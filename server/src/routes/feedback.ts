@@ -20,19 +20,25 @@ import {
   validateModerateFeedbackRequest
 } from '../../../packages/core/types/feedback';
 
+}
 interface FeedbackRouteParams {
   feedbackId: string;
   targetId?: string;
 }
+}
 
+}
 interface FeedbackVoteParams {
   feedbackId: string;
   voteType: 'helpful' | 'not_helpful';
 }
+}
 
+}
 interface FeedbackReplyBody {
   content: string;
   parentReplyId?: string;
+}
 }
 
 export async function feedbackRoutes(fastify: FastifyInstance) {
@@ -56,16 +62,16 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           type: { 
             type: 'string', 
             enum: ['rating', 'review', 'comment', 'report', 'suggestion', 'bug_report', 'feature_request'] 
-          },
+  }
           category: { 
             type: 'string', 
             enum: ['general', 'usability', 'performance', 'documentation', 'pricing', 'support', 'technical', 'content_quality'],
             default: 'general' 
-          },
+  }
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-          },
+  }
           targetId: { type: 'string', format: 'uuid' },
           title: { type: 'string', minLength: 1, maxLength: 200 },
           content: { type: 'string', minLength: 1, maxLength: 5000 },
@@ -77,12 +83,12 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-          },
+  }
           cons: { 
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-          },
+  }
           useCase: { type: 'string', maxLength: 1000 },
           wouldRecommend: { type: 'boolean' },
           
@@ -94,23 +100,22 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
               'offensive_language', 'misleading_information', 'low_quality',
               'duplicate_content', 'terms_violation', 'other'
             ]
-          },
+  }
           evidence: { 
             type: 'array', 
             items: { type: 'string' },
             maxItems: 5 
-          },
-          
+  }
           // Bug report fields
           severity: { 
             type: 'string', 
             enum: ['low', 'medium', 'high', 'critical'] 
-          },
+  }
           stepsToReproduce: { 
             type: 'array', 
             items: { type: 'string' },
             maxItems: 20 
-          },
+  }
           expectedBehavior: { type: 'string', maxLength: 2000 },
           actualBehavior: { type: 'string', maxLength: 2000 },
           
@@ -120,7 +125,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             maxItems: 5 
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -128,7 +133,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             feedback: { type: 'object' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -196,19 +201,19 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-          },
+  }
           type: { 
             type: 'string', 
             enum: ['rating', 'review', 'comment', 'report', 'suggestion', 'bug_report', 'feature_request'] 
-          },
+  }
           category: { 
             type: 'string', 
             enum: ['general', 'usability', 'performance', 'documentation', 'pricing', 'support', 'technical', 'content_quality'] 
-          },
+  }
           status: { 
             type: 'string', 
             enum: ['pending', 'approved', 'rejected', 'flagged', 'archived', 'resolved'] 
-          },
+  }
           authorId: { type: 'string', format: 'uuid' },
           verifiedOnly: { type: 'boolean' },
           minRating: { type: 'integer', minimum: 1, maximum: 5 },
@@ -219,12 +224,12 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['created_at', 'rating', 'helpful_votes', 'updated_at'],
             default: 'created_at' 
-          },
+  }
           sortOrder: { 
             type: 'string', 
             enum: ['asc', 'desc'],
             default: 'desc' 
-          },
+  }
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
         }
@@ -259,7 +264,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -270,12 +275,12 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-          },
+  }
           cons: { 
             type: 'array', 
             items: { type: 'string', maxLength: 500 },
             maxItems: 10 
-          },
+  }
           useCase: { type: 'string', maxLength: 1000 },
           wouldRecommend: { type: 'boolean' }
         }
@@ -350,7 +355,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['voteType'],
@@ -397,7 +402,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['content'],
@@ -442,7 +447,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -513,7 +518,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           targetType: { 
             type: 'string', 
             enum: ['contribution', 'template', 'user', 'platform'] 
-          },
+  }
           dateFrom: { type: 'string', format: 'date' },
           dateTo: { type: 'string', format: 'date' },
           groupBy: { 
@@ -570,7 +575,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
         properties: {
           feedbackId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['action'],
@@ -578,7 +583,7 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
           action: { 
             type: 'string', 
             enum: ['approve', 'reject', 'flag', 'archive'] 
-          },
+  }
           notes: { type: 'string', maxLength: 1000 },
           rejectionReason: { type: 'string', maxLength: 500 }
         }
@@ -682,11 +687,11 @@ export async function feedbackRoutes(fastify: FastifyInstance) {
             items: { type: 'string', format: 'uuid' },
             minItems: 1,
             maxItems: 50 
-          },
+  }
           action: { 
             type: 'string', 
             enum: ['approve', 'reject', 'flag', 'archive'] 
-          },
+  }
           notes: { type: 'string', maxLength: 1000 },
           rejectionReason: { type: 'string', maxLength: 500 }
         }

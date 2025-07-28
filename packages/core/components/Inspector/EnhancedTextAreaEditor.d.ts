@@ -9,7 +9,7 @@ interface EnhancedTextAreaEditorProps extends EditorFieldProps {
     enableInlineCorrections?: boolean;
     autoApplyCorrections?: boolean;
     showCorrectionHighlights?: boolean;
-}
+
 export declare const EnhancedTextAreaEditor: React.FC<EnhancedTextAreaEditorProps>;
 export {};
 //# sourceMappingURL=EnhancedTextAreaEditor.d.ts.map

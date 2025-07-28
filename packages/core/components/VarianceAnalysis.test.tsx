@@ -12,10 +12,9 @@ import { VarianceSuggestion } from '../services/VarianceAnalysisService';
 // Mock the variance analysis service
 jest.mock('../services/VarianceAnalysisService', () => ({)
   varianceAnalysisService: {,
-    analyzeVariance: jest.fn<unknown[], unknown>(),
-    createDiversityIndicators: jest.fn<unknown[], unknown>(),
-    getVarianceLevelInfo: jest.fn<unknown[], unknown>()
-  }
+  analyzeVariance: jest.fn<unknown, unknown>(),
+  createDiversityIndicators: jest.fn<unknown, unknown>(),
+  getVarianceLevelInfo: jest.fn<unknown, unknown>(),
 }));
 const mockVarianceService = require('../services/VarianceAnalysisService').varianceAnalysisService;
 const createMockResult = (seed: number, output: string): PreviewResultWithPath => ({)
@@ -25,7 +24,8 @@ const createMockResult = (seed: number, output: string): PreviewResultWithPath =
   usedNodeIds: ['node1'],
   usedEdgeIds: ['edge1'],
   executionPath: {,
-    id: `exec_${seed}`,}
+  id: `exec_${seed}`}
+}
     seed,
     startTime: Date.now() - 1000,
     endTime: Date.now(),
@@ -33,65 +33,60 @@ const createMockResult = (seed: number, output: string): PreviewResultWithPath =
     steps: [],
     finalOutput: output,
     nodeExecutionOrder: ['node1'],
-    randomizationPoints: [],
-  }
-});
+    randomizationPoints: [];
+  });
 const mockAnalysis = {
   overallVariance: 'medium' as const,
   varianceScore: 0.65,
   diversityMetrics: {,
-    outputLengthVariance: 0.4,
-    vocabularyDiversity: 0.7,
-    structuralDiversity: 0.5,
-    executionPathDiversity: 0.3,
-  },
+  outputLengthVariance: 0.4,
+  vocabularyDiversity: 0.7,
+  structuralDiversity: 0.5,
+  executionPathDiversity: 0.3,
+},
   creativeRange: {,
-    uniqueElements: ['unique', 'elements', 'here'],
-    commonElements: ['common', 'words'],
-    repetitionRate: 0.3,
-    creativityScore: 0.75,
-  },
+  uniqueElements: ['unique', 'elements', 'here'],
+  commonElements: ['common', 'words'],
+  repetitionRate: 0.3,
+  creativityScore: 0.75,
+},
   suggestions: [,
     {
-      type: 'increase' as const,
-      category: 'weights' as const,
-      message: 'Adjust weight distributions for more variation',
-      impact: 'high' as const,
-      actionable: true,
-    },
+  type: 'increase' as const,
+  category: 'weights' as const,
+  message: 'Adjust weight distributions for more variation',
+  impact: 'high' as const,
+  actionable: true,
+}
     {
-      type: 'optimize' as const,
-      category: 'content' as const,
-      message: 'Good balance achieved',
-      impact: 'low' as const,
-      actionable: false,
-    }
-  ]
-};
+  type: 'optimize' as const,
+  category: 'content' as const,
+  message: 'Good balance achieved',
+  impact: 'low' as const,
+  actionable: false];
+  };
 const mockIndicators = [;
   {
-    metric: 'Length Variance',
-    value: 0.4,
-    level: 'medium' as const,
-    description: 'Variation in output length',
-    color: '#f59e0b',
-  },
+  metric: 'Length Variance',
+  value: 0.4,
+  level: 'medium' as const,
+  description: 'Variation in output length',
+  color: '#f59e0b',
+}
   {
-    metric: 'Vocabulary Diversity',
-    value: 0.7,
-    level: 'high' as const,
-    description: 'Word diversity score',
-    color: '#10b981',
-  },
+  metric: 'Vocabulary Diversity',
+  value: 0.7,
+  level: 'high' as const,
+  description: 'Word diversity score',
+  color: '#10b981',
+}
   {
-    metric: 'Creativity Score',
-    value: 0.75,
-    level: 'high' as const,
-    description: 'Overall creativity metric',
-    color: '#10b981',
-  }
-];
-const mockVarianceInfo = {
+  metric: 'Creativity Score',
+  value: 0.75,
+  level: 'high' as const,
+  description: 'Overall creativity metric',
+  color: '#10b981'];
+  const mockVarianceInfo = {
   color: '#f59e0b',
   background: '#fffbeb',
   border: '#fed7aa',
@@ -218,7 +213,7 @@ describe('VarianceAnalysis', () => {
       expect(screen.getAllByText('LOW IMPACT')).toHaveLength(1);
     });
     it('should handle suggestion clicks for actionable suggestions', () => {
-      const mockOnSuggestionClick = jest.fn<unknown[], unknown>();
+      const mockOnSuggestionClick = jest.fn<unknown, unknown>();
       const results = [;
         createMockResult(1, 'First result'),
         createMockResult(2, 'Second result')
@@ -234,7 +229,7 @@ describe('VarianceAnalysis', () => {
       expect(mockOnSuggestionClick).toHaveBeenCalledWith(mockAnalysis.suggestions[0]);
     });
     it('should not handle clicks for non-actionable suggestions', () => {
-      const mockOnSuggestionClick = jest.fn<unknown[], unknown>();
+      const mockOnSuggestionClick = jest.fn<unknown, unknown>();
       const results = [;
         createMockResult(1, 'First result'),
         createMockResult(2, 'Second result')
@@ -251,19 +246,19 @@ describe('VarianceAnalysis', () => {
     });
   });
   describe('Variance Levels', () => {
-    it('should display low variance styling', () => {
-      const lowVarianceAnalysis = {
-        ...mockAnalysis,
-        overallVariance: 'low' as const,
-        varianceScore: 0.2,
-      };
+  it('should display low variance styling', () => {
+  const lowVarianceAnalysis = {
+  ...mockAnalysis,
+  overallVariance: 'low' as const,
+  varianceScore: 0.2,
+};
       const lowVarianceInfo = {
-        color: '#ef4444',
-        background: '#fef2f2',
-        border: '#fecaca',
-        icon: '🔴',
-        description: 'Results are very similar',
-      };
+  color: '#ef4444',
+  background: '#fef2f2',
+  border: '#fecaca',
+  icon: '🔴',
+  description: 'Results are very similar',
+};
       mockVarianceService.analyzeVariance.mockReturnValue(lowVarianceAnalysis as unknown);
       mockVarianceService.getVarianceLevelInfo.mockReturnValue(lowVarianceInfo as unknown);
       const results = [;
@@ -276,18 +271,18 @@ describe('VarianceAnalysis', () => {
       expect(screen.getByText('Results are very similar')).toBeInTheDocument();
     });
     it('should display high variance styling', () => {
-      const highVarianceAnalysis = {
-        ...mockAnalysis,
-        overallVariance: 'high' as const,
-        varianceScore: 0.9,
-      };
+  const highVarianceAnalysis = {
+  ...mockAnalysis,
+  overallVariance: 'high' as const,
+  varianceScore: 0.9,
+};
       const highVarianceInfo = {
-        color: '#10b981',
-        background: '#f0fdf4',
-        border: '#bbf7d0',
-        icon: '🟢',
-        description: 'High creative diversity',
-      };
+  color: '#10b981',
+  background: '#f0fdf4',
+  border: '#bbf7d0',
+  icon: '🟢',
+  description: 'High creative diversity',
+};
       mockVarianceService.analyzeVariance.mockReturnValue(highVarianceAnalysis as unknown);
       mockVarianceService.getVarianceLevelInfo.mockReturnValue(highVarianceInfo as unknown);
       const results = [;
@@ -326,11 +321,11 @@ describe('VarianceAnalysis', () => {
     });
   });
   describe('Edge Cases', () => {
-    it('should handle empty suggestions', () => {
-      const analysisWithoutSuggestions = {
-        ...mockAnalysis,
-        suggestions: [],
-      };
+  it('should handle empty suggestions', () => {
+  const analysisWithoutSuggestions = {
+  ...mockAnalysis,
+  suggestions: [],
+};
       mockVarianceService.analyzeVariance.mockReturnValue(analysisWithoutSuggestions as unknown);
       const results = [;
         createMockResult(1, 'First result'),
@@ -340,14 +335,13 @@ describe('VarianceAnalysis', () => {
       expect(screen.queryByText('💡 Optimization Suggestions')).not.toBeInTheDocument();
     });
     it('should handle empty unique/common elements', () => {
-      const analysisWithEmptyElements = {
-        ...mockAnalysis,
-        creativeRange: {,
-          ...mockAnalysis.creativeRange,
-          uniqueElements: [],
-          commonElements: [],
-        }
-      };
+  const analysisWithEmptyElements = {
+  ...mockAnalysis,
+  creativeRange: {,
+  ...mockAnalysis.creativeRange,
+  uniqueElements: [],
+  commonElements: [],
+};
       mockVarianceService.analyzeVariance.mockReturnValue(analysisWithEmptyElements as unknown);
       const results = [;
         createMockResult(1, 'First result'),

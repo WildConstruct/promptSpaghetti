@@ -110,16 +110,16 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           exportType: { 
             type: 'string',
             enum: ['USER_DATA', 'ACCESS_LOGS', 'AUDIT_TRAIL', 'SYSTEM_LOGS', 'COMPLIANCE_REPORT', 'SECURITY_EVENTS', 'CUSTOM_QUERY']
-          },
+  }
           dataCategories: { 
             type: 'array',
             items: { type: 'string' },
             minItems: 1
-          },
+  }
           format: {
             type: 'string',
             enum: ['JSON', 'CSV', 'XML', 'PDF', 'XLSX']
-          },
+  }
           purpose: { type: 'string', minLength: 10 },
           timeRange: {
             type: 'object',
@@ -127,7 +127,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
               startDate: { type: 'string', format: 'date-time' },
               endDate: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           filters: {
             type: 'object',
             properties: {
@@ -137,13 +137,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
               userIds: { type: 'array', items: { type: 'string' } },
               customFilters: { type: 'object' }
             }
-          },
+  }
           includeMetadata: { type: 'boolean', default: false },
           anonymize: { type: 'boolean', default: false },
           encryptOutput: { type: 'boolean', default: false }
-        },
+  }
         required: ['exportType', 'dataCategories', 'format', 'purpose']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -210,9 +210,9 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-        },
+  }
         required: ['jobId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -274,7 +274,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-        },
+  }
         required: ['jobId']
       }
     }
@@ -333,13 +333,13 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string',
             enum: ['QUEUED', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED']
-          },
+  }
           exportType: {
             type: 'string',
             enum: ['USER_DATA', 'ACCESS_LOGS', 'AUDIT_TRAIL', 'SYSTEM_LOGS', 'COMPLIANCE_REPORT', 'SECURITY_EVENTS', 'CUSTOM_QUERY']
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -358,7 +358,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
                   fileSize: { type: 'number' }
                 }
               }
-            },
+  }
             pagination: {
               type: 'object',
               properties: {
@@ -439,9 +439,9 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-        },
+  }
         required: ['jobId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -505,7 +505,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
                   maxRecords: { type: 'number' }
                 }
               }
-            },
+  }
             formats: {
               type: 'array',
               items: {
@@ -533,7 +533,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV', 'XML'],
           estimatedTime: '2-5 minutes',
           maxRecords: 1000
-        },
+  }
         {
           type: 'ACCESS_LOGS',
           description: 'Export user access and activity logs',
@@ -541,7 +541,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV'],
           estimatedTime: '5-15 minutes',
           maxRecords: 50000
-        },
+  }
         {
           type: 'AUDIT_TRAIL',
           description: 'Export audit trail and compliance data',
@@ -549,7 +549,7 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           supportedFormats: ['JSON', 'CSV', 'PDF'],
           estimatedTime: '10-30 minutes',
           maxRecords: 100000
-        },
+  }
         {
           type: 'SECURITY_EVENTS',
           description: 'Export security events and alerts',
@@ -566,21 +566,21 @@ export async function dataExportRoutes(fastify: FastifyInstance) {
           mimeType: 'application/json',
           supportsAnonymization: true,
           supportsEncryption: true
-        },
+  }
         {
           format: 'CSV',
           description: 'Comma Separated Values',
           mimeType: 'text/csv',
           supportsAnonymization: true,
           supportsEncryption: true
-        },
+  }
         {
           format: 'XML',
           description: 'Extensible Markup Language',
           mimeType: 'application/xml',
           supportsAnonymization: true,
           supportsEncryption: true
-        },
+  }
         {
           format: 'PDF',
           description: 'Portable Document Format',

@@ -13,26 +13,26 @@ import { ComplianceChecker } from '../ComplianceChecker';
 import { LegalDocument, ComplianceCheck } from '../types';
 
 // Mock data
-const mockDocument: LegalDocument = {
+const mockDocument: LegalDocument = {,
   id: 'doc-123',
   title: 'Privacy Policy',
   type: 'policy',
   content: 'This privacy policy describes how we collect, use, and protect personal information. We collect personal data including names, email addresses, and usage analytics. Data is stored securely and shared with third parties only as described herein.',
   metadata: {,
-    jurisdiction: 'US-CA',
-    practiceArea: ['privacy law', 'data protection'],
-    parties: ['Tech Company Inc.'],
-    references: [],
-    tags: ['privacy', 'gdpr', 'ccpa'],
-    confidentialityLevel: 'public',
-  },
+  jurisdiction: 'US-CA',
+  practiceArea: ['privacy law', 'data protection'],
+  parties: ['Tech Company Inc.'],
+  references: [],
+  tags: ['privacy', 'gdpr', 'ccpa'],
+  confidentialityLevel: 'public',
+},
   status: 'under_review',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-02'),
-  version: '1.0',
-};
+  version: '1.0';
+  };
 describe('ComplianceChecker Component', () => {
-  const mockOnComplianceResults = jest.fn<unknown[], unknown>();
+  const mockOnComplianceResults = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -128,14 +128,14 @@ describe('ComplianceChecker Component', () => {
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
       await waitFor(() => {
-        expect(mockOnComplianceResults).toHaveBeenCalledWith()
-          expect.arrayContaining([)
-            expect.objectContaining({)
-              regulation: expect.any(String),
-              requirement: expect.any(String),
-              status: expect.oneOf(['compliant', 'non_compliant', 'partial', 'unknown']),
-              severity: expect.oneOf(['info', 'warning', 'error', 'critical'])
-            })
+  expect(mockOnComplianceResults).toHaveBeenCalledWith()
+  expect.arrayContaining([)
+  expect.objectContaining({)
+  regulation: expect.any(String),
+  requirement: expect.any(String),
+  status: expect.oneOf(['compliant', 'non_compliant', 'partial', 'unknown']),
+  severity: expect.oneOf(['info', 'warning', 'error', 'critical']),
+}
           ])
         );
       }, { timeout: 5000 });
@@ -241,10 +241,10 @@ describe('ComplianceChecker Component', () => {
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
       await waitFor(async () => {
-        const violationItem = screen.getByText(/Right to Deletion/i);
-        await user.click(violationItem);
-        expect(screen.getByText(/Affected Sections: 2, 3/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+  const violationItem = screen.getByText(/Right to Deletion/i);
+  await user.click(violationItem);
+  expect(screen.getByText(/Affected Sections: 2, 3/i)).toBeInTheDocument();
+}, { timeout: 5000 });
     });
   });
   describe('Filtering and Sorting', () => {
@@ -356,8 +356,8 @@ describe('ComplianceChecker Component', () => {
       const startButton = screen.getByText(/Start Compliance Check/i);
       await user.click(startButton);
       await waitFor(() => {
-        expect(screen.getByText(/Compliance Score: 33%/i)).toBeInTheDocument(); // 1/3 fully compliant
-      }, { timeout: 5000 });
+  expect(screen.getByText(/Compliance Score: 33%/i)).toBeInTheDocument(); // 1/3 fully compliant,
+}, { timeout: 5000 });
     });
   });
   describe('Regulation Management', () => {

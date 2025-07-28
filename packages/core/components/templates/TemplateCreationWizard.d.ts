@@ -4,13 +4,14 @@
  */
 import React from 'react';
 import { ProjectTemplate, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
+
 interface TemplateCreationWizardProps {
     graphData: unknown;
     isOpen: boolean;
     onClose: () => void;
     onComplete: (template: ProjectTemplate) => void;
     templateManager: ProjectTemplateManager;
-}
+
 export declare const TemplateCreationWizard: React.FC<TemplateCreationWizardProps>;
 export {};
 //# sourceMappingURL=TemplateCreationWizard.d.ts.map

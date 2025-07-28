@@ -156,7 +156,7 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           limit: pagination.limit || 50,
           offset: pagination.offset || 0,
           hasMore: totalCount > (pagination.offset || 0) + events.length
-        },
+  }
         totalCount
       });
 
@@ -440,7 +440,7 @@ export async function historicalAnalyticsRoutes(fastify: FastifyInstance) {
           queryEngine: metrics.queryPerformance.slowQueries < 10 ? 'healthy' : 'degraded',
           dataStorage: metrics.dataVolume.totalEvents > 0 ? 'healthy' : 'unknown',
           retentionSystem: metrics.retentionExecution.errorsEncountered === 0 ? 'healthy' : 'error'
-        },
+  }
         lastOptimization: Date.now() - (24 * 60 * 60 * 1000), // Mock: 24 hours ago
         retentionStatus: {
           lastExecution: metrics.retentionExecution.lastRunTime,

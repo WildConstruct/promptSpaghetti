@@ -5,6 +5,7 @@
  * for professional VFX director workflows.
  */
 import React from 'react';
+
 export interface VFXUser {
     id: string;
     name: string;
@@ -12,14 +13,15 @@ export interface VFXUser {
     avatar?: string;
     email: string;
     color: string;
-}
+
+
 export interface AnnotationToolsDemoProps {
     className?: string;
     title?: string;
     showAllTools?: boolean;
     readonly?: boolean;
     initialUser?: VFXUser;
-}
+
 export declare const AnnotationToolsDemo: React.FC<AnnotationToolsDemoProps>;
 export default AnnotationToolsDemo;
 //# sourceMappingURL=AnnotationToolsDemo.d.ts.map

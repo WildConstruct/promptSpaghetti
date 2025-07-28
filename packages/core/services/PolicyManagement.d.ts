@@ -25,7 +25,7 @@ export declare enum PolicyDomain {
     DATA_PROTECTION = "DATA_PROTECTION",
     ACCESS_CONTROL = "ACCESS_CONTROL",
     MARKETPLACE = "MARKETPLACE"
-}
+
 export declare enum PolicyType {
     SECURITY_DASHBOARD = "SECURITY_DASHBOARD",
     AUTOMATED_ENFORCEMENT = "AUTOMATED_ENFORCEMENT",
@@ -37,14 +37,14 @@ export declare enum PolicyType {
     TRANSACTION_SECURITY = "TRANSACTION_SECURITY",
     COMPLIANCE_FRAMEWORK = "COMPLIANCE_FRAMEWORK",
     VFX_WORKFLOW = "VFX_WORKFLOW"
-}
+
 export declare enum PolicyStatus {
     ACTIVE = "ACTIVE",
     INACTIVE = "INACTIVE",
     PENDING = "PENDING",
     DEPRECATED = "DEPRECATED",
     EMERGENCY = "EMERGENCY"
-}
+
 export declare enum ComplianceFramework {
     GDPR = "GDPR",
     CCPA = "CCPA",
@@ -53,7 +53,7 @@ export declare enum ComplianceFramework {
     ISO_27001 = "ISO_27001",
     PCI_DSS = "PCI_DSS",
     ENTERTAINMENT_INDUSTRY = "ENTERTAINMENT_INDUSTRY"
-}
+
 export interface UnifiedPolicy {
     id: string;
     name: string;
@@ -108,7 +108,7 @@ export interface UnifiedPolicy {
         conflictingPolicies: string[];
         supersededBy?: string;
     };
-}
+
 export interface PolicyRule {
     id: string;
     name: string;
@@ -128,7 +128,7 @@ export interface PolicyRule {
     };
     weight: number;
     enabled: boolean;
-}
+
 export interface PolicyCondition {
     id: string;
     name: string;
@@ -145,7 +145,7 @@ export interface PolicyCondition {
     };
     weight: number;
     critical: boolean;
-}
+
 export interface PolicyAction {
     id: string;
     name: string;
@@ -163,7 +163,7 @@ export interface PolicyAction {
     };
     priority: number;
     enabled: boolean;
-}
+
 export interface PolicyException {
     id: string;
     name: string;
@@ -187,27 +187,27 @@ export interface PolicyException {
         reviewRequired: boolean;
     };
     active: boolean;
-}
+
 export interface TimeBasedRule {
     timePeriods: string[];
     seasonality: boolean;
     historicalContext: boolean;
-}
+
 export interface LocationBasedRule {
     regions: string[];
     geopoliticalContext: boolean;
     culturalConsiderations: string[];
-}
+
 export interface RoleBasedRule {
     roles: string[];
     permissions: string[];
     clearanceLevel: string;
-}
+
 export interface ContentBasedRule {
     contentTypes: string[];
     qualityMetrics: Record<string, number>;
     historicalAccuracy: boolean;
-}
+
 export interface PolicyEvaluationContext {
     requestId: string;
     timestamp: Date;
@@ -232,7 +232,7 @@ export interface PolicyEvaluationContext {
         expertReviewed?: boolean;
     };
     additionalContext: Record<string, any>;
-}
+
 export interface PolicyEvaluationResult {
     requestId: string;
     evaluationId: string;
@@ -284,7 +284,7 @@ export interface PolicyEvaluationResult {
         escalationRequired: boolean;
         auditRequired: boolean;
     };
-}
+
 export interface PolicyViolation {
     id: string;
     policyId: string;
@@ -316,7 +316,6 @@ export interface PolicyViolation {
         acknowledgedAt?: Date;
         tags: string[];
     };
-}
 /**
  * Unified Policy Management System
  */
@@ -406,6 +405,6 @@ export declare class PolicyManagement extends EventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default PolicyManagement;
 //# sourceMappingURL=PolicyManagement.d.ts.map

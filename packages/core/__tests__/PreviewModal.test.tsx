@@ -15,7 +15,7 @@ describe('PreviewModal', () => {
       { output: 'Result 4', seed: 4 },
       { output: 'Result 5', seed: 5 }
     ],
-    onClose: jest.fn(),
+    onClose: jest.fn();
   };
   it('renders results when not loading or error', () => {
     render(<PreviewModal {...baseProps} />);

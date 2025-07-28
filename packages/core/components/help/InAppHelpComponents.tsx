@@ -54,30 +54,30 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 
 // Core help system types
+
 export interface HelpContentItem {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   content: string;
-  type: 'tooltip' | 'article' | 'video' | 'tutorial' | 'faq' | 'guide';
+  type: 'tooltip' | 'article' | 'video' | 'tutorial' | 'faq' | 'guide';,
   category: string;
-  tags: string[];
+  tags: string;,
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   estimatedReadTime?: number;
   thumbnail?: string;
   videoUrl?: string;
-  lastUpdated: Date;
+  lastUpdated: Date;,
   helpfulness: {,
-    helpful: number;
-    unhelpful: number;
-  };
+  helpful: number;,
+  unhelpful: number;
+};
 }
-
 export interface TourStep {
-  id: string;
+  id: string;,
   title: string;
-  content: string;
-  target: string; // CSS selector
+  content: string;,
+  target: string; // CSS selector,
   position: 'top' | 'bottom' | 'left' | 'right' | 'center';
   action?: 'click' | 'hover' | 'scroll' | 'wait';
   actionTarget?: string;
@@ -87,36 +87,34 @@ export interface TourStep {
   highlight?: boolean;
   delay?: number;
 }
-
 export interface HelpTour {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: string;
-  steps: TourStep[];
+  steps: TourStep;
   autoStart?: boolean;
   skippable?: boolean;
   repeatable?: boolean;
-  prerequisites?: string[];
-  estimatedDuration: number;
+  prerequisites?: string;
+  estimatedDuration: number;,
   difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
-
 export interface HelpContext {
   currentPage: string;
   userRole?: string;
   userExperience?: 'beginner' | 'intermediate' | 'advanced';
-  completedTours?: string[];
-  dismissedHelp?: string[];
-  preferences?: {
-    showTooltips: boolean;
-    showTours: boolean;
-    preferredHelpType: 'text' | 'video' | 'interactive';
-    autoplayVideos: boolean;
-  };
-}
+  completedTours?: string;
+  dismissedHelp?: string;
+  preferences?: {,
+  showTooltips: boolean;,
+  showTours: boolean;
+  preferredHelpType: 'text' | 'video' | 'interactive';,
+  autoplayVideos: boolean;
+};
 
 // Tooltip Component
+}
 export interface HelpTooltipProps {
   content: string | ReactNode;
   title?: string;
@@ -132,7 +130,6 @@ export interface HelpTooltipProps {
   onShow?: () => void;
   onHide?: () => void;
 }
-
 export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
   content,
   title,
@@ -181,14 +178,12 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
           top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
           left = triggerRect.right + 8;
           break;
-        }
         // Viewport collision detection
         if (left < 0) left = 8;
         if (left + tooltipRect.width > viewport.width) left = viewport.width - tooltipRect.width - 8;
         if (top < 0) top = 8;
         if (top + tooltipRect.height > viewport.height) top = viewport.height - tooltipRect.height - 8;
         setTooltipPosition({ top, left });
-      }
     }, delay);
   }, [delay, onShow, position]);
   const hideTooltip = useCallback(() => {
@@ -197,17 +192,16 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
     onHide?.();
   }, [onHide]);
   const handleTriggerEvent = useCallback((event: React.MouseEvent | React.FocusEvent) => {
-    if (trigger === 'click' && event.type === 'click') {
-      isVisible ? hideTooltip() : showTooltip();
-    } else if (trigger === 'hover') {
+  if (trigger === 'click' && event.type === 'click') {
+  isVisible ? hideTooltip() : showTooltip();
+} else if (trigger === 'hover') {
       if (event.type === 'mouseenter') showTooltip();
       else if (event.type === 'mouseleave') hideTooltip();
     } else if (trigger === 'focus') {
       if (event.type === 'focus') showTooltip();
       else if (event.type === 'blur') hideTooltip();
-    }
   }, [trigger, isVisible, showTooltip, hideTooltip]);
-  return ();
+  return;
     <>
       <div 
         ref={triggerRef}
@@ -225,12 +219,12 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
           ref={tooltipRef}
           className={`help-tooltip help-tooltip-${position}`}
           style={{
-            position: 'fixed',
-            top: tooltipPosition.top,
-            left: tooltipPosition.left,
-            maxWidth,
-            zIndex: 9999,
-          }}
+  position: 'fixed',
+  top: tooltipPosition.top,
+  left: tooltipPosition.left,
+  maxWidth,
+  zIndex: 9999,
+}}
         >
           {showArrow && <div className={`help-tooltip-arrow help-tooltip-arrow-${position}`} />}
           <div className="help-tooltip-content">
@@ -259,9 +253,10 @@ export const HelpTooltip: React.FC<HelpTooltipProps> = ({)
 };
 
 // Contextual Help Panel
+
 export interface ContextualHelpPanelProps {
-  title: string;
-  content: HelpContentItem[];
+  title: string;,
+  content: HelpContentItem;
   context: HelpContext;
   position?: 'right' | 'left' | 'bottom';
   collapsible?: boolean;
@@ -272,7 +267,6 @@ export interface ContextualHelpPanelProps {
   onContentSelect?: (content: HelpContentItem) => void;
   onFeedback?: (contentId: string, helpful: boolean) => void;
 }
-
 export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
   title,
   content,
@@ -296,7 +290,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
   }, [content]);
   const filteredContent = useMemo(() => {
     return content.filter(item => {)
-      // Search filter
+  // Search filter
       const matchesSearch = searchQuery === '' || ;
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -314,7 +308,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
     onFeedback?.(contentId, helpful);
   }, [onFeedback]);
   if (isCollapsed && collapsible) {
-    return ();
+    return;
       <div className={`help-panel help-panel-collapsed help-panel-${position} ${className}`}>}
         <Button
           variant="ghost"
@@ -327,8 +321,7 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
         </Button>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`help-panel help-panel-${position} ${className}`}>}
       <CardHeader className="help-panel-header">
         <div className="help-panel-header-content">
@@ -505,15 +498,15 @@ export const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> = ({)
 };
 
 // Guided Tour Component
+
 export interface GuidedTourProps {
-  tour: HelpTour;
+  tour: HelpTour;,
   isActive: boolean;
   onComplete?: () => void;
   onSkip?: () => void;
   onStepChange?: (stepIndex: number) => void;
   className?: string;
 }
-
 export const GuidedTour: React.FC<GuidedTourProps> = ({)
   tour,
   isActive,
@@ -532,27 +525,24 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
   const isFirstStep = currentStepIndex === 0;
   // Highlight target element
   useEffect(() => {
-    if (!isActive || !currentStep) return;
-    const targetElement = document.querySelector(currentStep.target) as HTMLElement;
-    if (targetElement) {
-      setHighlightedElement(targetElement);
-      // Create overlay effect
-      const _____rect = targetElement.getBoundingClientRect();
-      if (overlayRef.current) {
-        overlayRef.current.style.display = 'block';
-        // Add spotlight effect positioning
-      }
-      // Scroll element into view
-      targetElement.scrollIntoView({)
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    }
+  if (!isActive || !currentStep) return;
+  const targetElement = document.querySelector(currentStep.target) as HTMLElement;
+  if (targetElement) {
+  setHighlightedElement(targetElement);
+  // Create overlay effect
+  const _____rect = targetElement.getBoundingClientRect();
+  if (overlayRef.current) {
+  overlayRef.current.style.display = 'block';
+  // Add spotlight effect positioning
+  // Scroll element into view
+  targetElement.scrollIntoView({)
+  behavior: 'smooth',
+  block: 'center',
+  inline: 'center',
+});
     return () => {
       if (overlayRef.current) {
         overlayRef.current.style.display = 'none';
-      }
       setHighlightedElement(null);
     };
   }, [isActive, currentStep]);
@@ -560,19 +550,16 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
     if (stepIndex >= 0 && stepIndex < tour.steps.length) {
       setCurrentStepIndex(stepIndex);
       onStepChange?.(stepIndex);
-    }
   }, [tour.steps.length, onStepChange]);
   const nextStep = useCallback(() => {
     if (isLastStep) {
       onComplete?.();
     } else {
       goToStep(currentStepIndex + 1);
-    }
   }, [isLastStep, currentStepIndex, goToStep, onComplete]);
   const prevStep = useCallback(() => {
     if (!isFirstStep) {
       goToStep(currentStepIndex - 1);
-    }
   }, [isFirstStep, currentStepIndex, goToStep]);
   const skipTour = useCallback(() => {
     onSkip?.();
@@ -589,7 +576,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
     return () => clearTimeout(timer);
   }, [isPlaying, isActive, nextStep, currentStepIndex]);
   if (!isActive || !currentStep) return null;
-  return ();
+  return;
     <>
       {/* Overlay for highlighting */}
       <div ref={overlayRef} className="tour-overlay" style={{ display: 'none' }} />
@@ -695,15 +682,15 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({)
 };
 
 // Help Hub Component
+
 export interface HelpHubProps {
-  tours: HelpTour[];
-  content: HelpContentItem[];
+  tours: HelpTour;,
+  content: HelpContentItem;
   context: HelpContext;
   onTourStart?: (tourId: string) => void;
   onContentView?: (contentId: string) => void;
   className?: string;
 }
-
 export const HelpHub: React.FC<HelpHubProps> = ({)
   tours,
   content,
@@ -715,7 +702,7 @@ export const HelpHub: React.FC<HelpHubProps> = ({)
   const [activeTab, setActiveTab] = useState<'getting-started' | 'tutorials' | 'guides' | 'faq'>('getting-started');
   const suggestedTours = useMemo(() => {
     return tours.filter(tour => {)
-      // Filter based on user experience and completed tours
+  // Filter based on user experience and completed tours
       const isCompleted = context.completedTours?.includes(tour.id);
       const matchesExperience = !context.userExperience || tour.difficulty === context.userExperience;
       return !isCompleted && matchesExperience;
@@ -723,14 +710,14 @@ export const HelpHub: React.FC<HelpHubProps> = ({)
   }, [tours, context]);
   const suggestedContent = useMemo(() => {
     return content.filter(item => {)
-      const matchesExperience = !context.userExperience || item.difficulty === context.userExperience;
+  const matchesExperience = !context.userExperience || item.difficulty === context.userExperience;
       const isRelevant = item.tags.some(tag => ;);
         tag.toLowerCase().includes(context.currentPage.toLowerCase())
       );
       return matchesExperience && (isRelevant || item.category === 'getting-started');
     }).slice(0, 6);
   }, [content, context]);
-  return ();
+  return;
     <div className={`help-hub ${className}`}>}
       <Card className="help-hub-card">
         <CardHeader>
@@ -936,19 +923,19 @@ export const HelpHub: React.FC<HelpHubProps> = ({)
 };
 
 // Quick Help Button
+
 export interface QuickHelpProps {
-  helpContent: HelpContentItem[];
+  helpContent: HelpContentItem;
   onHelpRequest?: () => void;
   className?: string;
 }
-
 export const QuickHelp: React.FC<QuickHelpProps> = ({)
   helpContent,
   onHelpRequest,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  return ();
+  return;
     <div className={`quick-help ${className}`}>}
       <Button
         variant="primary"

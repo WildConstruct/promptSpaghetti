@@ -9,22 +9,22 @@ export interface ContentCriteria {
     min_rating?: number;
     min_download_count?: number;
     quality_score_threshold?: number;
-    categories?: string[];
-    tags?: string[];
-    exclude_categories?: string[];
+    categories?: string;
+    tags?: string;
+    exclude_categories?: string;
     published_after?: Date;
     last_updated_after?: Date;
-    creator_ids?: string[];
-    creator_tiers?: string[];
+    creator_ids?: string;
+    creator_tiers?: string;
     min_conversion_rate?: number;
     min_engagement_score?: number;
-    content_types?: string[];
-    languages?: string[];
-    exclude_content_ids?: string[];
+    content_types?: string;
+    languages?: string;
+    exclude_content_ids?: string;
     exclude_recently_promoted?: boolean;
     exclude_current_promotions?: boolean;
     max_content_count?: number;
-    diversification_rules?: DiversificationRule[];
+    diversification_rules?: DiversificationRule;
 }
 export interface DiversificationRule {
     attribute: string;
@@ -45,27 +45,14 @@ export interface SelectionCriteriaTemplate {
 }
 export interface ContentSelectionPreview {
     total_matches: number;
-    sample_content: Array<{
-        id: string;
-        title: string;
-        creator: string;
-        rating: number;
-        downloads: number;
-        category: string;
-        match_reasons: string[];
-    }>;
-    category_distribution: Record<string, number>;
-    creator_distribution: Record<string, number>;
-    quality_stats: {
-        avg_rating: number;
-        avg_downloads: number;
-        avg_engagement: number;
-    };
-    performance_prediction: {
-        expected_ctr: number;
-        expected_conversion_rate: number;
-        confidence_level: number;
-    };
+    sample_content: Array<{}, id>;
+    string: any;
+    title: string;
+    creator: string;
+    rating: number;
+    downloads: number;
+    category: string;
+    match_reasons: string;
 }
 export interface ContentSelectionCriteriaProps {
     className?: string;

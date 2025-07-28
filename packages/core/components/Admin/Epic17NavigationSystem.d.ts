@@ -9,6 +9,7 @@
  * - Integration with authorization system for permission-based navigation
  */
 import React from 'react';
+
 export interface NavigationItem {
     id: string;
     label: string;
@@ -29,26 +30,26 @@ export interface NavigationItem {
         story?: string;
         tags: string[];
     };
-}
+
 export interface NavigationBadge {
     type: 'count' | 'status' | 'alert' | 'info';
     value: string | number;
     color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
     pulse?: boolean;
-}
+
 export interface NavigationContext {
     currentPath: string;
     currentSection: string;
     parentSections: string[];
     breadcrumbs: BreadcrumbItem[];
     availableActions: QuickAction[];
-}
+
 export interface BreadcrumbItem {
     label: string;
     path: string;
     icon?: React.ComponentType<unknown>;
     active: boolean;
-}
+
 export interface QuickAction {
     id: string;
     label: string;
@@ -58,7 +59,7 @@ export interface QuickAction {
     shortcut?: string;
     category: 'primary' | 'secondary' | 'tertiary';
     enabled: boolean;
-}
+
 export interface NavigationState {
     expandedSections: Set<string>;
     pinnedItems: Set<string>;
@@ -66,14 +67,13 @@ export interface NavigationState {
     favoriteItems: Set<string>;
     searchQuery: string;
     mobileMenuOpen: boolean;
-}
+
 export interface RecentItem {
     id: string;
     label: string;
     path: string;
     timestamp: Date;
     icon: React.ComponentType<unknown>;
-}
 interface Epic17NavigationSystemProps {
     currentSection?: string;
     onSectionChange?: (section: string) => void;
@@ -81,7 +81,7 @@ interface Epic17NavigationSystemProps {
     showBreadcrumbs?: boolean;
     showQuickActions?: boolean;
     enableSearch?: boolean;
-}
+
 export declare const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps>;
 export default Epic17NavigationSystem;
 //# sourceMappingURL=Epic17NavigationSystem.d.ts.map

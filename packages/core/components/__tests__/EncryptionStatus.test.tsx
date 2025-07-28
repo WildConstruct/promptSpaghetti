@@ -9,24 +9,24 @@ import {
   EncryptionAlgorithm 
 } from '../EncryptionStatus';
 describe('EncryptionStatus Components', () => {
-  const mockEncryptionState: EncryptionState = {
-    status: 'encrypted',
-    algorithm: 'AES-256-GCM',
-    keyId: 'key123456789',
-    lastEncrypted: Date.now() - 1000 * 60 * 5, // 5 minutes ago
-    lastDecrypted: Date.now() - 1000 * 60 * 10, // 10 minutes ago
-    dataSize: 1024 * 1024, // 1MB
-    encryptionTime: 150,
-    strength: 'strong',
-  };
-  const mockErrorState: EncryptionState = {
-    status: 'error',
-    error: 'Failed to encrypt data: Invalid key',
-  };
-  const mockNotEncryptedState: EncryptionState = {
-    status: 'not_encrypted',
-    dataSize: 2048,
-  };
+  const mockEncryptionState: EncryptionState = {,
+  status: 'encrypted',
+  algorithm: 'AES-256-GCM',
+  keyId: 'key123456789',
+  lastEncrypted: Date.now() - 1000 * 60 * 5, // 5 minutes ago,
+  lastDecrypted: Date.now() - 1000 * 60 * 10, // 10 minutes ago,
+  dataSize: 1024 * 1024, // 1MB,
+  encryptionTime: 150,
+  strength: 'strong',
+};
+  const mockErrorState: EncryptionState = {,
+  status: 'error',
+  error: 'Failed to encrypt data: Invalid key',
+};
+  const mockNotEncryptedState: EncryptionState = {,
+  status: 'not_encrypted',
+  dataSize: 2048,
+};
   describe('EncryptionStatus', () => {
     it('renders encrypted status correctly', () => {
       render(<EncryptionStatus encryptionState={mockEncryptionState} />);
@@ -102,11 +102,11 @@ describe('EncryptionStatus Components', () => {
     });
   });
   describe('EncryptionDetails', () => {
-    const mockHandlers = {
-      onEncrypt: jest.fn(),
-      onDecrypt: jest.fn(),
-      onChangeAlgorithm: jest.fn(),
-    };
+  const mockHandlers = {
+  onEncrypt: jest.fn(),
+  onDecrypt: jest.fn(),
+  onChangeAlgorithm: jest.fn(),
+};
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -148,65 +148,65 @@ describe('EncryptionStatus Components', () => {
       expect(screen.getByText('Failed to encrypt data: Invalid key')).toBeInTheDocument();
     });
     it('formats data sizes correctly', () => {
-      const smallDataState: EncryptionState = { 
-        status: 'encrypted', 
-        dataSize: 512 ,
-      };
+  const smallDataState: EncryptionState = {,
+  status: 'encrypted',
+  dataSize: 512,
+};
       render(<EncryptionDetails encryptionState={smallDataState} />);
       expect(screen.getByText('512 B')).toBeInTheDocument();
       const { rerender } = render(<EncryptionDetails encryptionState={smallDataState} />);
-      const kbDataState: EncryptionState = { 
-        status: 'encrypted', 
-        dataSize: 1536 ,
-      };
+      const kbDataState: EncryptionState = {,
+  status: 'encrypted',
+  dataSize: 1536,
+};
       rerender(<EncryptionDetails encryptionState={kbDataState} />);
       expect(screen.getByText('1.5 KB')).toBeInTheDocument();
-      const gbDataState: EncryptionState = { 
-        status: 'encrypted', 
-        dataSize: 1024 * 1024 * 1024 * 2.5 ,
-      };
+      const gbDataState: EncryptionState = {,
+  status: 'encrypted',
+  dataSize: 1024 * 1024 * 1024 * 2.5,
+};
       rerender(<EncryptionDetails encryptionState={gbDataState} />);
       expect(screen.getByText('2.5 GB')).toBeInTheDocument();
     });
     it('shows correct strength colors', () => {
-      const strongState: EncryptionState = { 
-        status: 'encrypted', 
-        strength: 'strong' ,
-      };
+  const strongState: EncryptionState = {,
+  status: 'encrypted',
+  strength: 'strong',
+};
       render(<EncryptionDetails encryptionState={strongState} />);
       expect(screen.getByText('strong')).toHaveClass('text-green-600');
       const { rerender } = render(<EncryptionDetails encryptionState={strongState} />);
-      const mediumState: EncryptionState = { 
-        status: 'encrypted', 
-        strength: 'medium' ,
-      };
+      const mediumState: EncryptionState = {,
+  status: 'encrypted',
+  strength: 'medium',
+};
       rerender(<EncryptionDetails encryptionState={mediumState} />);
       expect(screen.getByText('medium')).toHaveClass('text-yellow-600');
-      const weakState: EncryptionState = { 
-        status: 'encrypted', 
-        strength: 'weak' ,
-      };
+      const weakState: EncryptionState = {,
+  status: 'encrypted',
+  strength: 'weak',
+};
       rerender(<EncryptionDetails encryptionState={weakState} />);
       expect(screen.getByText('weak')).toHaveClass('text-red-600');
     });
     it('provides correct algorithm strength descriptions', () => {
-      const aes256State: EncryptionState = { 
-        status: 'encrypted', 
-        algorithm: 'AES-256-GCM' ,
-      };
+  const aes256State: EncryptionState = {,
+  status: 'encrypted',
+  algorithm: 'AES-256-GCM',
+};
       render(<EncryptionDetails encryptionState={aes256State} />);
       expect(screen.getByText('Strong encryption (256-bit)')).toBeInTheDocument();
       const { rerender } = render(<EncryptionDetails encryptionState={aes256State} />);
-      const aes128State: EncryptionState = { 
-        status: 'encrypted', 
-        algorithm: 'AES-128-GCM' ,
-      };
+      const aes128State: EncryptionState = {,
+  status: 'encrypted',
+  algorithm: 'AES-128-GCM',
+};
       rerender(<EncryptionDetails encryptionState={aes128State} />);
       expect(screen.getByText('Medium encryption (128-bit)')).toBeInTheDocument();
-      const rsa4096State: EncryptionState = { 
-        status: 'encrypted', 
-        algorithm: 'RSA-4096' ,
-      };
+      const rsa4096State: EncryptionState = {,
+  status: 'encrypted',
+  algorithm: 'RSA-4096',
+};
       rerender(<EncryptionDetails encryptionState={rsa4096State} />);
       expect(screen.getByText('Strong encryption (RSA 4096-bit)')).toBeInTheDocument();
     });
@@ -233,12 +233,12 @@ describe('EncryptionStatus Components', () => {
       expect(screen.getByText('Encryption Status')).toBeInTheDocument();
     });
     it('handles different encryption algorithms', () => {
-      const algorithms: EncryptionAlgorithm[] = [
+      const algorithms: EncryptionAlgorithm = [
         'AES-256-GCM', 'AES-256-CBC', 'AES-128-GCM', 
         'RSA-2048', 'RSA-4096', 'ChaCha20-Poly1305', 'unknown'
       ];
       algorithms.forEach(algorithm => {)
-        const state: EncryptionState = { status: 'encrypted', algorithm };
+  const state: EncryptionState = { status: 'encrypted', algorithm };
         const { rerender } = render(<EncryptionStatus encryptionState={state} />);
         expect(screen.getByText(algorithm)).toBeInTheDocument();
         rerender(<div />); // Clean up for next iteration

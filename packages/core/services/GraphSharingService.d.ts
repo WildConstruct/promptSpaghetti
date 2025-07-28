@@ -1,5 +1,6 @@
 import { Node } from 'reactflow';
 import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
+
 export interface SharedGraphFormat {
     metadata: {,
         exportId: string;
@@ -145,7 +146,7 @@ export interface SharedGraphFormat {
         warnings: string[];
         errors: string[];
     };
-}
+
 export declare class GraphSharingService {
     private static instance;
     private sharedGraphs;
@@ -242,7 +243,7 @@ export declare class GraphSharingService {
       permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
       collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']
     ): boolean;
-}
+
 export declare export declare const importSharedGraph: (sharedGraph: SharedGraphFormat, options?: any) => Promise<{
     success: boolean;
     graph?: {

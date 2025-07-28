@@ -46,6 +46,7 @@ export enum ResolutionStrategy {
   ROLLBACK = 'rollback'
 }
 
+}
 export interface ConflictContext {
   resource_id: string;
   workspace_id: string;
@@ -58,11 +59,13 @@ export interface ConflictContext {
     line_number?: number;
     column?: number;
     offset?: number;
+}
   };
   timestamp: Date;
   priority_levels: Map<string, number>; // User ID -> priority level
 }
 
+}
 export interface ResolutionResult {
   success: boolean;
   resolution_strategy: ResolutionStrategy;
@@ -75,11 +78,13 @@ export interface ResolutionResult {
     resolution_time_ms: number;
     confidence_score: number;     // 0-1 confidence in resolution
     affected_users: string[];
+}
   };
   warnings?: string[];
   errors?: string[];
 }
 
+}
 export interface Operation {
   id: string;
   type: 'insert' | 'delete' | 'replace' | 'move' | 'format';
@@ -90,7 +95,9 @@ export interface Operation {
   timestamp: Date;
   session_id: string;
 }
+}
 
+}
 export interface OperationalTransform {
   operations: Operation[];
   transformed_operations: Operation[];
@@ -100,6 +107,7 @@ export interface OperationalTransform {
     transform_time_ms: number;
     operations_processed: number;
     conflicts_resolved: number;
+}
   };
 }
 
@@ -127,6 +135,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     resourceId: string,
     currentSessions: EditSession[]
   ): Promise<ConflictMarker[]> {
+
     const conflicts: ConflictMarker[] = [];
     const activeSessions = currentSessions.filter(s => s.editing_state.is_active);
 
@@ -179,6 +188,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     sessionA: EditSession,
     sessionB: EditSession
   ): Promise<ConflictMarker[]> {
+
     const conflicts: ConflictMarker[] = [];
 
     // Check cursor position conflicts
@@ -289,6 +299,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     strategy: ResolutionStrategy,
     manualResolution?: unknown
   ): Promise<ResolutionResult> {
+
     const startTime = Date.now();
     const context = this.activeConflicts.get(resourceId);
     
@@ -304,7 +315,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-        },
+  }
         errors: ['No active conflicts found for resource']
       };
     }
@@ -371,7 +382,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: Date.now() - startTime,
           confidence_score: 0,
           affected_users: context.conflicting_sessions.map(s => s.user_id)
-        },
+  }
         errors: [error instanceof Error ? error.message : String(error)]
       };
 
@@ -384,6 +395,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Last Writer Wins resolution strategy
    */
   private async resolveWithLastWriterWins(context: ConflictContext): Promise<ResolutionResult> {
+
     // Find the most recent edit session
     const latestSession = context.conflicting_sessions.reduce((latest, current) => 
       current.session_info.last_activity_at > latest.session_info.last_activity_at ? current : latest
@@ -403,7 +415,7 @@ export class ConflictResolutionEngine extends EventEmitter {
         resolution_time_ms: 0, // Will be updated by caller
         confidence_score: 0.8,  // High confidence for simple strategy
         affected_users: []       // Will be updated by caller
-      },
+  }
       warnings: [`Resolved using last writer wins. Winner: ${winningUserId}`]
     };
   }
@@ -412,6 +424,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Operational Transform resolution strategy
    */
   private async resolveWithOperationalTransform(context: ConflictContext): Promise<ResolutionResult> {
+
     // Implement operational transformation algorithm
     const operations: Operation[] = [];
     
@@ -458,7 +471,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: transform.transform_metadata.transform_time_ms,
           confidence_score: 0.3,
           affected_users: []
-        },
+  }
         errors: ['Operational transform could not resolve all conflicts']
       };
     }
@@ -468,6 +481,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Three-way merge resolution strategy
    */
   private async resolveWithThreeWayMerge(context: ConflictContext): Promise<ResolutionResult> {
+
     // Implement three-way merge algorithm
     const baseVersion = context.base_version;
     const localVersion = context.local_version;
@@ -502,7 +516,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: mergeResult.confidence_score,
           affected_users: []
-        },
+  }
         warnings: ['Three-way merge completed with unresolved conflicts']
       };
     }
@@ -512,6 +526,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Auto merge resolution strategy
    */
   private async resolveWithAutoMerge(context: ConflictContext): Promise<ResolutionResult> {
+
     // Try operational transform first, fall back to three-way merge
     let result = await this.resolveWithOperationalTransform(context);
     
@@ -535,6 +550,7 @@ export class ConflictResolutionEngine extends EventEmitter {
     context: ConflictContext,
     manualResolution: unknown
   ): Promise<ResolutionResult> {
+
     if (!manualResolution) {
       return {
         success: false,
@@ -547,7 +563,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-        },
+  }
         errors: ['Manual resolution data required']
       };
     }
@@ -572,6 +588,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Rollback resolution strategy
    */
   private async resolveWithRollback(context: ConflictContext): Promise<ResolutionResult> {
+
     const rollbackPoints = this.rollbackPoints.get(context.resource_id);
     
     if (!rollbackPoints || rollbackPoints.length === 0) {
@@ -586,7 +603,7 @@ export class ConflictResolutionEngine extends EventEmitter {
           resolution_time_ms: 0,
           confidence_score: 0,
           affected_users: []
-        },
+  }
         errors: ['No rollback points available']
       };
     }
@@ -606,7 +623,7 @@ export class ConflictResolutionEngine extends EventEmitter {
         resolution_time_ms: 0,
         confidence_score: 0.7,
         affected_users: []
-      },
+  }
       warnings: ['Content rolled back to previous stable version']
     };
   }
@@ -619,6 +636,7 @@ export class ConflictResolutionEngine extends EventEmitter {
    * Apply operational transformation to operations
    */
   private async applyOperationalTransform(operations: Operation[]): Promise<OperationalTransform> {
+
     const startTime = Date.now();
     const transformedOps: Operation[] = [];
     const conflicts: ConflictMarker[] = [];

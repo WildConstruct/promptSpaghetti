@@ -27,53 +27,49 @@ import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration
 // ========================================
 
 export interface ThrottlingAnalyticsConfig {
-  enableAnalyticsIntegration: boolean;
-  analyticsUpdateInterval: number; // minutes
-  enablePatternBasedAdjustments: boolean;
+  enableAnalyticsIntegration: boolean;,
+  analyticsUpdateInterval: number; // minutes,
+  enablePatternBasedAdjustments: boolean;,
   enableScalingInsights: boolean;
-  enablePredictiveThrottling: boolean;
+  enablePredictiveThrottling: boolean;,
   enableAnomalyDetection: boolean;
-  confidenceThreshold: number; // 0-100
+  confidenceThreshold: number; // 0-100,
 }
-
 export interface ThrottlingAnalyticsInsight {
-  insightId: string;
+  insightId: string;,
   timestamp: Date;
-  insightType: 'pattern_detected' | 'scaling_recommendation' | 'anomaly_detected' | 'predictive_adjustment';
-  confidence: number; // 0-100
-  ruleId: string;
+  insightType: 'pattern_detected' | 'scaling_recommendation' | 'anomaly_detected' | 'predictive_adjustment';,
+  confidence: number; // 0-100,
+  ruleId: string;,
   recommendation: {,
-    action: 'increase_throttling' | 'decrease_throttling' | 'maintain_current' | 'enable_protection' | 'disable_protection';
-    adjustmentFactor: number; // multiplier for throttling parameters
-    reason: string;
-    expectedImpact: string;
-    validityPeriod: number; // minutes
-  };
+  action: 'increase_throttling' | 'decrease_throttling' | 'maintain_current' | 'enable_protection' | 'disable_protection';,
+  adjustmentFactor: number; // multiplier for throttling parameters,
+  reason: string;,
+  expectedImpact: string;
+  validityPeriod: number; // minutes,
+};
   metadata: {,
-    patternType?: string;
-    usageMetrics?: Record<string, number>;
-    scalingFactors?: Record<string, number>;
-    anomalyScore?: number;
-    anomalyType?: string;
-    supportingData?: Record<string, unknown>;
-  };
+  patternType?: string;
+  usageMetrics?: Record<string, number>;
+  scalingFactors?: Record<string, number>;
+  anomalyScore?: number;
+  anomalyType?: string;
+  supportingData?: Record<string, unknown>;
+};
 }
-
 export interface PatternDetectionData {
-  pattern: string;
+  pattern: string;,
   confidence: number;
   recommendation: string;
 }
-
 export interface EndpointUsageData {
-  endpoint: string;
+  endpoint: string;,
   usageMetrics: Record<string, number>;
 }
-
 export interface ScalingRecommendationData {
-  confidence: number;
+  confidence: number;,
   action: string;
-  multiplier: number;
+  multiplier: number;,
   reason: string;
   scaleUp?: boolean;
   expectedImpact?: string;
@@ -81,11 +77,10 @@ export interface ScalingRecommendationData {
   // Allow index signature for compatibility
   [key: string]: unknown;
 }
-
 export interface QuotaRecommendationData {
-  endpoint: string;
+  endpoint: string;,
   currentQuota: number;
-  recommendedQuota: number;
+  recommendedQuota: number;,
   reason: string;
   confidence?: number;
   action?: string;
@@ -94,46 +89,42 @@ export interface QuotaRecommendationData {
   // Allow index signature for compatibility
   [key: string]: unknown;
 }
-
 export interface LoadPredictionData {
-  predictedLoad: number;
+  predictedLoad: number;,
   currentLoad: number;
-  confidence: number;
+  confidence: number;,
   timeFrame: number;
 }
-
 export interface PerformanceAnomalyData {
-  anomalyType: string;
+  anomalyType: string;,
   severity: number;
-  affectedEndpoints: string[];
+  affectedEndpoints: string;,
   recommendation: string;
   confidence?: number;
   anomalyScore?: number;
   // Allow index signature for compatibility
   [key: string]: unknown;
 }
-
 export interface ThrottlingDecisionContext extends ThrottlingContext {
-  analyticsInsights: ThrottlingAnalyticsInsight[];
+  analyticsInsights: ThrottlingAnalyticsInsight;,
   historicalPerformance: {,
-    requestVolume: number[];
-    successRate: number[];
-    averageLatency: number[];
-    errorRates: number[];
-  };
+  requestVolume: number;,
+  successRate: number;
+  averageLatency: number;,
+  errorRates: number;
+};
   patternAnalysis: {,
-    currentPattern: string;
-    patternConfidence: number;
-    predictedNextPattern: string;
-    patternTransitionProbability: number;
-  };
+  currentPattern: string;
+  patternConfidence: number;,
+  predictedNextPattern: string;
+  patternTransitionProbability: number;
+};
   scalingContext: {,
-    currentLoad: number;
-    predictedLoad: number;
-    scalingRecommendation: string;
-    capacityUtilization: number;
-  };
-}
+  currentLoad: number;
+  predictedLoad: number;,
+  scalingRecommendation: string;
+  capacityUtilization: number;
+};
 
 // ========================================
 // Throttling Rule Types
@@ -172,131 +163,121 @@ export const SystemCondition = {
 } as const;
 
 export interface ThrottlingRule {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   enabled: boolean;
   priority: number;
   // Rule conditions
-  mode: ThrottlingMode;
-  triggerConditions: ThrottlingCondition[];
+  mode: ThrottlingMode;,
+  triggerConditions: ThrottlingCondition;
   // Throttling parameters
-  baseDelay: number;          // Base throttling delay in ms
-  maxDelay: number;           // Maximum throttling delay in ms
-  adaptiveMultiplier: number;  // Multiplier for adaptive adjustments
+  baseDelay: number;          // Base throttling delay in ms,
+  maxDelay: number;           // Maximum throttling delay in ms,
+  adaptiveMultiplier: number;  // Multiplier for adaptive adjustments,
   // Progressive throttling
-  escalationSteps: ThrottlingStep[];
+  escalationSteps: ThrottlingStep;
   // Circuit breaker settings
-  failureThreshold: number;    // Failures before circuit opens
-  recoveryTimeout: number;     // Time before attempting recovery
-  halfOpenRequests: number;    // Test requests in half-open state
+  failureThreshold: number;    // Failures before circuit opens,
+  recoveryTimeout: number;     // Time before attempting recovery,
+  halfOpenRequests: number;    // Test requests in half-open state,
   // Load shedding
-  loadThreshold: number;       // System load percentage trigger
-  shedPercentage: number;      // Percentage of requests to drop
+  loadThreshold: number;       // System load percentage trigger,
+  shedPercentage: number;      // Percentage of requests to drop,
   // Bandwidth shaping
-  tokensPerSecond: number;     // Token bucket refill rate
-  burstSize: number;           // Maximum burst tokens
+  tokensPerSecond: number;     // Token bucket refill rate,
+  burstSize: number;           // Maximum burst tokens,
   // Monitoring and alerting
-  monitoringEnabled: boolean;
-  alertThreshold: number;      // Alert when throttling exceeds this %
+  monitoringEnabled: boolean;,
+  alertThreshold: number;      // Alert when throttling exceeds this %,
   logViolations: boolean;
   // Epic 31 Analytics Integration
   analyticsConfig?: ThrottlingAnalyticsConfig;
   lastAnalyticsUpdate?: Date;
-  activeInsights?: ThrottlingAnalyticsInsight[];
-  performanceHistory?: {
-    throttlingEffectiveness: number; // 0-100
-    falsePositiveRate: number; // 0-100
-    adaptationSuccessRate: number; // 0-100
-    lastOptimizationDate: Date;
-  };
+  activeInsights?: ThrottlingAnalyticsInsight;
+  performanceHistory?: {,
+  throttlingEffectiveness: number; // 0-100,
+  falsePositiveRate: number; // 0-100,
+  adaptationSuccessRate: number; // 0-100,
+  lastOptimizationDate: Date;
+};
 }
-
 export interface ThrottlingCondition {
-  type: 'endpoint' | 'method' | 'user_pattern' | 'system_load' | 'threat_level' | 'time_based' | 'custom';
+  type: 'endpoint' | 'method' | 'user_pattern' | 'system_load' | 'threat_level' | 'time_based' | 'custom';,
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in_range' | 'pattern_match';
   field?: string;
   value?: unknown;
   threshold?: number;
 }
-
 export interface ThrottlingStep {
-  level: number;
-  delay: number;              // Delay in ms for this step
-  blockPercentage: number;    // Percentage of requests to block
-  duration: number;           // Duration in ms before next step
+  level: number;,
+  delay: number;              // Delay in ms for this step,
+  blockPercentage: number;    // Percentage of requests to block,
+  duration: number;           // Duration in ms before next step,
   condition: ThrottlingCondition;
 }
-
 export interface ThrottlingContext {
-  requestId: string;
+  requestId: string;,
   endpoint: string;
   method: string;
   userId?: string;
-  ip: string;
+  ip: string;,
   userAgent: string;
-  timestamp: number;
-  systemLoad: number;         // Current system load (0-100)
-  threatLevel: ThreatLevel;
+  timestamp: number;,
+  systemLoad: number;         // Current system load (0-100),
+  threatLevel: ThreatLevel;,
   recentFailures: number;
   consecutiveFailures: number;
 }
-
 export interface ThrottlingResult {
-  action: 'allow' | 'throttle' | 'block' | 'shed';
-  delay: number;              // Delay to apply in ms
-  reason: string;
+  action: 'allow' | 'throttle' | 'block' | 'shed';,
+  delay: number;              // Delay to apply in ms,
+  reason: string;,
   ruleId: string;
   metadata: {,
-    originalDelay?: number;
-    appliedMultiplier?: number;
-    systemCondition: SystemCondition;
-    escalationLevel?: number;
-    tokensRemaining?: number;
-    analyticsAdjustments?: {
-      appliedInsights: number;
-      originalAction: string;
-      originalDelay: number;
-      adjustmentReason: string;
-      confidenceScore: number;
-      adjustmentFactors?: Record<string, number>;
-    };
+  originalDelay?: number;
+  appliedMultiplier?: number;
+  systemCondition: SystemCondition;
+  escalationLevel?: number;
+  tokensRemaining?: number;
+  analyticsAdjustments?: {,
+  appliedInsights: number;,
+  originalAction: string;
+  originalDelay: number;,
+  adjustmentReason: string;
+  confidenceScore: number;
+  adjustmentFactors?: Record<string, number>;
+};
   };
 }
-
 export interface CircuitBreakerState {
-  state: 'closed' | 'open' | 'half_open';
+  state: 'closed' | 'open' | 'half_open';,
   failureCount: number;
-  lastFailureTime: Date;
+  lastFailureTime: Date;,
   nextAttemptTime: Date;
-  successCount: number;       // For half-open state
+  successCount: number;       // For half-open state,
 }
-
 export interface TokenBucketState {
-  tokens: number;
+  tokens: number;,
   lastRefill: Date;
-  capacity: number;
+  capacity: number;,
   refillRate: number;
+  // ========================================
+  // System Metrics Interface
+  // ========================================
 }
-
-// ========================================
-// System Metrics Interface
-// ========================================
-
 export interface SystemMetrics {
-  cpuUsage: number;           // 0-100
-  memoryUsage: number;        // 0-100
-  activeConnections: number;
+  cpuUsage: number;           // 0-100,
+  memoryUsage: number;        // 0-100,
+  activeConnections: number;,
   requestsPerSecond: number;
-  averageResponseTime: number;
-  errorRate: number;          // 0-100
+  averageResponseTime: number;,
+  errorRate: number;          // 0-100,
   queueDepth: number;
+  // ========================================
+  // Adaptive Throttling Rules Engine
+  // ========================================
 }
-
-// ========================================
-// Adaptive Throttling Rules Engine
-// ========================================
-
 export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   private rules: Map<string, ThrottlingRule> = new Map();
   private circuitBreakerStates: Map<string, CircuitBreakerState> = new Map();
@@ -306,113 +287,98 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
   // Epic 31 Analytics Integration
   private usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
   private scalingAnalytics?: ApiScalingAnalyticsIntegration;
-  private analyticsInsights: Map<string, ThrottlingAnalyticsInsight[]> = new Map();
+  private analyticsInsights: Map<string, ThrottlingAnalyticsInsight> = new Map();
   private analyticsEnabled: boolean = false;
   private lastAnalyticsUpdate: Date = new Date();
   constructor();
-    private rateLimitingService: RateLimitingService, 
-    initializeDefaults: boolean = true,
-    analyticsConfig?: {
-      usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
-      scalingAnalytics?: ApiScalingAnalyticsIntegration;
-      enableAnalytics?: boolean;
-    }
-    super();
-    this.systemMetrics = this.getDefaultSystemMetrics();
-    // Initialize Epic 31 analytics integration
-    if (analyticsConfig) {
-      this.usagePatternAnalytics = analyticsConfig.usagePatternAnalytics;
-      this.scalingAnalytics = analyticsConfig.scalingAnalytics;
-      this.analyticsEnabled = analyticsConfig.enableAnalytics || false;
-      // Set up analytics event listeners
-      this.initializeAnalyticsIntegration();
-    }
-    if (initializeDefaults) {
-      this.initializeDefaultRules();
-      this.startMetricsCollection();
-    }
-  }
+  private rateLimitingService: RateLimitingService,
+  initializeDefaults: boolean = true,
+  analyticsConfig?: {,
+  usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
+  scalingAnalytics?: ApiScalingAnalyticsIntegration;
+  enableAnalytics?: boolean;
+  super();
+  this.systemMetrics = this.getDefaultSystemMetrics();
+  // Initialize Epic 31 analytics integration
+  if (analyticsConfig) {
+  this.usagePatternAnalytics = analyticsConfig.usagePatternAnalytics;
+  this.scalingAnalytics = analyticsConfig.scalingAnalytics;
+  this.analyticsEnabled = analyticsConfig.enableAnalytics || false;
+  // Set up analytics event listeners
+  this.initializeAnalyticsIntegration();
+  if (initializeDefaults) {
+  this.initializeDefaultRules();
+  this.startMetricsCollection();
   /**
-   * Add a new throttling rule
-   */
-  public addRule(rule: ThrottlingRule): void {
-    this.validateRule(rule);
-    this.rules.set(rule.id, rule);
-    // Initialize circuit breaker state if needed
-    if (rule.mode === ThrottlingMode.CIRCUIT_BREAKER) {
-      this.circuitBreakerStates.set(rule.id, {)
-        state: 'closed',
-        failureCount: 0,
-        lastFailureTime: new Date(),
-        nextAttemptTime: new Date(),
-        successCount: 0,
-      });
-    }
+  * Add a new throttling rule
+  */
+  public addRule(rule: ThrottlingRule): void {,
+  this.validateRule(rule);
+  this.rules.set(rule.id, rule);
+  // Initialize circuit breaker state if needed
+  if (rule.mode === ThrottlingMode.CIRCUIT_BREAKER) {
+  this.circuitBreakerStates.set(rule.id, {)
+  state: 'closed',
+  failureCount: 0,
+  lastFailureTime: new Date(),
+  nextAttemptTime: new Date(),
+  successCount: 0,
+});
     // Initialize token bucket if needed
     if (rule.mode === ThrottlingMode.BANDWIDTH_SHAPING) {
-      this.tokenBuckets.set(rule.id, {)
-        tokens: rule.burstSize,
-        lastRefill: new Date(),
-        capacity: rule.burstSize,
-        refillRate: rule.tokensPerSecond,
-      });
-    }
+  this.tokenBuckets.set(rule.id, {)
+  tokens: rule.burstSize,
+  lastRefill: new Date(),
+  capacity: rule.burstSize,
+  refillRate: rule.tokensPerSecond,
+});
     this.emit('ruleAdded', { ruleId: rule.id, rule });
-  }
   /**
    * Apply throttling rules to a request context with Epic 31 analytics insights
    */
   public async applyThrottling(context: ThrottlingContext): Promise<ThrottlingResult> {
-    if (!this.enabled) {
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'Throttling disabled',
-        ruleId: 'none',
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
-    }
+  if (!this.enabled) {
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Throttling disabled',
+  ruleId: 'none',
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
     // Update system metrics
     await this.refreshSystemMetrics();
     // Update analytics insights if enabled
     if (this.analyticsEnabled) {
-      await this.updateAnalyticsInsights();
-    }
-    // Find matching rules (sorted by priority)
-    const matchingRules = this.findMatchingRules(context);
-    if (matchingRules.length === 0) {
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'No matching throttling rules',
-        ruleId: 'none',
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
-    }
+  await this.updateAnalyticsInsights();
+  // Find matching rules (sorted by priority)
+  const matchingRules = this.findMatchingRules(context);
+  if (matchingRules.length === 0) {
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'No matching throttling rules',
+  ruleId: 'none',
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
     // Apply the highest priority rule with analytics enhancement
     const rule = matchingRules[0];
     const enhancedContext = await this.enhanceContextWithAnalytics(context, rule);
     const result = await this.applyRuleWithAnalytics(rule, enhancedContext);
     // Record analytics data for learning
     if (this.analyticsEnabled) {
-      await this.recordThrottlingDecision(rule, enhancedContext, result);
-    }
-    // Log and emit events if necessary
-    if (rule.logViolations && result.action !== 'allow') {
-      this.emit('throttlingApplied', {)
-        context: enhancedContext,
-        rule: rule.id,
-        result,
-        timestamp: new Date(),
-        analyticsInsights: enhancedContext.analyticsInsights,
-      });
-    }
+  await this.recordThrottlingDecision(rule, enhancedContext, result);
+  // Log and emit events if necessary
+  if (rule.logViolations && result.action !== 'allow') {
+  this.emit('throttlingApplied', {)
+  context: enhancedContext,
+  rule: rule.id,
+  result,
+  timestamp: new Date(),
+  analyticsInsights: enhancedContext.analyticsInsights,
+});
     return result;
-  }
   /**
    * Update system metrics
    */
@@ -422,7 +388,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       ...metrics
     };
     this.emit('metricsUpdated', this.systemMetrics);
-  }
   /**
    * Get current system condition
    */
@@ -431,21 +396,16 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     // Check for attack conditions first (high error rate is primary indicator)
     if (this.systemMetrics.errorRate > 50 || avgLoad > 95) {
       return SystemCondition.UNDER_ATTACK;
-    } 
     // Check for overload (high load OR high error rate)
     if (avgLoad > 85 || this.systemMetrics.errorRate > 25) {
       return SystemCondition.OVERLOAD;
-    } 
     // Check for high load (moderate-high load OR moderate error rate)
     if (avgLoad > 70 || this.systemMetrics.errorRate > 15) {
       return SystemCondition.HIGH_LOAD;
-    } 
     // Check for elevated (moderate load OR low-moderate error rate)
     if (avgLoad > 50 || this.systemMetrics.errorRate > 5) {
       return SystemCondition.ELEVATED;
-    }
     return SystemCondition.NORMAL;
-  }
   /**
    * Convert SystemCondition string to numeric code for analytics
    */
@@ -455,40 +415,35 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       case SystemCondition.ELEVATED: return 1;
       case SystemCondition.HIGH_LOAD: return 2;
       case SystemCondition.OVERLOAD: return 3;
-      case SystemCondition.UNDER_ATTACK: return 4;
-      default: return 0;
-    }
-  }
+      case SystemCondition.UNDER_ATTACK: return 4;,
+  default: return 0;
   /**
    * Get throttling statistics
    */
   public getStatistics(): {
-    rulesCount: number;
-    activeRules: number;
+    rulesCount: number;,
+  activeRules: number;
     circuitBreakers: Record<string, CircuitBreakerState>;
     tokenBuckets: Record<string, { tokens: number; capacity: number }>;
-    systemCondition: SystemCondition;
-    systemMetrics: SystemMetrics;
+    systemCondition: SystemCondition;,
+  systemMetrics: SystemMetrics;
     const circuitBreakers: Record<string, CircuitBreakerState> = {};
     for (const [id, state] of this.circuitBreakerStates) {
       circuitBreakers[id] = state;
-    }
     const tokenBuckets: Record<string, { tokens: number; capacity: number }> = {};
     for (const [id, bucket] of this.tokenBuckets) {
-      tokenBuckets[id] = {
-        tokens: Math.floor(bucket.tokens),
-        capacity: bucket.capacity,
-      };
-    }
+  tokenBuckets[id] = {
+  tokens: Math.floor(bucket.tokens),
+  capacity: bucket.capacity,
+};
     return {
-      rulesCount: this.rules.size,
-      activeRules: Array.from(this.rules.values()).filter(r => r.enabled).length,
-      circuitBreakers,
-      tokenBuckets,
-      systemCondition: this.getSystemCondition(),
-      systemMetrics: this.systemMetrics,
-    };
-  }
+  rulesCount: this.rules.size,
+  activeRules: Array.from(this.rules.values()).filter(r => r.enabled).length,
+  circuitBreakers,
+  tokenBuckets,
+  systemCondition: this.getSystemCondition(),
+  systemMetrics: this.systemMetrics,
+};
   // ========================================
   // Epic 31 Analytics Integration Methods
   // ========================================
@@ -506,7 +461,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       this.usagePatternAnalytics.on('quotaRecommendation', (data) => {
         this.handleQuotaRecommendation(data);
       });
-    }
     if (this.scalingAnalytics) {
       this.scalingAnalytics.on('scalingRecommendation', (data) => {
         this.handleScalingRecommendation(data);
@@ -517,70 +471,62 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       this.scalingAnalytics.on('performanceAnomaly', (data) => {
         this.handlePerformanceAnomaly(data);
       });
-    }
     // Start periodic analytics updates
     this.startAnalyticsUpdateCycle();
-  }
   /**
    * Update analytics insights from Epic 31 services
    */
   private async updateAnalyticsInsights(): Promise<void> {
-    const now = new Date();
-    const timeSinceLastUpdate = now.getTime() - this.lastAnalyticsUpdate.getTime();
-    const updateInterval = 5 * 60 * 1000; // 5 minutes;
-    if (timeSinceLastUpdate < updateInterval) {
-      return; // Skip update if too recent
-    }
-    try {
-      // Update usage pattern insights
-      if (this.usagePatternAnalytics) {
-        const patternRecommendations = await this.getPatternBasedInsights();
-        this.updateInsightsForRules(patternRecommendations);
-      }
-      // Update scaling insights
-      if (this.scalingAnalytics) {
-        const scalingRecommendations = await this.getScalingBasedInsights();
-        this.updateInsightsForRules(scalingRecommendations);
-      }
-      this.lastAnalyticsUpdate = now;
-      this.emit('analyticsInsightsUpdated', {)
-        timestamp: now,
-        insightCount: Array.from(this.analyticsInsights.values()).reduce((sum, insights) => sum + insights.length, 0)
-      });
+  const now = new Date();
+  const timeSinceLastUpdate = now.getTime() - this.lastAnalyticsUpdate.getTime();
+  const updateInterval = 5 * 60 * 1000; // 5 minutes;
+  if (timeSinceLastUpdate < updateInterval) {
+  return; // Skip update if too recent
+  try {
+  // Update usage pattern insights
+  if (this.usagePatternAnalytics) {
+  const patternRecommendations = await this.getPatternBasedInsights();
+  this.updateInsightsForRules(patternRecommendations);
+  // Update scaling insights
+  if (this.scalingAnalytics) {
+  const scalingRecommendations = await this.getScalingBasedInsights();
+  this.updateInsightsForRules(scalingRecommendations);
+  this.lastAnalyticsUpdate = now;
+  this.emit('analyticsInsightsUpdated', {)
+  timestamp: now,
+  insightCount: Array.from(this.analyticsInsights.values()).reduce((sum, insights) => sum + insights.length, 0),
+});
     } catch (error) {
-      this.emit('analyticsUpdateError', {)
-        error: error instanceof Error ? error.message : 'Unknown error',
-        timestamp: now,
-      });
-    }
-  }
+  this.emit('analyticsUpdateError', {)
+  error: error instanceof Error ? error.message : 'Unknown error',
+  timestamp: now,
+});
   /**
    * Enhance context with analytics data
    */
-  private async enhanceContextWithAnalytics()
-    context: ThrottlingContext, 
+  private async enhanceContextWithAnalytics(()
+    context: ThrottlingContext,
     rule: ThrottlingRule,
   ): Promise<ThrottlingDecisionContext> {
-    const insights = this.analyticsInsights.get(rule.id) || [];
-    // Get historical performance data
-    const historicalPerformance = await this.getHistoricalPerformance(context.endpoint);
-    // Get pattern analysis
-    const patternAnalysis = await this.getPatternAnalysis(context);
-    // Get scaling context
-    const scalingContext = await this.getScalingContext();
-    return {
-      ...context,
-      analyticsInsights: insights,
-      historicalPerformance,
-      patternAnalysis,
-      scalingContext
-    };
-  }
+  const insights = this.analyticsInsights.get(rule.id) || [];
+  // Get historical performance data
+  const historicalPerformance = await this.getHistoricalPerformance(context.endpoint);
+  // Get pattern analysis
+  const patternAnalysis = await this.getPatternAnalysis(context);
+  // Get scaling context
+  const scalingContext = await this.getScalingContext();
+  return {
+  ...context,
+  analyticsInsights: insights,
+  historicalPerformance,
+  patternAnalysis,
+  scalingContext
+};
   /**
    * Apply rule with analytics-enhanced decision making
    */
-  private async applyRuleWithAnalytics()
-    rule: ThrottlingRule, 
+  private async applyRuleWithAnalytics(()
+    rule: ThrottlingRule,
     context: ThrottlingDecisionContext,
   ): Promise<ThrottlingResult> {
     // Start with base rule application
@@ -588,17 +534,13 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     // Apply analytics adjustments if enabled
     if (rule.analyticsConfig?.enableAnalyticsIntegration && context.analyticsInsights.length > 0) {
       result = await this.applyAnalyticsAdjustments(rule, context, result);
-    }
     return result;
-  }
   /**
    * Apply analytics-based adjustments to throttling decision
    */
-  private async applyAnalyticsAdjustments()
-    rule: ThrottlingRule,
+  private async applyAnalyticsAdjustments(rule: ThrottlingRule,)
     context: ThrottlingDecisionContext,
-    baseResult: ThrottlingResult,
-  ): Promise<ThrottlingResult> {
+    baseResult: ThrottlingResult): Promise<ThrottlingResult> {,
     let adjustedResult = { ...baseResult };
     // Process insights by confidence level (highest first)
     const sortedInsights = context.analyticsInsights;
@@ -606,12 +548,11 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       .sort((a, b) => b.confidence - a.confidence);
     for (const insight of sortedInsights) {
       adjustedResult = this.applyInsightAdjustment(rule, context, adjustedResult, insight);
-    }
     // Add analytics metadata
     adjustedResult.metadata = {
       ...adjustedResult.metadata,
       analyticsAdjustments: {,
-        appliedInsights: sortedInsights.length,
+  appliedInsights: sortedInsights.length,
         originalAction: baseResult.action,
         originalDelay: baseResult.delay,
         adjustmentReason: sortedInsights.length > 0 ? sortedInsights[0].recommendation.reason : 'No insights applied',
@@ -620,32 +561,27 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
           acc[`insight_${index}`] = insight.recommendation.adjustmentFactor;}
           return acc;
         }, {} as Record<string, number>)
-      }
     };
     return adjustedResult;
-  }
   /**
    * Apply individual insight adjustment
    */
-  private applyInsightAdjustment()
-    rule: ThrottlingRule,
+  private applyInsightAdjustment(rule: ThrottlingRule,)
     context: ThrottlingDecisionContext,
     result: ThrottlingResult,
-    insight: ThrottlingAnalyticsInsight,
-  ): ThrottlingResult {
+    insight: ThrottlingAnalyticsInsight): ThrottlingResult {,
     const adjustment = insight.recommendation;
     const adjustedResult = { ...result };
     switch (adjustment.action) {
-      case 'increase_throttling':
-        if (result.action === 'allow') {
-          adjustedResult.action = 'throttle';
-          adjustedResult.delay = rule.baseDelay * adjustment.adjustmentFactor;
-        } else if (result.action === 'throttle') {
+  case 'increase_throttling':,
+  if (result.action === 'allow') {
+  adjustedResult.action = 'throttle';
+  adjustedResult.delay = rule.baseDelay * adjustment.adjustmentFactor;
+} else if (result.action === 'throttle') {
           adjustedResult.delay = Math.min()
             result.delay * adjustment.adjustmentFactor,
             rule.maxDelay
           );
-        }
         adjustedResult.reason = `${result.reason} (Analytics: ${adjustment.reason})`;}
         break;
       case 'decrease_throttling':
@@ -659,8 +595,6 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
           );
           if (adjustedResult.delay === 0) {
             adjustedResult.action = 'allow';
-          }
-        }
         adjustedResult.reason = `${result.reason} (Analytics: ${adjustment.reason})`;}
         break;
       case 'enable_protection':
@@ -668,108 +602,93 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
           adjustedResult.action = 'throttle';
           adjustedResult.delay = rule.baseDelay;
           adjustedResult.reason = `Protection enabled by analytics: ${adjustment.reason}`;}
-        }
         break;
       case 'disable_protection':
         if (result.action !== 'allow' && insight.confidence > 90) {
           adjustedResult.action = 'allow';
           adjustedResult.delay = 0;
           adjustedResult.reason = `Protection disabled by analytics: ${adjustment.reason}`;}
-        }
         break;
-    }
     return adjustedResult;
-  }
   /**
    * Record throttling decision for analytics learning
    */
-  private async recordThrottlingDecision()
-    rule: ThrottlingRule,
+  private async recordThrottlingDecision(rule: ThrottlingRule,)
     context: ThrottlingDecisionContext,
-    result: ThrottlingResult,
-  ): Promise<void> {
-    const decisionData = {
-      ruleId: rule.id,
-      context: {,
-        endpoint: context.endpoint,
-        method: context.method,
-        systemLoad: context.systemLoad,
-        threatLevel: context.threatLevel,
-        timestamp: context.timestamp,
-      },
-      decision: {,
-        action: result.action,
-        delay: result.delay,
-        reason: result.reason,
-      },
-      analyticsContext: {,
-        insights: context.analyticsInsights.length,
-        patternConfidence: context.patternAnalysis.patternConfidence,
-        scalingRecommendation: context.scalingContext.scalingRecommendation,
-      }
-    };
+    result: ThrottlingResult): Promise<void> {,
+  const decisionData = {
+  ruleId: rule.id,
+  context: {,
+  endpoint: context.endpoint,
+  method: context.method,
+  systemLoad: context.systemLoad,
+  threatLevel: context.threatLevel,
+  timestamp: context.timestamp,
+},
+  decision: {,
+  action: result.action,
+  delay: result.delay,
+  reason: result.reason,
+},
+  analyticsContext: {,
+  insights: context.analyticsInsights.length,
+  patternConfidence: context.patternAnalysis.patternConfidence,
+  scalingRecommendation: context.scalingContext.scalingRecommendation,
+};
     // Send to analytics services for learning
     if (this.usagePatternAnalytics) {
-      this.usagePatternAnalytics.emit('throttlingDecision', decisionData);
-    }
-    if (this.scalingAnalytics) {
-      this.scalingAnalytics.emit('throttlingDecision', decisionData);
-    }
-    // Update rule performance history
-    this.updateRulePerformanceHistory(rule, result);
-  }
+  this.usagePatternAnalytics.emit('throttlingDecision', decisionData);
+  if (this.scalingAnalytics) {
+  this.scalingAnalytics.emit('throttlingDecision', decisionData);
+  // Update rule performance history
+  this.updateRulePerformanceHistory(rule, result);
   /**
-   * Get pattern-based insights
-   */
-  private async getPatternBasedInsights(): Promise<ThrottlingAnalyticsInsight[]> {
-    const insights: ThrottlingAnalyticsInsight[] = [];
-    if (!this.usagePatternAnalytics) return insights;
-    try {
-      // Get usage patterns for all rules
-      for (const [ruleId, rule] of this.rules) {
-        if (!rule.analyticsConfig?.enablePatternBasedAdjustments) continue;
-        // Simulate getting pattern data (in real implementation, this would call the analytics service)
-        const patternData = {
-          patternType: 'burst_pattern',
-          confidence: 85,
-          recommendation: {,
-            action: 'increase_throttling' as const,
-            adjustmentFactor: 1.5,
-            reason: 'Burst pattern detected, increase throttling to prevent overload',
-            expectedImpact: 'Reduce load spikes by 30%',
-            validityPeriod: 30,
-          }
-        };
+  * Get pattern-based insights
+  */
+  private async getPatternBasedInsights(): Promise<ThrottlingAnalyticsInsight> {,
+  const insights: ThrottlingAnalyticsInsight = [];
+  if (!this.usagePatternAnalytics) return insights;
+  try {
+  // Get usage patterns for all rules
+  for (const [ruleId, rule] of this.rules) {
+  if (!rule.analyticsConfig?.enablePatternBasedAdjustments) continue;
+  // Simulate getting pattern data (in real implementation, this would call the analytics service)
+  const patternData = {
+  patternType: 'burst_pattern',
+  confidence: 85,
+  recommendation: {,
+  action: 'increase_throttling' as const,
+  adjustmentFactor: 1.5,
+  reason: 'Burst pattern detected, increase throttling to prevent overload',
+  expectedImpact: 'Reduce load spikes by 30%',
+  validityPeriod: 30,
+};
         insights.push({)
-          insightId: `pattern-${ruleId}-${Date.now()}`,}
-          timestamp: new Date(),
+  insightId: `pattern-${ruleId}-${Date.now()}`}
+},
+  timestamp: new Date(),
           insightType: 'pattern_detected',
           confidence: patternData.confidence,
           ruleId,
           recommendation: patternData.recommendation,
           metadata: {,
-            patternType: patternData.patternType,
-            usageMetrics: {,
-              requestsPerMinute: this.systemMetrics.requestsPerSecond * 60,
-              errorRate: this.systemMetrics.errorRate,
-              averageLatency: this.systemMetrics.averageResponseTime,
-            }
-          }
-        });
-      }
+  patternType: patternData.patternType,
+  usageMetrics: {,
+  requestsPerMinute: this.systemMetrics.requestsPerSecond * 60,
+  errorRate: this.systemMetrics.errorRate,
+  averageLatency: this.systemMetrics.averageResponseTime,
+});
     } catch (error) {
-      this.emit('analyticsError', {)
-        type: 'pattern_analysis',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
+  this.emit('analyticsError', {)
+  type: 'pattern_analysis',
+  error: error instanceof Error ? error.message : 'Unknown error',
+});
     return insights;
-  }
   /**
    * Get scaling-based insights
    */
-  private async getScalingBasedInsights(): Promise<ThrottlingAnalyticsInsight[]> {
-    const insights: ThrottlingAnalyticsInsight[] = [];
+  private async getScalingBasedInsights(): Promise<ThrottlingAnalyticsInsight> {
+    const insights: ThrottlingAnalyticsInsight = [];
     if (!this.scalingAnalytics) return insights;
     try {
       // Get scaling recommendations for throttling adjustments
@@ -778,142 +697,128 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         for (const [ruleId, rule] of this.rules) {
           if (!rule.analyticsConfig?.enableScalingInsights) continue;
           insights.push({)
-            insightId: `scaling-${ruleId}-${Date.now()}`,}
-            timestamp: new Date(),
+  insightId: `scaling-${ruleId}-${Date.now()}`}
+},
+  timestamp: new Date(),
             insightType: 'scaling_recommendation',
             confidence: 90,
             ruleId,
             recommendation: {,
-              action: 'increase_throttling',
+  action: 'increase_throttling',
               adjustmentFactor: systemCondition === SystemCondition.OVERLOAD ? 2.0 : 1.5,
-              reason: `System ${systemCondition} detected, increase throttling to protect resources`,}
-              expectedImpact: 'Reduce system load by 25-40%',
-              validityPeriod: 15,
-            },
-            metadata: {,
-              scalingFactors: {,
-                cpuUsage: this.systemMetrics.cpuUsage,
-                memoryUsage: this.systemMetrics.memoryUsage,
-                systemConditionCode: this.getSystemConditionCode(systemCondition),
-              }
-            }
-          });
-        }
-      }
+              reason: `System ${systemCondition} detected, increase throttling to protect resources`}
+},
+  expectedImpact: 'Reduce system load by 25-40%',
+              validityPeriod: 15;
+  },
+  metadata: {,
+  scalingFactors: {,
+  cpuUsage: this.systemMetrics.cpuUsage,
+  memoryUsage: this.systemMetrics.memoryUsage,
+  systemConditionCode: this.getSystemConditionCode(systemCondition),
+});
     } catch (error) {
-      this.emit('analyticsError', {)
-        type: 'scaling_analysis',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
+  this.emit('analyticsError', {)
+  type: 'scaling_analysis',
+  error: error instanceof Error ? error.message : 'Unknown error',
+});
     return insights;
-  }
   /**
    * Update insights for rules
    */
-  private updateInsightsForRules(insights: ThrottlingAnalyticsInsight[]): void {
-    // Group insights by rule ID
-    const insightsByRule = new Map<string, ThrottlingAnalyticsInsight[]>();
-    for (const insight of insights) {
-      const existing = insightsByRule.get(insight.ruleId) || [];
-      existing.push(insight);
-      insightsByRule.set(insight.ruleId, existing);
-    }
-    // Update each rule's insights
-    for (const [ruleId, ruleInsights] of insightsByRule) {
-      // Keep only recent insights (last 4 hours)
-      const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000);
-      const recentInsights = ruleInsights.filter(insight => insight.timestamp > fourHoursAgo);
-      this.analyticsInsights.set(ruleId, recentInsights);
-      // Update rule's active insights
-      const rule = this.rules.get(ruleId);
-      if (rule) {
-        rule.activeInsights = recentInsights;
-        rule.lastAnalyticsUpdate = new Date();
-      }
-    }
-  }
+  private updateInsightsForRules(insights: ThrottlingAnalyticsInsight): void {
+  // Group insights by rule ID
+  const insightsByRule = new Map<string, ThrottlingAnalyticsInsight>();
+  for (const insight of insights) {
+  const existing = insightsByRule.get(insight.ruleId) || [];
+  existing.push(insight);
+  insightsByRule.set(insight.ruleId, existing);
+  // Update each rule's insights
+  for (const [ruleId, ruleInsights] of insightsByRule) {
+  // Keep only recent insights (last 4 hours)
+  const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000);
+  const recentInsights = ruleInsights.filter(insight => insight.timestamp > fourHoursAgo);
+  this.analyticsInsights.set(ruleId, recentInsights);
+  // Update rule's active insights
+  const rule = this.rules.get(ruleId);
+  if (rule) {
+  rule.activeInsights = recentInsights;
+  rule.lastAnalyticsUpdate = new Date();
   /**
-   * Get historical performance data
-   */
-  private async getHistoricalPerformance(endpoint: string): Promise<{
-    requestVolume: number[];
-    successRate: number[];
-    averageLatency: number[];
-    errorRates: number[];
-  }> {
-    // In a real implementation, this would query historical data
-    // For now, simulate with recent system metrics
-    return {
-      requestVolume: [,
-        this.systemMetrics.requestsPerSecond * 0.8,
-        this.systemMetrics.requestsPerSecond * 0.9,
-        this.systemMetrics.requestsPerSecond * 1.1,
-        this.systemMetrics.requestsPerSecond
-      ],
-      successRate: [98.5, 97.8, 98.1, 100 - this.systemMetrics.errorRate],
-      averageLatency: [,
-        this.systemMetrics.averageResponseTime * 0.9,
-        this.systemMetrics.averageResponseTime * 1.1,
-        this.systemMetrics.averageResponseTime * 0.95,
-        this.systemMetrics.averageResponseTime
-      ],
-      errorRates: [1.5, 2.2, 1.9, this.systemMetrics.errorRate]
-    };
-  }
+  * Get historical performance data
+  */
+  private async getHistoricalPerformance(endpoint: string): Promise<{,
+  requestVolume: number;,
+  successRate: number;
+  averageLatency: number;,
+  errorRates: number;
+}> {
+  // In a real implementation, this would query historical data
+  // For now, simulate with recent system metrics
+  return {
+  requestVolume: [,
+  this.systemMetrics.requestsPerSecond * 0.8,
+  this.systemMetrics.requestsPerSecond * 0.9,
+  this.systemMetrics.requestsPerSecond * 1.1,
+  this.systemMetrics.requestsPerSecond
+  ],
+  successRate: [98.5, 97.8, 98.1, 100 - this.systemMetrics.errorRate],
+  averageLatency: [,
+  this.systemMetrics.averageResponseTime * 0.9,
+  this.systemMetrics.averageResponseTime * 1.1,
+  this.systemMetrics.averageResponseTime * 0.95,
+  this.systemMetrics.averageResponseTime
+  ],
+  errorRates: [1.5, 2.2, 1.9, this.systemMetrics.errorRate],
+};
   /**
    * Get pattern analysis
    */
-  private async getPatternAnalysis(context: ThrottlingContext): Promise<{
-    currentPattern: string;
-    patternConfidence: number;
-    predictedNextPattern: string;
-    patternTransitionProbability: number;
-  }> {
-    // Analyze current request patterns
-    const hour = new Date().getHours();
-    let currentPattern = 'normal';
-    let confidence = 75;
-    // Business hours pattern
-    if (hour >= 9 && hour <= 17) {
-      currentPattern = 'business_hours';
-      confidence = 85;
-    }
-    // High load pattern
-    if (this.systemMetrics.requestsPerSecond > 100) {
-      currentPattern = 'high_traffic';
-      confidence = 90;
-    }
-    // Attack pattern
-    if (context.threatLevel === ThreatLevel.HIGH || context.threatLevel === ThreatLevel.CRITICAL) {
-      currentPattern = 'attack_pattern';
-      confidence = 95;
-    }
-    return {
-      currentPattern,
-      patternConfidence: confidence,
-      predictedNextPattern: currentPattern === 'attack_pattern' ? 'recovery' : 'normal',
-      patternTransitionProbability: 0.7,
-    };
-  }
+  private async getPatternAnalysis(context: ThrottlingContext): Promise<{,
+  currentPattern: string;
+  patternConfidence: number;,
+  predictedNextPattern: string;
+  patternTransitionProbability: number;
+}> {
+  // Analyze current request patterns
+  const hour = new Date().getHours();
+  let currentPattern = 'normal';
+  let confidence = 75;
+  // Business hours pattern
+  if (hour >= 9 && hour <= 17) {
+  currentPattern = 'business_hours';
+  confidence = 85;
+  // High load pattern
+  if (this.systemMetrics.requestsPerSecond > 100) {
+  currentPattern = 'high_traffic';
+  confidence = 90;
+  // Attack pattern
+  if (context.threatLevel === ThreatLevel.HIGH || context.threatLevel === ThreatLevel.CRITICAL) {
+  currentPattern = 'attack_pattern';
+  confidence = 95;
+  return {
+  currentPattern,
+  patternConfidence: confidence,
+  predictedNextPattern: currentPattern === 'attack_pattern' ? 'recovery' : 'normal',
+  patternTransitionProbability: 0.7,
+};
   /**
    * Get scaling context
    */
   private async getScalingContext(): Promise<{
-    currentLoad: number;
-    predictedLoad: number;
-    scalingRecommendation: string;
-    capacityUtilization: number;
-  }> {
-    const currentLoad = (this.systemMetrics.cpuUsage + this.systemMetrics.memoryUsage) / 2;
-    const trend = currentLoad > 70 ? 'increasing' : 'stable';
-    return {
-      currentLoad,
-      predictedLoad: trend === 'increasing' ? currentLoad * 1.2 : currentLoad,
-      scalingRecommendation: currentLoad > 80 ? 'scale_up' : 'maintain',
-      capacityUtilization: currentLoad,
-    };
-  }
+  currentLoad: number;,
+  predictedLoad: number;
+  scalingRecommendation: string;,
+  capacityUtilization: number;
+}> {
+  const currentLoad = (this.systemMetrics.cpuUsage + this.systemMetrics.memoryUsage) / 2;
+  const trend = currentLoad > 70 ? 'increasing' : 'stable';
+  return {
+  currentLoad,
+  predictedLoad: trend === 'increasing' ? currentLoad * 1.2 : currentLoad,
+  scalingRecommendation: currentLoad > 80 ? 'scale_up' : 'maintain',
+  capacityUtilization: currentLoad,
+};
   /**
    * Start analytics update cycle
    */
@@ -923,26 +828,25 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     setInterval(async () => {
       await this.updateAnalyticsInsights();
     }, 5 * 60 * 1000);
-  }
   /**
    * Handle pattern detected event
    */
   private handlePatternDetected(data: PatternDetectionData): void {
-    this.emit('analyticsPatternDetected', {)
-      timestamp: new Date(),
-      pattern: data.pattern,
-      confidence: data.confidence,
-      recommendation: data.recommendation,
-    });
-  }
+  this.emit('analyticsPatternDetected', {)
+  timestamp: new Date(),
+  pattern: data.pattern,
+  confidence: data.confidence,
+  recommendation: data.recommendation,
+});
   /**
    * Handle abuse detected event
    */
   private handleAbuseDetected(data: EndpointUsageData): void {
     // Create emergency throttling rule for abuse pattern
-    const emergencyRule: ThrottlingRule = {
-      id: `emergency-${Date.now()}`,}
-      name: 'Emergency Abuse Protection',
+    const emergencyRule: ThrottlingRule = {,
+  id: `emergency-${Date.now()}`}
+},
+  name: 'Emergency Abuse Protection',
       description: 'Automatically created rule to handle detected abuse',
       enabled: true,
       priority: 999,
@@ -951,9 +855,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         {
           type: 'endpoint',
           operator: 'contains',
-          value: data.endpoint || '',
-        }
-      ],
+          value: data.endpoint || ''],
       baseDelay: 1000,
       maxDelay: 10000,
       adaptiveMultiplier: 2.0,
@@ -964,14 +866,13 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
           blockPercentage: 25,
           duration: 300000,
           condition: { type: 'user_pattern', operator: 'greater_than', field: 'consecutive_failures', threshold: 3 }
-        },
+  }
         {
           level: 2,
           delay: 3000,
           blockPercentage: 50,
           duration: 600000,
           condition: { type: 'user_pattern', operator: 'greater_than', field: 'consecutive_failures', threshold: 5 }
-        }
       ],
       failureThreshold: 0,
       recoveryTimeout: 0,
@@ -984,244 +885,218 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       alertThreshold: 95,
       logViolations: true,
       analyticsConfig: {,
-        enableAnalyticsIntegration: true,
-        analyticsUpdateInterval: 1,
-        enablePatternBasedAdjustments: true,
-        enableScalingInsights: false,
-        enablePredictiveThrottling: false,
-        enableAnomalyDetection: true,
-        confidenceThreshold: 90,
-      }
-    };
+  enableAnalyticsIntegration: true,
+  analyticsUpdateInterval: 1,
+  enablePatternBasedAdjustments: true,
+  enableScalingInsights: false,
+  enablePredictiveThrottling: false,
+  enableAnomalyDetection: true,
+  confidenceThreshold: 90,
+};
     this.addRule(emergencyRule);
     this.emit('emergencyRuleCreated', {)
-      ruleId: emergencyRule.id,
-      trigger: 'abuse_detected',
-      data,
-      timestamp: new Date(),
-    });
-  }
+  ruleId: emergencyRule.id,
+  trigger: 'abuse_detected',
+  data,
+  timestamp: new Date(),
+});
   /**
    * Handle quota recommendation event
    */
   private handleQuotaRecommendation(data: QuotaRecommendationData): void {
     // Convert quota recommendations to throttling adjustments
-    const insights: ThrottlingAnalyticsInsight[] = [];
+    const insights: ThrottlingAnalyticsInsight = [];
     for (const [ruleId] of this.rules) {
       insights.push({)
-        insightId: `quota-${ruleId}-${Date.now()}`,}
-        timestamp: new Date(),
+  insightId: `quota-${ruleId}-${Date.now()}`}
+},
+  timestamp: new Date(),
         insightType: 'pattern_detected',
         confidence: data.confidence || 80,
         ruleId,
         recommendation: {,
-          action: data.action === 'increase' ? 'decrease_throttling' : 'increase_throttling',
+  action: data.action === 'increase' ? 'decrease_throttling' : 'increase_throttling',
           adjustmentFactor: data.multiplier || 1.2,
-          reason: `Quota recommendation: ${data.reason}`,}
-          expectedImpact: data.expectedImpact || 'Optimize resource utilization',
-          validityPeriod: 60,
-        },
-        metadata: {,
-          patternType: 'quota_adjustment',
-          supportingData: data,
-        }
-      });
-    }
+          reason: `Quota recommendation: ${data.reason}`}
+},
+  expectedImpact: data.expectedImpact || 'Optimize resource utilization',
+          validityPeriod: 60;
+  },
+  metadata: {,
+  patternType: 'quota_adjustment',
+  supportingData: data,
+});
     this.updateInsightsForRules(insights);
-  }
   /**
    * Handle scaling recommendation event
    */
   private handleScalingRecommendation(data: ScalingRecommendationData): void {
-    const insights: ThrottlingAnalyticsInsight[] = [];
+    const insights: ThrottlingAnalyticsInsight = [];
     for (const [ruleId] of this.rules) {
       insights.push({)
-        insightId: `scaling-${ruleId}-${Date.now()}`,}
-        timestamp: new Date(),
+  insightId: `scaling-${ruleId}-${Date.now()}`}
+},
+  timestamp: new Date(),
         insightType: 'scaling_recommendation',
         confidence: data.confidence || 85,
         ruleId,
         recommendation: {,
-          action: data.scaleUp ? 'increase_throttling' : 'decrease_throttling',
+  action: data.scaleUp ? 'increase_throttling' : 'decrease_throttling',
           adjustmentFactor: data.scaleUp ? 1.5 : 0.8,
-          reason: `Scaling recommendation: ${data.reason}`,}
-          expectedImpact: data.expectedImpact || 'Optimize system performance',
-          validityPeriod: 30,
-        },
-        metadata: {,
-          scalingFactors: data.scalingFactors || {},
-          supportingData: data,
-        }
-      });
-    }
+          reason: `Scaling recommendation: ${data.reason}`}
+},
+  expectedImpact: data.expectedImpact || 'Optimize system performance',
+          validityPeriod: 30;
+  },
+  metadata: {,
+  scalingFactors: data.scalingFactors || {},
+          supportingData: data;
+  });
     this.updateInsightsForRules(insights);
-  }
   /**
    * Handle load prediction event
    */
   private handleLoadPrediction(data: LoadPredictionData): void {
-    if (data.predictedLoad > data.currentLoad * 1.5) {
-      this.emit('predictiveThrottlingTrigger', {)
-        timestamp: new Date(),
-        predictedLoad: data.predictedLoad,
-        currentLoad: data.currentLoad,
-        recommendation: 'preemptive_throttling',
-      });
-    }
-  }
+  if (data.predictedLoad > data.currentLoad * 1.5) {
+  this.emit('predictiveThrottlingTrigger', {)
+  timestamp: new Date(),
+  predictedLoad: data.predictedLoad,
+  currentLoad: data.currentLoad,
+  recommendation: 'preemptive_throttling',
+});
   /**
    * Handle performance anomaly event
    */
   private handlePerformanceAnomaly(data: PerformanceAnomalyData): void {
-    const insights: ThrottlingAnalyticsInsight[] = [];
+    const insights: ThrottlingAnalyticsInsight = [];
     for (const [ruleId] of this.rules) {
       insights.push({)
-        insightId: `anomaly-${ruleId}-${Date.now()}`,}
-        timestamp: new Date(),
+  insightId: `anomaly-${ruleId}-${Date.now()}`}
+},
+  timestamp: new Date(),
         insightType: 'anomaly_detected',
         confidence: data.confidence || 95,
         ruleId,
         recommendation: {,
-          action: 'enable_protection',
+  action: 'enable_protection',
           adjustmentFactor: 2.0,
-          reason: `Performance anomaly detected: ${data.anomalyType}`,}
-          expectedImpact: 'Protect system during anomalous conditions',
-          validityPeriod: 10,
-        },
-        metadata: {,
-          anomalyScore: data.anomalyScore,
-          anomalyType: data.anomalyType,
-          supportingData: data,
-        }
-      });
-    }
+          reason: `Performance anomaly detected: ${data.anomalyType}`}
+},
+  expectedImpact: 'Protect system during anomalous conditions',
+          validityPeriod: 10;
+  },
+  metadata: {,
+  anomalyScore: data.anomalyScore,
+  anomalyType: data.anomalyType,
+  supportingData: data,
+});
     this.updateInsightsForRules(insights);
-  }
   /**
    * Update rule performance history
    */
   private updateRulePerformanceHistory(rule: ThrottlingRule, result: ThrottlingResult): void {
-    if (!rule.performanceHistory) {
-      rule.performanceHistory = {
-        throttlingEffectiveness: 75,
-        falsePositiveRate: 5,
-        adaptationSuccessRate: 80,
-        lastOptimizationDate: new Date(),
-      };
-    }
+  if (!rule.performanceHistory) {
+  rule.performanceHistory = {
+  throttlingEffectiveness: 75,
+  falsePositiveRate: 5,
+  adaptationSuccessRate: 80,
+  lastOptimizationDate: new Date(),
+};
     // Update effectiveness based on result
     if (result.action !== 'allow') {
-      rule.performanceHistory.throttlingEffectiveness = Math.min(100, )
-        rule.performanceHistory.throttlingEffectiveness + 1);
-    }
-    // Simulate false positive detection (in real implementation, this would be based on actual outcomes)
-    if (Math.random() < 0.1) { // 10% chance of false positive
-      rule.performanceHistory.falsePositiveRate = Math.min(100, )
-        rule.performanceHistory.falsePositiveRate + 0.5);
-    }
-    rule.performanceHistory.lastOptimizationDate = new Date();
-  }
+  rule.performanceHistory.throttlingEffectiveness = Math.min(100)
+  rule.performanceHistory.throttlingEffectiveness + 1);
+  // Simulate false positive detection (in real implementation, this would be based on actual outcomes)
+  if (Math.random() < 0.1) { // 10% chance of false positive
+  rule.performanceHistory.falsePositiveRate = Math.min(100)
+  rule.performanceHistory.falsePositiveRate + 0.5);
+  rule.performanceHistory.lastOptimizationDate = new Date();
   /**
-   * Get analytics-enhanced statistics
-   */
-  public getAnalyticsStatistics(): {
-    analyticsEnabled: boolean;
-    lastUpdate: Date;
-    totalInsights: number;
-    insightsByType: Record<string, number>;
-    insightsByRule: Record<string, number>;
-    averageConfidence: number;
-    performanceMetrics: {,
-      averageEffectiveness: number;
-      averageFalsePositiveRate: number;
-      averageAdaptationSuccessRate: number;
-    };
+  * Get analytics-enhanced statistics
+  */
+  public getAnalyticsStatistics(): {,
+  analyticsEnabled: boolean;,
+  lastUpdate: Date;
+  totalInsights: number;,
+  insightsByType: Record<string, number>;
+  insightsByRule: Record<string, number>;
+  averageConfidence: number;,
+  performanceMetrics: {,
+  averageEffectiveness: number;,
+  averageFalsePositiveRate: number;
+  averageAdaptationSuccessRate: number;
+};
     const allInsights = Array.from(this.analyticsInsights.values()).flat();
     const insightsByType: Record<string, number> = {};
     const insightsByRule: Record<string, number> = {};
     let totalConfidence = 0;
     for (const insight of allInsights) {
-      insightsByType[insight.insightType] = (insightsByType[insight.insightType] || 0) + 1;
-      insightsByRule[insight.ruleId] = (insightsByRule[insight.ruleId] || 0) + 1;
-      totalConfidence += insight.confidence;
-    }
-    // Calculate performance metrics
-    let totalEffectiveness = 0;
-    let totalFalsePositiveRate = 0;
-    let totalAdaptationSuccessRate = 0;
-    let rulesWithHistory = 0;
-    for (const rule of this.rules.values()) {
-      if (rule.performanceHistory) {
-        totalEffectiveness += rule.performanceHistory.throttlingEffectiveness;
-        totalFalsePositiveRate += rule.performanceHistory.falsePositiveRate;
-        totalAdaptationSuccessRate += rule.performanceHistory.adaptationSuccessRate;
-        rulesWithHistory++;
-      }
-    }
-    return {
-      analyticsEnabled: this.analyticsEnabled,
-      lastUpdate: this.lastAnalyticsUpdate,
-      totalInsights: allInsights.length,
-      insightsByType,
-      insightsByRule,
-      averageConfidence: allInsights.length > 0 ? totalConfidence / allInsights.length : 0,
-      performanceMetrics: {,
-        averageEffectiveness: rulesWithHistory > 0 ? totalEffectiveness / rulesWithHistory : 0,
-        averageFalsePositiveRate: rulesWithHistory > 0 ? totalFalsePositiveRate / rulesWithHistory : 0,
-        averageAdaptationSuccessRate: rulesWithHistory > 0 ? totalAdaptationSuccessRate / rulesWithHistory : 0,
-      }
-    };
-  }
+  insightsByType[insight.insightType] = (insightsByType[insight.insightType] || 0) + 1;
+  insightsByRule[insight.ruleId] = (insightsByRule[insight.ruleId] || 0) + 1;
+  totalConfidence += insight.confidence;
+  // Calculate performance metrics
+  let totalEffectiveness = 0;
+  let totalFalsePositiveRate = 0;
+  let totalAdaptationSuccessRate = 0;
+  let rulesWithHistory = 0;
+  for (const rule of this.rules.values()) {
+  if (rule.performanceHistory) {
+  totalEffectiveness += rule.performanceHistory.throttlingEffectiveness;
+  totalFalsePositiveRate += rule.performanceHistory.falsePositiveRate;
+  totalAdaptationSuccessRate += rule.performanceHistory.adaptationSuccessRate;
+  rulesWithHistory++;
+  return {
+  analyticsEnabled: this.analyticsEnabled,
+  lastUpdate: this.lastAnalyticsUpdate,
+  totalInsights: allInsights.length,
+  insightsByType,
+  insightsByRule,
+  averageConfidence: allInsights.length > 0 ? totalConfidence / allInsights.length : 0,
+  performanceMetrics: {,
+  averageEffectiveness: rulesWithHistory > 0 ? totalEffectiveness / rulesWithHistory : 0,
+  averageFalsePositiveRate: rulesWithHistory > 0 ? totalFalsePositiveRate / rulesWithHistory : 0,
+  averageAdaptationSuccessRate: rulesWithHistory > 0 ? totalAdaptationSuccessRate / rulesWithHistory : 0,
+};
   // ========================================
   // Private Implementation Methods
   // ========================================
   private validateRule(rule: ThrottlingRule): void {
-    if (!rule.id || !rule.name) {
-      throw new Error('Rule must have id and name');
-    }
-    if (rule.baseDelay < 0 || rule.maxDelay < rule.baseDelay) {
-      throw new Error('Invalid delay configuration');
-    }
-    if (rule.mode === ThrottlingMode.CIRCUIT_BREAKER) {
-      if (rule.failureThreshold <= 0 || rule.recoveryTimeout <= 0) {
-        throw new Error('Invalid circuit breaker configuration');
-      }
-    }
-    if (rule.mode === ThrottlingMode.BANDWIDTH_SHAPING) {
-      if (rule.tokensPerSecond <= 0 || rule.burstSize <= 0) {
-        throw new Error('Invalid bandwidth shaping configuration');
-      }
-    }
-  }
-  private findMatchingRules(context: ThrottlingContext): ThrottlingRule[] {
-    const matchingRules: ThrottlingRule[] = [];
-    for (const rule of this.rules.values()) {
-      if (!rule.enabled) continue;
-      const conditionsMatch = rule.triggerConditions.every(condition =>;);
-        this.evaluateCondition(condition, context)
-      );
-      if (conditionsMatch) {
-        matchingRules.push(rule);
-      }
-    }
-    // Sort by priority (highest first)
-    return matchingRules.sort((a, b) => b.priority - a.priority);
-  }
-  private evaluateCondition(condition: ThrottlingCondition, context: ThrottlingContext): boolean {
-    switch (condition.type) {
-    case 'endpoint':
-      return this.evaluateStringCondition(condition, context.endpoint);
-    case 'method':
-      return this.evaluateStringCondition(condition, context.method);
-    case 'system_load':
-      return this.evaluateNumericCondition(condition, this.systemMetrics.cpuUsage);
-    case 'threat_level':
-      const threatValues = {
-        [ThreatLevel.LOW]: 1,
-        [ThreatLevel.MEDIUM]: 2,
-        [ThreatLevel.HIGH]: 3,
-        [ThreatLevel.CRITICAL]: 4
-      };
+  if (!rule.id || !rule.name) {
+  throw new Error('Rule must have id and name');
+  if (rule.baseDelay < 0 || rule.maxDelay < rule.baseDelay) {
+  throw new Error('Invalid delay configuration');
+  if (rule.mode === ThrottlingMode.CIRCUIT_BREAKER) {
+  if (rule.failureThreshold <= 0 || rule.recoveryTimeout <= 0) {
+  throw new Error('Invalid circuit breaker configuration');
+  if (rule.mode === ThrottlingMode.BANDWIDTH_SHAPING) {
+  if (rule.tokensPerSecond <= 0 || rule.burstSize <= 0) {
+  throw new Error('Invalid bandwidth shaping configuration');
+  private findMatchingRules(context: ThrottlingContext): ThrottlingRule {,
+  const matchingRules: ThrottlingRule = [];
+  for (const rule of this.rules.values()) {
+  if (!rule.enabled) continue;
+  const conditionsMatch = rule.triggerConditions.every(condition =>;);
+  this.evaluateCondition(condition, context)
+  );
+  if (conditionsMatch) {
+  matchingRules.push(rule);
+  // Sort by priority (highest first)
+  return matchingRules.sort((a, b) => b.priority - a.priority);
+  private evaluateCondition(condition: ThrottlingCondition, context: ThrottlingContext): boolean {,
+  switch (condition.type) {
+  case 'endpoint':,
+  return this.evaluateStringCondition(condition, context.endpoint);
+  case 'method':,
+  return this.evaluateStringCondition(condition, context.method);
+  case 'system_load':,
+  return this.evaluateNumericCondition(condition, this.systemMetrics.cpuUsage);
+  case 'threat_level':,
+  const threatValues = {
+  [ThreatLevel.LOW]: 1,
+  [ThreatLevel.MEDIUM]: 2,
+  [ThreatLevel.HIGH]: 3,
+  [ThreatLevel.CRITICAL]: 4,
+};
       return this.evaluateNumericCondition(condition, threatValues[context.threatLevel]);
     case 'time_based':
       const currentHour = new Date().getHours();
@@ -1230,86 +1105,73 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       return this.evaluateUserPattern(condition, context);
     default:
       return false;
-    }
-  }
   private evaluateStringCondition(condition: ThrottlingCondition, value: string): boolean {
-    switch (condition.operator) {
-    case 'equals':
-      return value === String(condition.value);
-    case 'contains':
-      return value.includes(String(condition.value));
-    case 'pattern_match':
-      try {
-        return new RegExp(String(condition.value)).test(value);
-      } catch {
-        return false;
-      }
-    default:
-      return false;
-    }
-  }
-  private evaluateNumericCondition(condition: ThrottlingCondition, value: number): boolean {
-    switch (condition.operator) {
-    case 'greater_than':
-      const gtThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
-      return !isNaN(gtThreshold) && value > gtThreshold;
-    case 'less_than':
-      const ltThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
-      return !isNaN(ltThreshold) && value < ltThreshold;
-    case 'in_range':
-      if (Array.isArray(condition.value) && condition.value.length >= 2) {
-        const min = typeof condition.value[0] === 'number' ? condition.value[0] : Number(condition.value[0]);
-        const max = typeof condition.value[1] === 'number' ? condition.value[1] : Number(condition.value[1]);
-        return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
-      }
-      return false;
-    default:
-      return false;
-    }
-  }
-  private evaluateUserPattern(condition: ThrottlingCondition, context: ThrottlingContext): boolean {
-    switch (condition.field) {
-    case 'consecutive_failures':
-      return this.evaluateNumericCondition(condition, context.consecutiveFailures);
-    case 'recent_failures':
-      return this.evaluateNumericCondition(condition, context.recentFailures);
-    default:
-      return false;
-    }
-  }
-  private async applyRule(rule: ThrottlingRule, context: ThrottlingContext): Promise<ThrottlingResult> {
-    switch (rule.mode) {
-    case ThrottlingMode.ADAPTIVE:
-      return this.applyAdaptiveThrottling(rule, context);
-    case ThrottlingMode.PROGRESSIVE:
-      return this.applyProgressiveThrottling(rule, context);
-    case ThrottlingMode.CIRCUIT_BREAKER:
-      return this.applyCircuitBreaker(rule, context);
-    case ThrottlingMode.LOAD_SHEDDING:
-      return this.applyLoadShedding(rule, context);
-    case ThrottlingMode.BANDWIDTH_SHAPING:
-      return this.applyBandwidthShaping(rule, context);
-    default:
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'Unknown throttling mode',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
-    }
-  }
+  switch (condition.operator) {
+  case 'equals':,
+  return value === String(condition.value);
+  case 'contains':,
+  return value.includes(String(condition.value));
+  case 'pattern_match':,
+  try {
+  return new RegExp(String(condition.value)).test(value);
+} catch {
+  return false;
+  default:,
+  return false;
+  private evaluateNumericCondition(condition: ThrottlingCondition, value: number): boolean {,
+  switch (condition.operator) {
+  case 'greater_than':,
+  const gtThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
+  return !isNaN(gtThreshold) && value > gtThreshold;
+  case 'less_than':,
+  const ltThreshold = condition.threshold ?? (typeof condition.value === 'number' ? condition.value : Number(condition.value));
+  return !isNaN(ltThreshold) && value < ltThreshold;
+  case 'in_range':,
+  if (Array.isArray(condition.value) && condition.value.length >= 2) {
+  const min = typeof condition.value[0] === 'number' ? condition.value[0] : Number(condition.value[0]);
+  const max = typeof condition.value[1] === 'number' ? condition.value[1] : Number(condition.value[1]);
+  return !isNaN(min) && !isNaN(max) && value >= min && value <= max;
+  return false;
+  default:,
+  return false;
+  private evaluateUserPattern(condition: ThrottlingCondition, context: ThrottlingContext): boolean {,
+  switch (condition.field) {
+  case 'consecutive_failures':,
+  return this.evaluateNumericCondition(condition, context.consecutiveFailures);
+  case 'recent_failures':,
+  return this.evaluateNumericCondition(condition, context.recentFailures);
+  default:,
+  return false;
+  private async applyRule(rule: ThrottlingRule, context: ThrottlingContext): Promise<ThrottlingResult> {,
+  switch (rule.mode) {
+  case ThrottlingMode.ADAPTIVE:,
+  return this.applyAdaptiveThrottling(rule, context);
+  case ThrottlingMode.PROGRESSIVE:,
+  return this.applyProgressiveThrottling(rule, context);
+  case ThrottlingMode.CIRCUIT_BREAKER:,
+  return this.applyCircuitBreaker(rule, context);
+  case ThrottlingMode.LOAD_SHEDDING:,
+  return this.applyLoadShedding(rule, context);
+  case ThrottlingMode.BANDWIDTH_SHAPING:,
+  return this.applyBandwidthShaping(rule, context);
+  default:,
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Unknown throttling mode',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
   private applyAdaptiveThrottling(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
-    const systemCondition = this.getSystemCondition();
-    const conditionMultipliers = {
-      [SystemCondition.NORMAL]: 1.0,
-      [SystemCondition.ELEVATED]: 1.5,
-      [SystemCondition.HIGH_LOAD]: 2.5,
-      [SystemCondition.OVERLOAD]: 4.0,
-      [SystemCondition.UNDER_ATTACK]: 8.0
-    };
+  const systemCondition = this.getSystemCondition();
+  const conditionMultipliers = {
+  [SystemCondition.NORMAL]: 1.0,
+  [SystemCondition.ELEVATED]: 1.5,
+  [SystemCondition.HIGH_LOAD]: 2.5,
+  [SystemCondition.OVERLOAD]: 4.0,
+  [SystemCondition.UNDER_ATTACK]: 8.0,
+};
     const baseMultiplier = conditionMultipliers[systemCondition];
     const threatMultiplier = this.getThreatMultiplier(context.threatLevel);
     const finalMultiplier = baseMultiplier * threatMultiplier * rule.adaptiveMultiplier;
@@ -1317,358 +1179,321 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     return {
       action: calculatedDelay > 0 ? 'throttle' : 'allow',
       delay: calculatedDelay,
-      reason: `Adaptive throttling based on ${systemCondition} system condition and ${context.threatLevel} threat level`,}
-      ruleId: rule.id,
+      reason: `Adaptive throttling based on ${systemCondition} system condition and ${context.threatLevel} threat level`}
+},
+  ruleId: rule.id,
       metadata: {,
-        originalDelay: rule.baseDelay,
-        appliedMultiplier: finalMultiplier,
-        systemCondition
-      }
-    };
-  }
+  originalDelay: rule.baseDelay,
+  appliedMultiplier: finalMultiplier,
+  systemCondition
+};
   private applyProgressiveThrottling(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
-    // Find the appropriate escalation step based on recent failures
-    let currentStep = rule.escalationSteps.find(step => ;);
-      context.consecutiveFailures >= step.level
-    );
-    if (!currentStep && rule.escalationSteps.length > 0) {
-      currentStep = rule.escalationSteps[0];
-    }
-    if (!currentStep) {
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'No escalation step found',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-          escalationLevel: 0,
-        }
-      };
-    }
+  // Find the appropriate escalation step based on recent failures
+  let currentStep = rule.escalationSteps.find(step => ;);
+  context.consecutiveFailures >= step.level
+  );
+  if (!currentStep && rule.escalationSteps.length > 0) {
+  currentStep = rule.escalationSteps[0];
+  if (!currentStep) {
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'No escalation step found',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+  escalationLevel: 0,
+};
     // Determine action based on block percentage
     const shouldBlock = Math.random() * 100 < currentStep.blockPercentage;
     return {
       action: shouldBlock ? 'block' : 'throttle',
       delay: currentStep.delay,
-      reason: `Progressive throttling at level ${currentStep.level}`,}
-      ruleId: rule.id,
+      reason: `Progressive throttling at level ${currentStep.level}`}
+},
+  ruleId: rule.id,
       metadata: {,
-        systemCondition: this.getSystemCondition(),
-        escalationLevel: currentStep.level,
-      }
-    };
-  }
+  systemCondition: this.getSystemCondition(),
+  escalationLevel: currentStep.level,
+};
   private applyCircuitBreaker(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
-    const state = this.circuitBreakerStates.get(rule.id)!;
-    const now = new Date();
-    switch (state.state) {
-    case 'closed':
-      // Normal operation, allow request
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'Circuit breaker closed - normal operation',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
+  const state = this.circuitBreakerStates.get(rule.id)!;
+  const now = new Date();
+  switch (state.state) {
+  case 'closed':,
+  // Normal operation, allow request
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Circuit breaker closed - normal operation',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
     case 'open':
       // Circuit is open, check if recovery timeout has passed
       if (now >= state.nextAttemptTime) {
-        state.state = 'half_open';
-        state.successCount = 0;
-        return {
-          action: 'allow',
-          delay: 0,
-          reason: 'Circuit breaker half-open - testing recovery',
-          ruleId: rule.id,
-          metadata: {,
-            systemCondition: this.getSystemCondition(),
-          }
-        };
-      }
+  state.state = 'half_open';
+  state.successCount = 0;
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Circuit breaker half-open - testing recovery',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
       return {
-        action: 'block',
-        delay: 0,
-        reason: 'Circuit breaker open - blocking all requests',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
+  action: 'block',
+  delay: 0,
+  reason: 'Circuit breaker open - blocking all requests',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
     case 'half_open':
       // Allow limited requests to test recovery
       if (state.successCount < rule.halfOpenRequests) {
-        return {
-          action: 'allow',
-          delay: 0,
-          reason: 'Circuit breaker half-open - limited testing',
-          ruleId: rule.id,
-          metadata: {,
-            systemCondition: this.getSystemCondition(),
-          }
-        };
-      }
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Circuit breaker half-open - limited testing',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
       return {
-        action: 'block',
-        delay: 0,
-        reason: 'Circuit breaker half-open - test quota exceeded',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
-    }
-  }
+  action: 'block',
+  delay: 0,
+  reason: 'Circuit breaker half-open - test quota exceeded',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
   private applyLoadShedding(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
-    const currentLoad = (this.systemMetrics.cpuUsage + this.systemMetrics.memoryUsage) / 2;
-    if (currentLoad < rule.loadThreshold) {
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'System load below threshold',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-        }
-      };
-    }
+  const currentLoad = (this.systemMetrics.cpuUsage + this.systemMetrics.memoryUsage) / 2;
+  if (currentLoad < rule.loadThreshold) {
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'System load below threshold',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
     // Apply load shedding
     const shouldShed = Math.random() * 100 < rule.shedPercentage;
     return {
-      action: shouldShed ? 'shed' : 'allow',
-      delay: 0,
-      reason: shouldShed ? 'Load shedding applied' : 'Request survived load shedding',
-      ruleId: rule.id,
-      metadata: {,
-        systemCondition: this.getSystemCondition(),
-      }
-    };
-  }
+  action: shouldShed ? 'shed' : 'allow',
+  delay: 0,
+  reason: shouldShed ? 'Load shedding applied' : 'Request survived load shedding',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+};
   private applyBandwidthShaping(rule: ThrottlingRule, context: ThrottlingContext): ThrottlingResult {
-    const bucket = this.tokenBuckets.get(rule.id)!;
-    const now = new Date();
-    // Refill tokens based on elapsed time
-    const elapsedMs = now.getTime() - bucket.lastRefill.getTime();
-    const elapsedSeconds = elapsedMs / 1000;
-    const tokensToAdd = elapsedSeconds * rule.tokensPerSecond;
-    bucket.tokens = Math.min(bucket.capacity, bucket.tokens + tokensToAdd);
-    bucket.lastRefill = now;
-    // Check if tokens are available
-    if (bucket.tokens >= 1) {
-      bucket.tokens -= 1;
-      return {
-        action: 'allow',
-        delay: 0,
-        reason: 'Token consumed from bucket',
-        ruleId: rule.id,
-        metadata: {,
-          systemCondition: this.getSystemCondition(),
-          tokensRemaining: Math.floor(bucket.tokens),
-        }
-      };
-    }
+  const bucket = this.tokenBuckets.get(rule.id)!;
+  const now = new Date();
+  // Refill tokens based on elapsed time
+  const elapsedMs = now.getTime() - bucket.lastRefill.getTime();
+  const elapsedSeconds = elapsedMs / 1000;
+  const tokensToAdd = elapsedSeconds * rule.tokensPerSecond;
+  bucket.tokens = Math.min(bucket.capacity, bucket.tokens + tokensToAdd);
+  bucket.lastRefill = now;
+  // Check if tokens are available
+  if (bucket.tokens >= 1) {
+  bucket.tokens -= 1;
+  return {
+  action: 'allow',
+  delay: 0,
+  reason: 'Token consumed from bucket',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+  tokensRemaining: Math.floor(bucket.tokens),
+};
     // Calculate delay until next token is available
     const delay = Math.ceil((1 - bucket.tokens) / rule.tokensPerSecond * 1000);
     return {
-      action: 'throttle',
-      delay: Math.min(delay, rule.maxDelay),
-      reason: 'No tokens available in bucket',
-      ruleId: rule.id,
-      metadata: {,
-        systemCondition: this.getSystemCondition(),
-        tokensRemaining: 0,
-      }
-    };
-  }
+  action: 'throttle',
+  delay: Math.min(delay, rule.maxDelay),
+  reason: 'No tokens available in bucket',
+  ruleId: rule.id,
+  metadata: {,
+  systemCondition: this.getSystemCondition(),
+  tokensRemaining: 0,
+};
   private getThreatMultiplier(threatLevel: ThreatLevel): number {
-    const multipliers = {
-      [ThreatLevel.LOW]: 1.0,
-      [ThreatLevel.MEDIUM]: 2.0,
-      [ThreatLevel.HIGH]: 4.0,
-      [ThreatLevel.CRITICAL]: 8.0
-    };
+  const multipliers = {
+  [ThreatLevel.LOW]: 1.0,
+  [ThreatLevel.MEDIUM]: 2.0,
+  [ThreatLevel.HIGH]: 4.0,
+  [ThreatLevel.CRITICAL]: 8.0,
+};
     return multipliers[threatLevel];
-  }
   private getDefaultSystemMetrics(): SystemMetrics {
-    return {
-      cpuUsage: 10,  // Start with low but realistic values
-      memoryUsage: 20,
-      activeConnections: 0,
-      requestsPerSecond: 0,
-      averageResponseTime: 100,
-      errorRate: 0,
-      queueDepth: 0,
-    };
-  }
+  return {
+  cpuUsage: 10,  // Start with low but realistic values,
+  memoryUsage: 20,
+  activeConnections: 0,
+  requestsPerSecond: 0,
+  averageResponseTime: 100,
+  errorRate: 0,
+  queueDepth: 0,
+};
   private async refreshSystemMetrics(): Promise<void> {
-    // In a real implementation, this would collect actual system metrics
-    // For now, we'll simulate some basic metrics
-    // This is a placeholder - in production, integrate with system monitoring
-    this.systemMetrics = {
-      cpuUsage: Math.min(100, this.systemMetrics.cpuUsage + (Math.random() - 0.5) * 5),
-      memoryUsage: Math.min(100, this.systemMetrics.memoryUsage + (Math.random() - 0.5) * 3),
-      activeConnections: Math.max(0, this.systemMetrics.activeConnections + Math.floor((Math.random() - 0.5) * 10)),
-      requestsPerSecond: Math.max(0, this.systemMetrics.requestsPerSecond + (Math.random() - 0.5) * 50),
-      averageResponseTime: Math.max(0, this.systemMetrics.averageResponseTime + (Math.random() - 0.5) * 100),
-      errorRate: Math.min(100, Math.max(0, this.systemMetrics.errorRate + (Math.random() - 0.5) * 2)),
-      queueDepth: Math.max(0, this.systemMetrics.queueDepth + Math.floor((Math.random() - 0.5) * 5))
-    };
-  }
+  // In a real implementation, this would collect actual system metrics
+  // For now, we'll simulate some basic metrics
+  // This is a placeholder - in production, integrate with system monitoring
+  this.systemMetrics = {
+  cpuUsage: Math.min(100, this.systemMetrics.cpuUsage + (Math.random() - 0.5) * 5),
+  memoryUsage: Math.min(100, this.systemMetrics.memoryUsage + (Math.random() - 0.5) * 3),
+  activeConnections: Math.max(0, this.systemMetrics.activeConnections + Math.floor((Math.random() - 0.5) * 10)),
+  requestsPerSecond: Math.max(0, this.systemMetrics.requestsPerSecond + (Math.random() - 0.5) * 50),
+  averageResponseTime: Math.max(0, this.systemMetrics.averageResponseTime + (Math.random() - 0.5) * 100),
+  errorRate: Math.min(100, Math.max(0, this.systemMetrics.errorRate + (Math.random() - 0.5) * 2)),
+  queueDepth: Math.max(0, this.systemMetrics.queueDepth + Math.floor((Math.random() - 0.5) * 5)),
+};
   private initializeDefaultRules(): void {
-    // High-traffic endpoint protection
-    this.addRule({)
-      id: 'api-adaptive',
-      name: 'API Adaptive Throttling',
-      description: 'Adaptive throttling for API endpoints based on system load',
-      enabled: true,
-      priority: 900,
-      mode: ThrottlingMode.ADAPTIVE,
-      triggerConditions: [,
-        {
-          type: 'endpoint',
-          operator: 'contains',
-          value: '/api',
-        }
-      ],
-      baseDelay: 100,
-      maxDelay: 5000,
-      adaptiveMultiplier: 1.5,
-      escalationSteps: [],
-      failureThreshold: 0,
-      recoveryTimeout: 0,
-      halfOpenRequests: 0,
-      loadThreshold: 0,
-      shedPercentage: 0,
-      tokensPerSecond: 0,
-      burstSize: 0,
-      monitoringEnabled: true,
-      alertThreshold: 75,
-      logViolations: true,
-      analyticsConfig: {,
-        enableAnalyticsIntegration: true,
-        analyticsUpdateInterval: 5,
-        enablePatternBasedAdjustments: true,
-        enableScalingInsights: true,
-        enablePredictiveThrottling: true,
-        enableAnomalyDetection: true,
-        confidenceThreshold: 75,
-      }
-    });
+  // High-traffic endpoint protection
+  this.addRule({)
+  id: 'api-adaptive',
+  name: 'API Adaptive Throttling',
+  description: 'Adaptive throttling for API endpoints based on system load',
+  enabled: true,
+  priority: 900,
+  mode: ThrottlingMode.ADAPTIVE,
+  triggerConditions: [,
+  {
+  type: 'endpoint',
+  operator: 'contains',
+  value: '/api'],
+  baseDelay: 100,
+  maxDelay: 5000,
+  adaptiveMultiplier: 1.5,
+  escalationSteps: [],
+  failureThreshold: 0,
+  recoveryTimeout: 0,
+  halfOpenRequests: 0,
+  loadThreshold: 0,
+  shedPercentage: 0,
+  tokensPerSecond: 0,
+  burstSize: 0,
+  monitoringEnabled: true,
+  alertThreshold: 75,
+  logViolations: true,
+  analyticsConfig: {,
+  enableAnalyticsIntegration: true,
+  analyticsUpdateInterval: 5,
+  enablePatternBasedAdjustments: true,
+  enableScalingInsights: true,
+  enablePredictiveThrottling: true,
+  enableAnomalyDetection: true,
+  confidenceThreshold: 75,
+});
     // Authentication endpoint circuit breaker
     this.addRule({)
-      id: 'auth-circuit-breaker',
-      name: 'Authentication Circuit Breaker',
-      description: 'Circuit breaker protection for authentication endpoints',
-      enabled: true,
-      priority: 1000,
-      mode: ThrottlingMode.CIRCUIT_BREAKER,
-      triggerConditions: [,
+  id: 'auth-circuit-breaker',
+  name: 'Authentication Circuit Breaker',
+  description: 'Circuit breaker protection for authentication endpoints',
+  enabled: true,
+  priority: 1000,
+  mode: ThrottlingMode.CIRCUIT_BREAKER,
+  triggerConditions: [,
+  {
+  type: 'endpoint',
+  operator: 'pattern_match',
+  value: '/(login|register|auth)',
+}
         {
-          type: 'endpoint',
-          operator: 'pattern_match',
-          value: '/(login|register|auth)',
-        },
-        {
-          type: 'user_pattern',
-          operator: 'greater_than',
-          field: 'consecutive_failures',
-          threshold: 3,
-        }
-      ],
-      baseDelay: 0,
-      maxDelay: 0,
-      adaptiveMultiplier: 1.0,
-      escalationSteps: [],
-      failureThreshold: 5,
-      recoveryTimeout: 300000, // 5 minutes
-      halfOpenRequests: 3,
-      loadThreshold: 0,
-      shedPercentage: 0,
-      tokensPerSecond: 0,
-      burstSize: 0,
-      monitoringEnabled: true,
-      alertThreshold: 90,
-      logViolations: true,
-      analyticsConfig: {,
-        enableAnalyticsIntegration: true,
-        analyticsUpdateInterval: 2,
-        enablePatternBasedAdjustments: true,
-        enableScalingInsights: false,
-        enablePredictiveThrottling: true,
-        enableAnomalyDetection: true,
-        confidenceThreshold: 85,
-      }
-    });
+  type: 'user_pattern',
+  operator: 'greater_than',
+  field: 'consecutive_failures',
+  threshold: 3],
+  baseDelay: 0,
+  maxDelay: 0,
+  adaptiveMultiplier: 1.0,
+  escalationSteps: [],
+  failureThreshold: 5,
+  recoveryTimeout: 300000, // 5 minutes,
+  halfOpenRequests: 3,
+  loadThreshold: 0,
+  shedPercentage: 0,
+  tokensPerSecond: 0,
+  burstSize: 0,
+  monitoringEnabled: true,
+  alertThreshold: 90,
+  logViolations: true,
+  analyticsConfig: {,
+  enableAnalyticsIntegration: true,
+  analyticsUpdateInterval: 2,
+  enablePatternBasedAdjustments: true,
+  enableScalingInsights: false,
+  enablePredictiveThrottling: true,
+  enableAnomalyDetection: true,
+  confidenceThreshold: 85,
+});
     // Load shedding for high system load
     this.addRule({)
-      id: 'load-shedding',
-      name: 'System Load Shedding',
-      description: 'Drop requests when system load is critically high',
-      enabled: true,
-      priority: 800,
-      mode: ThrottlingMode.LOAD_SHEDDING,
-      triggerConditions: [,
-        {
-          type: 'system_load',
-          operator: 'greater_than',
-          threshold: 85,
-        }
-      ],
-      baseDelay: 0,
-      maxDelay: 0,
-      adaptiveMultiplier: 1.0,
-      escalationSteps: [],
-      failureThreshold: 0,
-      recoveryTimeout: 0,
-      halfOpenRequests: 0,
-      loadThreshold: 85,
-      shedPercentage: 50,
-      tokensPerSecond: 0,
-      burstSize: 0,
-      monitoringEnabled: true,
-      alertThreshold: 95,
-      logViolations: true,
-    });
+  id: 'load-shedding',
+  name: 'System Load Shedding',
+  description: 'Drop requests when system load is critically high',
+  enabled: true,
+  priority: 800,
+  mode: ThrottlingMode.LOAD_SHEDDING,
+  triggerConditions: [,
+  {
+  type: 'system_load',
+  operator: 'greater_than',
+  threshold: 85],
+  baseDelay: 0,
+  maxDelay: 0,
+  adaptiveMultiplier: 1.0,
+  escalationSteps: [],
+  failureThreshold: 0,
+  recoveryTimeout: 0,
+  halfOpenRequests: 0,
+  loadThreshold: 85,
+  shedPercentage: 50,
+  tokensPerSecond: 0,
+  burstSize: 0,
+  monitoringEnabled: true,
+  alertThreshold: 95,
+  logViolations: true,
+});
     // Bandwidth shaping for preview endpoints
     this.addRule({)
-      id: 'preview-bandwidth',
-      name: 'Preview Bandwidth Shaping',
-      description: 'Token bucket rate limiting for preview generation endpoints',
-      enabled: true,
-      priority: 700,
-      mode: ThrottlingMode.BANDWIDTH_SHAPING,
-      triggerConditions: [,
-        {
-          type: 'endpoint',
-          operator: 'contains',
-          value: '/preview',
-        }
-      ],
-      baseDelay: 0,
-      maxDelay: 2000,
-      adaptiveMultiplier: 1.0,
-      escalationSteps: [],
-      failureThreshold: 0,
-      recoveryTimeout: 0,
-      halfOpenRequests: 0,
-      loadThreshold: 0,
-      shedPercentage: 0,
-      tokensPerSecond: 2, // 2 requests per second
-      burstSize: 10,      // Allow bursts up to 10 requests
-      monitoringEnabled: true,
-      alertThreshold: 80,
-      logViolations: false,
-    });
-  }
+  id: 'preview-bandwidth',
+  name: 'Preview Bandwidth Shaping',
+  description: 'Token bucket rate limiting for preview generation endpoints',
+  enabled: true,
+  priority: 700,
+  mode: ThrottlingMode.BANDWIDTH_SHAPING,
+  triggerConditions: [,
+  {
+  type: 'endpoint',
+  operator: 'contains',
+  value: '/preview'],
+  baseDelay: 0,
+  maxDelay: 2000,
+  adaptiveMultiplier: 1.0,
+  escalationSteps: [],
+  failureThreshold: 0,
+  recoveryTimeout: 0,
+  halfOpenRequests: 0,
+  loadThreshold: 0,
+  shedPercentage: 0,
+  tokensPerSecond: 2, // 2 requests per second,
+  burstSize: 10,      // Allow bursts up to 10 requests,
+  monitoringEnabled: true,
+  alertThreshold: 80,
+  logViolations: false,
+});
   private startMetricsCollection(): void {
     // Update metrics every 30 seconds
     setInterval(async () => {
       await this.refreshSystemMetrics();
     }, 30000);
-  }
   /**
    * Record successful request (for circuit breaker recovery)
    */
@@ -1683,11 +1508,8 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
         state.failureCount = 0;
         state.successCount = 0;
         this.emit('circuitBreakerClosed', { ruleId });
-      }
     } else if (state.state === 'closed') {
       state.failureCount = Math.max(0, state.failureCount - 1);
-    }
-  }
   /**
    * Record failed request (for circuit breaker triggering)
    */
@@ -1707,35 +1529,30 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       state.nextAttemptTime = new Date(Date.now() + rule.recoveryTimeout);
       state.successCount = 0;
       this.emit('circuitBreakerReopened', { ruleId });
-    }
-  }
   /**
    * Enable or disable the throttling engine
    */
   public setEnabled(enabled: boolean): void {
     this.enabled = enabled;
     this.emit('enabledChanged', { enabled });
-  }
   /**
    * Get a specific rule
    */
   public getRule(id: string): ThrottlingRule | undefined {
-    return this.rules.get(id);
-  }
+  return this.rules.get(id);
   /**
-   * Get recent throttling attempts for integration with rate limiting
-   */
-  public getRecentThrottlingAttempts(identifier: string, endpoint: string): Array<{
-    timestamp: Date;
-    action: string;
-    delay: number;
-    ruleId: string;
-    success: boolean;
-  }> {
+  * Get recent throttling attempts for integration with rate limiting
+  */
+  public getRecentThrottlingAttempts(identifier: string, endpoint: string): Array<{,
+  timestamp: Date;,
+  action: string;
+  delay: number;,
+  ruleId: string;
+  success: boolean;
+}> {
     // This would be implemented with actual attempt tracking
     // For now, return empty array as this is a placeholder for the integration
     return [];
-  }
   /**
    * Remove a rule
    */
@@ -1745,9 +1562,7 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
       this.circuitBreakerStates.delete(id);
       this.tokenBuckets.delete(id);
       this.emit('ruleRemoved', { ruleId: id });
-    }
     return removed;
-  }
   /**
    * Clean up resources
    */
@@ -1756,7 +1571,5 @@ export class AdaptiveThrottlingRulesEngine extends EventEmitter {
     this.circuitBreakerStates.clear();
     this.tokenBuckets.clear();
     this.removeAllListeners();
-  }
-}
 
 export default AdaptiveThrottlingRulesEngine;

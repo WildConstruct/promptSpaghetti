@@ -11,9 +11,5 @@ export interface AnalyticsDashboardProps {
     autoRefresh?: boolean;
     refreshInterval?: number;
 }
-/**
- * Main analytics dashboard component
- */
 export declare const AnalyticsDashboard: React.FC<AnalyticsDashboardProps>;
-export default AnalyticsDashboard;
 //# sourceMappingURL=AnalyticsDashboard.d.ts.map

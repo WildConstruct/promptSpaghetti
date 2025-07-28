@@ -1,13 +1,3 @@
-/**
- * Epic 31.4.2 - User Behavior Modeling and Anomaly Detection
- *
- * Implements advanced user behavior analytics to detect anomalous patterns
- * and potential security threats through machine learning algorithms.
- * Integrates with Epic 1 analytics infrastructure and Epic 17 user management.
- *
- * Task: E31-1753313263588-A09495
- */
-import { EventEmitter } from 'events';
 export interface UserBehaviorEvent {
     id: string;
     userId: string;
@@ -35,35 +25,30 @@ export declare enum UserActionType {
     DATA_EXPORT = "data_export",
     ADMIN_ACTION = "admin_action",
     SEARCH_QUERY = "search_query",
-    NAVIGATION = "navigation"
-}
-export interface GeolocationData {
-    country: string;
-    region: string;
-    city: string;
-    latitude: number;
-    longitude: number;
-    timezone: string;
+    NAVIGATION = "navigation",
+    export,
+    interface,
+    GeolocationData
 }
 export interface UserBehaviorProfile {
     userId: string;
     createdAt: Date;
     lastUpdated: Date;
     totalEvents: number;
-    typicalLoginTimes: number[];
-    typicalDaysOfWeek: number[];
+    typicalLoginTimes: number;
+    typicalDaysOfWeek: number;
     averageSessionDuration: number;
     typicalLoginFrequency: number;
-    commonLocations: GeolocationData[];
-    travelPatterns: TravelPattern[];
+    commonLocations: GeolocationData;
+    travelPatterns: TravelPattern;
     suspiciousLocationThreshold: number;
-    commonResources: ResourceAccess[];
+    commonResources: ResourceAccess;
     typicalActionDistribution: Record<UserActionType, number>;
-    peakActivityHours: number[];
+    peakActivityHours: number;
     failureRate: number;
     riskyBehaviorScore: number;
     privilegedAccessFrequency: number;
-    commonUserAgents: string[];
+    commonUserAgents: string;
     typicalDeviceCount: number;
     ipAddressStability: number;
     baselineRiskScore: number;
@@ -81,7 +66,7 @@ export interface ResourceAccess {
     resource: string;
     accessCount: number;
     averageAccessTime: number;
-    typicalAccessPattern: number[];
+    typicalAccessPattern: number;
     lastAccessed: Date;
     riskScore: number;
 }
@@ -93,12 +78,12 @@ export interface BehaviorAnomaly {
     severity: AnomalySeverity;
     confidence: number;
     description: string;
-    triggeringEvents: UserBehaviorEvent[];
+    triggeringEvents: UserBehaviorEvent;
     deviationScore: number;
     baselineValue: number;
     observedValue: number;
     riskAssessment: RiskAssessment;
-    recommendedActions: string[];
+    recommendedActions: string;
     isResolved: boolean;
     resolvedAt?: Date;
     falsePositive?: boolean;
@@ -115,93 +100,9 @@ export declare enum AnomalyType {
     ATYPICAL_NAVIGATION_PATTERN = "atypical_navigation_pattern",
     BULK_DATA_ACCESS = "bulk_data_access",
     OFF_HOURS_ACTIVITY = "off_hours_activity",
-    IMPOSSIBLE_TRAVEL = "impossible_travel"
+    IMPOSSIBLE_TRAVEL = "impossible_travel",
+    export,
+    enum,
+    AnomalySeverity
 }
-export declare enum AnomalySeverity {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
-    CRITICAL = "critical"
-}
-export interface RiskAssessment {
-    overallRisk: number;
-    businessImpact: number;
-    probabilityOfThreat: number;
-    potentialDamage: string[];
-    mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate';
-}
-export interface BehaviorAnalyticsConfig {
-    profileUpdateInterval: number;
-    anomalyDetectionSensitivity: number;
-    baselineTrainingPeriod: number;
-    maxProfileAge: number;
-    enableRealTimeDetection: boolean;
-    enableGeolocationTracking: boolean;
-    minEventsForProfile: number;
-    adaptiveThresholding: boolean;
-}
-export declare class UserBehaviorAnalytics extends EventEmitter {
-    private userProfiles;
-    private recentEvents;
-    private detectedAnomalies;
-    private config;
-    private analysisInterval?;
-    private isAnalyzing;
-    constructor(config?: Partial<BehaviorAnalyticsConfig>);
-    /**
-     * Process incoming user behavior event
-     */
-    processUserEvent(event: UserBehaviorEvent): Promise<void>;
-    /**
-     * Update user behavioral profile based on new event
-     */
-    private updateUserProfile;
-    private createNewProfile;
-    private updateTemporalPatterns;
-    private updateGeographicPatterns;
-    private updateAccessPatterns;
-    private updateSecurityPatterns;
-    private updateDevicePatterns;
-    /**
-     * Detect behavioral anomalies in user event
-     */
-    private detectAnomalies;
-    private detectTemporalAnomalies;
-    private detectGeographicAnomalies;
-    private detectAccessAnomalies;
-    private detectVolumeAnomalies;
-    private detectDeviceAnomalies;
-    private handleAnomaly;
-    private createAnomaly;
-    private updateArrayPattern;
-    private updateTravelPatterns;
-    private calculateDistance;
-    private toRadians;
-    private calculateResourceRiskScore;
-    private isPrivilegedAction;
-    private isHighRiskResource;
-    private getRecentEvents;
-    private updateRiskScores;
-    private assessRisk;
-    private getPotentialDamage;
-    private getRecommendedActions;
-    private generateAnomalyId;
-    private cleanupOldEvents;
-    private startRealTimeAnalysis;
-    private performBatchAnalysis;
-    private adjustAnomalyThresholds;
-    getUserProfile(userId: string): UserBehaviorProfile | undefined;
-    getUserAnomalies(userId: string): BehaviorAnomaly[];
-    getAllAnomalies(): BehaviorAnomaly[];
-    getActiveAnomalies(): BehaviorAnomaly[];
-    resolveAnomaly(anomalyId: string, falsePositive?: boolean): boolean;
-    updateConfig(newConfig: Partial<BehaviorAnalyticsConfig>): void;
-    getAnalyticsStats(): Record<string, unknown>;
-    destroy(): void;
-}
-export declare class UserBehaviorAnalyticsFactory {
-    private static instance;
-    static getInstance(config?: Partial<BehaviorAnalyticsConfig>): UserBehaviorAnalytics;
-}
-export default UserBehaviorAnalytics;
 //# sourceMappingURL=UserBehaviorAnalytics.d.ts.map

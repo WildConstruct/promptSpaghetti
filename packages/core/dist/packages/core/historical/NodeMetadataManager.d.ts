@@ -8,10 +8,10 @@
 export interface NodeMetadata {
     id: string;
     nodeId: string;
-    tags: NodeTag[];
-    era: EraTag[];
-    genre: GenreTag[];
-    style: StyleTag[];
+    tags: NodeTag;
+    era: EraTag;
+    genre: GenreTag;
+    style: StyleTag;
     quality: QualityMetadata;
     historicalContext: HistoricalContext;
     created: string;
@@ -33,33 +33,33 @@ export interface EraTag {
         start: number;
         end: number;
     };
-    region: string[];
+    region: string;
     accuracy: 'high' | 'medium' | 'low';
     description: string;
     parent?: string;
-    children?: string[];
+    children?: string;
 }
 export interface GenreTag {
     id: string;
     name: string;
     category: 'artistic' | 'literary' | 'musical' | 'architectural' | 'cultural';
     description: string;
-    characteristics: string[];
-    relatedGenres: string[];
+    characteristics: string;
+    relatedGenres: string;
 }
 export interface StyleTag {
     id: string;
     name: string;
     category: 'fashion' | 'architecture' | 'art' | 'literature' | 'decoration';
-    period: string[];
-    region: string[];
+    period: string;
+    region: string;
     description: string;
-    keyFeatures: string[];
+    keyFeatures: string;
 }
 export interface QualityMetadata {
     authenticity: number;
     completeness: number;
-    sources: string[];
+    sources: string;
     verification: 'verified' | 'unverified' | 'disputed' | 'fictional';
     lastVerified?: string;
 }
@@ -67,8 +67,8 @@ export interface HistoricalContext {
     socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';
     usage: 'daily' | 'ceremonial' | 'religious' | 'military' | 'trade' | 'artistic';
     rarity: 'common' | 'uncommon' | 'rare' | 'very_rare' | 'unique';
-    materials: string[];
-    productionMethod: string[];
+    materials: string;
+    productionMethod: string;
     culturalSignificance: string;
 }
 export interface TagInheritanceRule {
@@ -76,8 +76,8 @@ export interface TagInheritanceRule {
     name: string;
     sourceType: string;
     targetType: string;
-    conditions: TagCondition[];
-    transformations: TagTransformation[];
+    conditions: TagCondition;
+    transformations: TagTransformation;
     enabled: boolean;
 }
 export interface TagCondition {
@@ -89,9 +89,6 @@ export interface TagTransformation {
     type: 'copy' | 'modify' | 'merge' | 'filter';
     config: Record<string, any>;
 }
-/**
- * NodeMetadataManager - Manages metadata and tagging for nodes
- */
 export declare class NodeMetadataManager {
     private static instance;
     private nodeMetadata;
@@ -100,7 +97,6 @@ export declare class NodeMetadataManager {
     private styleDefinitions;
     private inheritanceRules;
     static getInstance(): NodeMetadataManager;
-    constructor();
     /**
      * Initialize default era, genre, and style definitions
      */
@@ -120,91 +116,7 @@ export declare class NodeMetadataManager {
      * Set metadata for a node
      */
     setNodeMetadata(nodeId: string, metadata: Partial<NodeMetadata>): void;
-    /**
-     * Add tags to a node
-     */
-    addNodeTags(nodeId: string, tags: NodeTag[]): void;
-    /**
-     * Remove tags from a node
-     */
-    removeNodeTags(nodeId: string, tagIds: string[]): void;
-    /**
-     * Search nodes by tags
-     */
-    searchNodesByTags(searchTags: Partial<NodeTag>[], operator?: 'AND' | 'OR'): string[];
-    /**
-     * Get all available era definitions
-     */
-    getEraDefinitions(): EraTag[];
-    /**
-     * Get era definition by ID
-     */
-    getEraDefinition(id: string): EraTag | undefined;
-    /**
-     * Get eras by time period
-     */
-    getErasByPeriod(year: number): EraTag[];
-    /**
-     * Get all available genre definitions
-     */
-    getGenreDefinitions(): GenreTag[];
-    /**
-     * Get all available style definitions
-     */
-    getStyleDefinitions(): StyleTag[];
-    /**
-     * Apply tag inheritance rules
-     */
-    applyTagInheritance(sourceNodeId: string, targetNodeId: string, sourceNodeType: string, targetNodeType: string): void;
-    /**
-     * Evaluate inheritance rule conditions
-     */
-    private evaluateConditions;
-    /**
-     * Apply tag transformation
-     */
-    private applyTagTransformation;
-    /**
-     * Infer tags from node content
-     */
-    inferTagsFromContent(nodeId: string, content: string, nodeType: string): NodeTag[];
-    /**
-     * Validate tag compatibility
-     */
-    validateTagCompatibility(tags: NodeTag[]): {
-        valid: boolean;
-        conflicts: string[];
-        warnings: string[];
-    };
-    /**
-     * Check material-era compatibility
-     */
-    private checkMaterialEraCompatibility;
-    /**
-     * Get tag statistics
-     */
-    getTagStatistics(): {
-        totalNodes: number;
-        taggedNodes: number;
-        totalTags: number;
-        tagsByType: Record<string, number>;
-        averageTagsPerNode: number;
-        topTags: {
-            value: string;
-            count: number;
-        }[];
-    };
-    /**
-     * Export metadata for external use
-     */
-    exportMetadata(nodeIds?: string[]): NodeMetadata[];
-    /**
-     * Import metadata from external source
-     */
-    importMetadata(metadataList: NodeMetadata[]): {
-        imported: number;
-        errors: string[];
-    };
+    nodeId: any;
+    tags: metadata.tags;
 }
-export declare const nodeMetadataManager: NodeMetadataManager;
 //# sourceMappingURL=NodeMetadataManager.d.ts.map

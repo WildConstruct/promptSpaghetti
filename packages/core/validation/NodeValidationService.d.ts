@@ -7,6 +7,7 @@
 import { NodeValidationResult, NodeValidationConfig } from './NodeValidationFramework';
 import { AdvancedNodeData } from '../runtime/advanced';
 import { EventEmitter } from 'events';
+
 export interface ValidationServiceConfig extends NodeValidationConfig {
     /** Enable validation result caching */
     enableCaching: boolean;
@@ -16,7 +17,7 @@ export interface ValidationServiceConfig extends NodeValidationConfig {
     enableMonitoring: boolean;
     /** Batch size for bulk validation operations */
     batchSize: number;
-}
+
 export interface ValidationServiceMetrics {
     totalValidations: number;
     successfulValidations: number;
@@ -25,12 +26,14 @@ export interface ValidationServiceMetrics {
     securityThreatsDetected: number;
     performanceIssuesDetected: number;
     cacheHitRate: number;
-}
+
+
 export interface ValidationCacheEntry {
     result: NodeValidationResult;
     timestamp: number;
     nodeHash: string;
-}
+
+
 /**
  * Node Validation Service with caching, monitoring, and batch operations
  */
@@ -90,6 +93,6 @@ export declare class NodeValidationService extends EventEmitter {
     private cleanupCache;
     private emitValidationEvent;
     private chunkArray;
-}
+
 export default NodeValidationService;
 //# sourceMappingURL=NodeValidationService.d.ts.map

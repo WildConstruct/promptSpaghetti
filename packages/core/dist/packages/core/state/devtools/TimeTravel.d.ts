@@ -30,10 +30,10 @@ export interface TimelineEntry<T = any> {
     metadata: {
         description?: string;
         author?: string;
-        tags: string[];
+        tags: string;
         branchId?: string;
         parentId?: string;
-        childIds: string[];
+        childIds: string;
         size: number;
         compressed: boolean;
     };
@@ -46,10 +46,10 @@ export interface TimeBranch {
     lastModified: number;
     parentEntryId: string;
     headEntryId: string;
-    entryIds: string[];
+    entryIds: string;
     metadata: {
         author: string;
-        tags: string[];
+        tags: string;
         protected: boolean;
         color: string;
     };
@@ -61,8 +61,8 @@ export interface TimeTravelState {
     isReplaying: boolean;
     canGoBack: boolean;
     canGoForward: boolean;
-    branches: string[];
-    markers: TimelineMarker[];
+    branches: string;
+    markers: TimelineMarker;
 }
 export interface TimelineMarker {
     id: string;
@@ -78,18 +78,18 @@ export interface StateDiff {
     type: 'added' | 'removed' | 'modified' | 'unchanged';
     oldValue?: any;
     newValue?: any;
-    children?: StateDiff[];
+    children?: StateDiff;
 }
 export interface ReplaySession {
     id: string;
     name: string;
     description: string;
-    timeline: TimelineEntry[];
+    timeline: TimelineEntry;
     currentIndex: number;
     playbackSpeed: number;
     autoPlay: boolean;
     loop: boolean;
-    breakpoints: number[];
+    breakpoints: number;
     created: number;
     lastPlayed: number;
 }
@@ -98,10 +98,10 @@ export interface TimelineQuery {
         start: number;
         end: number;
     };
-    domains?: string[];
-    types?: string[];
-    branches?: string[];
-    tags?: string[];
+    domains?: string;
+    types?: string;
+    branches?: string;
+    tags?: string;
     search?: string;
     limit?: number;
     offset?: number;
@@ -118,89 +118,5 @@ export declare class TimeTravel extends EventEmitter {
     private isRecording;
     private isReplaying;
     constructor(config?: Partial<TimeTravelConfig>);
-    recordStateSnapshot<T>(snapshot: StateSnapshot<T>, domain: string, options?: {
-        description?: string;
-        tags?: string[];
-        marker?: Omit<TimelineMarker, 'id' | 'entryId' | 'timestamp'>;
-    }): string;
-    recordStateChange<T>(change: StateChange<T>, domain: string, options?: {
-        description?: string;
-        tags?: string[];
-    }): string;
-    goToPosition(position: number): boolean;
-    goToEntry(entryId: string): boolean;
-    goToTimestamp(timestamp: number): boolean;
-    goBack(steps?: number): boolean;
-    goForward(steps?: number): boolean;
-    goToStart(): boolean;
-    goToEnd(): boolean;
-    createBranch(name: string, options?: {
-        description?: string;
-        fromEntryId?: string;
-        author?: string;
-        tags?: string[];
-        color?: string;
-    }): string;
-    switchBranch(branchId: string): boolean;
-    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {
-        strategy?: 'fast-forward' | 'merge-commit' | 'squash';
-        message?: string;
-    }): string | null;
-    createReplaySession(name: string, options?: {
-        description?: string;
-        timeRange?: {
-            start: number;
-            end: number;
-        };
-        domains?: string[];
-        speed?: number;
-    }): string;
-    startReplay(sessionId: string, options?: {
-        autoPlay?: boolean;
-        loop?: boolean;
-        speed?: number;
-        fromIndex?: number;
-    }): boolean;
-    stepReplay(sessionId: string, direction?: 'forward' | 'backward'): boolean;
-    stopReplay(): void;
-    createStateDiff(fromEntryId: string, toEntryId: string): StateDiff[];
-    addMarker(marker: Omit<TimelineMarker, 'id' | 'timestamp'>): string;
-    removeMarker(markerId: string): boolean;
-    queryTimeline(query: TimelineQuery): TimelineEntry[];
-    searchTimeline(searchTerm: string, options?: {
-        fields?: string[];
-        caseSensitive?: boolean;
-        regex?: boolean;
-    }): TimelineEntry[];
-    private initializeMainBranch;
-    private setupAutoSnapshot;
-    private createAutoSnapshot;
-    private addEntryToTimeline;
-    private getCurrentEntryId;
-    private compressSnapshot;
-    private getFilteredTimeline;
-    private executeAutoReplay;
-    private extractStateFromEntry;
-    private calculateDeepDiff;
-    private getFieldValue;
-    private generateEntryId;
-    private generateBranchId;
-    private generateMarkerId;
-    private generateSessionId;
-    private generateRandomColor;
-    getTimeTravelState(): TimeTravelState;
-    canGoBack(): boolean;
-    canGoForward(): boolean;
-    getTimeline(): TimelineEntry[];
-    getBranches(): TimeBranch[];
-    getMarkers(): TimelineMarker[];
-    getReplaySessions(): ReplaySession[];
-    getCurrentEntry(): TimelineEntry | null;
-    startRecording(): void;
-    stopRecording(): void;
-    clearHistory(): void;
-    exportHistory(): any;
-    importHistory(data: any): void;
 }
-export declare const globalTimeTravel: TimeTravel;
 //# sourceMappingURL=TimeTravel.d.ts.map

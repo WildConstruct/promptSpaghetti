@@ -91,12 +91,12 @@ describe('NodeTypes Data Model', () => {
       expect(errors).toContain('Node label is required');
     });
     test('validates WeightedChoice specifics', () => {
-      const invalidChoice = {
-        id: 'test',
-        type: 'WeightedChoice' as const,
-        label: 'Test',
-        choices: [],
-      };
+  const invalidChoice = {
+  id: 'test',
+  type: 'WeightedChoice' as const,
+  label: 'Test',
+  choices: [],
+};
       const errors = validateNodeData(invalidChoice);
       expect(errors).toContain('WeightedChoice nodes must have at least one choice');
     });

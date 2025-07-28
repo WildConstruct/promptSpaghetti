@@ -5,6 +5,7 @@
  * Canvas-based overlay system for visual communication and creative direction.
  */
 import React from 'react';
+
 export interface DrawingAnnotation {
     id: string;
     type: 'freehand' | 'arrow' | 'circle' | 'rectangle' | 'line' | 'text';
@@ -26,7 +27,7 @@ export interface DrawingAnnotation {
             y: number;
         };
     };
-}
+
 export interface DrawingStyle {
     color: string;
     thickness: number;
@@ -39,13 +40,13 @@ export interface DrawingStyle {
     fontSize?: number;
     fontFamily?: string;
     fontWeight?: 'normal' | 'bold';
-}
+
 export interface VFXUser {
     id: string;
     name: string;
     role: string;
     color: string;
-}
+
 export interface DrawingCanvasProps {
     width: number;
     height: number;
@@ -58,7 +59,7 @@ export interface DrawingCanvasProps {
     showGrid?: boolean;
     gridSize?: number;
     className?: string;
-}
+
 export declare const DrawingAnnotationsCanvas: React.FC<DrawingCanvasProps>;
 export default DrawingAnnotationsCanvas;
 //# sourceMappingURL=DrawingAnnotations.d.ts.map

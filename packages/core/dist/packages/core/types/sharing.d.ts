@@ -14,14 +14,14 @@ export interface UserInfo {
 export interface Collaborator extends UserInfo {
     role: SharePermission;
     addedAt: Date;
-    permissions: string[];
+    permissions: string;
     invitedBy: string;
     acceptedAt?: Date;
 }
 export interface SharingConfig {
     accessLevel: ShareAccessLevel;
     permissions: SharePermission;
-    collaborators: Collaborator[];
+    collaborators: Collaborator;
     shareUrl: string;
     shareToken: string;
     expiresAt?: Date;
@@ -41,8 +41,8 @@ export interface ShareSecurityConfig {
         dataRetentionDays: number;
     };
     accessControls: {
-        ipWhitelist: string[];
-        geoRestrictions: string[];
+        ipWhitelist: string;
+        geoRestrictions: string;
         requireAuthentication: boolean;
         maxConcurrentUsers?: number;
         sessionTimeout?: number;
@@ -66,7 +66,7 @@ export interface SharedContentMetadata {
     exportId: string;
     version: string;
     author: UserInfo;
-    tags: string[];
+    tags: string;
     category?: string;
     language?: string;
     contentSize: number;
@@ -76,30 +76,30 @@ export interface SharedContentMetadata {
 }
 export interface VersionControl {
     currentVersion: string;
-    versions: ContentVersion[];
+    versions: ContentVersion;
     isLatest: boolean;
-    changesFromPrevious?: string[];
-    mergeConflicts?: MergeConflict[];
+    changesFromPrevious?: string;
+    mergeConflicts?: MergeConflict;
 }
 export interface ContentVersion {
     version: string;
     timestamp: Date;
     author: UserInfo;
-    changes: string[];
+    changes: string;
     size: number;
     checksum: string;
 }
 export interface MergeConflict {
     path: string;
     type: 'content' | 'metadata' | 'permissions';
-    conflictingVersions: string[];
+    conflictingVersions: string;
     resolution?: 'auto' | 'manual';
 }
 export interface ContentAnnotations {
-    connectionLabels: ConnectionLabel[];
-    stickyNotes: StickyNote[];
-    regions: AnnotationRegion[];
-    comments: ShareComment[];
+    connectionLabels: ConnectionLabel;
+    stickyNotes: StickyNote;
+    regions: AnnotationRegion;
+    comments: ShareComment;
 }
 export interface ConnectionLabel {
     id: string;
@@ -150,15 +150,15 @@ export interface ShareComment {
     resolvedAt?: Date;
 }
 export interface ShareAnalytics {
-    views: ShareView[];
-    downloads: ShareDownload[];
-    collaborations: CollaborationEvent[];
+    views: ShareView;
+    downloads: ShareDownload;
+    collaborations: CollaborationEvent;
     totalViews: number;
     uniqueViewers: number;
     averageViewDuration: number;
     peakConcurrentUsers: number;
-    geographicDistribution: GeographicStats[];
-    deviceStats: DeviceStats[];
+    geographicDistribution: GeographicStats;
+    deviceStats: DeviceStats;
     conversionMetrics: ConversionMetrics;
 }
 export interface ShareView {
@@ -229,7 +229,7 @@ export interface CreateShareRequest {
     description?: string;
     sharing: Partial<SharingConfig>;
     security?: Partial<ShareSecurityConfig>;
-    collaborators?: string[];
+    collaborators?: string;
 }
 export interface CreateShareResponse {
     success: boolean;
@@ -254,7 +254,7 @@ export interface ShareAccessRequest {
 export interface ShareAccessResponse {
     success: boolean;
     content?: SharedContent;
-    permissions: SharePermission[];
+    permissions: SharePermission;
     requiresPassword: boolean;
     error?: string;
     analytics?: {
@@ -282,9 +282,11 @@ export interface ShareAnalyticsResponse {
     error?: string;
 }
 export declare class ShareError extends Error {
+    constructor();
+    message: string;
     code: ShareErrorCode;
     details?: any;
-    constructor(message: string, code: ShareErrorCode, details?: any);
+    super(message: any): any;
 }
 export declare enum ShareErrorCode {
     SHARE_NOT_FOUND = "SHARE_NOT_FOUND",
@@ -295,20 +297,10 @@ export declare enum ShareErrorCode {
     CONTENT_NOT_FOUND = "CONTENT_NOT_FOUND",
     INVALID_SHARE_TOKEN = "INVALID_SHARE_TOKEN",
     RATE_LIMITED = "RATE_LIMITED",
-    SECURITY_VIOLATION = "SECURITY_VIOLATION"
-}
-export interface SharingSystemConfig {
-    maxShareDuration: number;
-    defaultAccessLevel: ShareAccessLevel;
-    allowAnonymousSharing: boolean;
-    requireEmailVerification: boolean;
-    maxCollaborators: number;
-    allowPasswordProtection: boolean;
-    trackAnalyticsByDefault: boolean;
-    defaultRetentionDays: number;
-    maxFileSizeForSharing: number;
-    supportedFormats: string[];
-    encryptionRequired: boolean;
+    SECURITY_VIOLATION = "SECURITY_VIOLATION",
+    export,
+    interface,
+    SharingSystemConfig
 }
 export interface ShareEvent {
     type: ShareEventType;

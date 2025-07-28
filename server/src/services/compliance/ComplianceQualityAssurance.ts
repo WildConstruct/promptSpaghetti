@@ -18,6 +18,7 @@ import {
   ComplianceReportValidationService 
 } from './ComplianceReportValidationService';
 
+}
 export interface QualityAssessment {
   assessmentId: string;
   reportId: string;
@@ -32,7 +33,9 @@ export interface QualityAssessment {
   certification: QualityCertification;
   auditTrail: QualityAuditEntry[];
 }
+}
 
+}
 export interface QualityDimension {
   dimensionId: string;
   name: string;
@@ -45,7 +48,9 @@ export interface QualityDimension {
   feedback: string;
   recommendations: string[];
 }
+}
 
+}
 export interface QualityCriteria {
   criteriaId: string;
   name: string;
@@ -57,7 +62,9 @@ export interface QualityCriteria {
   evidence: string[];
   assessorNotes: string;
 }
+}
 
+}
 export interface ScoringRubric {
   excellent: RubricLevel;
   good: RubricLevel;
@@ -65,14 +72,18 @@ export interface ScoringRubric {
   poor: RubricLevel;
   unacceptable: RubricLevel;
 }
+}
 
+}
 export interface RubricLevel {
   scoreRange: [number, number];
   description: string;
   characteristics: string[];
   examples: string[];
 }
+}
 
+}
 export interface PeerReview {
   reviewId: string;
   reviewerId: string;
@@ -87,7 +98,9 @@ export interface PeerReview {
   approvalRequired: boolean;
   signoffDate?: Date;
 }
+}
 
+}
 export interface ReviewDimension {
   dimension: string;
   rating: number;
@@ -95,7 +108,9 @@ export interface ReviewDimension {
   comments: string;
   evidence: string[];
 }
+}
 
+}
 export interface ReviewComment {
   commentId: string;
   section: string;
@@ -106,7 +121,9 @@ export interface ReviewComment {
   response?: string;
   responseDate?: Date;
 }
+}
 
+}
 export interface BenchmarkComparison {
   benchmarkType: 'industry' | 'internal' | 'regulatory' | 'best_practice';
   comparisonDate: Date;
@@ -117,7 +134,9 @@ export interface BenchmarkComparison {
   comparisonDimensions: BenchmarkDimension[];
   insights: string[];
 }
+}
 
+}
 export interface BenchmarkDimension {
   dimension: string;
   benchmarkValue: number;
@@ -127,7 +146,9 @@ export interface BenchmarkDimension {
   ranking: number;
   trend: 'improving' | 'declining' | 'stable';
 }
+}
 
+}
 export interface ImprovementAction {
   actionId: string;
   priority: 'critical' | 'high' | 'medium' | 'low';
@@ -143,7 +164,9 @@ export interface ImprovementAction {
   dependencies: string[];
   resources: ResourceRequirement[];
 }
+}
 
+}
 export interface SuccessMetric {
   metricName: string;
   currentValue: number;
@@ -151,7 +174,9 @@ export interface SuccessMetric {
   measurementMethod: string;
   reviewFrequency: string;
 }
+}
 
+}
 export interface ResourceRequirement {
   resourceType: 'budget' | 'personnel' | 'technology' | 'training' | 'external';
   description: string;
@@ -159,7 +184,9 @@ export interface ResourceRequirement {
   timeCommitment: string;
   skillsRequired: string[];
 }
+}
 
+}
 export interface QualityCertification {
   certificationId: string;
   certificationLevel: 'basic' | 'standard' | 'advanced' | 'premium';
@@ -170,7 +197,9 @@ export interface QualityCertification {
   conditions: string[];
   attestation: string;
 }
+}
 
+}
 export interface QualityAssessor {
   assessorId: string;
   name: string;
@@ -180,7 +209,9 @@ export interface QualityAssessor {
   experienceYears: number;
   specializations: ComplianceFramework[];
 }
+}
 
+}
 export interface QualityEvidence {
   evidenceId: string;
   evidenceType: 'automated_check' | 'manual_review' | 'peer_validation' | 'benchmark_data';
@@ -190,7 +221,9 @@ export interface QualityEvidence {
   timestamp: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface QualityAuditEntry {
   entryId: string;
   timestamp: Date;
@@ -199,11 +232,14 @@ export interface QualityAuditEntry {
   details: Record<string, any>;
   impact: string;
 }
+}
 
+}
 export interface QualityMetrics {
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
+}
   };
   totalReportsAssessed: number;
   averageQualityScore: number;
@@ -220,6 +256,7 @@ export interface QualityMetrics {
   improvementImpact: ImprovementImpact[];
 }
 
+}
 export interface CommonIssue {
   issue: string;
   frequency: number;
@@ -227,13 +264,16 @@ export interface CommonIssue {
   affectedFrameworks: ComplianceFramework[];
   recommendedActions: string[];
 }
+}
 
+}
 export interface ImprovementImpact {
   actionType: string;
   implementationCount: number;
   averageImprovementPercent: number;
   costEffectiveness: number;
   recommendedContinuation: boolean;
+}
 }
 
 export class ComplianceQualityAssurance {
@@ -253,6 +293,7 @@ export class ComplianceQualityAssurance {
     assessor: QualityAssessor,
     assessmentLevel: 'basic' | 'standard' | 'comprehensive' = 'standard'
   ): Promise<QualityAssessment> {
+
     console.log(`🎯 Starting ${assessmentLevel} quality assessment for report: ${report.id}`);
 
     const assessmentId = crypto.randomUUID();
@@ -310,6 +351,7 @@ export class ComplianceQualityAssurance {
     reviewers: QualityAssessor[],
     reviewType: 'technical' | 'business' | 'regulatory' | 'editorial'
   ): Promise<PeerReview[]> {
+
     console.log(`👥 Initiating ${reviewType} peer review with ${reviewers.length} reviewers`);
 
     const peerReviews: PeerReview[] = [];
@@ -355,6 +397,7 @@ export class ComplianceQualityAssurance {
     reviewId: string,
     reviewData: Partial<PeerReview>
   ): Promise<PeerReview> {
+
     const review = assessment.peerReviews.find(r => r.reviewId === reviewId);
     if (!review) {
       throw new Error(`Peer review ${reviewId} not found`);
@@ -382,6 +425,7 @@ export class ComplianceQualityAssurance {
   async generateQualityImprovementPlan(
     assessment: QualityAssessment
   ): Promise<ImprovementAction[]> {
+
     const improvements: ImprovementAction[] = [];
 
     // Analyze dimensions with low scores
@@ -416,6 +460,7 @@ export class ComplianceQualityAssurance {
     assessment: QualityAssessment,
     period: { startDate: Date; endDate: Date }
   ): Promise<QualityMetrics> {
+
     const periodKey = `${period.startDate.toISOString()}-${period.endDate.toISOString()}`;
     
     const metrics = this.qualityMetrics.get(periodKey) || {
@@ -429,7 +474,7 @@ export class ComplianceQualityAssurance {
         acceptable: 0,
         poor: 0,
         unacceptable: 0
-      },
+  }
       frameworkPerformance: new Map(),
       commonIssues: [],
       improvementImpact: []
@@ -466,6 +511,7 @@ export class ComplianceQualityAssurance {
     report: StandardComplianceReport,
     validation: ValidationResult
   ): Promise<QualityDimension[]> {
+
     const dimensions: QualityDimension[] = [
       await this.assessAccuracyDimension(report, validation),
       await this.assessCompletenessDimension(report, validation),
@@ -483,6 +529,7 @@ export class ComplianceQualityAssurance {
     report: StandardComplianceReport,
     validation: ValidationResult
   ): Promise<QualityDimension> {
+
     const accuracyScore = validation.summary.accuracyScore;
     
     return {
@@ -515,6 +562,7 @@ export class ComplianceQualityAssurance {
     report: StandardComplianceReport,
     validation: ValidationResult
   ): Promise<QualityDimension> {
+
     const completenessScore = validation.summary.completenessScore;
     
     return {
@@ -532,6 +580,7 @@ export class ComplianceQualityAssurance {
   }
 
   private async assessTimelinesssDimension(report: StandardComplianceReport): Promise<QualityDimension> {
+
     // Assess timeliness based on report generation and period end
     const periodEnd = report.reportingPeriod.endDate;
     const generatedAt = report.generatedAt;
@@ -580,6 +629,7 @@ export class ComplianceQualityAssurance {
     report: StandardComplianceReport,
     dimensions: QualityDimension[]
   ): Promise<BenchmarkComparison> {
+
     // Implementation would compare against industry benchmarks
     return {
       benchmarkType: 'industry',

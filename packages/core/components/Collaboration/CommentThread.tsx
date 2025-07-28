@@ -19,7 +19,7 @@ import { CommentEditor } from './CommentEditor';
 import { CommentMentions } from './CommentMentions';
 import { Comment, CommentStatus } from '../../types/CommentTypes';
 interface CommentThreadProps {
-  resourceId: string;
+  resourceId: string;,
   resourceType: 'project' | 'resource' | 'node' | 'region';
   workspaceId?: string;
   userId: string;
@@ -30,9 +30,8 @@ interface CommentThreadProps {
   allowEditing?: boolean;
   allowModeration?: boolean;
   realTime?: boolean;
-}
-const CommentThread: React.FC<CommentThreadProps> = ({ )
-  resourceId, 
+  const CommentThread: React.FC<CommentThreadProps> = ({ ),
+  resourceId,
   resourceType,
   workspaceId,
   userId,
@@ -60,80 +59,72 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
     refreshComments,
     realTimeConnection
   } = useComments({)
-    resourceId,
+  resourceId,
     resourceType,
     workspaceId,
     userId,
     realTime
   });
-  const handleCreateComment = useCallback(async (content: string, mentions: string[] = []) => {
-    try {
-      await createComment({)
-        content,
-        mentions,
-        target_data: targetData,
-      });
+  const handleCreateComment = useCallback(async (content: string, mentions: string = []) => {
+  try {
+  await createComment({)
+  content,
+  mentions,
+  target_data: targetData,
+});
       setShowNewComment(false);
     } catch (err) {
-      console.error('Failed to create comment:', err);
-    }
-  }, [createComment, targetData]);
-  const handleCreateReply = useCallback(async (parentId: string, content: string, mentions: string[] = []) => {
-    try {
-      await createComment({)
-        content,
-        mentions,
-        parent_id: parentId,
-        target_data: targetData,
-      });
+  console.error('Failed to create comment:', err);
+}, [createComment, targetData]);
+  const handleCreateReply = useCallback(async (parentId: string, content: string, mentions: string = []) => {
+  try {
+  await createComment({)
+  content,
+  mentions,
+  parent_id: parentId,
+  target_data: targetData,
+});
       setReplyingTo(null);
     } catch (err) {
-      console.error('Failed to create reply:', err);
-    }
-  }, [createComment, targetData]);
-  const handleUpdateComment = useCallback(async (commentId: string, content: string, mentions: string[] = []) => {
+  console.error('Failed to create reply:', err);
+}, [createComment, targetData]);
+  const handleUpdateComment = useCallback(async (commentId: string, content: string, mentions: string = []) => {
     try {
       await updateComment(commentId, {)
-        content,
+  content,
         mentions
       });
       setEditingComment(null);
     } catch (err) {
-      console.error('Failed to update comment:', err);
-    }
-  }, [updateComment]);
+  console.error('Failed to update comment:', err);
+}, [updateComment]);
   const handleDeleteComment = useCallback(async (commentId: string) => {
     if (!confirm('Are you sure you want to delete this comment?')) {
       return;
-    }
     try {
       await deleteComment(commentId);
     } catch (err) {
-      console.error('Failed to delete comment:', err);
-    }
-  }, [deleteComment]);
+  console.error('Failed to delete comment:', err);
+}, [deleteComment]);
   const handleResolveComment = useCallback(async (commentId: string) => {
     try {
       await resolveComment(commentId);
     } catch (err) {
-      console.error('Failed to resolve comment:', err);
-    }
-  }, [resolveComment]);
+  console.error('Failed to resolve comment:', err);
+}, [resolveComment]);
   const handleUnresolveComment = useCallback(async (commentId: string) => {
     try {
       await unresolveComment(commentId);
     } catch (err) {
-      console.error('Failed to unresolve comment:', err);
-    }
-  }, [unresolveComment]);
+  console.error('Failed to unresolve comment:', err);
+}, [unresolveComment]);
   const toggleReplies = (commentId: string) => {
     setExpandedReplies(prev => {)
-      const next = new Set(prev);
+  const next = new Set(prev);
       if (next.has(commentId)) {
         next.delete(commentId);
       } else {
         next.add(commentId);
-      }
       return next;
     });
   };
@@ -143,7 +134,7 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
     const canEdit = allowEditing && (comment.author_id === userId || allowModeration);
     const canModerate = allowModeration;
     const isResolved = comment.status === 'resolved';
-    return ();
+    return;
       <div key={comment.id} className={`${isReply ? 'ml-8 pl-4 border-l-2 border-gray-200' : ''}`}>}
         <div className={`p-4 rounded-lg ${isResolved ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-200'} ${isReply ? 'bg-gray-50' : ''}`}>}
           {/* Comment Header */}
@@ -293,7 +284,7 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
   };
   // Group comments by parent
   const rootComments = comments.filter(comment => !comment.parent_id);
-  return ();
+  return;
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
@@ -311,10 +302,10 @@ const CommentThread: React.FC<CommentThreadProps> = ({ )
             {/* Real-time connection indicator */}
             {realTime && ()
               <div className={`w-2 h-2 rounded-full ${
-                realTimeConnection?.status === 'connected' ? 'bg-green-400' :
-                realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :
-                'bg-red-400'
-              }`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
+  realTimeConnection?.status === 'connected' ? 'bg-green-400' :,
+  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :,
+  'bg-red-400'
+}`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
             )}
             <button
               onClick={() => setShowNewComment(!showNewComment)}

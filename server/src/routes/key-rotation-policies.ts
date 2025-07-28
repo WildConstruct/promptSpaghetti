@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyRotationPolicyService } from '../services/KeyRotationPolicyService';
 
+}
 interface CreatePolicyRequest {
   policyName: string;
   description?: string;
@@ -37,7 +38,9 @@ interface CreatePolicyRequest {
   retentionDays?: number;
   priority?: number;
 }
+}
 
+}
 interface ScheduleRotationRequest {
   keyId: string;
   policyId: string;
@@ -45,15 +48,20 @@ interface ScheduleRotationRequest {
   priority?: 'low' | 'medium' | 'high' | 'critical' | 'emergency';
   reason?: string;
 }
+}
 
+}
 interface ApproveRotationRequest {
   scheduleId: string;
   notes?: string;
 }
+}
 
+}
 interface ExecuteRotationRequest {
   scheduleId: string;
   force?: boolean;
+}
 }
 
 export async function keyRotationPolicyRoutes(
@@ -169,7 +177,7 @@ export async function keyRotationPolicyRoutes(
           requiresApproval: policy.requiresApproval,
           priority: policy.priority,
           createdAt: policy.createdAt
-        },
+  }
         message: 'Rotation policy created successfully',
         timestamp: new Date().toISOString()
       };
@@ -285,7 +293,7 @@ export async function keyRotationPolicyRoutes(
           priority: schedule.priority,
           rotationWindow: schedule.rotationWindow,
           approvalRequired: schedule.approvalRequired
-        },
+  }
         message: 'Rotation scheduled successfully',
         nextSteps: schedule.approvalRequired ? 
           ['Rotation requires approval before execution'] : 
@@ -441,7 +449,7 @@ export async function keyRotationPolicyRoutes(
           pendingApproval: filteredRotations.filter(r => r.status === 'pending_approval').length,
           approved: filteredRotations.filter(r => r.status === 'approved').length,
           highPriority: filteredRotations.filter(r => r.priority === 'high' || r.priority === 'critical').length
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -477,7 +485,7 @@ export async function keyRotationPolicyRoutes(
             metrics.complianceScore >= 90 ? 'good' : 
               metrics.complianceScore >= 80 ? 'fair' : 'poor',
           actionRequired: metrics.overdueRotations > 0 || metrics.emergencyRotations > 0
-        },
+  }
         recommendations: [
           metrics.overdueRotations > 0 ? 'Address overdue rotations immediately' : null,
           metrics.complianceScore < 90 ? 'Review and improve rotation processes' : null,
@@ -526,7 +534,7 @@ export async function keyRotationPolicyRoutes(
           readyToExecute: rotations.filter((r: any) => r.ready_to_execute).length,
           blockedRotations: rotations.filter((r: any) => !r.ready_to_execute).length,
           pendingApproval: rotations.filter((r: any) => r.blocking_reason?.includes('approval')).length
-        },
+  }
         recommendations: [
           'Review blocked rotations and resolve issues',
           'Ensure approvers are available for pending rotations',
@@ -599,17 +607,17 @@ export async function keyRotationPolicyRoutes(
           trigger: 'rotationIntervalDays',
           description: 'Rotate key every N days from creation/last rotation',
           example: 'rotationIntervalDays: 30'
-        },
+  }
         {
           trigger: 'maxUsageCount',
           description: 'Rotate key after N cryptographic operations',
           example: 'maxUsageCount: 10000'
-        },
+  }
         {
           trigger: 'rotationThresholdDate',
           description: 'Rotate key by specific date',
           example: 'rotationThresholdDate: "2024-12-31T23:59:59Z"'
-        },
+  }
         {
           trigger: 'inactivityDays',
           description: 'Rotate key if inactive for N days',
@@ -621,23 +629,23 @@ export async function keyRotationPolicyRoutes(
           step: 1,
           description: 'Policy evaluation identifies rotation requirement',
           automatic: true
-        },
+  }
         {
           step: 2,
           description: 'Rotation scheduled with approval if required',
           userAction: 'Schedule via API or automatic trigger'
-        },
+  }
         {
           step: 3,
           description: 'Approval request sent to designated roles',
           automatic: true,
           condition: 'If requiresApproval: true'
-        },
+  }
         {
           step: 4,
           description: 'Security admin approves rotation',
           userAction: 'POST /rotation-policies/approve'
-        },
+  }
         {
           step: 5,
           description: 'Rotation executes during scheduled window',
@@ -658,37 +666,37 @@ export async function keyRotationPolicyRoutes(
           method: 'POST',
           description: 'Create new rotation policy',
           auth: 'key_manager role required'
-        },
+  }
         {
           path: '/rotation-policies/evaluate',
           method: 'POST',
           description: 'Evaluate key against rotation policies',
           auth: 'authenticated user'
-        },
+  }
         {
           path: '/rotation-policies/schedule',
           method: 'POST',
           description: 'Schedule key rotation',
           auth: 'key_manager role required'
-        },
+  }
         {
           path: '/rotation-policies/approve',
           method: 'POST',
           description: 'Approve pending rotation',
           auth: 'security_admin role required'
-        },
+  }
         {
           path: '/rotation-policies/execute',
           method: 'POST',
           description: 'Execute scheduled rotation',
           auth: 'key_manager role required'
-        },
+  }
         {
           path: '/rotation-policies/upcoming',
           method: 'GET',
           description: 'Get upcoming rotations',
           auth: 'authenticated user'
-        },
+  }
         {
           path: '/rotation-policies/metrics',
           method: 'GET',

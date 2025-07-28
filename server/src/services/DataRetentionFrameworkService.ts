@@ -13,6 +13,7 @@ import {
   STANDARD_RETENTION_PERIODS
 } from '../types/DataRetentionPeriods';
 
+}
 export interface RetentionRecord {
   recordId: string;
   dataId: string;
@@ -29,6 +30,7 @@ export interface RetentionRecord {
   lastReviewed?: Date;
   reviewedBy?: string;
 }
+}
 
 export enum RetentionStatus {
   ACTIVE = 'ACTIVE',
@@ -39,6 +41,7 @@ export enum RetentionStatus {
   UNDER_REVIEW = 'UNDER_REVIEW'
 }
 
+}
 export interface RetentionPolicy {
   policyId: string;
   name: string;
@@ -50,12 +53,15 @@ export interface RetentionPolicy {
   updatedAt: Date;
   rules: RetentionRule[];
 }
+}
 
+}
 export interface RetentionRule {
   ruleId: string;
   condition: string;
   action: RetentionAction;
   priority: number;
+}
 }
 
 export enum RetentionAction {
@@ -66,6 +72,7 @@ export enum RetentionAction {
   HOLD = 'HOLD'
 }
 
+}
 export interface RetentionJob {
   jobId: string;
   jobType: RetentionJobType;
@@ -77,6 +84,7 @@ export interface RetentionJob {
   recordsDeleted: number;
   recordsArchived: number;
   errors: string[];
+}
 }
 
 export enum RetentionJobType {
@@ -111,6 +119,7 @@ export class DataRetentionFrameworkService {
     userId?: string,
     jurisdiction?: Jurisdiction[]
   ): Promise<RetentionRecord> {
+
     const retentionPeriod = this.determineRetentionPeriod(category, subcategory, jurisdiction);
     if (!retentionPeriod) {
       throw new Error(`No retention period found for category: ${category}`);
@@ -141,6 +150,7 @@ export class DataRetentionFrameworkService {
   }
 
   async scheduleRetentionJob(jobType: RetentionJobType, scheduledAt?: Date): Promise<RetentionJob> {
+
     const jobId = `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const job: RetentionJob = {
       jobId,
@@ -158,6 +168,7 @@ export class DataRetentionFrameworkService {
   }
 
   async executeRetentionJob(jobId: string): Promise<RetentionJob> {
+
     const job = await this.getRetentionJob(jobId);
     if (!job) {
       throw new Error(`Retention job not found: ${jobId}`);
@@ -192,6 +203,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async executeScheduledCleanup(job: RetentionJob): Promise<void> {
+
     const expiredRecords = await this.getExpiredRecords();
     
     for (const record of expiredRecords) {
@@ -218,6 +230,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async executeArchiving(job: RetentionJob): Promise<void> {
+
     const recordsToArchive = await this.getRecordsForArchiving();
     
     for (const record of recordsToArchive) {
@@ -237,6 +250,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async executeComplianceReview(job: RetentionJob): Promise<void> {
+
     const recordsForReview = await this.getRecordsForReview();
     
     for (const record of recordsForReview) {
@@ -251,6 +265,7 @@ export class DataRetentionFrameworkService {
   }
 
   async addRetentionException(recordId: string, exception: string, approvedBy: string): Promise<void> {
+
     const record = await this.getRetentionRecord(recordId);
     if (!record) {
       throw new Error(`Retention record not found: ${recordId}`);
@@ -270,6 +285,7 @@ export class DataRetentionFrameworkService {
   }
 
   async getRetentionStatus(dataId: string): Promise<RetentionRecord | null> {
+
     const query = `
       SELECT * FROM data_retention_records 
       WHERE data_id = $1 
@@ -282,6 +298,7 @@ export class DataRetentionFrameworkService {
   }
 
   async getUpcomingDeletions(days: number = 30): Promise<RetentionRecord[]> {
+
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + days);
     
@@ -318,6 +335,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getExpiredRecords(): Promise<RetentionRecord[]> {
+
     const query = `
       SELECT * FROM data_retention_records 
       WHERE scheduled_deletion <= NOW() 
@@ -329,6 +347,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRecordsForArchiving(): Promise<RetentionRecord[]> {
+
     const archiveDate = new Date();
     archiveDate.setDate(archiveDate.getDate() + 30); // Archive 30 days before deletion
     
@@ -344,6 +363,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRecordsForReview(): Promise<RetentionRecord[]> {
+
     const query = `
       SELECT * FROM data_retention_records 
       WHERE retention_period->>'reviewRequired' = 'true'
@@ -356,18 +376,21 @@ export class DataRetentionFrameworkService {
   }
 
   private async archiveData(record: RetentionRecord): Promise<void> {
+
     // Implementation would move data to archive storage
     // This is a placeholder for the actual archiving logic
     console.log(`Archiving data for record: ${record.recordId}`);
   }
 
   private async deleteData(record: RetentionRecord): Promise<void> {
+
     // Implementation would perform actual data deletion
     // This is a placeholder for the actual deletion logic
     console.log(`Deleting data for record: ${record.recordId}`);
   }
 
   private async saveRetentionRecord(record: RetentionRecord): Promise<void> {
+
     const query = `
       INSERT INTO data_retention_records (
         record_id, data_id, data_type, category, subcategory, user_id,
@@ -391,6 +414,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async updateRetentionRecord(record: RetentionRecord): Promise<void> {
+
     const query = `
       UPDATE data_retention_records 
       SET status = $1, scheduled_deletion = $2, exceptions = $3, 
@@ -410,12 +434,14 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRetentionRecord(recordId: string): Promise<RetentionRecord | null> {
+
     const query = 'SELECT * FROM data_retention_records WHERE record_id = $1';
     const result = await this.db.query(query, [recordId]);
     return result.rows[0] || null;
   }
 
   private async saveRetentionJob(job: RetentionJob): Promise<void> {
+
     const query = `
       INSERT INTO retention_jobs (
         job_id, job_type, status, scheduled_at, records_processed,
@@ -436,6 +462,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async updateRetentionJob(job: RetentionJob): Promise<void> {
+
     const query = `
       UPDATE retention_jobs 
       SET status = $1, started_at = $2, completed_at = $3, 
@@ -457,6 +484,7 @@ export class DataRetentionFrameworkService {
   }
 
   private async getRetentionJob(jobId: string): Promise<RetentionJob | null> {
+
     const query = 'SELECT * FROM retention_jobs WHERE job_id = $1';
     const result = await this.db.query(query, [jobId]);
     return result.rows[0] || null;
@@ -467,6 +495,7 @@ export class DataRetentionFrameworkService {
     record: RetentionRecord,
     additionalData?: any
   ): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: `RETENTION_${eventType}`,
       userId: record.userId || 'system',
@@ -476,7 +505,7 @@ export class DataRetentionFrameworkService {
         category: record.category,
         status: record.status,
         ...additionalData
-      },
+  }
       timestamp: new Date()
     });
   }

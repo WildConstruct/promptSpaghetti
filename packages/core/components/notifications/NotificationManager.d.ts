@@ -3,6 +3,7 @@
  * Manages notification delivery, preferences, and real-time updates
  */
 import { Notification } from './NotificationCenter';
+
 export interface NotificationPreferences {
     in_app_enabled: boolean;
     email_enabled: boolean;
@@ -42,7 +43,7 @@ export interface NotificationPreferences {
         frequency: 'hourly' | 'daily' | 'weekly';
         time: string;
     };
-}
+
 export interface NotificationFilter {
     filter: 'all' | 'unread' | 'mentions' | 'workspace';
     sort_by: 'newest' | 'priority' | 'type';
@@ -50,7 +51,7 @@ export interface NotificationFilter {
     offset?: number;
     start_date?: string;
     end_date?: string;
-}
+
 export interface NotificationStats {
     total: number;
     unread: number;
@@ -60,7 +61,7 @@ export interface NotificationStats {
         date: string;
         count: number;
     }[];
-}
+
 export declare class NotificationManager {
     private apiClient;
     private userId;
@@ -96,5 +97,5 @@ export declare class NotificationManager {
     getUnreadCount(): number;
     sendNotification(notification: Omit<Notification, 'id' | 'user_id' | 'delivered_at'>): Promise<void>;
     disconnect(): void;
-}
+
 //# sourceMappingURL=NotificationManager.d.ts.map

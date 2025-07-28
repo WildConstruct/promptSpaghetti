@@ -22,7 +22,7 @@ jest.mock('stripe', () => {
       confirm: jest.fn().mockResolvedValue({
         id: 'pi_test_123',
         status: 'succeeded'
-      })
+  }
     }
   }));
 });
@@ -55,11 +55,11 @@ describe('Transaction System Integration Tests', () => {
     fastify = {
       db: {
         query: jest.fn()
-      },
+  }
       log: {
         info: jest.fn(),
         error: jest.fn()
-      },
+  }
       authenticate: jest.fn()
     } as any;
 

@@ -48,6 +48,7 @@ export enum LicenseStatus {
 }
 
 // Shopping Cart interfaces
+}
 export interface CartItem {
   id: string;
   template_id: string;
@@ -58,7 +59,9 @@ export interface CartItem {
   discount_cents?: number;
   added_at: Date;
 }
+}
 
+}
 export interface ShoppingCart {
   id: string;
   user_id: string;
@@ -71,8 +74,10 @@ export interface ShoppingCart {
   updated_at: Date;
   expires_at: Date;
 }
+}
 
 // Payment Processing interfaces
+}
 export interface PaymentMethod {
   id: string;
   user_id: string;
@@ -86,7 +91,9 @@ export interface PaymentMethod {
   metadata: Record<string, any>;
   created_at: Date;
 }
+}
 
+}
 export interface PaymentIntent {
   id: string;
   cart_id: string;
@@ -103,8 +110,10 @@ export interface PaymentIntent {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Enhanced Transaction interface
+}
 export interface Transaction {
   id: string;
   payment_intent_id: string;
@@ -126,8 +135,10 @@ export interface Transaction {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // License Management interfaces
+}
 export interface TemplateLicense {
   id: string;
   purchase_id: string;
@@ -149,7 +160,9 @@ export interface TemplateLicense {
   updated_at: Date;
   last_used_at?: Date;
 }
+}
 
+}
 export interface LicenseTransfer {
   id: string;
   license_id: string;
@@ -160,8 +173,10 @@ export interface LicenseTransfer {
   approved_at?: Date;
   created_at: Date;
 }
+}
 
 // Order and Receipt interfaces
+}
 export interface Order {
   id: string;
   user_id: string;
@@ -184,7 +199,9 @@ export interface Order {
   updated_at: Date;
   completed_at?: Date;
 }
+}
 
+}
 export interface OrderItem {
   id: string;
   order_id: string;
@@ -198,7 +215,9 @@ export interface OrderItem {
   fulfillment_status: 'pending' | 'fulfilled' | 'failed';
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface BillingAddress {
   name: string;
   email: string;
@@ -210,8 +229,10 @@ export interface BillingAddress {
   country: string;
   tax_id?: string;
 }
+}
 
 // Refund interfaces
+}
 export interface RefundRequest {
   id: string;
   purchase_id: string;
@@ -225,7 +246,9 @@ export interface RefundRequest {
   processed_at?: Date;
   created_at: Date;
 }
+}
 
+}
 export interface Refund {
   id: string;
   refund_request_id: string;
@@ -238,8 +261,10 @@ export interface Refund {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Fraud and Risk Management
+}
 export interface RiskAssessment {
   id: string;
   payment_intent_id: string;
@@ -255,8 +280,10 @@ export interface RiskAssessment {
   automated_decision: boolean;
   created_at: Date;
 }
+}
 
 // Tax interfaces
+}
 export interface TaxCalculation {
   id: string;
   cart_id: string;
@@ -270,6 +297,7 @@ export interface TaxCalculation {
     type: string;
     rate: number;
     amount_cents: number;
+}
   }>;
   calculated_at: Date;
 }
@@ -306,7 +334,7 @@ export const CreatePaymentIntentSchema = z.object({
     postal_code: z.string().min(1),
     country: z.string().min(2).max(2),
     tax_id: z.string().optional()
-  })
+  }
 });
 
 export const ProcessPaymentSchema = z.object({
@@ -327,6 +355,7 @@ export const LicenseTransferSchema = z.object({
 });
 
 // Analytics interfaces for transactions
+}
 export interface TransactionAnalytics {
   period_start: Date;
   period_end: Date;
@@ -338,6 +367,7 @@ export interface TransactionAnalytics {
     refund_rate: number;
     dispute_rate: number;
     fraud_rate: number;
+}
   };
   payment_methods: Array<{
     provider: PaymentProvider;

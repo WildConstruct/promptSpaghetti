@@ -1,4 +1,5 @@
 import { Graph } from '../../graphSchema';
+
 export interface ParserResult {
     success: boolean;
     graph?: Graph;
@@ -10,7 +11,7 @@ export interface ParserResult {
         nodeCount: number;
         edgeCount: number;
     };
-}
+
 export interface ParserError {
     type: 'lexer' | 'parser' | 'semantic';
     code: string;
@@ -20,14 +21,14 @@ export interface ParserError {
     nodeId?: string;
     severity: 'error' | 'warning';
     suggestion?: string;
-}
+
 export interface ParserOptions {
     tolerateErrors?: boolean;
     maxErrors?: number;
     validateSchema?: boolean;
     includeAST?: boolean;
     performance?: boolean;
-}
+
 export declare class GraphParser {
     private options;
     constructor(options?: ParserOptions);
@@ -90,7 +91,6 @@ export declare class GraphParser {
      * Generate detailed error report
      */
     generateErrorReport(result: ParserResult): string;
-}
 /**
  * Convenience function for simple parsing
  */

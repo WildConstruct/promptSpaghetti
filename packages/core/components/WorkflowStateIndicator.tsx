@@ -10,39 +10,35 @@ import {
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
 interface WorkflowState {
-  id: string;
+  id: string;,
   name: string;
   color: string;
   icon?: string;
-  is_initial: boolean;
+  is_initial: boolean;,
   is_final: boolean;
   is_locked: boolean;
-}
-interface WorkflowStateIndicatorProps {
+  interface WorkflowStateIndicatorProps {
   state: WorkflowState;
   isLocked?: boolean;
   canEdit?: boolean;
   onStateChange?: () => void;
   compact?: boolean;
-}
-
-export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
+  export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({,)
   state,
   isLocked = false,
   canEdit = false,
   onStateChange,
   compact = false
 }) => {
-  const getStateIcon = (iconName?: string) => {
-    switch (iconName) {
-    case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
-    case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
-    case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
-    case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-    case 'DocumentTextIcon': 
-    default: return <DocumentTextIcon className="h-4 w-4" />;
-    }
-  };
+  const getStateIcon = (iconName?: string) => {,
+  switch (iconName) {
+  case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
+  case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
+  case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
+  case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
+  case 'DocumentTextIcon':,
+  default: return <DocumentTextIcon className="h-4 w-4" />;
+};
   const getStateDescription = () => {
     if (state.is_initial) return 'Initial state';
     if (state.is_final) return 'Final state';
@@ -50,12 +46,13 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
     return 'Active state';
   };
   if (compact) {
-    return ();
+    return;
       <div 
         className="flex items-center space-x-2 px-2 py-1 rounded-md text-sm"
         style={{ 
-          backgroundColor: `${state.color}20`, }
-          color: state.color,
+          backgroundColor: `${state.color}20`}
+},
+  color: state.color,
           border: `1px solid ${state.color}40`}
         }}
         title={`${state.name} - ${getStateDescription()}`}
@@ -69,17 +66,17 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
         )}
       </div>
     );
-  }
-  return ();
+  return;
     <div className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div 
             className="flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium"
             style={{ 
-              backgroundColor: `${state.color}20`, }
-              color: state.color ,
-            }}
+              backgroundColor: `${state.color}20`}
+},
+  color: state.color ;
+  }}
           >
             {getStateIcon(state.icon)}
             <span>{state.name}</span>
@@ -128,7 +125,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
 };
 
 // Simple version for use in lists
-export const WorkflowStateBadge: React.FC<{
+export const WorkflowStateBadge: React.FC<{,
   state: WorkflowState;
   size?: 'sm' | 'md' | 'lg';
 }> = ({ state, size = 'md' }) => {
@@ -141,20 +138,20 @@ export const WorkflowStateBadge: React.FC<{
     case 'ArchiveBoxIcon': return <ArchiveBoxIcon className={iconSize} />;
     case 'DocumentTextIcon': 
     default: return <DocumentTextIcon className={iconSize} />;
-    }
   };
   const sizeClasses = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1 text-sm',
-    lg: 'px-4 py-2 text-base',
-  };
-  return ();
+  sm: 'px-2 py-1 text-xs',
+  md: 'px-3 py-1 text-sm',
+  lg: 'px-4 py-2 text-base',
+};
+  return;
     <div 
       className={`inline-flex items-center space-x-2 rounded-full font-medium ${sizeClasses[size]}`}
       style={{ 
-        backgroundColor: `${state.color}20`, }
-        color: state.color ,
-      }}
+        backgroundColor: `${state.color}20`}
+},
+  color: state.color ;
+  }}
     >
       {getStateIcon(state.icon)}
       <span>{state.name}</span>

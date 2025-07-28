@@ -1,8 +1,3 @@
-/**
- * Epic 9.2.5 - Notification Manager
- * Manages notification delivery, preferences, and real-time updates
- */
-import { Notification } from './NotificationCenter';
 export interface NotificationPreferences {
     in_app_enabled: boolean;
     email_enabled: boolean;
@@ -78,23 +73,5 @@ export declare class NotificationManager {
     private isInQuietHours;
     private getTypePreferences;
     private showBrowserNotification;
-    getNotifications(filter: NotificationFilter): Promise<{
-        notifications: Notification[];
-        total: number;
-        unread_count: number;
-    }>;
-    markAsRead(notificationId: string): Promise<void>;
-    markAllAsRead(notificationIds: string[]): Promise<void>;
-    deleteNotification(notificationId: string): Promise<void>;
-    getStats(days?: number): Promise<NotificationStats>;
-    getPreferences(): Promise<NotificationPreferences>;
-    updatePreferences(preferences: Partial<NotificationPreferences>): Promise<NotificationPreferences>;
-    private loadPreferences;
-    private getDefaultPreferences;
-    onNotificationReceived(callback: (notification: Notification) => void): () => void;
-    requestPermission(): Promise<NotificationPermission>;
-    getUnreadCount(): number;
-    sendNotification(notification: Omit<Notification, 'id' | 'user_id' | 'delivered_at'>): Promise<void>;
-    disconnect(): void;
 }
 //# sourceMappingURL=NotificationManager.d.ts.map

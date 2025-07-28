@@ -29,37 +29,14 @@ interface PromotionPreviewData {
         end_date: Date;
         status: string;
     };
-    content: Array<{
-        id: string;
-        title: string;
-        category: string;
-        thumbnail: string;
-        rating: number;
-        downloads: number;
-        performance_score: number;
-    }>;
-    rotation_config: {
-        pattern: string;
-        duration_per_content?: number;
-        click_threshold?: number;
-        performance_threshold?: number;
-    };
-    predicted_performance: {
-        estimated_impressions: number;
-        estimated_ctr: number;
-        estimated_conversions: number;
-        estimated_revenue: number;
-        confidence_level: number;
-    };
-    ab_test_config?: {
-        test_name: string;
-        variants: Array<{
-            id: string;
-            name: string;
-            traffic_split: number;
-            content_ids: string[];
-        }>;
-    };
+    content: Array<{}, id>;
+    string: any;
+    title: string;
+    category: string;
+    thumbnail: string;
+    rating: number;
+    downloads: number;
+    performance_score: number;
 }
 export interface PromotionPreviewProps {
     promotionData?: PromotionPreviewData;

@@ -6,13 +6,14 @@
  */
 import React from 'react';
 import { Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService';
+
 interface KnowledgeBaseSearchProps {
     knowledgeService: Epic16KnowledgeBaseService;
     userId: string;
     onArticleSelect?: (articleId: string) => void;
     onSearchPerformed?: (query: string, resultCount: number) => void;
     className?: string;
-}
+
 export declare const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps>;
 export default KnowledgeBaseSearch;
 //# sourceMappingURL=KnowledgeBaseSearch.d.ts.map

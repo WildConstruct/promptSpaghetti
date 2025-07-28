@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // Core Access Control Interfaces
 // =============================================================================
 
+}
 export interface AccessControlConfig {
   enabled: boolean;
   defaultDenyAll: boolean;
@@ -54,7 +55,9 @@ export interface AccessControlConfig {
   webhookNotifications: boolean;
   realTimeUpdates: boolean;
 }
+}
 
+}
 export interface AccessControlContext {
   // Subject (who is requesting access)
   subject: AccessSubject;
@@ -85,7 +88,9 @@ export interface AccessControlContext {
   // Additional context
   customAttributes: Record<string, any>;
 }
+}
 
+}
 export interface AccessSubject {
   id: string;
   type: SubjectType;
@@ -120,7 +125,9 @@ export interface AccessSubject {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AccessResource {
   id: string;
   type: ResourceType;
@@ -158,7 +165,9 @@ export interface AccessResource {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AccessAction {
   id: string;
   type: ActionType;
@@ -181,7 +190,9 @@ export interface AccessAction {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AccessEnvironment {
   // Time and location
   timestamp: Date;
@@ -190,6 +201,7 @@ export interface AccessEnvironment {
     country: string;
     region: string;
     city: string;
+}
     coordinates?: { lat: number; lon: number };
   };
   
@@ -228,6 +240,7 @@ export interface AccessEnvironment {
   metadata: Record<string, any>;
 }
 
+}
 export interface AccessDecision {
   decision: AccessDecisionType;
   requestId: string;
@@ -257,11 +270,13 @@ export interface AccessDecision {
   // Additional information
   metadata: Record<string, any>;
 }
+}
 
 // =============================================================================
 // Policy System Interfaces
 // =============================================================================
 
+}
 export interface AccessPolicy {
   id: string;
   name: string;
@@ -308,42 +323,54 @@ export interface AccessPolicy {
   updatedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface PolicyTarget {
   subjects?: SubjectTarget[];
   resources?: ResourceTarget[];
   actions?: ActionTarget[];
   environments?: EnvironmentTarget[];
 }
+}
 
+}
 export interface SubjectTarget {
   type: 'IDENTITY' | 'ROLE' | 'GROUP' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
 }
+}
 
+}
 export interface ResourceTarget {
   type: 'ID' | 'TYPE' | 'PATH' | 'CLASSIFICATION' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
 }
+}
 
+}
 export interface ActionTarget {
   type: 'ID' | 'TYPE' | 'OPERATION' | 'CATEGORY';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
 }
+}
 
+}
 export interface EnvironmentTarget {
   type: 'TIME' | 'LOCATION' | 'DEVICE' | 'NETWORK' | 'ATTRIBUTE';
   operator: ComparisonOperator;
   value: Error;
   negate: boolean;
 }
+}
 
+}
 export interface PolicyRule {
   id: string;
   description: string;
@@ -363,7 +390,9 @@ export interface PolicyRule {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface RuleCondition {
   field: string;
   operator: ComparisonOperator;
@@ -371,14 +400,18 @@ export interface RuleCondition {
   type: ConditionType;
   weight: number; // 0-1
 }
+}
 
+}
 export interface PolicyCondition {
   type: 'TEMPORAL' | 'CONTEXTUAL' | 'RISK' | 'COMPLIANCE';
   operator: ComparisonOperator;
   value: Error;
   required: boolean;
 }
+}
 
+}
 export interface PolicyEvaluationResult {
   policyId: string;
   decision: PolicyDecision;
@@ -397,7 +430,9 @@ export interface PolicyEvaluationResult {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AccessCondition {
   type: ConditionType;
   description: string;
@@ -412,7 +447,9 @@ export interface AccessCondition {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AccessObligation {
   type: ObligationType;
   description: string;
@@ -430,11 +467,13 @@ export interface AccessObligation {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
 // =============================================================================
 // RBAC Interfaces
 // =============================================================================
 
+}
 export interface Role {
   id: string;
   name: string;
@@ -466,7 +505,9 @@ export interface Role {
   updatedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface Permission {
   id: string;
   name: string;
@@ -491,7 +532,9 @@ export interface Permission {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface RoleAssignment {
   id: string;
   subjectId: string;
@@ -519,13 +562,17 @@ export interface RoleAssignment {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface RoleConstraint {
   type: ConstraintType;
   parameters: Record<string, any>;
   required: boolean;
 }
+}
 
+}
 export interface PermissionConstraint {
   type: ConstraintType;
   field: string;
@@ -533,17 +580,21 @@ export interface PermissionConstraint {
   value: Error;
   required: boolean;
 }
+}
 
+}
 export interface PermissionCondition {
   type: ConditionType;
   expression: string;
   parameters: Record<string, any>;
+}
 }
 
 // =============================================================================
 // ABAC Interfaces
 // =============================================================================
 
+}
 export interface SubjectAttribute {
   name: string;
   value: Error;
@@ -571,7 +622,9 @@ export interface SubjectAttribute {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ResourceAttribute {
   name: string;
   value: Error;
@@ -593,7 +646,9 @@ export interface ResourceAttribute {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface EnvironmentAttribute {
   name: string;
   value: Error;
@@ -613,7 +668,9 @@ export interface EnvironmentAttribute {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface Group {
   id: string;
   name: string;
@@ -643,7 +700,9 @@ export interface Group {
   updatedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface GroupMember {
   subjectId: string;
   membershipType: MembershipType;
@@ -652,13 +711,16 @@ export interface GroupMember {
   addedBy: string;
   addedAt: Date;
 }
+}
 
+}
 export interface GroupAttribute {
   name: string;
   value: Error;
   type: AttributeType;
   inherited: boolean;
   metadata: Record<string, any>;
+}
 }
 
 // =============================================================================
@@ -899,6 +961,7 @@ export class AccessControlFramework extends EventEmitter {
    * Main authorization decision point
    */
   async authorize(context: AccessControlContext): Promise<AccessDecision> {
+
     const startTime = Date.now();
     
     try {
@@ -965,6 +1028,7 @@ export class AccessControlFramework extends EventEmitter {
    * Bulk authorization for multiple contexts
    */
   async authorizeBulk(contexts: AccessControlContext[]): Promise<AccessDecision[]> {
+
     const decisions: AccessDecision[] = [];
     
     // Process in batches to avoid overwhelming the system
@@ -989,6 +1053,7 @@ export class AccessControlFramework extends EventEmitter {
     action: string,
     context?: Partial<AccessControlContext>
   ): Promise<boolean> {
+
     const authContext: AccessControlContext = {
       subject: await this.getSubject(subjectId),
       resource: await this.getResource(resourceId),
@@ -1014,6 +1079,7 @@ export class AccessControlFramework extends EventEmitter {
     resourceType?: ResourceType,
     tenantId?: string
   ): Promise<Permission[]> {
+
     const subject = await this.getSubject(subjectId);
     const permissions: Permission[] = [];
 
@@ -1053,6 +1119,7 @@ export class AccessControlFramework extends EventEmitter {
    * Create new access policy
    */
   async createPolicy(policy: Omit<AccessPolicy, 'id' | 'createdAt' | 'updatedAt' | 'version'>): Promise<AccessPolicy> {
+
     const newPolicy: AccessPolicy = {
       ...policy,
       id: crypto.randomUUID(),
@@ -1080,7 +1147,7 @@ export class AccessControlFramework extends EventEmitter {
         policyName: newPolicy.name,
         policyType: newPolicy.type,
         createdBy: newPolicy.createdBy
-      },
+  }
       riskLevel: 'MEDIUM'
     });
 
@@ -1091,6 +1158,7 @@ export class AccessControlFramework extends EventEmitter {
    * Update access policy
    */
   async updatePolicy(policyId: string, updates: Partial<AccessPolicy>): Promise<AccessPolicy> {
+
     const existingPolicy = await this.getPolicy(policyId);
     if (!existingPolicy) {
       throw new Error(`Policy not found: ${policyId}`);
@@ -1124,7 +1192,7 @@ export class AccessControlFramework extends EventEmitter {
         policyId,
         changes: Object.keys(updates),
         version: updatedPolicy.version
-      },
+  }
       riskLevel: 'MEDIUM'
     });
 
@@ -1135,6 +1203,7 @@ export class AccessControlFramework extends EventEmitter {
    * Delete access policy
    */
   async deletePolicy(policyId: string): Promise<boolean> {
+
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       return false;
@@ -1157,7 +1226,7 @@ export class AccessControlFramework extends EventEmitter {
       details: {
         policyId,
         policyName: policy.name
-      },
+  }
       riskLevel: 'HIGH'
     });
 
@@ -1168,6 +1237,7 @@ export class AccessControlFramework extends EventEmitter {
    * Get policy by ID
    */
   async getPolicy(policyId: string): Promise<AccessPolicy | null> {
+
     // Check cache first
     if (this.policyCache.has(policyId)) {
       return this.policyCache.get(policyId) || null;
@@ -1192,6 +1262,7 @@ export class AccessControlFramework extends EventEmitter {
     limit?: number;
     offset?: number;
   }): Promise<{ policies: AccessPolicy[]; total: number }> {
+
     return await this.loadPolicies(filter);
   }
 
@@ -1203,6 +1274,7 @@ export class AccessControlFramework extends EventEmitter {
    * Create new role
    */
   async createRole(role: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>): Promise<Role> {
+
     const newRole: Role = {
       ...role,
       id: crypto.randomUUID(),
@@ -1218,7 +1290,7 @@ export class AccessControlFramework extends EventEmitter {
         roleId: newRole.id,
         roleName: newRole.name,
         permissions: newRole.permissions.map(p => p.name)
-      },
+  }
       riskLevel: 'MEDIUM'
     });
 
@@ -1236,7 +1308,7 @@ export class AccessControlFramework extends EventEmitter {
       workspaceId?: string;
       projectId?: string;
       resourceId?: string;
-    },
+  }
     options?: {
       effectiveDate?: Date;
       expirationDate?: Date;
@@ -1244,6 +1316,7 @@ export class AccessControlFramework extends EventEmitter {
       reason?: string;
     }
   ): Promise<RoleAssignment> {
+
     const assignment: RoleAssignment = {
       id: crypto.randomUUID(),
       subjectId,
@@ -1269,7 +1342,7 @@ export class AccessControlFramework extends EventEmitter {
         assignmentId: assignment.id,
         assignedBy: assignment.assignedBy,
         scope
-      },
+  }
       riskLevel: 'MEDIUM'
     });
 
@@ -1280,6 +1353,7 @@ export class AccessControlFramework extends EventEmitter {
    * Revoke role from subject
    */
   async revokeRole(assignmentId: string, revokedBy?: string, reason?: string): Promise<boolean> {
+
     const assignment = await this.getRoleAssignment(assignmentId);
     if (!assignment) {
       return false;
@@ -1300,7 +1374,7 @@ export class AccessControlFramework extends EventEmitter {
         roleId: assignment.roleId,
         revokedBy,
         reason
-      },
+  }
       riskLevel: 'MEDIUM'
     });
 
@@ -1312,6 +1386,7 @@ export class AccessControlFramework extends EventEmitter {
   // =============================================================================
 
   private async evaluatePolicies(context: AccessControlContext): Promise<PolicyEvaluationResult[]> {
+
     const applicablePolicies = await this.getApplicablePolicies(context);
     const results: PolicyEvaluationResult[] = [];
 
@@ -1339,6 +1414,7 @@ export class AccessControlFramework extends EventEmitter {
   }
 
   private async evaluatePolicy(policy: AccessPolicy, context: AccessControlContext): Promise<PolicyEvaluationResult> {
+
     const startTime = Date.now();
     const appliedRules: string[] = [];
     const conditions: AccessCondition[] = [];
@@ -1809,6 +1885,7 @@ export class AccessControlFramework extends EventEmitter {
     decision: AccessDecision, 
     source: 'CACHED' | 'EVALUATED' | 'ERROR'
   ): Promise<void> {
+
     if (!this.config.auditAllDecisions && !this.config.auditFailuresOnly) {
       return;
     }
@@ -1830,7 +1907,7 @@ export class AccessControlFramework extends EventEmitter {
         evaluationTime: decision.evaluationTime,
         source,
         appliedPolicies: decision.appliedPolicies
-      },
+  }
       riskLevel: decision.decision === 'DENY' ? 'MEDIUM' : 'LOW',
       compliance: {
         frameworks: context.resource.complianceFrameworks || [],
@@ -1845,12 +1922,14 @@ export class AccessControlFramework extends EventEmitter {
   // =============================================================================
 
   private async getApplicablePolicies(_____context: AccessControlContext): Promise<AccessPolicy[]> {
+
     // Mock implementation - would query database with complex filtering
     const allPolicies = Array.from(this.policyCache.values());
     return allPolicies.filter(policy => policy.enabled);
   }
 
   private async validatePolicy(policy: AccessPolicy): Promise<void> {
+
     if (!policy.name || policy.name.trim() === '') {
       throw new Error('Policy name is required');
     }
@@ -1865,47 +1944,56 @@ export class AccessControlFramework extends EventEmitter {
   }
 
   private async storePolicy(policy: AccessPolicy): Promise<void> {
+
     // Mock implementation - would store in database
     console.log(`Storing policy: ${policy.id}`);
   }
 
   private async loadPolicy(policyId: string): Promise<AccessPolicy | null> {
+
     // Mock implementation - would load from database
     return this.policyCache.get(policyId) || null;
   }
 
   private async loadPolicies(filter?: any): Promise<{ policies: AccessPolicy[]; total: number }> {
+
     // Mock implementation - would load from database with filtering
     const policies = Array.from(this.policyCache.values());
     return { policies, total: policies.length };
   }
 
   private async removePolicy(policyId: string): Promise<void> {
+
     // Mock implementation - would remove from database
     console.log(`Removing policy: ${policyId}`);
   }
 
   private async storeRole(role: Role): Promise<void> {
+
     // Mock implementation - would store in database
     console.log(`Storing role: ${role.id}`);
   }
 
   private async storeRoleAssignment(assignment: RoleAssignment): Promise<void> {
+
     // Mock implementation - would store in database
     console.log(`Storing role assignment: ${assignment.id}`);
   }
 
   private async getRoleAssignment(_____assignmentId: string): Promise<RoleAssignment | null> {
+
     // Mock implementation - would load from database
     return null;
   }
 
   private async updateRoleAssignment(assignment: RoleAssignment): Promise<void> {
+
     // Mock implementation - would update in database
     console.log(`Updating role assignment: ${assignment.id}`);
   }
 
   private async getSubject(subjectId: string): Promise<AccessSubject> {
+
     // Mock implementation - would load from database/cache
     return {
       id: subjectId,
@@ -1922,6 +2010,7 @@ export class AccessControlFramework extends EventEmitter {
   }
 
   private async getResource(resourceId: string): Promise<AccessResource> {
+
     // Mock implementation - would load from database/cache
     return {
       id: resourceId,
@@ -1939,6 +2028,7 @@ export class AccessControlFramework extends EventEmitter {
   }
 
   private async getAction(actionType: string): Promise<AccessAction> {
+
     // Mock implementation - would load from database/cache
     return {
       id: crypto.randomUUID(),
@@ -1957,6 +2047,7 @@ export class AccessControlFramework extends EventEmitter {
   }
 
   private async getCurrentEnvironment(): Promise<AccessEnvironment> {
+
     // Mock implementation - would collect actual environment data
     return {
       timestamp: new Date(),

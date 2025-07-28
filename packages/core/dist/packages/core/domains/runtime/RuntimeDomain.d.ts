@@ -7,12 +7,12 @@
 import React from 'react';
 import { ExecutionTask, ExecutionInstance, ExecutionRecord, NodeDefinition, RuntimeMetrics, RuntimeConfig, RuntimeDomainState, RuntimeDomainEvents, ExecutionOptions, ValidationResult, NodeMetrics, RuntimeDashboardProps, ExecutionQueueProps, NodeRegistryProps, Graph, ExecutionContext } from './types/RuntimeTypes';
 export interface IExecutionService {
-    executeGraph(graph: Graph, seeds: number[], options?: ExecutionOptions): Promise<ExecutionRecord[]>;
+    executeGraph(graph: Graph, seeds: number, options?: ExecutionOptions): Promise<ExecutionRecord>;
     executeNode(nodeId: string, inputs: any, context: ExecutionContext): Promise<any>;
     queueExecution(task: ExecutionTask): Promise<string>;
     cancelExecution(taskId: string): Promise<void>;
     getExecutionStatus(taskId: string): Promise<ExecutionInstance | null>;
-    getExecutionHistory(filters?: ExecutionHistoryFilters): Promise<ExecutionRecord[]>;
+    getExecutionHistory(filters?: ExecutionHistoryFilters): Promise<ExecutionRecord>;
     getQueueStatus(): Promise<QueueStatus>;
     pauseQueue(): Promise<void>;
     resumeQueue(): Promise<void>;
@@ -22,20 +22,20 @@ export interface INodeRegistryService {
     registerNode(definition: NodeDefinition): Promise<void>;
     unregisterNode(nodeType: string): Promise<void>;
     getNodeDefinition(nodeType: string): Promise<NodeDefinition | null>;
-    getAllNodeDefinitions(): Promise<NodeDefinition[]>;
-    getNodesByCategory(category: string): Promise<NodeDefinition[]>;
+    getAllNodeDefinitions(): Promise<NodeDefinition>;
+    getNodesByCategory(category: string): Promise<NodeDefinition>;
     validateNodeDefinition(definition: NodeDefinition): Promise<ValidationResult>;
     updateNodeDefinition(nodeType: string, updates: Partial<NodeDefinition>): Promise<NodeDefinition>;
-    searchNodes(query: string, filters?: NodeSearchFilters): Promise<NodeDefinition[]>;
+    searchNodes(query: string, filters?: NodeSearchFilters): Promise<NodeDefinition>;
     getNodeMetrics(nodeType: string): Promise<NodeMetrics>;
 }
 export interface IValidationService {
     validateGraph(graph: Graph): Promise<ValidationResult>;
     validateNode(node: any, definition: NodeDefinition): Promise<ValidationResult>;
-    validateInputs(inputs: any, specifications: any[]): Promise<ValidationResult>;
-    validateOutputs(outputs: any, specifications: any[]): Promise<ValidationResult>;
+    validateInputs(inputs: any, specifications: any): Promise<ValidationResult>;
+    validateOutputs(outputs: any, specifications: any): Promise<ValidationResult>;
     validateConnection(sourceNode: string, targetNode: string, graph: Graph): Promise<ValidationResult>;
-    getValidationRules(nodeType: string): Promise<any[]>;
+    getValidationRules(nodeType: string): Promise<any>;
     addCustomValidation(name: string, validator: Function): Promise<void>;
     removeCustomValidation(name: string): Promise<void>;
 }
@@ -45,7 +45,7 @@ export interface IPerformanceService {
     startProfiling(executionId: string): Promise<void>;
     stopProfiling(executionId: string): Promise<ProfileResult>;
     analyzePerformance(executionId: string): Promise<PerformanceAnalysis>;
-    getBottlenecks(): Promise<PerformanceBottleneck[]>;
+    getBottlenecks(): Promise<PerformanceBottleneck>;
     optimizeGraph(graph: Graph): Promise<OptimizedGraph>;
     benchmarkNode(nodeType: string, iterations: number): Promise<BenchmarkResult>;
     generatePerformanceReport(criteria: ReportCriteria): Promise<PerformanceReport>;
@@ -57,7 +57,7 @@ export interface ICacheService {
     clear(): Promise<void>;
     getStats(): Promise<CacheStats>;
     invalidatePattern(pattern: string): Promise<number>;
-    warmup(keys: string[]): Promise<void>;
+    warmup(keys: string): Promise<void>;
     export(): Promise<CacheExport>;
     import(data: CacheExport): Promise<void>;
 }
@@ -66,7 +66,7 @@ export interface ISecurityService {
     checkPermissions(nodeType: string, userId: string): Promise<boolean>;
     sanitizeInputs(inputs: any, nodeType: string): Promise<any>;
     auditExecution(execution: ExecutionRecord): Promise<void>;
-    detectSuspiciousActivity(metrics: RuntimeMetrics): Promise<SecurityAlert[]>;
+    detectSuspiciousActivity(metrics: RuntimeMetrics): Promise<SecurityAlert>;
     enforceResourceLimits(executionId: string): Promise<void>;
     validateNodeSecurity(definition: NodeDefinition): Promise<SecurityValidation>;
 }
@@ -78,7 +78,7 @@ export interface ExecutionHistoryFilters {
         start: Date;
         end: Date;
     };
-    nodeTypes?: string[];
+    nodeTypes?: string;
     limit?: number;
     offset?: number;
 }
@@ -93,18 +93,18 @@ export interface QueueStatus {
 }
 export interface NodeSearchFilters {
     category?: string;
-    tags?: string[];
+    tags?: string;
     author?: string;
     version?: string;
-    capabilities?: string[];
+    capabilities?: string;
 }
 export interface ProfileResult {
     executionId: string;
     totalTime: number;
-    nodeProfiles: NodeProfile[];
+    nodeProfiles: NodeProfile;
     memoryProfile: MemoryProfile;
     cpuProfile: CpuProfile;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface NodeProfile {
     nodeId: string;
@@ -127,7 +127,7 @@ export interface CpuProfile {
     userTime: number;
     systemTime: number;
     idleTime: number;
-    samples: CpuSample[];
+    samples: CpuSample;
 }
 export interface CpuSample {
     timestamp: number;
@@ -136,8 +136,8 @@ export interface CpuSample {
 }
 export interface PerformanceAnalysis {
     executionId: string;
-    bottlenecks: PerformanceBottleneck[];
-    recommendations: PerformanceRecommendation[];
+    bottlenecks: PerformanceBottleneck;
+    recommendations: PerformanceRecommendation;
     score: number;
     metrics: PerformanceMetrics;
 }
@@ -164,14 +164,14 @@ export interface PerformanceMetrics {
 export interface OptimizedGraph {
     original: Graph;
     optimized: Graph;
-    optimizations: GraphOptimization[];
+    optimizations: GraphOptimization;
     estimatedImprovement: number;
 }
 export interface GraphOptimization {
     type: 'node_elimination' | 'node_fusion' | 'parallelization' | 'caching';
     description: string;
     impact: number;
-    nodes: string[];
+    nodes: string;
 }
 export interface BenchmarkResult {
     nodeType: string;
@@ -197,17 +197,17 @@ export interface PerformanceReport {
     criteria: ReportCriteria;
     summary: ReportSummary;
     nodeMetrics: Map<string, NodeMetrics>;
-    bottlenecks: PerformanceBottleneck[];
-    recommendations: PerformanceRecommendation[];
-    trends: PerformanceTrend[];
+    bottlenecks: PerformanceBottleneck;
+    recommendations: PerformanceRecommendation;
+    trends: PerformanceTrend;
     generatedAt: Date;
 }
 export interface ReportSummary {
     totalExecutions: number;
     averageExecutionTime: number;
     successRate: number;
-    topPerformingNodes: string[];
-    worstPerformingNodes: string[];
+    topPerformingNodes: string;
+    worstPerformingNodes: string;
 }
 export interface PerformanceTrend {
     metric: string;
@@ -227,7 +227,7 @@ export interface CacheStats {
     memoryUsage: number;
 }
 export interface CacheExport {
-    entries: CacheEntry[];
+    entries: CacheEntry;
     metadata: CacheMetadata;
     exportedAt: Date;
 }
@@ -246,9 +246,9 @@ export interface CacheMetadata {
 }
 export interface SecurityValidation {
     allowed: boolean;
-    risks: SecurityRisk[];
-    requirements: string[];
-    recommendations: string[];
+    risks: SecurityRisk;
+    requirements: string;
+    recommendations: string;
 }
 export interface SecurityRisk {
     type: string;
@@ -276,26 +276,26 @@ export interface IRuntimeDomain {
     hooks: {
         useRuntime: () => {
             state: RuntimeDomainState;
-            executeGraph: (graph: Graph, seeds: number[], options?: ExecutionOptions) => Promise<ExecutionRecord[]>;
-            queueExecution: (graph: Graph, seeds: number[]) => Promise<string>;
+            executeGraph: (graph: Graph, seeds: number, options?: ExecutionOptions) => Promise<ExecutionRecord>;
+            queueExecution: (graph: Graph, seeds: number) => Promise<string>;
             cancelExecution: (taskId: string) => Promise<void>;
             getMetrics: () => Promise<RuntimeMetrics>;
         };
         useExecutionQueue: () => {
-            queue: ExecutionTask[];
-            running: ExecutionInstance[];
-            completed: ExecutionRecord[];
+            queue: ExecutionTask;
+            running: ExecutionInstance;
+            completed: ExecutionRecord;
             queueSize: number;
             isProcessing: boolean;
             pauseQueue: () => Promise<void>;
             resumeQueue: () => Promise<void>;
         };
         useNodeRegistry: () => {
-            nodes: NodeDefinition[];
+            nodes: NodeDefinition;
             loading: boolean;
             registerNode: (definition: NodeDefinition) => Promise<void>;
             getNode: (nodeType: string) => NodeDefinition | null;
-            searchNodes: (query: string) => NodeDefinition[];
+            searchNodes: (query: string) => NodeDefinition;
         };
         usePerformanceMetrics: () => {
             metrics: RuntimeMetrics | null;
@@ -308,7 +308,7 @@ export interface IRuntimeDomain {
         useValidation: () => {
             validateGraph: (graph: Graph) => Promise<ValidationResult>;
             validateNode: (node: any, definition: NodeDefinition) => Promise<ValidationResult>;
-            getValidationRules: (nodeType: string) => Promise<any[]>;
+            getValidationRules: (nodeType: string) => Promise<any>;
         };
     };
     services: {
@@ -321,7 +321,7 @@ export interface IRuntimeDomain {
     };
     events: RuntimeDomainEvents & {
         subscribe: (event: keyof RuntimeDomainEvents, callback: Function) => () => void;
-        emit: (event: keyof RuntimeDomainEvents, ...args: any[]) => void;
+        emit: (event: keyof RuntimeDomainEvents, ...args: any) => void;
     };
     config: {
         getConfig: () => RuntimeConfig;

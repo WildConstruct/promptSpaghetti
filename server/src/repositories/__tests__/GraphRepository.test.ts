@@ -24,7 +24,7 @@ describe('GraphRepository Implementations', () => {
           version INTEGER DEFAULT 1,
           created_at INTEGER NOT NULL,
           updated_at INTEGER NOT NULL
-        )
+
       `);
       
       repository = new DatabaseGraphRepository(db);

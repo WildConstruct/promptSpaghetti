@@ -1,17 +1,3 @@
-/**
- * Epic 8.4 - Help Content Management System
- *
- * Manages contextual help content with intelligent content delivery,
- * user proficiency tracking, and director-friendly guidance.
- *
- * Features:
- * - Dynamic help content management
- * - User proficiency level tracking
- * - Context-aware content delivery
- * - Film industry terminology integration
- * - Progressive learning path management
- */
-import { HelpContent } from './ContextualHelpSystem';
 export interface UserProfile {
     id: string;
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
@@ -28,7 +14,7 @@ export interface UserProfile {
         connectionsBuilt: number;
         previewsGenerated: number;
         projectsCompleted: number;
-        advancedFeaturesUsed: string[];
+        advancedFeaturesUsed: string;
     };
     lastActivity: Date;
 }
@@ -40,7 +26,7 @@ export interface LearningPath {
     steps: {
         contentId: string;
         requiredProgress?: Record<string, number>;
-        unlockConditions?: string[];
+        unlockConditions?: string;
     }[];
 }
 export declare class HelpContentManager {
@@ -49,26 +35,15 @@ export declare class HelpContentManager {
     private learningPaths;
     constructor(userId?: string);
     private initializeUserProfile;
+    if(saved: any): any;
     private saveUserProfile;
     private loadDefaultContent;
     private loadLearningPaths;
-    getContextualHelp(context: {
-        nodeCount: number;
-        edgeCount: number;
-        selectedNodeType?: string;
-        currentAction?: string;
-        triggerElement?: string;
-    }): HelpContent[];
-    markContentViewed(contentId: string): void;
-    updateProgress(progressType: keyof UserProfile['progress'], value: number | string): void;
-    private checkLevelProgression;
-    getCurrentLearningPath(): LearningPath | null;
-    getNextLearningStep(): HelpContent | null;
-    getUserProfile(): UserProfile;
-    updateUserPreferences(preferences: Partial<UserProfile['preferences']>): void;
-    onLevelUp?: (newLevel: string) => void;
-    onProgressMilestone?: (milestone: string) => void;
+    getContextualHelp(context: {}): any;
+    nodeCount: number;
+    edgeCount: number;
+    selectedNodeType?: string;
+    currentAction?: string;
+    triggerElement?: string;
 }
-export declare const helpContentManager: HelpContentManager;
-export default helpContentManager;
 //# sourceMappingURL=HelpContentManager.d.ts.map

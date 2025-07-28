@@ -104,11 +104,13 @@ export enum SOC2EvidenceType {
 /**
  * SOC2 Compliance Assessment Interface
  */
+}
 export interface SOC2ComplianceAssessment {
   assessmentId: string;
   reportingPeriod: {
     startDate: Date;
     endDate: Date;
+}
   };
   trustServiceCategory: SOC2TrustServiceCategory;
   criteria: SOC2TrustServiceCriteria[];
@@ -122,6 +124,7 @@ export interface SOC2ComplianceAssessment {
   assessmentDate: Date;
 }
 
+}
 export interface SOC2Evidence {
   evidenceId: string;
   type: SOC2EvidenceType;
@@ -136,7 +139,9 @@ export interface SOC2Evidence {
   testingProcedures?: string[];
   testingResults?: string;
 }
+}
 
+}
 export interface SOC2Finding {
   findingId: string;
   severity: 'SIGNIFICANT_DEFICIENCY' | 'MATERIAL_WEAKNESS' | 'OBSERVATION';
@@ -149,7 +154,9 @@ export interface SOC2Finding {
   targetRemediationDate?: Date;
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
+}
 
+}
 export interface SOC2RemediationPlan {
   planId: string;
   findings: string[]; // Finding IDs
@@ -159,7 +166,9 @@ export interface SOC2RemediationPlan {
   responsible: string;
   approver: string;
 }
+}
 
+}
 export interface SOC2RemediationAction {
   actionId: string;
   description: string;
@@ -167,6 +176,7 @@ export interface SOC2RemediationAction {
   targetDate: Date;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   evidenceOfCompletion?: string;
+}
 }
 
 /**
@@ -187,12 +197,13 @@ export class SOC2ComplianceRuleset {
    * Initialize SOC2 compliance rules
    */
   private async initializeSOC2Rules(): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'SOC2_RULES_INITIALIZATION_STARTED',
       details: {
         framework: 'SOC2',
         trustServiceCategories: Object.values(SOC2TrustServiceCategory)
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
@@ -214,7 +225,7 @@ export class SOC2ComplianceRuleset {
         details: {
           framework: 'SOC2',
           rulesCreated: 47 // Total rules across all categories
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -229,7 +240,7 @@ export class SOC2ComplianceRuleset {
         details: {
           framework: 'SOC2',
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['SOC2'],
@@ -245,6 +256,7 @@ export class SOC2ComplianceRuleset {
    * Initialize Security Trust Service Category Rules (Common Criteria + Security-specific)
    */
   private async initializeSecurityRules(): Promise<void> {
+
     // CC1.0 - Control Environment
     await this.ruleEngine.registerRule({
       ruleId: 'SOC2-SEC-CC1-001',
@@ -265,7 +277,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -278,10 +290,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'CC1-GOV-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -332,7 +344,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -359,7 +371,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -372,10 +384,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'CC6-ACCESS-001',
         type: 'CONTEXT_PROPERTY' as ConditionType,
@@ -426,7 +438,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -453,7 +465,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -466,10 +478,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'CC7-OPS-001',
         type: 'THRESHOLD' as ConditionType,
@@ -520,7 +532,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -532,6 +544,7 @@ export class SOC2ComplianceRuleset {
    * Initialize Availability Trust Service Category Rules
    */
   private async initializeAvailabilityRules(): Promise<void> {
+
     // A1.0 - Availability Design
     await this.ruleEngine.registerRule({
       ruleId: 'SOC2-AVL-A1-001',
@@ -552,7 +565,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -565,10 +578,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'A1-DESIGN-001',
         type: 'THRESHOLD' as ConditionType,
@@ -619,7 +632,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -631,6 +644,7 @@ export class SOC2ComplianceRuleset {
    * Initialize Processing Integrity Trust Service Category Rules
    */
   private async initializeProcessingIntegrityRules(): Promise<void> {
+
     // PI1.0 - Processing Completeness
     await this.ruleEngine.registerRule({
       ruleId: 'SOC2-PI-PI1-001',
@@ -651,7 +665,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -664,10 +678,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'PI1-COMP-001',
         type: 'THRESHOLD' as ConditionType,
@@ -718,7 +732,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -730,6 +744,7 @@ export class SOC2ComplianceRuleset {
    * Initialize Confidentiality Trust Service Category Rules
    */
   private async initializeConfidentialityRules(): Promise<void> {
+
     // C1.0 - Access Controls for Confidential Information
     await this.ruleEngine.registerRule({
       ruleId: 'SOC2-CNF-C1-001',
@@ -750,7 +765,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -763,10 +778,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'C1-ACCESS-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -817,7 +832,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -829,6 +844,7 @@ export class SOC2ComplianceRuleset {
    * Initialize Privacy Trust Service Category Rules
    */
   private async initializePrivacyRules(): Promise<void> {
+
     // P1.0 - Notice and Communication
     await this.ruleEngine.registerRule({
       ruleId: 'SOC2-PRV-P1-001',
@@ -849,7 +865,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -862,10 +878,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'P1-NOTICE-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -916,7 +932,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -943,7 +959,7 @@ export class SOC2ComplianceRuleset {
           conditions: [],
           triggers: [],
           exemptions: []
-        },
+  }
         dataTypes: [],
         processingActivities: [],
         geographicScope: { countries: [], regions: [], jurisdictions: [], adequacyDecisions: [], transferMechanisms: [], localizations: [] },
@@ -956,10 +972,10 @@ export class SOC2ComplianceRuleset {
           frequency: {} as any,
           businessHours: {} as any,
           holidays: []
-        },
+  }
         technicalScope: { systems: [], platforms: [], technologies: [], protocols: [], dataFormats: [], storageTypes: [], networkTypes: [], deploymentTypes: [] },
         exceptions: []
-      },
+  }
       conditions: [{
         conditionId: 'P2-CONSENT-001',
         type: 'DATA_FIELD' as ConditionType,
@@ -1010,7 +1026,7 @@ export class SOC2ComplianceRuleset {
         references: [],
         changelog: [],
         annotations: []
-      },
+  }
       validation: {} as any,
       testing: {} as any,
       lifecycle: {} as any,
@@ -1025,6 +1041,7 @@ export class SOC2ComplianceRuleset {
     trustServiceCategory: SOC2TrustServiceCategory,
     reportingPeriod: { startDate: Date; endDate: Date }
   ): Promise<SOC2ComplianceAssessment> {
+
     const assessmentId = `SOC2-ASSESS-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     
     const assessment: SOC2ComplianceAssessment = {
@@ -1048,7 +1065,7 @@ export class SOC2ComplianceRuleset {
         assessmentId,
         trustServiceCategory,
         reportingPeriod
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
@@ -1067,6 +1084,7 @@ export class SOC2ComplianceRuleset {
     trustServiceCategory: SOC2TrustServiceCategory,
     context: RuleEvaluationContext
   ): Promise<RuleEvaluationResult[]> {
+
     const results = await this.ruleEngine.evaluateRules(
       context,
       ['SOC_2' as ComplianceFramework],
@@ -1080,7 +1098,7 @@ export class SOC2ComplianceRuleset {
         rulesEvaluated: results.length,
         compliantRules: results.filter(r => r.outcome.result === 'PASS').length,
         nonCompliantRules: results.filter(r => r.outcome.result === 'FAIL').length
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -1126,7 +1144,7 @@ export class SOC2ComplianceRuleset {
         assessmentId,
         overallRating,
         criteriaEvaluated: trustServiceCriteriaResults.size
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -1231,14 +1249,17 @@ export class SOC2ComplianceRuleset {
    * Public API methods
    */
   async getAssessment(assessmentId: string): Promise<SOC2ComplianceAssessment | undefined> {
+
     return this.assessments.get(assessmentId);
   }
 
   async listAssessments(): Promise<SOC2ComplianceAssessment[]> {
+
     return Array.from(this.assessments.values());
   }
 
   async addEvidence(assessmentId: string, evidence: SOC2Evidence): Promise<void> {
+
     const assessment = this.assessments.get(assessmentId);
     if (assessment) {
       assessment.evidenceCollected.push(evidence);
@@ -1250,7 +1271,7 @@ export class SOC2ComplianceRuleset {
           evidenceId: evidence.evidenceId,
           evidenceType: evidence.type,
           criteria: evidence.criteria
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -1262,6 +1283,7 @@ export class SOC2ComplianceRuleset {
   }
 
   async addFinding(assessmentId: string, finding: SOC2Finding): Promise<void> {
+
     const assessment = this.assessments.get(assessmentId);
     if (assessment) {
       assessment.findings.push(finding);
@@ -1273,7 +1295,7 @@ export class SOC2ComplianceRuleset {
           findingId: finding.findingId,
           severity: finding.severity,
           criteria: finding.criteria
-        },
+  }
         riskLevel: finding.severity === 'MATERIAL_WEAKNESS' ? 'HIGH' : 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],

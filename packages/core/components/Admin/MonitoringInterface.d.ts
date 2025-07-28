@@ -7,6 +7,7 @@
  * API, and security monitoring with role-based views and real-time updates.
  */
 import React from 'react';
+
 export interface MonitoringMetrics {
     system: {,
         cpu: number;
@@ -41,7 +42,7 @@ export interface MonitoringMetrics {
         errorCount: number;
         operationsPerSecond: number;
     };
-}
+
 export interface AlertData {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
@@ -52,20 +53,19 @@ export interface AlertData {
     acknowledged: boolean;
     resolved: boolean;
     assignee?: string;
-}
+
 export interface MonitoringViewConfig {
     layout: 'executive' | 'operational' | 'analytics' | 'compliance';
     refreshInterval: number;
     widgets: string[];
     rolePermissions: string[];
-}
 interface MonitoringInterfaceProps {
     userRole: string;
     userId: string;
     onAlertAction?: (alertId: string, action: string) => void;
     onExport?: (type: string, timeRange: string) => void;
     className?: string;
-}
+
 export declare const MonitoringInterface: React.FC<MonitoringInterfaceProps>;
 export default MonitoringInterface;
 //# sourceMappingURL=MonitoringInterface.d.ts.map

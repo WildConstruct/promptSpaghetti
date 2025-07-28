@@ -23,6 +23,7 @@ import {
   DisputeEvidence
 } from '../../../packages/core/types/DisputeTypes';
 
+}
 export interface CreateDisputeRequest {
   transactionId: string;
   type: DisputeType;
@@ -41,9 +42,11 @@ export interface CreateDisputeRequest {
     description: string;
     content: string;
     category?: string;
+}
   }>;
 }
 
+}
 export interface UpdateDisputeRequest {
   status?: DisputeStatus;
   assignedTo?: string;
@@ -55,16 +58,20 @@ export interface UpdateDisputeRequest {
     description: string;
     content: string;
     category?: string;
+}
   }>;
 }
 
+}
 export interface ResolveDisputeRequest {
   outcome: DisputeOutcome;
   finalAmount: number;
   reason: string;
   notes?: string;
 }
+}
 
+}
 export interface AddEvidenceRequest {
   evidence: Array<{
     type: string;
@@ -73,9 +80,11 @@ export interface AddEvidenceRequest {
     content: string;
     attachments?: string[];
     category?: string;
+}
   }>;
 }
 
+}
 export interface CreateResponseRequest {
   responseType: 'accept' | 'contest' | 'partial_accept';
   argument: string;
@@ -85,6 +94,7 @@ export interface CreateResponseRequest {
     description: string;
     content: string;
     category?: string;
+}
   }>;
 }
 
@@ -548,7 +558,7 @@ export class DisputeAdminController {
           sortBy: 'createdAt',
           sortOrder: 'desc',
           limit: 10
-        })
+  }
       ]);
 
       reply.code(200).send({
@@ -587,12 +597,12 @@ export class DisputeAdminController {
           database: 'healthy',
           trustScoring: 'healthy',
           enforcement: 'healthy'
-        },
+  }
         metrics: {
           uptime: process.uptime(),
           memoryUsage: process.memoryUsage(),
           version: process.version
-        },
+  }
         disputeSystemStatus: {
           processingQueue: 'normal',
           responseTime: 'good',

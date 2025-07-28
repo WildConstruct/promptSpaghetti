@@ -35,49 +35,41 @@ export enum PasswordStrength {
   FAIR = 'fair',
   GOOD = 'good',
   STRONG = 'strong'
-}
-
-// Reset flow steps
-export enum ResetStep {
+  // Reset flow steps
+  export enum ResetStep {
   REQUEST = 'request',
   VERIFY = 'verify',
   RESET = 'reset',
   SUCCESS = 'success'
-}
-
-// Component interfaces
-export interface PasswordResetRequest {
+  // Component interfaces
+  export interface PasswordResetRequest {
   email: string;
   ipAddress?: string;
   userAgent?: string;
   metadata?: Record<string, any>;
 }
-
 export interface TokenVerification {
-  token: string;
+  token: string;,
   email: string;
 }
-
 export interface PasswordResetData {
-  token: string;
+  token: string;,
   newPassword: string;
   confirmPassword: string;
 }
-
 export interface PasswordValidation {
-  isValid: boolean;
+  isValid: boolean;,
   strength: PasswordStrength;
-  score: number;
-  feedback: string[];
+  score: number;,
+  feedback: string;
   requirements: {,
-    length: boolean;
-    uppercase: boolean;
-    lowercase: boolean;
-    numbers: boolean;
-    symbols: boolean;
-  };
+  length: boolean;,
+  uppercase: boolean;
+  lowercase: boolean;,
+  numbers: boolean;
+  symbols: boolean;
+};
 }
-
 export interface PasswordResetFlowProps {
   onResetComplete?: (success: boolean, email: string) => void;
   onStepChange?: (step: ResetStep) => void;
@@ -87,7 +79,6 @@ export interface PasswordResetFlowProps {
   supportEmail?: string;
   customValidation?: (password: string) => PasswordValidation;
 }
-
 export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   onResetComplete,
   onStepChange,
@@ -113,26 +104,24 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   const [resendTimer, setResendTimer] = useState(0);
   // Password validation
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({)
-    isValid: false,
-    strength: PasswordStrength.WEAK,
-    score: 0,
-    feedback: [],
-    requirements: {,
-      length: false,
-      uppercase: false,
-      lowercase: false,
-      numbers: false,
-      symbols: false,
-    }
-  });
+  isValid: false,
+  strength: PasswordStrength.WEAK,
+  score: 0,
+  feedback: [],
+  requirements: {,
+  length: false,
+  uppercase: false,
+  lowercase: false,
+  numbers: false,
+  symbols: false,
+});
   // Timer for resend cooldown
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (resendTimer > 0) {
-      interval = setInterval(() => {
-        setResendTimer(prev => prev - 1);
-      }, 1000);
-    }
+  let interval: NodeJS.Timeout;
+  if (resendTimer > 0) {
+  interval = setInterval(() => {
+  setResendTimer(prev => prev - 1);
+}, 1000);
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -143,13 +132,12 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
   }, [currentStep, onStepChange]);
   // Password validation
   useEffect(() => {
-    if (newPassword) {
-      const validation = customValidation ? ;
-        customValidation(newPassword) : 
-        validatePassword(newPassword);
-      setPasswordValidation(validation);
-    }
-  }, [newPassword, customValidation]);
+  if (newPassword) {
+  const validation = customValidation ? ;
+  customValidation(newPassword) :,
+  validatePassword(newPassword);
+  setPasswordValidation(validation);
+}, [newPassword, customValidation]);
   // Default password validation
   const validatePassword = (password: string): PasswordValidation => {
     const requirements = {
@@ -160,7 +148,7 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       symbols: /[!@#$%^&*(),.?":{}|<>]/.test(password)
     };
     const score = Object.values(requirements).filter(Boolean).length;
-    const feedback: string[] = [];
+    const feedback: string = [];
     if (!requirements.length) feedback.push('Password must be at least 8 characters long');
     if (!requirements.uppercase) feedback.push('Add at least one uppercase letter');
     if (!requirements.lowercase) feedback.push('Add at least one lowercase letter');
@@ -173,24 +161,21 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
     else strength = PasswordStrength.STRONG;
     // Additional security checks
     if (password.length >= 12 && score >= 4) {
-      strength = PasswordStrength.STRONG;
-    }
-    // Check for common patterns
-    if (/^(.)\1+$/.test(password)) {
-      feedback.push('Avoid repeating characters');
-      strength = PasswordStrength.WEAK;
-    }
-    if (/^(012|123|234|345|456|567|678|789|890|abc|def|ghi|jkl|mno|pqr|stu|vwx|yza)/i.test(password)) {
-      feedback.push('Avoid sequential characters');
-      strength = PasswordStrength.WEAK;
-    }
-    return {
-      isValid: score >= 4 && password.length >= 8,
-      strength,
-      score: (score / 5) * 100,
-      feedback,
-      requirements
-    };
+  strength = PasswordStrength.STRONG;
+  // Check for common patterns
+  if (/^(.)\1+$/.test(password)) {
+  feedback.push('Avoid repeating characters');
+  strength = PasswordStrength.WEAK;
+  if (/^(012|123|234|345|456|567|678|789|890|abc|def|ghi|jkl|mno|pqr|stu|vwx|yza)/i.test(password)) {
+  feedback.push('Avoid sequential characters');
+  strength = PasswordStrength.WEAK;
+  return {
+  isValid: score >= 4 && password.length >= 8,
+  strength,
+  score: (score / 5) * 100,
+  feedback,
+  requirements
+};
   };
   // API simulation helpers (replace with actual API calls)
   const requestPasswordReset = async (requestData: PasswordResetRequest): Promise<boolean> => {
@@ -199,11 +184,9 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(requestData.email)) {
       throw new Error('Please enter a valid email address');
-    }
     // Mock rate limiting
     if (requestData.email === 'blocked@example.com') {
       throw new Error('Too many reset requests. Please try again later.');
-    }
     return true;
   };
   const verifyResetToken = async (verification: TokenVerification): Promise<boolean> => {
@@ -211,113 +194,105 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
     // Mock token validation
     if (verification.token.length < 6) {
       throw new Error('Please enter a valid reset code');
-    }
     if (verification.token === '000000') {
       throw new Error('Invalid or expired reset code');
-    }
     return true;
   };
   const resetPassword = async (resetData: PasswordResetData): Promise<boolean> => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    // Validate passwords match
-    if (resetData.newPassword !== resetData.confirmPassword) {
-      throw new Error('Passwords do not match');
-    }
-    // Validate password strength
-    const validation = customValidation ? ;
-      customValidation(resetData.newPassword) : 
-      validatePassword(resetData.newPassword);
-    if (!validation.isValid) {
-      throw new Error('Password does not meet security requirements');
-    }
-    return true;
-  };
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  // Validate passwords match
+  if (resetData.newPassword !== resetData.confirmPassword) {
+  throw new Error('Passwords do not match');
+  // Validate password strength
+  const validation = customValidation ? ;
+  customValidation(resetData.newPassword) :,
+  validatePassword(resetData.newPassword);
+  if (!validation.isValid) {
+  throw new Error('Password does not meet security requirements');
+  return true;
+};
   // Event handlers
   const handleRequestReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const requestData: PasswordResetRequest = {
-        email,
-        ipAddress: '192.168.1.100', // Would be detected from client
-        userAgent: navigator.userAgent,
-        metadata: {,
-          timestamp: new Date().toISOString(),
-          referrer: document.referrer,
-        }
-      };
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  try {
+  const requestData: PasswordResetRequest = {,
+  email,
+  ipAddress: '192.168.1.100', // Would be detected from client,
+  userAgent: navigator.userAgent,
+  metadata: {,
+  timestamp: new Date().toISOString(),
+  referrer: document.referrer,
+};
       await requestPasswordReset(requestData);
       setTokenSent(true);
       setSuccess(`Reset code sent to ${email}`);}
       setResendTimer(60); // 60 second cooldown
       setCurrentStep(ResetStep.VERIFY);
       onSecurityEvent?.(SecurityEvent.RESET_REQUESTED, {)
-        email,
-        timestamp: new Date(),
-      });
+  email,
+  timestamp: new Date(),
+});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send reset code');
-      onSecurityEvent?.(SecurityEvent.RESET_REQUEST_FAILED, {)
-        email,
-        error: err instanceof Error ? err.message : 'Unknown error',
-      });
+  setError(err instanceof Error ? err.message : 'Failed to send reset code');
+  onSecurityEvent?.(SecurityEvent.RESET_REQUEST_FAILED, {)
+  email,
+  error: err instanceof Error ? err.message : 'Unknown error',
+});
     } finally {
       setLoading(false);
-    }
   };
   const handleVerifyToken = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const verification: TokenVerification = {
-        token,
-        email
-      };
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  try {
+  const verification: TokenVerification = {,
+  token,
+  email
+};
       await verifyResetToken(verification);
       setSuccess('Code verified successfully');
       setCurrentStep(ResetStep.RESET);
       onSecurityEvent?.(SecurityEvent.TOKEN_VERIFIED, {)
-        email,
-        timestamp: new Date(),
-      });
+  email,
+  timestamp: new Date(),
+});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to verify code');
-      onSecurityEvent?.(SecurityEvent.TOKEN_VERIFICATION_FAILED, {)
-        email,
-        error: err instanceof Error ? err.message : 'Unknown error',
-      });
+  setError(err instanceof Error ? err.message : 'Failed to verify code');
+  onSecurityEvent?.(SecurityEvent.TOKEN_VERIFICATION_FAILED, {)
+  email,
+  error: err instanceof Error ? err.message : 'Unknown error',
+});
     } finally {
       setLoading(false);
-    }
   };
   const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const resetData: PasswordResetData = {
-        token,
-        newPassword,
-        confirmPassword
-      };
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+  try {
+  const resetData: PasswordResetData = {,
+  token,
+  newPassword,
+  confirmPassword
+};
       await resetPassword(resetData);
       setCurrentStep(ResetStep.SUCCESS);
       onResetComplete?.(true, email);
       onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_COMPLETED, {)
-        email,
-        timestamp: new Date(),
-      });
+  email,
+  timestamp: new Date(),
+});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to reset password');
-      onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_FAILED, {)
-        email,
-        error: err instanceof Error ? err.message : 'Unknown error',
-      });
+  setError(err instanceof Error ? err.message : 'Failed to reset password');
+  onSecurityEvent?.(SecurityEvent.PASSWORD_RESET_FAILED, {)
+  email,
+  error: err instanceof Error ? err.message : 'Unknown error',
+});
     } finally {
       setLoading(false);
-    }
   };
   const handleResendCode = async () => {
     if (resendTimer > 0) return;
@@ -328,14 +303,13 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       setSuccess('New reset code sent');
       setResendTimer(60);
       onSecurityEvent?.(SecurityEvent.RESET_CODE_RESENT, {)
-        email,
-        timestamp: new Date(),
-      });
+  email,
+  timestamp: new Date(),
+});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to resend code');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to resend code');
+} finally {
       setLoading(false);
-    }
   };
   const handleGoBack = () => {
     setError('');
@@ -344,21 +318,19 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       setCurrentStep(ResetStep.REQUEST);
     } else if (currentStep === ResetStep.RESET) {
       setCurrentStep(ResetStep.VERIFY);
-    }
   };
   const getPasswordStrengthColor = (strength: PasswordStrength) => {
-    switch (strength) {
-    case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
-    case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
-    case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
-    case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (strength) {
+  case PasswordStrength.WEAK: return 'text-red-600 bg-red-100';
+  case PasswordStrength.FAIR: return 'text-orange-600 bg-orange-100';
+  case PasswordStrength.GOOD: return 'text-blue-600 bg-blue-100';
+  case PasswordStrength.STRONG: return 'text-green-600 bg-green-100';,
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getPasswordStrengthWidth = (score: number) => {
     return `${Math.max(score, 10)}%`;}
   };
-  return ();
+  return;
     <div className={`max-w-md mx-auto bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
@@ -381,43 +353,43 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
       <div className="px-6 py-4 bg-gray-50">
         <div className="flex items-center justify-between text-sm">
           <div className={`flex items-center space-x-2 ${
-            currentStep === ResetStep.REQUEST ? 'text-blue-600' : 
-              ['verify', 'reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
-          }`}>
+  currentStep === ResetStep.REQUEST ? 'text-blue-600' :,
+  ['verify', 'reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400',
+}`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-              currentStep === ResetStep.REQUEST ? 'bg-blue-600 text-white' :
-                ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
-            }`}>
+  currentStep === ResetStep.REQUEST ? 'bg-blue-600 text-white' :,
+  ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600',
+}`}>
               {['verify', 'reset', 'success'].includes(currentStep) ? '✓' : '1'}
             </div>
             <span>Request</span>
           </div>
           <div className={`w-8 h-0.5 ${
-            ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300'
-          }`} />
+  ['verify', 'reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300',
+}`} />
           <div className={`flex items-center space-x-2 ${
-            currentStep === ResetStep.VERIFY ? 'text-blue-600' : 
-              ['reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400'
-          }`}>
+  currentStep === ResetStep.VERIFY ? 'text-blue-600' :,
+  ['reset', 'success'].includes(currentStep) ? 'text-green-600' : 'text-gray-400',
+}`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-              currentStep === ResetStep.VERIFY ? 'bg-blue-600 text-white' :
-                ['reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
-            }`}>
+  currentStep === ResetStep.VERIFY ? 'bg-blue-600 text-white' :,
+  ['reset', 'success'].includes(currentStep) ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600',
+}`}>
               {['reset', 'success'].includes(currentStep) ? '✓' : '2'}
             </div>
             <span>Verify</span>
           </div>
           <div className={`w-8 h-0.5 ${
-            ['reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300'
-          }`} />
+  ['reset', 'success'].includes(currentStep) ? 'bg-green-600' : 'bg-gray-300',
+}`} />
           <div className={`flex items-center space-x-2 ${
-            currentStep === ResetStep.RESET ? 'text-blue-600' : 
-              currentStep === ResetStep.SUCCESS ? 'text-green-600' : 'text-gray-400'
-          }`}>
+  currentStep === ResetStep.RESET ? 'text-blue-600' :,
+  currentStep === ResetStep.SUCCESS ? 'text-green-600' : 'text-gray-400',
+}`}>
             <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-              currentStep === ResetStep.RESET ? 'bg-blue-600 text-white' :
-                currentStep === ResetStep.SUCCESS ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600'
-            }`}>
+  currentStep === ResetStep.RESET ? 'bg-blue-600 text-white' :,
+  currentStep === ResetStep.SUCCESS ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-600',
+}`}>
               {currentStep === ResetStep.SUCCESS ? '✓' : '3'}
             </div>
             <span>Reset</span>
@@ -606,10 +578,10 @@ export const PasswordResetFlow: React.FC<PasswordResetFlowProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      passwordValidation.strength === PasswordStrength.WEAK ? 'bg-red-500' :
-                        passwordValidation.strength === PasswordStrength.FAIR ? 'bg-orange-500' :
-                          passwordValidation.strength === PasswordStrength.GOOD ? 'bg-blue-500' : 'bg-green-500'
-                    }`}
+  passwordValidation.strength === PasswordStrength.WEAK ? 'bg-red-500' :,
+  passwordValidation.strength === PasswordStrength.FAIR ? 'bg-orange-500' :,
+  passwordValidation.strength === PasswordStrength.GOOD ? 'bg-blue-500' : 'bg-green-500',
+}`}
                     style={{ width: getPasswordStrengthWidth(passwordValidation.score) }}
                   />
                 </div>
@@ -733,6 +705,5 @@ export enum SecurityEvent {
   PASSWORD_RESET_COMPLETED = 'password_reset_completed',
   PASSWORD_RESET_FAILED = 'password_reset_failed',
   RESET_CODE_RESENT = 'reset_code_resent'
-}
 
 export default PasswordResetFlow;

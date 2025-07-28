@@ -14,9 +14,9 @@ interface PolicyConfigurationInterfaceProps {
     onPolicyDeploy?: (deployment: unknown) => void;
     initialPolicy?: unknown;
     mode?: 'create' | 'edit' | 'view';
-    complianceFrameworks?: string[];
-    jurisdictions?: string[];
-    templates?: PolicyTemplate[];
+    complianceFrameworks?: string;
+    jurisdictions?: string;
+    templates?: PolicyTemplate;
 }
 interface PolicyTemplate {
     templateId: string;
@@ -24,7 +24,7 @@ interface PolicyTemplate {
     description: string;
     framework: string;
     policyType: PolicyType;
-    variables: TemplateVariable[];
+    variables: TemplateVariable;
 }
 interface TemplateVariable {
     name: string;

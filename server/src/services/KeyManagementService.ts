@@ -9,6 +9,7 @@ import { AccessControlManager, AccessContext, KeyOperation, AccessDecision } fro
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
+}
 export interface KeyManagementConfig {
   // Key encryption
   keyEncryptionAlgorithm: 'aes-256-gcm' | 'chacha20-poly1305';
@@ -39,7 +40,9 @@ export interface KeyManagementConfig {
   auditAllOperations: boolean;
   dataClassificationRequired: boolean;
 }
+}
 
+}
 export interface MasterKey {
   keyId: string;
   purpose: KeyPurpose;
@@ -63,18 +66,22 @@ export interface MasterKey {
   // Security
   securityLevel: string;
   accessControlList?: AccessControlEntry[];
+}
   complianceTags?: { [key: string]: unknown };
 }
 
+}
 export interface AccessControlEntry {
   userId?: string;
   serviceId?: string;
   role?: string;
   operations: string[];
+}
   conditions?: { [key: string]: unknown };
   expiresAt?: Date;
 }
 
+}
 export interface KeyRotationPolicy {
   policyName: string;
   keyPurpose: KeyPurpose;
@@ -94,6 +101,7 @@ export interface KeyRotationPolicy {
   requiresApproval: boolean;
   approvalRoles?: string[];
 }
+}
 
 export type KeyPurpose = 
   | 'data_encryption'
@@ -104,6 +112,7 @@ export type KeyPurpose =
   | 'backup_encryption'
   | 'audit_signing';
 
+}
 export interface KeyGenerationRequest {
   purpose: KeyPurpose;
   algorithm?: string;
@@ -112,10 +121,12 @@ export interface KeyGenerationRequest {
   expiresAt?: Date;
   maxUsageCount?: number;
   accessControlList?: AccessControlEntry[];
+}
   complianceTags?: { [key: string]: unknown };
   makePrimary?: boolean;
 }
 
+}
 export interface KeyOperationContext {
   userId?: string;
   serviceId?: string;
@@ -124,9 +135,11 @@ export interface KeyOperationContext {
   userAgent?: string;
   operationType: 'encrypt' | 'decrypt' | 'sign' | 'verify' | 'derive' | 'export' | 'import' | 'rotate' | 'destroy';
   dataClassification?: string;
+}
   additionalContext?: { [key: string]: unknown };
 }
 
+}
 export interface KeyBackup {
   backupId: string;
   keyId: string;
@@ -135,6 +148,7 @@ export interface KeyBackup {
   expiresAt?: Date;
   storageLocation?: string;
   verified: boolean;
+}
 }
 
 export class KeyManagementService extends EventEmitter {
@@ -167,6 +181,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async generateMasterKey(request: KeyGenerationRequest): Promise<MasterKey> {
+
     try {
       // Validate request
       this.validateKeyGenerationRequest(request);
@@ -258,6 +273,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async getMasterKey(keyId: string, context?: KeyOperationContext): Promise<MasterKey | null> {
+
     try {
       // Check cache first
       if (this.config.cacheEnabled) {
@@ -330,6 +346,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async getKeyMaterial(keyId: string, context: KeyOperationContext): Promise<Buffer | null> {
+
     try {
       // Enhanced access control evaluation
       const accessContext: AccessContext = {
@@ -425,6 +442,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async rotateKey(keyId: string, context: KeyOperationContext): Promise<MasterKey> {
+
     try {
       // Get current key
       const currentKey = await this.getMasterKey(keyId);
@@ -488,6 +506,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async destroyKey(keyId: string, context: KeyOperationContext, reason: string): Promise<boolean> {
+
     try {
       // Validate access (requires elevated permissions)
       if (!await this.validateKeyAccess(keyId, { ...context, operationType: 'destroy' })) {
@@ -528,6 +547,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   async createKeyBackup(keyId: string, backupType: 'full' | 'metadata_only' | 'differential'): Promise<KeyBackup> {
+
     try {
       const backupId = this.generateBackupId(keyId);
       
@@ -622,6 +642,7 @@ export class KeyManagementService extends EventEmitter {
     limit?: number;
     offset?: number;
   } = {}): Promise<MasterKey[]> {
+
     try {
       let query = `
         SELECT 
@@ -807,6 +828,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   private async deactivateOtherPrimaryKeys(purpose: KeyPurpose): Promise<void> {
+
     await this.db.query(`
       UPDATE master_keys 
       SET is_primary = false 
@@ -815,6 +837,7 @@ export class KeyManagementService extends EventEmitter {
   }
 
   private async validateKeyAccess(keyId: string, context: KeyOperationContext): Promise<boolean> {
+
     if (!this.config.enableAccessControl) {
       return true;
     }
@@ -841,6 +864,7 @@ export class KeyManagementService extends EventEmitter {
     userId: string,
     operation: string
   ): Promise<boolean> {
+
     try {
       const result = await this.db.query(`
         SELECT COUNT(*) as count FROM temporary_access_grants tag
@@ -865,6 +889,7 @@ export class KeyManagementService extends EventEmitter {
     result: 'success' | 'failure' | 'unauthorized' | 'expired' | 'revoked',
     additionalInfo?: { riskLevel?: string; monitoringRequired?: boolean }
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO key_access_log (
@@ -894,6 +919,7 @@ export class KeyManagementService extends EventEmitter {
     details: unknown,
     context?: KeyOperationContext
   ): Promise<void> {
+
     if (!this.config.auditAllOperations) return;
     
     try {
@@ -904,7 +930,7 @@ export class KeyManagementService extends EventEmitter {
           keyId,
           operation,
           ...details
-        },
+  }
         severity: ['destroy', 'export'].includes(operation) ? 'warning' : 'info',
         ipAddress: context?.ipAddress,
         userAgent: context?.userAgent

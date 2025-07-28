@@ -26,30 +26,37 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 // Global optimizer instance
 let securityAnalyticsOptimizer: SecurityAnalyticsOptimizer | null = null;
 
+}
 interface OptimizationQuery {
   includeRecommendations?: boolean;
   includeHistory?: boolean;
   includeCacheMetrics?: boolean;
   includeStatus?: boolean;
 }
+}
 
+}
 interface OptimizationRequest {
   recommendationId?: string;
   autoImplement?: boolean;
   optimizationType?: 'performance' | 'memory' | 'cpu' | 'cache' | 'resource_allocation';
 }
+}
 
+}
 interface OptimizationResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
 }
+}
 
 /**
  * Initialize security analytics optimizer
  */
 async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalyticsOptimizer> {
+
   if (securityAnalyticsOptimizer) {
     return securityAnalyticsOptimizer;
   }
@@ -66,8 +73,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       performance_event_forwarding: true,
       batch_size: 50,
       flush_interval_ms: 10000
-    },
-    
+  }
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -75,8 +81,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 5
-    },
-    
+  }
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 1000,
@@ -84,8 +89,7 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       cpu_threshold_percent: 80,
       alert_on_degradation: true,
       auto_optimization_enabled: false
-    },
-    
+  }
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.8,
@@ -106,24 +110,24 @@ async function initializeSecurityAnalyticsOptimizer(): Promise<SecurityAnalytics
       memory_threshold_mb: 512,
       cpu_threshold_percent: 80,
       latency_threshold_ms: 1000
-    },
+  }
     caching: {
       enabled: true,
       cache_ttl_seconds: 3600, // 1 hour default
       max_cache_size_mb: 100,
       cache_strategies: ['lru', 'ttl', 'predictive']
-    },
+  }
     resource_management: {
       auto_scaling_enabled: true,
       max_concurrent_operations: 10,
       resource_pool_size: 20,
       garbage_collection_interval_ms: 300000 // 5 minutes
-    },
+  }
     analytics_integration: {
       epic1_optimization_events: true,
       epic17_admin_notifications: true,
       optimization_metrics_tracking: true
-    },
+  }
     security_validation: {
       enabled: true,
       threat_detection_enabled: true,
@@ -179,7 +183,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
                 cache_metrics: { type: 'object' },
                 optimizer_status: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -200,7 +204,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           auto_optimization_enabled: status.auto_optimization_enabled,
           cache_enabled: status.cache_enabled,
           monitoring_active: status.monitoring_active
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -360,7 +364,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           performance_improvement: result.performance_improvement,
           actions_taken: result.actions_taken,
           duration_ms: result.completed_at - result.started_at
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -407,7 +411,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             average_improvement: averageImprovement,
             most_recent: history.length > 0 ? history[history.length - 1] : null
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -442,9 +446,9 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             hit_rate_status: cacheMetrics.hit_rate > 0.7 ? 'good' : cacheMetrics.hit_rate > 0.5 ? 'fair' : 'poor',
             size_status: cacheMetrics.cache_size_mb < 80 ? 'good' : cacheMetrics.cache_size_mb < 95 ? 'fair' : 'critical',
             access_time_status: cacheMetrics.avg_access_time_ms < 10 ? 'good' : cacheMetrics.avg_access_time_ms < 50 ? 'fair' : 'poor'
-          },
+  }
           recommendations: []
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -477,7 +481,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
         data: {
           cache_cleared: true,
           cleared_at: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -511,7 +515,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
           memory_usage: process.memoryUsage(),
           uptime: process.uptime(),
           cpu_usage: process.cpuUsage()
-        },
+  }
         configuration: {
           auto_optimization_enabled: process.env.AUTO_OPTIMIZATION_ENABLED === 'true',
           cache_enabled: true,
@@ -561,13 +565,13 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             recent_security_events: threatMetrics.security_events,
             patterns_detected: threatMetrics.suspicious_patterns,
             anomalies_detected: threatMetrics.anomalies_detected
-          },
+  }
           recommendations: threatMetrics.risk_score > 50 ? [
             'Enable additional monitoring',
             'Review recent optimization requests',
             'Consider tightening security thresholds'
           ] : []
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -648,7 +652,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
               low_events: auditLog.filter(e => e.severity === 'low').length
             }
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -688,7 +692,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             message: 'No auto-implementable recommendations found',
             recommendations_reviewed: recommendations.length,
             auto_implementable: 0
-          },
+  }
           timestamp: Date.now()
         };
       }
@@ -712,7 +716,7 @@ export default async function securityAnalyticsOptimizationRoutes(fastify: Fasti
             actions_taken: result.actions_taken,
             success: result.success
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {

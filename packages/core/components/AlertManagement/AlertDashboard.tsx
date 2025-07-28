@@ -38,75 +38,72 @@ import {
 } from '../../services/AlertSystem';
 interface AlertDashboardProps {
   className?: string;
-}
-/**
- * Severity configurations for UI styling
- */
-const SEVERITY_CONFIG = {
+  /**
+  * Severity configurations for UI styling
+  */
+  const SEVERITY_CONFIG = {
   critical: {,
-    color: 'text-red-700 bg-red-50 border-red-200',
-    badgeColor: 'bg-red-100 text-red-800',
-    icon: AlertOctagon,
-    priority: 5,
-  },
+  color: 'text-red-700 bg-red-50 border-red-200',
+  badgeColor: 'bg-red-100 text-red-800',
+  icon: AlertOctagon,
+  priority: 5,
+},
   high: {,
-    color: 'text-orange-700 bg-orange-50 border-orange-200',
-    badgeColor: 'bg-orange-100 text-orange-800',
-    icon: AlertTriangle,
-    priority: 4,
-  },
+  color: 'text-orange-700 bg-orange-50 border-orange-200',
+  badgeColor: 'bg-orange-100 text-orange-800',
+  icon: AlertTriangle,
+  priority: 4,
+},
   medium: {,
-    color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
-    badgeColor: 'bg-yellow-100 text-yellow-800',
-    icon: Shield,
-    priority: 3,
-  },
+  color: 'text-yellow-700 bg-yellow-50 border-yellow-200',
+  badgeColor: 'bg-yellow-100 text-yellow-800',
+  icon: Shield,
+  priority: 3,
+},
   low: {,
-    color: 'text-blue-700 bg-blue-50 border-blue-200',
-    badgeColor: 'bg-blue-100 text-blue-800',
-    icon: Info,
-    priority: 2,
-  },
+  color: 'text-blue-700 bg-blue-50 border-blue-200',
+  badgeColor: 'bg-blue-100 text-blue-800',
+  icon: Info,
+  priority: 2,
+},
   info: {,
-    color: 'text-gray-700 bg-gray-50 border-gray-200',
-    badgeColor: 'bg-gray-100 text-gray-800',
-    icon: Info,
-    priority: 1,
-  }
+  color: 'text-gray-700 bg-gray-50 border-gray-200',
+  badgeColor: 'bg-gray-100 text-gray-800',
+  icon: Info,
+  priority: 1,
 };
 /**
  * Status configurations for UI styling
  */
 const STATUS_CONFIG = {
   active: {,
-    color: 'text-red-600 bg-red-50',
-    badgeColor: 'bg-red-100 text-red-800',
-    icon: Bell,
-  },
+  color: 'text-red-600 bg-red-50',
+  badgeColor: 'bg-red-100 text-red-800',
+  icon: Bell,
+},
   acknowledged: {,
-    color: 'text-yellow-600 bg-yellow-50',
-    badgeColor: 'bg-yellow-100 text-yellow-800',
-    icon: CheckCircle,
-  },
+  color: 'text-yellow-600 bg-yellow-50',
+  badgeColor: 'bg-yellow-100 text-yellow-800',
+  icon: CheckCircle,
+},
   resolved: {,
-    color: 'text-green-600 bg-green-50',
-    badgeColor: 'bg-green-100 text-green-800',
-    icon: CheckCircle,
-  },
+  color: 'text-green-600 bg-green-50',
+  badgeColor: 'bg-green-100 text-green-800',
+  icon: CheckCircle,
+},
   suppressed: {,
-    color: 'text-purple-600 bg-purple-50',
-    badgeColor: 'bg-purple-100 text-purple-800',
-    icon: XCircle,
-  },
+  color: 'text-purple-600 bg-purple-50',
+  badgeColor: 'bg-purple-100 text-purple-800',
+  icon: XCircle,
+},
   expired: {,
-    color: 'text-gray-600 bg-gray-50',
-    badgeColor: 'bg-gray-100 text-gray-800',
-    icon: Clock,
-  }
+  color: 'text-gray-600 bg-gray-50',
+  badgeColor: 'bg-gray-100 text-gray-800',
+  icon: Clock,
 };
 
 export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => {
-  const [alerts, setAlerts] = useState<AlertType[]>([]);
+  const [alerts, setAlerts] = useState<AlertType>([]);
   const [stats, setStats] = useState<AlertStats | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('overview');
   const [filter, setFilter] = useState<AlertFilter>({});
@@ -140,17 +137,16 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
   }, [alerts, searchQuery]);
   // Group alerts by severity for overview
   const alertsBySeverity = useMemo(() => {
-    const grouped: Record<AlertSeverity, AlertType[]> = {
-      critical: [],
-      high: [],
-      medium: [],
-      low: [],
-      info: [],
-    };
+  const grouped: Record<AlertSeverity, AlertType> = {,
+  critical: [],
+  high: [],
+  medium: [],
+  low: [],
+  info: [],
+};
     filteredAlerts.forEach(alert => {)
-      if (alert.status === 'active' || alert.status === 'acknowledged') {
+  if (alert.status === 'active' || alert.status === 'acknowledged') {
         grouped[alert.severity].push(alert);
-      }
     });
     return grouped;
   }, [filteredAlerts]);
@@ -168,7 +164,7 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
   const updateFilter = (updates: Partial<AlertFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
-  return ();
+  return;
     <div className={`alert-dashboard space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -281,9 +277,8 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                 value={filter.severities?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    severities: value === 'all' ? undefined : [value as AlertSeverity] ,
-                  })
-                }
+                    severities: value === 'all' ? undefined : [value as AlertSeverity] ;
+  }
               >
                 <option value="all">All Severities</option>
                 <option value="critical">Critical</option>
@@ -296,9 +291,8 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
                 value={filter.statuses?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    statuses: value === 'all' ? undefined : [value as AlertStatus] ,
-                  })
-                }
+                    statuses: value === 'all' ? undefined : [value as AlertStatus] ;
+  }
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -319,8 +313,8 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
             <TabsContent value="overview" className="mt-6">
               <div className="space-y-6">
                 {Object.entries(alertsBySeverity)
-                  .sort(([, a], [, b]) => b.length - a.length)
-                  .filter(([, alerts]) => alerts.length > 0)
+                  .sort(([ a], [ b]) => b.length - a.length)
+                  .filter(([ alerts]) => alerts.length > 0)
                   .map(([severity, severityAlerts]) => ()
                     <div key={severity}>
                       <div className="flex items-center mb-3">
@@ -387,13 +381,12 @@ export const AlertDashboard: React.FC<AlertDashboardProps> = ({ className }) => 
  * Alert Card Component
  */
 interface AlertCardProps {
-  alert: AlertType;
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
-  onSuppress: (id: string) => void;
+  alert: AlertType;,
+  onAcknowledge: (id: string) => void;,
+  onResolve: (id: string) => void;,
+  onSuppress: (id: string) => void;,
   onClick: (alert: AlertType) => void;
-}
-const AlertCard: React.FC<AlertCardProps> = ({)
+  const AlertCard: React.FC<AlertCardProps> = ({,)
   alert,
   onAcknowledge,
   onResolve,
@@ -404,7 +397,7 @@ const AlertCard: React.FC<AlertCardProps> = ({)
   const statusConfig = STATUS_CONFIG[alert.status];
   const SeverityIcon = severityConfig.icon;
   const _____StatusIcon = statusConfig.icon;
-  return ();
+  return;
     <div 
       className={`border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer ${severityConfig.color}`}
       onClick={() => onClick(alert)}
@@ -458,13 +451,12 @@ const AlertCard: React.FC<AlertCardProps> = ({)
  * Alert List Component
  */
 interface AlertListProps {
-  alerts: AlertType[];
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
-  onSuppress: (id: string) => void;
+  alerts: AlertType;,
+  onAcknowledge: (id: string) => void;,
+  onResolve: (id: string) => void;,
+  onSuppress: (id: string) => void;,
   onSelectAlert: (alert: AlertType) => void;
-}
-const AlertList: React.FC<AlertListProps> = ({)
+  const AlertList: React.FC<AlertListProps> = ({,)
   alerts,
   onAcknowledge,
   onResolve,
@@ -472,15 +464,14 @@ const AlertList: React.FC<AlertListProps> = ({)
   onSelectAlert
 }) => {
   if (alerts.length === 0) {
-    return ();
+    return;
       <div className="text-center py-8">
         <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No alerts found</h3>
         <p className="text-gray-500">All quiet on this front!</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-3">
       {alerts.map(alert => ()
         <AlertCard
@@ -499,13 +490,12 @@ const AlertList: React.FC<AlertListProps> = ({)
  * Alert Detail Modal Component
  */
 interface AlertDetailModalProps {
-  alert: AlertType;
+  alert: AlertType;,
   onClose: () => void;
-  onAcknowledge: (id: string) => void;
-  onResolve: (id: string) => void;
+  onAcknowledge: (id: string) => void;,
+  onResolve: (id: string) => void;,
   onSuppress: (id: string) => void;
-}
-const AlertDetailModal: React.FC<AlertDetailModalProps> = ({)
+  const AlertDetailModal: React.FC<AlertDetailModalProps> = ({,)
   alert,
   onClose,
   onAcknowledge,
@@ -514,7 +504,7 @@ const AlertDetailModal: React.FC<AlertDetailModalProps> = ({)
 }) => {
   const severityConfig = SEVERITY_CONFIG[alert.severity];
   const SeverityIcon = severityConfig.icon;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">

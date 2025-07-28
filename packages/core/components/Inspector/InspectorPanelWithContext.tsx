@@ -6,9 +6,7 @@ interface InspectorPanelWithContextProps {
   onClose?: () => void;
   minWidth?: number;
   maxWidth?: number;
-}
-
-export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps> = ({)
+  export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps> = ({,)
   onClose,
   minWidth = 280,
   maxWidth = 600
@@ -49,7 +47,6 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
       document.removeEventListener('mouseup', handleMouseUp);
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-    }
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
@@ -60,34 +57,32 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
   const handleChange = (partial: Record<string, unknown>) => {
     if (selectedNode) {
       updateNodeData(selectedNode.id, partial);
-    }
   };
   if (!panelVisible) {
-    return null;
-  }
+  return null;
   if (!selectedNode || !selectedSchema) {
-    return ();
-      <aside
-        style={{
-          width: panelCollapsed ? 40 : panelWidth,
-          minWidth: panelCollapsed ? 40 : minWidth,
-          borderLeft: '1px solid #4a5568',
-          background: '#1a202c',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          transition: panelCollapsed ? 'width 0.2s ease' : 'none',
-        }}
+  return;
+  <aside
+  style={{
+  width: panelCollapsed ? 40 : panelWidth,
+  minWidth: panelCollapsed ? 40 : minWidth,
+  borderLeft: '1px solid #4a5568',
+  background: '#1a202c',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: panelCollapsed ? 'width 0.2s ease' : 'none',
+}}
       >
         <div
           style={{
-            padding: '12px 16px',
-            borderBottom: '1px solid #4a5568',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: '#2d3748',
-          }}
+  padding: '12px 16px',
+  borderBottom: '1px solid #4a5568',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  background: '#2d3748',
+}}
         >
           {!panelCollapsed && ()
             <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
@@ -97,26 +92,26 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
           <button
             onClick={() => setPanelCollapsed(!panelCollapsed)}
             style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: 16,
-              color: '#a0aec0',
-              padding: 4,
-            }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: 16,
+  color: '#a0aec0',
+  padding: 4,
+}}
             title={panelCollapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
             {panelCollapsed ? '◀' : '▶'}
           </button>
         </div>
         {!panelCollapsed && ()
-          <div style={{ 
-            padding: 16, 
-            color: '#a0aec0', 
-            fontStyle: 'italic',
-            textAlign: 'center',
-            marginTop: 40,
-          }}>
+          <div style={{
+  padding: 16,
+  color: '#a0aec0',
+  fontStyle: 'italic',
+  textAlign: 'center',
+  marginTop: 40,
+}}>
             Select a node to edit its properties
           </div>
         )}
@@ -124,41 +119,40 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
           ref={resizeRef}
           onMouseDown={handleMouseDown}
           style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: 4,
-            cursor: 'col-resize',
-            background: 'transparent',
-            zIndex: 10,
-          }}
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  bottom: 0,
+  width: 4,
+  cursor: 'col-resize',
+  background: 'transparent',
+  zIndex: 10,
+}}
         />
       </aside>
     );
-  }
-  return ();
+  return;
     <aside
       style={{
-        width: panelCollapsed ? 40 : panelWidth,
-        minWidth: panelCollapsed ? 40 : minWidth,
-        borderLeft: '1px solid #4a5568',
-        background: '#1a202c',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        transition: panelCollapsed ? 'width 0.2s ease' : 'none',
-      }}
+  width: panelCollapsed ? 40 : panelWidth,
+  minWidth: panelCollapsed ? 40 : minWidth,
+  borderLeft: '1px solid #4a5568',
+  background: '#1a202c',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: panelCollapsed ? 'width 0.2s ease' : 'none',
+}}
     >
       <div
         style={{
-          padding: '12px 16px',
-          borderBottom: '1px solid #4a5568',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#2d3748',
-        }}
+  padding: '12px 16px',
+  borderBottom: '1px solid #4a5568',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  background: '#2d3748',
+}}
       >
         {!panelCollapsed && ()
           <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>
@@ -170,13 +164,13 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
             <button
               onClick={onClose}
               style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 16,
-                color: '#a0aec0',
-                padding: 4,
-              }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: 16,
+  color: '#a0aec0',
+  padding: 4,
+}}
               title="Close Inspector"
             >
               ✕
@@ -185,13 +179,13 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
           <button
             onClick={() => setPanelCollapsed(!panelCollapsed)}
             style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: 16,
-              color: '#a0aec0',
-              padding: 4,
-            }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: 16,
+  color: '#a0aec0',
+  padding: 4,
+}}
             title={panelCollapsed ? 'Expand Inspector' : 'Collapse Inspector'}
           >
             {panelCollapsed ? '◀' : '▶'}
@@ -214,15 +208,15 @@ export const InspectorPanelWithContext: React.FC<InspectorPanelWithContextProps>
         ref={resizeRef}
         onMouseDown={handleMouseDown}
         style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: 4,
-          cursor: 'col-resize',
-          background: 'transparent',
-          zIndex: 10,
-        }}
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  bottom: 0,
+  width: 4,
+  cursor: 'col-resize',
+  background: 'transparent',
+  zIndex: 10,
+}}
       />
     </aside>
   );

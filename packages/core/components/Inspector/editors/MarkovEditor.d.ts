@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface MarkovEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-}
+
 /**
  * Epic 8.4 - Markov Chain Editor with Progressive Disclosure
  *

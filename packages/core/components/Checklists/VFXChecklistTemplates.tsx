@@ -45,7 +45,7 @@ import type {
 } from './VFXChecklistSystem';
 
 // Built-in template data
-const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
+const BUILTIN_TEMPLATES: VFXChecklistTemplate = [
   {
     id: 'template-asset-creation',
     name: 'Asset Creation Pipeline',
@@ -55,14 +55,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     isPublic: true,
     usageCount: 247,
     createdBy: {,
-      id: 'system',
+  id: 'system',
       name: 'Wild Construct',
       role: 'director',
       email: 'system@wildconstruct.com',
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
-    },
-    items: [,
+  },
+  items: [,
       {
         title: 'Concept Art Review',
         description: 'Review and approve initial concept art and design direction',
@@ -87,8 +87,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['concept', 'art', 'accuracy'],
         estimatedHours: 4,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: '3D Model Creation',
         description: 'Create base 3D geometry and structure',
@@ -114,8 +114,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['modeling', '3d', 'geometry'],
         estimatedHours: 12,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Texturing & Materials',
         description: 'Create historically accurate textures and material definitions',
@@ -140,8 +140,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['3D Model Creation'],
         tags: ['texturing', 'materials', 'pbr'],
         estimatedHours: 8,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Rigging & Animation Setup',
         description: 'Setup character/object rigging for animation',
@@ -166,8 +166,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['3D Model Creation'],
         tags: ['rigging', 'animation', 'bones'],
         estimatedHours: 10,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Final Asset Review',
         description: 'Complete review and approval of finished asset',
@@ -193,10 +193,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Concept Art Review', '3D Model Creation', 'Texturing & Materials', 'Rigging & Animation Setup'],
         tags: ['review', 'qa', 'approval'],
         estimatedHours: 3,
-        history: [],
-      }
-    ]
-  },
+        history: []];
+  }
   {
     id: 'template-shot-finaling',
     name: 'Shot Finaling Pipeline',
@@ -206,14 +204,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     isPublic: true,
     usageCount: 189,
     createdBy: {,
-      id: 'system',
+  id: 'system',
       name: 'Wild Construct',
       role: 'director',
       email: 'system@wildconstruct.com',
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
-    },
-    items: [,
+  },
+  items: [,
       {
         title: 'Composite Review',
         description: 'Review composite against reference and brief',
@@ -238,8 +236,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['composite', 'review', 'integration'],
         estimatedHours: 2,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Color Correction & Grading',
         description: 'Final color correction and grading to match scene',
@@ -263,8 +261,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Composite Review'],
         tags: ['color', 'grading', 'lut'],
         estimatedHours: 3,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Technical QC',
         description: 'Technical quality control and standards compliance',
@@ -289,8 +287,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Color Correction & Grading'],
         tags: ['qc', 'technical', 'standards'],
         estimatedHours: 1,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Client Review & Notes',
         description: 'Submit for client review and address feedback',
@@ -315,8 +313,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Technical QC'],
         tags: ['client', 'review', 'feedback'],
         estimatedHours: 4,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Final Delivery',
         description: 'Package and deliver final approved shot',
@@ -340,10 +338,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: ['Client Review & Notes'],
         tags: ['delivery', 'package', 'final'],
         estimatedHours: 1,
-        history: [],
-      }
-    ]
-  },
+        history: []];
+  }
   {
     id: 'template-historical-validation',
     name: 'Historical Accuracy Validation',
@@ -353,14 +349,14 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
     isPublic: true,
     usageCount: 156,
     createdBy: {,
-      id: 'system',
+  id: 'system',
       name: 'Wild Construct',
       role: 'director',
       email: 'system@wildconstruct.com',
       color: '#3b82f6',
       permissions: { canCreate: true, canEdit: true, canDelete: true, canApprove: true, canAssign: true, canViewReports: true }
-    },
-    items: [,
+  },
+  items: [,
       {
         title: 'Architecture Accuracy Review',
         description: 'Validate architectural elements against historical period',
@@ -386,8 +382,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['architecture', 'accuracy', 'utdg'],
         estimatedHours: 6,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Clothing & Costume Validation',
         description: 'Ensure clothing and costumes are period-appropriate',
@@ -412,8 +408,8 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['costume', 'clothing', 'fashion'],
         estimatedHours: 4,
-        history: [],
-      },
+        history: [];
+  }
       {
         title: 'Technology & Tools Assessment',
         description: 'Verify all technology and tools match the historical period',
@@ -438,15 +434,12 @@ const BUILTIN_TEMPLATES: VFXChecklistTemplate[] = [
         dependencies: [],
         tags: ['technology', 'tools', 'timeline'],
         estimatedHours: 3,
-        history: [],
-      }
-    ]
-  }
+        history: []],
 ];
 
 export interface VFXChecklistTemplatesProps {
-  templates?: VFXChecklistTemplate[];
-  currentUser: VFXTeamMember;
+  templates?: VFXChecklistTemplate;
+  currentUser: VFXTeamMember;,
   onTemplateSelect: (template: VFXChecklistTemplate) => void;
   onTemplateCreate?: (template: Omit<VFXChecklistTemplate, 'id' | 'usageCount'>) => void;
   onTemplateUpdate?: (templateId: string, updates: Partial<VFXChecklistTemplate>) => void;
@@ -455,7 +448,6 @@ export interface VFXChecklistTemplatesProps {
   readonly?: boolean;
   className?: string;
 }
-
 export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
   templates = [],
   currentUser,
@@ -481,11 +473,10 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
   // Filter templates
   const filteredTemplates = useMemo(() => {
     return allTemplates.filter(template => {)
-      // Search filter
+  // Search filter
       if (searchTerm && !template.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !template.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
-      }
       // Category filter
       if (categoryFilter !== 'all' && template.category !== categoryFilter) return false;
       // Phase filter
@@ -507,9 +498,8 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
     if (template && onTemplateClone) {
       const newName = `${template.name} (Copy)`;}
       onTemplateClone(templateId, newName);
-    }
   }, [allTemplates, onTemplateClone]);
-  return ();
+  return;
     <div className={`vfx-checklist-templates ${className}`}>}
       <Card>
         <CardHeader>
@@ -662,17 +652,16 @@ export const VFXChecklistTemplates: React.FC<VFXChecklistTemplatesProps> = ({)
 
 // Individual template card component
 interface TemplateCardProps {
-  template: VFXChecklistTemplate;
+  template: VFXChecklistTemplate;,
   currentUser: VFXTeamMember;
-  isSelected: boolean;
+  isSelected: boolean;,
   onSelect: () => void;
   onUse: () => void;
   onClone?: () => void;
   onUpdate?: (templateId: string, updates: Partial<VFXChecklistTemplate>) => void;
   onDelete?: (templateId: string) => void;
   readonly?: boolean;
-}
-const TemplateCard: React.FC<TemplateCardProps> = ({)
+  const TemplateCard: React.FC<TemplateCardProps> = ({,)
   template,
   currentUser,
   isSelected,
@@ -685,23 +674,23 @@ const TemplateCard: React.FC<TemplateCardProps> = ({)
 }) => {
   const isOwner = template.createdBy.id === currentUser.id;
   const isBuiltIn = template.createdBy.id === 'system';
-  const getCategoryIcon = (category: VFXChecklistCategory) => {
-    const iconMap = {
-      pre_production: FileText,
-      asset_creation: Palette,
-      animation: Film,
-      fx: Zap,
-      lighting: Camera,
-      compositing: Palette,
-      rendering: BarChart3,
-      post_production: Edit3,
-      review: Eye,
-      delivery: CheckCircle,
-    };
+  const getCategoryIcon = (category: VFXChecklistCategory) => {,
+  const iconMap = {
+  pre_production: FileText,
+  asset_creation: Palette,
+  animation: Film,
+  fx: Zap,
+  lighting: Camera,
+  compositing: Palette,
+  rendering: BarChart3,
+  post_production: Edit3,
+  review: Eye,
+  delivery: CheckCircle,
+};
     const IconComponent = iconMap[category] || FileText;
     return <IconComponent className="w-4 h-4" />;
   };
-  return ();
+  return;
     <Card className={`template-card cursor-pointer hover:shadow-lg transition-all ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isBuiltIn ? 'border-blue-200 bg-blue-50' : ''}`}>}
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
@@ -759,11 +748,11 @@ const TemplateCard: React.FC<TemplateCardProps> = ({)
                   <div key={index} className="flex items-center gap-2 text-xs">
                     <div 
                       className="w-2 h-2 rounded-full"
-                      style={{ 
-                        backgroundColor: item.priority === 'critical' ? '#dc2626' : ,
-                          item.priority === 'high' ? '#ef4444' :
-                            item.priority === 'medium' ? '#f59e0b' : '#10b981'
-                      }}
+                      style={{
+  backgroundColor: item.priority === 'critical' ? '#dc2626' : ,
+  item.priority === 'high' ? '#ef4444' :,
+  item.priority === 'medium' ? '#f59e0b' : '#10b981',
+}}
                     />
                     <span className="truncate">{item.title}</span>
                   </div>

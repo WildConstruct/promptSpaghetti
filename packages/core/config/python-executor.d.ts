@@ -2,6 +2,7 @@
  * Configuration for Python Executor Integration
  * Epic 8 Story 8.1.4: Configuration management for Python executor
  */
+
 export interface PythonExecutorConfig {
     serviceUrl: string;
     apiKey?: string;
@@ -22,7 +23,8 @@ export interface PythonExecutorConfig {
     enableAuditLogs: boolean;
     enableDebugLogs: boolean;
     enableValidation: boolean;
-}
+
+
 /**
  * Configuration manager for Python executor
  */
@@ -86,7 +88,7 @@ export declare class PythonExecutorConfigManager {
      * Import configuration from JSON
      */
     fromJSON(json: string): void;
-}
+
 /**
  * Global configuration manager instance
  */

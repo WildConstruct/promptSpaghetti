@@ -15,7 +15,6 @@ export interface LoadingStateProps {
   showSpinner?: boolean;
   className?: string;
 }
-
 export const LoadingState: React.FC<LoadingStateProps> = ({)
   message = 'Loading...',
   size = 'medium',

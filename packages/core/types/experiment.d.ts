@@ -2,9 +2,10 @@
  * Epic 14 - A/B Testing Framework
  * Core experiment types and interfaces
  */
+
 export interface ExperimentId {
     value: string;
-}
+
 export interface ExperimentVariant {
     id: string;
     name: string;
@@ -16,10 +17,10 @@ export interface ExperimentVariant {
     maxTokens?: number;
     properties?: Record<string, unknown>;
     promptHash?: string;
-}
+
 export interface TrafficAllocation {
     [variantId: string]: number;
-}
+
 export interface ExperimentMetric {
     id: string;
     name: string;
@@ -29,9 +30,10 @@ export interface ExperimentMetric {
     isGuardrail: boolean;
     expectedDirection: 'increase' | 'decrease';
     minimumDetectableEffect?: number;
-}
+
 export type ExperimentType = 'prompt' | 'graph' | 'feature_flag';
 export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed' | 'archived';
+
 export interface ExperimentSchedule {
     startAt?: Date;
     endAt?: Date;
@@ -41,7 +43,7 @@ export interface ExperimentSchedule {
         budgetCap?: number;
         confidenceThreshold?: number;
     };
-}
+
 export interface Experiment {
     id: string;
     organizationId: string;
@@ -62,40 +64,40 @@ export interface Experiment {
     exclusionRules?: ExperimentExclusion[];
     factorialDesign?: FactorialDesign;
     rolloutStrategy?: RolloutStrategy;
-}
+
 export interface ExperimentSegment {
     id: string;
     name: string;
     filters: SegmentFilter[];
     operator: 'AND' | 'OR';
-}
+
 export interface SegmentFilter {
     property: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
     value: unknown;
-}
+
 export interface ExperimentExclusion {
     type: 'user' | 'session' | 'segment';
     identifiers: string[];
     reason: string;
-}
+
 export interface FactorialDesign {
     factors: Factor[];
     designMatrix: DesignCell[];
-}
+
 export interface Factor {
     name: string;
     levels: string[];
-}
+
 export interface DesignCell {
     id: string;
     factors: Record<string, string>;
     allocation: number;
-}
+
 export interface RolloutStrategy {
     type: 'immediate' | 'gradual';
     stages?: RolloutStage[];
-}
+
 export interface RolloutStage {
     percentage: number;
     duration: number;
@@ -104,7 +106,7 @@ export interface RolloutStage {
         errorRate?: number;
         latencyThreshold?: number;
     };
-}
+
 export interface UserAssignment {
     userId: string;
     experimentId: string;
@@ -113,14 +115,14 @@ export interface UserAssignment {
     sessionId?: string;
     sticky: boolean;
     salt: string;
-}
+
 export interface AssignmentRequest {
     userId: string;
     sessionId?: string;
     experimentId: string;
     overrideVariant?: string;
     debugMode?: boolean;
-}
+
 export interface AssignmentResponse {
     variantId: string;
     variant: ExperimentVariant;
@@ -131,7 +133,7 @@ export interface AssignmentResponse {
         bucket: number;
         allocation: TrafficAllocation;
     };
-}
+
 export interface ExperimentResults {
     experimentId: string;
     calculatedAt: Date;
@@ -139,7 +141,7 @@ export interface ExperimentResults {
     statistical: StatisticalResults;
     segments: SegmentResults[];
     insights: ExperimentInsight[];
-}
+
 export interface VariantResults {
     variantId: string;
     metrics: MetricResult[];
@@ -148,14 +150,14 @@ export interface VariantResults {
     averageLatency?: number;
     totalCost?: number;
     errorRate?: number;
-}
+
 export interface MetricResult {
     metricId: string;
     value: number;
     confidenceInterval: [number, number];
     standardError: number;
     trend: 'up' | 'down' | 'stable';
-}
+
 export interface StatisticalResults {
     primaryMetric: {,
         winningVariant?: string;
@@ -170,13 +172,13 @@ export interface StatisticalResults {
         threshold: number;
         actualValue: number;
     }[];
-}
+
 export interface SegmentResults {
     segment: ExperimentSegment;
     variants: VariantResults[];
     sampleSize: number;
     significance: boolean;
-}
+
 export interface ExperimentInsight {
     type: 'winner_detected' | 'segment_opportunity' | 'cost_anomaly' | 'performance_degradation';
     title: string;
@@ -185,7 +187,7 @@ export interface ExperimentInsight {
     actionable: boolean;
     recommendations?: string[];
     data?: Record<string, unknown>;
-}
+
 export interface ExperimentTemplate {
     id: string;
     name: string;
@@ -201,7 +203,7 @@ export interface ExperimentTemplate {
     timesUsed: number;
     createdBy: string;
     createdAt: Date;
-}
+
 export interface KnowledgeBaseEntry {
     id: string;
     experimentId: string;
@@ -216,7 +218,7 @@ export interface KnowledgeBaseEntry {
     confidence: number;
     createdAt: Date;
     updatedAt: Date;
-}
+
 export interface ABTestingConfig {
     maxVariants: number;
     defaultConfidenceLevel: number;
@@ -226,7 +228,7 @@ export interface ABTestingConfig {
     enableBayesian: boolean;
     enableBandits: boolean;
     enableFactorial: boolean;
-}
+
 export interface AllocationServiceConfig {
     redisUrl: string;
     cacheTtl: number;
@@ -239,7 +241,7 @@ export interface AllocationServiceConfig {
             rotatedAt: Date;
         }[];
     };
-}
+
 export declare class ExperimentError extends Error {
     code: string;
     experimentId?: string | undefined;
@@ -251,14 +253,15 @@ export declare class ExperimentError extends Error {
       details?: Record<string,
       unknown> | undefined
     );
-}
+
 export declare class AllocationError extends Error {
     code: string;
     userId?: string | undefined;
     experimentId?: string | undefined;
     constructor(message: string, code: string, userId?: string | undefined, experimentId?: string | undefined);
-}
+
 export type ExperimentEventType = 'experiment_created' | 'experiment_started' | 'experiment_paused' | 'experiment_resumed' | 'experiment_completed' | 'variant_assigned' | 'winner_detected' | 'rollout_stage_completed';
+
 export interface ExperimentEvent {
     type: ExperimentEventType;
     experimentId: string;
@@ -266,5 +269,5 @@ export interface ExperimentEvent {
     data: Record<string, unknown>;
     userId?: string;
     variantId?: string;
-}
+
 //# sourceMappingURL=experiment.d.ts.map

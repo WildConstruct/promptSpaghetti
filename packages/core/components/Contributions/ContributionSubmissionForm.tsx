@@ -14,39 +14,35 @@ import {
 } from '../../types/contributions';
 
 export interface ContributionSubmissionFormProps {
-  onSubmit: (data: CreateContributionRequest) => void;
+  onSubmit: (data: CreateContributionRequest) => void;,
   onCancel: () => void;
   initialData?: Partial<CreateContributionRequest>;
   className?: string;
-}
-interface FormStep {
-  id: string;
+  interface FormStep {
+  id: string;,
   title: string;
   description: string;
+  const FORM_STEPS: FormStep = [
+  {
+  id: 'type',
+  title: 'Choose Type',
+  description: 'Select the type of contribution you want to create',
 }
-const FORM_STEPS: FormStep[] = [
   {
-    id: 'type',
-    title: 'Choose Type',
-    description: 'Select the type of contribution you want to create',
-  },
+  id: 'basic',
+  title: 'Basic Information',
+  description: 'Provide title, description, and categorization',
+}
   {
-    id: 'basic',
-    title: 'Basic Information',
-    description: 'Provide title, description, and categorization'
-  },
+  id: 'content',
+  title: 'Content Details',
+  description: 'Add specific content based on contribution type',
+}
   {
-    id: 'content',
-    title: 'Content Details',
-    description: 'Add specific content based on contribution type',
-  },
-  {
-    id: 'review',
-    title: 'Review & Submit',
-    description: 'Review your submission before publishing',
-  }
-];
-
+  id: 'review',
+  title: 'Review & Submit',
+  description: 'Review your submission before publishing'];
+}
 export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps> = ({)
   onSubmit,
   onCancel,
@@ -55,7 +51,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<CreateContributionRequest>>({)
-    type: 'template',
+  type: 'template',
     title: '',
     description: '',
     category: '',
@@ -68,17 +64,17 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Available categories by type
-  const getCategoriesByType = (type: ContributionType): string[] => {
-    const categories = {
-      template: ['Prompt Engineering', 'Character Creation', 'Story Generation', 'Data Analysis', 'Creative Writing', 'Business', 'Education'],
-      knowledge_article: ['Getting Started', 'Best Practices', 'Advanced Techniques', 'Troubleshooting', 'API Reference'],
-      tutorial: ['Beginner', 'Intermediate', 'Advanced', 'Project-Based', 'Quick Start'],
-      case_study: ['Success Stories', 'ROI Analysis', 'Implementation', 'Before/After', 'Industry Specific'],
-      pattern_library: ['Prompt Patterns', 'Graph Patterns', 'Workflow Patterns', 'Integration Patterns'],
-      community_post: ['General Discussion', 'Questions', 'Announcements', 'Showcase', 'Feedback'],
-      documentation: ['User Guides', 'API Documentation', 'Technical Specs', 'FAQs'],
-      review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews']
-    };
+  const getCategoriesByType = (type: ContributionType): string => {
+  const categories = {
+  template: ['Prompt Engineering', 'Character Creation', 'Story Generation', 'Data Analysis', 'Creative Writing', 'Business', 'Education'],
+  knowledge_article: ['Getting Started', 'Best Practices', 'Advanced Techniques', 'Troubleshooting', 'API Reference'],
+  tutorial: ['Beginner', 'Intermediate', 'Advanced', 'Project-Based', 'Quick Start'],
+  case_study: ['Success Stories', 'ROI Analysis', 'Implementation', 'Before/After', 'Industry Specific'],
+  pattern_library: ['Prompt Patterns', 'Graph Patterns', 'Workflow Patterns', 'Integration Patterns'],
+  community_post: ['General Discussion', 'Questions', 'Announcements', 'Showcase', 'Feedback'],
+  documentation: ['User Guides', 'API Documentation', 'Technical Specs', 'FAQs'],
+  review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews'],
+};
     return categories[type] || [];
   };
   // Update form data
@@ -87,67 +83,59 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
     // Clear errors for updated fields
     const updatedFields = Object.keys(updates);
     setErrors(prev => {)
-      const newErrors = { ...prev };
+  const newErrors = { ...prev };
       updatedFields.forEach(field => delete newErrors[field]);
       return newErrors;
     });
   };
   // Add tag
   const addTag = (tag: string) => {
-    if (tag.trim() && !formData.tags?.includes(tag.trim())) {
-      updateFormData({ )
-        tags: [...(formData.tags || []), tag.trim()]
-      });
-    }
+  if (tag.trim() && !formData.tags?.includes(tag.trim())) {
+  updateFormData({ )
+  tags: [...(formData.tags || []), tag.trim()],
+});
   };
   // Remove tag
   const removeTag = (index: number) => {
-    updateFormData({)
-      tags: formData.tags?.filter((_, i) => i !== index) || []
-    });
+  updateFormData({)
+  tags: formData.tags?.filter((_, i) => i !== index) || [],
+});
   };
   // Validate current step
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
     switch (step) {
-    case 0: // Type selection
-      if (!formData.type) {
-        newErrors.type = 'Please select a contribution type';
-      }
-      break;
-    case 1: // Basic information
-      if (!formData.title?.trim()) {
-        newErrors.title = 'Title is required';
-      } else if (formData.title.length < 5) {
+  case 0: // Type selection,
+  if (!formData.type) {
+  newErrors.type = 'Please select a contribution type';
+  break;
+  case 1: // Basic information,
+  if (!formData.title?.trim()) {
+  newErrors.title = 'Title is required';
+} else if (formData.title.length < 5) {
         newErrors.title = 'Title must be at least 5 characters';
       } else if (formData.title.length > 200) {
         newErrors.title = 'Title must be less than 200 characters';
-      }
       if (!formData.description?.trim()) {
         newErrors.description = 'Description is required';
       } else if (formData.description.length < 20) {
         newErrors.description = 'Description must be at least 20 characters';
       } else if (formData.description.length > 2000) {
-        newErrors.description = 'Description must be less than 2000 characters';
-      }
-      if (!formData.category?.trim()) {
-        newErrors.category = 'Category is required';
-      }
-      break;
-    case 2: // Content details
-      if (!formData.content || Object.keys(formData.content).length === 0) {
-        newErrors.content = 'Content details are required';
-      }
-      break;
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  newErrors.description = 'Description must be less than 2000 characters';
+  if (!formData.category?.trim()) {
+  newErrors.category = 'Category is required';
+  break;
+  case 2: // Content details,
+  if (!formData.content || Object.keys(formData.content).length === 0) {
+  newErrors.content = 'Content details are required';
+  break;
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
   // Handle next step
   const handleNext = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, FORM_STEPS.length - 1));
-    }
   };
   // Handle previous step
   const handlePrevious = () => {
@@ -166,18 +154,17 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       validateCreateContributionRequest(submissionData);
       await onSubmit(submissionData);
     } catch (err) {
-      setErrors({ )
-        submit: err instanceof Error ? err.message : 'Failed to submit contribution' ,
-      });
+  setErrors({ )
+  submit: err instanceof Error ? err.message : 'Failed to submit contribution',
+});
     } finally {
       setIsSubmitting(false);
-    }
   };
   // Render step content
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return ();
+      return;
         <div className="step-content">
           <h3>What type of contribution are you creating?</h3>
           <div className="type-grid">
@@ -200,7 +187,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 1:
-      return ();
+      return;
         <div className="step-content">
           <h3>Basic Information</h3>
           <div className="form-group">
@@ -256,7 +243,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                     e.preventDefault();
                     addTag(e.currentTarget.value);
                     e.currentTarget.value = '';
-                  }
                 }}
               />
               <div className="tags-list">
@@ -278,7 +264,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 2:
-      return ();
+      return;
         <div className="step-content">
           <h3>Content Details</h3>
           {renderContentFields()}
@@ -286,7 +272,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     case 3:
-      return ();
+      return;
         <div className="step-content">
           <h3>Review Your Submission</h3>
           <div className="review-section">
@@ -319,27 +305,26 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       );
     default:
       return null;
-    }
   };
   // Get detailed type description
   const getTypeDescription = (type: ContributionType): string => {
-    const descriptions = {
-      template: 'Create reusable prompt templates that others can use and customize for their projects.',
-      knowledge_article: 'Share educational content, guides, and best practices with the community.',
-      tutorial: 'Create step-by-step learning content to help others master new skills.',
-      case_study: 'Document real-world success stories and implementation examples.',
-      pattern_library: 'Contribute reusable design patterns and architectural solutions.',
-      community_post: 'Start discussions, ask questions, or share announcements with the community.',
-      documentation: 'Help improve technical documentation and user guides.',
-      review: 'Share your experience and feedback about templates, tools, or services.'
-    };
+  const descriptions = {
+  template: 'Create reusable prompt templates that others can use and customize for their projects.',
+  knowledge_article: 'Share educational content, guides, and best practices with the community.',
+  tutorial: 'Create step-by-step learning content to help others master new skills.',
+  case_study: 'Document real-world success stories and implementation examples.',
+  pattern_library: 'Contribute reusable design patterns and architectural solutions.',
+  community_post: 'Start discussions, ask questions, or share announcements with the community.',
+  documentation: 'Help improve technical documentation and user guides.',
+  review: 'Share your experience and feedback about templates, tools, or services.',
+};
     return descriptions[type] || '';
   };
   // Render content fields based on type
   const renderContentFields = () => {
     switch (formData.type) {
     case 'template':
-      return ();
+      return;
         <div className="content-fields">
           <div className="form-group">
             <label>Graph JSON *</label>
@@ -356,7 +341,6 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                   updateFormData({ )
                     content: { ...formData.content, graphJson: e.target.value } 
                   });
-                }
               }}
               placeholder="Paste your graph JSON here..."
               rows={8}
@@ -381,14 +365,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
               <select
                 value={formData.content?.pricing?.type || 'free'}
                 onChange={(e) => updateFormData({ )
-                  content: { ,
-                    ...formData.content, 
-                    pricing: { ,
-                      ...formData.content?.pricing, 
-                      type: e.target.value as 'free' | 'paid' ,
-                    } 
-                  } 
-                })}
+                  content: {,
+  ...formData.content,
+  pricing: {,
+  ...formData.content?.pricing,
+  type: e.target.value as 'free' | 'paid',
+})}
               >
                 <option value="free">Free</option>
                 <option value="paid">Paid</option>
@@ -399,14 +381,12 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
                   placeholder="Price in cents"
                   value={formData.content?.pricing?.priceInCents || ''}
                   onChange={(e) => updateFormData({ )
-                    content: { ,
-                      ...formData.content, 
-                      pricing: { ,
-                        ...formData.content?.pricing, 
-                        priceInCents: parseInt(e.target.value) || 0 ,
-                      } 
-                    } 
-                  })}
+                    content: {,
+  ...formData.content,
+  pricing: {,
+  ...formData.content?.pricing,
+  priceInCents: parseInt(e.target.value) || 0,
+})}
                 />
               )}
             </div>
@@ -415,7 +395,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
       );
     case 'knowledge_article':
     case 'tutorial':
-      return ();
+      return;
         <div className="content-fields">
           <div className="form-group">
             <label>Article/Tutorial Content *</label>
@@ -445,7 +425,7 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
         </div>
       );
     default:
-      return ();
+      return;
         <div className="content-fields">
           <div className="form-group">
             <label>Content *</label>
@@ -460,9 +440,8 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           </div>
         </div>
       );
-    }
   };
-  return ();
+  return;
     <div className={`contribution-submission-form ${className}`}>}
       {/* Progress Indicator */}
       <div className="progress-indicator">
@@ -539,296 +518,238 @@ export const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProp
           padding: 24px;
           max-height: 80vh;
           overflow-y: auto;
-        }
         .progress-indicator {
           display: flex;
           margin-bottom: 32px;
           overflow-x: auto;
           padding-bottom: 8px;
-        }
         .progress-step {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 0 20px 0 0;
-          opacity: 0.5;
+          align-items: center;,
+  gap: 12px;
+          padding: 0 20px 0 0;,
+  opacity: 0.5;
           transition: opacity 0.2s ease;
           min-width: 200px;
-        }
         .progress-step.active {
           opacity: 1;
-        }
         .progress-step.current {
           opacity: 1;
-        }
         .step-number {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: #e5e7eb;
-          color: #6b7280;
-          display: flex;
+          width: 32px;,
+  height: 32px;
+          border-radius: 50%;,
+  background: #e5e7eb;
+          color: #6b7280;,
+  display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 600;
           font-size: 14px;
           flex-shrink: 0;
-        }
         .progress-step.active .step-number {
-          background: #3b82f6;
-          color: #ffffff;
-        }
+          background: #3b82f6;,
+  color: #ffffff;
         .step-info {
           flex: 1;
-        }
         .step-title {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 2px;
-        }
         .step-description {
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .form-content {
           margin-bottom: 32px;
-        }
         .step-content h3 {
           margin: 0 0 24px 0;
           font-size: 24px;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .type-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
           margin-bottom: 16px;
-        }
         .type-option {
           border: 2px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
+          border-radius: 8px;,
+  padding: 20px;
+          cursor: pointer;,
+  transition: all 0.2s ease;
         .type-option:hover {
           border-color: #3b82f6;
-        }
         .type-option.selected {
-          border-color: #3b82f6;
-          background: #eff6ff;
-        }
+          border-color: #3b82f6;,
+  background: #eff6ff;
         .type-header h4 {
           margin: 0 0 8px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .type-description {
           margin: 0;
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           line-height: 1.5;
-        }
         .form-group {
           margin-bottom: 20px;
-        }
         .form-group label {
           display: block;
           margin-bottom: 6px;
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-group input,
         .form-group textarea,
         .form-group select {
-          width: 100%;
-          padding: 10px 12px;
+          width: 100%;,
+  padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;
-          transition: border-color 0.2s ease;
-        }
+          font-size: 14px;,
+  transition: border-color 0.2s ease;
         .form-group input:focus,
         .form-group textarea:focus,
-        .form-group select:focus {
-          outline: none;
+        .form-group select:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
         .form-group input.error,
         .form-group textarea.error,
         .form-group select.error {
           border-color: #ef4444;
-        }
         .char-count {
           text-align: right;
-          font-size: 12px;
-          color: #9ca3af;
+          font-size: 12px;,
+  color: #9ca3af;
           margin-top: 4px;
-        }
         .tags-input input {
           margin-bottom: 8px;
-        }
         .tags-list {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         .tag {
-          background: #3b82f6;
-          color: #ffffff;
+          background: #3b82f6;,
+  color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
+          font-weight: 500;,
+  display: flex;
+          align-items: center;,
+  gap: 4px;
         .tag-remove {
-          background: none;
-          border: none;
-          color: #ffffff;
-          cursor: pointer;
-          font-size: 14px;
-          padding: 0;
-          margin: 0;
-          width: 16px;
+          background: none;,
+  border: none;
+          color: #ffffff;,
+  cursor: pointer;
+          font-size: 14px;,
+  padding: 0;
+          margin: 0;,
+  width: 16px;
           height: 16px;
-          border-radius: 50%;
-          display: flex;
+          border-radius: 50%;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
-        .tag-remove:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
+        .tag-remove:hover {,
+  background: rgba(255, 255, 255, 0.2);
         .pricing-group {
-          display: flex;
-          gap: 12px;
+          display: flex;,
+  gap: 12px;
           align-items: center;
-        }
         .pricing-group select {
           flex: 1;
-        }
         .pricing-group input {
           flex: 1;
-        }
         .review-section {
-          background: #f8fafc;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 20px;
-        }
+          background: #f8fafc;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 20px;
         .review-item {
           margin-bottom: 16px;
-        }
         .review-item:last-child {
           margin-bottom: 0;
-        }
         .review-item strong {
           display: block;
-          margin-bottom: 4px;
-          color: #374151;
-        }
+          margin-bottom: 4px;,
+  color: #374151;
         .description-preview {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 4px;
-          padding: 12px;
-          font-size: 14px;
-          color: #6b7280;
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 4px;,
+  padding: 12px;
+          font-size: 14px;,
+  color: #6b7280;
           white-space: pre-wrap;
-        }
         .tags-preview {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         .tags-preview .tag {
-          background: #e5e7eb;
-          color: #4b5563;
-        }
+          background: #e5e7eb;,
+  color: #4b5563;
         .error-message {
           color: #ef4444;
           font-size: 12px;
           margin-top: 4px;
-        }
         .form-actions {
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
-        }
         .action-group {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .btn-primary, .btn-secondary, .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: 1px solid transparent;
-        }
+          font-weight: 500;,
+  cursor: pointer;
+          transition: all 0.2s ease;,
+  border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;
-          color: #ffffff;
-        }
-        .btn-primary:hover:not(:disabled) {
-          background: #2563eb;
-        }
+          background: #3b82f6;,
+  color: #ffffff;
+        .btn-primary:hover:not(:disabled) {,
+  background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;
-          color: #374151;
+          background: #f3f4f6;,
+  color: #374151;
           border-color: #d1d5db;
-        }
-        .btn-secondary:hover {
-          background: #e5e7eb;
-        }
+        .btn-secondary:hover {,
+  background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;
-          color: #374151;
+          background: #ffffff;,
+  color: #374151;
           border-color: #d1d5db;
-        }
-        .btn-outline:hover {
-          background: #f9fafb;
-        }
-        .btn-primary:disabled {
-          opacity: 0.5;
+        .btn-outline:hover {,
+  background: #f9fafb;
+        .btn-primary:disabled {,
+  opacity: 0.5;
           cursor: not-allowed;
-        }
         @media (max-width: 768px) {
           .contribution-submission-form {
             padding: 16px;
-          }
           .progress-indicator {
-            flex-direction: column;
-            gap: 12px;
-          }
+            flex-direction: column;,
+  gap: 12px;
           .progress-step {
             min-width: auto;
             padding-right: 0;
-          }
           .type-grid {
             grid-template-columns: 1fr;
-          }
           .form-actions {
-            flex-direction: column;
-            gap: 16px;
-          }
+            flex-direction: column;,
+  gap: 16px;
           .action-group {
             width: 100%;
             justify-content: center;
-          }
           .pricing-group {
             flex-direction: column;
-          }
-        }
       `}</style>
     </div>
   );

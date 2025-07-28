@@ -46,6 +46,7 @@ export enum ApiPermissionScope {
   API_KEY = 'api_key'
 }
 
+}
 export interface ApiPermission {
   permissionId: string;
   name: string;
@@ -61,16 +62,20 @@ export interface ApiPermission {
     lastModified: Date;
     version: number;
     tags: string[];
+}
   };
 }
 
+}
 export interface ApiPermissionCondition {
   field: string;
   operator: 'eq' | 'ne' | 'in' | 'nin' | 'gt' | 'gte' | 'lt' | 'lte' | 'regex' | 'exists';
   value: any;
   logicalOperator?: 'AND' | 'OR';
 }
+}
 
+}
 export interface ApiPermissionAssignment {
   assignmentId: string;
   userId: string;
@@ -85,6 +90,7 @@ export interface ApiPermissionAssignment {
     teamId?: string;
     apiKeyId?: string;
     resourceId?: string;
+}
   };
   conditions?: ApiPermissionCondition[];
   metadata: {
@@ -95,6 +101,7 @@ export interface ApiPermissionAssignment {
   };
 }
 
+}
 export interface ApiRole {
   roleId: string;
   name: string;
@@ -109,9 +116,11 @@ export interface ApiRole {
     lastModified: Date;
     assignmentCount: number;
     tags: string[];
+}
   };
 }
 
+}
 export interface PermissionTemplate {
   templateId: string;
   name: string;
@@ -121,7 +130,9 @@ export interface PermissionTemplate {
   defaultScope: ApiPermissionScope;
   isBuiltIn: boolean;
 }
+}
 
+}
 export interface PermissionCheck {
   userId: string;
   type: ApiPermissionType;
@@ -134,9 +145,11 @@ export interface PermissionCheck {
     apiKeyId?: string;
     resourceId?: string;
     metadata?: Record<string, any>;
+}
   };
 }
 
+}
 export interface PermissionCheckResult {
   allowed: boolean;
   reason: string;
@@ -145,12 +158,15 @@ export interface PermissionCheckResult {
   warnings: string[];
   suggestions: string[];
 }
+}
 
+}
 export interface PermissionAnalytics {
   summary: {
     totalPermissions: number;
     activeAssignments: number;
     uniqueUsers: number;
+}
     mostUsedPermissions: { permissionId: string; usage: number }[];
     recentActivity: PermissionActivity[];
   };
@@ -168,6 +184,7 @@ export interface PermissionAnalytics {
   recommendations: PermissionRecommendation[];
 }
 
+}
 export interface PermissionActivity {
   activityId: string;
   userId: string;
@@ -178,7 +195,9 @@ export interface PermissionActivity {
   result: 'success' | 'failure' | 'warning';
   details: Record<string, any>;
 }
+}
 
+}
 export interface PermissionRecommendation {
   type: 'cleanup' | 'security' | 'optimization' | 'compliance';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -186,6 +205,7 @@ export interface PermissionRecommendation {
   description: string;
   affectedUsers: string[];
   suggestedActions: string[];
+}
 }
 
 // =============================================================================
@@ -212,6 +232,7 @@ export class ApiPermissionAssignmentService {
    * Initialize the permission assignment service
    */
   private async initializeService(): Promise<void> {
+
     try {
       await this.initializeDatabaseSchema();
       await this.loadSystemPermissions();
@@ -237,6 +258,7 @@ export class ApiPermissionAssignmentService {
     permissionData: Omit<ApiPermission, 'permissionId' | 'metadata'>,
     createdBy: string
   ): Promise<ApiPermission> {
+
     const permissionId = `api_perm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const permission: ApiPermission = {
@@ -291,6 +313,7 @@ export class ApiPermissionAssignmentService {
       requiresApproval?: boolean;
     }
   ): Promise<ApiPermissionAssignment> {
+
     const permission = this.permissions.get(permissionId);
     if (!permission) {
       throw new Error(`Permission ${permissionId} not found`);
@@ -363,6 +386,7 @@ export class ApiPermissionAssignmentService {
     revokedBy: string,
     reason: string
   ): Promise<void> {
+
     const assignment = this.assignments.get(assignmentId);
     if (!assignment) {
       throw new Error(`Assignment ${assignmentId} not found`);
@@ -414,6 +438,7 @@ export class ApiPermissionAssignmentService {
    * Check if user has specific permission
    */
   async checkPermission(check: PermissionCheck): Promise<PermissionCheckResult> {
+
     const userAssignments = Array.from(this.assignments.values())
       .filter(a => a.userId === check.userId && a.status === 'active');
 
@@ -497,6 +522,7 @@ export class ApiPermissionAssignmentService {
       totalCount: number;
     };
   }> {
+
     let assignments = Array.from(this.assignments.values())
       .filter(a => a.userId === userId);
 
@@ -560,6 +586,7 @@ export class ApiPermissionAssignmentService {
     roleData: Omit<ApiRole, 'roleId' | 'metadata'>,
     createdBy: string
   ): Promise<ApiRole> {
+
     const roleId = `api_role_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const role: ApiRole = {
@@ -610,6 +637,7 @@ export class ApiPermissionAssignmentService {
       reason: string;
     }
   ): Promise<ApiPermissionAssignment[]> {
+
     const role = this.roles.get(roleId);
     if (!role) {
       throw new Error(`Role ${roleId} not found`);
@@ -665,6 +693,7 @@ export class ApiPermissionAssignmentService {
    * Generate permission analytics
    */
   async generateAnalytics(timeRange: { start: Date; end: Date }): Promise<PermissionAnalytics> {
+
     const allAssignments = Array.from(this.assignments.values());
     const activeAssignments = allAssignments.filter(a => a.status === 'active');
     const recentActivities = this.activities.filter(a => 
@@ -714,18 +743,18 @@ export class ApiPermissionAssignmentService {
         uniqueUsers,
         mostUsedPermissions,
         recentActivity: recentActivities.slice(0, 20) // Latest 20 activities
-      },
+  }
       breakdown: {
         byType: byType as Record<ApiPermissionType, number>,
         byAction: byAction as Record<ApiPermissionAction, number>,
         byScope: byScope as Record<ApiPermissionScope, number>
-      },
+  }
       security: {
         overPrivilegedUsers,
         unusedPermissions,
         expiringAssignments,
         suspiciousActivity
-      },
+  }
       recommendations
     };
   }
@@ -735,6 +764,7 @@ export class ApiPermissionAssignmentService {
   // =============================================================================
 
   private async initializeDatabaseSchema(): Promise<void> {
+
     const schemas = [
       `CREATE TABLE IF NOT EXISTS api_permissions (
         permission_id TEXT PRIMARY KEY,
@@ -784,6 +814,7 @@ export class ApiPermissionAssignmentService {
   }
 
   private async loadSystemPermissions(): Promise<void> {
+
     const systemPermissions = this.getSystemPermissions();
     
     for (const permissionData of systemPermissions) {
@@ -815,7 +846,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.CREATE,
         scope: ApiPermissionScope.GLOBAL,
         resource: 'api_keys'
-      },
+  }
       {
         name: 'View API Keys',
         description: 'Ability to view existing API keys',
@@ -823,7 +854,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.READ,
         scope: ApiPermissionScope.USER,
         resource: 'api_keys'
-      },
+  }
       {
         name: 'Update API Keys',
         description: 'Ability to update API key settings',
@@ -831,7 +862,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.UPDATE,
         scope: ApiPermissionScope.USER,
         resource: 'api_keys'
-      },
+  }
       {
         name: 'Delete API Keys',
         description: 'Ability to delete API keys',
@@ -839,7 +870,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.DELETE,
         scope: ApiPermissionScope.USER,
         resource: 'api_keys'
-      },
+  }
       {
         name: 'Revoke API Keys',
         description: 'Ability to revoke active API keys',
@@ -847,7 +878,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.REVOKE,
         scope: ApiPermissionScope.GLOBAL,
         resource: 'api_keys'
-      },
+  }
       {
         name: 'Rotate API Keys',
         description: 'Ability to rotate API keys',
@@ -855,8 +886,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.ROTATE,
         scope: ApiPermissionScope.USER,
         resource: 'api_keys'
-      },
-
+  }
       // Usage Control Permissions
       {
         name: 'Manage Usage Limits',
@@ -865,7 +895,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.MANAGE,
         scope: ApiPermissionScope.GLOBAL,
         resource: 'usage_limits'
-      },
+  }
       {
         name: 'View Usage Analytics',
         description: 'Ability to view usage statistics and analytics',
@@ -873,7 +903,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.READ,
         scope: ApiPermissionScope.ORGANIZATION,
         resource: 'usage_analytics'
-      },
+  }
       {
         name: 'Override Usage Limits',
         description: 'Ability to override usage limits in emergency situations',
@@ -881,8 +911,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.OVERRIDE,
         scope: ApiPermissionScope.GLOBAL,
         resource: 'usage_limits'
-      },
-
+  }
       // Rate Limiting Permissions
       {
         name: 'Configure Rate Limits',
@@ -891,8 +920,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.MANAGE,
         scope: ApiPermissionScope.GLOBAL,
         resource: 'rate_limits'
-      },
-
+  }
       // Monitoring Permissions
       {
         name: 'Monitor API Usage',
@@ -901,7 +929,7 @@ export class ApiPermissionAssignmentService {
         action: ApiPermissionAction.MONITOR,
         scope: ApiPermissionScope.ORGANIZATION,
         resource: 'api_monitoring'
-      },
+  }
       {
         name: 'Access API Logs',
         description: 'Ability to access detailed API access logs',
@@ -914,6 +942,7 @@ export class ApiPermissionAssignmentService {
   }
 
   private async loadSystemRoles(): Promise<void> {
+
     const systemRoles = this.getSystemRoles();
     
     for (const roleData of systemRoles) {
@@ -956,7 +985,7 @@ export class ApiPermissionAssignmentService {
           'sys_monitoring_read'
         ],
         scope: ApiPermissionScope.GLOBAL
-      },
+  }
       {
         name: 'API Manager',
         description: 'Manage API keys and usage for organization',
@@ -970,7 +999,7 @@ export class ApiPermissionAssignmentService {
           'sys_monitoring_monitor'
         ],
         scope: ApiPermissionScope.ORGANIZATION
-      },
+  }
       {
         name: 'API User',
         description: 'Basic API key management for own keys',
@@ -981,7 +1010,7 @@ export class ApiPermissionAssignmentService {
           'sys_usage_control_read'
         ],
         scope: ApiPermissionScope.USER
-      },
+  }
       {
         name: 'API Viewer',
         description: 'Read-only access to API information',
@@ -996,17 +1025,20 @@ export class ApiPermissionAssignmentService {
   }
 
   private async loadBuiltInTemplates(): Promise<void> {
+
     // Load built-in permission templates for common use cases
     console.log('📥 Loading built-in permission templates...');
   }
 
   private async loadExistingAssignments(): Promise<void> {
+
     // Load existing assignments from database
     console.log('📥 Loading existing permission assignments...');
   }
 
   // Validation methods
   private async validatePermission(permission: ApiPermission): Promise<void> {
+
     if (!permission.name || permission.name.trim().length === 0) {
       throw new Error('Permission name is required');
     }
@@ -1021,6 +1053,7 @@ export class ApiPermissionAssignmentService {
   }
 
   private async validateAssignment(assignment: ApiPermissionAssignment): Promise<void> {
+
     if (!assignment.userId) {
       throw new Error('User ID is required for assignment');
     }
@@ -1031,6 +1064,7 @@ export class ApiPermissionAssignmentService {
   }
 
   private async validateRole(role: ApiRole): Promise<void> {
+
     if (!role.name || role.name.trim().length === 0) {
       throw new Error('Role name is required');
     }
@@ -1066,6 +1100,7 @@ export class ApiPermissionAssignmentService {
     conditions: ApiPermissionCondition[],
     context: Record<string, any>
   ): Promise<{ passed: boolean; reason?: string; conditions: ApiPermissionCondition[] }> {
+
     if (!conditions || conditions.length === 0) {
       return { passed: true, conditions: [] };
     }
@@ -1077,6 +1112,7 @@ export class ApiPermissionAssignmentService {
 
   // Other helper methods...
   private async checkAssignmentConflicts(assignment: ApiPermissionAssignment): Promise<void> {
+
     // Check for conflicting assignments
   }
 
@@ -1086,10 +1122,12 @@ export class ApiPermissionAssignmentService {
   }
 
   private async syncPermissionWithRBAC(assignment: ApiPermissionAssignment, action: 'assign' | 'revoke'): Promise<void> {
+
     // Sync with main RBAC system if needed
   }
 
   private async invalidateUserPermissions(userId: string): Promise<void> {
+
     // Invalidate any cached permissions for user
   }
 
@@ -1115,11 +1153,13 @@ export class ApiPermissionAssignmentService {
   }
 
   private async identifyOverPrivilegedUsers(): Promise<string[]> {
+
     // Logic to identify users with excessive permissions
     return [];
   }
 
   private async identifyUnusedPermissions(timeRange: { start: Date; end: Date }): Promise<string[]> {
+
     // Logic to identify permissions that haven't been used
     return [];
   }
@@ -1139,6 +1179,7 @@ export class ApiPermissionAssignmentService {
   }
 
   private async generateRecommendations(data: any): Promise<PermissionRecommendation[]> {
+
     const recommendations: PermissionRecommendation[] = [];
     
     if (data.expiringAssignments.length > 0) {
@@ -1162,6 +1203,7 @@ export class ApiPermissionAssignmentService {
     resource: string,
     details: Record<string, any>
   ): Promise<void> {
+
     const activity: PermissionActivity = {
       activityId: `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       userId,
@@ -1183,19 +1225,23 @@ export class ApiPermissionAssignmentService {
 
   // Persistence methods (placeholder - would integrate with actual database)
   private async persistPermission(permission: ApiPermission): Promise<void> {
+
     console.log(`💾 Persisting API permission: ${permission.permissionId}`);
   }
 
   private async persistAssignment(assignment: ApiPermissionAssignment): Promise<void> {
+
     console.log(`💾 Persisting permission assignment: ${assignment.assignmentId}`);
   }
 
   private async persistRole(role: ApiRole): Promise<void> {
+
     console.log(`💾 Persisting API role: ${role.roleId}`);
   }
 
   // Public API methods
   async getPermissions(filters?: { type?: ApiPermissionType; scope?: ApiPermissionScope }): Promise<ApiPermission[]> {
+
     let permissions = Array.from(this.permissions.values());
     
     if (filters?.type) {
@@ -1210,6 +1256,7 @@ export class ApiPermissionAssignmentService {
   }
 
   async getRoles(filters?: { category?: string; scope?: ApiPermissionScope }): Promise<ApiRole[]> {
+
     let roles = Array.from(this.roles.values());
     
     if (filters?.category) {
@@ -1224,10 +1271,12 @@ export class ApiPermissionAssignmentService {
   }
 
   async getTemplates(): Promise<PermissionTemplate[]> {
+
     return Array.from(this.templates.values());
   }
 
   async getActivities(userId?: string, limit?: number): Promise<PermissionActivity[]> {
+
     let activities = [...this.activities];
     
     if (userId) {

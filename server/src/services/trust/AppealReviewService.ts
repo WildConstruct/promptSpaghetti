@@ -38,12 +38,14 @@ export type ReviewerExpertise =
 // Review Framework Interfaces
 // =============================================================================
 
+}
 export interface ReviewCriteria {
   factual_accuracy: {
     score: number; // 1-10
     notes: string;
     evidence_verification: boolean;
     fact_checking_complete: boolean;
+}
   };
   policy_compliance: {
     score: number; // 1-10
@@ -78,6 +80,7 @@ export interface ReviewCriteria {
   };
 }
 
+}
 export interface ReviewRecommendation {
   primary_decision: ReviewDecision;
   confidence_level: number; // 1-100
@@ -86,6 +89,7 @@ export interface ReviewRecommendation {
     supporting_evidence: string[];
     mitigating_circumstances: string[];
     aggravating_factors: string[];
+}
   };
   implementation: {
     immediate_actions: string[];
@@ -100,6 +104,7 @@ export interface ReviewRecommendation {
   };
 }
 
+}
 export interface ReviewWorkflow {
   review_id: string;
   appeal_id: string;
@@ -149,7 +154,9 @@ export interface ReviewWorkflow {
   internal_comments: string;
   public_summary: string;
 }
+}
 
+}
 export interface ReviewTemplate {
   template_id: string;
   name: string;
@@ -175,9 +182,12 @@ export interface ReviewTemplate {
   usage_count: number;
   last_updated: Date;
 }
+}
 
+}
 export interface ReviewQualityMetrics {
   reviewer_id: string;
+}
   time_period: { start: Date; end: Date };
   
   // Volume metrics
@@ -211,6 +221,7 @@ export interface ReviewQualityMetrics {
   certification_status: Record<ReviewerExpertise, 'certified' | 'provisional' | 'training'>;
 }
 
+}
 export interface PrecedentMatch {
   precedent_id: string;
   appeal_id: string;
@@ -230,6 +241,7 @@ export interface PrecedentMatch {
   policy_version_match: boolean;
   
   relevance_notes: string;
+}
 }
 
 // =============================================================================
@@ -266,6 +278,7 @@ export class AppealReviewService {
     reviewerId: string,
     templateId?: string
   ): Promise<string> {
+
     const appeal = await this.appealService.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
@@ -332,7 +345,7 @@ export class AppealReviewService {
         complexity,
         priority,
         estimated_hours: estimatedHours
-      },
+  }
       severity: 'info'
     });
 
@@ -343,6 +356,7 @@ export class AppealReviewService {
    * Get review workflow by ID
    */
   async getReviewWorkflow(reviewId: string): Promise<ReviewWorkflow | null> {
+
     const result = await this.db.query(`
       SELECT * FROM appeal_review_workflows WHERE review_id = $1
     `, [reviewId]);
@@ -376,6 +390,7 @@ export class AppealReviewService {
       internal_comments?: string;
     }
   ): Promise<void> {
+
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow) {
       throw new Error(`Review workflow not found: ${reviewId}`);
@@ -439,6 +454,7 @@ export class AppealReviewService {
    * Find similar precedent cases for an appeal
    */
   async findPrecedentCases(appealId: string, limit = 10): Promise<PrecedentMatch[]> {
+
     const appeal = await this.appealService.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
@@ -498,6 +514,7 @@ export class AppealReviewService {
    * Create precedent case from completed review
    */
   async createPrecedentCase(reviewId: string): Promise<string> {
+
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow || !workflow.final_decision) {
       throw new Error('Cannot create precedent from incomplete review');
@@ -548,6 +565,7 @@ export class AppealReviewService {
     reviewId: string,
     assessorId: string
   ): Promise<{ quality_score: number; quality_notes: string; improvement_suggestions: string[] }> {
+
     const workflow = await this.getReviewWorkflow(reviewId);
     if (!workflow) {
       throw new Error(`Review workflow not found: ${reviewId}`);
@@ -632,6 +650,7 @@ export class AppealReviewService {
     reviewerId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<ReviewQualityMetrics> {
+
     // Get basic statistics
     const statsResult = await this.db.query(`
       SELECT 
@@ -705,6 +724,7 @@ export class AppealReviewService {
   // =============================================================================
 
   private async storeReviewWorkflow(workflow: ReviewWorkflow): Promise<void> {
+
     await this.db.query(`
       INSERT INTO appeal_review_workflows (
         review_id, appeal_id, reviewer_id, reviewer_expertise, status, priority, complexity,
@@ -767,6 +787,7 @@ export class AppealReviewService {
   }
 
   private async assessReviewComplexity(appeal: Appeal): Promise<ReviewComplexity> {
+
     // Simple heuristics for complexity assessment
     let complexityScore = 0;
 
@@ -790,6 +811,7 @@ export class AppealReviewService {
   }
 
   private async determinePriority(appeal: Appeal): Promise<'routine' | 'expedited' | 'urgent' | 'critical'> {
+
     // Map appeal priority to review priority
     switch (appeal.priority) {
     case 'urgent': return 'critical';
@@ -828,6 +850,7 @@ export class AppealReviewService {
   }
 
   private async getReviewerExpertise(____reviewerId: string): Promise<ReviewerExpertise[]> {
+
     // Would query reviewer expertise from user/reviewer profile
     // For now, return default expertise
     return ['trust_scoring', 'policy_enforcement'];
@@ -855,6 +878,7 @@ export class AppealReviewService {
   }
 
   private async getReviewTemplate(____templateId: string): Promise<ReviewTemplate | null> {
+
     // Would implement template retrieval
     return null;
   }
@@ -863,6 +887,7 @@ export class AppealReviewService {
     appeal: Appeal, 
     precedentRow: unknown
   ): Promise<{ score: number; matchingFactors: string[]; differences: string[]; policyMatch: boolean; notes: string }> {
+
     let score = 0;
     const matchingFactors: string[] = [];
     const differences: string[] = [];

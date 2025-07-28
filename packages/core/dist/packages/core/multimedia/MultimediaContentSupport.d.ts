@@ -42,11 +42,11 @@ export interface MediaMetadata {
     description?: string;
     alt?: string;
     caption?: string;
-    tags: string[];
+    tags: string;
     author?: string;
     copyright?: string;
     exif?: Record<string, any>;
-    chapters?: MediaChapter[];
+    chapters?: MediaChapter;
     quality: 'low' | 'medium' | 'high' | 'original';
     encoding?: {
         codec: string;
@@ -66,7 +66,7 @@ export interface MediaChapter {
 export interface AccessibilityFeatures {
     altText: string;
     transcription?: string;
-    captions?: MediaCaption[];
+    captions?: MediaCaption;
     audioDescription?: string;
     signLanguage?: boolean;
     highContrast?: boolean;
@@ -92,8 +92,8 @@ export interface MediaCaption {
 export interface ProcessingStatus {
     status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
     progress: number;
-    stages: ProcessingStage[];
-    errors: string[];
+    stages: ProcessingStage;
+    errors: string;
     estimatedCompletion?: Date;
     processingTime?: number;
 }
@@ -121,7 +121,7 @@ export interface StorageInfo {
     };
     backup: {
         enabled: boolean;
-        locations: string[];
+        locations: string;
         lastBackup?: Date;
     };
 }
@@ -183,7 +183,7 @@ export interface MultimediaConfig {
     storage: {
         provider: 'local' | 'aws' | 'gcp' | 'azure';
         maxFileSize: number;
-        allowedTypes: string[];
+        allowedTypes: string;
         compressionEnabled: boolean;
     };
     processing: {
@@ -214,91 +214,13 @@ export declare class MultimediaContentSupport extends EventEmitter {
     private processingWorkers;
     private isProcessing;
     constructor(config?: Partial<MultimediaConfig>);
-    uploadAsset(file: File | Buffer, metadata?: Partial<MediaMetadata>, options?: MediaProcessingOptions): Promise<string>;
-    processAsset(assetId: string, options?: MediaProcessingOptions): Promise<void>;
-    getAsset(assetId: string): MediaAsset | null;
-    listAssets(filters?: {
-        type?: MediaAsset['type'];
-        tags?: string[];
-        dateRange?: {
-            start: Date;
-            end: Date;
-        };
-        status?: ProcessingStatus['status'];
-    }): MediaAsset[];
-    updateAsset(assetId: string, updates: Partial<MediaAsset>): Promise<void>;
-    deleteAsset(assetId: string): Promise<boolean>;
-    getOptimizedUrl(assetId: string, options?: {
-        quality?: 'low' | 'medium' | 'high';
-        format?: string;
-        size?: {
-            width?: number;
-            height?: number;
-        };
-    }): string;
-    getProcessingStatus(assetId: string): ProcessingStatus | null;
-    generateThumbnail(assetId: string, options?: {
-        size?: {
-            width: number;
-            height: number;
-        };
-        timestamp?: number;
-    }): Promise<string>;
-    batchProcess(assetIds: string[], options?: MediaProcessingOptions): Promise<void>;
-    batchDelete(assetIds: string[]): Promise<boolean[]>;
-    getUsageMetrics(): {
-        totalAssets: number;
-        totalSize: number;
-        assetsByType: Record<string, number>;
-        processingStats: {
-            pending: number;
-            processing: number;
-            completed: number;
-            failed: number;
-        };
-        storageUsage: {
-            used: number;
-            available: number;
-            efficiency: number;
-        };
+    compression: {
+        enabled: this;
     };
-    updateConfig(config: Partial<MultimediaConfig>): void;
-    destroy(): void;
-    private validateFile;
-    private getMediaType;
-    private generateDefaultAccessibility;
-    private generateProcessingStages;
-    private uploadFile;
-    private processImage;
-    private processVideo;
-    private processAudio;
-    private processDocument;
-    private processInteractive;
-    private generateAccessibilityFeatures;
-    private updateProcessingStage;
-    private generateImageThumbnail;
-    private generateVideoThumbnail;
-    private generateDocumentThumbnail;
-    private deleteFromStorage;
-    private getQualityValue;
-    private calculateStorageEfficiency;
-    private initializeProcessingWorkers;
-    private startProcessing;
-    private stopProcessing;
-    private processQueue;
-    private terminateWorkers;
-    private getBaseUrl;
-    private delay;
+    config: MultimediaConfig;
+    storage: any;
+    compressionEnabled: any;
+    algorithm: 'gzip';
+    ratio: 1;
 }
-export declare class MultimediaComponentFactory {
-    static createImageViewer(assetId: string): React.ComponentType<any>;
-    static createVideoPlayer(assetId: string): React.ComponentType<any>;
-    static createAudioPlayer(assetId: string): React.ComponentType<any>;
-    static createDocumentViewer(assetId: string): React.ComponentType<any>;
-}
-declare const _default: {
-    MultimediaContentSupport: typeof MultimediaContentSupport;
-    MultimediaComponentFactory: typeof MultimediaComponentFactory;
-};
-export default _default;
 //# sourceMappingURL=MultimediaContentSupport.d.ts.map

@@ -14,7 +14,7 @@ export declare enum AlertSeverity {
     MEDIUM = "medium",// < 1 hour response
     LOW = "low",// < 4 hours response
     INFO = "info"
-}
+
 export declare enum AlertState {
     TRIGGERED = "triggered",
     ACKNOWLEDGED = "acknowledged",
@@ -22,7 +22,7 @@ export declare enum AlertState {
     RESOLVED = "resolved",
     CLOSED = "closed",
     SUPPRESSED = "suppressed"
-}
+
 export declare enum AlertChannel {
     EMAIL = "email",
     SMS = "sms",
@@ -30,7 +30,7 @@ export declare enum AlertChannel {
     WEBHOOK = "webhook",
     PAGERDUTY = "pagerduty",
     TEAMS = "teams"
-}
+
 export interface SecurityAlert {
     id: string;
     timestamp: Date;
@@ -89,7 +89,7 @@ export interface SecurityAlert {
         processingTime: number;
         checksum: string;
     };
-}
+
 export interface AlertRule {
     id: string;
     name: string;
@@ -102,7 +102,7 @@ export interface AlertRule {
     escalationPolicy: EscalationPolicy;
     automatedActions: AutomatedAction[];
     compliance: ComplianceFramework[];
-}
+
 export interface AlertCondition {
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'contains' | 'matches';
@@ -112,14 +112,14 @@ export interface AlertCondition {
         timeWindow: number;
         groupBy?: string;
     };
-}
+
 export interface SuppressionRule {
     id: string;
     description: string;
     conditions: AlertCondition[];
     suppressionWindow: number;
     maxSuppressions?: number;
-}
+
 export interface EscalationPolicy {
     id: string;
     name: string;
@@ -127,7 +127,7 @@ export interface EscalationPolicy {
     requiresAcknowledgment: boolean;
     autoResolve: boolean;
     escalationTimeout: number;
-}
+
 export interface EscalationStep {
     level: number;
     delay: number;
@@ -135,7 +135,7 @@ export interface EscalationStep {
     channels: AlertChannel[];
     actions: string[];
     continueOnFailure: boolean;
-}
+
 export interface NotificationRecipient {
     type: 'user' | 'team' | 'role';
     identifier: string;
@@ -144,7 +144,7 @@ export interface NotificationRecipient {
         address: string;
         priority: number;
     }>;
-}
+
 export interface AutomatedAction {
     id: string;
     name: string;
@@ -157,7 +157,7 @@ export interface AutomatedAction {
     cooldownPeriod: number;
     requiresApproval: boolean;
     approvers?: string[];
-}
+
 export interface WorkflowExecution {
     alertId: string;
     workflowId: string;
@@ -170,7 +170,7 @@ export interface WorkflowExecution {
         stack: string;
         step: string;
     };
-}
+
 export interface WorkflowStep {
     id: string;
     name: string;
@@ -180,7 +180,6 @@ export interface WorkflowStep {
     endTime?: Date;
     result?: any;
     error?: string;
-}
 /**
  * Advanced security alerting workflow engine
  */
@@ -320,10 +319,10 @@ export declare class SecurityAlertingWorkflow extends EventEmitter {
     private executeNextEscalation;
     private cleanupOldAlerts;
     private setupAnalyticsIntegration;
-}
-export declare function createSecurityAlertingWorkflow()
-  analytics: SecurityEventAnalytics,
-  securityLogger: SecurityLogger,
-): SecurityAlertingWorkflow;
+
+export declare function createSecurityAlertingWorkflow(()
+    analytics: SecurityEventAnalytics,
+    securityLogger: SecurityLogger,
+  ): SecurityAlertingWorkflow;
 export default SecurityAlertingWorkflow;
 //# sourceMappingURL=SecurityAlertingWorkflow.d.ts.map

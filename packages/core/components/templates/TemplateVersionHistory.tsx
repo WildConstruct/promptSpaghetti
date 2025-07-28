@@ -27,13 +27,11 @@ interface TemplateVersionHistoryProps {
   onVersionRestore?: (version: TemplateVersion) => void;
   onVersionExport?: (version: TemplateVersion) => void;
   className?: string;
-}
 interface VersionNode {
-  version: TemplateVersion;
+  version: TemplateVersion;,
   level: number;
-  isLast: boolean;
+  isLast: boolean;,
   hasBranches: boolean;
-}
 
 export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ _____templateId, onVersionSelect }) => {
   const [selectedVersions, setSelectedVersions] = useState<Set<string>>(new Set());
@@ -46,89 +44,86 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
     loadVersionHistory();
   }, [template.id]);
   const loadVersionHistory = async () => {
-    setLoading(true);
-    try {
-      // Mock version history - in real implementation, would call TemplateVersionManager
-      const mockVersions: TemplateVersion[] = [
+  setLoading(true);
+  try {
+  // Mock version history - in real implementation, would call TemplateVersionManager
+  const mockVersions: TemplateVersion = [
+  {
+  id: 'v-1',
+  template_id: template.id,
+  version_number: '2.1.0',
+  title: 'Major UI improvements',
+  description: 'Added new node types and improved user interface',
+  changelog: '- Added ConditionalNode\n- Improved styling\n- Bug fixes',
+  branch_name: 'main',
+  commit_hash: 'abc123',
+  api_version: '2.0.0',
+  compatibility_level: 'minor',
+  migration_required: false,
+  created_by: 'user-1',
+  created_at: '2024-01-15T10:30:00Z',
+  published_at: '2024-01-15T11:00:00Z',
+  status: 'published',
+  visibility: 'public',
+  download_count: 142,
+  usage_count: 89,
+  rating: 4.7,
+  dependencies: [],
+  conflicts: [],
+  template_data: template,
+}
         {
-          id: 'v-1',
-          template_id: template.id,
-          version_number: '2.1.0',
-          title: 'Major UI improvements',
-          description: 'Added new node types and improved user interface',
-          changelog: '- Added ConditionalNode\n- Improved styling\n- Bug fixes',
-          branch_name: 'main',
-          commit_hash: 'abc123',
-          api_version: '2.0.0',
-          compatibility_level: 'minor',
-          migration_required: false,
-          created_by: 'user-1',
-          created_at: '2024-01-15T10:30:00Z',
-          published_at: '2024-01-15T11:00:00Z',
-          status: 'published',
-          visibility: 'public',
-          download_count: 142,
-          usage_count: 89,
-          rating: 4.7,
-          dependencies: [],
-          conflicts: [],
-          template_data: template,
-        },
+  id: 'v-2',
+  template_id: template.id,
+  version_number: '2.0.0',
+  title: 'Major refactor',
+  description: 'Complete rewrite with new architecture',
+  changelog: '- Breaking changes\n- New API\n- Performance improvements',
+  branch_name: 'main',
+  commit_hash: 'def456',
+  api_version: '2.0.0',
+  compatibility_level: 'major',
+  migration_required: true,
+  created_by: 'user-1',
+  created_at: '2024-01-10T14:20:00Z',
+  published_at: '2024-01-10T15:00:00Z',
+  status: 'published',
+  visibility: 'public',
+  download_count: 89,
+  usage_count: 156,
+  rating: 4.5,
+  dependencies: [],
+  conflicts: [],
+  template_data: template,
+}
         {
-          id: 'v-2',
-          template_id: template.id,
-          version_number: '2.0.0',
-          title: 'Major refactor',
-          description: 'Complete rewrite with new architecture',
-          changelog: '- Breaking changes\n- New API\n- Performance improvements',
-          branch_name: 'main',
-          commit_hash: 'def456',
-          api_version: '2.0.0',
-          compatibility_level: 'major',
-          migration_required: true,
-          created_by: 'user-1',
-          created_at: '2024-01-10T14:20:00Z',
-          published_at: '2024-01-10T15:00:00Z',
-          status: 'published',
-          visibility: 'public',
-          download_count: 89,
-          usage_count: 156,
-          rating: 4.5,
-          dependencies: [],
-          conflicts: [],
-          template_data: template,
-        },
-        {
-          id: 'v-3',
-          template_id: template.id,
-          version_number: '1.9.1',
-          title: 'Hotfix release',
-          description: 'Critical bug fixes',
-          changelog: '- Fixed memory leak\n- Improved error handling',
-          branch_name: 'hotfix-1.9.1',
-          commit_hash: 'ghi789',
-          api_version: '1.9.0',
-          compatibility_level: 'patch',
-          migration_required: false,
-          created_by: 'user-2',
-          created_at: '2024-01-08T09:15:00Z',
-          published_at: '2024-01-08T09:30:00Z',
-          status: 'published',
-          visibility: 'public',
-          download_count: 67,
-          usage_count: 234,
-          rating: 4.3,
-          dependencies: [],
-          conflicts: [],
-          template_data: template,
-        }
-      ];
-      setVersions(mockVersions);
-    } catch (error) {
-      console.error('Failed to load version history:', error);
-    } finally {
+  id: 'v-3',
+  template_id: template.id,
+  version_number: '1.9.1',
+  title: 'Hotfix release',
+  description: 'Critical bug fixes',
+  changelog: '- Fixed memory leak\n- Improved error handling',
+  branch_name: 'hotfix-1.9.1',
+  commit_hash: 'ghi789',
+  api_version: '1.9.0',
+  compatibility_level: 'patch',
+  migration_required: false,
+  created_by: 'user-2',
+  created_at: '2024-01-08T09:15:00Z',
+  published_at: '2024-01-08T09:30:00Z',
+  status: 'published',
+  visibility: 'public',
+  download_count: 67,
+  usage_count: 234,
+  rating: 4.3,
+  dependencies: [],
+  conflicts: [],
+  template_data: template];
+  setVersions(mockVersions);
+} catch (error) {
+  console.error('Failed to load version history:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleVersionSelect = (version: TemplateVersion, isMultiSelect: boolean) => {
     if (isMultiSelect) {
@@ -137,27 +132,24 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
         newSelection.delete(version.id);
       } else {
         newSelection.add(version.id);
-      }
       setSelectedVersions(newSelection);
     } else {
       setSelectedVersions(new Set([version.id]));
       onVersionSelect?.(version);
-    }
   };
   const handleCompareVersions = async () => {
     const selectedArray = Array.from(selectedVersions);
     if (selectedArray.length !== 2) {
       alert('Please select exactly 2 versions to compare');
       return;
-    }
     setLoading(true);
     try {
       // Mock comparison - in real implementation, would call TemplateVersionManager
-      const mockComparison: VersionComparisonResult = {
-        from_version: versions.find(v => v.id === selectedArray[0])!,
+      const mockComparison: VersionComparisonResult = {,
+  from_version: versions.find(v => v.id === selectedArray[0])!,
         to_version: versions.find(v => v.id === selectedArray[1])!,
         diff: {,
-          metadata_changes: [,
+  metadata_changes: [,
             { field: 'name', old_value: 'Old Name', new_value: 'New Name', change_type: 'modified' }
           ],
           variable_changes: [,
@@ -165,59 +157,55 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           ],
           customization_changes: [],
           graph_changes: {,
-            nodes_added: 2,
-            nodes_removed: 1,
-            nodes_modified: 3,
-            edges_added: 1,
-            edges_removed: 0,
-            edges_modified: 2,
-          }
-        },
-        compatibility: {,
-          breaking_changes: false,
-          api_changes: true,
-          schema_changes: false,
-          dependency_changes: true,
-        },
-        migration_required: false,
+  nodes_added: 2,
+  nodes_removed: 1,
+  nodes_modified: 3,
+  edges_added: 1,
+  edges_removed: 0,
+  edges_modified: 2,
+},
+  compatibility: {,
+  breaking_changes: false,
+  api_changes: true,
+  schema_changes: false,
+  dependency_changes: true,
+},
+  migration_required: false,
         migration_complexity: 'simple',
-        estimated_migration_time: 5,
-      };
+        estimated_migration_time: 5;
+  };
       setComparisonResult(mockComparison);
       setShowComparison(true);
     } catch (error) {
-      console.error('Failed to compare versions:', error);
-    } finally {
+  console.error('Failed to compare versions:', error);
+} finally {
       setLoading(false);
-    }
   };
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'published': return 'text-green-600 bg-green-100';
-    case 'draft': return 'text-yellow-600 bg-yellow-100';
-    case 'deprecated': return 'text-red-600 bg-red-100';
-    case 'archived': return 'text-gray-600 bg-gray-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'published': return 'text-green-600 bg-green-100';
+  case 'draft': return 'text-yellow-600 bg-yellow-100';
+  case 'deprecated': return 'text-red-600 bg-red-100';
+  case 'archived': return 'text-gray-600 bg-gray-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getCompatibilityColor = (level: string) => {
-    switch (level) {
-    case 'patch': return 'text-green-600';
-    case 'minor': return 'text-yellow-600';
-    case 'major': return 'text-red-600';
-    default: return 'text-gray-600';
-    }
-  };
+  switch (level) {
+  case 'patch': return 'text-green-600';
+  case 'minor': return 'text-yellow-600';
+  case 'major': return 'text-red-600';
+  default: return 'text-gray-600';
+};
   const renderTimelineView = () => (;);
     <div className="space-y-4">
       {versions.map((version, index) => ()
         <div
           key={version.id}
           className={`relative flex items-start space-x-4 p-4 rounded-lg border-2 transition-colors cursor-pointer ${
-            selectedVersions.has(version.id)
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 bg-white hover:border-gray-300'
-          }`}
+  selectedVersions.has(version.id)
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 bg-white hover:border-gray-300',
+}`}
           onClick={(e) => handleVersionSelect(version, e.metaKey || e.ctrlKey)}
         >
           {/* Timeline connector */}
@@ -226,8 +214,8 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
           )}
           {/* Version indicator */}
           <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-            version.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'
-          }`}>
+  version.status === 'published' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600',
+}`}>
             <FiTag className="w-4 h-4" />
           </div>
           {/* Version info */}
@@ -333,7 +321,6 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                     setSelectedVersions(new Set(versions.map(v => v.id)));
                   } else {
                     setSelectedVersions(new Set());
-                  }
                 }}
               />
             </th>
@@ -365,8 +352,8 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
             <tr
               key={version.id}
               className={`hover:bg-gray-50 cursor-pointer ${
-                selectedVersions.has(version.id) ? 'bg-blue-50' : ''
-              }`}
+  selectedVersions.has(version.id) ? 'bg-blue-50' : '',
+}`}
               onClick={(e) => handleVersionSelect(version, e.metaKey || e.ctrlKey)}
             >
               <td className="px-3 py-4 whitespace-nowrap">
@@ -441,7 +428,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
   );
   const renderComparisonModal = () => {
     if (!showComparison || !comparisonResult) return null;
-    return ();
+    return;
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -483,28 +470,24 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                     {comparisonResult.compatibility.breaking_changes ? 
                       <FiX className="w-4 h-4 text-red-500 mr-2" /> :
                       <FiCheck className="w-4 h-4 text-green-500 mr-2" />
-                    }
                     <span>Breaking changes</span>
                   </div>
                   <div className="flex items-center">
                     {comparisonResult.compatibility.api_changes ? 
                       <FiX className="w-4 h-4 text-yellow-500 mr-2" /> :
                       <FiCheck className="w-4 h-4 text-green-500 mr-2" />
-                    }
                     <span>API changes</span>
                   </div>
                   <div className="flex items-center">
                     {comparisonResult.compatibility.schema_changes ? 
                       <FiX className="w-4 h-4 text-yellow-500 mr-2" /> :
                       <FiCheck className="w-4 h-4 text-green-500 mr-2" />
-                    }
                     <span>Schema changes</span>
                   </div>
                   <div className="flex items-center">
                     {comparisonResult.compatibility.dependency_changes ? 
                       <FiX className="w-4 h-4 text-yellow-500 mr-2" /> :
                       <FiCheck className="w-4 h-4 text-green-500 mr-2" />
-                    }
                     <span>Dependency changes</span>
                   </div>
                 </div>
@@ -553,7 +536,7 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
       </div>
     );
   };
-  return ();
+  return;
     <div className={`template-version-history ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Version History</h2>
@@ -565,10 +548,10 @@ export const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps> = ({ 
                 key={mode}
                 onClick={() => setViewMode(mode as any)}
                 className={`px-3 py-1 text-sm font-medium transition-colors first:rounded-l-lg last:rounded-r-lg ${
-                  viewMode === mode
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
+  viewMode === mode
+  ? 'bg-blue-600 text-white'
+  : 'text-gray-600 hover:text-gray-800',
+}`}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}
               </button>

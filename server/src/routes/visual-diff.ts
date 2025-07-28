@@ -69,8 +69,8 @@ const visualDiffRoutes: FastifyPluginAsync = async (fastify) => {
             duration_ms: z.number(),
             similarity_score: z.number(),
             changes_count: z.number()
-          })
-        })
+  }
+  }
       }
     }
   }, async (request, reply) => {
@@ -142,7 +142,7 @@ const visualDiffRoutes: FastifyPluginAsync = async (fastify) => {
           success: z.boolean(),
           data: z.record(z.unknown()),
           session_id: z.string().uuid()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -368,7 +368,7 @@ const visualDiffRoutes: FastifyPluginAsync = async (fastify) => {
         source_version_id: z.string().uuid(),
         target_version_id: z.string().uuid(),
         comparison_type: z.enum(['structural', 'semantic', 'visual']).optional().default('structural')
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -417,7 +417,7 @@ const visualDiffRoutes: FastifyPluginAsync = async (fastify) => {
           target_version_id: z.string().uuid(),
           comparison_type: z.enum(['structural', 'semantic', 'visual']).optional().default('structural')
         })).max(10) // Limit batch size
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -429,7 +429,7 @@ const visualDiffRoutes: FastifyPluginAsync = async (fastify) => {
             comparison_type: comp.comparison_type,
             include_details: false
           }, request.user.id)
-        )
+
       );
 
       const successful = results

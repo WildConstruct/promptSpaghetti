@@ -18,7 +18,6 @@ export interface ErrorStateProps {
   variant?: 'default' | 'minimal' | 'detailed';
   className?: string;
 }
-
 export const ErrorState: React.FC<ErrorStateProps> = ({)
   error,
   title = 'Something went wrong',
@@ -31,10 +30,10 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
 }) => {
   const errorMessage = error instanceof Error ? error.message : error;
   const getDescription = () => {
-    if (description) return description;
-    if (errorMessage) return errorMessage;
-    return 'An unexpected error occurred while loading the dashboard.';
-  };
+  if (description) return description;
+  if (errorMessage) return errorMessage;
+  return 'An unexpected error occurred while loading the dashboard.';
+};
   const renderMinimal = () => (;);
     <div className={`error-state minimal ${className}`}>}
       <div className="error-content">
@@ -110,13 +109,12 @@ export const ErrorState: React.FC<ErrorStateProps> = ({)
     </div>
   );
   switch (variant) {
-    case 'minimal':
-      return renderMinimal();
-    case 'detailed':
-      return renderDetailed();
-    default:
-      return renderDefault();
-  }
+  case 'minimal':,
+  return renderMinimal();
+  case 'detailed':,
+  return renderDetailed();
+  default:,
+  return renderDefault();
 };
 
 export default ErrorState;

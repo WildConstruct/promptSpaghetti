@@ -1,26 +1,27 @@
 import { useMemo } from 'react';
 import { NodeMeta } from '../Palette';
+
 interface UseNodeUtilsProps {
-  nodeTypes: NodeMeta[];
-}
+  nodeTypes: NodeMeta;
+
+
 interface UseNodeUtilsReturn {
-  getNodeMeta: (nodeType: string) => NodeMeta;
+  getNodeMeta: (nodeType: string) => NodeMeta;,
   getCategoryColor: (category: string) => string;
-}
 
 export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsReturn => {
   const getNodeMeta = useMemo(() => {
-    return (nodeType: string): NodeMeta => {
-      // Handle undefined/null/invalid types
-      if (!nodeType || typeof nodeType !== 'string') {
-        return { 
-          id: 'default', 
-          label: 'Unknown', 
-          icon: '🔧', 
-          category: 'unknown',
-          tooltip: 'Unknown node type',
-        };
-      }
+  return (nodeType: string): NodeMeta => {,
+  // Handle undefined/null/invalid types
+  if (!nodeType || typeof nodeType !== 'string') {
+  return {
+  id: 'default',
+  label: 'Unknown',
+  icon: '🔧',
+  category: 'unknown',
+  tooltip: 'Unknown node type',
+};
+
       return nodeTypes.find(n => n.id === nodeType) || { 
         id: nodeType, 
         label: nodeType.charAt(0).toUpperCase() + nodeType.slice(1), 
@@ -31,15 +32,14 @@ export const useNodeUtils = ({ nodeTypes }: UseNodeUtilsProps): UseNodeUtilsRetu
     };
   }, [nodeTypes]);
   const getCategoryColor = useMemo(() => {
-    return (category: string): string => {
-      switch (category) {
-      case 'text': return '#4f46e5'; // Indigo
-      case 'logic': return '#059669'; // Emerald  
-      case 'output': return '#dc2626'; // Red
-      case 'variable': return '#7c3aed'; // Violet
-      default: return '#6b7280'; // Gray
-      }
-    };
+  return (category: string): string => {,
+  switch (category) {
+  case 'text': return '#4f46e5'; // Indigo,
+  case 'logic': return '#059669'; // Emerald,
+  case 'output': return '#dc2626'; // Red,
+  case 'variable': return '#7c3aed'; // Violet,
+  default: return '#6b7280'; // Gray,
+};
   }, []);
   return {
     getNodeMeta,

@@ -12,6 +12,7 @@ import { AuthenticationService } from '../services/AuthenticationService';
 import { ApiKeyManagementService } from '../services/ApiKeyManagementService';
 import { WebhookAuthenticationService } from '../services/WebhookAuthenticationService';
 
+}
 export interface AuthContext {
   authenticated: boolean;
   method: 'jwt' | 'api_key' | 'oauth' | 'webhook' | 'none';
@@ -20,6 +21,7 @@ export interface AuthContext {
     keyId: string;
     scopes: string[];
     rateLimitStatus: any;
+}
   };
   webhook?: {
     providerId: string;
@@ -39,6 +41,7 @@ export interface AuthContext {
   };
 }
 
+}
 export interface AuthOptions {
   required?: boolean;
   allowMethods?: Array<'jwt' | 'api_key' | 'oauth' | 'webhook'>;
@@ -46,6 +49,7 @@ export interface AuthOptions {
   requiredPermissions?: string[];
   allowWebhookProviders?: string[];
   bypassForPaths?: string[];
+}
 }
 
 export class UnifiedAuthenticationMiddleware {
@@ -148,6 +152,7 @@ export class UnifiedAuthenticationMiddleware {
     request: FastifyRequest, 
     options: { allowMethods: string[]; allowWebhookProviders: string[] }
   ): Promise<AuthContext> {
+
     const { allowMethods, allowWebhookProviders } = options;
     
     // Try JWT authentication
@@ -190,6 +195,7 @@ export class UnifiedAuthenticationMiddleware {
    * Try JWT authentication
    */
   private async tryJWTAuthentication(request: FastifyRequest): Promise<AuthContext> {
+
     try {
       const authHeader = request.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -219,6 +225,7 @@ export class UnifiedAuthenticationMiddleware {
    * Try API key authentication
    */
   private async tryApiKeyAuthentication(request: FastifyRequest): Promise<AuthContext> {
+
     try {
       // Check for API key in header
       const apiKey = request.headers['x-api-key'] as string ||
@@ -244,7 +251,7 @@ export class UnifiedAuthenticationMiddleware {
             keyId: validation.keyId,
             scopes: validation.scopes || [],
             rateLimitStatus: validation.rateLimitStatus
-          },
+  }
           permissions: validation.scopes || [],
           metadata: this.createMetadata(request, 'api_key')
         };
@@ -260,6 +267,7 @@ export class UnifiedAuthenticationMiddleware {
    * Try OAuth authentication
    */
   private async tryOAuthAuthentication(request: FastifyRequest): Promise<AuthContext> {
+
     try {
       // Check for OAuth access token
       const oauthToken = request.headers['x-oauth-token'] as string ||
@@ -277,7 +285,7 @@ export class UnifiedAuthenticationMiddleware {
         oauth: {
           provider: 'unknown', // Would be determined from token
           token: oauthToken
-        },
+  }
         permissions: ['oauth:authenticated'],
         metadata: this.createMetadata(request, 'oauth')
       };
@@ -295,6 +303,7 @@ export class UnifiedAuthenticationMiddleware {
     request: FastifyRequest, 
     allowWebhookProviders: string[]
   ): Promise<AuthContext> {
+
     try {
       // Extract provider ID from path or headers
       const providerId = this.extractWebhookProvider(request, allowWebhookProviders);
@@ -316,7 +325,7 @@ export class UnifiedAuthenticationMiddleware {
             providerId,
             eventType: validation.eventType,
             validation
-          },
+  }
           permissions: [`webhook:${providerId}`],
           metadata: this.createMetadata(request, 'webhook')
         };
@@ -469,9 +478,11 @@ declare module 'fastify' {
     requireWebhook: (providers: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     requireJWT: (permissions?: string[]) => (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
     unifiedAuth: UnifiedAuthenticationMiddleware;
+}
   }
 
   interface FastifyRequest {
     authContext?: AuthContext;
+}
   }
 }

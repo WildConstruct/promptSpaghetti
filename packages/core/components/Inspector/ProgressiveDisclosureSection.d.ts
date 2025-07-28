@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { type FieldPriority } from '../VisualHierarchy/HierarchyDesignSystem';
+
 export interface ProgressiveDisclosureSectionProps {
     title: string;
     level: 'basic' | 'advanced' | 'debug';
@@ -10,7 +11,8 @@ export interface ProgressiveDisclosureSectionProps {
     className?: string;
     priority?: FieldPriority;
     fieldName?: string;
-}
+
+
 /**
  * Epic 8.4 - Progressive Disclosure Section Component
  *

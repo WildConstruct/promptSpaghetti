@@ -18,7 +18,6 @@ interface PromotionSlot {
     };
     traffic_allocation: number;
     priority: number;
-}
 interface PromotionPreviewData {
     schedule: {,
         id: string;
@@ -60,7 +59,7 @@ interface PromotionPreviewData {
             content_ids: string[];
         }>;
     };
-}
+
 export interface PromotionPreviewProps {
     promotionData?: PromotionPreviewData;
     onUpdateRotation?: (config: unknown) => void;
@@ -68,7 +67,7 @@ export interface PromotionPreviewProps {
     onStopPreview?: () => void;
     isLive?: boolean;
     className?: string;
-}
+
 export declare const PromotionPreview: React.FC<PromotionPreviewProps>;
 export default PromotionPreview;
 //# sourceMappingURL=PromotionPreview.d.ts.map

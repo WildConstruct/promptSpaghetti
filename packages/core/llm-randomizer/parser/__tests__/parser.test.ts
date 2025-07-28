@@ -50,12 +50,12 @@ node1 -> node2
       expect(arrowTokens[0].value).toBe('->');
     });
     test('should handle indentation correctly', () => {
-      const content = `node1:;
+      const content = `node1:;,;
   type: WeightedChoice,
   props:
     choices:
-      - value: "test"
-        weight: 1`;
+      - value: "test",
+  weight: 1`;
       const lexer = new GraphLexer(content);
       const { tokens, errors } = lexer.tokenize();
       expect(errors).toHaveLength(0);
@@ -73,8 +73,8 @@ invalid@character: value
   });
   describe('ASTBuilder', () => {
     test('should build AST from valid tokens', () => {
-      const content = `version: 1.0.0;
-metadata:
+      const content = `version: 1.0.0;,;
+  metadata:
   name: "Test Graph",
 ---NODES---
 test_node:
@@ -98,10 +98,10 @@ choice_node:
   type: WeightedChoice,
   props:
     choices:
-      - value: "Option A"
-        weight: 0.6,
-      - value: "Option B"
-        weight: 0.4,
+      - value: "Option A",
+  weight: 0.6,
+      - value: "Option B",
+  weight: 0.4,
   inputs: [input1, input2]
 ---END---`;
       const lexer = new GraphLexer(content);
@@ -162,22 +162,19 @@ invalid_structure
             id: 'choice1',
             nodeType: 'WeightedChoice',
             properties: {,
-              choices: [,
+  choices: [,
                 { value: 'Option A', weight: 0.6 },
                 { value: 'Option B', weight: 0.4 }
               ]
-            }
-          },
+  }
           {
             type: 'NodeDefinition' as const,
             position: { line: 6, column: 1, offset: 50 },
             id: 'output1',
             nodeType: 'Output',
-            inputs: ['choice1'],
-          }
-        ],
-        edges: [],
-      };
+            inputs: ['choice1']],
+        edges: [];
+  };
       const analyzer = new SemanticAnalyzer();
       const { graph, errors, warnings } = analyzer.analyze(ast);
       expect(graph).toBeTruthy();
@@ -194,17 +191,15 @@ invalid_structure
             type: 'NodeDefinition' as const,
             position: { line: 2, column: 1, offset: 10 },
             id: 'duplicate',
-            nodeType: 'Output',
-          },
+            nodeType: 'Output';
+  }
           {
             type: 'NodeDefinition' as const,
             position: { line: 4, column: 1, offset: 30 },
             id: 'duplicate',
-            nodeType: 'Concat',
-          }
-        ],
-        edges: [],
-      };
+            nodeType: 'Concat'],
+        edges: [];
+  };
       const analyzer = new SemanticAnalyzer();
       const { graph, errors } = analyzer.analyze(ast);
       expect(graph).toBeNull();
@@ -221,11 +216,9 @@ invalid_structure
             position: { line: 2, column: 1, offset: 10 },
             id: 'node1',
             nodeType: 'Concat',
-            inputs: ['nonexistent'],
-          }
-        ],
-        edges: [],
-      };
+            inputs: ['nonexistent']],
+        edges: [];
+  };
       const analyzer = new SemanticAnalyzer();
       const { graph, errors } = analyzer.analyze(ast);
       expect(graph).toBeNull();
@@ -242,18 +235,16 @@ invalid_structure
             position: { line: 2, column: 1, offset: 10 },
             id: 'node1',
             nodeType: 'Concat',
-            inputs: ['node2'],
-          },
+            inputs: ['node2'];
+  }
           {
             type: 'NodeDefinition' as const,
             position: { line: 4, column: 1, offset: 30 },
             id: 'node2',
             nodeType: 'Concat',
-            inputs: ['node1'],
-          }
-        ],
-        edges: [],
-      };
+            inputs: ['node1']],
+        edges: [];
+  };
       const analyzer = new SemanticAnalyzer();
       const { graph, errors } = analyzer.analyze(ast);
       expect(graph).toBeNull();
@@ -271,10 +262,9 @@ invalid_structure
             id: 'choice1',
             nodeType: 'WeightedChoice',
             // Missing choices property
-          }
         ],
-        edges: [],
-      };
+        edges: [];
+  };
       const analyzer = new SemanticAnalyzer();
       const { graph, errors } = analyzer.analyze(ast);
       expect(graph).toBeNull();
@@ -282,159 +272,159 @@ invalid_structure
     });
   });
   describe('GraphParser Integration', () => {
-    test('should parse complete valid graph', async () => {
-      const content = `version: 1.0.0;
-metadata:
+  test('should parse complete valid graph', async () => {
+  const content = `version: 1.0.0;,;
+  metadata:,
   name: "Test Graph",
   description: "Integration test graph",
   author: "test",
----NODES---
-greeting_choice:
+  ---NODES---
+  greeting_choice:,
   type: WeightedChoice,
-  props:
-    choices:
-      - value: "Hello"
-        weight: 0.6,
-      - value: "Hi"
-        weight: 0.4,
-name_var:
+  props:,
+  choices:,
+  - value: "Hello",
+  weight: 0.6,
+  - value: "Hi",
+  weight: 0.4,
+  name_var:,
   type: GetVariable,
-  props:
-    key: "user_name",
-greeting_concat:
+  props:,
+  key: "user_name",
+  greeting_concat:,
   type: Concat,
-  inputs: [greeting_choice, name_var]
-final_output:
+  inputs: [greeting_choice, name_var],
+  final_output:,
   type: Output,
   inputs: [greeting_concat],
----EDGES---
-greeting_choice -> greeting_concat
-name_var -> greeting_concat
-greeting_concat -> final_output
----END---`;
-      const result = await parseGraph(content);
-      expect(result.success).toBe(true);
-      expect(result.graph).toBeTruthy();
-      expect(result.graph!.nodes).toHaveLength(4);
-      expect(result.errors).toHaveLength(0);
-      expect(result.metadata.nodeCount).toBe(4);
-      expect(result.metadata.edgeCount).toBe(3);
-    });
+  ---EDGES---
+  greeting_choice -> greeting_concat
+  name_var -> greeting_concat
+  greeting_concat -> final_output
+  ---END---`;
+  const result = await parseGraph(content);
+  expect(result.success).toBe(true);
+  expect(result.graph).toBeTruthy();
+  expect(result.graph!.nodes).toHaveLength(4);
+  expect(result.errors).toHaveLength(0);
+  expect(result.metadata.nodeCount).toBe(4);
+  expect(result.metadata.edgeCount).toBe(3);
+});
     test('should handle parser errors gracefully', async () => {
-      const content = `version: 1.0.0;
----NODES---
-invalid_node:
+  const content = `version: 1.0.0;
+  ---NODES---
+  invalid_node:,
   type: InvalidType,
   invalid_property: value,
----END---`;
-      const result = await parseGraph(content);
-      expect(result.success).toBe(false);
-      expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some(e => e.code === 'INVALID_NODE_TYPE')).toBe(true);
-    });
+  ---END---`;
+  const result = await parseGraph(content);
+  expect(result.success).toBe(false);
+  expect(result.errors.length).toBeGreaterThan(0);
+  expect(result.errors.some(e => e.code === 'INVALID_NODE_TYPE')).toBe(true);
+});
     test('should validate graph quickly', async () => {
-      const content = `version: 1.0.0;
----NODES---
-test:
+  const content = `version: 1.0.0;
+  ---NODES---
+  test:,
   type: Output,
----END---`;
-      const isValid = await validateGraph(content);
-      expect(isValid).toBe(true);
-    });
+  ---END---`;
+  const isValid = await validateGraph(content);
+  expect(isValid).toBe(true);
+});
     test('should detect invalid format quickly', async () => {
       const content = 'invalid format without proper structure';
       const isValid = await validateGraph(content);
       expect(isValid).toBe(false);
     });
     test('should provide detailed error reporting', async () => {
-      const content = `version: 2.0.0;
----NODES---
-duplicate:
+  const content = `version: 2.0.0;
+  ---NODES---
+  duplicate:,
   type: Output,
-duplicate:
+  duplicate:,
   type: Concat,
----END---`;
-      const parser = new GraphParser();
-      const result = await parser.parse(content);
-      const report = parser.generateErrorReport(result);
-      expect(report).toContain('Parser Error Report');
-      expect(report).toContain('UNSUPPORTED_VERSION');
-      expect(report).toContain('DUPLICATE_NODE_ID');
-    });
+  ---END---`;
+  const parser = new GraphParser();
+  const result = await parser.parse(content);
+  const report = parser.generateErrorReport(result);
+  expect(report).toContain('Parser Error Report');
+  expect(report).toContain('UNSUPPORTED_VERSION');
+  expect(report).toContain('DUPLICATE_NODE_ID');
+});
     test('should handle performance profiling', async () => {
-      const content = `version: 1.0.0;
----NODES---
-test:
+  const content = `version: 1.0.0;
+  ---NODES---
+  test:,
   type: Output,
----END---`;
-      const parser = new GraphParser();
-      const result = await parser.parseWithProfiling(content);
-      expect(result.profiling).toBeDefined();
-      expect(result.profiling.lexerTime).toBeGreaterThan(0);
-      expect(result.profiling.astTime).toBeGreaterThan(0);
-      expect(result.profiling.semanticTime).toBeGreaterThan(0);
-      expect(result.profiling.totalTime).toBeGreaterThan(0);
-    });
+  ---END---`;
+  const parser = new GraphParser();
+  const result = await parser.parseWithProfiling(content);
+  expect(result.profiling).toBeDefined();
+  expect(result.profiling.lexerTime).toBeGreaterThan(0);
+  expect(result.profiling.astTime).toBeGreaterThan(0);
+  expect(result.profiling.semanticTime).toBeGreaterThan(0);
+  expect(result.profiling.totalTime).toBeGreaterThan(0);
+});
     test('should handle tolerateErrors option', async () => {
-      const content = `version: 1.0.0;
----NODES---
-node1:
+  const content = `version: 1.0.0;
+  ---NODES---
+  node1:,
   type: InvalidType,
-node2:
+  node2:,
   type: Output,
----END---`;
-      const parser = new GraphParser({ )
-        tolerateErrors: true,
-        maxErrors: 5,
-      });
+  ---END---`;
+  const parser = new GraphParser({ )
+  tolerateErrors: true,
+  maxErrors: 5,
+});
       const result = await parser.parse(content);
       // Should still process despite errors
       expect(result.errors.length).toBeGreaterThan(0);
       expect(result.metadata.nodeCount).toBe(2);
     });
     test('should parse batch of graphs', async () => {
-      const graphs = [;
-        'version: 1.0.0\n---NODES---\ntest1:\n  type: Output\n---END---',
-        'version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---',
-        'invalid graph content'
-      ];
-      const parser = new GraphParser();
-      const results = await parser.parseBatch(graphs);
-      expect(results).toHaveLength(3);
-      expect(results[0].success).toBe(true);
-      expect(results[1].success).toBe(true);
-      expect(results[2].success).toBe(false);
-    });
+  const graphs = [;
+  'version: 1.0.0\n---NODES---\ntest1:\n  type: Output\n---END---',
+  'version: 1.0.0\n---NODES---\ntest2:\n  type: Output\n---END---',
+  'invalid graph content'
+  ];
+  const parser = new GraphParser();
+  const results = await parser.parseBatch(graphs);
+  expect(results).toHaveLength(3);
+  expect(results[0].success).toBe(true);
+  expect(results[1].success).toBe(true);
+  expect(results[2].success).toBe(false);
+});
   });
   describe('Round-trip Compatibility', () => {
-    test('should parse serializer output correctly', async () => {
-      // This test would use the serializer from Story 12.1
-      const serializedContent = `version: 1.0.0;
-metadata:
+  test('should parse serializer output correctly', async () => {
+  // This test would use the serializer from Story 12.1
+  const serializedContent = `version: 1.0.0;,;
+  metadata:,
   name: "Round-trip Test",
   author: "test",
----NODES---
-choice1:
+  ---NODES---
+  choice1:,
   type: WeightedChoice,
-  props:
-    choices:
-      - value: "Hello"
-        weight: 0.5,
-      - value: "Hi"
-        weight: 0.5,
-output1:
+  props:,
+  choices:,
+  - value: "Hello",
+  weight: 0.5,
+  - value: "Hi",
+  weight: 0.5,
+  output1:,
   type: Output,
   inputs: ["choice1"],
----EDGES---
-choice1 -> output1
----END---`;
-      const result = await parseGraph(serializedContent);
-      expect(result.success).toBe(true);
-      expect(result.graph).toBeTruthy();
-      expect(result.graph!.nodes).toHaveLength(2);
-      const choiceNode = result.graph!.nodes.find(n => n.id === 'choice1');
-      expect(choiceNode).toBeTruthy();
-      expect(choiceNode!.type).toBe('WeightedChoice');
-    });
+  ---EDGES---
+  choice1 -> output1
+  ---END---`;
+  const result = await parseGraph(serializedContent);
+  expect(result.success).toBe(true);
+  expect(result.graph).toBeTruthy();
+  expect(result.graph!.nodes).toHaveLength(2);
+  const choiceNode = result.graph!.nodes.find(n => n.id === 'choice1');
+  expect(choiceNode).toBeTruthy();
+  expect(choiceNode!.type).toBe('WeightedChoice');
+});
   });
 });

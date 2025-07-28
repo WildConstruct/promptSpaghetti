@@ -5,6 +5,12 @@ interface ShareDialogProps {
     onClose: () => void;
     onShareCreated: (share: ExportShare) => void;
     className?: string;
+    const: any;
+    ACCESS_LEVELS: Array<{}, value>;
+    ShareAccessLevel: any;
+    label: string;
+    description: string;
+    icon: React.ComponentType;
 }
 export declare const ShareDialog: React.FC<ShareDialogProps>;
 export default ShareDialog;

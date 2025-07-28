@@ -10,6 +10,7 @@
 import { EventEmitter } from 'events';
 import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
+
 export interface DataQualityConfig {
     enableRealTimeValidation: boolean;
     validationInterval: number;
@@ -19,7 +20,7 @@ export interface DataQualityConfig {
     alertingEnabled: boolean;
     reportingEnabled: boolean;
     validationRules: ValidationRule[];
-}
+
 export interface QualityThresholds {
     completeness: number;
     accuracy: number;
@@ -28,7 +29,7 @@ export interface QualityThresholds {
     validity: number;
     uniqueness: number;
     overall: number;
-}
+
 export interface ValidationRule {
     id: string;
     name: string;
@@ -40,7 +41,7 @@ export interface ValidationRule {
     lastUpdated: Date;
     executionCount: number;
     violationCount: number;
-}
+
 export declare enum ValidationRuleType {
     SCHEMA_VALIDATION = "schema_validation",
     RANGE_CHECK = "range_check",
@@ -52,13 +53,13 @@ export declare enum ValidationRuleType {
     STATISTICAL_OUTLIER = "statistical_outlier",
     DUPLICATE_DETECTION = "duplicate_detection",
     COMPLETENESS_CHECK = "completeness_check"
-}
+
 export declare enum ValidationSeverity {
     INFO = "info",
     WARNING = "warning",
     ERROR = "error",
     CRITICAL = "critical"
-}
+
 export interface DataQualityReport {
     reportId: string;
     generatedAt: Date;
@@ -72,14 +73,14 @@ export interface DataQualityReport {
     trends: QualityTrend[];
     recommendations: QualityRecommendation[];
     dataSourceMetrics: DataSourceQuality[];
-}
+
 export interface QualityDimensionScore {
     dimension: QualityDimension;
     score: number;
     trend: 'improving' | 'declining' | 'stable';
     violationCount: number;
     issuesSummary: string[];
-}
+
 export declare enum QualityDimension {
     COMPLETENESS = "completeness",
     ACCURACY = "accuracy",
@@ -87,7 +88,7 @@ export declare enum QualityDimension {
     TIMELINESS = "timeliness",
     VALIDITY = "validity",
     UNIQUENESS = "uniqueness"
-}
+
 export interface DataQualityViolation {
     violationId: string;
     timestamp: Date;
@@ -105,14 +106,14 @@ export interface DataQualityViolation {
     isResolved: boolean;
     resolvedAt?: Date;
     remediation?: RemediationAction;
-}
+
 export interface RemediationAction {
     actionType: RemediationActionType;
     description: string;
     executedAt: Date;
     result: 'success' | 'failure' | 'partial';
     details: string;
-}
+
 export declare enum RemediationActionType {
     DATA_CORRECTION = "data_correction",
     RECORD_FLAGGING = "record_flagging",
@@ -121,7 +122,7 @@ export declare enum RemediationActionType {
     QUARANTINE = "quarantine",
     ENRICHMENT = "enrichment",
     TRANSFORMATION = "transformation"
-}
+
 export interface QualityTrend {
     dimension: QualityDimension;
     timeframe: string;
@@ -129,7 +130,7 @@ export interface QualityTrend {
     changePercent: number;
     significance: 'high' | 'medium' | 'low';
     driverFactors: string[];
-}
+
 export interface QualityRecommendation {
     id: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -140,7 +141,7 @@ export interface QualityRecommendation {
     estimatedEffort: string;
     targetDimensions: QualityDimension[];
     implementationSteps: string[];
-}
+
 export interface DataSourceQuality {
     sourceName: string;
     sourceType: string;
@@ -150,7 +151,7 @@ export interface DataSourceQuality {
     lastValidated: Date;
     dimensions: Record<QualityDimension, number>;
     commonIssues: string[];
-}
+
 export interface DataQualityMetrics {
     totalRecordsProcessed: number;
     totalViolations: number;
@@ -160,14 +161,14 @@ export interface DataQualityMetrics {
     automatedRemediations: number;
     manualInterventions: number;
     qualityTrend: 'improving' | 'declining' | 'stable';
-}
+
 export interface ValidationContext {
     recordId: string;
     dataSource: string;
     timestamp: Date;
     metadata: Record<string, unknown>;
     relatedRecords?: unknown[];
-}
+
 export interface QualityProfile {
     dataSourceName: string;
     expectedSchema: Record<string, FieldExpectation>;
@@ -175,7 +176,7 @@ export interface QualityProfile {
     businessRules: BusinessRule[];
     lastUpdated: Date;
     validationHistory: ValidationHistoryEntry[];
-}
+
 export interface FieldExpectation {
     fieldName: string;
     dataType: string;
@@ -186,7 +187,7 @@ export interface FieldExpectation {
     allowedValues?: unknown[];
     nullablePercent: number;
     uniquenessRequired: boolean;
-}
+
 export interface StatisticalBaseline {
     recordCount: {,
         mean: number;
@@ -196,7 +197,7 @@ export interface StatisticalBaseline {
     };
     fieldStatistics: Record<string, FieldStatistics>;
     temporalPatterns: TemporalPattern[];
-}
+
 export interface FieldStatistics {
     fieldName: string;
     dataType: string;
@@ -208,12 +209,12 @@ export interface FieldStatistics {
         frequency: number;
     }>;
     outlierThreshold: number;
-}
+
 export interface TemporalPattern {
     pattern: 'hourly' | 'daily' | 'weekly' | 'monthly';
     expectedVolume: number[];
     variationThreshold: number;
-}
+
 export interface BusinessRule {
     ruleId: string;
     name: string;
@@ -221,14 +222,14 @@ export interface BusinessRule {
     expression: string;
     severity: ValidationSeverity;
     enabled: boolean;
-}
+
 export interface ValidationHistoryEntry {
     timestamp: Date;
     overallScore: number;
     violationCount: number;
     processingTime: number;
     recordsValidated: number;
-}
+
 export declare class SecurityDataQualityMonitor extends EventEmitter {
     private config;
     private validationRules;
@@ -295,6 +296,6 @@ export declare class SecurityDataQualityMonitor extends EventEmitter {
     resolveViolation(violationId: string, resolvedBy: string): boolean;
     updateConfiguration(newConfig: Partial<DataQualityConfig>): void;
     destroy(): void;
-}
+
 export default SecurityDataQualityMonitor;
 //# sourceMappingURL=SecurityDataQualityMonitor.d.ts.map

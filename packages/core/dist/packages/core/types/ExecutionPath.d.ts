@@ -8,7 +8,7 @@ export interface NodeExecutionStep {
     stepIndex: number;
     timestamp: number;
     executionTimeMs: number;
-    inputs: ExecutionInput[];
+    inputs: ExecutionInput;
     output: unknown;
     randomChoice?: RandomChoiceInfo;
     error?: string;
@@ -20,7 +20,7 @@ export interface ExecutionInput {
 }
 export interface RandomChoiceInfo {
     choiceType: 'weighted' | 'uniform' | 'conditional' | 'sequential' | 'markov';
-    availableOptions: string[];
+    availableOptions: string;
     selectedOption: string;
     selectionReason: string;
     probability?: number;
@@ -33,17 +33,17 @@ export interface ExecutionPath {
     startTime: number;
     endTime: number;
     totalExecutionTime: number;
-    steps: NodeExecutionStep[];
+    steps: NodeExecutionStep;
     finalOutput: string;
-    nodeExecutionOrder: string[];
-    randomizationPoints: RandomChoiceInfo[];
+    nodeExecutionOrder: string;
+    randomizationPoints: RandomChoiceInfo;
     error?: string;
 }
 export interface PathVisualizationData {
     executionPath: ExecutionPath;
     pathColor: string;
-    highlightedNodes: string[];
-    executionFlow: ExecutionFlowEdge[];
+    highlightedNodes: string;
+    executionFlow: ExecutionFlowEdge;
     variance: number;
     creativityScore: number;
 }
@@ -59,40 +59,40 @@ export interface PreviewResultWithPath {
     seed: number;
     output: string;
     error?: string;
-    usedNodeIds?: string[];
-    usedEdgeIds?: string[];
+    usedNodeIds?: string;
+    usedEdgeIds?: string;
     executionTimeMs?: number;
     executionPath?: ExecutionPath;
     pathVisualization?: PathVisualizationData;
     debugInfo?: {
-        nodeExecutionOrder: string[];
-        randomChoices: RandomChoiceInfo[];
+        nodeExecutionOrder: string;
+        randomChoices: RandomChoiceInfo;
         performanceBreakdown: Record<string, number>;
         memoryUsage?: number;
     };
 }
 export interface MultiSeedPreviewResult {
-    results: PreviewResultWithPath[];
+    results: PreviewResultWithPath;
     aggregateStats: {
         totalTime: number;
         averageTime: number;
         variance: number;
         uniquePaths: number;
-        commonNodes: string[];
-        divergencePoints: string[];
+        commonNodes: string;
+        divergencePoints: string;
     };
     pathComparison: PathComparisonData;
 }
 export interface PathComparisonData {
-    sharedSteps: NodeExecutionStep[];
+    sharedSteps: NodeExecutionStep;
     divergentPaths: {
         resultId: string;
         divergencePoint: string;
-        uniqueSteps: NodeExecutionStep[];
+        uniqueSteps: NodeExecutionStep;
     }[];
     varianceAnalysis: {
-        highVarianceNodes: string[];
-        consistentNodes: string[];
+        highVarianceNodes: string;
+        consistentNodes: string;
         randomizationImpact: number;
     };
 }

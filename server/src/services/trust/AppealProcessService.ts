@@ -62,6 +62,7 @@ export type AppealDecision = 'approve' | 'partially_approve' | 'deny' | 'dismiss
 // Core Appeal Interfaces
 // =============================================================================
 
+}
 export interface AppealEvidence {
   evidence_id: string;
   evidence_type: AppealEvidenceType;
@@ -74,7 +75,9 @@ export interface AppealEvidence {
   submitted_by: string;
   verification_status: 'pending' | 'verified' | 'disputed' | 'rejected';
 }
+}
 
+}
 export interface AppealTimeline {
   event_id: string;
   timestamp: Date;
@@ -85,7 +88,9 @@ export interface AppealTimeline {
   details?: Record<string, any>;
   public_visible: boolean;
 }
+}
 
+}
 export interface AppealReviewCriteria {
   policy_adherence: number;      // 1-10 scale
   evidence_quality: number;      // 1-10 scale
@@ -94,7 +99,9 @@ export interface AppealReviewCriteria {
   precedent_consistency: number; // 1-10 scale
   risk_assessment: number;       // 1-10 scale
 }
+}
 
+}
 export interface AppealDecisionRationale {
   primary_reasoning: string;
   supporting_factors: string[];
@@ -104,7 +111,9 @@ export interface AppealDecisionRationale {
   risk_considerations: string[];
   recommended_actions?: string[];
 }
+}
 
+}
 export interface Appeal {
   appeal_id: string;
   appellant_id: string;
@@ -162,7 +171,9 @@ export interface Appeal {
   resubmission_count: number;
   max_resubmissions: number;
 }
+}
 
+}
 export interface AppealFilters {
   status?: AppealStatus;
   category?: AppealCategory;
@@ -171,12 +182,14 @@ export interface AppealFilters {
   date_range?: {
     start: Date;
     end: Date;
+}
   };
   escalation_level?: number;
   limit?: number;
   offset?: number;
 }
 
+}
 export interface AppealStatistics {
   total_appeals: number;
   by_status: Record<AppealStatus, number>;
@@ -188,6 +201,7 @@ export interface AppealStatistics {
     sla_compliance_rate: number;
     approval_rate: number;
     satisfaction_score: number;
+}
   };
   workload_distribution: Record<ReviewerRole, number>;
   trend_data: {
@@ -237,6 +251,7 @@ export class AppealProcessService {
     impact_statement?: string;
     initial_evidence?: Partial<AppealEvidence>[];
   }): Promise<string> {
+
     const appealId = `appeal-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     // Calculate priority based on original decision and impact
@@ -317,7 +332,7 @@ export class AppealProcessService {
         category: appealData.category,
         original_decision: appealData.original_decision_id,
         priority
-      },
+  }
       severity: 'info'
     });
 
@@ -331,6 +346,7 @@ export class AppealProcessService {
    * Get appeal by ID with full details
    */
   async getAppeal(appealId: string): Promise<Appeal | null> {
+
     const result = await this.db.query(`
       SELECT * FROM appeals WHERE appeal_id = $1
     `, [appealId]);
@@ -352,6 +368,7 @@ export class AppealProcessService {
     updatedBy: string,
     notes?: string
   ): Promise<void> {
+
     const appeal = await this.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
@@ -382,6 +399,7 @@ export class AppealProcessService {
    * Assign appeal to reviewer
    */
   async assignReviewer(appealId: string, reviewerId: string, reviewerRole: ReviewerRole): Promise<void> {
+
     await this.db.query(`
       UPDATE appeals 
       SET assigned_reviewer_id = $1, reviewer_role = $2, last_updated = NOW()
@@ -409,6 +427,7 @@ export class AppealProcessService {
    * Add evidence to an appeal
    */
   async addEvidence(appealId: string, evidenceData: Partial<AppealEvidence>): Promise<string> {
+
     const evidenceId = `evidence-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     const evidence: AppealEvidence = {
@@ -457,6 +476,7 @@ export class AppealProcessService {
     reviewerId: string,
     reviewCriteria?: AppealReviewCriteria
   ): Promise<void> {
+
     const appeal = await this.getAppeal(appealId);
     if (!appeal) {
       throw new Error(`Appeal not found: ${appealId}`);
@@ -509,7 +529,7 @@ export class AppealProcessService {
         decision,
         resolution_time_hours: resolutionTimeHours,
         appellant_id: appeal.appellant_id
-      },
+  }
       severity: decision === 'approve' ? 'warning' : 'info'
     });
 
@@ -521,6 +541,7 @@ export class AppealProcessService {
    * List appeals with filtering
    */
   async listAppeals(filters: AppealFilters = {}): Promise<{ appeals: Appeal[]; total: number }> {
+
     let whereClause = '';
     const params: unknown[] = [];
     const conditions: string[] = [];
@@ -577,6 +598,7 @@ export class AppealProcessService {
    * Get appeal statistics and metrics
    */
   async getAppealStatistics(timeRange?: { start: Date; end: Date }): Promise<AppealStatistics> {
+
     let dateFilter = '';
     const params: unknown[] = [];
     
@@ -632,7 +654,7 @@ export class AppealProcessService {
         sla_compliance_rate: 0, // Would calculate based on target vs actual resolution
         approval_rate: totalAppeals > 0 ? (parseInt(stats.approved_count) / totalAppeals * 100) : 0,
         satisfaction_score: parseFloat(stats.avg_satisfaction) || 0
-      },
+  }
       workload_distribution: {} as Record<ReviewerRole, number>,
       trend_data: {
         daily_submissions: {},
@@ -646,6 +668,7 @@ export class AppealProcessService {
   // =============================================================================
 
   private async storeAppeal(appeal: Appeal): Promise<void> {
+
     await this.db.query(`
       INSERT INTO appeals (
         appeal_id, appellant_id, appellant_type, original_decision_id, original_decision_type,
@@ -654,7 +677,7 @@ export class AppealProcessService {
         follow_up_required, allow_resubmission, resubmission_count, max_resubmissions
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
-      )
+
     `, [
       appeal.appeal_id, appeal.appellant_id, appeal.appellant_type,
       appeal.original_decision_id, appeal.original_decision_type,
@@ -672,6 +695,7 @@ export class AppealProcessService {
   }
 
   private async addTimelineEvent(appealId: string, event: Partial<AppealTimeline>): Promise<void> {
+
     const eventId = event.event_id || `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     await this.db.query(`
@@ -685,7 +709,7 @@ export class AppealProcessService {
         description,
         details,
         public_visible
-      )
+
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `, [
       eventId, appealId, event.timestamp || new Date(), event.event_type,
@@ -739,6 +763,7 @@ export class AppealProcessService {
     category: AppealCategory,
     impactStatement?: string
   ): Promise<AppealPriority> {
+
     // High priority for financial or safety impacts
     if (category === 'transaction_block' || category === 'account_restriction') {
       return 'high';
@@ -760,6 +785,7 @@ export class AppealProcessService {
   }
 
   private async determineReviewComplexity(appealData: unknown): Promise<'simple' | 'standard' | 'complex' | 'critical'> {
+
     // Simple logic - would be more sophisticated in practice
     if (appealData.category === 'other') return 'simple';
     if (appealData.category === 'enforcement_action') return 'complex';
@@ -780,6 +806,7 @@ export class AppealProcessService {
   }
 
   private async autoAssignReviewer(appealId: string): Promise<void> {
+
     // Simple round-robin assignment - would be more sophisticated
     const availableReviewers = await this.getAvailableReviewers();
     if (availableReviewers.length > 0) {
@@ -797,6 +824,7 @@ export class AppealProcessService {
   }
 
   private async executeDecisionActions(appealId: string, decision: AppealDecision, _____appeal: Appeal): Promise<void> {
+
     // If appeal approved, would reverse or modify original enforcement action
     if (decision === 'approve' || decision === 'partially_approve') {
       console.log(`Executing reversal actions for approved appeal: ${appealId}`);
@@ -805,11 +833,13 @@ export class AppealProcessService {
   }
 
   private async sendAppealNotifications(appealId: string, event: string): Promise<void> {
+
     // Would send email/in-app notifications to appellant and reviewers
     console.log(`Sending notifications for appeal ${appealId}, event: ${event}`);
   }
 
   private async storeReviewCriteria(appealId: string, criteria: AppealReviewCriteria): Promise<void> {
+
     await this.db.query(`
       INSERT INTO appeal_review_criteria (appeal_id, criteria_data, created_at)
       VALUES ($1, $2, NOW())

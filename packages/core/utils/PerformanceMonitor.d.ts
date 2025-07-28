@@ -4,6 +4,7 @@
  * Real-time performance monitoring system for Wild Construct platform
  * tracking director-friendly interface responsiveness and graph execution performance.
  */
+
 export interface PerformanceMetric {
     name: string;
     value: number;
@@ -13,7 +14,7 @@ export interface PerformanceMetric {
         warning: number;
         critical: number;
     };
-}
+
 export interface PerformanceReport {
     period: {,
         start: number;
@@ -32,7 +33,7 @@ export interface PerformanceReport {
         };
     };
     alerts: PerformanceAlert[];
-}
+
 export interface PerformanceAlert {
     metric: string;
     level: 'warning' | 'critical';
@@ -40,7 +41,7 @@ export interface PerformanceAlert {
     threshold: number;
     timestamp: number;
     context?: Record<string, any>;
-}
+
 export declare class PerformanceMonitor {
     private metrics;
     private thresholds;
@@ -126,7 +127,7 @@ export declare class PerformanceMonitor {
         }[];
         recentAlerts: PerformanceAlert[];
     };
-}
+
 export declare const performanceMonitor: PerformanceMonitor;
 export default performanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map

@@ -55,7 +55,6 @@ interface SystemAccessDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-}
 const ACCESS_LEVEL_CONFIG = {
   none: { color: 'text-gray-600 bg-gray-100', icon: Lock, priority: 0 },
   basic: { color: 'text-blue-600 bg-blue-100', icon: Users, priority: 1 },
@@ -79,8 +78,8 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('users');
-  const [users, setUsers] = useState<SystemUser[]>([]);
-  const [accessRequests, setAccessRequests] = useState<AccessRequest[]>([]);
+  const [users, setUsers] = useState<SystemUser>([]);
+  const [accessRequests, setAccessRequests] = useState<AccessRequest>([]);
   const [stats, setStats] = useState<AccessStats | null>(null);
   const [selectedUser, setSelectedUser] = useState<SystemUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -96,15 +95,15 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
     return () => clearInterval(interval);
   }, []);
   const loadData = async () => {
-    try {
-      setIsLoading(true);
-      // Load users
-      const filter: AccessFilter = {
-        searchQuery: searchQuery || undefined,
-        statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-        accessLevels: accessLevelFilter !== 'all' ? [accessLevelFilter] : undefined,
-        includeInactive: true,
-      };
+  try {
+  setIsLoading(true);
+  // Load users
+  const filter: AccessFilter = {,
+  searchQuery: searchQuery || undefined,
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
+  accessLevels: accessLevelFilter !== 'all' ? [accessLevelFilter] : undefined,
+  includeInactive: true,
+};
       const usersList = systemAccessManager.getUsers(filter);
       setUsers(usersList);
       // Load stats
@@ -113,89 +112,79 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       // Mock access requests - in real implementation, this would come from the service
       setAccessRequests([)
         {
-          id: 'req_001',
-          requesterId: 'user_001',
-          requesterName: 'John Doe',
-          type: 'role_assignment',
-          targetUserId: 'user_002',
-          roleId: 'admin',
-          businessJustification: 'Need admin access for project management',
-          urgency: 'medium',
-          status: 'pending',
-          approvers: [{,
-            userId: 'admin_001',
-            displayName: 'System Admin',
-            order: 1,
-            required: true,
-            status: 'pending',
-          }],
+  id: 'req_001',
+  requesterId: 'user_001',
+  requesterName: 'John Doe',
+  type: 'role_assignment',
+  targetUserId: 'user_002',
+  roleId: 'admin',
+  businessJustification: 'Need admin access for project management',
+  urgency: 'medium',
+  status: 'pending',
+  approvers: [{,
+  userId: 'admin_001',
+  displayName: 'System Admin',
+  order: 1,
+  required: true,
+  status: 'pending',
+}],
           requestedAt: new Date(),
-          auditTrail: [],
-        }
-      ]);
+          auditTrail: []]);
     } catch (error) {
-      console.error('Failed to load system access data:', error);
-    } finally {
+  console.error('Failed to load system access data:', error);
+} finally {
       setIsLoading(false);
-    }
   };
   const handleCreateUser = async () => {
-    // Mock user creation
-    try {
-      const _____newUser = await systemAccessManager.createUser({)
-        username: 'newuser',
-        email: 'new@example.com',
-        displayName: 'New User',
-        status: 'pending',
-        isActive: true,
-        isVerified: false,
-        profile: {,
-          timezone: 'UTC',
-          language: 'en',
-        },
-        roles: [],
+  // Mock user creation
+  try {
+  const _____newUser = await systemAccessManager.createUser({)
+  username: 'newuser',
+  email: 'new@example.com',
+  displayName: 'New User',
+  status: 'pending',
+  isActive: true,
+  isVerified: false,
+  profile: {,
+  timezone: 'UTC',
+  language: 'en',
+},
+  roles: [],
         permissions: [],
         systemAccess: 'basic',
         mfaEnabled: false,
-        securityClearance: 'public',
-      }, userId || 'admin');
+        securityClearance: 'public';
+  }, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to create user:', error);
-    }
-  };
+  console.error('Failed to create user:', error);
+};
   const handleAssignRole = async (targetUserId: string, roleId: string) => {
     try {
       await systemAccessManager.assignRole(targetUserId, roleId, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to assign role:', error);
-    }
-  };
+  console.error('Failed to assign role:', error);
+};
   const handleRevokeRole = async (targetUserId: string, roleId: string) => {
     try {
       await systemAccessManager.revokeRole(targetUserId, roleId, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to revoke role:', error);
-    }
-  };
+  console.error('Failed to revoke role:', error);
+};
   const filteredUsers = useMemo(() => {
     return users.filter(user => {)
-      if (searchQuery) {
+  if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!user.username.toLowerCase().includes(query) &&
             !user.email.toLowerCase().includes(query) &&
             !user.displayName.toLowerCase().includes(query)) {
           return false;
-        }
-      }
       if (statusFilter !== 'all' && user.status !== statusFilter) {
         return false;
-      }
       if (accessLevelFilter !== 'all' && user.systemAccess !== accessLevelFilter) {
         return false;
-      }
       return true;
     });
   }, [users, searchQuery, statusFilter, accessLevelFilter]);
@@ -299,7 +288,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
   );
   const renderStatsTab = () => {
     if (!stats) return <div>Loading statistics...</div>;
-    return ();
+    return;
       <div className="stats-section">
         <div className="stats-grid">
           <Card>
@@ -373,7 +362,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
                 {Object.entries(stats.byAccessLevel).map(([level, count]) => {
                   const config = ACCESS_LEVEL_CONFIG[level as SystemAccessLevel];
                   const percentage = (count / stats.totalUsers) * 100;
-                  return ();
+                  return;
                     <div key={level} className="chart-item">
                       <div className="chart-label">
                         <config.icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -401,7 +390,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
                 {Object.entries(stats.byStatus).map(([status, count]) => {
                   const config = STATUS_CONFIG[status as UserStatus];
                   const percentage = (count / stats.totalUsers) * 100;
-                  return ();
+                  return;
                     <div key={status} className="chart-item">
                       <div className="chart-label">
                         <config.icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -424,7 +413,7 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       </div>
     );
   };
-  return ();
+  return;
     <div className={`system-access-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -486,208 +475,165 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
       )}
       <style>{`
         .system-access-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .users-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 1rem;,
+  background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
-        }
         .search-filters {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
+          align-items: center;,
+  gap: 0.75rem;
         .search-bar {
-          position: relative;
-          display: flex;
+          position: relative;,
+  display: flex;
           align-items: center;
-        }
         .search-bar .lucide {
-          position: absolute;
-          left: 0.75rem;
+          position: absolute;,
+  left: 0.75rem;
           z-index: 1;
-        }
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
-        }
         .action-buttons {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .users-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
           gap: 1rem;
-        }
         .stats-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 1rem;
-        }
         .stat-item {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .stat-icon {
           padding: 0.75rem;
-          border-radius: 8px;
-          background: #f3f4f6;
-        }
+          border-radius: 8px;,
+  background: #f3f4f6;
         .stat-info {
           flex: 1;
-        }
         .stat-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.25rem;
-        }
         .stat-value {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .stat-change {
           font-size: 0.75rem;
           font-weight: 500;
-        }
         .stat-change.positive {
           color: #059669;
-        }
         .stat-description {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .access-level-chart,
         .status-chart {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .chart-item {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .chart-label {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           min-width: 120px;
           font-size: 0.875rem;
           font-weight: 500;
-        }
         .chart-bar {
-          flex: 1;
-          height: 8px;
+          flex: 1;,
+  height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .chart-fill {
-          height: 100%;
-          transition: width 0.3s ease;
-        }
+          height: 100%;,
+  transition: width 0.3s ease;
         .chart-value {
           min-width: 40px;
           text-align: right;
           font-weight: 600;
           font-size: 0.875rem;
-        }
         .requests-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .requests-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .requests-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .empty-state {
-          text-align: center;
-          padding: 4rem 2rem;
+          text-align: center;,
+  padding: 4rem 2rem;
           color: #6b7280;
-        }
         .empty-state h3 {
           color: #1f2937;
-        }
         @media (max-width: 768px) {
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .users-controls {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .search-filters {
             flex-direction: column;
             align-items: stretch;
-          }
           .search-input {
             min-width: auto;
-          }
           .users-grid {
             grid-template-columns: 1fr;
-          }
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
           .charts-section {
             grid-template-columns: 1fr;
-          }
-        }
         @media (max-width: 480px) {
           .stats-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );
@@ -695,24 +641,23 @@ export const SystemAccessDashboard: React.FC<SystemAccessDashboardProps> = ({)
 
 // User Card Component
 interface UserCardProps {
-  user: SystemUser;
-  onSelect: (user: SystemUser) => void;
-  onAssignRole: (userId: string, roleId: string) => void;
+  user: SystemUser;,
+  onSelect: (user: SystemUser) => void;,
+  onAssignRole: (userId: string, roleId: string) => void;,
   onRevokeRole: (userId: string, roleId: string) => void;
   currentUserId?: string;
-}
-const UserCard: React.FC<UserCardProps> = ({ )
-  user, 
-  onSelect, 
-  onAssignRole, 
-  onRevokeRole, 
-  currentUserId 
+  const UserCard: React.FC<UserCardProps> = ({ ),
+  user,
+  onSelect,
+  onAssignRole,
+  onRevokeRole,
+  currentUserId
 }) => {
   const statusConfig = STATUS_CONFIG[user.status];
   const accessConfig = ACCESS_LEVEL_CONFIG[user.systemAccess];
   const StatusIcon = statusConfig.icon;
   const AccessIcon = accessConfig.icon;
-  return ();
+  return;
     <Card className="user-card">
       <CardContent className="p-4">
         <div className="user-card-header">
@@ -787,53 +732,43 @@ const UserCard: React.FC<UserCardProps> = ({ )
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .user-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .user-email {
           color: #6b7280;
           font-size: 0.875rem;
           margin-bottom: 0.25rem;
-        }
         .user-username {
           color: #9ca3af;
           font-size: 0.75rem;
-        }
         .user-badges {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
+          flex-direction: column;,
+  gap: 0.25rem;
           align-items: flex-end;
-        }
         .user-details {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          flex-direction: column;,
+  gap: 0.5rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .detail-item {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
-        }
         .detail-label {
           color: #6b7280;
           font-weight: 500;
-        }
         .detail-value {
           color: #1f2937;
           text-align: right;
-        }
         .user-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
       `}</style>
     </Card>
   );
@@ -841,25 +776,23 @@ const UserCard: React.FC<UserCardProps> = ({ )
 
 // Access Request Card Component
 interface AccessRequestCardProps {
-  request: AccessRequest;
-  onApprove: (requestId: string) => void;
+  request: AccessRequest;,
+  onApprove: (requestId: string) => void;,
   onReject: (requestId: string) => void;
-}
-const AccessRequestCard: React.FC<AccessRequestCardProps> = ({)
+  const AccessRequestCard: React.FC<AccessRequestCardProps> = ({,)
   request,
   onApprove,
   onReject
 }) => {
-  const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-    case 'critical': return 'text-red-600 bg-red-100';
-    case 'high': return 'text-orange-600 bg-orange-100';
-    case 'medium': return 'text-yellow-600 bg-yellow-100';
-    case 'low': return 'text-blue-600 bg-blue-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-  return ();
+  const getUrgencyColor = (urgency: string) => {,
+  switch (urgency) {
+  case 'critical': return 'text-red-600 bg-red-100';
+  case 'high': return 'text-orange-600 bg-orange-100';
+  case 'medium': return 'text-yellow-600 bg-yellow-100';
+  case 'low': return 'text-blue-600 bg-blue-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
+  return;
     <Card className="request-card">
       <CardContent className="p-4">
         <div className="request-header">
@@ -924,56 +857,44 @@ const AccessRequestCard: React.FC<AccessRequestCardProps> = ({)
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .request-title {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .request-requester,
         .request-time {
           color: #6b7280;
           font-size: 0.875rem;
-        }
         .request-badges {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
+          flex-direction: column;,
+  gap: 0.25rem;
           align-items: flex-end;
-        }
         .request-details {
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
         .request-details p {
           margin-bottom: 0.5rem;
-        }
         .request-details p:last-child {
           margin-bottom: 0;
-        }
         .request-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .approve-btn {
           background: #059669;
           border-color: #059669;
-        }
-        .approve-btn:hover {
-          background: #047857;
+        .approve-btn:hover {,
+  background: #047857;
           border-color: #047857;
-        }
         .reject-btn {
           color: #dc2626;
           border-color: #dc2626;
-        }
-        .reject-btn:hover {
-          background: #dc2626;
+        .reject-btn:hover {,
+  background: #dc2626;
           color: white;
-        }
       `}</style>
     </Card>
   );
@@ -981,18 +902,17 @@ const AccessRequestCard: React.FC<AccessRequestCardProps> = ({)
 
 // User Detail Modal Component
 interface UserDetailModalProps {
-  user: SystemUser;
+  user: SystemUser;,
   onClose: () => void;
   onUpdate: () => void;
   currentUserId?: string;
-}
-const UserDetailModal: React.FC<UserDetailModalProps> = ({)
+  const UserDetailModal: React.FC<UserDetailModalProps> = ({,)
   user,
   onClose,
   onUpdate,
   currentUserId
 }) => {
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1092,101 +1012,83 @@ const UserDetailModal: React.FC<UserDetailModalProps> = ({)
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;
-          inset: 0;
+          position: fixed;,
+  inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 1000;
-        }
         .modal-content {
           background: white;
-          border-radius: 8px;
-          width: 90vw;
+          border-radius: 8px;,
+  width: 90vw;
           max-width: 800px;
-          max-height: 80vh;
-          overflow: auto;
-        }
+          max-height: 80vh;,
+  overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 1.5rem;
+          align-items: center;,
+  padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
-        }
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .modal-body {
           padding: 1.5rem;
-        }
         .user-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1.5rem;
         .detail-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
-        }
         .detail-item {
           display: flex;
           justify-content: space-between;
           align-items: center;
           font-size: 0.875rem;
-        }
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
-        }
         .detail-item span {
           color: #1f2937;
-        }
         .roles-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .role-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem;
+          align-items: center;,
+  padding: 0.5rem;
           background: #f3f4f6;
           border-radius: 4px;
           font-size: 0.875rem;
-        }
         .role-date {
           color: #6b7280;
           font-size: 0.75rem;
-        }
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
+          justify-content: flex-end;,
+  gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
-        }
         @media (max-width: 768px) {
           .user-details-grid {
             grid-template-columns: 1fr;
-          }
           .modal-content {
             width: 95vw;
             max-height: 90vh;
-          }
-        }
       `}</style>
     </div>
   );

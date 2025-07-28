@@ -1,8 +1,6 @@
 /**
 import { Plus, FileText, X } from 'lucide-react';
-
 import { Plus } from 'lucide-react';
-
  * Tutorial UI Components (Epic 16)
  *
  * DEPLOYMENT BLOCKER FIX: Comprehensive tutorial UI components for creating
@@ -30,20 +28,20 @@ export interface TutorialStep {
     duration?: number;
     isRequired: boolean;
     isSkippable: boolean;
-    prerequisites: string[];
-    objectives: string[];
+    prerequisites: string;
+    objectives: string;
     validation?: StepValidation;
-    hints: TutorialHint[];
-    resources: TutorialResource[];
+    hints: TutorialHint;
+    resources: TutorialResource;
     metadata: StepMetadata;
 }
 export interface TutorialContent {
     format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
     primary: string;
     secondary?: string;
-    media?: MediaContent[];
-    interactive?: InteractiveElement[];
-    code?: CodeExample[];
+    media?: MediaContent;
+    interactive?: InteractiveElement;
+    code?: CodeExample;
 }
 export interface MediaContent {
     id: string;
@@ -81,7 +79,7 @@ export interface CodeExample {
 }
 export interface StepValidation {
     type: 'automatic' | 'manual' | 'quiz' | 'checklist';
-    criteria: ValidationCriteria[];
+    criteria: ValidationCriteria;
     feedback: {
         success: string;
         failure: string;
@@ -115,17 +113,17 @@ export interface TutorialResource {
     url?: string;
     content?: string;
     description: string;
-    tags: string[];
+    tags: string;
 }
 export interface StepMetadata {
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     category: string;
-    tags: string[];
+    tags: string;
     estimatedTime: number;
     completionRate: number;
     averageScore: number;
-    commonMistakes: string[];
-    tips: string[];
+    commonMistakes: string;
+    tips: string;
 }
 export interface Tutorial {
     id: string;
@@ -134,7 +132,7 @@ export interface Tutorial {
     category: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimatedDuration: number;
-    steps: TutorialStep[];
+    steps: TutorialStep;
     learning: LearningObjectives;
     navigation: NavigationConfig;
     accessibility: AccessibilityConfig;
@@ -142,10 +140,10 @@ export interface Tutorial {
     metadata: TutorialMetadata;
 }
 export interface LearningObjectives {
-    primary: string[];
-    secondary: string[];
-    outcomes: string[];
-    assessments: Assessment[];
+    primary: string;
+    secondary: string;
+    outcomes: string;
+    assessments: Assessment;
 }
 export interface Assessment {
     id: string;
@@ -153,14 +151,14 @@ export interface Assessment {
     title: string;
     description: string;
     passingScore: number;
-    questions?: QuizQuestion[];
+    questions?: QuizQuestion;
 }
 export interface QuizQuestion {
     id: string;
     type: 'multiple_choice' | 'true_false' | 'short_answer' | 'code';
     question: string;
-    options?: string[];
-    correctAnswer: string | string[];
+    options?: string;
+    correctAnswer: string | string;
     explanation: string;
     points: number;
 }
@@ -193,9 +191,9 @@ export interface TutorialMetadata {
     author: string;
     version: string;
     language: string;
-    tags: string[];
-    prerequisites: string[];
-    targetAudience: string[];
+    tags: string;
+    prerequisites: string;
+    targetAudience: string;
     createdAt: Date;
     lastModified: Date;
     isPublished: boolean;
@@ -206,17 +204,17 @@ export interface TutorialProgress {
     tutorialId: string;
     userId: string;
     currentStepId: string;
-    completedSteps: string[];
-    skippedSteps: string[];
-    failedSteps: string[];
+    completedSteps: string;
+    skippedSteps: string;
+    failedSteps: string;
     startTime: Date;
     lastActiveTime: Date;
     completionTime?: Date;
     totalTimeSpent: number;
     score: number;
     attempts: Record<string, number>;
-    bookmarks: string[];
-    notes: TutorialNote[];
+    bookmarks: string;
+    notes: TutorialNote;
 }
 export interface TutorialNote {
     id: string;
@@ -234,31 +232,9 @@ export interface TutorialPlayerProps {
     onExit: () => void;
     className?: string;
 }
-export declare const TutorialPlayer: React.FC<TutorialPlayerProps>, progress: any, tutorial: any, steps: any, length: any;
-interface TutorialStepContentProps {
-    step: TutorialStep;
-    isPlaying: boolean;
-    settings: unknown;
-    onComplete: (score?: number) => void;
-    onPlayPause: () => void;
-}
-interface TutorialStepListProps {
-    steps: TutorialStep[];
-    currentStepIndex: number;
-    completedSteps: string[];
-    onStepSelect: (index: number) => void;
-}
-interface TutorialResourcesProps {
-    resources: TutorialResource[];
-    onResourceClick: (resource: TutorialResource) => void;
-}
-interface TutorialSettingsProps {
-    settings: unknown;
-    onSettingsChange: (settings: unknown) => void;
-    onClose: () => void;
-}
+export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
 export interface TutorialBrowserProps {
-    tutorials: Tutorial[];
+    tutorials: Tutorial;
     onTutorialSelect: (tutorial: Tutorial) => void;
     onTutorialCreate: () => void;
     className?: string;
@@ -267,10 +243,10 @@ export declare const TutorialBrowser: React.FC<TutorialBrowserProps>;
 declare const _default: {
     TutorialPlayer: React.FC<TutorialPlayerProps>;
     TutorialBrowser: React.FC<TutorialBrowserProps>;
-    TutorialStepContent: React.FC<TutorialStepContentProps>;
-    TutorialStepList: React.FC<TutorialStepListProps>;
-    TutorialResources: React.FC<TutorialResourcesProps>;
-    TutorialSettings: React.FC<TutorialSettingsProps>;
+    TutorialStepContent: any;
+    TutorialStepList: any;
+    TutorialResources: any;
+    TutorialSettings: any;
 };
 export default _default;
 //# sourceMappingURL=TutorialUIComponents.d.ts.map

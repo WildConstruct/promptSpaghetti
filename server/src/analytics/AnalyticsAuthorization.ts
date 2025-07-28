@@ -53,6 +53,7 @@ export enum AnalyticsPermission {
 }
 
 // Authorization Policy
+}
 export interface AuthorizationPolicy {
   id: string;
   name: string;
@@ -61,7 +62,9 @@ export interface AuthorizationPolicy {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface AuthorizationRule {
   id: string;
   condition: {
@@ -73,6 +76,7 @@ export interface AuthorizationRule {
     organizationMatch?: 'self' | 'any';
     requiredPermissions: string[];
     requiredRoles?: string[];
+}
   };
   action: 'allow' | 'deny';
   fields?: {
@@ -83,12 +87,14 @@ export interface AuthorizationRule {
 }
 
 // Authorization Result
+}
 export interface AuthorizationResult {
   allowed: boolean;
   reason?: string;
   filteredEvent?: Partial<UnifiedAnalyticsEvent>;
   redactedFields?: string[];
   appliedRules?: string[];
+}
 }
 
 /**
@@ -123,15 +129,15 @@ export class AnalyticsAuthorizationService {
           condition: {
             userMatch: 'self',
             requiredPermissions: [AnalyticsPermission.VIEW_EVENTS]
-          },
+  }
           action: 'allow'
-        },
+  }
         {
           id: 'user-other-deny',
           condition: {
             userMatch: 'any',
             requiredPermissions: [AnalyticsPermission.VIEW_EVENTS]
-          },
+  }
           action: 'deny'
         }
       ]
@@ -150,7 +156,7 @@ export class AnalyticsAuthorizationService {
           condition: {
             organizationMatch: 'self',
             requiredPermissions: [AnalyticsPermission.VIEW_ORGANIZATION_ANALYTICS]
-          },
+  }
           action: 'allow'
         }
       ]
@@ -169,7 +175,7 @@ export class AnalyticsAuthorizationService {
           condition: {
             requiredRoles: ['admin', 'super_admin'],
             requiredPermissions: [AnalyticsPermission.VIEW_ALL_EVENTS]
-          },
+  }
           action: 'allow'
         }
       ]
@@ -188,18 +194,18 @@ export class AnalyticsAuthorizationService {
           condition: {
             severities: ['critical', 'error'],
             requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA]
-          },
+  }
           action: 'allow',
           fields: {
             redacted: ['data.password', 'data.token', 'data.apiKey', 'data.secret']
           }
-        },
+  }
         {
           id: 'security-events-restriction',
           condition: {
             eventTypes: ['security_event', 'fraud_detection'],
             requiredPermissions: [AnalyticsPermission.VIEW_SENSITIVE_DATA]
-          },
+  }
           action: 'deny'
         }
       ]
@@ -218,7 +224,7 @@ export class AnalyticsAuthorizationService {
           condition: {
             categories: ['integration'],
             requiredPermissions: [AnalyticsPermission.VIEW_INTEGRATION_ANALYTICS]
-          },
+  }
           action: 'allow'
         }
       ]
@@ -232,6 +238,7 @@ export class AnalyticsAuthorizationService {
     event: Partial<UnifiedAnalyticsEvent>,
     authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
     try {
       // Check basic publish permission
       if (!this.hasPermission(authContext, AnalyticsPermission.PUBLISH_EVENTS)) {
@@ -282,6 +289,7 @@ export class AnalyticsAuthorizationService {
     event: UnifiedAnalyticsEvent,
     authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
     try {
       // Check basic view permission
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_EVENTS)) {
@@ -308,6 +316,7 @@ export class AnalyticsAuthorizationService {
     filter: EventFilter,
     authContext: AuthContext
   ): Promise<{ allowed: boolean; filteredQuery?: EventFilter; reason?: string }> {
+
     try {
       // Check analytics viewing permission
       if (!this.hasPermission(authContext, AnalyticsPermission.VIEW_ANALYTICS)) {
@@ -355,6 +364,7 @@ export class AnalyticsAuthorizationService {
     dashboardType: 'user' | 'organization' | 'admin' | 'system',
     authContext: AuthContext
   ): Promise<AuthorizationResult> {
+
     try {
       const requiredPermissions = {
         user: [AnalyticsPermission.VIEW_DASHBOARD],
@@ -384,6 +394,7 @@ export class AnalyticsAuthorizationService {
    * Create auth context from Fastify request
    */
   async createAuthContextFromRequest(request: any): Promise<AuthContext> {
+
     // In a real implementation, this would integrate with the authentication service
     // For now, return a mock context for testing
     return {
@@ -409,6 +420,7 @@ export class AnalyticsAuthorizationService {
     authContext: AuthContext,
     action: 'publish' | 'view'
   ): Promise<AuthorizationResult> {
+
     const appliedRules: string[] = [];
     let finalResult: AuthorizationResult = { allowed: false };
     let filteredEvent = { ...event };
@@ -613,6 +625,7 @@ export class AnalyticsAuthorizationService {
    * Create auth context from authentication service
    */
   async createAuthContextFromToken(token: string): Promise<AuthContext | null> {
+
     if (!this.authService) {
       throw new Error('Authentication service not configured');
     }

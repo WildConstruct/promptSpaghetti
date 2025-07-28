@@ -8,11 +8,9 @@
  */
 import React from 'react';
 export interface WeightedChoiceData {
-    choices?: Array<{
-        text: string;
-        weight: number;
-    }>;
-    [key: string]: unknown;
+    choices?: Array<{}, text>;
+    string: any;
+    weight: number;
 }
 export interface DragReorderWeightedChoiceEditorProps {
     data: WeightedChoiceData;
@@ -23,9 +21,6 @@ export interface DragReorderWeightedChoiceEditorProps {
     showPreview?: boolean;
     showAnalytics?: boolean;
 }
-/**
- * Enhanced WeightedChoice editor with professional drag-to-reorder interface
- */
 export declare const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoiceEditorProps>;
 export default DragReorderWeightedChoiceEditor;
 //# sourceMappingURL=DragReorderWeightedChoiceEditor.d.ts.map

@@ -1,7 +1,7 @@
 import React from 'react';
 export interface VariationListProps {
     nodeId: string;
-    variations: string[];
+    variations: string;
     onAdd?: (variation: string) => void;
     onRemove?: (index: number) => void;
     onUpdate?: (index: number, newValue: string) => void;

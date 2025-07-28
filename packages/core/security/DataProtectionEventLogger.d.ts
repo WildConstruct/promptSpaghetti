@@ -24,7 +24,7 @@ export declare enum DataProtectionEventType {
     REGULATORY_ALERT = "regulatory_alert",
     POLICY_UPDATE_APPLIED = "policy_update_applied",
     COMPLIANCE_AUDIT_ACCESS = "compliance_audit_access"
-}
+
 export declare enum DataSensitivityLevel {
     PUBLIC = "public",
     INTERNAL = "internal",
@@ -32,14 +32,14 @@ export declare enum DataSensitivityLevel {
     RESTRICTED = "restricted",
     PII = "pii",
     SPECIAL_CATEGORY = "special_category"
-}
+
 export declare enum ComplianceFramework {
     GDPR = "gdpr",
     CCPA = "ccpa",
     SOX = "sox",
     HIPAA = "hipaa",
     CUSTOM = "custom"
-}
+
 export interface DataProtectionEvent {
     eventType: DataProtectionEventType;
     timestamp: Date;
@@ -56,7 +56,7 @@ export interface DataProtectionEvent {
     automatedDecision: boolean;
     complianceFrameworks: ComplianceFramework[];
     metadata?: Record<string, any>;
-}
+
 export interface DataDeletionEvent extends DataProtectionEvent {
     deletionJobId: string;
     scheduledTime: Date;
@@ -70,7 +70,7 @@ export interface DataDeletionEvent extends DataProtectionEvent {
     };
     failureReasons?: string[];
     exemptionReasons?: string[];
-}
+
 export interface PrivacyRequestEvent extends DataProtectionEvent {
     requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
     requestId: string;
@@ -79,7 +79,7 @@ export interface PrivacyRequestEvent extends DataProtectionEvent {
     status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';
     dataCategories: string[];
     processingPurposes: string[];
-}
+
 export interface PolicyViolationEvent extends DataProtectionEvent {
     violationType: string;
     policyId: string;
@@ -89,7 +89,6 @@ export interface PolicyViolationEvent extends DataProtectionEvent {
     mitigationActions: string[];
     requiresNotification: boolean;
     notificationDeadline?: Date;
-}
 /**
  * Data Protection Event Logger
  * Provides specialized logging for privacy and compliance events
@@ -136,7 +135,7 @@ export declare class DataProtectionEventLogger {
     private aggregateViolations;
     private aggregatePrivacyRequests;
     private calculateRetentionCompliance;
-}
+
 export interface ComplianceReport {
     framework: ComplianceFramework;
     reportPeriod: {,
@@ -150,11 +149,11 @@ export interface ComplianceReport {
     privacyRequests: any[];
     retentionCompliance: ComplianceMetrics;
     generatedAt: Date;
-}
+
 export interface ComplianceMetrics {
     totalEvents: number;
     pastRetentionEvents: number;
     improperllyRetainedEvents: number;
     compliancePercentage: number;
-}
+
 //# sourceMappingURL=DataProtectionEventLogger.d.ts.map

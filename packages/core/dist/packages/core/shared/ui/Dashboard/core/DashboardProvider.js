@@ -7,7 +7,14 @@ import { jsx as _jsx } from "react/jsx-runtime";
  */
 import { createContext, useContext, useState, useCallback } from 'react';
 const DashboardContext = createContext(undefined);
-export const DashboardProvider = ({ children, timeRange: initialTimeRange = '7d', onTimeRangeChange, onRefresh, onExport }) => {
+export const DashboardProvider = ({
+    children,
+    timeRange: initialTimeRange = '7d',
+    onTimeRangeChange,
+    onRefresh,
+    onExport
+});
+{
     const [timeRange, setTimeRange] = useState(initialTimeRange);
     const [refreshing, setRefreshing] = useState(false);
     const [exporting, setExporting] = useState(false);
@@ -30,53 +37,58 @@ export const DashboardProvider = ({ children, timeRange: initialTimeRange = '7d'
         setSelectedItems(prev => new Set([...prev, id]));
     }, []);
     const deselectItem = useCallback((id) => {
-        setSelectedItems(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(id);
-            return newSet;
-        });
-    }, []);
-    const selectAll = useCallback((ids) => {
-        setSelectedItems(new Set(ids));
-    }, []);
-    const clearSelection = useCallback(() => {
-        setSelectedItems(new Set());
-    }, []);
-    const isSelected = useCallback((id) => {
-        return selectedItems.has(id);
-    }, [selectedItems]);
-    const contextValue = {
-        timeRange,
-        setTimeRange: handleTimeRangeChange,
-        refreshing,
-        setRefreshing,
-        exporting,
-        setExporting,
-        filters,
-        setFilters,
-        updateFilter,
-        clearFilters,
-        searchTerm,
-        setSearchTerm,
-        viewMode,
-        setViewMode,
-        selectedItems,
-        selectItem,
-        deselectItem,
-        selectAll,
-        clearSelection,
-        isSelected,
-        onRefresh,
-        onExport,
-        onTimeRangeChange
-    };
-    return (_jsx(DashboardContext.Provider, { value: contextValue, children: children }));
+        setSelectedItems(prev => { });
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+    });
+}
+[];
+;
+const selectAll = useCallback((ids) => {
+    setSelectedItems(new Set(ids));
+}, []);
+const clearSelection = useCallback(() => {
+    setSelectedItems(new Set());
+}, []);
+const isSelected = useCallback((id) => {
+    return selectedItems.has(id);
+}, [selectedItems]);
+const contextValue = {
+    timeRange,
+    setTimeRange: handleTimeRangeChange,
+    refreshing,
+    setRefreshing,
+    exporting,
+    setExporting,
+    filters,
+    setFilters,
+    updateFilter,
+    clearFilters,
+    searchTerm,
+    setSearchTerm,
+    viewMode,
+    setViewMode,
+    selectedItems,
+    selectItem,
+    deselectItem,
+    selectAll,
+    clearSelection,
+    isSelected,
+    onRefresh,
+    onExport,
+    onTimeRangeChange
 };
+return;
+_jsx(DashboardContext.Provider, { value: contextValue, children: children });
+;
+;
 export const useDashboard = () => {
     const context = useContext(DashboardContext);
     if (context === undefined) {
         throw new Error('useDashboard must be used within a DashboardProvider');
+        return context;
     }
-    return context;
+    ;
+    export default DashboardProvider;
 };
-export default DashboardProvider;

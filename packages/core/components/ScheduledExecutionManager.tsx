@@ -19,29 +19,28 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 interface ScheduledExecution {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   schedule_name: string;
-  schedule_type: 'cron' | 'interval' | 'once';
+  schedule_type: 'cron' | 'interval' | 'once';,
   schedule_expression: string;
-  action_type: 'state_transition' | 'approval_request' | 'custom';
+  action_type: 'state_transition' | 'approval_request' | 'custom';,
   action_config: Record<string, any>;
   enabled: boolean;
   next_run_at?: Date;
   last_run_at?: Date;
   run_count: number;
   max_runs?: number;
-  retry_count: number;
+  retry_count: number;,
   max_retries: number;
-  created_by: string;
+  created_by: string;,
   created_at: Date;
   updated_at: Date;
-}
-interface ExecutionLog {
-  id: string;
+  interface ExecutionLog {
+  id: string;,
   schedule_id: string;
-  execution_id: string;
+  execution_id: string;,
   status: 'running' | 'completed' | 'failed' | 'cancelled';
   started_at: Date;
   completed_at?: Date;
@@ -50,22 +49,19 @@ interface ExecutionLog {
   execution_time_ms?: number;
   retry_attempt: number;
   next_retry_at?: Date;
-}
-interface ScheduledExecutionManagerProps {
+  interface ScheduledExecutionManagerProps {
   workspaceId: string;
   resourceId?: string;
   onClose?: () => void;
-}
-type TabType = 'schedules' | 'executions' | 'logs';
-
-export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({)
+  type TabType = 'schedules' | 'executions' | 'logs';
+  export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps> = ({,)
   workspaceId,
   resourceId,
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('schedules');
-  const [schedules, setSchedules] = useState<ScheduledExecution[]>([]);
-  const [executionLogs, setExecutionLogs] = useState<ExecutionLog[]>([]);
+  const [schedules, setSchedules] = useState<ScheduledExecution>([]);
+  const [executionLogs, setExecutionLogs] = useState<ExecutionLog>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCreateSchedule, setShowCreateSchedule] = useState(false);
@@ -78,23 +74,23 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     loadExecutionLogs();
   }, [workspaceId]);
   const loadSchedules = async () => {
-    setLoading(true);
-    try {
-      // Mock API call - replace with actual API
-      const mockSchedules: ScheduledExecution[] = [
-        {
-          id: '1',
-          workspace_id: workspaceId,
-          resource_id: resourceId || 'resource-1',
-          schedule_name: 'Daily Status Check',
-          schedule_type: 'cron',
-          schedule_expression: '0 9 * * *', // 9 AM daily
-          action_type: 'state_transition',
-          action_config: {,
-            to_state_id: 'review-state',
-            comment: 'Automated daily review trigger',
-          },
-          enabled: true,
+  setLoading(true);
+  try {
+  // Mock API call - replace with actual API
+  const mockSchedules: ScheduledExecution = [
+  {
+  id: '1',
+  workspace_id: workspaceId,
+  resource_id: resourceId || 'resource-1',
+  schedule_name: 'Daily Status Check',
+  schedule_type: 'cron',
+  schedule_expression: '0 9 * * *', // 9 AM daily,
+  action_type: 'state_transition',
+  action_config: {,
+  to_state_id: 'review-state',
+  comment: 'Automated daily review trigger',
+},
+  enabled: true,
           next_run_at: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow 9 AM
           last_run_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday 9 AM
           run_count: 15,
@@ -103,22 +99,22 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user1',
           created_at: new Date('2024-01-01'),
-          updated_at: new Date('2024-01-20'),
-        },
+          updated_at: new Date('2024-01-20');
+  }
         {
-          id: '2',
-          workspace_id: workspaceId,
-          resource_id: resourceId || 'resource-2',
-          schedule_name: 'Weekly Report Generation',
-          schedule_type: 'cron',
-          schedule_expression: '0 0 * * 0', // Sunday midnight
-          action_type: 'custom',
-          action_config: {,
-            action: 'generate_report',
-            report_type: 'weekly_summary',
-            email_recipients: ['admin@example.com'],
-          },
-          enabled: true,
+  id: '2',
+  workspace_id: workspaceId,
+  resource_id: resourceId || 'resource-2',
+  schedule_name: 'Weekly Report Generation',
+  schedule_type: 'cron',
+  schedule_expression: '0 0 * * 0', // Sunday midnight,
+  action_type: 'custom',
+  action_config: {,
+  action: 'generate_report',
+  report_type: 'weekly_summary',
+  email_recipients: ['admin@example.com'],
+},
+  enabled: true,
           next_run_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Next Sunday
           last_run_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last Sunday
           run_count: 8,
@@ -127,22 +123,22 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user2',
           created_at: new Date('2024-01-01'),
-          updated_at: new Date('2024-01-15'),
-        },
+          updated_at: new Date('2024-01-15');
+  }
         {
-          id: '3',
-          workspace_id: workspaceId,
-          resource_id: resourceId || 'resource-3',
-          schedule_name: 'One-time Migration',
-          schedule_type: 'once',
-          schedule_expression: '2024-01-25T15:00:00Z',
-          action_type: 'custom',
-          action_config: {,
-            action: 'migrate_data',
-            source: 'old_system',
-            target: 'new_system',
-          },
-          enabled: false,
+  id: '3',
+  workspace_id: workspaceId,
+  resource_id: resourceId || 'resource-3',
+  schedule_name: 'One-time Migration',
+  schedule_type: 'once',
+  schedule_expression: '2024-01-25T15:00:00Z',
+  action_type: 'custom',
+  action_config: {,
+  action: 'migrate_data',
+  source: 'old_system',
+  target: 'new_system',
+},
+  enabled: false,
           next_run_at: new Date('2024-01-25T15:00:00Z'),
           last_run_at: undefined,
           run_count: 0,
@@ -151,35 +147,32 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           max_retries: 3,
           created_by: 'user3',
           created_at: new Date('2024-01-20'),
-          updated_at: new Date('2024-01-20'),
-        }
-      ];
+          updated_at: new Date('2024-01-20')];
       setSchedules(mockSchedules);
     } catch (error) {
       setError('Failed to load schedules');
     } finally {
       setLoading(false);
-    }
   };
   const loadExecutionLogs = async () => {
-    try {
-      // Mock API call - replace with actual API
-      const mockLogs: ExecutionLog[] = [
-        {
-          id: '1',
-          schedule_id: '1',
-          execution_id: 'exec-1',
-          status: 'completed',
-          started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
-          result_data: {,
-            state_changed: true,
-            new_state: 'review',
-            affected_resources: 1,
-          },
-          execution_time_ms: 5000,
-          retry_attempt: 0,
-        },
+  try {
+  // Mock API call - replace with actual API
+  const mockLogs: ExecutionLog = [
+  {
+  id: '1',
+  schedule_id: '1',
+  execution_id: 'exec-1',
+  status: 'completed',
+  started_at: new Date(Date.now() - 24 * 60 * 60 * 1000),
+  completed_at: new Date(Date.now() - 24 * 60 * 60 * 1000 + 5000),
+  result_data: {,
+  state_changed: true,
+  new_state: 'review',
+  affected_resources: 1,
+},
+  execution_time_ms: 5000,
+          retry_attempt: 0;
+  }
         {
           id: '2',
           schedule_id: '2',
@@ -191,8 +184,8 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           error_message: 'Failed to generate report: Database connection timeout',
           execution_time_ms: 30000,
           retry_attempt: 1,
-          next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000),
-        },
+          next_retry_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 + 5 * 60 * 1000);
+  }
         {
           id: '3',
           schedule_id: '1',
@@ -200,19 +193,16 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
           status: 'running',
           started_at: new Date(Date.now() - 2 * 60 * 1000),
           result_data: {},
-          retry_attempt: 0,
-        }
-      ];
+          retry_attempt: 0];
       setExecutionLogs(mockLogs);
     } catch (error) {
       setError('Failed to load execution logs');
-    }
   };
   const handleCreateSchedule = async (scheduleData: Partial<ScheduledExecution>) => {
     try {
       // Mock API call - replace with actual API
-      const newSchedule: ScheduledExecution = {
-        id: Date.now().toString(),
+      const newSchedule: ScheduledExecution = {,
+  id: Date.now().toString(),
         workspace_id: workspaceId,
         resource_id: resourceId || 'default',
         schedule_name: scheduleData.schedule_name || 'New Schedule',
@@ -227,13 +217,12 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
         max_retries: scheduleData.max_retries || 3,
         created_by: 'current_user',
         created_at: new Date(),
-        updated_at: new Date(),
-      };
+        updated_at: new Date();
+  };
       setSchedules(prev => [...prev, newSchedule]);
       setShowCreateSchedule(false);
     } catch (error) {
       setError('Failed to create schedule');
-    }
   };
   const handleDeleteSchedule = async (scheduleId: string) => {
     try {
@@ -242,7 +231,6 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       setShowDeleteConfirm(null);
     } catch (error) {
       setError('Failed to delete schedule');
-    }
   };
   const handleToggleSchedule = async (scheduleId: string) => {
     try {
@@ -254,20 +242,20 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       ));
     } catch (error) {
       setError('Failed to toggle schedule');
-    }
   };
   const handleRunNow = async (scheduleId: string) => {
     try {
       // Mock API call - replace with actual API
-      const newLog: ExecutionLog = {
-        id: Date.now().toString(),
+      const newLog: ExecutionLog = {,
+  id: Date.now().toString(),
         schedule_id: scheduleId,
-        execution_id: `exec-${Date.now()}`,}
-        status: 'running',
+        execution_id: `exec-${Date.now()}`}
+},
+  status: 'running',
         started_at: new Date(),
         result_data: {},
-        retry_attempt: 0,
-      };
+        retry_attempt: 0;
+  };
       setExecutionLogs(prev => [newLog, ...prev]);
       // Simulate completion after 3 seconds
       setTimeout(() => {
@@ -279,31 +267,25 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               completed_at: new Date(),
               execution_time_ms: 3000,
               result_data: { manual_execution: true }
-            }
             : log
         ));
       }, 3000);
     } catch (error) {
       setError('Failed to run schedule');
-    }
   };
   const formatCronExpression = (expression: string) => {
-    // Basic cron expression formatting
-    const parts = expression.split(' ');
-    if (parts.length === 5) {
-      const [minute, hour, day, month, dayOfWeek] = parts;
-      if (minute === '0' && hour === '0' && day === '*' && month === '*' && dayOfWeek === '*') {
-        return 'Daily at midnight';
-      }
-      if (minute === '0' && hour === '9' && day === '*' && month === '*' && dayOfWeek === '*') {
-        return 'Daily at 9:00 AM';
-      }
-      if (minute === '0' && hour === '0' && day === '*' && month === '*' && dayOfWeek === '0') {
-        return 'Weekly on Sunday at midnight';
-      }
-    }
-    return expression;
-  };
+  // Basic cron expression formatting
+  const parts = expression.split(' ');
+  if (parts.length === 5) {
+  const [minute, hour, day, month, dayOfWeek] = parts;
+  if (minute === '0' && hour === '0' && day === '*' && month === '*' && dayOfWeek === '*') {
+  return 'Daily at midnight';
+  if (minute === '0' && hour === '9' && day === '*' && month === '*' && dayOfWeek === '*') {
+  return 'Daily at 9:00 AM';
+  if (minute === '0' && hour === '0' && day === '*' && month === '*' && dayOfWeek === '0') {
+  return 'Weekly on Sunday at midnight';
+  return expression;
+};
   const formatScheduleExpression = (schedule: ScheduledExecution) => {
     switch (schedule.schedule_type) {
     case 'cron':
@@ -311,37 +293,33 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     case 'interval':
       return `Every ${schedule.schedule_expression}`;}
     case 'once':
-      return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;}
-    default:
+      return `Once at ${new Date(schedule.schedule_expression).toLocaleString()}`;},}
+  default:
       return schedule.schedule_expression;
-    }
   };
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'running': return 'bg-blue-100 text-blue-800';
-    case 'completed': return 'bg-green-100 text-green-800';
-    case 'failed': return 'bg-red-100 text-red-800';
-    case 'cancelled': return 'bg-gray-100 text-gray-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'running': return 'bg-blue-100 text-blue-800';
+  case 'completed': return 'bg-green-100 text-green-800';
+  case 'failed': return 'bg-red-100 text-red-800';
+  case 'cancelled': return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const ___getStatusIcon = (status: string) => {
-    switch (status) {
-    case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
-    case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
-    case 'failed': return <XCircleIcon className="h-4 w-4 text-red-600" />;
-    case 'cancelled': return <StopIcon className="h-4 w-4 text-gray-600" />;
-    default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
-    }
-  };
+  switch (status) {
+  case 'running': return <PlayIcon className="h-4 w-4 text-blue-600" />;
+  case 'completed': return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
+  case 'failed': return <XCircleIcon className="h-4 w-4 text-red-600" />;
+  case 'cancelled': return <StopIcon className="h-4 w-4 text-gray-600" />;
+  default: return <ClockIcon className="h-4 w-4 text-gray-600" />;
+};
   const toggleLogExpansion = (logId: string) => {
     setExpandedLogs(prev => {)
-      const newSet = new Set(prev);
+  const newSet = new Set(prev);
       if (newSet.has(logId)) {
         newSet.delete(logId);
       } else {
         newSet.add(logId);
-      }
       return newSet;
     });
   };
@@ -365,10 +343,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                 <div className="flex items-center space-x-3">
                   <h4 className="font-medium text-gray-900">{schedule.schedule_name}</h4>
                   <span className={`px-2 py-1 text-xs rounded-full ${
-                    schedule.enabled 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
+  schedule.enabled
+  ? 'bg-green-100 text-green-800'
+  : 'bg-gray-100 text-gray-800',
+}`}>
                     {schedule.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                   <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">
@@ -402,10 +380,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                 <button
                   onClick={() => handleToggleSchedule(schedule.id)}
                   className={`p-2 rounded-md transition-colors ${
-                    schedule.enabled
-                      ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50'
-                      : 'text-green-600 hover:text-green-800 hover:bg-green-50'
-                  }`}
+  schedule.enabled
+  ? 'text-orange-600 hover:text-orange-800 hover:bg-orange-50',
+  : 'text-green-600 hover:text-green-800 hover:bg-green-50',
+}`}
                   title={schedule.enabled ? 'Disable' : 'Enable'}
                 >
                   {schedule.enabled ? <PauseIcon className="h-4 w-4" /> : <PlayIcon className="h-4 w-4" />}
@@ -485,16 +463,16 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                 <h5 className="font-medium text-sm mb-2">Execution Details</h5>
                 <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
                   {JSON.stringify({)
-                    execution_id: log.execution_id,
-                    schedule_id: log.schedule_id,
-                    status: log.status,
-                    started_at: log.started_at,
-                    completed_at: log.completed_at,
-                    execution_time_ms: log.execution_time_ms,
-                    retry_attempt: log.retry_attempt,
-                    result_data: log.result_data,
-                    error_message: log.error_message,
-                  }, null, 2)}
+  execution_id: log.execution_id,
+  schedule_id: log.schedule_id,
+  status: log.status,
+  started_at: log.started_at,
+  completed_at: log.completed_at,
+  execution_time_ms: log.execution_time_ms,
+  retry_attempt: log.retry_attempt,
+  result_data: log.result_data,
+  error_message: log.error_message,
+}, null, 2)}
                 </pre>
               </div>
             )}
@@ -518,7 +496,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
       .filter(log => log.execution_time_ms)
       .reduce((sum, log) => sum + (log.execution_time_ms || 0), 0) / 
       executionLogs.filter(log => log.execution_time_ms).length || 0;
-    return ();
+    return;
       <div className="space-y-6">
         <h3 className="text-lg font-semibold">Execution Statistics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -577,10 +555,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
                 <div className="flex items-center space-x-3">
                   <span className="font-medium">{schedule.schedule_name}</span>
                   <span className={`px-2 py-1 text-xs rounded-full ${
-                    schedule.enabled 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
+  schedule.enabled
+  ? 'bg-green-100 text-green-800'
+  : 'bg-gray-100 text-gray-800',
+}`}>
                     {schedule.enabled ? 'Enabled' : 'Disabled'}
                   </span>
                 </div>
@@ -599,7 +577,7 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
     { id: 'logs', label: 'Execution Logs', icon: EyeIcon },
     { id: 'statistics', label: 'Statistics', icon: CogIcon }
   ];
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -631,10 +609,10 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
               className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
@@ -683,25 +661,25 @@ export const ScheduledExecutionManager: React.FC<ScheduledExecutionManagerProps>
 };
 
 // Sub-components for modals
-const CreateScheduleModal: React.FC<{
+const CreateScheduleModal: React.FC<{,
   onClose: () => void;
   onSubmit: (data: Partial<ScheduledExecution>) => void;
 }> = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({)
-    schedule_name: '',
+  schedule_name: '',
     schedule_type: 'cron' as 'cron' | 'interval' | 'once',
     schedule_expression: '0 9 * * *', // 9 AM daily
     action_type: 'state_transition' as 'state_transition' | 'approval_request' | 'custom',
     action_config: {},
     enabled: true,
     max_runs: undefined as number | undefined,
-    max_retries: 3,
+    max_retries: 3;
   });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <h3 className="text-lg font-semibold mb-4">Create Schedule</h3>
@@ -824,11 +802,11 @@ const CreateScheduleModal: React.FC<{
     </div>
   );
 };
-const DeleteScheduleModal: React.FC<{
+const DeleteScheduleModal: React.FC<{,
   onClose: () => void;
   onConfirm: () => void;
 }> = ({ onClose, onConfirm }) => {
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete Schedule</h3>

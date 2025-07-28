@@ -56,39 +56,37 @@ export helpInteractions: [] as Array<{ event: string; data: any; timestamp: numb
       sessionId: `session_${Date.now()}`}
     };
     switch (event) {
-    case 'help_interaction':
-    case 'contextual_help_triggered':
-    case 'tour_completed':
-    case 'feedback_submitted':
-      analytics.helpInteractions.push(entry);
+  case 'help_interaction':,
+  case 'contextual_help_triggered':,
+  case 'tour_completed':,
+  case 'feedback_submitted':,
+  analytics.helpInteractions.push(entry);
+  break;
+  case 'user_struggle_detected':,
+  analytics.userStruggles.push(entry);
+  break;
+  case 'help_effectiveness':,
+  const helpId = data.helpId;
+  analytics.effectiveness[helpId] = {
+  views: (analytics.effectiveness[helpId]?.views || 0) + 1,
+  helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0),
+};
       break;
-    case 'user_struggle_detected':
-      analytics.userStruggles.push(entry);
-      break;
-    case 'help_effectiveness':
-      const helpId = data.helpId;
-      analytics.effectiveness[helpId] = {
-        views: (analytics.effectiveness[helpId]?.views || 0) + 1,
-        helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0),
-      };
-      break;
-    }
     // Optional: Send to analytics service
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', event, {)
-        custom_parameter_1: JSON.stringify(data),
-        event_category: 'help_system',
-      });
-    }
+  (window as any).gtag('event', event, {)
+  custom_parameter_1: JSON.stringify(data),
+  event_category: 'help_system',
+});
   };
   const getAnalytics = () => ({ ...analytics });
   const getHelpEffectivenessReport = () => {
-    const report = Object.entries(analytics.effectiveness).map(([helpId, stats]) => ({)
-      helpId,
-      views: stats.views,
-      helpful: stats.helpful,
-      effectivenessRate: stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0,
-    }));
+  const report = Object.entries(analytics.effectiveness).map(([helpId, stats]) => ({)
+  helpId,
+  views: stats.views,
+  helpful: stats.helpful,
+  effectivenessRate: stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0,
+}));
     return report.sort((a, b) => b.effectivenessRate - a.effectivenessRate);
   };
   const getStruggleReport = () => {
@@ -110,5 +108,5 @@ export helpInteractions: [] as Array<{ event: string; data: any; timestamp: numb
 };
 
 // Constants for help system configuration
-export 
+
 export default Epic16HelpSystem;

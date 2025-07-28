@@ -8,6 +8,7 @@ import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 import { GeolocationService, GeolocationData, LocationHistory } from './GeolocationService';
 
+}
 export interface UnusualLocationConfig {
   // Detection thresholds
   newLocationSuspicionThreshold: number; // km distance to be considered unusual
@@ -36,7 +37,9 @@ export interface UnusualLocationConfig {
   trustedASNs: string[]; // Trusted Autonomous System Numbers
   blockedASNs: string[]; // Blocked ASNs
 }
+}
 
+}
 export interface LocationRiskAssessment {
   riskScore: number; // 0-100
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -45,7 +48,9 @@ export interface LocationRiskAssessment {
   confidence: number; // 0-1
   reasoning: string[];
 }
+}
 
+}
 export interface LocationRiskFactor {
   factor: string;
   weight: number;
@@ -53,7 +58,9 @@ export interface LocationRiskFactor {
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface UnusualLocationEvent {
   id: string;
   userId: string;
@@ -73,7 +80,9 @@ export interface UnusualLocationEvent {
   resolvedAt?: Date;
   notes?: string;
 }
+}
 
+}
 export interface UserLocationProfile {
   userId: string;
   typicalCountries: string[];
@@ -89,6 +98,7 @@ export interface UserLocationProfile {
     uniqueRegionsCount: number;
     typicalLoginHours: number[];
     weekendTravelFrequency: number;
+}
   };
   riskProfile: {
     baselineRisk: number;
@@ -154,6 +164,7 @@ export class UnusualLocationDetectionService {
     event: UnusualLocationEvent;
     action: 'allow' | 'challenge' | 'block';
   }> {
+
     try {
       // Get geolocation data
       const location = await this.geolocationService.getGeolocationData(
@@ -234,6 +245,7 @@ export class UnusualLocationDetectionService {
     userProfile: UserLocationProfile,
     recentLocations: LocationHistory[]
   ): Promise<LocationRiskAssessment> {
+
     const riskFactors: LocationRiskFactor[] = [];
     let totalRiskScore = 0;
 
@@ -685,6 +697,7 @@ export class UnusualLocationDetectionService {
    * Get user's location profile
    */
   private async getUserLocationProfile(userId: string): Promise<UserLocationProfile> {
+
     // Try to get cached profile first
     const cacheKey = `user_location_profile:${userId}`;
     const cached = await this.redis.get(cacheKey);
@@ -710,6 +723,7 @@ export class UnusualLocationDetectionService {
    * Generate user location profile from historical data
    */
   private async generateUserLocationProfile(userId: string): Promise<UserLocationProfile> {
+
     const locationHistory = await this.geolocationService.getUserLocationHistory(userId);
     
     // Extract typical locations
@@ -749,21 +763,21 @@ export class UnusualLocationDetectionService {
         uniqueRegionsCount: new Set(locationHistory.map(lh => lh.location.region)).size,
         typicalLoginHours: [], // Would need to calculate from login times
         weekendTravelFrequency: 0 // Would need to calculate
-      },
+  }
       riskProfile: {
         baselineRisk: 30, // Default baseline
         lastUpdated: new Date(),
         suspiciousLocationCount: 0,
         falsePosativeRate: 0.1 // Default 10%
-      },
-      lastAnalysis: new Date()
-    };
+  }
+      lastAnalysis: new Date(};
   }
 
   /**
    * Get recent location history for velocity analysis
    */
   private async getRecentLocationHistory(userId: string, timeWindowMinutes: number): Promise<LocationHistory[]> {
+
     const cutoffTime = new Date(Date.now() - timeWindowMinutes * 60 * 1000);
     
     const result = await this.db.query(`
@@ -799,6 +813,7 @@ export class UnusualLocationDetectionService {
     sessionId: string,
     action: 'allow' | 'challenge' | 'block'
   ): Promise<UnusualLocationEvent> {
+
     const eventId = `ULE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     let distanceFromPrevious: number | undefined;
@@ -869,6 +884,7 @@ export class UnusualLocationDetectionService {
     location: GeolocationData,
     riskAssessment: LocationRiskAssessment
   ): Promise<void> {
+
     // Clear cached profile to force regeneration
     const cacheKey = `user_location_profile:${userId}`;
     await this.redis.del(cacheKey);
@@ -880,6 +896,7 @@ export class UnusualLocationDetectionService {
    * Initialize database schema for unusual location detection
    */
   async initializeSchema(): Promise<void> {
+
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS unusual_location_events (
         id VARCHAR(255) PRIMARY KEY,
@@ -901,7 +918,7 @@ export class UnusualLocationDetectionService {
         notes TEXT,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     await this.db.query(`

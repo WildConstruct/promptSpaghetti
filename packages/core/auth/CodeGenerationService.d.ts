@@ -10,7 +10,7 @@ export declare enum CodeType {
     BACKUP_CODE = "backup_code",
     RECOVERY_TOKEN = "recovery_token",
     API_TOKEN = "api_token"
-}
+
 export declare enum CodeFormat {
     NUMERIC = "numeric",// 123456
     ALPHANUMERIC = "alphanumeric",// A1B2C3
@@ -18,7 +18,7 @@ export declare enum CodeFormat {
     BASE32 = "base32",// JBSWY3DPEHPK3PXP
     HEX = "hex",// 1a2b3c4d
     UUID = "uuid"
-}
+
 export interface CodeGenerationOptions {
     type: CodeType;
     format: CodeFormat;
@@ -32,7 +32,7 @@ export interface CodeGenerationOptions {
     customCharset?: string;
     excludeSimilar?: boolean;
     enforceComplexity?: boolean;
-}
+
 export interface GeneratedCode {
     code: string;
     hashedCode: string;
@@ -47,7 +47,7 @@ export interface GeneratedCode {
         entropy: number;
         algorithm: string;
     };
-}
+
 export interface CodeValidationResult {
     valid: boolean;
     reason?: 'expired' | 'invalid' | 'rate_limited' | 'used' | 'format_mismatch';
@@ -57,13 +57,13 @@ export interface CodeValidationResult {
         timingAttackSafe: boolean;
         processingTimeMs: number;
     };
-}
+
 export interface CodeValidationOptions {
     allowExpired?: boolean;
     constantTimeValidation?: boolean;
     rateLimitingEnabled?: boolean;
     maxAttempts?: number;
-}
+
 export declare class CodeGenerationService {
     private rateLimitService;
     private hashingAlgorithm;
@@ -117,7 +117,7 @@ export declare class CodeGenerationService {
     private hashCode;
     private constantTimeCompare;
     private validateCodeFormat;
-}
+
 export declare class CodeGenerationUtils {
     /**
      * Analyze the strength of a generated code
@@ -140,6 +140,6 @@ export declare class CodeGenerationUtils {
      * Format code for user display
      */
     static formatCodeForDisplay(code: string, format: CodeFormat): string;
-}
+
 export default CodeGenerationService;
 //# sourceMappingURL=CodeGenerationService.d.ts.map

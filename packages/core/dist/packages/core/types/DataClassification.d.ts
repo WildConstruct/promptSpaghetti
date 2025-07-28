@@ -9,19 +9,10 @@ export declare enum DataClassificationLevel {
     INTERNAL = "INTERNAL",
     CONFIDENTIAL = "CONFIDENTIAL",
     RESTRICTED = "RESTRICTED",
-    TOP_SECRET = "TOP_SECRET"
-}
-export interface DataClassification {
-    id: string;
-    dataElement: string;
-    classification: DataClassificationLevel;
-    rationale: string;
-    dataOwner: string;
-    classifiedBy: string;
-    classificationDate: Date;
-    reviewDate: Date;
-    approvals: ClassificationApproval[];
-    metadata: ClassificationMetadata;
+    TOP_SECRET = "TOP_SECRET",
+    export,
+    interface,
+    DataClassification
 }
 export interface ClassificationApproval {
     approver: string;
@@ -30,28 +21,25 @@ export interface ClassificationApproval {
     comments?: string;
 }
 export interface ClassificationMetadata {
-    regulatoryRequirements?: string[];
+    regulatoryRequirements?: string;
     businessJustification: string;
     riskAssessment: string;
-    dataLineage?: string[];
-    relatedClassifications?: string[];
+    dataLineage?: string;
+    relatedClassifications?: string;
 }
 export interface ClassificationContext {
     dataType: string;
     businessContext: string;
-    regulatoryScope: string[];
+    regulatoryScope: string;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     dataOwner: string;
 }
 export interface ValidationResult {
     valid: boolean;
-    errors: string[];
-    warnings: string[];
-    recommendations: string[];
+    errors: string;
+    warnings: string;
+    recommendations: string;
 }
-/**
- * Handling Requirements by Classification Level
- */
 export interface HandlingRequirements {
     storage: StorageRequirements;
     transmission: TransmissionRequirements;
@@ -63,22 +51,22 @@ export interface StorageRequirements {
     encryptionRequired: boolean;
     encryptionAlgorithm: string;
     keyRotationDays: number;
-    accessControls: string[];
+    accessControls: string;
     backupEncryption: boolean;
     retentionDays: number;
-    approvedLocations: string[];
+    approvedLocations: string;
     redundancyLevel: 'NONE' | 'STANDARD' | 'HIGH' | 'CRITICAL';
 }
 export interface TransmissionRequirements {
     tlsVersion: string;
     certificatePinning: boolean;
-    networkRestrictions: string[];
+    networkRestrictions: string;
     loggingLevel: 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE';
     compressionAllowed: boolean;
     endToEndEncryption: boolean;
 }
 export interface ProcessingRequirements {
-    approvedEnvironments: string[];
+    approvedEnvironments: string;
     loggingRequired: boolean;
     cachingRestrictions: CachingRestrictions;
     thirdPartyProcessing: boolean;
@@ -109,9 +97,6 @@ export interface MonitoringRequirements {
     complianceChecks: boolean;
     incidentResponse: boolean;
 }
-/**
- * Encryption Requirements by Classification
- */
 export interface EncryptionRequirements {
     required: boolean;
     algorithm?: string;
@@ -120,14 +105,11 @@ export interface EncryptionRequirements {
     hsmRequired?: boolean;
     keyEscrow?: boolean;
 }
-/**
- * Classification Rules Engine
- */
 export interface ClassificationRule {
     id: string;
     name: string;
     description: string;
-    conditions: ClassificationCondition[];
+    conditions: ClassificationCondition;
     classification: DataClassificationLevel;
     confidence: number;
     priority: number;
@@ -138,9 +120,6 @@ export interface ClassificationCondition {
     weight: number;
     required: boolean;
 }
-/**
- * Audit and Compliance Types
- */
 export interface ClassificationAuditEvent {
     id: string;
     timestamp: Date;
@@ -157,10 +136,10 @@ export interface ClassificationAuditEvent {
 export interface ComplianceReport {
     period: DateRange;
     summary: ComplianceSummary;
-    byClassification: ClassificationCompliance[];
-    violations: ComplianceViolation[];
-    recommendations: string[];
-    trends: ComplianceTrend[];
+    byClassification: ClassificationCompliance;
+    violations: ComplianceViolation;
+    recommendations: string;
+    trends: ComplianceTrend;
 }
 export interface DateRange {
     start: Date;
@@ -197,9 +176,6 @@ export interface ComplianceTrend {
     change: number;
     direction: 'IMPROVING' | 'STABLE' | 'DEGRADING';
 }
-/**
- * Data Operation Context
- */
 export interface OperationContext {
     operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
     userId: string;
@@ -217,29 +193,20 @@ export interface OperationContext {
     requestedAt?: Date;
     emergencyAccess?: boolean;
 }
-/**
- * Classification Service Interface
- */
 export interface ClassificationService {
     classifyData(data: unknown, context: ClassificationContext): Promise<DataClassification>;
     validateClassification(classification: DataClassification): Promise<ValidationResult>;
     getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements;
     auditClassificationAccess(userId: string, dataId: string, operation: string): Promise<void>;
     updateClassification(id: string, updates: Partial<DataClassification>): Promise<DataClassification>;
-    bulkClassify(dataElements: unknown[], context: ClassificationContext): Promise<DataClassification[]>;
+    bulkClassify(dataElements: unknown, context: ClassificationContext): Promise<DataClassification>;
 }
-/**
- * Classification Constants and Decision Matrix
- */
 export interface ClassificationCriteria {
     legalRegulatory: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
     businessImpact: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
     personalPrivacy: 'NONE' | 'MINIMAL' | 'PERSONAL' | 'SENSITIVE';
     securityRisk: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
 }
-/**
- * Utility Types
- */
 export type ClassificationEvent = 'ASSIGNED' | 'CHANGED' | 'REVIEWED' | 'EXPIRED' | 'VIOLATED';
 export type ComplianceStatus = 'COMPLIANT' | 'NON_COMPLIANT' | 'UNDER_REVIEW' | 'EXCEPTION_GRANTED';
 export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';

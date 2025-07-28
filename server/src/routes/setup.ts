@@ -66,6 +66,7 @@ export async function generatePreviewOutputs(
   sessionId?: string,
   userId?: number
 ): Promise<PreviewResultWithPath[]> {
+
   const results: PreviewResultWithPath[] = [];
   const executionPaths: ExecutionPath[] = [];
     
@@ -150,7 +151,7 @@ export async function generatePreviewOutputs(
           creativityScore: result.executionPath.randomizationPoints.length / Math.max(
             1,
             result.executionPath.steps.length
-          )
+
         };
       }
     });
@@ -163,6 +164,7 @@ export async function generatePreviewOutputs(
  * Setup all routes on a Fastify server instance
  */
 export async function setupRoutes(server: FastifyInstance): Promise<void> {
+
   // Build authentication configuration
   const authConfig = buildAuthConfig();
   server.decorate('authConfig', authConfig);
@@ -264,7 +266,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
         connections: wsMetrics.totalConnections,
         activeDocuments: wsMetrics.activeDocuments,
         uptime: wsMetrics.uptime
-      },
+  }
       timestamp: new Date().toISOString()
     };
   });
@@ -456,7 +458,7 @@ export async function setupRoutes(server: FastifyInstance): Promise<void> {
           seedStart: { type: 'integer', minimum: 1, default: 1 }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       if (!ENABLE_PREVIEW_API) {
         reply.status(503).send({ 

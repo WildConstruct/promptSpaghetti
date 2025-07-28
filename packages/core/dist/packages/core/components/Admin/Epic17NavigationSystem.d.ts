@@ -15,10 +15,10 @@ export interface NavigationItem {
     description?: string;
     icon: React.ComponentType<unknown>;
     path: string;
-    children?: NavigationItem[];
+    children?: NavigationItem;
     requiredPermissions?: {
         resource: string;
-        actions: string[];
+        actions: string;
     }[];
     badge?: NavigationBadge;
     metadata: {
@@ -27,7 +27,7 @@ export interface NavigationItem {
         riskLevel: 'low' | 'medium' | 'high' | 'critical';
         epic?: string;
         story?: string;
-        tags: string[];
+        tags: string;
     };
 }
 export interface NavigationBadge {
@@ -39,9 +39,9 @@ export interface NavigationBadge {
 export interface NavigationContext {
     currentPath: string;
     currentSection: string;
-    parentSections: string[];
-    breadcrumbs: BreadcrumbItem[];
-    availableActions: QuickAction[];
+    parentSections: string;
+    breadcrumbs: BreadcrumbItem;
+    availableActions: QuickAction;
 }
 export interface BreadcrumbItem {
     label: string;
@@ -62,7 +62,7 @@ export interface QuickAction {
 export interface NavigationState {
     expandedSections: Set<string>;
     pinnedItems: Set<string>;
-    recentItems: RecentItem[];
+    recentItems: RecentItem;
     favoriteItems: Set<string>;
     searchQuery: string;
     mobileMenuOpen: boolean;
@@ -73,6 +73,8 @@ export interface RecentItem {
     path: string;
     timestamp: Date;
     icon: React.ComponentType<unknown>;
+    const: any;
+    EPIC17_NAVIGATION: NavigationItem;
 }
 interface Epic17NavigationSystemProps {
     currentSection?: string;

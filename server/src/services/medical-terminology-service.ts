@@ -45,18 +45,22 @@ type MedicalConcept = z.infer<typeof MedicalConceptSchema>;
 type TerminologySearchOptions = z.infer<typeof TerminologySearchOptionsSchema>;
 type ConceptValidation = z.infer<typeof ConceptValidationSchema>;
 
+}
 interface TerminologySearchResult {
   concepts: MedicalConcept[];
   total: number;
   searchTime: number;
 }
+}
 
+}
 interface VocabularyInfo {
   name: string;
   version: string;
   description: string;
   totalConcepts: number;
   lastUpdated: string;
+}
 }
 
 export class MedicalTerminologyService {
@@ -76,6 +80,7 @@ export class MedicalTerminologyService {
     query: string,
     options: TerminologySearchOptions = {}
   ): Promise<TerminologySearchResult> {
+
     const startTime = Date.now();
     const {
       vocabularies,
@@ -134,6 +139,7 @@ export class MedicalTerminologyService {
     conceptId: string,
     vocabulary: ConceptValidation['vocabulary']
   ): Promise<ConceptValidation> {
+
     try {
       const vocabData = this.vocabularyData.get(vocabulary);
       if (!vocabData) {
@@ -174,6 +180,7 @@ export class MedicalTerminologyService {
    * Get concept details by ID and vocabulary
    */
   async getConceptDetails(conceptId: string, vocabulary: string): Promise<MedicalConcept | null> {
+
     try {
       const vocabData = this.vocabularyData.get(vocabulary);
       if (!vocabData) {
@@ -221,6 +228,7 @@ export class MedicalTerminologyService {
    * Get available vocabulary information
    */
   async getVocabularyInfo(): Promise<VocabularyInfo[]> {
+
     return Array.from(this.vocabularyInfo.values());
   }
 
@@ -231,6 +239,7 @@ export class MedicalTerminologyService {
     conceptId: string,
     vocabulary: string
   ): Promise<MedicalConcept['relationships']> {
+
     try {
       const concept = await this.getConceptDetails(conceptId, vocabulary);
       return concept?.relationships || [];
@@ -278,6 +287,7 @@ export class MedicalTerminologyService {
     vocabulary: string,
     options: { exactMatch?: boolean; semanticTypes?: string[] }
   ): Promise<MedicalConcept[]> {
+
     const vocabData = this.vocabularyData.get(vocabulary);
     if (!vocabData) {
       return [];
@@ -350,6 +360,7 @@ export class MedicalTerminologyService {
   }
 
   private async findSimilarConcepts(conceptId: string, vocabulary: string): Promise<string[]> {
+
     // Mock implementation - in production would use similarity algorithms
     const vocabData = this.vocabularyData.get(vocabulary);
     if (!vocabData) {
@@ -389,7 +400,7 @@ export class MedicalTerminologyService {
             relatedConceptName: 'Cardiovascular Diseases'
           }
         ]
-      },
+  }
       {
         conceptId: 'C0011847',
         preferredName: 'Diabetes',
@@ -398,7 +409,7 @@ export class MedicalTerminologyService {
         vocabulary: 'umls',
         semanticType: 'Disease or Syndrome',
         relationships: []
-      },
+  }
       {
         conceptId: 'C0004057',
         preferredName: 'Aspirin',
@@ -436,7 +447,7 @@ export class MedicalTerminologyService {
         vocabulary: 'loinc',
         semanticType: 'Laboratory or Test Result',
         relationships: []
-      },
+  }
       {
         conceptId: '33747-0',
         preferredName: 'General appearance of patient',

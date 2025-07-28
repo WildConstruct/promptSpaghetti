@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { Experiment, ExperimentVariant } from '../../types/experiment';
+
 export interface ExperimentBuilderProps {
     experiment?: Experiment;
     onSave: (experiment: Partial<Experiment>) => Promise<void>;
@@ -15,7 +16,7 @@ export interface ExperimentBuilderProps {
     onStart: (experimentId: string) => Promise<void>;
     onPause: (experimentId: string) => Promise<void>;
     className?: string;
-}
+
 export declare const ExperimentBuilder: React.FC<ExperimentBuilderProps>;
 export default ExperimentBuilder;
 //# sourceMappingURL=ExperimentBuilder.d.ts.map

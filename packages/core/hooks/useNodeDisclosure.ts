@@ -8,11 +8,10 @@ import { useUISettingsStore } from '../stores/uiSettingsStore';
  */
 export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
   const nodePrefs = getEffectiveNodePreferences(nodeId, nodeType);
-
   // Set disclosure level for this specific node
-  const setDisclosureLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {
-    setNodeDisclosureLevel(nodeId, level);
-  }, [nodeId, setNodeDisclosureLevel]);
+  const setDisclosureLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {,
+  setNodeDisclosureLevel(nodeId, level);
+}, [nodeId, setNodeDisclosureLevel]);
 
   // Toggle whether to use global default
   const setUseGlobalDefault = useCallback((useGlobal: boolean) => {
@@ -45,8 +44,7 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
         fieldLevel = 'advanced';
       } else {
         fieldLevel = 'basic';
-      }
-    }
+
 
     return shouldShowSection(fieldLevel);
   }, [shouldShowSection]);
@@ -78,10 +76,9 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
  */
 export const useDisclosurePreferences = () => {
   const [preferenceInheritance, setPreferenceInheritance] = useState<'global' | 'nodeType' | 'individual'>('global');
-  
-  const setGlobalLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {
-    setGlobalDisclosureLevel(level);
-  }, [setGlobalDisclosureLevel]);
+  const setGlobalLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {,
+  setGlobalDisclosureLevel(level);
+}, [setGlobalDisclosureLevel]);
 
   const setInheritance = useCallback((inheritance: 'global' | 'nodeType' | 'individual') => {
     setPreferenceInheritance(inheritance);

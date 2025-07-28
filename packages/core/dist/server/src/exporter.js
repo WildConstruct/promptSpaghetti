@@ -425,7 +425,9 @@ export function graphToBundle(graph, options) {
         debug: {
             seed: typeof graph.seed === 'number' ? graph.seed : undefined,
             originGraphGuid: undefined // Could be added as an optional parameter if needed
-        },
+        }
+        // Epic 8.6: VFX pipeline metadata
+        ,
         // Epic 8.6: VFX pipeline metadata
         vfx: options.controlNetEnabled ? {
             exportFormat: 'controlnet-compatible',
@@ -1365,7 +1367,9 @@ async function exportMARSFramework(data, options) {
                     background_treatment: marsData.tags.FOCAL.background_treatment,
                     visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy
                 }
-            },
+            }
+            // ControlNet Integration
+            ,
             // ControlNet Integration
             controlnet_mapping: marsData.structured.controlnet_mapping,
             // VFX Professional Notes
@@ -1374,7 +1378,9 @@ async function exportMARSFramework(data, options) {
                 controlnet_workflow: 'Map pose_guidance for character animation, depth_hints for 3D integration',
                 recommended_tools: ['ControlNet', 'Stable Diffusion', 'Midjourney', 'DALL-E'],
                 technical_requirements: 'Ensure pose data matches character rig, depth maps align with scene geometry'
-            },
+            }
+            // Original prompt for reference
+            ,
             // Original prompt for reference
             original_prompt: data.results?.[0]?.output || '',
             variables_used: data.variables || {}
@@ -1435,7 +1441,9 @@ async function exportZadaNaturalLanguage(data, options) {
                 shot_description: zadaData.director_friendly.shot_description,
                 mood_direction: zadaData.director_friendly.mood_direction,
                 reference_notes: zadaData.director_friendly.reference_notes
-            },
+            }
+            // Multiple Natural Language Variants
+            ,
             // Multiple Natural Language Variants
             variants: zadaData.variants.map(variant => ({
                 id: variant.variant_id,
@@ -1452,7 +1460,9 @@ async function exportZadaNaturalLanguage(data, options) {
                 variables_context: data.variables || {},
                 accessibility_focus: 'Converts technical prompts into natural, director-friendly language',
                 target_audience: options?.targetAudience || 'Creative team members without technical AI background'
-            },
+            }
+            // Usage Guidelines
+            ,
             // Usage Guidelines
             usage_notes: {
                 director_workflow: 'Use screenplay_style for storyboard discussions',

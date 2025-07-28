@@ -24,8 +24,8 @@ export interface FunnelChartProps {
         start: number;
         end: number;
     };
-    segments?: UserSegment[];
-    cohorts?: ConversionCohort[];
+    segments?: UserSegment;
+    cohorts?: ConversionCohort;
     chartMode?: FunnelChartMode;
     showDropoffAnalysis?: boolean;
     realTimeUpdates?: boolean;
@@ -59,19 +59,18 @@ export interface StepComparisonMetrics {
         percentile: number;
         industry: string;
     };
-    segments: Array<{
-        segmentId: string;
-        segmentName: string;
-        conversionRate: number;
-        performance: 'above_average' | 'below_average' | 'average';
-    }>;
+    segments: Array<{}, segmentId>;
+    string: any;
+    segmentName: string;
+    conversionRate: number;
+    performance: 'above_average' | 'below_average' | 'average';
 }
 export interface FunnelChartData {
-    steps: StepMetrics[];
+    steps: StepMetrics;
     overallMetrics: OverallFunnelMetrics;
-    dropoffAnalysis: DropoffAnalysis[];
-    trends: FunnelTrend[];
-    segmentComparisons: SegmentFunnelComparison[];
+    dropoffAnalysis: DropoffAnalysis;
+    trends: FunnelTrend;
+    segmentComparisons: SegmentFunnelComparison;
 }
 export interface OverallFunnelMetrics {
     totalEntries: number;
@@ -90,9 +89,9 @@ export interface DropoffAnalysis {
     stepName: string;
     dropOffCount: number;
     dropOffRate: number;
-    dropOffReasons: DropoffReason[];
+    dropOffReasons: DropoffReason;
     recoveryOpportunity: number;
-    recommendedActions: string[];
+    recommendedActions: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
 }
 export interface DropoffReason {
@@ -113,12 +112,10 @@ export interface SegmentFunnelComparison {
     segmentId: string;
     segmentName: string;
     overallConversionRate: number;
-    stepPerformance: Array<{
-        stepId: string;
-        conversionRate: number;
-        relativePerformance: number;
-    }>;
-    insights: string[];
+    stepPerformance: Array<{}, stepId>;
+    string: any;
+    conversionRate: number;
+    relativePerformance: number;
 }
 export interface ChartExportData {
     chartMode: FunnelChartMode;
@@ -134,7 +131,7 @@ export interface ChartExportData {
             start: number;
             end: number;
         };
-        filters: unknown[];
+        filters: unknown;
     };
 }
 export interface InteractionState {
@@ -150,11 +147,8 @@ export interface StepTooltipContent {
     stepName: string;
     metrics: StepMetrics;
     comparisonData?: StepComparisonMetrics;
-    insights: string[];
+    insights: string;
 }
-/**
- * Main Funnel Chart Component
- */
 export declare const FunnelChart: React.FC<FunnelChartProps>;
 export default FunnelChart;
 //# sourceMappingURL=FunnelChart.d.ts.map

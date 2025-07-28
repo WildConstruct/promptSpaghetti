@@ -17,14 +17,14 @@ export interface BulkUpdateOperation {
     id: string;
     name: string;
     description?: string;
-    targets: BulkUpdateTarget[];
-    updates: PropertyUpdate[];
+    targets: BulkUpdateTarget;
+    updates: PropertyUpdate;
     validation: ValidationRules;
     execution: ExecutionSettings;
     rollback: RollbackSettings;
     status: OperationStatus;
     progress: OperationProgress;
-    results: OperationResult[];
+    results: OperationResult;
     createdAt: Date;
     createdBy: string;
     executedAt?: Date;
@@ -35,7 +35,7 @@ export interface PropertyUpdate {
     property: string;
     operation: UpdateOperationType;
     value?: any;
-    conditions?: UpdateCondition[];
+    conditions?: UpdateCondition;
     transformation?: PropertyTransformation;
 }
 export interface UpdateCondition {
@@ -50,9 +50,9 @@ export interface PropertyTransformation {
     description: string;
 }
 export interface ValidationRules {
-    required?: string[];
-    constraints?: PropertyConstraint[];
-    customValidators?: CustomValidator[];
+    required?: string;
+    constraints?: PropertyConstraint;
+    customValidators?: CustomValidator;
     skipInvalid?: boolean;
 }
 export interface PropertyConstraint {
@@ -96,8 +96,8 @@ export interface OperationResult {
     targetId: string;
     targetType: TargetType;
     status: 'success' | 'failed' | 'skipped' | 'validation_error';
-    changes: PropertyChange[];
-    errors: OperationError[];
+    changes: PropertyChange;
+    errors: OperationError;
     executedAt: Date;
     duration: number;
     backup?: Record<string, any>;
@@ -123,7 +123,7 @@ export interface BulkUpdateTemplate {
     name: string;
     description: string;
     targetType: TargetType;
-    updates: PropertyUpdate[];
+    updates: PropertyUpdate;
     validation: ValidationRules;
     execution: ExecutionSettings;
     usageCount: number;
@@ -132,9 +132,9 @@ export interface BulkUpdateTemplate {
     createdAt: Date;
 }
 export interface BulkUpdateFilter {
-    statuses?: OperationStatus[];
-    targetTypes?: TargetType[];
-    createdBy?: string[];
+    statuses?: OperationStatus;
+    targetTypes?: TargetType;
+    createdBy?: string;
     dateRange?: {
         start?: Date;
         end?: Date;
@@ -148,27 +148,11 @@ export interface BulkUpdateStats {
     failedOperations: number;
     totalTargetsProcessed: number;
     averageProcessingTime: number;
-    successRateByType: Record<TargetType, {
-        total: number;
-        successful: number;
-        rate: number;
-    }>;
-    commonErrors: Array<{
-        type: string;
-        message: string;
-        count: number;
-        affectedTargets: number;
-    }>;
-    performanceMetrics: {
-        averageItemsPerSecond: number;
-        largestBatchSize: number;
-        longestOperation: number;
-        totalProcessingTime: number;
-    };
+    successRateByType: Record<TargetType, {}, total>;
+    number: any;
+    successful: number;
+    rate: number;
 }
-/**
- * Bulk Property Update Service
- */
 export declare class BulkPropertyUpdateService {
     private static instance;
     private operations;
@@ -177,78 +161,6 @@ export declare class BulkPropertyUpdateService {
     private entityProviders;
     private constructor();
     static getInstance(): BulkPropertyUpdateService;
-    /**
-     * Entity Provider Registration
-     */
-    registerEntityProvider(targetType: TargetType, provider: EntityProvider): void;
-    /**
-     * Operation Management
-     */
-    createOperation(name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: {
-        validation?: Partial<ValidationRules>;
-        execution?: Partial<ExecutionSettings>;
-        rollback?: Partial<RollbackSettings>;
-    }, createdBy: string): Promise<BulkUpdateOperation>;
-    validateOperation(operationId: string): Promise<ValidationResult>;
-    executeOperation(operationId: string): Promise<boolean>;
-    rollbackOperation(operationId: string): Promise<boolean>;
-    /**
-     * Template Management
-     */
-    createTemplate(name: string, targetType: TargetType, updates: PropertyUpdate[], validation: ValidationRules, execution: ExecutionSettings, createdBy: string): Promise<BulkUpdateTemplate>;
-    applyTemplate(templateId: string, targets: BulkUpdateTarget[], operationName: string, createdBy: string): Promise<BulkUpdateOperation>;
-    /**
-     * Data Retrieval
-     */
-    getOperations(filter?: BulkUpdateFilter): BulkUpdateOperation[];
-    getTemplates(targetType?: TargetType): BulkUpdateTemplate[];
-    getBulkUpdateStats(): BulkUpdateStats;
-    /**
-     * Event Handling
-     */
-    subscribe(listenerId: string, callback: (event: BulkUpdateEvent) => void): void;
-    unsubscribe(listenerId: string): void;
-    private executeSequentially;
-    private executeInParallel;
-    private executeInBatches;
-    private executeForTarget;
-    private applyPropertyUpdate;
-    private evaluateConditions;
-    private applyTransformation;
-    private validateTarget;
-    private validatePropertyConstraint;
-    private registerDefaultEntityProviders;
-    private notifyListeners;
-    private generateOperationId;
-    private generateTemplateId;
-    private chunkArray;
-    private sleep;
+    if(: any, errorMap: any, has: any): any;
 }
-interface ValidationResult {
-    valid: boolean;
-    errors: OperationError[];
-    warnings: OperationError[];
-    targetResults: TargetValidationResult[];
-}
-interface TargetValidationResult {
-    targetId: string;
-    valid: boolean;
-    errors: OperationError[];
-    warnings: OperationError[];
-}
-interface EntityProvider {
-    getEntity: (id: string) => Promise<Record<string, any> | null>;
-    updateEntity: (id: string, data: Record<string, any>) => Promise<Record<string, any>>;
-}
-export interface BulkUpdateEvent {
-    type: string;
-    data: any;
-    timestamp: Date;
-}
-export declare const bulkPropertyUpdateService: BulkPropertyUpdateService;
-export declare const createBulkOperation: (name: string, targets: BulkUpdateTarget[], updates: PropertyUpdate[], options: any, createdBy: string) => Promise<BulkUpdateOperation>;
-export declare const executeBulkOperation: (operationId: string) => Promise<boolean>;
-export declare const getBulkOperations: (filter?: BulkUpdateFilter) => BulkUpdateOperation[];
-export declare const getBulkUpdateStats: () => BulkUpdateStats;
-export {};
 //# sourceMappingURL=BulkPropertyUpdateService.d.ts.map

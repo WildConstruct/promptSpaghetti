@@ -7,6 +7,7 @@
  * Task: T-1752989144373-766 - Build plugin loader with version & dependency resolution
  */
 import { ExtensionManifest, ExtensionVersionManager } from './ExtensionLifecycleManager';
+
 export interface DependencyNode {
     id: string;
     version: string;
@@ -14,7 +15,7 @@ export interface DependencyNode {
     dependents: string[];
     resolved: boolean;
     optional: boolean;
-}
+
 export interface DependencyGraph {
     nodes: Map<string, DependencyNode>;
     edges: Array<{,
@@ -25,7 +26,7 @@ export interface DependencyGraph {
     resolved: boolean;
     conflicts: DependencyConflict[];
     circularDependencies: CircularDependency[];
-}
+
 export interface DependencyConflict {
     packageId: string;
     requiredVersions: Array<{,
@@ -36,13 +37,14 @@ export interface DependencyConflict {
         selectedVersion: string;
         strategy: 'latest' | 'maxSatisfying' | 'manual';
     };
-}
+
 export interface CircularDependency {
     cycle: string[];
     breakable: boolean;
     suggestions: string[];
-}
+
 export type LoadOrder = string[];
+
 export interface DependencyResolutionOptions {
     allowOptionalDependencies: boolean;
     strictVersionMatching: boolean;
@@ -50,7 +52,7 @@ export interface DependencyResolutionOptions {
     maxDepth: number;
     resolutionStrategy: 'latest' | 'maxSatisfying' | 'conservative';
     allowCircularDependencies: boolean;
-}
+
 export declare class DependencyResolver {
     private versionManager;
     private options;
@@ -114,5 +116,5 @@ export declare class DependencyResolver {
      * In a real implementation, this would query npm registry or plugin registry
      */
     private getAvailableVersions;
-}
+
 //# sourceMappingURL=DependencyResolver.d.ts.map

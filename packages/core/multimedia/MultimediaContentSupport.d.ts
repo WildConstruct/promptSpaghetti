@@ -17,6 +17,7 @@
  * - Performance optimization
  */
 import { EventEmitter } from 'events';
+
 export interface MediaAsset {
     id: string;
     name: string;
@@ -36,7 +37,7 @@ export interface MediaAsset {
     storage: StorageInfo;
     created: Date;
     lastModified: Date;
-}
+
 export interface MediaMetadata {
     title?: string;
     description?: string;
@@ -54,7 +55,7 @@ export interface MediaMetadata {
         framerate?: number;
         sampleRate?: number;
     };
-}
+
 export interface MediaChapter {
     id: string;
     title: string;
@@ -62,7 +63,7 @@ export interface MediaChapter {
     endTime: number;
     description?: string;
     thumbnailUrl?: string;
-}
+
 export interface AccessibilityFeatures {
     altText: string;
     transcription?: string;
@@ -71,7 +72,7 @@ export interface AccessibilityFeatures {
     signLanguage?: boolean;
     highContrast?: boolean;
     screenReaderOptimized: boolean;
-}
+
 export interface MediaCaption {
     id: string;
     language: string;
@@ -88,7 +89,7 @@ export interface MediaCaption {
         backgroundColor: string;
         fontFamily: string;
     };
-}
+
 export interface ProcessingStatus {
     status: 'pending' | 'processing' | 'completed' | 'failed' | 'optimizing';
     progress: number;
@@ -96,7 +97,7 @@ export interface ProcessingStatus {
     errors: string[];
     estimatedCompletion?: Date;
     processingTime?: number;
-}
+
 export interface ProcessingStage {
     name: string;
     status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -104,7 +105,7 @@ export interface ProcessingStage {
     startTime?: Date;
     endTime?: Date;
     details?: string;
-}
+
 export interface StorageInfo {
     provider: 'local' | 'cloud' | 'cdn';
     bucket?: string;
@@ -124,7 +125,7 @@ export interface StorageInfo {
         locations: string[];
         lastBackup?: Date;
     };
-}
+
 export interface MediaProcessingOptions {
     image?: {
         resize?: {
@@ -178,7 +179,7 @@ export interface MediaProcessingOptions {
         searchable?: boolean;
         compress?: boolean;
     };
-}
+
 export interface MultimediaConfig {
     storage: {,
         provider: 'local' | 'aws' | 'gcp' | 'azure';
@@ -206,7 +207,7 @@ export interface MultimediaConfig {
         autoGenerateCaptions: boolean;
         enforceStandards: boolean;
     };
-}
+
 export declare class MultimediaContentSupport extends EventEmitter {
     private assets;
     private processingQueue;
@@ -289,13 +290,12 @@ export declare class MultimediaContentSupport extends EventEmitter {
     private terminateWorkers;
     private getBaseUrl;
     private delay;
-}
+
 export declare class MultimediaComponentFactory {
     static createImageViewer(assetId: string): React.ComponentType<any>;
     static createVideoPlayer(assetId: string): React.ComponentType<any>;
     static createAudioPlayer(assetId: string): React.ComponentType<any>;
     static createDocumentViewer(assetId: string): React.ComponentType<any>;
-}
 declare const _default: {
     MultimediaContentSupport: typeof MultimediaContentSupport;
     MultimediaComponentFactory: typeof MultimediaComponentFactory;

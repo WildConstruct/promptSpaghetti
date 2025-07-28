@@ -5,6 +5,7 @@
  * Adapter for Stable Video Diffusion models (SVD and SVD-XT)
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface StableVideoConfig {
     endpoint: string;
     apiType: 'stability-ai' | 'automatic1111' | 'comfyui' | 'custom';
@@ -12,7 +13,7 @@ export interface StableVideoConfig {
     timeout?: number;
     maxRetries?: number;
     defaultModel?: string;
-}
+
 export interface StableVideoRequestOptions {
     image: string;
     model?: 'svd' | 'svd-xt' | 'svd-img2vid' | 'svd-xt-1-1';
@@ -34,7 +35,7 @@ export interface StableVideoRequestOptions {
     upscale_video?: boolean;
     remove_watermark?: boolean;
     loop_video?: boolean;
-}
+
 export interface StableVideoGenerationResult {
     video: {,
         frames: string[];
@@ -66,7 +67,7 @@ export interface StableVideoGenerationResult {
         estimated_cost: number;
         processing_time: number;
     };
-}
+
 export interface SVDModelInfo {
     name: string;
     type: 'svd' | 'svd-xt';
@@ -74,7 +75,7 @@ export interface SVDModelInfo {
     resolution: string;
     description: string;
     memory_requirements: string;
-}
+
 export declare class StableVideoAdapter extends BaseAIModel {
     private config;
     private availableModels;
@@ -111,6 +112,6 @@ export declare class StableVideoAdapter extends BaseAIModel {
     private _interpolateFrame;
     private _upscaleFrame;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default StableVideoAdapter;
 //# sourceMappingURL=StableVideoAdapter.d.ts.map

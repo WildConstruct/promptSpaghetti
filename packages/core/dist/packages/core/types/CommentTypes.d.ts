@@ -11,11 +11,11 @@ export interface Comment {
     parent_id?: string;
     content_markdown: string;
     content_html?: string;
-    mentions: string[];
+    mentions: string;
     status: CommentStatus;
     resolved_by?: string;
     resolved_at?: string;
-    replies?: Comment[];
+    replies?: Comment;
     created_at: string;
     updated_at: string;
 }
@@ -28,11 +28,10 @@ export interface CommentThread {
     reply_count: number;
     unread_count: number;
     last_activity: string;
-    participants: Array<{
-        user_id: string;
-        user_name: string;
-        user_avatar?: string;
-    }>;
+    participants: Array<{}, user_id>;
+    string: any;
+    user_name: string;
+    user_avatar?: string;
 }
 export interface CommentStats {
     total: number;
@@ -47,13 +46,13 @@ export interface CommentStats {
 }
 export interface CommentCreateRequest {
     content: string;
-    mentions?: string[];
+    mentions?: string;
     parent_id?: string;
     target_data?: Record<string, any>;
 }
 export interface CommentUpdateRequest {
     content?: string;
-    mentions?: string[];
+    mentions?: string;
     status?: CommentStatus;
 }
 export interface CommentFilter {
@@ -65,7 +64,7 @@ export interface CommentFilter {
     created_to?: string;
 }
 export interface CommentListResponse {
-    comments: Comment[];
+    comments: Comment;
     total: number;
     has_more: boolean;
     next_cursor?: string;
@@ -91,7 +90,7 @@ export interface UseCommentsOptions {
     autoLoad?: boolean;
 }
 export interface UseCommentsReturn {
-    comments: Comment[];
+    comments: Comment;
     loading: boolean;
     error: Error | null;
     stats: CommentStats | null;
@@ -114,7 +113,7 @@ export interface MentionUser {
     online?: boolean;
 }
 export interface MentionSearchResponse {
-    users: MentionUser[];
+    users: MentionUser;
     total: number;
 }
 export interface CommentNotification {

@@ -6,6 +6,7 @@
  * collected evidence and audit/compliance obligations.
  */
 
+}
 export interface EvidenceType {
   id: string;
   name: string;
@@ -20,9 +21,11 @@ export interface EvidenceType {
     tamper_evident_storage: boolean;
     chain_of_custody: boolean;
     version_control: boolean;
+}
   };
 }
 
+}
 export interface ComplianceFramework {
   id: string;
   name: string;
@@ -38,9 +41,11 @@ export interface ComplianceFramework {
     format: string[];
     recipients: string[];
     retention_period: string;
+}
   };
 }
 
+}
 export interface AuditRequirement {
   id: string;
   framework_id: string;
@@ -54,7 +59,9 @@ export interface AuditRequirement {
   automated_collection: boolean;
   manual_verification_required: boolean;
 }
+}
 
+}
 export interface EvidenceMapping {
   evidence_type_id: string;
   audit_requirement_id: string;
@@ -65,7 +72,9 @@ export interface EvidenceMapping {
   dependencies: string[];
   alternatives: string[];
 }
+}
 
+}
 export interface EvidenceGap {
   audit_requirement_id: string;
   missing_evidence_types: string[];
@@ -74,7 +83,9 @@ export interface EvidenceGap {
   deadline: string;
   responsible_party: string;
 }
+}
 
+}
 export interface AuditTrail {
   id: string;
   evidence_type_id: string;
@@ -89,6 +100,7 @@ export interface AuditTrail {
     actor: string;
     action: string;
     reason: string;
+}
   }[];
   validation_status: 'pending' | 'validated' | 'invalid' | 'expired';
   retention_expiry: string;
@@ -129,7 +141,7 @@ export class AuditEvidenceMapper {
           recipients: ['data_protection_authority', 'executive_team'],
           retention_period: '7_years'
         }
-      },
+  }
       {
         id: 'soc2-2017',
         name: 'Service Organization Control 2',
@@ -146,7 +158,7 @@ export class AuditEvidenceMapper {
           recipients: ['audit_committee', 'customers'],
           retention_period: '5_years'
         }
-      },
+  }
       {
         id: 'iso27001-2022',
         name: 'ISO/IEC 27001',
@@ -163,7 +175,7 @@ export class AuditEvidenceMapper {
           recipients: ['certification_body', 'management'],
           retention_period: '6_years'
         }
-      },
+  }
       {
         id: 'hipaa-1996',
         name: 'Health Insurance Portability and Accountability Act',
@@ -208,7 +220,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: false
         }
-      },
+  }
       {
         id: 'security_logs',
         name: 'Security Event Logs',
@@ -224,7 +236,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: false
         }
-      },
+  }
       {
         id: 'consent_records',
         name: 'Consent Records',
@@ -240,7 +252,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: true
         }
-      },
+  }
       {
         id: 'configuration_snapshots',
         name: 'System Configuration Snapshots',
@@ -256,7 +268,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: false,
           version_control: true
         }
-      },
+  }
       {
         id: 'policy_documents',
         name: 'Policy Documents',
@@ -272,7 +284,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: true
         }
-      },
+  }
       {
         id: 'risk_assessments',
         name: 'Risk Assessment Reports',
@@ -288,7 +300,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: true
         }
-      },
+  }
       {
         id: 'incident_reports',
         name: 'Security Incident Reports',
@@ -304,7 +316,7 @@ export class AuditEvidenceMapper {
           chain_of_custody: true,
           version_control: true
         }
-      },
+  }
       {
         id: 'training_records',
         name: 'Security Training Records',
@@ -345,7 +357,7 @@ export class AuditEvidenceMapper {
         criticality: 'critical',
         automated_collection: true,
         manual_verification_required: true
-      },
+  }
       {
         id: 'soc2_access_control',
         framework_id: 'soc2-2017',
@@ -358,7 +370,7 @@ export class AuditEvidenceMapper {
         criticality: 'high',
         automated_collection: true,
         manual_verification_required: false
-      },
+  }
       {
         id: 'iso27001_incident_management',
         framework_id: 'iso27001-2022',
@@ -371,7 +383,7 @@ export class AuditEvidenceMapper {
         criticality: 'high',
         automated_collection: false,
         manual_verification_required: true
-      },
+  }
       {
         id: 'hipaa_audit_controls',
         framework_id: 'hipaa-1996',
@@ -406,7 +418,7 @@ export class AuditEvidenceMapper {
         validation_rules: ['timestamp_present', 'user_identified', 'action_logged'],
         dependencies: ['configuration_snapshots'],
         alternatives: []
-      },
+  }
       {
         evidence_type_id: 'consent_records',
         audit_requirement_id: 'gdpr_consent_tracking',
@@ -416,7 +428,7 @@ export class AuditEvidenceMapper {
         validation_rules: ['consent_timestamp', 'purpose_specified', 'withdrawal_option'],
         dependencies: ['privacy_policies'],
         alternatives: []
-      },
+  }
       {
         evidence_type_id: 'security_logs',
         audit_requirement_id: 'hipaa_audit_controls',
@@ -426,7 +438,7 @@ export class AuditEvidenceMapper {
         validation_rules: ['phi_access_logged', 'security_events_captured'],
         dependencies: ['access_logs'],
         alternatives: []
-      },
+  }
       {
         evidence_type_id: 'incident_reports',
         audit_requirement_id: 'iso27001_incident_management',

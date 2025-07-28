@@ -12,19 +12,17 @@ import { LoadingState, ErrorState } from '../states';
 import './DashboardShell.css';
 
 export interface TabConfig {
-  id: string;
+  id: string;,
   label: string;
   content: React.ReactNode;
   badge?: string | number;
   disabled?: boolean;
 }
-
 export interface TimeRangeOption {
-  label: string;
+  label: string;,
   value: string;
   days?: number;
 }
-
 export interface DashboardShellProps {
   // Header configuration
   title: string;
@@ -38,11 +36,11 @@ export interface DashboardShellProps {
   onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
   // Time range filtering
   timeRange?: string;
-  timeRangeOptions?: TimeRangeOption[];
+  timeRangeOptions?: TimeRangeOption;
   onTimeRangeChange?: (timeRange: string) => void;
   showTimeRange?: boolean;
   // Tab navigation
-  tabs?: TabConfig[];
+  tabs?: TabConfig;
   activeTab?: string;
   onTabChange?: (tabId: string) => void;
   // Content and states
@@ -57,14 +55,13 @@ export interface DashboardShellProps {
   className?: string;
   headerClassName?: string;
   contentClassName?: string;
-}
-const DEFAULT_TIME_RANGE_OPTIONS: TimeRangeOption[] = [
+const DEFAULT_TIME_RANGE_OPTIONS: TimeRangeOption = [
   { label: 'Last 24 hours', value: '24h', days: 1 },
   { label: 'Last 7 days', value: '7d', days: 7 },
   { label: 'Last 30 days', value: '30d', days: 30 },
   { label: 'Last 90 days', value: '90d', days: 90 }
 ];
-
+}
 export const DashboardShell: React.FC<DashboardShellProps> = ({)
   title,
   description,
@@ -92,13 +89,13 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({)
   contentClassName = ''
 }) => {
   const [internalActiveTab, setInternalActiveTab] = useState()
-    activeTab || tabs?.[0]?.id || ''
+  activeTab || tabs?.[0]?.id || ''
   );
   const currentActiveTab = activeTab || internalActiveTab;
-  const handleTabChange = (tabId: string) => {
-    setInternalActiveTab(tabId);
-    onTabChange?.(tabId);
-  };
+  const handleTabChange = (tabId: string) => {,
+  setInternalActiveTab(tabId);
+  onTabChange?.(tabId);
+};
   const handleRefresh = () => {
     onRefresh?.();
   };
@@ -112,12 +109,12 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({)
   const currentTabContent = tabs?.find(tab => tab.id === currentActiveTab)?.content;
   // Determine padding class
   const paddingClass = {
-    none: 'dashboard-padding-none',
-    small: 'dashboard-padding-small', 
-    medium: 'dashboard-padding-medium',
-    large: 'dashboard-padding-large',
-  }[padding];
-  return ();
+  none: 'dashboard-padding-none',
+  small: 'dashboard-padding-small',
+  medium: 'dashboard-padding-medium',
+  large: 'dashboard-padding-large',
+}[padding];
+  return;
     <DashboardProvider
       timeRange={timeRange}
       onTimeRangeChange={handleTimeRangeChange}

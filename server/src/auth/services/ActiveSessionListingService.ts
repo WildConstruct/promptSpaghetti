@@ -8,6 +8,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { EnhancedSessionService, Session } from './EnhancedSessionService';
 
+}
 export interface SessionListingOptions {
   includeExpired?: boolean;
   includeInactive?: boolean;
@@ -23,6 +24,7 @@ export interface SessionListingOptions {
     dateRange?: {
       from?: Date;
       to?: Date;
+}
     };
   };
   pagination?: {
@@ -34,6 +36,7 @@ export interface SessionListingOptions {
   groupBy?: 'user' | 'device' | 'location' | 'none';
 }
 
+}
 export interface SessionSummary {
   sessionId: string;
   userId: string;
@@ -43,6 +46,7 @@ export interface SessionSummary {
     type: string;
     fingerprint?: string;
     trusted: boolean;
+}
   };
   location: {
     ipAddress: string;
@@ -77,6 +81,7 @@ export interface SessionSummary {
   };
 }
 
+}
 export interface SessionListingResult {
   sessions: SessionSummary[];
   pagination: {
@@ -86,6 +91,7 @@ export interface SessionListingResult {
     totalPages: number;
     hasNext: boolean;
     hasPrev: boolean;
+}
   };
   summary: {
     totalActive: number;
@@ -100,6 +106,7 @@ export interface SessionListingResult {
   filters: SessionListingOptions['filterBy'];
 }
 
+}
 export interface UserSessionOverview {
   userId: string;
   totalSessions: number;
@@ -110,6 +117,7 @@ export interface UserSessionOverview {
     sessionCount: number;
     lastSeen: Date;
     trusted: boolean;
+}
   }>;
   locations: Array<{
     location: string;
@@ -155,6 +163,7 @@ export class ActiveSessionListingService extends EventEmitter {
    * List active sessions with comprehensive filtering and sorting
    */
   async listSessions(options: SessionListingOptions = {}): Promise<SessionListingResult> {
+
     const defaultOptions: SessionListingOptions = {
       includeExpired: false,
       includeInactive: false,
@@ -201,6 +210,7 @@ export class ActiveSessionListingService extends EventEmitter {
    * Get detailed session overview for a specific user
    */
   async getUserSessionOverview(userId: string): Promise<UserSessionOverview> {
+
     try {
       // Get all user sessions
       const userSessions = await this.sessionService.getUserSessions(userId);
@@ -210,7 +220,7 @@ export class ActiveSessionListingService extends EventEmitter {
         userSessions.sessions.map(async (session) => {
           const fullSession = await this.getSessionDetails(session.sessionId);
           return fullSession;
-        })
+  }
       );
 
       // Aggregate device information
@@ -297,6 +307,7 @@ export class ActiveSessionListingService extends EventEmitter {
     searchFields: ('userId' | 'deviceName' | 'ipAddress' | 'location' | 'userAgent')[] = ['userId', 'deviceName', 'ipAddress'],
     options?: SessionListingOptions
   ): Promise<SessionListingResult> {
+
     try {
       // Get all sessions with base filters
       const baseOptions = { ...options, filterBy: { ...options?.filterBy } };
@@ -416,6 +427,7 @@ export class ActiveSessionListingService extends EventEmitter {
     filename: string;
     mimeType: string;
   }> {
+
     try {
       // Get all sessions without pagination
       const allOptions = { ...options, pagination: undefined };
@@ -465,6 +477,7 @@ export class ActiveSessionListingService extends EventEmitter {
   // Private helper methods
 
   private async getFilteredSessions(options: SessionListingOptions): Promise<SessionSummary[]> {
+
     // Check cache first
     if (this.shouldUseCache()) {
       return this.getSessionsFromCache(options);
@@ -551,6 +564,7 @@ export class ActiveSessionListingService extends EventEmitter {
   }
 
   private async generateSessionSummary(sessions: SessionSummary[]): Promise<SessionListingResult['summary']> {
+
     const activeSessions = sessions.filter(s => s.status.isActive);
     const inactiveSessions = sessions.filter(s => !s.status.isActive && !s.status.isExpired);
     const expiredSessions = sessions.filter(s => s.status.isExpired);
@@ -604,6 +618,7 @@ export class ActiveSessionListingService extends EventEmitter {
     session: Session | SessionSummary,
     options: SessionListingOptions
   ): Promise<SessionSummary> {
+
     // If already a summary, return it
     if ('deviceInfo' in session && 'timing' in session) {
       return session as SessionSummary;
@@ -621,32 +636,32 @@ export class ActiveSessionListingService extends EventEmitter {
         name: 'Unknown Device', // Would be fetched from device profile
         type: 'unknown',
         trusted: false
-      },
+  }
       location: {
         ipAddress: fullSession.metadata.ipAddress,
         country: fullSession.metadata.geolocation?.country,
         region: fullSession.metadata.geolocation?.region,
         city: fullSession.metadata.geolocation?.city
-      },
+  }
       timing: {
         createdAt: fullSession.metadata.createdAt,
         lastActivity: fullSession.metadata.lastActivity,
         expiresAt: fullSession.metadata.expiresAt,
         remainingTime: Math.max(0, (fullSession.metadata.expiresAt.getTime() - now.getTime()) / 1000),
         idleTime: (now.getTime() - fullSession.metadata.lastActivity.getTime()) / 1000
-      },
+  }
       security: {
         trustLevel: fullSession.security.trustLevel,
         mfaVerified: fullSession.security.mfaVerified,
         riskScore: fullSession.security.riskScore,
         flags: fullSession.security.securityFlags
-      },
+  }
       status: {
         current: fullSession.status,
         isActive: fullSession.status === 'active',
         isExpired: fullSession.status === 'expired',
         requiresAction: []
-      },
+  }
       activity: {
         requestCount: fullSession.analytics.requestCount,
         lastEndpoint: fullSession.analytics.lastEndpoint,
@@ -657,12 +672,14 @@ export class ActiveSessionListingService extends EventEmitter {
   }
 
   private async getAllActiveSessions(): Promise<SessionSummary[]> {
+
     // This would integrate with the session service to get all sessions
     // For now, returning empty array
     return [];
   }
 
   private async getSessionDetails(sessionId: string): Promise<SessionSummary | null> {
+
     try {
       // Would fetch from session service
       return null;
@@ -722,6 +739,7 @@ export class ActiveSessionListingService extends EventEmitter {
   }
 
   private async calculateLocationDistribution(sessions: SessionSummary[]): Promise<any[]> {
+
     const distribution: Record<string, { count: number; riskTotal: number }> = {};
     
     sessions.forEach(session => {
@@ -800,12 +818,14 @@ export class ActiveSessionListingService extends EventEmitter {
   }
 
   private async convertToExcel(sessions: SessionSummary[]): Promise<Buffer> {
+
     // Would use a library like xlsx to generate Excel file
     // For now, return empty buffer
     return Buffer.from('');
   }
 
   private async logExportEvent(options: SessionListingOptions, format: string, count: number): Promise<void> {
+
     console.log(`Session export: ${count} sessions exported as ${format}`, options);
   }
 
@@ -826,6 +846,7 @@ export class ActiveSessionListingService extends EventEmitter {
   }
 
   private async refreshCache(): Promise<void> {
+
     try {
       const allSessions = await this.getAllActiveSessions();
       this.sessionCache.clear();

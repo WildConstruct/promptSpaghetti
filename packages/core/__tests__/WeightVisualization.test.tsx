@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { WeightVisualization, WeightLegend } from '../components/WeightControls/WeightVisualization';
 import { WeightControlOption } from '../components/Inspector/WeightControlSlider';
 describe('WeightVisualization', () => {
-  const mockOptions: WeightControlOption[] = [
+  const mockOptions: WeightControlOption = [
     { id: '1', text: 'Option A', weight: 40 },
     { id: '2', text: 'Option B', weight: 30 },
     { id: '3', text: 'Option C', weight: 20 },
@@ -43,7 +43,7 @@ describe('WeightVisualization', () => {
       expect(svg).toBeInTheDocument();
     });
     it('handles zero weights', () => {
-      const zeroWeightOptions: WeightControlOption[] = [
+      const zeroWeightOptions: WeightControlOption = [
         { id: '1', text: 'Option A', weight: 0 },
         { id: '2', text: 'Option B', weight: 0 }
       ];
@@ -77,7 +77,7 @@ describe('WeightVisualization', () => {
       expect(screen.getByText('10%')).toBeInTheDocument();
     });
     it('skips labels for small slices', () => {
-      const smallSliceOptions: WeightControlOption[] = [
+      const smallSliceOptions: WeightControlOption = [
         { id: '1', text: 'Major Option', weight: 95 },
         { id: '2', text: 'Minor Option', weight: 5 },
         { id: '3', text: 'Tiny Option', weight: 1 } // <5%, should not show label
@@ -133,7 +133,7 @@ describe('WeightVisualization', () => {
       expect(screen.getByText('Option B')).toBeInTheDocument();
     });
     it('truncates long option names', () => {
-      const longNameOptions: WeightControlOption[] = [
+      const longNameOptions: WeightControlOption = [
         { id: '1', text: 'Very Long Option Name That Should Be Truncated', weight: 50 },
         { id: '2', text: 'Short', weight: 50 }
       ];
@@ -151,7 +151,7 @@ describe('WeightVisualization', () => {
       expect(screen.getByText('Short')).toBeInTheDocument();
     });
     it('handles zero heights correctly', () => {
-      const zeroWeightOptions: WeightControlOption[] = [
+      const zeroWeightOptions: WeightControlOption = [
         { id: '1', text: 'Option A', weight: 0 },
         { id: '2', text: 'Option B', weight: 100 }
       ];
@@ -192,11 +192,12 @@ describe('WeightVisualization', () => {
     });
     it('cycles through color palette correctly', () => {
       // Test with more options than available colors
-      const manyOptions: WeightControlOption[] = Array.from({ length: 15 }, (_, i) => ({)
-        id: String(i),
-        text: `Option ${i}`,}
-        weight: 10,
-      }));
+      const manyOptions: WeightControlOption = Array.from({ length: 15 }, (_, i) => ({)
+  id: String(i),
+        text: `Option ${i}`}
+},
+  weight: 10;
+  }));
       render();
         <WeightVisualization
           options={manyOptions}
@@ -251,7 +252,7 @@ describe('WeightVisualization', () => {
   });
 });
 describe('WeightLegend', () => {
-  const mockOptions: WeightControlOption[] = [
+  const mockOptions: WeightControlOption = [
     { id: '1', text: 'Dragon Attack', weight: 40 },
     { id: '2', text: 'Peaceful Negotiation', weight: 30 },
     { id: '3', text: 'Strategic Retreat', weight: 20 },
@@ -269,7 +270,7 @@ describe('WeightLegend', () => {
     expect(screen.getByText('10%')).toBeInTheDocument();
   });
   it('handles zero total weight', () => {
-    const zeroWeightOptions: WeightControlOption[] = [
+    const zeroWeightOptions: WeightControlOption = [
       { id: '1', text: 'Option A', weight: 0 },
       { id: '2', text: 'Option B', weight: 0 }
     ];
@@ -299,7 +300,7 @@ describe('WeightLegend', () => {
     expect(legend).toBeInTheDocument();
   });
   it('rounds percentages correctly', () => {
-    const preciseOptions: WeightControlOption[] = [
+    const preciseOptions: WeightControlOption = [
       { id: '1', text: 'Option A', weight: 33.33 },
       { id: '2', text: 'Option B', weight: 33.33 },
       { id: '3', text: 'Option C', weight: 33.34 }
@@ -310,7 +311,7 @@ describe('WeightLegend', () => {
   });
 });
 describe('Integration Tests', () => {
-  const mockOptions: WeightControlOption[] = [
+  const mockOptions: WeightControlOption = [
     { id: '1', text: 'Fire Spell', weight: 45 },
     { id: '2', text: 'Ice Spell', weight: 35 },
     { id: '3', text: 'Lightning Spell', weight: 20 }
@@ -348,7 +349,7 @@ describe('Integration Tests', () => {
     );
     expect(screen.getAllByText('45%')).toHaveLength(2);
     // Update options
-    const updatedOptions: WeightControlOption[] = [
+    const updatedOptions: WeightControlOption = [
       { id: '1', text: 'Fire Spell', weight: 50 },
       { id: '2', text: 'Ice Spell', weight: 25 },
       { id: '3', text: 'Lightning Spell', weight: 25 }
@@ -387,7 +388,7 @@ describe('Integration Tests', () => {
     expect(svg).toBeInTheDocument();
     // All text should be readable
     mockOptions.forEach(option => {)
-      expect(screen.getByText(option.text)).toBeInTheDocument();
+  expect(screen.getByText(option.text)).toBeInTheDocument();
     });
   });
 });

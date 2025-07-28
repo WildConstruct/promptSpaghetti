@@ -3,6 +3,7 @@
  * Defines approval criteria and rules for different deployment environments
  */
 
+}
 export interface DeploymentApprovalRule {
   environment: string;
   required: boolean;
@@ -13,7 +14,9 @@ export interface DeploymentApprovalRule {
   reviewerAssignment: ReviewerAssignmentRule;
   timeouts: TimeoutConfiguration;
 }
+}
 
+}
 export interface DeploymentCriterion {
   type: 'security-review' | 'performance-impact' | 'business-approval' | 'technical-review' | 'compliance-check';
   weight: number;
@@ -22,11 +25,14 @@ export interface DeploymentCriterion {
   reviewerRoles: string[];
   validationSteps?: ValidationStep[];
 }
+}
 
+}
 export interface AutoApprovalConditions {
   testCoverage: {
     minimum: number;
     required: boolean;
+}
   };
   securityScan: {
     status: 'passed' | 'warning' | 'failed';
@@ -53,20 +59,25 @@ export interface AutoApprovalConditions {
   };
 }
 
+}
 export interface EscalationRule {
   triggerAfterHours: number;
   escalateTo: string[];
   notificationChannels: string[];
   urgencyIncrease: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface ReviewerAssignmentRule {
   strategy: 'manual' | 'automatic' | 'round-robin' | 'load-balanced';
   reviewerPools: ReviewerPool[];
   fallbackReviewers: string[];
   excludeRequestor: boolean;
 }
+}
 
+}
 export interface ReviewerPool {
   name: string;
   members: string[];
@@ -74,20 +85,25 @@ export interface ReviewerPool {
   minimumRequired: number;
   expertise: string[];
 }
+}
 
+}
 export interface TimeoutConfiguration {
   initialTimeoutHours: number;
   escalationTimeoutHours: number;
   maxTotalTimeoutHours: number;
   businessHoursOnly: boolean;
 }
+}
 
+}
 export interface ValidationStep {
   name: string;
   description: string;
   automatable: boolean;
   command?: string;
   expectedResult?: any;
+}
 }
 
 // Default deployment approval rules
@@ -110,14 +126,14 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
             automatable: true,
             command: 'npm audit --audit-level=high',
             expectedResult: { vulnerabilities: 0 }
-          },
+  }
           {
             name: 'Dependency Review',
             description: 'Review of new or updated dependencies',
             automatable: false
           }
         ]
-      },
+  }
       {
         type: 'performance-impact',
         weight: 0.2,
@@ -131,7 +147,7 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
             automatable: true,
             command: 'npm run bundle-analyzer',
             expectedResult: { sizeIncrease: '<5%' }
-          },
+  }
           {
             name: 'Performance Tests',
             description: 'Run performance benchmarks',
@@ -140,7 +156,7 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
             expectedResult: { regressionPercent: '<10%' }
           }
         ]
-      },
+  }
       {
         type: 'business-approval',
         weight: 0.5,
@@ -152,7 +168,7 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
             name: 'Feature Flag Review',
             description: 'Review feature flags and rollout strategy',
             automatable: false
-          },
+  }
           {
             name: 'User Impact Assessment',
             description: 'Assess impact on user experience',
@@ -165,38 +181,38 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       testCoverage: {
         minimum: 90,
         required: true
-      },
+  }
       securityScan: {
         status: 'passed',
         maxCriticalIssues: 0,
         maxHighIssues: 0
-      },
+  }
       performanceRegression: {
         maxRegressionPercent: 5,
         checkEndpoints: ['/api/health', '/api/preview', '/']
-      },
+  }
       breakingChanges: {
         allowed: false,
         requiresManualApproval: true
-      },
+  }
       deploymentSize: {
         maxChangedFiles: 10,
         maxLinesChanged: 500
-      },
+  }
       businessHours: {
         required: false, // Production can be deployed anytime
         timezone: 'America/Los_Angeles',
         allowedHours: { start: 9, end: 17 },
         allowedDays: [1, 2, 3, 4, 5] // Monday-Friday
       }
-    },
+  }
     escalationRules: [
       {
         triggerAfterHours: 4,
         escalateTo: ['engineering-manager', 'cto'],
         notificationChannels: ['slack:engineering', 'email:escalation'],
         urgencyIncrease: 'high'
-      },
+  }
       {
         triggerAfterHours: 8,
         escalateTo: ['vp-engineering'],
@@ -213,14 +229,14 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
           roles: ['security-engineer', 'security-lead'],
           minimumRequired: 1,
           expertise: ['security', 'compliance', 'vulnerability-assessment']
-        },
+  }
         {
           name: 'performance-team',
           members: ['charlie@company.com', 'diana@company.com'],
           roles: ['performance-engineer', 'senior-developer'],
           minimumRequired: 1,
           expertise: ['performance', 'optimization', 'monitoring']
-        },
+  }
         {
           name: 'business-stakeholders',
           members: ['eve@company.com', 'frank@company.com'],
@@ -231,15 +247,14 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       ],
       fallbackReviewers: ['engineering-manager@company.com', 'cto@company.com'],
       excludeRequestor: true
-    },
+  }
     timeouts: {
       initialTimeoutHours: 24,
       escalationTimeoutHours: 4,
       maxTotalTimeoutHours: 48,
       businessHoursOnly: false
     }
-  },
-
+  }
   staging: {
     environment: 'staging',
     required: true,
@@ -259,7 +274,7 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
             command: 'npm audit --audit-level=moderate'
           }
         ]
-      },
+  }
       {
         type: 'technical-review',
         weight: 0.4,
@@ -279,31 +294,31 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       testCoverage: {
         minimum: 80,
         required: true
-      },
+  }
       securityScan: {
         status: 'passed',
         maxCriticalIssues: 0,
         maxHighIssues: 2
-      },
+  }
       performanceRegression: {
         maxRegressionPercent: 15,
         checkEndpoints: ['/api/health']
-      },
+  }
       breakingChanges: {
         allowed: true,
         requiresManualApproval: false
-      },
+  }
       deploymentSize: {
         maxChangedFiles: 50,
         maxLinesChanged: 2000
-      },
+  }
       businessHours: {
         required: false,
         timezone: 'America/Los_Angeles',
         allowedHours: { start: 0, end: 23 },
         allowedDays: [0, 1, 2, 3, 4, 5, 6] // Any day
       }
-    },
+  }
     escalationRules: [
       {
         triggerAfterHours: 8,
@@ -325,15 +340,14 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       ],
       fallbackReviewers: ['tech-lead@company.com'],
       excludeRequestor: true
-    },
+  }
     timeouts: {
       initialTimeoutHours: 8,
       escalationTimeoutHours: 4,
       maxTotalTimeoutHours: 24,
       businessHoursOnly: false
     }
-  },
-
+  }
   preview: {
     environment: 'preview',
     required: false,
@@ -343,45 +357,44 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       testCoverage: {
         minimum: 70,
         required: false
-      },
+  }
       securityScan: {
         status: 'warning', // Allow warnings for preview
         maxCriticalIssues: 1,
         maxHighIssues: 5
-      },
+  }
       performanceRegression: {
         maxRegressionPercent: 25,
         checkEndpoints: []
-      },
+  }
       breakingChanges: {
         allowed: true,
         requiresManualApproval: false
-      },
+  }
       deploymentSize: {
         maxChangedFiles: 1000,
         maxLinesChanged: 10000
-      },
+  }
       businessHours: {
         required: false,
         timezone: 'America/Los_Angeles',
         allowedHours: { start: 0, end: 23 },
         allowedDays: [0, 1, 2, 3, 4, 5, 6]
       }
-    },
+  }
     reviewerAssignment: {
       strategy: 'automatic',
       reviewerPools: [],
       fallbackReviewers: [],
       excludeRequestor: false
-    },
+  }
     timeouts: {
       initialTimeoutHours: 1,
       escalationTimeoutHours: 1,
       maxTotalTimeoutHours: 4,
       businessHoursOnly: false
     }
-  },
-
+  }
   development: {
     environment: 'development',
     required: false,
@@ -391,37 +404,37 @@ export const DEPLOYMENT_APPROVAL_RULES: Record<string, DeploymentApprovalRule> =
       testCoverage: {
         minimum: 50,
         required: false
-      },
+  }
       securityScan: {
         status: 'failed', // Allow even failed scans in dev
         maxCriticalIssues: 10,
         maxHighIssues: 20
-      },
+  }
       performanceRegression: {
         maxRegressionPercent: 50,
         checkEndpoints: []
-      },
+  }
       breakingChanges: {
         allowed: true,
         requiresManualApproval: false
-      },
+  }
       deploymentSize: {
         maxChangedFiles: 9999,
         maxLinesChanged: 999999
-      },
+  }
       businessHours: {
         required: false,
         timezone: 'America/Los_Angeles',
         allowedHours: { start: 0, end: 23 },
         allowedDays: [0, 1, 2, 3, 4, 5, 6]
       }
-    },
+  }
     reviewerAssignment: {
       strategy: 'automatic',
       reviewerPools: [],
       fallbackReviewers: [],
       excludeRequestor: false
-    },
+  }
     timeouts: {
       initialTimeoutHours: 0.5,
       escalationTimeoutHours: 0.5,

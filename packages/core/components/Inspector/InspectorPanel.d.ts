@@ -1,4 +1,5 @@
 import { ZodSchema } from 'zod';
+
 export interface InspectorPanelProps {
     node: Error | null;
     schema: ZodSchema<unknown> | null;
@@ -8,7 +9,7 @@ export interface InspectorPanelProps {
     initialWidth?: number;
     minWidth?: number;
     maxWidth?: number;
-}
+
 export declare const InspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {)
     node: any;
     schema: any;

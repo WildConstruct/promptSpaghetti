@@ -8,42 +8,39 @@ import userEvent from '@testing-library/user-event';
 import { Node } from 'reactflow';
 import { NodeLabelsLayer } from '../NodeLabelsLayer';
 import { NodeLabelConfig, DEFAULT_NODE_LABEL_PREFERENCES } from '../../../types/CollaborationTypes';
-const mockNodes: Node[] = [
+const mockNodes: Node = [
   {
     id: 'node-1',
     type: 'default',
     position: { x: 100, y: 100 },
     data: { label: 'Node 1' },
     width: 180,
-    height: 90,
-  },
+    height: 90;
+  }
   {
     id: 'node-2',
     type: 'default',
     position: { x: 300, y: 200 },
     data: { label: 'Node 2' },
     width: 180,
-    height: 90,
-  }
-];
+    height: 90];
 const mockLabelConfigs: Record<string, NodeLabelConfig> = {
-  'label-1': {
-    id: 'label-1',
-    nodeId: 'node-1',
-    customLabel: 'Custom Label 1',
-    displayMode: 'always',
-    position: 'bottom',
-    style: 'default',
-    showIcon: false,
-    truncateLength: 50,
-    author: 'Test Author',
-    timestamp: '2024-01-01T12:00:00Z',
-  }
+  'label-1': {,
+  id: 'label-1',
+  nodeId: 'node-1',
+  customLabel: 'Custom Label 1',
+  displayMode: 'always',
+  position: 'bottom',
+  style: 'default',
+  showIcon: false,
+  truncateLength: 50,
+  author: 'Test Author',
+  timestamp: '2024-01-01T12:00:00Z',
 };
 const defaultProps = {
   nodes: mockNodes,
   labelConfigs: mockLabelConfigs,
-  onLabelConfigsChange: jest.fn<unknown[], unknown>(),
+  onLabelConfigsChange: jest.fn<unknown, unknown>(),
   labelPreferences: DEFAULT_NODE_LABEL_PREFERENCES,
   author: 'Test Author',
   readOnly: false,
@@ -67,9 +64,9 @@ describe('NodeLabelsLayer Component', () => {
           {...defaultProps}
           labelConfigs={{}}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'always',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'always',
+}}
         />
       );
       expect(screen.getByText('Node 1')).toBeInTheDocument();
@@ -81,9 +78,9 @@ describe('NodeLabelsLayer Component', () => {
           {...defaultProps}
           labelConfigs={{}}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'selected',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'selected',
+}}
           selectedNodeId={null}
         />
       );
@@ -93,9 +90,9 @@ describe('NodeLabelsLayer Component', () => {
           {...defaultProps}
           labelConfigs={{}}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'selected',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'selected',
+}}
           selectedNodeId="node-1"
         />
       );
@@ -107,15 +104,15 @@ describe('NodeLabelsLayer Component', () => {
       const firstContainer = containers[0];
       // Check that container is positioned at node position
       expect(firstContainer.parentElement).toHaveStyle({)
-        position: 'absolute',
-        left: '100px',
-        top: '100px',
-      });
+  position: 'absolute',
+  left: '100px',
+  top: '100px',
+});
     });
   });
   describe('Label Actions', () => {
     test('creates new label config', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -129,7 +126,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(onLabelConfigsChange).toHaveBeenCalledTimes(0);
     });
     test('updates existing label config', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -142,7 +139,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(existingLabel).toBeInTheDocument();
     });
     test('deletes label config', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -156,7 +153,7 @@ describe('NodeLabelsLayer Component', () => {
   });
   describe('Context Menu Integration', () => {
     test('handles right-click on node area', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -170,7 +167,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(firstContainer).toBeInTheDocument();
     });
     test('ignores context menu when read-only', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -190,8 +187,8 @@ describe('NodeLabelsLayer Component', () => {
       // Mock document.addEventListener and removeEventListener
       const originalAddEventListener = document.addEventListener;
       const originalRemoveEventListener = document.removeEventListener;
-      document.addEventListener = jest.fn<unknown[], unknown>();
-      document.removeEventListener = jest.fn<unknown[], unknown>();
+      document.addEventListener = jest.fn<unknown, unknown>();
+      document.removeEventListener = jest.fn<unknown, unknown>();
       // Restore original methods after test
       afterEach(() => {
         document.addEventListener = originalAddEventListener;
@@ -208,7 +205,7 @@ describe('NodeLabelsLayer Component', () => {
       expect(document.removeEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
     });
     test('ignores keyboard shortcuts when read-only', () => {
-      const onLabelConfigsChange = jest.fn<unknown[], unknown>();
+      const onLabelConfigsChange = jest.fn<unknown, unknown>();
       render();
         <NodeLabelsLayer
           {...defaultProps}
@@ -227,9 +224,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'selected',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'selected',
+}}
           selectedNodeId={null}
         />
       );
@@ -239,9 +236,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'selected',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'selected',
+}}
           selectedNodeId="node-1"
         />
       );
@@ -253,9 +250,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'hover',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'hover',
+}}
           hoveredNodeId={null}
         />
       );
@@ -265,9 +262,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'hover',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'hover',
+}}
           hoveredNodeId="node-1"
         />
       );
@@ -279,9 +276,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'focus',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'focus',
+}}
           focusedNodeId={null}
         />
       );
@@ -290,9 +287,9 @@ describe('NodeLabelsLayer Component', () => {
         <NodeLabelsLayer
           {...defaultProps}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'focus',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'focus',
+}}
           focusedNodeId="node-1"
         />
       );
@@ -310,26 +307,26 @@ describe('NodeLabelsLayer Component', () => {
       );
       const layer = screen.getByTestId('node-labels-layer');
       expect(layer).toHaveStyle({)
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-      });
+  position: 'absolute',
+  top: '0',
+  left: '0',
+  width: '100%',
+  height: '100%',
+});
     });
     test('has correct z-index for layering', () => {
       render(<NodeLabelsLayer {...defaultProps} />);
       const layer = screen.getByTestId('node-labels-layer');
       expect(layer).toHaveStyle({)
-        zIndex: '1500',
-      });
+  zIndex: '1500',
+});
     });
     test('allows graph interactions to pass through', () => {
       render(<NodeLabelsLayer {...defaultProps} />);
       const layer = screen.getByTestId('node-labels-layer');
       expect(layer).toHaveStyle({)
-        pointerEvents: 'none',
-      });
+  pointerEvents: 'none',
+});
     });
   });
   describe('Instructions Overlay', () => {
@@ -363,13 +360,15 @@ describe('NodeLabelsLayer Component', () => {
   describe('Performance', () => {
     test('handles large numbers of nodes efficiently', () => {
       const manyNodes = Array.from({ length: 100 }, (_, i) => ({)
-        id: `node-${i}`,}
-        type: 'default',
+  id: `node-${i}`}
+},
+  type: 'default',
         position: { x: (i % 10) * 200, y: Math.floor(i / 10) * 150 },
-        data: { label: `Node ${i}` },}
-        width: 180,
-        height: 90,
-      }));
+        data: { label: `Node ${i}` }
+},
+  width: 180,
+        height: 90;
+  }));
       const startTime = performance.now();
       render();
         <NodeLabelsLayer
@@ -377,9 +376,9 @@ describe('NodeLabelsLayer Component', () => {
           nodes={manyNodes}
           labelConfigs={{}}
           labelPreferences={{
-            ...DEFAULT_NODE_LABEL_PREFERENCES,
-            defaultDisplayMode: 'always',
-          }}
+  ...DEFAULT_NODE_LABEL_PREFERENCES,
+  defaultDisplayMode: 'always',
+}}
         />
       );
       const endTime = performance.now();
@@ -387,8 +386,8 @@ describe('NodeLabelsLayer Component', () => {
       expect(endTime - startTime).toBeLessThan(200);
     });
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
-      const TestWrapper = ({ nodes }: { nodes: Node[] }) => {
+      const renderSpy = jest.fn<unknown, unknown>();
+      const TestWrapper = ({ nodes }: { nodes: Node }) => {
         renderSpy();
         return <NodeLabelsLayer {...defaultProps} nodes={nodes} />;
       };
@@ -404,8 +403,8 @@ describe('NodeLabelsLayer Component', () => {
         position: { x: 500, y: 300 },
         data: { label: 'Node 3' },
         width: 180,
-        height: 90,
-      }];
+        height: 90;
+  }];
       rerender(<TestWrapper nodes={updatedNodes} />);
       expect(renderSpy).toHaveBeenCalledTimes(3);
     });
@@ -437,9 +436,7 @@ describe('NodeLabelsLayer Component', () => {
           position: { x: 100, y: 100 },
           data: {},
           width: 180,
-          height: 90,
-        }
-      ];
+          height: 90];
       expect(() => {
         render();
           <NodeLabelsLayer
@@ -450,11 +447,11 @@ describe('NodeLabelsLayer Component', () => {
       }).not.toThrow();
     });
     test('handles invalid label configs gracefully', () => {
-      const invalidConfigs = {
-        'invalid-label': {
-          id: 'invalid-label',
-          nodeId: 'non-existent-node',
-        } as any
+  const invalidConfigs = {
+  'invalid-label': {,
+  id: 'invalid-label',
+  nodeId: 'non-existent-node',
+} as any
       };
       expect(() => {
         render();

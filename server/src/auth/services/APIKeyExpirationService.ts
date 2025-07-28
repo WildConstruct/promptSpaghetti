@@ -41,20 +41,25 @@ export enum APIKeyStatus {
 }
 
 // Keep interface for backward compatibility
+}
 export interface ExpirationPolicy {
   warningDays: number; // Days before expiration to send warning
   gracePerioddDays: number; // Days after expiration before cleanup
   autoCleanup: boolean; // Whether to automatically clean up expired keys
   notifyUsers: boolean; // Whether to notify users of expiring keys
 }
+}
 
+}
 export interface RotationPolicy {
   maxAgedays: number; // Maximum age before rotation is recommended
   autoRotate: boolean; // Whether to automatically rotate keys
   rotationWarningDays: number; // Days before recommended rotation
   criticalAgedays: number; // Age at which rotation becomes critical
 }
+}
 
+}
 export interface ExpirationCheck {
   keyId: string;
   userId: string;
@@ -64,7 +69,9 @@ export interface ExpirationCheck {
   daysSinceExpiration?: number;
   recommendedAction: 'none' | 'warn_user' | 'rotate' | 'cleanup';
 }
+}
 
+}
 export interface RotationCheck {
   keyId: string;
   userId: string;
@@ -73,6 +80,7 @@ export interface RotationCheck {
   status: 'fresh' | 'aging' | 'rotation_recommended' | 'rotation_critical';
   rotationCount: number;
   recommendedAction: 'none' | 'schedule_rotation' | 'force_rotation';
+}
 }
 
 export class ApiKeyExpirationService {
@@ -122,7 +130,7 @@ export class ApiKeyExpirationService {
           eventType: 'EXPIRATION_SERVICE_ERROR',
           details: {
             error: error instanceof Error ? error.message : 'Unknown error'
-          },
+  }
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
@@ -151,6 +159,7 @@ export class ApiKeyExpirationService {
    * Check for expiring and expired API keys
    */
   async checkExpirations(): Promise<ExpirationCheck[]> {
+
     const query = `
       SELECT key_id, user_id, name, expires_at, status, created_at
       FROM api_keys
@@ -222,6 +231,7 @@ export class ApiKeyExpirationService {
    * Check for keys that need rotation based on age
    */
   async checkRotations(): Promise<RotationCheck[]> {
+
     const query = `
       SELECT key_id, user_id, name, created_at, metadata
       FROM api_keys
@@ -274,6 +284,7 @@ export class ApiKeyExpirationService {
    * Process expiration checks and take appropriate actions
    */
   async processExpirationChecks(): Promise<void> {
+
     const checks = await this.checkExpirations();
     let processedCount = 0;
 
@@ -312,7 +323,7 @@ export class ApiKeyExpirationService {
           expired: checks.filter(c => c.status === 'expired').length,
           critical: checks.filter(c => c.status === 'critical').length
         }
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -326,6 +337,7 @@ export class ApiKeyExpirationService {
    * Process rotation checks and take appropriate actions
    */
   async processRotationChecks(): Promise<void> {
+
     const checks = await this.checkRotations();
     let processedCount = 0;
 
@@ -350,7 +362,7 @@ export class ApiKeyExpirationService {
           rotationRecommended: checks.filter(c => c.status === 'rotation_recommended').length,
           rotationCritical: checks.filter(c => c.status === 'rotation_critical').length
         }
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -364,6 +376,7 @@ export class ApiKeyExpirationService {
    * Clean up expired API key
    */
   private async cleanupExpiredKey(check: ExpirationCheck): Promise<void> {
+
     const query = `
       UPDATE api_keys 
       SET status = 'expired', updated_at = NOW()
@@ -380,7 +393,7 @@ export class ApiKeyExpirationService {
         name: check.name,
         daysSinceExpiration: check.daysSinceExpiration,
         reason: 'Automatic cleanup after grace period'
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
@@ -394,6 +407,7 @@ export class ApiKeyExpirationService {
    * Mark key as expired
    */
   private async markAsExpired(check: ExpirationCheck): Promise<void> {
+
     const query = `
       UPDATE api_keys 
       SET status = 'expired', updated_at = NOW()
@@ -409,7 +423,7 @@ export class ApiKeyExpirationService {
         keyId: check.keyId,
         name: check.name,
         daysSinceExpiration: check.daysSinceExpiration
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
@@ -423,6 +437,7 @@ export class ApiKeyExpirationService {
    * Notify user of expiring key
    */
   private async notifyUserOfExpiration(check: ExpirationCheck): Promise<void> {
+
     // In full implementation, would send email/notification
     await this.auditService.logEvent({
       eventType: 'API_KEY_EXPIRATION_WARNING',
@@ -432,7 +447,7 @@ export class ApiKeyExpirationService {
         name: check.name,
         daysUntilExpiration: check.daysUntilExpiration,
         notificationType: 'expiration_warning'
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -446,6 +461,7 @@ export class ApiKeyExpirationService {
    * Notify user of force rotation requirement
    */
   private async notifyForceRotation(check: RotationCheck): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'API_KEY_ROTATION_CRITICAL',
       userId: check.userId,
@@ -455,7 +471,7 @@ export class ApiKeyExpirationService {
         ageInDays: check.ageInDays,
         rotationCount: check.rotationCount,
         notificationType: 'force_rotation'
-      },
+  }
       riskLevel: 'HIGH',
       compliance: {
         frameworks: ['SOC2'],
@@ -469,6 +485,7 @@ export class ApiKeyExpirationService {
    * Notify user of recommended rotation
    */
   private async notifyScheduleRotation(check: RotationCheck): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'API_KEY_ROTATION_RECOMMENDED',
       userId: check.userId,
@@ -478,7 +495,7 @@ export class ApiKeyExpirationService {
         ageInDays: check.ageInDays,
         rotationCount: check.rotationCount,
         notificationType: 'schedule_rotation'
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2'],
@@ -509,6 +526,7 @@ export class ApiKeyExpirationService {
       rotation: RotationPolicy;
     };
   }> {
+
     const [expirationChecks, rotationChecks] = await Promise.all([
       this.checkExpirations(),
       this.checkRotations()
@@ -520,13 +538,13 @@ export class ApiKeyExpirationService {
         warning: expirationChecks.filter(c => c.status === 'warning').length,
         expired: expirationChecks.filter(c => c.status === 'expired').length,
         critical: expirationChecks.filter(c => c.status === 'critical').length
-      },
+  }
       rotations: {
         fresh: rotationChecks.filter(c => c.status === 'fresh').length,
         aging: rotationChecks.filter(c => c.status === 'aging').length,
         recommended: rotationChecks.filter(c => c.status === 'rotation_recommended').length,
         critical: rotationChecks.filter(c => c.status === 'rotation_critical').length
-      },
+  }
       policies: {
         expiration: this.expirationPolicy,
         rotation: this.rotationPolicy

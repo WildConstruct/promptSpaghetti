@@ -47,61 +47,58 @@ import {
 } from 'lucide-react';
 
 // Core Types
+
 export interface TargetingCondition {
-  id: string;
+  id: string;,
   type: 'attribute' | 'behavior' | 'segment' | 'geography' | 'device' | 'time';
-  field: string;
+  field: string;,
   operator: string;
   value: Error;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
   weight?: number;
   isEnabled: boolean;
 }
-
 export interface UserSegment {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  conditions: TargetingCondition[];
+  conditions: TargetingCondition;,
   userCount: number;
-  isActive: boolean;
+  isActive: boolean;,
   createdAt: Date;
-  lastUpdated: Date;
-  tags: string[];
+  lastUpdated: Date;,
+  tags: string;
   color: string;
 }
-
 export interface TargetingAudience {
-  id: string;
+  id: string;,
   name: string;
-  segments: UserSegment[];
-  conditions: TargetingCondition[];
-  estimatedReach: number;
+  segments: UserSegment;,
+  conditions: TargetingCondition;
+  estimatedReach: number;,
   conversionRate: number;
-  isActive: boolean;
+  isActive: boolean;,
   rolloutPercentage: number;
 }
-
 export interface TargetingPreview {
-  totalUsers: number;
+  totalUsers: number;,
   matchedUsers: number;
-  matchPercentage: number;
+  matchPercentage: number;,
   sampleUsers: Array<{,
-    id: string;
-    email: string;
-    attributes: Record<string, any>;
-    matchReasons: string[];
-  }>;
+  id: string;,
+  email: string;
+  attributes: Record<string, any>;
+  matchReasons: string;
+}>;
   demographics: {,
-    age: Record<string, number>;
-    location: Record<string, number>;
-    userType: Record<string, number>;
-  };
-}
+  age: Record<string, number>;
+  location: Record<string, number>;
+  userType: Record<string, number>;
+};
 
 // Audience Selector Component
 interface AudienceSelectorProps {
-  audiences: TargetingAudience[];
+  audiences: TargetingAudience;
   selectedAudience?: TargetingAudience;
   onSelect: (audience: TargetingAudience) => void;
   onCreate?: () => void;
@@ -110,24 +107,22 @@ interface AudienceSelectorProps {
   showAnalytics?: boolean;
   compact?: boolean;
 }
-
 export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name');
   const filteredAudiences = useMemo(() => {
-    const filtered = audiences.filter(audience =>;);
-      audience.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    return filtered.sort((a, b) => {
-      switch (sortBy) {
-      case 'reach':
-        return b.estimatedReach - a.estimatedReach;
-      case 'updated':
-        return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
-      default:
-        return a.name.localeCompare(b.name);
-      }
-    });
+  const filtered = audiences.filter(audience =>;);
+  audience.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return filtered.sort((a, b) => {
+  switch (sortBy) {
+  case 'reach':,
+  return b.estimatedReach - a.estimatedReach;
+  case 'updated':,
+  return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
+  default:,
+  return a.name.localeCompare(b.name);
+});
   }, [audiences, searchTerm, sortBy]);
-  return ();
+  return;
     <div className={`audience-selector ${compact ? 'compact' : ''}`}>}
       <div className="selector-header">
         <div className="header-title">
@@ -260,33 +255,33 @@ export const [sortBy, setSortBy] = useState<'name' | 'reach' | 'updated'>('name'
 
 // Advanced Condition Builder Component
 interface AdvancedConditionBuilderProps {
-  conditions: TargetingCondition[];
-  onChange: (conditions: TargetingCondition[]) => void;
+  conditions: TargetingCondition;,
+  onChange: (conditions: TargetingCondition) => void;,
   availableFields: Array<{,
-    key: string;
-    label: string;
-    type: string;
-    category: string;
-    options?: unknown[];
-  }>;
-  onPreview?: (conditions: TargetingCondition[]) => Promise<TargetingPreview>;
+  key: string;,
+  label: string;
+  type: string;,
+  category: string;
+  options?: unknown;
+}>;
+  onPreview?: (conditions: TargetingCondition) => Promise<TargetingPreview>;
   showVisualBuilder?: boolean;
-}
 
 export const [previewLoading, setPreviewLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [draggedCondition, setDraggedCondition] = useState<string | null>(null);
   const addCondition = (type: TargetingCondition['type'] = 'attribute') => {
-    const newCondition: TargetingCondition = {
-      id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
+    const newCondition: TargetingCondition = {,
+  id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
+}
       type,
       field: availableFields[0]?.key || '',
       operator: 'equals',
       value: '',
       logicalOperator: conditions.length > 0 ? 'AND' : undefined,
       weight: 1,
-      isEnabled: true,
-    };
+      isEnabled: true;
+  };
     onChange([...conditions, newCondition]);
   };
   const updateCondition = (id: string, updates: Partial<TargetingCondition>) => {
@@ -299,7 +294,6 @@ export const [previewLoading, setPreviewLoading] = useState(false);
     // Remove logical operator from first condition if needed
     if (filtered.length > 0 && filtered[0].logicalOperator) {
       filtered[0] = { ...filtered[0], logicalOperator: undefined };
-    }
     onChange(filtered);
   };
   const generatePreview = async () => {
@@ -309,10 +303,9 @@ export const [previewLoading, setPreviewLoading] = useState(false);
       const result = await onPreview(conditions);
       setPreview(result);
     } catch (error) {
-      console.error('Failed to generate preview:', error);
-    } finally {
+  console.error('Failed to generate preview:', error);
+} finally {
       setPreviewLoading(false);
-    }
   };
   const handleDragStart = (e: React.DragEvent, conditionId: string) => {
     setDraggedCondition(conditionId);
@@ -336,14 +329,13 @@ export const [previewLoading, setPreviewLoading] = useState(false);
   const conditionsByCategory = useMemo(() => {
     const categories: Record<string, typeof availableFields> = {};
     availableFields.forEach(field => {)
-      if (!categories[field.category]) {
+  if (!categories[field.category]) {
         categories[field.category] = [];
-      }
       categories[field.category].push(field);
     });
     return categories;
   }, [availableFields]);
-  return ();
+  return;
     <div className="advanced-condition-builder">
       <div className="builder-header">
         <div className="header-title">
@@ -469,8 +461,8 @@ export const [previewLoading, setPreviewLoading] = useState(false);
                     <select
                       value={conditions[index + 1]?.logicalOperator || 'AND'}
                       onChange={(e) => updateCondition(conditions[index + 1].id, { )
-                        logicalOperator: e.target.value as 'AND' | 'OR' | 'NOT' ,
-                      })}
+                        logicalOperator: e.target.value as 'AND' | 'OR' | 'NOT' ;
+  })}
                       className="logic-select"
                     >
                       <option value="AND">AND</option>
@@ -594,17 +586,14 @@ export const [previewLoading, setPreviewLoading] = useState(false);
 
 // Geographic Targeting Component
 interface GeographicTargetingProps {
-  selectedCountries: string[];
-  selectedRegions: string[];
-  selectedCities: string[];
-  onCountriesChange: (countries: string[]) => void;
-  onRegionsChange: (regions: string[]) => void;
-  onCitiesChange: (cities: string[]) => void;
+  selectedCountries: string;,
+  selectedRegions: string;
+  selectedCities: string;,
+  onCountriesChange: (countries: string) => void;,
+  onRegionsChange: (regions: string) => void;,
+  onCitiesChange: (cities: string) => void;
   excludeMode?: boolean;
   onExcludeModeChange?: (exclude: boolean) => void;
-}
-
-export 
   // Mock data - in real implementation, this would come from props or API
   const countries = [;
     { code: 'US', name: 'United States', userCount: 125000 },
@@ -613,7 +602,7 @@ export
     { code: 'AU', name: 'Australia', userCount: 45000 },
     { code: 'DE', name: 'Germany', userCount: 78000 }
   ];
-  return ();
+  return;
     <div className="geographic-targeting">
       <div className="geo-header">
         <div className="header-title">
@@ -661,11 +650,11 @@ export
                 key={country.code}
                 className={`country-item ${selectedCountries.includes(country.code) ? 'selected' : ''}`}
                 onClick={() => {
-                  const newSelection = selectedCountries.includes(country.code);
-                    ? selectedCountries.filter(c => c !== country.code)
-                    : [...selectedCountries, country.code];
-                  onCountriesChange(newSelection);
-                }}
+  const newSelection = selectedCountries.includes(country.code);
+  ? selectedCountries.filter(c => c !== country.code)
+  : [...selectedCountries, country.code];
+  onCountriesChange(newSelection);
+}}
               >
                 <div className="country-flag">
                   {/* Flag placeholder */}
@@ -706,15 +695,12 @@ export
 
 // Segment Management Component
 interface SegmentManagementProps {
-  segments: UserSegment[];
+  segments: UserSegment;,
   onCreateSegment: (segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastUpdated'>) => void;
-  onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;
-  onDeleteSegment: (id: string) => void;
+  onUpdateSegment: (id: string, updates: Partial<UserSegment>) => void;,
+  onDeleteSegment: (id: string) => void;,
   onDuplicateSegment: (id: string) => void;
-}
-
-export 
-  return ();
+  return;
     <div className="segment-management">
       <div className="segments-header">
         <div className="header-title">
@@ -725,13 +711,13 @@ export
         <button
           className="btn btn-primary"
           onClick={() => onCreateSegment({)
-            name: 'New Segment',
-            conditions: [],
-            userCount: 0,
-            isActive: true,
-            tags: [],
-            color: '#3B82F6',
-          })}
+  name: 'New Segment',
+  conditions: [],
+  userCount: 0,
+  isActive: true,
+  tags: [],
+  color: '#3B82F6',
+})}
         >
           <Plus size={16} />
           Create Segment
@@ -744,8 +730,8 @@ export
             className={`segment-card ${expandedSegment === segment.id ? 'expanded' : ''}`}
           >
             <div className="segment-header" onClick={() => 
-              setExpandedSegment(expandedSegment === segment.id ? null : segment.id)
-            }>
+              setExpandedSegment(expandedSegment === segment.id ? null : segment.id);
+  }>
               <div className="segment-indicator">
                 <div
                   className="segment-color"
@@ -784,7 +770,6 @@ export
                   {expandedSegment === segment.id ? 
                     <ChevronDown size={16} /> : 
                     <ChevronRight size={16} />
-                  }
                 </button>
               </div>
             </div>
@@ -862,13 +847,13 @@ export
           <button
             className="btn btn-primary"
             onClick={() => onCreateSegment({)
-              name: 'My First Segment',
-              conditions: [],
-              userCount: 0,
-              isActive: true,
-              tags: [],
-              color: '#3B82F6',
-            })}
+  name: 'My First Segment',
+  conditions: [],
+  userCount: 0,
+  isActive: true,
+  tags: [],
+  color: '#3B82F6',
+})}
           >
             <Plus size={16} />
             Create First Segment
@@ -882,27 +867,26 @@ export
 // Targeting Performance Analytics
 interface TargetingAnalyticsProps {
   analytics: {,
-    totalUsers: number;
-    activeTargeting: number;
-    conversionRate: number;
-    impressions: number;
-    clicks: number;
-    topSegments: Array<{,
-      id: string;
-      name: string;
-      performance: number;
-      users: number;
-    }>;
+  totalUsers: number;,
+  activeTargeting: number;
+  conversionRate: number;,
+  impressions: number;
+  clicks: number;,
+  topSegments: Array<{,
+  id: string;,
+  name: string;
+  performance: number;,
+  users: number;
+}>;
     geographicBreakdown: Record<string, number>;
     timeSeriesData: Array<{,
-      date: string;
-      impressions: number;
-      conversions: number;
-    }>;
+  date: string;
+  impressions: number;,
+  conversions: number;
+}>;
   };
-  timeRange: '24h' | '7d' | '30d' | '90d';
+  timeRange: '24h' | '7d' | '30d' | '90d';,
   onTimeRangeChange: (range: '24h' | '7d' | '30d' | '90d') => void;
-}
 
 // Export all components
 export {

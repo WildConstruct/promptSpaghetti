@@ -8,7 +8,7 @@ interface SaveTemplateDialogProps {
         error?: string;
     }>;
     initialData?: Partial<TemplateSaveData>;
-}
+
 export declare const SaveTemplateDialog: React.FC<SaveTemplateDialogProps>;
 export {};
 //# sourceMappingURL=SaveTemplateDialog.d.ts.map

@@ -24,6 +24,7 @@ import { SecurityTimeSeriesAnalysisEngine } from '../services/SecurityTimeSeries
 // Global insights automation engine instance
 let insightsEngine: SecurityInsightsAutomationEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface GenerateInsightsRequest {
   generation_configuration: {
     generation_type: 'scheduled' | 'triggered' | 'on_demand';
@@ -40,6 +42,7 @@ interface GenerateInsightsRequest {
     time_range?: {
       start: number;
       end: number;
+}
     };
     priority_filter?: ('low' | 'medium' | 'high' | 'critical')[];
     quality_threshold?: number;
@@ -59,6 +62,7 @@ interface GenerateInsightsRequest {
   };
 }
 
+}
 interface DistributeInsightsRequest {
   insight_ids: string[];
   distribution_configuration: {
@@ -70,6 +74,7 @@ interface DistributeInsightsRequest {
       immediate?: boolean;
       scheduled_time?: number;
       recurring_schedule?: string;
+}
     };
   };
   delivery_preferences?: {
@@ -83,6 +88,7 @@ interface DistributeInsightsRequest {
   };
 }
 
+}
 interface CreatePersonalizationProfileRequest {
   profile_configuration: {
     user_role: string;
@@ -93,6 +99,7 @@ interface CreatePersonalizationProfileRequest {
     preferred_formats: string[];
     delivery_schedule: string;
     language_preference?: string;
+}
   };
   customization_options?: {
     insight_relevance_weighting?: {
@@ -114,6 +121,7 @@ interface CreatePersonalizationProfileRequest {
   };
 }
 
+}
 interface SearchInsightsRequest {
   search_criteria: {
     insight_types?: string[];
@@ -121,6 +129,7 @@ interface SearchInsightsRequest {
     date_range?: {
       start: number;
       end: number;
+}
     };
     confidence_threshold?: number;
     relevance_score_threshold?: number;
@@ -142,12 +151,14 @@ interface SearchInsightsRequest {
   };
 }
 
+}
 interface GenerateReportRequest {
   report_type: 'insights_summary' | 'distribution_analytics' | 'engagement_analysis' | 'business_impact' | 'automation_performance';
   report_scope: {
     time_range?: {
       start: number;
       end: number;
+}
     };
     insight_ids?: string[];
     audience_filters?: string[];
@@ -171,6 +182,7 @@ interface GenerateReportRequest {
 }
 
 async function initializeInsightsEngine(): Promise<void> {
+
   if (insightsEngine) {
     return;
   }
@@ -185,7 +197,7 @@ async function initializeInsightsEngine(): Promise<void> {
       automated_distribution: true,
       multi_language_support: true,
       personalization_enabled: true
-    },
+  }
     insight_types: {
       threat_insights: true,
       risk_insights: true,
@@ -195,7 +207,7 @@ async function initializeInsightsEngine(): Promise<void> {
       predictive_insights: true,
       behavioral_insights: true,
       contextual_insights: true
-    },
+  }
     analysis_algorithms: {
       natural_language_processing: true,
       machine_learning_analysis: true,
@@ -205,7 +217,7 @@ async function initializeInsightsEngine(): Promise<void> {
       anomaly_contextualization: true,
       causal_inference: true,
       impact_assessment: true
-    },
+  }
     data_sources: {
       security_events: true,
       threat_intelligence: true,
@@ -215,7 +227,7 @@ async function initializeInsightsEngine(): Promise<void> {
       performance_metrics: true,
       user_behavior_data: true,
       external_intelligence: true
-    },
+  }
     generation_triggers: {
       scheduled_intervals: ['hourly', 'daily', 'weekly'],
       event_driven_triggers: ['critical_alert', 'policy_violation', 'anomaly_detected'],
@@ -224,7 +236,7 @@ async function initializeInsightsEngine(): Promise<void> {
       anomaly_triggers: ['statistical_anomaly', 'behavioral_anomaly'],
       compliance_triggers: ['regulation_change', 'audit_finding'],
       escalation_triggers: ['incident_escalation', 'threat_escalation']
-    },
+  }
     distribution_channels: {
       dashboard_integration: true,
       email_reports: true,
@@ -234,7 +246,7 @@ async function initializeInsightsEngine(): Promise<void> {
       mobile_notifications: true,
       executive_briefings: true,
       automated_tickets: true
-    },
+  }
     personalization: {
       role_based_insights: true,
       department_specific: true,
@@ -286,35 +298,35 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               generation_type: {
                 type: 'string',
                 enum: ['scheduled', 'triggered', 'on_demand']
-              },
+  }
               insight_types: {
                 type: 'array',
                 items: {
                   type: 'string',
                   enum: ['threat', 'risk', 'compliance', 'operational', 'strategic', 'predictive', 'behavioral', 'contextual']
                 }
-              },
+  }
               data_sources: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               time_range: {
                 type: 'object',
                 properties: {
                   start: { type: 'number' },
                   end: { type: 'number' }
                 }
-              },
+  }
               priority_filter: {
                 type: 'array',
                 items: {
                   type: 'string',
                   enum: ['low', 'medium', 'high', 'critical']
                 }
-              },
+  }
               quality_threshold: { type: 'number', minimum: 0, maximum: 1 }
             }
-          },
+  }
           analysis_preferences: {
             type: 'object',
             properties: {
@@ -323,13 +335,13 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               technical_detail_level: {
                 type: 'string',
                 enum: ['basic', 'intermediate', 'advanced', 'expert']
-              },
+  }
               business_context_emphasis: { type: 'boolean' },
               predictive_analysis: { type: 'boolean' }
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -348,7 +360,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -402,31 +414,31 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             average_confidence_score: generationResult.generation_metrics.average_confidence_score,
             average_quality_score: generationResult.generation_metrics.average_quality_score,
             processing_time_ms: processingTime
-          },
+  }
           insights_breakdown: {
             by_type: this.calculateInsightsByType(generationResult.insights_generated),
             by_priority: this.calculateInsightsByPriority(generationResult.insights_generated),
             by_confidence: this.calculateInsightsByConfidence(generationResult.insights_generated)
-          },
+  }
           quality_assessment: {
             overall_quality_score: generationResult.quality_assessment.overall_quality_score,
             relevance_assessment: generationResult.quality_assessment.relevance_assessment,
             accuracy_validation: generationResult.quality_assessment.accuracy_validation,
             completeness_score: generationResult.quality_assessment.completeness_score
-          },
+  }
           data_processing: {
             sources_processed: generationResult.data_processing_summary.data_sources_processed.length,
             algorithms_used: generationResult.data_processing_summary.analysis_algorithms_used.length,
             correlations_discovered: generationResult.data_processing_summary.correlation_discoveries,
             anomalies_detected: generationResult.data_processing_summary.anomaly_detections
-          },
+  }
           distribution_readiness: {
             ready_for_distribution: generationResult.distribution_readiness.insights_ready_for_distribution,
             personalization_profiles: generationResult.distribution_readiness.personalization_profiles_applied,
             target_audiences: generationResult.distribution_readiness.target_audiences_identified,
             channels_prepared: generationResult.distribution_readiness.distribution_channels_prepared.length
           }
-        },
+  }
         timestamp: Date.now()
       };
 
@@ -454,21 +466,21 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             type: 'array',
             items: { type: 'string' },
             minItems: 1
-          },
+  }
           distribution_configuration: {
             type: 'object',
             properties: {
               target_audiences: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               distribution_channels: {
                 type: 'array',
                 items: {
                   type: 'string',
                   enum: ['email', 'slack', 'dashboard', 'siem', 'mobile', 'api']
                 }
-              },
+  }
               personalization_enabled: { type: 'boolean' },
               priority_override: { type: 'boolean' },
               delivery_timing: {
@@ -480,7 +492,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
                 }
               }
             }
-          },
+  }
           delivery_preferences: {
             type: 'object',
             properties: {
@@ -490,7 +502,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
                   type: 'string',
                   enum: ['summary', 'detailed', 'executive', 'technical']
                 }
-              },
+  }
               language_preference: { type: 'string' },
               notification_settings: {
                 type: 'object',
@@ -531,7 +543,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             channels_used: distributionResult.distribution_summary.channels_used.length,
             success_rate: distributionResult.distribution_summary.distribution_success_rate,
             average_delivery_time: distributionResult.distribution_summary.average_delivery_time
-          },
+  }
           channel_performance: distributionResult.channel_results.map(result => ({
             channel: result.channel_name,
             recipients: result.recipients_count,
@@ -549,14 +561,14 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             relevance_improvement: distributionResult.personalization_effectiveness.relevance_improvement,
             engagement_uplift: distributionResult.personalization_effectiveness.engagement_uplift,
             satisfaction_score: distributionResult.personalization_effectiveness.satisfaction_score
-          },
+  }
           delivery_analytics: {
             open_rates: distributionResult.distribution_analytics.open_rates,
             click_through_rates: distributionResult.distribution_analytics.click_through_rates,
             time_to_engagement: distributionResult.distribution_analytics.time_to_engagement,
             feedback_collection_rate: distributionResult.distribution_analytics.feedback_collection_rate
           }
-        },
+  }
         timestamp: Date.now()
       };
 
@@ -589,23 +601,23 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               technical_expertise: {
                 type: 'string',
                 enum: ['beginner', 'intermediate', 'advanced', 'expert']
-              },
+  }
               responsibility_areas: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               priority_focus_areas: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               preferred_formats: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               delivery_schedule: { type: 'string' },
               language_preference: { type: 'string' }
             }
-          },
+  }
           customization_options: {
             type: 'object',
             properties: {
@@ -650,18 +662,18 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             department: profile.department,
             technical_expertise: profile.technical_expertise,
             language_preference: profile.language_preference
-          },
+  }
           personalization_settings: {
             priority_focus_areas: profile.priority_focus_areas,
             preferred_formats: profile.preferred_formats,
             delivery_schedule: profile.delivery_schedule
-          },
+  }
           customization_applied: {
             insight_weighting: customization_options?.insight_relevance_weighting || {},
             communication_preferences: customization_options?.communication_preferences || {},
             automation_preferences: customization_options?.automation_preferences || {}
           }
-        },
+  }
         timestamp: Date.now()
       };
 
@@ -691,25 +703,25 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               insight_types: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               priority_levels: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               date_range: {
                 type: 'object',
                 properties: {
                   start: { type: 'number' },
                   end: { type: 'number' }
                 }
-              },
+  }
               confidence_threshold: { type: 'number', minimum: 0, maximum: 1 },
               keyword_search: {
                 type: 'array',
                 items: { type: 'string' }
               }
             }
-          },
+  }
           search_options: {
             type: 'object',
             properties: {
@@ -752,7 +764,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             insight.insight_title.toLowerCase().includes(keyword.toLowerCase()) ||
             insight.description.toLowerCase().includes(keyword.toLowerCase()) ||
             insight.insight_content.summary.toLowerCase().includes(keyword.toLowerCase())
-          )
+
         );
       }
 
@@ -781,20 +793,20 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             insights_returned: filteredInsights.length,
             search_criteria_applied: Object.keys(search_criteria).length,
             processing_time_ms: 250 // Mock processing time
-          },
+  }
           insight_results: insightSummaries,
           result_analytics: {
             type_distribution: this.calculateTypeDistribution(filteredInsights),
             priority_distribution: this.calculatePriorityDistribution(filteredInsights),
             confidence_distribution: this.calculateConfidenceDistribution(filteredInsights),
             temporal_distribution: this.calculateTemporalDistribution(filteredInsights)
-          },
+  }
           personalization_applied: {
             user_preferences_considered: personalization?.apply_user_preferences || false,
             role_based_filtering: !!personalization?.user_role_filter,
             department_specific_results: !!personalization?.department_filter
           }
-        },
+  }
         timestamp: Date.now()
       };
 
@@ -821,7 +833,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
           report_type: {
             type: 'string',
             enum: ['insights_summary', 'distribution_analytics', 'engagement_analysis', 'business_impact', 'automation_performance']
-          },
+  }
           report_scope: {
             type: 'object',
             properties: {
@@ -831,17 +843,17 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
                   start: { type: 'number' },
                   end: { type: 'number' }
                 }
-              },
+  }
               insight_ids: {
                 type: 'array',
                 items: { type: 'string' }
-              },
+  }
               audience_filters: {
                 type: 'array',
                 items: { type: 'string' }
               }
             }
-          },
+  }
           report_options: {
             type: 'object',
             properties: {
@@ -850,7 +862,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               detail_level: {
                 type: 'string',
                 enum: ['summary', 'detailed', 'comprehensive']
-              },
+  }
               export_format: {
                 type: 'string',
                 enum: ['json', 'pdf', 'csv', 'xlsx']
@@ -889,7 +901,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               end_date: new Date(report_scope.time_range.end).toISOString(),
               duration_days: Math.ceil((report_scope.time_range.end - report_scope.time_range.start) / (24 * 60 * 60 * 1000))
             } : null
-          },
+  }
           report_content: {
             executive_summary: report.executive_summary,
             key_insights: report.key_findings?.slice(0, 10) || [],
@@ -900,21 +912,21 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
               user_engagement_rate: report.user_engagement_rate || 0.78,
               business_impact_score: report.business_impact_score || 4.2
             }
-          },
+  }
           report_analytics: {
             insights_coverage: {
               total_insights_period: report.insights_analyzed,
               insights_distributed: report.insights_distributed || 0,
               insights_acted_upon: report.insights_acted_upon || 0,
               average_quality_score: report.average_quality_score || 0.85
-            },
+  }
             engagement_statistics: {
               total_recipients: report.total_recipients || 0,
               average_engagement_rate: report.average_engagement_rate || 0.65,
               feedback_collection_rate: report.feedback_collection_rate || 0.45,
               satisfaction_score: report.satisfaction_score || 4.1
             }
-          },
+  }
           report_metadata: {
             export_format: report_options?.export_format || 'json',
             detail_level: report_options?.detail_level || 'detailed',
@@ -922,7 +934,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             includes_recommendations: report_options?.include_recommendations || false,
             automated_delivery: !!delivery_settings?.automated_scheduling
           }
-        },
+  }
         timestamp: Date.now()
       };
 
@@ -955,7 +967,7 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
                 distribution_metrics: { type: 'object' },
                 business_impact: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -980,42 +992,42 @@ export default async function insightsAutomationRoutes(fastify: FastifyInstance)
             average_feedback_score: analytics.summary.average_feedback_score,
             insights_acted_upon: analytics.summary.insights_acted_upon,
             automation_efficiency: analytics.summary.automation_efficiency
-          },
+  }
           generation_metrics: {
             distribution_by_type: analytics.insight_distribution.by_type,
             distribution_by_priority: analytics.insight_distribution.by_priority,
             distribution_by_confidence: analytics.insight_distribution.by_confidence,
             performance_metrics: analytics.generation_performance
-          },
+  }
           distribution_metrics: {
             delivery_success_rates: analytics.distribution_metrics.delivery_success_rates,
             engagement_metrics: analytics.distribution_metrics.engagement_metrics,
             channel_effectiveness: analytics.distribution_metrics.channel_effectiveness,
             personalization_impact: analytics.distribution_metrics.personalization_impact
-          },
+  }
           business_impact: {
             decisions_influenced: analytics.business_impact.decisions_influenced,
             actions_triggered: analytics.business_impact.actions_triggered,
             cost_savings_achieved: analytics.business_impact.cost_savings_achieved,
             risk_mitigation_value: analytics.business_impact.risk_mitigation_value,
             compliance_improvements: analytics.business_impact.compliance_improvements
-          },
+  }
           user_satisfaction: {
             overall_satisfaction: analytics.user_satisfaction.overall_satisfaction_score,
             relevance_ratings: analytics.user_satisfaction.relevance_ratings,
             clarity_ratings: analytics.user_satisfaction.clarity_ratings,
             actionability_ratings: analytics.user_satisfaction.actionability_ratings,
             timeliness_ratings: analytics.user_satisfaction.timeliness_ratings
-          },
+  }
           automation_metrics: {
             automation_coverage: analytics.automation_metrics.automation_coverage,
             manual_intervention_rate: analytics.automation_metrics.manual_intervention_rate,
             processing_throughput: analytics.automation_metrics.processing_throughput,
             error_rates: analytics.automation_metrics.error_rates,
             scalability_metrics: analytics.automation_metrics.scalability_metrics
-          },
+  }
           recent_activities: analytics.recent_activities.slice(0, 10)
-        },
+  }
         timestamp: Date.now()
       };
 

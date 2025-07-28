@@ -4,6 +4,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { Transaction } from '../marketplace/transaction.types.js';
 // import { PaymentProvider } from '../marketplace/transaction.types.js';
 
+}
 export interface TransactionAnomalyPattern {
   patternType: 'velocity' | 'amount' | 'location' | 'time' | 'behavior' | 'payment_method';
   threshold: number;
@@ -12,7 +13,9 @@ export interface TransactionAnomalyPattern {
   enabled: boolean;
   description: string;
 }
+}
 
+}
 export interface TransactionAnomaly {
   id: string;
   transactionId: string;
@@ -29,7 +32,9 @@ export interface TransactionAnomaly {
   investigatedAt?: Date;
   resolution?: string;
 }
+}
 
+}
 export interface FraudRing {
   id: string;
   userIds: string[];
@@ -39,6 +44,7 @@ export interface FraudRing {
   transactionCount: number;
   detectedAt: Date;
   status: 'suspected' | 'confirmed' | 'dismissed';
+}
 }
 
 export class TransactionAnomalyDetectionService {
@@ -61,7 +67,7 @@ export class TransactionAnomalyDetectionService {
         severity: 'high',
         enabled: true,
         description: 'High transaction velocity detected'
-      },
+  }
       {
         patternType: 'amount',
         threshold: 100000, // Transactions over $1000
@@ -69,7 +75,7 @@ export class TransactionAnomalyDetectionService {
         severity: 'medium',
         enabled: true,
         description: 'Unusually high transaction amount'
-      },
+  }
       {
         patternType: 'amount',
         threshold: 500000, // Transactions over $5000
@@ -77,7 +83,7 @@ export class TransactionAnomalyDetectionService {
         severity: 'critical',
         enabled: true,
         description: 'Extremely high transaction amount'
-      },
+  }
       {
         patternType: 'velocity',
         threshold: 50000, // More than $500 in rapid succession
@@ -85,7 +91,7 @@ export class TransactionAnomalyDetectionService {
         severity: 'high',
         enabled: true,
         description: 'High spending velocity detected'
-      },
+  }
       {
         patternType: 'behavior',
         threshold: 3, // 3+ failed payments before success
@@ -93,7 +99,7 @@ export class TransactionAnomalyDetectionService {
         severity: 'medium',
         enabled: true,
         description: 'Suspicious payment behavior pattern'
-      },
+  }
       {
         patternType: 'payment_method',
         threshold: 5, // Same payment method used by 5+ different users
@@ -110,6 +116,7 @@ export class TransactionAnomalyDetectionService {
   // =============================================
 
   async detectAnomaliesForTransaction(transactionId: string): Promise<TransactionAnomaly[]> {
+
     const transaction = await this.getTransactionById(transactionId);
     if (!transaction) return [];
 
@@ -135,6 +142,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     switch (pattern.patternType) {
     case 'velocity':
       return await this.checkVelocityAnomaly(transaction, pattern);
@@ -155,6 +163,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     const timeWindowMs = this.parseTimeWindow(pattern.timeWindow);
     const cutoffTime = new Date(new Date(transaction.created_at).getTime() - timeWindowMs);
 
@@ -181,7 +190,7 @@ export class TransactionAnomalyDetectionService {
             totalAmount: total_amount,
             timeWindow: pattern.timeWindow,
             threshold: pattern.threshold
-          },
+  }
           confidence: Math.min(0.9, 0.5 + (count - pattern.threshold) * 0.1),
           suggestedActions: [
             'Review user account activity',
@@ -217,7 +226,7 @@ export class TransactionAnomalyDetectionService {
             timeWindow: pattern.timeWindow,
             threshold: pattern.threshold,
             averageAmount: count > 0 ? total_amount / count : 0
-          },
+  }
           confidence: Math.min(0.95, 0.6 + (total_amount - pattern.threshold) / pattern.threshold * 0.3),
           suggestedActions: [
             'Verify spending legitimacy',
@@ -226,8 +235,7 @@ export class TransactionAnomalyDetectionService {
             'Contact customer for verification'
           ],
           status: 'new',
-          detectedAt: new Date()
-        };
+          detectedAt: new Date(};
       }
     }
 
@@ -238,6 +246,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     if (transaction.amount_cents >= pattern.threshold) {
       // Get user's historical spending pattern
       const historicalData = await this.db.query(`
@@ -297,12 +306,11 @@ export class TransactionAnomalyDetectionService {
           userP95Amount: p95_amount,
           threshold: pattern.threshold,
           deviationMultiple: avg_amount > 0 ? transaction.amount_cents / avg_amount : 0
-        },
+  }
         confidence,
         suggestedActions,
         status: 'new',
-        detectedAt: new Date()
-      };
+        detectedAt: new Date(};
     }
 
     return null;
@@ -312,6 +320,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     const timeWindowMs = this.parseTimeWindow(pattern.timeWindow);
     const cutoffTime = new Date(new Date(transaction.created_at).getTime() - timeWindowMs);
 
@@ -349,7 +358,7 @@ export class TransactionAnomalyDetectionService {
           threshold: pattern.threshold,
           cardTestingIndicators,
           recentActivity: recentActivity
-        },
+  }
         confidence: Math.min(0.9, 0.6 + failedCount * 0.1),
         suggestedActions: [
           'Review payment methods used',
@@ -359,8 +368,7 @@ export class TransactionAnomalyDetectionService {
           ...(cardTestingIndicators.isCardTesting ? ['Block payment method immediately'] : [])
         ],
         status: 'new',
-        detectedAt: new Date()
-      };
+        detectedAt: new Date(};
     }
 
     return null;
@@ -370,6 +378,7 @@ export class TransactionAnomalyDetectionService {
     isCardTesting: boolean;
     indicators: string[];
   }> {
+
     const indicators: string[] = [];
     let isCardTesting = false;
 
@@ -405,6 +414,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     // Get payment method from payment intent
     const paymentIntentResult = await this.db.query(`
       SELECT payment_method_id
@@ -451,7 +461,7 @@ export class TransactionAnomalyDetectionService {
           timeWindow: pattern.timeWindow,
           threshold: pattern.threshold,
           affectedUserIds: user_ids.split(',').filter(id => id)
-        },
+  }
         confidence: Math.min(0.95, 0.7 + (unique_users - pattern.threshold) * 0.05),
         suggestedActions: [
           'Investigate payment method sharing',
@@ -461,8 +471,7 @@ export class TransactionAnomalyDetectionService {
           'Verify cardholder identity'
         ],
         status: 'new',
-        detectedAt: new Date()
-      };
+        detectedAt: new Date(};
     }
 
     return null;
@@ -472,6 +481,7 @@ export class TransactionAnomalyDetectionService {
     transaction: Transaction, 
     ____pattern: TransactionAnomalyPattern
   ): Promise<TransactionAnomaly | null> {
+
     const transactionTime = new Date(transaction.created_at);
     const hour = transactionTime.getUTCHours();
     const dayOfWeek = transactionTime.getUTCDay();
@@ -530,7 +540,7 @@ export class TransactionAnomalyDetectionService {
           userAverageHour: avg_hour,
           userHourStddev: stddev_hour,
           userTransactionCount: count
-        },
+  }
         confidence,
         suggestedActions: [
           'Verify transaction timing with customer',
@@ -538,8 +548,7 @@ export class TransactionAnomalyDetectionService {
           'Review recent account activity'
         ],
         status: 'new',
-        detectedAt: new Date()
-      };
+        detectedAt: new Date(};
     }
 
     return null;
@@ -550,6 +559,7 @@ export class TransactionAnomalyDetectionService {
   // =============================================
 
   async detectFraudRings(): Promise<FraudRing[]> {
+
     const fraudRings: FraudRing[] = [];
 
     // Detect based on shared payment methods
@@ -565,6 +575,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   private async detectPaymentMethodRings(fraudRings: FraudRing[]): Promise<void> {
+
     const sharedPaymentMethods = await this.db.query(`
       SELECT 
         pi.payment_method_id,
@@ -609,6 +620,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   private async detectPatternRings(fraudRings: FraudRing[]): Promise<void> {
+
     const patternGroups = await this.db.query(`
       SELECT 
         amount_cents,
@@ -654,6 +666,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   private async detectIPRings(____fraudRings: FraudRing[]): Promise<void> {
+
     // This would require IP address data from risk assessments
     // Implementation would be similar to payment method rings but based on IP clustering
     // Skipping for now as IP data structure is not fully defined
@@ -679,6 +692,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   private async getTransactionById(transactionId: string): Promise<Transaction | null> {
+
     const result = await this.db.query('SELECT * FROM transactions WHERE id = ?', [transactionId]);
     if (result.length === 0) return null;
 
@@ -689,6 +703,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   private async saveTransactionAnomaly(anomaly: TransactionAnomaly): Promise<void> {
+
     await this.db.query(`
       INSERT INTO transaction_anomalies (
         id, transaction_id, user_id, pattern_type, severity, description,
@@ -728,6 +743,7 @@ export class TransactionAnomalyDetectionService {
     investigatorId: string,
     resolution?: string
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE transaction_anomalies 
       SET status = ?, investigated_by = ?, investigated_at = ?, resolution = ?
@@ -736,6 +752,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   async getActiveAnomalies(limit: number = 100): Promise<TransactionAnomaly[]> {
+
     const results = await this.db.query(`
       SELECT * FROM transaction_anomalies 
       WHERE status IN ('new', 'investigating')
@@ -751,6 +768,7 @@ export class TransactionAnomalyDetectionService {
   }
 
   async getAnomaliesByTransaction(transactionId: string): Promise<TransactionAnomaly[]> {
+
     const results = await this.db.query(`
       SELECT * FROM transaction_anomalies 
       WHERE transaction_id = ?

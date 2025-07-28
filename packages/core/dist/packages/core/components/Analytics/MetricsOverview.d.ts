@@ -9,9 +9,5 @@ export interface MetricsOverviewProps {
     performanceData?: unknown;
     loading: boolean;
 }
-/**
- * Metrics overview component
- */
 export declare const MetricsOverview: React.FC<MetricsOverviewProps>;
-export default MetricsOverview;
 //# sourceMappingURL=MetricsOverview.d.ts.map

@@ -6,6 +6,31 @@
  * Comprehensive activity tracking data model for monitoring user actions,
  * system events, and administrative activities across the platform.
  */
+ > ;
+topSources: Array < {
+    source: string,
+    count: number,
+    percentage: number
+} > ;
+topActions: Array < {
+    action: string,
+    count: number,
+    percentage: number
+} > ;
+topUsers: Array < {
+    userId: string,
+    userEmail: string,
+    count: number,
+    percentage: number
+} > ;
+errorRate: number;
+averageDuration: number;
+performanceMetrics: {
+    p50: number;
+    p95: number;
+    p99: number;
+}
+;
 // Default configurations
 export const DEFAULT_ACTIVITY_RETENTION_DAYS = 90;
 export const DEFAULT_ACTIVITY_PAGE_SIZE = 50;
@@ -23,12 +48,12 @@ export const ACTIVITY_TYPE_LABELS = {
     authentication: 'Authentication',
     authorization: 'Authorization',
     file_operation: 'File Operation',
-    workflow_event: 'Workflow Event'
+    workflow_event: 'Workflow Event',
 };
 export const ACTIVITY_SEVERITY_COLORS = {
     critical: '#dc2626',
     high: '#ea580c',
     medium: '#d97706',
     low: '#65a30d',
-    info: '#2563eb'
+    info: '#2563eb',
 };

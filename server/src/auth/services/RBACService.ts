@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { SessionRotationService, PrivilegeChangeEvent } from './SessionRotationService';
 
+}
 export interface CreateRoleData {
   name: string;
   description?: string;
@@ -13,14 +14,18 @@ export interface CreateRoleData {
   organizationId?: string;
   permissions: CreatePermissionData[];
 }
+}
 
+}
 export interface CreatePermissionData {
   resource: string;
   action: string;
   scope: 'global' | 'organization' | 'team' | 'own';
   conditions?: Record<string, any>;
 }
+}
 
+}
 export interface AssignRoleData {
   userId: string;
   roleId: string;
@@ -28,11 +33,14 @@ export interface AssignRoleData {
   expiresAt?: Date;
   scopeContext?: Record<string, any>;
 }
+}
 
+}
 export interface PermissionCheckResult {
   allowed: boolean;
   reason?: string;
   matchingPermissions?: Permission[];
+}
 }
 
 export class RBACService {
@@ -64,6 +72,7 @@ export class RBACService {
     data: CreateRoleData,
     context: { ipAddress?: string; userAgent?: string; createdBy?: string } = {}
   ): Promise<Role> {
+
     const transaction = await this.dbService.beginTransaction();
     
     try {
@@ -106,7 +115,7 @@ export class RBACService {
           scope: data.scope,
           organizationId: data.organizationId,
           permissionsCount: data.permissions.length
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -134,6 +143,7 @@ export class RBACService {
     updates: Partial<CreateRoleData>,
     context: { ipAddress?: string; userAgent?: string; updatedBy?: string } = {}
   ): Promise<Role> {
+
     const transaction = await this.dbService.beginTransaction();
     
     try {
@@ -196,7 +206,7 @@ export class RBACService {
         details: {
           changes: updates,
           previousName: existingRole.name
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -223,6 +233,7 @@ export class RBACService {
     roleId: string,
     context: { ipAddress?: string; userAgent?: string; deletedBy?: string } = {}
   ): Promise<void> {
+
     const transaction = await this.dbService.beginTransaction();
     
     try {
@@ -262,7 +273,7 @@ export class RBACService {
         details: {
           roleName: role.name,
           scope: role.scope
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -281,6 +292,7 @@ export class RBACService {
     } = {},
     pagination: { limit?: number; offset?: number } = {}
   ): Promise<{ roles: Role[]; total: number }> {
+
     const { limit = 50, offset = 0 } = pagination;
     
     let whereClause = 'WHERE 1=1';
@@ -332,6 +344,7 @@ export class RBACService {
   }
 
   async getRoleById(roleId: string): Promise<Role | null> {
+
     const result = await this.dbService.query('SELECT * FROM roles WHERE id = $1', [roleId]);
     
     if (result.rows.length === 0) {
@@ -351,6 +364,7 @@ export class RBACService {
   }
 
   async getRolePermissions(roleId: string): Promise<Permission[]> {
+
     const result = await this.dbService.query(
       'SELECT * FROM permissions WHERE role_id = $1 ORDER BY resource, action',
       [roleId]
@@ -372,6 +386,7 @@ export class RBACService {
     data: AssignRoleData,
     context: { ipAddress?: string; userAgent?: string; currentSessionId?: string } = {}
   ): Promise<UserRole> {
+
     const userRoleId = require('crypto').randomUUID();
     const now = new Date();
 
@@ -410,7 +425,7 @@ export class RBACService {
         roleName: role?.name,
         expiresAt: data.expiresAt,
         scopeContext: data.scopeContext
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -454,6 +469,7 @@ export class RBACService {
     roleId: string,
     context: { ipAddress?: string; userAgent?: string; removedBy?: string; currentSessionId?: string } = {}
   ): Promise<void> {
+
     // Get existing roles before removal for session rotation
     const existingRoles = await this.getUserRoles(userId);
     const existingRoleIds = existingRoles.map(r => r.id);
@@ -484,7 +500,7 @@ export class RBACService {
         targetUserId: userId,
         roleId,
         roleName: role?.name
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -514,6 +530,7 @@ export class RBACService {
   }
 
   async getUserRoles(userId: string): Promise<Role[]> {
+
     const result = await this.dbService.query(`
       SELECT r.* FROM roles r
       INNER JOIN user_roles ur ON r.id = ur.role_id
@@ -538,6 +555,7 @@ export class RBACService {
     permission: PermissionCheck,
     context?: PermissionContext
   ): Promise<PermissionCheckResult> {
+
     try {
       const userPermissions = await this.getUserPermissions(userId);
       
@@ -577,6 +595,7 @@ export class RBACService {
   }
 
   async getUserPermissions(userId: string): Promise<Permission[]> {
+
     // Check cache first
     const cacheKey = `user_permissions_${userId}`;
     const cached = this.permissionCache.get(cacheKey);
@@ -660,6 +679,7 @@ export class RBACService {
     permission: Permission,
     context?: PermissionContext
   ): Promise<boolean> {
+
     if (!permission.conditions || Object.keys(permission.conditions).length === 0) {
       return true;
     }
@@ -700,6 +720,7 @@ export class RBACService {
   }
 
   private async clearUserPermissionCache(roleId: string): Promise<void> {
+
     // Get all users with this role
     const result = await this.dbService.query(
       'SELECT DISTINCT user_id FROM user_roles WHERE role_id = $1',
@@ -750,6 +771,7 @@ export class RBACService {
   }
 
   async getUsersWithRole(roleId: string): Promise<any[]> {
+
     const result = await this.dbService.query(`
       SELECT u.id, u.email, ur.granted_at, ur.expires_at, ur.granted_by,
              up.display_name, up.first_name, up.last_name

@@ -53,14 +53,13 @@ const mockTemplate = {
   updatedAt: new Date('2024-01-01'),
   isPublic: false,
   graph: {,
-    nodes: [],
-    edges: [],
-  },
+  nodes: [],
+  edges: [],
+},
   metadata: {,
-    category: 'test',
-    difficulty: 'beginner',
-    estimatedTime: 5,
-  }
+  category: 'test',
+  difficulty: 'beginner',
+  estimatedTime: 5,
 };
 const defaultProps = {
   isOpen: true,
@@ -154,7 +153,6 @@ describe('TemplateImportExportDialog', () => {
       if (closeButton) {
         await userEvent.click(closeButton);
         expect(onClose).toHaveBeenCalled();
-      }
     });
     it('calls onClose when cancel is clicked', async () => {
       const onClose = jest.fn();
@@ -229,7 +227,6 @@ describe('TemplateImportExportDialog', () => {
         });
         // Should not throw errors when switching between source types
         expect(screen.getByText(sourceType)).toBeInTheDocument();
-      }
     });
   });
   describe('Accessibility', () => {
@@ -248,7 +245,6 @@ describe('TemplateImportExportDialog', () => {
       if (firstButton) {
         firstButton.focus();
         expect(firstButton).toHaveFocus();
-      }
     });
   });
 });

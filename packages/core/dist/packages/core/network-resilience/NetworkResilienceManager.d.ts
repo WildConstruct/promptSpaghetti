@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
-import { QueuedOperation, OfflineQueueConfig } from './OfflineOperationQueue';
+import { OfflineQueueConfig } from './OfflineOperationQueue';
 import { ConnectionState, ConnectionQuality, ConnectionStateConfig } from './ConnectionStateManager';
 import { ReconnectionState, ReconnectionConfig } from './ReconnectionHandler';
-import { SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
+import { RecoveryConfig } from './SynchronizationRecovery';
 export interface NetworkResilienceConfig {
     enabled: boolean;
     offlineQueue: Partial<OfflineQueueConfig>;
@@ -67,66 +67,6 @@ export declare class NetworkResilienceManager extends EventEmitter {
     private metrics;
     constructor(config?: Partial<NetworkResilienceConfig>);
     /**
-     * Initialize the network resilience system
-     */
-    initialize(documentId: string, userId: string): Promise<void>;
-    /**
-     * Connect to WebSocket server
-     */
-    connect(websocketUrl: string, authToken?: string): Promise<void>;
-    /**
-     * Disconnect from server
-     */
-    disconnect(reason?: string): void;
-    /**
-     * Queue operation for processing (offline or online)
-     */
-    queueOperation(operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>): string;
-    /**
-     * Get current network status
-     */
-    getStatus(): NetworkStatus;
-    /**
-     * Force synchronization
-     */
-    forceSync(): Promise<SyncDelta | null>;
-    /**
-     * Get comprehensive metrics
-     */
-    getMetrics(): ResilienceMetrics;
-    /**
-     * Enable or disable network resilience
-     */
-    setEnabled(enabled: boolean): void;
-    /**
-     * Clear all queued operations
-     */
-    clearQueue(): void;
-    /**
-     * Export current state for debugging
-     */
-    exportState(): any;
-    /**
-     * Cleanup and shutdown
-     */
-    cleanup(): void;
-    /**
-     * Initialize sub-components
-     */
-    private initializeComponents;
-    /**
-     * Set up event handlers between components
-     */
-    private setupEventHandlers;
-    /**
-     * Establish WebSocket connection
-     */
-    private establishWebSocketConnection;
-    /**
-     * Handle incoming WebSocket messages
-     */
-    private handleWebSocketMessage;
-    /**
      * Start reconnection process
      */
     private startReconnection;
@@ -163,20 +103,20 @@ export declare class NetworkResilienceManager extends EventEmitter {
      */
     private stopMetricsCollection;
     /**
-     * Update metrics
-     */
+    * Update metrics
+    */
     private updateMetrics;
     /**
-     * Start persistence
-     */
+    * Start persistence
+    */
     private startPersistence;
     /**
      * Stop persistence
      */
     private stopPersistence;
     /**
-     * Save current state to storage
-     */
+    * Save current state to storage
+    */
     private saveState;
     /**
      * Load persisted state

@@ -71,7 +71,7 @@ export interface ExecutiveInsight {
 }
 export interface ExecutiveSecurityDashboardProps {
     metrics: ExecutiveMetrics;
-    insights: ExecutiveInsight[];
+    insights: ExecutiveInsight;
     theme?: DashboardTheme;
     refreshInterval?: number;
     showFinancials?: boolean;
@@ -79,9 +79,6 @@ export interface ExecutiveSecurityDashboardProps {
     onInsightAction?: (insight: ExecutiveInsight, action: string) => void;
     onDrillDown?: (metric: string) => void;
 }
-/**
- * Executive Security Dashboard Component
- */
 export declare const ExecutiveSecurityDashboard: React.FC<ExecutiveSecurityDashboardProps>;
 export default ExecutiveSecurityDashboard;
 //# sourceMappingURL=ExecutiveSecurityDashboard.d.ts.map

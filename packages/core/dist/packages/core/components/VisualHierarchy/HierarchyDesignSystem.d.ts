@@ -36,63 +36,53 @@ export declare const TypographyScale: {
         lineHeight: number;
         letterSpacing: string;
     };
-};
-export declare const HierarchyColors: {
-    basic: {
-        primary: string;
-        secondary: string;
-        background: string;
-        border: string;
-        text: string;
-        accent: string;
+    const: {
+        basic: {
+            primary: string;
+            secondary: string;
+            background: string;
+            border: string;
+            text: string;
+            accent: string;
+        };
+        advanced: {
+            primary: string;
+            secondary: string;
+            background: string;
+            border: string;
+            text: string;
+            accent: string;
+        };
+        debug: {
+            primary: string;
+            secondary: string;
+            background: string;
+            border: string;
+            text: string;
+            accent: string;
+        };
+        neutral: {
+            primary: string;
+            secondary: string;
+            background: string;
+            border: string;
+            text: string;
+            accent: string;
+        };
+        const: {
+            field: {
+                height: number;
+                padding: string;
+            };
+        };
+        section: {
+            padding: string;
+        };
     };
-    advanced: {
-        primary: string;
-        secondary: string;
-        background: string;
-        border: string;
-        text: string;
-        accent: string;
-    };
-    debug: {
-        primary: string;
-        secondary: string;
-        background: string;
-        border: string;
-        text: string;
-        accent: string;
-    };
-    neutral: {
-        primary: string;
-        secondary: string;
-        background: string;
-        border: string;
-        text: string;
-        accent: string;
-    };
-};
-export declare const SpacingScale: {
-    xs: number;
-    sm: number;
-    md: number;
-    lg: number;
-    xl: number;
-    xxl: number;
-    xxxl: number;
-};
-export declare const ComponentSizes: {
-    field: {
-        height: number;
-        padding: string;
-    };
-    section: {
-        padding: string;
-        marginBottom: number;
-    };
-    header: {
-        height: number;
-        padding: string;
-    };
+    marginBottom: any;
+}, header: {
+    height: 32;
+    padding: `${SpacingScale.sm}px ${SpacingScale.md}px`;
 };
 export declare const FieldImportanceStyles: {
     critical: {
@@ -102,7 +92,7 @@ export declare const FieldImportanceStyles: {
         letterSpacing: string;
         borderLeftWidth: number;
         borderLeftStyle: "solid";
-        borderLeftColor: string;
+        borderLeftColor: any;
         backgroundColor: string;
     };
     important: {
@@ -112,7 +102,7 @@ export declare const FieldImportanceStyles: {
         letterSpacing: string;
         borderLeftWidth: number;
         borderLeftStyle: "solid";
-        borderLeftColor: string;
+        borderLeftColor: any;
         backgroundColor: string;
     };
     standard: {
@@ -122,7 +112,7 @@ export declare const FieldImportanceStyles: {
         letterSpacing: string;
         borderLeftWidth: number;
         borderLeftStyle: "solid";
-        borderLeftColor: string;
+        borderLeftColor: any;
         backgroundColor: string;
     };
     supplementary: {
@@ -133,24 +123,13 @@ export declare const FieldImportanceStyles: {
         letterSpacing: string;
         borderLeftWidth: number;
         borderLeftStyle: "solid";
-        borderLeftColor: string;
+        borderLeftColor: any;
         backgroundColor: string;
     };
+    type: any;
+    FieldPriority: number;
+    const: (fieldName: string, nodeType?: string) => FieldPriority;
 };
-export type FieldPriority = 'critical' | 'important' | 'standard' | 'supplementary';
-export declare const classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
-export interface HierarchyHeaderProps {
-    title: string;
-    level: 'basic' | 'advanced' | 'debug';
-    priority?: FieldPriority;
-    description?: string;
-    icon?: string;
-    isCollapsible?: boolean;
-    isExpanded?: boolean;
-    onToggle?: () => void;
-    children?: React.ReactNode;
-}
-export declare const HierarchyHeader: React.FC<HierarchyHeaderProps>;
 export interface HierarchyFieldProps {
     priority: FieldPriority;
     level: 'basic' | 'advanced' | 'debug';
@@ -170,8 +149,6 @@ export interface ComplexityIndicatorProps {
 export declare const ComplexityIndicator: React.FC<ComplexityIndicatorProps>;
 export declare const AccessibilityUtils: {
     getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
-    getAriaDescription: (priority: FieldPriority) => string;
-    getFocusableElements: (container: HTMLElement) => HTMLElement[];
 };
 declare const _default: {
     TypographyScale: {
@@ -205,64 +182,54 @@ declare const _default: {
             lineHeight: number;
             letterSpacing: string;
         };
+        const: {
+            basic: {
+                primary: string;
+                secondary: string;
+                background: string;
+                border: string;
+                text: string;
+                accent: string;
+            };
+            advanced: {
+                primary: string;
+                secondary: string;
+                background: string;
+                border: string;
+                text: string;
+                accent: string;
+            };
+            debug: {
+                primary: string;
+                secondary: string;
+                background: string;
+                border: string;
+                text: string;
+                accent: string;
+            };
+            neutral: {
+                primary: string;
+                secondary: string;
+                background: string;
+                border: string;
+                text: string;
+                accent: string;
+            };
+            const: {
+                field: {
+                    height: number;
+                    padding: string;
+                };
+            };
+            section: {
+                padding: string;
+            };
+        };
+        marginBottom: any;
     };
-    HierarchyColors: {
-        basic: {
-            primary: string;
-            secondary: string;
-            background: string;
-            border: string;
-            text: string;
-            accent: string;
-        };
-        advanced: {
-            primary: string;
-            secondary: string;
-            background: string;
-            border: string;
-            text: string;
-            accent: string;
-        };
-        debug: {
-            primary: string;
-            secondary: string;
-            background: string;
-            border: string;
-            text: string;
-            accent: string;
-        };
-        neutral: {
-            primary: string;
-            secondary: string;
-            background: string;
-            border: string;
-            text: string;
-            accent: string;
-        };
-    };
-    SpacingScale: {
-        xs: number;
-        sm: number;
-        md: number;
-        lg: number;
-        xl: number;
-        xxl: number;
-        xxxl: number;
-    };
-    ComponentSizes: {
-        field: {
-            height: number;
-            padding: string;
-        };
-        section: {
-            padding: string;
-            marginBottom: number;
-        };
-        header: {
-            height: number;
-            padding: string;
-        };
-    };
+    HierarchyColors: any;
+    SpacingScale: any;
+    ComponentSizes: any;
     FieldImportanceStyles: {
         critical: {
             fontSize: number;
@@ -271,7 +238,7 @@ declare const _default: {
             letterSpacing: string;
             borderLeftWidth: number;
             borderLeftStyle: "solid";
-            borderLeftColor: string;
+            borderLeftColor: any;
             backgroundColor: string;
         };
         important: {
@@ -281,7 +248,7 @@ declare const _default: {
             letterSpacing: string;
             borderLeftWidth: number;
             borderLeftStyle: "solid";
-            borderLeftColor: string;
+            borderLeftColor: any;
             backgroundColor: string;
         };
         standard: {
@@ -291,7 +258,7 @@ declare const _default: {
             letterSpacing: string;
             borderLeftWidth: number;
             borderLeftStyle: "solid";
-            borderLeftColor: string;
+            borderLeftColor: any;
             backgroundColor: string;
         };
         supplementary: {
@@ -302,18 +269,19 @@ declare const _default: {
             letterSpacing: string;
             borderLeftWidth: number;
             borderLeftStyle: "solid";
-            borderLeftColor: string;
+            borderLeftColor: any;
             backgroundColor: string;
         };
+        type: any;
+        FieldPriority: number;
+        const: (fieldName: string, nodeType?: string) => FieldPriority;
     };
-    classifyFieldPriority: (fieldName: string, nodeType?: string) => FieldPriority;
-    HierarchyHeader: React.FC<HierarchyHeaderProps>;
+    classifyFieldPriority: any;
+    HierarchyHeader: any;
     HierarchyField: React.FC<HierarchyFieldProps>;
     ComplexityIndicator: React.FC<ComplexityIndicatorProps>;
     AccessibilityUtils: {
         getAriaLabel: (level: "basic" | "advanced" | "debug", title: string) => string;
-        getAriaDescription: (priority: FieldPriority) => string;
-        getFocusableElements: (container: HTMLElement) => HTMLElement[];
     };
 };
 export default _default;

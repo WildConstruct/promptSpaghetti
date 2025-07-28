@@ -19,18 +19,17 @@ export interface MarketplacePolicyTemplate {
     name: string;
     description: string;
     category: 'creator' | 'buyer' | 'template' | 'transaction' | 'system';
-    rules: PolicyRule[];
+    rules: PolicyRule;
     defaultSeverity: 'low' | 'medium' | 'high' | 'critical';
     isSystemTemplate: boolean;
     configurable: {
         thresholds: Record<string, number>;
         timeframes: Record<string, number>;
-        actions: string[];
+        actions: string;
     };
 }
 export interface MarketplacePolicyConfigProps {
     className?: string;
 }
 export declare const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps>;
-export default MarketplacePolicyConfig;
 //# sourceMappingURL=MarketplacePolicyConfig.d.ts.map

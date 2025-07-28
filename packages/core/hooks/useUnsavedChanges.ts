@@ -8,34 +8,28 @@ import { useEffect, useCallback, useState } from 'react';
 interface UseUnsavedChangesOptions {
   hasUnsavedChanges: boolean;
   projectName?: string;
-  onSave?: () => Promise<boolean> | boolean; // Returns true if save was successful
-}
-
-interface UseUnsavedChangesReturn {
-  showUnsavedDialog: boolean;
+  onSave?: () => Promise<boolean> | boolean; // Returns true if save was successful,
+  interface UseUnsavedChangesReturn {
+  showUnsavedDialog: boolean;,
   dialogAction: string;
-  confirmNavigation: (action: string, callback: () => void) => void;
+  confirmNavigation: (action: string, callback: () => void) => void;,
   handleSave: () => void;
-  handleDontSave: () => void;
+  handleDontSave: () => void;,
   handleCancel: () => void;
-}
-
-export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChangesReturn {
+  export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChangesReturn {,
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogAction, setDialogAction] = useState('');
   const [pendingCallback, setPendingCallback] = useState<(() => void) | null>(null);
-
   // Handle beforeunload event for browser close/refresh
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
-        // Standard way to show browser confirmation dialog
-        const message = 'You have unsaved changes. Are you sure you want to leave?';
-        event.preventDefault();
-        event.returnValue = message; // For Chrome
-        return message; // For other browsers
-      }
-    };
+  const handleBeforeUnload = (event: BeforeUnloadEvent) => {,
+  if (hasUnsavedChanges) {
+  // Standard way to show browser confirmation dialog
+  const message = 'You have unsaved changes. Are you sure you want to leave?';
+  event.preventDefault();
+  event.returnValue = message; // For Chrome
+  return message; // For other browsers
+};
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
@@ -50,7 +44,7 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChanges
     } else {
       // No unsaved changes, proceed immediately
       callback();
-    }
+
   }, [hasUnsavedChanges]);
 
   // Handle save and continue
@@ -66,19 +60,18 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChanges
         } else if (!saveSuccessful) {
           // Save failed, keep dialog open
           console.warn('Save operation failed');
-        }
+
       } catch (error) {
-        console.error('Error during save operation:', error);
-        // Keep dialog open on error
-      }
-    } else {
+  console.error('Error during save operation:', error);
+  // Keep dialog open on error
+} else {
       // No save handler provided, just proceed
       if (pendingCallback) {
         pendingCallback();
         setPendingCallback(null);
-      }
+
       setShowUnsavedDialog(false);
-    }
+
   }, [onSave, pendingCallback]);
 
   // Handle don't save and continue
@@ -86,7 +79,7 @@ export function useUnsavedChanges(hasUnsavedChanges: boolean): UseUnsavedChanges
     if (pendingCallback) {
       pendingCallback();
       setPendingCallback(null);
-    }
+
     setShowUnsavedDialog(false);
   }, [pendingCallback]);
 

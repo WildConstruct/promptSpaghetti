@@ -12,6 +12,7 @@ export enum CircuitState {
   HALF_OPEN = 'half-open' // Testing if service has recovered
 }
 
+}
 export interface CircuitBreakerOptions {
   failureThreshold: number;        // Number of failures before opening circuit
   successThreshold: number;        // Number of successes to close from half-open
@@ -20,7 +21,9 @@ export interface CircuitBreakerOptions {
   monitoringPeriod: number;       // Window for failure counting (ms)
   name: string;                   // Circuit breaker name for identification
 }
+}
 
+}
 export interface CircuitBreakerMetrics {
   state: CircuitState;
   failures: number;
@@ -31,6 +34,7 @@ export interface CircuitBreakerMetrics {
   lastSuccessTime?: number;
   stateChangedTime: number;
   nextRetryTime?: number;
+}
 }
 
 class CircuitBreaker extends EventEmitter {
@@ -118,6 +122,7 @@ class CircuitBreaker extends EventEmitter {
   }
 
   public async execute<T>(operation: () => Promise<T>): Promise<T> {
+
     this.cleanOldMetrics();
     this.requests++;
 
@@ -138,7 +143,7 @@ class CircuitBreaker extends EventEmitter {
           setTimeout(() => {
             reject(new Error(`Operation timed out after ${this.options.timeout}ms`));
           }, this.options.timeout);
-        })
+  }
       ]);
 
       // Success case
@@ -230,6 +235,7 @@ export class CircuitBreakerService {
     operation: () => Promise<T>,
     options?: Partial<CircuitBreakerOptions>
   ): Promise<T> {
+
     let breaker = this.getCircuitBreaker(breakerName);
 
     if (!breaker) {
@@ -330,6 +336,7 @@ export const circuitBreakerService = CircuitBreakerService.getInstance();
 export async function withDatabaseCircuitBreaker<T>(
   operation: () => Promise<T>
 ): Promise<T> {
+
   return circuitBreakerService.getDatabaseCircuitBreaker().execute(operation);
 }
 
@@ -337,6 +344,7 @@ export async function withDatabaseCircuitBreaker<T>(
 export async function withRedisCircuitBreaker<T>(
   operation: () => Promise<T>
 ): Promise<T> {
+
   return circuitBreakerService.getRedisCircuitBreaker().execute(operation);
 }
 
@@ -345,6 +353,7 @@ export async function withExternalAPICircuitBreaker<T>(
   serviceName: string,
   operation: () => Promise<T>
 ): Promise<T> {
+
   return circuitBreakerService.getExternalAPICircuitBreaker(serviceName).execute(operation);
 }
 
@@ -352,6 +361,7 @@ export async function withExternalAPICircuitBreaker<T>(
 export async function withFileSystemCircuitBreaker<T>(
   operation: () => Promise<T>
 ): Promise<T> {
+
   return circuitBreakerService.getFileSystemCircuitBreaker().execute(operation);
 }
 

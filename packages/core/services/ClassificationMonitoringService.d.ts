@@ -7,6 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
+
 export interface MonitoringEvent {
     id: string;
     timestamp: Date;
@@ -19,14 +20,14 @@ export interface MonitoringEvent {
     details: Record<string, any>;
     context: OperationContext;
     metrics?: MonitoringMetrics;
-}
+
 export interface MonitoringMetrics {
     processingTimeMs: number;
     dataSize?: number;
     violationCount?: number;
     complianceScore?: number;
     riskScore?: number;
-}
+
 export interface ClassificationStats {
     classification: DataClassificationLevel;
     totalEvents: number;
@@ -37,7 +38,7 @@ export interface ClassificationStats {
     violationRate: number;
     complianceRate: number;
     lastUpdated: Date;
-}
+
 export interface UserActivity {
     userId: string;
     totalEvents: number;
@@ -46,7 +47,7 @@ export interface UserActivity {
     lastActivity: Date;
     riskScore: number;
     suspiciousActivities: string[];
-}
+
 export interface MonitoringAlert {
     id: string;
     timestamp: Date;
@@ -57,7 +58,7 @@ export interface MonitoringAlert {
     resolved: boolean;
     resolvedAt?: Date;
     resolvedBy?: string;
-}
+
 export interface MonitoringThreshold {
     name: string;
     description: string;
@@ -68,7 +69,7 @@ export interface MonitoringThreshold {
     enabled: boolean;
     cooldownMinutes: number;
     lastTriggered?: Date;
-}
+
 export interface MonitoringDashboard {
     overallStats: {,
         totalEvents: number;
@@ -87,7 +88,7 @@ export interface MonitoringDashboard {
         violationCount: number;
         complianceScore: number;
     }[];
-}
+
 export declare class ClassificationMonitoringService {
     private events;
     private alerts;
@@ -205,6 +206,6 @@ export declare class ClassificationMonitoringService {
      * Clear monitoring data
      */
     clearData(): void;
-}
+
 export default ClassificationMonitoringService;
 //# sourceMappingURL=ClassificationMonitoringService.d.ts.map

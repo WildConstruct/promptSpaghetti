@@ -4,55 +4,53 @@ import { PaletteSearch, createPaletteSearch, highlightSearchTerms } from '../Pal
 import { NodeMeta } from '../../Palette';
 
 // Mock nodes for testing
-const mockNodes: NodeMeta[] = [
+const mockNodes: NodeMeta = [
   {
-    id: 'Subject',
-    label: 'Character',
-    icon: '👤',
-    category: 'content',
-    tooltip: 'Define characters, people, or entities in your content'
-  },
+  id: 'Subject',
+  label: 'Character',
+  icon: '👤',
+  category: 'content',
+  tooltip: 'Define characters, people, or entities in your content',
+}
   {
-    id: 'WeightedChoice',
-    label: 'Random Selection',
-    icon: '🎲',
-    category: 'flow',
-    tooltip: 'Choose randomly from multiple options with different likelihood',
-  },
+  id: 'WeightedChoice',
+  label: 'Random Selection',
+  icon: '🎲',
+  category: 'flow',
+  tooltip: 'Choose randomly from multiple options with different likelihood',
+}
   {
-    id: 'Conditional',
-    label: 'If/Then',
-    icon: '🔀',
-    category: 'advanced',
-    tooltip: 'Choose different creative paths based on conditions',
-  },
+  id: 'Conditional',
+  label: 'If/Then',
+  icon: '🔀',
+  category: 'advanced',
+  tooltip: 'Choose different creative paths based on conditions',
+}
   {
-    id: 'Output',
-    label: 'Result',
-    icon: '📝',
-    category: 'output',
-    tooltip: 'Final generated content ready for use',
-  },
+  id: 'Output',
+  label: 'Result',
+  icon: '📝',
+  category: 'output',
+  tooltip: 'Final generated content ready for use',
+}
   {
-    id: 'SetVariable',
-    label: 'Store Value',
-    icon: '💾',
-    category: 'memory',
-    tooltip: 'Save a value to use later in your workflow',
-  },
+  id: 'SetVariable',
+  label: 'Store Value',
+  icon: '💾',
+  category: 'memory',
+  tooltip: 'Save a value to use later in your workflow',
+}
   {
-    id: 'PythonTransform',
-    label: 'Custom Script',
-    icon: '🐍',
-    category: 'process',
-    tooltip: 'Apply custom processing logic to transform content',
-  }
-];
-describe('PaletteSearch', () => {
+  id: 'PythonTransform',
+  label: 'Custom Script',
+  icon: '🐍',
+  category: 'process',
+  tooltip: 'Apply custom processing logic to transform content'];
+  describe('PaletteSearch', () => {
   let searchEngine: PaletteSearch;
   beforeEach(() => {
-    searchEngine = new PaletteSearch(mockNodes);
-  });
+  searchEngine = new PaletteSearch(mockNodes);
+});
   describe('Constructor and Initialization', () => {
     test('should initialize with nodes', () => {
       expect(searchEngine).toBeInstanceOf(PaletteSearch);
@@ -113,8 +111,6 @@ describe('PaletteSearch', () => {
       if (results.length > 1) {
         for (let i = 1; i < results.length; i++) {
           expect(results[i].relevance).toBeLessThanOrEqual(results[i - 1].relevance);
-        }
-      }
     });
     test('should include matched fields information', () => {
       const results = searchEngine.search('Character');
@@ -135,7 +131,7 @@ describe('PaletteSearch', () => {
     test('should filter by minimum relevance', () => {
       const results = searchEngine.search('xyz', { minimumRelevance: 0.5 });
       results.forEach(result => {)
-        expect(result.relevance).toBeGreaterThanOrEqual(0.5);
+  expect(result.relevance).toBeGreaterThanOrEqual(0.5);
       });
     });
     test('should disable relevance sorting when requested', () => {
@@ -177,7 +173,6 @@ describe('PaletteSearch', () => {
       const partialMatchResults = searchEngine.search('Custom XYZ');
       if (fullMatchResults.length > 0 && partialMatchResults.length > 0) {
         expect(fullMatchResults[0].relevance).toBeGreaterThan(partialMatchResults[0].relevance);
-      }
     });
   });
   describe('Category-based Search', () => {
@@ -195,13 +190,13 @@ describe('PaletteSearch', () => {
       const results = searchEngine.searchInCategories('value', ['memory']);
       expect(results.length).toBeGreaterThan(0);
       results.forEach(result => {)
-        expect(result.categories).toContain('memory');
+  expect(result.categories).toContain('memory');
       });
     });
     test('should handle multiple category filter', () => {
       const results = searchEngine.searchInCategories('content', ['content', 'output']);
       results.forEach(result => {)
-        expect();
+  expect();
           result.categories.includes('content') || result.categories.includes('output')
         ).toBe(true);
       });
@@ -253,37 +248,33 @@ describe('PaletteSearch', () => {
     });
   });
   describe('Node Updates', () => {
-    test('should update search index when nodes change', () => {
-      const newNodes: NodeMeta[] = [
-        {
-          id: 'NewNode',
-          label: 'New Test Node',
-          icon: '🆕',
-          category: 'test',
-          tooltip: 'A new node for testing',
-        }
-      ];
-      searchEngine.updateNodes(newNodes);
-      const results = searchEngine.search('New Test');
-      expect(results.length).toBeGreaterThan(0);
-      expect(results[0].node.label).toBe('New Test Node');
-    });
+  test('should update search index when nodes change', () => {
+  const newNodes: NodeMeta = [
+  {
+  id: 'NewNode',
+  label: 'New Test Node',
+  icon: '🆕',
+  category: 'test',
+  tooltip: 'A new node for testing'];
+  searchEngine.updateNodes(newNodes);
+  const results = searchEngine.search('New Test');
+  expect(results.length).toBeGreaterThan(0);
+  expect(results[0].node.label).toBe('New Test Node');
+});
     test('should clear old results after update', () => {
-      const newNodes: NodeMeta[] = [
-        {
-          id: 'OnlyNode',
-          label: 'Only Node',
-          icon: '📱',
-          category: 'test',
-          tooltip: 'The only node',
-        }
-      ];
-      searchEngine.updateNodes(newNodes);
-      const oldResults = searchEngine.search('Character');
-      const newResults = searchEngine.search('Only');
-      expect(oldResults.length).toBe(0);
-      expect(newResults.length).toBeGreaterThan(0);
-    });
+  const newNodes: NodeMeta = [
+  {
+  id: 'OnlyNode',
+  label: 'Only Node',
+  icon: '📱',
+  category: 'test',
+  tooltip: 'The only node'];
+  searchEngine.updateNodes(newNodes);
+  const oldResults = searchEngine.search('Character');
+  const newResults = searchEngine.search('Only');
+  expect(oldResults.length).toBe(0);
+  expect(newResults.length).toBeGreaterThan(0);
+});
   });
   describe('Performance and Edge Cases', () => {
     test('should handle very long search queries', () => {
@@ -293,44 +284,41 @@ describe('PaletteSearch', () => {
       // Should not crash or hang
     });
     test('should handle nodes with empty fields', () => {
-      const nodesWithEmpty: NodeMeta[] = [
-        {
-          id: '',
-          label: '',
-          icon: '',
-          category: '',
-          tooltip: '',
-        }
-      ];
-      const emptyEngine = new PaletteSearch(nodesWithEmpty);
-      const results = emptyEngine.search('test');
-      expect(Array.isArray(results)).toBe(true);
-    });
+  const nodesWithEmpty: NodeMeta = [
+  {
+  id: '',
+  label: '',
+  icon: '',
+  category: '',
+  tooltip: ''];
+  const emptyEngine = new PaletteSearch(nodesWithEmpty);
+  const results = emptyEngine.search('test');
+  expect(Array.isArray(results)).toBe(true);
+});
     test('should handle special Unicode characters', () => {
-      const unicodeNodes: NodeMeta[] = [
-        {
-          id: 'unicode',
-          label: 'Café ñoño 中文',
-          icon: '🌍',
-          category: 'test',
-          tooltip: 'Unicode test node',
-        }
-      ];
-      const unicodeEngine = new PaletteSearch(unicodeNodes);
-      const results = unicodeEngine.search('café');
-      expect(results.length).toBeGreaterThan(0);
-    });
+  const unicodeNodes: NodeMeta = [
+  {
+  id: 'unicode',
+  label: 'Café ñoño 中文',
+  icon: '🌍',
+  category: 'test',
+  tooltip: 'Unicode test node'];
+  const unicodeEngine = new PaletteSearch(unicodeNodes);
+  const results = unicodeEngine.search('café');
+  expect(results.length).toBeGreaterThan(0);
+});
     test('should handle large number of nodes efficiently', () => {
-      const manyNodes: NodeMeta[] = [];
+      const manyNodes: NodeMeta = [];
       for (let i = 0; i < 1000; i++) {
         manyNodes.push({)
-          id: `node${i}`,}
-          label: `Node ${i}`,}
-          icon: '📊',
+  id: `node${i}`}
+},
+  label: `Node ${i}`}
+},
+  icon: '📊',
           category: 'test',
           tooltip: `Test node number ${i}`}
         });
-      }
       const largeEngine = new PaletteSearch(manyNodes);
       const start = performance.now();
       const results = largeEngine.search('Node');

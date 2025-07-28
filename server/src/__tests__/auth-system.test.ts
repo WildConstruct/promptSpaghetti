@@ -131,8 +131,8 @@ describe('AuthService', () => {
           method: 'POST',
           headers: expect.objectContaining({
             'Content-Type': 'application/x-www-form-urlencoded'
-          })
-        })
+  }
+  }
       );
     });
 

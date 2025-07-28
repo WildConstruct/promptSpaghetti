@@ -21,7 +21,7 @@ export interface AuditLogEntry {
     context: OperationContext;
     outcome: AuditOutcome;
     metadata: AuditMetadata;
-    complianceFlags: ComplianceFlag[];
+    complianceFlags: ComplianceFlag;
     riskScore: number;
     correlationId?: string;
 }
@@ -45,11 +45,11 @@ export interface AuditOutcome {
     success: boolean;
     errorCode?: string;
     errorMessage?: string;
-    warningMessages: string[];
+    warningMessages: string;
     executionTimeMs: number;
     resourcesAffected: number;
     complianceScore: number;
-    violationsDetected: string[];
+    violationsDetected: string;
     remediationRequired: boolean;
 }
 export interface AuditMetadata {
@@ -112,7 +112,7 @@ export interface AuditReport {
     requestedBy: string;
     parameters: AuditQuery;
     summary: AuditSummary;
-    entries: AuditLogEntry[];
+    entries: AuditLogEntry;
     format: 'JSON' | 'CSV' | 'PDF' | 'XML';
     retentionPeriod: number;
     expiresAt: Date;
@@ -128,26 +128,16 @@ export interface AuditSummary {
     classificationBreakdown: Record<DataClassificationLevel, number>;
     complianceBreakdown: Record<string, {
         compliant: number;
-        nonCompliant: number;
-        needsReview: number;
-    }>;
-    riskAnalysis: {
-        averageRiskScore: number;
-        highRiskEntries: number;
-        criticalViolations: number;
-    };
-    trendsAnalysis: {
-        activityTrend: 'INCREASING' | 'DECREASING' | 'STABLE';
-        riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-        complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
-    };
+    }, nonCompliant>;
+    number: any;
+    needsReview: number;
 }
 export interface AuditRetentionPolicy {
     classification: DataClassificationLevel;
     retentionDays: number;
     archiveAfterDays: number;
     permanentDeletionAfterDays: number;
-    complianceRequirements: string[];
+    complianceRequirements: string;
     encryptionRequired: boolean;
     backupRequired: boolean;
 }
@@ -159,103 +149,16 @@ export declare class ClassificationAuditLoggingService {
     private archiveHandlers;
     constructor();
     /**
-     * Initialize default audit retention policies
-     */
+    * Initialize default audit retention policies
+    */
     private initializeRetentionPolicies;
-    /**
-     * Log an audit entry
-     */
-    logAuditEvent(action: AuditAction, classification: DataClassificationLevel, dataId: string, details: Partial<AuditDetails>, context: OperationContext, outcome: Partial<AuditOutcome>, metadata?: Partial<AuditMetadata>): Promise<string>;
     /**
      * Determine resource type from data ID
      */
     private determineResourceType;
     /**
-     * Generate compliance flags for the entry
-     */
+    * Generate compliance flags for the entry
+    */
     private generateComplianceFlags;
-    /**
-     * Get compliance requirement for framework and action
-     */
-    private getComplianceRequirement;
-    /**
-     * Calculate risk score for the entry
-     */
-    private calculateRiskScore;
-    /**
-     * Generate correlation ID for related events
-     */
-    private generateCorrelationId;
-    /**
-     * Perform compliance checks on the entry
-     */
-    private performComplianceChecks;
-    /**
-     * Query audit logs
-     */
-    queryAuditLogs(query: AuditQuery): AuditLogEntry[];
-    /**
-     * Generate audit report
-     */
-    generateAuditReport(name: string, description: string, query: AuditQuery, format: AuditReport['format'], requestedBy: string): Promise<string>;
-    /**
-     * Generate audit summary
-     */
-    private generateAuditSummary;
-    /**
-     * Export audit report
-     */
-    exportAuditReport(reportId: string): string | null;
-    /**
-     * Get audit entry by ID
-     */
-    getAuditEntry(entryId: string): AuditLogEntry | undefined;
-    /**
-     * Get audit report by ID
-     */
-    getAuditReport(reportId: string): AuditReport | undefined;
-    /**
-     * Register log handler
-     */
-    onAuditLog(handler: (entry: AuditLogEntry) => void): void;
-    /**
-     * Register archive handler
-     */
-    onArchive(handler: (entries: AuditLogEntry[]) => void): void;
-    /**
-     * Notify log handlers
-     */
-    private notifyLogHandlers;
-    /**
-     * Start retention cleanup process
-     */
-    private startRetentionCleanup;
-    /**
-     * Perform retention cleanup
-     */
-    private performRetentionCleanup;
-    /**
-     * Get retention policy
-     */
-    getRetentionPolicy(classification: DataClassificationLevel): AuditRetentionPolicy | undefined;
-    /**
-     * Update retention policy
-     */
-    updateRetentionPolicy(classification: DataClassificationLevel, policy: AuditRetentionPolicy): void;
-    /**
-     * Get audit statistics
-     */
-    getAuditStatistics(): {
-        totalEntries: number;
-        entriesByClassification: Record<DataClassificationLevel, number>;
-        entriesByAction: Record<string, number>;
-        averageRiskScore: number;
-        recentViolations: number;
-    };
-    /**
-     * Clear audit logs (for testing purposes)
-     */
-    clearAuditLogs(): void;
 }
-export default ClassificationAuditLoggingService;
 //# sourceMappingURL=ClassificationAuditLoggingService.d.ts.map

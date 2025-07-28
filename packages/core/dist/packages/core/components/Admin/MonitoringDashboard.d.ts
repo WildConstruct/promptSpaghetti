@@ -12,8 +12,8 @@ export interface DashboardLayout {
     id: string;
     name: string;
     description: string;
-    widgets: WidgetConfig[];
-    roles: string[];
+    widgets: WidgetConfig;
+    roles: string;
     refreshInterval: number;
 }
 export interface MonitoringDashboardProps {
@@ -24,6 +24,8 @@ export interface MonitoringDashboardProps {
     onExport?: (type: string, timeRange: string) => void;
     onAlertAction?: (alertId: string, action: string) => void;
     className?: string;
+    const: any;
+    DASHBOARD_LAYOUTS: DashboardLayout;
 }
 export declare const MonitoringDashboard: React.FC<MonitoringDashboardProps>;
 export default MonitoringDashboard;

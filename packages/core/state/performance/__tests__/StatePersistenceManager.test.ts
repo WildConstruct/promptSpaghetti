@@ -14,18 +14,17 @@ const mockIndexedDB = {
 // Mock CompressionStream/DecompressionStream for testing
 const mockCompressionStream = {
   readable: {,
-    getReader: jest.fn(() => ({),
-      read: jest.fn(() => Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
+  getReader: jest.fn(() => ({;)
+  read: jest.fn(() => Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ value: new Uint8Array([1, 2, 3]), done: false }))
         .mockReturnValueOnce(Promise.resolve({ done: true }))
     }))
   },
   writable: {,
-    getWriter: jest.fn(() => ({),
-      write: jest.fn(() => Promise.resolve()),
-      close: jest.fn(() => Promise.resolve()),
-    }))
-  }
+  getWriter: jest.fn(() => ({,)
+  write: jest.fn(() => Promise.resolve()),
+  close: jest.fn(() => Promise.resolve()),
+}))
 };
 
 // Mock global objects
@@ -56,9 +55,9 @@ afterAll(() => {
 describe('StatePersistenceManager', () => {
   let manager: StatePersistenceManager;
   beforeEach(() => {
-    manager = new StatePersistenceManager();
-    jest.clearAllMocks();
-  });
+  manager = new StatePersistenceManager();
+  jest.clearAllMocks();
+});
   afterEach(() => {
     manager.removeAllListeners();
   });
@@ -106,22 +105,22 @@ describe('StatePersistenceManager', () => {
       const testData = { nodes: [], edges: [], version: 1 };
       // Mock IndexedDB operations
       const mockTransaction = {
-        objectStore: jest.fn(() => ({),
-          put: jest.fn(() => ({),
-            onsuccess: null,
-            onerror: null,
-          }))
+  objectStore: jest.fn(() => ({,)
+  put: jest.fn(() => ({,)
+  onsuccess: null,
+  onerror: null,
+}))
         }))
       };
       const mockDB = {
-        transaction: jest.fn(() => mockTransaction),
-      };
+  transaction: jest.fn(() => mockTransaction),
+};
       mockIndexedDB.open.mockImplementation(() => ({)
-        onsuccess: null,
-        onerror: null,
-        onupgradeneeded: null,
-        result: mockDB,
-      }));
+  onsuccess: null,
+  onerror: null,
+  onupgradeneeded: null,
+  result: mockDB,
+}));
       await manager.persist('graph-editor', testData);
       // Verify IndexedDB was called (async nature makes this tricky to test directly)
       expect(mockIndexedDB.open).toHaveBeenCalled();
@@ -207,11 +206,11 @@ describe('StatePersistenceManager', () => {
     });
   });
   describe('Configuration Management', () => {
-    it('should allow updating domain rules', () => {
-      const newRule: Partial<PersistenceRule> = {
-        debounceMs: 2000,
-        compression: false,
-      };
+  it('should allow updating domain rules', () => {
+  const newRule: Partial<PersistenceRule> = {,
+  debounceMs: 2000,
+  compression: false,
+};
       manager.updateDomainRule('admin-dashboard', newRule);
       const rules = manager.getDomainRules();
       const updatedRule = rules.get('admin-dashboard');
@@ -285,7 +284,6 @@ describe('StatePersistenceManager', () => {
         await manager.persist('admin-dashboard', { test: true });
       } catch (error) {
         // Expected to throw
-      }
       // Error event emission would happen in the actual implementation
     });
   });
@@ -342,7 +340,6 @@ describe('StatePersistenceManager', () => {
       const promises = [];
       for (let i = 0; i < 10; i++) {
         promises.push(manager.persist('performance', { metric: i }));
-      }
       await Promise.all(promises);
       // Batch processing should handle multiple concurrent requests
       const rules = manager.getDomainRules();
@@ -369,7 +366,6 @@ describe('StatePersistenceManager', () => {
         await manager.persist('admin-dashboard', { large: 'data' });
       } catch (error) {
         expect(error.message).toContain('admin-dashboard');
-      }
     });
   });
 });
@@ -387,7 +383,7 @@ describe('StatePersistenceManager Integration with BaseStateContainer', () => {
     // Mock localStorage for this test
     mockLocalStorage.setItem.mockImplementation(() => {});
     await globalPersistenceManager.persist(testDomain, testData, {)
-      key: testDomain,
+  key: testDomain,
       metadata: { historyLength: 5, subscriberCount: 2 }
     });
     // Should not throw errors and should be callable from state containers

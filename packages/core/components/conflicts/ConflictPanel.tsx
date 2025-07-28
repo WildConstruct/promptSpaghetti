@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 
 export interface ConflictData {
-  id: string;
+  id: string;,
   type: string;
-  description: string;
+  description: string;,
   operations: Array<{,
-    id: string;
-    userId: string;
-    userName?: string;
-    timestamp: number;
-    oldValue: Error;
-    newValue: Error;
-  }>;
+  id: string;,
+  userId: string;
+  userName?: string;
+  timestamp: number;,
+  oldValue: Error;
+  newValue: Error;
+}>;
   nodeId?: string;
   edgeId?: string;
   property?: string;
-  detectedAt: number;
+  detectedAt: number;,
   autoResolved: boolean;
 }
-
 export interface ConflictPanelProps {
-  conflicts: ConflictData[];
+  conflicts: ConflictData;,
   onResolveConflict: (conflictId: string, strategy: string, userSelection?: Record<string, unknown>) => void;
-  onViewConflict: (conflictId: string) => void;
+  onViewConflict: (conflictId: string) => void;,
   currentUserId: string;
   className?: string;
 }
-
 export const ConflictPanel: React.FC<ConflictPanelProps> = ()
   { conflicts,
   onResolveConflict,
@@ -35,60 +33,57 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
   className }
 ) => {
   const [selectedStrategy, setSelectedStrategy] = useState<string>('last_writer_wins');
-  const formatTimestamp = (timestamp: number): string => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    if (diff < 60000) { // Less than 1 minute
-      return 'Just now';
-    } else if (diff < 3600000) { // Less than 1 hour
+  const formatTimestamp = (timestamp: number): string => {,
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+  if (diff < 60000) { // Less than 1 minute
+  return 'Just now';
+} else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
       return `${minutes}m ago`;}
     } else {
       const hours = Math.floor(diff / 3600000);
       return `${hours}h ago`;}
-    }
   };
   const getConflictIcon = (type: string): string => {
-    switch (type) {
-    case 'node_position':
-      return '📍';
-    case 'node_properties':
-      return '⚙️';
-    case 'node_creation':
-      return '➕';
-    case 'node_deletion':
-      return '➖';
-    case 'edge_creation':
-      return '🔗';
-    case 'edge_deletion':
-      return '🔓';
-    case 'edge_properties':
-      return '🔧';
-    default:
-      return '⚠️';
-    }
-  };
+  switch (type) {
+  case 'node_position':,
+  return '📍';
+  case 'node_properties':,
+  return '⚙️';
+  case 'node_creation':,
+  return '➕';
+  case 'node_deletion':,
+  return '➖';
+  case 'edge_creation':,
+  return '🔗';
+  case 'edge_deletion':,
+  return '🔓';
+  case 'edge_properties':,
+  return '🔧';
+  default:,
+  return '⚠️';
+};
   const getConflictColor = (type: string): string => {
-    switch (type) {
-    case 'node_position':
-      return 'border-blue-200 bg-blue-50';
-    case 'node_properties':
-      return 'border-green-200 bg-green-50';
-    case 'node_creation':
-      return 'border-purple-200 bg-purple-50';
-    case 'node_deletion':
-      return 'border-red-200 bg-red-50';
-    case 'edge_creation':
-      return 'border-indigo-200 bg-indigo-50';
-    case 'edge_deletion':
-      return 'border-orange-200 bg-orange-50';
-    case 'edge_properties':
-      return 'border-teal-200 bg-teal-50';
-    default:
-      return 'border-gray-200 bg-gray-50';
-    }
-  };
+  switch (type) {
+  case 'node_position':,
+  return 'border-blue-200 bg-blue-50';
+  case 'node_properties':,
+  return 'border-green-200 bg-green-50';
+  case 'node_creation':,
+  return 'border-purple-200 bg-purple-50';
+  case 'node_deletion':,
+  return 'border-red-200 bg-red-50';
+  case 'edge_creation':,
+  return 'border-indigo-200 bg-indigo-50';
+  case 'edge_deletion':,
+  return 'border-orange-200 bg-orange-50';
+  case 'edge_properties':,
+  return 'border-teal-200 bg-teal-50';
+  default:,
+  return 'border-gray-200 bg-gray-50';
+};
   const resolutionStrategies = [;
     { value: 'last_writer_wins', label: 'Last Writer Wins', description: 'Use the most recent change' },
     { value: 'first_writer_wins', label: 'First Writer Wins', description: 'Use the earliest change' },
@@ -97,7 +92,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
     { value: 'user_resolution', label: 'Manual Resolution', description: 'Choose specific values' }
   ];
   if (conflicts.length === 0) {
-    return ();
+    return;
       <div className={`bg-white rounded-lg border p-4 ${className}`}>}
         <div className="text-center text-gray-500">
           <div className="text-2xl mb-2">✅</div>
@@ -106,8 +101,7 @@ export const ConflictPanel: React.FC<ConflictPanelProps> = ()
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`bg-white rounded-lg border ${className}`}>}
       {/* Header */}
       <div className="border-b p-4">
@@ -292,9 +286,8 @@ export default ConflictPanel;
 
 // Notification component for conflict alerts
 interface ConflictNotificationProps {
-  conflict: ConflictData;
-  onResolve: (conflict: ConflictData) => void;
+  conflict: ConflictData;,
+  onResolve: (conflict: ConflictData) => void;,
   onDismiss: () => void;
-}
 
 export };

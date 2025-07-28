@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
 import { RateLimitingPerformanceMetrics } from './RateLimitingPerformanceMetrics';
+
 export interface AnalyticsDashboardConfig {
     enableRealTimeAnalytics: boolean;
     enablePredictiveAnalytics: boolean;
@@ -19,7 +20,7 @@ export interface AnalyticsDashboardConfig {
     dataRetentionDays: number;
     analyticsProcessingInterval: number;
     mlModelUpdateInterval: number;
-}
+
 export interface SecurityAnalytics {
     threatAnalysis: {,
         currentThreatLevel: ThreatLevel;
@@ -120,7 +121,7 @@ export interface SecurityAnalytics {
             securityROI: number;
         };
     };
-}
+
 export interface PredictiveInsights {
     threatPredictions: Array<{,
         predictionId: string;
@@ -150,7 +151,7 @@ export interface PredictiveInsights {
         possibleCauses: string[];
         investigationSteps: string[];
     }>;
-}
+
 export interface DashboardVisualization {
     chartConfigurations: Array<{,
         chartId: string;
@@ -192,7 +193,7 @@ export interface DashboardVisualization {
         status: 'good' | 'warning' | 'critical';
         target?: number;
     }>;
-}
+
 export declare class RateLimitingAnalyticsDashboard extends EventEmitter {
     private rateLimitingService;
     private throttlingEngine?;
@@ -377,6 +378,6 @@ export declare class RateLimitingAnalyticsDashboard extends EventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default RateLimitingAnalyticsDashboard;
 //# sourceMappingURL=RateLimitingAnalyticsDashboard.d.ts.map

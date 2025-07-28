@@ -1,5 +1,6 @@
 import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
+
 export interface HelpContextState {
     helpContent: HelpContent[];
     onboardingEnabled: boolean;
@@ -17,13 +18,13 @@ export interface HelpContextState {
     completeOnboarding: () => void;
     toggleHelpHints: () => void;
     resetHelpSystem: () => void;
-}
+
 export declare export interface HelpProviderProps {
     children: React.ReactNode;
     customHelpContent?: HelpContent[];
     enableOnboarding?: boolean;
     enableHelpHints?: boolean;
-}
+
 export declare const HelpProvider: React.FC<HelpProviderProps>;
 export declare const registerHelpContent: (content: HelpContent | HelpContent[]) => void;
 export declare export declare     currentStep: number;

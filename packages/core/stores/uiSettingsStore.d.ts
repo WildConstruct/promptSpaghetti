@@ -2,11 +2,11 @@ export interface NodePreferences {
     disclosureLevel: 'basic' | 'advanced' | 'debug';
     useGlobalDefault: boolean;
     lastModified: number;
-}
+
 export interface NodeTypePreferences {
     disclosureLevel: 'basic' | 'advanced' | 'debug';
     collapsedSections: string[];
-}
+
 export interface UISettings {
     debugMode: boolean;
     professionalUI: boolean;
@@ -22,7 +22,6 @@ export interface UISettings {
     showNodeIcons: boolean;
     demoMode: boolean;
     hideAllTechnicalUI: boolean;
-}
 interface UISettingsState extends UISettings {
     setDebugMode: (enabled: boolean) => void;
     setProfessionalUI: (enabled: boolean) => void;
@@ -45,7 +44,7 @@ interface UISettingsState extends UISettings {
     applyFilmmakerPreset: () => void;
     applyDeveloperPreset: () => void;
     applyDemoPreset: () => void;
-}
+
 export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<UISettingsState>, "persist"> & {
     persist: {,
         setOptions: (options: Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>) => void;

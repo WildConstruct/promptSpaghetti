@@ -36,6 +36,7 @@ import { PromotionSchedulingService } from '../../services/PromotionSchedulingSe
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
+}
 export interface CreatePromotionRequest {
   title: string;
   description?: string;
@@ -52,7 +53,9 @@ export interface CreatePromotionRequest {
   target_metrics?: any;
   ab_test_config?: any;
 }
+}
 
+}
 export interface UpdatePromotionRequest {
   title?: string;
   description?: string;
@@ -61,14 +64,18 @@ export interface UpdatePromotionRequest {
   target_metrics?: any;
   end_date?: string;
 }
+}
 
+}
 export interface PromotionPreviewRequest {
   content_ids: string[];
   slot_id: string;
   rotation_config?: any;
   ab_test_config?: any;
 }
+}
 
+}
 export interface PromotionPreviewResponse {
   schedule: {
     id: string;
@@ -78,6 +85,7 @@ export interface PromotionPreviewResponse {
     start_date: Date;
     end_date: Date;
     status: string;
+}
   };
   content: Array<{
     id: string;
@@ -99,6 +107,7 @@ export interface PromotionPreviewResponse {
   ab_test_config?: any;
 }
 
+}
 export interface PromotionDashboard {
   active_promotions: number;
   total_impressions: number;
@@ -108,6 +117,7 @@ export interface PromotionDashboard {
   top_performing_slots: any[];
   recent_promotions: any[];
   performance_trends: any[];
+}
 }
 
 @ApiTags('admin/promotions')
@@ -128,6 +138,7 @@ export class PromotionController {
   @ApiOperation({ summary: 'Get promotion management dashboard data' })
   @RequirePermissions(['admin:promotion:read'])
   async getDashboard(): Promise<PromotionDashboard> {
+
     const [activePromotions, performanceMetrics, slots] = await Promise.all([
       this.promotionService.getPromotionSchedules({ status: 'ACTIVE' }),
       this.getOverallPerformanceMetrics(),
@@ -233,7 +244,7 @@ export class PromotionController {
         status: 'DRAFT',
         created_by: userId,
         metadata: {}
-      },
+  }
       userId
     );
 
@@ -386,6 +397,7 @@ export class PromotionController {
     @Body() request: PromotionPreviewRequest,
     @Query('user_id') userId: string
   ): Promise<PromotionPreviewResponse> {
+
     // Get slot details
     const slot = await this.promotionService.getPromotionSlot(request.slot_id);
     if (!slot) {
@@ -411,7 +423,7 @@ export class PromotionController {
         start_date: new Date(),
         end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week
         status: 'PREVIEW'
-      },
+  }
       content: contentDetails,
       rotation_config: request.rotation_config || {},
       predicted_performance: predictedPerformance,
@@ -528,6 +540,7 @@ export class PromotionController {
   // Helper methods
 
   private async getContentDetails(contentIds: string[]): Promise<any[]> {
+
     // Mock implementation - would integrate with actual content service
     return contentIds.map(id => ({
       id,
@@ -545,6 +558,7 @@ export class PromotionController {
     slotId: string,
     rotationConfig?: any
   ): Promise<any> {
+
     // Mock performance prediction - would use ML models in production
     const baseImpressions = 10000;
     const baseCtr = 2.5;
@@ -559,6 +573,7 @@ export class PromotionController {
   }
 
   private async getOverallPerformanceMetrics(): Promise<any> {
+
     // Mock implementation - would query actual metrics
     return {
       total_impressions: 150000,
@@ -570,6 +585,7 @@ export class PromotionController {
   }
 
   private async getPromotionTrends(period: string): Promise<any> {
+
     // Mock implementation
     return {
       period,
@@ -580,6 +596,7 @@ export class PromotionController {
   }
 
   private async getSlotUtilizationMetrics(): Promise<any> {
+
     // Mock implementation
     return {
       slots: [],

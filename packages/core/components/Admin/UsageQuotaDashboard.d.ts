@@ -10,6 +10,7 @@
  */
 import React from 'react';
 import { UsageQuota } from '../../types/UsageQuotaTypes';
+
 interface UsageQuotaDashboardProps {
     onQuotaCreate?: (quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>) => Promise<void>;
     onQuotaUpdate?: (quotaId: string, updates: Partial<UsageQuota>) => Promise<void>;
@@ -17,7 +18,7 @@ interface UsageQuotaDashboardProps {
     onViolationResolve?: (violationId: string, resolution: string) => Promise<void>;
     onQuotaOverride?: (quotaId: string, userId: string, overrideAmount: number, duration: number) => Promise<void>;
     className?: string;
-}
+
 export declare const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps>;
 export default UsageQuotaDashboard;
 //# sourceMappingURL=UsageQuotaDashboard.d.ts.map

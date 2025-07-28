@@ -8,9 +8,9 @@ export interface HelpContent {
     position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
     showOnDisclosureLevel?: ('basic' | 'advanced' | 'debug')[];
     learnMoreUrl?: string;
-    examples?: string[];
+    examples?: string;
     shortcut?: string;
-    relatedFeatures?: string[];
+    relatedFeatures?: string;
     priority?: 'high' | 'medium' | 'low';
 }
 export interface ContextualTooltipProps {
@@ -21,12 +21,11 @@ export interface ContextualTooltipProps {
     className?: string;
 }
 export interface HelpSystemProps {
-    helpContent: HelpContent[];
+    helpContent: HelpContent;
     showOnboarding?: boolean;
     onboardingStep?: number;
     onOnboardingComplete?: () => void;
     className?: string;
 }
 export declare const ContextualTooltip: React.FC<ContextualTooltipProps>;
-export default ContextualTooltip;
 //# sourceMappingURL=ContextualHelpSystem.d.ts.map

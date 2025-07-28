@@ -26,15 +26,15 @@ export interface PermissionGrant {
     requestId: string;
     grantedBy: string;
     grantedAt: Date;
-    permissions: string[];
-    conditions: PermissionCondition[];
+    permissions: string;
+    conditions: PermissionCondition;
     timeLimit?: Date;
     usageLimit?: number;
     usageCount: number;
     revoked: boolean;
     revokedAt?: Date;
     revokedBy?: string;
-    auditTrail: PermissionAuditEntry[];
+    auditTrail: PermissionAuditEntry;
 }
 export interface PermissionAuditEntry {
     timestamp: Date;
@@ -51,7 +51,7 @@ export interface EscalationRequest {
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'ESCALATED';
     createdAt: Date;
     updatedAt: Date;
-    steps: EscalationStepStatus[];
+    steps: EscalationStepStatus;
     finalDecision?: {
         decision: 'APPROVED' | 'DENIED';
         decisionBy: string;
@@ -62,8 +62,8 @@ export interface EscalationRequest {
 export interface EscalationStepStatus {
     stepId: string;
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'SKIPPED';
-    assignedTo: string[];
-    approvals: StepApproval[];
+    assignedTo: string;
+    approvals: StepApproval;
     startedAt: Date;
     completedAt?: Date;
     timeoutAt: Date;
@@ -73,16 +73,16 @@ export interface StepApproval {
     decision: 'APPROVED' | 'DENIED';
     timestamp: Date;
     comments?: string;
-    conditions?: PermissionCondition[];
+    conditions?: PermissionCondition;
 }
 export interface DelegationRequest {
     id: string;
     delegatorId: string;
     delegateeId: string;
-    permissions: string[];
+    permissions: string;
     timeLimit: Date;
     usageLimit?: number;
-    conditions: DelegationCondition[];
+    conditions: DelegationCondition;
     justification: string;
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'ACTIVE' | 'EXPIRED' | 'REVOKED';
     createdAt: Date;
@@ -91,18 +91,18 @@ export interface DelegationRequest {
 }
 export interface HierarchyAnalysis {
     userLevel: number;
-    effectivePermissions: OperationPermission[];
-    inheritedFrom: string[];
-    delegatedPermissions: DelegationGrant[];
-    restrictions: PermissionRestriction[];
-    escalationPaths: string[];
+    effectivePermissions: OperationPermission;
+    inheritedFrom: string;
+    delegatedPermissions: DelegationGrant;
+    restrictions: PermissionRestriction;
+    escalationPaths: string;
     riskProfile: HierarchyRiskProfile;
 }
 export interface DelegationGrant {
     id: string;
     delegatorId: string;
-    permissions: string[];
-    conditions: DelegationCondition[];
+    permissions: string;
+    conditions: DelegationCondition;
     expiresAt: Date;
     usageRemaining?: number;
     source: 'DIRECT' | 'INHERITED' | 'EMERGENCY';
@@ -116,10 +116,10 @@ export interface PermissionRestriction {
 }
 export interface HierarchyRiskProfile {
     overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    riskFactors: string[];
+    riskFactors: string;
     mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';
     lastAssessment: Date;
-    recommendedActions: string[];
+    recommendedActions: string;
 }
 export declare class DataPermissionHierarchyManager extends EventEmitter {
     private hierarchy;
@@ -130,61 +130,5 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     private emergencyOverrides;
     private userLevelCache;
     constructor(hierarchy?: PermissionHierarchy);
-    /**
-     * Evaluate permission request based on hierarchy
-     */
-    evaluatePermissionRequest(request: PermissionRequest): Promise<{
-        granted: boolean;
-        reason: string;
-        conditions?: PermissionCondition[];
-        escalationRequired?: boolean;
-        escalationPath?: string;
-        timeLimit?: Date;
-        usageLimit?: number;
-    }>;
-    /**
-     * Grant permission based on evaluation
-     */
-    grantPermission(request: PermissionRequest, grantedBy: string, conditions?: PermissionCondition[], timeLimit?: Date, usageLimit?: number): Promise<PermissionGrant>;
-    /**
-     * Initiate escalation process
-     */
-    initiateEscalation(request: PermissionRequest, escalationPathId: string): Promise<EscalationRequest>;
-    /**
-     * Delegate permissions to another user
-     */
-    delegatePermissions(delegatorId: string, delegateeId: string, permissions: string[], timeLimit: Date, conditions: DelegationCondition[], justification: string): Promise<DelegationRequest>;
-    /**
-     * Analyze user's effective permissions
-     */
-    analyzeUserPermissions(userId: string): Promise<HierarchyAnalysis>;
-    private createDefaultHierarchy;
-    private generateDefaultOperationPermissions;
-    private generateDefaultTimeRestrictions;
-    private generateDefaultInheritanceRules;
-    private generateDefaultEscalationPaths;
-    private generateDefaultDelegationRules;
-    private generateDefaultEmergencyOverrides;
-    private getUserPermissionLevel;
-    private findEscalationPath;
-    private isEscalationPathApplicable;
-    private isEscalationPathAvailable;
-    private evaluateConditions;
-    private evaluateCondition;
-    private evaluateTimeRestrictions;
-    private evaluateTimeRestriction;
-    private calculateRiskScore;
-    private resolveApprovers;
-    private processEscalationStep;
-    private canAutoDelegateTo;
-    private getInheritedPermissions;
-    private getDelegatedPermissions;
-    private getInheritanceSources;
-    private getActiveRestrictions;
-    private calculateUserRiskProfile;
-    private startCleanupTasks;
-    private cleanupExpiredGrants;
-    private cleanupExpiredRequests;
 }
-export default DataPermissionHierarchyManager;
 //# sourceMappingURL=DataPermissionHierarchyManager.d.ts.map

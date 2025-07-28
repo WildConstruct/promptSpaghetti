@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 // Enhanced presence data models
+}
 export interface UserPresenceData {
   userId: string;
   userName?: string;
@@ -19,6 +20,7 @@ export interface UserPresenceData {
       width: number;
       height: number;
       zoom: number;
+}
     };
   };
   selection?: {
@@ -50,6 +52,7 @@ export interface UserPresenceData {
   platform?: string;
 }
 
+}
 export interface DocumentPresence {
   documentId: string;
   users: Map<string, UserPresenceData>;
@@ -58,7 +61,9 @@ export interface DocumentPresence {
   lastActivity: number;
   createdAt: number;
 }
+}
 
+}
 export interface PresenceStats {
   totalUsers: number;
   activeUsers: number;
@@ -69,7 +74,9 @@ export interface PresenceStats {
   peakConcurrentUsers: number;
   lastUpdated: number;
 }
+}
 
+}
 export interface PresenceConfig {
   idleTimeout: number; // Time before marking user as idle (ms)
   awayTimeout: number; // Time before marking user as away (ms)
@@ -80,6 +87,7 @@ export interface PresenceConfig {
   enableActivityTracking: boolean;
   retainPresenceHistory: boolean;
   historyRetentionPeriod: number; // How long to keep presence history (ms)
+}
 }
 
 export class PresenceManager extends EventEmitter {

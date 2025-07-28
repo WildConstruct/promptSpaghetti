@@ -387,7 +387,7 @@ export async function registerOperationTypesRoutes(
           totalSteps: 3,
           completedSteps: 0,
           lastUpdateTime: new Date()
-        },
+  }
         executedBy: request.user!.id,
         startTime: new Date(),
         totalTargets: 0,

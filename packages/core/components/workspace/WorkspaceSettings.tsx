@@ -5,12 +5,11 @@
 import React, { useState } from 'react';
 import { WorkspaceWithMembership } from '../../types/workspace';
 interface WorkspaceSettingsProps {
-  workspace: WorkspaceWithMembership;
+  workspace: WorkspaceWithMembership;,
   onUpdate: (updates: { name?: string; description?: string }) => void;
-  onArchive: () => void;
+  onArchive: () => void;,
   onCancel: () => void;
   canArchive: boolean;
-}
 
 export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({)
   workspace,
@@ -21,9 +20,9 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({)
 }) => {
   const [activeTab, setActiveTab] = useState<'general' | 'members' | 'danger'>('general');
   const [formData, setFormData] = useState({)
-    name: workspace.name,
-    description: workspace.description || '',
-  });
+  name: workspace.name,
+  description: workspace.description || '',
+});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
@@ -35,57 +34,50 @@ export const WorkspaceSettings: React.FC<WorkspaceSettingsProps> = ({)
       newErrors.name = 'Workspace name must be at least 3 characters';
     } else if (formData.name.length > 50) {
       newErrors.name = 'Workspace name must be less than 50 characters';
-    }
     if (formData.description && formData.description.length > 200) {
       newErrors.description = 'Description must be less than 200 characters';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    // Check if there are any changes
-    const hasChanges = ;
-      formData.name !== workspace.name ||
-      formData.description !== (workspace.description || '');
-    if (!hasChanges) {
-      onCancel();
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await onUpdate({)
-        name: formData.name.trim(),
-        description: formData.description.trim() || undefined,
-      });
+  e.preventDefault();
+  if (!validateForm()) {
+  return;
+  // Check if there are any changes
+  const hasChanges = ;
+  formData.name !== workspace.name ||
+  formData.description !== (workspace.description || '');
+  if (!hasChanges) {
+  onCancel();
+  return;
+  setIsSubmitting(true);
+  try {
+  await onUpdate({)
+  name: formData.name.trim(),
+  description: formData.description.trim() || undefined,
+});
     } catch (error) {
-      console.error('Failed to update workspace:', error);
-    } finally {
+  console.error('Failed to update workspace:', error);
+} finally {
       setIsSubmitting(false);
-    }
   };
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
-    }
   };
   const handleArchive = async () => {
     setIsSubmitting(true);
     try {
       await onArchive();
     } catch (error) {
-      console.error('Failed to archive workspace:', error);
-    } finally {
+  console.error('Failed to archive workspace:', error);
+} finally {
       setIsSubmitting(false);
       setShowArchiveConfirm(false);
-    }
   };
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal modal--large">
         <div className="modal__header">

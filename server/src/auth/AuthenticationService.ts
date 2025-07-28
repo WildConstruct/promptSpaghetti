@@ -60,6 +60,7 @@ export class AuthenticationService {
   }
 
   async initialize(): Promise<void> {
+
     try {
       // Connect to Redis
       await this.redisService.connect();
@@ -78,6 +79,7 @@ export class AuthenticationService {
     request: RegisterRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<RegisterResponse> {
+
     // Rate limiting
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -92,7 +94,7 @@ export class AuthenticationService {
           endpoint: 'register',
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -114,7 +116,7 @@ export class AuthenticationService {
         details: { 
           email: user.email,
           registrationMethod: 'email'
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -131,7 +133,7 @@ export class AuthenticationService {
         details: { 
           email: request.email,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -145,6 +147,7 @@ export class AuthenticationService {
     request: LoginRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<LoginResponse> {
+
     // Rate limiting
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -159,7 +162,7 @@ export class AuthenticationService {
           endpoint: 'login',
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -186,7 +189,7 @@ export class AuthenticationService {
           details: { 
             reason: 'account_locked',
             lockedUntil: user.lockedUntil
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
@@ -205,7 +208,7 @@ export class AuthenticationService {
           details: { 
             reason: 'invalid_password',
             failedAttempts: user.failedLoginAttempts + 1
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
@@ -222,7 +225,7 @@ export class AuthenticationService {
           details: { 
             reason: 'inactive_account',
             status: user.status
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           severity: 'warning'
@@ -254,7 +257,7 @@ export class AuthenticationService {
         details: { 
           loginMethod: 'password',
           sessionId
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId,
@@ -278,7 +281,7 @@ export class AuthenticationService {
         details: { 
           email: request.email,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -293,6 +296,7 @@ export class AuthenticationService {
     sessionId?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       // Revoke all user tokens
       await this.tokenService.revokeAllUserTokens(userId);
@@ -317,6 +321,7 @@ export class AuthenticationService {
     request: RefreshTokenRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<{ accessToken: string; refreshToken: string }> {
+
     try {
       const tokens = await this.tokenService.refreshAccessToken(request.refreshToken);
       
@@ -349,6 +354,7 @@ export class AuthenticationService {
     request: PasswordResetRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     // Rate limiting
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -381,7 +387,7 @@ export class AuthenticationService {
         details: { 
           hashedEmail: this.hashEmail(request.email),
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -395,6 +401,7 @@ export class AuthenticationService {
     request: PasswordResetConfirmRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     try {
       const user = await this.userService.resetPassword(request.token, request.newPassword);
       
@@ -418,7 +425,7 @@ export class AuthenticationService {
         details: { 
           token: request.token,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -432,6 +439,7 @@ export class AuthenticationService {
     request: EmailVerificationRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     try {
       const user = await this.userService.verifyEmail(request.token);
       
@@ -450,7 +458,7 @@ export class AuthenticationService {
         details: { 
           token: request.token,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -465,6 +473,7 @@ export class AuthenticationService {
     request: ChangePasswordRequest,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     // Rate limiting
     const rateLimitResult = await this.rateLimitService.checkUserRateLimit(
       userId,
@@ -512,6 +521,7 @@ export class AuthenticationService {
   }
 
   async validateToken(token: string): Promise<PublicUser> {
+
     const payload = await this.tokenService.verifyAccessToken(token);
     const user = await this.userService.getUserById(payload.sub);
     
@@ -544,6 +554,7 @@ export class AuthenticationService {
       deviceInfo?: unknown;
     }
   ): Promise<string> {
+
     const sessionId = require('crypto').randomUUID();
     
     await this.dbService.query(`
@@ -563,6 +574,7 @@ export class AuthenticationService {
   }
 
   private async toPublicUser(user: User): Promise<PublicUser> {
+
     // Get user profile
     const profileResult = await this.dbService.query(`
       SELECT * FROM user_profiles WHERE user_id = $1
@@ -665,6 +677,7 @@ export class AuthenticationService {
   }
 
   async getHealthStatus(): Promise<{ database: string; redis: string; authentication: string }> {
+
     try {
       // Check database connectivity
       const dbStatus = await this.dbService.query('SELECT 1 as health');
@@ -688,6 +701,7 @@ export class AuthenticationService {
   }
 
   async shutdown(): Promise<void> {
+
     await this.redisService.close();
     await this.dbService.close();
   }

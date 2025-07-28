@@ -37,6 +37,7 @@ export { KnowledgeBaseLayout, KnowledgeBaseHero, ArticleCard, CategoryBrowser, L
 export type { KnowledgeBaseSection, LearningPath, LearningPathStep, SearchResult, KnowledgeBaseStats, KnowledgeBaseHeroProps, ArticleCardProps, CategoryBrowserProps, LearningPathCardProps, KnowledgeBaseLayoutProps } from './KnowledgeBaseLayouts';
 export { KnowledgeBaseDemo, default as KnowledgeBaseDemoDefault } from './KnowledgeBaseDemo';
 export type { KnowledgeBaseDemoProps } from './KnowledgeBaseDemo';
+
 export interface Epic16ComponentTheme {
     primary: string;
     secondary: string;
@@ -59,7 +60,7 @@ export interface Epic16ComponentTheme {
         error: string;
         info: string;
     };
-}
+
 export declare const defaultEpic16Theme: Epic16ComponentTheme;
 export declare const Epic16DesignTokens: {
     readonly spacing: {

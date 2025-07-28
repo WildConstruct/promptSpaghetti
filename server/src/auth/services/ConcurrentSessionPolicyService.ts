@@ -9,6 +9,7 @@ import { RedisService } from '../database/RedisService';
 import { EnhancedSessionService, Session } from './EnhancedSessionService';
 import { RemoteSessionTerminationService } from './RemoteSessionTerminationService';
 
+}
 export interface ConcurrentSessionPolicy {
   id: string;
   name: string;
@@ -24,6 +25,7 @@ export interface ConcurrentSessionPolicy {
     sessionTypes?: string[];
     deviceTypes?: string[];
     environments?: string[];
+}
   };
   
   limits: {
@@ -81,6 +83,7 @@ export interface ConcurrentSessionPolicy {
   };
 }
 
+}
 export interface SessionConflict {
   id: string;
   userId: string;
@@ -93,6 +96,7 @@ export interface SessionConflict {
     description: string;
     currentSessionCount: number;
     allowedSessionCount: number;
+}
   };
   
   sessions: Array<{
@@ -127,6 +131,7 @@ export interface SessionConflict {
   };
 }
 
+}
 export interface SessionPolicyViolation {
   id: string;
   userId: string;
@@ -140,6 +145,7 @@ export interface SessionPolicyViolation {
     policyConstraints: any;
     actionTaken: string;
     success: boolean;
+}
   };
   
   impact: {
@@ -156,8 +162,10 @@ export interface SessionPolicyViolation {
   };
 }
 
+}
 export interface PolicyStatistics {
   policyId: string;
+}
   timeRange: { start: Date; end: Date };
   
   enforcement: {
@@ -248,6 +256,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     policy?: ConcurrentSessionPolicy;
     errors?: string[];
   }> {
+
     try {
       // Validate policy configuration
       const validation = this.validatePolicyConfiguration(policyData);
@@ -321,6 +330,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     requiresUserChoice?: boolean;
     gracePeriod?: number;
   }> {
+
     try {
       // Get applicable policies for this user/context
       const applicablePolicies = await this.findApplicablePolicies(userId, newSessionContext);
@@ -383,6 +393,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     actionsPerformed: string[];
     errors?: string[];
   }> {
+
     const conflict = this.activeConflicts.get(conflictId);
     if (!conflict) {
       return {
@@ -444,7 +455,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
                 type: 'policy_violation',
                 description: `Concurrent session limit exceeded for policy: ${policy.name}`,
                 severity: conflict.conflict.severity
-              },
+  }
               {
                 ipAddress: '127.0.0.1', // System IP
                 userAgent: 'ConcurrentSessionPolicyService'
@@ -472,7 +483,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
                 type: 'policy_violation',
                 description: `All sessions terminated due to policy violation: ${policy.name}`,
                 severity: 'high'
-              },
+  }
               {
                 ipAddress: '127.0.0.1',
                 userAgent: 'ConcurrentSessionPolicyService'
@@ -558,6 +569,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     policyId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<PolicyStatistics> {
+
     try {
       const policy = this.policies.get(policyId);
       if (!policy) {
@@ -634,6 +646,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     expiresAt?: Date;
     message: string;
   }> {
+
     try {
       const policy = this.policies.get(policyId);
       if (!policy) {
@@ -699,6 +712,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     userId: string,
     context: any
   ): Promise<ConcurrentSessionPolicy[]> {
+
     const applicablePolicies: ConcurrentSessionPolicy[] = [];
 
     for (const policy of this.policies.values()) {
@@ -718,6 +732,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     userId: string,
     context: any
   ): Promise<boolean> {
+
     // Check global scope
     if (policy.scope.global) {
       return true;
@@ -747,6 +762,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
   }
 
   private async getUserActiveSessions(userId: string): Promise<any[]> {
+
     // Check cache first
     const cached = this.userSessionCache.get(userId);
     if (cached) {
@@ -784,6 +800,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     currentSessions: any[],
     newSessionContext: any
   ): Promise<string | null> {
+
     // Check max concurrent sessions
     if (currentSessions.length >= policy.limits.maxConcurrentSessions) {
       return `Maximum concurrent sessions exceeded: ${currentSessions.length}/${policy.limits.maxConcurrentSessions}`;
@@ -829,6 +846,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     newSessionContext: any,
     violationReason: string
   ): Promise<SessionConflict> {
+
     const conflict: SessionConflict = {
       id: this.generateConflictId(),
       userId,
@@ -840,7 +858,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         description: violationReason,
         currentSessionCount: currentSessions.length,
         allowedSessionCount: policy.limits.maxConcurrentSessions
-      },
+  }
       sessions: currentSessions.map(s => ({
         sessionId: s.id,
         deviceId: s.deviceId,
@@ -854,7 +872,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
       resolution: {
         status: 'pending',
         userNotified: false
-      },
+  }
       context: {
         newSessionAttempt: newSessionContext,
         triggeringEvent: 'session_creation',
@@ -874,6 +892,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     requiresUserChoice: boolean;
     suggestedActions: string[];
   }> {
+
     switch (policy.enforcement.action) {
     case 'block_new':
       return {
@@ -927,11 +946,13 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
   }
 
   private async degradeSession(sessionId: string, policy: ConcurrentSessionPolicy): Promise<void> {
+
     // Implementation would reduce session privileges/capabilities
     console.log(`Degrading session ${sessionId} due to policy ${policy.name}`);
   }
 
   private async escalateForApproval(conflict: SessionConflict, policy: ConcurrentSessionPolicy): Promise<void> {
+
     // Implementation would send notification to administrators
     console.log(`Escalating conflict ${conflict.id} for manual approval`);
   }
@@ -945,6 +966,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
   }
 
   private async invalidateUserSessionCache(userId: string): Promise<void> {
+
     this.userSessionCache.delete(userId);
     await this.redis.del(`user_sessions:${userId}`);
   }
@@ -984,40 +1006,40 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         scope: {
           global: true,
           sessionTypes: ['web', 'mobile']
-        },
+  }
         limits: {
           maxConcurrentSessions: 3,
           maxSessionsPerDevice: 2,
           excludeServiceAccounts: true
-        },
+  }
         enforcement: {
           action: 'terminate_oldest',
           gracePeriod: 30,
           notifyUser: true,
           allowUserChoice: true,
           preserveActiveSession: true
-        },
+  }
         exceptions: {
           adminOverride: true,
           emergencyAccess: true
-        },
+  }
         detection: {
           realTimeChecking: true,
           checkInterval: 60,
           locationRadius: 100
-        },
+  }
         monitoring: {
           auditEvents: true,
           alertOnViolations: true,
           metricsCollection: true,
           reportingEnabled: true
-        },
+  }
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
           tags: ['default', 'standard']
         }
-      },
+  }
       {
         name: 'High Security Sessions',
         description: 'Strict policy for administrative and privileged sessions',
@@ -1027,34 +1049,34 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
           global: false,
           userRoles: ['admin', 'security'],
           sessionTypes: ['admin', 'api']
-        },
+  }
         limits: {
           maxConcurrentSessions: 2,
           maxSessionsPerDevice: 1,
           maxSessionsPerIP: 2
-        },
+  }
         enforcement: {
           action: 'block_new',
           gracePeriod: 15,
           notifyUser: true,
           allowUserChoice: false,
           preserveActiveSession: true
-        },
+  }
         exceptions: {
           adminOverride: false,
           emergencyAccess: true
-        },
+  }
         detection: {
           realTimeChecking: true,
           checkInterval: 30,
           locationRadius: 50
-        },
+  }
         monitoring: {
           auditEvents: true,
           alertOnViolations: true,
           metricsCollection: true,
           reportingEnabled: true
-        },
+  }
         metadata: {
           createdBy: 'system',
           createdAt: new Date(),
@@ -1079,6 +1101,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
   }
 
   private async performPeriodicCheck(): Promise<void> {
+
     // Check all active sessions against policies
     console.log('Performing periodic concurrent session policy check');
   }
@@ -1094,21 +1117,25 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
   }
 
   private async handleSessionCreated(event: any): Promise<void> {
+
     // Invalidate cache for the user
     await this.invalidateUserSessionCache(event.userId);
   }
 
   private async handleSessionTerminated(event: any): Promise<void> {
+
     // Invalidate cache for the user
     await this.invalidateUserSessionCache(event.userId);
   }
 
   private async savePolicyToDatabase(policy: ConcurrentSessionPolicy): Promise<void> {
+
     // Implementation would save to database
     console.log(`Saving policy ${policy.id} to database`);
   }
 
   private async logPolicyEvent(action: string, policyId: string, userId: string, details: any): Promise<void> {
+
     console.log(`Policy Event: ${action} - ${policyId} by ${userId}`, details);
   }
 
@@ -1117,6 +1144,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     policy: ConcurrentSessionPolicy,
     actionsPerformed: string[]
   ): Promise<void> {
+
     const violation: SessionPolicyViolation = {
       id: this.generateViolationId(),
       userId: conflict.userId,
@@ -1129,12 +1157,12 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
         policyConstraints: policy.limits,
         actionTaken: actionsPerformed.join(', '),
         success: conflict.resolution.status === 'resolved'
-      },
+  }
       impact: {
         sessionsAffected: conflict.sessions.length,
         userImpact: conflict.conflict.severity === 'high' ? 'severe' : 'moderate',
         businessImpact: 'Session management policy enforcement'
-      },
+  }
       followUp: {
         escalationRequired: conflict.conflict.severity === 'critical',
         adminNotified: policy.monitoring.alertOnViolations,
@@ -1156,6 +1184,7 @@ export class ConcurrentSessionPolicyService extends EventEmitter {
     policy: ConcurrentSessionPolicy,
     actionsPerformed: string[]
   ): Promise<void> {
+
     // Implementation would send notification to user
     console.log(`Notifying user ${conflict.userId} of policy enforcement`, {
       policy: policy.name,

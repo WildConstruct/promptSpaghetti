@@ -11,25 +11,28 @@
 import React from 'react';
 import { PlaybookCategory, Epic17System } from '../../types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../types/EnforcementTypes';
+
 interface AdminIncidentDashboardProps {
     onPlaybookExecute?: (playbookId: string, options: ExecutionOptions) => Promise<void>;
     onIncidentCreate?: (incident: IncidentCreationData) => Promise<void>;
     className?: string;
-}
+
+
 interface ExecutionOptions {
     manualTrigger?: boolean;
     userId?: string;
     urgencyOverride?: ActionSeverity;
     skipApproval?: boolean;
     dryRun?: boolean;
-}
+
+
 interface IncidentCreationData {
     title: string;
     description: string;
     severity: ActionSeverity;
     affectedSystems: Epic17System[];
     category: PlaybookCategory;
-}
+
 export declare const AdminIncidentDashboard: React.FC<AdminIncidentDashboardProps>;
 export default AdminIncidentDashboard;
 //# sourceMappingURL=AdminIncidentDashboard.d.ts.map

@@ -6,9 +6,8 @@
 export interface ExperimentId {
   value: string;
 }
-
 export interface ExperimentVariant {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
   prompt?: string;
@@ -19,22 +18,19 @@ export interface ExperimentVariant {
   properties?: Record<string, unknown>;
   promptHash?: string;
 }
-
 export interface TrafficAllocation {
-  [variantId: string]: number; // percentage (0-100)
+  [variantId: string]: number; // percentage (0-100),
 }
-
 export interface ExperimentMetric {
-  id: string;
+  id: string;,
   name: string;
   type: 'conversion' | 'latency' | 'cost' | 'custom';
-  query?: string; // ClickHouse SQL for custom metrics
-  isPrimary: boolean;
+  query?: string; // ClickHouse SQL for custom metrics,
+  isPrimary: boolean;,
   isGuardrail: boolean;
   expectedDirection: 'increase' | 'decrease';
   minimumDetectableEffect?: number;
 }
-
 export type ExperimentType = 'prompt' | 'graph' | 'feature_flag';
 
 export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed' | 'archived';
@@ -42,98 +38,88 @@ export type ExperimentStatus = 'draft' | 'running' | 'paused' | 'completed' | 'a
 export interface ExperimentSchedule {
   startAt?: Date;
   endAt?: Date;
-  autoStop?: {
-    minSampleSize?: number;
-    maxPValue?: number;
-    budgetCap?: number;
-    confidenceThreshold?: number;
-  };
+  autoStop?: {,
+  minSampleSize?: number;
+  maxPValue?: number;
+  budgetCap?: number;
+  confidenceThreshold?: number;
+};
 }
-
 export interface Experiment {
-  id: string;
+  id: string;,
   organizationId: string;
-  name: string;
+  name: string;,
   type: ExperimentType;
   hypothesis: string;
   description?: string;
-  variants: ExperimentVariant[];
+  variants: ExperimentVariant;,
   trafficAllocation: TrafficAllocation;
-  metrics: ExperimentMetric[];
+  metrics: ExperimentMetric;,
   status: ExperimentStatus;
-  schedule: ExperimentSchedule;
-  tags: string[];
-  createdBy: string;
+  schedule: ExperimentSchedule;,
+  tags: string;
+  createdBy: string;,
   createdAt: Date;
   updatedAt: Date;
   // Advanced configuration
-  targetSegments?: ExperimentSegment[];
-  exclusionRules?: ExperimentExclusion[];
+  targetSegments?: ExperimentSegment;
+  exclusionRules?: ExperimentExclusion;
   factorialDesign?: FactorialDesign;
   rolloutStrategy?: RolloutStrategy;
 }
-
 export interface ExperimentSegment {
-  id: string;
+  id: string;,
   name: string;
-  filters: SegmentFilter[];
+  filters: SegmentFilter;,
   operator: 'AND' | 'OR';
 }
-
 export interface SegmentFilter {
-  property: string;
+  property: string;,
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: unknown;
 }
-
 export interface ExperimentExclusion {
-  type: 'user' | 'session' | 'segment';
-  identifiers: string[];
+  type: 'user' | 'session' | 'segment';,
+  identifiers: string;
   reason: string;
 }
-
 export interface FactorialDesign {
-  factors: Factor[];
-  designMatrix: DesignCell[];
+  factors: Factor;,
+  designMatrix: DesignCell;
 }
-
 export interface Factor {
-  name: string;
-  levels: string[];
+  name: string;,
+  levels: string;
 }
-
 export interface DesignCell {
-  id: string;
+  id: string;,
   factors: Record<string, string>;
   allocation: number;
 }
-
 export interface RolloutStrategy {
   type: 'immediate' | 'gradual';
-  stages?: RolloutStage[];
+  stages?: RolloutStage;
 }
-
 export interface RolloutStage {
-  percentage: number;
-  duration: number; // hours
-  triggerConditions?: {
-    successRate?: number;
-    errorRate?: number;
-    latencyThreshold?: number;
-  };
-}
+  percentage: number;,
+  duration: number; // hours,
+  triggerConditions?: {,
+  successRate?: number;
+  errorRate?: number;
+  latencyThreshold?: number;
+};
 
 // Assignment and allocation types
+}
 export interface UserAssignment {
-  userId: string;
+  userId: string;,
   experimentId: string;
-  variantId: string;
+  variantId: string;,
   assignedAt: Date;
   sessionId?: string;
-  sticky: boolean;
+  sticky: boolean;,
   salt: string;
 }
-
 export interface AssignmentRequest {
   userId: string;
   sessionId?: string;
@@ -141,162 +127,147 @@ export interface AssignmentRequest {
   overrideVariant?: string;
   debugMode?: boolean;
 }
-
 export interface AssignmentResponse {
-  variantId: string;
+  variantId: string;,
   variant: ExperimentVariant;
   assigned: boolean;
   reason?: string;
-  debugInfo?: {
-    hash: string;
-    bucket: number;
-    allocation: TrafficAllocation;
-  };
-}
+  debugInfo?: {,
+  hash: string;,
+  bucket: number;
+  allocation: TrafficAllocation;
+};
 
 // Results and analysis types
-export interface ExperimentResults {
-  experimentId: string;
-  calculatedAt: Date;
-  variants: VariantResults[];
-  statistical: StatisticalResults;
-  segments: SegmentResults[];
-  insights: ExperimentInsight[];
 }
-
+export interface ExperimentResults {
+  experimentId: string;,
+  calculatedAt: Date;
+  variants: VariantResults;,
+  statistical: StatisticalResults;
+  segments: SegmentResults;,
+  insights: ExperimentInsight;
+}
 export interface VariantResults {
-  variantId: string;
-  metrics: MetricResult[];
+  variantId: string;,
+  metrics: MetricResult;
   sampleSize: number;
   conversionRate?: number;
   averageLatency?: number;
   totalCost?: number;
   errorRate?: number;
 }
-
 export interface MetricResult {
-  metricId: string;
+  metricId: string;,
   value: number;
   confidenceInterval: [number, number];
-  standardError: number;
+  standardError: number;,
   trend: 'up' | 'down' | 'stable';
 }
-
 export interface StatisticalResults {
   primaryMetric: {,
-    winningVariant?: string;
-    pValue: number;
-    statisticalSignificance: boolean;
-    practicalSignificance: boolean;
-    confidenceLevel: number;
-  };
+  winningVariant?: string;
+  pValue: number;,
+  statisticalSignificance: boolean;
+  practicalSignificance: boolean;,
+  confidenceLevel: number;
+};
   guardrailMetrics: {,
-    metricId: string;
-    passed: boolean;
-    threshold: number;
-    actualValue: number;
-  }[];
+  metricId: string;
+  passed: boolean;,
+  threshold: number;
+  actualValue: number;
+}[];
 }
-
 export interface SegmentResults {
-  segment: ExperimentSegment;
-  variants: VariantResults[];
-  sampleSize: number;
+  segment: ExperimentSegment;,
+  variants: VariantResults;
+  sampleSize: number;,
   significance: boolean;
 }
-
 export interface ExperimentInsight {
-  type: 'winner_detected' | 'segment_opportunity' | 'cost_anomaly' | 'performance_degradation';
+  type: 'winner_detected' | 'segment_opportunity' | 'cost_anomaly' | 'performance_degradation';,
   title: string;
-  description: string;
+  description: string;,
   severity: 'low' | 'medium' | 'high';
   actionable: boolean;
-  recommendations?: string[];
+  recommendations?: string;
   data?: Record<string, unknown>;
+  // Template and knowledge base types
 }
-
-// Template and knowledge base types
 export interface ExperimentTemplate {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: string;
-  type: ExperimentType;
+  type: ExperimentType;,
   variants: Partial<ExperimentVariant>[];
-  metrics: ExperimentMetric[];
+  metrics: ExperimentMetric;,
   defaultAllocation: TrafficAllocation;
-  tags: string[];
+  tags: string;,
   successRate: number;
-  averageUplift: number;
+  averageUplift: number;,
   timesUsed: number;
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;
 }
-
 export interface KnowledgeBaseEntry {
-  id: string;
+  id: string;,
   experimentId: string;
-  title: string;
+  title: string;,
   summary: string;
-  insights: string[];
-  learnings: string[];
-  recommendations: string[];
+  insights: string;,
+  learnings: string;
+  recommendations: string;,
   category: string;
-  tags: string[];
+  tags: string;,
   impact: 'low' | 'medium' | 'high';
-  confidence: number;
+  confidence: number;,
   createdAt: Date;
   updatedAt: Date;
+  // Configuration and system types
 }
-
-// Configuration and system types
 export interface ABTestingConfig {
-  maxVariants: number;
+  maxVariants: number;,
   defaultConfidenceLevel: number;
-  defaultMinSampleSize: number;
-  saltRotationInterval: number; // days
-  maxExperimentDuration: number; // days
-  enableBayesian: boolean;
+  defaultMinSampleSize: number;,
+  saltRotationInterval: number; // days,
+  maxExperimentDuration: number; // days,
+  enableBayesian: boolean;,
   enableBandits: boolean;
   enableFactorial: boolean;
 }
-
 export interface AllocationServiceConfig {
-  redisUrl: string;
+  redisUrl: string;,
   cacheTtl: number; // seconds
-  maxAssignmentLatency: number; // ms
+  maxAssignmentLatency: number; // ms,
   enableDebugMode: boolean;
   saltStorage: {,
-    currentSalt: string;
+  currentSalt: string;
+
     previousSalts: { salt: string; rotatedAt: Date }[];
   };
-}
 
 // Error types
+}
 export class ExperimentError extends Error {
   constructor();
-    message: string,
-    public code: string,
-    public experimentId?: string,
-    public details?: Record<string, unknown>
-    super(message);
-    this.name = 'ExperimentError';
-  }
-}
-
-export class AllocationError extends Error {
+  message: string,
+  public code: string,
+  public experimentId?: string,
+  public details?: Record<string, unknown>,
+  super(message);
+  this.name = 'ExperimentError';
+  export class AllocationError extends Error {
   constructor();
-    message: string,
-    public code: string,
-    public userId?: string,
-    public experimentId?: string
-    super(message);
-    this.name = 'AllocationError';
-  }
-}
-
-// Utility types
-export type ExperimentEventType = 
+  message: string,
+  public code: string,
+  public userId?: string,
+  public experimentId?: string,
+  super(message);
+  this.name = 'AllocationError';
+  // Utility types
+  export type ExperimentEventType =
   | 'experiment_created'
   | 'experiment_started'
   | 'experiment_paused'
@@ -305,11 +276,10 @@ export type ExperimentEventType =
   | 'variant_assigned'
   | 'winner_detected'
   | 'rollout_stage_completed';
-
-export interface ExperimentEvent {
-  type: ExperimentEventType;
+  export interface ExperimentEvent {
+  type: ExperimentEventType;,
   experimentId: string;
-  timestamp: Date;
+  timestamp: Date;,
   data: Record<string, unknown>;
   userId?: string;
   variantId?: string;

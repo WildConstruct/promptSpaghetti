@@ -13,16 +13,17 @@ export enum ErrorCategory {
   EXTERNAL_SERVICE = 'external_service',
   DATABASE = 'database',
   INTERNAL = 'internal',
-  BUSINESS_LOGIC = 'business_logic',
+  BUSINESS_LOGIC = 'business_logic'
 }
 
 export enum ErrorSeverity {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical',
+  CRITICAL = 'critical'
 }
 
+}
 export interface ErrorContext {
   correlationId: string;
   userId?: string;
@@ -35,12 +36,15 @@ export interface ErrorContext {
   stackTrace?: string;
   additionalData?: Record<string, unknown>;
 }
+}
 
+}
 export interface ErrorDetail {
   field?: string;
   code: string;
   message: string;
   value?: unknown;
+}
 }
 
 export abstract class BaseError extends Error {

@@ -57,7 +57,7 @@ const StartReviewProcessSchema = z.object({
     minReviewers: z.number().optional(),
     escalationThreshold: z.number().optional(),
     autoEscalationEnabled: z.boolean()
-  })
+  }
 });
 
 const ProcessReviewDecisionSchema = z.object({
@@ -88,7 +88,7 @@ const ProcessReviewDecisionSchema = z.object({
     overridden: z.boolean().optional(),
     overriddenBy: z.string().optional(),
     overrideReason: z.string().optional()
-  })
+  }
 });
 
 const EscalateReviewSchema = z.object({
@@ -158,7 +158,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -195,7 +195,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -231,7 +231,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -276,9 +276,9 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
               escalated: z.number(),
               completed_today: z.number(),
               overdue: z.number()
-            })
-          })
-        })
+  }
+  }
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -362,7 +362,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -422,7 +422,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         400: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -461,7 +461,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         404: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -532,7 +532,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -574,8 +574,8 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
             summary: z.any(),
             performance: z.any(),
             trends: z.any()
-          })
-        })
+  }
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -641,7 +641,7 @@ export async function reviewProcessRoutes(fastify: FastifyInstance) {
             approval_rate: analyticsResult.rows[0].total_processes > 0
               ? (analyticsResult.rows[0].approved_count / analyticsResult.rows[0].total_processes * 100).toFixed(1)
               : 0
-          },
+  }
           trends: trendsResult.rows
         }
       });

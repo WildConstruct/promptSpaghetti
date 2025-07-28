@@ -18,6 +18,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface TestRunnerConfig {
   // Test Execution
   suites: string[]; // Test suite IDs to run
@@ -48,7 +49,9 @@ export interface TestRunnerConfig {
   timeout: number; // Overall timeout in milliseconds
   testTimeout: number; // Individual test timeout
 }
+}
 
+}
 export interface TestExecutionPlan {
   planId: string;
   suites: TestSuiteExecutionPlan[];
@@ -57,7 +60,9 @@ export interface TestExecutionPlan {
   parallelExecution: boolean;
   createdAt: Date;
 }
+}
 
+}
 export interface TestSuiteExecutionPlan {
   suiteId: string;
   suiteName: string;
@@ -66,7 +71,9 @@ export interface TestSuiteExecutionPlan {
   dependencies: string[];
   priority: number;
 }
+}
 
+}
 export interface TestRunResult {
   runId: string;
   startTime: Date;
@@ -91,7 +98,9 @@ export interface TestRunResult {
   // Environment
   environment: TestEnvironmentInfo;
 }
+}
 
+}
 export interface OverallTestSummary {
   totalSuites: number;
   passedSuites: number;
@@ -111,7 +120,9 @@ export interface OverallTestSummary {
   criticalFailures: number;
   performanceRegressions: number;
 }
+}
 
+}
 export interface OverallPerformanceAnalysis {
   overallTrend: 'improving' | 'stable' | 'degrading';
   significantChanges: number;
@@ -126,9 +137,11 @@ export interface OverallPerformanceAnalysis {
     averagePerformance: number;
     trend: string;
     issueCount: number;
+}
   }>;
 }
 
+}
 export interface RegressionAnalysis {
   hasRegressions: boolean;
   regressionCount: number;
@@ -142,11 +155,13 @@ export interface RegressionAnalysis {
     baselineValue: number;
     regressionPercentage: number;
     severity: 'minor' | 'moderate' | 'major' | 'critical';
+}
   }>;
   
   recommendation: string;
 }
 
+}
 export interface GeneratedReport {
   reportId: string;
   format: ReportFormat;
@@ -154,7 +169,9 @@ export interface GeneratedReport {
   fileSize: number;
   generatedAt: Date;
 }
+}
 
+}
 export interface TestEnvironmentInfo {
   nodeVersion: string;
   platform: string;
@@ -165,6 +182,7 @@ export interface TestEnvironmentInfo {
     commit: string;
     branch: string;
     buildTime: Date;
+}
   };
   ciInfo?: {
     provider: string;
@@ -210,6 +228,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Initialize test runner
    */
   public async initialize(): Promise<void> {
+
     console.log('🚀 Initializing Performance Test Runner...');
     
     // Create output directory
@@ -225,6 +244,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Run performance tests based on configuration
    */
   public async run(): Promise<TestRunResult> {
+
     if (this.isRunning) {
       throw new Error('Test runner is already running');
     }
@@ -306,6 +326,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Create execution plan for test suites
    */
   private async createExecutionPlan(): Promise<TestExecutionPlan> {
+
     console.log('📋 Creating execution plan...');
     
     const suites: TestSuiteExecutionPlan[] = [];
@@ -357,6 +378,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Execute test suites according to plan
    */
   private async executeTestSuites(plan: TestExecutionPlan): Promise<void> {
+
     console.log(`🔄 Executing ${plan.suites.length} test suites...`);
     
     if (plan.parallelExecution && plan.suites.length > 1) {
@@ -372,6 +394,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Execute test suites in parallel
    */
   private async executeTestSuitesParallel(suites: TestSuiteExecutionPlan[]): Promise<void> {
+
     const concurrency = Math.min(suites.length, this.config.maxConcurrency);
     const semaphore = Array(concurrency).fill(null);
     
@@ -398,6 +421,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Execute test suites sequentially
    */
   private async executeTestSuitesSequential(suites: TestSuiteExecutionPlan[]): Promise<void> {
+
     for (const suite of suites) {
       try {
         const result = await this.executeSingleSuite(suite.suiteId);
@@ -412,6 +436,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Execute a single test suite
    */
   private async executeSingleSuite(suiteId: string): Promise<TestSuiteResult> {
+
     console.log(`🧪 Executing test suite: ${suiteId}`);
     
     const testSuite = this.testSuites.get(suiteId);
@@ -443,6 +468,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Initialize test suites
    */
   private async initializeTestSuites(): Promise<void> {
+
     const defaultSuiteConfigs: PerformanceTestConfig[] = [
       {
         testSuiteId: 'api_performance_suite',
@@ -458,20 +484,20 @@ export class PerformanceTestRunner extends EventEmitter {
         resourceLimits: {
           maxMemory: 512,
           maxCpu: 80
-        },
+  }
         baseline: {
           enabled: true,
           recordBaseline: this.config.updateBaseline,
           compareToBaseline: this.config.compareBaseline,
           baselineThreshold: this.config.performanceRegressionThreshold
-        },
+  }
         reporting: {
           enabled: true,
           includeDetails: true,
           includeTrends: true,
           generateCharts: false
         }
-      },
+  }
       {
         testSuiteId: 'system_performance_suite',
         name: 'System Performance Test Suite',
@@ -486,13 +512,13 @@ export class PerformanceTestRunner extends EventEmitter {
         resourceLimits: {
           maxMemory: 1024,
           maxCpu: 90
-        },
+  }
         baseline: {
           enabled: true,
           recordBaseline: this.config.updateBaseline,
           compareToBaseline: this.config.compareBaseline,
           baselineThreshold: this.config.performanceRegressionThreshold
-        },
+  }
         reporting: {
           enabled: true,
           includeDetails: true,
@@ -587,6 +613,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Generate overall performance analysis
    */
   private async generateOverallAnalysis(): Promise<void> {
+
     if (!this.currentRun) return;
     
     const analysis = this.currentRun.performanceAnalysis;
@@ -701,6 +728,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Generate regression analysis
    */
   private async generateRegressionAnalysis(): Promise<void> {
+
     if (!this.currentRun) return;
     
     // Placeholder implementation - would compare with stored baseline
@@ -717,6 +745,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Update baseline data
    */
   private async updateBaselines(): Promise<void> {
+
     console.log('📊 Updating performance baselines...');
     
     // Implementation would store current results as new baseline
@@ -729,6 +758,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Store baseline data for a test suite
    */
   private async storeBaseline(result: TestSuiteResult): Promise<void> {
+
     try {
       await this.databaseService.execute(`
         INSERT OR REPLACE INTO performance_baselines (
@@ -750,6 +780,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Generate test reports
    */
   private async generateReports(): Promise<void> {
+
     console.log('📄 Generating performance test reports...');
     
     for (const format of this.config.reportFormats) {
@@ -766,6 +797,7 @@ export class PerformanceTestRunner extends EventEmitter {
    * Generate a specific report format
    */
   private async generateReport(format: ReportFormat): Promise<GeneratedReport> {
+
     if (!this.currentRun) throw new Error('No current run to report on');
     
     const reportId = `report_${this.currentRun.runId}_${format}`;
@@ -809,8 +841,7 @@ export class PerformanceTestRunner extends EventEmitter {
       format,
       filePath,
       fileSize: stats.size,
-      generatedAt: new Date()
-    };
+      generatedAt: new Date(};
   }
 
   /**
@@ -983,6 +1014,7 @@ ${this.currentRun.suiteResults.map(suite => `
    * Ensure output directory exists
    */
   private async ensureOutputDirectory(): Promise<void> {
+
     try {
       await fs.mkdir(this.config.outputDir, { recursive: true });
     } catch (error) {
@@ -1003,8 +1035,7 @@ ${this.currentRun.suiteResults.map(suite => `
         version: process.env.BUILD_VERSION || '1.0.0',
         commit: process.env.COMMIT_HASH || 'unknown',
         branch: process.env.BRANCH_NAME || 'unknown',
-        buildTime: new Date()
-      },
+        buildTime: new Date(},
       ciInfo: process.env.CI ? {
         provider: process.env.CI_PROVIDER || 'unknown',
         buildId: process.env.BUILD_ID || process.env.CI_BUILD_ID || 'unknown',
@@ -1017,6 +1048,7 @@ ${this.currentRun.suiteResults.map(suite => `
    * Persist test results to storage
    */
   private async persistResults(): Promise<void> {
+
     if (!this.currentRun) return;
     
     try {
@@ -1039,7 +1071,7 @@ ${this.currentRun.suiteResults.map(suite => `
           suiteResults: this.currentRun.suiteResults,
           reports: this.currentRun.reports,
           regressionAnalysis: this.currentRun.regressionAnalysis
-        })
+  }
       ]);
       
       console.log(`💾 Persisted test run results: ${this.currentRun.runId}`);
@@ -1067,6 +1099,7 @@ ${this.currentRun.suiteResults.map(suite => `
    * Cancel current test run
    */
   public async cancel(): Promise<void> {
+
     if (this.isRunning && this.currentRun) {
       console.log('⏹️ Cancelling performance test run...');
       

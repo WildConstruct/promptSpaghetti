@@ -48,6 +48,7 @@ import {
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
+}
 export interface CreateReviewerRequest {
   user_id: string;
   role: ReviewerRole;
@@ -55,7 +56,9 @@ export interface CreateReviewerRequest {
   capacity_limit: number;
   skill_ratings: Record<string, number>;
 }
+}
 
+}
 export interface AssignReviewRequest {
   review_item_id: string;
   review_type: ReviewType;
@@ -68,24 +71,32 @@ export interface AssignReviewRequest {
   assignment_strategy?: AssignmentStrategy;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface ManualAssignRequest {
   reviewer_id: string;
   reason: string;
   due_date?: string;
   priority?: 'low' | 'medium' | 'high' | 'urgent';
 }
+}
 
+}
 export interface ReassignRequest {
   new_reviewer_id: string;
   reason: string;
 }
+}
 
+}
 export interface UpdateAvailabilityRequest {
   availability_status: 'available' | 'busy' | 'away' | 'unavailable';
   capacity_limit?: number;
 }
+}
 
+}
 export interface ReviewerDashboard {
   total_reviewers: number;
   active_reviewers: number;
@@ -96,6 +107,7 @@ export interface ReviewerDashboard {
   average_review_time: number;
   workload_distribution: WorkloadDistribution[];
   recent_assignments: ReviewAssignment[];
+}
 }
 
 @ApiTags('admin/reviewer-assignment')
@@ -116,6 +128,7 @@ export class ReviewerAssignmentController {
   @ApiOperation({ summary: 'Get reviewer assignment dashboard data' })
   @RequirePermissions(['admin:reviewer:read'])
   async getDashboard(): Promise<ReviewerDashboard> {
+
     const [
       workloadDistribution,
       recentAssignments,
@@ -150,6 +163,7 @@ export class ReviewerAssignmentController {
   async getWorkloadDistribution(
     @Query('review_type') reviewType?: ReviewType
   ): Promise<WorkloadDistribution[]> {
+
     return this.reviewerService.getWorkloadDistribution(reviewType);
   }
 
@@ -168,6 +182,7 @@ export class ReviewerAssignmentController {
     @Query('page') page?: string,
     @Query('limit') limit?: string
   ): Promise<{ reviewers: ReviewerProfile[]; total: number; page: number; limit: number }> {
+
     // Implementation would include filtering and pagination
     const workloadDistribution = await this.reviewerService.getWorkloadDistribution();
     
@@ -191,7 +206,7 @@ export class ReviewerAssignmentController {
           escalations_received: 0,
           current_streak: 0,
           last_review_date: new Date()
-        },
+  }
         created_at: new Date(),
         updated_at: new Date()
       })),
@@ -208,6 +223,7 @@ export class ReviewerAssignmentController {
     @Body() request: CreateReviewerRequest,
     @Query('user_id') userId: string
   ): Promise<ReviewerProfile> {
+
     // Validate user exists and has appropriate permissions
     // This would typically integrate with user management service
 
@@ -251,6 +267,7 @@ export class ReviewerAssignmentController {
   @ApiParam({ name: 'id', description: 'Reviewer ID' })
   @RequirePermissions(['admin:reviewer:read'])
   async getReviewer(@Param('id') reviewerId: string): Promise<ReviewerProfile> {
+
     // This would be implemented with proper database query
     throw new NotFoundException(`Reviewer ${reviewerId} not found`);
   }
@@ -264,6 +281,7 @@ export class ReviewerAssignmentController {
     @Body() request: UpdateAvailabilityRequest,
     @Query('user_id') userId: string
   ): Promise<{ success: boolean; message: string }> {
+
     // Implementation would update reviewer availability
     await this.auditService.logEvent({
       userId,
@@ -288,6 +306,7 @@ export class ReviewerAssignmentController {
     @Body() request: AssignReviewRequest,
     @Query('user_id') userId: string
   ): Promise<ReviewAssignment> {
+
     // Validate review item exists
     if (!request.review_item_id || !request.review_type) {
       throw new BadRequestException('review_item_id and review_type are required');
@@ -335,6 +354,7 @@ export class ReviewerAssignmentController {
     @Body() request: ManualAssignRequest,
     @Query('user_id') userId: string
   ): Promise<ReviewAssignment> {
+
     const assignment = await this.reviewerService.assignSpecificReviewer(
       reviewItemId,
       reviewType,
@@ -369,6 +389,7 @@ export class ReviewerAssignmentController {
     @Body() request: ReassignRequest,
     @Query('user_id') userId: string
   ): Promise<ReviewAssignment> {
+
     const assignment = await this.reviewerService.reassignReview(
       assignmentId,
       request.new_reviewer_id,
@@ -409,6 +430,7 @@ export class ReviewerAssignmentController {
     @Query('page') page?: string,
     @Query('limit') limit?: string
   ): Promise<{ assignments: ReviewAssignment[]; total: number; page: number; limit: number }> {
+
     // Implementation would include comprehensive filtering and pagination
     let assignments: ReviewAssignment[] = [];
     
@@ -433,6 +455,7 @@ export class ReviewerAssignmentController {
   @ApiParam({ name: 'id', description: 'Assignment ID' })
   @RequirePermissions(['admin:reviewer:read'])
   async getAssignment(@Param('id') assignmentId: string): Promise<ReviewAssignment> {
+
     // Implementation would fetch assignment details
     throw new NotFoundException(`Assignment ${assignmentId} not found`);
   }
@@ -446,6 +469,7 @@ export class ReviewerAssignmentController {
     @Body() completionData: any,
     @Query('user_id') userId: string
   ): Promise<{ success: boolean; message: string }> {
+
     await this.reviewerService.completeAssignment(assignmentId, userId, completionData);
 
     await this.auditService.logEvent({
@@ -472,6 +496,7 @@ export class ReviewerAssignmentController {
     @Query('start_date') startDate?: string,
     @Query('end_date') endDate?: string
   ): Promise<any> {
+
     // Implementation would generate performance analytics
     return {
       reviewer_id: reviewerId,
@@ -491,6 +516,7 @@ export class ReviewerAssignmentController {
   @ApiQuery({ name: 'period', required: false, description: 'Time period: 7d, 30d, 90d' })
   @RequirePermissions(['admin:reviewer:analytics'])
   async getWorkloadTrends(@Query('period') period = '30d'): Promise<any> {
+
     // Implementation would generate workload trend analytics
     return {
       period,
@@ -512,10 +538,11 @@ export class ReviewerAssignmentController {
     @Body() request: { assignment_ids: string[]; new_reviewer_id: string; reason: string },
     @Query('user_id') userId: string
   ): Promise<{ success: number; failed: number; results: any[] }> {
+
     const results = await Promise.allSettled(
       request.assignment_ids.map(id => 
         this.reviewerService.reassignReview(id, request.new_reviewer_id, request.reason, userId)
-      )
+
     );
 
     await this.auditService.logEvent({
@@ -539,6 +566,7 @@ export class ReviewerAssignmentController {
   // Helper methods
 
   private async getRecentAssignments(limit: number): Promise<ReviewAssignment[]> {
+
     // Implementation would fetch recent assignments
     return [];
   }
@@ -549,6 +577,7 @@ export class ReviewerAssignmentController {
     completion_rate: number;
     average_review_time: number;
   }> {
+
     // Implementation would calculate overall statistics
     return {
       pending_assignments: 0,

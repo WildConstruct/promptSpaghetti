@@ -4,6 +4,7 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuthConfig } from '../types';
 
+}
 export interface RegistrationMetrics {
   dailyRegistrations: number;
   weeklyRegistrations: number;
@@ -14,6 +15,7 @@ export interface RegistrationMetrics {
     step: string;
     count: number;
     percentage: number;
+}
   }>;
   sourceBreakdown: Record<string, {
     visits: number;
@@ -22,6 +24,7 @@ export interface RegistrationMetrics {
   }>;
 }
 
+}
 export interface FormAnalytics {
   fieldInteractionTime: Record<string, number>;
   fieldErrorRate: Record<string, number>;
@@ -29,6 +32,7 @@ export interface FormAnalytics {
     field: string;
     errorRate: number;
     averageTime: number;
+}
   }>;
   stepCompletionRates: Record<number, number>;
 }
@@ -53,6 +57,7 @@ export class AnalyticsService {
       additionalData?: any;
     }
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO registration_analytics (
@@ -83,6 +88,7 @@ export class AnalyticsService {
       timeSpentMs?: number;
     }
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO form_field_analytics (
@@ -111,6 +117,7 @@ export class AnalyticsService {
       durationMs?: number;
     }
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO registration_funnel (
@@ -129,6 +136,7 @@ export class AnalyticsService {
   }
 
   async getRegistrationMetrics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RegistrationMetrics> {
+
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -154,7 +162,7 @@ export class AnalyticsService {
             COUNT(DISTINCT CASE WHEN step = 'completed' THEN session_id END) as completed
           FROM registration_funnel
           WHERE created_at >= NOW() - INTERVAL '${timeframes[timeframe]}'
-        )
+
         SELECT 
           started,
           completed,
@@ -174,7 +182,7 @@ export class AnalyticsService {
             AND step IN ('started', 'completed')
           GROUP BY session_id
           HAVING COUNT(DISTINCT step) = 2
-        )
+
         SELECT AVG(EXTRACT(EPOCH FROM (end_time - start_time))) as avg_seconds
         FROM session_times
       `);
@@ -191,7 +199,7 @@ export class AnalyticsService {
         ),
         total_started AS (
           SELECT count as total FROM step_counts WHERE step = 'started'
-        )
+
         SELECT 
           sc.step,
           sc.count,
@@ -245,6 +253,7 @@ export class AnalyticsService {
   }
 
   async getFormAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<FormAnalytics> {
+
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -274,7 +283,7 @@ export class AnalyticsService {
           FROM form_field_analytics
           WHERE created_at >= NOW() - INTERVAL '${timeframes[timeframe]}'
           GROUP BY field_name
-        )
+
         SELECT 
           field_name,
           CASE WHEN total_interactions > 0 
@@ -296,7 +305,7 @@ export class AnalyticsService {
           FROM registration_funnel
           WHERE created_at >= NOW() - INTERVAL '${timeframes[timeframe]}'
           GROUP BY session_id
-        )
+
         SELECT 
           1 as step_number,
           AVG(reached_step_1::INTEGER) as completion_rate
@@ -432,6 +441,7 @@ export class AnalyticsService {
     status: 'sent' | 'delivered' | 'opened' | 'clicked' | 'bounced' | 'failed',
     metadata?: any
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO email_deliveries (

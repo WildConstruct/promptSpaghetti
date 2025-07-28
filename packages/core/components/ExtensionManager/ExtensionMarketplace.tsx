@@ -6,19 +6,17 @@ import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
 export interface ExtensionMarketplaceProps {
-  extensions: ExtensionManifest[];
+  extensions: ExtensionManifest;,
   selectedExtension: ExtensionManifest | null;
-  onExtensionSelect: (extension: ExtensionManifest) => void;
+  onExtensionSelect: (extension: ExtensionManifest) => void;,
   onInstallExtension: (extension: ExtensionManifest) => void;
-}
-interface MarketplaceCategory {
-  id: string;
+  interface MarketplaceCategory {
+  id: string;,
   name: string;
-  icon: string;
+  icon: string;,
   description: string;
   count: number;
 }
-
 export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
   extensions,
   selectedExtension,
@@ -27,64 +25,61 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const categories: MarketplaceCategory[] = [
+  const categories: MarketplaceCategory = [
+  {
+  id: 'all',
+  name: 'All Extensions',
+  icon: '📦',
+  description: 'Browse all available extensions',
+  count: extensions.length,
+}
     {
-      id: 'all',
-      name: 'All Extensions',
-      icon: '📦',
-      description: 'Browse all available extensions',
-      count: extensions.length,
-    },
+  id: 'featured',
+  name: 'Featured',
+  icon: '⭐',
+  description: 'Editor\'s choice and popular extensions',
+  count: Math.floor(extensions.length * 0.3),
+}
     {
-      id: 'featured',
-      name: 'Featured',
-      icon: '⭐',
-      description: 'Editor\'s choice and popular extensions',
-      count: Math.floor(extensions.length * 0.3),
-    },
+  id: 'node',
+  name: 'Node Extensions',
+  icon: '🔧',
+  description: 'Add new node types and functionality',
+  count: extensions.filter(ext => ext.extension_type === 'node').length,
+}
     {
-      id: 'node',
-      name: 'Node Extensions',
-      icon: '🔧',
-      description: 'Add new node types and functionality',
-      count: extensions.filter(ext => ext.extension_type === 'node').length,
-    },
+  id: 'ui',
+  name: 'UI & Themes',
+  icon: '🎨',
+  description: 'Customize the interface and appearance',
+  count: extensions.filter(ext => ext.extension_type === 'ui').length,
+}
     {
-      id: 'ui',
-      name: 'UI & Themes',
-      icon: '🎨',
-      description: 'Customize the interface and appearance',
-      count: extensions.filter(ext => ext.extension_type === 'ui').length,
-    },
+  id: 'transform',
+  name: 'Data Transforms',
+  icon: '⚡',
+  description: 'Process and transform your data',
+  count: extensions.filter(ext => ext.extension_type === 'transform').length,
+}
     {
-      id: 'transform',
-      name: 'Data Transforms',
-      icon: '⚡',
-      description: 'Process and transform your data',
-      count: extensions.filter(ext => ext.extension_type === 'transform').length,
-    },
-    {
-      id: 'storage',
-      name: 'Storage & Sync',
-      icon: '💾',
-      description: 'Connect to external storage and services',
-      count: extensions.filter(ext => ext.extension_type === 'storage').length,
-    }
-  ];
+  id: 'storage',
+  name: 'Storage & Sync',
+  icon: '💾',
+  description: 'Connect to external storage and services',
+  count: extensions.filter(ext => ext.extension_type === 'storage').length];
   const filteredExtensions = selectedCategory === 'all' ;
-    ? extensions 
-    : selectedCategory === 'featured'
-      ? extensions.slice(0, Math.floor(extensions.length * 0.3))
-      : extensions.filter(ext => ext.extension_type === selectedCategory);
-  const getExtensionIcon = (type: string): string => {
-    switch (type) {
-    case 'node': return '🔧';
-    case 'ui': return '🎨';
-    case 'transform': return '⚡';
-    case 'storage': return '💾';
-    default: return '📦';
-    }
-  };
+  ? extensions
+  : selectedCategory === 'featured',
+  ? extensions.slice(0, Math.floor(extensions.length * 0.3))
+  : extensions.filter(ext => ext.extension_type === selectedCategory);
+  const getExtensionIcon = (type: string): string => {,
+  switch (type) {
+  case 'node': return '🔧';
+  case 'ui': return '🎨';
+  case 'transform': return '⚡';
+  case 'storage': return '💾';
+  default: return '📦';
+};
   const formatDownloads = (downloads: number): string => {
     if (downloads < 1000) return downloads.toString();
     if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;}
@@ -96,7 +91,7 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-        return ();
+        return;
           <div
             key={extension.id}
             className={`extension-card ${isSelected ? 'selected' : ''}`}
@@ -158,7 +153,7 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
         const downloads = Math.floor(Math.random() * 50000);
         const rating = (4 + Math.random()).toFixed(1);
         const isSelected = selectedExtension?.id === extension.id;
-        return ();
+        return;
           <div
             key={extension.id}
             className={`extension-list-item ${isSelected ? 'selected' : ''}`}
@@ -197,15 +192,14 @@ export const ExtensionMarketplace: React.FC<ExtensionMarketplaceProps> = ({)
     </div>
   );
   if (filteredExtensions.length === 0) {
-    return ();
+    return;
       <div className="marketplace-empty">
         <div className="empty-icon">🏪</div>
         <h3>No Extensions Found</h3>
         <p>No extensions available in the selected category.</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="extension-marketplace">
       {/* Featured Banner */}
       {selectedCategory === 'all' && ()

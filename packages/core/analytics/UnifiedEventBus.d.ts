@@ -30,14 +30,14 @@ export declare enum AnalyticsEventType {
     ERROR_EVENT = "error_event",
     WARNING_EVENT = "warning_event",
     INFO_EVENT = "info_event"
-}
+
 export declare enum EventSeverity {
     CRITICAL = "critical",
     ERROR = "error",
     WARNING = "warning",
     INFO = "info",
     DEBUG = "debug"
-}
+
 export declare enum EventCategory {
     EXECUTION = "execution",
     USER = "user",
@@ -46,7 +46,7 @@ export declare enum EventCategory {
     BUSINESS = "business",
     SYSTEM = "system",
     INTEGRATION = "integration"
-}
+
 export declare const BaseEventSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodNativeEnum<typeof AnalyticsEventType>;
@@ -141,6 +141,7 @@ export declare const EventFilterSchema: z.ZodObject<{
     sources?: string[] | undefined;
 }>;
 export type EventFilter = z.infer<typeof EventFilterSchema>;
+
 export interface EventSubscriber {
     id: string;
     name: string;
@@ -151,8 +152,9 @@ export interface EventSubscriber {
     retryConfig?: {
         maxRetries: number;
         backoffMs: number;
+
     };
-}
+
 export interface EventBusConfig {
     maxEventHistory: number;
     enablePersistence: boolean;
@@ -160,7 +162,8 @@ export interface EventBusConfig {
     flushIntervalMs: number;
     deadLetterQueue: boolean;
     metricsEnabled: boolean;
-}
+
+
 export interface EventBusMetrics {
     eventsPublished: number;
     eventsProcessed: number;
@@ -169,7 +172,8 @@ export interface EventBusMetrics {
     averageProcessingTime: number;
     queueDepth: number;
     lastEventTime: number;
-}
+
+
 /**
  * Unified Event Bus Implementation
  *
@@ -257,7 +261,7 @@ export declare class UnifiedEventBus extends EventEmitter {
      * Cleanup and shutdown
      */
     shutdown(): Promise<void>;
-}
+
 /**
  * Event Bus Factory for dependency injection
  */
@@ -266,6 +270,6 @@ export declare class EventBusFactory {
     static getInstance(config?: Partial<EventBusConfig>): UnifiedEventBus;
     static createInstance(config?: Partial<EventBusConfig>): UnifiedEventBus;
     static shutdown(): Promise<void>;
-}
+
 export default UnifiedEventBus;
 //# sourceMappingURL=UnifiedEventBus.d.ts.map

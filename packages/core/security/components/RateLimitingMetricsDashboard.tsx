@@ -24,31 +24,26 @@ interface RateLimitingMetricsDashboardProps {
   className?: string;
   theme?: 'light' | 'dark';
   autoRefresh?: boolean;
-  refreshInterval?: number; // seconds
-}
-interface ChartData {
-  labels: string[];
+  refreshInterval?: number; // seconds,
+  interface ChartData {
+  labels: string;,
   datasets: Array<{,
-    label: string;
-    data: number[];
-    borderColor: string;
-    backgroundColor: string;
-    fill?: boolean;
-  }>;
-}
+  label: string;,
+  data: number;
+  borderColor: string;,
+  backgroundColor: string;
+  fill?: boolean;
+}>;
 interface MetricStat {
-  label: string;
+  label: string;,
   value: number | string;
   unit?: string;
   trend?: 'up' | 'down' | 'stable';
   severity?: 'normal' | 'warning' | 'critical';
-}
-
-// ========================================
-// Dashboard Component
-// ========================================
-
-export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboardProps> = ({)
+  // ========================================
+  // Dashboard Component
+  // ========================================
+  export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboardProps> = ({,)
   metricsService,
   className = '',
   theme = 'light',
@@ -58,7 +53,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   // State management
   const [currentMetrics, setCurrentMetrics] = useState<PerformanceMetrics | null>(null);
   const [visualizationData, setVisualizationData] = useState<MetricsVisualizationData | null>(null);
-  const [activeAlerts, setActiveAlerts] = useState<AlertCondition[]>([]);
+  const [activeAlerts, setActiveAlerts] = useState<AlertCondition>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('1h');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
@@ -77,10 +72,9 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       setVisualizationData(vizData);
       setLastUpdate(new Date());
     } catch (error) {
-      console.error('Error loading metrics data:', error);
-    } finally {
+  console.error('Error loading metrics data:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [metricsService, selectedTimeRange]);
   // Set up auto-refresh
   useEffect(() => {
@@ -88,7 +82,6 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
     if (autoRefresh) {
       const interval = setInterval(loadMetricsData, refreshInterval * 1000);
       return () => clearInterval(interval);
-    }
   }, [loadMetricsData, autoRefresh, refreshInterval]);
   // Listen for real-time updates
   useEffect(() => {
@@ -113,7 +106,6 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       return `${(value / 1000000).toFixed(decimals)}M`;}
     } else if (value >= 1000) {
       return `${(value / 1000).toFixed(decimals)}K`;}
-    }
     return value.toFixed(decimals);
   }, []);
   const formatDuration = useCallback((milliseconds: number): string => {
@@ -123,56 +115,53 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       return `${(milliseconds / 1000).toFixed(1)}s`;}
     } else {
       return `${(milliseconds / 60000).toFixed(1)}m`;}
-    }
   }, []);
-  const getMetricStats = useMemo((): MetricStat[] => {
-    if (!currentMetrics) return [];
-    return [
+  const getMetricStats = useMemo((): MetricStat => {
+  if (!currentMetrics) return [];
+  return [
+  {
+  label: 'Requests/sec',
+  value: formatNumber(currentMetrics.throughput.requestsPerSecond),
+  unit: 'rps',
+  trend: 'stable',
+  severity: currentMetrics.throughput.requestsPerSecond > 1000 ? 'normal' : 'warning',
+}
       {
-        label: 'Requests/sec',
-        value: formatNumber(currentMetrics.throughput.requestsPerSecond),
-        unit: 'rps',
-        trend: 'stable',
-        severity: currentMetrics.throughput.requestsPerSecond > 1000 ? 'normal' : 'warning',
-      },
+  label: 'Avg Response Time',
+  value: formatDuration(currentMetrics.responseTime.average),
+  trend: 'stable',
+  severity: currentMetrics.responseTime.average > 200 ? 'critical' : ,
+  currentMetrics.responseTime.average > 100 ? 'warning' : 'normal',
+}
       {
-        label: 'Avg Response Time',
-        value: formatDuration(currentMetrics.responseTime.average),
-        trend: 'stable',
-        severity: currentMetrics.responseTime.average > 200 ? 'critical' : ,
-                 currentMetrics.responseTime.average > 100 ? 'warning' : 'normal'
-      },
+  label: 'Block Rate',
+  value: currentMetrics.errorRates.blockRate.toFixed(1),
+  unit: '%',
+  trend: 'down',
+  severity: currentMetrics.errorRates.blockRate > 25 ? 'critical' : ,
+  currentMetrics.errorRates.blockRate > 10 ? 'warning' : 'normal',
+}
       {
-        label: 'Block Rate',
-        value: currentMetrics.errorRates.blockRate.toFixed(1),
-        unit: '%',
-        trend: 'down',
-        severity: currentMetrics.errorRates.blockRate > 25 ? 'critical' : ,
-                 currentMetrics.errorRates.blockRate > 10 ? 'warning' : 'normal'
-      },
+  label: 'Error Rate',
+  value: currentMetrics.errorRates.errorRate.toFixed(1),
+  unit: '%',
+  trend: 'stable',
+  severity: currentMetrics.errorRates.errorRate > 10 ? 'critical' : ,
+  currentMetrics.errorRates.errorRate > 5 ? 'warning' : 'normal',
+}
       {
-        label: 'Error Rate',
-        value: currentMetrics.errorRates.errorRate.toFixed(1),
-        unit: '%',
-        trend: 'stable',
-        severity: currentMetrics.errorRates.errorRate > 10 ? 'critical' : ,
-                 currentMetrics.errorRates.errorRate > 5 ? 'warning' : 'normal'
-      },
+  label: 'Memory Usage',
+  value: formatNumber(currentMetrics.resourceUtilization.memoryUsage),
+  unit: 'MB',
+  trend: 'up',
+  severity: currentMetrics.resourceUtilization.memoryUsage > 1000 ? 'warning' : 'normal',
+}
       {
-        label: 'Memory Usage',
-        value: formatNumber(currentMetrics.resourceUtilization.memoryUsage),
-        unit: 'MB',
-        trend: 'up',
-        severity: currentMetrics.resourceUtilization.memoryUsage > 1000 ? 'warning' : 'normal',
-      },
-      {
-        label: 'Active Connections',
-        value: formatNumber(currentMetrics.resourceUtilization.activeConnections),
-        trend: 'stable',
-        severity: 'normal',
-      }
-    ];
-  }, [currentMetrics, formatNumber, formatDuration]);
+  label: 'Active Connections',
+  value: formatNumber(currentMetrics.resourceUtilization.activeConnections),
+  trend: 'stable',
+  severity: 'normal'];
+}, [currentMetrics, formatNumber, formatDuration]);
   const getTimeSeriesChartData = useMemo((): ChartData | null => {
     if (!visualizationData) return null;
     const { timeSeriesData } = visualizationData;
@@ -182,33 +171,31 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
       ),
       datasets: [,
         {
-          label: 'Response Time (ms)',
-          data: timeSeriesData.responseTime,
-          borderColor: theme === 'dark' ? '#60A5FA' : '#2563EB',
-          backgroundColor: theme === 'dark' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(37, 99, 235, 0.1)',
-          fill: true,
-        },
+  label: 'Response Time (ms)',
+  data: timeSeriesData.responseTime,
+  borderColor: theme === 'dark' ? '#60A5FA' : '#2563EB',
+  backgroundColor: theme === 'dark' ? 'rgba(96, 165, 250, 0.1)' : 'rgba(37, 99, 235, 0.1)',
+  fill: true,
+}
         {
-          label: 'Requests/sec',
-          data: timeSeriesData.throughput,
-          borderColor: theme === 'dark' ? '#34D399' : '#059669',
-          backgroundColor: theme === 'dark' ? 'rgba(52, 211, 153, 0.1)' : 'rgba(5, 150, 105, 0.1)',
-          fill: false,
-        }
-      ]
-    };
+  label: 'Requests/sec',
+  data: timeSeriesData.throughput,
+  borderColor: theme === 'dark' ? '#34D399' : '#059669',
+  backgroundColor: theme === 'dark' ? 'rgba(52, 211, 153, 0.1)' : 'rgba(5, 150, 105, 0.1)',
+  fill: false];
+  };
   }, [visualizationData, theme]);
     return {
-      labels: Object.keys(distribution),
-      datasets: [{,
-        data: Object.values(distribution),
-        backgroundColor: [,
-          '#10B981', // LOW - Green
-          '#F59E0B', // MEDIUM - Yellow
-          '#EF4444', // HIGH - Red
-          '#DC2626'  // CRITICAL - Dark Red
-        ]
-      }]
+  labels: Object.keys(distribution),
+  datasets: [{,
+  data: Object.values(distribution),
+  backgroundColor: [,
+  '#10B981', // LOW - Green
+  '#F59E0B', // MEDIUM - Yellow
+  '#EF4444', // HIGH - Red
+  '#DC2626'  // CRITICAL - Dark Red
+  ]
+}]
     };
   }, [visualizationData]);
   // ========================================
@@ -222,10 +209,10 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
     setActiveAlerts(prev => prev.filter(alert => alert.alertId !== alertId));
   };
   const handleExportData = (format: 'json' | 'csv') => {
-    const exportData = metricsService.exportMetrics(format);
-    const blob = new Blob([exportData], { )
-      type: format === 'json' ? 'application/json' : 'text/csv' ,
-    });
+  const exportData = metricsService.exportMetrics(format);
+  const blob = new Blob([exportData], { )
+  type: format === 'json' ? 'application/json' : 'text/csv',
+});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -254,10 +241,10 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
           </p>
           <div className="flex items-baseline space-x-1">
             <p className={`text-2xl font-semibold ${
-              stat.severity === 'critical' ? 'text-red-600 dark:text-red-400' :
-              stat.severity === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :
-              'text-gray-900 dark:text-white'
-            }`}>
+  stat.severity === 'critical' ? 'text-red-600 dark:text-red-400' :,
+  stat.severity === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :,
+  'text-gray-900 dark:text-white',
+}`}>
               {stat.value}
             </p>
             {stat.unit && ()
@@ -313,8 +300,8 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
                     <p className="font-medium text-gray-900 dark:text-white">
                       {alert.condition}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      Current: {alert.currentValue.toFixed(2)} | Threshold: {alert.threshold}
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">,
+  Current: {alert.currentValue.toFixed(2)} | Threshold: {alert.threshold}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                       {alert.timestamp.toLocaleString()}
@@ -336,7 +323,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   );
   const renderTimeSeriesChart = () => {
     if (!getTimeSeriesChartData) return null;
-    return ();
+    return;
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -360,7 +347,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   const renderHeatmap = () => {
     if (!visualizationData) return null;
     const { heatmapData } = visualizationData;
-    return ();
+    return;
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -423,7 +410,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
   // Main Render
   // ========================================
   if (isLoading && !currentMetrics) {
-    return ();
+    return;
       <div className={`p-8 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -433,8 +420,7 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -475,10 +461,10 @@ export const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboard
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600 dark:text-gray-400">Status</span>
                   <span className={`text-sm font-medium ${
-                    activeAlerts.length === 0 ? 'text-green-600 dark:text-green-400' :
-                    activeAlerts.length < 3 ? 'text-yellow-600 dark:text-yellow-400' :
-                    'text-red-600 dark:text-red-400'
-                  }`}>
+  activeAlerts.length === 0 ? 'text-green-600 dark:text-green-400' :,
+  activeAlerts.length < 3 ? 'text-yellow-600 dark:text-yellow-400' :,
+  'text-red-600 dark:text-red-400',
+}`}>
                     {activeAlerts.length === 0 ? 'Healthy' :
                      activeAlerts.length < 3 ? 'Warning' : 'Critical'}
                   </span>

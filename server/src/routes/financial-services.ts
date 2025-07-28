@@ -190,7 +190,7 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
                       daysOverdue: { type: 'number' }
                     }
                   }
-                },
+  }
                 totalCount: { type: 'number' }
               }
             }
@@ -489,9 +489,9 @@ export default async function financialServicesRoutes(fastify: FastifyInstance) 
         type: 'object',
         properties: {
           reportId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['reportId']
-      },
+  }
       response: {
         200: {
           type: 'object',

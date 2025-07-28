@@ -13,15 +13,16 @@ import {
 } from './TargetingUIComponents';
 
 // Hook for managing targeting conditions
-export const useTargetingConditions = (initialConditions: TargetingCondition[] = []) => {
-  const [conditions, setConditions] = useState<TargetingCondition[]>(initialConditions);
+export const useTargetingConditions = (initialConditions: TargetingCondition = []) => {
+  const [conditions, setConditions] = useState<TargetingCondition>(initialConditions);
   const [isDirty, setIsDirty] = useState(false);
   const addCondition = useCallback((condition: Omit<TargetingCondition, 'id'>) => {
     const newCondition: TargetingCondition = {
       ...condition,
-      id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
-      logicalOperator: conditions.length > 0 ? 'AND' : undefined,
-    };
+      id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
+},
+  logicalOperator: conditions.length > 0 ? 'AND' : undefined;
+  };
     setConditions(prev => [...prev, newCondition]);
     setIsDirty(true);
   }, [conditions.length]);
@@ -33,18 +34,17 @@ export const useTargetingConditions = (initialConditions: TargetingCondition[] =
   }, []);
   const removeCondition = useCallback((id: string) => {
     setConditions(prev => {)
-      const filtered = prev.filter(c => c.id !== id);
+  const filtered = prev.filter(c => c.id !== id);
       // Remove logical operator from first condition if needed
       if (filtered.length > 0 && filtered[0].logicalOperator) {
         filtered[0] = { ...filtered[0], logicalOperator: undefined };
-      }
       return filtered;
     });
     setIsDirty(true);
   }, []);
   const reorderConditions = useCallback((fromIndex: number, toIndex: number) => {
     setConditions(prev => {)
-      const reordered = [...prev];
+  const reordered = [...prev];
       const [removed] = reordered.splice(fromIndex, 1);
       reordered.splice(toIndex, 0, removed);
       return reordered;
@@ -64,11 +64,10 @@ export const useTargetingConditions = (initialConditions: TargetingCondition[] =
   [conditions]
   );
   const conditionsByType = useMemo(() => {
-    const grouped: Record<string, TargetingCondition[]> = {};
+    const grouped: Record<string, TargetingCondition> = {};
     conditions.forEach(condition => {)
-      if (!grouped[condition.type]) {
+  if (!grouped[condition.type]) {
         grouped[condition.type] = [];
-      }
       grouped[condition.type].push(condition);
     });
     return grouped;
@@ -90,7 +89,7 @@ export const useTargetingConditions = (initialConditions: TargetingCondition[] =
 
 // Hook for managing user segments
 export const useUserSegments = () => {
-  const [segments, setSegments] = useState<UserSegment[]>([]);
+  const [segments, setSegments] = useState<UserSegment>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fetchSegments = useCallback(async () => {
@@ -101,14 +100,12 @@ export const useUserSegments = () => {
       const response = await fetch('/api/user-segments');
       if (!response.ok) {
         throw new Error('Failed to fetch segments');
-      }
       const data = await response.json();
       setSegments(data.segments || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch segments');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch segments');
+} finally {
       setLoading(false);
-    }
   }, []);
   const createSegment = useCallback(async (segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastUpdated'>) => {
     setLoading(true);
@@ -116,23 +113,21 @@ export const useUserSegments = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch('/api/user-segments', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(segment),
-      });
+        body: JSON.stringify(segment);
+  });
       if (!response.ok) {
         throw new Error('Failed to create segment');
-      }
       const newSegment = await response.json();
       setSegments(prev => [...prev, newSegment]);
       return newSegment;
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to create segment';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to create segment';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const updateSegment = useCallback(async (id: string, updates: Partial<UserSegment>) => {
     setLoading(true);
@@ -140,25 +135,24 @@ export const useUserSegments = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/user-segments/${id}`, {)}
-        method: 'PATCH',
+  },
+  method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+        body: JSON.stringify(updates);
+  });
       if (!response.ok) {
         throw new Error('Failed to update segment');
-      }
       const updatedSegment = await response.json();
       setSegments(prev => prev.map(segment =>)
         segment.id === id ? { ...segment, ...updatedSegment } : segment
       ));
       return updatedSegment;
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to update segment';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to update segment';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const deleteSegment = useCallback(async (id: string) => {
     setLoading(true);
@@ -166,30 +160,29 @@ export const useUserSegments = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/user-segments/${id}`, {)}
-        method: 'DELETE',
-      });
+  },
+  method: 'DELETE';
+  });
       if (!response.ok) {
         throw new Error('Failed to delete segment');
-      }
       setSegments(prev => prev.filter(segment => segment.id !== id));
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to delete segment';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to delete segment';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const duplicateSegment = useCallback(async (id: string) => {
     const originalSegment = segments.find(s => s.id === id);
     if (!originalSegment) {
       throw new Error('Segment not found');
-    }
     return createSegment({)
-      ...originalSegment,
-      name: `${originalSegment.name} (Copy)`,}
-      isActive: false,
-    });
+  ...originalSegment,
+      name: `${originalSegment.name} (Copy)`}
+},
+  isActive: false;
+  });
   }, [segments, createSegment]);
   // Load segments on mount
   useEffect(() => {
@@ -200,12 +193,11 @@ export const useUserSegments = () => {
   [segments]
   );
   const segmentsByTag = useMemo(() => {
-    const grouped: Record<string, UserSegment[]> = {};
+    const grouped: Record<string, UserSegment> = {};
     segments.forEach(segment => {)
-      segment.tags.forEach(tag => {)
-        if (!grouped[tag]) {
+  segment.tags.forEach(tag => {)
+  if (!grouped[tag]) {
           grouped[tag] = [];
-        }
         grouped[tag].push(segment);
       });
     });
@@ -230,33 +222,30 @@ export const useTargetingPreview = () => {
   const [preview, setPreview] = useState<TargetingPreview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const generatePreview = useCallback(async (conditions: TargetingCondition[]) => {
+  const generatePreview = useCallback(async (conditions: TargetingCondition) => {
     if (conditions.length === 0) {
       setPreview(null);
       return;
-    }
     setLoading(true);
     setError(null);
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch('/api/targeting/preview', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ conditions })
       });
       if (!response.ok) {
         throw new Error('Failed to generate preview');
-      }
       const previewData = await response.json();
       setPreview(previewData);
       return previewData;
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to generate preview';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to generate preview';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const clearPreview = useCallback(() => {
     setPreview(null);
@@ -273,7 +262,7 @@ export const useTargetingPreview = () => {
 
 // Hook for audience management
 export const useAudienceManagement = () => {
-  const [audiences, setAudiences] = useState<TargetingAudience[]>([]);
+  const [audiences, setAudiences] = useState<TargetingAudience>([]);
   const [selectedAudience, setSelectedAudience] = useState<TargetingAudience | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -285,14 +274,12 @@ export const useAudienceManagement = () => {
       const response = await fetch('/api/targeting/audiences');
       if (!response.ok) {
         throw new Error('Failed to fetch audiences');
-      }
       const data = await response.json();
       setAudiences(data.audiences || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch audiences');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch audiences');
+} finally {
       setLoading(false);
-    }
   }, []);
   const createAudience = useCallback(async (audience: Omit<TargetingAudience, 'id'>) => {
     setLoading(true);
@@ -300,23 +287,21 @@ export const useAudienceManagement = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch('/api/targeting/audiences', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(audience),
-      });
+        body: JSON.stringify(audience);
+  });
       if (!response.ok) {
         throw new Error('Failed to create audience');
-      }
       const newAudience = await response.json();
       setAudiences(prev => [...prev, newAudience]);
       return newAudience;
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to create audience';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to create audience';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const updateAudience = useCallback(async (id: string, updates: Partial<TargetingAudience>) => {
     setLoading(true);
@@ -324,28 +309,26 @@ export const useAudienceManagement = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/targeting/audiences/${id}`, {)}
-        method: 'PATCH',
+  },
+  method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      });
+        body: JSON.stringify(updates);
+  });
       if (!response.ok) {
         throw new Error('Failed to update audience');
-      }
       const updatedAudience = await response.json();
       setAudiences(prev => prev.map(audience =>)
         audience.id === id ? { ...audience, ...updatedAudience } : audience
       ));
       if (selectedAudience?.id === id) {
         setSelectedAudience({ ...selectedAudience, ...updatedAudience });
-      }
       return updatedAudience;
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to update audience';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to update audience';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, [selectedAudience]);
   const deleteAudience = useCallback(async (id: string) => {
     setLoading(true);
@@ -353,22 +336,20 @@ export const useAudienceManagement = () => {
     try {
       // Mock API call - replace with actual implementation
       const response = await fetch(`/api/targeting/audiences/${id}`, {)}
-        method: 'DELETE',
-      });
+  },
+  method: 'DELETE';
+  });
       if (!response.ok) {
         throw new Error('Failed to delete audience');
-      }
       setAudiences(prev => prev.filter(audience => audience.id !== id));
       if (selectedAudience?.id === id) {
         setSelectedAudience(null);
-      }
     } catch (err) {
-      const error = err instanceof Error ? err.message : 'Failed to delete audience';
-      setError(error);
-      throw new Error(error);
-    } finally {
+  const error = err instanceof Error ? err.message : 'Failed to delete audience';
+  setError(error);
+  throw new Error(error);
+} finally {
       setLoading(false);
-    }
   }, [selectedAudience]);
   const selectAudience = useCallback((audience: TargetingAudience) => {
     setSelectedAudience(audience);
@@ -397,55 +378,52 @@ export const useAudienceManagement = () => {
 
 // Hook for geographic targeting
 export const useGeographicTargeting = () => {
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string>([]);
+  const [selectedRegions, setSelectedRegions] = useState<string>([]);
+  const [selectedCities, setSelectedCities] = useState<string>([]);
   const [excludeMode, setExcludeMode] = useState(false);
   const [availableLocations, _____setAvailableLocations] = useState({)
-    countries: [],
-    regions: [],
-    cities: [],
-  });
+  countries: [],
+  regions: [],
+  cities: [],
+});
   const toggleCountry = useCallback((countryCode: string) => {
-    setSelectedCountries(prev => )
-      prev.includes(countryCode)
-        ? prev.filter(c => c !== countryCode)
-        : [...prev, countryCode]
-    );
-  }, []);
+  setSelectedCountries(prev => )
+  prev.includes(countryCode)
+  ? prev.filter(c => c !== countryCode)
+  : [...prev, countryCode]);
+}, []);
   const toggleRegion = useCallback((regionCode: string) => {
-    setSelectedRegions(prev => )
-      prev.includes(regionCode)
-        ? prev.filter(r => r !== regionCode)
-        : [...prev, regionCode]
-    );
-  }, []);
+  setSelectedRegions(prev => )
+  prev.includes(regionCode)
+  ? prev.filter(r => r !== regionCode)
+  : [...prev, regionCode]);
+}, []);
   const toggleCity = useCallback((cityCode: string) => {
-    setSelectedCities(prev => )
-      prev.includes(cityCode)
-        ? prev.filter(c => c !== cityCode)
-        : [...prev, cityCode]
-    );
-  }, []);
+  setSelectedCities(prev => )
+  prev.includes(cityCode)
+  ? prev.filter(c => c !== cityCode)
+  : [...prev, cityCode]);
+}, []);
   const clearSelection = useCallback(() => {
     setSelectedCountries([]);
     setSelectedRegions([]);
     setSelectedCities([]);
   }, []);
   const getTargetingConfig = useCallback(() => {
-    return {
-      countries: selectedCountries,
-      regions: selectedRegions,
-      cities: selectedCities,
-      excludeMode
-    };
+  return {
+  countries: selectedCountries,
+  regions: selectedRegions,
+  cities: selectedCities,
+  excludeMode
+};
   }, [selectedCountries, selectedRegions, selectedCities, excludeMode]);
   const loadFromConfig = useCallback((config: {)
-    countries?: string[];
-    regions?: string[];
-    cities?: string[];
-    excludeMode?: boolean;
-  }) => {
+  countries?: string;
+  regions?: string;
+  cities?: string;
+  excludeMode?: boolean;
+}) => {
     setSelectedCountries(config.countries || []);
     setSelectedRegions(config.regions || []);
     setSelectedCities(config.cities || []);
@@ -484,14 +462,12 @@ export const useTargetingAnalytics = () => {
       const response = await fetch(`/api/targeting/analytics?range=${range}`);}
       if (!response.ok) {
         throw new Error('Failed to fetch analytics');
-      }
       const data = await response.json();
       setAnalytics(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch analytics');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch analytics');
+} finally {
       setLoading(false);
-    }
   }, []);
   const changeTimeRange = useCallback((range: typeof timeRange) => {
     setTimeRange(range);

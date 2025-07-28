@@ -44,6 +44,7 @@ export type ActionType =
 // Policy Structure Interfaces
 // =============================================================================
 
+}
 export interface PolicyMetadata {
   id: string;
   name: string;
@@ -61,7 +62,9 @@ export interface PolicyMetadata {
   category?: string;
   subcategory?: string;
 }
+}
 
+}
 export interface PolicyScope {
   scope_type: PolicyScope;
   scope_criteria: {
@@ -72,6 +75,7 @@ export interface PolicyScope {
     trust_score_ranges?: {
       min?: number;
       max?: number;
+}
     };
     custom_filters?: Array<{
       field: string;
@@ -85,6 +89,7 @@ export interface PolicyScope {
   };
 }
 
+}
 export interface PolicyCondition {
   id: string;
   name: string;
@@ -98,7 +103,9 @@ export interface PolicyCondition {
   logical_operator?: 'AND' | 'OR';
   weight?: number;
 }
+}
 
+}
 export interface PolicyAction {
   id: string;
   type: ActionType;
@@ -114,6 +121,7 @@ export interface PolicyAction {
     max_attempts: number;
     retry_delay: number;
     backoff_factor: number;
+}
   };
   notifications?: {
     admin: boolean;
@@ -123,6 +131,7 @@ export interface PolicyAction {
   };
 }
 
+}
 export interface PolicyRule {
   id: string;
   name: string;
@@ -137,6 +146,7 @@ export interface PolicyRule {
     max_triggers: number;
     time_window: number; // seconds
     cooldown_period: number; // seconds
+}
   };
   audit_settings: {
     log_evaluations: boolean;
@@ -145,12 +155,14 @@ export interface PolicyRule {
   };
 }
 
+}
 export interface PolicyConfiguration {
   global_settings: {
     default_severity: PolicySeverity;
     auto_execution_enabled: boolean;
     audit_enabled: boolean;
     notification_enabled: boolean;
+}
   };
   thresholds: Record<string, {
     warning: number;
@@ -174,6 +186,7 @@ export interface PolicyConfiguration {
 // Complete Policy Definition
 // =============================================================================
 
+}
 export interface Policy {
   metadata: PolicyMetadata;
   scope: PolicyScope;
@@ -183,6 +196,7 @@ export interface Policy {
     required_policies?: string[];
     conflicting_policies?: string[];
     prerequisite_conditions?: PolicyCondition[];
+}
   };
   compliance?: {
     regulatory_framework: string[];
@@ -201,6 +215,7 @@ export interface Policy {
   };
 }
 
+}
 export interface PolicyTestCase {
   id: string;
   name: string;
@@ -209,6 +224,7 @@ export interface PolicyTestCase {
   expected_conditions: Array<{
     condition_id: string;
     expected_result: boolean;
+}
   }>;
   expected_actions: Array<{
     action_id: string;
@@ -221,6 +237,7 @@ export interface PolicyTestCase {
 // Policy Evaluation Context
 // =============================================================================
 
+}
 export interface PolicyEvaluationContext {
   timestamp: Date;
   entity_type: 'user' | 'template' | 'transaction' | 'system';
@@ -232,6 +249,7 @@ export interface PolicyEvaluationContext {
     session_id?: string;
     ip_address?: string;
     user_agent?: string;
+}
   };
   environment: {
     region: string;
@@ -242,6 +260,7 @@ export interface PolicyEvaluationContext {
   parent_evaluation_id?: string;
 }
 
+}
 export interface PolicyEvaluationResult {
   evaluation_id: string;
   policy_id: string;
@@ -253,6 +272,7 @@ export interface PolicyEvaluationResult {
     met: boolean;
     value: Error;
     evaluation_time: number;
+}
   }>;
   actions_triggered: Array<{
     action_id: string;
@@ -272,6 +292,7 @@ export interface PolicyEvaluationResult {
 // Policy Template System
 // =============================================================================
 
+}
 export interface PolicyTemplate {
   template_id: string;
   name: string;
@@ -291,6 +312,7 @@ export interface PolicyTemplate {
       max?: number;
       pattern?: string;
       options?: unknown[];
+}
     };
   }>;
   examples: Array<{
@@ -310,6 +332,7 @@ export interface PolicyTemplate {
 // Policy Management Interfaces
 // =============================================================================
 
+}
 export interface PolicyVersion {
   version_id: string;
   policy_id: string;
@@ -321,12 +344,14 @@ export interface PolicyVersion {
     old_value: Error;
     new_value: Error;
     change_type: 'create' | 'update' | 'delete';
+}
   }>;
   change_summary: string;
   rollback_available: boolean;
   deployment_status: 'draft' | 'staged' | 'deployed' | 'rolled_back';
 }
 
+}
 export interface PolicyDeployment {
   deployment_id: string;
   policy_id: string;
@@ -344,6 +369,7 @@ export interface PolicyDeployment {
       percentage: number;
       duration: number;
       success_criteria: PolicyCondition[];
+}
     }>;
   };
   health_checks: Array<{
@@ -360,6 +386,7 @@ export interface PolicyDeployment {
   };
 }
 
+}
 export interface PolicyAuditLog {
   audit_id: string;
   policy_id: string;
@@ -369,6 +396,7 @@ export interface PolicyAuditLog {
     type: 'user' | 'system' | 'api';
     id: string;
     name?: string;
+}
   };
   details: {
     event_data: Record<string, unknown>;
@@ -392,11 +420,13 @@ export interface PolicyAuditLog {
 // Policy Analytics and Reporting
 // =============================================================================
 
+}
 export interface PolicyMetrics {
   policy_id: string;
   time_period: {
     start_date: Date;
     end_date: Date;
+}
   };
   evaluation_metrics: {
     total_evaluations: number;
@@ -431,6 +461,7 @@ export interface PolicyMetrics {
   };
 }
 
+}
 export interface PolicyRecommendation {
   recommendation_id: string;
   policy_id: string;
@@ -444,6 +475,7 @@ export interface PolicyRecommendation {
     current_value: Error;
     suggested_value: Error;
     impact: string;
+}
   }>;
   expected_benefits: string[];
   implementation_effort: 'low' | 'medium' | 'high';
@@ -469,6 +501,7 @@ export class PolicyDataService {
 
   // Policy CRUD Operations
   async createPolicy(policy: Policy): Promise<string> {
+
     const client = await this.db.getClient();
     try {
       await client.query('BEGIN');
@@ -507,7 +540,7 @@ export class PolicyDataService {
           dependencies,
           compliance,
           testing
-        )
+
         VALUES ($1, $2, $3, $4, $5, $6, $7)
       `, [
         policyId,
@@ -531,6 +564,7 @@ export class PolicyDataService {
   }
 
   async getPolicy(policyId: string): Promise<Policy | null> {
+
     const result = await this.db.query(`
       SELECT p.*, pd.scope_data, pd.rules_data, pd.configuration_data, 
              pd.dependencies, pd.compliance, pd.testing
@@ -548,6 +582,7 @@ export class PolicyDataService {
   }
 
   async updatePolicy(policyId: string, updates: Partial<Policy>, updatedBy: string): Promise<void> {
+
     const client = await this.db.getClient();
     try {
       await client.query('BEGIN');
@@ -609,6 +644,7 @@ export class PolicyDataService {
   }
 
   async deletePolicy(policyId: string): Promise<void> {
+
     await this.db.query('DELETE FROM policies WHERE id = $1', [policyId]);
   }
 
@@ -619,6 +655,7 @@ export class PolicyDataService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ policies: Policy[]; total: number }> {
+
     let whereClause = '';
     const params: unknown[] = [];
     const conditions: string[] = [];
@@ -661,6 +698,7 @@ export class PolicyDataService {
 
   // Policy Evaluation
   async evaluatePolicy(policyId: string, context: PolicyEvaluationContext): Promise<PolicyEvaluationResult> {
+
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       throw new Error(`Policy not found: ${policyId}`);
@@ -715,6 +753,7 @@ export class PolicyDataService {
 
   // Analytics and Metrics
   async getPolicyMetrics(policyId: string, timeRange: { start: Date; end: Date }): Promise<PolicyMetrics> {
+
     const result = await this.db.query(`
       SELECT 
         COUNT(*) as total_evaluations,
@@ -738,14 +777,14 @@ export class PolicyDataService {
         average_execution_time: parseFloat(row.avg_execution_time) || 0,
         max_execution_time: parseFloat(row.max_execution_time) || 0,
         evaluations_per_hour: 0 // Calculate based on time range
-      },
+  }
       action_metrics: {
         total_actions: 0,
         successful_actions: 0,
         failed_actions: 0,
         actions_by_type: {} as Record<ActionType, number>,
         false_positive_rate: 0
-      },
+  }
       performance_metrics: {
         throughput: 0,
         latency_p50: 0,
@@ -753,7 +792,7 @@ export class PolicyDataService {
         latency_p99: 0,
         memory_usage: 0,
         error_rate: 0
-      },
+  }
       business_impact: {
         entities_protected: 0,
         violations_prevented: 0,
@@ -781,7 +820,7 @@ export class PolicyDataService {
         tags: JSON.parse(row.tags || '[]'),
         category: row.category,
         subcategory: row.subcategory
-      },
+  }
       scope: JSON.parse(row.scope_data || '{}'),
       rules: JSON.parse(row.rules_data || '[]'),
       configuration: JSON.parse(row.configuration_data || '{}'),
@@ -887,12 +926,14 @@ export class PolicyDataService {
   }
 
   private async executeAction(action: PolicyAction, context: PolicyEvaluationContext): Promise<unknown> {
+
     // Placeholder for action execution
     console.log(`Executing action: ${action.type}`, { action, context });
     return { success: true, timestamp: new Date() };
   }
 
   private async logPolicyEvaluation(result: PolicyEvaluationResult): Promise<void> {
+
     await this.db.query(`
       INSERT INTO policy_evaluations 
       (
@@ -905,7 +946,7 @@ export class PolicyDataService {
        execution_time,
        conditions_met,
        actions_triggered
-     )
+
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     `, [
       result.evaluation_id,
@@ -979,7 +1020,7 @@ export class PolicyBuilder {
         updated_at: new Date(),
         effective_date: new Date(),
         tags: ['enforcement', 'trust-score']
-      })
+  }
       .addRule({
         id: 'trust-threshold-rule',
         name: 'Trust Score Threshold',

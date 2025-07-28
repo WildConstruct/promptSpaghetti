@@ -11,6 +11,7 @@ import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 import { randomUUID } from 'crypto';
 import { createHash } from 'crypto';
 
+}
 export interface FinancialDataRecord {
   id: string;
   externalId: string;
@@ -56,6 +57,7 @@ export interface FinancialDataRecord {
   
   updatedAt: Date;
 }
+}
 
 export enum FinancialDataType {
   TRANSACTION = 'transaction',
@@ -68,6 +70,7 @@ export enum FinancialDataType {
   LOAN = 'loan'
 }
 
+}
 export interface DeletionWorkflow {
   id: string;
   workflowName: string;
@@ -88,6 +91,7 @@ export interface DeletionWorkflow {
   updatedAt: Date;
   createdBy: string;
 }
+}
 
 export enum DeletionTriggerType {
   SCHEDULE = 'schedule',
@@ -96,6 +100,7 @@ export enum DeletionTriggerType {
   LEGAL_REQUEST = 'legal_request'
 }
 
+}
 export interface VerificationStep {
   stepId: string;
   name: string;
@@ -103,7 +108,9 @@ export interface VerificationStep {
   config: Record<string, unknown>;
   required: boolean;
 }
+}
 
+}
 export interface SafetyCheck {
   checkId: string;
   name: string;
@@ -111,7 +118,9 @@ export interface SafetyCheck {
   config: Record<string, unknown>;
   blocking: boolean; // If true, deletion is blocked on failure
 }
+}
 
+}
 export interface DeletionExecution {
   id: string;
   workflowId: string;
@@ -135,6 +144,7 @@ export interface DeletionExecution {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 export enum DeletionExecutionStatus {
   PENDING = 'pending',
@@ -144,6 +154,7 @@ export enum DeletionExecutionStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 export interface ComplianceReport {
   id: string;
   reportType: string;
@@ -166,6 +177,7 @@ export interface ComplianceReport {
   updatedAt: Date;
   createdBy: string;
 }
+}
 
 /**
  * Financial Data Lifecycle Service
@@ -186,6 +198,7 @@ export class FinancialDataLifecycleService {
   async registerFinancialData(
     data: Omit<FinancialDataRecord, 'id' | 'createdAt' | 'updatedAt' | 'lastAccessedAt' | 'currentStage' | 'complianceTags' | 'auditMetadata'>
   ): Promise<FinancialDataRecord> {
+
     const id = randomUUID();
     const now = new Date();
     
@@ -249,7 +262,7 @@ export class FinancialDataLifecycleService {
         externalId: record.externalId,
         retentionPeriodYears: record.retentionPeriodYears,
         jurisdiction: record.jurisdiction
-      },
+  }
       severity: 'info'
     });
 
@@ -262,6 +275,7 @@ export class FinancialDataLifecycleService {
   async createDeletionWorkflow(
     workflow: Omit<DeletionWorkflow, 'id' | 'createdAt' | 'updatedAt' | 'totalExecutions' | 'successfulDeletions' | 'failedDeletions'>
   ): Promise<DeletionWorkflow> {
+
     const id = randomUUID();
     const now = new Date();
     
@@ -301,7 +315,7 @@ export class FinancialDataLifecycleService {
         triggerType: newWorkflow.triggerType,
         batchSize: newWorkflow.batchSize,
         requireApproval: newWorkflow.requireApproval
-      },
+  }
       severity: 'info'
     });
 
@@ -325,6 +339,7 @@ export class FinancialDataLifecycleService {
     recordsFailed: number;
     executions: DeletionExecution[];
   }> {
+
     // Get workflow configuration
     const workflow = await this.getDeletionWorkflow(workflowId);
     if (!workflow || !workflow.isActive) {
@@ -373,7 +388,7 @@ export class FinancialDataLifecycleService {
         recordsDeleted: deletedCount,
         recordsFailed: failedCount,
         workflowName: workflow.workflowName
-      },
+  }
       severity: 'info'
     });
 
@@ -393,6 +408,7 @@ export class FinancialDataLifecycleService {
     selectionCriteria?: Record<string, unknown>,
     limit?: number
   ): Promise<FinancialDataRecord[]> {
+
     // Use the database view for optimized queries
     let query = `
       SELECT * FROM financial_records_ready_for_deletion
@@ -462,6 +478,7 @@ export class FinancialDataLifecycleService {
     executedBy: string,
     requireApproval?: boolean
   ): Promise<DeletionExecution> {
+
     const executionId = randomUUID();
     const now = new Date();
     
@@ -481,7 +498,7 @@ export class FinancialDataLifecycleService {
         workflowName: workflow.workflowName,
         recordDataType: record.dataType,
         executedBy
-      },
+  }
       createdAt: now,
       updatedAt: now
     };
@@ -662,6 +679,7 @@ export class FinancialDataLifecycleService {
    * Perform the actual deletion of a record
    */
   private async performDeletion(record: FinancialDataRecord, execution: DeletionExecution): Promise<void> {
+
     const now = new Date();
     
     // Update the record to mark it as deleted
@@ -703,7 +721,7 @@ export class FinancialDataLifecycleService {
         deletionWorkflow: execution.workflowId,
         batchId: execution.executionBatchId,
         verificationHash: execution.verificationHash
-      },
+  }
       severity: 'warn'
     });
   }
@@ -712,6 +730,7 @@ export class FinancialDataLifecycleService {
    * Save deletion execution record to database
    */
   private async saveDeletionExecution(execution: DeletionExecution): Promise<void> {
+
     await this.db.query(`
       INSERT OR REPLACE INTO financial_deletion_executions (
         id, workflow_id, execution_batch_id, record_id, external_record_id,
@@ -737,6 +756,7 @@ export class FinancialDataLifecycleService {
    * Get deletion workflow by ID
    */
   private async getDeletionWorkflow(workflowId: string): Promise<DeletionWorkflow | null> {
+
     const rows = await this.db.query(`
       SELECT * FROM financial_deletion_workflows WHERE id = ?
     `, [workflowId]);
@@ -770,6 +790,7 @@ export class FinancialDataLifecycleService {
    * Update workflow statistics after execution
    */
   private async updateWorkflowStatistics(workflowId: string, successfulDeletions: number, failedDeletions: number): Promise<void> {
+
     await this.db.query(`
       UPDATE financial_deletion_workflows 
       SET 
@@ -795,6 +816,7 @@ export class FinancialDataLifecycleService {
       includeDetails?: boolean;
     }
   ): Promise<ComplianceReport> {
+
     const reportId = randomUUID();
     const now = new Date();
 
@@ -846,11 +868,11 @@ export class FinancialDataLifecycleService {
         failedDeletions: stats.failed_deletions || 0,
         workflowsUsed: stats.workflows_used || 0,
         generationTimestamp: now.toISOString()
-      },
+  }
       summaryStatistics: {
         avgDeletionsPerDay: Math.round((stats.unique_records_deleted || 0) / Math.max(1, Math.ceil((periodEnd.getTime() - periodStart.getTime()) / (24 * 60 * 60 * 1000)))),
         successRate: stats.total_deletions ? Math.round((stats.successful_deletions / stats.total_deletions) * 100) : 0
-      },
+  }
       generatedAt: now,
       createdAt: now,
       updatedAt: now,
@@ -884,7 +906,7 @@ export class FinancialDataLifecycleService {
         periodEnd: periodEnd.toISOString(),
         totalRecordsDeleted: report.totalRecordsDeleted,
         regulatoryFramework: report.regulatoryFramework
-      },
+  }
       severity: 'info'
     });
 

@@ -2,6 +2,7 @@
 // Define rule schema and structure for data protection policies
 // Task: T-1752989143998-258
 
+}
 export interface DataProtectionRule {
   ruleId: string;
   name: string;
@@ -15,6 +16,7 @@ export interface DataProtectionRule {
   enabled: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
 }
 
 export enum RuleType {
@@ -32,24 +34,30 @@ export enum RuleCategory {
   OPERATIONAL = 'OPERATIONAL'
 }
 
+}
 export interface RuleScope {
   dataTypes: string[];
   userGroups: string[];
   geographicRegions: string[];
   timeRange?: TimeRange;
 }
+}
 
+}
 export interface TimeRange {
   startDate?: Date;
   endDate?: Date;
   schedule?: string; // cron expression
 }
+}
 
+}
 export interface RuleCondition {
   field: string;
   operator: ConditionOperator;
   value: unknown;
   logicalOperator?: LogicalOperator;
+}
 }
 
 export enum ConditionOperator {
@@ -69,10 +77,12 @@ export enum LogicalOperator {
   NOT = 'NOT'
 }
 
+}
 export interface RuleAction {
   actionType: ActionType;
   parameters: Record<string, any>;
   executionOrder: number;
+}
 }
 
 export enum ActionType {
@@ -86,16 +96,20 @@ export enum ActionType {
   DELETE = 'DELETE'
 }
 
+}
 export interface RuleValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
 }
+}
 
+}
 export interface RuleEvaluationContext {
   userId: string;
   dataType: string;
   operation: string;
   timestamp: Date;
   metadata: Record<string, any>;
+}
 }

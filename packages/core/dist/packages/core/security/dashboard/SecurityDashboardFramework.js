@@ -49,335 +49,389 @@ export var DashboardType;
     DashboardType["VULNERABILITY"] = "vulnerability";
     DashboardType["ANALYTICS"] = "analytics";
     DashboardType["AUDIT"] = "audit"; // Security audit and forensics
+    // Dashboard Themes
+    DashboardType[DashboardType["export"] = void 0] = "export";
+    DashboardType[DashboardType["enum"] = void 0] = "enum";
+    DashboardType[DashboardType["DashboardTheme"] = void 0] = "DashboardTheme";
 })(DashboardType || (DashboardType = {}));
-// Dashboard Themes
-export var DashboardTheme;
-(function (DashboardTheme) {
-    DashboardTheme["LIGHT"] = "light";
-    DashboardTheme["DARK"] = "dark";
-    DashboardTheme["CINEMA"] = "cinema";
-    DashboardTheme["HIGH_CONTRAST"] = "high-contrast";
-    DashboardTheme["COLORBLIND_FRIENDLY"] = "colorblind";
-})(DashboardTheme || (DashboardTheme = {}));
-// User Roles for Dashboard Access
-export var SecurityRole;
-(function (SecurityRole) {
-    SecurityRole["EXECUTIVE"] = "executive";
-    SecurityRole["SECURITY_ADMIN"] = "security_admin";
-    SecurityRole["SECURITY_ANALYST"] = "security_analyst";
-    SecurityRole["SOC_ANALYST"] = "soc_analyst";
-    SecurityRole["INCIDENT_RESPONDER"] = "incident_responder";
-    SecurityRole["COMPLIANCE_OFFICER"] = "compliance_officer";
-    SecurityRole["AUDITOR"] = "auditor";
-    SecurityRole["VIEWER"] = "viewer";
-})(SecurityRole || (SecurityRole = {}));
-// Widget Categories
-export var WidgetCategory;
-(function (WidgetCategory) {
-    WidgetCategory["METRICS"] = "metrics";
-    WidgetCategory["CHARTS"] = "charts";
-    WidgetCategory["TABLES"] = "tables";
-    WidgetCategory["MAPS"] = "maps";
-    WidgetCategory["TIMELINES"] = "timelines";
-    WidgetCategory["ALERTS"] = "alerts";
-    WidgetCategory["CONTROLS"] = "controls";
-    WidgetCategory["STATUS"] = "status"; // Status indicators and health checks
-})(WidgetCategory || (WidgetCategory = {}));
-/**
- * Main Security Dashboard Framework Class
- */
-export class SecurityDashboardFramework extends EventEmitter {
-    dashboards = new Map();
-    widgets = new Map();
-    themes = new Map();
-    dataSources = new Map();
-    securityLogger;
-    options;
-    constructor(options = {}) {
-        super();
-        this.options = {
-            enableAuditLogging: true,
-            enablePerformanceMonitoring: true,
-            enableCaching: true,
-            defaultTheme: DashboardTheme.CINEMA,
-            maxWidgetsPerDashboard: 50,
-            maxDashboardsPerUser: 20,
-            sessionTimeout: 480, // 8 hours
-            dataRetention: 365,
-            complianceMode: true,
-            ...options
-        };
-        this.securityLogger = new SecurityLogger({
-            component: 'SecurityDashboardFramework',
-            enableAuditTrail: this.options.enableAuditLogging,
-            enableMetrics: this.options.enablePerformanceMonitoring
-        });
+{
+    LIGHT = 'light',
+        DARK = 'dark',
+        CINEMA = 'cinema',
+        HIGH_CONTRAST = 'high-contrast',
+        COLORBLIND_FRIENDLY = 'colorblind';
+    // User Roles for Dashboard Access
+    export let SecurityRole;
+    (function (SecurityRole) {
+        SecurityRole["EXECUTIVE"] = "executive";
+        SecurityRole["SECURITY_ADMIN"] = "security_admin";
+        SecurityRole["SECURITY_ANALYST"] = "security_analyst";
+        SecurityRole["SOC_ANALYST"] = "soc_analyst";
+        SecurityRole["INCIDENT_RESPONDER"] = "incident_responder";
+        SecurityRole["COMPLIANCE_OFFICER"] = "compliance_officer";
+        SecurityRole["AUDITOR"] = "auditor";
+        SecurityRole["VIEWER"] = "viewer";
+        // Widget Categories
+        SecurityRole[SecurityRole["export"] = void 0] = "export";
+        SecurityRole[SecurityRole["enum"] = void 0] = "enum";
+        SecurityRole[SecurityRole["WidgetCategory"] = void 0] = "WidgetCategory";
+    })(SecurityRole || (SecurityRole = {}));
+    {
+        METRICS = 'metrics', // KPI and metric displays
+            CHARTS = 'charts', // Various chart visualizations
+            TABLES = 'tables', // Data tables and lists
+            MAPS = 'maps', // Geographic and network maps
+            TIMELINES = 'timelines', // Event timelines
+            ALERTS = 'alerts', // Alert and notification widgets
+            CONTROLS = 'controls', // Interactive control widgets
+            STATUS = 'status'; // Status indicators and health checks
+        export class SecurityDashboardFramework extends EventEmitter {
+            dashboards = new Map();
+            widgets = new Map();
+            themes = new Map();
+            dataSources = new Map();
+            securityLogger;
+            options;
+            constructor(options = {}) {
+                super();
+                this.options = {
+                    enableAuditLogging: true,
+                    enablePerformanceMonitoring: true,
+                    enableCaching: true,
+                    defaultTheme: DashboardTheme.CINEMA,
+                    maxWidgetsPerDashboard: 50,
+                    maxDashboardsPerUser: 20,
+                    sessionTimeout: 480, // 8 hours,
+                    dataRetention: 365,
+                    complianceMode: true,
+                    ...options
+                };
+                this.securityLogger = new SecurityLogger({});
+                component: 'SecurityDashboardFramework',
+                    enableAuditTrail;
+                this.options.enableAuditLogging,
+                    enableMetrics;
+                this.options.enablePerformanceMonitoring,
+                ;
+            }
+            ;
+        }
         this.initializeFramework();
-    }
-    /**
-     * Initialize the dashboard framework
-     */
-    async initializeFramework() {
-        try {
-            // Load default themes
-            this.loadDefaultThemes();
-            // Register built-in widgets
-            this.registerBuiltInWidgets();
-            // Initialize data sources
-            this.initializeDataSources();
-            // Load saved dashboards
-            await this.loadDashboards();
-            this.securityLogger.logSecurityEvent({
+        async;
+        initializeFramework();
+        Promise < void  > {
+            try: {
+                // Load default themes
+                this: .loadDefaultThemes(),
+                // Register built-in widgets
+                this: .registerBuiltInWidgets(),
+                // Initialize data sources
+                this: .initializeDataSources(),
+                // Load saved dashboards
+                await, this: .loadDashboards(),
+                this: .securityLogger.logSecurityEvent({}),
                 type: SecurityEventType.SECURITY_ALERT,
                 level: LogLevel.INFO,
                 message: 'Security dashboard framework initialized successfully',
                 details: {
                     widgetCount: this.widgets.size,
                     dashboardCount: this.dashboards.size,
-                    themeCount: this.themes.size
-                }
-            });
-            this.emit('framework:initialized');
-        }
-        catch (error) {
-            this.securityLogger.logSecurityEvent({
+                    themeCount: this.themes.size,
+                },
+                this: .emit('framework:initialized')
+            }, catch(error) {
+                this.securityLogger.logSecurityEvent({});
                 type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.ERROR,
-                message: 'Failed to initialize security dashboard framework',
-                details: { error: error instanceof Error ? error.message : 'Unknown error' }
-            });
-            throw error;
-        }
-    }
-    /**
-     * Register a new dashboard
-     */
-    async registerDashboard(config, userId) {
-        try {
-            // Validate configuration
-            this.validateDashboardConfig(config);
-            // Check permissions
-            if (!this.hasPermission(userId, SecurityRole.SECURITY_ADMIN)) {
-                throw new Error('Insufficient permissions to register dashboard');
+                    level;
+                LogLevel.ERROR,
+                    message;
+                'Failed to initialize security dashboard framework',
+                    details;
+                {
+                    error: error instanceof Error ? error.message : 'Unknown error';
+                }
+            },
+            throw: error,
+            /**
+             * Register a new dashboard
+             */
+            async registerDashboard(config, userId) {
+                try {
+                    // Validate configuration
+                    this.validateDashboardConfig(config);
+                    // Check permissions
+                    if (!this.hasPermission(userId, SecurityRole.SECURITY_ADMIN)) {
+                        throw new Error('Insufficient permissions to register dashboard');
+                        // Store dashboard
+                        this.dashboards.set(config.id, {});
+                    }
+                }
+                finally {
+                }
+            },
+            ...config,
+            metadata: {
+                ...config.metadata,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                createdBy: userId,
+            },
+            this: .securityLogger.logSecurityEvent({}),
+            type: SecurityEventType.SECURITY_ALERT,
+            level: LogLevel.INFO,
+            message: 'Dashboard registered successfully',
+            details: {
+                dashboardId: config.id,
+                type: config.type,
+                widgetCount: config.widgets.length,
+                createdBy: userId,
+            },
+            this: .emit('dashboard:registered', config),
+            return: true
+        };
+        try { }
+        catch (error) {
+            this.securityLogger.logSecurityEvent({});
+            type: SecurityEventType.SECURITY_ALERT,
+                level;
+            LogLevel.ERROR,
+                message;
+            'Failed to register dashboard',
+                details;
+            {
+                dashboardId: config.id,
+                    error;
+                error instanceof Error ? error.message : 'Unknown error',
+                ;
             }
-            // Store dashboard
-            this.dashboards.set(config.id, {
-                ...config,
-                metadata: {
-                    ...config.metadata,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    createdBy: userId
-                }
-            });
-            this.securityLogger.logSecurityEvent({
-                type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.INFO,
-                message: 'Dashboard registered successfully',
-                details: {
-                    dashboardId: config.id,
-                    type: config.type,
-                    widgetCount: config.widgets.length,
-                    createdBy: userId
-                }
-            });
-            this.emit('dashboard:registered', config);
-            return true;
-        }
-        catch (error) {
-            this.securityLogger.logSecurityEvent({
-                type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.ERROR,
-                message: 'Failed to register dashboard',
-                details: {
-                    dashboardId: config.id,
-                    error: error instanceof Error ? error.message : 'Unknown error'
-                }
-            });
+            ;
             return false;
-        }
-    }
-    /**
-     * Register a new widget type
-     */
-    registerWidget(definition) {
-        try {
-            this.validateWidgetDefinition(definition);
-            this.widgets.set(definition.type, definition);
-            this.securityLogger.logSecurityEvent({
-                type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.INFO,
-                message: 'Widget type registered successfully',
-                details: {
-                    widgetType: definition.type,
-                    category: definition.category,
-                    version: definition.version
+            /**
+             * Register a new widget type
+             */
+            registerWidget(definition, WidgetDefinition);
+            boolean;
+            {
+                try {
+                    this.validateWidgetDefinition(definition);
+                    this.widgets.set(definition.type, definition);
+                    this.securityLogger.logSecurityEvent({});
+                    type: SecurityEventType.SECURITY_ALERT,
+                        level;
+                    LogLevel.INFO,
+                        message;
+                    'Widget type registered successfully',
+                        details;
+                    {
+                        widgetType: definition.type,
+                            category;
+                        definition.category,
+                            version;
+                        definition.version,
+                        ;
+                    }
+                    ;
+                    return true;
                 }
-            });
-            return true;
-        }
-        catch (error) {
-            this.securityLogger.logSecurityEvent({
-                type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.ERROR,
-                message: 'Failed to register widget type',
-                details: {
-                    widgetType: definition.type,
-                    error: error instanceof Error ? error.message : 'Unknown error'
+                catch (error) {
+                    this.securityLogger.logSecurityEvent({});
+                    type: SecurityEventType.SECURITY_ALERT,
+                        level;
+                    LogLevel.ERROR,
+                        message;
+                    'Failed to register widget type',
+                        details;
+                    {
+                        widgetType: definition.type,
+                            error;
+                        error instanceof Error ? error.message : 'Unknown error',
+                        ;
+                    }
+                    ;
+                    return false;
+                    /**
+                     * Get dashboard by ID
+                     */
+                    getDashboard(id, string, userId, string);
+                    DashboardConfig | null;
+                    {
+                        const dashboard = this.dashboards.get(id);
+                        if (!dashboard)
+                            return null;
+                        // Check view permissions
+                        const userRoles = this.getUserRoles(userId);
+                        const canView = dashboard.permissions.view.some(role => userRoles.includes(role));
+                        if (!canView) {
+                            this.securityLogger.logSecurityEvent({});
+                            type: SecurityEventType.SECURITY_ALERT,
+                                level;
+                            LogLevel.WARN,
+                                message;
+                            'Dashboard access denied',
+                                details;
+                            {
+                                dashboardId: id,
+                                    userId,
+                                    userRoles,
+                                    requiredRoles;
+                                dashboard.permissions.view,
+                                ;
+                            }
+                            ;
+                            return null;
+                            return dashboard;
+                            /**
+                             * List available dashboards for user
+                             */
+                            listDashboards(userId, string, type ?  : DashboardType);
+                            DashboardConfig;
+                            {
+                                const userRoles = this.getUserRoles(userId);
+                                const availableDashboards = [];
+                                for (const dashboard of this.dashboards.values()) {
+                                    const canView = dashboard.permissions.view.some(role => userRoles.includes(role));
+                                    const matchesType = !type || dashboard.type === type;
+                                    if (canView && matchesType) {
+                                        availableDashboards.push(dashboard);
+                                        return availableDashboards.sort((a, b) => b.metadata.updatedAt.getTime() - a.metadata.updatedAt.getTime());
+                                        /**
+                                         * Get available widget types
+                                         */
+                                        getWidgetTypes(category ?  : WidgetCategory);
+                                        WidgetDefinition;
+                                        {
+                                            const widgets = Array.from(this.widgets.values());
+                                            return category ? widgets.filter(w => w.category === category) : widgets;
+                                            /**
+                                             * Get theme configuration
+                                             */
+                                            getTheme(theme, DashboardTheme);
+                                            ThemeConfig | null;
+                                            {
+                                                return this.themes.get(theme) || null;
+                                                validateDashboardConfig(config, DashboardConfig);
+                                                void {
+                                                    if(, config) { }, : .id || typeof config.id !== 'string'
+                                                };
+                                                {
+                                                    throw new Error('Dashboard ID is required and must be a string');
+                                                    if (!config.title || typeof config.title !== 'string') {
+                                                        throw new Error('Dashboard title is required and must be a string');
+                                                        if (config.widgets.length > this.options.maxWidgetsPerDashboard) {
+                                                            throw new Error(`Dashboard cannot have more than ${this.options.maxWidgetsPerDashboard} widgets`);
+                                                        }
+                                                        // Validate widgets
+                                                        config.widgets.forEach(widget => this.validateWidgetConfig(widget));
+                                                        validateWidgetConfig(config, WidgetConfiguration);
+                                                        void {
+                                                            if(, config) { }, : .id || !config.type
+                                                        };
+                                                        {
+                                                            throw new Error('Widget must have id and type');
+                                                            const definition = this.widgets.get(config.type);
+                                                            if (!definition) {
+                                                                throw new Error(`Unknown widget type: ${config.type}`);
+                                                            }
+                                                            // Validate size constraints
+                                                            if (config.size.width < definition.minSize.width || )
+                                                                config.size.height < definition.minSize.height;
+                                                            {
+                                                                throw new Error('Widget size below minimum requirements');
+                                                                validateWidgetDefinition(definition, WidgetDefinition);
+                                                                void {
+                                                                    if(, definition) { }, : .type || !definition.name || !definition.component
+                                                                };
+                                                                {
+                                                                    throw new Error('Widget definition must have type, name, and component');
+                                                                    if (this.widgets.has(definition.type)) {
+                                                                        throw new Error(`Widget type ${definition.type} already registered`);
+                                                                    }
+                                                                    hasPermission(userId, string, requiredRole, SecurityRole);
+                                                                    boolean;
+                                                                    {
+                                                                        const userRoles = this.getUserRoles(userId);
+                                                                        return userRoles.includes(requiredRole);
+                                                                        getUserRoles(userId, string);
+                                                                        SecurityRole;
+                                                                        {
+                                                                            // In a real implementation, this would fetch from user management system
+                                                                            return [SecurityRole.SECURITY_ANALYST, SecurityRole.VIEWER];
+                                                                            loadDefaultThemes();
+                                                                            void {
+                                                                                // Implementation would load theme configurations
+                                                                                // This is a placeholder for the theme loading logic
+                                                                                /**
+                                                                                 * Register built-in widgets
+                                                                                 */
+                                                                                registerBuiltInWidgets() {
+                                                                                    // Implementation would register standard security widgets
+                                                                                    // This is a placeholder for widget registration
+                                                                                    /**
+                                                                                     * Initialize data sources
+                                                                                     */
+                                                                                }
+                                                                                // Implementation would register standard security widgets
+                                                                                // This is a placeholder for widget registration
+                                                                                /**
+                                                                                 * Initialize data sources
+                                                                                 */
+                                                                                ,
+                                                                                // Implementation would register standard security widgets
+                                                                                // This is a placeholder for widget registration
+                                                                                /**
+                                                                                 * Initialize data sources
+                                                                                 */
+                                                                                initializeDataSources() {
+                                                                                    // Implementation would set up data source connections
+                                                                                    // This is a placeholder for data source initialization
+                                                                                    /**
+                                                                                     * Load saved dashboards
+                                                                                     */
+                                                                                }
+                                                                                // Implementation would set up data source connections
+                                                                                // This is a placeholder for data source initialization
+                                                                                /**
+                                                                                 * Load saved dashboards
+                                                                                 */
+                                                                                ,
+                                                                                // Implementation would set up data source connections
+                                                                                // This is a placeholder for data source initialization
+                                                                                /**
+                                                                                 * Load saved dashboards
+                                                                                 */
+                                                                                async loadDashboards() {
+                                                                                    // Implementation would load dashboards from persistent storage
+                                                                                    // This is a placeholder for dashboard loading
+                                                                                    /**
+                                                                                     * Cleanup resources
+                                                                                     */
+                                                                                    destroy();
+                                                                                    void {
+                                                                                        this: .dashboards.clear(),
+                                                                                        this: .widgets.clear(),
+                                                                                        this: .themes.clear(),
+                                                                                        this: .dataSources.clear(),
+                                                                                        this: .removeAllListeners(),
+                                                                                        export: , default: SecurityDashboardFramework
+                                                                                    };
+                                                                                }
+                                                                            };
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            });
-            return false;
-        }
-    }
-    /**
-     * Get dashboard by ID
-     */
-    getDashboard(id, userId) {
-        const dashboard = this.dashboards.get(id);
-        if (!dashboard)
-            return null;
-        // Check view permissions
-        const userRoles = this.getUserRoles(userId);
-        const canView = dashboard.permissions.view.some(role => userRoles.includes(role));
-        if (!canView) {
-            this.securityLogger.logSecurityEvent({
-                type: SecurityEventType.SECURITY_ALERT,
-                level: LogLevel.WARN,
-                message: 'Dashboard access denied',
-                details: {
-                    dashboardId: id,
-                    userId,
-                    userRoles,
-                    requiredRoles: dashboard.permissions.view
-                }
-            });
-            return null;
-        }
-        return dashboard;
-    }
-    /**
-     * List available dashboards for user
-     */
-    listDashboards(userId, type) {
-        const userRoles = this.getUserRoles(userId);
-        const availableDashboards = [];
-        for (const dashboard of this.dashboards.values()) {
-            const canView = dashboard.permissions.view.some(role => userRoles.includes(role));
-            const matchesType = !type || dashboard.type === type;
-            if (canView && matchesType) {
-                availableDashboards.push(dashboard);
             }
         }
-        return availableDashboards.sort((a, b) => b.metadata.updatedAt.getTime() - a.metadata.updatedAt.getTime());
-    }
-    /**
-     * Get available widget types
-     */
-    getWidgetTypes(category) {
-        const widgets = Array.from(this.widgets.values());
-        return category ? widgets.filter(w => w.category === category) : widgets;
-    }
-    /**
-     * Get theme configuration
-     */
-    getTheme(theme) {
-        return this.themes.get(theme) || null;
-    }
-    /**
-     * Validate dashboard configuration
-     */
-    validateDashboardConfig(config) {
-        if (!config.id || typeof config.id !== 'string') {
-            throw new Error('Dashboard ID is required and must be a string');
-        }
-        if (!config.title || typeof config.title !== 'string') {
-            throw new Error('Dashboard title is required and must be a string');
-        }
-        if (config.widgets.length > this.options.maxWidgetsPerDashboard) {
-            throw new Error(`Dashboard cannot have more than ${this.options.maxWidgetsPerDashboard} widgets`);
-        }
-        // Validate widgets
-        config.widgets.forEach(widget => this.validateWidgetConfig(widget));
-    }
-    /**
-     * Validate widget configuration
-     */
-    validateWidgetConfig(config) {
-        if (!config.id || !config.type) {
-            throw new Error('Widget must have id and type');
-        }
-        const definition = this.widgets.get(config.type);
-        if (!definition) {
-            throw new Error(`Unknown widget type: ${config.type}`);
-        }
-        // Validate size constraints
-        if (config.size.width < definition.minSize.width ||
-            config.size.height < definition.minSize.height) {
-            throw new Error('Widget size below minimum requirements');
-        }
-    }
-    /**
-     * Validate widget definition
-     */
-    validateWidgetDefinition(definition) {
-        if (!definition.type || !definition.name || !definition.component) {
-            throw new Error('Widget definition must have type, name, and component');
-        }
-        if (this.widgets.has(definition.type)) {
-            throw new Error(`Widget type ${definition.type} already registered`);
-        }
-    }
-    /**
-     * Check user permissions
-     */
-    hasPermission(userId, requiredRole) {
-        const userRoles = this.getUserRoles(userId);
-        return userRoles.includes(requiredRole);
-    }
-    /**
-     * Get user roles (mock implementation)
-     */
-    getUserRoles(userId) {
-        // In a real implementation, this would fetch from user management system
-        return [SecurityRole.SECURITY_ANALYST, SecurityRole.VIEWER];
-    }
-    /**
-     * Load default themes
-     */
-    loadDefaultThemes() {
-        // Implementation would load theme configurations
-        // This is a placeholder for the theme loading logic
-    }
-    /**
-     * Register built-in widgets
-     */
-    registerBuiltInWidgets() {
-        // Implementation would register standard security widgets
-        // This is a placeholder for widget registration
-    }
-    /**
-     * Initialize data sources
-     */
-    initializeDataSources() {
-        // Implementation would set up data source connections
-        // This is a placeholder for data source initialization
-    }
-    /**
-     * Load saved dashboards
-     */
-    async loadDashboards() {
-        // Implementation would load dashboards from persistent storage
-        // This is a placeholder for dashboard loading
-    }
-    /**
-     * Cleanup resources
-     */
-    destroy() {
-        this.dashboards.clear();
-        this.widgets.clear();
-        this.themes.clear();
-        this.dataSources.clear();
-        this.removeAllListeners();
     }
 }
-export default SecurityDashboardFramework;

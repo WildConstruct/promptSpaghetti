@@ -12,7 +12,7 @@ export interface PaginationOptions {
     sortOrder?: 'asc' | 'desc';
 }
 export interface PaginatedResult<T> {
-    data: T[];
+    data: T;
     pagination: {
         page: number;
         limit: number;
@@ -58,14 +58,14 @@ export interface UserRole {
     scopeContext?: Record<string, unknown>;
 }
 export interface QueryOptions {
-    select?: string[];
+    select?: string;
     where?: Record<string, unknown>;
     orderBy?: Record<string, 'asc' | 'desc'>;
-    include?: string[];
+    include?: string;
     distinct?: boolean;
 }
 export interface QueryResult<T> {
-    rows: T[];
+    rows: T;
     count: number;
     affectedRows?: number;
     insertId?: number;
@@ -105,7 +105,7 @@ export interface FullEntity extends BaseEntity, SoftDeletableEntity {
 }
 export interface SearchOptions {
     query?: string;
-    fields?: string[];
+    fields?: string;
     filters?: Record<string, unknown>;
     fuzzy?: boolean;
     caseSensitive?: boolean;
@@ -114,7 +114,7 @@ export interface FilterOptions {
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'ilike' | 'between';
     value: any;
-    values?: any[];
+    values?: any;
 }
 export interface OperationResult<T = unknown> {
     success: boolean;
@@ -128,18 +128,15 @@ export interface BulkOperationResult<T = unknown> {
     success: boolean;
     successCount: number;
     errorCount: number;
-    data?: T[];
-    errors?: Array<{
-        index: number;
-        error: string;
-        item?: any;
-    }>;
-    timestamp: Date;
-    executionTime?: number;
+    data?: T;
+    errors?: Array<{}, index>;
+    number: any;
+    error: string;
+    item?: any;
 }
 export interface CacheOptions {
     ttl?: number;
-    tags?: string[];
+    tags?: string;
     version?: string;
 }
 export interface CachedResult<T> {
@@ -162,6 +159,5 @@ export type DatabaseValue = Primitive | Record<string, unknown> | Array<unknown>
 export type WhereCondition = Record<string, DatabaseValue>;
 export type UpdateData<T> = Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
-export declare function createPaginatedResult<T>(data: T[], totalCount: number, options: PaginationOptions): PaginatedResult<T>;
-export declare function createOperationResult<T>(success: boolean, data?: T, error?: string, errorCode?: string, executionTime?: number): OperationResult<T>;
+export declare function createPaginatedResult<T>(data: T): any;
 //# sourceMappingURL=types.d.ts.map

@@ -26,10 +26,9 @@ const ALERT_TYPE_ICONS = {
  * Alert item props
  */
 interface AlertItemProps {
-  alert: unknown;
+  alert: unknown;,
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
-}
 /**
  * Alert item component
  */
@@ -42,7 +41,6 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
       await onAcknowledge(alert.id);
     } finally {
       setIsProcessing(false);
-    }
   }, [alert.id, onAcknowledge]);
   const handleDismiss = useCallback(async () => {
     if (onDismiss) {
@@ -51,15 +49,13 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
         await onDismiss(alert.id);
       } finally {
         setIsProcessing(false);
-      }
-    }
   }, [alert.id, onDismiss]);
   const IconComponent = ALERT_TYPE_ICONS[alert.alertType as keyof typeof ALERT_TYPE_ICONS] || AlertTriangle;
   const severityClass = SEVERITY_COLORS[alert.severity as keyof typeof SEVERITY_COLORS] || SEVERITY_COLORS.info;
   const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleString();
   };
-  return ();
+  return;
     <Card className={`alert-item ${severityClass} border-l-4`}>}
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
@@ -145,16 +141,15 @@ const AlertItem: React.FC<AlertItemProps> = ({ alert, onAcknowledge, onDismiss }
  * Alert summary card props
  */
 interface AlertSummaryProps {
-  alerts: unknown[];
+  alerts: unknown;,
   title: string;
-  icon: React.ReactNode;
+  icon: React.ReactNode;,
   color: string;
-}
 /**
  * Alert summary card component
  */
 const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, color }) => {
-  return ();
+  return;
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2">
@@ -181,16 +176,17 @@ const AlertSummaryCard: React.FC<AlertSummaryProps> = ({ alerts, title, icon, co
 /**
  * Alerts panel props
  */
+
 export interface AlertsPanelProps {
-  alerts: unknown[];
+  alerts: unknown;,
   onAcknowledge: (alertId: string) => void;
   onDismiss?: (alertId: string) => void;
   showSummary?: boolean;
   className?: string;
+  /**
+  * Alerts panel component
+  */
 }
-/**
- * Alerts panel component
- */
 export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   alerts,
   onAcknowledge,
@@ -204,7 +200,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
    * Filter alerts based on selected filter
    */
   const filteredAlerts = alerts.filter(alert => {)
-    if (filter === 'all') return true;
+  if (filter === 'all') return true;
     return alert.severity === filter;
   });
   /**
@@ -213,24 +209,22 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   const sortedAlerts = [...filteredAlerts].sort((a, b) => {
     if (sortBy === 'timestamp') {
       return b.timestamp - a.timestamp;
-    }
     if (sortBy === 'severity') {
       const severityOrder = { critical: 3, warning: 2, info: 1 };
       return (severityOrder[b.severity as keyof typeof severityOrder] || 0) - 
              (severityOrder[a.severity as keyof typeof severityOrder] || 0);
-    }
     return 0;
   });
   /**
    * Get alert counts by type
    */
   const getAlertCounts = () => {
-    const counts = {
-      all: alerts.length,
-      critical: alerts.filter(a => a.severity === 'critical').length,
-      warning: alerts.filter(a => a.severity === 'warning').length,
-      info: alerts.filter(a => a.severity === 'info').length,
-    };
+  const counts = {
+  all: alerts.length,
+  critical: alerts.filter(a => a.severity === 'critical').length,
+  warning: alerts.filter(a => a.severity === 'warning').length,
+  info: alerts.filter(a => a.severity === 'info').length,
+};
     return counts;
   };
   /**
@@ -245,7 +239,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
   const alertCounts = getAlertCounts();
   const { budgetAlerts, performanceAlerts, errorAlerts } = getAlertsByType();
   if (alerts.length === 0) {
-    return ();
+    return;
       <div className={`alerts-panel ${className}`}>}
         <Card>
           <CardContent className="text-center py-8">
@@ -256,8 +250,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`alerts-panel ${className}`}>}
       {showSummary && ()
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -363,7 +356,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
                 variant="outline"
                 onClick={() => {
                   alerts.filter(a => !a.acknowledged).forEach(alert => {)
-                    onAcknowledge(alert.id);
+  onAcknowledge(alert.id);
                   });
                 }}
               >
@@ -375,7 +368,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
                   variant="outline"
                   onClick={() => {
                     alerts.forEach(alert => {)
-                      onDismiss(alert.id);
+  onDismiss(alert.id);
                     });
                   }}
                 >
@@ -395,22 +388,16 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({)
 const styles = `;
   .alerts-panel {
     width: 100%;
-  }
   .alert-item {
     transition: all 0.2s ease-in-out;
-  }
-  .alert-item:hover {
-    transform: translateY(-1px);
+  .alert-item:hover {,
+  transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
   .alert-item.border-l-4 {
     border-left-width: 4px;
-  }
   @media (max-width: 768px) {
     .alerts-panel .grid {
       grid-template-columns: 1fr;
-    }
-  }
 `;
 
 // Inject styles
@@ -418,6 +405,5 @@ if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
-}
 
 export default AlertsPanel;

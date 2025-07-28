@@ -30,37 +30,37 @@ export type MarketplaceHelpContentType =
   | 'marketplace-navigation';
 
 // Extended help content interface for marketplace features
+
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
-  type: HelpContentType | MarketplaceHelpContentType;
+  type: HelpContentType | MarketplaceHelpContentType;,
   marketplaceContext: {,
-    page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
-    userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
-    templateCategory?: string;
-    purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-    features?: string[];
-  };
-}
+  page?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
+  userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
+  templateCategory?: string;
+  purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
+  features?: string;
+};
 
 export interface MarketplaceHelpOverlayProps {
   // Current marketplace context
   currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
   userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
   // Template-specific context
-  selectedTemplate?: {
-    id: string;
-    category: string;
-    type: string;
-    isPremium: boolean;
-  };
+  selectedTemplate?: {,
+  id: string;,
+  category: string;
+  type: string;,
+  isPremium: boolean;
+};
   // Purchase context
   cartItems?: number;
   purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
   // Community context
   forumContext?: {
-    category: string;
-    hasPosted: boolean;
-    reputation: number;
-  };
+  category: string;,
+  hasPosted: boolean;
+  reputation: number;
+};
   // User preferences
   showMarketplaceHelp?: boolean;
   enableGuidedTours?: boolean;
@@ -72,7 +72,6 @@ export interface MarketplaceHelpOverlayProps {
   onTourCompleted?: (tourId: string) => void;
   onFeedbackSubmitted?: (feedback: { rating: number; comment: string; context: string }) => void;
 }
-
 export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   currentPage = 'marketplace',
   userRole = 'new-user',
@@ -100,7 +99,7 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
   const overlayRef = useRef<HTMLDivElement>(null);
   const targetElementRef = useRef<HTMLElement | null>(null);
   // Comprehensive marketplace help content database
-  const marketplaceHelpDatabase: MarketplaceHelpContent[] = useMemo(() => [
+  const marketplaceHelpDatabase: MarketplaceHelpContent = useMemo(() => [
     {
       id: 'marketplace-welcome',
       type: 'marketplace-discovery',
@@ -116,101 +115,96 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       relatedFeatures: ['Template Search', 'Category Filters', 'Preview System', 'Rating System'],
       level: 'beginner',
       context: {,
-        conditions: { isFirstVisit: true }
-      },
-      marketplaceContext: {,
-        page: 'marketplace',
-        userRole: 'new-user',
-      }
-    },
+  conditions: { isFirstVisit: true }
+  },
+  marketplaceContext: {,
+  page: 'marketplace',
+  userRole: 'new-user',
+}
     {
-      id: 'template-discovery-guide',
-      type: 'template-browsing',
-      title: 'Finding the Right Template',
-      content: 'Use the search and filter system to discover templates that match your creative vision. Templates are organized by genre, complexity, and use case.',
-      filmTerminology: 'Like scouting locations or casting - find the right elements that match your creative vision.',
-      actionItems: [,
-        'Try category filters to explore different genres',
-        'Use the search bar for specific topics',
-        'Sort by popularity, rating, or recent updates',
-        'Save interesting templates to your wishlist'
-      ],
-      relatedFeatures: ['Advanced Search', 'Category Navigation', 'Sort Options', 'Wishlist'],
-      level: 'beginner',
-      context: {,
-        triggerElements: ['search-bar', 'category-filter', 'sort-dropdown']
-      },
-      marketplaceContext: {,
-        page: 'marketplace',
-        purchaseStage: 'browsing',
-      }
-    },
+  id: 'template-discovery-guide',
+  type: 'template-browsing',
+  title: 'Finding the Right Template',
+  content: 'Use the search and filter system to discover templates that match your creative vision. Templates are organized by genre, complexity, and use case.',
+  filmTerminology: 'Like scouting locations or casting - find the right elements that match your creative vision.',
+  actionItems: [,
+  'Try category filters to explore different genres',
+  'Use the search bar for specific topics',
+  'Sort by popularity, rating, or recent updates',
+  'Save interesting templates to your wishlist'
+  ],
+  relatedFeatures: ['Advanced Search', 'Category Navigation', 'Sort Options', 'Wishlist'],
+  level: 'beginner',
+  context: {,
+  triggerElements: ['search-bar', 'category-filter', 'sort-dropdown'],
+},
+  marketplaceContext: {,
+  page: 'marketplace',
+  purchaseStage: 'browsing',
+}
     {
-      id: 'template-preview-system',
-      type: 'template-preview',
-      title: 'Template Preview & Evaluation',
-      content: 'Preview templates to understand their structure and potential outputs. Each template shows example generations and explains the creative approach.',
-      filmTerminology: 'Like reading a script treatment - get a feel for the story structure and creative approach before committing.',
-      actionItems: [,
-        'Click preview to see template structure',
-        'Review example outputs and variations',
-        'Check the complexity level and requirements',
-        'Read the creator\'s description and intent'
-      ],
-      relatedFeatures: ['Template Preview', 'Example Outputs', 'Complexity Indicators'],
-      level: 'beginner',
-      context: {,
-        triggerElements: ['preview-button', 'template-card']
-      },
-      marketplaceContext: {,
-        page: 'template-details',
-        purchaseStage: 'preview',
-      }
-    },
+  id: 'template-preview-system',
+  type: 'template-preview',
+  title: 'Template Preview & Evaluation',
+  content: 'Preview templates to understand their structure and potential outputs. Each template shows example generations and explains the creative approach.',
+  filmTerminology: 'Like reading a script treatment - get a feel for the story structure and creative approach before committing.',
+  actionItems: [,
+  'Click preview to see template structure',
+  'Review example outputs and variations',
+  'Check the complexity level and requirements',
+  'Read the creator\'s description and intent'
+  ],
+  relatedFeatures: ['Template Preview', 'Example Outputs', 'Complexity Indicators'],
+  level: 'beginner',
+  context: {,
+  triggerElements: ['preview-button', 'template-card'],
+},
+  marketplaceContext: {,
+  page: 'template-details',
+  purchaseStage: 'preview',
+}
     {
-      id: 'purchase-flow-guidance',
-      type: 'purchase-flow',
-      title: 'Template Purchase Process',
-      content: 'Add templates to your cart and complete the purchase. You\'ll receive immediate access to download and use templates in your projects.',
-      filmTerminology: 'Like acquiring rights to a script - once purchased, you have full creative license to adapt and use.',
-      actionItems: [,
-        'Add desired templates to your shopping cart',
-        'Review license terms and usage rights',
-        'Complete secure checkout process',
-        'Download templates to your project library'
-      ],
-      relatedFeatures: ['Shopping Cart', 'Secure Checkout', 'License Management', 'Download System'],
-      level: 'beginner',
-      context: {,
-        triggerElements: ['add-to-cart', 'checkout-button']
-      },
-      marketplaceContext: {,
-        page: 'template-details',
-        purchaseStage: 'cart',
-      }
-    },
+  id: 'purchase-flow-guidance',
+  type: 'purchase-flow',
+  title: 'Template Purchase Process',
+  content: 'Add templates to your cart and complete the purchase. You\'ll receive immediate access to download and use templates in your projects.',
+  filmTerminology: 'Like acquiring rights to a script - once purchased, you have full creative license to adapt and use.',
+  actionItems: [,
+  'Add desired templates to your shopping cart',
+  'Review license terms and usage rights',
+  'Complete secure checkout process',
+  'Download templates to your project library'
+  ],
+  relatedFeatures: ['Shopping Cart', 'Secure Checkout', 'License Management', 'Download System'],
+  level: 'beginner',
+  context: {,
+  triggerElements: ['add-to-cart', 'checkout-button'],
+},
+  marketplaceContext: {,
+  page: 'template-details',
+  purchaseStage: 'cart',
+}
     {
-      id: 'rating-review-system',
-      type: 'rating-system',
-      title: 'Rating and Reviewing Templates',
-      content: 'Share your experience with templates by rating and reviewing them. Help other creators discover quality content and provide feedback to template creators.',
-      filmTerminology: 'Like film critics and audience reviews - your feedback guides others and improves the creative community.',
-      actionItems: [,
-        'Rate templates based on quality and usefulness',
-        'Write detailed reviews about your experience',
-        'Include specific use cases and results',
-        'Be constructive in feedback to help creators improve'
-      ],
-      relatedFeatures: ['Rating System', 'Review Writing', 'Community Feedback'],
-      level: 'intermediate',
-      context: {,
-        triggerElements: ['rating-stars', 'write-review']
-      },
-      marketplaceContext: {,
-        page: 'template-details',
-        userRole: 'buyer',
-      }
-    },
+  id: 'rating-review-system',
+  type: 'rating-system',
+  title: 'Rating and Reviewing Templates',
+  content: 'Share your experience with templates by rating and reviewing them. Help other creators discover quality content and provide feedback to template creators.',
+  filmTerminology: 'Like film critics and audience reviews - your feedback guides others and improves the creative community.',
+  actionItems: [,
+  'Rate templates based on quality and usefulness',
+  'Write detailed reviews about your experience',
+  'Include specific use cases and results',
+  'Be constructive in feedback to help creators improve'
+  ],
+  relatedFeatures: ['Rating System', 'Review Writing', 'Community Feedback'],
+  level: 'intermediate',
+  context: {,
+  triggerElements: ['rating-stars', 'write-review'],
+},
+  marketplaceContext: {,
+  page: 'template-details',
+  userRole: 'buyer',
+}
     {
       id: 'creator-dashboard-intro',
       type: 'creator-onboarding',
@@ -226,57 +220,54 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       relatedFeatures: ['Template Upload', 'Analytics Dashboard', 'Revenue Tracking', 'Community Management'],
       level: 'advanced',
       context: {,
-        conditions: { hasCreatedTemplate: true }
-      },
-      marketplaceContext: {,
-        page: 'creator-dashboard',
-        userRole: 'creator',
-      }
-    },
+  conditions: { hasCreatedTemplate: true }
+  },
+  marketplaceContext: {,
+  page: 'creator-dashboard',
+  userRole: 'creator',
+}
     {
-      id: 'community-participation',
-      type: 'community-features',
-      title: 'Community & Forum Participation',
-      content: 'Connect with other creators, share techniques, ask questions, and participate in community discussions. Build your reputation and learn from experienced professionals.',
-      filmTerminology: 'Like industry networking events and creative guilds - connect, collaborate, and grow your professional network.',
-      actionItems: [,
-        'Introduce yourself in the community forum',
-        'Ask questions and share your experiences',
-        'Participate in creative challenges and discussions',
-        'Follow creators whose work inspires you'
-      ],
-      relatedFeatures: ['Community Forum', 'User Profiles', 'Following System', 'Creative Challenges'],
-      level: 'intermediate',
-      context: {,
-        triggerElements: ['forum-post', 'community-nav']
-      },
-      marketplaceContext: {,
-        page: 'community',
-        userRole: 'community-member',
-      }
-    },
+  id: 'community-participation',
+  type: 'community-features',
+  title: 'Community & Forum Participation',
+  content: 'Connect with other creators, share techniques, ask questions, and participate in community discussions. Build your reputation and learn from experienced professionals.',
+  filmTerminology: 'Like industry networking events and creative guilds - connect, collaborate, and grow your professional network.',
+  actionItems: [,
+  'Introduce yourself in the community forum',
+  'Ask questions and share your experiences',
+  'Participate in creative challenges and discussions',
+  'Follow creators whose work inspires you'
+  ],
+  relatedFeatures: ['Community Forum', 'User Profiles', 'Following System', 'Creative Challenges'],
+  level: 'intermediate',
+  context: {,
+  triggerElements: ['forum-post', 'community-nav'],
+},
+  marketplaceContext: {,
+  page: 'community',
+  userRole: 'community-member',
+}
     {
-      id: 'profile-optimization',
-      type: 'profile-management',
-      title: 'Profile & Portfolio Management',
-      content: 'Create a compelling profile that showcases your work and builds trust with potential buyers. A well-crafted profile increases template visibility and sales.',
-      filmTerminology: 'Like your director\'s reel - showcase your best work and creative style to attract collaborators and opportunities.',
-      actionItems: [,
-        'Complete your profile with professional information',
-        'Upload a professional profile photo',
-        'Write a compelling bio highlighting your expertise',
-        'Showcase your best template creations'
-      ],
-      relatedFeatures: ['Profile Editor', 'Portfolio Gallery', 'Bio Management', 'Achievement System'],
-      level: 'intermediate',
-      context: {,
-        triggerElements: ['profile-edit', 'portfolio-section']
-      },
-      marketplaceContext: {,
-        page: 'profile',
-        userRole: 'creator',
-      }
-    },
+  id: 'profile-optimization',
+  type: 'profile-management',
+  title: 'Profile & Portfolio Management',
+  content: 'Create a compelling profile that showcases your work and builds trust with potential buyers. A well-crafted profile increases template visibility and sales.',
+  filmTerminology: 'Like your director\'s reel - showcase your best work and creative style to attract collaborators and opportunities.',
+  actionItems: [,
+  'Complete your profile with professional information',
+  'Upload a professional profile photo',
+  'Write a compelling bio highlighting your expertise',
+  'Showcase your best template creations'
+  ],
+  relatedFeatures: ['Profile Editor', 'Portfolio Gallery', 'Bio Management', 'Achievement System'],
+  level: 'intermediate',
+  context: {,
+  triggerElements: ['profile-edit', 'portfolio-section'],
+},
+  marketplaceContext: {,
+  page: 'profile',
+  userRole: 'creator',
+}
     {
       id: 'monetization-strategies',
       type: 'monetization',
@@ -292,51 +283,44 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       relatedFeatures: ['Pricing Tools', 'Analytics Dashboard', 'SEO Optimization', 'Marketing Resources'],
       level: 'advanced',
       context: {,
-        conditions: { isCreator: true, hasPublishedTemplates: true }
-      },
-      marketplaceContext: {,
-        page: 'creator-dashboard',
-        userRole: 'creator',
-      }
-    }
-  ], []);
+  conditions: { isCreator: true, hasPublishedTemplates: true }
+  },
+  marketplaceContext: {,
+  page: 'creator-dashboard',
+  userRole: 'creator'], []);
   // Calculate current marketplace context for smart help suggestions
   const currentMarketplaceContext = useMemo(() => {
-    return {
-      page: currentPage,
-      userRole,
-      templateCategory: selectedTemplate?.category,
-      templateType: selectedTemplate?.type,
-      isPremiumTemplate: selectedTemplate?.isPremium,
-      hasItemsInCart: cartItems > 0,
-      purchaseStage,
-      forumReputation: forumContext?.reputation || 0,
-      hasPostedInForum: forumContext?.hasPosted || false,
-      isNewUser: userRole === 'new-user',
-      isCreator: userRole === 'creator',
-    };
+  return {
+  page: currentPage,
+  userRole,
+  templateCategory: selectedTemplate?.category,
+  templateType: selectedTemplate?.type,
+  isPremiumTemplate: selectedTemplate?.isPremium,
+  hasItemsInCart: cartItems > 0,
+  purchaseStage,
+  forumReputation: forumContext?.reputation || 0,
+  hasPostedInForum: forumContext?.hasPosted || false,
+  isNewUser: userRole === 'new-user',
+  isCreator: userRole === 'creator',
+};
   }, [currentPage, userRole, selectedTemplate, cartItems, purchaseStage, forumContext]);
   // Find relevant marketplace help content based on context
-  const getRelevantMarketplaceHelp = useCallback((context: unknown): MarketplaceHelpContent[] => {
+  const getRelevantMarketplaceHelp = useCallback((context: unknown): MarketplaceHelpContent => {
     return marketplaceHelpDatabase.filter(help => {)
-      const marketplaceCtx = help.marketplaceContext;
+  const marketplaceCtx = help.marketplaceContext;
       // Page matching
       if (marketplaceCtx.page && marketplaceCtx.page !== context.page) {
         return false;
-      }
       // User role matching
       if (marketplaceCtx.userRole && marketplaceCtx.userRole !== context.userRole) {
         return false;
-      }
       // Purchase stage matching
       if (marketplaceCtx.purchaseStage && marketplaceCtx.purchaseStage !== context.purchaseStage) {
         return false;
-      }
       // Template category matching
       if (marketplaceCtx.templateCategory && context.templateCategory && )
           marketplaceCtx.templateCategory !== context.templateCategory) {
         return false;
-      }
       // Level filtering based on complexity preference
       const levelOrder = ['beginner', 'intermediate', 'advanced', 'professional'];
       const contextLevelIndex = levelOrder.indexOf(helpComplexity);
@@ -358,67 +342,61 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
     if (x < 10) x = 10;
     if (x + overlayRect.width > viewportWidth - 10) {
       x = viewportWidth - overlayRect.width - 10;
-    }
     if (y + overlayRect.height > viewportHeight - 10) {
       y = targetRect.top - overlayRect.height - 10;
-    }
     setOverlayPosition({ x, y });
   }, []);
   // Show help overlay for specific element
   const showHelpOverlay = useCallback((elementSelector: string, helpId?: string) => {
-    const targetElement = document.querySelector(elementSelector) as HTMLElement;
-    if (!targetElement) return;
-    targetElementRef.current = targetElement;
-    // Find relevant help content
-    const relevantHelp = helpId ;
-      ? marketplaceHelpDatabase.find(h => h.id === helpId)
-      : getRelevantMarketplaceHelp(currentMarketplaceContext)[0];
-    if (relevantHelp) {
-      setActiveOverlay(relevantHelp);
-      setIsOverlayVisible(true);
-      // Position overlay after it's rendered
-      setTimeout(() => {
-        if (overlayRef.current) {
-          positionOverlay(targetElement, overlayRef.current);
-        }
-      }, 10);
+  const targetElement = document.querySelector(elementSelector) as HTMLElement;
+  if (!targetElement) return;
+  targetElementRef.current = targetElement;
+  // Find relevant help content
+  const relevantHelp = helpId ;
+  ? marketplaceHelpDatabase.find(h => h.id === helpId)
+  : getRelevantMarketplaceHelp(currentMarketplaceContext)[0];
+  if (relevantHelp) {
+  setActiveOverlay(relevantHelp);
+  setIsOverlayVisible(true);
+  // Position overlay after it's rendered
+  setTimeout(() => {
+  if (overlayRef.current) {
+  positionOverlay(targetElement, overlayRef.current);
+}, 10);
       // Track interaction
       onHelpInteraction?.('overlay_shown', {)
-        helpId: relevantHelp.id,
-        targetElement: elementSelector,
-        context: currentMarketplaceContext,
-      });
-    }
+  helpId: relevantHelp.id,
+  targetElement: elementSelector,
+  context: currentMarketplaceContext,
+});
   }, [marketplaceHelpDatabase, getRelevantMarketplaceHelp, currentMarketplaceContext, positionOverlay, onHelpInteraction]);
   // Hide overlay
   const hideOverlay = useCallback(() => {
-    if (activeOverlay) {
-      onHelpInteraction?.('overlay_closed', {)
-        helpId: activeOverlay.id,
-        timeShown: Date.now() // Could track duration,
-      });
-    }
+  if (activeOverlay) {
+  onHelpInteraction?.('overlay_closed', {)
+  helpId: activeOverlay.id,
+  timeShown: Date.now() // Could track duration,
+});
     setActiveOverlay(null);
     setIsOverlayVisible(false);
     targetElementRef.current = null;
   }, [activeOverlay, onHelpInteraction]);
   // Start guided tour
   const startGuidedTour = useCallback((tourType: string) => {
-    const tourContent = marketplaceHelpDatabase.filter(help => ;);
-      help.type === tourType || 
-      (help.marketplaceContext.page === currentPage && help.level === 'beginner')
-    );
-    if (tourContent.length > 0) {
-      setCurrentTour(tourType);
-      setTourStep(0);
-      setActiveOverlay(tourContent[0]);
-      setIsOverlayVisible(true);
-      onHelpInteraction?.('tour_started', {)
-        tourType,
-        stepCount: tourContent.length,
-        context: currentMarketplaceContext,
-      });
-    }
+  const tourContent = marketplaceHelpDatabase.filter(help => ;);
+  help.type === tourType ||
+  (help.marketplaceContext.page === currentPage && help.level === 'beginner')
+  );
+  if (tourContent.length > 0) {
+  setCurrentTour(tourType);
+  setTourStep(0);
+  setActiveOverlay(tourContent[0]);
+  setIsOverlayVisible(true);
+  onHelpInteraction?.('tour_started', {)
+  tourType,
+  stepCount: tourContent.length,
+  context: currentMarketplaceContext,
+});
   }, [marketplaceHelpDatabase, currentPage, currentMarketplaceContext, onHelpInteraction]);
   // Next tour step
   const nextTourStep = useCallback(() => {
@@ -432,23 +410,22 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
       setTourStep(nextStep);
       setActiveOverlay(tourContent[nextStep]);
     } else {
-      // Tour completed
-      onTourCompleted?.(currentTour);
-      onHelpInteraction?.('tour_completed', {)
-        tourType: currentTour,
-        totalSteps: tourContent.length,
-      });
+  // Tour completed
+  onTourCompleted?.(currentTour);
+  onHelpInteraction?.('tour_completed', {)
+  tourType: currentTour,
+  totalSteps: tourContent.length,
+});
       setCurrentTour(null);
       setTourStep(0);
       hideOverlay();
-    }
   }, [currentTour, tourStep, marketplaceHelpDatabase, currentPage, onTourCompleted, onHelpInteraction, hideOverlay]);
   // Auto-trigger contextual help based on marketplace context
   useEffect(() => {
     if (!showMarketplaceHelp) return;
     const relevantHelp = getRelevantMarketplaceHelp(currentMarketplaceContext);
     const prioritizedHelp = relevantHelp.filter(help => {)
-      // Show help for new users or specific contexts
+  // Show help for new users or specific contexts
       return currentMarketplaceContext.isNewUser || 
              help.marketplaceContext.purchaseStage === currentMarketplaceContext.purchaseStage;
     });
@@ -459,33 +436,31 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
         setOverlayPosition({ x: 20, y: 100 });
       }, 2000); // Delay to avoid overwhelming user
       return () => clearTimeout(timer);
-    }
   }, [showMarketplaceHelp, getRelevantMarketplaceHelp, currentMarketplaceContext, activeOverlay]);
   // Handle feedback submission
   const handleFeedbackSubmit = useCallback((rating: number, comment: string) => {
     if (activeOverlay) {
       onFeedbackSubmitted?.({)
-        rating,
+  rating,
         comment,
         context: `${activeOverlay.id} - ${currentMarketplaceContext.page}`}
       });
-    }
     setShowFeedback(false);
   }, [activeOverlay, currentMarketplaceContext, onFeedbackSubmitted]);
   // Expose methods for external control
   useEffect(() => {
-    // Attach methods to window for external access
-    (window as any).marketplaceHelp = {
-      showHelp: showHelpOverlay,
-      hideHelp: hideOverlay,
-      startTour: startGuidedTour,
-    };
+  // Attach methods to window for external access
+  (window as any).marketplaceHelp = {
+  showHelp: showHelpOverlay,
+  hideHelp: hideOverlay,
+  startTour: startGuidedTour,
+};
     return () => {
       delete (window as any).marketplaceHelp;
     };
   }, [showHelpOverlay, hideOverlay, startGuidedTour]);
   if (!showMarketplaceHelp) return null;
-  return ();
+  return;
     <div className="marketplace-help-overlay">
       {/* Help Overlay */}
       {isOverlayVisible && activeOverlay && ()
@@ -494,10 +469,12 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
           className={`marketplace-help-tooltip ${overlaySize}`}
           style={{
             position: 'fixed',
-            left: `${overlayPosition.x}px`,}
-            top: `${overlayPosition.y}px`,}
-            zIndex: 10001,
-          }}
+            left: `${overlayPosition.x}px`}
+},
+  top: `${overlayPosition.y}px`}
+},
+  zIndex: 10001;
+  }}
         >
           {/* Overlay Header */}
           <div className="overlay-header">
@@ -629,293 +606,238 @@ export const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps> = ({)
         .marketplace-help-overlay {
           position: relative;
           pointer-events: none;
-        }
         .marketplace-help-overlay * {
           pointer-events: auto;
-        }
         .marketplace-help-tooltip {
           background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
           border: 2px solid #0f4c75;
-          border-radius: 12px;
-          color: #fff;
+          border-radius: 12px;,
+  color: #fff;
           min-width: 320px;
           max-width: 500px;
           box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
           animation: marketplaceSlideIn 0.3s ease-out;
           backdrop-filter: blur(10px);
-        }
         .marketplace-help-tooltip.compact {
           max-height: 180px;
           min-width: 280px;
-        }
         .marketplace-help-tooltip.normal {
           max-height: 350px;
-        }
         .marketplace-help-tooltip.expanded {
           max-height: 600px;
           max-width: 600px;
-        }
         @keyframes marketplaceSlideIn {
           from {
-            opacity: 0;
-            transform: translateY(-20px) scale(0.95);
-          }
+            opacity: 0;,
+  transform: translateY(-20px) scale(0.95);
           to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
+            opacity: 1;,
+  transform: translateY(0) scale(1);
         .overlay-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 16px 20px;
-          border-bottom: 1px solid #0f4c75;
-          background: rgba(15, 76, 117, 0.2);
-        }
+          align-items: center;,
+  padding: 16px 20px;
+          border-bottom: 1px solid #0f4c75;,
+  background: rgba(15, 76, 117, 0.2);
         .help-title {
           display: flex;
-          align-items: center;
-          gap: 10px;
-        }
+          align-items: center;,
+  gap: 10px;
         .help-title h3 {
           margin: 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #3bb3e0;
-        }
+          font-weight: 600;,
+  color: #3bb3e0;
         .help-icon {
           font-size: 20px;
-        }
         .overlay-controls {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .size-toggle,
         .feedback-button,
         .close-button {
           background: rgba(59, 179, 224, 0.2);
-          border: 1px solid #3bb3e0;
-          color: #3bb3e0;
-          cursor: pointer;
-          padding: 6px 8px;
-          border-radius: 6px;
-          transition: all 0.2s ease;
+          border: 1px solid #3bb3e0;,
+  color: #3bb3e0;
+          cursor: pointer;,
+  padding: 6px 8px;
+          border-radius: 6px;,
+  transition: all 0.2s ease;
           font-size: 12px;
-        }
         .size-toggle:hover,
         .feedback-button:hover,
-        .close-button:hover {
-          background: rgba(59, 179, 224, 0.4);
+        .close-button:hover {,
+  background: rgba(59, 179, 224, 0.4);
           transform: scale(1.05);
-        }
         .overlay-content {
           padding: 20px;
-        }
         .help-description {
           margin: 0 0 16px 0;
           line-height: 1.5;
-          font-size: 14px;
-          color: #e0e7ff;
-        }
+          font-size: 14px;,
+  color: #e0e7ff;
         .marketplace-terminology {
           background: linear-gradient(135deg, rgba(59, 179, 224, 0.1) 0%, rgba(15, 76, 117, 0.2) 100%);
-          border-left: 4px solid #3bb3e0;
-          padding: 12px 16px;
+          border-left: 4px solid #3bb3e0;,
+  padding: 12px 16px;
           margin: 16px 0;
           border-radius: 0 8px 8px 0;
-        }
         .marketplace-terminology p {
           margin: 0;
-          font-size: 13px;
-          color: #3bb3e0;
+          font-size: 13px;,
+  color: #3bb3e0;
           font-style: italic;
-        }
         .terminology-icon {
           margin-right: 8px;
           font-size: 16px;
-        }
         .action-items {
           margin-top: 20px;
-        }
         .action-items h4 {
           margin: 0 0 12px 0;
-          font-size: 13px;
-          color: #3bb3e0;
+          font-size: 13px;,
+  color: #3bb3e0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-        }
         .action-items ul {
           margin: 0;
           padding-left: 20px;
-        }
         .action-items li {
           font-size: 13px;
           line-height: 1.4;
-          margin-bottom: 6px;
-          color: #cbd5e1;
-        }
+          margin-bottom: 6px;,
+  color: #cbd5e1;
         .related-features {
           margin-top: 20px;
-        }
         .related-features h4 {
           margin: 0 0 12px 0;
-          font-size: 13px;
-          color: #3bb3e0;
+          font-size: 13px;,
+  color: #3bb3e0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-        }
         .feature-tags {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         .feature-tag {
           background: rgba(59, 179, 224, 0.2);
-          color: #3bb3e0;
-          padding: 4px 8px;
+          color: #3bb3e0;,
+  padding: 4px 8px;
           border-radius: 4px;
-          font-size: 11px;
-          border: 1px solid rgba(59, 179, 224, 0.3);
-        }
+          font-size: 11px;,
+  border: 1px solid rgba(59, 179, 224, 0.3);
         .tour-navigation {
-          border-top: 1px solid #0f4c75;
-          padding: 16px 20px;
+          border-top: 1px solid #0f4c75;,
+  padding: 16px 20px;
           background: rgba(15, 76, 117, 0.1);
-        }
         .tour-progress {
           margin-bottom: 12px;
-        }
         .progress-bar {
           background: rgba(59, 179, 224, 0.2);
           height: 4px;
           border-radius: 2px;
-          margin-bottom: 8px;
-          overflow: hidden;
-        }
+          margin-bottom: 8px;,
+  overflow: hidden;
         .progress-fill {
           background: linear-gradient(90deg, #3bb3e0 0%, #0f4c75 100%);
-          height: 100%;
-          transition: width 0.3s ease;
-        }
+          height: 100%;,
+  transition: width 0.3s ease;
         .step-text {
-          font-size: 12px;
-          color: #3bb3e0;
-        }
+          font-size: 12px;,
+  color: #3bb3e0;
         .tour-controls {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .tour-skip {
-          background: none;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          color: #cbd5e1;
-          padding: 8px 12px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 12px;
-          transition: all 0.2s ease;
-        }
+          background: none;,
+  border: 1px solid rgba(255, 255, 255, 0.3);
+          color: #cbd5e1;,
+  padding: 8px 12px;
+          border-radius: 6px;,
+  cursor: pointer;
+          font-size: 12px;,
+  transition: all 0.2s ease;
         .tour-skip:hover {
           border-color: rgba(255, 255, 255, 0.5);
-        }
         .tour-next {
           background: linear-gradient(135deg, #3bb3e0 0%, #0f4c75 100%);
-          color: #fff;
-          border: none;
+          color: #fff;,
+  border: none;
           padding: 8px 16px;
-          border-radius: 6px;
-          cursor: pointer;
+          border-radius: 6px;,
+  cursor: pointer;
           font-size: 12px;
-          font-weight: 600;
-          transition: all 0.2s ease;
-        }
-        .tour-next:hover {
-          transform: translateY(-1px);
+          font-weight: 600;,
+  transition: all 0.2s ease;
+        .tour-next:hover {,
+  transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(59, 179, 224, 0.3);
-        }
         .feedback-form {
-          border-top: 1px solid #0f4c75;
-          padding: 16px 20px;
+          border-top: 1px solid #0f4c75;,
+  padding: 16px 20px;
           background: rgba(15, 76, 117, 0.1);
-        }
         .feedback-form h4 {
           margin: 0 0 12px 0;
-          font-size: 14px;
-          color: #3bb3e0;
-        }
+          font-size: 14px;,
+  color: #3bb3e0;
         .feedback-rating {
-          display: flex;
-          gap: 4px;
+          display: flex;,
+  gap: 4px;
           margin-bottom: 12px;
-        }
         .rating-star {
-          background: none;
-          border: none;
-          font-size: 18px;
-          cursor: pointer;
+          background: none;,
+  border: none;
+          font-size: 18px;,
+  cursor: pointer;
           transition: transform 0.2s ease;
-        }
-        .rating-star:hover {
-          transform: scale(1.2);
-        }
+        .rating-star:hover {,
+  transform: scale(1.2);
         .feedback-close {
-          background: none;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          color: #cbd5e1;
-          padding: 6px 12px;
-          border-radius: 4px;
-          cursor: pointer;
+          background: none;,
+  border: 1px solid rgba(255, 255, 255, 0.3);
+          color: #cbd5e1;,
+  padding: 6px 12px;
+          border-radius: 4px;,
+  cursor: pointer;
           font-size: 11px;
-        }
         .marketplace-tour-launcher {
-          position: fixed;
-          bottom: 30px;
+          position: fixed;,
+  bottom: 30px;
           right: 30px;
           z-index: 9998;
-        }
         .start-marketplace-tour {
           background: linear-gradient(135deg, #3bb3e0 0%, #0f4c75 100%);
-          color: #fff;
-          border: none;
+          color: #fff;,
+  border: none;
           padding: 16px 24px;
-          border-radius: 12px;
-          cursor: pointer;
+          border-radius: 12px;,
+  cursor: pointer;
           font-weight: 600;
           font-size: 14px;
           box-shadow: 0 8px 24px rgba(59, 179, 224, 0.3);
-          transition: all 0.3s ease;
-          animation: marketplaceTourPulse 4s ease-in-out infinite;
-        }
-        .start-marketplace-tour:hover {
-          transform: translateY(-3px);
+          transition: all 0.3s ease;,
+  animation: marketplaceTourPulse 4s ease-in-out infinite;
+        .start-marketplace-tour:hover {,
+  transform: translateY(-3px);
           box-shadow: 0 12px 32px rgba(59, 179, 224, 0.4);
-        }
         @keyframes marketplaceTourPulse {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); }
-        }
         @media (max-width: 768px) {
           .marketplace-help-tooltip {
             min-width: 280px;
             max-width: 90vw;
-          }
           .overlay-header {
             padding: 12px 16px;
-          }
           .overlay-content {
             padding: 16px;
-          }
           .marketplace-tour-launcher {
-            bottom: 20px;
-            right: 20px;
-          }
+            bottom: 20px;,
+  right: 20px;
           .start-marketplace-tour {
             padding: 12px 20px;
             font-size: 13px;
-          }
-        }
       `}</style>
     </div>
   );

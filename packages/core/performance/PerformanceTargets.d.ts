@@ -2,12 +2,13 @@
  * Performance Targets and Thresholds for Epic 18
  * Defines performance targets based on user requirements, industry standards, and business objectives
  */
+
 export interface PerformanceTargetConfig {
     environment: 'development' | 'staging' | 'production';
     userSegment: 'power-users' | 'general' | 'enterprise';
     deviceProfile: 'high-end' | 'mid-range' | 'low-end';
     networkProfile: 'fast' | 'average' | 'slow';
-}
+
 export interface PerformanceTarget {
     kpiId: string;
     target: number;
@@ -20,7 +21,6 @@ export interface PerformanceTarget {
         businessValue: 'high' | 'medium' | 'low';
         technicalRisk: 'high' | 'medium' | 'low';
     };
-}
 /**
  * Performance targets based on Web Vitals and industry standards
  *
@@ -50,8 +50,7 @@ export declare function getTargetsForUserSegment(segment: PerformanceTargetConfi
 /**
  * Validate if current performance meets targets
  */
-export declare function validatePerformanceTargets()
-  currentMetrics: Record<string,
+export declare function validatePerformanceTargets(currentMetrics: Record<string,)
   number>,
   config: PerformanceTargetConfig,
 ): {

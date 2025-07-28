@@ -16,26 +16,23 @@ import {
   AIRecommendation
 } from '../../services/Epic16KnowledgeBaseService';
 interface KnowledgeBaseArticleViewerProps {
-  article: KnowledgeBaseArticle;
+  article: KnowledgeBaseArticle;,
   knowledgeService: Epic16KnowledgeBaseService;
   userId: string;
   onArticleSelect?: (articleId: string) => void;
   onClose?: () => void;
-}
-interface ViewerState {
-  loading: boolean;
+  interface ViewerState {
+  loading: boolean;,
   error: string | null;
-  showTableOfContents: boolean;
+  showTableOfContents: boolean;,
   activeSection: string;
-  userRating: number;
+  userRating: number;,
   userFeedback: string;
-  feedbackType: FeedbackType;
+  feedbackType: FeedbackType;,
   showFeedbackForm: boolean;
-  recommendations: AIRecommendation[];
+  recommendations: AIRecommendation;,
   readingProgress: number;
-}
-
-export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps> = ({)
+  export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProps> = ({,)
   article,
   knowledgeService,
   userId,
@@ -44,37 +41,36 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
 }) => {
   // State management
   const [viewerState, setViewerState] = useState<ViewerState>({)
-    loading: false,
-    error: null,
-    showTableOfContents: true,
-    activeSection: '',
-    userRating: 0,
-    userFeedback: '',
-    feedbackType: FeedbackType.IMPROVEMENT,
-    showFeedbackForm: false,
-    recommendations: [],
-    readingProgress: 0,
-  });
+  loading: false,
+  error: null,
+  showTableOfContents: true,
+  activeSection: '',
+  userRating: 0,
+  userFeedback: '',
+  feedbackType: FeedbackType.IMPROVEMENT,
+  showFeedbackForm: false,
+  recommendations: [],
+  readingProgress: 0,
+});
   // Refs
   const contentRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<Map<string, HTMLElement>>(new Map());
   // Load recommendations
   useEffect(() => {
-    const loadRecommendations = async () => {
-      try {
-        const recommendations = await knowledgeService.getRecommendations({)
-          currentArticleId: article.id,
-          userSearchHistory: [],
-          viewedArticles: [article.id],
-          userRole: 'user',
-          userExperience: 'intermediate',
-          timestamp: new Date(),
-        });
+  const loadRecommendations = async () => {
+  try {
+  const recommendations = await knowledgeService.getRecommendations({)
+  currentArticleId: article.id,
+  userSearchHistory: [],
+  viewedArticles: [article.id],
+  userRole: 'user',
+  userExperience: 'intermediate',
+  timestamp: new Date(),
+});
         setViewerState(prev => ({ ...prev, recommendations }));
       } catch (error) {
-        console.error('Failed to load recommendations:', error);
-      }
-    };
+  console.error('Failed to load recommendations:', error);
+};
     loadRecommendations();
   }, [article.id, knowledgeService]);
   // Track reading progress
@@ -92,17 +88,13 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         if (rect.top <= 100 && rect.bottom > 100) {
           activeSection = sectionId;
           break;
-        }
-      }
       if (activeSection !== viewerState.activeSection) {
         setViewerState(prev => ({ ...prev, activeSection }));
-      }
     };
     const contentElement = contentRef.current;
     if (contentElement) {
       contentElement.addEventListener('scroll', handleScroll);
       return () => contentElement.removeEventListener('scroll', handleScroll);
-    }
   }, [viewerState.activeSection]);
   // Calculate average rating
   const averageRating = useMemo(() => {
@@ -115,19 +107,18 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
   }, [article.ratings, userId]);
   // Handle rating submission
   const handleRatingSubmit = useCallback(async (rating: number) => {
-    try {
-      await knowledgeService.rateArticle(article.id, {)
-        userId,
-        rating,
-        helpful: rating >= 4,
-      });
+  try {
+  await knowledgeService.rateArticle(article.id, {)
+  userId,
+  rating,
+  helpful: rating >= 4,
+});
       setViewerState(prev => ({ ...prev, userRating: rating }));
     } catch (error) {
-      setViewerState(prev => ({)
-        ...prev,
-        error: error instanceof Error ? error.message : 'Failed to submit rating',
-      }));
-    }
+  setViewerState(prev => ({)
+  ...prev,
+  error: error instanceof Error ? error.message : 'Failed to submit rating',
+}));
   }, [article.id, knowledgeService, userId]);
   // Handle feedback submission
   const handleFeedbackSubmit = useCallback(async () => {
@@ -135,31 +126,29 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
     try {
       setViewerState(prev => ({ ...prev, loading: true }));
       await knowledgeService.submitFeedback(article.id, {)
-        userId,
-        type: viewerState.feedbackType,
-        message: viewerState.userFeedback,
-        status: 'new' as any,
-      });
+  userId,
+  type: viewerState.feedbackType,
+  message: viewerState.userFeedback,
+  status: 'new' as any,
+});
       setViewerState(prev => ({)
-        ...prev,
-        loading: false,
-        userFeedback: '',
-        showFeedbackForm: false,
-      }));
+  ...prev,
+  loading: false,
+  userFeedback: '',
+  showFeedbackForm: false,
+}));
     } catch (error) {
-      setViewerState(prev => ({)
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to submit feedback',
-      }));
-    }
+  setViewerState(prev => ({)
+  ...prev,
+  loading: false,
+  error: error instanceof Error ? error.message : 'Failed to submit feedback',
+}));
   }, [article.id, knowledgeService, userId, viewerState.feedbackType, viewerState.userFeedback]);
   // Handle section navigation
   const scrollToSection = useCallback((sectionId: string) => {
     const element = sectionsRef.current.get(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }, []);
   // Handle helpful vote
   const handleHelpfulVote = useCallback(async (helpful: boolean) => {
@@ -167,16 +156,15 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
       // In a real implementation, this would call an API
       console.log(`Marked article as ${helpful ? 'helpful' : 'not helpful'}`);}
     } catch (error) {
-      console.error('Failed to submit helpful vote:', error);
-    }
-  }, []);
+  console.error('Failed to submit helpful vote:', error);
+}, []);
   // Format date
   const formatDate = useCallback((date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {)
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(date);
   }, []);
   // Format category name
   const formatCategoryName = useCallback((category: string) => {
@@ -184,14 +172,13 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
   }, []);
   // Render section content
   const renderSectionContent = useCallback((section: unknown) => {
-    const setSectionRef = (element: HTMLElement | null) => {
-      if (element) {
-        sectionsRef.current.set(section.id, element);
-      }
-    };
+  const setSectionRef = (element: HTMLElement | null) => {,
+  if (element) {
+  sectionsRef.current.set(section.id, element);
+};
     switch (section.type) {
     case SectionType.CODE:
-      return ();
+      return;
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">{section.title}</h3>
           <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
@@ -200,7 +187,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     case SectionType.WARNING:
-      return ();
+      return;
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
             <div className="flex">
@@ -220,7 +207,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     case SectionType.TIP:
-      return ();
+      return;
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
             <div className="flex">
@@ -240,7 +227,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
         </div>
       );
     default:
-      return ();
+      return;
         <div ref={setSectionRef} id={section.anchor} className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">{section.title}</h3>
           <div className="prose max-w-none text-gray-700">
@@ -248,11 +235,10 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
           </div>
         </div>
       );
-    }
   }, []);
   // Render stars
   const renderStars = useCallback((rating: number, interactive = false, onRate?: (rating: number) => void) => {
-    return ();
+    return;
       <div className="flex items-center">
         {[1, 2, 3, 4, 5].map(star => ()
           <button
@@ -263,8 +249,8 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
           >
             <svg
               className={`w-5 h-5 ${
-                star <= rating ? 'text-yellow-400' : 'text-gray-300'
-              }`}
+  star <= rating ? 'text-yellow-400' : 'text-gray-300',
+}`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -275,7 +261,7 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
       </div>
     );
   }, []);
-  return ();
+  return;
     <div className="knowledge-base-article-viewer h-full flex bg-gray-50">
       {/* Reading Progress */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-gray-200 z-50">
@@ -305,10 +291,10 @@ export const KnowledgeBaseArticleViewer: React.FC<KnowledgeBaseArticleViewerProp
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
-                    viewerState.activeSection === section.id
-                      ? 'bg-blue-100 text-blue-700 border-l-2 border-blue-500'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                  }`}
+  viewerState.activeSection === section.id
+  ? 'bg-blue-100 text-blue-700 border-l-2 border-blue-500'
+  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100',
+}`}
                 >
                   <span className="text-xs text-gray-400 mr-2">{index + 1}.</span>
                   {section.title}

@@ -26,6 +26,7 @@ import {
   DashboardTheme,
   DashboardPermissions
 } from './SecurityDashboardFramework';
+
 export interface DashboardTemplate {
     id: string;
     type: DashboardType;
@@ -52,7 +53,7 @@ export interface DashboardTemplate {
         industryFocus?: string[];
         complianceFrameworks?: string[];
     };
-}
+
 export interface DashboardPreset {
     id: string;
     name: string;
@@ -74,7 +75,7 @@ export interface DashboardPreset {
         config: Record<string, any>;
     }[];
     permissions: DashboardPermissions;
-}
+
 export interface RegistryOptions {
     enableCache: boolean;
     cacheTimeout: number;
@@ -82,7 +83,6 @@ export interface RegistryOptions {
     allowCustomDashboards: boolean;
     maxCustomDashboards: number;
     enableAuditLogging: boolean;
-}
 /**
  * Dashboard Registry Class
  *
@@ -156,6 +156,6 @@ export declare class DashboardRegistry {
      * Clear registry (for testing)
      */
     clear(): void;
-}
+
 export default DashboardRegistry;
 //# sourceMappingURL=DashboardRegistry.d.ts.map

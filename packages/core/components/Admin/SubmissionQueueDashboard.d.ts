@@ -5,6 +5,7 @@
  * Part of Epic 17.5.1 - Review Workflow (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface QueueSubmission {
     id: string;
     template_id: string;
@@ -29,7 +30,7 @@ export interface QueueSubmission {
     review_priority: 'low' | 'medium' | 'high' | 'urgent';
     estimated_review_time?: number;
     complexity_score?: number;
-}
+
 export interface ValidationResult {
     rule_id: string;
     severity: 'error' | 'warning' | 'info';
@@ -37,7 +38,7 @@ export interface ValidationResult {
     message: string;
     field?: string;
     auto_fixable: boolean;
-}
+
 export interface QueueMetrics {
     total_pending: number;
     total_under_review: number;
@@ -53,7 +54,7 @@ export interface QueueMetrics {
         completed_today: number;
         average_review_time: number;
     }>;
-}
+
 export interface QueueFilters {
     status?: string[];
     priority?: string[];
@@ -69,7 +70,6 @@ export interface QueueFilters {
     sort_order: 'asc' | 'desc';
     page: number;
     limit: number;
-}
 declare const SubmissionQueueDashboard: React.FC;
 export default SubmissionQueueDashboard;
 //# sourceMappingURL=SubmissionQueueDashboard.d.ts.map

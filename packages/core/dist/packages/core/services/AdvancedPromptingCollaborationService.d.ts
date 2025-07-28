@@ -13,7 +13,7 @@ export interface FilmIndustryUser {
     name: string;
     role: FilmIndustryRole;
     department: string;
-    permissions: string[];
+    permissions: string;
     isOnline: boolean;
     currentSession?: string;
 }
@@ -23,8 +23,8 @@ export interface MARSRegionTemplate {
     title: string;
     description: string;
     color: string;
-    tags: string[];
-    defaultNodes: string[];
+    tags: string;
+    defaultNodes: string;
     vfxCompatible: boolean;
     marsParameters: {
         category: string;
@@ -38,7 +38,7 @@ export interface ZadaPromptPattern {
     description: string;
     pattern: string;
     methodology: PromptingMethodology;
-    filmGenre: string[];
+    filmGenre: string;
     complexity: 'simple' | 'intermediate' | 'advanced';
     elements: {
         timeAndSetting: string;
@@ -57,10 +57,10 @@ export interface PromptingMethodologySession {
     sessionId: string;
     title: string;
     methodology: PromptingMethodology;
-    participants: FilmIndustryUser[];
+    participants: FilmIndustryUser;
     currentPattern: ZadaPromptPattern | null;
-    marsRegions: MARSRegionTemplate[];
-    collaborativeEdits: MethodologyEdit[];
+    marsRegions: MARSRegionTemplate;
+    collaborativeEdits: MethodologyEdit;
     vfxExportConfig: VFXPipelineConfig;
     createdAt: Date;
     lastModified: Date;
@@ -79,7 +79,7 @@ export interface VFXPipelineConfig {
     includeMarsStructure: boolean;
     includeZadaPatterns: boolean;
     exportFormat: 'controlnet' | 'stable_diffusion' | 'custom_pipeline';
-    targetSoftware: string[];
+    targetSoftware: string;
     pipelineMetadata: {
         project: string;
         sequence: string;
@@ -93,9 +93,9 @@ export interface FilmIndustryWorkflowTemplate {
     description: string;
     targetRole: FilmIndustryRole;
     methodology: PromptingMethodology;
-    phases: WorkflowPhase[];
-    marsZones: MARSZoneType[];
-    zadaElements: string[];
+    phases: WorkflowPhase;
+    marsZones: MARSZoneType;
+    zadaElements: string;
     estimatedDuration: number;
     complexity: 'simple' | 'intermediate' | 'advanced';
 }
@@ -104,10 +104,10 @@ export interface WorkflowPhase {
     name: string;
     description: string;
     duration: number;
-    requiredRoles: FilmIndustryRole[];
-    deliverables: string[];
+    requiredRoles: FilmIndustryRole;
+    deliverables: string;
     methodology: PromptingMethodology;
-    marsConfiguration?: MARSRegionTemplate[];
+    marsConfiguration?: MARSRegionTemplate;
     zadaPattern?: ZadaPromptPattern;
 }
 export interface CollaborationComment {
@@ -123,13 +123,6 @@ export interface CollaborationComment {
     resolved: boolean;
     priority: 'low' | 'medium' | 'high' | 'critical';
 }
-/**
- * Advanced Prompting Collaboration Service for Film Industry Teams
- *
- * Provides sophisticated collaboration tools for film industry professionals
- * working with AI prompt generation, combining MARS framework, Zada natural
- * language patterns, and VFX pipeline integration.
- */
 export declare class AdvancedPromptingCollaborationService extends EventEmitter {
     private sessions;
     private users;
@@ -140,19 +133,5 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     private initializeDefaults;
     private initializeMARSRegionTemplates;
     private initializeZadaPromptPatterns;
-    private initializeWorkflowTemplates;
-    createCollaborationSession(title: string, methodology: PromptingMethodology, creatorId: string): Promise<PromptingMethodologySession>;
-    joinCollaborationSession(sessionId: string, userId: string): Promise<boolean>;
-    createZadaPattern(sessionId: string, userId: string, patternData: Partial<ZadaPromptPattern>): Promise<ZadaPromptPattern>;
-    createMARSRegion(sessionId: string, userId: string, regionData: Partial<MARSRegionTemplate>): Promise<MARSRegionTemplate>;
-    generateVFXExport(sessionId: string, userId: string): Promise<any>;
-    registerUser(user: FilmIndustryUser): void;
-    getUsersByRole(role: FilmIndustryRole): FilmIndustryUser[];
-    getWorkflowTemplates(targetRole?: FilmIndustryRole): FilmIndustryWorkflowTemplate[];
-    getMARSRegionTemplates(zoneType?: MARSZoneType): MARSRegionTemplate[];
-    getZadaPatterns(methodology?: PromptingMethodology): ZadaPromptPattern[];
-    getActiveSessions(): PromptingMethodologySession[];
-    getSessionById(sessionId: string): PromptingMethodologySession | undefined;
-    getUserSessions(userId: string): PromptingMethodologySession[];
 }
 //# sourceMappingURL=AdvancedPromptingCollaborationService.d.ts.map

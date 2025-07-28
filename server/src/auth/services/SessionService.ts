@@ -7,6 +7,7 @@ import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 import { TokenService } from './TokenService';
 
+}
 export interface SessionData {
   userId: string;
   deviceInfo?: {
@@ -17,6 +18,7 @@ export interface SessionData {
     version?: string;
     language?: string;
     timezone?: string;
+}
   };
   location?: {
     ipAddress?: string;
@@ -27,12 +29,15 @@ export interface SessionData {
   rememberMe?: boolean;
 }
 
+}
 export interface SessionValidationResult {
   valid: boolean;
   session?: UserSession;
   reason?: string;
 }
+}
 
+}
 export interface ActiveSession {
   id: string;
   deviceInfo: any;
@@ -40,6 +45,7 @@ export interface ActiveSession {
   lastAccessedAt: Date;
   createdAt: Date;
   current?: boolean;
+}
 }
 
 export class SessionService {
@@ -64,6 +70,7 @@ export class SessionService {
   }
 
   async createSession(sessionData: SessionData): Promise<UserSession> {
+
     const crypto = require('crypto');
     const sessionId = crypto.randomUUID();
     const sessionToken = crypto.randomBytes(32).toString('hex');
@@ -118,7 +125,7 @@ export class SessionService {
         deviceInfo: sessionData.deviceInfo,
         location: sessionData.location,
         rememberMe: sessionData.rememberMe
-      },
+  }
       ipAddress: sessionData.location?.ipAddress,
       userAgent: sessionData.deviceInfo?.userAgent,
       sessionId,
@@ -129,6 +136,7 @@ export class SessionService {
   }
 
   async getSession(sessionToken: string): Promise<UserSession | null> {
+
     // Try Redis first for performance
     const cachedSession = await this.getCachedSession(sessionToken);
     if (cachedSession) {
@@ -154,6 +162,7 @@ export class SessionService {
   }
 
   async validateSession(sessionToken: string): Promise<SessionValidationResult> {
+
     const session = await this.getSession(sessionToken);
     
     if (!session) {
@@ -184,6 +193,7 @@ export class SessionService {
   }
 
   async updateSessionActivity(sessionToken: string): Promise<void> {
+
     const now = new Date();
     
     // Update in database
@@ -202,6 +212,7 @@ export class SessionService {
   }
 
   async renewSession(sessionToken: string): Promise<UserSession | null> {
+
     const session = await this.getSession(sessionToken);
     if (!session) {
       return null;
@@ -229,7 +240,7 @@ export class SessionService {
       details: {
         sessionId: session.id,
         newExpiresAt
-      },
+  }
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
@@ -240,6 +251,7 @@ export class SessionService {
   }
 
   async revokeSession(sessionToken: string, reason?: string): Promise<void> {
+
     const session = await this.getSession(sessionToken);
     if (!session) {
       return;
@@ -267,7 +279,7 @@ export class SessionService {
       details: {
         sessionId: session.id,
         reason: reason || 'manual_revocation'
-      },
+  }
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       sessionId: session.id,
@@ -276,6 +288,7 @@ export class SessionService {
   }
 
   async revokeAllUserSessions(userId: string, exceptSessionId?: string): Promise<number> {
+
     const whereClause = exceptSessionId 
       ? 'WHERE user_id = $1 AND id != $2 AND NOT revoked'
       : 'WHERE user_id = $1 AND NOT revoked';
@@ -313,7 +326,7 @@ export class SessionService {
         revokedCount,
         exceptSessionId,
         revokedSessionIds: result.rows.map(row => row.id)
-      },
+  }
       severity: 'info'
     });
 
@@ -321,6 +334,7 @@ export class SessionService {
   }
 
   async getUserActiveSessions(userId: string): Promise<ActiveSession[]> {
+
     const result = await this.dbService.query(`
       SELECT id, device_info, ip_address, user_agent, last_accessed_at, created_at
       FROM user_sessions
@@ -333,13 +347,14 @@ export class SessionService {
       deviceInfo: row.device_info || {},
       location: {
         ipAddress: row.ip_address
-      },
+  }
       lastAccessedAt: row.last_accessed_at,
       createdAt: row.created_at
     }));
   }
 
   async cleanupExpiredSessions(): Promise<number> {
+
     const result = await this.dbService.query(`
       DELETE FROM user_sessions 
       WHERE expires_at < NOW()
@@ -358,7 +373,7 @@ export class SessionService {
         details: {
           cleanedCount,
           cleanedSessionIds: result.rows.map(row => row.id)
-        },
+  }
         severity: 'info'
       });
     }
@@ -372,6 +387,7 @@ export class SessionService {
     expiredSessions: number;
     revokedSessions: number;
   }> {
+
     const result = await this.dbService.query(`
       SELECT 
         COUNT(*) as total_sessions,
@@ -397,6 +413,7 @@ export class SessionService {
     suspiciousLocations: string[];
     newDevices: any[];
   }> {
+
     // Get recent sessions (last 24 hours)
     const result = await this.dbService.query(`
       SELECT ip_address, device_info, created_at
@@ -440,6 +457,7 @@ export class SessionService {
   }
 
   private async cacheSession(session: UserSession): Promise<void> {
+
     const cacheKey = `session:${session.sessionToken}`;
     const ttl = Math.floor((session.expiresAt.getTime() - Date.now()) / 1000);
     
@@ -449,6 +467,7 @@ export class SessionService {
   }
 
   private async getCachedSession(sessionToken: string): Promise<UserSession | null> {
+
     const cacheKey = `session:${sessionToken}`;
     const cached = await this.redisService.get(cacheKey);
     
@@ -472,6 +491,7 @@ export class SessionService {
   }
 
   private async removeCachedSession(sessionToken: string): Promise<void> {
+
     const cacheKey = `session:${sessionToken}`;
     await this.redisService.del(cacheKey);
   }
@@ -495,6 +515,7 @@ export class SessionService {
 
   // Session notification methods
   async notifyNewSession(session: UserSession): Promise<void> {
+
     // TODO: Implement email notification for new session
     await this.auditService.logEvent({
       userId: session.userId,
@@ -502,13 +523,14 @@ export class SessionService {
       details: {
         sessionId: session.id,
         type: 'new_session'
-      },
+  }
       sessionId: session.id,
       severity: 'info'
     });
   }
 
   async notifySuspiciousActivity(userId: string, activity: any): Promise<void> {
+
     // TODO: Implement security alert notification
     await this.auditService.logEvent({
       userId,
@@ -516,7 +538,7 @@ export class SessionService {
       details: {
         type: 'suspicious_activity',
         activity
-      },
+  }
       severity: 'warning'
     });
   }

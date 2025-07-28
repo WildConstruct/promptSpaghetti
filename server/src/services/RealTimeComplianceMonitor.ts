@@ -23,6 +23,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
+}
 export interface RealTimeMonitoringConfig {
   monitorId: string;
   enabled: boolean;
@@ -55,7 +56,9 @@ export interface RealTimeMonitoringConfig {
   enableNotifications: boolean;
   enableAutoRemediation: boolean;
 }
+}
 
+}
 export interface RealTimeEvent {
   eventId: string;
   eventType: ComplianceEventType;
@@ -67,7 +70,9 @@ export interface RealTimeEvent {
   tags: string[];
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface EventPayload {
   userId?: string;
   resourceId?: string;
@@ -79,7 +84,9 @@ export interface EventPayload {
   duration?: number;
   error?: ErrorInfo;
 }
+}
 
+}
 export interface DataAccessInfo {
   dataType: string;
   dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
@@ -89,7 +96,9 @@ export interface DataAccessInfo {
   legalBasis?: string;
   consentId?: string;
 }
+}
 
+}
 export interface ComplianceViolationEvent {
   violationId: string;
   ruleId: string;
@@ -103,7 +112,9 @@ export interface ComplianceViolationEvent {
   requiresImmediateAction: boolean;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ViolationEvidence {
   type: 'log' | 'metric' | 'configuration' | 'data_sample' | 'user_action';
   source: string;
@@ -112,7 +123,9 @@ export interface ViolationEvidence {
   hash?: string;
   signature?: string;
 }
+}
 
+}
 export interface AlertThreshold {
   metric: string;
   operator: 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'ne';
@@ -120,7 +133,9 @@ export interface AlertThreshold {
   timeWindow: number; // minutes
   consecutiveCount?: number;
 }
+}
 
+}
 export interface EscalationRule {
   ruleId: string;
   condition: string;
@@ -129,7 +144,9 @@ export interface EscalationRule {
   recipients: string[];
   actions: string[];
 }
+}
 
+}
 export interface SuppressionRule {
   ruleId: string;
   pattern: string;
@@ -137,7 +154,9 @@ export interface SuppressionRule {
   reason: string;
   approvedBy: string;
 }
+}
 
+}
 export interface MonitoringMetrics {
   eventsProcessed: number;
   violationsDetected: number;
@@ -147,6 +166,7 @@ export interface MonitoringMetrics {
   alertsGenerated: number;
   remediationsTriggered: number;
   timestamp: Date;
+}
 }
 
 export type ComplianceEventType = 
@@ -232,6 +252,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Initialize the real-time compliance monitor
    */
   public async initialize(): Promise<void> {
+
     if (this.isRunning) {
       throw new Error('Real-time compliance monitor is already running');
     }
@@ -267,6 +288,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Process a real-time compliance event
    */
   public async processEvent(event: RealTimeEvent): Promise<void> {
+
     if (!this.isRunning) {
       throw new Error('Real-time compliance monitor is not running');
     }
@@ -290,6 +312,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Process multiple events in batch
    */
   public async processEventBatch(events: RealTimeEvent[]): Promise<void> {
+
     for (const event of events) {
       await this.processEvent(event);
     }
@@ -299,6 +322,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Process event immediately for critical violations
    */
   private async processEventImmediate(event: RealTimeEvent): Promise<void> {
+
     const startTime = Date.now();
 
     try {
@@ -327,6 +351,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Evaluate event against compliance rules
    */
   private async evaluateEventAgainstRules(event: RealTimeEvent): Promise<ComplianceViolationEvent[]> {
+
     const violations: ComplianceViolationEvent[] = [];
 
     try {
@@ -379,6 +404,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     violation: ComplianceViolationEvent, 
     _____originalEvent: RealTimeEvent
   ): Promise<void> {
+
     // Store violation
     this.violationCache.set(violation.violationId, violation);
 
@@ -474,6 +500,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Check if alert thresholds are exceeded
    */
   private async checkAlertThresholds(violation: ComplianceViolationEvent): Promise<void> {
+
     for (const threshold of this.config.alertThresholds) {
       const exceeded = await this.evaluateThreshold(threshold, violation);
       if (exceeded) {
@@ -489,6 +516,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     threshold: AlertThreshold, 
     _____violation: ComplianceViolationEvent
   ): Promise<boolean> {
+
     // Get metric value for the specified time window
     const timeWindow = new Date(Date.now() - (threshold.timeWindow * 60 * 1000));
     const metricValue = await this.getMetricValue(threshold.metric, timeWindow);
@@ -516,6 +544,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Get metric value for threshold evaluation
    */
   private async getMetricValue(metric: string, since: Date): Promise<number> {
+
     switch (metric) {
     case 'violations_per_hour':
       return await this.getViolationCount(since);
@@ -534,6 +563,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Get violation count since specified time
    */
   private async getViolationCount(since: Date): Promise<number> {
+
     let count = 0;
     for (const violation of this.violationCache.values()) {
       if (violation.detectedAt >= since) {
@@ -547,6 +577,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Get critical violation count since specified time
    */
   private async getCriticalViolationCount(since: Date): Promise<number> {
+
     let count = 0;
     for (const violation of this.violationCache.values()) {
       if (violation.detectedAt >= since && violation.severity === 'critical') {
@@ -563,6 +594,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     threshold: AlertThreshold, 
     violation: ComplianceViolationEvent
   ): Promise<void> {
+
     const alert = {
       alertId: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       threshold: threshold.metric,
@@ -589,6 +621,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Send violation notification
    */
   private async sendViolationNotification(violation: ComplianceViolationEvent): Promise<void> {
+
     await this.notificationService.sendNotification({
       type: 'violation_detected',
       recipient: 'compliance_team',
@@ -607,6 +640,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Trigger automated remediation
    */
   private async triggerAutoRemediation(violation: ComplianceViolationEvent): Promise<void> {
+
     try {
       for (const action of violation.suggestedActions) {
         await this.executeRemediationAction(action, violation);
@@ -634,6 +668,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     action: string, 
     violation: ComplianceViolationEvent
   ): Promise<void> {
+
     // This would integrate with specific remediation systems
     console.log(`Executing remediation action: ${action} for violation: ${violation.violationId}`);
     
@@ -660,6 +695,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Handle escalation rules
    */
   private async handleEscalation(violation: ComplianceViolationEvent): Promise<void> {
+
     for (const rule of this.config.escalationRules) {
       if (this.shouldEscalate(rule, violation)) {
         await this.escalateViolation(rule, violation);
@@ -682,6 +718,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     rule: EscalationRule, 
     violation: ComplianceViolationEvent
   ): Promise<void> {
+
     const escalationLevel = (this.escalationState.get(violation.violationId) || 0) + 1;
     this.escalationState.set(violation.violationId, escalationLevel);
 
@@ -730,6 +767,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Process queued events
    */
   private async processEventQueue(): Promise<void> {
+
     if (this.eventQueue.length === 0 || 
         this.activeEvaluations >= this.config.maxConcurrentEvaluations) {
       return;
@@ -746,7 +784,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
     const processingPromises = batch.map(event => 
       this.processEventImmediate(event).catch(error => 
         this.handleProcessingError(error, event)
-      )
+
     );
 
     await Promise.allSettled(processingPromises);
@@ -756,6 +794,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Handle processing errors
    */
   private async handleProcessingError(error: Error, event: RealTimeEvent): Promise<void> {
+
     console.error('Event processing error:', error, 'Event:', event);
     
     this.metrics.errorRate = (this.metrics.errorRate * 0.9) + (1 * 0.1); // Exponential moving average
@@ -786,6 +825,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Report current metrics
    */
   private async reportMetrics(): Promise<void> {
+
     this.metrics.timestamp = new Date();
 
     if (this.config.enableMetrics) {
@@ -815,6 +855,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Perform health check
    */
   private async performHealthCheck(): Promise<void> {
+
     const health = {
       healthy: true,
       issues: [] as string[],
@@ -859,8 +900,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
       errorRate: 0,
       alertsGenerated: 0,
       remediationsTriggered: 0,
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   /**
@@ -897,6 +937,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Persist violation to database
    */
   private async persistViolation(violation: ComplianceViolationEvent): Promise<void> {
+
     try {
       await this.databaseService.execute(`
         INSERT INTO compliance_violations (
@@ -923,6 +964,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Load previous state from Redis
    */
   private async loadState(): Promise<void> {
+
     try {
       const metricsData = await this.redisService.get(`compliance_monitor_metrics:${this.config.monitorId}`);
       if (metricsData) {
@@ -965,6 +1007,7 @@ export class RealTimeComplianceMonitor extends EventEmitter {
    * Stop the real-time monitor
    */
   public async stop(): Promise<void> {
+
     if (!this.isRunning) {
       return;
     }

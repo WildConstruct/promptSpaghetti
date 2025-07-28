@@ -21,6 +21,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
+}
 interface PolicyRoutes {
   '/policies': {
     GET: {
@@ -31,6 +32,7 @@ interface PolicyRoutes {
         tags?: string;
         limit?: number;
         offset?: number;
+}
       };
     };
     POST: {
@@ -158,17 +160,17 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             type: { 
               type: 'string', 
               enum: ['enforcement', 'content_moderation', 'compliance', 'security', 'operational', 'community', 'commerce', 'verification', 'privacy', 'accessibility']
-            },
+  }
             status: { 
               type: 'string', 
               enum: ['draft', 'active', 'inactive', 'deprecated', 'archived'] 
-            },
+  }
             category: { type: 'string' },
             tags: { type: 'string', description: 'Comma-separated tags' },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -181,7 +183,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const filters = {
@@ -234,12 +236,12 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
                 created_by: { type: 'string' },
                 effective_date: { type: 'string', format: 'date-time' }
               }
-            },
+  }
             scope: { type: 'object' },
             rules: { type: 'array' },
             configuration: { type: 'object' }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -250,7 +252,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const policy = request.body;
@@ -272,7 +274,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             policy_id: policyId,
             policy_name: policy.metadata.name,
             policy_type: policy.metadata.type
-          },
+  }
           severity: 'info'
         });
 
@@ -310,7 +312,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -346,7 +348,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           properties: {
             policyId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -360,7 +362,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -383,7 +385,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           details: {
             policy_id: policyId,
             updated_fields: Object.keys(updates)
-          },
+  }
           severity: 'info'
         });
 
@@ -414,7 +416,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -436,7 +438,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           details: {
             policy_id: policyId,
             policy_name: existingPolicy.metadata.name
-          },
+  }
           severity: 'warning'
         });
 
@@ -465,7 +467,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           properties: {
             policyId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['entity_type', 'entity_id', 'entity_data'],
@@ -473,14 +475,14 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             entity_type: { 
               type: 'string', 
               enum: ['user', 'template', 'transaction', 'system'] 
-            },
+  }
             entity_id: { type: 'string' },
             entity_data: { type: 'object' },
             context_data: { type: 'object' }
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -497,12 +499,12 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             user_id: userId,
             ip_address: request.ip,
             user_agent: request.headers['user-agent']
-          },
+  }
           environment: {
             region: 'us-east-1', // Default
             platform: 'web',
             version: '1.0.0'
-          },
+  }
           context_data: context_data || {}
         };
 
@@ -518,7 +520,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             entity_id,
             result: result.overall_result,
             execution_time: result.execution_time
-          },
+  }
           severity: result.overall_result === 'error' ? 'error' : 'info'
         });
 
@@ -549,7 +551,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           properties: {
             policyId: { type: 'string' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           required: ['start_date', 'end_date'],
@@ -564,7 +566,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -610,7 +612,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { category, type, is_public, limit = 20, offset = 0 } = request.query;
@@ -694,7 +696,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['policy_name', 'parameters'],
@@ -704,7 +706,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { templateId } = request.params;
@@ -781,7 +783,7 @@ export default async function policyManagementRoutes(fastify: FastifyInstance) {
             template_id: templateId,
             policy_name,
             parameters
-          },
+  }
           severity: 'info'
         });
 

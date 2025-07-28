@@ -19,7 +19,7 @@ export interface CreatorTrustBadgeProps {
     creatorId: string;
     creatorName: string;
     trustScore?: TrustScore | null;
-    verifications?: string[];
+    verifications?: string;
     showFullDetails?: boolean;
     className?: string;
 }
@@ -30,19 +30,12 @@ export interface TrustScoreDisplayProps {
     className?: string;
 }
 export interface VerificationBadgesProps {
-    verifications: string[];
+    verifications: string;
     maxDisplay?: number;
     size?: 'small' | 'medium' | 'large';
     className?: string;
 }
-/**
- * Main trust indicator component
- */
 export declare const TrustIndicator: React.FC<TrustIndicatorProps>;
-/**
- * Creator trust badge with comprehensive information
- */
-export declare const CreatorTrustBadge: React.FC<CreatorTrustBadgeProps>;
 /**
  * Detailed trust score display with breakdown
  */
@@ -73,13 +66,4 @@ export interface InlineTrustStatusProps {
     className?: string;
 }
 export declare const InlineTrustStatus: React.FC<InlineTrustStatusProps>;
-declare const _default: {
-    TrustIndicator: React.FC<TrustIndicatorProps>;
-    CreatorTrustBadge: React.FC<CreatorTrustBadgeProps>;
-    TrustScoreDisplay: React.FC<TrustScoreDisplayProps>;
-    VerificationBadges: React.FC<VerificationBadgesProps>;
-    TemplateTrustIndicator: React.FC<TemplateTrustIndicatorProps>;
-    InlineTrustStatus: React.FC<InlineTrustStatusProps>;
-};
-export default _default;
 //# sourceMappingURL=TrustIndicators.d.ts.map

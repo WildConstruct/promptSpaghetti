@@ -7,50 +7,46 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
 export interface ExtensionStatus {
-  enabled: boolean;
+  enabled: boolean;,
   loaded: boolean;
   hasErrors: boolean;
   lastError?: string;
-  version: string;
+  version: string;,
   updateAvailable: boolean;
   availableVersion?: string;
 }
-
 export interface ExtensionInstallation {
-  extension: ExtensionManifest;
+  extension: ExtensionManifest;,
   installedAt: Date;
   enabledAt?: Date;
   disabledAt?: Date;
   configuration?: Record<string, any>;
 }
-
 export interface ExtensionManagerState {
   // Extension data
-  installedExtensions: ExtensionManifest[];
-  availableExtensions: ExtensionManifest[];
+  installedExtensions: ExtensionManifest;,
+  availableExtensions: ExtensionManifest;
   extensionStatuses: Map<string, ExtensionStatus>;
   extensionConfigurations: Map<string, Record<string, any>>;
   // UI state
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;
   selectedExtensionId: string | null;
   // Actions
-  loadInstalledExtensions: () => Promise<void>;
+  loadInstalledExtensions: () => Promise<void>;,
   loadAvailableExtensions: () => Promise<void>;
-  installExtension: (extension: ExtensionManifest) => Promise<void>;
-  uninstallExtension: (extensionId: string) => Promise<void>;
-  enableExtension: (extensionId: string) => Promise<void>;
-  disableExtension: (extensionId: string) => Promise<void>;
-  updateExtension: (extensionId: string) => Promise<void>;
+  installExtension: (extension: ExtensionManifest) => Promise<void>;,
+  uninstallExtension: (extensionId: string) => Promise<void>;,
+  enableExtension: (extensionId: string) => Promise<void>;,
+  disableExtension: (extensionId: string) => Promise<void>;,
+  updateExtension: (extensionId: string) => Promise<void>;,
   configureExtension: (extensionId: string, config: Record<string, any>) => Promise<void>;
-  getExtensionStatus: (extensionId: string) => ExtensionStatus;
+  getExtensionStatus: (extensionId: string) => ExtensionStatus;,
   checkForUpdates: () => Promise<void>;
-  clearError: () => void;
+  clearError: () => void;,
   setSelectedExtension: (extensionId: string | null) => void;
-}
-
-// Default extension status
-const createDefaultStatus = (extension: ExtensionManifest): ExtensionStatus => ({)
+  // Default extension status
+  const createDefaultStatus = (extension: ExtensionManifest): ExtensionStatus => ({,)
   enabled: false,
   loaded: false,
   hasErrors: false,
@@ -59,96 +55,88 @@ const createDefaultStatus = (extension: ExtensionManifest): ExtensionStatus => (
 });
 
 // Mock data for development
-const mockInstalledExtensions: ExtensionManifest[] = [
+const mockInstalledExtensions: ExtensionManifest = [
   {
-    manifest_version: '1.0',
-    id: 'core-text-utils',
-    name: 'Core Text Utilities',
-    version: '1.2.0',
-    description: 'Essential text processing and manipulation utilities',
-    author: 'PromptSpaghetti Team',
-    extension_type: 'transform',
-    capabilities: {,
-      provides: ['text-transform', 'string-manipulation'],
-      requires: ['runtime-nodes'],
-    },
-    dependencies: {,
-      system_version: '^1.0.0',
-    },
-    permissions: ['data-processing'],
+  manifest_version: '1.0',
+  id: 'core-text-utils',
+  name: 'Core Text Utilities',
+  version: '1.2.0',
+  description: 'Essential text processing and manipulation utilities',
+  author: 'PromptSpaghetti Team',
+  extension_type: 'transform',
+  capabilities: {,
+  provides: ['text-transform', 'string-manipulation'],
+  requires: ['runtime-nodes'],
+},
+  dependencies: {,
+  system_version: '^1.0.0',
+},
+  permissions: ['data-processing'],
     runtime: {,
-      entry_point: 'dist/index.js',
-      node_types: ['TextCleanup', 'TextFormat', 'TextSplit']
-    }
-  },
+  entry_point: 'dist/index.js',
+  node_types: ['TextCleanup', 'TextFormat', 'TextSplit'],
+}
   {
-    manifest_version: '1.0',
-    id: 'advanced-math',
-    name: 'Advanced Math Operations',
-    version: '2.1.0',
-    description: 'Complex mathematical operations and statistical functions',
-    author: 'MathUtils Inc',
-    extension_type: 'node',
-    capabilities: {,
-      provides: ['math-operations', 'statistics'],
-      requires: ['runtime-nodes', 'advanced-nodes']
-    },
-    dependencies: {,
-      system_version: '^1.0.0',
-    },
-    permissions: ['data-processing'],
+  manifest_version: '1.0',
+  id: 'advanced-math',
+  name: 'Advanced Math Operations',
+  version: '2.1.0',
+  description: 'Complex mathematical operations and statistical functions',
+  author: 'MathUtils Inc',
+  extension_type: 'node',
+  capabilities: {,
+  provides: ['math-operations', 'statistics'],
+  requires: ['runtime-nodes', 'advanced-nodes'],
+},
+  dependencies: {,
+  system_version: '^1.0.0',
+},
+  permissions: ['data-processing'],
     runtime: {,
-      entry_point: 'dist/math.js',
-      node_types: ['MathCalculator', 'StatisticsAnalyzer', 'DataVisualizer']
-    }
-  }
-];
-const mockAvailableExtensions: ExtensionManifest[] = [
+  entry_point: 'dist/math.js',
+  node_types: ['MathCalculator', 'StatisticsAnalyzer', 'DataVisualizer']];
+  const mockAvailableExtensions: ExtensionManifest = [
   ...mockInstalledExtensions,
   {
-    manifest_version: '1.0',
-    id: 'data-connectors',
-    name: 'Data Connectors',
-    version: '1.0.0',
-    description: 'Connect to external data sources and APIs',
-    author: 'DataFlow Systems',
-    extension_type: 'storage',
-    capabilities: {,
-      provides: ['data-storage', 'api-integration'],
-      requires: ['network-access'],
-    },
-    dependencies: {,
-      system_version: '^1.0.0',
-    },
-    permissions: ['network', 'data-storage'],
+  manifest_version: '1.0',
+  id: 'data-connectors',
+  name: 'Data Connectors',
+  version: '1.0.0',
+  description: 'Connect to external data sources and APIs',
+  author: 'DataFlow Systems',
+  extension_type: 'storage',
+  capabilities: {,
+  provides: ['data-storage', 'api-integration'],
+  requires: ['network-access'],
+},
+  dependencies: {,
+  system_version: '^1.0.0',
+},
+  permissions: ['network', 'data-storage'],
     runtime: {,
-      entry_point: 'dist/connectors.js',
-      storage_providers: ['RestAPI', 'GraphQL', 'Database']
-    }
-  },
+  entry_point: 'dist/connectors.js',
+  storage_providers: ['RestAPI', 'GraphQL', 'Database'],
+}
   {
-    manifest_version: '1.0',
-    id: 'ui-themes',
-    name: 'UI Theme Pack',
-    version: '3.0.0',
-    description: 'Additional themes and visual customizations',
-    author: 'Design Studio',
-    extension_type: 'ui',
-    capabilities: {,
-      provides: ['themes', 'ui-components'],
-      requires: ['ui-components'],
-    },
-    dependencies: {,
-      system_version: '^1.0.0',
-    },
-    permissions: ['ui-components'],
+  manifest_version: '1.0',
+  id: 'ui-themes',
+  name: 'UI Theme Pack',
+  version: '3.0.0',
+  description: 'Additional themes and visual customizations',
+  author: 'Design Studio',
+  extension_type: 'ui',
+  capabilities: {,
+  provides: ['themes', 'ui-components'],
+  requires: ['ui-components'],
+},
+  dependencies: {,
+  system_version: '^1.0.0',
+},
+  permissions: ['ui-components'],
     ui: {,
-      themes: ['dark-pro', 'light-minimal', 'high-contrast'],
-      components: ['ThemeSelector', 'ColorPicker']
-    }
-  }
-];
-
+  themes: ['dark-pro', 'light-minimal', 'high-contrast'],
+  components: ['ThemeSelector', 'ColorPicker']];
+}
 export const useExtensionManagerStore = create<ExtensionManagerState>((set, get) => ({)
   // Initial state
   installedExtensions: [],
@@ -162,47 +150,46 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
   loadInstalledExtensions: async () => {,
     set({ isLoading: true, error: null });
     try {
-      // In a real implementation, this would fetch from the extension registry
-      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
-      const extensions = mockInstalledExtensions;
-      const statuses = new Map<string, ExtensionStatus>();
-      // Initialize statuses for installed extensions
-      for (const ext of extensions) {
-        statuses.set(ext.id, {)
-          ...createDefaultStatus(ext),
-          enabled: ext.id === 'core-text-utils', // Enable core utils by default
-          loaded: true,
-        });
-      }
+  // In a real implementation, this would fetch from the extension registry
+  await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+  const extensions = mockInstalledExtensions;
+  const statuses = new Map<string, ExtensionStatus>();
+  // Initialize statuses for installed extensions
+  for (const ext of extensions) {
+  statuses.set(ext.id, {)
+  ...createDefaultStatus(ext),
+  enabled: ext.id === 'core-text-utils', // Enable core utils by default,
+  loaded: true,
+});
       set({)
-        installedExtensions: extensions,
-        extensionStatuses: statuses,
-        isLoading: false,
-      });
+  installedExtensions: extensions,
+  extensionStatuses: statuses,
+  isLoading: false,
+});
     } catch (error) {
       set({)
-        error: `Failed to load installed extensions: ${error}`,}
-        isLoading: false,
-      });
-    }
-  },
+  error: `Failed to load installed extensions: ${error}`}
+},
+  isLoading: false;
+  });
+  }
   // Load available extensions from marketplace
   loadAvailableExtensions: async () => {,
     set({ isLoading: true, error: null });
     try {
-      // In a real implementation, this would fetch from marketplace API
-      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate API call
-      set({)
-        availableExtensions: mockAvailableExtensions,
-        isLoading: false,
-      });
+  // In a real implementation, this would fetch from marketplace API
+  await new Promise(resolve => setTimeout(resolve, 800)); // Simulate API call
+  set({)
+  availableExtensions: mockAvailableExtensions,
+  isLoading: false,
+});
     } catch (error) {
       set({)
-        error: `Failed to load available extensions: ${error}`,}
-        isLoading: false,
-      });
-    }
-  },
+  error: `Failed to load available extensions: ${error}`}
+},
+  isLoading: false;
+  });
+  }
   // Install extension
   installExtension: async (extension: ExtensionManifest) => {,
     set({ isLoading: true, error: null });
@@ -215,119 +202,112 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
           platform: 'web',
           availableExtensions: new Map(),
           grantedPermissions: ['data-processing', 'ui-components']
-        }
       );
       if (!compatibilityResult.compatible) {
         throw new Error(`Extension is not compatible: ${compatibilityResult.issues.map(i => i.message).join(', ')}`);}
-      }
       // Simulate installation process
       await new Promise(resolve => setTimeout(resolve, 1000));
       const state = get();
       const newInstalledExtensions = [...state.installedExtensions];
       // Add to installed extensions if not already installed
       if (!newInstalledExtensions.find(ext => ext.id === extension.id)) {
-        newInstalledExtensions.push(extension);
-      }
-      // Set initial status
-      const newStatuses = new Map(state.extensionStatuses);
-      newStatuses.set(extension.id, {)
-        ...createDefaultStatus(extension),
-        loaded: true,
-        enabled: false,
-      });
+  newInstalledExtensions.push(extension);
+  // Set initial status
+  const newStatuses = new Map(state.extensionStatuses);
+  newStatuses.set(extension.id, {)
+  ...createDefaultStatus(extension),
+  loaded: true,
+  enabled: false,
+});
       set({)
-        installedExtensions: newInstalledExtensions,
-        extensionStatuses: newStatuses,
-        isLoading: false,
-      });
+  installedExtensions: newInstalledExtensions,
+  extensionStatuses: newStatuses,
+  isLoading: false,
+});
     } catch (error) {
       set({)
-        error: `Failed to install extension: ${error}`,}
-        isLoading: false,
-      });
+  error: `Failed to install extension: ${error}`}
+},
+  isLoading: false;
+  });
       throw error;
-    }
-  },
+  }
   // Uninstall extension
   uninstallExtension: async (extensionId: string) => {,
     set({ isLoading: true, error: null });
     try {
-      // Simulate uninstallation process
-      await new Promise(resolve => setTimeout(resolve, 500));
-      const state = get();
-      const newInstalledExtensions = state.installedExtensions.filter(ext => ext.id !== extensionId);
-      const newStatuses = new Map(state.extensionStatuses);
-      const newConfigurations = new Map(state.extensionConfigurations);
-      newStatuses.delete(extensionId);
-      newConfigurations.delete(extensionId);
-      set({)
-        installedExtensions: newInstalledExtensions,
-        extensionStatuses: newStatuses,
-        extensionConfigurations: newConfigurations,
-        selectedExtensionId: state.selectedExtensionId === extensionId ? null : state.selectedExtensionId,
-        isLoading: false,
-      });
+  // Simulate uninstallation process
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const state = get();
+  const newInstalledExtensions = state.installedExtensions.filter(ext => ext.id !== extensionId);
+  const newStatuses = new Map(state.extensionStatuses);
+  const newConfigurations = new Map(state.extensionConfigurations);
+  newStatuses.delete(extensionId);
+  newConfigurations.delete(extensionId);
+  set({)
+  installedExtensions: newInstalledExtensions,
+  extensionStatuses: newStatuses,
+  extensionConfigurations: newConfigurations,
+  selectedExtensionId: state.selectedExtensionId === extensionId ? null : state.selectedExtensionId,
+  isLoading: false,
+});
     } catch (error) {
       set({)
-        error: `Failed to uninstall extension: ${error}`,}
-        isLoading: false,
-      });
+  error: `Failed to uninstall extension: ${error}`}
+},
+  isLoading: false;
+  });
       throw error;
-    }
-  },
+  }
   // Enable extension
   enableExtension: async (extensionId: string) => {,
-    const state = get();
-    const status = state.extensionStatuses.get(extensionId);
-    if (!status) {
-      throw new Error('Extension not found');
-    }
-    try {
-      // Simulate enabling process
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const newStatuses = new Map(state.extensionStatuses);
-      newStatuses.set(extensionId, {)
-        ...status,
-        enabled: true,
-        hasErrors: false,
-        lastError: undefined,
-      });
+  const state = get();
+  const status = state.extensionStatuses.get(extensionId);
+  if (!status) {
+  throw new Error('Extension not found');
+  try {
+  // Simulate enabling process
+  await new Promise(resolve => setTimeout(resolve, 300));
+  const newStatuses = new Map(state.extensionStatuses);
+  newStatuses.set(extensionId, {)
+  ...status,
+  enabled: true,
+  hasErrors: false,
+  lastError: undefined,
+});
       set({ extensionStatuses: newStatuses });
     } catch (error) {
       const newStatuses = new Map(state.extensionStatuses);
       newStatuses.set(extensionId, {)
-        ...status,
+  ...status,
         enabled: false,
         hasErrors: true,
         lastError: `Failed to enable: ${error}`}
       });
       set({ extensionStatuses: newStatuses });
       throw error;
-    }
-  },
+  }
   // Disable extension
   disableExtension: async (extensionId: string) => {,
-    const state = get();
-    const status = state.extensionStatuses.get(extensionId);
-    if (!status) {
-      throw new Error('Extension not found');
-    }
-    try {
-      // Simulate disabling process
-      await new Promise(resolve => setTimeout(resolve, 200));
-      const newStatuses = new Map(state.extensionStatuses);
-      newStatuses.set(extensionId, {)
-        ...status,
-        enabled: false,
-        hasErrors: false,
-        lastError: undefined,
-      });
+  const state = get();
+  const status = state.extensionStatuses.get(extensionId);
+  if (!status) {
+  throw new Error('Extension not found');
+  try {
+  // Simulate disabling process
+  await new Promise(resolve => setTimeout(resolve, 200));
+  const newStatuses = new Map(state.extensionStatuses);
+  newStatuses.set(extensionId, {)
+  ...status,
+  enabled: false,
+  hasErrors: false,
+  lastError: undefined,
+});
       set({ extensionStatuses: newStatuses });
     } catch (error) {
       set({ error: `Failed to disable extension: ${error}` });}
       throw error;
-    }
-  },
+  }
   // Update extension
   updateExtension: async (extensionId: string) => {,
     set({ isLoading: true, error: null });
@@ -339,7 +319,6 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
       const status = state.extensionStatuses.get(extensionId);
       if (!extension || !status) {
         throw new Error('Extension not found');
-      }
       // Update version (simulate)
       const newVersion = status.availableVersion || `${parseInt(extension.version.split('.')[0]) + 1}.0.0`;}
       const updatedExtension = { ...extension, version: newVersion };
@@ -348,24 +327,24 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
       );
       const newStatuses = new Map(state.extensionStatuses);
       newStatuses.set(extensionId, {)
-        ...status,
-        version: newVersion,
-        updateAvailable: false,
-        availableVersion: undefined,
-      });
+  ...status,
+  version: newVersion,
+  updateAvailable: false,
+  availableVersion: undefined,
+});
       set({)
-        installedExtensions: newInstalledExtensions,
-        extensionStatuses: newStatuses,
-        isLoading: false,
-      });
+  installedExtensions: newInstalledExtensions,
+  extensionStatuses: newStatuses,
+  isLoading: false,
+});
     } catch (error) {
       set({)
-        error: `Failed to update extension: ${error}`,}
-        isLoading: false,
-      });
+  error: `Failed to update extension: ${error}`}
+},
+  isLoading: false;
+  });
       throw error;
-    }
-  },
+  }
   // Configure extension
   configureExtension: async (extensionId: string, config: Record<string, any>) => {
     try {
@@ -378,19 +357,18 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
     } catch (error) {
       set({ error: `Failed to configure extension: ${error}` });}
       throw error;
-    }
-  },
+  }
   // Get extension status
   getExtensionStatus: (extensionId: string) => {,
-    const state = get();
-    return state.extensionStatuses.get(extensionId) || {
-      enabled: false,
-      loaded: false,
-      hasErrors: false,
-      version: '0.0.0',
-      updateAvailable: false,
-    };
-  },
+  const state = get();
+  return state.extensionStatuses.get(extensionId) || {
+  enabled: false,
+  loaded: false,
+  hasErrors: false,
+  version: '0.0.0',
+  updateAvailable: false,
+};
+  }
   // Check for updates
   checkForUpdates: async () => {,
     const state = get();
@@ -403,22 +381,19 @@ export const useExtensionManagerStore = create<ExtensionManagerState>((set, get)
         const newPatch = currentVersion[2] + 1;
         const availableVersion = `${currentVersion[0]}.${currentVersion[1]}.${newPatch}`;}
         newStatuses.set(extensionId, {)
-          ...status,
-          updateAvailable: true,
-          availableVersion
-        });
-      }
-    }
+  ...status,
+  updateAvailable: true,
+  availableVersion
+});
     set({ extensionStatuses: newStatuses });
-  },
+  }
   // Clear error
   clearError: () => {,
     set({ error: null });
-  },
+  }
   // Set selected extension
   setSelectedExtension: (extensionId: string | null) => {,
     set({ selectedExtensionId: extensionId });
-  }
 }));
 
 export type ExtensionManagerStore = ReturnType<typeof useExtensionManagerStore>;

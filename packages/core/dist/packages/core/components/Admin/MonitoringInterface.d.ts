@@ -56,8 +56,8 @@ export interface AlertData {
 export interface MonitoringViewConfig {
     layout: 'executive' | 'operational' | 'analytics' | 'compliance';
     refreshInterval: number;
-    widgets: string[];
-    rolePermissions: string[];
+    widgets: string;
+    rolePermissions: string;
 }
 interface MonitoringInterfaceProps {
     userRole: string;

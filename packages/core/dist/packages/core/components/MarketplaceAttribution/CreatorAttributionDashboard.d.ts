@@ -14,5 +14,4 @@ export interface CreatorAttributionDashboardProps {
     className?: string;
 }
 export declare const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps>;
-export default CreatorAttributionDashboard;
 //# sourceMappingURL=CreatorAttributionDashboard.d.ts.map

@@ -21,6 +21,7 @@ import {
 import { Database } from '../database/connection';
 
 // Request type definitions
+}
 interface CreateRecoveryRuleRequest {
   Body: {
     name: string;
@@ -37,23 +38,29 @@ interface CreateRecoveryRuleRequest {
       escalate_after_minutes: number;
       escalation_recipients: string[];
       escalation_actions: string[];
+}
     };
   };
 }
 
+}
 interface UpdateRecoveryRuleRequest {
   Params: {
     ruleId: string;
+}
   };
   Body: Partial<CreateRecoveryRuleRequest['Body']>;
 }
 
+}
 interface GetRecoveryRuleRequest {
   Params: {
     ruleId: string;
+}
   };
 }
 
+}
 interface ListRecoveryRulesRequest {
   Querystring: {
     enabled?: boolean;
@@ -61,9 +68,11 @@ interface ListRecoveryRulesRequest {
     urgency?: RecoveryUrgency;
     page?: number;
     pageSize?: number;
+}
   };
 }
 
+}
 interface TriggerRecoveryRequest {
   Body: {
     trigger_type: RecoveryTriggerType;
@@ -74,16 +83,20 @@ interface TriggerRecoveryRequest {
       affected_components: string[];
       metrics?: Record<string, any>;
       error_details?: string;
+}
     };
   };
 }
 
+}
 interface GetRecoveryExecutionRequest {
   Params: {
     executionId: string;
+}
   };
 }
 
+}
 interface ListRecoveryExecutionsRequest {
   Querystring: {
     status?: RecoveryAutomationStatus;
@@ -94,13 +107,16 @@ interface ListRecoveryExecutionsRequest {
     end_date?: string;
     page?: number;
     pageSize?: number;
+}
   };
 }
 
+}
 interface GetRecoveryAnalyticsRequest {
   Querystring: {
     start_date: string;
     end_date: string;
+}
   };
 }
 
@@ -135,24 +151,24 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-          },
+  }
           trigger_conditions: { type: 'object' },
           recovery_strategy: { 
             type: 'string', 
             enum: ['immediate_rollback', 'selective_recovery', 'phased_recovery',
               'full_system_recovery', 'failover_recovery', 'hybrid_recovery']
-          },
+  }
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-          },
+  }
           auto_execute: { type: 'boolean', default: false },
           max_attempts: { type: 'integer', minimum: 1, maximum: 10, default: 3 },
           cooldown_period: { type: 'integer', minimum: 0, default: 300 },
           notification_recipients: { 
             type: 'array', 
             items: { type: 'string', format: 'email' }
-          },
+  }
           escalation_policy: {
             type: 'object',
             required: ['escalate_after_minutes', 'escalation_recipients', 'escalation_actions'],
@@ -161,7 +177,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
               escalation_recipients: { 
                 type: 'array', 
                 items: { type: 'string', format: 'email' }
-              },
+  }
               escalation_actions: { 
                 type: 'array', 
                 items: { type: 'string' }
@@ -169,7 +185,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -210,7 +226,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           ruleId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -253,7 +269,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           ruleId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -304,15 +320,15 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-          },
+  }
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-          },
+  }
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -384,7 +400,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-          },
+  }
           trigger_details: {
             type: 'object',
             required: ['detected_at', 'trigger_source', 'severity', 'affected_components'],
@@ -395,13 +411,13 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
               affected_components: { 
                 type: 'array', 
                 items: { type: 'string' }
-              },
+  }
               metrics: { type: 'object' },
               error_details: { type: 'string' }
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -454,7 +470,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           executionId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -503,24 +519,24 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['monitoring', 'analyzing', 'preparing', 'executing', 'validating',
               'completed', 'failed', 'requires_intervention', 'cancelled']
-          },
+  }
           trigger_type: { 
             type: 'string', 
             enum: ['system_failure', 'data_corruption', 'performance_degradation', 
               'security_incident', 'compliance_violation', 'scheduled_maintenance', 
               'manual_trigger', 'cascade_failure']
-          },
+  }
           urgency: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'maintenance']
-          },
+  }
           rule_id: { type: 'string' },
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -594,7 +610,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           executionId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -636,7 +652,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           executionId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -686,7 +702,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -780,7 +796,7 @@ export async function recoveryAutomationRoutes(fastify: FastifyInstance) {
         properties: {
           action: { type: 'string', enum: ['start', 'stop'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',

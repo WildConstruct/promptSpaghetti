@@ -28,7 +28,7 @@ export declare enum NotificationType {
     SECURITY_ALERT = "security_alert",
     DEVICE_CONFLICT = "device_conflict",
     LOCATION_CONFLICT = "location_conflict"
-}
+
 export declare enum NotificationChannel {
     EMAIL = "email",
     SMS = "sms",
@@ -37,14 +37,14 @@ export declare enum NotificationChannel {
     WEBHOOK = "webhook",
     SLACK = "slack",
     TEAMS = "teams"
-}
+
 export declare enum NotificationPriority {
     LOW = "low",
     NORMAL = "normal",
     HIGH = "high",
     CRITICAL = "critical",
     EMERGENCY = "emergency"
-}
+
 export declare enum DeliveryStatus {
     PENDING = "pending",
     SENT = "sent",
@@ -54,7 +54,7 @@ export declare enum DeliveryStatus {
     READ = "read",
     CLICKED = "clicked",
     EXPIRED = "expired"
-}
+
 export interface NotificationConfig {
     channels: NotificationChannel[];
     priority: NotificationPriority;
@@ -67,7 +67,7 @@ export interface NotificationConfig {
     rateLimitWindow: number;
     rateLimitCount: number;
     templateCustomization: boolean;
-}
+
 export interface UserNotificationPreferences {
     userId: string;
     channels: {,
@@ -91,7 +91,7 @@ export interface UserNotificationPreferences {
         enabledTypes: NotificationType[];
         minimumPriority: NotificationPriority;
     };
-}
+
 export interface NotificationMessage {
     id: string;
     type: NotificationType;
@@ -121,7 +121,7 @@ export interface NotificationMessage {
         deviceInfo?: any;
         locationInfo?: any;
     };
-}
+
 export interface NotificationAction {
     id: string;
     label: string;
@@ -130,7 +130,7 @@ export interface NotificationAction {
     data?: Record<string, any>;
     requiresConfirmation?: boolean;
     timeout?: number;
-}
+
 export interface NotificationTemplate {
     type: NotificationType;
     channel: NotificationChannel;
@@ -143,7 +143,7 @@ export interface NotificationTemplate {
             type: NotificationAction['type'];
         };
     };
-}
+
 export interface ConflictResolutionResponse {
     conflictId: string;
     userId: string;
@@ -151,7 +151,7 @@ export interface ConflictResolutionResponse {
     selectedSessionId?: string;
     confirmed: boolean;
     timestamp: Date;
-}
+
 export interface NotificationStats {
     totalSent: number;
     deliveryRate: number;
@@ -173,7 +173,6 @@ export interface NotificationStats {
             expired: number;
         };
     };
-}
 /**
  * Comprehensive session conflict notification service
  */
@@ -291,7 +290,7 @@ export declare class SessionConflictNotificationService extends EventEmitter {
      * Destroy the notification service and clean up resources
      */
     destroy(): void;
-}
+
 export declare const sessionConflictNotificationService: SessionConflictNotificationService;
 export default SessionConflictNotificationService;
 //# sourceMappingURL=SessionConflictNotificationService.d.ts.map

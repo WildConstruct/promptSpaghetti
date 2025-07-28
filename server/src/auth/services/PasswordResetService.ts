@@ -21,7 +21,7 @@ const PASSWORD_RESET_REQUEST_SCHEMA = z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
     fingerprint: z.string().optional()
-  })
+  }
 });
 
 const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
@@ -32,7 +32,7 @@ const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
     fingerprint: z.string().optional()
-  })
+  }
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: 'Passwords don\'t match',
   path: ['confirmPassword']
@@ -54,6 +54,7 @@ export class PasswordResetService {
   async requestPasswordReset(
     request: PasswordResetRequest
   ): Promise<PasswordResetResponse> {
+
     try {
       // Validate input
       const validatedRequest = PASSWORD_RESET_REQUEST_SCHEMA.parse(request);
@@ -154,6 +155,7 @@ export class PasswordResetService {
   }
 
   async validatePasswordResetToken(token: string): Promise<PasswordResetValidation> {
+
     try {
       const hashedToken = this.hashToken(token);
       const tokenRecord = await this.getTokenRecord(hashedToken);
@@ -202,6 +204,7 @@ export class PasswordResetService {
   async confirmPasswordReset(
     confirmation: PasswordResetConfirmation
   ): Promise<PasswordResetResponse> {
+
     try {
       // Validate input with better error handling
       let validatedConfirmation;
@@ -320,6 +323,7 @@ export class PasswordResetService {
   }
 
   async revokePasswordResetToken(token: string, userId: string): Promise<void> {
+
     const hashedToken = this.hashToken(token);
     await this.db.query(
       'UPDATE password_reset_tokens SET revoked_at = NOW() WHERE hashed_token = $1 AND user_id = $2',
@@ -328,6 +332,7 @@ export class PasswordResetService {
   }
 
   async getPasswordResetAttempts(userId: string, hours: number = 24): Promise<PasswordResetAttempt[]> {
+
     const result = await this.db.query(`
       SELECT 
         prt.created_at,
@@ -351,6 +356,7 @@ export class PasswordResetService {
   }
 
   private async checkRateLimits(email: string, ipAddress: string): Promise<void> {
+
     // Rate limit by IP address
     await this.rateLimit.checkLimit(
       `password_reset_ip:${ipAddress}`,
@@ -367,6 +373,7 @@ export class PasswordResetService {
   }
 
   private async generateSecureToken(): Promise<string> {
+
     return randomBytes(this.TOKEN_LENGTH).toString('hex');
   }
 
@@ -382,6 +389,7 @@ export class PasswordResetService {
     userAgent: string;
     fingerprint?: string;
   }): Promise<void> {
+
     await this.db.query(`
       INSERT INTO password_reset_tokens (
         user_id, hashed_token, expires_at, ip_address, user_agent, fingerprint
@@ -397,6 +405,7 @@ export class PasswordResetService {
   }
 
   private async getTokenRecord(hashedToken: string): Promise<PasswordResetToken | null> {
+
     const result = await this.db.query(`
       SELECT user_id, hashed_token, expires_at, used_at, revoked_at, created_at
       FROM password_reset_tokens
@@ -419,6 +428,7 @@ export class PasswordResetService {
   }
 
   private async getActiveTokens(userId: string): Promise<PasswordResetToken[]> {
+
     const result = await this.db.query(`
       SELECT user_id, hashed_token, expires_at, used_at, revoked_at, created_at
       FROM password_reset_tokens
@@ -440,6 +450,7 @@ export class PasswordResetService {
   }
 
   private async cleanupExpiredTokens(userId: string): Promise<void> {
+
     await this.db.query(`
       DELETE FROM password_reset_tokens
       WHERE user_id = $1 AND expires_at < NOW()
@@ -447,6 +458,7 @@ export class PasswordResetService {
   }
 
   private async revokeToken(token: string): Promise<void> {
+
     const hashedToken = this.hashToken(token);
     await this.db.query(
       'UPDATE password_reset_tokens SET revoked_at = NOW() WHERE hashed_token = $1',
@@ -459,6 +471,7 @@ export class PasswordResetService {
     message: string;
     score: number;
   }> {
+
     // Basic password requirements
     if (password.length < 8) {
       return { valid: false, message: 'Password must be at least 8 characters long', score: 0 };
@@ -508,6 +521,7 @@ export class PasswordResetService {
   }
 
   private async hashPassword(password: string): Promise<string> {
+
     const argon2 = await import('argon2');
     return await argon2.hash(password, {
       type: argon2.argon2id,
@@ -523,6 +537,7 @@ export class PasswordResetService {
     token: string,
     clientInfo: any
   ): Promise<void> {
+
     const client = await this.db.getClient();
     
     try {
@@ -551,6 +566,7 @@ export class PasswordResetService {
   }
 
   private async invalidateAllUserSessions(userId: string): Promise<void> {
+
     // Mark all sessions as invalid
     await this.db.query(
       'UPDATE user_sessions SET invalidated_at = NOW() WHERE user_id = $1 AND invalidated_at IS NULL',
@@ -566,6 +582,7 @@ export class PasswordResetService {
     token: string,
     clientInfo: any
   ): Promise<void> {
+
     const resetUrl = `${process.env.FRONTEND_URL}/auth/reset-password?token=${token}`;
     
     await this.email.sendPasswordResetEmail({
@@ -582,6 +599,7 @@ export class PasswordResetService {
     user: any,
     clientInfo: any
   ): Promise<void> {
+
     await this.email.sendPasswordResetConfirmationEmail({
       to: user.email,
       firstName: user.first_name,

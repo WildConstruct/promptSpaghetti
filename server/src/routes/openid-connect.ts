@@ -65,7 +65,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
           timestamp: new Date()
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -87,7 +87,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -133,7 +133,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           claimsCount: Object.keys(userInfo).length,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0', 'GDPR'],
@@ -156,7 +156,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -207,7 +207,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           keyCount: jwks.keys.length,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -229,7 +229,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -288,7 +288,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
             tokenActive: true,
             clientId: tokenPayload.aud,
             tokenType: token_type_hint || 'access_token'
-          },
+  }
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['RFC7662', 'OIDC1.0'],
@@ -311,7 +311,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
             tokenActive: false,
             tokenError: tokenError.message,
             tokenType: token_type_hint || 'access_token'
-          },
+  }
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['RFC7662', 'OIDC1.0'],
@@ -330,7 +330,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
           error: error.message,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['RFC7662'],
@@ -396,7 +396,7 @@ export default async function openidConnectRoutes(fastify: FastifyInstance) {
         url: request.url,
         userAgent: request.headers['user-agent'],
         ipAddress: request.ip
-      },
+  }
       riskLevel: 'HIGH',
       compliance: {
         frameworks: ['OIDC1.0'],

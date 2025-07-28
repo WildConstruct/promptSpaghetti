@@ -14,6 +14,7 @@
  */
 import { EventEmitter } from 'events';
 import { EnhancedConversionEvent, FunnelStreamConfig } from './ConversionFunnelArchitecture';
+
 export interface StreamEvent {
     id: string;
     type: 'conversion_event' | 'funnel_step' | 'attribution_update' | 'session_event';
@@ -23,7 +24,7 @@ export interface StreamEvent {
     timestamp: number;
     headers: Record<string, string>;
     retryCount: number;
-}
+
 export interface StreamPartition {
     id: number;
     events: StreamEvent[];
@@ -31,7 +32,7 @@ export interface StreamPartition {
     lastProcessed: number;
     consumerCount: number;
     lag: number;
-}
+
 export interface StreamConsumer {
     id: string;
     groupId: string;
@@ -40,7 +41,7 @@ export interface StreamConsumer {
     processedOffset: Map<number, number>;
     isActive: boolean;
     processingRate: number;
-}
+
 export interface StreamMetrics {
     totalEvents: number;
     eventsPerSecond: number;
@@ -59,14 +60,14 @@ export interface StreamMetrics {
         size: number;
         oldestEvent: number;
     };
-}
+
 export interface ProcessingResult {
     success: boolean;
     eventId: string;
     processingTime: number;
     error?: string;
     retryable: boolean;
-}
+
 export type EventProcessor = (event: StreamEvent) => Promise<ProcessingResult>;
 /**
  * Conversion Stream Processor
@@ -167,7 +168,6 @@ export declare class ConversionStreamProcessor extends EventEmitter {
      * Reprocess dead letter queue event
      */
     reprocessDeadLetterEvent(eventId: string): Promise<boolean>;
-}
 /**
  * Factory function to create ConversionStreamProcessor
  */

@@ -9,12 +9,12 @@ import '@testing-library/jest-dom';
 
 // Mock useExport hook
 const mockUseExport = {
-  getTemplates: jest.fn<unknown[], unknown>(),
-  createTemplate: jest.fn<unknown[], unknown>(),
-  updateTemplate: jest.fn<unknown[], unknown>(),
-  deleteTemplate: jest.fn<unknown[], unknown>(),
-  shareTemplate: jest.fn<unknown[], unknown>(),
-  getTemplateStats: jest.fn<unknown[], unknown>()
+  getTemplates: jest.fn<unknown, unknown>(),
+  createTemplate: jest.fn<unknown, unknown>(),
+  updateTemplate: jest.fn<unknown, unknown>(),
+  deleteTemplate: jest.fn<unknown, unknown>(),
+  shareTemplate: jest.fn<unknown, unknown>(),
+  getTemplateStats: jest.fn<unknown, unknown>(),
 };
 jest.mock('../hooks/useExport', () => ({)
   useExport: () => mockUseExport,
@@ -34,8 +34,8 @@ const mockTemplates = [;
     format_options: { indent: 2, includeMetadata: true },
     created_at: '2024-01-01T00:00:00Z',
     updated_at: '2024-01-01T00:00:00Z',
-    created_by: 'user-1',
-  },
+    created_by: 'user-1';
+  }
   {
     id: 'template-2',
     name: 'VFX Pipeline Export',
@@ -47,32 +47,30 @@ const mockTemplates = [;
     format_options: { pipeline: 'maya', frameRange: '1-100' },
     created_at: '2024-01-01T00:00:00Z',
     updated_at: '2024-01-01T00:00:00Z',
-    created_by: 'system',
-  }
-];
-const mockTemplateStats = new Map([;);
+    created_by: 'system'];
+const mockTemplateStats = new Map([);
   ['template-1', {
-    id: 'template-1',
-    usageCount: 145,
-    lastUsed: '2024-01-15T00:00:00Z',
-    averageRating: 4.2,
-    totalRatings: 12,
-    successRate: 0.95,
-  }],
+  id: 'template-1',
+  usageCount: 145,
+  lastUsed: '2024-01-15T00:00:00Z',
+  averageRating: 4.2,
+  totalRatings: 12,
+  successRate: 0.95,
+}],
   ['template-2', {
-    id: 'template-2',
-    usageCount: 2300,
-    lastUsed: '2024-01-20T00:00:00Z',
-    averageRating: 4.7,
-    totalRatings: 45,
-    successRate: 0.98,
-  }]
+  id: 'template-2',
+  usageCount: 2300,
+  lastUsed: '2024-01-20T00:00:00Z',
+  averageRating: 4.7,
+  totalRatings: 45,
+  successRate: 0.98,
+}]
 ]);
 const defaultProps = {
   visible: true,
   projectId: 'test-project',
-  onClose: jest.fn<unknown[], unknown>(),
-  onTemplateSelect: jest.fn<unknown[], unknown>()
+  onClose: jest.fn<unknown, unknown>(),
+  onTemplateSelect: jest.fn<unknown, unknown>(),
 };
 describe('AdvancedExportTemplateManager', () => {
   beforeEach(() => {
@@ -106,10 +104,10 @@ describe('AdvancedExportTemplateManager', () => {
     it('loads templates on mount', async () => {
       render(<AdvancedExportTemplateManager {...defaultProps} />);
       await waitFor(() => {
-        expect(mockUseExport.getTemplates).toHaveBeenCalledWith({)
-          sortBy: 'name',
-          sortOrder: 'asc',
-        });
+  expect(mockUseExport.getTemplates).toHaveBeenCalledWith({)
+  sortBy: 'name',
+  sortOrder: 'asc',
+});
       });
     });
     it('loads template statistics', async () => {
@@ -130,8 +128,8 @@ describe('AdvancedExportTemplateManager', () => {
       mockUseExport.getTemplates.mockRejectedValue(new Error('Network error'));
       render(<AdvancedExportTemplateManager {...defaultProps} />);
       await waitFor(() => {
-        expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
+});
     });
   });
   describe('Template Display', () => {
@@ -342,8 +340,8 @@ describe('AdvancedExportTemplateManager', () => {
       mockUseExport.getTemplates.mockRejectedValue(new Error('API Error'));
       render(<AdvancedExportTemplateManager {...defaultProps} />);
       await waitFor(() => {
-        expect(screen.getByText(/Error: API Error/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: API Error/)).toBeInTheDocument();
+});
     });
     it('handles missing template stats gracefully', async () => {
       mockUseExport.getTemplateStats.mockRejectedValue(new Error('Stats unavailable'));

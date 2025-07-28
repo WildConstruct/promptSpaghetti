@@ -16,6 +16,9 @@ export class GraphStoreBridge {
     constructor() {
         this.newStateContainer = new GraphStateContainer();
         this.setupBidirectionalSync();
+        /**
+         * Setup bidirectional synchronization between old and new state
+         */
     }
     /**
      * Setup bidirectional synchronization between old and new state
@@ -43,132 +46,130 @@ export class GraphStoreBridge {
             const newNodes = this.convertNodesToNewFormat(oldState.nodes);
             const newEdges = this.convertEdgesToNewFormat(oldState.edges);
             // Update new state container
-            this.newStateContainer.executeOperation({
-                type: 'BULK_UPDATE',
-                nodes: newNodes,
-                edges: newEdges
-            });
-            this.isNewStateContainer = false;
+            this.newStateContainer.executeOperation({});
+            type: 'BULK_UPDATE',
+                nodes;
+            newNodes,
+                edges;
+            newEdges,
+            ;
         });
+        this.isNewStateContainer = false;
     }
+    ;
     /**
      * Convert nodes from new format to old ReactFlow format
      */
     convertNodesToOldFormat(newNodes) {
-        return newNodes.map(node => ({
-            id: node.id,
-            type: node.type,
-            position: node.position,
-            data: node.data,
-            selected: false, // Will be handled by selection state
-            dragging: false,
-            // Map other properties as needed
-        }));
+        return newNodes.map(node => ({}), id, node.id, type, node.type, position, node.position, data, node.data, selected, false, // Will be handled by selection state,
+        dragging, false);
+        // Map other properties as needed
     }
+    ;
     /**
      * Convert edges from new format to old ReactFlow format
      */
     convertEdgesToOldFormat(newEdges) {
-        return newEdges.map(edge => ({
-            id: edge.id,
-            source: edge.sourceId,
-            target: edge.targetId,
-            sourceHandle: edge.sourceHandle,
-            targetHandle: edge.targetHandle,
-            type: edge.type || 'default',
-            data: edge.data || {},
-            selected: false, // Will be handled by selection state
-        }));
+        return newEdges.map(edge => ({}), id, edge.id, source, edge.sourceId, target, edge.targetId, sourceHandle, edge.sourceHandle, targetHandle, edge.targetHandle, type, edge.type || 'default', data, edge.data || {}, selected, false); // Will be handled by selection state
     }
+    ;
     /**
      * Convert nodes from old ReactFlow format to new format
      */
     convertNodesToNewFormat(oldNodes) {
         const nodes = {};
-        oldNodes.forEach(node => {
-            nodes[node.id] = {
-                id: node.id,
-                type: node.type || 'default',
-                position: node.position,
-                data: node.data || {},
-                metadata: {
-                    created: Date.now(),
-                    updated: Date.now(),
-                    version: 1
-                }
-            };
-        });
+        oldNodes.forEach(node => { });
+        nodes[node.id] = {
+            id: node.id,
+            type: node.type || 'default',
+            position: node.position,
+            data: node.data || {},
+            metadata: {
+                created: Date.now(),
+                updated: Date.now(),
+                version: 1,
+            }
+        };
+        ;
         return nodes;
+        /**
+         * Convert edges from old ReactFlow format to new format
+         */
     }
     /**
      * Convert edges from old ReactFlow format to new format
      */
     convertEdgesToNewFormat(oldEdges) {
         const edges = {};
-        oldEdges.forEach(edge => {
-            edges[edge.id] = {
-                id: edge.id,
-                sourceId: edge.source,
-                targetId: edge.target,
-                sourceHandle: edge.sourceHandle,
-                targetHandle: edge.targetHandle,
-                type: edge.type || 'default',
-                data: edge.data || {},
-                metadata: {
-                    created: Date.now(),
-                    updated: Date.now(),
-                    version: 1
-                }
-            };
-        });
+        oldEdges.forEach(edge => { });
+        edges[edge.id] = {
+            id: edge.id,
+            sourceId: edge.source,
+            targetId: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+            type: edge.type || 'default',
+            data: edge.data || {},
+            metadata: {
+                created: Date.now(),
+                updated: Date.now(),
+                version: 1,
+            }
+        };
+        ;
         return edges;
-    }
-    /**
-     * Get the new state container instance
-     */
-    getNewStateContainer() {
-        return this.newStateContainer;
-    }
-    /**
-     * Check if a component should use the new state system
-     * This allows gradual migration by feature flags or component names
-     */
-    shouldUseNewState(componentName) {
-        // For now, keep using old state for existing components
-        // New components can opt into new state system
-        const newStateComponents = [
-            'DevToolsPanel',
-            'PerformancePanel',
-            'TimeTravelPanel',
-            'StateInspectorPanel'
-        ];
-        return componentName ? newStateComponents.includes(componentName) : false;
-    }
-    /**
-     * Cleanup method to remove listeners
-     */
-    dispose() {
-        // Remove any event listeners when the bridge is no longer needed
-        this.newStateContainer.dispose();
-    }
-}
-// Singleton instance for global access
-export const graphStoreBridge = new GraphStoreBridge();
-/**
- * Hook for components that want to gradually migrate to new state
- */
-export function useGraphStateMigration(componentName) {
-    const shouldUseNew = graphStoreBridge.shouldUseNewState(componentName);
-    if (shouldUseNew) {
-        return {
-            stateContainer: graphStoreBridge.getNewStateContainer(),
-            isNewState: true
-        };
-    }
-    else {
-        return {
-            store: useGraphStore,
-            isNewState: false
-        };
+        /**
+         * Get the new state container instance
+         */
+        getNewStateContainer();
+        GraphStateContainer;
+        {
+            return this.newStateContainer;
+            /**
+            * Check if a component should use the new state system
+            * This allows gradual migration by feature flags or component names
+            */
+            shouldUseNewState(componentName ?  : string);
+            boolean;
+            {
+                // For now, keep using old state for existing components
+                // New components can opt into new state system
+                const newStateComponents = [];
+                'DevToolsPanel',
+                    'PerformancePanel',
+                    'TimeTravelPanel',
+                    'StateInspectorPanel';
+                ;
+                return componentName ? newStateComponents.includes(componentName) : false;
+                /**
+                * Cleanup method to remove listeners
+                */
+                dispose();
+                void {
+                    // Remove any event listeners when the bridge is no longer needed
+                    this: .newStateContainer.dispose(),
+                    // Singleton instance for global access
+                    const: graphStoreBridge = new GraphStoreBridge(),
+                    /**
+                    * Hook for components that want to gradually migrate to new state
+                    */
+                    function: useGraphStateMigration(componentName ?  : string) };
+                {
+                    const shouldUseNew = graphStoreBridge.shouldUseNewState(componentName);
+                    if (shouldUseNew) {
+                        return {
+                            stateContainer: graphStoreBridge.getNewStateContainer(),
+                            isNewState: true,
+                        };
+                    }
+                    else {
+                        return {
+                            store: useGraphStore,
+                            isNewState: false,
+                        };
+                    }
+                }
+            }
+        }
     }
 }

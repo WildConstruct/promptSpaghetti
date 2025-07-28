@@ -9,6 +9,7 @@ import {
   PasswordValidationResult,
   PasswordValidationContext
 } from '../auth/PasswordComplexityValidator';
+
 export interface PasswordStrengthIndicatorProps {
     password: string;
     context?: PasswordValidationContext;
@@ -22,7 +23,8 @@ export interface PasswordStrengthIndicatorProps {
     className?: string;
     onValidationChange?: (result: PasswordValidationResult) => void;
     debounceMs?: number;
-}
+
+
 export interface PasswordStrengthDisplayProps {
     result: PasswordValidationResult;
     showDetails: boolean;
@@ -31,7 +33,7 @@ export interface PasswordStrengthDisplayProps {
     showEntropy: boolean;
     compact: boolean;
     theme: 'light' | 'dark';
-}
+
 export declare const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>;
 export declare const usePasswordStrength: ()
   password: string,

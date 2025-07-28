@@ -56,25 +56,25 @@ export type AnyGenerationResult = GenerationResult | ClaudeGenerationResult | Ge
 /**
  * Universal agent interface for consistent usage across models
  */
+
 export interface UniversalAgentRequest {
-  purpose: string;
+  purpose: string;,
   complexity: 'simple' | 'moderate' | 'complex';
   nodeCount: number;
-  nodeTypes?: string[];
-  specificRequirements?: string[];
-  focusAreas?: string[];
+  nodeTypes?: string;
+  specificRequirements?: string;
+  focusAreas?: string;
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
   // Model-specific extensions
-  userContext?: string; // For Claude
-  constraints?: string[]; // For Gemini
-  examples?: string[]; // For Gemini
+  userContext?: string; // For Claude,
+  constraints?: string; // For Gemini,
+  examples?: string; // For Gemini,
+  /**
+  * Universal generation function that routes to appropriate agent
+  */
 }
-/**
- * Universal generation function that routes to appropriate agent
- */
-export async function generateGraph()
-  request: UniversalAgentRequest,
+export async function generateGraph(request: UniversalAgentRequest,)
   provider: 'openai' | 'claude' | 'gemini' = 'openai',
   config: Partial<AnyAgentConfig> = {}
 ): Promise<AnyGenerationResult> {
@@ -87,5 +87,3 @@ export async function generateGraph()
     return generateGraphWithGemini(request as GeminiGenerationRequest, config as Partial<GeminiAgentConfig>);
   default:
     throw new Error(`Unsupported provider: ${provider}`);}
-  }
-}

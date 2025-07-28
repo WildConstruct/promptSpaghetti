@@ -1,4 +1,5 @@
 import React from 'react';
+
 export interface VariationListProps {
     nodeId: string;
     variations: string[];
@@ -9,6 +10,6 @@ export interface VariationListProps {
     maxVariations?: number;
     placeholder?: string;
     allowQuickEntry?: boolean;
-}
+
 export declare const VariationList: React.FC<VariationListProps>;
 //# sourceMappingURL=VariationList.d.ts.map

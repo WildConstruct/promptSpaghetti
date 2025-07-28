@@ -68,6 +68,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
   // Helper function to extract user ID from JWT
   async function getUserFromToken(request: FastifyRequest): Promise<string> {
+
     const authHeader = request.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       throw new Error('Missing or invalid authorization header');
@@ -89,7 +90,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             user: { type: 'object' },
             emailVerificationRequired: { type: 'boolean' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -120,7 +121,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             user: { type: 'object' },
             expiresAt: { type: 'string', format: 'date-time' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {
@@ -165,7 +166,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             accessToken: { type: 'string' },
             refreshToken: { type: 'string' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {
@@ -193,7 +194,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         429: {
           type: 'object',
           properties: {
@@ -222,7 +223,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -250,7 +251,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -273,7 +274,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-    },
+  }
     schema: {
       body: ChangePasswordSchema,
       response: {
@@ -282,7 +283,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -307,7 +308,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     preHandler: async (request) => {
       // Validate JWT token
       await getUserFromToken(request);
-    },
+  }
     schema: {
       response: {
         200: {
@@ -315,7 +316,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           properties: {
             user: { type: 'object' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {
@@ -356,9 +357,9 @@ export async function authRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           token: { type: 'string' }
-        },
+  }
         required: ['token']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -366,7 +367,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             valid: { type: 'boolean' },
             user: { type: 'object' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {

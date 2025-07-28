@@ -17,13 +17,13 @@ export declare enum RateLimitStrategy {
     SLIDING_WINDOW = "sliding_window",
     TOKEN_BUCKET = "token_bucket",
     LEAKY_BUCKET = "leaky_bucket"
-}
+
 export declare enum BackoffStrategy {
     EXPONENTIAL = "exponential",
     LINEAR = "linear",
     FIBONACCI = "fibonacci",
     CUSTOM = "custom"
-}
+
 export declare enum EndpointCategory {
     AUTHENTICATION = "authentication",
     MFA_VERIFICATION = "mfa_verification",
@@ -31,18 +31,18 @@ export declare enum EndpointCategory {
     REGISTRATION = "registration",
     PROFILE_UPDATE = "profile_update",
     ADMIN_OPERATIONS = "admin_operations"
-}
+
 export declare enum ThreatLevel {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum RateLimitResult {
     ALLOWED = "allowed",
     BLOCKED = "blocked",
     WARNING = "warning"
-}
+
 export interface RateLimitConfig {
     strategy: RateLimitStrategy;
     windowSize: number;
@@ -52,7 +52,7 @@ export interface RateLimitConfig {
     exemptionsEnabled: boolean;
     adaptiveEnabled: boolean;
     threatDetectionEnabled: boolean;
-}
+
 export interface EndpointLimits {
     category: EndpointCategory;
     endpoint: string;
@@ -77,7 +77,7 @@ export interface EndpointLimits {
         suspiciousActivityThreshold: number;
         threatLevelAdjustments: Record<ThreatLevel, number>;
     };
-}
+
 export interface RateLimitAttempt {
     identifier: string;
     endpoint: string;
@@ -90,7 +90,7 @@ export interface RateLimitAttempt {
         userId?: string;
         threatLevel: ThreatLevel;
     };
-}
+
 export interface RateLimitStatus {
     identifier: string;
     endpoint: string;
@@ -101,7 +101,7 @@ export interface RateLimitStatus {
     backoffLevel: number;
     threatLevel: ThreatLevel;
     adaptiveMultiplier: number;
-}
+
 export interface BackoffState {
     identifier: string;
     endpoint: string;
@@ -110,7 +110,7 @@ export interface BackoffState {
     consecutiveFailures: number;
     totalFailures: number;
     lastFailureTime: Date;
-}
+
 export interface ThreatContext {
     identifier: string;
     threatLevel: ThreatLevel;
@@ -127,7 +127,6 @@ export interface ThreatContext {
         newDevice: boolean;
     };
     confidence: number;
-}
 /**
  * Advanced rate limiting service with threat detection and adaptive protection
  */
@@ -209,6 +208,6 @@ export declare class RateLimitingService extends EventEmitter {
     private getAttemptKey;
     private getBackoffKey;
     private startCleanupTimer;
-}
+
 export default RateLimitingService;
 //# sourceMappingURL=RateLimitingService.d.ts.map

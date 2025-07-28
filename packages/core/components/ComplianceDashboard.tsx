@@ -8,9 +8,8 @@ import { ComplianceTrendReport } from '../services/ComplianceHistoricalAnalyzer'
 interface ComplianceDashboardProps {
   className?: string;
   autoRefresh?: boolean;
-  refreshInterval?: number; // milliseconds
-}
-const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
+  refreshInterval?: number; // milliseconds,
+  const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({,)
   className = '',
   autoRefresh = true,
   refreshInterval = 300000 // 5 minutes
@@ -26,12 +25,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
     if (autoRefresh) {
       const interval = setInterval(loadDashboardData, refreshInterval);
       return () => clearInterval(interval);
-    }
   }, [autoRefresh, refreshInterval]);
   useEffect(() => {
     if (selectedFramework !== 'overview') {
       loadFrameworkTrends(selectedFramework);
-    }
   }, [selectedFramework, selectedTimeRange]);
   const loadDashboardData = async () => {
     try {
@@ -40,51 +37,48 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
       setDashboardData(data);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+} finally {
       setLoading(false);
-    }
   };
   const loadFrameworkTrends = async (framework: string) => {
     try {
       const trends = await enhancedComplianceMonitor.getFrameworkTrendAnalysis(framework, selectedTimeRange);
       setFrameworkTrends(prev => ({ ...prev, [framework]: trends }));
     } catch (err) {
-      console.error('Failed to load framework trends:', err);
-    }
-  };
+  console.error('Failed to load framework trends:', err);
+};
   const getStatusColor = (status: string): string => {
-    switch (status) {
-    case 'healthy':
-    case 'ready':
-    case 'compliant':
-      return 'text-green-600 bg-green-100';
-    case 'warning':
-    case 'needs_preparation':
-      return 'text-yellow-600 bg-yellow-100';
-    case 'critical':
-    case 'not_ready':
-    case 'non_compliant':
-      return 'text-red-600 bg-red-100';
-    default:
-      return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'healthy':,
+  case 'ready':,
+  case 'compliant':,
+  return 'text-green-600 bg-green-100';
+  case 'warning':,
+  case 'needs_preparation':,
+  return 'text-yellow-600 bg-yellow-100';
+  case 'critical':,
+  case 'not_ready':,
+  case 'non_compliant':,
+  return 'text-red-600 bg-red-100';
+  default:,
+  return 'text-gray-600 bg-gray-100';
+};
   const getHealthScoreColor = (score: number): string => {
     if (score >= 90) return 'text-green-600';
     if (score >= 70) return 'text-yellow-600';
     return 'text-red-600';
   };
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('en-US', {)
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(date);
   };
   if (loading) {
-    return ();
+    return;
       <div className={`compliance-dashboard ${className}`}>}
         <div className="animate-pulse">
           <div className="h-8 bg-gray-300 rounded mb-4"></div>
@@ -97,9 +91,8 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className={`compliance-dashboard ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex">
@@ -122,9 +115,8 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (!dashboardData) return null;
-  return ();
+  return;
     <div className={`compliance-dashboard ${className} space-y-6`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -215,10 +207,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
               key={framework}
               onClick={() => setSelectedFramework(framework)}
               className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
-                selectedFramework === framework
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  selectedFramework === framework
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               {framework === 'overview' ? 'Overview' : framework}
             </button>
@@ -289,10 +281,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
               <div className="p-6 space-y-4">
                 {dashboardData.historicalTrends.forecastAlerts.map((alert, index) => ()
                   <div key={index} className={`p-4 rounded-lg border ${
-                    alert.risk === 'high' ? 'bg-red-50 border-red-200' :
-                      alert.risk === 'medium' ? 'bg-yellow-50 border-yellow-200' :
-                        'bg-blue-50 border-blue-200'
-                  }`}>
+  alert.risk === 'high' ? 'bg-red-50 border-red-200' :,
+  alert.risk === 'medium' ? 'bg-yellow-50 border-yellow-200' :,
+  'bg-blue-50 border-blue-200'
+}`}>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium text-gray-900">{alert.metric} ({alert.framework})</p>
@@ -300,10 +292,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
                       </div>
                       <div className="text-right">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          alert.risk === 'high' ? 'text-red-800 bg-red-100' :
-                            alert.risk === 'medium' ? 'text-yellow-800 bg-yellow-100' :
-                              'text-blue-800 bg-blue-100'
-                        }`}>
+  alert.risk === 'high' ? 'text-red-800 bg-red-100' :,
+  alert.risk === 'medium' ? 'text-yellow-800 bg-yellow-100' :,
+  'text-blue-800 bg-blue-100'
+}`}>
                           {alert.risk} risk
                         </span>
                         <p className="text-sm text-gray-600 mt-1">{alert.timeframe}</p>
@@ -394,10 +386,10 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
                   </div>
                   <div className="text-center p-4 bg-gray-50 rounded-lg">
                     <p className={`text-2xl font-bold ${
-                      frameworkTrends[selectedFramework]!.summary.improvementTrend === 'positive' ? 'text-green-600' :
-                      frameworkTrends[selectedFramework]!.summary.improvementTrend === 'negative' ? 'text-red-600' :
-                        'text-blue-600'
-                    }`}>
+  frameworkTrends[selectedFramework]!.summary.improvementTrend === 'positive' ? 'text-green-600' :,
+  frameworkTrends[selectedFramework]!.summary.improvementTrend === 'negative' ? 'text-red-600' :,
+  'text-blue-600'
+}`}>
                       {frameworkTrends[selectedFramework]!.summary.improvementTrend === 'positive' ? '↗️' :
                        frameworkTrends[selectedFramework]!.summary.improvementTrend === 'negative' ? '↘️' : '➡️'}
                     </p>
@@ -422,9 +414,9 @@ const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({)
                         <div className="text-right">
                           <div className="flex items-center space-x-2">
                             <span className={`text-lg ${
-                              metric.trendDirection === 'up' ? 'text-green-600' :
-                                metric.trendDirection === 'down' ? 'text-red-600' : 'text-blue-600'
-                            }`}>
+  metric.trendDirection === 'up' ? 'text-green-600' :,
+  metric.trendDirection === 'down' ? 'text-red-600' : 'text-blue-600',
+}`}>
                               {metric.trendDirection === 'up' ? '↗️' :
                                 metric.trendDirection === 'down' ? '↘️' : '➡️'}
                             </span>

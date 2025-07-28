@@ -30,7 +30,7 @@ export interface LoadedPlugin {
     exports: any;
     sandbox: PluginSandbox;
     loadedAt: Date;
-    dependencies: string[];
+    dependencies: string;
     status: 'loaded' | 'active' | 'inactive' | 'error';
     error?: Error;
 }
@@ -59,55 +59,5 @@ export declare class PluginLoader {
     private loadingQueue;
     private options;
     constructor(options?: Partial<PluginLoadOptions>);
-    /**
-     * Load a plugin from a source
-     */
-    loadPlugin(source: PluginSource): Promise<LoadedPlugin>;
-    /**
-     * Load multiple plugins with dependency resolution
-     */
-    loadPlugins(sources: PluginSource[]): Promise<Map<string, LoadedPlugin>>;
-    /**
-     * Resolve and install plugin dependencies
-     */
-    resolvePluginDependencies(manifest: ExtensionManifest): Promise<string[]>;
-    /**
-     * Unload a plugin and its dependents
-     */
-    unloadPlugin(pluginId: string): Promise<void>;
-    /**
-     * Reload a plugin (unload and load again)
-     */
-    reloadPlugin(pluginId: string): Promise<LoadedPlugin>;
-    /**
-     * Get plugin registry information
-     */
-    getPluginRegistry(): PluginRegistry;
-    /**
-     * Check for plugin updates
-     */
-    checkForUpdates(): Promise<Array<{
-        pluginId: string;
-        currentVersion: string;
-        availableVersion: string;
-    }>>;
-    /**
-     * Update a plugin to latest version
-     */
-    updatePlugin(pluginId: string): Promise<LoadedPlugin>;
-    private loadPluginInternal;
-    private resolvePluginSource;
-    private loadPluginManifest;
-    private loadPluginExports;
-    private validatePluginPermissions;
-    private loadManifests;
-    private resolveDependency;
-    private findDependents;
-    private getPluginKey;
-    private downloadFromNpm;
-    private downloadFromGit;
-    private downloadFromUrl;
-    private downloadFromRegistry;
-    private getLatestVersion;
 }
 //# sourceMappingURL=PluginLoader.d.ts.map

@@ -34,6 +34,7 @@ const MAX_BATCH_SIZE = 1000;
 const CIRCUIT_BREAKER_THRESHOLD = 5;
 const CIRCUIT_BREAKER_TIMEOUT = 60000; // 1 minute
 
+}
 export interface AdvancedSearchFilter {
   // Basic filters
   timeRange?: TimeRangeFilter;
@@ -51,7 +52,9 @@ export interface AdvancedSearchFilter {
   advanced?: AdvancedFilter;
   output?: OutputOptions;
 }
+}
 
+}
 export interface TimeRangeFilter {
   startDate?: Date;
   endDate?: Date;
@@ -60,10 +63,12 @@ export interface TimeRangeFilter {
   last?: {
     value: number;
     unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+}
   };
   timePattern?: TimePatternFilter;
 }
 
+}
 export interface ActorFilter {
   userIds?: string[];
   userEmails?: string[];
@@ -74,7 +79,9 @@ export interface ActorFilter {
   suspiciousUsers?: boolean;
   searchTerm?: string;
 }
+}
 
+}
 export interface ResourceFilter {
   resourceTypes?: string[];
   resourceIds?: string[];
@@ -83,7 +90,9 @@ export interface ResourceFilter {
   includeRelated?: boolean;
   searchTerm?: string;
 }
+}
 
+}
 export interface ContextFilter {
   sessionIds?: string[];
   ipAddresses?: string[];
@@ -91,7 +100,9 @@ export interface ContextFilter {
   geoLocations?: string[];
   deviceTypes?: ('desktop' | 'mobile' | 'tablet' | 'api' | 'system')[];
 }
+}
 
+}
 export interface SearchFilter {
   query: string;
   fields?: string[];
@@ -100,7 +111,9 @@ export interface SearchFilter {
   regex?: boolean;
   highlight?: boolean;
 }
+}
 
+}
 export interface ComplianceFilter {
   standards?: ComplianceStandard[];
   requiresReview?: boolean;
@@ -109,15 +122,19 @@ export interface ComplianceFilter {
   complianceScore?: {
     min?: number;
     max?: number;
+}
   };
 }
 
+}
 export interface AdvancedFilter {
   customSql?: string;
   aggregations?: AggregationConfig[];
   correlations?: CorrelationConfig[];
 }
+}
 
+}
 export interface OutputOptions {
   fields?: string[];
   format?: 'json' | 'csv' | 'excel';
@@ -128,17 +145,22 @@ export interface OutputOptions {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface CachedResult {
   result: AuditEventResponse;
   timestamp: Date;
   expiresAt: Date;
 }
+}
 
+}
 export interface CircuitBreakerState {
   failures: number;
   lastFailure?: Date;
   state: 'closed' | 'open' | 'half-open';
+}
 }
 
 /**
@@ -163,6 +185,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     filter: AdvancedSearchFilter,
     requestId?: string
   ): Promise<AuditEventResponse> {
+
     const startTime = Date.now();
     const operationId = requestId || this.generateRequestId();
     
@@ -237,6 +260,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     filters: SuggestedFilter[];
     patterns: string[];
   }> {
+
     try {
       const suggestions = {
         completions: [] as string[],
@@ -296,6 +320,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       tags?: string[];
     } = {}
   ): Promise<SavedFilter> {
+
     try {
       // Validate inputs
       if (!name || name.trim().length === 0) {
@@ -356,6 +381,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     total: number;
     hasMore: boolean;
   }> {
+
     try {
       if (!userId || userId.trim().length === 0) {
         throw new Error('User ID is required');
@@ -479,6 +505,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
   }
 
   private async buildOptimizedQuery(filter: AdvancedSearchFilter): Promise<AuditEventQuery> {
+
     // Implementation would build optimized SQL with proper indexing hints
     const query: AuditEventQuery = {
       timeRange: filter.timeRange,
@@ -496,6 +523,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     query: AuditEventQuery,
     signal: AbortSignal
   ): Promise<AuditEventResponse> {
+
     return new Promise((resolve, reject) => {
       if (signal.aborted) {
         reject(new Error('Query cancelled'));
@@ -512,7 +540,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
         .then(result => {
           signal.removeEventListener('abort', abortHandler);
           resolve(result);
-        })
+  }
         .catch(error => {
           signal.removeEventListener('abort', abortHandler);
           reject(error);
@@ -525,6 +553,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     filter: AdvancedSearchFilter,
     signal: AbortSignal
   ): Promise<AuditEventResponse> {
+
     if (signal.aborted) {
       throw new Error('Enhancement cancelled');
     }
@@ -534,8 +563,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
       ...response,
       metadata: {
         ...response.metadata,
-        processingTime: Date.now()
-      }
+        processingTime: Date.now(}
     };
   }
 
@@ -543,6 +571,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     query: string,
     signal?: AbortSignal
   ): Promise<string[]> {
+
     if (signal?.aborted) {
       throw new Error('Query completions cancelled');
     }
@@ -555,6 +584,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     partialFilter: Partial<AdvancedSearchFilter>,
     signal?: AbortSignal
   ): Promise<SuggestedFilter[]> {
+
     if (signal?.aborted) {
       throw new Error('Filter suggestions cancelled');
     }
@@ -618,6 +648,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
   }
 
   private async persistSavedFilter(filter: SavedFilter): Promise<void> {
+
     // Implementation would save to database
     console.log('Persisting filter:', filter.id);
   }
@@ -626,6 +657,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
     _____userId: string,
     _____includePublic: boolean
   ): Promise<SavedFilter[]> {
+
     // Implementation would load from database
     return [];
   }
@@ -669,6 +701,7 @@ export class OptimizedAuditFilteringService extends EventEmitter {
 }
 
 // Supporting interfaces
+}
 export interface SavedFilter {
   id: string;
   name: string;
@@ -681,28 +714,39 @@ export interface SavedFilter {
   tags: string[];
   usageCount: number;
 }
+}
 
+}
 export interface SuggestedFilter {
   field: string;
   operator: string;
   value: string;
   description: string;
 }
+}
 
+}
 export interface TimePreset {
   // Define time preset interface
 }
+}
 
+}
 export interface TimePatternFilter {
   // Define time pattern interface
 }
+}
 
+}
 export interface AggregationConfig {
   // Define aggregation interface
 }
+}
 
+}
 export interface CorrelationConfig {
   // Define correlation interface
+}
 }
 
 export default OptimizedAuditFilteringService;

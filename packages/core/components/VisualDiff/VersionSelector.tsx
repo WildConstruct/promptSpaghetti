@@ -3,23 +3,21 @@
 import React, { useMemo } from 'react';
 
 export interface Version {
-  id: string;
+  id: string;,
   version_number: number;
-  description: string;
+  description: string;,
   created_at: Date;
   created_by?: string;
   is_current?: boolean;
 }
-
 export interface VersionSelectorProps {
-  graphId: string;
-  versions: Version[];
-  sourceVersionId: string;
+  graphId: string;,
+  versions: Version;
+  sourceVersionId: string;,
   targetVersionId: string;
   onVersionChange: (sourceId: string, targetId: string) => void;
   className?: string;
 }
-
 export const VersionSelector: React.FC<VersionSelectorProps> = ({)
   graphId,
   versions,
@@ -34,62 +32,56 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({)
   }, [versions]);
   // Format version display
   const formatVersion = (version: Version) => {
-    const date = new Date(version.created_at).toLocaleDateString();
-    const time = new Date(version.created_at).toLocaleTimeString([], { )
-      hour: '2-digit', 
-      minute: '2-digit' ,
-    });
+  const date = new Date(version.created_at).toLocaleDateString();
+  const time = new Date(version.created_at).toLocaleTimeString([], { )
+  hour: '2-digit',
+  minute: '2-digit',
+});
     return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;}
   };
   // Handle source version change
   const handleSourceChange = (versionId: string) => {
     if (versionId !== targetVersionId) {
       onVersionChange(versionId, targetVersionId);
-    }
   };
   // Handle target version change
   const handleTargetChange = (versionId: string) => {
     if (versionId !== sourceVersionId) {
       onVersionChange(sourceVersionId, versionId);
-    }
   };
   // Get quick compare options (recent versions)
   const getQuickCompareOptions = () => {
-    if (sortedVersions.length < 2) return [];
-    return [
+  if (sortedVersions.length < 2) return [];
+  return [
+  {
+  label: 'Current vs Previous',
+  source: sortedVersions[1]?.id,
+  target: sortedVersions[0]?.id,
+}
       {
-        label: 'Current vs Previous',
-        source: sortedVersions[1]?.id,
-        target: sortedVersions[0]?.id,
-      },
+  label: 'Current vs 2 versions ago',
+  source: sortedVersions[2]?.id,
+  target: sortedVersions[0]?.id,
+}
       {
-        label: 'Current vs 2 versions ago',
-        source: sortedVersions[2]?.id,
-        target: sortedVersions[0]?.id,
-      },
-      {
-        label: 'Previous vs 2 versions ago',
-        source: sortedVersions[2]?.id,
-        target: sortedVersions[1]?.id,
-      }
-    ].filter(option => option.source && option.target);
-  };
+  label: 'Previous vs 2 versions ago',
+  source: sortedVersions[2]?.id,
+  target: sortedVersions[1]?.id].filter(option => option.source && option.target);
+};
   const quickOptions = getQuickCompareOptions();
   if (versions.length === 0) {
-    return ();
+    return;
       <div className={`text-center py-4 text-gray-500 ${className}`}>}
         No versions available for comparison
       </div>
     );
-  }
   if (versions.length === 1) {
-    return ();
+    return;
       <div className={`text-center py-4 text-gray-500 ${className}`}>}
         Need at least 2 versions to compare
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`space-y-4 ${className}`}>}
       {/* Version Selectors */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

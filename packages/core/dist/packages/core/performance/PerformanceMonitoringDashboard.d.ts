@@ -15,7 +15,7 @@ export interface DashboardConfig {
     reporting: {
         enabled: boolean;
         interval: number;
-        recipients: string[];
+        recipients: string;
     };
 }
 export interface DashboardData {
@@ -25,13 +25,13 @@ export interface DashboardData {
     budgetResult: BudgetCheckResult;
     snapshot: PerformanceSnapshot;
     trends: {
-        score: number[];
-        violations: number[];
-        bundleSize: number[];
-        memoryUsage: number[];
-        apiLatency: number[];
+        score: number;
+        violations: number;
+        bundleSize: number;
+        memoryUsage: number;
+        apiLatency: number;
     };
-    alerts: DashboardAlert[];
+    alerts: DashboardAlert;
 }
 export interface DashboardAlert {
     id: string;
@@ -42,7 +42,7 @@ export interface DashboardAlert {
     timestamp: number;
     acknowledged: boolean;
     autoResolvable: boolean;
-    actions: AlertAction[];
+    actions: AlertAction;
 }
 export interface AlertAction {
     id: string;
@@ -64,15 +64,11 @@ export interface OptimizationSuggestion {
     };
     implementation: {
         effort: 'low' | 'medium' | 'high';
-        steps: string[];
+        steps: string;
         codeExample?: string;
     };
-    metrics: string[];
+    metrics: string;
 }
-/**
- * Performance Monitoring Dashboard
- * Centralized performance monitoring and optimization management
- */
 export declare class PerformanceMonitoringDashboard extends EventEmitter {
     private budgetManager;
     private config;
@@ -82,58 +78,11 @@ export declare class PerformanceMonitoringDashboard extends EventEmitter {
     private monitoringInterval?;
     private reportingInterval?;
     constructor(config?: Partial<DashboardConfig>);
-    /**
-     * Start performance monitoring
-     */
-    startMonitoring(): void;
-    /**
-     * Stop performance monitoring
-     */
-    stopMonitoring(): void;
-    /**
-     * Capture current performance snapshot
-     */
-    capturePerformanceSnapshot(): Promise<PerformanceSnapshot>;
-    /**
-     * Get current dashboard data
-     */
-    getDashboardData(): DashboardData;
-    /**
-     * Get optimization suggestions
-     */
-    getOptimizationSuggestions(): OptimizationSuggestion[];
-    /**
-     * Apply automatic optimization
-     */
-    applyOptimization(suggestionId: string): Promise<boolean>;
     private getBundleMetrics;
     private getRuntimeMetrics;
     private getApiMetrics;
     private getMemoryMetrics;
     private getNetworkMetrics;
     private setupBudgetManagerListeners;
-    private processAlerts;
-    private createAlert;
-    private getScoreImprovementActions;
-    private calculateSystemStatus;
-    private getActiveAlerts;
-    private getScoreTrend;
-    private generatePerformanceReport;
-    private applyBundleSplitting;
-    private applyMemoryOptimization;
-    private applyApiOptimization;
-    /**
-     * Acknowledge an alert
-     */
-    acknowledgeAlert(alertId: string): boolean;
-    /**
-     * Get performance budget configuration
-     */
-    getBudgetConfig(): import("./PerformanceBudget").PerformanceBudgetConfig;
-    /**
-     * Update performance budget
-     */
-    updateBudget(newConfig: any): void;
 }
-export default PerformanceMonitoringDashboard;
 //# sourceMappingURL=PerformanceMonitoringDashboard.d.ts.map

@@ -17,6 +17,7 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
+}
 interface SearchEvent {
   sessionId: string;
   userId?: string;
@@ -29,7 +30,9 @@ interface SearchEvent {
   userAgent?: string;
   ipAddress?: string;
 }
+}
 
+}
 interface SearchClickEvent {
   sessionId: string;
   userId?: string;
@@ -39,7 +42,9 @@ interface SearchClickEvent {
   timestamp: Date;
   clickedFromSearch: boolean;
 }
+}
 
+}
 interface SearchAbandonmentEvent {
   sessionId: string;
   userId?: string;
@@ -49,11 +54,14 @@ interface SearchAbandonmentEvent {
   timestamp: Date;
   reason: 'no_results' | 'irrelevant_results' | 'timeout' | 'navigation';
 }
+}
 
+}
 interface SearchMetrics {
   period: {
     start: Date;
     end: Date;
+}
   };
   totalSearches: number;
   averageResponseTime: number;
@@ -88,12 +96,14 @@ interface SearchMetrics {
   }>;
 }
 
+}
 interface SearchOptimizationRecommendations {
   slowQueries: Array<{
     query: string;
     avgResponseTime: number;
     frequency: number;
     recommendation: string;
+}
   }>;
   lowPerformingFilters: Array<{
     filter: string;
@@ -130,6 +140,7 @@ export class SearchAnalyticsService {
    * Track a search event with performance metrics
    */
   async trackSearchEvent(event: SearchEvent): Promise<void> {
+
     try {
       // Store in PostgreSQL for long-term analytics
       await this.storeSearchEvent(event);
@@ -149,6 +160,7 @@ export class SearchAnalyticsService {
    * Track search result click events
    */
   async trackClickEvent(event: SearchClickEvent): Promise<void> {
+
     try {
       // Store click event
       const query = `
@@ -180,6 +192,7 @@ export class SearchAnalyticsService {
    * Track search abandonment events
    */
   async trackAbandonmentEvent(event: SearchAbandonmentEvent): Promise<void> {
+
     try {
       const query = `
         INSERT INTO marketplace_search_abandonments (
@@ -214,6 +227,7 @@ export class SearchAnalyticsService {
     endDate: Date,
     granularity: 'hour' | 'day' | 'week' = 'day'
   ): Promise<SearchMetrics> {
+
     try {
       const [
         basicMetrics,
@@ -247,6 +261,7 @@ export class SearchAnalyticsService {
    * Get real-time search performance metrics
    */
   async getRealTimeMetrics(): Promise<any> {
+
     try {
       const metrics = await this.redis.hmget(
         'search:realtime',
@@ -279,6 +294,7 @@ export class SearchAnalyticsService {
   async getOptimizationRecommendations(
     days: number = 7
   ): Promise<SearchOptimizationRecommendations> {
+
     try {
       const endDate = new Date();
       const startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);
@@ -317,6 +333,7 @@ export class SearchAnalyticsService {
     variantB: any,
     trafficSplit: number = 0.5
   ): Promise<string> {
+
     try {
       const query = `
         INSERT INTO marketplace_search_ab_tests (
@@ -345,6 +362,7 @@ export class SearchAnalyticsService {
    * Get A/B test assignment for a user session
    */
   async getABTestVariant(sessionId: string): Promise<'A' | 'B' | null> {
+
     try {
       // Check if session already has assignment
       const existing = await this.redis.get(`ab_test:${sessionId}`);
@@ -376,6 +394,7 @@ export class SearchAnalyticsService {
   // Private helper methods
 
   private async storeSearchEvent(event: SearchEvent): Promise<void> {
+
     const query = `
       INSERT INTO marketplace_search_events (
         session_id, user_id, query, filters, timestamp,
@@ -398,6 +417,7 @@ export class SearchAnalyticsService {
   }
 
   private async updateRealTimeMetrics(event: SearchEvent): Promise<void> {
+
     const hour = Math.floor(Date.now() / (60 * 60 * 1000));
     const key = `search:metrics:${hour}`;
     
@@ -410,6 +430,7 @@ export class SearchAnalyticsService {
   }
 
   private async updatePercentileMetrics(responseTime: number): Promise<void> {
+
     // Use Redis sorted sets for percentile calculations
     const now = Date.now();
     const key = 'search:response_times';
@@ -419,6 +440,7 @@ export class SearchAnalyticsService {
   }
 
   private async updateClickThroughMetrics(event: SearchClickEvent): Promise<void> {
+
     const hour = Math.floor(Date.now() / (60 * 60 * 1000));
     const key = `search:ctr:${hour}`;
     
@@ -429,6 +451,7 @@ export class SearchAnalyticsService {
   }
 
   private async updateAbandonmentMetrics(event: SearchAbandonmentEvent): Promise<void> {
+
     const hour = Math.floor(Date.now() / (60 * 60 * 1000));
     const key = `search:abandonment:${hour}`;
     
@@ -440,6 +463,7 @@ export class SearchAnalyticsService {
   }
 
   private async checkPerformanceAlerts(event: SearchEvent): Promise<void> {
+
     // Alert if response time exceeds threshold
     if (event.responseTimeMs > 1000) { // 1 second threshold
       console.warn(`Slow search detected: ${event.responseTimeMs}ms for query "${event.query}"`);
@@ -452,6 +476,7 @@ export class SearchAnalyticsService {
   }
 
   private async getBasicMetrics(startDate: Date, endDate: Date): Promise<any> {
+
     const query = `
       SELECT 
         COUNT(*) as total_searches,
@@ -492,6 +517,7 @@ export class SearchAnalyticsService {
   }
 
   private async getTopQueries(startDate: Date, endDate: Date): Promise<any[]> {
+
     const query = `
       SELECT 
         query,
@@ -517,11 +543,13 @@ export class SearchAnalyticsService {
   }
 
   private async getTopFilters(startDate: Date, endDate: Date): Promise<any[]> {
+
     // This would analyze the filters JSON to find most used filters
     return []; // TODO: Implement filter analysis
   }
 
   private async getConversionFunnel(startDate: Date, endDate: Date): Promise<any> {
+
     // TODO: Implement conversion funnel analysis
     return {
       searches: 0,
@@ -536,11 +564,13 @@ export class SearchAnalyticsService {
     endDate: Date,
     granularity: string
   ): Promise<any[]> {
+
     // TODO: Implement time-based performance analysis
     return [];
   }
 
   private async getSlowQueries(startDate: Date, endDate: Date): Promise<any[]> {
+
     const query = `
       SELECT 
         query,
@@ -564,16 +594,19 @@ export class SearchAnalyticsService {
   }
 
   private async getLowPerformingFilters(startDate: Date, endDate: Date): Promise<any[]> {
+
     // TODO: Implement filter performance analysis
     return [];
   }
 
   private async getIndexOptimizations(): Promise<any[]> {
+
     // TODO: Implement index optimization recommendations
     return [];
   }
 
   private async getCacheOptimizations(startDate: Date, endDate: Date): Promise<any[]> {
+
     // TODO: Implement cache optimization recommendations
     return [];
   }

@@ -3,6 +3,7 @@ import { QueuedOperation, OfflineQueueConfig } from './OfflineOperationQueue';
 import { ConnectionState, ConnectionQuality, ConnectionStateConfig } from './ConnectionStateManager';
 import { ReconnectionState, ReconnectionConfig } from './ReconnectionHandler';
 import { SyncDelta, RecoveryConfig } from './SynchronizationRecovery';
+
 export interface NetworkResilienceConfig {
     enabled: boolean;
     offlineQueue: Partial<OfflineQueueConfig>;
@@ -26,7 +27,7 @@ export interface NetworkResilienceConfig {
         metricsInterval: number;
         enableProfiling: boolean;
     };
-}
+
 export interface ResilienceMetrics {
     uptime: number;
     totalDowntime: number;
@@ -38,7 +39,7 @@ export interface ResilienceMetrics {
     averageReconnectTime: number;
     dataLoss: number;
     conflicts: number;
-}
+
 export interface NetworkStatus {
     isOnline: boolean;
     connectionState: ConnectionState;
@@ -48,7 +49,7 @@ export interface NetworkStatus {
     pendingSync: boolean;
     lastSync: number | null;
     metrics: ResilienceMetrics;
-}
+
 export declare class NetworkResilienceManager extends EventEmitter {
     private config;
     private offlineQueue;
@@ -182,5 +183,5 @@ export declare class NetworkResilienceManager extends EventEmitter {
      * Load persisted state
      */
     private loadPersistedState;
-}
+
 //# sourceMappingURL=NetworkResilienceManager.d.ts.map

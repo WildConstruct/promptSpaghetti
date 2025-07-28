@@ -73,35 +73,25 @@ export interface PerformanceMetrics {
 }
 export interface MetricsVisualizationData {
     timeSeriesData: {
-        timestamps: Date[];
-        responseTime: number[];
-        throughput: number[];
-        blockRate: number[];
-        errorRate: number[];
+        timestamps: Date;
+        responseTime: number;
+        throughput: number;
+        blockRate: number;
+        errorRate: number;
     };
     heatmapData: {
-        endpoints: string[];
-        timeSlots: string[];
-        activityMatrix: number[][];
-        blockMatrix: number[][];
+        endpoints: string;
+        timeSlots: string;
+        activityMatrix: number[];
+        blockMatrix: number[];
     };
     geospatialData: {
-        locations: Array<{
-            latitude: number;
-            longitude: number;
-            requestCount: number;
-            blockCount: number;
-            threatLevel: ThreatLevel;
-        }>;
-    };
-    distributionData: {
-        endpointDistribution: Record<string, number>;
-        threatLevelDistribution: Record<ThreatLevel, number>;
-        responseTimeDistribution: Array<{
-            range: string;
-            count: number;
-        }>;
-        userAgentDistribution: Record<string, number>;
+        locations: Array<{}, latitude>;
+        number: any;
+        longitude: number;
+        requestCount: number;
+        blockCount: number;
+        threatLevel: ThreatLevel;
     };
 }
 export interface AlertCondition {
@@ -112,8 +102,8 @@ export interface AlertCondition {
     condition: string;
     currentValue: number;
     threshold: number;
-    affectedEndpoints: string[];
-    recommendedActions: string[];
+    affectedEndpoints: string;
+    recommendedActions: string;
     metadata: Record<string, unknown>;
 }
 export interface DashboardWidget {
@@ -128,8 +118,8 @@ export interface DashboardWidget {
         timeRange?: string;
         aggregation?: 'sum' | 'avg' | 'max' | 'min' | 'count';
         filters?: Record<string, unknown>;
-        dimensions?: string[];
-        metrics?: string[];
+        dimensions?: string;
+        metrics?: string;
     };
     position: {
         x: number;
@@ -148,130 +138,10 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     private dashboardWidgets;
     private metricsCollectionTimer?;
     private startTime;
-    constructor(rateLimitingService: RateLimitingService, throttlingEngine?: AdaptiveThrottlingRulesEngine, config?: Partial<RateLimitingMetricsConfig>);
-    /**
-     * Start real-time metrics collection
-     */
-    startMetricsCollection(): void;
-    /**
-     * Stop metrics collection
-     */
-    stopMetricsCollection(): void;
-    /**
-     * Collect current performance metrics
-     */
-    private collectCurrentMetrics;
-    /**
-     * Calculate response time metrics
-     */
-    private calculateResponseTimes;
-    /**
-     * Calculate throughput metrics
-     */
-    private calculateThroughputMetrics;
-    /**
-     * Calculate error and block rate metrics
-     */
-    private calculateErrorMetrics;
-    /**
-     * Get resource utilization metrics
-     */
-    private getResourceUtilization;
-    /**
-     * Calculate threat-related metrics
-     */
-    private calculateThreatMetrics;
-    /**
-     * Generate time series data for charts
-     */
-    generateTimeSeriesData(timeRange?: string): MetricsVisualizationData['timeSeriesData'];
-    /**
-     * Generate heatmap data for endpoint activity
-     */
-    generateHeatmapData(): MetricsVisualizationData['heatmapData'];
-    /**
-     * Generate geospatial data for request origins
-     */
-    generateGeospatialData(): MetricsVisualizationData['geospatialData'];
-    /**
-     * Generate distribution data for various metrics
-     */
-    generateDistributionData(): MetricsVisualizationData['distributionData'];
-    /**
-     * Get complete visualization data
-     */
-    getVisualizationData(timeRange?: string): MetricsVisualizationData;
-    /**
-     * Initialize default dashboard widgets
-     */
-    private initializeDefaultWidgets;
-    /**
-     * Add or update a dashboard widget
-     */
-    addWidget(widget: DashboardWidget): void;
-    /**
-     * Remove a dashboard widget
-     */
-    removeWidget(widgetId: string): boolean;
-    /**
-     * Get all dashboard widgets
-     */
-    getWidgets(): DashboardWidget[];
-    /**
-     * Get widget data for rendering
-     */
-    getWidgetData(widgetId: string): any;
-    /**
-     * Check for alert conditions
-     */
-    private checkAlertConditions;
-    /**
-     * Create and manage alerts
-     */
-    private createAlert;
-    /**
-     * Get all active alerts
-     */
-    getActiveAlerts(): AlertCondition[];
-    /**
-     * Acknowledge an alert
-     */
-    acknowledgeAlert(alertId: string): boolean;
-    /**
-     * Create empty metrics object
-     */
-    private createEmptyMetrics;
-    /**
-     * Clean up old metrics data
-     */
-    private cleanupOldMetrics;
-    /**
-     * Set up event listeners for rate limiting service
-     */
-    private setupEventListeners;
-    /**
-     * Get comprehensive system status
-     */
-    getSystemStatus(): {
-        status: 'healthy' | 'warning' | 'critical';
-        uptime: number;
-        metrics: PerformanceMetrics;
-        alerts: AlertCondition[];
-        systemInfo: {
-            version: string;
-            environment: string;
-            configuredEndpoints: number;
-            metricsCollected: number;
-        };
-    };
-    /**
-     * Export metrics data for external analysis
-     */
-    exportMetrics(format?: 'json' | 'csv'): string;
-    /**
-     * Cleanup resources
-     */
-    destroy(): void;
+    constructor();
+    rateLimitingService: RateLimitingService;
+    throttlingEngine?: AdaptiveThrottlingRulesEngine;
+    config?: Partial<RateLimitingMetricsConfig>;
+    super(): any;
 }
-export default RateLimitingPerformanceMetrics;
 //# sourceMappingURL=RateLimitingPerformanceMetrics.d.ts.map

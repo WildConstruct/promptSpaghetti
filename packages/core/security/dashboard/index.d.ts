@@ -89,7 +89,6 @@ export declare class SecurityDashboardFactory {
      * Destroy the factory and cleanup resources
      */
     destroy(): void;
-}
 /**
  * Default factory instance for convenience
  */

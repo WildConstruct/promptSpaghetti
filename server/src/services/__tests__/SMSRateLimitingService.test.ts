@@ -24,6 +24,7 @@ class MockSMSProvider implements SMSProvider {
   private shouldFail = false;
 
   sendSMS(message: SMSMessage): Promise<boolean> {
+
     return Promise.resolve(!this.shouldFail);
   }
 
@@ -49,6 +50,7 @@ class MockRateLimitStorage {
   private store = new Map<string, { value: any; expires?: Date }>();
 
   async get(key: string): Promise<any> {
+
     const item = this.store.get(key);
     if (!item) return null;
     
@@ -61,11 +63,13 @@ class MockRateLimitStorage {
   }
 
   async set(key: string, value: any, ttlMs?: number): Promise<void> {
+
     const expires = ttlMs ? new Date(Date.now() + ttlMs) : undefined;
     this.store.set(key, { value, expires });
   }
 
   async increment(key: string, amount: number = 1): Promise<number> {
+
     const current = (await this.get(key)) || 0;
     const newValue = current + amount;
     await this.set(key, newValue);
@@ -73,6 +77,7 @@ class MockRateLimitStorage {
   }
 
   async expire(key: string, ttlMs: number): Promise<void> {
+
     const item = this.store.get(key);
     if (item) {
       item.expires = new Date(Date.now() + ttlMs);
@@ -80,10 +85,12 @@ class MockRateLimitStorage {
   }
 
   async delete(key: string): Promise<boolean> {
+
     return this.store.delete(key);
   }
 
   async cleanup(): Promise<void> {
+
     const now = new Date();
     for (const [key, item] of this.store.entries()) {
       if (item.expires && item.expires < now) {
@@ -622,7 +629,7 @@ describe('SMSRateLimitingService', () => {
             type: message.type
           }),
           queueSize: expect.any(Number)
-        })
+  }
       );
     });
   });

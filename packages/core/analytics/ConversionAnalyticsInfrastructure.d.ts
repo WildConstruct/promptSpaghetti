@@ -20,7 +20,6 @@ interface AnalyticsEvent {
     userId: string;
     sessionId: string;
     properties: Record<string, any>;
-}
 interface MetricQuery {
     metric: string;
     filters?: Record<string, any>;
@@ -29,18 +28,16 @@ interface MetricQuery {
         end: number;
     };
     groupBy?: string[];
-}
 interface MetricResult {
     metric: string;
     value: number;
     timestamp: number;
     dimensions?: Record<string, any>;
-}
 interface AnalyticsInfrastructure {
     processEvent(event: AnalyticsEvent): Promise<void>;
     getMetrics(query: MetricQuery): Promise<MetricResult[]>;
     createDataWarehouseQuery(query: string): Promise<any[]>;
-}
+
 export interface ConversionMetricQuery {
     funnelId?: string;
     segmentId?: string;
@@ -58,15 +55,16 @@ export interface ConversionMetricQuery {
     useCache?: boolean;
     maxResults?: number;
     timeout?: number;
-}
+
 export type ConversionMetricType = 'conversion_rate' | 'drop_off_rate' | 'average_time_to_convert' | 'user_count' | 'session_count' | 'revenue' | 'average_order_value' | 'retention_rate' | 'churn_rate' | 'funnel_completion_rate' | 'step_conversion_rate' | 'attribution_value' | 'cohort_performance' | 'segment_growth' | 'custom';
 export type ConversionGroupBy = 'funnel_step' | 'user_segment' | 'cohort' | 'channel' | 'device_type' | 'location' | 'template_category' | 'time_period' | 'attribution_model';
+
 export interface ConversionFilter {
     field: string;
     operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than' | 'contains';
     value: any;
     negate?: boolean;
-}
+
 export interface ConversionMetricResult {
     metricType: ConversionMetricType;
     value: number;
@@ -80,7 +78,7 @@ export interface ConversionMetricResult {
     };
     dimensions: Record<string, any>;
     breakdowns?: MetricBreakdown[];
-}
+
 export interface ComparisonData {
     previousPeriod: {,
         value: number;
@@ -92,13 +90,13 @@ export interface ComparisonData {
         source: string;
         lastUpdated: number;
     };
-}
+
 export interface MetricBreakdown {
     dimension: string;
     value: any;
     metricValue: number;
     percentage: number;
-}
+
 export interface ProcessingStageResult {
     stage: string;
     success: boolean;
@@ -106,14 +104,14 @@ export interface ProcessingStageResult {
     errorCount: number;
     duration: number;
     errors?: ProcessingError[];
-}
+
 export interface ProcessingError {
     eventId: string;
     stage: string;
     error: string;
     severity: 'warning' | 'error' | 'critical';
     context?: Record<string, any>;
-}
+
 export interface DataWarehouseConfig {
     connectionString: string;
     schemaName: string;
@@ -134,7 +132,7 @@ export interface DataWarehouseConfig {
         funnelIndex: boolean;
         customIndices: string[];
     };
-}
+
 export interface AnalyticsAPIConfig {
     caching: {,
         enabled: boolean;
@@ -153,7 +151,6 @@ export interface AnalyticsAPIConfig {
         enableQueryPlanning: boolean;
         precomputeMetrics: string[];
     };
-}
 /**
  * Main Conversion Analytics Infrastructure
  * Coordinates all processing stages and provides unified API
@@ -194,7 +191,6 @@ export declare class ConversionAnalyticsInfrastructure {
      * Get infrastructure health status
      */
     getHealthStatus(): Promise<InfrastructureHealthStatus>;
-}
 /**
  * Multi-stage processing pipeline for conversion events
  */
@@ -208,7 +204,6 @@ export declare class ConversionProcessingPipeline {
     processBatch(events: FlexibleConversionEvent[], options: BatchProcessingOptions): Promise<BatchProcessingResult>;
     private chunkArray;
     getHealthStatus(): Promise<ComponentHealthStatus>;
-}
 /**
  * Advanced metrics calculator with real-time and historical analysis
  */
@@ -235,7 +230,7 @@ export declare class ConversionMetricsCalculator {
     private extractDimensionValue;
     private extractDimensions;
     getHealthStatus(): Promise<ComponentHealthStatus>;
-}
+
 export interface ProcessingConfig {
     validation: ValidationConfig;
     enrichment: EnrichmentConfig;
@@ -246,50 +241,50 @@ export interface ProcessingConfig {
     batchSize: number;
     continueOnError: boolean;
     forwardToEpic1: boolean;
-}
+
 export interface ValidationConfig {
     strict: boolean;
     requiredFields: string[];
     customRules: string[];
-}
+
 export interface EnrichmentConfig {
     enableUserEnrichment: boolean;
     enableTemplateEnrichment: boolean;
     enableLocationEnrichment: boolean;
-}
+
 export interface TransformationConfig {
     normalizeTimestamps: boolean;
     calculateDerivedFields: boolean;
     applyPrivacyFilters: boolean;
-}
+
 export interface AggregationConfig {
     enableRealTimeAggregation: boolean;
     aggregationWindows: string[];
     customAggregations: string[];
-}
+
 export interface StorageConfig {
     primaryStorage: string;
     archiveStorage: string;
     retentionPeriod: number;
-}
+
 export interface MetricCalculationConfig {
     enableCaching: boolean;
     cacheTimeout: number;
     parallelCalculations: boolean;
     customMetrics: Record<string, string>;
-}
+
 export interface BatchProcessingOptions {
     batchSize?: number;
     parallel?: boolean;
     continueOnError?: boolean;
-}
+
 export interface BatchProcessingResult {
     totalEvents: number;
     processedCount: number;
     errorCount: number;
     duration: number;
     stageResults: ProcessingStageResult[];
-}
+
 export interface RealTimeMetrics {
     funnelId: string;
     timestamp: number;
@@ -300,26 +295,26 @@ export interface RealTimeMetrics {
         averageTimeToConvert: number;
         topDropOffStep: string;
     };
-}
+
 export interface DataExportRequest {
     format: 'csv' | 'json' | 'parquet';
     query: ConversionMetricQuery;
     compression?: 'gzip' | 'zip';
     destination?: 'download' | 's3' | 'api';
-}
+
 export interface DataExportResult {
     exportId: string;
     status: 'pending' | 'completed' | 'failed';
     downloadUrl?: string;
     fileSize?: number;
     recordCount?: number;
-}
+
 export interface InfrastructureHealthStatus {
     processing: ComponentHealthStatus;
     metrics: ComponentHealthStatus;
     dataWarehouse: ComponentHealthStatus;
     api: ComponentHealthStatus;
-}
+
 export interface ComponentHealthStatus {
     healthy: boolean;
     uptime: number;
@@ -330,24 +325,24 @@ export interface ComponentHealthStatus {
         averageLatency: number;
     };
     details?: any;
-}
+
 export interface CachedMetric {
     value: ConversionMetricResult;
     timestamp: number;
     ttl: number;
-}
+
 export interface ProcessingStage {
     getName(): string;
     process(event: FlexibleConversionEvent): Promise<StageProcessingResult>;
     getHealthStatus(): Promise<ComponentHealthStatus>;
-}
+
 export interface StageProcessingResult {
     success: boolean;
     transformedEvent?: FlexibleConversionEvent;
     errors?: ProcessingError[];
-}
+
 export interface MetricCalculator {
     calculate(events: FlexibleConversionEvent[], query: ConversionMetricQuery): Promise<number>;
-}
+
 export declare export default ConversionAnalyticsInfrastructure;
 //# sourceMappingURL=ConversionAnalyticsInfrastructure.d.ts.map

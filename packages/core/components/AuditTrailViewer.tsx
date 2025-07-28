@@ -22,17 +22,14 @@ interface AuditTrailViewerProps {
   workspaceId: string;
   resourceId?: string;
   onClose?: () => void;
-}
-interface AuditFilters {
+  interface AuditFilters {
   action_type?: string;
   actor_id?: string;
   resource_id?: string;
   start_date?: Date;
   end_date?: Date;
   search_term?: string;
-}
-
-export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
+  export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({,)
   workspaceId,
   resourceId,
   onClose
@@ -45,8 +42,8 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
     exportAuditHistory
   } = useWorkflowStore();
   const [filters, setFilters] = useState<AuditFilters>({)
-    resource_id: resourceId,
-  });
+  resource_id: resourceId,
+});
   const [showFilters, setShowFilters] = useState(false);
   const [_____selectedEntries, _____setSelectedEntries] = useState<Set<string>>(new Set());
   const [showExportDialog, setShowExportDialog] = useState(false);
@@ -59,23 +56,18 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
     let entries = auditHistory;
     if (filters.action_type) {
       entries = entries.filter(entry => entry.action_type === filters.action_type);
-    }
     if (filters.actor_id) {
       entries = entries.filter(entry => entry.actor_id === filters.actor_id);
-    }
     if (filters.resource_id) {
       entries = entries.filter(entry => entry.resource_id === filters.resource_id);
-    }
     if (filters.start_date) {
       entries = entries.filter(entry => )
         new Date(entry.action_timestamp) >= filters.start_date!
       );
-    }
     if (filters.end_date) {
       entries = entries.filter(entry => )
         new Date(entry.action_timestamp) <= filters.end_date!
       );
-    }
     if (filters.search_term) {
       const searchLower = filters.search_term.toLowerCase();
       entries = entries.filter(entry => )
@@ -84,7 +76,6 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
         entry.comment?.toLowerCase().includes(searchLower) ||
         JSON.stringify(entry.metadata).toLowerCase().includes(searchLower)
       );
-    }
     return entries.sort((a, b) => 
       new Date(b.action_timestamp).getTime() - new Date(a.action_timestamp).getTime()
     );
@@ -97,60 +88,56 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
     Array.from(new Set(auditHistory.map(entry => entry.actor_id))).sort()
   , [auditHistory]);
   const handleFilterChange = (key: keyof AuditFilters, value: Error) => {
-    setFilters(prev => ({)
-      ...prev,
-      [key]: value
-    }));
+  setFilters(prev => ({)
+  ...prev,
+  [key]: value,
+}));
   };
   const handleExport = async (format: 'csv' | 'json' | 'pdf') => {
     try {
       await exportAuditHistory(workspaceId, filters, format);
       setShowExportDialog(false);
     } catch (error) {
-      console.error('Failed to export audit history:', error);
-    }
-  };
+  console.error('Failed to export audit history:', error);
+};
   const formatTimestamp = (timestamp: Date) => {
     return new Date(timestamp).toLocaleString();
   };
   const getActionTypeIcon = (actionType: string) => {
-    switch (actionType) {
-    case 'state_change':
-      return <CogIcon className="h-4 w-4 text-blue-600" />;
-    case 'approval_requested':
-      return <ClockIcon className="h-4 w-4 text-yellow-600" />;
-    case 'approved':
-      return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
-    case 'rejected':
-      return <XCircleIcon className="h-4 w-4 text-red-600" />;
-    case 'locked':
-      return <LockClosedIcon className="h-4 w-4 text-orange-600" />;
-    case 'unlocked':
-      return <LockOpenIcon className="h-4 w-4 text-gray-600" />;
-    default:
-      return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
-    }
-  };
+  switch (actionType) {
+  case 'state_change':,
+  return <CogIcon className="h-4 w-4 text-blue-600" />;
+  case 'approval_requested':,
+  return <ClockIcon className="h-4 w-4 text-yellow-600" />;
+  case 'approved':,
+  return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
+  case 'rejected':,
+  return <XCircleIcon className="h-4 w-4 text-red-600" />;
+  case 'locked':,
+  return <LockClosedIcon className="h-4 w-4 text-orange-600" />;
+  case 'unlocked':,
+  return <LockOpenIcon className="h-4 w-4 text-gray-600" />;
+  default:,
+  return <ClipboardDocumentListIcon className="h-4 w-4 text-gray-600" />;
+};
   const getActionTypeColor = (actionType: string) => {
-    switch (actionType) {
-    case 'state_change': return 'bg-blue-50 text-blue-800';
-    case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
-    case 'approved': return 'bg-green-50 text-green-800';
-    case 'rejected': return 'bg-red-50 text-red-800';
-    case 'locked': return 'bg-orange-50 text-orange-800';
-    case 'unlocked': return 'bg-gray-50 text-gray-800';
-    default: return 'bg-gray-50 text-gray-800';
-    }
-  };
+  switch (actionType) {
+  case 'state_change': return 'bg-blue-50 text-blue-800';
+  case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
+  case 'approved': return 'bg-green-50 text-green-800';
+  case 'rejected': return 'bg-red-50 text-red-800';
+  case 'locked': return 'bg-orange-50 text-orange-800';
+  case 'unlocked': return 'bg-gray-50 text-gray-800';
+  default: return 'bg-gray-50 text-gray-800';
+};
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center">
           <XCircleIcon className="h-5 w-5 text-red-600 mr-2" />
@@ -158,8 +145,7 @@ export const AuditTrailViewer: React.FC<AuditTrailViewerProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">

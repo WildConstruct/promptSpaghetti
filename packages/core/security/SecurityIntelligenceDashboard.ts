@@ -17,32 +17,29 @@ import { ThreatForecast } from './SecurityThreatForecasting';
 // ==========================================
 
 export interface SecurityDashboardConfig {
-  refreshInterval: number;
+  refreshInterval: number;,
   enableRealTimeUpdates: boolean;
-  retentionPeriodDays: number;
+  retentionPeriodDays: number;,
   enableExecutiveReports: boolean;
-  enableThreatIntelligence: boolean;
+  enableThreatIntelligence: boolean;,
   enableComplianceReporting: boolean;
-  alertThresholds: DashboardAlertThresholds;
-  reportingSchedules: ReportingSchedule[];
+  alertThresholds: DashboardAlertThresholds;,
+  reportingSchedules: ReportingSchedule;
 }
-
 export interface DashboardAlertThresholds {
-  criticalThreatCount: number;
+  criticalThreatCount: number;,
   anomalyVolumeThreshold: number;
-  responseTimeThresholdMs: number;
+  responseTimeThresholdMs: number;,
   systemHealthThreshold: number;
   complianceScoreThreshold: number;
 }
-
 export interface ReportingSchedule {
-  reportType: ReportType;
+  reportType: ReportType;,
   frequency: ReportFrequency;
-  recipients: string[];
+  recipients: string;,
   nextExecution: Date;
   enabled: boolean;
 }
-
 export enum ReportType {
   EXECUTIVE_SUMMARY = 'executive_summary',
   THREAT_INTELLIGENCE = 'threat_intelligence',
@@ -51,28 +48,23 @@ export enum ReportType {
   INCIDENT_ANALYSIS = 'incident_analysis',
   TREND_ANALYSIS = 'trend_analysis',
   OPERATIONAL_METRICS = 'operational_metrics'
-}
-
-export enum ReportFrequency {
+  export enum ReportFrequency {
   REAL_TIME = 'real_time',
   HOURLY = 'hourly',
   DAILY = 'daily',
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
   QUARTERLY = 'quarterly'
+  export interface SecurityPosture {
+  overallScore: number; // 0-100,
+  threatLevel: ThreatLevel;,
+  complianceScore: number; // 0-100,
+  systemHealth: number; // 0-100,
+  lastUpdated: Date;,
+  trends: PostureTrend;
+  riskFactors: RiskFactor;,
+  recommendations: SecurityRecommendation;
 }
-
-export interface SecurityPosture {
-  overallScore: number; // 0-100
-  threatLevel: ThreatLevel;
-  complianceScore: number; // 0-100
-  systemHealth: number; // 0-100
-  lastUpdated: Date;
-  trends: PostureTrend[];
-  riskFactors: RiskFactor[];
-  recommendations: SecurityRecommendation[];
-}
-
 export enum ThreatLevel {
   MINIMAL = 'minimal',
   LOW = 'low',
@@ -80,27 +72,23 @@ export enum ThreatLevel {
   ELEVATED = 'elevated',
   HIGH = 'high',
   SEVERE = 'severe'
-}
-
-export interface PostureTrend {
-  metric: string;
+  export interface PostureTrend {
+  metric: string;,
   direction: 'improving' | 'declining' | 'stable';
-  changePercent: number;
+  changePercent: number;,
   timeframe: string;
   significance: 'high' | 'medium' | 'low';
 }
-
 export interface RiskFactor {
-  id: string;
+  id: string;,
   category: RiskCategory;
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  impact: number; // 0-100
-  likelihood: number; // 0-100
-  description: string;
+  severity: 'critical' | 'high' | 'medium' | 'low';,
+  impact: number; // 0-100,
+  likelihood: number; // 0-100,
+  description: string;,
   mitigationStatus: 'pending' | 'in_progress' | 'completed';
-  estimatedResolutionTime: number; // hours
+  estimatedResolutionTime: number; // hours,
 }
-
 export enum RiskCategory {
   TECHNICAL = 'technical',
   OPERATIONAL = 'operational',
@@ -108,168 +96,152 @@ export enum RiskCategory {
   THREAT_INTELLIGENCE = 'threat_intelligence',
   HUMAN_FACTOR = 'human_factor',
   INFRASTRUCTURE = 'infrastructure'
-}
-
-export interface SecurityRecommendation {
-  id: string;
+  export interface SecurityRecommendation {
+  id: string;,
   priority: 'immediate' | 'high' | 'medium' | 'low';
-  category: string;
+  category: string;,
   title: string;
-  description: string;
+  description: string;,
   expectedBenefit: string;
-  estimatedEffort: string;
+  estimatedEffort: string;,
   implementationCost: number;
-  riskReduction: number; // 0-100
-  dependencies: string[];
+  riskReduction: number; // 0-100,
+  dependencies: string;,
   timeline: string;
 }
-
 export interface ThreatIntelligenceData {
-  activeThreatCount: number;
-  highSeverityThreats: ThreatSummary[];
+  activeThreatCount: number;,
+  highSeverityThreats: ThreatSummary;
   threatsByCategory: Record<string, number>;
-  geographicalThreats: GeographicalThreat[];
-  attackVectors: AttackVector[];
-  threatTrends: ThreatTrend[];
-  indicators: ThreatIndicator[];
+  geographicalThreats: GeographicalThreat;,
+  attackVectors: AttackVector;
+  threatTrends: ThreatTrend;,
+  indicators: ThreatIndicator;
 }
-
 export interface ThreatSummary {
-  id: string;
+  id: string;,
   type: string;
-  severity: string;
+  severity: string;,
   confidence: number;
-  firstSeen: Date;
+  firstSeen: Date;,
   lastSeen: Date;
-  affectedSystems: string[];
+  affectedSystems: string;,
   description: string;
   status: 'active' | 'mitigated' | 'resolved';
 }
-
 export interface GeographicalThreat {
-  country: string;
+  country: string;,
   region: string;
-  threatCount: number;
+  threatCount: number;,
   severityDistribution: Record<string, number>;
-  primaryThreatTypes: string[];
+  primaryThreatTypes: string;
 }
-
 export interface AttackVector {
-  vector: string;
+  vector: string;,
   frequency: number;
-  successRate: number;
+  successRate: number;,
   averageDamage: number;
   trend: 'increasing' | 'decreasing' | 'stable';
 }
-
 export interface ThreatTrend {
-  timeframe: string;
+  timeframe: string;,
   threatType: string;
-  volumeChange: number;
+  volumeChange: number;,
   severityChange: number;
   newVariants: number;
 }
-
 export interface ThreatIndicator {
-  type: 'ip' | 'domain' | 'hash' | 'pattern';
+  type: 'ip' | 'domain' | 'hash' | 'pattern';,
   value: string;
-  confidence: number;
-  sources: string[];
-  firstSeen: Date;
-  associatedThreats: string[];
+  confidence: number;,
+  sources: string;
+  firstSeen: Date;,
+  associatedThreats: string;
 }
-
 export interface DashboardMetrics {
   securityEvents: {,
-    total: number;
-    critical: number;
-    resolved: number;
-    averageResponseTime: number;
-  };
+  total: number;,
+  critical: number;
+  resolved: number;,
+  averageResponseTime: number;
+};
   anomalies: {,
-    detected: number;
-    falsePositives: number;
-    accuracy: number;
-  };
+  detected: number;
+  falsePositives: number;,
+  accuracy: number;
+};
   systemHealth: {,
-    availability: number;
-    performance: number;
-    errors: number;
-  };
+  availability: number;
+  performance: number;,
+  errors: number;
+};
   compliance: {,
-    overallScore: number;
-    violations: number;
-    auditReadiness: number;
-  };
+  overallScore: number;
+  violations: number;,
+  auditReadiness: number;
+};
   threats: {,
-    active: number;
-    mitigated: number;
-    severity: Record<string, number>;
-  };
+  active: number;
+  mitigated: number;,
+  severity: Record<string, number>;
+};
 }
-
 export interface ExecutiveReport {
-  id: string;
+  id: string;,
   reportType: ReportType;
-  generatedAt: Date;
+  generatedAt: Date;,
   period: {,
-    start: Date;
-    end: Date;
-  };
-  summary: ExecutiveSummary;
-  keyMetrics: KeyMetric[];
-  findings: Finding[];
-  recommendations: SecurityRecommendation[];
-  appendices: ReportAppendix[];
+  start: Date;,
+  end: Date;
+};
+  summary: ExecutiveSummary;,
+  keyMetrics: KeyMetric;
+  findings: Finding;,
+  recommendations: SecurityRecommendation;
+  appendices: ReportAppendix;
 }
-
 export interface ExecutiveSummary {
-  overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
-  keyHighlights: string[];
-  majorConcerns: string[];
-  actionItems: string[];
+  overallStatus: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';,
+  keyHighlights: string;
+  majorConcerns: string;,
+  actionItems: string;
   budgetImpact: string;
 }
-
 export interface KeyMetric {
-  name: string;
+  name: string;,
   value: number | string;
-  unit: string;
+  unit: string;,
   trend: 'up' | 'down' | 'stable';
-  context: string;
+  context: string;,
   benchmark: number | string;
 }
-
 export interface Finding {
-  id: string;
+  id: string;,
   category: string;
-  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
+  severity: 'critical' | 'high' | 'medium' | 'low' | 'info';,
   title: string;
-  description: string;
-  evidence: string[];
-  impact: string;
+  description: string;,
+  evidence: string;
+  impact: string;,
   recommendation: string;
 }
-
 export interface ReportAppendix {
-  title: string;
+  title: string;,
   type: 'chart' | 'table' | 'text' | 'image';
-  content: unknown;
+  content: unknown;,
   description: string;
 }
-
 export interface DashboardWidget {
-  id: string;
+  id: string;,
   type: WidgetType;
-  title: string;
+  title: string;,
   position: WidgetPosition;
-  size: WidgetSize;
+  size: WidgetSize;,
   config: WidgetConfig;
-  dataSource: string;
+  dataSource: string;,
   refreshRate: number;
   isVisible: boolean;
 }
-
 export enum WidgetType {
   METRIC_CARD = 'metric_card',
   LINE_CHART = 'line_chart',
@@ -281,31 +253,25 @@ export enum WidgetType {
   TREND_INDICATOR = 'trend_indicator',
   ALERT_LIST = 'alert_list',
   THREAT_MAP = 'threat_map'
-}
-
-export interface WidgetPosition {
-  x: number;
+  export interface WidgetPosition {
+  x: number;,
   y: number;
 }
-
 export interface WidgetSize {
-  width: number;
+  width: number;,
   height: number;
 }
-
 export interface WidgetConfig {
-  theme: 'light' | 'dark';
-  colors: string[];
-  showLegend: boolean;
+  theme: 'light' | 'dark';,
+  colors: string;
+  showLegend: boolean;,
   showLabels: boolean;
-  animation: boolean;
+  animation: boolean;,
   customOptions: Record<string, unknown>;
+  // ==========================================
+  // MAIN DASHBOARD CLASS
+  // ==========================================
 }
-
-// ==========================================
-// MAIN DASHBOARD CLASS
-// ==========================================
-
 export class SecurityIntelligenceDashboard extends EventEmitter {
   private config: SecurityDashboardConfig;
   private securityPosture: SecurityPosture;
@@ -316,47 +282,44 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
   private updateInterval?: NodeJS.Timeout;
   private isUpdating = false;
   constructor(config: Partial<SecurityDashboardConfig> = {}) {
-    super();
-    this.config = {
-      refreshInterval: 30000, // 30 seconds
-      enableRealTimeUpdates: true,
-      retentionPeriodDays: 90,
-      enableExecutiveReports: true,
-      enableThreatIntelligence: true,
-      enableComplianceReporting: true,
-      alertThresholds: {,
-        criticalThreatCount: 5,
-        anomalyVolumeThreshold: 100,
-        responseTimeThresholdMs: 300000, // 5 minutes
-        systemHealthThreshold: 85,
-        complianceScoreThreshold: 85,
-      },
-      reportingSchedules: [],
+  super();
+  this.config = {
+  refreshInterval: 30000, // 30 seconds,
+  enableRealTimeUpdates: true,
+  retentionPeriodDays: 90,
+  enableExecutiveReports: true,
+  enableThreatIntelligence: true,
+  enableComplianceReporting: true,
+  alertThresholds: {,
+  criticalThreatCount: 5,
+  anomalyVolumeThreshold: 100,
+  responseTimeThresholdMs: 300000, // 5 minutes,
+  systemHealthThreshold: 85,
+  complianceScoreThreshold: 85,
+},
+  reportingSchedules: [],
       ...config
     };
     this.initializeDashboard();
     this.initializeDefaultWidgets();
     if (this.config.enableRealTimeUpdates) {
-      this.startRealTimeUpdates();
-    }
-    if (this.config.enableExecutiveReports) {
-      this.startReportingScheduler();
-    }
-  }
+  this.startRealTimeUpdates();
+  if (this.config.enableExecutiveReports) {
+  this.startReportingScheduler();
   // ==========================================
   // INITIALIZATION
   // ==========================================
-  private initializeDashboard(): void {
-    this.securityPosture = {
-      overallScore: 0,
-      threatLevel: ThreatLevel.MINIMAL,
-      complianceScore: 0,
-      systemHealth: 0,
-      lastUpdated: new Date(),
-      trends: [],
-      riskFactors: [],
-      recommendations: [],
-    };
+  private initializeDashboard(): void {,
+  this.securityPosture = {
+  overallScore: 0,
+  threatLevel: ThreatLevel.MINIMAL,
+  complianceScore: 0,
+  systemHealth: 0,
+  lastUpdated: new Date(),
+  trends: [],
+  riskFactors: [],
+  recommendations: [],
+};
     this.threatIntelligence = {
       activeThreatCount: 0,
       highSeverityThreats: [],
@@ -364,39 +327,37 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       geographicalThreats: [],
       attackVectors: [],
       threatTrends: [],
-      indicators: [],
-    };
+      indicators: [];
+  };
     this.dashboardMetrics = {
-      securityEvents: {,
-        total: 0,
-        critical: 0,
-        resolved: 0,
-        averageResponseTime: 0,
-      },
-      anomalies: {,
-        detected: 0,
-        falsePositives: 0,
-        accuracy: 0,
-      },
-      systemHealth: {,
-        availability: 100,
-        performance: 100,
-        errors: 0,
-      },
-      compliance: {,
-        overallScore: 100,
-        violations: 0,
-        auditReadiness: 100,
-      },
-      threats: {,
-        active: 0,
+  securityEvents: {,
+  total: 0,
+  critical: 0,
+  resolved: 0,
+  averageResponseTime: 0,
+},
+  anomalies: {,
+  detected: 0,
+  falsePositives: 0,
+  accuracy: 0,
+},
+  systemHealth: {,
+  availability: 100,
+  performance: 100,
+  errors: 0,
+},
+  compliance: {,
+  overallScore: 100,
+  violations: 0,
+  auditReadiness: 100,
+},
+  threats: {,
+  active: 0,
         mitigated: 0,
         severity: {}
-      }
     };
-  }
   private initializeDefaultWidgets(): void {
-    const defaultWidgets: DashboardWidget[] = [
+    const defaultWidgets: DashboardWidget = [
       {
         id: 'security-posture-gauge',
         type: WidgetType.GAUGE,
@@ -404,17 +365,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 0, y: 0 },
         size: { width: 6, height: 4 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#ff4444', '#ffaa00', '#44ff44'],
           showLegend: true,
           showLabels: true,
           animation: true,
           customOptions: { min: 0, max: 100 }
-        },
-        dataSource: 'security_posture',
+  },
+  dataSource: 'security_posture',
         refreshRate: 30000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'threat-level-indicator',
         type: WidgetType.METRIC_CARD,
@@ -422,17 +383,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 6, y: 0 },
         size: { width: 3, height: 2 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#ff4444'],
           showLegend: false,
           showLabels: true,
           animation: true,
           customOptions: {}
-        },
-        dataSource: 'threat_level',
+  },
+  dataSource: 'threat_level',
         refreshRate: 10000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'active-threats-count',
         type: WidgetType.METRIC_CARD,
@@ -440,17 +401,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 9, y: 0 },
         size: { width: 3, height: 2 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#ff6b35'],
           showLegend: false,
           showLabels: true,
           animation: true,
           customOptions: {}
-        },
-        dataSource: 'active_threats',
+  },
+  dataSource: 'active_threats',
         refreshRate: 10000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'compliance-score',
         type: WidgetType.GAUGE,
@@ -458,17 +419,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 6, y: 2 },
         size: { width: 6, height: 4 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#ff4444', '#ffaa00', '#44ff44'],
           showLegend: true,
           showLabels: true,
           animation: true,
           customOptions: { min: 0, max: 100 }
-        },
-        dataSource: 'compliance_score',
+  },
+  dataSource: 'compliance_score',
         refreshRate: 60000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'security-events-timeline',
         type: WidgetType.LINE_CHART,
@@ -476,17 +437,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 0, y: 4 },
         size: { width: 12, height: 6 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#007acc', '#ff6b35', '#ff4444'],
           showLegend: true,
           showLabels: true,
           animation: true,
           customOptions: { timeWindow: '24h' }
-        },
-        dataSource: 'security_events_timeline',
+  },
+  dataSource: 'security_events_timeline',
         refreshRate: 30000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'threat-distribution',
         type: WidgetType.PIE_CHART,
@@ -494,17 +455,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 0, y: 10 },
         size: { width: 6, height: 6 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#007acc', '#ff6b35', '#ff4444', '#44ff44', '#ffaa00'],
           showLegend: true,
           showLabels: true,
           animation: true,
           customOptions: {}
-        },
-        dataSource: 'threat_distribution',
+  },
+  dataSource: 'threat_distribution',
         refreshRate: 60000,
-        isVisible: true,
-      },
+        isVisible: true;
+  }
       {
         id: 'geographical-threats',
         type: WidgetType.THREAT_MAP,
@@ -512,52 +473,47 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         position: { x: 6, y: 10 },
         size: { width: 6, height: 6 },
         config: {,
-          theme: 'light',
+  theme: 'light',
           colors: ['#ffaa00', '#ff6b35', '#ff4444'],
           showLegend: true,
           showLabels: true,
           animation: true,
           customOptions: { mapType: 'world' }
-        },
-        dataSource: 'geographical_threats',
+  },
+  dataSource: 'geographical_threats',
         refreshRate: 120000,
-        isVisible: true,
-      }
-    ];
+        isVisible: true];
     defaultWidgets.forEach(widget => {)
-      this.widgets.set(widget.id, widget);
+  this.widgets.set(widget.id, widget);
     });
-  }
   // ==========================================
   // DATA PROCESSING
   // ==========================================
   /**
    * Process security intelligence data for dashboard
    */
-  public async processSecurityIntelligence(intelligence: SecurityIntelligence[]): Promise<void> {
-    try {
-      // Update security posture
-      await this.updateSecurityPosture(intelligence);
-      // Update threat intelligence
-      await this.updateThreatIntelligence(intelligence);
-      // Update dashboard metrics
-      await this.updateDashboardMetrics(intelligence);
-      // Check alert thresholds
-      await this.checkAlertThresholds();
-      this.emit('dataUpdated', {)
-        securityPosture: this.securityPosture,
-        threatIntelligence: this.threatIntelligence,
-        metrics: this.dashboardMetrics,
-      });
+  public async processSecurityIntelligence(intelligence: SecurityIntelligence): Promise<void> {
+  try {
+  // Update security posture
+  await this.updateSecurityPosture(intelligence);
+  // Update threat intelligence
+  await this.updateThreatIntelligence(intelligence);
+  // Update dashboard metrics
+  await this.updateDashboardMetrics(intelligence);
+  // Check alert thresholds
+  await this.checkAlertThresholds();
+  this.emit('dataUpdated', {)
+  securityPosture: this.securityPosture,
+  threatIntelligence: this.threatIntelligence,
+  metrics: this.dashboardMetrics,
+});
     } catch (error) {
       console.error('Error processing security intelligence:', error);
       this.emit('error', { error, intelligence });
-    }
-  }
   /**
    * Process security anomalies for dashboard
    */
-  public async processSecurityAnomalies(anomalies: SecurityAnomaly[]): Promise<void> {
+  public async processSecurityAnomalies(anomalies: SecurityAnomaly): Promise<void> {
     try {
       // Update anomaly metrics
       this.dashboardMetrics.anomalies.detected = anomalies.length;
@@ -568,28 +524,26 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       if (totalResolved > 0) {
         this.dashboardMetrics.anomalies.accuracy = 
           ((totalResolved - this.dashboardMetrics.anomalies.falsePositives) / totalResolved) * 100;
-      }
       // Update risk factors from anomalies
       await this.updateRiskFactorsFromAnomalies(anomalies);
       this.emit('anomaliesProcessed', { count: anomalies.length });
     } catch (error) {
       console.error('Error processing security anomalies:', error);
       this.emit('error', { error, anomalies });
-    }
-  }
   /**
    * Process threat forecasts for dashboard
    */
-  public async processThreatForecasts(forecasts: ThreatForecast[]): Promise<void> {
+  public async processThreatForecasts(forecasts: ThreatForecast): Promise<void> {
     try {
       // Update threat trends from forecasts
-      const threatTrends: ThreatTrend[] = forecasts.map(forecast => ({)
-        timeframe: `next_${forecast.timeHorizon}min`,}
-        threatType: forecast.threatType,
+      const threatTrends: ThreatTrend = forecasts.map(forecast => ({,)
+  timeframe: `next_${forecast.timeHorizon}min`}
+},
+  threatType: forecast.threatType,
         volumeChange: forecast.predictedIntensity,
         severityChange: forecast.riskMetrics.valueAtRisk,
-        newVariants: forecast.seasonalFactors.length,
-      }));
+        newVariants: forecast.seasonalFactors.length;
+  }));
       this.threatIntelligence.threatTrends = threatTrends;
       // Update security posture trends
       await this.updatePostureTrends(forecasts);
@@ -597,25 +551,22 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     } catch (error) {
       console.error('Error processing threat forecasts:', error);
       this.emit('error', { error, forecasts });
-    }
-  }
   // ==========================================
   // SECURITY POSTURE ANALYSIS
   // ==========================================
-  private async updateSecurityPosture(intelligence: SecurityIntelligence[]): Promise<void> {
-    const activeIntelligence = intelligence.filter(i => !i.autoResolved);
-    // Calculate overall security score
-    let postureScore = 100;
-    // Deduct points for active threats
-    const threatDeductions = activeIntelligence.reduce((total, intel) => {
-      switch (intel.severity) {
-        case 'critical': return total + 20;
-        case 'high': return total + 10;
-        case 'medium': return total + 5;
-        case 'low': return total + 2;
-        default: return total;
-      }
-    }, 0);
+  private async updateSecurityPosture(intelligence: SecurityIntelligence): Promise<void> {
+  const activeIntelligence = intelligence.filter(i => !i.autoResolved);
+  // Calculate overall security score
+  let postureScore = 100;
+  // Deduct points for active threats
+  const threatDeductions = activeIntelligence.reduce((total, intel) => {
+  switch (intel.severity) {
+  case 'critical': return total + 20;
+  case 'high': return total + 10;
+  case 'medium': return total + 5;
+  case 'low': return total + 2;
+  default: return total;
+}, 0);
     postureScore = Math.max(0, postureScore - threatDeductions);
     // Update threat level based on active threats
     const criticalThreats = activeIntelligence.filter(i => i.severity === 'critical').length;
@@ -632,63 +583,61 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     // Generate recommendations
     const recommendations = await this.generateRecommendations(intelligence, postureScore);
     this.securityPosture = {
-      overallScore: postureScore,
-      threatLevel,
-      complianceScore: this.dashboardMetrics.compliance.overallScore,
-      systemHealth: this.dashboardMetrics.systemHealth.availability,
-      lastUpdated: new Date(),
-      trends: this.securityPosture.trends, // Preserve existing trends
-      riskFactors,
-      recommendations
-    };
-  }
-  private async updateThreatIntelligence(intelligence: SecurityIntelligence[]): Promise<void> {
+  overallScore: postureScore,
+  threatLevel,
+  complianceScore: this.dashboardMetrics.compliance.overallScore,
+  systemHealth: this.dashboardMetrics.systemHealth.availability,
+  lastUpdated: new Date(),
+  trends: this.securityPosture.trends, // Preserve existing trends,
+  riskFactors,
+  recommendations
+};
+  private async updateThreatIntelligence(intelligence: SecurityIntelligence): Promise<void> {
     const activeThreats = intelligence.filter(i => !i.autoResolved);
     // High severity threats summary
-    const highSeverityThreats: ThreatSummary[] = activeThreats
+    const highSeverityThreats: ThreatSummary = activeThreats
       .filter(i => i.severity === 'critical' || i.severity === 'high')
       .map(intel => ({)
-        id: intel.id,
+  id: intel.id,
         type: intel.type,
         severity: intel.severity,
         confidence: intel.confidence,
         firstSeen: intel.timestamp,
         lastSeen: intel.timestamp,
         affectedSystems: intel.correlatedEvents.map(e => e.metadata?.system as string).filter(Boolean),
-        description: `Security intelligence: ${intel.type}`,}
-        status: intel.autoResolved ? 'resolved' : 'active',
-      }));
+        description: `Security intelligence: ${intel.type}`}
+},
+  status: intel.autoResolved ? 'resolved' : 'active';
+  }));
     // Threats by category
     const threatsByCategory: Record<string, number> = {};
     activeThreats.forEach(intel => {)
-      threatsByCategory[intel.type] = (threatsByCategory[intel.type] || 0) + 1;
+  threatsByCategory[intel.type] = (threatsByCategory[intel.type] || 0) + 1;
     });
     // Generate geographical threat data (simplified)
-    const geographicalThreats: GeographicalThreat[] = [
+    const geographicalThreats: GeographicalThreat = [
       {
-        country: 'Various',
-        region: 'Global',
-        threatCount: activeThreats.length,
-        severityDistribution: {,
-          critical: activeThreats.filter(i => i.severity === 'critical').length,
-          high: activeThreats.filter(i => i.severity === 'high').length,
-          medium: activeThreats.filter(i => i.severity === 'medium').length,
-          low: activeThreats.filter(i => i.severity === 'low').length,
-        },
-        primaryThreatTypes: Object.keys(threatsByCategory).slice(0, 3)
-      }
+  country: 'Various',
+  region: 'Global',
+  threatCount: activeThreats.length,
+  severityDistribution: {,
+  critical: activeThreats.filter(i => i.severity === 'critical').length,
+  high: activeThreats.filter(i => i.severity === 'high').length,
+  medium: activeThreats.filter(i => i.severity === 'medium').length,
+  low: activeThreats.filter(i => i.severity === 'low').length,
+},
+  primaryThreatTypes: Object.keys(threatsByCategory).slice(0, 3)
     ];
     this.threatIntelligence = {
-      activeThreatCount: activeThreats.length,
-      highSeverityThreats,
-      threatsByCategory,
-      geographicalThreats,
-      attackVectors: [], // Would be populated with actual attack vector analysis
-      threatTrends: this.threatIntelligence.threatTrends, // Preserve existing trends
-      indicators: [] // Would be populated with IOCs,
-    };
-  }
-  private async updateDashboardMetrics(intelligence: SecurityIntelligence[]): Promise<void> {
+  activeThreatCount: activeThreats.length,
+  highSeverityThreats,
+  threatsByCategory,
+  geographicalThreats,
+  attackVectors: [], // Would be populated with actual attack vector analysis,
+  threatTrends: this.threatIntelligence.threatTrends, // Preserve existing trends,
+  indicators: [] // Would be populated with IOCs,
+};
+  private async updateDashboardMetrics(intelligence: SecurityIntelligence): Promise<void> {
     // Update security events metrics
     this.dashboardMetrics.securityEvents.total = intelligence.length;
     this.dashboardMetrics.securityEvents.critical = intelligence.filter(i => i.severity === 'critical').length;
@@ -700,42 +649,39 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         return sum + (intel.resolutionTime!.getTime() - intel.timestamp.getTime());
       }, 0);
       this.dashboardMetrics.securityEvents.averageResponseTime = totalResponseTime / resolvedIntelligence.length;
-    }
     // Update threat metrics
     this.dashboardMetrics.threats.active = intelligence.filter(i => !i.autoResolved).length;
     this.dashboardMetrics.threats.mitigated = intelligence.filter(i => i.autoResolved).length;
     const severityDistribution: Record<string, number> = {};
     intelligence.forEach(intel => {)
-      severityDistribution[intel.severity] = (severityDistribution[intel.severity] || 0) + 1;
+  severityDistribution[intel.severity] = (severityDistribution[intel.severity] || 0) + 1;
     });
     this.dashboardMetrics.threats.severity = severityDistribution;
-  }
   // ==========================================
   // REPORTING SYSTEM
   // ==========================================
   /**
    * Generate executive report
    */
-  public async generateExecutiveReport()
+  public async generateExecutiveReport(()
     reportType: ReportType,
     period: { start: Date; end: Date }
   ): Promise<ExecutiveReport> {
-    const summary = await this.generateExecutiveSummary();
-    const keyMetrics = await this.generateKeyMetrics();
-    const findings = await this.generateFindings();
-    const recommendations = this.securityPosture.recommendations;
-    return {
-      id: this.generateReportId(),
-      reportType,
-      generatedAt: new Date(),
-      period,
-      summary,
-      keyMetrics,
-      findings,
-      recommendations,
-      appendices: [],
-    };
-  }
+  const summary = await this.generateExecutiveSummary();
+  const keyMetrics = await this.generateKeyMetrics();
+  const findings = await this.generateFindings();
+  const recommendations = this.securityPosture.recommendations;
+  return {
+  id: this.generateReportId(),
+  reportType,
+  generatedAt: new Date(),
+  period,
+  summary,
+  keyMetrics,
+  findings,
+  recommendations,
+  appendices: [],
+};
   private async generateExecutiveSummary(): Promise<ExecutiveSummary> {
     const overallScore = this.securityPosture.overallScore;
     let overallStatus: ExecutiveSummary['overallStatus'];
@@ -745,8 +691,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     else if (overallScore >= 60) overallStatus = 'poor';
     else overallStatus = 'critical';
     const keyHighlights = [;
-      `Security posture score: ${overallScore}/100`,}
-      `Active threats: ${this.threatIntelligence.activeThreatCount}`,}
+      `Security posture score: ${overallScore}/100`}
+}
+      `Active threats: ${this.threatIntelligence.activeThreatCount}`}
+}
       `Compliance score: ${this.securityPosture.complianceScore}/100`}
     ];
     const majorConcerns = this.securityPosture.riskFactors;
@@ -758,233 +706,211 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       .slice(0, 5)
       .map(rec => rec.title);
     return {
-      overallStatus,
-      keyHighlights,
-      majorConcerns,
-      actionItems,
-      budgetImpact: 'Moderate investment required for security improvements',
-    };
-  }
-  private async generateKeyMetrics(): Promise<KeyMetric[]> {
-    return [
+  overallStatus,
+  keyHighlights,
+  majorConcerns,
+  actionItems,
+  budgetImpact: 'Moderate investment required for security improvements',
+};
+  private async generateKeyMetrics(): Promise<KeyMetric> {
+  return [
+  {
+  name: 'Security Posture Score',
+  value: this.securityPosture.overallScore,
+  unit: '/100',
+  trend: 'stable',
+  context: 'Overall security effectiveness',
+  benchmark: 85,
+}
       {
-        name: 'Security Posture Score',
-        value: this.securityPosture.overallScore,
-        unit: '/100',
-        trend: 'stable',
-        context: 'Overall security effectiveness',
-        benchmark: 85,
-      },
+  name: 'Active Threats',
+  value: this.threatIntelligence.activeThreatCount,
+  unit: 'threats',
+  trend: 'down',
+  context: 'Current security threats',
+  benchmark: 0,
+}
       {
-        name: 'Active Threats',
-        value: this.threatIntelligence.activeThreatCount,
-        unit: 'threats',
-        trend: 'down',
-        context: 'Current security threats',
-        benchmark: 0,
-      },
-      {
-        name: 'Mean Time to Resolution',
-        value: Math.round(this.dashboardMetrics.securityEvents.averageResponseTime / 60000),
-        unit: 'minutes',
-        trend: 'stable',
-        context: 'Average incident response time',
-        benchmark: 15,
-      },
+  name: 'Mean Time to Resolution',
+  value: Math.round(this.dashboardMetrics.securityEvents.averageResponseTime / 60000),
+  unit: 'minutes',
+  trend: 'stable',
+  context: 'Average incident response time',
+  benchmark: 15,
+}
       {
         name: 'Compliance Score',
         value: this.securityPosture.complianceScore,
         unit: '/100',
         trend: 'up',
         context: 'Regulatory compliance status',
-        benchmark: 95,
-      }
-    ];
-  }
-  private async generateFindings(): Promise<Finding[]> {
-    const findings: Finding[] = [];
+        benchmark: 95];
+  private async generateFindings(): Promise<Finding> {
+    const findings: Finding = [];
     // Generate findings from risk factors
     this.securityPosture.riskFactors.forEach(risk => {)
-      findings.push({)
-        id: risk.id,
+  findings.push({)
+  id: risk.id,
         category: risk.category,
         severity: risk.severity,
-        title: `Risk Factor: ${risk.category}`,}
-        description: risk.description,
-        evidence: [`Risk impact: ${risk.impact}/100`, `Likelihood: ${risk.likelihood}/100`],}
-        impact: `Potential impact score: ${risk.impact}`,}
-        recommendation: `Mitigation status: ${risk.mitigationStatus}`}
+        title: `Risk Factor: ${risk.category}`}
+},
+  description: risk.description,
+        evidence: [`Risk impact: ${risk.impact}/100`, `Likelihood: ${risk.likelihood}/100`]}
+},
+  impact: `Potential impact score: ${risk.impact}`}
+},
+  recommendation: `Mitigation status: ${risk.mitigationStatus}`}
       });
     });
     return findings.slice(0, 10); // Limit to top 10 findings
-  }
   // ==========================================
   // HELPER METHODS
   // ==========================================
-  private async generateRiskFactors(intelligence: SecurityIntelligence[]): Promise<RiskFactor[]> {
-    const riskFactors: RiskFactor[] = [];
+  private async generateRiskFactors(intelligence: SecurityIntelligence): Promise<RiskFactor> {
+    const riskFactors: RiskFactor = [];
     // Generate risk factors from active intelligence
     const activeThreats = intelligence.filter(i => !i.autoResolved);
     if (activeThreats.length > 10) {
       riskFactors.push({)
-        id: 'high-threat-volume',
+  id: 'high-threat-volume',
         category: RiskCategory.THREAT_INTELLIGENCE,
         severity: 'high',
         impact: 80,
         likelihood: 90,
-        description: `High volume of active threats detected: ${activeThreats.length}`,}
-        mitigationStatus: 'pending',
-        estimatedResolutionTime: 24,
-      });
-    }
+        description: `High volume of active threats detected: ${activeThreats.length}`}
+},
+  mitigationStatus: 'pending',
+        estimatedResolutionTime: 24;
+  });
     const criticalThreats = activeThreats.filter(i => i.severity === 'critical');
     if (criticalThreats.length > 0) {
       riskFactors.push({)
-        id: 'critical-threats',
+  id: 'critical-threats',
         category: RiskCategory.THREAT_INTELLIGENCE,
         severity: 'critical',
         impact: 95,
         likelihood: 100,
-        description: `Critical severity threats detected: ${criticalThreats.length}`,}
-        mitigationStatus: 'in_progress',
-        estimatedResolutionTime: 4,
-      });
-    }
+        description: `Critical severity threats detected: ${criticalThreats.length}`}
+},
+  mitigationStatus: 'in_progress',
+        estimatedResolutionTime: 4;
+  });
     return riskFactors;
-  }
-  private async generateRecommendations()
-    intelligence: SecurityIntelligence[],
+  private async generateRecommendations(()
+    intelligence: SecurityIntelligence,
     postureScore: number,
-  ): Promise<SecurityRecommendation[]> {
-    const recommendations: SecurityRecommendation[] = [];
-    if (postureScore < 70) {
-      recommendations.push({)
-        id: 'improve-security-posture',
-        priority: 'high',
-        category: 'Security Posture',
-        title: 'Improve Overall Security Posture',
-        description: 'Security score is below acceptable threshold',
-        expectedBenefit: 'Reduce security risk by 30%',
-        estimatedEffort: '2-4 weeks',
-        implementationCost: 50000,
-        riskReduction: 30,
-        dependencies: ['security_team_approval', 'budget_allocation'],
-        timeline: '4 weeks',
-      });
-    }
+  ): Promise<SecurityRecommendation> {
+  const recommendations: SecurityRecommendation = [];
+  if (postureScore < 70) {
+  recommendations.push({)
+  id: 'improve-security-posture',
+  priority: 'high',
+  category: 'Security Posture',
+  title: 'Improve Overall Security Posture',
+  description: 'Security score is below acceptable threshold',
+  expectedBenefit: 'Reduce security risk by 30%',
+  estimatedEffort: '2-4 weeks',
+  implementationCost: 50000,
+  riskReduction: 30,
+  dependencies: ['security_team_approval', 'budget_allocation'],
+  timeline: '4 weeks',
+});
     const activeThreats = intelligence.filter(i => !i.autoResolved);
     if (activeThreats.length > 5) {
-      recommendations.push({)
-        id: 'threat-mitigation',
-        priority: 'immediate',
-        category: 'Threat Response',
-        title: 'Implement Immediate Threat Mitigation',
-        description: 'High number of active threats require immediate attention',
-        expectedBenefit: 'Reduce active threat count by 70%',
-        estimatedEffort: '1-2 weeks',
-        implementationCost: 25000,
-        riskReduction: 50,
-        dependencies: ['incident_response_team'],
-        timeline: '2 weeks',
-      });
-    }
+  recommendations.push({)
+  id: 'threat-mitigation',
+  priority: 'immediate',
+  category: 'Threat Response',
+  title: 'Implement Immediate Threat Mitigation',
+  description: 'High number of active threats require immediate attention',
+  expectedBenefit: 'Reduce active threat count by 70%',
+  estimatedEffort: '1-2 weeks',
+  implementationCost: 25000,
+  riskReduction: 50,
+  dependencies: ['incident_response_team'],
+  timeline: '2 weeks',
+});
     return recommendations;
-  }
-  private async updateRiskFactorsFromAnomalies(anomalies: SecurityAnomaly[]): Promise<void> {
+  private async updateRiskFactorsFromAnomalies(anomalies: SecurityAnomaly): Promise<void> {
     const highSeverityAnomalies = anomalies.filter(a => ;);
       a.severity === 'high' || a.severity === 'critical'
     );
     if (highSeverityAnomalies.length > 0) {
-      const riskFactor: RiskFactor = {
-        id: 'anomaly-detection-risk',
+      const riskFactor: RiskFactor = {,
+  id: 'anomaly-detection-risk',
         category: RiskCategory.TECHNICAL,
         severity: 'medium',
         impact: 60,
         likelihood: 70,
-        description: `High-severity anomalies detected: ${highSeverityAnomalies.length}`,}
-        mitigationStatus: 'pending',
-        estimatedResolutionTime: 8,
-      };
+        description: `High-severity anomalies detected: ${highSeverityAnomalies.length}`}
+},
+  mitigationStatus: 'pending',
+        estimatedResolutionTime: 8;
+  };
       // Add or update risk factor
       const existingIndex = this.securityPosture.riskFactors.findIndex(r => r.id === riskFactor.id);
       if (existingIndex >= 0) {
         this.securityPosture.riskFactors[existingIndex] = riskFactor;
       } else {
-        this.securityPosture.riskFactors.push(riskFactor);
-      }
-    }
-  }
-  private async updatePostureTrends(forecasts: ThreatForecast[]): Promise<void> {
-    // Update posture trends based on forecasts
-    const trends: PostureTrend[] = [];
-    const highConfidenceForecasts = forecasts.filter(f => f.confidence > 0.7);
-    if (highConfidenceForecasts.length > 0) {
-      const avgIntensity = highConfidenceForecasts.reduce(;);
-        (sum,)
-        f
-      ) => sum + f.predictedIntensity, 0) / highConfidenceForecasts.length;
-      trends.push({)
-        metric: 'threat_intensity',
-        direction: avgIntensity > 60 ? 'declining' : avgIntensity > 30 ? 'stable' : 'improving',
-        changePercent: avgIntensity,
-        timeframe: 'next_4_hours',
-        significance: avgIntensity > 70 ? 'high' : avgIntensity > 40 ? 'medium' : 'low',
-      });
-    }
+  this.securityPosture.riskFactors.push(riskFactor);
+  private async updatePostureTrends(forecasts: ThreatForecast): Promise<void> {,
+  // Update posture trends based on forecasts
+  const trends: PostureTrend = [];
+  const highConfidenceForecasts = forecasts.filter(f => f.confidence > 0.7);
+  if (highConfidenceForecasts.length > 0) {
+  const avgIntensity = highConfidenceForecasts.reduce(;);
+  (sum)
+  f
+  ) => sum + f.predictedIntensity, 0) / highConfidenceForecasts.length;
+  trends.push({)
+  metric: 'threat_intensity',
+  direction: avgIntensity > 60 ? 'declining' : avgIntensity > 30 ? 'stable' : 'improving',
+  changePercent: avgIntensity,
+  timeframe: 'next_4_hours',
+  significance: avgIntensity > 70 ? 'high' : avgIntensity > 40 ? 'medium' : 'low',
+});
     this.securityPosture.trends = trends;
-  }
   private async checkAlertThresholds(): Promise<void> {
-    const alerts: string[] = [];
+    const alerts: string = [];
     // Check critical threat count
     if (this.threatIntelligence.activeThreatCount >= this.config.alertThresholds.criticalThreatCount) {
       alerts.push(`Critical: Active threat count (${this.threatIntelligence.activeThreatCount}) exceeds threshold`);}
-    }
     // Check system health
     if (this.dashboardMetrics.systemHealth.availability < this.config.alertThresholds.systemHealthThreshold) {
       alerts.push(`Warning: System health (${this.dashboardMetrics.systemHealth.availability}%) below threshold`);}
-    }
     // Check compliance score
     if (this.securityPosture.complianceScore < this.config.alertThresholds.complianceScoreThreshold) {
       alerts.push(`Warning: Compliance score (${this.securityPosture.complianceScore}%) below threshold`);}
-    }
     if (alerts.length > 0) {
-      this.emit('alertsTriggered', alerts);
-    }
-  }
-  private startRealTimeUpdates(): void {
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
-    }
-    this.updateInterval = setInterval(async () => {
-      if (!this.isUpdating) {
-        this.isUpdating = true;
-        try {
-          await this.performScheduledUpdate();
-        } catch (error) {
-          console.error('Scheduled update error:', error);
-        } finally {
+  this.emit('alertsTriggered', alerts);
+  private startRealTimeUpdates(): void {,
+  if (this.updateInterval) {
+  clearInterval(this.updateInterval);
+  this.updateInterval = setInterval(async () => {
+  if (!this.isUpdating) {
+  this.isUpdating = true;
+  try {
+  await this.performScheduledUpdate();
+} catch (error) {
+  console.error('Scheduled update error:', error);
+} finally {
           this.isUpdating = false;
-        }
-      }
     }, this.config.refreshInterval);
-  }
   private async performScheduledUpdate(): Promise<void> {
-    // Update system health metrics
-    this.dashboardMetrics.systemHealth = {
-      availability: 95 + Math.random() * 5, // Simulate availability
-      performance: 90 + Math.random() * 10, // Simulate performance
-      errors: Math.floor(Math.random() * 5) // Simulate error count,
-    };
+  // Update system health metrics
+  this.dashboardMetrics.systemHealth = {
+  availability: 95 + Math.random() * 5, // Simulate availability,
+  performance: 90 + Math.random() * 10, // Simulate performance,
+  errors: Math.floor(Math.random() * 5) // Simulate error count,
+};
     this.emit('scheduledUpdate', this.dashboardMetrics);
-  }
   private startReportingScheduler(): void {
     if (this.reportingScheduler) {
       clearInterval(this.reportingScheduler);
-    }
     this.reportingScheduler = setInterval(async () => {
       await this.checkReportingSchedules();
     }, 60000); // Check every minute
-  }
   private async checkReportingSchedules(): Promise<void> {
     const now = new Date();
     for (const schedule of this.config.reportingSchedules) {
@@ -1001,10 +927,6 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         } catch (error) {
           console.error('Report generation error:', error);
           this.emit('reportError', { error, schedule });
-        }
-      }
-    }
-  }
   private calculateReportPeriod(frequency: ReportFrequency): { start: Date; end: Date } {
     const end = new Date();
     const start = new Date();
@@ -1023,9 +945,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         break;
       default:
         start.setHours(start.getHours() - 1);
-    }
     return { start, end };
-  }
   private calculateNextExecution(frequency: ReportFrequency): Date {
     const next = new Date();
     switch (frequency) {
@@ -1044,45 +964,33 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       case ReportFrequency.QUARTERLY:
         next.setMonth(next.getMonth() + 3);
         break;
-    }
     return next;
-  }
-  private async distributeReport(report: ExecutiveReport, recipients: string[]): Promise<void> {
+  private async distributeReport(report: ExecutiveReport, recipients: string): Promise<void> {
     // Integration point with Epic 17 notification system
     console.log(`📊 DISTRIBUTING REPORT: ${report.reportType} to ${recipients.join(', ')}`);}
-  }
   private generateReportId(): string {
     return `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  }
   // ==========================================
   // PUBLIC API METHODS
   // ==========================================
   public getSecurityPosture(): SecurityPosture {
     return this.securityPosture;
-  }
   public getThreatIntelligence(): ThreatIntelligenceData {
     return this.threatIntelligence;
-  }
   public getDashboardMetrics(): DashboardMetrics {
     return this.dashboardMetrics;
-  }
-  public getWidgets(): DashboardWidget[] {
+  public getWidgets(): DashboardWidget {
     return Array.from(this.widgets.values());
-  }
   public getWidget(widgetId: string): DashboardWidget | undefined {
     return this.widgets.get(widgetId);
-  }
   public addWidget(widget: DashboardWidget): void {
     this.widgets.set(widget.id, widget);
     this.emit('widgetAdded', widget);
-  }
   public removeWidget(widgetId: string): boolean {
     const removed = this.widgets.delete(widgetId);
     if (removed) {
       this.emit('widgetRemoved', widgetId);
-    }
     return removed;
-  }
   public updateWidget(widgetId: string, updates: Partial<DashboardWidget>): boolean {
     const widget = this.widgets.get(widgetId);
     if (!widget) return false;
@@ -1090,7 +998,6 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.widgets.set(widgetId, updatedWidget);
     this.emit('widgetUpdated', updatedWidget);
     return true;
-  }
   public async generateAdHocReport()
     analysisType: string,
     parameters: Record<string,
@@ -1102,7 +1009,6 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       ReportType.EXECUTIVE_SUMMARY,
       this.calculateReportPeriod(ReportFrequency.DAILY)
     );
-  }
   public updateConfiguration(newConfig: Partial<SecurityDashboardConfig>): void {
     this.config = { ...this.config, ...newConfig };
     if (newConfig.enableRealTimeUpdates !== undefined) {
@@ -1111,27 +1017,18 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       } else if (this.updateInterval) {
         clearInterval(this.updateInterval);
         this.updateInterval = undefined;
-      }
-    }
     if (newConfig.enableExecutiveReports !== undefined) {
       if (newConfig.enableExecutiveReports) {
         this.startReportingScheduler();
       } else if (this.reportingScheduler) {
         clearInterval(this.reportingScheduler);
         this.reportingScheduler = undefined;
-      }
-    }
-  }
   public destroy(): void {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
-    }
     if (this.reportingScheduler) {
       clearInterval(this.reportingScheduler);
-    }
     this.removeAllListeners();
     this.widgets.clear();
-  }
-}
 
 export default SecurityIntelligenceDashboard;

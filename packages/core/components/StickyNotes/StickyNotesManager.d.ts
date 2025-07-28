@@ -10,11 +10,12 @@
  * - Professional UI matching Cinema 4D standards
  */
 import React from 'react';
+
 interface StickyNotesManagerProps {
     disabled?: boolean;
     readonly?: boolean;
     author?: string;
-}
+
 export declare const StickyNotesManager: React.FC<StickyNotesManagerProps>;
 export default StickyNotesManager;
 //# sourceMappingURL=StickyNotesManager.d.ts.map

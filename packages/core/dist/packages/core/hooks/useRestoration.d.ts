@@ -9,9 +9,9 @@ interface UseRestorationReturn {
     cancelRestoration: (restorationAttemptId: string) => Promise<void>;
     getStats: (projectId: string) => Promise<RestorationStatsResponse>;
     createBookmark: (request: RestorationBookmarkRequest) => Promise<RestorationBookmark>;
-    getBookmarks: (projectId: string) => Promise<RestorationBookmark[]>;
+    getBookmarks: (projectId: string) => Promise<RestorationBookmark>;
     deleteBookmark: (bookmarkId: string) => Promise<void>;
-    listRestorations: (filter: RestorationFilter) => Promise<RestorationAttempt[]>;
+    listRestorations: (filter: RestorationFilter) => Promise<RestorationAttempt>;
     getRestorationDetails: (restorationAttemptId: string) => Promise<any>;
     clearError: () => void;
 }

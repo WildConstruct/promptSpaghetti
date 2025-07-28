@@ -41,25 +41,25 @@ describe('LocationHistoryAnalysisService', () => {
         maxDistanceKm: 5,
         minTimeForHomeDetection: 7,
         confidenceThreshold: 0.6
-      },
+  }
       travelAnalysis: {
         enabled: true,
         maxReasonableSpeedKmh: 1000,
         minTravelDistanceKm: 10,
         anomalyDetectionSensitivity: 'medium'
-      },
+  }
       riskScoring: {
         noveltyWeight: 0.3,
         frequencyWeight: 0.2,
         geopoliticalWeight: 0.2,
         temporalWeight: 0.3
-      },
+  }
       anomalyDetection: {
         enabled: true,
         sensitivityLevel: 0.7,
         falsePositiveThreshold: 0.2,
         autoResolveAfterDays: 30
-      },
+  }
       cache: {
         profileCacheTtl: 3600,
         analysisCacheTtl: 1800,
@@ -134,10 +134,10 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'San Francisco',
           latitude: 37.7749,
           longitude: -122.4194
-        },
+  }
         accessTime: new Date('2024-01-01T09:00:00Z'),
         accessCount: 50
-      },
+  }
       {
         location: {
           ipAddress: '1.1.1.2',
@@ -145,10 +145,10 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'San Francisco',
           latitude: 37.7849, // Close to first location
           longitude: -122.4094
-        },
+  }
         accessTime: new Date('2024-01-01T10:00:00Z'),
         accessCount: 30
-      },
+  }
       {
         location: {
           ipAddress: '2.2.2.2',
@@ -156,7 +156,7 @@ describe('LocationHistoryAnalysisService', () => {
           city: 'New York',
           latitude: 40.7128,
           longitude: -74.0060
-        },
+  }
         accessTime: new Date('2024-01-01T18:00:00Z'),
         accessCount: 25
       }
@@ -253,7 +253,7 @@ describe('LocationHistoryAnalysisService', () => {
           isProxy: true,
           isTor: true,
           isMalicious: true
-        },
+  }
         accessTime: new Date('2024-01-01T02:00:00Z'), // Unusual hour
         accessCount: 5
       }];
@@ -295,12 +295,12 @@ describe('LocationHistoryAnalysisService', () => {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-01T08:00:00Z'),
           accessCount: 10
-        },
+  }
         {
           location: { latitude: 40.7128, longitude: -74.0060, city: 'New York' },
           accessTime: new Date('2024-01-01T14:00:00Z'), // 6 hours later
           accessCount: 5
-        },
+  }
         {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-02T08:00:00Z'), // Next day
@@ -338,7 +338,7 @@ describe('LocationHistoryAnalysisService', () => {
           location: { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco' },
           accessTime: new Date('2024-01-01T08:00:00Z'),
           accessCount: 10
-        },
+  }
         {
           location: { latitude: 51.5074, longitude: -0.1278, city: 'London' },
           accessTime: new Date('2024-01-01T08:05:00Z'), // 5 minutes later, impossible

@@ -16,45 +16,43 @@ export interface UseWebSocketOptions {
   onUserLeave?: (user: any) => void;
   onError?: (error: any) => void;
 }
-
 export interface UseWebSocketReturn {
-  connectionState: ConnectionState;
+  connectionState: ConnectionState;,
   isConnected: boolean;
-  isConnecting: boolean;
-  sendGraphUpdate: (update: GraphUpdatePayload) => boolean;
-  sendPresenceUpdate: (presence: PresenceUpdatePayload) => boolean;
+  isConnecting: boolean;,
+  sendGraphUpdate: (update: GraphUpdatePayload) => boolean;,
+  sendPresenceUpdate: (presence: PresenceUpdatePayload) => boolean;,
   connect: () => Promise<void>;
-  disconnect: () => void;
+  disconnect: () => void;,
   queuedMessages: number;
   clearQueue: () => void;
-}
-const DEFAULT_CONFIG: Partial<WebSocketClientConfig> = {
+  const DEFAULT_CONFIG: Partial<WebSocketClientConfig> = {,
   reconnectInterval: 1000,
   maxReconnectAttempts: 5,
   heartbeatInterval: 30000,
   connectionTimeout: 10000,
   enableOfflineQueue: true,
 };
-
+}
 export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   const {
-    url = 'ws://localhost:8001',
-    documentId,
-    userId = 'anonymous',
-    authToken,
-    enabled = true,
-    reconnectInterval = DEFAULT_CONFIG.reconnectInterval,
-    maxReconnectAttempts = DEFAULT_CONFIG.maxReconnectAttempts,
-    onGraphUpdate,
-    onPresenceUpdate,
-    onUserJoin,
-    onUserLeave,
-    onError
-  } = options;
+  url = 'ws://localhost:8001',
+  documentId,
+  userId = 'anonymous',
+  authToken,
+  enabled = true,
+  reconnectInterval = DEFAULT_CONFIG.reconnectInterval,
+  maxReconnectAttempts = DEFAULT_CONFIG.maxReconnectAttempts,
+  onGraphUpdate,
+  onPresenceUpdate,
+  onUserJoin,
+  onUserLeave,
+  onError
+} = options;
   const [connectionState, setConnectionState] = useState<ConnectionState>({)
-    status: 'disconnected',
-    reconnectAttempts: 0,
-  });
+  status: 'disconnected',
+  reconnectAttempts: 0,
+});
   const [queuedMessages, setQueuedMessages] = useState(0);
   const clientRef = useRef<WebSocketClient | null>(null);
   const optionsRef = useRef(options);
@@ -64,18 +62,17 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   }, [options]);
   // Initialize WebSocket client
   useEffect(() => {
-    if (!enabled || !documentId) {
-      return;
-    }
-    const config: WebSocketClientConfig = {
-      url,
-      reconnectInterval: reconnectInterval || DEFAULT_CONFIG.reconnectInterval!,
-      maxReconnectAttempts: maxReconnectAttempts || DEFAULT_CONFIG.maxReconnectAttempts!,
-      heartbeatInterval: DEFAULT_CONFIG.heartbeatInterval!,
-      connectionTimeout: DEFAULT_CONFIG.connectionTimeout!,
-      enableOfflineQueue: DEFAULT_CONFIG.enableOfflineQueue!,
-      authToken
-    };
+  if (!enabled || !documentId) {
+  return;
+  const config: WebSocketClientConfig = {,
+  url,
+  reconnectInterval: reconnectInterval || DEFAULT_CONFIG.reconnectInterval!,
+  maxReconnectAttempts: maxReconnectAttempts || DEFAULT_CONFIG.maxReconnectAttempts!,
+  heartbeatInterval: DEFAULT_CONFIG.heartbeatInterval!,
+  connectionTimeout: DEFAULT_CONFIG.connectionTimeout!,
+  enableOfflineQueue: DEFAULT_CONFIG.enableOfflineQueue!,
+  authToken
+};
     const client = new WebSocketClient(config);
     clientRef.current = client;
     // Set up event listeners
@@ -106,11 +103,10 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
     });
     // Auto-connect if enabled
     if (enabled) {
-      client.connect(documentId, userId).catch((error) => {
-        console.error('Failed to connect WebSocket:', error);
-        optionsRef.current.onError?.(error);
-      });
-    }
+  client.connect(documentId, userId).catch((error) => {
+  console.error('Failed to connect WebSocket:', error);
+  optionsRef.current.onError?.(error);
+});
     return () => {
       client.disconnect();
       client.removeAllListeners();
@@ -126,7 +122,6 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
   const connect = useCallback(async (): Promise<void> => {
     if (clientRef.current && documentId) {
       await clientRef.current.connect(documentId, userId);
-    }
   }, [documentId, userId]);
   const disconnect = useCallback((): void => {
     clientRef.current?.disconnect();
@@ -136,22 +131,21 @@ export function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn {
     setQueuedMessages(0);
   }, []);
   return {
-    connectionState,
-    isConnected: connectionState.status === 'authenticated' || connectionState.status === 'connected',
-    isConnecting: connectionState.status === 'connecting' || connectionState.status === 'authenticating',
-    sendGraphUpdate,
-    sendPresenceUpdate,
-    connect,
-    disconnect,
-    queuedMessages,
-    clearQueue
-  };
-}
+  connectionState,
+  isConnected: connectionState.status === 'authenticated' || connectionState.status === 'connected',
+  isConnecting: connectionState.status === 'connecting' || connectionState.status === 'authenticating',
+  sendGraphUpdate,
+  sendPresenceUpdate,
+  connect,
+  disconnect,
+  queuedMessages,
+  clearQueue
+};
 
 // Enhanced hook for managing user presence
 export function usePresence(documentId: string, userId: string, userName?: string, userAvatar?: string) {
   const [cursor, setCursor] = useState<{ x: number; y: number; nodeId?: string } | null>(null);
-  const [selection, setSelection] = useState<string[]>([]);
+  const [selection, setSelection] = useState<string>([]);
   const [currentTool, setCurrentTool] = useState<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [focusedNodeId, setFocusedNodeId] = useState<string>('');
@@ -167,99 +161,91 @@ export function usePresence(documentId: string, userId: string, userName?: strin
     requestPresenceData,
     isConnected 
   } = useWebSocket({)
-    documentId,
-    userId,
-    authToken: undefined, // Add your auth token here
-    onPresenceSync: (data) => {,
-      const usersMap = new Map();
-      data.users.forEach((user: any) => {
-        usersMap.set(user.userId, user);
-      });
+  documentId,
+  userId,
+  authToken: undefined, // Add your auth token here,
+  onPresenceSync: (data) => {,
+  const usersMap = new Map();
+  data.users.forEach((user: any) => {,
+  usersMap.set(user.userId, user);
+});
       setOtherUsers(usersMap);
-    },
-    onPresenceUpdate: (presence) => {,
+  },
+  onPresenceUpdate: (presence) => {,
       if (presence.userId !== userId) {
         setOtherUsers(prev => new Map(prev.set(presence.userId, presence)));
-      }
-    },
-    onCursorUpdate: (data) => {,
+  },
+  onCursorUpdate: (data) => {,
       if (data.userId !== userId) {
         setUserCursors(prev => new Map(prev.set(data.userId, data.cursor)));
-      }
-    },
-    onSelectionUpdate: (data) => {,
+  },
+  onSelectionUpdate: (data) => {,
       if (data.userId !== userId) {
         setUserSelections(prev => new Map(prev.set(data.userId, data.selection)));
-      }
-    },
-    onActivityUpdate: (data) => {,
-      if (data.userId !== userId) {
-        setUserActivity(prev => new Map(prev.set(data.userId, {)
-          currentTool: data.currentTool,
-          isTyping: data.isTyping,
-          focusedNodeId: data.focusedNodeId,
-        })));
-      }
-    },
-    onUserJoin: (user) => {,
+  },
+  onActivityUpdate: (data) => {,
+  if (data.userId !== userId) {
+  setUserActivity(prev => new Map(prev.set(data.userId, {)
+  currentTool: data.currentTool,
+  isTyping: data.isTyping,
+  focusedNodeId: data.focusedNodeId,
+})));
+  },
+  onUserJoin: (user) => {,
       // User will be added via presence_sync
-    },
-    onUserLeave: (user) => {,
+  },
+  onUserLeave: (user) => {,
       setOtherUsers(prev => {)
-        const next = new Map(prev);
+  const next = new Map(prev);
         next.delete(user.userId);
         return next;
       });
       setUserCursors(prev => {)
-        const next = new Map(prev);
+  const next = new Map(prev);
         next.delete(user.userId);
         return next;
       });
       setUserSelections(prev => {)
-        const next = new Map(prev);
+  const next = new Map(prev);
         next.delete(user.userId);
         return next;
       });
       setUserActivity(prev => {)
-        const next = new Map(prev);
+  const next = new Map(prev);
         next.delete(user.userId);
         return next;
       });
-    },
-    onUserStatusChanged: (data) => {,
+  },
+  onUserStatusChanged: (data) => {,
       setOtherUsers(prev => {)
-        const user = prev.get(data.userId);
+  const user = prev.get(data.userId);
         if (user) {
           return new Map(prev.set(data.userId, { ...user, status: data.status }));
-        }
         return prev;
       });
-    }
   });
   // Request presence data when connected
   useEffect(() => {
     if (isConnected) {
       requestPresenceData();
-    }
   }, [isConnected, requestPresenceData]);
   const updateCursor = useCallback((x: number, y: number, nodeId?: string, viewportBounds?: any) => {
     setCursor({ x, y, nodeId });
     sendCursorUpdate(x, y, nodeId, viewportBounds);
   }, [sendCursorUpdate]);
-  const updateSelection = useCallback((newSelection: string[]) => {
+  const updateSelection = useCallback((newSelection: string) => {
     setSelection(newSelection);
     sendSelectionUpdate(newSelection);
   }, [sendSelectionUpdate]);
   const updateActivity = useCallback((tool?: string, typing?: boolean, focusedNode?: string) => {
-    if (tool !== undefined) setCurrentTool(tool);
-    if (typing !== undefined) setIsTyping(typing);
-    if (focusedNode !== undefined) setFocusedNodeId(focusedNode);
-    sendActivityUpdate();
-      tool !== undefined ? tool : currentTool,
-      typing !== undefined ? typing : isTyping,
-      focusedNode !== undefined ? focusedNode : focusedNodeId
-    );
-  }, [currentTool, isTyping, focusedNodeId, sendActivityUpdate]);
+  if (tool !== undefined) setCurrentTool(tool);
+  if (typing !== undefined) setIsTyping(typing);
+  if (focusedNode !== undefined) setFocusedNodeId(focusedNode);
+  sendActivityUpdate();
+  tool !== undefined ? tool : currentTool,
+  typing !== undefined ? typing : isTyping,
+  focusedNode !== undefined ? focusedNode : focusedNodeId);
+}, [currentTool, isTyping, focusedNodeId, sendActivityUpdate]);
   // Auto-clear typing indicator
   useEffect(() => {
     if (isTyping) {
@@ -268,41 +254,38 @@ export function usePresence(documentId: string, userId: string, userName?: strin
         sendActivityUpdate(currentTool, false, focusedNodeId);
       }, 3000);
       return () => clearTimeout(timeout);
-    }
   }, [isTyping, currentTool, focusedNodeId, sendActivityUpdate]);
   // Combine all user data
   const allUsers = useMemo(() => {
-    const users: any[] = [];
-    for (const [userId, userData] of otherUsers) {
-      const cursor = userCursors.get(userId);
-      const selection = userSelections.get(userId);
-      const activity = userActivity.get(userId);
-      users.push({)
-        ...userData,
-        cursor,
-        selection: selection?.nodeIds || [],
-        currentTool: activity?.currentTool,
-        isTyping: activity?.isTyping,
-        focusedNodeId: activity?.focusedNodeId,
-      });
-    }
+  const users: any = [];
+  for (const [userId, userData] of otherUsers) {
+  const cursor = userCursors.get(userId);
+  const selection = userSelections.get(userId);
+  const activity = userActivity.get(userId);
+  users.push({)
+  ...userData,
+  cursor,
+  selection: selection?.nodeIds || [],
+  currentTool: activity?.currentTool,
+  isTyping: activity?.isTyping,
+  focusedNodeId: activity?.focusedNodeId,
+});
     return users;
   }, [otherUsers, userCursors, userSelections, userActivity]);
   return {
-    // Current user state
-    cursor,
-    selection,
-    currentTool,
-    isTyping,
-    focusedNodeId,
-    // Other users
-    otherUsers: allUsers,
-    userCursors: Array.from(userCursors.entries()),
-    userSelections: Array.from(userSelections.entries()),
-    typingUsers: allUsers.filter(user => user.isTyping),
-    // Actions
-    updateCursor,
-    updateSelection,
-    updateActivity
-  };
-}
+  // Current user state
+  cursor,
+  selection,
+  currentTool,
+  isTyping,
+  focusedNodeId,
+  // Other users
+  otherUsers: allUsers,
+  userCursors: Array.from(userCursors.entries()),
+  userSelections: Array.from(userSelections.entries()),
+  typingUsers: allUsers.filter(user => user.isTyping),
+  // Actions
+  updateCursor,
+  updateSelection,
+  updateActivity
+};

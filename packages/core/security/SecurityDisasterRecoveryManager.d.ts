@@ -7,6 +7,7 @@
  * ensuring business continuity and data protection in catastrophic scenarios.
  */
 import { EventEmitter } from 'events';
+
 export interface DisasterRecoveryPlan {
     id: string;
     name: string;
@@ -73,7 +74,7 @@ export interface DisasterRecoveryPlan {
     approved_at?: number;
     next_review_date: number;
     status: 'draft' | 'approved' | 'active' | 'archived';
-}
+
 export interface RecoveryStrategy {
     id: string;
     name: string;
@@ -117,7 +118,7 @@ export interface RecoveryStrategy {
     created_at: number;
     last_tested: number;
     test_success_rate: number;
-}
+
 export interface RecoveryProcedure {
     id: string;
     name: string;
@@ -142,7 +143,7 @@ export interface RecoveryProcedure {
     estimated_duration: number;
     last_execution_duration?: number;
     success_rate: number;
-}
+
 export interface BackupJob {
     id: string;
     name: string;
@@ -210,7 +211,7 @@ export interface BackupJob {
     last_run: number;
     next_run: number;
     enabled: boolean;
-}
+
 export interface BackupExecution {
     id: string;
     job_id: string;
@@ -253,7 +254,7 @@ export interface BackupExecution {
     };
     triggered_by: 'schedule' | 'manual' | 'event' | 'disaster_recovery';
     execution_log: string[];
-}
+
 export interface DisasterRecoveryEvent {
     id: string;
     plan_id: string;
@@ -310,7 +311,7 @@ export interface DisasterRecoveryEvent {
     status: 'active' | 'resolved' | 'under_investigation';
     incident_commander: string;
     created_by: string;
-}
+
 export interface RecoveryTimelineEntry {
     id: string;
     timestamp: number;
@@ -321,7 +322,7 @@ export interface RecoveryTimelineEntry {
     duration?: number;
     details: Record<string, any>;
     notes?: string;
-}
+
 export interface TestResult {
     id: string;
     plan_id: string;
@@ -363,7 +364,7 @@ export interface TestResult {
     };
     test_report: string;
     conducted_by: string;
-}
+
 export interface NotificationTreeNode {
     id: string;
     name: string;
@@ -394,7 +395,7 @@ export interface NotificationTreeNode {
         };
         on_call_schedule?: string;
     };
-}
+
 export interface EscalationProcedure {
     id: string;
     name: string;
@@ -407,7 +408,7 @@ export interface EscalationProcedure {
         authorization_required: boolean;
     }[];
     max_escalation_level: number;
-}
+
 export interface StakeholderGroup {
     id: string;
     name: string;
@@ -419,7 +420,7 @@ export interface StakeholderGroup {
         information_level: 'summary' | 'detailed' | 'technical';
     };
     notification_triggers: string[];
-}
+
 export interface ExternalDependency {
     id: string;
     name: string;
@@ -436,7 +437,7 @@ export interface ExternalDependency {
         response_time: number;
         recovery_time: number;
     };
-}
+
 export interface ActionItem {
     id: string;
     title: string;
@@ -450,7 +451,7 @@ export interface ActionItem {
     completion_criteria: string;
     created_at: number;
     completed_at?: number;
-}
+
 export interface Issue {
     id: string;
     title: string;
@@ -460,7 +461,7 @@ export interface Issue {
     impact: string;
     root_cause?: string;
     recommendations: string[];
-}
+
 export interface DisasterRecoveryMetrics {
     availability: {,
         system_uptime: number;
@@ -511,7 +512,7 @@ export interface DisasterRecoveryMetrics {
         start: number;
         end: number;
     };
-}
+
 export interface DisasterRecoveryConfig {
     enabled: boolean;
     default_rto: number;
@@ -564,7 +565,6 @@ export interface DisasterRecoveryConfig {
         require_multi_factor_auth: boolean;
         background_check_required: boolean;
     };
-}
 /**
  * Security Analytics Disaster Recovery Manager
  */
@@ -672,6 +672,6 @@ export declare class SecurityDisasterRecoveryManager extends EventEmitter {
      * Shutdown the disaster recovery manager
      */
     shutdown(): void;
-}
+
 export default SecurityDisasterRecoveryManager;
 //# sourceMappingURL=SecurityDisasterRecoveryManager.d.ts.map

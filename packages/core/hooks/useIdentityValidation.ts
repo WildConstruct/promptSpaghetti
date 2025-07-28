@@ -20,18 +20,16 @@ export interface IdentityValidationHookConfig {
   autoLoadUserData?: boolean;
   enableRealTimeUpdates?: boolean;
 }
-
 export interface ValidationSubmissionResult {
   success: boolean;
   requestId?: string;
   error?: string;
   status?: ValidationStatus;
 }
-
 export const useIdentityValidation = (config: IdentityValidationHookConfig = {}) => {
   const { userId, autoLoadUserData = true, enableRealTimeUpdates = false } = config;
   const [userTrustScore, setUserTrustScore] = useState<TrustScore | null>(null);
-  const [userValidations, setUserValidations] = useState<IdentityValidationRequest[]>([]);
+  const [userValidations, setUserValidations] = useState<IdentityValidationRequest>([]);
   const [validationSummary, setValidationSummary] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +37,6 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
   useEffect(() => {
     if (userId && autoLoadUserData) {
       loadUserData();
-    }
   }, [userId, autoLoadUserData]);
   // Setup real-time updates if enabled
   useEffect(() => {
@@ -48,7 +45,6 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
         loadUserData();
       }, 30000); // Update every 30 seconds
       return () => clearInterval(interval);
-    }
   }, [enableRealTimeUpdates, userId]);
   const loadUserData = useCallback(async () => {
     if (!userId) return;
@@ -62,10 +58,9 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       setUserValidations(validations);
       setValidationSummary(summary);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load user data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load user data');
+} finally {
       setIsLoading(false);
-    }
   }, [userId]);
   /**
    * Submit email verification
@@ -73,7 +68,6 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
   const submitEmailVerification = useCallback(async (email: string): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -84,16 +78,15 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       // Refresh user data
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Email verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Email verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Submit phone verification
@@ -101,7 +94,6 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
   const submitPhoneVerification = useCallback(async (phoneNumber: string): Promise<ValidationSubmissionResult> => {
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -111,26 +103,23 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       );
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Phone verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Phone verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Submit government ID verification
    */
   const submitGovernmentIdVerification = useCallback(async (;);
-    governmentIdData: NonNullable<IdentityValidationData['governmentId']>,
-  ): Promise<ValidationSubmissionResult> => {
+    governmentIdData: NonNullable<IdentityValidationData['governmentId']>): Promise<ValidationSubmissionResult> => {,
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -140,26 +129,23 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       );
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Government ID verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Government ID verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Submit professional credentials verification
    */
   const submitProfessionalCredentials = useCallback(async (;);
-    professionalData: NonNullable<IdentityValidationData['professionalCredentials']>,
-  ): Promise<ValidationSubmissionResult> => {
+    professionalData: NonNullable<IdentityValidationData['professionalCredentials']>): Promise<ValidationSubmissionResult> => {,
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -169,26 +155,23 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       );
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Professional credentials verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Professional credentials verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Submit social media verification
    */
   const submitSocialMediaVerification = useCallback(async (;);
-    socialMediaData: NonNullable<IdentityValidationData['socialMediaProfiles']>,
-  ): Promise<ValidationSubmissionResult> => {
+    socialMediaData: NonNullable<IdentityValidationData['socialMediaProfiles']>): Promise<ValidationSubmissionResult> => {,
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -198,26 +181,23 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       );
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Social media verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Social media verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Submit portfolio verification
    */
   const submitPortfolioVerification = useCallback(async (;);
-    portfolioData: NonNullable<IdentityValidationData['professionalCredentials']>['portfolio'],
-  ): Promise<ValidationSubmissionResult> => {
+    portfolioData: NonNullable<IdentityValidationData['professionalCredentials']>['portfolio']): Promise<ValidationSubmissionResult> => {,
     if (!userId) {
       return { success: false, error: 'User ID is required' };
-    }
     try {
       const result = await identityValidationService.submitValidationRequest(;);
         userId,
@@ -227,16 +207,15 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
       );
       await loadUserData();
       return {
-        success: true,
-        requestId: result.requestId,
-        status: result.status,
-      };
+  success: true,
+  requestId: result.requestId,
+  status: result.status,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Portfolio verification failed',
-      };
-    }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Portfolio verification failed',
+};
   }, [userId, loadUserData]);
   /**
    * Check validation status
@@ -263,69 +242,63 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
    * Get next recommended verification steps
    */
   const getRecommendedVerificationSteps = useCallback((): {
-    type: IdentityValidationType;
-    title: string;
-    description: string;
-    priority: 'high' | 'medium' | 'low';
-    requiredFor: string;
-  }[] => {
-    if (!validationSummary) return [];
-    const steps = [];
-    const missing = validationSummary.missingValidations || [];
-    if (missing.includes('email_verification')) {
-      steps.push({)
-        type: 'email_verification' as const,
-        title: 'Verify Email Address',
-        description: 'Confirm your email address to enable account security features',
-        priority: 'high' as const,
-        requiredFor: 'Basic verification',
-      });
-    }
+  type: IdentityValidationType;,
+  title: string;
+  description: string;,
+  priority: 'high' | 'medium' | 'low';
+  requiredFor: string;
+}[] => {
+  if (!validationSummary) return [];
+  const steps = [];
+  const missing = validationSummary.missingValidations || [];
+  if (missing.includes('email_verification')) {
+  steps.push({)
+  type: 'email_verification' as const,
+  title: 'Verify Email Address',
+  description: 'Confirm your email address to enable account security features',
+  priority: 'high' as const,
+  requiredFor: 'Basic verification',
+});
     if (missing.includes('phone_verification')) {
-      steps.push({)
-        type: 'phone_verification' as const,
-        title: 'Verify Phone Number',
-        description: 'Add two-factor authentication and account recovery options',
-        priority: 'high' as const,
-        requiredFor: 'Account security',
-      });
-    }
+  steps.push({)
+  type: 'phone_verification' as const,
+  title: 'Verify Phone Number',
+  description: 'Add two-factor authentication and account recovery options',
+  priority: 'high' as const,
+  requiredFor: 'Account security',
+});
     if (missing.includes('professional_credentials')) {
-      steps.push({)
-        type: 'professional_credentials' as const,
-        title: 'Add Professional Credentials',
-        description: 'Showcase your education, certifications, and industry experience',
-        priority: 'medium' as const,
-        requiredFor: 'Professional tier access',
-      });
-    }
+  steps.push({)
+  type: 'professional_credentials' as const,
+  title: 'Add Professional Credentials',
+  description: 'Showcase your education, certifications, and industry experience',
+  priority: 'medium' as const,
+  requiredFor: 'Professional tier access',
+});
     if (missing.includes('portfolio_verification')) {
-      steps.push({)
-        type: 'portfolio_verification' as const,
-        title: 'Verify Portfolio',
-        description: 'Link your professional work to build credibility',
-        priority: 'medium' as const,
-        requiredFor: 'Creator marketplace',
-      });
-    }
+  steps.push({)
+  type: 'portfolio_verification' as const,
+  title: 'Verify Portfolio',
+  description: 'Link your professional work to build credibility',
+  priority: 'medium' as const,
+  requiredFor: 'Creator marketplace',
+});
     if (missing.includes('social_media_verification')) {
-      steps.push({)
-        type: 'social_media_verification' as const,
-        title: 'Connect Social Profiles',
-        description: 'Link your LinkedIn, IMDb, or other professional profiles',
-        priority: 'low' as const,
-        requiredFor: 'Community features',
-      });
-    }
+  steps.push({)
+  type: 'social_media_verification' as const,
+  title: 'Connect Social Profiles',
+  description: 'Link your LinkedIn, IMDb, or other professional profiles',
+  priority: 'low' as const,
+  requiredFor: 'Community features',
+});
     if (missing.includes('government_id')) {
-      steps.push({)
-        type: 'government_id' as const,
-        title: 'Government ID Verification',
-        description: 'Complete identity verification for premium features',
-        priority: 'medium' as const,
-        requiredFor: 'Payment processing',
-      });
-    }
+  steps.push({)
+  type: 'government_id' as const,
+  title: 'Government ID Verification',
+  description: 'Complete identity verification for premium features',
+  priority: 'medium' as const,
+  requiredFor: 'Payment processing',
+});
     return steps.sort((a, b) => {
       const priorityOrder = { high: 0, medium: 1, low: 2 };
       return priorityOrder[a.priority] - priorityOrder[b.priority];
@@ -340,84 +313,84 @@ export const useIdentityValidation = (config: IdentityValidationHookConfig = {})
   /**
    * Get trust tier benefits
    */
-  const getTrustTierBenefits = useCallback((tier?: TrustScore['tier']): string[] => {
-    const currentTier = tier || userTrustScore?.tier || 'unverified';
-    const benefits: Record<TrustScore['tier'], string[]> = {
-      unverified: [,
-        'Access to free templates',
-        'Basic graph creation tools'
-      ],
-      basic: [,
-        'Email support',
-        'Access to premium templates (limited)',
-        'Basic marketplace features'
-      ],
-      verified: [,
-        'Priority support',
-        'Full marketplace access',
-        'Template creation & selling',
-        'Collaboration features'
-      ],
-      professional: [,
-        'Professional badge display',
-        'Featured creator status',
-        'Advanced analytics',
-        'Custom branding options',
-        'Direct industry connections'
-      ],
-      expert: [,
-        'Expert verification badge',
-        'Mentorship opportunities',
-        'Early access to new features',
-        'Revenue sharing bonuses',
-        'Industry partnership access'
-      ]
-    };
+  const getTrustTierBenefits = useCallback((tier?: TrustScore['tier']): string => {
+  const currentTier = tier || userTrustScore?.tier || 'unverified';
+  const benefits: Record<TrustScore['tier'], string> = {,
+  unverified: [,
+  'Access to free templates',
+  'Basic graph creation tools'
+  ],
+  basic: [,
+  'Email support',
+  'Access to premium templates (limited)',
+  'Basic marketplace features'
+  ],
+  verified: [,
+  'Priority support',
+  'Full marketplace access',
+  'Template creation & selling',
+  'Collaboration features'
+  ],
+  professional: [,
+  'Professional badge display',
+  'Featured creator status',
+  'Advanced analytics',
+  'Custom branding options',
+  'Direct industry connections'
+  ],
+  expert: [,
+  'Expert verification badge',
+  'Mentorship opportunities',
+  'Early access to new features',
+  'Revenue sharing bonuses',
+  'Industry partnership access'
+  ]
+};
     return benefits[currentTier] || [];
   }, [userTrustScore]);
   return {
-    // State
-    userTrustScore,
-    userValidations,
-    validationSummary,
-    isLoading,
-    error,
-    // Verification submissions
-    submitEmailVerification,
-    submitPhoneVerification,
-    submitGovernmentIdVerification,
-    submitProfessionalCredentials,
-    submitSocialMediaVerification,
-    submitPortfolioVerification,
-    // Status checking
-    checkValidationStatus,
-    getValidationResult,
-    // Helper methods
-    getVerificationCompletionPercentage,
-    getRecommendedVerificationSteps,
-    hasVerification,
-    getTrustTierBenefits,
-    // Data refresh
-    refreshUserData: loadUserData,
-    // Utility methods
-    isEmailVerified: hasVerification('email_verification'),
-    isPhoneVerified: hasVerification('phone_verification'),
-    isIdentityVerified: hasVerification('government_id'),
-    isProfessionalVerified: hasVerification('professional_credentials'),
-    isSocialVerified: hasVerification('social_media_verification'),
-    isPortfolioVerified: hasVerification('portfolio_verification'),
-    // Trust score utilities
-    trustLevel: userTrustScore?.tier || 'unverified',
-    trustPercentage: userTrustScore?.overall || 0,
-    canAccessPremiumFeatures: (),
-      userTrustScore?.tier && ['verified',
-        'professional',
-        'expert'].includes(userTrustScore.tier)
-      )) || false,
-    canSellTemplates: (userTrustScore?.tier && ['professional', 'expert'].includes(userTrustScore.tier)) || false,
-    // Direct service access
-    identityValidationService
-  };
+  // State
+  userTrustScore,
+  userValidations,
+  validationSummary,
+  isLoading,
+  error,
+  // Verification submissions
+  submitEmailVerification,
+  submitPhoneVerification,
+  submitGovernmentIdVerification,
+  submitProfessionalCredentials,
+  submitSocialMediaVerification,
+  submitPortfolioVerification,
+  // Status checking
+  checkValidationStatus,
+  getValidationResult,
+  // Helper methods
+  getVerificationCompletionPercentage,
+  getRecommendedVerificationSteps,
+  hasVerification,
+  getTrustTierBenefits,
+  // Data refresh
+  refreshUserData: loadUserData,
+  // Utility methods
+  isEmailVerified: hasVerification('email_verification'),
+  isPhoneVerified: hasVerification('phone_verification'),
+  isIdentityVerified: hasVerification('government_id'),
+  isProfessionalVerified: hasVerification('professional_credentials'),
+  isSocialVerified: hasVerification('social_media_verification'),
+  isPortfolioVerified: hasVerification('portfolio_verification'),
+  // Trust score utilities
+  trustLevel: userTrustScore?.tier || 'unverified',
+  trustPercentage: userTrustScore?.overall || 0,
+  canAccessPremiumFeatures: (),
+  userTrustScore?.tier && ['verified',
+  'professional',
+  'expert'].includes(userTrustScore.tier)
+  )) || false,
+  canSellTemplates: (userTrustScore?.tier && ['professional', 'expert'].includes(userTrustScore.tier)) || false,
+  // Direct service access
+  identityValidationService
+};
 };
 
 export default useIdentityValidation;

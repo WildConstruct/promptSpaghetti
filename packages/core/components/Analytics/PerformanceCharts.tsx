@@ -10,17 +10,16 @@ import { TrendingUp, TrendingDown, Activity, AlertTriangle } from 'lucide-react'
  */
 interface TimeSeriesChartProps {
   data: Record<string, unknown>[];
-  title: string;
+  title: string;,
   metric: string;
-  unit: string;
+  unit: string;,
   color: string;
   loading: boolean;
   error?: string;
-}
-/**
- * Time series chart component
- */
-const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
+  /**
+  * Time series chart component
+  */
+  const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({,)
   data,
   title,
   metric,
@@ -32,20 +31,16 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
   const formatValue = (value: number) => {
     if (unit === 'ms') {
       return value < 1000 ? `${value}ms` : `${(value / 1000).toFixed(1)}s`;}
-    }
     if (unit === 'currency') {
-      return new Intl.NumberFormat('en-US', {)
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-      }).format(value);
-    }
+  return new Intl.NumberFormat('en-US', {)
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+}).format(value);
     if (value >= 1000000) {
       return `${(value / 1000000).toFixed(1)}M`;}
-    }
     if (value >= 1000) {
       return `${(value / 1000).toFixed(1)}K`;}
-    }
     return value.toLocaleString();
   };
   const formatXAxis = (timestamp: number) => {
@@ -53,7 +48,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   if (loading) {
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -65,9 +60,8 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
         </CardContent>
       </Card>
     );
-  }
   if (error) {
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -80,9 +74,8 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
         </CardContent>
       </Card>
     );
-  }
   if (!data || data.length === 0) {
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -94,8 +87,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
         </CardContent>
       </Card>
     );
-  }
-  return ();
+  return;
     <Card>
       <CardHeader>
         <CardTitle className="text-sm text-gray-600">{title}</CardTitle>
@@ -120,11 +112,11 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
                 formatter={(value: number) => [formatValue(value), metric]}
                 labelFormatter={(timestamp: number) => formatXAxis(timestamp)}
                 contentStyle={{
-                  backgroundColor: '#1F2937',
-                  border: 'none',
-                  borderRadius: '8px',
-                  color: '#F9FAFB',
-                }}
+  backgroundColor: '#1F2937',
+  border: 'none',
+  borderRadius: '8px',
+  color: '#F9FAFB',
+}}
               />
               <Line
                 type="monotone"
@@ -144,37 +136,37 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({)
 /**
  * Performance charts props
  */
+
 export interface PerformanceChartsProps {
-  analyticsClient: AnalyticsClient;
+  analyticsClient: AnalyticsClient;,
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
-}
 /**
  * Performance charts state
  */
 interface PerformanceChartsState {
-  executionsData: unknown[];
-  tokensData: unknown[];
-  costData: unknown[];
-  errorsData: unknown[];
-  granularity: 'hour' | 'day';
+  executionsData: unknown;,
+  tokensData: unknown;
+  costData: unknown;,
+  errorsData: unknown;
+  granularity: 'hour' | 'day';,
   loading: {,
-    executions: boolean;
-    tokens: boolean;
-    cost: boolean;
-    errors: boolean;
-  };
+  executions: boolean;,
+  tokens: boolean;
+  cost: boolean;,
+  errors: boolean;
+};
   errors: {,
-    executions?: string;
-    tokens?: string;
-    cost?: string;
-    errors?: string;
-  };
-}
+  executions?: string;
+  tokens?: string;
+  cost?: string;
+  errors?: string;
+};
 /**
  * Performance charts component
  */
+}
 export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   analyticsClient,
   timeRange,
@@ -182,82 +174,80 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   organizationId
 }) => {
   const [state, setState] = useState<PerformanceChartsState>({)
-    executionsData: [],
-    tokensData: [],
-    costData: [],
-    errorsData: [],
-    granularity: 'hour',
-    loading: {,
-      executions: true,
-      tokens: true,
-      cost: true,
-      errors: true,
-    },
-    errors: {}
+  executionsData: [],
+  tokensData: [],
+  costData: [],
+  errorsData: [],
+  granularity: 'hour',
+  loading: {,
+  executions: true,
+  tokens: true,
+  cost: true,
+  errors: true,
+},
+  errors: {}
   });
   /**
    * Load chart data
    */
   const loadChartData = useCallback(async () => {
-    const metrics = ['executions', 'tokens', 'cost', 'errors'] as const;
-    setState(prev => ({)
-      ...prev,
-      loading: {,
-        executions: true,
-        tokens: true,
-        cost: true,
-        errors: true,
-      },
-      errors: {}
+  const metrics = ['executions', 'tokens', 'cost', 'errors'] as const;
+  setState(prev => ({)
+  ...prev,
+  loading: {,
+  executions: true,
+  tokens: true,
+  cost: true,
+  errors: true,
+},
+  errors: {}
     }));
     // Load all metrics in parallel
     const results = await Promise.allSettled(;);
       metrics.map(metric =>)
         analyticsClient.getTimeSeries(metric, {)
-          ...timeRange,
-          granularity: state.granularity,
-        })
+  ...timeRange,
+  granularity: state.granularity,
+}
     );
     const newState = {
-      executionsData: [],
-      tokensData: [],
-      costData: [],
-      errorsData: [],
-      loading: {,
-        executions: false,
-        tokens: false,
-        cost: false,
-        errors: false,
-      },
-      errors: {}
+  executionsData: [],
+  tokensData: [],
+  costData: [],
+  errorsData: [],
+  loading: {,
+  executions: false,
+  tokens: false,
+  cost: false,
+  errors: false,
+},
+  errors: {}
     };
     results.forEach((result, index) => {
-      const metric = metrics[index];
-      if (result.status === 'fulfilled' && result.value.success) {
-        const data = result.value.data.dataPoints || [];
-        switch (metric) {
-        case 'executions':
-          newState.executionsData = data;
-          break;
-        case 'tokens':
-          newState.tokensData = data;
-          break;
-        case 'cost':
-          newState.costData = data;
-          break;
-        case 'errors':
-          newState.errorsData = data;
-          break;
-        }
-      } else {
-        const error = result.status === 'rejected' ;
-          ? result.reason.message 
-          : 'Failed to load data';
-        newState.errors[metric] = error;
-      }
-    });
+  const metric = metrics[index];
+  if (result.status === 'fulfilled' && result.value.success) {
+  const data = result.value.data.dataPoints || [];
+  switch (metric) {
+  case 'executions':,
+  newState.executionsData = data;
+  break;
+  case 'tokens':,
+  newState.tokensData = data;
+  break;
+  case 'cost':,
+  newState.costData = data;
+  break;
+  case 'errors':,
+  newState.errorsData = data;
+  break;
+} else {
+  const error = result.status === 'rejected' ;
+  ? result.reason.message
+  : 'Failed to load data';
+  newState.errors[metric] = error;
+});
     setState(prev => ({)
-      ...prev,
+  ...prev,
       ...newState
     }));
   }, [analyticsClient, timeRange, state.granularity]);
@@ -271,18 +261,18 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
    * Calculate trend
    */
   const calculateTrend = useCallback((data: Record<string, unknown>[]) => {
-    if (data.length < 2) return null;
-    const recent = data.slice(-Math.floor(data.length / 2));
-    const earlier = data.slice(0, Math.floor(data.length / 2));
-    const recentAvg = recent.reduce((sum, d) => sum + d.value, 0) / recent.length;
-    const earlierAvg = earlier.reduce((sum, d) => sum + d.value, 0) / earlier.length;
-    if (earlierAvg === 0) return null;
-    const change = ((recentAvg - earlierAvg) / earlierAvg) * 100;
-    return {
-      direction: change > 5 ? 'up' : change < -5 ? 'down' : 'stable',
-      value: Math.abs(change),
-      isPositive: change > 0,
-    };
+  if (data.length < 2) return null;
+  const recent = data.slice(-Math.floor(data.length / 2));
+  const earlier = data.slice(0, Math.floor(data.length / 2));
+  const recentAvg = recent.reduce((sum, d) => sum + d.value, 0) / recent.length;
+  const earlierAvg = earlier.reduce((sum, d) => sum + d.value, 0) / earlier.length;
+  if (earlierAvg === 0) return null;
+  const change = ((recentAvg - earlierAvg) / earlierAvg) * 100;
+  return {
+  direction: change > 5 ? 'up' : change < -5 ? 'down' : 'stable',
+  value: Math.abs(change),
+  isPositive: change > 0,
+};
   }, []);
   /**
    * Refresh data
@@ -300,7 +290,7 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
   const tokensTrend = calculateTrend(state.tokensData);
   const costTrend = calculateTrend(state.costData);
   const errorsTrend = calculateTrend(state.errorsData);
-  return ();
+  return;
     <div className="performance-charts">
       {/* Charts Header */}
       <div className="charts-header">
@@ -441,75 +431,58 @@ export const PerformanceCharts: React.FC<PerformanceChartsProps> = ({)
 const styles = `;
   .performance-charts {
     space-y: 1.5rem;
-  }
   .charts-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-  }
   .header-controls {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+    align-items: center;,
+  gap: 0.5rem;
   .trend-summary {
     margin-bottom: 1.5rem;
-  }
   .trend-card {
-    padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #E5E7EB;
+    padding: 1rem;,
+  background: white;
+    border-radius: 8px;,
+  border: 1px solid #E5E7EB;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
   .trend-label {
-    font-size: 0.875rem;
-    color: #6B7280;
+    font-size: 0.875rem;,
+  color: #6B7280;
     margin-bottom: 0.5rem;
-  }
   .trend-value {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+    align-items: center;,
+  gap: 0.5rem;
   .trend-indicator {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    align-items: center;,
+  gap: 0.25rem;
     font-size: 0.875rem;
     font-weight: 500;
-  }
   .trend-indicator.up {
     color: #10B981;
-  }
   .trend-indicator.down {
     color: #EF4444;
-  }
   .trend-indicator.down-good {
     color: #10B981;
-  }
   .trend-indicator.up-bad {
     color: #EF4444;
-  }
   .trend-indicator.stable {
     color: #6B7280;
-  }
   .charts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 1.5rem;
-  }
   @media (max-width: 768px) {
     .charts-header {
-      flex-direction: column;
-      gap: 1rem;
+      flex-direction: column;,
+  gap: 1rem;
       align-items: stretch;
-    }
     .charts-grid {
       grid-template-columns: 1fr;
-    }
-  }
 `;
 
 // Inject styles
@@ -517,6 +490,5 @@ if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
-}
 
 export default PerformanceCharts;

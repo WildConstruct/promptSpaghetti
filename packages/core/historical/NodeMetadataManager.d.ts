@@ -5,6 +5,7 @@
  * Extends node schema to support metadata tags, era-based tagging,
  * genre/style classification, and tag management.
  */
+
 export interface NodeMetadata {
     id: string;
     nodeId: string;
@@ -17,7 +18,7 @@ export interface NodeMetadata {
     created: string;
     updated: string;
     author: string;
-}
+
 export interface NodeTag {
     id: string;
     type: 'era' | 'genre' | 'style' | 'material' | 'social_class' | 'region' | 'custom';
@@ -25,7 +26,7 @@ export interface NodeTag {
     source: 'user' | 'system' | 'imported' | 'inferred';
     confidence: number;
     metadata?: Record<string, any>;
-}
+
 export interface EraTag {
     id: string;
     name: string;
@@ -38,7 +39,7 @@ export interface EraTag {
     description: string;
     parent?: string;
     children?: string[];
-}
+
 export interface GenreTag {
     id: string;
     name: string;
@@ -46,7 +47,7 @@ export interface GenreTag {
     description: string;
     characteristics: string[];
     relatedGenres: string[];
-}
+
 export interface StyleTag {
     id: string;
     name: string;
@@ -55,14 +56,14 @@ export interface StyleTag {
     region: string[];
     description: string;
     keyFeatures: string[];
-}
+
 export interface QualityMetadata {
     authenticity: number;
     completeness: number;
     sources: string[];
     verification: 'verified' | 'unverified' | 'disputed' | 'fictional';
     lastVerified?: string;
-}
+
 export interface HistoricalContext {
     socialClass: 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal' | 'unknown';
     usage: 'daily' | 'ceremonial' | 'religious' | 'military' | 'trade' | 'artistic';
@@ -70,7 +71,7 @@ export interface HistoricalContext {
     materials: string[];
     productionMethod: string[];
     culturalSignificance: string;
-}
+
 export interface TagInheritanceRule {
     id: string;
     name: string;
@@ -79,16 +80,15 @@ export interface TagInheritanceRule {
     conditions: TagCondition[];
     transformations: TagTransformation[];
     enabled: boolean;
-}
+
 export interface TagCondition {
     field: string;
     operator: 'equals' | 'contains' | 'matches' | 'in' | 'not_in';
     value: any;
-}
+
 export interface TagTransformation {
     type: 'copy' | 'modify' | 'merge' | 'filter';
     config: Record<string, any>;
-}
 /**
  * NodeMetadataManager - Manages metadata and tagging for nodes
  */
@@ -210,6 +210,6 @@ export declare class NodeMetadataManager {
         imported: number;
         errors: string[];
     };
-}
+
 export declare const nodeMetadataManager: NodeMetadataManager;
 //# sourceMappingURL=NodeMetadataManager.d.ts.map

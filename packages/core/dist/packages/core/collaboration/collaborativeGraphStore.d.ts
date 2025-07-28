@@ -1,7 +1,3 @@
-/**
- * Collaborative Graph Store - Epic 9.1.2
- * Extends existing graph store with collaborative editing capabilities
- */
 import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
 export interface UserPresence {
@@ -15,7 +11,7 @@ export interface UserPresence {
             y: number;
         };
     };
-    selection?: string[];
+    selection?: string;
     lastSeen: number;
 }
 export interface CollaborativeGraphState {
@@ -50,20 +46,12 @@ export interface CollaborativeGraphState {
         x: number;
         y: number;
     }) => void;
-    updateUserSelection: (nodeIds: string[]) => void;
+    updateUserSelection: (nodeIds: string) => void;
     applyRemoteUpdate: (update: Uint8Array) => void;
     getDocumentState: () => Uint8Array | null;
     createSnapshot: () => Uint8Array | null;
     getMetrics: () => any;
     getSyncState: () => any;
 }
-export declare const useCollaborativeGraphStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<CollaborativeGraphState>, "subscribe"> & {
-    subscribe: {
-        (listener: (selectedState: CollaborativeGraphState, previousSelectedState: CollaborativeGraphState) => void): () => void;
-        <U>(selector: (state: CollaborativeGraphState) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
-            equalityFn?: (a: U, b: U) => boolean;
-            fireImmediately?: boolean;
-        }): () => void;
-    };
-}>;
+export declare const useCollaborativeGraphStore: import("zustand").UseBoundStore<import("zustand").StoreApi<CollaborativeGraphState>>;
 //# sourceMappingURL=collaborativeGraphStore.d.ts.map

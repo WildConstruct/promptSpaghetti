@@ -29,12 +29,12 @@ export interface AutomatedOptimizationSuggestionsProps {
     onExport?: (data: OptimizationSuggestionsExportData) => void;
 }
 export interface OptimizationConfiguration {
-    enabledSuggestionTypes: SuggestionType[];
+    enabledSuggestionTypes: SuggestionType;
     automationSettings: AutomationSettings;
-    alertThresholds: AlertThreshold[];
-    learningModels: LearningModel[];
-    integrations: OptimizationIntegration[];
-    constraints: OptimizationConstraint[];
+    alertThresholds: AlertThreshold;
+    learningModels: LearningModel;
+    integrations: OptimizationIntegration;
+    constraints: OptimizationConstraint;
     performance: PerformanceSettings;
 }
 export interface AutomationSettings {
@@ -66,7 +66,7 @@ export interface LearningModel {
     confidence: number;
     accuracy: number;
     lastTraining: number;
-    dataRequirements: ModelDataRequirement[];
+    dataRequirements: ModelDataRequirement;
 }
 export type ModelType = 'conversion_prediction' | 'user_behavior_analysis' | 'pattern_recognition' | 'anomaly_detection' | 'optimization_recommendation' | 'a_b_test_analysis';
 export interface ModelDataRequirement {
@@ -81,7 +81,7 @@ export interface OptimizationIntegration {
     type: IntegrationType;
     enabled: boolean;
     configuration: IntegrationConfiguration;
-    capabilities: IntegrationCapability[];
+    capabilities: IntegrationCapability;
 }
 export type IntegrationType = 'analytics_platform' | 'a_b_testing_tool' | 'personalization_engine' | 'email_marketing' | 'ad_platform' | 'cms' | 'crm';
 export interface IntegrationConfiguration {
@@ -99,7 +99,7 @@ export interface OptimizationConstraint {
     constraintId: string;
     type: ConstraintType;
     description: string;
-    parameters: ConstraintParameter[];
+    parameters: ConstraintParameter;
     enabled: boolean;
     priority: number;
 }
@@ -119,7 +119,7 @@ export interface PerformanceSettings {
 export interface UserContext {
     userId: string;
     userRole: UserRole;
-    permissions: Permission[];
+    permissions: Permission;
     preferences: UserPreferences;
     workflowState: WorkflowState;
 }
@@ -140,13 +140,13 @@ export interface NotificationSettings {
     enablePushNotifications: boolean;
     enableEmailAlerts: boolean;
     frequency: NotificationFrequency;
-    severityFilter: AlertSeverity[];
+    severityFilter: AlertSeverity;
 }
 export type NotificationFrequency = 'immediate' | 'hourly' | 'daily' | 'weekly';
 export interface DashboardLayout {
     layout: 'grid' | 'list' | 'cards';
     density: 'compact' | 'comfortable' | 'spacious';
-    sections: DashboardSection[];
+    sections: DashboardSection;
 }
 export interface DashboardSection {
     sectionId: string;
@@ -157,7 +157,7 @@ export interface DashboardSection {
 }
 export interface UserAutomationSettings {
     enableAutomatedSuggestions: boolean;
-    autoApprovalLimits: AutoApprovalLimit[];
+    autoApprovalLimits: AutoApprovalLimit;
     reviewRequired: boolean;
     rollbackPermissions: boolean;
 }
@@ -176,26 +176,26 @@ export interface DisplaySettings {
 }
 export interface WorkflowState {
     currentStep: string;
-    completedSteps: string[];
-    pendingActions: PendingAction[];
-    activeExperiments: string[];
+    completedSteps: string;
+    pendingActions: PendingAction;
+    activeExperiments: string;
 }
 export interface PendingAction {
     actionId: string;
     actionType: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
     dueDate: number;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface OptimizationSuggestionsData {
-    activeSuggestions: OptimizationSuggestion[];
-    automatedActions: AutomatedAction[];
-    learningInsights: LearningInsight[];
+    activeSuggestions: OptimizationSuggestion;
+    automatedActions: AutomatedAction;
+    learningInsights: LearningInsight;
     performanceMetrics: SuggestionPerformanceMetrics;
     systemHealth: AutomationSystemHealth;
-    experiments: ActiveExperiment[];
-    patterns: RecognizedPattern[];
-    predictions: OptimizationPrediction[];
+    experiments: ActiveExperiment;
+    patterns: RecognizedPattern;
+    predictions: OptimizationPrediction;
 }
 export interface OptimizationSuggestion {
     suggestionId: string;
@@ -208,8 +208,8 @@ export interface OptimizationSuggestion {
     effort: SuggestionEffort;
     source: SuggestionSource;
     context: SuggestionContext;
-    recommendations: ActionRecommendation[];
-    constraints: ApplicableConstraint[];
+    recommendations: ActionRecommendation;
+    constraints: ApplicableConstraint;
     timeline: SuggestionTimeline;
     automation: AutomationOptions;
     testing: TestingRequirements;
@@ -227,7 +227,7 @@ export interface SuggestionImpact {
         min: number;
         max: number;
     };
-    affectedMetrics: AffectedMetric[];
+    affectedMetrics: AffectedMetric;
     userImpact: UserImpact;
     businessImpact: BusinessImpact;
     riskAssessment: RiskAssessment;
@@ -241,14 +241,14 @@ export interface AffectedMetric {
 }
 export interface UserImpact {
     affectedUsers: number;
-    userSegments: string[];
+    userSegments: string;
     experienceChange: 'positive' | 'negative' | 'neutral';
     adaptationTime: number;
 }
 export interface BusinessImpact {
     revenueImpact: number;
     costImpact: number;
-    resourceRequirements: ResourceRequirement[];
+    resourceRequirements: ResourceRequirement;
     timeToValue: number;
     strategicAlignment: number;
 }
@@ -260,8 +260,8 @@ export interface ResourceRequirement {
 }
 export interface RiskAssessment {
     overallRisk: RiskLevel;
-    riskFactors: RiskFactor[];
-    mitigationStrategies: MitigationStrategy[];
+    riskFactors: RiskFactor;
+    mitigationStrategies: MitigationStrategy;
     rollbackPlan: RollbackPlan;
 }
 export type RiskLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
@@ -282,15 +282,15 @@ export interface MitigationStrategy {
 export interface RollbackPlan {
     rollbackPossible: boolean;
     rollbackTime: number;
-    rollbackSteps: string[];
+    rollbackSteps: string;
     dataLoss: boolean;
 }
 export interface SuggestionEffort {
     estimatedHours: number;
-    skillsRequired: RequiredSkill[];
-    toolsRequired: RequiredTool[];
+    skillsRequired: RequiredSkill;
+    toolsRequired: RequiredTool;
     complexity: ComplexityLevel;
-    dependencies: SuggestionDependency[];
+    dependencies: SuggestionDependency;
 }
 export interface RequiredSkill {
     skill: string;
@@ -323,12 +323,12 @@ export interface SuggestionSource {
 }
 export type SourceType = 'machine_learning' | 'statistical_analysis' | 'pattern_recognition' | 'user_feedback' | 'competitor_analysis' | 'industry_benchmark' | 'expert_knowledge' | 'historical_data';
 export interface SuggestionContext {
-    triggeringEvents: TriggeringEvent[];
-    environmentalFactors: EnvironmentalFactor[];
-    marketConditions: MarketCondition[];
-    seasonality: SeasonalityFactor[];
-    competitiveActivity: CompetitiveActivity[];
-    userBehaviorChanges: UserBehaviorChange[];
+    triggeringEvents: TriggeringEvent;
+    environmentalFactors: EnvironmentalFactor;
+    marketConditions: MarketCondition;
+    seasonality: SeasonalityFactor;
+    competitiveActivity: CompetitiveActivity;
+    userBehaviorChanges: UserBehaviorChange;
 }
 export interface TriggeringEvent {
     eventType: string;
@@ -380,24 +380,24 @@ export interface ActionRecommendation {
 export type ActionType = 'content_change' | 'design_modification' | 'pricing_update' | 'targeting_adjustment' | 'feature_toggle' | 'configuration_change' | 'workflow_optimization' | 'integration_update';
 export interface ActionImplementation {
     method: ImplementationMethod;
-    steps: ImplementationStep[];
+    steps: ImplementationStep;
     automation: AutomationCapability;
-    validation: ValidationRequirement[];
+    validation: ValidationRequirement;
 }
 export type ImplementationMethod = 'manual' | 'semi_automated' | 'fully_automated' | 'api_call' | 'configuration';
 export interface ImplementationStep {
     stepNumber: number;
     description: string;
     estimatedTime: number;
-    skills: string[];
-    tools: string[];
+    skills: string;
+    tools: string;
     validation: string;
 }
 export interface AutomationCapability {
     automatable: boolean;
     automationLevel: AutomationLevel;
-    requirements: AutomationRequirement[];
-    limitations: string[];
+    requirements: AutomationRequirement;
+    limitations: string;
 }
 export interface AutomationRequirement {
     requirement: string;
@@ -422,7 +422,7 @@ export interface ActionOutcome {
     expectedChange: number;
     timeToEffect: number;
     duration: number;
-    sideEffects: SideEffect[];
+    sideEffects: SideEffect;
 }
 export interface SideEffect {
     effect: string;
@@ -431,8 +431,8 @@ export interface SideEffect {
     mitigation: string;
 }
 export interface ActionMonitoring {
-    metricsToTrack: MonitoringMetric[];
-    alertConditions: MonitoringAlert[];
+    metricsToTrack: MonitoringMetric;
+    alertConditions: MonitoringAlert;
     reportingFrequency: number;
     dashboardUpdates: boolean;
 }
@@ -457,26 +457,26 @@ export interface ApplicableConstraint {
 }
 export interface SuggestionTimeline {
     estimatedImplementation: number;
-    phases: TimelinePhase[];
-    milestones: TimelineMilestone[];
-    criticalPath: string[];
+    phases: TimelinePhase;
+    milestones: TimelineMilestone;
+    criticalPath: string;
 }
 export interface TimelinePhase {
     phaseName: string;
     description: string;
     duration: number;
-    dependencies: string[];
-    deliverables: string[];
+    dependencies: string;
+    deliverables: string;
 }
 export interface TimelineMilestone {
     milestoneName: string;
     targetDate: number;
-    criteria: string[];
-    dependencies: string[];
+    criteria: string;
+    dependencies: string;
 }
 export interface AutomationOptions {
     fullyAutomatable: boolean;
-    partialAutomation: PartialAutomation[];
+    partialAutomation: PartialAutomation;
     userApprovalRequired: boolean;
     rollbackCapable: boolean;
     monitoringRequired: boolean;
@@ -484,8 +484,8 @@ export interface AutomationOptions {
 export interface PartialAutomation {
     component: string;
     automatable: boolean;
-    requirements: string[];
-    limitations: string[];
+    requirements: string;
+    limitations: string;
 }
 export interface TestingRequirements {
     testingRecommended: boolean;
@@ -496,9 +496,9 @@ export interface TestingRequirements {
 }
 export type TestType = 'a_b_test' | 'multivariate_test' | 'split_test' | 'staged_rollout' | 'canary_release';
 export interface TestDesign {
-    variants: TestVariant[];
+    variants: TestVariant;
     trafficAllocation: TrafficAllocation;
-    targetMetrics: string[];
+    targetMetrics: string;
     minimumSampleSize: number;
     statisticalPower: number;
 }
@@ -509,7 +509,7 @@ export interface TestVariant {
     expectedOutcome: number;
 }
 export interface VariantImplementation {
-    changes: VariantChange[];
+    changes: VariantChange;
     configuration: Record<string, any>;
 }
 export interface VariantChange {
@@ -531,9 +531,9 @@ export interface RampUpStrategy {
     incrementFrequency: number;
 }
 export interface TestCriteria {
-    successMetrics: SuccessMetric[];
-    guardrailMetrics: GuardrailMetric[];
-    stopConditions: StopCondition[];
+    successMetrics: SuccessMetric;
+    guardrailMetrics: GuardrailMetric;
+    stopConditions: StopCondition;
 }
 export interface SuccessMetric {
     metric: string;
@@ -557,13 +557,13 @@ export interface SuggestionFeedback {
     userComments: string;
     implementationFeedback: ImplementationFeedback;
     outcomeTracking: OutcomeTracking;
-    lessonsLearned: string[];
+    lessonsLearned: string;
 }
 export interface ImplementationFeedback {
     difficultyRating: number;
     timeActual: number;
-    resourcesActual: ResourceActual[];
-    challenges: Challenge[];
+    resourcesActual: ResourceActual;
+    challenges: Challenge;
 }
 export interface ResourceActual {
     resource: string;
@@ -577,10 +577,10 @@ export interface Challenge {
     timeToResolve: number;
 }
 export interface OutcomeTracking {
-    actualResults: ActualResult[];
+    actualResults: ActualResult;
     timeToEffect: number;
     duration: number;
-    sideEffectsObserved: ObservedSideEffect[];
+    sideEffectsObserved: ObservedSideEffect;
 }
 export interface ActualResult {
     metric: string;
@@ -617,7 +617,7 @@ export interface ActionAutomation {
     approvalRequired: boolean;
     approvedBy?: string;
     approvedAt?: number;
-    constraints: AutomationConstraint[];
+    constraints: AutomationConstraint;
 }
 export interface AutomationConstraint {
     constraint: string;
@@ -630,7 +630,7 @@ export interface ActionExecution {
     retryCount: number;
     maxRetries: number;
     timeoutDuration: number;
-    executionLog: ExecutionLogEntry[];
+    executionLog: ExecutionLogEntry;
 }
 export interface ExecutionLogEntry {
     timestamp: number;
@@ -640,8 +640,8 @@ export interface ExecutionLogEntry {
 }
 export interface ActionMonitoringState {
     isMonitoring: boolean;
-    metricsTracked: TrackedMetric[];
-    alertsGenerated: GeneratedAlert[];
+    metricsTracked: TrackedMetric;
+    alertsGenerated: GeneratedAlert;
     lastCheck: number;
 }
 export interface TrackedMetric {
@@ -672,8 +672,8 @@ export interface LearningInsight {
     description: string;
     confidence: number;
     supportingData: SupportingData;
-    implications: InsightImplication[];
-    recommendations: InsightRecommendation[];
+    implications: InsightImplication;
+    recommendations: InsightRecommendation;
     applicability: InsightApplicability;
     createdAt: number;
 }
@@ -685,7 +685,7 @@ export interface SupportingData {
         end: number;
     };
     dataQuality: number;
-    sources: string[];
+    sources: string;
     methodology: string;
 }
 export interface InsightImplication {
@@ -701,9 +701,9 @@ export interface InsightRecommendation {
     expectedBenefit: string;
 }
 export interface InsightApplicability {
-    applicableScenarios: string[];
-    limitations: string[];
-    prerequisites: string[];
+    applicableScenarios: string;
+    limitations: string;
+    prerequisites: string;
     confidence: number;
 }
 export interface SuggestionPerformanceMetrics {
@@ -728,7 +728,7 @@ export interface PerformanceTrend {
     direction: 'improving' | 'declining' | 'stable';
     rate: number;
     confidence: number;
-    factors: TrendFactor[];
+    factors: TrendFactor;
 }
 export interface TrendFactor {
     factor: string;
@@ -737,9 +737,9 @@ export interface TrendFactor {
 }
 export interface AutomationSystemHealth {
     overallStatus: 'healthy' | 'degraded' | 'critical';
-    components: SystemComponent[];
+    components: SystemComponent;
     performance: SystemPerformance;
-    errors: SystemError[];
+    errors: SystemError;
     maintenance: MaintenanceInfo;
 }
 export interface SystemComponent {
@@ -783,8 +783,8 @@ export interface ActiveExperiment {
     startDate: number;
     endDate: number;
     trafficAllocation: number;
-    metrics: ExperimentMetric[];
-    results: ExperimentResult[];
+    metrics: ExperimentMetric;
+    results: ExperimentResult;
 }
 export type ExperimentStatus = 'planning' | 'running' | 'paused' | 'completed' | 'terminated';
 export interface ExperimentMetric {
@@ -809,7 +809,7 @@ export interface RecognizedPattern {
     frequency: number;
     reliability: number;
     context: PatternContext;
-    implications: PatternImplication[];
+    implications: PatternImplication;
     actionability: PatternActionability;
 }
 export type PatternType = 'user_behavior' | 'performance_cycle' | 'seasonal_trend' | 'conversion_path' | 'traffic_pattern' | 'engagement_pattern';
@@ -818,9 +818,9 @@ export interface PatternContext {
         start: number;
         end: number;
     };
-    conditions: string[];
-    segments: string[];
-    triggers: string[];
+    conditions: string;
+    segments: string;
+    triggers: string;
 }
 export interface PatternImplication {
     implication: string;
@@ -829,8 +829,8 @@ export interface PatternImplication {
 }
 export interface PatternActionability {
     actionable: boolean;
-    suggestedActions: string[];
-    constraints: string[];
+    suggestedActions: string;
+    constraints: string;
     effort: 'low' | 'medium' | 'high';
 }
 export interface OptimizationPrediction {
@@ -843,9 +843,9 @@ export interface OptimizationPrediction {
         max: number;
     };
     timeframe: number;
-    factors: PredictionFactor[];
-    scenarios: PredictionScenario[];
-    recommendations: PredictionRecommendation[];
+    factors: PredictionFactor;
+    scenarios: PredictionScenario;
+    recommendations: PredictionRecommendation;
 }
 export type PredictionType = 'conversion_rate' | 'revenue_impact' | 'user_behavior' | 'traffic_volume' | 'performance_metric' | 'experiment_outcome';
 export interface PredictionFactor {
@@ -858,7 +858,7 @@ export interface PredictionScenario {
     scenarioName: string;
     probability: number;
     predictedOutcome: number;
-    conditions: string[];
+    conditions: string;
 }
 export interface PredictionRecommendation {
     recommendation: string;
@@ -867,12 +867,12 @@ export interface PredictionRecommendation {
     effort: 'low' | 'medium' | 'high';
 }
 export interface OptimizationSuggestionsExportData {
-    suggestions: OptimizationSuggestion[];
-    automatedActions: AutomatedAction[];
+    suggestions: OptimizationSuggestion;
+    automatedActions: AutomatedAction;
     performanceMetrics: SuggestionPerformanceMetrics;
-    learningInsights: LearningInsight[];
-    patterns: RecognizedPattern[];
-    predictions: OptimizationPrediction[];
+    learningInsights: LearningInsight;
+    patterns: RecognizedPattern;
+    predictions: OptimizationPrediction;
     exportTimestamp: number;
     configuration: OptimizationConfiguration;
 }

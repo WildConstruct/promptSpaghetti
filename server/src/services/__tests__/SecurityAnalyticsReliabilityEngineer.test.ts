@@ -71,7 +71,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         recovery_timeout_ms: 60000,
         half_open_max_calls: 3,
         monitoring_window_ms: 300000
-      },
+  }
       fault_tolerance: {
         enabled: true,
         retry_attempts: 3,
@@ -79,7 +79,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         exponential_backoff: true,
         jitter_enabled: true,
         max_retry_delay_ms: 10000
-      },
+  }
       disaster_recovery: {
         enabled: true,
         backup_interval_ms: 3600000,
@@ -87,7 +87,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         auto_failover: false,
         recovery_verification: true,
         backup_encryption: true
-      },
+  }
       health_monitoring: {
         enabled: true,
         check_interval_ms: 30000,
@@ -95,7 +95,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         critical_threshold: 60,
         auto_healing: true,
         alert_escalation: true
-      },
+  }
       system_resilience: {
         enabled: true,
         load_shedding: true,
@@ -103,7 +103,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         resource_isolation: true,
         chaos_engineering: false,
         stress_testing_enabled: false
-      },
+  }
       epic_integration: {
         epic1_reliability_events: true,
         epic17_admin_notifications: true,
@@ -216,7 +216,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         reliabilityEngineer.executeWithCircuitBreaker(
           'security_analytics_service',
           newOperation
-        )
+
       ).rejects.toThrow('Circuit breaker open');
       
       expect(newOperation).not.toHaveBeenCalled();
@@ -254,7 +254,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
         reliabilityEngineer.executeWithFaultTolerance(
           alwaysFailingOperation,
           'test_operation'
-        )
+
       ).rejects.toThrow('Permanent failure');
       
       expect(alwaysFailingOperation).toHaveBeenCalledTimes(testConfig.fault_tolerance.retry_attempts + 1);
@@ -377,13 +377,13 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'reliability_engineer_overall_health'
-        })
+  }
       );
       
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'reliability_circuit_breakers'
-        })
+  }
       );
     });
 
@@ -391,7 +391,7 @@ describe('SecurityAnalyticsReliabilityEngineer', () => {
       expect(mockDiagnosticService.registerDiagnostic).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'reliability_comprehensive_diagnostics'
-        })
+  }
       );
     });
 

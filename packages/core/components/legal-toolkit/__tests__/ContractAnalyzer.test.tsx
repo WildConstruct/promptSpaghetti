@@ -13,27 +13,27 @@ import { ContractAnalyzer } from '../ContractAnalyzer';
 import { LegalDocument, ContractAnalysis, ContractClause, RiskAssessment } from '../types';
 
 // Mock data
-const mockDocument: LegalDocument = {
+const mockDocument: LegalDocument = {,
   id: 'doc-123',
   title: 'Test Contract',
   type: 'contract',
   content: 'This is a comprehensive test contract with various clauses including termination, payment, liability, and confidentiality provisions. The contract establishes terms for services between parties.',
   metadata: {,
-    jurisdiction: 'US-CA',
-    practiceArea: ['contract law', 'commercial law'],
-    parties: ['Company A Inc.', 'Service Provider LLC'],
-    references: [],
-    tags: ['commercial', 'services'],
-    confidentialityLevel: 'confidential',
-  },
+  jurisdiction: 'US-CA',
+  practiceArea: ['contract law', 'commercial law'],
+  parties: ['Company A Inc.', 'Service Provider LLC'],
+  references: [],
+  tags: ['commercial', 'services'],
+  confidentialityLevel: 'confidential',
+},
   status: 'draft',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-02'),
-  version: '1.0',
-};
+  version: '1.0';
+  };
 describe('ContractAnalyzer Component', () => {
-  const mockOnClauseIdentified = jest.fn<unknown[], unknown>();
-  const mockOnAnalysisComplete = jest.fn<unknown[], unknown>();
+  const mockOnClauseIdentified = jest.fn<unknown, unknown>();
+  const mockOnAnalysisComplete = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -119,13 +119,13 @@ describe('ContractAnalyzer Component', () => {
       const startButton = screen.getByText(/Start Analysis/i);
       await user.click(startButton);
       await waitFor(() => {
-        expect(mockOnClauseIdentified).toHaveBeenCalledWith()
-          expect.arrayContaining([)
-            expect.objectContaining({)
-              type: expect.any(String),
-              title: expect.any(String),
-              category: expect.any(String),
-            })
+  expect(mockOnClauseIdentified).toHaveBeenCalledWith()
+  expect.arrayContaining([)
+  expect.objectContaining({)
+  type: expect.any(String),
+  title: expect.any(String),
+  category: expect.any(String),
+}
           ])
         );
       });
@@ -142,14 +142,14 @@ describe('ContractAnalyzer Component', () => {
       const startButton = screen.getByText(/Start Analysis/i);
       await user.click(startButton);
       await waitFor(() => {
-        expect(mockOnAnalysisComplete).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            documentId: 'doc-123',
-            clauses: expect.any(Array),
-            riskAssessment: expect.any(Object),
-            recommendations: expect.any(Array),
-            confidence: expect.any(Number),
-          })
+  expect(mockOnAnalysisComplete).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  documentId: 'doc-123',
+  clauses: expect.any(Array),
+  riskAssessment: expect.any(Object),
+  recommendations: expect.any(Array),
+  confidence: expect.any(Number),
+}
         );
       }, { timeout: 5000 });
     });
@@ -202,10 +202,10 @@ describe('ContractAnalyzer Component', () => {
       const startButton = screen.getByText(/Start Analysis/i);
       await user.click(startButton);
       await waitFor(() => {
-        expect(screen.getByText(/Overall Risk: MEDIUM/i)).toBeInTheDocument();
-        expect(screen.getByText(/Risk Score: 65\/100/i)).toBeInTheDocument();
-        expect(screen.getByText(/Confidence: 85%/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+  expect(screen.getByText(/Overall Risk: MEDIUM/i)).toBeInTheDocument();
+  expect(screen.getByText(/Risk Score: 65\/100/i)).toBeInTheDocument();
+  expect(screen.getByText(/Confidence: 85%/i)).toBeInTheDocument();
+}, { timeout: 5000 });
     });
     it('shows recommendations', async () => {
       const user = userEvent.setup();
@@ -255,11 +255,11 @@ describe('ContractAnalyzer Component', () => {
       const startButton = screen.getByText(/Start Analysis/i);
       await user.click(startButton);
       await waitFor(async () => {
-        const clauseButton = screen.getByText(/Termination Clause/i);
-        await user.click(clauseButton);
-        expect(screen.getByText(/Either party may terminate/i)).toBeInTheDocument();
-        expect(screen.getByText(/Risk Level: MEDIUM/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+  const clauseButton = screen.getByText(/Termination Clause/i);
+  await user.click(clauseButton);
+  expect(screen.getByText(/Either party may terminate/i)).toBeInTheDocument();
+  expect(screen.getByText(/Risk Level: MEDIUM/i)).toBeInTheDocument();
+}, { timeout: 5000 });
     });
     it('allows filtering clauses by category', async () => {
       const user = userEvent.setup();

@@ -38,6 +38,7 @@ export class IntegrationAnalyticsServiceWrapper {
    * Initialize Integration Analytics Service
    */
   public async initialize(): Promise<void> {
+
     if (this.isInitialized) {
       console.log('⚠️ Integration Analytics Service already initialized');
       return;
@@ -91,7 +92,7 @@ export class IntegrationAnalyticsServiceWrapper {
             monitoringEnabled: config.monitoring.healthCheckInterval > 0,
             costTrackingEnabled: config.costTracking.enabled
           }
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -199,6 +200,7 @@ export class IntegrationAnalyticsServiceWrapper {
    * Shutdown the analytics service
    */
   public async shutdown(): Promise<void> {
+
     if (!this.isInitialized || !this.analyticsService) {
       return;
     }
@@ -215,7 +217,7 @@ export class IntegrationAnalyticsServiceWrapper {
         userId: 'system',
         details: {
           timestamp: new Date()
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -244,12 +246,12 @@ export class IntegrationAnalyticsServiceWrapper {
         interval: 5000, // 5 seconds
         maxEventsInMemory: 10000,
         persistenceBatchSize: 100
-      },
+  }
       metricAggregation: {
         enabled: true,
         interval: 60000, // 1 minute
         aggregationWindows: [5, 15, 60, 1440] // 5min, 15min, 1hr, 1day
-      },
+  }
       monitoring: {
         healthCheckInterval: 30000, // 30 seconds
         alertThresholds: {
@@ -257,12 +259,12 @@ export class IntegrationAnalyticsServiceWrapper {
           responseTime: 5000, // 5 seconds
           availability: 95.0 // 95%
         }
-      },
+  }
       costTracking: {
         enabled: true,
         defaultCurrency: 'USD',
         costOptimizationThreshold: 100.0 // $100
-      },
+  }
       reporting: {
         retentionPeriod: 90, // 90 days
         maxReportSize: 50 * 1024 * 1024, // 50MB
@@ -513,20 +515,20 @@ export class IntegrationAnalyticsServiceWrapper {
           healthy: dashboard.healthSummary.filter(i => i.status === 'healthy').length,
           degraded: dashboard.healthSummary.filter(i => i.status === 'degraded').length,
           failing: dashboard.healthSummary.filter(i => i.status === 'failing').length
-        },
+  }
         performanceMetrics: {
           averageResponseTime: dashboard.performanceAnalysis.averageResponseTime,
           totalThroughput: dashboard.performanceAnalysis.throughputAnalysis.totalThroughput
-        },
+  }
         errorMetrics: {
           totalErrors: dashboard.errorAnalysis.totalErrors,
           criticalErrors: dashboard.errorAnalysis.criticalErrors.length
-        },
+  }
         costMetrics: {
           totalCost: dashboard.costAnalysis.totalCost,
           projectedMonthlyCost: dashboard.costAnalysis.projectedMonthlyCost,
           potentialSavings: dashboard.costAnalysis.potentialSavings
-        },
+  }
         timestamp: dashboard.timestamp
       };
     } catch (error) {
@@ -597,7 +599,7 @@ export class IntegrationAnalyticsServiceWrapper {
       context: {
         environment: process.env.NODE_ENV || 'development',
         ...eventData.context
-      },
+  }
       metadata: eventData.context || {}
     });
   }

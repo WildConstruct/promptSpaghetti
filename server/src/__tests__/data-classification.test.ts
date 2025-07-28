@@ -55,20 +55,20 @@ describe('DataClassificationService', () => {
         restricted: true,
         internal: false,
         public: false
-      },
+  }
       approvalRequired: {
         confidential: true,
         restricted: true,
         internal: false,
         public: false
-      },
+  }
       driftDetection: {
         enabled: true,
         thresholds: {
           significantChange: 10.0,
           rapidChange: 5.0,
           timeWindow: 24
-        },
+  }
         alerting: {
           enabled: true,
           notifyOnSignificant: true,
@@ -171,7 +171,7 @@ describe('DataClassificationService', () => {
             field: 'filename',
             operator: 'pattern',
             value: '.*\\.secret\\.'
-          },
+  }
           {
             field: 'size',
             operator: 'gt',
@@ -538,7 +538,7 @@ describe('DataClassificationService', () => {
           ruleId: rule.id,
           ruleName: 'Test Rule',
           classification: 'internal'
-        },
+  }
         severity: 'info'
       });
     });
@@ -631,7 +631,7 @@ describe('DataClassificationService', () => {
           policyName: 'Test Policy',
           action: 'deny',
           sourceClassification: 'confidential'
-        },
+  }
         severity: 'info'
       });
     });
@@ -649,7 +649,7 @@ describe('DataClassificationService', () => {
           reasoning: JSON.stringify(['Test reasoning']),
           metadata: JSON.stringify({}),
           classified_at: new Date('2024-01-01')
-        },
+  }
         {
           data_id: 'data-123',
           classification: 'confidential',
@@ -990,8 +990,8 @@ describe('DataClassificationService', () => {
             driftType: 'upgrade',
             previousClassification: 'internal',
             newClassification: 'confidential'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -1048,7 +1048,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Latest classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 60000)
-          },
+  }
           {
             dataId: 'oscillating-data',
             classification: 'confidential',
@@ -1058,7 +1058,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Previous classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 120000)
-          },
+  }
           {
             dataId: 'oscillating-data',
             classification: 'internal',
@@ -1068,7 +1068,7 @@ describe('DataClassificationService', () => {
             reasoning: ['Earlier classification'],
             metadata: {},
             classifiedAt: new Date(Date.now() - 180000)
-          },
+  }
           {
             dataId: 'oscillating-data',
             classification: 'confidential',
@@ -1305,7 +1305,7 @@ describe('DataClassificationService', () => {
           driftType: 'upgrade',
           severity: 'medium',
           detectedAt: new Date()
-        },
+  }
         {
           id: 'drift-2',
           dataId: 'data-2',
@@ -1314,7 +1314,7 @@ describe('DataClassificationService', () => {
           driftType: 'downgrade',
           severity: 'high',
           detectedAt: new Date()
-        },
+  }
         {
           id: 'drift-3',
           dataId: 'data-3',

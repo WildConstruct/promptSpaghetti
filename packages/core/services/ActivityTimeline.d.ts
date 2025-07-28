@@ -14,6 +14,7 @@
  * - Performance monitoring integration
  * - Export and reporting capabilities
  */
+
 export interface ActivityEvent {
     id: string;
     timestamp: Date;
@@ -51,7 +52,7 @@ export interface ActivityEvent {
     acknowledged?: boolean;
     bookmarked?: boolean;
     archived?: boolean;
-}
+
 export interface ActivityDetails {
     nodeChanges?: NodeChange[];
     connectionChanges?: ConnectionChange[];
@@ -72,7 +73,7 @@ export interface ActivityDetails {
     externalSource?: string;
     externalUrl?: string;
     customData?: Record<string, unknown>;
-}
+
 export interface NodeChange {
     nodeId: string;
     nodeType: string;
@@ -81,7 +82,7 @@ export interface NodeChange {
     oldValue?: unknown;
     newValue?: unknown;
     position?: [number, number];
-}
+
 export interface ConnectionChange {
     connectionId: string;
     changeType: 'created' | 'deleted';
@@ -89,13 +90,13 @@ export interface ConnectionChange {
     targetNodeId: string;
     sourceHandle?: string;
     targetHandle?: string;
-}
+
 export interface VariableChange {
     variableName: string;
     oldValue?: string;
     newValue?: string;
     scope: 'global' | 'local' | 'session';
-}
+
 export interface ClientInfo {
     userAgent: string;
     platform: string;
@@ -105,19 +106,20 @@ export interface ClientInfo {
     viewport: [number, number];
     timezone: string;
     language: string;
-}
+
 export interface GeolocationInfo {
     country?: string;
     region?: string;
     city?: string;
     coordinates?: [number, number];
     timezone: string;
-}
+
 export type ActivityType = 'user_interaction' | 'system_event' | 'graph_operation' | 'file_operation' | 'collaboration' | 'authentication' | 'performance' | 'error' | 'admin' | 'integration';
 export type ActivityCategory = 'graph_editing' | 'node_manipulation' | 'execution' | 'file_management' | 'user_management' | 'collaboration' | 'system_health' | 'security' | 'performance' | 'configuration';
 export type ActivitySource = 'web_ui' | 'mobile_app' | 'api' | 'cli' | 'webhook' | 'system' | 'background_task' | 'integration';
 export type ActivityImpact = 'none' | 'low' | 'medium' | 'high' | 'critical';
 export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public';
+
 export interface ActivityFilter {
     userIds?: string[];
     types?: ActivityType[];
@@ -142,7 +144,7 @@ export interface ActivityFilter {
     offset?: number;
     sortBy?: 'timestamp' | 'impact' | 'duration';
     sortDirection?: 'asc' | 'desc';
-}
+
 export interface ActivityStats {
     totalEvents: number;
     uniqueUsers: number;
@@ -169,7 +171,7 @@ export interface ActivityStats {
     collaborativeEvents: number;
     teamsActive: number;
     sharingEvents: number;
-}
+
 export interface ActivitySession {
     id: string;
     userId: string;
@@ -189,7 +191,6 @@ export interface ActivitySession {
     goalsAchieved?: string[];
     tasksCompleted?: string[];
     errorsEncountered?: number;
-}
 /**
  * Enhanced Activity Timeline Service
  */
@@ -283,7 +284,7 @@ export declare class ActivityTimelineService {
     private startBackgroundProcessing;
     private cleanupOldActivities;
     private processSessionAnalytics;
-}
+
 export declare const activityTimeline: ActivityTimelineService;
 export declare const trackActivity: (event: Partial<ActivityEvent>) => Promise<ActivityEvent>;
 export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {)

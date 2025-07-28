@@ -72,6 +72,7 @@ export class UsageQuotaService {
    * Check if a usage request is within quota limits
    */
   async checkQuota(request: QuotaCheckRequest): Promise<QuotaCheckResult> {
+
     const startTime = Date.now();
     
     try {
@@ -109,7 +110,7 @@ export class UsageQuotaService {
               request,
               result,
               violationType: 'quota_exceeded'
-            },
+  }
             severity: this.getViolationSeverity(result),
             category: 'system'
           });
@@ -134,7 +135,7 @@ export class UsageQuotaService {
           request,
           error: error.message,
           stack: error.stack
-        },
+  }
         severity: 'high',
         category: 'system'
       });
@@ -151,6 +152,7 @@ export class UsageQuotaService {
    * Track usage for a quota
    */
   async trackUsage(quota: UsageQuota, request: QuotaCheckRequest): Promise<void> {
+
     const period = this.getCurrentPeriod(quota.limitPeriod);
     const cacheKey = `usage:${quota.quotaId}:${request.userId}:${period.start.getTime()}`;
 
@@ -201,6 +203,7 @@ export class UsageQuotaService {
    * Get current usage for a quota and user
    */
   async getCurrentUsage(quota: UsageQuota, userId: string): Promise<number> {
+
     const period = this.getCurrentPeriod(quota.limitPeriod);
     const cacheKey = `usage:${quota.quotaId}:${userId}:${period.start.getTime()}`;
 
@@ -243,6 +246,7 @@ export class UsageQuotaService {
     request: QuotaCheckRequest, 
     result: QuotaCheckResult
   ): Promise<void> {
+
     try {
       console.log(`🚨 Handling quota violation for quota ${quota.quotaId}, user ${request.userId}`);
 
@@ -268,7 +272,7 @@ export class UsageQuotaService {
             resourceIdentifier: request.resourceIdentifier,
             usageAmount: request.usageAmount
           }
-        },
+  }
         status: 'active',
         appealSubmitted: false
       };
@@ -289,7 +293,7 @@ export class UsageQuotaService {
             quotaType: quota.quotaType,
             violationCount: await this.getRecentViolationCount(request.userId),
             enforcementAction: quota.enforcementAction
-          },
+  }
           timestamp: new Date()
         });
       }
@@ -310,6 +314,7 @@ export class UsageQuotaService {
     violation: QuotaViolation, 
     request: QuotaCheckRequest
   ): Promise<void> {
+
     console.log(`⚖️ Executing enforcement action: ${quota.enforcementAction}`);
 
     switch (quota.enforcementAction) {
@@ -358,6 +363,7 @@ export class UsageQuotaService {
    * Create a new quota
    */
   async createQuota(quota: Omit<UsageQuota, 'quotaId' | 'createdAt' | 'updatedAt'>): Promise<UsageQuota> {
+
     const quotaId = this.generateUuid();
     const now = new Date();
 
@@ -382,7 +388,7 @@ export class UsageQuotaService {
           configuration, metadata
         ) VALUES (
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
-        )
+
       `, [
         newQuota.quotaId,
         newQuota.quotaName,
@@ -438,6 +444,7 @@ export class UsageQuotaService {
     updates: Partial<UsageQuota>, 
     adminUserId: string
   ): Promise<UsageQuota> {
+
     try {
       console.log(`📝 Updating quota: ${quotaId}`);
 
@@ -512,7 +519,7 @@ export class UsageQuotaService {
           previousState: currentQuota,
           updates,
           newState: updatedQuota
-        },
+  }
         severity: 'medium',
         category: 'admin'
       });
@@ -530,6 +537,7 @@ export class UsageQuotaService {
    * Get quota by ID
    */
   async getQuotaById(quotaId: string): Promise<UsageQuota | null> {
+
     // Check cache first
     if (this.quotaCache.has(quotaId)) {
       return this.quotaCache.get(quotaId)!;
@@ -561,6 +569,7 @@ export class UsageQuotaService {
    * Get user's quota usage summary
    */
   async getUserQuotaSummary(userId: string, period?: { start: Date; end: Date }): Promise<QuotaUsageSummary> {
+
     const summaryPeriod = period || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
       end: new Date()
@@ -589,7 +598,7 @@ export class UsageQuotaService {
             lastViolation: violations.length > 0 ? violations[0].violationTimestamp : undefined,
             violationCount: violations.length
           };
-        })
+  }
       );
 
       // Get violation summary
@@ -608,7 +617,7 @@ export class UsageQuotaService {
           type: 'day',
           value: 30,
           timezone: 'UTC'
-        },
+  }
         quotas: quotaDetails,
         totalViolations,
         activeViolations: activeViolations.length,
@@ -633,6 +642,7 @@ export class UsageQuotaService {
    * Find quotas applicable to a request
    */
   private async findApplicableQuotas(request: QuotaCheckRequest): Promise<UsageQuota[]> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM usage_quotas
@@ -644,7 +654,7 @@ export class UsageQuotaService {
           (applies_to_type = 'organization' AND applies_to_value = $4) OR
           (applies_to_type = 'global') OR
           (applies_to_type = 'tier' AND applies_to_value = $5)
-        )
+
         ORDER BY priority DESC, limit_value ASC
       `, [
         request.quotaType,
@@ -666,6 +676,7 @@ export class UsageQuotaService {
    * Check a single quota against request
    */
   private async checkSingleQuota(quota: UsageQuota, request: QuotaCheckRequest): Promise<QuotaCheckResult> {
+
     const currentUsage = await this.getCurrentUsage(quota, request.userId);
     const remainingQuota = Math.max(0, quota.limitValue - currentUsage);
     const utilizationPercentage = Math.round((currentUsage / quota.limitValue) * 100);
@@ -822,7 +833,7 @@ export class UsageQuotaService {
       appliesTo: {
         type: row.applies_to_type,
         value: row.applies_to_value
-      },
+  }
       enforcementAction: row.enforcement_action,
       resetBehavior: row.reset_behavior,
       gracePeriodMinutes: parseInt(row.grace_period_minutes),
@@ -859,6 +870,7 @@ export class UsageQuotaService {
    * Initialize the service
    */
   private async initializeService(): Promise<void> {
+
     console.log('🚀 Initializing Usage Quota Service...');
     
     try {
@@ -909,6 +921,7 @@ export class UsageQuotaService {
    * Preload critical quotas into cache
    */
   private async preloadCriticalQuotas(): Promise<void> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM usage_quotas 
@@ -950,6 +963,7 @@ export class UsageQuotaService {
   }
 
   private async logQuotaEvent(event: Partial<QuotaEventLog>): Promise<void> {
+
     // Implementation for logging quota events
     console.log(`📝 Quota event: ${event.eventType}`, event);
   }

@@ -28,7 +28,7 @@ export declare enum ChallengeType {
     BEHAVIORAL_ANALYSIS = "behavioral_analysis",
     DEVICE_VERIFICATION = "device_verification",
     LOCATION_VERIFICATION = "location_verification"
-}
+
 export declare enum ChallengeOutcome {
     SUCCESS = "success",
     FAILURE = "failure",
@@ -36,19 +36,19 @@ export declare enum ChallengeOutcome {
     ABANDONED = "abandoned",
     ERROR = "error",
     SKIPPED = "skipped"
-}
+
 export declare enum DifficultyLevel {
     EASY = "easy",
     MEDIUM = "medium",
     HARD = "hard",
     ADAPTIVE = "adaptive"
-}
+
 export declare enum UserAgentType {
     HUMAN = "human",
     BOT_SUSPECTED = "bot_suspected",
     BOT_CONFIRMED = "bot_confirmed",
     UNKNOWN = "unknown"
-}
+
 export interface ChallengeEvent {
     id: string;
     sessionId: string;
@@ -122,7 +122,7 @@ export interface ChallengeEvent {
         assistiveTechUsed: string[];
         accommodationsApplied: string[];
     };
-}
+
 export interface ChallengeStatistics {
     challengeType: ChallengeType;
     period: {,
@@ -164,7 +164,7 @@ export interface ChallengeStatistics {
         userExperienceScore: number;
         securityScore: number;
     };
-}
+
 export interface TelemetryQuery {
     startTime: Date;
     endTime: Date;
@@ -182,7 +182,7 @@ export interface TelemetryQuery {
     aggregateBy?: 'hour' | 'day' | 'week' | 'month';
     limit?: number;
     offset?: number;
-}
+
 export interface ABTestConfig {
     id: string;
     name: string;
@@ -197,7 +197,7 @@ export interface ABTestConfig {
     endDate: Date;
     targetMetric: 'success_rate' | 'completion_time' | 'user_satisfaction' | 'security_score';
     isActive: boolean;
-}
+
 export interface FraudPattern {
     id: string;
     name: string;
@@ -215,7 +215,6 @@ export interface FraudPattern {
     confidence: number;
     lastUpdated: Date;
     isActive: boolean;
-}
 /**
  * Comprehensive challenge telemetry service
  */
@@ -339,7 +338,7 @@ export declare class ChallengeTelemetryService extends EventEmitter {
     private startFraudDetection;
     private aggregateMetrics;
     private runFraudDetection;
-}
+
 export declare const challengeTelemetryService: ChallengeTelemetryService;
 export default ChallengeTelemetryService;
 //# sourceMappingURL=ChallengeTelemetryService.d.ts.map

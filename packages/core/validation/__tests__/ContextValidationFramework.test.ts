@@ -11,18 +11,18 @@ import { AdvancedExecutionContext } from '../../runtime/advanced';
 describe('ContextValidationFramework', () => {
   let framework: ContextValidationFramework;
   beforeEach(() => {
-    framework = new ContextValidationFramework({)
-      enableVariableValidation: true,
-      enableStateValidation: true,
-      enableCacheValidation: true,
-      enablePerformanceValidation: true,
-      enableSecurityValidation: true,
-      maxVariableCount: 10,
-      maxDepth: 5,
-      maxCacheSize: 100,
-      warningThreshold: 70,
-      errorThreshold: 50,
-    });
+  framework = new ContextValidationFramework({)
+  enableVariableValidation: true,
+  enableStateValidation: true,
+  enableCacheValidation: true,
+  enablePerformanceValidation: true,
+  enableSecurityValidation: true,
+  maxVariableCount: 10,
+  maxDepth: 5,
+  maxCacheSize: 100,
+  warningThreshold: 70,
+  errorThreshold: 50,
+});
   });
   describe('Context Validation', () => {
     it('should validate a minimal valid context', async () => {
@@ -43,9 +43,9 @@ describe('ContextValidationFramework', () => {
       expect(result.score).toBeLessThan(50);
     });
     it('should detect invalid PRNG output', async () => {
-      const context = ContextValidationUtils.createTestContext({)
-        prng: () => 2.0 // Invalid range,
-      });
+  const context = ContextValidationUtils.createTestContext({)
+  prng: () => 2.0 // Invalid range,
+});
       const result = await framework.validateContext(context);
       expect(result.valid).toBe(false);
       expect(result.errors.some(error => error.includes('PRNG returns invalid values'))).toBe(true);
@@ -63,15 +63,14 @@ describe('ContextValidationFramework', () => {
       // Add more variables than the limit
       for (let i = 0; i < 15; i++) {
         context.variables[`var${i}`] = `value${i}`;}
-      }
       const result = await framework.validateContext(context);
       expect(result.valid).toBe(true); // Should pass but with warnings
       expect(result.warnings.some(warning => warning.includes('Too many variables'))).toBe(true);
     });
     it('should detect excessive evaluation depth', async () => {
-      const context = ContextValidationUtils.createTestContext({)
-        evaluationDepth: 10 // Exceeds max depth of 5,
-      });
+  const context = ContextValidationUtils.createTestContext({)
+  evaluationDepth: 10 // Exceeds max depth of 5,
+});
       const result = await framework.validateContext(context);
       expect(result.valid).toBe(false);
       expect(result.errors.some(error => error.includes('state consistency issues'))).toBe(true);
@@ -81,7 +80,6 @@ describe('ContextValidationFramework', () => {
       // Fill cache beyond limit
       for (let i = 0; i < 150; i++) {
         context.cache.set(`key${i}`, `value${i}`);}
-      }
       const result = await framework.validateContext(context);
       expect(result.warnings.some(warning => warning.includes('Cache size exceeds limit'))).toBe(true);
     });
@@ -108,7 +106,6 @@ describe('ContextValidationFramework', () => {
       context.evaluationDepth = 10;
       for (let i = 0; i < 15; i++) {
         context.variables[`var${i}`] = undefined;}
-      }
       const result = await framework.validateContext(context);
       expect(result.recommendations.length).toBeGreaterThan(0);
       expect(result.recommendations.some(rec => rec.includes('optimizing context'))).toBe(true);
@@ -116,8 +113,8 @@ describe('ContextValidationFramework', () => {
   });
   describe('Custom Rules', () => {
     it('should allow adding custom validation rules', () => {
-      const customRule: ContextValidationRule = {
-        name: 'custom_test',
+      const customRule: ContextValidationRule = {,
+  name: 'custom_test',
         description: 'Test custom rule',
         category: 'warning',
         weight: 1.0,
@@ -127,15 +124,15 @@ describe('ContextValidationFramework', () => {
       expect(framework.getRules()).toContain(customRule);
     });
     it('should prevent duplicate rule names', () => {
-      const rule1: ContextValidationRule = {
-        name: 'duplicate_test',
+      const rule1: ContextValidationRule = {,
+  name: 'duplicate_test',
         description: 'First rule',
         category: 'warning',
         weight: 1.0,
         validate: () => ({ passed: true, score: 100 })
       };
-      const rule2: ContextValidationRule = {
-        name: 'duplicate_test',
+      const rule2: ContextValidationRule = {,
+  name: 'duplicate_test',
         description: 'Second rule',
         category: 'warning',
         weight: 1.0,
@@ -145,8 +142,8 @@ describe('ContextValidationFramework', () => {
       expect(() => framework.addRule(rule2)).toThrow('already exists');
     });
     it('should allow removing rules', () => {
-      const rule: ContextValidationRule = {
-        name: 'removable_test',
+      const rule: ContextValidationRule = {,
+  name: 'removable_test',
         description: 'Test rule for removal',
         category: 'info',
         weight: 0.5,
@@ -159,15 +156,14 @@ describe('ContextValidationFramework', () => {
     });
     it('should execute custom rules during validation', async () => {
       let ruleExecuted = false;
-      const customRule: ContextValidationRule = {
-        name: 'execution_test',
+      const customRule: ContextValidationRule = {,
+  name: 'execution_test',
         description: 'Test rule execution',
         category: 'critical',
         weight: 2.0,
         validate: () => {,
           ruleExecuted = true;
           return { passed: false, score: 0, message: 'Custom rule failed' };
-        }
       };
       framework.addRule(customRule);
       const context = ContextValidationUtils.createTestContext();
@@ -177,11 +173,11 @@ describe('ContextValidationFramework', () => {
     });
   });
   describe('Configuration Management', () => {
-    it('should update configuration', () => {
-      const newConfig = {
-        maxVariableCount: 50,
-        warningThreshold: 80,
-      };
+  it('should update configuration', () => {
+  const newConfig = {
+  maxVariableCount: 50,
+  warningThreshold: 80,
+};
       framework.updateConfig(newConfig);
       // We can't directly access the config, but we can test the behavior
       expect(() => framework.updateConfig(newConfig)).not.toThrow();
@@ -195,11 +191,11 @@ describe('ContextValidationFramework', () => {
     });
   });
   describe('Statistics and Monitoring', () => {
-    it('should track validation statistics', async () => {
-      const context1 = ContextValidationUtils.createTestContext();
-      const context2 = ContextValidationUtils.createTestContext({)
-        prng: null as any // Create invalid context,
-      });
+  it('should track validation statistics', async () => {
+  const context1 = ContextValidationUtils.createTestContext();
+  const context2 = ContextValidationUtils.createTestContext({)
+  prng: null as any // Create invalid context,
+});
       await framework.validateContext(context1);
       await framework.validateContext(context2);
       const stats = framework.getValidationStatistics();
@@ -226,15 +222,14 @@ describe('ContextValidationFramework', () => {
         done();
       });
       // Force an error by creating a rule that throws
-      const errorRule: ContextValidationRule = {
-        name: 'error_test',
-        description: 'Rule that throws errors',
-        category: 'critical',
-        weight: 1.0,
-        validate: () => {,
-          throw new Error('Test error');
-        }
-      };
+      const errorRule: ContextValidationRule = {,
+  name: 'error_test',
+  description: 'Rule that throws errors',
+  category: 'critical',
+  weight: 1.0,
+  validate: () => {,
+  throw new Error('Test error');
+};
       framework.addRule(errorRule);
       const context = ContextValidationUtils.createTestContext();
       setTimeout(() => {
@@ -266,10 +261,10 @@ describe('ContextValidationUtils', () => {
       expect(typeof context.executionMeta.executionId).toBe('string');
     });
     it('should apply overrides', () => {
-      const context = ContextValidationUtils.createTestContext({)
-        evaluationDepth: 5,
-        seed: 99999,
-      });
+  const context = ContextValidationUtils.createTestContext({)
+  evaluationDepth: 5,
+  seed: 99999,
+});
       expect(context.evaluationDepth).toBe(5);
       expect(context.seed).toBe(99999);
     });
@@ -354,11 +349,10 @@ describe('ContextValidationUtils', () => {
       expect(ContextValidationUtils.isValidContext(context)).toBe(true);
     });
     it('should handle PRNG that throws errors', () => {
-      const context = ContextValidationUtils.createTestContext({)
-        prng: () => {,
-          throw new Error('PRNG error');
-        }
-      });
+  const context = ContextValidationUtils.createTestContext({)
+  prng: () => {,
+  throw new Error('PRNG error');
+});
       // Should still be structurally valid
       expect(ContextValidationUtils.isValidContext(context)).toBe(true);
     });

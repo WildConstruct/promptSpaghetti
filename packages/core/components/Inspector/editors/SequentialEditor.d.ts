@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface SequentialEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-}
+
 /**
  * Epic 8.4 - Sequential Editor with Progressive Disclosure
  *

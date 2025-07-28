@@ -7,6 +7,7 @@
 import { FrameworkNode, NodeFramework } from './NodeFramework';
 import { AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService } from '../validation';
+
 export interface NodeCreationOptions {
     /** Validate node before creation */
     validate?: boolean;
@@ -18,7 +19,7 @@ export interface NodeCreationOptions {
     metadata?: Record<string, any>;
     /** Template to base node on */
     template?: string;
-}
+
 export interface NodeTemplate {
     id: string;
     name: string;
@@ -28,7 +29,7 @@ export interface NodeTemplate {
     defaultData: any;
     category: string;
     tags: string[];
-}
+
 export interface NodeFactoryConfig {
     /** Enable automatic node optimization */
     enableOptimization: boolean;
@@ -40,7 +41,6 @@ export interface NodeFactoryConfig {
     enableCaching: boolean;
     /** Maximum cache size */
     maxCacheSize: number;
-}
 /**
  * Node Factory for creating and managing framework nodes
  */
@@ -142,6 +142,6 @@ export declare class NodeFactory {
     private validateTemplate;
     private cacheNode;
     private recordCreation;
-}
+
 export default NodeFactory;
 //# sourceMappingURL=NodeFactory.d.ts.map

@@ -8,6 +8,7 @@
  * Task: E31-1753313263588-A09495
  */
 import { EventEmitter } from 'events';
+
 export interface UserBehaviorEvent {
     id: string;
     userId: string;
@@ -22,7 +23,7 @@ export interface UserBehaviorEvent {
     success: boolean;
     duration?: number;
     dataVolumeBytes?: number;
-}
+
 export declare enum UserActionType {
     LOGIN = "login",
     LOGOUT = "logout",
@@ -36,7 +37,7 @@ export declare enum UserActionType {
     ADMIN_ACTION = "admin_action",
     SEARCH_QUERY = "search_query",
     NAVIGATION = "navigation"
-}
+
 export interface GeolocationData {
     country: string;
     region: string;
@@ -44,7 +45,8 @@ export interface GeolocationData {
     latitude: number;
     longitude: number;
     timezone: string;
-}
+
+
 export interface UserBehaviorProfile {
     userId: string;
     createdAt: Date;
@@ -69,14 +71,16 @@ export interface UserBehaviorProfile {
     baselineRiskScore: number;
     anomalyThreshold: number;
     adaptationRate: number;
-}
+
+
 export interface TravelPattern {
     fromLocation: GeolocationData;
     toLocation: GeolocationData;
     frequency: number;
     typicalDuration: number;
     lastOccurrence: Date;
-}
+
+
 export interface ResourceAccess {
     resource: string;
     accessCount: number;
@@ -84,7 +88,8 @@ export interface ResourceAccess {
     typicalAccessPattern: number[];
     lastAccessed: Date;
     riskScore: number;
-}
+
+
 export interface BehaviorAnomaly {
     id: string;
     userId: string;
@@ -102,7 +107,7 @@ export interface BehaviorAnomaly {
     isResolved: boolean;
     resolvedAt?: Date;
     falsePositive?: boolean;
-}
+
 export declare enum AnomalyType {
     UNUSUAL_LOGIN_TIME = "unusual_login_time",
     UNUSUAL_LOCATION = "unusual_location",
@@ -116,20 +121,21 @@ export declare enum AnomalyType {
     BULK_DATA_ACCESS = "bulk_data_access",
     OFF_HOURS_ACTIVITY = "off_hours_activity",
     IMPOSSIBLE_TRAVEL = "impossible_travel"
-}
+
 export declare enum AnomalySeverity {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface RiskAssessment {
     overallRisk: number;
     businessImpact: number;
     probabilityOfThreat: number;
     potentialDamage: string[];
     mitigationUrgency: 'low' | 'medium' | 'high' | 'immediate';
-}
+
+
 export interface BehaviorAnalyticsConfig {
     profileUpdateInterval: number;
     anomalyDetectionSensitivity: number;
@@ -139,7 +145,7 @@ export interface BehaviorAnalyticsConfig {
     enableGeolocationTracking: boolean;
     minEventsForProfile: number;
     adaptiveThresholding: boolean;
-}
+
 export declare class UserBehaviorAnalytics extends EventEmitter {
     private userProfiles;
     private recentEvents;
@@ -198,10 +204,10 @@ export declare class UserBehaviorAnalytics extends EventEmitter {
     updateConfig(newConfig: Partial<BehaviorAnalyticsConfig>): void;
     getAnalyticsStats(): Record<string, unknown>;
     destroy(): void;
-}
+
 export declare class UserBehaviorAnalyticsFactory {
     private static instance;
     static getInstance(config?: Partial<BehaviorAnalyticsConfig>): UserBehaviorAnalytics;
-}
+
 export default UserBehaviorAnalytics;
 //# sourceMappingURL=UserBehaviorAnalytics.d.ts.map

@@ -167,7 +167,7 @@ export async function activityTimelineRoutes(
           streamId,
           updateFrequency: streamRequest.updateFrequency,
           expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
-        },
+  }
         message: 'Activity stream created successfully'
       });
 
@@ -346,7 +346,7 @@ export async function activityTimelineRoutes(
         timeRange: {
           start: query.startDate ? new Date(query.startDate) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           end: query.endDate ? new Date(query.endDate) : new Date()
-        },
+  }
         patterns: query.includePatterns !== false ? {
           mostActiveHours: [9, 10, 14, 15],
           mostActiveDays: ['Monday', 'Tuesday', 'Wednesday'],
@@ -518,7 +518,7 @@ export async function activityTimelineRoutes(
           activeDays: 28,
           mostActiveHour: 14,
           mostActiveDay: 'Tuesday'
-        },
+  }
         trends: {
           daily: Array.from({ length: 30 }, (_, i) => ({
             date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -531,7 +531,7 @@ export async function activityTimelineRoutes(
             activities: Math.floor(Math.random() * 20) + 1,
             averageDuration: Math.floor(Math.random() * 10) + 2
           }))
-        },
+  }
         categories: {
           authentication: 45,
           content_creation: 320,
@@ -540,7 +540,7 @@ export async function activityTimelineRoutes(
           api_usage: 55,
           system_administration: 12,
           other: 30
-        },
+  }
         devices: {
           desktop: 890,
           mobile: 245,
@@ -593,13 +593,13 @@ export async function activityTimelineRoutes(
           insightGeneration: 'operational',
           dataExport: 'operational',
           realtimeUpdates: 'operational'
-        },
+  }
         metrics: {
           activeStreams: 0, // Would get from service
           processingLatency: 45,
           accuracyScore: 96.8,
           uptime: process.uptime()
-        },
+  }
         environment: process.env.NODE_ENV || 'development'
       };
 

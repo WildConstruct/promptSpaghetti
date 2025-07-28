@@ -8,10 +8,10 @@ import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advance
 import { EventEmitter } from 'events';
 export interface ContextValidationResult {
     valid: boolean;
-    errors: string[];
-    warnings: string[];
+    errors: string;
+    warnings: string;
     score: number;
-    recommendations: string[];
+    recommendations: string;
     contextHealth: {
         variableIntegrity: number;
         stateConsistency: number;
@@ -44,85 +44,12 @@ export interface ContextValidationConfig {
     warningThreshold: number;
     errorThreshold: number;
 }
-/**
- * Comprehensive context validation framework
- */
 export declare class ContextValidationFramework extends EventEmitter {
     private config;
     private rules;
     private validationHistory;
-    constructor(config?: Partial<ContextValidationConfig>);
-    /**
-     * Validate execution context comprehensively
-     */
-    validateContext(context: AdvancedExecutionContext, config?: AdvancedNodeConfig): Promise<ContextValidationResult>;
-    /**
-     * Add custom validation rule
-     */
-    addRule(rule: ContextValidationRule): void;
-    /**
-     * Remove validation rule
-     */
-    removeRule(name: string): void;
-    /**
-     * Get validation statistics
-     */
-    getValidationStatistics(): {
-        totalValidations: number;
-        averageScore: number;
-        errorRate: number;
-        warningRate: number;
-        recentValidations: Array<{
-            contextId: string;
-            score: number;
-            timestamp: number;
-            valid: boolean;
-        }>;
-    };
-    /**
-     * Get all validation rules
-     */
-    getRules(): ContextValidationRule[];
-    /**
-     * Update configuration
-     */
-    updateConfig(newConfig: Partial<ContextValidationConfig>): void;
-    private initializeDefaultRules;
-    private addVariableValidationRules;
-    private addStateValidationRules;
-    private addCacheValidationRules;
-    private addPerformanceValidationRules;
-    private addSecurityValidationRules;
-    private updateContextHealth;
-    private recordValidation;
+    number: any;
+    contextId: string;
+    result: ContextValidationResult;
 }
-/**
- * Context validation utilities
- */
-export declare class ContextValidationUtils {
-    /**
-     * Create a minimal valid context for testing
-     */
-    static createTestContext(overrides?: Partial<AdvancedExecutionContext>): AdvancedExecutionContext;
-    /**
-     * Validate context meets minimum requirements
-     */
-    static isValidContext(context: any): context is AdvancedExecutionContext;
-    /**
-     * Estimate context memory usage
-     */
-    static estimateContextMemory(context: AdvancedExecutionContext): {
-        totalBytes: number;
-        breakdown: {
-            variables: number;
-            nodeStates: number;
-            cache: number;
-            metadata: number;
-        };
-    };
-    private static estimateObjectMemory;
-    private static estimateMapMemory;
-    private static estimateValueMemory;
-}
-export default ContextValidationFramework;
 //# sourceMappingURL=ContextValidationFramework.d.ts.map

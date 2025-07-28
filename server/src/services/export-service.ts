@@ -55,6 +55,7 @@ export class ExportService {
   }
 
   private async ensureExportDirectoryExists(): Promise<void> {
+
     try {
       await fs.mkdir(this.exportDir, { recursive: true });
     } catch (error) {
@@ -65,6 +66,7 @@ export class ExportService {
 
   // Export Template Management
   async createExportTemplate(template: CreateExportTemplate): Promise<ExportTemplate> {
+
     try {
       logger.info('Creating export template:', { name: template.name, format: template.export_format });
 
@@ -116,6 +118,7 @@ export class ExportService {
   }
 
   async getExportTemplate(id: string): Promise<ExportTemplate | null> {
+
     try {
       const query = 'SELECT * FROM export_templates WHERE id = $1';
       const result = await this.db.query(query, [id]);
@@ -132,6 +135,7 @@ export class ExportService {
     limit?: number;
     offset?: number;
   } = {}): Promise<ExportTemplate[]> {
+
     try {
       let query = 'SELECT * FROM export_templates WHERE project_id = $1';
       const params: unknown[] = [projectId];
@@ -171,6 +175,7 @@ export class ExportService {
   }
 
   async getExportTemplateWithStats(id: string): Promise<ExportTemplateWithStats | null> {
+
     try {
       const template = await this.getExportTemplate(id);
       if (!template) return null;
@@ -208,6 +213,7 @@ export class ExportService {
   }
 
   async updateExportTemplate(id: string, updates: UpdateExportTemplate): Promise<ExportTemplate | null> {
+
     try {
       logger.info('Updating export template:', { id, updates });
 
@@ -261,6 +267,7 @@ export class ExportService {
   }
 
   async deleteExportTemplate(id: string): Promise<boolean> {
+
     try {
       logger.info('Deleting export template:', { id });
 
@@ -280,6 +287,7 @@ export class ExportService {
 
   // Export Job Management
   async createExportJob(job: CreateExportJob): Promise<ExportJob> {
+
     try {
       logger.info('Creating export job:', { 
         projectId: job.project_id, 
@@ -346,6 +354,7 @@ export class ExportService {
   }
 
   async getExportJob(id: string): Promise<ExportJob | null> {
+
     try {
       const query = 'SELECT * FROM export_jobs WHERE id = $1';
       const result = await this.db.query(query, [id]);
@@ -363,6 +372,7 @@ export class ExportService {
     limit?: number;
     offset?: number;
   } = {}): Promise<ExportJob[]> {
+
     try {
       let query = 'SELECT * FROM export_jobs WHERE project_id = $1';
       const params: unknown[] = [projectId];
@@ -408,6 +418,7 @@ export class ExportService {
   }
 
   async getExportJobWithTemplate(id: string): Promise<ExportJobWithTemplate | null> {
+
     try {
       const query = `
         SELECT 
@@ -474,6 +485,7 @@ export class ExportService {
   }
 
   async updateExportJob(id: string, updates: UpdateExportJob): Promise<ExportJob | null> {
+
     try {
       const fields = [];
       const values = [];
@@ -514,6 +526,7 @@ export class ExportService {
   }
 
   async cancelExportJob(id: string): Promise<boolean> {
+
     try {
       logger.info('Cancelling export job:', { id });
 
@@ -539,6 +552,7 @@ export class ExportService {
   }
 
   async getExportProgress(id: string): Promise<ExportProgress | null> {
+
     try {
       const job = await this.getExportJob(id);
       if (!job) return null;
@@ -577,6 +591,7 @@ export class ExportService {
   }
 
   private async processExportJob(jobId: string): Promise<void> {
+
     const startTime = Date.now();
     
     try {
@@ -639,6 +654,7 @@ export class ExportService {
   }
 
   private async generateExportFile(job: ExportJob): Promise<string> {
+
     const fileName = `export_${job.id}.${this.getFileExtension(job.export_format)}`;
     const filePath = path.join(this.exportDir, fileName);
     
@@ -703,6 +719,7 @@ export class ExportService {
   }
 
   private async calculateFileHash(filePath: string): Promise<string> {
+
     const fileBuffer = await fs.readFile(filePath);
     const hashSum = crypto.createHash('sha256');
     hashSum.update(fileBuffer);
@@ -711,6 +728,7 @@ export class ExportService {
 
   // Export Statistics
   async getExportStatistics(projectId: string): Promise<ExportStatistics> {
+
     try {
       const query = `
         SELECT 
@@ -787,6 +805,7 @@ export class ExportService {
 
   // Export Format Definitions
   async getExportFormats(): Promise<ExportFormatDefinition[]> {
+
     try {
       const query = 'SELECT * FROM export_format_definitions WHERE is_enabled = true ORDER BY format_name';
       const result = await this.db.query(query);
@@ -798,6 +817,7 @@ export class ExportService {
   }
 
   async getExportFormat(formatName: string): Promise<ExportFormatDefinition | null> {
+
     try {
       const query = 'SELECT * FROM export_format_definitions WHERE format_name = $1';
       const result = await this.db.query(query, [formatName]);
@@ -810,6 +830,7 @@ export class ExportService {
 
   // Cleanup Methods
   async cleanupExpiredJobs(): Promise<number> {
+
     try {
       logger.info('Cleaning up expired export jobs');
       
@@ -846,6 +867,7 @@ export class ExportService {
   }
 
   async cleanupFailedJobs(olderThanDays: number = 7): Promise<number> {
+
     try {
       logger.info('Cleaning up failed export jobs older than', { days: olderThanDays });
       

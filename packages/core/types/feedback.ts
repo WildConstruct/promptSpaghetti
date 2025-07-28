@@ -72,14 +72,14 @@ export const BaseFeedbackSchema = z.object({)
   // Content
   title: z.string().min(1).max(200).optional(),
   content: z.string().min(1).max(5000),
-  attachments: z.array(z.object({),
-    id: z.string(),
-    type: z.enum(['image', 'video', 'document', 'screenshot']),
-    url: z.string().url(),
-    filename: z.string(),
-    size: z.number().positive(),
-    mimeType: z.string(),
-  })).default([]),
+  attachments: z.array(z.object({,)
+  id: z.string(),
+  type: z.enum(['image', 'video', 'document', 'screenshot']),
+  url: z.string().url(),
+  filename: z.string(),
+  size: z.number().positive(),
+  mimeType: z.string(),
+})).default([]),
   // Rating (if applicable)
   rating: z.number().min(1).max(5).optional(),
   // Metadata
@@ -120,12 +120,12 @@ export const ReviewFeedbackSchema = BaseFeedbackSchema.extend({)
   verifiedPurchase: z.boolean().default(false),
   purchaseDate: z.date().optional(),
   // Template-specific fields
-  templateUsage: z.object({),
-    timesUsed: z.number().int().min(0).optional(),
-    outputQuality: z.number().min(1).max(5).optional(),
-    easeOfUse: z.number().min(1).max(5).optional(),
-    valueForMoney: z.number().min(1).max(5).optional(),
-  }).optional()
+  templateUsage: z.object({,)
+  timesUsed: z.number().int().min(0).optional(),
+  outputQuality: z.number().min(1).max(5).optional(),
+  easeOfUse: z.number().min(1).max(5).optional(),
+  valueForMoney: z.number().min(1).max(5).optional(),
+}).optional()
 });
 
 // Report Schema
@@ -134,17 +134,17 @@ export const ReportFeedbackSchema = BaseFeedbackSchema.extend({)
   // Report-specific fields
   reason: ReportReasonSchema,
   severity: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
-  evidence: z.array(z.object({),
-    type: z.enum(['screenshot', 'url', 'text', 'video']),
-    content: z.string(),
-    description: z.string().optional(),
-  })).default([]),
+  evidence: z.array(z.object({,)
+  type: z.enum(['screenshot', 'url', 'text', 'video']),
+  content: z.string(),
+  description: z.string().optional(),
+})).default([]),
   // Investigation fields
   investigatedBy: z.string().uuid().optional(),
   investigatedAt: z.date().optional(),
   investigationNotes: z.string().optional(),
-  actionTaken: z.string().optional(),
-});
+  actionTaken: z.string().optional();
+  });
 
 // Bug Report Schema
 export const BugReportFeedbackSchema = BaseFeedbackSchema.extend({)
@@ -157,18 +157,18 @@ export const BugReportFeedbackSchema = BaseFeedbackSchema.extend({)
   stepsToReproduce: z.array(z.string()).default([]),
   expectedBehavior: z.string().optional(),
   actualBehavior: z.string().optional(),
-  environment: z.object({),
-    browser: z.string().optional(),
-    os: z.string().optional(),
-    device: z.string().optional(),
-    version: z.string().optional(),
-  }).optional(),
+  environment: z.object({,)
+  browser: z.string().optional(),
+  os: z.string().optional(),
+  device: z.string().optional(),
+  version: z.string().optional(),
+}).optional(),
   // Bug tracking
   assignedTo: z.string().uuid().optional(),
   estimatedEffort: z.number().optional(), // hours
   fixedAt: z.date().optional(),
-  fixVersion: z.string().optional(),
-});
+  fixVersion: z.string().optional();
+  });
 
 // Suggestion Schema
 export const SuggestionFeedbackSchema = BaseFeedbackSchema.extend({)
@@ -197,13 +197,13 @@ export const FeedbackSummarySchema = z.object({)
   // Rating summary
   averageRating: z.number().min(0).max(5).default(0),
   totalRatings: z.number().int().default(0),
-  ratingDistribution: z.object({),
-    1: z.number().int().default(0),
-    2: z.number().int().default(0),
-    3: z.number().int().default(0),
-    4: z.number().int().default(0),
-    5: z.number().int().default(0),
-  }),
+  ratingDistribution: z.object({,)
+  1: z.number().int().default(0),
+  2: z.number().int().default(0),
+  3: z.number().int().default(0),
+  4: z.number().int().default(0),
+  5: z.number().int().default(0),
+}),
   // Review summary
   totalReviews: z.number().int().default(0),
   verifiedReviews: z.number().int().default(0),
@@ -221,8 +221,8 @@ export const FeedbackSummarySchema = z.object({)
   moderationRate: z.number().min(0).max(100).default(0),
   // Timestamps
   lastUpdated: z.date(),
-  generatedAt: z.date(),
-});
+  generatedAt: z.date();
+  });
 
 // =============================================================================
 // Feedback Interaction Schemas
@@ -246,12 +246,12 @@ export const FeedbackReplySchema = z.object({)
   authorType: z.enum(['user', 'creator', 'moderator', 'admin']),
   // Content
   content: z.string().min(1).max(2000),
-  attachments: z.array(z.object({),
-    id: z.string(),
-    type: z.enum(['image', 'document']),
-    url: z.string().url(),
-    filename: z.string(),
-  })).default([]),
+  attachments: z.array(z.object({,)
+  id: z.string(),
+  type: z.enum(['image', 'document']),
+  url: z.string().url(),
+  filename: z.string(),
+})).default([]),
   // Status
   status: z.enum(['visible', 'hidden', 'deleted']).default('visible'),
   // Engagement
@@ -259,8 +259,8 @@ export const FeedbackReplySchema = z.object({)
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  editedAt: z.date().optional(),
-});
+  editedAt: z.date().optional();
+  });
 
 // =============================================================================
 // Request/Response Schemas
@@ -365,17 +365,16 @@ export type ModerateFeedbackRequest = z.infer<typeof ModerateFeedbackRequestSche
 export const validateFeedback = (feedback: unknown): Feedback => {
   const base = BaseFeedbackSchema.parse(feedback);
   switch (base.type) {
-  case 'review':
-    return ReviewFeedbackSchema.parse(feedback);
-  case 'report':
-    return ReportFeedbackSchema.parse(feedback);
-  case 'bug_report':
-    return BugReportFeedbackSchema.parse(feedback);
-  case 'suggestion':
-    return SuggestionFeedbackSchema.parse(feedback);
-  default:
-    return BaseFeedbackSchema.parse(feedback);
-  }
+  case 'review':,
+  return ReviewFeedbackSchema.parse(feedback);
+  case 'report':,
+  return ReportFeedbackSchema.parse(feedback);
+  case 'bug_report':,
+  return BugReportFeedbackSchema.parse(feedback);
+  case 'suggestion':,
+  return SuggestionFeedbackSchema.parse(feedback);
+  default:,
+  return BaseFeedbackSchema.parse(feedback);
 };
 
 export const validateCreateFeedbackRequest = (request: unknown): CreateFeedbackRequest => {
@@ -435,12 +434,11 @@ export const FEEDBACK_DEFAULTS = {
   RATING_REQUIRED_TYPES: ['rating', 'review'],
   MAX_ATTACHMENTS: 5,
   MAX_ATTACHMENT_SIZE_MB: 10,
-  AUTO_APPROVE_THRESHOLD: 80, // Quality score
-  FLAGGED_THRESHOLD: 3, // Number of reports
+  AUTO_APPROVE_THRESHOLD: 80, // Quality score,
+  FLAGGED_THRESHOLD: 3, // Number of reports,
   MODERATION_QUEUE_PRIORITY: {,
-    critical: 1,
-    high: 2,
-    medium: 3,
-    low: 4,
-  }
+  critical: 1,
+  high: 2,
+  medium: 3,
+  low: 4,
 } as const;

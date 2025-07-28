@@ -19,7 +19,7 @@ export declare enum LockoutStatus {
     UNLOCKED = "unlocked",
     EXPIRED = "expired",
     ESCALATED = "escalated"
-}
+
 export declare enum LockoutReason {
     EXCESSIVE_FAILED_ATTEMPTS = "excessive_failed_attempts",
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
@@ -27,28 +27,28 @@ export declare enum LockoutReason {
     ADMIN_MANUAL_LOCK = "admin_manual_lock",
     SYSTEM_SECURITY_ALERT = "system_security_alert",
     COMPLIANCE_REQUIREMENT = "compliance_requirement"
-}
+
 export declare enum UnlockMethod {
     ADMIN_OVERRIDE = "admin_override",
     SELF_SERVICE_RESET = "self_service_reset",
     AUTOMATIC_EXPIRY = "automatic_expiry",
     SECURITY_REVIEW = "security_review",
     EMERGENCY_UNLOCK = "emergency_unlock"
-}
+
 export declare enum AdminRole {
     SECURITY_ADMIN = "security_admin",
     SYSTEM_ADMIN = "system_admin",
     HELP_DESK = "help_desk",
     SUPER_ADMIN = "super_admin",
     COMPLIANCE_OFFICER = "compliance_officer"
-}
+
 export declare enum NotificationType {
     LOCKOUT_NOTIFICATION = "lockout_notification",
     UNLOCK_NOTIFICATION = "unlock_notification",
     SECURITY_ALERT = "security_alert",
     ADMIN_ACTION_REQUIRED = "admin_action_required",
     COMPLIANCE_REPORT = "compliance_report"
-}
+
 export interface AccountLockout {
     id: string;
     userId: string;
@@ -70,7 +70,7 @@ export interface AccountLockout {
     adminActions: AdminAction[];
     notifications: LockoutNotification[];
     auditTrail: AuditEntry[];
-}
+
 export interface AdminAction {
     id: string;
     adminId: string;
@@ -85,7 +85,7 @@ export interface AdminAction {
     approvedBy?: string;
     approvalTime?: Date;
     metadata: Record<string, any>;
-}
+
 export interface LockoutNotification {
     id: string;
     type: NotificationType;
@@ -96,7 +96,7 @@ export interface LockoutNotification {
     readAt?: Date;
     content: string;
     status: 'pending' | 'sent' | 'delivered' | 'failed' | 'read';
-}
+
 export interface AuditEntry {
     id: string;
     timestamp: Date;
@@ -106,7 +106,7 @@ export interface AuditEntry {
     details: Record<string, any>;
     ipAddress?: string;
     sessionId?: string;
-}
+
 export interface UnlockRequest {
     lockoutId: string;
     adminId: string;
@@ -116,7 +116,7 @@ export interface UnlockRequest {
     justification: string;
     approvalRequired: boolean;
     metadata?: Record<string, any>;
-}
+
 export interface UnlockPolicy {
     adminRole: AdminRole;
     canUnlock: boolean;
@@ -126,7 +126,6 @@ export interface UnlockPolicy {
     emergencyUnlock: boolean;
     auditRequired: boolean;
     notificationRequired: boolean;
-}
 /**
  * Comprehensive account lockout management service
  */
@@ -221,7 +220,7 @@ export declare class AccountLockoutService extends EventEmitter {
     private logSecurityEvent;
     private generateLockoutId;
     private startCleanupTimer;
-}
+
 export declare const accountLockoutService: AccountLockoutService;
 export default AccountLockoutService;
 //# sourceMappingURL=AccountLockoutService.d.ts.map

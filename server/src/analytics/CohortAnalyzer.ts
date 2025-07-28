@@ -6,6 +6,7 @@ import { AnalyticsEventType } from './AnalyticsCollector';
 /**
  * Cohort definition
  */
+}
 export interface CohortDefinition {
   id: string;
   name: string;
@@ -14,6 +15,7 @@ export interface CohortDefinition {
   timeframe: {
     startDate: number;
     endDate?: number;
+}
   };
   type: 'acquisition' | 'behavior' | 'retention' | 'custom';
   refreshInterval?: number; // Auto-refresh interval in milliseconds
@@ -25,6 +27,7 @@ export interface CohortDefinition {
 /**
  * Cohort criteria for user segmentation
  */
+}
 export interface CohortCriteria {
   // User demographics
   userAttributes?: {
@@ -33,6 +36,7 @@ export interface CohortCriteria {
     registrationPeriod?: {
       startDate: number;
       endDate: number;
+}
     };
   };
   
@@ -73,6 +77,7 @@ export interface CohortCriteria {
 /**
  * Cohort analysis result
  */
+}
 export interface CohortAnalysis {
   cohortId: string;
   analysisId: string;
@@ -85,10 +90,12 @@ export interface CohortAnalysis {
   retentionData?: RetentionData;
   comparisonData?: CohortComparison;
 }
+}
 
 /**
  * Cohort member
  */
+}
 export interface CohortMember {
   userId: number;
   sessionId: string;
@@ -102,6 +109,7 @@ export interface CohortMember {
     successRate: number;
     tokenUsage: number;
     totalCost: number;
+}
   };
   segments: string[];
   status: 'active' | 'inactive' | 'churned';
@@ -110,6 +118,7 @@ export interface CohortMember {
 /**
  * Cohort metrics
  */
+}
 export interface CohortMetrics {
   totalUsers: number;
   activeUsers: number;
@@ -122,10 +131,12 @@ export interface CohortMetrics {
   retentionRate: number;
   engagementScore: number;
 }
+}
 
 /**
  * Cohort segment
  */
+}
 export interface CohortSegment {
   segmentId: string;
   name: string;
@@ -138,6 +149,7 @@ export interface CohortSegment {
     executions: number;
     successRate: number;
     tokenUsage: number;
+}
   };
   characteristics: string[];
 }
@@ -145,6 +157,7 @@ export interface CohortSegment {
 /**
  * Cohort trend data
  */
+}
 export interface CohortTrend {
   period: string;
   timestamp: number;
@@ -156,10 +169,12 @@ export interface CohortTrend {
   averageEngagement: number;
   retentionRate: number;
 }
+}
 
 /**
  * Retention analysis data
  */
+}
 export interface RetentionData {
   cohortPeriod: string;
   periods: string[];
@@ -170,12 +185,14 @@ export interface RetentionData {
     period: number;
     rate: number;
     users: number;
+}
   }>;
 }
 
 /**
  * Cohort comparison data
  */
+}
 export interface CohortComparison {
   comparisonId: string;
   cohorts: Array<{
@@ -183,6 +200,7 @@ export interface CohortComparison {
     name: string;
     size: number;
     metrics: CohortMetrics;
+}
   }>;
   differences: Array<{
     metric: string;
@@ -647,7 +665,7 @@ export class CohortAnalyzer extends EventEmitter {
         successRate: executionEvents.length > 0 ? successfulExecutions.length / executionEvents.length : 0,
         tokenUsage: totalTokenUsage,
         totalCost
-      },
+  }
       segments: [], // Would be populated by segmentation logic
       status
     };

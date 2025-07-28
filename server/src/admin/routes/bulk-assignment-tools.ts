@@ -114,7 +114,7 @@ export async function registerBulkAssignmentToolsRoutes(
           resources: requestData.resources,
           parameters: requestData.parameters,
           templateId: requestData.templateId
-        },
+  }
         options: {
           batchSize: requestData.parameters?.batchSize || 50,
           maxConcurrency: requestData.parameters?.maxConcurrency || 5,
@@ -123,7 +123,7 @@ export async function registerBulkAssignmentToolsRoutes(
           atomicMode: requestData.parameters?.rollbackOnFailure ?? false,
           validateBefore: true,
           notifyOnComplete: requestData.parameters?.notifyTargets ?? false
-        },
+  }
         metadata: {
           requestedBy: request.user!.id,
           reason: requestData.reason,
@@ -295,17 +295,17 @@ export async function registerBulkAssignmentToolsRoutes(
           duplicateTargets: 0,
           invalidTargets: 0,
           conflictedTargets: 0
-        },
+  }
         resourceAnalysis: {
           totalResources: requestData.resources.length,
           unavailableResources: 0,
           restrictedResources: 0
-        },
+  }
         estimatedDuration: requestData.targets.length * requestData.resources.length * 100, // milliseconds
         estimatedCost: {
           computeUnits: requestData.targets.length * requestData.resources.length * 0.1,
           storageGB: requestData.targets.length * 0.001
-        },
+  }
         recommendations: [
           'Consider using a template for similar operations in the future',
           'Review conflict resolution settings for optimal results',
@@ -391,7 +391,7 @@ export async function registerBulkAssignmentToolsRoutes(
             timesUsed: 0,
             successRate: 0
           }
-        },
+  }
         message: 'Assignment template created successfully'
       });
 
@@ -446,13 +446,13 @@ export async function registerBulkAssignmentToolsRoutes(
             executionMode: 'immediate',
             batchSize: 10,
             notifyTargets: true
-          },
+  }
           defaultResources: ['basic_user_role', 'default_permissions'],
           isSystemTemplate: true,
           usage: { timesUsed: 45, lastUsed: new Date(), successRate: 95 },
           createdBy: 'system',
           createdAt: new Date('2024-01-01')
-        },
+  }
         {
           id: 'template_api_key_distribution',
           name: 'API Key Distribution',
@@ -463,7 +463,7 @@ export async function registerBulkAssignmentToolsRoutes(
             executionMode: 'staged',
             batchSize: 25,
             continueOnError: false
-          },
+  }
           defaultResources: ['dev_api_key', 'staging_api_key'],
           isSystemTemplate: false,
           usage: { timesUsed: 12, lastUsed: new Date(), successRate: 88 },
@@ -538,7 +538,7 @@ export async function registerBulkAssignmentToolsRoutes(
           id: templateId,
           ...updates,
           lastModified: new Date().toISOString()
-        },
+  }
         message: 'Assignment template updated successfully'
       });
 
@@ -606,7 +606,7 @@ export async function registerBulkAssignmentToolsRoutes(
           successRate: 91.0,
           averageProcessingTime: 234000, // milliseconds
           totalTargetsProcessed: 12450
-        },
+  }
         breakdown: {
           byAssignmentType: {
             api_key: 45,
@@ -614,14 +614,14 @@ export async function registerBulkAssignmentToolsRoutes(
             role: 28,
             team: 12,
             quota: 4
-          },
+  }
           byOperationType: {
             assign: 89,
             revoke: 34,
             update: 23,
             transfer: 10
           }
-        },
+  }
         trends: [
           { date: '2024-01-01', operations: 12, successRate: 88.5 },
           { date: '2024-01-02', operations: 18, successRate: 94.2 },

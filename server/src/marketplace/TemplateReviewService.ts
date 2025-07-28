@@ -18,13 +18,16 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
+}
 export interface ReviewCriteria {
   quality: number;        // 1-5 stars - Code/template quality
   usability: number;      // 1-5 stars - Ease of use
   documentation: number;  // 1-5 stars - Documentation quality
   support: number;        // 1-5 stars - Creator responsiveness
 }
+}
 
+}
 export interface TemplateReview {
   id: string;
   templateId: string;
@@ -54,6 +57,7 @@ export interface TemplateReview {
       quality: number;
       usability: number;
       support: number;
+}
     };
   };
   
@@ -62,6 +66,7 @@ export interface TemplateReview {
   fraudFlags: string[];
 }
 
+}
 export interface ReviewSubmission {
   templateId: string;
   userId: string;
@@ -73,9 +78,11 @@ export interface ReviewSubmission {
     ipAddress?: string;
     purchaseVerified?: boolean;
     usageDuration?: number; // days since purchase
+}
   };
 }
 
+}
 export interface AggregatedRating {
   templateId: string;
   overall: {
@@ -83,6 +90,7 @@ export interface AggregatedRating {
     count: number;
     distribution: Record<1 | 2 | 3 | 4 | 5, number>;
     confidence: number;
+}
   };
   criteria: {
     quality: { average: number; count: number };
@@ -99,6 +107,7 @@ export interface AggregatedRating {
   lastUpdated: Date;
 }
 
+}
 export interface ModerationQueue {
   pending: TemplateReview[];
   flagged: TemplateReview[];
@@ -108,6 +117,7 @@ export interface ModerationQueue {
     moderatorId: string;
     timestamp: Date;
     reason?: string;
+}
   }>;
 }
 
@@ -130,6 +140,7 @@ export class TemplateReviewService {
    * Submit a new template review
    */
   async submitReview(submission: ReviewSubmission): Promise<string> {
+
     try {
       // Calculate overall rating
       const { quality, usability, documentation, support } = submission.criteria;
@@ -201,6 +212,7 @@ export class TemplateReviewService {
     hasMore: boolean;
     aggregated: AggregatedRating;
   }> {
+
     try {
       const {
         page = 1,
@@ -271,6 +283,7 @@ export class TemplateReviewService {
    * Get aggregated rating for a template
    */
   async getAggregatedRating(templateId: string): Promise<AggregatedRating> {
+
     try {
       // Check cache first
       const cached = await this.redis.get(`aggregated:${templateId}`);
@@ -321,33 +334,33 @@ export class TemplateReviewService {
             3: parseInt(row.rating_3) || 0,
             4: parseInt(row.rating_4) || 0,
             5: parseInt(row.rating_5) || 0
-          },
+  }
           confidence
-        },
+  }
         criteria: {
           quality: { 
             average: parseFloat(row.avg_quality) || 0, 
             count: totalCount 
-          },
+  }
           usability: { 
             average: parseFloat(row.avg_usability) || 0, 
             count: totalCount 
-          },
+  }
           documentation: { 
             average: parseFloat(row.avg_documentation) || 0, 
             count: totalCount 
-          },
+  }
           support: { 
             average: parseFloat(row.avg_support) || 0, 
             count: totalCount 
           }
-        },
+  }
         sentiment: {
           averageScore: parseFloat(row.avg_sentiment) || 0,
           positiveCount: parseInt(row.positive_sentiment) || 0,
           neutralCount: parseInt(row.neutral_sentiment) || 0,
           negativeCount: parseInt(row.negative_sentiment) || 0
-        },
+  }
         lastUpdated: new Date()
       };
 
@@ -365,6 +378,7 @@ export class TemplateReviewService {
    * Approve a review (moderation)
    */
   async approveReview(reviewId: string, moderatorId: string): Promise<void> {
+
     try {
       const query = `
         UPDATE marketplace_template_reviews 
@@ -392,6 +406,7 @@ export class TemplateReviewService {
    * Reject a review (moderation)
    */
   async rejectReview(reviewId: string, moderatorId: string, reason: string): Promise<void> {
+
     try {
       const query = `
         UPDATE marketplace_template_reviews 
@@ -417,6 +432,7 @@ export class TemplateReviewService {
    * Get moderation queue
    */
   async getModerationQueue(): Promise<ModerationQueue> {
+
     try {
       const [pendingResult, flaggedResult, actionsResult] = await Promise.all([
         this.pool.query(`
@@ -457,6 +473,7 @@ export class TemplateReviewService {
    * Mark review as helpful
    */
   async markHelpful(reviewId: string, userId: string): Promise<void> {
+
     try {
       // Check if user already marked this review
       const existingQuery = `
@@ -492,6 +509,7 @@ export class TemplateReviewService {
   // Private helper methods
 
   private async analyzeSentiment(content: string): Promise<TemplateReview['sentiment']> {
+
     // Simplified sentiment analysis - in production would use ML service
     const positiveWords = ['great', 'excellent', 'amazing', 'perfect', 'love', 'helpful', 'useful'];
     const negativeWords = ['bad', 'terrible', 'awful', 'useless', 'hate', 'broken', 'poor'];
@@ -516,6 +534,7 @@ export class TemplateReviewService {
   }
 
   private async calculateFraudScore(submission: ReviewSubmission): Promise<number> {
+
     let fraudScore = 0;
 
     // Check review length (very short or very long reviews are suspicious)
@@ -536,6 +555,7 @@ export class TemplateReviewService {
   }
 
   private async generateFraudFlags(submission: ReviewSubmission): Promise<string[]> {
+
     const flags: string[] = [];
     
     if (submission.content.length < 20) {
@@ -570,24 +590,24 @@ export class TemplateReviewService {
         count: 0,
         distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
         confidence: 0
-      },
+  }
       criteria: {
         quality: { average: 0, count: 0 },
         usability: { average: 0, count: 0 },
         documentation: { average: 0, count: 0 },
         support: { average: 0, count: 0 }
-      },
+  }
       sentiment: {
         averageScore: 0,
         positiveCount: 0,
         neutralCount: 0,
         negativeCount: 0
-      },
-      lastUpdated: new Date()
-    };
+  }
+      lastUpdated: new Date(};
   }
 
   private async storeReview(review: TemplateReview): Promise<void> {
+
     const query = `
       INSERT INTO marketplace_template_reviews (
         id, template_id, user_id, title, content, 
@@ -632,7 +652,7 @@ export class TemplateReviewService {
         usability: row.usability_rating,
         documentation: row.documentation_rating,
         support: row.support_rating
-      },
+  }
       overallRating: row.overall_rating,
       timestamp: row.timestamp,
       verified: row.verified,
@@ -650,13 +670,14 @@ export class TemplateReviewService {
           usability: row.sentiment_score * 0.9,
           support: row.sentiment_score * 0.7
         }
-      },
+  }
       fraudScore: row.fraud_score,
       fraudFlags: row.fraud_flags ? JSON.parse(row.fraud_flags) : []
     };
   }
 
   private async invalidateTemplateCache(templateId: string): Promise<void> {
+
     await this.redis.del(`aggregated:${templateId}`);
   }
 
@@ -666,6 +687,7 @@ export class TemplateReviewService {
     moderatorId: string, 
     reason?: string
   ): Promise<void> {
+
     const query = `
       INSERT INTO marketplace_review_moderation_log (
         review_id, action, moderator_id, reason, timestamp
@@ -679,6 +701,7 @@ export class TemplateReviewService {
    * Cleanup resources
    */
   async destroy(): Promise<void> {
+
     try {
       await this.redis.quit();
       console.log('TemplateReviewService destroyed successfully');

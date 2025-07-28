@@ -18,81 +18,79 @@ import {
 } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Core interfaces
+
 export interface UserBehaviorFlowVisualizationProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
   flowConfig: FlowVisualizationConfig;
-  behaviorData: BehaviorFlowData[];
+  behaviorData: BehaviorFlowData;
   onFlowAnalysis?: (analysis: FlowAnalysis) => void;
   onPathwayOptimization?: (optimization: PathwayOptimization) => void;
   onExport?: (data: FlowVisualizationExportData) => void;
 }
-
 export interface FlowVisualizationConfig {
-  visualizationType: VisualizationType;
+  visualizationType: VisualizationType;,
   timeRange: { start: number; end: number };
-  segmentFilters: SegmentFilter[];
+  segmentFilters: SegmentFilter;,
   pathwayAnalysis: PathwayAnalysisSettings;
-  interactionFilters: InteractionFilter[];
+  interactionFilters: InteractionFilter;,
   performanceSettings: VisualizationPerformanceSettings;
 }
-
 export type VisualizationType = 'sankey' | 'node_link' | 'flow_map' | 'journey_map' | 'heatmap';
 
 export interface BehaviorFlowData {
-  userId: string;
+  userId: string;,
   sessionId: string;
-  flowPath: FlowStep[];
+  flowPath: FlowStep;,
   metadata: FlowMetadata;
-  outcomes: FlowOutcome[];
+  outcomes: FlowOutcome;
 }
-
 export interface FlowStep {
-  stepId: string;
+  stepId: string;,
   page: string;
-  action: string;
+  action: string;,
   timestamp: number;
-  duration: number;
+  duration: number;,
   context: StepContext;
 }
-
 export interface FlowAnalysis {
-  popularPaths: PopularPath[];
-  dropoffPoints: DropoffPoint[];
-  conversionPaths: ConversionPath[];
-  optimizationOpportunities: OptimizationOpportunity[];
-}
+  popularPaths: PopularPath;,
+  dropoffPoints: DropoffPoint;
+  conversionPaths: ConversionPath;,
+  optimizationOpportunities: OptimizationOpportunity;
 
 // Mock data generator
 const generateMockBehaviorFlowData = (): BehaviorFlowData => ({)
-  userId: `user_${Math.random().toString(36).substr(2, 8)}`,}
-  sessionId: `session_${Math.random().toString(36).substr(2, 9)}`,}
+  userId: `user_${Math.random().toString(36).substr(2, 8)}`}
+},
+  sessionId: `session_${Math.random().toString(36).substr(2, 9)}`}
+},
   flowPath: Array.from({ length: Math.floor(Math.random() * 10) + 3 }, (_, i) => ({)
-    stepId: `step_${i}`,}
-    page: `/page${Math.floor(Math.random() * 20) + 1}`,}
-    action: ['view', 'click', 'scroll', 'form_submit'][Math.floor(Math.random() * 4)],
+  stepId: `step_${i}`}
+},
+  page: `/page${Math.floor(Math.random() * 20) + 1}`}
+},
+  action: ['view', 'click', 'scroll', 'form_submit'][Math.floor(Math.random() * 4)],
     timestamp: Date.now() - (10 - i) * 60000,
     duration: Math.random() * 120000 + 30000,
     context: {,
-      device: 'desktop',
-      referrer: i === 0 ? 'google.com' : undefined,
-      exitType: i === 9 ? 'conversion' : 'continue',
-    }
-  })),
+  device: 'desktop',
+  referrer: i === 0 ? 'google.com' : undefined,
+  exitType: i === 9 ? 'conversion' : 'continue',
+})),
   metadata: {,
-    totalDuration: Math.random() * 1800000 + 300000,
-    deviceType: 'desktop',
-    userType: 'returning',
-  },
+  totalDuration: Math.random() * 1800000 + 300000,
+  deviceType: 'desktop',
+  userType: 'returning',
+},
   outcomes: [,
     {
-      type: 'conversion',
-      value: Math.random() * 100,
-      timestamp: Date.now(),
-    }
-  ]
-});
+  type: 'conversion',
+  value: Math.random() * 100,
+  timestamp: Date.now()];
+  });
 
 // Main component
+}
 export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizationProps> = ({)
   analyticsInfrastructure,
   flowConfig,
@@ -101,7 +99,7 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
   onPathwayOptimization,
   onExport
 }) => {
-  const [mockFlowData, setMockFlowData] = useState<BehaviorFlowData[]>([]);
+  const [mockFlowData, setMockFlowData] = useState<BehaviorFlowData>([]);
   const [selectedVisualization, setSelectedVisualization] = useState<VisualizationType>('sankey');
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const [analysisResults, setAnalysisResults] = useState<FlowAnalysis | null>(null);
@@ -117,47 +115,46 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
     // Calculate popular paths
     const pathCounts = new Map<string, number>();
     mockFlowData.forEach(flow => {)
-      const pathKey = flow.flowPath.map(step => step.page).join(' → ');
+  const pathKey = flow.flowPath.map(step => step.page).join(' → ');
       pathCounts.set(pathKey, (pathCounts.get(pathKey) || 0) + 1);
     });
     const popularPaths = Array.from(pathCounts.entries());
-      .sort(([,a], [,b]) => b - a)
+      .sort(([a], [b]) => b - a)
       .slice(0, 10)
       .map(([path, count]) => ({)
-        path,
-        count,
-        percentage: (count / mockFlowData.length) * 100,
-        avgDuration: Math.random() * 300000 + 180000,
-        conversionRate: Math.random() * 0.4 + 0.1,
-      }));
+  path,
+  count,
+  percentage: (count / mockFlowData.length) * 100,
+  avgDuration: Math.random() * 300000 + 180000,
+  conversionRate: Math.random() * 0.4 + 0.1,
+}));
     // Calculate dropoff points
     const pageCounts = new Map<string, { entries: number; exits: number }>();
     mockFlowData.forEach(flow => {)
-      flow.flowPath.forEach((step, index) => {
+  flow.flowPath.forEach((step, index) => {
         const current = pageCounts.get(step.page) || { entries: 0, exits: 0 };
         current.entries++;
         if (index === flow.flowPath.length - 1) {
           current.exits++;
-        }
         pageCounts.set(step.page, current);
       });
     });
     const dropoffPoints = Array.from(pageCounts.entries());
       .map(([page, counts]) => ({)
-        page,
-        entries: counts.entries,
-        exits: counts.exits,
-        dropoffRate: counts.exits / counts.entries,
-        impactScore: counts.entries * (counts.exits / counts.entries),
-      }))
+  page,
+  entries: counts.entries,
+  exits: counts.exits,
+  dropoffRate: counts.exits / counts.entries,
+  impactScore: counts.entries * (counts.exits / counts.entries),
+}))
       .sort((a, b) => b.impactScore - a.impactScore)
       .slice(0, 8);
     return {
-      popularPaths,
-      dropoffPoints,
-      conversionPaths: [],
-      optimizationOpportunities: [],
-    };
+  popularPaths,
+  dropoffPoints,
+  conversionPaths: [],
+  optimizationOpportunities: [],
+};
   }, [mockFlowData]);
   const handleVisualizationChange = useCallback((type: VisualizationType) => {
     setSelectedVisualization(type);
@@ -169,34 +166,31 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
       setLoading(false);
       if (onFlowAnalysis && flowAnalysis) {
         onFlowAnalysis(flowAnalysis);
-      }
     }, 2000);
   }, [flowAnalysis, onFlowAnalysis]);
   const handleExport = useCallback(() => {
-    if (onExport) {
-      const exportData: FlowVisualizationExportData = {
-        flowData: mockFlowData,
-        analysis: analysisResults,
-        visualizationConfig: flowConfig,
-        metadata: {,
-          exportTimestamp: Date.now(),
-          totalFlows: mockFlowData.length,
-          timeRange: flowConfig.timeRange,
-          version: '1.0.0',
-        }
-      };
+  if (onExport) {
+  const exportData: FlowVisualizationExportData = {,
+  flowData: mockFlowData,
+  analysis: analysisResults,
+  visualizationConfig: flowConfig,
+  metadata: {,
+  exportTimestamp: Date.now(),
+  totalFlows: mockFlowData.length,
+  timeRange: flowConfig.timeRange,
+  version: '1.0.0',
+};
       onExport(exportData);
-    }
   }, [mockFlowData, analysisResults, flowConfig, onExport]);
   const stats = useMemo(() => ({)
-    totalFlows: mockFlowData.length,
-    avgFlowLength: mockFlowData.reduce((sum, flow) => sum + flow.flowPath.length, 0) / mockFlowData.length || 0,
-    avgDuration: mockFlowData.reduce((sum, flow) => sum + flow.metadata.totalDuration, 0) / mockFlowData.length || 0,
-    conversionRate: mockFlowData.filter(flow => ),
-      flow.outcomes.some(outcome => outcome.type === 'conversion')
-    ).length / mockFlowData.length * 100
-  }), [mockFlowData]);
-  return ();
+  totalFlows: mockFlowData.length,
+  avgFlowLength: mockFlowData.reduce((sum, flow) => sum + flow.flowPath.length, 0) / mockFlowData.length || 0,
+  avgDuration: mockFlowData.reduce((sum, flow) => sum + flow.metadata.totalDuration, 0) / mockFlowData.length || 0,
+  conversionRate: mockFlowData.filter(flow => ),
+  flow.outcomes.some(outcome => outcome.type === 'conversion')
+  ).length / mockFlowData.length * 100
+}), [mockFlowData]);
+  return;
     <div className="behavior-flow-visualization">
       <div className="flow-header">
         <div className="header-section">
@@ -222,7 +216,7 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
         </div>
         <div className="header-controls">
           <div className="visualization-selector">
-            {(['sankey', 'node_link', 'flow_map', 'journey_map', 'heatmap'] as VisualizationType[]).map(type => ()
+            {(['sankey', 'node_link', 'flow_map', 'journey_map', 'heatmap'] as VisualizationType).map(type => ()
               <button
                 key={type}
                 className={selectedVisualization === type ? 'active' : ''}
@@ -320,102 +314,88 @@ export const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizati
 };
 
 // Supporting interfaces (condensed)
+
 export interface SegmentFilter {
-  segment: string;
+  segment: string;,
   enabled: boolean;
 }
-
 export interface PathwayAnalysisSettings {
-  minPathLength: number;
+  minPathLength: number;,
   maxPathLength: number;
   includeLoops: boolean;
 }
-
 export interface InteractionFilter {
-  actionType: string;
+  actionType: string;,
   enabled: boolean;
 }
-
 export interface VisualizationPerformanceSettings {
-  maxNodes: number;
+  maxNodes: number;,
   aggregationLevel: 'high' | 'medium' | 'low';
   renderingMode: 'fast' | 'detailed';
 }
-
 export interface FlowMetadata {
-  totalDuration: number;
+  totalDuration: number;,
   deviceType: string;
   userType: string;
 }
-
 export interface FlowOutcome {
-  type: string;
+  type: string;,
   value: number;
   timestamp: number;
 }
-
 export interface StepContext {
   device: string;
   referrer?: string;
   exitType: string;
 }
-
 export interface PopularPath {
-  path: string;
+  path: string;,
   count: number;
-  percentage: number;
+  percentage: number;,
   avgDuration: number;
   conversionRate: number;
 }
-
 export interface DropoffPoint {
-  page: string;
+  page: string;,
   entries: number;
-  exits: number;
+  exits: number;,
   dropoffRate: number;
   impactScore: number;
 }
-
 export interface ConversionPath {
-  path: string;
+  path: string;,
   conversionRate: number;
   value: number;
 }
-
 export interface OptimizationOpportunity {
-  type: string;
+  type: string;,
   description: string;
-  impact: number;
+  impact: number;,
   effort: string;
 }
-
 export interface PathwayOptimization {
-  recommendations: OptimizationRecommendation[];
+  recommendations: OptimizationRecommendation;,
   projectedImpact: ProjectedImpact;
 }
-
 export interface OptimizationRecommendation {
-  action: string;
+  action: string;,
   rationale: string;
   priority: string;
 }
-
 export interface ProjectedImpact {
-  conversionIncrease: number;
+  conversionIncrease: number;,
   engagementIncrease: number;
   dropoffReduction: number;
 }
-
 export interface FlowVisualizationExportData {
-  flowData: BehaviorFlowData[];
+  flowData: BehaviorFlowData;,
   analysis: FlowAnalysis | null;
-  visualizationConfig: FlowVisualizationConfig;
-  metadata: {,
-    exportTimestamp: number;
-    totalFlows: number;
+  visualizationConfig: FlowVisualizationConfig;,
+  metadata: {;
+  exportTimestamp: number;,
+  totalFlows: number;
     timeRange: { start: number; end: number };
     version: string;
   };
 }
-
 export default UserBehaviorFlowVisualization;

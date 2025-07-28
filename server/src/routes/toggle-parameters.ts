@@ -11,8 +11,10 @@ import { ToggleParametersService } from '../services/ToggleParametersService';
 import { Database } from '../database/connection';
 import { ToggleType } from '../database/feature-toggle-models';
 
+}
 interface ToggleParametersRouteOptions {
   db: Database;
+}
 }
 
 // Request schemas for validation
@@ -23,7 +25,7 @@ const validateParametersSchema = {
     toggleType: { 
       type: 'string', 
       enum: Object.values(ToggleType)
-    },
+  }
     parameters: { type: 'object' }
   }
 };
@@ -46,13 +48,13 @@ const createPresetSchema = {
     toggleType: { 
       type: 'string', 
       enum: Object.values(ToggleType)
-    },
+  }
     parameters: { type: 'object' },
     tags: { 
       type: 'array', 
       items: { type: 'string' },
       maxItems: 10
-    },
+  }
     usage: { 
       type: 'string',
       enum: ['development', 'staging', 'production', 'experiment']
@@ -165,7 +167,7 @@ export default async function toggleParametersRoutes(
         properties: {
           toggleId: { type: 'string' }
         }
-      },
+  }
       body: updateParametersSchema
     }
   }, async (request, reply) => {
@@ -209,7 +211,7 @@ export default async function toggleParametersRoutes(
         properties: {
           toggleId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -256,11 +258,11 @@ export default async function toggleParametersRoutes(
           toggleType: { 
             type: 'string', 
             enum: Object.values(ToggleType)
-          },
+  }
           usage: { 
             type: 'string',
             enum: ['development', 'staging', 'production', 'experiment']
-          },
+  }
           tags: { 
             type: 'array', 
             items: { type: 'string' } 
@@ -344,7 +346,7 @@ export default async function toggleParametersRoutes(
           toggleId: { type: 'string' },
           presetId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -397,7 +399,7 @@ export default async function toggleParametersRoutes(
         properties: {
           toggleId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {

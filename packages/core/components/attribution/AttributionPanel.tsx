@@ -47,36 +47,33 @@ interface AttributionPanelProps {
   projectId: string;
   selectedResourceType?: ResourceType;
   selectedResourceId?: string;
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
   onAttributionRecord?: (attribution: ChangeAttribution) => void;
-}
 interface AuthorIndicatorProps {
   attribution: ChangeAttribution;
   showDetails?: boolean;
   onClick?: () => void;
-}
 const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDetails = true, onClick }) => {
-  const getAuthorInitials = (name?: string) => {
-    if (!name) return '?';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  };
+  const getAuthorInitials = (name?: string) => {,
+  if (!name) return '?';
+  return name.split(' ').map(n => n[0]).join('').toUpperCase();
+};
   const getAuthorColor = (authorType: string) => {
-    switch (authorType) {
-    case 'user':
-      return '#1890ff';
-    case 'anonymous':
-      return '#d9d9d9';
-    case 'guest':
-      return '#faad14';
-    case 'system':
-      return '#52c41a';
-    case 'api':
-      return '#722ed1';
-    default:
-      return '#8c8c8c';
-    }
-  };
+  switch (authorType) {
+  case 'user':,
+  return '#1890ff';
+  case 'anonymous':,
+  return '#d9d9d9';
+  case 'guest':,
+  return '#faad14';
+  case 'system':,
+  return '#52c41a';
+  case 'api':,
+  return '#722ed1';
+  default:,
+  return '#8c8c8c';
+};
   const getChangeTypeIcon = (changeType: ChangeType) => {
     switch (changeType) {
     case 'create':
@@ -91,7 +88,6 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
       return <ShareAltOutlined style={{ color: '#fa8c16' }} />;
     default:
       return <EditOutlined />;
-    }
   };
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -142,7 +138,7 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
     </div>
   );
   if (onClick) {
-    return ();
+    return;
       <div 
         style={{ cursor: 'pointer', padding: '4px', borderRadius: '4px' }}
         onClick={onClick}
@@ -152,7 +148,6 @@ const AuthorIndicator: React.FC<AuthorIndicatorProps> = ({ attribution, showDeta
         {content}
       </div>
     );
-  }
   return content;
 };
 
@@ -164,7 +159,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   onClose,
   onAttributionRecord
 }) => {
-  const [attributions, setAttributions] = useState<ChangeAttribution[]>([]);
+  const [attributions, setAttributions] = useState<ChangeAttribution>([]);
   const [showContributors, setShowContributors] = useState(false);
   const [privacySettings, setPrivacySettings] = useState<AttributionPrivacySettings | null>(null);
   const [showPrivacySettings, setShowPrivacySettings] = useState(false);
@@ -184,17 +179,14 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
         loadResourceAttributions();
       } else {
         loadRecentAttributions();
-      }
-    }
   }, [visible, projectId, selectedResourceType, selectedResourceId]);
   const loadPrivacySettings = async () => {
     try {
       const settings = await getPrivacySettings(projectId);
       setPrivacySettings(settings);
     } catch (error) {
-      console.error('Failed to load privacy settings:', error);
-    }
-  };
+  console.error('Failed to load privacy settings:', error);
+};
   const loadResourceAttributions = async () => {
     if (!selectedResourceType || !selectedResourceId) return;
     try {
@@ -205,34 +197,31 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       );
       setAttributions(resourceAttributions);
     } catch (error) {
-      console.error('Failed to load resource attributions:', error);
-    }
-  };
+  console.error('Failed to load resource attributions:', error);
+};
   const loadRecentAttributions = async () => {
-    try {
-      const recentAttributions = await listAttributions({)
-        projectId,
-        limit: 50,
-        offset: 0,
-        sortBy: 'created_at',
-        sortOrder: 'desc',
-      });
+  try {
+  const recentAttributions = await listAttributions({)
+  projectId,
+  limit: 50,
+  offset: 0,
+  sortBy: 'created_at',
+  sortOrder: 'desc',
+});
       setAttributions(recentAttributions);
     } catch (error) {
-      console.error('Failed to load recent attributions:', error);
-    }
-  };
+  console.error('Failed to load recent attributions:', error);
+};
   const handlePrivacySettingsChange = async (settings: Partial<AttributionPrivacySettings>) => {
     try {
       const updatedSettings = await updatePrivacySettings({)
-        projectId,
+  projectId,
         settings: { ...privacySettings, ...settings } as any
       });
       setPrivacySettings(updatedSettings);
     } catch (error) {
-      console.error('Failed to update privacy settings:', error);
-    }
-  };
+  console.error('Failed to update privacy settings:', error);
+};
   const handleAttributionClick = (attribution: ChangeAttribution) => {
     setSelectedAttribution(attribution);
   };
@@ -240,14 +229,13 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
     const key = `${attribution.resourceType}:${attribution.resourceId}`;}
     if (!groups[key]) {
       groups[key] = [];
-    }
     groups[key].push(attribution);
     return groups;
-  }, {} as Record<string, ChangeAttribution[]>);
+  }, {} as Record<string, ChangeAttribution>);
   const renderAttributionList = () => {
     if (selectedResourceType && selectedResourceId) {
       // Show attributions for specific resource
-      return ();
+      return;
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Changes to {selectedResourceType} {selectedResourceId}</Text>
@@ -268,7 +256,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       );
     } else {
       // Show recent attributions grouped by resource
-      return ();
+      return;
         <div>
           <div style={{ marginBottom: '12px' }}>
             <Text strong>Recent Changes</Text>
@@ -276,7 +264,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
           {Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
             const [resourceType, resourceId] = resourceKey.split(':');
             const _____latestAttribution = resourceAttributions[0];
-            return ();
+            return;
               <Card 
                 key={resourceKey} 
                 size="small" 
@@ -304,15 +292,14 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
                           <div>{CHANGE_TYPE_DESCRIPTIONS[attribution.changeType]}</div>
                           <div>{attribution.createdAt.toLocaleString()}</div>
                         </div>
-                      }
                     >
                       <Avatar
                         size={20}
-                        style={{ 
-                          backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
-                          fontSize: '10px',
-                          cursor: 'pointer',
-                        }}
+                        style={{
+  backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
+  fontSize: '10px',
+  cursor: 'pointer',
+}}
                         onClick={() => handleAttributionClick(attribution)}
                       >
                         {attribution.authorName?.[0] || '?'}
@@ -330,7 +317,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
           })}
         </div>
       );
-    }
   };
   const renderPrivacySettings = () => (;);
     <div>
@@ -382,7 +368,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
   );
   const renderAttributionDetail = () => {
     if (!selectedAttribution) return null;
-    return ();
+    return;
       <div>
         <div style={{ marginBottom: '16px' }}>
           <Button size="small" onClick={() => setSelectedAttribution(null)}>
@@ -448,7 +434,7 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
       </div>
     );
   };
-  return ();
+  return;
     <Drawer
       title="Change Attribution"
       placement="right"
@@ -472,7 +458,6 @@ export const AttributionPanel: React.FC<AttributionPanelProps> = ({)
             />
           </Tooltip>
         </Space>
-      }
     >
       {error && ()
         <Alert

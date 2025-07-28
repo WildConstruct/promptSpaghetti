@@ -38,81 +38,74 @@ import {
 
 // Types for MFA management
 interface MFAMethod {
-  id: string;
+  id: string;,
   type: 'totp' | 'sms' | 'email' | 'backup_codes';
-  name: string;
+  name: string;,
   enabled: boolean;
-  primary: boolean;
+  primary: boolean;,
   configuredAt: Date;
   lastUsed?: Date;
-  configuration?: {
-    phoneNumber?: string;
-    email?: string;
-    appName?: string;
-    secretKey?: string;
-  };
-}
+  configuration?: {,
+  phoneNumber?: string;
+  email?: string;
+  appName?: string;
+  secretKey?: string;
+};
 interface BackupCode {
-  id: string;
+  id: string;,
   code: string;
   used: boolean;
   usedAt?: Date;
-}
-interface TrustedDevice {
-  id: string;
+  interface TrustedDevice {
+  id: string;,
   name: string;
-  type: 'desktop' | 'mobile' | 'tablet';
+  type: 'desktop' | 'mobile' | 'tablet';,
   browser: string;
-  location: string;
+  location: string;,
   addedAt: Date;
-  lastAccess: Date;
+  lastAccess: Date;,
   current: boolean;
-}
-interface SecurityEvent {
-  id: string;
+  interface SecurityEvent {
+  id: string;,
   type: 'login' | 'mfa_enabled' | 'mfa_disabled' | 'device_added' | 'device_removed' | 'backup_used';
-  description: string;
+  description: string;,
   timestamp: Date;
-  ipAddress: string;
+  ipAddress: string;,
   location: string;
   riskLevel: 'low' | 'medium' | 'high';
-}
-interface MFASettings {
-  requireMFA: boolean;
+  interface MFASettings {
+  requireMFA: boolean;,
   allowBackupCodes: boolean;
-  trustedDeviceExpiry: number; // days
-  maxTrustedDevices: number;
-  sessionTimeout: number; // minutes
-  emailNotifications: boolean;
+  trustedDeviceExpiry: number; // days,
+  maxTrustedDevices: number;,
+  sessionTimeout: number; // minutes,
+  emailNotifications: boolean;,
   smsNotifications: boolean;
-}
-interface MFAManagementProps {
+  interface MFAManagementProps {
   userId: string;
   onMFAStatusChange?: (enabled: boolean) => void;
   onSecurityEvent?: (event: SecurityEvent) => void;
   className?: string;
-}
-
-export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
+  export const MFAManagementPanel: React.FC<MFAManagementProps> = ({,)
   userId,
   onMFAStatusChange,
   onSecurityEvent,
   className = ''
 }) => {
   // State management
-  const [mfaMethods, setMFAMethods] = useState<MFAMethod[]>([]);
-  const [backupCodes, setBackupCodes] = useState<BackupCode[]>([]);
-  const [trustedDevices, setTrustedDevices] = useState<TrustedDevice[]>([]);
-  const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
+  const [mfaMethods, setMFAMethods] = useState<MFAMethod>([]);
+  const [backupCodes, setBackupCodes] = useState<BackupCode>([]);
+  const [trustedDevices, setTrustedDevices] = useState<TrustedDevice>([]);
+  const [securityEvents, setSecurityEvents] = useState<SecurityEvent>([]);
   const [settings, setSettings] = useState<MFASettings>({)
-    requireMFA: false,
-    allowBackupCodes: true,
-    trustedDeviceExpiry: 30,
-    maxTrustedDevices: 5,
-    sessionTimeout: 30,
-    emailNotifications: true,
-    smsNotifications: false,
-  });
+  requireMFA: false,
+  allowBackupCodes: true,
+  trustedDeviceExpiry: 30,
+  maxTrustedDevices: 5,
+  sessionTimeout: 30,
+  emailNotifications: true,
+  smsNotifications: false,
+});
   const [activeTab, setActiveTab] = useState<'methods' | 'backup' | 'devices' | 'history' | 'settings'>('methods');
   const [loading, setLoading] = useState(false);
   const [showBackupCodes, setShowBackupCodes] = useState(false);
@@ -135,55 +128,49 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
         loadSettings();
       ]);
     } catch (error) {
-      console.error('Failed to load MFA data:', error);
-    } finally {
+  console.error('Failed to load MFA data:', error);
+} finally {
       setLoading(false);
-    }
   };
   const loadMFAMethods = async () => {
-    // Mock data - replace with actual API call
-    const methods: MFAMethod[] = [
+  // Mock data - replace with actual API call
+  const methods: MFAMethod = [
+  {
+  id: 'totp-1',
+  type: 'totp',
+  name: 'Authenticator App',
+  enabled: true,
+  primary: true,
+  configuredAt: new Date('2024-01-15'),
+  lastUsed: new Date('2024-07-19'),
+  configuration: {,
+  appName: 'Google Authenticator',
+}
       {
-        id: 'totp-1',
-        type: 'totp',
-        name: 'Authenticator App',
-        enabled: true,
-        primary: true,
-        configuredAt: new Date('2024-01-15'),
-        lastUsed: new Date('2024-07-19'),
-        configuration: {,
-          appName: 'Google Authenticator',
-        }
-      },
+  id: 'sms-1',
+  type: 'sms',
+  name: 'SMS Verification',
+  enabled: false,
+  primary: false,
+  configuredAt: new Date('2024-02-01'),
+  configuration: {,
+  phoneNumber: '+1 (555) 123-4567',
+}
       {
-        id: 'sms-1',
-        type: 'sms',
-        name: 'SMS Verification',
-        enabled: false,
-        primary: false,
-        configuredAt: new Date('2024-02-01'),
-        configuration: {,
-          phoneNumber: '+1 (555) 123-4567',
-        }
-      },
-      {
-        id: 'email-1',
-        type: 'email',
-        name: 'Email Verification',
-        enabled: true,
-        primary: false,
-        configuredAt: new Date('2024-01-10'),
-        lastUsed: new Date('2024-07-18'),
-        configuration: {,
-          email: 'user@example.com',
-        }
-      }
-    ];
-    setMFAMethods(methods);
-  };
+  id: 'email-1',
+  type: 'email',
+  name: 'Email Verification',
+  enabled: true,
+  primary: false,
+  configuredAt: new Date('2024-01-10'),
+  lastUsed: new Date('2024-07-18'),
+  configuration: {,
+  email: 'user@example.com'];
+  setMFAMethods(methods);
+};
   const loadBackupCodes = async () => {
     // Mock data - replace with actual API call
-    const codes: BackupCode[] = [
+    const codes: BackupCode = [
       { id: '1', code: 'ABC123DEF', used: false },
       { id: '2', code: 'GHI456JKL', used: true, usedAt: new Date('2024-06-15') },
       { id: '3', code: 'MNO789PQR', used: false },
@@ -193,75 +180,71 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
     setBackupCodes(codes);
   };
   const loadTrustedDevices = async () => {
-    // Mock data - replace with actual API call
-    const devices: TrustedDevice[] = [
+  // Mock data - replace with actual API call
+  const devices: TrustedDevice = [
+  {
+  id: 'device-1',
+  name: 'MacBook Pro',
+  type: 'desktop',
+  browser: 'Chrome 126',
+  location: 'San Francisco, CA',
+  addedAt: new Date('2024-07-01'),
+  lastAccess: new Date('2024-07-20'),
+  current: true,
+}
       {
-        id: 'device-1',
-        name: 'MacBook Pro',
-        type: 'desktop',
-        browser: 'Chrome 126',
-        location: 'San Francisco, CA',
-        addedAt: new Date('2024-07-01'),
-        lastAccess: new Date('2024-07-20'),
-        current: true,
-      },
-      {
-        id: 'device-2',
-        name: 'iPhone 15 Pro',
-        type: 'mobile',
-        browser: 'Safari',
-        location: 'San Francisco, CA',
-        addedAt: new Date('2024-06-15'),
-        lastAccess: new Date('2024-07-19'),
-        current: false,
-      }
-    ];
-    setTrustedDevices(devices);
-  };
+  id: 'device-2',
+  name: 'iPhone 15 Pro',
+  type: 'mobile',
+  browser: 'Safari',
+  location: 'San Francisco, CA',
+  addedAt: new Date('2024-06-15'),
+  lastAccess: new Date('2024-07-19'),
+  current: false];
+  setTrustedDevices(devices);
+};
   const loadSecurityEvents = async () => {
-    // Mock data - replace with actual API call
-    const events: SecurityEvent[] = [
+  // Mock data - replace with actual API call
+  const events: SecurityEvent = [
+  {
+  id: 'event-1',
+  type: 'login',
+  description: 'Successful login with TOTP',
+  timestamp: new Date('2024-07-20T10:30:00'),
+  ipAddress: '192.168.1.100',
+  location: 'San Francisco, CA',
+  riskLevel: 'low',
+}
       {
-        id: 'event-1',
-        type: 'login',
-        description: 'Successful login with TOTP',
-        timestamp: new Date('2024-07-20T10:30:00'),
-        ipAddress: '192.168.1.100',
-        location: 'San Francisco, CA',
-        riskLevel: 'low',
-      },
+  id: 'event-2',
+  type: 'mfa_enabled',
+  description: 'Email verification enabled',
+  timestamp: new Date('2024-07-19T15:45:00'),
+  ipAddress: '192.168.1.100',
+  location: 'San Francisco, CA',
+  riskLevel: 'low',
+}
       {
-        id: 'event-2',
-        type: 'mfa_enabled',
-        description: 'Email verification enabled',
-        timestamp: new Date('2024-07-19T15:45:00'),
-        ipAddress: '192.168.1.100',
-        location: 'San Francisco, CA',
-        riskLevel: 'low',
-      },
-      {
-        id: 'event-3',
-        type: 'device_added',
-        description: 'New trusted device added: iPhone 15 Pro',
-        timestamp: new Date('2024-06-15T09:15:00'),
-        ipAddress: '10.0.0.50',
-        location: 'San Francisco, CA',
-        riskLevel: 'medium',
-      }
-    ];
-    setSecurityEvents(events);
-  };
+  id: 'event-3',
+  type: 'device_added',
+  description: 'New trusted device added: iPhone 15 Pro',
+  timestamp: new Date('2024-06-15T09:15:00'),
+  ipAddress: '10.0.0.50',
+  location: 'San Francisco, CA',
+  riskLevel: 'medium'];
+  setSecurityEvents(events);
+};
   const loadSettings = async () => {
-    // Mock data - replace with actual API call
-    const userSettings: MFASettings = {
-      requireMFA: true,
-      allowBackupCodes: true,
-      trustedDeviceExpiry: 30,
-      maxTrustedDevices: 5,
-      sessionTimeout: 30,
-      emailNotifications: true,
-      smsNotifications: false,
-    };
+  // Mock data - replace with actual API call
+  const userSettings: MFASettings = {,
+  requireMFA: true,
+  allowBackupCodes: true,
+  trustedDeviceExpiry: 30,
+  maxTrustedDevices: 5,
+  sessionTimeout: 30,
+  emailNotifications: true,
+  smsNotifications: false,
+};
     setSettings(userSettings);
   };
   // Event handlers
@@ -278,10 +261,9 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
       const hasEnabledMethods = mfaMethods.some(m => m.id !== methodId && m.enabled) || enabled;
       onMFAStatusChange?.(hasEnabledMethods);
     } catch (error) {
-      console.error('Failed to toggle MFA method:', error);
-    } finally {
+  console.error('Failed to toggle MFA method:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleSetupTOTP = async () => {
     setLoading(true);
@@ -293,18 +275,18 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
       setTotpQRCode(qrCode);
       setSetupMethod('totp');
     } catch (error) {
-      console.error('Failed to setup TOTP:', error);
-    } finally {
+  console.error('Failed to setup TOTP:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleSetupSMS = async (phoneNumber: string) => {
     setLoading(true);
     try {
       // API call to setup SMS verification
-      const newMethod: MFAMethod = {
-        id: `sms-${Date.now()}`,}
-        type: 'sms',
+      const newMethod: MFAMethod = {,
+  id: `sms-${Date.now()}`}
+},
+  type: 'sms',
         name: 'SMS Verification',
         enabled: true,
         primary: false,
@@ -314,73 +296,68 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
       setMFAMethods(prev => [...prev, newMethod]);
       setSetupMethod('');
     } catch (error) {
-      console.error('Failed to setup SMS:', error);
-    } finally {
+  console.error('Failed to setup SMS:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleGenerateBackupCodes = async () => {
     setLoading(true);
     try {
       // Generate new backup codes
-      const newCodes: BackupCode[] = Array.from({ length: 10 }, (_, i) => ({)
-        id: `backup-${Date.now()}-${i}`,}
-        code: generateBackupCode(),
-        used: false,
-      }));
+      const newCodes: BackupCode = Array.from({ length: 10 }, (_, i) => ({)
+  id: `backup-${Date.now()}-${i}`}
+},
+  code: generateBackupCode(),
+        used: false;
+  }));
       setBackupCodes(newCodes);
     } catch (error) {
-      console.error('Failed to generate backup codes:', error);
-    } finally {
+  console.error('Failed to generate backup codes:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleRemoveTrustedDevice = async (deviceId: string) => {
     setLoading(true);
     try {
       setTrustedDevices(prev => prev.filter(device => device.id !== deviceId));
     } catch (error) {
-      console.error('Failed to remove trusted device:', error);
-    } finally {
+  console.error('Failed to remove trusted device:', error);
+} finally {
       setLoading(false);
-    }
   };
   const handleUpdateSettings = async (newSettings: Partial<MFASettings>) => {
     setLoading(true);
     try {
       setSettings(prev => ({ ...prev, ...newSettings }));
     } catch (error) {
-      console.error('Failed to update settings:', error);
-    } finally {
+  console.error('Failed to update settings:', error);
+} finally {
       setLoading(false);
-    }
   };
   // Helper functions
   const generateTOTPSecret = (): string => {
     return 'JBSWY3DPEHPK3PXP'; // Mock secret
   };
   const generateQRCode = (secret: string): string => {
-    return `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==`; // Mock QR code
-  };
+  return `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==`; // Mock QR code,
+};
   const generateBackupCode = (): string => {
     return Math.random().toString(36).substring(2, 11).toUpperCase();
   };
   const getSeverityColor = (riskLevel: string): string => {
-    switch (riskLevel) {
-      case 'high': return 'text-red-600';
-      case 'medium': return 'text-yellow-600';
-      case 'low': return 'text-green-600';
-      default: return 'text-gray-600';
-    }
-  };
+  switch (riskLevel) {
+  case 'high': return 'text-red-600';
+  case 'medium': return 'text-yellow-600';
+  case 'low': return 'text-green-600';
+  default: return 'text-gray-600';
+};
   const getDeviceIcon = (type: string) => {
-    switch (type) {
-      case 'mobile': return <Smartphone className="w-4 h-4" />;
-      case 'tablet': return <Smartphone className="w-4 h-4" />;
-      default: return <Monitor className="w-4 h-4" />;
-    }
-  };
-  return ();
+  switch (type) {
+  case 'mobile': return <Smartphone className="w-4 h-4" />;
+  case 'tablet': return <Smartphone className="w-4 h-4" />;
+  default: return <Monitor className="w-4 h-4" />;
+};
+  return;
     <div className={`bg-white rounded-lg shadow-lg ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -406,10 +383,10 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
               key={id}
               onClick={() => setActiveTab(id as any)}
               className={`flex items-center space-x-2 py-4 text-sm font-medium border-b-2 ${
-                activeTab === id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <Icon className="w-4 h-4" />
               <span>{label}</span>
@@ -593,10 +570,10 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
                     <div
                       key={code.id}
                       className={`p-3 rounded-lg border font-mono text-sm ${
-                        code.used 
-                          ? 'bg-gray-50 border-gray-200 text-gray-400 line-through'
-                          : 'bg-white border-gray-300 text-gray-900'
-                      }`}
+  code.used
+  ? 'bg-gray-50 border-gray-200 text-gray-400 line-through'
+  : 'bg-white border-gray-300 text-gray-900',
+}`}
                     >
                       {code.code}
                       {code.used && code.usedAt && ()
@@ -672,9 +649,9 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-3">
                       <div className={`w-2 h-2 rounded-full mt-2 ${
-                        event.riskLevel === 'high' ? 'bg-red-500' :
-                        event.riskLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
-                      }`} />
+  event.riskLevel === 'high' ? 'bg-red-500' :,
+  event.riskLevel === 'medium' ? 'bg-yellow-500' : 'bg-green-500',
+}`} />
                       <div>
                         <h4 className="text-sm font-medium text-gray-900">{event.description}</h4>
                         <div className="flex items-center space-x-4 mt-1 text-xs text-gray-500">
@@ -691,10 +668,10 @@ export const MFAManagementPanel: React.FC<MFAManagementProps> = ({)
                       </div>
                     </div>
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      event.riskLevel === 'high' ? 'bg-red-100 text-red-800' :
-                      event.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
-                    }`}>
+  event.riskLevel === 'high' ? 'bg-red-100 text-red-800' :,
+  event.riskLevel === 'medium' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-green-100 text-green-800'
+}`}>
                       {event.riskLevel.toUpperCase()} RISK
                     </span>
                   </div>

@@ -12,8 +12,8 @@
  */
 import React from 'react';
 export interface Epic16HelpSystemProps {
-    nodes?: unknown[];
-    edges?: unknown[];
+    nodes?: unknown;
+    edges?: unknown;
     selectedNodeId?: string;
     currentPage?: string;
     userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';

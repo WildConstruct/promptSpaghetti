@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react';
 import { Node } from 'reactflow';
 import { ZodSchema } from 'zod';
 interface InspectorState {
@@ -18,14 +17,6 @@ interface InspectorActions {
 }
 interface InspectorContextValue extends InspectorState, InspectorActions {
 }
-interface InspectorProviderProps {
-    children: ReactNode;
-    onNodeUpdate?: (nodeId: string, data: Record<string, unknown>) => void;
-    initialWidth?: number;
-    initialCollapsed?: boolean;
-    initialVisible?: boolean;
-}
-export declare const InspectorProvider: React.FC<InspectorProviderProps>;
 export declare const useInspectorContext: () => InspectorContextValue;
 export {};
 //# sourceMappingURL=InspectorContext.d.ts.map

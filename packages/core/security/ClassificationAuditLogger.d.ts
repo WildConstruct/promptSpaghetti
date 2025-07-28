@@ -35,7 +35,7 @@ export declare enum AuditEventType {
     DATA_DELETED = "data_deleted",
     CONFIGURATION_CHANGED = "configuration_changed",
     SYSTEM_EVENT = "system_event"
-}
+
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -78,7 +78,7 @@ export interface AuditLogEntry {
         signature?: string;
         sequenceNumber: number;
     };
-}
+
 export interface AuditQueryFilter {
     startDate?: Date;
     endDate?: Date;
@@ -91,7 +91,7 @@ export interface AuditQueryFilter {
     searchText?: string;
     limit?: number;
     offset?: number;
-}
+
 export interface ComplianceReport {
     framework: ComplianceFramework;
     reportPeriod: {,
@@ -120,7 +120,7 @@ export interface ComplianceReport {
     recommendations: string[];
     generatedAt: Date;
     generatedBy: string;
-}
+
 export interface RetentionPolicy {
     framework: ComplianceFramework;
     eventType: AuditEventType;
@@ -128,14 +128,14 @@ export interface RetentionPolicy {
     archiveAfterDays?: number;
     deleteAfterDays: number;
     requiresApproval: boolean;
-}
+
 export declare enum ExportFormat {
     JSON = "json",
     CSV = "csv",
     SYSLOG = "syslog",
     CEF = "cef",// Common Event Format
     LEEF = "leef"
-}
+
 export interface AuditLoggerConfig {
     enableRealTimeLogging: boolean;
     enableCompression: boolean;
@@ -152,7 +152,6 @@ export interface AuditLoggerConfig {
         headers?: Record<string, string>;
     }>;
     performanceMode: 'balanced' | 'high_performance' | 'high_security';
-}
 /**
  * Classification Audit Logger Service
  */
@@ -254,6 +253,6 @@ export declare class ClassificationAuditLogger extends EventEmitter {
      * Cleanup and shutdown
      */
     destroy(): void;
-}
+
 export default ClassificationAuditLogger;
 //# sourceMappingURL=ClassificationAuditLogger.d.ts.map

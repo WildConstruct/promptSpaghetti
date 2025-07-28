@@ -24,7 +24,6 @@ interface VariablePortCleanupOptions {
      * Custom callback when edges are cleaned up
      */
     onEdgesCleanedUp?: (cleanedEdges: Edge[]) => void;
-}
 /**
  * Hook for managing orphaned edge cleanup when variable ports change dynamically
  */

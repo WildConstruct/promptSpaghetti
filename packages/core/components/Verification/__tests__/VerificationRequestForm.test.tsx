@@ -8,8 +8,8 @@ import { VerificationRequestForm } from '../VerificationRequestForm';
 // import { IdentityValidationType } from '../../../auth/IdentityValidation'; // Unused import
 
 // Mock the onSubmit function
-const mockOnSubmit = jest.fn<unknown[], unknown>();
-const mockOnCancel = jest.fn<unknown[], unknown>();
+const mockOnSubmit = jest.fn<unknown, unknown>();
+const mockOnCancel = jest.fn<unknown, unknown>();
 const defaultProps = {
   userId: 'test-user-123',
   onSubmit: mockOnSubmit,
@@ -77,9 +77,9 @@ describe('VerificationRequestForm', () => {
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
       await waitFor(() => {
-        expect(mockOnSubmit).toHaveBeenCalledWith('email_verification', {)
-          email: 'test@example.com',
-        });
+  expect(mockOnSubmit).toHaveBeenCalledWith('email_verification', {)
+  email: 'test@example.com',
+});
       });
     });
     test('shows loading state during submission', async () => {
@@ -149,8 +149,8 @@ describe('VerificationRequestForm', () => {
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
       await waitFor(() => {
-        expect(screen.getByText(/Failed to submit Email Verification: Network error occurred/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Failed to submit Email Verification: Network error occurred/)).toBeInTheDocument();
+});
     });
     test('clears errors when switching steps', async () => {
       const user = userEvent.setup();
@@ -215,13 +215,13 @@ describe('VerificationRequestForm', () => {
     });
   });
   describe('Responsive Design', () => {
-    test('renders properly on mobile viewport', () => {
-      // Mock mobile viewport
-      Object.defineProperty(window, 'innerWidth', {)
-        writable: true,
-        configurable: true,
-        value: 375,
-      });
+  test('renders properly on mobile viewport', () => {
+  // Mock mobile viewport
+  Object.defineProperty(window, 'innerWidth', {)
+  writable: true,
+  configurable: true,
+  value: 375,
+});
       render(<VerificationRequestForm {...defaultProps} />);
       // Form should still be functional
       expect(screen.getByText('Account Verification')).toBeInTheDocument();

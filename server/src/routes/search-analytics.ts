@@ -537,14 +537,14 @@ router.get('/dashboard',
           health: {
             overall_status: overallHealth,
             services: healthStatus
-          },
+  }
           performance: currentMetrics,
           alerts: {
             active: activeAlerts,
             total: activeAlerts.length,
             critical: activeAlerts.filter(a => a.severity === 'critical').length,
             warning: activeAlerts.filter(a => a.severity === 'warning').length
-          },
+  }
           recommendations: {
             items: recommendations.slice(0, 5), // Top 5 recommendations
             total: recommendations.length,

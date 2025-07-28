@@ -2,6 +2,7 @@ import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, Valida
 /**
  * State tracking for Markov chain processing
  */
+
 export interface MarkovState {
     /** Current state in the chain */
     currentState: string;
@@ -11,10 +12,10 @@ export interface MarkovState {
     transitionCount: number;
     /** Metadata for pattern analysis */
     metadata?: Record<string, any>;
-}
 /**
  * Transition matrix interface for Markov chains
  */
+
 export interface TransitionMatrix {
     /** Available states in the chain */
     states: string[];
@@ -26,10 +27,10 @@ export interface TransitionMatrix {
     transition(currentState: string, rng: () => number): string;
     /** Validate the matrix configuration */
     validate(): ValidationResult;
-}
 /**
  * Configuration for Markov chain behavior
  */
+
 export interface MarkovConfig {
     /** Maximum number of transitions before forcing termination */
     maxTransitions?: number;
@@ -41,7 +42,6 @@ export interface MarkovConfig {
     detectLoops?: boolean;
     /** Custom configuration for extensibility */
     custom?: Record<string, any>;
-}
 /**
  * Standard transition matrix implementation
  */
@@ -53,7 +53,6 @@ export declare class StandardTransitionMatrix implements TransitionMatrix {
     getInitialState(): string;
     transition(currentState: string, rng: () => number): string;
     validate(): ValidationResult;
-}
 /**
  * Advanced Markov node with state transition matrices
  * Supports probabilistic state transitions with full determinism
@@ -95,12 +94,10 @@ export declare class MarkovNode extends AdvancedRuntimeNode<string> {
      * Simple loop detection
      */
     private detectLoop;
-}
 /**
  * Factory function for creating Markov nodes
  */
-export declare function createMarkovNode()
-  id: string,
+export declare function createMarkovNode(id: string,)
   states: string[],
   transitions: Record<string,
   Record<string,

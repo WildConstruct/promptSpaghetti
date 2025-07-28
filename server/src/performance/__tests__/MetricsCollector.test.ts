@@ -49,17 +49,17 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
         used: 1024 * 1024 * 512, // 512MB
         total: 1024 * 1024 * 1024 * 8, // 8GB
         percentage: 6.25
-      },
+  }
       networkStats: {
         bytesReceived: 1024 * 100,
         bytesSent: 1024 * 150,
         packetsReceived: 50,
         packetsSent: 75
-      },
+  }
       diskUsage: {
         reads: 100,
         writes: 50
-      },
+  }
       processMetrics: {
         pid: 1234,
         uptime: 3600000, // 1 hour
@@ -556,7 +556,7 @@ describe('Epic 20.1 - MetricsCollector Unit Tests', () => {
               cpuUsage: Math.random() * 100,
               timestamp: Date.now() + Math.random() * 1000
             });
-          })
+  }
         );
       }
 

@@ -51,6 +51,7 @@ export declare enum DataSensitivityLevel {
     RESTRICTED = "RESTRICTED",
     TOP_SECRET = "TOP_SECRET"
 }
+}
 export interface DashboardPolicy {
     id: string;
     name: string;
@@ -76,19 +77,25 @@ export interface DashboardPolicy {
     updatedAt: Date;
     version: number;
 }
+}
+}
 export interface AccessSchedule {
     allowedDays: number[];
     allowedHours: {
         start: string;
         end: string;
+}
     };
     timezone: string;
     exceptions: ScheduleException[];
+}
 }
 export interface ScheduleException {
     date: string;
     type: 'ALLOW' | 'DENY';
     reason: string;
+}
+}
 }
 export interface ContentFilter {
     type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
@@ -98,11 +105,15 @@ export interface ContentFilter {
     action: 'HIDE' | 'MASK' | 'REDACT' | 'AGGREGATE';
     maskingPattern?: string;
 }
+}
+}
 export interface DataRetentionPolicy {
     retentionPeriod: number;
     archiveAfter: number;
     purgeAfter: number;
     complianceHolds: string[];
+}
+}
 }
 export interface PolicyCondition {
     type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
@@ -110,6 +121,8 @@ export interface PolicyCondition {
     operator: 'EQUALS' | 'NOT_EQUALS' | 'IN' | 'NOT_IN' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN';
     value: Error;
     weight: number;
+}
+}
 }
 export interface PolicyEvaluationContext {
     userId: string;
@@ -122,6 +135,7 @@ export interface PolicyEvaluationContext {
         userAgent: string;
         timestamp: Date;
         sessionId: string;
+}
     };
     requestedData: {
         type: string;
@@ -130,6 +144,7 @@ export interface PolicyEvaluationContext {
         operations: DataOperation[];
     };
     riskScore?: number;
+}
 }
 export interface PolicyEvaluationResult {
     allowed: boolean;
@@ -141,10 +156,14 @@ export interface PolicyEvaluationResult {
     sessionTimeout?: number;
     warnings: string[];
 }
+}
+}
 export interface PolicyRestriction {
     type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
     description: string;
     parameters: Record<string, any>;
+}
+}
 }
 export interface DashboardViewConfiguration {
     userId: string;
@@ -158,7 +177,9 @@ export interface DashboardViewConfiguration {
         allowExport: boolean;
         allowedFormats: string[];
         watermarkRequired: boolean;
+}
     };
+}
 }
 export interface ComplianceReport {
     id: string;
@@ -168,6 +189,7 @@ export interface ComplianceReport {
     period: {
         start: Date;
         end: Date;
+}
     };
     summary: {
         totalPolicies: number;
@@ -184,6 +206,7 @@ export interface ComplianceReport {
         comments?: string;
     };
 }
+}
 export interface ComplianceFinding {
     id: string;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -194,12 +217,16 @@ export interface ComplianceFinding {
     remediation: string;
     status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
+}
+}
 export interface ComplianceEvidence {
     type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
     source: string;
     timestamp: Date;
     data: Record<string, unknown>;
     hash: string;
+}
+}
 }
 export interface ComplianceRecommendation {
     priority: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -208,6 +235,7 @@ export interface ComplianceRecommendation {
     implementation: string;
     impact: string;
     effort: 'LOW' | 'MEDIUM' | 'HIGH';
+}
 }
 /**
  * Security Dashboard Policy Management System

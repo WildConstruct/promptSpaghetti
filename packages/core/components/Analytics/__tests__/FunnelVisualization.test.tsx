@@ -21,239 +21,226 @@ const mockAnalyticsInfrastructure = {
   processConversionEvent: jest.fn().mockResolvedValue([]),
   processBatch: jest.fn().mockResolvedValue({ totalEvents: 0, processedCount: 0, errorCount: 0, duration: 0, stageResults: [] }),
   queryMetrics: jest.fn().mockResolvedValue([]),
-  getRealTimeMetrics: jest.fn().mockResolvedValue({),
-    funnelId: 'test-funnel',
-    timestamp: Date.now(),
-    metrics: {,
-      activeUsers: 100,
-      conversionsLastHour: 15,
-      conversionRate: 15.0,
-      averageTimeToConvert: 3600000,
-      topDropOffStep: 'step-2',
-    }
-  }),
-  exportData: jest.fn().mockResolvedValue({),
-    exportId: 'export-123',
-    status: 'pending',
-  }),
-  getHealthStatus: jest.fn().mockResolvedValue({),
-    processing: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
+  getRealTimeMetrics: jest.fn().mockResolvedValue({,)
+  funnelId: 'test-funnel',
+  timestamp: Date.now(),
+  metrics: {,
+  activeUsers: 100,
+  conversionsLastHour: 15,
+  conversionRate: 15.0,
+  averageTimeToConvert: 3600000,
+  topDropOffStep: 'step-2',
+}),
+  exportData: jest.fn().mockResolvedValue({,)
+  exportId: 'export-123',
+  status: 'pending',
+}),
+  getHealthStatus: jest.fn().mockResolvedValue({,)
+  processing: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     metrics: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     dataWarehouse: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } },
     api: { healthy: true, uptime: Date.now(), metrics: { errorRate: 0, averageLatency: 0 } }
-  })
+  }
 } as jest.Mocked<ConversionAnalyticsInfrastructure>;
 
 // Mock funnel definition
-const mockFunnelDefinition: ConversionFunnelDefinition = {
+const mockFunnelDefinition: ConversionFunnelDefinition = {,
   id: 'test-funnel',
   name: 'Test Marketplace Funnel',
   description: 'Test funnel for marketplace conversion',
   category: 'acquisition',
   version: '1.0.0',
   configuration: {,
-    timeWindow: 86400000,
-    allowBacktracking: false,
-    requireSequentialSteps: true,
-    enableParallelPaths: false,
-    dropOffGracePeriod: 300000,
-  },
+  timeWindow: 86400000,
+  allowBacktracking: false,
+  requireSequentialSteps: true,
+  enableParallelPaths: false,
+  dropOffGracePeriod: 300000,
+},
   steps: [,
     {
-      id: 'step-1',
-      name: 'Landing Page',
-      description: 'User lands on marketplace',
-      order: 1,
-      type: 'entry_point',
-      isRequired: true,
-      isTerminal: false,
-      eventCriteria: {,
-        eventType: 'page_view',
-        propertyMatchers: [],
-      },
-      conditions: [],
+  id: 'step-1',
+  name: 'Landing Page',
+  description: 'User lands on marketplace',
+  order: 1,
+  type: 'entry_point',
+  isRequired: true,
+  isTerminal: false,
+  eventCriteria: {,
+  eventType: 'page_view',
+  propertyMatchers: [],
+},
+  conditions: [],
       timeConstraints: {},
       successMetrics: {,
-        expectedCompletionRate: 90,
-        averageTimeToComplete: 30000,
-        criticalSuccessFactors: [],
-      },
-      branches: [],
+  expectedCompletionRate: 90,
+  averageTimeToComplete: 30000,
+  criticalSuccessFactors: [],
+},
+  branches: [],
       metadata: {,
-        businessValue: 1,
-        complexity: 'low',
-        dependencies: [],
-        optimizationOpportunities: [],
-      }
-    },
+  businessValue: 1,
+  complexity: 'low',
+  dependencies: [],
+  optimizationOpportunities: [],
+}
     {
-      id: 'step-2',
-      name: 'Template Browse',
-      description: 'User browses templates',
-      order: 2,
-      type: 'engagement',
-      isRequired: true,
-      isTerminal: false,
-      eventCriteria: {,
-        eventType: 'template_browse',
-        propertyMatchers: [],
-      },
-      conditions: [],
+  id: 'step-2',
+  name: 'Template Browse',
+  description: 'User browses templates',
+  order: 2,
+  type: 'engagement',
+  isRequired: true,
+  isTerminal: false,
+  eventCriteria: {,
+  eventType: 'template_browse',
+  propertyMatchers: [],
+},
+  conditions: [],
       timeConstraints: {},
       successMetrics: {,
-        expectedCompletionRate: 70,
-        averageTimeToComplete: 120000,
-        criticalSuccessFactors: [],
-      },
-      branches: [],
+  expectedCompletionRate: 70,
+  averageTimeToComplete: 120000,
+  criticalSuccessFactors: [],
+},
+  branches: [],
       metadata: {,
-        businessValue: 2,
-        complexity: 'medium',
-        dependencies: [],
-        optimizationOpportunities: [],
-      }
-    },
+  businessValue: 2,
+  complexity: 'medium',
+  dependencies: [],
+  optimizationOpportunities: [],
+}
     {
-      id: 'step-3',
-      name: 'Template Purchase',
-      description: 'User purchases template',
-      order: 3,
-      type: 'conversion',
-      isRequired: true,
-      isTerminal: true,
-      eventCriteria: {,
-        eventType: 'template_purchased',
-        propertyMatchers: [],
-      },
-      conditions: [],
+  id: 'step-3',
+  name: 'Template Purchase',
+  description: 'User purchases template',
+  order: 3,
+  type: 'conversion',
+  isRequired: true,
+  isTerminal: true,
+  eventCriteria: {,
+  eventType: 'template_purchased',
+  propertyMatchers: [],
+},
+  conditions: [],
       timeConstraints: {},
       successMetrics: {,
-        expectedCompletionRate: 15,
-        averageTimeToComplete: 300000,
-        criticalSuccessFactors: [],
-      },
-      branches: [],
+  expectedCompletionRate: 15,
+  averageTimeToComplete: 300000,
+  criticalSuccessFactors: [],
+},
+  branches: [],
       metadata: {,
-        businessValue: 10,
+  businessValue: 10,
         complexity: 'high',
         dependencies: [],
-        optimizationOpportunities: [],
-      }
-    }
-  ],
+        optimizationOpportunities: []],
   conditionalPaths: [],
   successCriteria: {,
-    primary: {,
-      stepId: 'step-3',
+  primary: {;
+  stepId: 'step-3',
       requirements: { operator: 'AND', conditions: [] },
-      weight: 1.0,
-    },
-    secondary: [],
+      weight: 1.0;
+  },
+  secondary: [],
     scoreCalculation: { method: 'weighted' }
   },
   analytics: {,
-    enableRealTimeTracking: true,
-    retentionPeriod: 90,
-    cohortTrackingEnabled: true,
-    segmentationRules: [],
-  },
+  enableRealTimeTracking: true,
+  retentionPeriod: 90,
+  cohortTrackingEnabled: true,
+  segmentationRules: [],
+},
   metadata: {,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-    createdBy: 'test-user',
-    tags: ['marketplace', 'conversion'],
-    businessContext: 'Test marketplace conversion funnel',
-    expectedConversionRate: 15,
-  }
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  createdBy: 'test-user',
+  tags: ['marketplace', 'conversion'],
+  businessContext: 'Test marketplace conversion funnel',
+  expectedConversionRate: 15,
 };
 
 // Mock segments and cohorts
-const mockSegments: UserSegment[] = [
+const mockSegments: UserSegment = [
   {
-    id: 'segment-1',
-    name: 'Premium Users',
-    description: 'Users with premium accounts',
-    definition: {,
-      rules: [],
-      operator: 'AND',
-      updateFrequency: 'daily',
-      isStatic: false,
-    },
-    state: {,
-      currentSize: 1500,
-      lastUpdated: Date.now(),
-      growthRate: 5.2,
-      churnRate: 2.1,
-      status: 'active',
-    },
-    performance: {,
-      averageConversionRate: 25.8,
-      averageTimeToConvert: 72000000,
-      averageLifetimeValue: 1250,
-      engagementScore: 8.5,
-      retentionRate: 92.3,
-      behaviorPatterns: [],
-    },
-    funnelMetrics: new Map(),
+  id: 'segment-1',
+  name: 'Premium Users',
+  description: 'Users with premium accounts',
+  definition: {,
+  rules: [],
+  operator: 'AND',
+  updateFrequency: 'daily',
+  isStatic: false,
+},
+  state: {,
+  currentSize: 1500,
+  lastUpdated: Date.now(),
+  growthRate: 5.2,
+  churnRate: 2.1,
+  status: 'active',
+},
+  performance: {,
+  averageConversionRate: 25.8,
+  averageTimeToConvert: 72000000,
+  averageLifetimeValue: 1250,
+  engagementScore: 8.5,
+  retentionRate: 92.3,
+  behaviorPatterns: [],
+},
+  funnelMetrics: new Map(),
     metadata: {,
-      businessValue: 'high',
+  businessValue: 'high',
       targetingPriority: 10,
       customAttributes: {}
-    }
-  }
 ];
-const mockCohorts: ConversionCohort[] = [
+const mockCohorts: ConversionCohort = [
   {
     id: 'cohort-1',
     name: 'January 2024 Cohort',
     description: 'Users who joined in January 2024',
     definition: {,
-      criteriaEvent: 'user_registered',
+  criteriaEvent: 'user_registered',
       criteriaConditions: { operator: 'AND', conditions: [] },
-      timeWindow: 2592000000,
-    },
-    analysis: {,
-      retentionPeriods: [7, 14, 30, 60, 90],
-      analysisWindow: 90,
-      metricCalculations: [],
-    },
-    state: {,
-      currentSize: 2500,
-      creationDate: Date.now() - 5184000000,
-      lastAnalysisDate: Date.now(),
-      status: 'active',
-      completionRate: 18.5,
-    },
-    performance: {,
-      conversionRates: [],
-      retentionRates: [],
-      averageTimeToConvert: 86400000,
-      topDropOffPoints: [],
-      valueMetrics: {,
-        totalRevenue: 125000,
-        averageOrderValue: 50,
-        lifetimeValue: 85,
-        revenuePerUser: 50,
-        costPerAcquisition: 25,
-        returnOnInvestment: 2.0,
-      }
-    },
-    metadata: {,
-      businessContext: 'First cohort of 2024',
+      timeWindow: 2592000000;
+  },
+  analysis: {,
+  retentionPeriods: [7, 14, 30, 60, 90],
+  analysisWindow: 90,
+  metricCalculations: [],
+},
+  state: {,
+  currentSize: 2500,
+  creationDate: Date.now() - 5184000000,
+  lastAnalysisDate: Date.now(),
+  status: 'active',
+  completionRate: 18.5,
+},
+  performance: {,
+  conversionRates: [],
+  retentionRates: [],
+  averageTimeToConvert: 86400000,
+  topDropOffPoints: [],
+  valueMetrics: {,
+  totalRevenue: 125000,
+  averageOrderValue: 50,
+  lifetimeValue: 85,
+  revenuePerUser: 50,
+  costPerAcquisition: 25,
+  returnOnInvestment: 2.0,
+},
+  metadata: {,
+  businessContext: 'First cohort of 2024',
       hypothesis: 'New year users have higher conversion intent',
       expectedOutcome: 'Higher than average conversion rate',
       tags: ['2024', 'new-year'],
-      owner: 'test-user',
-    }
-  }
-];
+      owner: 'test-user'];
 describe('FunnelVisualization', () => {
   const defaultProps = {
     funnelDefinition: mockFunnelDefinition,
     analyticsInfrastructure: mockAnalyticsInfrastructure,
     timeRange: { start: Date.now() - 86400000, end: Date.now() },
     segments: mockSegments,
-    cohorts: mockCohorts,
+    cohorts: mockCohorts;
   };
   beforeEach(() => {
     jest.clearAllMocks();
@@ -373,7 +360,6 @@ describe('FunnelVisualization', () => {
         if (stepElement) {
           fireEvent.click(stepElement);
           expect(onStepClick).toHaveBeenCalled();
-        }
       });
     });
   });
@@ -398,11 +384,11 @@ describe('FunnelVisualization', () => {
     });
   });
   describe('Error Handling', () => {
-    it('should handle analytics infrastructure errors', async () => {
-      const errorInfrastructure = {
-        ...mockAnalyticsInfrastructure,
-        queryMetrics: jest.fn().mockRejectedValue(new Error('Network error')),
-      };
+  it('should handle analytics infrastructure errors', async () => {
+  const errorInfrastructure = {
+  ...mockAnalyticsInfrastructure,
+  queryMetrics: jest.fn().mockRejectedValue(new Error('Network error')),
+};
       render();
         <FunnelVisualization 
           {...defaultProps} 
@@ -416,12 +402,12 @@ describe('FunnelVisualization', () => {
       });
     });
     it('should allow retrying after error', async () => {
-      const errorInfrastructure = {
-        ...mockAnalyticsInfrastructure,
-        queryMetrics: jest.fn(),
-          .mockRejectedValueOnce(new Error('Network error'))
-          .mockResolvedValue([])
-      };
+  const errorInfrastructure = {
+  ...mockAnalyticsInfrastructure,
+  queryMetrics: jest.fn(),
+  .mockRejectedValueOnce(new Error('Network error'))
+  .mockResolvedValue([])
+};
       render();
         <FunnelVisualization 
           {...defaultProps} 
@@ -464,14 +450,14 @@ describe('FunnelVisualization', () => {
 });
 describe('FunnelConfiguration', () => {
   const configProps = {
-    initialFunnel: {,
-      name: 'Test Funnel',
-      description: 'Test Description',
-      category: 'acquisition' as const,
-    },
-    templates: [],
+  initialFunnel: {,
+  name: 'Test Funnel',
+  description: 'Test Description',
+  category: 'acquisition' as const,
+},
+  templates: [],
     availableEvents: [],
-    availableProperties: [],
+    availableProperties: [];
   };
   describe('Basic Configuration', () => {
     it('should render configuration form', () => {
@@ -558,27 +544,26 @@ describe('FunnelConfiguration', () => {
 });
 describe('FunnelComparison', () => {
   const comparisonProps = {
-    analyticsInfrastructure: mockAnalyticsInfrastructure,
-    primaryFunnel: mockFunnelDefinition,
-    comparisonMode: 'time_period' as const,
-    comparisonConfig: {,
-      mode: 'time_period' as const,
-      baseline: {,
-        id: 'baseline',
-        name: 'Last Month',
-        description: 'Previous month performance',
-      },
-      comparison: {,
-        id: 'comparison',
-        name: 'This Month',
-        description: 'Current month performance',
-      },
-      timeRange: { start: Date.now() - 2592000000, end: Date.now() },
+  analyticsInfrastructure: mockAnalyticsInfrastructure,
+  primaryFunnel: mockFunnelDefinition,
+  comparisonMode: 'time_period' as const,
+  comparisonConfig: {,
+  mode: 'time_period' as const,
+  baseline: {,
+  id: 'baseline',
+  name: 'Last Month',
+  description: 'Previous month performance',
+},
+  comparison: {,
+  id: 'comparison',
+  name: 'This Month',
+  description: 'Current month performance',
+},
+  timeRange: { start: Date.now() - 2592000000, end: Date.now() },
       significanceLevel: 0.05,
       minimumSampleSize: 100,
       includeStatisticalTests: true,
-      autoGenerateInsights: true,
-    }
+      autoGenerateInsights: true;
   };
   describe('Component Rendering', () => {
     it('should render comparison interface', async () => {
@@ -647,7 +632,7 @@ describe('FunnelSegmentation', () => {
     funnelId: 'test-funnel',
     timeRange: { start: Date.now() - 86400000, end: Date.now() },
     availableSegments: mockSegments,
-    availableCohorts: mockCohorts,
+    availableCohorts: mockCohorts;
   };
   describe('Component Rendering', () => {
     it('should render segmentation interface', () => {
@@ -679,7 +664,6 @@ describe('FunnelSegmentation', () => {
       if (segmentCard) {
         fireEvent.click(segmentCard);
         expect(segmentCard).toHaveClass('active');
-      }
     });
   });
   describe('Cohort Selection', () => {
@@ -717,7 +701,6 @@ describe('FunnelSegmentation', () => {
         fireEvent.click(segmentCard);
         expect(screen.getByText('Active Filters')).toBeInTheDocument();
         expect(screen.getByText('Premium Users')).toBeInTheDocument();
-      }
     });
   });
   describe('Segment Analysis', () => {
@@ -736,7 +719,6 @@ describe('FunnelSegmentation', () => {
         await waitFor(() => {
           expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalled();
         });
-      }
     });
   });
 });
@@ -771,22 +753,21 @@ describe('Integration Tests', () => {
     // Add a segment filter
     const segmentCard = screen.getByText('Premium Users').closest('.segment-card');
     if (segmentCard) {
-      fireEvent.click(segmentCard);
-      await waitFor(() => {
-        expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            funnelId: 'test-funnel',
-            metrics: expect.arrayContaining(['conversion_rate', 'user_count', 'revenue']),
-            filters: expect.arrayContaining([),
-              expect.objectContaining({)
-                field: 'userContext.segmentIds',
-                operator: 'contains',
-                value: 'segment-1',
-              })
+  fireEvent.click(segmentCard);
+  await waitFor(() => {
+  expect(mockAnalyticsInfrastructure.queryMetrics).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  funnelId: 'test-funnel',
+  metrics: expect.arrayContaining(['conversion_rate', 'user_count', 'revenue']),
+  filters: expect.arrayContaining([),
+  expect.objectContaining({)
+  field: 'userContext.segmentIds',
+  operator: 'contains',
+  value: 'segment-1',
+}
             ])
-          })
+  }
         );
       });
-    }
   });
 });

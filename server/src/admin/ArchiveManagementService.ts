@@ -21,6 +21,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { UploaderService } from './UploaderArchitecture';
 
+}
 export interface ArchiveRecord {
   id: string;
   name: string;
@@ -77,7 +78,9 @@ export interface ArchiveRecord {
   archivedBy: string;
   lastAccessedBy?: string;
 }
+}
 
+}
 export interface SourceMetadata {
   // Database source metadata
   databaseName?: string;
@@ -86,6 +89,7 @@ export interface SourceMetadata {
   dateRange?: {
     start: Date;
     end: Date;
+}
   };
   
   // File source metadata
@@ -109,6 +113,7 @@ export interface SourceMetadata {
   customFields: Record<string, unknown>;
 }
 
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -118,30 +123,39 @@ export interface RetentionPolicy {
   notificationSettings: NotificationSettings;
   exceptions?: RetentionException[];
 }
+}
 
+}
 export interface StorageTransition {
   afterDays: number;
   targetStorageClass: StorageClass;
   conditions?: TransitionCondition[];
 }
+}
 
+}
 export interface TransitionCondition {
   type: 'access_frequency' | 'size' | 'age' | 'custom';
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
   value: unknown;
 }
+}
 
+}
 export interface NotificationSettings {
   notifyBeforeExpiration: boolean;
   notificationDays: number[];
   recipients: string[];
   channels: NotificationChannel[];
 }
+}
 
+}
 export interface RetentionException {
   condition: string; // JSON logic expression
   action: 'extend' | 'preserve' | 'accelerate';
   parameters: Record<string, unknown>;
+}
 }
 
 export enum ArchiveType {
@@ -280,6 +294,7 @@ export enum NotificationChannel {
   SYSTEM_NOTIFICATION = 'system_notification'
 }
 
+}
 export interface ArchiveJob {
   id: string;
   archiveId: string;
@@ -316,6 +331,7 @@ export interface ArchiveJob {
   maxRetries: number;
   nextRetryAt?: Date;
 }
+}
 
 export enum ArchiveJobType {
   CREATE_ARCHIVE = 'create_archive',
@@ -340,6 +356,7 @@ export enum ArchiveJobStatus {
   RETRY_SCHEDULED = 'retry_scheduled'
 }
 
+}
 export interface ArchiveJobConfig {
   sourceConfig: any;
   compressionConfig?: CompressionConfig;
@@ -349,7 +366,9 @@ export interface ArchiveJobConfig {
   notificationConfig?: NotificationConfig;
   customConfig?: Record<string, any>;
 }
+}
 
+}
 export interface CompressionConfig {
   algorithm: CompressionAlgorithm;
   level: number; // 1-9 for most algorithms
@@ -357,14 +376,18 @@ export interface CompressionConfig {
   parallelThreads?: number;
   skipUncompressible?: boolean;
 }
+}
 
+}
 export interface EncryptionConfig {
   algorithm: EncryptionAlgorithm;
   keyId: string;
   keyRotation: boolean;
   keyRotationDays: number;
 }
+}
 
+}
 export interface StorageConfig {
   provider: string;
   bucket?: string;
@@ -373,21 +396,27 @@ export interface StorageConfig {
   redundancyLevel: RedundancyLevel;
   serverSideEncryption?: boolean;
 }
+}
 
+}
 export interface ValidationConfig {
   checksumAlgorithm: ChecksumAlgorithm;
   fullContentValidation: boolean;
   scheduleRegularChecks: boolean;
   validationFrequencyDays: number;
 }
+}
 
+}
 export interface NotificationConfig {
   enabled: boolean;
   channels: NotificationChannel[];
   recipients: string[];
   template?: string;
 }
+}
 
+}
 export interface ArchiveQuery {
   archiveTypes?: ArchiveType[];
   categories?: ArchiveCategory[];
@@ -397,6 +426,7 @@ export interface ArchiveQuery {
   dateRange?: {
     start: Date;
     end: Date;
+}
   };
   tags?: string[];
   businessCriticality?: BusinessCriticality[];
@@ -434,6 +464,7 @@ export enum ArchiveSortField {
   ACCESS_COUNT = 'access_count'
 }
 
+}
 export interface ArchiveStatistics {
   totalArchives: number;
   totalSize: number;
@@ -470,7 +501,9 @@ export interface ArchiveStatistics {
   corruptedArchives: number;
   lastValidationRun?: Date;
 }
+}
 
+}
 export interface RestoreRequest {
   archiveId: string;
   restoreType: RestoreType;
@@ -482,6 +515,7 @@ export interface RestoreRequest {
   notifyOnComplete: boolean;
   expiresAt?: Date;
 }
+}
 
 export enum RestoreType {
   FULL_RESTORE = 'full_restore',
@@ -491,12 +525,14 @@ export enum RestoreType {
   VALIDATION_RESTORE = 'validation_restore'
 }
 
+}
 export interface PartialRestoreConfig {
   filePattern?: string;
   directoryPaths?: string[];
   dateRange?: {
     start: Date;
     end: Date;
+}
   };
   maxFiles?: number;
   maxSize?: number;
@@ -555,6 +591,7 @@ export class ArchiveManagementService extends EventEmitter {
       priority?: number;
     } = {}
   ): Promise<ArchiveRecord> {
+
     try {
       const archiveId = this.generateArchiveId();
       
@@ -631,7 +668,7 @@ export class ArchiveManagementService extends EventEmitter {
           category,
           sourceType,
           sourceIdentifier
-        },
+  }
         severity: 'info'
       });
       
@@ -648,7 +685,7 @@ export class ArchiveManagementService extends EventEmitter {
           error: error instanceof Error ? error.message : String(error),
           name,
           sourceIdentifier
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -663,6 +700,7 @@ export class ArchiveManagementService extends EventEmitter {
     totalCount: number;
     hasMore: boolean;
   }> {
+
     const conditions = [];
     const values = [];
     let paramIndex = 1;
@@ -771,6 +809,7 @@ export class ArchiveManagementService extends EventEmitter {
       expiresAt?: Date;
     } = {}
   ): Promise<string> {
+
     try {
       const archive = await this.getArchiveById(archiveId);
       if (!archive) {
@@ -818,7 +857,7 @@ export class ArchiveManagementService extends EventEmitter {
           restoreId,
           restoreType,
           reason: options.reason
-        },
+  }
         severity: 'info'
       });
       
@@ -834,7 +873,7 @@ export class ArchiveManagementService extends EventEmitter {
         resourceId: archiveId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -845,6 +884,7 @@ export class ArchiveManagementService extends EventEmitter {
    * Get archive statistics
    */
   async getArchiveStatistics(): Promise<ArchiveStatistics> {
+
     const statsQuery = `
       SELECT 
         COUNT(*) as total_archives,
@@ -911,29 +951,35 @@ export class ArchiveManagementService extends EventEmitter {
   // Placeholder methods that would be fully implemented
   
   private async storeArchiveRecord(_archive: ArchiveRecord): Promise<void> {
+
     // Implementation would store in database
   }
   
   private async createArchiveJob(_archive: ArchiveRecord, _priority: number): Promise<ArchiveJob> {
+
     // Implementation would create archive job
     return {} as ArchiveJob;
   }
   
   private async getArchiveById(id: string): Promise<ArchiveRecord | null> {
+
     // Implementation would retrieve from database
     return null;
   }
   
   private async storeRestoreRequest(restoreId: string, request: RestoreRequest): Promise<void> {
+
     // Implementation would store restore request
   }
   
   private async createRestoreJob(request: RestoreRequest, restoreId: string): Promise<ArchiveJob> {
+
     // Implementation would create restore job
     return {} as ArchiveJob;
   }
   
   private async updateArchiveAccess(archiveId: string, userId: string): Promise<void> {
+
     // Implementation would update access tracking
   }
   
@@ -960,10 +1006,12 @@ export class ArchiveManagementService extends EventEmitter {
   }
   
   private async loadRetentionPolicies(): Promise<void> {
+
     // Implementation would load retention policies from database
   }
 }
 
+}
 export interface ArchiveConfig {
   defaultCompressionAlgorithm: CompressionAlgorithm;
   defaultStorageProvider: string;
@@ -978,6 +1026,7 @@ export interface ArchiveConfig {
   validateOnCreate: boolean;
   regularValidationEnabled: boolean;
   notificationsEnabled: boolean;
+}
 }
 
 export default ArchiveManagementService;

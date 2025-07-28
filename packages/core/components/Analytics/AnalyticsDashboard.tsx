@@ -30,6 +30,7 @@ const TIME_RANGES = [;
 /**
  * Analytics dashboard props
  */
+
 export interface AnalyticsDashboardProps {
   analyticsClient: AnalyticsClient;
   userId?: number;
@@ -37,27 +38,26 @@ export interface AnalyticsDashboardProps {
   className?: string;
   autoRefresh?: boolean;
   refreshInterval?: number;
-}
-/**
- * Analytics dashboard state
- */
-interface DashboardState {
-  loading: boolean;
+  /**
+  * Analytics dashboard state
+  */
+  interface DashboardState {
+  loading: boolean;,
   error: string | null;
-  summary: unknown;
+  summary: unknown;,
   dashboardData: unknown;
-  alerts: unknown[];
-  recommendations: unknown[];
-  timeRange: string;
+  alerts: unknown;,
+  recommendations: unknown;
+  timeRange: string;,
   lastUpdated: Date | null;
-  conversionData: unknown;
+  conversionData: unknown;,
   realTimeMetrics: unknown;
-  performanceData: unknown;
+  performanceData: unknown;,
   userRole: 'director' | 'producer' | 'admin' | 'user';
+  /**
+  * Main analytics dashboard component
+  */
 }
-/**
- * Main analytics dashboard component
- */
 export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
   analyticsClient,
   userId,
@@ -67,19 +67,19 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
   refreshInterval = 30000 // 30 seconds
 }) => {
   const [state, setState] = useState<DashboardState>({)
-    loading: true,
-    error: null,
-    summary: null,
-    dashboardData: null,
-    alerts: [],
-    recommendations: [],
-    timeRange: '24h',
-    lastUpdated: null,
-    conversionData: null,
-    realTimeMetrics: null,
-    performanceData: null,
-    userRole: 'director',
-  });
+  loading: true,
+  error: null,
+  summary: null,
+  dashboardData: null,
+  alerts: [],
+  recommendations: [],
+  timeRange: '24h',
+  lastUpdated: null,
+  conversionData: null,
+  realTimeMetrics: null,
+  performanceData: null,
+  userRole: 'director',
+});
   const [_____selectedView, _____setSelectedView] = useState<'overview' | 'conversions' | 'director' | 'performance' | 'costs' | 'usage' | 'insights'>('overview');
   /**
    * Calculate time range based on selected option
@@ -115,39 +115,35 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
       const performanceData = performanceMonitor.getDashboardData();
       // Combine real-time metrics
       const realTimeMetrics = {
-        ...conversionData.realTimeMetrics,
-        performance: {,
-          healthScore: performanceData.overview.healthScore,
-          activeAlerts: performanceData.overview.activeAlerts,
-          keyMetrics: performanceData.keyMetrics,
-        }
-      };
+  ...conversionData.realTimeMetrics,
+  performance: {,
+  healthScore: performanceData.overview.healthScore,
+  activeAlerts: performanceData.overview.activeAlerts,
+  keyMetrics: performanceData.keyMetrics,
+};
       if (!summaryResponse.success) {
-        throw new Error(summaryResponse.error || 'Failed to load summary');
-      }
-      if (!dashboardResponse.success) {
-        throw new Error(dashboardResponse.error || 'Failed to load dashboard data');
-      }
-      setState(prev => ({)
-        ...prev,
-        loading: false,
-        summary: summaryResponse.data,
-        dashboardData: dashboardResponse.data,
-        alerts: alertsResponse.success ? alertsResponse.data : [],
-        recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
-        conversionData,
-        realTimeMetrics,
-        performanceData,
-        lastUpdated: new Date(),
-      }));
+  throw new Error(summaryResponse.error || 'Failed to load summary');
+  if (!dashboardResponse.success) {
+  throw new Error(dashboardResponse.error || 'Failed to load dashboard data');
+  setState(prev => ({)
+  ...prev,
+  loading: false,
+  summary: summaryResponse.data,
+  dashboardData: dashboardResponse.data,
+  alerts: alertsResponse.success ? alertsResponse.data : [],
+  recommendations: recommendationsResponse.success ? recommendationsResponse.data : [],
+  conversionData,
+  realTimeMetrics,
+  performanceData,
+  lastUpdated: new Date(),
+}));
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
-      setState(prev => ({)
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load dashboard data',
-      }));
-    }
+  console.error('Failed to load dashboard data:', error);
+  setState(prev => ({)
+  ...prev,
+  loading: false,
+  error: error instanceof Error ? error.message : 'Failed to load dashboard data',
+}));
   }, [analyticsClient, userId, organizationId, state.timeRange, getTimeRange]);
   /**
    * Handle time range change
@@ -165,18 +161,16 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
    * Handle alert acknowledgment
    */
   const handleAcknowledgeAlert = useCallback(async (alertId: string) => {
-    try {
-      const response = await analyticsClient.acknowledgeAlert(alertId);
-      if (response.success) {
-        setState(prev => ({)
-          ...prev,
-          alerts: prev.alerts.filter(alert => alert.id !== alertId),
-        }));
-      }
+  try {
+  const response = await analyticsClient.acknowledgeAlert(alertId);
+  if (response.success) {
+  setState(prev => ({)
+  ...prev,
+  alerts: prev.alerts.filter(alert => alert.id !== alertId),
+}));
     } catch (error) {
-      console.error('Failed to acknowledge alert:', error);
-    }
-  }, [analyticsClient]);
+  console.error('Failed to acknowledge alert:', error);
+}, [analyticsClient]);
   /**
    * Setup auto-refresh
    */
@@ -184,7 +178,6 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
     if (autoRefresh) {
       const interval = setInterval(loadDashboardData, refreshInterval);
       return () => clearInterval(interval);
-    }
   }, [autoRefresh, refreshInterval, loadDashboardData]);
   /**
    * Initial data load
@@ -196,7 +189,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
    * Render loading state
    */
   if (state.loading && !state.summary) {
-    return ();
+    return;
       <div className={`analytics-dashboard ${className}`}>}
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -204,12 +197,11 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   /**
    * Render error state
    */
   if (state.error) {
-    return ();
+    return;
       <div className={`analytics-dashboard ${className}`}>}
         <Alert variant="destructive">
           <AlertDescription>
@@ -226,8 +218,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
         </Alert>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`analytics-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -360,98 +351,80 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({)
 const styles = `;
   .analytics-dashboard {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: column;,
+  gap: 1rem;
     padding: 1rem;
-    max-width: 100%;
-    overflow: hidden;
-  }
+    max-width: 100%;,
+  overflow: hidden;
   .dashboard-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-    background: white;
+    align-items: center;,
+  padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;,
+  background: white;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
   .header-title {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
+    align-items: center;,
+  gap: 1rem;
   .header-title h1 {
     margin: 0;
     font-size: 1.5rem;
-    font-weight: 600;
-    color: #1f2937;
-  }
+    font-weight: 600;,
+  color: #1f2937;
   .header-controls {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+    align-items: center;,
+  gap: 0.5rem;
   .alerts-bar {
     margin-bottom: 1rem;
-  }
   .dashboard-tabs {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
+    flex: 1;,
+  display: flex;
+    flex-direction: column;,
+  overflow: hidden;
   .tab-content {
-    flex: 1;
-    overflow: auto;
+    flex: 1;,
+  overflow: auto;
     padding: 1rem 0;
-  }
   .overview-grid {
-    display: grid;
-    gap: 1rem;
+    display: grid;,
+  gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
   .insights-grid {
-    display: grid;
-    gap: 1rem;
+    display: grid;,
+  gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  }
   .loading-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 4rem;
+    justify-content: center;,
+  padding: 4rem;
     gap: 1rem;
-  }
   .loading-spinner {
-    width: 2rem;
-    height: 2rem;
+    width: 2rem;,
+  height: 2rem;
     border: 2px solid #e5e7eb;
     border-top: 2px solid #3b82f6;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
+    border-radius: 50%;,
+  animation: spin 1s linear infinite;
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
   @media (max-width: 768px) {
     .dashboard-header {
-      flex-direction: column;
-      gap: 1rem;
+      flex-direction: column;,
+  gap: 1rem;
       align-items: stretch;
-    }
     .header-controls {
       justify-content: space-between;
-    }
     .overview-grid {
       grid-template-columns: 1fr;
-    }
     .insights-grid {
       grid-template-columns: 1fr;
-    }
-  }
 `;
 
 // Inject styles
@@ -459,6 +432,5 @@ if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
-}
 
 export default AnalyticsDashboard;

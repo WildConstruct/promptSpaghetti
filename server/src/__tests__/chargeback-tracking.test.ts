@@ -315,7 +315,7 @@ describe('Chargeback Tracking System', () => {
             type: EvidenceType.RECEIPT,
             title: 'Transaction Receipt',
             text_content: 'Receipt details...'
-          },
+  }
           {
             type: EvidenceType.CUSTOMER_COMMUNICATION,
             title: 'Email Thread',

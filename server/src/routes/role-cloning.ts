@@ -14,6 +14,7 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/AuditService';
 import { requirePermission } from '../middleware/auth';
 
+}
 interface CloneRoleBody {
   sourceRoleId: string;
   targetName: string;
@@ -25,24 +26,31 @@ interface CloneRoleBody {
   cloneMetadata?: {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
+}
   };
 }
 
+}
 interface RoleCloneHistoryParams {
   roleId: string;
 }
+}
 
+}
 interface RoleTemplatesQuery {
   organizationId?: string;
   limit?: string;
 }
+}
 
+}
 interface ValidateCloneBody {
   sourceRoleId: string;
   targetName: string;
   targetScope: string;
   organizationId?: string;
   includePermissions: string[];
+}
 }
 
 export async function roleCloneRoutes(fastify: FastifyInstance) {
@@ -72,11 +80,11 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'string' },
             minItems: 1
-          },
+  }
           excludePermissions: {
             type: 'array',
             items: { type: 'string' }
-          },
+  }
           cloneMetadata: {
             type: 'object',
             properties: {
@@ -85,7 +93,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -101,17 +109,17 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                 permissions: {
                   type: 'array',
                   items: { type: 'string' }
-                },
+  }
                 createdAt: { type: 'string' },
                 metadata: { type: 'object' }
               }
-            },
+  }
             warnings: {
               type: 'array',
               items: { type: 'string' }
             }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -183,7 +191,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
         properties: {
           roleId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -206,7 +214,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                       clonedBy: { type: 'string' }
                     }
                   }
-                },
+  }
                 templateUsage: {
                   type: 'object',
                   properties: {
@@ -217,7 +225,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -268,7 +276,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           organizationId: { type: 'string' },
           limit: { type: 'string', pattern: '^[0-9]+$' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -286,7 +294,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                   permissions: {
                     type: 'array',
                     items: { type: 'string' }
-                  },
+  }
                   metadata: {
                     type: 'object',
                     properties: {
@@ -344,7 +352,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
             items: { type: 'string' }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -357,11 +365,11 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                 errors: {
                   type: 'array',
                   items: { type: 'string' }
-                },
+  }
                 warnings: {
                   type: 'array',
                   items: { type: 'string' }
-                },
+  }
                 conflicts: {
                   type: 'array',
                   items: {
@@ -452,7 +460,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
           offset: { type: 'string', pattern: '^[0-9]+$' },
           organizationId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -474,7 +482,7 @@ export async function roleCloneRoutes(fastify: FastifyInstance) {
                   permissionsSkipped: { type: 'number' }
                 }
               }
-            },
+  }
             total: { type: 'number' }
           }
         }

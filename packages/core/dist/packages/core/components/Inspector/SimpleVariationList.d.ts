@@ -1,7 +1,7 @@
 import React from 'react';
 export interface SimpleVariationListProps {
-    variations: string[];
-    onChange: (variations: string[]) => void;
+    variations: string;
+    onChange: (variations: string) => void;
     placeholder?: string;
     addButtonText?: string;
     emptyMessage?: string;

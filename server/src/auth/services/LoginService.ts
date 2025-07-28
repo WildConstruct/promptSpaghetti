@@ -19,6 +19,7 @@ import { RedisService } from '../database/RedisService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 import { GeolocationService, GeolocationData } from './GeolocationService';
 
+}
 export interface LoginAttempt {
   userId?: string;
   email: string;
@@ -34,9 +35,11 @@ export interface LoginAttempt {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
+}
   };
 }
 
+}
 export interface LoginAnalytics {
   totalAttempts: number;
   successfulLogins: number;
@@ -46,6 +49,7 @@ export interface LoginAnalytics {
     reason: string;
     count: number;
     percentage: number;
+}
   }>;
   suspiciousActivity: Array<{
     type: string;
@@ -60,6 +64,7 @@ export interface LoginAnalytics {
   };
 }
 
+}
 export interface DeviceInfo {
   browser?: string;
   os?: string;
@@ -67,6 +72,7 @@ export interface DeviceInfo {
   userAgent: string;
   fingerprint?: string;
   trusted?: boolean;
+}
 }
 
 export class LoginService {
@@ -118,6 +124,7 @@ export class LoginService {
       timezone?: string;
     };
   }): Promise<GeolocationData> {
+
     if (!context.ipAddress) {
       return {
         country: 'Unknown',
@@ -153,6 +160,7 @@ export class LoginService {
       };
     }
   ): Promise<LoginResponse> {
+
     const startTime = Date.now();
     let user: User | null = null;
     
@@ -276,6 +284,7 @@ export class LoginService {
     sessionId?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       // Revoke tokens
       await this.tokenService.revokeAllUserTokens(userId);
@@ -305,6 +314,7 @@ export class LoginService {
     refreshToken: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<{ accessToken: string; refreshToken: string }> {
+
     try {
       const tokens = await this.tokenService.refreshAccessToken(refreshToken);
       
@@ -343,6 +353,7 @@ export class LoginService {
     isBackupCode: boolean = false,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<boolean> {
+
     try {
       await this.auditService.logEvent({
         userId,
@@ -381,7 +392,7 @@ export class LoginService {
               method, 
               isBackupCode,
               remainingBackupCodes: result.remainingCodes 
-            },
+  }
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             severity: 'info'
@@ -395,7 +406,7 @@ export class LoginService {
               method, 
               isBackupCode,
               reason: result.message 
-            },
+  }
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             severity: 'warning'
@@ -426,7 +437,7 @@ export class LoginService {
         details: { 
           method, 
           error: error.message 
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -440,6 +451,7 @@ export class LoginService {
     unlockToken: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     // Use the lockout service to verify and unlock
     const success = await this.lockoutService.verifyUnlockToken(email, unlockToken);
     if (!success) {
@@ -451,6 +463,7 @@ export class LoginService {
   }
 
   async getLoginAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<LoginAnalytics> {
+
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -510,7 +523,7 @@ export class LoginService {
           WHERE action = '${AUDIT_EVENTS.LOGIN_SUCCESS}'
             AND details->>'deviceFingerprint' IS NOT NULL
           GROUP BY details->>'deviceFingerprint'
-        )
+
         SELECT 
           COUNT(*) FILTER (WHERE first_seen >= NOW() - INTERVAL '${timeframes[timeframe]}') as new_devices,
           COUNT(*) FILTER (WHERE first_seen < NOW() - INTERVAL '${timeframes[timeframe]}') as returning_devices,
@@ -556,6 +569,7 @@ export class LoginService {
     email: string,
     context: any
   ): Promise<void> {
+
     // Rate limiting check
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -570,7 +584,7 @@ export class LoginService {
           email: this.hashEmail(email),
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -584,6 +598,7 @@ export class LoginService {
   }
 
   private async validateCredentials(email: string, password: string): Promise<User> {
+
     const user = await this.userService.getUserByEmail(email);
     
     if (!user) {
@@ -600,6 +615,7 @@ export class LoginService {
   }
 
   private async validateUserAccount(user: User, context: any): Promise<void> {
+
     // Check account status
     if (user.status !== 'active') {
       throw new Error('Account is not active. Please contact support.');
@@ -621,6 +637,7 @@ export class LoginService {
     accessToken: string;
     refreshToken: string;
   }> {
+
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.generateAccessToken(user),
       this.tokenService.generateRefreshToken(user)
@@ -634,6 +651,7 @@ export class LoginService {
     request: LoginRequest,
     context: any
   ): Promise<UserSession> {
+
     const sessionId = require('crypto').randomUUID();
     const deviceInfo = this.parseDeviceInfo(context.userAgent);
     
@@ -662,6 +680,7 @@ export class LoginService {
   }
 
   private async updateLoginData(user: User, context: any): Promise<void> {
+
     await this.userService.updateUser(user.id, {
       lastLoginAt: new Date(),
       failedLoginAttempts: 0,
@@ -681,6 +700,7 @@ export class LoginService {
       suspiciousIndicators: string[];
     }
   ): Promise<void> {
+
     // Check for new device
     const isNewDevice = await this.isNewDevice(user.id, context.deviceFingerprint);
     
@@ -709,7 +729,7 @@ export class LoginService {
           reason: isNewDevice ? 'new_device' : 'unusual_location',
           deviceFingerprint: context.deviceFingerprint,
           location: context.geoLocation
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: session.id,
@@ -719,6 +739,7 @@ export class LoginService {
   }
 
   private async detectSuspiciousActivity(email: string, context: any): Promise<void> {
+
     // Check for rapid successive attempts from same IP
     const recentAttempts = await this.redis.get(`login_attempts:${context.ipAddress}`);
     if (recentAttempts && parseInt(recentAttempts) > 10) {
@@ -728,7 +749,7 @@ export class LoginService {
           type: 'rapid_attempts',
           ipAddress: context.ipAddress,
           email: this.hashEmail(email)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -744,7 +765,7 @@ export class LoginService {
         details: {
           type: 'multiple_emails',
           ipAddress: context.ipAddress
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -753,6 +774,7 @@ export class LoginService {
   }
 
   private async logLoginAttempt(attempt: LoginAttempt): Promise<void> {
+
     const action = attempt.success ? AUDIT_EVENTS.LOGIN_SUCCESS : AUDIT_EVENTS.LOGIN_FAILED;
     
     await this.auditService.logEvent({
@@ -763,7 +785,7 @@ export class LoginService {
         success: attempt.success,
         failureReason: attempt.failureReason,
         deviceFingerprint: attempt.deviceFingerprint
-      },
+  }
       ipAddress: attempt.ipAddress,
       userAgent: attempt.userAgent,
       severity: attempt.success ? 'info' : 'warning'
@@ -777,6 +799,7 @@ export class LoginService {
     outcome: 'success' | 'failure',
     failureReason?: string
   ): Promise<void> {
+
     // Track in Redis for real-time metrics
     const metricsKey = `login_metrics:${new Date().toISOString().split('T')[0]}`;
     const metrics = {
@@ -790,6 +813,7 @@ export class LoginService {
   }
 
   private async isNewDevice(userId: string, deviceFingerprint?: string): Promise<boolean> {
+
     if (!deviceFingerprint) return false;
 
     const result = await this.db.query(`
@@ -804,6 +828,7 @@ export class LoginService {
   }
 
   private async isUnusualLocation(userId: string, geoLocation?: any): Promise<boolean> {
+
     if (!geoLocation?.country) return false;
 
     const result = await this.db.query(`
@@ -819,6 +844,7 @@ export class LoginService {
   }
 
   private async revokeSession(sessionId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE user_sessions 
       SET revoked = true, revoked_at = NOW() 
@@ -827,6 +853,7 @@ export class LoginService {
   }
 
   private async updateSessionActivity(userId: string, context: any): Promise<void> {
+
     await this.db.query(`
       UPDATE user_sessions 
       SET last_accessed_at = NOW() 
@@ -899,6 +926,7 @@ export class LoginService {
   }
 
   private async toPublicUser(user: User): Promise<any> {
+
     // Get user profile and roles (simplified version)
     return {
       id: user.id,

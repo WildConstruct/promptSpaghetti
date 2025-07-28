@@ -18,7 +18,6 @@ export interface ContributionCardProps {
   onView?: (contributionId: string) => void;
   className?: string;
 }
-
 export const ContributionCard: React.FC<ContributionCardProps> = ({)
   contribution,
   variant = 'standard',
@@ -30,133 +29,128 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
   className = ''
 }) => {
   // Get type-specific styling and icons
-  const getTypeConfig = (type: ContributionType) => {
-    const configs = {
-      template: {,
-        color: '#3b82f6',
-        bgColor: '#eff6ff',
-        icon: '📄',
-        label: 'Template',
-      },
-      knowledge_article: {,
-        color: '#10b981',
-        bgColor: '#ecfdf5',
-        icon: '📚',
-        label: 'Knowledge Article',
-      },
-      tutorial: {,
-        color: '#f59e0b',
-        bgColor: '#fffbeb',
-        icon: '🎓',
-        label: 'Tutorial',
-      },
-      case_study: {,
-        color: '#8b5cf6',
-        bgColor: '#f3e8ff',
-        icon: '📊',
-        label: 'Case Study',
-      },
-      pattern_library: {,
-        color: '#ef4444',
-        bgColor: '#fef2f2',
-        icon: '🔧',
-        label: 'Pattern Library',
-      },
-      community_post: {,
-        color: '#06b6d4',
-        bgColor: '#ecfeff',
-        icon: '💬',
-        label: 'Community Post',
-      },
-      documentation: {,
-        color: '#6b7280',
-        bgColor: '#f9fafb',
-        icon: '📋',
-        label: 'Documentation',
-      },
-      review: {,
-        color: '#84cc16',
-        bgColor: '#f7fee7',
-        icon: '⭐',
-        label: 'Review',
-      }
-    };
+  const getTypeConfig = (type: ContributionType) => {,
+  const configs = {
+  template: {,
+  color: '#3b82f6',
+  bgColor: '#eff6ff',
+  icon: '📄',
+  label: 'Template',
+},
+  knowledge_article: {,
+  color: '#10b981',
+  bgColor: '#ecfdf5',
+  icon: '📚',
+  label: 'Knowledge Article',
+},
+  tutorial: {,
+  color: '#f59e0b',
+  bgColor: '#fffbeb',
+  icon: '🎓',
+  label: 'Tutorial',
+},
+  case_study: {,
+  color: '#8b5cf6',
+  bgColor: '#f3e8ff',
+  icon: '📊',
+  label: 'Case Study',
+},
+  pattern_library: {,
+  color: '#ef4444',
+  bgColor: '#fef2f2',
+  icon: '🔧',
+  label: 'Pattern Library',
+},
+  community_post: {,
+  color: '#06b6d4',
+  bgColor: '#ecfeff',
+  icon: '💬',
+  label: 'Community Post',
+},
+  documentation: {,
+  color: '#6b7280',
+  bgColor: '#f9fafb',
+  icon: '📋',
+  label: 'Documentation',
+},
+  review: {,
+  color: '#84cc16',
+  bgColor: '#f7fee7',
+  icon: '⭐',
+  label: 'Review',
+};
     return configs[type] || configs.template;
   };
   // Get status styling
   const getStatusConfig = (status: ContributionStatus) => {
-    const configs = {
-      draft: {,
-        color: '#6b7280',
-        bgColor: '#f9fafb',
-        label: 'Draft',
-      },
-      submitted: {,
-        color: '#3b82f6',
-        bgColor: '#eff6ff',
-        label: 'Submitted',
-      },
-      under_review: {,
-        color: '#f59e0b',
-        bgColor: '#fffbeb',
-        label: 'Under Review',
-      },
-      revision_requested: {,
-        color: '#ef4444',
-        bgColor: '#fef2f2',
-        label: 'Needs Revision',
-      },
-      approved: {,
-        color: '#10b981',
-        bgColor: '#ecfdf5',
-        label: 'Approved',
-      },
-      published: {,
-        color: '#10b981',
-        bgColor: '#ecfdf5',
-        label: 'Published',
-      },
-      rejected: {,
-        color: '#ef4444',
-        bgColor: '#fef2f2',
-        label: 'Rejected',
-      },
-      archived: {,
-        color: '#6b7280',
-        bgColor: '#f9fafb',
-        label: 'Archived',
-      }
-    };
+  const configs = {
+  draft: {,
+  color: '#6b7280',
+  bgColor: '#f9fafb',
+  label: 'Draft',
+},
+  submitted: {,
+  color: '#3b82f6',
+  bgColor: '#eff6ff',
+  label: 'Submitted',
+},
+  under_review: {,
+  color: '#f59e0b',
+  bgColor: '#fffbeb',
+  label: 'Under Review',
+},
+  revision_requested: {,
+  color: '#ef4444',
+  bgColor: '#fef2f2',
+  label: 'Needs Revision',
+},
+  approved: {,
+  color: '#10b981',
+  bgColor: '#ecfdf5',
+  label: 'Approved',
+},
+  published: {,
+  color: '#10b981',
+  bgColor: '#ecfdf5',
+  label: 'Published',
+},
+  rejected: {,
+  color: '#ef4444',
+  bgColor: '#fef2f2',
+  label: 'Rejected',
+},
+  archived: {,
+  color: '#6b7280',
+  bgColor: '#f9fafb',
+  label: 'Archived',
+};
     return configs[status] || configs.draft;
   };
   const typeConfig = getTypeConfig(contribution.type);
   const statusConfig = getStatusConfig(contribution.status);
   // Format dates
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {)
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+  return new Date(dateString).toLocaleDateString('en-US', {)
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
   };
   // Format numbers
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return (num / 1000000).toFixed(1) + 'M';
-    }
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'K';
-    }
     return num.toString();
   };
   // Handle card click
   const handleCardClick = (e: React.MouseEvent) => {
     if (e.target instanceof HTMLElement && e.target.closest('.card-actions')) {
       return; // Don't trigger card click if clicking on actions
-    }
     onClick?.(contribution);
   };
-  return ();
+  return;
     <div 
       className={`contribution-card ${variant} ${className}`}
       onClick={handleCardClick}
@@ -164,17 +158,17 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
     >
       {/* Card Header */}
       <div className="card-header">
-        <div className="type-badge" style={{ 
-          color: typeConfig.color, 
-          backgroundColor: typeConfig.bgColor ,
-        }}>
+        <div className="type-badge" style={{
+  color: typeConfig.color,
+  backgroundColor: typeConfig.bgColor,
+}}>
           <span className="type-icon">{typeConfig.icon}</span>
           <span className="type-label">{typeConfig.label}</span>
         </div>
         <div className="status-badge" style={{
-          color: statusConfig.color,
-          backgroundColor: statusConfig.bgColor,
-        }}>
+  color: statusConfig.color,
+  backgroundColor: statusConfig.bgColor,
+}}>
           {statusConfig.label}
         </div>
       </div>
@@ -186,7 +180,6 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
             {contribution.description.length > 120 
               ? `${contribution.description.substring(0, 120)}...`}
               : contribution.description
-            }
           </p>
         )}
         {/* Tags */}
@@ -295,42 +288,36 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
       </div>
       <style>{`
         .contribution-card {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 20px;
-          transition: all 0.2s ease;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 12px;,
+  padding: 20px;
+          transition: all 0.2s ease;,
+  display: flex;
+          flex-direction: column;,
+  gap: 16px;
         .contribution-card:hover {
           border-color: #d1d5db;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
         .contribution-card.compact {
-          padding: 16px;
-          gap: 12px;
-        }
+          padding: 16px;,
+  gap: 12px;
         .card-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 12px;
-        }
+          align-items: center;,
+  gap: 12px;
         .type-badge {
           display: flex;
-          align-items: center;
-          gap: 6px;
+          align-items: center;,
+  gap: 6px;
           padding: 6px 10px;
           border-radius: 6px;
           font-size: 12px;
           font-weight: 600;
           flex-shrink: 0;
-        }
         .type-icon {
           font-size: 14px;
-        }
         .status-badge {
           padding: 4px 8px;
           border-radius: 4px;
@@ -339,146 +326,119 @@ export const ContributionCard: React.FC<ContributionCardProps> = ({)
           text-transform: uppercase;
           letter-spacing: 0.5px;
           flex-shrink: 0;
-        }
         .card-content {
           flex: 1;
-        }
         .contribution-title {
           margin: 0 0 8px 0;
           font-size: 18px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           line-height: 1.4;
-        }
         .compact .contribution-title {
           font-size: 16px;
           margin-bottom: 4px;
-        }
         .contribution-description {
           margin: 0 0 12px 0;
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           line-height: 1.5;
-        }
         .tags-container {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         .tag {
-          background: #f3f4f6;
-          color: #4b5563;
+          background: #f3f4f6;,
+  color: #4b5563;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
           text-transform: uppercase;
           letter-spacing: 0.3px;
-        }
         .more-tags {
-          background: #e5e7eb;
-          color: #6b7280;
-        }
+          background: #e5e7eb;,
+  color: #6b7280;
         .card-metrics {
-          display: flex;
-          gap: 16px;
+          display: flex;,
+  gap: 16px;
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
-        }
         .metric {
           display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 13px;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 4px;
+          font-size: 13px;,
+  color: #6b7280;
         .card-footer {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 12px;
+          align-items: center;,
+  gap: 12px;
           padding-top: 12px;
           border-top: 1px solid #f3f4f6;
-        }
         .footer-info {
           display: flex;
-          flex-direction: column;
-          gap: 2px;
+          flex-direction: column;,
+  gap: 2px;
           flex: 1;
           min-width: 0;
-        }
         .contributor-name {
           font-size: 13px;
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           truncate;
-        }
         .date {
-          font-size: 12px;
-          color: #9ca3af;
-        }
+          font-size: 12px;,
+  color: #9ca3af;
         .card-actions {
-          display: flex;
-          gap: 6px;
+          display: flex;,
+  gap: 6px;
           flex-shrink: 0;
-        }
         .action-btn {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 6px;
-          padding: 6px;
-          cursor: pointer;
-          color: #6b7280;
-          transition: all 0.2s ease;
-          display: flex;
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 6px;,
+  padding: 6px;
+          cursor: pointer;,
+  color: #6b7280;
+          transition: all 0.2s ease;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
-        .action-btn:hover {
-          background: #f3f4f6;
-          border-color: #d1d5db;
-          color: #374151;
-        }
-        .edit-btn:hover {
-          background: #eff6ff;
-          border-color: #3b82f6;
-          color: #3b82f6;
-        }
-        .delete-btn:hover {
-          background: #fef2f2;
-          border-color: #ef4444;
-          color: #ef4444;
-        }
-        .view-btn:hover {
-          background: #ecfdf5;
-          border-color: #10b981;
-          color: #10b981;
-        }
+        .action-btn:hover {,
+  background: #f3f4f6;
+          border-color: #d1d5db;,
+  color: #374151;
+        .edit-btn:hover {,
+  background: #eff6ff;
+          border-color: #3b82f6;,
+  color: #3b82f6;
+        .delete-btn:hover {,
+  background: #fef2f2;
+          border-color: #ef4444;,
+  color: #ef4444;
+        .view-btn:hover {,
+  background: #ecfdf5;
+          border-color: #10b981;,
+  color: #10b981;
         @media (max-width: 640px) {
           .contribution-card {
-            padding: 16px;
-            gap: 12px;
-          }
+            padding: 16px;,
+  gap: 12px;
           .card-header {
             flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
-          }
+            align-items: stretch;,
+  gap: 8px;
           .type-badge {
             align-self: flex-start;
-          }
           .card-metrics {
             gap: 12px;
-          }
           .card-footer {
             flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
-          }
+            align-items: stretch;,
+  gap: 8px;
           .card-actions {
             align-self: flex-end;
-          }
-        }
       `}</style>
     </div>
   );

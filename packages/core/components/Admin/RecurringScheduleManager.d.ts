@@ -8,11 +8,12 @@
  * Epic: 17 - Backstage Admin Controls
  */
 import React from 'react';
+
 interface RecurringScheduleManagerProps {
     className?: string;
     userId?: string;
     userRole?: string;
-}
+
 export declare const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps>;
 export default RecurringScheduleManager;
 //# sourceMappingURL=RecurringScheduleManager.d.ts.map

@@ -17,27 +17,25 @@ import { SecurityIntelligence } from './MLSecurityAnalyticsFramework';
 // ==========================================
 
 export interface DataPipelineConfig {
-  enableRealTimeProcessing: boolean;
-  batchProcessingInterval: number; // minutes
-  maxBatchSize: number;
+  enableRealTimeProcessing: boolean;,
+  batchProcessingInterval: number; // minutes,
+  maxBatchSize: number;,
   enableDataValidation: boolean;
-  enableDataEnrichment: boolean;
+  enableDataEnrichment: boolean;,
   enableDataTransformation: boolean;
-  retentionPeriodDays: number;
+  retentionPeriodDays: number;,
   enableErrorRecovery: boolean;
-  parallelProcessingThreads: number;
+  parallelProcessingThreads: number;,
   dataQualityThresholds: DataQualityThresholds;
-  outputFormats: OutputFormat[];
+  outputFormats: OutputFormat;
 }
-
 export interface DataQualityThresholds {
-  completeness: number; // 0-100%
-  accuracy: number; // 0-100%
-  consistency: number; // 0-100%
-  timeliness: number; // max age in minutes
-  validity: number; // 0-100%
+  completeness: number; // 0-100%,
+  accuracy: number; // 0-100%,
+  consistency: number; // 0-100%,
+  timeliness: number; // max age in minutes,
+  validity: number; // 0-100%,
 }
-
 export enum OutputFormat {
   JSON = 'json',
   AVRO = 'avro',
@@ -46,23 +44,20 @@ export enum OutputFormat {
   ELASTIC_SEARCH = 'elasticsearch',
   KAFKA = 'kafka',
   DATABASE = 'database'
-}
-
-export interface PipelineStage {
-  stageId: string;
+  export interface PipelineStage {
+  stageId: string;,
   stageName: string;
-  stageType: StageType;
+  stageType: StageType;,
   enabled: boolean;
-  priority: number;
+  priority: number;,
   configuration: Record<string, unknown>;
-  inputSchema: DataSchema;
+  inputSchema: DataSchema;,
   outputSchema: DataSchema;
-  transformations: DataTransformation[];
-  validationRules: ValidationRule[];
-  errorHandling: ErrorHandlingStrategy;
+  transformations: DataTransformation;,
+  validationRules: ValidationRule;
+  errorHandling: ErrorHandlingStrategy;,
   performanceMetrics: StageMetrics;
 }
-
 export enum StageType {
   INGESTION = 'ingestion',
   VALIDATION = 'validation',
@@ -72,25 +67,21 @@ export enum StageType {
   ANALYSIS = 'analysis',
   OUTPUT = 'output',
   ARCHIVAL = 'archival'
-}
-
-export interface DataSchema {
-  schemaId: string;
+  export interface DataSchema {
+  schemaId: string;,
   version: string;
-  fields: SchemaField[];
-  constraints: SchemaConstraint[];
+  fields: SchemaField;,
+  constraints: SchemaConstraint;
 }
-
 export interface SchemaField {
-  name: string;
+  name: string;,
   type: FieldType;
-  required: boolean;
+  required: boolean;,
   nullable: boolean;
   defaultValue?: unknown;
   description?: string;
-  validationRules?: string[];
+  validationRules?: string;
 }
-
 export enum FieldType {
   STRING = 'string',
   NUMBER = 'number',
@@ -102,15 +93,12 @@ export enum FieldType {
   UUID = 'uuid',
   IP_ADDRESS = 'ip_address',
   EMAIL = 'email'
-}
-
-export interface SchemaConstraint {
-  constraintType: ConstraintType;
+  export interface SchemaConstraint {
+  constraintType: ConstraintType;,
   field: string;
-  value: unknown;
+  value: unknown;,
   errorMessage: string;
 }
-
 export enum ConstraintType {
   MIN_LENGTH = 'min_length',
   MAX_LENGTH = 'max_length',
@@ -120,18 +108,15 @@ export enum ConstraintType {
   FOREIGN_KEY = 'foreign_key',
   NOT_NULL = 'not_null',
   CUSTOM = 'custom'
-}
-
-export interface DataTransformation {
-  transformationId: string;
+  export interface DataTransformation {
+  transformationId: string;,
   transformationType: TransformationType;
-  inputFields: string[];
-  outputFields: string[];
+  inputFields: string;,
+  outputFields: string;
   parameters: Record<string, unknown>;
-  condition?: string; // JavaScript expression
+  condition?: string; // JavaScript expression,
   enabled: boolean;
 }
-
 export enum TransformationType {
   MAP = 'map',
   FILTER = 'filter',
@@ -145,19 +130,16 @@ export enum TransformationType {
   ENCRYPT = 'encrypt',
   HASH = 'hash',
   CLASSIFY = 'classify'
-}
-
-export interface ValidationRule {
-  ruleId: string;
+  export interface ValidationRule {
+  ruleId: string;,
   ruleName: string;
-  ruleType: ValidationRuleType;
+  ruleType: ValidationRuleType;,
   field: string;
-  condition: string;
+  condition: string;,
   errorMessage: string;
-  severity: ValidationSeverity;
+  severity: ValidationSeverity;,
   enabled: boolean;
 }
-
 export enum ValidationRuleType {
   REQUIRED_FIELD = 'required_field',
   DATA_TYPE = 'data_type',
@@ -167,25 +149,20 @@ export enum ValidationRuleType {
   CROSS_FIELD = 'cross_field',
   REFERENCE_CHECK = 'reference_check',
   UNIQUENESS = 'uniqueness'
-}
-
-export enum ValidationSeverity {
+  export enum ValidationSeverity {
   INFO = 'info',
   WARNING = 'warning',
   ERROR = 'error',
   CRITICAL = 'critical'
-}
-
-export interface ErrorHandlingStrategy {
-  onValidationError: ErrorAction;
+  export interface ErrorHandlingStrategy {
+  onValidationError: ErrorAction;,
   onTransformationError: ErrorAction;
-  onOutputError: ErrorAction;
+  onOutputError: ErrorAction;,
   maxRetryAttempts: number;
-  retryDelayMs: number;
+  retryDelayMs: number;,
   deadLetterQueue: boolean;
   alertOnError: boolean;
 }
-
 export enum ErrorAction {
   SKIP = 'skip',
   RETRY = 'retry',
@@ -193,39 +170,34 @@ export enum ErrorAction {
   HALT_PIPELINE = 'halt_pipeline',
   LOG_AND_CONTINUE = 'log_and_continue',
   APPLY_DEFAULT = 'apply_default'
-}
-
-export interface StageMetrics {
-  recordsProcessed: number;
+  export interface StageMetrics {
+  recordsProcessed: number;,
   recordsSuccessful: number;
-  recordsFailed: number;
+  recordsFailed: number;,
   averageProcessingTime: number;
-  throughputPerSecond: number;
+  throughputPerSecond: number;,
   errorRate: number;
   lastProcessedAt?: Date;
-  performanceTrends: PerformanceTrend[];
+  performanceTrends: PerformanceTrend;
 }
-
 export interface PerformanceTrend {
-  timestamp: Date;
+  timestamp: Date;,
   metric: string;
-  value: number;
+  value: number;,
   trend: 'increasing' | 'decreasing' | 'stable';
 }
-
 export interface PipelineExecution {
-  executionId: string;
+  executionId: string;,
   pipelineId: string;
   startTime: Date;
   endTime?: Date;
-  status: ExecutionStatus;
+  status: ExecutionStatus;,
   inputRecordCount: number;
-  outputRecordCount: number;
-  stageExecutions: StageExecution[];
-  errors: ExecutionError[];
+  outputRecordCount: number;,
+  stageExecutions: StageExecution;
+  errors: ExecutionError;,
   metrics: ExecutionMetrics;
 }
-
 export enum ExecutionStatus {
   PENDING = 'pending',
   RUNNING = 'running',
@@ -233,34 +205,30 @@ export enum ExecutionStatus {
   FAILED = 'failed',
   CANCELLED = 'cancelled',
   RETRYING = 'retrying'
-}
-
-export interface StageExecution {
-  stageId: string;
+  export interface StageExecution {
+  stageId: string;,
   stageName: string;
   startTime: Date;
   endTime?: Date;
-  status: ExecutionStatus;
+  status: ExecutionStatus;,
   inputCount: number;
-  outputCount: number;
+  outputCount: number;,
   duration: number;
-  memoryUsage: number;
+  memoryUsage: number;,
   cpuUsage: number;
-  errors: string[];
+  errors: string;
 }
-
 export interface ExecutionError {
-  errorId: string;
+  errorId: string;,
   timestamp: Date;
-  stageId: string;
+  stageId: string;,
   errorType: ErrorType;
   errorMessage: string;
   recordId?: string;
   stackTrace?: string;
-  retryCount: number;
+  retryCount: number;,
   resolved: boolean;
 }
-
 export enum ErrorType {
   VALIDATION_ERROR = 'validation_error',
   TRANSFORMATION_ERROR = 'transformation_error',
@@ -270,30 +238,26 @@ export enum ErrorType {
   RESOURCE_ERROR = 'resource_error',
   TIMEOUT_ERROR = 'timeout_error',
   UNKNOWN_ERROR = 'unknown_error'
-}
-
-export interface ExecutionMetrics {
-  totalDuration: number;
+  export interface ExecutionMetrics {
+  totalDuration: number;,
   recordThroughput: number;
-  averageRecordSize: number;
+  averageRecordSize: number;,
   peakMemoryUsage: number;
-  totalCpuTime: number;
+  totalCpuTime: number;,
   networkBytesTransferred: number;
   diskBytesWritten: number;
 }
-
 export interface DataSource {
-  sourceId: string;
+  sourceId: string;,
   sourceName: string;
-  sourceType: SourceType;
+  sourceType: SourceType;,
   connectionConfig: ConnectionConfig;
-  schema: DataSchema;
+  schema: DataSchema;,
   enabled: boolean;
   schedule?: ProcessingSchedule;
   lastProcessed?: Date;
   metrics: SourceMetrics;
 }
-
 export enum SourceType {
   FILE_SYSTEM = 'file_system',
   DATABASE = 'database',
@@ -305,29 +269,26 @@ export enum SourceType {
   SYSLOG = 'syslog',
   SNMP = 'snmp',
   WMI = 'wmi'
-}
-
-export interface ConnectionConfig {
+  export interface ConnectionConfig {
   endpoint?: string;
-  credentials?: {
-    username?: string;
-    password?: string;
-    apiKey?: string;
-    certificate?: string;
-  };
+  credentials?: {,
+  username?: string;
+  password?: string;
+  apiKey?: string;
+  certificate?: string;
+};
   timeout?: number;
   maxConnections?: number;
   retryConfig?: {
-    maxRetries: number;
-    backoffMs: number;
-  };
+  maxRetries: number;,
+  backoffMs: number;
+};
   ssl?: {
-    enabled: boolean;
-    verifyHostname: boolean;
-    certificatePath?: string;
-  };
+  enabled: boolean;,
+  verifyHostname: boolean;
+  certificatePath?: string;
+};
 }
-
 export interface ProcessingSchedule {
   scheduleType: ScheduleType;
   cronExpression?: string;
@@ -336,35 +297,30 @@ export interface ProcessingSchedule {
   endTime?: Date;
   enabled: boolean;
 }
-
 export enum ScheduleType {
   REALTIME = 'realtime',
   BATCH = 'batch',
   CRON = 'cron',
   INTERVAL = 'interval',
   EVENT_DRIVEN = 'event_driven'
-}
-
-export interface SourceMetrics {
-  recordsIngested: number;
+  export interface SourceMetrics {
+  recordsIngested: number;,
   bytesIngested: number;
   lastIngestedAt?: Date;
-  ingestRate: number;
+  ingestRate: number;,
   errorCount: number;
   averageLatency: number;
 }
-
 export interface DataDestination {
-  destinationId: string;
+  destinationId: string;,
   destinationName: string;
-  destinationType: DestinationType;
+  destinationType: DestinationType;,
   connectionConfig: ConnectionConfig;
-  outputFormat: OutputFormat;
+  outputFormat: OutputFormat;,
   schema: DataSchema;
-  enabled: boolean;
+  enabled: boolean;,
   metrics: DestinationMetrics;
 }
-
 export enum DestinationType {
   FILE_SYSTEM = 'file_system',
   DATABASE = 'database',
@@ -375,31 +331,27 @@ export enum DestinationType {
   WEBHOOK = 'webhook',
   CLOUD_STORAGE = 'cloud_storage',
   SEARCH_INDEX = 'search_index'
-}
-
-export interface DestinationMetrics {
-  recordsWritten: number;
+  export interface DestinationMetrics {
+  recordsWritten: number;,
   bytesWritten: number;
   lastWrittenAt?: Date;
-  writeRate: number;
+  writeRate: number;,
   errorCount: number;
   averageLatency: number;
 }
-
 export interface PipelineAlert {
-  alertId: string;
+  alertId: string;,
   timestamp: Date;
-  alertType: PipelineAlertType;
+  alertType: PipelineAlertType;,
   severity: ValidationSeverity;
   pipelineId: string;
   stageId?: string;
-  message: string;
+  message: string;,
   details: Record<string, unknown>;
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
 }
-
 export enum PipelineAlertType {
   PERFORMANCE_DEGRADATION = 'performance_degradation',
   ERROR_RATE_HIGH = 'error_rate_high',
@@ -409,40 +361,36 @@ export enum PipelineAlertType {
   SCHEMA_VIOLATION = 'schema_violation',
   SLA_BREACH = 'sla_breach',
   SECURITY_ISSUE = 'security_issue'
-}
-
-// ==========================================
-// MAIN PIPELINE CLASS
-// ==========================================
-
-export class SecurityIntelligenceDataPipeline extends EventEmitter {
+  // ==========================================
+  // MAIN PIPELINE CLASS
+  // ==========================================
+  export class SecurityIntelligenceDataPipeline extends EventEmitter {
   private config: DataPipelineConfig;
   private stages: Map<string, PipelineStage> = new Map();
   private dataSources: Map<string, DataSource> = new Map();
   private dataDestinations: Map<string, DataDestination> = new Map();
   private executionHistory: Map<string, PipelineExecution> = new Map();
   private currentExecution?: PipelineExecution;
-  private processingQueue: any[] = [];
+  private processingQueue: any = [];
   private isProcessing: boolean = false;
   private alerts: Map<string, PipelineAlert> = new Map();
-  constructor(config: DataPipelineConfig) {
-    super();
-    this.config = config;
-    this.initializeDefaultStages();
-    this.startProcessingLoop();
-  }
+  constructor(config: DataPipelineConfig) {,
+  super();
+  this.config = config;
+  this.initializeDefaultStages();
+  this.startProcessingLoop();
   // ==========================================
   // PUBLIC METHODS
   // ==========================================
-  public async ingestData(sourceId: string, data: any[]): Promise<string> {
-    const executionId = this.createExecution(data.length);
-    try {
-      this.processingQueue.push(...data.map(record => ({)
-        ...record,
-        __executionId: executionId,
-        __sourceId: sourceId,
-        __ingestedAt: new Date(),
-      })));
+  public async ingestData(sourceId: string, data: any): Promise<string> {,
+  const executionId = this.createExecution(data.length);
+  try {
+  this.processingQueue.push(...data.map(record => ({)
+  ...record,
+  __executionId: executionId,
+  __sourceId: sourceId,
+  __ingestedAt: new Date(),
+})));
       this.emit('dataIngested', { )
         sourceId, 
         recordCount: data.length, 
@@ -450,44 +398,39 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       });
       return executionId;
     } catch (error) {
-      this.handleExecutionError(executionId, 'ingestion', error as Error);
-      throw error;
-    }
-  }
-  public async processDataBatch(data: any[]): Promise<PipelineExecution> {
-    const executionId = this.createExecution(data.length);
-    const execution = this.executionHistory.get(executionId)!;
-    try {
-      execution.status = ExecutionStatus.RUNNING;
-      this.currentExecution = execution;
-      // Process through each stage
-      let stageData = data;
-      const sortedStages = Array.from(this.stages.values());
-        .filter(stage => stage.enabled)
-        .sort((a, b) => a.priority - b.priority);
-      for (const stage of sortedStages) {
-        const stageExecution = this.createStageExecution(stage, stageData.length);
-        execution.stageExecutions.push(stageExecution);
-        try {
-          stageData = await this.processStage(stage, stageData, stageExecution);
-          this.completeStageExecution(stageExecution, stageData.length);
-        } catch (error) {
-          this.failStageExecution(stageExecution, error as Error);
-          if (stage.errorHandling.onTransformationError === ErrorAction.HALT_PIPELINE) {
-            throw error;
-          }
-        }
-      }
-      // Complete execution
-      execution.status = ExecutionStatus.COMPLETED;
-      execution.endTime = new Date();
-      execution.outputRecordCount = stageData.length;
-      execution.metrics = this.calculateExecutionMetrics(execution);
-      this.emit('executionCompleted', { )
-        executionId, 
-        inputCount: data.length, 
-        outputCount: stageData.length ,
-      });
+  this.handleExecutionError(executionId, 'ingestion', error as Error);
+  throw error;
+  public async processDataBatch(data: any): Promise<PipelineExecution> {,
+  const executionId = this.createExecution(data.length);
+  const execution = this.executionHistory.get(executionId)!;
+  try {
+  execution.status = ExecutionStatus.RUNNING;
+  this.currentExecution = execution;
+  // Process through each stage
+  let stageData = data;
+  const sortedStages = Array.from(this.stages.values());
+  .filter(stage => stage.enabled)
+  .sort((a, b) => a.priority - b.priority);
+  for (const stage of sortedStages) {
+  const stageExecution = this.createStageExecution(stage, stageData.length);
+  execution.stageExecutions.push(stageExecution);
+  try {
+  stageData = await this.processStage(stage, stageData, stageExecution);
+  this.completeStageExecution(stageExecution, stageData.length);
+} catch (error) {
+  this.failStageExecution(stageExecution, error as Error);
+  if (stage.errorHandling.onTransformationError === ErrorAction.HALT_PIPELINE) {
+  throw error;
+  // Complete execution
+  execution.status = ExecutionStatus.COMPLETED;
+  execution.endTime = new Date();
+  execution.outputRecordCount = stageData.length;
+  execution.metrics = this.calculateExecutionMetrics(execution);
+  this.emit('executionCompleted', { )
+  executionId,
+  inputCount: data.length,
+  outputCount: stageData.length,
+});
       return execution;
     } catch (error) {
       execution.status = ExecutionStatus.FAILED;
@@ -495,108 +438,89 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       this.handleExecutionError(executionId, 'pipeline', error as Error);
       throw error;
     } finally {
-      this.currentExecution = undefined;
-    }
-  }
-  public addDataSource(source: Omit<DataSource, 'metrics'>): void {
-    const sourceWithMetrics: DataSource = {
-      ...source,
-      metrics: {,
-        recordsIngested: 0,
-        bytesIngested: 0,
-        ingestRate: 0,
-        errorCount: 0,
-        averageLatency: 0,
-      }
-    };
+  this.currentExecution = undefined;
+  public addDataSource(source: Omit<DataSource, 'metrics'>): void {,
+  const sourceWithMetrics: DataSource = {,
+  ...source,
+  metrics: {,
+  recordsIngested: 0,
+  bytesIngested: 0,
+  ingestRate: 0,
+  errorCount: 0,
+  averageLatency: 0,
+};
     this.dataSources.set(source.sourceId, sourceWithMetrics);
     this.emit('dataSourceAdded', { sourceId: source.sourceId });
-  }
   public addDataDestination(destination: Omit<DataDestination, 'metrics'>): void {
-    const destinationWithMetrics: DataDestination = {
-      ...destination,
-      metrics: {,
-        recordsWritten: 0,
-        bytesWritten: 0,
-        writeRate: 0,
-        errorCount: 0,
-        averageLatency: 0,
-      }
-    };
+  const destinationWithMetrics: DataDestination = {,
+  ...destination,
+  metrics: {,
+  recordsWritten: 0,
+  bytesWritten: 0,
+  writeRate: 0,
+  errorCount: 0,
+  averageLatency: 0,
+};
     this.dataDestinations.set(destination.destinationId, destinationWithMetrics);
     this.emit('dataDestinationAdded', { destinationId: destination.destinationId });
-  }
   public addPipelineStage(stage: PipelineStage): void {
     this.stages.set(stage.stageId, stage);
     this.emit('pipelineStageAdded', { stageId: stage.stageId });
-  }
   public updateStageConfiguration(stageId: string, configuration: Record<string, unknown>): void {
     const stage = this.stages.get(stageId);
     if (!stage) {
       throw new Error(`Pipeline stage ${stageId} not found`);}
-    }
     stage.configuration = { ...stage.configuration, ...configuration };
     this.emit('stageConfigurationUpdated', { stageId, configuration });
-  }
   public enableStage(stageId: string): void {
     const stage = this.stages.get(stageId);
     if (!stage) {
       throw new Error(`Pipeline stage ${stageId} not found`);}
-    }
     stage.enabled = true;
     this.emit('stageEnabled', { stageId });
-  }
   public disableStage(stageId: string): void {
     const stage = this.stages.get(stageId);
     if (!stage) {
       throw new Error(`Pipeline stage ${stageId} not found`);}
-    }
     stage.enabled = false;
     this.emit('stageDisabled', { stageId });
-  }
-  public getExecutionHistory(limit?: number): PipelineExecution[] {
-    const executions = Array.from(this.executionHistory.values());
-      .sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
-    return limit ? executions.slice(0, limit) : executions;
-  }
-  public getExecution(executionId: string): PipelineExecution | undefined {
-    return this.executionHistory.get(executionId);
-  }
-  public getPipelineMetrics(): PipelineMetrics {
-    const executions = Array.from(this.executionHistory.values());
-    const recentExecutions = executions.filter(e => ;);
-      Date.now() - e.startTime.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
-    );
-    return {
-      totalExecutions: executions.length,
-      successfulExecutions: executions.filter(e => e.status === ExecutionStatus.COMPLETED).length,
-      failedExecutions: executions.filter(e => e.status === ExecutionStatus.FAILED).length,
-      averageExecutionTime: this.calculateAverageExecutionTime(recentExecutions),
-      throughputPerHour: this.calculateThroughput(recentExecutions),
-      errorRate: this.calculateErrorRate(recentExecutions),
-      queueSize: this.processingQueue.length,
-      activeExecutions: this.currentExecution ? 1 : 0,
-      stageMetrics: this.getStageMetrics(),
-    };
-  }
+  public getExecutionHistory(limit?: number): PipelineExecution {
+  const executions = Array.from(this.executionHistory.values());
+  .sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
+  return limit ? executions.slice(0, limit) : executions;
+  public getExecution(executionId: string): PipelineExecution | undefined {,
+  return this.executionHistory.get(executionId);
+  public getPipelineMetrics(): PipelineMetrics {,
+  const executions = Array.from(this.executionHistory.values());
+  const recentExecutions = executions.filter(e => ;);
+  Date.now() - e.startTime.getTime() < 24 * 60 * 60 * 1000 // Last 24 hours
+  );
+  return {
+  totalExecutions: executions.length,
+  successfulExecutions: executions.filter(e => e.status === ExecutionStatus.COMPLETED).length,
+  failedExecutions: executions.filter(e => e.status === ExecutionStatus.FAILED).length,
+  averageExecutionTime: this.calculateAverageExecutionTime(recentExecutions),
+  throughputPerHour: this.calculateThroughput(recentExecutions),
+  errorRate: this.calculateErrorRate(recentExecutions),
+  queueSize: this.processingQueue.length,
+  activeExecutions: this.currentExecution ? 1 : 0,
+  stageMetrics: this.getStageMetrics(),
+};
   public acknowledgeAlert(alertId: string, acknowledgedBy: string): void {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);}
-    }
     alert.acknowledged = true;
     alert.acknowledgedBy = acknowledgedBy;
     alert.acknowledgedAt = new Date();
     this.emit('alertAcknowledged', { alertId, acknowledgedBy });
-  }
-  public getActiveAlerts(): PipelineAlert[] {
+  public getActiveAlerts(): PipelineAlert {
     return Array.from(this.alerts.values()).filter(alert => !alert.acknowledged);
-  }
   // ==========================================
   // PRIVATE METHODS
   // ==========================================
   private initializeDefaultStages(): void {
-    const defaultStages: PipelineStage[] = [
+    const defaultStages: PipelineStage = [
       {
         stageId: 'ingestion',
         stageName: 'Data Ingestion',
@@ -609,8 +533,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         transformations: [],
         validationRules: [],
         errorHandling: this.createDefaultErrorHandling(),
-        performanceMetrics: this.createDefaultMetrics(),
-      },
+        performanceMetrics: this.createDefaultMetrics();
+  }
       {
         stageId: 'validation',
         stageName: 'Data Validation',
@@ -623,8 +547,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         transformations: [],
         validationRules: this.createDefaultValidationRules(),
         errorHandling: this.createDefaultErrorHandling(),
-        performanceMetrics: this.createDefaultMetrics(),
-      },
+        performanceMetrics: this.createDefaultMetrics();
+  }
       {
         stageId: 'enrichment',
         stageName: 'Data Enrichment',
@@ -637,8 +561,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         transformations: this.createDefaultTransformations(),
         validationRules: [],
         errorHandling: this.createDefaultErrorHandling(),
-        performanceMetrics: this.createDefaultMetrics(),
-      },
+        performanceMetrics: this.createDefaultMetrics();
+  }
       {
         stageId: 'analysis',
         stageName: 'Security Analysis',
@@ -651,8 +575,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         transformations: [],
         validationRules: [],
         errorHandling: this.createDefaultErrorHandling(),
-        performanceMetrics: this.createDefaultMetrics(),
-      },
+        performanceMetrics: this.createDefaultMetrics();
+  }
       {
         stageId: 'output',
         stageName: 'Data Output',
@@ -665,11 +589,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         transformations: [],
         validationRules: [],
         errorHandling: this.createDefaultErrorHandling(),
-        performanceMetrics: this.createDefaultMetrics(),
-      }
-    ];
+        performanceMetrics: this.createDefaultMetrics()];
     defaultStages.forEach(stage => this.stages.set(stage.stageId, stage));
-  }
   private createDefaultSchema(): DataSchema {
     return {
       schemaId: 'default',
@@ -682,31 +603,30 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         { name: 'source', type: FieldType.STRING, required: false, nullable: true },
         { name: 'data', type: FieldType.OBJECT, required: false, nullable: true }
       ],
-      constraints: [],
-    };
-  }
-  private createDefaultValidationRules(): ValidationRule[] {
-    return [
+      constraints: [];
+  };
+  private createDefaultValidationRules(): ValidationRule {
+  return [
+  {
+  ruleId: 'required_id',
+  ruleName: 'Required ID Field',
+  ruleType: ValidationRuleType.REQUIRED_FIELD,
+  field: 'id',
+  condition: 'value != null && value != ""',
+  errorMessage: 'ID field is required',
+  severity: ValidationSeverity.ERROR,
+  enabled: true,
+}
       {
-        ruleId: 'required_id',
-        ruleName: 'Required ID Field',
-        ruleType: ValidationRuleType.REQUIRED_FIELD,
-        field: 'id',
-        condition: 'value != null && value != ""',
-        errorMessage: 'ID field is required',
-        severity: ValidationSeverity.ERROR,
-        enabled: true,
-      },
-      {
-        ruleId: 'valid_timestamp',
-        ruleName: 'Valid Timestamp',
-        ruleType: ValidationRuleType.DATA_TYPE,
-        field: 'timestamp',
-        condition: 'value instanceof Date || !isNaN(Date.parse(value))',
-        errorMessage: 'Timestamp must be a valid date',
-        severity: ValidationSeverity.ERROR,
-        enabled: true,
-      },
+  ruleId: 'valid_timestamp',
+  ruleName: 'Valid Timestamp',
+  ruleType: ValidationRuleType.DATA_TYPE,
+  field: 'timestamp',
+  condition: 'value instanceof Date || !isNaN(Date.parse(value))',
+  errorMessage: 'Timestamp must be a valid date',
+  severity: ValidationSeverity.ERROR,
+  enabled: true,
+}
       {
         ruleId: 'valid_severity',
         ruleName: 'Valid Severity Level',
@@ -715,11 +635,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         condition: '["low", "medium", "high", "critical"].includes(value)',
         errorMessage: 'Severity must be one of: low, medium, high, critical',
         severity: ValidationSeverity.ERROR,
-        enabled: true,
-      }
-    ];
-  }
-  private createDefaultTransformations(): DataTransformation[] {
+        enabled: true];
+  private createDefaultTransformations(): DataTransformation {
     return [
       {
         transformationId: 'normalize_timestamp',
@@ -727,8 +644,8 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         inputFields: ['timestamp'],
         outputFields: ['timestamp'],
         parameters: { format: 'ISO8601' },
-        enabled: true,
-      },
+        enabled: true;
+  }
       {
         transformationId: 'enrich_geolocation',
         transformationType: TransformationType.ENRICH,
@@ -736,55 +653,46 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         outputFields: ['geolocation'],
         parameters: { service: 'geoip' },
         condition: 'record.source_ip != null',
-        enabled: true,
-      },
+        enabled: true;
+  }
       {
         transformationId: 'classify_threat',
         transformationType: TransformationType.CLASSIFY,
         inputFields: ['type', 'severity', 'data'],
         outputFields: ['threat_classification'],
         parameters: { model: 'security_classifier' },
-        enabled: true,
-      }
-    ];
-  }
+        enabled: true];
   private createDefaultErrorHandling(): ErrorHandlingStrategy {
-    return {
-      onValidationError: ErrorAction.LOG_AND_CONTINUE,
-      onTransformationError: ErrorAction.RETRY,
-      onOutputError: ErrorAction.REDIRECT_TO_DLQ,
-      maxRetryAttempts: 3,
-      retryDelayMs: 1000,
-      deadLetterQueue: true,
-      alertOnError: true,
-    };
-  }
+  return {
+  onValidationError: ErrorAction.LOG_AND_CONTINUE,
+  onTransformationError: ErrorAction.RETRY,
+  onOutputError: ErrorAction.REDIRECT_TO_DLQ,
+  maxRetryAttempts: 3,
+  retryDelayMs: 1000,
+  deadLetterQueue: true,
+  alertOnError: true,
+};
   private createDefaultMetrics(): StageMetrics {
-    return {
-      recordsProcessed: 0,
-      recordsSuccessful: 0,
-      recordsFailed: 0,
-      averageProcessingTime: 0,
-      throughputPerSecond: 0,
-      errorRate: 0,
-      performanceTrends: [],
-    };
-  }
+  return {
+  recordsProcessed: 0,
+  recordsSuccessful: 0,
+  recordsFailed: 0,
+  averageProcessingTime: 0,
+  throughputPerSecond: 0,
+  errorRate: 0,
+  performanceTrends: [],
+};
   private startProcessingLoop(): void {
     if (this.config.enableRealTimeProcessing) {
       setInterval(async () => {
         if (this.processingQueue.length > 0 && !this.isProcessing) {
           await this.processQueueBatch();
-        }
       }, 1000); // Check every second
-    }
     // Batch processing interval
     setInterval(async () => {
       if (this.processingQueue.length >= this.config.maxBatchSize) {
         await this.processQueueBatch();
-      }
     }, this.config.batchProcessingInterval * 60 * 1000);
-  }
   private async processQueueBatch(): Promise<void> {
     if (this.isProcessing) return;
     this.isProcessing = true;
@@ -793,96 +701,84 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       const batch = this.processingQueue.splice(0, batchSize);
       if (batch.length > 0) {
         await this.processDataBatch(batch);
-      }
     } catch (error) {
       this.emit('batchProcessingError', { error, queueSize: this.processingQueue.length });
     } finally {
       this.isProcessing = false;
-    }
-  }
   private createExecution(inputCount: number): string {
     const executionId = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
     const execution: PipelineExecution = {
-      executionId,
-      pipelineId: 'security_intelligence_pipeline',
-      startTime: new Date(),
-      status: ExecutionStatus.PENDING,
-      inputRecordCount: inputCount,
-      outputRecordCount: 0,
-      stageExecutions: [],
-      errors: [],
-      metrics: {,
-        totalDuration: 0,
-        recordThroughput: 0,
-        averageRecordSize: 0,
-        peakMemoryUsage: 0,
-        totalCpuTime: 0,
-        networkBytesTransferred: 0,
-        diskBytesWritten: 0,
-      }
-    };
+  executionId,
+  pipelineId: 'security_intelligence_pipeline',
+  startTime: new Date(),
+  status: ExecutionStatus.PENDING,
+  inputRecordCount: inputCount,
+  outputRecordCount: 0,
+  stageExecutions: [],
+  errors: [],
+  metrics: {,
+  totalDuration: 0,
+  recordThroughput: 0,
+  averageRecordSize: 0,
+  peakMemoryUsage: 0,
+  totalCpuTime: 0,
+  networkBytesTransferred: 0,
+  diskBytesWritten: 0,
+};
     this.executionHistory.set(executionId, execution);
     return executionId;
-  }
   private createStageExecution(stage: PipelineStage, inputCount: number): StageExecution {
-    return {
-      stageId: stage.stageId,
-      stageName: stage.stageName,
-      startTime: new Date(),
-      status: ExecutionStatus.RUNNING,
-      inputCount,
-      outputCount: 0,
-      duration: 0,
-      memoryUsage: 0,
-      cpuUsage: 0,
-      errors: [],
-    };
-  }
-  private async processStage(stage: PipelineStage, data: any[], stageExecution: StageExecution): Promise<any[]> {
-    const startTime = Date.now();
-    try {
-      let processedData = data;
-      // Apply validations
-      if (this.config.enableDataValidation && stage.validationRules.length > 0) {
-        processedData = this.validateData(processedData, stage.validationRules, stageExecution);
-      }
-      // Apply transformations
-      if (this.config.enableDataTransformation && stage.transformations.length > 0) {
-        processedData = await this.transformData(processedData, stage.transformations, stageExecution);
-      }
-      // Stage-specific processing
-      switch (stage.stageType) {
-        case StageType.ENRICHMENT:
-          if (this.config.enableDataEnrichment) {
-            processedData = await this.enrichData(processedData, stage.configuration);
-          }
-          break;
-        case StageType.ANALYSIS:
-          processedData = await this.analyzeData(processedData, stage.configuration);
-          break;
-        case StageType.OUTPUT:
-          await this.outputData(processedData, stage.configuration);
-          break;
-      }
-      // Update stage metrics
-      const processingTime = Date.now() - startTime;
-      stage.performanceMetrics.recordsProcessed += data.length;
-      stage.performanceMetrics.recordsSuccessful += processedData.length;
-      stage.performanceMetrics.averageProcessingTime = 
-        (stage.performanceMetrics.averageProcessingTime + processingTime) / 2;
-      stage.performanceMetrics.throughputPerSecond = 
-        processedData.length / (processingTime / 1000);
-      return processedData;
-    } catch (error) {
+  return {
+  stageId: stage.stageId,
+  stageName: stage.stageName,
+  startTime: new Date(),
+  status: ExecutionStatus.RUNNING,
+  inputCount,
+  outputCount: 0,
+  duration: 0,
+  memoryUsage: 0,
+  cpuUsage: 0,
+  errors: [],
+};
+  private async processStage(stage: PipelineStage, data: any, stageExecution: StageExecution): Promise<any> {
+  const startTime = Date.now();
+  try {
+  let processedData = data;
+  // Apply validations
+  if (this.config.enableDataValidation && stage.validationRules.length > 0) {
+  processedData = this.validateData(processedData, stage.validationRules, stageExecution);
+  // Apply transformations
+  if (this.config.enableDataTransformation && stage.transformations.length > 0) {
+  processedData = await this.transformData(processedData, stage.transformations, stageExecution);
+  // Stage-specific processing
+  switch (stage.stageType) {
+  case StageType.ENRICHMENT:,
+  if (this.config.enableDataEnrichment) {
+  processedData = await this.enrichData(processedData, stage.configuration);
+  break;
+  case StageType.ANALYSIS:,
+  processedData = await this.analyzeData(processedData, stage.configuration);
+  break;
+  case StageType.OUTPUT:,
+  await this.outputData(processedData, stage.configuration);
+  break;
+  // Update stage metrics
+  const processingTime = Date.now() - startTime;
+  stage.performanceMetrics.recordsProcessed += data.length;
+  stage.performanceMetrics.recordsSuccessful += processedData.length;
+  stage.performanceMetrics.averageProcessingTime =
+  (stage.performanceMetrics.averageProcessingTime + processingTime) / 2;
+  stage.performanceMetrics.throughputPerSecond =
+  processedData.length / (processingTime / 1000);
+  return processedData;
+} catch (error) {
       stage.performanceMetrics.recordsFailed += data.length;
       stage.performanceMetrics.errorRate = 
         stage.performanceMetrics.recordsFailed / 
         Math.max(stage.performanceMetrics.recordsProcessed, 1);
       throw error;
-    }
-  }
-  private validateData(data: any[], rules: ValidationRule[], stageExecution: StageExecution): any[] {
-    const validData: any[] = [];
+  private validateData(data: any, rules: ValidationRule, stageExecution: StageExecution): any {
+    const validData: any = [];
     for (const record of data) {
       let isValid = true;
       for (const rule of rules.filter(r => r.enabled)) {
@@ -894,37 +790,25 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
             if (rule.severity === ValidationSeverity.ERROR || rule.severity === ValidationSeverity.CRITICAL) {
               isValid = false;
               break;
-            }
-          }
         } catch (error) {
           stageExecution.errors.push(`Error evaluating validation rule ${rule.ruleId}: ${error}`);}
           isValid = false;
           break;
-        }
-      }
       if (isValid) {
-        validData.push(record);
-      }
-    }
-    return validData;
-  }
-  private async transformData()
-    data: any[],
-    transformations: DataTransformation[],
-    stageExecution: StageExecution,
-  ): Promise<any[]> {
-    let transformedData = [...data];
-    for (const transformation of transformations.filter(t => t.enabled)) {
-      try {
-        transformedData = await this.applyTransformation(transformedData, transformation);
-      } catch (error) {
+  validData.push(record);
+  return validData;
+  private async transformData(data: any,)
+  transformations: DataTransformation,
+  stageExecution: StageExecution): Promise<any> {,
+  let transformedData = [...data];
+  for (const transformation of transformations.filter(t => t.enabled)) {
+  try {
+  transformedData = await this.applyTransformation(transformedData, transformation);
+} catch (error) {
         stageExecution.errors.push(`Transformation failed for ${transformation.transformationId}: ${error}`);}
         // Continue with other transformations based on error handling strategy
-      }
-    }
     return transformedData;
-  }
-  private async applyTransformation(data: any[], transformation: DataTransformation): Promise<any[]> {
+  private async applyTransformation(data: any, transformation: DataTransformation): Promise<any> {
     switch (transformation.transformationType) {
       case TransformationType.MAP:
         return data.map(record => this.mapRecord(record, transformation));
@@ -938,8 +822,6 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         return await this.classifyRecords(data, transformation);
       default:
         return data;
-    }
-  }
   private mapRecord(record: any, transformation: DataTransformation): any {
     const mapped = { ...record };
     transformation.inputFields.forEach((inputField, index) => {
@@ -948,97 +830,79 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
         mapped[outputField] = mapped[inputField];
         if (transformation.parameters.removeOriginal) {
           delete mapped[inputField];
-        }
-      }
     });
     return mapped;
-  }
   private normalizeRecord(record: any, transformation: DataTransformation): any {
     const normalized = { ...record };
     transformation.inputFields.forEach(field => {)
-      const value = this.getFieldValue(normalized, field);
+  const value = this.getFieldValue(normalized, field);
       if (value !== undefined) {
         normalized[field] = this.normalizeValue(value, transformation.parameters);
-      }
     });
     return normalized;
-  }
   private normalizeValue(value: any, parameters: Record<string, unknown>): any {
-    if (value instanceof Date || !isNaN(Date.parse(value))) {
-      // Normalize timestamps
-      const date = new Date(value);
-      switch (parameters.format) {
-        case 'ISO8601':
-          return date.toISOString();
-        case 'timestamp':
-          return date.getTime();
-        default:
-          return date;
-      }
-    }
-    if (typeof value === 'string') {
-      // Normalize strings
-      if (parameters.lowercase) return value.toLowerCase();
-      if (parameters.uppercase) return value.toUpperCase();
-      if (parameters.trim) return value.trim();
-    }
-    return value;
-  }
-  private async enrichRecords(data: any[], transformation: DataTransformation): Promise<any[]> {
-    // Placeholder for enrichment logic
-    // In a real implementation, this would call external services for enrichment
-    return data.map(record => ({)
-      ...record,
-      enriched_at: new Date(),
-      enrichment_source: transformation.parameters.service || 'default',
-    }));
-  }
-  private async classifyRecords(data: any[], transformation: DataTransformation): Promise<any[]> {
-    // Placeholder for classification logic
-    // In a real implementation, this would use ML models for classification
-    return data.map(record => ({)
-      ...record,
-      classification: {,
-        category: 'security_event',
-        confidence: 0.85,
-        model: transformation.parameters.model || 'default',
-      }
-    }));
-  }
-  private async enrichData(data: any[], configuration: Record<string, unknown>): Promise<any[]> {
-    // Implement data enrichment logic
-    return data.map(record => ({)
-      ...record,
-      enriched: true,
-      enrichment_timestamp: new Date(),
-    }));
-  }
-  private async analyzeData(data: any[], configuration: Record<string, unknown>): Promise<any[]> {
-    // Implement security analysis logic
-    return data.map(record => ({)
-      ...record,
-      analyzed: true,
-      risk_score: Math.random() * 100,
-      threat_indicators: [],
-    }));
-  }
-  private async outputData(data: any[], configuration: Record<string, unknown>): Promise<void> {
-    // Implement output logic based on configured destinations
-    for (const destination of this.dataDestinations.values()) {
-      if (destination.enabled) {
-        await this.writeToDestination(data, destination);
-      }
-    }
-  }
-  private async writeToDestination(data: any[], destination: DataDestination): Promise<void> {
-    // Placeholder for destination-specific writing logic
-    destination.metrics.recordsWritten += data.length;
-    destination.metrics.lastWrittenAt = new Date();
-    this.emit('dataWritten', { )
-      destinationId: destination.destinationId, 
-      recordCount: data.length ,
-    });
-  }
+  if (value instanceof Date || !isNaN(Date.parse(value))) {
+  // Normalize timestamps
+  const date = new Date(value);
+  switch (parameters.format) {
+  case 'ISO8601':,
+  return date.toISOString();
+  case 'timestamp':,
+  return date.getTime();
+  default:,
+  return date;
+  if (typeof value === 'string') {
+  // Normalize strings
+  if (parameters.lowercase) return value.toLowerCase();
+  if (parameters.uppercase) return value.toUpperCase();
+  if (parameters.trim) return value.trim();
+  return value;
+  private async enrichRecords(data: any, transformation: DataTransformation): Promise<any> {,
+  // Placeholder for enrichment logic
+  // In a real implementation, this would call external services for enrichment
+  return data.map(record => ({)
+  ...record,
+  enriched_at: new Date(),
+  enrichment_source: transformation.parameters.service || 'default',
+}));
+  private async classifyRecords(data: any, transformation: DataTransformation): Promise<any> {
+  // Placeholder for classification logic
+  // In a real implementation, this would use ML models for classification
+  return data.map(record => ({)
+  ...record,
+  classification: {,
+  category: 'security_event',
+  confidence: 0.85,
+  model: transformation.parameters.model || 'default',
+}));
+  private async enrichData(data: any, configuration: Record<string, unknown>): Promise<any> {
+  // Implement data enrichment logic
+  return data.map(record => ({)
+  ...record,
+  enriched: true,
+  enrichment_timestamp: new Date(),
+}));
+  private async analyzeData(data: any, configuration: Record<string, unknown>): Promise<any> {
+  // Implement security analysis logic
+  return data.map(record => ({)
+  ...record,
+  analyzed: true,
+  risk_score: Math.random() * 100,
+  threat_indicators: [],
+}));
+  private async outputData(data: any, configuration: Record<string, unknown>): Promise<void> {
+  // Implement output logic based on configured destinations
+  for (const destination of this.dataDestinations.values()) {
+  if (destination.enabled) {
+  await this.writeToDestination(data, destination);
+  private async writeToDestination(data: any, destination: DataDestination): Promise<void> {,
+  // Placeholder for destination-specific writing logic
+  destination.metrics.recordsWritten += data.length;
+  destination.metrics.lastWrittenAt = new Date();
+  this.emit('dataWritten', { )
+  destinationId: destination.destinationId,
+  recordCount: data.length,
+});
   private evaluateValidationCondition(condition: string, value: any, record: any): boolean {
     try {
       // Create a safe evaluation context
@@ -1047,58 +911,48 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
       return Function('value', 'record', `return ${condition}`)(value, record);}
     } catch {
       return false;
-    }
-  }
   private evaluateCondition(condition: string, record: any): boolean {
     try {
       return Function('record', `return ${condition}`)(record);}
     } catch {
       return false;
-    }
-  }
   private getFieldValue(record: any, fieldPath: string): any {
     const path = fieldPath.split('.');
     let value = record;
     for (const key of path) {
       value = value?.[key];
       if (value === undefined) break;
-    }
     return value;
-  }
   private completeStageExecution(stageExecution: StageExecution, outputCount: number): void {
     stageExecution.endTime = new Date();
     stageExecution.status = ExecutionStatus.COMPLETED;
     stageExecution.outputCount = outputCount;
     stageExecution.duration = stageExecution.endTime.getTime() - stageExecution.startTime.getTime();
-  }
   private failStageExecution(stageExecution: StageExecution, error: Error): void {
     stageExecution.endTime = new Date();
     stageExecution.status = ExecutionStatus.FAILED;
     stageExecution.duration = stageExecution.endTime.getTime() - stageExecution.startTime.getTime();
     stageExecution.errors.push(error.message);
-  }
   private handleExecutionError(executionId: string, stage: string, error: Error): void {
     const execution = this.executionHistory.get(executionId);
     if (execution) {
-      const executionError: ExecutionError = {
-        errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,}
-        timestamp: new Date(),
+      const executionError: ExecutionError = {,
+  errorId: `error_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`}
+},
+  timestamp: new Date(),
         stageId: stage,
         errorType: ErrorType.UNKNOWN_ERROR,
         errorMessage: error.message,
         stackTrace: error.stack,
         retryCount: 0,
-        resolved: false,
-      };
+        resolved: false;
+  };
       execution.errors.push(executionError);
-    }
     // Create alert
-    this.createAlert(PipelineAlertType.PIPELINE_FAILURE, ValidationSeverity.ERROR, )
+    this.createAlert(PipelineAlertType.PIPELINE_FAILURE, ValidationSeverity.ERROR)
       `Pipeline execution failed: ${error.message}`, { executionId, stage, error: error.message });}
     this.emit('executionError', { executionId, stage, error });
-  }
-  private createAlert()
-    type: PipelineAlertType,
+  private createAlert(type: PipelineAlertType,)
     severity: ValidationSeverity,
     message: string,
     details: Record<string,
@@ -1106,133 +960,118 @@ export class SecurityIntelligenceDataPipeline extends EventEmitter {
   ): void {
     const alertId = `alert_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;}
     const alert: PipelineAlert = {
-      alertId,
-      timestamp: new Date(),
-      alertType: type,
-      severity,
-      pipelineId: 'security_intelligence_pipeline',
-      message,
-      details,
-      acknowledged: false,
-    };
+  alertId,
+  timestamp: new Date(),
+  alertType: type,
+  severity,
+  pipelineId: 'security_intelligence_pipeline',
+  message,
+  details,
+  acknowledged: false,
+};
     this.alerts.set(alertId, alert);
     this.emit('alertCreated', alert);
-  }
   private calculateExecutionMetrics(execution: PipelineExecution): ExecutionMetrics {
-    const duration = execution.endTime!.getTime() - execution.startTime.getTime();
-    return {
-      totalDuration: duration,
-      recordThroughput: execution.outputRecordCount / (duration / 1000),
-      averageRecordSize: 1024, // Placeholder - calculate actual size
-      peakMemoryUsage: 0, // Placeholder - implement memory tracking  
-      totalCpuTime: 0, // Placeholder - implement CPU tracking
-      networkBytesTransferred: 0, // Placeholder
-      diskBytesWritten: 0 // Placeholder,
-    };
-  }
-  private calculateAverageExecutionTime(executions: PipelineExecution[]): number {
-    if (executions.length === 0) return 0;
-    const completed = executions.filter(e => e.status === ExecutionStatus.COMPLETED && e.endTime);
-    if (completed.length === 0) return 0;
-    const totalTime = completed.reduce((sum, exec) => ;
-      sum + (exec.endTime!.getTime() - exec.startTime.getTime()), 0);
-    return totalTime / completed.length;
-  }
-  private calculateThroughput(executions: PipelineExecution[]): number {
-    const hourlyBuckets = new Map<number, number>();
-    executions.forEach(exec => {)
-      const hour = Math.floor(exec.startTime.getTime() / (60 * 60 * 1000));
-      hourlyBuckets.set(hour, (hourlyBuckets.get(hour) || 0) + exec.outputRecordCount);
-    });
+  const duration = execution.endTime!.getTime() - execution.startTime.getTime();
+  return {
+  totalDuration: duration,
+  recordThroughput: execution.outputRecordCount / (duration / 1000),
+  averageRecordSize: 1024, // Placeholder - calculate actual size,
+  peakMemoryUsage: 0, // Placeholder - implement memory tracking,
+  totalCpuTime: 0, // Placeholder - implement CPU tracking,
+  networkBytesTransferred: 0, // Placeholder,
+  diskBytesWritten: 0 // Placeholder,
+};
+  private calculateAverageExecutionTime(executions: PipelineExecution): number {
+  if (executions.length === 0) return 0;
+  const completed = executions.filter(e => e.status === ExecutionStatus.COMPLETED && e.endTime);
+  if (completed.length === 0) return 0;
+  const totalTime = completed.reduce((sum, exec) => ;
+  sum + (exec.endTime!.getTime() - exec.startTime.getTime()), 0);
+  return totalTime / completed.length;
+  private calculateThroughput(executions: PipelineExecution): number {,
+  const hourlyBuckets = new Map<number, number>();
+  executions.forEach(exec => {)
+  const hour = Math.floor(exec.startTime.getTime() / (60 * 60 * 1000));
+  hourlyBuckets.set(hour, (hourlyBuckets.get(hour) || 0) + exec.outputRecordCount);
+});
     if (hourlyBuckets.size === 0) return 0;
     const totalRecords = Array.from(hourlyBuckets.values()).reduce((sum, count) => sum + count, 0);
     return totalRecords / hourlyBuckets.size;
-  }
-  private calculateErrorRate(executions: PipelineExecution[]): number {
+  private calculateErrorRate(executions: PipelineExecution): number {
     if (executions.length === 0) return 0;
     const failed = executions.filter(e => e.status === ExecutionStatus.FAILED).length;
     return failed / executions.length;
-  }
   private getStageMetrics(): Map<string, StageMetrics> {
     const metrics = new Map<string, StageMetrics>();
     this.stages.forEach((stage, stageId) => {
       metrics.set(stageId, { ...stage.performanceMetrics });
     });
     return metrics;
-  }
-}
 
 // ==========================================
 // INTERFACES FOR PIPELINE METRICS
 // ==========================================
 
 export interface PipelineMetrics {
-  totalExecutions: number;
+  totalExecutions: number;,
   successfulExecutions: number;
-  failedExecutions: number;
+  failedExecutions: number;,
   averageExecutionTime: number;
-  throughputPerHour: number;
+  throughputPerHour: number;,
   errorRate: number;
-  queueSize: number;
+  queueSize: number;,
   activeExecutions: number;
   stageMetrics: Map<string, StageMetrics>;
+  // ==========================================
+  // FACTORY CLASS
+  // ==========================================
 }
-
-// ==========================================
-// FACTORY CLASS
-// ==========================================
-
 export class SecurityIntelligenceDataPipelineFactory {
-  public static createDefaultConfig(): DataPipelineConfig {
-    return {
-      enableRealTimeProcessing: true,
-      batchProcessingInterval: 5,
-      maxBatchSize: 1000,
-      enableDataValidation: true,
-      enableDataEnrichment: true,
-      enableDataTransformation: true,
-      retentionPeriodDays: 30,
-      enableErrorRecovery: true,
-      parallelProcessingThreads: 4,
-      dataQualityThresholds: {,
-        completeness: 95,
-        accuracy: 90,
-        consistency: 85,
-        timeliness: 5,
-        validity: 95,
-      },
-      outputFormats: [OutputFormat.JSON, OutputFormat.DATABASE]
+  public static createDefaultConfig(): DataPipelineConfig {,
+  return {
+  enableRealTimeProcessing: true,
+  batchProcessingInterval: 5,
+  maxBatchSize: 1000,
+  enableDataValidation: true,
+  enableDataEnrichment: true,
+  enableDataTransformation: true,
+  retentionPeriodDays: 30,
+  enableErrorRecovery: true,
+  parallelProcessingThreads: 4,
+  dataQualityThresholds: {,
+  completeness: 95,
+  accuracy: 90,
+  consistency: 85,
+  timeliness: 5,
+  validity: 95,
+},
+  outputFormats: [OutputFormat.JSON, OutputFormat.DATABASE]
     };
-  }
   public static createHighThroughputConfig(): DataPipelineConfig {
-    return {
-      ...this.createDefaultConfig(),
-      enableRealTimeProcessing: true,
-      batchProcessingInterval: 1,
-      maxBatchSize: 5000,
-      parallelProcessingThreads: 8,
-      enableDataValidation: false, // Disable for performance
-      enableDataEnrichment: false,
-    };
-  }
+  return {
+  ...this.createDefaultConfig(),
+  enableRealTimeProcessing: true,
+  batchProcessingInterval: 1,
+  maxBatchSize: 5000,
+  parallelProcessingThreads: 8,
+  enableDataValidation: false, // Disable for performance,
+  enableDataEnrichment: false,
+};
   public static createHighQualityConfig(): DataPipelineConfig {
-    return {
-      ...this.createDefaultConfig(),
-      enableDataValidation: true,
-      enableDataEnrichment: true,
-      dataQualityThresholds: {,
-        completeness: 99,
-        accuracy: 95,
-        consistency: 95,
-        timeliness: 2,
-        validity: 99,
-      }
-    };
-  }
+  return {
+  ...this.createDefaultConfig(),
+  enableDataValidation: true,
+  enableDataEnrichment: true,
+  dataQualityThresholds: {,
+  completeness: 99,
+  accuracy: 95,
+  consistency: 95,
+  timeliness: 2,
+  validity: 99,
+};
   public static createPipeline(config?: Partial<DataPipelineConfig>): SecurityIntelligenceDataPipeline {
     const fullConfig = { ...this.createDefaultConfig(), ...config };
     return new SecurityIntelligenceDataPipeline(fullConfig);
-  }
-}
 
 export default SecurityIntelligenceDataPipeline;

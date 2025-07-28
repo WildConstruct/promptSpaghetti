@@ -93,14 +93,14 @@ const evaluateArchivingSchema = {
     complianceRequirements: { 
       type: 'array', 
       items: { type: 'string' }
-    },
+  }
     hasUserConsent: { type: 'boolean' },
     isEmergency: { type: 'boolean' },
     isScheduled: { type: 'boolean' },
     triggeredBy: { 
       type: 'string', 
       enum: ['user', 'system', 'policy', 'emergency'] 
-    },
+  }
     requestId: { type: 'string' }
   }
 };
@@ -183,7 +183,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           lastUpdated: Math.max(
             config.updatedAt.getTime(),
             state?.lastToggleTime?.getTime() || 0
-          )
+
         };
       });
 
@@ -267,7 +267,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         lastUpdated: Math.max(
           config.updatedAt.getTime(),
           state?.lastToggleTime?.getTime() || 0
-        )
+
       });
     } catch (error) {
       request.log.error('Error getting archive toggle:', error);
@@ -286,7 +286,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      },
+  }
       body: updateArchiveToggleSchema
     }
   }, async (request, reply) => {
@@ -327,7 +327,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      },
+  }
       body: setToggleStateSchema
     }
   }, async (request, reply) => {
@@ -369,7 +369,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      },
+  }
       body: emergencyOverrideSchema
     }
   }, async (request, reply) => {
@@ -447,7 +447,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         context: {
           ...context,
           timestamp: context.timestamp.toISOString()
-        },
+  }
         evaluatedAt: new Date().toISOString(),
         evaluatedFor: user?.id || 'system'
       });
@@ -468,7 +468,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -572,7 +572,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
           soxCompliant: config.soxCompliant,
           complianceRequired: config.complianceRequired,
           requiresExplicitConsent: config.requiresExplicitConsent
-        },
+  }
         operationalMetrics: {
           totalArchiveOperations: state.archiveOperationsCount,
           failedOperations: state.failedArchiveOperations,
@@ -580,19 +580,19 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
             ? ((state.archiveOperationsCount - state.failedArchiveOperations) / state.archiveOperationsCount * 100).toFixed(2) + '%'
             : 'N/A',
           lastOperation: state.lastArchiveOperation?.toISOString()
-        },
+  }
         consentStatus: {
           hasUserConsent: state.hasUserConsent,
           lastConsentCheck: state.lastConsentCheck?.toISOString(),
           consentRequired: config.requiresExplicitConsent
-        },
+  }
         auditStatus: {
           auditingEnabled: config.auditArchiveOperations,
           totalAuditEntries: state.auditTrail.length,
           lastAuditEntry: state.auditTrail.length > 0 
             ? state.auditTrail[state.auditTrail.length - 1].timestamp.toISOString()
             : null
-        },
+  }
         generatedAt: new Date().toISOString()
       };
 
@@ -614,7 +614,7 @@ export async function archiveToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string' } }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {

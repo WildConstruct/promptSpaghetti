@@ -57,7 +57,7 @@ describe('Security Analytics Performance API Routes', () => {
           epic1_analytics: true,
           epic17_admin: true,
           real_time_monitoring: true
-        },
+  }
         system_health: {
           buffer_sizes: { metrics: 5, alerts: 2 },
           monitoring_active: true
@@ -92,12 +92,12 @@ describe('Security Analytics Performance API Routes', () => {
             epic1_integration: true,
             epic17_integration: true,
             monitoring_active: true
-          },
+  }
           current_metrics: {
             performance_score: 85,
             system_availability_percent: 99.5
           }
-        },
+  }
         timestamp: expect.any(Number)
       });
     });
@@ -153,11 +153,11 @@ describe('Security Analytics Performance API Routes', () => {
             performance_score: 85,
             throughput_events_per_second: 100,
             active_threats_detected: 2
-          },
+  }
           integration_status: {
             monitoring_active: true
           }
-        },
+  }
         timestamp: expect.any(Number)
       });
 
@@ -224,7 +224,7 @@ describe('Security Analytics Performance API Routes', () => {
         headers: {
           authorization: 'Bearer valid-token',
           'content-type': 'application/json'
-        },
+  }
         payload: JSON.stringify(alertData)
       });
 
@@ -237,7 +237,7 @@ describe('Security Analytics Performance API Routes', () => {
           alert_id: 'alert-123',
           acknowledged_by: 'admin-user',
           acknowledged_at: expect.any(Number)
-        },
+  }
         timestamp: expect.any(Number)
       });
     });
@@ -249,7 +249,7 @@ describe('Security Analytics Performance API Routes', () => {
         headers: {
           authorization: 'Bearer valid-token',
           'content-type': 'application/json'
-        },
+  }
         payload: JSON.stringify({})
       });
 
@@ -262,11 +262,11 @@ describe('Security Analytics Performance API Routes', () => {
         url: '/api/security-analytics/performance/alerts/acknowledge',
         headers: {
           'content-type': 'application/json'
-        },
+  }
         payload: JSON.stringify({
           alertId: 'alert-123',
           acknowledgedBy: 'admin-user'
-        })
+  }
       });
 
       expect(response.statusCode).toBe(401);
@@ -291,7 +291,7 @@ describe('Security Analytics Performance API Routes', () => {
           system_availability: 99.5,
           active_threats: 2,
           last_check: expect.any(Number)
-        },
+  }
         timestamp: expect.any(Number)
       });
     });
@@ -359,7 +359,7 @@ describe('Security Analytics Performance API Routes', () => {
         data: {
           optimization_started: true,
           started_at: expect.any(Number)
-        },
+  }
         timestamp: expect.any(Number)
       });
     });
@@ -395,15 +395,15 @@ describe('Security Analytics Performance API Routes', () => {
             epic1_analytics: true,
             epic17_admin: true,
             real_time_monitoring: true
-          },
+  }
           system_health: {
             buffer_sizes: {
               metrics: 5,
               alerts: 2
-            },
+  }
             monitoring_active: true
           }
-        },
+  }
         timestamp: expect.any(Number)
       });
 

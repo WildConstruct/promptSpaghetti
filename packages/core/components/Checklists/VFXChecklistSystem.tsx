@@ -44,35 +44,35 @@ import {
 } from 'lucide-react';
 
 // Core checklist data structures
+
 export interface VFXChecklistItem {
-  id: string;
+  id: string;,
   title: string;
   description?: string;
-  status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';
+  status: 'pending' | 'in_progress' | 'review' | 'approved' | 'rejected' | 'blocked';,
   priority: 'low' | 'medium' | 'high' | 'critical';
-  completion: number; // 0-100 percentage
+  completion: number; // 0-100 percentage,
   assignee?: VFXTeamMember;
   reviewer?: VFXTeamMember;
-  author: VFXTeamMember;
+  author: VFXTeamMember;,
   createdAt: string;
   updatedAt: string;
   dueDate?: string;
   estimatedHours?: number;
   actualHours?: number;
-  dependencies: string[];
-  subtasks: VFXChecklistSubtask[];
-  attachments: VFXChecklistAttachment[];
-  assets: VFXAssetReference[];
-  tags: string[];
+  dependencies: string;,
+  subtasks: VFXChecklistSubtask;
+  attachments: VFXChecklistAttachment;,
+  assets: VFXAssetReference;
+  tags: string;,
   category: VFXChecklistCategory;
-  vfxPhase: VFXProductionPhase;
-  qualityGates: VFXQualityGate[];
-  comments: VFXChecklistComment[];
-  history: VFXChecklistHistoryEntry[];
+  vfxPhase: VFXProductionPhase;,
+  qualityGates: VFXQualityGate;
+  comments: VFXChecklistComment;,
+  history: VFXChecklistHistoryEntry;
 }
-
 export interface VFXChecklistSubtask {
-  id: string;
+  id: string;,
   title: string;
   completed: boolean;
   assignee?: VFXTeamMember;
@@ -80,33 +80,30 @@ export interface VFXChecklistSubtask {
   description?: string;
   estimatedMinutes?: number;
 }
-
 export interface VFXChecklistAttachment {
-  id: string;
+  id: string;,
   name: string;
-  type: 'image' | 'video' | 'document' | 'reference' | 'asset';
+  type: 'image' | 'video' | 'document' | 'reference' | 'asset';,
   url: string;
   thumbnailUrl?: string;
-  size: number;
+  size: number;,
   uploadedBy: VFXTeamMember;
   uploadedAt: string;
 }
-
 export interface VFXAssetReference {
-  id: string;
+  id: string;,
   name: string;
-  type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';
+  type: 'model' | 'texture' | 'animation' | 'effect' | 'composite' | 'render';,
   status: 'draft' | 'review' | 'approved' | 'final';
   version: string;
-  accuracy?: number; // Historical accuracy percentage
-  complexity?: number; // Rendering complexity score
-  dependencies: string[];
+  accuracy?: number; // Historical accuracy percentage,
+  complexity?: number; // Rendering complexity score,
+  dependencies: string;
 }
-
 export interface VFXQualityGate {
-  id: string;
+  id: string;,
   name: string;
-  type: 'technical' | 'creative' | 'accuracy' | 'performance';
+  type: 'technical' | 'creative' | 'accuracy' | 'performance';,
   status: 'pending' | 'passed' | 'failed' | 'waived';
   criteria: string;
   result?: string;
@@ -114,48 +111,43 @@ export interface VFXQualityGate {
   checkedAt?: string;
   required: boolean;
 }
-
 export interface VFXChecklistComment {
-  id: string;
+  id: string;,
   content: string;
-  author: VFXTeamMember;
+  author: VFXTeamMember;,
   timestamp: string;
-  type: 'comment' | 'review' | 'approval' | 'rejection';
-  mentions: string[];
-  reactions: { [emoji: string]: VFXTeamMember[] };
+  type: 'comment' | 'review' | 'approval' | 'rejection';,
+  mentions: string;
+  reactions: { [emoji: string]: VFXTeamMember };
 }
-
 export interface VFXChecklistHistoryEntry {
-  id: string;
+  id: string;,
   action: string;
   field?: string;
   oldValue?: unknown;
   newValue?: unknown;
-  user: VFXTeamMember;
+  user: VFXTeamMember;,
   timestamp: string;
   description: string;
 }
-
 export interface VFXTeamMember {
-  id: string;
+  id: string;,
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator' | 'qa_lead';
   avatar?: string;
-  email: string;
+  email: string;,
   color: string;
   isOnline?: boolean;
   permissions: VFXPermissions;
 }
-
 export interface VFXPermissions {
-  canCreate: boolean;
+  canCreate: boolean;,
   canEdit: boolean;
-  canDelete: boolean;
+  canDelete: boolean;,
   canApprove: boolean;
-  canAssign: boolean;
+  canAssign: boolean;,
   canViewReports: boolean;
 }
-
 export type VFXChecklistCategory = 
   | 'pre_production' | 'asset_creation' | 'animation' | 'fx' | 'lighting' 
   | 'compositing' | 'rendering' | 'post_production' | 'review' | 'delivery';
@@ -165,63 +157,59 @@ export type VFXProductionPhase =
   | 'comp' | 'render' | 'review' | 'final';
 
 export interface VFXChecklist {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
   project: string;
   scene?: string;
   shot?: string;
   sequence?: string;
-  items: VFXChecklistItem[];
+  items: VFXChecklistItem;
   template?: VFXChecklistTemplate;
-  owner: VFXTeamMember;
-  team: VFXTeamMember[];
-  createdAt: string;
+  owner: VFXTeamMember;,
+  team: VFXTeamMember;
+  createdAt: string;,
   updatedAt: string;
   dueDate?: string;
-  status: 'draft' | 'active' | 'review' | 'completed' | 'archived';
-  tags: string[];
+  status: 'draft' | 'active' | 'review' | 'completed' | 'archived';,
+  tags: string;
   metadata: VFXChecklistMetadata;
 }
-
 export interface VFXChecklistTemplate {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  category: VFXChecklistCategory;
+  category: VFXChecklistCategory;,
   phase: VFXProductionPhase;
   items: Omit<VFXChecklistItem, 'id' | 'author' | 'createdAt' | 'updatedAt' | 'history'>[];
-  isPublic: boolean;
+  isPublic: boolean;,
   createdBy: VFXTeamMember;
   usageCount: number;
 }
-
 export interface VFXChecklistMetadata {
-  totalItems: number;
+  totalItems: number;,
   completedItems: number;
-  overallProgress: number;
+  overallProgress: number;,
   estimatedTotalHours: number;
-  actualTotalHours: number;
+  actualTotalHours: number;,
   criticalIssues: number;
-  blockedItems: number;
+  blockedItems: number;,
   averageAccuracy: number;
-  lastActivity: string;
+  lastActivity: string;,
   collaborators: number;
 }
-
 export interface VFXChecklistSystemProps {
-  checklist: VFXChecklist;
+  checklist: VFXChecklist;,
   currentUser: VFXTeamMember;
-  onChecklistUpdate: (checklist: VFXChecklist) => void;
+  onChecklistUpdate: (checklist: VFXChecklist) => void;,
   onItemCreate: (item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
-  onItemDelete: (itemId: string) => void;
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;,
+  onItemDelete: (itemId: string) => void;,
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
   readonly?: boolean;
   showStatistics?: boolean;
   compactView?: boolean;
   className?: string;
-}
 
 // Status configurations with VFX-specific colors and labels
 const STATUS_CONFIG = {
@@ -262,7 +250,7 @@ const VFX_PRODUCTION_PHASES = [;
   { value: 'review', label: 'Review' },
   { value: 'final', label: 'Final' }
 ];
-
+}
 export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   checklist,
   currentUser,
@@ -291,23 +279,22 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
   // Creation state
   const [isCreating, setIsCreating] = useState(false);
   const [newItemTemplate, setNewItemTemplate] = useState<Partial<VFXChecklistItem>>({)
-    title: '',
-    description: '',
-    priority: 'medium',
-    category: 'asset_creation',
-    vfxPhase: 'asset_build',
-    subtasks: [],
-    tags: [],
-    dependencies: [],
-  });
+  title: '',
+  description: '',
+  priority: 'medium',
+  category: 'asset_creation',
+  vfxPhase: 'asset_build',
+  subtasks: [],
+  tags: [],
+  dependencies: [],
+});
   // Filtered and sorted items
   const filteredItems = useMemo(() => {
     const filtered = checklist.items.filter(item => {)
-      // Search filter
+  // Search filter
       if (searchTerm && !item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           !item.description?.toLowerCase().includes(searchTerm.toLowerCase())) {
         return false;
-      }
       // Status filter
       if (statusFilter !== 'all' && item.status !== statusFilter) return false;
       // Priority filter
@@ -322,127 +309,124 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
     });
     // Sort items
     filtered.sort((a, b) => {
-      let comparison = 0;
-      switch (sortBy) {
-      case 'priority':
-        const priorityOrder = ['critical', 'high', 'medium', 'low'];
-        comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
-        break;
-      case 'dueDate':
-        const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
-        const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
-        comparison = aDate - bDate;
-        break;
-      case 'status':
-        const statusOrder = ['blocked', 'rejected', 'pending', 'in_progress', 'review', 'approved'];
-        comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
-        break;
-      case 'progress':
-        comparison = a.completion - b.completion;
-        break;
-      }
-      return sortOrder === 'asc' ? comparison : -comparison;
-    });
+  let comparison = 0;
+  switch (sortBy) {
+  case 'priority':,
+  const priorityOrder = ['critical', 'high', 'medium', 'low'];
+  comparison = priorityOrder.indexOf(a.priority) - priorityOrder.indexOf(b.priority);
+  break;
+  case 'dueDate':,
+  const aDate = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
+  const bDate = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
+  comparison = aDate - bDate;
+  break;
+  case 'status':,
+  const statusOrder = ['blocked', 'rejected', 'pending', 'in_progress', 'review', 'approved'];
+  comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
+  break;
+  case 'progress':,
+  comparison = a.completion - b.completion;
+  break;
+  return sortOrder === 'asc' ? comparison : -comparison;
+});
     return filtered;
   }, [checklist.items, searchTerm, statusFilter, priorityFilter, categoryFilter, assigneeFilter, showCompleted, sortBy, sortOrder]);
   // Statistics
   const statistics = useMemo(() => {
-    const total = checklist.items.length;
-    const completed = checklist.items.filter(item => item.status === 'approved').length;
-    const inProgress = checklist.items.filter(item => item.status === 'in_progress').length;
-    const review = checklist.items.filter(item => item.status === 'review').length;
-    const blocked = checklist.items.filter(item => item.status === 'blocked').length;
-    const critical = checklist.items.filter(item => item.priority === 'critical').length;
-    const overdue = checklist.items.filter(item => ;);
-      item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
-    ).length;
-    const totalEstimated = checklist.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
-    const totalActual = checklist.items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
-    const avgProgress = total > 0 ? checklist.items.reduce((sum, item) => sum + item.completion, 0) / total : 0;
-    return {
-      total,
-      completed,
-      inProgress,
-      review,
-      blocked,
-      critical,
-      overdue,
-      totalEstimated,
-      totalActual,
-      avgProgress,
-      efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0,
-    };
+  const total = checklist.items.length;
+  const completed = checklist.items.filter(item => item.status === 'approved').length;
+  const inProgress = checklist.items.filter(item => item.status === 'in_progress').length;
+  const review = checklist.items.filter(item => item.status === 'review').length;
+  const blocked = checklist.items.filter(item => item.status === 'blocked').length;
+  const critical = checklist.items.filter(item => item.priority === 'critical').length;
+  const overdue = checklist.items.filter(item => ;);
+  item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
+  ).length;
+  const totalEstimated = checklist.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
+  const totalActual = checklist.items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
+  const avgProgress = total > 0 ? checklist.items.reduce((sum, item) => sum + item.completion, 0) / total : 0;
+  return {
+  total,
+  completed,
+  inProgress,
+  review,
+  blocked,
+  critical,
+  overdue,
+  totalEstimated,
+  totalActual,
+  avgProgress,
+  efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0,
+};
   }, [checklist.items]);
   // Handle item status change
   const handleStatusChange = useCallback((itemId: string, newStatus: VFXChecklistItem['status']) => {
-    const updates: Partial<VFXChecklistItem> = { 
-      status: newStatus,
-      updatedAt: new Date().toISOString(),
-    };
+  const updates: Partial<VFXChecklistItem> = {,
+  status: newStatus,
+  updatedAt: new Date().toISOString(),
+};
     // Auto-complete when approved
     if (newStatus === 'approved') {
       updates.completion = 100;
-    }
     onItemUpdate(itemId, updates);
   }, [onItemUpdate]);
   // Handle priority change
   const handlePriorityChange = useCallback((itemId: string, newPriority: VFXChecklistItem['priority']) => {
-    onItemUpdate(itemId, { )
-      priority: newPriority,
-      updatedAt: new Date().toISOString(),
-    });
+  onItemUpdate(itemId, { )
+  priority: newPriority,
+  updatedAt: new Date().toISOString(),
+});
   }, [onItemUpdate]);
   // Handle assignee change
   const handleAssigneeChange = useCallback((itemId: string, assigneeId: string) => {
-    const assignee = checklist.team.find(member => member.id === assigneeId);
-    onItemUpdate(itemId, { )
-      assignee,
-      updatedAt: new Date().toISOString(),
-    });
+  const assignee = checklist.team.find(member => member.id === assigneeId);
+  onItemUpdate(itemId, { )
+  assignee,
+  updatedAt: new Date().toISOString(),
+});
   }, [checklist.team, onItemUpdate]);
   // Handle progress change
   const handleProgressChange = useCallback((itemId: string, completion: number) => {
-    const updates: Partial<VFXChecklistItem> = { 
-      completion,
-      updatedAt: new Date().toISOString(),
-    };
+  const updates: Partial<VFXChecklistItem> = {,
+  completion,
+  updatedAt: new Date().toISOString(),
+};
     // Auto-approve when 100% complete
     if (completion === 100 && currentUser.permissions.canApprove) {
       updates.status = 'approved';
-    }
     onItemUpdate(itemId, updates);
   }, [currentUser.permissions.canApprove, onItemUpdate]);
   // Create new item
   const handleCreateItem = useCallback(() => {
-    if (!newItemTemplate.title?.trim()) return;
-    const newItem: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'> = {
-      ...newItemTemplate,
-      title: newItemTemplate.title.trim(),
-      status: 'pending',
-      completion: 0,
-      author: currentUser,
-      subtasks: [],
-      attachments: [],
-      assets: [],
-      qualityGates: [],
-      comments: [],
-      dependencies: newItemTemplate.dependencies || [],
-      tags: newItemTemplate.tags || [],
-    } as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
+  if (!newItemTemplate.title?.trim()) return;
+  const newItem: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'> = {,
+  ...newItemTemplate,
+  title: newItemTemplate.title.trim(),
+  status: 'pending',
+  completion: 0,
+  author: currentUser,
+  subtasks: [],
+  attachments: [],
+  assets: [],
+  qualityGates: [],
+  comments: [],
+  dependencies: newItemTemplate.dependencies || [],
+  tags: newItemTemplate.tags || [],
+} as Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>;
     onItemCreate(newItem);
     setIsCreating(false);
     setNewItemTemplate({)
-      title: '',
-      description: '',
-      priority: 'medium',
-      category: 'asset_creation',
-      vfxPhase: 'asset_build',
-      subtasks: [],
-      tags: [],
-      dependencies: [],
-    });
+  title: '',
+  description: '',
+  priority: 'medium',
+  category: 'asset_creation',
+  vfxPhase: 'asset_build',
+  subtasks: [],
+  tags: [],
+  dependencies: [],
+});
   }, [newItemTemplate, currentUser, onItemCreate]);
-  return ();
+  return;
     <div className={`vfx-checklist-system ${className}`}>}
       <Card>
         <CardHeader>
@@ -762,22 +746,21 @@ export const VFXChecklistSystem: React.FC<VFXChecklistSystemProps> = ({)
 
 // Individual checklist item card component
 interface VFXChecklistItemCardProps {
-  item: VFXChecklistItem;
+  item: VFXChecklistItem;,
   checklist: VFXChecklist;
-  currentUser: VFXTeamMember;
-  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void;
-  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void;
-  onAssigneeChange: (itemId: string, assigneeId: string) => void;
-  onProgressChange: (itemId: string, progress: number) => void;
+  currentUser: VFXTeamMember;,
+  onStatusChange: (itemId: string, status: VFXChecklistItem['status']) => void;,
+  onPriorityChange: (itemId: string, priority: VFXChecklistItem['priority']) => void;,
+  onAssigneeChange: (itemId: string, assigneeId: string) => void;,
+  onProgressChange: (itemId: string, progress: number) => void;,
   onCommentCreate: (itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => void;
-  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;
+  onItemUpdate: (itemId: string, updates: Partial<VFXChecklistItem>) => void;,
   onItemDelete: (itemId: string) => void;
   readonly?: boolean;
   compact?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
-}
-const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
+  const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({,)
   item,
   checklist,
   currentUser,
@@ -804,7 +787,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
   const handleCommentSubmit = useCallback(() => {
     if (!newComment.trim()) return;
     onCommentCreate(item.id, {)
-      content: newComment.trim(),
+  content: newComment.trim(),
       author: currentUser,
       type: 'comment',
       mentions: [],
@@ -812,7 +795,7 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
     });
     setNewComment('');
   }, [newComment, item.id, currentUser, onCommentCreate]);
-  return ();
+  return;
     <Card className={`checklist-item ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isOverdue ? 'border-red-300' : ''}`}>}
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
@@ -822,10 +805,10 @@ const VFXChecklistItemCard: React.FC<VFXChecklistItemCardProps> = ({)
               onClick={() => onStatusChange(item.id, item.status === 'approved' ? 'pending' : 'approved')}
               disabled={readonly}
               className={`w-5 h-5 border-2 rounded flex items-center justify-center ${
-                item.status === 'approved'
-                  ? 'bg-green-500 border-green-500 text-white'
-                  : 'border-gray-300 hover:border-gray-400'
-              }`}
+  item.status === 'approved'
+  ? 'bg-green-500 border-green-500 text-white'
+  : 'border-gray-300 hover:border-gray-400',
+}`}
             >
               {item.status === 'approved' && <CheckSquare className="w-3 h-3" />}
             </button>

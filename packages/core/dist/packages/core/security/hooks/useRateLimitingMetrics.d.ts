@@ -1,11 +1,3 @@
-/**
- * React Hook for Rate Limiting Performance Metrics
- * Task: E31-1753313263525-EEFACB - Build API rate limiting performance metrics visualization
- * Epic 31: Security Intelligence Platform
- *
- * Custom React hook for managing rate limiting performance metrics,
- * providing real-time data updates and dashboard state management.
- */
 import { PerformanceMetrics, MetricsVisualizationData, AlertCondition, DashboardWidget } from '../RateLimitingPerformanceMetrics';
 import { RateLimitingService } from '../RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
@@ -19,8 +11,8 @@ export interface UseRateLimitingMetricsOptions {
 export interface MetricsHookReturn {
     currentMetrics: PerformanceMetrics | null;
     visualizationData: MetricsVisualizationData | null;
-    activeAlerts: AlertCondition[];
-    widgets: DashboardWidget[];
+    activeAlerts: AlertCondition;
+    widgets: DashboardWidget;
     isLoading: boolean;
     isConnected: boolean;
     lastUpdate: Date | null;
@@ -41,7 +33,11 @@ export interface MetricsServiceConfig {
     throttlingEngine?: AdaptiveThrottlingRulesEngine;
     options?: UseRateLimitingMetricsOptions;
 }
-export declare const useRateLimitingMetrics: ({ rateLimitingService, throttlingEngine, options }: MetricsServiceConfig) => MetricsHookReturn;
+export declare const useRateLimitingMetrics: {
+    rateLimitingService: any;
+    throttlingEngine: any;
+    options: {};
+}, MetricsServiceConfig: any, MetricsHookReturn: any;
 export declare function useRateLimitingMetricsWidget(widgetId: string, metricsHook: unknown): {
     data: unknown;
     isLoading: boolean;

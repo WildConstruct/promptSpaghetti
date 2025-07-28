@@ -15,19 +15,17 @@ import {
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
 interface LearningPathDashboardProps {
-  learningService: Epic16LearningPathService;
+  learningService: Epic16LearningPathService;,
   userId: string;
   userRole: 'user' | 'creator' | 'admin';
   onPathSelect?: (path: LearningPath) => void;
-}
 interface PathFilters {
-  category: LearningCategory[];
-  difficulty: DifficultyLevel[];
-  audience: TargetAudience[];
+  category: LearningCategory;,
+  difficulty: DifficultyLevel;
+  audience: TargetAudience;,
   duration: { min?: number; max?: number };
-  certification: boolean | null;
+  certification: boolean | null;,
   searchQuery: string;
-}
 
 export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
   learningService,
@@ -36,35 +34,35 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
   onPathSelect
 }) => {
   // State management
-  const [availablePaths, setAvailablePaths] = useState<LearningPath[]>([]);
-  const [userPaths, setUserPaths] = useState<UserEnrollment[]>([]);
-  const [recommendations, setRecommendations] = useState<LearningPath[]>([]);
+  const [availablePaths, setAvailablePaths] = useState<LearningPath>([]);
+  const [userPaths, setUserPaths] = useState<UserEnrollment>([]);
+  const [recommendations, setRecommendations] = useState<LearningPath>([]);
   const [_____selectedPath, setSelectedPath] = useState<LearningPath | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<PathFilters>({)
-    category: [],
+  category: [],
     difficulty: [],
     audience: [],
     duration: {},
     certification: null,
-    searchQuery: '',
+    searchQuery: '';
   });
   const [view, setView] = useState<'discover' | 'my-learning' | 'recommendations' | 'analytics'>('discover');
   const [analytics, setAnalytics] = useState<unknown>(null);
   // Load data
   const loadData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Load available paths
-      const searchResults = await learningService.searchLearningPaths('', {)
-        category: filters.category.length > 0 ? filters.category : undefined,
-        difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined,
-        audience: filters.audience.length > 0 ? filters.audience : undefined,
-        duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined,
-        certification: filters.certification ?? undefined,
-      });
+  setLoading(true);
+  setError(null);
+  try {
+  // Load available paths
+  const searchResults = await learningService.searchLearningPaths('', {)
+  category: filters.category.length > 0 ? filters.category : undefined,
+  difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined,
+  audience: filters.audience.length > 0 ? filters.audience : undefined,
+  duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined,
+  certification: filters.certification ?? undefined,
+});
       setAvailablePaths(searchResults);
       // Load user's paths
       const userEnrollments = await learningService.getUserPaths(userId);
@@ -76,12 +74,10 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
       if (userRole !== 'user') {
         const analyticsData = await learningService.getAnalytics();
         setAnalytics(analyticsData);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load learning paths');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load learning paths');
+} finally {
       setLoading(false);
-    }
   }, [learningService, userId, userRole, filters]);
   useEffect(() => {
     loadData();
@@ -102,9 +98,8 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
       await learningService.enrollUser(userId, pathId);
       await loadData(); // Refresh data
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to enroll in path');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to enroll in path');
+};
   // Handle path selection
   const handlePathSelect = (path: LearningPath) => {
     setSelectedPath(path);
@@ -113,20 +108,20 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
   // Reset filters
   const resetFilters = () => {
     setFilters({)
-      category: [],
+  category: [],
       difficulty: [],
       audience: [],
       duration: {},
       certification: null,
-      searchQuery: '',
-    });
+      searchQuery: '';
+  });
   };
   // Render learning path card
   const renderPathCard = (path: LearningPath, enrollment?: UserEnrollment) => {
     const isEnrolled = !!enrollment;
     const progress = enrollment?.progress.overallProgress || 0;
     const status = enrollment?.status;
-    return ();
+    return;
       <div
         key={path.id}
         className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer"
@@ -197,10 +192,10 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
               </div>
               <div className="mt-2 flex items-center justify-between">
                 <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                  status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :
-                    status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                }`}>
+  status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :,
+  status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' :,
+  'bg-gray-100 text-gray-800'
+}`}>
                   {status?.replace('_', ' ').toUpperCase()}
                 </span>
                 <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -237,7 +232,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
     );
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -245,8 +240,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="learning-path-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -298,10 +292,10 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                 key={tab.key}
                 onClick={() => setView(tab.key as any)}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  view === tab.key
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  view === tab.key
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 <span className="mr-2">{tab.icon}</span>
                 {tab.label}
@@ -407,7 +401,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                     placeholder="Min"
                     value={filters.duration.min || ''}
                     onChange={(e) => setFilters({)
-                      ...filters,
+  ...filters,
                       duration: { ...filters.duration, min: e.target.value ? parseInt(e.target.value) * 60 : undefined }
                     })}
                     className="px-3 py-2 border border-gray-300 rounded-md text-sm"
@@ -417,7 +411,7 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
                     placeholder="Max"
                     value={filters.duration.max ? Math.floor(filters.duration.max / 60) : ''}
                     onChange={(e) => setFilters({)
-                      ...filters,
+  ...filters,
                       duration: { ...filters.duration, max: e.target.value ? parseInt(e.target.value) * 60 : undefined }
                     })}
                     className="px-3 py-2 border border-gray-300 rounded-md text-sm"
@@ -500,9 +494,9 @@ export const LearningPathDashboard: React.FC<LearningPathDashboardProps> = ({)
               ) : ()
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                   {userPaths.map((enrollment) => {
-                    const path = availablePaths.find(p => p.id === enrollment.pathId);
-                    return path ? renderPathCard(path, enrollment) : null;
-                  })}
+  const path = availablePaths.find(p => p.id === enrollment.pathId);
+  return path ? renderPathCard(path, enrollment) : null;
+})}
                 </div>
               )}
             </div>

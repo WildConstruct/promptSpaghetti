@@ -17,6 +17,7 @@
 import React from 'react';
 import { ConversionFunnelDefinition } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface CreatorOptimizationDashboardProps {
     creatorId: string;
     creatorProfile: CreatorProfile;
@@ -25,12 +26,13 @@ export interface CreatorOptimizationDashboardProps {
     timeRange?: {
         start: number;
         end: number;
+
     };
     dashboardMode?: CreatorDashboardMode;
     onActionTaken?: (action: CreatorAction) => void;
     onGoalSet?: (goal: CreatorGoal) => void;
     onExport?: (data: CreatorOptimizationExportData) => void;
-}
+
 export interface CreatorProfile {
     creatorId: string;
     displayName: string;
@@ -45,8 +47,9 @@ export interface CreatorProfile {
     badgesEarned: CreatorBadge[];
     preferences: CreatorPreferences;
     goals: CreatorGoal[];
-}
+
 export type CreatorTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+
 export interface CreatorBadge {
     badgeId: string;
     name: string;
@@ -54,13 +57,15 @@ export interface CreatorBadge {
     earnedDate: number;
     category: 'quality' | 'popularity' | 'innovation' | 'community' | 'milestone';
     rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-}
+
+
 export interface CreatorPreferences {
     notificationSettings: NotificationSettings;
     displaySettings: DisplaySettings;
     privacySettings: PrivacySettings;
     optimizationFocus: OptimizationFocus[];
-}
+
+
 export interface NotificationSettings {
     emailNotifications: boolean;
     pushNotifications: boolean;
@@ -68,21 +73,24 @@ export interface NotificationSettings {
     marketingUpdates: boolean;
     communityUpdates: boolean;
     frequency: 'real_time' | 'daily' | 'weekly' | 'monthly';
-}
+
+
 export interface DisplaySettings {
     theme: 'light' | 'dark' | 'auto';
     dashboardLayout: 'compact' | 'standard' | 'detailed';
     defaultTimeRange: 'week' | 'month' | 'quarter' | 'year';
     chartType: 'line' | 'bar' | 'area' | 'mixed';
-}
+
+
 export interface PrivacySettings {
     profileVisibility: 'public' | 'limited' | 'private';
     revenueDataSharing: boolean;
     performanceDataSharing: boolean;
     allowBenchmarking: boolean;
-}
+
 export type OptimizationFocus = 'revenue_growth' | 'conversion_improvement' | 'user_engagement' | 'market_expansion' | 'quality_enhancement' | 'competitive_advantage';
 export type CreatorDashboardMode = 'overview' | 'performance' | 'optimization' | 'growth' | 'learning';
+
 export interface CreatorOptimizationData {
     overviewMetrics: CreatorOverviewMetrics;
     templatePerformance: CreatorTemplatePerformance[];
@@ -93,7 +101,8 @@ export interface CreatorOptimizationData {
     successStories: CreatorSuccessStory[];
     automatedSuggestions: AutomatedSuggestion[];
     goalProgress: CreatorGoalProgress[];
-}
+
+
 export interface CreatorOverviewMetrics {
     totalRevenue: number;
     monthlyRevenue: number;
@@ -111,7 +120,8 @@ export interface CreatorOverviewMetrics {
     followerCount: number;
     followerGrowth: number;
     lastUpdated: number;
-}
+
+
 export interface CreatorTemplatePerformance {
     templateId: string;
     templateName: string;
@@ -123,7 +133,8 @@ export interface CreatorTemplatePerformance {
     optimization: TemplateOptimizationData;
     competitivePosition: TemplateCompetitivePosition;
     recommendations: TemplateRecommendation[];
-}
+
+
 export interface TemplateMetrics {
     views: number;
     downloads: number;
@@ -136,14 +147,16 @@ export interface TemplateMetrics {
     shareCount: number;
     bounceRate: number;
     timeOnPage: number;
-}
+
+
 export interface TemplateConversionFunnel {
     steps: TemplateConversionStep[];
     overallConversionRate: number;
     biggestDropoff: string;
     biggestOpportunity: string;
     optimizationPotential: number;
-}
+
+
 export interface TemplateConversionStep {
     stepName: string;
     visitors: number;
@@ -152,7 +165,8 @@ export interface TemplateConversionStep {
     dropoffRate: number;
     averageTimeSpent: number;
     optimizationScore: number;
-}
+
+
 export interface TemplateOptimizationData {
     optimizationScore: number;
     optimizationPotential: number;
@@ -160,7 +174,8 @@ export interface TemplateOptimizationData {
     improvementAreas: string[];
     quickWins: OptimizationQuickWin[];
     longTermOpportunities: OptimizationOpportunity[];
-}
+
+
 export interface OptimizationQuickWin {
     action: string;
     description: string;
@@ -168,7 +183,8 @@ export interface OptimizationQuickWin {
     effort: 'minimal' | 'low' | 'medium';
     timeToImplement: number;
     successProbability: number;
-}
+
+
 export interface OptimizationOpportunity {
     opportunity: string;
     description: string;
@@ -177,7 +193,8 @@ export interface OptimizationOpportunity {
     timeToImplement: number;
     investmentRequired: number;
     expectedROI: number;
-}
+
+
 export interface TemplateCompetitivePosition {
     categoryRank: number;
     totalInCategory: number;
@@ -186,7 +203,8 @@ export interface TemplateCompetitivePosition {
     competitiveAdvantages: string[];
     vulnerabilities: string[];
     marketTrends: MarketTrend[];
-}
+
+
 export interface CompetitorTemplate {
     templateId: string;
     templateName: string;
@@ -194,21 +212,24 @@ export interface CompetitorTemplate {
     metrics: CompetitorMetrics;
     strengthsVsYours: string[];
     weaknessesVsYours: string[];
-}
+
+
 export interface CompetitorMetrics {
     estimatedRevenue: number;
     estimatedDownloads: number;
     rating: number;
     reviewCount: number;
     pricePoint: number;
-}
+
+
 export interface MarketTrend {
     trend: string;
     direction: 'growing' | 'declining' | 'stable';
     impact: 'high' | 'medium' | 'low';
     opportunity: string;
     threat: string;
-}
+
+
 export interface TemplateRecommendation {
     type: TemplateRecommendationType;
     title: string;
@@ -218,9 +239,10 @@ export interface TemplateRecommendation {
     expectedImpact: RecommendationImpact;
     implementation: RecommendationImplementation;
     successMetrics: string[];
-}
+
 export type TemplateRecommendationType = 'pricing_optimization' | 'content_improvement' | 'marketing_enhancement' | 'user_experience' | 'competitive_positioning' | 'technical_optimization';
 export type RecommendationCategory = 'quick_win' | 'strategic_improvement' | 'competitive_advantage' | 'long_term_growth';
+
 export interface RecommendationImpact {
     revenueIncrease: number;
     conversionImprovement: number;
@@ -228,7 +250,8 @@ export interface RecommendationImpact {
     ratingImprovement: number;
     timeToImpact: number;
     confidence: number;
-}
+
+
 export interface RecommendationImplementation {
     steps: string[];
     estimatedTime: number;
@@ -236,7 +259,8 @@ export interface RecommendationImplementation {
     tools: string[];
     cost: number;
     difficulty: 'easy' | 'moderate' | 'challenging' | 'expert';
-}
+
+
 export interface CreatorOptimizationRecommendation {
     recommendationId: string;
     type: CreatorRecommendationType;
@@ -247,8 +271,9 @@ export interface CreatorOptimizationRecommendation {
     targetTemplates: string[];
     actionPlan: CreatorActionPlan;
     relatedGoals: string[];
-}
+
 export type CreatorRecommendationType = 'portfolio_optimization' | 'pricing_strategy' | 'marketing_improvement' | 'skill_development' | 'market_expansion' | 'brand_building' | 'community_engagement';
+
 export interface CreatorRecommendationImpact {
     portfolioImpact: number;
     revenueImpact: number;
@@ -256,14 +281,16 @@ export interface CreatorRecommendationImpact {
     brandImpact: number;
     timeframe: number;
     successProbability: number;
-}
+
+
 export interface CreatorActionPlan {
     phases: ActionPhase[];
     totalTimeline: number;
     milestones: ActionMilestone[];
     resources: ActionResource[];
     riskMitigation: RiskMitigation[];
-}
+
+
 export interface ActionPhase {
     phaseName: string;
     description: string;
@@ -271,47 +298,54 @@ export interface ActionPhase {
     tasks: ActionTask[];
     dependencies: string[];
     successCriteria: string[];
-}
+
+
 export interface ActionTask {
     taskName: string;
     description: string;
     effort: number;
     skills: string[];
     deliverables: string[];
-}
+
+
 export interface ActionMilestone {
     milestoneName: string;
     targetDate: number;
     metrics: MilestoneMetric[];
     reward: string;
-}
+
+
 export interface MilestoneMetric {
     metric: string;
     target: number;
     current: number;
     progress: number;
-}
+
+
 export interface ActionResource {
     resourceType: 'tool' | 'service' | 'education' | 'template' | 'community';
     name: string;
     description: string;
     cost: number;
     link?: string;
-}
+
+
 export interface RiskMitigation {
     risk: string;
     probability: number;
     impact: number;
     mitigation: string;
     contingency: string;
-}
+
+
 export interface CreatorCompetitiveInsights {
     marketPosition: MarketPosition;
     competitorAnalysis: CompetitorAnalysis[];
     marketOpportunities: MarketOpportunity[];
     threatAnalysis: ThreatAnalysis[];
     benchmarkData: BenchmarkData;
-}
+
+
 export interface MarketPosition {
     overallRank: number;
     categoryRanks: CategoryRank[];
@@ -319,14 +353,16 @@ export interface MarketPosition {
     brandStrength: number;
     competitiveAdvantages: string[];
     uniqueValueProposition: string;
-}
+
+
 export interface CategoryRank {
     category: string;
     rank: number;
     totalCreators: number;
     marketShare: number;
     growth: number;
-}
+
+
 export interface CompetitorAnalysis {
     competitorId: string;
     competitorName: string;
@@ -336,7 +372,8 @@ export interface CompetitorAnalysis {
     strategy: string;
     recentMoves: string[];
     threat_level: 'low' | 'medium' | 'high';
-}
+
+
 export interface MarketOpportunity {
     opportunity: string;
     description: string;
@@ -346,7 +383,8 @@ export interface MarketOpportunity {
     timeToMarket: number;
     investmentRequired: number;
     expectedROI: number;
-}
+
+
 export interface ThreatAnalysis {
     threat: string;
     description: string;
@@ -355,20 +393,23 @@ export interface ThreatAnalysis {
     timeframe: number;
     mitigation: string[];
     monitoring: string[];
-}
+
+
 export interface BenchmarkData {
     industryAverages: IndustryAverage[];
     peerComparisons: PeerComparison[];
     bestPractices: BestPractice[];
     performance_gaps: PerformanceGap[];
-}
+
+
 export interface IndustryAverage {
     metric: string;
     industryAverage: number;
     yourValue: number;
     percentile: number;
     trend: 'above' | 'below' | 'at_average';
-}
+
+
 export interface PeerComparison {
     metric: string;
     yourValue: number;
@@ -376,7 +417,8 @@ export interface PeerComparison {
     topPerformer: number;
     bottomPerformer: number;
     ranking: number;
-}
+
+
 export interface BestPractice {
     practice: string;
     description: string;
@@ -384,20 +426,23 @@ export interface BestPractice {
     difficulty: 'easy' | 'moderate' | 'challenging';
     impact: 'high' | 'medium' | 'low';
     examples: BestPracticeExample[];
-}
+
+
 export interface BestPracticeExample {
     creatorName: string;
     implementation: string;
     results: string;
     keyTakeaways: string[];
-}
+
+
 export interface PerformanceGap {
     area: string;
     gap: number;
     priority: 'high' | 'medium' | 'low';
     actionItems: string[];
     timeToClose: number;
-}
+
+
 export interface CreatorGrowthOpportunity {
     opportunityId: string;
     title: string;
@@ -407,8 +452,9 @@ export interface CreatorGrowthOpportunity {
     requirements: GrowthRequirement[];
     roadmap: GrowthRoadmap;
     risks: GrowthRisk[];
-}
+
 export type GrowthOpportunityCategory = 'new_market' | 'new_product' | 'skill_expansion' | 'partnership' | 'automation' | 'brand_building';
+
 export interface GrowthPotential {
     revenueUpside: number;
     marketSize: number;
@@ -416,7 +462,8 @@ export interface GrowthPotential {
     scalability: 'low' | 'medium' | 'high';
     sustainability: 'low' | 'medium' | 'high';
     confidenceLevel: number;
-}
+
+
 export interface GrowthRequirement {
     requirement: string;
     type: 'skill' | 'resource' | 'investment' | 'partnership' | 'technology';
@@ -424,13 +471,15 @@ export interface GrowthRequirement {
     cost: number;
     timeToAcquire: number;
     alternatives: string[];
-}
+
+
 export interface GrowthRoadmap {
     phases: GrowthPhase[];
     totalTimeline: number;
     keyMilestones: GrowthMilestone[];
     dependencies: GrowthDependency[];
-}
+
+
 export interface GrowthPhase {
     phaseName: string;
     description: string;
@@ -438,27 +487,31 @@ export interface GrowthPhase {
     objectives: string[];
     deliverables: string[];
     success_criteria: string[];
-}
+
+
 export interface GrowthMilestone {
     milestoneName: string;
     description: string;
     targetDate: number;
     metrics: MilestoneMetric[];
     dependencies: string[];
-}
+
+
 export interface GrowthDependency {
     dependency: string;
     type: 'internal' | 'external' | 'market' | 'technology';
     criticality: 'high' | 'medium' | 'low';
     mitigation: string;
-}
+
+
 export interface GrowthRisk {
     risk: string;
     probability: number;
     impact: number;
     mitigation: string;
     monitoring: string;
-}
+
+
 export interface CreatorLearningResource {
     resourceId: string;
     title: string;
@@ -474,9 +527,10 @@ export interface CreatorLearningResource {
     relevanceScore: number;
     relatedSkills: string[];
     prerequisites: string[];
-}
+
 export type LearningResourceType = 'course' | 'tutorial' | 'documentation' | 'video' | 'book' | 'workshop' | 'certification' | 'community';
 export type ResourceFormat = 'online' | 'offline' | 'interactive' | 'self_paced' | 'instructor_led';
+
 export interface CreatorSuccessStory {
     storyId: string;
     title: string;
@@ -489,7 +543,8 @@ export interface CreatorSuccessStory {
     keyTakeaways: string[];
     applicableStrategies: string[];
     relevanceScore: number;
-}
+
+
 export interface SuccessResults {
     revenueIncrease: number;
     conversionImprovement: number;
@@ -497,7 +552,8 @@ export interface SuccessResults {
     ratingImprovement: number;
     marketShareGain: number;
     timeToResults: number;
-}
+
+
 export interface AutomatedSuggestion {
     suggestionId: string;
     type: SuggestionType;
@@ -508,29 +564,33 @@ export interface AutomatedSuggestion {
     automationLevel: AutomationLevel;
     triggerConditions: TriggerCondition[];
     implementation: SuggestionImplementation;
-}
+
 export type SuggestionType = 'pricing_adjustment' | 'content_update' | 'marketing_action' | 'performance_alert' | 'opportunity_alert' | 'competitive_response';
+
 export interface SuggestionImpact {
     primary: string;
     secondary: string[];
     quantifiedImpact: number;
     timeframe: number;
     certainty: number;
-}
+
 export type AutomationLevel = 'manual' | 'semi_automated' | 'fully_automated';
+
 export interface TriggerCondition {
     condition: string;
     threshold: number;
     timeframe: number;
     frequency: 'once' | 'daily' | 'weekly' | 'monthly';
-}
+
+
 export interface SuggestionImplementation {
     automatable: boolean;
     manualSteps: string[];
     toolsRequired: string[];
     skillsRequired: string[];
     estimatedTime: number;
-}
+
+
 export interface CreatorGoal {
     goalId: string;
     title: string;
@@ -542,36 +602,41 @@ export interface CreatorGoal {
     status: GoalStatus;
     progress: GoalProgress;
     relatedRecommendations: string[];
-}
+
 export type GoalCategory = 'revenue' | 'growth' | 'quality' | 'efficiency' | 'market_position' | 'skill_development';
+
 export interface GoalTarget {
     metric: string;
     currentValue: number;
     targetValue: number;
     improvementPercentage: number;
     measurementFrequency: 'daily' | 'weekly' | 'monthly';
-}
+
+
 export interface GoalTimeline {
     startDate: number;
     targetDate: number;
     duration: number;
     milestones: GoalMilestone[];
     checkpoints: GoalCheckpoint[];
-}
+
+
 export interface GoalMilestone {
     name: string;
     description: string;
     date: number;
     metrics: MilestoneMetric[];
     rewards: string[];
-}
+
+
 export interface GoalCheckpoint {
     date: number;
     expectedProgress: number;
     reviewCriteria: string[];
     adjustmentOptions: string[];
-}
+
 export type GoalStatus = 'draft' | 'active' | 'on_track' | 'at_risk' | 'delayed' | 'completed' | 'cancelled';
+
 export interface GoalProgress {
     currentProgress: number;
     progressTrend: 'accelerating' | 'on_track' | 'slowing' | 'stalled';
@@ -579,37 +644,43 @@ export interface GoalProgress {
     nextMilestone: string;
     daysToGoal: number;
     likelihoodOfSuccess: number;
-}
+
+
 export interface CreatorGoalProgress {
     goal: CreatorGoal;
     progressData: ProgressDataPoint[];
     insights: ProgressInsight[];
     adjustmentRecommendations: AdjustmentRecommendation[];
-}
+
+
 export interface ProgressDataPoint {
     date: number;
     value: number;
     target: number;
     progress: number;
-}
+
+
 export interface ProgressInsight {
     insight: string;
     type: 'positive' | 'concern' | 'opportunity' | 'risk';
     impact: 'high' | 'medium' | 'low';
     actionable: boolean;
-}
+
+
 export interface AdjustmentRecommendation {
     recommendation: string;
     reason: string;
     impact: string;
     effort: 'low' | 'medium' | 'high';
     urgency: 'immediate' | 'soon' | 'planned';
-}
+
+
 export interface CreatorAction {
     actionType: 'goal_set' | 'recommendation_accepted' | 'template_updated' | 'learning_started';
     details: Record<string, any>;
     timestamp: number;
-}
+
+
 export interface CreatorOptimizationExportData {
     creatorProfile: CreatorProfile;
     overviewMetrics: CreatorOverviewMetrics;
@@ -617,6 +688,6 @@ export interface CreatorOptimizationExportData {
     optimizationRecommendations: CreatorOptimizationRecommendation[];
     goalProgress: CreatorGoalProgress[];
     exportTimestamp: number;
-}
+
 export declare const CreatorOptimizationDashboard: React.FC<CreatorOptimizationDashboardProps>;
 //# sourceMappingURL=CreatorOptimizationDashboard.d.ts.map

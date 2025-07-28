@@ -65,6 +65,6 @@ export declare class DataClassificationAccessControlEngine implements AccessDeci
     private calculateRiskLevel;
     private generateCacheKey;
     private isCacheValid;
-}
+
 export default DataClassificationAccessControlEngine;
 //# sourceMappingURL=DataClassificationAccessControlEngine.d.ts.map

@@ -109,13 +109,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-        },
+  }
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -163,13 +163,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-        },
+  }
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -238,13 +238,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-        },
+  }
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -294,13 +294,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
           weekendTravelFrequency: 0.1
-        },
+  }
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -364,13 +364,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 15,
           typicalLoginHours: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
           weekendTravelFrequency: 0.8
-        },
+  }
         riskProfile: {
           baselineRisk: 30,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.02
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -424,13 +424,13 @@ describe('UnusualLocationDetectionService', () => {
           uniqueRegionsCount: 1,
           typicalLoginHours: [],
           weekendTravelFrequency: 0.1
-        },
+  }
         riskProfile: {
           baselineRisk: 10,
           lastUpdated: new Date(),
           suspiciousLocationCount: 0,
           falsePosativeRate: 0.05
-        },
+  }
         lastAnalysis: new Date()
       };
 
@@ -524,7 +524,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 50,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {
@@ -570,7 +570,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 20,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {
@@ -583,7 +583,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 15,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {
@@ -596,7 +596,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 10,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {
@@ -609,7 +609,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 8,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {
@@ -622,7 +622,7 @@ describe('UnusualLocationDetectionService', () => {
           lastSeen: new Date(),
           frequency: 5,
           isTypical: true
-        },
+  }
         {
           userId: 'user123',
           location: {

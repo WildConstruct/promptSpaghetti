@@ -37,28 +37,25 @@ import {
   X
 } from 'lucide-react';
 interface DateTimeSelection {
-  date: Date;
-  time: string; // HH:MM format
+  date: Date;,
+  time: string; // HH:MM format,
   timezone: string;
   businessHoursOnly?: boolean;
   avoidWeekends?: boolean;
   smartSuggestion?: boolean;
-}
 interface BusinessHours {
-  enabled: boolean;
-  workdays: number[]; // 0-6 (Sunday-Saturday)
-  startTime: string; // HH:MM
-  endTime: string; // HH:MM
+  enabled: boolean;,
+  workdays: number; // 0-6 (Sunday-Saturday)
+  startTime: string; // HH:MM,
+  endTime: string; // HH:MM,
   timezone: string;
-}
 interface ConflictInfo {
-  hasConflict: boolean;
+  hasConflict: boolean;,
   type: 'business_hours' | 'weekend' | 'holiday' | 'maintenance' | 'high_traffic' | 'other';
-  description: string;
+  description: string;,
   severity: 'low' | 'medium' | 'high';
   suggestion?: string;
-  alternativeTimes?: Date[];
-}
+  alternativeTimes?: Date;
 interface AdvancedDateTimeControlsProps {
   value?: DateTimeSelection;
   onChange: (selection: DateTimeSelection) => void;
@@ -68,7 +65,6 @@ interface AdvancedDateTimeControlsProps {
   smartSuggestions?: boolean;
   allowPastDates?: boolean;
   className?: string;
-}
 const TIMEZONE_GROUPS = {
   'Popular': [
     { value: 'UTC', label: 'UTC (Coordinated Universal Time)', offset: '+00:00' },
@@ -129,26 +125,23 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
   const [_____showTimezoneSearch, _____setShowTimezoneSearch] = useState(false);
   const [timezoneSearchQuery, setTimezoneSearchQuery] = useState('');
   const [currentBusinessHours, setCurrentBusinessHours] = useState<BusinessHours>()
-    businessHours || {
-      enabled: true,
-      workdays: [1, 2, 3, 4, 5],
-      startTime: '09:00',
-      endTime: '17:00',
-      timezone: 'UTC',
-    }
-  );
+  businessHours || {
+  enabled: true,
+  workdays: [1, 2, 3, 4, 5],
+  startTime: '09:00',
+  endTime: '17:00',
+  timezone: 'UTC');
   // Calculate current date/time in selected timezone
   const dateTimeInTimezone = useMemo(() => {
-    const combined = new Date(selectedDate);
-    const [hours, minutes] = selectedTime.split(':');
-    combined.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-    return combined;
-  }, [selectedDate, selectedTime]);
+  const combined = new Date(selectedDate);
+  const [hours, minutes] = selectedTime.split(':');
+  combined.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  return combined;
+}, [selectedDate, selectedTime]);
   // Check for conflicts
   const conflictInfo: ConflictInfo = useMemo(() => {
     if (!conflictDetection) {
       return { hasConflict: false, type: 'other', description: '', severity: 'low' };
-    }
     const dayOfWeek = dateTimeInTimezone.getDay();
     const timeValue = selectedTime;
     // Check business hours
@@ -161,57 +154,53 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
           severity: 'medium',
           suggestion: `Consider scheduling during workdays: ${currentBusinessHours.workdays.map(d => WEEKDAY_SHORT[d]).join(', ')}`}
         };
-      }
       if (timeValue < currentBusinessHours.startTime || timeValue > currentBusinessHours.endTime) {
         return {
           hasConflict: true,
           type: 'business_hours',
-          description: `Selected time is outside business hours (${currentBusinessHours.startTime} - ${currentBusinessHours.endTime})`,}
-          severity: 'medium',
+          description: `Selected time is outside business hours (${currentBusinessHours.startTime} - ${currentBusinessHours.endTime})`}
+},
+  severity: 'medium',
           suggestion: `Consider scheduling between ${currentBusinessHours.startTime} and ${currentBusinessHours.endTime}`}
         };
-      }
-    }
     // Check for past dates
     if (!allowPastDates && dateTimeInTimezone < new Date()) {
-      return {
-        hasConflict: true,
-        type: 'other',
-        description: 'Selected time is in the past',
-        severity: 'high',
-        suggestion: 'Please select a future date and time',
-      };
-    }
+  return {
+  hasConflict: true,
+  type: 'other',
+  description: 'Selected time is in the past',
+  severity: 'high',
+  suggestion: 'Please select a future date and time',
+};
     return { hasConflict: false, type: 'other', description: '', severity: 'low' };
   }, [dateTimeInTimezone, selectedTime, currentBusinessHours, allowPastDates, conflictDetection]);
   // Smart time suggestions
   const smartTimeSuggestions = useMemo(() => {
-    if (!smartSuggestions) return [];
-    const suggestions: Date[] = [];
-    const baseDate = new Date(selectedDate);
-    // Suggest optimal times based on business hours
-    if (currentBusinessHours.enabled) {
-      const [startHour, startMin] = currentBusinessHours.startTime.split(':').map(Number);
-      const [endHour, _____endMin] = currentBusinessHours.endTime.split(':').map(Number);
-      // Suggest start of business day
-      const startOfDay = new Date(baseDate);
-      startOfDay.setHours(startHour, startMin, 0, 0);
-      if (startOfDay > new Date()) suggestions.push(startOfDay);
-      // Suggest mid-morning
-      const midMorning = new Date(baseDate);
-      midMorning.setHours(startHour + 1, 0, 0, 0);
-      if (midMorning > new Date()) suggestions.push(midMorning);
-      // Suggest lunch break end
-      const postLunch = new Date(baseDate);
-      postLunch.setHours(13, 0, 0, 0);
-      if (postLunch > new Date() && postLunch.getHours() <= endHour) suggestions.push(postLunch);
-      // Suggest late afternoon
-      const lateAfternoon = new Date(baseDate);
-      lateAfternoon.setHours(Math.min(15, endHour - 1), 0, 0, 0);
-      if (lateAfternoon > new Date()) suggestions.push(lateAfternoon);
-    }
-    return suggestions.slice(0, 4);
-  }, [selectedDate, currentBusinessHours, smartSuggestions]);
+  if (!smartSuggestions) return [];
+  const suggestions: Date = [];
+  const baseDate = new Date(selectedDate);
+  // Suggest optimal times based on business hours
+  if (currentBusinessHours.enabled) {
+  const [startHour, startMin] = currentBusinessHours.startTime.split(':').map(Number);
+  const [endHour, _____endMin] = currentBusinessHours.endTime.split(':').map(Number);
+  // Suggest start of business day
+  const startOfDay = new Date(baseDate);
+  startOfDay.setHours(startHour, startMin, 0, 0);
+  if (startOfDay > new Date()) suggestions.push(startOfDay);
+  // Suggest mid-morning
+  const midMorning = new Date(baseDate);
+  midMorning.setHours(startHour + 1, 0, 0, 0);
+  if (midMorning > new Date()) suggestions.push(midMorning);
+  // Suggest lunch break end
+  const postLunch = new Date(baseDate);
+  postLunch.setHours(13, 0, 0, 0);
+  if (postLunch > new Date() && postLunch.getHours() <= endHour) suggestions.push(postLunch);
+  // Suggest late afternoon
+  const lateAfternoon = new Date(baseDate);
+  lateAfternoon.setHours(Math.min(15, endHour - 1), 0, 0, 0);
+  if (lateAfternoon > new Date()) suggestions.push(lateAfternoon);
+  return suggestions.slice(0, 4);
+}, [selectedDate, currentBusinessHours, smartSuggestions]);
   // Handle date change
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -229,34 +218,34 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
   };
   // Update parent component
   const updateSelection = (partial: Partial<DateTimeSelection>) => {
-    const newSelection: DateTimeSelection = {
-      date: selectedDate,
-      time: selectedTime,
-      timezone: selectedTimezone,
-      businessHoursOnly: currentBusinessHours.enabled,
-      ...partial
-    };
+  const newSelection: DateTimeSelection = {,
+  date: selectedDate,
+  time: selectedTime,
+  timezone: selectedTimezone,
+  businessHoursOnly: currentBusinessHours.enabled,
+  ...partial
+};
     onChange(newSelection);
   };
   // Business hours preset handler
   const applyBusinessHoursPreset = (preset: typeof COMMON_BUSINESS_HOURS[0]) => {
-    const newBusinessHours: BusinessHours = {
-      ...currentBusinessHours,
-      startTime: preset.start,
-      endTime: preset.end,
-      workdays: preset.workdays,
-    };
+  const newBusinessHours: BusinessHours = {,
+  ...currentBusinessHours,
+  startTime: preset.start,
+  endTime: preset.end,
+  workdays: preset.workdays,
+};
     setCurrentBusinessHours(newBusinessHours);
     onBusinessHoursChange?.(newBusinessHours);
   };
   // Format date for display
   const formatDisplayDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {)
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(date);
   };
   // Format time for display
   const formatDisplayTime = (time: string) => {
@@ -273,8 +262,6 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
       for (let minute = 0; minute < 60; minute += 15) {
         const timeStr = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;}
         options.push(timeStr);
-      }
-    }
     return options;
   }, []);
   // Filter timezones based on search
@@ -289,11 +276,10 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
       );
       if (matchingTimezones.length > 0) {
         filtered[group] = matchingTimezones;
-      }
     });
     return filtered;
   }, [timezoneSearchQuery]);
-  return ();
+  return;
     <div className={`space-y-4 ${className}`}>}
       <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
@@ -450,8 +436,8 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                           <button
                             key={timezone.value}
                             className={`w-full text-left p-2 rounded border hover:bg-gray-50 ${
-                              selectedTimezone === timezone.value ? 'bg-blue-50 border-blue-300' : ''
-                            }`}
+  selectedTimezone === timezone.value ? 'bg-blue-50 border-blue-300' : '',
+}`}
                             onClick={() => handleTimezoneChange(timezone.value)}
                           >
                             <div className="flex justify-between items-center">
@@ -608,15 +594,15 @@ export const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps> =
                 <h4 className="font-medium mb-2">Time in Other Zones</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {TIMEZONE_GROUPS.Popular.slice(0, 4).map((tz) => {
-                    const timeInZone = new Intl.DateTimeFormat('en-US', {)
-                      timeZone: tz.value,
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    }).format(dateTimeInTimezone);
-                    return ();
+  const timeInZone = new Intl.DateTimeFormat('en-US', {)
+  timeZone: tz.value,
+  weekday: 'short',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(dateTimeInTimezone);
+                    return;
                       <div key={tz.value} className="p-2 border rounded text-sm">
                         <p className="font-medium">{tz.value}</p>
                         <p className="text-gray-600">{timeInZone}</p>

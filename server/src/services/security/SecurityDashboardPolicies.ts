@@ -62,6 +62,7 @@ export enum DataSensitivityLevel {
   TOP_SECRET = 'TOP_SECRET'
 }
 
+}
 export interface DashboardPolicy {
   id: string;
   name: string;
@@ -101,23 +102,29 @@ export interface DashboardPolicy {
   updatedAt: Date;
   version: number;
 }
+}
 
+}
 export interface AccessSchedule {
   allowedDays: number[]; // 0-6 (Sunday-Saturday)
   allowedHours: {
     start: string; // HH:MM format
     end: string;
+}
   };
   timezone: string;
   exceptions: ScheduleException[];
 }
 
+}
 export interface ScheduleException {
   date: string; // YYYY-MM-DD
   type: 'ALLOW' | 'DENY';
   reason: string;
 }
+}
 
+}
 export interface ContentFilter {
   type: 'FIELD' | 'VALUE' | 'REGEX' | 'CLASSIFICATION' | 'KEYWORD';
   field?: string;
@@ -126,14 +133,18 @@ export interface ContentFilter {
   action: 'HIDE' | 'MASK' | 'REDACT' | 'AGGREGATE';
   maskingPattern?: string; // e.g., '***' or 'X' repeated
 }
+}
 
+}
 export interface DataRetentionPolicy {
   retentionPeriod: number; // days
   archiveAfter: number; // days
   purgeAfter: number; // days
   complianceHolds: string[]; // Legal hold IDs
 }
+}
 
+}
 export interface PolicyCondition {
   type: 'USER_ATTRIBUTE' | 'TIME' | 'LOCATION' | 'DEVICE' | 'CONTEXT' | 'RISK_SCORE';
   field: string;
@@ -141,7 +152,9 @@ export interface PolicyCondition {
   value: Error;
   weight: number; // 0-1
 }
+}
 
+}
 export interface PolicyEvaluationContext {
   userId: string;
   userRoles: DashboardRole[];
@@ -153,6 +166,7 @@ export interface PolicyEvaluationContext {
     userAgent: string;
     timestamp: Date;
     sessionId: string;
+}
   };
   requestedData: {
     type: string;
@@ -163,6 +177,7 @@ export interface PolicyEvaluationContext {
   riskScore?: number;
 }
 
+}
 export interface PolicyEvaluationResult {
   allowed: boolean;
   policy: DashboardPolicy;
@@ -173,13 +188,17 @@ export interface PolicyEvaluationResult {
   sessionTimeout?: number;
   warnings: string[];
 }
+}
 
+}
 export interface PolicyRestriction {
   type: 'TIME_LIMIT' | 'DATA_LIMIT' | 'OPERATION_LIMIT' | 'EXPORT_DISABLED' | 'APPROVAL_REQUIRED';
   description: string;
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface DashboardViewConfiguration {
   userId: string;
   allowedSections: string[];
@@ -192,9 +211,11 @@ export interface DashboardViewConfiguration {
     allowExport: boolean;
     allowedFormats: string[];
     watermarkRequired: boolean;
+}
   };
 }
 
+}
 export interface ComplianceReport {
   id: string;
   framework: string;
@@ -203,6 +224,7 @@ export interface ComplianceReport {
   period: {
     start: Date;
     end: Date;
+}
   };
   
   summary: {
@@ -223,6 +245,7 @@ export interface ComplianceReport {
   };
 }
 
+}
 export interface ComplianceFinding {
   id: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -233,7 +256,9 @@ export interface ComplianceFinding {
   remediation: string;
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
+}
 
+}
 export interface ComplianceEvidence {
   type: 'AUDIT_LOG' | 'CONFIGURATION' | 'SCREENSHOT' | 'DOCUMENT';
   source: string;
@@ -241,7 +266,9 @@ export interface ComplianceEvidence {
   data: Record<string, unknown>;
   hash: string; // For integrity verification
 }
+}
 
+}
 export interface ComplianceRecommendation {
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   category: 'POLICY' | 'CONFIGURATION' | 'TRAINING' | 'PROCESS';
@@ -249,6 +276,7 @@ export interface ComplianceRecommendation {
   implementation: string;
   impact: string;
   effort: 'LOW' | 'MEDIUM' | 'HIGH';
+}
 }
 
 /**
@@ -275,6 +303,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
    * Evaluate policies for a given context
    */
   async evaluatePolicies(context: PolicyEvaluationContext): Promise<PolicyEvaluationResult[]> {
+
     const results: PolicyEvaluationResult[] = [];
     
     // Generate cache key
@@ -324,6 +353,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     userId: string,
     context: Partial<PolicyEvaluationContext>
   ): Promise<DashboardViewConfiguration> {
+
     const fullContext: PolicyEvaluationContext = {
       userId,
       userRoles: await this.getUserRoles(userId),
@@ -333,13 +363,13 @@ export class SecurityDashboardPolicies extends EventEmitter {
         userAgent: 'Unknown',
         timestamp: new Date(),
         sessionId: 'default'
-      },
+  }
       requestedData: {
         type: 'dashboard',
         classification: DataClassificationLevel.INTERNAL,
         sensitivityLevel: DataSensitivityLevel.INTERNAL,
         operations: [DataOperation.READ]
-      },
+  }
       ...context
     };
     
@@ -374,6 +404,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     policyData: Omit<DashboardPolicy, 'id' | 'createdAt' | 'updatedAt' | 'version'>,
     createdBy: string
   ): Promise<DashboardPolicy> {
+
     const policy: DashboardPolicy = {
       ...policyData,
       id: this.generatePolicyId(),
@@ -413,6 +444,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     updates: Partial<DashboardPolicy>,
     updatedBy: string
   ): Promise<DashboardPolicy> {
+
     const existingPolicy = this.policies.get(policyId);
     if (!existingPolicy) {
       throw new Error(`Policy not found: ${policyId}`);
@@ -456,6 +488,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
    * Delete policy
    */
   async deletePolicy(policyId: string, deletedBy: string): Promise<void> {
+
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error(`Policy not found: ${policyId}`);
@@ -514,6 +547,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     period: { start: Date; end: Date },
     generatedBy: string
   ): Promise<ComplianceReport> {
+
     const reportId = this.generateReportId();
     const activePolicies = this.getPolicies({ enabled: true });
     const frameworkPolicies = activePolicies.filter(p =>
@@ -543,7 +577,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
         activePolicies: frameworkPolicies.length,
         violations: findings.filter(f => f.type === 'VIOLATION').length,
         warnings: findings.filter(f => f.type === 'WARNING').length
-      },
+  }
       findings,
       recommendations,
       attestation: {
@@ -579,6 +613,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     policy: DashboardPolicy,
     context: PolicyEvaluationContext
   ): Promise<PolicyEvaluationResult> {
+
     // Check role membership
     const hasRequiredRole = policy.roles.some(role => context.userRoles.includes(role));
     if (!hasRequiredRole) {
@@ -678,6 +713,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     condition: PolicyCondition,
     context: PolicyEvaluationContext
   ): Promise<boolean> {
+
     let contextValue: Error;
     
     switch (condition.type) {
@@ -936,6 +972,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
     policy: DashboardPolicy,
     framework: string
   ): Promise<ComplianceFinding[]> {
+
     const findings: ComplianceFinding[] = [];
     
     // Framework-specific compliance checks
@@ -1095,14 +1132,13 @@ export class SecurityDashboardPolicies extends EventEmitter {
           archiveAfter: 30,
           purgeAfter: 365,
           complianceHolds: []
-        },
+  }
         complianceFrameworks: [],
         auditRequired: false,
         approvalRequired: false,
         conditions: [],
         sessionTimeout: 3600000 // 1 hour
-      },
-      
+  }
       {
         name: 'Security Administrator Policy',
         description: 'Full administrative permissions for security dashboards',
@@ -1118,7 +1154,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
           archiveAfter: 90,
           purgeAfter: 2555, // 7 years
           complianceHolds: []
-        },
+  }
         complianceFrameworks: ['SOX', 'GDPR'],
         auditRequired: true,
         approvalRequired: false,
@@ -1168,6 +1204,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
   
   // Mock methods for external integrations
   private async getUserRoles(_____userId: string): Promise<DashboardRole[]> {
+
     // In real implementation, this would query user management system
     return [DashboardRole.VIEWER];
   }
@@ -1262,6 +1299,7 @@ export class SecurityDashboardPolicies extends EventEmitter {
   }
 }
 
+}
 interface PolicyAuditEntry {
   timestamp: Date;
   userId: string;
@@ -1273,6 +1311,7 @@ interface PolicyAuditEntry {
     projectId?: string;
     ipAddress: string;
     userAgent: string;
+}
   };
 }
 

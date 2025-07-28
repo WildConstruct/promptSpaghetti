@@ -68,6 +68,7 @@ export class ArchiveToggleService extends EventEmitter {
     request: CreateArchiveToggleRequest,
     createdBy: string
   ): Promise<ArchiveToggleConfig> {
+
     try {
       const config: ArchiveToggleConfig = {
         id: this.generateToggleId(),
@@ -120,7 +121,7 @@ export class ArchiveToggleService extends EventEmitter {
           scope: config.scope,
           mode: config.mode,
           complianceRequired: config.complianceRequired
-        },
+  }
         severity: 'info'
       });
       
@@ -148,7 +149,7 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           request
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -162,6 +163,7 @@ export class ArchiveToggleService extends EventEmitter {
     request: UpdateArchiveToggleRequest,
     updatedBy: string
   ): Promise<ArchiveToggleConfig> {
+
     try {
       const existingConfig = this.toggleConfigs.get(request.id);
       if (!existingConfig) {
@@ -223,7 +225,7 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           changes: this.getConfigurationChanges(previousState, updatedConfig),
           reason: request.reason
-        },
+  }
         severity: 'info'
       });
       
@@ -240,7 +242,7 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           request
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -253,6 +255,7 @@ export class ArchiveToggleService extends EventEmitter {
   async evaluateArchiving(
     context: ArchiveToggleEvaluationContext
   ): Promise<ArchiveToggleEvaluationResult> {
+
     try {
       const evaluationId = this.generateEvaluationId();
       const evaluatedAt = new Date();
@@ -339,9 +342,9 @@ export class ArchiveToggleService extends EventEmitter {
               category: context.category,
               dataClassification: context.dataClassification,
               sourceIdentifier: context.sourceIdentifier
-            },
+  }
             result: evaluation
-          },
+  }
           severity: evaluation.isArchivingAllowed ? 'info' : 'warning'
         });
       }
@@ -362,7 +365,7 @@ export class ArchiveToggleService extends EventEmitter {
         details: {
           error: error instanceof Error ? error.message : String(error),
           context
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -378,6 +381,7 @@ export class ArchiveToggleService extends EventEmitter {
     reason: string,
     actorId: string
   ): Promise<ArchiveToggleState> {
+
     try {
       const currentState = this.toggleStates.get(toggleId);
       const config = this.toggleConfigs.get(toggleId);
@@ -429,7 +433,7 @@ export class ArchiveToggleService extends EventEmitter {
           reason,
           previousState: previousState.isEnabled,
           newState: enabled
-        },
+  }
         severity: 'info'
       });
       
@@ -447,7 +451,7 @@ export class ArchiveToggleService extends EventEmitter {
           error: error instanceof Error ? error.message : String(error),
           enabled,
           reason
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -464,6 +468,7 @@ export class ArchiveToggleService extends EventEmitter {
     ttlMinutes: number,
     actorId: string
   ): Promise<ArchiveToggleState> {
+
     try {
       const config = this.toggleConfigs.get(toggleId);
       const currentState = this.toggleStates.get(toggleId);
@@ -508,11 +513,11 @@ export class ArchiveToggleService extends EventEmitter {
         previousState: { 
           isEnabled: currentState.isEnabled,
           isOverridden: currentState.isOverridden 
-        },
+  }
         newState: { 
           isEnabled: enabled,
           isOverridden: true 
-        },
+  }
         reason,
         isEmergency: true
       });
@@ -529,7 +534,7 @@ export class ArchiveToggleService extends EventEmitter {
           enabled,
           ttlMinutes,
           expiresAt: overrideExpiresAt.toISOString()
-        },
+  }
         severity: 'critical'
       });
       
@@ -548,7 +553,7 @@ export class ArchiveToggleService extends EventEmitter {
           enabled,
           reason,
           ttlMinutes
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -823,6 +828,7 @@ export class ArchiveToggleService extends EventEmitter {
   }
   
   private async expireOverride(toggleId: string): Promise<void> {
+
     const state = this.toggleStates.get(toggleId);
     const config = this.toggleConfigs.get(toggleId);
     
@@ -863,6 +869,7 @@ export class ArchiveToggleService extends EventEmitter {
   }
   
   private async initializePredefinedToggles(): Promise<void> {
+
     try {
       for (const [key, presetConfig] of Object.entries(PREDEFINED_ARCHIVE_TOGGLE_CONFIGS)) {
         // Check if toggle already exists
@@ -916,21 +923,25 @@ export class ArchiveToggleService extends EventEmitter {
   }
   
   private async loadToggleConfigurations(): Promise<void> {
+
     // Implementation would load from database
     // For now, this is a placeholder
   }
   
   private async storeToggleConfig(config: ArchiveToggleConfig): Promise<void> {
+
     // Implementation would store in database
     // Placeholder for database integration
   }
   
   private async storeToggleState(state: ArchiveToggleState): Promise<void> {
+
     // Implementation would store in database
     // Placeholder for database integration
   }
   
   private async createAuditEntry(toggleId: string, entry: ArchiveToggleAuditEntry): Promise<void> {
+
     // Implementation would store audit entry
     // For now, add to in-memory trail
     const state = this.toggleStates.get(toggleId);

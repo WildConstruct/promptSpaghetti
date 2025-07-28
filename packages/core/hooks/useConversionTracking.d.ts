@@ -6,13 +6,14 @@
  */
 import { Node, Edge } from 'reactflow';
 import { ConversionEventType } from '../analytics/ConversionTracker';
+
 export interface ConversionTrackingConfig {
     enableAutoTracking?: boolean;
     trackPageViews?: boolean;
     trackUserInteractions?: boolean;
     experimentId?: string;
     variantId?: string;
-}
+
 export declare const useConversionTracking: (config?: ConversionTrackingConfig) => {
     trackDirectorAction: (action: string, context?: Record<string, any>) => void;
     trackNodeCreation: (nodeType: string, nodeData: any) => void;

@@ -12,8 +12,8 @@ import {
 describe('PasswordComplexityValidator', () => {
   let validator: PasswordComplexityValidator;
   beforeEach(() => {
-    validator = new PasswordComplexityValidator();
-  });
+  validator = new PasswordComplexityValidator();
+});
   describe('Configuration Management', () => {
     test('should initialize with default balanced configuration', () => {
       const config = validator.getConfig();
@@ -23,15 +23,14 @@ describe('PasswordComplexityValidator', () => {
       expect(config.rules.length).toBeGreaterThan(0);
     });
     test('should allow custom configuration', () => {
-      const customConfig: Partial<PasswordComplexityConfig> = {
-        mode: 'strict',
-        minimumScore: 80,
-        allowOverrides: {,
-          enabled: true,
-          roles: ['admin'],
-          requireJustification: false,
-        }
-      };
+  const customConfig: Partial<PasswordComplexityConfig> = {,
+  mode: 'strict',
+  minimumScore: 80,
+  allowOverrides: {,
+  enabled: true,
+  roles: ['admin'],
+  requireJustification: false,
+};
       const customValidator = new PasswordComplexityValidator(customConfig);
       const config = customValidator.getConfig();
       expect(config.mode).toBe('strict');
@@ -44,9 +43,9 @@ describe('PasswordComplexityValidator', () => {
       expect(validation.errors).toHaveLength(0);
     });
     test('should detect configuration errors', () => {
-      validator.updateConfig({)
-        minimumScore: 150 // Invalid score > 100,
-      });
+  validator.updateConfig({)
+  minimumScore: 150 // Invalid score > 100,
+});
       const validation = validator.validateConfig();
       expect(validation.valid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
@@ -144,13 +143,13 @@ describe('PasswordComplexityValidator', () => {
       expect(randomResult.passed).toBe(true);
     });
     test('should validate personal information', () => {
-      const rule = PasswordRules.noPersonalInfo();
-      const context: PasswordValidationContext = {
-        username: 'johndoe',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-      };
+  const rule = PasswordRules.noPersonalInfo();
+  const context: PasswordValidationContext = {,
+  username: 'johndoe',
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'john.doe@example.com',
+};
       const personalResult = rule.validate('johndoe123', context);
       expect(personalResult.passed).toBe(false);
       const firstNameResult = rule.validate('john123', context);
@@ -159,10 +158,10 @@ describe('PasswordComplexityValidator', () => {
       expect(unrelatedResult.passed).toBe(true);
     });
     test('should validate password history', () => {
-      const rule = PasswordRules.notInHistory(5);
-      const context: PasswordValidationContext = {
-        previousPasswords: ['OldPass1!', 'OldPass2!', 'OldPass3!']
-      };
+  const rule = PasswordRules.notInHistory(5);
+  const context: PasswordValidationContext = {,
+  previousPasswords: ['OldPass1!', 'OldPass2!', 'OldPass3!'],
+};
       const reusedResult = rule.validate('OldPass1!', context);
       expect(reusedResult.passed).toBe(false);
       const newResult = rule.validate('NewPass1!', context);
@@ -193,21 +192,21 @@ describe('PasswordComplexityValidator', () => {
     });
   });
   describe('Rule Management', () => {
-    test('should add custom rule', () => {
-      const customRule = {
-        id: 'custom-rule',
-        name: 'Custom Rule',
-        description: 'Custom validation rule',
-        enabled: true,
-        required: false,
-        weight: 5,
-        category: 'pattern' as const,
-        severity: 'warning' as const,
-        validate: (password: string) => ({),
-          passed: password.includes('custom'),
-          score: password.includes('custom') ? 10 : 0,
-          message: 'Custom rule result',
-        })
+  test('should add custom rule', () => {
+  const customRule = {
+  id: 'custom-rule',
+  name: 'Custom Rule',
+  description: 'Custom validation rule',
+  enabled: true,
+  required: false,
+  weight: 5,
+  category: 'pattern' as const,
+  severity: 'warning' as const,
+  validate: (password: string) => ({,)
+  passed: password.includes('custom'),
+  score: password.includes('custom') ? 10 : 0,
+  message: 'Custom rule result',
+}
       };
       validator.addRule(customRule);
       const retrievedRule = validator.getRule('custom-rule');
@@ -235,7 +234,7 @@ describe('PasswordComplexityValidator', () => {
       expect(lengthRules.length).toBeGreaterThan(0);
       expect(characterRules.length).toBeGreaterThan(0);
       lengthRules.forEach(rule => {)
-        expect(rule.category).toBe('length');
+  expect(rule.category).toBe('length');
       });
     });
   });
@@ -263,14 +262,14 @@ describe('PasswordComplexityValidator', () => {
     });
   });
   describe('Context-Aware Validation', () => {
-    test('should use context for personal information check', async () => {
-      const context: PasswordValidationContext = {
-        username: 'testuser',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-        organizationName: 'TestCorp',
-      };
+  test('should use context for personal information check', async () => {
+  const context: PasswordValidationContext = {,
+  username: 'testuser',
+  email: 'test@example.com',
+  firstName: 'Test',
+  lastName: 'User',
+  organizationName: 'TestCorp',
+};
       const personalPassword = await validator.validatePassword('testuser123', context);
       expect(personalPassword.valid).toBe(false);
       expect(personalPassword.errors.some(e => e.includes('personal'))).toBe(true);
@@ -278,9 +277,9 @@ describe('PasswordComplexityValidator', () => {
       expect(safePassword.valid).toBe(true);
     });
     test('should check password history', async () => {
-      const context: PasswordValidationContext = {
-        previousPasswords: ['OldPass1!', 'OldPass2!', 'OldPass3!']
-      };
+  const context: PasswordValidationContext = {,
+  previousPasswords: ['OldPass1!', 'OldPass2!', 'OldPass3!'],
+};
       const reusedPassword = await validator.validatePassword('OldPass1!', context);
       expect(reusedPassword.valid).toBe(false);
       expect(reusedPassword.errors.some(e => e.includes('history'))).toBe(true);
@@ -321,26 +320,25 @@ describe('PasswordComplexityValidator', () => {
       expect(results).toHaveLength(4);
       expect(duration).toBeLessThan(1000); // Should complete within 1 second
       results.forEach(result => {)
-        expect(result).toBeDefined();
+  expect(result).toBeDefined();
         expect(result.score).toBeGreaterThanOrEqual(0);
         expect(result.score).toBeLessThanOrEqual(100);
       });
     });
     test('should handle rule validation errors gracefully', async () => {
-      // Add a rule that throws an error
-      const faultyRule = {
-        id: 'faulty-rule',
-        name: 'Faulty Rule',
-        description: 'Rule that throws an error',
-        enabled: true,
-        required: false,
-        weight: 5,
-        category: 'pattern' as const,
-        severity: 'error' as const,
-        validate: () => {,
-          throw new Error('Validation error');
-        }
-      };
+  // Add a rule that throws an error
+  const faultyRule = {
+  id: 'faulty-rule',
+  name: 'Faulty Rule',
+  description: 'Rule that throws an error',
+  enabled: true,
+  required: false,
+  weight: 5,
+  category: 'pattern' as const,
+  severity: 'error' as const,
+  validate: () => {,
+  throw new Error('Validation error');
+};
       validator.addRule(faultyRule);
       const result = await validator.validatePassword('TestPass123!');
       // Should handle error gracefully and still return results
@@ -355,38 +353,36 @@ describe('PasswordComplexityValidator', () => {
     });
   });
   describe('Real-World Password Scenarios', () => {
-    const testCases = [;
+  const testCases = [;
+  {
+  password: 'password',
+  expectedValid: false,
+  description: 'common weak password',
+}
       {
-        password: 'password',
-        expectedValid: false,
-        description: 'common weak password',
-      },
+  password: 'Password123',
+  expectedValid: false,
+  description: 'predictable pattern',
+}
       {
-        password: 'Password123',
-        expectedValid: false,
-        description: 'predictable pattern',
-      },
+  password: 'MyS3cur3!P@ssw0rd',
+  expectedValid: true,
+  description: 'strong mixed password',
+}
       {
-        password: 'MyS3cur3!P@ssw0rd',
-        expectedValid: true,
-        description: 'strong mixed password',
-      },
+  password: 'Tr7$mK9#nQ2@pL8&',
+  expectedValid: true,
+  description: 'very strong random password',
+}
       {
-        password: 'Tr7$mK9#nQ2@pL8&',
-        expectedValid: true,
-        description: 'very strong random password',
-      },
-      {
-        password: '123456789',
-        expectedValid: false,
-        description: 'numeric sequence',
-      },
+  password: '123456789',
+  expectedValid: false,
+  description: 'numeric sequence',
+}
       {
         password: 'qwertyuiop',
         expectedValid: false,
-        description: 'keyboard pattern',
-      }
-    ];
+        description: 'keyboard pattern'];
     testCases.forEach(({ password, expectedValid, description }) => {
       test(`should correctly validate ${description}`, async () => {}
         const result = await validator.validatePassword(password);
@@ -396,7 +392,6 @@ describe('PasswordComplexityValidator', () => {
           expect(result.errors).toHaveLength(0);
         } else {
           expect(result.score).toBeLessThan(70);
-        }
       });
     });
   });

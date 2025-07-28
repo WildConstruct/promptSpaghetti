@@ -30,12 +30,11 @@ describe('OWASP Security Test Suite', () => {
   describe('A01:2021 - Broken Access Control', () => {
     it('should prevent access to restricted properties', () => {
       const context = SafeExpressionEvaluator.createSafeContext({)
-        user: {,
-          name: 'John',
+  user: {,
+  name: 'John',
           role: 'user',
           __admin: true,  // Hidden property
           _internal: { secret: 'data' }
-        }
       });
       // Should allow normal property access
       expect(SafeExpressionEvaluator.evaluate('user.name', context)).toBe('John');
@@ -62,11 +61,10 @@ describe('OWASP Security Test Suite', () => {
         'delete currentUser.role'
       ];
       for (const attempt of privilegeEscalationAttempts) {
-        const node = new ConditionalNode('test', [;);
+        const node = new ConditionalNode('test', [);
           { condition: attempt, output: 'escalated' }
         ], 'safe');
         expect(() => node.run(ctx)).toThrow();
-      }
     });
   });
   describe('A02:2021 - Cryptographic Failures', () => {
@@ -84,12 +82,11 @@ describe('OWASP Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(attempt, context);
         }).toThrow();
-      }
     });
     it('should prevent timing attack vectors', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        password: 'secret123',
-      });
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  password: 'secret123',
+});
       // These comparison methods could be vulnerable to timing attacks
       // In a real implementation, we'd want constant-time comparison
       // For now, we just ensure no function access that could leak timing
@@ -101,7 +98,7 @@ describe('OWASP Security Test Suite', () => {
   describe('A03:2021 - Injection', () => {
     it('should prevent code injection', () => {
       const context = SafeExpressionEvaluator.createSafeContext({)
-        userInput: 'alert("XSS")',
+  userInput: 'alert("XSS")',
         data: { value: 42 }
       });
       // Direct eval injection
@@ -122,9 +119,9 @@ describe('OWASP Security Test Suite', () => {
       }).toThrow();
     });
     it('should prevent command injection patterns', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        filename: '../../../etc/passwd',
-      });
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  filename: '../../../etc/passwd',
+});
       // File system access attempts
       const fsAttempts = [;
         'require("fs").readFileSync(filename)',
@@ -136,13 +133,12 @@ describe('OWASP Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(attempt, context);
         }).toThrow();
-      }
     });
     it('should sanitize regex patterns', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        pattern: '(a+)+$',  // ReDoS pattern
-        text: 'aaaaaaaaaaaaaaaaaaaaaaaab',
-      });
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  pattern: '(a+)+$',  // ReDoS pattern,
+  text: 'aaaaaaaaaaaaaaaaaaaaaaaab',
+});
       // Should block regex constructor
       expect(() => {
         SafeExpressionEvaluator.evaluate('new RegExp(pattern)', context);
@@ -157,19 +153,19 @@ describe('OWASP Security Test Suite', () => {
     it('should enforce secure defaults', () => {
       const ctx = new AdvancedExecutionContext('test');
       // Strict mode should be available as an option
-      const strictNode = new ConditionalNode('strict', [;);
+      const strictNode = new ConditionalNode('strict', [);
         { condition: 'undefinedVar > 0', output: 'should fail' }
       ], 'default', { strictMode: true });
       expect(() => strictNode.run(ctx)).toThrow();
       // Non-strict mode logs warning but continues
-      const nonStrictNode = new ConditionalNode('non-strict', [;);
+      const nonStrictNode = new ConditionalNode('non-strict', [);
         { condition: 'undefinedVar > 0', output: 'should fail' }
       ], 'default', { strictMode: false });
       expect(nonStrictNode.run(ctx)).toBe('default');
       // Check warning was logged
       const warnings = securityAudit.getEvents({ )
-        severity: SecuritySeverity.WARNING ,
-      });
+        severity: SecuritySeverity.WARNING ;
+  });
       expect(warnings.length).toBeGreaterThan(0);
     });
     it('should limit expression complexity by design', () => {
@@ -177,7 +173,6 @@ describe('OWASP Security Test Suite', () => {
       let complexExpr = 'x';
       for (let i = 0; i < 100; i++) {
         complexExpr = `(${complexExpr} || ${complexExpr})`;}
-      }
       const context = SafeExpressionEvaluator.createSafeContext({ x: true });
       // Should fail due to complexity
       expect(() => {
@@ -210,7 +205,6 @@ describe('OWASP Security Test Suite', () => {
         // Error should not expose internal details
         expect(error.message).not.toContain('at Object.evaluate');
         expect(error.stack).toBeDefined(); // Stack trace is available for debugging
-      }
     });
   });
   describe('A08:2021 - Software and Data Integrity Failures', () => {
@@ -229,7 +223,6 @@ describe('OWASP Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(vector, context);
         }).toThrow();
-      }
       // Verify prototype is clean
       expect((obj as any).polluted).toBeUndefined();
       expect(Object.prototype.hasOwnProperty('polluted')).toBe(false);
@@ -274,8 +267,8 @@ describe('OWASP Security Test Suite', () => {
       expect(blockedEvents.length).toBeGreaterThan(0);
       // Verify critical events are captured
       const criticalEvents = securityAudit.getEvents({ )
-        severity: SecuritySeverity.CRITICAL ,
-      });
+        severity: SecuritySeverity.CRITICAL ;
+  });
       const hasCritical = criticalEvents.length > 0 || ;
         blockedEvents.some(e => e.message.includes('__proto__'));
       expect(hasCritical).toBe(true);
@@ -294,14 +287,12 @@ describe('OWASP Security Test Suite', () => {
       ];
       for (const op of operations) {
         try {
-          const node = new ConditionalNode('test', [;);
+          const node = new ConditionalNode('test', [);
             { condition: op.expr, output: 'result' }
           ], 'default');
           node.run(ctx);
         } catch (e) {
           // Expected for unsafe operations
-        }
-      }
       // Get security statistics
       const stats = securityAudit.getStatistics();
       expect(stats.totalEvents).toBeGreaterThan(0);
@@ -310,14 +301,13 @@ describe('OWASP Security Test Suite', () => {
       // Should identify patterns in blocked operations
       if (stats.topBlockedPatterns.length > 0) {
         expect(stats.topBlockedPatterns[0].count).toBeGreaterThan(0);
-      }
     });
   });
   describe('A10:2021 - Server-Side Request Forgery (SSRF)', () => {
-    it('should prevent network access', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        url: 'http://internal.service/api/data',
-      });
+  it('should prevent network access', () => {
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  url: 'http://internal.service/api/data',
+});
       // Network access attempts
       const networkAttempts = [;
         'fetch(url)',
@@ -331,12 +321,11 @@ describe('OWASP Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(attempt, context);
         }).toThrow();
-      }
     });
     it('should prevent DNS resolution', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        hostname: 'internal.database.local',
-      });
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  hostname: 'internal.database.local',
+});
       // DNS resolution attempts
       expect(() => {
         SafeExpressionEvaluator.evaluate('require("dns").resolve(hostname)', context);
@@ -365,7 +354,6 @@ describe('OWASP Security Test Suite', () => {
         // Verify the attempt was logged
         const events = securityAudit.getEvents();
         expect(events[events.length - 1].blocked).toBe(true);
-      }
     });
     it('should handle Unicode and encoding attacks', () => {
       const context = SafeExpressionEvaluator.createSafeContext({});
@@ -381,7 +369,6 @@ describe('OWASP Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(attack, context);
         }).toThrow();
-      }
     });
   });
 });

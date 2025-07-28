@@ -82,7 +82,7 @@ export declare class AnimationManager {
      * Cleanup all animations
      */
     cleanup(): void;
-}
+
 export declare const globalAnimationManager: AnimationManager;
 /**
  * Hook for managing element hover states with smooth transitions
@@ -119,7 +119,7 @@ interface AnimatedProps {
     duration?: number;
     delay?: number;
     isVisible?: boolean;
-}
+
 export declare const AnimatedContainer: React.FC<AnimatedProps>;
 export {};
 //# sourceMappingURL=smoothAnimations.d.ts.map

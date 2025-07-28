@@ -26,7 +26,7 @@ describe('NewDeviceDetectionService', () => {
       city: 'San Francisco',
       latitude: 37.7749,
       longitude: -122.4194
-    },
+  }
     metadata: {
       loginTime: new Date(),
       sessionId: 'session-123',
@@ -80,13 +80,13 @@ describe('NewDeviceDetectionService', () => {
         considerLocationChange: true,
         considerUserAgentChange: true,
         maxSimilarDevices: 5
-      },
+  }
       riskAssessment: {
         newDeviceBaseRisk: 50,
         trustedUserDiscount: 20,
         suspiciousPatternMultiplier: 1.5,
         recentBreachMultiplier: 2.0
-      },
+  }
       verification: {
         lowRiskMethods: ['email_code'],
         mediumRiskMethods: ['email_code', 'sms_code'],
@@ -95,21 +95,21 @@ describe('NewDeviceDetectionService', () => {
         gracePeriodHours: 24,
         maxAttempts: 3,
         lockoutDurationMinutes: 30
-      },
+  }
       notifications: {
         notifyOnNewDevice: true,
         notifyOnSimilarDevice: false,
         notifyOnHighRisk: true,
         includeDeviceDetails: true,
         includeLocationDetails: true
-      },
+  }
       autoApproval: {
         enabled: true,
         requireLowRisk: true,
         requireTrustedNetwork: false,
         requireBusinessHours: true,
         maxAutoApprovalsPerDay: 5
-      },
+  }
       cache: {
         detectionResultTtl: 3600,
         deviceListTtl: 1800,
@@ -193,7 +193,7 @@ describe('NewDeviceDetectionService', () => {
           trust_score: 70,
           last_seen: new Date(),
           is_trusted: true
-        },
+  }
         {
           id: 'device-2',
           fingerprint: 'similar-fingerprint-2',
@@ -253,7 +253,7 @@ describe('NewDeviceDetectionService', () => {
               components: {
                 userAgent: testContext.userAgent,
                 location: { country: 'Canada', city: 'Toronto' } // Different location
-              },
+  }
               is_trusted: true,
               last_accessed: new Date()
             }]
@@ -572,7 +572,7 @@ describe('NewDeviceDetectionService', () => {
         details: {
           deviceFingerprint: testFingerprint,
           approvalMethod: 'email_verification'
-        },
+  }
         severity: 'info'
       });
       expect(mockRedis.del).toHaveBeenCalled();
@@ -598,7 +598,7 @@ describe('NewDeviceDetectionService', () => {
         details: {
           deviceFingerprint: testFingerprint,
           reason
-        },
+  }
         severity: 'warning'
       });
       expect(mockRedis.del).toHaveBeenCalled();
@@ -689,7 +689,7 @@ describe('NewDeviceDetectionService', () => {
           risk_level: 'medium',
           location: { country: 'US', city: 'NYC' },
           approved: true
-        },
+  }
         {
           fingerprint: 'device-2',
           detected_at: new Date('2024-01-05'),

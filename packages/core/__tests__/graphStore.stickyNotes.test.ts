@@ -13,37 +13,34 @@ const mockStore = {
   edges: [],
   stickyNotes: [],
   annotations: {,
-    stickyNotes: [],
+  stickyNotes: [],
     nodeLabels: {},
     regionGroups: [],
     connectionLabels: [],
     metadata: {,
-      author: 'Anonymous',
-      created: new Date().toISOString(),
-      modified: new Date().toISOString(),
-      version: '1.0.0',
-    }
-  },
+  author: 'Anonymous',
+  created: new Date().toISOString(),
+  modified: new Date().toISOString(),
+  version: '1.0.0',
+},
   hasUnsavedChanges: false,
-  setStickyNotes: jest.fn<unknown[], unknown>(),
-  addStickyNote: jest.fn<unknown[], unknown>(),
-  updateStickyNote: jest.fn<unknown[], unknown>(),
-  deleteStickyNote: jest.fn<unknown[], unknown>(),
-  markProjectSaved: jest.fn<unknown[], unknown>(),
-  getTemplateCompatibleData: jest.fn<unknown[], unknown>()
+  setStickyNotes: jest.fn<unknown, unknown>(),
+  addStickyNote: jest.fn<unknown, unknown>(),
+  updateStickyNote: jest.fn<unknown, unknown>(),
+  deleteStickyNote: jest.fn<unknown, unknown>(),
+  markProjectSaved: jest.fn<unknown, unknown>(),
+  getTemplateCompatibleData: jest.fn<unknown, unknown>()
 };
 jest.mock('../graphStore', () => ({)
   useGraphStore: Object.assign(),
-    () => mockStore,
-    {
-      getState: () => mockStore,
-      setState: (fn: unknown) => {,
-        const newState = typeof fn === 'function' ? fn(mockStore) : fn;
-        Object.assign(mockStore, newState);
-      }
-    }
+  () => mockStore,
+  {
+  getState: () => mockStore,
+  setState: (fn: unknown) => {,
+  const newState = typeof fn === 'function' ? fn(mockStore) : fn;
+  Object.assign(mockStore, newState);
 }));
-const mockNotes: StickyNote[] = [
+const mockNotes: StickyNote = [
   {
     id: 'note-1',
     position: { x: 100, y: 100 },
@@ -52,8 +49,8 @@ const mockNotes: StickyNote[] = [
     size: { width: 200, height: 150 },
     author: 'Test Author',
     timestamp: '2024-01-01T12:00:00Z',
-    zIndex: 1,
-  },
+    zIndex: 1;
+  }
   {
     id: 'note-2',
     position: { x: 300, y: 200 },
@@ -62,28 +59,25 @@ const mockNotes: StickyNote[] = [
     size: { width: 180, height: 120 },
     author: 'Another Author',
     timestamp: '2024-01-01T13:00:00Z',
-    zIndex: 2,
-  }
-];
+    zIndex: 2];
 describe('Graph Store - Sticky Notes Operations', () => {
   beforeEach(() => {
     // Reset mock store state
     Object.assign(mockStore, {)
-      stickyNotes: [],
+  stickyNotes: [],
       annotations: {,
-        stickyNotes: [],
+  stickyNotes: [],
         nodeLabels: {},
         regionGroups: [],
         connectionLabels: [],
         metadata: {,
-          author: 'Anonymous',
-          created: new Date().toISOString(),
-          modified: new Date().toISOString(),
-          version: '1.0.0',
-        }
-      },
-      hasUnsavedChanges: false,
-    });
+  author: 'Anonymous',
+  created: new Date().toISOString(),
+  modified: new Date().toISOString(),
+  version: '1.0.0',
+},
+  hasUnsavedChanges: false;
+  });
     jest.clearAllMocks();
   });
   describe('Initial State', () => {
@@ -92,17 +86,16 @@ describe('Graph Store - Sticky Notes Operations', () => {
     });
     test('initializes annotations object correctly', () => {
       expect(mockStore.annotations).toEqual({)
-        stickyNotes: [],
+  stickyNotes: [],
         nodeLabels: {},
         regionGroups: [],
         connectionLabels: [],
         metadata: {,
-          author: 'Anonymous',
-          created: expect.any(String),
-          modified: expect.any(String),
-          version: '1.0.0',
-        }
-      });
+  author: 'Anonymous',
+  created: expect.any(String),
+  modified: expect.any(String),
+  version: '1.0.0',
+});
     });
     test('initializes with hasUnsavedChanges as false', () => {
       expect(mockStore.hasUnsavedChanges).toBe(false);
@@ -276,8 +269,8 @@ describe('Graph Store - Sticky Notes Operations', () => {
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: '2024-01-01T14:00:00Z',
-        zIndex: 3,
-      };
+        zIndex: 3;
+  };
       store.addStickyNote(thirdNote);
       // Delete middle note
       store.deleteStickyNote('note-2');
@@ -305,12 +298,12 @@ describe('Graph Store - Sticky Notes Operations', () => {
       expect(store.hasUnsavedChanges).toBe(true);
     });
     test('sticky notes are included in template data', () => {
-      store.setStickyNotes(mockNotes);
-      const templateData = store.getTemplateCompatibleData();
-      expect(templateData.annotations.stickyNotes).toEqual([]);
-      // Note: Current implementation returns empty array for sticky notes in template data
-      // This might be intentional for privacy or could be updated later
-    });
+  store.setStickyNotes(mockNotes);
+  const templateData = store.getTemplateCompatibleData();
+  expect(templateData.annotations.stickyNotes).toEqual([]);
+  // Note: Current implementation returns empty array for sticky notes in template data,
+  // This might be intentional for privacy or could be updated later
+});
   });
   describe('State Consistency', () => {
     test('stickyNotes and annotations.stickyNotes stay synchronized', () => {
@@ -360,15 +353,17 @@ describe('Graph Store - Sticky Notes Operations', () => {
   describe('Performance', () => {
     test('handles large numbers of notes efficiently', () => {
       const manyNotes = Array.from({ length: 1000 }, (_, i) => ({)
-        id: `note-${i}`,}
-        position: { x: i * 10, y: i * 10 },
-        content: `Note ${i}`,}
-        color: 'yellow' as const,
+  id: `note-${i}`}
+},
+  position: { x: i * 10, y: i * 10 },
+        content: `Note ${i}`}
+},
+  color: 'yellow' as const,
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: new Date().toISOString(),
-        zIndex: i,
-      }));
+        zIndex: i;
+  }));
       const startTime = performance.now();
       store.setStickyNotes(manyNotes);
       const endTime = performance.now();
@@ -377,20 +372,21 @@ describe('Graph Store - Sticky Notes Operations', () => {
     });
     test('update operations are efficient', () => {
       const manyNotes = Array.from({ length: 100 }, (_, i) => ({)
-        id: `note-${i}`,}
-        position: { x: i * 10, y: i * 10 },
-        content: `Note ${i}`,}
-        color: 'yellow' as const,
+  id: `note-${i}`}
+},
+  position: { x: i * 10, y: i * 10 },
+        content: `Note ${i}`}
+},
+  color: 'yellow' as const,
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: new Date().toISOString(),
-        zIndex: i,
-      }));
+        zIndex: i;
+  }));
       store.setStickyNotes(manyNotes);
       const startTime = performance.now();
       for (let i = 0; i < 10; i++) {
         store.updateStickyNote(`note-${i}`, { content: `Updated ${i}` });}
-      }
       const endTime = performance.now();
       expect(endTime - startTime).toBeLessThan(50); // Should be fast
     });

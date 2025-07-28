@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { Comment } from '../../types/workspace';
+
 interface CommentThreadProps {
     comment: Comment;
     workspaceId: string;
@@ -14,7 +15,7 @@ interface CommentThreadProps {
     onResolve: (commentId: string, resolved: boolean) => Promise<void>;
     compact?: boolean;
     isLast?: boolean;
-}
+
 export declare const CommentThread: React.FC<CommentThreadProps>;
 export default CommentThread;
 //# sourceMappingURL=CommentThread.d.ts.map

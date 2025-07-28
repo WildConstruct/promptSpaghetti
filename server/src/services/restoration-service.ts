@@ -42,6 +42,7 @@ export class RestorationService {
    * Create a new restoration attempt
    */
   async createRestoration(request: CreateRestorationAttemptRequest, userId: string): Promise<RestorationAttempt> {
+
     const config = validateRestorationConfig(request.config);
     
     this.logger.info('Creating restoration attempt', {
@@ -82,6 +83,7 @@ export class RestorationService {
    * Generate a preview of what the restoration would do
    */
   async generatePreview(request: RestorationPreviewRequest, userId: string): Promise<RestorationPreviewResponse> {
+
     const config = validateRestorationConfig(request.config);
     
     this.logger.info('Generating restoration preview', {
@@ -142,7 +144,7 @@ export class RestorationService {
         totalConflicts: conflicts.length,
         estimatedDuration: this.estimateRestorationDuration(preview, conflicts),
         riskLevel: this.assessRiskLevel(conflicts)
-      },
+  }
       expiresAt
     };
   }
@@ -151,6 +153,7 @@ export class RestorationService {
    * Get restoration progress
    */
   async getRestorationProgress(restorationAttemptId: string): Promise<RestorationProgressResponse> {
+
     const attempt = await this.db.query(`
       SELECT * FROM restoration_attempts WHERE id = $1
     `, [restorationAttemptId]);
@@ -200,7 +203,7 @@ export class RestorationService {
       estimatedTimeRemaining: this.estimateTimeRemaining(
         attempt.rows[0].progress_percentage, 
         attempt.rows[0].created_at
-      )
+
     };
   }
 
@@ -208,6 +211,7 @@ export class RestorationService {
    * Resolve a conflict
    */
   async resolveConflict(request: ConflictResolutionRequest, userId: string): Promise<ConflictResolutionResult> {
+
     const resolution = validateConflictResolution(request);
     
     this.logger.info('Resolving conflict', {
@@ -246,6 +250,7 @@ export class RestorationService {
    * Cancel a restoration attempt
    */
   async cancelRestoration(restorationAttemptId: string, userId: string): Promise<void> {
+
     this.logger.info('Cancelling restoration', { restorationAttemptId, userId });
 
     await this.db.query(`
@@ -259,6 +264,7 @@ export class RestorationService {
    * Get restoration statistics
    */
   async getRestorationStats(projectId: string): Promise<RestorationStatsResponse> {
+
     const stats = await this.db.query(`
       SELECT 
         COUNT(*) as total_attempts,
@@ -303,6 +309,7 @@ export class RestorationService {
    * Create a restoration bookmark
    */
   async createBookmark(request: RestorationBookmarkRequest, userId: string): Promise<RestorationBookmark> {
+
     const result = await this.db.query(`
       INSERT INTO restoration_bookmarks (
         project_id, name, description, source_snapshot_id, target_snapshot_id,
@@ -326,6 +333,7 @@ export class RestorationService {
    * Get restoration bookmarks
    */
   async getBookmarks(projectId: string, userId: string): Promise<RestorationBookmark[]> {
+
     const result = await this.db.query(`
       SELECT * FROM restoration_bookmarks
       WHERE project_id = $1 AND created_by = $2
@@ -339,6 +347,7 @@ export class RestorationService {
    * List restoration attempts with filtering
    */
   async listRestorations(filter: RestorationFilter): Promise<RestorationAttempt[]> {
+
     let query = `
       SELECT * FROM restoration_attempts
       WHERE 1=1
@@ -392,6 +401,7 @@ export class RestorationService {
   // Private methods
 
   private async processRestoration(attempt: RestorationAttempt): Promise<void> {
+
     try {
       await this.updateRestorationStatus(attempt.id, 'in_progress');
 
@@ -416,6 +426,7 @@ export class RestorationService {
   }
 
   private async createRestorationContext(attempt: RestorationAttempt): Promise<RestorationContext> {
+
     const sourceSnapshot = await this.getSnapshotData(attempt.sourceSnapshotId);
     const targetSnapshot = attempt.targetSnapshotId ? 
       await this.getSnapshotData(attempt.targetSnapshotId) : null;
@@ -433,6 +444,7 @@ export class RestorationService {
   }
 
   private async generateRestorationOperations(____context: RestorationContext): Promise<RestorationOperation[]> {
+
     const operations: RestorationOperation[] = [];
     // Implementation would generate operations based on the restoration strategy
     // This is a simplified placeholder
@@ -443,6 +455,7 @@ export class RestorationService {
     restorationAttemptId: string,
     operations: RestorationOperation[]
   ): Promise<RestorationResult> {
+
     let executedOperations = 0;
     const resolvedConflicts = 0;
     const startTime = Date.now();
@@ -478,6 +491,7 @@ export class RestorationService {
   }
 
   private async executeOperation(____operation: RestorationOperation): Promise<void> {
+
     // Implementation would execute the specific operation
     // This is a placeholder
   }
@@ -488,6 +502,7 @@ export class RestorationService {
     ____currentState: Error, 
     ____config: RestorationConfig
   ): Promise<RestorationConflict[]> {
+
     const conflicts: RestorationConflict[] = [];
     // Implementation would detect conflicts between snapshots
     // This is a simplified placeholder
@@ -500,6 +515,7 @@ export class RestorationService {
     ____currentState: Error, 
     ____config: RestorationConfig
   ): Promise<unknown> {
+
     // Implementation would generate preview data
     return {
       nodesToAdd: [],
@@ -551,6 +567,7 @@ export class RestorationService {
     status: string,
     errorMessage?: string
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE restoration_attempts 
       SET status = $1, error_message = $2, updated_at = CURRENT_TIMESTAMP
@@ -559,6 +576,7 @@ export class RestorationService {
   }
 
   private async updateRestorationProgress(restorationAttemptId: string, progress: number): Promise<void> {
+
     await this.db.query(`
       UPDATE restoration_attempts 
       SET progress_percentage = $1, updated_at = CURRENT_TIMESTAMP
@@ -567,11 +585,13 @@ export class RestorationService {
   }
 
   private async getSnapshotData(____snapshotId: string): Promise<unknown> {
+
     // Implementation would fetch snapshot data from S3
     return {};
   }
 
   private async getCurrentProjectState(____projectId: string): Promise<unknown> {
+
     // Implementation would get current project state
     return {};
   }

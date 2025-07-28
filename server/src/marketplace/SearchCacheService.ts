@@ -24,6 +24,7 @@ import { promisify } from 'util';
 const gzip = promisify(zlib.gzip);
 const gunzip = promisify(zlib.gunzip);
 
+}
 interface CacheConfig {
   defaultTTL: number;
   maxMemoryItems: number;
@@ -31,7 +32,9 @@ interface CacheConfig {
   warmupQueries: string[];
   prefetchThreshold: number;
 }
+}
 
+}
 interface CacheEntry {
   data: any;
   timestamp: number;
@@ -40,7 +43,9 @@ interface CacheEntry {
   compressed: boolean;
   size: number;
 }
+}
 
+}
 interface CacheMetrics {
   hits: number;
   misses: number;
@@ -53,15 +58,18 @@ interface CacheMetrics {
     query: string;
     hits: number;
     lastAccessed: Date;
+}
   }>;
 }
 
+}
 interface SearchCacheOptions {
   ttl?: number;
   tags?: string[];
   compress?: boolean;
   priority?: 'low' | 'normal' | 'high';
   refreshAhead?: boolean;
+}
 }
 
 @Injectable()
@@ -117,6 +125,7 @@ export class SearchCacheService {
    * Get cached search results
    */
   async get(key: string): Promise<any | null> {
+
     const startTime = Date.now();
     this.cacheMetrics.totalQueries++;
 
@@ -154,6 +163,7 @@ export class SearchCacheService {
     data: any, 
     options: SearchCacheOptions = {}
   ): Promise<void> {
+
     try {
       const {
         ttl = this.config.defaultTTL,
@@ -179,7 +189,7 @@ export class SearchCacheService {
           tags, 
           priority,
           refreshAhead 
-        })
+  }
       ]);
 
       // Track for analytics
@@ -211,6 +221,7 @@ export class SearchCacheService {
    * Invalidate cache entries by pattern or tags
    */
   async invalidate(pattern?: string, tags?: string[]): Promise<number> {
+
     try {
       let deletedCount = 0;
 
@@ -262,6 +273,7 @@ export class SearchCacheService {
    * Warm up cache with popular queries
    */
   async warmupCache(): Promise<void> {
+
     try {
       console.log('Starting cache warmup...');
       
@@ -288,6 +300,7 @@ export class SearchCacheService {
    * Get cache performance metrics
    */
   async getMetrics(): Promise<CacheMetrics> {
+
     try {
       // Update real-time metrics
       this.cacheMetrics.hitRate = this.cacheMetrics.totalQueries > 0 
@@ -316,6 +329,7 @@ export class SearchCacheService {
    * Clear all cache entries
    */
   async clear(): Promise<void> {
+
     try {
       await this.redis.flushdb();
       this.memoryCache.clear();
@@ -336,6 +350,7 @@ export class SearchCacheService {
    * Preload cache for anticipated queries
    */
   async preload(queries: Array<{ query: string; filters?: any; priority?: number }>): Promise<void> {
+
     try {
       console.log(`Preloading cache for ${queries.length} queries...`);
       
@@ -365,6 +380,7 @@ export class SearchCacheService {
     status: 'healthy' | 'degraded' | 'unhealthy';
     details: any;
   }> {
+
     try {
       const [redisPing, memoryUsage] = await Promise.all([
         this.redis.ping(),
@@ -420,6 +436,7 @@ export class SearchCacheService {
   }
 
   private async getFromRedis(key: string): Promise<any | null> {
+
     try {
       const result = await this.redis.get(key);
       if (!result) return null;
@@ -471,6 +488,7 @@ export class SearchCacheService {
     ttl: number, 
     metadata: any
   ): Promise<void> {
+
     try {
       const pipeline = this.redis.pipeline();
       
@@ -561,6 +579,7 @@ export class SearchCacheService {
   }
 
   private async trackCacheSet(key: string, size: number, tags: string[]): Promise<void> {
+
     try {
       // Track cache analytics in database
       const query = `
@@ -586,6 +605,7 @@ export class SearchCacheService {
   }
 
   private async performCleanup(): Promise<void> {
+
     try {
       // Clean expired memory cache entries
       for (const [key, entry] of this.memoryCache) {
@@ -612,6 +632,7 @@ export class SearchCacheService {
    * Destroy service and clean up resources
    */
   async destroy(): Promise<void> {
+
     try {
       if (this.cleanupInterval) {
         clearInterval(this.cleanupInterval);

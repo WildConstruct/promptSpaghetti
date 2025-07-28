@@ -24,6 +24,7 @@ export enum ReplayEventType {
 /**
  * Replay event data structure
  */
+}
 export interface ReplayEvent {
   id: string;
   sessionId: string;
@@ -34,6 +35,7 @@ export interface ReplayEvent {
   viewport: {
     width: number;
     height: number;
+}
   };
 }
 
@@ -53,13 +55,16 @@ export type ReplayEventData =
   | ErrorData
   | NavigationData;
 
+}
 export interface MouseMoveData {
   x: number;
   y: number;
   elementId?: string;
   elementType?: string;
 }
+}
 
+}
 export interface MouseClickData {
   x: number;
   y: number;
@@ -68,7 +73,9 @@ export interface MouseClickData {
   elementType?: string;
   elementText?: string;
 }
+}
 
+}
 export interface KeyPressData {
   key: string;
   code: string;
@@ -76,23 +83,31 @@ export interface KeyPressData {
   elementType?: string;
   isInputField: boolean;
 }
+}
 
+}
 export interface ScrollData {
   scrollX: number;
   scrollY: number;
   elementId?: string;
 }
+}
 
+}
 export interface ResizeData {
   width: number;
   height: number;
 }
+}
 
+}
 export interface FocusData {
   elementId?: string;
   elementType?: string;
 }
+}
 
+}
 export interface DOMData {
   mutationType: 'childList' | 'attributes' | 'characterData';
   target: string;
@@ -101,7 +116,9 @@ export interface DOMData {
   attributeName?: string;
   attributeValue?: string;
 }
+}
 
+}
 export interface NetworkData {
   url: string;
   method: string;
@@ -110,13 +127,17 @@ export interface NetworkData {
   requestSize?: number;
   responseSize?: number;
 }
+}
 
+}
 export interface ConsoleData {
   level: 'log' | 'warn' | 'error' | 'info';
   message: string;
   args?: unknown[];
 }
+}
 
+}
 export interface ErrorData {
   message: string;
   stack?: string;
@@ -124,16 +145,20 @@ export interface ErrorData {
   lineno?: number;
   colno?: number;
 }
+}
 
+}
 export interface NavigationData {
   from: string;
   to: string;
   type: 'navigate' | 'reload' | 'back' | 'forward';
 }
+}
 
 /**
  * Session replay recording
  */
+}
 export interface SessionReplay {
   id: string;
   sessionId: string;
@@ -148,6 +173,7 @@ export interface SessionReplay {
     screenResolution: string;
     timezone: string;
     language: string;
+}
   };
   summary: {
     totalEvents: number;
@@ -167,6 +193,7 @@ export interface SessionReplay {
 /**
  * Session replay configuration
  */
+}
 export interface ReplayConfig {
   enabled: boolean;
   maxRecordingDuration: number; // milliseconds
@@ -179,6 +206,7 @@ export interface ReplayConfig {
   maskSensitiveData: boolean;
   excludeElements: string[]; // CSS selectors
   minSessionDuration: number; // minimum duration to save
+}
 }
 
 /**
@@ -256,7 +284,7 @@ export class SessionReplaySystem extends EventEmitter {
         screenResolution: metadata?.screenResolution || 'unknown',
         timezone: metadata?.timezone || 'unknown',
         language: metadata?.language || 'unknown'
-      },
+  }
       summary: {
         totalEvents: 0,
         clicks: 0,
@@ -264,7 +292,7 @@ export class SessionReplaySystem extends EventEmitter {
         scrolls: 0,
         errors: 0,
         networkRequests: 0
-      },
+  }
       privacySettings: {
         maskInputs: this.config.maskSensitiveData,
         maskText: this.config.privacyMode,
@@ -666,7 +694,7 @@ export class SessionReplaySystem extends EventEmitter {
         creator: {
           name: 'SessionReplaySystem',
           version: '1.0'
-        },
+  }
         entries: replay.events
           .filter(e => e.type === ReplayEventType.NETWORK_REQUEST)
           .map(e => {
@@ -677,16 +705,16 @@ export class SessionReplaySystem extends EventEmitter {
                 method: netData.method,
                 url: netData.url,
                 headers: []
-              },
+  }
               response: {
                 status: netData.status || 0,
                 headers: []
-              },
+  }
               timings: {
                 wait: netData.duration || 0
               }
             };
-          })
+  }
       }
     };
 

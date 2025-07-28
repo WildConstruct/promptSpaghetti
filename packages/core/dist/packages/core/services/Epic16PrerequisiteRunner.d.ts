@@ -6,9 +6,9 @@
  */
 import { PrerequisiteReport } from './Epic16PrerequisiteSystem';
 export interface PrerequisiteRunnerOptions {
-    categories?: string[];
-    skipChecks?: string[];
-    onlyChecks?: string[];
+    categories?: string;
+    skipChecks?: string;
+    onlyChecks?: string;
     autoFix?: boolean;
     timeout?: number;
     concurrency?: number;
@@ -39,30 +39,8 @@ export declare class Epic16PrerequisiteRunner {
      */
     getQuickStatus(): Promise<{
         status: 'healthy' | 'degraded' | 'critical';
-        message: string;
-        details: any;
-    }>;
-    private buildSystemConfig;
-    private setupEventListeners;
-    private loadConfigFile;
-    private filterChecks;
-    private generateOutput;
-    private generateHTMLReport;
-    private generateMarkdownReport;
-    private displaySummary;
-    private log;
+    }, message>;
+    string: any;
+    details: any;
 }
-/**
- * Create a prerequisite runner with CLI-friendly defaults
- */
-export declare function createEpic16PrerequisiteRunner(options?: PrerequisiteRunnerOptions): Epic16PrerequisiteRunner;
-/**
- * Run Epic 16 prerequisites with default settings (useful for npm scripts)
- */
-export declare function runEpic16Prerequisites(options?: PrerequisiteRunnerOptions): Promise<PrerequisiteRunnerResult>;
-/**
- * Quick health check for monitoring (returns exit code)
- */
-export declare function checkEpic16Health(): Promise<number>;
-export default Epic16PrerequisiteRunner;
 //# sourceMappingURL=Epic16PrerequisiteRunner.d.ts.map

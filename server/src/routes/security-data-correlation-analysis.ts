@@ -26,6 +26,7 @@ import { SecurityIntelligenceDataModelEngine } from '../services/SecurityIntelli
 // Global correlation analysis engine instance
 let correlationAnalysisEngine: SecurityDataCorrelationAnalysisEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -34,12 +35,14 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface ExecuteCorrelationAnalysisRequest {
   analysis_configuration: {
     analysis_name: string;
     analysis_type: 'real_time' | 'batch' | 'hybrid' | 'comprehensive';
     priority: 'low' | 'medium' | 'high' | 'critical';
     timeout_minutes?: number;
+}
   };
   data_sources: {
     source_id: string;
@@ -122,12 +125,14 @@ interface ExecuteCorrelationAnalysisRequest {
   };
 }
 
+}
 interface GetCorrelationResultsRequest {
   analysis_filters: {
     analysis_ids?: string[];
     time_range?: {
       start_time: string;
       end_time: string;
+}
     };
     risk_score_range?: {
       min_score: number;
@@ -150,11 +155,13 @@ interface GetCorrelationResultsRequest {
   };
 }
 
+}
 interface GetArchitectureMetricsRequest {
   metrics_scope: {
     time_range: {
       start_time: string;
       end_time: string;
+}
     };
     component_filters?: ('correlation_engine' | 'pattern_recognition' | 'threat_intelligence' | 'machine_learning' | 'risk_assessment')[];
     include_performance_metrics: boolean;
@@ -167,6 +174,7 @@ interface GetArchitectureMetricsRequest {
   };
 }
 
+}
 interface OptimizeArchitectureRequest {
   optimization_scope: {
     target_components: ('correlation_engine' | 'pattern_recognition' | 'threat_intelligence' | 'machine_learning' | 'risk_assessment')[];
@@ -175,6 +183,7 @@ interface OptimizeArchitectureRequest {
       max_performance_impact_percent: number;
       max_resource_increase_percent: number;
       maintain_accuracy_threshold: number;
+}
     };
   };
   optimization_parameters: {
@@ -208,7 +217,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
               priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
               timeout_minutes: { type: 'number', minimum: 1, maximum: 1440 }
             }
-          },
+  }
           data_sources: {
             type: 'array',
             minItems: 1,
@@ -230,7 +239,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                 }
               }
             }
-          },
+  }
           correlation_settings: {
             type: 'object',
             required: ['multi_dimensional_correlation', 'correlation_algorithms', 'confidence_threshold'],
@@ -242,7 +251,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   enabled_dimensions: { 
                     type: 'array', 
                     items: { type: 'string', enum: ['temporal', 'spatial', 'behavioral', 'network', 'identity', 'asset', 'threat', 'contextual'] }
-                  },
+  }
                   correlation_thresholds: {
                     type: 'array',
                     items: {
@@ -252,7 +261,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                         threshold: { type: 'number', minimum: 0, maximum: 1 }
                       }
                     }
-                  },
+  }
                   dimension_weights: {
                     type: 'array',
                     items: {
@@ -264,55 +273,55 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                     }
                   }
                 }
-              },
+  }
               correlation_algorithms: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['multi_variate', 'graph_based', 'statistical', 'fuzzy_logic', 'machine_learning'] }
-              },
+  }
               confidence_threshold: { type: 'number', minimum: 0, maximum: 1 },
               false_positive_mitigation: { type: 'boolean' }
             }
-          },
+  }
           pattern_recognition: {
             type: 'object',
             properties: {
               enabled_patterns: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['attack', 'fraud', 'insider_threat', 'data_exfiltration', 'lateral_movement', 'privilege_escalation'] }
-              },
+  }
               recognition_algorithms: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['rule_based', 'machine_learning', 'hybrid', 'graph_pattern', 'sequence_pattern'] }
-              },
+  }
               pattern_libraries: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['mitre_attack', 'custom', 'community', 'threat_intel'] }
-              },
+  }
               confidence_threshold: { type: 'number', minimum: 0, maximum: 1 },
               mitre_attack_mapping: { type: 'boolean' }
             }
-          },
+  }
           threat_intelligence: {
             type: 'object',
             properties: {
               intelligence_sources: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['commercial_feeds', 'open_source', 'government_feeds', 'industry_sharing', 'internal'] }
-              },
+  }
               enrichment_enabled: { type: 'boolean' },
               attribution_analysis: { type: 'boolean' },
               campaign_tracking: { type: 'boolean' },
               threat_actor_profiling: { type: 'boolean' },
               stix_taxii_integration: { type: 'boolean' }
             }
-          },
+  }
           machine_learning: {
             type: 'object',
             properties: {
               enabled_models: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['supervised', 'unsupervised', 'reinforcement', 'deep_learning', 'ensemble'] }
-              },
+  }
               anomaly_detection: {
                 type: 'object',
                 properties: {
@@ -320,7 +329,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   algorithms: { type: 'array', items: { type: 'string' } },
                   sensitivity: { type: 'number', minimum: 0, maximum: 1 }
                 }
-              },
+  }
               classification: {
                 type: 'object',
                 properties: {
@@ -328,7 +337,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   models: { type: 'array', items: { type: 'string' } },
                   confidence_threshold: { type: 'number', minimum: 0, maximum: 1 }
                 }
-              },
+  }
               prediction: {
                 type: 'object',
                 properties: {
@@ -338,7 +347,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                 }
               }
             }
-          },
+  }
           risk_assessment: {
             type: 'object',
             properties: {
@@ -349,18 +358,18 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   categories: { type: 'array', items: { type: 'string' } },
                   weighting_method: { type: 'string' }
                 }
-              },
+  }
               likelihood_assessment: {
                 type: 'object',
                 properties: {
                   methods: { type: 'array', items: { type: 'string' } },
                   time_horizon: { type: 'string' }
                 }
-              },
+  }
               mitigation_recommendations: { type: 'boolean' },
               scoring_method: { type: 'string', enum: ['quantitative', 'qualitative', 'hybrid'] }
             }
-          },
+  }
           quality_requirements: {
             type: 'object',
             properties: {
@@ -371,7 +380,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -396,7 +405,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -445,35 +454,35 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             acc[dw.dimension] = dw.weight;
             return acc;
           }, {} as Record<string, number>) || {}
-        },
+  }
         pattern_config: {
           attack_patterns: pattern_recognition?.enabled_patterns?.includes('attack') || false,
           fraud_patterns: pattern_recognition?.enabled_patterns?.includes('fraud') || false,
           insider_threat_patterns: pattern_recognition?.enabled_patterns?.includes('insider_threat') || false,
           recognition_algorithms: pattern_recognition?.recognition_algorithms || [],
           confidence_threshold: pattern_recognition?.confidence_threshold || 0.7
-        },
+  }
         threat_intel_config: {
           attribution: threat_intelligence?.attribution_analysis || false,
           campaigns: threat_intelligence?.campaign_tracking || false,
           threat_actors: threat_intelligence?.threat_actor_profiling || false,
           intelligence_sources: threat_intelligence?.intelligence_sources || [],
           enrichment_enabled: threat_intelligence?.enrichment_enabled || false
-        },
+  }
         ml_config: {
           anomaly_detection: machine_learning?.anomaly_detection || { enabled: false, algorithms: [], sensitivity: 0.5 },
           classification: machine_learning?.classification || { enabled: false, models: [], confidence_threshold: 0.7 },
           prediction: machine_learning?.prediction || { enabled: false, prediction_types: [], time_horizon_hours: 24 },
           model_selection: machine_learning?.enabled_models || [],
           confidence_threshold: 0.7
-        },
+  }
         risk_config: {
           risk_factors: risk_assessment?.risk_factors || [],
           impact_assessment: risk_assessment?.impact_assessment || { categories: [], weighting_method: 'weighted_average' },
           likelihood_assessment: risk_assessment?.likelihood_assessment || { methods: [], time_horizon: '30_days' },
           mitigation: risk_assessment?.mitigation_recommendations || false,
           scoring_method: risk_assessment?.scoring_method || 'hybrid'
-        },
+  }
         processing_options: {
           priority: analysis_configuration.priority,
           timeout_minutes: analysis_configuration.timeout_minutes || 60,
@@ -524,18 +533,18 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   start_time: { type: 'string', format: 'date-time' },
                   end_time: { type: 'string', format: 'date-time' }
                 }
-              },
+  }
               risk_score_range: {
                 type: 'object',
                 properties: {
                   min_score: { type: 'number', minimum: 0, maximum: 100 },
                   max_score: { type: 'number', minimum: 0, maximum: 100 }
                 }
-              },
+  }
               pattern_types: { type: 'array', items: { type: 'string' } },
               threat_levels: { type: 'array', items: { type: 'string' } }
             }
-          },
+  }
           result_format: {
             type: 'object',
             required: ['include_correlations', 'include_patterns', 'include_threat_intel', 'include_ml_results', 'include_risk_assessment'],
@@ -547,7 +556,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
               include_risk_assessment: { type: 'boolean' },
               include_actionable_insights: { type: 'boolean' }
             }
-          },
+  }
           pagination: {
             type: 'object',
             properties: {
@@ -556,7 +565,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -575,7 +584,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -650,16 +659,16 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   start_time: { type: 'string', format: 'date-time' },
                   end_time: { type: 'string', format: 'date-time' }
                 }
-              },
+  }
               component_filters: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['correlation_engine', 'pattern_recognition', 'threat_intelligence', 'machine_learning', 'risk_assessment'] }
-              },
+  }
               include_performance_metrics: { type: 'boolean' },
               include_accuracy_metrics: { type: 'boolean' },
               include_quality_metrics: { type: 'boolean' }
             }
-          },
+  }
           aggregation_settings: {
             type: 'object',
             properties: {
@@ -671,7 +680,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -691,7 +700,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -715,13 +724,13 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             memory_usage_percent: 72,
             disk_io_ops_per_second: 450,
             network_bandwidth_mbps: 85
-          },
+  }
           latency_metrics: {
             p50_latency_ms: 800,
             p95_latency_ms: 2100,
             p99_latency_ms: 3500
           }
-        },
+  }
         accuracy_metrics: {
           correlation_accuracy: 0.92,
           pattern_recognition_accuracy: 0.88,
@@ -731,41 +740,41 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
           overall_precision: 0.91,
           overall_recall: 0.89,
           f1_score: 0.90
-        },
+  }
         quality_metrics: {
           data_quality_score: 0.95,
           analysis_completeness: 0.93,
           result_consistency: 0.91,
           timeliness_score: 0.87,
           confidence_score: 0.85
-        },
+  }
         component_metrics: {
           correlation_engine: {
             processing_time_ms: 450,
             accuracy_score: 0.92,
             throughput_events_per_second: 2500
-          },
+  }
           pattern_recognition: {
             processing_time_ms: 320,
             accuracy_score: 0.88,
             patterns_detected_per_hour: 450
-          },
+  }
           threat_intelligence: {
             processing_time_ms: 180,
             enrichment_rate: 0.76,
             attribution_accuracy: 0.84
-          },
+  }
           machine_learning: {
             processing_time_ms: 680,
             model_accuracy: 0.86,
             prediction_confidence: 0.83
-          },
+  }
           risk_assessment: {
             processing_time_ms: 120,
             assessment_accuracy: 0.90,
             mitigation_relevance: 0.88
           }
-        },
+  }
         aggregated_metrics: {
           time_series_data: [
             { timestamp: Date.now() - 3600000, performance_score: 0.85, accuracy_score: 0.90 },
@@ -813,11 +822,11 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
               target_components: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['correlation_engine', 'pattern_recognition', 'threat_intelligence', 'machine_learning', 'risk_assessment'] }
-              },
+  }
               optimization_objectives: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['performance', 'accuracy', 'throughput', 'latency', 'resource_usage'] }
-              },
+  }
               constraints: {
                 type: 'object',
                 required: ['max_performance_impact_percent', 'max_resource_increase_percent', 'maintain_accuracy_threshold'],
@@ -828,7 +837,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                 }
               }
             }
-          },
+  }
           optimization_parameters: {
             type: 'object',
             required: ['analysis_historical_data', 'apply_ml_optimization', 'enable_auto_tuning', 'optimization_duration_minutes'],
@@ -840,7 +849,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -861,7 +870,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -890,19 +899,19 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
           throughput_increase_percent: 18,
           latency_reduction_percent: 30,
           resource_efficiency_improvement_percent: 15
-        },
+  }
         resource_impact: {
           cpu_usage_change_percent: -12,
           memory_usage_change_percent: 8,
           disk_io_change_percent: -20,
           network_usage_change_percent: -5
-        },
+  }
         accuracy_impact: {
           correlation_accuracy_change: 0.02,
           pattern_recognition_accuracy_change: 0.01,
           threat_detection_accuracy_change: 0.00,
           overall_accuracy_maintained: true
-        },
+  }
         recommendations: [
           'Consider implementing distributed processing for correlation engine to handle higher volumes',
           'Enable advanced caching strategies for frequently accessed threat intelligence data',
@@ -953,7 +962,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -972,7 +981,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
               active_analyses: 0,
               system_resources: {}
             }
-          },
+  }
           timestamp: Date.now()
         };
       }
@@ -986,21 +995,21 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
           machine_learning: 'active',
           risk_assessment: 'active',
           real_time_processing: 'active'
-        },
+  }
         health_indicators: {
           system_health_score: 0.92,
           performance_score: 0.88,
           accuracy_score: 0.90,
           availability_score: 0.99,
           resource_efficiency_score: 0.85
-        },
+  }
         active_analyses: 12,
         system_resources: {
           cpu_utilization_percent: 65,
           memory_utilization_percent: 72,
           disk_usage_percent: 45,
           network_utilization_percent: 38
-        },
+  }
         recent_activity: {
           analyses_completed_last_hour: 24,
           patterns_detected_last_hour: 156,
@@ -1028,6 +1037,7 @@ export default async function securityDataCorrelationAnalysisRoutes(fastify: Fas
 
 // Initialize the correlation analysis engine with integration to existing Epic 31 components
 async function initializeCorrelationAnalysisEngine(fastify: FastifyInstance): Promise<void> {
+
   if (correlationAnalysisEngine) {
     return; // Already initialized
   }

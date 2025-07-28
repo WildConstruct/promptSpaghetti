@@ -10,15 +10,15 @@ import { Node } from '../types/GraphTypes';
 
 export const useGraphOperations = () => {
   const actions = useGraphEditorStore((state) => ({)
-    addNode: state.addNode,
-    removeNode: state.removeNode,
-    updateNode: state.updateNode,
-    moveNode: state.moveNode,
-    duplicateNode: state.duplicateNode,
-    addEdge: state.addEdge,
-    removeEdge: state.removeEdge,
-    getNodeById: state.getNodeById,
-  }));
+  addNode: state.addNode,
+  removeNode: state.removeNode,
+  updateNode: state.updateNode,
+  moveNode: state.moveNode,
+  duplicateNode: state.duplicateNode,
+  addEdge: state.addEdge,
+  removeEdge: state.removeEdge,
+  getNodeById: state.getNodeById,
+}));
   // Node operations
   const addNode = useCallback((nodeType: string, position: { x: number; y: number }) => {
     actions.addNode(nodeType, position);
@@ -41,15 +41,14 @@ export const useGraphOperations = () => {
     actions.moveNode(nodeId, position);
   }, [actions]);
   const moveSelectedNodes = useCallback((deltaX: number, deltaY: number) => {
-    const state = useGraphEditorStore.getState();
-    state.selectedNodeIds.forEach(nodeId => {)
-      const node = actions.getNodeById(nodeId);
-      if (node) {
-        actions.moveNode(nodeId, {)
-          x: node.position.x + deltaX,
-          y: node.position.y + deltaY,
-        });
-      }
+  const state = useGraphEditorStore.getState();
+  state.selectedNodeIds.forEach(nodeId => {)
+  const node = actions.getNodeById(nodeId);
+  if (node) {
+  actions.moveNode(nodeId, {)
+  x: node.position.x + deltaX,
+  y: node.position.y + deltaY,
+});
     });
   }, [actions]);
   const duplicateNode = useCallback((nodeId: string) => {
@@ -85,11 +84,11 @@ export const useGraphOperations = () => {
     const state = useGraphEditorStore.getState();
     // Remove edges connected to selected nodes first
     state.selectedNodeIds.forEach(nodeId => {)
-      removeAllEdgesForNode(nodeId);
+  removeAllEdgesForNode(nodeId);
     });
     // Then remove the nodes
     state.selectedNodeIds.forEach(nodeId => {)
-      actions.removeNode(nodeId);
+  actions.removeNode(nodeId);
     });
   }, [actions, removeAllEdgesForNode]);
   // Utility functions
@@ -108,16 +107,14 @@ export const useGraphOperations = () => {
     const state = useGraphEditorStore.getState();
     const connectedNodeIds = new Set<string>();
     state.graph.edges.forEach(edge => {)
-      if (edge.source === nodeId) {
+  if (edge.source === nodeId) {
         connectedNodeIds.add(edge.target);
-      }
       if (edge.target === nodeId) {
         connectedNodeIds.add(edge.source);
-      }
     });
     return Array.from(connectedNodeIds)
       .map(id => actions.getNodeById(id))
-      .filter(Boolean) as Node[];
+      .filter(Boolean) as Node;
   }, [actions]);
   return {
     // Node operations

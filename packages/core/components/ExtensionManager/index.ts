@@ -44,7 +44,7 @@ export const ExtensionManagerConstants = {
   // Install methods
   INSTALL_METHODS: ['file', 'url', 'dev'] as const,
   // Configuration tabs
-  CONFIG_TABS: ['general', 'advanced', 'security'] as const
+  CONFIG_TABS: ['general', 'advanced', 'security'] as const,
 };
 
 // Type utilities
@@ -58,17 +58,16 @@ export type ConfigTab = typeof ExtensionManagerConstants.CONFIG_TABS[number];
 // Extension Manager Hooks and Utilities
 export const ExtensionManagerUtils = {
   /**
-   * Get extension type icon
-   */
-  getExtensionIcon(type: string): string {
-    switch (type) {
-    case 'node': return '🔧';
-    case 'ui': return '🎨';
-    case 'transform': return '⚡';
-    case 'storage': return '💾';
-    default: return '📦';
-    }
-  },
+  * Get extension type icon
+  */
+  getExtensionIcon(type: string): string {,
+  switch (type) {
+  case 'node': return '🔧';
+  case 'ui': return '🎨';
+  case 'transform': return '⚡';
+  case 'storage': return '💾';
+  default: return '📦';
+}
   /**
    * Get status icon for extension
    */
@@ -77,7 +76,7 @@ export const ExtensionManagerUtils = {
     if (!status.loaded) return '⏸️';
     if (status.enabled) return '✅';
     return '⭕';
-  },
+  }
   /**
    * Get human-readable status text
    */
@@ -86,7 +85,7 @@ export const ExtensionManagerUtils = {
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
     return 'Disabled';
-  },
+  }
   /**
    * Format download count for display
    */
@@ -94,7 +93,7 @@ export const ExtensionManagerUtils = {
     if (downloads < 1000) return downloads.toString();
     if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;}
     return `${(downloads / 1000000).toFixed(1)}M`;}
-  },
+  }
   /**
    * Format file size for display
    */
@@ -102,29 +101,29 @@ export const ExtensionManagerUtils = {
     if (bytes < 1024) return `${bytes} B`;}
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
-  },
+  }
   /**
    * Validate extension name for development
    */
   validateExtensionName(name: string): boolean {
     return /^[a-z0-9-]+$/.test(name) && name.length >= 3 && name.length <= 50;
-  },
+  }
   /**
    * Get permission description
    */
   getPermissionDescription(permission: string): string {
-    const descriptions: Record<string, string> = {
-      'data-processing': 'Access and process data within the application',
-      'file-system-read': 'Read files from the local file system',
-      'file-system-write': 'Write files to the local file system',
-      'network': 'Make network requests to external services',
-      'ui-components': 'Add or modify user interface components',
-      'extensions-api': 'Interact with other extensions',
-      'system-info': 'Access system information and statistics',
-      'data-storage': 'Store and retrieve persistent data'
-    };
+  const descriptions: Record<string, string> = {,
+  'data-processing': 'Access and process data within the application',
+  'file-system-read': 'Read files from the local file system',
+  'file-system-write': 'Write files to the local file system',
+  'network': 'Make network requests to external services',
+  'ui-components': 'Add or modify user interface components',
+  'extensions-api': 'Interact with other extensions',
+  'system-info': 'Access system information and statistics',
+  'data-storage': 'Store and retrieve persistent data',
+};
     return descriptions[permission] || 'Access to system functionality';
-  },
+  }
   /**
    * Check if permission is dangerous
    */
@@ -137,7 +136,6 @@ export const ExtensionManagerUtils = {
       'extensions-api'
     ];
     return dangerousPermissions.includes(permission);
-  }
 };
 
 // Default extension manager configuration

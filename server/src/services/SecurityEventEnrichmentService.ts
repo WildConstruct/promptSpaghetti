@@ -9,6 +9,7 @@ import { LocationDetectionService } from './LocationDetectionService';
 import { RiskScoringService } from './RiskScoringService';
 import { logger } from '../utils/logger';
 
+}
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -25,7 +26,9 @@ export interface GeolocationData {
   isTor?: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface DeviceFingerprint {
   id: string;
   browser: string;
@@ -42,7 +45,9 @@ export interface DeviceFingerprint {
   lastSeen: Date;
   trustLevel: number; // 0-100
 }
+}
 
+}
 export interface UserBehaviorContext {
   averageSessionDuration: number;
   typicalLoginTimes: number[]; // hours of day
@@ -55,13 +60,16 @@ export interface UserBehaviorContext {
   lastLoginDate: Date;
   loginFrequency: number; // logins per day
 }
+}
 
+}
 export interface ThreatIntelligence {
   ipReputation: {
     score: number; // 0-100, lower is worse
     categories: string[]; // malware, spam, phishing, etc.
     lastSeen: Date;
     sources: string[];
+}
   };
   knownAttackPatterns: {
     matches: string[];
@@ -75,6 +83,7 @@ export interface ThreatIntelligence {
   };
 }
 
+}
 export interface SessionAnalytics {
   sessionAge: number; // minutes
   activityCount: number;
@@ -84,6 +93,7 @@ export interface SessionAnalytics {
   deviceChanges: number;
   privilegeEscalations: number;
   suspiciousActivities: string[];
+}
 }
 
 export class SecurityEventEnrichmentService {
@@ -111,6 +121,7 @@ export class SecurityEventEnrichmentService {
    * Enrich a security event with comprehensive context
    */
   public async enrichSecurityEvent(event: SecurityEvent): Promise<SecurityEvent> {
+
     try {
       const enrichmentData: Record<string, any> = {};
 
@@ -207,6 +218,7 @@ export class SecurityEventEnrichmentService {
    * Enrich with geolocation data
    */
   private async enrichWithGeolocation(ipAddress: string): Promise<GeolocationData> {
+
     try {
       // Use location detection service
       const location = await this.locationDetectionService.detectLocation(ipAddress);
@@ -251,6 +263,7 @@ export class SecurityEventEnrichmentService {
     userAgent: string, 
     userId?: string
   ): Promise<DeviceFingerprint> {
+
     try {
       const fingerprintId = await this.deviceFingerprintingService.generateFingerprint({
         userAgent
@@ -312,6 +325,7 @@ export class SecurityEventEnrichmentService {
     userId: string, 
     eventTime: Date
   ): Promise<UserBehaviorContext> {
+
     try {
       // Check cache first
       if (this.userBehaviorCache.has(userId)) {
@@ -361,6 +375,7 @@ export class SecurityEventEnrichmentService {
    * Enrich with threat intelligence data
    */
   private async enrichWithThreatIntelligence(ipAddress: string): Promise<ThreatIntelligence> {
+
     try {
       // Check cache first
       if (this.ipReputationCache.has(ipAddress)) {
@@ -391,12 +406,12 @@ export class SecurityEventEnrichmentService {
           categories: [],
           lastSeen: new Date(),
           sources: []
-        },
+  }
         knownAttackPatterns: {
           matches: [],
           confidence: 0,
           severity: 'low'
-        },
+  }
         compromisedCredentials: {
           isCompromised: false,
           breachSources: []
@@ -409,6 +424,7 @@ export class SecurityEventEnrichmentService {
    * Enrich with session analytics
    */
   private async enrichWithSessionAnalytics(sessionId: string): Promise<SessionAnalytics> {
+
     try {
       // Analyze current session
       const sessionData = await this.getSessionData(sessionId);
@@ -459,8 +475,7 @@ export class SecurityEventEnrichmentService {
       dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][day],
       monthName: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][month],
       quarter: Math.floor(month / 3) + 1,
-      timestamp: timestamp.toISOString()
-    };
+      timestamp: timestamp.toISOString(};
   }
 
   /**
@@ -501,6 +516,7 @@ export class SecurityEventEnrichmentService {
    * Analyze potential attack patterns
    */
   private async analyzeAttackPatterns(event: SecurityEvent): Promise<unknown> {
+
     const patterns = [];
     
     // Check for common attack patterns
@@ -591,21 +607,25 @@ export class SecurityEventEnrichmentService {
   }
 
   private async isKnownDevice(_____fingerprintId: string, userId?: string): Promise<boolean> {
+
     // Mock implementation - would check device history
     return false;
   }
 
   private async calculateDeviceTrustLevel(_____fingerprintId: string, userId?: string): Promise<number> {
+
     // Mock implementation - would calculate based on device history
     return 50;
   }
 
   private async getDeviceFirstSeen(_____fingerprintId: string): Promise<Date> {
+
     // Mock implementation
     return new Date();
   }
 
   private async analyzeUserBehavior(_____userId: string): Promise<unknown> {
+
     // Mock implementation - would analyze historical behavior
     return {
       avgSessionDuration: 30,
@@ -641,6 +661,7 @@ export class SecurityEventEnrichmentService {
   }
 
   private async getIPReputation(_____ipAddress: string): Promise<unknown> {
+
     // Mock implementation - would query threat intelligence feeds
     return {
       score: 75,
@@ -651,6 +672,7 @@ export class SecurityEventEnrichmentService {
   }
 
   private async checkKnownAttackPatterns(_____ipAddress: string): Promise<unknown> {
+
     // Mock implementation - would check against known attack patterns
     return {
       matches: [],
@@ -660,6 +682,7 @@ export class SecurityEventEnrichmentService {
   }
 
   private async checkCompromisedCredentials(_____ipAddress: string): Promise<unknown> {
+
     // Mock implementation - would check breach databases
     return {
       isCompromised: false,
@@ -668,6 +691,7 @@ export class SecurityEventEnrichmentService {
   }
 
   private async getSessionData(_____sessionId: string): Promise<unknown> {
+
     // Mock implementation - would get session analytics
     return {
       startTime: Date.now() - 1800000, // 30 minutes ago
@@ -697,6 +721,7 @@ export class SecurityEventEnrichmentService {
   }
 
   private async isFromSuspiciousLocation(_____ipAddress: string): Promise<boolean> {
+
     // Mock implementation - would check against suspicious location database
     return false;
   }

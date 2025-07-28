@@ -112,7 +112,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         id: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -181,7 +181,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         id: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -227,7 +227,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -318,7 +318,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -348,7 +348,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -426,7 +426,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -456,7 +456,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -490,7 +490,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }).optional(),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -567,7 +567,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -620,7 +620,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         resource_id: z.string().uuid(),
         to_state_id: z.string().uuid(),
         user_id: z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -651,7 +651,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       querystring: z.object({
         resource_id: z.string().uuid(),
         lock_type: z.string().optional()
-      })
+  }
     }
   }, async (request, reply) => {
     try {

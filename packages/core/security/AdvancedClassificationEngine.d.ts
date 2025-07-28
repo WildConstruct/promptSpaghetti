@@ -13,6 +13,7 @@ import {
   ClassificationResult,
   DataElement
 } from './DataClassifier';
+
 export interface MLClassificationModel {
     id: string;
     name: string;
@@ -25,7 +26,7 @@ export interface MLClassificationModel {
     threshold: number;
     categories: DataCategory[];
     features: string[];
-}
+
 export interface ClassificationWorkflow {
     id: string;
     name: string;
@@ -35,22 +36,22 @@ export interface ClassificationWorkflow {
     conditions: WorkflowCondition[];
     enabled: boolean;
     priority: number;
-}
+
 export interface WorkflowTrigger {
     type: 'classification_complete' | 'threshold_exceeded' | 'compliance_violation' | 'manual_review_required';
     conditions: Record<string, any>;
-}
+
 export interface WorkflowAction {
     type: 'notify' | 'encrypt' | 'quarantine' | 'audit_log' | 'escalate' | 'auto_remediate';
     parameters: Record<string, any>;
     timeout: number;
-}
+
 export interface WorkflowCondition {
     field: string;
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
     value: any;
     logic: 'AND' | 'OR';
-}
+
 export interface ClassificationAnalytics {
     totalClassifications: number;
     classificationsByLevel: Record<ClassificationLevel, number>;
@@ -68,7 +69,7 @@ export interface ClassificationAnalytics {
         avgConfidence: number;
     }>;
     lastUpdated: Date;
-}
+
 export interface DataFlow {
     id: string;
     source: string;
@@ -79,7 +80,7 @@ export interface DataFlow {
     lastClassified: Date;
     riskScore: number;
     complianceStatus: 'compliant' | 'violation' | 'unknown';
-}
+
 export interface ClassificationContext {
     source: string;
     purpose: string;
@@ -97,7 +98,7 @@ export interface ClassificationContext {
     };
     dataFlow?: DataFlow;
     parentClassification?: string;
-}
+
 export interface EnhancedClassificationResult extends ClassificationResult {
     mlPredictions: Array<{,
         model: string;
@@ -120,7 +121,6 @@ export interface EnhancedClassificationResult extends ClassificationResult {
     workflowsTriggered: string[];
     reviewRequired: boolean;
     reviewReason?: string;
-}
 /**
  * Advanced Classification Engine with ML and Workflow Capabilities
  */
@@ -238,6 +238,6 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
      * Cleanup and shutdown
      */
     destroy(): void;
-}
+
 export default AdvancedClassificationEngine;
 //# sourceMappingURL=AdvancedClassificationEngine.d.ts.map

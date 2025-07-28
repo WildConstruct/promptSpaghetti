@@ -1,13 +1,3 @@
-/**
- * Epic 17 Toggle Conditions Service
- *
- * Advanced conditional evaluation system for feature toggles providing:
- * - Complex condition expressions with context variables
- * - User/segment targeting with dynamic rule evaluation
- * - Time-based and percentage rollout conditions
- * - A/B testing integration and multivariate conditions
- * - Security-hardened expression evaluation
- */
 export interface ToggleCondition {
     id: string;
     toggleId: string;
@@ -34,36 +24,16 @@ export declare enum ConditionType {
     GEOGRAPHIC = "geographic",// Geographic/location-based
     DEVICE_TYPE = "device_type",// Device/platform-based
     TRAFFIC_SPLIT = "traffic_split",// Traffic splitting conditions
-    FEATURE_FLAG = "feature_flag"
-}
-export interface ConditionParameters {
-    userAttributes?: UserAttributeParams;
-    userSegments?: string[];
-    percentage?: number;
-    salt?: string;
-    startTime?: Date;
-    endTime?: Date;
-    timezone?: string;
-    schedule?: ScheduleParams;
-    experiment?: ExperimentParams;
-    countries?: string[];
-    regions?: string[];
-    cities?: string[];
-    deviceTypes?: string[];
-    platforms?: string[];
-    browsers?: string[];
-    requiredToggles?: string[];
-    conflictingToggles?: string[];
-    customVariables?: Record<string, any>;
-    functions?: Record<string, Function>;
+    FEATURE_FLAG = "feature_flag",// Based on other feature flags
+    export,
+    interface,
+    ConditionParameters
 }
 export interface UserAttributeParams {
-    attributes: Array<{
-        key: string;
-        operator: ComparisonOperator;
-        value: any;
-    }>;
-    logic: 'AND' | 'OR';
+    attributes: Array<{}, key>;
+    string: any;
+    operator: ComparisonOperator;
+    value: any;
 }
 export declare enum ComparisonOperator {
     EQUALS = "equals",
@@ -78,13 +48,10 @@ export declare enum ComparisonOperator {
     ENDS_WITH = "ends_with",
     MATCHES_REGEX = "matches_regex",
     IN_LIST = "in_list",
-    NOT_IN_LIST = "not_in_list"
-}
-export interface ScheduleParams {
-    daysOfWeek?: number[];
-    hoursOfDay?: number[];
-    recurring?: boolean;
-    recurrencePattern?: 'daily' | 'weekly' | 'monthly';
+    NOT_IN_LIST = "not_in_list",
+    export,
+    interface,
+    ScheduleParams
 }
 export interface ExperimentParams {
     experimentId: string;
@@ -94,12 +61,12 @@ export interface ExperimentParams {
 }
 export interface ConditionMetadata {
     category: string;
-    tags: string[];
+    tags: string;
     epic?: string;
     story?: string;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     businessImpact: string;
-    technicalNotes: string[];
+    technicalNotes: string;
     author: string;
     reviewedBy?: string;
     reviewedAt?: Date;
@@ -119,8 +86,8 @@ export interface UserContext {
     role?: string;
     segment?: string;
     attributes?: Record<string, any>;
-    groups?: string[];
-    permissions?: string[];
+    groups?: string;
+    permissions?: string;
 }
 export interface RequestContext {
     ip?: string;
@@ -165,7 +132,7 @@ export interface ToggleEvaluationResult {
     toggleId: string;
     enabled: boolean;
     variant?: string;
-    conditions: ConditionEvaluationResult[];
+    conditions: ConditionEvaluationResult;
     fallbackReason?: string;
     confidence: number;
     metadata: {
@@ -186,7 +153,7 @@ export interface ToggleConditionsConfig {
         allowCustomExpressions: boolean;
         maxExpressionComplexity: number;
         enableSecurityAudit: boolean;
-        blockedPatterns: string[];
+        blockedPatterns: string;
     };
     rollout: {
         defaultSalt: string;
@@ -201,12 +168,6 @@ export interface ToggleConditionsConfig {
         stickinessStrategy: 'user' | 'session' | 'device';
     };
 }
-/**
- * Toggle Conditions Service
- *
- * Core service for evaluating complex conditions for feature toggles in Epic 17.
- * Provides secure, performant, and flexible condition evaluation.
- */
 export declare class ToggleConditionsService {
     private conditions;
     private toggleConditions;
@@ -214,51 +175,6 @@ export declare class ToggleConditionsService {
     private config;
     private expressionEvaluator;
     constructor(config?: Partial<ToggleConditionsConfig>);
-    /**
-     * Add or update a condition for a toggle
-     */
-    addCondition(condition: Omit<ToggleCondition, 'id' | 'created' | 'lastModified'>): Promise<ToggleCondition>;
-    /**
-     * Remove a condition
-     */
-    removeCondition(conditionId: string): Promise<boolean>;
-    /**
-     * Evaluate all conditions for a toggle
-     */
-    evaluateToggle(toggleId: string, context: EvaluationContext): Promise<ToggleEvaluationResult>;
-    /**
-     * Evaluate a single condition
-     */
-    evaluateCondition(condition: ToggleCondition, context: EvaluationContext): Promise<ConditionEvaluationResult>;
-    /**
-     * Get all conditions for a toggle
-     */
-    getToggleConditions(toggleId: string): ToggleCondition[];
-    /**
-     * Bulk evaluate multiple toggles
-     */
-    evaluateToggles(toggleIds: string[], context: EvaluationContext): Promise<Map<string, ToggleEvaluationResult>>;
-    private evaluateUserAttribute;
-    private evaluateUserSegment;
-    private evaluatePercentage;
-    private evaluateTimeWindow;
-    private evaluateABTest;
-    private evaluateMultivariate;
-    private evaluateCustomExpression;
-    private evaluateDependency;
-    private evaluateGeographic;
-    private evaluateDeviceType;
-    private evaluateTrafficSplit;
-    private evaluateFeatureFlag;
-    private compareValues;
-    private generateHash;
-    private generateConditionId;
-    private generateContextHash;
-    private calculateConfidence;
-    private validateCondition;
-    private clearToggleCache;
-    private cleanupCache;
-    private isCacheValid;
+    default: throw;
 }
-export default ToggleConditionsService;
 //# sourceMappingURL=ToggleConditionsService.d.ts.map

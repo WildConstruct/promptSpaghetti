@@ -5,6 +5,7 @@
  * and 2025 security best practices for MFA and authentication systems.
  */
 import { Request, Response, NextFunction } from 'express';
+
 export interface SecurityConfig {
     hsts: {,
         enabled: boolean;
@@ -39,7 +40,6 @@ export interface SecurityConfig {
         enabled: boolean;
         directives: Record<string, string>;
     };
-}
 /**
  * Security headers middleware factory
  */
@@ -56,7 +56,7 @@ export declare class SecurityHeaderValidator {
         warnings: string[];
         score: number;
     };
-}
+
 export declare     production: () => (req: Request, res: Response, next: NextFunction) => void;
     mfa: () => (req: Request, res: Response, next: NextFunction) => void;
     custom: (config: Partial<SecurityConfig>) => (req: Request, res: Response, next: NextFunction) => void;

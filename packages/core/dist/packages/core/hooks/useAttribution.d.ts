@@ -9,18 +9,18 @@ interface UseAttributionReturn {
         start: Date;
         end: Date;
     }) => Promise<ContributorStatsResponse>;
-    listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution[]>;
+    listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;
     startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;
     endSession: (sessionId: string) => Promise<void>;
     updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
     getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
     cleanupOldData: (projectId: string) => Promise<void>;
-    getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution[]>;
+    getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>;
     getAuthorAttribution: (projectId: string, authorId: string, dateRange?: {
         start: Date;
         end: Date;
-    }) => Promise<ChangeAttribution[]>;
-    recordBatchAttributions: (projectId: string, attributions: any[], batchId?: string) => Promise<ChangeAttribution[]>;
+    }) => Promise<ChangeAttribution>;
+    recordBatchAttributions: (projectId: string, attributions: any, batchId?: string) => Promise<ChangeAttribution>;
     clearError: () => void;
 }
 export declare const useAttribution: () => UseAttributionReturn;

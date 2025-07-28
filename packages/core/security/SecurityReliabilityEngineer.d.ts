@@ -7,6 +7,7 @@
  * focusing on SRE principles, error budgets, and continuous improvement.
  */
 import { EventEmitter } from 'events';
+
 export interface ServiceLevelObjective {
     id: string;
     name: string;
@@ -37,7 +38,7 @@ export interface ServiceLevelObjective {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface BurnRateAlert {
     id: string;
     name: string;
@@ -46,7 +47,7 @@ export interface BurnRateAlert {
     burn_rate_threshold: number;
     severity: 'warning' | 'critical';
     notification_channels: string[];
-}
+
 export interface SLOPerformanceRecord {
     timestamp: number;
     measurement_window_start: number;
@@ -57,7 +58,7 @@ export interface SLOPerformanceRecord {
     error_budget_remaining: number;
     incidents_affecting_slo: string[];
     automated_actions_taken: string[];
-}
+
 export interface ReliabilityIncident {
     id: string;
     title: string;
@@ -95,7 +96,7 @@ export interface ReliabilityIncident {
     created_at: number;
     last_updated: number;
     status: 'active' | 'mitigated' | 'resolved' | 'postmortem_pending' | 'closed';
-}
+
 export interface IncidentAction {
     id: string;
     timestamp: number;
@@ -104,7 +105,7 @@ export interface IncidentAction {
     description: string;
     outcome: string;
     automated: boolean;
-}
+
 export interface ImprovementItem {
     id: string;
     title: string;
@@ -115,7 +116,7 @@ export interface ImprovementItem {
     assigned_to: string;
     due_date: number;
     status: 'planned' | 'in_progress' | 'completed' | 'cancelled';
-}
+
 export interface ReliabilityMetrics {
     id: string;
     service: string;
@@ -162,7 +163,7 @@ export interface ReliabilityMetrics {
     }>;
     collected_at: number;
     collection_method: 'automated' | 'manual';
-}
+
 export interface PostmortemTemplate {
     id: string;
     name: string;
@@ -181,7 +182,7 @@ export interface PostmortemTemplate {
     created_by: string;
     created_at: number;
     last_updated: number;
-}
+
 export interface ReliabilityReport {
     id: string;
     title: string;
@@ -233,7 +234,7 @@ export interface ReliabilityReport {
     generated_at: number;
     reviewed_by?: string[];
     approved_at?: number;
-}
+
 export interface ReliabilityEvent {
     id: string;
     type: 'slo_violation' | 'error_budget_alert' | 'incident_detected' | 'capacity_threshold' | 'performance_degradation';
@@ -257,7 +258,7 @@ export interface ReliabilityEvent {
         resolved_at?: number;
         resolution_notes?: string;
     };
-}
+
 export declare class SecurityReliabilityEngineer extends EventEmitter {
     private slos;
     private incidents;
@@ -311,6 +312,6 @@ export declare class SecurityReliabilityEngineer extends EventEmitter {
     getReports(): ReliabilityReport[];
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
-}
+
 export default SecurityReliabilityEngineer;
 //# sourceMappingURL=SecurityReliabilityEngineer.d.ts.map

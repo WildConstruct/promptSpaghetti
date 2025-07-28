@@ -14,8 +14,8 @@ export interface DataPipeline {
     type: 'ingestion' | 'transformation' | 'enrichment' | 'aggregation' | 'export' | 'analytics' | 'ml_processing';
     configuration: {
         source: DataSource;
-        destinations: DataDestination[];
-        processing_stages: ProcessingStage[];
+        destinations: DataDestination;
+        processing_stages: ProcessingStage;
         batch_size: number;
         processing_interval_ms: number;
         retry_policy: RetryPolicy;
@@ -109,8 +109,8 @@ export interface ProcessingStage {
         processing_logic: string;
         input_schema?: string;
         output_schema?: string;
-        transformation_rules: TransformationRule[];
-        validation_rules: ValidationRule[];
+        transformation_rules: TransformationRule;
+        validation_rules: ValidationRule;
     };
     performance: {
         max_processing_time_ms: number;
@@ -163,7 +163,7 @@ export interface RetryPolicy {
     initial_delay_ms: number;
     max_delay_ms: number;
     backoff_multiplier: number;
-    retry_on_errors: string[];
+    retry_on_errors: string;
     dead_letter_queue_enabled: boolean;
 }
 export interface ErrorHandlingStrategy {
@@ -204,7 +204,7 @@ export interface PipelineExecution {
     accuracy_percent: number;
     duplicate_rate_percent: number;
     error_rate_percent: number;
-    stage_executions: StageExecution[];
+    stage_executions: StageExecution;
     resource_usage: {
         compute_time_seconds: number;
         memory_peak_mb: number;
@@ -213,8 +213,8 @@ export interface PipelineExecution {
         cost_estimate: number;
     };
     status: 'running' | 'completed' | 'failed' | 'cancelled' | 'partially_completed';
-    error_summary?: ExecutionError[];
-    warnings: string[];
+    error_summary?: ExecutionError;
+    warnings: string;
     executed_by: string;
 }
 export interface StageExecution {
@@ -238,8 +238,8 @@ export interface StageExecution {
         data_integrity_score: number;
     };
     status: 'completed' | 'failed' | 'skipped';
-    errors: string[];
-    warnings: string[];
+    errors: string;
+    warnings: string;
 }
 export interface ExecutionError {
     error_type: string;
@@ -277,8 +277,8 @@ export interface PipelineAlert {
         resolution_notes?: string;
         auto_resolved: boolean;
     };
-    automated_actions: string[];
-    recommended_actions: string[];
+    automated_actions: string;
+    recommended_actions: string;
 }
 export interface PipelineOptimizationRecommendation {
     id: string;
@@ -299,15 +299,15 @@ export interface PipelineOptimizationRecommendation {
     implementation: {
         configuration_changes: Record<string, any>;
         code_changes_required: boolean;
-        testing_requirements: string[];
+        testing_requirements: string;
         rollback_plan: string;
         estimated_implementation_hours: number;
     };
     validation: {
-        success_criteria: string[];
+        success_criteria: string;
         measurement_method: string;
         validation_period_days: number;
-        rollback_triggers: string[];
+        rollback_triggers: string;
     };
     generated_at: number;
     status: 'pending' | 'approved' | 'implemented' | 'validated' | 'rejected';
@@ -323,24 +323,12 @@ export interface DataLineageRecord {
     source_system: string;
     source_record_id: string;
     source_timestamp: number;
-    processing_history: Array<{
-        stage_id: string;
-        stage_name: string;
-        processed_at: number;
-        transformations_applied: string[];
-        validation_results: Record<string, boolean>;
-    }>;
-    current_location: string;
-    current_format: string;
-    last_modified: number;
-    quality_scores: {
-        completeness: number;
-        accuracy: number;
-        consistency: number;
-        timeliness: number;
-    };
-    dependent_records: string[];
-    dependency_of_records: string[];
+    processing_history: Array<{}, stage_id>;
+    string: any;
+    stage_name: string;
+    processed_at: number;
+    transformations_applied: string;
+    validation_results: Record<string, boolean>;
 }
 export declare class SecurityDataPipelineMonitor extends EventEmitter {
     private pipelines;
@@ -352,43 +340,15 @@ export declare class SecurityDataPipelineMonitor extends EventEmitter {
     private monitoringIntervals;
     constructor();
     private initializeEventHandlers;
-    registerPipeline(pipeline: Omit<DataPipeline, 'id' | 'created_at' | 'status'>): Promise<string>;
-    updatePipeline(pipelineId: string, updates: Partial<DataPipeline>): Promise<void>;
-    deletePipeline(pipelineId: string): Promise<void>;
-    startPipeline(pipelineId: string, triggeredBy?: string): Promise<void>;
-    stopPipeline(pipelineId: string): Promise<void>;
-    pausePipeline(pipelineId: string): Promise<void>;
-    private executePipeline;
-    private loadDataFromSource;
-    private executeStage;
-    private stageOutputs;
-    private storeStageOutput;
-    private getStageOutput;
-    private writeToDestinations;
-    private calculateDataQualityScore;
-    private calculateCompletenessPercent;
-    private calculateAccuracyPercent;
-    private calculateDuplicateRate;
-    private calculatePipelineHealthScore;
-    private startPipelineMonitoring;
-    private stopPipelineMonitoring;
-    private performPipelineHealthCheck;
-    private generateAlert;
-    private processAlert;
-    private attemptPipelineRestart;
-    private analyzeExecutionResults;
-    private generateOptimizationRecommendations;
-    getPipelineStatus(pipelineId?: string): any;
-    getExecutionHistory(pipelineId: string, limit?: number): PipelineExecution[];
-    getActiveAlerts(pipelineId?: string): PipelineAlert[];
-    getOptimizationRecommendations(pipelineId: string, status?: PipelineOptimizationRecommendation['status']): PipelineOptimizationRecommendation[];
-    acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void>;
-    resolveAlert(alertId: string, resolvedBy: string, notes?: string): Promise<void>;
-    approveRecommendation(recommendationId: string, reviewedBy: string, notes?: string): Promise<void>;
-    implementRecommendation(recommendationId: string): Promise<void>;
-    private setNestedProperty;
-    performMaintenance(): Promise<void>;
-    shutdown(): Promise<void>;
+    break: any;
+    default: break;
+    stageExecution: any;
+    records_output: any;
+    const endTime: number;
+    stageExecution: any;
+    execution_end: any;
+    stageExecution: any;
+    execution_duration_ms: number;
+    if(stageExecution: any, execution_duration_ms: any): any;
 }
-export default SecurityDataPipelineMonitor;
 //# sourceMappingURL=SecurityDataPipelineMonitor.d.ts.map

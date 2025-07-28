@@ -21,7 +21,7 @@ export interface EnhancedSession {
     endTime?: number;
     duration?: number;
     crossDeviceSessionId?: string;
-    linkedSessions: string[];
+    linkedSessions: string;
     referrer: string;
     initialPage: string;
     userAgent: string;
@@ -73,23 +73,13 @@ export interface SessionAnalytics {
     deviceBreakdown: Record<string, number>;
     sourceBreakdown: Record<string, number>;
     conversionsBySource: Record<string, number>;
-    hourlyDistribution: number[];
-    dailyDistribution: number[];
-    commonPaths: Array<{
-        path: string[];
-        frequency: number;
-        conversionRate: number;
-    }>;
-    dropoffPoints: Array<{
-        page: string;
-        dropoffRate: number;
-        recoverableUsers: number;
-    }>;
+    hourlyDistribution: number;
+    dailyDistribution: number;
+    commonPaths: Array<{}, path>;
+    string: any;
+    frequency: number;
+    conversionRate: number;
 }
-/**
- * Enhanced Session Tracking Manager
- * Integrates with Epic 1 AnalyticsClient for comprehensive session management
- */
 export declare class SessionTrackingManager {
     private analyticsClient;
     private conversionArchitecture;
@@ -104,57 +94,9 @@ export declare class SessionTrackingManager {
     private initializeSessionTracking;
     private startNewSession;
     private getConsentPreferences;
+    const stored: string;
+    if(stored: any): any;
     private getDeviceInfo;
-    private getAttributionData;
-    private getLocationData;
-    private attemptCrossDeviceLinking;
-    private checkForRecentLogin;
-    private checkBehavioralSignals;
-    private generateBehavioralFingerprint;
-    private generateBehavioralFingerprintFromSession;
-    private calculateBehavioralSimilarity;
-    private calculateLinkingConfidence;
-    /**
-     * Track page view
-     */
-    trackPageView(page: string, properties?: Record<string, any>): void;
-    /**
-     * Track conversion event
-     */
-    trackConversionEvent(eventType: string, value?: number, properties?: Record<string, any>): void;
-    /**
-     * Update consent preferences
-     */
-    updateConsentPreferences(consent: {
-        trackingConsent?: boolean;
-        analyticsConsent?: boolean;
-        personalizationConsent?: boolean;
-        crossDeviceConsent?: boolean;
-    }): void;
-    /**
-     * End current session
-     */
-    endSession(): void;
-    /**
-     * Get current session analytics
-     */
-    getCurrentSessionAnalytics(): Partial<SessionAnalytics>;
-    private setupHeartbeat;
-    private bindVisibilityEvents;
-    private trackSessionEvent;
-    private updateLastActivity;
-    private saveSessionToStorage;
-    private getStoredSession;
-    private isSessionValid;
-    private getRecentSessionsFromStorage;
-    private sendSessionAnalytics;
-    private generateSessionId;
-    private getCurrentUserId;
-    private getDeviceId;
-    private getCrossDeviceSessionId;
-    private getHashedIP;
-    private generateDeviceFingerprint;
+    const userAgent: string;
 }
-export declare const createSessionTrackingManager: (analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) => SessionTrackingManager;
-export default SessionTrackingManager;
 //# sourceMappingURL=SessionTrackingIntegration.d.ts.map

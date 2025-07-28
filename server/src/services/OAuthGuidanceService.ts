@@ -12,6 +12,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataClassificationService } from './DataClassificationService';
 import { KeyManagementService } from './KeyManagementService';
 
+}
 export interface OAuthConfiguration {
   configId: string;
   clientId: string;
@@ -30,7 +31,9 @@ export interface OAuthConfiguration {
   version: string;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface OAuthScope {
   name: string;
   description: string;
@@ -43,7 +46,9 @@ export interface OAuthScope {
   thirdPartySharing: boolean;
   auditLevel: 'BASIC' | 'ENHANCED' | 'COMPREHENSIVE';
 }
+}
 
+}
 export interface ScopeDataAccess {
   resources: string[];
   operations: ('READ' | 'WRITE' | 'DELETE' | 'EXECUTE')[];
@@ -53,7 +58,9 @@ export interface ScopeDataAccess {
   userDataAccess: boolean;
   crossTenantAccess: boolean;
 }
+}
 
+}
 export interface TokenConfiguration {
   accessTokenTtl: number; // seconds
   refreshTokenTtl: number; // seconds
@@ -65,7 +72,9 @@ export interface TokenConfiguration {
   bindingConfiguration: TokenBindingConfiguration;
   revocationConfiguration: RevocationConfiguration;
 }
+}
 
+}
 export interface TokenRotationPolicy {
   enabled: boolean;
   rotationInterval: number; // seconds
@@ -74,7 +83,9 @@ export interface TokenRotationPolicy {
   automaticRotation: boolean;
   notificationChannels: string[];
 }
+}
 
+}
 export interface TokenBindingConfiguration {
   certificateBinding: boolean;
   deviceBinding: boolean;
@@ -83,7 +94,9 @@ export interface TokenBindingConfiguration {
   geolocationBinding: boolean;
   customBindingFields: string[];
 }
+}
 
+}
 export interface RevocationConfiguration {
   enableRevocation: boolean;
   revocationEndpoint: string;
@@ -92,7 +105,9 @@ export interface RevocationConfiguration {
   notificationRequired: boolean;
   auditRevocation: boolean;
 }
+}
 
+}
 export interface OAuthSecurityConfiguration {
   pkceRequired: boolean;
   stateParameterRequired: boolean;
@@ -108,7 +123,9 @@ export interface OAuthSecurityConfiguration {
   securityHeaders: SecurityHeaderConfiguration;
   threatDetection: ThreatDetectionConfiguration;
 }
+}
 
+}
 export interface OAuthRateLimitConfiguration {
   tokenRequestLimit: { requests: number; windowMs: number };
   authorizationLimit: { requests: number; windowMs: number };
@@ -119,6 +136,7 @@ export interface OAuthRateLimitConfiguration {
   penaltyDuration: number; // seconds
 }
 
+}
 export interface SecurityHeaderConfiguration {
   strictTransportSecurity: boolean;
   contentSecurityPolicy: string;
@@ -128,7 +146,9 @@ export interface SecurityHeaderConfiguration {
   permissionsPolicy: string;
   customHeaders: Record<string, string>;
 }
+}
 
+}
 export interface ThreatDetectionConfiguration {
   bruteForceProtection: boolean;
   suspiciousPatternDetection: boolean;
@@ -139,13 +159,16 @@ export interface ThreatDetectionConfiguration {
   alertChannels: string[];
   escalationThresholds: ThreatEscalationThreshold[];
 }
+}
 
+}
 export interface ThreatEscalationThreshold {
   threatLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   occurrences: number;
   timeWindow: number; // minutes
   actions: ThreatResponseAction[];
   notifications: string[];
+}
 }
 
 export type ThreatResponseAction = 
@@ -158,6 +181,7 @@ export type ThreatResponseAction =
   | 'REVOKE_TOKENS'
   | 'NOTIFY_USER';
 
+}
 export interface ComplianceSettings {
   gdprCompliance: GDPRComplianceConfiguration;
   ccpaCompliance: CCPAComplianceConfiguration;
@@ -166,7 +190,9 @@ export interface ComplianceSettings {
   pci_dssCompliance?: PCIDSSComplianceConfiguration;
   customCompliance: CustomComplianceFramework[];
 }
+}
 
+}
 export interface GDPRComplianceConfiguration {
   enabled: boolean;
   lawfulBasisTracking: boolean;
@@ -178,7 +204,9 @@ export interface GDPRComplianceConfiguration {
   dataProcessingRecords: boolean;
   crossBorderTransferSafeguards: string[];
 }
+}
 
+}
 export interface CCPAComplianceConfiguration {
   enabled: boolean;
   consumerRightsSupport: boolean;
@@ -187,7 +215,9 @@ export interface CCPAComplianceConfiguration {
   dataSaleDisclosures: boolean;
   thirdPartyProcessorAgreements: boolean;
 }
+}
 
+}
 export interface SOXComplianceConfiguration {
   enabled: boolean;
   accessControlsDocumentation: boolean;
@@ -196,7 +226,9 @@ export interface SOXComplianceConfiguration {
   segregationOfDuties: boolean;
   auditTrailRequirements: boolean;
 }
+}
 
+}
 export interface HIPAAComplianceConfiguration {
   enabled: boolean;
   minimumNecessaryStandard: boolean;
@@ -205,7 +237,9 @@ export interface HIPAAComplianceConfiguration {
   encryptionRequirements: boolean;
   businessAssociateAgreements: boolean;
 }
+}
 
+}
 export interface PCIDSSComplianceConfiguration {
   enabled: boolean;
   dataFlowDocumentation: boolean;
@@ -214,7 +248,9 @@ export interface PCIDSSComplianceConfiguration {
   strongCryptography: boolean;
   regularSecurityTesting: boolean;
 }
+}
 
+}
 export interface CustomComplianceFramework {
   frameworkId: string;
   name: string;
@@ -223,7 +259,9 @@ export interface CustomComplianceFramework {
   auditRequirements: string[];
   documentation: string[];
 }
+}
 
+}
 export interface ComplianceRequirement {
   requirementId: string;
   category: string;
@@ -233,7 +271,9 @@ export interface ComplianceRequirement {
   validationCriteria: string[];
   evidence: string[];
 }
+}
 
+}
 export interface DataHandlingConfiguration {
   dataClassificationIntegration: boolean;
   dataRetentionPolicies: DataRetentionPolicy[];
@@ -242,7 +282,9 @@ export interface DataHandlingConfiguration {
   dataSubjectRights: DataSubjectRightsConfiguration;
   thirdPartyDataSharing: ThirdPartyDataSharingConfiguration;
 }
+}
 
+}
 export interface DataRetentionPolicy {
   dataType: string;
   retentionPeriod: number; // days
@@ -251,7 +293,9 @@ export interface DataRetentionPolicy {
   archivalRequired: boolean;
   notificationRequired: boolean;
 }
+}
 
+}
 export interface DataProcessingPurpose {
   purposeId: string;
   name: string;
@@ -263,7 +307,9 @@ export interface DataProcessingPurpose {
   retentionPeriod: number;
   thirdPartySharing: boolean;
 }
+}
 
+}
 export interface CrossBorderTransferConfiguration {
   enabled: boolean;
   adequacyDecisions: string[];
@@ -273,7 +319,9 @@ export interface CrossBorderTransferConfiguration {
   safeguardMeasures: string[];
   transferDocumentation: boolean;
 }
+}
 
+}
 export interface DataSubjectRightsConfiguration {
   rightOfAccess: boolean;
   rightOfRectification: boolean;
@@ -284,7 +332,9 @@ export interface DataSubjectRightsConfiguration {
   rightsNotificationChannels: string[];
   responseTimeframes: Record<string, number>; // days
 }
+}
 
+}
 export interface ThirdPartyDataSharingConfiguration {
   enabled: boolean;
   approvalRequired: boolean;
@@ -294,6 +344,7 @@ export interface ThirdPartyDataSharingConfiguration {
   auditTrailRequired: boolean;
   consentRequired: boolean;
   shareableDataCategories: string[];
+}
 }
 
 export type OAuthClientType = 
@@ -321,6 +372,7 @@ export type ConfigurationStatus =
   | 'REVOKED'
   | 'SUSPENDED';
 
+}
 export interface OAuthGuidanceDocument {
   documentId: string;
   title: string;
@@ -334,6 +386,7 @@ export interface OAuthGuidanceDocument {
   reviewers: string[];
   approvalStatus: 'DRAFT' | 'UNDER_REVIEW' | 'APPROVED' | 'PUBLISHED';
 }
+}
 
 export type GuidanceCategory = 
   | 'IMPLEMENTATION_GUIDE'
@@ -344,6 +397,7 @@ export type GuidanceCategory =
   | 'MIGRATION_GUIDE'
   | 'TESTING_GUIDELINES';
 
+}
 export interface GuidanceContent {
   overview: string;
   prerequisites: string[];
@@ -354,7 +408,9 @@ export interface GuidanceContent {
   troubleshooting: TroubleshootingEntry[];
   references: Reference[];
 }
+}
 
+}
 export interface GuidanceStep {
   stepNumber: number;
   title: string;
@@ -364,7 +420,9 @@ export interface GuidanceStep {
   warnings?: string[];
   verificationSteps: string[];
 }
+}
 
+}
 export interface CodeExample {
   language: string;
   title: string;
@@ -373,7 +431,9 @@ export interface CodeExample {
   explanation: string;
   securityNotes?: string[];
 }
+}
 
+}
 export interface SecurityConsideration {
   category: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   title: string;
@@ -381,14 +441,18 @@ export interface SecurityConsideration {
   mitigation: string;
   validation: string[];
 }
+}
 
+}
 export interface ComplianceNote {
   regulation: string;
   requirement: string;
   implementationGuidance: string;
   validationCriteria: string[];
 }
+}
 
+}
 export interface TroubleshootingEntry {
   problem: string;
   symptoms: string[];
@@ -396,14 +460,18 @@ export interface TroubleshootingEntry {
   solutions: string[];
   prevention: string[];
 }
+}
 
+}
 export interface Reference {
   type: 'RFC' | 'STANDARD' | 'SPECIFICATION' | 'DOCUMENTATION' | 'ARTICLE';
   title: string;
   url: string;
   description: string;
 }
+}
 
+}
 export interface OAuthIntegrationAssessment {
   assessmentId: string;
   clientId: string;
@@ -418,7 +486,9 @@ export interface OAuthIntegrationAssessment {
   nextReviewDate: Date;
   status: 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED' | 'REQUIRES_REMEDIATION';
 }
+}
 
+}
 export interface AssessmentScope {
   configurationReview: boolean;
   securityTesting: boolean;
@@ -427,7 +497,9 @@ export interface AssessmentScope {
   threatModeling: boolean;
   penetrationTesting: boolean;
 }
+}
 
+}
 export interface SecurityFinding {
   findingId: string;
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'INFO';
@@ -440,7 +512,9 @@ export interface SecurityFinding {
   timeline: number; // days
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'ACCEPTED_RISK';
 }
+}
 
+}
 export interface SecurityRecommendation {
   recommendationId: string;
   priority: 'IMMEDIATE' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -452,7 +526,9 @@ export interface SecurityRecommendation {
   estimatedEffort: string;
   dependencies: string[];
 }
+}
 
+}
 export interface ComplianceStatus {
   gdprCompliant: boolean;
   ccpaCompliant: boolean;
@@ -462,7 +538,9 @@ export interface ComplianceStatus {
   customFrameworkCompliance: Record<string, boolean>;
   nonComplianceIssues: ComplianceIssue[];
 }
+}
 
+}
 export interface ComplianceIssue {
   framework: string;
   requirement: string;
@@ -470,6 +548,7 @@ export interface ComplianceIssue {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   remediation: string;
   timeline: number; // days
+}
 }
 
 export class OAuthGuidanceService {
@@ -496,6 +575,7 @@ export class OAuthGuidanceService {
     dataClassifications: string[],
     complianceRequirements: string[]
   ): Promise<{ configuration: OAuthConfiguration; guidance: OAuthGuidanceDocument }> {
+
     try {
       // Analyze security requirements
       const securityRequirements = await this.analyzeSecurityRequirements(
@@ -562,6 +642,7 @@ export class OAuthGuidanceService {
     complianceIssues: ComplianceIssue[];
     recommendations: SecurityRecommendation[];
   }> {
+
     const configuration = await this.getConfiguration(configId);
     
     const securityIssues: SecurityFinding[] = [];
@@ -597,6 +678,7 @@ export class OAuthGuidanceService {
     assessor: string,
     scope: AssessmentScope
   ): Promise<{ assessmentId: string }> {
+
     const assessmentId = await this.generateAssessmentId();
 
     try {
@@ -692,6 +774,7 @@ export class OAuthGuidanceService {
     configuration: OAuthConfiguration,
     securityRequirements: SecurityRequirements
   ): Promise<OAuthGuidanceDocument> {
+
     const documentId = await this.generateDocumentId();
 
     const content: GuidanceContent = {
@@ -727,6 +810,7 @@ export class OAuthGuidanceService {
     dataClassifications: string[],
     _____complianceRequirements: string[]
   ): Promise<SecurityRequirements> {
+
     // Implement security requirements analysis
     return {
       securityLevel: 'ENHANCED',
@@ -743,6 +827,7 @@ export class OAuthGuidanceService {
     useCase: string,
     securityRequirements: SecurityRequirements
   ): Promise<OAuthConfiguration> {
+
     const configId = await this.generateConfigId();
 
     return {
@@ -794,14 +879,14 @@ export class OAuthGuidanceService {
           sensitivityLevel: 'INTERNAL',
           userDataAccess: true,
           crossTenantAccess: false
-        },
+  }
         permissions: ['read:identity'],
         requiresConsent: true,
         consentType: 'EXPLICIT',
         dataClassification: 'INTERNAL',
         thirdPartySharing: false,
         auditLevel: 'ENHANCED'
-      },
+  }
       {
         name: 'profile',
         description: 'User profile information',
@@ -812,7 +897,7 @@ export class OAuthGuidanceService {
           sensitivityLevel: 'INTERNAL',
           userDataAccess: true,
           crossTenantAccess: false
-        },
+  }
         permissions: ['read:profile'],
         requiresConsent: true,
         consentType: 'GRANULAR',
@@ -839,7 +924,7 @@ export class OAuthGuidanceService {
         gracePeriod: 300, // 5 minutes
         automaticRotation: true,
         notificationChannels: ['security-team']
-      },
+  }
       bindingConfiguration: {
         certificateBinding: securityRequirements.requiresMTLS,
         deviceBinding: securityRequirements.tokenBindingRequired,
@@ -847,7 +932,7 @@ export class OAuthGuidanceService {
         userAgentBinding: true,
         geolocationBinding: false,
         customBindingFields: []
-      },
+  }
       revocationConfiguration: {
         enableRevocation: true,
         revocationEndpoint: '/oauth/revoke',
@@ -879,7 +964,7 @@ export class OAuthGuidanceService {
         perClientLimits: true,
         burstAllowance: 10,
         penaltyDuration: 300
-      },
+  }
       securityHeaders: {
         strictTransportSecurity: true,
         contentSecurityPolicy: 'default-src \'self\'',
@@ -888,7 +973,7 @@ export class OAuthGuidanceService {
         referrerPolicy: 'strict-origin-when-cross-origin',
         permissionsPolicy: 'geolocation=(), microphone=(), camera=()',
         customHeaders: {}
-      },
+  }
       threatDetection: {
         bruteForceProtection: true,
         suspiciousPatternDetection: true,
@@ -922,7 +1007,7 @@ export class OAuthGuidanceService {
         privacyByDesign: true,
         dataProcessingRecords: true,
         crossBorderTransferSafeguards: ['ADEQUACY_DECISION', 'SCC']
-      },
+  }
       ccpaCompliance: {
         enabled: true,
         consumerRightsSupport: true,
@@ -930,7 +1015,7 @@ export class OAuthGuidanceService {
         optOutMechanisms: true,
         dataSaleDisclosures: true,
         thirdPartyProcessorAgreements: true
-      },
+  }
       customCompliance: []
     };
   }
@@ -969,7 +1054,7 @@ export class OAuthGuidanceService {
         certificationMechanisms: [],
         safeguardMeasures: [],
         transferDocumentation: false
-      },
+  }
       dataSubjectRights: {
         rightOfAccess: true,
         rightOfRectification: true,
@@ -986,7 +1071,7 @@ export class OAuthGuidanceService {
           'restriction': 30,
           'object': 30
         }
-      },
+  }
       thirdPartyDataSharing: {
         enabled: false,
         approvalRequired: true,
@@ -1032,7 +1117,7 @@ export class OAuthGuidanceService {
           'Test redirect URI validation',
           'Confirm grant type restrictions'
         ]
-      },
+  }
       {
         stepNumber: 2,
         title: 'Security Configuration',
@@ -1103,7 +1188,7 @@ window.location.href = authUrl.toString();
           'Test token binding mechanisms',
           'Validate token rotation policies'
         ]
-      },
+  }
       {
         category: 'HIGH',
         title: 'Transport Security',
@@ -1160,7 +1245,7 @@ window.location.href = authUrl.toString();
         title: 'RFC 6749 - OAuth 2.0 Authorization Framework',
         url: 'https://tools.ietf.org/html/rfc6749',
         description: 'Core OAuth 2.0 specification'
-      },
+  }
       {
         type: 'RFC',
         title: 'RFC 7636 - PKCE for OAuth Public Clients',
@@ -1175,6 +1260,7 @@ window.location.href = authUrl.toString();
     issues: SecurityFinding[],
     recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Validate PKCE requirement
     if (!configuration.securityConfiguration.pkceRequired && 
         ['PUBLIC', 'SINGLE_PAGE_APPLICATION', 'NATIVE'].includes(configuration.clientType)) {
@@ -1213,6 +1299,7 @@ window.location.href = authUrl.toString();
     issues: ComplianceIssue[],
     _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Validate GDPR compliance
     if (configuration.complianceSettings.gdprCompliance.enabled && 
         !configuration.complianceSettings.gdprCompliance.consentManagement) {
@@ -1231,6 +1318,7 @@ window.location.href = authUrl.toString();
     configuration: OAuthConfiguration,
     issues: ComplianceIssue[]
   ): Promise<void> {
+
     // Validate data retention policies
     if (configuration.dataHandling.dataRetentionPolicies.length === 0) {
       issues.push({
@@ -1270,16 +1358,19 @@ window.location.href = authUrl.toString();
 
   // Database and utility methods
   private async getConfiguration(_____configId: string): Promise<OAuthConfiguration> {
+
     // Implementation would fetch from database
     throw new Error('Not implemented');
   }
 
   private async getConfigurationByClientId(_____clientId: string): Promise<OAuthConfiguration> {
+
     // Implementation would fetch from database
     throw new Error('Not implemented');
   }
 
   private async storeAssessment(_____assessment: OAuthIntegrationAssessment): Promise<void> {
+
     // Implementation would store in database
   }
 
@@ -1288,6 +1379,7 @@ window.location.href = authUrl.toString();
     _____findings: SecurityFinding[],
     _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Implementation would perform configuration review
   }
 
@@ -1296,6 +1388,7 @@ window.location.href = authUrl.toString();
     _____findings: SecurityFinding[],
     _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Implementation would perform security testing
   }
 
@@ -1304,6 +1397,7 @@ window.location.href = authUrl.toString();
     _____findings: SecurityFinding[],
     _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Implementation would perform compliance validation
   }
 
@@ -1312,6 +1406,7 @@ window.location.href = authUrl.toString();
     _____findings: SecurityFinding[],
     _____recommendations: SecurityRecommendation[]
   ): Promise<void> {
+
     // Implementation would perform data flow analysis
   }
 
@@ -1319,6 +1414,7 @@ window.location.href = authUrl.toString();
     _____configuration: OAuthConfiguration,
     _____findings: SecurityFinding[]
   ): Promise<ComplianceStatus> {
+
     return {
       gdprCompliant: true,
       ccpaCompliant: true,
@@ -1339,19 +1435,23 @@ window.location.href = authUrl.toString();
   }
 
   private async generateConfigId(): Promise<string> {
+
     return `OAUTH-CFG-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateDocumentId(): Promise<string> {
+
     return `OAUTH-DOC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateAssessmentId(): Promise<string> {
+
     return `OAUTH-ASS-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
 
 // Supporting interfaces
+}
 interface SecurityRequirements {
   securityLevel: 'BASIC' | 'STANDARD' | 'ENHANCED' | 'MAXIMUM';
   requiresMTLS: boolean;
@@ -1359,4 +1459,5 @@ interface SecurityRequirements {
   requiresDPoP: boolean;
   tokenBindingRequired: boolean;
   encryptionRequired: boolean;
+}
 }

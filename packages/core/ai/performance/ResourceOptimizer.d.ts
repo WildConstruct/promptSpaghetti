@@ -4,6 +4,7 @@
  *
  * Intelligent resource management and optimization for AI model operations
  */
+
 export interface ResourceUsage {
     memory: {,
         used: number;
@@ -33,7 +34,7 @@ export interface ResourceUsage {
         memory: number;
         temperature: number;
     };
-}
+
 export interface OptimizationStrategy {
     name: string;
     description: string;
@@ -47,7 +48,7 @@ export interface OptimizationStrategy {
     };
     implementation: () => Promise<void>;
     rollback: () => Promise<void>;
-}
+
 export interface ResourceOptimizationConfig {
     enabled: boolean;
     monitoringInterval: number;
@@ -71,7 +72,7 @@ export interface ResourceOptimizationConfig {
         maxModelInstances: number;
         maxCacheSize: number;
     };
-}
+
 export interface ModelResourceProfile {
     modelId: string;
     resourceRequirements: {,
@@ -90,7 +91,7 @@ export interface ModelResourceProfile {
         costEfficiency: number;
         resourceEfficiency: number;
     };
-}
+
 export declare class ResourceOptimizer {
     private config;
     private currentUsage;
@@ -182,6 +183,6 @@ export declare class ResourceOptimizer {
     private measureCurrentState;
     private calculateImpact;
     destroy(): void;
-}
+
 export default ResourceOptimizer;
 //# sourceMappingURL=ResourceOptimizer.d.ts.map

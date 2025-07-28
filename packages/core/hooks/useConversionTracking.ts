@@ -15,7 +15,6 @@ export interface ConversionTrackingConfig {
   experimentId?: string;
   variantId?: string;
 }
-
 export const useConversionTracking = (config: ConversionTrackingConfig = {}) => {
   const {
     enableAutoTracking = true,
@@ -28,141 +27,137 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
   const sessionEvents = useRef(new Set<string>());
   // Auto-track page views
   useEffect(() => {
-    if (trackPageViews && !hasTrackedPageView.current) {
-      conversionTracker.trackEvent('session_started', {)
-        page: window.location.pathname,
-        referrer: document.referrer,
-      });
+  if (trackPageViews && !hasTrackedPageView.current) {
+  conversionTracker.trackEvent('session_started', {)
+  page: window.location.pathname,
+  referrer: document.referrer,
+});
       hasTrackedPageView.current = true;
-    }
   }, [trackPageViews]);
   // Track director-specific workflow actions
   const trackDirectorAction = useCallback((action: string, context: Record<string, any> = {}) => {
-    if (!enableAutoTracking) return;
-    const enrichedContext = {
-      ...context,
-      timestamp: Date.now(),
-      page: window.location.pathname,
-      ...(experimentId && variantId && {)
-        experiment_id: experimentId,
-        variant_id: variantId,
-      })
+  if (!enableAutoTracking) return;
+  const enrichedContext = {
+  ...context,
+  timestamp: Date.now(),
+  page: window.location.pathname,
+  ...(experimentId && variantId && {)
+  experiment_id: experimentId,
+  variant_id: variantId,
+}
     };
     conversionTracker.trackDirectorWorkflow(action, enrichedContext);
   }, [enableAutoTracking, experimentId, variantId]);
   // Track node creation events
   const trackNodeCreation = useCallback((nodeType: string, nodeData: any) => {
-    const eventKey = 'node_created';
-    // Only track first node creation as conversion event
-    if (!sessionEvents.current.has(eventKey)) {
-      conversionTracker.trackEvent('first_project_created', {)
-        first_node_type: nodeType,
-        node_data_size: JSON.stringify(nodeData).length,
-        is_first_node: true,
-      });
+  const eventKey = 'node_created';
+  // Only track first node creation as conversion event
+  if (!sessionEvents.current.has(eventKey)) {
+  conversionTracker.trackEvent('first_project_created', {)
+  first_node_type: nodeType,
+  node_data_size: JSON.stringify(nodeData).length,
+  is_first_node: true,
+});
       sessionEvents.current.add(eventKey);
-    }
     // Track all node creations for analytics
     trackDirectorAction('node-created', {)
-      node_type: nodeType,
-      node_config: nodeData,
-      session_node_count: sessionEvents.current.size,
-    });
+  node_type: nodeType,
+  node_config: nodeData,
+  session_node_count: sessionEvents.current.size,
+});
   }, [trackDirectorAction]);
   // Track connection creation events
   const trackConnectionCreation = useCallback((source: string, target: string) => {
-    const eventKey = 'connection_made';
-    // Only track first connection as conversion event
-    if (!sessionEvents.current.has(eventKey)) {
-      conversionTracker.trackEvent('first_connection_made', {)
-        source_node: source,
-        target_node: target,
-        is_first_connection: true,
-      });
+  const eventKey = 'connection_made';
+  // Only track first connection as conversion event
+  if (!sessionEvents.current.has(eventKey)) {
+  conversionTracker.trackEvent('first_connection_made', {)
+  source_node: source,
+  target_node: target,
+  is_first_connection: true,
+});
       sessionEvents.current.add(eventKey);
-    }
     trackDirectorAction('connection-made', {)
-      source_node: source,
-      target_node: target,
-      total_connections: sessionEvents.current.size,
-    });
+  source_node: source,
+  target_node: target,
+  total_connections: sessionEvents.current.size,
+});
   }, [trackDirectorAction]);
   // Track preview generation events
-  const trackPreviewGeneration = useCallback((previewConfig: {)
-    nodeCount: number;
-    edgeCount: number;
-    seedCount: number;
-    executionTime?: number;
-  }) => {
-    const eventKey = 'preview_generated';
-    // Only track first preview as conversion event
-    if (!sessionEvents.current.has(eventKey)) {
-      conversionTracker.trackEvent('first_preview_generated', {)
-        graph_complexity: previewConfig.nodeCount + previewConfig.edgeCount,
-        seed_count: previewConfig.seedCount,
-        is_first_preview: true,
-        execution_time: previewConfig.executionTime,
-      });
+  const trackPreviewGeneration = useCallback((previewConfig: {,)
+  nodeCount: number;
+  edgeCount: number;,
+  seedCount: number;
+  executionTime?: number;
+}) => {
+  const eventKey = 'preview_generated';
+  // Only track first preview as conversion event
+  if (!sessionEvents.current.has(eventKey)) {
+  conversionTracker.trackEvent('first_preview_generated', {)
+  graph_complexity: previewConfig.nodeCount + previewConfig.edgeCount,
+  seed_count: previewConfig.seedCount,
+  is_first_preview: true,
+  execution_time: previewConfig.executionTime,
+});
       sessionEvents.current.add(eventKey);
-    }
     trackDirectorAction('preview-generated', previewConfig);
   }, [trackDirectorAction]);
   // Track advanced feature usage
   const trackAdvancedFeature = useCallback((featureName: string, featureContext: Record<string, any> = {}) => {
-    conversionTracker.trackEvent('advanced_feature_used', {)
-      feature_name: featureName,
-      feature_context: featureContext,
-      user_level: 'director' // Could be dynamic based on user profile,
-    });
+  conversionTracker.trackEvent('advanced_feature_used', {)
+  feature_name: featureName,
+  feature_context: featureContext,
+  user_level: 'director' // Could be dynamic based on user profile,
+});
     trackDirectorAction('advanced-feature-used', {)
-      feature: featureName,
-      ...featureContext
-    });
+  feature: featureName,
+  ...featureContext
+});
   }, [trackDirectorAction]);
   // Track project save events
-  const trackProjectSave = useCallback((projectData: {)
-    nodeCount: number;
-    edgeCount: number;
-    projectId: string;
-    isFirstSave?: boolean;
-  }) => {
-    const eventType = projectData.isFirstSave ? 'project_saved' : 'project_saved';
-    conversionTracker.trackEvent(eventType, {)
-      project_id: projectData.projectId,
-      graph_size: projectData.nodeCount + projectData.edgeCount,
-      node_count: projectData.nodeCount,
-      edge_count: projectData.edgeCount,
-      is_first_save: projectData.isFirstSave || false,
-    });
+  const trackProjectSave = useCallback((projectData: {,)
+  nodeCount: number;
+  edgeCount: number;,
+  projectId: string;
+  isFirstSave?: boolean;
+}) => {
+  const eventType = projectData.isFirstSave ? 'project_saved' : 'project_saved';
+  conversionTracker.trackEvent(eventType, {)
+  project_id: projectData.projectId,
+  graph_size: projectData.nodeCount + projectData.edgeCount,
+  node_count: projectData.nodeCount,
+  edge_count: projectData.edgeCount,
+  is_first_save: projectData.isFirstSave || false,
+});
   }, []);
   // Track help system interactions
-  const trackHelpInteraction = useCallback((helpContext: {)
-    helpContentId: string;
-    userLevel: string;
-    triggerAction?: string;
-  }) => {
-    conversionTracker.trackEvent('help_content_viewed', {)
-      help_content_id: helpContext.helpContentId,
-      user_level: helpContext.userLevel,
-      trigger_action: helpContext.triggerAction,
-    });
+  const trackHelpInteraction = useCallback((helpContext: {,)
+  helpContentId: string;
+  userLevel: string;
+  triggerAction?: string;
+}) => {
+  conversionTracker.trackEvent('help_content_viewed', {)
+  help_content_id: helpContext.helpContentId,
+  user_level: helpContext.userLevel,
+  trigger_action: helpContext.triggerAction,
+});
     conversionTracker.trackEngagement('help_interaction', {)
-      content_id: helpContext.helpContentId,
-      user_proficiency: helpContext.userLevel,
-    });
+  content_id: helpContext.helpContentId,
+  user_proficiency: helpContext.userLevel,
+});
   }, []);
   // Track export generation
-  const trackExportGeneration = useCallback((exportData: {)
-    format: string;
-    projectSize: number;
-    exportTime: number;
-  }) => {
-    conversionTracker.trackEvent('export_generated', {)
-      export_format: exportData.format,
-      project_size: exportData.projectSize,
-      export_time: exportData.exportTime,
-      is_professional_export: true,
-    });
+  const trackExportGeneration = useCallback((exportData: {,)
+  format: string;
+  projectSize: number;,
+  exportTime: number;
+}) => {
+  conversionTracker.trackEvent('export_generated', {)
+  export_format: exportData.format,
+  project_size: exportData.projectSize,
+  export_time: exportData.exportTime,
+  is_professional_export: true,
+});
     trackDirectorAction('export-generated', exportData);
   }, [trackDirectorAction]);
   // Track business events (subscription, payment, etc.)
@@ -171,23 +166,23 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
     value: number,
     metadata: Record<string, any> = {}
   ) => {
-    conversionTracker.trackBusinessEvent(eventType, value, {)
-      user_role: 'director',
-      conversion_source: 'director_workflow',
-      ...metadata
-    });
+  conversionTracker.trackBusinessEvent(eventType, value, {)
+  user_role: 'director',
+  conversion_source: 'director_workflow',
+  ...metadata
+});
   }, []);
   // Track template usage
-  const trackTemplateUsage = useCallback((templateData: {)
-    templateId: string;
-    templateCategory: string;
-    isFirstTemplate?: boolean;
-  }) => {
-    conversionTracker.trackEvent('template_used', {)
-      template_id: templateData.templateId,
-      template_category: templateData.templateCategory,
-      is_first_template: templateData.isFirstTemplate || false,
-    });
+  const trackTemplateUsage = useCallback((templateData: {,)
+  templateId: string;
+  templateCategory: string;
+  isFirstTemplate?: boolean;
+}) => {
+  conversionTracker.trackEvent('template_used', {)
+  template_id: templateData.templateId,
+  template_category: templateData.templateCategory,
+  is_first_template: templateData.isFirstTemplate || false,
+});
   }, []);
   // A/B testing integration
   const trackExperimentEvent = useCallback((;);
@@ -201,46 +196,42 @@ export const useConversionTracking = (config: ConversionTrackingConfig = {}) => 
         eventType,
         properties
       );
-    }
   }, [experimentId, variantId]);
   // Graph state tracking
-  const trackGraphState = useCallback((nodes: Node[], edges: Edge[]) => {
-    const graphComplexity = {
-      nodeCount: nodes.length,
-      edgeCount: edges.length,
-      nodeTypes: [...new Set(nodes.map(n => n.data?.nodeType || 'unknown'))],
-      hasAdvancedNodes: nodes.some(n => ),
-        ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(n.data?.nodeType)
-    };
+  const trackGraphState = useCallback((nodes: Node, edges: Edge) => {
+  const graphComplexity = {
+  nodeCount: nodes.length,
+  edgeCount: edges.length,
+  nodeTypes: [...new Set(nodes.map(n => n.data?.nodeType || 'unknown'))],
+  hasAdvancedNodes: nodes.some(n => ),
+  ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(n.data?.nodeType)
+};
     // Track graph milestones
     if (graphComplexity.nodeCount === 1) {
       trackDirectorAction('first-node-created', graphComplexity);
     } else if (graphComplexity.nodeCount === 5) {
       trackDirectorAction('workflow-established', graphComplexity);
     } else if (graphComplexity.nodeCount >= 10) {
-      trackDirectorAction('complex-project-created', graphComplexity);
-    }
-    if (graphComplexity.hasAdvancedNodes) {
-      trackAdvancedFeature('advanced_nodes', {)
-        advanced_node_types: graphComplexity.nodeTypes.filter(t => ),
-          ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(t)
-      });
-    }
+  trackDirectorAction('complex-project-created', graphComplexity);
+  if (graphComplexity.hasAdvancedNodes) {
+  trackAdvancedFeature('advanced_nodes', {)
+  advanced_node_types: graphComplexity.nodeTypes.filter(t => ),
+  ['Conditional', 'Sequential', 'Markov', 'WeightedAdvanced'].includes(t)
+});
   }, [trackDirectorAction, trackAdvancedFeature]);
   // User interaction tracking
   useEffect(() => {
-    if (!trackUserInteractions || !enableAutoTracking) return;
-    const trackClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      // Track button clicks
-      if (target.tagName === 'BUTTON') {
-        const buttonText = target.textContent || target.getAttribute('aria-label') || 'unknown';
-        conversionTracker.trackEngagement('feature_usage', {)
-          interaction_type: 'button_click',
-          button_text: buttonText,
-          element_id: target.id || undefined,
-        });
-      }
+  if (!trackUserInteractions || !enableAutoTracking) return;
+  const trackClick = (event: MouseEvent) => {,
+  const target = event.target as HTMLElement;
+  // Track button clicks
+  if (target.tagName === 'BUTTON') {
+  const buttonText = target.textContent || target.getAttribute('aria-label') || 'unknown';
+  conversionTracker.trackEngagement('feature_usage', {)
+  interaction_type: 'button_click',
+  button_text: buttonText,
+  element_id: target.id || undefined,
+});
     };
     document.addEventListener('click', trackClick);
     return () => document.removeEventListener('click', trackClick);

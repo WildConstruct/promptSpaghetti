@@ -12,6 +12,7 @@ import { FileBrowserAnalytics, DeveloperInsights, UsageAnalytics } from '../anal
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
 // Request/Response type definitions
+}
 interface AnalyticsQuery {
   startDate?: string;
   endDate?: string;
@@ -21,7 +22,9 @@ interface AnalyticsQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface TrackOperationBody {
   operationType: string;
   fileName: string;
@@ -29,19 +32,24 @@ interface TrackOperationBody {
   success?: boolean;
   metadata?: Record<string, any>;
 }
+}
 
+}
 interface TrackSearchBody {
   searchTerm: string;
   resultsCount: number;
   clickedResults?: number;
   metadata?: Record<string, any>;
 }
+}
 
+}
 interface TrackPerformanceBody {
   operationType: string;
   duration: number;
   success?: boolean;
   metadata?: Record<string, any>;
+}
 }
 
 // Initialize analytics services (these would typically be dependency injected)
@@ -80,7 +88,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           success: { type: 'boolean' },
           metadata: { type: 'object' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -261,7 +269,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           daily: Object.fromEntries(stats.downloadsByTimeframe.daily),
           weekly: Object.fromEntries(stats.downloadsByTimeframe.weekly),
           monthly: Object.fromEntries(stats.downloadsByTimeframe.monthly)
-        },
+  }
         downloadsByUserAgent: Object.fromEntries(stats.downloadsByUserAgent),
         downloadsByLocation: Object.fromEntries(stats.downloadsByLocation)
       };
@@ -398,20 +406,20 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
             users: todayAnalytics.overview.uniqueUsers,
             downloads: todayAnalytics.overview.totalDownloads,
             errorRate: todayAnalytics.overview.errorRate
-          },
+  }
           thisWeek: {
             operations: weekAnalytics.overview.totalOperations,
             users: weekAnalytics.overview.uniqueUsers,
             downloads: weekAnalytics.overview.totalDownloads,
             errorRate: weekAnalytics.overview.errorRate
-          },
+  }
           thisMonth: {
             operations: monthAnalytics.overview.totalOperations,
             users: monthAnalytics.overview.uniqueUsers,
             downloads: monthAnalytics.overview.totalDownloads,
             errorRate: monthAnalytics.overview.errorRate
           }
-        },
+  }
         topOperations: Object.fromEntries(
           Array.from(weekAnalytics.operationBreakdown.entries())
             .sort(([,a], [,b]) => b - a)
@@ -425,7 +433,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
         performanceMetrics: {
           averageLoadTime: weekAnalytics.performanceMetrics.averageLoadTime,
           averageOperationTime: weekAnalytics.performanceMetrics.averageOperationTime
-        },
+  }
         searchMetrics: weekAnalytics.searchMetrics,
         generatedAt: new Date().toISOString()
       };
@@ -499,7 +507,7 @@ export async function registerFileBrowserAnalyticsRoutes(fastify: FastifyInstanc
           bufferSize: analyticsStatus.bufferSize,
           sessionDuration: analyticsStatus.sessionDuration,
           lastHourMetrics: analyticsStatus.lastHour
-        },
+  }
         timestamp: new Date().toISOString()
       });
 

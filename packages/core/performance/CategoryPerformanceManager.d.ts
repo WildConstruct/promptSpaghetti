@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { PerformanceMonitor } from '../monitoring';
+
 export interface CategoryPerformanceConfig {
     enableCategoryOptimization: boolean;
     enableDynamicThresholds: boolean;
@@ -17,7 +18,7 @@ export interface CategoryPerformanceConfig {
         cpuThreshold: number;
         responseTimeTarget: number;
     };
-}
+
 export interface CategoryConfig {
     name: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -40,7 +41,7 @@ export interface CategoryConfig {
         cooldownMs: number;
         maxInstances: number;
     };
-}
+
 export interface CategoryMetrics {
     categoryName: string;
     totalNodes: number;
@@ -57,7 +58,7 @@ export interface CategoryMetrics {
     bottlenecks: string[];
     recommendations: string[];
     lastUpdated: number;
-}
+
 export interface OptimizationAction {
     id: string;
     category: string;
@@ -71,7 +72,6 @@ export interface OptimizationAction {
     };
     timestamp: number;
     applied: boolean;
-}
 /**
  * Category-based performance optimization manager
  */
@@ -153,6 +153,6 @@ export declare class CategoryPerformanceManager extends EventEmitter {
     private executeCacheOptimization;
     private executeThrottling;
     private executePriorityBoost;
-}
+
 export default CategoryPerformanceManager;
 //# sourceMappingURL=CategoryPerformanceManager.d.ts.map

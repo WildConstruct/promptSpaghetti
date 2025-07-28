@@ -52,6 +52,7 @@ export class RevisionRequestService {
     requesterName: string,
     requesterEmail: string
   ): Promise<RevisionRequest> {
+
     const requestId = `rev_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Calculate urgency and complexity scores if enabled
@@ -93,6 +94,7 @@ export class RevisionRequestService {
   }
 
   async getRevisionRequest(requestId: string): Promise<RevisionRequest | null> {
+
     const query = `
       SELECT * FROM revision_requests 
       WHERE id = $1
@@ -113,6 +115,7 @@ export class RevisionRequestService {
     actorId: string,
     actorName: string
   ): Promise<RevisionRequest> {
+
     // Build dynamic update query
     const updateFields: string[] = [];
     const values: unknown[] = [];
@@ -157,6 +160,7 @@ export class RevisionRequestService {
   }
 
   async deleteRevisionRequest(requestId: string, actorId: string, actorName: string): Promise<void> {
+
     // Update status to cancelled instead of hard delete for audit trail
     await this.updateRevisionRequestStatus(
       requestId,
@@ -178,6 +182,7 @@ export class RevisionRequestService {
     actorName: string,
     notes?: string
   ): Promise<RevisionRequest> {
+
     const updates: Partial<RevisionRequest> = {
       status: newStatus,
       ...(notes && { reviewNotes: notes }),
@@ -198,6 +203,7 @@ export class RevisionRequestService {
     actorId: string,
     actorName: string
   ): Promise<RevisionRequest> {
+
     const updates = {
       reviewerId,
       reviewerName,
@@ -221,6 +227,7 @@ export class RevisionRequestService {
     actorId: string,
     actorName: string
   ): Promise<RevisionRequest> {
+
     return this.updateRevisionRequestStatus(
       requestId,
       RevisionRequestStatus.SUBMITTED,
@@ -236,6 +243,7 @@ export class RevisionRequestService {
     reviewerId: string,
     reviewerName: string
   ): Promise<RevisionRequest> {
+
     let newStatus: RevisionRequestStatus;
     let timelineEventType: RevisionTimelineEventType;
     let description: string;
@@ -286,6 +294,7 @@ export class RevisionRequestService {
   // ============================================================================
 
   async searchRevisionRequests(query: RevisionRequestSearchQuery): Promise<RevisionRequestSearchResults> {
+
     const {
       page = 1,
       pageSize = 50,
@@ -327,13 +336,14 @@ export class RevisionRequestService {
         pageSize,
         total: parseInt(total),
         totalPages: Math.ceil(total / pageSize)
-      },
+  }
       aggregations,
       filters: this.buildAppliedFilters(query)
     };
   }
 
   async getRevisionRequestsByRequester(requesterId: string): Promise<RevisionRequest[]> {
+
     const query = `
       SELECT * FROM revision_requests 
       WHERE requester_id = $1 
@@ -345,6 +355,7 @@ export class RevisionRequestService {
   }
 
   async getRevisionRequestsByReviewer(reviewerId: string): Promise<RevisionRequest[]> {
+
     const query = `
       SELECT * FROM revision_requests 
       WHERE reviewer_id = $1 
@@ -356,6 +367,7 @@ export class RevisionRequestService {
   }
 
   async getPendingRevisionRequests(): Promise<RevisionRequest[]> {
+
     const query = `
       SELECT * FROM revision_requests 
       WHERE status IN ($1, $2, $3)
@@ -386,6 +398,7 @@ export class RevisionRequestService {
     mimeType: string,
     uploadedBy: string
   ): Promise<RevisionEvidence> {
+
     const evidenceId = `ev_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const query = `
@@ -414,6 +427,7 @@ export class RevisionRequestService {
   }
 
   async getRevisionEvidence(requestId: string): Promise<RevisionEvidence[]> {
+
     const query = `
       SELECT * FROM revision_evidence 
       WHERE revision_request_id = $1 
@@ -425,6 +439,7 @@ export class RevisionRequestService {
   }
 
   async removeEvidence(evidenceId: string, actorId: string, actorName: string): Promise<void> {
+
     // Get the evidence info first for timeline
     const evidenceQuery = 'SELECT * FROM revision_evidence WHERE id = $1';
     const evidenceResult = await this.db.query(evidenceQuery, [evidenceId]);
@@ -460,6 +475,7 @@ export class RevisionRequestService {
     coordinates: EvidenceAnnotation['coordinates'],
     createdBy: string
   ): Promise<EvidenceAnnotation> {
+
     const annotationId = `ann_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const query = `
@@ -481,6 +497,7 @@ export class RevisionRequestService {
   }
 
   async getEvidenceAnnotations(evidenceId: string): Promise<EvidenceAnnotation[]> {
+
     const query = `
       SELECT * FROM revision_evidence_annotations 
       WHERE evidence_id = $1 
@@ -495,6 +512,7 @@ export class RevisionRequestService {
     annotationId: string,
     resolvedBy: string
   ): Promise<EvidenceAnnotation> {
+
     const query = `
       UPDATE revision_evidence_annotations 
       SET resolved = TRUE, resolved_by = $1, resolved_at = NOW()
@@ -524,6 +542,7 @@ export class RevisionRequestService {
     parentCommentId?: string,
     mentions: string[] = []
   ): Promise<RevisionComment> {
+
     const commentId = `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const query = `
@@ -552,6 +571,7 @@ export class RevisionRequestService {
   }
 
   async getComments(requestId: string, includeInternal: boolean = false): Promise<RevisionComment[]> {
+
     const query = `
       SELECT * FROM revision_comments 
       WHERE revision_request_id = $1 
@@ -568,6 +588,7 @@ export class RevisionRequestService {
   // ============================================================================
 
   async getRevisionTimeline(requestId: string): Promise<RevisionTimelineEvent[]> {
+
     const query = `
       SELECT * FROM revision_timeline 
       WHERE revision_request_id = $1 
@@ -588,6 +609,7 @@ export class RevisionRequestService {
     newValue?: string,
     metadata: Record<string, any> = {}
   ): Promise<RevisionTimelineEvent> {
+
     const eventId = `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const query = `
@@ -614,6 +636,7 @@ export class RevisionRequestService {
     startDate: Date,
     endDate: Date
   ): Promise<RevisionRequestAnalytics> {
+
     const [overview, performance, trends] = await Promise.all([
       this.getAnalyticsOverview(startDate, endDate),
       this.getAnalyticsPerformance(startDate, endDate),
@@ -625,7 +648,7 @@ export class RevisionRequestService {
         startDate,
         endDate,
         timeRange: 'custom'
-      },
+  }
       overview,
       performance,
       trends,
@@ -635,6 +658,7 @@ export class RevisionRequestService {
   }
 
   async getReviewerPerformance(reviewerId?: string): Promise<ReviewerPerformance[]> {
+
     const query = `
       SELECT 
         rr.reviewer_id,
@@ -673,6 +697,7 @@ export class RevisionRequestService {
   // ============================================================================
 
   async exportRevisionRequests(request: RevisionRequestExportRequest): Promise<string> {
+
     const searchResults = await this.searchRevisionRequests({
       ...request.query,
       page: 1,
@@ -696,6 +721,7 @@ export class RevisionRequestService {
   // ============================================================================
 
   private async autoAssignReviewer(request: RevisionRequest): Promise<void> {
+
     if (!this.config.enableAutoAssignment) {
       return;
     }
@@ -872,6 +898,7 @@ export class RevisionRequestService {
   }
 
   private async getRevisionRequestAggregations(query: RevisionRequestSearchQuery): Promise<RevisionRequestAggregations> {
+
     // Simplified aggregation - in production would be more comprehensive
     const { whereClause, params } = this.buildWhereClause(query);
     
@@ -914,7 +941,7 @@ export class RevisionRequestService {
         overdue: 0,
         dueToday: 0,
         dueThisWeek: 0
-      },
+  }
       averageCompletionTime: 24,
       topRequesters: [],
       topReviewers: []
@@ -1013,7 +1040,7 @@ export class RevisionRequestService {
         y: row.coordinates_y,
         width: row.coordinates_width,
         height: row.coordinates_height
-      },
+  }
       content: row.content,
       createdBy: row.created_by,
       createdAt: new Date(row.created_at),
@@ -1088,6 +1115,7 @@ export class RevisionRequestService {
 
   // Placeholder methods for analytics
   private async getAnalyticsOverview(_____startDate: Date, _____endDate: Date): Promise<unknown> {
+
     return {
       totalRequests: 0,
       completedRequests: 0,
@@ -1105,6 +1133,7 @@ export class RevisionRequestService {
   }
 
   private async getAnalyticsPerformance(_____startDate: Date, _____endDate: Date): Promise<unknown> {
+
     return {
       reviewerPerformance: {},
       contentTypePerformance: {},
@@ -1118,6 +1147,7 @@ export class RevisionRequestService {
   }
 
   private async getAnalyticsTrends(_____startDate: Date, _____endDate: Date): Promise<unknown> {
+
     return {
       requestVolume: [],
       completionTrends: [],
@@ -1126,10 +1156,12 @@ export class RevisionRequestService {
   }
 
   private async generateInsights(_____startDate: Date, _____endDate: Date): Promise<any[]> {
+
     return [];
   }
 
   private async generateRecommendations(_____startDate: Date, _____endDate: Date): Promise<any[]> {
+
     return [];
   }
 }

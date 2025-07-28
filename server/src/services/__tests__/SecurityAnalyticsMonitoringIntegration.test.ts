@@ -76,7 +76,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           response_time_ms: 50,
           error_rate: 0.01,
           availability_percent: 99.9
-        },
+  }
         optimization_service: {
           status: 'healthy',
           last_check: Date.now(),
@@ -84,7 +84,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           error_rate: 0.005,
           availability_percent: 99.95
         }
-      },
+  }
       system_metrics: {
         uptime_ms: 3600000,
         total_requests: 10000,
@@ -177,7 +177,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         event_forwarding_enabled: true,
         metrics_aggregation_interval_ms: 60000,
         reliability_event_types: ['circuit_breaker_opened', 'auto_healing_successful', 'disaster_recovery_triggered']
-      },
+  }
       epic17_integration: {
         health_check_registration_enabled: true,
         diagnostic_service_enabled: true,
@@ -185,7 +185,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         threshold_management_enabled: true,
         alert_escalation_enabled: true,
         compliance_monitoring_enabled: true
-      },
+  }
       unified_monitoring: {
         cross_epic_correlation_enabled: true,
         unified_dashboard_enabled: true,
@@ -193,7 +193,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
         historical_data_correlation: true,
         predictive_analytics_enabled: true,
         anomaly_detection_enabled: true
-      },
+  }
       integration_resilience: {
         circuit_breaker_enabled: true,
         fallback_monitoring_enabled: true,
@@ -283,7 +283,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           id: 'security_analytics_reliability_comprehensive',
           name: 'Security Analytics Reliability System',
           category: 'security'
-        })
+  }
       );
 
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith(
@@ -291,7 +291,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           id: 'security_analytics_circuit_breakers', 
           name: 'Security Analytics Circuit Breakers',
           category: 'reliability'
-        })
+  }
       );
     });
 
@@ -301,7 +301,7 @@ describe('SecurityAnalyticsMonitoringIntegration', () => {
           id: 'security_analytics_reliability_comprehensive',
           name: 'Security Analytics Reliability Diagnostics',
           category: 'security_reliability'
-        })
+  }
       );
     });
 

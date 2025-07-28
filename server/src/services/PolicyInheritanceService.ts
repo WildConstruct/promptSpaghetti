@@ -10,6 +10,7 @@
 import { EventEmitter } from 'events';
 
 // Core interfaces for policy inheritance
+}
 export interface PolicyNode {
   id: string;
   name: string;
@@ -23,7 +24,9 @@ export interface PolicyNode {
   effective: EffectivePolicies;
   status: PolicyNodeStatus;
 }
+}
 
+}
 export interface PolicyReference {
   policyId: string;
   policyType: PolicyType;
@@ -38,7 +41,9 @@ export interface PolicyReference {
   conditions: PolicyCondition[];
   exceptions: PolicyException[];
 }
+}
 
+}
 export interface InheritanceRule {
   ruleId: string;
   name: string;
@@ -52,7 +57,9 @@ export interface InheritanceRule {
   enabled: boolean;
   metadata: InheritanceRuleMetadata;
 }
+}
 
+}
 export interface PolicyOverride {
   overrideId: string;
   targetPolicyId: string;
@@ -67,7 +74,9 @@ export interface PolicyOverride {
   conditions: OverrideCondition[];
   audit: OverrideAudit;
 }
+}
 
+}
 export interface EffectivePolicies {
   nodeId: string;
   computedAt: Date;
@@ -78,7 +87,9 @@ export interface EffectivePolicies {
   coverage: PolicyCoverage;
   inheritance: InheritanceTrace[];
 }
+}
 
+}
 export interface ResolvedPolicy {
   policyId: string;
   effectiveVersion: string;
@@ -91,7 +102,9 @@ export interface ResolvedPolicy {
   confidence: number;
   lastUpdated: Date;
 }
+}
 
+}
 export interface PolicyConflict {
   conflictId: string;
   type: ConflictType;
@@ -103,7 +116,9 @@ export interface PolicyConflict {
   resolvedAt?: Date;
   resolvedBy?: string;
 }
+}
 
+}
 export interface PolicyGap {
   gapId: string;
   type: GapType;
@@ -114,7 +129,9 @@ export interface PolicyGap {
   detectedAt: Date;
   resolvedAt?: Date;
 }
+}
 
+}
 export interface InheritanceTrace {
   nodeId: string;
   policyId: string;
@@ -122,7 +139,9 @@ export interface InheritanceTrace {
   transformations: PolicyTransformation[];
   finalState: PolicyState;
 }
+}
 
+}
 export interface InheritanceStep {
   stepId: string;
   sourceNode: string;
@@ -131,6 +150,7 @@ export interface InheritanceStep {
   action: InheritanceActionType;
   transformations: string[];
   timestamp: Date;
+}
 }
 
 // Enums and types
@@ -226,6 +246,7 @@ export enum InheritanceActionType {
 }
 
 // Additional interfaces
+}
 export interface PolicyScope {
   scopeId: string;
   type: ScopeType;
@@ -233,7 +254,9 @@ export interface PolicyScope {
   conditions: ScopeCondition[];
   exceptions: ScopeException[];
 }
+}
 
+}
 export interface PolicyCondition {
   conditionId: string;
   type: ConditionType;
@@ -241,7 +264,9 @@ export interface PolicyCondition {
   parameters: Record<string, unknown>;
   enabled: boolean;
 }
+}
 
+}
 export interface PolicyException {
   exceptionId: string;
   type: ExceptionType;
@@ -250,7 +275,9 @@ export interface PolicyException {
   approvedBy: string;
   validUntil?: Date;
 }
+}
 
+}
 export interface PolicySource {
   sourceId: string;
   type: SourceType;
@@ -259,7 +286,9 @@ export interface PolicySource {
   version: string;
   lastModified: Date;
 }
+}
 
+}
 export interface PolicyNodeMetadata {
   createdAt: Date;
   createdBy: string;
@@ -269,7 +298,9 @@ export interface PolicyNodeMetadata {
   tags: string[];
   attributes: Record<string, unknown>;
 }
+}
 
+}
 export interface PolicyNodeStatus {
   active: boolean;
   validated: boolean;
@@ -277,21 +308,27 @@ export interface PolicyNodeStatus {
   errors: ValidationError[];
   warnings: ValidationWarning[];
 }
+}
 
+}
 export interface InheritanceCondition {
   conditionId: string;
   type: string;
   expression: string;
   parameters: Record<string, unknown>;
 }
+}
 
+}
 export interface InheritanceAction {
   actionId: string;
   type: InheritanceActionType;
   parameters: Record<string, unknown>;
   conditions: InheritanceCondition[];
 }
+}
 
+}
 export interface InheritanceRuleMetadata {
   createdAt: Date;
   createdBy: string;
@@ -299,34 +336,44 @@ export interface InheritanceRuleMetadata {
   documentation: string;
   tags: string[];
 }
+}
 
+}
 export interface InheritanceScope {
   policyTypes: PolicyType[];
   nodeTypes: PolicyNodeType[];
   conditions: string[];
 }
+}
 
+}
 export interface OverrideCondition {
   conditionId: string;
   type: string;
   expression: string;
   parameters: Record<string, unknown>;
 }
+}
 
+}
 export interface OverrideAudit {
   createdAt: Date;
   createdBy: string;
   approvalWorkflow: string[];
   changeLog: OverrideChange[];
 }
+}
 
+}
 export interface OverrideChange {
   timestamp: Date;
   action: string;
   actor: string;
   details: Record<string, unknown>;
 }
+}
 
+}
 export interface PolicyCoverage {
   totalPolicies: number;
   inheritedPolicies: number;
@@ -336,14 +383,18 @@ export interface PolicyCoverage {
   gaps: number;
   conflicts: number;
 }
+}
 
+}
 export interface PolicyResolutionSource {
   type: 'direct' | 'inherited' | 'merged' | 'computed';
   sourceNodes: string[];
   rules: string[];
   transformations: string[];
 }
+}
 
+}
 export interface ConflictResolution {
   strategy: string;
   resolution: string;
@@ -351,7 +402,9 @@ export interface ConflictResolution {
   appliedAt: Date;
   rationale: string;
 }
+}
 
+}
 export interface GapRecommendation {
   type: string;
   priority: number;
@@ -359,7 +412,9 @@ export interface GapRecommendation {
   actions: string[];
   estimatedEffort: string;
 }
+}
 
+}
 export interface PolicyTransformation {
   transformationId: string;
   type: string;
@@ -368,7 +423,9 @@ export interface PolicyTransformation {
   rules: string[];
   timestamp: Date;
 }
+}
 
+}
 export interface PolicyState {
   policyId: string;
   version: string;
@@ -376,19 +433,24 @@ export interface PolicyState {
   metadata: Record<string, unknown>;
   status: string;
 }
+}
 
+}
 export interface ValidationError {
   code: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
   source: string;
 }
+}
 
+}
 export interface ValidationWarning {
   code: string;
   message: string;
   recommendation: string;
   source: string;
+}
 }
 
 // Implementation types
@@ -428,6 +490,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Register a policy node in the hierarchy
    */
   public async registerNode(node: PolicyNode): Promise<{ success: boolean; errors: string[] }> {
+
     const errors: string[] = [];
 
     try {
@@ -468,6 +531,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Add an inheritance rule
    */
   public async addInheritanceRule(rule: InheritanceRule): Promise<{ success: boolean; errors: string[] }> {
+
     const errors: string[] = [];
 
     try {
@@ -506,6 +570,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Apply policy override
    */
   public async applyOverride(override: PolicyOverride): Promise<{ success: boolean; errors: string[] }> {
+
     const errors: string[] = [];
 
     try {
@@ -549,6 +614,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Compute effective policies for a node
    */
   public async computeEffectivePolicies(nodeId: string): Promise<EffectivePolicies> {
+
     // Check cache first
     const cached = this.computationCache.get(nodeId);
     if (cached && this.isCacheValid(cached)) {
@@ -577,7 +643,7 @@ export class PolicyInheritanceService extends EventEmitter {
           coveragePercentage: 0,
           gaps: 0,
           conflicts: 0
-        },
+  }
         inheritance: []
       };
 
@@ -648,6 +714,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Analyze policy inheritance impact
    */
   public async analyzeInheritanceImpact(changes: PolicyChange[]): Promise<InheritanceImpactAnalysis> {
+
     const analysis: InheritanceImpactAnalysis = {
       analysisId: this.generateAnalysisId(),
       timestamp: new Date(),
@@ -660,7 +727,7 @@ export class PolicyInheritanceService extends EventEmitter {
         newGaps: 0,
         filledGaps: 0,
         performanceImpact: 'low'
-      },
+  }
       recommendations: []
     };
 
@@ -697,6 +764,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Get policy lineage/ancestry
    */
   public async getPolicyLineage(nodeId: string, policyId: string): Promise<PolicyLineage> {
+
     const node = this.nodes.get(nodeId);
     if (!node) {
       throw new Error(`Node not found: ${nodeId}`);
@@ -764,6 +832,7 @@ export class PolicyInheritanceService extends EventEmitter {
    * Check if adding a node would create a cycle
    */
   private async wouldCreateCycle(node: PolicyNode): Promise<boolean> {
+
     if (!node.parentId) return false;
 
     const visited = new Set<string>();
@@ -801,7 +870,7 @@ export class PolicyInheritanceService extends EventEmitter {
         policyTypes: [PolicyType.SECURITY, PolicyType.ACCESS_CONTROL],
         nodeTypes: [PolicyNodeType.ORGANIZATION, PolicyNodeType.DIVISION, PolicyNodeType.DEPARTMENT],
         conditions: []
-      },
+  }
       conditions: [],
       actions: [{
         actionId: 'cascade-security',
@@ -831,7 +900,7 @@ export class PolicyInheritanceService extends EventEmitter {
         policyTypes: [PolicyType.COMPLIANCE, PolicyType.DATA_PROTECTION],
         nodeTypes: Object.values(PolicyNodeType),
         conditions: []
-      },
+  }
       conditions: [],
       actions: [{
         actionId: 'aggregate-compliance',
@@ -894,11 +963,13 @@ export class PolicyInheritanceService extends EventEmitter {
 
   // Additional helper methods would be implemented here...
   private updateHierarchyRelationships(_____node: PolicyNode): Promise<void> {
+
     // Implementation for updating hierarchy relationships
     return Promise.resolve();
   }
 
   private recomputeAffectedPolicies(_____nodeId: string): Promise<void> {
+
     // Implementation for recomputing affected policies
     return Promise.resolve();
   }
@@ -914,11 +985,13 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private detectRuleConflicts(_____rule: InheritanceRule): Promise<RuleConflict[]> {
+
     // Implementation for detecting rule conflicts
     return Promise.resolve([]);
   }
 
   private recomputeAllPolicies(): Promise<void> {
+
     // Implementation for recomputing all policies
     return Promise.resolve();
   }
@@ -934,6 +1007,7 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private isOverrideAuthorized(_____override: PolicyOverride): Promise<boolean> {
+
     // Implementation for checking override authorization
     return Promise.resolve(true);
   }
@@ -948,31 +1022,37 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private collectDirectPolicies(_____node: PolicyNode): Promise<ResolvedPolicy[]> {
+
     // Implementation for collecting direct policies
     return Promise.resolve([]);
   }
 
   private collectInheritedPolicies(_____node: PolicyNode): Promise<ResolvedPolicy[]> {
+
     // Implementation for collecting inherited policies
     return Promise.resolve([]);
   }
 
   private applyInheritanceRules(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<ResolvedPolicy[]> {
+
     // Implementation for applying inheritance rules
     return Promise.resolve(policies);
   }
 
   private applyOverrides(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<ResolvedPolicy[]> {
+
     // Implementation for applying overrides
     return Promise.resolve(policies);
   }
 
   private resolveConflicts(policies: ResolvedPolicy[], _____node: PolicyNode): Promise<{ resolvedPolicies: ResolvedPolicy[]; conflicts: PolicyConflict[] }> {
+
     // Implementation for resolving conflicts
     return Promise.resolve({ resolvedPolicies: policies, conflicts: [] });
   }
 
   private detectPolicyGaps(_____policies: ResolvedPolicy[], _____node: PolicyNode): Promise<PolicyGap[]> {
+
     // Implementation for detecting policy gaps
     return Promise.resolve([]);
   }
@@ -991,6 +1071,7 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private generateInheritanceTraces(_____policies: ResolvedPolicy[], _____node: PolicyNode): Promise<InheritanceTrace[]> {
+
     // Implementation for generating inheritance traces
     return Promise.resolve([]);
   }
@@ -1000,11 +1081,13 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private findImpactedNodes(_____change: PolicyChange): Promise<string[]> {
+
     // Implementation for finding impacted nodes
     return Promise.resolve([]);
   }
 
   private simulateChanges(_____changes: PolicyChange[]): Promise<SimulationResults> {
+
     // Implementation for simulating changes
     return Promise.resolve({
       newConflicts: 0,
@@ -1015,6 +1098,7 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private generateRecommendations(_____analysis: InheritanceImpactAnalysis): Promise<Recommendation[]> {
+
     // Implementation for generating recommendations
     return Promise.resolve([]);
   }
@@ -1024,32 +1108,38 @@ export class PolicyInheritanceService extends EventEmitter {
   }
 
   private traceAncestry(_____nodeId: string, _____policyId: string): Promise<LineageNode[]> {
+
     // Implementation for tracing ancestry
     return Promise.resolve([]);
   }
 
   private findDescendants(_____nodeId: string, _____policyId: string): Promise<LineageNode[]> {
+
     // Implementation for finding descendants
     return Promise.resolve([]);
   }
 
   private collectTransformations(_____nodeId: string, _____policyId: string): Promise<PolicyTransformation[]> {
+
     // Implementation for collecting transformations
     return Promise.resolve([]);
   }
 
   private findRelatedOverrides(_____nodeId: string, _____policyId: string): Promise<PolicyOverride[]> {
+
     // Implementation for finding related overrides
     return Promise.resolve([]);
   }
 
   private findRelatedConflicts(_____nodeId: string, _____policyId: string): Promise<PolicyConflict[]> {
+
     // Implementation for finding related conflicts
     return Promise.resolve([]);
   }
 }
 
 // Additional interfaces for helper types
+}
 interface PolicyHierarchy {
   hierarchyId: string;
   name: string;
@@ -1057,25 +1147,33 @@ interface PolicyHierarchy {
   nodes: string[];
   depth: number;
 }
+}
 
+}
 interface ConflictResolutionStrategy {
   name: string;
   resolve: (conflicts: PolicyConflict[]) => Promise<PolicyConflict[]>;
 }
+}
 
+}
 interface RuleConflict {
   description: string;
   severity: string;
   conflictingRules: string[];
 }
+}
 
+}
 interface PolicyChange {
   changeId: string;
   type: 'add' | 'remove' | 'modify';
   target: string;
   details: Record<string, unknown>;
 }
+}
 
+}
 interface InheritanceImpactAnalysis {
   analysisId: string;
   timestamp: Date;
@@ -1088,24 +1186,30 @@ interface InheritanceImpactAnalysis {
     newGaps: number;
     filledGaps: number;
     performanceImpact: 'low' | 'medium' | 'high';
+}
   };
   recommendations: Recommendation[];
 }
 
+}
 interface SimulationResults {
   newConflicts: number;
   resolvedConflicts: number;
   newGaps: number;
   filledGaps: number;
 }
+}
 
+}
 interface Recommendation {
   type: string;
   priority: number;
   description: string;
   actions: string[];
 }
+}
 
+}
 interface PolicyLineage {
   nodeId: string;
   policyId: string;
@@ -1116,12 +1220,15 @@ interface PolicyLineage {
   overrides: PolicyOverride[];
   conflicts: PolicyConflict[];
 }
+}
 
+}
 interface LineageNode {
   nodeId: string;
   relationship: string;
   distance: number;
   policies: string[];
+}
 }
 
 export default PolicyInheritanceService;

@@ -242,6 +242,7 @@ export type TemplateFavorite = z.infer<typeof TemplateFavoriteSchema>;
 export type TemplateDownload = z.infer<typeof TemplateDownloadSchema>;
 
 // Extended types with additional data
+}
 export interface ProjectTemplateWithStats extends ProjectTemplate {
   review_count?: number;
   favorite_count?: number;
@@ -252,12 +253,14 @@ export interface ProjectTemplateWithStats extends ProjectTemplate {
   can_delete?: boolean;
 }
 
+}
 export interface TemplateReviewWithAuthor extends TemplateReview {
   author_name?: string;
   author_avatar?: string;
   is_author?: boolean;
 }
 
+}
 export interface TemplateUsageWithTemplate extends TemplateUsage {
   template_name?: string;
   template_thumbnail?: string;
@@ -265,6 +268,7 @@ export interface TemplateUsageWithTemplate extends TemplateUsage {
 }
 
 // Filter and query types
+}
 export interface TemplateFilter {
   search?: string;
   category?: string;
@@ -276,12 +280,16 @@ export interface TemplateFilter {
   created_by?: string;
   workspace_id?: string;
 }
+}
 
+}
 export interface TemplateSort {
   sort_by?: 'name' | 'created_at' | 'updated_at' | 'rating_average' | 'usage_count' | 'relevance';
   sort_order?: 'asc' | 'desc';
 }
+}
 
+}
 export interface TemplateReviewFilter {
   template_id?: string;
   user_id?: string;
@@ -289,7 +297,9 @@ export interface TemplateReviewFilter {
   max_rating?: number;
   has_text?: boolean;
 }
+}
 
+}
 export interface TemplateUsageFilter {
   template_id?: string;
   user_id?: string;
@@ -299,8 +309,10 @@ export interface TemplateUsageFilter {
   from_date?: Date;
   to_date?: Date;
 }
+}
 
 // Customization field definition
+}
 export interface CustomizationField {
   type: keyof typeof CustomizationFieldType;
   label: string;
@@ -311,6 +323,7 @@ export interface CustomizationField {
     min?: number;
     max?: number;
     pattern?: string;
+}
     options?: Array<{ value: Error; label: string }>;
   };
   help_text?: string;
@@ -318,6 +331,7 @@ export interface CustomizationField {
 }
 
 // Template customization interface
+}
 export interface TemplateCustomization {
   fields: Record<string, CustomizationField>;
   groups?: Array<{
@@ -325,10 +339,12 @@ export interface TemplateCustomization {
     label: string;
     description?: string;
     order: number;
+}
   }>;
 }
 
 // Template analytics types
+}
 export interface TemplateAnalytics {
   usage_stats: {
     total_usages: number;
@@ -336,6 +352,7 @@ export interface TemplateAnalytics {
     completion_rate: number;
     average_completion_time: number;
     usage_by_source: Record<string, number>;
+}
     usage_trend: Array<{ date: string; count: number }>;
   };
   rating_stats: {
@@ -352,6 +369,7 @@ export interface TemplateAnalytics {
 }
 
 // Template export format
+}
 export interface TemplateExport {
   metadata: {
     template_id: string;
@@ -360,6 +378,7 @@ export interface TemplateExport {
     exported_at: string;
     exported_by: string;
     export_format: string;
+}
   };
   template: ProjectTemplate;
   customizations?: Record<string, any>;

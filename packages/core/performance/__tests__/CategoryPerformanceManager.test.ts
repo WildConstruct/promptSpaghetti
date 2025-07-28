@@ -19,41 +19,41 @@ jest.mock('../../monitoring/PerformanceMonitor');
 describe('CategoryPerformanceManager', () => {
   let performanceMonitor: jest.Mocked<PerformanceMonitor>;
   let categoryManager: CategoryPerformanceManager;
-  const mockPerformanceMetrics: PerformanceMetrics = {
-    nodeId: 'test-node',
-    nodeType: 'WeightedChoice',
-    executionId: 'exec-123',
-    duration: 150,
-    memoryUsage: {,
-      before: 1000,
-      after: 1024,
-      peak: 1050,
-      delta: 24,
-    },
-    contextSize: {,
-      variableCount: 5,
-      stateCount: 3,
-      cacheSize: 10,
-      evaluationDepth: 2,
-    },
-    cacheHit: false,
+  const mockPerformanceMetrics: PerformanceMetrics = {,
+  nodeId: 'test-node',
+  nodeType: 'WeightedChoice',
+  executionId: 'exec-123',
+  duration: 150,
+  memoryUsage: {,
+  before: 1000,
+  after: 1024,
+  peak: 1050,
+  delta: 24,
+},
+  contextSize: {,
+  variableCount: 5,
+  stateCount: 3,
+  cacheSize: 10,
+  evaluationDepth: 2,
+},
+  cacheHit: false,
     errors: [],
     warnings: [],
     startTime: Date.now(),
     endTime: Date.now() + 150,
-    customMetrics: new Map(),
+    customMetrics: new Map();
   };
   beforeEach(() => {
-    // Create mock performance monitor
-    performanceMonitor = {
-      on: jest.fn<unknown[], unknown>(),
-      startExecution: jest.fn<unknown[], unknown>(),
-      endExecution: jest.fn<unknown[], unknown>(),
-      getMetrics: jest.fn<unknown[], unknown>(),
-      clearMetrics: jest.fn<unknown[], unknown>(),
-      generateReport: jest.fn<unknown[], unknown>(),
-      shutdown: jest.fn<unknown[], unknown>()
-    } as any;
+  // Create mock performance monitor
+  performanceMonitor = {
+  on: jest.fn<unknown, unknown>(),
+  startExecution: jest.fn<unknown, unknown>(),
+  endExecution: jest.fn<unknown, unknown>(),
+  getMetrics: jest.fn<unknown, unknown>(),
+  clearMetrics: jest.fn<unknown, unknown>(),
+  generateReport: jest.fn<unknown, unknown>(),
+  shutdown: jest.fn<unknown, unknown>(),
+} as any;
     // Initialize category manager
     categoryManager = new CategoryPerformanceManager(performanceMonitor);
   });
@@ -67,15 +67,14 @@ describe('CategoryPerformanceManager', () => {
       expect(performanceMonitor.on).toHaveBeenCalledWith('execution_started', expect.any(Function));
     });
     test('should initialize with custom configuration', () => {
-      const customConfig: Partial<CategoryPerformanceConfig> = {
-        enableCategoryOptimization: false,
-        globalSettings: {,
-          maxConcurrentOperations: 50,
-          memoryThreshold: 512 * 1024 * 1024,
-          cpuThreshold: 90,
-          responseTimeTarget: 200,
-        }
-      };
+  const customConfig: Partial<CategoryPerformanceConfig> = {,
+  enableCategoryOptimization: false,
+  globalSettings: {,
+  maxConcurrentOperations: 50,
+  memoryThreshold: 512 * 1024 * 1024,
+  cpuThreshold: 90,
+  responseTimeTarget: 200,
+};
       const customManager = new CategoryPerformanceManager(performanceMonitor, customConfig);
       expect(customManager).toBeInstanceOf(CategoryPerformanceManager);
       customManager.shutdown();
@@ -85,7 +84,7 @@ describe('CategoryPerformanceManager', () => {
       const categories = ['basic', 'advanced', 'utility', 'integration'];
       // Test that the manager has the expected categories available
       categories.forEach(category => {)
-        const metrics = categoryManager.getCategoryMetrics(category);
+  const metrics = categoryManager.getCategoryMetrics(category);
         expect(metrics).toBeDefined();
         expect(metrics.categoryName).toBe(category);
       });
@@ -130,7 +129,6 @@ describe('CategoryPerformanceManager', () => {
       for (let i = 0; i < 51; i++) {
         const result = await categoryManager.registerExecution(`node-${i}`, 'WeightedChoice', 0);}
         results.push(result);
-      }
       // First 50 should be immediate
       expect(results[0]).toMatch(/^basic-node-0-\d+$/);
       // 51st should be queued
@@ -141,7 +139,6 @@ describe('CategoryPerformanceManager', () => {
       // Fill capacity first
       for (let i = 0; i < 50; i++) {
         await categoryManager.registerExecution(`immediate-${i}`, 'WeightedChoice', 0);}
-      }
       // Queue items with different priorities
       queuedPromises.push(categoryManager.registerExecution('low-priority', 'WeightedChoice', 1));
       queuedPromises.push(categoryManager.registerExecution('high-priority', 'WeightedChoice', 10));
@@ -149,7 +146,7 @@ describe('CategoryPerformanceManager', () => {
       const queuedResults = await Promise.all(queuedPromises);
       // All should be queued
       queuedResults.forEach(result => {)
-        expect(result).toMatch(/^queued-basic-/);
+  expect(result).toMatch(/^queued-basic-/);
       });
     });
     test('should throw error for queue limit exceeded', async () => {
@@ -158,13 +155,11 @@ describe('CategoryPerformanceManager', () => {
       // Fill immediate capacity (50)
       for (let i = 0; i < 50; i++) {
         promises.push(categoryManager.registerExecution(`immediate-${i}`, 'WeightedChoice', 0));}
-      }
       await Promise.all(promises);
       // Fill queue (1000 limit)
       const queuePromises = [];
       for (let i = 0; i < 1000; i++) {
         queuePromises.push(categoryManager.registerExecution(`queue-${i}`, 'WeightedChoice', 0));}
-      }
       await Promise.all(queuePromises);
       // This should exceed queue limit
       await expect()
@@ -201,7 +196,6 @@ describe('CategoryPerformanceManager', () => {
         startHandler({ nodeType: 'WeightedChoice', nodeId: 'test-node' });
         const metrics = categoryManager.getCategoryMetrics('basic');
         expect(metrics?.totalNodes).toBeGreaterThan(0);
-      }
     });
     test('should update metrics when execution completes', () => {
       const completeHandler = performanceMonitor.on.mock.calls.find(;);
@@ -215,16 +209,14 @@ describe('CategoryPerformanceManager', () => {
         )?.[1];
         if (startHandler) {
           startHandler({ nodeType: 'WeightedChoice', nodeId: 'test-node' });
-        }
         // Then complete it
         completeHandler({ )
           nodeType: 'WeightedChoice', 
           nodeId: 'test-node',
-          metrics: mockPerformanceMetrics,
-        });
+          metrics: mockPerformanceMetrics;
+  });
         const metrics = categoryManager.getCategoryMetrics('basic');
         expect(metrics?.activeNodes).toBeGreaterThanOrEqual(0);
-      }
     });
   });
   describe('Optimization Recommendations', () => {
@@ -237,15 +229,13 @@ describe('CategoryPerformanceManager', () => {
         // Complete multiple executions with errors to trigger high error rate
         for (let i = 0; i < 10; i++) {
           completeHandler({)
-            nodeType: 'WeightedChoice',
-            nodeId: `error-node-${i}`,}
-            metrics: {,
-              ...mockPerformanceMetrics,
-              errors: ['Validation failed', 'Timeout error']
-            }
-          });
-        }
-      }
+  nodeType: 'WeightedChoice',
+            nodeId: `error-node-${i}`}
+},
+  metrics: {,
+  ...mockPerformanceMetrics,
+  errors: ['Validation failed', 'Timeout error'],
+});
       const recommendations = categoryManager.getOptimizationRecommendations();
       expect(Array.isArray(recommendations)).toBe(true);
     });
@@ -257,13 +247,11 @@ describe('CategoryPerformanceManager', () => {
           const prevPriority = priorityOrder[recommendations[i - 1].priority];
           const currPriority = priorityOrder[recommendations[i].priority];
           expect(prevPriority).toBeGreaterThanOrEqual(currPriority);
-        }
-      }
     });
     test('should include estimated impact in recommendations', () => {
       const recommendations = categoryManager.getOptimizationRecommendations();
       recommendations.forEach(rec => {)
-        expect(rec).toHaveProperty('estimatedImpact');
+  expect(rec).toHaveProperty('estimatedImpact');
         expect(typeof rec.estimatedImpact).toBe('number');
         expect(rec.estimatedImpact).toBeGreaterThanOrEqual(0);
         expect(rec.estimatedImpact).toBeLessThanOrEqual(100);
@@ -276,16 +264,15 @@ describe('CategoryPerformanceManager', () => {
       expect(Array.isArray(actions)).toBe(true);
     });
     test('should throw error for unknown category optimization', async () => {
-      await expect()
-        categoryManager.forceOptimization('nonexistent')
-      ).rejects.toThrow('Category not found: nonexistent');
-    });
+  await expect()
+  categoryManager.forceOptimization('nonexistent')
+  ).rejects.toThrow('Category not found: nonexistent');
+});
     test('should apply optimization actions', async () => {
       const actions = await categoryManager.forceOptimization('basic');
       if (actions.length > 0) {
         const success = await categoryManager.applyOptimization(actions[0].id);
         expect(typeof success).toBe('boolean');
-      }
     });
     test('should emit events when optimization is applied', async () => {
       const actions = await categoryManager.forceOptimization('basic');
@@ -300,13 +287,12 @@ describe('CategoryPerformanceManager', () => {
         });
         await categoryManager.applyOptimization(actions[0].id);
         await optimizationPromise;
-      }
     });
     test('should handle optimization failures gracefully', async () => {
-      await expect()
-        categoryManager.applyOptimization('nonexistent-action-id')
-      ).rejects.toThrow('Optimization action not found: nonexistent-action-id');
-    });
+  await expect()
+  categoryManager.applyOptimization('nonexistent-action-id')
+  ).rejects.toThrow('Optimization action not found: nonexistent-action-id');
+});
   });
   describe('Cache Statistics', () => {
     test('should return cache statistics for all categories', () => {
@@ -316,7 +302,7 @@ describe('CategoryPerformanceManager', () => {
       expect(stats).toHaveProperty('utility');
       expect(stats).toHaveProperty('integration');
       Object.values(stats).forEach(stat => {)
-        expect(stat).toHaveProperty('size');
+  expect(stat).toHaveProperty('size');
         expect(stat).toHaveProperty('maxSize');
         expect(stat).toHaveProperty('hitRate');
         expect(stat).toHaveProperty('evictions');
@@ -350,7 +336,6 @@ describe('CategoryPerformanceManager', () => {
       // Fill capacity first
       for (let i = 0; i < 50; i++) {
         await categoryManager.registerExecution(`immediate-${i}`, 'WeightedChoice', 0);}
-      }
       const eventPromise = new Promise<void>((resolve) => {
         categoryManager.on('execution_queued', (data) => {
           expect(data).toHaveProperty('executionId');
@@ -379,12 +364,11 @@ describe('CategoryPerformanceManager', () => {
         });
         // Simulate completion to trigger queue processing
         completeHandler({)
-          nodeType: 'WeightedChoice',
-          nodeId: 'completed-node',
-          metrics: mockPerformanceMetrics,
-        });
+  nodeType: 'WeightedChoice',
+  nodeId: 'completed-node',
+  metrics: mockPerformanceMetrics,
+});
         return eventPromise;
-      }
     });
   });
   describe('Shutdown', () => {
@@ -392,7 +376,7 @@ describe('CategoryPerformanceManager', () => {
       categoryManager.shutdown();
       const stats = categoryManager.getCacheStatistics();
       Object.values(stats).forEach(stat => {)
-        expect(stat.size).toBe(0);
+  expect(stat.size).toBe(0);
       });
     });
     test('should emit manager_shutdown event', (done) => {
@@ -413,16 +397,15 @@ describe('CategoryPerformanceManager', () => {
       const promises = [];
       const nodeCount = 1000;
       for (let i = 0; i < nodeCount; i++) {
-        const nodeType = i % 4 === 0 ? 'WeightedChoice' : ;
+        const nodeType = i % 4 === 0 ? 'WeightedChoice' :;
           i % 4 === 1 ? 'WeightedAdvanced' :
             i % 4 === 2 ? 'Include' : 'APICall';
         promises.push(categoryManager.registerExecution(`load-node-${i}`, nodeType, Math.floor(Math.random() * 10)));}
-      }
       const results = await Promise.all(promises);
       expect(results).toHaveLength(nodeCount);
       // All should have valid execution IDs
       results.forEach(result => {)
-        expect(typeof result).toBe('string');
+  expect(typeof result).toBe('string');
         expect(result.length).toBeGreaterThan(0);
       });
     });
@@ -436,10 +419,11 @@ describe('CategoryPerformanceManager', () => {
       if (completeHandler) {
         const interval = setInterval(() => {
           completeHandler({)
-            nodeType: 'WeightedChoice',
-            nodeId: `perf-test-${completedUpdates}`,}
-            metrics: mockPerformanceMetrics,
-          });
+  nodeType: 'WeightedChoice',
+            nodeId: `perf-test-${completedUpdates}`}
+},
+  metrics: mockPerformanceMetrics;
+  });
           completedUpdates++;
           if (completedUpdates >= updateCount) {
             clearInterval(interval);
@@ -448,11 +432,9 @@ describe('CategoryPerformanceManager', () => {
             expect(duration).toBeLessThan(5000); // 5 seconds max
             expect(completedUpdates).toBe(updateCount);
             done();
-          }
         }, 1);
       } else {
         done.fail('Could not find execution_completed handler');
-      }
     });
     test('should handle edge cases gracefully', async () => {
       // Test with extreme priority values
@@ -481,47 +463,44 @@ describe('CategoryPerformanceManager', () => {
       manager.shutdown();
     });
     test('should work with partial configuration', () => {
-      const partialConfig: Partial<CategoryPerformanceConfig> = {
-        globalSettings: {,
-          maxConcurrentOperations: 25,
-          memoryThreshold: 512 * 1024 * 1024,
-          cpuThreshold: 70,
-          responseTimeTarget: 150,
-        }
-      };
+  const partialConfig: Partial<CategoryPerformanceConfig> = {,
+  globalSettings: {,
+  maxConcurrentOperations: 25,
+  memoryThreshold: 512 * 1024 * 1024,
+  cpuThreshold: 70,
+  responseTimeTarget: 150,
+};
       const manager = new CategoryPerformanceManager(performanceMonitor, partialConfig);
       expect(manager).toBeInstanceOf(CategoryPerformanceManager);
       manager.shutdown();
     });
     test('should validate category configuration overrides', () => {
-      const customCategories: Record<string, CategoryConfig> = {
-        'custom': {
-          name: 'Custom Category',
-          priority: 'high',
-          optimizationStrategy: 'latency',
-          resourceLimits: {,
-            maxMemoryMB: 1000,
-            maxExecutionTimeMs: 2000,
-            maxConcurrentNodes: 25,
-            queueLimit: 500,
-          },
-          cacheStrategy: {,
-            enabled: true,
-            ttlMs: 120000,
-            maxSize: 100,
-            evictionPolicy: 'lfu',
-          },
-          scalingRules: {,
-            scaleUpThreshold: 80,
-            scaleDownThreshold: 20,
-            cooldownMs: 45000,
-            maxInstances: 8,
-          }
-        }
-      };
-      const config: Partial<CategoryPerformanceConfig> = {
-        categories: customCategories,
-      };
+  const customCategories: Record<string, CategoryConfig> = {,
+  'custom': {,
+  name: 'Custom Category',
+  priority: 'high',
+  optimizationStrategy: 'latency',
+  resourceLimits: {,
+  maxMemoryMB: 1000,
+  maxExecutionTimeMs: 2000,
+  maxConcurrentNodes: 25,
+  queueLimit: 500,
+},
+  cacheStrategy: {,
+  enabled: true,
+  ttlMs: 120000,
+  maxSize: 100,
+  evictionPolicy: 'lfu',
+},
+  scalingRules: {,
+  scaleUpThreshold: 80,
+  scaleDownThreshold: 20,
+  cooldownMs: 45000,
+  maxInstances: 8,
+};
+      const config: Partial<CategoryPerformanceConfig> = {,
+  categories: customCategories,
+};
       const manager = new CategoryPerformanceManager(performanceMonitor, config);
       expect(manager.getCategoryMetrics('custom')).toBeDefined();
       manager.shutdown();

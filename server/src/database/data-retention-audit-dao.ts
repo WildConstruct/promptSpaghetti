@@ -11,6 +11,7 @@ import {
   OperationStatus
 } from '../types/audit';
 
+}
 export interface AuditQueryFilters {
   operationType?: DataRetentionOperationType;
   operationStatus?: OperationStatus;
@@ -22,6 +23,7 @@ export interface AuditQueryFilters {
   limit?: number;
   offset?: number;
 }
+}
 
 export class DataRetentionAuditDAO {
   constructor(private db: Pool) {}
@@ -32,6 +34,7 @@ export class DataRetentionAuditDAO {
     audit: Omit<DataRetentionAuditRecord, 'id' | 'createdAt' | 'updatedAt'>,
     client?: PoolClient
   ): Promise<string> {
+
     const dbClient = client || this.db;
     
     const query = `
@@ -73,6 +76,7 @@ export class DataRetentionAuditDAO {
     updates: Partial<DataRetentionAuditRecord>,
     client?: PoolClient
   ): Promise<void> {
+
     const dbClient = client || this.db;
     
     const updateFields = [];
@@ -118,6 +122,7 @@ export class DataRetentionAuditDAO {
   }
 
   async getDataRetentionAuditById(id: string): Promise<DataRetentionAuditRecord | null> {
+
     const query = `
       SELECT * FROM data_retention_audit WHERE id = $1
     `;
@@ -134,6 +139,7 @@ export class DataRetentionAuditDAO {
     audits: DataRetentionAuditRecord[];
     totalCount: number;
   }> {
+
     const whereConditions = [];
     const values = [];
     let paramIndex = 1;
@@ -212,6 +218,7 @@ export class DataRetentionAuditDAO {
     failedOperations: number;
     avgExecutionTime: number;
   }> {
+
     const intervalMap = {
       day: '1 day',
       week: '1 week',
@@ -248,6 +255,7 @@ export class DataRetentionAuditDAO {
     audit: Omit<DataSubjectRightsAuditRecord, 'id' | 'createdAt' | 'updatedAt'>,
     client?: PoolClient
   ): Promise<string> {
+
     const dbClient = client || this.db;
     
     const query = `
@@ -282,6 +290,7 @@ export class DataRetentionAuditDAO {
     audit: Omit<ComplianceMonitoringAuditRecord, 'id' | 'createdAt' | 'updatedAt'>,
     client?: PoolClient
   ): Promise<string> {
+
     const dbClient = client || this.db;
     
     const query = `

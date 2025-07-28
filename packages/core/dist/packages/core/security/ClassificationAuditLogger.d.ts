@@ -15,7 +15,7 @@
  * - Real-time streaming to external systems
  */
 import { EventEmitter } from 'events';
-import { ClassificationLevel, DataCategory, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
+import { ClassificationLevel, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
 import { AlertSeverity } from './ClassificationMonitor';
 export declare enum AuditEventType {
     CLASSIFICATION_PERFORMED = "classification_performed",
@@ -28,59 +28,19 @@ export declare enum AuditEventType {
     DATA_EXPORTED = "data_exported",
     DATA_DELETED = "data_deleted",
     CONFIGURATION_CHANGED = "configuration_changed",
-    SYSTEM_EVENT = "system_event"
-}
-export interface AuditLogEntry {
-    id: string;
-    timestamp: Date;
-    eventType: AuditEventType;
-    actor: {
-        userId?: string;
-        systemId?: string;
-        ipAddress: string;
-        userAgent?: string;
-        sessionId?: string;
-    };
-    target: {
-        dataId?: string;
-        resourceType: string;
-        resourceId: string;
-        classification?: ClassificationResult;
-    };
-    action: {
-        operation: string;
-        result: 'success' | 'failure';
-        reason?: string;
-        duration?: number;
-    };
-    context: {
-        environment: string;
-        applicationVersion: string;
-        correlationId?: string;
-        parentEventId?: string;
-        metadata: Record<string, any>;
-    };
-    compliance: {
-        frameworks: ComplianceFramework[];
-        dataCategory?: DataCategory;
-        retentionRequired: boolean;
-        encryptionApplied: boolean;
-    };
-    integrity: {
-        hash: string;
-        previousHash: string;
-        signature?: string;
-        sequenceNumber: number;
-    };
+    SYSTEM_EVENT = "system_event",
+    export,
+    interface,
+    AuditLogEntry
 }
 export interface AuditQueryFilter {
     startDate?: Date;
     endDate?: Date;
-    eventTypes?: AuditEventType[];
-    userIds?: string[];
-    dataIds?: string[];
-    classificationLevels?: ClassificationLevel[];
-    complianceFrameworks?: ComplianceFramework[];
+    eventTypes?: AuditEventType;
+    userIds?: string;
+    dataIds?: string;
+    classificationLevels?: ClassificationLevel;
+    complianceFrameworks?: ComplianceFramework;
     resultStatus?: 'success' | 'failure';
     searchText?: string;
     limit?: number;
@@ -104,16 +64,12 @@ export interface ComplianceReport {
         exported: number;
         deleted: number;
     };
-    violationDetails: Array<{
-        timestamp: Date;
-        eventId: string;
-        description: string;
-        severity: 'low' | 'medium' | 'high' | 'critical';
-        remediation?: string;
-    }>;
-    recommendations: string[];
-    generatedAt: Date;
-    generatedBy: string;
+    violationDetails: Array<{}, timestamp>;
+    Date: any;
+    eventId: string;
+    description: string;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    remediation?: string;
 }
 export interface RetentionPolicy {
     framework: ComplianceFramework;
@@ -128,28 +84,11 @@ export declare enum ExportFormat {
     CSV = "csv",
     SYSLOG = "syslog",
     CEF = "cef",// Common Event Format
-    LEEF = "leef"
+    LEEF = "leef",// Log Event Extended Format
+    export,
+    interface,
+    AuditLoggerConfig
 }
-export interface AuditLoggerConfig {
-    enableRealTimeLogging: boolean;
-    enableCompression: boolean;
-    enableEncryption: boolean;
-    encryptionKey?: Buffer;
-    signatureKey?: Buffer;
-    retentionPolicies: RetentionPolicy[];
-    logRotationSizeMB: number;
-    logRotationIntervalHours: number;
-    archiveLocation: string;
-    streamEndpoints?: Array<{
-        url: string;
-        format: ExportFormat;
-        headers?: Record<string, string>;
-    }>;
-    performanceMode: 'balanced' | 'high_performance' | 'high_security';
-}
-/**
- * Classification Audit Logger Service
- */
 export declare class ClassificationAuditLogger extends EventEmitter {
     private config;
     private logs;
@@ -165,72 +104,57 @@ export declare class ClassificationAuditLogger extends EventEmitter {
     private compressionCache;
     constructor(config: AuditLoggerConfig);
     /**
-     * Log a classification event
-     */
-    logClassification(dataElement: DataElement, result: ClassificationResult, actor: AuditLogEntry['actor'], duration: number): Promise<string>;
+    * Log a classification event
+    */
+    logClassification(): any;
+    dataElement: DataElement;
+    result: ClassificationResult;
+    actor: AuditLogEntry['actor'];
+    duration: number;
     /**
      * Log a classification update
      */
-    logClassificationUpdate(dataId: string, oldLevel: ClassificationLevel, newLevel: ClassificationLevel, reason: string, actor: AuditLogEntry['actor']): Promise<string>;
+    logClassificationUpdate(): any;
+    dataId: string;
+    oldLevel: ClassificationLevel;
+    newLevel: ClassificationLevel;
+    reason: string;
+    actor: AuditLogEntry['actor'];
     /**
      * Log a policy violation
      */
-    logPolicyViolation(violation: {
+    logPolicyViolation(): any;
+    violation: {
         dataId: string;
         policyId: string;
         description: string;
         severity: AlertSeverity;
         framework: ComplianceFramework;
-    }, actor: AuditLogEntry['actor']): Promise<string>;
+    };
+    actor: AuditLogEntry['actor'];
     /**
      * Log data access event
      */
-    logDataAccess(dataId: string, accessGranted: boolean, reason: string, actor: AuditLogEntry['actor'], classification?: ClassificationResult): Promise<string>;
+    logDataAccess(): any;
+    dataId: string;
+    accessGranted: boolean;
+    reason: string;
+    actor: AuditLogEntry['actor'];
+    classification?: ClassificationResult;
     /**
      * Query audit logs
      */
-    queryLogs(filter: AuditQueryFilter): Promise<AuditLogEntry[]>;
+    queryLogs(filter: AuditQueryFilter): Promise<AuditLogEntry>;
     /**
-     * Generate compliance report
-     */
-    generateComplianceReport(framework: ComplianceFramework, startDate: Date, endDate: Date): Promise<ComplianceReport>;
-    /**
-     * Export logs in specified format
-     */
-    exportLogs(filter: AuditQueryFilter, format: ExportFormat): Promise<string>;
-    /**
-     * Verify log integrity
-     */
-    verifyIntegrity(startId?: string, endId?: string): Promise<{
-        valid: boolean;
-        errors: Array<{
-            logId: string;
-            error: string;
-        }>;
-    }>;
-    private createAuditEntry;
-    private storeLog;
-    private calculateLogHash;
-    private signLog;
-    private verifySignature;
-    private scheduleBatchFlush;
-    private streamLog;
-    private rotateLogs;
-    private exportAsJSON;
-    private exportAsCSV;
-    private exportAsSyslog;
-    private exportAsCEF;
-    private exportAsLEEF;
-    private mapToSeverity;
-    private mapAlertSeverityToComplianceSeverity;
-    private generateRecommendations;
-    private generateLogId;
-    private initializeTimers;
-    private enforceRetentionPolicies;
-    /**
-     * Cleanup and shutdown
-     */
-    destroy(): void;
+    * Generate compliance report
+    */
+    generateComplianceReport(): any;
+    framework: ComplianceFramework;
+    startDate: Date;
+    endDate: Date;
+    const violations: any;
+    log: any;
+    log: any;
+    eventType: any;
 }
-export default ClassificationAuditLogger;
 //# sourceMappingURL=ClassificationAuditLogger.d.ts.map

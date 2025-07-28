@@ -25,17 +25,17 @@ export interface FunnelSegmentationProps {
         start: number;
         end: number;
     };
-    availableSegments?: UserSegment[];
-    availableCohorts?: ConversionCohort[];
+    availableSegments?: UserSegment;
+    availableCohorts?: ConversionCohort;
     onSegmentCreated?: (segment: UserSegment) => void;
-    onFilterChange?: (filters: SegmentFilter[]) => void;
+    onFilterChange?: (filters: SegmentFilter) => void;
     onSegmentAnalysis?: (analysis: SegmentAnalysisResult) => void;
 }
 export interface SegmentFilter {
     id: string;
     name: string;
     type: SegmentFilterType;
-    conditions: SegmentCondition[];
+    conditions: SegmentCondition;
     operator: 'AND' | 'OR';
     isActive: boolean;
     createdAt: number;
@@ -56,18 +56,18 @@ export interface SegmentAnalysisResult {
     segmentName: string;
     totalUsers: number;
     funnelPerformance: SegmentFunnelPerformance;
-    behaviorPatterns: BehavioralPattern[];
+    behaviorPatterns: BehavioralPattern;
     demographics: DemographicBreakdown;
     valueMetrics: SegmentValueMetrics;
-    comparisons: SegmentComparison[];
-    insights: SegmentInsight[];
+    comparisons: SegmentComparison;
+    insights: SegmentInsight;
 }
 export interface SegmentFunnelPerformance {
     conversionRate: number;
     averageTimeToConvert: number;
-    dropOffPoints: DropOffAnalysis[];
-    pathAnalysis: PathAnalysis[];
-    stepPerformance: StepSegmentPerformance[];
+    dropOffPoints: DropOffAnalysis;
+    pathAnalysis: PathAnalysis;
+    stepPerformance: StepSegmentPerformance;
 }
 export interface StepSegmentPerformance {
     stepId: string;
@@ -76,15 +76,15 @@ export interface StepSegmentPerformance {
     conversions: number;
     conversionRate: number;
     averageTimeSpent: number;
-    exitReasons: ExitReason[];
+    exitReasons: ExitReason;
 }
 export interface DropOffAnalysis {
     stepId: string;
     stepName: string;
     dropOffRate: number;
     dropOffCount: number;
-    primaryReasons: DropOffReason[];
-    recoveryOpportunities: string[];
+    primaryReasons: DropOffReason;
+    recoveryOpportunities: string;
 }
 export interface DropOffReason {
     reason: string;
@@ -96,7 +96,7 @@ export interface DropOffReason {
 export interface PathAnalysis {
     pathId: string;
     pathName: string;
-    steps: string[];
+    steps: string;
     userCount: number;
     conversionRate: number;
     averageTimeToComplete: number;
@@ -106,15 +106,15 @@ export interface BehavioralPattern {
     id: string;
     name: string;
     description: string;
-    pattern: string[];
+    pattern: string;
     frequency: number;
     conversionImpact: number;
     timePattern: TimePattern;
     strength: 'strong' | 'moderate' | 'weak';
 }
 export interface TimePattern {
-    preferredDays: number[];
-    preferredHours: number[];
+    preferredDays: number;
+    preferredHours: number;
     sessionDuration: number;
     visitFrequency: number;
     seasonality?: SeasonalityData;
@@ -225,13 +225,13 @@ export interface SegmentInsight {
     description: string;
     impact: number;
     confidence: number;
-    recommendations: string[];
+    recommendations: string;
     evidence: Record<string, any>;
 }
 export interface SegmentRuleBuilder {
-    fieldDefinitions: FieldDefinition[];
-    operators: OperatorDefinition[];
-    templates: SegmentTemplate[];
+    fieldDefinitions: FieldDefinition;
+    operators: OperatorDefinition;
+    templates: SegmentTemplate;
 }
 export interface FieldDefinition {
     path: string;
@@ -239,13 +239,13 @@ export interface FieldDefinition {
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
     category: string;
     description: string;
-    possibleValues?: unknown[];
+    possibleValues?: unknown;
     validation?: FieldValidation;
 }
 export interface OperatorDefinition {
     operator: SegmentOperator;
     displayName: string;
-    supportedTypes: string[];
+    supportedTypes: string;
     description: string;
     requiresValue: boolean;
     multiValue: boolean;
@@ -255,9 +255,9 @@ export interface SegmentTemplate {
     name: string;
     description: string;
     category: SegmentFilterType;
-    conditions: SegmentCondition[];
+    conditions: SegmentCondition;
     operator: 'AND' | 'OR';
-    tags: string[];
+    tags: string;
 }
 export interface FieldValidation {
     required?: boolean;
@@ -266,9 +266,5 @@ export interface FieldValidation {
     pattern?: string;
     customValidator?: string;
 }
-/**
- * Main Funnel Segmentation Component
- */
 export declare const FunnelSegmentation: React.FC<FunnelSegmentationProps>;
-export default FunnelSegmentation;
 //# sourceMappingURL=FunnelSegmentation.d.ts.map

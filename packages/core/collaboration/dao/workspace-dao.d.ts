@@ -63,5 +63,5 @@ export declare class WorkspaceDAO implements WorkspaceOperations {
     createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification>;
     getUserNotifications(userId: UserId, unreadOnly?: boolean): Promise<Notification[]>;
     markNotificationRead(id: string): Promise<void>;
-}
+
 //# sourceMappingURL=workspace-dao.d.ts.map

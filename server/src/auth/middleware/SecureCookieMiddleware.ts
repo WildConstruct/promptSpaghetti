@@ -6,6 +6,7 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
+}
 export interface SecureCookieConfig {
   // Basic security attributes
   httpOnly: boolean;
@@ -49,9 +50,11 @@ export interface SecureCookieConfig {
     requireHttps: boolean;
     sameSiteBypass?: string[]; // User agents to bypass SameSite
     legacySupport: boolean;
+}
   };
 }
 
+}
 export interface CookieSecurityContext {
   trustLevel: 'low' | 'medium' | 'high' | 'critical';
   environment: 'development' | 'staging' | 'production';
@@ -61,7 +64,9 @@ export interface CookieSecurityContext {
   supportsSameSite: boolean;
   supportsPartitioned: boolean;
 }
+}
 
+}
 export interface SecureCookie {
   name: string;
   value: string;
@@ -73,6 +78,7 @@ export interface SecureCookie {
     boundTo?: {
       ip?: string;
       userAgent?: string;
+}
     };
     encrypted: boolean;
     signed: boolean;
@@ -138,6 +144,7 @@ export class SecureCookieMiddleware {
     options: Partial<SecureCookieConfig> = {},
     context?: CookieSecurityContext
   ): Promise<Response> {
+
     const securityContext = context || this.analyzeSecurityContext(res.req as Request);
     
     // Serialize value if object
@@ -180,7 +187,7 @@ export class SecureCookieMiddleware {
         boundTo: {
           ip: this.config.ipBinding ? securityContext.ipAddress : undefined,
           userAgent: this.config.userAgentBinding ? securityContext.userAgent : undefined
-        },
+  }
         encrypted: this.config.encrypted,
         signed: this.config.signed
       }
@@ -414,6 +421,7 @@ export class SecureCookieMiddleware {
    * Encrypt cookie value
    */
   private async encryptValue(value: string, context: CookieSecurityContext): Promise<string> {
+
     if (!this.config.encryptionKey) {
       throw new Error('Encryption key not configured');
     }
@@ -441,6 +449,7 @@ export class SecureCookieMiddleware {
    * Decrypt cookie value
    */
   private async decryptValue(encryptedValue: string, context: CookieSecurityContext): Promise<string> {
+
     if (!this.config.encryptionKey) {
       throw new Error('Encryption key not configured');
     }
@@ -566,6 +575,7 @@ export class SecureCookieMiddleware {
    * CSRF token validation
    */
   private async validateCSRFToken(req: Request): Promise<boolean> {
+
     const sessionCookie = req.cookies['session'];
     const csrfCookie = req.cookies['csrf-token'];
     const csrfHeader = req.headers['x-csrf-token'];
@@ -668,7 +678,7 @@ export class SecureCookieMiddleware {
         allowSubdomains: false,
         requireHttps: true,
         legacySupport: false
-      },
+  }
       ...config
     };
   }

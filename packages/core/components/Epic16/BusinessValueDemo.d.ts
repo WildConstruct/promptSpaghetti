@@ -6,6 +6,7 @@
  * Part of Epic 16 Case Study Showcase (Story 16.4.4).
  */
 import React from 'react';
+
 interface BusinessValueDemoProps {
     className?: string;
     templateExample?: {
@@ -13,8 +14,9 @@ interface BusinessValueDemoProps {
         price: number;
         description: string;
         category: string;
+
     };
-}
+
 export declare const BusinessValueDemo: React.FC<BusinessValueDemoProps>;
 export default BusinessValueDemo;
 //# sourceMappingURL=BusinessValueDemo.d.ts.map

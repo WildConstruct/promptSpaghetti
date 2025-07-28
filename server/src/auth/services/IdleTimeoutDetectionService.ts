@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { RedisService } from '../database/RedisService';
 import { SessionActivityTrackingService } from './SessionActivityTrackingService';
 
+}
 export interface IdleTimeoutPolicy {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface IdleTimeoutPolicy {
     deviceTypes?: string[];
     trustLevels?: string[];
     timeConditions?: {
+}
       businessHours?: { start: string; end: string };
       weekends?: boolean;
       holidays?: boolean;
@@ -75,6 +77,7 @@ export interface IdleTimeoutPolicy {
   };
 }
 
+}
 export interface IdleSession {
   sessionId: string;
   userId: string;
@@ -86,6 +89,7 @@ export interface IdleSession {
     warningIssuedAt?: Date;
     timeoutScheduledAt?: Date;
     gracePeriodEnds?: Date;
+}
   };
   
   policy: {
@@ -122,6 +126,7 @@ export interface IdleSession {
   };
 }
 
+}
 export interface TimeoutEvent {
   id: string;
   sessionId: string;
@@ -133,6 +138,7 @@ export interface TimeoutEvent {
           'extension_granted' | 'activity_resumed' | 'force_logout';
     severity: 'info' | 'warning' | 'error';
     details: Record<string, any>;
+}
   };
   
   session: {
@@ -150,6 +156,7 @@ export interface TimeoutEvent {
   };
 }
 
+}
 export interface IdleStatistics {
   timeRange: { start: Date; end: Date };
   
@@ -232,6 +239,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     policyData: Omit<IdleTimeoutPolicy, 'id'>,
     createdBy: string
   ): Promise<IdleTimeoutPolicy> {
+
     const policy: IdleTimeoutPolicy = {
       ...policyData,
       id: this.generatePolicyId()
@@ -269,6 +277,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     initialTimeout?: number;
     message?: string;
   }> {
+
     try {
       // Find applicable policy
       const policy = await this.findApplicablePolicy(context);
@@ -287,19 +296,19 @@ export class IdleTimeoutDetectionService extends EventEmitter {
         timing: {
           lastActivity: new Date(),
           idleTime: 0
-        },
+  }
         policy: {
           policyId: policy.id,
           appliedTimeout: policy.timeouts.baseIdleTimeout,
           warningThreshold: policy.timeouts.warningThreshold,
           gracePeriod: policy.timeouts.gracePeriod
-        },
+  }
         status: {
           state: 'active',
           warningsSent: 0,
           extensionsGranted: 0,
           heartbeatMissed: 0
-        },
+  }
         context,
         activities: {
           recentActivities: [],
@@ -358,6 +367,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     timeToWarning: number;
     timeToTimeout: number;
   }> {
+
     const session = this.idleSessions.get(sessionId);
     if (!session) {
       return {
@@ -461,6 +471,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     idleTime: number;
     timeToWarning: number;
   }> {
+
     const session = this.idleSessions.get(sessionId);
     if (!session) {
       return {
@@ -503,6 +514,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
     extensionsRemaining?: number;
     message: string;
   }> {
+
     const session = this.idleSessions.get(sessionId);
     if (!session) {
       return {
@@ -581,6 +593,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
       policies?: string[];
     }
   ): Promise<IdleStatistics> {
+
     try {
       // Filter events by time range and criteria
       const filteredEvents = this.timeoutEvents.filter(event => {
@@ -641,12 +654,14 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   // Private helper methods
 
   private async startMonitoring(): Promise<void> {
+
     this.monitoringInterval = setInterval(async () => {
       await this.performIdleCheck();
     }, this.config.monitoringFrequency);
   }
 
   private async performIdleCheck(): Promise<void> {
+
     const now = new Date();
     const sessionsToCheck = Array.from(this.idleSessions.values());
 
@@ -660,6 +675,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async checkSessionIdle(session: IdleSession, now: Date): Promise<void> {
+
     const policy = this.policies.get(session.policy.policyId);
     if (!policy || !policy.enabled) return;
 
@@ -696,6 +712,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async handleWarning(session: IdleSession): Promise<void> {
+
     const policy = this.policies.get(session.policy.policyId);
     if (!policy) return;
 
@@ -727,6 +744,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async handleTimeout(session: IdleSession, reason: string): Promise<void> {
+
     const policy = this.policies.get(session.policy.policyId);
     if (!policy) return;
 
@@ -761,6 +779,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async handleFinalTimeout(sessionId: string): Promise<void> {
+
     const session = this.idleSessions.get(sessionId);
     if (!session || session.status.state !== 'grace_period') return;
 
@@ -771,6 +790,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async executeTimeoutAction(session: IdleSession, policy: IdleTimeoutPolicy): Promise<void> {
+
     session.status.state = 'terminated';
 
     switch (policy.actions.onTimeout.action) {
@@ -794,6 +814,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async findApplicablePolicy(context: any): Promise<IdleTimeoutPolicy | null> {
+
     const applicablePolicies = [];
 
     for (const policy of this.policies.values()) {
@@ -846,20 +867,20 @@ export class IdleTimeoutDetectionService extends EventEmitter {
         conditions: {
           sessionTypes: ['web', 'mobile'],
           trustLevels: ['trusted', 'verified']
-        },
+  }
         timeouts: {
           baseIdleTimeout: 1800, // 30 minutes
           warningThreshold: 1500, // 25 minutes
           gracePeriod: 60, // 1 minute
           maxIdleTime: 3600 // 1 hour max
-        },
+  }
         detection: {
           activityTypes: ['page_view', 'api_call', 'interaction'],
           excludeTypes: ['heartbeat', 'ping'],
           minimumActivityThreshold: 10, // 10 seconds
           heartbeatRequired: true,
           heartbeatInterval: 60 // 1 minute
-        },
+  }
         actions: {
           onWarning: {
             notifyUser: true,
@@ -867,20 +888,20 @@ export class IdleTimeoutDetectionService extends EventEmitter {
             allowExtension: true,
             extensionDuration: 300, // 5 minutes
             maxExtensions: 2
-          },
+  }
           onTimeout: {
             action: 'logout',
             preserveData: true,
             notifyUser: true,
             gracefulShutdown: true
-          },
+  }
           onGracePeriodExpiry: {
             forceLogout: true,
             lockAccount: false,
             clearSessionData: true
           }
         }
-      },
+  }
       {
         name: 'High Security Timeout',
         description: 'Strict timeout for admin and privileged sessions',
@@ -890,32 +911,32 @@ export class IdleTimeoutDetectionService extends EventEmitter {
           sessionTypes: ['admin', 'api'],
           userRoles: ['admin', 'security'],
           trustLevels: ['verified']
-        },
+  }
         timeouts: {
           baseIdleTimeout: 900, // 15 minutes
           warningThreshold: 600, // 10 minutes
           gracePeriod: 30, // 30 seconds
           maxIdleTime: 900 // 15 minutes max
-        },
+  }
         detection: {
           activityTypes: ['api_call', 'admin_action', 'security_event'],
           excludeTypes: ['heartbeat'],
           minimumActivityThreshold: 5, // 5 seconds
           heartbeatRequired: true,
           heartbeatInterval: 30 // 30 seconds
-        },
+  }
         actions: {
           onWarning: {
             notifyUser: true,
             notificationMethods: ['ui', 'email', 'websocket'],
             allowExtension: false
-          },
+  }
           onTimeout: {
             action: 'logout',
             preserveData: false,
             notifyUser: true,
             gracefulShutdown: false
-          },
+  }
           onGracePeriodExpiry: {
             forceLogout: true,
             lockAccount: false,
@@ -932,6 +953,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async setupRedisTracking(sessionId: string, policy: IdleTimeoutPolicy): Promise<void> {
+
     const key = `idle:${sessionId}`;
     const data = {
       lastActivity: new Date().toISOString(),
@@ -944,6 +966,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async updateRedisActivity(sessionId: string, timestamp: Date): Promise<void> {
+
     const key = `idle:${sessionId}`;
     await this.redis.hset(key, 'lastActivity', timestamp.toISOString());
   }
@@ -953,6 +976,7 @@ export class IdleTimeoutDetectionService extends EventEmitter {
   }
 
   private async logEvent(action: string, sessionId: string, userId: string, details: any): Promise<void> {
+
     const event: TimeoutEvent = {
       id: `IDLE-EVT-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
       sessionId,
@@ -962,13 +986,13 @@ export class IdleTimeoutDetectionService extends EventEmitter {
         type: action as any,
         severity: 'info',
         details
-      },
+  }
       session: {
         idleDuration: details.idleTime || 0,
         totalSessionTime: details.totalSessionTime || 0,
         activitiesInSession: details.activityCount || 0,
         policyApplied: details.policyId || ''
-      },
+  }
       outcome: {
         success: true
       }

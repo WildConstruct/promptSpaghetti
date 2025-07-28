@@ -19,22 +19,22 @@ describe('ClassificationMonitoringService', () => {
   let service: ClassificationMonitoringService;
   let mockContext: OperationContext;
   beforeEach(() => {
-    service = new ClassificationMonitoringService();
-    mockContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session123',
-      purpose: 'data analysis',
-      environment: 'production',
-      timestamp: new Date(),
-      source: '192.168.1.100',
-      requestId: 'req123',
-    };
+  service = new ClassificationMonitoringService();
+  mockContext = {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session123',
+  purpose: 'data analysis',
+  environment: 'production',
+  timestamp: new Date(),
+  source: '192.168.1.100',
+  requestId: 'req123',
+};
   });
   describe('Event Recording', () => {
     it('should record monitoring events', async () => {
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'INTERNAL',
         userId: 'user123',
@@ -44,10 +44,9 @@ describe('ClassificationMonitoringService', () => {
         details: { fileSize: 1024 },
         context: mockContext,
         metrics: {,
-          processingTimeMs: 50,
-          dataSize: 1024,
-        }
-      });
+  processingTimeMs: 50,
+  dataSize: 1024,
+});
       const events = service.getEvents();
       expect(events).toHaveLength(1);
       expect(events[0].classification).toBe('INTERNAL');
@@ -55,7 +54,7 @@ describe('ClassificationMonitoringService', () => {
     });
     it('should update classification statistics when recording events', async () => {
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'CONFIDENTIAL',
         userId: 'user123',
@@ -65,11 +64,10 @@ describe('ClassificationMonitoringService', () => {
         details: {},
         context: mockContext,
         metrics: {,
-          processingTimeMs: 100,
-        }
-      });
+  processingTimeMs: 100,
+});
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'VIOLATION',
         classification: 'CONFIDENTIAL',
         userId: 'user456',
@@ -79,9 +77,8 @@ describe('ClassificationMonitoringService', () => {
         details: { reason: 'Insufficient permissions' },
         context: mockContext,
         metrics: {,
-          processingTimeMs: 50,
-        }
-      });
+  processingTimeMs: 50,
+});
       const stats = service.getClassificationStats('CONFIDENTIAL');
       expect(stats).toHaveLength(1);
       expect(stats[0].totalEvents).toBe(2);
@@ -93,7 +90,7 @@ describe('ClassificationMonitoringService', () => {
       const userId = 'user123';
       // Record multiple events for the same user
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'PUBLIC',
         userId,
@@ -101,10 +98,10 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'RESTRICTED',
         userId,
@@ -112,10 +109,10 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'VIOLATION',
         classification: 'CONFIDENTIAL',
         userId,
@@ -123,8 +120,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'write',
         result: 'FAILURE',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       const userActivity = service.getUserActivity(userId);
       expect(userActivity).toBeDefined();
       expect(userActivity?.totalEvents).toBe(3);
@@ -134,12 +131,12 @@ describe('ClassificationMonitoringService', () => {
       expect(userActivity?.violationCount).toBe(1);
     });
     it('should handle real-time event notifications', async () => {
-      const receivedEvents: MonitoringEvent[] = [];
-      service.onEvent((event) => {
-        receivedEvents.push(event);
-      });
+  const receivedEvents: MonitoringEvent = [];
+  service.onEvent((event) => {
+  receivedEvents.push(event);
+});
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'INTERNAL',
         userId: 'user123',
@@ -147,32 +144,33 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       expect(receivedEvents).toHaveLength(1);
       expect(receivedEvents[0].eventType).toBe('ACCESS');
     });
   });
   describe('Threshold Monitoring', () => {
-    it('should trigger alerts when thresholds are exceeded', async () => {
-      const receivedAlerts: MonitoringAlert[] = [];
-      service.onAlert((alert) => {
-        receivedAlerts.push(alert);
-      });
+  it('should trigger alerts when thresholds are exceeded', async () => {
+  const receivedAlerts: MonitoringAlert = [];
+  service.onAlert((alert) => {
+  receivedAlerts.push(alert);
+});
       // Generate events that should trigger violation rate threshold
       for (let i = 0; i < 10; i++) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: i < 8 ? 'ACCESS' : 'VIOLATION',
           classification: 'INTERNAL',
-          userId: `user${i}`,}
-          dataId: `data${i}`,}
-          operation: 'read',
+          userId: `user${i}`}
+},
+  dataId: `data${i}`}
+},
+  operation: 'read',
           result: i < 8 ? 'SUCCESS' : 'FAILURE',
           details: {},
-          context: mockContext,
-        });
-      }
+          context: mockContext;
+  });
       // Should trigger high violation rate alert (20% > 10% threshold)
       expect(receivedAlerts.length).toBeGreaterThan(0);
       const violationAlert = receivedAlerts.find(a => a.type === 'THRESHOLD_EXCEEDED');
@@ -180,13 +178,13 @@ describe('ClassificationMonitoringService', () => {
       expect(violationAlert?.severity).toBe('HIGH');
     });
     it('should respect threshold cooldown periods', async () => {
-      const receivedAlerts: MonitoringAlert[] = [];
-      service.onAlert((alert) => {
-        receivedAlerts.push(alert);
-      });
+  const receivedAlerts: MonitoringAlert = [];
+  service.onAlert((alert) => {
+  receivedAlerts.push(alert);
+});
       // First event should trigger alert
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'COMPLIANCE_CHECK',
         classification: 'CONFIDENTIAL',
         userId: 'user123',
@@ -196,14 +194,13 @@ describe('ClassificationMonitoringService', () => {
         details: {},
         context: mockContext,
         metrics: {,
-          processingTimeMs: 100,
-          complianceScore: 70 // Below 80 threshold,
-        }
-      });
+  processingTimeMs: 100,
+  complianceScore: 70 // Below 80 threshold,
+});
       const initialAlertCount = receivedAlerts.length;
       // Second event should not trigger due to cooldown
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'COMPLIANCE_CHECK',
         classification: 'CONFIDENTIAL',
         userId: 'user456',
@@ -213,20 +210,19 @@ describe('ClassificationMonitoringService', () => {
         details: {},
         context: mockContext,
         metrics: {,
-          processingTimeMs: 120,
-          complianceScore: 60,
-        }
-      });
+  processingTimeMs: 120,
+  complianceScore: 60,
+});
       expect(receivedAlerts.length).toBe(initialAlertCount);
     });
     it('should allow threshold configuration updates', () => {
-      const threshold = service.getThreshold('high-violation-rate');
-      expect(threshold).toBeDefined();
-      expect(threshold?.value).toBe(0.1);
-      service.updateThreshold('high-violation-rate', {)
-        value: 0.2,
-        enabled: false,
-      });
+  const threshold = service.getThreshold('high-violation-rate');
+  expect(threshold).toBeDefined();
+  expect(threshold?.value).toBe(0.1);
+  service.updateThreshold('high-violation-rate', {)
+  value: 0.2,
+  enabled: false,
+});
       const updatedThreshold = service.getThreshold('high-violation-rate');
       expect(updatedThreshold?.value).toBe(0.2);
       expect(updatedThreshold?.enabled).toBe(false);
@@ -238,17 +234,17 @@ describe('ClassificationMonitoringService', () => {
       // Generate many restricted data access events
       for (let i = 0; i < 15; i++) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: 'ACCESS',
           classification: 'RESTRICTED',
           userId,
-          dataId: `data${i}`,}
-          operation: 'read',
+          dataId: `data${i}`}
+},
+  operation: 'read',
           result: 'SUCCESS',
           details: {},
-          context: mockContext,
-        });
-      }
+          context: mockContext;
+  });
       const userActivity = service.getUserActivity(userId);
       expect(userActivity?.suspiciousActivities).toContain('Rapid access to restricted data');
     });
@@ -257,17 +253,17 @@ describe('ClassificationMonitoringService', () => {
       // Generate multiple violation events
       for (let i = 0; i < 5; i++) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: 'VIOLATION',
           classification: 'CONFIDENTIAL',
           userId,
-          dataId: `data${i}`,}
-          operation: 'write',
+          dataId: `data${i}`}
+},
+  operation: 'write',
           result: 'FAILURE',
           details: { reason: 'Access denied' },
-          context: mockContext,
-        });
-      }
+          context: mockContext;
+  });
       const userActivity = service.getUserActivity(userId);
       expect(userActivity?.suspiciousActivities).toContain('Multiple access violations');
     });
@@ -280,7 +276,7 @@ describe('ClassificationMonitoringService', () => {
       global.Date = jest.fn(() => nightTime) as any;
       global.Date.now = originalDate.now;
       await service.recordEvent({)
-        timestamp: nightTime,
+  timestamp: nightTime,
         eventType: 'VIOLATION',
         classification: 'RESTRICTED',
         userId,
@@ -288,8 +284,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'FAILURE',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       global.Date = originalDate;
       const userActivity = service.getUserActivity(userId);
       expect(userActivity?.suspiciousActivities).toContain('Unusual access time');
@@ -298,7 +294,7 @@ describe('ClassificationMonitoringService', () => {
       const userId = 'risky-user';
       // Generate various events that contribute to risk
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'VIOLATION',
         classification: 'RESTRICTED',
         userId,
@@ -306,10 +302,10 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'FAILURE',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'RESTRICTED',
         userId,
@@ -317,8 +313,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       const userActivity = service.getUserActivity(userId);
       expect(userActivity?.riskScore).toBeGreaterThan(0);
       expect(userActivity?.riskScore).toBeLessThanOrEqual(100);
@@ -327,25 +323,25 @@ describe('ClassificationMonitoringService', () => {
   describe('Dashboard and Reporting', () => {
     it('should generate comprehensive dashboard data', async () => {
       // Generate various events
-      const classifications: DataClassificationLevel[] = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
+      const classifications: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
       const results = ['SUCCESS', 'SUCCESS', 'SUCCESS', 'FAILURE', 'WARNING'] as const;
       for (let i = 0; i < 20; i++) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: i % 5 === 0 ? 'VIOLATION' : 'ACCESS',
           classification: classifications[i % 4],
-          userId: `user${i % 3}`,}
-          dataId: `data${i}`,}
-          operation: 'read',
+          userId: `user${i % 3}`}
+},
+  dataId: `data${i}`}
+},
+  operation: 'read',
           result: results[i % 5],
           details: {},
           context: mockContext,
           metrics: {,
-            processingTimeMs: 50 + (i * 10),
-            complianceScore: 80 + (i % 20),
-          }
-        });
-      }
+  processingTimeMs: 50 + (i * 10),
+  complianceScore: 80 + (i % 20),
+});
       const dashboard = service.getDashboard();
       expect(dashboard.overallStats).toBeDefined();
       expect(dashboard.overallStats.totalEvents).toBeGreaterThan(0);
@@ -358,7 +354,7 @@ describe('ClassificationMonitoringService', () => {
     it('should filter events by various criteria', async () => {
       // Generate test events
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'INTERNAL',
         userId: 'user123',
@@ -366,10 +362,10 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'VIOLATION',
         classification: 'CONFIDENTIAL',
         userId: 'user456',
@@ -377,8 +373,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'write',
         result: 'FAILURE',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       // Test filtering by classification
       const internalEvents = service.getEvents({ classification: 'INTERNAL' });
       expect(internalEvents).toHaveLength(1);
@@ -395,7 +391,7 @@ describe('ClassificationMonitoringService', () => {
     it('should export monitoring data in different formats', async () => {
       // Generate some test data
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'INTERNAL',
         userId: 'user123',
@@ -403,8 +399,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       // Test JSON export
       const jsonExport = service.exportData('json');
       const parsedJson = JSON.parse(jsonExport);
@@ -419,14 +415,14 @@ describe('ClassificationMonitoringService', () => {
     });
   });
   describe('Alert Management', () => {
-    it('should create and manage alerts', async () => {
-      const receivedAlerts: MonitoringAlert[] = [];
-      service.onAlert((alert) => {
-        receivedAlerts.push(alert);
-      });
+  it('should create and manage alerts', async () => {
+  const receivedAlerts: MonitoringAlert = [];
+  service.onAlert((alert) => {
+  receivedAlerts.push(alert);
+});
       // Trigger an alert
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'COMPLIANCE_CHECK',
         classification: 'RESTRICTED',
         userId: 'user123',
@@ -436,10 +432,9 @@ describe('ClassificationMonitoringService', () => {
         details: {},
         context: mockContext,
         metrics: {,
-          processingTimeMs: 150,
-          complianceScore: 50 // Very low compliance,
-        }
-      });
+  processingTimeMs: 150,
+  complianceScore: 50 // Very low compliance,
+});
       expect(receivedAlerts.length).toBeGreaterThan(0);
       const alerts = service.getAlerts();
       expect(alerts.length).toBeGreaterThan(0);
@@ -449,7 +444,7 @@ describe('ClassificationMonitoringService', () => {
     it('should allow alert resolution', async () => {
       // Trigger an alert
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'COMPLIANCE_CHECK',
         classification: 'CONFIDENTIAL',
         userId: 'user123',
@@ -459,10 +454,9 @@ describe('ClassificationMonitoringService', () => {
         details: {},
         context: mockContext,
         metrics: {,
-          processingTimeMs: 180,
-          complianceScore: 60,
-        }
-      });
+  processingTimeMs: 180,
+  complianceScore: 60,
+});
       const alerts = service.getAlerts();
       expect(alerts.length).toBeGreaterThan(0);
       const alertId = alerts[0].id;
@@ -480,24 +474,25 @@ describe('ClassificationMonitoringService', () => {
       // Generate more than 10000 events
       for (let i = 0; i < 10005; i++) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: 'ACCESS',
           classification: 'PUBLIC',
-          userId: `user${i}`,}
-          dataId: `data${i}`,}
-          operation: 'read',
+          userId: `user${i}`}
+},
+  dataId: `data${i}`}
+},
+  operation: 'read',
           result: 'SUCCESS',
           details: {},
-          context: mockContext,
-        });
-      }
+          context: mockContext;
+  });
       const events = service.getEvents();
       expect(events.length).toBeLessThanOrEqual(10000);
     });
     it('should clear all monitoring data when requested', async () => {
       // Generate some data
       await service.recordEvent({)
-        timestamp: new Date(),
+  timestamp: new Date(),
         eventType: 'ACCESS',
         classification: 'INTERNAL',
         userId: 'user123',
@@ -505,8 +500,8 @@ describe('ClassificationMonitoringService', () => {
         operation: 'read',
         result: 'SUCCESS',
         details: {},
-        context: mockContext,
-      });
+        context: mockContext;
+  });
       expect(service.getEvents()).toHaveLength(1);
       expect(service.getUserActivity('user123')).toBeDefined();
       // Clear all data
@@ -518,7 +513,7 @@ describe('ClassificationMonitoringService', () => {
       const stats = service.getClassificationStats();
       expect(stats).toHaveLength(4);
       stats.forEach(stat => {)
-        expect(stat.totalEvents).toBe(0);
+  expect(stat.totalEvents).toBe(0);
       });
     });
   });
@@ -527,7 +522,7 @@ describe('ClassificationMonitoringService', () => {
       const times = [100, 200, 150, 175];
       for (const time of times) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: 'ACCESS',
           classification: 'INTERNAL',
           userId: 'user123',
@@ -537,10 +532,8 @@ describe('ClassificationMonitoringService', () => {
           details: {},
           context: mockContext,
           metrics: {,
-            processingTimeMs: time,
-          }
-        });
-      }
+  processingTimeMs: time,
+});
       const stats = service.getClassificationStats('INTERNAL');
       expect(stats[0].averageProcessingTime).toBe(156.25); // (100+200+150+175)/4
     });
@@ -548,7 +541,7 @@ describe('ClassificationMonitoringService', () => {
       const scores = [100, 80, 90, 70, 85];
       for (const score of scores) {
         await service.recordEvent({)
-          timestamp: new Date(),
+  timestamp: new Date(),
           eventType: 'COMPLIANCE_CHECK',
           classification: 'CONFIDENTIAL',
           userId: 'user123',
@@ -558,11 +551,9 @@ describe('ClassificationMonitoringService', () => {
           details: {},
           context: mockContext,
           metrics: {,
-            processingTimeMs: 100,
-            complianceScore: score,
-          }
-        });
-      }
+  processingTimeMs: 100,
+  complianceScore: score,
+});
       const stats = service.getClassificationStats('CONFIDENTIAL');
       expect(stats[0].complianceRate).toBe(85); // (100+80+90+70+85)/5
     });

@@ -28,6 +28,7 @@ export type RotationPattern =
   'FIXED_DURATION' | 'PERFORMANCE_THRESHOLD' | 'EQUAL_TIME' | 'WEIGHTED_ROTATION';
 
 // Core interfaces
+}
 export interface PromotionSlot {
   id: string;
   name: string;
@@ -37,6 +38,7 @@ export interface PromotionSlot {
   traffic_allocation: number; // Percentage of traffic
   priority: number;
   metadata: {
+}
     dimensions?: { width: number; height: number };
     position?: string;
     styling?: Record<string, any>;
@@ -46,6 +48,7 @@ export interface PromotionSlot {
   updated_at: Date;
 }
 
+}
 export interface PromotionSchedule {
   id: string;
   title: string;
@@ -82,7 +85,9 @@ export interface PromotionSchedule {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ContentCriteria {
   // Quality filters
   min_rating?: number;
@@ -119,13 +124,17 @@ export interface ContentCriteria {
   max_content_count?: number;
   diversification_rules?: DiversificationRule[];
 }
+}
 
+}
 export interface DiversificationRule {
   attribute: string; // 'category', 'creator', 'content_type'
   max_percentage: number; // Maximum percentage from same attribute
   enforce_uniqueness: boolean;
 }
+}
 
+}
 export interface RotationConfig {
   // Fixed duration rotation
   duration_per_content?: number; // minutes
@@ -146,7 +155,9 @@ export interface RotationConfig {
   allow_repeat: boolean;
   cooldown_period?: number; // hours before content can be promoted again
 }
+}
 
+}
 export interface WeightCriteria {
   performance_weight: number; // 0-1
   recency_weight: number;
@@ -154,7 +165,9 @@ export interface WeightCriteria {
   creator_tier_weight: number;
   custom_weights?: Record<string, number>;
 }
+}
 
+}
 export interface TargetMetrics {
   target_impressions?: number;
   target_clicks?: number;
@@ -164,7 +177,9 @@ export interface TargetMetrics {
   target_conversion_rate?: number;
   min_engagement_time?: number; // seconds
 }
+}
 
+}
 export interface ActualMetrics {
   impressions: number;
   clicks: number;
@@ -176,7 +191,9 @@ export interface ActualMetrics {
   bounce_rate: number;
   last_updated: Date;
 }
+}
 
+}
 export interface ABTestConfig {
   test_name: string;
   variants: ABTestVariant[];
@@ -187,7 +204,9 @@ export interface ABTestConfig {
   test_duration_days: number;
   early_stopping_enabled: boolean;
 }
+}
 
+}
 export interface ABTestVariant {
   id: string;
   name: string;
@@ -195,12 +214,15 @@ export interface ABTestVariant {
   config_overrides?: Partial<RotationConfig>;
   target_metrics?: Partial<TargetMetrics>;
 }
+}
 
+}
 export interface PromotionPerformanceReport {
   promotion_id: string;
   time_period: {
     start: Date;
     end: Date;
+}
   };
   overall_performance: ActualMetrics;
   content_performance: ContentPerformanceMetrics[];
@@ -210,6 +232,7 @@ export interface PromotionPerformanceReport {
   recommendations: PromotionRecommendation[];
 }
 
+}
 export interface ContentPerformanceMetrics {
   content_id: string;
   content_title: string;
@@ -218,7 +241,9 @@ export interface ContentPerformanceMetrics {
   performance_score: number; // 0-100
   rotation_efficiency: number;
 }
+}
 
+}
 export interface SlotPerformanceMetrics {
   slot_id: string;
   slot_name: string;
@@ -228,13 +253,17 @@ export interface SlotPerformanceMetrics {
   revenue_per_impression: number;
   utilization_rate: number; // Percentage of time slot was active
 }
+}
 
+}
 export interface ComparisonMetrics {
   vs_previous_promotion?: MetricComparison;
   vs_baseline?: MetricComparison;
   vs_target?: MetricComparison;
 }
+}
 
+}
 export interface MetricComparison {
   metric_name: string;
   current_value: number;
@@ -242,7 +271,9 @@ export interface MetricComparison {
   percentage_change: number;
   is_improvement: boolean;
 }
+}
 
+}
 export interface PerformanceInsight {
   type: 'positive' | 'negative' | 'neutral';
   title: string;
@@ -251,7 +282,9 @@ export interface PerformanceInsight {
   confidence: number; // 0-1
   supporting_data: Record<string, any>;
 }
+}
 
+}
 export interface PromotionRecommendation {
   type: 'optimization' | 'content_selection' | 'scheduling' | 'rotation' | 'budget';
   title: string;
@@ -260,6 +293,7 @@ export interface PromotionRecommendation {
   effort_level: 'low' | 'medium' | 'high';
   priority_score: number; // 0-100
   implementation_steps: string[];
+}
 }
 
 @Injectable()
@@ -279,6 +313,7 @@ export class PromotionSchedulingService {
     scheduleData: Omit<PromotionSchedule, 'id' | 'created_at' | 'updated_at'>,
     createdBy: string
   ): Promise<PromotionSchedule> {
+
     const scheduleId = uuidv4();
     
     // Validate slot availability
@@ -328,6 +363,7 @@ export class PromotionSchedulingService {
     updates: Partial<PromotionSchedule>,
     updatedBy: string
   ): Promise<PromotionSchedule> {
+
     const existingSchedule = await this.getPromotionSchedule(scheduleId);
     if (!existingSchedule) {
       throw new NotFoundException(`Promotion schedule ${scheduleId} not found`);
@@ -365,6 +401,7 @@ export class PromotionSchedulingService {
    * Get promotion schedule with performance data
    */
   async getPromotionSchedule(scheduleId: string): Promise<PromotionSchedule | null> {
+
     const query = `
       SELECT * FROM promotion_schedules WHERE id = $1
     `;
@@ -386,6 +423,7 @@ export class PromotionSchedulingService {
     page?: number;
     limit?: number;
   }): Promise<{ schedules: PromotionSchedule[]; total: number }> {
+
     let query = `
       SELECT ps.*, psl.name as slot_name, psl.location as slot_location
       FROM promotion_schedules ps
@@ -444,6 +482,7 @@ export class PromotionSchedulingService {
    * Select content based on criteria using intelligent algorithms
    */
   async selectContent(criteria: ContentCriteria): Promise<string[]> {
+
     let query = `
       SELECT DISTINCT t.id, t.title, t.category, t.creator_id,
              COALESCE(ta.avg_rating, 0) as rating,
@@ -514,6 +553,7 @@ export class PromotionSchedulingService {
     startDate?: Date,
     endDate?: Date
   ): Promise<PromotionPerformanceReport> {
+
     const schedule = await this.getPromotionSchedule(scheduleId);
     if (!schedule) {
       throw new NotFoundException(`Promotion schedule ${scheduleId} not found`);
@@ -540,7 +580,7 @@ export class PromotionSchedulingService {
       time_period: {
         start: reportStartDate,
         end: reportEndDate
-      },
+  }
       overall_performance: overallMetrics,
       content_performance: contentPerformance,
       slot_performance: slotPerformance,
@@ -556,6 +596,7 @@ export class PromotionSchedulingService {
     startDate: Date, 
     endDate: Date
   ): Promise<void> {
+
     const query = `
       SELECT COUNT(*) as conflicts
       FROM promotion_schedules
@@ -565,7 +606,7 @@ export class PromotionSchedulingService {
           (start_date <= $2 AND end_date >= $2) OR
           (start_date <= $3 AND end_date >= $3) OR
           (start_date >= $2 AND end_date <= $3)
-        )
+
     `;
 
     const result = await this.pool.query(query, [slotId, startDate, endDate]);
@@ -576,6 +617,7 @@ export class PromotionSchedulingService {
   }
 
   private async createSystemSchedule(schedule: PromotionSchedule): Promise<void> {
+
     // Create schedule in the underlying scheduling system
     await this.schedulingService.createSchedule({
       name: `Promotion: ${schedule.title}`,
@@ -637,6 +679,7 @@ export class PromotionSchedulingService {
   }
 
   private async storePromotionSchedule(schedule: PromotionSchedule): Promise<void> {
+
     const query = `
       INSERT INTO promotion_schedules (
         id, title, description, promotion_type, slot_id, status,

@@ -11,9 +11,11 @@ import { MarketplaceLeaderboardService } from '../marketplace/LeaderboardService
 import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 import { Database } from '../database/connection';
 
+}
 interface LeaderboardRouteOptions {
   database: Database;
   badgeSystem: BadgeSystem;
+}
 }
 
 // =============================================================================
@@ -28,7 +30,7 @@ const leaderboardQuerySchema = {
       type: 'string',
       enum: ['24h', '7d', '30d', '90d', 'all'],
       default: 'all'
-    },
+  }
     category: { type: 'string', format: 'uuid' },
     limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
     offset: { type: 'number', minimum: 0, default: 0 },
@@ -54,7 +56,7 @@ const leaderboardResponseSchema = {
           lastUpdated: { type: 'string', format: 'date-time' }
         }
       }
-    },
+  }
     totalEntries: { type: 'number' },
     lastUpdated: { type: 'string', format: 'date-time' },
     timeframe: { type: 'string' },
@@ -694,19 +696,19 @@ export default async function marketplaceLeaderboardRoutes(
           type: {
             type: 'string',
             enum: ['templates', 'creators', 'categories', 'engagement']
-          },
+  }
           metric: { type: 'string' },
           timeframe: {
             type: 'string',
             enum: ['24h', '7d', '30d', '90d', 'all'],
             default: 'all'
-          },
+  }
           category: { type: 'string', format: 'uuid' },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 },
           includeHistory: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: leaderboardResponseSchema
       }

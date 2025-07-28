@@ -19,6 +19,7 @@ import { AuditService } from './AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
+}
 export interface LocationContext {
   userId: string;
   ipAddress: string;
@@ -29,9 +30,11 @@ export interface LocationContext {
     country?: string;
     city?: string;
     timezone?: string;
+}
   };
 }
 
+}
 export interface LocationChallengeRequirement {
   required: boolean;
   challengeId?: string;
@@ -45,6 +48,7 @@ export interface LocationChallengeRequirement {
   gracePeriodHours?: number;
   message?: string;
 }
+}
 
 export enum LocationChallengeType {
   EMAIL_VERIFICATION = 'email_verification',
@@ -55,6 +59,7 @@ export enum LocationChallengeType {
   ADMIN_APPROVAL = 'admin_approval'
 }
 
+}
 export interface LocationVerificationAttempt {
   id: string;
   userId: string;
@@ -77,9 +82,11 @@ export interface LocationVerificationAttempt {
     reasons: string[];
     deliveryMethod?: string;
     gracePeriodApplied?: boolean;
+}
   };
 }
 
+}
 export interface LocationVerificationConfig {
   // Risk thresholds for different challenge types
   emailVerificationThreshold: number;      // 30 - Low risk
@@ -106,6 +113,7 @@ export interface LocationVerificationConfig {
   enableTOTPVerification: boolean;
   enableManualReview: boolean;
   enableGracePeriods: boolean;
+}
 }
 
 export class LocationVerificationService {
@@ -147,6 +155,7 @@ export class LocationVerificationService {
    * Assess if location verification is required for a login attempt
    */
   async assessLocationChallenge(context: LocationContext): Promise<LocationChallengeRequirement> {
+
     try {
       // Get geolocation data
       const geoData = await this.geolocationService.getGeolocationData(
@@ -210,7 +219,7 @@ export class LocationVerificationService {
         details: {
           error: error instanceof Error ? error.message : 'Unknown error',
           ipAddress: context.ipAddress
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -244,6 +253,7 @@ export class LocationVerificationService {
     gracePeriodSet?: boolean;
     message?: string;
   }> {
+
     try {
       // Get verification attempt
       const attempt = await this.getVerificationAttempt(challengeId);
@@ -330,7 +340,7 @@ export class LocationVerificationService {
             challengeType: attempt.challengeType,
             attempts: newAttempts,
             gracePeriodSet
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
@@ -360,7 +370,7 @@ export class LocationVerificationService {
               challengeType: attempt.challengeType,
               totalAttempts: newAttempts,
               reason: 'max_attempts_exceeded'
-            },
+  }
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             sessionId: context.sessionId,
@@ -392,7 +402,7 @@ export class LocationVerificationService {
         details: {
           challengeId,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -410,6 +420,7 @@ export class LocationVerificationService {
     userId: string,
     limit: number = 50
   ): Promise<LocationVerificationAttempt[]> {
+
     const result = await this.db.query(`
       SELECT * FROM location_verification_attempts
       WHERE user_id = $1
@@ -459,6 +470,7 @@ export class LocationVerificationService {
     geoData: GeolocationData,
     locationAnalysis: any
   ): Promise<LocationChallengeRequirement> {
+
     const riskScore = verificationReq.riskScore;
     let challengeType: LocationChallengeType;
     let deliveryMethod: string;
@@ -559,7 +571,7 @@ export class LocationVerificationService {
         deliveryMethod,
         location: `${geoData.city}, ${geoData.country}`,
         reasons: attempt.metadata.reasons
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       sessionId: context.sessionId,
@@ -589,6 +601,7 @@ export class LocationVerificationService {
     verificationCode: { code: string; codeId: string },
     challengeType: LocationChallengeType
   ): Promise<void> {
+
     if (challengeType === LocationChallengeType.EMAIL_VERIFICATION) {
       await this.emailService.sendLocationVerification(context.userId, {
         code: verificationCode.code,
@@ -596,7 +609,7 @@ export class LocationVerificationService {
           city: geoData.city,
           country: geoData.country,
           region: geoData.region
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         expiryMinutes: Math.floor(this.config.emailCodeExpiry / (60 * 1000)),
@@ -674,16 +687,19 @@ export class LocationVerificationService {
     expiresAt?: Date;
     remainingHours?: number;
   }> {
+
     // Implementation for checking grace period
     return { active: false };
   }
 
   private async setLocationGracePeriod(userId: string, geoData: GeolocationData): Promise<boolean> {
+
     // Implementation for setting grace period
     return true;
   }
 
   private async verifyTOTPCode(userId: string, code: string): Promise<{ success: boolean; message?: string }> {
+
     // Would integrate with TOTP service
     return { success: false, message: 'TOTP verification not implemented' };
   }
@@ -693,6 +709,7 @@ export class LocationVerificationService {
   }
 
   private async getVerificationAttempt(challengeId: string): Promise<LocationVerificationAttempt | null> {
+
     const result = await this.db.query(`
       SELECT * FROM location_verification_attempts WHERE challenge_id = $1
     `, [challengeId]);
@@ -701,6 +718,7 @@ export class LocationVerificationService {
   }
 
   private async storeVerificationAttempt(attempt: LocationVerificationAttempt): Promise<void> {
+
     await this.db.query(`
       INSERT INTO location_verification_attempts (
         id, user_id, challenge_id, verification_code_id, ip_address, 
@@ -729,6 +747,7 @@ export class LocationVerificationService {
     challengeId: string,
     updates: Partial<LocationVerificationAttempt>
   ): Promise<void> {
+
     const setClause = [];
     const values = [];
     let paramIndex = 1;
@@ -781,6 +800,7 @@ export class LocationVerificationService {
    * Initialize database schema for location verification
    */
   async initializeSchema(): Promise<void> {
+
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS location_verification_attempts (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -798,7 +818,7 @@ export class LocationVerificationService {
         expires_at TIMESTAMP NOT NULL,
         completed_at TIMESTAMP,
         metadata JSONB
-      )
+
     `);
 
     await this.db.query(`

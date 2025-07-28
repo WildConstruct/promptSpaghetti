@@ -54,6 +54,7 @@ export class BranchingService {
    * Create a new branch
    */
   async createBranch(request: CreateBranchRequest, userId: string): Promise<ProjectBranch> {
+
     const validatedRequest = validateCreateBranchRequest(request);
     
     this.logger.info('Creating new branch', {
@@ -136,6 +137,7 @@ export class BranchingService {
    * Update branch settings
    */
   async updateBranch(branchId: string, request: UpdateBranchRequest, userId: string): Promise<ProjectBranch> {
+
     const validatedRequest = validateUpdateBranchRequest(request);
     
     this.logger.info('Updating branch', {
@@ -227,6 +229,7 @@ export class BranchingService {
    * Delete a branch
    */
   async deleteBranch(branchId: string, userId: string): Promise<void> {
+
     this.logger.info('Deleting branch', { branchId, userId });
 
     // Check permissions
@@ -262,6 +265,7 @@ export class BranchingService {
    * Get branch by ID
    */
   async getBranchById(branchId: string): Promise<ProjectBranch> {
+
     const result = await this.db.query(`
       SELECT * FROM project_branches WHERE id = $1
     `, [branchId]);
@@ -277,6 +281,7 @@ export class BranchingService {
    * List branches with filtering
    */
   async listBranches(filter: BranchFilter): Promise<ProjectBranch[]> {
+
     const validatedFilter = validateBranchFilter(filter);
     
     let query = `
@@ -353,6 +358,7 @@ export class BranchingService {
    * Create a commit in a branch
    */
   async createCommit(request: CreateCommitRequest, userId: string): Promise<BranchCommit> {
+
     this.logger.info('Creating commit', {
       branchId: request.branchId,
       snapshotId: request.snapshotId,
@@ -405,6 +411,7 @@ export class BranchingService {
    * Create a merge request
    */
   async createMergeRequest(request: CreateMergeRequestRequest, userId: string): Promise<BranchMergeRequest> {
+
     const validatedRequest = validateCreateMergeRequestRequest(request);
     
     this.logger.info('Creating merge request', {
@@ -462,6 +469,7 @@ export class BranchingService {
    * Merge a branch
    */
   async mergeBranch(request: MergeBranchRequest, userId: string): Promise<BranchMergeRequest> {
+
     const validatedRequest = validateMergeBranchRequest(request);
     
     this.logger.info('Merging branch', {
@@ -532,6 +540,7 @@ export class BranchingService {
    * Get branch statistics
    */
   async getBranchStats(projectId: string): Promise<BranchStatsResponse> {
+
     const stats = await this.db.query(`
       SELECT 
         COUNT(*) as total_branches,
@@ -600,6 +609,7 @@ export class BranchingService {
    * Get branch hierarchy
    */
   async getBranchHierarchy(projectId: string): Promise<BranchHierarchy[]> {
+
     const branches = await this.listBranches({ projectId, limit: 1000 });
     
     const buildHierarchy = (
@@ -624,6 +634,7 @@ export class BranchingService {
    * Compare branches
    */
   async compareBranches(sourceBranchId: string, targetBranchId: string): Promise<BranchComparisonResponse> {
+
     const sourceBranch = await this.getBranchById(sourceBranchId);
     const targetBranch = await this.getBranchById(targetBranchId);
 
@@ -662,6 +673,7 @@ export class BranchingService {
   // Private helper methods
 
   private async checkBranchPermission(branchId: string, userId: string, permission: string): Promise<boolean> {
+
     const result = await this.db.query(`
       SELECT ${permission} FROM branch_permissions 
       WHERE branch_id = $1 AND user_id = $2
@@ -677,6 +689,7 @@ export class BranchingService {
   }
 
   private async branchRequiresReview(branchId: string): Promise<boolean> {
+
     const result = await this.db.query(`
       SELECT requires_review FROM project_branches WHERE id = $1
     `, [branchId]);
@@ -685,6 +698,7 @@ export class BranchingService {
   }
 
   private async detectConflicts(sourceBranchId: string, targetBranchId: string): Promise<BranchConflict[]> {
+
     // Simplified conflict detection - would need more sophisticated logic
     const result = await this.db.query(`
       SELECT * FROM branch_conflicts 
@@ -695,6 +709,7 @@ export class BranchingService {
   }
 
   private async performMerge(mergeRequest: BranchMergeRequest, strategy: string, userId: string): Promise<string> {
+
     // Simplified merge implementation - would need actual merge logic
     const mergeCommitId = await this.createCommit({
       branchId: mergeRequest.targetBranchId,
@@ -710,6 +725,7 @@ export class BranchingService {
     ____sourceBranchId: string,
     ____targetBranchId: string
   ): Promise<BranchCommit | null> {
+
     // Simplified common ancestor finding - would need graph traversal
     return null;
   }
@@ -720,6 +736,7 @@ export class BranchingService {
   }
 
   private async getMergeRequestById(mergeRequestId: string): Promise<BranchMergeRequest> {
+
     const result = await this.db.query(`
       SELECT * FROM branch_merge_requests WHERE id = $1
     `, [mergeRequestId]);

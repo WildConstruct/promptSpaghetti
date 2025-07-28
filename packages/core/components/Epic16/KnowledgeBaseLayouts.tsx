@@ -33,74 +33,69 @@ import {
 import type { Article, ArticleCategory, ArticleAuthor } from './ArticleManagement';
 
 // Additional types for knowledge base layouts
+
 export interface KnowledgeBaseSection {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   icon: React.ComponentType<{ className?: string }>;
-  articles: Article[];
+  articles: Article;,
   color: string;
   featured: boolean;
 }
-
 export interface LearningPath {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: number; // in minutes
-  steps: LearningPathStep[];
-  prerequisites?: string[];
-  completionRate: number; // percentage of users who complete
-  enrolledCount: number;
+  estimatedTime: number; // in minutes,
+  steps: LearningPathStep;
+  prerequisites?: string;
+  completionRate: number; // percentage of users who complete,
+  enrolledCount: number;,
   completedCount: number;
-  tags: string[];
+  tags: string;,
   author: ArticleAuthor;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export interface LearningPathStep {
-  id: string;
+  id: string;,
   title: string;
-  type: 'article' | 'video' | 'quiz' | 'exercise' | 'template';
-  resourceId: string; // ID of the actual resource
-  estimatedTime: number;
+  type: 'article' | 'video' | 'quiz' | 'exercise' | 'template';,
+  resourceId: string; // ID of the actual resource,
+  estimatedTime: number;,
   required: boolean;
   completed?: boolean;
   order: number;
 }
-
 export interface SearchResult {
-  id: string;
+  id: string;,
   title: string;
-  excerpt: string;
+  excerpt: string;,
   type: 'article' | 'learning-path' | 'template' | 'tutorial';
-  url: string;
+  url: string;,
   relevanceScore: number;
-  category: string;
-  tags: string[];
-  matchedTerms: string[];
+  category: string;,
+  tags: string;
+  matchedTerms: string;
 }
-
 export interface KnowledgeBaseStats {
-  totalArticles: number;
+  totalArticles: number;,
   totalViews: number;
-  totalCategories: number;
+  totalCategories: number;,
   totalAuthors: number;
-  recentlyUpdated: Article[];
-  popularArticles: Article[];
-  featuredContent: Article[];
+  recentlyUpdated: Article;,
+  popularArticles: Article;
+  featuredContent: Article;
+  // Props for different layout components
 }
-
-// Props for different layout components
 export interface KnowledgeBaseHeroProps {
-  stats: KnowledgeBaseStats;
-  onSearch: (query: string) => void;
-  onBrowseCategory: (categoryId: string) => void;
-  featuredSections: KnowledgeBaseSection[];
+  stats: KnowledgeBaseStats;,
+  onSearch: (query: string) => void;,
+  onBrowseCategory: (categoryId: string) => void;,
+  featuredSections: KnowledgeBaseSection;
 }
-
 export interface ArticleCardProps {
   article: Article;
   variant?: 'compact' | 'detailed' | 'featured' | 'list';
@@ -114,24 +109,21 @@ export interface ArticleCardProps {
   onShare?: (article: Article) => void;
   className?: string;
 }
-
 export interface CategoryBrowserProps {
-  categories: ArticleCategory[];
+  categories: ArticleCategory;,
   onSelectCategory: (category: ArticleCategory) => void;
   layout?: 'grid' | 'list' | 'tree';
   showArticleCount?: boolean;
 }
-
 export interface LearningPathCardProps {
   learningPath: LearningPath;
   variant?: 'compact' | 'detailed';
   showProgress?: boolean;
-  currentUserProgress?: number; // percentage completed
+  currentUserProgress?: number; // percentage completed,
   onClick?: (path: LearningPath) => void;
   onEnroll?: (path: LearningPath) => void;
+  // Hero Section Component
 }
-
-// Hero Section Component
 export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
   stats,
   onSearch,
@@ -139,13 +131,12 @@ export const KnowledgeBaseHero: React.FC<KnowledgeBaseHeroProps> = ({)
   featuredSections
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      onSearch(searchQuery.trim());
-    }
-  };
-  return ();
+  const handleSearchSubmit = (e: React.FormEvent) => {,
+  e.preventDefault();
+  if (searchQuery.trim()) {
+  onSearch(searchQuery.trim());
+};
+  return;
     <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="max-w-7xl mx-auto px-4 py-16">
         {/* Main Hero Content */}
@@ -242,15 +233,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
     onClick?.(article);
   }, [onClick, article]);
   const getDifficultyColor = (difficulty: Article['difficulty']) => {
-    switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (difficulty) {
+  case 'beginner': return 'bg-green-100 text-green-800';
+  case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+  case 'advanced': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   if (variant === 'compact') {
-    return ();
+    return;
       <div className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer ${className}`}>}
         <div onClick={handleCardClick}>
           <div className="flex items-start justify-between mb-2">
@@ -282,9 +272,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
         </div>
       </div>
     );
-  }
   if (variant === 'list') {
-    return ();
+    return;
       <div className={`bg-white border-b border-gray-200 p-4 hover:bg-gray-50 cursor-pointer ${className}`}>}
         <div onClick={handleCardClick} className="flex items-center justify-between">
           <div className="flex-1">
@@ -331,9 +320,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
         </div>
       </div>
     );
-  }
   if (variant === 'featured') {
-    return ();
+    return;
       <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}>}
         <div className="p-6">
           <div className="flex items-start justify-between mb-4">
@@ -418,9 +406,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({)
         </div>
       </div>
     );
-  }
   // Default detailed variant
-  return ();
+  return;
     <div className={`bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow ${className}`}>}
       <div onClick={handleCardClick} className="cursor-pointer">
         <div className="flex items-start justify-between mb-3">
@@ -519,7 +506,7 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
   showArticleCount = true
 }) => {
   if (layout === 'list') {
-    return ();
+    return;
       <div className="space-y-2">
         {categories.map((category) => ()
           <div
@@ -547,9 +534,8 @@ export const CategoryBrowser: React.FC<CategoryBrowserProps> = ({)
         ))}
       </div>
     );
-  }
   // Grid layout (default)
-  return ();
+  return;
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {categories.map((category) => ()
         <div
@@ -586,18 +572,17 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
   onClick,
   onEnroll
 }) => {
-  const getDifficultyColor = (difficulty: LearningPath['difficulty']) => {
-    switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  const getDifficultyColor = (difficulty: LearningPath['difficulty']) => {,
+  switch (difficulty) {
+  case 'beginner': return 'bg-green-100 text-green-800';
+  case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+  case 'advanced': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const completedSteps = learningPath.steps.filter(step => step.completed).length;
   const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
   if (variant === 'compact') {
-    return ();
+    return;
       <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
         <div onClick={() => onClick?.(learningPath)}>
           <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">{learningPath.title}</h3>
@@ -625,9 +610,8 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
         </div>
       </div>
     );
-  }
   // Detailed variant
-  return ();
+  return;
     <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div onClick={() => onClick?.(learningPath)} className="cursor-pointer">
         <div className="flex items-start justify-between mb-4">
@@ -713,19 +697,19 @@ export const LearningPathCard: React.FC<LearningPathCardProps> = ({)
 };
 
 // Main Knowledge Base Layout Component
+
 export interface KnowledgeBaseLayoutProps {
-  articles: Article[];
-  categories: ArticleCategory[];
-  learningPaths?: LearningPath[];
+  articles: Article;,
+  categories: ArticleCategory;
+  learningPaths?: LearningPath;
   stats: KnowledgeBaseStats;
   layout?: 'grid' | 'list' | 'masonry';
-  onSearch: (query: string) => void;
-  onSelectCategory: (category: ArticleCategory) => void;
+  onSearch: (query: string) => void;,
+  onSelectCategory: (category: ArticleCategory) => void;,
   onSelectArticle: (article: Article) => void;
   onSelectLearningPath?: (path: LearningPath) => void;
   className?: string;
 }
-
 export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
   articles,
   categories,
@@ -740,49 +724,47 @@ export const KnowledgeBaseLayout: React.FC<KnowledgeBaseLayoutProps> = ({)
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>(layout === 'list' ? 'list' : 'grid');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const featuredSections: KnowledgeBaseSection[] = useMemo(() => [
+  const featuredSections: KnowledgeBaseSection = useMemo(() => [
+  {
+  id: 'getting-started',
+  title: 'Getting Started',
+  description: 'Essential guides for new users',
+  icon: PlayIcon,
+  articles: articles.filter(a => a.tags.includes('getting-started')),
+  color: 'blue',
+  featured: true,
+}
     {
-      id: 'getting-started',
-      title: 'Getting Started',
-      description: 'Essential guides for new users',
-      icon: PlayIcon,
-      articles: articles.filter(a => a.tags.includes('getting-started')),
-      color: 'blue',
-      featured: true,
-    },
+  id: 'templates',
+  title: 'Template Creation',
+  description: 'Learn to create effective templates',
+  icon: DocumentIcon,
+  articles: articles.filter(a => a.category.slug === 'templates'),
+  color: 'green',
+  featured: true,
+}
     {
-      id: 'templates',
-      title: 'Template Creation',
-      description: 'Learn to create effective templates',
-      icon: DocumentIcon,
-      articles: articles.filter(a => a.category.slug === 'templates'),
-      color: 'green',
-      featured: true,
-    },
+  id: 'best-practices',
+  title: 'Best Practices',
+  description: 'Proven strategies and techniques',
+  icon: LightBulbIcon,
+  articles: articles.filter(a => a.tags.includes('best-practices')),
+  color: 'purple',
+  featured: true,
+}
     {
-      id: 'best-practices',
-      title: 'Best Practices',
-      description: 'Proven strategies and techniques',
-      icon: LightBulbIcon,
-      articles: articles.filter(a => a.tags.includes('best-practices')),
-      color: 'purple',
-      featured: true,
-    },
-    {
-      id: 'advanced',
-      title: 'Advanced Topics',
-      description: 'Deep dives for experienced users',
-      icon: AcademicCapIcon,
-      articles: articles.filter(a => a.difficulty === 'advanced'),
-      color: 'orange',
-      featured: true,
-    }
-  ], [articles]);
+  id: 'advanced',
+  title: 'Advanced Topics',
+  description: 'Deep dives for experienced users',
+  icon: AcademicCapIcon,
+  articles: articles.filter(a => a.difficulty === 'advanced'),
+  color: 'orange',
+  featured: true], [articles]);
   const filteredArticles = useMemo(() => {
-    if (!selectedCategory) return articles;
-    return articles.filter(article => article.category.id === selectedCategory);
-  }, [articles, selectedCategory]);
-  return ();
+  if (!selectedCategory) return articles;
+  return articles.filter(article => article.category.id === selectedCategory);
+}, [articles, selectedCategory]);
+  return;
     <div className={`min-h-screen bg-gray-50 ${className}`}>}
       {/* Hero Section */}
       <KnowledgeBaseHero

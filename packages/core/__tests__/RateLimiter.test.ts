@@ -24,12 +24,12 @@ describe('RateLimiter', () => {
   let rateLimiter: RateLimiter;
   let mockStore: MemoryRateLimitStore;
   beforeEach(() => {
-    mockStore = new MemoryRateLimitStore();
-    rateLimiter = new RateLimiter({)
-      windowMs: 60000, // 1 minute
-      maxRequests: 10,
-      store: mockStore,
-    });
+  mockStore = new MemoryRateLimitStore();
+  rateLimiter = new RateLimiter({)
+  windowMs: 60000, // 1 minute,
+  maxRequests: 10,
+  store: mockStore,
+});
   });
   afterEach(() => {
     mockStore.destroy();
@@ -41,14 +41,12 @@ describe('RateLimiter', () => {
         const result = await rateLimiter.checkLimit(context);
         expect(result.allowed).toBe(true);
         expect(result.info.remainingRequests).toBe(10 - i - 1);
-      }
     });
     test('should block requests exceeding limit', async () => {
       const context: RateLimitContext = { ip: '192.168.1.1' };
       // Make 10 allowed requests
       for (let i = 0; i < 10; i++) {
         await rateLimiter.checkLimit(context);
-      }
       // 11th request should be blocked
       const result = await rateLimiter.checkLimit(context);
       expect(result.allowed).toBe(false);
@@ -57,12 +55,12 @@ describe('RateLimiter', () => {
       expect(result.error).toContain('Too many requests');
     });
     test('should reset after window expires', async () => {
-      // Use shorter window for testing
-      const shortLimiter = new RateLimiter({)
-        windowMs: 100, // 100ms
-        maxRequests: 2,
-        store: mockStore,
-      });
+  // Use shorter window for testing
+  const shortLimiter = new RateLimiter({)
+  windowMs: 100, // 100ms,
+  maxRequests: 2,
+  store: mockStore,
+});
       const context: RateLimitContext = { ip: '192.168.1.1' };
       // Exhaust limit
       await shortLimiter.checkLimit(context);
@@ -81,7 +79,6 @@ describe('RateLimiter', () => {
       // Exhaust limit for first IP
       for (let i = 0; i < 10; i++) {
         await rateLimiter.checkLimit(context1);
-      }
       const result1 = await rateLimiter.checkLimit(context1);
       expect(result1.allowed).toBe(false);
       // Second IP should still be allowed
@@ -106,12 +103,12 @@ describe('RateLimiter', () => {
       expect(key).toBe('endpoint:POST:/api/login');
     });
     test('should generate composite keys', () => {
-      const context: RateLimitContext = { 
-        ip: '192.168.1.1', 
-        userId: 'user123',
-        method: 'POST',
-        path: '/api/data',
-      };
+  const context: RateLimitContext = {,
+  ip: '192.168.1.1',
+  userId: 'user123',
+  method: 'POST',
+  path: '/api/data',
+};
       const generator = RateLimitKeyGenerator.composite(['ip', 'user', 'endpoint']);
       const key = generator(context);
       expect(key).toBe('192.168.1.1:user123:POST:/api/data');
@@ -123,18 +120,18 @@ describe('RateLimiter', () => {
     });
   });
   describe('Configuration', () => {
-    test('should validate configuration', () => {
-      expect(() => {
-        new RateLimiter({)
-          windowMs: 500, // Too short
-          maxRequests: 10,
-        });
+  test('should validate configuration', () => {
+  expect(() => {
+  new RateLimiter({)
+  windowMs: 500, // Too short,
+  maxRequests: 10,
+});
       }).toThrow('Invalid rate limit configuration');
       expect(() => {
-        new RateLimiter({)
-          windowMs: 60000,
-          maxRequests: 0 // Invalid,
-        });
+  new RateLimiter({)
+  windowMs: 60000,
+  maxRequests: 0 // Invalid,
+});
       }).toThrow('Invalid rate limit configuration');
     });
     test('should use default configuration', () => {
@@ -151,13 +148,13 @@ describe('RateLimiter', () => {
     });
   });
   describe('Headers', () => {
-    test('should include standard rate limit headers', async () => {
-      const limiter = new RateLimiter({)
-        windowMs: 60000,
-        maxRequests: 10,
-        standardHeaders: true,
-        store: mockStore,
-      });
+  test('should include standard rate limit headers', async () => {
+  const limiter = new RateLimiter({)
+  windowMs: 60000,
+  maxRequests: 10,
+  standardHeaders: true,
+  store: mockStore,
+});
       const context: RateLimitContext = { ip: '192.168.1.1' };
       const result = await limiter.checkLimit(context);
       expect(result.headers['RateLimit-Limit']).toBe('10');
@@ -165,12 +162,12 @@ describe('RateLimiter', () => {
       expect(result.headers['RateLimit-Reset']).toBeDefined();
     });
     test('should include legacy headers when enabled', async () => {
-      const limiter = new RateLimiter({)
-        windowMs: 60000,
-        maxRequests: 10,
-        legacyHeaders: true,
-        store: mockStore,
-      });
+  const limiter = new RateLimiter({)
+  windowMs: 60000,
+  maxRequests: 10,
+  legacyHeaders: true,
+  store: mockStore,
+});
       const context: RateLimitContext = { ip: '192.168.1.1' };
       const result = await limiter.checkLimit(context);
       expect(result.headers['X-RateLimit-Limit']).toBe('10');
@@ -182,7 +179,6 @@ describe('RateLimiter', () => {
       // Exhaust limit
       for (let i = 0; i < 10; i++) {
         await rateLimiter.checkLimit(context);
-      }
       const result = await rateLimiter.checkLimit(context);
       expect(result.headers['Retry-After']).toBeDefined();
       expect(parseInt(result.headers['Retry-After'])).toBeGreaterThan(0);
@@ -194,7 +190,6 @@ describe('RateLimiter', () => {
       // Exhaust limit
       for (let i = 0; i < 10; i++) {
         await rateLimiter.checkLimit(context);
-      }
       let result = await rateLimiter.checkLimit(context);
       expect(result.allowed).toBe(false);
       // Reset limit
@@ -229,9 +224,9 @@ describe('RateLimiter', () => {
       expect(config.maxRequests).toBe(1000);
     });
     test('should create from preset', () => {
-      const limiter = RateLimitUtils.fromPreset('passwordReset', {)
-        store: mockStore,
-      });
+  const limiter = RateLimitUtils.fromPreset('passwordReset', {)
+  store: mockStore,
+});
       const config = limiter.getConfig();
       expect(config.windowMs).toBe(60 * 60 * 1000); // 1 hour
       expect(config.maxRequests).toBe(3);
@@ -247,10 +242,10 @@ describe('RateLimiter', () => {
         async cleanup() { throw new Error('Store error'); }
       };
       const limiter = new RateLimiter({)
-        windowMs: 60000,
-        maxRequests: 10,
-        store: failingStore as any,
-      });
+  windowMs: 60000,
+  maxRequests: 10,
+  store: failingStore as any,
+});
       const context: RateLimitContext = { ip: '192.168.1.1' };
       const result = await limiter.checkLimit(context);
       // Should fail open (allow request)
@@ -262,8 +257,8 @@ describe('RateLimiter', () => {
 describe('MemoryRateLimitStore', () => {
   let store: MemoryRateLimitStore;
   beforeEach(() => {
-    store = new MemoryRateLimitStore(100); // 100ms cleanup interval
-  });
+  store = new MemoryRateLimitStore(100); // 100ms cleanup interval
+});
   afterEach(() => {
     store.destroy();
   });
@@ -325,12 +320,12 @@ describe('RedisRateLimitStore', () => {
   let mockRedis: MockRedisClient;
   let store: RedisRateLimitStore;
   beforeEach(() => {
-    mockRedis = new MockRedisClient();
-    store = new RedisRateLimitStore({)
-      client: mockRedis,
-      keyPrefix: 'test:',
-      fallbackToMemory: true,
-    });
+  mockRedis = new MockRedisClient();
+  store = new RedisRateLimitStore({)
+  client: mockRedis,
+  keyPrefix: 'test:',
+  fallbackToMemory: true,
+});
   });
   afterEach(async () => {
     await store.close();
@@ -341,8 +336,8 @@ describe('RedisRateLimitStore', () => {
       await store.set('test-key', data, 60000);
       const retrieved = await store.get('test-key');
       expect(retrieved).toEqual(expect.objectContaining({)
-        hits: data.hits,
-      }));
+  hits: data.hits,
+}));
     });
     test('should increment with Redis', async () => {
       const result1 = await store.increment('counter', 60000);
@@ -380,10 +375,10 @@ describe('RateLimitConfigurationManager', () => {
   let configManager: RateLimitConfigurationManager;
   let context: ConfigurationContext;
   beforeEach(() => {
-    context = {
-      environment: 'development',
-      region: 'us-east-1',
-    };
+  context = {
+  environment: 'development',
+  region: 'us-east-1',
+};
     configManager = new RateLimitConfigurationManager(context);
   });
   describe('Profile Management', () => {
@@ -435,11 +430,10 @@ describe('RateLimitConfigurationManager', () => {
       // Rules should be sorted by priority (highest first)
       for (let i = 1; i < matchingRules.length; i++) {
         expect(matchingRules[i-1].priority).toBeGreaterThanOrEqual(matchingRules[i].priority);
-      }
     });
     test('should create rate limit config from rule', () => {
-      const rule: DynamicRateLimitRule = {
-        id: 'test-rule',
+      const rule: DynamicRateLimitRule = {,
+  id: 'test-rule',
         name: 'Test Rule',
         description: 'Test rule',
         enabled: true,
@@ -461,8 +455,8 @@ describe('RateLimitConfigurationManager', () => {
       configManager.setActiveProfile('development');
     });
     test('should add rule to active profile', () => {
-      const newRule: DynamicRateLimitRule = {
-        id: 'new-rule',
+      const newRule: DynamicRateLimitRule = {,
+  id: 'new-rule',
         name: 'New Rule',
         description: 'New test rule',
         enabled: true,
@@ -482,17 +476,16 @@ describe('RateLimitConfigurationManager', () => {
       expect(addedRule).toBeDefined();
     });
     test('should update existing rule', () => {
-      const activeProfile = configManager.getActiveProfile();
-      const originalRule = activeProfile?.rules[0];
-      if (originalRule) {
-        const success = configManager.updateRule(originalRule.id, {)
-          maxRequests: 20,
-        });
+  const activeProfile = configManager.getActiveProfile();
+  const originalRule = activeProfile?.rules[0];
+  if (originalRule) {
+  const success = configManager.updateRule(originalRule.id, {)
+  maxRequests: 20,
+});
         expect(success).toBe(true);
         const updatedProfile = configManager.getActiveProfile();
         const updatedRule = updatedProfile?.rules.find(r => r.id === originalRule.id);
         expect(updatedRule?.maxRequests).toBe(20);
-      }
     });
     test('should remove rule', () => {
       const activeProfile = configManager.getActiveProfile();
@@ -503,7 +496,6 @@ describe('RateLimitConfigurationManager', () => {
         const updatedProfile = configManager.getActiveProfile();
         const removedRule = updatedProfile?.rules.find(r => r.id === ruleToRemove.id);
         expect(removedRule).toBeUndefined();
-      }
     });
   });
   describe('Import/Export', () => {
@@ -515,12 +507,12 @@ describe('RateLimitConfigurationManager', () => {
       expect(parsed.profiles).toBeDefined();
     });
     test('should import configuration', () => {
-      const customProfile = RateLimitConfigurationPresets.createAPIProfile();
-      const config = {
-        context,
-        activeProfile: 'api-service',
-        profiles: [customProfile],
-      };
+  const customProfile = RateLimitConfigurationPresets.createAPIProfile();
+  const config = {
+  context,
+  activeProfile: 'api-service',
+  profiles: [customProfile],
+};
       configManager.importConfiguration(JSON.stringify(config));
       const imported = configManager.getProfile('api-service');
       expect(imported).toBeDefined();
@@ -530,86 +522,86 @@ describe('RateLimitConfigurationManager', () => {
 });
 describe('ConditionEvaluator', () => {
   describe('IP Conditions', () => {
-    test('should evaluate IP equality', () => {
-      const condition = {
-        type: 'ip' as const,
-        operator: 'equals' as const,
-        value: '192.168.1.1',
-      };
+  test('should evaluate IP equality', () => {
+  const condition = {
+  type: 'ip' as const,
+  operator: 'equals' as const,
+  value: '192.168.1.1',
+};
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.1' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.2' })).toBe(false);
     });
     test('should evaluate IP contains', () => {
-      const condition = {
-        type: 'ip' as const,
-        operator: 'contains' as const,
-        value: '192.168',
-      };
+  const condition = {
+  type: 'ip' as const,
+  operator: 'contains' as const,
+  value: '192.168',
+};
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.1' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { ip: '10.0.0.1' })).toBe(false);
     });
     test('should evaluate IP in list', () => {
-      const condition = {
-        type: 'ip' as const,
-        operator: 'in' as const,
-        values: ['192.168.1.1', '192.168.1.2', '10.0.0.1']
-      };
+  const condition = {
+  type: 'ip' as const,
+  operator: 'in' as const,
+  values: ['192.168.1.1', '192.168.1.2', '10.0.0.1'],
+};
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.1' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { ip: '172.16.0.1' })).toBe(false);
     });
   });
   describe('Endpoint Conditions', () => {
-    test('should evaluate endpoint patterns', () => {
-      const condition = {
-        type: 'endpoint' as const,
-        operator: 'startsWith' as const,
-        value: '/api',
-      };
+  test('should evaluate endpoint patterns', () => {
+  const condition = {
+  type: 'endpoint' as const,
+  operator: 'startsWith' as const,
+  value: '/api',
+};
       expect(ConditionEvaluator.evaluate(condition, { path: '/api/users' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { path: '/public/home' })).toBe(false);
     });
     test('should evaluate endpoint regex', () => {
-      const condition = {
-        type: 'endpoint' as const,
-        operator: 'regex' as const,
-        value: '/(login|register)',
-      };
+  const condition = {
+  type: 'endpoint' as const,
+  operator: 'regex' as const,
+  value: '/(login|register)',
+};
       expect(ConditionEvaluator.evaluate(condition, { path: '/auth/login' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { path: '/auth/register' })).toBe(true);
       expect(ConditionEvaluator.evaluate(condition, { path: '/auth/logout' })).toBe(false);
     });
   });
   describe('Header Conditions', () => {
-    test('should evaluate header values', () => {
-      const condition = {
-        type: 'header' as const,
-        operator: 'equals' as const,
-        field: 'authorization',
-        value: 'Bearer token123',
-      };
+  test('should evaluate header values', () => {
+  const condition = {
+  type: 'header' as const,
+  operator: 'equals' as const,
+  field: 'authorization',
+  value: 'Bearer token123',
+};
       const context = {
         headers: { authorization: 'Bearer token123' }
       };
       expect(ConditionEvaluator.evaluate(condition, context)).toBe(true);
     });
     test('should handle missing headers', () => {
-      const condition = {
-        type: 'header' as const,
-        operator: 'exists' as const,
-        field: 'x-api-key',
-      };
+  const condition = {
+  type: 'header' as const,
+  operator: 'exists' as const,
+  field: 'x-api-key',
+};
       expect(ConditionEvaluator.evaluate(condition, { headers: {} })).toBe(false);
       expect(ConditionEvaluator.evaluate(condition, { headers: { 'x-api-key': 'test' } })).toBe(true);
     });
   });
   describe('Negation', () => {
-    test('should handle negated conditions', () => {
-      const condition = {
-        type: 'ip' as const,
-        operator: 'equals' as const,
-        value: '192.168.1.1',
-        negate: true,
-      };
+  test('should handle negated conditions', () => {
+  const condition = {
+  type: 'ip' as const,
+  operator: 'equals' as const,
+  value: '192.168.1.1',
+  negate: true,
+};
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.1' })).toBe(false);
       expect(ConditionEvaluator.evaluate(condition, { ip: '192.168.1.2' })).toBe(true);
     });
@@ -617,23 +609,23 @@ describe('ConditionEvaluator', () => {
 });
 describe('Integration Tests', () => {
   test('should work with configuration manager and rate limiter', async () => {
-    const context: ConfigurationContext = {
-      environment: 'production',
-    };
+  const context: ConfigurationContext = {,
+  environment: 'production',
+};
     const configManager = new RateLimitConfigurationManager(context);
     configManager.setActiveProfile('production');
     const requestContext = {
-      ip: '192.168.1.1',
-      method: 'POST',
-      path: '/api/auth/login',
-    };
+  ip: '192.168.1.1',
+  method: 'POST',
+  path: '/api/auth/login',
+};
     const matchingRules = configManager.findMatchingRules(requestContext);
     expect(matchingRules.length).toBeGreaterThan(0);
     const rule = matchingRules[0];
     const rateLimitConfig = configManager.createRateLimitConfig(rule);
     const store = new MemoryRateLimitStore();
     const rateLimiter = new RateLimiter({)
-      ...rateLimitConfig,
+  ...rateLimitConfig,
       store
     });
     // Test rate limiting with the configured rule
@@ -645,23 +637,23 @@ describe('Integration Tests', () => {
 });
 describe('Utility Functions', () => {
   test('should extract IP from headers', () => {
-    const headers = {
-      'x-forwarded-for': '192.168.1.1, 10.0.0.1',
-      'x-real-ip': '172.16.0.1'
-    };
+  const headers = {
+  'x-forwarded-for': '192.168.1.1, 10.0.0.1',
+  'x-real-ip': '172.16.0.1',
+};
     const ip = RateLimitUtils.extractIP(headers);
     expect(ip).toBe('192.168.1.1'); // First IP from x-forwarded-for
   });
   test('should format rate limit info for logging', () => {
-    const info = {
-      totalHits: 5,
-      totalHitsInWindow: 5,
-      remainingRequests: 5,
-      resetTime: new Date(),
-      windowStart: new Date(),
-      windowEnd: new Date(),
-      exceeded: false,
-    };
+  const info = {
+  totalHits: 5,
+  totalHitsInWindow: 5,
+  remainingRequests: 5,
+  resetTime: new Date(),
+  windowStart: new Date(),
+  windowEnd: new Date(),
+  exceeded: false,
+};
     const logString = RateLimitUtils.formatInfoForLogging(info, 'ip:192.168.1.1');
     expect(logString).toContain('Rate limit OK');
     expect(logString).toContain('hits=5');

@@ -10,12 +10,11 @@ import { projectManager } from '../../../projectManager';
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
   projectManager: {,
-    getRecentFiles: jest.fn(),
-    getFavoriteFiles: jest.fn(),
-    toggleFavorite: jest.fn(),
-    addToRecentFiles: jest.fn(),
-    isFavorite: jest.fn(),
-  }
+  getRecentFiles: jest.fn(),
+  getFavoriteFiles: jest.fn(),
+  toggleFavorite: jest.fn(),
+  addToRecentFiles: jest.fn(),
+  isFavorite: jest.fn(),
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 
@@ -29,41 +28,39 @@ const localStorageMock = {
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 describe('RecentFiles Component', () => {
   const mockFiles = [;
+  {
+  id: 'file1',
+  name: 'project1.psg',
+  path: '/projects/project1.psg',
+  size: 2048,
+  lastModified: new Date('2025-01-15T10:00:00Z'),
+  nodeCount: 10,
+  metadata: {,
+  title: 'Project 1',
+  description: 'First project',
+  tags: ['test'],
+  author: 'User',
+  version: '1.0.0',
+  created: new Date('2025-01-10T10:00:00Z'),
+},
+  isFavorite: true;
+  }
     {
-      id: 'file1',
-      name: 'project1.psg',
-      path: '/projects/project1.psg',
-      size: 2048,
-      lastModified: new Date('2025-01-15T10:00:00Z'),
-      nodeCount: 10,
-      metadata: {,
-        title: 'Project 1',
-        description: 'First project',
-        tags: ['test'],
-        author: 'User',
-        version: '1.0.0',
-        created: new Date('2025-01-10T10:00:00Z'),
-      },
-      isFavorite: true,
-    },
-    {
-      id: 'file2',
-      name: 'project2.psg',
-      path: '/projects/project2.psg',
-      size: 4096,
-      lastModified: new Date('2025-01-14T15:30:00Z'),
-      nodeCount: 20,
-      metadata: {,
-        title: 'Project 2',
-        description: 'Second project',
-        tags: ['example'],
-        author: 'User',
-        version: '2.0.0',
-        created: new Date('2025-01-12T12:00:00Z'),
-      },
-      isFavorite: false,
-    }
-  ];
+  id: 'file2',
+  name: 'project2.psg',
+  path: '/projects/project2.psg',
+  size: 4096,
+  lastModified: new Date('2025-01-14T15:30:00Z'),
+  nodeCount: 20,
+  metadata: {,
+  title: 'Project 2',
+  description: 'Second project',
+  tags: ['example'],
+  author: 'User',
+  version: '2.0.0',
+  created: new Date('2025-01-12T12:00:00Z'),
+},
+  isFavorite: false];
   beforeEach(() => {
     jest.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
@@ -106,7 +103,6 @@ describe('RecentFiles Component', () => {
       if (favoriteButton) {
         fireEvent.click(favoriteButton);
         expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file1');
-      }
     });
     it('adds favorite when non-favorite file is starred', () => {
       mockProjectManager.toggleFavorite.mockReturnValue(true);
@@ -119,7 +115,6 @@ describe('RecentFiles Component', () => {
       if (starButtons.length > 1) {
         fireEvent.click(starButtons[1]);
         expect(mockProjectManager.toggleFavorite).toHaveBeenCalledWith('file2');
-      }
     });
   });
   describe('View Toggle Functionality', () => {
@@ -152,7 +147,6 @@ describe('RecentFiles Component', () => {
       if (fileItem) {
         fireEvent.click(fileItem);
         expect(handleClick).toHaveBeenCalledWith(mockFiles[0]);
-      }
     });
     it('does not call onClick when star button is clicked', () => {
       const handleClick = jest.fn();
@@ -163,7 +157,6 @@ describe('RecentFiles Component', () => {
       if (starButton) {
         fireEvent.click(starButton);
         expect(handleClick).not.toHaveBeenCalled();
-      }
     });
   });
   describe('Empty States', () => {
@@ -233,9 +226,8 @@ describe('RecentFiles Component', () => {
       const fileItem = screen.getByText('project1.psg').closest('div');
       if (fileItem) {
         fireEvent.keyDown(fileItem, { key: 'Enter' });
-        // Note: Would need to add keyboard support to component
-      }
-    });
+        // Note: Would need to add keyboard support to component;
+  });
   });
   describe('Performance', () => {
     it('memoizes file list to prevent unnecessary re-renders', () => {
@@ -275,7 +267,6 @@ describe('RecentFiles Component', () => {
         expect(() => {
           fireEvent.click(starButton);
         }).not.toThrow();
-      }
     });
   });
   describe('State Management', () => {
@@ -301,7 +292,6 @@ describe('RecentFiles Component', () => {
         waitFor(() => {
           expect(screen.queryByText('⭐')).not.toBeInTheDocument();
         });
-      }
     });
   });
 });

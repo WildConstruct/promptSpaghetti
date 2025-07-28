@@ -14,17 +14,17 @@ export interface ModerationWorkflow {
     description: string;
     version: string;
     trigger: WorkflowTrigger;
-    conditions: WorkflowCondition[];
-    steps: WorkflowStep[];
+    conditions: WorkflowCondition;
+    steps: WorkflowStep;
     routing: WorkflowRouting;
     processing: ProcessingConfig;
     escalation: EscalationConfig;
     automation: AutomationConfig;
     validation: ValidationConfig;
     monitoring: MonitoringConfig;
-    tags: string[];
+    tags: string;
     category: ModerationCategory;
-    applicableContentTypes: ContentType[];
+    applicableContentTypes: ContentType;
     isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -42,10 +42,10 @@ export interface WorkflowExecution {
     completedAt?: Date;
     pausedAt?: Date;
     cancelledAt?: Date;
-    stepExecutions: StepExecution[];
-    results: ExecutionResult[];
+    stepExecutions: StepExecution;
+    results: ExecutionResult;
     metrics: ExecutionMetrics;
-    errors: ExecutionError[];
+    errors: ExecutionError;
     retryCount: number;
     context: WorkflowContext;
     variables: WorkflowVariables;
@@ -56,16 +56,16 @@ export interface WorkflowStep {
     type: StepType;
     description: string;
     config: StepConfig;
-    conditions: StepCondition[];
-    actions: StepAction[];
-    nextSteps: NextStep[];
+    conditions: StepCondition;
+    actions: StepAction;
+    nextSteps: NextStep;
     onSuccess?: string;
     onFailure?: string;
     onTimeout?: string;
     timeout?: number;
     delay?: number;
-    assignmentRules: AssignmentRule[];
-    requiredRoles: string[];
+    assignmentRules: AssignmentRule;
+    requiredRoles: string;
     validation: StepValidation;
     canRunInParallel: boolean;
     parallelGroup?: string;
@@ -78,7 +78,7 @@ export interface StepExecution {
     startedAt: Date;
     completedAt?: Date;
     assignedTo?: string;
-    reviewers: string[];
+    reviewers: string;
     result?: StepResult;
     output?: Record<string, any>;
     duration: number;
@@ -87,8 +87,8 @@ export interface StepExecution {
 }
 export interface WorkflowTrigger {
     type: 'content_reported' | 'auto_detection' | 'manual_review' | 'scheduled' | 'api_trigger' | 'state_change';
-    conditions: TriggerCondition[];
-    filters: TriggerFilter[];
+    conditions: TriggerCondition;
+    filters: TriggerFilter;
     priority: number;
     enabled: boolean;
 }
@@ -101,7 +101,7 @@ export interface WorkflowCondition {
 }
 export interface WorkflowRouting {
     strategy: 'sequential' | 'parallel' | 'conditional' | 'priority_based' | 'load_balanced';
-    rules: RoutingRule[];
+    rules: RoutingRule;
     loadBalancing?: LoadBalancingConfig;
     failover: FailoverConfig;
 }
@@ -113,10 +113,10 @@ export interface ProcessingConfig {
 }
 export interface EscalationConfig {
     enabled: boolean;
-    triggers: EscalationTrigger[];
-    levels: EscalationLevel[];
-    timeouts: EscalationTimeout[];
-    notifications: NotificationConfig[];
+    triggers: EscalationTrigger;
+    levels: EscalationLevel;
+    timeouts: EscalationTimeout;
+    notifications: NotificationConfig;
 }
 export interface AutomationConfig {
     aiAssistance: AIAssistanceConfig;
@@ -125,10 +125,10 @@ export interface AutomationConfig {
     predictiveAnalytics: PredictiveConfig;
 }
 export interface ValidationConfig {
-    inputValidation: ValidationRule[];
-    outputValidation: ValidationRule[];
-    businessRules: BusinessRule[];
-    complianceChecks: ComplianceRule[];
+    inputValidation: ValidationRule;
+    outputValidation: ValidationRule;
+    businessRules: BusinessRule;
+    complianceChecks: ComplianceRule;
 }
 export interface MonitoringConfig {
     metricsCollection: MetricsConfig;
@@ -142,7 +142,7 @@ export type StepExecutionStatus = 'waiting' | 'assigned' | 'in_progress' | 'comp
 export interface StepConfig {
     parameters: Record<string, any>;
     templates: Record<string, string>;
-    integrations: IntegrationConfig[];
+    integrations: IntegrationConfig;
     ui: UIConfig;
 }
 export interface StepCondition {
@@ -163,7 +163,7 @@ export interface NextStep {
 }
 export interface AssignmentRule {
     type: 'round_robin' | 'load_based' | 'skill_based' | 'availability' | 'priority' | 'random';
-    criteria: AssignmentCriteria[];
+    criteria: AssignmentCriteria;
     fallback?: AssignmentRule;
 }
 export interface AssignmentCriteria {
@@ -173,9 +173,9 @@ export interface AssignmentCriteria {
     mandatory: boolean;
 }
 export interface StepValidation {
-    required: string[];
-    rules: ValidationRule[];
-    customValidators: CustomValidator[];
+    required: string;
+    rules: ValidationRule;
+    customValidators: CustomValidator;
 }
 export interface RetryPolicy {
     enabled: boolean;
@@ -183,13 +183,13 @@ export interface RetryPolicy {
     backoffStrategy: 'fixed' | 'linear' | 'exponential';
     baseDelay: number;
     maxDelay: number;
-    retryableErrors: string[];
+    retryableErrors: string;
 }
 export interface StepResult {
     status: 'success' | 'failure' | 'partial';
     data: Record<string, any>;
-    errors: string[];
-    warnings: string[];
+    errors: string;
+    warnings: string;
     metadata: Record<string, any>;
 }
 export interface TriggerCondition {
@@ -225,7 +225,7 @@ export interface BatchProcessingConfig {
     enabled: boolean;
     batchSize: number;
     timeout: number;
-    aggregationRules: AggregationRule[];
+    aggregationRules: AggregationRule;
 }
 export interface ResourceLimits {
     maxMemory: number;
@@ -241,9 +241,9 @@ export interface EscalationTrigger {
 export interface EscalationLevel {
     level: number;
     name: string;
-    assignees: string[];
+    assignees: string;
     timeout: number;
-    actions: EscalationAction[];
+    actions: EscalationAction;
 }
 export interface EscalationTimeout {
     level: number;
@@ -253,18 +253,18 @@ export interface EscalationTimeout {
 export interface NotificationConfig {
     type: 'email' | 'sms' | 'push' | 'webhook' | 'internal';
     template: string;
-    recipients: string[];
-    conditions: string[];
+    recipients: string;
+    conditions: string;
 }
 export interface AIAssistanceConfig {
     enabled: boolean;
-    models: AIModelConfig[];
+    models: AIModelConfig;
     confidenceThreshold: number;
     fallbackToHuman: boolean;
 }
 export interface AutoApprovalConfig {
     enabled: boolean;
-    rules: AutoApprovalRule[];
+    rules: AutoApprovalRule;
     safetyLimits: SafetyLimits;
     auditTrail: boolean;
 }
@@ -276,8 +276,8 @@ export interface SmartRoutingConfig {
 }
 export interface PredictiveConfig {
     enabled: boolean;
-    features: string[];
-    models: PredictiveModel[];
+    features: string;
+    models: PredictiveModel;
     confidenceThreshold: number;
 }
 export interface ValidationRule {
@@ -300,27 +300,27 @@ export interface ComplianceRule {
 }
 export interface MetricsConfig {
     enabled: boolean;
-    metrics: string[];
+    metrics: string;
     aggregation: AggregationConfig;
     retention: RetentionConfig;
 }
 export interface AlertConfig {
     enabled: boolean;
-    rules: AlertRule[];
-    channels: AlertChannel[];
-    escalation: AlertEscalation[];
+    rules: AlertRule;
+    channels: AlertChannel;
+    escalation: AlertEscalation;
 }
 export interface LoggingConfig {
     level: 'debug' | 'info' | 'warn' | 'error';
     format: 'json' | 'text';
-    destinations: LogDestination[];
+    destinations: LogDestination;
     retention: number;
 }
 export interface ReportingConfig {
     enabled: boolean;
-    schedules: ReportSchedule[];
-    templates: ReportTemplate[];
-    distribution: DistributionConfig[];
+    schedules: ReportSchedule;
+    templates: ReportTemplate;
+    distribution: DistributionConfig;
 }
 export interface ExecutionResult {
     stepId: string;
@@ -364,9 +364,9 @@ export interface IntegrationConfig {
 }
 export interface UIConfig {
     layout: string;
-    fields: UIField[];
-    actions: UIAction[];
-    validation: UIValidation[];
+    fields: UIField;
+    actions: UIAction;
+    validation: UIValidation;
 }
 export interface CustomValidator {
     name: string;
@@ -384,7 +384,7 @@ export interface HealthCheckConfig {
 export interface AggregationRule {
     field: string;
     operation: 'sum' | 'avg' | 'min' | 'max' | 'count';
-    groupBy: string[];
+    groupBy: string;
 }
 export interface EscalationAction {
     type: 'notify' | 'reassign' | 'escalate' | 'auto_resolve';
@@ -394,27 +394,27 @@ export interface AIModelConfig {
     name: string;
     version: string;
     endpoint: string;
-    capabilities: string[];
+    capabilities: string;
 }
 export interface AutoApprovalRule {
     condition: string;
     confidence: number;
-    limitations: string[];
+    limitations: string;
 }
 export interface SafetyLimits {
     maxAutoApprovals: number;
     timeWindow: number;
-    categories: string[];
+    categories: string;
 }
 export interface PredictiveModel {
     name: string;
     type: string;
     accuracy: number;
-    features: string[];
+    features: string;
 }
 export interface AggregationConfig {
-    intervals: string[];
-    functions: string[];
+    intervals: string;
+    functions: string;
 }
 export interface RetentionConfig {
     shortTerm: number;
@@ -433,8 +433,8 @@ export interface AlertChannel {
 }
 export interface AlertEscalation {
     delay: number;
-    channels: string[];
-    recipients: string[];
+    channels: string;
+    recipients: string;
 }
 export interface LogDestination {
     type: 'file' | 'database' | 'external';
@@ -449,12 +449,12 @@ export interface ReportSchedule {
 export interface ReportTemplate {
     name: string;
     format: 'pdf' | 'excel' | 'json' | 'csv';
-    sections: ReportSection[];
+    sections: ReportSection;
 }
 export interface DistributionConfig {
-    recipients: string[];
-    channels: string[];
-    conditions: string[];
+    recipients: string;
+    channels: string;
+    conditions: string;
 }
 export interface ResourceUsage {
     memory: number;
@@ -471,7 +471,7 @@ export interface UIField {
     type: string;
     label: string;
     required: boolean;
-    validation: string[];
+    validation: string;
 }
 export interface UIAction {
     name: string;
@@ -481,7 +481,7 @@ export interface UIAction {
 }
 export interface UIValidation {
     field: string;
-    rules: string[];
+    rules: string;
     message: string;
 }
 export interface ReportSection {
@@ -508,7 +508,7 @@ export interface WorkflowStats {
         processingCapacity: number;
         queueDepth: number;
         resourceUtilization: number;
-        bottlenecks: string[];
+        bottlenecks: string;
     };
     quality: {
         slaCompliance: number;
@@ -518,24 +518,18 @@ export interface WorkflowStats {
     };
 }
 export interface WorkflowFilter {
-    categories?: ModerationCategory[];
-    contentTypes?: ContentType[];
-    status?: ExecutionStatus[];
-    assignees?: string[];
+    categories?: ModerationCategory;
+    contentTypes?: ContentType;
+    status?: ExecutionStatus;
+    assignees?: string;
     dateRange?: {
         start?: Date;
         end?: Date;
     };
-    tags?: string[];
-    workflowIds?: string[];
-    priorities?: ModerationPriority[];
+    tags?: string;
+    workflowIds?: string;
+    priorities?: ModerationPriority;
 }
-/**
- * Moderation Workflow Service
- *
- * Orchestrates complex moderation workflows with intelligent routing,
- * parallel processing, and comprehensive monitoring.
- */
 export declare class ModerationWorkflowService {
     private static instance;
     private workflows;
@@ -545,67 +539,5 @@ export declare class ModerationWorkflowService {
     private processor;
     private constructor();
     static getInstance(): ModerationWorkflowService;
-    /**
-     * Workflow Management
-     */
-    createWorkflow(workflowData: Omit<ModerationWorkflow, 'id' | 'createdAt' | 'updatedAt'>, createdBy: string): Promise<ModerationWorkflow>;
-    updateWorkflow(workflowId: string, updates: Partial<ModerationWorkflow>, updatedBy: string): Promise<ModerationWorkflow | null>;
-    deleteWorkflow(workflowId: string, deletedBy: string): Promise<boolean>;
-    /**
-     * Workflow Execution
-     */
-    executeWorkflow(workflowId: string, itemId: string, triggeredBy: string, context?: Record<string, any>): Promise<WorkflowExecution>;
-    pauseExecution(executionId: string, pausedBy: string): Promise<boolean>;
-    resumeExecution(executionId: string, resumedBy: string): Promise<boolean>;
-    cancelExecution(executionId: string, cancelledBy: string): Promise<boolean>;
-    /**
-     * Step Execution
-     */
-    executeStep(executionId: string, stepIndex: number): Promise<StepExecution>;
-    /**
-     * Data Retrieval
-     */
-    getWorkflows(filter?: {
-        category?: ModerationCategory;
-        active?: boolean;
-    }): ModerationWorkflow[];
-    getExecutions(filter?: WorkflowFilter): WorkflowExecution[];
-    getWorkflowStats(): WorkflowStats;
-    /**
-     * Event Handling
-     */
-    subscribe(listenerId: string, callback: (event: WorkflowEvent) => void): void;
-    unsubscribe(listenerId: string): void;
-    private initializeDefaultWorkflows;
-    private startWorkflowProcessor;
-    private processWorkflowQueue;
-    private processExecution;
-    private validateWorkflowConditions;
-    private evaluateCondition;
-    private executeAutomationStep;
-    private executeReviewStep;
-    private executeValidationStep;
-    private executeApprovalStep;
-    private executeNotificationStep;
-    private executeCustomStep;
-    private determineNextStep;
-    private notifyListeners;
-    private generateWorkflowId;
-    private generateExecutionId;
-    private generateStepExecutionId;
-    private sleep;
 }
-export interface WorkflowEvent {
-    type: string;
-    data: any;
-    timestamp: Date;
-}
-export declare const moderationWorkflowService: ModerationWorkflowService;
-export declare const createWorkflow: (workflowData: Omit<ModerationWorkflow, "id" | "createdAt" | "updatedAt">, createdBy: string) => Promise<ModerationWorkflow>;
-export declare const executeWorkflow: (workflowId: string, itemId: string, triggeredBy: string) => Promise<WorkflowExecution>;
-export declare const getWorkflows: (filter?: {
-    category?: ModerationCategory;
-    active?: boolean;
-}) => ModerationWorkflow[];
-export declare const getWorkflowStats: () => WorkflowStats;
 //# sourceMappingURL=ModerationWorkflowService.d.ts.map

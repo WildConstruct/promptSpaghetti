@@ -6,12 +6,12 @@
  */
 import { FrameworkNode, NodeDefinition } from '../NodeFramework';
 import { AdvancedNodeConfig, AdvancedExecutionContext } from '../../runtime/advanced';
+
 export interface WeightedChoiceData {
     choices: string[];
     weights: number[];
     normalizeWeights?: boolean;
     seedOverride?: string;
-}
 /**
  * Framework-integrated WeightedChoice node
  */
@@ -63,6 +63,6 @@ export declare class WeightedChoiceFrameworkNode extends FrameworkNode {
     private createSeededRandom;
     private updatePerformanceMetrics;
     private estimateMemoryUsage;
-}
+
 export default WeightedChoiceFrameworkNode;
 //# sourceMappingURL=WeightedChoiceFrameworkNode.d.ts.map

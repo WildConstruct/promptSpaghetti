@@ -25,7 +25,7 @@ describe('64 Character Limit Enforcement', () => {
   it('should handle various over-limit lengths', () => {
     const testLengths = [65, 100, 500, 1000];
     testLengths.forEach(length => {)
-      const longName = 'x'.repeat(length);
+  const longName = 'x'.repeat(length);
       expect(SecurityValidation.validateVariableName(longName)).toBe(false);
       expect(SecurityValidation.validateSafePropertyKey(longName)).toBe(false);
     });
@@ -33,7 +33,7 @@ describe('64 Character Limit Enforcement', () => {
   it('should accept variable names under 64 characters', () => {
     const validLengths = [1, 10, 32, 63];
     validLengths.forEach(length => {)
-      const validName = 'a'.repeat(length);
+  const validName = 'a'.repeat(length);
       expect(SecurityValidation.validateVariableName(validName)).toBe(true);
       expect(SecurityValidation.validateSafePropertyKey(validName)).toBe(true);
     });

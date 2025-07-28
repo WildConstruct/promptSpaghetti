@@ -6,7 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { DataClassificationLevel, HandlingRequirements, OperationContext, ValidationResult } from '../types/DataClassification';
+import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
 export interface HandlingRule {
     id: string;
     name: string;
@@ -18,7 +18,7 @@ export interface HandlingRule {
     priority: number;
     effectiveDate: Date;
     expirationDate?: Date;
-    complianceFramework: string[];
+    complianceFramework: string;
 }
 export interface HandlingRuleViolation {
     id: string;
@@ -31,7 +31,7 @@ export interface HandlingRuleViolation {
     detectedAt: Date;
     context: OperationContext;
     evidence: Record<string, any>;
-    remediation: string[];
+    remediation: string;
     status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
 }
 export interface ComplianceCheck {
@@ -50,85 +50,8 @@ export declare class ClassificationHandlingRulesService {
     private complianceChecks;
     constructor();
     /**
-     * Initialize default handling requirements for each classification level
-     */
+    * Initialize default handling requirements for each classification level
+    */
     private initializeDefaultHandlingRequirements;
-    /**
-     * Initialize default handling rules
-     */
-    private initializeDefaultHandlingRules;
-    /**
-     * Get handling requirements for a classification level
-     */
-    getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements | undefined;
-    /**
-     * Validate data handling against requirements
-     */
-    validateDataHandling(dataId: string, classification: DataClassificationLevel, operation: string, context: OperationContext): Promise<ValidationResult>;
-    /**
-     * Validate storage requirements
-     */
-    private validateStorageRequirements;
-    /**
-     * Validate transmission requirements
-     */
-    private validateTransmissionRequirements;
-    /**
-     * Validate processing requirements
-     */
-    private validateProcessingRequirements;
-    /**
-     * Validate monitoring requirements
-     */
-    private validateMonitoringRequirements;
-    /**
-     * Record handling rule violations
-     */
-    private recordViolations;
-    /**
-     * Get severity level based on classification
-     */
-    private getSeverityForClassification;
-    /**
-     * Get remediation steps for error
-     */
-    private getRemediationSteps;
-    private checkEncryptionCompliance;
-    private checkLocationCompliance;
-    private checkBackupEncryptionCompliance;
-    private checkTLSCompliance;
-    private checkCertificatePinningCompliance;
-    private checkEndToEndEncryptionCompliance;
-    private checkNetworkRestrictionCompliance;
-    private checkIsolationCompliance;
-    private checkThirdPartyProcessingCompliance;
-    private checkCachingCompliance;
-    private checkRealtimeMonitoringCompliance;
-    private checkAnomalyDetectionCompliance;
-    /**
-     * Get all handling rules for a classification level
-     */
-    getHandlingRules(classification?: DataClassificationLevel): HandlingRule[];
-    /**
-     * Get all violations
-     */
-    getViolations(classification?: DataClassificationLevel): HandlingRuleViolation[];
-    /**
-     * Get compliance checks
-     */
-    getComplianceChecks(classification?: DataClassificationLevel): ComplianceCheck[];
-    /**
-     * Add custom handling rule
-     */
-    addHandlingRule(rule: HandlingRule): void;
-    /**
-     * Update handling requirements for a classification level
-     */
-    updateHandlingRequirements(classification: DataClassificationLevel, requirements: HandlingRequirements): void;
-    /**
-     * Get compliance score for a classification level
-     */
-    getComplianceScore(classification: DataClassificationLevel): number;
 }
-export default ClassificationHandlingRulesService;
 //# sourceMappingURL=ClassificationHandlingRulesService.d.ts.map

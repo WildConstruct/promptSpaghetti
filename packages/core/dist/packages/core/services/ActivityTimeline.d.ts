@@ -41,21 +41,21 @@ export interface ActivityEvent {
     success: boolean;
     errorMessage?: string;
     parentEventId?: string;
-    relatedEventIds?: string[];
+    relatedEventIds?: string;
     causedByEventId?: string;
-    collaborators?: string[];
+    collaborators?: string;
     visibility: ActivityVisibility;
     icon?: string;
     color?: string;
-    tags: string[];
+    tags: string;
     acknowledged?: boolean;
     bookmarked?: boolean;
     archived?: boolean;
 }
 export interface ActivityDetails {
-    nodeChanges?: NodeChange[];
-    connectionChanges?: ConnectionChange[];
-    variableChanges?: VariableChange[];
+    nodeChanges?: NodeChange;
+    connectionChanges?: ConnectionChange;
+    variableChanges?: VariableChange;
     beforeValue?: unknown;
     afterValue?: unknown;
     diff?: string;
@@ -119,22 +119,22 @@ export type ActivitySource = 'web_ui' | 'mobile_app' | 'api' | 'cli' | 'webhook'
 export type ActivityImpact = 'none' | 'low' | 'medium' | 'high' | 'critical';
 export type ActivityVisibility = 'private' | 'team' | 'workspace' | 'public';
 export interface ActivityFilter {
-    userIds?: string[];
-    types?: ActivityType[];
-    categories?: ActivityCategory[];
-    sources?: ActivitySource[];
-    workspaceIds?: string[];
-    projectIds?: string[];
-    graphIds?: string[];
+    userIds?: string;
+    types?: ActivityType;
+    categories?: ActivityCategory;
+    sources?: ActivitySource;
+    workspaceIds?: string;
+    projectIds?: string;
+    graphIds?: string;
     dateRange?: {
         start: Date;
         end: Date;
     };
-    impactLevels?: ActivityImpact[];
+    impactLevels?: ActivityImpact;
     successOnly?: boolean;
     errorsOnly?: boolean;
     searchQuery?: string;
-    tags?: string[];
+    tags?: string;
     hasCollaborators?: boolean;
     hasParent?: boolean;
     hasChildren?: boolean;
@@ -157,18 +157,11 @@ export interface ActivityStats {
         hour: number;
         count: number;
     };
-    mostActiveUsers: Array<{
-        userId: string;
-        displayName: string;
-        eventCount: number;
-        lastActivity: Date;
-    }>;
-    averageExecutionTime: number;
-    errorRate: number;
-    cacheHitRate: number;
-    collaborativeEvents: number;
-    teamsActive: number;
-    sharingEvents: number;
+    mostActiveUsers: Array<{}, userId>;
+    string: any;
+    displayName: string;
+    eventCount: number;
+    lastActivity: Date;
 }
 export interface ActivitySession {
     id: string;
@@ -179,20 +172,17 @@ export interface ActivitySession {
     endTime?: Date;
     duration?: number;
     eventCount: number;
-    uniqueResources: string[];
+    uniqueResources: string;
     clientInfo: ClientInfo;
     location?: GeolocationInfo;
     type: 'work' | 'exploration' | 'collaboration' | 'admin';
     productivity: 'high' | 'medium' | 'low';
-    primaryActivities: ActivityType[];
-    keyEvents: string[];
-    goalsAchieved?: string[];
-    tasksCompleted?: string[];
+    primaryActivities: ActivityType;
+    keyEvents: string;
+    goalsAchieved?: string;
+    tasksCompleted?: string;
     errorsEncountered?: number;
 }
-/**
- * Enhanced Activity Timeline Service
- */
 export declare class ActivityTimelineService {
     private static instance;
     private activities;
@@ -201,99 +191,6 @@ export declare class ActivityTimelineService {
     private currentSession;
     private constructor();
     static getInstance(): ActivityTimelineService;
-    /**
-     * Track a new activity event
-     */
-    trackActivity(event: Partial<ActivityEvent>): Promise<ActivityEvent>;
-    /**
-     * Track a graph operation
-     */
-    trackGraphOperation(action: string, details: Partial<ActivityDetails> & {
-        nodeChanges?: NodeChange[];
-        connectionChanges?: ConnectionChange[];
-        variableChanges?: VariableChange[];
-    }, userId: string, context?: {
-        workspaceId?: string;
-        projectId?: string;
-        graphId?: string;
-    }): Promise<ActivityEvent>;
-    /**
-     * Track user interaction
-     */
-    trackUserInteraction(action: string, element: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>): Promise<ActivityEvent>;
-    /**
-     * Track performance event
-     */
-    trackPerformance(operation: string, duration: number, success: boolean, details?: Partial<ActivityDetails>, userId?: string): Promise<ActivityEvent>;
-    /**
-     * Track collaboration event
-     */
-    trackCollaboration(action: string, collaborators: string[], resource: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>): Promise<ActivityEvent>;
-    /**
-     * Get activities with filtering
-     */
-    getActivities(filter?: ActivityFilter): ActivityEvent[];
-    /**
-     * Get activity statistics
-     */
-    getActivityStats(filter?: ActivityFilter): ActivityStats;
-    /**
-     * Get user activity timeline
-     */
-    getUserTimeline(userId: string, filter?: Partial<ActivityFilter>): ActivityEvent[];
-    /**
-     * Get collaborative activities
-     */
-    getCollaborativeActivities(workspaceId?: string, filter?: Partial<ActivityFilter>): ActivityEvent[];
-    /**
-     * Subscribe to activity events
-     */
-    subscribe(listenerId: string, callback: (event: ActivityEvent) => void): void;
-    /**
-     * Unsubscribe from activity events
-     */
-    unsubscribe(listenerId: string): void;
-    /**
-     * Start a new user session
-     */
-    startSession(userId: string, clientInfo: ClientInfo, context?: {
-        workspaceId?: string;
-        projectId?: string;
-        location?: GeolocationInfo;
-    }): ActivitySession;
-    /**
-     * End current user session
-     */
-    endSession(): ActivitySession | null;
-    private generateEventId;
-    private generateSessionId;
-    private initializeSession;
-    private updateCurrentSession;
-    private processEventInsights;
-    private analyzeSession;
-    private notifyListeners;
-    private emitActivity;
-    private generateGraphOperationTitle;
-    private generateGraphOperationDescription;
-    private calculateGraphOperationImpact;
-    private generateGraphOperationTags;
-    private categorizeUserInteraction;
-    private calculatePerformanceImpact;
-    private groupByField;
-    private startBackgroundProcessing;
-    private cleanupOldActivities;
-    private processSessionAnalytics;
+    title: `${operation} completed in ${duration}ms`;
 }
-export declare const activityTimeline: ActivityTimelineService;
-export declare const trackActivity: (event: Partial<ActivityEvent>) => Promise<ActivityEvent>;
-export declare const trackGraphOperation: (action: string, details: Partial<ActivityDetails>, userId: string, context?: {
-    workspaceId?: string;
-    projectId?: string;
-    graphId?: string;
-}) => Promise<ActivityEvent>;
-export declare const trackUserInteraction: (action: string, element: string, details: Partial<ActivityDetails>, userId: string, context?: Record<string, unknown>) => Promise<ActivityEvent>;
-export declare const trackPerformance: (operation: string, duration: number, success: boolean, details?: Partial<ActivityDetails>, userId?: string) => Promise<ActivityEvent>;
-export declare const getActivities: (filter?: ActivityFilter) => ActivityEvent[];
-export declare const getActivityStats: (filter?: ActivityFilter) => ActivityStats;
-export declare const getUserTimeline: (userId: string, filter?: Partial<ActivityFilter>) => ActivityEvent[];
 //# sourceMappingURL=ActivityTimeline.d.ts.map

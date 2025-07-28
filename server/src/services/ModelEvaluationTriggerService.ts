@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 
 const exec = promisify(execCallback);
 
+}
 export interface ModelEvaluationTriggerRequest {
   modelId: string;
   modelName: string;
@@ -27,7 +28,9 @@ export interface ModelEvaluationTriggerRequest {
   evaluationSuite?: 'standard' | 'comprehensive' | 'security' | 'performance';
   priority?: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface ModelEvaluationJob {
   id: string;
   modelId: string;
@@ -43,12 +46,15 @@ export interface ModelEvaluationJob {
   githubRunUrl?: string;
   priority: string;
 }
+}
 
+}
 export interface ModelEvaluationResults {
   overall: {
     score: number;
     status: 'passed' | 'failed' | 'warning';
     summary: string;
+}
   };
   performance: {
     accuracy?: number;
@@ -86,6 +92,7 @@ export interface ModelEvaluationResults {
   };
 }
 
+}
 export interface ModelEvaluationConfig {
   enabled: boolean;
   defaultEvaluationSuite: 'standard' | 'comprehensive' | 'security' | 'performance';
@@ -104,6 +111,7 @@ export interface ModelEvaluationConfig {
     development: boolean;
     staging: boolean;
     production: boolean;
+}
   };
   qualityGates: {
     minAccuracy: number;
@@ -128,6 +136,7 @@ export class ModelEvaluationTriggerService {
    * Trigger model evaluation workflow
    */
   async triggerEvaluation(request: ModelEvaluationTriggerRequest): Promise<ModelEvaluationJob> {
+
     try {
       // Check if service is enabled
       if (!this.config.enabled) {
@@ -182,7 +191,7 @@ export class ModelEvaluationTriggerService {
           triggeredBy: request.triggeredBy,
           githubRunId: job.githubRunId,
           priority: job.priority
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -202,7 +211,7 @@ export class ModelEvaluationTriggerService {
           version: request.version,
           error: error.message,
           triggeredBy: request.triggeredBy
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -222,6 +231,7 @@ export class ModelEvaluationTriggerService {
     request: ModelEvaluationTriggerRequest, 
     job: ModelEvaluationJob
   ): Promise<{ runId: string; runUrl: string }> {
+
     try {
       const workflowInputs = {
         modelId: request.modelId,
@@ -278,6 +288,7 @@ export class ModelEvaluationTriggerService {
    * Get evaluation job status
    */
   async getEvaluationJob(jobId: string): Promise<ModelEvaluationJob | null> {
+
     return this.jobs.get(jobId) || null;
   }
 
@@ -285,6 +296,7 @@ export class ModelEvaluationTriggerService {
    * Get all evaluation jobs for a model
    */
   async getModelEvaluationJobs(modelId: string): Promise<ModelEvaluationJob[]> {
+
     return Array.from(this.jobs.values()).filter(job => job.modelId === modelId);
   }
 
@@ -297,6 +309,7 @@ export class ModelEvaluationTriggerService {
     results?: ModelEvaluationResults,
     error?: string
   ): Promise<void> {
+
     const job = this.jobs.get(jobId);
     if (!job) {
       throw new Error(`Evaluation job ${jobId} not found`);
@@ -323,7 +336,7 @@ export class ModelEvaluationTriggerService {
           : undefined,
         hasResults: !!results,
         error
-      },
+  }
       riskLevel: status === 'failed' ? 'HIGH' : 'LOW',
       compliance: {
         frameworks: ['AI_GOVERNANCE'],
@@ -337,6 +350,7 @@ export class ModelEvaluationTriggerService {
    * Cancel evaluation job
    */
   async cancelEvaluation(jobId: string): Promise<void> {
+
     const job = this.jobs.get(jobId);
     if (!job) {
       throw new Error(`Evaluation job ${jobId} not found`);
@@ -359,7 +373,7 @@ export class ModelEvaluationTriggerService {
         modelId: job.modelId,
         version: job.version,
         originalStatus: job.status
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['AI_GOVERNANCE'],
@@ -478,5 +492,5 @@ export class ModelEvaluationTriggerService {
 }
 
 // Default configuration for development
-export 
+
 export default ModelEvaluationTriggerService;

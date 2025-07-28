@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
+
 export interface DashboardConfig {
     refreshIntervalMs: number;
     showPredictiveAnalytics: boolean;
@@ -17,7 +18,7 @@ export interface DashboardConfig {
         competitiveThreatScore: number;
     };
     filmIndustryFocus: boolean;
-}
+
 export interface DashboardMetrics {
     totalRevenue: number;
     revenueGrowthRate: number;
@@ -40,7 +41,7 @@ export interface DashboardMetrics {
     competitiveAdvantage: number;
     pricePositioning: 'premium' | 'competitive' | 'value';
     updatedAt: number;
-}
+
 export interface PricingAlert {
     id: string;
     type: 'revenue_decline' | 'demand_drop' | 'competitive_threat' | 'optimization_opportunity';
@@ -53,7 +54,7 @@ export interface PricingAlert {
     recommendation: string;
     createdAt: number;
     acknowledged: boolean;
-}
+
 export interface PricingInsight {
     id: string;
     type: 'trend' | 'opportunity' | 'risk' | 'optimization';
@@ -70,7 +71,7 @@ export interface PricingInsight {
         change: number;
     }>;
     createdAt: number;
-}
+
 export interface RevenueProjection {
     period: '1_month' | '3_months' | '6_months' | '1_year';
     projectedRevenue: number;
@@ -84,7 +85,6 @@ export interface RevenueProjection {
         impact: number;
         confidence: number;
     }>;
-}
 /**
  * Real-time pricing dashboard for monitoring and optimization
  */
@@ -174,6 +174,6 @@ export declare class PricingDashboard extends EventEmitter {
     private checkAlerts;
     private calculateRevenueProjection;
     private getAllModels;
-}
+
 export default PricingDashboard;
 //# sourceMappingURL=PricingDashboard.d.ts.map

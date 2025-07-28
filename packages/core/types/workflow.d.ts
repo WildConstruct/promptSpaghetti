@@ -11,7 +11,7 @@ export interface WorkflowState {
     sort_order: number;
     created_at: Date;
     updated_at: Date;
-}
+
 export interface WorkflowTransition {
     id: string;
     workspace_id: string;
@@ -23,7 +23,7 @@ export interface WorkflowTransition {
     required_permissions: bigint;
     conditions: Record<string, any>;
     created_at: Date;
-}
+
 export interface WorkflowApproval {
     id: string;
     workspace_id: string;
@@ -42,7 +42,7 @@ export interface WorkflowApproval {
     auto_approve_conditions: Record<string, any>;
     created_at: Date;
     updated_at: Date;
-}
+
 export interface WorkflowApprovalReviewer {
     id: string;
     approval_id: string;
@@ -51,7 +51,7 @@ export interface WorkflowApprovalReviewer {
     reviewed_at?: Date;
     review_comment?: string;
     created_at: Date;
-}
+
 export interface WorkflowLock {
     id: string;
     workspace_id: string;
@@ -63,7 +63,7 @@ export interface WorkflowLock {
     expires_at?: Date;
     auto_release: boolean;
     metadata: Record<string, any>;
-}
+
 export interface WorkflowHistoryEntry {
     id: string;
     workspace_id: string;
@@ -80,7 +80,7 @@ export interface WorkflowHistoryEntry {
     ip_address?: string;
     user_agent?: string;
     session_id?: string;
-}
+
 export interface WorkflowSchedule {
     id: string;
     workspace_id: string;
@@ -101,7 +101,7 @@ export interface WorkflowSchedule {
     created_by: string;
     created_at: Date;
     updated_at: Date;
-}
+
 export interface WorkflowExecutionLog {
     id: string;
     schedule_id: string;
@@ -114,7 +114,7 @@ export interface WorkflowExecutionLog {
     execution_time_ms?: number;
     retry_attempt: number;
     next_retry_at?: Date;
-}
+
 export interface WorkflowStatistics {
     total_states: number;
     total_transitions: number;
@@ -140,14 +140,14 @@ export interface WorkflowStatistics {
         successful_executions: number;
         failed_executions: number;
     };
-}
+
 export interface StateTransitionRequest {
     resource_id: string;
     to_state_id: string;
     comment?: string;
     metadata?: Record<string, any>;
     force?: boolean;
-}
+
 export interface StateTransitionResult {
     success: boolean;
     new_state_id?: string;
@@ -155,7 +155,7 @@ export interface StateTransitionResult {
     approval_id?: string;
     error?: string;
     workflow_history_id?: string;
-}
+
 export interface WorkflowEvent {
     type: 'state_changed' | 'approval_requested' | 'approval_completed' | 'lock_acquired' | 'lock_released' | 'schedule_executed';
     workspace_id: string;
@@ -163,7 +163,7 @@ export interface WorkflowEvent {
     actor_id: string;
     timestamp: Date;
     data: Record<string, any>;
-}
+
 export interface WorkflowConfiguration {
     auto_lock_on_state_change: boolean;
     auto_release_locks_on_completion: boolean;
@@ -177,14 +177,14 @@ export interface WorkflowConfiguration {
         lock_acquired: boolean;
         schedule_failed: boolean;
     };
-}
+
 export interface WorkflowStateFilter {
     workspace_id?: string;
     is_initial?: boolean;
     is_final?: boolean;
     is_locked?: boolean;
     name_contains?: string;
-}
+
 export interface WorkflowApprovalFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -192,7 +192,7 @@ export interface WorkflowApprovalFilter {
     status?: 'pending' | 'approved' | 'rejected' | 'cancelled';
     priority?: 'low' | 'medium' | 'high' | 'urgent';
     overdue?: boolean;
-}
+
 export interface WorkflowHistoryFilter {
     workspace_id?: string;
     resource_id?: string;
@@ -202,21 +202,21 @@ export interface WorkflowHistoryFilter {
     date_to?: Date;
     limit?: number;
     offset?: number;
-}
+
 export interface WorkflowLockFilter {
     workspace_id?: string;
     resource_id?: string;
     locked_by?: string;
     lock_type?: 'edit' | 'state_change' | 'delete' | 'custom';
     expired?: boolean;
-}
+
 export interface WorkflowScheduleFilter {
     workspace_id?: string;
     resource_id?: string;
     schedule_type?: 'cron' | 'interval' | 'once';
     enabled?: boolean;
     overdue?: boolean;
-}
+
 export interface WorkflowComponentProps {
     workspaceId: string;
     currentUserId: string;
@@ -224,7 +224,7 @@ export interface WorkflowComponentProps {
     onApprovalRequested?: (approvalId: string) => void;
     onLockAcquired?: (lockId: string) => void;
     onLockReleased?: (lockId: string) => void;
-}
+
 export interface UseWorkflowReturn {
     states: WorkflowState[];
     transitions: WorkflowTransition[];
@@ -243,7 +243,7 @@ export interface UseWorkflowReturn {
     isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
     getResourceState: (resourceId: string) => WorkflowState | null;
     getAvailableTransitions: (currentStateId: string) => WorkflowTransition[];
-}
+
 export interface WorkflowApiResponse<T> {
     data: T;
     meta?: {
@@ -253,14 +253,14 @@ export interface WorkflowApiResponse<T> {
         has_more: boolean;
     };
     error?: string;
-}
+
 export interface WorkflowValidationResult {
     valid: boolean;
     transition?: WorkflowTransition;
     error?: string;
     can_transition?: boolean;
     is_locked?: boolean;
-}
+
 export type WorkflowActionType = 'state_changed' | 'approval_requested' | 'approved' | 'rejected' | 'lock_acquired' | 'lock_released' | 'schedule_executed';
 export type WorkflowLockType = 'edit' | 'state_change' | 'delete' | 'custom';
 export type WorkflowApprovalStatus = 'pending' | 'approved' | 'rejected' | 'cancelled';

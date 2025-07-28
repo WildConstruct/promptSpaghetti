@@ -25,6 +25,7 @@ import {
 } from './DataClassificationAccessControl';
 import { InheritanceFramework, EffectivePermissions } from './DelegationInheritanceRules';
 import { DataClassifier } from './DataClassifier';
+
 export interface AccessControlConfig {
     enableRBAC: boolean;
     enableABAC: boolean;
@@ -37,7 +38,8 @@ export interface AccessControlConfig {
     strictCompliance: boolean;
     emergencyBypass: boolean;
     performanceMode: 'HIGH_SECURITY' | 'BALANCED' | 'HIGH_PERFORMANCE';
-}
+
+
 export interface AccessControlMetrics {
     totalRequests: number;
     approvedRequests: number;
@@ -50,13 +52,15 @@ export interface AccessControlMetrics {
     delegatedDecisions: number;
     emergencyAccess: number;
     complianceViolations: number;
-}
+
+
 export interface CacheEntry {
     decision: AccessDecision;
     timestamp: Date;
     ttl: number;
     requestHash: string;
-}
+
+
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -73,7 +77,8 @@ export interface AuditLogEntry {
     obligations: PolicyObligation[];
     decisionTime: number;
     metadata: Record<string, any>;
-}
+
+
 export interface SecurityAlert {
     id: string;
     type: 'UNAUTHORIZED_ACCESS' | 'POLICY_VIOLATION' | 'ANOMALOUS_BEHAVIOR' | 'DELEGATION_ABUSE' | 'EMERGENCY_ACCESS';
@@ -85,7 +90,8 @@ export interface SecurityAlert {
     context: Record<string, any>;
     requiresResponse: boolean;
     autoRemediation: boolean;
-}
+
+
 /**
  * Main Access Control Service Implementation
  */
@@ -264,6 +270,6 @@ export declare class CentralizedAccessControlService extends EventEmitter {
      * Cleanup resources and stop service
      */
     destroy(): void;
-}
+
 export default CentralizedAccessControlService;
 //# sourceMappingURL=CentralizedAccessControlService.d.ts.map

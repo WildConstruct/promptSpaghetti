@@ -31,12 +31,14 @@ import {
   BulkPlacementOperation
 } from '../../../packages/core/types/PlacementTypes';
 
+}
 export interface PlacementAdminConfig {
   maxSlotsPerArea: number;
   maxPlacementsPerSlot: number;
   previewCacheTTL: number;
   bulkOperationLimit: number;
   analyticsRetentionDays: number;
+}
 }
 
 export class PlacementAdminController {
@@ -68,6 +70,7 @@ export class PlacementAdminController {
    * Register all placement admin routes
    */
   async registerRoutes(fastify: FastifyInstance): Promise<void> {
+
     // Placement Slots Management
     fastify.get('/admin/placement-slots', this.getPlacementSlots.bind(this));
     fastify.post('/admin/placement-slots', this.createPlacementSlot.bind(this));
@@ -109,6 +112,7 @@ export class PlacementAdminController {
    * Get placement slots with filtering and pagination
    */
   async getPlacementSlots(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const query = request.query as any;
       const { area, isActive, tags, limit = 50, offset = 0 } = query;
@@ -146,6 +150,7 @@ export class PlacementAdminController {
    * Create new placement slot
    */
   async createPlacementSlot(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const body = request.body as CreateSlotRequest;
       const userId = this.getUserId(request);
@@ -176,6 +181,7 @@ export class PlacementAdminController {
    * Get single placement slot by ID
    */
   async getPlacementSlot(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { slotId: string };
       const slot = await this.placementService.getPlacementSlot(params.slotId);
@@ -205,6 +211,7 @@ export class PlacementAdminController {
    * Update placement slot
    */
   async updatePlacementSlot(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { slotId: string };
       const body = request.body as UpdateSlotRequest;
@@ -230,6 +237,7 @@ export class PlacementAdminController {
    * Delete placement slot
    */
   async deletePlacementSlot(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { slotId: string };
       const userId = this.getUserId(request);
@@ -257,6 +265,7 @@ export class PlacementAdminController {
    * Search content placements
    */
   async searchContentPlacements(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const query = request.query as any;
       
@@ -308,6 +317,7 @@ export class PlacementAdminController {
    * Create content placement
    */
   async createContentPlacement(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const body = request.body as CreatePlacementRequest;
       const userId = this.getUserId(request);
@@ -335,6 +345,7 @@ export class PlacementAdminController {
    * Get single content placement
    */
   async getContentPlacement(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { placementId: string };
       const placement = await this.placementService.getContentPlacement(params.placementId);
@@ -364,6 +375,7 @@ export class PlacementAdminController {
    * Update content placement
    */
   async updateContentPlacement(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { placementId: string };
       const body = request.body as UpdatePlacementRequest;
@@ -389,6 +401,7 @@ export class PlacementAdminController {
    * Delete content placement
    */
   async deleteContentPlacement(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { placementId: string };
       const userId = this.getUserId(request);
@@ -416,6 +429,7 @@ export class PlacementAdminController {
    * Generate placement preview
    */
   async generatePlacementPreview(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { slotId: string };
       const body = request.body as {
@@ -447,6 +461,7 @@ export class PlacementAdminController {
    * Get cached placement preview
    */
   async getPlacementPreview(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { previewId: string };
 
@@ -477,6 +492,7 @@ export class PlacementAdminController {
    * Get placement analytics dashboard data
    */
   async getPlacementAnalytics(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const query = request.query as any;
       const period = {
@@ -504,6 +520,7 @@ export class PlacementAdminController {
    * Get slot-specific metrics
    */
   async getSlotMetrics(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { slotId: string };
       const query = request.query as any;
@@ -533,6 +550,7 @@ export class PlacementAdminController {
    * Get performance report
    */
   async getPerformanceReport(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const query = request.query as any;
       
@@ -541,13 +559,13 @@ export class PlacementAdminController {
         period: {
           startDate: query.startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           endDate: query.endDate || new Date()
-        },
+  }
         summary: {
           totalSlots: await this.getSlotCount(),
           totalPlacements: await this.getPlacementCount(),
           totalImpressions: await this.getTotalImpressions(query),
           averageCTR: await this.getAverageCTR(query)
-        },
+  }
         topPerformers: await this.getTopPerformers(query),
         recommendations: await this.generateRecommendations()
       };
@@ -573,6 +591,7 @@ export class PlacementAdminController {
    * Get system status and health metrics
    */
   async getSystemStatus(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const status = {
         system: 'placement_management',
@@ -586,7 +605,7 @@ export class PlacementAdminController {
           systemLoad: this.getSystemLoad(),
           cacheHitRate: this.getCacheHitRate(),
           averageResponseTime: this.getAverageResponseTime()
-        },
+  }
         configuration: {
           maxSlotsPerArea: this.config.maxSlotsPerArea,
           maxPlacementsPerSlot: this.config.maxPlacementsPerSlot,
@@ -612,6 +631,7 @@ export class PlacementAdminController {
    * Get audit log for placement operations
    */
   async getAuditLog(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const query = request.query as any;
       const { entityType, entityId, userId, action, limit = 100, offset = 0 } = query;
@@ -647,6 +667,7 @@ export class PlacementAdminController {
    * Create bulk operation
    */
   async createBulkOperation(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const body = request.body as {
         operationType: 'create' | 'update' | 'delete' | 'activate' | 'deactivate' | 'schedule';
@@ -687,7 +708,7 @@ export class PlacementAdminController {
           operationId: operation.operationId,
           status: operation.status,
           estimatedDuration: this.estimateOperationDuration(body.targetPlacements.length)
-        },
+  }
         message: 'Bulk operation initiated successfully'
       });
     } catch (error) {
@@ -703,6 +724,7 @@ export class PlacementAdminController {
    * Get bulk operation status
    */
   async getBulkOperationStatus(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const params = request.params as { operationId: string };
       const operation = await this.getBulkOperation(params.operationId);
@@ -762,6 +784,7 @@ export class PlacementAdminController {
   }
 
   private async checkSlotLimits(area: PlacementArea): Promise<void> {
+
     const currentCount = await this.getSlotCountByArea(area);
     if (currentCount >= this.config.maxSlotsPerArea) {
       throw new Error(`Maximum slots per area limit reached (${this.config.maxSlotsPerArea})`);
@@ -793,6 +816,7 @@ export class PlacementAdminController {
   }
 
   private async storeBulkOperation(operation: BulkPlacementOperation): Promise<void> {
+
     await this.db.query(`
       INSERT INTO bulk_placement_operations (
         operation_id, operation_type, target_placements, operation_data,
@@ -815,6 +839,7 @@ export class PlacementAdminController {
   }
 
   private async getBulkOperation(operationId: string): Promise<BulkPlacementOperation | null> {
+
     const result = await this.db.query(`
       SELECT * FROM bulk_placement_operations WHERE operation_id = $1
     `, [operationId]);
@@ -839,6 +864,7 @@ export class PlacementAdminController {
   }
 
   private async processBulkOperationAsync(operation: BulkPlacementOperation): Promise<void> {
+
     // This would run in the background to process the bulk operation
     setTimeout(async () => {
       console.log(`🔄 Processing bulk operation: ${operation.operationId}`);
@@ -866,6 +892,7 @@ export class PlacementAdminController {
     status: 'pending' | 'running' | 'completed' | 'failed', 
     progress: number
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE bulk_placement_operations 
       SET status = $2, progress = $3, completed_at = CASE WHEN $2 IN (
@@ -880,6 +907,7 @@ export class PlacementAdminController {
    * Perform system maintenance tasks
    */
   async performSystemMaintenance(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       const body = request.body as {
         tasks: ('cleanup_expired' | 'rebuild_cache' | 'update_metrics' | 'archive_old_data')[];
@@ -933,18 +961,22 @@ export class PlacementAdminController {
   }
 
   private async cleanupExpiredPlacements(): Promise<void> {
+
     console.log('🧹 Cleaning up expired placements');
   }
 
   private async rebuildCache(): Promise<void> {
+
     console.log('🔄 Rebuilding placement cache');
   }
 
   private async updateMetrics(): Promise<void> {
+
     console.log('📊 Updating placement metrics');
   }
 
   private async archiveOldData(): Promise<void> {
+
     console.log('📦 Archiving old placement data');
   }
 }

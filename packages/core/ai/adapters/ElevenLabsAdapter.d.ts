@@ -5,12 +5,13 @@
  * Adapter for ElevenLabs AI voice synthesis with custom voice training and cloning
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface ElevenLabsConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
-}
+
 export interface ElevenLabsRequestOptions {
     text: string;
     voice_id?: string;
@@ -32,7 +33,7 @@ export interface ElevenLabsRequestOptions {
         description?: string;
         labels?: Record<string, string>;
     };
-}
+
 export interface ElevenLabsGenerationResult {
     audio: {,
         data: ArrayBuffer;
@@ -57,7 +58,7 @@ export interface ElevenLabsGenerationResult {
         cost: number;
         quota_remaining?: number;
     };
-}
+
 export interface ElevenLabsVoice {
     voice_id: string;
     name: string;
@@ -126,7 +127,7 @@ export interface ElevenLabsVoice {
         enabled_in_library: boolean;
     };
     high_quality_base_model_ids: string[];
-}
+
 export interface ElevenLabsModel {
     model_id: string;
     name: string;
@@ -145,7 +146,7 @@ export interface ElevenLabsModel {
         language_id: string;
         name: string;
     }>;
-}
+
 export declare class ElevenLabsAdapter extends BaseAIModel {
     private config;
     private availableVoices;
@@ -197,6 +198,6 @@ export declare class ElevenLabsAdapter extends BaseAIModel {
     private _getBitDepth;
     private _calculateCost;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default ElevenLabsAdapter;
 //# sourceMappingURL=ElevenLabsAdapter.d.ts.map

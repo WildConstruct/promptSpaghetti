@@ -12,146 +12,135 @@ import {
 } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Core interfaces
+
 export interface EngagementMetricsTrendAnalysisProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
   metricsConfig: EngagementMetricsConfig;
   trendAnalysisConfig: TrendAnalysisConfig;
   onTrendAlert?: (alert: TrendAlert) => void;
   onMetricThreshold?: (threshold: MetricThreshold) => void;
   onExport?: (data: EngagementMetricsExportData) => void;
+  // Configuration interfaces
 }
-
-// Configuration interfaces
 export interface EngagementMetricsConfig {
-  metrics: EngagementMetric[];
-  timeRanges: TimeRange[];
-  segmentation: SegmentationConfig;
+  metrics: EngagementMetric;,
+  timeRanges: TimeRange;
+  segmentation: SegmentationConfig;,
   benchmarks: BenchmarkConfig;
   alerting: AlertingConfig;
 }
-
 export interface EngagementMetric {
-  metricId: string;
+  metricId: string;,
   name: string;
-  type: MetricType;
+  type: MetricType;,
   calculation: MetricCalculation;
-  visualization: VisualizationConfig;
-  thresholds: MetricThreshold[];
+  visualization: VisualizationConfig;,
+  thresholds: MetricThreshold;
 }
-
 export type MetricType = 'count' | 'rate' | 'duration' | 'score' | 'percentage' | 'ratio';
 
 export interface TrendAnalysisConfig {
-  algorithms: TrendAlgorithm[];
+  algorithms: TrendAlgorithm;,
   forecasting: ForecastingConfig;
-  seasonality: SeasonalityConfig;
+  seasonality: SeasonalityConfig;,
   anomalyDetection: AnomalyDetectionConfig;
   reporting: TrendReportingConfig;
+  // Data structures
 }
-
-// Data structures
 export interface EngagementMetricsData {
-  timestamp: number;
-  metrics: MetricValue[];
-  segmentData: SegmentMetrics[];
+  timestamp: number;,
+  metrics: MetricValue;
+  segmentData: SegmentMetrics;,
   metadata: MetricsMetadata;
 }
-
 export interface MetricValue {
-  metricId: string;
+  metricId: string;,
   value: number;
-  change: number;
+  change: number;,
   trend: TrendDirection;
   confidence: number;
 }
-
 export interface TrendAnalysis {
-  metric: string;
+  metric: string;,
   trend: TrendData;
-  forecast: ForecastData;
-  insights: TrendInsight[];
-  anomalies: TrendAnomaly[];
+  forecast: ForecastData;,
+  insights: TrendInsight;
+  anomalies: TrendAnomaly;
 }
-
 export interface TrendData {
-  direction: TrendDirection;
+  direction: TrendDirection;,
   strength: number;
-  duration: number;
+  duration: number;,
   significance: number;
   changeRate: number;
 }
-
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile' | 'seasonal';
 
 // Mock data generators
 const generateMockEngagementMetrics = (): EngagementMetricsData => {
   const baseTimestamp = Date.now();
   return {
-    timestamp: baseTimestamp,
-    metrics: [,
+  timestamp: baseTimestamp,
+  metrics: [,
+  {
+  metricId: 'daily_active_users',
+  value: Math.floor(Math.random() * 1000) + 2000,
+  change: (Math.random() - 0.5) * 20,
+  trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
+  confidence: Math.random() * 0.3 + 0.7,
+}
       {
-        metricId: 'daily_active_users',
-        value: Math.floor(Math.random() * 1000) + 2000,
-        change: (Math.random() - 0.5) * 20,
-        trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7,
-      },
+  metricId: 'session_duration',
+  value: Math.random() * 300 + 180,
+  change: (Math.random() - 0.5) * 30,
+  trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
+  confidence: Math.random() * 0.3 + 0.7,
+}
       {
-        metricId: 'session_duration',
-        value: Math.random() * 300 + 180,
-        change: (Math.random() - 0.5) * 30,
-        trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7,
-      },
+  metricId: 'pages_per_session',
+  value: Math.random() * 5 + 3,
+  change: (Math.random() - 0.5) * 2,
+  trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
+  confidence: Math.random() * 0.3 + 0.7,
+}
       {
-        metricId: 'pages_per_session',
-        value: Math.random() * 5 + 3,
-        change: (Math.random() - 0.5) * 2,
-        trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7,
-      },
+  metricId: 'engagement_score',
+  value: Math.random() * 40 + 60,
+  change: (Math.random() - 0.5) * 10,
+  trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
+  confidence: Math.random() * 0.3 + 0.7,
+}
       {
-        metricId: 'engagement_score',
-        value: Math.random() * 40 + 60,
-        change: (Math.random() - 0.5) * 10,
-        trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7,
-      },
-      {
-        metricId: 'interaction_rate',
-        value: Math.random() * 0.5 + 0.3,
-        change: (Math.random() - 0.5) * 0.1,
-        trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
-        confidence: Math.random() * 0.3 + 0.7,
-      }
-    ],
-    segmentData: [],
-    metadata: {,
-      lastUpdated: baseTimestamp,
-      dataQuality: Math.random() * 0.2 + 0.8,
-      sampleSize: Math.floor(Math.random() * 5000) + 10000,
-    }
-  };
+  metricId: 'interaction_rate',
+  value: Math.random() * 0.5 + 0.3,
+  change: (Math.random() - 0.5) * 0.1,
+  trend: ['increasing', 'decreasing', 'stable'][Math.floor(Math.random() * 3)] as TrendDirection,
+  confidence: Math.random() * 0.3 + 0.7],
+  segmentData: [],
+  metadata: {,
+  lastUpdated: baseTimestamp,
+  dataQuality: Math.random() * 0.2 + 0.8,
+  sampleSize: Math.floor(Math.random() * 5000) + 10000,
 };
-const generateTrendAnalysis = (metricId: string): TrendAnalysis => ({)
+};
+const generateTrendAnalysis = (metricId: string): TrendAnalysis => ({,)
   metric: metricId,
   trend: {,
-    direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)] as TrendDirection,
-    strength: Math.random(),
-    duration: Math.floor(Math.random() * 30) + 7,
-    significance: Math.random(),
-    changeRate: (Math.random() - 0.5) * 10,
-  },
+  direction: ['increasing', 'decreasing', 'stable', 'volatile'][Math.floor(Math.random() * 4)] as TrendDirection,
+  strength: Math.random(),
+  duration: Math.floor(Math.random() * 30) + 7,
+  significance: Math.random(),
+  changeRate: (Math.random() - 0.5) * 10,
+},
   forecast: {,
-    predictions: Array.from({ length: 7 }, (_, i) => ({)
-      timestamp: Date.now() + (i + 1) * 86400000,
-      predictedValue: Math.random() * 100 + 50,
-      confidence: Math.random() * 0.3 + 0.6,
-      range: {,
-        lower: Math.random() * 20 + 30,
-        upper: Math.random() * 20 + 70,
-      }
-    })),
+  predictions: Array.from({ length: 7 }, (_, i) => ({)
+  timestamp: Date.now() + (i + 1) * 86400000,
+  predictedValue: Math.random() * 100 + 50,
+  confidence: Math.random() * 0.3 + 0.6,
+  range: {,
+  lower: Math.random() * 20 + 30,
+  upper: Math.random() * 20 + 70,
+})),
     accuracy: Math.random() * 0.3 + 0.7,
     model: 'ARIMA',
     factors: [,
@@ -163,14 +152,13 @@ const generateTrendAnalysis = (metricId: string): TrendAnalysis => ({)
   insights: [,
     {
       type: 'trend_shift',
-      message: `${metricId} showing ${Math.random() > 0.5 ? 'positive' : 'negative'} trend over past 7 days`,}
-      confidence: Math.random() * 0.3 + 0.7,
+      message: `${metricId} showing ${Math.random() > 0.5 ? 'positive' : 'negative'} trend over past 7 days`}
+},
+  confidence: Math.random() * 0.3 + 0.7,
       impact: Math.random() > 0.5 ? 'high' : 'medium',
-      actionable: true,
-    }
-  ],
-  anomalies: [],
-});
+      actionable: true],
+  anomalies: [];
+  });
 
 // Main component
 export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnalysisProps> = ({)
@@ -181,8 +169,8 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
   onMetricThreshold,
   onExport
 }) => {
-  const [metricsData, setMetricsData] = useState<EngagementMetricsData[]>([]);
-  const [trendAnalyses, setTrendAnalyses] = useState<TrendAnalysis[]>([]);
+  const [metricsData, setMetricsData] = useState<EngagementMetricsData>([]);
+  const [trendAnalyses, setTrendAnalyses] = useState<TrendAnalysis>([]);
   const [selectedMetric, setSelectedMetric] = useState<string>('daily_active_users');
   const [selectedTimeRange, setSelectedTimeRange] = useState<string>('7d');
   const [loading, setLoading] = useState(false);
@@ -210,17 +198,18 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
       setLoading(false);
       if (onTrendAlert) {
         onTrendAlert({)
-          alertId: `alert_${Math.random().toString(36).substr(2, 8)}`,}
-          metricId: selectedMetric,
+  alertId: `alert_${Math.random().toString(36).substr(2, 8)}`}
+},
+  metricId: selectedMetric,
           type: 'trend_change',
           severity: 'medium',
-          message: `Significant trend change detected in ${selectedMetric}`,}
-          timestamp: Date.now(),
+          message: `Significant trend change detected in ${selectedMetric}`}
+},
+  timestamp: Date.now(),
           threshold: 0.15,
           actualValue: 0.23,
           recommendations: ['Monitor closely', 'Investigate root cause']
         });
-      }
     }, 1500);
   }, [selectedMetric, onTrendAlert]);
   const handleExport = useCallback(() => {
@@ -230,14 +219,12 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
         trendAnalyses,
         timeRange: { start: Date.now() - 30 * 86400000, end: Date.now() },
         metadata: {,
-          exportTimestamp: Date.now(),
-          version: '1.0.0',
-          totalDataPoints: metricsData.length,
-          metricsIncluded: metricsData[0]?.metrics.map(m => m.metricId) || [],
-        }
-      };
+  exportTimestamp: Date.now(),
+  version: '1.0.0',
+  totalDataPoints: metricsData.length,
+  metricsIncluded: metricsData[0]?.metrics.map(m => m.metricId) || [],
+};
       onExport(exportData);
-    }
   }, [metricsData, trendAnalyses, onExport]);
   const currentMetrics = useMemo(() => {
     return metricsData[metricsData.length - 1]?.metrics || [];
@@ -246,16 +233,16 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
     return trendAnalyses.find(t => t.metric === selectedMetric);
   }, [trendAnalyses, selectedMetric]);
   const chartData = useMemo(() => {
-    return metricsData.map(data => {)
-      const metric = data.metrics.find(m => m.metricId === selectedMetric);
-      return {
-        timestamp: data.timestamp,
-        value: metric?.value || 0,
-        date: new Date(data.timestamp).toLocaleDateString(),
-      };
+  return metricsData.map(data => {)
+  const metric = data.metrics.find(m => m.metricId === selectedMetric);
+  return {
+  timestamp: data.timestamp,
+  value: metric?.value || 0,
+  date: new Date(data.timestamp).toLocaleDateString(),
+};
     });
   }, [metricsData, selectedMetric]);
-  return ();
+  return;
     <div className="engagement-metrics-trend-analysis">
       <div className="metrics-header">
         <div className="header-section">
@@ -415,8 +402,8 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
           <h3>Metrics Comparison</h3>
           <div className="comparison-grid">
             {currentMetrics.map(metric => {)
-              const analysis = trendAnalyses.find(t => t.metric === metric.metricId);
-              return ();
+  const analysis = trendAnalyses.find(t => t.metric === metric.metricId);
+              return;
                 <div key={metric.metricId} className="comparison-card">
                   <div className="comparison-header">
                     <h4>{metric.metricId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>
@@ -449,155 +436,133 @@ export const EngagementMetricsTrendAnalysis: React.FC<EngagementMetricsTrendAnal
 };
 
 // Supporting interfaces (condensed)
+
 export interface TimeRange {
-  id: string;
+  id: string;,
   label: string;
   days: number;
 }
-
 export interface SegmentationConfig {
-  enabled: boolean;
-  segments: string[];
+  enabled: boolean;,
+  segments: string;
 }
-
 export interface BenchmarkConfig {
-  enabled: boolean;
-  benchmarks: Benchmark[];
+  enabled: boolean;,
+  benchmarks: Benchmark;
 }
-
 export interface Benchmark {
-  name: string;
+  name: string;,
   value: number;
   type: 'industry' | 'internal' | 'target';
 }
-
 export interface AlertingConfig {
-  enabled: boolean;
-  thresholds: AlertThreshold[];
+  enabled: boolean;,
+  thresholds: AlertThreshold;
 }
-
 export interface AlertThreshold {
-  metricId: string;
+  metricId: string;,
   condition: 'above' | 'below' | 'change';
-  value: number;
+  value: number;,
   severity: 'low' | 'medium' | 'high';
 }
-
 export interface MetricCalculation {
-  formula: string;
+  formula: string;,
   aggregation: 'sum' | 'average' | 'count';
   timeWindow: number;
 }
-
 export interface VisualizationConfig {
-  chartType: 'line' | 'bar' | 'area';
+  chartType: 'line' | 'bar' | 'area';,
   showTrendline: boolean;
   showForecast: boolean;
 }
-
 export interface MetricThreshold {
-  level: 'warning' | 'critical';
+  level: 'warning' | 'critical';,
   value: number;
   operator: 'gt' | 'lt' | 'eq';
 }
-
 export interface TrendAlgorithm {
-  name: string;
+  name: string;,
   enabled: boolean;
   parameters: Record<string, any>;
 }
-
 export interface ForecastingConfig {
-  enabled: boolean;
+  enabled: boolean;,
   horizon: number;
-  models: string[];
+  models: string;
 }
-
 export interface SeasonalityConfig {
-  enabled: boolean;
-  periods: number[];
+  enabled: boolean;,
+  periods: number;
 }
-
 export interface AnomalyDetectionConfig {
-  enabled: boolean;
+  enabled: boolean;,
   sensitivity: number;
-  methods: string[];
+  methods: string;
 }
-
 export interface TrendReportingConfig {
-  enabled: boolean;
+  enabled: boolean;,
   frequency: 'daily' | 'weekly' | 'monthly';
-  recipients: string[];
+  recipients: string;
 }
-
 export interface SegmentMetrics {
-  segment: string;
-  metrics: MetricValue[];
+  segment: string;,
+  metrics: MetricValue;
 }
-
 export interface MetricsMetadata {
-  lastUpdated: number;
+  lastUpdated: number;,
   dataQuality: number;
   sampleSize: number;
 }
-
 export interface ForecastData {
-  predictions: ForecastPrediction[];
+  predictions: ForecastPrediction;,
   accuracy: number;
-  model: string;
-  factors: ForecastFactor[];
+  model: string;,
+  factors: ForecastFactor;
 }
-
 export interface ForecastPrediction {
-  timestamp: number;
+  timestamp: number;,
   predictedValue: number;
-  confidence: number;
+  confidence: number;,
   range: { lower: number; upper: number };
 }
-
 export interface ForecastFactor {
-  factor: string;
+  factor: string;,
   influence: number;
 }
-
 export interface TrendInsight {
-  type: string;
+  type: string;,
   message: string;
-  confidence: number;
+  confidence: number;,
   impact: 'low' | 'medium' | 'high';
   actionable: boolean;
 }
-
 export interface TrendAnomaly {
-  timestamp: number;
+  timestamp: number;,
   expectedValue: number;
-  actualValue: number;
+  actualValue: number;,
   severity: number;
   explanation: string;
 }
-
 export interface TrendAlert {
-  alertId: string;
+  alertId: string;,
   metricId: string;
-  type: string;
+  type: string;,
   severity: 'low' | 'medium' | 'high';
-  message: string;
+  message: string;,
   timestamp: number;
-  threshold: number;
+  threshold: number;,
   actualValue: number;
-  recommendations: string[];
+  recommendations: string;
 }
-
 export interface EngagementMetricsExportData {
-  metricsData: EngagementMetricsData[];
-  trendAnalyses: TrendAnalysis[];
+  metricsData: EngagementMetricsData;,
+  trendAnalyses: TrendAnalysis;
   timeRange: { start: number; end: number };
   metadata: {,
-    exportTimestamp: number;
-    version: string;
-    totalDataPoints: number;
-    metricsIncluded: string[];
-  };
+  exportTimestamp: number;
+  version: string;,
+  totalDataPoints: number;
+  metricsIncluded: string;
+};
 }
-
 export default EngagementMetricsTrendAnalysis;

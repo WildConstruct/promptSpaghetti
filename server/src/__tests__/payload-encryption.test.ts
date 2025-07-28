@@ -149,8 +149,8 @@ describe('PayloadEncryptionService', () => {
           operationType: 'encrypt',
           additionalContext: expect.objectContaining({
             endpoint: '/auth/login'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -255,8 +255,8 @@ describe('PayloadEncryptionService', () => {
           additionalContext: expect.objectContaining({
             algorithm: encryptedPayload.algorithm,
             timestamp: encryptedPayload.timestamp
-          })
-        })
+  }
+  }
       );
     });
 
@@ -376,7 +376,7 @@ describe('PayloadEncryptionService', () => {
           userId: 'payload_encryption_service',
           operationType: 'rotate',
           additionalContext: { reason: 'scheduled_rotation' }
-        })
+  }
       );
 
       const metrics = payloadEncryptionService.getMetrics();
@@ -557,7 +557,7 @@ describe('PayloadEncryptionService', () => {
         expect.objectContaining({
           userId: 'payload_encryption_service',
           operationType: 'encrypt'
-        })
+  }
       );
     });
   });

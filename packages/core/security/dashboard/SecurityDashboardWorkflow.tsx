@@ -53,21 +53,21 @@ import {
 import './SecurityDashboardWorkflow.css';
 
 // Security Dashboard Workflow Types
+
 export interface SecurityWorkflowEvent {
-  id: string;
+  id: string;,
   type: SecurityEventType;
-  severity: SecuritySeverity;
+  severity: SecuritySeverity;,
   source: string;
-  timestamp: Date;
+  timestamp: Date;,
   description: string;
   metadata: Record<string, any>;
   workflowState?: string;
   assignedTo?: string;
-  escalationLevel: number;
-  complianceFrameworks: string[];
-  automatedActions: SecurityAction[];
+  escalationLevel: number;,
+  complianceFrameworks: string;
+  automatedActions: SecurityAction;
 }
-
 export enum SecurityEventType {
   THREAT_DETECTION = 'threat_detection',
   AUTHENTICATION_FAILURE = 'authentication_failure',
@@ -79,26 +79,21 @@ export enum SecurityEventType {
   COMPLIANCE_VIOLATION = 'compliance_violation',
   SYSTEM_ANOMALY = 'system_anomaly',
   INSIDER_THREAT = 'insider_threat'
-}
-
-export enum SecuritySeverity {
+  export enum SecuritySeverity {
   CRITICAL = 'critical',
   HIGH = 'high',
   MEDIUM = 'medium',
   LOW = 'low',
   INFO = 'info'
-}
-
-export interface SecurityAction {
-  type: SecurityActionType;
+  export interface SecurityAction {
+  type: SecurityActionType;,
   target: string;
   parameters: Record<string, any>;
-  timestamp: Date;
+  timestamp: Date;,
   executedBy: string;
   status: 'pending' | 'executing' | 'completed' | 'failed';
   result?: string;
 }
-
 export enum SecurityActionType {
   BLOCK_IP = 'block_ip',
   ISOLATE_HOST = 'isolate_host',
@@ -108,51 +103,45 @@ export enum SecurityActionType {
   CREATE_TICKET = 'create_ticket',
   ESCALATE_ALERT = 'escalate_alert',
   COLLECT_EVIDENCE = 'collect_evidence'
-}
-
-export interface SecurityWorkflowConfig {
-  enableAutoTransitions: boolean;
+  export interface SecurityWorkflowConfig {
+  enableAutoTransitions: boolean;,
   enableAutomatedActions: boolean;
-  enableRealTimeUpdates: boolean;
-  escalationThresholds: Record<SecuritySeverity, number>; // minutes
-  autoApprovalRules: AutoApprovalRule[];
-  complianceRequirements: ComplianceRequirement[];
+  enableRealTimeUpdates: boolean;,
+  escalationThresholds: Record<SecuritySeverity, number>; // minutes,
+  autoApprovalRules: AutoApprovalRule;,
+  complianceRequirements: ComplianceRequirement;
 }
-
 export interface AutoApprovalRule {
-  id: string;
+  id: string;,
   name: string;
   conditions: Record<string, any>;
-  maxSeverity: SecuritySeverity;
-  approvedActions: SecurityActionType[];
+  maxSeverity: SecuritySeverity;,
+  approvedActions: SecurityActionType;
   requiredRole?: SecurityRole;
 }
-
 export interface ComplianceRequirement {
-  framework: string;
-  alertTypes: SecurityEventType[];
-  responseTimeMinutes: number;
-  requiredDocumentation: string[];
+  framework: string;,
+  alertTypes: SecurityEventType;
+  responseTimeMinutes: number;,
+  requiredDocumentation: string;
   notificationRequired: boolean;
 }
-
 export interface SecurityDashboardWorkflowProps {
-  workspaceId: string;
+  workspaceId: string;,
   userId: string;
   userRole: SecurityRole;
   dashboardType?: DashboardType;
   config?: Partial<SecurityWorkflowConfig>;
   onSecurityEvent?: (event: SecurityWorkflowEvent) => void;
   onWorkflowTransition?: (result: StateTransitionResult) => void;
+  /**
+  * Main Security Dashboard Workflow Component
+  */
+  // Safe reload function that can be mocked in tests
 }
-/**
- * Main Security Dashboard Workflow Component
- */
-// Safe reload function that can be mocked in tests
 export const safeReload = (): void => {
   if (typeof window !== 'undefined' && window.location) {
     window.location.reload();
-  }
 };
 
 export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps> = ({)
@@ -167,8 +156,8 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
   // State management
   const [framework, setFramework] = useState<SecurityDashboardFramework | null>(null);
   const [dashboardConfig, setDashboardConfig] = useState<DashboardConfig | null>(null);
-  const [securityEvents, setSecurityEvents] = useState<SecurityWorkflowEvent[]>([]);
-  const [activeAlerts, setActiveAlerts] = useState<SecurityWorkflowEvent[]>([]);
+  const [securityEvents, setSecurityEvents] = useState<SecurityWorkflowEvent>([]);
+  const [activeAlerts, setActiveAlerts] = useState<SecurityWorkflowEvent>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // Workflow store integration
@@ -186,57 +175,53 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
     releaseLock
   } = useWorkflowStore();
   // Configuration with defaults
-  const workflowConfig: SecurityWorkflowConfig = useMemo(() => ({)
-    enableAutoTransitions: true,
-    enableAutomatedActions: true,
-    enableRealTimeUpdates: true,
-    escalationThresholds: {,
-      [SecuritySeverity.CRITICAL]: 15, // 15 minutes
-      [SecuritySeverity.HIGH]: 60,     // 1 hour
-      [SecuritySeverity.MEDIUM]: 240,  // 4 hours
-      [SecuritySeverity.LOW]: 1440,    // 24 hours
-      [SecuritySeverity.INFO]: 4320    // 3 days
-    },
-    autoApprovalRules: [,
+  const workflowConfig: SecurityWorkflowConfig = useMemo(() => ({,)
+  enableAutoTransitions: true,
+  enableAutomatedActions: true,
+  enableRealTimeUpdates: true,
+  escalationThresholds: {,
+  [SecuritySeverity.CRITICAL]: 15, // 15 minutes,
+  [SecuritySeverity.HIGH]: 60,     // 1 hour,
+  [SecuritySeverity.MEDIUM]: 240,  // 4 hours,
+  [SecuritySeverity.LOW]: 1440,    // 24 hours,
+  [SecuritySeverity.INFO]: 4320    // 3 days,
+},
+  autoApprovalRules: [,
       {
         id: 'auto-block-known-malicious',
         name: 'Auto-block known malicious IPs',
         conditions: { threatIntelligence: 'confirmed_malicious' },
         maxSeverity: SecuritySeverity.HIGH,
         approvedActions: [SecurityActionType.BLOCK_IP],
-        requiredRole: SecurityRole.SECURITY_ANALYST,
-      }
-    ],
+        requiredRole: SecurityRole.SECURITY_ANALYST],
     complianceRequirements: [,
       {
-        framework: 'GDPR',
-        alertTypes: [SecurityEventType.DATA_BREACH, SecurityEventType.ACCESS_VIOLATION],
-        responseTimeMinutes: 60,
-        requiredDocumentation: ['incident_report', 'impact_assessment'],
-        notificationRequired: true,
-      },
+  framework: 'GDPR',
+  alertTypes: [SecurityEventType.DATA_BREACH, SecurityEventType.ACCESS_VIOLATION],
+  responseTimeMinutes: 60,
+  requiredDocumentation: ['incident_report', 'impact_assessment'],
+  notificationRequired: true,
+}
       {
-        framework: 'SOX',
-        alertTypes: [SecurityEventType.ACCESS_VIOLATION, SecurityEventType.POLICY_VIOLATION],
-        responseTimeMinutes: 240,
-        requiredDocumentation: ['access_log', 'remediation_plan'],
-        notificationRequired: false,
-      }
-    ],
-    ...config
-  }), [config]);
+  framework: 'SOX',
+  alertTypes: [SecurityEventType.ACCESS_VIOLATION, SecurityEventType.POLICY_VIOLATION],
+  responseTimeMinutes: 240,
+  requiredDocumentation: ['access_log', 'remediation_plan'],
+  notificationRequired: false],
+  ...config
+}), [config]);
   // Initialize dashboard framework
   useEffect(() => {
-    const initializeFramework = async () => {
-      try {
-        setLoading(true);
-        // Initialize security dashboard framework
-        const dashboardFramework = new SecurityDashboardFramework({)
-          enableAuditLogging: true,
-          enablePerformanceMonitoring: true,
-          enableCaching: true,
-          complianceMode: true,
-        });
+  const initializeFramework = async () => {
+  try {
+  setLoading(true);
+  // Initialize security dashboard framework
+  const dashboardFramework = new SecurityDashboardFramework({)
+  enableAuditLogging: true,
+  enablePerformanceMonitoring: true,
+  enableCaching: true,
+  complianceMode: true,
+});
         // Load workflow states and transitions
         await Promise.all([)
           fetchStates(workspaceId),
@@ -250,27 +235,26 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         // Initialize real-time event streaming
         if (workflowConfig.enableRealTimeUpdates) {
           initializeEventStreaming();
-        }
         setLoading(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize dashboard');
-        setLoading(false);
-      }
-    };
+  setError(err instanceof Error ? err.message : 'Failed to initialize dashboard');
+  setLoading(false);
+};
     initializeFramework();
   }, [workspaceId, dashboardType, userRole, fetchStates, fetchTransitions, fetchApprovals]);
   // Create dashboard configuration based on type and role
   const createSecurityDashboardConfig = async (;);
     type: DashboardType, 
-    role: SecurityRole,
-  ): Promise<DashboardConfig> => {
-    const baseConfig: DashboardConfig = {
-      id: `security-dashboard-${type}-${Date.now()}`,}
+    role: SecurityRole): Promise<DashboardConfig> => {,
+    const baseConfig: DashboardConfig = {,
+  id: `security-dashboard-${type}-${Date.now()}`}
+}
       type,
-      title: `Security ${type.charAt(0).toUpperCase() + type.slice(1)} Dashboard`,}
-      description: 'Real-time security monitoring and workflow management',
+      title: `Security ${type.charAt(0).toUpperCase() + type.slice(1)} Dashboard`}
+},
+  description: 'Real-time security monitoring and workflow management',
       layout: {,
-        type: 'grid',
+  type: 'grid',
         columns: 12,
         gap: 16,
         responsive: true,
@@ -279,50 +263,49 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           { name: 'tablet', minWidth: 768, columns: 6 },
           { name: 'desktop', minWidth: 1024, columns: 12 }
         ]
-      },
-      widgets: createWidgetsForDashboard(type, role),
+  },
+  widgets: createWidgetsForDashboard(type, role),
       permissions: {,
-        view: [role],
-        edit: [SecurityRole.SECURITY_ADMIN],
-        delete: [SecurityRole.SECURITY_ADMIN],
-        export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-        share: [SecurityRole.SECURITY_ADMIN],
-        adminOnly: false,
-      },
-      refreshInterval: 30000, // 30 seconds
+  view: [role],
+  edit: [SecurityRole.SECURITY_ADMIN],
+  delete: [SecurityRole.SECURITY_ADMIN],
+  export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+  share: [SecurityRole.SECURITY_ADMIN],
+  adminOnly: false,
+},
+  refreshInterval: 30000, // 30 seconds
       autoRefresh: true,
       theme: 'cinema' as any,
       metadata: {,
-        version: '1.0.0',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: userId,
-        updatedBy: userId,
-        tags: ['security', 'workflow', 'monitoring'],
-        category: 'security_operations',
-        organization: workspaceId,
-        compliance: {,
-          frameworks: ['GDPR', 'SOX', 'ISO27001'],
-          requirements: ['audit_trail', 'access_control'],
-          auditRequired: true,
-          retentionPeriod: 2555, // 7 years
-          dataResidency: ['US', 'EU']
-        },
-        usage: {,
-          viewCount: 0,
-          lastViewed: new Date(),
-          popularWidgets: [],
-          averageSessionDuration: 0,
-          peakUsageHours: [9, 10, 11, 14, 15, 16]
-        }
-      },
-      dataClassification: 'CONFIDENTIAL' as any,
-    };
+  version: '1.0.0',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  createdBy: userId,
+  updatedBy: userId,
+  tags: ['security', 'workflow', 'monitoring'],
+  category: 'security_operations',
+  organization: workspaceId,
+  compliance: {,
+  frameworks: ['GDPR', 'SOX', 'ISO27001'],
+  requirements: ['audit_trail', 'access_control'],
+  auditRequired: true,
+  retentionPeriod: 2555, // 7 years,
+  dataResidency: ['US', 'EU'],
+},
+  usage: {,
+  viewCount: 0,
+  lastViewed: new Date(),
+  popularWidgets: [],
+  averageSessionDuration: 0,
+  peakUsageHours: [9, 10, 11, 14, 15, 16],
+},
+  dataClassification: 'CONFIDENTIAL' as any;
+  };
     return baseConfig;
   };
   // Create widgets based on dashboard type and user role
-  const createWidgetsForDashboard = (type: DashboardType, role: SecurityRole): WidgetConfiguration[] => {
-    const commonWidgets: WidgetConfiguration[] = [
+  const createWidgetsForDashboard = (type: DashboardType, role: SecurityRole): WidgetConfiguration => {
+    const commonWidgets: WidgetConfiguration = [
       {
         id: 'security-alerts-overview',
         type: 'security-alerts-table',
@@ -331,25 +314,24 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         position: { x: 0, y: 0, order: 1 },
         size: { width: 8, height: 4, resizable: true },
         config: {,
-          showWorkflowStatus: true,
-          enableQuickActions: true,
-          maxRows: 50,
-          autoRefresh: true,
-        },
-        dataSource: {,
-          type: 'realtime' as any,
+  showWorkflowStatus: true,
+  enableQuickActions: true,
+  maxRows: 50,
+  autoRefresh: true,
+},
+  dataSource: {,
+  type: 'realtime' as any,
           source: 'security-events-stream',
           endpoint: '/api/security/events/stream',
           caching: { enabled: true, ttl: 30 }
-        },
-        permissions: {,
-          view: [role],
-          configure: [SecurityRole.SECURITY_ADMIN],
-          export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-          drillDown: [role],
-          dataAccess: ['CONFIDENTIAL' as any],
-        }
-      },
+  },
+  permissions: {,
+  view: [role],
+  configure: [SecurityRole.SECURITY_ADMIN],
+  export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+  drillDown: [role],
+  dataAccess: ['CONFIDENTIAL' as any],
+}
       {
         id: 'workflow-status-overview',
         type: 'workflow-status-chart',
@@ -358,54 +340,49 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         position: { x: 8, y: 0, order: 2 },
         size: { width: 4, height: 4, resizable: true },
         config: {,
-          chartType: 'donut',
-          showPercentages: true,
-          enableDrillDown: true,
-        },
-        dataSource: {,
-          type: 'batch' as any,
+  chartType: 'donut',
+  showPercentages: true,
+  enableDrillDown: true,
+},
+  dataSource: {,
+  type: 'batch' as any,
           source: 'workflow-statistics',
           endpoint: '/api/workflow/statistics',
           caching: { enabled: true, ttl: 300 }
-        },
-        permissions: {,
-          view: [role],
+  },
+  permissions: {,
+  view: [role],
           configure: [SecurityRole.SECURITY_ADMIN],
           export: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
           drillDown: [role],
-          dataAccess: ['INTERNAL' as any],
-        }
-      }
-    ];
+          dataAccess: ['INTERNAL' as any]];
     // Add role-specific widgets
     if (role === SecurityRole.SECURITY_ADMIN || role === SecurityRole.SECURITY_ANALYST) {
       commonWidgets.push({)
-        id: 'automated-actions-log',
+  id: 'automated-actions-log',
         type: 'automated-actions-timeline',
         category: 'timelines' as any,
         title: 'Automated Response Actions',
         position: { x: 0, y: 4, order: 3 },
         size: { width: 6, height: 3, resizable: true },
         config: {,
-          showExecutionDetails: true,
-          enableActionApproval: true,
-          maxItems: 25,
-        },
-        dataSource: {,
-          type: 'realtime' as any,
+  showExecutionDetails: true,
+  enableActionApproval: true,
+  maxItems: 25,
+},
+  dataSource: {,
+  type: 'realtime' as any,
           source: 'security-actions-stream',
           endpoint: '/api/security/actions/stream',
           caching: { enabled: true, ttl: 60 }
-        },
-        permissions: {,
-          view: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-          configure: [SecurityRole.SECURITY_ADMIN],
-          export: [SecurityRole.SECURITY_ADMIN],
-          drillDown: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
-          dataAccess: ['CONFIDENTIAL' as any],
-        }
-      });
-    }
+  },
+  permissions: {,
+  view: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+  configure: [SecurityRole.SECURITY_ADMIN],
+  export: [SecurityRole.SECURITY_ADMIN],
+  drillDown: [SecurityRole.SECURITY_ANALYST, SecurityRole.SECURITY_ADMIN],
+  dataAccess: ['CONFIDENTIAL' as any],
+});
     return commonWidgets;
   };
   // Initialize real-time event streaming
@@ -414,20 +391,19 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
     const wsUrl = `ws://localhost:8000/ws/security/${workspaceId}`;}
     const ws = new WebSocket(wsUrl);
     ws.onmessage = (event) => {
-      try {
-        const securityEvent: SecurityWorkflowEvent = JSON.parse(event.data);
-        // Process incoming security event
-        processSecurityEvent(securityEvent);
-        // Notify parent component
-        onSecurityEvent?.(securityEvent);
-      } catch (error) {
-        console.error('Failed to process security event:', error);
-      }
-    };
+  try {
+  const securityEvent: SecurityWorkflowEvent = JSON.parse(event.data);
+  // Process incoming security event
+  processSecurityEvent(securityEvent);
+  // Notify parent component
+  onSecurityEvent?.(securityEvent);
+} catch (error) {
+  console.error('Failed to process security event:', error);
+};
     ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-      setError('Real-time connection lost');
-    };
+  console.error('WebSocket error:', error);
+  setError('Real-time connection lost');
+};
     // Cleanup on unmount
     return () => {
       ws.close();
@@ -441,21 +417,17 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       // Update active alerts
       if (event.severity === SecuritySeverity.CRITICAL || event.severity === SecuritySeverity.HIGH) {
         setActiveAlerts(prev => [event, ...prev]);
-      }
       // Check for automated workflow transitions
       if (workflowConfig.enableAutoTransitions) {
         await evaluateAutoTransition(event);
-      }
       // Execute automated actions if enabled
       if (workflowConfig.enableAutomatedActions) {
         await executeAutomatedActions(event);
-      }
       // Check compliance requirements
       await checkComplianceRequirements(event);
     } catch (error) {
-      console.error('Failed to process security event:', error);
-    }
-  };
+  console.error('Failed to process security event:', error);
+};
   // Evaluate automatic workflow transitions
   const evaluateAutoTransition = async (event: SecurityWorkflowEvent) => {
     try {
@@ -468,14 +440,12 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         initialState.id,
         'system',
         {
-          comment: `Auto-created for ${event.type} event`,}
-          metadata: {,
-            securityEvent: event,
+          comment: `Auto-created for ${event.type} event`}
+},
+  metadata: {,
+  securityEvent: event,
             autoCreated: true,
-            timestamp: new Date().toISOString(),
-          }
-        }
-      );
+            timestamp: new Date().toISOString());
       if (result.success) {
         // Update event with workflow state
         setSecurityEvents(prev => )
@@ -484,20 +454,17 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
               ? { ...e, workflowState: result.new_state_id }
               : e
         );
-      }
     } catch (error) {
-      console.error('Failed to evaluate auto transition:', error);
-    }
-  };
+  console.error('Failed to evaluate auto transition:', error);
+};
   // Execute automated security actions
   const executeAutomatedActions = async (event: SecurityWorkflowEvent) => {
     try {
       const applicableRules = workflowConfig.autoApprovalRules.filter(rule => {)
-        // Check severity threshold
+  // Check severity threshold
         const severityOrder = [SecuritySeverity.INFO, SecuritySeverity.LOW, SecuritySeverity.MEDIUM, SecuritySeverity.HIGH, SecuritySeverity.CRITICAL];
         if (severityOrder.indexOf(event.severity) > severityOrder.indexOf(rule.maxSeverity)) {
           return false;
-        }
         // Check conditions (simplified example)
         return Object.entries(rule.conditions).every(([key, value]) => 
           event.metadata[key] === value
@@ -505,24 +472,21 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       });
       for (const rule of applicableRules) {
         for (const actionType of rule.approvedActions) {
-          const action: SecurityAction = {
-            type: actionType,
+          const action: SecurityAction = {,
+  type: actionType,
             target: event.source,
             parameters: { eventId: event.id, reason: event.description },
             timestamp: new Date(),
             executedBy: 'system',
-            status: 'pending',
-          };
+            status: 'pending';
+  };
           // Execute the action (simplified example)
           await executeSecurityAction(action);
           // Update event with executed action
           event.automatedActions.push(action);
-        }
-      }
     } catch (error) {
-      console.error('Failed to execute automated actions:', error);
-    }
-  };
+  console.error('Failed to execute automated actions:', error);
+};
   // Execute a specific security action
   const executeSecurityAction = async (action: SecurityAction): Promise<void> => {
     try {
@@ -531,7 +495,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       case SecurityActionType.BLOCK_IP:
         // Call API to block IP
         await fetch('/api/security/actions/block-ip', {)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ip: action.target, reason: action.parameters.reason })
         });
@@ -539,7 +503,7 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       case SecurityActionType.DISABLE_ACCOUNT:
         // Call API to disable account
         await fetch('/api/security/actions/disable-account', {)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ account: action.target, reason: action.parameters.reason })
         });
@@ -547,26 +511,24 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
       case SecurityActionType.NOTIFY_TEAM:
         // Send notification to security team
         await fetch('/api/security/notifications', {)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ),
             type: 'security_alert', 
             target: 'security_team',
-            message: action.parameters.reason,
-          })
+            message: action.parameters.reason;
+  }
         });
         break;
       default:
         throw new Error(`Unsupported action type: ${action.type}`);}
-      }
       action.status = 'completed';
       action.result = 'Action executed successfully';
     } catch (error) {
-      action.status = 'failed';
-      action.result = error instanceof Error ? error.message : 'Unknown error';
-      throw error;
-    }
-  };
+  action.status = 'failed';
+  action.result = error instanceof Error ? error.message : 'Unknown error';
+  throw error;
+};
   // Check compliance requirements
   const checkComplianceRequirements = async (event: SecurityWorkflowEvent) => {
     try {
@@ -577,25 +539,21 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         if (requirement.notificationRequired) {
           // Send compliance notification
           await fetch('/api/compliance/notifications', {)
-            method: 'POST',
+  method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({),
-              framework: requirement.framework,
-              event,
-              responseTimeMinutes: requirement.responseTimeMinutes,
-              requiredDocumentation: requirement.requiredDocumentation,
-            })
+            body: JSON.stringify({,)
+  framework: requirement.framework,
+  event,
+  responseTimeMinutes: requirement.responseTimeMinutes,
+  requiredDocumentation: requirement.requiredDocumentation,
+}
           });
-        }
         // Add compliance framework to event
         if (!event.complianceFrameworks.includes(requirement.framework)) {
           event.complianceFrameworks.push(requirement.framework);
-        }
-      }
     } catch (error) {
-      console.error('Failed to check compliance requirements:', error);
-    }
-  };
+  console.error('Failed to check compliance requirements:', error);
+};
   // Handle manual workflow transitions
       try {
         const result = await transitionResourceState(;);
@@ -614,7 +572,6 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
           );
           // Notify parent component
           onWorkflowTransition?.(result);
-        }
         return result;
       } finally {
         // Always release the lock
@@ -624,13 +581,10 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         );
         if (eventLock) {
           await releaseLock(eventLock.id, userId);
-        }
-      }
     } catch (error) {
-      console.error('Failed to transition workflow state:', error);
-      throw error;
-    }
-  };
+  console.error('Failed to transition workflow state:', error);
+  throw error;
+};
   // Handle approval actions
   const handleApprovalAction = async (;);
     approvalId: string,
@@ -643,29 +597,26 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         result = await approveWorkflow(approvalId, userId, comment);
       } else {
         result = await rejectWorkflow(approvalId, userId, comment || 'No reason provided');
-      }
       // Handle the result
       if (typeof result === 'object' && 'success' in result) {
         onWorkflowTransition?.(result as StateTransitionResult);
-      }
       return result;
     } catch (error) {
-      console.error(`Failed to ${action} workflow:`, error);}
+      console.error(`Failed to ${action},)}
+  workflow:`, error);}
       throw error;
-    }
   };
   // Render loading state
   if (loading) {
-    return ();
+    return;
       <div className="security-dashboard-loading">
         <div className="loading-spinner"></div>
         <p>Initializing Security Dashboard Workflow...</p>
       </div>
     );
-  }
   // Render error state
   if (error) {
-    return ();
+    return;
       <div className="security-dashboard-error">
         <div className="error-icon">⚠️</div>
         <h3>Dashboard Error</h3>
@@ -678,9 +629,8 @@ export const SecurityDashboardWorkflow: React.FC<SecurityDashboardWorkflowProps>
         </button>
       </div>
     );
-  }
   // Main dashboard render
-  return ();
+  return;
     <div className="security-dashboard-workflow">
       {/* Dashboard Header */}
       <header className="dashboard-header">

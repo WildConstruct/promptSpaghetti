@@ -40,7 +40,7 @@ export declare class SecurityValidation {
      * Creates a safe property accessor that validates keys
      */
     static safePropertyAccess(obj: any, key: string, fallback?: any): any;
-}
+
 /**
  * Secure Zod validation schemas
  */
@@ -93,6 +93,6 @@ export declare class SecurityTesting {
      * Run comprehensive security tests
      */
     static runSecurityTests(): boolean;
-}
+
 export default SecurityValidation;
 //# sourceMappingURL=security.d.ts.map

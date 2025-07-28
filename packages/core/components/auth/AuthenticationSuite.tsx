@@ -17,129 +17,124 @@ import {
   Zap
 } from 'lucide-react';
 interface FeatureCard {
-  title: string;
+  title: string;,
   description: string;
-  icon: React.ElementType;
+  icon: React.ElementType;,
   status: 'completed' | 'in-progress' | 'planned';
-  features: string[];
+  features: string;
   component?: string;
-}
-
-export const AuthenticationSuite: React.FC = () => {
+  export const AuthenticationSuite: React.FC = () => {,
   const [activeSection, setActiveSection] = useState<string>('overview');
-  const authFeatures: FeatureCard[] = [
+  const authFeatures: FeatureCard = [
+  {
+  title: 'Authentication Foundation',
+  description: 'Complete OAuth, session, and API authentication system',
+  icon: Lock,
+  status: 'completed',
+  component: 'OAuthService, SessionService, TokenService',
+  features: [,
+  'OAuth 2.0 integration (Google, GitHub, Microsoft)',
+  'JWT-based authentication with RS256',
+  'Session management with Redis caching',
+  'Multi-device session tracking',
+  'API token authentication with scopes',
+  'Password reset with secure tokens',
+  'Account lockout protection',
+  'Suspicious activity detection'
+  ]
+}
     {
-      title: 'Authentication Foundation',
-      description: 'Complete OAuth, session, and API authentication system',
-      icon: Lock,
-      status: 'completed',
-      component: 'OAuthService, SessionService, TokenService',
-      features: [,
-        'OAuth 2.0 integration (Google, GitHub, Microsoft)',
-        'JWT-based authentication with RS256',
-        'Session management with Redis caching',
-        'Multi-device session tracking',
-        'API token authentication with scopes',
-        'Password reset with secure tokens',
-        'Account lockout protection',
-        'Suspicious activity detection'
-      ]
-    },
+  title: 'User Profile & Preferences',
+  description: 'Comprehensive user profile management with preferences',
+  icon: Users,
+  status: 'completed',
+  component: 'ProfileService, UserProfileManager',
+  features: [,
+  'User profile management with image upload',
+  'Inline profile editing with real-time validation',
+  'Categorized user preferences system',
+  'Multi-channel notification preferences',
+  'OAuth account linking/unlinking',
+  'Privacy settings and data control',
+  'Profile completion tracking',
+  'Preference synchronization across devices'
+  ]
+}
     {
-      title: 'User Profile & Preferences',
-      description: 'Comprehensive user profile management with preferences',
-      icon: Users,
-      status: 'completed',
-      component: 'ProfileService, UserProfileManager',
-      features: [,
-        'User profile management with image upload',
-        'Inline profile editing with real-time validation',
-        'Categorized user preferences system',
-        'Multi-channel notification preferences',
-        'OAuth account linking/unlinking',
-        'Privacy settings and data control',
-        'Profile completion tracking',
-        'Preference synchronization across devices'
-      ]
-    },
+  title: 'Role-Based Access Control (RBAC)',
+  description: 'Advanced permission system with hierarchical roles',
+  icon: Shield,
+  status: 'completed',
+  component: 'RBACService, RoleManager, PermissionGuards',
+  features: [,
+  'Hierarchical role-based permissions',
+  'Granular resource-action permissions',
+  'Permission checking with context',
+  'Role inheritance and delegation',
+  'Permission caching for performance',
+  'Audit logging for all role changes',
+  'Dynamic permission evaluation',
+  'Multi-scope permission contexts'
+  ]
+}
     {
-      title: 'Role-Based Access Control (RBAC)',
-      description: 'Advanced permission system with hierarchical roles',
-      icon: Shield,
-      status: 'completed',
-      component: 'RBACService, RoleManager, PermissionGuards',
-      features: [,
-        'Hierarchical role-based permissions',
-        'Granular resource-action permissions',
-        'Permission checking with context',
-        'Role inheritance and delegation',
-        'Permission caching for performance',
-        'Audit logging for all role changes',
-        'Dynamic permission evaluation',
-        'Multi-scope permission contexts'
-      ]
-    },
-    {
-      title: 'Teams & Organizations',
-      description: 'Multi-tenant organization and team management',
-      icon: Building2,
-      status: 'completed',
-      component: 'OrganizationService, TeamManager, OrganizationManager',
-      features: [,
-        'Multi-tenant organization structure',
-        'Hierarchical team management',
-        'Team membership with role-based access',
-        'Organization settings and branding',
-        'Team collaboration features',
-        'Organization statistics and analytics',
-        'Plan-based usage limits',
-        'Organization and team audit trails'
-      ]
-    }
+  title: 'Teams & Organizations',
+  description: 'Multi-tenant organization and team management',
+  icon: Building2,
+  status: 'completed',
+  component: 'OrganizationService, TeamManager, OrganizationManager',
+  features: [,
+  'Multi-tenant organization structure',
+  'Hierarchical team management',
+  'Team membership with role-based access',
+  'Organization settings and branding',
+  'Team collaboration features',
+  'Organization statistics and analytics',
+  'Plan-based usage limits',
+  'Organization and team audit trails'
+  ]
   ];
   const additionalFeatures = [;
+  {
+  title: 'Security & Compliance',
+  description: 'Enterprise-grade security features',
+  icon: Key,
+  status: 'completed' as const,
+  features: [,
+  'Rate limiting and DDoS protection',
+  'Comprehensive audit logging',
+  'GDPR compliance features',
+  'Data encryption at rest and in transit',
+  'Security event monitoring',
+  'Suspicious activity detection',
+  'Account lockout policies',
+  'Password strength enforcement'
+  ]
+}
     {
-      title: 'Security & Compliance',
-      description: 'Enterprise-grade security features',
-      icon: Key,
-      status: 'completed' as const,
-      features: [,
-        'Rate limiting and DDoS protection',
-        'Comprehensive audit logging',
-        'GDPR compliance features',
-        'Data encryption at rest and in transit',
-        'Security event monitoring',
-        'Suspicious activity detection',
-        'Account lockout policies',
-        'Password strength enforcement'
-      ]
-    },
-    {
-      title: 'Database & Performance',
-      description: 'Scalable database design with performance optimization',
-      icon: Database,
-      status: 'completed' as const,
-      features: [,
-        'PostgreSQL with optimized indexes',
-        'Database transaction management',
-        'Connection pooling and caching',
-        'Audit trails with retention policies',
-        'Performance monitoring',
-        'Query optimization',
-        'Data backup and recovery',
-        'Migration management'
-      ]
-    }
+  title: 'Database & Performance',
+  description: 'Scalable database design with performance optimization',
+  icon: Database,
+  status: 'completed' as const,
+  features: [,
+  'PostgreSQL with optimized indexes',
+  'Database transaction management',
+  'Connection pooling and caching',
+  'Audit trails with retention policies',
+  'Performance monitoring',
+  'Query optimization',
+  'Data backup and recovery',
+  'Migration management'
+  ]
   ];
-  const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'completed': return 'text-green-600 bg-green-100';
-    case 'in-progress': return 'text-blue-600 bg-blue-100';
-    case 'planned': return 'text-gray-600 bg-gray-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-  return ();
+  const getStatusColor = (status: string) => {,
+  switch (status) {
+  case 'completed': return 'text-green-600 bg-green-100';
+  case 'in-progress': return 'text-blue-600 bg-blue-100';
+  case 'planned': return 'text-gray-600 bg-gray-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
+  return;
     <div className="max-w-7xl mx-auto p-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Authentication & User Management Suite</h1>
@@ -171,10 +166,10 @@ export const AuthenticationSuite: React.FC = () => {
             key={tab.id}
             onClick={() => setActiveSection(tab.id)}
             className={`flex items-center px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-              activeSection === tab.id
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
-            }`}
+  activeSection === tab.id
+  ? 'bg-white text-blue-600 shadow-sm'
+  : 'text-gray-600 hover:text-gray-900',
+}`}
           >
             <tab.icon className="w-4 h-4 mr-2" />
             {tab.label}

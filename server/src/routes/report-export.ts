@@ -23,11 +23,14 @@ const exportService = new ReportExportService('./exports');
 /**
  * Request/Response schemas
  */
+}
 interface ExportRequestBody {
   reportData: ReportData;
   config: ExportConfig;
 }
+}
 
+}
 interface ScheduleExportBody {
   name: string;
   description: string;
@@ -39,15 +42,18 @@ interface ScheduleExportBody {
     dayOfWeek?: number;
     dayOfMonth?: number;
     cron?: string;
+}
   };
   enabled?: boolean;
 }
 
+}
 interface BulkExportBody {
   reports: Array<{
     name: string;
     reportData: ReportData;
     config: ExportConfig;
+}
   }>;
   options?: {
     parallel?: boolean;
@@ -412,13 +418,13 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           generatedAt: new Date(),
           generatedBy: (request.user as any)?.email || 'test-user',
           version: '1.0.0'
-        },
+  }
         summary: {
           totalRecords: 100,
           averageValue: 75.5,
           successRate: 95.2,
           errorCount: 5
-        },
+  }
         data: [
           { id: 1, name: 'Sample Item 1', value: 100, category: 'A', status: 'active' },
           { id: 2, name: 'Sample Item 2', value: 75, category: 'B', status: 'inactive' },

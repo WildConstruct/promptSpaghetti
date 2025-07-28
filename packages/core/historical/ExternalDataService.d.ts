@@ -5,15 +5,17 @@
  * Manages external historical data sources and integration
  */
 import { DataSource, HistoricalQuery, HistoricalQueryResult, UTDGNode } from '../types/UTDG';
+
 export interface CacheEntry {
     data: any;
     timestamp: number;
     ttl: number;
     source_id: string;
-}
+
+
 export interface DataSourceRegistry {
     [sourceId: string]: DataSource;
-}
+
 export declare class ExternalDataService {
     private dataSources;
     private cache;
@@ -155,6 +157,6 @@ export declare class ExternalDataService {
      * Initialize default data sources
      */
     private initializeDefaultDataSources;
-}
+
 export default ExternalDataService;
 //# sourceMappingURL=ExternalDataService.d.ts.map

@@ -10,12 +10,14 @@ import { EventRepository } from './EventPersistenceLayer';
 import { UnifiedAnalyticsEvent, AnalyticsEventType, EventCategory, EventSeverity } from './UnifiedEventBus';
 
 // System Metrics Interface (from target architecture)
+}
 export interface SystemMetrics {
   performance: {
     nodeExecutionTime: HistogramMetric;
     memoryUsage: GaugeMetric;
     cacheHitRate: CounterMetric;
     errorRate: CounterMetric;
+}
   };
   
   business: {
@@ -34,6 +36,7 @@ export interface SystemMetrics {
 }
 
 // Metric Types
+}
 export interface BaseMetric {
   name: string;
   value: number;
@@ -41,16 +44,20 @@ export interface BaseMetric {
   labels: Record<string, string>;
   tags: string[];
 }
+}
 
+}
 export interface GaugeMetric extends BaseMetric {
   type: 'gauge';
 }
 
+}
 export interface CounterMetric extends BaseMetric {
   type: 'counter';
   delta?: number;
 }
 
+}
 export interface HistogramMetric extends BaseMetric {
   type: 'histogram';
   buckets: { upperBound: number; count: number }[];
@@ -78,6 +85,7 @@ export const AlertConfigSchema = z.object({
 
 export type AlertConfig = z.infer<typeof AlertConfigSchema>;
 
+}
 export interface Alert {
   id: string;
   configId: string;
@@ -91,8 +99,10 @@ export interface Alert {
   resolvedAt?: number;
   tags: string[];
 }
+}
 
 // Trace Configuration
+}
 export interface TraceContext {
   traceId: string;
   spanId: string;
@@ -100,7 +110,9 @@ export interface TraceContext {
   baggage: Record<string, string>;
   flags: number;
 }
+}
 
+}
 export interface Span {
   traceId: string;
   spanId: string;
@@ -110,12 +122,14 @@ export interface Span {
   endTime?: number;
   duration?: number;
   tags: Record<string, string>;
+}
   logs: Array<{ timestamp: number; fields: Record<string, unknown> }>;
   status: 'ok' | 'error' | 'timeout';
   error?: string;
 }
 
 // Performance Analytics
+}
 export interface PerformanceReport {
   timeRange: { start: number; end: number };
   summary: {
@@ -163,6 +177,7 @@ export class PerformanceMonitoringService {
    * Record performance metric
    */
   async recordMetric(metric: BaseMetric): Promise<void> {
+
     const metricName = metric.name;
     
     if (!this.metrics.has(metricName)) {
@@ -196,12 +211,12 @@ export class PerformanceMonitoringService {
           min: (metric as HistogramMetric).min,
           max: (metric as HistogramMetric).max,
           mean: (metric as HistogramMetric).mean
-        })
-      },
+  }
+  }
       metadata: {
         component: 'performance-monitoring',
         metricType: metric.type
-      },
+  }
       tags: metric.tags,
       environment: process.env.NODE_ENV || 'development'
     };
@@ -250,6 +265,7 @@ export class PerformanceMonitoringService {
    * Finish distributed trace span
    */
   async finishSpan(spanId: string, tags?: Record<string, string>, error?: string): Promise<void> {
+
     const span = this.spans.get(spanId);
     if (!span) return;
 
@@ -277,13 +293,13 @@ export class PerformanceMonitoringService {
         duration: span.duration,
         status: span.status,
         error: span.error
-      },
+  }
       metadata: {
         traceId: span.traceId,
         spanId: span.spanId,
         parentSpanId: span.parentSpanId,
         component: 'distributed-tracing'
-      },
+  }
       tags: Object.keys(span.tags),
       environment: process.env.NODE_ENV || 'development'
     };
@@ -311,6 +327,7 @@ export class PerformanceMonitoringService {
    * Create alert configuration
    */
   async createAlert(config: Omit<AlertConfig, 'id'>): Promise<string> {
+
     const alertId = `alert_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fullConfig: AlertConfig = {
       id: alertId,
@@ -325,6 +342,7 @@ export class PerformanceMonitoringService {
    * Get system metrics following target architecture
    */
   async getSystemMetrics(): Promise<SystemMetrics> {
+
     const now = Date.now();
     const oneHourAgo = now - (60 * 60 * 1000);
 
@@ -339,13 +357,13 @@ export class PerformanceMonitoringService {
         memoryUsage: this.getGaugeMetric(performanceMetrics, 'memory.usage'),
         cacheHitRate: this.getCounterMetric(performanceMetrics, 'cache.hit.rate'),
         errorRate: this.getCounterMetric(performanceMetrics, 'error.rate')
-      },
+  }
       business: {
         activeUsers: this.getGaugeMetric(businessMetrics, 'active.users'),
         graphsCreated: this.getCounterMetric(businessMetrics, 'graphs.created'),
         revenueGenerated: this.getCounterMetric(businessMetrics, 'revenue.generated'),
         featureUsage: this.getHistogramMetric(businessMetrics, 'feature.usage')
-      },
+  }
       infrastructure: {
         cpuUtilization: this.getGaugeMetric(infrastructureMetrics, 'cpu.utilization'),
         memoryUtilization: this.getGaugeMetric(infrastructureMetrics, 'memory.utilization'),
@@ -359,6 +377,7 @@ export class PerformanceMonitoringService {
    * Generate comprehensive performance report
    */
   async generatePerformanceReport(startTime: number, endTime: number): Promise<PerformanceReport> {
+
     const metrics = await this.getMetricsByTimeRange('performance', startTime, endTime);
     const responseTimeMetrics = metrics.filter(m => m.name.includes('response.time'));
     const errorMetrics = metrics.filter(m => m.name.includes('error'));
@@ -405,12 +424,12 @@ export class PerformanceMonitoringService {
         throughput,
         p95ResponseTime,
         p99ResponseTime
-      },
+  }
       trends: {
         responseTimeTrend: responseTrend,
         errorRateTrend: errorTrend,
         throughputTrend: throughputTrend
-      },
+  }
       recommendations,
       bottlenecks
     };
@@ -434,6 +453,7 @@ export class PerformanceMonitoringService {
     alertsActive: number;
     tracesActive: number;
   }> {
+
     const now = Date.now();
     const oneHourAgo = now - (60 * 60 * 1000);
     
@@ -454,7 +474,7 @@ export class PerformanceMonitoringService {
         avg: avgResponseTime,
         p95: this.calculatePercentile(responseTimeMetrics.filter(m => m.type === 'histogram') as HistogramMetric[], 95),
         p99: this.calculatePercentile(responseTimeMetrics.filter(m => m.type === 'histogram') as HistogramMetric[], 99)
-      },
+  }
       errorRate,
       throughput,
       alertsActive: this.activeAlerts.size,
@@ -464,6 +484,7 @@ export class PerformanceMonitoringService {
 
   // Private helper methods
   private async evaluateAlerts(metric: BaseMetric): Promise<void> {
+
     for (const config of this.alertConfigs.values()) {
       if (!config.enabled || !metric.name.includes(config.metric)) continue;
 
@@ -509,12 +530,12 @@ export class PerformanceMonitoringService {
             threshold: alert.threshold,
             condition: config.condition,
             message: alert.message
-          },
+  }
           metadata: {
             alertId: alert.id,
             configId: config.id,
             component: 'alerting'
-          },
+  }
           tags: alert.tags,
           environment: process.env.NODE_ENV || 'development'
         };
@@ -536,6 +557,7 @@ export class PerformanceMonitoringService {
   }
 
   private async getMetricsByTimeRange(category: string, startTime: number, endTime: number): Promise<BaseMetric[]> {
+
     const allMetrics: BaseMetric[] = [];
     
     for (const metricsList of this.metrics.values()) {
@@ -764,6 +786,7 @@ export class PerformanceMonitoringService {
   }
 
   private async collectSystemMetrics(): Promise<void> {
+
     const now = Date.now();
     
     // Collect basic system metrics

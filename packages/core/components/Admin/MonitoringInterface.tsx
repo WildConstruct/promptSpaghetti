@@ -11,68 +11,65 @@ import { HealthDashboard } from './HealthDashboard';
 import { UsageQuotaDashboard } from './UsageQuotaDashboard';
 
 // Monitoring Interface Types
+
 export interface MonitoringMetrics {
   system: {,
-    cpu: number;
-    memory: number;
-    disk: number;
-    network: {,
-      inbound: number;
-      outbound: number;
-    };
-    uptime: number;
-    lastUpdated: string;
+  cpu: number;,
+  memory: number;
+  disk: number;,
+  network: {,
+  inbound: number;,
+  outbound: number;
+};
+    uptime: number;,
+  lastUpdated: string;
   };
   api: {,
-    requestsPerSecond: number;
-    averageLatency: number;
-    errorRate: number;
-    activeConnections: number;
-    totalRequests: number;
-    failedRequests: number;
-  };
+  requestsPerSecond: number;
+  averageLatency: number;,
+  errorRate: number;
+  activeConnections: number;,
+  totalRequests: number;
+  failedRequests: number;
+};
   security: {,
-    activeThreats: number;
-    blockedAttempts: number;
-    suspiciousActivity: number;
-    lastIncident: string | null;
-    complianceScore: number;
-  };
+  activeThreats: number;
+  blockedAttempts: number;,
+  suspiciousActivity: number;
+  lastIncident: string | null;,
+  complianceScore: number;
+};
   performance: {,
-    responseTime: number;
-    throughput: number;
-    availability: number;
-    errorCount: number;
-    operationsPerSecond: number;
-  };
+  responseTime: number;
+  throughput: number;,
+  availability: number;
+  errorCount: number;,
+  operationsPerSecond: number;
+};
 }
-
 export interface AlertData {
-  id: string;
+  id: string;,
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  title: string;
+  title: string;,
   description: string;
-  source: string;
+  source: string;,
   timestamp: string;
-  acknowledged: boolean;
+  acknowledged: boolean;,
   resolved: boolean;
   assignee?: string;
 }
-
 export interface MonitoringViewConfig {
-  layout: 'executive' | 'operational' | 'analytics' | 'compliance';
+  layout: 'executive' | 'operational' | 'analytics' | 'compliance';,
   refreshInterval: number;
-  widgets: string[];
-  rolePermissions: string[];
-}
-interface MonitoringInterfaceProps {
-  userRole: string;
+  widgets: string;,
+  rolePermissions: string;
+  interface MonitoringInterfaceProps {
+  userRole: string;,
   userId: string;
   onAlertAction?: (alertId: string, action: string) => void;
   onExport?: (type: string, timeRange: string) => void;
   className?: string;
 }
-
 export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   userRole,
   userId,
@@ -83,67 +80,65 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   // State Management
   const [currentView, setCurrentView] = useState<MonitoringViewConfig['layout']>('executive');
   const [metrics, setMetrics] = useState<MonitoringMetrics | null>(null);
-  const [alerts, setAlerts] = useState<AlertData[]>([]);
+  const [alerts, setAlerts] = useState<AlertData>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('connected');
   // View Configurations
-  const viewConfigs: Record<MonitoringViewConfig['layout'], MonitoringViewConfig> = {
-    executive: {,
-      layout: 'executive',
-      refreshInterval: 30000,
-      widgets: ['system-overview', 'alert-summary', 'key-metrics', 'health-score'],
-      rolePermissions: ['admin', 'executive', 'manager']
-    },
-    operational: {,
-      layout: 'operational',
-      refreshInterval: 5000,
-      widgets: ['system-details', 'real-time-logs', 'performance-charts', 'alert-management'],
-      rolePermissions: ['admin', 'operator', 'engineer']
-    },
-    analytics: {,
-      layout: 'analytics',
-      refreshInterval: 60000,
-      widgets: ['trend-analysis', 'usage-patterns', 'performance-benchmarks', 'capacity-planning'],
-      rolePermissions: ['admin', 'analyst', 'manager']
-    },
-    compliance: {,
-      layout: 'compliance',
-      refreshInterval: 300000,
-      widgets: ['audit-trail', 'policy-enforcement', 'regulatory-status', 'evidence-collection'],
-      rolePermissions: ['admin', 'compliance', 'auditor']
-    }
-  };
+  const viewConfigs: Record<MonitoringViewConfig['layout'], MonitoringViewConfig> = {,
+  executive: {,
+  layout: 'executive',
+  refreshInterval: 30000,
+  widgets: ['system-overview', 'alert-summary', 'key-metrics', 'health-score'],
+  rolePermissions: ['admin', 'executive', 'manager'],
+},
+  operational: {,
+  layout: 'operational',
+  refreshInterval: 5000,
+  widgets: ['system-details', 'real-time-logs', 'performance-charts', 'alert-management'],
+  rolePermissions: ['admin', 'operator', 'engineer'],
+},
+  analytics: {,
+  layout: 'analytics',
+  refreshInterval: 60000,
+  widgets: ['trend-analysis', 'usage-patterns', 'performance-benchmarks', 'capacity-planning'],
+  rolePermissions: ['admin', 'analyst', 'manager'],
+},
+  compliance: {,
+  layout: 'compliance',
+  refreshInterval: 300000,
+  widgets: ['audit-trail', 'policy-enforcement', 'regulatory-status', 'evidence-collection'],
+  rolePermissions: ['admin', 'compliance', 'auditor'],
+};
   // Available views based on user role
   const availableViews = Object.entries(viewConfigs);
-    .filter(([, config]) => config.rolePermissions.includes(userRole))
+    .filter(([ config]) => config.rolePermissions.includes(userRole))
     .map(([key]) => key as MonitoringViewConfig['layout']);
   // Real-time data fetching
   const fetchMetrics = useCallback(async () => {
-    try {
-      setConnectionStatus('connected');
-      // Simulate API calls - replace with actual endpoints
-      const [systemResponse, apiResponse, securityResponse, performanceResponse] = await Promise.all([)
-        fetch('/api/system/health/metrics').then(r => r.json()),
-        fetch('/api/system/api/metrics').then(r => r.json()),
-        fetch('/api/system/security/metrics').then(r => r.json()),
-        fetch('/api/system/performance/metrics').then(r => r.json())
-      ]);
-      const metricsData: MonitoringMetrics = {
-        system: systemResponse,
-        api: apiResponse,
-        security: securityResponse,
-        performance: performanceResponse,
-      };
+  try {
+  setConnectionStatus('connected');
+  // Simulate API calls - replace with actual endpoints
+  const [systemResponse, apiResponse, securityResponse, performanceResponse] = await Promise.all([)
+  fetch('/api/system/health/metrics').then(r => r.json()),
+  fetch('/api/system/api/metrics').then(r => r.json()),
+  fetch('/api/system/security/metrics').then(r => r.json()),
+  fetch('/api/system/performance/metrics').then(r => r.json())
+  ]);
+  const metricsData: MonitoringMetrics = {,
+  system: systemResponse,
+  api: apiResponse,
+  security: securityResponse,
+  performance: performanceResponse,
+};
       setMetrics(metricsData);
       setLastUpdated(new Date().toISOString());
       setIsLoading(false);
     } catch (error) {
-      console.error('Failed to fetch metrics:', error);
-      setConnectionStatus('disconnected');
-      setIsLoading(false);
-    }
-  }, []);
+  console.error('Failed to fetch metrics:', error);
+  setConnectionStatus('disconnected');
+  setIsLoading(false);
+}, []);
   // Fetch alerts
   const fetchAlerts = useCallback(async () => {
     try {
@@ -151,24 +146,21 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
       const alertsData = await response.json();
       setAlerts(alertsData);
     } catch (error) {
-      console.error('Failed to fetch alerts:', error);
-    }
-  }, []);
+  console.error('Failed to fetch alerts:', error);
+}, []);
   // Handle alert actions
   const handleAlertAction = useCallback((alertId: string, action: string) => {
-    onAlertAction?.(alertId, action);
-    // Update local state optimistically
-    setAlerts(prev => prev.map(alert => )
-      alert.id === alertId 
-        ? { 
-          ...alert, 
-          acknowledged: action === 'acknowledge' ? true : alert.acknowledged,
-          resolved: action === 'resolve' ? true : alert.resolved,
-          assignee: action === 'assign' ? userId : alert.assignee,
-        }
-        : alert
-    ));
-  }, [onAlertAction, userId]);
+  onAlertAction?.(alertId, action);
+  // Update local state optimistically
+  setAlerts(prev => prev.map(alert => )
+  alert.id === alertId
+  ? {
+  ...alert,
+  acknowledged: action === 'acknowledge' ? true : alert.acknowledged,
+  resolved: action === 'resolve' ? true : alert.resolved,
+  assignee: action === 'assign' ? userId : alert.assignee,
+  : alert));
+}, [onAlertAction, userId]);
   // Auto-refresh effect
   useEffect(() => {
     const config = viewConfigs[currentView];
@@ -183,37 +175,36 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   }, [currentView, fetchMetrics, fetchAlerts]);
   // Alert severity colors
   const getSeverityColor = (severity: AlertData['severity']) => {
-    switch (severity) {
-    case 'critical': return '#dc2626';
-    case 'high': return '#ea580c';
-    case 'medium': return '#d97706';
-    case 'low': return '#65a30d';
-    case 'info': return '#2563eb';
-    default: return '#6b7280';
-    }
-  };
+  switch (severity) {
+  case 'critical': return '#dc2626';
+  case 'high': return '#ea580c';
+  case 'medium': return '#d97706';
+  case 'low': return '#65a30d';
+  case 'info': return '#2563eb';
+  default: return '#6b7280';
+};
   // Header component
   const MonitoringHeader = () => (;);
     <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: '20px',
-      padding: '16px 24px',
-      backgroundColor: '#FFFFFF',
-      borderRadius: '8px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-    }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '20px',
+  padding: '16px 24px',
+  backgroundColor: '#FFFFFF',
+  borderRadius: '8px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}>
       <div>
         <h1 style={{ margin: '0 0 4px 0', fontSize: '24px', fontWeight: '600', color: '#1f2937' }}>
           System Monitoring
         </h1>
         <p style={{ margin: 0, fontSize: '14px', color: '#6b7280' }}>
           Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleString() : 'Never'} • 
-          Status: <span style={{ ,
-            color: connectionStatus === 'connected' ? '#10b981' : '#ef4444',
-            fontWeight: '500',
-          }}>
+          Status: <span style={{,
+  color: connectionStatus === 'connected' ? '#10b981' : '#ef4444',
+  fontWeight: '500',
+}}>
             {connectionStatus}
           </span>
         </p>
@@ -224,13 +215,13 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
           value={currentView}
           onChange={(e) => setCurrentView(e.target.value as MonitoringViewConfig['layout'])}
           style={{
-            padding: '8px 12px',
-            border: '1px solid #d1d5db',
-            borderRadius: '6px',
-            fontSize: '14px',
-            backgroundColor: '#FFFFFF',
-            cursor: 'pointer',
-          }}
+  padding: '8px 12px',
+  border: '1px solid #d1d5db',
+  borderRadius: '6px',
+  fontSize: '14px',
+  backgroundColor: '#FFFFFF',
+  cursor: 'pointer',
+}}
         >
           {availableViews.map(view => ()
             <option key={view} value={view}>
@@ -242,15 +233,15 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
         <button
           onClick={() => onExport?.('metrics', '24h')}
           style={{
-            padding: '8px 16px',
-            backgroundColor: '#3b82f6',
-            color: '#FFFFFF',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '14px',
-            fontWeight: '500',
-            cursor: 'pointer',
-          }}
+  padding: '8px 16px',
+  backgroundColor: '#3b82f6',
+  color: '#FFFFFF',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '14px',
+  fontWeight: '500',
+  cursor: 'pointer',
+}}
         >
           Export Report
         </button>
@@ -259,16 +250,16 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   );
   // Alert Summary Component
   const AlertSummary = () => {
-    const criticalAlerts = alerts.filter(a => a.severity === 'critical' && !a.resolved).length;
-    const highAlerts = alerts.filter(a => a.severity === 'high' && !a.resolved).length;
-    const unacknowledged = alerts.filter(a => !a.acknowledged && !a.resolved).length;
-    return ();
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-        padding: '20px',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-      }}>
+  const criticalAlerts = alerts.filter(a => a.severity === 'critical' && !a.resolved).length;
+  const highAlerts = alerts.filter(a => a.severity === 'high' && !a.resolved).length;
+  const unacknowledged = alerts.filter(a => !a.acknowledged && !a.resolved).length;
+  return;
+  <div style={{
+  backgroundColor: '#FFFFFF',
+  borderRadius: '8px',
+  padding: '20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}>
         <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
           Alert Overview
         </h3>
@@ -295,14 +286,14 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   };
   // Key Metrics Component
   const KeyMetrics = () => {
-    if (!metrics) return <div>Loading metrics...</div>;
-    return ();
-      <div style={{
-        backgroundColor: '#FFFFFF',
-        borderRadius: '8px',
-        padding: '20px',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-      }}>
+  if (!metrics) return <div>Loading metrics...</div>;
+  return;
+  <div style={{
+  backgroundColor: '#FFFFFF',
+  borderRadius: '8px',
+  padding: '20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}>
         <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
           System Performance
         </h3>
@@ -313,19 +304,20 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
               {metrics.system.cpu.toFixed(1)}%
             </div>
             <div style={{
-              width: '100%',
-              height: '4px',
-              backgroundColor: '#e5e7eb',
-              borderRadius: '2px',
-              overflow: 'hidden',
-              marginTop: '8px',
-            }}>
+  width: '100%',
+  height: '4px',
+  backgroundColor: '#e5e7eb',
+  borderRadius: '2px',
+  overflow: 'hidden',
+  marginTop: '8px',
+}}>
               <div style={{
-                width: `${Math.min(metrics.system.cpu, 100)}%`,}
-                height: '100%',
+                width: `${Math.min(metrics.system.cpu, 100)}%`}
+},
+  height: '100%',
                 backgroundColor: metrics.system.cpu > 80 ? '#dc2626' : metrics.system.cpu > 60 ? '#f59e0b' : '#10b981',
-                borderRadius: '2px',
-              }} />
+                borderRadius: '2px';
+  }} />
             </div>
           </div>
           <div>
@@ -334,19 +326,20 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
               {metrics.system.memory.toFixed(1)}%
             </div>
             <div style={{
-              width: '100%',
-              height: '4px',
-              backgroundColor: '#e5e7eb',
-              borderRadius: '2px',
-              overflow: 'hidden',
-              marginTop: '8px',
-            }}>
+  width: '100%',
+  height: '4px',
+  backgroundColor: '#e5e7eb',
+  borderRadius: '2px',
+  overflow: 'hidden',
+  marginTop: '8px',
+}}>
               <div style={{
-                width: `${Math.min(metrics.system.memory, 100)}%`,}
-                height: '100%',
+                width: `${Math.min(metrics.system.memory, 100)}%`}
+},
+  height: '100%',
                 backgroundColor: metrics.system.memory > 80 ? '#dc2626' : metrics.system.memory > 60 ? '#f59e0b' : '#10b981',
-                borderRadius: '2px',
-              }} />
+                borderRadius: '2px';
+  }} />
             </div>
           </div>
           <div>
@@ -365,11 +358,11 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
   // Recent Alerts Component
   const RecentAlerts = () => (;);
     <div style={{
-      backgroundColor: '#FFFFFF',
-      borderRadius: '8px',
-      padding: '20px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-    }}>
+  backgroundColor: '#FFFFFF',
+  borderRadius: '8px',
+  padding: '20px',
+  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+}}>
       <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
         Recent Alerts
       </h3>
@@ -383,9 +376,10 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
               justifyContent: 'space-between',
               padding: '12px',
               backgroundColor: '#f9fafb',
-              borderLeft: `4px solid ${getSeverityColor(alert.severity)}`,}
-              borderRadius: '4px',
-            }}
+              borderLeft: `4px solid ${getSeverityColor(alert.severity)}`}
+},
+  borderRadius: '4px';
+  }}
           >
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: '14px', fontWeight: '500', color: '#1f2937', marginBottom: '2px' }}>
@@ -400,14 +394,14 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
                 <button
                   onClick={() => handleAlertAction(alert.id, 'acknowledge')}
                   style={{
-                    padding: '4px 8px',
-                    backgroundColor: '#3b82f6',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                  }}
+  padding: '4px 8px',
+  backgroundColor: '#3b82f6',
+  color: '#FFFFFF',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                 >
                   Acknowledge
                 </button>
@@ -416,14 +410,14 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
                 <button
                   onClick={() => handleAlertAction(alert.id, 'resolve')}
                   style={{
-                    padding: '4px 8px',
-                    backgroundColor: '#10b981',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                  }}
+  padding: '4px 8px',
+  backgroundColor: '#10b981',
+  color: '#FFFFFF',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                 >
                   Resolve
                 </button>
@@ -435,36 +429,35 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
     </div>
   );
   if (isLoading && !metrics) {
-    return ();
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '400px',
-        backgroundColor: '#f9fafb',
-        borderRadius: '8px',
-      }}>
+  return;
+  <div style={{
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '400px',
+  backgroundColor: '#f9fafb',
+  borderRadius: '8px',
+}}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
-            width: '40px',
-            height: '40px',
-            border: '4px solid #e5e7eb',
-            borderTopColor: '#3b82f6',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px',
-          }} />
+  width: '40px',
+  height: '40px',
+  border: '4px solid #e5e7eb',
+  borderTopColor: '#3b82f6',
+  borderRadius: '50%',
+  animation: 'spin 1s linear infinite',
+  margin: '0 auto 16px',
+}} />
           <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading monitoring data...</div>
         </div>
       </div>
     );
-  }
-  return ();
-    <div className={`monitoring-interface ${className}`} style={{ }
-      padding: '20px',
+  return;
+    <div className={`monitoring-interface ${className}`} style={{ },}
+  padding: '20px',
       backgroundColor: '#f9fafb',
-      minHeight: '100vh',
-    }}>
+      minHeight: '100vh';
+  }}>
       <MonitoringHeader />
       {/* Executive View */}
       {currentView === 'executive' && ()
@@ -492,8 +485,6 @@ export const MonitoringInterface: React.FC<MonitoringInterfaceProps> = ({)
         @keyframes spin {
           to {
             transform: rotate(360deg);
-          }
-        }
       `}</style>
     </div>
   );

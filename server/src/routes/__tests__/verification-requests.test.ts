@@ -492,7 +492,7 @@ describe('Verification Request API', () => {
             name: 'front.jpg',
             type: 'image/jpeg',
             data: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD'
-          },
+  }
           {
             name: 'back.jpg',
             type: 'image/jpeg',
@@ -556,7 +556,7 @@ describe('Verification Request API', () => {
             verificationType: 'email_verification',
             data: { email: `rapid${i}@example.com` }
           }
-        })
+  }
       );
 
       const responses = await Promise.all(requests);

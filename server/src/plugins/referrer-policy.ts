@@ -9,6 +9,7 @@ import { ReferrerPolicyService } from '../middleware/referrer-policy';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
+}
 export interface ReferrerPolicyPluginOptions {
   enabled?: boolean;
   defaultPolicy?: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url';
@@ -16,6 +17,7 @@ export interface ReferrerPolicyPluginOptions {
   enableReporting?: boolean;
   maxViolationHistory?: number;
   cacheTimeout?: number;
+}
 }
 
 async function referrerPolicyPlugin(
@@ -42,6 +44,7 @@ async function referrerPolicyPlugin(
   declare module 'fastify' {
     interface FastifyInstance {
       referrerPolicyService: ReferrerPolicyService;
+}
     }
   }
 

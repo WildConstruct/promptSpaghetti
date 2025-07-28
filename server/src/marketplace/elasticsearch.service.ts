@@ -5,6 +5,7 @@ import { SearchFilters, TemplateWithStats } from './types';
 import { MarketplaceDAO } from './dao';
 import { Pool } from 'pg';
 
+}
 interface ElasticsearchTemplate {
   id: string;
   title: string;
@@ -23,11 +24,14 @@ interface ElasticsearchTemplate {
   created_at: string;
   updated_at: string;
 }
+}
 
+}
 interface SearchResponse {
   templates: TemplateWithStats[];
   total: number;
   aggregations?: {
+}
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;
     avg_ratings: Array<{ rating: number; count: number }>;
@@ -62,6 +66,7 @@ export class ElasticsearchService {
    * Advanced search with Elasticsearch
    */
   async searchTemplates(filters: SearchFilters): Promise<SearchResponse> {
+
     try {
       const query = this.buildElasticsearchQuery(filters);
       const response = await this.client.search({
@@ -90,6 +95,7 @@ export class ElasticsearchService {
    * Get search suggestions and autocomplete
    */
   async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
+
     try {
       const response = await this.client.search({
         index: this.INDEX_NAME,
@@ -102,7 +108,7 @@ export class ElasticsearchService {
                 size: limit,
                 skip_duplicates: true
               }
-            },
+  }
             tag_suggest: {
               prefix: query,
               completion: {
@@ -138,6 +144,7 @@ export class ElasticsearchService {
    * Index a template in Elasticsearch
    */
   async indexTemplate(template: TemplateWithStats): Promise<void> {
+
     try {
       const doc: ElasticsearchTemplate = {
         id: template.id,
@@ -172,6 +179,7 @@ export class ElasticsearchService {
    * Remove a template from Elasticsearch
    */
   async removeTemplate(templateId: string): Promise<void> {
+
     try {
       await this.client.delete({
         index: this.INDEX_NAME,
@@ -186,6 +194,7 @@ export class ElasticsearchService {
    * Reindex all templates from database
    */
   async reindexAllTemplates(): Promise<void> {
+
     try {
       // Delete existing index
       await this.client.indices.delete({
@@ -220,6 +229,7 @@ export class ElasticsearchService {
    * Get search analytics
    */
   async getSearchAnalytics(timeRange: string = '7d'): Promise<any> {
+
     try {
       const response = await this.client.search({
         index: this.INDEX_NAME,
@@ -231,26 +241,26 @@ export class ElasticsearchService {
                 gte: `now-${timeRange}`
               }
             }
-          },
+  }
           aggs: {
             popular_searches: {
               terms: {
                 field: 'title.keyword',
                 size: 10
               }
-            },
+  }
             category_distribution: {
               terms: {
                 field: 'categories.keyword',
                 size: 20
               }
-            },
+  }
             price_distribution: {
               histogram: {
                 field: 'price_cents',
                 interval: 500
               }
-            },
+  }
             rating_distribution: {
               histogram: {
                 field: 'avg_rating',
@@ -272,6 +282,7 @@ export class ElasticsearchService {
    * Initialize Elasticsearch index with proper mappings
    */
   private async initializeIndex(): Promise<void> {
+
     try {
       const indexExists = await this.client.indices.exists({
         index: this.INDEX_NAME
@@ -293,7 +304,7 @@ export class ElasticsearchService {
                   }
                 }
               }
-            },
+  }
             mappings: {
               properties: {
                 id: { type: 'keyword' },
@@ -304,17 +315,17 @@ export class ElasticsearchService {
                     keyword: { type: 'keyword' },
                     suggest: { type: 'completion' }
                   }
-                },
+  }
                 description: {
                   type: 'text',
                   analyzer: 'custom_text'
-                },
+  }
                 tags: {
                   type: 'keyword',
                   fields: {
                     suggest: { type: 'completion' }
                   }
-                },
+  }
                 price_cents: { type: 'integer' },
                 avg_rating: { type: 'float' },
                 total_reviews: { type: 'integer' },
@@ -325,7 +336,7 @@ export class ElasticsearchService {
                   fields: {
                     keyword: { type: 'keyword' }
                   }
-                },
+  }
                 owner_verified: { type: 'boolean' },
                 is_ai_generated: { type: 'boolean' },
                 claude_compat: { type: 'keyword' },
@@ -450,7 +461,7 @@ export class ElasticsearchService {
           field: 'categories',
           size: 50
         }
-      },
+  }
       price_ranges: {
         range: {
           field: 'price_cents',
@@ -461,14 +472,14 @@ export class ElasticsearchService {
             { key: 'high', from: 5000 }
           ]
         }
-      },
+  }
       avg_ratings: {
         histogram: {
           field: 'avg_rating',
           interval: 1,
           min_doc_count: 1
         }
-      },
+  }
       tags: {
         terms: {
           field: 'tags',
@@ -483,7 +494,7 @@ export class ElasticsearchService {
           must: must.length > 0 ? must : [{ match_all: {} }],
           filter
         }
-      },
+  }
       sort,
       aggs
     };
@@ -534,6 +545,7 @@ export class ElasticsearchService {
    * Process Elasticsearch search results
    */
   private async processSearchResults(esResponse: any): Promise<TemplateWithStats[]> {
+
     const templateIds = esResponse.hits.hits.map((hit: any) => hit._id);
     
     if (templateIds.length === 0) return [];
@@ -618,6 +630,7 @@ export class ElasticsearchService {
    * Fallback to PostgreSQL search when Elasticsearch fails
    */
   private async fallbackToPostgresSearch(filters: SearchFilters): Promise<SearchResponse> {
+
     const result = await this.dao.searchTemplates(filters);
     return {
       templates: result.templates,

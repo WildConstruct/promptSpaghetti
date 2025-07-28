@@ -59,13 +59,13 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
       email: 'admin@example.com',
       roles: ['admin'],
       permissions: ['users:read', 'users:write', 'admin:*']
-    },
+  }
     user: {
       id: 2, 
       email: 'user@example.com',
       roles: ['user'],
       permissions: ['profile:read', 'profile:write']
-    },
+  }
     limitedUser: {
       id: 3,
       email: 'limited@example.com', 
@@ -274,7 +274,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           headers: {
             authorization: `Bearer ${validTokens.admin}`
           }
-        })
+  }
       );
 
       const responses = await Promise.all(promises);
@@ -378,7 +378,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           method: 'GET', 
           url: '/api/protected/admin',
           headers: { authorization: `Bearer ${validTokens.admin}` }
-        })
+  }
       ]);
 
       // JWT tokens can be reused until expiry (not replay protected)
@@ -539,7 +539,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           method: 'POST',
           url: '/api/protected/sensitive-action',
           headers: { authorization: `Bearer ${validTokens.admin}` }
-        })
+  }
       ]);
 
       expect(responses[0].statusCode).toBe(200);
@@ -571,7 +571,7 @@ describe('Epic 19.5 - Authenticated Penetration Testing', () => {
           headers: {
             authorization: `Bearer ${validTokens.admin}`
           }
-        })
+  }
       );
 
       const responses = await Promise.all(promises);

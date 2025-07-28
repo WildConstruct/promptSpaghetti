@@ -18,6 +18,7 @@
 import React from 'react';
 import { UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface FunnelSegmentationProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     funnelId: string;
@@ -30,7 +31,7 @@ export interface FunnelSegmentationProps {
     onSegmentCreated?: (segment: UserSegment) => void;
     onFilterChange?: (filters: SegmentFilter[]) => void;
     onSegmentAnalysis?: (analysis: SegmentAnalysisResult) => void;
-}
+
 export interface SegmentFilter {
     id: string;
     name: string;
@@ -40,8 +41,9 @@ export interface SegmentFilter {
     isActive: boolean;
     createdAt: number;
     lastModified: number;
-}
+
 export type SegmentFilterType = 'demographic' | 'behavioral' | 'geographic' | 'device' | 'acquisition' | 'engagement' | 'value' | 'custom';
+
 export interface SegmentCondition {
     id: string;
     field: string;
@@ -49,8 +51,9 @@ export interface SegmentCondition {
     value: Error;
     displayName: string;
     dataType: 'string' | 'number' | 'boolean' | 'date' | 'array';
-}
+
 export type SegmentOperator = 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'starts_with' | 'ends_with' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'exists' | 'not_exists' | 'regex_match';
+
 export interface SegmentAnalysisResult {
     segmentId: string;
     segmentName: string;
@@ -61,14 +64,14 @@ export interface SegmentAnalysisResult {
     valueMetrics: SegmentValueMetrics;
     comparisons: SegmentComparison[];
     insights: SegmentInsight[];
-}
+
 export interface SegmentFunnelPerformance {
     conversionRate: number;
     averageTimeToConvert: number;
     dropOffPoints: DropOffAnalysis[];
     pathAnalysis: PathAnalysis[];
     stepPerformance: StepSegmentPerformance[];
-}
+
 export interface StepSegmentPerformance {
     stepId: string;
     stepName: string;
@@ -77,7 +80,7 @@ export interface StepSegmentPerformance {
     conversionRate: number;
     averageTimeSpent: number;
     exitReasons: ExitReason[];
-}
+
 export interface DropOffAnalysis {
     stepId: string;
     stepName: string;
@@ -85,14 +88,14 @@ export interface DropOffAnalysis {
     dropOffCount: number;
     primaryReasons: DropOffReason[];
     recoveryOpportunities: string[];
-}
+
 export interface DropOffReason {
     reason: string;
     percentage: number;
     count: number;
     category: 'technical' | 'user_experience' | 'content' | 'external';
     severity: 'high' | 'medium' | 'low';
-}
+
 export interface PathAnalysis {
     pathId: string;
     pathName: string;
@@ -101,7 +104,7 @@ export interface PathAnalysis {
     conversionRate: number;
     averageTimeToComplete: number;
     isOptimal: boolean;
-}
+
 export interface BehavioralPattern {
     id: string;
     name: string;
@@ -111,14 +114,14 @@ export interface BehavioralPattern {
     conversionImpact: number;
     timePattern: TimePattern;
     strength: 'strong' | 'moderate' | 'weak';
-}
+
 export interface TimePattern {
     preferredDays: number[];
     preferredHours: number[];
     sessionDuration: number;
     visitFrequency: number;
     seasonality?: SeasonalityData;
-}
+
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly';
     peaks: Array<{,
@@ -126,13 +129,13 @@ export interface SeasonalityData {
         multiplier: number;
     }>;
     confidence: number;
-}
+
 export interface DemographicBreakdown {
     geography: GeographicDistribution;
     devices: DeviceDistribution;
     acquisition: AcquisitionChannelDistribution;
     userLifecycle: UserLifecycleDistribution;
-}
+
 export interface GeographicDistribution {
     countries: Array<{,
         country: string;
@@ -149,7 +152,7 @@ export interface GeographicDistribution {
         percentage: number;
         conversionRate: number;
     }>;
-}
+
 export interface DeviceDistribution {
     types: Array<{,
         type: string;
@@ -166,7 +169,7 @@ export interface DeviceDistribution {
         percentage: number;
         conversionRate: number;
     }>;
-}
+
 export interface AcquisitionChannelDistribution {
     channels: Array<{,
         channel: string;
@@ -185,7 +188,7 @@ export interface AcquisitionChannelDistribution {
         conversionRate: number;
         roi: number;
     }>;
-}
+
 export interface UserLifecycleDistribution {
     stages: Array<{,
         stage: string;
@@ -202,7 +205,7 @@ export interface UserLifecycleDistribution {
         percentage: number;
         conversionRate: number;
     }>;
-}
+
 export interface SegmentValueMetrics {
     averageLifetimeValue: number;
     averageOrderValue: number;
@@ -210,14 +213,14 @@ export interface SegmentValueMetrics {
     costPerAcquisition: number;
     returnOnInvestment: number;
     churnRate: number;
-}
+
 export interface SegmentComparison {
     comparedToSegment: string;
     conversionRateDelta: number;
     lifetimeValueDelta: number;
     engagementDelta: number;
     significance: number;
-}
+
 export interface SegmentInsight {
     type: 'opportunity' | 'risk' | 'trend' | 'anomaly';
     severity: 'high' | 'medium' | 'low';
@@ -227,12 +230,12 @@ export interface SegmentInsight {
     confidence: number;
     recommendations: string[];
     evidence: Record<string, any>;
-}
+
 export interface SegmentRuleBuilder {
     fieldDefinitions: FieldDefinition[];
     operators: OperatorDefinition[];
     templates: SegmentTemplate[];
-}
+
 export interface FieldDefinition {
     path: string;
     displayName: string;
@@ -241,7 +244,7 @@ export interface FieldDefinition {
     description: string;
     possibleValues?: unknown[];
     validation?: FieldValidation;
-}
+
 export interface OperatorDefinition {
     operator: SegmentOperator;
     displayName: string;
@@ -249,7 +252,7 @@ export interface OperatorDefinition {
     description: string;
     requiresValue: boolean;
     multiValue: boolean;
-}
+
 export interface SegmentTemplate {
     id: string;
     name: string;
@@ -258,14 +261,13 @@ export interface SegmentTemplate {
     conditions: SegmentCondition[];
     operator: 'AND' | 'OR';
     tags: string[];
-}
+
 export interface FieldValidation {
     required?: boolean;
     min?: number;
     max?: number;
     pattern?: string;
     customValidator?: string;
-}
 /**
  * Main Funnel Segmentation Component
  */

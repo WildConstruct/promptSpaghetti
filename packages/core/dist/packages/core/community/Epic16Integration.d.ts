@@ -10,13 +10,13 @@
  *
  * Provides unified interfaces and orchestration for the complete Epic 16 ecosystem.
  */
-import { MarketplaceTutorialSystemService, MarketplaceTutorial, TutorialSession, LearningPath, CommunityTutorialSubmission } from './MarketplaceTutorialSystem';
+import { MarketplaceTutorialSystemService, MarketplaceTutorial, TutorialSession } from './MarketplaceTutorialSystem';
 import { LearningAnalyticsServiceImpl } from '../analytics/LearningAnalyticsService';
-import { ContributionManagementService, ContributionSubmission } from './ContributionManagementService';
-import { SkillLevelTaggingService, SkillLevel, SkillDomain, UserSkillProfile } from './SkillLevelTaggingService';
+import { ContributionManagementService } from './ContributionManagementService';
+import { SkillLevelTaggingService, SkillLevel, SkillDomain } from './SkillLevelTaggingService';
 import { TimeRange } from '../analytics/LearningAnalyticsExtension';
 export interface Epic16UnifiedService {
-    discoverPersonalizedTutorials(userId: string, context: LearningContext): Promise<MarketplaceTutorial[]>;
+    discoverPersonalizedTutorials(userId: string, context: LearningContext): Promise<MarketplaceTutorial>;
     startLearningSession(userId: string, contentId: string, options: LearningSessionOptions): Promise<LearningSessionResult>;
     trackLearningProgress(sessionId: string, progressData: LearningProgressData): Promise<LearningProgressResult>;
     completeLearningExperience(sessionId: string, completionData: LearningCompletionData): Promise<LearningCompletionResult>;
@@ -27,17 +27,17 @@ export interface Epic16UnifiedService {
     contributeContent(submission: UnifiedContentSubmission): Promise<ContributionResult>;
     reviewCommunityContent(contributionId: string, reviewData: CommunityReviewData): Promise<ReviewResult>;
     publishCommunityContent(contributionId: string): Promise<PublicationResult>;
-    assessUserSkills(userId: string, domains?: SkillDomain[]): Promise<ComprehensiveSkillAssessment>;
-    recommendLearningPath(userId: string, goals: LearningGoal[]): Promise<PersonalizedLearningPath>;
+    assessUserSkills(userId: string, domains?: SkillDomain): Promise<ComprehensiveSkillAssessment>;
+    recommendLearningPath(userId: string, goals: LearningGoal): Promise<PersonalizedLearningPath>;
     trackSkillDevelopment(userId: string, timeRange: TimeRange): Promise<SkillDevelopmentTracking>;
     generateLearningROIReport(userId: string, timeRange: TimeRange): Promise<LearningROIReport>;
-    identifyLearningOpportunities(userId: string): Promise<LearningOpportunity[]>;
+    identifyLearningOpportunities(userId: string): Promise<LearningOpportunity>;
     optimizeLearningExperience(userId: string, feedback: UserFeedback): Promise<OptimizationResult>;
 }
 export interface LearningContext {
     user_role: 'buyer' | 'seller' | 'creator' | 'contributor' | 'admin';
     current_skill_levels: Record<SkillDomain, SkillLevel>;
-    learning_objectives: LearningObjective[];
+    learning_objectives: LearningObjective;
     time_constraints: TimeConstraints;
     preferred_learning_style: LearningStyle;
     marketplace_context: MarketplaceContext;
@@ -48,19 +48,19 @@ export interface LearningObjective {
     target_skill_level: SkillLevel;
     business_context: string;
     urgency: 'low' | 'medium' | 'high' | 'urgent';
-    success_criteria: string[];
+    success_criteria: string;
     timeline_days?: number;
 }
 export interface TimeConstraints {
     available_hours_per_week: number;
     preferred_session_duration_minutes: number;
     schedule_flexibility: 'rigid' | 'somewhat_flexible' | 'very_flexible';
-    peak_learning_times: string[];
-    blackout_periods?: string[];
+    peak_learning_times: string;
+    blackout_periods?: string;
 }
 export interface LearningStyle {
     primary_style: 'visual' | 'auditory' | 'kinesthetic' | 'reading';
-    secondary_styles: string[];
+    secondary_styles: string;
     interaction_preference: 'guided' | 'exploratory' | 'structured';
     support_preference: 'independent' | 'peer_supported' | 'mentor_guided';
     feedback_preference: 'immediate' | 'periodic' | 'completion_only';
@@ -68,16 +68,16 @@ export interface LearningStyle {
 export interface MarketplaceContext {
     current_marketplace_role: string;
     marketplace_experience_level: 'new' | 'beginner' | 'experienced' | 'expert';
-    current_challenges: string[];
-    business_goals: string[];
-    template_interests: string[];
+    current_challenges: string;
+    business_goals: string;
+    template_interests: string;
     revenue_goals?: RevenueGoal;
 }
 export interface RevenueGoal {
     target_monthly_revenue?: number;
     revenue_timeline_months?: number;
     primary_revenue_strategy: 'template_sales' | 'services' | 'consulting' | 'education';
-    target_customer_segments: string[];
+    target_customer_segments: string;
 }
 export interface LearningSessionOptions {
     execution_mode: 'guided' | 'self_paced' | 'practice' | 'assessment';
@@ -91,19 +91,19 @@ export interface LearningSessionResult {
     session: TutorialSession;
     personalization_applied: PersonalizationSummary;
     real_world_integration: RealWorldIntegration;
-    support_resources: SupportResource[];
+    support_resources: SupportResource;
     success_prediction: SuccessPrediction;
 }
 export interface PersonalizationSummary {
-    content_adaptations: ContentAdaptation[];
-    difficulty_adjustments: DifficultyAdjustment[];
-    example_personalizations: ExamplePersonalization[];
-    interaction_customizations: InteractionCustomization[];
+    content_adaptations: ContentAdaptation;
+    difficulty_adjustments: DifficultyAdjustment;
+    example_personalizations: ExamplePersonalization;
+    interaction_customizations: InteractionCustomization;
 }
 export interface RealWorldIntegration {
-    marketplace_connections: MarketplaceConnection[];
-    live_data_usage: LiveDataUsage[];
-    practical_applications: PracticalApplication[];
+    marketplace_connections: MarketplaceConnection;
+    live_data_usage: LiveDataUsage;
+    practical_applications: PracticalApplication;
     outcome_tracking: OutcomeTracking;
 }
 export interface SupportResource {
@@ -119,17 +119,17 @@ export interface SuccessPrediction {
     skill_acquisition_probability: number;
     satisfaction_prediction: number;
     time_to_completion_estimate: number;
-    potential_challenges: PotentialChallenge[];
-    mitigation_strategies: MitigationStrategy[];
+    potential_challenges: PotentialChallenge;
+    mitigation_strategies: MitigationStrategy;
 }
 export interface LearningProgressData {
     session_id: string;
     current_step_id: string;
-    interactions_completed: InteractionCompletion[];
-    skills_demonstrated: SkillDemonstration[];
+    interactions_completed: InteractionCompletion;
+    skills_demonstrated: SkillDemonstration;
     time_spent_seconds: number;
     difficulty_encountered: DifficultyLevel;
-    help_requests: HelpRequest[];
+    help_requests: HelpRequest;
     user_feedback: InProgressFeedback;
 }
 export interface InteractionCompletion {
@@ -173,18 +173,18 @@ export interface InProgressFeedback {
 }
 export interface LearningProgressResult {
     updated_session: TutorialSession;
-    skill_progress_updates: SkillProgressUpdate[];
-    adaptive_adjustments: AdaptiveAdjustment[];
-    milestone_achievements: MilestoneAchievement[];
-    next_recommendations: NextStepRecommendation[];
+    skill_progress_updates: SkillProgressUpdate;
+    adaptive_adjustments: AdaptiveAdjustment;
+    milestone_achievements: MilestoneAchievement;
+    next_recommendations: NextStepRecommendation;
 }
 export interface SkillProgressUpdate {
     skill_domain: SkillDomain;
     previous_assessment: number;
     current_assessment: number;
     progress_confidence: number;
-    evidence_points: string[];
-    next_development_steps: string[];
+    evidence_points: string;
+    next_development_steps: string;
 }
 export interface AdaptiveAdjustment {
     adjustment_type: 'difficulty' | 'pacing' | 'content_style' | 'support_level';
@@ -197,26 +197,26 @@ export interface MilestoneAchievement {
     milestone_id: string;
     milestone_name: string;
     achievement_timestamp: string;
-    skills_validated: string[];
+    skills_validated: string;
     recognition_type: 'badge' | 'certificate' | 'skill_level' | 'community_recognition';
-    marketplace_benefits: string[];
+    marketplace_benefits: string;
 }
 export interface NextStepRecommendation {
     recommendation_type: 'continue_current' | 'advance_to_next' | 'review_previous' | 'seek_help';
     recommendation_details: string;
     confidence_score: number;
-    expected_outcomes: string[];
+    expected_outcomes: string;
     time_estimate_minutes: number;
 }
 export interface PersonalizedLearningInsights {
     user_id: string;
     insight_generation_date: string;
     learning_performance: LearningPerformanceSummary;
-    skill_development_trends: SkillDevelopmentTrend[];
-    engagement_patterns: EngagementPatternInsight[];
+    skill_development_trends: SkillDevelopmentTrend;
+    engagement_patterns: EngagementPatternInsight;
     marketplace_correlation: MarketplaceCorrelationInsight;
-    personalized_recommendations: PersonalizedRecommendation[];
-    areas_for_improvement: ImprovementArea[];
+    personalized_recommendations: PersonalizedRecommendation;
+    areas_for_improvement: ImprovementArea;
 }
 export interface LearningPerformanceSummary {
     overall_learning_score: number;
@@ -244,7 +244,7 @@ export interface EngagementPatternInsight {
     pattern_type: 'temporal' | 'content_preference' | 'interaction_style' | 'support_seeking';
     pattern_description: string;
     pattern_strength: number;
-    optimization_opportunities: string[];
+    optimization_opportunities: string;
     predicted_impact: number;
 }
 export interface MarketplaceCorrelationInsight {
@@ -252,7 +252,7 @@ export interface MarketplaceCorrelationInsight {
     skill_development_to_revenue: number;
     tutorial_completion_to_creation_success: number;
     community_engagement_impact: number;
-    key_correlations: KeyCorrelation[];
+    key_correlations: KeyCorrelation;
 }
 export interface KeyCorrelation {
     learning_metric: string;
@@ -274,14 +274,14 @@ export interface ImprovementArea {
     area_description: string;
     current_performance: number;
     target_performance: number;
-    improvement_strategies: ImprovementStrategy[];
-    success_indicators: string[];
+    improvement_strategies: ImprovementStrategy;
+    success_indicators: string;
 }
 export interface ImprovementStrategy {
     strategy_name: string;
     strategy_description: string;
-    implementation_steps: string[];
-    required_resources: string[];
+    implementation_steps: string;
+    required_resources: string;
     timeline_weeks: number;
     success_probability: number;
 }
@@ -290,114 +290,10 @@ export declare class Epic16IntegratedService implements Epic16UnifiedService {
     private analyticsService;
     private contributionService;
     private skillService;
-    constructor(tutorialService: MarketplaceTutorialSystemService, analyticsService: LearningAnalyticsServiceImpl, contributionService: ContributionManagementService, skillService: SkillLevelTaggingService);
-    discoverPersonalizedTutorials(userId: string, context: LearningContext): Promise<MarketplaceTutorial[]>;
-    startLearningSession(userId: string, contentId: string, options: LearningSessionOptions): Promise<LearningSessionResult>;
-    trackLearningProgress(sessionId: string, progressData: LearningProgressData): Promise<LearningProgressResult>;
-    completeLearningExperience(sessionId: string, completionData: LearningCompletionData): Promise<LearningCompletionResult>;
-    getLearningInsights(userId: string, timeRange: TimeRange): Promise<PersonalizedLearningInsights>;
-    getContentPerformanceInsights(contentId: string, timeRange: TimeRange): Promise<ContentPerformanceInsights>;
-    getCommunityEngagementInsights(communityId: string, timeRange: TimeRange): Promise<CommunityEngagementInsights>;
-    getSystemWideInsights(timeRange: TimeRange): Promise<SystemWideInsights>;
-    contributeContent(submission: UnifiedContentSubmission): Promise<ContributionResult>;
-    reviewCommunityContent(contributionId: string, reviewData: CommunityReviewData): Promise<ReviewResult>;
-    publishCommunityContent(contributionId: string): Promise<PublicationResult>;
-    assessUserSkills(userId: string, domains?: SkillDomain[]): Promise<ComprehensiveSkillAssessment>;
-    recommendLearningPath(userId: string, goals: LearningGoal[]): Promise<PersonalizedLearningPath>;
-    trackSkillDevelopment(userId: string, timeRange: TimeRange): Promise<SkillDevelopmentTracking>;
-    generateLearningROIReport(userId: string, timeRange: TimeRange): Promise<LearningROIReport>;
-    identifyLearningOpportunities(userId: string): Promise<LearningOpportunity[]>;
-    optimizeLearningExperience(userId: string, feedback: UserFeedback): Promise<OptimizationResult>;
-    private convertToTutorialDiscoveryContext;
-    private applyMarketplacePersonalization;
-    private trackTutorialDiscoveryEvent;
-    private formatTimeRange;
-}
-export interface LearningCompletionData {
-    final_score: number;
-    skills_acquired: any[];
-    real_world_application: any;
-    user_feedback: any;
-    improvement_suggestions: string[];
-    next_learning_goals: any[];
-}
-export interface LearningCompletionResult {
-    completion_result: any;
-    skill_profile_updates: any;
-    completion_insights: any;
-    marketplace_impact: any;
-    next_learning_opportunities: any;
-}
-export interface ContentPerformanceInsights {
-    content_id: string;
-    analysis_period: string;
-    effectiveness_metrics: any;
-    engagement_data: any;
-    quality_trends: any;
-    optimization_recommendations: any;
-    benchmarking: any;
-}
-export interface CommunityEngagementInsights {
-    community_id: string;
-    analysis_period: string;
-    knowledge_metrics: any;
-    health_score: any;
-    contribution_patterns: any;
-    growth_insights: any;
-    optimization_opportunities: any;
-}
-export interface SystemWideInsights {
-    analysis_period: string;
-    learning_trends: any;
-    knowledge_transfer_metrics: any;
-    cross_platform_insights: any;
-    system_optimizations: any;
-    strategic_recommendations: any;
-}
-export interface UnifiedContentSubmission extends CommunityTutorialSubmission {
-}
-export interface ContributionResult extends ContributionSubmission {
-}
-export interface CommunityReviewData {
-}
-export interface ReviewResult {
-}
-export interface PublicationResult {
-}
-export interface ComprehensiveSkillAssessment extends UserSkillProfile {
-}
-export interface LearningGoal {
-}
-export interface PersonalizedLearningPath extends LearningPath {
-}
-export interface SkillDevelopmentTracking {
-}
-export interface LearningROIReport {
-}
-export interface LearningOpportunity {
-}
-export interface UserFeedback {
-}
-export interface OptimizationResult {
-}
-export interface ContentAdaptation {
-}
-export interface DifficultyAdjustment {
-}
-export interface ExamplePersonalization {
-}
-export interface InteractionCustomization {
-}
-export interface MarketplaceConnection {
-}
-export interface LiveDataUsage {
-}
-export interface PracticalApplication {
-}
-export interface OutcomeTracking {
-}
-export interface PotentialChallenge {
-}
-export interface MitigationStrategy {
+    constructor();
+    tutorialService: MarketplaceTutorialSystemService;
+    analyticsService: LearningAnalyticsServiceImpl;
+    contributionService: ContributionManagementService;
+    skillService: SkillLevelTaggingService;
 }
 //# sourceMappingURL=Epic16Integration.d.ts.map

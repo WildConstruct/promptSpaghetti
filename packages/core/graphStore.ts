@@ -39,48 +39,48 @@ export interface GraphState {
   stickyNotes: StickyNote[];
   annotations: GraphAnnotations;
   // Project state
-  currentProject: ProjectMetadata | null;,
+  currentProject: ProjectMetadata | null;
   projectSettings: ProjectSettings;
-  hasUnsavedChanges: boolean;,
+  hasUnsavedChanges: boolean;
   isAutoSaveEnabled: boolean;
   // Graph operations
-  setNodes: (nodes: Node) => void;,
-  setEdges: (edges: Edge) => void;,
-  addNode: (node: Node) => void;,
-  addEdge: (edge: Edge) => void;,
+  setNodes: (nodes: Node) => void;
+  setEdges: (edges: Edge) => void;
+  addNode: (node: Node) => void;
+  addEdge: (edge: Edge) => void;
   updateNode: (nodeId: string, partial: Record<string, unknown>) => void;
-  addVariation: (nodeId: string, variation: string) => void;,
-  removeVariation: (nodeId: string, variationIndex: number) => void;,
-  updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void;,
-  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;,
-  duplicateNode: (nodeId: string) => void;,
+  addVariation: (nodeId: string, variation: string) => void;
+  removeVariation: (nodeId: string, variationIndex: number) => void;
+  updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void;
+  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
+  duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
   // Sticky notes operations (Epic 8.7)
-  setStickyNotes: (notes: StickyNote) => void;,
-  addStickyNote: (note: StickyNote) => void;,
-  updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;,
+  setStickyNotes: (notes: StickyNote) => void;
+  addStickyNote: (note: StickyNote) => void;
+  updateStickyNote: (noteId: string, updates: Partial<StickyNote>) => void;
   deleteStickyNote: (noteId: string) => void;
   // Node labels operations (Epic 8.7 Task 2)
   setNodeLabelConfigs: (configs: Record<string, NodeLabelConfig>) => void;
-  addNodeLabelConfig: (config: NodeLabelConfig) => void;,
-  updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;,
-  deleteNodeLabelConfig: (labelId: string) => void;,
+  addNodeLabelConfig: (config: NodeLabelConfig) => void;
+  updateNodeLabelConfig: (labelId: string, updates: Partial<NodeLabelConfig>) => void;
+  deleteNodeLabelConfig: (labelId: string) => void;
   setLabelPreferences: (preferences: Partial<NodeLabelPreferences>) => void;
   // Region groups operations (Epic 8.7 Task 3)
-  setRegionGroups: (groups: RegionGroup) => void;,
-  addRegionGroup: (group: RegionGroup) => void;,
-  updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;,
-  deleteRegionGroup: (groupId: string) => void;,
+  setRegionGroups: (groups: RegionGroup) => void;
+  addRegionGroup: (group: RegionGroup) => void;
+  updateRegionGroup: (groupId: string, updates: Partial<RegionGroup>) => void;
+  deleteRegionGroup: (groupId: string) => void;
   setRegionGroupPreferences: (preferences: Partial<RegionGroupPreferences>) => void;
   // Connection annotations operations (Epic 8.7 Task 4)
-  setConnectionLabels: (labels: ConnectionLabel) => void;,
-  addConnectionLabel: (label: ConnectionLabel) => void;,
-  updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;,
-  removeConnectionLabel: (labelId: string) => void;,
-  setConnectionAnnotations: (annotations: ConnectionAnnotation) => void;,
-  addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;,
-  updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;,
-  removeConnectionAnnotation: (annotationId: string) => void;,
+  setConnectionLabels: (labels: ConnectionLabel) => void;
+  addConnectionLabel: (label: ConnectionLabel) => void;
+  updateConnectionLabel: (labelId: string, updates: Partial<ConnectionLabel>) => void;
+  removeConnectionLabel: (labelId: string) => void;
+  setConnectionAnnotations: (annotations: ConnectionAnnotation) => void;
+  addConnectionAnnotation: (annotation: ConnectionAnnotation) => void;
+  updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void;
+  removeConnectionAnnotation: (annotationId: string) => void;
   setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
   connectionAnnotationPreferences?: ConnectionAnnotationPreferences;
   // Project operations (file-based)
@@ -94,35 +94,35 @@ export interface GraphState {
     options: SaveProjectOptions & { userId?: number }
   ) => Promise<{ success: boolean; error?: string }>;
   deleteProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
-  listUserProjects: (),
+  listUserProjects: (
     userId?: number,
     query?: Record<string,
     unknown>
   ) => Promise<{ success: boolean; projects?: ProjectMetadata; error?: string }>;
   // Common project operations
-  newProject: () => void;,
-  setCurrentProject: (metadata: ProjectMetadata) => void;,
-  updateProjectSettings: (settings: Partial<ProjectSettings>) => void;,
+  newProject: () => void;
+  setCurrentProject: (metadata: ProjectMetadata) => void;
+  updateProjectSettings: (settings: Partial<ProjectSettings>) => void;
   markProjectSaved: () => void;
   markProjectModified: () => void;
   // Graph state operations
   getGraphData: () => { nodes: Node; edges: Edge };
   loadGraphData: (nodes: Node, edges: Edge) => void;
   // Template operations
-  saveAsTemplate: (),
+  saveAsTemplate: (
     templateData: TemplateSaveData,
     author: string) => Promise<{ success: boolean; error?: string; template?: Template }>;
-  applyTemplate: (),
+  applyTemplate: (
     templateId: string,
     options: TemplateInstantiationOptions) => Promise<{ success: boolean; error?: string }>;
   getTemplateCompatibleData: () => GraphData;
 }
-export const useGraphStore = create<GraphState>((set, get) => ({)
+export const useGraphStore = create<GraphState>((set, get) => ({
   // Initial state
   nodes: [],
   edges: [],
   stickyNotes: [],
-  annotations: {,
+  annotations: {
   stickyNotes: [],
     nodeLabelConfigs: {},
     labelPreferences: DEFAULT_NODE_LABEL_PREFERENCES,
@@ -131,14 +131,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
     connectionLabels: [],
     connectionAnnotations: [],
     connectionAnnotationPreferences: DEFAULT_CONNECTION_ANNOTATION_PREFERENCES,
-    metadata: {,
+    metadata: {
   author: 'system',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),
   version: '1.0.0',
 },
   currentProject: null,
-  projectSettings: {,
+  projectSettings: {
   autoSave: true,
   autoSaveInterval: 30000,
   backupCount: 5,
@@ -150,37 +150,37 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   // Graph operations
   setNodes: (nodes: Node) => set({ nodes, hasUnsavedChanges: true }),
   setEdges: (edges: Edge) => set({ edges, hasUnsavedChanges: true }),
-  addNode: (node: Node) => set((state) => ({ ),
+  addNode: (node: Node) => set((state) => ({
     nodes: [...state.nodes, node], 
-    hasUnsavedChanges: true ;
+    hasUnsavedChanges: true
   })),
-  addEdge: (edge: Edge) => set((state) => ({ ),
+  addEdge: (edge: Edge) => set((state) => ({
     edges: [...state.edges, edge], 
-    hasUnsavedChanges: true ;
+    hasUnsavedChanges: true
   })),
   updateNode: (nodeId: string, partial: Record<string, unknown>) => 
-    set((state) => ({)
-  nodes: state.nodes.map((node) =>,
+    set((state) => ({
+  nodes: state.nodes.map((node) =>
   node.id === nodeId ? mergeNodeData(node, partial as Partial<NodeData>) : node),
   hasUnsavedChanges: true,
 })),
   addVariation: (nodeId: string, variation: string) =>
-    set((state) => ({)
+    set((state) => ({
   nodes: addVariationToNode(state.nodes, nodeId, variation),
   hasUnsavedChanges: true,
 })),
   removeVariation: (nodeId: string, variationIndex: number) =>
-    set((state) => ({)
+    set((state) => ({
   nodes: removeVariationFromNode(state.nodes, nodeId, variationIndex),
   hasUnsavedChanges: true,
 })),
   updateVariation: (nodeId: string, variationIndex: number, newValue: string) =>
-    set((state) => ({)
+    set((state) => ({
   nodes: updateVariationInNode(state.nodes, nodeId, variationIndex, newValue),
   hasUnsavedChanges: true,
 })),
   reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) =>
-    set((state) => ({)
+    set((state) => ({
   nodes: reorderVariationsInNode(state.nodes, nodeId, fromIndex, toIndex),
   hasUnsavedChanges: true,
 })),
@@ -192,42 +192,42 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
         ...nodeToClone,
         id: `${nodeToClone.id}-copy-${Date.now()}`}
 },
-  position: {,
+  position: {
   x: nodeToClone.position.x + 100,
   y: nodeToClone.position.y + 100,
 },
-  data: {,
+  data: {
           ...nodeToClone.data,
           label: `${nodeToClone.data.label} (Copy)`}
       };
       return { nodes: [...state.nodes, newNode], hasUnsavedChanges: true };
     }),
       deleteNode: (nodeId: string) =>,
-    set((state) => ({)
+    set((state) => ({
   nodes: state.nodes.filter((n) => n.id !== nodeId),
   edges: state.edges.filter((e) => e.source !== nodeId && e.target !== nodeId),
   hasUnsavedChanges: true,
 })),
   // Sticky notes operations (Epic 8.7)
   setStickyNotes: (notes: StickyNote) =>,
-    set((state) => ({)
+    set((state) => ({
   stickyNotes: notes,
-  annotations: {,
+  annotations: {
   ...state.annotations,
   stickyNotes: notes,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   addStickyNote: (note: StickyNote) =>,
-    set((state) => ({)
+    set((state) => ({
   stickyNotes: [...state.stickyNotes, note],
-  annotations: {,
+  annotations: {
   ...state.annotations,
   stickyNotes: [...state.annotations.stickyNotes, note],
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -240,10 +240,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
       );
       return {
   stickyNotes: updatedNotes,
-  annotations: {,
+  annotations: {
   ...state.annotations,
   stickyNotes: updatedNotes,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -255,10 +255,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   const filteredNotes = state.stickyNotes.filter(note => note.id !== noteId);
   return {
   stickyNotes: filteredNotes,
-  annotations: {,
+  annotations: {
   ...state.annotations,
   stickyNotes: filteredNotes,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -267,25 +267,25 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
     }),
   // Node labels operations (Epic 8.7 Task 2)
   setNodeLabelConfigs: (configs: Record<string, any>) =>
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   nodeLabelConfigs: configs,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   addNodeLabelConfig: (config: NodeLabelConfig) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
-  nodeLabelConfigs: {,
+  nodeLabelConfigs: {
   ...state.annotations.nodeLabelConfigs,
   [config.id]: config,
 },
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -296,16 +296,16 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   const existingConfig = state.annotations.nodeLabelConfigs[labelId];
   if (!existingConfig) return state;
   return {
-  annotations: {,
+  annotations: {
   ...state.annotations,
-  nodeLabelConfigs: {,
+  nodeLabelConfigs: {
   ...state.annotations.nodeLabelConfigs,
-  [labelId]: {,
+  [labelId]: {
   ...existingConfig,
   ...updates,
   timestamp: new Date().toISOString(),
 },
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -316,10 +316,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
     set((state) => {
       const { [labelId]: deleted, ...remainingConfigs } = state.annotations.nodeLabelConfigs;
       return {
-  annotations: {,
+  annotations: {
   ...state.annotations,
   nodeLabelConfigs: remainingConfigs,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -327,14 +327,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   };
     }),
   setLabelPreferences: (preferences: NodeLabelPreferences) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
-  labelPreferences: {,
+  labelPreferences: {
   ...state.annotations.labelPreferences,
   ...preferences
 },
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -342,22 +342,22 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   })),
   // Region groups operations (Epic 8.7 Task 3)
   setRegionGroups: (groups: RegionGroup) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   regionGroups: groups,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   addRegionGroup: (group: RegionGroup) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   regionGroups: [...state.annotations.regionGroups, group],
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -368,14 +368,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
       const existingGroup = state.annotations.regionGroups.find(g => g.id === groupId);
       if (!existingGroup) return state;
       return {
-        annotations: {,
+        annotations: {
           ...state.annotations,
           regionGroups: state.annotations.regionGroups.map(group =>),
             group.id === groupId 
               ? { ...group, ...updates, lastModified: new Date().toISOString() }
               : group
           ),
-          metadata: {,
+          metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -383,25 +383,25 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   };
     }),
   deleteRegionGroup: (groupId: string) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   regionGroups: state.annotations.regionGroups.filter(group => group.id !== groupId),
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   setRegionGroupPreferences: (preferences: RegionGroupPreferences) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
-  regionGroupPreferences: {,
+  regionGroupPreferences: {
   ...state.annotations.regionGroupPreferences,
   ...preferences
 },
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -409,22 +409,22 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   })),
   // Connection annotations operations (Epic 8.7 Task 4)
   setConnectionLabels: (labels: ConnectionLabel) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionLabels: labels,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   addConnectionLabel: (label) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionLabels: [...(state.annotations.connectionLabels || []), label],
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -436,10 +436,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
         label.id === labelId ? { ...label, ...updates } : label
       );
       return {
-  annotations: {,
+  annotations: {
   ...state.annotations,
   connectionLabels: updatedLabels,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -447,35 +447,35 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   };
     }),
   removeConnectionLabel: (labelId) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionLabels: (state.annotations.connectionLabels || []).filter(),
   label => label.id !== labelId
   ),
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   setConnectionAnnotations: (annotations) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionAnnotations: annotations,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   addConnectionAnnotation: (annotation) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionAnnotations: [...(state.annotations.connectionAnnotations || []), annotation],
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -487,10 +487,10 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
         annotation.id === annotationId ? { ...annotation, ...updates } : annotation
       );
       return {
-  annotations: {,
+  annotations: {
   ...state.annotations,
   connectionAnnotations: updatedAnnotations,
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
@@ -498,38 +498,38 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   };
     }),
   removeConnectionAnnotation: (annotationId: string) =>,
-    set((state) => ({)
-  annotations: {,
+    set((state) => ({
+  annotations: {
   ...state.annotations,
   connectionAnnotations: (state.annotations.connectionAnnotations || []).filter(),
   annotation => annotation.id !== annotationId
   ),
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   setConnectionAnnotationPreferences: (preferences: ConnectionAnnotationPreferences) =>,
-    set((state) => ({)
-  connectionAnnotationPreferences: {,
+    set((state) => ({
+  connectionAnnotationPreferences: {
   ...state.connectionAnnotationPreferences,
   ...preferences
 },
-  annotations: {,
+  annotations: {
   ...state.annotations,
-  connectionAnnotationPreferences: {,
+  connectionAnnotationPreferences: {
   ...state.annotations.connectionAnnotationPreferences,
   ...preferences
 },
-  metadata: {,
+  metadata: {
   ...state.annotations.metadata,
   modified: new Date().toISOString(),
 },
   hasUnsavedChanges: true;
   })),
   // Project operations
-  saveProject: async (options: SaveProjectOptions) => {,
+  saveProject: async (options: SaveProjectOptions) => {
     const state = get();
     try {
       const result = await ProjectManager.saveProjectToDevice(;);
@@ -540,7 +540,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
       if (result.success) {
   set({ )
   hasUnsavedChanges: false,
-  currentProject: result.fileName ? {,
+  currentProject: result.fileName ? {
   name: options.name,
   description: options.description,
   version: '1.0.0',
@@ -558,11 +558,11 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   error: error instanceof Error ? error.message : 'Unknown error',
 };
   },
-  loadProject: async () => {,
+  loadProject: async () => {
     try {
       const result = await ProjectManager.loadProjectFromDevice();
       if (result.success && result.data) {
-        set({)
+        set({
   nodes: result.data.graph.nodes,
           edges: result.data.graph.edges,
           currentProject: result.data.metadata,
@@ -577,30 +577,30 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   error: error instanceof Error ? error.message : 'Unknown error',
 };
   },
-  newProject: () => {,
-  set({)
+  newProject: () => {
+  set({
   nodes: [],
   edges: [],
   currentProject: null,
   hasUnsavedChanges: false,
 });
   },
-  setCurrentProject: (metadata: ProjectMetadata) => {,
+  setCurrentProject: (metadata: ProjectMetadata) => {
     set({ currentProject: metadata });
   },
-  updateProjectSettings: (settings: Partial<ProjectSettings>) => {,
-    set((state) => ({)
+  updateProjectSettings: (settings: Partial<ProjectSettings>) => {
+    set((state) => ({
   projectSettings: { ...state.projectSettings, ...settings },
       hasUnsavedChanges: true;
   }));
   },
-  markProjectSaved: () => {,
+  markProjectSaved: () => {
     set({ hasUnsavedChanges: false });
   },
-  markProjectModified: () => {,
+  markProjectModified: () => {
     set({ hasUnsavedChanges: true });
   },
-  getGraphData: () => {,
+  getGraphData: () => {
     const state = get();
     return { nodes: state.nodes, edges: state.edges };
   },
@@ -620,7 +620,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
       if (result.success) {
   set({ )
   hasUnsavedChanges: false,
-  currentProject: {,
+  currentProject: {
   name: options.name,
   description: options.description,
   version: '1.0.0',
@@ -645,7 +645,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
     try {
       const result = await ServerProjectManager.loadProjectFromServer(projectId, userId);
       if (result.success && result.data) {
-        set({)
+        set({
   nodes: result.data.graph.nodes,
           edges: result.data.graph.edges,
           currentProject: result.data.metadata,
@@ -673,7 +673,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
       if (result.success) {
   set({ )
   hasUnsavedChanges: false,
-  currentProject: {,
+  currentProject: {
   ...state.currentProject,
   name: options.name,
   description: options.description,
@@ -703,7 +703,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   },
   listUserProjects: async (userId?: number, query?: Record<string, unknown>) => {
     try {
-      const result = await ServerProjectManager.getUserProjects({)
+      const result = await ServerProjectManager.getUserProjects({
   userId,
         ...query
       });
@@ -748,14 +748,14 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   if (options.mergeWithCurrent) {
   // Merge with current graph
   const state = get();
-  set({)
+  set({
   nodes: [...state.nodes, ...graphData.nodes],
   edges: [...state.edges, ...graphData.edges],
   hasUnsavedChanges: true,
 });
       } else {
   // Replace current graph
-  set({)
+  set({
   nodes: graphData.nodes,
   edges: graphData.edges,
   hasUnsavedChanges: true,
@@ -767,12 +767,12 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   error: error instanceof Error ? error.message : 'Failed to apply template',
 };
   },
-  getTemplateCompatibleData: () => {,
+  getTemplateCompatibleData: () => {
   const state = get();
   return {
   nodes: state.nodes,
   edges: state.edges,
-  annotations: {,
+  annotations: {
   stickyNotes: [], // Will be populated when sticky notes system is implemented,
   nodeLabels: Object.fromEntries(),
   state.nodes.map(node => [node.id, node.data?.label || node.id])
@@ -781,7 +781,7 @@ export const useGraphStore = create<GraphState>((set, get) => ({)
   connectionLabels: Object.fromEntries(),
   state.edges.filter(edge => edge.label).map(edge => [edge.id, edge.label!])
   ),
-  metadata: {,
+  metadata: {
   author: 'system',
   created: new Date().toISOString(),
   modified: new Date().toISOString(),

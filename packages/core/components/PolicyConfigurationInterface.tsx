@@ -24,86 +24,77 @@ interface PolicyConfigurationInterfaceProps {
   onPolicyDeploy?: (deployment: unknown) => void;
   initialPolicy?: unknown;
   mode?: 'create' | 'edit' | 'view';
-  complianceFrameworks?: string[];
-  jurisdictions?: string[];
-  templates?: PolicyTemplate[];
-}
-interface PolicyTemplate {
-  templateId: string;
+  complianceFrameworks?: string;
+  jurisdictions?: string;
+  templates?: PolicyTemplate;
+  interface PolicyTemplate {
+  templateId: string;,
   name: string;
-  description: string;
+  description: string;,
   framework: string;
-  policyType: PolicyType;
-  variables: TemplateVariable[];
-}
-interface TemplateVariable {
-  name: string;
+  policyType: PolicyType;,
+  variables: TemplateVariable;
+  interface TemplateVariable {
+  name: string;,
   type: 'TEXT' | 'EMAIL' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'LIST';
   required: boolean;
   defaultValue?: unknown;
   description?: string;
-}
-interface PolicyFormData {
-  policyType: PolicyType;
+  interface PolicyFormData {
+  policyType: PolicyType;,
   title: string;
-  description: string;
-  jurisdiction: string[];
-  complianceFrameworks: string[];
-  audience: string[];
+  description: string;,
+  jurisdiction: string;
+  complianceFrameworks: string;,
+  audience: string;
   templateId?: string;
   variables: Record<string, any>;
-  customizations: PolicyCustomization[];
-}
-interface PolicyCustomization {
-  customizationId: string;
+  customizations: PolicyCustomization;
+  interface PolicyCustomization {
+  customizationId: string;,
   type: 'BRANDING' | 'CONTENT' | 'STRUCTURE' | 'VARIABLES' | 'STYLING';
-  target: string;
+  target: string;,
   value: Error;
-  priority: number;
+  priority: number;,
   enabled: boolean;
-}
-interface DeploymentConfig {
-  environment: 'STAGING' | 'PRODUCTION';
-  channels: string[];
-  rolloutType: 'IMMEDIATE' | 'PHASED' | 'CANARY' | 'BLUE_GREEN';
-  phases: RolloutPhase[];
+  interface DeploymentConfig {
+  environment: 'STAGING' | 'PRODUCTION';,
+  channels: string;
+  rolloutType: 'IMMEDIATE' | 'PHASED' | 'CANARY' | 'BLUE_GREEN';,
+  phases: RolloutPhase;
   notifications: NotificationConfig;
-}
-interface RolloutPhase {
-  phaseId: string;
+  interface RolloutPhase {
+  phaseId: string;,
   name: string;
-  percentage: number;
-  audience: string[];
+  percentage: number;,
+  audience: string;
   duration: number;
-}
-interface NotificationConfig {
-  enabled: boolean;
-  channels: string[];
-  template: string;
+  interface NotificationConfig {
+  enabled: boolean;,
+  channels: string;
+  template: string;,
   immediate: boolean;
   scheduled?: Date;
-}
-
-// Validation schemas
-const PolicyFormSchema = z.object({)
+  // Validation schemas
+  const PolicyFormSchema = z.object({)
   policyType: z.enum(),
-    ['PRIVACY_POLICY',
-      'TERMS_OF_SERVICE',
-      'COOKIE_POLICY',
-      'DATA_PROCESSING_AGREEMENT',
-      'CONSENT_POLICY',
-      'RETENTION_POLICY',
-      'SECURITY_POLICY',
-      'ACCEPTABLE_USE_POLICY',
-      'GDPR_POLICY',
-      'CCPA_POLICY',
-      'CUSTOM']
+  ['PRIVACY_POLICY',
+  'TERMS_OF_SERVICE',
+  'COOKIE_POLICY',
+  'DATA_PROCESSING_AGREEMENT',
+  'CONSENT_POLICY',
+  'RETENTION_POLICY',
+  'SECURITY_POLICY',
+  'ACCEPTABLE_USE_POLICY',
+  'GDPR_POLICY',
+  'CCPA_POLICY',
+  'CUSTOM']
   ),
   title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be less than 200 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be less than 1000 characters'),
   jurisdiction: z.array(z.string()).min(1, 'At least one jurisdiction is required'),
   complianceFrameworks: z.array(z.string()),
-  audience: z.array(z.string()).min(1, 'At least one audience is required')
+  audience: z.array(z.string()).min(1, 'At least one audience is required'),
 });
 
 export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterfaceProps> = ({)
@@ -119,7 +110,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   // State management
   const [currentTab, setCurrentTab] = useState<'basic' | 'content' | 'compliance' | 'deployment' | 'preview'>('basic');
   const [formData, setFormData] = useState<PolicyFormData>({)
-    policyType: 'PRIVACY_POLICY',
+  policyType: 'PRIVACY_POLICY',
     title: '',
     description: '',
     jurisdiction: [],
@@ -127,20 +118,19 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
     audience: [],
     templateId: '',
     variables: {},
-    customizations: [],
+    customizations: [];
   });
   const [deploymentConfig, setDeploymentConfig] = useState<DeploymentConfig>({)
-    environment: 'STAGING',
-    channels: [],
-    rolloutType: 'IMMEDIATE',
-    phases: [],
-    notifications: {,
-      enabled: true,
-      channels: ['EMAIL'],
-      template: 'default',
-      immediate: true,
-    }
-  });
+  environment: 'STAGING',
+  channels: [],
+  rolloutType: 'IMMEDIATE',
+  phases: [],
+  notifications: {,
+  enabled: true,
+  channels: ['EMAIL'],
+  template: 'default',
+  immediate: true,
+});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<PolicyTemplate | null>(null);
@@ -148,7 +138,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
   useEffect(() => {
     if (initialPolicy && mode !== 'create') {
       setFormData({)
-        policyType: initialPolicy.policyType,
+  policyType: initialPolicy.policyType,
         title: initialPolicy.title,
         description: initialPolicy.description,
         jurisdiction: initialPolicy.jurisdiction,
@@ -156,26 +146,24 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         audience: initialPolicy.audience,
         templateId: initialPolicy.templateId || '',
         variables: initialPolicy.variables || {},
-        customizations: initialPolicy.customizations || [],
-      });
-    }
+        customizations: initialPolicy.customizations || [];
+  });
   }, [initialPolicy, mode]);
   // Template selection handling
   const handleTemplateSelect = useCallback((templateId: string) => {
-    const template = templates.find(t => t.templateId === templateId);
-    if (template) {
-      setSelectedTemplate(template);
-      setFormData(prev => ({)
-        ...prev,
-        templateId,
-        policyType: template.policyType,
-        complianceFrameworks: [template.framework],
-        variables: template.variables.reduce((acc, variable) => ({)
-          ...acc,
-          [variable.name]: variable.defaultValue || ''
-        }), {})
+  const template = templates.find(t => t.templateId === templateId);
+  if (template) {
+  setSelectedTemplate(template);
+  setFormData(prev => ({)
+  ...prev,
+  templateId,
+  policyType: template.policyType,
+  complianceFrameworks: [template.framework],
+  variables: template.variables.reduce((acc, variable) => ({,)
+  ...acc,
+  [variable.name]: variable.defaultValue || '',
+}), {})
       }));
-    }
   }, [templates]);
   // Form validation
   const validateForm = useCallback((): boolean => {
@@ -187,32 +175,27 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
       if (error instanceof z.ZodError) {
         const newErrors: Record<string, string> = {};
         error.errors.forEach(err => {)
-          if (err.path) {
+  if (err.path) {
             newErrors[err.path.join('.')] = err.message;
-          }
         });
         setErrors(newErrors);
-      }
       return false;
-    }
   }, [formData]);
   // Form submission handlers
   const handleCreate = useCallback(async () => {
-    if (!validateForm()) return;
-    setIsLoading(true);
-    try {
-      const policyData = {
-        ...formData,
-        templateId: selectedTemplate?.templateId,
-      };
+  if (!validateForm()) return;
+  setIsLoading(true);
+  try {
+  const policyData = {
+  ...formData,
+  templateId: selectedTemplate?.templateId,
+};
       if (onPolicyCreate) {
         await onPolicyCreate(policyData);
-      }
     } catch (error) {
-      console.error('Error creating policy:', error);
-    } finally {
+  console.error('Error creating policy:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [formData, selectedTemplate, validateForm, onPolicyCreate]);
   const handleUpdate = useCallback(async () => {
     if (!validateForm()) return;
@@ -223,72 +206,65 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
         version: initialPolicy?.version,
         changes: [,
           {
-            changeId: `CHG-${Date.now()}`,}
-            type: 'CONTENT',
+            changeId: `CHG-${Date.now()}`}
+},
+  type: 'CONTENT',
             location: 'general',
             description: 'Policy configuration updated via interface',
             impact: 'MEDIUM' as ChangeImpact,
             requiresReacceptance: true,
-            newValue: formData,
-          }
-        ],
+            newValue: formData],
         description: 'Updated policy configuration',
         impact: 'MEDIUM' as ChangeImpact,
         requiresApproval: true,
-        notificationRequired: true,
-      };
+        notificationRequired: true;
+  };
       if (onPolicyUpdate) {
         await onPolicyUpdate(updateData);
-      }
     } catch (error) {
-      console.error('Error updating policy:', error);
-    } finally {
+  console.error('Error updating policy:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [formData, initialPolicy, validateForm, onPolicyUpdate]);
   const handleDeploy = useCallback(async () => {
-    if (!initialPolicy?.policyId) return;
-    setIsLoading(true);
-    try {
-      const deploymentData = {
-        policyId: initialPolicy.policyId,
-        version: initialPolicy.version,
-        environment: deploymentConfig.environment,
-        channels: deploymentConfig.channels,
-        rolloutStrategy: {,
-          type: deploymentConfig.rolloutType,
-          phases: deploymentConfig.phases.map(phase => ({),
-            ...phase,
-            startDate: new Date(),
-            successCriteria: [],
-            dependencies: [],
-          })),
+  if (!initialPolicy?.policyId) return;
+  setIsLoading(true);
+  try {
+  const deploymentData = {
+  policyId: initialPolicy.policyId,
+  version: initialPolicy.version,
+  environment: deploymentConfig.environment,
+  channels: deploymentConfig.channels,
+  rolloutStrategy: {,
+  type: deploymentConfig.rolloutType,
+  phases: deploymentConfig.phases.map(phase => ({,)
+  ...phase,
+  startDate: new Date(),
+  successCriteria: [],
+  dependencies: [],
+})),
           rollbackCriteria: [],
-          monitoringPeriod: 24,
-        },
-        notificationSettings: {,
-          enabled: deploymentConfig.notifications.enabled,
-          channels: deploymentConfig.notifications.channels.map(channel => ({),
-            type: channel,
+          monitoringPeriod: 24;
+  },
+  notificationSettings: {,
+  enabled: deploymentConfig.notifications.enabled,
+          channels: deploymentConfig.notifications.channels.map(channel => ({,)
+  type: channel,
             configuration: {},
-            enabled: true,
-          })),
+            enabled: true;
+  })),
           audiences: formData.audience,
           template: deploymentConfig.notifications.template,
           scheduling: {,
-            immediate: deploymentConfig.notifications.immediate,
-            scheduled: deploymentConfig.notifications.scheduled,
-          }
-        }
-      };
+  immediate: deploymentConfig.notifications.immediate,
+  scheduled: deploymentConfig.notifications.scheduled,
+};
       if (onPolicyDeploy) {
         await onPolicyDeploy(deploymentData);
-      }
     } catch (error) {
-      console.error('Error deploying policy:', error);
-    } finally {
+  console.error('Error deploying policy:', error);
+} finally {
       setIsLoading(false);
-    }
   }, [deploymentConfig, initialPolicy, formData.audience, onPolicyDeploy]);
   // Computed values
   const availableTemplates = useMemo(() => {
@@ -306,33 +282,34 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
   const addCustomization = useCallback(() => {
-    const newCustomization: PolicyCustomization = {
-      customizationId: `CUST-${Date.now()}`,}
-      type: 'CONTENT',
+    const newCustomization: PolicyCustomization = {,
+  customizationId: `CUST-${Date.now()}`}
+},
+  type: 'CONTENT',
       target: '',
       value: '',
       priority: 1,
-      enabled: true,
-    };
+      enabled: true;
+  };
     setFormData(prev => ({)
-      ...prev,
-      customizations: [...prev.customizations, newCustomization]
-    }));
+  ...prev,
+  customizations: [...prev.customizations, newCustomization],
+}));
   }, []);
   const updateCustomization = useCallback((index: number, field: keyof PolicyCustomization, value: Error) => {
     setFormData(prev => ({)
-      ...prev,
+  ...prev,
       customizations: prev.customizations.map((cust, i) => 
         i === index ? { ...cust, [field]: value } : cust
     }));
   }, []);
   const removeCustomization = useCallback((index: number) => {
-    setFormData(prev => ({)
-      ...prev,
-      customizations: prev.customizations.filter((_, i) => i !== index)
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  customizations: prev.customizations.filter((_, i) => i !== index),
+}));
   }, []);
-  return ();
+  return;
     <div className="policy-configuration-interface">
       <div className="policy-config-header">
         <h2 className="policy-config-title">
@@ -447,7 +424,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           updateFormField('jurisdiction', [...formData.jurisdiction, jurisdiction]);
                         } else {
                           updateFormField('jurisdiction', formData.jurisdiction.filter(j => j !== jurisdiction));
-                        }
                       }}
                       disabled={mode === 'view'}
                     />
@@ -470,7 +446,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                           updateFormField('audience', [...formData.audience, audience]);
                         } else {
                           updateFormField('audience', formData.audience.filter(a => a !== audience));
-                        }
                       }}
                       disabled={mode === 'view'}
                     />
@@ -521,9 +496,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         id={variable.name}
                         checked={formData.variables[variable.name] || false}
                         onChange={(e) => updateFormField('variables', {)
-                          ...formData.variables,
-                          [variable.name]: e.target.checked
-                        })}
+  ...formData.variables,
+  [variable.name]: e.target.checked,
+})}
                         disabled={mode === 'view'}
                       />
                     ) : variable.type === 'DATE' ? ()
@@ -532,9 +507,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
                         onChange={(e) => updateFormField('variables', {)
-                          ...formData.variables,
-                          [variable.name]: e.target.value
-                        })}
+  ...formData.variables,
+  [variable.name]: e.target.value,
+})}
                         disabled={mode === 'view'}
                       />
                     ) : variable.type === 'NUMBER' ? ()
@@ -543,9 +518,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
                         onChange={(e) => updateFormField('variables', {)
-                          ...formData.variables,
-                          [variable.name]: e.target.value
-                        })}
+  ...formData.variables,
+  [variable.name]: e.target.value,
+})}
                         disabled={mode === 'view'}
                       />
                     ) : ()
@@ -554,9 +529,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         id={variable.name}
                         value={formData.variables[variable.name] || ''}
                         onChange={(e) => updateFormField('variables', {)
-                          ...formData.variables,
-                          [variable.name]: e.target.value
-                        })}
+  ...formData.variables,
+  [variable.name]: e.target.value,
+})}
                         disabled={mode === 'view'}
                       />
                     )}
@@ -673,7 +648,6 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                             'complianceFrameworks',
                             formData.complianceFrameworks.filter(f => f !== framework)
                             ));
-                        }
                       }}
                       disabled={mode === 'view'}
                     />
@@ -729,9 +703,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 id="environment"
                 value={deploymentConfig.environment}
                 onChange={(e) => setDeploymentConfig(prev => ({)
-                  ...prev,
-                  environment: e.target.value as 'STAGING' | 'PRODUCTION',
-                }))}
+  ...prev,
+  environment: e.target.value as 'STAGING' | 'PRODUCTION',
+}))}
                 disabled={mode === 'view'}
               >
                 <option value="STAGING">Staging</option>
@@ -744,9 +718,9 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                 id="rolloutType"
                 value={deploymentConfig.rolloutType}
                 onChange={(e) => setDeploymentConfig(prev => ({)
-                  ...prev,
-                  rolloutType: e.target.value as any,
-                }))}
+  ...prev,
+  rolloutType: e.target.value as any,
+}))}
                 disabled={mode === 'view'}
               >
                 <option value="IMMEDIATE">Immediate</option>
@@ -764,17 +738,16 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                       type="checkbox"
                       checked={deploymentConfig.channels.includes(channel)}
                       onChange={(e) => {
-                        if (e.target.checked) {
-                          setDeploymentConfig(prev => ({)
-                            ...prev,
-                            channels: [...prev.channels, channel]
-                          }));
+  if (e.target.checked) {
+  setDeploymentConfig(prev => ({)
+  ...prev,
+  channels: [...prev.channels, channel],
+}));
                         } else {
-                          setDeploymentConfig(prev => ({)
-                            ...prev,
-                            channels: prev.channels.filter(c => c !== channel),
-                          }));
-                        }
+  setDeploymentConfig(prev => ({)
+  ...prev,
+  channels: prev.channels.filter(c => c !== channel),
+}));
                       }}
                       disabled={mode === 'view'}
                     />
@@ -791,7 +764,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                     type="checkbox"
                     checked={deploymentConfig.notifications.enabled}
                     onChange={(e) => setDeploymentConfig(prev => ({)
-                      ...prev,
+  ...prev,
                       notifications: { ...prev.notifications, enabled: e.target.checked }
                     }))}
                     disabled={mode === 'view'}
@@ -810,23 +783,20 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                             type="checkbox"
                             checked={deploymentConfig.notifications.channels.includes(channel)}
                             onChange={(e) => {
-                              if (e.target.checked) {
-                                setDeploymentConfig(prev => ({)
-                                  ...prev,
-                                  notifications: {,
-                                    ...prev.notifications,
-                                    channels: [...prev.notifications.channels, channel]
-                                  }
-                                }));
+  if (e.target.checked) {
+  setDeploymentConfig(prev => ({)
+  ...prev,
+  notifications: {,
+  ...prev.notifications,
+  channels: [...prev.notifications.channels, channel],
+}));
                               } else {
-                                setDeploymentConfig(prev => ({)
-                                  ...prev,
-                                  notifications: {,
-                                    ...prev.notifications,
-                                    channels: prev.notifications.channels.filter(c => c !== channel),
-                                  }
-                                }));
-                              }
+  setDeploymentConfig(prev => ({)
+  ...prev,
+  notifications: {,
+  ...prev.notifications,
+  channels: prev.notifications.channels.filter(c => c !== channel),
+}));
                             }}
                             disabled={mode === 'view'}
                           />
@@ -841,7 +811,7 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         type="checkbox"
                         checked={deploymentConfig.notifications.immediate}
                         onChange={(e) => setDeploymentConfig(prev => ({)
-                          ...prev,
+  ...prev,
                           notifications: { ...prev.notifications, immediate: e.target.checked }
                         }))}
                         disabled={mode === 'view'}
@@ -857,12 +827,11 @@ export const PolicyConfigurationInterface: React.FC<PolicyConfigurationInterface
                         id="scheduledDate"
                         value={deploymentConfig.notifications.scheduled?.toISOString().slice(0, 16) || ''}
                         onChange={(e) => setDeploymentConfig(prev => ({)
-                          ...prev,
-                          notifications: {,
-                            ...prev.notifications,
-                            scheduled: new Date(e.target.value),
-                          }
-                        }))}
+  ...prev,
+  notifications: {,
+  ...prev.notifications,
+  scheduled: new Date(e.target.value),
+}))}
                         disabled={mode === 'view'}
                       />
                     </div>

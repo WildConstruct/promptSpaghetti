@@ -24,126 +24,120 @@ import {
 } from '@heroicons/react/24/outline';
 
 // Type definitions for article management
+
 export interface Article {
-  id: string;
+  id: string;,
   title: string;
-  content: string;
+  content: string;,
   excerpt: string;
-  slug: string;
+  slug: string;,
   status: 'draft' | 'published' | 'archived' | 'review';
-  category: ArticleCategory;
-  tags: string[];
+  category: ArticleCategory;,
+  tags: string;
   author: ArticleAuthor;
-  collaborators?: ArticleAuthor[];
-  createdAt: Date;
+  collaborators?: ArticleAuthor;
+  createdAt: Date;,
   updatedAt: Date;
   publishedAt?: Date;
-  viewCount: number;
+  viewCount: number;,
   likeCount: number;
-  shareCount: number;
+  shareCount: number;,
   bookmarkCount: number;
-  readTime: number; // estimated reading time in minutes
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  readTime: number; // estimated reading time in minutes,
+  difficulty: 'beginner' | 'intermediate' | 'advanced';,
   featured: boolean;
-  attachments?: ArticleAttachment[];
-  relatedArticles?: string[]; // IDs of related articles
+  attachments?: ArticleAttachment;
+  relatedArticles?: string; // IDs of related articles,
   seo: {,
-    metaTitle?: string;
-    metaDescription?: string;
-    keywords?: string[];
-  };
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string;
+};
   analytics: {,
-    averageRating: number;
-    ratingCount: number;
-    completionRate: number;
-    bounceRate: number;
-  };
+  averageRating: number;
+  ratingCount: number;,
+  completionRate: number;
+  bounceRate: number;
+};
 }
-
 export interface ArticleCategory {
-  id: string;
+  id: string;,
   name: string;
-  slug: string;
+  slug: string;,
   description: string;
   color: string;
   icon?: string;
   parentId?: string;
   articleCount: number;
 }
-
 export interface ArticleAuthor {
-  id: string;
+  id: string;,
   name: string;
   email: string;
   avatar?: string;
   role: 'admin' | 'editor' | 'contributor' | 'guest';
   bio?: string;
-  socialLinks?: {
-    twitter?: string;
-    github?: string;
-    linkedin?: string;
-  };
+  socialLinks?: {,
+  twitter?: string;
+  github?: string;
+  linkedin?: string;
+};
 }
-
 export interface ArticleAttachment {
-  id: string;
+  id: string;,
   name: string;
-  url: string;
+  url: string;,
   type: 'image' | 'document' | 'video' | 'audio' | 'archive';
-  size: number;
+  size: number;,
   mimeType: string;
 }
-
 export interface ArticleFilter {
   status?: Article['status'][];
-  category?: string[];
-  tags?: string[];
-  author?: string[];
+  category?: string;
+  tags?: string;
+  author?: string;
   difficulty?: Article['difficulty'][];
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
+  dateRange?: {,
+  start: Date;,
+  end: Date;
+};
   featured?: boolean;
   searchQuery?: string;
 }
-
 export interface ArticleSort {
-  field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
+  field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';,
   direction: 'asc' | 'desc';
+  // Props for main ArticleManagement component
 }
-
-// Props for main ArticleManagement component
 export interface ArticleManagementProps {
-  articles: Article[];
-  categories: ArticleCategory[];
-  currentUser: ArticleAuthor;
-  onCreateArticle: (article: Partial<Article>) => Promise<Article>;
-  onUpdateArticle: (id: string, article: Partial<Article>) => Promise<Article>;
-  onDeleteArticle: (id: string) => Promise<void>;
-  onPublishArticle: (id: string) => Promise<void>;
-  onArchiveArticle: (id: string) => Promise<void>;
-  onDuplicateArticle: (id: string) => Promise<Article>;
-  onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
-  onCreateCategory: (category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
+  articles: Article;,
+  categories: ArticleCategory;
+  currentUser: ArticleAuthor;,
+  onCreateArticle: (article: Partial<Article>) => Promise<Article>;,
+  onUpdateArticle: (id: string, article: Partial<Article>) => Promise<Article>;,
+  onDeleteArticle: (id: string) => Promise<void>;,
+  onPublishArticle: (id: string) => Promise<void>;,
+  onArchiveArticle: (id: string) => Promise<void>;,
+  onDuplicateArticle: (id: string) => Promise<Article>;,
+  onUploadAttachment: (file: File) => Promise<ArticleAttachment>;,
+  onCreateCategory: (category: Partial<ArticleCategory>) => Promise<ArticleCategory>;,
   onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
   className?: string;
+  // Article List Component
 }
-
-// Article List Component
-export const ArticleList: React.FC<{
-  articles: Article[];
-  filter: ArticleFilter;
+export const ArticleList: React.FC<{,
+  articles: Article;
+  filter: ArticleFilter;,
   sort: ArticleSort;
-  onEdit: (article: Article) => void;
-  onDelete: (article: Article) => void;
-  onDuplicate: (article: Article) => void;
-  onView: (article: Article) => void;
+  onEdit: (article: Article) => void;,
+  onDelete: (article: Article) => void;,
+  onDuplicate: (article: Article) => void;,
+  onView: (article: Article) => void;,
   currentUser: ArticleAuthor;
 }> = ({ articles, filter, sort, onEdit, onDelete, onDuplicate, onView, currentUser }) => {
   const filteredAndSortedArticles = useMemo(() => {
     const filtered = articles.filter(article => {)
-      // Apply all filters
+  // Apply all filters
       if (filter.status?.length && !filter.status.includes(article.status)) return false;
       if (filter.category?.length && !filter.category.includes(article.category.id)) return false;
       if (filter.tags?.length && !filter.tags.some(tag => article.tags.includes(tag))) return false;
@@ -154,57 +148,52 @@ export const ArticleList: React.FC<{
         const query = filter.searchQuery.toLowerCase();
         const searchableText = `${article.title} ${article.excerpt} ${article.tags.join(' ')}`.toLowerCase();}
         if (!searchableText.includes(query)) return false;
-      }
       if (filter.dateRange) {
         const articleDate = new Date(article.createdAt);
         if (articleDate < filter.dateRange.start || articleDate > filter.dateRange.end) return false;
-      }
       return true;
     });
     // Apply sorting
     filtered.sort((a, b) => {
-      const multiplier = sort.direction === 'asc' ? 1 : -1;
-      switch (sort.field) {
-      case 'title':
-        return a.title.localeCompare(b.title) * multiplier;
-      case 'createdAt':
-        return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * multiplier;
-      case 'updatedAt':
-        return (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()) * multiplier;
-      case 'publishedAt':
-        const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
-        const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-        return (aDate - bDate) * multiplier;
-      case 'viewCount':
-        return (a.viewCount - b.viewCount) * multiplier;
-      case 'likeCount':
-        return (a.likeCount - b.likeCount) * multiplier;
-      case 'rating':
-        return (a.analytics.averageRating - b.analytics.averageRating) * multiplier;
-      default:
-        return 0;
-      }
-    });
+  const multiplier = sort.direction === 'asc' ? 1 : -1;
+  switch (sort.field) {
+  case 'title':,
+  return a.title.localeCompare(b.title) * multiplier;
+  case 'createdAt':,
+  return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * multiplier;
+  case 'updatedAt':,
+  return (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()) * multiplier;
+  case 'publishedAt':,
+  const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+  const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+  return (aDate - bDate) * multiplier;
+  case 'viewCount':,
+  return (a.viewCount - b.viewCount) * multiplier;
+  case 'likeCount':,
+  return (a.likeCount - b.likeCount) * multiplier;
+  case 'rating':,
+  return (a.analytics.averageRating - b.analytics.averageRating) * multiplier;
+  default:,
+  return 0;
+});
     return filtered;
   }, [articles, filter, sort]);
   const getStatusColor = (status: Article['status']) => {
-    switch (status) {
-    case 'published': return 'bg-green-100 text-green-800';
-    case 'draft': return 'bg-gray-100 text-gray-800';
-    case 'review': return 'bg-yellow-100 text-yellow-800';
-    case 'archived': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'published': return 'bg-green-100 text-green-800';
+  case 'draft': return 'bg-gray-100 text-gray-800';
+  case 'review': return 'bg-yellow-100 text-yellow-800';
+  case 'archived': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getDifficultyColor = (difficulty: Article['difficulty']) => {
-    switch (difficulty) {
-    case 'beginner': return 'bg-blue-100 text-blue-800';
-    case 'intermediate': return 'bg-orange-100 text-orange-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-  return ();
+  switch (difficulty) {
+  case 'beginner': return 'bg-blue-100 text-blue-800';
+  case 'intermediate': return 'bg-orange-100 text-orange-800';
+  case 'advanced': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
+  return;
     <div className="space-y-4">
       {filteredAndSortedArticles.map((article) => ()
         <div
@@ -314,13 +303,13 @@ export const ArticleList: React.FC<{
 // Article Editor Component
 export const ArticleEditor: React.FC<{
   article?: Article;
-  categories: ArticleCategory[];
-  onSave: (article: Partial<Article>) => Promise<void>;
+  categories: ArticleCategory;,
+  onSave: (article: Partial<Article>) => Promise<void>;,
   onCancel: () => void;
   onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
 }> = ({ article, categories, onSave, onCancel, onUploadAttachment }) => {
   const [formData, setFormData] = useState<Partial<Article>>(() => ({)
-    title: article?.title || '',
+  title: article?.title || '',
     content: article?.content || '',
     excerpt: article?.excerpt || '',
     status: article?.status || 'draft',
@@ -337,19 +326,18 @@ export const ArticleEditor: React.FC<{
     setFormData(prev => ({ ...prev, [field]: value }));
   }, []);
   const handleAddTag = useCallback(() => {
-    if (newTag.trim() && !formData.tags?.includes(newTag.trim())) {
-      setFormData(prev => ({)
-        ...prev,
-        tags: [...(prev.tags || []), newTag.trim()]
-      }));
+  if (newTag.trim() && !formData.tags?.includes(newTag.trim())) {
+  setFormData(prev => ({)
+  ...prev,
+  tags: [...(prev.tags || []), newTag.trim()],
+}));
       setNewTag('');
-    }
   }, [newTag, formData.tags]);
   const handleRemoveTag = useCallback((tagToRemove: string) => {
-    setFormData(prev => ({)
-      ...prev,
-      tags: prev.tags?.filter(tag => tag !== tagToRemove) || [],
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  tags: prev.tags?.filter(tag => tag !== tagToRemove) || [],
+}));
   }, []);
   const handleSave = useCallback(async () => {
     setIsSaving(true);
@@ -357,9 +345,8 @@ export const ArticleEditor: React.FC<{
       await onSave(formData);
     } finally {
       setIsSaving(false);
-    }
   }, [formData, onSave]);
-  return ();
+  return;
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">
@@ -572,41 +559,36 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({)
         await onUpdateArticle(editingArticle.id, articleData);
       } else {
         await onCreateArticle(articleData);
-      }
       setActiveTab('list');
       setEditingArticle(null);
     } catch (error) {
-      console.error('Failed to save article:', error);
-      // Handle error (show toast, etc.)
-    }
-  }, [editingArticle, onCreateArticle, onUpdateArticle]);
+  console.error('Failed to save article:', error);
+  // Handle error (show toast, etc.)
+}, [editingArticle, onCreateArticle, onUpdateArticle]);
   const handleCancel = useCallback(() => {
     setActiveTab('list');
     setEditingArticle(null);
   }, []);
   const handleView = useCallback((article: Article) => {
-    // Navigate to article view or open preview modal
-    console.log('View article:', article);
-  }, []);
+  // Navigate to article view or open preview modal
+  console.log('View article:', article);
+}, []);
   const handleDelete = useCallback(async (article: Article) => {
     if (window.confirm(`Are you sure you want to delete "${article.title}"?`)) {}
       try {
         await onDeleteArticle(article.id);
       } catch (error) {
-        console.error('Failed to delete article:', error);
-      }
-    }
-  }, [onDeleteArticle]);
+  console.error('Failed to delete article:', error);
+}, [onDeleteArticle]);
   const handleDuplicate = useCallback(async (article: Article) => {
     try {
       const duplicated = await onDuplicateArticle(article.id);
       setEditingArticle(duplicated);
       setActiveTab('editor');
     } catch (error) {
-      console.error('Failed to duplicate article:', error);
-    }
-  }, [onDuplicateArticle]);
-  return ();
+  console.error('Failed to duplicate article:', error);
+}, [onDuplicateArticle]);
+  return;
     <div className={`bg-gray-50 min-h-screen ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
@@ -627,20 +609,20 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({)
               <button
                 onClick={() => setActiveTab('list')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'list'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+  activeTab === 'list'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
               >
                 Articles ({articles.length})
               </button>
               <button
                 onClick={() => setActiveTab('categories')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === 'categories'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+  activeTab === 'categories'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
               >
                 Categories ({categories.length})
               </button>
@@ -685,30 +667,30 @@ export const ArticleManagement: React.FC<ArticleManagementProps> = ({)
                 <button
                   onClick={() => setFilter(prev => ({ ...prev, status: prev.status?.includes('published') ? undefined : ['published'] }))}
                   className={`px-3 py-1 rounded-full text-sm border ${
-                    filter.status?.includes('published')
-                      ? 'bg-green-100 text-green-800 border-green-300'
-                      : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-                  }`}
+  filter.status?.includes('published')
+  ? 'bg-green-100 text-green-800 border-green-300'
+  : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
+}`}
                 >
                   Published
                 </button>
                 <button
                   onClick={() => setFilter(prev => ({ ...prev, featured: prev.featured === true ? undefined : true }))}
                   className={`px-3 py-1 rounded-full text-sm border ${
-                    filter.featured === true
-                      ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                      : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-                  }`}
+  filter.featured === true
+  ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+  : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
+}`}
                 >
                   Featured
                 </button>
                 <button
                   onClick={() => setFilter(prev => ({ ...prev, author: prev.author?.includes(currentUser.id) ? undefined : [currentUser.id] }))}
                   className={`px-3 py-1 rounded-full text-sm border ${
-                    filter.author?.includes(currentUser.id)
-                      ? 'bg-blue-100 text-blue-800 border-blue-300'
-                      : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
-                  }`}
+  filter.author?.includes(currentUser.id)
+  ? 'bg-blue-100 text-blue-800 border-blue-300'
+  : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
+}`}
                 >
                   My Articles
                 </button>

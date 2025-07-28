@@ -5,6 +5,7 @@
  * Cinema 4D-inspired keyboard shortcuts with customization and help overlay
  */
 import React from 'react';
+
 export interface KeyboardShortcut {
     id: string;
     key: string;
@@ -14,7 +15,8 @@ export interface KeyboardShortcut {
     category: 'editing' | 'navigation' | 'selection' | 'view' | 'file' | 'generation';
     enabled: boolean;
     global?: boolean;
-}
+
+
 export interface KeyboardShortcutsManagerProps {
     onCommandPalette: () => void;
     onUndo: () => void;
@@ -33,7 +35,7 @@ export interface KeyboardShortcutsManagerProps {
     customShortcuts?: KeyboardShortcut[];
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;
-}
+
 export declare const KeyboardShortcutsManager: React.FC<KeyboardShortcutsManagerProps>;
 export default KeyboardShortcutsManager;
 //# sourceMappingURL=KeyboardShortcutsManager.d.ts.map

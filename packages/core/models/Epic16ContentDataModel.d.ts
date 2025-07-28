@@ -12,7 +12,7 @@ export declare enum TemplateStatus {
     ARCHIVED = "archived",
     UNDER_REVIEW = "under_review",
     REJECTED = "rejected"
-}
+
 export declare enum PurchaseStatus {
     PENDING = "pending",
     COMPLETED = "completed",
@@ -20,7 +20,7 @@ export declare enum PurchaseStatus {
     REFUNDED = "refunded",
     DISPUTED = "disputed",
     CANCELLED = "cancelled"
-}
+
 export declare enum RefundReason {
     NOT_AS_DESCRIBED = "not_as_described",
     CLAUDE_INCOMPATIBLE = "claude_incompat",
@@ -28,7 +28,7 @@ export declare enum RefundReason {
     TECHNICAL_ISSUE = "technical_issue",
     DUPLICATE_PURCHASE = "duplicate_purchase",
     OTHER = "other"
-}
+
 export declare enum ContentType {
     TEMPLATE = "template",
     TUTORIAL = "tutorial",
@@ -36,14 +36,14 @@ export declare enum ContentType {
     KNOWLEDGE_ARTICLE = "knowledge_article",
     COMMUNITY_POST = "community_post",
     DOCUMENTATION = "documentation"
-}
+
 export declare enum UserRole {
     BUYER = "buyer",
     CREATOR = "creator",
     ADMIN = "admin",
     MODERATOR = "moderator",
     REVIEWER = "reviewer"
-}
+
 export declare enum ForumPostType {
     DISCUSSION = "discussion",
     QUESTION = "question",
@@ -51,14 +51,14 @@ export declare enum ForumPostType {
     TUTORIAL = "tutorial",
     SHOWCASE = "showcase",
     FEEDBACK = "feedback"
-}
+
 export declare enum PostStatus {
     ACTIVE = "active",
     HIDDEN = "hidden",
     DELETED = "deleted",
     PENDING_MODERATION = "pending_moderation",
     LOCKED = "locked"
-}
+
 export declare const UserProfileSchema: z.ZodObject<{
     id: z.ZodString;
     userId: z.ZodString;
@@ -1373,6 +1373,7 @@ export declare const NotificationSchema: z.ZodObject<{
     scheduledFor?: Date | undefined;
 }>;
 export type Notification = z.infer<typeof NotificationSchema>;
+
 export type Epic16ContentModel = {
     UserProfile: UserProfile;
     Template: Template;
@@ -2691,14 +2692,14 @@ export declare const Epic16ContentSchemas: {
         scheduledFor?: Date | undefined;
     }>;
 };
-export declare function validateContentModel<T extends keyof Epic16ContentModel>()
-  type: T,
-  data: unknown,
-): Epic16ContentModel[T];
-export declare function isValidContentModel<T extends keyof Epic16ContentModel>()
-  type: T,
-  data: unknown,
-): data is Epic16ContentModel[T];
+export declare function validateContentModel<T extends keyof Epic16ContentModel>(()
+    type: T,
+    data: unknown,
+  ): Epic16ContentModel[T];
+export declare function isValidContentModel<T extends keyof Epic16ContentModel>(()
+    type: T,
+    data: unknown,
+  ): data is Epic16ContentModel[T];
 export declare const Epic16Relationships: {
     readonly userToTemplates: "one-to-many";
     readonly templateToVersions: "one-to-many";

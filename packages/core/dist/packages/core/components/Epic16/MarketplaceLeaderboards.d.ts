@@ -14,5 +14,4 @@ export interface MarketplaceLeaderboardsProps {
     className?: string;
 }
 export declare const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps>;
-export default MarketplaceLeaderboards;
 //# sourceMappingURL=MarketplaceLeaderboards.d.ts.map

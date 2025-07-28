@@ -14,15 +14,14 @@ import { ExecutionContext } from '../index';
 
 // Test implementation of AdvancedRuntimeNode
 class TestAdvancedNode extends AdvancedRuntimeNode<string> {
-  constructor(id: string, private value: string, config?: Partial<AdvancedNodeConfig>) {
-    const defaultConfig: AdvancedNodeConfig = {
-      deterministic: true,
-      cacheable: true,
-      stateful: false,
-      ...config
-    };
+  constructor(id: string, private value: string, config?: Partial<AdvancedNodeConfig>) {,
+  const defaultConfig: AdvancedNodeConfig = {,
+  deterministic: true,
+  cacheable: true,
+  stateful: false,
+  ...config
+};
     super(id, defaultConfig);
-  }
   run(ctx: AdvancedExecutionContext): string {
     // Record execution in metadata
     ctx.executionMeta.nodeExecutionOrder.push(this.id);
@@ -31,13 +30,11 @@ class TestAdvancedNode extends AdvancedRuntimeNode<string> {
         return `${this.value}-executed`;}
       });
     });
-  }
   validate(): ValidationResult {
     const errors = ValidationHelpers.validateRequired(this.value, 'value');
     return errors.length > 0 
       ? ValidationHelpers.createInvalidResult(errors)
       : ValidationHelpers.createValidResult();
-  }
   serialize(): AdvancedNodeData {
     return SerializationHelpers.createAdvancedNodeData()
       this.id,
@@ -45,23 +42,18 @@ class TestAdvancedNode extends AdvancedRuntimeNode<string> {
       this.config,
       { value: this.value }
     );
-  }
-}
 
 // Test implementation of stateful node
 class TestStatefulNode extends AdvancedRuntimeNode<number> {
   constructor(id: string, private increment: number = 1) {
     super(id, { deterministic: true, cacheable: false, stateful: true });
-  }
   run(ctx: AdvancedExecutionContext): number {
     const currentState = this.getState(ctx) || { counter: 0 };
     const newCounter = currentState.counter + this.increment;
     this.setState(ctx, { counter: newCounter });
     return newCounter;
-  }
   validate(): ValidationResult {
     return ValidationHelpers.createValidResult();
-  }
   serialize(): AdvancedNodeData {
     return SerializationHelpers.createAdvancedNodeData()
       this.id,
@@ -69,31 +61,29 @@ class TestStatefulNode extends AdvancedRuntimeNode<number> {
       this.config,
       { increment: this.increment }
     );
-  }
-}
 describe('AdvancedRuntimeNode Foundation', () => {
   let basicCtx: ExecutionContext;
   let advancedCtx: AdvancedExecutionContext;
   beforeEach(() => {
     basicCtx = {
       variables: { testVar: 'testValue' },
-      seed: 12345,
-    };
+      seed: 12345;
+  };
     advancedCtx = AdvancedExecutionUtils.enhanceContext(basicCtx);
   });
   describe('AdvancedExecutionUtils', () => {
-    it('should enhance basic execution context', () => {
-      const enhanced = AdvancedExecutionUtils.enhanceContext(basicCtx);
-      expect(enhanced.variables).toEqual(basicCtx.variables);
-      expect(enhanced.seed).toEqual(basicCtx.seed);
-      expect(enhanced.nodeStates).toBeInstanceOf(Map);
-      expect(enhanced.cache).toBeInstanceOf(Map);
-      expect(enhanced.evaluationDepth).toBe(0);
-      expect(enhanced.executionMeta).toMatchObject({)
-        startTime: expect.any(Number),
-        nodeExecutionOrder: [],
-        performanceMetrics: expect.any(Map),
-      });
+  it('should enhance basic execution context', () => {
+  const enhanced = AdvancedExecutionUtils.enhanceContext(basicCtx);
+  expect(enhanced.variables).toEqual(basicCtx.variables);
+  expect(enhanced.seed).toEqual(basicCtx.seed);
+  expect(enhanced.nodeStates).toBeInstanceOf(Map);
+  expect(enhanced.cache).toBeInstanceOf(Map);
+  expect(enhanced.evaluationDepth).toBe(0);
+  expect(enhanced.executionMeta).toMatchObject({)
+  startTime: expect.any(Number),
+  nodeExecutionOrder: [],
+  performanceMetrics: expect.any(Map),
+});
     });
     it('should clear execution state', () => {
       advancedCtx.nodeStates.set('test', 'state');
@@ -125,10 +115,10 @@ describe('AdvancedRuntimeNode Foundation', () => {
     });
   });
   describe('TestAdvancedNode (Basic Advanced Node)', () => {
-    let node: TestAdvancedNode;
-    beforeEach(() => {
-      node = new TestAdvancedNode('test-node', 'test-value');
-    });
+  let node: TestAdvancedNode;
+  beforeEach(() => {
+  node = new TestAdvancedNode('test-node', 'test-value');
+});
     it('should create with correct configuration', () => {
       const config = node.getConfig();
       expect(config.deterministic).toBe(true);
@@ -171,10 +161,10 @@ describe('AdvancedRuntimeNode Foundation', () => {
     });
   });
   describe('TestStatefulNode (Stateful Advanced Node)', () => {
-    let node: TestStatefulNode;
-    beforeEach(() => {
-      node = new TestStatefulNode('stateful-node', 2);
-    });
+  let node: TestStatefulNode;
+  beforeEach(() => {
+  node = new TestStatefulNode('stateful-node', 2);
+});
     it('should maintain state between executions', () => {
       const result1 = node.run(advancedCtx);
       const result2 = node.run(advancedCtx);
@@ -231,12 +221,12 @@ describe('AdvancedRuntimeNode Foundation', () => {
     });
   });
   describe('SerializationHelpers', () => {
-    it('should create advanced node data', () => {
-      const config: AdvancedNodeConfig = {
-        deterministic: true,
-        cacheable: false,
-        stateful: true,
-      };
+  it('should create advanced node data', () => {
+  const config: AdvancedNodeConfig = {,
+  deterministic: true,
+  cacheable: false,
+  stateful: true,
+};
       const data = SerializationHelpers.createAdvancedNodeData(;);
         'test-id',
         'TestType',
@@ -251,8 +241,8 @@ describe('AdvancedRuntimeNode Foundation', () => {
       expect(data.metadata?.created).toBeDefined();
     });
     it('should validate serialized data', () => {
-      const validData: AdvancedNodeData = {
-        id: 'test',
+      const validData: AdvancedNodeData = {,
+  id: 'test',
         type: 'TestType',
         config: { deterministic: true, cacheable: true, stateful: false },
         data: { test: 'value' }

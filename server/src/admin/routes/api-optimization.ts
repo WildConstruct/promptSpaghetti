@@ -12,12 +12,14 @@ import { ApiOptimizationService, OptimizationAnalysisConfig } from '../services/
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
+}
 interface OptimizationQueryParams {
   timeWindow?: number;
   keyId?: string;
   focusAreas?: string;
   severity?: string;
   includeBenchmarks?: boolean;
+}
 }
 
 export async function apiOptimizationRoutes(fastify: FastifyInstance) {
@@ -111,7 +113,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
               high: recommendations.filter(r => r.severity === 'high').length,
               medium: recommendations.filter(r => r.severity === 'medium').length,
               low: recommendations.filter(r => r.severity === 'low').length
-            },
+  }
             byType: {
               performance: recommendations.filter(r => r.type === 'performance').length,
               security: recommendations.filter(r => r.type === 'security').length,
@@ -119,7 +121,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
               reliability: recommendations.filter(r => r.type === 'reliability').length
             }
           }
-        },
+  }
         meta: {
           generatedAt: new Date().toISOString(),
           filters: { severity, focusAreas }
@@ -162,7 +164,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
               performanceGains: recommendations.reduce((acc, r) => acc + (r.impact.performanceImprovement || 0), 0)
             }
           }
-        },
+  }
         meta: {
           generatedAt: new Date().toISOString()
         }
@@ -216,7 +218,7 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
           database: 'connected',
           auditService: 'operational',
           optimizationEngine: 'ready'
-        },
+  }
         version: '1.0.0'
       };
 
@@ -273,19 +275,19 @@ export async function apiOptimizationRoutes(fastify: FastifyInstance) {
             criticalIssues: recommendations.flat().filter(r => r.severity === 'critical').length,
             estimatedSavings: recommendations.flat().reduce((acc, r) => acc + (r.impact.estimatedSavings || 0), 0),
             performanceGains: 0
-          },
+  }
           recommendations: recommendations.flat(),
           trends: {
             performanceTrend: 'stable' as const,
             usageTrend: 'stable' as const,
             errorTrend: 'stable' as const
-          },
+  }
           benchmarks: {
             industryAverages: {
               responseTime: 300,
               errorRate: 2.5,
               uptime: 99.5
-            },
+  }
             yourPerformance: {
               responseTime: 0,
               errorRate: 0,

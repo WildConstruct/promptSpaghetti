@@ -15,6 +15,7 @@
  * - Usage statistics and analytics
  */
 
+}
 export interface Category {
   id: string;
   domain: CategoryDomain;
@@ -67,6 +68,7 @@ export interface Category {
   // Localization
   localizedNames?: Record<string, string>;
   localizedDescriptions?: Record<string, string>;
+}
 }
 
 export enum CategoryDomain {
@@ -142,6 +144,7 @@ export enum CategoryAccessLevel {
   SYSTEM_ONLY = 'system_only'
 }
 
+}
 export interface CategoryMetadata {
   // Core metadata
   tags: string[];
@@ -172,7 +175,9 @@ export interface CategoryMetadata {
   // Custom fields
   customFields: Record<string, unknown>;
 }
+}
 
+}
 export interface CategoryConfiguration {
   // Behavior settings
   allowSubcategories: boolean;
@@ -194,7 +199,9 @@ export interface CategoryConfiguration {
   // Integration settings
   integrationConfig: Record<string, unknown>;
 }
+}
 
+}
 export interface CategoryValidationRule {
   field: string;
   rule: 'required' | 'unique' | 'format' | 'range' | 'custom';
@@ -202,7 +209,9 @@ export interface CategoryValidationRule {
   message: string;
   severity: 'error' | 'warning' | 'info';
 }
+}
 
+}
 export interface CategoryAutoAssignmentRule {
   condition: string; // JSON logic expression
   action: 'assign' | 'suggest' | 'require_approval';
@@ -210,7 +219,9 @@ export interface CategoryAutoAssignmentRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface CategoryNotificationSettings {
   notifyOnAssignment: boolean;
   notifyOnUnassignment: boolean;
@@ -218,7 +229,9 @@ export interface CategoryNotificationSettings {
   notificationChannels: string[];
   recipientRoles: string[];
 }
+}
 
+}
 export interface CategoryDisplaySettings {
   showInNavigation: boolean;
   showInFilters: boolean;
@@ -228,7 +241,9 @@ export interface CategoryDisplaySettings {
   listViewTemplate?: string;
   detailViewTemplate?: string;
 }
+}
 
+}
 export interface CategoryVersion {
   version: number;
   changes: CategoryChange[];
@@ -237,19 +252,24 @@ export interface CategoryVersion {
   changeReason: string;
   previousData: Partial<Category>;
 }
+}
 
+}
 export interface CategoryChange {
   field: string;
   oldValue: unknown;
   newValue: unknown;
   changeType: 'created' | 'updated' | 'deleted' | 'moved' | 'renamed';
 }
+}
 
+}
 export interface CategoryUsageStatistics {
   categoryId: string;
   period: {
     start: Date;
     end: Date;
+}
   };
   
   // Usage metrics
@@ -278,6 +298,7 @@ export interface CategoryUsageStatistics {
   userSatisfactionScore?: number;
 }
 
+}
 export interface CategoryTree {
   category: Category;
   children: CategoryTree[];
@@ -287,7 +308,9 @@ export interface CategoryTree {
   isSelected?: boolean;
   isLoading?: boolean;
 }
+}
 
+}
 export interface CategoryFilter {
   domains?: CategoryDomain[];
   status?: CategoryStatus[];
@@ -311,12 +334,15 @@ export interface CategoryFilter {
   usageCountMax?: number;
   businessCriticality?: string[];
 }
+}
 
+}
 export interface CategoryQuery {
   filter?: CategoryFilter;
   sort?: {
     field: keyof Category;
     direction: 'asc' | 'desc';
+}
   }[];
   pagination?: {
     limit: number;
@@ -331,6 +357,7 @@ export interface CategoryQuery {
   };
 }
 
+}
 export interface CategoryOperation {
   operation: CategoryOperationType;
   categoryId: string;
@@ -340,6 +367,7 @@ export interface CategoryOperation {
     notifyUsers?: boolean;
     createAuditLog?: boolean;
     cascadeToChildren?: boolean;
+}
   };
 }
 
@@ -360,6 +388,7 @@ export enum CategoryOperationType {
   EXPORT = 'export'
 }
 
+}
 export interface CategoryBulkOperation {
   operations: CategoryOperation[];
   executionMode: 'sequential' | 'parallel';
@@ -368,7 +397,9 @@ export interface CategoryBulkOperation {
   requestedBy: string;
   reason: string;
 }
+}
 
+}
 export interface CategoryImportExport {
   format: 'json' | 'csv' | 'xml' | 'yaml';
   includeHierarchy: boolean;
@@ -377,14 +408,18 @@ export interface CategoryImportExport {
   filterBy?: CategoryFilter;
   transformRules?: CategoryTransformRule[];
 }
+}
 
+}
 export interface CategoryTransformRule {
   sourceField: string;
   targetField: string;
   transformation: 'direct' | 'map' | 'calculate' | 'validate';
   options?: unknown;
 }
+}
 
+}
 export interface CategoryPermission {
   categoryId: string;
   userId?: string;
@@ -396,7 +431,9 @@ export interface CategoryPermission {
   expiresAt?: Date;
   conditions?: string; // JSON logic expression
 }
+}
 
+}
 export interface CategoryAuditEntry {
   id: string;
   categoryId: string;
@@ -424,16 +461,20 @@ export interface CategoryAuditEntry {
   notes?: string;
   systemGenerated: boolean;
 }
+}
 
 /**
  * Category validation result
  */
+}
 export interface CategoryValidationResult {
   valid: boolean;
   errors: CategoryValidationError[];
   warnings: CategoryValidationWarning[];
 }
+}
 
+}
 export interface CategoryValidationError {
   field: string;
   code: string;
@@ -441,7 +482,9 @@ export interface CategoryValidationError {
   severity: 'error' | 'critical';
   suggestedFix?: string;
 }
+}
 
+}
 export interface CategoryValidationWarning {
   field: string;
   code: string;
@@ -449,10 +492,12 @@ export interface CategoryValidationWarning {
   severity: 'warning' | 'info';
   canIgnore: boolean;
 }
+}
 
 /**
  * Category relationship types for linking related categories
  */
+}
 export interface CategoryRelationship {
   id: string;
   sourceCategoryId: string;
@@ -463,6 +508,7 @@ export interface CategoryRelationship {
   metadata?: Record<string, unknown>;
   createdBy: string;
   createdAt: Date;
+}
 }
 
 export enum CategoryRelationshipType {
@@ -480,6 +526,7 @@ export enum CategoryRelationshipType {
 /**
  * Category mapping for external systems
  */
+}
 export interface CategoryMapping {
   id: string;
   internalCategoryId: string;
@@ -497,10 +544,12 @@ export interface CategoryMapping {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 /**
  * Category template for rapid creation of standard category structures
  */
+}
 export interface CategoryTemplate {
   id: string;
   name: string;
@@ -522,7 +571,9 @@ export interface CategoryTemplate {
   updatedBy: string;
   updatedAt: Date;
 }
+}
 
+}
 export interface CategoryTemplateNode {
   code: string;
   name: string;
@@ -534,15 +585,18 @@ export interface CategoryTemplateNode {
   configuration?: Partial<CategoryConfiguration>;
   required: boolean;
 }
+}
 
 /**
  * Category analytics and insights
  */
+}
 export interface CategoryAnalytics {
   categoryId: string;
   period: {
     start: Date;
     end: Date;
+}
   };
   
   // Performance metrics
@@ -579,6 +633,7 @@ export interface CategoryAnalytics {
   };
 }
 
+}
 export interface CategoryRecommendation {
   type: 'optimization' | 'maintenance' | 'structure' | 'content';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -588,6 +643,7 @@ export interface CategoryRecommendation {
   estimatedImpact: string;
   estimatedEffort: string;
   implementationSteps: string[];
+}
 }
 
 export default Category;

@@ -12,18 +12,23 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 
 // Request/Response Types
+}
 interface ConsentConfigRequest {
   Params: {
     version?: string;
+}
   };
 }
 
+}
 interface UserPreferencesRequest {
   Params: {
     userId: string;
+}
   };
 }
 
+}
 interface SavePreferencesRequest {
   Body: {
     userId?: string;
@@ -31,9 +36,11 @@ interface SavePreferencesRequest {
     consents: Record<string, unknown>;
     userPreferences: Record<string, unknown>;
     lastUpdated: string;
+}
   };
 }
 
+}
 interface ConsentEventRequest {
   Body: {
     eventId: string;
@@ -44,21 +51,26 @@ interface ConsentEventRequest {
     consentType?: string;
     source: string;
     metadata: Record<string, unknown>;
+}
   };
 }
 
+}
 interface ExportDataRequest {
   Params: {
     userId: string;
+}
   };
   Querystring: {
     format?: 'json' | 'xml' | 'csv';
   };
 }
 
+}
 interface ResetConsentsRequest {
   Params: {
     userId: string;
+}
   };
 }
 
@@ -76,7 +88,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         properties: {
           version: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -92,7 +104,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
                 complianceSettings: { type: 'object' },
                 retentionSettings: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'string' },
             requestId: { type: 'string' }
           }
@@ -113,7 +125,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           version,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['GDPR'],
@@ -138,7 +150,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         details: {
           error: error instanceof Error ? error.message : 'Unknown error',
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['GDPR'],
@@ -167,7 +179,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -193,7 +205,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         details: {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['GDPR'],
@@ -236,7 +248,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           userPreferences: { type: 'object' },
           lastUpdated: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -263,7 +275,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           consentTypes: Object.keys(preferences.consents),
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['GDPR', 'CCPA'],
@@ -329,7 +341,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           metadata: event.metadata,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: getEventRiskLevel(event.eventType),
         compliance: {
           frameworks: ['GDPR', 'CCPA'],
@@ -367,7 +379,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -391,7 +403,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           exportSize: JSON.stringify(exportData).length,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR'],
@@ -471,7 +483,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
           revocationId: revocationResult.revocationId,
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR'],
@@ -485,7 +497,7 @@ export async function consentRoutes(fastify: FastifyInstance) {
         data: {
           revocationId: revocationResult.revocationId,
           message: 'Consent reset process initiated'
-        },
+  }
         timestamp: new Date().toISOString(),
         requestId: generateRequestId()
       });
@@ -526,7 +538,7 @@ async function getConsentConfiguration(version: string) {
         retentionPeriod: 365,
         cookies: [],
         storageItems: []
-      },
+  }
       {
         type: 'analytics',
         name: 'Analytics',
@@ -576,7 +588,7 @@ async function getConsentConfiguration(version: string) {
         buttonsLayout: 'horizontal',
         maxWidth: 800,
         responsive: true
-      },
+  }
       content: {
         title: 'Cookie Consent',
         message: 'We use cookies to enhance your experience and analyze our traffic.',
@@ -588,7 +600,7 @@ async function getConsentConfiguration(version: string) {
         cookiePolicyUrl: '/cookies',
         termsOfServiceUrl: '/terms',
         languages: []
-      },
+  }
       styling: {
         backgroundColor: '#ffffff',
         textColor: '#333333',
@@ -604,7 +616,7 @@ async function getConsentConfiguration(version: string) {
         zIndex: 9999,
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
       }
-    },
+  }
     complianceSettings: {
       gdprEnabled: true,
       ccpaEnabled: false,
@@ -619,7 +631,7 @@ async function getConsentConfiguration(version: string) {
       jurisdictionDetection: false,
       ageGateEnabled: false,
       minimumAge: 16
-    },
+  }
     retentionSettings: {
       consentRecordRetention: 2555, // 7 years
       auditLogRetention: 2555,
@@ -647,14 +659,14 @@ async function getUserConsentPreferences(userId: string) {
         marketingEmails: false,
         productUpdates: false,
         securityAlerts: true
-      },
+  }
       accessibilitySettings: {
         highContrast: false,
         largeFonts: false,
         reduceMotion: false,
         screenReaderOptimized: false,
         keyboardNavigation: false
-      },
+  }
       privacySettings: {
         dataProcessingOptOut: false,
         profileVisibility: 'private',
@@ -690,7 +702,7 @@ async function generateConsentDataExport(userId: string, format: string) {
         userId,
         createdAt: new Date().toISOString(),
         lastActive: new Date().toISOString()
-      },
+  }
       consents: [],
       preferences: {},
       events: []

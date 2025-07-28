@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { promisify } from 'util';
 import base32 from 'base32';
 
+}
 export interface EncryptedSecret {
   id: string;
   userId: string;
@@ -22,16 +23,20 @@ export interface EncryptedSecret {
     associatedConfigId?: string;
     entropy: number;
     hashFingerprint: string;
+}
   };
 }
 
+}
 export interface SecretGenerationOptions {
   length?: number; // In bytes
   purpose: 'totp' | 'backup' | 'recovery';
   associatedConfigId?: string;
   customEntropy?: Buffer;
 }
+}
 
+}
 export interface KeyRotationResult {
   success: boolean;
   rotatedSecrets: number;
@@ -39,7 +44,9 @@ export interface KeyRotationResult {
   newKeyVersion: number;
   message: string;
 }
+}
 
+}
 export interface SecretAuditEntry {
   id: string;
   secretId: string;
@@ -51,6 +58,7 @@ export interface SecretAuditEntry {
   success: boolean;
   metadata: Record<string, any>;
   riskLevel: 'low' | 'medium' | 'high';
+}
 }
 
 export class TOTPSecretManager {
@@ -86,6 +94,7 @@ export class TOTPSecretManager {
     options: SecretGenerationOptions,
     sourceIP: string = '127.0.0.1'
   ): Promise<{ secretId: string; secret: string; base32Secret: string }> {
+
     const length = Math.max(
       Math.min(options.length || 32, this.secretMaxLength),
       this.secretMinLength
@@ -124,7 +133,7 @@ export class TOTPSecretManager {
         length,
         entropy: this.calculateEntropy(secretBytes),
         associatedConfigId: options.associatedConfigId
-      },
+  }
       riskLevel: 'low'
     });
 
@@ -144,6 +153,7 @@ export class TOTPSecretManager {
     sourceIP: string = '127.0.0.1',
     userAgent?: string
   ): Promise<{ secret: string; base32Secret: string } | null> {
+
     const encryptedSecret = await this.getEncryptedSecret(secretId);
     
     if (!encryptedSecret) {
@@ -214,6 +224,7 @@ export class TOTPSecretManager {
    * Rotate encryption keys and re-encrypt all secrets
    */
   async rotateEncryptionKeys(reason: string = 'scheduled_rotation'): Promise<KeyRotationResult> {
+
     const newKeyVersion = this.currentKeyVersion + 1;
     const newKey = this.deriveKey(this.masterKey, `totp-secrets-v${newKeyVersion}`);
     
@@ -235,7 +246,7 @@ export class TOTPSecretManager {
           {
             purpose: secret.metadata.purpose as any,
             associatedConfigId: secret.metadata.associatedConfigId
-          },
+  }
           newKeyVersion
         );
 
@@ -280,6 +291,7 @@ export class TOTPSecretManager {
     reason: string,
     sourceIP: string = '127.0.0.1'
   ): Promise<boolean> {
+
     const encryptedSecret = await this.getEncryptedSecret(secretId);
     
     if (!encryptedSecret) {
@@ -324,6 +336,7 @@ export class TOTPSecretManager {
    * Generate cryptographically secure random bytes
    */
   private async generateSecureRandomBytes(length: number): Promise<Buffer> {
+
     const randomBytes = promisify(crypto.randomBytes);
     
     // Use multiple entropy sources for extra security
@@ -346,6 +359,7 @@ export class TOTPSecretManager {
     options: SecretGenerationOptions,
     keyVersion?: number
   ): Promise<EncryptedSecret> {
+
     const useKeyVersion = keyVersion || this.currentKeyVersion;
     const encryptionKey = this.encryptionKeys.get(useKeyVersion);
     
@@ -397,6 +411,7 @@ export class TOTPSecretManager {
    * Decrypt secret using stored encryption parameters
    */
   private async decryptSecret(encryptedSecret: EncryptedSecret): Promise<Buffer> {
+
     const encryptionKey = this.encryptionKeys.get(encryptedSecret.keyVersion);
     
     if (!encryptionKey) {
@@ -477,6 +492,7 @@ export class TOTPSecretManager {
    * Securely overwrite encrypted data
    */
   private async secureOverwrite(encryptedSecret: EncryptedSecret): Promise<void> {
+
     // Overwrite sensitive fields with random data multiple times
     for (let i = 0; i < 3; i++) {
       encryptedSecret.encryptedSecret = crypto.randomBytes(
@@ -499,26 +515,32 @@ export class TOTPSecretManager {
   // Storage methods (would be implemented with actual database)
 
   private async storeEncryptedSecret(secret: EncryptedSecret): Promise<void> {
+
     this.secretStore.set(secret.id, secret);
   }
 
   private async getEncryptedSecret(secretId: string): Promise<EncryptedSecret | null> {
+
     return this.secretStore.get(secretId) || null;
   }
 
   private async updateEncryptedSecret(secret: EncryptedSecret): Promise<void> {
+
     this.secretStore.set(secret.id, secret);
   }
 
   private async removeEncryptedSecret(secretId: string): Promise<void> {
+
     this.secretStore.delete(secretId);
   }
 
   private async getAllEncryptedSecrets(): Promise<EncryptedSecret[]> {
+
     return Array.from(this.secretStore.values());
   }
 
   private async logSecretAccess(entry: Omit<SecretAuditEntry, 'id' | 'timestamp'>): Promise<void> {
+
     const auditEntry: SecretAuditEntry = {
       ...entry,
       id: this.generateAuditId(),
@@ -547,6 +569,7 @@ export class TOTPSecretManager {
     userId: string, 
     hours: number = 24
   ): Promise<SecretAuditEntry[]> {
+
     const cutoff = new Date(Date.now() - hours * 60 * 60 * 1000);
     
     return this.auditLog.filter(entry => 

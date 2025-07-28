@@ -17,12 +17,14 @@ import {
   VerificationQueue
 } from './verification.types';
 
+}
 export interface VerificationServiceConfig {
   s3: {
     bucket: string;
     region: string;
     accessKeyId?: string;
     secretAccessKey?: string;
+}
   };
   documentUpload: {
     maxFileSize: number; // bytes
@@ -64,10 +66,11 @@ export class VerificationService {
     requestData: {
       requested_level: VerificationLevel;
       information: VerificationInformation;
-    },
+  }
     clientIp?: string,
     userAgent?: string
   ): Promise<VerificationRequest> {
+
     const client = await this.db.getClient();
     
     try {
@@ -100,7 +103,7 @@ export class VerificationService {
           has_personal_info: !!requestData.information.personal_info,
           has_professional_info: !!requestData.information.professional_info,
           has_business_info: !!requestData.information.business_info
-        },
+  }
         ipAddress: clientIp,
         userAgent,
         severity: 'info'
@@ -124,6 +127,7 @@ export class VerificationService {
     clientIp?: string,
     userAgent?: string
   ): Promise<VerificationRequest> {
+
     const client = await this.db.getClient();
     
     try {
@@ -179,6 +183,7 @@ export class VerificationService {
     clientIp?: string,
     userAgent?: string
   ): Promise<VerificationRequest> {
+
     const client = await this.db.getClient();
     
     try {
@@ -245,7 +250,7 @@ export class VerificationService {
           request_id: requestId,
           requested_level: request.requested_level,
           documents_uploaded: uploadedDocs
-        },
+  }
         ipAddress: clientIp,
         userAgent,
         severity: 'info'
@@ -271,10 +276,11 @@ export class VerificationService {
       file_name: string;
       file_size: number;
       file_type: string;
-    },
+  }
     clientIp?: string,
     userAgent?: string
   ): Promise<{ document: VerificationDocument; upload_url: string }> {
+
     const client = await this.db.getClient();
     
     try {
@@ -366,6 +372,7 @@ export class VerificationService {
     clientIp?: string,
     userAgent?: string
   ): Promise<VerificationDocument> {
+
     const client = await this.db.getClient();
     
     try {
@@ -434,6 +441,7 @@ export class VerificationService {
     userId: string,
     options: { limit?: number; offset?: number } = {}
   ): Promise<{ requests: VerificationRequest[]; total: number }> {
+
     const { limit = 10, offset = 0 } = options;
     
     // Get requests
@@ -477,6 +485,7 @@ export class VerificationService {
 
   // Get user verification status
   async getUserVerificationStatus(userId: string): Promise<UserVerificationStatus | null> {
+
     const result = await this.db.query(`
       SELECT uvs.*, 
              json_agg(
@@ -518,6 +527,7 @@ export class VerificationService {
     reviewerId?: string,
     options: { limit?: number; offset?: number; status?: VerificationRequestStatus } = {}
   ): Promise<VerificationQueue> {
+
     const { limit = 20, offset = 0, status = 'submitted' } = options;
 
     const queueResult = await this.db.query(`
@@ -617,6 +627,7 @@ export class VerificationService {
     userAgent?: string,
     notes?: string
   ): Promise<void> {
+
     await client.query(`
       INSERT INTO verification_audit_log 
       (verification_request_id, action, actor_id, new_values, notes, ip_address, user_agent)
@@ -625,6 +636,7 @@ export class VerificationService {
   }
 
   private async scheduleVirusScan(s3Key: string, documentId: string): Promise<void> {
+
     // TODO: Implement virus scanning integration
     // This could integrate with AWS ClamAV, or other virus scanning services
     console.log(`Scheduling virus scan for document ${documentId} at ${s3Key}`);

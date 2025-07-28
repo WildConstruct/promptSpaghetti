@@ -16,7 +16,7 @@ export interface DataSource {
         strategy: 'memory' | 'disk' | 'hybrid';
         maxSize: number;
     };
-    transforms: DataTransform[];
+    transforms: DataTransform;
     rateLimit?: {
         requests: number;
         window: number;
@@ -31,7 +31,7 @@ export interface DataSource {
     metadata: {
         description: string;
         category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
-        tags: string[];
+        tags: string;
         lastSync?: string;
         version?: string;
     };
@@ -44,11 +44,11 @@ export interface DataTransform {
     enabled: boolean;
 }
 export interface HistoricalQuery {
-    era: string | string[];
-    region?: string | string[];
+    era: string | string;
+    region?: string | string;
     category: string;
     subcategory?: string;
-    keywords?: string[];
+    keywords?: string;
     filters: Record<string, any>;
     limit?: number;
     offset?: number;
@@ -57,7 +57,7 @@ export interface HistoricalQuery {
 }
 export interface QueryResult<T = any> {
     success: boolean;
-    data: T[];
+    data: T;
     metadata: {
         total: number;
         offset: number;
@@ -68,7 +68,7 @@ export interface QueryResult<T = any> {
         executionTime: number;
     };
     error?: string;
-    warnings?: string[];
+    warnings?: string;
 }
 export declare class DataSourceManager extends EventEmitter {
     private static instance;
@@ -77,27 +77,14 @@ export declare class DataSourceManager extends EventEmitter {
     private rateLimiters;
     private healthStatus;
     static getInstance(): DataSourceManager;
-    constructor();
     /**
      * Initialize default historical data sources
      */
     private initializeDefaultSources;
     /**
-     * Register a new data source
-     */
-    registerDataSource(source: DataSource): void;
-    /**
-     * Query historical data from configured sources
-     */
-    queryHistoricalData(query: HistoricalQuery, sourceIds?: string[]): Promise<QueryResult[]>;
-    /**
      * Execute query against a specific data source
      */
     private executeQuery;
-    /**
-     * Query API data source
-     */
-    private queryAPI;
     /**
      * Query static/demo data
      */
@@ -126,25 +113,5 @@ export declare class DataSourceManager extends EventEmitter {
      * Generate mock database results for demo purposes
      */
     private generateMockDatabaseResults;
-    /**
-     * Query JSON file data source
-     */
-    private queryJSONFile;
-    /**
-     * Query CSV file data source
-     */
-    private queryCSVFile;
-    /**
-     * Query XML file data source
-     */
-    private queryXMLFile;
-    /**
-     * Utility methods for mock data generation
-     */
-    private generateMockItemName;
-    private generateMockDescription;
-    private generateMockMaterials;
-    private generateQueryHash;
 }
-export declare const dataSourceManager: DataSourceManager;
 //# sourceMappingURL=DataSourceManager.d.ts.map

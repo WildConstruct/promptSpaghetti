@@ -8,14 +8,14 @@ export interface TemplatePreviewVariant {
     variablesUsed: string[];
     hasErrors: boolean;
     errorMessage?: string;
-}
+
 export interface TemplatePreviewPerformance {
     averageExecutionTime: number;
     totalGenerations: number;
     successRate: number;
     lastUpdate: number;
     templatesProcessed: number;
-}
+
 export interface TemplatePreviewConfig {
     maxVariants: number;
     debounceMs: number;
@@ -23,7 +23,7 @@ export interface TemplatePreviewConfig {
     autoRefresh: boolean;
     showVariableSubstitution: boolean;
     errorOnUndefinedVariables: boolean;
-}
+
 export declare const useTemplatePreview: ()
   template: string,
   variableValues?: Record<string,

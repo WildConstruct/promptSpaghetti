@@ -6,6 +6,7 @@
  * social interactions, and dynamic content.
  */
 import { EventEmitter } from 'events';
+
 export interface InteractiveElement {
     id: string;
     type: InteractiveElementType;
@@ -24,7 +25,7 @@ export interface InteractiveElement {
     status: ElementStatus;
     integrations: ElementIntegration[];
     dependencies: string[];
-}
+
 export declare enum InteractiveElementType {
     LIVE_CHAT = "live_chat",
     REAL_TIME_NOTIFICATIONS = "real_time_notifications",
@@ -63,14 +64,14 @@ export declare enum InteractiveElementType {
     NPS_WIDGET = "nps_widget",
     HELP_TOOLTIP = "help_tooltip",
     GUIDED_TOUR = "guided_tour"
-}
+
 export declare enum ElementStatus {
     DRAFT = "draft",
     ACTIVE = "active",
     PAUSED = "paused",
     ARCHIVED = "archived",
     ERROR = "error"
-}
+
 export interface ElementConfiguration {
     theme: ElementTheme;
     layout: ElementLayout;
@@ -87,7 +88,7 @@ export interface ElementConfiguration {
     custom_css: string;
     custom_js: string;
     template_overrides: Record<string, string>;
-}
+
 export interface ElementTheme {
     primary_color: string;
     secondary_color: string;
@@ -99,7 +100,7 @@ export interface ElementTheme {
     shadow: string;
     font_family: string;
     font_size: number;
-}
+
 export interface ElementLayout {
     position: 'fixed' | 'absolute' | 'relative' | 'static';
     placement: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center' | 'inline';
@@ -108,12 +109,12 @@ export interface ElementLayout {
     z_index: number;
     responsive: boolean;
     breakpoints: ResponsiveBreakpoint[];
-}
+
 export interface ResponsiveBreakpoint {
     screen_size: 'mobile' | 'tablet' | 'desktop' | 'large';
     min_width: number;
     overrides: Partial<ElementLayout>;
-}
+
 export interface AnimationConfig {
     entrance: AnimationType;
     exit: AnimationType;
@@ -121,7 +122,7 @@ export interface AnimationConfig {
     transition_duration: number;
     easing: string;
     stagger_delay: number;
-}
+
 export declare enum AnimationType {
     NONE = "none",
     FADE = "fade",
@@ -133,7 +134,7 @@ export declare enum AnimationType {
     ROTATE = "rotate",
     BOUNCE = "bounce",
     ELASTIC = "elastic"
-}
+
 export interface BehaviorConfig {
     auto_trigger: boolean;
     trigger_delay: number;
@@ -144,14 +145,14 @@ export interface BehaviorConfig {
     max_interactions: number;
     cooldown_period: number;
     frequency_cap: FrequencyCap;
-}
+
 export interface FrequencyCap {
     enabled: boolean;
     max_per_session: number;
     max_per_day: number;
     max_per_week: number;
     reset_on_engagement: boolean;
-}
+
 export interface InteractionConfig {
     click_tracking: boolean;
     hover_tracking: boolean;
@@ -159,13 +160,13 @@ export interface InteractionConfig {
     time_tracking: boolean;
     conversion_tracking: boolean;
     custom_events: CustomEventConfig[];
-}
+
 export interface CustomEventConfig {
     name: string;
     trigger: string;
     data: Record<string, any>;
     callback?: string;
-}
+
 export interface PersistenceConfig {
     state_persistence: boolean;
     user_preferences: boolean;
@@ -173,13 +174,13 @@ export interface PersistenceConfig {
     local_storage: boolean;
     session_storage: boolean;
     database_sync: boolean;
-}
+
 export interface CachingConfig {
     enabled: boolean;
     ttl: number;
     strategy: 'memory' | 'localStorage' | 'sessionStorage' | 'redis';
     invalidation_keys: string[];
-}
+
 export interface AccessibilityConfig {
     aria_labels: Record<string, string>;
     keyboard_navigation: boolean;
@@ -188,7 +189,7 @@ export interface AccessibilityConfig {
     reduced_motion: boolean;
     focus_management: boolean;
     semantic_markup: boolean;
-}
+
 export interface ApiEndpointConfig {
     name: string;
     url: string;
@@ -198,13 +199,13 @@ export interface ApiEndpointConfig {
     rate_limit: number;
     timeout: number;
     retry_config: RetryConfig;
-}
+
 export interface RetryConfig {
     max_attempts: number;
     backoff_strategy: 'linear' | 'exponential' | 'fixed';
     base_delay: number;
     max_delay: number;
-}
+
 export interface WebhookConfig {
     name: string;
     url: string;
@@ -212,7 +213,7 @@ export interface WebhookConfig {
     headers: Record<string, string>;
     secret: string;
     retry_config: RetryConfig;
-}
+
 export interface ElementState {
     current_state: string;
     properties: Record<string, any>;
@@ -225,7 +226,7 @@ export interface ElementState {
     render_time: number;
     interaction_count: number;
     last_interaction: Date | null;
-}
+
 export interface ElementError {
     code: string;
     message: string;
@@ -233,7 +234,7 @@ export interface ElementError {
     timestamp: Date;
     user_id?: string;
     context: Record<string, any>;
-}
+
 export interface Interaction {
     id: string;
     type: InteractionType;
@@ -243,7 +244,7 @@ export interface Interaction {
     data: Record<string, any>;
     result: InteractionResult;
     duration: number;
-}
+
 export declare enum InteractionType {
     CLICK = "click",
     HOVER = "hover",
@@ -254,7 +255,7 @@ export declare enum InteractionType {
     GESTURE = "gesture",
     API_CALL = "api_call",
     CUSTOM = "custom"
-}
+
 export interface InteractionContext {
     page_url: string;
     referrer: string;
@@ -264,14 +265,14 @@ export interface InteractionContext {
     device_type: 'desktop' | 'mobile' | 'tablet';
     session_id: string;
     ab_test_variant: string | null;
-}
+
 export interface InteractionResult {
     success: boolean;
     error?: string;
     conversion: boolean;
     data: Record<string, any>;
     next_action?: string;
-}
+
 export interface ElementAnalytics {
     total_impressions: number;
     unique_users: number;
@@ -294,7 +295,7 @@ export interface ElementAnalytics {
     hourly_distribution: number[];
     geographical_distribution: Record<string, number>;
     device_distribution: Record<string, number>;
-}
+
 export interface DailyStats {
     date: string;
     impressions: number;
@@ -302,13 +303,13 @@ export interface DailyStats {
     conversions: number;
     unique_users: number;
     error_count: number;
-}
+
 export interface TargetContext {
     type: TargetType;
     rules: TargetRule[];
     operator: 'AND' | 'OR';
     weight: number;
-}
+
 export declare enum TargetType {
     USER_ATTRIBUTE = "user_attribute",
     BEHAVIORAL = "behavioral",
@@ -317,13 +318,13 @@ export declare enum TargetType {
     DEVICE = "device",
     CONTENT = "content",
     CUSTOM = "custom"
-}
+
 export interface TargetRule {
     field: string;
     operator: ComparisonOperator;
     value: any;
     case_sensitive: boolean;
-}
+
 export declare enum ComparisonOperator {
     EQUALS = "equals",
     NOT_EQUALS = "not_equals",
@@ -340,7 +341,7 @@ export declare enum ComparisonOperator {
     REGEX = "regex",
     EXISTS = "exists",
     NOT_EXISTS = "not_exists"
-}
+
 export interface ElementTrigger {
     id: string;
     type: TriggerType;
@@ -348,7 +349,7 @@ export interface ElementTrigger {
     delay: number;
     max_triggers: number;
     cooldown: number;
-}
+
 export declare enum TriggerType {
     PAGE_LOAD = "page_load",
     TIME_DELAY = "time_delay",
@@ -359,26 +360,26 @@ export declare enum TriggerType {
     EXIT_INTENT = "exit_intent",
     IDLE_TIME = "idle_time",
     ELEMENT_VISIBLE = "element_visible"
-}
+
 export interface TriggerCondition {
     field: string;
     operator: ComparisonOperator;
     value: any;
-}
+
 export interface ElementCondition {
     id: string;
     name: string;
     expression: string;
     variables: Record<string, any>;
     active: boolean;
-}
+
 export interface ElementIntegration {
     type: IntegrationType;
     config: Record<string, any>;
     enabled: boolean;
     last_sync: Date | null;
     sync_status: 'success' | 'error' | 'pending';
-}
+
 export declare enum IntegrationType {
     ANALYTICS = "analytics",
     CRM = "crm",
@@ -390,7 +391,7 @@ export declare enum IntegrationType {
     CDN = "cdn",
     SEARCH = "search",
     AI_ML = "ai_ml"
-}
+
 export interface LiveChatElement extends InteractiveElement {
     type: InteractiveElementType.LIVE_CHAT;
     config: ElementConfiguration & {,
@@ -408,7 +409,7 @@ export interface LiveChatElement extends InteractiveElement {
             };
         };
     };
-}
+
 export interface ProgressBarElement extends InteractiveElement {
     type: InteractiveElementType.PROGRESS_BAR;
     config: ElementConfiguration & {,
@@ -423,18 +424,18 @@ export interface ProgressBarElement extends InteractiveElement {
             milestones: Milestone[];
         };
     };
-}
+
 export interface ColorThreshold {
     threshold: number;
     color: string;
     label?: string;
-}
+
 export interface Milestone {
     value: number;
     label: string;
     icon?: string;
     reward?: string;
-}
+
 export interface QuickPreviewElement extends InteractiveElement {
     type: InteractiveElementType.QUICK_PREVIEW;
     config: ElementConfiguration & {,
@@ -449,7 +450,7 @@ export interface QuickPreviewElement extends InteractiveElement {
             sharing_enabled: boolean;
         };
     };
-}
+
 export interface InteractiveDemo extends InteractiveElement {
     type: InteractiveElementType.INTERACTIVE_DEMO;
     config: ElementConfiguration & {,
@@ -465,7 +466,7 @@ export interface InteractiveDemo extends InteractiveElement {
             steps: DemoStep[];
         };
     };
-}
+
 export interface DemoStep {
     id: string;
     title: string;
@@ -475,7 +476,7 @@ export interface DemoStep {
     action_data: Record<string, any>;
     duration: number;
     optional: boolean;
-}
+
 export declare class Epic16InteractiveElementsService extends EventEmitter {
     private elements;
     private activeElements;
@@ -504,7 +505,7 @@ export declare class Epic16InteractiveElementsService extends EventEmitter {
     private getContextFieldValue;
     private compareValues;
     private evaluateExpression;
-}
+
 export interface ActivationContext {
     userId: string;
     sessionId: string;
@@ -513,7 +514,7 @@ export interface ActivationContext {
     timestamp: Date;
     userAttributes: Record<string, any>;
     requestContext: Record<string, any>;
-}
+
 export interface UserSession {
     userId: string;
     sessionId: string;
@@ -521,6 +522,6 @@ export interface UserSession {
     elementInteractions: Map<string, number>;
     uniqueElements: Set<string>;
     totalInteractions: number;
-}
+
 export default Epic16InteractiveElementsService;
 //# sourceMappingURL=Epic16InteractiveElementsService.d.ts.map

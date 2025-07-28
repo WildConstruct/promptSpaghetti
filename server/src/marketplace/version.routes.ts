@@ -40,9 +40,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['templateId']
-      },
+  }
       body: {
         type: 'object',
         required: ['version_number', 'graph_json', 'release_notes', 'compatibility_level'],
@@ -95,7 +95,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -124,9 +124,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['templateId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -172,9 +172,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -254,9 +254,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -299,9 +299,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           templateId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['templateId']
-      },
+  }
       body: {
         type: 'object',
         required: ['to_version_id', 'rollback_reason', 'rollback_type', 'impact_assessment', 'rollback_plan', 'verification_steps'],
@@ -349,9 +349,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -386,7 +386,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
         properties: {
           templateId: { type: 'string', format: 'uuid' },
           versionNumber: { type: 'string', pattern: '^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$' }
-        },
+  }
         required: ['templateId', 'versionNumber']
       }
     }
@@ -418,9 +418,9 @@ export async function versionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -461,7 +461,7 @@ export async function versionRoutes(fastify: FastifyInstance) {
         properties: {
           fromId: { type: 'string', format: 'uuid' },
           toId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['fromId', 'toId']
       }
     }

@@ -23,43 +23,38 @@ const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
 interface RestorationWizardProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
-  projectId: string;
+  projectId: string;,
   sourceSnapshotId: string;
   targetSnapshotId?: string;
   onSuccess?: (attempt: RestorationAttempt) => void;
   onError?: (error: string) => void;
-}
-interface WizardStep {
-  title: string;
+  interface WizardStep {
+  title: string;,
   description: string;
   icon: React.ReactNode;
+  const wizardSteps: WizardStep = [
+  {
+  title: 'Configure',
+  description: 'Set restoration options',
+  icon: <RestoreOutlined />,
 }
-const wizardSteps: WizardStep[] = [
   {
-    title: 'Configure',
-    description: 'Set restoration options',
-    icon: <RestoreOutlined />,
-  },
+  title: 'Preview',
+  description: 'Review changes',
+  icon: <ExclamationCircleOutlined />,
+}
   {
-    title: 'Preview',
-    description: 'Review changes',
-    icon: <ExclamationCircleOutlined />,
-  },
+  title: 'Confirm',
+  description: 'Confirm restoration',
+  icon: <CheckCircleOutlined />,
+}
   {
-    title: 'Confirm',
-    description: 'Confirm restoration',
-    icon: <CheckCircleOutlined />,
-  },
-  {
-    title: 'Progress',
-    description: 'Monitor progress',
-    icon: <LoadingOutlined />,
-  }
-];
-
-export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
+  title: 'Progress',
+  description: 'Monitor progress',
+  icon: <LoadingOutlined />];
+  export const RestorationWizard: React.FC<RestorationWizardProps> = ({,)
   visible,
   onClose,
   projectId,
@@ -71,12 +66,12 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const [config, setConfig] = useState<RestorationConfig>({)
-    restorationType: 'full',
-    restorationStrategy: 'replace',
-    preserveCurrentChanges: false,
-    createBackup: true,
-    notifyOnCompletion: true,
-  });
+  restorationType: 'full',
+  restorationStrategy: 'replace',
+  preserveCurrentChanges: false,
+  createBackup: true,
+  notifyOnCompletion: true,
+});
   const [preview, setPreview] = useState<RestorationPreviewResponse | null>(null);
   const [restorationAttempt, setRestorationAttempt] = useState<RestorationAttempt | null>(null);
   const [progress, setProgress] = useState<RestorationProgressResponse | null>(null);
@@ -90,43 +85,39 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
   } = useRestoration();
   // Reset state when modal opens/closes
   useEffect(() => {
-    if (visible) {
-      setCurrentStep(0);
-      setConfig({)
-        restorationType: 'full',
-        restorationStrategy: 'replace',
-        preserveCurrentChanges: false,
-        createBackup: true,
-        notifyOnCompletion: true,
-      });
+  if (visible) {
+  setCurrentStep(0);
+  setConfig({)
+  restorationType: 'full',
+  restorationStrategy: 'replace',
+  preserveCurrentChanges: false,
+  createBackup: true,
+  notifyOnCompletion: true,
+});
       setPreview(null);
       setRestorationAttempt(null);
       setProgress(null);
       setError(null);
       form.resetFields();
-    }
   }, [visible, form]);
   // Poll for progress updates
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (restorationAttempt && currentStep === 3) {
-      interval = setInterval(async () => {
-        try {
-          const progressData = await getProgress(restorationAttempt.id);
-          setProgress(progressData);
-          if (progressData.status === 'completed') {
-            clearInterval(interval);
-            onSuccess?.(restorationAttempt);
-          } else if (progressData.status === 'failed') {
+  let interval: NodeJS.Timeout;
+  if (restorationAttempt && currentStep === 3) {
+  interval = setInterval(async () => {
+  try {
+  const progressData = await getProgress(restorationAttempt.id);
+  setProgress(progressData);
+  if (progressData.status === 'completed') {
+  clearInterval(interval);
+  onSuccess?.(restorationAttempt);
+} else if (progressData.status === 'failed') {
             clearInterval(interval);
             setError(progressData.errorMessage || 'Restoration failed');
             onError?.(progressData.errorMessage || 'Restoration failed');
-          }
         } catch (error) {
-          console.error('Failed to get progress:', error);
-        }
-      }, 1000);
-    }
+  console.error('Failed to get progress:', error);
+}, 1000);
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -140,19 +131,18 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
         setConfig(updatedConfig);
         setLoading(true);
         const previewData = await generatePreview({)
-          projectId,
-          sourceSnapshotId,
-          targetSnapshotId,
-          config: updatedConfig,
-        });
+  projectId,
+  sourceSnapshotId,
+  targetSnapshotId,
+  config: updatedConfig,
+});
         setPreview(previewData);
         setCurrentStep(1);
       } catch (error) {
-        console.error('Failed to generate preview:', error);
-        setError('Failed to generate preview. Please try again.');
-      } finally {
+  console.error('Failed to generate preview:', error);
+  setError('Failed to generate preview. Please try again.');
+} finally {
         setLoading(false);
-      }
     } else if (currentStep === 1) {
       // Preview step - move to confirmation
       setCurrentStep(2);
@@ -161,7 +151,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
       try {
         setLoading(true);
         const attempt = await createRestoration({)
-          projectId,
+  projectId,
           sourceSnapshotId,
           targetSnapshotId,
           config
@@ -169,12 +159,10 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
         setRestorationAttempt(attempt);
         setCurrentStep(3);
       } catch (error) {
-        console.error('Failed to start restoration:', error);
-        setError('Failed to start restoration. Please try again.');
-      } finally {
+  console.error('Failed to start restoration:', error);
+  setError('Failed to start restoration. Please try again.');
+} finally {
         setLoading(false);
-      }
-    }
   };
   const handlePrevious = () => {
     setCurrentStep(Math.max(0, currentStep - 1));
@@ -185,11 +173,9 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
       try {
         await cancelRestoration(restorationAttempt.id);
       } catch (error) {
-        console.error('Failed to cancel restoration:', error);
-      }
-    }
-    onClose();
-  };
+  console.error('Failed to cancel restoration:', error);
+  onClose();
+};
   const canGoNext = () => {
     if (currentStep === 0) return true;
     if (currentStep === 1) return preview !== null;
@@ -202,7 +188,7 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
   const renderStepContent = () => {
     switch (currentStep) {
     case 0:
-      return ();
+      return;
         <Form
           form={form}
           layout="vertical"
@@ -256,9 +242,9 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
           preview={preview}
           config={config}
           onConflictResolve={(conflictId, strategy) => {
-            // Handle conflict resolution
-            console.log('Resolving conflict:', conflictId, strategy);
-          }}
+  // Handle conflict resolution
+  console.log('Resolving conflict:', conflictId, strategy);
+}}
         />
       ) : ()
         <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -296,7 +282,6 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
       );
     default:
       return null;
-    }
   };
   const getModalTitle = () => {
     const stepTitles = [;
@@ -308,17 +293,16 @@ export const RestorationWizard: React.FC<RestorationWizardProps> = ({)
     return stepTitles[currentStep] || 'Version Restoration';
   };
   const getModalWidth = () => {
-    switch (currentStep) {
-    case 1:
-    case 2:
-      return 900;
-    case 3:
-      return 700;
-    default:
-      return 600;
-    }
-  };
-  return ();
+  switch (currentStep) {
+  case 1:,
+  case 2:,
+  return 900;
+  case 3:,
+  return 700;
+  default:,
+  return 600;
+};
+  return;
     <Modal
       title={getModalTitle()}
       visible={visible}

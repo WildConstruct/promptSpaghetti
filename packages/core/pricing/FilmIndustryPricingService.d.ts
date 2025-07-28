@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { PricingOptimizer } from './PricingOptimizer';
+
 export interface FilmStudioProfile {
     studioId: string;
     name: string;
@@ -23,7 +24,7 @@ export interface FilmStudioProfile {
     contractStartDate: number;
     contractEndDate: number;
     loyaltyStatus: 'new' | 'standard' | 'preferred' | 'vip';
-}
+
 export interface ProjectPricingRequest {
     studioId: string;
     projectId: string;
@@ -47,7 +48,7 @@ export interface ProjectPricingRequest {
         marketingContent?: MarketingContentOptions;
         characterDevelopment?: CharacterDevelopmentOptions;
     };
-}
+
 export interface ProjectDeliverable {
     type: 'script_analysis' | 'character_profiles' | 'scene_breakdown' | 'dialogue_generation' | 'storyboard_concepts' | 'visual_references' | 'marketing_taglines' | 'synopsis_variants';
     quantity: number;
@@ -56,7 +57,7 @@ export interface ProjectDeliverable {
     revisions: number;
     format: string[];
     specifications: Record<string, any>;
-}
+
 export interface ScriptAnalysisOptions {
     analysisDepth: 'basic' | 'comprehensive' | 'deep_dive';
     includeCharacterArcs: boolean;
@@ -64,35 +65,35 @@ export interface ScriptAnalysisOptions {
     includeStructuralNotes: boolean;
     includeGenreCompliance: boolean;
     benchmarkScripts?: string[];
-}
+
 export interface StoryboardOptions {
     artStyle: 'sketch' | 'detailed' | 'cinematic' | 'animatic';
     frameCount: number;
     includeNotes: boolean;
     colorTreatment: 'bw' | 'color' | 'mood_palette';
     animationPreview: boolean;
-}
+
 export interface ConceptArtOptions {
     artDirection: 'realistic' | 'stylized' | 'fantastical' | 'period_accurate';
     deliverableTypes: ('character_design' | 'environment_design' | 'prop_design' | 'costume_design')[];
     iterationRounds: number;
     highResolution: boolean;
     includeVariations: boolean;
-}
+
 export interface MarketingContentOptions {
     campaignScope: 'teaser' | 'full_campaign' | 'awards_season' | 'international';
     platforms: ('theatrical' | 'digital' | 'social' | 'print' | 'tv')[];
     audienceSegments: string[];
     brandGuidelines: boolean;
     localizationNeeded: string[];
-}
+
 export interface CharacterDevelopmentOptions {
     characterCount: number;
     developmentDepth: 'basic_profile' | 'detailed_background' | 'full_psychology';
     includeDialoguePatterns: boolean;
     includeVisualReferences: boolean;
     includeRelationshipMaps: boolean;
-}
+
 export interface FilmIndustryPricingResult {
     projectId: string;
     studioId: string;
@@ -126,14 +127,14 @@ export interface FilmIndustryPricingResult {
     riskAssessment: 'low' | 'medium' | 'high';
     validUntil: number;
     createdAt: number;
-}
+
 export interface PaymentScheduleItem {
     milestone: string;
     percentage: number;
     amount: number;
     dueDate: number;
     description: string;
-}
+
 export interface StudioPricingAnalytics {
     studioId: string;
     period: {,
@@ -168,7 +169,6 @@ export interface StudioPricingAnalytics {
         projectVolumeGrowth: number;
         averageValueGrowth: number;
     };
-}
 /**
  * Specialized pricing service for film industry clients
  */
@@ -264,6 +264,6 @@ export declare class FilmIndustryPricingService extends EventEmitter {
     private calculateStudioBenchmarks;
     private getCurrentStudioPricing;
     private calculateOptimalStudioPricing;
-}
+
 export default FilmIndustryPricingService;
 //# sourceMappingURL=FilmIndustryPricingService.d.ts.map

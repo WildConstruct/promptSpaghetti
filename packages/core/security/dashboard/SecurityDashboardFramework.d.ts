@@ -47,14 +47,14 @@ export declare enum DashboardType {
     VULNERABILITY = "vulnerability",// Vulnerability management
     ANALYTICS = "analytics",// Advanced security analytics
     AUDIT = "audit"
-}
+
 export declare enum DashboardTheme {
     LIGHT = "light",
     DARK = "dark",
     CINEMA = "cinema",
     HIGH_CONTRAST = "high-contrast",
     COLORBLIND_FRIENDLY = "colorblind"
-}
+
 export declare enum SecurityRole {
     EXECUTIVE = "executive",
     SECURITY_ADMIN = "security_admin",
@@ -64,7 +64,7 @@ export declare enum SecurityRole {
     COMPLIANCE_OFFICER = "compliance_officer",
     AUDITOR = "auditor",
     VIEWER = "viewer"
-}
+
 export declare enum WidgetCategory {
     METRICS = "metrics",// KPI and metric displays
     CHARTS = "charts",// Various chart visualizations
@@ -74,7 +74,7 @@ export declare enum WidgetCategory {
     ALERTS = "alerts",// Alert and notification widgets
     CONTROLS = "controls",// Interactive control widgets
     STATUS = "status"
-}
+
 export interface DashboardConfig {
     id: string;
     type: DashboardType;
@@ -89,7 +89,7 @@ export interface DashboardConfig {
     customStyles?: Record<string, any>;
     metadata: DashboardMetadata;
     dataClassification: DataClassificationLevel;
-}
+
 export interface DashboardLayout {
     type: 'grid' | 'masonry' | 'custom';
     columns: number;
@@ -98,13 +98,13 @@ export interface DashboardLayout {
     responsive: boolean;
     breakpoints?: LayoutBreakpoint[];
     regions?: LayoutRegion[];
-}
+
 export interface LayoutBreakpoint {
     name: string;
     minWidth: number;
     columns: number;
     gap?: number;
-}
+
 export interface LayoutRegion {
     id: string;
     name: string;
@@ -113,7 +113,7 @@ export interface LayoutRegion {
     maxHeight?: number;
     resizable?: boolean;
     collapsible?: boolean;
-}
+
 export interface WidgetConfiguration {
     id: string;
     type: string;
@@ -127,13 +127,13 @@ export interface WidgetConfiguration {
     refreshInterval?: number;
     autoRefresh?: boolean;
     customStyles?: Record<string, any>;
-}
+
 export interface WidgetPosition {
     x: number;
     y: number;
     order?: number;
     region?: string;
-}
+
 export interface WidgetSize {
     width: number;
     height: number;
@@ -142,7 +142,7 @@ export interface WidgetSize {
     maxWidth?: number;
     maxHeight?: number;
     resizable?: boolean;
-}
+
 export interface DataSourceConfig {
     type: 'realtime' | 'batch' | 'static';
     source: string;
@@ -152,27 +152,27 @@ export interface DataSourceConfig {
     aggregation?: AggregationConfig;
     caching?: CachingConfig;
     authentication?: AuthenticationConfig;
-}
+
 export interface AggregationConfig {
     groupBy: string[];
     timeWindow: string;
     functions: AggregationFunction[];
-}
+
 export interface AggregationFunction {
     field: string;
     function: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
     alias?: string;
-}
+
 export interface CachingConfig {
     enabled: boolean;
     ttl: number;
     invalidationRules?: string[];
-}
+
 export interface AuthenticationConfig {
     required: boolean;
     method: 'oauth' | 'apikey' | 'certificate' | 'none';
     credentials?: Record<string, string>;
-}
+
 export interface DashboardPermissions {
     view: SecurityRole[];
     edit: SecurityRole[];
@@ -181,14 +181,14 @@ export interface DashboardPermissions {
     share: SecurityRole[];
     adminOnly: boolean;
     dataClassificationRequirement?: DataClassificationLevel;
-}
+
 export interface WidgetPermissions {
     view: SecurityRole[];
     configure: SecurityRole[];
     export: SecurityRole[];
     drillDown: SecurityRole[];
     dataAccess: DataClassificationLevel[];
-}
+
 export interface DashboardMetadata {
     version: string;
     createdAt: Date;
@@ -200,21 +200,21 @@ export interface DashboardMetadata {
     organization: string;
     compliance: ComplianceMetadata;
     usage: UsageMetadata;
-}
+
 export interface ComplianceMetadata {
     frameworks: string[];
     requirements: string[];
     auditRequired: boolean;
     retentionPeriod: number;
     dataResidency: string[];
-}
+
 export interface UsageMetadata {
     viewCount: number;
     lastViewed: Date;
     popularWidgets: string[];
     averageSessionDuration: number;
     peakUsageHours: number[];
-}
+
 export interface WidgetDefinition {
     type: string;
     name: string;
@@ -230,7 +230,7 @@ export interface WidgetDefinition {
     permissions: WidgetPermissions;
     tags: string[];
     version: string;
-}
+
 export interface DataRequirement {
     field: string;
     type: 'number' | 'string' | 'boolean' | 'date' | 'object';
@@ -238,12 +238,12 @@ export interface DataRequirement {
     description: string;
     format?: string;
     validation?: ValidationRule[];
-}
+
 export interface ValidationRule {
     type: 'range' | 'pattern' | 'enum' | 'custom';
     params: Record<string, any>;
     message: string;
-}
+
 export interface ThemeConfig {
     name: DashboardTheme;
     displayName: string;
@@ -254,7 +254,7 @@ export interface ThemeConfig {
     borders: BorderConfig;
     animations: AnimationConfig;
     accessibility: AccessibilityConfig;
-}
+
 export interface ColorPalette {
     primary: string;
     secondary: string;
@@ -271,7 +271,7 @@ export interface ColorPalette {
     info: string;
     border: string;
     shadow: string;
-}
+
 export interface TypographyConfig {
     fontFamily: string;
     fontSize: {,
@@ -295,7 +295,7 @@ export interface TypographyConfig {
         normal: number;
         relaxed: number;
     };
-}
+
 export interface SpacingConfig {
     xs: string;
     sm: string;
@@ -304,13 +304,13 @@ export interface SpacingConfig {
     xl: string;
     '2xl': string;
     '3xl': string;
-}
+
 export interface ShadowConfig {
     sm: string;
     md: string;
     lg: string;
     xl: string;
-}
+
 export interface BorderConfig {
     width: {,
         thin: string;
@@ -323,7 +323,7 @@ export interface BorderConfig {
         lg: string;
         full: string;
     };
-}
+
 export interface AnimationConfig {
     duration: {,
         fast: string;
@@ -336,7 +336,7 @@ export interface AnimationConfig {
         easeOut: string;
         easeInOut: string;
     };
-}
+
 export interface AccessibilityConfig {
     focusRing: string;
     screenReaderOnly: string;
@@ -346,7 +346,7 @@ export interface AccessibilityConfig {
         min: string;
         max: string;
     };
-}
+
 export interface DashboardFrameworkEvents {
     'dashboard:loaded': (dashboard: DashboardConfig) => void;
     'dashboard:error': (error: Error, dashboardId: string) => void;
@@ -358,14 +358,14 @@ export interface DashboardFrameworkEvents {
     'permission:denied': (event: PermissionDeniedEvent) => void;
     'theme:changed': (theme: DashboardTheme) => void;
     'layout:changed': (layout: DashboardLayout) => void;
-}
+
 export interface UserInteractionEvent {
     userId: string;
     action: string;
     target: string;
     timestamp: Date;
     metadata: Record<string, any>;
-}
+
 export interface PermissionDeniedEvent {
     userId: string;
     requiredRole: SecurityRole;
@@ -373,7 +373,7 @@ export interface PermissionDeniedEvent {
     resource: string;
     action: string;
     timestamp: Date;
-}
+
 export interface SecurityDashboardFrameworkOptions {
     enableAuditLogging: boolean;
     enablePerformanceMonitoring: boolean;
@@ -384,7 +384,6 @@ export interface SecurityDashboardFrameworkOptions {
     sessionTimeout: number;
     dataRetention: number;
     complianceMode: boolean;
-}
 /**
  * Main Security Dashboard Framework Class
  */
@@ -464,6 +463,6 @@ export declare class SecurityDashboardFramework extends EventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default SecurityDashboardFramework;
 //# sourceMappingURL=SecurityDashboardFramework.d.ts.map

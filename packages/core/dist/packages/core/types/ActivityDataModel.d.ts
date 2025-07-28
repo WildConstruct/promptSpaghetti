@@ -43,8 +43,8 @@ export interface BaseActivity {
     startTime?: string;
     endTime?: string;
     metadata: Record<string, any>;
-    tags: string[];
-    changes?: ActivityChange[];
+    tags: string;
+    changes?: ActivityChange;
     error?: {
         code?: string;
         message?: string;
@@ -132,8 +132,8 @@ export interface DataActivity extends BaseActivity {
     primaryKey?: string | number;
     operationType: 'insert' | 'update' | 'delete' | 'bulk_update' | 'bulk_delete';
     affectedRows?: number;
-    validationErrors?: string[];
-    businessRules?: string[];
+    validationErrors?: string;
+    businessRules?: string;
 }
 export interface PerformanceActivity extends BaseActivity {
     type: 'performance_event';
@@ -147,7 +147,7 @@ export interface PerformanceActivity extends BaseActivity {
         networkIo?: number;
     };
     thresholds?: Record<string, number>;
-    thresholdViolations?: string[];
+    thresholdViolations?: string;
     loadLevel?: 'low' | 'medium' | 'high' | 'peak';
     concurrentUsers?: number;
 }
@@ -162,7 +162,7 @@ export interface AuthenticationActivity extends BaseActivity {
     loginAttempts?: number;
     lastSuccessfulLogin?: string;
     riskScore?: number;
-    riskFactors?: string[];
+    riskFactors?: string;
 }
 export interface FileActivity extends BaseActivity {
     type: 'file_operation';
@@ -196,25 +196,25 @@ export type Activity = UserActivity | SystemActivity | AdminActivity | SecurityA
 export interface ActivityQuery {
     startTime?: string;
     endTime?: string;
-    types?: ActivityType[];
-    severities?: ActivitySeverity[];
-    statuses?: ActivityStatus[];
-    sources?: string[];
-    userIds?: string[];
-    userEmails?: string[];
-    userRoles?: string[];
-    resourceTypes?: string[];
-    resourceIds?: string[];
+    types?: ActivityType;
+    severities?: ActivitySeverity;
+    statuses?: ActivityStatus;
+    sources?: string;
+    userIds?: string;
+    userEmails?: string;
+    userRoles?: string;
+    resourceTypes?: string;
+    resourceIds?: string;
     searchTerm?: string;
-    searchFields?: string[];
+    searchFields?: string;
     metadataFilters?: Record<string, any>;
-    tags?: string[];
+    tags?: string;
     limit?: number;
     offset?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
-    aggregateBy?: string[];
-    include?: string[];
+    aggregateBy?: string;
+    include?: string;
 }
 export interface ActivityAggregation {
     field: string;
@@ -223,9 +223,9 @@ export interface ActivityAggregation {
     percentage: number;
 }
 export interface ActivityQueryResult {
-    activities: Activity[];
+    activities: Activity;
     totalCount: number;
-    aggregations?: Record<string, ActivityAggregation[]>;
+    aggregations?: Record<string, ActivityAggregation>;
     facets?: Record<string, Array<{
         value: string;
         count: number;
@@ -243,7 +243,7 @@ export interface ActivityIndex {
     resourceId?: string;
     severity: ActivitySeverity;
     status: ActivityStatus;
-    tags: string[];
+    tags: string;
 }
 export interface ActivityStream {
     subscriptionId: string;
@@ -262,42 +262,18 @@ export interface ActivityMetrics {
     activitiesByType: Record<ActivityType, number>;
     activitiesBySeverity: Record<ActivitySeverity, number>;
     activitiesByStatus: Record<ActivityStatus, number>;
-    activitiesOverTime: Array<{
-        timestamp: string;
-        count: number;
-        types: Record<ActivityType, number>;
-    }>;
-    topSources: Array<{
-        source: string;
-        count: number;
-        percentage: number;
-    }>;
-    topActions: Array<{
-        action: string;
-        count: number;
-        percentage: number;
-    }>;
-    topUsers: Array<{
-        userId: string;
-        userEmail?: string;
-        count: number;
-        percentage: number;
-    }>;
-    errorRate: number;
-    averageDuration: number;
-    performanceMetrics: {
-        p50: number;
-        p95: number;
-        p99: number;
-    };
+    activitiesOverTime: Array<{}, timestamp>;
+    string: any;
+    count: number;
+    types: Record<ActivityType, number>;
 }
 export interface ActivityRetentionPolicy {
     id: string;
     name: string;
     description: string;
     retentionPeriod: number;
-    activityTypes: ActivityType[];
-    severities: ActivitySeverity[];
+    activityTypes: ActivityType;
+    severities: ActivitySeverity;
     archiveEnabled: boolean;
     archiveLocation?: string;
     compressionEnabled?: boolean;

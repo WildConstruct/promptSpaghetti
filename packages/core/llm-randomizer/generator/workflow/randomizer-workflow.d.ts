@@ -2,12 +2,13 @@ import { RandomizerParameters } from '../parameters/parameter-schema';
 import { UniversalAgentRequest } from '../../agents';
 import { ParserResult } from '../../parser';
 import { Graph } from '../../../graphSchema';
+
 export interface WorkflowOptions {
     onProgress?: (message: string, progress?: number) => void;
     validateIntermediateSteps?: boolean;
     includeDebugInfo?: boolean;
     timeoutMs?: number;
-}
+
 export interface WorkflowResult {
     success: boolean;
     graph?: Graph;
@@ -30,18 +31,17 @@ export interface WorkflowResult {
         parserResult: ParserResult;
         validationResult: any;
     };
-}
+
 export interface WorkflowError {
     stage: 'preparation' | 'llm' | 'parsing' | 'validation' | 'serialization';
     type: string;
     message: string;
     details?: any;
-}
+
 export interface WorkflowWarning {
     stage: string;
     message: string;
     suggestion?: string;
-}
 /**
  * Complete randomizer workflow that orchestrates all Epic 12 components
  */
@@ -86,5 +86,5 @@ export declare class RandomizerWorkflow {
         errors: string[];
         warnings: string[];
     };
-}
+
 //# sourceMappingURL=randomizer-workflow.d.ts.map

@@ -1,6 +1,6 @@
 import { NodeMeta } from '../Palette';
 interface UseNodeUtilsProps {
-    nodeTypes: NodeMeta[];
+    nodeTypes: NodeMeta;
 }
 interface UseNodeUtilsReturn {
     getNodeMeta: (nodeType: string) => NodeMeta;

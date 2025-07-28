@@ -6,6 +6,7 @@
  * and self-service capabilities for users.
  */
 import { EventEmitter } from 'events';
+
 export interface HelpRequest {
     id: string;
     type: HelpRequestType;
@@ -37,7 +38,7 @@ export interface HelpRequest {
     closedAt?: Date;
     sla: HelpSLA;
     analytics: HelpAnalytics;
-}
+
 export declare enum HelpRequestType {
     QUESTION = "question",
     TECHNICAL_ISSUE = "technical_issue",
@@ -51,7 +52,7 @@ export declare enum HelpRequestType {
     PARTNERSHIP_INQUIRY = "partnership_inquiry",
     COMPLIANCE_ISSUE = "compliance_issue",
     ONBOARDING_HELP = "onboarding_help"
-}
+
 export declare enum HelpCategory {
     GETTING_STARTED = "getting_started",
     TEMPLATES = "templates",
@@ -63,14 +64,14 @@ export declare enum HelpCategory {
     PARTNERSHIPS = "partnerships",
     COMPLIANCE = "compliance",
     GENERAL = "general"
-}
+
 export declare enum HelpPriority {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     URGENT = "urgent",
     CRITICAL = "critical"
-}
+
 export declare enum HelpRequestStatus {
     SUBMITTED = "submitted",
     TRIAGED = "triaged",
@@ -81,7 +82,7 @@ export declare enum HelpRequestStatus {
     RESOLVED = "resolved",
     CLOSED = "closed",
     REOPENED = "reopened"
-}
+
 export interface RequestContext {
     userAgent: string;
     ipAddress: string;
@@ -109,7 +110,7 @@ export interface RequestContext {
     accountAge: number;
     previousTickets: number;
     successfulTransactions: number;
-}
+
 export interface RoutingDecision {
     strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';
     confidence: number;
@@ -117,7 +118,7 @@ export interface RoutingDecision {
     estimatedResolutionTime: number;
     recommendedAgent?: string;
     fallbackStrategy?: string;
-}
+
 export interface HelpResponse {
     id: string;
     type: 'auto' | 'agent' | 'system' | 'knowledge_base';
@@ -127,7 +128,7 @@ export interface HelpResponse {
     helpful: boolean | null;
     attachments: string[];
     timestamp: Date;
-}
+
 export interface HelpAttachment {
     id: string;
     filename: string;
@@ -142,7 +143,7 @@ export interface HelpAttachment {
         containsPersonalInfo: boolean;
         category: string;
     };
-}
+
 export interface HelpSLA {
     responseTime: {,
         target: number;
@@ -157,7 +158,7 @@ export interface HelpSLA {
         breached: boolean;
     };
     escalationThreshold: number;
-}
+
 export interface HelpAnalytics {
     viewCount: number;
     interactionCount: number;
@@ -167,7 +168,7 @@ export interface HelpAnalytics {
     agentEfficiencyScore?: number;
     deflectionScore?: number;
     resolutionSource: 'self_service' | 'knowledge_base' | 'community' | 'agent' | 'escalation';
-}
+
 export interface KnowledgeBaseArticle {
     id: string;
     title: string;
@@ -180,7 +181,7 @@ export interface KnowledgeBaseArticle {
     viewCount: number;
     lastUpdated: Date;
     url: string;
-}
+
 export interface KnowledgeBaseSearch {
     query: string;
     categories?: HelpCategory[];
@@ -190,7 +191,7 @@ export interface KnowledgeBaseSearch {
         userType?: string;
     };
     limit?: number;
-}
+
 export interface RoutingRule {
     id: string;
     name: string;
@@ -199,18 +200,18 @@ export interface RoutingRule {
     action: RoutingAction;
     priority: number;
     active: boolean;
-}
+
 export interface RoutingCondition {
     field: string;
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
     value: any;
     weight: number;
-}
+
 export interface RoutingAction {
     type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles';
     target: string;
     parameters: Record<string, any>;
-}
+
 export interface HelpRequestConfig {
     autoResolution: {,
         enabled: boolean;
@@ -244,13 +245,12 @@ export interface HelpRequestConfig {
         chatbot: boolean;
         emailSupport: boolean;
     };
-}
+
 export interface EscalationRule {
     trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';
     condition: string;
     escalateTo: string;
     delayMinutes: number;
-}
 /**
  * Epic 16 Help Request Service
  *
@@ -355,6 +355,6 @@ export declare class Epic16HelpRequestService extends EventEmitter {
     private assignToSpecialist;
     private routeToCommunity;
     private increasePriority;
-}
+
 export default Epic16HelpRequestService;
 //# sourceMappingURL=Epic16HelpRequestService.d.ts.map

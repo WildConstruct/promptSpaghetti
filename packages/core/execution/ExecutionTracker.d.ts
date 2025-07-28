@@ -51,7 +51,7 @@ export declare class GraphExecutionTracker implements ExecutionTracker {
         activeExecutions: number;
         totalExecutionsTracked: number;
     };
-}
+
 /**
  * Utility functions for execution path analysis
  */
@@ -80,6 +80,6 @@ export declare class ExecutionPathAnalyzer {
         bottleneckNodes: string[];
         randomizationSummary: string;
     };
-}
+
 export default GraphExecutionTracker;
 //# sourceMappingURL=ExecutionTracker.d.ts.map

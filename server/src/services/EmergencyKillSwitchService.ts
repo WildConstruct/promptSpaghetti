@@ -9,6 +9,7 @@
 import { Database } from '../database/connection';
 import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
 
+}
 export interface EmergencyKillSwitchConfig {
   id: string;
   name: string;
@@ -23,7 +24,9 @@ export interface EmergencyKillSwitchConfig {
   lastActivatedBy?: string;
   activationCount: number;
 }
+}
 
+}
 export interface KillSwitchActivation {
   id: string;
   killSwitchId: string;
@@ -35,7 +38,9 @@ export interface KillSwitchActivation {
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: Date;
 }
+}
 
+}
 export interface EmergencyKillSwitchMetrics {
   totalKillSwitches: number;
   activeKillSwitches: number;
@@ -43,6 +48,7 @@ export interface EmergencyKillSwitchMetrics {
   avgActivationTime: number;
   togglesCurrentlyDisabled: number;
   lastActivation?: Date;
+}
 }
 
 export class EmergencyKillSwitchService {
@@ -77,6 +83,7 @@ export class EmergencyKillSwitchService {
     config: Omit<EmergencyKillSwitchConfig,
     'id' | 'createdAt' | 'activationCount'>
   ): Promise<string> {
+
     const killSwitchId = `ks_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -107,6 +114,7 @@ export class EmergencyKillSwitchService {
   }
 
   async listKillSwitches(): Promise<EmergencyKillSwitchConfig[]> {
+
     const result = await this.db.query(`
       SELECT * FROM emergency_kill_switches 
       ORDER BY created_at DESC
@@ -130,6 +138,7 @@ export class EmergencyKillSwitchService {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 400 })
   async updateKillSwitch(id: string, updates: Partial<EmergencyKillSwitchConfig>, updatedBy: string): Promise<void> {
+
     const updateFields = [];
     const updateValues = [];
     let paramIndex = 1;
@@ -186,6 +195,7 @@ export class EmergencyKillSwitchService {
     reason: string, 
     autoRollbackMinutes?: number
   ): Promise<KillSwitchActivation> {
+
     const killSwitch = await this.getKillSwitchById(killSwitchId);
     if (!killSwitch) {
       throw new Error(`Kill switch not found: ${killSwitchId}`);
@@ -282,6 +292,7 @@ export class EmergencyKillSwitchService {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async rollbackKillSwitch(activationId: string, rolledBackBy: string, reason?: string): Promise<void> {
+
     const activation = await this.getActivationById(activationId);
     if (!activation) {
       throw new Error(`Kill switch activation not found: ${activationId}`);
@@ -332,6 +343,7 @@ export class EmergencyKillSwitchService {
   // ==========================================
 
   async emergencyDisableAllToggles(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
+
     console.warn('🚨 EMERGENCY: Disabling ALL feature toggles!');
     
     // Use or create the "ALL" kill switch
@@ -351,6 +363,7 @@ export class EmergencyKillSwitchService {
   }
 
   async emergencyDisableClaudeImpactToggles(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
+
     console.warn('🚨 EMERGENCY: Disabling Claude-impacting feature toggles!');
     
     // Use or create the Claude impact kill switch
@@ -371,6 +384,7 @@ export class EmergencyKillSwitchService {
   }
 
   async emergencyDisableCriticalFeatures(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
+
     console.warn('🚨 EMERGENCY: Disabling critical feature toggles!');
     
     // Use or create the critical features kill switch
@@ -394,6 +408,7 @@ export class EmergencyKillSwitchService {
   // ==========================================
 
   async getKillSwitchMetrics(): Promise<EmergencyKillSwitchMetrics> {
+
     const result = await this.db.query(`
       SELECT 
         COUNT(*) as total_kill_switches,
@@ -429,6 +444,7 @@ export class EmergencyKillSwitchService {
   }
 
   async getActiveActivations(): Promise<KillSwitchActivation[]> {
+
     const result = await this.db.query(`
       SELECT * FROM kill_switch_activations
       WHERE status = 'ACTIVE'
@@ -453,6 +469,7 @@ export class EmergencyKillSwitchService {
   // ==========================================
 
   private async getKillSwitchById(id: string): Promise<EmergencyKillSwitchConfig | null> {
+
     const result = await this.db.query(
       'SELECT * FROM emergency_kill_switches WHERE id = $1',
       [id]
@@ -478,6 +495,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async getKillSwitchByScope(scope: string): Promise<EmergencyKillSwitchConfig | null> {
+
     const result = await this.db.query(
       'SELECT * FROM emergency_kill_switches WHERE scope = $1 AND enabled = true LIMIT 1',
       [scope]
@@ -503,6 +521,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async getActivationById(id: string): Promise<KillSwitchActivation | null> {
+
     // Check memory first
     if (this.activeKillSwitches.has(id)) {
       return this.activeKillSwitches.get(id)!;
@@ -531,6 +550,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async getAffectedToggles(killSwitch: EmergencyKillSwitchConfig): Promise<string[]> {
+
     let query = 'SELECT key FROM feature_toggles WHERE enabled = true';
     const queryParams: unknown[] = [];
 
@@ -583,6 +603,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async disableToggles(toggleKeys: string[], disabledBy: string, reason: string): Promise<void> {
+
     if (toggleKeys.length === 0) return;
 
     await this.db.query(
@@ -597,6 +618,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async restoreToggleStates(rollbackData: Record<string, any>, restoredBy: string): Promise<void> {
+
     for (const [toggleKey, state] of Object.entries(rollbackData)) {
       await this.db.query(
         `UPDATE feature_toggles 
@@ -628,6 +650,7 @@ export class EmergencyKillSwitchService {
     killSwitch: EmergencyKillSwitchConfig,
     activation: KillSwitchActivation
   ): Promise<void> {
+
     // Implementation would send notifications via email, Slack, etc.
     console.warn('🚨 EMERGENCY NOTIFICATION SENT:');
     console.warn(`   Kill Switch: ${killSwitch.name}`);
@@ -642,6 +665,7 @@ export class EmergencyKillSwitchService {
     userId: string,
     details: unknown
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO audit_logs (
         user_id, action, resource_type, resource_id, details, severity, created_at
@@ -657,6 +681,7 @@ export class EmergencyKillSwitchService {
   }
 
   private async initializeDefaultKillSwitches(): Promise<void> {
+
     // This would be called during service startup to ensure default kill switches exist
     // Implementation would check for and create default kill switches if they don't exist
   }

@@ -5,6 +5,7 @@
  * Part of Epic 17.5.1 - Review Workflow (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface ReviewItem {
     id: string;
     type: 'template_submission' | 'verification_request' | 'policy_violation' | 'content_appeal' | 'marketplace_listing';
@@ -56,7 +57,7 @@ export interface ReviewItem {
         original_reviewer: string;
         appeal_deadline: Date;
     };
-}
+
 export interface ValidationResult {
     rule_id: string;
     severity: 'error' | 'warning' | 'info';
@@ -65,14 +66,14 @@ export interface ValidationResult {
     field?: string;
     auto_fixable: boolean;
     suggestions?: string[];
-}
+
 export interface ReviewFeedback {
     category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
     rating: number;
     comments: string;
     suggestions: string[];
     is_blocking: boolean;
-}
+
 export interface DocumentData {
     id: string;
     type: 'image' | 'pdf' | 'document' | 'video' | 'audio';
@@ -88,7 +89,7 @@ export interface DocumentData {
         duration?: number;
         quality?: 'low' | 'medium' | 'high';
     };
-}
+
 export interface VerificationCriterion {
     id: string;
     name: string;
@@ -98,7 +99,7 @@ export interface VerificationCriterion {
     status: 'pending' | 'passed' | 'failed' | 'manual_review';
     automated_result?: unknown;
     manual_override?: boolean;
-}
+
 export interface Evidence {
     id: string;
     type: 'screenshot' | 'log' | 'report' | 'document';
@@ -106,7 +107,7 @@ export interface Evidence {
     description: string;
     timestamp: Date;
     confidence_score?: number;
-}
+
 export interface ReviewDecision {
     decision: 'approved' | 'rejected' | 'changes_requested';
     overall_score: number;
@@ -119,7 +120,7 @@ export interface ReviewDecision {
         conditions: string[];
         deadline: Date;
     };
-}
+
 export interface UnifiedReviewInterfaceProps {
     reviewItem: ReviewItem;
     onDecision: (decision: ReviewDecision) => void;
@@ -127,7 +128,6 @@ export interface UnifiedReviewInterfaceProps {
     onBack: () => void;
     reviewerPermissions: string[];
     className?: string;
-}
 declare const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps>;
 export default UnifiedReviewInterface;
 //# sourceMappingURL=UnifiedReviewInterface.d.ts.map

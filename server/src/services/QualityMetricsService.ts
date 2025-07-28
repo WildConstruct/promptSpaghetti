@@ -21,6 +21,7 @@ import * as path from 'path';
 // Quality Metrics Configuration and Interfaces
 // =============================================================================
 
+}
 export interface QualityMetricsConfig {
   enabled: boolean;
   collectRealTime: boolean;
@@ -41,6 +42,7 @@ export interface QualityMetricsConfig {
     security: boolean;
     documentation: boolean;
     buildHealth: boolean;
+}
   };
   
   // Caching and performance
@@ -57,11 +59,13 @@ export interface QualityMetricsConfig {
   };
 }
 
+}
 export interface QualityThresholds {
   testCoverage: {
     minimum: number; // percentage
     target: number; // percentage
     critical: number; // percentage below which alerts fire
+}
   };
   
   codeQuality: {
@@ -89,6 +93,7 @@ export interface QualityThresholds {
   };
 }
 
+}
 export interface QualityMetrics {
   timestamp: Date;
   overall: OverallQualityScore;
@@ -112,9 +117,11 @@ export interface QualityMetrics {
     dataSourcesActive: string[];
     lastUpdated: Date;
     version: string;
+}
   };
 }
 
+}
 export interface OverallQualityScore {
   score: number; // 0-100
   grade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
@@ -129,6 +136,7 @@ export interface OverallQualityScore {
     security: number;
     documentation: number;
     buildHealth: number;
+}
   };
   
   // Weightings used in calculation
@@ -142,6 +150,7 @@ export interface OverallQualityScore {
   };
 }
 
+}
 export interface TestCoverageMetrics {
   overall: {
     percentage: number;
@@ -151,6 +160,7 @@ export interface TestCoverageMetrics {
     branchesCovered: number;
     functionsTotal: number;
     functionsCovered: number;
+}
   };
   
   byPackage: PackageCoverageMetrics[];
@@ -167,12 +177,14 @@ export interface TestCoverageMetrics {
   coverageHotspots: CoverageHotspot[];
 }
 
+}
 export interface CodeQualityMetrics {
   complexity: {
     average: number;
     maximum: number;
     distribution: ComplexityDistribution;
     highComplexityFiles: string[];
+}
   };
   
   duplication: {
@@ -203,6 +215,7 @@ export interface CodeQualityMetrics {
   };
 }
 
+}
 export interface PerformanceQualityMetrics {
   responseTime: {
     average: number;
@@ -210,6 +223,7 @@ export interface PerformanceQualityMetrics {
     p90: number;
     p95: number;
     p99: number;
+}
   };
   
   throughput: {
@@ -245,6 +259,7 @@ export interface PerformanceQualityMetrics {
   loadTestResults: LoadTestResult[];
 }
 
+}
 export interface SecurityQualityMetrics {
   vulnerabilities: {
     total: number;
@@ -253,6 +268,7 @@ export interface SecurityQualityMetrics {
     medium: number;
     low: number;
     trends: number[];
+}
   };
   
   dependencies: {
@@ -281,12 +297,14 @@ export interface SecurityQualityMetrics {
   };
 }
 
+}
 export interface DocumentationQualityMetrics {
   coverage: {
     apiDocumentation: number; // percentage
     codeDocumentation: number; // percentage
     userGuides: number; // percentage
     overall: number; // percentage
+}
   };
   
   accuracy: {
@@ -309,12 +327,14 @@ export interface DocumentationQualityMetrics {
   };
 }
 
+}
 export interface BuildHealthMetrics {
   builds: {
     successRate: number; // percentage last 30 days
     averageDuration: number; // minutes
     failureReasons: BuildFailureReason[];
     trends: number[];
+}
   };
   
   tests: {
@@ -339,6 +359,7 @@ export interface BuildHealthMetrics {
   };
 }
 
+}
 export interface QualityTrends {
   overall: TrendData;
   testCoverage: TrendData;
@@ -348,7 +369,9 @@ export interface QualityTrends {
   documentation: TrendData;
   buildHealth: TrendData;
 }
+}
 
+}
 export interface TrendData {
   daily: number[];
   weekly: number[];
@@ -357,7 +380,9 @@ export interface TrendData {
   velocity: number; // rate of change
   projection: number; // projected value in 30 days
 }
+}
 
+}
 export interface QualityRecommendation {
   id: string;
   category: 'testCoverage' | 'codeQuality' | 'performance' | 'security' | 'documentation' | 'buildHealth';
@@ -376,6 +401,7 @@ export interface QualityRecommendation {
     currentValue: number;
     projectedValue: number;
     confidence: number; // 0-100
+}
   };
   
   // Related items
@@ -388,6 +414,7 @@ export interface QualityRecommendation {
   updatedAt: Date;
 }
 
+}
 export interface QualityAlert {
   id: string;
   type: 'threshold_breach' | 'quality_degradation' | 'build_failure' | 'security_issue';
@@ -411,15 +438,19 @@ export interface QualityAlert {
   acknowledgedAt?: Date;
   resolvedAt?: Date;
 }
+}
 
 // Supporting interfaces
+}
 interface PackageCoverageMetrics {
   name: string;
   percentage: number;
   linesTotal: number;
   linesCovered: number;
 }
+}
 
+}
 interface ComponentCoverageMetrics {
   name: string;
   type: 'component' | 'service' | 'utility';
@@ -427,7 +458,9 @@ interface ComponentCoverageMetrics {
   criticalPaths: number;
   uncoveredPaths: number;
 }
+}
 
+}
 interface CoverageHotspot {
   file: string;
   function: string;
@@ -435,7 +468,9 @@ interface CoverageHotspot {
   importance: 'low' | 'medium' | 'high' | 'critical';
   reason: string;
 }
+}
 
+}
 interface ComplexityDistribution {
   '1-5': number;
   '6-10': number;
@@ -443,13 +478,17 @@ interface ComplexityDistribution {
   '21-50': number;
   '50+': number;
 }
+}
 
+}
 interface DuplicationBlock {
   lines: number;
   files: string[];
   similarity: number; // percentage
 }
+}
 
+}
 interface FileMaintainability {
   file: string;
   index: number;
@@ -457,21 +496,27 @@ interface FileMaintainability {
   size: number;
   issues: string[];
 }
+}
 
+}
 interface LintRuleBreakdown {
   rule: string;
   count: number;
   severity: 'error' | 'warning';
   trend: 'increasing' | 'stable' | 'decreasing';
 }
+}
 
+}
 interface TechnicalDebtBreakdown {
   category: string;
   minutes: number;
   files: string[];
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 interface LoadTestResult {
   timestamp: Date;
   duration: number; // seconds
@@ -481,60 +526,77 @@ interface LoadTestResult {
   errorRate: number; // percentage
   passed: boolean;
 }
+}
 
+}
 interface LicenseBreakdown {
   license: string;
   count: number;
   compatible: boolean;
   risk: 'low' | 'medium' | 'high';
 }
+}
 
+}
 interface SecurityCategoryBreakdown {
   category: string;
   count: number;
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 interface ComplianceFrameworkStatus {
   framework: string; // e.g., 'GDPR', 'SOX', 'ISO27001'
   score: number; // 0-100
   status: 'compliant' | 'non_compliant' | 'partial';
   lastAssessed: Date;
 }
+}
 
+}
 interface ComplianceGap {
   framework: string;
   requirement: string;
   status: 'missing' | 'partial' | 'outdated';
   priority: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 interface BuildFailureReason {
   reason: string;
   count: number;
   percentage: number;
   trend: 'increasing' | 'stable' | 'decreasing';
 }
+}
 
+}
 interface SlowTest {
   name: string;
   duration: number; // milliseconds
   file: string;
   trend: 'improving' | 'stable' | 'degrading';
 }
+}
 
+}
 interface PipelineStage {
   name: string;
   averageDuration: number; // minutes
   successRate: number; // percentage
   bottleneck: boolean;
 }
+}
 
+}
 interface RecommendationAction {
   description: string;
   type: 'code_change' | 'configuration' | 'process' | 'tooling';
   effort: 'low' | 'medium' | 'high';
   automated: boolean;
+}
 }
 
 // =============================================================================
@@ -574,6 +636,7 @@ export class QualityMetricsService extends EventEmitter {
    * Start the quality metrics collection service
    */
   async start(): Promise<void> {
+
     if (!this.config.enabled) {
       console.log('Quality metrics collection is disabled');
       return;
@@ -599,6 +662,7 @@ export class QualityMetricsService extends EventEmitter {
    * Stop the quality metrics collection service
    */
   async stop(): Promise<void> {
+
     console.log('Stopping Quality Metrics Service...');
     
     // Clear timers
@@ -622,6 +686,7 @@ export class QualityMetricsService extends EventEmitter {
    * Collect comprehensive quality metrics
    */
   async collectQualityMetrics(): Promise<QualityMetrics> {
+
     const startTime = Date.now();
     
     try {
@@ -721,6 +786,7 @@ export class QualityMetricsService extends EventEmitter {
    * Get current quality metrics (from cache if available)
    */
   async getCurrentMetrics(): Promise<QualityMetrics | null> {
+
     try {
       // Try to get from cache first
       if (this.config.cacheEnabled) {
@@ -747,6 +813,7 @@ export class QualityMetricsService extends EventEmitter {
     endDate: Date,
     granularity: 'hour' | 'day' | 'week' = 'day'
   ): Promise<QualityMetrics[]> {
+
     try {
       const query = `
         SELECT metrics_data, timestamp
@@ -775,6 +842,7 @@ export class QualityMetricsService extends EventEmitter {
    * Get quality trends for dashboard
    */
   async getQualityTrends(timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<QualityTrends> {
+
     try {
       const endDate = new Date();
       const startDate = new Date();
@@ -808,6 +876,7 @@ export class QualityMetricsService extends EventEmitter {
     category?: string,
     priority?: 'low' | 'medium' | 'high' | 'critical'
   ): Promise<QualityRecommendation[]> {
+
     try {
       let query = 'SELECT * FROM quality_recommendations WHERE status != $1';
       const params: unknown[] = ['dismissed'];
@@ -838,6 +907,7 @@ export class QualityMetricsService extends EventEmitter {
    * Get active quality alerts
    */
   async getActiveAlerts(): Promise<QualityAlert[]> {
+
     try {
       const query = `
         SELECT * FROM quality_alerts 
@@ -859,6 +929,7 @@ export class QualityMetricsService extends EventEmitter {
    * Acknowledge a quality alert
    */
   async acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void> {
+
     try {
       const query = `
         UPDATE quality_alerts 
@@ -893,6 +964,7 @@ export class QualityMetricsService extends EventEmitter {
     status: 'acknowledged' | 'in_progress' | 'completed' | 'dismissed',
     updatedBy: string
   ): Promise<void> {
+
     try {
       const query = `
         UPDATE quality_recommendations 
@@ -924,6 +996,7 @@ export class QualityMetricsService extends EventEmitter {
   // =============================================================================
   
   private async collectTestCoverageMetrics(): Promise<TestCoverageMetrics> {
+
     try {
       // Read Jest coverage data if available
       const coverageData = await this.readCoverageData();
@@ -974,6 +1047,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectCodeQualityMetrics(): Promise<CodeQualityMetrics> {
+
     try {
       // This would integrate with actual code quality tools
       // For now, providing structured default metrics
@@ -1049,6 +1123,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectPerformanceMetrics(): Promise<PerformanceQualityMetrics> {
+
     try {
       // Get current performance metrics from MetricsCollector
       const performanceData = await this.metricsCollector.getCurrentMetrics();
@@ -1060,34 +1135,34 @@ export class QualityMetricsService extends EventEmitter {
           p90: performanceData?.server?.responseTime?.p90 || 250,
           p95: performanceData?.server?.responseTime?.p95 || 350,
           p99: performanceData?.server?.responseTime?.p99 || 500
-        },
+  }
         throughput: {
           requestsPerSecond: performanceData?.server?.throughput?.current || 45,
           peakRps: performanceData?.server?.throughput?.peak || 120,
           trends: performanceData?.server?.throughput?.trends || [40, 42, 45, 48, 45]
-        },
+  }
         resourceUtilization: {
           cpu: {
             average: performanceData?.server?.cpu?.average || 35.5,
             peak: performanceData?.server?.cpu?.peak || 78,
             trends: performanceData?.server?.cpu?.trends || [32, 34, 36, 38, 35.5]
-          },
+  }
           memory: {
             average: performanceData?.server?.memory?.average || 512,
             peak: performanceData?.server?.memory?.peak || 768,
             trends: performanceData?.server?.memory?.trends || [480, 495, 510, 525, 512]
-          },
+  }
           disk: {
             usage: 65,
             iops: 1200
           }
-        },
+  }
         errorRates: {
           overall: performanceData?.server?.errorRate?.overall || 0.8,
           by4xx: performanceData?.server?.errorRate?.by4xx || 0.6,
           by5xx: performanceData?.server?.errorRate?.by5xx || 0.2,
           trends: performanceData?.server?.errorRate?.trends || [1.2, 1.0, 0.9, 0.8, 0.8]
-        },
+  }
         loadTestResults: []
       };
       
@@ -1098,6 +1173,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectSecurityMetrics(): Promise<SecurityQualityMetrics> {
+
     try {
       // This would integrate with security scanning tools
       return {
@@ -1108,7 +1184,7 @@ export class QualityMetricsService extends EventEmitter {
           medium: 6,
           low: 4,
           trends: [18, 15, 14, 13, 12]
-        },
+  }
         dependencies: {
           total: 245,
           outdated: 23,
@@ -1118,7 +1194,7 @@ export class QualityMetricsService extends EventEmitter {
             { license: 'Apache-2.0', count: 45, compatible: true, risk: 'low' },
             { license: 'GPL-3.0', count: 2, compatible: false, risk: 'high' }
           ]
-        },
+  }
         codeSecurityIssues: {
           total: 5,
           byCategory: [
@@ -1127,7 +1203,7 @@ export class QualityMetricsService extends EventEmitter {
             { category: 'Logging', count: 2, severity: 'low' }
           ],
           highRiskFiles: ['server/src/auth/AuthService.ts']
-        },
+  }
         compliance: {
           frameworks: [
             { framework: 'GDPR', score: 85, status: 'partial', lastAssessed: new Date() },
@@ -1137,7 +1213,7 @@ export class QualityMetricsService extends EventEmitter {
           gaps: [
             { framework: 'GDPR', requirement: 'Data Retention Policy', status: 'partial', priority: 'medium' }
           ]
-        },
+  }
         accessControl: {
           privilegedAccounts: 5,
           dormantAccounts: 12,
@@ -1152,6 +1228,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectDocumentationMetrics(): Promise<DocumentationQualityMetrics> {
+
     try {
       // This would integrate with the documentation testing framework we just built
       return {
@@ -1160,18 +1237,18 @@ export class QualityMetricsService extends EventEmitter {
           codeDocumentation: 65,
           userGuides: 82,
           overall: 75
-        },
+  }
         accuracy: {
           validCodeExamples: 89,
           validApiExamples: 92,
           brokenLinks: 5,
           outdatedSections: ['docs/legacy-api.md', 'docs/deprecated-features.md']
-        },
+  }
         completeness: {
           missingApiDocs: ['/api/analytics', '/api/quality-metrics'],
           missingUserGuides: ['Advanced Configuration', 'Troubleshooting Guide'],
           incompleteSections: ['docs/deployment.md']
-        },
+  }
         maintenance: {
           lastUpdated: new Date(),
           staleSections: ['docs/version-1-migration.md'],
@@ -1186,6 +1263,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectBuildHealthMetrics(): Promise<BuildHealthMetrics> {
+
     try {
       // This would integrate with CI/CD systems
       return {
@@ -1199,7 +1277,7 @@ export class QualityMetricsService extends EventEmitter {
             { reason: 'Build timeout', count: 2, percentage: 10, trend: 'stable' }
           ],
           trends: [92, 93, 94, 95, 94.5]
-        },
+  }
         tests: {
           passRate: 97.8,
           totalTests: 1247,
@@ -1209,13 +1287,13 @@ export class QualityMetricsService extends EventEmitter {
             { name: 'Graph rendering test', duration: 3200, file: 'GraphEditor.test.tsx', trend: 'stable' }
           ],
           trends: [96.5, 97.0, 97.2, 97.5, 97.8]
-        },
+  }
         deployments: {
           successRate: 98.2,
           frequency: 5.2,
           rollbackRate: 1.8,
           averageDeployTime: 8.5
-        },
+  }
         pipeline: {
           stages: [
             { name: 'Lint', averageDuration: 2.5, successRate: 96, bottleneck: false },
@@ -1336,6 +1414,7 @@ export class QualityMetricsService extends EventEmitter {
   // =============================================================================
   
   private async initializeDatabase(): Promise<void> {
+
     // Create tables for storing quality metrics
     const queries = [
       `CREATE TABLE IF NOT EXISTS quality_metrics (
@@ -1398,6 +1477,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async collectAndEmitMetrics(): Promise<void> {
+
     try {
       const metrics = await this.collectQualityMetrics();
       this.emit('realTimeMetrics', metrics);
@@ -1407,6 +1487,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async performAggregation(): Promise<void> {
+
     // Perform periodic data aggregation and cleanup
     try {
       // Clean up old metrics data based on retention policy
@@ -1425,6 +1506,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async storeMetrics(metrics: QualityMetrics): Promise<void> {
+
     const query = `
       INSERT INTO quality_metrics (timestamp, overall_score, metrics_data)
       VALUES ($1, $2, $3)
@@ -1438,6 +1520,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async cacheMetrics(metrics: QualityMetrics): Promise<void> {
+
     const cacheKey = 'quality_metrics:current';
     await this.redisService.setex(
       cacheKey,
@@ -1447,6 +1530,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async getCachedMetrics(): Promise<QualityMetrics | null> {
+
     const cacheKey = 'quality_metrics:current';
     const cached = await this.redisService.get(cacheKey);
     
@@ -1511,6 +1595,7 @@ export class QualityMetricsService extends EventEmitter {
   
   // Additional helper methods would be implemented here...
   private async readCoverageData(): Promise<unknown> {
+
     try {
       const coveragePath = path.join(process.cwd(), 'coverage', 'coverage-summary.json');
       const data = await fs.readFile(coveragePath, 'utf-8');
@@ -1537,6 +1622,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async getCoverageTrends(): Promise<unknown> {
+
     return {
       last7Days: [82, 83, 82, 84, 83, 85, 84],
       last30Days: [78, 79, 80, 81, 82, 83, 84, 85],
@@ -1594,7 +1680,7 @@ export class QualityMetricsService extends EventEmitter {
         cpu: { average: 0, peak: 0, trends: [] },
         memory: { average: 0, peak: 0, trends: [] },
         disk: { usage: 0, iops: 0 }
-      },
+  }
       errorRates: { overall: 0, by4xx: 0, by5xx: 0, trends: [] },
       loadTestResults: []
     };
@@ -1629,11 +1715,13 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async calculateTrends(): Promise<QualityTrends> {
+
     // Calculate trends from historical data
     return this.getEmptyTrends();
   }
   
   private async generateRecommendations(metrics: unknown): Promise<QualityRecommendation[]> {
+
     const recommendations: QualityRecommendation[] = [];
     
     // Generate recommendations based on metrics
@@ -1655,7 +1743,7 @@ export class QualityMetricsService extends EventEmitter {
           currentValue: metrics.testCoverage.overall.percentage,
           projectedValue: this.config.thresholds.testCoverage.target,
           confidence: 85
-        },
+  }
         relatedFiles: metrics.testCoverage.uncoveredCriticalPaths,
         relatedComponents: [],
         status: 'new',
@@ -1668,6 +1756,7 @@ export class QualityMetricsService extends EventEmitter {
   }
   
   private async checkForAlerts(metrics: unknown): Promise<QualityAlert[]> {
+
     const alerts: QualityAlert[] = [];
     
     // Check for threshold breaches
@@ -1735,29 +1824,28 @@ export const DEFAULT_QUALITY_METRICS_CONFIG: QualityMetricsConfig = {
       minimum: 70,
       target: 80,
       critical: 60
-    },
+  }
     codeQuality: {
       maxComplexity: 15,
       maxDuplication: 10,
       minMaintainabilityIndex: 70
-    },
+  }
     performance: {
       maxResponseTime: 500,
       maxMemoryUsage: 1024,
       maxCpuUsage: 80
-    },
+  }
     security: {
       maxVulnerabilities: 20,
       maxCriticalVulnerabilities: 0,
       requiresSecurityScan: true
-    },
+  }
     buildHealth: {
       maxFailureRate: 10,
       maxBuildTime: 15,
       requiresAllTestsPassing: true
     }
-  },
-  
+  }
   dataSources: {
     testCoverage: true,
     codeQuality: true,
@@ -1765,8 +1853,7 @@ export const DEFAULT_QUALITY_METRICS_CONFIG: QualityMetricsConfig = {
     security: true,
     documentation: true,
     buildHealth: true
-  },
-  
+  }
   cacheEnabled: true,
   cacheTTL: 300, // 5 minutes
   maxCacheEntries: 100,

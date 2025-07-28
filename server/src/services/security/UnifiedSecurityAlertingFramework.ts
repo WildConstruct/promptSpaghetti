@@ -70,6 +70,7 @@ export enum AlertStatus {
   ESCALATED = 'ESCALATED'
 }
 
+}
 export interface UnifiedAlert {
   id: string;
   title: string;
@@ -121,7 +122,9 @@ export interface UnifiedAlert {
   requiresManualReview: boolean;
   escalationRules: string[];
 }
+}
 
+}
 export interface AlertResponseAction {
   id: string;
   alertId: string;
@@ -136,9 +139,11 @@ export interface AlertResponseAction {
     success: boolean;
     message: string;
     details?: unknown;
+}
   };
 }
 
+}
 export interface AlertComment {
   id: string;
   alertId: string;
@@ -148,7 +153,9 @@ export interface AlertComment {
   isSystemGenerated: boolean;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface AlertAttachment {
   id: string;
   alertId: string;
@@ -160,7 +167,9 @@ export interface AlertAttachment {
   description?: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -187,27 +196,35 @@ export interface AlertRule {
   lastTriggered?: Date;
   triggerCount: number;
 }
+}
 
+}
 export interface AlertCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'NOT_IN' | 'REGEX';
   value: Error;
   weight: number; // 0-1, importance of this condition
 }
+}
 
+}
 export interface RuleAction {
   type: 'EMAIL' | 'SMS' | 'WEBHOOK' | 'SLACK' | 'TEAMS' | 'PAGER' | 'EXECUTE_SCRIPT' | 'UPDATE_STATUS' | 'ASSIGN';
   parameters: Record<string, any>;
   conditions: ActionCondition[];
   enabled: boolean;
 }
+}
 
+}
 export interface ActionCondition {
   condition: string;
   value: Error;
   operator: string;
 }
+}
 
+}
 export interface AlertingConfiguration {
   // General settings
   enableRealTimeProcessing: boolean;
@@ -240,7 +257,9 @@ export interface AlertingConfiguration {
   notificationChannels: NotificationChannel[];
   escalationChain: EscalationRule[];
 }
+}
 
+}
 export interface NotificationChannel {
   id: string;
   type: 'EMAIL' | 'SMS' | 'WEBHOOK' | 'SLACK' | 'TEAMS' | 'PAGER';
@@ -252,15 +271,19 @@ export interface NotificationChannel {
     maxPerMinute: number;
     maxPerHour: number;
     maxPerDay: number;
+}
   };
 }
 
+}
 export interface ChannelCondition {
   field: string;
   operator: string;
   value: Error;
 }
+}
 
+}
 export interface EscalationRule {
   level: number;
   triggerAfter: number; // milliseconds
@@ -268,12 +291,16 @@ export interface EscalationRule {
   actions: RuleAction[];
   assignTo?: string[];
 }
+}
 
+}
 export interface EscalationCondition {
   condition: string;
   value: Error;
 }
+}
 
+}
 export interface AlertMetrics {
   totalAlerts: number;
   alertsByPriority: Record<AlertPriority, number>;
@@ -291,6 +318,7 @@ export interface AlertMetrics {
     hourly: number[];
     daily: number[];
     weekly: number[];
+}
   };
   
   topAlertTypes: Array<{
@@ -306,6 +334,7 @@ export interface AlertMetrics {
   };
 }
 
+}
 export interface AlertDashboard {
   summary: {
     totalActive: number;
@@ -313,6 +342,7 @@ export interface AlertDashboard {
     high: number;
     newAlerts: number;
     unassigned: number;
+}
   };
   
   recentAlerts: UnifiedAlert[];
@@ -394,6 +424,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     source: AlertSource,
     metadata: Partial<UnifiedAlert> = {}
   ): Promise<UnifiedAlert> {
+
     const startTime = Date.now();
     
     try {
@@ -541,6 +572,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     userId?: string,
     comment?: string
   ): Promise<UnifiedAlert> {
+
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
@@ -594,6 +626,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     assigneeId: string,
     assignerId: string
   ): Promise<UnifiedAlert> {
+
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
@@ -659,6 +692,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     parameters: Record<string, any>,
     executedBy: string
   ): Promise<AlertResponseAction> {
+
     const alert = this.alerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert not found: ${alertId}`);
@@ -737,8 +771,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
       topPriorities,
       systemHealth: {} as SystemHealthSummary, // Would be populated from health monitoring
       trendAnalysis: this.generateTrendAnalysis(),
-      recommendations: this.generateRecommendations()
-    };
+      recommendations: this.generateRecommendations(};
   }
   
   /**
@@ -791,7 +824,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         hourly: [],
         daily: [],
         weekly: []
-      },
+  }
       topAlertTypes: [],
       performanceMetrics: {
         processingTime: this.metrics.averageProcessingTime,
@@ -861,6 +894,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async startProcessingLoop(): Promise<void> {
+
     if (this.isProcessing) return;
     this.isProcessing = true;
     
@@ -889,10 +923,12 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async processAlertImmediate(alert: UnifiedAlert): Promise<void> {
+
     await this.processAlertFull(alert);
   }
   
   private async processAlertFull(alert: UnifiedAlert): Promise<void> {
+
     // Correlation analysis
     if (this.config.enableCorrelation) {
       await this.performCorrelationAnalysis(alert);
@@ -911,6 +947,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async performCorrelationAnalysis(alert: UnifiedAlert): Promise<void> {
+
     const correlationWindow = this.config.correlationTimeWindow;
     const cutoff = Date.now() - correlationWindow;
     
@@ -953,6 +990,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async applyAlertRules(alert: UnifiedAlert): Promise<void> {
+
     for (const rule of this.alertRules.values()) {
       if (!rule.enabled) continue;
       
@@ -1028,6 +1066,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async executeRuleActions(alert: UnifiedAlert, rule: AlertRule): Promise<void> {
+
     for (const action of rule.actions) {
       if (!action.enabled) continue;
       
@@ -1044,6 +1083,7 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async executeAction(alert: UnifiedAlert, action: RuleAction): Promise<void> {
+
     switch (action.type) {
     case 'EMAIL':
       await this.sendEmailNotification(alert, action.parameters);
@@ -1062,10 +1102,12 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
   }
   
   private async checkEscalationConditions(____alert: UnifiedAlert): Promise<void> {
+
     // Escalation logic would be implemented here
   }
   
   private async sendNotifications(alert: UnifiedAlert): Promise<void> {
+
     for (const channel of this.notificationChannels.values()) {
       if (!channel.enabled) continue;
       
@@ -1082,11 +1124,12 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
         operator: condition.operator as any,
         value: condition.value,
         weight: 1
-      })
+  }
     );
   }
   
   private async sendChannelNotification(alert: UnifiedAlert, channel: NotificationChannel): Promise<void> {
+
     // Channel-specific notification logic would be implemented here
     logger.info(`Sending notification via ${channel.type}`, {
       alertId: alert.id,
@@ -1099,15 +1142,18 @@ export class UnifiedSecurityAlertingFramework extends EventEmitter {
     ____parameters: Record<string, any>,
     ____alert: UnifiedAlert
   ): Promise<{ success: boolean; message: string; details?: unknown }> {
+
     // Response action implementation would go here
     return { success: true, message: `${actionType} executed successfully` };
   }
   
   private async sendEmailNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
+
     // Email notification implementation
   }
   
   private async sendWebhookNotification(____alert: UnifiedAlert, ____parameters: unknown): Promise<void> {
+
     // Webhook notification implementation
   }
   

@@ -5,11 +5,9 @@ import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucid
 import { LockPolicy } from '../types/locking';
 import { useLockingStore } from '../stores/lockingStore';
 interface LockPolicyEditorProps {
-  workspaceId: string;
+  workspaceId: string;,
   onPolicyUpdate: () => void;
-}
-
-export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
+  export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({,)
   workspaceId,
   onPolicyUpdate
 }) => {
@@ -23,31 +21,24 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
   useEffect(() => {
     if (policy) {
       setEditingPolicy(policy);
-    }
   }, [policy]);
   const validatePolicy = (policyData: Partial<LockPolicy>): Record<string, string> => {
     const errors: Record<string, string> = {};
     if (!policyData.name?.trim()) {
       errors.name = 'Policy name is required';
-    }
     if (policyData.max_locks_per_user && policyData.max_locks_per_user < 1) {
       errors.max_locks_per_user = 'Must be at least 1';
-    }
     if (policyData.max_locks_per_resource && policyData.max_locks_per_resource < 1) {
       errors.max_locks_per_resource = 'Must be at least 1';
-    }
     if (policyData.default_duration_minutes && policyData.default_duration_minutes < 1) {
       errors.default_duration_minutes = 'Must be at least 1 minute';
-    }
     if (policyData.max_duration_minutes && policyData.max_duration_minutes < 1) {
       errors.max_duration_minutes = 'Must be at least 1 minute';
-    }
     if ();
       policyData.default_duration_minutes &&
       policyData.max_duration_minutes &&
       policyData.default_duration_minutes > policyData.max_duration_minutes
       errors.default_duration_minutes = 'Cannot exceed maximum duration';
-    }
     return errors;
   };
   const handleInputChange = (field: keyof LockPolicy, value: Error) => {
@@ -58,7 +49,6 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
     // Clear validation error for this field
     if (validationErrors[field]) {
       setValidationErrors(prev => ({ ...prev, [field]: undefined }));
-    }
   };
   const handleSave = async () => {
     if (!editingPolicy) return;
@@ -66,32 +56,28 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
-    }
     try {
       const result = await updatePolicy(workspaceId, editingPolicy);
       if (result.success) {
         setHasChanges(false);
         onPolicyUpdate();
-      }
     } catch (error) {
-      console.error('Failed to save policy:', error);
-    }
-  };
+  console.error('Failed to save policy:', error);
+};
   const handleReset = () => {
     setEditingPolicy(policy);
     setHasChanges(false);
     setValidationErrors({});
   };
   if (isLoading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600">Loading policy...</span>
       </div>
     );
-  }
   if (!editingPolicy) {
-    return ();
+    return;
       <div className="text-center py-8">
         <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Policy Found</h3>
@@ -100,8 +86,7 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
         </p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -150,8 +135,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
               value={editingPolicy.name || ''}
               onChange={(e) => handleInputChange('name', e.target.value)}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.name ? 'border-red-300' : 'border-gray-300'
-              }`}
+  validationErrors.name ? 'border-red-300' : 'border-gray-300',
+}`}
             />
             {validationErrors.name && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.name}</p>
@@ -187,8 +172,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
               value={editingPolicy.max_locks_per_user || ''}
               onChange={(e) => handleInputChange('max_locks_per_user', parseInt(e.target.value))}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300'
-              }`}
+  validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300',
+}`}
             />
             {validationErrors.max_locks_per_user && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_user}</p>
@@ -204,8 +189,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
               value={editingPolicy.max_locks_per_resource || ''}
               onChange={(e) => handleInputChange('max_locks_per_resource', parseInt(e.target.value))}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300'
-              }`}
+  validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300',
+}`}
             />
             {validationErrors.max_locks_per_resource && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_resource}</p>
@@ -230,8 +215,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
               value={editingPolicy.default_duration_minutes || ''}
               onChange={(e) => handleInputChange('default_duration_minutes', parseInt(e.target.value))}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300'
-              }`}
+  validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300',
+}`}
             />
             {validationErrors.default_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.default_duration_minutes}</p>
@@ -247,8 +232,8 @@ export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({)
               value={editingPolicy.max_duration_minutes || ''}
               onChange={(e) => handleInputChange('max_duration_minutes', parseInt(e.target.value))}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300'
-              }`}
+  validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300',
+}`}
             />
             {validationErrors.max_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_duration_minutes}</p>

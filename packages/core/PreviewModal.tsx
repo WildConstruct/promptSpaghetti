@@ -10,23 +10,29 @@ import { professionalColors } from './styles/professional-design-system';
 
 // Individual result management for Epic 8.5 Task 3
 interface ResultAction {
-  type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export';,
+  type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export';
   resultIndex: number;
   data?: Record<string, unknown>;
-  interface LockedResult {
-  index: number;,
+}
+
+interface LockedResult {
+  index: number;
   seed: number;
   lockedAt: number;
   note?: string;
-  // Legacy interface for backward compatibility
-  interface PreviewResult {
+}
+
+// Legacy interface for backward compatibility
+interface PreviewResult {
   seed: number;
   output?: string;
   error?: string;
-  interface PreviewModalProps {
-  open: boolean;,
+}
+
+export interface PreviewModalProps {
+  open: boolean;
   loading: boolean;
-  error: string | null;,
+  error: string | null;
   results: PreviewResult | PreviewResultWithPath;
   onClose: () => void;
   onCancel?: () => void;
@@ -36,8 +42,10 @@ interface ResultAction {
   onResultAction?: (action: ResultAction) => void;
   lockedResults?: LockedResult;
   regeneratingResults?: number;
-  // Epic 8.5 Task 5: Creative variance analysis,
+  // Epic 8.5 Task 5: Creative variance analysis
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
+}
+
 export const PreviewModal: React.FC<PreviewModalProps> = ({
   open,
   loading,
@@ -57,12 +65,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<number>([]);
   const [exportDialog, setExportDialog] = useState<{
-  open: boolean;,
+  open: boolean;
   type: 'individual' | 'batch' | 'comparison';
   individualIndex?: number;
 }>({ open: false, type: 'individual' });
   // Check if results have execution path data
-  const hasExecutionPaths = results.length > 0 && ;
+  const hasExecutionPaths = results.length > 0 &&
     results.some(r => 'executionPath' in r && r.executionPath);
   // Helper functions for result management
   const isResultLocked = (index: number) => lockedResults.some(locked => locked.index === index);
@@ -70,7 +78,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
   const isResultSelected = (index: number) => selectedForComparison.includes(index);
   const handleResultAction = (type: ResultAction['type'], index: number, data?: Record<string, unknown>) => {
   if (type === 'export') {
-  setExportDialog({)
+  setExportDialog({
   open: true,
   type: 'individual',
   individualIndex: index,
@@ -93,26 +101,28 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
       let exportResult;
       if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
         const result = results[exportDialog.individualIndex] as PreviewResultWithPath;
-        exportResult = await resultExportService.exportIndividualResult()
+        exportResult = await resultExportService.exportIndividualResult(
           result,
           exportDialog.individualIndex,
           results.length,
           options
         );
       } else if (exportDialog.type === 'batch') {
-        exportResult = await resultExportService.exportBatchResults()
+        exportResult = await resultExportService.exportBatchResults(
           results as PreviewResultWithPath,
           selectedForComparison,
           options
         );
       } else {
-        exportResult = await resultExportService.exportComparison()
+        exportResult = await resultExportService.exportComparison(
           results as PreviewResultWithPath,
           options
         );
+      }
       // Handle the export result
       if (exportResult.shouldDownload) {
         downloadExportResult(exportResult, format);
+      }
     } catch (error) {
   console.error('Export failed:', error);
   throw error;
@@ -125,12 +135,12 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     // Generate filename based on format and export type
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
     const extension = getFileExtension(format);
-    let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;}
+    let filename = `promptscape-${exportDialog.type}-${timestamp}.${extension}`;
     if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
       const seed = results[exportDialog.individualIndex].seed;
-      filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;}
+      filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;
     } else if (exportDialog.type === 'batch') {
-      filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;}
+      filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;
     link.download = filename;
     document.body.appendChild(link);
     link.click();
@@ -138,7 +148,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
     URL.revokeObjectURL(url);
   };
   const getFileExtension = (format: ExportFormat): string => {
-  const extensions: Record<ExportFormat, string> = {,
+  const extensions: Record<ExportFormat, string> = {
   'plain-text': 'txt',
   'json-simple': 'json',
   'json-complete': 'json',
@@ -250,7 +260,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             {/* Batch Export Button */}
             {selectedForComparison.length > 0 && ()
               <button
-                onClick={() => setExportDialog({)
+                onClick={() => setExportDialog({
   open: true,
   type: 'batch',
 })}
@@ -271,7 +281,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
             {/* Export All Button */}
             {!compareMode && results.length > 1 && ()
               <button
-                onClick={() => setExportDialog({)
+                onClick={() => setExportDialog({
   open: true,
   type: 'comparison',
 })}
@@ -340,7 +350,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({
 }}>
                 <h3 style={{ margin: '0 0 12px 0', color: '#0c4a6e', fontSize: 14 }}>⚖️ Result Comparison</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-                  {selectedForComparison.map(index => {)
+                  {selectedForComparison.map(index => {
   const result = results[index];
                     return;
                       <div key={index} style={{

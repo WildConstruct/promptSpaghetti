@@ -7,6 +7,7 @@
  * ensuring optimal performance, compliance, and cost-effective long-term storage.
  */
 import { EventEmitter } from 'events';
+
 export interface DataPartitionConfig {
     id: string;
     name: string;
@@ -71,7 +72,7 @@ export interface DataPartitionConfig {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface RetentionPolicy {
     id: string;
     name: string;
@@ -96,7 +97,7 @@ export interface RetentionPolicy {
     }>;
     created_at: number;
     enabled: boolean;
-}
+
 export interface StorageTier {
     tier_name: 'hot' | 'warm' | 'cold' | 'archive';
     storage_class: string;
@@ -106,7 +107,7 @@ export interface StorageTier {
     minimum_storage_duration_days: number;
     durability: number;
     geographic_regions: string[];
-}
+
 export interface ArchivalJob {
     id: string;
     name: string;
@@ -154,7 +155,7 @@ export interface ArchivalJob {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface ArchivalExecution {
     id: string;
     job_id: string;
@@ -203,7 +204,7 @@ export interface ArchivalExecution {
     };
     triggered_by: string;
     created_at: number;
-}
+
 export interface DataRetrievalRequest {
     id: string;
     requester: string;
@@ -266,7 +267,7 @@ export interface DataRetrievalRequest {
     };
     created_at: number;
     last_updated: number;
-}
+
 export interface PartitionMetrics {
     id: string;
     partition_config_id: string;
@@ -313,7 +314,7 @@ export interface PartitionMetrics {
         compliance_score: number;
     };
     collected_at: number;
-}
+
 export interface ArchivalEvent {
     id: string;
     type: 'partition_created' | 'archival_completed' | 'retrieval_requested' | 'compliance_audit' | 'error_occurred' | 'maintenance_scheduled';
@@ -351,7 +352,7 @@ export interface ArchivalEvent {
         compliance_reporting_required: boolean;
         review_date?: number;
     };
-}
+
 export declare class SecurityDataArchiver extends EventEmitter {
     private partitionConfigs;
     private retentionPolicies;
@@ -420,6 +421,6 @@ export declare class SecurityDataArchiver extends EventEmitter {
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
     shutdown(): void;
-}
+
 export default SecurityDataArchiver;
 //# sourceMappingURL=SecurityDataArchiver.d.ts.map

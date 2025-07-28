@@ -26,15 +26,15 @@ export interface FunnelAnomalyDetectionProps {
     };
     detectionConfig?: AnomalyDetectionConfig;
     alertConfig?: AlertConfiguration;
-    segments?: UserSegment[];
-    cohorts?: ConversionCohort[];
+    segments?: UserSegment;
+    cohorts?: ConversionCohort;
     realTimeMonitoring?: boolean;
     onAnomalyDetected?: (anomaly: DetectedAnomaly) => void;
     onAlertTriggered?: (alert: AnomalyAlert) => void;
     onExport?: (data: AnomalyDetectionExportData) => void;
 }
 export interface AnomalyDetectionConfig {
-    algorithms: AnomalyAlgorithm[];
+    algorithms: AnomalyAlgorithm;
     sensitivityLevel: 'low' | 'medium' | 'high' | 'adaptive';
     minimumConfidence: number;
     lookbackPeriods: number;
@@ -42,25 +42,25 @@ export interface AnomalyDetectionConfig {
     trendAnalysis: boolean;
     segmentAnalysis: boolean;
     cohortAnalysis: boolean;
-    customRules: CustomAnomalyRule[];
+    customRules: CustomAnomalyRule;
 }
 export interface AlertConfiguration {
-    channels: AlertChannel[];
-    escalationRules: EscalationRule[];
-    suppressionRules: SuppressionRule[];
+    channels: AlertChannel;
+    escalationRules: EscalationRule;
+    suppressionRules: SuppressionRule;
     throttling: AlertThrottling;
     severity: AlertSeverityConfig;
-    recipients: AlertRecipient[];
+    recipients: AlertRecipient;
 }
 export type AnomalyAlgorithm = 'statistical_zscore' | 'statistical_iqr' | 'isolation_forest' | 'local_outlier_factor' | 'prophet_decomposition' | 'lstm_autoencoder' | 'seasonal_hybrid_esd' | 'changepoint_detection';
 export interface AnomalyDetectionData {
-    currentAnomalies: DetectedAnomaly[];
-    historicalAnomalies: DetectedAnomaly[];
-    anomalyTrends: AnomalyTrend[];
-    predictedAnomalies: PredictedAnomaly[];
-    rootCauseAnalysis: RootCauseAnalysis[];
-    impactAssessment: AnomalyImpactAssessment[];
-    alertHistory: AnomalyAlert[];
+    currentAnomalies: DetectedAnomaly;
+    historicalAnomalies: DetectedAnomaly;
+    anomalyTrends: AnomalyTrend;
+    predictedAnomalies: PredictedAnomaly;
+    rootCauseAnalysis: RootCauseAnalysis;
+    impactAssessment: AnomalyImpactAssessment;
+    alertHistory: AnomalyAlert;
     systemHealth: SystemHealthMetrics;
     detectionPerformance: DetectionPerformanceMetrics;
 }
@@ -81,9 +81,9 @@ export interface DetectedAnomaly {
     algorithm: AnomalyAlgorithm;
     description: string;
     context: AnomalyContext;
-    rootCauses: PotentialRootCause[];
+    rootCauses: PotentialRootCause;
     impact: AnomalyImpact;
-    recommendations: AnomalyRecommendation[];
+    recommendations: AnomalyRecommendation;
     status: AnomalyStatus;
     acknowledgedBy?: string;
     acknowledgedAt?: number;
@@ -97,10 +97,10 @@ export interface AnomalyContext {
     timeOfDay: number;
     dayOfWeek: number;
     seasonality: string;
-    environmentalFactors: EnvironmentalFactor[];
-    concurrentEvents: ConcurrentEvent[];
-    marketConditions: MarketCondition[];
-    systemMetrics: SystemMetric[];
+    environmentalFactors: EnvironmentalFactor;
+    concurrentEvents: ConcurrentEvent;
+    marketConditions: MarketCondition;
+    systemMetrics: SystemMetric;
 }
 export interface EnvironmentalFactor {
     factor: string;
@@ -131,8 +131,8 @@ export interface PotentialRootCause {
     category: RootCauseCategory;
     description: string;
     probability: number;
-    evidence: Evidence[];
-    investigationSteps: string[];
+    evidence: Evidence;
+    investigationSteps: string;
 }
 export type RootCauseCategory = 'technical' | 'user_behavior' | 'external_factors' | 'business_changes' | 'seasonal' | 'competitive' | 'system_performance';
 export interface Evidence {
@@ -158,7 +158,7 @@ export interface AnomalyRecommendation {
     expectedImpact: 'low' | 'medium' | 'high';
     timeline: string;
     owner: string;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface AnomalyTrend {
     period: string;
@@ -175,7 +175,7 @@ export interface PredictedAnomaly {
     probability: number;
     expectedSeverity: AnomalySeverity;
     affectedMetric: string;
-    preventiveActions: PreventiveAction[];
+    preventiveActions: PreventiveAction;
     monitoringPlan: MonitoringPlan;
 }
 export interface PreventiveAction {
@@ -183,21 +183,21 @@ export interface PreventiveAction {
     effectiveness: number;
     cost: number;
     timeline: string;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface MonitoringPlan {
-    metrics: string[];
+    metrics: string;
     frequency: number;
     alertThresholds: Record<string, number>;
-    escalationPlan: string[];
+    escalationPlan: string;
 }
 export interface RootCauseAnalysis {
     anomalyId: string;
     analysisTimestamp: number;
     primaryCause: PotentialRootCause;
-    contributingFactors: PotentialRootCause[];
-    correlatedAnomalies: string[];
-    timeline: CausalTimeline[];
+    contributingFactors: PotentialRootCause;
+    correlatedAnomalies: string;
+    timeline: CausalTimeline;
     confidence: number;
     validationStatus: 'pending' | 'confirmed' | 'rejected';
 }
@@ -213,8 +213,8 @@ export interface AnomalyImpactAssessment {
     directImpact: DirectImpact;
     indirectImpact: IndirectImpact;
     totalImpact: TotalImpact;
-    affectedUserSegments: AffectedSegment[];
-    businessImplications: BusinessImplication[];
+    affectedUserSegments: AffectedSegment;
+    businessImplications: BusinessImplication;
     recoveryProjection: RecoveryProjection;
 }
 export interface DirectImpact {
@@ -249,15 +249,15 @@ export interface BusinessImplication {
 }
 export interface RecoveryProjection {
     estimatedRecoveryTime: number;
-    recoveryStages: RecoveryStage[];
+    recoveryStages: RecoveryStage;
     successProbability: number;
-    resourceRequirements: ResourceRequirement[];
+    resourceRequirements: ResourceRequirement;
 }
 export interface RecoveryStage {
     stage: string;
     duration: number;
     expectedImprovement: number;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface ResourceRequirement {
     resource: string;
@@ -284,13 +284,13 @@ export type AlertStatus = 'sent' | 'delivered' | 'acknowledged' | 'escalated' | 
 export interface EscalationRule {
     severity: AnomalySeverity;
     escalationDelay: number;
-    escalationChain: string[];
+    escalationChain: string;
     maxEscalations: number;
 }
 export interface SuppressionRule {
     anomalyType: AnomalyType;
     suppressionDuration: number;
-    conditions: SuppressionCondition[];
+    conditions: SuppressionCondition;
 }
 export interface SuppressionCondition {
     metric: string;
@@ -312,7 +312,7 @@ export interface AlertSeverityConfig {
 }
 export interface AlertSeveritySettings {
     enabled: boolean;
-    channels: AlertChannel[];
+    channels: AlertChannel;
     immediateAlert: boolean;
     escalationEnabled: boolean;
 }
@@ -322,14 +322,14 @@ export interface AlertRecipient {
     email?: string;
     phone?: string;
     slackId?: string;
-    roles: string[];
-    severity: AnomalySeverity[];
+    roles: string;
+    severity: AnomalySeverity;
     availability: AvailabilitySchedule;
 }
 export interface AvailabilitySchedule {
     timezone: string;
-    schedule: DaySchedule[];
-    holidays: string[];
+    schedule: DaySchedule;
+    holidays: string;
     onCall: boolean;
 }
 export interface DaySchedule {
@@ -345,7 +345,7 @@ export interface CustomAnomalyRule {
     condition: string;
     severity: AnomalySeverity;
     enabled: boolean;
-    metrics: string[];
+    metrics: string;
     thresholds: Record<string, number>;
 }
 export interface SystemHealthMetrics {
@@ -368,11 +368,11 @@ export interface DetectionPerformanceMetrics {
     confidence: number;
 }
 export interface AnomalyDetectionExportData {
-    anomalies: DetectedAnomaly[];
-    alerts: AnomalyAlert[];
-    impactAssessments: AnomalyImpactAssessment[];
-    rootCauseAnalyses: RootCauseAnalysis[];
-    performanceMetrics: DetectionPerformanceMetrics[];
+    anomalies: DetectedAnomaly;
+    alerts: AnomalyAlert;
+    impactAssessments: AnomalyImpactAssessment;
+    rootCauseAnalyses: RootCauseAnalysis;
+    performanceMetrics: DetectionPerformanceMetrics;
     exportTimestamp: number;
     configuration: AnomalyDetectionConfig;
 }

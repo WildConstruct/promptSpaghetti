@@ -7,6 +7,7 @@ import { join } from 'path';
 /**
  * System resource metrics
  */
+}
 export interface SystemMetrics {
   timestamp: number;
   cpuUsage: number;
@@ -14,6 +15,7 @@ export interface SystemMetrics {
     used: number;
     total: number;
     percentage: number;
+}
   };
   networkStats: {
     bytesReceived: number;
@@ -38,6 +40,7 @@ export interface SystemMetrics {
 /**
  * WebSocket performance metrics
  */
+}
 export interface WebSocketMetrics {
   timestamp: number;
   connectionCount: number;
@@ -49,10 +52,12 @@ export interface WebSocketMetrics {
   activeDocuments: number;
   averageUsersPerDocument: number;
 }
+}
 
 /**
  * Collaboration-specific metrics
  */
+}
 export interface CollaborationMetrics {
   timestamp: number;
   conflictRate: number;
@@ -65,10 +70,12 @@ export interface CollaborationMetrics {
   operationQueueLength: number;
   conflictQueueLength: number;
 }
+}
 
 /**
  * Performance thresholds for alerting
  */
+}
 export interface PerformanceThresholds {
   maxCpuUsage: number;
   maxMemoryUsage: number;
@@ -78,10 +85,12 @@ export interface PerformanceThresholds {
   minSuccessRate: number;
   maxErrorRate: number;
 }
+}
 
 /**
  * Performance alert
  */
+}
 export interface PerformanceAlert {
   id: string;
   timestamp: number;
@@ -92,10 +101,12 @@ export interface PerformanceAlert {
   description: string;
   resolved: boolean;
 }
+}
 
 /**
  * Metrics aggregation window
  */
+}
 export interface MetricsWindow {
   windowStart: number;
   windowEnd: number;
@@ -103,6 +114,7 @@ export interface MetricsWindow {
   systemMetrics: SystemMetrics[];
   webSocketMetrics: WebSocketMetrics[];
   collaborationMetrics: CollaborationMetrics[];
+}
 }
 
 /**
@@ -264,7 +276,7 @@ export class MetricsCollector extends EventEmitter {
         start: startTime,
         end: endTime,
         duration: endTime - startTime
-      },
+  }
       system: this.aggregateSystemMetrics(window.systemMetrics),
       webSocket: this.aggregateWebSocketMetrics(window.webSocketMetrics),
       collaboration: this.aggregateCollaborationMetrics(window.collaborationMetrics),
@@ -317,6 +329,7 @@ export class MetricsCollector extends EventEmitter {
    * Export metrics to file
    */
   async exportMetrics(filePath: string, format: 'json' | 'csv' = 'json'): Promise<void> {
+
     const data = {
       exportTime: Date.now(),
       systemMetrics: this.systemMetrics,
@@ -337,6 +350,7 @@ export class MetricsCollector extends EventEmitter {
    * Collect all current metrics
    */
   private async collectAllMetrics(): Promise<void> {
+
     try {
       const systemMetrics = await this.collectSystemMetrics();
       this.systemMetrics.push(systemMetrics);
@@ -351,6 +365,7 @@ export class MetricsCollector extends EventEmitter {
    * Collect system metrics
    */
   private async collectSystemMetrics(): Promise<SystemMetrics> {
+
     const memInfo = process.memoryUsage();
     const cpuUsage = await this.getCPUUsage();
     const networkStats = await this.getNetworkStats();
@@ -362,12 +377,12 @@ export class MetricsCollector extends EventEmitter {
         used: memInfo.heapUsed,
         total: memInfo.heapTotal,
         percentage: (memInfo.heapUsed / memInfo.heapTotal) * 100
-      },
+  }
       networkStats,
       diskUsage: {
         reads: 0, // Would need platform-specific implementation
         writes: 0
-      },
+  }
       processMetrics: {
         pid: process.pid,
         uptime: process.uptime(),
@@ -383,6 +398,7 @@ export class MetricsCollector extends EventEmitter {
    * Get CPU usage percentage
    */
   private async getCPUUsage(): Promise<number> {
+
     return new Promise((resolve) => {
       const startTime = process.hrtime();
       const startUsage = process.cpuUsage();
@@ -404,6 +420,7 @@ export class MetricsCollector extends EventEmitter {
    * Get network statistics
    */
   private async getNetworkStats(): Promise<any> {
+
     try {
       const networkInterfaces = os.networkInterfaces();
       const totalReceived = 0;
@@ -431,6 +448,7 @@ export class MetricsCollector extends EventEmitter {
    * Initialize network baseline for delta calculations
    */
   private async initializeNetworkBaseline(): Promise<void> {
+
     this.networkBaseline = await this.getNetworkStats();
   }
 

@@ -78,7 +78,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           hasMore: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -111,7 +111,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           flags: z.array(z.any()),
           anomalies: z.array(z.any()),
           riskAnalysis: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -160,7 +160,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -202,7 +202,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -238,7 +238,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -280,7 +280,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           summary: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -309,7 +309,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           report: z.any(),
           downloadUrl: z.string().optional()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -327,7 +327,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
           {
             startDate: new Date(startDate),
             endDate: new Date(endDate)
-          },
+  }
           'csv'
         );
 
@@ -351,7 +351,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       querystring: z.object({
         ...TransactionSearchSchema.shape,
         format: z.enum(['csv', 'json']).default('csv')
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -401,7 +401,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           anomalies: z.array(z.any())
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -429,7 +429,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -461,7 +461,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           fraudRings: z.array(z.any())
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -485,7 +485,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
         200: z.object({
           anomalies: z.array(z.any()),
           riskAnalysis: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -518,7 +518,7 @@ export async function transactionMonitoringRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           dashboard: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {

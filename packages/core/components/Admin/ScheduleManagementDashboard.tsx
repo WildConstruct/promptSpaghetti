@@ -51,13 +51,13 @@ import {
   SchedulingStats as ContentStats
 } from '../../services/ContentSchedulingService';
 interface ScheduleItem {
-  id: string;
+  id: string;,
   name: string;
-  type: 'feature_toggle' | 'content';
+  type: 'feature_toggle' | 'content';,
   status: 'pending' | 'active' | 'completed' | 'failed' | 'cancelled';
   nextExecution?: Date;
   lastExecution?: Date;
-  createdAt: Date;
+  createdAt: Date;,
   createdBy: string;
   // Feature toggle specific
   toggleId?: string;
@@ -66,41 +66,38 @@ interface ScheduleItem {
   contentId?: string;
   contentType?: string;
   operation?: string;
-}
-interface ScheduleAnalytics {
-  totalSchedules: number;
+  interface ScheduleAnalytics {
+  totalSchedules: number;,
   activeSchedules: number;
-  completedToday: number;
+  completedToday: number;,
   failedToday: number;
   upcomingIn24h: number;
   // Performance metrics
-  successRate: number;
+  successRate: number;,
   averageExecutionTime: number;
   // Type breakdown
-  featureToggleSchedules: number;
+  featureToggleSchedules: number;,
   contentSchedules: number;
   // Recent executions
   recentExecutions: Array<{,
-    id: string;
-    name: string;
-    type: string;
-    status: 'success' | 'failed';
-    executedAt: Date;
-    duration: number;
-  }>;
+  id: string;,
+  name: string;
+  type: string;,
+  status: 'success' | 'failed';
+  executedAt: Date;,
+  duration: number;
+}>;
   // Upcoming schedules
   upcomingSchedules: Array<{,
-    id: string;
-    name: string;
-    type: string;
-    nextExecution: Date;
-  }>;
-}
+  id: string;
+  name: string;,
+  type: string;
+  nextExecution: Date;
+}>;
 interface ScheduleManagementDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-}
 const STATUS_CONFIG = {
   pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },
   active: { color: 'text-blue-600 bg-blue-100', icon: PlayCircle },
@@ -119,100 +116,94 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleItem>([]);
   const [analytics, setAnalytics] = useState<ScheduleAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   // Mock data - in real implementation, this would fetch from APIs
-  const mockSchedules: ScheduleItem[] = [
+  const mockSchedules: ScheduleItem = [
+  {
+  id: 'schedule-1',
+  name: 'Weekly Maintenance Window',
+  type: 'feature_toggle',
+  status: 'active',
+  toggleId: 'maintenance-mode',
+  action: 'enable',
+  nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+  lastExecution: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+  createdBy: 'admin',
+}
     {
-      id: 'schedule-1',
-      name: 'Weekly Maintenance Window',
-      type: 'feature_toggle',
-      status: 'active',
-      toggleId: 'maintenance-mode',
-      action: 'enable',
-      nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-      lastExecution: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      createdBy: 'admin',
-    },
+  id: 'schedule-2',
+  name: 'Blog Post Publication',
+  type: 'content',
+  status: 'pending',
+  contentId: 'post-123',
+  contentType: 'blog_post',
+  operation: 'publish',
+  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
+  createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+  createdBy: 'editor',
+}
     {
-      id: 'schedule-2',
-      name: 'Blog Post Publication',
-      type: 'content',
-      status: 'pending',
-      contentId: 'post-123',
-      contentType: 'blog_post',
-      operation: 'publish',
-      nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-      createdBy: 'editor',
-    },
-    {
-      id: 'schedule-3',
-      name: 'Feature Rollout - 50%',
-      type: 'feature_toggle',
-      status: 'completed',
-      toggleId: 'new-dashboard',
-      action: 'update_percentage',
-      lastExecution: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-      createdBy: 'devops',
-    }
-  ];
-  const mockAnalytics: ScheduleAnalytics = {
-    totalSchedules: 45,
-    activeSchedules: 12,
-    completedToday: 8,
-    failedToday: 2,
-    upcomingIn24h: 5,
-    successRate: 94.2,
-    averageExecutionTime: 1.8,
-    featureToggleSchedules: 28,
-    contentSchedules: 17,
-    recentExecutions: [,
+  id: 'schedule-3',
+  name: 'Feature Rollout - 50%',
+  type: 'feature_toggle',
+  status: 'completed',
+  toggleId: 'new-dashboard',
+  action: 'update_percentage',
+  lastExecution: new Date(Date.now() - 4 * 60 * 60 * 1000),
+  createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+  createdBy: 'devops'];
+  const mockAnalytics: ScheduleAnalytics = {,
+  totalSchedules: 45,
+  activeSchedules: 12,
+  completedToday: 8,
+  failedToday: 2,
+  upcomingIn24h: 5,
+  successRate: 94.2,
+  averageExecutionTime: 1.8,
+  featureToggleSchedules: 28,
+  contentSchedules: 17,
+  recentExecutions: [,
+  {
+  id: 'exec-1',
+  name: 'Feature Rollout - 50%',
+  type: 'Feature Toggle',
+  status: 'success',
+  executedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+  duration: 1.2,
+}
       {
-        id: 'exec-1',
-        name: 'Feature Rollout - 50%',
-        type: 'Feature Toggle',
-        status: 'success',
-        executedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-        duration: 1.2,
-      },
+  id: 'exec-2',
+  name: 'Newsletter Send',
+  type: 'Content',
+  status: 'success',
+  executedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
+  duration: 2.5,
+}
       {
-        id: 'exec-2',
-        name: 'Newsletter Send',
-        type: 'Content',
-        status: 'success',
-        executedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        duration: 2.5,
-      },
+  id: 'exec-3',
+  name: 'Database Maintenance',
+  type: 'Feature Toggle',
+  status: 'failed',
+  executedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
+  duration: 0.3],
+  upcomingSchedules: [,
+  {
+  id: 'upcoming-1',
+  name: 'Blog Post Publication',
+  type: 'Content',
+  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
+}
       {
-        id: 'exec-3',
-        name: 'Database Maintenance',
-        type: 'Feature Toggle',
-        status: 'failed',
-        executedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
-        duration: 0.3,
-      }
-    ],
-    upcomingSchedules: [,
-      {
-        id: 'upcoming-1',
-        name: 'Blog Post Publication',
-        type: 'Content',
-        nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
-      },
-      {
-        id: 'upcoming-2',
-        name: 'Weekly Maintenance',
-        type: 'Feature Toggle',
-        nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-      }
-    ]
+  id: 'upcoming-2',
+  name: 'Weekly Maintenance',
+  type: 'Feature Toggle',
+  nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)];
   };
   useEffect(() => {
     // Simulate loading schedules and analytics
@@ -228,7 +219,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
   // Filter schedules based on search and filters
   const filteredSchedules = useMemo(() => {
     return schedules.filter(schedule => {)
-      const matchesSearch = searchQuery === '' || ;
+  const matchesSearch = searchQuery === '' || ;
         schedule.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         schedule.createdBy.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === 'all' || schedule.status === statusFilter;
@@ -237,12 +228,12 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
     });
   }, [schedules, searchQuery, statusFilter, typeFilter]);
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {)
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(date);
   };
   const formatDuration = (seconds: number) => {
     return `${seconds.toFixed(1)}s`;}
@@ -260,7 +251,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
     console.log(`Deleting schedule: ${scheduleId}`);}
   };
   if (loading) {
-    return ();
+    return;
       <div className={`p-6 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
@@ -268,8 +259,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`p-6 space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -445,7 +435,7 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
                 {filteredSchedules.map((schedule) => {
                   const StatusIcon = STATUS_CONFIG[schedule.status].icon;
                   const TypeIcon = TYPE_CONFIG[schedule.type].icon;
-                  return ();
+                  return;
                     <div key={schedule.id} className="p-6 hover:bg-gray-50">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
@@ -467,7 +457,6 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
                                 schedule.lastExecution ?
                                   `Last: ${formatDate(schedule.lastExecution)}` :}
                                   'No execution'
-                              }
                             </p>
                             <div className="flex items-center space-x-2 mt-1">
                               <Badge className={TYPE_CONFIG[schedule.type].color}>

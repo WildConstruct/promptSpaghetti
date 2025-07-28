@@ -40,6 +40,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async createWorkflowState(data: Zod.infer<typeof CreateWorkflowStateSchema>): Promise<WorkflowState> {
+
     const validated = CreateWorkflowStateSchema.parse(data);
     
     const result = await this.db.query(`
@@ -64,6 +65,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowStates(filter: WorkflowStateFilter = {}): Promise<WorkflowState[]> {
+
     let query = `
       SELECT * FROM workflow_states
       WHERE 1=1
@@ -103,6 +105,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowStateById(id: string): Promise<WorkflowState | null> {
+
     const result = await this.db.query(
       'SELECT * FROM workflow_states WHERE id = $1',
       [id]
@@ -111,6 +114,7 @@ export class WorkflowDAO {
   }
 
   async updateWorkflowState(id: string, updates: Partial<WorkflowState>): Promise<WorkflowState | null> {
+
     const setClause = Object.keys(updates)
       .map((key, index) => `${key} = $${index + 2}`)
       .join(', ');
@@ -127,6 +131,7 @@ export class WorkflowDAO {
   }
 
   async deleteWorkflowState(id: string): Promise<boolean> {
+
     const result = await this.db.query(
       'DELETE FROM workflow_states WHERE id = $1',
       [id]
@@ -139,6 +144,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async createWorkflowTransition(data: Zod.infer<typeof CreateWorkflowTransitionSchema>): Promise<WorkflowTransition> {
+
     const validated = CreateWorkflowTransitionSchema.parse(data);
     
     const result = await this.db.query(`
@@ -162,6 +168,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowTransitions(workspaceId: string, fromStateId?: string): Promise<WorkflowTransition[]> {
+
     let query = `
       SELECT * FROM workflow_transitions
       WHERE workspace_id = $1
@@ -180,6 +187,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowTransitionById(id: string): Promise<WorkflowTransition | null> {
+
     const result = await this.db.query(
       'SELECT * FROM workflow_transitions WHERE id = $1',
       [id]
@@ -188,6 +196,7 @@ export class WorkflowDAO {
   }
 
   async deleteWorkflowTransition(id: string): Promise<boolean> {
+
     const result = await this.db.query(
       'DELETE FROM workflow_transitions WHERE id = $1',
       [id]
@@ -200,6 +209,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async transitionResourceState(request: StateTransitionRequest, actorId: string): Promise<StateTransitionResult> {
+
     return this.db.transaction(async (client) => {
       // Get current state
       const currentStateResult = await client.query(
@@ -289,6 +299,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async createWorkflowApproval(data: Zod.infer<typeof CreateWorkflowApprovalSchema>): Promise<WorkflowApproval> {
+
     const validated = CreateWorkflowApprovalSchema.parse(data);
     
     const result = await this.db.query(`
@@ -312,6 +323,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowApprovals(filter: WorkflowApprovalFilter = {}): Promise<WorkflowApproval[]> {
+
     let query = `
       SELECT wa.*, wt.name as transition_name, r.name as resource_name
       FROM workflow_approvals wa
@@ -358,6 +370,7 @@ export class WorkflowDAO {
   }
 
   async approveWorkflow(approvalId: string, data: Zod.infer<typeof ApproveWorkflowSchema>): Promise<StateTransitionResult> {
+
     const validated = ApproveWorkflowSchema.parse(data);
 
     return this.db.transaction(async (client) => {
@@ -410,6 +423,7 @@ export class WorkflowDAO {
   }
 
   async rejectWorkflow(approvalId: string, data: Zod.infer<typeof RejectWorkflowSchema>): Promise<boolean> {
+
     const validated = RejectWorkflowSchema.parse(data);
 
     return this.db.transaction(async (client) => {
@@ -448,6 +462,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async createWorkflowLock(data: Zod.infer<typeof CreateWorkflowLockSchema>): Promise<WorkflowLock> {
+
     const validated = CreateWorkflowLockSchema.parse(data);
     
     const result = await this.db.query(`
@@ -471,6 +486,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowLocks(filter: WorkflowLockFilter = {}): Promise<WorkflowLock[]> {
+
     let query = `
       SELECT wl.*, r.name as resource_name
       FROM workflow_locks wl
@@ -511,6 +527,7 @@ export class WorkflowDAO {
   }
 
   async releaseWorkflowLock(lockId: string, actorId: string): Promise<boolean> {
+
     return this.db.transaction(async (client) => {
       const result = await client.query(
         'DELETE FROM workflow_locks WHERE id = $1 RETURNING *',
@@ -538,6 +555,7 @@ export class WorkflowDAO {
   }
 
   async releaseExpiredLocks(): Promise<number> {
+
     const result = await this.db.query(`
       DELETE FROM workflow_locks 
       WHERE expires_at < CURRENT_TIMESTAMP AND auto_release = true
@@ -550,6 +568,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   private async logWorkflowHistory(client: unknown, data: Partial<WorkflowHistoryEntry>): Promise<unknown> {
+
     return client.query(`
       INSERT INTO workflow_history (
         workspace_id, resource_id, action_type, previous_state_id, new_state_id,
@@ -571,6 +590,7 @@ export class WorkflowDAO {
   }
 
   async getWorkflowHistory(filter: WorkflowHistoryFilter = {}): Promise<WorkflowHistoryEntry[]> {
+
     let query = `
       SELECT wh.*, r.name as resource_name,
              ps.name as previous_state_name, ns.name as new_state_name
@@ -624,6 +644,7 @@ export class WorkflowDAO {
   // =============================================================================
 
   async getWorkflowStatistics(workspaceId: string): Promise<WorkflowStatistics> {
+
     const [
       statesResult,
       transitionsResult,
@@ -699,8 +720,7 @@ export class WorkflowDAO {
           return acc;
         }, {}),
         avg_lock_duration_hours: lockStatsResult.rows.reduce((sum, row) => sum + (parseFloat(row.avg_hours) || 0), 0) / lockStatsResult.rows.length || 0
-      },
-      
+  }
       schedule_stats: {
         total_active: parseInt(schedulesResult.rows[0].count),
         by_type: scheduleStatsResult.rows.reduce((acc, row) => {

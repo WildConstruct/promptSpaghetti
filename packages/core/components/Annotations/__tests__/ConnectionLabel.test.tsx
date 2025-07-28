@@ -10,7 +10,7 @@ import {
   ConnectionLabel as ConnectionLabelType,
   CONNECTION_LABEL_STYLES 
 } from '../../../types/CollaborationTypes';
-const mockLabel: ConnectionLabelType = {
+const mockLabel: ConnectionLabelType = {,
   id: 'test-label-1',
   connectionId: 'edge-1',
   content: 'Test Label',
@@ -21,9 +21,9 @@ const mockLabel: ConnectionLabelType = {
   visible: true,
   author: 'Test Author',
   timestamp: '2024-01-01T12:00:00Z',
-  lastModified: '2024-01-01T12:00:00Z',
-};
-const mockOnAction = jest.fn<unknown[], unknown>();
+  lastModified: '2024-01-01T12:00:00Z';
+  };
+const mockOnAction = jest.fn<unknown, unknown>();
 describe('ConnectionLabel Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -39,10 +39,10 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       expect(labelElement).toBeInTheDocument();
       expect(labelElement).toHaveStyle({)
-        position: 'absolute',
-        left: '100px',
-        top: '50px',
-      });
+  position: 'absolute',
+  left: '100px',
+  top: '50px',
+});
       expect(screen.getByText('Test Label')).toBeInTheDocument();
     });
     test('applies correct styling based on style prop', () => {
@@ -56,10 +56,10 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       const expectedStyle = CONNECTION_LABEL_STYLES.badge;
       expect(labelElement).toHaveStyle({)
-        background: expectedStyle.background,
-        borderRadius: expectedStyle.borderRadius,
-        padding: expectedStyle.padding,
-      });
+  background: expectedStyle.background,
+  borderRadius: expectedStyle.borderRadius,
+  padding: expectedStyle.padding,
+});
     });
     test('shows delete button when canEdit is true', () => {
       render();
@@ -92,11 +92,11 @@ describe('ConnectionLabel Component', () => {
       expect(screen.queryByTestId('connection-label-test-label-1')).not.toBeInTheDocument();
     });
     test('shows icon when configured', () => {
-      const iconLabel = { 
-        ...mockLabel, 
-        showIcon: true, 
-        icon: '📝' ,
-      };
+  const iconLabel = {
+  ...mockLabel,
+  showIcon: true,
+  icon: '📝',
+};
       render();
         <ConnectionLabel
           label={iconLabel}
@@ -129,10 +129,10 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByText('Test Label');
       await user.dblClick(labelElement);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'startEdit',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-      });
+  type: 'startEdit',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+});
       expect(screen.getByDisplayValue('Test Label')).toBeInTheDocument();
     });
     test('prevents editing when canEdit is false', async () => {
@@ -163,16 +163,15 @@ describe('ConnectionLabel Component', () => {
       await user.clear(input);
       await user.type(input, 'Updated Label{enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-        content: 'Updated Label',
-        label: {,
-          content: 'Updated Label',
-          isEditing: false,
-          lastModified: expect.any(String),
-        }
-      });
+  type: 'update',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+  content: 'Updated Label',
+  label: {,
+  content: 'Updated Label',
+  isEditing: false,
+  lastModified: expect.any(String),
+});
     });
     test('cancels editing on Escape key', async () => {
       const user = userEvent.setup();
@@ -188,10 +187,10 @@ describe('ConnectionLabel Component', () => {
       await user.clear(input);
       await user.type(input, 'Changed Text{escape}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'stopEdit',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-      });
+  type: 'stopEdit',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+});
     });
     test('saves changes on blur', async () => {
       const user = userEvent.setup();
@@ -208,16 +207,15 @@ describe('ConnectionLabel Component', () => {
       await user.type(input, 'Blurred Content');
       await user.tab(); // Triggers blur
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-        content: 'Blurred Content',
-        label: {,
-          content: 'Blurred Content',
-          isEditing: false,
-          lastModified: expect.any(String),
-        }
-      });
+  type: 'update',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+  content: 'Blurred Content',
+  label: {,
+  content: 'Blurred Content',
+  isEditing: false,
+  lastModified: expect.any(String),
+});
     });
     test('handles empty content gracefully', async () => {
       const user = userEvent.setup();
@@ -233,16 +231,15 @@ describe('ConnectionLabel Component', () => {
       await user.clear(input);
       await user.type(input, '{enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-        content: 'Untitled',
-        label: {,
-          content: 'Untitled',
-          isEditing: false,
-          lastModified: expect.any(String),
-        }
-      });
+  type: 'update',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+  content: 'Untitled',
+  label: {,
+  content: 'Untitled',
+  isEditing: false,
+  lastModified: expect.any(String),
+});
     });
     test('enforces maximum length constraint', async () => {
       const user = userEvent.setup();
@@ -273,9 +270,9 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       fireEvent.mouseDown(labelElement, { clientX: 150, clientY: 75 });
       expect(labelElement).toHaveStyle({)
-        cursor: 'grabbing',
-        transform: 'translate(-50%, -50%) scale(1.05)'
-      });
+  cursor: 'grabbing',
+  transform: 'translate(-50%, -50%) scale(1.05)',
+});
     });
     test('prevents dragging during editing', () => {
       const editingLabel = { ...mockLabel, isEditing: true };
@@ -289,8 +286,8 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       fireEvent.mouseDown(labelElement, { clientX: 150, clientY: 75 });
       expect(labelElement).not.toHaveStyle({)
-        cursor: 'grabbing',
-      });
+  cursor: 'grabbing',
+});
     });
     test('prevents dragging when canEdit is false', () => {
       render();
@@ -303,8 +300,8 @@ describe('ConnectionLabel Component', () => {
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       fireEvent.mouseDown(labelElement, { clientX: 150, clientY: 75 });
       expect(labelElement).not.toHaveStyle({)
-        cursor: 'grabbing',
-      });
+  cursor: 'grabbing',
+});
     });
     test('calls move action during drag', () => {
       render();
@@ -320,7 +317,7 @@ describe('ConnectionLabel Component', () => {
       // Move mouse
       fireEvent.mouseMove(document, { clientX: 200, clientY: 100 });
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'move',
+  type: 'move',
         labelId: 'test-label-1',
         connectionId: 'edge-1',
         position: { x: 150, y: 75 } // clientX/Y - drag offset
@@ -340,14 +337,14 @@ describe('ConnectionLabel Component', () => {
       const deleteButton = screen.getByTitle('Remove label');
       await user.click(deleteButton);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'delete',
-        labelId: 'test-label-1',
-        connectionId: 'edge-1',
-      });
+  type: 'delete',
+  labelId: 'test-label-1',
+  connectionId: 'edge-1',
+});
     });
     test('prevents event propagation on delete', async () => {
       const user = userEvent.setup();
-      const mockStopPropagation = jest.fn<unknown[], unknown>();
+      const mockStopPropagation = jest.fn<unknown, unknown>();
       render();
         <ConnectionLabel
           label={mockLabel}
@@ -358,8 +355,8 @@ describe('ConnectionLabel Component', () => {
       const deleteButton = screen.getByTitle('Remove label');
       // Mock event to test stopPropagation
       fireEvent.click(deleteButton, {)
-        stopPropagation: mockStopPropagation,
-      });
+  stopPropagation: mockStopPropagation,
+});
       expect(mockOnAction).toHaveBeenCalled();
     });
   });
@@ -374,9 +371,9 @@ describe('ConnectionLabel Component', () => {
       );
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       expect(labelElement).toHaveStyle({)
-        transform: expect.stringContaining('scale(1.1)'),
-        zIndex: '1000',
-      });
+  transform: expect.stringContaining('scale(1.1)'),
+  zIndex: '1000',
+});
     });
     test('shows arrow pointer for arrow style', () => {
       const arrowLabel = { ...mockLabel, style: 'arrow' as const };
@@ -403,11 +400,11 @@ describe('ConnectionLabel Component', () => {
       expect(labelElement.querySelector('div[style*="radial-gradient"]')).toBeInTheDocument();
     });
     test('applies custom colors when provided', () => {
-      const customLabel = { 
-        ...mockLabel, 
-        color: '#ff0000',
-        backgroundColor: '#00ff00',
-      };
+  const customLabel = {
+  ...mockLabel,
+  color: '#ff0000',
+  backgroundColor: '#00ff00',
+};
       render();
         <ConnectionLabel
           label={customLabel}
@@ -416,9 +413,9 @@ describe('ConnectionLabel Component', () => {
       );
       const labelElement = screen.getByTestId('connection-label-test-label-1');
       expect(labelElement).toHaveStyle({)
-        color: '#ff0000',
-        background: '#00ff00',
-      });
+  color: '#ff0000',
+  background: '#00ff00',
+});
     });
   });
   describe('Tooltips', () => {
@@ -517,10 +514,10 @@ describe('ConnectionLabel Component', () => {
   });
   describe('Performance', () => {
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestWrapper = ({ label }: { label: ConnectionLabelType }) => {
         renderSpy();
-        return ();
+        return;
           <ConnectionLabel
             label={label}
             onAction={mockOnAction}
@@ -550,7 +547,6 @@ describe('ConnectionLabel Component', () => {
       for (let i = 0; i < 10; i++) {
         fireEvent.mouseDown(labelElement, { clientX: 100 + i, clientY: 50 + i });
         fireEvent.mouseUp(labelElement);
-      }
       // Should not crash or cause performance issues
       expect(labelElement).toBeInTheDocument();
     });

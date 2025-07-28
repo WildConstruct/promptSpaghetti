@@ -23,9 +23,9 @@ export const StoredEventSchema = z.object({)
   requestId: z.string().nullable(),
   traceId: z.string().nullable(),
   // Data (stored as JSON)
-  data: z.string(), // JSON serialized
-  metadata: z.string(), // JSON serialized
-  tags: z.string(), // JSON serialized array
+  data: z.string(), // JSON serialized,
+  metadata: z.string(), // JSON serialized,
+  tags: z.string(), // JSON serialized array,
   // Storage metadata
   environment: z.string(),
   region: z.string().nullable(),
@@ -36,6 +36,7 @@ export const StoredEventSchema = z.object({)
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
 // Event Query Options
+
 export interface EventQueryOptions {
   filter?: EventFilter;
   sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -43,49 +44,48 @@ export interface EventQueryOptions {
   limit?: number;
   offset?: number;
   includeMetadata?: boolean;
+  // Event Statistics
 }
-
-// Event Statistics
 export interface EventStatistics {
-  totalEvents: number;
+  totalEvents: number;,
   eventsByType: { [type: string]: number };
   eventsByCategory: { [category: string]: number };
   eventsBySeverity: { [severity: string]: number };
   eventsBySource: { [source: string]: number };
   timeRange: { earliest: number; latest: number };
   storageSize: number;
-}
 
 // Event Aggregation
+}
 export interface EventAggregation {
   groupBy: string;
   timeGranularity?: 'hour' | 'day' | 'week' | 'month';
   aggregates: {,
-    count: number;
-    firstSeen: number;
-    lastSeen: number;
-    uniqueSources: number;
-    uniqueUsers: number;
-    uniqueSessions: number;
-  };
-}
+  count: number;,
+  firstSeen: number;
+  lastSeen: number;,
+  uniqueSources: number;
+  uniqueUsers: number;,
+  uniqueSessions: number;
+};
 /**
  * Event Repository Interface
  * 
  * Following repository pattern from Story 1.4 for consistent data access
  */
+}
 export interface EventRepository {
   // Core CRUD operations
   save(event: UnifiedAnalyticsEvent): Promise<string>;
-  saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]>;
+  saveBatch(events: UnifiedAnalyticsEvent): Promise<string>;
   findById(id: string): Promise<UnifiedAnalyticsEvent | null>;
-  findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]>;
+  findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent>;
   count(filter?: EventFilter): Promise<number>;
   delete(id: string): Promise<boolean>;
-  deleteBatch(ids: string[]): Promise<number>;
+  deleteBatch(ids: string): Promise<number>;
   // Analytics queries
   getStatistics(filter?: EventFilter): Promise<EventStatistics>;
-  getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]>;
+  getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation>;
   getTimeSeriesData();
     metric: string,
     granularity: string,
@@ -95,19 +95,18 @@ export interface EventRepository {
   cleanup(retentionDays: number): Promise<number>;
   archive(beforeDate: number): Promise<number>;
   optimize(): Promise<void>;
-}
 /**
  * Database Event Repository Implementation
  * 
  * SQLite-based implementation for production use
  */
+}
 export class DatabaseEventRepository implements EventRepository {
   private db: any; // Database connection from Story 1.4
   private tableName = 'unified_analytics_events';
   constructor(database: any) {
     this.db = database;
     this.initializeSchema();
-  }
   /**
    * Initialize database schema
    */
@@ -147,7 +146,6 @@ export class DatabaseEventRepository implements EventRepository {
         INDEX idx_retention_date (retention_date)
     `;
     this.db.exec(createTableSQL);
-  }
   /**
    * Save single event
    */
@@ -183,11 +181,10 @@ export class DatabaseEventRepository implements EventRepository {
       retentionDate
     );
     return event.id;
-  }
   /**
    * Save batch of events
    */
-  async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
+  async saveBatch(events: UnifiedAnalyticsEvent): Promise<string> {
     const stmt = this.db.prepare(`;);
       INSERT OR REPLACE INTO ${this.tableName} ()}
         id, type, category, severity, timestamp, source, version,
@@ -195,7 +192,7 @@ export class DatabaseEventRepository implements EventRepository {
         data, metadata, tags, environment, region, stored_at, retention_date
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    const transaction = this.db.transaction((events: UnifiedAnalyticsEvent[]) => {
+    const transaction = this.db.transaction((events: UnifiedAnalyticsEvent) => {
       const now = Date.now();
       for (const event of events) {
         const retentionDate = this.calculateRetentionDate(event);
@@ -220,11 +217,9 @@ export class DatabaseEventRepository implements EventRepository {
           now,
           retentionDate
         );
-      }
     });
     transaction(events);
     return events.map(e => e.id);
-  }
   /**
    * Find event by ID
    */
@@ -234,11 +229,10 @@ export class DatabaseEventRepository implements EventRepository {
     `);
     const row = stmt.get(id);
     return row ? this.mapRowToEvent(row) : null;
-  }
   /**
    * Find multiple events with filtering and pagination
    */
-  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]> {
+  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent> {
     const { whereClause, params } = this.buildWhereClause(options.filter);
     const orderClause = this.buildOrderClause(options.sortBy, options.sortOrder);
     const limitClause = this.buildLimitClause(options.limit, options.offset);
@@ -251,7 +245,6 @@ export class DatabaseEventRepository implements EventRepository {
     const stmt = this.db.prepare(sql);
     const rows = stmt.all(...params);
     return rows.map((row: any) => this.mapRowToEvent(row));
-  }
   /**
    * Count events matching filter
    */
@@ -261,7 +254,6 @@ export class DatabaseEventRepository implements EventRepository {
     const stmt = this.db.prepare(sql);
     const result = stmt.get(...params);
     return result.count;
-  }
   /**
    * Delete single event
    */
@@ -269,17 +261,15 @@ export class DatabaseEventRepository implements EventRepository {
     const stmt = this.db.prepare(`DELETE FROM ${this.tableName} WHERE id = ?`);}
     const result = stmt.run(id);
     return result.changes > 0;
-  }
   /**
    * Delete multiple events
    */
-  async deleteBatch(ids: string[]): Promise<number> {
+  async deleteBatch(ids: string): Promise<number> {
     if (ids.length === 0) return 0;
     const placeholders = ids.map(() => '?').join(',');
     const stmt = this.db.prepare(`DELETE FROM ${this.tableName} WHERE id IN (${placeholders})`);}
     const result = stmt.run(...ids);
     return result.changes;
-  }
   /**
    * Get event statistics
    */
@@ -333,26 +323,26 @@ export class DatabaseEventRepository implements EventRepository {
     `);
     const sizeResult = sizeStmt.get(...params);
     return {
-      totalEvents: totalResult.count,
-      eventsByType,
-      eventsByCategory,
-      eventsBySeverity,
-      eventsBySource,
-      timeRange: {,
-        earliest: timeResult.earliest || 0,
-        latest: timeResult.latest || 0,
-      },
-      storageSize: sizeResult.size || 0,
-    };
-  }
+  totalEvents: totalResult.count,
+  eventsByType,
+  eventsByCategory,
+  eventsBySeverity,
+  eventsBySource,
+  timeRange: {,
+  earliest: timeResult.earliest || 0,
+  latest: timeResult.latest || 0,
+},
+  storageSize: sizeResult.size || 0;
+  };
   /**
    * Get event aggregations
    */
-  async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]> {
+  async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation> {
     const { whereClause, params } = this.buildWhereClause(filter);
     const sql = `;
       SELECT 
-        ${groupBy},}
+        ${groupBy}
+}
         COUNT(*) as count,
         MIN(timestamp) as firstSeen,
         MAX(timestamp) as lastSeen,
@@ -365,23 +355,20 @@ export class DatabaseEventRepository implements EventRepository {
     `;
     const stmt = this.db.prepare(sql);
     const results = stmt.all(...params);
-    return results.map((row: any) => ({)
-      groupBy: row[groupBy],
-      aggregates: {,
-        count: row.count,
-        firstSeen: row.firstSeen,
-        lastSeen: row.lastSeen,
-        uniqueSources: row.uniqueSources,
-        uniqueUsers: row.uniqueUsers,
-        uniqueSessions: row.uniqueSessions,
-      }
-    }));
-  }
+    return results.map((row: any) => ({,)
+  groupBy: row[groupBy],
+  aggregates: {,
+  count: row.count,
+  firstSeen: row.firstSeen,
+  lastSeen: row.lastSeen,
+  uniqueSources: row.uniqueSources,
+  uniqueUsers: row.uniqueUsers,
+  uniqueSessions: row.uniqueSessions,
+}));
   /**
    * Get time series data
    */
-  async getTimeSeriesData()
-    metric: string, 
+  async getTimeSeriesData(metric: string, )
     granularity: string, 
     filter?: EventFilter
   ): Promise<Array<{ timestamp: number; value: number }>> {
@@ -402,10 +389,10 @@ export class DatabaseEventRepository implements EventRepository {
         break;
       default:
         timeGrouping = "datetime(timestamp / 1000, 'unixepoch', 'start of hour')";
-    }
     const sql = `;
       SELECT 
-        strftime('%s', ${timeGrouping}) * 1000 as timestamp,}
+        strftime('%s', ${timeGrouping}) * 1000 as timestamp}
+}
         COUNT(*) as value
       FROM ${this.tableName} ${whereClause}
       GROUP BY ${timeGrouping}
@@ -413,11 +400,10 @@ export class DatabaseEventRepository implements EventRepository {
     `;
     const stmt = this.db.prepare(sql);
     const results = stmt.all(...params);
-    return results.map((row: any) => ({)
-      timestamp: parseInt(row.timestamp),
-      value: row.value,
-    }));
-  }
+    return results.map((row: any) => ({,)
+  timestamp: parseInt(row.timestamp),
+  value: row.value,
+}));
   /**
    * Cleanup old events
    */
@@ -429,7 +415,6 @@ export class DatabaseEventRepository implements EventRepository {
     `);
     const result = stmt.run(cutoffTime);
     return result.changes;
-  }
   /**
    * Archive old events
    */
@@ -443,94 +428,79 @@ export class DatabaseEventRepository implements EventRepository {
     `);
     const result = stmt.run(Date.now(), beforeDate);
     return result.changes;
-  }
   /**
    * Optimize database
    */
   async optimize(): Promise<void> {
-    this.db.exec('VACUUM');
-    this.db.exec('ANALYZE');
-  }
+  this.db.exec('VACUUM');
+  this.db.exec('ANALYZE');
   /**
-   * Map database row to event object
-   */
-  private mapRowToEvent(row: any): UnifiedAnalyticsEvent {
-    return {
-      id: row.id,
-      type: row.type,
-      category: row.category,
-      severity: row.severity,
-      timestamp: row.timestamp,
-      source: row.source,
-      version: row.version,
-      sessionId: row.session_id,
-      userId: row.user_id,
-      organizationId: row.organization_id,
-      requestId: row.request_id,
-      traceId: row.trace_id,
-      data: JSON.parse(row.data),
-      metadata: JSON.parse(row.metadata),
-      tags: JSON.parse(row.tags),
-      environment: row.environment,
-      region: row.region,
-    };
-  }
+  * Map database row to event object
+  */
+  private mapRowToEvent(row: any): UnifiedAnalyticsEvent {,
+  return {
+  id: row.id,
+  type: row.type,
+  category: row.category,
+  severity: row.severity,
+  timestamp: row.timestamp,
+  source: row.source,
+  version: row.version,
+  sessionId: row.session_id,
+  userId: row.user_id,
+  organizationId: row.organization_id,
+  requestId: row.request_id,
+  traceId: row.trace_id,
+  data: JSON.parse(row.data),
+  metadata: JSON.parse(row.metadata),
+  tags: JSON.parse(row.tags),
+  environment: row.environment,
+  region: row.region,
+};
   /**
    * Build WHERE clause for filtering
    */
-  private buildWhereClause(filter?: EventFilter): { whereClause: string; params: any[] } {
+  private buildWhereClause(filter?: EventFilter): { whereClause: string; params: any } {
     if (!filter) {
       return { whereClause: '', params: [] };
-    }
-    const conditions: string[] = [];
-    const params: any[] = [];
+    const conditions: string = [];
+    const params: any = [];
     if (filter.types && filter.types.length > 0) {
       const placeholders = filter.types.map(() => '?').join(',');
       conditions.push(`type IN (${placeholders})`);}
       params.push(...filter.types);
-    }
     if (filter.categories && filter.categories.length > 0) {
       const placeholders = filter.categories.map(() => '?').join(',');
       conditions.push(`category IN (${placeholders})`);}
       params.push(...filter.categories);
-    }
     if (filter.severities && filter.severities.length > 0) {
       const placeholders = filter.severities.map(() => '?').join(',');
       conditions.push(`severity IN (${placeholders})`);}
       params.push(...filter.severities);
-    }
     if (filter.sources && filter.sources.length > 0) {
       const placeholders = filter.sources.map(() => '?').join(',');
       conditions.push(`source IN (${placeholders})`);}
       params.push(...filter.sources);
-    }
     if (filter.userId) {
       conditions.push('user_id = ?');
       params.push(filter.userId);
-    }
     if (filter.organizationId) {
       conditions.push('organization_id = ?');
       params.push(filter.organizationId);
-    }
     if (filter.sessionId) {
       conditions.push('session_id = ?');
       params.push(filter.sessionId);
-    }
     if (filter.environment) {
       conditions.push('environment = ?');
       params.push(filter.environment);
-    }
     if (filter.startTime) {
       conditions.push('timestamp >= ?');
       params.push(filter.startTime);
-    }
     if (filter.endTime) {
       conditions.push('timestamp <= ?');
       params.push(filter.endTime);
-    }
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';}
     return { whereClause, params };
-  }
   /**
    * Build ORDER clause
    */
@@ -540,7 +510,6 @@ export class DatabaseEventRepository implements EventRepository {
     const field = validSortFields.includes(sortBy) ? sortBy : 'timestamp';
     const order = sortOrder === 'asc' ? 'ASC' : 'DESC';
     return `ORDER BY ${field} ${order}`;}
-  }
   /**
    * Build LIMIT clause
    */
@@ -549,24 +518,20 @@ export class DatabaseEventRepository implements EventRepository {
     let clause = `LIMIT ${limit}`;}
     if (offset && offset > 0) {
       clause += ` OFFSET ${offset}`;}
-    }
     return clause;
-  }
   /**
    * Calculate retention date for event
    */
   private calculateRetentionDate(event: UnifiedAnalyticsEvent): number | null {
-    // Default retention policies by event type
-    const retentionDays = {
-      [AnalyticsEventType.ERROR_EVENT]: 90,
-      [AnalyticsEventType.SECURITY_EVENT]: 365,
-      [AnalyticsEventType.REVENUE_EVENT]: 2555, // 7 years
-      default: 30,
-    };
+  // Default retention policies by event type
+  const retentionDays = {
+  [AnalyticsEventType.ERROR_EVENT]: 90,
+  [AnalyticsEventType.SECURITY_EVENT]: 365,
+  [AnalyticsEventType.REVENUE_EVENT]: 2555, // 7 years,
+  default: 30,
+};
     const days = retentionDays[event.type as keyof typeof retentionDays] || retentionDays.default;
     return Date.now() + (days * 24 * 60 * 60 * 1000);
-  }
-}
 /**
  * Event Persistence Factory
  * 
@@ -575,12 +540,9 @@ export class DatabaseEventRepository implements EventRepository {
 export class EventPersistenceFactory {
   static createRepository(database: any): EventRepository {
     return new DatabaseEventRepository(database);
-  }
   static createInMemoryRepository(): EventRepository {
     // For testing and development
     return new InMemoryEventRepository();
-  }
-}
 /**
  * In-Memory Event Repository for testing
  */
@@ -589,51 +551,40 @@ class InMemoryEventRepository implements EventRepository {
   async save(event: UnifiedAnalyticsEvent): Promise<string> {
     this.events.set(event.id, { ...event });
     return event.id;
-  }
-  async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
+  async saveBatch(events: UnifiedAnalyticsEvent): Promise<string> {
     for (const event of events) {
       this.events.set(event.id, { ...event });
-    }
     return events.map(e => e.id);
-  }
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
-    return this.events.get(id) || null;
-  }
-  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]> {
-    let events = Array.from(this.events.values());
-    // Apply filtering
-    if (options.filter) {
-      events = events.filter(event => this.matchesFilter(event, options.filter!));
-    }
-    // Apply sorting
-    if (options.sortBy) {
-      events.sort((a, b) => {
-        const aVal = (a as any)[options.sortBy!];
-        const bVal = (b as any)[options.sortBy!];
-        const result = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-        return options.sortOrder === 'asc' ? result : -result;
-      });
-    }
+  return this.events.get(id) || null;
+  async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent> {,
+  let events = Array.from(this.events.values());
+  // Apply filtering
+  if (options.filter) {
+  events = events.filter(event => this.matchesFilter(event, options.filter!));
+  // Apply sorting
+  if (options.sortBy) {
+  events.sort((a, b) => {
+  const aVal = (a as any)[options.sortBy!];
+  const bVal = (b as any)[options.sortBy!];
+  const result = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+  return options.sortOrder === 'asc' ? result : -result;
+});
     // Apply pagination
     const start = options.offset || 0;
     const end = options.limit ? start + options.limit : undefined;
     return events.slice(start, end);
-  }
   async count(filter?: EventFilter): Promise<number> {
     if (!filter) return this.events.size;
     return Array.from(this.events.values())
       .filter(event => this.matchesFilter(event, filter)).length;
-  }
   async delete(id: string): Promise<boolean> {
     return this.events.delete(id);
-  }
-  async deleteBatch(ids: string[]): Promise<number> {
+  async deleteBatch(ids: string): Promise<number> {
     let deleted = 0;
     for (const id of ids) {
       if (this.events.delete(id)) deleted++;
-    }
     return deleted;
-  }
   async getStatistics(filter?: EventFilter): Promise<EventStatistics> {
     const events = filter ;
       ? Array.from(this.events.values()).filter(e => this.matchesFilter(e, filter))
@@ -653,7 +604,6 @@ class InMemoryEventRepository implements EventRepository {
       if (event.timestamp < earliest) earliest = event.timestamp;
       if (event.timestamp > latest) latest = event.timestamp;
       storageSize += JSON.stringify(event).length;
-    }
     return {
       totalEvents: events.length,
       eventsByType,
@@ -663,53 +613,43 @@ class InMemoryEventRepository implements EventRepository {
       timeRange: { earliest, latest },
       storageSize
     };
-  }
-  async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]> {
+  async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation> {
     const events = filter ;
       ? Array.from(this.events.values()).filter(e => this.matchesFilter(e, filter))
       : Array.from(this.events.values());
-    const groups: { [key: string]: UnifiedAnalyticsEvent[] } = {};
+    const groups: { [key: string]: UnifiedAnalyticsEvent } = {};
     for (const event of events) {
-      const key = (event as any)[groupBy] || 'unknown';
-      if (!groups[key]) groups[key] = [];
-      groups[key].push(event);
-    }
-    return Object.entries(groups).map(([key, groupEvents]) => ({)
-      groupBy: key,
-      aggregates: {,
-        count: groupEvents.length,
-        firstSeen: Math.min(...groupEvents.map(e => e.timestamp)),
-        lastSeen: Math.max(...groupEvents.map(e => e.timestamp)),
-        uniqueSources: new Set(groupEvents.map(e => e.source)).size,
-        uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size,
-        uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size,
-      }
-    }));
-  }
-  async getTimeSeriesData()
-    metric: string,
+  const key = (event as any)[groupBy] || 'unknown';
+  if (!groups[key]) groups[key] = [];
+  groups[key].push(event);
+  return Object.entries(groups).map(([key, groupEvents]) => ({)
+  groupBy: key,
+  aggregates: {,
+  count: groupEvents.length,
+  firstSeen: Math.min(...groupEvents.map(e => e.timestamp)),
+  lastSeen: Math.max(...groupEvents.map(e => e.timestamp)),
+  uniqueSources: new Set(groupEvents.map(e => e.source)).size,
+  uniqueUsers: new Set(groupEvents.map(e => e.userId).filter(Boolean)).size,
+  uniqueSessions: new Set(groupEvents.map(e => e.sessionId).filter(Boolean)).size,
+}));
+  async getTimeSeriesData(metric: string,)
     granularity: string,
     filter?: EventFilter
   ): Promise<Array<{ timestamp: number; value: number }>> {
     // Simplified implementation for in-memory repository
     return [];
-  }
   async cleanup(retentionDays: number): Promise<number> {
     const cutoffTime = Date.now() - (retentionDays * 24 * 60 * 60 * 1000);
     const toDelete = Array.from(this.events.values());
       .filter(event => event.timestamp < cutoffTime);
     for (const event of toDelete) {
       this.events.delete(event.id);
-    }
     return toDelete.length;
-  }
   async archive(beforeDate: number): Promise<number> {
     // In-memory implementation doesn't support archiving
     return 0;
-  }
   async optimize(): Promise<void> {
     // No optimization needed for in-memory storage
-  }
   private matchesFilter(event: UnifiedAnalyticsEvent, filter: EventFilter): boolean {
     if (filter.types && !filter.types.includes(event.type as any)) return false;
     if (filter.categories && !filter.categories.includes(event.category as any)) return false;
@@ -722,7 +662,5 @@ class InMemoryEventRepository implements EventRepository {
     if (filter.startTime && event.timestamp < filter.startTime) return false;
     if (filter.endTime && event.timestamp > filter.endTime) return false;
     return true;
-  }
-}
 
 export default EventPersistenceFactory;

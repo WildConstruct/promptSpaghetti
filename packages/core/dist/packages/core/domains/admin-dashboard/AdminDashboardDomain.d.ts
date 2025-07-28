@@ -7,17 +7,17 @@
 import React from 'react';
 import { AdminDashboardState, AdminDashboardConfig, DashboardLayout, WidgetDefinition, AdminUser, SecurityAlert, ApiKey, SystemMetrics, AdminDomainEvents, AdminDashboardProps, WidgetGridProps, WidgetLibraryProps } from './types/AdminTypes';
 export interface IAdminUserService {
-    getUsers(): Promise<AdminUser[]>;
+    getUsers(): Promise<AdminUser>;
     getUser(userId: string): Promise<AdminUser>;
     createUser(userData: Partial<AdminUser>): Promise<AdminUser>;
     updateUser(userId: string, updates: Partial<AdminUser>): Promise<AdminUser>;
     deleteUser(userId: string): Promise<void>;
-    updateUserPermissions(userId: string, permissions: string[]): Promise<void>;
+    updateUserPermissions(userId: string, permissions: string): Promise<void>;
     suspendUser(userId: string, reason: string): Promise<void>;
     activateUser(userId: string): Promise<void>;
 }
 export interface ISecurityService {
-    getSecurityAlerts(): Promise<SecurityAlert[]>;
+    getSecurityAlerts(): Promise<SecurityAlert>;
     acknowledgeAlert(alertId: string): Promise<void>;
     getSecurityMetrics(): Promise<any>;
     performSecurityScan(): Promise<any>;
@@ -25,7 +25,7 @@ export interface ISecurityService {
     generateSecurityReport(): Promise<any>;
 }
 export interface IApiManagementService {
-    getApiKeys(): Promise<ApiKey[]>;
+    getApiKeys(): Promise<ApiKey>;
     createApiKey(keyData: Partial<ApiKey>): Promise<ApiKey>;
     updateApiKey(keyId: string, updates: Partial<ApiKey>): Promise<ApiKey>;
     revokeApiKey(keyId: string): Promise<void>;
@@ -40,7 +40,7 @@ export interface ISystemMonitoringService {
     updateSystemConfig(config: any): Promise<void>;
 }
 export interface IDashboardConfigService {
-    getLayouts(): Promise<DashboardLayout[]>;
+    getLayouts(): Promise<DashboardLayout>;
     getLayout(layoutId: string): Promise<DashboardLayout>;
     saveLayout(layout: DashboardLayout): Promise<DashboardLayout>;
     deleteLayout(layoutId: string): Promise<void>;
@@ -49,12 +49,12 @@ export interface IDashboardConfigService {
     setDefaultLayout(layoutId: string): Promise<void>;
 }
 export interface IWidgetRegistry {
-    getWidgets(): WidgetDefinition[];
+    getWidgets(): WidgetDefinition;
     getWidget(widgetType: string): WidgetDefinition | undefined;
     registerWidget(widget: WidgetDefinition): void;
     unregisterWidget(widgetType: string): void;
-    getWidgetsByCategory(category: string): WidgetDefinition[];
-    getAvailableWidgets(permissions: string[]): WidgetDefinition[];
+    getWidgetsByCategory(category: string): WidgetDefinition;
+    getAvailableWidgets(permissions: string): WidgetDefinition;
 }
 export interface IAdminDashboardDomain {
     components: {
@@ -78,7 +78,7 @@ export interface IAdminDashboardDomain {
             toggleEditMode: () => void;
         };
         useAdminUsers: () => {
-            users: AdminUser[];
+            users: AdminUser;
             loading: boolean;
             error: string | null;
             createUser: (userData: Partial<AdminUser>) => Promise<void>;
@@ -87,7 +87,7 @@ export interface IAdminDashboardDomain {
             suspendUser: (userId: string, reason: string) => Promise<void>;
         };
         useSecurity: () => {
-            alerts: SecurityAlert[];
+            alerts: SecurityAlert;
             metrics: any;
             loading: boolean;
             acknowledgeAlert: (alertId: string) => Promise<void>;
@@ -95,7 +95,7 @@ export interface IAdminDashboardDomain {
             generateReport: () => Promise<any>;
         };
         useApiManagement: () => {
-            apiKeys: ApiKey[];
+            apiKeys: ApiKey;
             loading: boolean;
             error: string | null;
             createApiKey: (keyData: Partial<ApiKey>) => Promise<void>;
@@ -120,7 +120,7 @@ export interface IAdminDashboardDomain {
     };
     events: AdminDomainEvents & {
         subscribe: (event: keyof AdminDomainEvents, callback: Function) => () => void;
-        emit: (event: keyof AdminDomainEvents, ...args: any[]) => void;
+        emit: (event: keyof AdminDomainEvents, ...args: any) => void;
     };
     config: {
         getConfig: () => AdminDashboardConfig;
@@ -128,7 +128,7 @@ export interface IAdminDashboardDomain {
         resetConfig: () => void;
     };
     utils: {
-        validatePermission: (userPermissions: string[], requiredPermission: string) => boolean;
+        validatePermission: (userPermissions: string, requiredPermission: string) => boolean;
         formatUserRole: (role: string) => string;
         calculateSecurityScore: (metrics: any) => number;
         exportDashboardConfig: (layout: DashboardLayout) => string;

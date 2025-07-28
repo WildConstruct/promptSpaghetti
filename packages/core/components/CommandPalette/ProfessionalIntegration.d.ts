@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 export interface ProfessionalIntegrationProps {
     nodes: Node[];
     edges: Edge[];
@@ -18,13 +19,14 @@ export interface ProfessionalIntegrationProps {
     onNodeCreate: (nodeType: string, position: {)
         x: number;
         y: number;
+
     }, data?: Record<string, unknown>) => void;
     onNodeDelete: (nodeIds: string[]) => void;
     onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
     onSave: () => void;
     onLoad: () => void;
     theme?: 'light' | 'dark' | 'cinema';
-}
+
 export declare const ProfessionalIntegration: React.FC<ProfessionalIntegrationProps>;
 export default ProfessionalIntegration;
 //# sourceMappingURL=ProfessionalIntegration.d.ts.map

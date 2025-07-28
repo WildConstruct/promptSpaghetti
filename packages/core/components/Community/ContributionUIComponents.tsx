@@ -31,213 +31,190 @@ import {
 } from 'lucide-react';
 
 // Types with comprehensive validation
+
 export interface ContributionFormData {
-  title: string;
+  title: string;,
   description: string;
-  content: string;
+  content: string;,
   category: string;
-  tags: string[];
+  tags: string;,
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  estimatedTime: number; // minutes
-  prerequisites: string[];
+  estimatedTime: number; // minutes,
+  prerequisites: string;,
   resources: Array<{,
-    type: 'link' | 'file' | 'image' | 'video';
-    url: string;
-    title: string;
-  }>;
+  type: 'link' | 'file' | 'image' | 'video';,
+  url: string;
+  title: string;
+}>;
   license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary';
 }
-
 export interface ContributionItem {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   author: {,
-    id: string;
-    name: string;
-    avatar?: string;
-    reputation: number;
-  };
-  category: string;
-  tags: string[];
-  difficulty: string;
+  id: string;,
+  name: string;
+  avatar?: string;
+  reputation: number;
+};
+  category: string;,
+  tags: string;
+  difficulty: string;,
   status: 'draft' | 'submitted' | 'approved' | 'rejected' | 'published';
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
-  rating: number;
+  rating: number;,
   reviewCount: number;
-  downloadCount: number;
+  downloadCount: number;,
   comments: number;
-}
 
 // Error types for comprehensive error handling
+}
 export interface ValidationError {
-  field: string;
+  field: string;,
   message: string;
   code: string;
 }
-
 export interface ContributionError {
-  type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';
+  type: 'validation' | 'network' | 'permission' | 'server' | 'unknown';,
   message: string;
   details?: string;
   field?: string;
   code?: string;
+  // Security and validation utilities
 }
-
-// Security and validation utilities
 export class ContributionValidator {
-  static validateTitle(title: string): ValidationError[] {
-    const errors: ValidationError[] = [];
-    if (!title || title.trim().length === 0) {
-      errors.push({)
-        field: 'title',
-        message: 'Title is required',
-        code: 'REQUIRED',
-      });
-    }
+  static validateTitle(title: string): ValidationError {,
+  const errors: ValidationError = [];
+  if (!title || title.trim().length === 0) {
+  errors.push({)
+  field: 'title',
+  message: 'Title is required',
+  code: 'REQUIRED',
+});
     if (title.length > 200) {
-      errors.push({)
-        field: 'title',
-        message: 'Title must be less than 200 characters',
-        code: 'MAX_LENGTH',
-      });
-    }
+  errors.push({)
+  field: 'title',
+  message: 'Title must be less than 200 characters',
+  code: 'MAX_LENGTH',
+});
     // Security: Check for malicious content
     if (/<script|javascript:|data:|eval\(/i.test(title)) {
-      errors.push({)
-        field: 'title',
-        message: 'Title contains potentially dangerous content',
-        code: 'SECURITY_VIOLATION',
-      });
-    }
+  errors.push({)
+  field: 'title',
+  message: 'Title contains potentially dangerous content',
+  code: 'SECURITY_VIOLATION',
+});
     return errors;
-  }
-  static validateDescription(description: string): ValidationError[] {
-    const errors: ValidationError[] = [];
-    if (!description || description.trim().length === 0) {
-      errors.push({)
-        field: 'description',
-        message: 'Description is required',
-        code: 'REQUIRED',
-      });
-    }
+  static validateDescription(description: string): ValidationError {
+  const errors: ValidationError = [];
+  if (!description || description.trim().length === 0) {
+  errors.push({)
+  field: 'description',
+  message: 'Description is required',
+  code: 'REQUIRED',
+});
     if (description.length < 50) {
-      errors.push({)
-        field: 'description',
-        message: 'Description must be at least 50 characters',
-        code: 'MIN_LENGTH',
-      });
-    }
+  errors.push({)
+  field: 'description',
+  message: 'Description must be at least 50 characters',
+  code: 'MIN_LENGTH',
+});
     if (description.length > 2000) {
-      errors.push({)
-        field: 'description',
-        message: 'Description must be less than 2000 characters',
-        code: 'MAX_LENGTH',
-      });
-    }
+  errors.push({)
+  field: 'description',
+  message: 'Description must be less than 2000 characters',
+  code: 'MAX_LENGTH',
+});
     return errors;
-  }
-  static validateContent(content: string): ValidationError[] {
-    const errors: ValidationError[] = [];
-    if (!content || content.trim().length === 0) {
-      errors.push({)
-        field: 'content',
-        message: 'Content is required',
-        code: 'REQUIRED',
-      });
-    }
+  static validateContent(content: string): ValidationError {
+  const errors: ValidationError = [];
+  if (!content || content.trim().length === 0) {
+  errors.push({)
+  field: 'content',
+  message: 'Content is required',
+  code: 'REQUIRED',
+});
     if (content.length < 100) {
-      errors.push({)
-        field: 'content',
-        message: 'Content must be at least 100 characters',
-        code: 'MIN_LENGTH',
-      });
-    }
+  errors.push({)
+  field: 'content',
+  message: 'Content must be at least 100 characters',
+  code: 'MIN_LENGTH',
+});
     if (content.length > 50000) {
-      errors.push({)
-        field: 'content',
-        message: 'Content exceeds maximum length (50,000 characters)',
-        code: 'MAX_LENGTH',
-      });
-    }
+  errors.push({)
+  field: 'content',
+  message: 'Content exceeds maximum length (50,000 characters)',
+  code: 'MAX_LENGTH',
+});
     // Security checks
     const scriptTags = (content.match(/<script/gi) || []).length;
     if (scriptTags > 0) {
-      errors.push({)
-        field: 'content',
-        message: 'Script tags are not allowed in content',
-        code: 'SECURITY_VIOLATION',
-      });
-    }
+  errors.push({)
+  field: 'content',
+  message: 'Script tags are not allowed in content',
+  code: 'SECURITY_VIOLATION',
+});
     return errors;
-  }
-  static validateTags(tags: string[]): ValidationError[] {
-    const errors: ValidationError[] = [];
-    if (tags.length === 0) {
-      errors.push({)
-        field: 'tags',
-        message: 'At least one tag is required',
-        code: 'REQUIRED',
-      });
-    }
+  static validateTags(tags: string): ValidationError {
+  const errors: ValidationError = [];
+  if (tags.length === 0) {
+  errors.push({)
+  field: 'tags',
+  message: 'At least one tag is required',
+  code: 'REQUIRED',
+});
     if (tags.length > 10) {
-      errors.push({)
-        field: 'tags',
-        message: 'Maximum 10 tags allowed',
-        code: 'MAX_COUNT',
-      });
-    }
+  errors.push({)
+  field: 'tags',
+  message: 'Maximum 10 tags allowed',
+  code: 'MAX_COUNT',
+});
     tags.forEach((tag, index) => {
       if (tag.length > 30) {
         errors.push({)
-          field: `tags[${index}]`,}
-          message: 'Each tag must be less than 30 characters',
-          code: 'MAX_LENGTH',
-        });
-      }
+  field: `tags[${index}]`}
+},
+  message: 'Each tag must be less than 30 characters',
+          code: 'MAX_LENGTH';
+  });
       if (!/^[a-zA-Z0-9\-_\s]+$/.test(tag)) {
         errors.push({)
-          field: `tags[${index}]`,}
-          message: 'Tags can only contain letters, numbers, hyphens, and underscores',
-          code: 'INVALID_FORMAT',
-        });
-      }
+  field: `tags[${index}]`}
+},
+  message: 'Tags can only contain letters, numbers, hyphens, and underscores',
+          code: 'INVALID_FORMAT';
+  });
     });
     return errors;
-  }
-  static validateFormData(formData: ContributionFormData): ValidationError[] {
-    const errors: ValidationError[] = [];
-    errors.push(...this.validateTitle(formData.title));
-    errors.push(...this.validateDescription(formData.description));
-    errors.push(...this.validateContent(formData.content));
-    errors.push(...this.validateTags(formData.tags));
-    // Validate estimated time
-    if (formData.estimatedTime <= 0 || formData.estimatedTime > 600) {
-      errors.push({)
-        field: 'estimatedTime',
-        message: 'Estimated time must be between 1 and 600 minutes',
-        code: 'INVALID_RANGE',
-      });
-    }
+  static validateFormData(formData: ContributionFormData): ValidationError {
+  const errors: ValidationError = [];
+  errors.push(...this.validateTitle(formData.title));
+  errors.push(...this.validateDescription(formData.description));
+  errors.push(...this.validateContent(formData.content));
+  errors.push(...this.validateTags(formData.tags));
+  // Validate estimated time
+  if (formData.estimatedTime <= 0 || formData.estimatedTime > 600) {
+  errors.push({)
+  field: 'estimatedTime',
+  message: 'Estimated time must be between 1 and 600 minutes',
+  code: 'INVALID_RANGE',
+});
     // Validate category
     if (!formData.category || formData.category.trim().length === 0) {
-      errors.push({)
-        field: 'category',
-        message: 'Category is required',
-        code: 'REQUIRED',
-      });
-    }
+  errors.push({)
+  field: 'category',
+  message: 'Category is required',
+  code: 'REQUIRED',
+});
     return errors;
-  }
-}
 
 // Error boundary component for robust error handling
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
   errorInfo?: unknown;
-}
 
 export class ContributionErrorBoundary extends React.Component<
   { children: React.ReactNode; onError?: (error: Error) => void },
@@ -246,20 +223,17 @@ export class ContributionErrorBoundary extends React.Component<
   constructor(props: Record<string, unknown>) {
     super(props);
     this.state = { hasError: false };
-  }
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
-  }
   componentDidCatch(error: Error, errorInfo: unknown) {
     this.setState({ errorInfo });
     // Log error for monitoring
     console.error('ContributionErrorBoundary caught an error:', error, errorInfo);
     // Call parent error handler if provided
     this.props.onError?.(error);
-  }
   render() {
     if (this.state.hasError) {
-      return ();
+      return;
         <Card className="error-boundary">
           <CardContent className="p-6 text-center">
             <AlertTriangle className="h-12 w-12 text-red-600 mx-auto mb-4" />
@@ -279,12 +253,10 @@ export class ContributionErrorBoundary extends React.Component<
           </CardContent>
         </Card>
       );
-    }
     return this.props.children;
-  }
-}
 
 // Main contribution form component
+
 export interface ContributionFormProps {
   initialData?: Partial<ContributionFormData>;
   onSubmit: (data: ContributionFormData) => Promise<{ success: boolean; error?: ContributionError }>;
@@ -292,7 +264,6 @@ export interface ContributionFormProps {
   isLoading?: boolean;
   className?: string;
 }
-
 export const ContributionForm: React.FC<ContributionFormProps> = ({)
   initialData = {},
   onSubmit,
@@ -302,19 +273,19 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
 }) => {
   // Form state with comprehensive initialization
   const [formData, setFormData] = useState<ContributionFormData>({)
-    title: initialData.title || '',
-    description: initialData.description || '',
-    content: initialData.content || '',
-    category: initialData.category || '',
-    tags: initialData.tags || [],
-    difficulty: initialData.difficulty || 'beginner',
-    estimatedTime: initialData.estimatedTime || 60,
-    prerequisites: initialData.prerequisites || [],
-    resources: initialData.resources || [],
-    license: initialData.license || 'cc-by',
-  });
+  title: initialData.title || '',
+  description: initialData.description || '',
+  content: initialData.content || '',
+  category: initialData.category || '',
+  tags: initialData.tags || [],
+  difficulty: initialData.difficulty || 'beginner',
+  estimatedTime: initialData.estimatedTime || 60,
+  prerequisites: initialData.prerequisites || [],
+  resources: initialData.resources || [],
+  license: initialData.license || 'cc-by',
+});
   // Error state management
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<ValidationError>([]);
   const [submitError, setSubmitError] = useState<ContributionError | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
@@ -330,60 +301,53 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
     if (onSaveDraft && !isSubmitting && !isDraftSaving) {
       if (autoSaveTimer) {
         clearTimeout(autoSaveTimer);
-      }
       const timer = setTimeout(async () => {
         try {
           setIsDraftSaving(true);
           await onSaveDraft(formData);
           setLastSaved(new Date());
         } catch (error) {
-          console.error('Auto-save failed:', error);
-        } finally {
+  console.error('Auto-save failed:', error);
+} finally {
           setIsDraftSaving(false);
-        }
       }, 30000);
       setAutoSaveTimer(timer);
-    }
     return () => {
       if (autoSaveTimer) {
         clearTimeout(autoSaveTimer);
-      }
     };
   }, [formData, onSaveDraft, isSubmitting, isDraftSaving]);
   // Form update handlers with error handling
   const updateFormData = useCallback((field: keyof ContributionFormData, value: Error) => {
-    try {
-      setFormData(prev => ({)
-        ...prev,
-        [field]: value
-      }));
+  try {
+  setFormData(prev => ({)
+  ...prev,
+  [field]: value,
+}));
       // Clear specific field errors when user makes changes
       setErrors(prev => prev.filter(error => error.field !== field));
       setSubmitError(null);
     } catch (error) {
-      console.error('Error updating form data:', error);
-    }
-  }, []);
+  console.error('Error updating form data:', error);
+}, []);
   // Tag management with validation
   const addTag = useCallback((tag: string) => {
-    const trimmedTag = tag.trim().toLowerCase();
-    if (!trimmedTag) return;
-    if (formData.tags.includes(trimmedTag)) {
-      setErrors(prev => [...prev, {)
-        field: 'tags',
-        message: 'Tag already exists',
-        code: 'DUPLICATE',
-      }]);
+  const trimmedTag = tag.trim().toLowerCase();
+  if (!trimmedTag) return;
+  if (formData.tags.includes(trimmedTag)) {
+  setErrors(prev => [...prev, {)
+  field: 'tags',
+  message: 'Tag already exists',
+  code: 'DUPLICATE',
+}]);
       return;
-    }
     if (formData.tags.length >= 10) {
-      setErrors(prev => [...prev, {)
-        field: 'tags',
-        message: 'Maximum 10 tags allowed',
-        code: 'MAX_COUNT',
-      }]);
+  setErrors(prev => [...prev, {)
+  field: 'tags',
+  message: 'Maximum 10 tags allowed',
+  code: 'MAX_COUNT',
+}]);
       return;
-    }
     updateFormData('tags', [...formData.tags, trimmedTag]);
   }, [formData.tags, updateFormData]);
   const removeTag = useCallback((index: number) => {
@@ -401,22 +365,19 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
       if (validationErrors.length > 0) {
         setErrors(validationErrors);
         return;
-      }
       // Submit to parent component
       const result = await onSubmit(formData);
       if (!result.success && result.error) {
         setSubmitError(result.error);
-      }
     } catch (error) {
-      console.error('Submit error:', error);
-      setSubmitError({)
-        type: 'unknown',
-        message: 'An unexpected error occurred while submitting',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      });
+  console.error('Submit error:', error);
+  setSubmitError({)
+  type: 'unknown',
+  message: 'An unexpected error occurred while submitting',
+  details: error instanceof Error ? error.message : 'Unknown error',
+});
     } finally {
       setIsSubmitting(false);
-    }
   }, [formData, onSubmit]);
   // Save draft handler
   const handleSaveDraft = useCallback(async () => {
@@ -428,17 +389,15 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
         setLastSaved(new Date());
       } else if (result.error) {
         setSubmitError(result.error);
-      }
     } catch (error) {
-      console.error('Save draft error:', error);
-      setSubmitError({)
-        type: 'unknown',
-        message: 'Failed to save draft',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      });
+  console.error('Save draft error:', error);
+  setSubmitError({)
+  type: 'unknown',
+  message: 'Failed to save draft',
+  details: error instanceof Error ? error.message : 'Unknown error',
+});
     } finally {
       setIsDraftSaving(false);
-    }
   }, [formData, onSaveDraft]);
   // Error display component
   const ErrorDisplay = ({ error }: { error: ContributionError }) => ()
@@ -464,14 +423,14 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
   const renderFieldError = (fieldName: string) => {
     const error = getFieldError(fieldName);
     if (!error) return null;
-    return ();
+    return;
       <div className="field-error text-red-600 text-sm mt-1 flex items-center">
         <AlertTriangle className="h-4 w-4 mr-1" />
         {error.message}
       </div>
     );
   };
-  return ();
+  return;
     <ContributionErrorBoundary>
       <form onSubmit={handleSubmit} className={`contribution-form ${className}`}>}
         {/* Global error display */}
@@ -528,8 +487,8 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
                   value={formData.description}
                   onChange={(e) => updateFormData('description', e.target.value)}
                   className={`w-full p-3 border rounded-lg resize-vertical min-h-[100px] ${
-                    getFieldError('description') ? 'border-red-500' : 'border-gray-300'
-                  }`}
+  getFieldError('description') ? 'border-red-500' : 'border-gray-300',
+}`}
                   placeholder="Provide a detailed description of your contribution"
                   maxLength={2000}
                   required
@@ -550,8 +509,8 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
                     value={formData.category}
                     onChange={(e) => updateFormData('category', e.target.value)}
                     className={`w-full p-3 border rounded-lg ${
-                      getFieldError('category') ? 'border-red-500' : 'border-gray-300'
-                    }`}
+  getFieldError('category') ? 'border-red-500' : 'border-gray-300',
+}`}
                     required
                   >
                     <option value="">Select a category</option>
@@ -615,8 +574,8 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
                   value={formData.content}
                   onChange={(e) => updateFormData('content', e.target.value)}
                   className={`w-full p-3 border rounded-lg resize-vertical min-h-[300px] ${
-                    getFieldError('content') ? 'border-red-500' : 'border-gray-300'
-                  }`}
+  getFieldError('content') ? 'border-red-500' : 'border-gray-300',
+}`}
                   placeholder="Enter the main content of your contribution. Use markdown formatting for better presentation."
                   maxLength={50000}
                   required
@@ -646,7 +605,6 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
                         e.preventDefault();
                         addTag(e.currentTarget.value);
                         e.currentTarget.value = '';
-                      }
                     }}
                     className={getFieldError('tags') ? 'border-red-500' : ''}
                   />
@@ -756,8 +714,9 @@ export const ContributionForm: React.FC<ContributionFormProps> = ({)
 };
 
 // Contribution listing component
+
 export interface ContributionListProps {
-  contributions: ContributionItem[];
+  contributions: ContributionItem;
   onView?: (contribution: ContributionItem) => void;
   onEdit?: (contribution: ContributionItem) => void;
   onDelete?: (contribution: ContributionItem) => void;
@@ -767,7 +726,6 @@ export interface ContributionListProps {
   error?: ContributionError;
   className?: string;
 }
-
 export const ContributionList: React.FC<ContributionListProps> = ({)
   contributions,
   onView,
@@ -781,24 +739,22 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
 }) => {
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
   const handleAction = useCallback(async (;);
-    contributionId: string,
-    action: () => Promise<void> | void,
-  ) => {
-    try {
-      setLoadingActions(prev => new Set(prev).add(contributionId));
-      await action();
-    } catch (error) {
-      console.error('Action failed:', error);
-    } finally {
+  contributionId: string,
+  action: () => Promise<void> | void) => {,
+  try {
+  setLoadingActions(prev => new Set(prev).add(contributionId));
+  await action();
+} catch (error) {
+  console.error('Action failed:', error);
+} finally {
       setLoadingActions(prev => {)
-        const newSet = new Set(prev);
+  const newSet = new Set(prev);
         newSet.delete(contributionId);
         return newSet;
       });
-    }
   }, []);
   if (error) {
-    return ();
+    return;
       <div className="error-state p-6 text-center">
         <XCircle className="h-12 w-12 text-red-600 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -811,17 +767,15 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
         </Button>
       </div>
     );
-  }
   if (isLoading) {
-    return ();
+    return;
       <div className="loading-state p-6 text-center">
         <RefreshCw className="h-8 w-8 animate-spin text-blue-600 mx-auto mb-4" />
         <p className="text-gray-600">Loading contributions...</p>
       </div>
     );
-  }
   if (contributions.length === 0) {
-    return ();
+    return;
       <div className="empty-state p-6 text-center">
         <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -830,8 +784,7 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
         <p className="text-gray-600">Be the first to contribute to the community!</p>
       </div>
     );
-  }
-  return ();
+  return;
     <ContributionErrorBoundary>
       <div className={`contribution-list ${className}`}>}
         <div className="contributions-grid space-y-4">
@@ -878,7 +831,6 @@ export const ContributionList: React.FC<ContributionListProps> = ({)
                           contribution.status === 'approved' ? 'bg-blue-100 text-blue-800' :
                             contribution.status === 'rejected' ? 'bg-red-100 text-red-800' :
                               'bg-yellow-100 text-yellow-800'
-                      }
                     >
                       {contribution.status}
                     </Badge>

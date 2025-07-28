@@ -11,6 +11,7 @@
  */
 import React from 'react';
 import { StickyNote, StickyNoteColor, StickyNoteCategory } from '../../types/StickyNotes';
+
 interface StickyNoteToolbarProps {
     selectedNotes: StickyNote[];
     onColorChange: (color: StickyNoteColor) => void;
@@ -19,7 +20,7 @@ interface StickyNoteToolbarProps {
     onSettingsChange: (settings: unknown) => void;
     settings: unknown;
     className?: string;
-}
+
 export declare const StickyNoteToolbar: React.FC<StickyNoteToolbarProps>;
 export default StickyNoteToolbar;
 //# sourceMappingURL=StickyNoteToolbar.d.ts.map

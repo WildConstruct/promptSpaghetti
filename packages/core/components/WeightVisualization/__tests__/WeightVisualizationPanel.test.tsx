@@ -7,7 +7,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { WeightVisualizationPanel } from '../WeightVisualizationPanel';
 import { WeightControlOption } from '../../Inspector/WeightControlSlider';
-const mockOptions: WeightControlOption[] = [
+const mockOptions: WeightControlOption = [
   { id: '1', text: 'Option A', weight: 3 },
   { id: '2', text: 'Option B', weight: 2 },
   { id: '3', text: 'Option C', weight: 1 },
@@ -129,7 +129,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.queryByText('Distribution Statistics')).not.toBeInTheDocument();
   });
   it('calculates correct statistics', () => {
-    const balancedOptions: WeightControlOption[] = [
+    const balancedOptions: WeightControlOption = [
       { id: '1', text: 'A', weight: 2 },
       { id: '2', text: 'B', weight: 2 },
       { id: '3', text: 'C', weight: 2 },
@@ -145,7 +145,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Well Balanced/)).toBeInTheDocument();
   });
   it('identifies unbalanced distributions', () => {
-    const unbalancedOptions: WeightControlOption[] = [
+    const unbalancedOptions: WeightControlOption = [
       { id: '1', text: 'A', weight: 10 },
       { id: '2', text: 'B', weight: 1 },
       { id: '3', text: 'C', weight: 1 }
@@ -160,7 +160,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Unbalanced/)).toBeInTheDocument();
   });
   it('handles collapsible state', () => {
-    const mockOnCollapseChange = jest.fn<unknown[], unknown>();
+    const mockOnCollapseChange = jest.fn<unknown, unknown>();
     render();
       <WeightVisualizationPanel 
         options={mockOptions}
@@ -172,7 +172,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Weight Distribution/)).toBeInTheDocument();
   });
   it('handles option hover events', () => {
-    const mockOnHover = jest.fn<unknown[], unknown>();
+    const mockOnHover = jest.fn<unknown, unknown>();
     render();
       <WeightVisualizationPanel 
         options={mockOptions}
@@ -183,7 +183,7 @@ describe('WeightVisualizationPanel', () => {
     expect(screen.getByText(/Weight Distribution/)).toBeInTheDocument();
   });
   it('handles option click events', () => {
-    const mockOnClick = jest.fn<unknown[], unknown>();
+    const mockOnClick = jest.fn<unknown, unknown>();
     render();
       <WeightVisualizationPanel 
         options={mockOptions}
@@ -215,7 +215,7 @@ describe('WeightVisualizationPanel', () => {
 });
 describe('WeightVisualizationPanel Statistics', () => {
   it('calculates entropy correctly for balanced distribution', () => {
-    const balancedOptions: WeightControlOption[] = [
+    const balancedOptions: WeightControlOption = [
       { id: '1', text: 'A', weight: 1 },
       { id: '2', text: 'B', weight: 1 },
       { id: '3', text: 'C', weight: 1 },
@@ -232,7 +232,7 @@ describe('WeightVisualizationPanel Statistics', () => {
     expect(screen.getByText(/Well Balanced/)).toBeInTheDocument();
   });
   it('identifies dominant options correctly', () => {
-    const dominantOptions: WeightControlOption[] = [
+    const dominantOptions: WeightControlOption = [
       { id: '1', text: 'Dominant', weight: 8 },
       { id: '2', text: 'Minor', weight: 1 },
       { id: '3', text: 'Minor2', weight: 1 }

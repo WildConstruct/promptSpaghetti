@@ -76,5 +76,5 @@ export declare class OperationHistory {
     private createVariationUpdateInverse;
     private createVariationReorderInverse;
     private updateRedoFlags;
-}
+
 //# sourceMappingURL=OperationHistory.d.ts.map

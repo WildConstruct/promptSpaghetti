@@ -16,68 +16,66 @@ interface WorkflowStateIndicatorProps {
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-}
-const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {
+  const DEFAULT_STATE_CONFIGS: Record<WorkflowState, WorkflowStateConfig> = {,
   draft: {,
-    id: 'draft',
-    name: 'Draft',
-    description: 'Work in progress',
-    color: 'gray',
-    icon: 'FileText',
-    is_initial: true,
-    is_final: false,
-    required_permissions: [],
-  },
+  id: 'draft',
+  name: 'Draft',
+  description: 'Work in progress',
+  color: 'gray',
+  icon: 'FileText',
+  is_initial: true,
+  is_final: false,
+  required_permissions: [],
+},
   review: {,
-    id: 'review',
-    name: 'In Review',
-    description: 'Under review',
-    color: 'yellow',
-    icon: 'Eye',
-    is_initial: false,
-    is_final: false,
-    required_permissions: [],
-  },
+  id: 'review',
+  name: 'In Review',
+  description: 'Under review',
+  color: 'yellow',
+  icon: 'Eye',
+  is_initial: false,
+  is_final: false,
+  required_permissions: [],
+},
   approved: {,
-    id: 'approved',
-    name: 'Approved',
-    description: 'Approved for publication',
-    color: 'green',
-    icon: 'CheckCircle',
-    is_initial: false,
-    is_final: false,
-    required_permissions: [],
-  },
+  id: 'approved',
+  name: 'Approved',
+  description: 'Approved for publication',
+  color: 'green',
+  icon: 'CheckCircle',
+  is_initial: false,
+  is_final: false,
+  required_permissions: [],
+},
   published: {,
-    id: 'published',
-    name: 'Published',
-    description: 'Live and public',
-    color: 'blue',
-    icon: 'Globe',
-    is_initial: false,
-    is_final: true,
-    required_permissions: [],
-  },
+  id: 'published',
+  name: 'Published',
+  description: 'Live and public',
+  color: 'blue',
+  icon: 'Globe',
+  is_initial: false,
+  is_final: true,
+  required_permissions: [],
+},
   archived: {,
-    id: 'archived',
-    name: 'Archived',
-    description: 'No longer active',
-    color: 'gray',
-    icon: 'Archive',
-    is_initial: false,
-    is_final: true,
-    required_permissions: [],
-  },
+  id: 'archived',
+  name: 'Archived',
+  description: 'No longer active',
+  color: 'gray',
+  icon: 'Archive',
+  is_initial: false,
+  is_final: true,
+  required_permissions: [],
+},
   rejected: {,
-    id: 'rejected',
-    name: 'Rejected',
-    description: 'Rejected during review',
-    color: 'red',
-    icon: 'XCircle',
-    is_initial: false,
-    is_final: false,
-    required_permissions: [],
-  }
+  id: 'rejected',
+  name: 'Rejected',
+  description: 'Rejected during review',
+  color: 'red',
+  icon: 'XCircle',
+  is_initial: false,
+  is_final: false,
+  required_permissions: [],
 };
 const STATE_ICONS = {
   FileText,
@@ -91,85 +89,83 @@ const STATE_ICONS = {
 };
 const getStateColors = (color: string) => {
   switch (color) {
-    case 'gray':
-      return {
-        bg: 'bg-gray-100',
-        text: 'text-gray-800',
-        border: 'border-gray-300',
-        icon: 'text-gray-600',
-      };
+  case 'gray':,
+  return {
+  bg: 'bg-gray-100',
+  text: 'text-gray-800',
+  border: 'border-gray-300',
+  icon: 'text-gray-600',
+};
     case 'yellow':
       return {
-        bg: 'bg-yellow-100',
-        text: 'text-yellow-800',
-        border: 'border-yellow-300',
-        icon: 'text-yellow-600',
-      };
+  bg: 'bg-yellow-100',
+  text: 'text-yellow-800',
+  border: 'border-yellow-300',
+  icon: 'text-yellow-600',
+};
     case 'green':
       return {
-        bg: 'bg-green-100',
-        text: 'text-green-800',
-        border: 'border-green-300',
-        icon: 'text-green-600',
-      };
+  bg: 'bg-green-100',
+  text: 'text-green-800',
+  border: 'border-green-300',
+  icon: 'text-green-600',
+};
     case 'blue':
       return {
-        bg: 'bg-blue-100',
-        text: 'text-blue-800',
-        border: 'border-blue-300',
-        icon: 'text-blue-600',
-      };
+  bg: 'bg-blue-100',
+  text: 'text-blue-800',
+  border: 'border-blue-300',
+  icon: 'text-blue-600',
+};
     case 'red':
       return {
-        bg: 'bg-red-100',
-        text: 'text-red-800',
-        border: 'border-red-300',
-        icon: 'text-red-600',
-      };
+  bg: 'bg-red-100',
+  text: 'text-red-800',
+  border: 'border-red-300',
+  icon: 'text-red-600',
+};
     case 'purple':
       return {
-        bg: 'bg-purple-100',
-        text: 'text-purple-800',
-        border: 'border-purple-300',
-        icon: 'text-purple-600',
-      };
+  bg: 'bg-purple-100',
+  text: 'text-purple-800',
+  border: 'border-purple-300',
+  icon: 'text-purple-600',
+};
     case 'indigo':
       return {
-        bg: 'bg-indigo-100',
-        text: 'text-indigo-800',
-        border: 'border-indigo-300',
-        icon: 'text-indigo-600',
-      };
+  bg: 'bg-indigo-100',
+  text: 'text-indigo-800',
+  border: 'border-indigo-300',
+  icon: 'text-indigo-600',
+};
     default:
-      return {
-        bg: 'bg-gray-100',
-        text: 'text-gray-800',
-        border: 'border-gray-300',
-        icon: 'text-gray-600',
-      };
-  }
+      return {,
+  bg: 'bg-gray-100',
+  text: 'text-gray-800',
+  border: 'border-gray-300',
+  icon: 'text-gray-600',
+};
 };
 const getSizeClasses = (size: 'sm' | 'md' | 'lg') => {
   switch (size) {
-    case 'sm':
-      return {
-        container: 'px-2 py-1 text-xs',
-        icon: 'w-3 h-3',
-        gap: 'space-x-1',
-      };
+  case 'sm':,
+  return {
+  container: 'px-2 py-1 text-xs',
+  icon: 'w-3 h-3',
+  gap: 'space-x-1',
+};
     case 'lg':
       return {
-        container: 'px-4 py-2 text-base',
-        icon: 'w-5 h-5',
-        gap: 'space-x-3',
-      };
+  container: 'px-4 py-2 text-base',
+  icon: 'w-5 h-5',
+  gap: 'space-x-3',
+};
     default: // md,
       return {
-        container: 'px-3 py-1 text-sm',
-        icon: 'w-4 h-4',
-        gap: 'space-x-2',
-      };
-  }
+  container: 'px-3 py-1 text-sm',
+  icon: 'w-4 h-4',
+  gap: 'space-x-2',
+};
 };
 
 export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
@@ -185,7 +181,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
   // Get icon component
   const IconComponent = STATE_ICONS[config.icon as keyof typeof STATE_ICONS] || FileText;
   if (!showLabel) {
-    return ();
+    return;
       <div 
         className={`inline-flex items-center justify-center rounded-full border ${colors.bg} ${colors.border} ${sizes.container} ${className}`}
         title={`${config.name}${config.description ? ` - ${config.description}` : ''}`}
@@ -193,8 +189,7 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
         <IconComponent className={`${sizes.icon} ${colors.icon}`} />}
       </div>
     );
-  }
-  return ();
+  return;
     <div 
       className={`inline-flex items-center rounded-full border font-medium ${colors.bg} ${colors.text} ${colors.border} ${sizes.container} ${sizes.gap} ${className}`}
       title={config.description}
@@ -207,20 +202,19 @@ export const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps> = ({)
 
 // Workflow State Timeline Component
 interface WorkflowStateTimelineProps {
-  states: WorkflowStateConfig[];
+  states: WorkflowStateConfig;,
   currentState: WorkflowState;
-  completedStates?: WorkflowState[];
+  completedStates?: WorkflowState;
   className?: string;
-}
 
 export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
-  return ();
+  return;
     <div className={`flex items-center space-x-2 ${className}`}>}
       {states.map((state, index) => {
         const isLast = index === states.length - 1;
         const completed = isCompleted(state.id);
         const current = isCurrent(state.id);
-        return ();
+        return;
           <React.Fragment key={state.id}>
             <div className="flex flex-col items-center">
               <WorkflowStateIndicator
@@ -238,8 +232,8 @@ export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
               <div className="flex-1 mx-2">
                 <div 
                   className={`h-0.5 ${
-                    completed ? 'bg-green-400' : 'bg-gray-200'
-                  }`} 
+  completed ? 'bg-green-400' : 'bg-gray-200',
+}`} 
                 />
               </div>
             )}
@@ -253,13 +247,12 @@ export const isCurrent = (stateId: WorkflowState) => stateId === currentState;
 // Workflow State History Component
 interface WorkflowStateHistoryProps {
   history: Array<{,
-    state: WorkflowState;
-    stateConfig?: WorkflowStateConfig;
-    timestamp: string;
-    actor?: string;
-    comment?: string;
-  }>;
+  state: WorkflowState;
+  stateConfig?: WorkflowStateConfig;
+  timestamp: string;
+  actor?: string;
+  comment?: string;
+}>;
   className?: string;
-}
 
 export };

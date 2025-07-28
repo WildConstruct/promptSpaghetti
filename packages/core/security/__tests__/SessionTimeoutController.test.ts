@@ -17,8 +17,8 @@ import {
 describe('SessionTimeoutController', () => {
   let controller: SessionTimeoutController;
   beforeEach(() => {
-    controller = new SessionTimeoutController();
-  });
+  controller = new SessionTimeoutController();
+});
   afterEach(() => {
     controller.destroy();
   });
@@ -36,14 +36,14 @@ describe('SessionTimeoutController', () => {
       expect(state.gracePeriodActive).toBe(false);
     });
     test('should initialize session with custom configuration', () => {
-      const sessionId = 'session-custom';
-      const customConfig: Partial<TimeoutConfiguration> = {
-        policy: TimeoutPolicy.STRICT,
-        idleTimeout: 15 * 60 * 1000, // 15 minutes
-        maxExtensions: 1,
-        deviceTrustFactor: 0.8,
-        locationTrustFactor: 0.9,
-      };
+  const sessionId = 'session-custom';
+  const customConfig: Partial<TimeoutConfiguration> = {,
+  policy: TimeoutPolicy.STRICT,
+  idleTimeout: 15 * 60 * 1000, // 15 minutes,
+  maxExtensions: 1,
+  deviceTrustFactor: 0.8,
+  locationTrustFactor: 0.9,
+};
       const state = controller.initializeSession(sessionId, customConfig);
       expect(state.configuration.policy).toBe(TimeoutPolicy.STRICT);
       expect(state.configuration.idleTimeout).toBe(15 * 60 * 1000);
@@ -60,10 +60,10 @@ describe('SessionTimeoutController', () => {
       controller.initializeSession('session-event', {});
     });
     test('should calculate remaining time correctly', () => {
-      const sessionId = 'session-time';
-      const state = controller.initializeSession(sessionId, {)
-        idleTimeout: 20 * 60 * 1000 // 20 minutes,
-      });
+  const sessionId = 'session-time';
+  const state = controller.initializeSession(sessionId, {)
+  idleTimeout: 20 * 60 * 1000 // 20 minutes,
+});
       expect(state.remainingTime).toBe(20 * 60 * 1000);
       expect(state.currentTimeout.getTime()).toBeGreaterThan(Date.now());
     });
@@ -90,13 +90,13 @@ describe('SessionTimeoutController', () => {
       controller.initializeSession(sessionId, {});
       // Add activities with different intensities
       controller.recordActivity(sessionId, {)
-        type: 'mouse',
-        intensity: ActivityLevel.HIGH,
-      });
+  type: 'mouse',
+  intensity: ActivityLevel.HIGH,
+});
       controller.recordActivity(sessionId, {)
-        type: 'keyboard',
-        intensity: ActivityLevel.CRITICAL,
-      });
+  type: 'keyboard',
+  intensity: ActivityLevel.CRITICAL,
+});
       const state = controller.getSessionState(sessionId);
       expect(state?.activityScore).toBeGreaterThan(0);
       expect(state?.activityScore).toBeLessThanOrEqual(1);
@@ -111,9 +111,9 @@ describe('SessionTimeoutController', () => {
       const sessionId = 'session-activity-event';
       controller.initializeSession(sessionId, {});
       controller.recordActivity(sessionId, {)
-        type: 'api',
-        intensity: ActivityLevel.MEDIUM,
-      });
+  type: 'api',
+  intensity: ActivityLevel.MEDIUM,
+});
     });
     test('should ignore activity for inactive session', () => {
       const sessionId = 'session-inactive';
@@ -121,20 +121,20 @@ describe('SessionTimeoutController', () => {
       // Force timeout the session
       controller.forceTimeout(sessionId, TimeoutReason.MANUAL);
       controller.recordActivity(sessionId, {)
-        type: 'mouse',
-        intensity: ActivityLevel.HIGH,
-      });
+  type: 'mouse',
+  intensity: ActivityLevel.HIGH,
+});
       // Activity should not be recorded
       const state = controller.getSessionState(sessionId);
       expect(state?.recentActivities).toHaveLength(0);
     });
   });
   describe('Session Extension', () => {
-    test('should extend session manually', () => {
-      const sessionId = 'session-extend';
-      controller.initializeSession(sessionId, {)
-        extensionDuration: 10 * 60 * 1000 // 10 minutes,
-      });
+  test('should extend session manually', () => {
+  const sessionId = 'session-extend';
+  controller.initializeSession(sessionId, {)
+  extensionDuration: 10 * 60 * 1000 // 10 minutes,
+});
       const originalExtensions = 0;
       const success = controller.extendSession(sessionId, 'manual');
       expect(success).toBe(true);
@@ -143,10 +143,10 @@ describe('SessionTimeoutController', () => {
       expect(state?.remainingTime).toBe(10 * 60 * 1000);
     });
     test('should deny extension when max extensions reached', () => {
-      const sessionId = 'session-max-extend';
-      controller.initializeSession(sessionId, {)
-        maxExtensions: 1,
-      });
+  const sessionId = 'session-max-extend';
+  controller.initializeSession(sessionId, {)
+  maxExtensions: 1,
+});
       // Use up the allowed extension
       controller.extendSession(sessionId, 'manual');
       // Try to extend again
@@ -176,11 +176,11 @@ describe('SessionTimeoutController', () => {
     });
   });
   describe('Critical Operations', () => {
-    test('should start critical operation', () => {
-      const sessionId = 'session-critical';
-      controller.initializeSession(sessionId, {)
-        criticalOperationGrace: 5 * 60 * 1000 // 5 minutes,
-      });
+  test('should start critical operation', () => {
+  const sessionId = 'session-critical';
+  controller.initializeSession(sessionId, {)
+  criticalOperationGrace: 5 * 60 * 1000 // 5 minutes,
+});
       const success = controller.startCriticalOperation(sessionId, 'payment');
       expect(success).toBe(true);
       const state = controller.getSessionState(sessionId);
@@ -222,11 +222,11 @@ describe('SessionTimeoutController', () => {
     });
   });
   describe('Session Management', () => {
-    test('should get session state', () => {
-      const sessionId = 'session-get';
-      const originalState = controller.initializeSession(sessionId, {)
-        policy: TimeoutPolicy.ADAPTIVE,
-      });
+  test('should get session state', () => {
+  const sessionId = 'session-get';
+  const originalState = controller.initializeSession(sessionId, {)
+  policy: TimeoutPolicy.ADAPTIVE,
+});
       const retrievedState = controller.getSessionState(sessionId);
       expect(retrievedState?.sessionId).toBe(originalState.sessionId);
       expect(retrievedState?.configuration.policy).toBe(TimeoutPolicy.ADAPTIVE);
@@ -322,15 +322,15 @@ describe('SessionTimeoutController', () => {
         done();
       });
       // Emit the event directly to test the event handling
-      const mockEvent: TimeoutEvent = {
-        sessionId: 'session-warning',
-        eventType: 'warning',
-        timestamp: new Date(),
-        remainingTime: 5 * 60 * 1000,
-        reason: TimeoutReason.IDLE,
-        userNotified: true,
-        actionRequired: true,
-      };
+      const mockEvent: TimeoutEvent = {,
+  sessionId: 'session-warning',
+  eventType: 'warning',
+  timestamp: new Date(),
+  remainingTime: 5 * 60 * 1000,
+  reason: TimeoutReason.IDLE,
+  userNotified: true,
+  actionRequired: true,
+};
       controller.emit('timeoutWarning', mockEvent);
     });
     test('should emit session timeout event', (done) => {
@@ -341,8 +341,8 @@ describe('SessionTimeoutController', () => {
         done();
       });
       // Emit the event directly to test the event handling
-      const mockEvent: TimeoutEvent = {
-        sessionId: 'session-timeout-event',
+      const mockEvent: TimeoutEvent = {,
+  sessionId: 'session-timeout-event',
         eventType: 'timeout',
         timestamp: new Date(),
         remainingTime: 0,
@@ -361,7 +361,7 @@ describe('SessionTimeoutController', () => {
       });
       // Emit the event directly to test the event handling
       controller.emit('gracePeriodActivated', {)
-        sessionId: 'session-grace',
+  sessionId: 'session-grace',
         duration: 2 * 60 * 1000,
         state: {} as SessionTimeoutState
       });
@@ -386,36 +386,34 @@ describe('SessionTimeoutController', () => {
       // Create many sessions
       for (let i = 0; i < 10; i++) {
         controller.initializeSession(`session-bulk-${i}`, {});}
-      }
       expect(controller.getActiveSessions()).toHaveLength(10);
       // Force timeout all sessions
       for (let i = 0; i < 10; i++) {
         controller.forceTimeout(`session-bulk-${i}`);}
-      }
       expect(controller.getActiveSessions()).toHaveLength(0);
     });
   });
   describe('Edge Cases and Error Handling', () => {
-    test('should handle operations on non-existent session', () => {
-      const nonExistentId = 'non-existent-session';
-      expect(controller.getSessionState(nonExistentId)).toBeNull();
-      expect(controller.extendSession(nonExistentId)).toBe(false);
-      expect(controller.forceTimeout(nonExistentId)).toBe(false);
-      expect(controller.suspendTimeout(nonExistentId, 1000)).toBe(false);
-      expect(controller.startCriticalOperation(nonExistentId, 'test')).toBe(false);
-      // Should not throw error
-      controller.recordActivity(nonExistentId, {)
-        type: 'mouse',
-        intensity: ActivityLevel.LOW,
-      });
+  test('should handle operations on non-existent session', () => {
+  const nonExistentId = 'non-existent-session';
+  expect(controller.getSessionState(nonExistentId)).toBeNull();
+  expect(controller.extendSession(nonExistentId)).toBe(false);
+  expect(controller.forceTimeout(nonExistentId)).toBe(false);
+  expect(controller.suspendTimeout(nonExistentId, 1000)).toBe(false);
+  expect(controller.startCriticalOperation(nonExistentId, 'test')).toBe(false);
+  // Should not throw error
+  controller.recordActivity(nonExistentId, {)
+  type: 'mouse',
+  intensity: ActivityLevel.LOW,
+});
       controller.endCriticalOperation(nonExistentId);
     });
     test('should handle zero or negative timeout values', () => {
-      const sessionId = 'session-zero-timeout';
-      const state = controller.initializeSession(sessionId, {)
-        idleTimeout: 0,
-        absoluteTimeout: -1000,
-      });
+  const sessionId = 'session-zero-timeout';
+  const state = controller.initializeSession(sessionId, {)
+  idleTimeout: 0,
+  absoluteTimeout: -1000,
+});
       // Should use provided values (even if zero/negative)
       expect(state.configuration.idleTimeout).toBe(0);
       expect(state.isActive).toBe(true);
@@ -426,11 +424,10 @@ describe('SessionTimeoutController', () => {
       // Add many activities
       for (let i = 0; i < 20; i++) {
         controller.recordActivity(sessionId, {)
-          type: 'api',
+  type: 'api',
           intensity: ActivityLevel.CRITICAL,
           metadata: { requestId: i }
         });
-      }
       const state = controller.getSessionState(sessionId);
       expect(state?.recentActivities.length).toBeGreaterThan(0);
       expect(state?.activityScore).toBeLessThanOrEqual(1);

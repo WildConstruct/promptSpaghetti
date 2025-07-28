@@ -14,16 +14,16 @@ describe('Conditional Node', () => {
   let node: ConditionalNode;
   let context: unknown;
   beforeEach(() => {
-    const branches: ConditionalBranch[] = [
+    const branches: ConditionalBranch = [
       { condition: 'score > 90', output: 'excellent', label: 'High Score' },
       { condition: 'score > 70', output: 'good', label: 'Medium Score' },
       { condition: 'score > 50', output: 'average', label: 'Low Score' }
     ];
     node = new ConditionalNode('test-conditional', branches, 'poor');
     context = AdvancedExecutionUtils.enhanceContext({)
-      variables: { score: 85 },
-      seed: 12345,
-    });
+  variables: { score: 85 },
+      seed: 12345;
+  });
   });
   describe('Basic Functionality', () => {
     test('should execute and return matching condition result', () => {
@@ -53,7 +53,7 @@ describe('Conditional Node', () => {
   });
   describe('Expression Evaluation', () => {
     test('should evaluate numeric comparisons', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'value >= 100', output: 'high' },
         { condition: 'value >= 50', output: 'medium' },
         { condition: 'value >= 0', output: 'low' }
@@ -73,7 +73,7 @@ describe('Conditional Node', () => {
       expect(numericNode.run(context)).toBe('negative');
     });
     test('should evaluate string comparisons', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'status === "active"', output: 'running' },
         { condition: 'status === "inactive"', output: 'stopped' },
         { condition: 'status === "pending"', output: 'waiting' }
@@ -87,7 +87,7 @@ describe('Conditional Node', () => {
       expect(stringNode.run(context)).toBe('unknown');
     });
     test('should evaluate boolean expressions', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'isActive && isValid', output: 'ready' },
         { condition: 'isActive || isValid', output: 'partial' },
         { condition: '!isActive', output: 'inactive' }
@@ -104,7 +104,7 @@ describe('Conditional Node', () => {
       expect(booleanNode.run(context)).toBe('inactive');
     });
     test('should handle undefined variables gracefully', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'undefinedVar > 10', output: 'never' }
       ];
       const undefinedNode = new ConditionalNode('undefined-test', branches, 'default');
@@ -112,7 +112,7 @@ describe('Conditional Node', () => {
       expect(result).toBe('default'); // Should not throw in non-strict mode
     });
     test('should throw on undefined variables in strict mode', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'undefinedVar > 10', output: 'never' }
       ];
       const strictNode = new ConditionalNode('strict', branches, 'default', { strictMode: true });
@@ -121,7 +121,7 @@ describe('Conditional Node', () => {
   });
   describe('Utility Functions', () => {
     test('should support hasVariable function', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'hasVariable("score")', output: 'has-score' },
         { condition: 'hasVariable("missing")', output: 'has-missing' }
       ];
@@ -130,7 +130,7 @@ describe('Conditional Node', () => {
       expect(result).toBe('has-score');
     });
     test('should support getVariable function with defaults', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'getVariable("missing", 30) > 80', output: 'default-high' },
         { condition: 'getVariable("score", 0) > 80', output: 'score-high' }
       ];
@@ -139,7 +139,7 @@ describe('Conditional Node', () => {
       expect(result).toBe('score-high'); // score 85 > 80, missing=30 so 30 > 80 is false
     });
     test('should support string utility functions', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'startsWith(name, "Mr")', output: 'male-title' },
         { condition: 'endsWith(name, "Jr")', output: 'junior' },
         { condition: 'includes(name, "Smith")', output: 'smith-family' }
@@ -156,7 +156,7 @@ describe('Conditional Node', () => {
       expect(stringUtilNode.run(context)).toBe('smith-family');
     });
     test('should support array utility functions', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'length(items) > 5', output: 'many-items' },
         { condition: 'includes(items, "apple")', output: 'has-apple' },
         { condition: 'isEmpty(items)', output: 'no-items' }
@@ -173,7 +173,7 @@ describe('Conditional Node', () => {
       expect(arrayUtilNode.run(context)).toBe('no-items');
     });
     test('should support pattern matching', () => {
-      const branches: ConditionalBranch[] = [
+      const branches: ConditionalBranch = [
         { condition: 'matches(email, ".*@gmail\\.com$")', output: 'gmail' },
         { condition: 'matches(email, ".*@.*\\.edu$")', output: 'education' }
       ];
@@ -187,14 +187,13 @@ describe('Conditional Node', () => {
     });
   });
   describe('Custom Functions', () => {
-    test('should support custom functions in configuration', () => {
-      const customConfig: ConditionalConfig = {
-        customFunctions: {,
-          isEven: (n: number) => n % 2 === 0,
-          capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
-        }
-      };
-      const branches: ConditionalBranch[] = [
+  test('should support custom functions in configuration', () => {
+  const customConfig: ConditionalConfig = {,
+  customFunctions: {,
+  isEven: (n: number) => n % 2 === 0,
+  capitalize: (str: string) => str.charAt(0).toUpperCase() + str.slice(1),
+};
+      const branches: ConditionalBranch = [
         { condition: 'isEven(number)', output: 'even' },
         { condition: '!isEven(number)', output: 'odd' }
       ];
@@ -205,14 +204,13 @@ describe('Conditional Node', () => {
       expect(customNode.run(context)).toBe('odd');
     });
     test('should support custom functions with multiple parameters', () => {
-      const customConfig: ConditionalConfig = {
-        customFunctions: {,
-          between: (value: number, min: number, max: number) => value >= min && value <= max,
-          distance: (x1: number, y1: number, x2: number, y2: number) => 
-            Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-        }
-      };
-      const branches: ConditionalBranch[] = [
+  const customConfig: ConditionalConfig = {,
+  customFunctions: {,
+  between: (value: number, min: number, max: number) => value >= min && value <= max,
+  distance: (x1: number, y1: number, x2: number, y2: number) =>,
+  Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+};
+      const branches: ConditionalBranch = [
         { condition: 'between(score, 80, 100)', output: 'A-grade' },
         { condition: 'between(score, 70, 79)', output: 'B-grade' },
         { condition: 'distance(x, y, 0, 0) < 5', output: 'near-origin' }
@@ -239,7 +237,7 @@ describe('Conditional Node', () => {
       expect(validation.warnings).toContain('No conditional branches configured - will always return default output');
     });
     test('should validate empty condition expressions', () => {
-      const invalidBranches: ConditionalBranch[] = [
+      const invalidBranches: ConditionalBranch = [
         { condition: '', output: 'invalid' },
         { condition: '   ', output: 'also-invalid' }
       ];
@@ -249,7 +247,7 @@ describe('Conditional Node', () => {
       expect(validation.errors.some(e => e.includes('empty condition'))).toBe(true);
     });
     test('should detect dangerous expressions', () => {
-      const dangerousBranches: ConditionalBranch[] = [
+      const dangerousBranches: ConditionalBranch = [
         { condition: 'eval("malicious code")', output: 'danger' },
         { condition: 'Function("return process")()', output: 'also-danger' }
       ];
@@ -259,7 +257,7 @@ describe('Conditional Node', () => {
       expect(validation.errors.some(e => e.includes('Dangerous expression detected'))).toBe(true);
     });
     test('should warn about undefined outputs', () => {
-      const undefinedBranches: ConditionalBranch[] = [
+      const undefinedBranches: ConditionalBranch = [
         { condition: 'true', output: undefined as any }
       ];
       const undefinedNode = new ConditionalNode('undefined-output', undefinedBranches, 'default');
@@ -268,7 +266,7 @@ describe('Conditional Node', () => {
       expect(validation.warnings.some(w => w.includes('undefined output'))).toBe(true);
     });
     test('should warn about equality operators', () => {
-      const equalityBranches: ConditionalBranch[] = [
+      const equalityBranches: ConditionalBranch = [
         { condition: 'value == 5', output: 'loose-equality' }
       ];
       const equalityNode = new ConditionalNode('equality', equalityBranches, 'default');
@@ -279,28 +277,28 @@ describe('Conditional Node', () => {
   });
   describe('Security', () => {
     test('should block dangerous eval expressions', () => {
-      const dangerousBranches: ConditionalBranch[] = [
+      const dangerousBranches: ConditionalBranch = [
         { condition: 'eval("alert(1)")', output: 'evil' }
       ];
       const dangerousNode = new ConditionalNode('evil', dangerousBranches, 'safe');
       expect(() => dangerousNode.run(context)).toThrow('Dangerous pattern detected');
     });
     test('should block constructor access', () => {
-      const constructorBranches: ConditionalBranch[] = [
+      const constructorBranches: ConditionalBranch = [
         { condition: 'constructor.constructor("return process")()', output: 'evil' }
       ];
       const constructorNode = new ConditionalNode('constructor-evil', constructorBranches, 'safe');
       expect(() => constructorNode.run(context)).toThrow('Dangerous pattern detected');
     });
     test('should block prototype pollution attempts', () => {
-      const prototypeBranches: ConditionalBranch[] = [
+      const prototypeBranches: ConditionalBranch = [
         { condition: '__proto__.polluted = true', output: 'evil' }
       ];
       const prototypeNode = new ConditionalNode('prototype-evil', prototypeBranches, 'safe');
       expect(() => prototypeNode.run(context)).toThrow('Dangerous pattern detected');
     });
     test('should block global access attempts', () => {
-      const globalBranches: ConditionalBranch[] = [
+      const globalBranches: ConditionalBranch = [
         { condition: 'global.process.exit(1)', output: 'evil' },
         { condition: 'window.location = "evil"', output: 'also-evil' }
       ];
@@ -319,10 +317,10 @@ describe('Conditional Node', () => {
       expect(serialized.metadata?.version).toBe('1.0.0');
     });
     test('should include conditional config in serialization', () => {
-      const customConfig: ConditionalConfig = {
-        allowVariableAccess: false,
-        strictMode: true,
-      };
+  const customConfig: ConditionalConfig = {,
+  allowVariableAccess: false,
+  strictMode: true,
+};
       const configNode = new ConditionalNode('config', [], 'default', customConfig);
       const serialized = configNode.serialize();
       expect(serialized.data.conditionalConfig).toEqual(expect.objectContaining(customConfig));
@@ -331,22 +329,22 @@ describe('Conditional Node', () => {
   describe('Performance and Tracking', () => {
     test('should track performance metrics', () => {
       const freshContext = AdvancedExecutionUtils.enhanceContext({)
-        variables: { score: 85 },
-        seed: 12345,
-      });
+  variables: { score: 85 },
+        seed: 12345;
+  });
       node.run(freshContext);
       const metricKey = 'test-conditional-conditional-evaluation_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
       expect(freshContext.executionMeta.nodeExecutionOrder).toContain('test-conditional');
     });
     test('should handle complex expressions efficiently', () => {
-      const complexBranches: ConditionalBranch[] = [];
+      const complexBranches: ConditionalBranch = [];
       for (let i = 0; i < 50; i++) {
         complexBranches.push({)
-          condition: `value === ${i}`,}
-          output: `result-${i}`}
+  condition: `value === ${i}`}
+},
+  output: `result-${i}`}
         });
-      }
       const complexNode = new ConditionalNode('complex', complexBranches, 'no-match');
       const startTime = performance.now();
       context.variables.value = 25;
@@ -358,7 +356,7 @@ describe('Conditional Node', () => {
   });
   describe('Factory Functions', () => {
     test('should create node via factory function', () => {
-      const branches: ConditionalBranch[] = [{ condition: 'true', output: 'factory' }];
+      const branches: ConditionalBranch = [{ condition: 'true', output: 'factory' }];
       const factoryNode = createConditionalNode('factory-test', branches, 'default');
       expect(factoryNode).toBeInstanceOf(ConditionalNode);
       expect(factoryNode.id).toBe('factory-test');
@@ -373,7 +371,7 @@ describe('Conditional Node', () => {
       expect(ConditionPresets.and('a > 5', 'b < 10')).toBe('(a > 5) && (b < 10)');
     });
     test('should work with preset conditions', () => {
-      const presetBranches: ConditionalBranch[] = [
+      const presetBranches: ConditionalBranch = [
         { condition: ConditionPresets.greaterThan('score', 90), output: 'excellent' },
         { condition: ConditionPresets.hasVariable('bonus'), output: 'has-bonus' },
         { condition: ConditionPresets.equals('status', 'vip'), output: 'vip-user' }

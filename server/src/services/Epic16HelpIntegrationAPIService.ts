@@ -16,6 +16,7 @@ import { EventEmitter } from 'events';
 // API Service Types
 // =============================================================================
 
+}
 export interface HelpSessionAPIRequest {
   userId: string;
   sessionType: 'onboarding' | 'feature-discovery' | 'troubleshooting' | 'purchase-assistance' | 'template-creation' | 'marketplace-navigation';
@@ -26,9 +27,11 @@ export interface HelpSessionAPIRequest {
     userRole: 'buyer' | 'seller' | 'admin';
     graphContext?: unknown;
     marketplaceContext?: unknown;
+}
   };
 }
 
+}
 export interface HelpContentAPIResponse {
   success: boolean;
   content: HelpContentItem[];
@@ -38,9 +41,11 @@ export interface HelpContentAPIResponse {
     userLevel: string;
     contextualRelevance: number;
     estimatedReadTime: number;
+}
   };
 }
 
+}
 export interface HelpContentItem {
   id: string;
   type: string;
@@ -55,9 +60,11 @@ export interface HelpContentItem {
     viewRequired: boolean;
     completionTracking: boolean;
     feedbackEnabled: boolean;
+}
   };
 }
 
+}
 export interface TransitionAPIRequest {
   userId: string;
   fromSystem: 'graph-editor' | 'marketplace';
@@ -66,7 +73,9 @@ export interface TransitionAPIRequest {
   currentSessionId?: string;
   transitionData?: Record<string, any>;
 }
+}
 
+}
 export interface EscalationAPIRequest {
   sessionId: string;
   userId: string;
@@ -78,6 +87,7 @@ export interface EscalationAPIRequest {
     userActions?: string[];
     systemState?: Record<string, any>;
     attachments?: string[];
+}
   };
 }
 
@@ -111,6 +121,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   // =============================================================================
 
   async getContextualHelp(request: HelpSessionAPIRequest): Promise<HelpContentAPIResponse> {
+
     try {
       const startTime = Date.now();
 
@@ -168,6 +179,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     continuousHelp: boolean;
     bridgeContent?: HelpContentItem[];
   }> {
+
     try {
       // 1. Validate transition request
       if (!this.isValidTransition(request.fromSystem, request.toSystem)) {
@@ -230,6 +242,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
     expectedResponse: string;
     supportChannels: string[];
   }> {
+
     try {
       // 1. Validate escalation request
       const session = this.activeSessions.get(request.sessionId);
@@ -333,6 +346,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
       skippedContent?: string[];
     }
   ): Promise<{ success: boolean; session?: unknown }> {
+
     try {
       const session = this.activeSessions.get(sessionId);
       if (!session) {
@@ -393,6 +407,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   // =============================================================================
 
   private async getUserProfile(userId: string): Promise<unknown> {
+
     // Implementation would fetch user profile from database
     return {
       id: userId,
@@ -401,7 +416,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
         showFilmTerminology: true,
         autoTriggerHelp: true,
         preferredComplexity: 'detailed'
-      },
+  }
       progress: {
         nodesCreated: 0,
         connectionsBuilt: 0,
@@ -443,6 +458,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   private async fetchHelpContent(request: HelpSessionAPIRequest, _____analysis: unknown): Promise<HelpContentItem[]> {
+
     // Mock implementation - would integrate with actual help content system
     const mockContent: HelpContentItem[] = [
       {
@@ -465,6 +481,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   private async createHelpSession(request: HelpSessionAPIRequest, content: HelpContentItem[]): Promise<string> {
+
     const sessionId = `help_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const session = {
@@ -495,6 +512,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   private async generateBridgeContent(request: TransitionAPIRequest): Promise<HelpContentItem[]> {
+
     // Generate contextual bridge content based on transition
     const bridgeContent: HelpContentItem = {
       id: `bridge_${request.fromSystem}_to_${request.toSystem}`,
@@ -515,6 +533,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   private async recordSystemTransition(request: TransitionAPIRequest): Promise<string> {
+
     const transitionId = `trans_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
     
     // Record in database
@@ -528,7 +547,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
           preserve_help,
           transition_data,
           created_at
-        )
+
          VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
         [transitionId, request.userId, request.fromSystem, request.toSystem, request.preserveHelp, JSON.stringify(request.transitionData)]
       );
@@ -642,6 +661,7 @@ export class Epic16HelpIntegrationAPIService extends EventEmitter {
   }
 
   private async flushAnalytics(): Promise<void> {
+
     if (this.analyticsBuffer.length === 0) return;
 
     try {

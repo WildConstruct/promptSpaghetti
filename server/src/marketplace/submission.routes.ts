@@ -49,7 +49,7 @@ export async function submissionRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -94,9 +94,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -142,9 +142,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -179,7 +179,7 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -206,7 +206,7 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         properties: {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -248,7 +248,7 @@ export async function submissionRoutes(fastify: FastifyInstance) {
           status: { type: 'string', enum: ['submitted', 'under_review', 'changes_requested'] },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -293,9 +293,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         required: ['decision', 'score', 'comments', 'detailed_feedback'],
@@ -354,9 +354,9 @@ export async function submissionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         required: ['file_type', 'filename', 'file_size', 'mime_type'],

@@ -9,6 +9,7 @@ import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import { WebSocketStreamingServer } from './WebSocketStreaming';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
+
 interface DashboardIntegrationConfig {
     enableLegacySupport: boolean;
     migrationMode: 'gradual' | 'immediate' | 'parallel';
@@ -16,7 +17,8 @@ interface DashboardIntegrationConfig {
     cacheTTL: number;
     webhookEndpoints: string[];
     alertingEnabled: boolean;
-}
+
+
 interface LegacyAnalyticsSystem {
     name: string;
     routePath: string;
@@ -25,7 +27,8 @@ interface LegacyAnalyticsSystem {
     lastSync: number;
     eventCount: number;
     healthStatus: 'healthy' | 'degraded' | 'failing';
-}
+
+
 interface WidgetPerformanceMetrics {
     widgetId: string;
     widgetType: string;
@@ -34,7 +37,8 @@ interface WidgetPerformanceMetrics {
     cacheHitRate: number;
     queryCount: number;
     lastUpdate: number;
-}
+
+
 interface IntegrationStatus {
     totalSystems: number;
     integratedSystems: number;
@@ -43,7 +47,8 @@ interface IntegrationStatus {
     eventThroughput: number;
     systemHealth: number;
     lastHealthCheck: number;
-}
+
+
 /**
  * Dashboard Integration Service
  *
@@ -179,6 +184,6 @@ export declare class DashboardIntegrationService {
         hitRate: number;
         memoryUsage: number;
     };
-}
+
 export default DashboardIntegrationService;
 //# sourceMappingURL=DashboardIntegrationService.d.ts.map

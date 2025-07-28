@@ -12,5 +12,4 @@ export interface BadgeShowcaseProps {
     className?: string;
 }
 export declare const BadgeShowcase: React.FC<BadgeShowcaseProps>;
-export default BadgeShowcase;
 //# sourceMappingURL=BadgeShowcase.d.ts.map

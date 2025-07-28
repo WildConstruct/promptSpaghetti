@@ -11,6 +11,7 @@
  * - Advanced funnel step definitions with conditions
  */
 import { ConversionEvent, ConversionFunnel } from './ConversionTracker';
+
 export interface EnhancedConversionEvent extends ConversionEvent {
     deviceFingerprint?: string;
     crossDeviceUserId?: string;
@@ -31,7 +32,7 @@ export interface EnhancedConversionEvent extends ConversionEvent {
         processed: boolean;
         latency: number;
     };
-}
+
 export interface TouchPoint {
     id: string;
     timestamp: number;
@@ -44,14 +45,15 @@ export interface TouchPoint {
     value?: number;
     position: number;
     influence: number;
-}
+
 export type MarketingChannel = 'organic_search' | 'paid_search' | 'social_organic' | 'social_paid' | 'email' | 'direct' | 'referral' | 'display' | 'affiliate' | 'video' | 'content_marketing' | 'marketplace_internal';
+
 export interface AttributionModel {
     name: 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven';
     weight: number;
     touchpoint: TouchPoint;
     attribution_value: number;
-}
+
 export interface EnhancedConversionFunnel extends ConversionFunnel {
     crossDeviceTracking: boolean;
     attributionWindow: number;
@@ -69,7 +71,7 @@ export interface EnhancedConversionFunnel extends ConversionFunnel {
         thresholds: AnomalyThreshold[];
         alerting: AlertingConfig;
     };
-}
+
 export interface ConversionGoal {
     id: string;
     name: string;
@@ -78,7 +80,7 @@ export interface ConversionGoal {
     eventPattern: string;
     conditions: Record<string, any>;
     weight: number;
-}
+
 export interface UserSegment {
     id: string;
     name: string;
@@ -88,12 +90,12 @@ export interface UserSegment {
     };
     size: number;
     conversionRate: number;
-}
+
 export interface SegmentRule {
     field: string;
     operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
     value: any;
-}
+
 export interface CohortDefinition {
     id: string;
     name: string;
@@ -101,19 +103,19 @@ export interface CohortDefinition {
     criteriaWindow: number;
     analysisWindow: number;
     retentionPeriods: number[];
-}
+
 export interface AnomalyThreshold {
     metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
     threshold: number;
     direction: 'above' | 'below' | 'change';
     sensitivity: 'low' | 'medium' | 'high';
-}
+
 export interface AlertingConfig {
     channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
     recipients: string[];
     frequency: 'immediate' | 'hourly' | 'daily';
     cooldown: number;
-}
+
 export interface CrossDeviceIdentity {
     primaryUserId: string;
     linkedDevices: DeviceIdentity[];
@@ -125,7 +127,7 @@ export interface CrossDeviceIdentity {
         expiresAt: number;
         purpose: string;
     };
-}
+
 export interface DeviceIdentity {
     deviceId: string;
     deviceType: 'desktop' | 'mobile' | 'tablet';
@@ -136,13 +138,13 @@ export interface DeviceIdentity {
     ipAddress?: string;
     linkedAt: number;
     linkingSignals: LinkingSignal[];
-}
+
 export interface LinkingSignal {
     type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
     strength: number;
     timestamp: number;
     metadata: Record<string, any>;
-}
+
 export interface FunnelStreamConfig {
     streamName: string;
     batchSize: number;
@@ -160,7 +162,7 @@ export interface FunnelStreamConfig {
         strategy: 'user_id' | 'session_id' | 'time_based' | 'random';
         partitionCount: number;
     };
-}
+
 export interface ConversionPatternInsight {
     pattern: {,
         id: string;
@@ -179,7 +181,7 @@ export interface ConversionPatternInsight {
         targeting: string[];
         personalization: string[];
     };
-}
+
 export interface UserJourneyPattern {
     pattern: string[];
     frequency: number;
@@ -188,7 +190,6 @@ export interface UserJourneyPattern {
     averageValue: number;
     dropOffPoints: string[];
     characteristics: Record<string, any>;
-}
 /**
  * Enhanced Conversion Architecture Manager
  * Orchestrates all conversion tracking components with privacy compliance
@@ -237,7 +238,7 @@ export declare class ConversionArchitectureManager {
      * Analyze conversion patterns and generate insights
      */
     analyzeConversionPatterns(funnelId: string): ConversionPatternInsight | null;
-}
+
 export declare const conversionArchitecture: ConversionArchitectureManager;
 export default conversionArchitecture;
 //# sourceMappingURL=ConversionFunnelArchitecture.d.ts.map

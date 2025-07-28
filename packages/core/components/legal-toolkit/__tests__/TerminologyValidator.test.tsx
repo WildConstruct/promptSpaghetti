@@ -17,51 +17,43 @@ const mockText = 'This contract establishes consideration for services provided.
         definition: 'To compensate for harm or loss; to provide security against legal responsibility',
         context: 'liability',
         jurisdiction: 'US',
-        source: 'Legal Dictionary',
-      }
-    ],
+        source: 'Legal Dictionary'],
     confidence: 92,
-    context: 'liability',
-  },
+    context: 'liability';
+  }
   {
     term: 'force majeure',
     position: { start: 115, end: 128 },
     isValid: false,
     suggestions: [,
       {
-        term: 'force majeure',
-        definition: 'Superior or irresistible force; unforeseeable circumstances',
-        context: 'contract performance',
-        jurisdiction: 'US',
-        source: 'Black\'s Law Dictionary',
-        alternatives: ['act of God', 'unforeseeable circumstances', 'superior force']
-      }
-    ],
-    confidence: 88,
-    context: 'contract performance',
-  },
+  term: 'force majeure',
+  definition: 'Superior or irresistible force; unforeseeable circumstances',
+  context: 'contract performance',
+  jurisdiction: 'US',
+  source: 'Black\'s Law Dictionary',
+  alternatives: ['act of God', 'unforeseeable circumstances', 'superior force']],
+  confidence: 88,
+  context: 'contract performance',
+}
   {
     term: 'jurisdiction',
     position: { start: 200, end: 212 },
     isValid: true,
     suggestions: [,
       {
-        term: 'jurisdiction',
-        definition: 'The power and authority of a court to hear and determine a case',
-        context: 'legal authority',
-        jurisdiction: 'US',
-        source: 'Black\'s Law Dictionary',
-      }
-    ],
-    confidence: 97,
-    context: 'legal authority',
-  }
-];
-describe('TerminologyValidator Component', () => {
-  const mockOnValidationResults = jest.fn<unknown[], unknown>();
+  term: 'jurisdiction',
+  definition: 'The power and authority of a court to hear and determine a case',
+  context: 'legal authority',
+  jurisdiction: 'US',
+  source: 'Black\'s Law Dictionary'],
+  confidence: 97,
+  context: 'legal authority'];
+  describe('TerminologyValidator Component', () => {
+  const mockOnValidationResults = jest.fn<unknown, unknown>();
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  jest.clearAllMocks();
+});
   describe('Initial Rendering', () => {
     it('renders terminology validator interface', () => {
       render();
@@ -154,19 +146,19 @@ describe('TerminologyValidator Component', () => {
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
       await waitFor(() => {
-        expect(mockOnValidationResults).toHaveBeenCalledWith()
-          expect.arrayContaining([)
-            expect.objectContaining({)
-              term: expect.any(String),
-              position: expect.objectContaining({),
-                start: expect.any(Number),
-                end: expect.any(Number),
-              }),
+  expect(mockOnValidationResults).toHaveBeenCalledWith()
+  expect.arrayContaining([)
+  expect.objectContaining({)
+  term: expect.any(String),
+  position: expect.objectContaining({,)
+  start: expect.any(Number),
+  end: expect.any(Number),
+}),
               isValid: expect.any(Boolean),
               suggestions: expect.any(Array),
               confidence: expect.any(Number),
-              context: expect.any(String),
-            })
+              context: expect.any(String);
+  }
           ])
         );
       }, { timeout: 5000 });
@@ -236,10 +228,10 @@ describe('TerminologyValidator Component', () => {
         expect(validTerms.length).toBe(3); // consideration, indemnify, jurisdiction
         expect(invalidTerms.length).toBe(1); // force majeure
         validTerms.forEach(term => {)
-          expect(term).toHaveClass('valid');
+  expect(term).toHaveClass('valid');
         });
         invalidTerms.forEach(term => {)
-          expect(term).toHaveClass('invalid');
+  expect(term).toHaveClass('invalid');
         });
       }, { timeout: 5000 });
     });
@@ -291,13 +283,13 @@ describe('TerminologyValidator Component', () => {
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
       await waitFor(async () => {
-        const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
-        await user.click(forceMajeureTerm);
-        expect(screen.getByText(/Alternatives:/i)).toBeInTheDocument();
-        expect(screen.getByText(/act of God/i)).toBeInTheDocument();
-        expect(screen.getByText(/unforeseeable circumstances/i)).toBeInTheDocument();
-        expect(screen.getByText(/superior force/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+  const forceMajeureTerm = screen.getByTestId(/term-force-majeure/i);
+  await user.click(forceMajeureTerm);
+  expect(screen.getByText(/Alternatives:/i)).toBeInTheDocument();
+  expect(screen.getByText(/act of God/i)).toBeInTheDocument();
+  expect(screen.getByText(/unforeseeable circumstances/i)).toBeInTheDocument();
+  expect(screen.getByText(/superior force/i)).toBeInTheDocument();
+}, { timeout: 5000 });
     });
     it('allows copying correct term suggestions', async () => {
       const user = userEvent.setup();
@@ -328,11 +320,11 @@ describe('TerminologyValidator Component', () => {
       const validateButton = screen.getByText(/Validate Terms/i);
       await user.click(validateButton);
       await waitFor(async () => {
-        const indemnifyTerm = screen.getByTestId(/term-indemnify/i);
-        await user.click(indemnifyTerm);
-        expect(screen.getByText(/Context: liability/i)).toBeInTheDocument();
-        expect(screen.getByText(/Jurisdiction: US/i)).toBeInTheDocument();
-      }, { timeout: 5000 });
+  const indemnifyTerm = screen.getByTestId(/term-indemnify/i);
+  await user.click(indemnifyTerm);
+  expect(screen.getByText(/Context: liability/i)).toBeInTheDocument();
+  expect(screen.getByText(/Jurisdiction: US/i)).toBeInTheDocument();
+}, { timeout: 5000 });
     });
   });
   describe('Filtering and Search', () => {

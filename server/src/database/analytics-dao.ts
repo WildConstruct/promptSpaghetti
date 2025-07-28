@@ -14,6 +14,7 @@ import {
 /**
  * Database models for analytics data
  */
+}
 export interface AnalyticsSession {
   id: number;
   sessionId: string;
@@ -31,10 +32,12 @@ export interface AnalyticsSession {
   createdAt: number;
   updatedAt: number;
 }
+}
 
 /**
  * Project execution statistics for health monitoring
  */
+}
 export interface ProjectExecutionStats {
   projectId: string;
   total: number;
@@ -43,7 +46,9 @@ export interface ProjectExecutionStats {
   averageExecutionTime: number;
   lastExecution?: number;
 }
+}
 
+}
 export interface GraphExecution {
   id: number;
   executionId: string;
@@ -64,7 +69,9 @@ export interface GraphExecution {
   cpuTimeMs?: number;
   createdAt: number;
 }
+}
 
+}
 export interface NodeExecution {
   id: number;
   executionId: string;
@@ -81,7 +88,9 @@ export interface NodeExecution {
   memoryDeltaMb?: number;
   createdAt: number;
 }
+}
 
+}
 export interface TokenUsage {
   id: number;
   usageId: string;
@@ -104,7 +113,9 @@ export interface TokenUsage {
   latencyMs?: number;
   createdAt: number;
 }
+}
 
+}
 export interface UserInteraction {
   id: number;
   interactionId: string;
@@ -123,7 +134,9 @@ export interface UserInteraction {
   metadata: string;
   createdAt: number;
 }
+}
 
+}
 export interface AnalyticsAggregation {
   id: number;
   timeBucket: number;
@@ -141,10 +154,12 @@ export interface AnalyticsAggregation {
   errorCount: number;
   createdAt: number;
 }
+}
 
 /**
  * Analytics query filters
  */
+}
 export interface AnalyticsFilters {
   startTime?: number;
   endTime?: number;
@@ -159,10 +174,12 @@ export interface AnalyticsFilters {
   limit?: number;
   offset?: number;
 }
+}
 
 /**
  * Analytics summary data
  */
+}
 export interface AnalyticsSummary {
   totalEvents: number;
   uniqueUsers: number;
@@ -173,6 +190,7 @@ export interface AnalyticsSummary {
   totalCost: number;
   averageExecutionTime: number;
   successRate: number;
+}
   topGraphTypes: Array<{ type: string; count: number }>;
   topNodeTypes: Array<{ type: string; count: number; avgTime: number }>;
   providerUsage: Array<{ provider: string; tokens: number; cost: number }>;
@@ -600,7 +618,7 @@ export class AnalyticsDAO {
         hour_bucket, user_id, organization_id, total_events, unique_sessions,
         graphs_executed, nodes_executed, avg_execution_time_ms, p95_execution_time_ms,
         total_token_usage, total_cost_usd, success_rate, error_count
-      )
+
       SELECT 
         datetime(timestamp / 1000, 'unixepoch', 'start of hour') as hour_bucket,
         user_id,
@@ -626,7 +644,7 @@ export class AnalyticsDAO {
         date_bucket, user_id, organization_id, total_events, unique_sessions,
         active_users, graphs_executed, nodes_executed, avg_execution_time_ms,
         p95_execution_time_ms, total_token_usage, total_cost_usd, success_rate, error_count
-      )
+
       SELECT 
         date(timestamp / 1000, 'unixepoch') as date_bucket,
         user_id,
@@ -917,7 +935,7 @@ export class AnalyticsDAO {
             AND timestamp >= ?
           GROUP BY session_id 
           HAVING COUNT(DISTINCT user_id) > 1
-        )
+
       GROUP BY user_id
       ORDER BY collaborationCount DESC
       LIMIT 10
@@ -987,7 +1005,7 @@ export class AnalyticsDAO {
         errorRate: Math.round(errorRate),
         collaborationLevel: Math.round(collaborationLevel),
         userEngagement: Math.round(userEngagement)
-      },
+  }
       recommendation
     };
   }

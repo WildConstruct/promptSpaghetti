@@ -33,32 +33,32 @@ import { SecurityRole, DashboardType } from '../SecurityDashboardFramework';
 // Mock the workflow store
 const mockWorkflowStore = {
   states: [,
+  {
+  id: 'state-1',
+  workspace_id: 'workspace-1',
+  name: 'New',
+  description: 'Initial state for new security events',
+  color: '#ff6d00',
+  is_initial: true,
+  is_final: false,
+  is_locked: false,
+  sort_order: 1,
+  created_at: new Date(),
+  updated_at: new Date(),
+}
     {
-      id: 'state-1',
-      workspace_id: 'workspace-1',
-      name: 'New',
-      description: 'Initial state for new security events',
-      color: '#ff6d00',
-      is_initial: true,
-      is_final: false,
-      is_locked: false,
-      sort_order: 1,
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      id: 'state-2',
-      workspace_id: 'workspace-1',
-      name: 'Investigating',
-      description: 'Security event under investigation',
-      color: '#fbc02d',
-      is_initial: false,
-      is_final: false,
-      is_locked: false,
-      sort_order: 2,
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
+  id: 'state-2',
+  workspace_id: 'workspace-1',
+  name: 'Investigating',
+  description: 'Security event under investigation',
+  color: '#fbc02d',
+  is_initial: false,
+  is_final: false,
+  is_locked: false,
+  sort_order: 2,
+  created_at: new Date(),
+  updated_at: new Date(),
+}
     {
       id: 'state-3',
       workspace_id: 'workspace-1',
@@ -70,9 +70,7 @@ const mockWorkflowStore = {
       is_locked: false,
       sort_order: 3,
       created_at: new Date(),
-      updated_at: new Date(),
-    }
-  ],
+      updated_at: new Date()],
   transitions: [,
     {
       id: 'transition-1',
@@ -83,47 +81,43 @@ const mockWorkflowStore = {
       requires_approval: false,
       required_permissions: 0n,
       conditions: {},
-      created_at: new Date(),
-    }
-  ],
+      created_at: new Date()],
   approvals: [,
     {
-      id: 'approval-1',
-      workspace_id: 'workspace-1',
-      resource_id: 'event-1',
-      transition_id: 'transition-1',
-      requester_id: 'user-1',
-      status: 'pending' as const,
-      requested_at: new Date(),
-      priority: 'high' as const,
-      created_at: new Date(),
-      updated_at: new Date(),
-    }
-  ],
+  id: 'approval-1',
+  workspace_id: 'workspace-1',
+  resource_id: 'event-1',
+  transition_id: 'transition-1',
+  requester_id: 'user-1',
+  status: 'pending' as const,
+  requested_at: new Date(),
+  priority: 'high' as const,
+  created_at: new Date(),
+  updated_at: new Date()],
   locks: [],
   history: [],
   statistics: null,
   loading: false,
   error: null,
-  fetchStates: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
-  fetchTransitions: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
-  fetchApprovals: jest.fn<unknown[], unknown>().mockResolvedValue(undefined as unknown as unknown),
-  transitionResourceState: jest.fn<unknown[], unknown>().mockResolvedValue({)
-    success: true,
-    new_state_id: 'state-2',
-  } as unknown as unknown),
-  approveWorkflow: jest.fn<unknown[], unknown>().mockResolvedValue({)
-    success: true,
-    new_state_id: 'state-2',
-  } as unknown as unknown),
-  rejectWorkflow: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown),
-  acquireLock: jest.fn<unknown[], unknown>().mockResolvedValue({)
-    id: 'lock-1',
-    resource_id: 'event-1',
-    locked_by: 'user-1',
-    lock_type: 'state_change' as const,
-  } as unknown as unknown),
-  releaseLock: jest.fn<unknown[], unknown>().mockResolvedValue(true as unknown as unknown)
+  fetchStates: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
+  fetchTransitions: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
+  fetchApprovals: jest.fn<unknown, unknown>().mockResolvedValue(undefined as unknown as unknown),
+  transitionResourceState: jest.fn<unknown, unknown>().mockResolvedValue({,)
+  success: true,
+  new_state_id: 'state-2',
+} as unknown as unknown),
+  approveWorkflow: jest.fn<unknown, unknown>().mockResolvedValue({)
+  success: true,
+  new_state_id: 'state-2',
+} as unknown as unknown),
+  rejectWorkflow: jest.fn<unknown, unknown>().mockResolvedValue(true as unknown as unknown),
+  acquireLock: jest.fn<unknown, unknown>().mockResolvedValue({)
+  id: 'lock-1',
+  resource_id: 'event-1',
+  locked_by: 'user-1',
+  lock_type: 'state_change' as const,
+} as unknown as unknown),
+  releaseLock: jest.fn<unknown, unknown>().mockResolvedValue(true as unknown as unknown)
 };
 
 // Mock the useWorkflowStore hook
@@ -133,7 +127,7 @@ jest.mock('../stores/workflowStore', () => ({)
 
 // Mock WebSocket
 const mockWebSocket = {
-  close: jest.fn<unknown[], unknown>(),
+  close: jest.fn<unknown, unknown>(),
   onmessage: null as ((event: MessageEvent) => void) | null,
   onerror: null as ((event: Event) => void) | null,
 };
@@ -142,19 +136,19 @@ const mockWebSocket = {
 global.WebSocket = jest.fn(() => mockWebSocket);
 
 // Mock fetch for API calls
-global.fetch = jest.fn<unknown[], unknown>();
+global.fetch = jest.fn<unknown, unknown>();
 describe('SecurityDashboardWorkflow', () => {
   const defaultProps = {
-    workspaceId: 'workspace-1',
-    userId: 'user-1',
-    userRole: SecurityRole.SECURITY_ANALYST,
-    dashboardType: DashboardType.OPERATIONAL,
-  };
+  workspaceId: 'workspace-1',
+  userId: 'user-1',
+  userRole: SecurityRole.SECURITY_ANALYST,
+  dashboardType: DashboardType.OPERATIONAL,
+};
   beforeEach(() => {
     jest.clearAllMocks();
     // Reset fetch mock
     (fetch as jest.Mock).mockResolvedValue({)
-      ok: true,
+  ok: true,
       json: ( as unknown as unknown) => Promise.resolve({})
     });
   });
@@ -199,11 +193,11 @@ describe('SecurityDashboardWorkflow', () => {
         metadata: { attemptCount: 5, targetUser: 'admin' },
         escalationLevel: 1,
         complianceFrameworks: ['SOX'],
-        automatedActions: [],
-      };
+        automatedActions: [];
+  };
     });
     test('processes incoming security events via WebSocket', async () => {
-      const onSecurityEvent = jest.fn<unknown[], unknown>();
+      const onSecurityEvent = jest.fn<unknown, unknown>();
       render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
@@ -215,11 +209,10 @@ describe('SecurityDashboardWorkflow', () => {
       });
       // Simulate WebSocket message
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(mockSecurityEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(mockSecurityEvent),
+} as MessageEvent);
       });
       expect(onSecurityEvent).toHaveBeenCalledWith(mockSecurityEvent);
       // Event should appear in the table
@@ -237,23 +230,22 @@ describe('SecurityDashboardWorkflow', () => {
       // Simulate WebSocket message for critical event
       const criticalEvent = { ...mockSecurityEvent, severity: SecuritySeverity.CRITICAL };
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(criticalEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(criticalEvent),
+} as MessageEvent);
       });
       await waitFor(() => {
-        expect(mockWorkflowStore.transitionResourceState).toHaveBeenCalledWith()
-          'event-1',
-          'state-1',
-          'system',
-          expect.objectContaining({)
-            comment: expect.stringContaining('Auto-created'),
-            metadata: expect.objectContaining({),
-              autoCreated: true,
-            })
-          })
+  expect(mockWorkflowStore.transitionResourceState).toHaveBeenCalledWith()
+  'event-1',
+  'state-1',
+  'system',
+  expect.objectContaining({)
+  comment: expect.stringContaining('Auto-created'),
+  metadata: expect.objectContaining({,)
+  autoCreated: true,
+}
+  }
         );
       });
     });
@@ -267,10 +259,8 @@ describe('SecurityDashboardWorkflow', () => {
             conditions: { attemptCount: 5 },
             maxSeverity: SecuritySeverity.HIGH,
             approvedActions: ['BLOCK_IP' as const],
-            requiredRole: SecurityRole.SECURITY_ANALYST,
-          }
-        ]
-      };
+            requiredRole: SecurityRole.SECURITY_ANALYST];
+  };
       render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
@@ -282,18 +272,17 @@ describe('SecurityDashboardWorkflow', () => {
       });
       // Simulate WebSocket message matching auto-action rule
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(mockSecurityEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(mockSecurityEvent),
+} as MessageEvent);
       });
       await waitFor(() => {
         expect(fetch).toHaveBeenCalledWith('/api/security/actions/block-ip', {)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: expect.stringContaining('"ip":"192.168.1.100"'),
-        });
+          body: expect.stringContaining('"ip":"192.168.1.100"');
+  });
       });
     });
     test('shows active alerts banner when high-severity events present', async () => {
@@ -306,11 +295,10 @@ describe('SecurityDashboardWorkflow', () => {
       // Simulate high-severity event
       const highSeverityEvent = { ...mockSecurityEvent, severity: SecuritySeverity.HIGH };
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(highSeverityEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(highSeverityEvent),
+} as MessageEvent);
       });
       await waitFor(() => {
         expect(screen.getByText('Active Security Alerts Requiring Attention')).toBeInTheDocument();
@@ -338,14 +326,13 @@ describe('SecurityDashboardWorkflow', () => {
       });
       // Add an event first
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify({),
-              ...mockSecurityEvent,
-              workflowState: 'state-1',
-            })
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify({,)
+  ...mockSecurityEvent,
+  workflowState: 'state-1',
+}
           } as MessageEvent);
-        }
       });
       await waitFor(() => {
         expect(screen.getByText('New')).toBeInTheDocument();
@@ -430,18 +417,16 @@ describe('SecurityDashboardWorkflow', () => {
     });
   });
   describe('Compliance Integration', () => {
-    test('checks compliance requirements for security events', async () => {
-      const configWithCompliance = {
-        complianceRequirements: [,
-          {
-            framework: 'GDPR',
-            alertTypes: [SecurityEventType.AUTHENTICATION_FAILURE],
-            responseTimeMinutes: 60,
-            requiredDocumentation: ['incident_report'],
-            notificationRequired: true,
-          }
-        ]
-      };
+  test('checks compliance requirements for security events', async () => {
+  const configWithCompliance = {
+  complianceRequirements: [,
+  {
+  framework: 'GDPR',
+  alertTypes: [SecurityEventType.AUTHENTICATION_FAILURE],
+  responseTimeMinutes: 60,
+  requiredDocumentation: ['incident_report'],
+  notificationRequired: true];
+  };
       render();
         <SecurityDashboardWorkflow 
           {...defaultProps} 
@@ -453,18 +438,17 @@ describe('SecurityDashboardWorkflow', () => {
       });
       // Simulate event that triggers compliance check
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(mockSecurityEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(mockSecurityEvent),
+} as MessageEvent);
       });
       await waitFor(() => {
         expect(fetch).toHaveBeenCalledWith('/api/compliance/notifications', {)
-          method: 'POST',
+  method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: expect.stringContaining('GDPR'),
-        });
+          body: expect.stringContaining('GDPR');
+  });
       });
     });
   });
@@ -478,7 +462,6 @@ describe('SecurityDashboardWorkflow', () => {
       act(() => {
         if (mockWebSocket.onerror) {
           mockWebSocket.onerror(new Event('error'));
-        }
       });
       // Should show error indicator (implementation would add this)
       // This is a placeholder for where error handling would be tested
@@ -495,11 +478,10 @@ describe('SecurityDashboardWorkflow', () => {
         metadata: { threatIntelligence: 'confirmed_malicious' }
       };
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(eventWithAutoAction),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(eventWithAutoAction),
+} as MessageEvent);
       });
       // Should handle the error gracefully without crashing
       await waitFor(() => {
@@ -510,12 +492,12 @@ describe('SecurityDashboardWorkflow', () => {
   describe('User Interface Interactions', () => {
     test('refreshes dashboard when refresh button clicked', async () => {
       // Mock window.location.reload to prevent JSDOM errors
-      const mockReload = jest.fn<unknown[], unknown>();
+      const mockReload = jest.fn<unknown, unknown>();
       Object.defineProperty(window, 'location', {)
-        value: { reload: mockReload },
+  value: { reload: mockReload },
         writable: true,
-        configurable: true,
-      });
+        configurable: true;
+  });
       render(<SecurityDashboardWorkflow {...defaultProps} />);
       await waitFor(() => {
         expect(screen.getByText('🔄 Refresh')).toBeInTheDocument();
@@ -537,11 +519,10 @@ describe('SecurityDashboardWorkflow', () => {
       });
       // Add event to table
       act(() => {
-        if (mockWebSocket.onmessage) {
-          mockWebSocket.onmessage({)
-            data: JSON.stringify(mockSecurityEvent),
-          } as MessageEvent);
-        }
+  if (mockWebSocket.onmessage) {
+  mockWebSocket.onmessage({)
+  data: JSON.stringify(mockSecurityEvent),
+} as MessageEvent);
       });
       await waitFor(() => {
         expect(screen.getByText('AUTHENTICATION_FAILURE')).toBeInTheDocument();
@@ -585,15 +566,14 @@ describe('SecurityDashboardWorkflow', () => {
         act(() => {
           if (mockWebSocket.onmessage) {
             mockWebSocket.onmessage({)
-              data: JSON.stringify({),
+  data: JSON.stringify({),
                 ...mockSecurityEvent,
-                id: `event-${i}`,}
-                description: `Event ${i}`}
-              })
+                id: `event-${i}`}
+},
+  description: `Event ${i}`}
+  }
             } as MessageEvent);
-          }
         });
-      }
       // Should only show first 10 events
       await waitFor(() => {
         const eventRows = screen.getAllByText(/Event \d+/);

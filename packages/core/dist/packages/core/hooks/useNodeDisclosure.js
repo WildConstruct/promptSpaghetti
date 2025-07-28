@@ -38,10 +38,11 @@ export const useNodeDisclosureControl = (nodeId, nodeType) => {
             }
             else {
                 fieldLevel = 'basic';
+                return shouldShowSection(fieldLevel);
             }
+            [shouldShowSection];
         }
-        return shouldShowSection(fieldLevel);
-    }, [shouldShowSection]);
+    });
     return {
         // Current state
         disclosureLevel,

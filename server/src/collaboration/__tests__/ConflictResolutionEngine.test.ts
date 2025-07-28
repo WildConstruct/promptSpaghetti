@@ -38,12 +38,12 @@ describe('ConflictResolutionEngine', () => {
           expires_at: new Date(Date.now() + 3600000),
           client_id: 'client1',
           user_agent: 'test-browser'
-        },
+  }
         editing_state: {
           editing_mode: 'edit',
           is_active: true,
           has_unsaved_changes: false
-        },
+  }
         collaboration_metadata: {
           priority_level: 1,
           edit_permissions: [],
@@ -78,20 +78,20 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             current_cursor_position: cursorPosition,
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-          },
+  }
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
           }
-        },
+  }
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -103,17 +103,17 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             current_cursor_position: {
               ...cursorPosition,
               user_id: 'user2',
               timestamp: new Date(now.getTime() + 2000) // Same position, different timestamp
-            },
+  }
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-          },
+  }
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
@@ -150,20 +150,20 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             current_selection: selectionRange,
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-          },
+  }
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
           }
-        },
+  }
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -175,16 +175,16 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             current_selection: {
               ...selectionRange,
               user_id: 'user2' // Overlapping selection
-            },
+  }
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-          },
+  }
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
@@ -216,7 +216,7 @@ describe('ConflictResolutionEngine', () => {
             id: 'session1',
             user_id: 'user1',
             session_info: { last_activity_at: new Date(2023, 0, 1, 10, 0) }
-          },
+  }
           {
             id: 'session2',
             user_id: 'user2',
@@ -324,7 +324,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user1',
           timestamp: new Date(2023, 0, 1, 10, 0),
           session_id: 'session1'
-        },
+  }
         {
           id: 'op2',
           type: 'insert' as const,
@@ -355,7 +355,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user1',
           timestamp: new Date(2023, 0, 1, 10, 0),
           session_id: 'session1'
-        },
+  }
         {
           id: 'op2',
           type: 'replace' as const,
@@ -601,19 +601,19 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: true
-          },
+  }
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
           }
-        },
+  }
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -625,12 +625,12 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-          },
+  }
           editing_state: {
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: true
-          },
+  }
           collaboration_metadata: {
             priority_level: 2, // Higher priority
             edit_permissions: [],

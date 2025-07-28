@@ -47,14 +47,14 @@ describe('PolicyAuthoringService', () => {
             policyType: 'PRIVACY_POLICY',
             title: 'Test Privacy Policy',
             authorId: 'test-author-id'
-          })
-        })
+  }
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'POLICY_CREATED'
-        })
+  }
       );
     });
 
@@ -151,13 +151,13 @@ describe('PolicyAuthoringService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'POLICY_UPDATE_INITIATED'
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'POLICY_UPDATED'
-        })
+  }
       );
     });
 
@@ -236,7 +236,7 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-        },
+  }
         notificationSettings: {
           enabled: true,
           channels: [
@@ -264,8 +264,8 @@ describe('PolicyAuthoringService', () => {
           eventType: 'POLICY_DEPLOYMENT_INITIATED',
           details: expect.objectContaining({
             environment: 'STAGING'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -304,7 +304,7 @@ describe('PolicyAuthoringService', () => {
                 alertThresholds: { error_rate: 0.05 },
                 automatedActions: []
               }
-            },
+  }
             {
               phaseId: 'phase-2',
               name: 'Full Rollout',
@@ -330,14 +330,14 @@ describe('PolicyAuthoringService', () => {
                 threshold: 0.1,
                 duration: 60,
                 consecutive: true
-              },
+  }
               automatic: true,
               severity: 'HIGH',
               action: 'IMMEDIATE'
             }
           ],
           monitoringPeriod: 72
-        },
+  }
         notificationSettings: {
           enabled: true,
           channels: [
@@ -346,7 +346,7 @@ describe('PolicyAuthoringService', () => {
               configuration: {},
               enabled: true,
               priority: 1
-            },
+  }
             {
               type: 'IN_APP',
               configuration: {},
@@ -387,7 +387,7 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-        },
+  }
         notificationSettings: {
           enabled: false,
           channels: [],
@@ -411,7 +411,7 @@ describe('PolicyAuthoringService', () => {
           company_name: 'European Corp',
           contact_email: 'privacy@european.corp',
           data_retention_period: 5
-        },
+  }
         'compliance-officer'
       );
 
@@ -426,7 +426,7 @@ describe('PolicyAuthoringService', () => {
         {
           business_name: 'California Business Inc',
           contact_method: 'privacy@californiabiz.com'
-        },
+  }
         'legal-counsel'
       );
 
@@ -441,7 +441,7 @@ describe('PolicyAuthoringService', () => {
         {
           covered_entity: 'Healthcare Provider LLC',
           hipaa_officer: 'hipaa@healthcare.com'
-        },
+  }
         'compliance-manager'
       );
 
@@ -472,7 +472,7 @@ describe('PolicyAuthoringService', () => {
             framework: 'GDPR',
             score: expect.any(Number),
             status: expect.any(String)
-          })
+  }
         ]),
         recommendations: expect.any(Array)
       });
@@ -528,7 +528,7 @@ describe('PolicyAuthoringService', () => {
           requiresReacceptance: expect.any(Boolean),
           affectedUsers: expect.any(Number),
           riskLevel: expect.any(String)
-        })
+  }
       });
     });
   });
@@ -568,8 +568,8 @@ describe('PolicyAuthoringService', () => {
           eventType: 'POLICY_EXPORTED',
           details: expect.objectContaining({
             format: 'PDF'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -738,7 +738,7 @@ describe('PolicyAuthoringService', () => {
           phases: [],
           rollbackCriteria: [],
           monitoringPeriod: 24
-        },
+  }
         notificationSettings: {
           enabled: true,
           channels: [{ type: 'EMAIL', configuration: {}, enabled: true, priority: 1 }],

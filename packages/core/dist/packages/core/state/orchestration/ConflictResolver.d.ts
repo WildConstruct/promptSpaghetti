@@ -12,7 +12,7 @@ export interface StateConflict<T = any> {
     remoteChange: StateChange<T>;
     conflictType: ConflictType;
     severity: ConflictSeverity;
-    affectedPaths: string[];
+    affectedPaths: string;
     metadata?: Record<string, any>;
 }
 export type ConflictType = 'CONCURRENT_UPDATE' | 'DELETE_UPDATE' | 'CREATE_CREATE' | 'TYPE_MISMATCH' | 'DEPENDENCY_VIOLATION' | 'PERMISSION_CONFLICT' | 'SCHEMA_VIOLATION';
@@ -33,7 +33,7 @@ export interface ConflictResolutionRule {
     name: string;
     domain?: string;
     pathPattern?: RegExp;
-    conflictTypes: ConflictType[];
+    conflictTypes: ConflictType;
     strategy: ResolutionStrategy;
     priority: number;
     condition?: (conflict: StateConflict) => boolean;
@@ -42,7 +42,7 @@ export interface ConflictResolutionRule {
 export interface OperationalTransform {
     apply(operation: any, state: any): any;
     transform(op1: any, op2: any): [any, any];
-    compose(ops: any[]): any;
+    compose(ops: any): any;
     inverse(operation: any): any;
 }
 export interface GraphMutation {
@@ -63,18 +63,15 @@ export interface Permission {
     conditions?: Record<string, any>;
 }
 export interface DashboardLayout {
-    widgets: Array<{
-        id: string;
-        x: number;
-        y: number;
-        w: number;
-        h: number;
-        minW?: number;
-        minH?: number;
-        static?: boolean;
-    }>;
-    breakpoints: Record<string, number>;
-    cols: Record<string, number>;
+    widgets: Array<{}, id>;
+    string: any;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    minW?: number;
+    minH?: number;
+    static?: boolean;
 }
 export declare class ConflictResolver {
     private resolutionRules;
@@ -82,43 +79,12 @@ export declare class ConflictResolver {
     private resolutionHistory;
     private maxHistorySize;
     constructor();
-    detectAndResolveConflicts<T>(localChanges: StateChange<T>[], remoteChanges: StateChange<T>[], currentState: T, domain: string): Promise<ConflictResolution<T>[]>;
-    private detectConflicts;
-    private analyzeChangePair;
-    private resolveConflict;
-    private applyResolutionStrategy;
     private lastWriterWins;
     private firstWriterWins;
     private mergeChanges;
     private operationalTransform;
     private securityPriorityResolution;
     private requestUserIntervention;
-    resolveGraphConflicts(localChanges: GraphMutation[], remoteChanges: GraphMutation[]): GraphMutation[];
-    resolveSecurityConflicts(localPermissions: Permission[], remotePermissions: Permission[]): Permission[];
-    resolveDashboardConflicts(localLayout: DashboardLayout, remoteLayout: DashboardLayout): DashboardLayout;
     private setupDefaultRules;
-    private findResolutionRule;
-    addResolutionRule(rule: ConflictResolutionRule): void;
-    removeResolutionRule(name: string): void;
-    getActiveConflicts(): StateConflict[];
-    getResolutionHistory(): ConflictResolution[];
-    private extractAffectedPaths;
-    private pathsOverlap;
-    private determineConflictType;
-    private assessConflictSeverity;
-    private generateConflictId;
-    private generateResolutionId;
-    private generateChangeId;
-    private addToHistory;
-    private applyChangeToState;
-    private mergePaylods;
-    private applyOperationalTransform;
-    private selectMoreRestrictiveChange;
-    private selectMoreRestrictivePermission;
-    private groupMutationsByType;
-    private resolveGraphMutationType;
-    private resolveSpatialConflict;
-    private mergeWidgetProperties;
 }
-export declare const globalConflictResolver: ConflictResolver;
 //# sourceMappingURL=ConflictResolver.d.ts.map

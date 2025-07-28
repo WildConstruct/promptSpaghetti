@@ -2,6 +2,7 @@
  * Epic 9.2.6 - Project Templates Implementation
  * Manages project templates with versioning, categorization, and sharing capabilities
  */
+
 export interface ProjectTemplate {
     id: string;
     name: string;
@@ -28,7 +29,7 @@ export interface ProjectTemplate {
     estimated_time: number;
     prerequisites: string[];
     learning_objectives: string[];
-}
+
 export interface TemplateVariable {
     id: string;
     name: string;
@@ -43,7 +44,7 @@ export interface TemplateVariable {
         pattern?: string;
         options?: string[];
     };
-}
+
 export interface CustomizationPoint {
     id: string;
     name: string;
@@ -52,7 +53,7 @@ export interface CustomizationPoint {
     properties: string[];
     description: string;
     ui_component: 'input' | 'select' | 'color_picker' | 'slider' | 'toggle';
-}
+
 export interface TemplateCategory {
     id: string;
     name: string;
@@ -60,7 +61,7 @@ export interface TemplateCategory {
     icon: string;
     color: string;
     parent_id?: string;
-}
+
 export interface TemplateUsageAnalytics {
     template_id: string;
     total_uses: number;
@@ -73,7 +74,7 @@ export interface TemplateUsageAnalytics {
         date: string;
         uses: number;
     }[];
-}
+
 export declare class ProjectTemplateManager {
     private apiClient;
     private templates;
@@ -129,5 +130,5 @@ export declare class ProjectTemplateManager {
     private extractFromBundle;
     private extractDependencies;
     private initializeDefaultCategories;
-}
+
 //# sourceMappingURL=ProjectTemplateManager.d.ts.map

@@ -22,10 +22,10 @@ export interface IAuthenticationService {
 }
 export interface IAuthorizationService {
     checkPermission(userId: string, resource: string, action: PermissionAction): Promise<boolean>;
-    checkPermissions(userId: string, permissions: AccessRequest[]): Promise<AccessResponse[]>;
+    checkPermissions(userId: string, permissions: AccessRequest): Promise<AccessResponse>;
     grantPermission(userId: string, permission: Permission): Promise<void>;
     revokePermission(userId: string, permissionId: string): Promise<void>;
-    getUserPermissions(userId: string): Promise<Permission[]>;
+    getUserPermissions(userId: string): Promise<Permission>;
     evaluatePolicy(userId: string, resource: string, action: PermissionAction, context: AccessContext): Promise<AccessResponse>;
     createRole(role: Omit<UserRole, 'id'>): Promise<UserRole>;
     assignRole(userId: string, roleId: string): Promise<void>;
@@ -33,10 +33,10 @@ export interface IAuthorizationService {
 }
 export interface IAuditService {
     logEvent(event: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog>;
-    getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog[]>;
+    getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog>;
     getAuditLog(id: string): Promise<AuditLog>;
     generateAuditReport(criteria: AuditReportCriteria): Promise<AuditReport>;
-    searchAuditLogs(query: string, filters?: AuditLogFilters): Promise<AuditLog[]>;
+    searchAuditLogs(query: string, filters?: AuditLogFilters): Promise<AuditLog>;
     exportAuditLogs(filters?: AuditLogFilters, format?: 'csv' | 'json' | 'pdf'): Promise<string>;
     retentionCleanup(): Promise<{
         deleted: number;
@@ -44,28 +44,28 @@ export interface IAuditService {
     }>;
 }
 export interface ISecurityMonitoringService {
-    getSecurityAlerts(filters?: SecurityAlertFilters): Promise<SecurityAlert[]>;
+    getSecurityAlerts(filters?: SecurityAlertFilters): Promise<SecurityAlert>;
     createAlert(alert: Omit<SecurityAlert, 'id' | 'timestamp'>): Promise<SecurityAlert>;
     resolveAlert(alertId: string, resolution: string): Promise<void>;
     acknowledgeAlert(alertId: string, userId: string): Promise<void>;
     getSecurityMetrics(period?: string): Promise<SecurityMetrics>;
-    performSecurityScan(scope: string[]): Promise<SecurityScanResult>;
+    performSecurityScan(scope: string): Promise<SecurityScanResult>;
     analyzeRisk(userId: string, context: AccessContext): Promise<RiskAssessment>;
-    detectAnomalies(userId: string, activities: any[]): Promise<AnomalyDetection[]>;
+    detectAnomalies(userId: string, activities: any): Promise<AnomalyDetection>;
 }
 export interface IPolicyManagementService {
-    getPolicies(type?: string): Promise<SecurityPolicy[]>;
+    getPolicies(type?: string): Promise<SecurityPolicy>;
     getPolicy(id: string): Promise<SecurityPolicy>;
     createPolicy(policy: Omit<SecurityPolicy, 'id'>): Promise<SecurityPolicy>;
     updatePolicy(id: string, updates: Partial<SecurityPolicy>): Promise<SecurityPolicy>;
     deletePolicy(id: string): Promise<void>;
     evaluatePolicy(policy: SecurityPolicy, context: any): Promise<PolicyEvaluationResult>;
     enforcePolicy(policyId: string, violation: PolicyViolation): Promise<EnforcementAction>;
-    validatePolicyRules(rules: PolicyRule[]): Promise<ValidationResult[]>;
+    validatePolicyRules(rules: PolicyRule): Promise<ValidationResult>;
 }
 export interface IDataClassificationService {
     classifyData(data: any, context?: any): Promise<DataClassification>;
-    getClassifications(): Promise<DataClassification[]>;
+    getClassifications(): Promise<DataClassification>;
     createClassification(classification: Omit<DataClassification, 'id'>): Promise<DataClassification>;
     updateClassification(id: string, updates: Partial<DataClassification>): Promise<DataClassification>;
     deleteClassification(id: string): Promise<void>;
@@ -98,7 +98,7 @@ export interface AuditReportCriteria {
         start: Date;
         end: Date;
     };
-    scope: string[];
+    scope: string;
     includeDetails: boolean;
     format: 'summary' | 'detailed' | 'compliance';
 }
@@ -106,8 +106,8 @@ export interface AuditReport {
     id: string;
     criteria: AuditReportCriteria;
     summary: ReportSummary;
-    findings: ReportFinding[];
-    recommendations: string[];
+    findings: ReportFinding;
+    recommendations: string;
     generatedAt: Date;
     generatedBy: string;
 }
@@ -125,15 +125,15 @@ export interface SecurityScanResult {
     scanId: string;
     startedAt: Date;
     completedAt: Date;
-    scope: string[];
-    findings: SecurityFinding[];
+    scope: string;
+    findings: SecurityFinding;
     summary: ScanSummary;
 }
 export interface RiskAssessment {
     userId: string;
     riskScore: number;
-    factors: RiskFactor[];
-    recommendations: string[];
+    factors: RiskFactor;
+    recommendations: string;
     validUntil: Date;
 }
 export interface AnomalyDetection {
@@ -141,15 +141,15 @@ export interface AnomalyDetection {
     description: string;
     severity: string;
     confidence: number;
-    evidence: any[];
+    evidence: any;
     timestamp: Date;
 }
 export interface PolicyEvaluationResult {
     policyId: string;
     allowed: boolean;
-    matchedRules: string[];
-    violations: PolicyViolation[];
-    recommendations: string[];
+    matchedRules: string;
+    violations: PolicyViolation;
+    recommendations: string;
 }
 export interface PolicyViolation {
     ruleId: string;
@@ -165,9 +165,9 @@ export interface EnforcementAction {
 }
 export interface ValidationResult {
     valid: boolean;
-    errors: string[];
-    warnings: string[];
-    suggestions: string[];
+    errors: string;
+    warnings: string;
+    suggestions: string;
 }
 export interface EncryptionContext {
     purpose: string;
@@ -183,7 +183,7 @@ export interface EncryptedData {
 }
 export interface KeyRotationResult {
     rotatedKeys: number;
-    failedRotations: string[];
+    failedRotations: string;
     completedAt: Date;
 }
 export interface ReportSummary {
@@ -201,7 +201,7 @@ export interface ReportFinding {
     severity: string;
     description: string;
     count: number;
-    examples: AuditLog[];
+    examples: AuditLog;
 }
 export interface SecurityFinding {
     type: string;
@@ -240,28 +240,28 @@ export interface ISecurityDomain {
     hooks: {
         useAuth: () => {
             user: User | null;
-            permissions: Permission[];
+            permissions: Permission;
             isAuthenticated: boolean;
             login: (credentials: any) => Promise<void>;
             logout: () => Promise<void>;
             checkPermission: (resource: string, action: PermissionAction) => boolean;
         };
         usePermissions: () => {
-            permissions: Permission[];
+            permissions: Permission;
             loading: boolean;
             hasPermission: (resource: string, action: PermissionAction) => boolean;
             hasRole: (roleName: string) => boolean;
             refreshPermissions: () => Promise<void>;
         };
         useAuditLogs: () => {
-            logs: AuditLog[];
+            logs: AuditLog;
             loading: boolean;
             error: string | null;
             fetchLogs: (filters?: AuditLogFilters) => Promise<void>;
             exportLogs: (format: string) => Promise<void>;
         };
         useSecurityAlerts: () => {
-            alerts: SecurityAlert[];
+            alerts: SecurityAlert;
             unreadCount: number;
             loading: boolean;
             acknowledgeAlert: (alertId: string) => Promise<void>;
@@ -285,12 +285,12 @@ export interface ISecurityDomain {
     };
     events: SecurityDomainEvents & {
         subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;
-        emit: (event: keyof SecurityDomainEvents, ...args: any[]) => void;
+        emit: (event: keyof SecurityDomainEvents, ...args: any) => void;
     };
     utils: {
         validatePassword: (password: string) => ValidationResult;
         generateSecurePassword: (length?: number) => string;
-        calculateRiskScore: (factors: RiskFactor[]) => number;
+        calculateRiskScore: (factors: RiskFactor) => number;
         formatPermission: (permission: Permission) => string;
         hashSensitiveData: (data: string) => Promise<string>;
         maskSensitiveData: (data: string, type: string) => string;

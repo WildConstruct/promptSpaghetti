@@ -39,7 +39,7 @@ export declare class SemanticVersion {
      * Get version string
      */
     toString(): string;
-}
+
 export declare class VersionRange {
     private ranges;
     constructor(ranges: RangeSet[]);
@@ -59,7 +59,7 @@ export declare class VersionRange {
      * Get string representation
      */
     toString(): string;
-}
+
 export declare class ExtensionVersionManager {
     private static instance;
     private versionCache;
@@ -119,23 +119,26 @@ export declare class ExtensionVersionManager {
      * Clear caches
      */
     clearCaches(): void;
-}
+
 type ReleaseType = 'major' | 'minor' | 'patch' | 'prerelease';
 type RiskLevel = 'low' | 'medium' | 'high';
 type UpgradeStepType = 'major' | 'minor' | 'patch' | 'prerelease';
+
 interface Comparator {
     operator: string;
     version: SemanticVersion;
     satisfies: (version: SemanticVersion) => boolean;
-}
+
 type RangeSet = Comparator[];
+
 export interface CompatibilityResult {
     compatible: boolean;
     issues: CompatibilityIssue[];
     warnings: string[];
     systemVersion: string;
     extensionVersion: string;
-}
+
+
 export interface CompatibilityIssue {
     type: 'system-version' | 'missing-dependency' | 'version-mismatch' | 'circular-dependency';
     severity: 'error' | 'warning';
@@ -144,14 +147,16 @@ export interface CompatibilityIssue {
     currentVersion?: string;
     requiredVersion?: string;
     circularPath?: string[];
-}
+
+
 export interface UpgradePath {
     possible: boolean;
     reason?: string;
     steps: UpgradeStep[];
     totalRisk?: RiskLevel;
     estimatedDuration?: string;
-}
+
+
 export interface UpgradeStep {
     fromVersion: string;
     toVersion: string;
@@ -159,7 +164,7 @@ export interface UpgradeStep {
     risk: RiskLevel;
     breakingChanges: boolean;
     recommendedActions: string[];
-}
+
 export declare const extensionVersionManager: ExtensionVersionManager;
 export {};
 //# sourceMappingURL=ExtensionVersionManager.d.ts.map

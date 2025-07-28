@@ -127,7 +127,7 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           recommendationId: 'test_recommendation_id',
           autoImplement: true
@@ -150,7 +150,7 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           optimizationType: 'performance',
           autoImplement: true
@@ -171,7 +171,7 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {} // Missing required fields
       });
 

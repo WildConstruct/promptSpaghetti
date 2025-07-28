@@ -8,6 +8,7 @@
  * Task: E31-1753313263589-B894E3
  */
 import { EventEmitter } from 'events';
+
 export interface SecurityEvent {
     id: string;
     timestamp: Date;
@@ -20,7 +21,7 @@ export interface SecurityEvent {
     metadata: Record<string, unknown>;
     riskScore: number;
     geolocation?: GeolocationData;
-}
+
 export declare enum SecurityEventType {
     LOGIN_ATTEMPT = "login_attempt",
     LOGIN_SUCCESS = "login_success",
@@ -34,13 +35,13 @@ export declare enum SecurityEventType {
     BRUTE_FORCE_ATTEMPT = "brute_force_attempt",
     ACCOUNT_LOCKOUT = "account_lockout",
     PRIVILEGE_ESCALATION = "privilege_escalation"
-}
+
 export declare enum SecuritySeverity {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface GeolocationData {
     country: string;
     region: string;
@@ -48,7 +49,8 @@ export interface GeolocationData {
     latitude: number;
     longitude: number;
     isKnownLocation: boolean;
-}
+
+
 export interface ThreatPrediction {
     predictionId: string;
     timestamp: Date;
@@ -60,7 +62,7 @@ export interface ThreatPrediction {
     recommendedActions: PreventiveAction[];
     modelVersion: string;
     features: Record<string, number>;
-}
+
 export declare enum ThreatType {
     BRUTE_FORCE_ATTACK = "brute_force_attack",
     ACCOUNT_TAKEOVER = "account_takeover",
@@ -70,7 +72,7 @@ export declare enum ThreatType {
     API_ABUSE = "api_abuse",
     DATA_EXFILTRATION = "data_exfiltration",
     PRIVILEGE_ESCALATION_ATTEMPT = "privilege_escalation_attempt"
-}
+
 export interface PreventiveAction {
     actionType: ActionType;
     target: string;
@@ -78,7 +80,7 @@ export interface PreventiveAction {
     urgency: 'low' | 'medium' | 'high' | 'immediate';
     description: string;
     estimatedEffectiveness: number;
-}
+
 export declare enum ActionType {
     INCREASE_MONITORING = "increase_monitoring",
     RATE_LIMIT_ADJUSTMENT = "rate_limit_adjustment",
@@ -88,7 +90,7 @@ export declare enum ActionType {
     QUARANTINE_SESSION = "quarantine_session",
     REVOKE_PERMISSIONS = "revoke_permissions",
     FORCE_PASSWORD_RESET = "force_password_reset"
-}
+
 export interface PredictionModel {
     modelId: string;
     name: string;
@@ -101,7 +103,8 @@ export interface PredictionModel {
     isActive: boolean;
     threatTypes: ThreatType[];
     featureImportance: Record<string, number>;
-}
+
+
 export interface AnalyticsConfiguration {
     predictionThreshold: number;
     maxPredictionTimeframe: number;
@@ -110,7 +113,7 @@ export interface AnalyticsConfiguration {
     retentionPeriod: number;
     alertingEnabled: boolean;
     autoResponseEnabled: boolean;
-}
+
 export declare class PredictiveSecurityAnalytics extends EventEmitter {
     private models;
     private eventHistory;
@@ -185,11 +188,11 @@ export declare class PredictiveSecurityAnalytics extends EventEmitter {
     updateConfiguration(newConfig: Partial<AnalyticsConfiguration>): void;
     analyzeHistoricalData(timeframeHours?: number): Promise<ThreatPrediction[]>;
     destroy(): void;
-}
+
 export declare class PredictiveAnalyticsFactory {
     private static instance;
     static getInstance(config?: Partial<AnalyticsConfiguration>): PredictiveSecurityAnalytics;
     static createCustomInstance(config: Partial<AnalyticsConfiguration>): PredictiveSecurityAnalytics;
-}
+
 export default PredictiveSecurityAnalytics;
 //# sourceMappingURL=PredictiveSecurityAnalytics.d.ts.map

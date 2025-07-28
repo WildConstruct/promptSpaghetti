@@ -5,70 +5,65 @@ interface WebSocketStatusProps {
   queuedMessages?: number;
   className?: string;
   showDetails?: boolean;
-}
-
-export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({)
+  export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({,)
   connectionState,
   queuedMessages = 0,
   className = '',
   showDetails = false
 }) => {
-  const getStatusColor = (status: ConnectionState['status']): string => {
-    switch (status) {
-    case 'connected':
-    case 'authenticated':
-      return 'text-green-500';
-    case 'connecting':
-    case 'authenticating':
-      return 'text-yellow-500';
-    case 'disconnected':
-      return 'text-gray-500';
-    case 'error':
-      return 'text-red-500';
-    default:
-      return 'text-gray-500';
-    }
-  };
+  const getStatusColor = (status: ConnectionState['status']): string => {,
+  switch (status) {
+  case 'connected':,
+  case 'authenticated':,
+  return 'text-green-500';
+  case 'connecting':,
+  case 'authenticating':,
+  return 'text-yellow-500';
+  case 'disconnected':,
+  return 'text-gray-500';
+  case 'error':,
+  return 'text-red-500';
+  default:,
+  return 'text-gray-500';
+};
   const getStatusIcon = (status: ConnectionState['status']): string => {
-    switch (status) {
-    case 'connected':
-    case 'authenticated':
-      return '●';
-    case 'connecting':
-    case 'authenticating':
-      return '◐';
-    case 'disconnected':
-      return '○';
-    case 'error':
-      return '✕';
-    default:
-      return '○';
-    }
-  };
+  switch (status) {
+  case 'connected':,
+  case 'authenticated':,
+  return '●';
+  case 'connecting':,
+  case 'authenticating':,
+  return '◐';
+  case 'disconnected':,
+  return '○';
+  case 'error':,
+  return '✕';
+  default:,
+  return '○';
+};
   const getStatusText = (status: ConnectionState['status']): string => {
-    switch (status) {
-    case 'connected':
-      return 'Connected';
-    case 'authenticated':
-      return 'Connected & Authenticated';
-    case 'connecting':
-      return 'Connecting...';
-    case 'authenticating':
-      return 'Authenticating...';
-    case 'disconnected':
-      return 'Disconnected';
-    case 'error':
-      return 'Connection Error';
-    default:
-      return 'Unknown';
-    }
-  };
+  switch (status) {
+  case 'connected':,
+  return 'Connected';
+  case 'authenticated':,
+  return 'Connected & Authenticated';
+  case 'connecting':,
+  return 'Connecting...';
+  case 'authenticating':,
+  return 'Authenticating...';
+  case 'disconnected':,
+  return 'Disconnected';
+  case 'error':,
+  return 'Connection Error';
+  default:,
+  return 'Unknown';
+};
   const formatTime = (timestamp?: number): string => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);
     return date.toLocaleTimeString();
   };
-  return ();
+  return;
     <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
         className={`text-sm font-mono ${getStatusColor(connectionState.status)}`}
@@ -111,19 +106,19 @@ export const WebSocketStatus: React.FC<WebSocketStatusProps> = ({)
 };
 
 // Compact version for status bars
-export const WebSocketStatusIcon: React.FC<{
+export const WebSocketStatusIcon: React.FC<{,
   connectionState: ConnectionState;
   onClick?: () => void;
 }> = ({ connectionState, onClick }) => {
   const statusColor = {
-    connected: '#10b981',
-    authenticated: '#10b981',
-    connecting: '#f59e0b',
-    authenticating: '#f59e0b',
-    disconnected: '#6b7280',
-    error: '#ef4444',
-  }[connectionState.status];
-  return ();
+  connected: '#10b981',
+  authenticated: '#10b981',
+  connecting: '#f59e0b',
+  authenticating: '#f59e0b',
+  disconnected: '#6b7280',
+  error: '#ef4444',
+}[connectionState.status];
+  return;
     <div 
       className="cursor-pointer" 
       onClick={onClick}
@@ -143,7 +138,7 @@ export const WebSocketStatusIcon: React.FC<{
 };
 
 // Connection details modal/dropdown content
-export const WebSocketDetails: React.FC<{
+export const WebSocketDetails: React.FC<{,
   connectionState: ConnectionState;
   queuedMessages?: number;
   onClearQueue?: () => void;
@@ -158,7 +153,7 @@ export const WebSocketDetails: React.FC<{
 }) => {
   const isConnected = connectionState.status === 'connected' || connectionState.status === 'authenticated';
   const canReconnect = connectionState.status === 'disconnected' || connectionState.status === 'error';
-  return ();
+  return;
     <div className="p-4 bg-white rounded-lg shadow-lg border w-80">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -169,10 +164,10 @@ export const WebSocketDetails: React.FC<{
           <div className="flex justify-between">
             <span className="text-gray-600">Status:</span>
             <span className={`font-medium ${
-              isConnected ? 'text-green-600' : 
-                connectionState.status === 'error' ? 'text-red-600' : 
-                  'text-gray-600'
-            }`}>
+  isConnected ? 'text-green-600' :,
+  connectionState.status === 'error' ? 'text-red-600' :,
+  'text-gray-600'
+}`}>
               {connectionState.status}
             </span>
           </div>

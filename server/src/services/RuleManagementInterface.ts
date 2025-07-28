@@ -23,6 +23,7 @@ import { RuleTestingFramework } from './RuleTestingFramework';
 import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 
+}
 export interface RuleManagementConfiguration {
   environment: string;
   enableVersioning: boolean;
@@ -37,7 +38,9 @@ export interface RuleManagementConfiguration {
   monitoring: MonitoringConfig;
   governance: GovernanceConfig;
 }
+}
 
+}
 export interface ApprovalWorkflowConfig {
   enabled: boolean;
   stages: ApprovalStage[];
@@ -46,7 +49,9 @@ export interface ApprovalWorkflowConfig {
   notifications: NotificationConfig;
   timeouts: TimeoutConfig;
 }
+}
 
+}
 export interface ApprovalStage {
   stageId: string;
   name: string;
@@ -61,7 +66,9 @@ export interface ApprovalStage {
   minimumApprovals: number;
   vetoPower: boolean;
 }
+}
 
+}
 export interface ApproverConfig {
   approverId: string;
   type: ApproverType;
@@ -70,6 +77,7 @@ export interface ApproverConfig {
   expertise: string[];
   delegationAllowed: boolean;
   autoApprovalRules: AutoApprovalRule[];
+}
 }
 
 export enum ApproverType {
@@ -80,12 +88,14 @@ export enum ApproverType {
   EXTERNAL = 'EXTERNAL'
 }
 
+}
 export interface AutoApprovalRule {
   ruleId: string;
   conditions: AutoApprovalCondition[];
   riskThreshold: RiskLevel;
   requireManualReview: boolean;
   notifications: boolean;
+}
 }
 
 export enum RiskLevel {
@@ -97,6 +107,7 @@ export enum RiskLevel {
   CRITICAL = 'CRITICAL'
 }
 
+}
 export interface DeploymentStrategy {
   strategy: DeploymentType;
   environments: string[];
@@ -105,6 +116,7 @@ export interface DeploymentStrategy {
   blueGreenDeployment: BlueGreenConfig;
   validation: DeploymentValidation;
   rollback: AutoRollbackConfig;
+}
 }
 
 export enum DeploymentType {
@@ -115,6 +127,7 @@ export enum DeploymentType {
   SCHEDULED = 'SCHEDULED'
 }
 
+}
 export interface CanaryConfig {
   enabled: boolean;
   initialPercentage: number;
@@ -124,7 +137,9 @@ export interface CanaryConfig {
   rollbackCriteria: RollbackCriteria;
   monitoring: CanaryMonitoring;
 }
+}
 
+}
 export interface RuleVersion {
   versionId: string;
   ruleId: string;
@@ -145,6 +160,7 @@ export interface RuleVersion {
   activatedAt?: Date;
   deactivatedAt?: Date;
 }
+}
 
 export enum VersionStatus {
   DRAFT = 'DRAFT',
@@ -160,6 +176,7 @@ export enum VersionStatus {
   ARCHIVED = 'ARCHIVED'
 }
 
+}
 export interface VersionChange {
   changeId: string;
   type: ChangeType;
@@ -173,6 +190,7 @@ export interface VersionChange {
   evidence: ChangeEvidence[];
   riskAssessment: ChangeRiskAssessment;
   timestamp: Date;
+}
 }
 
 export enum ChangeType {
@@ -197,6 +215,7 @@ export enum ChangeCategory {
   PERFORMANCE = 'PERFORMANCE'
 }
 
+}
 export interface RuleApproval {
   approvalId: string;
   ruleVersionId: string;
@@ -214,6 +233,7 @@ export interface RuleApproval {
   expiresAt?: Date;
   delegatedBy?: string;
   overridden?: boolean;
+}
 }
 
 export enum ApprovalStatus {
@@ -238,6 +258,7 @@ export enum ApprovalDecision {
   DEFER = 'DEFER'
 }
 
+}
 export interface RuleDeployment {
   deploymentId: string;
   ruleVersionId: string;
@@ -258,6 +279,7 @@ export interface RuleDeployment {
   logs: DeploymentLog[];
   artifacts: DeploymentArtifact[];
 }
+}
 
 export enum DeploymentStatus {
   PENDING = 'PENDING',
@@ -270,6 +292,7 @@ export enum DeploymentStatus {
   CANCELLED = 'CANCELLED'
 }
 
+}
 export interface RuleConflictDetection {
   conflictId: string;
   type: ConflictType;
@@ -282,6 +305,7 @@ export interface RuleConflictDetection {
   recommendations: ConflictRecommendation[];
   history: ConflictHistory[];
   metadata: ConflictMetadata;
+}
 }
 
 export enum ConflictType {
@@ -315,6 +339,7 @@ export enum ConflictStatus {
   IGNORED = 'IGNORED'
 }
 
+}
 export interface RulePerformanceMetrics {
   ruleId: string;
   version: string;
@@ -329,7 +354,9 @@ export interface RulePerformanceMetrics {
   alerts: PerformanceAlert[];
   optimizations: PerformanceOptimization[];
 }
+}
 
+}
 export interface ExecutionMetrics {
   totalExecutions: number;
   successfulExecutions: number;
@@ -342,7 +369,9 @@ export interface ExecutionMetrics {
   errorRate: number; // percentage
   timeoutRate: number; // percentage
 }
+}
 
+}
 export interface ResourceMetrics {
   averageMemoryUsage: number;
   peakMemoryUsage: number;
@@ -353,7 +382,9 @@ export interface ResourceMetrics {
   cacheHitRate: number; // percentage
   databaseConnections: number;
 }
+}
 
+}
 export interface RuleGovernance {
   governanceId: string;
   ruleId: string;
@@ -368,7 +399,9 @@ export interface RuleGovernance {
   audit: AuditGovernance;
   reporting: ReportingGovernance;
 }
+}
 
+}
 export interface RuleOwner {
   ownerId: string;
   name: string;
@@ -380,6 +413,7 @@ export interface RuleOwner {
   backup: BackupOwner[];
   delegation: DelegationSettings;
 }
+}
 
 export enum AuthorityLevel {
   READ_ONLY = 'READ_ONLY',
@@ -389,6 +423,7 @@ export enum AuthorityLevel {
   OWNER = 'OWNER'
 }
 
+}
 export interface RuleStakeholder {
   stakeholderId: string;
   name: string;
@@ -398,6 +433,7 @@ export interface RuleStakeholder {
   influence: InfluenceLevel;
   notifications: NotificationPreferences;
   involvement: InvolvementLevel;
+}
 }
 
 export enum StakeholderInterest {
@@ -463,6 +499,7 @@ export class RuleManagementInterface {
     author: string,
     justification: string
   ): Promise<RuleCreationResult> {
+
     const ruleId = `RULE-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     
     await this.auditService.logEvent({
@@ -473,7 +510,7 @@ export class RuleManagementInterface {
         framework: ruleData.framework,
         category: ruleData.category,
         justification
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: [ruleData.framework || 'GDPR'],
@@ -521,7 +558,7 @@ export class RuleManagementInterface {
           conflicts: conflicts.length,
           validationPassed: validation.passed,
           approvalRequired: !!approvalWorkflow
-        },
+  }
         riskLevel: conflicts.length > 0 ? 'MEDIUM' : 'LOW',
         compliance: {
           frameworks: [ruleData.framework || 'GDPR'],
@@ -539,7 +576,7 @@ export class RuleManagementInterface {
           ruleId,
           author,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [ruleData.framework || 'GDPR'],
@@ -562,6 +599,7 @@ export class RuleManagementInterface {
     justification: string,
     changeCategory: ChangeCategory = ChangeCategory.MINOR
   ): Promise<RuleUpdateResult> {
+
     const currentVersions = this.ruleVersions.get(ruleId);
     if (!currentVersions || currentVersions.length === 0) {
       throw new Error(`Rule ${ruleId} not found`);
@@ -577,7 +615,7 @@ export class RuleManagementInterface {
         author,
         changeCategory,
         justification
-      },
+  }
       riskLevel: this.getRiskLevelForChangeCategory(changeCategory),
       compliance: {
         frameworks: [currentVersion.rule?.framework || 'GDPR'],
@@ -635,7 +673,7 @@ export class RuleManagementInterface {
           conflicts: conflicts.length,
           validationPassed: validation.passed,
           impactLevel: impact.level
-        },
+  }
         riskLevel: this.getRiskLevelForChangeCategory(changeCategory),
         compliance: {
           frameworks: [currentVersion.rule?.framework || 'GDPR'],
@@ -654,7 +692,7 @@ export class RuleManagementInterface {
           author,
           changeCategory,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [currentVersion.rule?.framework || 'GDPR'],
@@ -676,6 +714,7 @@ export class RuleManagementInterface {
     environment: string,
     strategy: DeploymentType = DeploymentType.IMMEDIATE
   ): Promise<RuleDeploymentResult> {
+
     const versions = this.ruleVersions.get(ruleId);
     const version = versions?.find(v => v.versionId === versionId);
     
@@ -697,7 +736,7 @@ export class RuleManagementInterface {
         deploymentId,
         environment,
         strategy
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: [version.rule?.framework || 'GDPR'],
@@ -743,7 +782,7 @@ export class RuleManagementInterface {
         validation: {
           preDeployment: preValidation,
           postDeployment: postValidation
-        },
+  }
         monitoring: deployment.monitoring,
         rollback: deploymentResult.rollback,
         errors: deploymentResult.errors,
@@ -760,7 +799,7 @@ export class RuleManagementInterface {
           success: deploymentResult.success,
           duration: deploymentResult.duration,
           errors: deploymentResult.errors.length
-        },
+  }
         riskLevel: deploymentResult.success ? 'LOW' : 'HIGH',
         compliance: {
           frameworks: [version.rule?.framework || 'GDPR'],
@@ -780,7 +819,7 @@ export class RuleManagementInterface {
           deploymentId,
           environment,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [version.rule?.framework || 'GDPR'],
@@ -805,6 +844,7 @@ export class RuleManagementInterface {
     approverId: string,
     conditions?: ApprovalCondition[]
   ): Promise<ApprovalProcessResult> {
+
     const versions = this.ruleVersions.get(ruleId);
     const version = versions?.find(v => v.versionId === versionId);
     
@@ -826,7 +866,7 @@ export class RuleManagementInterface {
         decision,
         approverId,
         stage: approval.stage
-      },
+  }
       riskLevel: decision === ApprovalDecision.REJECT ? 'MEDIUM' : 'LOW',
       compliance: {
         frameworks: [version.rule?.framework || 'GDPR'],
@@ -883,7 +923,7 @@ export class RuleManagementInterface {
           approvalId,
           approverId,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [version.rule?.framework || 'GDPR'],
@@ -903,6 +943,7 @@ export class RuleManagementInterface {
     ruleId: string,
     timeWindow: TimeWindow = { start: new Date(Date.now() - 24 * 60 * 60 * 1000), end: new Date() }
   ): Promise<RulePerformanceReport> {
+
     const versions = this.ruleVersions.get(ruleId);
     if (!versions) {
       throw new Error(`Rule ${ruleId} not found`);
@@ -968,7 +1009,7 @@ export class RuleManagementInterface {
           ruleId,
           timeWindow,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: [activeVersion.rule?.framework || 'GDPR'],
@@ -989,6 +1030,7 @@ export class RuleManagementInterface {
     framework?: ComplianceFramework,
     timeWindow?: TimeWindow
   ): Promise<RuleGovernanceReport> {
+
     const reportId = `GOV-REPORT-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     
     try {
@@ -1033,7 +1075,7 @@ export class RuleManagementInterface {
           scope: scope.ruleCount,
           framework,
           ruleId
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: framework ? [framework] : ['GDPR'],
@@ -1052,7 +1094,7 @@ export class RuleManagementInterface {
           ruleId,
           framework,
           error: error instanceof Error ? error.message : 'Unknown error'
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: framework ? [framework] : ['GDPR'],
@@ -1092,6 +1134,7 @@ export class RuleManagementInterface {
     author: string,
     justification: string
   ): Promise<RuleVersion> {
+
     const versionId = `${ruleId}-V1.0.0`;
     
     const version: RuleVersion = {
@@ -1135,6 +1178,7 @@ export class RuleManagementInterface {
   }
 
   private async validateRule(___version: RuleVersion): Promise<ValidationResult> {
+
     // Implement comprehensive rule validation
     return {
       passed: true,
@@ -1146,6 +1190,7 @@ export class RuleManagementInterface {
   }
 
   private async detectConflicts(___version: RuleVersion): Promise<RuleConflictDetection[]> {
+
     // Implement conflict detection logic
     return [];
   }
@@ -1210,6 +1255,7 @@ export class RuleManagementInterface {
   // For brevity, I'm including simplified implementations
 
   private async startApprovalWorkflow(___version: RuleVersion): Promise<ApprovalWorkflowInstance> {
+
     return {
       workflowId: `WORKFLOW-${Date.now()}`,
       status: 'PENDING',
@@ -1219,6 +1265,7 @@ export class RuleManagementInterface {
   }
 
   private async initializeGovernance(ruleId: string, owner: string): Promise<RuleGovernance> {
+
     return {
       governanceId: `GOV-${ruleId}`,
       ruleId,
@@ -1232,7 +1279,7 @@ export class RuleManagementInterface {
         contactInfo: {} as ContactInfo,
         backup: [],
         delegation: {} as DelegationSettings
-      },
+  }
       stakeholders: [],
       compliance: {} as ComplianceTracking,
       lifecycle: {} as LifecycleGovernance,
@@ -1271,6 +1318,7 @@ export class RuleManagementInterface {
 }
 
 // Interface definitions for the management system
+}
 export interface RuleCreationResult {
   success: boolean;
   ruleId: string;
@@ -1282,7 +1330,9 @@ export interface RuleCreationResult {
   governance: RuleGovernance;
   nextSteps: string[];
 }
+}
 
+}
 export interface RuleUpdateResult {
   success: boolean;
   ruleId: string;
@@ -1295,7 +1345,9 @@ export interface RuleUpdateResult {
   approvalWorkflow?: ApprovalWorkflowInstance;
   nextSteps: string[];
 }
+}
 
+}
 export interface RuleDeploymentResult {
   success: boolean;
   deploymentId: string;
@@ -1308,6 +1360,7 @@ export interface RuleDeploymentResult {
   validation: {
     preDeployment: ValidationResult;
     postDeployment: ValidationResult;
+}
   };
   monitoring: DeploymentMonitoring;
   rollback?: DeploymentRollback;
@@ -1315,6 +1368,7 @@ export interface RuleDeploymentResult {
   warnings: DeploymentWarning[];
 }
 
+}
 export interface ApprovalProcessResult {
   success: boolean;
   approvalId: string;
@@ -1326,7 +1380,9 @@ export interface ApprovalProcessResult {
   nextSteps: string[];
   notifications: NotificationTarget[];
 }
+}
 
+}
 export interface RulePerformanceReport {
   ruleId: string;
   version: string;
@@ -1340,7 +1396,9 @@ export interface RulePerformanceReport {
   recommendations: string[];
   generatedAt: Date;
 }
+}
 
+}
 export interface RuleGovernanceReport {
   reportId: string;
   scope: ReportScope;
@@ -1353,6 +1411,7 @@ export interface RuleGovernanceReport {
   summary: unknown;
   generatedAt: Date;
   generatedBy: string;
+}
 }
 
 // Simplified interfaces for brevity (would be fully implemented)

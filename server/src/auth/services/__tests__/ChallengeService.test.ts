@@ -29,19 +29,19 @@ describe('ChallengeService', () => {
           v2Enabled: true,
           v3Enabled: true,
           v3Threshold: 0.5
-        },
+  }
         hcaptcha: {
           siteKey: 'test-hcaptcha-site-key',
           secretKey: 'test-hcaptcha-secret',
           enabled: true
-        },
+  }
         custom: {
           enabled: true,
           difficulty: ChallengeDifficulty.MEDIUM,
           maxAttempts: 3,
           expiryMinutes: 10
         }
-      },
+  }
       rules: [],
       escalation: {
         enabled: true,
@@ -50,7 +50,7 @@ describe('ChallengeService', () => {
           timeWindow: 300,
           escalateAfter: 5
         }
-      },
+  }
       progressive: {
         enabled: true,
         stages: []
@@ -298,7 +298,7 @@ describe('ChallengeService', () => {
       (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue({
           success: true
-        })
+  }
       } as any);
 
       const request: ChallengeRequest = {
@@ -330,7 +330,7 @@ describe('ChallengeService', () => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
-        })
+  }
       );
     });
 
@@ -340,7 +340,7 @@ describe('ChallengeService', () => {
         json: jest.fn().mockResolvedValue({
           success: true,
           score: 0.3 // Below threshold of 0.5
-        })
+  }
       } as any);
 
       const request: ChallengeRequest = {
@@ -372,7 +372,7 @@ describe('ChallengeService', () => {
       (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue({
           success: true
-        })
+  }
       } as any);
 
       const request: ChallengeRequest = {
@@ -401,7 +401,7 @@ describe('ChallengeService', () => {
         'https://hcaptcha.com/siteverify',
         expect.objectContaining({
           method: 'POST'
-        })
+  }
       );
     });
 

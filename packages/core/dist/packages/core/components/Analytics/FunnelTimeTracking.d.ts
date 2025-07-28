@@ -24,8 +24,8 @@ export interface FunnelTimeTrackingProps {
         start: number;
         end: number;
     };
-    segments?: UserSegment[];
-    cohorts?: ConversionCohort[];
+    segments?: UserSegment;
+    cohorts?: ConversionCohort;
     granularity?: TimeGranularity;
     showTrends?: boolean;
     showAnomalies?: boolean;
@@ -35,13 +35,13 @@ export interface FunnelTimeTrackingProps {
 }
 export type TimeGranularity = 'hour' | 'day' | 'week' | 'month' | 'quarter';
 export interface TimeTrackingData {
-    performanceTimeline: PerformanceTimelineData[];
-    trendAnalysis: TrendAnalysis[];
-    seasonalPatterns: SeasonalPattern[];
-    anomalies: PerformanceAnomaly[];
-    stepTimeAnalysis: StepTimeAnalysis[];
-    conversionVelocity: ConversionVelocityData[];
-    comparativePeriods: ComparativePeriodAnalysis[];
+    performanceTimeline: PerformanceTimelineData;
+    trendAnalysis: TrendAnalysis;
+    seasonalPatterns: SeasonalPattern;
+    anomalies: PerformanceAnomaly;
+    stepTimeAnalysis: StepTimeAnalysis;
+    conversionVelocity: ConversionVelocityData;
+    comparativePeriods: ComparativePeriodAnalysis;
     realTimeMetrics: RealTimeMetrics;
 }
 export interface PerformanceTimelineData {
@@ -49,8 +49,8 @@ export interface PerformanceTimelineData {
     period: string;
     granularity: TimeGranularity;
     overallMetrics: TimelineMetrics;
-    stepMetrics: StepTimelineMetrics[];
-    environmentalFactors: EnvironmentalFactor[];
+    stepMetrics: StepTimelineMetrics;
+    environmentalFactors: EnvironmentalFactor;
 }
 export interface TimelineMetrics {
     totalEntries: number;
@@ -89,8 +89,8 @@ export interface TrendAnalysis {
     changeRate: number;
     significance: number;
     confidence: number;
-    forecast: ForecastData[];
-    insights: TrendInsight[];
+    forecast: ForecastData;
+    insights: TrendInsight;
 }
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile';
 export interface ForecastData {
@@ -100,7 +100,7 @@ export interface ForecastData {
         lower: number;
         upper: number;
     };
-    factors: string[];
+    factors: string;
 }
 export interface TrendInsight {
     type: 'opportunity' | 'risk' | 'pattern' | 'recommendation';
@@ -109,31 +109,31 @@ export interface TrendInsight {
     impact: number;
     urgency: 'high' | 'medium' | 'low';
     actionable: boolean;
-    recommendedActions: string[];
+    recommendedActions: string;
 }
 export interface SeasonalPattern {
     pattern: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
     description: string;
     strength: number;
-    peaks: SeasonalPeak[];
-    troughs: SeasonalTrough[];
+    peaks: SeasonalPeak;
+    troughs: SeasonalTrough;
     businessImpact: number;
     reliability: number;
-    recommendations: SeasonalRecommendation[];
+    recommendations: SeasonalRecommendation;
 }
 export interface SeasonalPeak {
     period: string;
     value: number;
     consistency: number;
     duration: number;
-    contributingFactors: string[];
+    contributingFactors: string;
 }
 export interface SeasonalTrough {
     period: string;
     value: number;
     consistency: number;
     duration: number;
-    contributingFactors: string[];
+    contributingFactors: string;
 }
 export interface SeasonalRecommendation {
     type: 'marketing' | 'operations' | 'product' | 'support';
@@ -141,7 +141,7 @@ export interface SeasonalRecommendation {
     description: string;
     timing: string;
     expectedImpact: number;
-    implementation: string[];
+    implementation: string;
 }
 export interface PerformanceAnomaly {
     id: string;
@@ -155,7 +155,7 @@ export interface PerformanceAnomaly {
     actualValue: number;
     deviation: number;
     confidence: number;
-    possibleCauses: PossibleCause[];
+    possibleCauses: PossibleCause;
     businessImpact: number;
     autoResolved: boolean;
     investigationStatus: 'pending' | 'investigating' | 'resolved' | 'false_positive';
@@ -164,8 +164,8 @@ export interface PossibleCause {
     category: 'technical' | 'external' | 'product' | 'marketing' | 'seasonal';
     description: string;
     likelihood: number;
-    evidence: string[];
-    investigationSteps: string[];
+    evidence: string;
+    investigationSteps: string;
 }
 export interface StepTimeAnalysis {
     stepId: string;
@@ -174,7 +174,7 @@ export interface StepTimeAnalysis {
     timeSpentOnStep: TimeDistribution;
     timeToConvert: TimeDistribution;
     abandonmentTiming: AbandonmentTiming;
-    temporalPatterns: StepTemporalPattern[];
+    temporalPatterns: StepTemporalPattern;
 }
 export interface TimeDistribution {
     mean: number;
@@ -206,8 +206,8 @@ export interface ConversionVelocityData {
     averageConversionTime: number;
     conversionVelocity: number;
     velocityTrend: 'accelerating' | 'decelerating' | 'stable';
-    stepVelocities: StepVelocityData[];
-    bottleneckAnalysis: BottleneckAnalysis[];
+    stepVelocities: StepVelocityData;
+    bottleneckAnalysis: BottleneckAnalysis;
 }
 export interface StepVelocityData {
     stepId: string;
@@ -223,7 +223,7 @@ export interface BottleneckAnalysis {
     bottleneckType: 'time' | 'capacity' | 'conversion';
     severity: number;
     impact: number;
-    solutions: BottleneckSolution[];
+    solutions: BottleneckSolution;
 }
 export interface BottleneckSolution {
     title: string;
@@ -244,9 +244,9 @@ export interface ComparativePeriodAnalysis {
         label: string;
     };
     overallComparison: PeriodComparison;
-    stepComparisons: StepPeriodComparison[];
-    significantChanges: SignificantChange[];
-    insights: PeriodInsight[];
+    stepComparisons: StepPeriodComparison;
+    significantChanges: SignificantChange;
+    insights: PeriodInsight;
 }
 export interface PeriodComparison {
     metric: string;
@@ -261,7 +261,7 @@ export interface PeriodComparison {
 export interface StepPeriodComparison {
     stepId: string;
     stepName: string;
-    comparisons: PeriodComparison[];
+    comparisons: PeriodComparison;
 }
 export interface SignificantChange {
     stepId?: string;
@@ -271,14 +271,14 @@ export interface SignificantChange {
     magnitude: 'small' | 'moderate' | 'large';
     significance: number;
     businessImpact: number;
-    possibleReasons: string[];
+    possibleReasons: string;
 }
 export interface PeriodInsight {
     type: 'performance' | 'trend' | 'anomaly' | 'opportunity';
     title: string;
     description: string;
-    evidence: string[];
-    recommendations: string[];
+    evidence: string;
+    recommendations: string;
     priority: 'high' | 'medium' | 'low';
 }
 export interface RealTimeMetrics {
@@ -287,7 +287,7 @@ export interface RealTimeMetrics {
     activeUsers: number;
     conversionsLast24Hours: number;
     averageTimeToConvert: number;
-    currentBottlenecks: string[];
+    currentBottlenecks: string;
     alertsActive: number;
     lastUpdated: number;
 }
@@ -305,9 +305,9 @@ export interface TimeTrackingExportData {
         anomalies: string;
     };
     insights: {
-        trends: TrendInsight[];
-        seasonal: SeasonalRecommendation[];
-        anomalies: PerformanceAnomaly[];
+        trends: TrendInsight;
+        seasonal: SeasonalRecommendation;
+        anomalies: PerformanceAnomaly;
     };
     metadata: {
         exportedAt: number;
@@ -315,9 +315,6 @@ export interface TimeTrackingExportData {
         analysisDepth: 'basic' | 'standard' | 'comprehensive';
     };
 }
-/**
- * Main Funnel Time Tracking Component
- */
 export declare const FunnelTimeTracking: React.FC<FunnelTimeTrackingProps>;
 export default FunnelTimeTracking;
 //# sourceMappingURL=FunnelTimeTracking.d.ts.map

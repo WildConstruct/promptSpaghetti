@@ -6,13 +6,14 @@
  */
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
+
 export interface CrossModalConfig {
     provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
     baseURL?: string;
     model?: string;
     defaultParameters?: Record<string, any>;
-}
+
 export interface MultimodalInput {
     type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
@@ -25,7 +26,7 @@ export interface MultimodalInput {
             height: number;
         };
     };
-}
+
 export interface CrossModalAnalysis {
     content_understanding: {,
         overall_summary: string;
@@ -68,7 +69,7 @@ export interface CrossModalAnalysis {
             confidence: number;
         }>;
     };
-}
+
 export declare class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapter;
@@ -81,7 +82,7 @@ export declare class MultimodalUnderstandingNode extends AdvancedRuntimeNode {
     private _extractDominantFeatures;
     private _extractActions;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class ContentComparisonNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapter;
@@ -97,7 +98,7 @@ export declare class ContentComparisonNode extends AdvancedRuntimeNode {
     private _generateRecommendation;
     private _calculateSimilarityScores;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class ContentAdaptationNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapter;
@@ -119,5 +120,5 @@ export declare class ContentAdaptationNode extends AdvancedRuntimeNode {
     private _defineQualityCriteria;
     private _defineSuccessMetrics;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 //# sourceMappingURL=CrossModalNode.d.ts.map

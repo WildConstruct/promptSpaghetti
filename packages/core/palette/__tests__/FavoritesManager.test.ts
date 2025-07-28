@@ -4,10 +4,10 @@ import { FavoritesManager, getFavoritesManager } from '../FavoritesManager';
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: jest.fn<unknown[], unknown>(),
-  setItem: jest.fn<unknown[], unknown>(),
-  removeItem: jest.fn<unknown[], unknown>(),
-  clear: jest.fn<unknown[], unknown>(),
+  getItem: jest.fn<unknown, unknown>(),
+  setItem: jest.fn<unknown, unknown>(),
+  removeItem: jest.fn<unknown, unknown>(),
+  clear: jest.fn<unknown, unknown>(),
 };
 
 // Setup mocks
@@ -19,14 +19,14 @@ const addEventListenerSpy = jest.spyOn(window, 'addEventListener').mockImplement
 describe('FavoritesManager', () => {
   let favoritesManager: FavoritesManager;
   beforeEach(() => {
-    // Clear all mocks
-    jest.clearAllMocks();
-    localStorageMock.getItem.mockReturnValue(null as unknown);
-    // Reset singleton instance
-    (FavoritesManager as any).instance = undefined;
-    // Create fresh instance
-    favoritesManager = FavoritesManager.getInstance();
-  });
+  // Clear all mocks
+  jest.clearAllMocks();
+  localStorageMock.getItem.mockReturnValue(null as unknown);
+  // Reset singleton instance
+  (FavoritesManager as any).instance = undefined;
+  // Create fresh instance
+  favoritesManager = FavoritesManager.getInstance();
+});
   describe('Singleton Pattern', () => {
     test('should return the same instance', () => {
       const instance1 = FavoritesManager.getInstance();
@@ -100,7 +100,7 @@ describe('FavoritesManager', () => {
       expect(favoritesManager.getFavorites()).toEqual(nodeIds);
       expect(favoritesManager.getFavoritesCount()).toBe(3);
       nodeIds.forEach(nodeId => {)
-        expect(favoritesManager.isFavorite(nodeId)).toBe(true);
+  expect(favoritesManager.isFavorite(nodeId)).toBe(true);
       });
     });
   });
@@ -133,7 +133,7 @@ describe('FavoritesManager', () => {
   });
   describe('Change Listeners', () => {
     test('should notify listeners on changes', () => {
-      const listener = jest.fn<unknown[], unknown>();
+      const listener = jest.fn<unknown, unknown>();
       const unsubscribe = favoritesManager.addChangeListener(listener);
       favoritesManager.addFavorite('node1');
       expect(listener).toHaveBeenCalledWith(['node1']);
@@ -144,8 +144,8 @@ describe('FavoritesManager', () => {
       expect(listener).toHaveBeenCalledTimes(2); // Should not be called after unsubscribe
     });
     test('should handle multiple listeners', () => {
-      const listener1 = jest.fn<unknown[], unknown>();
-      const listener2 = jest.fn<unknown[], unknown>();
+      const listener1 = jest.fn<unknown, unknown>();
+      const listener2 = jest.fn<unknown, unknown>();
       favoritesManager.addChangeListener(listener1);
       favoritesManager.addChangeListener(listener2);
       favoritesManager.addFavorite('node1');
@@ -156,7 +156,7 @@ describe('FavoritesManager', () => {
       const errorListener = jest.fn(() => {
         throw new Error('Listener error');
       });
-      const normalListener = jest.fn<unknown[], unknown>();
+      const normalListener = jest.fn<unknown, unknown>();
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
       favoritesManager.addChangeListener(errorListener);
       favoritesManager.addChangeListener(normalListener);
@@ -166,8 +166,8 @@ describe('FavoritesManager', () => {
       consoleSpy.mockRestore();
     });
     test('should clear all listeners', () => {
-      const listener1 = jest.fn<unknown[], unknown>();
-      const listener2 = jest.fn<unknown[], unknown>();
+      const listener1 = jest.fn<unknown, unknown>();
+      const listener2 = jest.fn<unknown, unknown>();
       favoritesManager.addChangeListener(listener1);
       favoritesManager.addChangeListener(listener2);
       favoritesManager.clearListeners();
@@ -189,11 +189,11 @@ describe('FavoritesManager', () => {
       expect(savedData.lastModified).toBeTruthy();
     });
     test('should load from localStorage on initialization', () => {
-      const savedData = {
-        nodeIds: ['node1', 'node2'],
-        version: '1.0.0',
-        lastModified: new Date().toISOString(),
-      };
+  const savedData = {
+  nodeIds: ['node1', 'node2'],
+  version: '1.0.0',
+  lastModified: new Date().toISOString(),
+};
       localStorageMock.getItem.mockReturnValue(JSON.stringify(savedData as unknown));
       // Reset singleton and create new instance
       (FavoritesManager as any).instance = undefined;
@@ -237,31 +237,31 @@ describe('FavoritesManager', () => {
       expect(exportData.lastModified).toBeTruthy();
     });
     test('should import valid favorites data', () => {
-      const importData = {
-        nodeIds: ['node3', 'node4', 'node5'],
-        version: '1.0.0',
-        lastModified: new Date().toISOString(),
-      };
+  const importData = {
+  nodeIds: ['node3', 'node4', 'node5'],
+  version: '1.0.0',
+  lastModified: new Date().toISOString(),
+};
       const result = favoritesManager.importFavorites(importData);
       expect(result).toBe(true);
       expect(favoritesManager.getFavorites()).toEqual(['node3', 'node4', 'node5']);
     });
     test('should reject invalid import data', () => {
-      const invalidData = {
-        nodeIds: 'not an array',
-        version: '1.0.0',
-        lastModified: new Date().toISOString(),
-      };
+  const invalidData = {
+  nodeIds: 'not an array',
+  version: '1.0.0',
+  lastModified: new Date().toISOString(),
+};
       const result = favoritesManager.importFavorites(invalidData as any);
       expect(result).toBe(false);
       expect(favoritesManager.getFavorites()).toEqual([]);
     });
     test('should filter invalid node IDs on import', () => {
-      const importData = {
-        nodeIds: ['node1', '', null, 'node2', 123, 'node3'],
-        version: '1.0.0',
-        lastModified: new Date().toISOString(),
-      };
+  const importData = {
+  nodeIds: ['node1', '', null, 'node2', 123, 'node3'],
+  version: '1.0.0',
+  lastModified: new Date().toISOString(),
+};
       const result = favoritesManager.importFavorites(importData as any);
       expect(result).toBe(true);
       expect(favoritesManager.getFavorites()).toEqual(['node1', 'node2', 'node3']);

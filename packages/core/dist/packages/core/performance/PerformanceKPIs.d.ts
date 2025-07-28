@@ -45,47 +45,5 @@ export interface KPIThresholds {
         max: number;
     };
 }
-/**
- * Core Performance KPIs for the Prompt Graph System
- */
-export declare const corePerformanceKPIs: KPIDefinition[];
-/**
- * KPI threshold definitions for status calculation
- */
-export declare const kpiThresholds: Record<string, KPIThresholds>;
-/**
- * Calculate KPI status based on current value and thresholds
- */
-export declare function calculateKPIStatus(kpiId: string, value: number): 'excellent' | 'good' | 'warning' | 'critical';
-/**
- * Calculate KPI trend based on historical values
- */
-export declare function calculateKPITrend(snapshots: KPISnapshot[]): 'improving' | 'stable' | 'degrading';
-/**
- * Generate KPI recommendations based on current status
- */
-export declare function generateKPIRecommendations(kpiId: string, value: number, status: string): string[];
-/**
- * Get KPI by ID
- */
-export declare function getKPIDefinition(kpiId: string): KPIDefinition | undefined;
-/**
- * Get KPIs by category
- */
-export declare function getKPIsByCategory(category: string): KPIDefinition[];
-/**
- * Get high-priority KPIs
- */
-export declare function getCriticalKPIs(): KPIDefinition[];
-declare const _default: {
-    corePerformanceKPIs: KPIDefinition[];
-    kpiThresholds: Record<string, KPIThresholds>;
-    calculateKPIStatus: typeof calculateKPIStatus;
-    calculateKPITrend: typeof calculateKPITrend;
-    generateKPIRecommendations: typeof generateKPIRecommendations;
-    getKPIDefinition: typeof getKPIDefinition;
-    getKPIsByCategory: typeof getKPIsByCategory;
-    getCriticalKPIs: typeof getCriticalKPIs;
-};
-export default _default;
+export declare const corePerformanceKPIs: KPIDefinition;
 //# sourceMappingURL=PerformanceKPIs.d.ts.map

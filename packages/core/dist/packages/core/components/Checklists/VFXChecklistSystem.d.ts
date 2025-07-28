@@ -20,16 +20,16 @@ export interface VFXChecklistItem {
     dueDate?: string;
     estimatedHours?: number;
     actualHours?: number;
-    dependencies: string[];
-    subtasks: VFXChecklistSubtask[];
-    attachments: VFXChecklistAttachment[];
-    assets: VFXAssetReference[];
-    tags: string[];
+    dependencies: string;
+    subtasks: VFXChecklistSubtask;
+    attachments: VFXChecklistAttachment;
+    assets: VFXAssetReference;
+    tags: string;
     category: VFXChecklistCategory;
     vfxPhase: VFXProductionPhase;
-    qualityGates: VFXQualityGate[];
-    comments: VFXChecklistComment[];
-    history: VFXChecklistHistoryEntry[];
+    qualityGates: VFXQualityGate;
+    comments: VFXChecklistComment;
+    history: VFXChecklistHistoryEntry;
 }
 export interface VFXChecklistSubtask {
     id: string;
@@ -58,7 +58,7 @@ export interface VFXAssetReference {
     version: string;
     accuracy?: number;
     complexity?: number;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface VFXQualityGate {
     id: string;
@@ -77,9 +77,9 @@ export interface VFXChecklistComment {
     author: VFXTeamMember;
     timestamp: string;
     type: 'comment' | 'review' | 'approval' | 'rejection';
-    mentions: string[];
+    mentions: string;
     reactions: {
-        [emoji: string]: VFXTeamMember[];
+        [emoji: string]: VFXTeamMember;
     };
 }
 export interface VFXChecklistHistoryEntry {
@@ -120,15 +120,15 @@ export interface VFXChecklist {
     scene?: string;
     shot?: string;
     sequence?: string;
-    items: VFXChecklistItem[];
+    items: VFXChecklistItem;
     template?: VFXChecklistTemplate;
     owner: VFXTeamMember;
-    team: VFXTeamMember[];
+    team: VFXTeamMember;
     createdAt: string;
     updatedAt: string;
     dueDate?: string;
     status: 'draft' | 'active' | 'review' | 'completed' | 'archived';
-    tags: string[];
+    tags: string;
     metadata: VFXChecklistMetadata;
 }
 export interface VFXChecklistTemplate {

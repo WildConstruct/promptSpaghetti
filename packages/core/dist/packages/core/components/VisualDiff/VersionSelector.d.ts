@@ -9,7 +9,7 @@ export interface Version {
 }
 export interface VersionSelectorProps {
     graphId: string;
-    versions: Version[];
+    versions: Version;
     sourceVersionId: string;
     targetVersionId: string;
     onVersionChange: (sourceId: string, targetId: string) => void;

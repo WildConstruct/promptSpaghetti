@@ -5,6 +5,7 @@
  * Handles result selection, saving, tagging, rating, and organization.
  */
 import { EnhancedPreviewResult } from '../components/PreviewModal/EnhancedPreviewModal';
+
 export interface SavedResult extends EnhancedPreviewResult {
     savedAt: Date;
     lastModified: Date;
@@ -27,7 +28,7 @@ export interface SavedResult extends EnhancedPreviewResult {
         sceneType?: 'interior' | 'exterior' | 'mixed';
         timeOfDay?: 'dawn' | 'morning' | 'afternoon' | 'evening' | 'night';
     };
-}
+
 export interface ResultCollection {
     id: string;
     name: string;
@@ -44,7 +45,7 @@ export interface ResultCollection {
         budget?: string;
         targetRating?: string;
     };
-}
+
 export interface ResultFilter {
     tags?: string[];
     rating?: {
@@ -59,7 +60,7 @@ export interface ResultFilter {
     collection?: string;
     status?: string[];
     searchText?: string;
-}
+
 export interface ResultStats {
     totalResults: number;
     averageRating: number;
@@ -76,7 +77,6 @@ export interface ResultStats {
         resultId: string;
         details?: string;
     }>;
-}
 interface ResultManagementState {
     savedResults: Record<string, SavedResult>;
     collections: Record<string, ResultCollection>;
@@ -116,7 +116,7 @@ interface ResultManagementState {
     getResultsByCollection: (collectionId: string) => SavedResult[];
     getRecentResults: (limit?: number) => SavedResult[];
     getTopRatedResults: (limit?: number) => SavedResult[];
-}
+
 export declare const useResultManagementStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ResultManagementState>, "persist"> & {
     persist: {,
         setOptions: (options: Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>) => void;

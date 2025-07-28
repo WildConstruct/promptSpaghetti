@@ -21,12 +21,14 @@ import { AccessControlFramework } from '../services/security/AccessControlFramew
 import { z } from 'zod';
 
 // Internal interfaces for analytics
+}
 interface UserRiskData {
   userId: string;
   totalRisk: number;
   accessCount: number;
   highRiskCount: number;
   avgRisk?: number;
+}
 }
 
 // Request/Response schemas for validation
@@ -65,9 +67,10 @@ const BulkAuditSchema = z.object({
     userId: z.string(),
     sessionId: z.string().optional(),
     applicationContext: z.string().optional()
-  })
+  }
 });
 
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
@@ -123,9 +126,9 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
               successful: z.number(),
               failed: z.number(),
               highRisk: z.number()
-            })
-          })
-        })
+  }
+  }
+  }
       }
     }
   }, async (request: AuthenticatedRequest, reply) => {
@@ -165,7 +168,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
           to: auditEntries.length > 0 
             ? auditEntries[0].timestamp.toISOString()
             : new Date().toISOString()
-        },
+  }
         counts: {
           total: totalEntries.length,
           successful: totalEntries.filter(e => e.outcome === EvidenceAccessOutcome.SUCCESS).length,
@@ -181,7 +184,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
           limit: query.limit || 100,
           offset: query.offset || 0,
           hasMore: (query.offset || 0) + (query.limit || 100) < totalEntries.length
-        },
+  }
         summary
       };
 
@@ -209,8 +212,8 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
             generatedBy: z.string(),
             format: z.string(),
             recordCount: z.number()
-          })
-        })
+  }
+  }
       }
     }
   }, async (request: AuthenticatedRequest, reply) => {
@@ -277,7 +280,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
         includeIntegrityCheck: z.boolean().default(true),
         limit: z.number().int().min(1).max(1000).default(100),
         offset: z.number().int().min(0).default(0)
-      })
+  }
     }
   }, async (request: AuthenticatedRequest, reply) => {
     try {
@@ -334,7 +337,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
           verificationReport: z.unknown(),
           brokenChains: z.array(z.string()),
           recommendations: z.array(z.string())
-        })
+  }
       }
     }
   }, async (request: AuthenticatedRequest, reply) => {
@@ -365,23 +368,23 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
             type: 'user',
             roles: request.user.roles,
             permissions: request.user.permissions
-          },
+  }
           resource: {
             id: evidenceId,
             type: 'evidence',
             attributes: {}
-          },
+  }
           action: {
             operation: 'verify_integrity',
             intent: 'security_audit'
-          },
+  }
           environment: {
             timestamp: new Date(),
             applicationContext: 'admin_api',
             sourceIP: request.ip,
             userAgent: request.headers['user-agent'] || 'unknown'
           }
-        },
+  }
         evidenceId,
         EvidenceAccessAction.READ,
         EvidenceAccessOutcome.SUCCESS,
@@ -419,7 +422,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
           failed: z.number(),
           correlationId: z.string(),
           errors: z.array(z.string())
-        })
+  }
       }
     }
   }, async (request: AuthenticatedRequest, reply) => {
@@ -443,7 +446,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
             id: sharedContext.userId,
             type: 'user',
             sessionId: sharedContext.sessionId
-          },
+  }
           environment: {
             timestamp: new Date(),
             applicationContext: sharedContext.applicationContext || 'batch_api',
@@ -483,7 +486,7 @@ export async function auditTrailRoutes(fastify: FastifyInstance) {
         timeRange: z.enum(['24h', '7d', '30d', '90d']).default('7d'),
         groupBy: z.enum(['hour', 'day', 'week']).default('day'),
         includeRiskAnalysis: z.boolean().default(true)
-      })
+  }
     }
   }, async (request: AuthenticatedRequest, reply) => {
     try {
@@ -533,6 +536,7 @@ async function checkEvidenceAccess(
   evidenceId: string,
   accessControl: AccessControlFramework
 ): Promise<boolean> {
+
   // Check if user has access to evidence or is admin
   if (user.roles?.includes('admin')) {
     return true;
@@ -544,6 +548,7 @@ async function checkEvidenceAccess(
 }
 
 async function convertReportToCSV(report: AuditTrailReport): Promise<string> {
+
   // Convert audit report to CSV format
   const headers = [
     'Timestamp', 'Evidence ID', 'User ID', 'Action', 'Outcome', 
@@ -566,6 +571,7 @@ async function convertReportToCSV(report: AuditTrailReport): Promise<string> {
 }
 
 async function convertReportToXLSX(report: AuditTrailReport): Promise<Buffer> {
+
   // TODO: Implement XLSX conversion using a library like exceljs
   // For now, return empty buffer
   return Buffer.from('');

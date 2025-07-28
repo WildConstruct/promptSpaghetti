@@ -7,6 +7,7 @@
  * providing automated analysis, tuning recommendations, and performance optimization.
  */
 import { EventEmitter } from 'events';
+
 export interface OptimizationProfile {
     id: string;
     name: string;
@@ -43,7 +44,7 @@ export interface OptimizationProfile {
     last_updated: number;
     last_analyzed: number;
     enabled: boolean;
-}
+
 export interface OptimizationGoal {
     goal_type: 'performance' | 'cost' | 'reliability' | 'scalability' | 'security' | 'compliance';
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -52,7 +53,7 @@ export interface OptimizationGoal {
     improvement_target_percentage: number;
     deadline?: number;
     success_criteria: string[];
-}
+
 export interface PerformanceTarget {
     metric_name: string;
     current_value: number;
@@ -61,7 +62,7 @@ export interface PerformanceTarget {
     threshold_critical: number;
     measurement_unit: string;
     measurement_frequency: 'continuous' | 'hourly' | 'daily' | 'weekly';
-}
+
 export interface OptimizationConstraint {
     constraint_type: 'budget' | 'time' | 'resource' | 'compliance' | 'availability' | 'risk';
     description: string;
@@ -69,7 +70,7 @@ export interface OptimizationConstraint {
     limit_unit: string;
     hard_constraint: boolean;
     penalty_cost?: number;
-}
+
 export interface AnalysisScope {
     time_range_days: number;
     data_sources: string[];
@@ -77,7 +78,7 @@ export interface AnalysisScope {
     comparison_periods: string[];
     granularity: 'minute' | 'hour' | 'day';
     include_dependencies: boolean;
-}
+
 export interface OptimizationTool {
     id: string;
     name: string;
@@ -113,7 +114,7 @@ export interface OptimizationTool {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface OptimizationJob {
     id: string;
     name: string;
@@ -152,7 +153,7 @@ export interface OptimizationJob {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface OptimizationRecommendation {
     id: string;
     title: string;
@@ -189,7 +190,7 @@ export interface OptimizationRecommendation {
     };
     created_at: number;
     last_updated: number;
-}
+
 export interface PerformanceAnalysis {
     analysis_id: string;
     analysis_period: {,
@@ -240,7 +241,7 @@ export interface PerformanceAnalysis {
         vs_industry_benchmark: Record<string, number>;
         vs_theoretical_optimal: Record<string, number>;
     };
-}
+
 export interface CostBenefitAnalysis {
     analysis_id: string;
     current_costs: {,
@@ -276,7 +277,7 @@ export interface CostBenefitAnalysis {
         most_likely_scenario: Record<string, number>;
         confidence_interval: number;
     };
-}
+
 export interface RiskAssessment {
     assessment_id: string;
     risks: Array<{,
@@ -300,7 +301,7 @@ export interface RiskAssessment {
         additional_controls_needed: string[];
         audit_implications: string[];
     };
-}
+
 export interface ExecutionSummary {
     summary_id: string;
     execution_time_minutes: number;
@@ -330,7 +331,7 @@ export interface ExecutionSummary {
         message: string;
         resolution_suggestion?: string;
     }>;
-}
+
 export interface NotificationSettings {
     enabled: boolean;
     channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
@@ -339,7 +340,7 @@ export interface NotificationSettings {
     escalation_enabled: boolean;
     escalation_delay_minutes: number;
     escalation_recipients: string[];
-}
+
 export interface TriggerCondition {
     condition_type: 'performance_threshold' | 'cost_threshold' | 'error_rate' | 'capacity_utilization' | 'custom_metric';
     metric_name: string;
@@ -347,7 +348,7 @@ export interface TriggerCondition {
     threshold_value: number;
     evaluation_period_minutes: number;
     consecutive_violations: number;
-}
+
 export interface TestResult {
     test_id: string;
     test_name: string;
@@ -357,7 +358,7 @@ export interface TestResult {
     result_data: Record<string, any>;
     error_message?: string;
     executed_at: number;
-}
+
 export interface OptimizationResult {
     result_id: string;
     optimization_job_id: string;
@@ -382,7 +383,7 @@ export interface OptimizationResult {
     };
     lessons_learned: string[];
     future_recommendations: string[];
-}
+
 export interface OptimizationEvent {
     id: string;
     type: 'job_started' | 'job_completed' | 'job_failed' | 'recommendation_generated' | 'optimization_applied' | 'performance_regression';
@@ -413,7 +414,7 @@ export interface OptimizationEvent {
         resolution_actions: string[];
         resolved_at?: number;
     };
-}
+
 export declare class SecurityOptimizationTools extends EventEmitter {
     private optimizationProfiles;
     private optimizationTools;
@@ -480,6 +481,6 @@ export declare class SecurityOptimizationTools extends EventEmitter {
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
     shutdown(): void;
-}
+
 export default SecurityOptimizationTools;
 //# sourceMappingURL=SecurityOptimizationTools.d.ts.map

@@ -28,6 +28,7 @@ import {
   PlacementTemplate
 } from '../../../../packages/core/types/PlacementTypes';
 
+}
 export interface CreateSlotRequest {
   name: string;
   displayName: string;
@@ -43,7 +44,9 @@ export interface CreateSlotRequest {
   priority?: number;
   tags?: string[];
 }
+}
 
+}
 export interface UpdateSlotRequest {
   displayName?: string;
   description?: string;
@@ -57,7 +60,9 @@ export interface UpdateSlotRequest {
   isActive?: boolean;
   tags?: string[];
 }
+}
 
+}
 export interface CreatePlacementRequest {
   slotId: string;
   contentId: string;
@@ -74,7 +79,9 @@ export interface CreatePlacementRequest {
   notes?: string;
   tags?: string[];
 }
+}
 
+}
 export interface UpdatePlacementRequest {
   priority?: number;
   weight?: number;
@@ -86,6 +93,7 @@ export interface UpdatePlacementRequest {
   customData?: unknown;
   notes?: string;
   tags?: string[];
+}
 }
 
 export class PlacementManagementService {
@@ -105,6 +113,7 @@ export class PlacementManagementService {
    * Create a new placement slot
    */
   async createPlacementSlot(request: CreateSlotRequest, createdBy: string): Promise<PlacementSlot> {
+
     console.log(`📍 Creating placement slot: ${request.name}`);
 
     const slotId = this.generateSlotId();
@@ -141,7 +150,7 @@ export class PlacementManagementService {
         name: slot.name,
         placementArea: slot.placementArea,
         position: slot.position
-      },
+  }
       severity: 'info'
     });
 
@@ -152,6 +161,7 @@ export class PlacementManagementService {
    * Get placement slot by ID
    */
   async getPlacementSlot(slotId: string): Promise<PlacementSlot | null> {
+
     const result = await this.db.query(`
       SELECT * FROM placement_slots WHERE slot_id = $1
     `, [slotId]);
@@ -171,6 +181,7 @@ export class PlacementManagementService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ slots: PlacementSlot[]; total: number }> {
+
     let query = `
       SELECT ps.*, COUNT(cp.placement_id) as active_placements
       FROM placement_slots ps
@@ -224,6 +235,7 @@ export class PlacementManagementService {
    * Update placement slot
    */
   async updatePlacementSlot(slotId: string, updates: UpdateSlotRequest, updatedBy: string): Promise<PlacementSlot> {
+
     console.log(`📝 Updating placement slot: ${slotId}`);
 
     const currentSlot = await this.getPlacementSlot(slotId);
@@ -270,7 +282,7 @@ export class PlacementManagementService {
         updates: Object.keys(updateData),
         previousActive: currentSlot.isActive,
         newActive: updates.isActive
-      },
+  }
       severity: 'info'
     });
 
@@ -281,6 +293,7 @@ export class PlacementManagementService {
    * Delete placement slot
    */
   async deletePlacementSlot(slotId: string, deletedBy: string): Promise<void> {
+
     console.log(`🗑️ Deleting placement slot: ${slotId}`);
 
     // Check for active placements
@@ -312,6 +325,7 @@ export class PlacementManagementService {
    * Create content placement
    */
   async createContentPlacement(request: CreatePlacementRequest, createdBy: string): Promise<ContentPlacement> {
+
     console.log(`🎯 Creating content placement for slot: ${request.slotId}`);
 
     // Validate slot exists and has capacity
@@ -367,7 +381,7 @@ export class PlacementManagementService {
         contentId: request.contentId,
         contentType: request.contentType,
         priority: placement.priority
-      },
+  }
       severity: 'info'
     });
 
@@ -378,6 +392,7 @@ export class PlacementManagementService {
    * Get content placement by ID
    */
   async getContentPlacement(placementId: string): Promise<ContentPlacement | null> {
+
     const result = await this.db.query(`
       SELECT cp.*, ps.name as slot_name, ps.display_name as slot_display_name
       FROM content_placements cp
@@ -394,6 +409,7 @@ export class PlacementManagementService {
    * Search content placements
    */
   async searchContentPlacements(criteria: PlacementSearchCriteria): Promise<{ placements: ContentPlacement[]; total: number }> {
+
     console.log('🔍 Searching content placements', criteria);
 
     let query = `
@@ -488,6 +504,7 @@ export class PlacementManagementService {
     updates: UpdatePlacementRequest,
     updatedBy: string
   ): Promise<ContentPlacement> {
+
     console.log(`📝 Updating content placement: ${placementId}`);
 
     const currentPlacement = await this.getContentPlacement(placementId);
@@ -538,7 +555,7 @@ export class PlacementManagementService {
         updates: Object.keys(updateData),
         previousStatus: currentPlacement.status,
         newStatus: updates.status
-      },
+  }
       severity: 'info'
     });
 
@@ -549,6 +566,7 @@ export class PlacementManagementService {
    * Delete content placement
    */
   async deleteContentPlacement(placementId: string, deletedBy: string): Promise<void> {
+
     console.log(`🗑️ Deleting content placement: ${placementId}`);
 
     const placement = await this.getContentPlacement(placementId);
@@ -568,7 +586,7 @@ export class PlacementManagementService {
         placementId,
         slotId: placement.slotId,
         contentId: placement.contentId
-      },
+  }
       severity: 'warning'
     });
   }
@@ -585,6 +603,7 @@ export class PlacementManagementService {
     viewerContext: unknown,
     previewMode: 'live' | 'staged' | 'test' = 'test'
   ): Promise<PlacementPreview> {
+
     console.log(`👁️ Generating placement preview for slot: ${slotId}`);
 
     const slot = await this.getPlacementSlot(slotId);
@@ -633,6 +652,7 @@ export class PlacementManagementService {
    * Get placement slot metrics
    */
   async getSlotMetrics(slotId: string, period: unknown): Promise<PlacementSlotMetrics> {
+
     const [
       impressions,
       clicks,
@@ -676,6 +696,7 @@ export class PlacementManagementService {
    * Get placement analytics
    */
   async getPlacementAnalytics(period: unknown): Promise<PlacementAnalytics> {
+
     console.log('📊 Generating placement analytics', period);
 
     const [
@@ -787,6 +808,7 @@ export class PlacementManagementService {
   }
 
   private async storePlacementSlot(slot: PlacementSlot): Promise<void> {
+
     await this.db.query(`
       INSERT INTO placement_slots (
         slot_id, name, display_name, description, placement_area, position,
@@ -802,6 +824,7 @@ export class PlacementManagementService {
   }
 
   private async storeContentPlacement(placement: ContentPlacement): Promise<void> {
+
     await this.db.query(`
       INSERT INTO content_placements (
         placement_id, slot_id, content_id, content_type, priority, weight,
@@ -819,6 +842,7 @@ export class PlacementManagementService {
   }
 
   private async getActivePlacementsCount(slotId: string): Promise<number> {
+
     const result = await this.db.query(`
       SELECT COUNT(*) FROM content_placements 
       WHERE slot_id = $1 AND status = 'active'
@@ -827,6 +851,7 @@ export class PlacementManagementService {
   }
 
   private async validateContentExists(contentId: string, contentType: ContentType): Promise<void> {
+
     let tableName: string;
     let idColumn: string;
 
@@ -879,6 +904,7 @@ export class PlacementManagementService {
   }
 
   private async rebalanceSlotPriorities(slotId: string): Promise<void> {
+
     // Rebalance priorities to ensure proper ordering
     console.log(`⚖️ Rebalancing priorities for slot: ${slotId}`);
   }
@@ -920,6 +946,7 @@ export class PlacementManagementService {
   private async getActiveSlotsCount(): Promise<number> { return 20; }
   private async getTotalPlacementsCount(_____period: unknown): Promise<number> { return 150; }
   private async getOverallPerformanceMetrics(_____period: unknown): Promise<unknown> {
+
     return {
       totalImpressions: 50000,
       totalClicks: 2500,

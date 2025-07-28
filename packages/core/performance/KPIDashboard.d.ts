@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 import { KPIMonitoringService, KPITrendAnalysis } from './KPIMonitoringService';
 import { PerformanceBaseline } from './PerformanceBaseline';
 import { PerformanceTargetConfig } from './PerformanceTargets';
+
 export interface DashboardWidget {
     id: string;
     type: 'chart' | 'metric' | 'alert' | 'trend' | 'gauge' | 'table';
@@ -16,7 +17,7 @@ export interface DashboardWidget {
     data: any;
     refreshRate: number;
     lastUpdated: number;
-}
+
 export interface DashboardLayout {
     id: string;
     name: string;
@@ -25,7 +26,7 @@ export interface DashboardLayout {
     columns: number;
     autoRefresh: boolean;
     refreshInterval: number;
-}
+
 export interface DashboardMetrics {
     overview: {,
         totalKPIs: number;
@@ -58,7 +59,7 @@ export interface DashboardMetrics {
         degrading: KPITrendAnalysis[];
         stable: KPITrendAnalysis[];
     };
-}
+
 export interface DashboardReport {
     id: string;
     timestamp: number;
@@ -93,7 +94,6 @@ export interface DashboardReport {
             trend: string;
         }>;
     };
-}
 /**
  * KPI Dashboard Service
  * Provides comprehensive dashboard functionality for performance monitoring
@@ -203,6 +203,6 @@ export declare class KPIDashboard extends EventEmitter {
      * Clear old reports
      */
     clearOldReports(retentionDays?: number): number;
-}
+
 export default KPIDashboard;
 //# sourceMappingURL=KPIDashboard.d.ts.map

@@ -47,6 +47,7 @@ export enum AssignmentStatus {
 }
 
 // Core interfaces
+}
 export interface ReviewerProfile {
   id: string;
   user_id: string;
@@ -60,7 +61,9 @@ export interface ReviewerProfile {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface ReviewerMetrics {
   total_reviews: number;
   completed_reviews: number;
@@ -71,7 +74,9 @@ export interface ReviewerMetrics {
   current_streak: number;
   last_review_date: Date;
 }
+}
 
+}
 export interface ReviewAssignment {
   id: string;
   review_item_id: string;
@@ -99,7 +104,9 @@ export interface ReviewAssignment {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface AssignmentRule {
   id: string;
   review_type: ReviewType;
@@ -111,14 +118,18 @@ export interface AssignmentRule {
   fallback_strategy: AssignmentStrategy;
   enabled: boolean;
 }
+}
 
+}
 export interface AssignmentCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in';
   value: Error;
   weight: number;
 }
+}
 
+}
 export interface WorkloadDistribution {
   reviewer_id: string;
   current_assignments: number;
@@ -127,7 +138,9 @@ export interface WorkloadDistribution {
   overdue_count: number;
   priority_score: number;
 }
+}
 
+}
 export interface AssignmentRequest {
   review_item_id: string;
   review_type: ReviewType;
@@ -140,6 +153,7 @@ export interface AssignmentRequest {
   assignment_strategy?: AssignmentStrategy;
   metadata?: Record<string, any>;
 }
+}
 
 export class ReviewerAssignmentService {
   private readonly logger = new Logger(ReviewerAssignmentService.name);
@@ -150,6 +164,7 @@ export class ReviewerAssignmentService {
    * Initialize the reviewer assignment schema
    */
   async initializeSchema(): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -266,6 +281,7 @@ export class ReviewerAssignmentService {
    * Create or update reviewer profile
    */
   async createReviewerProfile(profileData: Omit<ReviewerProfile, 'id' | 'created_at' | 'updated_at'>): Promise<ReviewerProfile> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(`
@@ -301,6 +317,7 @@ export class ReviewerAssignmentService {
    * Assign reviewer automatically based on rules and availability
    */
   async assignReviewer(request: AssignmentRequest, assignedBy: string): Promise<ReviewAssignment> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -379,6 +396,7 @@ export class ReviewerAssignmentService {
     reason: string,
     dueDate?: Date
   ): Promise<ReviewAssignment> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -455,6 +473,7 @@ export class ReviewerAssignmentService {
     reason: string,
     performedBy: string
   ): Promise<ReviewAssignment> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -538,6 +557,7 @@ export class ReviewerAssignmentService {
    * Complete review assignment
    */
   async completeAssignment(assignmentId: string, performedBy: string, completionData?: any): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -602,6 +622,7 @@ export class ReviewerAssignmentService {
    * Get reviewer workload distribution
    */
   async getWorkloadDistribution(reviewType?: ReviewType): Promise<WorkloadDistribution[]> {
+
     const client = await this.pool.connect();
     try {
       let query = `
@@ -658,6 +679,7 @@ export class ReviewerAssignmentService {
     status?: AssignmentStatus,
     limit = 20
   ): Promise<ReviewAssignment[]> {
+
     const client = await this.pool.connect();
     try {
       let query = 'SELECT * FROM review_assignments WHERE reviewer_id = $1';
@@ -685,6 +707,7 @@ export class ReviewerAssignmentService {
     strategy: AssignmentStrategy,
     client: PoolClient
   ): Promise<ReviewerProfile | null> {
+
     let query = `
       SELECT rp.*, 
              COALESCE(active_assignments.count, 0) as current_active_assignments
@@ -747,6 +770,7 @@ export class ReviewerAssignmentService {
   }
 
   private async getAssignmentRules(reviewType: ReviewType): Promise<AssignmentRule[]> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(`
@@ -837,6 +861,7 @@ export class ReviewerAssignmentService {
     action: string,
     details: unknown
   ): Promise<void> {
+
     await client.query(`
       INSERT INTO assignment_history
       (assignment_id, action, previous_reviewer_id, new_reviewer_id, reason, performed_by, metadata)
@@ -853,6 +878,7 @@ export class ReviewerAssignmentService {
   }
 
   private async getReviewerProfile(reviewerId: string): Promise<ReviewerProfile | null> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(

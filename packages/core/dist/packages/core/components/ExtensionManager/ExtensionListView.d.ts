@@ -6,7 +6,7 @@ import React from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 export interface ExtensionListViewProps {
-    extensions: ExtensionManifest[];
+    extensions: ExtensionManifest;
     selectedExtension: ExtensionManifest | null;
     getExtensionStatus: (extensionId: string) => ExtensionStatus;
     onExtensionSelect: (extension: ExtensionManifest) => void;

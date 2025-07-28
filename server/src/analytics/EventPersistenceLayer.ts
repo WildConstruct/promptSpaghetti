@@ -40,6 +40,7 @@ export const StoredEventSchema = z.object({
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
 
 // Event Query Options
+}
 export interface EventQueryOptions {
   filter?: EventFilter;
   sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -48,10 +49,13 @@ export interface EventQueryOptions {
   offset?: number;
   includeMetadata?: boolean;
 }
+}
 
 // Event Statistics
+}
 export interface EventStatistics {
   totalEvents: number;
+}
   eventsByType: { [type: string]: number };
   eventsByCategory: { [category: string]: number };
   eventsBySeverity: { [severity: string]: number };
@@ -61,6 +65,7 @@ export interface EventStatistics {
 }
 
 // Event Aggregation
+}
 export interface EventAggregation {
   groupBy: string;
   timeGranularity?: 'hour' | 'day' | 'week' | 'month';
@@ -71,6 +76,7 @@ export interface EventAggregation {
     uniqueSources: number;
     uniqueUsers: number;
     uniqueSessions: number;
+}
   };
 }
 
@@ -79,6 +85,7 @@ export interface EventAggregation {
  * 
  * Following repository pattern from Story 1.4 for consistent data access
  */
+}
 export interface EventRepository {
   // Core CRUD operations
   save(event: UnifiedAnalyticsEvent): Promise<string>;
@@ -96,6 +103,7 @@ export interface EventRepository {
     metric: string,
     granularity: string,
     filter?: EventFilter
+}
   ): Promise<Array<{ timestamp: number; value: number }>>;
   
   // Maintenance operations
@@ -159,7 +167,7 @@ export class DatabaseEventRepository implements EventRepository {
         INDEX idx_environment (environment),
         INDEX idx_stored_at (stored_at),
         INDEX idx_retention_date (retention_date)
-      )
+
     `;
 
     this.db.exec(createTableSQL);
@@ -169,6 +177,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Save single event
    */
   async save(event: UnifiedAnalyticsEvent): Promise<string> {
+
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO ${this.tableName} (
         id, type, category, severity, timestamp, source, version,
@@ -209,6 +218,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Save batch of events
    */
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
+
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO ${this.tableName} (
         id, type, category, severity, timestamp, source, version,
@@ -254,6 +264,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Find event by ID
    */
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM ${this.tableName} WHERE id = ?
     `);
@@ -266,6 +277,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Find multiple events with filtering and pagination
    */
   async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]> {
+
     const { whereClause, params } = this.buildWhereClause(options.filter);
     const orderClause = this.buildOrderClause(options.sortBy, options.sortOrder);
     const limitClause = this.buildLimitClause(options.limit, options.offset);
@@ -287,6 +299,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Count events matching filter
    */
   async count(filter?: EventFilter): Promise<number> {
+
     const { whereClause, params } = this.buildWhereClause(filter);
     
     const sql = `SELECT COUNT(*) as count FROM ${this.tableName} ${whereClause}`;
@@ -300,6 +313,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Delete single event
    */
   async delete(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare(`DELETE FROM ${this.tableName} WHERE id = ?`);
     const result = stmt.run(id);
     return result.changes > 0;
@@ -309,6 +323,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Delete multiple events
    */
   async deleteBatch(ids: string[]): Promise<number> {
+
     if (ids.length === 0) return 0;
 
     const placeholders = ids.map(() => '?').join(',');
@@ -322,6 +337,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Get event statistics
    */
   async getStatistics(filter?: EventFilter): Promise<EventStatistics> {
+
     const { whereClause, params } = this.buildWhereClause(filter);
 
     // Total events
@@ -387,7 +403,7 @@ export class DatabaseEventRepository implements EventRepository {
       timeRange: {
         earliest: timeResult.earliest || 0,
         latest: timeResult.latest || 0
-      },
+  }
       storageSize: sizeResult.size || 0
     };
   }
@@ -396,6 +412,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Get event aggregations
    */
   async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]> {
+
     const { whereClause, params } = this.buildWhereClause(filter);
     
     const sql = `
@@ -478,6 +495,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Cleanup old events
    */
   async cleanup(retentionDays: number): Promise<number> {
+
     const cutoffTime = Date.now() - (retentionDays * 24 * 60 * 60 * 1000);
     
     const stmt = this.db.prepare(`
@@ -493,6 +511,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Archive old events
    */
   async archive(beforeDate: number): Promise<number> {
+
     // In a full implementation, this would move events to an archive table
     // For now, we'll just mark them as archived in metadata
     const stmt = this.db.prepare(`
@@ -509,6 +528,7 @@ export class DatabaseEventRepository implements EventRepository {
    * Optimize database
    */
   async optimize(): Promise<void> {
+
     this.db.exec('VACUUM');
     this.db.exec('ANALYZE');
   }
@@ -674,11 +694,13 @@ class InMemoryEventRepository implements EventRepository {
   private events: Map<string, UnifiedAnalyticsEvent> = new Map();
 
   async save(event: UnifiedAnalyticsEvent): Promise<string> {
+
     this.events.set(event.id, { ...event });
     return event.id;
   }
 
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
+
     for (const event of events) {
       this.events.set(event.id, { ...event });
     }
@@ -686,10 +708,12 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
+
     return this.events.get(id) || null;
   }
 
   async findMany(options: EventQueryOptions): Promise<UnifiedAnalyticsEvent[]> {
+
     let events = Array.from(this.events.values());
 
     // Apply filtering
@@ -715,6 +739,7 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async count(filter?: EventFilter): Promise<number> {
+
     if (!filter) return this.events.size;
     
     return Array.from(this.events.values())
@@ -722,10 +747,12 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async delete(id: string): Promise<boolean> {
+
     return this.events.delete(id);
   }
 
   async deleteBatch(ids: string[]): Promise<number> {
+
     let deleted = 0;
     for (const id of ids) {
       if (this.events.delete(id)) deleted++;
@@ -734,6 +761,7 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async getStatistics(filter?: EventFilter): Promise<EventStatistics> {
+
     const events = filter 
       ? Array.from(this.events.values()).filter(e => this.matchesFilter(e, filter))
       : Array.from(this.events.values());
@@ -771,6 +799,7 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async getAggregations(groupBy: string, filter?: EventFilter): Promise<EventAggregation[]> {
+
     const events = filter 
       ? Array.from(this.events.values()).filter(e => this.matchesFilter(e, filter))
       : Array.from(this.events.values());
@@ -806,6 +835,7 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async cleanup(retentionDays: number): Promise<number> {
+
     const cutoffTime = Date.now() - (retentionDays * 24 * 60 * 60 * 1000);
     const toDelete = Array.from(this.events.values())
       .filter(event => event.timestamp < cutoffTime);
@@ -818,11 +848,13 @@ class InMemoryEventRepository implements EventRepository {
   }
 
   async archive(beforeDate: number): Promise<number> {
+
     // In-memory implementation doesn't support archiving
     return 0;
   }
 
   async optimize(): Promise<void> {
+
     // No optimization needed for in-memory storage
   }
 

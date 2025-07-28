@@ -5,6 +5,7 @@
  * Gamifies the platform experience while highlighting professional accomplishments
  * and building trust through verified achievements.
  */
+
 export interface Badge {
     id: string;
     name: string;
@@ -25,10 +26,11 @@ export interface Badge {
         updatedAt: number;
         version: string;
     };
-}
+
 export type BadgeCategory = 'verification' | 'creation' | 'collaboration' | 'marketplace' | 'community' | 'achievement' | 'milestone' | 'professional' | 'special';
 export type BadgeTier = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
 export type BadgeRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+
 export interface BadgeCriteria {
     type: 'count' | 'threshold' | 'completion' | 'verification' | 'composite';
     metric?: string;
@@ -36,7 +38,7 @@ export interface BadgeCriteria {
     timeframe?: number;
     conditions?: Record<string, any>;
     customLogic?: (user: UserBadgeProgress) => boolean;
-}
+
 export interface UserBadge {
     badgeId: string;
     userId: string;
@@ -46,7 +48,7 @@ export interface UserBadge {
     metadata?: Record<string, any>;
     isDisplayed: boolean;
     isNotificationSent: boolean;
-}
+
 export interface UserBadgeProgress {
     userId: string;
     badges: Map<string, UserBadge>;
@@ -74,7 +76,7 @@ export interface UserBadgeProgress {
         expertRating: boolean;
         communityLeader: boolean;
     };
-}
+
 export interface BadgeUnlockEvent {
     userId: string;
     badgeId: string;
@@ -83,7 +85,7 @@ export interface BadgeUnlockEvent {
     isLevelUp: boolean;
     newLevel?: number;
     pointsEarned: number;
-}
+
 export declare class BadgeSystem {
     private badges;
     private userProgress;
@@ -158,7 +160,7 @@ export declare class BadgeSystem {
         rarest: string;
         averageBadgesPerUser: number;
     };
-}
+
 export declare const badgeSystem: BadgeSystem;
 export default badgeSystem;
 //# sourceMappingURL=BadgeSystem.d.ts.map

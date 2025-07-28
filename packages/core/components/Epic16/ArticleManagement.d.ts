@@ -5,6 +5,7 @@
  * for templates, tutorials, best practices, and marketplace documentation.
  */
 import React from 'react';
+
 export interface Article {
     id: string;
     title: string;
@@ -39,7 +40,7 @@ export interface Article {
         completionRate: number;
         bounceRate: number;
     };
-}
+
 export interface ArticleCategory {
     id: string;
     name: string;
@@ -49,7 +50,7 @@ export interface ArticleCategory {
     icon?: string;
     parentId?: string;
     articleCount: number;
-}
+
 export interface ArticleAuthor {
     id: string;
     name: string;
@@ -62,7 +63,7 @@ export interface ArticleAuthor {
         github?: string;
         linkedin?: string;
     };
-}
+
 export interface ArticleAttachment {
     id: string;
     name: string;
@@ -70,7 +71,7 @@ export interface ArticleAttachment {
     type: 'image' | 'document' | 'video' | 'audio' | 'archive';
     size: number;
     mimeType: string;
-}
+
 export interface ArticleFilter {
     status?: Article['status'][];
     category?: string[];
@@ -83,11 +84,11 @@ export interface ArticleFilter {
     };
     featured?: boolean;
     searchQuery?: string;
-}
+
 export interface ArticleSort {
     field: 'title' | 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'likeCount' | 'rating';
     direction: 'asc' | 'desc';
-}
+
 export interface ArticleManagementProps {
     articles: Article[];
     categories: ArticleCategory[];
@@ -102,7 +103,7 @@ export interface ArticleManagementProps {
     onCreateCategory: (category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
     onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
     className?: string;
-}
+
 export declare const ArticleList: React.FC<{
     articles: Article[];
     filter: ArticleFilter;

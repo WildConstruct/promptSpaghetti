@@ -4,6 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { RateLimitStore, RateLimitData } from './RateLimiter';
+
 export interface RedisClient {
     get(key: string): Promise<string | null>;
     set(key: string, value: string, options?: {)
@@ -22,7 +23,7 @@ export interface RedisClient {
         match?: string;
         count?: number;
     }): AsyncIterable<string[]>;
-}
+
 export interface RedisRateLimitConfig {
     keyPrefix?: string;
     client: RedisClient;
@@ -31,7 +32,7 @@ export interface RedisRateLimitConfig {
     retryAttempts?: number;
     retryDelay?: number;
     fallbackToMemory?: boolean;
-}
+
 export declare class RedisRateLimitStore implements RateLimitStore {
     private config;
     private client;
@@ -80,7 +81,7 @@ export declare class RedisRateLimitStore implements RateLimitStore {
     private executeWithRetry;
     private handleRedisError;
     private startConnectionMonitoring;
-}
+
 export declare class RedisConnectionFactory {
     /**
      * Create Redis client for different environments
@@ -106,7 +107,7 @@ export declare class RedisConnectionFactory {
         password?: string;
         maxRetriesPerRequest?: number;
     }): Promise<RedisClient>;
-}
+
 export declare class MockRedisClient implements RedisClient {
     private data;
     private expiries;
@@ -130,6 +131,6 @@ export declare class MockRedisClient implements RedisClient {
     private checkExpiry;
     clear(): void;
     size(): number;
-}
+
 export default RedisRateLimitStore;
 //# sourceMappingURL=RedisRateLimitStore.d.ts.map

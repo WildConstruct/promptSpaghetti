@@ -50,77 +50,67 @@ import {
   FeatureToggleSchedule
 } from '../../../server/src/database/scheduling-models';
 interface RecurringSchedule extends FeatureToggleSchedule {
-  nextOccurrences: Date[];
+  nextOccurrences: Date;,
   conflictCount: number;
   performanceMetrics: {,
-    successRate: number;
-    averageExecutionTime: number;
-    lastFailureReason?: string;
-  };
-}
+  successRate: number;,
+  averageExecutionTime: number;
+  lastFailureReason?: string;
+};
 interface ScheduleConflict {
-  id: string;
-  scheduleIds: string[];
-  type: 'time_overlap' | 'action_conflict' | 'resource_conflict';
+  id: string;,
+  scheduleIds: string;
+  type: 'time_overlap' | 'action_conflict' | 'resource_conflict';,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;
+  description: string;,
   suggestedResolution: string;
-}
-interface RecurringScheduleManagerProps {
+  interface RecurringScheduleManagerProps {
   className?: string;
   userId?: string;
   userRole?: string;
+  const RECURRENCE_PRESETS = [;
+  {
+  id: 'daily-business',
+  name: 'Daily (Business Days)',
+  description: 'Monday to Friday',
+  pattern: {,
+  type: 'weekly' as RecurrenceType,
+  interval: 1,
+  daysOfWeek: [1, 2, 3, 4, 5],
 }
-const RECURRENCE_PRESETS = [;
   {
-    id: 'daily-business',
-    name: 'Daily (Business Days)',
-    description: 'Monday to Friday',
-    pattern: {,
-      type: 'weekly' as RecurrenceType,
-      interval: 1,
-      daysOfWeek: [1, 2, 3, 4, 5]
-    }
-  },
+  id: 'weekly-maintenance',
+  name: 'Weekly Maintenance',
+  description: 'Sunday at 2 AM',
+  pattern: {,
+  type: 'weekly' as RecurrenceType,
+  interval: 1,
+  daysOfWeek: [0],
+}
   {
-    id: 'weekly-maintenance',
-    name: 'Weekly Maintenance',
-    description: 'Sunday at 2 AM',
-    pattern: {,
-      type: 'weekly' as RecurrenceType,
-      interval: 1,
-      daysOfWeek: [0],
-    }
-  },
+  id: 'monthly-first',
+  name: 'Monthly (First Day)',
+  description: '1st of every month',
+  pattern: {,
+  type: 'monthly' as RecurrenceType,
+  interval: 1,
+  daysOfMonth: [1],
+}
   {
-    id: 'monthly-first',
-    name: 'Monthly (First Day)',
-    description: '1st of every month',
-    pattern: {,
-      type: 'monthly' as RecurrenceType,
-      interval: 1,
-      daysOfMonth: [1],
-    }
-  },
-  {
-    id: 'quarterly',
-    name: 'Quarterly',
-    description: 'Every 3 months',
-    pattern: {,
-      type: 'monthly' as RecurrenceType,
-      interval: 3,
-    }
-  },
+  id: 'quarterly',
+  name: 'Quarterly',
+  description: 'Every 3 months',
+  pattern: {,
+  type: 'monthly' as RecurrenceType,
+  interval: 3,
+}
   {
     id: 'bi-weekly',
     name: 'Bi-weekly',
     description: 'Every 2 weeks',
     pattern: {,
-      type: 'weekly' as RecurrenceType,
-      interval: 2,
-    }
-  }
-];
+  type: 'weekly' as RecurrenceType,
+      interval: 2];
 const ACTION_CONFIG = {
   enable: { color: 'text-green-600 bg-green-100', icon: Play, label: 'Enable' },
   disable: { color: 'text-red-600 bg-red-100', icon: Pause, label: 'Disable' },
@@ -143,31 +133,31 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('schedules');
-  const [schedules, setSchedules] = useState<RecurringSchedule[]>([]);
-  const [conflicts, setConflicts] = useState<ScheduleConflict[]>([]);
+  const [schedules, setSchedules] = useState<RecurringSchedule>([]);
+  const [conflicts, setConflicts] = useState<ScheduleConflict>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [actionFilter, setActionFilter] = useState<string>('all');
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   // Mock data - in real implementation, this would fetch from APIs
-  const mockSchedules: RecurringSchedule[] = [
-    {
-      id: 'schedule-1',
-      toggleId: 'maintenance-mode',
-      name: 'Weekly Maintenance Window',
-      description: 'Enable maintenance mode every Sunday at 2 AM',
-      type: ScheduleType.RECURRING,
-      action: ScheduleAction.ENABLE,
-      startTime: new Date('2024-01-07T02:00:00.000Z'),
-      endTime: new Date('2024-01-07T06:00:00.000Z'),
-      timezone: 'America/New_York',
-      recurrence: {,
-        type: RecurrenceType.WEEKLY,
-        interval: 1,
-        daysOfWeek: [0],
-      },
-      actionConfig: {},
+  const mockSchedules: RecurringSchedule = [
+  {
+  id: 'schedule-1',
+  toggleId: 'maintenance-mode',
+  name: 'Weekly Maintenance Window',
+  description: 'Enable maintenance mode every Sunday at 2 AM',
+  type: ScheduleType.RECURRING,
+  action: ScheduleAction.ENABLE,
+  startTime: new Date('2024-01-07T02:00:00.000Z'),
+  endTime: new Date('2024-01-07T06:00:00.000Z'),
+  timezone: 'America/New_York',
+  recurrence: {,
+  type: RecurrenceType.WEEKLY,
+  interval: 1,
+  daysOfWeek: [0],
+},
+  actionConfig: {},
       status: ScheduleStatus.ACTIVE,
       enabled: true,
       createdBy: 'admin',
@@ -186,29 +176,28 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       ],
       conflictCount: 0,
       performanceMetrics: {,
-        successRate: 91.7,
-        averageExecutionTime: 1.8,
-        lastFailureReason: 'Network timeout',
-      }
-    },
+  successRate: 91.7,
+  averageExecutionTime: 1.8,
+  lastFailureReason: 'Network timeout',
+}
     {
-      id: 'schedule-2',
-      toggleId: 'feature-rollout',
-      name: 'Daily Feature Rollout',
-      description: 'Gradually increase feature rollout every day at 9 AM',
-      type: ScheduleType.RECURRING,
-      action: ScheduleAction.MODIFY_PERCENTAGE,
-      startTime: new Date('2024-01-15T09:00:00.000Z'),
-      timezone: 'UTC',
-      recurrence: {,
-        type: RecurrenceType.DAILY,
-        interval: 1,
-        endDate: new Date('2024-02-15T00:00:00.000Z'),
-      },
-      actionConfig: {,
-        rolloutPercentage: 10,
-      },
-      status: ScheduleStatus.ACTIVE,
+  id: 'schedule-2',
+  toggleId: 'feature-rollout',
+  name: 'Daily Feature Rollout',
+  description: 'Gradually increase feature rollout every day at 9 AM',
+  type: ScheduleType.RECURRING,
+  action: ScheduleAction.MODIFY_PERCENTAGE,
+  startTime: new Date('2024-01-15T09:00:00.000Z'),
+  timezone: 'UTC',
+  recurrence: {,
+  type: RecurrenceType.DAILY,
+  interval: 1,
+  endDate: new Date('2024-02-15T00:00:00.000Z'),
+},
+  actionConfig: {,
+  rolloutPercentage: 10,
+},
+  status: ScheduleStatus.ACTIVE,
       enabled: true,
       createdBy: 'devops',
       createdAt: new Date('2024-01-10T00:00:00.000Z'),
@@ -226,26 +215,25 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       ],
       conflictCount: 1,
       performanceMetrics: {,
-        successRate: 92.0,
-        averageExecutionTime: 0.8,
-      }
-    },
+  successRate: 92.0,
+  averageExecutionTime: 0.8,
+}
     {
-      id: 'schedule-3',
-      toggleId: 'database-backup',
-      name: 'Monthly Database Backup',
-      description: 'Enable backup mode on the first of every month',
-      type: ScheduleType.RECURRING,
-      action: ScheduleAction.ENABLE,
-      startTime: new Date('2024-02-01T01:00:00.000Z'),
-      endTime: new Date('2024-02-01T03:00:00.000Z'),
-      timezone: 'UTC',
-      recurrence: {,
-        type: RecurrenceType.MONTHLY,
-        interval: 1,
-        daysOfMonth: [1],
-      },
-      actionConfig: {},
+  id: 'schedule-3',
+  toggleId: 'database-backup',
+  name: 'Monthly Database Backup',
+  description: 'Enable backup mode on the first of every month',
+  type: ScheduleType.RECURRING,
+  action: ScheduleAction.ENABLE,
+  startTime: new Date('2024-02-01T01:00:00.000Z'),
+  endTime: new Date('2024-02-01T03:00:00.000Z'),
+  timezone: 'UTC',
+  recurrence: {,
+  type: RecurrenceType.MONTHLY,
+  interval: 1,
+  daysOfMonth: [1],
+},
+  actionConfig: {},
       status: ScheduleStatus.PENDING,
       enabled: true,
       createdBy: 'admin',
@@ -263,35 +251,30 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       ],
       conflictCount: 0,
       performanceMetrics: {,
-        successRate: 0,
-        averageExecutionTime: 0,
-      }
-    }
-  ];
-  const mockConflicts: ScheduleConflict[] = [
-    {
-      id: 'conflict-1',
-      scheduleIds: ['schedule-2', 'schedule-4'],
-      type: 'time_overlap',
-      severity: 'medium',
-      description: 'Feature rollout and maintenance window overlap on Sundays at 9 AM',
-      suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays',
-    }
-  ];
+  successRate: 0,
+  averageExecutionTime: 0];
+  const mockConflicts: ScheduleConflict = [
+  {
+  id: 'conflict-1',
+  scheduleIds: ['schedule-2', 'schedule-4'],
+  type: 'time_overlap',
+  severity: 'medium',
+  description: 'Feature rollout and maintenance window overlap on Sundays at 9 AM',
+  suggestedResolution: 'Reschedule feature rollout to 10 AM on Sundays'];
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setSchedules(mockSchedules);
-      setConflicts(mockConflicts);
-      setLoading(false);
-    };
+  const loadData = async () => {
+  setLoading(true);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  setSchedules(mockSchedules);
+  setConflicts(mockConflicts);
+  setLoading(false);
+};
     loadData();
   }, []);
   // Filter schedules
   const filteredSchedules = useMemo(() => {
     return schedules.filter(schedule => {)
-      const matchesSearch = searchQuery === '' || ;
+  const matchesSearch = searchQuery === '' || ;
         schedule.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         schedule.toggleId.toLowerCase().includes(searchQuery.toLowerCase()) ||
         schedule.createdBy.toLowerCase().includes(searchQuery.toLowerCase());
@@ -301,12 +284,12 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
     });
   }, [schedules, searchQuery, statusFilter, actionFilter]);
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {)
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
+  return new Intl.DateTimeFormat('en-US', {)
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+}).format(date);
   };
   const getRecurrenceDescription = (recurrence: RecurrenceData): string => {
     const { type, interval, daysOfWeek, daysOfMonth, _____monthsOfYear } = recurrence;
@@ -318,13 +301,11 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const days = daysOfWeek.map(d => dayNames[d]).join(', ');
         return interval === 1 ? `Weekly on ${days}` : `Every ${interval} weeks on ${days}`;}
-      }
       return interval === 1 ? 'Weekly' : `Every ${interval} weeks`;}
     case 'monthly':
       if (daysOfMonth && daysOfMonth.length > 0) {
         const days = daysOfMonth.join(', ');
         return interval === 1 ? `Monthly on day ${days}` : `Every ${interval} months on day ${days}`;}
-      }
       return interval === 1 ? 'Monthly' : `Every ${interval} months`;}
     case 'yearly':
       return interval === 1 ? 'Yearly' : `Every ${interval} years`;}
@@ -332,7 +313,6 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
       return recurrence.cronExpression || 'Custom pattern';
     default:
       return 'Unknown pattern';
-    }
   };
   const handlePauseSchedule = (scheduleId: string) => {
     setSchedules(prev => prev.map(s => )
@@ -352,9 +332,11 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
     if (originalSchedule) {
       const duplicatedSchedule: RecurringSchedule = {
         ...originalSchedule,
-        id: `schedule-${Date.now()}`,}
-        name: `${originalSchedule.name} (Copy)`,}
-        status: ScheduleStatus.PENDING,
+        id: `schedule-${Date.now()}`}
+},
+  name: `${originalSchedule.name} (Copy)`}
+},
+  status: ScheduleStatus.PENDING,
         executionCount: 0,
         failureCount: 0,
         createdAt: new Date(),
@@ -362,15 +344,13 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         nextExecution: undefined,
         lastExecution: undefined,
         performanceMetrics: {,
-          successRate: 0,
-          averageExecutionTime: 0,
-        }
-      };
+  successRate: 0,
+  averageExecutionTime: 0,
+};
       setSchedules(prev => [...prev, duplicatedSchedule]);
-    }
   };
   if (loading) {
-    return ();
+    return;
       <div className={`p-6 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
@@ -378,8 +358,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`p-6 space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -444,7 +423,7 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
             {filteredSchedules.map((schedule) => {
               const ActionIcon = ACTION_CONFIG[schedule.action].icon;
               const StatusIcon = STATUS_CONFIG[schedule.status].icon;
-              return ();
+              return;
                 <Card key={schedule.id}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
@@ -591,12 +570,12 @@ export const RecurringScheduleManager: React.FC<RecurringScheduleManagerProps> =
               <CardContent>
                 <RecurrenceEditor
                   value={{
-                    type: 'weekly',
-                    interval: 1,
-                  }}
+  type: 'weekly',
+  interval: 1,
+}}
                   onChange={(recurrence) => {
-                    console.log('Recurrence updated:', recurrence);
-                  }}
+  console.log('Recurrence updated:', recurrence);
+}}
                 />
               </CardContent>
             </Card>

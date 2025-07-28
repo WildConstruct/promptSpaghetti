@@ -39,24 +39,25 @@ import {
 } from 'lucide-react';
 
 // Types extending existing submission system
+
 export interface QueueSubmission {
-  id: string;
+  id: string;,
   template_id: string;
-  submitter_id: string;
+  submitter_id: string;,
   submitter_name: string;
-  submitter_email: string;
+  submitter_email: string;,
   status: 'submitted' | 'under_review' | 'changes_requested' | 'approved' | 'rejected';
-  version_number: number;
+  version_number: number;,
   submission_data: {,
-    title: string;
-    description: string;
-    tags: string[];
-    categories: string[];
-    price_cents: number;
-    is_ai_generated?: boolean;
-    intended_use_cases: string[];
-  };
-  validation_results: ValidationResult[];
+  title: string;,
+  description: string;
+  tags: string;,
+  categories: string;
+  price_cents: number;
+  is_ai_generated?: boolean;
+  intended_use_cases: string;
+};
+  validation_results: ValidationResult;,
   submitted_at: Date;
   updated_at: Date;
   assigned_reviewer?: string;
@@ -64,37 +65,34 @@ export interface QueueSubmission {
   estimated_review_time?: number; // minutes
   complexity_score?: number; // 1-10
 }
-
 export interface ValidationResult {
-  rule_id: string;
+  rule_id: string;,
   severity: 'error' | 'warning' | 'info';
-  category: string;
+  category: string;,
   message: string;
   field?: string;
   auto_fixable: boolean;
 }
-
 export interface QueueMetrics {
-  total_pending: number;
+  total_pending: number;,
   total_under_review: number;
-  total_changes_requested: number;
+  total_changes_requested: number;,
   average_wait_time_hours: number;
-  average_review_time_hours: number;
+  average_review_time_hours: number;,
   reviews_completed_today: number;
-  queue_velocity: number; // submissions/day
+  queue_velocity: number; // submissions/day,
   reviewer_workload: Array<{,
-    reviewer_id: string;
-    reviewer_name: string;
-    active_reviews: number;
-    completed_today: number;
-    average_review_time: number;
-  }>;
+  reviewer_id: string;,
+  reviewer_name: string;
+  active_reviews: number;,
+  completed_today: number;
+  average_review_time: number;
+}>;
 }
-
 export interface QueueFilters {
-  status?: string[];
-  priority?: string[];
-  categories?: string[];
+  status?: string;
+  priority?: string;
+  categories?: string;
   submitter?: string;
   assigned_reviewer?: string;
   submitted_after?: Date;
@@ -102,23 +100,22 @@ export interface QueueFilters {
   has_validation_errors?: boolean;
   complexity_min?: number;
   complexity_max?: number;
-  sort_by: 'submitted_at' | 'priority' | 'estimated_time' | 'complexity';
+  sort_by: 'submitted_at' | 'priority' | 'estimated_time' | 'complexity';,
   sort_order: 'asc' | 'desc';
-  page: number;
+  page: number;,
   limit: number;
-}
-const SubmissionQueueDashboard: React.FC = () => {
+  const SubmissionQueueDashboard: React.FC = () => {,
   // State management
-  const [submissions, setSubmissions] = useState<QueueSubmission[]>([]);
+  const [submissions, setSubmissions] = useState<QueueSubmission>([]);
   const [metrics, setMetrics] = useState<QueueMetrics | null>(null);
   const [filters, setFilters] = useState<QueueFilters>({)
-    sort_by: 'submitted_at',
-    sort_order: 'desc',
-    page: 1,
-    limit: 50,
-  });
+  sort_by: 'submitted_at',
+  sort_order: 'desc',
+  page: 1,
+  limit: 50,
+});
   const [loading, setLoading] = useState(true);
-  const [selectedSubmissions, setSelectedSubmissions] = useState<string[]>([]);
+  const [selectedSubmissions, setSelectedSubmissions] = useState<string>([]);
   const [searchQuery, setSearchQuery] = useState('');
   // Load queue data
   useEffect(() => {
@@ -131,108 +128,101 @@ const SubmissionQueueDashboard: React.FC = () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({)
-        ...Object.fromEntries()
+  ...Object.fromEntries()
           Object.entries(filters).filter(([_, value]) => value !== undefined && value !== null)
         ),
         ...(searchQuery && { search: searchQuery })
       });
       const response = await fetch(`/api/submissions/review-queue?${queryParams}`, {)}
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+  },
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (response.ok) {
         const data = await response.json();
         setSubmissions(data);
-      }
     } catch (error) {
-      console.error('Failed to load submission queue:', error);
-    }
-    setLoading(false);
-  };
+  console.error('Failed to load submission queue:', error);
+  setLoading(false);
+};
   const loadQueueMetrics = async () => {
     try {
       const response = await fetch('/api/submissions/queue-metrics', {)
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (response.ok) {
         const data = await response.json();
         setMetrics(data);
-      }
     } catch (error) {
-      console.error('Failed to load queue metrics:', error);
-    }
-  };
+  console.error('Failed to load queue metrics:', error);
+};
   const handleAssignReviewer = async (submissionId: string, reviewerId: string) => {
     try {
       const response = await fetch(`/api/submissions/${submissionId}/assign`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
-        },
-        body: JSON.stringify({ reviewer_id: reviewerId })
+  },
+  body: JSON.stringify({ reviewer_id: reviewerId })
       });
       if (response.ok) {
         loadSubmissionQueue();
-      }
     } catch (error) {
-      console.error('Failed to assign reviewer:', error);
-    }
-  };
+  console.error('Failed to assign reviewer:', error);
+};
   const handleBulkAssign = async (reviewerId: string) => {
     try {
       const response = await fetch('/api/submissions/bulk-assign', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
-        },
-        body: JSON.stringify({ ),
+  },
+  body: JSON.stringify({ ),
           submission_ids: selectedSubmissions,
-          reviewer_id: reviewerId ,
-        })
+          reviewer_id: reviewerId ;
+  }
       });
       if (response.ok) {
         setSelectedSubmissions([]);
         loadSubmissionQueue();
-      }
     } catch (error) {
-      console.error('Failed to bulk assign submissions:', error);
-    }
-  };
+  console.error('Failed to bulk assign submissions:', error);
+};
   const handleUpdatePriority = async (submissionId: string, priority: string) => {
     try {
       const response = await fetch(`/api/submissions/${submissionId}/priority`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`}
-        },
-        body: JSON.stringify({ priority })
+  },
+  body: JSON.stringify({ priority })
       });
       if (response.ok) {
         loadSubmissionQueue();
-      }
     } catch (error) {
-      console.error('Failed to update priority:', error);
-    }
-  };
+  console.error('Failed to update priority:', error);
+};
   const getPriorityColor = (priority: string) => {
-    const colors = {
-      urgent: 'bg-red-100 text-red-800',
-      high: 'bg-orange-100 text-orange-800',
-      medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-gray-100 text-gray-800',
-    };
+  const colors = {
+  urgent: 'bg-red-100 text-red-800',
+  high: 'bg-orange-100 text-orange-800',
+  medium: 'bg-yellow-100 text-yellow-800',
+  low: 'bg-gray-100 text-gray-800',
+};
     return colors[priority as keyof typeof colors] || colors.medium;
   };
   const getStatusColor = (status: string) => {
-    const colors = {
-      submitted: 'bg-blue-100 text-blue-800',
-      under_review: 'bg-purple-100 text-purple-800',
-      changes_requested: 'bg-yellow-100 text-yellow-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-    };
+  const colors = {
+  submitted: 'bg-blue-100 text-blue-800',
+  under_review: 'bg-purple-100 text-purple-800',
+  changes_requested: 'bg-yellow-100 text-yellow-800',
+  approved: 'bg-green-100 text-green-800',
+  rejected: 'bg-red-100 text-red-800',
+};
     return colors[status as keyof typeof colors] || colors.submitted;
   };
   const formatTimeAgo = (date: Date) => {
@@ -244,7 +234,7 @@ const SubmissionQueueDashboard: React.FC = () => {
     if (hours > 0) return `${hours}h ago`;}
     return 'Just now';
   };
-  return ();
+  return;
     <div className="submission-queue-dashboard">
       <div className="queue-header">
         <div className="header-content">
@@ -431,7 +421,6 @@ const SubmissionQueueDashboard: React.FC = () => {
                               setSelectedSubmissions([...selectedSubmissions, submission.id]);
                             } else {
                               setSelectedSubmissions(selectedSubmissions.filter(id => id !== submission.id));
-                            }
                           }}
                           className="checkbox"
                         />
@@ -581,281 +570,229 @@ const SubmissionQueueDashboard: React.FC = () => {
       </Tabs>
       <style>{`
         .submission-queue-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 24px;
-          background: #f8fafc;
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 24px;,
+  background: #f8fafc;
           min-height: 100vh;
-        }
         .queue-header {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 12px;,
+  padding: 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         .header-content {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 24px;
-        }
         .title-section {
           display: flex;
-          align-items: center;
-          gap: 16px;
-        }
+          align-items: center;,
+  gap: 16px;
         .header-actions {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 16px;
           margin-top: 24px;
-        }
         .metric-card {
           border: 1px solid #e2e8f0;
           border-radius: 8px;
-        }
         .queue-tabs {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 12px;,
+  padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         .filter-card {
-          margin-bottom: 24px;
-          border: 1px solid #e2e8f0;
-        }
+          margin-bottom: 24px;,
+  border: 1px solid #e2e8f0;
         .filter-section {
           display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+          flex-direction: column;,
+  gap: 16px;
         .search-bar {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          border: 1px solid #e2e8f0;
-          border-radius: 8px;
-          background: #f8fafc;
-        }
+          align-items: center;,
+  gap: 12px;
+          padding: 12px;,
+  border: 1px solid #e2e8f0;
+          border-radius: 8px;,
+  background: #f8fafc;
         .filter-controls {
-          display: flex;
-          gap: 12px;
+          display: flex;,
+  gap: 12px;
           flex-wrap: wrap;
-        }
         .filter-select {
-          padding: 8px 12px;
-          border: 1px solid #e2e8f0;
-          border-radius: 6px;
-          background: white;
+          padding: 8px 12px;,
+  border: 1px solid #e2e8f0;
+          border-radius: 6px;,
+  background: white;
           min-width: 150px;
-        }
         .bulk-actions {
           display: flex;
           align-items: center;
-          flex-wrap: wrap;
-          gap: 8px;
-          padding: 12px;
-          background: #f1f5f9;
+          flex-wrap: wrap;,
+  gap: 8px;
+          padding: 12px;,
+  background: #f1f5f9;
           border-radius: 8px;
-        }
         .submissions-table {
           border: 1px solid #e2e8f0;
-        }
         .loading-state, .empty-state {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          padding: 64px;
+          justify-content: center;,
+  padding: 64px;
           text-align: center;
-        }
         .submissions-list {
           divide-y: 1px solid #e2e8f0;
-        }
         .submission-row {
           display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 16px;
-          transition: background-color 0.2s;
-        }
-        .submission-row:hover {
-          background: #f8fafc;
-        }
+          align-items: center;,
+  gap: 16px;
+          padding: 16px;,
+  transition: background-color 0.2s;
+        .submission-row:hover {,
+  background: #f8fafc;
         .row-checkbox {
           flex-shrink: 0;
-        }
         .checkbox {
-          width: 16px;
-          height: 16px;
+          width: 16px;,
+  height: 16px;
           accent-color: #3b82f6;
-        }
         .submission-info {
           flex: 1;
           min-width: 0;
-        }
         .submission-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 8px;
-        }
         .submission-title {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
           line-height: 1.4;
-        }
         .submission-badges {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           flex-shrink: 0;
-        }
         .submission-details {
           display: flex;
-          flex-wrap: wrap;
-          gap: 16px;
+          flex-wrap: wrap;,
+  gap: 16px;
           margin-bottom: 8px;
-        }
         .detail-item {
           display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 14px;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 4px;
+          font-size: 14px;,
+  color: #6b7280;
         .validation-warnings {
           display: flex;
-          align-items: center;
-          gap: 4px;
+          align-items: center;,
+  gap: 4px;
           font-size: 14px;
-        }
         .submission-actions {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           align-items: center;
           flex-shrink: 0;
-        }
         .priority-select, .reviewer-select {
-          padding: 6px 10px;
-          border: 1px solid #e2e8f0;
-          border-radius: 4px;
-          background: white;
+          padding: 6px 10px;,
+  border: 1px solid #e2e8f0;
+          border-radius: 4px;,
+  background: white;
           font-size: 14px;
           min-width: 120px;
-        }
         .reviewer-card {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 16px;
+          justify-content: space-between;,
+  padding: 16px;
           border: 1px solid #e2e8f0;
           border-radius: 8px;
           margin-bottom: 12px;
-        }
         .reviewer-info {
           flex: 1;
-        }
         .reviewer-name {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 4px 0;
-        }
         .reviewer-stats {
-          font-size: 14px;
-          color: #6b7280;
-          display: flex;
-          gap: 8px;
+          font-size: 14px;,
+  color: #6b7280;
+          display: flex;,
+  gap: 8px;
           align-items: center;
-        }
         .workload-bar {
-          width: 100px;
-          height: 8px;
+          width: 100px;,
+  height: 8px;
           background: #f3f4f6;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .workload-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+          height: 100%;,
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
           transition: width 0.3s;
-        }
         .analytics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 16px;
-        }
         .trend-metrics {
           display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+          flex-direction: column;,
+  gap: 16px;
         .trend-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 12px;
+          align-items: center;,
+  padding: 12px;
           background: #f8fafc;
           border-radius: 6px;
-        }
         .trend-label {
-          font-size: 14px;
-          color: #6b7280;
-        }
+          font-size: 14px;,
+  color: #6b7280;
         .trend-value {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         @media (max-width: 768px) {
           .submission-queue-dashboard {
             padding: 16px;
-          }
           .header-content {
-            flex-direction: column;
-            gap: 16px;
+            flex-direction: column;,
+  gap: 16px;
             align-items: stretch;
-          }
           .metrics-grid {
             grid-template-columns: 1fr;
-          }
           .filter-controls {
             flex-direction: column;
-          }
           .filter-select {
             min-width: auto;
-          }
           .submission-row {
             flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-          }
+            align-items: stretch;,
+  gap: 12px;
           .submission-header {
-            flex-direction: column;
-            gap: 8px;
-          }
+            flex-direction: column;,
+  gap: 8px;
           .submission-badges {
             flex-wrap: wrap;
-          }
           .submission-actions {
             justify-content: stretch;
-          }
           .priority-select, .reviewer-select {
             flex: 1;
             min-width: auto;
-          }
-        }
       `}</style>
     </div>
   );
 };
-
+}
 export default SubmissionQueueDashboard;

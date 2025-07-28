@@ -47,5 +47,5 @@ export declare class ContributionManagementService implements ContributionReposi
     private sendPublicationNotifications;
     private initializePostPublicationTracking;
     private awardContributorBadge;
-}
+
 //# sourceMappingURL=ContributionManagementService.d.ts.map

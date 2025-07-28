@@ -7,6 +7,7 @@
  * and tracks flagging status.
  */
 import React from 'react';
+
 export interface FlaggingReason {
     id: string;
     label: string;
@@ -14,7 +15,8 @@ export interface FlaggingReason {
     severity: 'low' | 'medium' | 'high' | 'critical';
     category: 'content' | 'security' | 'legal' | 'spam' | 'harassment' | 'other';
     requiresDetails?: boolean;
-}
+
+
 export interface FlagSubmission {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
@@ -22,7 +24,8 @@ export interface FlagSubmission {
     details?: string;
     reporterId: string;
     metadata?: Record<string, unknown>;
-}
+
+
 export interface FlaggingButtonProps {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'user' | 'project';
@@ -34,7 +37,8 @@ export interface FlaggingButtonProps {
     size?: 'small' | 'medium' | 'large';
     variant?: 'button' | 'icon' | 'link';
     className?: string;
-}
+
+
 export interface FlaggingStatus {
     contentId: string;
     canFlag: boolean;
@@ -44,7 +48,7 @@ export interface FlaggingStatus {
     status: 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed';
     resolvedAt?: Date;
     moderatorNote?: string;
-}
+
 export declare const FlaggingButton: React.FC<FlaggingButtonProps>;
 export default FlaggingButton;
 //# sourceMappingURL=FlaggingButton.d.ts.map

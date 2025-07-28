@@ -68,6 +68,7 @@ export declare const StoredEventSchema: z.ZodObject<{
     retentionDate: number | null;
 }>;
 export type StoredEvent = z.infer<typeof StoredEventSchema>;
+
 export interface EventQueryOptions {
     filter?: EventFilter;
     sortBy?: 'timestamp' | 'type' | 'severity' | 'source';
@@ -75,7 +76,7 @@ export interface EventQueryOptions {
     limit?: number;
     offset?: number;
     includeMetadata?: boolean;
-}
+
 export interface EventStatistics {
     totalEvents: number;
     eventsByType: {,
@@ -95,7 +96,7 @@ export interface EventStatistics {
         latest: number;
     };
     storageSize: number;
-}
+
 export interface EventAggregation {
     groupBy: string;
     timeGranularity?: 'hour' | 'day' | 'week' | 'month';
@@ -107,12 +108,12 @@ export interface EventAggregation {
         uniqueUsers: number;
         uniqueSessions: number;
     };
-}
 /**
  * Event Repository Interface
  *
  * Following repository pattern from Story 1.4 for consistent data access
  */
+
 export interface EventRepository {
     save(event: UnifiedAnalyticsEvent): Promise<string>;
     saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]>;
@@ -130,7 +131,6 @@ export interface EventRepository {
     cleanup(retentionDays: number): Promise<number>;
     archive(beforeDate: number): Promise<number>;
     optimize(): Promise<void>;
-}
 /**
  * Database Event Repository Implementation
  *
@@ -219,7 +219,6 @@ export declare class DatabaseEventRepository implements EventRepository {
      * Calculate retention date for event
      */
     private calculateRetentionDate;
-}
 /**
  * Event Persistence Factory
  *
@@ -228,6 +227,6 @@ export declare class DatabaseEventRepository implements EventRepository {
 export declare class EventPersistenceFactory {
     static createRepository(database: any): EventRepository;
     static createInMemoryRepository(): EventRepository;
-}
+
 export default EventPersistenceFactory;
 //# sourceMappingURL=EventPersistenceLayer.d.ts.map

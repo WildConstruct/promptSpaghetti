@@ -13,7 +13,7 @@ export interface KnowledgeBaseSection {
     icon: React.ComponentType<{
         className?: string;
     }>;
-    articles: Article[];
+    articles: Article;
     color: string;
     featured: boolean;
 }
@@ -23,12 +23,12 @@ export interface LearningPath {
     description: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     estimatedTime: number;
-    steps: LearningPathStep[];
-    prerequisites?: string[];
+    steps: LearningPathStep;
+    prerequisites?: string;
     completionRate: number;
     enrolledCount: number;
     completedCount: number;
-    tags: string[];
+    tags: string;
     author: ArticleAuthor;
     createdAt: Date;
     updatedAt: Date;
@@ -51,23 +51,23 @@ export interface SearchResult {
     url: string;
     relevanceScore: number;
     category: string;
-    tags: string[];
-    matchedTerms: string[];
+    tags: string;
+    matchedTerms: string;
 }
 export interface KnowledgeBaseStats {
     totalArticles: number;
     totalViews: number;
     totalCategories: number;
     totalAuthors: number;
-    recentlyUpdated: Article[];
-    popularArticles: Article[];
-    featuredContent: Article[];
+    recentlyUpdated: Article;
+    popularArticles: Article;
+    featuredContent: Article;
 }
 export interface KnowledgeBaseHeroProps {
     stats: KnowledgeBaseStats;
     onSearch: (query: string) => void;
     onBrowseCategory: (categoryId: string) => void;
-    featuredSections: KnowledgeBaseSection[];
+    featuredSections: KnowledgeBaseSection;
 }
 export interface ArticleCardProps {
     article: Article;
@@ -83,7 +83,7 @@ export interface ArticleCardProps {
     className?: string;
 }
 export interface CategoryBrowserProps {
-    categories: ArticleCategory[];
+    categories: ArticleCategory;
     onSelectCategory: (category: ArticleCategory) => void;
     layout?: 'grid' | 'list' | 'tree';
     showArticleCount?: boolean;
@@ -101,9 +101,9 @@ export declare const ArticleCard: React.FC<ArticleCardProps>;
 export declare const CategoryBrowser: React.FC<CategoryBrowserProps>;
 export declare const LearningPathCard: React.FC<LearningPathCardProps>;
 export interface KnowledgeBaseLayoutProps {
-    articles: Article[];
-    categories: ArticleCategory[];
-    learningPaths?: LearningPath[];
+    articles: Article;
+    categories: ArticleCategory;
+    learningPaths?: LearningPath;
     stats: KnowledgeBaseStats;
     layout?: 'grid' | 'list' | 'masonry';
     onSearch: (query: string) => void;

@@ -3,6 +3,7 @@
  * Provides historically accurate medieval content integration for UTDG
  * Connects with external medieval databases and content sources
  */
+
 export interface MedievalClothing {
     id: string;
     name: string;
@@ -20,7 +21,7 @@ export interface MedievalClothing {
     occasions: string[];
     historicalAccuracy: 'high' | 'medium' | 'low';
     sources: string[];
-}
+
 export interface MedievalMaterial {
     id: string;
     name: string;
@@ -32,7 +33,7 @@ export interface MedievalMaterial {
     tradingSources: string[];
     primaryUses: string[];
     historicalNotes: string;
-}
+
 export interface MedievalLocation {
     id: string;
     name: string;
@@ -45,7 +46,7 @@ export interface MedievalLocation {
     season: 'spring' | 'summer' | 'autumn' | 'winter' | 'any';
     geographicalRegion: string;
     politicalContext: string;
-}
+
 export interface MedievalCharacter {
     id: string;
     name: string;
@@ -60,7 +61,7 @@ export interface MedievalCharacter {
     possessions: string[];
     socialConnections: string[];
     historicalContext: string;
-}
+
 export interface MedievalScene {
     id: string;
     title: string;
@@ -81,7 +82,7 @@ export interface MedievalScene {
         textures: string[];
     };
     narrativeHooks: string[];
-}
+
 export declare class MedievalDemo {
     private metadataManager;
     private dataSourceManager;
@@ -183,6 +184,6 @@ export declare class MedievalDemo {
         characters: MedievalCharacter[];
         scenes: MedievalScene[];
     };
-}
+
 export default MedievalDemo;
 //# sourceMappingURL=MedievalDemo.d.ts.map

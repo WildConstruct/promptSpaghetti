@@ -33,39 +33,34 @@ export interface MarketplaceLeaderboardsProps {
   onCreatorClick?: (creatorId: string) => void;
   onCategoryClick?: (categoryId: string) => void;
   className?: string;
-}
-interface LeaderboardEntry {
-  id: string;
+  interface LeaderboardEntry {
+  id: string;,
   name: string;
-  rank: number;
+  rank: number;,
   score: number;
-  change: number;
+  change: number;,
   metadata: Record<string, any>;
   lastUpdated: Date;
-}
-interface LeaderboardResponse {
-  success: boolean;
-  leaderboard: LeaderboardEntry[];
-  totalEntries: number;
+  interface LeaderboardResponse {
+  success: boolean;,
+  leaderboard: LeaderboardEntry;
+  totalEntries: number;,
   lastUpdated: Date;
-  timeframe: string;
+  timeframe: string;,
   metadata: {,
-    averageScore: number;
-    topScore: number;
-    totalParticipants: number;
-    updateFrequency: string;
-  };
-}
+  averageScore: number;,
+  topScore: number;
+  totalParticipants: number;,
+  updateFrequency: string;
+};
 interface LeaderboardFilter {
   timeframe: '24h' | '7d' | '30d' | '90d' | 'all';
   category?: string;
   limit: number;
+  // =============================================================================
+  // Marketplace Leaderboards Component
+  // =============================================================================
 }
-
-// =============================================================================
-// Marketplace Leaderboards Component
-// =============================================================================
-
 export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({)
   defaultTab = 'templates',
   onTemplateClick,
@@ -77,11 +72,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const [activeMetric, setActiveMetric] = useState<string>('revenue');
   const [filter, setFilter] = useState<LeaderboardFilter>({)
-    timeframe: 'all',
-    limit: 25,
-  });
+  timeframe: 'all',
+  limit: 25,
+});
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
@@ -89,39 +84,35 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // Data Loading
   // =============================================================================
   const fetchLeaderboard = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const params = new URLSearchParams({)
-        timeframe: filter.timeframe,
-        limit: filter.limit.toString(),
-        offset: '0',
-      });
+  try {
+  setLoading(true);
+  setError(null);
+  const params = new URLSearchParams({)
+  timeframe: filter.timeframe,
+  limit: filter.limit.toString(),
+  offset: '0',
+});
       if (filter.category) {
         params.append('category', filter.category);
-      }
       const endpoint = getLeaderboardEndpoint(activeTab, activeMetric);
       const response = await fetch(`${endpoint}?${params}`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${getAuthToken()}`}
-        }
       });
       if (!response.ok) {
         throw new Error('Failed to load leaderboard');
-      }
       const data = await response.json();
       if (data.success) {
         setLeaderboard(data);
         setLastRefresh(new Date());
       } else {
         throw new Error(data.error || 'Failed to load leaderboard');
-      }
     } catch (error) {
-      console.error('Failed to fetch leaderboard:', error);
-      setError(error instanceof Error ? error.message : 'Unknown error occurred');
-    } finally {
+  console.error('Failed to fetch leaderboard:', error);
+  setError(error instanceof Error ? error.message : 'Unknown error occurred');
+} finally {
       setLoading(false);
-    }
   }, [activeTab, activeMetric, filter]);
   const fetchCategories = useCallback(async () => {
     try {
@@ -135,9 +126,8 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
         { id: 'analysis', name: 'Analysis & Research' }
       ]);
     } catch (error) {
-      console.error('Failed to fetch categories:', error);
-    }
-  }, []);
+  console.error('Failed to fetch categories:', error);
+}, []);
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
@@ -168,18 +158,17 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
     fetchLeaderboard();
   };
   const handleEntryClick = (entry: LeaderboardEntry) => {
-    switch (activeTab) {
-    case 'templates':
-      onTemplateClick?.(entry.id);
-      break;
-    case 'creators':
-      onCreatorClick?.(entry.id);
-      break;
-    case 'categories':
-      onCategoryClick?.(entry.id);
-      break;
-    }
-  };
+  switch (activeTab) {
+  case 'templates':,
+  onTemplateClick?.(entry.id);
+  break;
+  case 'creators':,
+  onCreatorClick?.(entry.id);
+  break;
+  case 'categories':,
+  onCategoryClick?.(entry.id);
+  break;
+};
   // =============================================================================
   // UI Rendering Methods
   // =============================================================================
@@ -190,7 +179,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       { id: 'categories', label: 'Categories', icon: Award },
       { id: 'engagement', label: 'Community', icon: Trophy }
     ];
-    return ();
+    return;
       <div className="border-b border-gray-200 mb-6">
         <nav className="-mb-px flex space-x-8">
           {tabs.map((tab) => ()
@@ -198,10 +187,10 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
               className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <tab.icon className="w-4 h-4 mr-2" />
               {tab.label}
@@ -213,17 +202,17 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   };
   const renderMetricSelector = () => {
     const metrics = getMetricsForTab(activeTab);
-    return ();
+    return;
       <div className="flex flex-wrap gap-2">
         {metrics.map((metric) => ()
           <button
             key={metric.id}
             onClick={() => handleMetricChange(metric.id)}
             className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
-              activeMetric === metric.id
-                ? 'bg-blue-100 text-blue-700'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+  activeMetric === metric.id
+  ? 'bg-blue-100 text-blue-700'
+  : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+}`}
           >
             {metric.label}
           </button>
@@ -239,7 +228,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       { id: '90d', label: '90 Days' },
       { id: 'all', label: 'All Time' }
     ];
-    return ();
+    return;
       <div className="flex flex-wrap items-center gap-4">
         {/* Timeframe Filter */}
         <div className="flex items-center space-x-2">
@@ -288,7 +277,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   };
   const renderLeaderboardHeader = () => {
     if (!leaderboard) return null;
-    return ();
+    return;
       <div className="bg-blue-50 rounded-lg p-4 mb-6">
         <div className="flex items-center justify-between">
           <div>
@@ -312,15 +301,15 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   const renderLeaderboardEntry = (entry: LeaderboardEntry, index: number) => {
     const isTopThree = index < 3;
     const rankIcon = getRankIcon(index + 1);
-    return ();
+    return;
       <div
         key={entry.id}
         onClick={() => handleEntryClick(entry)}
         className={`flex items-center p-4 rounded-lg border transition-all cursor-pointer ${
-          isTopThree
-            ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200'
-            : 'bg-white border-gray-200 hover:bg-gray-50'
-        }`}
+  isTopThree
+  ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200',
+  : 'bg-white border-gray-200 hover:bg-gray-50',
+}`}
       >
         {/* Rank */}
         <div className="flex-shrink-0 w-12 text-center">
@@ -345,8 +334,8 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
               </div>
               {entry.change !== 0 && ()
                 <div className={`flex items-center text-sm ${
-                  entry.change > 0 ? 'text-green-600' : 'text-red-600'
-                }`}>
+  entry.change > 0 ? 'text-green-600' : 'text-red-600',
+}`}>
                   {entry.change > 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
                   {Math.abs(entry.change)}
                 </div>
@@ -365,7 +354,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
     switch (activeTab) {
     case 'templates':
       const templateData = entry.metadata as any;
-      return ();
+      return;
         <div className="flex items-center space-x-4 text-xs">
           <span>by {templateData.creatorName}</span>
           <span className="flex items-center">
@@ -380,7 +369,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'creators':
       const creatorData = entry.metadata as any;
-      return ();
+      return;
         <div className="flex items-center space-x-4 text-xs">
           <span>{creatorData.templateCount} templates</span>
           <span className="flex items-center">
@@ -396,7 +385,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'categories':
       const categoryData = entry.metadata as any;
-      return ();
+      return;
         <div className="flex items-center space-x-4 text-xs">
           <span>{categoryData.templateCount} templates</span>
           <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
@@ -404,7 +393,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     case 'engagement':
       const engagementData = entry.metadata as any;
-      return ();
+      return;
         <div className="flex items-center space-x-4 text-xs">
           <span>{engagementData.badgeCount} badges</span>
           <span>Level {engagementData.level}</span>
@@ -413,19 +402,17 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       );
     default:
       return null;
-    }
   };
   const renderLeaderboard = () => {
     if (loading) {
-      return ();
+      return;
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span className="ml-3 text-gray-600">Loading leaderboard...</span>
         </div>
       );
-    }
     if (error) {
-      return ();
+      return;
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <div className="text-red-600 mb-2">Failed to load leaderboard</div>
           <div className="text-sm text-red-500 mb-4">{error}</div>
@@ -437,9 +424,8 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
           </button>
         </div>
       );
-    }
     if (!leaderboard || leaderboard.leaderboard.length === 0) {
-      return ();
+      return;
         <div className="text-center py-12">
           <Trophy className="mx-auto w-16 h-16 text-gray-400" />
           <h3 className="mt-4 text-lg font-medium text-gray-900">No entries found</h3>
@@ -448,8 +434,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
           </p>
         </div>
       );
-    }
-    return ();
+    return;
       <div className="space-y-3">
         {leaderboard.leaderboard.map((entry, index) => 
           renderLeaderboardEntry(entry, index)
@@ -460,7 +445,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // =============================================================================
   // Main Render
   // =============================================================================
-  return ();
+  return;
     <div className={`marketplace-leaderboards ${className}`}>}
       {/* Header */}
       <div className="mb-8">
@@ -495,11 +480,9 @@ function getLeaderboardEndpoint(tab: string, metric: string): string {
   case 'categories':
     return `${baseUrl}/categories/${metric}`;}
   case 'engagement':
-    return `${baseUrl}/engagement/${metric}`;}
+    return `${baseUrl}/engagement/${metric}`;},}
   default:
     return `${baseUrl}/templates/revenue`;}
-  }
-}
 function getDefaultMetric(tab: string): string {
   switch (tab) {
   case 'templates':
@@ -512,8 +495,6 @@ function getDefaultMetric(tab: string): string {
     return 'points';
   default:
     return 'revenue';
-  }
-}
 function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
   switch (tab) {
   case 'templates':
@@ -545,29 +526,26 @@ function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
     ];
   default:
     return [{ id: 'revenue', label: 'Revenue' }];
-  }
-}
 function getLeaderboardTitle(tab: string, metric: string): string {
-  const metricLabels: Record<string, string> = {
-    revenue: 'Top Revenue',
-    purchases: 'Most Purchased',
-    rating: 'Highest Rated',
-    trending: 'Trending',
-    templates: 'Most Templates',
-    badges: 'Most Badges',
-    growth: 'Fastest Growing',
-    points: 'Most Points',
-    reviews: 'Most Reviews',
-    contributions: 'Top Contributors',
-  };
+  const metricLabels: Record<string, string> = {,
+  revenue: 'Top Revenue',
+  purchases: 'Most Purchased',
+  rating: 'Highest Rated',
+  trending: 'Trending',
+  templates: 'Most Templates',
+  badges: 'Most Badges',
+  growth: 'Fastest Growing',
+  points: 'Most Points',
+  reviews: 'Most Reviews',
+  contributions: 'Top Contributors',
+};
   const tabLabels: Record<string, string> = {
-    templates: 'Templates',
-    creators: 'Creators',
-    categories: 'Categories',
-    engagement: 'Community',
-  };
+  templates: 'Templates',
+  creators: 'Creators',
+  categories: 'Categories',
+  engagement: 'Community',
+};
   return `${metricLabels[metric]} ${tabLabels[tab]}`;}
-}
 function formatScore(score: number, metric: string): string {
   switch (metric) {
   case 'revenue':
@@ -575,11 +553,9 @@ function formatScore(score: number, metric: string): string {
   case 'rating':
     return `${score.toFixed(1)} ★`;}
   case 'growth':
-    return `${score.toFixed(1)}%`;}
+    return `${score.toFixed(1)}%`;},}
   default:
     return score.toLocaleString();
-  }
-}
 function getRankIcon(rank: number): React.ReactNode | null {
   switch (rank) {
   case 1:
@@ -590,8 +566,6 @@ function getRankIcon(rank: number): React.ReactNode | null {
     return <Award className="w-6 h-6 text-orange-500" />;
   default:
     return null;
-  }
-}
 function formatTimeAgo(date: Date): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -602,9 +576,7 @@ function formatTimeAgo(date: Date): string {
   if (diffHours < 24) return `${diffHours}h ago`;}
   const diffDays = Math.floor(diffHours / 24);
   return `${diffDays}d ago`;}
-}
 function getAuthToken(): string {
   return localStorage.getItem('authToken') || '';
-}
 
 export default MarketplaceLeaderboards;

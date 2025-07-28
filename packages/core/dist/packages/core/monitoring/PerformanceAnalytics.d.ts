@@ -24,51 +24,11 @@ export interface PerformanceReport {
         p50ExecutionTime: number;
         p95ExecutionTime: number;
         p99ExecutionTime: number;
-        slowestNodes: Array<{
-            nodeId: string;
-            nodeType: string;
-            averageDuration: number;
-            executionCount: number;
-        }>;
-    };
-    reliability: {
-        successRate: number;
-        errorRate: number;
-        mostReliableTypes: string[];
-        leastReliableTypes: string[];
-        errorPatterns: Array<{
-            pattern: string;
-            frequency: number;
-            affectedNodes: string[];
-        }>;
-    };
-    efficiency: {
-        memoryEfficiency: number;
-        cacheHitRate: number;
-        contextOptimization: number;
-        resourceWaste: number;
-        optimizationOpportunities: string[];
-    };
-    trends: {
-        performanceTrend: 'improving' | 'stable' | 'degrading';
-        trendConfidence: number;
-        projectedImprovement: number;
-        seasonalPatterns: Array<{
-            period: string;
-            impact: number;
-            description: string;
-        }>;
-    };
-    alerts: {
-        critical: number;
-        high: number;
-        medium: number;
-        low: number;
-        topAlertTypes: Array<{
-            type: string;
-            frequency: number;
-            severity: string;
-        }>;
+        slowestNodes: Array<{}, nodeId>;
+        string: any;
+        nodeType: string;
+        averageDuration: number;
+        executionCount: number;
     };
 }
 export interface PerformanceBenchmark {
@@ -96,72 +56,17 @@ export interface PerformanceInsight {
     title: string;
     description: string;
     impact: 'low' | 'medium' | 'high';
-    actionItems: string[];
-    affectedNodes: string[];
+    actionItems: string;
+    affectedNodes: string;
     confidence: number;
     automatable: boolean;
 }
-/**
- * Advanced performance analytics and reporting system
- */
 export declare class PerformanceAnalytics extends EventEmitter {
     private monitor;
     private insights;
     private benchmarks;
     private reportHistory;
     constructor(monitor: PerformanceMonitor);
-    /**
-     * Generate comprehensive performance report
-     */
-    generateReport(timeRange?: {
-        start: number;
-        end: number;
-    }): PerformanceReport;
-    /**
-     * Set benchmarks for node types
-     */
-    setBenchmark(nodeType: string, benchmark: PerformanceBenchmark['target']): void;
-    /**
-     * Generate performance insights
-     */
-    generateInsights(): PerformanceInsight[];
-    /**
-     * Get benchmark status for all node types
-     */
-    getBenchmarkStatus(): PerformanceBenchmark[];
-    /**
-     * Get recent insights
-     */
-    getInsights(category?: PerformanceInsight['category'], limit?: number): PerformanceInsight[];
-    /**
-     * Get historical reports
-     */
-    getReportHistory(limit?: number): Array<{
-        timestamp: number;
-        report: PerformanceReport;
-    }>;
-    /**
-     * Export analytics data
-     */
-    exportData(): {
-        insights: PerformanceInsight[];
-        benchmarks: PerformanceBenchmark[];
-        reports: Array<{
-            timestamp: number;
-            report: PerformanceReport;
-        }>;
-    };
-    private initializeDefaultBenchmarks;
-    private setupMonitoringListeners;
-    private getAllMetricsInRange;
-    private getAllAggregatedMetrics;
-    private calculateSummaryScores;
-    private analyzePerformance;
-    private analyzeReliability;
-    private analyzeEfficiency;
-    private analyzeTrends;
-    private analyzeAlerts;
-    private generateInsightId;
+    if(alerts: any, length: any): any;
 }
-export default PerformanceAnalytics;
 //# sourceMappingURL=PerformanceAnalytics.d.ts.map

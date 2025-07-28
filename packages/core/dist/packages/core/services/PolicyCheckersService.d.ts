@@ -20,8 +20,8 @@ export interface PolicyCheckResult {
     score?: number;
     message: string;
     details: Record<string, any>;
-    violations: PolicyViolation[];
-    recommendations: string[];
+    violations: PolicyViolation;
+    recommendations: string;
     timestamp: string;
     executionTimeMs: number;
 }
@@ -49,7 +49,7 @@ export interface PolicyCheckRequest {
         timestamp: string;
         metadata?: Record<string, any>;
     };
-    checksRequested?: PolicyType[];
+    checksRequested?: PolicyType;
     skipCache?: boolean;
 }
 export interface PolicyRule {
@@ -59,8 +59,8 @@ export interface PolicyRule {
     policyType: PolicyType;
     enabled: boolean;
     severity: PolicySeverity;
-    conditions: RuleCondition[];
-    actions: RuleAction[];
+    conditions: RuleCondition;
+    actions: RuleAction;
     executeOnCreate?: boolean;
     executeOnUpdate?: boolean;
     executeOnAccess?: boolean;
@@ -89,54 +89,16 @@ export interface PolicyChecker {
     version: string;
     check(request: PolicyCheckRequest): Promise<PolicyCheckResult>;
     validateRule(rule: PolicyRule): Promise<boolean>;
-    getDefaultRules(): Promise<PolicyRule[]>;
+    getDefaultRules(): Promise<PolicyRule>;
 }
 export declare class PolicyCheckersService {
     private checkers;
     private complianceMonitor;
     private contentQualityService;
     private cache;
-    constructor(complianceMonitor: ComplianceMonitor, contentQualityService: ContentQualityMetricsService);
-    registerChecker(checker: PolicyChecker): void;
-    executeChecks(request: PolicyCheckRequest): Promise<PolicyCheckResult[]>;
-    executeCheck(request: PolicyCheckRequest, policyType: PolicyType): Promise<PolicyCheckResult>;
-    validateContent(content: {
-        id: string;
-        type: string;
-        data: Record<string, any>;
-        author?: string;
-        metadata?: Record<string, any>;
-    }): Promise<{
-        isValid: boolean;
-        overallScore: number;
-        results: PolicyCheckResult[];
-        criticalViolations: PolicyViolation[];
-        requiredActions: string[];
-    }>;
-    validateUserAction(action: {
-        userId: string;
-        userRole: string;
-        action: string;
-        resource?: string;
-        context?: Record<string, any>;
-    }): Promise<{
-        allowed: boolean;
-        reasons: string[];
-        results: PolicyCheckResult[];
-    }>;
-    getStatistics(): Promise<{
-        totalCheckers: number;
-        checksExecutedToday: number;
-        averageExecutionTime: number;
-        topViolationTypes: Array<{
-            type: string;
-            count: number;
-        }>;
-        complianceScore: number;
-    }>;
-    private initializeBuiltInCheckers;
-    private createErrorResult;
-    private logPolicyCheckExecution;
+    constructor();
+    complianceMonitor: ComplianceMonitor;
+    contentQualityService: ContentQualityMetricsService;
 }
 export default PolicyCheckersService;
 //# sourceMappingURL=PolicyCheckersService.d.ts.map

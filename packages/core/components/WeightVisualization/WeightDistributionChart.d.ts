@@ -7,6 +7,7 @@
 import React from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export type ChartType = 'pie' | 'bar' | 'donut';
+
 export interface WeightDistributionChartProps {
     options: WeightControlOption[];
     type?: ChartType;
@@ -19,7 +20,7 @@ export interface WeightDistributionChartProps {
     animationDuration?: number;
     onOptionHover?: (option: WeightControlOption | null) => void;
     onOptionClick?: (option: WeightControlOption) => void;
-}
+
 export declare const WeightDistributionChart: React.FC<WeightDistributionChartProps>;
 export default WeightDistributionChart;
 //# sourceMappingURL=WeightDistributionChart.d.ts.map

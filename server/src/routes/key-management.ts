@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyManagementService, KeyGenerationRequest, KeyOperationContext } from '../services/KeyManagementService';
 
+}
 interface GenerateKeyRequest {
   purpose: 'data_encryption' | 'key_encryption' | 'token_signing' | 'api_signing' | 'session_encryption' | 'backup_encryption' | 'audit_signing';
   algorithm?: string;
@@ -12,32 +13,41 @@ interface GenerateKeyRequest {
   expiresAt?: string; // ISO date string
   maxUsageCount?: number;
   makePrimary?: boolean;
+}
   complianceTags?: { [key: string]: any };
 }
 
+}
 interface RotateKeyRequest {
   keyId: string;
   reason?: string;
 }
+}
 
+}
 interface DestroyKeyRequest {
   keyId: string;
   reason: string;
   confirmDestruction: boolean;
 }
+}
 
+}
 interface CreateBackupRequest {
   keyId: string;
   backupType: 'full' | 'metadata_only' | 'differential';
   storageLocation?: string;
 }
+}
 
+}
 interface ListKeysQuery {
   purpose?: string;
   isActive?: boolean;
   securityLevel?: string;
   page?: number;
   limit?: number;
+}
 }
 
 export async function keyManagementRoutes(
@@ -134,7 +144,7 @@ export async function keyManagementRoutes(
           isPrimary: masterKey.isPrimary,
           createdAt: masterKey.createdAt,
           expiresAt: masterKey.expiresAt
-        },
+  }
         message: 'Master key generated successfully',
         timestamp: new Date().toISOString()
       };
@@ -195,7 +205,7 @@ export async function keyManagementRoutes(
           lastUsedAt: masterKey.lastUsedAt,
           securityLevel: masterKey.securityLevel,
           complianceTags: masterKey.complianceTags
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -244,7 +254,7 @@ export async function keyManagementRoutes(
           page,
           limit,
           hasMore: keys.length === limit
-        },
+  }
         filters: { purpose, isActive, securityLevel },
         timestamp: new Date().toISOString()
       };
@@ -299,7 +309,7 @@ export async function keyManagementRoutes(
           newKeyId: newKey.keyId,
           reason: reason || 'Manual rotation',
           rotatedAt: new Date().toISOString()
-        },
+  }
         newKey: {
           keyId: newKey.keyId,
           purpose: newKey.purpose,
@@ -308,7 +318,7 @@ export async function keyManagementRoutes(
           securityLevel: newKey.securityLevel,
           isPrimary: newKey.isPrimary,
           createdAt: newKey.createdAt
-        },
+  }
         message: 'Key rotated successfully',
         timestamp: new Date().toISOString()
       };
@@ -434,7 +444,7 @@ export async function keyManagementRoutes(
           createdAt: backup.createdAt,
           expiresAt: backup.expiresAt,
           storageLocation: storageLocation || 'default'
-        },
+  }
         message: 'Key backup created successfully',
         timestamp: new Date().toISOString()
       };
@@ -646,17 +656,17 @@ export async function keyManagementRoutes(
           phase: 'Generation',
           description: 'Create new cryptographic keys with specified properties',
           operations: ['generate', 'activate']
-        },
+  }
         {
           phase: 'Active Use',
           description: 'Keys are available for cryptographic operations',
           operations: ['encrypt', 'decrypt', 'sign', 'verify']
-        },
+  }
         {
           phase: 'Rotation',
           description: 'Replace keys based on policies or manual triggers',
           operations: ['rotate', 'overlap', 'deactivate']
-        },
+  }
         {
           phase: 'Archive/Destroy',
           description: 'Securely retire or destroy keys',
@@ -669,31 +679,31 @@ export async function keyManagementRoutes(
           method: 'POST',
           description: 'Generate new master key',
           auth: 'key_manager role required'
-        },
+  }
         {
           path: '/keys/:keyId',
           method: 'GET',
           description: 'Get key metadata (no key material)',
           auth: 'authenticated user'
-        },
+  }
         {
           path: '/keys',
           method: 'GET',
           description: 'List keys with filtering',
           auth: 'authenticated user'
-        },
+  }
         {
           path: '/keys/rotate',
           method: 'POST',
           description: 'Rotate existing key',
           auth: 'key_manager role required'
-        },
+  }
         {
           path: '/keys/destroy',
           method: 'POST',
           description: 'Permanently destroy key',
           auth: 'admin role required'
-        },
+  }
         {
           path: '/keys/backup',
           method: 'POST',

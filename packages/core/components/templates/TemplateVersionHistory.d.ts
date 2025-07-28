@@ -5,6 +5,7 @@
 import React from 'react';
 import { TemplateVersion } from '../templates/TemplateVersionManager';
 import { ProjectTemplate } from '../templates/ProjectTemplateManager';
+
 interface TemplateVersionHistoryProps {
     template: ProjectTemplate;
     onVersionSelect?: (version: TemplateVersion) => void;
@@ -12,7 +13,7 @@ interface TemplateVersionHistoryProps {
     onVersionRestore?: (version: TemplateVersion) => void;
     onVersionExport?: (version: TemplateVersion) => void;
     className?: string;
-}
+
 export declare const TemplateVersionHistory: React.FC<TemplateVersionHistoryProps>;
 export {};
 //# sourceMappingURL=TemplateVersionHistory.d.ts.map

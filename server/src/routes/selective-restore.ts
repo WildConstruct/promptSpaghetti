@@ -44,7 +44,7 @@ const ExecuteRestoreSchema = z.object({
     on_completion: z.boolean(),
     on_error: z.boolean(),
     notification_channels: z.array(z.string())
-  })
+  }
 });
 
 // =============================================================================
@@ -67,7 +67,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           data: z.array(z.any()),
           totalCount: z.number()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -146,7 +146,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           tables: z.array(z.string()),
           schemas: z.array(z.string()).optional()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -234,8 +234,8 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
             estimated_duration_minutes: z.number(),
             warnings: z.array(z.string()),
             recommendations: z.array(z.string())
-          })
-        })
+  }
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -340,7 +340,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
               potential_conflicts: 0
             };
           }
-        })
+  }
       );
       
       // Calculate totals
@@ -420,7 +420,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
           success: z.boolean(),
           request_id: z.string(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -500,7 +500,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.array(z.any())
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -570,7 +570,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{
@@ -626,7 +626,7 @@ export async function selectiveRestoreRoutes(fastify: FastifyInstance) {
         200: z.object({
           success: z.boolean(),
           data: z.any()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest<{

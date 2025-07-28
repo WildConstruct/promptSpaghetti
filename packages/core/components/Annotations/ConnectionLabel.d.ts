@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { ConnectionLabel as ConnectionLabelType, ConnectionLabelAction } from '../../types/CollaborationTypes';
+
 interface ConnectionLabelProps {
     label: ConnectionLabelType;
     onAction: (action: ConnectionLabelAction) => void;
@@ -14,7 +15,7 @@ interface ConnectionLabelProps {
     showTooltip?: boolean;
     isHighlighted?: boolean;
     connectionPath?: string;
-}
+
 export declare const ConnectionLabel: React.FC<ConnectionLabelProps>;
 export default ConnectionLabel;
 //# sourceMappingURL=ConnectionLabel.d.ts.map

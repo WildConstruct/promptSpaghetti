@@ -6,13 +6,15 @@
  */
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
+
 export interface AudioConfig {
     provider: 'openai-tts' | 'elevenlabs' | 'whisper';
     apiKey?: string;
     endpoint?: string;
     model?: string;
     defaultParameters?: Record<string, any>;
-}
+
+
 export interface AudioMetadata {
     duration: number;
     format: string;
@@ -24,12 +26,14 @@ export interface AudioMetadata {
     model: string;
     generation_time: number;
     cost: number;
-}
+
+
 export interface GeneratedAudio {
     data: ArrayBuffer | string;
     format: string;
     metadata: AudioMetadata;
-}
+
+
 export interface TranscriptionResult {
     text: string;
     language?: string;
@@ -38,6 +42,7 @@ export interface TranscriptionResult {
         start: number;
         end: number;
         text: string;
+
     }>;
     words?: Array<{
         word: string;
@@ -45,7 +50,7 @@ export interface TranscriptionResult {
         end: number;
     }>;
     metadata: AudioMetadata;
-}
+
 export declare class TextToSpeechNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapters;
@@ -56,7 +61,7 @@ export declare class TextToSpeechNode extends AdvancedRuntimeNode {
     private _getConfiguredProvider;
     private _buildSynthesisOptions;
     private _mapToElevenLabsFormat;
-}
+
 export declare class AudioTranscriptionNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapters;
@@ -66,7 +71,7 @@ export declare class AudioTranscriptionNode extends AdvancedRuntimeNode {
     private _initializeAdapter;
     private _getConfiguredProvider;
     private _buildTranscriptionOptions;
-}
+
 export declare class AudioAnalysisNode extends AdvancedRuntimeNode {
     constructor(nodeId: string, config?: Record<string, any>);
     executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult>;
@@ -74,12 +79,12 @@ export declare class AudioAnalysisNode extends AdvancedRuntimeNode {
     private _estimateDuration;
     private _estimateBitrate;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class AudioConversionNode extends AdvancedRuntimeNode {
     constructor(nodeId: string, config?: Record<string, any>);
     executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult>;
     private _convertAudio;
     private _getFormatFromFile;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 //# sourceMappingURL=AudioProcessingNode.d.ts.map

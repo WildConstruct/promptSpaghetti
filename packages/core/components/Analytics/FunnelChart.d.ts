@@ -22,6 +22,7 @@ import {
   ConversionCohort
 } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface FunnelChartProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -36,8 +37,9 @@ export interface FunnelChartProps {
     realTimeUpdates?: boolean;
     onStepClick?: (step: ConversionStep, metrics: StepMetrics) => void;
     onExport?: (chartData: ChartExportData) => void;
-}
+
 export type FunnelChartMode = 'standard' | 'horizontal' | 'sankey' | 'waterfall' | 'heatmap';
+
 export interface StepMetrics {
     stepId: string;
     stepName: string;
@@ -52,7 +54,7 @@ export interface StepMetrics {
     revenuePerConversion: number;
     previousStepConversionRate?: number;
     comparisonData?: StepComparisonMetrics;
-}
+
 export interface StepComparisonMetrics {
     previousPeriod: {,
         conversionRate: number;
@@ -70,14 +72,14 @@ export interface StepComparisonMetrics {
         conversionRate: number;
         performance: 'above_average' | 'below_average' | 'average';
     }>;
-}
+
 export interface FunnelChartData {
     steps: StepMetrics[];
     overallMetrics: OverallFunnelMetrics;
     dropoffAnalysis: DropoffAnalysis[];
     trends: FunnelTrend[];
     segmentComparisons: SegmentFunnelComparison[];
-}
+
 export interface OverallFunnelMetrics {
     totalEntries: number;
     totalConversions: number;
@@ -89,7 +91,7 @@ export interface OverallFunnelMetrics {
     totalDropoffs: number;
     biggestDropoffStep: string;
     mostEfficientStep: string;
-}
+
 export interface DropoffAnalysis {
     stepId: string;
     stepName: string;
@@ -99,21 +101,21 @@ export interface DropoffAnalysis {
     recoveryOpportunity: number;
     recommendedActions: string[];
     severity: 'critical' | 'high' | 'medium' | 'low';
-}
+
 export interface DropoffReason {
     reason: string;
     category: 'technical' | 'user_experience' | 'content' | 'external';
     percentage: number;
     count: number;
     confidence: number;
-}
+
 export interface FunnelTrend {
     period: string;
     conversionRate: number;
     entries: number;
     conversions: number;
     revenue: number;
-}
+
 export interface SegmentFunnelComparison {
     segmentId: string;
     segmentName: string;
@@ -124,7 +126,7 @@ export interface SegmentFunnelComparison {
         relativePerformance: number;
     }>;
     insights: string[];
-}
+
 export interface ChartExportData {
     chartMode: FunnelChartMode;
     data: FunnelChartData;
@@ -141,7 +143,7 @@ export interface ChartExportData {
         };
         filters: unknown[];
     };
-}
+
 export interface InteractionState {
     hoveredStep: string | null;
     selectedStep: string | null;
@@ -150,13 +152,12 @@ export interface InteractionState {
         y: number;
     } | null;
     tooltipContent: StepTooltipContent | null;
-}
+
 export interface StepTooltipContent {
     stepName: string;
     metrics: StepMetrics;
     comparisonData?: StepComparisonMetrics;
     insights: string[];
-}
 /**
  * Main Funnel Chart Component
  */

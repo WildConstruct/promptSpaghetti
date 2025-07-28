@@ -29,70 +29,8 @@ export interface SecuritySystemNode {
         timeout_ms: number;
         retry_attempts: number;
         retry_delay_ms: number;
-        checks: Array<{
-            type: 'ping' | 'http_status' | 'database_query' | 'custom_script' | 'port_check' | 'ssl_cert' | 'disk_space' | 'memory_usage' | 'cpu_usage';
-            name: string;
-            configuration: Record<string, any>;
-            success_criteria: SuccessCriteria;
-            weight: number;
-        }>;
+        checks: Array<{}, type>;
     };
-    performance: {
-        metrics_collection: boolean;
-        collection_interval_ms: number;
-        retention_days: number;
-        thresholds: {
-            response_time_ms: {
-                warning: number;
-                critical: number;
-            };
-            cpu_usage_percent: {
-                warning: number;
-                critical: number;
-            };
-            memory_usage_percent: {
-                warning: number;
-                critical: number;
-            };
-            disk_usage_percent: {
-                warning: number;
-                critical: number;
-            };
-            network_latency_ms: {
-                warning: number;
-                critical: number;
-            };
-            error_rate_percent: {
-                warning: number;
-                critical: number;
-            };
-        };
-    };
-    availability: {
-        target_uptime_percent: number;
-        maintenance_window: MaintenanceWindow[];
-        planned_downtime_tolerance_minutes: number;
-        unplanned_downtime_tolerance_minutes: number;
-    };
-    dependencies: {
-        hard_dependencies: string[];
-        soft_dependencies: string[];
-        dependency_check_interval_ms: number;
-    };
-    current_state: {
-        status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
-        last_check_time: number;
-        uptime_start: number;
-        consecutive_failures: number;
-        health_score: number;
-        availability_percent_24h: number;
-        availability_percent_7d: number;
-        availability_percent_30d: number;
-    };
-    created_by: string;
-    created_at: number;
-    last_updated: number;
-    enabled: boolean;
 }
 export interface SuccessCriteria {
     expected_status_code?: number;
@@ -107,7 +45,7 @@ export interface MaintenanceWindow {
     description: string;
     start_time: string;
     end_time: string;
-    days_of_week: number[];
+    days_of_week: number;
     timezone: string;
     recurring: boolean;
     exclude_from_sla: boolean;
@@ -153,30 +91,14 @@ export interface AvailabilityReport {
         target_availability_percent: number;
         sla_compliance: boolean;
     };
-    downtime_incidents: Array<{
-        start_time: number;
-        end_time: number;
-        duration_minutes: number;
-        type: 'planned' | 'unplanned';
-        reason: string;
-        impact_level: 'low' | 'medium' | 'high' | 'critical';
-        root_cause?: string;
-    }>;
-    performance_summary: {
-        avg_response_time_ms: number;
-        p95_response_time_ms: number;
-        p99_response_time_ms: number;
-        error_rate_percent: number;
-        successful_checks: number;
-        failed_checks: number;
-        total_checks: number;
-    };
-    trends: {
-        availability_trend: 'improving' | 'stable' | 'degrading';
-        performance_trend: 'improving' | 'stable' | 'degrading';
-        reliability_score: number;
-        recommendation_priority: 'low' | 'medium' | 'high';
-    };
+    downtime_incidents: Array<{}, start_time>;
+    number: any;
+    end_time: number;
+    duration_minutes: number;
+    type: 'planned' | 'unplanned';
+    reason: string;
+    impact_level: 'low' | 'medium' | 'high' | 'critical';
+    root_cause?: string;
 }
 export interface SystemAlert {
     id: string;
@@ -190,8 +112,8 @@ export interface SystemAlert {
         current_value?: number;
         threshold_value?: number;
         measurement_unit?: string;
-        affected_checks: string[];
-        dependency_impact: string[];
+        affected_checks: string;
+        dependency_impact: string;
         estimated_impact: 'none' | 'low' | 'medium' | 'high' | 'critical';
     };
     resolution: {
@@ -226,13 +148,13 @@ export interface HealthTrackerConfig {
         alert_aggregation_window_ms: number;
         suppress_duplicate_alerts: boolean;
         auto_resolve_timeout_ms: number;
-        escalation_rules: EscalationRule[];
+        escalation_rules: EscalationRule;
     };
     reporting: {
         generate_daily_reports: boolean;
         generate_weekly_reports: boolean;
         generate_monthly_reports: boolean;
-        report_recipients: string[];
+        report_recipients: string;
         include_trends: boolean;
         include_recommendations: boolean;
     };
@@ -253,7 +175,7 @@ export interface EscalationRule {
         duration_minutes?: number;
     };
     actions: {
-        notify_users: string[];
+        notify_users: string;
         create_incident: boolean;
         auto_failover: boolean;
         run_automation: boolean;
@@ -271,45 +193,11 @@ export declare class SecuritySystemHealthTracker extends EventEmitter {
     private performanceMetrics;
     constructor(config: HealthTrackerConfig);
     private initializeEventHandlers;
-    registerSystem(system: Omit<SecuritySystemNode, 'id' | 'created_at' | 'current_state'>): Promise<string>;
-    updateSystem(systemId: string, updates: Partial<SecuritySystemNode>): Promise<void>;
-    unregisterSystem(systemId: string): Promise<void>;
-    private startHealthChecking;
-    private stopHealthChecking;
-    private performHealthCheck;
-    private executeHealthCheck;
-    private performPingCheck;
-    private performHttpCheck;
     private performDatabaseCheck;
     private performPortCheck;
     private performSSLCertCheck;
     private performDiskSpaceCheck;
-    private performMemoryCheck;
-    private performCPUCheck;
-    private performCustomScriptCheck;
-    private calculateHealthScore;
-    private determineSystemStatus;
-    private updateAvailabilityMetrics;
-    private calculateAvailability;
-    private checkForAlerts;
-    private generateAlert;
-    private processAlert;
-    private alertMatchesEscalationRule;
-    private executeEscalationRule;
-    private sendAlertNotifications;
-    private sendEscalationNotifications;
-    private createIncident;
-    private triggerAutoFailover;
-    private runAutomationScript;
-    generateAvailabilityReport(systemId: string, startTime: number, endTime: number): Promise<AvailabilityReport>;
-    getSystemHealth(systemId?: string): any;
-    getActiveAlerts(systemId?: string): SystemAlert[];
-    acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void>;
-    resolveAlert(alertId: string, resolvedBy: string, notes?: string): Promise<void>;
-    updateConfig(newConfig: Partial<HealthTrackerConfig>): Promise<void>;
-    getConfiguration(): HealthTrackerConfig;
-    performMaintenance(): Promise<void>;
-    shutdown(): Promise<void>;
+    boolean: any;
+    usage: number;
 }
-export default SecuritySystemHealthTracker;
 //# sourceMappingURL=SecuritySystemHealthTracker.d.ts.map

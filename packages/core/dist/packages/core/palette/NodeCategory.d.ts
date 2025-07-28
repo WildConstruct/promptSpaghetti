@@ -15,14 +15,11 @@ export interface NodeCategory {
     collapsible: boolean;
     defaultExpanded: boolean;
     metadata?: {
-        keywords?: string[];
+        keywords?: string;
         difficulty?: 'beginner' | 'intermediate' | 'advanced';
         usage?: 'common' | 'specialized' | 'experimental';
     };
 }
-/**
- * Special category IDs for system categories
- */
 export declare const SPECIAL_CATEGORIES: {
     readonly FAVORITES: "favorites";
     readonly SEARCH_RESULTS: "search-results";
@@ -31,45 +28,5 @@ export declare const SPECIAL_CATEGORIES: {
 /**
  * Core node categories definition
  */
-export declare const NODE_CATEGORIES: Record<string, NodeCategory>;
-/**
- * Node to category mapping
- */
-export declare const NODE_CATEGORY_MAPPING: Record<string, string[]>;
-/**
- * Get categories for a node type
- */
-export declare function getNodeCategories(nodeId: string): string[];
-/**
- * Get category metadata by ID
- */
-export declare function getCategoryById(categoryId: string): NodeCategory | undefined;
-/**
- * Get all categories sorted by order
- */
-export declare function getAllCategories(): NodeCategory[];
-/**
- * Get categories filtered by difficulty level
- */
-export declare function getCategoriesByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): NodeCategory[];
-/**
- * Search categories by keyword
- */
-export declare function searchCategories(query: string): NodeCategory[];
-/**
- * Get category color with opacity
- */
-export declare function getCategoryColor(categoryId: string, opacity?: number): string;
-/**
- * Category filter options
- */
-export interface CategoryFilterOptions {
-    difficulty?: 'beginner' | 'intermediate' | 'advanced';
-    usage?: 'common' | 'specialized' | 'experimental';
-    expanded?: boolean;
-}
-/**
- * Filter categories by options
- */
-export declare function filterCategories(options: CategoryFilterOptions): NodeCategory[];
+export declare const NODE_CATEGORIES: Record<string, NodeCategory>, SPECIAL_CATEGORIES: any, FAVORITES: any, : any, : any, : any, : any, FiStar: any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, : any, SPECIAL_CATEGORIES: any, SEARCH_RESULTS: any, : any, : any, : any, : any, FiSearch: any, : any, : any, : any;
 //# sourceMappingURL=NodeCategory.d.ts.map

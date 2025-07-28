@@ -5,55 +5,55 @@
  * Domain-specific state management for admin dashboard functionality
  */
 import { BaseStateContainer, ValidationResult } from '../../../state/containers/BaseStateContainer';
-import { DomainStateContainer, DomainStateChange } from '../../../state/orchestration/StateOrchestrator';
+import { DomainStateContainer } from '../../../state/orchestration/StateOrchestrator';
 export interface AdminDashboardState {
     layout: {
-        widgets: DashboardWidget[];
+        widgets: DashboardWidget;
         gridConfig: GridConfiguration;
         theme: 'light' | 'dark' | 'auto';
         collapsed: boolean;
     };
     users: {
-        list: UserRecord[];
-        selected: string[];
+        list: UserRecord;
+        selected: string;
         filters: UserFilters;
         pagination: PaginationState;
-        bulkOperations: BulkOperation[];
+        bulkOperations: BulkOperation;
     };
     metrics: {
         realTime: RealTimeMetrics;
         historical: HistoricalMetrics;
-        alerts: AlertRecord[];
+        alerts: AlertRecord;
         performance: PerformanceMetrics;
     };
     security: {
         threatLevel: 'low' | 'medium' | 'high' | 'critical';
-        activeIncidents: SecurityIncident[];
-        auditLogs: AuditLogEntry[];
+        activeIncidents: SecurityIncident;
+        auditLogs: AuditLogEntry;
         accessControl: AccessControlState;
     };
     api: {
-        endpoints: ApiEndpoint[];
-        rateLimits: RateLimitConfig[];
+        endpoints: ApiEndpoint;
+        rateLimits: RateLimitConfig;
         usage: ApiUsageMetrics;
-        errors: ApiError[];
+        errors: ApiError;
     };
     configuration: {
-        features: FeatureFlag[];
+        features: FeatureFlag;
         settings: SystemSettings;
         maintenance: MaintenanceState;
         backup: BackupState;
     };
     ui: {
         activeTab: string;
-        modals: ModalState[];
-        notifications: NotificationState[];
+        modals: ModalState;
+        notifications: NotificationState;
         loading: LoadingState;
     };
     collaboration: {
-        activeAdmins: AdminUser[];
-        sharedSessions: SharedSession[];
-        conflicts: StateConflict[];
+        activeAdmins: AdminUser;
+        sharedSessions: SharedSession;
+        conflicts: StateConflict;
     };
 }
 export interface DashboardWidget {
@@ -72,7 +72,7 @@ export interface DashboardWidget {
     error?: string;
     lastUpdated: number;
     refreshInterval?: number;
-    permissions: string[];
+    permissions: string;
 }
 export interface GridConfiguration {
     cols: number;
@@ -80,7 +80,7 @@ export interface GridConfiguration {
     margin: [number, number];
     containerPadding: [number, number];
     breakpoints: Record<string, number>;
-    layouts: Record<string, any[]>;
+    layouts: Record<string, any>;
 }
 export interface UserRecord {
     id: string;
@@ -88,7 +88,7 @@ export interface UserRecord {
     email: string;
     role: UserRole;
     status: 'active' | 'inactive' | 'suspended' | 'banned';
-    permissions: Permission[];
+    permissions: Permission;
     profile: UserProfile;
     activity: UserActivity;
     createdAt: number;
@@ -98,13 +98,13 @@ export interface UserRecord {
 export interface UserRole {
     id: string;
     name: string;
-    permissions: string[];
+    permissions: string;
     hierarchy: number;
     isSystem: boolean;
 }
 export interface Permission {
     resource: string;
-    actions: string[];
+    actions: string;
     conditions?: Record<string, any>;
     grantedAt: number;
     expiresAt?: number;
@@ -120,10 +120,10 @@ export interface UserProfile {
 }
 export interface UserActivity {
     loginCount: number;
-    lastActions: UserAction[];
+    lastActions: UserAction;
     sessionsActive: number;
-    ipAddresses: string[];
-    devices: DeviceInfo[];
+    ipAddresses: string;
+    devices: DeviceInfo;
 }
 export interface UserFilters {
     role?: string;
@@ -145,7 +145,7 @@ export interface PaginationState {
 export interface BulkOperation {
     id: string;
     type: 'activate' | 'deactivate' | 'delete' | 'update_role' | 'reset_password';
-    userIds: string[];
+    userIds: string;
     status: 'pending' | 'running' | 'completed' | 'failed';
     progress: number;
     result?: BulkOperationResult;
@@ -164,7 +164,7 @@ export interface RealTimeMetrics {
 }
 export interface HistoricalMetrics {
     timeRange: '1h' | '24h' | '7d' | '30d' | '90d';
-    data: MetricDataPoint[];
+    data: MetricDataPoint;
     aggregation: 'avg' | 'sum' | 'max' | 'min';
 }
 export interface MetricDataPoint {
@@ -185,7 +185,7 @@ export interface AlertRecord {
     acknowledgedAt?: number;
     resolved: boolean;
     resolvedAt?: number;
-    actions: AlertAction[];
+    actions: AlertAction;
     metadata: Record<string, any>;
 }
 export interface SecurityIncident {
@@ -194,9 +194,9 @@ export interface SecurityIncident {
     severity: 'low' | 'medium' | 'high' | 'critical';
     status: 'active' | 'investigating' | 'resolved' | 'false_positive';
     description: string;
-    affectedUsers: string[];
-    affectedResources: string[];
-    timeline: IncidentTimelineEntry[];
+    affectedUsers: string;
+    affectedResources: string;
+    timeline: IncidentTimelineEntry;
     response: IncidentResponse;
     createdAt: number;
     updatedAt: number;
@@ -208,8 +208,8 @@ export interface ApiEndpoint {
     version: string;
     status: 'active' | 'deprecated' | 'disabled';
     rateLimit: number;
-    authentication: string[];
-    permissions: string[];
+    authentication: string;
+    permissions: string;
     documentation: string;
     usage: EndpointUsageStats;
     healthStatus: 'healthy' | 'degraded' | 'error';
@@ -322,199 +322,143 @@ export declare class AdminStateContainer extends BaseStateContainer<AdminDashboa
     private metricsUpdateInterval?;
     private alertPollingInterval?;
     constructor(initialState?: Partial<AdminDashboardState>);
-    getInitialState(): AdminDashboardState;
-    validateState(state: AdminDashboardState): ValidationResult;
-    getDomainName(): string;
-    applyOperation(operation: AdminOperation, userId?: string): Promise<void>;
-    private applyOperationToState;
-    applyExternalChange(change: DomainStateChange): Promise<void>;
-    canAcceptChange(change: DomainStateChange): boolean;
-    prepareForTransaction(transactionId: string): Promise<void>;
-    commitTransaction(transactionId: string): Promise<void>;
-    rollbackTransaction(transactionId: string): Promise<void>;
-    getActiveAlerts(): AlertRecord[];
-    getCriticalAlerts(): AlertRecord[];
-    getSelectedUsers(): UserRecord[];
-    getFilteredUsers(): UserRecord[];
-    updateWidgetData(widgetId: string, data: any): Promise<void>;
-    private setupPolling;
-    private pollMetrics;
-    private pollAlerts;
-    private setupEventHandlers;
-    private emitDomainEvents;
-    private isValidEmail;
-    private setNestedProperty;
-    private generateId;
-    private generateChangeId;
-    destroy(): void;
-}
-interface WidgetConfiguration {
-    dataSource?: string;
-    refreshInterval?: number;
-    chartType?: string;
-    filters?: Record<string, any>;
-    displayOptions?: Record<string, any>;
-}
-interface UserPreferences {
-    theme: 'light' | 'dark' | 'auto';
-    language: string;
-    timezone: string;
-    notifications: {
-        email: boolean;
-        push: boolean;
-        sms: boolean;
+    if(initialState: any): {
+        layout: {
+            widgets: any[];
+            gridConfig: {
+                cols: number;
+                rowHeight: number;
+                margin: number[];
+                containerPadding: number[];
+                breakpoints: {
+                    lg: number;
+                    md: number;
+                    sm: number;
+                    xs: number;
+                    xxs: number;
+                };
+                layouts: {};
+            };
+            theme: string;
+            collapsed: boolean;
+        };
+        users: {
+            list: any[];
+            selected: any[];
+            filters: {};
+            pagination: {
+                page: number;
+                pageSize: number;
+                total: number;
+                hasNext: boolean;
+                hasPrev: boolean;
+            };
+            bulkOperations: any[];
+        };
+        metrics: {
+            realTime: {
+                activeUsers: number;
+                systemLoad: number;
+                memoryUsage: number;
+                cpuUsage: number;
+                networkTraffic: number;
+                errorRate: number;
+                responseTime: number;
+                timestamp: number;
+            };
+            historical: {
+                timeRange: string;
+                data: any[];
+                aggregation: string;
+            };
+            alerts: any[];
+            performance: {
+                uptime: number;
+                throughput: number;
+                latency: number;
+                errorCount: number;
+            };
+            security: {
+                threatLevel: string;
+                activeIncidents: any[];
+                auditLogs: any[];
+                accessControl: {
+                    policies: any[];
+                    roles: any[];
+                    violations: any[];
+                };
+                api: {
+                    endpoints: any[];
+                    rateLimits: any[];
+                    usage: {
+                        requestsPerMinute: number;
+                        errorRate: number;
+                        avgResponseTime: number;
+                        bandwidthUsage: number;
+                    };
+                    errors: any[];
+                };
+                configuration: {
+                    features: any[];
+                    settings: {
+                        maintenance: {
+                            inProgress: boolean;
+                            scheduled: boolean;
+                            lastRun: number;
+                            nextRun: number;
+                        };
+                        features: {};
+                        limits: {
+                            maxUsers: number;
+                            maxSessions: number;
+                            maxFileSize: number;
+                            maxRequests: number;
+                        };
+                        security: {
+                            passwordPolicy: {
+                                minLength: number;
+                                requireUppercase: boolean;
+                                requireLowercase: boolean;
+                                requireNumbers: boolean;
+                                requireSymbols: boolean;
+                            };
+                            sessionTimeout: number;
+                            maxLoginAttempts: number;
+                            twoFactorRequired: boolean;
+                        };
+                        notifications: {
+                            emailEnabled: boolean;
+                            smsEnabled: boolean;
+                            pushEnabled: boolean;
+                            templates: {};
+                        };
+                        backup: {
+                            lastBackup: number;
+                            nextBackup: number;
+                            status: string;
+                            size: number;
+                        };
+                        ui: {
+                            activeTab: string;
+                            modals: any[];
+                            notifications: any[];
+                            loading: {
+                                global: boolean;
+                                sections: {};
+                            };
+                            collaboration: {
+                                activeAdmins: any[];
+                                sharedSessions: any[];
+                                conflicts: any[];
+                            };
+                            validateState(state: AdminDashboardState): ValidationResult;
+                            if(: any, widget: any): any;
+                            "": any;
+                        };
+                    };
+                };
+            };
+        };
     };
 }
-interface UserAction {
-    type: string;
-    resource: string;
-    timestamp: number;
-    metadata?: Record<string, any>;
-}
-interface DeviceInfo {
-    id: string;
-    type: 'desktop' | 'mobile' | 'tablet';
-    os: string;
-    browser: string;
-    lastSeen: number;
-}
-interface BulkOperationResult {
-    successful: number;
-    failed: number;
-    errors: string[];
-}
-interface PerformanceMetrics {
-    uptime: number;
-    throughput: number;
-    latency: number;
-    errorCount: number;
-}
-interface AccessControlState {
-    policies: any[];
-    roles: any[];
-    violations: any[];
-}
-interface AuditLogEntry {
-    id: string;
-    userId: string;
-    action: string;
-    resource: string;
-    timestamp: number;
-    details: Record<string, any>;
-}
-interface AlertAction {
-    type: string;
-    label: string;
-    callback: string;
-}
-interface IncidentTimelineEntry {
-    timestamp: number;
-    event: string;
-    details: string;
-    userId?: string;
-}
-interface IncidentResponse {
-    actions: string[];
-    assignee?: string;
-    status: string;
-    notes: string[];
-}
-interface EndpointUsageStats {
-    requestCount: number;
-    errorCount: number;
-    avgResponseTime: number;
-    lastAccessed: number;
-}
-interface RateLimitConfig {
-    endpoint: string;
-    limit: number;
-    window: number;
-    current: number;
-}
-interface ApiUsageMetrics {
-    requestsPerMinute: number;
-    errorRate: number;
-    avgResponseTime: number;
-    bandwidthUsage: number;
-}
-interface ApiError {
-    id: string;
-    endpoint: string;
-    method: string;
-    statusCode: number;
-    message: string;
-    timestamp: number;
-    userId?: string;
-}
-interface FeatureFlag {
-    name: string;
-    enabled: boolean;
-    description: string;
-    rolloutPercentage: number;
-}
-interface MaintenanceState {
-    inProgress: boolean;
-    scheduled: boolean;
-    lastRun: number;
-    nextRun: number;
-}
-interface BackupState {
-    lastBackup: number;
-    nextBackup: number;
-    status: 'idle' | 'running' | 'completed' | 'failed';
-    size: number;
-}
-interface PasswordPolicy {
-    minLength: number;
-    requireUppercase: boolean;
-    requireLowercase: boolean;
-    requireNumbers: boolean;
-    requireSymbols: boolean;
-}
-interface ModalState {
-    id: string;
-    type: string;
-    title: string;
-    content: any;
-    isOpen: boolean;
-    onClose?: () => void;
-}
-interface NotificationState {
-    id: string;
-    type: 'info' | 'success' | 'warning' | 'error';
-    title: string;
-    message: string;
-    timestamp: number;
-    duration?: number;
-    actions?: Array<{
-        label: string;
-        action: () => void;
-    }>;
-}
-interface LoadingState {
-    global: boolean;
-    sections: Record<string, boolean>;
-}
-interface AdminUser {
-    id: string;
-    name: string;
-    avatar?: string;
-    isActive: boolean;
-    lastSeen: number;
-}
-interface SharedSession {
-    id: string;
-    adminIds: string[];
-    resource: string;
-    startTime: number;
-    activity: any[];
-}
-interface StateConflict {
-    id: string;
-    type: string;
-    description: string;
-    timestamp: number;
-    resolved: boolean;
-}
-export {};
 //# sourceMappingURL=AdminStateContainer.d.ts.map

@@ -8,38 +8,35 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 export interface SearchFilters {
   priceRange: [number, number]; // in cents
-  tags: string[];
+  tags: string;,
   rating: number; // minimum rating
-  compatibility: string[]; // Claude models
+  compatibility: string; // Claude models
   isAiGenerated?: boolean;
   sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
   creatorId?: string;
-}
 interface SearchSuggestion {
-  text: string;
+  text: string;,
   type: 'query' | 'tag' | 'creator' | 'template';
   count?: number;
   icon?: string;
-}
 interface MarketplaceSearchProps {
   onSearch: (query: string, filters: SearchFilters) => void;
   onFiltersChange?: (filters: SearchFilters) => void;
-  availableTags?: string[];
+  availableTags?: string;
   availableCreators?: Array<{ id: string; name: string; templateCount: number }>;
-  availableModels?: string[];
-  searchSuggestions?: SearchSuggestion[];
+  availableModels?: string;
+  searchSuggestions?: SearchSuggestion;
   isLoading?: boolean;
   resultCount?: number;
   className?: string;
-}
-const defaultFilters: SearchFilters = {
-  priceRange: [0, 10000], // $0 to $100
+const defaultFilters: SearchFilters = {,
+  priceRange: [0, 10000], // $0 to $100,
   tags: [],
   rating: 0,
   compatibility: [],
   sortBy: 'relevance',
 };
-
+}
 export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
   onSearch,
   onFiltersChange,
@@ -55,7 +52,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filteredSuggestions, setFilteredSuggestions] = useState<SearchSuggestion[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<SearchSuggestion>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   // Filter suggestions based on query
@@ -69,15 +66,13 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
     } else {
       setFilteredSuggestions([]);
       setShowSuggestions(false);
-    }
   }, [query, searchSuggestions]);
   // Handle clicks outside to close suggestions
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowSuggestions(false);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {,
+  if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+  setShowSuggestions(false);
+};
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -88,7 +83,6 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
-    }
   };
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     if (suggestion.type === 'tag') {
@@ -99,11 +93,9 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
       if (creator) {
         updateFilters({ creatorId: creator.id });
         setQuery('');
-      }
     } else {
       setQuery(suggestion.text);
       handleSearch();
-    }
     setShowSuggestions(false);
   };
   const updateFilters = (newFilters: Partial<SearchFilters>) => {
@@ -134,7 +126,7 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
     if (filters.sortBy !== 'relevance') count++;
     return count;
   }, [filters]);
-  return ();
+  return;
     <div className={`bg-white border-b border-gray-200 ${className}`}>}
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* Search Bar */}
@@ -222,10 +214,10 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium ${
-                showFilters || activeFilterCount > 0
-                  ? 'border-blue-300 text-blue-700 bg-blue-50'
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
+  showFilters || activeFilterCount > 0
+  ? 'border-blue-300 text-blue-700 bg-blue-50'
+  : 'border-gray-300 text-gray-700 hover:bg-gray-50',
+}`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v6.586a1 1 0 01-1.414.914l-4-2A1 1 0 018 18.586v-4.586a1 1 0 00-.293-.707L1.293 7.293A1 1 0 011 6.586V4z" />
@@ -352,10 +344,9 @@ export const MarketplaceSearch: React.FC<MarketplaceSearchProps> = ({)
                           if (e.target.checked) {
                             updateFilters({ compatibility: [...filters.compatibility, model] });
                           } else {
-                            updateFilters({ )
-                              compatibility: filters.compatibility.filter(m => m !== model) ,
-                            });
-                          }
+  updateFilters({ )
+  compatibility: filters.compatibility.filter(m => m !== model),
+});
                         }}
                         className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                       />

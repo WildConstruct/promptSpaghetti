@@ -20,6 +20,7 @@
  */
 import React from 'react';
 import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
+
 export interface SecurityDashboardMainProps {
     workspaceId: string;
     userId: string;
@@ -28,14 +29,16 @@ export interface SecurityDashboardMainProps {
     theme?: DashboardTheme;
     enableRealTimeUpdates?: boolean;
     refreshInterval?: number;
-}
+
+
 export interface SecurityMetrics {
     securityScore: number;
     activeThreats: number;
     blockedThreats: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     lastScanTime: Date;
-}
+
+
 export interface SecurityAlert {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -49,7 +52,8 @@ export interface SecurityAlert {
     affectedAssets: string[];
     indicators: string[];
     responseActions: ResponseAction[];
-}
+
+
 export interface ResponseAction {
     id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
@@ -58,14 +62,16 @@ export interface ResponseAction {
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
     performer?: string;
     timestamp?: Date;
-}
+
+
 export interface ComplianceStatus {
     framework: string;
     status: 'compliant' | 'non_compliant' | 'partial';
     score: number;
     violations: ComplianceViolation[];
     lastAssessment: Date;
-}
+
+
 export interface ComplianceViolation {
     id: string;
     type: string;
@@ -73,7 +79,8 @@ export interface ComplianceViolation {
     severity: 'critical' | 'high' | 'medium' | 'low';
     remediation: string;
     dueDate: Date;
-}
+
+
 /**
  * Main Security Dashboard Component
  */

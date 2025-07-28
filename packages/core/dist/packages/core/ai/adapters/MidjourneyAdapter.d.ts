@@ -4,7 +4,7 @@
  *
  * Adapter for Midjourney image generation via unofficial API
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel } from '../BaseAIModel';
 export interface MidjourneyConfig {
     apiKey?: string;
     serverUrl: string;
@@ -56,8 +56,8 @@ export interface MidjourneyResponse {
     result?: {
         imageUrl: string;
         thumbnailUrl?: string;
-        upscaledImages?: string[];
-        variations?: string[];
+        upscaledImages?: string;
+        variations?: string;
         prompt: string;
         seed?: number;
     };
@@ -66,51 +66,16 @@ export interface MidjourneyResponse {
 export interface MidjourneyGenerationResult {
     jobId: string;
     status: 'completed' | 'failed';
-    images: Array<{
-        url: string;
-        thumbnailUrl?: string;
-        type: 'main' | 'upscaled' | 'variation';
-        index?: number;
-    }>;
-    originalPrompt: string;
-    processedPrompt: string;
-    metadata: {
-        version: string;
-        aspectRatio: string;
-        stylize: number;
-        chaos: number;
-        quality: number;
-        seed?: number;
-        generationTime: number;
-    };
-    usage: {
-        credits: number;
-        estimatedCost: number;
-    };
+    images: Array<{}, url>;
+    string: any;
+    thumbnailUrl?: string;
+    type: 'main' | 'upscaled' | 'variation';
+    index?: number;
 }
 export declare class MidjourneyAdapter extends BaseAIModel {
     private config;
     private promptTemplater;
     private activeJobs;
     constructor(id: string, config: MidjourneyConfig);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: MidjourneyRequestOptions): Promise<MidjourneyGenerationResult>;
-    cleanup(): Promise<void>;
-    estimate(input: unknown, options?: MidjourneyRequestOptions): Promise<CostEstimate>;
-    getJobStatus(jobId: string): Promise<MidjourneyJobStatus | null>;
-    cancelJob(jobId: string): Promise<boolean>;
-    upscaleImage(jobId: string, imageIndex: number): Promise<MidjourneyGenerationResult>;
-    createVariation(jobId: string, imageIndex: number): Promise<MidjourneyGenerationResult>;
-    getActiveJobs(): MidjourneyJobStatus[];
-    private _testConnection;
-    private _buildHeaders;
-    private _makeRequest;
-    private _submitJob;
-    private _pollJobCompletion;
-    private _parseJobStatus;
-    private _processJobResult;
-    private _extractPrompt;
-    protected _performHealthCheck(): Promise<void>;
 }
-export default MidjourneyAdapter;
 //# sourceMappingURL=MidjourneyAdapter.d.ts.map

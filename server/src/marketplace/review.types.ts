@@ -55,6 +55,7 @@ export enum SentimentScore {
 }
 
 // Enhanced review interfaces
+}
 export interface ReviewMetrics {
   total_reviews: number;
   average_rating: number;
@@ -64,12 +65,14 @@ export interface ReviewMetrics {
     three_star: number;
     two_star: number;
     one_star: number;
+}
   };
   verified_percentage: number;
   response_rate: number; // Creator response rate
   helpfulness_score: number;
 }
 
+}
 export interface ReviewWithDetails {
   id: string;
   template_id: string;
@@ -98,6 +101,7 @@ export interface ReviewWithDetails {
     verified: boolean;
     total_reviews: number;
     average_rating_given: number;
+}
   };
   
   // Interaction metrics
@@ -131,6 +135,7 @@ export interface ReviewWithDetails {
   }[];
 }
 
+}
 export interface ReviewSubmission {
   template_id: string;
   stars: number;
@@ -143,7 +148,9 @@ export interface ReviewSubmission {
   would_recommend: boolean;
   attachments?: File[];
 }
+}
 
+}
 export interface ReviewFilters {
   rating?: number;
   verified_only?: boolean;
@@ -156,7 +163,9 @@ export interface ReviewFilters {
   sort_by?: ReviewSortBy;
   filter_by?: ReviewFilterBy;
 }
+}
 
+}
 export interface ReviewHelpfulnessVote {
   id: string;
   review_id: string;
@@ -164,7 +173,9 @@ export interface ReviewHelpfulnessVote {
   vote: ReviewHelpfulness;
   created_at: Date;
 }
+}
 
+}
 export interface ReviewFlag {
   id: string;
   review_id: string;
@@ -176,7 +187,9 @@ export interface ReviewFlag {
   resolved_at?: Date;
   created_at: Date;
 }
+}
 
+}
 export interface CreatorResponse {
   id: string;
   review_id: string;
@@ -185,13 +198,16 @@ export interface CreatorResponse {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface ReviewAnalytics {
   template_id: string;
   period_start: Date;
   period_end: Date;
   metrics: ReviewMetrics;
   trends: {
+}
     daily_reviews: Array<{ date: string; count: number; avg_rating: number }>;
     rating_trends: Array<{ date: string; rating: number }>;
     sentiment_trends: Array<{ date: string; sentiment: SentimentScore; count: number }>;
@@ -201,6 +217,7 @@ export interface ReviewAnalytics {
   difficulty_distribution: Array<{ difficulty: number; count: number; avg_rating: number }>;
 }
 
+}
 export interface ReviewModerationQueue {
   pending_reviews: ReviewWithDetails[];
   flagged_reviews: ReviewWithDetails[];
@@ -211,6 +228,7 @@ export interface ReviewModerationQueue {
     approved_today: number;
     rejected_today: number;
     flagged_today: number;
+}
   };
 }
 

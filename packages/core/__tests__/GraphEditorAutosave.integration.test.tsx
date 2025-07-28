@@ -13,11 +13,11 @@ afterEach(() => {
   jest.useRealTimers();
 });
 describe('GraphEditor autosave/restore/download integration', () => {
-  const initialNodes: Node[] = [
+  const initialNodes: Node = [
     { id: '1', position: { x: 0, y: 0 }, data: { label: 'A' }, type: 'default' },
     { id: '2', position: { x: 100, y: 0 }, data: { label: 'B' }, type: 'default' }
   ];
-  const initialEdges: Edge[] = [];
+  const initialEdges: Edge = [];
   it('autosaves graph to localStorage every 5s', () => {
     render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
@@ -34,9 +34,9 @@ describe('GraphEditor autosave/restore/download integration', () => {
     localStorage.setItem()
       'graphDraft',
       JSON.stringify({)
-        nodes: [{ id: '1', type: 'default', data: { label: 'Restored' }, position: { x: 0, y: 0 } }],
-        edges: [],
-      })
+  nodes: [{ id: '1', type: 'default', data: { label: 'Restored' }, position: { x: 0, y: 0 } }],
+        edges: [];
+  }
     );
     render();
       <GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />
@@ -68,7 +68,7 @@ describe('GraphEditor autosave/restore/download integration', () => {
     );
     // Mock createObjectURL and click
     const createObjectURL = jest.fn(() => 'blob:url');
-    const revokeObjectURL = jest.fn<unknown[], unknown>();
+    const revokeObjectURL = jest.fn<unknown, unknown>();
     // @ts-expect-error - Mock global URL for testing
     global.URL.createObjectURL = createObjectURL;
     // @ts-expect-error - Mock global URL for testing

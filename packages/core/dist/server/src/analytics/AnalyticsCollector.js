@@ -31,6 +31,7 @@ export var AnalyticsEventType;
     AnalyticsEventType["ERROR_OCCURRENCE"] = "error_occurrence";
     AnalyticsEventType["CONVERSION_EVENT"] = "conversion_event";
 })(AnalyticsEventType || (AnalyticsEventType = {}));
+;
 /**
  * Comprehensive analytics collector extending existing metrics infrastructure
  */

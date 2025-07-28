@@ -21,8 +21,8 @@ export interface StateChange<T> {
 }
 export interface ValidationResult {
     valid: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
 }
 export interface ValidationError {
     field: string;
@@ -69,9 +69,6 @@ export declare abstract class BaseStateContainer<T> extends EventEmitter {
     protected config: StateContainerConfig;
     protected isUpdating: boolean;
     constructor(config?: Partial<StateContainerConfig>);
-    abstract getInitialState(): T;
-    abstract validateState(state: T): ValidationResult;
-    abstract getDomainName(): string;
     getState(): T;
     setState(updater: StateUpdater<T> | Partial<T>, changeInfo?: Partial<StateChange<T>>): void;
     subscribe(subscriber: StateSubscriber<T>): UnsubscribeFn;
@@ -80,34 +77,9 @@ export declare abstract class BaseStateContainer<T> extends EventEmitter {
     getHistory(): StateSnapshot<T>[];
     restoreSnapshot(snapshotId: string): void;
     clearHistory(): void;
-    protected applyStateUpdate(newState: T, prevState: T, change: StateChange<T>): Promise<void>;
-    protected notifySubscribers(state: T, prevState: T): void;
-    protected addToHistory(state: T, change?: StateChange<T>): void;
-    protected persistState(): Promise<void>;
-    protected loadPersistedState(): Promise<void>;
-    protected cloneState(state: T): T;
-    protected calculateDiff(prevState: T, newState: T): Partial<T>;
-    protected generateChangeId(): string;
-    protected generateSnapshotId(): string;
-    protected profileStateUpdate(newState: T, prevState: T, change: StateChange<T>): Promise<void>;
-    protected recordInDevTools(state: T, change: StateChange<T>): Promise<void>;
-    enableDevTools(options?: {
-        enableTimeTravel?: boolean;
-        enableProfiling?: boolean;
-        enableValidation?: boolean;
-    }): void;
-    disableDevTools(): void;
-    private initializeDevTools;
-    debugState(): void;
-    getDevToolsInfo(): Promise<any>;
+    protected applyStateUpdate(newState: T): any;
+    prevState: T;
+    change: StateChange<T>;
+    Promise(): any;
 }
-export declare class StateValidationError extends Error {
-    errors: ValidationError[];
-    constructor(message: string, errors: ValidationError[]);
-}
-export declare class StateUpdateError extends Error {
-    cause?: Error;
-    constructor(message: string, cause?: Error);
-}
-export declare function createStateSelector<T, R>(selector: (state: T) => R, dependencies?: (keyof T)[]): (state: T) => R;
 //# sourceMappingURL=BaseStateContainer.d.ts.map

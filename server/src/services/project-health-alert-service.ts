@@ -8,6 +8,7 @@ import { WorkspaceDAO, ProjectWithStats } from '../database/workspace-dao';
 import { AttributionService } from './attribution-service';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
+}
 export interface AlertThresholds {
   // Stalled project detection
   stalledProject: {
@@ -15,6 +16,7 @@ export interface AlertThresholds {
     noExecutionDays: number;          // Days without graph execution
     noCollaborationDays: number;      // Days without multi-user activity
     minActivityThreshold: number;     // Minimum activities per week
+}
   };
   
   // Uneven contribution detection
@@ -33,6 +35,7 @@ export interface AlertThresholds {
   };
 }
 
+}
 export interface ProjectHealthAlert {
   id: string;
   alertType: 'STALLED_PROJECT' | 'UNEVEN_CONTRIBUTIONS' | 'LOW_ENGAGEMENT' | 'HIGH_ERROR_RATE';
@@ -56,7 +59,9 @@ export interface ProjectHealthAlert {
   dismissedBy?: string;
   dismissedReason?: string;
 }
+}
 
+}
 export interface ContributionAnalysis {
   totalContributions: number;
   activeContributors: number;
@@ -65,6 +70,7 @@ export interface ContributionAnalysis {
     contributions: number;
     percentage: number;
     lastActivity: Date;
+}
   }>;
   giniCoefficient: number;            // Measure of contribution inequality (0 = equal, 1 = maximum inequality)
   dominantContributor?: {
@@ -86,13 +92,13 @@ export class ProjectHealthAlertService {
       noExecutionDays: 14,            // 2 weeks without executions
       noCollaborationDays: 21,        // 3 weeks without collaboration
       minActivityThreshold: 5         // Minimum 5 activities per week
-    },
+  }
     unevenContributions: {
       maxContributionRatio: 0.75,     // No single user >75% of contributions
       minActiveContributors: 2,       // At least 2 active contributors
       contributionImbalanceThreshold: 0.6, // Gini coefficient threshold
       inactiveUserDays: 14           // 2 weeks to be considered inactive
-    },
+  }
     engagement: {
       minWeeklyActive: 2,             // At least 2 active users per week
       minMonthlyGrowth: 0.0,          // No negative growth
@@ -117,6 +123,7 @@ export class ProjectHealthAlertService {
     workspaceId: string,
     thresholds: Partial<AlertThresholds> = {}
   ): Promise<ProjectHealthAlert[]> {
+
     const finalThresholds = { ...this.defaultThresholds, ...thresholds };
     const alerts: ProjectHealthAlert[] = [];
 
@@ -156,6 +163,7 @@ export class ProjectHealthAlertService {
     project: ProjectWithStats,
     thresholds: AlertThresholds
   ): Promise<ProjectHealthAlert | null> {
+
     const now = new Date();
     const { stalledProject } = thresholds;
 
@@ -191,7 +199,7 @@ export class ProjectHealthAlertService {
               daysSinceLastActivity,
               threshold: stalledProject.inactivityDays,
               lastActivity: project.last_activity
-            },
+  }
             affectedUsers: [], // Will be populated with project members
             recommendedActions: [
               'Check in with project team members',
@@ -219,7 +227,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             weeklyActivity,
             threshold: stalledProject.minActivityThreshold
-          },
+  }
           affectedUsers: [],
           recommendedActions: [
             'Encourage more frequent updates',
@@ -244,6 +252,7 @@ export class ProjectHealthAlertService {
     project: ProjectWithStats,
     thresholds: AlertThresholds
   ): Promise<ProjectHealthAlert | null> {
+
     const { unevenContributions } = thresholds;
 
     try {
@@ -267,7 +276,7 @@ export class ProjectHealthAlertService {
             threshold: unevenContributions.maxContributionRatio,
             giniCoefficient: contributionAnalysis.giniCoefficient,
             activeContributors: contributionAnalysis.activeContributors
-          },
+  }
           affectedUsers: contributionAnalysis.contributionDistribution.map(c => c.userId),
           recommendedActions: [
             'Encourage pair programming or collaborative editing',
@@ -294,7 +303,7 @@ export class ProjectHealthAlertService {
             activeContributors: contributionAnalysis.activeContributors,
             threshold: unevenContributions.minActiveContributors,
             inactiveUsers: contributionAnalysis.inactiveUsers
-          },
+  }
           affectedUsers: contributionAnalysis.inactiveUsers,
           recommendedActions: [
             'Engage inactive team members',
@@ -320,6 +329,7 @@ export class ProjectHealthAlertService {
     project: ProjectWithStats,
     thresholds: AlertThresholds
   ): Promise<ProjectHealthAlert | null> {
+
     const { engagement } = thresholds;
 
     try {
@@ -338,7 +348,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             weeklyActiveUsers,
             threshold: engagement.minWeeklyActive
-          },
+  }
           affectedUsers: [],
           recommendedActions: [
             'Review project relevance and goals',
@@ -364,6 +374,7 @@ export class ProjectHealthAlertService {
     project: ProjectWithStats,
     thresholds: AlertThresholds
   ): Promise<ProjectHealthAlert | null> {
+
     const { engagement } = thresholds;
 
     try {
@@ -382,7 +393,7 @@ export class ProjectHealthAlertService {
           triggeredBy: {
             errorRate,
             threshold: engagement.maxErrorRate
-          },
+  }
           affectedUsers: [],
           recommendedActions: [
             'Review recent project changes for bugs',
@@ -408,6 +419,7 @@ export class ProjectHealthAlertService {
     project: ProjectWithStats,
     thresholds: AlertThresholds['unevenContributions']
   ): Promise<ContributionAnalysis> {
+
     try {
       // Get attribution data
       const attributionStats = await this.attributionService.getProjectAttributionStats(project.id);
@@ -486,6 +498,7 @@ export class ProjectHealthAlertService {
    * Get weekly activity count for a project
    */
   private async getWeeklyActivityCount(project: ProjectWithStats): Promise<number> {
+
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const now = new Date();
 
@@ -503,6 +516,7 @@ export class ProjectHealthAlertService {
    * Get number of weekly active users for a project
    */
   private async getWeeklyActiveUsers(project: ProjectWithStats): Promise<number> {
+
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const now = new Date();
 
@@ -521,6 +535,7 @@ export class ProjectHealthAlertService {
    * Get error rate for project executions
    */
   private async getProjectErrorRate(project: ProjectWithStats): Promise<number> {
+
     try {
       // Query analytics for execution success/failure rates
       const executions = await this.analyticsDAO.getProjectExecutions(project.id, 7); // Last 7 days
@@ -538,6 +553,7 @@ export class ProjectHealthAlertService {
    * Get all active alerts for a workspace
    */
   async getActiveAlerts(workspaceId: string): Promise<ProjectHealthAlert[]> {
+
     // This would be implemented with a proper database table for storing alerts
     // For now, we'll generate fresh alerts each time
     return this.scanProjectsForAlerts(workspaceId);
@@ -547,6 +563,7 @@ export class ProjectHealthAlertService {
    * Acknowledge an alert
    */
   async acknowledgeAlert(alertId: string, userId: string): Promise<void> {
+
     // Implementation would update alert status in database
     console.log(`Alert ${alertId} acknowledged by user ${userId}`);
   }
@@ -555,6 +572,7 @@ export class ProjectHealthAlertService {
    * Resolve an alert
    */
   async resolveAlert(alertId: string): Promise<void> {
+
     // Implementation would mark alert as resolved
     console.log(`Alert ${alertId} resolved`);
   }
@@ -563,6 +581,7 @@ export class ProjectHealthAlertService {
    * Dismiss an alert
    */
   async dismissAlert(alertId: string, userId: string, reason: string): Promise<void> {
+
     // Implementation would mark alert as dismissed
     console.log(`Alert ${alertId} dismissed by user ${userId}: ${reason}`);
   }

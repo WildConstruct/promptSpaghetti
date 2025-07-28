@@ -28,16 +28,14 @@ import { ConstraintValidator } from '../../historical/ConstraintValidator';
 import './ConstraintRuleManager.css';
 interface ConstraintRuleManagerProps {
   validator: ConstraintValidator;
-  onConstraintsChange?: (constraints: HistoricalConstraint[]) => void;
+  onConstraintsChange?: (constraints: HistoricalConstraint) => void;
   onClose?: () => void;
-}
-
-export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
+  export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({,)
   validator,
   onConstraintsChange,
   onClose
 }) => {
-  const [constraints, setConstraints] = useState<HistoricalConstraint[]>([]);
+  const [constraints, setConstraints] = useState<HistoricalConstraint>([]);
   const [editingConstraint, setEditingConstraint] = useState<HistoricalConstraint | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -49,15 +47,16 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
     setConstraints(defaultConstraints);
   }, []);
   const handleCreateConstraint = () => {
-    const newConstraint: HistoricalConstraint = {
-      id: `custom_${Date.now()}`,}
-      rule: 'era_compatibility',
+    const newConstraint: HistoricalConstraint = {,
+  id: `custom_${Date.now()}`}
+},
+  rule: 'era_compatibility',
       eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
       enforcement: 'warning',
       message: 'New constraint rule',
       description: 'Custom constraint description',
-      historical_basis: 'Historical basis for this constraint',
-    };
+      historical_basis: 'Historical basis for this constraint';
+  };
     setEditingConstraint(newConstraint);
     setIsCreating(true);
   };
@@ -66,26 +65,24 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
     setIsCreating(false);
   };
   const handleSaveConstraint = () => {
-    if (!editingConstraint) return;
-    const updatedConstraints = isCreating ;
-      ? [...constraints, editingConstraint]
-      : constraints.map(c => c.id === editingConstraint.id ? editingConstraint : c);
-    setConstraints(updatedConstraints);
-    onConstraintsChange?.(updatedConstraints);
-    // Add to validator
-    if (isCreating) {
-      validator.addConstraint(editingConstraint);
-    }
-    setEditingConstraint(null);
-    setIsCreating(false);
-  };
+  if (!editingConstraint) return;
+  const updatedConstraints = isCreating ;
+  ? [...constraints, editingConstraint]
+  : constraints.map(c => c.id === editingConstraint.id ? editingConstraint : c);
+  setConstraints(updatedConstraints);
+  onConstraintsChange?.(updatedConstraints);
+  // Add to validator
+  if (isCreating) {
+  validator.addConstraint(editingConstraint);
+  setEditingConstraint(null);
+  setIsCreating(false);
+};
   const handleDeleteConstraint = (constraintId: string) => {
     if (window.confirm('Are you sure you want to delete this constraint?')) {
       const updatedConstraints = constraints.filter(c => c.id !== constraintId);
       setConstraints(updatedConstraints);
       onConstraintsChange?.(updatedConstraints);
       validator.removeConstraint(constraintId);
-    }
   };
   const handleCancelEdit = () => {
     setEditingConstraint(null);
@@ -110,16 +107,13 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
           if (Array.isArray(importedConstraints)) {
             setConstraints(importedConstraints);
             onConstraintsChange?.(importedConstraints);
-          }
         } catch (error) {
-          alert('Error importing constraints: Invalid JSON format');
-        }
-      };
+  alert('Error importing constraints: Invalid JSON format');
+};
       reader.readAsText(file);
-    }
   };
   const filteredConstraints = constraints.filter(constraint => {)
-    if (filterCategory !== 'all' && constraint.rule !== filterCategory) return false;
+  if (filterCategory !== 'all' && constraint.rule !== filterCategory) return false;
     if (filterEnforcement !== 'all' && constraint.enforcement !== filterEnforcement) return false;
     return true;
   });
@@ -129,9 +123,8 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
     case 'warning': return <Info size={16} className="text-yellow-500" />;
     case 'suggestion': return <CheckCircle size={16} className="text-green-500" />;
     default: return <Settings size={16} />;
-    }
   };
-  return ();
+  return;
     <div className="constraint-rule-manager">
       <div className="rule-manager-header">
         <h2>Constraint Rule Management</h2>
@@ -227,11 +220,10 @@ export const ConstraintRuleManager: React.FC<ConstraintRuleManagerProps> = ({)
   );
 };
 interface ConstraintRuleItemProps {
-  constraint: HistoricalConstraint;
-  onEdit: (constraint: HistoricalConstraint) => void;
+  constraint: HistoricalConstraint;,
+  onEdit: (constraint: HistoricalConstraint) => void;,
   onDelete: (id: string) => void;
-}
-const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({)
+  const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({,)
   constraint,
   onEdit,
   onDelete
@@ -242,9 +234,8 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({)
     case 'warning': return <Info size={14} className="text-yellow-500" />;
     case 'suggestion': return <CheckCircle size={14} className="text-green-500" />;
     default: return <Settings size={14} />;
-    }
   };
-  return ();
+  return;
     <div className="constraint-rule-item">
       <div className="rule-header">
         <div className="rule-title">
@@ -290,13 +281,12 @@ const ConstraintRuleItem: React.FC<ConstraintRuleItemProps> = ({)
   );
 };
 interface ConstraintEditorProps {
-  constraint: HistoricalConstraint;
+  constraint: HistoricalConstraint;,
   isCreating: boolean;
-  onChange: (constraint: HistoricalConstraint) => void;
+  onChange: (constraint: HistoricalConstraint) => void;,
   onSave: () => void;
   onCancel: () => void;
-}
-const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
+  const ConstraintEditor: React.FC<ConstraintEditorProps> = ({,)
   constraint,
   isCreating,
   onChange,
@@ -321,7 +311,7 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
       : current.filter(c => c !== className);
     updateConstraint({ social_classes: updated.length > 0 ? updated : undefined });
   };
-  return ();
+  return;
     <div className="constraint-editor-overlay">
       <div className="constraint-editor">
         <div className="editor-header">
@@ -419,7 +409,7 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
           <div className="form-group">
             <label>Social Classes (optional):</label>
             <div className="checkbox-grid">
-              {(['peasant', 'artisan', 'merchant', 'noble', 'clergy', 'royal'] as SocialClass[]).map(socialClass => ()
+              {(['peasant', 'artisan', 'merchant', 'noble', 'clergy', 'royal'] as SocialClass).map(socialClass => ()
                 <label key={socialClass} className="checkbox-item">
                   <input
                     type="checkbox"
@@ -438,27 +428,27 @@ const ConstraintEditor: React.FC<ConstraintEditorProps> = ({)
 };
 
 // Helper function to get default constraints for demo
-function getDefaultConstraints(): HistoricalConstraint[] {
+function getDefaultConstraints(): HistoricalConstraint {
   return [
+  {
+  id: 'medieval-modern-separation',
+  rule: 'era_compatibility',
+  eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
+  enforcement: 'strict',
+  message: 'Medieval and modern items should not be mixed',
+  description: 'Prevents inappropriate mixing of medieval and modern elements',
+  historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
+}
     {
-      id: 'medieval-modern-separation',
-      rule: 'era_compatibility',
-      eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
-      enforcement: 'strict',
-      message: 'Medieval and modern items should not be mixed',
-      description: 'Prevents inappropriate mixing of medieval and modern elements',
-      historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
-    },
-    {
-      id: 'silk-availability-medieval',
-      rule: 'material_availability',
-      eras: [HISTORICAL_ERAS.MEDIEVAL_EARLY],
-      regions: ['Northern Europe'],
-      enforcement: 'warning',
-      message: 'Silk was extremely rare in early medieval Northern Europe',
-      description: 'Warns when silk is used in contexts where it would have been extremely expensive or unavailable',
-      historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
-    },
+  id: 'silk-availability-medieval',
+  rule: 'material_availability',
+  eras: [HISTORICAL_ERAS.MEDIEVAL_EARLY],
+  regions: ['Northern Europe'],
+  enforcement: 'warning',
+  message: 'Silk was extremely rare in early medieval Northern Europe',
+  description: 'Warns when silk is used in contexts where it would have been extremely expensive or unavailable',
+  historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
+}
     {
       id: 'social-class-clothing',
       rule: 'social_class_appropriateness',
@@ -467,9 +457,6 @@ function getDefaultConstraints(): HistoricalConstraint[] {
       enforcement: 'warning',
       message: 'Elaborate clothing inappropriate for peasant social class',
       description: 'Ensures clothing matches the economic and legal constraints of social classes',
-      historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe',
-    }
-  ];
-}
+      historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe'];
 
 export default ConstraintRuleManager;

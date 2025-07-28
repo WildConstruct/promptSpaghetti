@@ -9,8 +9,8 @@ import '@testing-library/jest-dom';
 
 // Mock useExport hook
 const mockUseExport = {
-  updateTemplate: jest.fn<unknown[], unknown>(),
-  previewTemplate: jest.fn<unknown[], unknown>()
+  updateTemplate: jest.fn<unknown, unknown>(),
+  previewTemplate: jest.fn<unknown, unknown>(),
 };
 jest.mock('../hooks/useExport', () => ({)
   useExport: () => mockUseExport,
@@ -27,20 +27,20 @@ const mockTemplate = {
   is_public: false,
   is_system_template: false,
   format_options: {,
-    indent: 2,
-    includeMetadata: true,
-    dateFormat: 'iso',
-  },
+  indent: 2,
+  includeMetadata: true,
+  dateFormat: 'iso',
+},
   created_at: '2024-01-01T00:00:00Z',
   updated_at: '2024-01-01T00:00:00Z',
-  created_by: 'user-1',
-};
+  created_by: 'user-1';
+  };
 const defaultProps = {
   template: mockTemplate,
   visible: true,
-  onClose: jest.fn<unknown[], unknown>(),
-  onSave: jest.fn<unknown[], unknown>(),
-  onPreview: jest.fn<unknown[], unknown>(),
+  onClose: jest.fn<unknown, unknown>(),
+  onSave: jest.fn<unknown, unknown>(),
+  onPreview: jest.fn<unknown, unknown>(),
   projectId: 'test-project',
 };
 describe('TemplateCustomizationDialog', () => {
@@ -171,10 +171,10 @@ describe('TemplateCustomizationDialog', () => {
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
       await waitFor(() => {
-        expect(indentInput).toHaveStyle({ )
-          border: '1px solid #ef4444',
-          background: '#fef2f2',
-        });
+  expect(indentInput).toHaveStyle({ )
+  border: '1px solid #ef4444',
+  background: '#fef2f2',
+});
       });
     });
   });
@@ -184,10 +184,10 @@ describe('TemplateCustomizationDialog', () => {
       const previewButton = screen.getByText('👁️ Preview');
       await userEvent.click(previewButton);
       await waitFor(() => {
-        expect(mockUseExport.previewTemplate).toHaveBeenCalledWith({)
-          ...mockTemplate,
-          format_options: expect.any(Object),
-        });
+  expect(mockUseExport.previewTemplate).toHaveBeenCalledWith({)
+  ...mockTemplate,
+  format_options: expect.any(Object),
+});
       });
       expect(defaultProps.onPreview).toHaveBeenCalledWith({ preview: 'sample output' });
     });
@@ -204,8 +204,8 @@ describe('TemplateCustomizationDialog', () => {
       const previewButton = screen.getByText('👁️ Preview');
       await userEvent.click(previewButton);
       await waitFor(() => {
-        expect(screen.getByText(/Error: Preview failed/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: Preview failed/)).toBeInTheDocument();
+});
     });
   });
   describe('Save Functionality', () => {
@@ -218,11 +218,11 @@ describe('TemplateCustomizationDialog', () => {
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
       await waitFor(() => {
-        expect(defaultProps.onSave).toHaveBeenCalledWith({)
-          ...mockTemplate,
-          format_options: expect.objectContaining({),
-            indent: 4,
-          }),
+  expect(defaultProps.onSave).toHaveBeenCalledWith({)
+  ...mockTemplate,
+  format_options: expect.objectContaining({,)
+  indent: 4,
+}),
           custom_fields: {}
         });
       });
@@ -252,8 +252,8 @@ describe('TemplateCustomizationDialog', () => {
       const saveButton = screen.getByText('💾 Save Customization');
       await userEvent.click(saveButton);
       await waitFor(() => {
-        expect(screen.getByText(/Error: Save failed/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: Save failed/)).toBeInTheDocument();
+});
     });
     it('uses updateTemplate when onSave is not provided', async () => {
       render(<TemplateCustomizationDialog {...defaultProps} onSave={undefined} />);
@@ -263,9 +263,9 @@ describe('TemplateCustomizationDialog', () => {
         expect(mockUseExport.updateTemplate).toHaveBeenCalledWith()
           mockTemplate.id,
           expect.objectContaining({)
-            format_options: expect.any(Object),
+  format_options: expect.any(Object),
             custom_fields: {}
-          })
+  }
         );
       });
     });
@@ -373,11 +373,11 @@ describe('TemplateCustomizationDialog', () => {
     });
   });
   describe('Edge Cases', () => {
-    it('handles missing format options gracefully', () => {
-      const templateWithoutOptions = {
-        ...mockTemplate,
-        format_options: undefined,
-      };
+  it('handles missing format options gracefully', () => {
+  const templateWithoutOptions = {
+  ...mockTemplate,
+  format_options: undefined,
+};
       expect(() => {
         render(<TemplateCustomizationDialog {...defaultProps} template={templateWithoutOptions} />);
       }).not.toThrow();

@@ -20,6 +20,7 @@ import { RateLimiter } from '../../../../packages/core/security/RateLimiter';
 // Middleware Configuration
 // ========================================
 
+}
 export interface ChallengeMiddlewareConfig {
   challengeService: ChallengeService;
   rateLimiter?: RateLimiter;
@@ -27,6 +28,7 @@ export interface ChallengeMiddlewareConfig {
   defaultChallenge?: {
     type: ChallengeType;
     difficulty: ChallengeDifficulty;
+}
   };
   bypassTokens?: string[]; // For testing/admin bypass
   trustProxy?: boolean;
@@ -37,6 +39,7 @@ export interface ChallengeMiddlewareConfig {
   };
 }
 
+}
 export interface ChallengeRule {
   path: string | RegExp;
   method?: string | string[];
@@ -46,11 +49,14 @@ export interface ChallengeRule {
   skipAuth?: boolean; // Skip if user is authenticated
   riskThreshold?: number;
 }
+}
 
+}
 export interface ChallengeCondition {
   type: 'failedAttempts' | 'riskScore' | 'ipReputation' | 'timeWindow' | 'custom';
   threshold?: number;
   evaluate?: (request: FastifyRequest) => boolean;
+}
 }
 
 // ========================================
@@ -65,6 +71,7 @@ declare module 'fastify' {
       challengeId?: string;
       type?: ChallengeType;
       riskScore?: number;
+}
     };
   }
 }
@@ -170,7 +177,7 @@ export class ChallengeMiddleware {
             riskScore,
             previousFailures: this.getFailureCount(clientInfo.ipAddress),
             suspiciousActivity: riskScore > 0.7
-          },
+  }
           clientInfo
         };
 
@@ -184,7 +191,7 @@ export class ChallengeMiddleware {
             type: challenge.type,
             data: challenge.challenge,
             expiresAt: challenge.expiresAt
-          },
+  }
           message: 'Please complete the challenge to continue'
         });
 
@@ -217,7 +224,7 @@ export class ChallengeMiddleware {
             action: 'manual_generation',
             riskScore,
             previousFailures: this.getFailureCount(clientInfo.ipAddress)
-          },
+  }
           clientInfo
         };
 
@@ -377,6 +384,7 @@ export class ChallengeMiddleware {
   }
 
   private async calculateRiskScore(request: FastifyRequest, clientInfo: { ipAddress: string }): Promise<number> {
+
     let score = 0;
 
     // Factor 1: Failed attempts

@@ -24,110 +24,10 @@ export declare enum PolicyDomain {
     VFX_PIPELINE = "VFX_PIPELINE",
     DATA_PROTECTION = "DATA_PROTECTION",
     ACCESS_CONTROL = "ACCESS_CONTROL",
-    MARKETPLACE = "MARKETPLACE"
-}
-export declare enum PolicyType {
-    SECURITY_DASHBOARD = "SECURITY_DASHBOARD",
-    AUTOMATED_ENFORCEMENT = "AUTOMATED_ENFORCEMENT",
-    CONTENT_GENERATION = "CONTENT_GENERATION",
-    HISTORICAL_ACCURACY = "HISTORICAL_ACCURACY",
-    DATA_CLASSIFICATION = "DATA_CLASSIFICATION",
-    USER_ACCESS = "USER_ACCESS",
-    TEMPLATE_QUALITY = "TEMPLATE_QUALITY",
-    TRANSACTION_SECURITY = "TRANSACTION_SECURITY",
-    COMPLIANCE_FRAMEWORK = "COMPLIANCE_FRAMEWORK",
-    VFX_WORKFLOW = "VFX_WORKFLOW"
-}
-export declare enum PolicyStatus {
-    ACTIVE = "ACTIVE",
-    INACTIVE = "INACTIVE",
-    PENDING = "PENDING",
-    DEPRECATED = "DEPRECATED",
-    EMERGENCY = "EMERGENCY"
-}
-export declare enum ComplianceFramework {
-    GDPR = "GDPR",
-    CCPA = "CCPA",
-    SOX = "SOX",
-    HIPAA = "HIPAA",
-    ISO_27001 = "ISO_27001",
-    PCI_DSS = "PCI_DSS",
-    ENTERTAINMENT_INDUSTRY = "ENTERTAINMENT_INDUSTRY"
-}
-export interface UnifiedPolicy {
-    id: string;
-    name: string;
-    description: string;
-    domain: PolicyDomain;
-    type: PolicyType;
-    status: PolicyStatus;
-    configuration: {
-        rules: PolicyRule[];
-        conditions: PolicyCondition[];
-        actions: PolicyAction[];
-        exceptions: PolicyException[];
-    };
-    scope: {
-        workspaceIds?: string[];
-        projectIds?: string[];
-        userRoles?: string[];
-        contentTypes?: string[];
-        vfxPipelines?: string[];
-    };
-    enforcement: {
-        mode: 'ENFORCE' | 'WARN' | 'MONITOR' | 'DISABLED';
-        severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-        automated: boolean;
-        reviewRequired: boolean;
-    };
-    compliance: {
-        frameworks: ComplianceFramework[];
-        requirements: string[];
-        auditRequired: boolean;
-        reportingRequired: boolean;
-    };
-    historicalAccuracy?: {
-        timePeriods: string[];
-        regions: string[];
-        cultures: string[];
-        accuracyLevel: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
-        expertValidationRequired: boolean;
-    };
-    metadata: {
-        version: number;
-        createdBy: string;
-        createdAt: Date;
-        updatedAt: Date;
-        lastEvaluated?: Date;
-        evaluationCount: number;
-        violationCount: number;
-        tags: string[];
-    };
-    dependencies?: {
-        requiredPolicies: string[];
-        conflictingPolicies: string[];
-        supersededBy?: string;
-    };
-}
-export interface PolicyRule {
-    id: string;
-    name: string;
-    description: string;
-    ruleType: 'VALIDATION' | 'RESTRICTION' | 'REQUIREMENT' | 'THRESHOLD' | 'PATTERN';
-    logic: {
-        field: string;
-        operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN' | 'BETWEEN' | 'REGEX' | 'CUSTOM';
-        value: any;
-        customFunction?: string;
-    };
-    context?: {
-        timeBasedRules?: TimeBasedRule[];
-        locationBasedRules?: LocationBasedRule[];
-        roleBasedRules?: RoleBasedRule[];
-        contentBasedRules?: ContentBasedRule[];
-    };
-    weight: number;
-    enabled: boolean;
+    MARKETPLACE = "MARKETPLACE",
+    export,
+    enum,
+    PolicyType
 }
 export interface PolicyCondition {
     id: string;
@@ -139,8 +39,8 @@ export interface PolicyCondition {
         evaluationMode: 'AND' | 'OR' | 'NOT';
     };
     evaluationContext: {
-        requiredData: string[];
-        externalServices?: string[];
+        requiredData: string;
+        externalServices?: string;
         cacheDuration?: number;
     };
     weight: number;
@@ -152,14 +52,14 @@ export interface PolicyAction {
     actionType: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE' | 'NOTIFY' | 'LOG' | 'TRANSFORM';
     configuration: {
         parameters: Record<string, any>;
-        targetEntities: string[];
+        targetEntities: string;
         executionMode: 'IMMEDIATE' | 'DEFERRED' | 'SCHEDULED';
         rollbackEnabled: boolean;
     };
     integrations?: {
-        services: string[];
-        webhooks: string[];
-        notifications: string[];
+        services: string;
+        webhooks: string;
+        notifications: string;
     };
     priority: number;
     enabled: boolean;
@@ -169,14 +69,14 @@ export interface PolicyException {
     name: string;
     description: string;
     criteria: {
-        userIds?: string[];
-        roleIds?: string[];
-        entityIds?: string[];
+        userIds?: string;
+        roleIds?: string;
+        entityIds?: string;
         contextConditions?: Record<string, any>;
     };
     scope: {
-        rules?: string[];
-        actions?: string[];
+        rules?: string;
+        actions?: string;
         fullPolicy?: boolean;
     };
     governance: {
@@ -189,22 +89,22 @@ export interface PolicyException {
     active: boolean;
 }
 export interface TimeBasedRule {
-    timePeriods: string[];
+    timePeriods: string;
     seasonality: boolean;
     historicalContext: boolean;
 }
 export interface LocationBasedRule {
-    regions: string[];
+    regions: string;
     geopoliticalContext: boolean;
-    culturalConsiderations: string[];
+    culturalConsiderations: string;
 }
 export interface RoleBasedRule {
-    roles: string[];
-    permissions: string[];
+    roles: string;
+    permissions: string;
     clearanceLevel: string;
 }
 export interface ContentBasedRule {
-    contentTypes: string[];
+    contentTypes: string;
     qualityMetrics: Record<string, number>;
     historicalAccuracy: boolean;
 }
@@ -241,49 +141,12 @@ export interface PolicyEvaluationResult {
     policyName: string;
     result: 'ALLOW' | 'DENY' | 'RESTRICT' | 'ESCALATE';
     confidence: number;
-    ruleResults: Array<{
-        ruleId: string;
-        ruleName: string;
-        result: 'PASS' | 'FAIL' | 'WARN';
-        score: number;
-        details: any;
-    }>;
-    conditionResults: Array<{
-        conditionId: string;
-        conditionName: string;
-        result: 'MET' | 'NOT_MET' | 'ERROR';
-        details: any;
-    }>;
-    triggeredActions: Array<{
-        actionId: string;
-        actionType: string;
-        executed: boolean;
-        result?: any;
-        error?: string;
-    }>;
-    appliedExceptions: Array<{
-        exceptionId: string;
-        exceptionName: string;
-        scope: string[];
-    }>;
-    complianceStatus: {
-        frameworks: Array<{
-            framework: ComplianceFramework;
-            compliant: boolean;
-            violations: string[];
-        }>;
-    };
-    performance: {
-        evaluationTimeMs: number;
-        cacheHit: boolean;
-        externalServiceCalls: number;
-    };
-    metadata: {
-        evaluatedBy: string;
-        reviewRequired: boolean;
-        escalationRequired: boolean;
-        auditRequired: boolean;
-    };
+    ruleResults: Array<{}, ruleId>;
+    string: any;
+    ruleName: string;
+    result: 'PASS' | 'FAIL' | 'WARN';
+    score: number;
+    details: any;
 }
 export interface PolicyViolation {
     id: string;
@@ -297,13 +160,13 @@ export interface PolicyViolation {
     };
     context: PolicyEvaluationContext;
     impact: {
-        affectedEntities: string[];
+        affectedEntities: string;
         riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
         businessImpact: string;
-        complianceImpact: string[];
+        complianceImpact: string;
     };
     response: {
-        actionsTaken: string[];
+        actionsTaken: string;
         escalated: boolean;
         resolved: boolean;
         resolvedAt?: Date;
@@ -314,12 +177,9 @@ export interface PolicyViolation {
         detectedBy: string;
         reportedAt?: Date;
         acknowledgedAt?: Date;
-        tags: string[];
+        tags: string;
     };
 }
-/**
- * Unified Policy Management System
- */
 export declare class PolicyManagement extends EventEmitter {
     private policies;
     private evaluationCache;
@@ -327,82 +187,9 @@ export declare class PolicyManagement extends EventEmitter {
     private performanceMetrics;
     private securityDashboardPolicies;
     private automatedEnforcementService;
-    constructor(securityDashboardPolicies?: SecurityDashboardPolicies, automatedEnforcementService?: AutomatedEnforcementService);
-    /**
-     * Create a new policy
-     */
-    createPolicy(policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>, createdBy: string): Promise<UnifiedPolicy>;
-    /**
-     * Update an existing policy
-     */
-    updatePolicy(policyId: string, updates: Partial<UnifiedPolicy>, updatedBy: string): Promise<UnifiedPolicy>;
-    /**
-     * Delete a policy
-     */
-    deletePolicy(policyId: string, deletedBy: string): Promise<void>;
-    /**
-     * Evaluate policies for a given context
-     */
-    evaluatePolicies(context: PolicyEvaluationContext): Promise<PolicyEvaluationResult[]>;
-    private evaluatePolicy;
-    private evaluateRules;
-    private evaluateRule;
-    private evaluateRuleContext;
-    private evaluateTimeBasedRule;
-    private evaluateLocationBasedRule;
-    private evaluateRoleBasedRule;
-    private evaluateContentBasedRule;
-    private initializeDefaultPolicies;
-    private createDefaultPolicy;
-    private createMockEnforcementService;
-    private generatePolicyId;
-    private generateEvaluationId;
-    private generateCacheKey;
-    private isCacheValid;
-    private getCurrentSeason;
-    private extractFieldValue;
-    private extractQualityMetric;
-    /**
-     * Get all policies
-     */
-    getPolicies(filters?: {
-        domain?: PolicyDomain;
-        type?: PolicyType;
-        status?: PolicyStatus;
-        enabled?: boolean;
-    }): UnifiedPolicy[];
-    /**
-     * Get policy by ID
-     */
-    getPolicy(policyId: string): UnifiedPolicy | null;
-    /**
-     * Generate compliance report
-     */
-    generateComplianceReport(framework: ComplianceFramework): Promise<any>;
-    private validatePolicy;
-    private findPoliciesDependingOn;
-    private getApplicablePolicies;
-    private isPolicyApplicable;
-    private evaluateExceptions;
-    private evaluateConditions;
-    private calculatePolicyResult;
-    private executeActions;
-    private evaluateCompliance;
-    private shouldRequireReview;
-    private shouldEscalate;
-    private finalizeResult;
-    private consolidateResults;
-    private recordPerformanceMetrics;
-    private recordViolation;
-    private evaluateCustomFunction;
-    private setupEventListeners;
-    private startBackgroundTasks;
-    private cleanupCache;
-    private collectPerformanceMetrics;
-    /**
-     * Cleanup resources
-     */
-    destroy(): void;
+    constructor();
+    securityDashboardPolicies?: SecurityDashboardPolicies;
+    automatedEnforcementService?: AutomatedEnforcementService;
+    super(): any;
 }
-export default PolicyManagement;
 //# sourceMappingURL=PolicyManagement.d.ts.map

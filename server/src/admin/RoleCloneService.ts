@@ -13,6 +13,7 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/AuditService';
 import { Role, Permission, User } from '../auth/types';
 
+}
 export interface CloneRoleRequest {
   sourceRoleId: string;
   targetName: string;
@@ -24,9 +25,11 @@ export interface CloneRoleRequest {
   cloneMetadata?: {
     templateVersion?: string;
     customProperties?: Record<string, unknown>;
+}
   };
 }
 
+}
 export interface CloneRoleResponse {
   success: boolean;
   clonedRole?: Role;
@@ -34,7 +37,9 @@ export interface CloneRoleResponse {
   validationErrors?: string[];
   warnings?: string[];
 }
+}
 
+}
 export interface CloneOperationResult {
   operationId: string;
   sourceRoleId: string;
@@ -45,14 +50,18 @@ export interface CloneOperationResult {
   permissionsSkipped: string[];
   conflicts: CloneConflict[];
 }
+}
 
+}
 export interface CloneConflict {
   type: 'permission_scope_mismatch' | 'permission_not_found' | 'scope_incompatible' | 'organization_mismatch';
   permissionId?: string;
   description: string;
   resolution: 'skip' | 'adjust' | 'manual_review';
 }
+}
 
+}
 export interface RoleCloneHistory {
   roleId: string;
   cloneCount: number;
@@ -62,6 +71,7 @@ export interface RoleCloneHistory {
     roleName: string;
     clonedAt: Date;
     clonedBy: string;
+}
   }>;
   templateUsage?: {
     timesUsedAsTemplate: number;
@@ -79,6 +89,7 @@ export class RoleCloneService {
    * Clone an existing role with specified permissions and configuration
    */
   async cloneRole(request: CloneRoleRequest, clonedBy: string): Promise<CloneRoleResponse> {
+
     const operationId = `clone_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     try {
@@ -191,6 +202,7 @@ export class RoleCloneService {
    * Get clone history for a specific role
    */
   async getRoleCloneHistory(roleId: string): Promise<RoleCloneHistory | null> {
+
     try {
       const query = `
         SELECT 
@@ -245,6 +257,7 @@ export class RoleCloneService {
    * Get all roles that can be used as templates (commonly cloned roles)
    */
   async getRoleTemplates(organizationId?: string, limit: number = 10): Promise<Role[]> {
+
     try {
       const query = `
         SELECT r.*, 
@@ -272,6 +285,7 @@ export class RoleCloneService {
     request: CloneRoleRequest, 
     sourceRole: Role
   ): Promise<{ isValid: boolean; errors: string[]; warnings: string[] }> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -339,6 +353,7 @@ export class RoleCloneService {
     skippedPermissions: string[];
     conflicts: CloneConflict[];
   }> {
+
     const resolvedPermissions: string[] = [];
     const skippedPermissions: string[] = [];
     const conflicts: CloneConflict[] = [];
@@ -401,6 +416,7 @@ export class RoleCloneService {
     resolvedPermissions: string[],
     clonedBy: string
   ): Promise<Role> {
+
     const roleId = `role_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const clonedRole: Role = {
@@ -461,6 +477,7 @@ export class RoleCloneService {
    * Update clone metadata for the source role
    */
   private async updateCloneMetadata(sourceRoleId: string, clonedRoleId: string, clonedBy: string): Promise<void> {
+
     // Increment clone count for source role
     await this.db.query(
       'UPDATE roles SET clone_count = COALESCE(clone_count, 0) + 1 WHERE id = ?',
@@ -472,6 +489,7 @@ export class RoleCloneService {
    * Record the clone operation for auditing and history
    */
   private async recordCloneOperation(operation: CloneOperationResult): Promise<void> {
+
     const insertQuery = `
       INSERT INTO clone_operations (
         operation_id, source_role_id, cloned_role_id, timestamp, cloned_by,
@@ -508,6 +526,7 @@ export class RoleCloneService {
    * Check if role name already exists
    */
   private async checkRoleNameExists(name: string, organizationId?: string): Promise<boolean> {
+
     const query = `
       SELECT COUNT(*) as count 
       FROM roles 
@@ -522,6 +541,7 @@ export class RoleCloneService {
    * Get role by ID
    */
   private async getRole(roleId: string): Promise<Role | null> {
+
     const query = `
       SELECT r.*, 
              GROUP_CONCAT(rp.permission_id) as permission_ids
@@ -544,6 +564,7 @@ export class RoleCloneService {
    * Get permission by ID
    */
   private async getPermission(permissionId: string): Promise<Permission | null> {
+
     const query = `
       SELECT * FROM permissions WHERE id = ? AND is_active = 1
     `;

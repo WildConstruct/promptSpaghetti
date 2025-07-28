@@ -17,48 +17,44 @@ import {
   Activity
 } from 'lucide-react';
 interface Team {
-  id: string;
+  id: string;,
   organizationId: string;
   parentTeamId?: string;
   name: string;
   description?: string;
   settings: Record<string, unknown>;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
   level?: number;
-  path?: string[];
-}
-interface TeamMember {
-  id: string;
+  path?: string;
+  interface TeamMember {
+  id: string;,
   userId: string;
-  role: 'owner' | 'admin' | 'member' | 'viewer';
+  role: 'owner' | 'admin' | 'member' | 'viewer';,
   joinedAt: Date;
   invitedBy?: string;
   user: {,
-    id: string;
-    email: string;
-    displayName?: string;
-    firstName?: string;
-    lastName?: string;
-    avatarUrl?: string;
-  };
-}
+  id: string;,
+  email: string;
+  displayName?: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
+};
 interface CreateTeamData {
   name: string;
   description?: string;
   parentTeamId?: string;
   settings?: Record<string, unknown>;
-}
 interface TeamManagerProps {
   organizationId: string;
   currentUser?: { id: string; name: string; email: string; role: string };
   onTeamChange?: (team: Team) => void;
   onMembershipUpdated?: (membership: { id: string; userId: string; teamId: string; role: string }) => void;
-}
 
-export const [organizations, setOrganizations] = useState<any[]>([]);
+export const [organizations, setOrganizations] = useState<any>([]);
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
@@ -68,204 +64,192 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   // Form state
   const [formData, setFormData] = useState<CreateTeamData>({)
-    name: '',
+  name: '',
     description: '',
     parentTeamId: '',
     settings: {}
   });
   const [memberFormData, setMemberFormData] = useState({)
-    userId: '',
-    role: 'member' as 'owner' | 'admin' | 'member' | 'viewer',
-  });
+  userId: '',
+  role: 'member' as 'owner' | 'admin' | 'member' | 'viewer',
+});
   useEffect(() => {
     loadTeams();
   }, [organizationId]);
   useEffect(() => {
     if (selectedTeam) {
       loadTeamMembers(selectedTeam.id);
-    }
   }, [selectedTeam]);
   const loadTeams = async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams/hierarchy`, {)}
-        credentials: 'include',
-      });
+  },
+  credentials: 'include';
+  });
       if (!response.ok) {
         throw new Error('Failed to load teams');
-      }
       const data = await response.json();
       setTeams(data.data);
       // Auto-select first team
       if (data.data.length > 0 && !selectedTeam) {
         setSelectedTeam(data.data[0]);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load teams');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load teams');
+} finally {
       setLoading(false);
-    }
   };
   const loadTeamMembers = async (teamId: string) => {
     try {
       const response = await fetch(`/api/auth/teams/${teamId}/members`, {)}
-        credentials: 'include',
-      });
+  },
+  credentials: 'include';
+  });
       if (!response.ok) {
         throw new Error('Failed to load team members');
-      }
       const data = await response.json();
       setTeamMembers(data.data);
     } catch (err) {
-      console.error('Failed to load team members:', err);
-    }
-  };
+  console.error('Failed to load team members:', err);
+};
   const createTeam = async () => {
     try {
       const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
         body: JSON.stringify({),
-          ...formData,
-          parentTeamId: formData.parentTeamId || undefined,
-        })
+  ...formData,
+  parentTeamId: formData.parentTeamId || undefined,
+}
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to create team');
-      }
       const data = await response.json();
       await loadTeams(); // Reload to get hierarchy
       setSelectedTeam(data.data);
       setShowCreateForm(false);
       resetForm();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create team');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to create team');
+};
   const updateTeam = async () => {
     if (!editingTeam) return;
     try {
       const response = await fetch(`/api/auth/teams/${editingTeam.id}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
         body: JSON.stringify({),
-          ...formData,
-          parentTeamId: formData.parentTeamId || undefined,
-        })
+  ...formData,
+  parentTeamId: formData.parentTeamId || undefined,
+}
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to update team');
-      }
       await loadTeams();
       setEditingTeam(null);
       resetForm();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update team');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to update team');
+};
   const deleteTeam = async (teamId: string) => {
     if (!confirm('Are you sure you want to delete this team? This action cannot be undone.')) {
       return;
-    }
     try {
       const response = await fetch(`/api/auth/teams/${teamId}`, {)}
-        method: 'DELETE',
-        credentials: 'include',
-      });
+  },
+  method: 'DELETE',
+        credentials: 'include';
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to delete team');
-      }
       await loadTeams();
       if (selectedTeam?.id === teamId) {
         setSelectedTeam(teams.find(team => team.id !== teamId) || null);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete team');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to delete team');
+};
   const addTeamMember = async () => {
     if (!selectedTeam) return;
     try {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(memberFormData),
-      });
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
+        body: JSON.stringify(memberFormData);
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to add team member');
-      }
       await loadTeamMembers(selectedTeam.id);
       setShowAddMember(false);
       setMemberFormData({ userId: '', role: 'member' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add team member');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to add team member');
+};
   const removeTeamMember = async (userId: string) => {
     if (!selectedTeam || !confirm('Are you sure you want to remove this member?')) return;
     try {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {)}
-        method: 'DELETE',
-        credentials: 'include',
-      });
+  },
+  method: 'DELETE',
+        credentials: 'include';
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to remove team member');
-      }
       await loadTeamMembers(selectedTeam.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to remove team member');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to remove team member');
+};
   const updateMemberRole = async (userId: string, newRole: string) => {
     if (!selectedTeam) return;
     try {
       const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
+  'Content-Type': 'application/json',
+},
+  credentials: 'include',
         body: JSON.stringify({ role: newRole })
       });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to update member role');
-      }
       await loadTeamMembers(selectedTeam.id);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update member role');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to update member role');
+};
   const resetForm = () => {
     setFormData({)
-      name: '',
+  name: '',
       description: '',
       parentTeamId: '',
       settings: {}
     });
   };
   const startEditing = (team: Team) => {
-    setEditingTeam(team);
-    setFormData({)
-      name: team.name,
-      description: team.description || '',
-      parentTeamId: team.parentTeamId || '',
-      settings: team.settings,
-    });
+  setEditingTeam(team);
+  setFormData({)
+  name: team.name,
+  description: team.description || '',
+  parentTeamId: team.parentTeamId || '',
+  settings: team.settings,
+});
   };
   const toggleTeamExpansion = (teamId: string) => {
     const newExpanded = new Set(expandedTeams);
@@ -273,39 +257,36 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
       newExpanded.delete(teamId);
     } else {
       newExpanded.add(teamId);
-    }
     setExpandedTeams(newExpanded);
   };
   const getRoleIcon = (role: string) => {
-    switch (role) {
-    case 'owner': return <Crown className="w-4 h-4 text-yellow-600" />;
-    case 'admin': return <Shield className="w-4 h-4 text-blue-600" />;
-    case 'member': return <User className="w-4 h-4 text-green-600" />;
-    case 'viewer': return <Eye className="w-4 h-4 text-gray-600" />;
-    default: return <User className="w-4 h-4 text-gray-600" />;
-    }
-  };
+  switch (role) {
+  case 'owner': return <Crown className="w-4 h-4 text-yellow-600" />;
+  case 'admin': return <Shield className="w-4 h-4 text-blue-600" />;
+  case 'member': return <User className="w-4 h-4 text-green-600" />;
+  case 'viewer': return <Eye className="w-4 h-4 text-gray-600" />;
+  default: return <User className="w-4 h-4 text-gray-600" />;
+};
   const getRoleBadge = (role: string) => {
-    switch (role) {
-    case 'owner': return 'bg-yellow-100 text-yellow-800';
-    case 'admin': return 'bg-blue-100 text-blue-800';
-    case 'member': return 'bg-green-100 text-green-800';
-    case 'viewer': return 'bg-gray-100 text-gray-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-  const renderTeamTree = (teamList: Team[], parentId?: string, level = 0) => {
+  switch (role) {
+  case 'owner': return 'bg-yellow-100 text-yellow-800';
+  case 'admin': return 'bg-blue-100 text-blue-800';
+  case 'member': return 'bg-green-100 text-green-800';
+  case 'viewer': return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
+  const renderTeamTree = (teamList: Team, parentId?: string, level = 0) => {
     const filteredTeams = teamList.filter(team => team.parentTeamId === parentId);
     return filteredTeams.map((team) => {
       const hasChildren = teamList.some(t => t.parentTeamId === team.id);
       const isExpanded = expandedTeams.has(team.id);
-      return ();
+      return;
         <div key={team.id}>
           <div
             onClick={() => setSelectedTeam(team)}
             className={`flex items-center p-3 cursor-pointer hover:bg-gray-50 transition-colors ${
-              selectedTeam?.id === team.id ? 'bg-blue-50 border-r-2 border-blue-600' : ''
-            }`}
+  selectedTeam?.id === team.id ? 'bg-blue-50 border-r-2 border-blue-600' : '',
+}`}
             style={{ paddingLeft: `${level * 20 + 12}px` }}
           >
             {hasChildren && ()
@@ -343,13 +324,12 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
     });
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="max-w-7xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -438,10 +418,10 @@ export const [organizations, setOrganizations] = useState<any[]>([]);
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id as any)}
                       className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                        activeTab === tab.id
-                          ? 'border-blue-500 text-blue-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                      }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
                     >
                       <tab.icon className="w-4 h-4 mr-2" />
                       {tab.label}

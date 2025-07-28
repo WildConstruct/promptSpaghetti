@@ -7,6 +7,7 @@ import { AnalyticsRepository } from './AnalyticsRepository';
  * Repository factory interface for dependency injection
  * Supports configuration-based implementation selection
  */
+}
 export interface RepositoryFactory {
   /**
    * Create a graph repository instance
@@ -43,10 +44,12 @@ export interface RepositoryFactory {
    */
   healthCheck(): Promise<RepositoryHealth>;
 }
+}
 
 /**
  * Health status for all repositories
  */
+}
 export interface RepositoryHealth {
   graph: boolean;
   user: boolean;
@@ -54,10 +57,12 @@ export interface RepositoryHealth {
   analytics: boolean;
   overall: boolean;
 }
+}
 
 /**
  * Configuration for repository factory
  */
+}
 export interface RepositoryConfig {
   database: {
     type: 'sqlite' | 'postgresql' | 'mysql';
@@ -67,6 +72,7 @@ export interface RepositoryConfig {
     database?: string;
     username?: string;
     password?: string;
+}
   };
   cache: {
     type: 'redis' | 'memory';

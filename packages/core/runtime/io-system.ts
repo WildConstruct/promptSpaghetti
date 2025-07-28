@@ -20,6 +20,7 @@ export type IODataType =
 /**
  * Input/Output port definition for advanced nodes
  */
+
 export interface IOPortDefinition {
   /** Unique identifier for this port */
   id: string;
@@ -37,10 +38,10 @@ export interface IOPortDefinition {
   description?: string;
   /** Whether this port supports multiple connections */
   multiple?: boolean;
+  /**
+  * Validation constraints for I/O ports
+  */
 }
-/**
- * Validation constraints for I/O ports
- */
 export interface IOConstraints {
   /** Minimum value (for numbers) */
   min?: number;
@@ -53,55 +54,55 @@ export interface IOConstraints {
   /** Regular expression pattern (for strings) */
   pattern?: string;
   /** Allowed values (for enums/choices) */
-  allowedValues?: unknown[];
+  allowedValues?: unknown;
   /** Custom validation function */
   customValidator?: (value: unknown) => ValidationResult;
+  /**
+  * Input/Output port specification for a node type
+  */
 }
-/**
- * Input/Output port specification for a node type
- */
 export interface IOSpec {
   /** Input port definitions */
-  inputs: IOPortDefinition[];
+  inputs: IOPortDefinition;
   /** Output port definitions */
-  outputs: IOPortDefinition[];
+  outputs: IOPortDefinition;
+  /**
+  * Resolved input values for node execution
+  */
 }
-/**
- * Resolved input values for node execution
- */
 export interface ResolvedInputs {
   /** Direct input values by port ID */
   values: Map<string, any>;
   /** Metadata about input resolution */
   metadata: Map<string, IOResolutionMetadata>;
+  /**
+  * Metadata about how an input was resolved
+  */
 }
-/**
- * Metadata about how an input was resolved
- */
 export interface IOResolutionMetadata {
   /** Whether the value came from a connection or default */
   source: 'connection' | 'default' | 'computed';
   /** Original connected node ID (if from connection) */
   sourceNodeId?: string;
   /** Type coercion performed */
-  typeCoercion?: {
-    from: IODataType;
-    to: IODataType;
-  };
+  typeCoercion?: {,
+  from: IODataType;,
+  to: IODataType;
+};
   /** Validation warnings */
-  warnings: string[];
-}
+  warnings: string;
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
+}
 export class AdvancedIOHandler {
   constructor(private spec: IOSpec) {}
   /**
    * Validate that all required inputs are available and valid
    */
   validateInputs(inputs: Map<string, any>): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
+    const errors: string = [];
+    const warnings: string = [];
     for (const inputDef of this.spec.inputs) {
       const value = inputs.get(inputDef.id);
       // Check required inputs
@@ -109,28 +110,22 @@ export class AdvancedIOHandler {
         if (inputDef.defaultValue === undefined) {
           errors.push(`Required input '${inputDef.label}' (${inputDef.id}) is missing`);}
           continue;
-        }
-      }
       // Validate input value if present
       if (value !== undefined && value !== null) {
-        const validationResult = this.validateValue(value, inputDef);
-        errors.push(...validationResult.errors);
-        warnings.push(...validationResult.warnings);
-      }
-    }
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  const validationResult = this.validateValue(value, inputDef);
+  errors.push(...validationResult.errors);
+  warnings.push(...validationResult.warnings);
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   /**
    * Resolve inputs from connected nodes and apply defaults
    */
   resolveInputs();
     connectedInputs: Map<string, any>,
-    ___nodeId: string,
-  ): ResolvedInputs {
+    ___nodeId: string): ResolvedInputs {,
     const values = new Map<string, any>();
     const metadata = new Map<string, IOResolutionMetadata>();
     for (const inputDef of this.spec.inputs) {
@@ -143,85 +138,74 @@ export class AdvancedIOHandler {
         );
         values.set(inputDef.id, value);
         metadata.set(inputDef.id, {)
-          source: 'connection',
-          sourceNodeId: 'unknown', // Would be resolved by engine
-          typeCoercion: coercion,
-          warnings
-        });
+  source: 'connection',
+  sourceNodeId: 'unknown', // Would be resolved by engine,
+  typeCoercion: coercion,
+  warnings
+});
       } else if (inputDef.defaultValue !== undefined) {
-        // Use default value
-        values.set(inputDef.id, inputDef.defaultValue);
-        metadata.set(inputDef.id, {)
-          source: 'default',
-          warnings: [],
-        });
+  // Use default value
+  values.set(inputDef.id, inputDef.defaultValue);
+  metadata.set(inputDef.id, {)
+  source: 'default',
+  warnings: [],
+});
       } else if (inputDef.required) {
         // Missing required input - this should be caught by validation
         metadata.set(inputDef.id, {)
-          source: 'default',
+  source: 'default',
           warnings: [`Missing required input: ${inputDef.label}`]}
         });
-      }
-    }
     return { values, metadata };
-  }
   /**
    * Validate and format output values according to output specification
    */
   validateOutputs(outputs: Map<string, any>): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-    for (const outputDef of this.spec.outputs) {
-      const value = outputs.get(outputDef.id);
-      if (value !== undefined && value !== null) {
-        const validationResult = this.validateValue(value, outputDef);
-        errors.push(...validationResult.errors);
-        warnings.push(...validationResult.warnings);
-      }
-    }
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  const errors: string = [];
+  const warnings: string = [];
+  for (const outputDef of this.spec.outputs) {
+  const value = outputs.get(outputDef.id);
+  if (value !== undefined && value !== null) {
+  const validationResult = this.validateValue(value, outputDef);
+  errors.push(...validationResult.errors);
+  warnings.push(...validationResult.warnings);
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   /**
    * Get input specification
    */
-  getInputSpec(): IOPortDefinition[] {
+  getInputSpec(): IOPortDefinition {
     return [...this.spec.inputs];
-  }
   /**
    * Get output specification  
    */
-  getOutputSpec(): IOPortDefinition[] {
+  getOutputSpec(): IOPortDefinition {
     return [...this.spec.outputs];
-  }
   /**
    * Validate a value against a port definition
    */
   private validateValue(value: unknown, portDef: IOPortDefinition): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
+    const errors: string = [];
+    const warnings: string = [];
     // Type validation
     if (!this.isValidType(value, portDef.dataType)) {
       errors.push()
         `Invalid type for ${portDef.label}: expected ${portDef.dataType}, got ${typeof value}`}
       );
       return { valid: false, errors, warnings };
-    }
     // Constraint validation
     if (portDef.constraints) {
-      const constraintResult = this.validateConstraints(value, portDef.constraints);
-      errors.push(...constraintResult.errors);
-      warnings.push(...constraintResult.warnings);
-    }
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  const constraintResult = this.validateConstraints(value, portDef.constraints);
+  errors.push(...constraintResult.errors);
+  warnings.push(...constraintResult.warnings);
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   /**
    * Check if value matches expected data type
    */
@@ -249,72 +233,58 @@ export class AdvancedIOHandler {
       return typeof value === 'boolean' || typeof value === 'string';
     default:
       return false;
-    }
-  }
   /**
    * Validate value against constraints
    */
   private validateConstraints(value: unknown, constraints: IOConstraints): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
+    const errors: string = [];
+    const warnings: string = [];
     // Numeric constraints
     if (typeof value === 'number') {
       if (constraints.min !== undefined && value < constraints.min) {
         errors.push(`Value ${value} is below minimum ${constraints.min}`);}
-      }
       if (constraints.max !== undefined && value > constraints.max) {
         errors.push(`Value ${value} is above maximum ${constraints.max}`);}
-      }
-    }
     // Length constraints
     if (typeof value === 'string' || Array.isArray(value)) {
       const length = value.length;
       if (constraints.minLength !== undefined && length < constraints.minLength) {
         errors.push(`Length ${length} is below minimum ${constraints.minLength}`);}
-      }
       if (constraints.maxLength !== undefined && length > constraints.maxLength) {
         errors.push(`Length ${length} is above maximum ${constraints.maxLength}`);}
-      }
-    }
     // Pattern constraints (for strings)
     if (typeof value === 'string' && constraints.pattern) {
       const regex = new RegExp(constraints.pattern);
       if (!regex.test(value)) {
         errors.push(`Value does not match required pattern: ${constraints.pattern}`);}
-      }
-    }
     // Allowed values constraints
     if (constraints.allowedValues && !constraints.allowedValues.includes(value)) {
       errors.push(`Value '${value}' is not in allowed values: ${constraints.allowedValues.join(', ')}`);}
-    }
     // Custom validation
     if (constraints.customValidator) {
-      const customResult = constraints.customValidator(value);
-      errors.push(...customResult.errors);
-      warnings.push(...customResult.warnings);
-    }
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  const customResult = constraints.customValidator(value);
+  errors.push(...customResult.errors);
+  warnings.push(...customResult.warnings);
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   /**
    * Coerce value to target data type with warnings
    */
-  private coerceValue()
-    value: unknown, 
+  private coerceValue(()
+    value: unknown,
     targetType: IODataType,
   ): { 
     value: unknown; 
     coercion?: { from: IODataType; to: IODataType }; 
-    warnings: string[] ,
-    const warnings: string[] = [];
+    warnings: string ,
+    const warnings: string = [];
     const originalType = this.getValueType(value);
     // No coercion needed if types match
     if (originalType === targetType || targetType === 'any') {
       return { value, warnings };
-    }
     // Attempt type coercion
     try {
       const coercedValue = this.performCoercion(value, originalType, targetType);
@@ -327,8 +297,6 @@ export class AdvancedIOHandler {
       const errorMessage = error instanceof Error ? error.message : String(error);
       warnings.push(`Type coercion failed: ${errorMessage}`);}
       return { value, warnings };
-    }
-  }
   /**
    * Get the IODataType for a value
    */
@@ -340,10 +308,8 @@ export class AdvancedIOHandler {
       if (value.every(v => typeof v === 'string')) return 'stringArray';
       if (value.every(v => typeof v === 'number')) return 'numberArray';
       return 'array';
-    }
     if (typeof value === 'object' && value !== null) return 'object';
     return 'any';
-  }
   /**
    * Perform actual type coercion
    */
@@ -360,7 +326,6 @@ export class AdvancedIOHandler {
     case 'boolean':
       if (typeof value === 'string') {
         return value.toLowerCase() === 'true' || value === '1';
-      }
       return Boolean(value);
     case 'array':
       return Array.isArray(value) ? value : [value];
@@ -370,7 +335,7 @@ export class AdvancedIOHandler {
     case 'numberArray':
       const numArr = Array.isArray(value) ? value : [value];
       return numArr.map(v => {)
-        const n = Number(v);
+  const n = Number(v);
         if (isNaN(n)) throw ErrorFactory.createValidationError()
           'array_element', v, 'convertible to number', { operation: 'array_coercion' }
         );
@@ -380,29 +345,24 @@ export class AdvancedIOHandler {
       throw ErrorFactory.createValidationError()
         'target_type', to, 'supported coercion type', { operation: 'type_coercion' }
       );
-    }
-  }
-}
 /**
  * Helper function to create common I/O specifications for advanced nodes
  */
 export class IOSpecBuilder {
-  private inputs: IOPortDefinition[] = [];
-  private outputs: IOPortDefinition[] = [];
+  private inputs: IOPortDefinition = [];
+  private outputs: IOPortDefinition = [];
   /**
    * Add an input port
    */
   addInput(definition: Omit<IOPortDefinition, 'id'> & { id: string }): IOSpecBuilder {
     this.inputs.push(definition);
     return this;
-  }
   /**
    * Add an output port
    */
   addOutput(definition: Omit<IOPortDefinition, 'id'> & { id: string }): IOSpecBuilder {
     this.outputs.push(definition);
     return this;
-  }
   /**
    * Add a standard text input
    */
@@ -413,14 +373,13 @@ export class IOSpecBuilder {
     defaultValue?: string
   ): IOSpecBuilder {
     return this.addInput({)
-      id,
+  id,
       label,
       dataType: 'string',
       required,
       defaultValue,
       description: `Text input for ${label.toLowerCase()}`}
     });
-  }
   /**
    * Add a standard number input
    */
@@ -433,7 +392,7 @@ export class IOSpecBuilder {
     defaultValue?: number
   ): IOSpecBuilder {
     return this.addInput({)
-      id,
+  id,
       label,
       dataType: 'number',
       required,
@@ -441,19 +400,18 @@ export class IOSpecBuilder {
       constraints: { min, max },
       description: `Numeric input for ${label.toLowerCase()}`}
     });
-  }
   /**
    * Add a standard choice input
    */
   addChoiceInput();
     id: string, 
     label: string, 
-    allowedValues: unknown[], 
+    allowedValues: unknown, 
     required: boolean = false,
     defaultValue?: unknown
   ): IOSpecBuilder {
     return this.addInput({)
-      id,
+  id,
       label,
       dataType: 'choice',
       required,
@@ -461,32 +419,29 @@ export class IOSpecBuilder {
       constraints: { allowedValues },
       description: `Choice input for ${label.toLowerCase()}`}
     });
-  }
   /**
    * Add a standard text output
    */
   addTextOutput(id: string, label: string): IOSpecBuilder {
     return this.addOutput({)
-      id,
+  id,
       label,
       dataType: 'string',
       required: true,
       description: `Text output for ${label.toLowerCase()}`}
     });
-  }
   /**
    * Build the final I/O specification
    */
   build(): IOSpec {
-    return {
-      inputs: [...this.inputs],
-      outputs: [...this.outputs],
-    };
-  }
+  return {
+  inputs: [...this.inputs],
+  outputs: [...this.outputs],
+};
   /**
    * Create a basic single-input, single-output spec
    */
-  static createSimple()
+  static createSimple(()
     inputLabel: string = 'Input',
     outputLabel: string = 'Output',
   ): IOSpec {
@@ -494,12 +449,11 @@ export class IOSpecBuilder {
       .addTextInput('input', inputLabel, false, '')
       .addTextOutput('output', outputLabel)
       .build();
-  }
   /**
    * Create a multi-input, single-output spec
    */
-  static createMultiInput()
-    inputLabels: string[],
+  static createMultiInput(()
+    inputLabels: string,
     outputLabel: string = 'Output',
   ): IOSpec {
     const builder = new IOSpecBuilder();
@@ -509,8 +463,6 @@ export class IOSpecBuilder {
     return builder
       .addTextOutput('output', outputLabel)
       .build();
-  }
-}
 /**
  * Type-safe input getter for advanced nodes
  */
@@ -522,56 +474,46 @@ export class TypedInputs {
   getString(portId: string, defaultValue: string = ''): string {
     const value = this.inputs.values.get(portId);
     return typeof value === 'string' ? value : String(value ?? defaultValue);
-  }
   /**
    * Get a number input value
    */
   getNumber(portId: string, defaultValue: number = 0): number {
     const value = this.inputs.values.get(portId);
     return typeof value === 'number' ? value : Number(value ?? defaultValue);
-  }
   /**
    * Get a boolean input value
    */
   getBoolean(portId: string, defaultValue: boolean = false): boolean {
     const value = this.inputs.values.get(portId);
     return typeof value === 'boolean' ? value : Boolean(value ?? defaultValue);
-  }
   /**
    * Get an array input value
    */
-  getArray<T = any>(portId: string, defaultValue: T[] = []): T[] {
+  getArray<T = any>(portId: string, defaultValue: T = []): T {
     const value = this.inputs.values.get(portId);
     return Array.isArray(value) ? value : defaultValue;
-  }
   /**
    * Get a string array input value
    */
-  getStringArray(portId: string, defaultValue: string[] = []): string[] {
+  getStringArray(portId: string, defaultValue: string = []): string {
     const value = this.inputs.values.get(portId);
     if (Array.isArray(value)) {
       return value.map(v => String(v));
-    }
     return defaultValue;
-  }
   /**
    * Get input metadata
    */
   getMetadata(portId: string): IOResolutionMetadata | undefined {
     return this.inputs.metadata.get(portId);
-  }
   /**
    * Check if input has warnings
    */
   hasWarnings(portId: string): boolean {
     const metadata = this.getMetadata(portId);
     return metadata ? metadata.warnings.length > 0 : false;
-  }
   /**
    * Get all warnings for an input
    */
-  getWarnings(portId: string): string[] {
+  getWarnings(portId: string): string {
     const metadata = this.getMetadata(portId);
     return metadata ? metadata.warnings : [];
-  }
-}

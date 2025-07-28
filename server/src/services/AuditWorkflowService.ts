@@ -5,6 +5,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { DataAccessControlService } from './DataAccessControlService';
 
+}
 export interface AuditWorkflow {
   id: string;
   name: string;
@@ -22,7 +23,9 @@ export interface AuditWorkflow {
   updatedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface WorkflowStep {
   stepId: string;
   name: string;
@@ -40,7 +43,9 @@ export interface WorkflowStep {
   approvalRequired: boolean;
   reviewRequirements: ReviewRequirement[];
 }
+}
 
+}
 export interface TriggerCondition {
   conditionType: TriggerType;
   parameters: Record<string, any>;
@@ -48,7 +53,9 @@ export interface TriggerCondition {
   threshold?: number;
   enabled: boolean;
 }
+}
 
+}
 export interface EvidenceItem {
   id: string;
   type: EvidenceType;
@@ -59,14 +66,18 @@ export interface EvidenceItem {
   collectedAt: Date;
   verificationStatus: VerificationStatus;
 }
+}
 
+}
 export interface ReviewRequirement {
   reviewType: ReviewType;
   requiredRole: string;
   criteria: string[];
   signOffRequired: boolean;
 }
+}
 
+}
 export interface WorkflowExecution {
   executionId: string;
   workflowId: string;
@@ -80,7 +91,9 @@ export interface WorkflowExecution {
   reports: AuditReport[];
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface WorkflowFinding {
   id: string;
   severity: FindingSeverity;
@@ -95,7 +108,9 @@ export interface WorkflowFinding {
   identifiedBy: string;
   identifiedAt: Date;
 }
+}
 
+}
 export interface RemediationAction {
   actionId: string;
   description: string;
@@ -105,7 +120,9 @@ export interface RemediationAction {
   evidence?: string[];
   completedAt?: Date;
 }
+}
 
+}
 export interface AuditReport {
   reportId: string;
   workflowExecutionId: string;
@@ -120,6 +137,7 @@ export interface AuditReport {
   approvedBy?: string;
   approvedAt?: Date;
   distribution: string[];
+}
 }
 
 export enum WorkflowType {
@@ -270,6 +288,7 @@ export class AuditWorkflowService {
    * Create a new audit workflow
    */
   async createWorkflow(workflow: Omit<AuditWorkflow, 'id' | 'createdAt' | 'updatedAt'>): Promise<{ workflowId: string }> {
+
     const workflowId = await this.generateWorkflowId();
 
     try {
@@ -337,6 +356,7 @@ export class AuditWorkflowService {
    * Start workflow execution
    */
   async startWorkflowExecution(workflowId: string, triggeredBy: string): Promise<{ executionId: string }> {
+
     const executionId = await this.generateExecutionId();
 
     try {
@@ -413,6 +433,7 @@ export class AuditWorkflowService {
     stepId: string,
     evidence: Omit<EvidenceItem, 'id' | 'collectedAt' | 'verificationStatus'>
   ): Promise<{ evidenceId: string }> {
+
     const evidenceId = await this.generateEvidenceId();
 
     try {
@@ -488,6 +509,7 @@ export class AuditWorkflowService {
     findings: string[],
     nextSteps: string[]
   ): Promise<{ nextStepId?: string }> {
+
     try {
       const execution = await this.getWorkflowExecution(executionId);
       if (!execution) {
@@ -577,6 +599,7 @@ export class AuditWorkflowService {
     reportType: ReportType,
     generatedBy: string
   ): Promise<{ reportId: string; reportContent: AuditReport }> {
+
     const reportId = await this.generateReportId();
 
     try {
@@ -668,6 +691,7 @@ export class AuditWorkflowService {
     assignee?: string;
     priority?: WorkflowPriority;
   }): Promise<AuditWorkflow[]> {
+
     let query = `
       SELECT * FROM audit_workflows 
       WHERE status = $1
@@ -699,6 +723,7 @@ export class AuditWorkflowService {
    * Get workflow execution status
    */
   async getWorkflowExecution(executionId: string): Promise<WorkflowExecution | null> {
+
     const result = await this.db.query(`
       SELECT * FROM workflow_executions WHERE execution_id = $1
     `, [executionId]);
@@ -713,6 +738,7 @@ export class AuditWorkflowService {
   // Private helper methods
 
   private async validateWorkflowConfig(workflow: Omit<AuditWorkflow, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> {
+
     if (!workflow.name || workflow.name.length < 3) {
       throw new Error('Workflow name must be at least 3 characters');
     }
@@ -736,6 +762,7 @@ export class AuditWorkflowService {
   }
 
   private async startWorkflowStep(executionId: string, stepId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE workflow_step_status 
       SET status = $1, start_date = NOW()
@@ -758,6 +785,7 @@ export class AuditWorkflowService {
   }
 
   private async completeWorkflowExecution(executionId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE workflow_executions 
       SET status = $1, end_date = NOW(), progress = 100
@@ -777,6 +805,7 @@ export class AuditWorkflowService {
   }
 
   private async generateReportSummary(execution: WorkflowExecution, workflow: AuditWorkflow): Promise<string> {
+
     const totalFindings = execution.findings.length;
     const criticalFindings = execution.findings.filter(f => f.severity === FindingSeverity.CRITICAL).length;
     const highFindings = execution.findings.filter(f => f.severity === FindingSeverity.HIGH).length;
@@ -786,6 +815,7 @@ export class AuditWorkflowService {
   }
 
   private async generateRecommendations(findings: WorkflowFinding[]): Promise<string[]> {
+
     const recommendations: string[] = [];
     
     findings.forEach(finding => {
@@ -796,6 +826,7 @@ export class AuditWorkflowService {
   }
 
   private async calculateComplianceStatus(findings: WorkflowFinding[]): Promise<ComplianceStatus> {
+
     const criticalFindings = findings.filter(f => f.severity === FindingSeverity.CRITICAL);
     const highFindings = findings.filter(f => f.severity === FindingSeverity.HIGH);
 
@@ -809,6 +840,7 @@ export class AuditWorkflowService {
   }
 
   private async determineReportDistribution(workflow: AuditWorkflow, reportType: ReportType): Promise<string[]> {
+
     const distribution = [...workflow.assignees];
     
     if (reportType === ReportType.EXECUTIVE_SUMMARY) {
@@ -819,22 +851,27 @@ export class AuditWorkflowService {
   }
 
   private async generateWorkflowId(): Promise<string> {
+
     return `WF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateExecutionId(): Promise<string> {
+
     return `EX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateEvidenceId(): Promise<string> {
+
     return `EV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateReportId(): Promise<string> {
+
     return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async getWorkflow(workflowId: string): Promise<AuditWorkflow | null> {
+
     const result = await this.db.query(`
       SELECT * FROM audit_workflows WHERE workflow_id = $1
     `, [workflowId]);

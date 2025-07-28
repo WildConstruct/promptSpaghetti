@@ -2,6 +2,7 @@
  * Sticky Notes Type Definitions
  * Epic 8.7 Task 1: Collaboration & Documentation Tools - Sticky Notes System
  */
+
 export interface StickyNote {
     id: string;
     position: {,
@@ -45,9 +46,10 @@ export interface StickyNote {
         comments: StickyNoteComment[];
         mentions: string[];
     };
-}
+
 export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange' | 'pink' | 'gray';
 export type StickyNoteCategory = 'general' | 'technical' | 'creative' | 'feedback' | 'question' | 'decision' | 'action-item' | 'reference';
+
 export interface StickyNoteComment {
     id: string;
     text: string;
@@ -57,7 +59,7 @@ export interface StickyNoteComment {
     };
     timestamp: string;
     resolved: boolean;
-}
+
 export interface StickyNoteGroup {
     id: string;
     name: string;
@@ -71,7 +73,7 @@ export interface StickyNoteGroup {
         borderColor: string;
         collapsed: boolean;
     };
-}
+
 export interface StickyNoteFilter {
     author?: string;
     category?: StickyNoteCategory;
@@ -82,7 +84,7 @@ export interface StickyNoteFilter {
     };
     textSearch?: string;
     tags?: string[];
-}
+
 export interface StickyNoteState {
     notes: Record<string, StickyNote>;
     groups: Record<string, StickyNoteGroup>;
@@ -97,7 +99,7 @@ export interface StickyNoteState {
         defaultColor: StickyNoteColor;
         defaultCategory: StickyNoteCategory;
     };
-}
+
 export interface StickyNoteActions {
     createNote: (position: {),
         x: number;
@@ -137,7 +139,7 @@ export interface StickyNoteActions {
     addComment: (noteId: string, comment: string) => void;
     resolveComment: (noteId: string, commentId: string) => void;
     updateSettings: (settings: Partial<StickyNoteState['settings']>) => void;
-}
+
 export interface StickyNoteEvent {
     type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'select';
     noteId: string;
@@ -146,7 +148,7 @@ export interface StickyNoteEvent {
         x: number;
         y: number;
     };
-}
+
 export interface StickyNoteReactFlowNode {
     id: string;
     type: 'stickyNote';
@@ -158,7 +160,7 @@ export interface StickyNoteReactFlowNode {
     draggable: boolean;
     selectable: boolean;
     deletable: boolean;
-}
+
 export interface StickyNoteTemplate {
     id: string;
     name: string;
@@ -173,19 +175,19 @@ export interface StickyNoteTemplate {
     createdAt: string;
     usageCount: number;
     tags: string[];
-}
+
 export interface StickyNoteTemplateLibrary {
     templates: Record<string, StickyNoteTemplate>;
     categories: StickyNoteCategory[];
     recentlyUsed: string[];
     favorites: string[];
-}
+
 export interface StickyNotePersistence {
     save: (state: StickyNoteState) => Promise<void>;
     load: () => Promise<StickyNoteState>;
     sync: (changes: Partial<StickyNoteState>) => Promise<void>;
     subscribe: (callback: (state: StickyNoteState) => void) => () => void;
-}
+
 export interface StickyNoteShortcuts {
     'cmd+n': 'createNote';
     'cmd+d': 'duplicateNote';
@@ -195,6 +197,6 @@ export interface StickyNoteShortcuts {
     'escape': 'stopEditing';
     'cmd+z': 'undo';
     'cmd+shift+z': 'redo';
-}
+
 export default StickyNote;
 //# sourceMappingURL=StickyNotes.d.ts.map

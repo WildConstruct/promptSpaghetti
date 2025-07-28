@@ -73,8 +73,8 @@ describe('PaymentAnalyticsCollector', () => {
               amount: 2000,
               currency: 'usd',
               country: 'US'
-            })
-          })
+  }
+  }
         );
 
         expect(mockDbConnection.query).toHaveBeenCalledWith(
@@ -142,8 +142,8 @@ describe('PaymentAnalyticsCollector', () => {
               fees: 60,
               netAmount: 1940,
               riskScore: 25
-            })
-          })
+  }
+  }
         );
       });
 
@@ -213,8 +213,8 @@ describe('PaymentAnalyticsCollector', () => {
               failureReason: 'Card was declined',
               errorCode: 'card_declined',
               isRetryable: true
-            })
-          })
+  }
+  }
         );
       });
 
@@ -244,8 +244,8 @@ describe('PaymentAnalyticsCollector', () => {
           expect.objectContaining({
             metadata: expect.objectContaining({
               isRetryable: true
-            })
-          })
+  }
+  }
         );
 
         // Test non-retryable error
@@ -260,8 +260,8 @@ describe('PaymentAnalyticsCollector', () => {
           expect.objectContaining({
             metadata: expect.objectContaining({
               isRetryable: false
-            })
-          })
+  }
+  }
         );
       });
     });
@@ -375,7 +375,7 @@ describe('PaymentAnalyticsCollector', () => {
             totalVolume: 200000,
             totalFees: 6000,
             averageFeeRate: 3
-          })
+  }
         );
       });
 
@@ -438,7 +438,7 @@ describe('PaymentAnalyticsCollector', () => {
             successRate: 95,
             averageProcessingTime: 300,
             totalVolume: 100000
-          })
+  }
         );
       });
     });
@@ -451,7 +451,7 @@ describe('PaymentAnalyticsCollector', () => {
             description: 'Card was declined',
             frequency: 150,
             retry_success_rate: 0.45
-          },
+  }
           {
             failure_code: 'insufficient_funds',
             description: 'Insufficient funds',
@@ -482,7 +482,7 @@ describe('PaymentAnalyticsCollector', () => {
             suggestedAction: 'Ask customer to try a different payment method',
             isRetryable: true,
             averageRetrySuccess: 45
-          })
+  }
         );
       });
     });
@@ -667,8 +667,8 @@ describe('PaymentAnalyticsCollector', () => {
             // Optional fields should be undefined
             country: undefined,
             userAgent: undefined
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -732,12 +732,12 @@ describe('PaymentAnalyticsCollector Integration', () => {
     expect(mockAnalyticsCollector.track).toHaveBeenNthCalledWith(1,
       expect.objectContaining({
         type: PaymentAnalyticsEventType.PAYMENT_ATTEMPT
-      })
+  }
     );
     expect(mockAnalyticsCollector.track).toHaveBeenNthCalledWith(2,
       expect.objectContaining({
         type: PaymentAnalyticsEventType.PAYMENT_SUCCESS
-      })
+  }
     );
 
     // Verify database events were stored

@@ -60,21 +60,21 @@ describe('SecurityABTestingFramework', () => {
         statistical_significance_threshold: 0.05,
         minimum_sample_size: 1000,
         maximum_test_duration_days: 30
-      },
+  }
       traffic_management: {
         traffic_splitting_enabled: true,
         canary_deployment_enabled: true,
         gradual_rollout_enabled: true,
         rollback_automation_enabled: true,
         traffic_allocation_strategies: ['random', 'hash_based']
-      },
+  }
       experiment_design: {
         randomization_enabled: true,
         stratified_sampling_enabled: true,
         control_group_required: true,
         minimum_control_group_size_percent: 20,
         bias_detection_enabled: true
-      },
+  }
       metrics_collection: {
         real_time_metrics_enabled: true,
         security_effectiveness_tracking: true,
@@ -82,21 +82,21 @@ describe('SecurityABTestingFramework', () => {
         user_experience_tracking: true,
         compliance_impact_tracking: true,
         cost_impact_tracking: true
-      },
+  }
       statistical_analysis: {
         bayesian_analysis_enabled: true,
         confidence_interval_calculation: true,
         power_analysis_enabled: true,
         effect_size_calculation: true,
         significance_testing_methods: ['t_test', 'chi_square', 'bayesian']
-      },
+  }
       safety_controls: {
         automatic_rollback_enabled: true,
         safety_thresholds: {
           security_incident_increase_percent: 50,
           performance_degradation_percent: 20,
           error_rate_increase_percent: 100
-        },
+  }
         circuit_breaker_enabled: true,
         early_termination_enabled: true,
         risk_monitoring_enabled: true
@@ -117,7 +117,7 @@ describe('SecurityABTestingFramework', () => {
           statistical_significance_level: 0.95,
           statistical_power: 0.80,
           business_significance_threshold: 10.0
-        },
+  }
         sample_size_calculation: {
           calculated_sample_size: 2000,
           calculation_method: 'frequentist',
@@ -126,7 +126,7 @@ describe('SecurityABTestingFramework', () => {
           expected_effect_size: 5.0,
           variance_estimate: 0.25
         }
-      },
+  }
       test_variants: [
         {
           variant_id: 'control',
@@ -137,12 +137,12 @@ describe('SecurityABTestingFramework', () => {
             policy: { id: 'current_mfa', name: 'Current MFA' },
             feature_flags: {},
             configuration_overrides: {}
-          },
+  }
           allocation: {
             traffic_percentage: 50,
             user_segments: ['all_users']
           }
-        },
+  }
         {
           variant_id: 'enhanced',
           variant_name: 'Enhanced MFA Policy',
@@ -152,7 +152,7 @@ describe('SecurityABTestingFramework', () => {
             policy: { id: 'enhanced_mfa', name: 'Enhanced MFA' },
             feature_flags: { adaptive_mfa: true },
             configuration_overrides: { risk_based_triggers: true }
-          },
+  }
           allocation: {
             traffic_percentage: 50,
             user_segments: ['all_users']
@@ -164,12 +164,12 @@ describe('SecurityABTestingFramework', () => {
         allocation_parameters: {},
         sticky_session_enabled: true,
         cross_device_consistency: false
-      },
+  }
       target_population: {
         population_criteria: {
           user_roles: ['admin', 'user'],
           access_patterns: ['regular', 'high_privilege']
-        },
+  }
         estimated_population_size: 10000,
         inclusion_rules: [
           {
@@ -714,7 +714,7 @@ describe('SecurityABTestingFramework', () => {
             is_control: true,
             policy_configuration: { policy: { id: 'control' }, feature_flags: {}, configuration_overrides: {} },
             allocation: { traffic_percentage: 25, user_segments: [] }
-          },
+  }
           {
             variant_id: 'variant_a',
             variant_name: 'Enhanced MFA',
@@ -722,7 +722,7 @@ describe('SecurityABTestingFramework', () => {
             is_control: false,
             policy_configuration: { policy: { id: 'enhanced' }, feature_flags: {}, configuration_overrides: {} },
             allocation: { traffic_percentage: 25, user_segments: [] }
-          },
+  }
           {
             variant_id: 'variant_b',
             variant_name: 'Adaptive MFA',
@@ -730,7 +730,7 @@ describe('SecurityABTestingFramework', () => {
             is_control: false,
             policy_configuration: { policy: { id: 'adaptive' }, feature_flags: {}, configuration_overrides: {} },
             allocation: { traffic_percentage: 25, user_segments: [] }
-          },
+  }
           {
             variant_id: 'variant_c',
             variant_name: 'Smart MFA',

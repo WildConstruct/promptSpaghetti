@@ -16,12 +16,15 @@ import {
   ToggleEvaluationResult 
 } from '../database/feature-toggle-models';
 
+}
 export interface ToggleParameterValidation {
   isValid: boolean;
   errors: string[];
   warnings?: string[];
 }
+}
 
+}
 export interface ParameterPreset {
   id: string;
   name: string;
@@ -33,7 +36,9 @@ export interface ParameterPreset {
   createdBy: string;
   createdAt: Date;
 }
+}
 
+}
 export interface ParameterTemplate {
   type: ToggleType;
   defaultParameters: Record<string, any>;
@@ -43,9 +48,11 @@ export interface ParameterTemplate {
     field: string;
     rule: string;
     message: string;
+}
   }>;
 }
 
+}
 export interface ParameterChangeLog {
   id: string;
   toggleId: string;
@@ -56,6 +63,7 @@ export interface ParameterChangeLog {
   changedBy: string;
   changedAt: Date;
   metadata?: Record<string, any>;
+}
 }
 
 export class ToggleParametersService {
@@ -71,8 +79,7 @@ export class ToggleParametersService {
       validationRules: [
         { field: 'enabled', rule: 'boolean', message: 'Enabled must be a boolean value' }
       ]
-    },
-    
+  }
     [ToggleType.PERCENTAGE_ROLLOUT]: {
       type: ToggleType.PERCENTAGE_ROLLOUT,
       defaultParameters: {
@@ -85,7 +92,7 @@ export class ToggleParametersService {
           durationHours: 24,
           incrementSize: 10
         }
-      },
+  }
       requiredFields: ['percentage'],
       optionalFields: ['saltKey', 'gradualRollout'],
       validationRules: [
@@ -94,8 +101,7 @@ export class ToggleParametersService {
         { field: 'gradualRollout.endPercentage', rule: 'range:0,100', message: 'End percentage must be between 0 and 100' },
         { field: 'gradualRollout.durationHours', rule: 'min:1', message: 'Duration must be at least 1 hour' }
       ]
-    },
-    
+  }
     [ToggleType.MULTIVARIATE]: {
       type: ToggleType.MULTIVARIATE,
       defaultParameters: {
@@ -103,15 +109,14 @@ export class ToggleParametersService {
         saltKey: null,
         defaultVariant: null,
         trafficAllocation: 100
-      },
+  }
       requiredFields: ['variants'],
       optionalFields: ['saltKey', 'defaultVariant', 'trafficAllocation'],
       validationRules: [
         { field: 'variants', rule: 'array:min:1', message: 'At least one variant is required' },
         { field: 'trafficAllocation', rule: 'range:0,100', message: 'Traffic allocation must be between 0 and 100' }
       ]
-    },
-    
+  }
     [ToggleType.SCHEDULED]: {
       type: ToggleType.SCHEDULED,
       defaultParameters: {
@@ -120,15 +125,14 @@ export class ToggleParametersService {
         endTime: null,
         timezone: 'UTC',
         recurrence: { type: 'none', interval: 1 }
-      },
+  }
       requiredFields: ['enabled', 'timezone'],
       optionalFields: ['startTime', 'endTime', 'recurrence', 'overrideOnHolidays'],
       validationRules: [
         { field: 'timezone', rule: 'timezone', message: 'Invalid timezone format' },
         { field: 'recurrence.interval', rule: 'min:1', message: 'Recurrence interval must be at least 1' }
       ]
-    },
-    
+  }
     [ToggleType.SEGMENTATION]: {
       type: ToggleType.SEGMENTATION,
       defaultParameters: {
@@ -136,7 +140,7 @@ export class ToggleParametersService {
         defaultValue: false,
         evaluationMode: 'first_match',
         fallbackBehavior: 'default'
-      },
+  }
       requiredFields: ['rules', 'defaultValue', 'evaluationMode'],
       optionalFields: ['fallbackBehavior'],
       validationRules: [
@@ -144,15 +148,14 @@ export class ToggleParametersService {
         { field: 'evaluationMode', rule: 'enum:first_match,all_rules,weighted', message: 'Invalid evaluation mode' },
         { field: 'fallbackBehavior', rule: 'enum:default,disable,error', message: 'Invalid fallback behavior' }
       ]
-    },
-    
+  }
     [ToggleType.DYNAMIC]: {
       type: ToggleType.DYNAMIC,
       defaultParameters: {
         formula: '',
         variables: {},
         cacheTtlSeconds: 300
-      },
+  }
       requiredFields: ['formula'],
       optionalFields: ['variables', 'cacheTtlSeconds'],
       validationRules: [
@@ -171,6 +174,7 @@ export class ToggleParametersService {
   // ==========================================
 
   async validateParameters(toggleType: ToggleType, parameters: Record<string, any>): Promise<ToggleParameterValidation> {
+
     const template = ToggleParametersService.PARAMETER_TEMPLATES[toggleType];
     if (!template) {
       return {
@@ -243,6 +247,7 @@ export class ToggleParametersService {
     updatedBy: string,
     reason?: string
   ): Promise<FeatureToggle> {
+
     // Get current toggle to determine type
     const toggle = await this.getToggleById(toggleId);
     if (!toggle) {
@@ -297,6 +302,7 @@ export class ToggleParametersService {
     toggleId: string,
     limit: number = 50
   ): Promise<ParameterChangeLog[]> {
+
     const query = `
       SELECT * FROM toggle_parameter_changes
       WHERE toggle_id = $1
@@ -314,6 +320,7 @@ export class ToggleParametersService {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 200 })
   async createParameterPreset(preset: Omit<ParameterPreset, 'id' | 'createdAt'>): Promise<string> {
+
     // Validate parameters match toggle type
     const validation = await this.validateParameters(preset.toggleType, preset.parameters);
     if (!validation.isValid) {
@@ -350,6 +357,7 @@ export class ToggleParametersService {
     usage?: string,
     tags?: string[]
   ): Promise<ParameterPreset[]> {
+
     let query = 'SELECT * FROM toggle_parameter_presets WHERE 1=1';
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -385,6 +393,7 @@ export class ToggleParametersService {
     appliedBy: string,
     reason?: string
   ): Promise<FeatureToggle> {
+
     // Get preset
     const preset = await this.getParameterPresetById(presetId);
     if (!preset) {
@@ -408,6 +417,7 @@ export class ToggleParametersService {
     toggle: FeatureToggle,
     context: ToggleEvaluationContext
   ): Promise<ToggleEvaluationResult> {
+
     try {
       switch (toggle.type) {
       case ToggleType.BOOLEAN:
@@ -832,11 +842,13 @@ export class ToggleParametersService {
 
   // Database helper methods
   private async getToggleById(toggleId: string): Promise<FeatureToggle | null> {
+
     const result = await this.db.query('SELECT * FROM feature_toggles WHERE id = $1', [toggleId]);
     return result.rows.length > 0 ? this.mapToggleFromDB(result.rows[0]) : null;
   }
 
   private async getParameterPresetById(presetId: string): Promise<ParameterPreset | null> {
+
     const result = await this.db.query('SELECT * FROM toggle_parameter_presets WHERE id = $1', [presetId]);
     return result.rows.length > 0 ? this.mapParameterPresetFromDB(result.rows[0]) : null;
   }
@@ -848,6 +860,7 @@ export class ToggleParametersService {
     changedBy: string,
     reason?: string
   ): Promise<void> {
+
     // Compare old and new values to log specific field changes
     const changes = this.compareParameterObjects(oldValue, newValue);
     
@@ -895,6 +908,7 @@ export class ToggleParametersService {
   }
 
   private async clearToggleEvaluationCache(toggleId: string): Promise<void> {
+
     await this.db.query('DELETE FROM toggle_evaluation_cache WHERE toggle_id = $1', [toggleId]);
   }
 

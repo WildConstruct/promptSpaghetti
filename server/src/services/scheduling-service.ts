@@ -25,6 +25,7 @@ export class SchedulingService {
 
   // Schedule management
   async createSchedule(request: CreateScheduleRequest, createdBy: string): Promise<FeatureToggleSchedule> {
+
     // Validate toggle exists
     const toggle = await this.featureToggleDAO.getToggle(request.toggleId);
     if (!toggle) {
@@ -55,18 +56,22 @@ export class SchedulingService {
   }
 
   async getSchedule(id: string): Promise<FeatureToggleSchedule | null> {
+
     return this.schedulingDAO.getSchedule(id);
   }
 
   async getSchedulesByToggle(toggleId: string): Promise<FeatureToggleSchedule[]> {
+
     return this.schedulingDAO.getSchedulesByToggle(toggleId);
   }
 
   async querySchedules(query: ScheduleQuery): Promise<{ schedules: FeatureToggleSchedule[]; total: number }> {
+
     return this.schedulingDAO.querySchedules(query);
   }
 
   async updateSchedule(request: UpdateScheduleRequest, updatedBy: string): Promise<FeatureToggleSchedule | null> {
+
     const existing = await this.schedulingDAO.getSchedule(request.id);
     if (!existing) {
       throw new Error(`Schedule with ID ${request.id} not found`);
@@ -90,6 +95,7 @@ export class SchedulingService {
   }
 
   async deleteSchedule(id: string): Promise<boolean> {
+
     const schedule = await this.schedulingDAO.getSchedule(id);
     if (!schedule) return false;
 
@@ -106,6 +112,7 @@ export class SchedulingService {
 
   // Schedule execution engine
   async executeScheduledActions(): Promise<void> {
+
     const now = new Date();
     
     // Get all schedules that should execute now
@@ -133,6 +140,7 @@ export class SchedulingService {
   }
 
   private async executeSchedule(schedule: FeatureToggleSchedule): Promise<void> {
+
     const startTime = Date.now();
     const executionTime = new Date();
 
@@ -207,7 +215,7 @@ export class SchedulingService {
           originalTime: schedule.nextExecution!,
           actualTime: executionTime,
           delay: executionTime.getTime() - schedule.nextExecution!.getTime()
-        },
+  }
         beforeValue,
         afterValue,
         affectedUsers,
@@ -233,13 +241,13 @@ export class SchedulingService {
           timezone: schedule.timezone,
           originalTime: schedule.nextExecution!,
           actualTime: executionTime
-        },
+  }
         error: {
           code: 'EXECUTION_ERROR',
           message: error instanceof Error ? error.message : 'Unknown error',
           stack: error instanceof Error ? error.stack : undefined,
           retryable: this.isRetryableError(error)
-        },
+  }
         duration: Date.now() - startTime,
         metadata: {
           action: schedule.action,
@@ -253,6 +261,7 @@ export class SchedulingService {
   }
 
   private async handleGradualRollout(schedule: FeatureToggleSchedule): Promise<void> {
+
     const { gradualRollout } = schedule.actionConfig;
     if (!gradualRollout) return;
 
@@ -283,6 +292,7 @@ export class SchedulingService {
 
   // Conflict detection and resolution
   private async detectScheduleConflicts(request: CreateScheduleRequest): Promise<ScheduleConflict[]> {
+
     const conflicts: ScheduleConflict[] = [];
     const existingSchedules = await this.schedulingDAO.getSchedulesByToggle(request.toggleId);
 
@@ -369,6 +379,7 @@ export class SchedulingService {
   }
 
   private async handleScheduleConflicts(schedule: FeatureToggleSchedule, conflicts: ScheduleConflict[]): Promise<void> {
+
     for (const conflict of conflicts) {
       await this.schedulingDAO.createConflict(conflict);
 
@@ -384,6 +395,7 @@ export class SchedulingService {
   }
 
   private async autoResolveConflict(schedule: FeatureToggleSchedule, conflict: ScheduleConflict): Promise<void> {
+
     const { suggestedResolution } = conflict;
     if (!suggestedResolution) return;
 
@@ -438,6 +450,7 @@ export class SchedulingService {
   }
 
   private async updateNextExecutionTime(scheduleId: string): Promise<void> {
+
     const schedule = await this.schedulingDAO.getSchedule(scheduleId);
     if (!schedule) return;
 
@@ -509,6 +522,7 @@ export class SchedulingService {
   }
 
   private async updateScheduleExecution(schedule: FeatureToggleSchedule, success: boolean): Promise<void> {
+
     const updates: unknown = {
       id: schedule.id,
       lastExecution: new Date(),
@@ -535,6 +549,7 @@ export class SchedulingService {
   }
 
   private async handleExecutionFailure(schedule: FeatureToggleSchedule, error: Error): Promise<void> {
+
     const isRetryable = this.isRetryableError(error);
     const maxRetries = 3;
 
@@ -576,14 +591,17 @@ export class SchedulingService {
 
   // Analytics
   async getScheduleAnalytics(startDate?: Date, endDate?: Date): Promise<ScheduleAnalytics> {
+
     return this.schedulingDAO.getScheduleAnalytics(startDate, endDate);
   }
 
   async getExecutionsBySchedule(scheduleId: string, limit = 100): Promise<ScheduleExecution[]> {
+
     return this.schedulingDAO.getExecutionsBySchedule(scheduleId, limit);
   }
 
   async getUnresolvedConflicts(): Promise<ScheduleConflict[]> {
+
     return this.schedulingDAO.getUnresolvedConflicts();
   }
 }

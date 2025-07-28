@@ -21,6 +21,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RBACService } from '../auth/services/RBACService';
 
+}
 export interface BulkOperationRequest<T = unknown> {
   id: string;
   resourceType: string;
@@ -37,6 +38,7 @@ export interface BulkOperationRequest<T = unknown> {
   };
 }
 
+}
 export interface BulkOperationOptions {
   batchSize?: number;
   maxConcurrency?: number;
@@ -51,7 +53,9 @@ export interface BulkOperationOptions {
   notifyOnComplete?: boolean;
   exportResults?: boolean;
 }
+}
 
+}
 export interface BulkOperationResult {
   operationId: string;
   status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'scheduled';
@@ -62,6 +66,7 @@ export interface BulkOperationResult {
     failedItems: number;
     skippedItems: number;
     percentComplete: number;
+}
   };
   results: Array<{
     targetId: string;
@@ -91,6 +96,7 @@ export interface BulkOperationResult {
   };
 }
 
+}
 export interface BulkOperationHandler<T = any, R = any> {
   resourceType: string;
   supportedOperations: string[];
@@ -100,6 +106,7 @@ export interface BulkOperationHandler<T = any, R = any> {
   rollback?(targetId: string, operation: string, parameters: T, result: R): Promise<void>;
 }
 
+}
 export interface BulkOperationContext {
   operationId: string;
   requestedBy: string;
@@ -110,7 +117,9 @@ export interface BulkOperationContext {
   userAgent?: string;
   timestamp: Date;
 }
+}
 
+}
 export interface BulkOperationConfig {
   maxConcurrentOperations: number;
   defaultBatchSize: number;
@@ -121,6 +130,7 @@ export interface BulkOperationConfig {
   retryDelayMs: number;
   cleanupIntervalMs: number;
   resultRetentionDays: number;
+}
 }
 
 export class BulkOperationFramework {
@@ -173,6 +183,7 @@ export class BulkOperationFramework {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<BulkOperationResult> {
+
     // Validate request
     await this.validateRequest(request, adminId);
 
@@ -187,11 +198,11 @@ export class BulkOperationFramework {
         failedItems: 0,
         skippedItems: 0,
         percentComplete: 0
-      },
+  }
       results: [],
       timing: {
         startedAt: request.options.scheduledAt || new Date()
-      },
+  }
       metadata: {
         ...request.metadata,
         auditIds: []
@@ -213,7 +224,7 @@ export class BulkOperationFramework {
         targetCount: request.targetIds.length,
         priority: request.metadata.priority,
         scheduled: !!request.options.scheduledAt
-      },
+  }
       severity: 'info'
     });
 
@@ -238,6 +249,7 @@ export class BulkOperationFramework {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const handler = this.handlers.get(request.resourceType);
     if (!handler) {
       throw new Error(`No handler registered for resource type: ${request.resourceType}`);
@@ -345,7 +357,7 @@ export class BulkOperationFramework {
           totalItems: request.targetIds.length,
           successItems: allResults.filter(r => r.status === 'success').length,
           failedItems: allResults.filter(r => r.status === 'failed').length
-        },
+  }
         severity: 'info'
       });
 
@@ -357,7 +369,7 @@ export class BulkOperationFramework {
         resourceId: request.id,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -370,6 +382,7 @@ export class BulkOperationFramework {
    * Get operation status and results
    */
   async getOperationStatus(operationId: string): Promise<BulkOperationResult | null> {
+
     const result = await this.dbService.query(
       'SELECT * FROM bulk_operations WHERE id = $1',
       [operationId]
@@ -386,6 +399,7 @@ export class BulkOperationFramework {
    * Cancel an active operation
    */
   async cancelOperation(operationId: string, adminId: string): Promise<void> {
+
     const controller = this.activeOperations.get(operationId);
     if (controller) {
       controller.abort();
@@ -414,6 +428,7 @@ export class BulkOperationFramework {
       offset?: number;
     } = {}
   ): Promise<{ operations: BulkOperationResult[]; totalCount: number }> {
+
     const conditions = [];
     const values = [];
     let paramIndex = 1;
@@ -461,6 +476,7 @@ export class BulkOperationFramework {
   // Private helper methods
 
   private async validateRequest<T>(request: BulkOperationRequest<T>, adminId: string): Promise<void> {
+
     if (!this.handlers.has(request.resourceType)) {
       throw new Error(`No handler registered for resource type: ${request.resourceType}`);
     }
@@ -489,6 +505,7 @@ export class BulkOperationFramework {
     request: BulkOperationRequest<T>,
     handler: BulkOperationHandler<T>
   ): Promise<void> {
+
     const validationErrors: Array<{ targetId: string; error: string }> = [];
 
     for (const targetId of request.targetIds) {
@@ -572,6 +589,7 @@ export class BulkOperationFramework {
     request: BulkOperationRequest<T>,
     handler: BulkOperationHandler<T>
   ): Promise<void> {
+
     if (!handler.rollback) return;
 
     for (const item of rollbackData.reverse()) {
@@ -584,6 +602,7 @@ export class BulkOperationFramework {
   }
 
   private async storeOperation(operation: BulkOperationResult): Promise<void> {
+
     await this.dbService.query(
       `INSERT INTO bulk_operations (
         id, status, progress, results, timing, validation, metadata, created_at, updated_at
@@ -601,6 +620,7 @@ export class BulkOperationFramework {
   }
 
   private async updateOperationStatus(operationId: string, status: string): Promise<void> {
+
     await this.dbService.query(
       'UPDATE bulk_operations SET status = $1, updated_at = NOW() WHERE id = $2',
       [status, operationId]
@@ -608,6 +628,7 @@ export class BulkOperationFramework {
   }
 
   private async updateProgress(operationId: string, batchResults: any[]): Promise<void> {
+
     const successCount = batchResults.filter(r => r.status === 'success').length;
     const failedCount = batchResults.filter(r => r.status === 'failed').length;
 
@@ -627,6 +648,7 @@ export class BulkOperationFramework {
   }
 
   private async finalizeResults(operationId: string, allResults: any[]): Promise<void> {
+
     const timing = {
       completedAt: new Date(),
       totalDuration: Date.now() - new Date().getTime(), // This would be calculated properly
@@ -680,6 +702,7 @@ export class BulkOperationFramework {
   }
 
   private async cleanupOldOperations(): Promise<void> {
+
     const cutoffDate = new Date(Date.now() - this.config.resultRetentionDays * 24 * 60 * 60 * 1000);
     
     await this.dbService.query(

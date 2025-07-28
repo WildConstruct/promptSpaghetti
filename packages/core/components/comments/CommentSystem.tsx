@@ -8,17 +8,15 @@ import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
 interface CommentSystemProps {
-  workspaceId: string;
+  workspaceId: string;,
   targetType: string;
-  targetId: string;
+  targetId: string;,
   userId: string;
   resourceId?: string;
   projectId?: string;
   className?: string;
   compact?: boolean;
-}
-
-export const CommentSystem: React.FC<CommentSystemProps> = ({)
+  export const CommentSystem: React.FC<CommentSystemProps> = ({,)
   workspaceId,
   targetType,
   targetId,
@@ -41,15 +39,15 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
     hasMore,
     refresh
   } = useComments({)
-    workspaceId,
+  workspaceId,
     targetType,
     targetId,
     userId,
     sortOrder
   });
   const handleCreateComment = async (content: string, parentCommentId?: string) => {
-    const commentData: CreateComment = {
-      workspace_id: workspaceId,
+    const commentData: CreateComment = {,
+  workspace_id: workspaceId,
       project_id: projectId,
       resource_id: resourceId,
       author_id: userId,
@@ -63,51 +61,44 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
       await createComment(commentData);
       if (!parentCommentId) {
         setShowCommentForm(false);
-      }
     } catch (error) {
-      console.error('Failed to create comment:', error);
-    }
-  };
+  console.error('Failed to create comment:', error);
+};
   const handleUpdateComment = async (commentId: string, content: string, metadata?: Record<string, unknown>) => {
     const updates: UpdateComment = { content };
     if (metadata) {
       updates.metadata = metadata;
-    }
     try {
       await updateComment(commentId, updates);
     } catch (error) {
-      console.error('Failed to update comment:', error);
-    }
-  };
+  console.error('Failed to update comment:', error);
+};
   const handleDeleteComment = async (commentId: string) => {
     try {
       await deleteComment(commentId);
     } catch (error) {
-      console.error('Failed to delete comment:', error);
-    }
-  };
+  console.error('Failed to delete comment:', error);
+};
   const handleResolveComment = async (commentId: string, resolved: boolean) => {
-    const comment = comments.find(c => c.id === commentId);
-    if (!comment) return;
-    const updates: UpdateComment = {
-      metadata: {,
-        ...comment.metadata,
-        resolved,
-        resolved_by: resolved ? userId : undefined,
-        resolved_at: resolved ? new Date().toISOString() : undefined,
-      }
-    };
+  const comment = comments.find(c => c.id === commentId);
+  if (!comment) return;
+  const updates: UpdateComment = {,
+  metadata: {,
+  ...comment.metadata,
+  resolved,
+  resolved_by: resolved ? userId : undefined,
+  resolved_at: resolved ? new Date().toISOString() : undefined,
+};
     try {
       await updateComment(commentId, updates);
     } catch (error) {
-      console.error('Failed to resolve comment:', error);
-    }
-  };
+  console.error('Failed to resolve comment:', error);
+};
   const totalComments = comments.reduce((total, comment) => {
     return total + 1 + (comment.reply_count || 0);
   }, 0);
   if (loading && comments.length === 0) {
-    return ();
+    return;
       <div className={`comment-system comment-system--loading ${className}`}>}
         <div className="comment-system__skeleton">
           <div className="skeleton-line skeleton-line--title"></div>
@@ -116,8 +107,7 @@ export const CommentSystem: React.FC<CommentSystemProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`comment-system ${compact ? 'comment-system--compact' : ''} ${className}`}>}
       <div className="comment-system__header">
         <div className="comment-system__title">

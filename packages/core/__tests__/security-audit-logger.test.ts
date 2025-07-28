@@ -18,12 +18,12 @@ describe('SecurityAuditLogger', () => {
   let logger: SecurityAuditLogger;
   let consoleLogSpy: jest.SpiedFunction<typeof console.log>;
   beforeEach(() => {
-    // Get fresh instance
-    logger = SecurityAuditLogger.getInstance({)
-      enableConsoleLogging: false, // Disable for cleaner tests
-      enableStackTraces: false,
-      maxEvents: 100,
-    });
+  // Get fresh instance
+  logger = SecurityAuditLogger.getInstance({)
+  enableConsoleLogging: false, // Disable for cleaner tests,
+  enableStackTraces: false,
+  maxEvents: 100,
+});
     // Clear any existing events
     logger.clearEvents();
     // Spy on console.log
@@ -47,27 +47,27 @@ describe('SecurityAuditLogger', () => {
       const events = logger.getEvents();
       expect(events).toHaveLength(1);
       expect(events[0]).toMatchObject({)
-        id: eventId,
+  id: eventId,
         severity: SecuritySeverity.INFO,
         category: SecurityEventCategory.EXPRESSION_VALIDATION,
         message: 'Test expression validated',
         context: { expression: 'x > 5' },
-        blocked: false,
-      });
+        blocked: false;
+  });
     });
     it('should log blocked operations', () => {
-      logger.logExpressionBlocked('eval("code")', 'Contains eval', {
-        nodeId: 'node-1',
-      });
+  logger.logExpressionBlocked('eval("code")', 'Contains eval', {
+  nodeId: 'node-1',
+});
       const events = logger.getEvents();
       expect(events).toHaveLength(1);
       expect(events[0]).toMatchObject({)
-        severity: SecuritySeverity.ERROR,
+  severity: SecuritySeverity.ERROR,
         category: SecurityEventCategory.EXPRESSION_VALIDATION,
         message: 'Expression blocked: Contains eval',
         context: { expression: 'eval("code")', nodeId: 'node-1' },
-        blocked: true,
-      });
+        blocked: true;
+  });
     });
     it('should log different severity levels', () => {
       logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.MATH_FUNCTION_ALLOWED, 'Math.min allowed');
@@ -100,63 +100,62 @@ describe('SecurityAuditLogger', () => {
           `Event ${i}`}
         );
         ids.add(id);
-      }
       expect(ids.size).toBe(10);
     });
   });
   describe('Helper Methods', () => {
-    it('should log AST node blocks', () => {
-      logger.logASTNodeBlocked('CallExpression', 'Function calls not allowed', {)
-        astDepth: 5,
-        nodeCount: 20,
-      });
+  it('should log AST node blocks', () => {
+  logger.logASTNodeBlocked('CallExpression', 'Function calls not allowed', {)
+  astDepth: 5,
+  nodeCount: 20,
+});
       const event = logger.getEvents()[0];
       expect(event).toMatchObject({)
-        severity: SecuritySeverity.ERROR,
+  severity: SecuritySeverity.ERROR,
         category: SecurityEventCategory.AST_NODE_BLOCKED,
         message: 'AST node \'CallExpression\' blocked: Function calls not allowed',
         context: { nodeType: 'CallExpression', astDepth: 5, nodeCount: 20 },
-        blocked: true,
-      });
+        blocked: true;
+  });
     });
     it('should log Math function blocks', () => {
-      logger.logMathFunctionBlocked('random', 'Non-deterministic', {)
-        functionName: 'random',
-      });
+  logger.logMathFunctionBlocked('random', 'Non-deterministic', {)
+  functionName: 'random',
+});
       const event = logger.getEvents()[0];
       expect(event).toMatchObject({)
-        severity: SecuritySeverity.WARNING,
+  severity: SecuritySeverity.WARNING,
         category: SecurityEventCategory.MATH_FUNCTION_BLOCKED,
         message: 'Math.random blocked: Non-deterministic',
         context: { functionName: 'random' },
-        blocked: true,
-      });
+        blocked: true;
+  });
     });
     it('should log prototype pollution attempts', () => {
-      logger.logPrototypePollutionAttempt('__proto__', {)
-        expression: 'obj.__proto__.polluted = true',
-      });
+  logger.logPrototypePollutionAttempt('__proto__', {)
+  expression: 'obj.__proto__.polluted = true',
+});
       const event = logger.getEvents()[0];
       expect(event).toMatchObject({)
-        severity: SecuritySeverity.CRITICAL,
+  severity: SecuritySeverity.CRITICAL,
         category: SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT,
         message: 'Prototype pollution attempt via property \'__proto__\'',
         context: { propertyName: '__proto__', expression: 'obj.__proto__.polluted = true' },
-        blocked: true,
-      });
+        blocked: true;
+  });
     });
     it('should log security policy violations', () => {
-      logger.logSecurityPolicyViolation('max-depth', 'Exceeded maximum AST depth of 20', {)
-        astDepth: 25,
-      });
+  logger.logSecurityPolicyViolation('max-depth', 'Exceeded maximum AST depth of 20', {)
+  astDepth: 25,
+});
       const event = logger.getEvents()[0];
       expect(event).toMatchObject({)
-        severity: SecuritySeverity.CRITICAL,
+  severity: SecuritySeverity.CRITICAL,
         category: SecurityEventCategory.SECURITY_POLICY_VIOLATION,
         message: 'Security policy \'max-depth\' violated: Exceeded maximum AST depth of 20',
         context: { astDepth: 25 },
-        blocked: true,
-      });
+        blocked: true;
+  });
     });
   });
   describe('Event Filtering', () => {
@@ -193,33 +192,33 @@ describe('SecurityAuditLogger', () => {
       expect(after).toHaveLength(4);
     });
     it('should combine multiple filters', () => {
-      const filtered = logger.getEvents({)
-        severity: SecuritySeverity.ERROR,
-        category: SecurityEventCategory.EXPRESSION_VALIDATION,
-        blocked: true,
-      });
+  const filtered = logger.getEvents({)
+  severity: SecuritySeverity.ERROR,
+  category: SecurityEventCategory.EXPRESSION_VALIDATION,
+  blocked: true,
+});
       expect(filtered).toHaveLength(1);
       expect(filtered[0].message).toContain('eval()');
     });
   });
   describe('Expression Tracking', () => {
     it('should track unique expressions', () => {
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test', )
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test')
         { expression: 'x > 5' });
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test', )
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test')
         { expression: 'y < 10' });
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test', )
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test')
         { expression: 'x > 5' }); // Duplicate
       const stats = logger.getStatistics();
       expect(stats.uniqueExpressions).toBe(2);
     });
     it('should get events for specific expression', () => {
       const expr = 'dangerous.eval()';
-      logger.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.EXPRESSION_VALIDATION, 'Warning', )
+      logger.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.EXPRESSION_VALIDATION, 'Warning')
         { expression: expr });
-      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked', )
+      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked')
         { expression: expr }, true);
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Other', )
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Other')
         { expression: 'safe.value' });
       const events = logger.getEventsForExpression(expr);
       expect(events).toHaveLength(2);
@@ -227,9 +226,9 @@ describe('SecurityAuditLogger', () => {
     it('should check if expression has been blocked', () => {
       const safeExpr = 'x > 5';
       const dangerousExpr = 'eval(code)';
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Safe', )
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Safe')
         { expression: safeExpr }, false);
-      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Dangerous', )
+      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Dangerous')
         { expression: dangerousExpr }, true);
       expect(logger.hasExpressionBeenBlocked(safeExpr)).toBe(false);
       expect(logger.hasExpressionBeenBlocked(dangerousExpr)).toBe(true);
@@ -241,15 +240,12 @@ describe('SecurityAuditLogger', () => {
       // Add comprehensive test data
       for (let i = 0; i < 5; i++) {
         logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.MATH_FUNCTION_ALLOWED, `Math.min ${i}`);}
-      }
       for (let i = 0; i < 3; i++) {
-        logger.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.MATH_FUNCTION_BLOCKED, `Math.random ${i}`, )}
+        logger.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.MATH_FUNCTION_BLOCKED, `Math.random ${i}`)}
           { expression: 'Math.random()' }, true);
-      }
       for (let i = 0; i < 2; i++) {
-        logger.logEvent(SecuritySeverity.CRITICAL, SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT, `__proto__ ${i}`,)}
+        logger.logEvent(SecuritySeverity.CRITICAL, SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT, `__proto__ ${i}`)}
           { expression: 'obj.__proto__' }, true);
-      }
     });
     it('should calculate event statistics', () => {
       const stats = logger.getStatistics();
@@ -266,13 +262,11 @@ describe('SecurityAuditLogger', () => {
     it('should track top blocked patterns', () => {
       // Add more blocked patterns
       for (let i = 0; i < 5; i++) {
-        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked',)
+        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked')
           { expression: `eval(${i})` }, true);}
-      }
       for (let i = 0; i < 3; i++) {
-        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked',)
+        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked')
           { expression: `new Function(${i})` }, true);}
-      }
       const stats = logger.getStatistics();
       expect(stats.topBlockedPatterns).toHaveLength(4);
       expect(stats.topBlockedPatterns[0].pattern).toBe('eval(N)');
@@ -285,17 +279,16 @@ describe('SecurityAuditLogger', () => {
     });
   });
   describe('Memory Management', () => {
-    it('should enforce max events limit', () => {
-      const maxEvents = 10;
-      const testLogger = SecurityAuditLogger.getInstance({ )
-        maxEvents,
-        enableConsoleLogging: false ,
-      });
+  it('should enforce max events limit', () => {
+  const maxEvents = 10;
+  const testLogger = SecurityAuditLogger.getInstance({ )
+  maxEvents,
+  enableConsoleLogging: false,
+});
       testLogger.clearEvents();
       // Add more than max events
       for (let i = 0; i < 15; i++) {
         testLogger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, `Event ${i}`);}
-      }
       const events = testLogger.getEvents();
       expect(events).toHaveLength(maxEvents + 1); // +1 for overflow warning
       expect(events[events.length - 1].category).toBe(SecurityEventCategory.AUDIT_LOG_OVERFLOW);
@@ -303,9 +296,8 @@ describe('SecurityAuditLogger', () => {
     it('should handle blocked pattern memory limits', () => {
       // Generate many unique blocked patterns
       for (let i = 0; i < 1000; i++) {
-        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked',)
+        logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Blocked')
           { expression: `dangerous_${i}_pattern` }, true);}
-      }
       // Should not throw and should maintain reasonable memory usage
       const stats = logger.getStatistics();
       expect(stats.topBlockedPatterns).toBeDefined();
@@ -314,20 +306,20 @@ describe('SecurityAuditLogger', () => {
   });
   describe('Export Functionality', () => {
     beforeEach(() => {
-      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test 1',)
+      logger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test 1')
         { expression: 'x > 5', nodeType: 'Conditional' });
-      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.AST_NODE_BLOCKED, 'Test 2',)
+      logger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.AST_NODE_BLOCKED, 'Test 2')
         { expression: 'eval()', nodeType: 'CallExpression' }, true);
     });
     it('should export events as JSON', () => {
-      const json = logger.exportEvents('json');
-      const parsed = JSON.parse(json);
-      expect(Array.isArray(parsed)).toBe(true);
-      expect(parsed).toHaveLength(2);
-      expect(parsed[0]).toMatchObject({)
-        severity: SecuritySeverity.INFO,
-        message: 'Test 1',
-      });
+  const json = logger.exportEvents('json');
+  const parsed = JSON.parse(json);
+  expect(Array.isArray(parsed)).toBe(true);
+  expect(parsed).toHaveLength(2);
+  expect(parsed[0]).toMatchObject({)
+  severity: SecuritySeverity.INFO,
+  message: 'Test 1',
+});
     });
     it('should export events as CSV', () => {
       const csv = logger.exportEvents('csv');
@@ -341,10 +333,10 @@ describe('SecurityAuditLogger', () => {
     });
   });
   describe('Console Logging', () => {
-    it('should log to console when enabled', () => {
-      const consoleLogger = SecurityAuditLogger.getInstance({ )
-        enableConsoleLogging: true ,
-      });
+  it('should log to console when enabled', () => {
+  const consoleLogger = SecurityAuditLogger.getInstance({ )
+  enableConsoleLogging: true,
+});
       consoleLogger.clearEvents();
       consoleLogger.logEvent(SecuritySeverity.WARNING, SecurityEventCategory.MATH_FUNCTION_BLOCKED, 'Test warning');
       expect(consoleLogSpy).toHaveBeenCalledWith()
@@ -353,9 +345,9 @@ describe('SecurityAuditLogger', () => {
       );
     });
     it('should use appropriate console colors and icons', () => {
-      const consoleLogger = SecurityAuditLogger.getInstance({ )
-        enableConsoleLogging: true ,
-      });
+  const consoleLogger = SecurityAuditLogger.getInstance({ )
+  enableConsoleLogging: true,
+});
       consoleLogger.clearEvents();
       // Test different severity levels
       consoleLogger.logEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION, 'Info');
@@ -381,11 +373,11 @@ describe('SecurityAuditLogger', () => {
     });
   });
   describe('Stack Trace Support', () => {
-    it('should capture stack traces when enabled', () => {
-      const traceLogger = SecurityAuditLogger.getInstance({ )
-        enableStackTraces: true,
-        enableConsoleLogging: false,
-      });
+  it('should capture stack traces when enabled', () => {
+  const traceLogger = SecurityAuditLogger.getInstance({ )
+  enableStackTraces: true,
+  enableConsoleLogging: false,
+});
       traceLogger.clearEvents();
       traceLogger.logEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION, 'Test');
       const event = traceLogger.getEvents()[0];
@@ -399,43 +391,40 @@ describe('SecurityAuditLogger', () => {
     });
   });
   describe('Decorator', () => {
-    class TestClass {
-      @auditSecurityEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION)
-      successMethod(): string {
-        return 'success';
-      }
-      @auditSecurityEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION)
-      errorMethod(): void {
-        throw new Error('Test error');
-      }
-    }
-    it('should audit successful method execution', () => {
-      const instance = new TestClass();
-      logger.clearEvents();
-      const result = instance.successMethod();
-      expect(result).toBe('success');
-      const events = logger.getEvents();
-      expect(events).toHaveLength(1);
-      expect(events[0]).toMatchObject({)
-        severity: SecuritySeverity.INFO,
-        message: 'successMethod executed successfully',
-        context: {,
-          functionName: 'TestClass.successMethod',
-        },
-        blocked: false,
-      });
+  class TestClass {
+  @auditSecurityEvent(SecuritySeverity.INFO, SecurityEventCategory.EXPRESSION_VALIDATION)
+  successMethod(): string {,
+  return 'success';
+  @auditSecurityEvent(SecuritySeverity.ERROR, SecurityEventCategory.EXPRESSION_VALIDATION)
+  errorMethod(): void {,
+  throw new Error('Test error');
+  it('should audit successful method execution', () => {
+  const instance = new TestClass();
+  logger.clearEvents();
+  const result = instance.successMethod();
+  expect(result).toBe('success');
+  const events = logger.getEvents();
+  expect(events).toHaveLength(1);
+  expect(events[0]).toMatchObject({)
+  severity: SecuritySeverity.INFO,
+  message: 'successMethod executed successfully',
+  context: {,
+  functionName: 'TestClass.successMethod',
+},
+  blocked: false;
+  });
     });
     it('should audit method execution errors', () => {
-      const instance = new TestClass();
-      logger.clearEvents();
-      expect(() => instance.errorMethod()).toThrow('Test error');
-      const events = logger.getEvents();
-      expect(events).toHaveLength(1);
-      expect(events[0]).toMatchObject({)
-        severity: SecuritySeverity.ERROR,
-        message: expect.stringContaining('errorMethod failed'),
-        blocked: true,
-      });
+  const instance = new TestClass();
+  logger.clearEvents();
+  expect(() => instance.errorMethod()).toThrow('Test error');
+  const events = logger.getEvents();
+  expect(events).toHaveLength(1);
+  expect(events[0]).toMatchObject({)
+  severity: SecuritySeverity.ERROR,
+  message: expect.stringContaining('errorMethod failed'),
+  blocked: true,
+});
     });
     it('should track execution time', () => {
       const instance = new TestClass();

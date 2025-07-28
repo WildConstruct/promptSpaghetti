@@ -4,7 +4,7 @@
  *
  * Adapter for Stable Video Diffusion models (SVD and SVD-XT)
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel } from '../BaseAIModel';
 export interface StableVideoConfig {
     endpoint: string;
     apiType: 'stability-ai' | 'automatic1111' | 'comfyui' | 'custom';
@@ -37,7 +37,7 @@ export interface StableVideoRequestOptions {
 }
 export interface StableVideoGenerationResult {
     video: {
-        frames: string[];
+        frames: string;
         url?: string;
         data?: ArrayBuffer;
         format: string;
@@ -79,38 +79,5 @@ export declare class StableVideoAdapter extends BaseAIModel {
     private config;
     private availableModels;
     constructor(id: string, config: StableVideoConfig);
-    initialize(): Promise<void>;
-    process(input: any, options?: StableVideoRequestOptions): Promise<StableVideoGenerationResult>;
-    cleanup(): Promise<void>;
-    estimate(input: any, options?: StableVideoRequestOptions): Promise<CostEstimate>;
-    generateImageToVideo(imageData: string, motionIntensity?: number, numFrames?: number, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
-    generateVideoLoop(imageData: string, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
-    generateHighQualityVideo(imageData: string, options?: Partial<StableVideoRequestOptions>): Promise<StableVideoGenerationResult>;
-    getAvailableModels(): Promise<SVDModelInfo[]>;
-    switchModel(modelName: string): Promise<void>;
-    interpolateFrames(frames: string[]): Promise<string[]>;
-    enhanceVideoQuality(frames: string[], upscaleFactor?: number): Promise<string[]>;
-    static getEstimatedCost(apiType: string): number;
-    static getEstimatedLatency(apiType: string): number;
-    static getSupportedModels(): SVDModelInfo[];
-    private _initializeModels;
-    private _testConnection;
-    private _buildHeaders;
-    private _loadAvailableModels;
-    private _extractImage;
-    private _validateImage;
-    private _processOptions;
-    private _generateVideo;
-    private _buildAutomatic1111Payload;
-    private _buildStabilityAIPayload;
-    private _buildGenericPayload;
-    private _processVideoResult;
-    private _makeRequest;
-    private _calculateComputeUnits;
-    private _estimateVideoSize;
-    private _interpolateFrame;
-    private _upscaleFrame;
-    protected _performHealthCheck(): Promise<void>;
 }
-export default StableVideoAdapter;
 //# sourceMappingURL=StableVideoAdapter.d.ts.map

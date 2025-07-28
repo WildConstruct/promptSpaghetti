@@ -246,6 +246,7 @@ export declare class TrustScoreService {
     private generateReportId;
     private generateEvidenceId;
 }
+}
 export interface TrustEvent {
     eventType: string;
     entityType: 'user' | 'template' | 'transaction';
@@ -254,6 +255,8 @@ export interface TrustEvent {
     description: string;
     timestamp: Date;
     metadata?: Record<string, any>;
+}
+}
 }
 export interface SuspiciousActivityReport {
     reportId?: string;
@@ -266,5 +269,6 @@ export interface SuspiciousActivityReport {
     evidence: string[];
     reportedBy: string;
     reportedAt: Date;
+}
 }
 //# sourceMappingURL=TrustScoreService.d.ts.map

@@ -16,24 +16,21 @@ import {
   SuggestionType
 } from '../../services/Epic16KnowledgeBaseService';
 interface KnowledgeBaseSearchProps {
-  knowledgeService: Epic16KnowledgeBaseService;
+  knowledgeService: Epic16KnowledgeBaseService;,
   userId: string;
   onArticleSelect?: (articleId: string) => void;
   onSearchPerformed?: (query: string, resultCount: number) => void;
   className?: string;
-}
-interface SearchState {
-  query: string;
+  interface SearchState {
+  query: string;,
   filters: SearchFilters;
-  results: SearchResult | null;
-  suggestions: SearchSuggestion[];
-  loading: boolean;
+  results: SearchResult | null;,
+  suggestions: SearchSuggestion;
+  loading: boolean;,
   error: string | null;
-  showFilters: boolean;
+  showFilters: boolean;,
   showSuggestions: boolean;
-}
-
-export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
+  export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({,)
   knowledgeService,
   userId,
   onArticleSelect,
@@ -42,9 +39,9 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
 }) => {
   // State management
   const [searchState, setSearchState] = useState<SearchState>({)
-    query: '',
+  query: '',
     filters: {,
-      categories: [],
+  categories: [],
       types: [],
       tags: [],
       readingLevel: [],
@@ -52,14 +49,14 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
       lastUpdated: {},
       minRating: 0,
       hasVideo: false,
-      hasCode: false,
-    },
-    results: null,
+      hasCode: false;
+  },
+  results: null,
     suggestions: [],
     loading: false,
     error: null,
     showFilters: false,
-    showSuggestions: false,
+    showSuggestions: false;
   });
   // Refs
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -82,24 +79,22 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
     if (!query.trim()) {
       setSearchState(prev => ({ ...prev, results: null, loading: false }));
       return;
-    }
     setSearchState(prev => ({ ...prev, loading: true, error: null }));
     try {
-      const searchResults = await knowledgeService.searchArticles(query, filters, userId);
-      setSearchState(prev => ({)
-        ...prev,
-        results: searchResults,
-        suggestions: searchResults.suggestions,
-        loading: false,
-      }));
+  const searchResults = await knowledgeService.searchArticles(query, filters, userId);
+  setSearchState(prev => ({)
+  ...prev,
+  results: searchResults,
+  suggestions: searchResults.suggestions,
+  loading: false,
+}));
       onSearchPerformed?.(query, searchResults.totalResults);
     } catch (error) {
-      setSearchState(prev => ({)
-        ...prev,
-        error: error instanceof Error ? error.message : 'Search failed',
-        loading: false,
-      }));
-    }
+  setSearchState(prev => ({)
+  ...prev,
+  error: error instanceof Error ? error.message : 'Search failed',
+  loading: false,
+}));
   }, [knowledgeService, userId, onSearchPerformed]);
   // Handle search input changes
   const handleSearchInput = useCallback((value: string) => {
@@ -107,7 +102,6 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
     // Clear existing timeout
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
-    }
     // Debounce search
     if (value.trim()) {
       searchTimeoutRef.current = setTimeout(() => {
@@ -115,7 +109,6 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
       }, 300);
     } else {
       setSearchState(prev => ({ ...prev, results: null, suggestions: [] }));
-    }
   }, [performSearch, searchState.filters]);
   // Handle filter changes
   const handleFilterChange = useCallback((newFilters: Partial<SearchFilters>) => {
@@ -123,15 +116,14 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
     setSearchState(prev => ({ ...prev, filters: updatedFilters }));
     if (searchState.query.trim()) {
       performSearch(searchState.query, updatedFilters);
-    }
   }, [searchState.filters, searchState.query, performSearch]);
   // Handle suggestion selection
   const handleSuggestionSelect = useCallback((suggestion: SearchSuggestion) => {
-    setSearchState(prev => ({)
-      ...prev,
-      query: suggestion.text,
-      showSuggestions: false,
-    }));
+  setSearchState(prev => ({)
+  ...prev,
+  query: suggestion.text,
+  showSuggestions: false,
+}));
     performSearch(suggestion.text, searchState.filters);
     searchInputRef.current?.focus();
   }, [performSearch, searchState.filters]);
@@ -141,8 +133,8 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
   }, [onArticleSelect]);
   // Clear filters
   const clearFilters = useCallback(() => {
-    const clearedFilters: SearchFilters = {
-      categories: [],
+    const clearedFilters: SearchFilters = {,
+  categories: [],
       types: [],
       tags: [],
       readingLevel: [],
@@ -150,8 +142,8 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
       lastUpdated: {},
       minRating: 0,
       hasVideo: false,
-      hasCode: false,
-    };
+      hasCode: false;
+  };
     handleFilterChange(clearedFilters);
   }, [handleFilterChange]);
   // Close suggestions when clicking outside
@@ -159,29 +151,27 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
     const handleClickOutside = (event: MouseEvent) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
         setSearchState(prev => ({ ...prev, showSuggestions: false }));
-      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
   // Generate search suggestions
   const searchSuggestions = useMemo(() => {
-    if (!searchState.query || searchState.query.length < 2) {
-      return popularSearches.slice(0, 5).map(search => ({)
-        text: search,
-        type: SuggestionType.POPULAR_SEARCH,
-        score: 0.8,
-      }));
-    }
+  if (!searchState.query || searchState.query.length < 2) {
+  return popularSearches.slice(0, 5).map(search => ({)
+  text: search,
+  type: SuggestionType.POPULAR_SEARCH,
+  score: 0.8,
+}));
     const filtered = popularSearches.filter(search =>;);
       search.toLowerCase().includes(searchState.query.toLowerCase())
     );
     return [
       ...filtered.map(search => ({)
-        text: search,
-        type: SuggestionType.QUERY_COMPLETION,
-        score: 0.9,
-      })),
+  text: search,
+  type: SuggestionType.QUERY_COMPLETION,
+  score: 0.9,
+})),
       ...searchState.suggestions
     ].slice(0, 8);
   }, [searchState.query, searchState.suggestions, popularSearches]);
@@ -195,7 +185,7 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
   const formatCategoryName = useCallback((category: string) => {
     return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   }, []);
-  return ();
+  return;
     <div className={`knowledge-base-search ${className}`}>}
       {/* Search Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8">
@@ -253,8 +243,8 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
                       <div
                         className="text-gray-900"
                         dangerouslySetInnerHTML={{
-                          __html: highlightQuery(suggestion.text, searchState.query)
-                        }}
+  __html: highlightQuery(suggestion.text, searchState.query),
+}}
                       />
                       <div className="text-xs text-gray-500">
                         {suggestion.type === SuggestionType.POPULAR_SEARCH ? 'Popular search' : 'Search suggestion'}
@@ -487,10 +477,10 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
                           <svg
                             key={i}
                             className={`w-4 h-4 ${
-                              i < Math.round(result.article.ratings.reduce((sum, r) => sum + r.rating, 0) / result.article.ratings.length || 0)
-                                ? 'text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
+  i < Math.round(result.article.ratings.reduce((sum, r) => sum + r.rating, 0) / result.article.ratings.length || 0)
+  ? 'text-yellow-400'
+  : 'text-gray-300',
+}`}
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -504,8 +494,8 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
                   <div
                     className="text-gray-600 mb-3"
                     dangerouslySetInnerHTML={{
-                      __html: result.highlightedContent,
-                    }}
+  __html: result.highlightedContent,
+}}
                   />
                   {result.relevanceReason.length > 0 && ()
                     <div className="text-xs text-gray-500">
@@ -522,8 +512,8 @@ export const KnowledgeBaseSearch: React.FC<KnowledgeBaseSearchProps> = ({)
                             <div
                               className="text-gray-600 text-xs mt-1"
                               dangerouslySetInnerHTML={{
-                                __html: section.highlightedText,
-                              }}
+  __html: section.highlightedText,
+}}
                             />
                           </div>
                         ))}

@@ -393,7 +393,7 @@ export declare class AuditManagementAPI {
     private generateReportFile;
     private summarizeReport;
     private generateTrendAnalysis;
-}
+
 export declare     event?: AuditEvent;
     error?: string;
 }>;

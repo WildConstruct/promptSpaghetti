@@ -12,7 +12,7 @@
  * - Cross-funnel segment performance analysis
  * - Automated segment lifecycle management
  */
-import { ConversionCohort, UserSegment, FlexibleConversionEvent, BehaviorPattern, DropOffPoint, FunnelSegmentMetrics } from './ConversionDataModel';
+import { ConversionCohort, UserSegment, BehaviorPattern, DropOffPoint, FunnelSegmentMetrics } from './ConversionDataModel';
 export interface CohortAnalysisResult {
     cohortId: string;
     analysisDate: number;
@@ -26,21 +26,21 @@ export interface CohortAnalysisResult {
         averageTimeToConvert: number;
     };
     behavior: {
-        commonPathways: PathwayAnalysis[];
+        commonPathways: PathwayAnalysis;
         dropOffAnalysis: DropOffAnalysis;
-        engagementPatterns: EngagementPattern[];
+        engagementPatterns: EngagementPattern;
         valueSegmentation: ValueSegmentation;
     };
     comparison: {
         previousPeriod?: CohortComparison;
-        benchmarkCohorts?: CohortBenchmark[];
+        benchmarkCohorts?: CohortBenchmark;
         industryBenchmarks?: IndustryBenchmark;
     };
     predictions: {
         projectedRetention: Map<number, number>;
         churnRisk: Map<string, number>;
         lifetimeValueForecast: Map<string, number>;
-        optimalInterventionPoints: InterventionPoint[];
+        optimalInterventionPoints: InterventionPoint;
     };
     dataQuality: {
         completeness: number;
@@ -68,43 +68,43 @@ export interface SegmentAnalysisResult {
     funnelAnalysis: Map<string, FunnelSegmentMetrics>;
     lifecycle: {
         acquisitionSources: Map<string, number>;
-        transitionPatterns: SegmentTransition[];
+        transitionPatterns: SegmentTransition;
         exitReasons: Map<string, number>;
         averageLifetime: number;
     };
     recommendations: {
-        optimization: SegmentOptimization[];
-        targeting: TargetingRecommendation[];
-        personalization: PersonalizationSuggestion[];
-        interventions: InterventionRecommendation[];
+        optimization: SegmentOptimization;
+        targeting: TargetingRecommendation;
+        personalization: PersonalizationSuggestion;
+        interventions: InterventionRecommendation;
     };
 }
 export interface PathwayAnalysis {
-    pathway: string[];
+    pathway: string;
     frequency: number;
     conversionRate: number;
     averageTimeToComplete: number;
     averageValue: number;
-    dropOffPoints: string[];
+    dropOffPoints: string;
 }
 export interface DropOffAnalysis {
     totalDropOffs: number;
     dropOffRate: number;
-    topDropOffPoints: DropOffPoint[];
-    recoveryOpportunities: RecoveryOpportunity[];
-    seasonalPatterns: SeasonalDropOff[];
+    topDropOffPoints: DropOffPoint;
+    recoveryOpportunities: RecoveryOpportunity;
+    seasonalPatterns: SeasonalDropOff;
 }
 export interface RecoveryOpportunity {
     dropOffPoint: string;
     potentialRecovery: number;
-    recommendedActions: string[];
+    recommendedActions: string;
     estimatedImpact: number;
     implementationComplexity: 'low' | 'medium' | 'high';
 }
 export interface SeasonalDropOff {
     period: string;
     dropOffMultiplier: number;
-    affectedSegments: string[];
+    affectedSegments: string;
     confidence: number;
 }
 export interface EngagementPattern {
@@ -114,25 +114,18 @@ export interface EngagementPattern {
     cohortSize: number;
     conversionImpact: number;
     retentionImpact: number;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface ValueSegmentation {
-    segments: Array<{
-        name: string;
-        range: {
-            min: number;
-            max: number;
-        };
-        size: number;
-        percentage: number;
-        characteristics: string[];
-    }>;
-    distribution: {
-        mean: number;
-        median: number;
-        standardDeviation: number;
-        percentiles: Map<number, number>;
+    segments: Array<{}, name>;
+    string: any;
+    range: {
+        min: number;
+        max: number;
     };
+    size: number;
+    percentage: number;
+    characteristics: string;
 }
 export interface CohortComparison {
     cohortId: string;
@@ -141,7 +134,7 @@ export interface CohortComparison {
     conversionDelta: Map<number, number>;
     valueDelta: number;
     significance: number;
-    insights: string[];
+    insights: string;
 }
 export interface CohortBenchmark {
     benchmarkCohortId: string;
@@ -153,7 +146,7 @@ export interface CohortBenchmark {
         engagementComparison: number;
     };
     relativePerformance: number;
-    insights: string[];
+    insights: string;
 }
 export interface IndustryBenchmark {
     industry: string;
@@ -171,7 +164,7 @@ export interface InterventionPoint {
     day: number;
     userCount: number;
     riskScore: number;
-    recommendedActions: string[];
+    recommendedActions: string;
     expectedImpact: {
         retentionImprovement: number;
         revenueImpact: number;
@@ -191,7 +184,7 @@ export interface BehavioralProfile {
     averageSessionDuration: number;
     averagePageViews: number;
     engagementScore: number;
-    activityPatterns: BehaviorPattern[];
+    activityPatterns: BehaviorPattern;
     preferredTimes: Map<string, number>;
     contentPreferences: Map<string, number>;
 }
@@ -209,7 +202,7 @@ export interface SegmentConversionMetrics {
     conversionsByFunnel: Map<string, number>;
     averageTimeToConvert: number;
     conversionValueDistribution: ValueDistribution;
-    topConversionPaths: PathwayAnalysis[];
+    topConversionPaths: PathwayAnalysis;
 }
 export interface SegmentEngagementMetrics {
     averageEngagementScore: number;
@@ -249,7 +242,7 @@ export interface SegmentTransition {
     toSegment: string;
     transitionRate: number;
     averageTimeToTransition: number;
-    triggerEvents: string[];
+    triggerEvents: string;
     transitionValue: number;
 }
 export interface SegmentOptimization {
@@ -257,7 +250,7 @@ export interface SegmentOptimization {
     currentPerformance: number;
     targetPerformance: number;
     improvementPotential: number;
-    recommendedActions: string[];
+    recommendedActions: string;
     estimatedImpact: {
         revenueImpact: number;
         conversionImprovement: number;
@@ -268,7 +261,7 @@ export interface SegmentOptimization {
 }
 export interface TargetingRecommendation {
     channel: string;
-    targetingCriteria: string[];
+    targetingCriteria: string;
     expectedReach: number;
     expectedConversionRate: number;
     estimatedCost: number;
@@ -282,7 +275,7 @@ export interface PersonalizationSuggestion {
     targetSubsegment: string;
     expectedImpact: number;
     implementationComplexity: 'low' | 'medium' | 'high';
-    dataRequirements: string[];
+    dataRequirements: string;
 }
 export interface InterventionRecommendation {
     triggerCondition: string;
@@ -293,10 +286,6 @@ export interface InterventionRecommendation {
     cost: number;
     priority: 'high' | 'medium' | 'low';
 }
-/**
- * Cohort and Segment Manager
- * Manages the complete lifecycle of cohorts and segments
- */
 export declare class CohortSegmentManager {
     private cohorts;
     private segments;
@@ -309,48 +298,24 @@ export declare class CohortSegmentManager {
      */
     createCohort(definition: Partial<ConversionCohort>): ConversionCohort;
     /**
-     * Create a new segment
-     */
-    createSegment(definition: Partial<UserSegment>): UserSegment;
-    /**
-     * Assign user to cohort
-     */
-    assignUserToCohort(userId: string, cohortId: string, joinDate?: number): boolean;
-    /**
-     * Assign user to segment
-     */
-    assignUserToSegment(userId: string, segmentId: string): boolean;
-    /**
-     * Process conversion event for cohort/segment analysis
-     */
-    processConversionEvent(event: FlexibleConversionEvent): void;
-    /**
-     * Analyze cohort performance
-     */
-    analyzeCohort(cohortId: string, options?: AnalysisOptions): Promise<CohortAnalysisResult>;
-    /**
-     * Analyze segment performance
-     */
-    analyzeSegment(segmentId: string, options?: AnalysisOptions): Promise<SegmentAnalysisResult>;
-    /**
      * Get user's cohort memberships
      */
-    getUserCohorts(userId: string): string[];
+    getUserCohorts(userId: string): string;
     /**
-     * Get user's segment memberships
-     */
-    getUserSegments(userId: string): string[];
+    * Get user's segment memberships
+    */
+    getUserSegments(userId: string): string;
     /**
-     * Update segment definitions and reassign users
-     */
+    * Update segment definitions and reassign users
+    */
     updateSegmentDefinition(segmentId: string, newDefinition: Partial<UserSegment>): void;
     /**
-     * Archive old cohorts
-     */
+    * Archive old cohorts
+    */
     archiveCohort(cohortId: string): void;
     /**
-     * Generate insights across all cohorts and segments
-     */
+    * Generate insights across all cohorts and segments
+    */
     generateCrossSegmentInsights(): CrossSegmentInsights;
     private performCohortAnalysis;
     private performSegmentAnalysis;
@@ -358,90 +323,5 @@ export declare class CohortSegmentManager {
     private getSegmentUsers;
     private calculateCohortMetrics;
     private analyzeCohortBehavior;
-    private generateCohortPredictions;
-    private generateCohortComparison;
-    private evaluateCohortCriteria;
-    private evaluateSegmentCriteria;
-    private updateCohortMetrics;
-    private updateSegmentMetrics;
-    private updateCohortPerformanceMetrics;
-    private updateSegmentPerformanceMetrics;
-    private evaluateNewAssignments;
-    private removeUserFromSegment;
-    private reassignSegmentUsers;
-    private assessDataQuality;
-    private analyzeSegmentComposition;
-    private calculateSegmentPerformance;
-    private analyzeSegmentFunnelPerformance;
-    private analyzeSegmentLifecycle;
-    private generateSegmentRecommendations;
-    private calculateSegmentOverlaps;
-    private compareSegmentPerformance;
-    private analyzeCohortTrends;
-    private identifyOptimizationOpportunities;
-    private generateCrossSegmentRecommendations;
-    private generateCohortId;
-    private generateSegmentId;
 }
-export interface AnalysisOptions {
-    useCache?: boolean;
-    includePredictions?: boolean;
-    includeComparisons?: boolean;
-    timeRange?: {
-        start: number;
-        end: number;
-    };
-    customMetrics?: string[];
-}
-export interface CrossSegmentInsights {
-    segmentOverlaps: SegmentOverlap[];
-    performanceComparisons: PerformanceComparison[];
-    cohortTrends: CohortTrend[];
-    opportunityAnalysis: OptimizationOpportunity[];
-    recommendations: CrossSegmentRecommendation[];
-}
-export interface SegmentOverlap {
-    segmentIds: string[];
-    overlapSize: number;
-    overlapPercentage: number;
-    characteristics: string[];
-    performance: {
-        conversionRate: number;
-        retentionRate: number;
-        averageValue: number;
-    };
-}
-export interface PerformanceComparison {
-    segmentIds: string[];
-    metrics: Record<string, number>;
-    significance: number;
-    insights: string[];
-}
-export interface CohortTrend {
-    metric: string;
-    trend: 'improving' | 'declining' | 'stable';
-    magnitude: number;
-    confidence: number;
-    affectedCohorts: string[];
-}
-export interface OptimizationOpportunity {
-    area: string;
-    segments: string[];
-    currentPerformance: number;
-    potentialImprovement: number;
-    estimatedImpact: number;
-    implementationEffort: 'low' | 'medium' | 'high';
-}
-export interface CrossSegmentRecommendation {
-    type: 'consolidation' | 'split' | 'targeting' | 'optimization';
-    description: string;
-    affectedSegments: string[];
-    expectedImpact: number;
-    priority: 'high' | 'medium' | 'low';
-}
-/**
- * Factory function to create CohortSegmentManager
- */
-export declare const createCohortSegmentManager: () => CohortSegmentManager;
-export default CohortSegmentManager;
 //# sourceMappingURL=CohortSegmentManager.d.ts.map

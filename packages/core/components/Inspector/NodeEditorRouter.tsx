@@ -18,9 +18,7 @@ interface NodeEditorRouterProps {
   schema: ZodSchema<Record<string, unknown>>;
   onChange: (partial: Record<string, unknown>) => void;
   onGlobalPreviewRequest?: () => void;
-}
-
-export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({)
+  export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({,)
   node,
   schema,
   onChange,
@@ -28,7 +26,6 @@ export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({)
 }) => {
   if (!node || !schema) {
     return null;
-  }
   const nodeType = node.type || node.data?.nodeType;
   const nodeId = node.id;
   const nodeData = node.data || {};
@@ -81,5 +78,4 @@ export const NodeEditorRouter: React.FC<NodeEditorRouterProps> = ({)
   default:
     console.warn(`No specific editor found for node type: ${nodeType}`);}
     return <BaseNodeEditor {...editorProps} />;
-  }
 };

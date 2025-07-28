@@ -8,12 +8,12 @@ import { z } from 'zod';
 export * from '../../../graphSchema';
 export interface GraphEditorState {
     graph: Graph;
-    selectedNodeIds: string[];
+    selectedNodeIds: string;
     draggedNodeId: string | null;
     isExecuting: boolean;
     executionResults: Record<string, any>;
-    validationErrors: ValidationError[];
-    previewSeeds: number[];
+    validationErrors: ValidationError;
+    previewSeeds: number;
     autosaveEnabled: boolean;
     isDirty: boolean;
 }
@@ -39,7 +39,7 @@ export interface ValidationError {
     severity: 'error' | 'warning' | 'info';
 }
 export interface PreviewConfiguration {
-    seeds: number[];
+    seeds: number;
     maxSeeds: number;
     autoRefresh: boolean;
     debounceMs: number;
@@ -63,11 +63,11 @@ export interface GraphEditorConfig {
 }
 export interface GraphDomainEvents {
     onGraphModified: (graph: Graph) => void;
-    onNodeSelected: (nodeIds: string[]) => void;
+    onNodeSelected: (nodeIds: string) => void;
     onNodeAdded: (node: Node) => void;
     onNodeRemoved: (nodeId: string) => void;
-    onValidationError: (errors: ValidationError[]) => void;
-    onExecutionStarted: (graph: Graph, seeds: number[]) => void;
+    onValidationError: (errors: ValidationError) => void;
+    onExecutionStarted: (graph: Graph, seeds: number) => void;
     onExecutionCompleted: (results: Record<string, any>) => void;
 }
 export interface GraphEditorProps {
@@ -75,18 +75,18 @@ export interface GraphEditorProps {
     config?: Partial<GraphEditorConfig>;
     readOnly?: boolean;
     onGraphChange?: (graph: Graph) => void;
-    onSelectionChange?: (nodeIds: string[]) => void;
+    onSelectionChange?: (nodeIds: string) => void;
     className?: string;
 }
 export interface NodePaletteProps {
     onNodeDragStart: (nodeType: string) => void;
-    availableNodes?: string[];
+    availableNodes?: string;
     customNodes?: Record<string, NodeTypeDefinition>;
     collapsed?: boolean;
     className?: string;
 }
 export interface InspectorProps {
-    selectedNodeIds: string[];
+    selectedNodeIds: string;
     graph: Graph;
     onNodeUpdate: (nodeId: string, updates: Partial<Node>) => void;
     onNodeDelete: (nodeId: string) => void;
@@ -95,8 +95,8 @@ export interface InspectorProps {
 }
 export interface CanvasProps {
     graph: Graph;
-    selectedNodeIds: string[];
-    onNodeSelect: (nodeIds: string[], isMultiSelect: boolean) => void;
+    selectedNodeIds: string;
+    onNodeSelect: (nodeIds: string, isMultiSelect: boolean) => void;
     onNodeMove: (nodeId: string, position: {
         x: number;
         y: number;
@@ -116,9 +116,9 @@ export interface NodeTypeDefinition {
     description: string;
     icon: string;
     category: 'basic' | 'advanced' | 'utility' | 'custom';
-    inputs: IODefinition[];
-    outputs: IODefinition[];
-    properties: PropertyDefinition[];
+    inputs: IODefinition;
+    outputs: IODefinition;
+    properties: PropertyDefinition;
 }
 export interface IODefinition {
     name: string;

@@ -17,13 +17,13 @@ export declare enum ResetStep {
     VERIFY = "verify",
     RESET = "reset",
     SUCCESS = "success"
-}
+
 export declare enum PasswordStrength {
     WEAK = "weak",
     FAIR = "fair",
     GOOD = "good",
     STRONG = "strong"
-}
+
 export interface PasswordValidation {
     isValid: boolean;
     strength: PasswordStrength;
@@ -36,12 +36,12 @@ export interface PasswordValidation {
         numbers: boolean;
         symbols: boolean;
     };
-}
+
 export interface ResetToken {
     token: string;
     tokenId: string;
     expiresAt: Date;
-}
+
 export interface UsePasswordResetOptions {
     onStepChange?: (step: ResetStep) => void;
     onSecurityEvent?: (event: string, details: any) => void;
@@ -49,7 +49,7 @@ export interface UsePasswordResetOptions {
     customValidation?: (password: string) => PasswordValidation;
     autoAdvance?: boolean;
     resendCooldown?: number;
-}
+
 export interface UsePasswordResetReturn {
     currentStep: ResetStep;
     loading: boolean;
@@ -78,7 +78,7 @@ export interface UsePasswordResetReturn {
     validatePassword: (password: string) => PasswordValidation;
     getPasswordStrengthColor: (strength: PasswordStrength) => string;
     getPasswordStrengthWidth: (score: number) => string;
-}
+
 export declare const usePasswordReset: (options?: UsePasswordResetOptions) => UsePasswordResetReturn;
 export default usePasswordReset;
 //# sourceMappingURL=usePasswordReset.d.ts.map

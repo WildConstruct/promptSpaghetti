@@ -7,6 +7,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService';
 import { DataProtectionRule, RuleEvaluationContext } from '../types/DataProtectionRuleSchema';
 
+}
 export interface FilterRequest {
   userId: string;
   dataType: string;
@@ -14,7 +15,9 @@ export interface FilterRequest {
   purpose: string;
   context: FilterContext;
 }
+}
 
+}
 export interface FilterContext {
   requestId: string;
   sessionId: string;
@@ -22,6 +25,7 @@ export interface FilterContext {
   userAgent: string;
   timestamp: Date;
   metadata?: Record<string, any>;
+}
 }
 
 export enum DataOperation {
@@ -34,6 +38,7 @@ export enum DataOperation {
   ANALYZE = 'analyze'
 }
 
+}
 export interface FilterResult {
   allowed: boolean;
   filteredFields?: string[];
@@ -42,7 +47,9 @@ export interface FilterResult {
   applicableConsents: string[];
   auditEventId: string;
 }
+}
 
+}
 export interface ConsentFilter {
   purpose: string;
   dataTypes: string[];
@@ -51,6 +58,7 @@ export interface ConsentFilter {
   granted: boolean;
   grantedAt?: Date;
   expiresAt?: Date;
+}
 }
 
 export class ConsentBasedDataFilterService {
@@ -63,6 +71,7 @@ export class ConsentBasedDataFilterService {
   }
 
   async filterDataAccess(request: FilterRequest): Promise<FilterResult> {
+
     const userConsents = await this.getUserConsents(request.userId);
     const applicableFilters = this.getApplicableFilters(userConsents, request);
     
@@ -78,6 +87,7 @@ export class ConsentBasedDataFilterService {
   }
 
   async getUserConsents(userId: string): Promise<ConsentFilter[]> {
+
     const query = `
       SELECT consent_data 
       FROM user_policy_acceptances 
@@ -174,6 +184,7 @@ export class ConsentBasedDataFilterService {
   }
 
   private async logFilterDecision(request: FilterRequest, result: Omit<FilterResult, 'auditEventId'>): Promise<string> {
+
     const auditEvent = {
       eventType: 'CONSENT_FILTER_DECISION',
       userId: request.userId,
@@ -184,7 +195,7 @@ export class ConsentBasedDataFilterService {
         allowed: result.allowed,
         reason: result.reason,
         context: request.context
-      },
+  }
       timestamp: new Date(),
       ipAddress: request.context.ipAddress,
       userAgent: request.context.userAgent,
@@ -195,6 +206,7 @@ export class ConsentBasedDataFilterService {
   }
 
   async getFilterableFields(userId: string, dataType: string): Promise<string[]> {
+
     const consents = await this.getUserConsents(userId);
     const grantedPurposes = consents
       .filter(c => c.granted && c.dataTypes.includes(dataType))

@@ -1,4 +1,5 @@
 export type ActivityEventType = 'project_created' | 'project_updated' | 'project_deleted' | 'resource_created' | 'resource_updated' | 'resource_deleted' | 'comment_added' | 'comment_updated' | 'comment_deleted' | 'member_added' | 'member_removed' | 'member_role_changed' | 'workflow_state_changed' | 'approval_requested' | 'approval_granted' | 'approval_rejected' | 'version_created' | 'branch_created' | 'branch_merged' | 'template_applied' | 'collaboration_started' | 'collaboration_ended';
+
 export interface ActivityEvent {
     id: string;
     workspace_id?: string;
@@ -20,7 +21,7 @@ export interface ActivityEvent {
     resource_url?: string;
     aggregation_key?: string;
     created_at: string;
-}
+
 export interface ActivityStats {
     total: number;
     by_type: Record<ActivityEventType, number>;
@@ -43,14 +44,14 @@ export interface ActivityStats {
             count: number;
         }>;
     };
-}
+
 export interface ActivityActor {
     id: string;
     name: string;
     avatar_url?: string;
     activity_count: number;
     last_activity: string;
-}
+
 export interface ActivityFilter {
     search?: string;
     type?: ActivityEventType;
@@ -59,7 +60,7 @@ export interface ActivityFilter {
     date_to?: string;
     project_id?: string;
     resource_id?: string;
-}
+
 export interface ActivityListResponse {
     activities: ActivityEvent[];
     total: number;
@@ -67,7 +68,7 @@ export interface ActivityListResponse {
     next_cursor?: string;
     stats?: ActivityStats;
     actors?: ActivityActor[];
-}
+
 export interface ActivityEventCreateRequest {
     workspace_id?: string;
     project_id?: string;
@@ -79,18 +80,18 @@ export interface ActivityEventCreateRequest {
     metadata?: Record<string, any>;
     resource_url?: string;
     aggregation_key?: string;
-}
+
 export interface ActivityRealTimeConnection {
     status: 'connected' | 'connecting' | 'disconnected' | 'error';
     lastConnected?: Date;
     reconnectAttempts: number;
     error?: string;
-}
+
 export interface ActivityRealTimeEvent {
     type: 'activity_created' | 'activity_updated' | 'activity_deleted';
     activity: ActivityEvent;
     timestamp: string;
-}
+
 export interface UseActivityFeedOptions {
     workspaceId?: string;
     projectId?: string;
@@ -101,7 +102,7 @@ export interface UseActivityFeedOptions {
     actorFilter?: string;
     realTime?: boolean;
     limit?: number;
-}
+
 export interface UseActivityFeedReturn {
     activities: ActivityEvent[];
     loading: boolean;
@@ -113,5 +114,5 @@ export interface UseActivityFeedReturn {
     refreshActivities: () => Promise<void>;
     loadMore: () => Promise<void>;
     createActivity: (activity: ActivityEventCreateRequest) => Promise<void>;
-}
+
 //# sourceMappingURL=ActivityTypes.d.ts.map

@@ -5,6 +5,7 @@
  * Converts WebSocket messages to standard events and vice versa.
  */
 import { globalEventBus, EventFactory, EventCategory, EventPriority } from '../EventSystem';
+import { WSMessage } from '../../collaboration/types';
 import { CollaborationEventType } from '../../collaboration/EnhancedCollaborationService';
 /**
  * Maps WebSocket message types to event system types
@@ -13,7 +14,7 @@ const WS_MESSAGE_TYPE_MAP = {
     // Connection events
     connect: 'user_connected',
     disconnect: 'user_disconnected',
-    // Document events  
+    // Document events
     graph_update: 'document_updated',
     node_create: 'node_created',
     node_update: 'node_updated',
@@ -68,7 +69,7 @@ const WS_MESSAGE_TYPE_MAP = {
     // Analytics events
     analytics_event: 'analytics_tracked',
     performance_metric: 'performance_measured',
-    user_action: 'user_action_tracked'
+    user_action: 'user_action_tracked',
 };
 /**
  * WebSocket Event Adapter Class
@@ -79,218 +80,245 @@ export class WebSocketEventAdapter {
     constructor(collaborationService) {
         this.collaborationService = collaborationService;
         this.setupEventBridging();
+        /**
+        * Set up bidirectional event bridging between WebSocket and Event Bus
+        */
     }
     /**
-     * Set up bidirectional event bridging between WebSocket and Event Bus
-     */
+    * Set up bidirectional event bridging between WebSocket and Event Bus
+    */
     setupEventBridging() {
         // Bridge WebSocket messages to Event Bus
         this.bridgeWebSocketToEventBus();
         // Bridge Event Bus events back to WebSocket
         this.bridgeEventBusToWebSocket();
+        /**
+        * Convert WebSocket messages to Event Bus events
+        */
     }
     /**
-     * Convert WebSocket messages to Event Bus events
-     */
+    * Convert WebSocket messages to Event Bus events
+    */
     bridgeWebSocketToEventBus() {
         if (!this.collaborationService)
             return;
         // Subscribe to all collaboration events
-        Object.values(CollaborationEventType).forEach(eventType => {
-            this.collaborationService.on(eventType, (data) => {
-                const event = this.convertWSMessageToEvent({
-                    type: eventType,
-                    data,
-                    timestamp: new Date().toISOString(),
-                    userId: data.userId,
-                    sessionId: data.sessionId
-                });
-                globalEventBus.publish(event).catch(error => {
-                    console.error('Failed to publish WebSocket event to Event Bus:', error);
-                });
-            });
+        Object.values(CollaborationEventType).forEach(eventType => { });
+        this.collaborationService.on(eventType, (data) => {
+            const event = this.convertWSMessageToEvent({});
+            type: eventType,
+                data,
+                timestamp;
+            new Date().toISOString(),
+                userId;
+            data.userId,
+                sessionId;
+            data.sessionId,
+            ;
         });
-        // Subscribe to raw WebSocket messages if available
-        if (typeof this.collaborationService.onMessage === 'function') {
-            this.collaborationService.onMessage((message) => {
-                const event = this.convertWSMessageToEvent(message);
-                globalEventBus.publish(event).catch(error => {
-                    console.error('Failed to publish WebSocket message to Event Bus:', error);
-                });
-            });
-        }
+        globalEventBus.publish(event).catch(error => { });
+        console.error('Failed to publish WebSocket event to Event Bus:', error);
     }
-    /**
-     * Convert Event Bus events to WebSocket messages
-     */
-    bridgeEventBusToWebSocket() {
-        // Subscribe to collaboration events from Event Bus
-        globalEventBus.subscribe({
-            categories: [EventCategory.COLLABORATION],
-            types: [
-                'document_updated', 'node_created', 'node_updated', 'node_deleted',
-                'edge_created', 'edge_updated', 'edge_deleted',
-                'session_created', 'session_joined', 'session_left',
-                'user_joined_session', 'user_left_session',
-                'presence_updated', 'cursor_moved', 'selection_changed',
-                'chat_message_sent', 'typing_started', 'typing_stopped'
-            ]
-        }, (event) => {
-            if (this.collaborationService) {
-                const wsMessage = this.convertEventToWSMessage(event);
-                if (wsMessage) {
-                    this.collaborationService.broadcastMessage(wsMessage);
-                }
-            }
-        }, { priority: EventPriority.HIGH });
+    ;
+}
+;
+;
+// Subscribe to raw WebSocket messages if available
+if (typeof this.collaborationService.onMessage === 'function') {
+    this.collaborationService.onMessage((message) => {
+        const event = this.convertWSMessageToEvent(message);
+        globalEventBus.publish(event).catch(error => { });
+        console.error('Failed to publish WebSocket message to Event Bus:', error);
+    });
+}
+;
+bridgeEventBusToWebSocket();
+void {
+    // Subscribe to collaboration events from Event Bus
+    globalEventBus, : .subscribe()
+};
+{
+    categories: [EventCategory.COLLABORATION],
+        types;
+    [,
+        'document_updated', 'node_created', 'node_updated', 'node_deleted',
+        'edge_created', 'edge_updated', 'edge_deleted',
+        'session_created', 'session_joined', 'session_left',
+        'user_joined_session', 'user_left_session',
+        'presence_updated', 'cursor_moved', 'selection_changed',
+        'chat_message_sent', 'typing_started', 'typing_stopped'
+    ];
+}
+(event) => {
+    if (this.collaborationService) {
+        const wsMessage = this.convertEventToWSMessage(event);
+        if (wsMessage) {
+            this.collaborationService.broadcastMessage(wsMessage);
+        }
+        {
+            priority: EventPriority.HIGH;
+        }
+        ;
         // Track subscribed event types
-        this.subscribedEventTypes = new Set([
-            'document_updated', 'node_created', 'node_updated', 'node_deleted',
+        this.subscribedEventTypes = new Set([]);
+        'document_updated', 'node_created', 'node_updated', 'node_deleted',
             'edge_created', 'edge_updated', 'edge_deleted',
             'session_created', 'session_joined', 'session_left',
             'user_joined_session', 'user_left_session',
             'presence_updated', 'cursor_moved', 'selection_changed',
-            'chat_message_sent', 'typing_started', 'typing_stopped'
-        ]);
-    }
-    /**
-     * Convert WebSocket message to Event Bus event
-     */
-    convertWSMessageToEvent(message) {
-        const eventType = WS_MESSAGE_TYPE_MAP[message.type] || message.type;
-        // Determine category based on message type
-        let category;
-        let priority;
-        if (message.type.startsWith('collaboration_') ||
-            ['connect', 'disconnect', 'presence_update', 'cursor_update', 'chat_message'].includes(message.type)) {
-            category = EventCategory.COLLABORATION;
-            priority = EventPriority.HIGH;
-        }
-        else if (message.type.startsWith('workflow_')) {
-            category = EventCategory.WORKFLOW;
-            priority = EventPriority.HIGH;
-        }
-        else if (message.type.startsWith('system_') ||
-            ['rate_limit_exceeded', 'invalid_message_format'].includes(message.type)) {
-            category = EventCategory.SYSTEM;
-            priority = message.type === 'system_error' ? EventPriority.CRITICAL : EventPriority.MEDIUM;
-        }
-        else if (['analytics_event', 'performance_metric', 'user_action'].includes(message.type)) {
-            category = EventCategory.ANALYTICS;
-            priority = EventPriority.MEDIUM;
-        }
-        else {
-            category = EventCategory.COLLABORATION; // Default
-            priority = EventPriority.MEDIUM;
-        }
-        return {
-            type: eventType,
-            timestamp: new Date(message.timestamp || Date.now()),
-            id: crypto.randomUUID(),
-            source: 'websocket-adapter',
-            userId: message.userId,
-            sessionId: message.sessionId,
-            metadata: {
-                category,
-                priority,
-                originalType: message.type,
-                wsData: message.data,
-                // Include WebSocket-specific metadata
-                ...(message.data && typeof message.data === 'object' ? message.data : {}),
-                // Preserve message metadata
-                messageId: message.id,
-                clientId: message.clientId
+            'chat_message_sent', 'typing_started', 'typing_stopped';
+        ;
+        convertWSMessageToEvent(message, WSMessage);
+        BaseEvent;
+        {
+            const eventType = WS_MESSAGE_TYPE_MAP[message.type] || message.type;
+            // Determine category based on message type
+            let category;
+            let priority;
+            if (message.type.startsWith('collaboration_') ||
+                ['connect', 'disconnect', 'presence_update', 'cursor_update', 'chat_message'].includes(message.type)) {
+                category = EventCategory.COLLABORATION;
+                priority = EventPriority.HIGH;
             }
-        };
-    }
-    /**
-     * Convert Event Bus event to WebSocket message
-     */
-    convertEventToWSMessage(event) {
-        // Find reverse mapping from event type to WebSocket message type
-        const wsType = Object.entries(WS_MESSAGE_TYPE_MAP)
-            .find(([wsType, eventType]) => eventType === event.type)?.[0];
-        if (!wsType) {
-            // Skip events that don't map back to WebSocket messages
-            return null;
-        }
-        return {
-            type: wsType,
-            data: {
-                ...event.metadata?.wsData,
-                eventId: event.id,
-                eventTimestamp: event.timestamp,
-                eventSource: event.source
-            },
-            userId: event.userId,
-            sessionId: event.sessionId,
-            timestamp: event.timestamp.toISOString()
-        };
-    }
-    /**
-     * Publish collaboration event through both systems
-     */
-    publishCollaborationEvent(type, data, userId, sessionId) {
-        // Create event for Event Bus
-        const event = EventFactory.createWorkflowEvent(type === CollaborationEventType.SESSION_CREATED ? 'task_created' :
-            type === CollaborationEventType.USER_JOINED ? 'task_assigned' :
-                type === CollaborationEventType.DOCUMENT_EDITED ? 'task_started' : 'task_completed', {
-            data: {
-                collaborationType: type,
-                ...data
+            else if (message.type.startsWith('workflow_')) {
+                category = EventCategory.WORKFLOW;
+                priority = EventPriority.HIGH;
             }
-        }, 'websocket-adapter', userId);
-        event.sessionId = sessionId;
-        event.metadata.category = EventCategory.COLLABORATION;
-        event.metadata.priority = EventPriority.HIGH;
-        // Publish to Event Bus
-        globalEventBus.publish(event).catch(error => {
-            console.error('Failed to publish collaboration event:', error);
-        });
-        // Also emit through collaboration service if available
-        if (this.collaborationService) {
-            this.collaborationService.emit(type, data);
+            else if (message.type.startsWith('system_') ||
+                ['rate_limit_exceeded', 'invalid_message_format'].includes(message.type)) {
+                category = EventCategory.SYSTEM;
+                priority = message.type === 'system_error' ? EventPriority.CRITICAL : EventPriority.MEDIUM;
+            }
+            else if (['analytics_event', 'performance_metric', 'user_action'].includes(message.type)) {
+                category = EventCategory.ANALYTICS;
+                priority = EventPriority.MEDIUM;
+            }
+            else {
+                category = EventCategory.COLLABORATION; // Default
+                priority = EventPriority.MEDIUM;
+                return {
+                    type: eventType,
+                    timestamp: new Date(message.timestamp || Date.now()),
+                    id: crypto.randomUUID(),
+                    source: 'websocket-adapter',
+                    userId: message.userId,
+                    sessionId: message.sessionId,
+                    metadata: {
+                        category,
+                        priority,
+                        originalType: message.type,
+                        wsData: message.data,
+                        // Include WebSocket-specific metadata
+                        ...(message.data && typeof message.data === 'object' ? message.data : {}),
+                        // Preserve message metadata
+                        messageId: message.id,
+                        clientId: message.clientId
+                    },
+                    /**
+                     * Convert Event Bus event to WebSocket message
+                     */
+                    convertEventToWSMessage(event) {
+                        // Find reverse mapping from event type to WebSocket message type
+                        const wsType = Object.entries(WS_MESSAGE_TYPE_MAP);
+                    },
+                    : 
+                        .find(([wsType, eventType]) => eventType === event.type)?.[0],
+                    if(, wsType) {
+                        // Skip events that don't map back to WebSocket messages
+                        return null;
+                        return {
+                            type: wsType,
+                            data: {
+                                ...event.metadata?.wsData,
+                                eventId: event.id,
+                                eventTimestamp: event.timestamp,
+                                eventSource: event.source,
+                            },
+                            userId: event.userId,
+                            sessionId: event.sessionId,
+                            timestamp: event.timestamp.toISOString()
+                        };
+                        /**
+                         * Publish collaboration event through both systems
+                         */
+                    }
+                    /**
+                     * Publish collaboration event through both systems
+                     */
+                    ,
+                    data: any,
+                    userId: string,
+                    sessionId: string,
+                    void: {
+                        // Create event for Event Bus
+                        const: event = EventFactory.createWorkflowEvent(),
+                        type
+                    } === CollaborationEventType.SESSION_CREATED ? 'task_created' : ,
+                    type
+                } === CollaborationEventType.USER_JOINED ? 'task_assigned' : ,
+                    type === CollaborationEventType.DOCUMENT_EDITED ? 'task_started' : 'task_completed',
+                    {
+                        data: {
+                            collaborationType: type,
+                            ...data
+                        },
+                        'websocket-adapter': ,
+                        userId,
+                        event, : .sessionId = sessionId,
+                        event, : .metadata.category = EventCategory.COLLABORATION,
+                        event, : .metadata.priority = EventPriority.HIGH,
+                        // Publish to Event Bus
+                        globalEventBus, : .publish(event).catch(error => { }),
+                        console, : .error('Failed to publish collaboration event:', error)
+                    };
+                ;
+                // Also emit through collaboration service if available
+                if (this.collaborationService) {
+                    this.collaborationService.emit(type, data);
+                    getStats();
+                    {
+                        subscribedEventTypes: number;
+                        hasCollaborationService: boolean;
+                        eventBusStats: any;
+                        return {
+                            subscribedEventTypes: this.subscribedEventTypes.size,
+                            hasCollaborationService: !!this.collaborationService,
+                            eventBusStats: globalEventBus.getStats(),
+                        };
+                        cleanup();
+                        void {
+                            : .collaborationService
+                        };
+                        {
+                            // Remove all event listeners
+                            Object.values(CollaborationEventType).forEach(eventType => { });
+                            this.collaborationService.removeAllListeners(eventType);
+                        }
+                        ;
+                        this.subscribedEventTypes.clear();
+                        // Export singleton instance
+                        export const webSocketAdapter = new WebSocketEventAdapter();
+                        // Export utility functions
+                        export const webSocketUtils = {
+                            /**
+                            * Get WebSocket message type for event type
+                            */
+                            getWebSocketType: (eventType) => {
+                                const entry = Object.entries(WS_MESSAGE_TYPE_MAP);
+                            },
+                            : 
+                                .find(([wsType, mappedEventType]) => mappedEventType === eventType),
+                            return: entry ? entry[0] : null
+                        };
+                        /**
+                         * Get event type for WebSocket message type
+                         */
+                        getEventType: (wsType) => {
+                            return WS_MESSAGE_TYPE_MAP[wsType] || wsType;
+                        };
+                    }
+                }
+            }
         }
-    }
-    /**
-     * Get adapter statistics
-     */
-    getStats() {
-        return {
-            subscribedEventTypes: this.subscribedEventTypes.size,
-            hasCollaborationService: !!this.collaborationService,
-            eventBusStats: globalEventBus.getStats()
-        };
-    }
-    /**
-     * Clean up adapter resources
-     */
-    cleanup() {
-        if (this.collaborationService) {
-            // Remove all event listeners
-            Object.values(CollaborationEventType).forEach(eventType => {
-                this.collaborationService.removeAllListeners(eventType);
-            });
-        }
-        this.subscribedEventTypes.clear();
-    }
-}
-// Export singleton instance
-export const webSocketAdapter = new WebSocketEventAdapter();
-// Export utility functions
-export const webSocketUtils = {
-    /**
-     * Get WebSocket message type for event type
-     */
-    getWebSocketType: (eventType) => {
-        const entry = Object.entries(WS_MESSAGE_TYPE_MAP)
-            .find(([wsType, mappedEventType]) => mappedEventType === eventType);
-        return entry ? entry[0] : null;
-    },
-    /**
-     * Get event type for WebSocket message type
-     */
-    getEventType: (wsType) => {
-        return WS_MESSAGE_TYPE_MAP[wsType] || wsType;
     }
 };

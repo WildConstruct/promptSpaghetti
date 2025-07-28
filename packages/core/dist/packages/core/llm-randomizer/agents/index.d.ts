@@ -15,17 +15,14 @@ export interface UniversalAgentRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
     nodeCount: number;
-    nodeTypes?: string[];
-    specificRequirements?: string[];
-    focusAreas?: string[];
+    nodeTypes?: string;
+    specificRequirements?: string;
+    focusAreas?: string;
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
     userContext?: string;
-    constraints?: string[];
-    examples?: string[];
+    constraints?: string;
+    examples?: string;
 }
-/**
- * Universal generation function that routes to appropriate agent
- */
-export declare function generateGraph(request: UniversalAgentRequest, provider?: 'openai' | 'claude' | 'gemini', config?: Partial<AnyAgentConfig>): Promise<AnyGenerationResult>;
+export declare function generateGraph(request: UniversalAgentRequest): any;
 //# sourceMappingURL=index.d.ts.map

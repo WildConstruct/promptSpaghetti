@@ -34,8 +34,8 @@ describe('TeamManager', () => {
       createdAt: new Date('2023-01-01'),
       updatedAt: new Date('2023-01-01'),
       level: 0,
-      path: ['Engineering'],
-    },
+      path: ['Engineering'];
+  }
     {
       id: 'team-2',
       organizationId: 'org-1',
@@ -47,7 +47,7 @@ describe('TeamManager', () => {
       updatedAt: new Date('2023-01-02'),
       level: 1,
       path: ['Engineering', 'Frontend']
-    },
+  }
     {
       id: 'team-3',
       organizationId: 'org-1',
@@ -59,50 +59,45 @@ describe('TeamManager', () => {
       updatedAt: new Date('2023-01-03'),
       level: 1,
       path: ['Engineering', 'Backend']
-    }
   ];
   const mockMembers = [;
     {
-      id: 'member-1',
-      userId: 'user-1',
-      role: 'owner' as const,
-      joinedAt: new Date('2023-01-01'),
-      invitedBy: 'user-1',
-      user: {,
-        id: 'user-1',
-        email: 'owner@example.com',
-        displayName: 'Team Owner',
-        firstName: 'Team',
-        lastName: 'Owner',
-        avatarUrl: null,
-      }
-    },
+  id: 'member-1',
+  userId: 'user-1',
+  role: 'owner' as const,
+  joinedAt: new Date('2023-01-01'),
+  invitedBy: 'user-1',
+  user: {,
+  id: 'user-1',
+  email: 'owner@example.com',
+  displayName: 'Team Owner',
+  firstName: 'Team',
+  lastName: 'Owner',
+  avatarUrl: null,
+}
     {
-      id: 'member-2',
-      userId: 'user-2',
-      role: 'member' as const,
-      joinedAt: new Date('2023-01-02'),
-      invitedBy: 'user-1',
-      user: {,
-        id: 'user-2',
-        email: 'member@example.com',
-        displayName: 'Team Member',
-        firstName: 'Team',
-        lastName: 'Member',
-        avatarUrl: null,
-      }
-    }
-  ];
+  id: 'member-2',
+  userId: 'user-2',
+  role: 'member' as const,
+  joinedAt: new Date('2023-01-02'),
+  invitedBy: 'user-1',
+  user: {,
+  id: 'user-2',
+  email: 'member@example.com',
+  displayName: 'Team Member',
+  firstName: 'Team',
+  lastName: 'Member',
+  avatarUrl: null];
   const defaultProps = {
-    organizationId: 'org-1',
-    onCreateTeam: jest.fn(),
-    onUpdateTeam: jest.fn(),
-    onDeleteTeam: jest.fn(),
-    onAddMember: jest.fn(),
-    onRemoveMember: jest.fn(),
-    onUpdateMemberRole: jest.fn(),
-    onLoadMembers: jest.fn(),
-  };
+  organizationId: 'org-1',
+  onCreateTeam: jest.fn(),
+  onUpdateTeam: jest.fn(),
+  onDeleteTeam: jest.fn(),
+  onAddMember: jest.fn(),
+  onRemoveMember: jest.fn(),
+  onUpdateMemberRole: jest.fn(),
+  onLoadMembers: jest.fn(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -163,7 +158,7 @@ describe('TeamManager', () => {
     await user.click(submitButton);
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalledWith({)
-        name: 'DevOps Team',
+  name: 'DevOps Team',
         description: 'DevOps and infrastructure team',
         parentTeamId: 'team-1',
         settings: {}
@@ -221,7 +216,7 @@ describe('TeamManager', () => {
     await user.click(submitButton);
     await waitFor(() => {
       expect(mockUpdate).toHaveBeenCalledWith('team-1', {)
-        name: 'Updated Engineering',
+  name: 'Updated Engineering',
         description: 'Engineering team',
         parentTeamId: null,
         settings: {}
@@ -274,7 +269,6 @@ describe('TeamManager', () => {
     const expandButton = teamCard?.querySelector('.expand-button');
     if (expandButton) {
       await user.click(expandButton);
-    }
     await waitFor(() => {
       expect(mockLoadMembers).toHaveBeenCalledWith('team-1');
     });
@@ -335,10 +329,10 @@ describe('TeamManager', () => {
     const submitButton = screen.getByText('Add Member');
     await user.click(submitButton);
     await waitFor(() => {
-      expect(mockAddMember).toHaveBeenCalledWith('team-1', {)
-        userEmail: 'newmember@example.com',
-        role: 'member',
-      });
+  expect(mockAddMember).toHaveBeenCalledWith('team-1', {)
+  userEmail: 'newmember@example.com',
+  role: 'member',
+});
     });
   });
   it('shows role update dropdown when member role is clicked', async () => {

@@ -22,7 +22,7 @@ describe('Security Validation Framework', () => {
         'global.process'
       ];
       dangerousInputs.forEach(input => {)
-        expect(SecurityValidation.validateSafeString(input)).toBe(false);
+  expect(SecurityValidation.validateSafeString(input)).toBe(false);
       });
     });
     it('should allow safe strings', () => {
@@ -35,7 +35,7 @@ describe('Security Validation Framework', () => {
         ''
       ];
       safeInputs.forEach(input => {)
-        expect(SecurityValidation.validateSafeString(input)).toBe(true);
+  expect(SecurityValidation.validateSafeString(input)).toBe(true);
       });
     });
     it('should reject non-string inputs', () => {
@@ -59,7 +59,7 @@ describe('Security Validation Framework', () => {
         'document.cookie'
       ];
       dangerousExpressions.forEach(expr => {)
-        expect(SecurityValidation.validateSafeExpression(expr)).toBe(false);
+  expect(SecurityValidation.validateSafeExpression(expr)).toBe(false);
       });
     });
     it('should allow safe expressions', () => {
@@ -75,7 +75,7 @@ describe('Security Validation Framework', () => {
         ''
       ];
       safeExpressions.forEach(expr => {)
-        expect(SecurityValidation.validateSafeExpression(expr)).toBe(true);
+  expect(SecurityValidation.validateSafeExpression(expr)).toBe(true);
       });
     });
     it('should reject overly long expressions', () => {
@@ -98,7 +98,7 @@ describe('Security Validation Framework', () => {
         'constructor.prototype'
       ];
       dangerousKeys.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
       });
     });
     it('should allow safe property keys', () => {
@@ -114,7 +114,7 @@ describe('Security Validation Framework', () => {
         'snake_case'
       ];
       safeKeys.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(true);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(true);
       });
     });
     it('should reject invalid key formats', () => {
@@ -130,7 +130,7 @@ describe('Security Validation Framework', () => {
         'a'.repeat(200) // Too long
       ];
       invalidKeys.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
       });
     });
   });
@@ -165,7 +165,6 @@ describe('Security Validation Framework', () => {
       const largeObject: Record<string, string> = {};
       for (let i = 0; i < 200; i++) {
         largeObject[`key${i}`] = `value${i}`;}
-      }
       expect(SecurityValidation.validateSafeValue(largeObject)).toBe(false);
     });
     it('should reject infinite and NaN numbers', () => {
@@ -203,219 +202,213 @@ describe('Zod Schema Security Tests', () => {
       const dangerousGraphs = [;
         {
           nodes: [{,
-            id: 'test',
+  id: 'test',
             type: 'SetVariable',
             key: 'test',
             value: function() { return 'evil'; }
           }]
-        },
+  }
         {
           nodes: [{,
-            id: 'test',
+  id: 'test',
             type: 'SetVariable',
             key: 'test',
             value: { __proto__: { polluted: true } }
           }]
-        },
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'SetVariable',
-            key: '__proto__',
-            value: 'any value',
-          }]
-        },
+  nodes: [{,
+  id: 'test',
+  type: 'SetVariable',
+  key: '__proto__',
+  value: 'any value',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'SetVariable',
-            key: 'constructor',
-            value: 'any value',
-          }]
-        }
+  nodes: [{,
+  id: 'test',
+  type: 'SetVariable',
+  key: 'constructor',
+  value: 'any value',
+}]
       ];
       dangerousGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).toThrow();
+  expect(() => GraphSchema.parse(graph)).toThrow();
       });
     });
     it('should accept safe values in SetVariable schema', () => {
-      const safeGraphs = [;
+  const safeGraphs = [;
+  {
+  nodes: [{,
+  id: 'test',
+  type: 'SetVariable',
+  key: 'username',
+  value: 'john_doe',
+}]
+  }
+        {
+  nodes: [{,
+  id: 'test',
+  type: 'SetVariable',
+  key: 'count',
+  value: 42,
+}]
+  }
+        {
+  nodes: [{,
+  id: 'test',
+  type: 'SetVariable',
+  key: 'enabled',
+  value: true,
+}]
+  }
         {
           nodes: [{,
-            id: 'test',
-            type: 'SetVariable',
-            key: 'username',
-            value: 'john_doe',
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'SetVariable',
-            key: 'count',
-            value: 42,
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'SetVariable',
-            key: 'enabled',
-            value: true,
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
+  id: 'test',
             type: 'SetVariable',
             key: 'data',
             value: { name: 'John', age: 30 }
           }]
-        }
       ];
       safeGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).not.toThrow();
+  expect(() => GraphSchema.parse(graph)).not.toThrow();
       });
     });
   });
   describe('DEBT-002: ConditionalNodeSchema Security', () => {
-    it('should reject dangerous expressions in Conditional schema', () => {
-      const dangerousGraphs = [;
+  it('should reject dangerous expressions in Conditional schema', () => {
+  const dangerousGraphs = [;
+  {
+  nodes: [{,
+  id: 'test',
+  type: 'Conditional',
+  branches: [{,
+  condition: 'eval("alert(1)")',
+  output: 'result',
+}]
+          }]
+  }
+        {
+  nodes: [{,
+  id: 'test',
+  type: 'Conditional',
+  branches: [{,
+  condition: 'constructor.constructor("alert(1)")()',
+  output: 'result',
+}]
+          }]
+  }
         {
           nodes: [{,
-            id: 'test',
+  id: 'test',
             type: 'Conditional',
             branches: [{,
-              condition: 'eval("alert(1)")',
-              output: 'result',
-            }]
+  condition: 'function() { alert(1); }',
+              output: 'result';
+  }]
           }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'Conditional',
-            branches: [{,
-              condition: 'constructor.constructor("alert(1)")()',
-              output: 'result',
-            }]
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'Conditional',
-            branches: [{,
-              condition: 'function() { alert(1); }',
-              output: 'result',
-            }]
-          }]
-        }
       ];
       dangerousGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).toThrow();
+  expect(() => GraphSchema.parse(graph)).toThrow();
       });
     });
     it('should accept safe expressions in Conditional schema', () => {
-      const safeGraphs = [;
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'Conditional',
-            branches: [{,
-              condition: 'variable === "value"',
-              output: 'result',
-            }]
+  const safeGraphs = [;
+  {
+  nodes: [{,
+  id: 'test',
+  type: 'Conditional',
+  branches: [{,
+  condition: 'variable === "value"',
+  output: 'result',
+}]
           }]
-        },
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Conditional',
-            branches: [{,
-              condition: 'number > 10',
-              output: 'result',
-            }]
+  nodes: [{,
+  id: 'test',
+  type: 'Conditional',
+  branches: [{,
+  condition: 'number > 10',
+  output: 'result',
+}]
           }]
-        },
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Conditional',
-            branches: [{,
-              condition: 'text.startsWith("prefix")',
-              output: 'result',
-            }]
+  nodes: [{,
+  id: 'test',
+  type: 'Conditional',
+  branches: [{,
+  condition: 'text.startsWith("prefix")',
+  output: 'result',
+}]
           }]
-        }
       ];
       safeGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).not.toThrow();
+  expect(() => GraphSchema.parse(graph)).not.toThrow();
       });
     });
   });
   describe('DEBT-003: IncludeNodeSchema Security', () => {
-    it('should reject dangerous property keys in Include schema', () => {
-      const dangerousGraphs = [;
+  it('should reject dangerous property keys in Include schema', () => {
+  const dangerousGraphs = [;
+  {
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: '__proto__',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: '__proto__',
-          }]
-        },
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'constructor',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'constructor',
-          }]
-        },
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'prototype',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'prototype',
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'hasOwnProperty',
-          }]
-        }
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'hasOwnProperty',
+}]
       ];
       dangerousGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).toThrow();
+  expect(() => GraphSchema.parse(graph)).toThrow();
       });
     });
     it('should accept safe property keys in Include schema', () => {
-      const safeGraphs = [;
+  const safeGraphs = [;
+  {
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'template_name',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'template_name',
-          }]
-        },
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'content123',
+}]
+  }
         {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'content123',
-          }]
-        },
-        {
-          nodes: [{,
-            id: 'test',
-            type: 'Include',
-            name: 'valid-key',
-          }]
-        }
+  nodes: [{,
+  id: 'test',
+  type: 'Include',
+  name: 'valid-key',
+}]
       ];
       safeGraphs.forEach(graph => {)
-        expect(() => GraphSchema.parse(graph)).not.toThrow();
+  expect(() => GraphSchema.parse(graph)).not.toThrow();
       });
     });
   });
@@ -425,14 +418,14 @@ describe('Runtime Security Tests', () => {
   beforeEach(() => {
     ctx = {
       variables: {},
-      seed: 'test-seed',
-    };
+      seed: 'test-seed';
+  };
   });
   describe('SetVariableNode Runtime Security', () => {
     it('should reject dangerous variable keys at runtime', () => {
       const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
       dangerousKeys.forEach(key => {)
-        const node = new SetVariableNode('test', key, 'value');
+  const node = new SetVariableNode('test', key, 'value');
         node.run(ctx);
         // Should not set the dangerous key
         expect(ctx.variables[key]).toBeUndefined();
@@ -444,7 +437,7 @@ describe('Runtime Security Tests', () => {
     it('should accept safe variable keys at runtime', () => {
       const safeKeys = ['username', 'user_id', 'data123'];
       safeKeys.forEach(key => {)
-        const node = new SetVariableNode('test', key, 'test-value');
+  const node = new SetVariableNode('test', key, 'test-value');
         node.run(ctx);
         expect(ctx.variables[key]).toBe('test-value');
       });
@@ -474,7 +467,7 @@ describe('Runtime Security Tests', () => {
         /regex/
       ];
       dangerousValues.forEach(value => {)
-        const node = new SetVariableNode('test', 'key', value);
+  const node = new SetVariableNode('test', 'key', value);
         node.run(ctx);
         // Should not set the dangerous value
         expect(ctx.variables.key).toBeUndefined();
@@ -482,16 +475,16 @@ describe('Runtime Security Tests', () => {
     });
   });
   describe('GetVariableNode Runtime Security', () => {
-    beforeEach(() => {
-      ctx.variables = {
-        safeKey: 'safe value',
-        normalProperty: 'normal value',
-      };
+  beforeEach(() => {
+  ctx.variables = {
+  safeKey: 'safe value',
+  normalProperty: 'normal value',
+};
     });
     it('should reject dangerous variable keys at runtime', () => {
       const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
       dangerousKeys.forEach(key => {)
-        const node = new GetVariableNode('test', key);
+  const node = new GetVariableNode('test', key);
         const result = node.run(ctx);
         expect(result).toBeUndefined();
       });
@@ -508,30 +501,30 @@ describe('Runtime Security Tests', () => {
     });
   });
   describe('IncludeNode Runtime Security', () => {
-    it('should handle safe property access', () => {
-      const lookup = {
-        template1: 'Hello World',
-        template2: 'Another template',
-      };
+  it('should handle safe property access', () => {
+  const lookup = {
+  template1: 'Hello World',
+  template2: 'Another template',
+};
       const node = new IncludeNode('test', 'template1', lookup);
       const result = node.run(ctx);
       expect(result).toBe('Hello World');
     });
     it('should reject dangerous property access', () => {
-      const lookup = {
-        template1: 'Hello World',
-      };
+  const lookup = {
+  template1: 'Hello World',
+};
       const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
       dangerousKeys.forEach(key => {)
-        const node = new IncludeNode('test', key, lookup);
+  const node = new IncludeNode('test', key, lookup);
         const result = node.run(ctx);
         expect(result).toBe(''); // Should return empty string for dangerous keys
       });
     });
     it('should handle non-existent properties safely', () => {
-      const lookup = {
-        template1: 'Hello World',
-      };
+  const lookup = {
+  template1: 'Hello World',
+};
       const node = new IncludeNode('test', 'nonExistent', lookup);
       const result = node.run(ctx);
       expect(result).toBe(''); // Should return empty string for non-existent keys
@@ -539,19 +532,19 @@ describe('Runtime Security Tests', () => {
     it('should handle invalid lookup objects safely', () => {
       const invalidLookups = [null, undefined, 'string', 123, true];
       invalidLookups.forEach(lookup => {)
-        const node = new IncludeNode('test', 'key', lookup as any);
+  const node = new IncludeNode('test', 'key', lookup as any);
         const result = node.run(ctx);
         expect(result).toBe(''); // Should return empty string for invalid lookups
       });
     });
     it('should handle non-string results safely', () => {
-      const lookup = {
-        template1: 123 as any, // Non-string value
-        template2: null as any,
-        template3: undefined as any,
-      };
+  const lookup = {
+  template1: 123 as any, // Non-string value,
+  template2: null as any,
+  template3: undefined as any,
+};
       ['template1', 'template2', 'template3'].forEach(key => {)
-        const node = new IncludeNode('test', key, lookup);
+  const node = new IncludeNode('test', key, lookup);
         const result = node.run(ctx);
         expect(result).toBe(''); // Should return empty string for non-string results
       });

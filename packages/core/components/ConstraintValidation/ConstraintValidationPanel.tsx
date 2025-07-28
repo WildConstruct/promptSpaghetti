@@ -19,16 +19,14 @@ import {
 import { Node } from '../../graphSchema';
 import './ConstraintValidationPanel.css';
 interface ConstraintValidationPanelProps {
-  nodes: Node[];
-  utdgNodes?: UTDGNode[];
+  nodes: Node;
+  utdgNodes?: UTDGNode;
   targetEra?: Era;
   visible?: boolean;
   onToggleVisibility?: () => void;
-  onNodeHighlight?: (nodeIds: string[]) => void;
+  onNodeHighlight?: (nodeIds: string) => void;
   onConstraintOverride?: (constraintId: string) => void;
-}
-
-export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({)
+  export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps> = ({,)
   nodes,
   utdgNodes = [],
   targetEra,
@@ -44,65 +42,62 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
   const [enforcementLevels, setEnforcementLevels] = useState<('strict' | 'warning' | 'suggestion')[]>(['strict', 'warning', 'suggestion']);
   // Convert regular nodes to UTDG nodes for validation
   const convertedNodes = useMemo(() => {
-    const converted: UTDGNode[] = [...utdgNodes];
-    // Convert regular nodes to basic UTDG nodes for validation
-    nodes.forEach(node => {)
-      if (!utdgNodes.find(un => un.id === node.id)) {
-        const utdgNode: UTDGNode = {
-          id: node.id,
-          type: 'style', // Default type for regular nodes
-          content: getNodeContent(node),
-          metadata: {,
-            era: selectedEra ? [selectedEra] : [HISTORICAL_ERAS.MODERN_EARLY],
-            authenticity: 0.5,
-            source: 'graph_editor',
-            tags: extractTags(node),
-            social_class: extractSocialClass(node),
-            daily_use: true,
-          },
-          relationships: {,
-            compatible: node.inputs || [],
-            incompatible: [],
-            variations: [],
-          },
-          constraints: [],
-        };
+  const converted: UTDGNode = [...utdgNodes];
+  // Convert regular nodes to basic UTDG nodes for validation
+  nodes.forEach(node => {)
+  if (!utdgNodes.find(un => un.id === node.id)) {
+  const utdgNode: UTDGNode = {,
+  id: node.id,
+  type: 'style', // Default type for regular nodes,
+  content: getNodeContent(node),
+  metadata: {,
+  era: selectedEra ? [selectedEra] : [HISTORICAL_ERAS.MODERN_EARLY],
+  authenticity: 0.5,
+  source: 'graph_editor',
+  tags: extractTags(node),
+  social_class: extractSocialClass(node),
+  daily_use: true,
+},
+  relationships: {,
+  compatible: node.inputs || [],
+  incompatible: [],
+  variations: [],
+},
+  constraints: [];
+  };
         converted.push(utdgNode);
-      }
     });
     return converted;
   }, [nodes, utdgNodes, selectedEra]);
   // Run validation when nodes or era changes
   useEffect(() => {
-    if (convertedNodes.length > 0) {
-      validator.setEnforcement(enforcementLevels);
-      const result = selectedEra ;
-        ? validator.validateForEra(convertedNodes, selectedEra)
-        : validator.validateNodes(convertedNodes);
-      setValidationResult(result);
-    }
-  }, [convertedNodes, selectedEra, validator, enforcementLevels]);
-  const handleNodeClick = (nodeIds: string[]) => {
+  if (convertedNodes.length > 0) {
+  validator.setEnforcement(enforcementLevels);
+  const result = selectedEra ;
+  ? validator.validateForEra(convertedNodes, selectedEra)
+  : validator.validateNodes(convertedNodes);
+  setValidationResult(result);
+}, [convertedNodes, selectedEra, validator, enforcementLevels]);
+  const handleNodeClick = (nodeIds: string) => {
     onNodeHighlight?.(nodeIds);
   };
   const handleConstraintOverride = (constraintId: string) => {
-    onConstraintOverride?.(constraintId);
-    // Re-run validation after override
-    if (convertedNodes.length > 0) {
-      const result = selectedEra ;
-        ? validator.validateForEra(convertedNodes, selectedEra)
-        : validator.validateNodes(convertedNodes);
-      setValidationResult(result);
-    }
-  };
+  onConstraintOverride?.(constraintId);
+  // Re-run validation after override
+  if (convertedNodes.length > 0) {
+  const result = selectedEra ;
+  ? validator.validateForEra(convertedNodes, selectedEra)
+  : validator.validateNodes(convertedNodes);
+  setValidationResult(result);
+};
   const handleEnforcementChange = (level: 'strict' | 'warning' | 'suggestion', enabled: boolean) => {
-    const newLevels = enabled ;
-      ? [...enforcementLevels, level]
-      : enforcementLevels.filter(l => l !== level);
-    setEnforcementLevels(newLevels);
-  };
+  const newLevels = enabled ;
+  ? [...enforcementLevels, level]
+  : enforcementLevels.filter(l => l !== level);
+  setEnforcementLevels(newLevels);
+};
   if (!visible) {
-    return ();
+    return;
       <div className="constraint-validation-collapsed">
         <button 
           onClick={onToggleVisibility}
@@ -113,8 +108,7 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
         </button>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="constraint-validation-panel">
       <div className="constraint-panel-header">
         <h3>Historical Constraints</h3>
@@ -252,12 +246,11 @@ export const ConstraintValidationPanel: React.FC<ConstraintValidationPanelProps>
   );
 };
 interface ConstraintItemProps {
-  type: 'violation' | 'warning' | 'suggestion';
+  type: 'violation' | 'warning' | 'suggestion';,
   constraint: ConstraintViolation | ConstraintWarning | ConstraintSuggestion;
-  onNodeClick?: (nodeIds: string[]) => void;
+  onNodeClick?: (nodeIds: string) => void;
   onOverride?: (constraintId: string) => void;
-}
-const ConstraintItem: React.FC<ConstraintItemProps> = ({)
+  const ConstraintItem: React.FC<ConstraintItemProps> = ({,)
   type,
   constraint,
   onNodeClick,
@@ -268,14 +261,13 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({)
     case 'violation': return <AlertTriangle size={14} />;
     case 'warning': return <Info size={14} />;
     case 'suggestion': return <CheckCircle size={14} />;
-    }
   };
   const getSeverityClass = () => {
     if (type === 'violation') return 'severity-high';
     if (type === 'warning') return 'severity-medium';
     return 'severity-low';
   };
-  return ();
+  return;
     <div className={`constraint-item ${type} ${getSeverityClass()}`}>}
       <div className="constraint-item-header">
         {getIcon()}
@@ -330,14 +322,11 @@ const ConstraintItem: React.FC<ConstraintItemProps> = ({)
 function getNodeContent(node: Node): string {
   if (node.type === 'WeightedChoice' && node.choices) {
     return node.choices.map(c => typeof c === 'string' ? c : c.value).join(', ');
-  }
   if (node.type === 'SetVariable') {
     return `${node.key} = ${node.value}`;}
-  }
   return node.type;
-}
-function extractTags(node: Node): string[] {
-  const tags: string[] = [node.type.toLowerCase()];
+function extractTags(node: Node): string {
+  const tags: string = [node.type.toLowerCase()];
   if (node.type === 'SetVariable' && node.key) {
     const key = node.key.toLowerCase();
     if (key.includes('medieval')) tags.push('medieval');
@@ -345,9 +334,7 @@ function extractTags(node: Node): string[] {
     if (key.includes('material')) tags.push('material');
     if (key.includes('noble')) tags.push('noble');
     if (key.includes('peasant')) tags.push('peasant');
-  }
   return tags;
-}
 function extractSocialClass(node: Node): ('peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal')[] | undefined {
   if (node.type === 'SetVariable' && node.key) {
     const key = node.key.toLowerCase();
@@ -356,8 +343,6 @@ function extractSocialClass(node: Node): ('peasant' | 'artisan' | 'merchant' | '
     if (key.includes('merchant')) return ['merchant'];
     if (key.includes('clergy')) return ['clergy'];
     if (key.includes('royal')) return ['royal'];
-  }
   return undefined;
-}
 
 export default ConstraintValidationPanel;

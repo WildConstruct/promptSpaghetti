@@ -52,7 +52,7 @@ describe('Role Cloning System', () => {
       scope: 'own' as const,
       description: 'View project details',
       category: 'Projects'
-    },
+  }
     {
       id: 'perm_edit_projects',
       name: 'Edit Projects', 
@@ -61,7 +61,7 @@ describe('Role Cloning System', () => {
       scope: 'own' as const,
       description: 'Modify projects',
       category: 'Projects'
-    },
+  }
     {
       id: 'perm_admin_roles',
       name: 'Manage Roles',
@@ -305,7 +305,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'API Test Clone',
@@ -329,7 +329,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: '', // Invalid empty name
@@ -354,7 +354,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'History API Test',
@@ -404,7 +404,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/validate-clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'Validation Test',
@@ -450,7 +450,7 @@ describe('Role Cloning System', () => {
         url: '/api/roles/clone',
         headers: {
           'Authorization': `Bearer ${generateTestToken(unauthorizedUser)}`
-        },
+  }
         payload: {
           sourceRoleId: mockSourceRole.id,
           targetName: 'Unauthorized Clone',

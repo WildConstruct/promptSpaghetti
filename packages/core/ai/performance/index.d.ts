@@ -20,13 +20,12 @@ interface PerformanceMetrics {
     averageResponseTime?: number;
     successRate?: number;
     totalCost?: number;
-}
 interface ResourceUsage {
     memory: number;
     cpu: number;
     disk: number;
     network: number;
-}
+
 export declare     successRateAverage: number;
     costTrend: "increasing" | "decreasing" | "stable";
     recommendations: string[];
@@ -47,5 +46,5 @@ export declare export interface OptimizationCategories {
         };
     };
     priorityActions: string[];
-}
+
 export declare //# sourceMappingURL=index.d.ts.map

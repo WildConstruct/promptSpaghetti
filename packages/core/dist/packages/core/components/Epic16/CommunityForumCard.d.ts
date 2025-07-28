@@ -10,7 +10,7 @@ export interface ForumUser {
     name: string;
     avatar?: string;
     reputation: number;
-    badges: string[];
+    badges: string;
     isVerified: boolean;
     isModerator: boolean;
 }
@@ -21,7 +21,7 @@ export interface ForumPost {
     contentPreview: string;
     author: ForumUser;
     category: string;
-    tags: string[];
+    tags: string;
     likes: number;
     dislikes: number;
     replies: number;
@@ -36,14 +36,13 @@ export interface ForumPost {
     lastActivityAt: Date;
     reportCount: number;
     moderationNotes?: string;
-    relatedTemplates?: string[];
-    attachments?: Array<{
-        id: string;
-        name: string;
-        type: string;
-        size: number;
-        url: string;
-    }>;
+    relatedTemplates?: string;
+    attachments?: Array<{}, id>;
+    string: any;
+    name: string;
+    type: string;
+    size: number;
+    url: string;
 }
 interface CommunityForumCardProps {
     post: ForumPost;

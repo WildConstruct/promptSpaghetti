@@ -12,26 +12,24 @@ import { PasswordResetFlow, ResetStep, PasswordStrength } from '../components/Pa
 // Mock the password reset managers
 jest.mock('../PasswordResetTokenManager', () => ({)
   passwordResetTokenManager: {,
-    generateToken: jest.fn<unknown[], unknown>(),
-    validateToken: jest.fn<unknown[], unknown>(),
-    useToken: jest.fn<unknown[], unknown>()
-  }
+  generateToken: jest.fn<unknown, unknown>(),
+  validateToken: jest.fn<unknown, unknown>(),
+  useToken: jest.fn<unknown, unknown>(),
 }));
 jest.mock('../VerificationCodeManager', () => ({)
   verificationCodeManager: {,
-    generateCode: jest.fn<unknown[], unknown>(),
-    validateCode: jest.fn<unknown[], unknown>(),
-    useCode: jest.fn<unknown[], unknown>()
-  }
+  generateCode: jest.fn<unknown, unknown>(),
+  validateCode: jest.fn<unknown, unknown>(),
+  useCode: jest.fn<unknown, unknown>(),
 }));
 describe('PasswordResetFlow', () => {
   const defaultProps = {
-    onResetComplete: jest.fn<unknown[], unknown>(),
-    onStepChange: jest.fn<unknown[], unknown>(),
-    onSecurityEvent: jest.fn<unknown[], unknown>(),
-    brandName: 'Test App',
-    supportEmail: 'support@test.com',
-  };
+  onResetComplete: jest.fn<unknown, unknown>(),
+  onStepChange: jest.fn<unknown, unknown>(),
+  onSecurityEvent: jest.fn<unknown, unknown>(),
+  brandName: 'Test App',
+  supportEmail: 'support@test.com',
+};
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
@@ -71,13 +69,13 @@ describe('PasswordResetFlow', () => {
         jest.advanceTimersByTime(2000);
       });
       await waitFor(() => {
-        expect(screen.getByText(/reset code sent to test@example.com/i)).toBeInTheDocument();
-        expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.VERIFY);
-        expect(defaultProps.onSecurityEvent).toHaveBeenCalledWith()
-          'password_reset_requested',
-          expect.objectContaining({)
-            email: 'test@example.com',
-          })
+  expect(screen.getByText(/reset code sent to test@example.com/i)).toBeInTheDocument();
+  expect(defaultProps.onStepChange).toHaveBeenCalledWith(ResetStep.VERIFY);
+  expect(defaultProps.onSecurityEvent).toHaveBeenCalledWith()
+  'password_reset_requested',
+  expect.objectContaining({)
+  email: 'test@example.com',
+}
         );
       });
     });
@@ -318,7 +316,6 @@ describe('PasswordResetFlow', () => {
         expect(passwordInput).toHaveAttribute('type', 'text');
         await user.click(toggleButton);
         expect(passwordInput).toHaveAttribute('type', 'password');
-      }
     });
     test('should handle successful password reset', async () => {
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
@@ -424,20 +421,19 @@ describe('PasswordResetFlow', () => {
     });
   });
   describe('Custom Validation', () => {
-    test('should use custom password validation when provided', async () => {
-      const customValidation = jest.fn(() => ({)
-        isValid: false,
-        strength: PasswordStrength.WEAK,
-        score: 0,
-        feedback: ['Custom validation failed'],
-        requirements: {,
-          length: false,
-          uppercase: false,
-          lowercase: false,
-          numbers: false,
-          symbols: false,
-        }
-      }));
+  test('should use custom password validation when provided', async () => {
+  const customValidation = jest.fn(() => ({)
+  isValid: false,
+  strength: PasswordStrength.WEAK,
+  score: 0,
+  feedback: ['Custom validation failed'],
+  requirements: {,
+  length: false,
+  uppercase: false,
+  lowercase: false,
+  numbers: false,
+  symbols: false,
+}));
       const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
       render(<PasswordResetFlow {...defaultProps} customValidation={customValidation} />);
       // Navigate to password reset step
@@ -478,8 +474,8 @@ describe('PasswordResetFlow', () => {
       expect(defaultProps.onSecurityEvent).toHaveBeenCalledWith()
         'password_reset_requested',
         expect.objectContaining({)
-          email: 'test@example.com',
-        })
+  email: 'test@example.com',
+}
       );
     });
   });

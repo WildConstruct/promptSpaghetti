@@ -76,34 +76,33 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 
 // Core tutorial interfaces
+
 export interface TutorialStep {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   content: TutorialContent;
   type: 'information' | 'interaction' | 'quiz' | 'practice' | 'checkpoint' | 'branch';
-  duration?: number; // estimated minutes
-  isRequired: boolean;
+  duration?: number; // estimated minutes,
+  isRequired: boolean;,
   isSkippable: boolean;
-  prerequisites: string[];
-  objectives: string[];
+  prerequisites: string;,
+  objectives: string;
   validation?: StepValidation;
-  hints: TutorialHint[];
-  resources: TutorialResource[];
+  hints: TutorialHint;,
+  resources: TutorialResource;
   metadata: StepMetadata;
 }
-
 export interface TutorialContent {
-  format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';
-  primary: string; // Main content
-  secondary?: string; // Additional content
-  media?: MediaContent[];
-  interactive?: InteractiveElement[];
-  code?: CodeExample[];
+  format: 'text' | 'html' | 'markdown' | 'video' | 'interactive' | 'mixed';,
+  primary: string; // Main content,
+  secondary?: string; // Additional content,
+  media?: MediaContent;
+  interactive?: InteractiveElement;
+  code?: CodeExample;
 }
-
 export interface MediaContent {
-  id: string;
+  id: string;,
   type: 'image' | 'video' | 'audio' | 'animation';
   url: string;
   thumbnailUrl?: string;
@@ -113,198 +112,179 @@ export interface MediaContent {
   autoplay?: boolean;
   controls?: boolean;
 }
-
 export interface InteractiveElement {
-  id: string;
+  id: string;,
   type: 'hotspot' | 'overlay' | 'tooltip' | 'modal' | 'form' | 'simulation';
   position?: { x: number; y: number };
   size?: { width: number; height: number };
-  trigger: 'click' | 'hover' | 'auto' | 'manual';
+  trigger: 'click' | 'hover' | 'auto' | 'manual';,
   content: string;
   action?: string;
 }
-
 export interface CodeExample {
-  id: string;
+  id: string;,
   language: string;
   code: string;
   explanation?: string;
   executable?: boolean;
   expectedOutput?: string;
 }
-
 export interface StepValidation {
-  type: 'automatic' | 'manual' | 'quiz' | 'checklist';
-  criteria: ValidationCriteria[];
+  type: 'automatic' | 'manual' | 'quiz' | 'checklist';,
+  criteria: ValidationCriteria;
   feedback: {,
-    success: string;
-    failure: string;
-    partial: string;
-  };
+  success: string;,
+  failure: string;
+  partial: string;
+};
   retries: {,
-    allowed: number;
-    unlimited: boolean;
-  };
+  allowed: number;
+  unlimited: boolean;
+};
 }
-
 export interface ValidationCriteria {
-  id: string;
+  id: string;,
   description: string;
   type: 'condition' | 'function' | 'user_input';
   condition?: string;
   function?: string;
   weight: number;
 }
-
 export interface TutorialHint {
-  id: string;
+  id: string;,
   content: string;
-  type: 'tip' | 'warning' | 'info' | 'encouragement';
+  type: 'tip' | 'warning' | 'info' | 'encouragement';,
   trigger: 'manual' | 'timer' | 'struggle' | 'request';
   delay?: number;
   priority: number;
 }
-
 export interface TutorialResource {
-  id: string;
+  id: string;,
   title: string;
   type: 'documentation' | 'video' | 'article' | 'example' | 'tool';
   url?: string;
   content?: string;
-  description: string;
-  tags: string[];
+  description: string;,
+  tags: string;
 }
-
 export interface StepMetadata {
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
   category: string;
-  tags: string[];
+  tags: string;,
   estimatedTime: number;
-  completionRate: number;
+  completionRate: number;,
   averageScore: number;
-  commonMistakes: string[];
-  tips: string[];
+  commonMistakes: string;,
+  tips: string;
 }
-
 export interface Tutorial {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   category: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  estimatedDuration: number; // minutes
-  steps: TutorialStep[];
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
+  estimatedDuration: number; // minutes,
+  steps: TutorialStep;,
   learning: LearningObjectives;
-  navigation: NavigationConfig;
+  navigation: NavigationConfig;,
   accessibility: AccessibilityConfig;
-  analytics: AnalyticsConfig;
+  analytics: AnalyticsConfig;,
   metadata: TutorialMetadata;
 }
-
 export interface LearningObjectives {
-  primary: string[];
-  secondary: string[];
-  outcomes: string[];
-  assessments: Assessment[];
+  primary: string;,
+  secondary: string;
+  outcomes: string;,
+  assessments: Assessment;
 }
-
 export interface Assessment {
-  id: string;
+  id: string;,
   type: 'quiz' | 'practical' | 'project' | 'peer_review';
-  title: string;
+  title: string;,
   description: string;
   passingScore: number;
-  questions?: QuizQuestion[];
+  questions?: QuizQuestion;
 }
-
 export interface QuizQuestion {
-  id: string;
+  id: string;,
   type: 'multiple_choice' | 'true_false' | 'short_answer' | 'code';
   question: string;
-  options?: string[];
-  correctAnswer: string | string[];
+  options?: string;
+  correctAnswer: string | string;,
   explanation: string;
   points: number;
 }
-
 export interface NavigationConfig {
-  allowBackward: boolean;
+  allowBackward: boolean;,
   allowForward: boolean;
-  allowJumping: boolean;
+  allowJumping: boolean;,
   showProgress: boolean;
-  showStepList: boolean;
+  showStepList: boolean;,
   autoAdvance: boolean;
   autoAdvanceDelay?: number;
 }
-
 export interface AccessibilityConfig {
-  screenReaderSupport: boolean;
+  screenReaderSupport: boolean;,
   keyboardNavigation: boolean;
-  highContrast: boolean;
+  highContrast: boolean;,
   reducedMotion: boolean;
-  audioDescriptions: boolean;
+  audioDescriptions: boolean;,
   closedCaptions: boolean;
   fontSize: 'small' | 'medium' | 'large' | 'extra-large';
 }
-
 export interface AnalyticsConfig {
-  trackProgress: boolean;
+  trackProgress: boolean;,
   trackEngagement: boolean;
-  trackPerformance: boolean;
+  trackPerformance: boolean;,
   trackDropoff: boolean;
   anonymize: boolean;
 }
-
 export interface TutorialMetadata {
-  author: string;
+  author: string;,
   version: string;
-  language: string;
-  tags: string[];
-  prerequisites: string[];
-  targetAudience: string[];
-  createdAt: Date;
+  language: string;,
+  tags: string;
+  prerequisites: string;,
+  targetAudience: string;
+  createdAt: Date;,
   lastModified: Date;
-  isPublished: boolean;
+  isPublished: boolean;,
   rating: number;
   reviewCount: number;
 }
-
 export interface TutorialProgress {
-  tutorialId: string;
+  tutorialId: string;,
   userId: string;
-  currentStepId: string;
-  completedSteps: string[];
-  skippedSteps: string[];
-  failedSteps: string[];
-  startTime: Date;
+  currentStepId: string;,
+  completedSteps: string;
+  skippedSteps: string;,
+  failedSteps: string;
+  startTime: Date;,
   lastActiveTime: Date;
   completionTime?: Date;
-  totalTimeSpent: number;
+  totalTimeSpent: number;,
   score: number;
   attempts: Record<string, number>;
-  bookmarks: string[];
-  notes: TutorialNote[];
+  bookmarks: string;,
+  notes: TutorialNote;
 }
-
 export interface TutorialNote {
-  id: string;
+  id: string;,
   stepId: string;
-  content: string;
+  content: string;,
   timestamp: Date;
   isPrivate: boolean;
+  // Main Tutorial Component
 }
-
-// Main Tutorial Component
 export interface TutorialPlayerProps {
   tutorial: Tutorial;
   progress?: TutorialProgress;
   onStepComplete: (stepId: string, score?: number) => void;
-  onTutorialComplete: (finalScore: number, completionTime: number) => void;
-  onProgressSave: (progress: Partial<TutorialProgress>) => void;
+  onTutorialComplete: (finalScore: number, completionTime: number) => void;,
+  onProgressSave: (progress: Partial<TutorialProgress>) => void;,
   onExit: () => void;
   className?: string;
 }
-
 export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   tutorial,
   progress,
@@ -320,20 +300,20 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const [showResources, setShowResources] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [userSettings, setUserSettings] = useState({)
-    fontSize: 'medium' as const,
-    reducedMotion: false,
-    autoplay: true,
-    showHints: true,
-  });
+  fontSize: 'medium' as const,
+  reducedMotion: false,
+  autoplay: true,
+  showHints: true,
+});
   const currentStep = tutorial.steps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === tutorial.steps.length - 1;
       const total = tutorial.steps.length;
     return {
-      completed,
-      total,
-      percentage: (completed / total) * 100,
-    };
+  completed,
+  total,
+  percentage: (completed / total) * 100,
+};
   }, [progress, tutorial.steps.length]);
   const handleStepNavigation = useCallback((direction: 'next' | 'previous', stepIndex?: number) => {
     if (stepIndex !== undefined) {
@@ -342,7 +322,6 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
       setCurrentStepIndex(prev => prev + 1);
     } else if (direction === 'previous' && !isFirstStep) {
       setCurrentStepIndex(prev => prev - 1);
-    }
   }, [isFirstStep, isLastStep]);
   const handleStepComplete = useCallback((score?: number) => {
     onStepComplete(currentStep.id, score);
@@ -351,18 +330,16 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         setTimeout(() => {
           handleStepNavigation('next');
         }, tutorial.navigation.autoAdvanceDelay || 2000);
-      }
     } else {
       // Tutorial completed
       const finalScore = 85; // Calculate based on progress;
       const completionTime = Date.now() - (progress?.startTime.getTime() || Date.now());
       onTutorialComplete(finalScore, completionTime);
-    }
   }, [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation]);
   const handlePlayPause = useCallback(() => {
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
-  return ();
+  return;
     <div className={`tutorial-player ${className}`}>}
       <div className="tutorial-header">
         <div className="tutorial-info">
@@ -485,13 +462,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 
 // Tutorial Progress Bar Component
 interface TutorialProgressBarProps {
-  current: number;
+  current: number;,
   total: number;
-  completedSteps: string[];
-  steps: TutorialStep[];
+  completedSteps: string;,
+  steps: TutorialStep;
   onStepClick: (index: number) => void;
-}
-const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
+  const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({,)
   current,
   total,
   completedSteps,
@@ -499,7 +475,7 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
   onStepClick
 }) => {
   const progressPercentage = (current / total) * 100;
-  return ();
+  return;
     <div className="tutorial-progress-bar">
       <div className="progress-track">
         <div 
@@ -511,7 +487,7 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
         {steps.map((step, index) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = index === current - 1;
-          return ();
+          return;
             <div
               key={step.id}
               className={`progress-step ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
@@ -534,13 +510,12 @@ const TutorialProgressBar: React.FC<TutorialProgressBarProps> = ({)
 
 // Tutorial Step Content Component
 interface TutorialStepContentProps {
-  step: TutorialStep;
+  step: TutorialStep;,
   isPlaying: boolean;
-  settings: unknown;
+  settings: unknown;,
   onComplete: (score?: number) => void;
   onPlayPause: () => void;
-}
-const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
+  const TutorialStepContent: React.FC<TutorialStepContentProps> = ({,)
   step,
   isPlaying,
   settings,
@@ -550,28 +525,27 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
   const [showHints, setShowHints] = useState(false);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const [validationResult, setValidationResult] = useState<{
-    passed: boolean;
-    score?: number;
-    feedback?: string;
-  } | null>(null);
+  passed: boolean;
+  score?: number;
+  feedback?: string;
+} | null>(null);
   const handleValidateStep = useCallback(async () => {
-    // Simulate step validation
-    const passed = Math.random() > 0.3; // 70% pass rate;
-    const score = passed ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 60) + 10;
-    setValidationResult({)
-      passed,
-      score,
-      feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!',
-    });
+  // Simulate step validation
+  const passed = Math.random() > 0.3; // 70% pass rate;
+  const score = passed ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 60) + 10;
+  setValidationResult({)
+  passed,
+  score,
+  feedback: passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!',
+});
     if (passed) {
       onComplete(score);
-    }
   }, [onComplete]);
   const renderContent = () => {
     switch (step.content.format) {
     case 'text':
     case 'markdown':
-      return ();
+      return;
         <div className="step-text-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -582,7 +556,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     case 'video':
-      return ();
+      return;
         <div className="step-video-content">
           <h2>{step.title}</h2>
           <div className="video-container">
@@ -600,7 +574,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     case 'interactive':
-      return ();
+      return;
         <div className="step-interactive-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -618,7 +592,7 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
         </div>
       );
     default:
-      return ();
+      return;
         <div className="step-mixed-content">
           <h2>{step.title}</h2>
           <p className="step-description">{step.description}</p>
@@ -630,9 +604,8 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
           </div>
         </div>
       );
-    }
   };
-  return ();
+  return;
     <div className="tutorial-step-content">
       <div className="step-header">
         <div className="step-meta">
@@ -763,25 +736,24 @@ const TutorialStepContent: React.FC<TutorialStepContentProps> = ({)
 
 // Tutorial Step List Component
 interface TutorialStepListProps {
-  steps: TutorialStep[];
+  steps: TutorialStep;,
   currentStepIndex: number;
-  completedSteps: string[];
+  completedSteps: string;,
   onStepSelect: (index: number) => void;
-}
-const TutorialStepList: React.FC<TutorialStepListProps> = ({)
+  const TutorialStepList: React.FC<TutorialStepListProps> = ({,)
   steps,
   currentStepIndex,
   completedSteps,
   onStepSelect
 }) => {
-  return ();
+  return;
     <div className="tutorial-step-list">
       <h3>Tutorial Steps</h3>
       <div className="step-list">
         {steps.map((step, index) => {
           const isCompleted = completedSteps.includes(step.id);
           const isCurrent = index === currentStepIndex;
-          return ();
+          return;
             <div
               key={step.id}
               className={`step-item ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
@@ -816,14 +788,13 @@ const TutorialStepList: React.FC<TutorialStepListProps> = ({)
 
 // Tutorial Resources Component
 interface TutorialResourcesProps {
-  resources: TutorialResource[];
+  resources: TutorialResource;,
   onResourceClick: (resource: TutorialResource) => void;
-}
-const TutorialResources: React.FC<TutorialResourcesProps> = ({)
+  const TutorialResources: React.FC<TutorialResourcesProps> = ({,)
   resources,
   onResourceClick
 }) => {
-  return ();
+  return;
     <div className="tutorial-resources">
       <h3>Resources</h3>
       <div className="resource-list">
@@ -858,16 +829,15 @@ const TutorialResources: React.FC<TutorialResourcesProps> = ({)
 
 // Tutorial Settings Component
 interface TutorialSettingsProps {
-  settings: unknown;
-  onSettingsChange: (settings: unknown) => void;
+  settings: unknown;,
+  onSettingsChange: (settings: unknown) => void;,
   onClose: () => void;
-}
-const TutorialSettings: React.FC<TutorialSettingsProps> = ({)
+  const TutorialSettings: React.FC<TutorialSettingsProps> = ({,)
   settings,
   onSettingsChange,
   onClose
 }) => {
-  return ();
+  return;
     <div className="tutorial-settings-overlay">
       <Card className="settings-card">
         <CardHeader>
@@ -947,10 +917,9 @@ const TutorialSettings: React.FC<TutorialSettingsProps> = ({)
 
 // Interactive Element Renderer
 interface InteractiveElementProps {
-  element: InteractiveElement;
+  element: InteractiveElement;,
   onInteraction: () => void;
-}
-const InteractiveElement: React.FC<InteractiveElementProps> = ({)
+  const InteractiveElement: React.FC<InteractiveElementProps> = ({,)
   element,
   onInteraction
 }) => {
@@ -959,15 +928,15 @@ const InteractiveElement: React.FC<InteractiveElementProps> = ({)
     setIsActive(true);
     onInteraction();
   };
-  return ();
+  return;
     <div
       className={`interactive-element ${element.type} ${isActive ? 'active' : ''}`}
       style={{
-        left: element.position?.x,
-        top: element.position?.y,
-        width: element.size?.width,
-        height: element.size?.height,
-      }}
+  left: element.position?.x,
+  top: element.position?.y,
+  width: element.size?.width,
+  height: element.size?.height,
+}}
       onClick={element.trigger === 'click' ? handleTrigger : undefined}
       onMouseEnter={element.trigger === 'hover' ? handleTrigger : undefined}
     >
@@ -1006,14 +975,13 @@ const InteractiveElement: React.FC<InteractiveElementProps> = ({)
 
 // Media Content Renderer
 interface MediaContentRendererProps {
-  media: MediaContent;
+  media: MediaContent;,
   settings: unknown;
-}
-const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({)
+  const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({,)
   media,
   settings
 }) => {
-  return ();
+  return;
     <div className="media-content">
       {media.type === 'image' && ()
         <img
@@ -1048,15 +1016,14 @@ const MediaContentRenderer: React.FC<MediaContentRendererProps> = ({)
 
 // Code Example Renderer
 interface CodeExampleRendererProps {
-  example: CodeExample;
+  example: CodeExample;,
   onExecute: () => void;
-}
-const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({)
+  const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({,)
   example,
   onExecute
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  return ();
+  return;
     <div className="code-example">
       <div className="code-header">
         <div className="code-language">
@@ -1105,13 +1072,13 @@ const CodeExampleRenderer: React.FC<CodeExampleRendererProps> = ({)
 };
 
 // Tutorial Browser Component
+
 export interface TutorialBrowserProps {
-  tutorials: Tutorial[];
-  onTutorialSelect: (tutorial: Tutorial) => void;
+  tutorials: Tutorial;,
+  onTutorialSelect: (tutorial: Tutorial) => void;,
   onTutorialCreate: () => void;
   className?: string;
 }
-
 export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   tutorials,
   onTutorialSelect,
@@ -1130,12 +1097,12 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   const filteredTutorials = useMemo(() => {
     return tutorials
       .filter(tutorial => {)
-        const matchesSearch = tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||;
+  const matchesSearch = tutorial.title.toLowerCase().includes(searchQuery.toLowerCase()) ||;
                             tutorial.description.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
         const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
         return matchesSearch && matchesCategory && matchesDifficulty;
-      })
+  }
       .sort((a, b) => {
         switch (sortBy) {
         case 'title':
@@ -1149,10 +1116,9 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
           return b.metadata.rating - a.metadata.rating;
         default:
           return 0;
-        }
       });
   }, [tutorials, searchQuery, selectedCategory, selectedDifficulty, sortBy]);
-  return ();
+  return;
     <div className={`tutorial-browser ${className}`}>}
       <div className="browser-header">
         <h2>Browse Tutorials</h2>
@@ -1229,14 +1195,13 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
 
 // Tutorial Card Component
 interface TutorialCardProps {
-  tutorial: Tutorial;
+  tutorial: Tutorial;,
   onClick: () => void;
-}
-const TutorialCard: React.FC<TutorialCardProps> = ({)
+  const TutorialCard: React.FC<TutorialCardProps> = ({,)
   tutorial,
   onClick
 }) => {
-  return ();
+  return;
     <Card className="tutorial-card" onClick={onClick}>
       <CardContent>
         <div className="card-header">

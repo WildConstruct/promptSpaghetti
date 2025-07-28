@@ -1,8 +1,3 @@
 import React from 'react';
-interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
-    value?: number;
-    max?: number;
-}
-export declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.RefAttributes<HTMLDivElement>>;
-export {};
+export declare const Progress: React.ReactNode;
 //# sourceMappingURL=Progress.d.ts.map

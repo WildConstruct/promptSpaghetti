@@ -29,5 +29,5 @@ export declare class SafeExpressionEvaluator {
      * Clear Math function audit log
      */
     static clearMathAuditLog(): void;
-}
+
 //# sourceMappingURL=expression-evaluator.d.ts.map

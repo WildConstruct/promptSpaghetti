@@ -15,6 +15,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface SatisfactionSurvey {
   surveyId: string;
   userId: string;
@@ -33,6 +34,7 @@ export interface SatisfactionSurvey {
     negativeAspects: string[];
     suggestions: string[];
     openFeedback?: string;
+}
   };
   
   // Feature-Specific Ratings
@@ -53,6 +55,7 @@ export interface SatisfactionSurvey {
   source: SatisfactionSource;
 }
 
+}
 export interface SatisfactionMetrics {
   // Aggregate Scores
   overallSatisfaction: {
@@ -60,6 +63,7 @@ export interface SatisfactionMetrics {
     trend: 'improving' | 'stable' | 'declining';
     changeFromPrevious: number;
     sampleSize: number;
+}
   };
   
   // NPS Metrics
@@ -114,6 +118,7 @@ export interface SatisfactionMetrics {
   };
 }
 
+}
 export interface SatisfactionContext {
   // Product Context
   templateId?: string;
@@ -131,7 +136,9 @@ export interface SatisfactionContext {
   supportHistory: number; // number of previous tickets
   userRole: 'buyer' | 'seller' | 'admin' | 'moderator';
 }
+}
 
+}
 export interface SatisfactionAlert {
   alertId: string;
   alertType: 'satisfaction_drop' | 'nps_decline' | 'high_churn_risk' | 'feature_dissatisfaction';
@@ -158,7 +165,9 @@ export interface SatisfactionAlert {
   acknowledgedBy?: string;
   resolvedAt?: Date;
 }
+}
 
+}
 export interface SatisfactionDashboard {
   // Summary Metrics
   summary: {
@@ -167,6 +176,7 @@ export interface SatisfactionDashboard {
     responseRate: number;
     totalResponses: number;
     trendDirection: 'up' | 'down' | 'stable';
+}
   };
   
   // Real-time Metrics
@@ -222,19 +232,23 @@ export type SatisfactionSource =
   | 'api_integration'
   | 'manual_entry';
 
+}
 export interface SatisfactionTrendPoint {
   date: Date;
   score: number;
   responses: number;
   segments: Record<string, number>;
 }
+}
 
+}
 export interface SatisfactionDriver {
   factor: string;
   impact: number; // correlation coefficient
   frequency: number; // how often mentioned
   sentiment: 'positive' | 'negative' | 'neutral';
   examples: string[];
+}
 }
 
 /**
@@ -275,6 +289,7 @@ export class UserSatisfactionTracker extends EventEmitter {
    * Initialize user satisfaction tracking service
    */
   public async initialize(): Promise<void> {
+
     console.log('📊 Initializing User Satisfaction Tracking...');
     
     // Initialize database schema
@@ -300,6 +315,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     userId: string,
     surveyData: Partial<SatisfactionSurvey>
   ): Promise<SatisfactionSurvey> {
+
     const survey: SatisfactionSurvey = {
       surveyId: `survey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       userId,
@@ -312,7 +328,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         purchaseHistory: 0,
         supportHistory: 0,
         userRole: 'buyer'
-      },
+  }
       npsScore: surveyData.npsScore || 0,
       satisfactionRating: surveyData.satisfactionRating || 0,
       usabilityRating: surveyData.usabilityRating || 0,
@@ -321,7 +337,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         positiveAspects: [],
         negativeAspects: [],
         suggestions: []
-      },
+  }
       featureRatings: surveyData.featureRatings || {},
       completionTime: surveyData.completionTime || 0,
       responseQuality: surveyData.responseQuality || 'medium',
@@ -357,7 +373,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         surveyType: survey.surveyType,
         npsScore: survey.npsScore,
         satisfactionRating: survey.satisfactionRating
-      },
+  }
       timestamp: new Date()
     } as any);
     
@@ -373,6 +389,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     timeframe?: { start: Date; end: Date },
     segments?: string[]
   ): Promise<SatisfactionMetrics> {
+
     // Return cached metrics if recent enough
     if (this.metricsCache && Date.now() - this.lastMetricsUpdate.getTime() < 5 * 60 * 1000) {
       return this.metricsCache;
@@ -389,6 +406,7 @@ export class UserSatisfactionTracker extends EventEmitter {
    * Get satisfaction dashboard data
    */
   public async getSatisfactionDashboard(refreshCache = false): Promise<SatisfactionDashboard> {
+
     if (this.dashboardCache && !refreshCache) {
       // Check if cache is still fresh (5 minutes)
       const cacheAge = Date.now() - this.dashboardCache.timestamp.getTime();
@@ -411,6 +429,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     surveyType: SatisfactionSurveyType,
     context: Partial<SatisfactionContext>
   ): Promise<{ surveyId: string; questions: any[] }> {
+
     const surveyId = `survey_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Generate context-appropriate questions
@@ -430,6 +449,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     userId: string,
     responses: Record<string, any>
   ): Promise<void> {
+
     // Process responses into satisfaction survey format
     const surveyData = await this.processSurveyResponses(surveyId, responses);
     
@@ -454,6 +474,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     };
     insights: string[];
   }> {
+
     const surveys = await this.getUserSurveys(userId, timeframe);
     
     const trends = {
@@ -473,6 +494,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     severity?: string[],
     acknowledged?: boolean
   ): Promise<SatisfactionAlert[]> {
+
     let alerts = Array.from(this.activeAlerts.values());
     
     if (severity) {
@@ -493,6 +515,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     alertId: string,
     acknowledgedBy: string
   ): Promise<void> {
+
     const alert = this.activeAlerts.get(alertId);
     if (!alert) {
       throw new Error(`Alert ${alertId} not found`);
@@ -512,6 +535,7 @@ export class UserSatisfactionTracker extends EventEmitter {
    * Initialize database schema for satisfaction tracking
    */
   private async initializeSatisfactionSchema(): Promise<void> {
+
     const schemas = [
       `CREATE TABLE IF NOT EXISTS satisfaction_surveys (
         survey_id TEXT PRIMARY KEY,
@@ -583,6 +607,7 @@ export class UserSatisfactionTracker extends EventEmitter {
    * Load recent surveys from database
    */
   private async loadRecentSurveys(): Promise<void> {
+
     const rows = await this.databaseService.query(`
       SELECT * FROM satisfaction_surveys 
       WHERE created_at > datetime('now', '-7 days')
@@ -625,6 +650,7 @@ export class UserSatisfactionTracker extends EventEmitter {
     timeframe?: { start: Date; end: Date },
     segments?: string[]
   ): Promise<SatisfactionMetrics> {
+
     // This is a complex calculation that would involve multiple database queries
     // and statistical analysis. Here's the structure:
     
@@ -663,6 +689,7 @@ export class UserSatisfactionTracker extends EventEmitter {
    * Generate satisfaction dashboard
    */
   private async generateSatisfactionDashboard(): Promise<SatisfactionDashboard> {
+
     const metrics = await this.getSatisfactionMetrics();
     const alerts = await this.getSatisfactionAlerts();
     const recentFeedback = await this.getRecentFeedback();
@@ -675,7 +702,7 @@ export class UserSatisfactionTracker extends EventEmitter {
         totalResponses: metrics.overallSatisfaction.sampleSize,
         trendDirection: metrics.overallSatisfaction.trend === 'improving' ? 'up' : 
           metrics.overallSatisfaction.trend === 'declining' ? 'down' : 'stable'
-      },
+  }
       realtime: await this.generateRealtimeMetrics(),
       segments: await this.generateSegmentAnalysis(),
       features: await this.generateFeatureAnalysis(),
@@ -710,6 +737,7 @@ export class UserSatisfactionTracker extends EventEmitter {
   }
 
   private async storeSatisfactionSurvey(survey: SatisfactionSurvey): Promise<void> {
+
     await this.databaseService.query(`
       INSERT INTO satisfaction_surveys (
         survey_id, user_id, survey_type, context, nps_score, satisfaction_rating,

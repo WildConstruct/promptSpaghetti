@@ -6,7 +6,6 @@ interface UseExternalDataImportProps {
     cacheStrategy?: 'aggressive' | 'conservative' | 'disabled';
     onError?: (error: Error) => void;
     onSuccess?: (results: QueryResult[]) => void;
-}
 interface ExternalDataImportState {
     isLoading: boolean;
     hasError: boolean;
@@ -17,7 +16,6 @@ interface ExternalDataImportState {
     enabledSourcesCount: number;
     cacheHitRate: number;
     lastUpdateTime: string | null;
-}
 interface UseExternalDataImportReturn {
     state: ExternalDataImportState;
     queryData: (query: HistoricalQuery, sourceIds?: string[]) => Promise<QueryResult[]>;
@@ -36,7 +34,7 @@ interface UseExternalDataImportReturn {
     };
     getQuerySuggestions: (partial: Partial<HistoricalQuery>) => string[];
     exportResults: (format: 'json' | 'csv') => string;
-}
+
 export declare const useExternalDataImport: ({ autoRefresh, refreshInterval, enableRealTimeUpdates, cacheStrategy, onError, onSuccess }?: UseExternalDataImportProps) => UseExternalDataImportReturn;
 export declare const useQueryBuilder: () => {
     query: Partial<HistoricalQuery>;

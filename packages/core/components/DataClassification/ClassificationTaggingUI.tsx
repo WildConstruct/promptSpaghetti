@@ -16,7 +16,7 @@ import {
   DEFAULT_HANDLING_REQUIREMENTS
 } from '../../types/DataClassification';
 interface ClassificationTaggingUIProps {
-  dataElement: unknown;
+  dataElement: unknown;,
   dataId: string;
   existingClassification?: DataClassification;
   context?: ClassificationContext;
@@ -24,18 +24,15 @@ interface ClassificationTaggingUIProps {
   onValidationChange?: (validation: ValidationResult) => void;
   readonly?: boolean;
   showHandlingRequirements?: boolean;
-}
-interface ClassificationFormData {
-  classification: DataClassificationLevel | '';
+  interface ClassificationFormData {
+  classification: DataClassificationLevel | '';,
   rationale: string;
-  dataOwner: string;
+  dataOwner: string;,
   businessJustification: string;
-  riskAssessment: string;
-  regulatoryRequirements: string[];
-  dataLineage: string[];
-}
-
-export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = ({)
+  riskAssessment: string;,
+  regulatoryRequirements: string;
+  dataLineage: string;
+  export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = ({,)
   dataElement,
   dataId,
   existingClassification,
@@ -46,66 +43,59 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
   showHandlingRequirements = true
 }) => {
   const [formData, setFormData] = useState<ClassificationFormData>({)
-    classification: existingClassification?.classification || '',
-    rationale: existingClassification?.rationale || '',
-    dataOwner: existingClassification?.dataOwner || context?.dataOwner || '',
-    businessJustification: existingClassification?.metadata.businessJustification || '',
-    riskAssessment: existingClassification?.metadata.riskAssessment || '',
-    regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || [],
-    dataLineage: existingClassification?.metadata.dataLineage || [],
-  });
+  classification: existingClassification?.classification || '',
+  rationale: existingClassification?.rationale || '',
+  dataOwner: existingClassification?.dataOwner || context?.dataOwner || '',
+  businessJustification: existingClassification?.metadata.businessJustification || '',
+  riskAssessment: existingClassification?.metadata.riskAssessment || '',
+  regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || [],
+  dataLineage: existingClassification?.metadata.dataLineage || [],
+});
   const [validation, setValidation] = useState<ValidationResult>({)
-    valid: true,
-    errors: [],
-    warnings: [],
-    recommendations: [],
-  });
+  valid: true,
+  errors: [],
+  warnings: [],
+  recommendations: [],
+});
   const [showRequirements, setShowRequirements] = useState(false);
   const [currentUser] = useState('current-user'); // TODO: Get from auth context
   // Validate form data
   useEffect(() => {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-    const recommendations: string[] = [];
-    if (!formData.classification) {
-      errors.push('Classification level is required');
-    }
-    if (!formData.rationale.trim()) {
-      errors.push('Classification rationale is required');
-    } else if (formData.rationale.length < 20) {
-      warnings.push('Rationale should be more detailed (minimum 20 characters)');
-    }
-    if (!formData.dataOwner.trim()) {
-      errors.push('Data owner must be specified');
-    }
-    if (!formData.businessJustification.trim() && formData.classification !== 'PUBLIC') {
-      warnings.push('Business justification is recommended for non-public data');
-    }
-    if (!formData.riskAssessment.trim() && ['CONFIDENTIAL', 'RESTRICTED'].includes(formData.classification)) {
-      errors.push('Risk assessment is required for confidential and restricted data');
-    }
-    if (formData.classification === 'RESTRICTED' && formData.regulatoryRequirements.length === 0) {
-      warnings.push('Regulatory requirements should be specified for restricted data');
-    }
-    // Classification-specific recommendations
-    if (formData.classification === 'CONFIDENTIAL' || formData.classification === 'RESTRICTED') {
-      recommendations.push('Consider implementing additional access controls');
-      recommendations.push('Ensure appropriate audit logging is enabled');
-    }
-    const newValidation: ValidationResult = {
-      valid: errors.length === 0,
-      errors,
-      warnings,
-      recommendations
-    };
+  const errors: string = [];
+  const warnings: string = [];
+  const recommendations: string = [];
+  if (!formData.classification) {
+  errors.push('Classification level is required');
+  if (!formData.rationale.trim()) {
+  errors.push('Classification rationale is required');
+} else if (formData.rationale.length < 20) {
+  warnings.push('Rationale should be more detailed (minimum 20 characters)');
+  if (!formData.dataOwner.trim()) {
+  errors.push('Data owner must be specified');
+  if (!formData.businessJustification.trim() && formData.classification !== 'PUBLIC') {
+  warnings.push('Business justification is recommended for non-public data');
+  if (!formData.riskAssessment.trim() && ['CONFIDENTIAL', 'RESTRICTED'].includes(formData.classification)) {
+  errors.push('Risk assessment is required for confidential and restricted data');
+  if (formData.classification === 'RESTRICTED' && formData.regulatoryRequirements.length === 0) {
+  warnings.push('Regulatory requirements should be specified for restricted data');
+  // Classification-specific recommendations
+  if (formData.classification === 'CONFIDENTIAL' || formData.classification === 'RESTRICTED') {
+  recommendations.push('Consider implementing additional access controls');
+  recommendations.push('Ensure appropriate audit logging is enabled');
+  const newValidation: ValidationResult = {,
+  valid: errors.length === 0,
+  errors,
+  warnings,
+  recommendations
+};
     setValidation(newValidation);
     onValidationChange?.(newValidation);
   }, [formData, onValidationChange]);
   const handleFieldChange = (field: keyof ClassificationFormData, value: Error) => {
-    setFormData(prev => ({)
-      ...prev,
-      [field]: value
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  [field]: value,
+}));
   };
   const handleArrayFieldChange = (field: 'regulatoryRequirements' | 'dataLineage', value: string) => {
     const items = value.split(',').map(item => item.trim()).filter(item => item.length > 0);
@@ -113,9 +103,10 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
   };
   const handleSubmit = () => {
     if (!validation.valid || !formData.classification) return;
-    const classification: DataClassification = {
-      id: existingClassification?.id || `class-${dataId}-${Date.now()}`,}
-      dataElement: dataId,
+    const classification: DataClassification = {,
+  id: existingClassification?.id || `class-${dataId}-${Date.now()}`}
+},
+  dataElement: dataId,
       classification: formData.classification as DataClassificationLevel,
       rationale: formData.rationale,
       dataOwner: formData.dataOwner,
@@ -124,29 +115,28 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
       reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
       approvals: [], // Will be populated by approval workflow
       metadata: {,
-        businessJustification: formData.businessJustification,
-        riskAssessment: formData.riskAssessment,
-        regulatoryRequirements: formData.regulatoryRequirements,
-        dataLineage: formData.dataLineage,
-        relatedClassifications: [],
-      }
-    };
+  businessJustification: formData.businessJustification,
+  riskAssessment: formData.riskAssessment,
+  regulatoryRequirements: formData.regulatoryRequirements,
+  dataLineage: formData.dataLineage,
+  relatedClassifications: [],
+};
     onClassificationChange(classification);
   };
   const getClassificationColor = (level: DataClassificationLevel): string => {
-    const colors = {
-      PUBLIC: 'bg-green-100 text-green-800 border-green-300',
-      INTERNAL: 'bg-blue-100 text-blue-800 border-blue-300',
-      CONFIDENTIAL: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      RESTRICTED: 'bg-red-100 text-red-800 border-red-300',
-    };
+  const colors = {
+  PUBLIC: 'bg-green-100 text-green-800 border-green-300',
+  INTERNAL: 'bg-blue-100 text-blue-800 border-blue-300',
+  CONFIDENTIAL: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+  RESTRICTED: 'bg-red-100 text-red-800 border-red-300',
+};
     return colors[level];
   };
   const getHandlingRequirements = () => {
     if (!formData.classification) return null;
     return DEFAULT_HANDLING_REQUIREMENTS[formData.classification as DataClassificationLevel];
   };
-  return ();
+  return;
     <div className="classification-tagging-ui bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Data Classification</h3>
@@ -163,11 +153,11 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
             <p>Type: {context.dataType}</p>
             <p>Business Context: {context.businessContext}</p>
             <p>Risk Level: <span className={`px-2 py-1 rounded text-xs font-medium ${
-              context.riskLevel === 'CRITICAL' ? 'bg-red-100 text-red-800' :
-                context.riskLevel === 'HIGH' ? 'bg-orange-100 text-orange-800' :
-                  context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-green-100 text-green-800'
-            }`}>{context.riskLevel}</span></p>
+  context.riskLevel === 'CRITICAL' ? 'bg-red-100 text-red-800' :,
+  context.riskLevel === 'HIGH' ? 'bg-orange-100 text-orange-800' :,
+  context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-green-100 text-green-800'
+}`}>{context.riskLevel}</span></p>
           </div>
         )}
       </div>
@@ -186,8 +176,8 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
               className={`p-3 text-left border-2 rounded-lg transition-colors ${
                 formData.classification === level
                   ? `${getClassificationColor(level)} border-opacity-100`}
-                  : 'bg-white border-gray-200 hover:border-gray-300'
-              } ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
+                  : 'bg-white border-gray-200 hover:border-gray-300';
+  } ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`}
             >
               <div className="font-medium">{level}</div>
               <div className="text-xs text-gray-600 mt-1">
@@ -333,7 +323,7 @@ export const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps> = (
               {(() => {
                 const requirements = getHandlingRequirements();
                 if (!requirements) return null;
-                return ();
+                return;
                   <div className="space-y-3 text-sm">
                     <div>
                       <h5 className="font-medium text-gray-900">Storage</h5>

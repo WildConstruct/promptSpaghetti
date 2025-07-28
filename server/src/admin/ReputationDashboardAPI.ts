@@ -14,6 +14,7 @@ import { ReputationSystem, UserReputation, UserBadge, BadgeType, RestrictionLeve
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface ReputationDashboardAPI {
   // User Reputation Management
   getUserReputation(userId: string): Promise<UserReputation>;
@@ -36,7 +37,9 @@ export interface ReputationDashboardAPI {
   bulkRecalculate(userIds: string[]): Promise<any>;
   exportReputationData(filters: any): Promise<any>;
 }
+}
 
+}
 export interface ReputationAPIRequest {
   // User Management
   userId?: string;
@@ -56,7 +59,9 @@ export interface ReputationAPIRequest {
   userIds?: string[];
   batchSize?: number;
 }
+}
 
+}
 export interface ReputationAPIResponse {
   success: boolean;
   data?: any;
@@ -66,6 +71,7 @@ export interface ReputationAPIResponse {
     processedCount?: number;
     failedCount?: number;
     processingTime?: number;
+}
   };
 }
 
@@ -147,6 +153,7 @@ export class ReputationDashboardAPI {
    * Get user reputation
    */
   private async handleGetUserReputation(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { userId } = request.params as { userId: string };
       const reputation = await this.reputationSystem.getUserReputation(userId);
@@ -167,6 +174,7 @@ export class ReputationDashboardAPI {
    * Recalculate user reputation
    */
   private async handleRecalculateReputation(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { userId } = request.params as { userId: string };
       const adminUserId = this.extractUserId(request);
@@ -193,6 +201,7 @@ export class ReputationDashboardAPI {
    * Update user verification status
    */
   private async handleUpdateVerification(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { userId } = request.params as { userId: string };
       const body = request.body as any;
@@ -235,6 +244,7 @@ export class ReputationDashboardAPI {
    * Flag user for review
    */
   private async handleFlagUser(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { userId } = request.params as { userId: string };
       const body = request.body as any;
@@ -268,6 +278,7 @@ export class ReputationDashboardAPI {
    * Award badge to user
    */
   private async handleAwardBadge(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { userId } = request.params as { userId: string };
       const body = request.body as any;
@@ -302,6 +313,7 @@ export class ReputationDashboardAPI {
    * Get reputation dashboard
    */
   private async handleGetDashboard(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     const startTime = Date.now();
     
     try {
@@ -317,7 +329,7 @@ export class ReputationDashboardAPI {
           verificationRate: metrics.verificationStats.verificationRate,
           activeAlerts: alerts.length,
           criticalAlerts: alerts.filter(a => a.severity === 'critical').length
-        },
+  }
         metrics,
         alerts: alerts.slice(0, 10), // Latest 10 alerts
         recentActivity,
@@ -347,6 +359,7 @@ export class ReputationDashboardAPI {
    * Search users by reputation criteria
    */
   private async handleSearchUsers(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       
@@ -390,6 +403,7 @@ export class ReputationDashboardAPI {
    * Get reputation leaderboard
    */
   private async handleGetLeaderboard(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       const category = query.category || 'overall'; // overall, creators, buyers, reviewers
@@ -420,6 +434,7 @@ export class ReputationDashboardAPI {
    * Handle bulk reputation recalculation
    */
   private async handleBulkRecalculate(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const body = request.body as any;
       const adminUserId = this.extractUserId(request);
@@ -456,6 +471,7 @@ export class ReputationDashboardAPI {
    * Export reputation data
    */
   private async handleExportData(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const body = request.body as any;
       const adminUserId = this.extractUserId(request);
@@ -493,7 +509,7 @@ export class ReputationDashboardAPI {
           format,
           recordCount: Array.isArray(exportData) ? exportData.length : 0,
           includePersonalData
-        },
+  }
         timestamp: new Date()
       } as any);
       
@@ -515,27 +531,28 @@ export class ReputationDashboardAPI {
    * Get real-time reputation statistics
    */
   private async handleRealtimeStats(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const stats = {
         reputationCalculations: {
           lastHour: await this.getCalculationCount('1 hour'),
           today: await this.getCalculationCount('24 hours'),
           thisWeek: await this.getCalculationCount('7 days')
-        },
+  }
         verificationRequests: {
           pending: await this.getPendingVerificationCount(),
           processedToday: await this.getVerificationProcessedCount('24 hours')
-        },
+  }
         alerts: {
           active: await this.getActiveAlertCount(),
           critical: await this.getCriticalAlertCount(),
           unassigned: await this.getUnassignedAlertCount()
-        },
+  }
         systemHealth: {
           reputationSystemHealth: await this.getReputationSystemHealthScore(),
           averageCalculationTime: await this.getAverageCalculationTime(),
           errorRate: await this.getCalculationErrorRate()
-        },
+  }
         timestamp: new Date()
       };
       
@@ -568,6 +585,7 @@ export class ReputationDashboardAPI {
    * Validate admin permissions
    */
   private async validateAdminPermissions(userId: string, permission: string): Promise<void> {
+
     // This would integrate with the actual permission system
     // For now, just check if user exists
     if (!userId) {
@@ -585,6 +603,7 @@ export class ReputationDashboardAPI {
    * Search users by reputation criteria
    */
   private async searchUsersByReputation(filters: any): Promise<any[]> {
+
     let query = `
       SELECT ur.*, u.username, u.email, u.created_at as user_created_at
       FROM user_reputations ur
@@ -644,6 +663,7 @@ export class ReputationDashboardAPI {
    * Get reputation leaderboard
    */
   private async getReputationLeaderboard(category: string, timeframe: string, limit: number): Promise<any[]> {
+
     // Implementation would depend on category and timeframe
     // For now, return top users by overall score
     const rows = await this.databaseService.query(`
@@ -668,18 +688,22 @@ export class ReputationDashboardAPI {
 
   // Additional placeholder methods for unimplemented functionality
   private async handleUnflagUser(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleRevokeBadge(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetBadgeDefinitions(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleCreateBadgeDefinition(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
@@ -710,6 +734,7 @@ export class ReputationDashboardAPI {
 
   // Placeholder methods for remaining endpoints
   private async handleGetMetrics(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const metrics = await this.reputationSystem.getReputationMetrics();
       return reply.code(200).send({ success: true, data: metrics });
@@ -719,6 +744,7 @@ export class ReputationDashboardAPI {
   }
 
   private async handleGetAlerts(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       const alerts = await this.reputationSystem.getActiveReputationAlerts(
@@ -732,50 +758,62 @@ export class ReputationDashboardAPI {
   }
 
   private async handleGetTrends(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleGetFraudAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleBulkVerify(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleAssignAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleResolveAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleEscalateAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleGetVerificationQueue(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleApproveVerification(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleRejectVerification(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleGetConfig(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleUpdateConfig(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 
   private async handleSystemHealth(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(200).send({
       success: true,
       data: {

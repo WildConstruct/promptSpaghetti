@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+
 export interface QueuedOperation {
     id: string;
     type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
@@ -12,7 +13,7 @@ export interface QueuedOperation {
     dependencies?: string[];
     maxRetries: number;
     expiresAt?: number;
-}
+
 export interface QueueMetrics {
     totalOperations: number;
     pendingOperations: number;
@@ -27,7 +28,7 @@ export interface QueueMetrics {
         low: number;
     };
     operationsByType: Map<string, number>;
-}
+
 export interface OfflineQueueConfig {
     maxQueueSize: number;
     maxRetries: number;
@@ -43,7 +44,7 @@ export interface OfflineQueueConfig {
         medium: number;
         low: number;
     };
-}
+
 export declare class OfflineOperationQueue extends EventEmitter {
     private queue;
     private processingQueue;
@@ -141,5 +142,5 @@ export declare class OfflineOperationQueue extends EventEmitter {
      * Load queue from localStorage
      */
     private loadFromPersistence;
-}
+
 //# sourceMappingURL=OfflineOperationQueue.d.ts.map

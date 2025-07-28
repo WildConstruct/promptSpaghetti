@@ -1,14 +1,3 @@
-/**
- * User Access Transparency Service
- *
- * Comprehensive transparency tools that provide users with full visibility
- * into how their data is accessed, processed, and shared. Implements
- * GDPR transparency requirements and user-centric privacy controls.
- *
- * Part of Epic 19 - Data Protection & Privacy Controls
- * Task: T-1752989143998-872 - Create user access transparency tools
- */
-import { EventEmitter } from 'events';
 import { DataClassificationLevel } from '../types/DataClassification';
 import { DataOperation } from './DataClassificationAccessControl';
 export interface TransparencyConfig {
@@ -21,13 +10,13 @@ export interface TransparencyConfig {
     consentManagementEnabled: boolean;
     dsarAutomationEnabled: boolean;
     dataPortabilityEnabled: boolean;
-    notificationChannels: NotificationChannel[];
+    notificationChannels: NotificationChannel;
 }
 export interface NotificationChannel {
     type: 'EMAIL' | 'SMS' | 'PUSH' | 'WEBHOOK' | 'IN_APP';
     endpoint: string;
     enabled: boolean;
-    events: TransparencyEventType[];
+    events: TransparencyEventType;
     frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY';
 }
 export declare enum TransparencyEventType {
@@ -41,27 +30,19 @@ export declare enum TransparencyEventType {
     PRIVACY_POLICY_UPDATE = "privacy_policy_update",
     CONSENT_REQUIRED = "consent_required",
     DATA_BREACH = "data_breach",
-    COMPLIANCE_VIOLATION = "compliance_violation"
-}
-export interface UserDataInventory {
-    userId: string;
-    generatedAt: Date;
-    dataCategories: DataCategory[];
-    totalDataPoints: number;
-    sensitiveDataCount: number;
-    retentionSummary: RetentionSummary;
-    thirdPartySharing: ThirdPartySharing[];
-    complianceStatus: ComplianceStatus;
-    privacyScore: PrivacyScore;
+    COMPLIANCE_VIOLATION = "compliance_violation",
+    export,
+    interface,
+    UserDataInventory
 }
 export interface DataCategory {
     category: string;
     description: string;
     classification: DataClassificationLevel;
-    dataPoints: DataPoint[];
-    lawfulBasis: LawfulBasis[];
+    dataPoints: DataPoint;
+    lawfulBasis: LawfulBasis;
     retentionPeriod: RetentionPeriod;
-    processingPurposes: ProcessingPurpose[];
+    processingPurposes: ProcessingPurpose;
     thirdPartyAccess: boolean;
     userControl: UserControlLevel;
 }
@@ -74,7 +55,7 @@ export interface DataPoint {
     collectedAt: Date;
     lastAccessed: Date;
     accessCount: number;
-    modificationHistory: DataModification[];
+    modificationHistory: DataModification;
     consentStatus: ConsentStatus;
 }
 export interface DataModification {
@@ -91,7 +72,7 @@ export interface LawfulBasis {
     description: string;
     validFrom: Date;
     validUntil?: Date;
-    evidence: string[];
+    evidence: string;
     userNotified: boolean;
 }
 export interface RetentionPeriod {
@@ -118,7 +99,7 @@ export interface ConsentStatus {
     withdrawable: boolean;
     withdrawnAt?: Date;
     version: string;
-    evidence: ConsentEvidence[];
+    evidence: ConsentEvidence;
 }
 export interface ConsentEvidence {
     type: 'EXPLICIT' | 'IMPLIED' | 'PRECHECK' | 'COOKIE' | 'API';
@@ -135,7 +116,7 @@ export interface RetentionSummary {
     expiredDataCount: number;
     userRequestedDeletions: number;
     automaticDeletions: number;
-    upcomingDeletions: UpcomingDeletion[];
+    upcomingDeletions: UpcomingDeletion;
 }
 export interface UpcomingDeletion {
     dataId: string;
@@ -149,7 +130,7 @@ export interface ThirdPartySharing {
     thirdPartyId: string;
     thirdPartyName: string;
     sharingPurpose: string;
-    dataShared: string[];
+    dataShared: string;
     sharingDate: Date;
     legalBasis: string;
     userConsent: boolean;
@@ -176,9 +157,9 @@ export interface ContactInfo {
 }
 export interface ComplianceStatus {
     overall: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT' | 'UNKNOWN';
-    frameworks: FrameworkCompliance[];
-    violations: ComplianceViolation[];
-    pendingActions: ComplianceAction[];
+    frameworks: FrameworkCompliance;
+    violations: ComplianceViolation;
+    pendingActions: ComplianceAction;
     lastAssessment: Date;
     nextAssessment: Date;
 }
@@ -186,14 +167,14 @@ export interface FrameworkCompliance {
     framework: 'GDPR' | 'CCPA' | 'HIPAA' | 'PCI_DSS' | 'SOX' | 'ISO27001';
     status: 'COMPLIANT' | 'PARTIAL' | 'NON_COMPLIANT';
     score: number;
-    requirements: RequirementStatus[];
+    requirements: RequirementStatus;
     lastAudit: Date;
     nextAudit: Date;
 }
 export interface RequirementStatus {
     requirement: string;
     status: 'MET' | 'PARTIAL' | 'NOT_MET' | 'NOT_APPLICABLE';
-    evidence: string[];
+    evidence: string;
     gap?: string;
     remediation?: string;
 }
@@ -205,7 +186,7 @@ export interface ComplianceViolation {
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     detectedAt: Date;
     resolvedAt?: Date;
-    remediation: string[];
+    remediation: string;
     userImpact: string;
     notificationRequired: boolean;
 }
@@ -228,8 +209,8 @@ export interface PrivacyScore {
         retentionCompliance: number;
         userControl: number;
     };
-    trends: PrivacyTrend[];
-    recommendations: PrivacyRecommendation[];
+    trends: PrivacyTrend;
+    recommendations: PrivacyRecommendation;
     lastCalculated: Date;
 }
 export interface PrivacyTrend {
@@ -252,7 +233,7 @@ export interface UserAccessActivity {
     timestamp: Date;
     activityType: TransparencyEventType;
     actor: ActivityActor;
-    dataAccessed: AccessedData[];
+    dataAccessed: AccessedData;
     purpose: string;
     legalBasis: string;
     automated: boolean;
@@ -295,15 +276,15 @@ export interface DataSubjectAccessRequest {
     requestDetails: DSARRequestDetails;
     response?: DSARResponse;
     assignedTo?: string;
-    processingHistory: DSARProcessingStep[];
+    processingHistory: DSARProcessingStep;
 }
 export interface DSARRequestDetails {
-    dataCategories?: string[];
+    dataCategories?: string;
     timeRange?: {
         start: Date;
         end: Date;
     };
-    specificData?: string[];
+    specificData?: string;
     reason?: string;
     identityVerified: boolean;
     urgency: 'STANDARD' | 'URGENT' | 'EMERGENCY';
@@ -316,9 +297,9 @@ export interface DSARResponse {
     fileSize: number;
     downloadUrl?: string;
     expiresAt: Date;
-    dataIncluded: string[];
-    dataExcluded: string[];
-    exclusionReasons: string[];
+    dataIncluded: string;
+    dataExcluded: string;
+    exclusionReasons: string;
     additionalInfo?: string;
 }
 export interface DSARProcessingStep {
@@ -344,7 +325,7 @@ export interface NotificationPreferences {
     pushNotifications: boolean;
     smsNotifications: boolean;
     frequency: 'IMMEDIATE' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
-    eventTypes: TransparencyEventType[];
+    eventTypes: TransparencyEventType;
     quietHours: {
         enabled: boolean;
         start: string;
@@ -372,7 +353,7 @@ export interface ConsentPreferences {
 }
 export interface DataRetentionPreferences {
     minimumRetention: boolean;
-    customRetentionPeriods: CustomRetentionPeriod[];
+    customRetentionPeriods: CustomRetentionPeriod;
     automaticDeletionReminders: boolean;
     dataArchivingPreference: 'DELETE' | 'ARCHIVE' | 'USER_CHOICE';
     retentionExtensionNotifications: boolean;
@@ -396,84 +377,17 @@ export declare enum UserControlLevel {
     LIMITED = "limited",
     MODERATE = "moderate",
     FULL = "full"
+    /**
+    * Main User Access Transparency Service
+    */
+    ,
+    /**
+    * Main User Access Transparency Service
+    */
+    export,
+    class,
+    UserAccessTransparencyService,
+    extends,
+    EventEmitter
 }
-/**
- * Main User Access Transparency Service
- */
-export declare class UserAccessTransparencyService extends EventEmitter {
-    private config;
-    private userSettings;
-    private activeDataInventories;
-    private dsarRequests;
-    private notificationQueue;
-    constructor(config: TransparencyConfig);
-    /**
-     * Generate comprehensive data inventory for user
-     */
-    generateUserDataInventory(userId: string): Promise<UserDataInventory>;
-    /**
-     * Get real-time user access activity
-     */
-    getUserAccessActivity(userId: string, timeRange?: {
-        start: Date;
-        end: Date;
-    }, limit?: number): Promise<UserAccessActivity[]>;
-    /**
-     * Submit Data Subject Access Request
-     */
-    submitDSAR(userId: string, requestType: DataSubjectAccessRequest['requestType'], details: DSARRequestDetails): Promise<DataSubjectAccessRequest>;
-    /**
-     * Get user's privacy score and recommendations
-     */
-    getPrivacyScore(userId: string): Promise<PrivacyScore>;
-    /**
-     * Update user transparency settings
-     */
-    updateTransparencySettings(userId: string, settings: Partial<TransparencySettings>): Promise<TransparencySettings>;
-    /**
-     * Send real-time transparency notification
-     */
-    sendTransparencyNotification(notification: TransparencyNotification): Promise<void>;
-    /**
-     * Get compliance status for user
-     */
-    getUserComplianceStatus(userId: string): Promise<ComplianceStatus>;
-    /**
-     * Export user data for portability
-     */
-    exportUserData(userId: string, format?: 'JSON' | 'XML' | 'CSV' | 'PDF', categories?: string[]): Promise<DSARResponse>;
-    private buildDataInventory;
-    private gatherDataCategories;
-    private calculateRetentionSummary;
-    private getThirdPartySharing;
-    private assessUserCompliance;
-    private calculatePrivacyScore;
-    private fetchUserAccessActivities;
-    private enrichActivityWithTransparencyData;
-    private generateRequestId;
-    private calculateCompletionDeadline;
-    private processDBARAutomatically;
-    private getDefaultSettings;
-    private isInQuietHours;
-    private queueNotification;
-    private deliverNotification;
-    private gatherUserDataForExport;
-    private generateDataExport;
-    private startPeriodicTasks;
-    private processNotificationQueue;
-}
-export interface TransparencyNotification {
-    id: string;
-    userId: string;
-    eventType: TransparencyEventType;
-    title: string;
-    message: string;
-    severity: 'INFO' | 'WARNING' | 'CRITICAL';
-    data: Record<string, any>;
-    timestamp: Date;
-    delivered: boolean;
-    deliveredAt?: Date;
-    channels: NotificationChannel[];
-}
-export default UserAccessTransparencyService;
 //# sourceMappingURL=UserAccessTransparency.d.ts.map

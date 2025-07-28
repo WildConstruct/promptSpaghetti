@@ -50,7 +50,7 @@ const evaluateToggleSchema = {
       items: { type: 'string' },
       minItems: 1,
       maxItems: 50
-    },
+  }
     context: {
       type: 'object',
       properties: {
@@ -200,7 +200,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       body: updateToggleSchema
     }
   }, async (request, reply) => {
@@ -227,13 +227,13 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           dryRun: { type: 'boolean', default: false }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -264,7 +264,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
             dependents: dependencies.dependents,
             estimatedUserImpact: 'TBD', // TODO: Integrate with Epic 13 analytics
             claudeImpact: toggle.claudeImpact
-          },
+  }
           wouldActivate: true
         });
       }
@@ -290,13 +290,13 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           dryRun: { type: 'boolean', default: false }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -328,7 +328,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
             estimatedUserImpact: 'TBD', // TODO: Integrate with Epic 13 analytics
             claudeImpact: toggle.claudeImpact,
             deactivationRisk: toggle.enabled ? 'MEDIUM' : 'LOW'
-          },
+  }
           wouldDeactivate: true
         });
       }
@@ -354,7 +354,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       body: {
         type: 'object',
         required: ['reason'],
@@ -412,7 +412,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -442,7 +442,7 @@ export async function featureToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         required: ['id'],
         properties: { id: { type: 'string', format: 'uuid' } }
-      },
+  }
       body: emergencyOverrideSchema
     }
   }, async (request, reply) => {

@@ -14,7 +14,7 @@ export interface SecurityEventConfig {
 export interface LoggingConfiguration {
     enabled: boolean;
     level: 'debug' | 'info' | 'warn' | 'error' | 'critical';
-    destinations: LogDestination[];
+    destinations: LogDestination;
     encryption: EncryptionConfiguration;
     batchSize: number;
     flushInterval: number;
@@ -26,8 +26,8 @@ export interface LogDestination {
     type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
     config: Record<string, any>;
     enabled: boolean;
-    filters: LogFilter[];
-    formatters: LogFormatter[];
+    filters: LogFilter;
+    formatters: LogFormatter;
 }
 export interface LogFilter {
     field: string;
@@ -38,15 +38,15 @@ export interface LogFilter {
 export interface LogFormatter {
     type: 'json' | 'structured' | 'syslog' | 'cef' | 'leef';
     template?: string;
-    includeFields?: string[];
-    excludeFields?: string[];
+    includeFields?: string;
+    excludeFields?: string;
 }
 export interface EncryptionConfiguration {
     enabled: boolean;
     algorithm: 'AES-256-GCM' | 'AES-256-CBC';
     keyRotationInterval: number;
     encryptSensitiveFields: boolean;
-    sensitiveFields: string[];
+    sensitiveFields: string;
 }
 export interface CircuitBreakerConfiguration {
     failureThreshold: number;
@@ -56,21 +56,21 @@ export interface CircuitBreakerConfiguration {
 }
 export interface AlertingConfiguration {
     enabled: boolean;
-    rules: SecurityAlertRule[];
-    channels: AlertChannel[];
-    suppressionRules: SuppressionRule[];
-    escalationPolicies: EscalationPolicy[];
+    rules: SecurityAlertRule;
+    channels: AlertChannel;
+    suppressionRules: SuppressionRule;
+    escalationPolicies: EscalationPolicy;
 }
 export interface SecurityAlertRule {
     id: string;
     name: string;
     description: string;
     enabled: boolean;
-    eventTypes: string[];
-    conditions: AlertCondition[];
+    eventTypes: string;
+    conditions: AlertCondition;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    channels: string[];
-    suppressionRules?: string[];
+    channels: string;
+    suppressionRules?: string;
     escalationPolicy?: string;
     metadata: Record<string, any>;
 }
@@ -81,14 +81,14 @@ export interface AlertCondition {
     value: any;
     timeWindow: number;
     aggregation?: 'count' | 'sum' | 'avg' | 'max' | 'min';
-    groupBy?: string[];
+    groupBy?: string;
 }
 export interface AlertChannel {
     id: string;
     type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'sms';
     config: Record<string, any>;
     enabled: boolean;
-    rateLimits: RateLimit[];
+    rateLimits: RateLimit;
 }
 export interface RateLimit {
     maxAlerts: number;
@@ -99,7 +99,7 @@ export interface SuppressionRule {
     id: string;
     name: string;
     enabled: boolean;
-    conditions: AlertCondition[];
+    conditions: AlertCondition;
     duration: number;
     reason: string;
 }
@@ -107,15 +107,15 @@ export interface EscalationPolicy {
     id: string;
     name: string;
     enabled: boolean;
-    steps: EscalationStep[];
+    steps: EscalationStep;
 }
 export interface EscalationStep {
     delay: number;
-    channels: string[];
+    channels: string;
     condition?: 'unacknowledged' | 'unresolved';
 }
 export interface RetentionConfiguration {
-    policies: RetentionPolicy[];
+    policies: RetentionPolicy;
     archival: ArchivalConfiguration;
     deletion: DeletionConfiguration;
 }
@@ -123,14 +123,14 @@ export interface RetentionPolicy {
     id: string;
     name: string;
     framework: ComplianceFramework;
-    eventTypes: string[];
-    dataClassifications: DataSensitivityLevel[];
+    eventTypes: string;
+    dataClassifications: DataSensitivityLevel;
     retentionPeriod: number;
     archivalRequired: boolean;
     encryptionRequired: boolean;
     immutableStorage: boolean;
     purgeAfterRetention: boolean;
-    exceptions: RetentionException[];
+    exceptions: RetentionException;
 }
 export interface RetentionException {
     reason: 'legal_hold' | 'investigation' | 'regulatory_request' | 'data_subject_request';
@@ -154,14 +154,14 @@ export interface DeletionConfiguration {
     auditDeletion: boolean;
 }
 export interface ComplianceConfiguration {
-    frameworks: ComplianceFrameworkConfig[];
+    frameworks: ComplianceFrameworkConfig;
     reporting: ReportingConfiguration;
     monitoring: ComplianceMonitoringConfiguration;
 }
 export interface ComplianceFrameworkConfig {
     framework: ComplianceFramework;
     enabled: boolean;
-    requirements: ComplianceRequirement[];
+    requirements: ComplianceRequirement;
     reportingFrequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
     alertOnViolations: boolean;
 }
@@ -170,8 +170,8 @@ export interface ComplianceRequirement {
     name: string;
     description: string;
     mandatory: boolean;
-    eventTypes: string[];
-    validationRules: ValidationRule[];
+    eventTypes: string;
+    validationRules: ValidationRule;
 }
 export interface ValidationRule {
     field: string;
@@ -184,14 +184,14 @@ export interface ReportingConfiguration {
     enabled: boolean;
     autoGeneration: boolean;
     outputFormats: ('json' | 'csv' | 'pdf' | 'xlsx')[];
-    recipients: ReportRecipient[];
-    schedules: ReportSchedule[];
+    recipients: ReportRecipient;
+    schedules: ReportSchedule;
 }
 export interface ReportRecipient {
     email: string;
     role: string;
-    frameworks: ComplianceFramework[];
-    reportTypes: string[];
+    frameworks: ComplianceFramework;
+    reportTypes: string;
 }
 export interface ReportSchedule {
     id: string;
@@ -211,7 +211,7 @@ export interface PerformanceConfiguration {
     monitoring: {
         enabled: boolean;
         metricsCollectionInterval: number;
-        alertThresholds: PerformanceThreshold[];
+        alertThresholds: PerformanceThreshold;
     };
     optimization: {
         asyncLogging: boolean;
@@ -239,14 +239,5 @@ export interface CacheConfiguration {
     maxSize: number;
     evictionPolicy: 'lru' | 'lfu' | 'fifo';
 }
-/**
- * Default Security Event Configuration
- * Production-ready configuration with security best practices
- */
 export declare const DEFAULT_SECURITY_EVENT_CONFIG: SecurityEventConfig;
-/**
- * Development Security Event Configuration
- * Lighter configuration for development and testing
- */
-export declare const DEVELOPMENT_SECURITY_EVENT_CONFIG: SecurityEventConfig;
 //# sourceMappingURL=SecurityEventConfiguration.d.ts.map

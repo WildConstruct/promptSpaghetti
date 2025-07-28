@@ -58,6 +58,7 @@ export type RecoveryUrgency =
 // RECOVERY AUTOMATION INTERFACES
 // ==========================================
 
+}
 export interface RecoveryAutomationRule {
   rule_id: string;
   name: string;
@@ -69,6 +70,7 @@ export interface RecoveryAutomationRule {
     duration?: number; // seconds
     pattern?: string;
     custom_query?: string;
+}
   };
   recovery_strategy: RecoveryStrategy;
   urgency: RecoveryUrgency;
@@ -88,6 +90,7 @@ export interface RecoveryAutomationRule {
   updated_by: string;
 }
 
+}
 export interface RecoveryAutomationExecution {
   execution_id: string;
   rule_id: string;
@@ -99,6 +102,7 @@ export interface RecoveryAutomationExecution {
     affected_components: string[];
     metrics?: Record<string, any>;
     error_details?: string;
+}
   };
   recovery_strategy: RecoveryStrategy;
   status: RecoveryAutomationStatus;
@@ -157,6 +161,7 @@ export interface RecoveryAutomationExecution {
   updated_at: Date;
 }
 
+}
 export interface RecoveryStep {
   step_id: string;
   step_name: string;
@@ -172,7 +177,9 @@ export interface RecoveryStep {
   step_data?: Record<string, any>;
   validation_results?: Record<string, boolean>;
 }
+}
 
+}
 export interface RecoveryAutomationConfig {
   enabled: boolean;
   monitoring_interval_seconds: number;
@@ -183,6 +190,7 @@ export interface RecoveryAutomationConfig {
     sms_enabled: boolean;
     webhook_enabled: boolean;
     default_recipients: string[];
+}
   };
   escalation_settings: {
     enable_escalation: boolean;
@@ -225,30 +233,30 @@ export const DEFAULT_RECOVERY_AUTOMATION_CONFIG: RecoveryAutomationConfig = {
     sms_enabled: true,
     webhook_enabled: false,
     default_recipients: ['admin@company.com']
-  },
+  }
   escalation_settings: {
     enable_escalation: true,
     default_escalation_minutes: 15,
     max_escalation_levels: 3
-  },
+  }
   validation_settings: {
     enable_pre_recovery_validation: true,
     enable_post_recovery_validation: true,
     validation_timeout_minutes: 10,
     required_validation_checks: ['system_health', 'data_integrity', 'user_access']
-  },
+  }
   recovery_point_settings: {
     auto_create_recovery_points: true,
     recovery_point_retention_days: 30,
     create_before_recovery: true
-  },
+  }
   performance_thresholds: {
     cpu_threshold: 85,
     memory_threshold: 90,
     disk_threshold: 95,
     response_time_ms: 5000,
     error_rate_percentage: 10
-  },
+  }
   security_settings: {
     require_admin_approval_for_critical: true,
     audit_all_recovery_actions: true,
@@ -285,6 +293,7 @@ export class RecoveryAutomationService {
     rule: Omit<RecoveryAutomationRule, 'rule_id' | 'created_at' | 'updated_at'>,
     created_by: string
   ): Promise<RecoveryAutomationRule> {
+
     const rule_id = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -329,6 +338,7 @@ export class RecoveryAutomationService {
     updates: Partial<RecoveryAutomationRule>,
     updated_by: string
   ): Promise<RecoveryAutomationRule> {
+
     const existing_rule = await this.getRecoveryRule(rule_id);
     if (!existing_rule) {
       throw new Error(`Recovery rule not found: ${rule_id}`);
@@ -413,6 +423,7 @@ export class RecoveryAutomationService {
   }
 
   async getRecoveryRule(rule_id: string): Promise<RecoveryAutomationRule | null> {
+
     // Check cache first
     if (this.recovery_rules.has(rule_id)) {
       return this.recovery_rules.get(rule_id)!;
@@ -456,6 +467,7 @@ export class RecoveryAutomationService {
     trigger_type?: RecoveryTriggerType;
     urgency?: RecoveryUrgency;
   }): Promise<RecoveryAutomationRule[]> {
+
     let query = 'SELECT * FROM recovery_automation_rules WHERE 1=1';
     const values: any[] = [];
     let param_index = 1;
@@ -507,6 +519,7 @@ export class RecoveryAutomationService {
     trigger_details: RecoveryAutomationExecution['trigger_details'],
     triggered_by?: string
   ): Promise<string> {
+
     const execution_id = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     // Find matching rules
@@ -535,17 +548,17 @@ export class RecoveryAutomationService {
       execution_timeline: {
         started_at: new Date(),
         analyzing_started: new Date()
-      },
+  }
       metrics: {
         components_recovered: 0
-      },
+  }
       validation_results: {
         system_health: false,
         data_integrity: false,
         performance_metrics: {},
         user_access_restored: false,
         compliance_maintained: false
-      },
+  }
       notifications_sent: [],
       escalations: [],
       admin_interventions: [],
@@ -576,6 +589,7 @@ export class RecoveryAutomationService {
     trigger_type: RecoveryTriggerType,
     trigger_details: RecoveryAutomationExecution['trigger_details']
   ): Promise<RecoveryAutomationRule[]> {
+
     const rules = await this.listRecoveryRules({ 
       enabled: true, 
       trigger_type 
@@ -595,6 +609,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeRecovery(execution_id: string): Promise<void> {
+
     const execution = this.active_recoveries.get(execution_id);
     if (!execution) {
       throw new Error(`Recovery execution not found: ${execution_id}`);
@@ -657,6 +672,7 @@ export class RecoveryAutomationService {
   }
 
   private async buildRecoverySteps(execution: RecoveryAutomationExecution): Promise<RecoveryStep[]> {
+
     const steps: RecoveryStep[] = [];
 
     // Pre-recovery validation
@@ -752,6 +768,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeRecoveryStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     step.status = 'running';
     step.started_at = new Date();
 
@@ -791,6 +808,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeValidationStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     // Implement validation logic
     step.validation_results = {
       system_available: true,
@@ -800,6 +818,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeBackupStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     // Create recovery point using existing service
     const recovery_point = await this.recoveryService.createRecoveryPoint(
       `Pre-recovery backup for ${execution_id}`,
@@ -811,6 +830,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeRestoreStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     const execution = this.active_recoveries.get(execution_id)!;
     
     // Get the most recent recovery point
@@ -839,6 +859,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeVerificationStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     // Implement post-recovery verification
     step.validation_results = {
       system_health: true,
@@ -848,6 +869,7 @@ export class RecoveryAutomationService {
   }
 
   private async executeNotificationStep(execution_id: string, step: RecoveryStep): Promise<void> {
+
     const execution = this.active_recoveries.get(execution_id)!;
     
     // Send notifications to configured recipients
@@ -858,6 +880,7 @@ export class RecoveryAutomationService {
   }
 
   private async validateRecovery(execution: RecoveryAutomationExecution): Promise<boolean> {
+
     // Implement comprehensive recovery validation
     let validation_success = true;
 
@@ -889,26 +912,31 @@ export class RecoveryAutomationService {
   }
 
   private async checkSystemHealth(): Promise<boolean> {
+
     // Implement system health check
     return true;
   }
 
   private async checkDataIntegrity(): Promise<boolean> {
+
     // Implement data integrity check
     return true;
   }
 
   private async checkUserAccess(): Promise<boolean> {
+
     // Implement user access check
     return true;
   }
 
   private async checkCompliance(): Promise<boolean> {
+
     // Implement compliance check
     return true;
   }
 
   private async sendRecoveryNotifications(execution: RecoveryAutomationExecution): Promise<void> {
+
     // Implementation for sending notifications
     console.log(`Recovery ${execution.execution_id} completed with status: ${execution.status}`);
   }
@@ -918,6 +946,7 @@ export class RecoveryAutomationService {
   // ==========================================
 
   private async storeRecoveryExecution(execution: RecoveryAutomationExecution): Promise<void> {
+
     await this.db.query(`
       INSERT INTO recovery_automation_executions (
         execution_id, rule_id, trigger_type, trigger_details, recovery_strategy,
@@ -936,6 +965,7 @@ export class RecoveryAutomationService {
   }
 
   private async updateRecoveryExecution(execution: RecoveryAutomationExecution): Promise<void> {
+
     execution.updated_at = new Date();
     
     await this.db.query(`
@@ -959,6 +989,7 @@ export class RecoveryAutomationService {
   // ==========================================
 
   async startMonitoring(): Promise<void> {
+
     if (this.monitoring_active) {
       return;
     }
@@ -971,11 +1002,13 @@ export class RecoveryAutomationService {
   }
 
   async stopMonitoring(): Promise<void> {
+
     this.monitoring_active = false;
     console.log('Recovery automation monitoring stopped');
   }
 
   private async monitoringLoop(): Promise<void> {
+
     while (this.monitoring_active) {
       try {
         await this.checkForTriggers();
@@ -992,11 +1025,13 @@ export class RecoveryAutomationService {
   }
 
   private async checkForTriggers(): Promise<void> {
+
     // Implement trigger detection logic
     // This would check system metrics, logs, etc. for conditions that match recovery rules
   }
 
   private async updateActiveRecoveries(): Promise<void> {
+
     // Update status of active recoveries
     for (const [execution_id, execution] of this.active_recoveries) {
       if (['completed', 'failed', 'cancelled'].includes(execution.status)) {
@@ -1006,6 +1041,7 @@ export class RecoveryAutomationService {
   }
 
   private async checkEscalations(): Promise<void> {
+
     // Check if any recoveries need escalation
     for (const execution of this.active_recoveries.values()) {
       if (this.shouldEscalate(execution)) {
@@ -1020,6 +1056,7 @@ export class RecoveryAutomationService {
   }
 
   private async escalateRecovery(execution: RecoveryAutomationExecution): Promise<void> {
+
     // Implement escalation logic
     console.log(`Escalating recovery: ${execution.execution_id}`);
   }

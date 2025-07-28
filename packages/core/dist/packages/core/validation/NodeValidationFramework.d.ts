@@ -1,10 +1,4 @@
-/**
- * Node Validation Framework
- * Epic 18 - Add Node Validation (E18-1753114562073-6B8498)
- *
- * Comprehensive validation framework for runtime nodes with security, type safety, and performance validation
- */
-import { ValidationResult, AdvancedNodeData } from '../runtime/advanced';
+import { ValidationResult } from '../runtime/advanced';
 export interface NodeValidationConfig {
     /** Enable strict type checking */
     strictTypeValidation: boolean;
@@ -25,26 +19,26 @@ export interface NodeValidationResult extends ValidationResult {
     /** Security-specific validation results */
     security: {
         passed: boolean;
-        threats: SecurityThreat[];
+        threats: SecurityThreat;
         riskLevel: 'low' | 'medium' | 'high' | 'critical';
     };
     /** Performance-specific validation results */
     performance: {
         passed: boolean;
-        issues: PerformanceIssue[];
+        issues: PerformanceIssue;
         estimatedMemoryUsage: number;
         estimatedExecutionTime: number;
     };
     /** Type safety validation results */
     typeSafety: {
         passed: boolean;
-        typeErrors: TypeError[];
+        typeErrors: TypeError;
         compatibility: 'full' | 'partial' | 'incompatible';
     };
     /** Schema validation results */
     schema: {
         passed: boolean;
-        schemaErrors: string[];
+        schemaErrors: string;
     };
 }
 export interface SecurityThreat {
@@ -67,10 +61,6 @@ export interface TypeError {
     field: string;
     description: string;
 }
-/**
- * Core Node Validation Framework
- * Provides comprehensive validation for runtime nodes
- */
 export declare class NodeValidationFramework {
     private config;
     private securityPatterns;
@@ -79,10 +69,6 @@ export declare class NodeValidationFramework {
      * Initialize security threat detection patterns
      */
     private initializeSecurityPatterns;
-    /**
-     * Comprehensive node validation
-     */
-    validateNode(nodeData: AdvancedNodeData): NodeValidationResult;
     /**
      * Security validation - detect injection attacks and dangerous operations
      */
@@ -100,8 +86,8 @@ export declare class NodeValidationFramework {
      */
     private validateNodeTypeSpecificSecurity;
     /**
-     * Validate Conditional node security (expression evaluation)
-     */
+    * Validate Conditional node security (expression evaluation)
+    */
     private validateConditionalSecurity;
     /**
      * Validate Python transform node security
@@ -111,50 +97,7 @@ export declare class NodeValidationFramework {
      * Performance validation - memory usage, execution time, infinite loops
      */
     private validatePerformance;
-    /**
-     * Detect potential infinite loops
-     */
-    private validateInfiniteLoops;
-    /**
-     * Type safety validation
-     */
-    private validateTypeSafety;
-    /**
-     * Schema validation against node configuration
-     */
-    private validateSchema;
-    private validateNodeDataTypes;
-    private validateIOPortTypes;
-    private estimateMemoryUsage;
-    private estimateExecutionTime;
-    private getNodeTypeMemoryMultiplier;
-    private getNodeTypeTimeMultiplier;
-    private calculateDataComplexity;
-    private getObjectDepth;
-    private calculateRiskLevel;
-    private getSecurityThreatType;
-    private getSecurityThreatSeverity;
-    private getSecurityRecommendation;
+    impact: 'May cause out of memory errors';
+    suggestion: 'Reduce data size or implement streaming';
 }
-/**
- * Validation utilities for common validation scenarios
- */
-export declare class NodeValidationUtils {
-    /**
-     * Quick security check for user input
-     */
-    static validateUserInput(input: string): SecurityThreat[];
-    /**
-     * Quick performance estimate
-     */
-    static estimateNodePerformance(nodeData: AdvancedNodeData): {
-        memory: number;
-        time: number;
-    };
-    /**
-     * Batch validate multiple nodes
-     */
-    static validateNodeBatch(nodes: AdvancedNodeData[]): NodeValidationResult[];
-}
-export default NodeValidationFramework;
 //# sourceMappingURL=NodeValidationFramework.d.ts.map

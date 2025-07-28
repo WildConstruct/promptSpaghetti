@@ -18,16 +18,16 @@ export interface DelegationRule {
     description: string;
     delegatorRole: string;
     delegateeRole: string;
-    delegatedPermissions: string[];
+    delegatedPermissions: string;
     maxClassificationLevel: DataClassificationLevel;
-    constraints: DelegationConstraint[];
+    constraints: DelegationConstraint;
     approvalRequired: boolean;
-    approvers: string[];
+    approvers: string;
     maxDuration: number;
     revocable: boolean;
     auditRequired: boolean;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    conditions: DelegationCondition[];
+    conditions: DelegationCondition;
     isActive: boolean;
     metadata: DelegationMetadata;
 }
@@ -57,8 +57,8 @@ export interface DelegationMetadata {
     effectiveDate: Date;
     expirationDate?: Date;
     reviewDate: Date;
-    approvalChain: ApprovalRecord[];
-    complianceFrameworks: string[];
+    approvalChain: ApprovalRecord;
+    complianceFrameworks: string;
     riskAssessment: RiskAssessment;
 }
 export interface ApprovalRecord {
@@ -66,14 +66,14 @@ export interface ApprovalRecord {
     approvedAt: Date;
     approvalLevel: 'MANAGER' | 'DATA_OWNER' | 'SECURITY_OFFICER' | 'ADMIN' | 'COMPLIANCE';
     comments?: string;
-    conditions?: string[];
+    conditions?: string;
     expirationDate?: Date;
 }
 export interface RiskAssessment {
     score: number;
     level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    factors: RiskFactor[];
-    mitigations: string[];
+    factors: RiskFactor;
+    mitigations: string;
     reassessmentRequired: boolean;
     lastAssessed: Date;
     assessedBy: string;
@@ -85,14 +85,11 @@ export interface RiskFactor {
     description: string;
     mitigationStatus: 'NONE' | 'PARTIAL' | 'COMPLETE';
 }
-/**
- * Role Inheritance Framework
- */
 export interface InheritanceFramework {
-    hierarchyLevels: HierarchyLevel[];
-    inheritanceRules: InheritanceRule[];
-    prohibitedInheritance: ProhibitedInheritance[];
-    escalationRules: EscalationRule[];
+    hierarchyLevels: HierarchyLevel;
+    inheritanceRules: InheritanceRule;
+    prohibitedInheritance: ProhibitedInheritance;
+    escalationRules: EscalationRule;
     inheritanceValidation: InheritanceValidation;
 }
 export interface HierarchyLevel {
@@ -100,12 +97,12 @@ export interface HierarchyLevel {
     name: string;
     description: string;
     maxClassificationAccess: DataClassificationLevel;
-    roles: string[];
+    roles: string;
     automaticInheritance: boolean;
     inheritanceScope: InheritanceScope;
-    constraints: LevelConstraint[];
-    parentLevels: number[];
-    childLevels: number[];
+    constraints: LevelConstraint;
+    parentLevels: number;
+    childLevels: number;
 }
 export interface InheritanceScope {
     permissions: 'ALL' | 'SUBSET' | 'NONE';
@@ -118,7 +115,7 @@ export interface LevelConstraint {
     value: any;
     enforced: boolean;
     overridable: boolean;
-    overrideApprovers: string[];
+    overrideApprovers: string;
 }
 export interface InheritanceRule {
     id: string;
@@ -127,8 +124,8 @@ export interface InheritanceRule {
     childRole: string;
     inheritanceType: 'AUTOMATIC' | 'CONDITIONAL' | 'MANUAL' | 'APPROVAL_BASED';
     inheritedElements: InheritedElements;
-    conditions: InheritanceCondition[];
-    restrictions: InheritanceRestriction[];
+    conditions: InheritanceCondition;
+    restrictions: InheritanceRestriction;
     priority: number;
     isActive: boolean;
     metadata: RuleMetadata;
@@ -140,10 +137,10 @@ export interface InheritedElements {
     responsibilities: InheritedResponsibilities;
 }
 export interface InheritedPermissions {
-    include: string[];
-    exclude: string[];
-    modify: PermissionModification[];
-    elevate: PermissionElevation[];
+    include: string;
+    exclude: string;
+    modify: PermissionModification;
+    elevate: PermissionElevation;
 }
 export interface PermissionModification {
     permission: string;
@@ -154,21 +151,21 @@ export interface PermissionModification {
 export interface PermissionElevation {
     fromLevel: DataClassificationLevel;
     toLevel: DataClassificationLevel;
-    conditions: string[];
+    conditions: string;
     approvalRequired: boolean;
     timeLimit: number;
     purpose: string;
 }
 export interface InheritedConstraints {
     inheritAll: boolean;
-    additionalConstraints: RoleConstraint[];
-    relaxedConstraints: string[];
-    conditionalConstraints: ConditionalConstraint[];
+    additionalConstraints: RoleConstraint;
+    relaxedConstraints: string;
+    conditionalConstraints: ConditionalConstraint;
 }
 export interface ConditionalConstraint {
     constraint: RoleConstraint;
     condition: string;
-    triggerEvents: string[];
+    triggerEvents: string;
     duration: number;
     autoRevoke: boolean;
 }
@@ -220,7 +217,7 @@ export interface FailureHandling {
 }
 export interface NotificationPolicy {
     enabled: boolean;
-    recipients: string[];
+    recipients: string;
     channels: ('EMAIL' | 'SMS' | 'SLACK' | 'DASHBOARD' | 'WEBHOOK')[];
     template: string;
     urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -234,24 +231,24 @@ export interface LoggingPolicy {
 }
 export interface EscalationPolicy {
     enabled: boolean;
-    escalationChain: EscalationLevel[];
+    escalationChain: EscalationLevel;
     timeout: number;
     autoEscalation: boolean;
     maxEscalations: number;
 }
 export interface EscalationLevel {
     level: number;
-    approvers: string[];
+    approvers: string;
     timeout: number;
     requiredApprovals: number;
     parallelApproval: boolean;
-    escalationConditions: string[];
+    escalationConditions: string;
 }
 export interface InheritanceRestriction {
     type: 'CLASSIFICATION_CEILING' | 'TEMPORAL_LIMIT' | 'PURPOSE_RESTRICTION' | 'SEGREGATION_DUTY' | 'CONFLICT_OF_INTEREST';
     specification: RestrictionSpecification;
     enforcement: EnforcementLevel;
-    exceptions: RestrictionException[];
+    exceptions: RestrictionException;
 }
 export interface RestrictionSpecification {
     parameter: string;
@@ -259,19 +256,19 @@ export interface RestrictionSpecification {
     operator: string;
     description: string;
     rationale: string;
-    complianceReference: string[];
+    complianceReference: string;
 }
 export interface EnforcementLevel {
     level: 'ADVISORY' | 'WARNING' | 'BLOCKING' | 'AUDIT_ONLY';
     overridable: boolean;
-    overrideApprovers: string[];
+    overrideApprovers: string;
     overrideAuditRequired: boolean;
     automaticReview: boolean;
 }
 export interface RestrictionException {
     id: string;
     description: string;
-    conditions: string[];
+    conditions: string;
     approvedBy: string;
     approvedAt: Date;
     expiresAt?: Date;
@@ -284,10 +281,10 @@ export interface ProhibitedInheritance {
     description: string;
     parentRole: string;
     childRole: string;
-    prohibitedElements: string[];
+    prohibitedElements: string;
     reason: string;
-    complianceRequirement: string[];
-    exceptions: ProhibitionException[];
+    complianceRequirement: string;
+    exceptions: ProhibitionException;
     isActive: boolean;
 }
 export interface ProhibitionException {
@@ -297,7 +294,7 @@ export interface ProhibitionException {
     approvedAt: Date;
     expiresAt?: Date;
     justification: string;
-    riskMitigation: string[];
+    riskMitigation: string;
     auditFrequency: 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY' | 'CONTINUOUS';
 }
 export interface EscalationRule {
@@ -305,10 +302,10 @@ export interface EscalationRule {
     name: string;
     trigger: EscalationTrigger;
     action: EscalationAction;
-    approvalChain: string[];
+    approvalChain: string;
     timeLimit: number;
     automaticEscalation: boolean;
-    conditions: EscalationCondition[];
+    conditions: EscalationCondition;
     isActive: boolean;
 }
 export interface EscalationTrigger {
@@ -338,10 +335,10 @@ export interface InheritanceValidation {
     riskAssessment: RiskValidation;
 }
 export interface ValidationFramework {
-    preInheritanceChecks: ValidationCheck[];
-    postInheritanceChecks: ValidationCheck[];
-    continuousValidation: ValidationCheck[];
-    periodicReviews: ReviewSchedule[];
+    preInheritanceChecks: ValidationCheck;
+    postInheritanceChecks: ValidationCheck;
+    continuousValidation: ValidationCheck;
+    periodicReviews: ReviewSchedule;
 }
 export interface ValidationCheck {
     id: string;
@@ -357,9 +354,9 @@ export interface ValidationCheck {
 export interface ReviewSchedule {
     frequency: 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
     scope: 'ALL_ROLES' | 'HIGH_RISK_ROLES' | 'SPECIFIC_ROLES' | 'CLASSIFICATION_BASED';
-    reviewers: string[];
+    reviewers: string;
     automated: boolean;
-    criteria: ReviewCriteria[];
+    criteria: ReviewCriteria;
 }
 export interface ReviewCriteria {
     criterion: string;
@@ -369,10 +366,10 @@ export interface ReviewCriteria {
     justificationRequired: boolean;
 }
 export interface ConflictDetection {
-    conflictTypes: ConflictType[];
-    detectionAlgorithms: DetectionAlgorithm[];
-    resolutionStrategies: ResolutionStrategy[];
-    escalationPaths: ConflictEscalation[];
+    conflictTypes: ConflictType;
+    detectionAlgorithms: DetectionAlgorithm;
+    resolutionStrategies: ResolutionStrategy;
+    escalationPaths: ConflictEscalation;
 }
 export interface ConflictType {
     type: 'SEGREGATION_OF_DUTIES' | 'CONFLICTING_PERMISSIONS' | 'EXCESSIVE_PRIVILEGES' | 'CIRCULAR_INHERITANCE' | 'POLICY_VIOLATION';
@@ -394,10 +391,10 @@ export interface ResolutionMethod {
     fallbackStrategy: string;
 }
 export interface PreventionMethod {
-    preventiveControls: string[];
-    validationGates: string[];
-    approvalRequirements: string[];
-    monitoringEnhancement: string[];
+    preventiveControls: string;
+    validationGates: string;
+    approvalRequirements: string;
+    monitoringEnhancement: string;
 }
 export interface DetectionAlgorithm {
     id: string;
@@ -420,7 +417,7 @@ export interface ResolutionStrategy {
     id: string;
     name: string;
     description: string;
-    applicableConflicts: string[];
+    applicableConflicts: string;
     strategy: string;
     automationLevel: 'FULL' | 'PARTIAL' | 'MANUAL';
     successRate: number;
@@ -429,23 +426,23 @@ export interface ResolutionStrategy {
 export interface ConflictEscalation {
     conflictType: string;
     severity: string;
-    escalationLevels: EscalationLevel[];
+    escalationLevels: EscalationLevel;
     timeout: number;
     finalAction: string;
 }
 export interface ComplianceValidation {
-    frameworks: ComplianceFramework[];
-    validationRules: ComplianceRule[];
-    auditRequirements: AuditRequirement[];
-    reportingRequirements: ReportingRequirement[];
+    frameworks: ComplianceFramework;
+    validationRules: ComplianceRule;
+    auditRequirements: AuditRequirement;
+    reportingRequirements: ReportingRequirement;
 }
 export interface ComplianceFramework {
     name: string;
     version: string;
-    applicableRoles: string[];
-    requirements: string[];
+    applicableRoles: string;
+    requirements: string;
     validationFrequency: string;
-    exceptions: string[];
+    exceptions: string;
 }
 export interface ComplianceRule {
     id: string;
@@ -453,27 +450,27 @@ export interface ComplianceRule {
     requirement: string;
     validation: string;
     severity: string;
-    exemptions: string[];
+    exemptions: string;
 }
 export interface AuditRequirement {
     event: string;
     frequency: string;
     retention: number;
     format: string;
-    distribution: string[];
+    distribution: string;
 }
 export interface ReportingRequirement {
     report: string;
     frequency: string;
-    recipients: string[];
+    recipients: string;
     format: string;
     automation: boolean;
 }
 export interface RiskValidation {
-    riskFactors: RiskFactor[];
-    assessmentCriteria: AssessmentCriterion[];
-    mitigationStrategies: MitigationStrategy[];
-    monitoringRequirements: MonitoringRequirement[];
+    riskFactors: RiskFactor;
+    assessmentCriteria: AssessmentCriterion;
+    mitigationStrategies: MitigationStrategy;
+    monitoringRequirements: MonitoringRequirement;
 }
 export interface AssessmentCriterion {
     criterion: string;
@@ -505,13 +502,13 @@ export interface RuleMetadata {
     approvedBy: string;
     approvedAt: Date;
     reviewDate: Date;
-    tags: string[];
+    tags: string;
     category: string;
     priority: number;
     riskLevel: string;
-    complianceFrameworks: string[];
-    relatedRules: string[];
-    testCases: TestCase[];
+    complianceFrameworks: string;
+    relatedRules: string;
+    testCases: TestCase;
 }
 export interface TestCase {
     id: string;
@@ -524,9 +521,6 @@ export interface TestCase {
     lastRun: Date;
     result: 'PASS' | 'FAIL' | 'PENDING' | 'SKIPPED';
 }
-/**
- * Delegation and Inheritance Engine
- */
 export declare class DelegationInheritanceEngine {
     private delegationRules;
     private inheritanceFramework;
@@ -534,110 +528,20 @@ export declare class DelegationInheritanceEngine {
     private auditLogger;
     constructor(framework: InheritanceFramework);
     /**
-     * Apply inheritance rules to determine effective permissions
-     */
-    applyInheritance(userId: string, baseRoles: string[], context: OperationContext): Promise<EffectivePermissions>;
-    /**
-     * Process delegation request
-     */
-    processDelegation(delegationRequest: DelegationRequest): Promise<DelegationResult>;
-    /**
-     * Validate inheritance chain for conflicts
-     */
-    validateInheritance(userId: string, roleChain: string[]): Promise<ValidationResult>;
-    /**
-     * Revoke delegated permissions
-     */
-    revokeDelegation(delegationId: string, reason: string, revokedBy: string): Promise<RevocationResult>;
-}
-export interface EffectivePermissions {
+    * Apply inheritance rules to determine effective permissions
+    */
+    applyInheritance(): any;
     userId: string;
-    permissions: string[];
-    constraints: RoleConstraint[];
-    inheritanceChain: InheritanceChain[];
-    delegatedPermissions: DelegatedPermission[];
-    expirationDate?: Date;
-    riskScore: number;
-    validationStatus: ValidationStatus;
-}
-export interface InheritanceChain {
-    level: number;
-    role: string;
-    inheritedFrom: string;
-    permissions: string[];
-    constraints: RoleConstraint[];
-    conditions: InheritanceCondition[];
-}
-export interface DelegatedPermission {
-    delegationId: string;
-    permission: string;
-    delegatedBy: string;
-    delegatedAt: Date;
-    expiresAt?: Date;
-    constraints: DelegationConstraint[];
-    revocable: boolean;
-}
-export interface DelegationRequest {
-    delegatorId: string;
-    delegateeId: string;
-    permissions: string[];
-    duration: number;
-    purpose: string;
-    justification: string;
-    constraints: DelegationConstraint[];
-    approvers?: string[];
-}
-export interface DelegationResult {
-    delegationId: string;
-    status: 'APPROVED' | 'DENIED' | 'PENDING_APPROVAL' | 'REQUIRES_ADDITIONAL_APPROVAL';
-    reason: string;
-    approvals: ApprovalRecord[];
-    effectiveDate?: Date;
-    expirationDate?: Date;
-    conditions: string[];
-}
-export interface ValidationResult {
-    isValid: boolean;
-    conflicts: ConflictDetail[];
-    warnings: ValidationWarning[];
-    recommendations: string[];
-    riskScore: number;
-    complianceStatus: ComplianceStatus;
-}
-export interface ConflictDetail {
-    type: string;
-    severity: string;
-    description: string;
-    affectedRoles: string[];
-    affectedPermissions: string[];
-    resolutionSuggestions: string[];
-}
-export interface ValidationWarning {
-    type: string;
-    message: string;
-    impact: 'LOW' | 'MEDIUM' | 'HIGH';
-    recommendation: string;
-}
-export interface ComplianceStatus {
-    framework: string;
-    status: 'COMPLIANT' | 'NON_COMPLIANT' | 'PARTIALLY_COMPLIANT' | 'UNDER_REVIEW';
-    violations: string[];
-    exemptions: string[];
-}
-export interface RevocationResult {
-    success: boolean;
-    reason: string;
-    revokedAt: Date;
-    affectedPermissions: string[];
-    notificationsSent: string[];
-    auditTrail: string;
-}
-export interface ValidationStatus {
-    isValid: boolean;
-    lastValidated: Date;
-    validatedBy: string;
-    expiresAt?: Date;
-    warnings: string[];
-    errors: string[];
+    baseRoles: string;
+    context: OperationContext;
+    /**
+    * Process delegation request
+    */
+    processDelegation(): any;
+    delegationRequest: DelegationRequest;
+    /**
+    * Validate inheritance chain for conflicts
+    */
+    validateInheritance(): any;
 }
 //# sourceMappingURL=DelegationInheritanceRules.d.ts.map

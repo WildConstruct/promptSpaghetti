@@ -73,7 +73,7 @@ describe('WebSocketStreaming', () => {
           categories: ['USER', 'PERFORMANCE'],
           userId: 'user-123',
           organizationId: 'org-456'
-        },
+  }
         batchSize: 10,
         timeout: 5000
       };
@@ -371,7 +371,7 @@ describe('WebSocketStreaming', () => {
             id: 'event-123',
             type: 'USER_INTERACTION',
             data: { large: 'data'.repeat(100) }
-          })
+  }
         }
       };
 

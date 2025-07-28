@@ -22,7 +22,7 @@ describe('VerificationThresholdService', () => {
       country: 'US',
       city: 'San Francisco',
       timezone: 'America/Los_Angeles'
-    },
+  }
     timestamp: new Date('2024-01-15T14:30:00Z')
   };
 
@@ -56,7 +56,7 @@ describe('VerificationThresholdService', () => {
         behaviorAnomalies: 20,
         timeFactors: 15,
         securityEvents: 10
-      },
+  }
       actionThresholds: {
         'password_change': { baseThreshold: 40, riskMultiplier: 1.5 },
         'admin_action': { baseThreshold: 60, riskMultiplier: 1.2 }
@@ -492,8 +492,8 @@ describe('VerificationThresholdService', () => {
             method: 'authenticator_app',
             success: true,
             gracePeriodSeconds: 1800
-          })
-        })
+  }
+  }
       );
     });
 
@@ -506,8 +506,8 @@ describe('VerificationThresholdService', () => {
           details: expect.objectContaining({
             success: false,
             gracePeriodSeconds: 0
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -528,7 +528,7 @@ describe('VerificationThresholdService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'verification_threshold_config_updated'
-        })
+  }
       );
     });
 
@@ -597,8 +597,8 @@ describe('VerificationThresholdService', () => {
             riskScore: expect.any(Number),
             threshold: expect.any(Number),
             verificationRequired: expect.any(Boolean)
-          })
-        })
+  }
+  }
       );
     });
   });

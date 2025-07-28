@@ -1119,6 +1119,7 @@ export declare const ContributorStatsResponseSchema: z.ZodObject<{
 export type AttributionStatsResponse = z.infer<typeof AttributionStatsResponseSchema>;
 export type AttributionTimelineResponse = z.infer<typeof AttributionTimelineResponseSchema>;
 export type ContributorStatsResponse = z.infer<typeof ContributorStatsResponseSchema>;
+
 export interface AttributionContext {
     projectId: string;
     userId?: string;
@@ -1128,7 +1129,7 @@ export interface AttributionContext {
     userAgent?: string;
     isAnonymous?: boolean;
     trackingConsent?: boolean;
-}
+
 export interface ChangeEvent {
     resourceType: ResourceType;
     resourceId: string;
@@ -1142,7 +1143,7 @@ export interface ChangeEvent {
     isCollaborative?: boolean;
     collaboratorCount?: number;
     parentChangeId?: string;
-}
+
 export interface AttributionVisualization {
     type: 'timeline' | 'heatmap' | 'contributor_chart' | 'collaboration_graph';
     data: any;
@@ -1155,7 +1156,7 @@ export interface AttributionVisualization {
         filters: AttributionFilter;
         totalDataPoints: number;
     };
-}
+
 export interface CollaborationMetrics {
     totalSessions: number;
     averageSessionDuration: number;
@@ -1172,7 +1173,7 @@ export interface CollaborationMetrics {
         byDayOfWeek: Record<string, number>;
         byResourceType: Record<string, number>;
     };
-}
+
 export declare export declare export declare export declare export declare const ATTRIBUTION_DEFAULTS: {
     readonly DEFAULT_RETENTION_DAYS: 365;
     readonly DEFAULT_ANONYMIZE_AFTER_DAYS: 90;
@@ -1210,13 +1211,14 @@ export declare const RESOURCE_TYPE_DESCRIPTIONS: {
     readonly position: "Node position";
     readonly graph: "Graph metadata";
 };
+
 export interface AttributionEvent {
     type: 'attribution_created' | 'attribution_updated' | 'session_started' | 'session_ended';
     data: ChangeAttribution | AttributionSession;
     timestamp: Date;
     projectId: string;
     sessionId?: string;
-}
+
 export interface AttributionNotification {
     type: 'contributor_milestone' | 'collaboration_started' | 'significant_change';
     title: string;
@@ -1225,5 +1227,5 @@ export interface AttributionNotification {
     timestamp: Date;
     projectId: string;
     authorId?: string;
-}
+
 //# sourceMappingURL=attribution.d.ts.map

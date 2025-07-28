@@ -31,6 +31,7 @@
 import { EventEmitter } from 'events';
 import { SecurityAlertingConfig } from './SecurityAlertingAnalytics';
 import { DataClassificationLevel } from './DataClassificationAccessControl';
+
 export interface SecurityAlertingConfigurationServiceOptions {
     storageBackend: 'filesystem' | 'database' | 'redis' | 'memory';
     enableCaching: boolean;
@@ -42,7 +43,8 @@ export interface SecurityAlertingConfigurationServiceOptions {
     maxBackups: number;
     encryptStorage: boolean;
     requireApproval: boolean;
-}
+
+
 export interface ConfigurationMetadata {
     id: string;
     version: number;
@@ -56,7 +58,8 @@ export interface ConfigurationMetadata {
     size: number;
     tags: string[];
     classification: DataClassificationLevel;
-}
+
+
 export interface ConfigurationChangeRequest {
     configId: string;
     changes: Partial<SecurityAlertingConfig>;
@@ -65,7 +68,8 @@ export interface ConfigurationChangeRequest {
     urgency: 'low' | 'medium' | 'high' | 'critical';
     scheduledAt?: Date;
     approvers?: string[];
-}
+
+
 export interface ConfigurationValidationResult {
     isValid: boolean;
     errors: ValidationError[];
@@ -73,34 +77,39 @@ export interface ConfigurationValidationResult {
     securityScore: number;
     complianceIssues: ComplianceIssue[];
     performanceImpact: PerformanceImpact;
-}
+
+
 export interface ValidationError {
     field: string;
     message: string;
     severity: 'error' | 'critical';
     code: string;
     suggestion?: string;
-}
+
+
 export interface ValidationWarning {
     field: string;
     message: string;
     impact: 'low' | 'medium' | 'high';
     code: string;
     suggestion?: string;
-}
+
+
 export interface ComplianceIssue {
     framework: string;
     requirement: string;
     impact: 'minor' | 'major' | 'critical';
     description: string;
-}
+
+
 export interface PerformanceImpact {
     cpuImpact: 'low' | 'medium' | 'high';
     memoryImpact: 'low' | 'medium' | 'high';
     storageImpact: 'low' | 'medium' | 'high';
     networkImpact: 'low' | 'medium' | 'high';
     estimatedCost: number;
-}
+
+
 /**
  * Service for managing security alerting configurations
  */
@@ -158,6 +167,6 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default SecurityAlertingConfigurationService;
 //# sourceMappingURL=SecurityAlertingConfigurationService.d.ts.map

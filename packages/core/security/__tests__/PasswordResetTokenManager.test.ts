@@ -16,24 +16,24 @@ import {
 describe('PasswordResetTokenManager', () => {
   let manager: PasswordResetTokenManager;
   beforeEach(() => {
-    manager = new PasswordResetTokenManager({)
-      antiEnumerationDelay: 1, // Speed up tests
-      cleanupInterval: 60000, // 1 minute for tests
-      enableAuditLogging: true,
-    });
+  manager = new PasswordResetTokenManager({)
+  antiEnumerationDelay: 1, // Speed up tests,
+  cleanupInterval: 60000, // 1 minute for tests,
+  enableAuditLogging: true,
+});
   });
   afterEach(() => {
     manager.destroy();
   });
   describe('Token Generation', () => {
-    test('should generate a password reset token successfully', async () => {
-      const request: TokenRequest = {
-        userId: 'user-123',
-        email: 'user@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should generate a password reset token successfully', async () => {
+  const request: TokenRequest = {,
+  userId: 'user-123',
+  email: 'user@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       expect(result?.token).toBeDefined();
@@ -42,27 +42,27 @@ describe('PasswordResetTokenManager', () => {
       expect(result?.token.length).toBeGreaterThan(0);
     });
     test('should generate tokens with different security levels', async () => {
-      const baseRequest: TokenRequest = {
-        userId: 'user-security',
-        email: 'security@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const baseRequest: TokenRequest = {,
+  userId: 'user-security',
+  email: 'security@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const standardToken = await manager.generateToken({)
-        ...baseRequest,
-        securityLevel: SecurityLevel.STANDARD,
-      });
+  ...baseRequest,
+  securityLevel: SecurityLevel.STANDARD,
+});
       const enhancedToken = await manager.generateToken({)
-        ...baseRequest,
-        userId: 'user-enhanced',
-        securityLevel: SecurityLevel.ENHANCED,
-      });
+  ...baseRequest,
+  userId: 'user-enhanced',
+  securityLevel: SecurityLevel.ENHANCED,
+});
       const maximumToken = await manager.generateToken({)
-        ...baseRequest,
-        userId: 'user-maximum',
-        securityLevel: SecurityLevel.MAXIMUM,
-      });
+  ...baseRequest,
+  userId: 'user-maximum',
+  securityLevel: SecurityLevel.MAXIMUM,
+});
       expect(standardToken).not.toBeNull();
       expect(enhancedToken).not.toBeNull();
       expect(maximumToken).not.toBeNull();
@@ -82,24 +82,24 @@ describe('PasswordResetTokenManager', () => {
         expect(data.expiresAt).toBeInstanceOf(Date);
         done();
       });
-      const request: TokenRequest = {
-        userId: 'user-event',
-        email: 'event@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-event',
+  email: 'event@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       manager.generateToken(request);
     });
     test('should handle custom expiration times', async () => {
-      const request: TokenRequest = {
-        userId: 'user-custom',
-        email: 'custom@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-        expirationMinutes: 30 // 30 minutes,
-      };
+  const request: TokenRequest = {,
+  userId: 'user-custom',
+  email: 'custom@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+  expirationMinutes: 30 // 30 minutes,
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       const tokenInfo = manager.getTokenInfo(result!.tokenId);
@@ -109,17 +109,17 @@ describe('PasswordResetTokenManager', () => {
       expect(expirationTime).toBeLessThan(31 * 60 * 1000);
     });
     test('should revoke existing tokens when multiple not allowed', async () => {
-      const singleTokenManager = new PasswordResetTokenManager({)
-        allowMultipleTokens: false,
-        antiEnumerationDelay: 1,
-      });
-      const request: TokenRequest = {
-        userId: 'user-single',
-        email: 'single@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const singleTokenManager = new PasswordResetTokenManager({)
+  allowMultipleTokens: false,
+  antiEnumerationDelay: 1,
+});
+      const request: TokenRequest = {,
+  userId: 'user-single',
+  email: 'single@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       // Generate first token
       const firstToken = await singleTokenManager.generateToken(request);
       expect(firstToken).not.toBeNull();
@@ -136,14 +136,14 @@ describe('PasswordResetTokenManager', () => {
     });
   });
   describe('Token Validation', () => {
-    test('should validate a valid token successfully', async () => {
-      const request: TokenRequest = {
-        userId: 'user-validate',
-        email: 'validate@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should validate a valid token successfully', async () => {
+  const request: TokenRequest = {,
+  userId: 'user-validate',
+  email: 'validate@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       const validation = await manager.validateToken(;);
@@ -167,17 +167,17 @@ describe('PasswordResetTokenManager', () => {
       expect(validation.riskScore).toBeGreaterThan(0);
     });
     test('should detect expired tokens', async () => {
-      const shortLivedManager = new PasswordResetTokenManager({)
-        defaultExpiration: 1, // 1 millisecond
-        antiEnumerationDelay: 1,
-      });
-      const request: TokenRequest = {
-        userId: 'user-expired',
-        email: 'expired@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const shortLivedManager = new PasswordResetTokenManager({)
+  defaultExpiration: 1, // 1 millisecond,
+  antiEnumerationDelay: 1,
+});
+      const request: TokenRequest = {,
+  userId: 'user-expired',
+  email: 'expired@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await shortLivedManager.generateToken(request);
       expect(result).not.toBeNull();
       // Wait for token to expire
@@ -192,13 +192,13 @@ describe('PasswordResetTokenManager', () => {
       shortLivedManager.destroy();
     });
     test('should calculate risk scores for validation', async () => {
-      const request: TokenRequest = {
-        userId: 'user-risk',
-        email: 'risk@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const request: TokenRequest = {,
+  userId: 'user-risk',
+  email: 'risk@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       // Same IP and user agent - low risk
@@ -225,29 +225,28 @@ describe('PasswordResetTokenManager', () => {
         eventsReceived++;
         if (eventsReceived === 1) done();
       });
-      const request: TokenRequest = {
-        userId: 'user-validation-event',
-        email: 'validation@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-validation-event',
+  email: 'validation@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       manager.generateToken(request).then(result => {)
-        if (result) {
+  if (result) {
           manager.validateToken(result.token, '192.168.1.1', 'Mozilla/5.0');
-        }
       });
     });
   });
   describe('Token Usage', () => {
-    test('should use a valid token successfully', async () => {
-      const request: TokenRequest = {
-        userId: 'user-use',
-        email: 'use@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should use a valid token successfully', async () => {
+  const request: TokenRequest = {,
+  userId: 'user-use',
+  email: 'use@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       const usage = await manager.useToken(;);
@@ -262,13 +261,13 @@ describe('PasswordResetTokenManager', () => {
       expect(usage.token?.usageCount).toBe(1);
     });
     test('should prevent reuse of used tokens', async () => {
-      const request: TokenRequest = {
-        userId: 'user-reuse',
-        email: 'reuse@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const request: TokenRequest = {,
+  userId: 'user-reuse',
+  email: 'reuse@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       // Use token first time
@@ -295,29 +294,28 @@ describe('PasswordResetTokenManager', () => {
         expect(data.usedAt).toBeInstanceOf(Date);
         done();
       });
-      const request: TokenRequest = {
-        userId: 'user-used-event',
-        email: 'used@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-used-event',
+  email: 'used@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       manager.generateToken(request).then(result => {)
-        if (result) {
+  if (result) {
           manager.useToken(result.token, '192.168.1.1', 'Mozilla/5.0');
-        }
       });
     });
   });
   describe('Token Revocation', () => {
-    test('should revoke a specific token', async () => {
-      const request: TokenRequest = {
-        userId: 'user-revoke',
-        email: 'revoke@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should revoke a specific token', async () => {
+  const request: TokenRequest = {,
+  userId: 'user-revoke',
+  email: 'revoke@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       const success = await manager.revokeToken(;);
@@ -333,41 +331,39 @@ describe('PasswordResetTokenManager', () => {
       expect(tokenInfo?.revocationReason).toBe('manual_revocation');
     });
     test('should revoke all user tokens', async () => {
-      const userId = 'user-revoke-all';
-      const requests: TokenRequest[] = [
+  const userId = 'user-revoke-all';
+  const requests: TokenRequest = [
+  {
+  userId,
+  email: 'revoke1@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+}
         {
-          userId,
-          email: 'revoke1@test.com',
-          type: TokenType.PASSWORD_RESET,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-        },
-        {
-          userId,
-          email: 'revoke2@test.com',
-          type: TokenType.EMAIL_VERIFICATION,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-        }
-      ];
-      // Generate multiple tokens
-      const tokens = await Promise.all(;);
-        requests.map(request => manager.generateToken(request))
-      );
-      tokens.forEach(token => expect(token).not.toBeNull());
-      // Revoke all password reset tokens for user
-      const revokedCount = await manager.revokeUserTokens(;);
-        userId,
-        TokenType.PASSWORD_RESET,
-        'user_requested'
-      );
-      expect(revokedCount).toBe(1);
-      // Check that only password reset token was revoked
-      const passwordResetToken = manager.getTokenInfo(tokens[0]!.tokenId);
-      const emailVerificationToken = manager.getTokenInfo(tokens[1]!.tokenId);
-      expect(passwordResetToken?.status).toBe(TokenStatus.REVOKED);
-      expect(emailVerificationToken?.status).toBe(TokenStatus.ACTIVE);
-    });
+  userId,
+  email: 'revoke2@test.com',
+  type: TokenType.EMAIL_VERIFICATION,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0'];
+  // Generate multiple tokens
+  const tokens = await Promise.all(;);
+  requests.map(request => manager.generateToken(request))
+  );
+  tokens.forEach(token => expect(token).not.toBeNull());
+  // Revoke all password reset tokens for user
+  const revokedCount = await manager.revokeUserTokens(;);
+  userId,
+  TokenType.PASSWORD_RESET,
+  'user_requested'
+  );
+  expect(revokedCount).toBe(1);
+  // Check that only password reset token was revoked
+  const passwordResetToken = manager.getTokenInfo(tokens[0]!.tokenId);
+  const emailVerificationToken = manager.getTokenInfo(tokens[1]!.tokenId);
+  expect(passwordResetToken?.status).toBe(TokenStatus.REVOKED);
+  expect(emailVerificationToken?.status).toBe(TokenStatus.ACTIVE);
+});
     test('should emit revocation events', (done) => {
       let eventsReceived = 0;
       manager.on('tokenRevoked', (data) => {
@@ -378,89 +374,88 @@ describe('PasswordResetTokenManager', () => {
         eventsReceived++;
         if (eventsReceived === 1) done();
       });
-      const request: TokenRequest = {
-        userId: 'user-revoke-event',
-        email: 'revoke@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-revoke-event',
+  email: 'revoke@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       manager.generateToken(request).then(result => {)
-        if (result) {
+  if (result) {
           manager.revokeToken(result.tokenId, 'test_revocation');
-        }
       });
     });
   });
   describe('Rate Limiting', () => {
-    test('should enforce rate limiting by email', async () => {
-      const rateLimitedManager = new PasswordResetTokenManager({)
-        rateLimitCount: 2,
-        rateLimitWindow: 60000, // 1 minute
-        antiEnumerationDelay: 1,
-      });
-      const request: TokenRequest = {
-        userId: 'user-rate-limit',
-        email: 'ratelimit@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should enforce rate limiting by email', async () => {
+  const rateLimitedManager = new PasswordResetTokenManager({)
+  rateLimitCount: 2,
+  rateLimitWindow: 60000, // 1 minute,
+  antiEnumerationDelay: 1,
+});
+      const request: TokenRequest = {,
+  userId: 'user-rate-limit',
+  email: 'ratelimit@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       // First two requests should succeed
       const token1 = await rateLimitedManager.generateToken(request);
       const token2 = await rateLimitedManager.generateToken({)
-        ...request,
-        userId: 'user-rate-limit-2',
-      });
+  ...request,
+  userId: 'user-rate-limit-2',
+});
       expect(token1).not.toBeNull();
       expect(token2).not.toBeNull();
       // Third request should be rate limited
       const token3 = await rateLimitedManager.generateToken({)
-        ...request,
-        userId: 'user-rate-limit-3',
-      });
+  ...request,
+  userId: 'user-rate-limit-3',
+});
       expect(token3).toBeNull();
       rateLimitedManager.destroy();
     });
     test('should enforce rate limiting by IP address', async () => {
-      const rateLimitedManager = new PasswordResetTokenManager({)
-        rateLimitCount: 2,
-        rateLimitWindow: 60000,
-        antiEnumerationDelay: 1,
-      });
-      const baseRequest: TokenRequest = {
-        userId: 'user-ip-limit',
-        email: 'iplimit@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0',
-      };
+  const rateLimitedManager = new PasswordResetTokenManager({)
+  rateLimitCount: 2,
+  rateLimitWindow: 60000,
+  antiEnumerationDelay: 1,
+});
+      const baseRequest: TokenRequest = {,
+  userId: 'user-ip-limit',
+  email: 'iplimit@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0',
+};
       // Generate tokens with same IP but different emails
       const token1 = await rateLimitedManager.generateToken(baseRequest);
       const token2 = await rateLimitedManager.generateToken({)
-        ...baseRequest,
-        email: 'iplimit2@test.com',
-      });
+  ...baseRequest,
+  email: 'iplimit2@test.com',
+});
       expect(token1).not.toBeNull();
       expect(token2).not.toBeNull();
       // Third request should be rate limited
       const token3 = await rateLimitedManager.generateToken({)
-        ...baseRequest,
-        email: 'iplimit3@test.com',
-      });
+  ...baseRequest,
+  email: 'iplimit3@test.com',
+});
       expect(token3).toBeNull();
       rateLimitedManager.destroy();
     });
   });
   describe('Token Information and Management', () => {
-    test('should get token information safely', async () => {
-      const request: TokenRequest = {
-        userId: 'user-info',
-        email: 'info@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  test('should get token information safely', async () => {
+  const request: TokenRequest = {,
+  userId: 'user-info',
+  email: 'info@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       const tokenInfo = manager.getTokenInfo(result!.tokenId);
@@ -477,78 +472,72 @@ describe('PasswordResetTokenManager', () => {
       expect((tokenInfo as any).salt).toBeUndefined();
     });
     test('should get user tokens', async () => {
-      const userId = 'user-tokens';
-      const requests: TokenRequest[] = [
+  const userId = 'user-tokens';
+  const requests: TokenRequest = [
+  {
+  userId,
+  email: 'tokens1@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+}
         {
-          userId,
-          email: 'tokens1@test.com',
-          type: TokenType.PASSWORD_RESET,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-        },
-        {
-          userId,
-          email: 'tokens2@test.com',
-          type: TokenType.EMAIL_VERIFICATION,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-        }
-      ];
-      await Promise.all(requests.map(request => manager.generateToken(request)));
-      const allUserTokens = manager.getUserTokens(userId);
-      const passwordResetTokens = manager.getUserTokens(userId, TokenType.PASSWORD_RESET);
-      expect(allUserTokens).toHaveLength(2);
-      expect(passwordResetTokens).toHaveLength(1);
-      expect(passwordResetTokens[0].type).toBe(TokenType.PASSWORD_RESET);
-    });
+  userId,
+  email: 'tokens2@test.com',
+  type: TokenType.EMAIL_VERIFICATION,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0'];
+  await Promise.all(requests.map(request => manager.generateToken(request)));
+  const allUserTokens = manager.getUserTokens(userId);
+  const passwordResetTokens = manager.getUserTokens(userId, TokenType.PASSWORD_RESET);
+  expect(allUserTokens).toHaveLength(2);
+  expect(passwordResetTokens).toHaveLength(1);
+  expect(passwordResetTokens[0].type).toBe(TokenType.PASSWORD_RESET);
+});
     test('should return null for non-existent token', () => {
       const tokenInfo = manager.getTokenInfo('non-existent-token');
       expect(tokenInfo).toBeNull();
     });
   });
   describe('Statistics and Analytics', () => {
-    test('should provide comprehensive statistics', async () => {
-      const userId = 'user-stats';
-      // Generate tokens of different types and states
-      const requests: TokenRequest[] = [
+  test('should provide comprehensive statistics', async () => {
+  const userId = 'user-stats';
+  // Generate tokens of different types and states
+  const requests: TokenRequest = [
+  {
+  userId,
+  email: 'stats1@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+}
         {
-          userId,
-          email: 'stats1@test.com',
-          type: TokenType.PASSWORD_RESET,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-        },
-        {
-          userId: 'user-stats-2',
-          email: 'stats2@test.com',
-          type: TokenType.EMAIL_VERIFICATION,
-          ipAddress: '192.168.1.1',
-          userAgent: 'Mozilla/5.0',
-          securityLevel: SecurityLevel.ENHANCED,
-        }
-      ];
-      const tokens = await Promise.all(;);
-        requests.map(request => manager.generateToken(request))
-      );
-      // Use one token
-      if (tokens[0]) {
-        await manager.useToken(tokens[0].token, '192.168.1.1', 'Mozilla/5.0');
-      }
-      // Revoke one token
-      if (tokens[1]) {
-        await manager.revokeToken(tokens[1].tokenId, 'test_statistics');
-      }
-      const stats = manager.getStatistics();
-      expect(stats.totalTokens).toBe(2);
-      expect(stats.usedTokens).toBe(1);
-      expect(stats.revokedTokens).toBe(1);
-      expect(stats.activeTokens).toBe(0);
-      expect(stats.tokensByType[TokenType.PASSWORD_RESET]).toBe(1);
-      expect(stats.tokensByType[TokenType.EMAIL_VERIFICATION]).toBe(1);
-      expect(stats.tokensBySecurityLevel[SecurityLevel.STANDARD]).toBe(1);
-      expect(stats.tokensBySecurityLevel[SecurityLevel.ENHANCED]).toBe(1);
-      expect(stats.usageRate).toBe(50); // 1 out of 2 tokens used
-    });
+  userId: 'user-stats-2',
+  email: 'stats2@test.com',
+  type: TokenType.EMAIL_VERIFICATION,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+  securityLevel: SecurityLevel.ENHANCED];
+  const tokens = await Promise.all(;);
+  requests.map(request => manager.generateToken(request))
+  );
+  // Use one token
+  if (tokens[0]) {
+  await manager.useToken(tokens[0].token, '192.168.1.1', 'Mozilla/5.0');
+  // Revoke one token
+  if (tokens[1]) {
+  await manager.revokeToken(tokens[1].tokenId, 'test_statistics');
+  const stats = manager.getStatistics();
+  expect(stats.totalTokens).toBe(2);
+  expect(stats.usedTokens).toBe(1);
+  expect(stats.revokedTokens).toBe(1);
+  expect(stats.activeTokens).toBe(0);
+  expect(stats.tokensByType[TokenType.PASSWORD_RESET]).toBe(1);
+  expect(stats.tokensByType[TokenType.EMAIL_VERIFICATION]).toBe(1);
+  expect(stats.tokensBySecurityLevel[SecurityLevel.STANDARD]).toBe(1);
+  expect(stats.tokensBySecurityLevel[SecurityLevel.ENHANCED]).toBe(1);
+  expect(stats.usageRate).toBe(50); // 1 out of 2 tokens used
+});
     test('should handle empty statistics', () => {
       const stats = manager.getStatistics();
       expect(stats.totalTokens).toBe(0);
@@ -567,35 +556,34 @@ describe('PasswordResetTokenManager', () => {
         expect(event.userAgent).toBe('Mozilla/5.0');
         done();
       });
-      const request: TokenRequest = {
-        userId: 'user-security-event',
-        email: 'security@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-security-event',
+  email: 'security@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       manager.generateToken(request);
     });
     test('should log rate limit violations', async () => {
-      const rateLimitedManager = new PasswordResetTokenManager({)
-        rateLimitCount: 1,
-        rateLimitWindow: 60000,
-        antiEnumerationDelay: 1,
-        enableAuditLogging: true,
-      });
+  const rateLimitedManager = new PasswordResetTokenManager({)
+  rateLimitCount: 1,
+  rateLimitWindow: 60000,
+  antiEnumerationDelay: 1,
+  enableAuditLogging: true,
+});
       let securityEventEmitted = false;
       rateLimitedManager.on('securityEvent', (event) => {
         if (event.event === SecurityEvent.RATE_LIMIT_EXCEEDED) {
           securityEventEmitted = true;
-        }
       });
-      const request: TokenRequest = {
-        userId: 'user-rate-violation',
-        email: 'violation@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-rate-violation',
+  email: 'violation@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       // First request should succeed
       const firstToken = await rateLimitedManager.generateToken(request);
       expect(firstToken).not.toBeNull();
@@ -616,17 +604,17 @@ describe('PasswordResetTokenManager', () => {
         done();
       });
       manager.updateConfig({)
-        defaultExpiration: 120 * 60 * 1000, // 2 hours
-        rateLimitCount: 5,
-      });
+  defaultExpiration: 120 * 60 * 1000, // 2 hours,
+  rateLimitCount: 5,
+});
     });
     test('should use custom configuration on initialization', () => {
-      const customManager = new PasswordResetTokenManager({)
-        defaultExpiration: 30 * 60 * 1000, // 30 minutes
-        tokenLength: 64,
-        hashRounds: 200000,
-        securityLevel: SecurityLevel.MAXIMUM,
-      });
+  const customManager = new PasswordResetTokenManager({)
+  defaultExpiration: 30 * 60 * 1000, // 30 minutes,
+  tokenLength: 64,
+  hashRounds: 200000,
+  securityLevel: SecurityLevel.MAXIMUM,
+});
       expect(customManager).toBeDefined();
       customManager.destroy();
     });
@@ -649,17 +637,17 @@ describe('PasswordResetTokenManager', () => {
       manager.destroy();
     });
     test('should clean up expired tokens', async () => {
-      const quickCleanupManager = new PasswordResetTokenManager({)
-        defaultExpiration: 1, // 1 millisecond
-        antiEnumerationDelay: 1,
-      });
-      const request: TokenRequest = {
-        userId: 'user-cleanup',
-        email: 'cleanup@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const quickCleanupManager = new PasswordResetTokenManager({)
+  defaultExpiration: 1, // 1 millisecond,
+  antiEnumerationDelay: 1,
+});
+      const request: TokenRequest = {,
+  userId: 'user-cleanup',
+  email: 'cleanup@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await quickCleanupManager.generateToken(request);
       expect(result).not.toBeNull();
       // Wait for token to expire
@@ -672,29 +660,27 @@ describe('PasswordResetTokenManager', () => {
       // Mock the expiration threshold to be more recent
       const originalPerformCleanup = (quickCleanupManager as any).performCleanup;
       (quickCleanupManager as any).performCleanup = function() {
-        const now = new Date();
-        const expiredThreshold = new Date(now.getTime() - 1); // 1ms ago instead of 24 hours;
-        let tokensRemoved = 0;
-        for (const [tokenId, token] of this.tokens) {
-          const shouldCleanup = (;);
-            token.status === TokenStatus.EXPIRED || 
-            token.status === TokenStatus.USED ||
-            token.status === TokenStatus.REVOKED
-          ) && ()
-            token.createdAt < expiredThreshold ||
-            (token.usedAt && token.usedAt < expiredThreshold) ||
-            (token.revokedAt && token.revokedAt < expiredThreshold)
-          );
-          if (shouldCleanup) {
-            this.tokens.delete(tokenId);
-            tokensRemoved++;
-          }
-        }
-        this.emit('cleanupCompleted', {)
-          tokensRemoved,
-          auditLogsRemoved: 0,
-          timestamp: now,
-        });
+  const now = new Date();
+  const expiredThreshold = new Date(now.getTime() - 1); // 1ms ago instead of 24 hours;
+  let tokensRemoved = 0;
+  for (const [tokenId, token] of this.tokens) {
+  const shouldCleanup = (;);
+  token.status === TokenStatus.EXPIRED ||
+  token.status === TokenStatus.USED ||
+  token.status === TokenStatus.REVOKED
+  ) && ()
+  token.createdAt < expiredThreshold ||
+  (token.usedAt && token.usedAt < expiredThreshold) ||
+  (token.revokedAt && token.revokedAt < expiredThreshold)
+  );
+  if (shouldCleanup) {
+  this.tokens.delete(tokenId);
+  tokensRemoved++;
+  this.emit('cleanupCompleted', {)
+  tokensRemoved,
+  auditLogsRemoved: 0,
+  timestamp: now,
+});
       };
       // Trigger cleanup
       (quickCleanupManager as any).performCleanup();
@@ -712,13 +698,13 @@ describe('PasswordResetTokenManager', () => {
       (failingManager as any).generateSecureToken = () => {
         throw new Error('Token generation failed');
       };
-      const request: TokenRequest = {
-        userId: 'user-error',
-        email: 'error@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+      const request: TokenRequest = {,
+  userId: 'user-error',
+  email: 'error@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await failingManager.generateToken(request);
       expect(result).toBeNull();
       failingManager.destroy();
@@ -750,13 +736,13 @@ describe('PasswordResetTokenManager', () => {
       expect(success).toBe(false);
     });
     test('should handle multiple revocations of same token', async () => {
-      const request: TokenRequest = {
-        userId: 'user-multi-revoke',
-        email: 'multirevoke@test.com',
-        type: TokenType.PASSWORD_RESET,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-      };
+  const request: TokenRequest = {,
+  userId: 'user-multi-revoke',
+  email: 'multirevoke@test.com',
+  type: TokenType.PASSWORD_RESET,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+};
       const result = await manager.generateToken(request);
       expect(result).not.toBeNull();
       // First revocation should succeed

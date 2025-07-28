@@ -23,8 +23,8 @@ export interface SearchFacet {
     field: string;
     displayName: string;
     description?: string;
-    options?: FacetOption[];
-    ranges?: FacetRange[];
+    options?: FacetOption;
+    ranges?: FacetRange;
     hierarchy?: FacetHierarchy;
     config: FacetConfig;
     metadata: FacetMetadata;
@@ -46,7 +46,7 @@ export interface FacetRange {
     format?: 'number' | 'currency' | 'percentage' | 'date';
 }
 export interface FacetHierarchy {
-    levels: HierarchyLevel[];
+    levels: HierarchyLevel;
     separator: string;
     expandedLevels: Set<string>;
     maxDepth?: number;
@@ -55,7 +55,7 @@ export interface HierarchyLevel {
     id: string;
     name: string;
     parent?: string;
-    children: string[];
+    children: string;
     count: number;
     selected: boolean;
     expanded: boolean;
@@ -74,23 +74,23 @@ export interface FacetConfig {
 export interface FacetMetadata {
     priority: number;
     group?: string;
-    dependencies?: string[];
+    dependencies?: string;
     conditionalDisplay?: {
         field: string;
         value: unknown;
     };
     analytics: {
         totalSelections: number;
-        popularValues: string[];
+        popularValues: string;
         averageSelections: number;
     };
 }
 export interface SearchQuery {
     text: string;
-    filters: SearchFilter[];
+    filters: SearchFilter;
     sort: SearchSort;
     pagination: SearchPagination;
-    facets: string[];
+    facets: string;
     options: SearchOptions;
 }
 export interface SearchFilter {
@@ -98,7 +98,7 @@ export interface SearchFilter {
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'starts_with' | 'ends_with' | 'greater' | 'less' | 'between' | 'in' | 'not_in';
     value: unknown;
-    values?: unknown[];
+    values?: unknown;
     boost?: number;
 }
 export interface SearchSort {
@@ -125,10 +125,10 @@ export interface SearchOptions {
 }
 export interface SearchResult<T = any> {
     items: SearchResultItem<T>[];
-    facets: FacetResult[];
+    facets: FacetResult;
     pagination: SearchPagination;
-    suggestions: SearchSuggestion[];
-    aggregations: SearchAggregation[];
+    suggestions: SearchSuggestion;
+    aggregations: SearchAggregation;
     metadata: SearchResultMetadata;
     query: SearchQuery;
 }
@@ -136,14 +136,14 @@ export interface SearchResultItem<T = any> {
     id: string;
     data: T;
     score: number;
-    highlights: Record<string, string[]>;
+    highlights: Record<string, string>;
     explanation?: ScoreExplanation;
-    matched: string[];
+    matched: string;
 }
 export interface ScoreExplanation {
     value: number;
     description: string;
-    details: ScoreDetail[];
+    details: ScoreDetail;
 }
 export interface ScoreDetail {
     field: string;
@@ -155,7 +155,7 @@ export interface FacetResult {
     facetId: string;
     name: string;
     type: string;
-    options?: FacetOption[];
+    options?: FacetOption;
     range?: {
         min: number;
         max: number;
@@ -181,13 +181,13 @@ export interface SearchAggregation {
     name: string;
     type: 'terms' | 'date_histogram' | 'numeric_range' | 'stats';
     field: string;
-    buckets?: AggregationBucket[];
+    buckets?: AggregationBucket;
     stats?: AggregationStats;
 }
 export interface AggregationBucket {
     key: unknown;
     count: number;
-    subAggregations?: SearchAggregation[];
+    subAggregations?: SearchAggregation;
 }
 export interface AggregationStats {
     min: number;
@@ -208,8 +208,8 @@ export interface QueryAnalysis {
     queryType: 'simple' | 'complex' | 'structured';
     appliedFilters: number;
     activeFacets: number;
-    searchTerms: string[];
-    suggestedTerms: string[];
+    searchTerms: string;
+    suggestedTerms: string;
 }
 export interface PerformanceMetrics {
     parseTime: number;
@@ -222,7 +222,7 @@ export interface PerformanceMetrics {
 }
 export interface SearchIndex<T = any> {
     name: string;
-    fields: IndexField[];
+    fields: IndexField;
     documents: Map<string, IndexedDocument<T>>;
     facets: Map<string, SearchFacet>;
     statistics: IndexStatistics;
@@ -313,81 +313,5 @@ export declare class FacetedSearchSystem<T = any> extends EventEmitter {
     private suggestionEngine;
     private searchAnalytics;
     constructor(config?: Partial<SearchConfiguration>);
-    createIndex(name: string, fields: IndexField[], configuration?: Partial<IndexConfiguration>): Promise<void>;
-    addDocuments(indexName: string, documents: T[], idField?: string): Promise<void>;
-    addFacet(indexName: string, facet: SearchFacet): Promise<void>;
-    search(indexName: string, query: Partial<SearchQuery>): Promise<SearchResult<T>>;
-    searchRealTime(indexName: string, query: Partial<SearchQuery>, callback: (result: SearchResult<T>) => void, debounceMs?: number): Promise<() => void>;
-    updateFacetSelection(indexName: string, facetId: string, value: unknown, selected: boolean): Promise<void>;
-    clearFacetSelections(indexName: string, facetId?: string): Promise<void>;
-    getSuggestions(indexName: string, query: string, type?: 'all' | 'completion' | 'correction'): Promise<SearchSuggestion[]>;
-    getSearchAnalytics(indexName?: string): {
-        totalSearches: number;
-        averageResponseTime: number;
-        popularQueries: Array<{
-            query: string;
-            count: number;
-        }>;
-        popularFacets: Array<{
-            facetId: string;
-            selectionCount: number;
-        }>;
-        cacheHitRate: number;
-        errorRate: number;
-    };
-    updateConfiguration(config: Partial<SearchConfiguration>): void;
-    deleteIndex(indexName: string): Promise<void>;
-    reindexDocuments(indexName: string): Promise<void>;
-    destroy(): void;
-    private initializeProcessors;
-    private buildCompleteQuery;
-    private parseQuery;
-    private parseQueryText;
-    private extractPhrases;
-    private extractOperators;
-    private extractFieldQueries;
-    private processFilter;
-    private normalizeFilterValue;
-    private executeSearch;
-    private calculateDocumentScore;
-    private calculateTextScore;
-    private calculateFieldScore;
-    private matchesFilter;
-    private generateHighlights;
-    private highlightField;
-    private getMatchedFields;
-    private generateScoreExplanation;
-    private compareByField;
-    private getFieldValueForSort;
-    private processFacets;
-    private processFacet;
-    private processTermsFacet;
-    private processRangeFacet;
-    private processDateFacet;
-    private processHierarchicalFacet;
-    private generateSuggestions;
-    private generateAggregations;
-    private buildPagination;
-    private analyzeQuery;
-    private classifyQuery;
-    private generateCacheKey;
-    private clearCacheForIndex;
-    private extractId;
-    private extractFields;
-    private processFieldValue;
-    private calculateIndexSize;
-    private updateFacetCounts;
-    private initializeFacet;
-    private initializeTermsFacet;
-    private initializeRangeFacet;
-    private initializeDateFacet;
-    private initializeHierarchicalFacet;
-    private processTextQuery;
-    private processFuzzyQuery;
-    private processPhraseQuery;
 }
-declare const _default: {
-    FacetedSearchSystem: typeof FacetedSearchSystem;
-};
-export default _default;
 //# sourceMappingURL=FacetedSearch.d.ts.map

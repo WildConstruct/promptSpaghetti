@@ -57,10 +57,12 @@ type TokenAnalysisRequest = z.infer<typeof TokenAnalysisRequestSchema>;
 type PromptAnalysisRequest = z.infer<typeof PromptAnalysisRequestSchema>;
 type ComparisonRequest = z.infer<typeof ComparisonRequestSchema>;
 
+}
 interface ModelInterpretationServices {
   tokenAnalyzer: TokenInfluenceAnalyzer;
   promptAnalyzer: PromptAnalyzer;
   analyticsCollector: AnalyticsCollector;
+}
 }
 
 export async function modelInterpretationRoutes(
@@ -86,7 +88,7 @@ export async function modelInterpretationRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Body: TokenAnalysisRequest }>, reply: FastifyReply) => {
       const { prompt, method, options = {}, modelConfig } = request.body;
 
@@ -185,7 +187,7 @@ export async function modelInterpretationRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Body: PromptAnalysisRequest }>, reply: FastifyReply) => {
       const { prompt, analysisDepth, includeInfluence, includeOptimizations, modelConfig } = request.body;
 
@@ -257,7 +259,7 @@ export async function modelInterpretationRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Body: ComparisonRequest }>, reply: FastifyReply) => {
       const { prompt, methods, modelConfig } = request.body;
 
@@ -322,15 +324,15 @@ export async function modelInterpretationRoutes(
               items: { type: 'string' },
               minItems: 1,
               maxItems: 10
-            },
+  }
             method: { type: 'string', enum: ['LIME', 'SALIENCY'] },
             options: { type: 'object' },
             modelConfig: { type: 'object' }
-          },
+  }
           required: ['prompts', 'method']
         }
       }
-    },
+  }
     async (request, reply) => {
       const { prompts, method, options = {}, modelConfig } = request.body as any;
 
@@ -363,7 +365,7 @@ export async function modelInterpretationRoutes(
                 error: error instanceof Error ? error.message : String(error) 
               };
             }
-          })
+  }
         );
 
         const successfulResults = results.filter(r => r.success);
@@ -389,7 +391,7 @@ export async function modelInterpretationRoutes(
               successful: successfulResults.length,
               failed: prompts.length - successfulResults.length
             }
-          },
+  }
           metadata: {
             timestamp: Date.now(),
             method,
@@ -417,7 +419,7 @@ export async function modelInterpretationRoutes(
         LIME: 0,
         SALIENCY: 0,
         BOTH: 0
-      },
+  }
       averageAnalysisTime: 0
     };
 
@@ -438,14 +440,14 @@ export async function modelInterpretationRoutes(
         tokenAnalyzer: 'operational',
         promptAnalyzer: 'operational',
         analytics: 'operational'
-      },
+  }
       capabilities: {
         lime: true,
         saliency: true,
         promptAnalysis: true,
         batchProcessing: true,
         methodComparison: true
-      },
+  }
       timestamp: Date.now()
     };
 

@@ -10,82 +10,77 @@ import { z } from 'zod';
 // ========================================
 
 export interface PasswordComplexityRule {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   enabled: boolean;
-  required: boolean;
-  weight: number; // For scoring (1-10)
-  category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';
+  required: boolean;,
+  weight: number; // For scoring (1-10),
+  category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';,
   severity: 'error' | 'warning' | 'info';
   validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
 }
-
 export interface PasswordValidationContext {
   username?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
-  previousPasswords?: string[];
-  commonPasswords?: string[];
-  personalInfo?: string[];
+  previousPasswords?: string;
+  commonPasswords?: string;
+  personalInfo?: string;
   organizationName?: string;
   userRole?: string;
   locale?: string;
 }
-
 export interface PasswordRuleResult {
-  passed: boolean;
-  score: number; // 0-10 scale
+  passed: boolean;,
+  score: number; // 0-10 scale,
   message: string;
   suggestion?: string;
-  details?: {
-    expected?: unknown;
-    actual?: unknown;
-    examples?: string[];
-  };
+  details?: {,
+  expected?: unknown;
+  actual?: unknown;
+  examples?: string;
+};
 }
-
 export interface PasswordComplexityConfig {
-  enabled: boolean;
+  enabled: boolean;,
   mode: 'strict' | 'balanced' | 'lenient' | 'custom';
-  minimumScore: number; // Overall minimum score required (0-100)
-  rules: PasswordComplexityRule[];
-  allowOverrides?: {
-    enabled: boolean;
-    roles: string[];
-    requireJustification: boolean;
-  };
+  minimumScore: number; // Overall minimum score required (0-100),
+  rules: PasswordComplexityRule;
+  allowOverrides?: {,
+  enabled: boolean;,
+  roles: string;
+  requireJustification: boolean;
+};
   breachChecking?: {
-    enabled: boolean;
-    sources: ('hibp' | 'internal' | 'custom')[];
-    cacheResults: boolean;
-    timeoutMs: number;
-  };
+  enabled: boolean;,
+  sources: ('hibp' | 'internal' | 'custom')[];
+  cacheResults: boolean;,
+  timeoutMs: number;
+};
   customDictionaries?: {
-    enabled: boolean;
-    sources: string[];
-    categories: string[];
-  };
+  enabled: boolean;,
+  sources: string;
+  categories: string;
+};
 }
-
 export interface PasswordValidationResult {
-  valid: boolean;
-  score: number; // 0-100 overall score
-  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';
-  ruleResults: PasswordRuleResult[];
-  errors: string[];
-  warnings: string[];
-  suggestions: string[];
-  estimatedCrackTime?: {
-    offline: string;
-    online: string;
-    unit: string;
-  };
+  valid: boolean;,
+  score: number; // 0-100 overall score,
+  strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';,
+  ruleResults: PasswordRuleResult;
+  errors: string;,
+  warnings: string;
+  suggestions: string;
+  estimatedCrackTime?: {,
+  offline: string;,
+  online: string;
+  unit: string;
+};
   entropy?: number;
-  passedRules: number;
+  passedRules: number;,
   totalRules: number;
-}
 
 // ========================================
 // Validation Schemas
@@ -98,35 +93,35 @@ const PasswordComplexityRuleSchema = z.object({)
   required: z.boolean(),
   weight: z.number().min(1).max(10),
   category: z.enum(['length', 'character', 'pattern', 'dictionary', 'entropy', 'history']),
-  severity: z.enum(['error', 'warning', 'info'])
+  severity: z.enum(['error', 'warning', 'info']),
 });
 const PasswordComplexityConfigSchema = z.object({)
   enabled: z.boolean(),
   mode: z.enum(['strict', 'balanced', 'lenient', 'custom']),
   minimumScore: z.number().min(0).max(100),
   rules: z.array(PasswordComplexityRuleSchema),
-  allowOverrides: z.object({),
-    enabled: z.boolean(),
-    roles: z.array(z.string()),
-    requireJustification: z.boolean(),
-  }).optional(),
-  breachChecking: z.object({),
-    enabled: z.boolean(),
-    sources: z.array(z.enum(['hibp', 'internal', 'custom'])),
-    cacheResults: z.boolean(),
-    timeoutMs: z.number().min(1000).max(30000),
-  }).optional(),
-  customDictionaries: z.object({),
-    enabled: z.boolean(),
-    sources: z.array(z.string()),
-    categories: z.array(z.string()),
-  }).optional()
+  allowOverrides: z.object({,)
+  enabled: z.boolean(),
+  roles: z.array(z.string()),
+  requireJustification: z.boolean(),
+}).optional(),
+  breachChecking: z.object({,)
+  enabled: z.boolean(),
+  sources: z.array(z.enum(['hibp', 'internal', 'custom'])),
+  cacheResults: z.boolean(),
+  timeoutMs: z.number().min(1000).max(30000),
+}).optional(),
+  customDictionaries: z.object({,)
+  enabled: z.boolean(),
+  sources: z.array(z.string()),
+  categories: z.array(z.string()),
+}).optional()
 });
 
 // ========================================
 // Built-in Password Rules
 // ========================================
-
+}
 export class PasswordRules {
   /**
    * Minimum length rule
@@ -135,8 +130,9 @@ export class PasswordRules {
     return {
       id: 'min-length',
       name: 'Minimum Length',
-      description: `Password must be at least ${minLength} characters long`,}
-      enabled: true,
+      description: `Password must be at least ${minLength} characters long`}
+},
+  enabled: true,
       required: true,
       weight: 8,
       category: 'length',
@@ -149,16 +145,15 @@ export class PasswordRules {
           score: passed ? score : 0,
           message: passed ,
             ? `Length requirement met (${password.length} characters)`}
-            : `Password too short (${password.length}/${minLength} characters)`,}
-          suggestion: passed ? undefined : `Add ${minLength - password.length} more characters`,}
-          details: {,
-            expected: minLength,
-            actual: password.length,
-          }
-        };
-      }
+            : `Password too short (${password.length}/${minLength} characters)`}
+},
+  suggestion: passed ? undefined : `Add ${minLength - password.length} more characters`}
+},
+  details: {,
+  expected: minLength,
+  actual: password.length,
+};
     };
-  }
   /**
    * Maximum length rule (to prevent DoS attacks)
    */
@@ -166,8 +161,9 @@ export class PasswordRules {
     return {
       id: 'max-length',
       name: 'Maximum Length',
-      description: `Password must not exceed ${maxLength} characters`,}
-      enabled: true,
+      description: `Password must not exceed ${maxLength} characters`}
+},
+  enabled: true,
       required: true,
       weight: 2,
       category: 'length',
@@ -179,16 +175,15 @@ export class PasswordRules {
           score: passed ? 10 : 0,
           message: passed ,
             ? 'Length within acceptable range'
-            : `Password too long (${password.length}/${maxLength} characters)`,}
-          suggestion: passed ? undefined : `Remove ${password.length - maxLength} characters`,}
-          details: {,
-            expected: maxLength,
-            actual: password.length,
-          }
-        };
-      }
+            : `Password too long (${password.length}/${maxLength} characters)`}
+},
+  suggestion: passed ? undefined : `Remove ${password.length - maxLength} characters`}
+},
+  details: {,
+  expected: maxLength,
+  actual: password.length,
+};
     };
-  }
   /**
    * Uppercase letter requirement
    */
@@ -196,8 +191,9 @@ export class PasswordRules {
     return {
       id: 'require-uppercase',
       name: 'Uppercase Letters',
-      description: `Password must contain at least ${minCount} uppercase letter(s)`,}
-      enabled: true,
+      description: `Password must contain at least ${minCount} uppercase letter(s)`}
+},
+  enabled: true,
       required: true,
       weight: 6,
       category: 'character',
@@ -211,17 +207,16 @@ export class PasswordRules {
           score: passed ? score : 0,
           message: passed ,
             ? `Uppercase requirement met (${uppercaseCount} found)`}
-            : `Not enough uppercase letters (${uppercaseCount}/${minCount})`,}
-          suggestion: passed ? undefined : `Add ${minCount - uppercaseCount} uppercase letter(s)`,}
-          details: {,
-            expected: minCount,
-            actual: uppercaseCount,
-            examples: ['A', 'B', 'C', 'Z']
-          }
-        };
-      }
+            : `Not enough uppercase letters (${uppercaseCount}/${minCount})`}
+},
+  suggestion: passed ? undefined : `Add ${minCount - uppercaseCount} uppercase letter(s)`}
+},
+  details: {,
+  expected: minCount,
+  actual: uppercaseCount,
+  examples: ['A', 'B', 'C', 'Z'],
+};
     };
-  }
   /**
    * Lowercase letter requirement
    */
@@ -229,8 +224,9 @@ export class PasswordRules {
     return {
       id: 'require-lowercase',
       name: 'Lowercase Letters',
-      description: `Password must contain at least ${minCount} lowercase letter(s)`,}
-      enabled: true,
+      description: `Password must contain at least ${minCount} lowercase letter(s)`}
+},
+  enabled: true,
       required: true,
       weight: 6,
       category: 'character',
@@ -244,17 +240,16 @@ export class PasswordRules {
           score: passed ? score : 0,
           message: passed ,
             ? `Lowercase requirement met (${lowercaseCount} found)`}
-            : `Not enough lowercase letters (${lowercaseCount}/${minCount})`,}
-          suggestion: passed ? undefined : `Add ${minCount - lowercaseCount} lowercase letter(s)`,}
-          details: {,
-            expected: minCount,
-            actual: lowercaseCount,
-            examples: ['a', 'b', 'c', 'z']
-          }
-        };
-      }
+            : `Not enough lowercase letters (${lowercaseCount}/${minCount})`}
+},
+  suggestion: passed ? undefined : `Add ${minCount - lowercaseCount} lowercase letter(s)`}
+},
+  details: {,
+  expected: minCount,
+  actual: lowercaseCount,
+  examples: ['a', 'b', 'c', 'z'],
+};
     };
-  }
   /**
    * Numeric digit requirement
    */
@@ -262,8 +257,9 @@ export class PasswordRules {
     return {
       id: 'require-digits',
       name: 'Numeric Digits',
-      description: `Password must contain at least ${minCount} numeric digit(s)`,}
-      enabled: true,
+      description: `Password must contain at least ${minCount} numeric digit(s)`}
+},
+  enabled: true,
       required: true,
       weight: 6,
       category: 'character',
@@ -277,17 +273,16 @@ export class PasswordRules {
           score: passed ? score : 0,
           message: passed ,
             ? `Digit requirement met (${digitCount} found)`}
-            : `Not enough digits (${digitCount}/${minCount})`,}
-          suggestion: passed ? undefined : `Add ${minCount - digitCount} digit(s)`,}
-          details: {,
-            expected: minCount,
-            actual: digitCount,
-            examples: ['0', '1', '5', '9']
-          }
-        };
-      }
+            : `Not enough digits (${digitCount}/${minCount})`}
+},
+  suggestion: passed ? undefined : `Add ${minCount - digitCount} digit(s)`}
+},
+  details: {,
+  expected: minCount,
+  actual: digitCount,
+  examples: ['0', '1', '5', '9'],
+};
     };
-  }
   /**
    * Special character requirement
    */
@@ -296,8 +291,9 @@ export class PasswordRules {
     return {
       id: 'require-special-chars',
       name: 'Special Characters',
-      description: `Password must contain at least ${minCount} special character(s)`,}
-      enabled: true,
+      description: `Password must contain at least ${minCount} special character(s)`}
+},
+  enabled: true,
       required: true,
       weight: 7,
       category: 'character',
@@ -312,17 +308,16 @@ export class PasswordRules {
           score: passed ? score : 0,
           message: passed ,
             ? `Special character requirement met (${specialCharCount} found)`}
-            : `Not enough special characters (${specialCharCount}/${minCount})`,}
-          suggestion: passed ? undefined : `Add ${minCount - specialCharCount} special character(s)`,}
-          details: {,
-            expected: minCount,
-            actual: specialCharCount,
-            examples: ['!', '@', '#', '$', '%', '^', '&', '*']
-          }
-        };
-      }
+            : `Not enough special characters (${specialCharCount}/${minCount})`}
+},
+  suggestion: passed ? undefined : `Add ${minCount - specialCharCount} special character(s)`}
+},
+  details: {,
+  expected: minCount,
+  actual: specialCharCount,
+  examples: ['!', '@', '#', '$', '%', '^', '&', '*'],
+};
     };
-  }
   /**
    * No consecutive identical characters
    */
@@ -330,14 +325,16 @@ export class PasswordRules {
     return {
       id: 'no-consecutive-identical',
       name: 'No Consecutive Identical Characters',
-      description: `Password cannot contain more than ${maxCount} consecutive identical characters`,}
-      enabled: true,
+      description: `Password cannot contain more than ${maxCount} consecutive identical characters`}
+},
+  enabled: true,
       required: false,
       weight: 4,
       category: 'pattern',
       severity: 'warning',
       validate: (password: string): PasswordRuleResult => {,
-        const consecutivePattern = new RegExp(`(.)\\1{${maxCount},}`, 'g');}
+        const consecutivePattern = new RegExp(`(.)\\1{${maxCount}
+}`, 'g');}
         const matches = password.match(consecutivePattern);
         const passed = !matches;
         return {
@@ -345,16 +342,15 @@ export class PasswordRules {
           score: passed ? 10 : 3,
           message: passed ,
             ? 'No consecutive identical characters found'
-            : `Contains consecutive identical characters: ${matches?.join(', ')}`,}
-          suggestion: passed ? undefined : 'Replace consecutive identical characters with varied characters',
+            : `Contains consecutive identical characters: ${matches?.join(', ')}`}
+},
+  suggestion: passed ? undefined : 'Replace consecutive identical characters with varied characters',
           details: {,
-            expected: `Max ${maxCount} consecutive`,}
-            actual: matches?.length || 0,
-          }
-        };
-      }
+  expected: `Max ${maxCount} consecutive`}
+},
+  actual: matches?.length || 0;
+  };
     };
-  }
   /**
    * No common sequences (123, abc, qwerty, etc.)
    */
@@ -384,37 +380,34 @@ export class PasswordRules {
           score: passed ? 10 : Math.max(2, 10 - foundSequences.length * 2),
           message: passed ,
             ? 'No common sequences found'
-            : `Contains common sequences: ${foundSequences.join(', ')}`,}
-          suggestion: passed ? undefined : 'Replace common sequences with random character combinations',
+            : `Contains common sequences: ${foundSequences.join(', ')}`}
+},
+  suggestion: passed ? undefined : 'Replace common sequences with random character combinations',
           details: {,
-            expected: 'No common sequences',
-            actual: foundSequences,
-          }
-        };
-      }
+  expected: 'No common sequences',
+  actual: foundSequences,
+};
     };
-  }
   /**
    * No personal information
    */
   static noPersonalInfo(): PasswordComplexityRule {
-    return {
-      id: 'no-personal-info',
-      name: 'No Personal Information',
-      description: 'Password cannot contain personal information like name, email, or username',
-      enabled: true,
-      required: true,
-      weight: 8,
-      category: 'dictionary',
-      severity: 'error',
-      validate: (password: string, context?: PasswordValidationContext): PasswordRuleResult => {
-        if (!context) {
-          return {
-            passed: true,
-            score: 10,
-            message: 'No personal information to check against',
-          };
-        }
+  return {
+  id: 'no-personal-info',
+  name: 'No Personal Information',
+  description: 'Password cannot contain personal information like name, email, or username',
+  enabled: true,
+  required: true,
+  weight: 8,
+  category: 'dictionary',
+  severity: 'error',
+  validate: (password: string, context?: PasswordValidationContext): PasswordRuleResult => {,
+  if (!context) {
+  return {
+  passed: true,
+  score: 10,
+  message: 'No personal information to check against',
+};
         const lowerPassword = password.toLowerCase();
         const personalInfo = [;
           context.username,
@@ -433,16 +426,14 @@ export class PasswordRules {
           score: passed ? 10 : Math.max(1, 10 - foundInfo.length * 3),
           message: passed ,
             ? 'No personal information found'
-            : `Contains personal information: ${foundInfo.join(', ')}`,}
-          suggestion: passed ? undefined : 'Remove personal information and use unrelated words or phrases',
+            : `Contains personal information: ${foundInfo.join(', ')}`}
+},
+  suggestion: passed ? undefined : 'Remove personal information and use unrelated words or phrases',
           details: {,
-            expected: 'No personal information',
-            actual: foundInfo,
-          }
-        };
-      }
+  expected: 'No personal information',
+  actual: foundInfo,
+};
     };
-  }
   /**
    * Entropy/randomness check
    */
@@ -450,8 +441,9 @@ export class PasswordRules {
     return {
       id: 'minimum-entropy',
       name: 'Minimum Entropy',
-      description: `Password must have at least ${minEntropy} bits of entropy`,}
-      enabled: true,
+      description: `Password must have at least ${minEntropy} bits of entropy`}
+},
+  enabled: true,
       required: false,
       weight: 9,
       category: 'entropy',
@@ -465,16 +457,14 @@ export class PasswordRules {
           score: passed ? score : Math.max(1, score),
           message: passed ,
             ? `Entropy requirement met (${entropy.toFixed(1)} bits)`}
-            : `Low entropy (${entropy.toFixed(1)}/${minEntropy} bits)`,}
-          suggestion: passed ? undefined : 'Increase randomness by mixing character types and avoiding patterns',
+            : `Low entropy (${entropy.toFixed(1)}/${minEntropy} bits)`}
+},
+  suggestion: passed ? undefined : 'Increase randomness by mixing character types and avoiding patterns',
           details: {,
-            expected: minEntropy,
-            actual: Math.round(entropy * 10) / 10,
-          }
-        };
-      }
+  expected: minEntropy,
+  actual: Math.round(entropy * 10) / 10,
+};
     };
-  }
   /**
    * Password history check
    */
@@ -482,20 +472,20 @@ export class PasswordRules {
     return {
       id: 'not-in-history',
       name: 'Not in Password History',
-      description: `Password cannot be the same as any of the last ${historyCount} passwords`,}
-      enabled: true,
+      description: `Password cannot be the same as any of the last ${historyCount} passwords`}
+},
+  enabled: true,
       required: true,
       weight: 7,
       category: 'history',
       severity: 'error',
       validate: (password: string, context?: PasswordValidationContext): PasswordRuleResult => {
-        if (!context?.previousPasswords || context.previousPasswords.length === 0) {
-          return {
-            passed: true,
-            score: 10,
-            message: 'No password history to check against',
-          };
-        }
+  if (!context?.previousPasswords || context.previousPasswords.length === 0) {
+  return {
+  passed: true,
+  score: 10,
+  message: 'No password history to check against',
+};
         const recentPasswords = context.previousPasswords.slice(0, historyCount);
         const isReused = recentPasswords.includes(password);
         return {
@@ -506,14 +496,11 @@ export class PasswordRules {
             : 'Password is not in recent history',
           suggestion: isReused ? 'Choose a password you have not used recently' : undefined,
           details: {,
-            expected: `Not in last ${historyCount} passwords`,}
-            actual: isReused ? 'Found in history' : 'Not in history',
-          }
-        };
-      }
+  expected: `Not in last ${historyCount} passwords`}
+},
+  actual: isReused ? 'Found in history' : 'Not in history';
+  };
     };
-  }
-}
 
 // ========================================
 // Password Complexity Validator
@@ -522,129 +509,119 @@ export class PasswordRules {
 export class PasswordComplexityValidator {
   private config: PasswordComplexityConfig;
   private commonPasswords: Set<string> = new Set();
-  constructor(config?: Partial<PasswordComplexityConfig>) {
-    this.config = this.createConfig(config);
-    this.loadCommonPasswords();
-  }
+  constructor(config?: Partial<PasswordComplexityConfig>) {,
+  this.config = this.createConfig(config);
+  this.loadCommonPasswords();
   /**
-   * Create configuration with defaults
-   */
-  private createConfig(customConfig?: Partial<PasswordComplexityConfig>): PasswordComplexityConfig {
-    // Determine the mode first (custom config takes precedence)
-    const mode = customConfig?.mode || 'balanced';
-    const defaultConfig: PasswordComplexityConfig = {
-      enabled: true,
-      mode: 'balanced',
-      minimumScore: 70,
-      rules: this.getDefaultRules(mode), // Use the actual mode
-      allowOverrides: {,
-        enabled: false,
-        roles: ['admin', 'security-officer'],
-        requireJustification: true,
-      },
-      breachChecking: {,
-        enabled: true,
-        sources: ['hibp'],
-        cacheResults: true,
-        timeoutMs: 5000,
-      },
-      customDictionaries: {,
-        enabled: false,
-        sources: [],
-        categories: [],
-      }
-    };
+  * Create configuration with defaults
+  */
+  private createConfig(customConfig?: Partial<PasswordComplexityConfig>): PasswordComplexityConfig {,
+  // Determine the mode first (custom config takes precedence)
+  const mode = customConfig?.mode || 'balanced';
+  const defaultConfig: PasswordComplexityConfig = {,
+  enabled: true,
+  mode: 'balanced',
+  minimumScore: 70,
+  rules: this.getDefaultRules(mode), // Use the actual mode,
+  allowOverrides: {,
+  enabled: false,
+  roles: ['admin', 'security-officer'],
+  requireJustification: true,
+},
+  breachChecking: {,
+  enabled: true,
+  sources: ['hibp'],
+  cacheResults: true,
+  timeoutMs: 5000,
+},
+  customDictionaries: {,
+  enabled: false,
+  sources: [],
+  categories: [],
+};
     const config = { ...defaultConfig, ...customConfig };
     // If rules weren't provided in customConfig, ensure they match the mode
     if (!customConfig?.rules) {
-      config.rules = this.getDefaultRules(config.mode);
-    }
-    return config;
-  }
+  config.rules = this.getDefaultRules(config.mode);
+  return config;
   /**
-   * Get default rules for different modes
-   */
-  private getDefaultRules(mode: string): PasswordComplexityRule[] {
-    switch (mode) {
-    case 'strict':
-      return [
-        PasswordRules.minLength(12),
-        PasswordRules.maxLength(128),
-        PasswordRules.requireUppercase(2),
-        PasswordRules.requireLowercase(2),
-        PasswordRules.requireDigits(2),
-        PasswordRules.requireSpecialChars(2),
-        PasswordRules.noConsecutiveIdentical(2),
-        PasswordRules.noCommonSequences(),
-        PasswordRules.noPersonalInfo(),
-        PasswordRules.minimumEntropy(60),
-        PasswordRules.notInHistory(10)
-      ];
-    case 'balanced':
-      return [
-        PasswordRules.minLength(8),
-        PasswordRules.maxLength(128),
-        PasswordRules.requireUppercase(1),
-        PasswordRules.requireLowercase(1),
-        PasswordRules.requireDigits(1),
-        PasswordRules.requireSpecialChars(1),
-        PasswordRules.noConsecutiveIdentical(3),
-        PasswordRules.noCommonSequences(),
-        PasswordRules.noPersonalInfo(),
-        PasswordRules.minimumEntropy(40),
-        PasswordRules.notInHistory(5)
-      ];
-    case 'lenient':
-      return [
-        PasswordRules.minLength(6),
-        PasswordRules.maxLength(128),
-        PasswordRules.requireUppercase(1),
-        PasswordRules.requireLowercase(1),
-        PasswordRules.requireDigits(1),
-        PasswordRules.noPersonalInfo(),
-        PasswordRules.notInHistory(3)
-      ];
-    default:
-      return [];
-    }
-  }
+  * Get default rules for different modes
+  */
+  private getDefaultRules(mode: string): PasswordComplexityRule {,
+  switch (mode) {
+  case 'strict':,
+  return [
+  PasswordRules.minLength(12),
+  PasswordRules.maxLength(128),
+  PasswordRules.requireUppercase(2),
+  PasswordRules.requireLowercase(2),
+  PasswordRules.requireDigits(2),
+  PasswordRules.requireSpecialChars(2),
+  PasswordRules.noConsecutiveIdentical(2),
+  PasswordRules.noCommonSequences(),
+  PasswordRules.noPersonalInfo(),
+  PasswordRules.minimumEntropy(60),
+  PasswordRules.notInHistory(10)
+  ];
+  case 'balanced':,
+  return [
+  PasswordRules.minLength(8),
+  PasswordRules.maxLength(128),
+  PasswordRules.requireUppercase(1),
+  PasswordRules.requireLowercase(1),
+  PasswordRules.requireDigits(1),
+  PasswordRules.requireSpecialChars(1),
+  PasswordRules.noConsecutiveIdentical(3),
+  PasswordRules.noCommonSequences(),
+  PasswordRules.noPersonalInfo(),
+  PasswordRules.minimumEntropy(40),
+  PasswordRules.notInHistory(5)
+  ];
+  case 'lenient':,
+  return [
+  PasswordRules.minLength(6),
+  PasswordRules.maxLength(128),
+  PasswordRules.requireUppercase(1),
+  PasswordRules.requireLowercase(1),
+  PasswordRules.requireDigits(1),
+  PasswordRules.noPersonalInfo(),
+  PasswordRules.notInHistory(3)
+  ];
+  default:,
+  return [];
   /**
-   * Load common passwords list
-   */
-  private loadCommonPasswords(): void {
-    // In a real implementation, this would load from a file or API
-    const commonPasswords = [;
-      'password', '123456', '123456789', 'qwerty', 'abc123',
-      'password123', 'admin', 'letmein', 'welcome', 'monkey',
-      'dragon', 'master', 'hello', 'freedom', 'whatever',
-      'qazwsx', 'trustno1', 'jordan23', 'harley', 'robert'
-    ];
-    commonPasswords.forEach(pwd => this.commonPasswords.add(pwd.toLowerCase()));
-  }
+  * Load common passwords list
+  */
+  private loadCommonPasswords(): void {,
+  // In a real implementation, this would load from a file or API
+  const commonPasswords = [;
+  'password', '123456', '123456789', 'qwerty', 'abc123',
+  'password123', 'admin', 'letmein', 'welcome', 'monkey',
+  'dragon', 'master', 'hello', 'freedom', 'whatever',
+  'qazwsx', 'trustno1', 'jordan23', 'harley', 'robert'
+  ];
+  commonPasswords.forEach(pwd => this.commonPasswords.add(pwd.toLowerCase()));
   /**
-   * Validate password against all configured rules
-   */
-  async validatePassword()
-    password: string, 
-    context?: PasswordValidationContext
-  ): Promise<PasswordValidationResult> {
-    if (!this.config.enabled) {
-      return {
-        valid: true,
-        score: 100,
-        strength: 'very-strong',
-        ruleResults: [],
-        errors: [],
-        warnings: [],
-        suggestions: [],
-        passedRules: 0,
-        totalRules: 0,
-      };
-    }
-    const ruleResults: PasswordRuleResult[] = [];
-    const errors: string[] = [];
-    const warnings: string[] = [];
-    const suggestions: string[] = [];
+  * Validate password against all configured rules
+  */
+  async validatePassword(password: string,)
+  context?: PasswordValidationContext): Promise<PasswordValidationResult> {,
+  if (!this.config.enabled) {
+  return {
+  valid: true,
+  score: 100,
+  strength: 'very-strong',
+  ruleResults: [],
+  errors: [],
+  warnings: [],
+  suggestions: [],
+  passedRules: 0,
+  totalRules: 0,
+};
+    const ruleResults: PasswordRuleResult = [];
+    const errors: string = [];
+    const warnings: string = [];
+    const suggestions: string = [];
     // Validate against all enabled rules
     for (const rule of this.config.rules) {
       if (!rule.enabled) continue;
@@ -656,48 +633,41 @@ export class PasswordComplexityValidator {
             errors.push(result.message);
           } else if (rule.severity === 'warning') {
             warnings.push(result.message);
-          }
           if (result.suggestion) {
             suggestions.push(result.suggestion);
-          }
-        }
       } catch (error) {
         console.error(`Error validating rule ${rule.id}:`, error);}
         ruleResults.push({)
-          passed: false,
+  passed: false,
           score: 0,
           message: `Rule validation failed: ${rule.name}`}
         });
-      }
-    }
     // Check against common passwords
     if (this.isCommonPassword(password)) {
-      errors.push('Password is too common');
-      suggestions.push('Choose a more unique password');
-    }
-    // Calculate overall score
-    const score = this.calculateOverallScore(ruleResults);
-    const strength = this.determineStrength(score);
-    const valid = errors.length === 0 && score >= this.config.minimumScore;
-    // Calculate entropy and crack time estimates
-    const entropy = PasswordComplexityValidator.calculateEntropy(password);
-    const crackTime = this.estimateCrackTime(entropy);
-    const passedRules = ruleResults.filter(r => r.passed).length;
-    const totalRules = ruleResults.length;
-    return {
-      valid,
-      score,
-      strength,
-      ruleResults,
-      errors,
-      warnings,
-      suggestions: [...new Set(suggestions)], // Remove duplicates
-      estimatedCrackTime: crackTime,
-      entropy,
-      passedRules,
-      totalRules
-    };
-  }
+  errors.push('Password is too common');
+  suggestions.push('Choose a more unique password');
+  // Calculate overall score
+  const score = this.calculateOverallScore(ruleResults);
+  const strength = this.determineStrength(score);
+  const valid = errors.length === 0 && score >= this.config.minimumScore;
+  // Calculate entropy and crack time estimates
+  const entropy = PasswordComplexityValidator.calculateEntropy(password);
+  const crackTime = this.estimateCrackTime(entropy);
+  const passedRules = ruleResults.filter(r => r.passed).length;
+  const totalRules = ruleResults.length;
+  return {
+  valid,
+  score,
+  strength,
+  ruleResults,
+  errors,
+  warnings,
+  suggestions: [...new Set(suggestions)], // Remove duplicates,
+  estimatedCrackTime: crackTime,
+  entropy,
+  passedRules,
+  totalRules
+};
   /**
    * Calculate password entropy
    */
@@ -708,17 +678,15 @@ export class PasswordComplexityValidator {
     if (/[0-9]/.test(password)) charsetSize += 10;
     if (/[^a-zA-Z0-9]/.test(password)) charsetSize += 32;
     return password.length * Math.log2(charsetSize);
-  }
   /**
    * Check if password is in common passwords list
    */
   private isCommonPassword(password: string): boolean {
     return this.commonPasswords.has(password.toLowerCase());
-  }
   /**
    * Calculate overall score from rule results
    */
-  private calculateOverallScore(ruleResults: PasswordRuleResult[]): number {
+  private calculateOverallScore(ruleResults: PasswordRuleResult): number {
     if (ruleResults.length === 0) return 0;
     let totalScore = 0;
     let totalWeight = 0;
@@ -727,9 +695,7 @@ export class PasswordComplexityValidator {
       const weight = rule?.weight || 5;
       totalScore += result.score * weight;
       totalWeight += weight;
-    }
     return totalWeight > 0 ? Math.round((totalScore / totalWeight) * 10) : 0;
-  }
   /**
    * Determine password strength category
    */
@@ -740,14 +706,13 @@ export class PasswordComplexityValidator {
     if (score >= 40) return 'fair';
     if (score >= 20) return 'weak';
     return 'very-weak';
-  }
   /**
    * Estimate crack time based on entropy
    */
-  private estimateCrackTime(entropy: number): {
-    offline: string;
-    online: string;
-    unit: string;
+  private estimateCrackTime(entropy: number): {,
+  offline: string;
+    online: string;,
+  unit: string;
     const combinations = Math.pow(2, entropy);
     const avgCombinations = combinations / 2;
     // Offline cracking (1 billion guesses per second)
@@ -762,23 +727,20 @@ export class PasswordComplexityValidator {
       return `${Math.round(seconds / 31536000)} years`;}
     };
     return {
-      offline: formatTime(offlineSeconds),
-      online: formatTime(onlineSeconds),
-      unit: 'average time',
-    };
-  }
+  offline: formatTime(offlineSeconds),
+  online: formatTime(onlineSeconds),
+  unit: 'average time',
+};
   /**
    * Update configuration
    */
   updateConfig(newConfig: Partial<PasswordComplexityConfig>): void {
     this.config = { ...this.config, ...newConfig };
-  }
   /**
    * Get current configuration
    */
   getConfig(): PasswordComplexityConfig {
     return { ...this.config };
-  }
   /**
    * Add custom rule
    */
@@ -788,8 +750,6 @@ export class PasswordComplexityValidator {
       this.config.rules[existingIndex] = rule;
     } else {
       this.config.rules.push(rule);
-    }
-  }
   /**
    * Remove rule
    */
@@ -798,9 +758,7 @@ export class PasswordComplexityValidator {
     if (index >= 0) {
       this.config.rules.splice(index, 1);
       return true;
-    }
     return false;
-  }
   /**
    * Enable/disable rule
    */
@@ -809,34 +767,28 @@ export class PasswordComplexityValidator {
     if (rule) {
       rule.enabled = enabled;
       return true;
-    }
     return false;
-  }
   /**
    * Get rule by ID
    */
   getRule(ruleId: string): PasswordComplexityRule | undefined {
     return this.config.rules.find(r => r.id === ruleId);
-  }
   /**
    * Get all rules by category
    */
-  getRulesByCategory(category: PasswordComplexityRule['category']): PasswordComplexityRule[] {
+  getRulesByCategory(category: PasswordComplexityRule['category']): PasswordComplexityRule {
     return this.config.rules.filter(r => r.category === category);
-  }
   /**
    * Validate configuration
    */
-  validateConfig(): { valid: boolean; errors: string[]; warnings: string[] } {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-    try {
-      PasswordComplexityConfigSchema.parse(this.config);
-    } catch (error) {
+  validateConfig(): { valid: boolean; errors: string; warnings: string } {
+  const errors: string = [];
+  const warnings: string = [];
+  try {
+  PasswordComplexityConfigSchema.parse(this.config);
+} catch (error) {
       if (error instanceof z.ZodError) {
         errors.push(...error.errors.map(e => `Configuration error: ${e.path.join('.')} - ${e.message}`));}
-      }
-    }
     // Check for conflicting rules
     const lengthRules = this.getRulesByCategory('length');
     const minLengthRule = lengthRules.find(r => r.id === 'min-length');
@@ -846,22 +798,16 @@ export class PasswordComplexityValidator {
       const maxLength = 128; // Would extract from rule configuration;
       if (minLength >= maxLength) {
         errors.push('Minimum length cannot be greater than or equal to maximum length');
-      }
-    }
     // Check for missing required rules
     const requiredCategories = ['length', 'character'];
     for (const category of requiredCategories) {
       const categoryRules = this.getRulesByCategory(category as PasswordComplexityRule['category']);
       if (categoryRules.length === 0) {
         warnings.push(`No rules defined for required category: ${category}`);}
-      }
-    }
     return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
-}
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
 
 export default PasswordComplexityValidator;

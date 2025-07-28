@@ -54,6 +54,7 @@ export class CategoryManagementService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Category> {
+
     try {
       // Validate category data
       const validationResult = await this.validateCategory(categoryData);
@@ -109,7 +110,7 @@ export class CategoryManagementService {
           code: category.code,
           name: category.name,
           level: category.level
-        },
+  }
         severity: 'info'
       });
 
@@ -125,7 +126,7 @@ export class CategoryManagementService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           categoryData: { domain: categoryData.domain, code: categoryData.code }
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -141,6 +142,7 @@ export class CategoryManagementService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Category> {
+
     try {
       // Get current category
       const currentCategory = await this.getCategoryById(categoryId);
@@ -234,7 +236,7 @@ export class CategoryManagementService {
           changedFields: Object.keys(updates),
           domain: updatedCategory.domain,
           code: updatedCategory.code
-        },
+  }
         severity: 'info'
       });
 
@@ -250,7 +252,7 @@ export class CategoryManagementService {
         resourceId: categoryId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -266,6 +268,7 @@ export class CategoryManagementService {
     options: { cascadeDelete?: boolean; transferChildrenTo?: string } = {},
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       const category = await this.getCategoryById(categoryId);
       if (!category) {
@@ -299,7 +302,7 @@ export class CategoryManagementService {
           name: category.name,
           cascadeDelete: options.cascadeDelete,
           transferChildrenTo: options.transferChildrenTo
-        },
+  }
         severity: 'info'
       });
 
@@ -313,7 +316,7 @@ export class CategoryManagementService {
         resourceId: categoryId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -324,6 +327,7 @@ export class CategoryManagementService {
    * Get category by ID
    */
   async getCategoryById(categoryId: string, includeRelationships: boolean = false): Promise<Category | null> {
+
     const result = await this.dbService.query('SELECT * FROM categories WHERE id = $1', [categoryId]);
     
     if (result.rows.length === 0) {
@@ -355,6 +359,7 @@ export class CategoryManagementService {
     totalCount: number;
     hasMore: boolean;
   }> {
+
     const conditions = [];
     const values = [];
     let paramIndex = 1;
@@ -463,6 +468,7 @@ export class CategoryManagementService {
     rootCategoryId?: string,
     maxDepth?: number
   ): Promise<CategoryTree[]> {
+
     const conditions = ['status = $1'];
     const values = ['active'];
     let paramIndex = 2;
@@ -502,6 +508,7 @@ export class CategoryManagementService {
     adminId: string,
     options: { strength?: number; bidirectional?: boolean; metadata?: any } = {}
   ): Promise<CategoryRelationship> {
+
     try {
       const relationshipId = require('crypto').randomUUID();
       
@@ -557,6 +564,7 @@ export class CategoryManagementService {
     periodStart?: Date,
     periodEnd?: Date
   ): Promise<CategoryUsageStatistics | null> {
+
     const endDate = periodEnd || new Date();
     const startDate = periodStart || new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days
 
@@ -582,6 +590,7 @@ export class CategoryManagementService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<CategoryAnalytics> {
+
     // This would implement comprehensive analytics generation
     // For now, return mock analytics structure
     return {
@@ -592,18 +601,18 @@ export class CategoryManagementService {
         assignmentAccuracy: 92,
         searchRelevance: 88,
         userSatisfaction: 4.2
-      },
+  }
       usagePatterns: {
         peakHours: [9, 10, 14, 15],
         seasonalTrends: { Q1: 100, Q2: 120, Q3: 110, Q4: 95 },
         userBehaviors: ['frequent_searches', 'quick_assignments']
-      },
+  }
       healthIndicators: {
         contentQuality: 90,
         organizationStructure: 85,
         userAdoption: 78,
         maintenanceNeeds: ['update_descriptions', 'review_unused_categories']
-      },
+  }
       recommendations: [
         {
           type: 'optimization',
@@ -699,7 +708,7 @@ export class CategoryManagementService {
           successCount,
           failedCount,
           reason: bulkOperation.reason
-        },
+  }
         severity: successCount > failedCount ? 'info' : 'warning'
       });
 
@@ -713,7 +722,7 @@ export class CategoryManagementService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           reason: bulkOperation.reason
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -723,6 +732,7 @@ export class CategoryManagementService {
   // Private helper methods
 
   private async validateCategory(categoryData: Partial<Category>): Promise<CategoryValidationResult> {
+
     const errors: any[] = [];
     const warnings: any[] = [];
 
@@ -788,6 +798,7 @@ export class CategoryManagementService {
     parentId?: string, 
     code?: string
   ): Promise<{ level: number; path: string; ancestors: string[] }> {
+
     if (!parentId) {
       return {
         level: 0,
@@ -815,6 +826,7 @@ export class CategoryManagementService {
   }
 
   private async getCategoryChildren(categoryId: string): Promise<Category[]> {
+
     const result = await this.dbService.query(
       'SELECT * FROM categories WHERE parent_id = $1',
       [categoryId]
@@ -828,6 +840,7 @@ export class CategoryManagementService {
     toCategoryId: string, 
     adminId: string
   ): Promise<void> {
+
     await this.dbService.query(
       'UPDATE categories SET parent_id = $1, updated_by = $2, updated_at = NOW() WHERE parent_id = $3',
       [toCategoryId, adminId, fromCategoryId]
@@ -874,6 +887,7 @@ export class CategoryManagementService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<any> {
+
     switch (operation.operation) {
     case 'create':
       return await this.createCategory(operation.data, adminId, context);
@@ -899,6 +913,7 @@ export class CategoryManagementService {
     context: { ipAddress?: string; userAgent?: string } = {},
     errorMessage?: string
   ): Promise<void> {
+
     const changes = this.calculateChanges(beforeData, afterData);
 
     await this.dbService.query(`
@@ -989,7 +1004,7 @@ export class CategoryManagementService {
       period: {
         start: row.period_start,
         end: row.period_end
-      },
+  }
       totalUsageCount: row.total_usage_count,
       uniqueUsers: row.unique_users,
       averageUsagePerUser: row.average_usage_per_user,

@@ -9,17 +9,17 @@ import { GraphEditor } from '../GraphEditor';
 // Mock usePreviewSeeds so we can observe calls without running async logic
 jest.mock('../usePreviewSeeds', () => {
   return {
-    usePreviewSeeds: () => ({),
-      loading: false,
-      error: null,
-      results: [],
-      runPreview: jest.fn(),
-      cancelPreview: jest.fn(),
-    })
+  usePreviewSeeds: () => ({,)
+  loading: false,
+  error: null,
+  results: [],
+  runPreview: jest.fn(),
+  cancelPreview: jest.fn(),
+}
   };
 });
-const initialNodes: any[] = [];
-const initialEdges: any[] = [];
+const initialNodes: any = [];
+const initialEdges: any = [];
 const renderEditor = () => {
   return render(<GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />);
 };

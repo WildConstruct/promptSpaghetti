@@ -30,20 +30,21 @@ export declare class AdvancedSecurityAnalyzer {
     private getCacheKey;
     private buildResult;
     private calculateConfidence;
-}
+
 export interface SecurityAnalysisResult {
     isSecure: boolean;
     riskScore: number;
     threatsDetected: string[];
     confidence: number;
-}
+
+
 export interface SecurityMetrics {
     patternsAnalyzed: number;
     cacheSize: number;
     learningDataPoints: number;
     version: string;
     lastUpdated: Date;
-}
+
 export declare     /**
      * Enhanced expression validation
      */

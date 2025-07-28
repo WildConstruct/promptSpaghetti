@@ -1,5 +1,4 @@
 // Shared types and engine placeholder
-// Export new components and types
 export * from './components/Inspector';
 export * from './types/NodeTypes';
 export * from './utils/nodeDataUtils';
@@ -16,6 +15,14 @@ export { UndoRedoManager } from './components/CommandPalette/UndoRedoManager';
 export { MultiSelectionManager } from './components/CommandPalette/MultiSelectionManager';
 export { AutosaveManager } from './components/CommandPalette/AutosaveManager';
 export { KeyboardShortcutsManager } from './components/CommandPalette/KeyboardShortcutsManager';
+// Epic 2: Menu Bar & Navigation Foundation
+export { ProfessionalMenuBar } from './components/MenuBar/ProfessionalMenuBar';
+// Epic 3: Integrated File Management System
+export { IntegratedFileBrowser } from './components/FileManagement/IntegratedFileBrowser';
+export { RecentFilesPanel } from './components/FileManagement/RecentFilesPanel';
+export { WorkspaceManager } from './components/FileManagement/WorkspaceManager';
+// Epic 4: Inline Node Editing System - Complete Implementation ✅
+export { InlineNodeEditor, InlineEditorManager, InlineEditorProvider, InlineEditableNode, GraphEditorWithInlineEditing, useInlineEditor, useInlineEditorContext, useGraphWithInlineEditing, createInlineEditingGraph, withInlineEditing, RichTextEditor, NodeSpecificRichEditor, WeightedChoiceEditor, ConcatEditor, VariableEditor, ConditionalEditor, OutputEditor, BatchNodeEditor } from './components/InlineEditor';
 // Project Management System exports
 export { ProjectManager } from './projectManager';
 export { ServerProjectManager } from './serverProjectManager';
@@ -33,7 +40,7 @@ export * from './correctionsStore';
 // Epic 8.4 - Extension System Architecture exports (avoid conflicts)
 export { ExtensionLifecycleManager } from './extensions/ExtensionLifecycleManager';
 export { ExtensionPointRegistry } from './extensions/ExtensionPointRegistry';
-export { ExtensionLifecycleState, ExtensionErrorType, ExtensionError, ExtensionManifestSchema } from './extensions/interfaces/ExtensionInterfaces';
+export { ExtensionLifecycleState, ExtensionErrorType, ExtensionError, ExtensionValidationResult, ExtensionManifestSchema } from './extensions/interfaces/ExtensionInterfaces';
 export { NodeCategory
 // Skip NodeDefinition to avoid conflict 
  } from './extensions/interfaces/NodeExtension';

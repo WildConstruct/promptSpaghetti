@@ -24,8 +24,8 @@ export interface PersonalizationABTest {
     name: string;
     description: string;
     status: TestStatus;
-    variants: TestVariant[];
-    metrics: TestMetric[];
+    variants: TestVariant;
+    metrics: TestMetric;
     targeting: TestTargeting;
     results: ABTestResult | null;
     timeline: TestTimeline;
@@ -46,8 +46,8 @@ export interface PersonalizationStrategy {
     name: string;
     type: PersonalizationType;
     parameters: StrategyParameters;
-    targetSegments: string[];
-    adaptationRules: AdaptationRule[];
+    targetSegments: string;
+    adaptationRules: AdaptationRule;
 }
 export type PersonalizationType = 'content_based' | 'collaborative_filtering' | 'hybrid' | 'contextual' | 'behavioral' | 'demographic';
 export interface ABTestResult {
@@ -55,16 +55,16 @@ export interface ABTestResult {
     startDate: number;
     endDate: number;
     participants: number;
-    results: VariantResult[];
+    results: VariantResult;
     statisticalSignificance: StatisticalSignificance;
     winningVariant: string | null;
-    insights: TestInsight[];
-    recommendations: TestRecommendation[];
+    insights: TestInsight;
+    recommendations: TestRecommendation;
 }
 export interface VariantResult {
     variantId: string;
     participants: number;
-    metrics: MetricResult[];
+    metrics: MetricResult;
     confidence: number;
     statisticalPower: number;
 }
@@ -72,7 +72,7 @@ export declare const PersonalizationABTestingFramework: React.FC<Personalization
 export interface TestFramework {
     platform: string;
     version: string;
-    capabilities: string[];
+    capabilities: string;
 }
 export interface StatisticalSettings {
     confidenceLevel: number;
@@ -83,11 +83,11 @@ export interface StatisticalSettings {
 export interface ExperimentDesign {
     designType: 'ab' | 'multivariate' | 'factorial';
     randomizationUnit: 'user' | 'session' | 'request';
-    stratification: string[];
+    stratification: string;
 }
 export interface OptimizationSettings {
     algorithm: 'frequentist' | 'bayesian' | 'bandit';
-    earlyStoppingRules: EarlyStoppingRule[];
+    earlyStoppingRules: EarlyStoppingRule;
     adaptiveAllocation: boolean;
 }
 export interface EarlyStoppingRule {
@@ -104,8 +104,8 @@ export interface TestMetric {
 }
 export interface TestTargeting {
     audience: string;
-    segments: string[];
-    filters: TargetingFilter[];
+    segments: string;
+    filters: TargetingFilter;
     sampleSize: number;
 }
 export interface TargetingFilter {
@@ -167,7 +167,7 @@ export interface TestInsight {
     insightId: string;
     type: string;
     message: string;
-    evidence: string[];
+    evidence: string;
 }
 export interface TestRecommendation {
     recommendationId: string;
@@ -190,13 +190,13 @@ export interface OptimizationRecommendation {
     implementation: {
         complexity: 'low' | 'medium' | 'high';
         estimatedTime: string;
-        resources: string[];
-        steps: string[];
+        resources: string;
+        steps: string;
     };
-    testEvidence: string[];
+    testEvidence: string;
 }
 export interface ABTestingExportData {
-    tests: PersonalizationABTest[];
+    tests: PersonalizationABTest;
     summary: {
         totalTests: number;
         runningTests: number;

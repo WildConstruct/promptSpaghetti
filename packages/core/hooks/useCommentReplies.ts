@@ -6,26 +6,24 @@ import { useState, useEffect, useCallback } from 'react';
 import { Comment, PaginatedResponse } from '../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 interface UseCommentRepliesOptions {
-  commentId: string;
+  commentId: string;,
   userId: string;
   limit?: number;
   sortOrder?: 'asc' | 'desc';
   enabled?: boolean;
   autoRefresh?: boolean;
   refreshInterval?: number;
-}
-
-export function useCommentReplies(options: UseCommentRepliesOptions) {
-  const { 
-    commentId, 
-    userId, 
-    limit = 10, 
-    sortOrder = 'asc',
-    enabled = true,
-    autoRefresh = false,
-    refreshInterval = 30000 
-  } = options;
-  const [replies, setReplies] = useState<Comment[]>([]);
+  export function useCommentReplies(options: UseCommentRepliesOptions) {,
+  const {
+  commentId,
+  userId,
+  limit = 10,
+  sortOrder = 'asc',
+  enabled = true,
+  autoRefresh = false,
+  refreshInterval = 30000
+} = options;
+  const [replies, setReplies] = useState<Comment>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,39 +36,35 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
       if (!append) {
         setLoading(true);
       } else {
-        setLoadingMore(true);
-      }
-      setError(null);
-      const params = new URLSearchParams({)
-        page: pageNum.toString(),
-        limit: limit.toString(),
-        sort_order: sortOrder,
-      });
+  setLoadingMore(true);
+  setError(null);
+  const params = new URLSearchParams({)
+  page: pageNum.toString(),
+  limit: limit.toString(),
+  sort_order: sortOrder,
+});
       const response = await fetch(`${API_BASE}/comments/${commentId}/replies?${params}`, {)}
-        headers: {,
-          'Content-Type': 'application/json',
-          'X-User-Id': userId
-        }
-      });
+  },
+  headers: {,
+  'Content-Type': 'application/json',
+  'X-User-Id': userId,
+});
       if (!response.ok) {
         throw new Error(`Failed to fetch replies: ${response.statusText}`);}
-      }
       const data: PaginatedResponse<Comment> = await response.json();
       if (append) {
         setReplies(prev => [...prev, ...data.data]);
       } else {
         setReplies(data.data);
-      }
       setHasMore(data.pagination.has_next);
       setPage(pageNum);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      console.error('Failed to fetch replies:', err);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  console.error('Failed to fetch replies:', err);
+} finally {
       setLoading(false);
       setLoadingMore(false);
-    }
   }, [commentId, userId, limit, sortOrder, enabled]);
   // Load more replies (pagination)
   const loadMore = useCallback(() => {
@@ -86,19 +80,17 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
   // Add a new reply to the list (called when a reply is created)
   const addReply = useCallback((newReply: Comment) => {
     setReplies(prev => {)
-      if (sortOrder === 'desc') {
+  if (sortOrder === 'desc') {
         return [newReply, ...prev];
       } else {
         return [...prev, newReply];
-      }
     });
   }, [sortOrder]);
   // Update a reply in the list
   const updateReply = useCallback((replyId: string, updatedReply: Comment) => {
-    setReplies(prev => prev.map(reply => )
-      reply.id === replyId ? updatedReply : reply
-    ));
-  }, []);
+  setReplies(prev => prev.map(reply => )
+  reply.id === replyId ? updatedReply : reply));
+}, []);
   // Remove a reply from the list
   const removeReply = useCallback((replyId: string) => {
     setReplies(prev => prev.filter(reply => reply.id !== replyId));
@@ -113,7 +105,6 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
       setPage(1);
       setHasMore(false);
       setError(null);
-    }
   }, [enabled, fetchReplies]);
   // Auto-refresh interval
   useEffect(() => {
@@ -127,7 +118,6 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
   useEffect(() => {
     if (replies.length > 0 && enabled) {
       refresh();
-    }
   }, [sortOrder]); // Only refresh when sort order changes
   return {
     replies,
@@ -142,4 +132,3 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
     updateReply,
     removeReply
   };
-}

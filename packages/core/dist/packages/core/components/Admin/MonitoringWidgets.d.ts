@@ -13,7 +13,7 @@ export interface WidgetConfig {
     type: 'metric' | 'chart' | 'list' | 'status' | 'alert';
     size: 'small' | 'medium' | 'large' | 'full-width';
     refreshInterval?: number;
-    requiredPermissions: string[];
+    requiredPermissions: string;
     dataSource: string;
 }
 interface MonitoringWidgetProps {

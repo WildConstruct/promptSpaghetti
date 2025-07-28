@@ -20,11 +20,11 @@ const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): A
   evaluationDepth: 0,
   cache: new Map(),
   executionMeta: {,
-    startTime: Date.now(),
-    executionId: 'test-exec-123',
-    nodeExecutionOrder: [],
-    performanceMetrics: new Map(),
-  },
+  startTime: Date.now(),
+  executionId: 'test-exec-123',
+  nodeExecutionOrder: [],
+  performanceMetrics: new Map(),
+},
   prng: () => Math.random(),
   seed: 12345,
   ...overrides
@@ -32,17 +32,17 @@ const createMockContext = (overrides: Partial<AdvancedExecutionContext> = {}): A
 describe('PerformanceMonitor', () => {
   let monitor: PerformanceMonitor;
   beforeEach(() => {
-    mockTime = 0;
-    monitor = new PerformanceMonitor({)
-      enableMemoryTracking: true,
-      enableContextTracking: true,
-      enableAggregation: false, // Disable for faster testing
-      enableAlerting: true,
-      slowExecutionThreshold: 100,
-      memoryThreshold: 1024 * 1024, // 1MB
-      contextSizeThreshold: 100,
-      maxMetricsHistory: 1000,
-    });
+  mockTime = 0;
+  monitor = new PerformanceMonitor({)
+  enableMemoryTracking: true,
+  enableContextTracking: true,
+  enableAggregation: false, // Disable for faster testing,
+  enableAlerting: true,
+  slowExecutionThreshold: 100,
+  memoryThreshold: 1024 * 1024, // 1MB,
+  contextSizeThreshold: 100,
+  maxMetricsHistory: 1000,
+});
   });
   afterEach(() => {
     monitor.shutdown();
@@ -94,7 +94,6 @@ describe('PerformanceMonitor', () => {
           if (eventsReceived === 2) {
             clearTimeout(timeout);
             resolve();
-          }
         });
       });
       const context = createMockContext();
@@ -117,11 +116,11 @@ describe('PerformanceMonitor', () => {
       mockTime += 40;
       const metrics = monitor.endExecution(trackingId, context);
       expect(metrics!.contextSize).toEqual({)
-        variableCount: 2,
-        stateCount: 1,
-        cacheSize: 1,
-        evaluationDepth: 3,
-      });
+  variableCount: 2,
+  stateCount: 1,
+  cacheSize: 1,
+  evaluationDepth: 3,
+});
     });
     it('should detect cache hits', () => {
       const context = createMockContext();
@@ -142,21 +141,19 @@ describe('PerformanceMonitor', () => {
     });
   });
   describe('Performance Analysis', () => {
-    it('should identify slow executions', () => {
-      const context = createMockContext();
-      const trackingId = monitor.startExecution('slow-node', 'SlowType', context);
-      mockTime += 150; // Exceeds threshold of 100ms
-      const metrics = monitor.endExecution(trackingId, context);
-      expect(metrics!.warnings).toContainEqual()
-        expect.stringContaining('Slow execution: 150.00ms')
-      );
-    });
+  it('should identify slow executions', () => {
+  const context = createMockContext();
+  const trackingId = monitor.startExecution('slow-node', 'SlowType', context);
+  mockTime += 150; // Exceeds threshold of 100ms
+  const metrics = monitor.endExecution(trackingId, context);
+  expect(metrics!.warnings).toContainEqual()
+  expect.stringContaining('Slow execution: 150.00ms'));
+});
     it('should track context size warnings', () => {
       const context = createMockContext();
       // Add many variables to exceed threshold
       for (let i = 0; i < 120; i++) {
         context.variables.set(`var${i}`, `value${i}`);}
-      }
       const trackingId = monitor.startExecution('large-context', 'LargeType', context);
       mockTime += 50;
       const metrics = monitor.endExecution(trackingId, context);
@@ -165,9 +162,9 @@ describe('PerformanceMonitor', () => {
       );
     });
     it('should track deep evaluation warnings', () => {
-      const context = createMockContext({)
-        evaluationDepth: 15 // Deep evaluation,
-      });
+  const context = createMockContext({)
+  evaluationDepth: 15 // Deep evaluation,
+});
       const trackingId = monitor.startExecution('deep-node', 'DeepType', context);
       mockTime += 30;
       const metrics = monitor.endExecution(trackingId, context);
@@ -219,10 +216,10 @@ describe('PerformanceMonitor', () => {
       expect(resolvedAlerts[0].resolved).toBe(true);
     });
     it('should limit maximum alerts', () => {
-      const limitedMonitor = new PerformanceMonitor({)
-        maxAlerts: 2,
-        slowExecutionThreshold: 50,
-      });
+  const limitedMonitor = new PerformanceMonitor({)
+  maxAlerts: 2,
+  slowExecutionThreshold: 50,
+});
       try {
         // Create multiple slow executions to trigger alerts
         for (let i = 0; i < 5; i++) {
@@ -230,12 +227,10 @@ describe('PerformanceMonitor', () => {
           const trackingId = limitedMonitor.startExecution(`node-${i}`, 'TestType', context);}
           mockTime += 150; // Slow execution
           limitedMonitor.endExecution(trackingId, context);
-        }
         const alerts = limitedMonitor.getAlerts(false);
         expect(alerts.length).toBeLessThanOrEqual(2);
       } finally {
         limitedMonitor.shutdown();
-      }
     });
   });
   describe('Metrics Retrieval', () => {
@@ -246,7 +241,6 @@ describe('PerformanceMonitor', () => {
         const trackingId = monitor.startExecution('target-node', 'TargetType', context);
         mockTime += 30 + i * 10;
         monitor.endExecution(trackingId, context);
-      }
       // Create execution for different node
       const otherTrackingId = monitor.startExecution('other-node', 'OtherType', context);
       mockTime += 40;
@@ -262,7 +256,6 @@ describe('PerformanceMonitor', () => {
         const trackingId = monitor.startExecution(`node-${i}`, 'FastType', context);}
         mockTime += 20 + i;
         monitor.endExecution(trackingId, context);
-      }
       // Create slow execution
       const slowTrackingId = monitor.startExecution('slow-node', 'SlowType', context);
       mockTime += 150;
@@ -291,10 +284,10 @@ describe('PerformanceMonitor', () => {
     });
   });
   describe('Memory Management', () => {
-    it('should enforce metrics history limits', () => {
-      const limitedMonitor = new PerformanceMonitor({)
-        maxMetricsHistory: 3,
-      });
+  it('should enforce metrics history limits', () => {
+  const limitedMonitor = new PerformanceMonitor({)
+  maxMetricsHistory: 3,
+});
       try {
         const context = createMockContext();
         // Create more executions than the limit
@@ -302,14 +295,12 @@ describe('PerformanceMonitor', () => {
           const trackingId = limitedMonitor.startExecution(`node-${i}`, 'TestType', context);}
           mockTime += 20;
           limitedMonitor.endExecution(trackingId, context);
-        }
         // Should only keep the last 3 metrics
         const allMetrics = limitedMonitor.getNodeMetrics('node-2'); // Should exist;
         expect(limitedMonitor.getNodeMetrics('node-0')).toHaveLength(0); // Should be cleaned up
         expect(limitedMonitor.getNodeMetrics('node-4')).toHaveLength(1); // Should exist
       } finally {
         limitedMonitor.shutdown();
-      }
     });
     it('should clear all data when requested', () => {
       const context = createMockContext();
@@ -324,12 +315,12 @@ describe('PerformanceMonitor', () => {
     });
   });
   describe('Configuration', () => {
-    it('should respect disabled features', () => {
-      const disabledMonitor = new PerformanceMonitor({)
-        enableMemoryTracking: false,
-        enableContextTracking: false,
-        enableAlerting: false,
-      });
+  it('should respect disabled features', () => {
+  const disabledMonitor = new PerformanceMonitor({)
+  enableMemoryTracking: false,
+  enableContextTracking: false,
+  enableAlerting: false,
+});
       try {
         const context = createMockContext();
         context.variables.set('test', 'value');
@@ -342,33 +333,30 @@ describe('PerformanceMonitor', () => {
         expect(disabledMonitor.getAlerts(false)).toHaveLength(0);
       } finally {
         disabledMonitor.shutdown();
-      }
     });
     it('should handle custom thresholds', () => {
-      const customMonitor = new PerformanceMonitor({)
-        slowExecutionThreshold: 200,
-        contextSizeThreshold: 5,
-      });
+  const customMonitor = new PerformanceMonitor({)
+  slowExecutionThreshold: 200,
+  contextSizeThreshold: 5,
+});
       try {
-        const context = createMockContext();
-        context.variables.set('v1', 'val1');
-        context.variables.set('v2', 'val2');
-        context.variables.set('v3', 'val3');
-        context.variables.set('v4', 'val4');
-        context.variables.set('v5', 'val5');
-        context.variables.set('v6', 'val6'); // Exceeds threshold of 5
-        const trackingId = customMonitor.startExecution('custom-test', 'CustomType', context);
-        mockTime += 150; // Under custom slow threshold
-        const metrics = customMonitor.endExecution(trackingId, context);
-        // Should not warn about slow execution (under 200ms threshold)
-        expect(metrics!.warnings.filter(w => w.includes('Slow execution'))).toHaveLength(0);
-        // Should warn about context size (over 5 threshold)
-        expect(metrics!.warnings).toContainEqual()
-          expect.stringContaining('Large context size: 6 items')
-        );
-      } finally {
+  const context = createMockContext();
+  context.variables.set('v1', 'val1');
+  context.variables.set('v2', 'val2');
+  context.variables.set('v3', 'val3');
+  context.variables.set('v4', 'val4');
+  context.variables.set('v5', 'val5');
+  context.variables.set('v6', 'val6'); // Exceeds threshold of 5
+  const trackingId = customMonitor.startExecution('custom-test', 'CustomType', context);
+  mockTime += 150; // Under custom slow threshold
+  const metrics = customMonitor.endExecution(trackingId, context);
+  // Should not warn about slow execution (under 200ms threshold)
+  expect(metrics!.warnings.filter(w => w.includes('Slow execution'))).toHaveLength(0);
+  // Should warn about context size (over 5 threshold)
+  expect(metrics!.warnings).toContainEqual()
+  expect.stringContaining('Large context size: 6 items'));
+} finally {
         customMonitor.shutdown();
-      }
     });
   });
   describe('Event System', () => {
@@ -404,16 +392,16 @@ describe('PerformanceMonitor', () => {
     });
   });
   describe('Edge Cases', () => {
-    it('should handle execution without execution metadata', () => {
-      const contextWithoutMeta = {
-        variables: new Map(),
-        nodeStates: new Map(),
-        evaluationDepth: 0,
-        cache: new Map(),
-        executionMeta: undefined, // Missing metadata
-        prng: () => Math.random(),
-        seed: 12345,
-      } as any;
+  it('should handle execution without execution metadata', () => {
+  const contextWithoutMeta = {
+  variables: new Map(),
+  nodeStates: new Map(),
+  evaluationDepth: 0,
+  cache: new Map(),
+  executionMeta: undefined, // Missing metadata,
+  prng: () => Math.random(),
+  seed: 12345,
+} as any;
       const trackingId = monitor.startExecution('no-meta-node', 'NoMetaType', contextWithoutMeta);
       mockTime += 50;
       const metrics = monitor.endExecution(trackingId, contextWithoutMeta);

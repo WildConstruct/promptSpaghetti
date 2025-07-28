@@ -55,7 +55,7 @@ export declare enum AnalyticsPermission {
     CONFIGURE_RETENTION = "analytics:configure_retention",
     MANAGE_INTEGRATIONS = "analytics:manage_integrations",
     VIEW_INTEGRATION_ANALYTICS = "analytics:view_integration_analytics"
-}
+
 export interface AuthorizationPolicy {
     id: string;
     name: string;
@@ -63,7 +63,7 @@ export interface AuthorizationPolicy {
     rules: AuthorizationRule[];
     priority: number;
     enabled: boolean;
-}
+
 export interface AuthorizationRule {
     id: string;
     condition: {,
@@ -82,14 +82,13 @@ export interface AuthorizationRule {
         denied?: string[];
         redacted?: string[];
     };
-}
+
 export interface AuthorizationResult {
     allowed: boolean;
     reason?: string;
     filteredEvent?: Partial<UnifiedAnalyticsEvent>;
     redactedFields?: string[];
     appliedRules?: string[];
-}
 /**
  * Analytics Authorization Service
  *
@@ -192,6 +191,6 @@ export declare class AnalyticsAuthorizationService {
             canManageAnalytics: boolean;
         };
     };
-}
+
 export default AnalyticsAuthorizationService;
 //# sourceMappingURL=AnalyticsAuthorization.d.ts.map

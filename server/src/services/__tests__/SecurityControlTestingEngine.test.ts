@@ -63,7 +63,7 @@ describe('SecurityControlTestingEngine', () => {
         regression_testing_enabled: true,
         performance_testing_enabled: true,
         security_testing_enabled: true
-      },
+  }
       effectiveness_measurement: {
         enabled: true,
         real_time_monitoring: true,
@@ -71,7 +71,7 @@ describe('SecurityControlTestingEngine', () => {
         comparative_analysis: true,
         trend_analysis: true,
         statistical_significance_testing: true
-      },
+  }
       optimization_settings: {
         enabled: true,
         automatic_optimization: false,
@@ -83,7 +83,7 @@ describe('SecurityControlTestingEngine', () => {
           performance_threshold: 500,
           reliability_threshold: 99
         }
-      },
+  }
       test_categories: {
         authentication_controls: true,
         authorization_controls: true,
@@ -92,7 +92,7 @@ describe('SecurityControlTestingEngine', () => {
         incident_response_controls: true,
         compliance_controls: true,
         monitoring_controls: true
-      },
+  }
       reporting_settings: {
         detailed_reports_enabled: true,
         executive_summaries_enabled: true,
@@ -115,10 +115,10 @@ describe('SecurityControlTestingEngine', () => {
           mfa_required_roles: ['admin', 'security_officer'],
           backup_codes_enabled: true,
           session_timeout_minutes: 30
-        },
+  }
         dependencies: ['identity_provider', 'token_service'],
         deployment_scope: ['admin_panel', 'api_gateway', 'database_access']
-      },
+  }
       testing_parameters: {
         test_frequency_hours: 12,
         test_scenarios: [
@@ -131,18 +131,18 @@ describe('SecurityControlTestingEngine', () => {
           detection_rate_minimum: 95,
           false_positive_rate_maximum: 5,
           response_time_maximum_ms: 500
-        },
+  }
         performance_thresholds: {
           max_response_time_ms: 500,
           min_availability_percent: 99.5,
           max_cpu_usage_percent: 15
-        },
+  }
         failure_conditions: [
           'mfa_bypass_successful',
           'detection_rate_below_threshold',
           'excessive_false_positives'
         ]
-      },
+  }
       effectiveness_metrics: {
         detection_rate: 97.5,
         false_positive_rate: 2.1,
@@ -150,7 +150,7 @@ describe('SecurityControlTestingEngine', () => {
         response_time_ms: 245,
         throughput_capacity: 1000,
         reliability_score: 99.2
-      },
+  }
       metadata: {
         created_by: 'security_team',
         created_at: Date.now() - 86400000,

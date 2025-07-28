@@ -164,7 +164,7 @@ export async function accountLockoutRoutes(
           limit,
           offset,
           total: lockedAccounts.length
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -312,7 +312,7 @@ export async function accountLockoutRoutes(
           database: 'connected',
           redis: 'connected',
           lockoutService: 'operational'
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -345,27 +345,27 @@ export async function accountLockoutRoutes(
           path: '/lockout/status/:email',
           method: 'GET',
           description: 'Get lockout status for an account'
-        },
+  }
         {
           path: '/lockout/request-unlock',
           method: 'POST',
           description: 'Request unlock token for locked account'
-        },
+  }
         {
           path: '/lockout/unlock',
           method: 'POST',
           description: 'Unlock account using token'
-        },
+  }
         {
           path: '/lockout/admin/statistics',
           method: 'GET',
           description: 'Get lockout statistics (admin only)'
-        },
+  }
         {
           path: '/lockout/admin/locked-accounts',
           method: 'GET',
           description: 'List currently locked accounts (admin only)'
-        },
+  }
         {
           path: '/lockout/admin/unlock',
           method: 'POST',

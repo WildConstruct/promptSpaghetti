@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 export type FilmIndustryRole = 'director' | 'vfx_supervisor' | 'pipeline_td' | 'vfx_artist' | 'cinematographer' | 'producer' | 'script_supervisor';
 export type PromptingMethodology = 'zada' | 'mars' | 'hybrid' | 'custom';
 export type MARSZoneType = 'camera' | 'subject' | 'effects' | 'focal' | 'lighting' | 'composition' | 'post_processing';
+
 export interface FilmIndustryUser {
     id: string;
     name: string;
@@ -16,7 +17,7 @@ export interface FilmIndustryUser {
     permissions: string[];
     isOnline: boolean;
     currentSession?: string;
-}
+
 export interface MARSRegionTemplate {
     id: string;
     zoneType: MARSZoneType;
@@ -31,7 +32,7 @@ export interface MARSRegionTemplate {
         subcategory: string;
         controlNetMapping?: string;
     };
-}
+
 export interface ZadaPromptPattern {
     id: string;
     name: string;
@@ -52,7 +53,7 @@ export interface ZadaPromptPattern {
         technicalLevel: number;
         humanReadableScore: number;
     };
-}
+
 export interface PromptingMethodologySession {
     sessionId: string;
     title: string;
@@ -64,7 +65,7 @@ export interface PromptingMethodologySession {
     vfxExportConfig: VFXPipelineConfig;
     createdAt: Date;
     lastModified: Date;
-}
+
 export interface MethodologyEdit {
     id: string;
     sessionId: string;
@@ -73,7 +74,7 @@ export interface MethodologyEdit {
     type: 'pattern_edit' | 'mars_region_add' | 'zada_element_edit' | 'vfx_config_update';
     data: any;
     conflictResolution?: string;
-}
+
 export interface VFXPipelineConfig {
     includeAnnotations: boolean;
     includeMarsStructure: boolean;
@@ -86,7 +87,7 @@ export interface VFXPipelineConfig {
         shot: string;
         version: string;
     };
-}
+
 export interface FilmIndustryWorkflowTemplate {
     id: string;
     name: string;
@@ -98,7 +99,7 @@ export interface FilmIndustryWorkflowTemplate {
     zadaElements: string[];
     estimatedDuration: number;
     complexity: 'simple' | 'intermediate' | 'advanced';
-}
+
 export interface WorkflowPhase {
     id: string;
     name: string;
@@ -109,7 +110,7 @@ export interface WorkflowPhase {
     methodology: PromptingMethodology;
     marsConfiguration?: MARSRegionTemplate[];
     zadaPattern?: ZadaPromptPattern;
-}
+
 export interface CollaborationComment {
     id: string;
     userId: string;
@@ -122,7 +123,6 @@ export interface CollaborationComment {
     targetId: string;
     resolved: boolean;
     priority: 'low' | 'medium' | 'high' | 'critical';
-}
 /**
  * Advanced Prompting Collaboration Service for Film Industry Teams
  *
@@ -166,5 +166,5 @@ export declare class AdvancedPromptingCollaborationService extends EventEmitter 
     getActiveSessions(): PromptingMethodologySession[];
     getSessionById(sessionId: string): PromptingMethodologySession | undefined;
     getUserSessions(userId: string): PromptingMethodologySession[];
-}
+
 //# sourceMappingURL=AdvancedPromptingCollaborationService.d.ts.map

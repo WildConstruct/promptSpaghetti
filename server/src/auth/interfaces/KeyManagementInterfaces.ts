@@ -26,6 +26,7 @@ import {
 // Service Interfaces
 // =============================================================================
 
+}
 export interface IKeyManagementService {
   // Core Key Operations
   generateKey(request: KeyGenerationRequest, context: KeyOperationContext): Promise<KeyDefinition>;
@@ -72,7 +73,9 @@ export interface IKeyManagementService {
   getServiceHealth(): Promise<ServiceHealthResult>;
   getKeyStatus(keyId: string): Promise<KeyStatusResult>;
 }
+}
 
+}
 export interface IKeyStorageProvider {
   // Basic Storage Operations
   store(keyId: string, keyData: KeyStorageData): Promise<boolean>;
@@ -87,6 +90,7 @@ export interface IKeyStorageProvider {
   search(criteria: SearchCriteria): Promise<KeyStorageData[]>;
   
   // Batch Operations
+}
   storeBatch(items: Array<{ keyId: string; keyData: KeyStorageData }>): Promise<BatchResult>;
   retrieveBatch(keyIds: string[]): Promise<Array<{ keyId: string; keyData: KeyStorageData | null }>>;
   deleteBatch(keyIds: string[]): Promise<BatchResult>;
@@ -97,6 +101,7 @@ export interface IKeyStorageProvider {
   backup(backupOptions: StorageBackupOptions): Promise<StorageBackupResult>;
 }
 
+}
 export interface IKeyAccessController {
   // Access Control
   checkAccess(keyId: string, operation: KeyOperationType, context: KeyOperationContext): Promise<AccessDecision>;
@@ -115,7 +120,9 @@ export interface IKeyAccessController {
   extendSession(sessionId: string, extensionMinutes: number): Promise<boolean>;
   terminateSession(sessionId: string): Promise<boolean>;
 }
+}
 
+}
 export interface IKeyAuditLogger {
   // Event Logging
   logEvent(event: KeyEvent): Promise<boolean>;
@@ -133,11 +140,13 @@ export interface IKeyAuditLogger {
   archiveEvents(olderThan: Date): Promise<number>;
   purgeEvents(olderThan: Date): Promise<number>;
 }
+}
 
 // =============================================================================
 // Data Transfer Objects
 // =============================================================================
 
+}
 export interface KeyListFilters {
   keyTypes?: KeyType[];
   statuses?: KeyStatus[];
@@ -152,14 +161,18 @@ export interface KeyListFilters {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface KeyListResult {
   keys: KeyDefinition[];
   total: number;
   hasMore: boolean;
   filters: KeyListFilters;
 }
+}
 
+}
 export interface KeyPermissionGrant {
   principalId: string;
   principalType: 'user' | 'service' | 'role';
@@ -168,7 +181,9 @@ export interface KeyPermissionGrant {
   expiresAt?: Date;
   reason: string;
 }
+}
 
+}
 export interface PermissionCheckResult {
   allowed: boolean;
   permissions: string[];
@@ -176,7 +191,9 @@ export interface PermissionCheckResult {
   reason: string;
   ttl?: number;
 }
+}
 
+}
 export interface KeyBackupOptions {
   backupType: 'full' | 'metadata' | 'keys_only';
   encryption: boolean;
@@ -184,7 +201,9 @@ export interface KeyBackupOptions {
   storageLocation?: string;
   retention?: number;
 }
+}
 
+}
 export interface KeyBackupResult {
   backupId: string;
   createdAt: Date;
@@ -193,23 +212,29 @@ export interface KeyBackupResult {
   storageLocation: string;
   encrypted: boolean;
 }
+}
 
+}
 export interface KeyRestoreOptions {
   validateChecksum: boolean;
   overwriteExisting: boolean;
   restorePermissions: boolean;
   newOwnerId?: string;
 }
+}
 
+}
 export interface KeyExportOptions {
   format: 'pem' | 'jwk' | 'pkcs8' | 'pkcs12' | 'raw';
   includePrivateKey: boolean;
   encryption?: {
     algorithm: string;
     passphrase: string;
+}
   };
 }
 
+}
 export interface KeyImportOptions {
   format: 'pem' | 'jwk' | 'pkcs8' | 'pkcs12' | 'raw';
   passphrase?: string;
@@ -217,7 +242,9 @@ export interface KeyImportOptions {
   purpose?: string;
   overwriteExisting?: boolean;
 }
+}
 
+}
 export interface EncryptionResult {
   encryptedData: Buffer;
   nonce?: Buffer;
@@ -225,21 +252,26 @@ export interface EncryptionResult {
   algorithm: string;
   keyId: string;
 }
+}
 
+}
 export interface MetricsFilters {
   timeRange?: {
     start: Date;
     end: Date;
+}
   };
   keyTypes?: KeyType[];
   operations?: KeyOperationType[];
   users?: string[];
 }
 
+}
 export interface AnalyticsRequest {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   granularity: 'hour' | 'day' | 'week' | 'month';
   includeUsage: boolean;
@@ -248,10 +280,12 @@ export interface AnalyticsRequest {
   includeCompliance: boolean;
 }
 
+}
 export interface EventFilters {
   timeRange?: {
     start: Date;
     end: Date;
+}
   };
   eventTypes?: KeyOperationType[];
   keyIds?: string[];
@@ -263,6 +297,7 @@ export interface EventFilters {
   offset?: number;
 }
 
+}
 export interface ComplianceValidationResult {
   compliant: boolean;
   violations: ComplianceViolation[];
@@ -270,7 +305,9 @@ export interface ComplianceValidationResult {
   framework: string;
   validatedAt: Date;
 }
+}
 
+}
 export interface ComplianceViolation {
   violationType: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -278,13 +315,17 @@ export interface ComplianceViolation {
   requirement: string;
   remediation: string;
 }
+}
 
+}
 export interface ComplianceWarning {
   warningType: string;
   description: string;
   recommendation: string;
 }
+}
 
+}
 export interface ServiceHealthResult {
   healthy: boolean;
   version: string;
@@ -296,10 +337,12 @@ export interface ServiceHealthResult {
     operationsPerSecond: number;
     averageResponseTime: number;
     errorRate: number;
+}
   };
   issues: ServiceIssue[];
 }
 
+}
 export interface DependencyHealth {
   name: string;
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -307,7 +350,9 @@ export interface DependencyHealth {
   lastCheck: Date;
   message?: string;
 }
+}
 
+}
 export interface ServiceIssue {
   severity: 'low' | 'medium' | 'high' | 'critical';
   type: string;
@@ -315,7 +360,9 @@ export interface ServiceIssue {
   firstSeen: Date;
   count: number;
 }
+}
 
+}
 export interface KeyStatusResult {
   keyId: string;
   status: KeyStatus;
@@ -326,11 +373,13 @@ export interface KeyStatusResult {
   warnings: string[];
   healthScore: number;
 }
+}
 
 // =============================================================================
 // Storage and Persistence Interfaces
 // =============================================================================
 
+}
 export interface KeyStorageData {
   keyId: string;
   keyDefinition: KeyDefinition;
@@ -340,7 +389,9 @@ export interface KeyStorageData {
   accessMetadata: AccessMetadata;
   complianceMetadata: ComplianceMetadata;
 }
+}
 
+}
 export interface StorageMetadata {
   storedAt: Date;
   updatedAt: Date;
@@ -351,7 +402,9 @@ export interface StorageMetadata {
   backupCount: number;
   lastBackup?: Date;
 }
+}
 
+}
 export interface AccessMetadata {
   lastAccess?: Date;
   accessCount: number;
@@ -360,7 +413,9 @@ export interface AccessMetadata {
   concurrentSessions: number;
   averageSessionDuration: number;
 }
+}
 
+}
 export interface ComplianceMetadata {
   frameworks: string[];
   classifications: string[];
@@ -369,7 +424,9 @@ export interface ComplianceMetadata {
   auditRequired: boolean;
   lastAudit?: Date;
 }
+}
 
+}
 export interface StorageFilters {
   keyTypes?: KeyType[];
   statuses?: KeyStatus[];
@@ -378,7 +435,9 @@ export interface StorageFilters {
   updatedAfter?: Date;
   tags?: Record<string, string>;
 }
+}
 
+}
 export interface SearchCriteria {
   query: string;
   fields: string[];
@@ -386,20 +445,26 @@ export interface SearchCriteria {
   fuzzy: boolean;
   limit: number;
 }
+}
 
+}
 export interface BatchResult {
   successful: number;
   failed: number;
+}
   errors: Array<{ id: string; error: string }>;
 }
 
+}
 export interface CleanupResult {
   deletedKeys: number;
   archivedKeys: number;
   freedSpace: number;
   duration: number;
 }
+}
 
+}
 export interface MigrationOptions {
   sourceVersion: string;
   targetVersion: string;
@@ -407,22 +472,28 @@ export interface MigrationOptions {
   validateData: boolean;
   createBackup: boolean;
 }
+}
 
+}
 export interface MigrationResult {
   migratedKeys: number;
   failedKeys: number;
   duration: number;
   backupId?: string;
+}
   issues: Array<{ keyId: string; issue: string }>;
 }
 
+}
 export interface StorageBackupOptions {
   includeMetadata: boolean;
   compressionLevel: number;
   encryptBackup: boolean;
   destination: string;
 }
+}
 
+}
 export interface StorageBackupResult {
   backupId: string;
   keyCount: number;
@@ -432,11 +503,13 @@ export interface StorageBackupResult {
   checksum: string;
   location: string;
 }
+}
 
 // =============================================================================
 // Access Control Interfaces
 // =============================================================================
 
+}
 export interface AccessDecision {
   allowed: boolean;
   reason: string;
@@ -445,7 +518,9 @@ export interface AccessDecision {
   sessionId?: string;
   expires?: Date;
 }
+}
 
+}
 export interface AccessPolicy {
   policyId: string;
   name: string;
@@ -458,18 +533,24 @@ export interface AccessPolicy {
   createdAt: Date;
   version: number;
 }
+}
 
+}
 export interface PolicyPrincipal {
   type: 'user' | 'service' | 'role' | 'group';
   identifier: string;
 }
+}
 
+}
 export interface PolicyCondition {
   key: string;
   operator: string;
   values: any[];
 }
+}
 
+}
 export interface PolicyEvaluationResult {
   decision: 'allow' | 'deny' | 'not_applicable';
   matchingPolicies: string[];
@@ -477,7 +558,9 @@ export interface PolicyEvaluationResult {
   cacheable: boolean;
   cacheTtl?: number;
 }
+}
 
+}
 export interface AccessSession {
   sessionId: string;
   keyId: string;
@@ -488,15 +571,18 @@ export interface AccessSession {
   usageCount: number;
   lastActivity: Date;
 }
+}
 
 // =============================================================================
 // Event and Audit Interfaces
 // =============================================================================
 
+}
 export interface EventAnalyticsRequest {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   groupBy: 'hour' | 'day' | 'week' | 'user' | 'operation' | 'key';
   includeSuccess: boolean;
@@ -504,10 +590,12 @@ export interface EventAnalyticsRequest {
   includeAnomalies: boolean;
 }
 
+}
 export interface EventAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   totalEvents: number;
   successfulEvents: number;
@@ -520,16 +608,19 @@ export interface EventAnalytics {
   riskDistribution: Record<string, number>;
 }
 
+}
 export interface ComplianceReportRequest {
   framework: string;
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   includeDetails: boolean;
   keyIds?: string[];
 }
 
+}
 export interface ComplianceReport {
   framework: string;
   reportId: string;
@@ -537,6 +628,7 @@ export interface ComplianceReport {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   overallCompliance: number;
   totalRequirements: number;
@@ -554,18 +646,22 @@ export interface ComplianceReport {
 // Factory and Configuration Interfaces
 // =============================================================================
 
+}
 export interface IKeyManagementServiceFactory {
   createService(config: KeyManagementConfiguration): IKeyManagementService;
   createStorageProvider(type: string, config: any): IKeyStorageProvider;
   createAccessController(config: any): IKeyAccessController;
   createAuditLogger(config: any): IKeyAuditLogger;
 }
+}
 
+}
 export interface ServiceConfiguration {
   storage: {
     primary: string;
     backup?: string;
     cache?: string;
+}
   };
   security: {
     encryption: boolean;

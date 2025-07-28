@@ -4,7 +4,7 @@
  *
  * Comprehensive adapter for OpenAI DALL-E 3 image generation
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel, AIModelType, AIModelProvider } from '../BaseAIModel';
 export interface DALLEConfig {
     apiKey: string;
     baseURL?: string;
@@ -24,57 +24,43 @@ export interface DALLERequestOptions {
 export interface ImagePromptOptimization {
     originalPrompt: string;
     optimizedPrompt: string;
-    optimizations: string[];
-    styleEnhancements: string[];
-    qualityImprovements: string[];
+    optimizations: string;
+    styleEnhancements: string;
+    qualityImprovements: string;
 }
 export interface DALLEResponse {
     created: number;
-    data: Array<{
-        url?: string;
-        b64_json?: string;
-        revised_prompt?: string;
-    }>;
+    data: Array<{}, ?url>;
+    string: any;
+    b64_json?: string;
+    revised_prompt?: string;
 }
 export interface ImageGenerationResult {
-    images: Array<{
-        url?: string;
-        base64?: string;
-        revisedPrompt?: string;
-        metadata: {
-            size: string;
-            quality: string;
-            style?: string;
-            model: string;
-        };
-    }>;
-    originalPrompt: string;
-    optimizedPrompt?: string;
-    usage: {
-        promptTokens: number;
-        totalCost: number;
+    images: Array<{}, ?url>;
+    string: any;
+    base64?: string;
+    revisedPrompt?: string;
+    metadata: {
+        size: string;
+        quality: string;
+        style?: string;
+        model: string;
     };
-    generationTime: number;
 }
 export declare class DALLEAdapter extends BaseAIModel {
     private config;
     private apiEndpoint;
     private promptOptimizer;
     constructor(id: string, config: DALLEConfig, modelName?: string);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: DALLERequestOptions): Promise<ImageGenerationResult>;
-    cleanup(): Promise<void>;
-    estimate(input: unknown, options?: DALLERequestOptions): Promise<CostEstimate>;
-    generateVariations(imageUrl: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
-    editImage(imageUrl: string, maskUrl: string, prompt: string, options?: Partial<DALLERequestOptions>): Promise<ImageGenerationResult>;
-    static getModelCostPerRequest(modelName: string): number;
-    static getModelAverageLatency(modelName: string): number;
-    private _testConnection;
-    private _makeRequest;
-    private _extractPrompt;
-    private _validateParameters;
-    private _processImageResponse;
-    protected _performHealthCheck(): Promise<void>;
+    provider: AIModelProvider.OPENAI;
+    type: AIModelType.IMAGE;
+    costPerRequest: DALLEAdapter.getModelCostPerRequest;
+    modelName: any;
+    averageLatency: DALLEAdapter.getModelAverageLatency;
+    modelName: any;
+    maxConcurrency: 5;
+    rateLimit: {
+        requestsPerMinute: modelName;
+    };
 }
-export default DALLEAdapter;
 //# sourceMappingURL=DALLEAdapter.d.ts.map

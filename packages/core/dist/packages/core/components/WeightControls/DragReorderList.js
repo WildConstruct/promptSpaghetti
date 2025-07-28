@@ -4,126 +4,147 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Implements drag-and-drop for option reordering while maintaining weight values
 import React, { useState, useRef, useCallback } from 'react';
 import { getOptionColor } from './WeightVisualization';
-const DRAG_THRESHOLD = 5; // Minimum pixels to start drag
-const DROP_ZONE_HEIGHT = 4; // Height of drop zone indicator
-export const DragReorderList = ({ options, onReorder, onWeightChange, onTextChange, className = '', disabled = false, showWeights = true }) => {
-    const [dragState, setDragState] = useState({
-        isDragging: false,
-        draggedIndex: null,
-        dragOverIndex: null,
-        dragOffset: { x: 0, y: 0 },
-        ghostPosition: { x: 0, y: 0 }
+const DRAG_THRESHOLD = 5; // Minimum pixels to start drag;
+const DROP_ZONE_HEIGHT = 4; // Height of drop zone indicator;
+export const DragReorderList = ({
+    options,
+    onReorder,
+    onWeightChange,
+    onTextChange,
+    className = '',
+    disabled = false,
+    showWeights = true
+});
+{
+    const [dragState, setDragState] = useState({});
+    isDragging: false,
+        draggedIndex;
+    null,
+        dragOverIndex;
+    null,
+        dragOffset;
+    {
+        x: 0, y;
+        0;
+    }
+    ghostPosition: {
+        x: 0, y;
+        0;
+    }
+}
+;
+const listRef = useRef(null);
+const dragStartRef = useRef(null);
+const itemRefs = useRef([]);
+// Using shared color palette from WeightVisualization component
+// Handle mouse down - prepare for potential drag
+const handleMouseDown = useCallback((event, index) => {
+    if (disabled || event.button !== 0)
+        return; // Only left mouse button
+    event.preventDefault();
+    const rect = event.currentTarget.getBoundingClientRect();
+    dragStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+        index
+    };
+    setDragState(prev => ({}), ...prev, dragOffset, {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
     });
-    const listRef = useRef(null);
-    const dragStartRef = useRef(null);
-    const itemRefs = useRef([]);
-    // Using shared color palette from WeightVisualization component
-    // Handle mouse down - prepare for potential drag
-    const handleMouseDown = useCallback((event, index) => {
-        if (disabled || event.button !== 0)
-            return; // Only left mouse button
-        event.preventDefault();
-        const rect = event.currentTarget.getBoundingClientRect();
-        dragStartRef.current = {
-            x: event.clientX,
-            y: event.clientY,
-            index
-        };
-        setDragState(prev => ({
-            ...prev,
-            dragOffset: {
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top
-            }
-        }));
-    }, [disabled]);
-    // Handle mouse move - start drag if threshold exceeded
-    const handleMouseMove = useCallback((event) => {
-        if (!dragStartRef.current || dragState.isDragging)
-            return;
-        const deltaX = Math.abs(event.clientX - dragStartRef.current.x);
-        const deltaY = Math.abs(event.clientY - dragStartRef.current.y);
-        if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
-            // Start dragging
-            setDragState(prev => ({
-                ...prev,
-                isDragging: true,
-                draggedIndex: dragStartRef.current.index,
-                ghostPosition: {
-                    x: event.clientX - prev.dragOffset.x,
-                    y: event.clientY - prev.dragOffset.y
-                }
-            }));
-            document.body.style.cursor = 'grabbing';
-            document.body.style.userSelect = 'none';
-        }
-    }, [dragState.isDragging]);
-    // Handle drag over - update drop target
-    const handleDragOver = useCallback((event) => {
-        if (!dragState.isDragging || !listRef.current)
-            return;
-        event.preventDefault();
-        // Update ghost position
-        setDragState(prev => ({
-            ...prev,
-            ghostPosition: {
-                x: event.clientX - prev.dragOffset.x,
-                y: event.clientY - prev.dragOffset.y
-            }
-        }));
-        // Find drop target
-        const listRect = listRef.current.getBoundingClientRect();
-        const relativeY = event.clientY - listRect.top;
-        let dropIndex = -1;
-        for (let i = 0; i < itemRefs.current.length; i++) {
-            const itemEl = itemRefs.current[i];
-            if (!itemEl)
-                continue;
-            const itemRect = itemEl.getBoundingClientRect();
-            const itemRelativeTop = itemRect.top - listRect.top;
-            const itemHeight = itemRect.height;
-            if (relativeY >= itemRelativeTop && relativeY <= itemRelativeTop + itemHeight) {
-                // Determine if we're in the top or bottom half
-                const itemMiddle = itemRelativeTop + itemHeight / 2;
-                dropIndex = relativeY < itemMiddle ? i : i + 1;
-                break;
-            }
-        }
+});
+[disabled];
+;
+// Handle mouse move - start drag if threshold exceeded
+const handleMouseMove = useCallback((event) => {
+    if (!dragStartRef.current || dragState.isDragging)
+        return;
+    const deltaX = Math.abs(event.clientX - dragStartRef.current.x);
+    const deltaY = Math.abs(event.clientY - dragStartRef.current.y);
+    if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
+        // Start dragging
+        setDragState(prev => ({}), ...prev, isDragging, true, draggedIndex, dragStartRef.current.index, ghostPosition, {
+            x: event.clientX - prev.dragOffset.x,
+            y: event.clientY - prev.dragOffset.y,
+        });
+    }
+});
+document.body.style.cursor = 'grabbing';
+document.body.style.userSelect = 'none';
+[dragState.isDragging];
+;
+// Handle drag over - update drop target
+const handleDragOver = useCallback((event) => {
+    if (!dragState.isDragging || !listRef.current)
+        return;
+    event.preventDefault();
+    // Update ghost position
+    setDragState(prev => ({}), ...prev, ghostPosition, {
+        x: event.clientX - prev.dragOffset.x,
+        y: event.clientY - prev.dragOffset.y,
+    });
+});
+// Find drop target
+const listRect = listRef.current.getBoundingClientRect();
+const relativeY = event.clientY - listRect.top;
+let dropIndex = -1;
+for (let i = 0; i < itemRefs.current.length; i++) {
+    const itemEl = itemRefs.current[i];
+    if (!itemEl)
+        continue;
+    const itemRect = itemEl.getBoundingClientRect();
+    const itemRelativeTop = itemRect.top - listRect.top;
+    const itemHeight = itemRect.height;
+    if (relativeY >= itemRelativeTop && relativeY <= itemRelativeTop + itemHeight) {
+        // Determine if we're in the top or bottom half
+        const itemMiddle = itemRelativeTop + itemHeight / 2;
+        dropIndex = relativeY < itemMiddle ? i : i + 1;
+        break;
         // Clamp drop index
         dropIndex = Math.max(0, Math.min(options.length, dropIndex));
         // Don't set drop index to same as dragged or adjacent
         if (dragState.draggedIndex !== null) {
             if (dropIndex === dragState.draggedIndex || dropIndex === dragState.draggedIndex + 1) {
                 dropIndex = -1;
+                setDragState(prev => ({}), ...prev, dragOverIndex, dropIndex);
             }
+            ;
         }
-        setDragState(prev => ({
-            ...prev,
-            dragOverIndex: dropIndex
-        }));
-    }, [dragState.isDragging, dragState.draggedIndex, options.length]);
-    // Handle mouse up - complete drag operation
-    const handleMouseUp = useCallback(() => {
-        if (dragState.isDragging && dragState.draggedIndex !== null && dragState.dragOverIndex !== null) {
-            // Calculate actual destination index
-            let toIndex = dragState.dragOverIndex;
-            if (toIndex > dragState.draggedIndex) {
-                toIndex -= 1; // Adjust for the item being removed
+        [dragState.isDragging, dragState.draggedIndex, options.length];
+        ;
+        // Handle mouse up - complete drag operation
+        const handleMouseUp = useCallback(() => {
+            if (dragState.isDragging && dragState.draggedIndex !== null && dragState.dragOverIndex !== null) {
+                // Calculate actual destination index
+                let toIndex = dragState.dragOverIndex;
+                if (toIndex > dragState.draggedIndex) {
+                    toIndex -= 1; // Adjust for the item being removed
+                    onReorder(dragState.draggedIndex, toIndex);
+                    // Reset drag state
+                    setDragState({});
+                    isDragging: false,
+                        draggedIndex;
+                    null,
+                        dragOverIndex;
+                    null,
+                        dragOffset;
+                    {
+                        x: 0, y;
+                        0;
+                    }
+                    ghostPosition: {
+                        x: 0, y;
+                        0;
+                    }
+                }
             }
-            onReorder(dragState.draggedIndex, toIndex);
-        }
-        // Reset drag state
-        setDragState({
-            isDragging: false,
-            draggedIndex: null,
-            dragOverIndex: null,
-            dragOffset: { x: 0, y: 0 },
-            ghostPosition: { x: 0, y: 0 }
         });
         dragStartRef.current = null;
         document.body.style.cursor = '';
         document.body.style.userSelect = '';
-    }, [dragState.isDragging, dragState.draggedIndex, dragState.dragOverIndex, onReorder]);
+    }
+    [dragState.isDragging, dragState.draggedIndex, dragState.dragOverIndex, onReorder];
+    ;
     // Attach global event listeners
     React.useEffect(() => {
         if (dragStartRef.current || dragState.isDragging) {
@@ -136,7 +157,8 @@ export const DragReorderList = ({ options, onReorder, onWeightChange, onTextChan
                 document.removeEventListener('mouseup', handleMouseUp);
             };
         }
-    }, [handleMouseMove, handleDragOver, handleMouseUp, dragState.isDragging]);
+        [handleMouseMove, handleDragOver, handleMouseUp, dragState.isDragging];
+    });
     // Touch event handlers for mobile support
     const handleTouchStart = useCallback((event, index) => {
         if (disabled || event.touches.length !== 1)
@@ -148,143 +170,180 @@ export const DragReorderList = ({ options, onReorder, onWeightChange, onTextChan
             y: touch.clientY,
             index
         };
-        setDragState(prev => ({
-            ...prev,
-            dragOffset: {
-                x: touch.clientX - rect.left,
-                y: touch.clientY - rect.top
-            }
-        }));
-    }, [disabled]);
-    const handleTouchMove = useCallback((event) => {
-        if (!dragStartRef.current || event.touches.length !== 1)
-            return;
-        const touch = event.touches[0];
-        if (!dragState.isDragging) {
-            const deltaX = Math.abs(touch.clientX - dragStartRef.current.x);
-            const deltaY = Math.abs(touch.clientY - dragStartRef.current.y);
-            if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
-                event.preventDefault();
-                setDragState(prev => ({
-                    ...prev,
-                    isDragging: true,
-                    draggedIndex: dragStartRef.current.index,
-                    ghostPosition: {
-                        x: touch.clientX - prev.dragOffset.x,
-                        y: touch.clientY - prev.dragOffset.y
-                    }
-                }));
-            }
-        }
-        else {
+        setDragState(prev => ({}), ...prev, dragOffset, {
+            x: touch.clientX - rect.left,
+            y: touch.clientY - rect.top,
+        });
+    });
+}
+[disabled];
+;
+const handleTouchMove = useCallback((event) => {
+    if (!dragStartRef.current || event.touches.length !== 1)
+        return;
+    const touch = event.touches[0];
+    if (!dragState.isDragging) {
+        const deltaX = Math.abs(touch.clientX - dragStartRef.current.x);
+        const deltaY = Math.abs(touch.clientY - dragStartRef.current.y);
+        if (deltaX > DRAG_THRESHOLD || deltaY > DRAG_THRESHOLD) {
             event.preventDefault();
-            handleDragOver({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => { } });
+            setDragState(prev => ({}), ...prev, isDragging, true, draggedIndex, dragStartRef.current.index, ghostPosition, {
+                x: touch.clientX - prev.dragOffset.x,
+                y: touch.clientY - prev.dragOffset.y,
+            });
         }
-    }, [dragState.isDragging, handleDragOver]);
-    const handleTouchEnd = useCallback(() => {
-        handleMouseUp();
-    }, [handleMouseUp]);
-    // Touch event listeners
-    React.useEffect(() => {
-        if (dragStartRef.current || dragState.isDragging) {
-            document.addEventListener('touchmove', handleTouchMove, { passive: false });
-            document.addEventListener('touchend', handleTouchEnd);
-            return () => {
-                document.removeEventListener('touchmove', handleTouchMove);
-                document.removeEventListener('touchend', handleTouchEnd);
-            };
-        }
-    }, [handleTouchMove, handleTouchEnd, dragState.isDragging]);
-    return (_jsxs("div", { ref: listRef, className: `drag-reorder-list ${className}`, style: {
-            position: 'relative',
-            userSelect: dragState.isDragging ? 'none' : 'auto'
-        }, children: [options.map((option, index) => {
-                const isDragged = dragState.draggedIndex === index;
-                const showDropZone = dragState.dragOverIndex === index && !isDragged;
-                return (_jsxs(React.Fragment, { children: [showDropZone && (_jsx("div", { style: {
-                                height: DROP_ZONE_HEIGHT,
-                                background: '#4299e1',
-                                borderRadius: 2,
-                                marginBottom: 4,
-                                opacity: 0.8
-                            } })), _jsxs("div", { ref: el => itemRefs.current[index] = el, onMouseDown: (e) => handleMouseDown(e, index), onTouchStart: (e) => handleTouchStart(e, index), style: {
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '8px 12px',
-                                marginBottom: 4,
-                                background: isDragged ? 'rgba(66, 153, 225, 0.1)' : '#2d3748',
-                                border: `2px solid ${isDragged ? '#4299e1' : 'transparent'}`,
-                                borderRadius: 6,
-                                cursor: disabled ? 'default' : 'grab',
-                                opacity: isDragged ? 0.5 : 1,
-                                transition: isDragged ? 'none' : 'all 0.2s ease',
-                                userSelect: 'none'
-                            }, children: [_jsx("div", { style: {
-                                        width: 16,
-                                        height: 16,
-                                        marginRight: 8,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        cursor: disabled ? 'default' : 'grab',
-                                        color: '#a0aec0',
-                                        fontSize: 12
-                                    }, children: "\u22EE\u22EE" }), _jsx("div", { style: {
-                                        width: 12,
-                                        height: 12,
-                                        borderRadius: 2,
-                                        backgroundColor: getOptionColor(index),
-                                        marginRight: 8,
-                                        flexShrink: 0
-                                    } }), _jsx("input", { type: "text", value: option.text, onChange: (e) => onTextChange?.(option.id, e.target.value), disabled: disabled, style: {
-                                        flex: 1,
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#e2e8f0',
-                                        fontSize: 14,
-                                        outline: 'none',
-                                        cursor: disabled ? 'default' : 'text'
-                                    }, onMouseDown: (e) => e.stopPropagation() }), showWeights && (_jsxs("div", { style: { display: 'flex', alignItems: 'center', marginLeft: 8 }, children: [_jsx("input", { type: "range", min: "0", max: "100", value: option.weight, onChange: (e) => onWeightChange?.(option.id, parseInt(e.target.value)), disabled: disabled || option.locked, style: {
-                                                width: 60,
-                                                marginRight: 8,
-                                                cursor: disabled || option.locked ? 'default' : 'pointer'
-                                            }, onMouseDown: (e) => e.stopPropagation() }), _jsxs("span", { style: {
-                                                minWidth: 35,
-                                                textAlign: 'right',
-                                                fontSize: 12,
-                                                color: '#a0aec0'
-                                            }, children: [option.weight, "%"] })] }))] })] }, option.id));
-            }), dragState.dragOverIndex === options.length && (_jsx("div", { style: {
+    }
+});
+{
+    event.preventDefault();
+    handleDragOver({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => { } });
+}
+[dragState.isDragging, handleDragOver];
+;
+const handleTouchEnd = useCallback(() => {
+    handleMouseUp();
+}, [handleMouseUp]);
+// Touch event listeners
+React.useEffect(() => {
+    if (dragStartRef.current || dragState.isDragging) {
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd);
+        return () => {
+            document.removeEventListener('touchmove', handleTouchMove);
+            document.removeEventListener('touchend', handleTouchEnd);
+        };
+    }
+    [handleTouchMove, handleTouchEnd, dragState.isDragging];
+});
+return;
+_jsx("div", { ref: listRef, className: `drag-reorder-list ${className}`, style: {
+        position: 'relative',
+        userSelect: dragState.isDragging ? 'none' : 'auto',
+    }, children: options.map((option, index) => {
+        const isDragged = dragState.draggedIndex === index;
+        const showDropZone = dragState.dragOverIndex === index && !isDragged;
+        return;
+        _jsxs(React.Fragment, { children: [showDropZone && ()
+                    < div, "style=", {
                     height: DROP_ZONE_HEIGHT,
                     background: '#4299e1',
                     borderRadius: 2,
-                    marginTop: 4,
-                    opacity: 0.8
-                } })), dragState.isDragging && dragState.draggedIndex !== null && (_jsx("div", { style: {
-                    position: 'fixed',
-                    top: dragState.ghostPosition.y,
-                    left: dragState.ghostPosition.x,
-                    pointerEvents: 'none',
-                    zIndex: 1000,
-                    transform: 'rotate(5deg)',
-                    opacity: 0.9
-                }, children: _jsxs("div", { style: {
+                    marginBottom: 4,
+                    opacity: 0.8,
+                }, "/> )}", _jsx("div", { ref: el => itemRefs.current[index] = el, onMouseDown: (e) => handleMouseDown(e, index), onTouchStart: (e) => handleTouchStart(e, index), style: {
                         display: 'flex',
                         alignItems: 'center',
                         padding: '8px 12px',
-                        background: '#2d3748',
-                        border: '2px solid #4299e1',
-                        borderRadius: 6,
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                        marginBottom: 4,
+                        background: isDragged ? 'rgba(66, 153, 225, 0.1)' : '#2d3748',
+                        border: `2px solid ${isDragged ? '#4299e1' : 'transparent'}`
+                    } }), ", borderRadius: 6, cursor: disabled ? 'default' : 'grab', opacity: isDragged ? 0.5 : 1, transition: isDragged ? 'none' : 'all 0.2s ease', userSelect: 'none'; }} >", _jsx("div", { style: {
+                        width: 16,
+                        height: 16,
+                        marginRight: 8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: disabled ? 'default' : 'grab',
+                        color: '#a0aec0',
+                        fontSize: 12,
+                    }, children: "\u22EE\u22EE" }), _jsx("div", { style: {
+                        width: 12,
+                        height: 12,
+                        borderRadius: 2,
+                        backgroundColor: getOptionColor(index),
+                        marginRight: 8,
+                        flexShrink: 0,
+                    } }), _jsx("input", { type: "text", value: option.text, onChange: (e) => onTextChange?.(option.id, e.target.value), disabled: disabled, style: {
+                        flex: 1,
+                        background: 'transparent',
+                        border: 'none',
                         color: '#e2e8f0',
                         fontSize: 14,
-                        minWidth: 200
-                    }, children: [_jsx("div", { style: {
-                                width: 12,
-                                height: 12,
-                                borderRadius: 2,
-                                backgroundColor: getOptionColor(dragState.draggedIndex),
-                                marginRight: 8
-                            } }), options[dragState.draggedIndex].text, showWeights && (_jsxs("span", { style: { marginLeft: 'auto', color: '#a0aec0', fontSize: 12 }, children: [options[dragState.draggedIndex].weight, "%"] }))] }) }))] }));
-};
+                        outline: 'none',
+                        cursor: disabled ? 'default' : 'text',
+                    }, onMouseDown: (e) => e.stopPropagation() }), showWeights && ()
+                    < div, " style=", { display: 'flex', alignItems: 'center', marginLeft: 8 }, ">", _jsx("input", { type: "range", min: "0", max: "100", value: option.weight, onChange: (e) => onWeightChange?.(option.id, parseInt(e.target.value)), disabled: disabled || option.locked, style: {
+                        width: 60,
+                        marginRight: 8,
+                        cursor: disabled || option.locked ? 'default' : 'pointer',
+                    }, onMouseDown: (e) => e.stopPropagation() }), _jsxs("span", { style: {
+                        minWidth: 35,
+                        textAlign: 'right',
+                        fontSize: 12,
+                        color: '#a0aec0',
+                    }, children: [option.weight, "%"] })] }, option.id);
+    }) });
+React.Fragment >
+;
+;
+{ /* Final drop zone */ }
+{
+    dragState.dragOverIndex === options.length && ()
+        < div;
+    style = {};
+    {
+        height: DROP_ZONE_HEIGHT,
+            background;
+        '#4299e1',
+            borderRadius;
+        2,
+            marginTop;
+        4,
+            opacity;
+        0.8,
+        ;
+    }
+}
+/>;
+{ /* Drag ghost element */ }
+{
+    dragState.isDragging && dragState.draggedIndex !== null && ()
+        < div;
+    style = {};
+    {
+        position: 'fixed',
+            top;
+        dragState.ghostPosition.y,
+            left;
+        dragState.ghostPosition.x,
+            pointerEvents;
+        'none',
+            zIndex;
+        1000,
+            transform;
+        'rotate(5deg)',
+            opacity;
+        0.9,
+        ;
+    }
+}
+    >
+        _jsxs("div", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                padding: '8px 12px',
+                background: '#2d3748',
+                border: '2px solid #4299e1',
+                borderRadius: 6,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                color: '#e2e8f0',
+                fontSize: 14,
+                minWidth: 200,
+            }, children: [_jsx("div", { style: {
+                        width: 12,
+                        height: 12,
+                        borderRadius: 2,
+                        backgroundColor: getOptionColor(dragState.draggedIndex),
+                        marginRight: 8,
+                    } }), options[dragState.draggedIndex].text, showWeights && ()
+                    < span, " style=", { marginLeft: 'auto', color: '#a0aec0', fontSize: 12 }, ">", options[dragState.draggedIndex].weight, "%"] });
+div >
+;
+div >
+;
+div >
+;
+;
+;
 export default DragReorderList;

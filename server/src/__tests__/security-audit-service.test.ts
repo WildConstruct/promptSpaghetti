@@ -22,7 +22,7 @@ describe('SecurityAuditService', () => {
         scoreThreshold: 70,
         criticalIssues: 0,
         highIssues: 2
-      },
+  }
       notifications: {
         enabled: false
       }
@@ -60,8 +60,8 @@ describe('SecurityAuditService', () => {
           method: 'HEAD',
           headers: expect.objectContaining({
             'User-Agent': 'SecurityAuditService/1.0'
-          })
-        })
+  }
+  }
       );
     });
 

@@ -87,8 +87,8 @@ describe('API Key Expiration System', () => {
             keyId,
             keyType: APIKeyType.API_ACCESS,
             expirationPolicy: ExpirationPolicy.FIXED_DURATION
-          })
-        })
+  }
+  }
       );
     });
 
@@ -320,7 +320,7 @@ describe('API Key Expiration System', () => {
         expect.objectContaining({
           action: 'api_key_renewal_requested',
           resource: 'api_key:renewal-test-key'
-        })
+  }
       );
     });
 
@@ -406,8 +406,8 @@ describe('API Key Expiration System', () => {
           resource: 'api_key:revoke-test-key',
           details: expect.objectContaining({
             reason: 'Security breach detected'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -549,7 +549,7 @@ describe('API Key Expiration System', () => {
         expect.objectContaining({
           action: 'expiration_report_generated',
           resource: 'api_key_expiration_report'
-        })
+  }
       );
     });
 
@@ -630,7 +630,7 @@ describe('API Key Expiration System', () => {
         expect.objectContaining({
           action: 'expiration_alert_resolved',
           resource: `alert:${alertToResolve.alertId}`
-        })
+  }
       );
     });
   });
@@ -774,7 +774,7 @@ describe('API Key Expiration System', () => {
             maxDuration: 60 * 60 * 1000,
             environment: 'test',
             scopes: ['read']
-          })
+  }
         );
       }
 

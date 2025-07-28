@@ -8,6 +8,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { getTimeoutManager } from '../services/TimeoutManager';
 
+}
 export interface TimeoutMiddlewareConfig {
   // Default timeouts by route pattern
   routeTimeouts: {
@@ -15,6 +16,7 @@ export interface TimeoutMiddlewareConfig {
       operationType: string;
       operationSubtype: string;
       timeout?: number;
+}
     };
   };
   
@@ -31,6 +33,7 @@ export interface TimeoutMiddlewareConfig {
   };
 }
 
+}
 export interface RequestTimeoutContext {
   operationId: string;
   operationType: string;
@@ -38,10 +41,12 @@ export interface RequestTimeoutContext {
   startTime: number;
   timeoutManager: ReturnType<typeof getTimeoutManager>;
 }
+}
 
 declare module 'fastify' {
   interface FastifyRequest {
     timeoutContext?: RequestTimeoutContext;
+}
   }
 }
 
@@ -51,60 +56,60 @@ const defaultConfig: TimeoutMiddlewareConfig = {
       operationType: 'api',
       operationSubtype: 'export',
       timeout: 30000
-    },
+  }
     '/auth/login': {
       operationType: 'auth',
       operationSubtype: 'login'
-    },
+  }
     '/auth/register': {
       operationType: 'auth',
       operationSubtype: 'register'
-    },
+  }
     '/auth/password-reset': {
       operationType: 'auth',
       operationSubtype: 'passwordReset'
-    },
+  }
     '/auth/refresh': {
       operationType: 'auth',
       operationSubtype: 'tokenRefresh'
-    },
+  }
     '/auth/verify-captcha': {
       operationType: 'auth',
       operationSubtype: 'captcha'
-    },
+  }
     '/auth/verify-2fa': {
       operationType: 'auth',
       operationSubtype: 'twoFactor'
-    },
+  }
     '/api/workspace': {
       operationType: 'database',
       operationSubtype: 'query'
-    },
+  }
     '/api/workflow': {
       operationType: 'database',
       operationSubtype: 'transaction'
-    },
+  }
     '/api/corrections': {
       operationType: 'database',
       operationSubtype: 'query'
-    },
+  }
     '/api/randomizer': {
       operationType: 'api',
       operationSubtype: 'export'
-    },
+  }
     '/api/analytics': {
       operationType: 'database',
       operationSubtype: 'query'
-    },
+  }
     '/api/marketplace': {
       operationType: 'api',
       operationSubtype: 'authentication'
-    },
+  }
     '/health': {
       operationType: 'database',
       operationSubtype: 'query'
     }
-  },
+  }
   defaultTimeout: 30000,
   enableRequestTracking: true,
   enableMetricsCollection: true,
@@ -323,6 +328,7 @@ export function withTimeout<T extends any[], R>(
   operationSubtype: string
 ) {
   return async function(this: unknown, ...args: T): Promise<R> {
+
     const request = args[0] as FastifyRequest;
     
     if (request.timeoutContext) {
@@ -414,5 +420,6 @@ declare module 'fastify' {
       fallbackOperation: () => Promise<T>
     ): Promise<import('../services/TimeoutManager').OperationResult<T>>;
     cancelOperation(): boolean;
+}
   }
 }

@@ -14,12 +14,14 @@ import {
   ModelMetadata
 } from './BaseAIModel';
 import { HTTPRequestMapping } from './adapters/GenericHTTPAdapter';
+
 export interface FactoryConfig {
     defaultTimeout?: number;
     defaultRetries?: number;
     enableLogging?: boolean;
     logLevel?: 'debug' | 'info' | 'warn' | 'error';
-}
+
+
 export interface ModelRegistration {
     id: string;
     provider: AIModelProvider;
@@ -28,7 +30,7 @@ export interface ModelRegistration {
     metadata?: Partial<ModelMetadata>;
     capabilities?: Partial<ModelCapabilities>;
     requestMapping?: HTTPRequestMapping;
-}
+
 export declare class AIModelFactory implements IAIModelFactory {
     private factoryConfig;
     private registeredModels;
@@ -56,6 +58,6 @@ export declare class AIModelFactory implements IAIModelFactory {
     getFactoryConfig(): FactoryConfig;
     getStatistics(): unknown;
     private _log;
-}
+
 export default AIModelFactory;
 //# sourceMappingURL=AIModelFactory.d.ts.map

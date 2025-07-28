@@ -60,6 +60,7 @@ const ProjectQuerySchema = z.object({
   sortOrder: z.enum(['asc', 'desc']).default('desc')
 });
 
+}
 interface DatabaseProject {
   id: string;
   user_id?: number;
@@ -73,6 +74,7 @@ interface DatabaseProject {
   file_format_version: string;
   graph_data: any;
   settings: any;
+}
 }
 
 /**
@@ -134,7 +136,7 @@ function dbProjectToAPI(dbProject: DatabaseProject): any {
       author: dbProject.author,
       tags: typeof dbProject.tags === 'string' ? JSON.parse(dbProject.tags || '[]') : (dbProject.tags || []),
       fileFormatVersion: dbProject.file_format_version
-    },
+  }
     graph: JSON.parse(dbProject.graph_data),
     settings: JSON.parse(dbProject.settings || '{}')
   };
@@ -154,9 +156,9 @@ export async function projectRoutes(fastify: FastifyInstance) {
         properties: {
           project: { type: 'object' },
           userId: { type: 'number' }
-        },
+  }
         required: ['project']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -167,7 +169,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { project, userId } = SaveProjectRequestSchema.parse(request.body);
@@ -229,7 +231,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           sortBy: { type: 'string', enum: ['createdAt', 'lastModified', 'name'], default: 'lastModified' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -241,7 +243,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const query = ProjectQuerySchema.parse(request.query);
@@ -321,19 +323,19 @@ export async function projectRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' }
         }
-      },
+  }
       response: {
         200: { type: 'object' }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -381,17 +383,17 @@ export async function projectRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           project: { type: 'object' },
           userId: { type: 'number' }
-        },
+  }
         required: ['project']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -401,7 +403,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -481,15 +483,15 @@ export async function projectRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           userId: { type: 'number' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -499,7 +501,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { projectId } = request.params;
@@ -552,7 +554,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           userId: { type: 'number' },
           limit: { type: 'number', minimum: 1, maximum: 50, default: 10 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -561,7 +563,7 @@ export async function projectRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { userId, limit = 10 } = request.query;

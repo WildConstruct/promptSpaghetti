@@ -21,7 +21,7 @@ export declare enum RiskLevel {
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum ThreatCategory {
     AUTHENTICATION = "authentication",
     AUTHORIZATION = "authorization",
@@ -32,7 +32,7 @@ export declare enum ThreatCategory {
     EXTERNAL_ATTACK = "external_attack",
     SYSTEM_COMPROMISE = "system_compromise",
     COMPLIANCE_VIOLATION = "compliance_violation"
-}
+
 export interface SecurityPattern {
     id: string;
     name: string;
@@ -46,7 +46,7 @@ export interface SecurityPattern {
     occurrences: number;
     relatedEvents: string[];
     mitigationStrategies: string[];
-}
+
 export interface BehavioralBaseline {
     userId: string;
     normalPatterns: {,
@@ -73,7 +73,7 @@ export interface BehavioralBaseline {
         trustedScore: number;
     };
     lastUpdated: Date;
-}
+
 export interface SecurityInsight {
     id: string;
     type: 'trend' | 'anomaly' | 'prediction' | 'recommendation';
@@ -98,7 +98,7 @@ export interface SecurityInsight {
         longTerm: string[];
     };
     generatedAt: Date;
-}
+
 export interface SecurityMetricsSummary {
     period: {,
         start: Date;
@@ -149,7 +149,7 @@ export interface SecurityMetricsSummary {
         complianceScore: number;
         incidentResponseTime: number;
     };
-}
+
 export interface AlertConfiguration {
     id: string;
     name: string;
@@ -167,7 +167,6 @@ export interface AlertConfiguration {
         autoResponse: string[];
     };
     enabled: boolean;
-}
 /**
  * Advanced security analytics engine
  */
@@ -273,6 +272,6 @@ export declare class SecurityEventAnalytics extends EventEmitter {
     private initializePatternDetection;
     private startContinuousAnalysis;
     private setupDefaultAlerts;
-}
+
 export default SecurityEventAnalytics;
 //# sourceMappingURL=SecurityEventAnalytics.d.ts.map

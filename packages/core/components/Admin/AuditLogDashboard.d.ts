@@ -8,11 +8,12 @@
  * Epic: 17 - Backstage Admin Controls, Substory: 17.1.6 (Audit Logging)
  */
 import React from 'react';
+
 interface AuditLogDashboardProps {
     className?: string;
     userId?: string;
     userRole?: string;
-}
+
 export declare const AuditLogDashboard: React.FC<AuditLogDashboardProps>;
 export default AuditLogDashboard;
 //# sourceMappingURL=AuditLogDashboard.d.ts.map

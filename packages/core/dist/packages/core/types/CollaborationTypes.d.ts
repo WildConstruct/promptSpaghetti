@@ -48,7 +48,7 @@ export interface RegionGroup {
     backgroundColor?: string;
     opacity?: number;
     bounds: RegionGroupBounds;
-    nodeIds: string[];
+    nodeIds: string;
     collapsed: boolean;
     visible: boolean;
     style: RegionGroupStyle;
@@ -66,7 +66,7 @@ export interface RegionGroupAction {
     type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
     groupId?: string;
     group?: Partial<RegionGroup>;
-    nodeIds?: string[];
+    nodeIds?: string;
     bounds?: RegionGroupBounds;
     position?: {
         x: number;
@@ -91,7 +91,7 @@ export interface RegionGroupPreferences {
     snapToGrid: boolean;
     gridSize: number;
 }
-export export export export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
+export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
 export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
 export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
 export interface ConnectionLabel {
@@ -121,7 +121,7 @@ export interface ConnectionLabel {
 export interface ConnectionAnnotation {
     id: string;
     connectionId: string;
-    labels: ConnectionLabel[];
+    labels: ConnectionLabel;
     visualStyle: ConnectionVisualStyle;
     color?: string;
     strokeWidth?: number;
@@ -167,7 +167,7 @@ export interface ConnectionAnnotationPreferences {
     maxLabelLength: number;
     highlightOnHover: boolean;
 }
-export export export export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
+export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
 export interface NodeLabelConfig {
@@ -204,13 +204,13 @@ export interface NodeLabelPreferences {
     maxLabelLength: number;
     showLabelTooltips: boolean;
 }
-export export export interface GraphAnnotations {
-    stickyNotes: StickyNote[];
+export interface GraphAnnotations {
+    stickyNotes: StickyNote;
     nodeLabels: Record<string, string>;
     nodeLabelConfigs: Record<string, NodeLabelConfig>;
-    regionGroups: RegionGroup[];
-    connectionLabels: ConnectionLabel[];
-    connectionAnnotations: ConnectionAnnotation[];
+    regionGroups: RegionGroup;
+    connectionLabels: ConnectionLabel;
+    connectionAnnotations: ConnectionAnnotation;
     labelPreferences: NodeLabelPreferences;
     regionGroupPreferences: RegionGroupPreferences;
     connectionAnnotationPreferences: ConnectionAnnotationPreferences;

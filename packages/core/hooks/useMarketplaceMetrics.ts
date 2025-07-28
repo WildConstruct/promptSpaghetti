@@ -19,7 +19,6 @@ export interface MarketplaceMetricsConfig {
   userId?: string;
   userRole?: 'director' | 'producer' | 'creator' | 'admin';
 }
-
 export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => {
   const {
     enableAutoTracking = true,
@@ -29,7 +28,7 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
     userRole = 'director'
   } = config;
   const [dashboardData, setDashboardData] = useState<any>(null);
-  const [insights, setInsights] = useState<any[]>([]);
+  const [insights, setInsights] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
   // Load initial data
   useEffect(() => {
@@ -41,154 +40,147 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
         setInsights(marketplaceInsights);
         setIsLoading(false);
       } catch (error) {
-        console.error('Failed to load marketplace metrics:', error);
-        setIsLoading(false);
-      }
-    };
+  console.error('Failed to load marketplace metrics:', error);
+  setIsLoading(false);
+};
     loadData();
   }, []);
   // Auto-track page views
   useEffect(() => {
-    if (trackPageViews && enableAutoTracking) {
-      const path = window.location.pathname;
-      if (path.includes('/marketplace')) {
-        marketplaceMetrics.trackEvent('marketplace_visited', {)
-          page: path,
-          user_role: userRole,
-        });
+  if (trackPageViews && enableAutoTracking) {
+  const path = window.location.pathname;
+  if (path.includes('/marketplace')) {
+  marketplaceMetrics.trackEvent('marketplace_visited', {)
+  page: path,
+  user_role: userRole,
+});
       } else if (path.includes('/template/')) {
-        const templateId = path.split('/template/')[1]?.split('/')[0];
-        if (templateId) {
-          marketplaceMetrics.trackEvent('template_viewed', {)
-            page: path,
-            user_role: userRole,
-          }, templateId, 'template');
-        }
+  const templateId = path.split('/template/')[1]?.split('/')[0];
+  if (templateId) {
+  marketplaceMetrics.trackEvent('template_viewed', {)
+  page: path,
+  user_role: userRole,
+}, templateId, 'template');
       } else if (path.includes('/creator/')) {
-        const creatorId = path.split('/creator/')[1]?.split('/')[0];
-        if (creatorId) {
-          marketplaceMetrics.trackEvent('creator_profile_viewed', {)
-            page: path,
-            user_role: userRole,
-          }, creatorId, 'creator');
-        }
-      }
-    }
+  const creatorId = path.split('/creator/')[1]?.split('/')[0];
+  if (creatorId) {
+  marketplaceMetrics.trackEvent('creator_profile_viewed', {)
+  page: path,
+  user_role: userRole,
+}, creatorId, 'creator');
   }, [trackPageViews, enableAutoTracking, userRole]);
   // Template interaction tracking
   const trackTemplatePreview = useCallback((templateId: string, templateData?: any) => {
-    if (!enableAutoTracking) return;
-    marketplaceMetrics.trackEvent('template_previewed', {)
-      template_data: templateData,
-      user_role: userRole,
-      interaction_context: 'preview_modal',
-    }, templateId, 'template');
+  if (!enableAutoTracking) return;
+  marketplaceMetrics.trackEvent('template_previewed', {)
+  template_data: templateData,
+  user_role: userRole,
+  interaction_context: 'preview_modal',
+}, templateId, 'template');
   }, [enableAutoTracking, userRole]);
   const trackTemplatePurchase = useCallback((templateId: string, price: number, paymentMethod?: string) => {
-    marketplaceMetrics.trackEvent('template_purchased', {)
-      payment_method: paymentMethod,
-      user_role: userRole,
-      purchase_context: 'marketplace',
-    }, templateId, 'template', price);
+  marketplaceMetrics.trackEvent('template_purchased', {)
+  payment_method: paymentMethod,
+  user_role: userRole,
+  purchase_context: 'marketplace',
+}, templateId, 'template', price);
   }, [userRole]);
   const trackTemplateDownload = useCallback((templateId: string, downloadType: 'free' | 'premium' = 'free') => {
-    marketplaceMetrics.trackEvent('template_downloaded', {)
-      download_type: downloadType,
-      user_role: userRole,
-    }, templateId, 'template');
+  marketplaceMetrics.trackEvent('template_downloaded', {)
+  download_type: downloadType,
+  user_role: userRole,
+}, templateId, 'template');
   }, [userRole]);
   const trackTemplateFavorite = useCallback((templateId: string, isFavorited: boolean) => {
-    if (isFavorited) {
-      marketplaceMetrics.trackEvent('template_favorited', {)
-        user_role: userRole,
-        action: 'add_favorite',
-      }, templateId, 'template');
-    }
-    // Note: Could track unfavorite as separate event if needed
+  if (isFavorited) {
+  marketplaceMetrics.trackEvent('template_favorited', {)
+  user_role: userRole,
+  action: 'add_favorite',
+}, templateId, 'template');
+    // Note: Could track unfavorite as separate event if needed;
   }, [userRole]);
   const trackTemplateShare = useCallback((templateId: string, shareMethod: 'link' | 'social' | 'email') => {
-    marketplaceMetrics.trackEvent('template_shared', {)
-      share_method: shareMethod,
-      user_role: userRole,
-    }, templateId, 'template');
+  marketplaceMetrics.trackEvent('template_shared', {)
+  share_method: shareMethod,
+  user_role: userRole,
+}, templateId, 'template');
   }, [userRole]);
   // Search and discovery tracking
   const trackSearch = useCallback((query: string, resultsCount: number, filters?: Record<string, any>) => {
-    marketplaceMetrics.trackEvent('search_performed', {)
-      query,
-      results_count: resultsCount,
-      filters,
-      user_role: userRole,
-    });
+  marketplaceMetrics.trackEvent('search_performed', {)
+  query,
+  results_count: resultsCount,
+  filters,
+  user_role: userRole,
+});
   }, [userRole]);
   const trackCategoryBrowse = useCallback((category: string, resultCount?: number) => {
-    marketplaceMetrics.trackEvent('category_browsed', {)
-      category,
-      result_count: resultCount,
-      user_role: userRole,
-    }, category, 'category');
+  marketplaceMetrics.trackEvent('category_browsed', {)
+  category,
+  result_count: resultCount,
+  user_role: userRole,
+}, category, 'category');
   }, [userRole]);
   const trackFilterApplied = useCallback((filters: Record<string, any>) => {
-    marketplaceMetrics.trackEvent('filter_applied', {)
-      filters,
-      user_role: userRole,
-      filter_count: Object.keys(filters).length,
-    });
+  marketplaceMetrics.trackEvent('filter_applied', {)
+  filters,
+  user_role: userRole,
+  filter_count: Object.keys(filters).length,
+});
   }, [userRole]);
   // Creator interactions
   const trackCreatorFollow = useCallback((creatorId: string) => {
-    marketplaceMetrics.trackEvent('creator_followed', {)
-      user_role: userRole,
-      follow_context: 'creator_profile',
-    }, creatorId, 'creator');
+  marketplaceMetrics.trackEvent('creator_followed', {)
+  user_role: userRole,
+  follow_context: 'creator_profile',
+}, creatorId, 'creator');
   }, [userRole]);
   // Review and rating tracking
   const trackRatingSubmit = useCallback((templateId: string, rating: number, reviewText?: string) => {
-    marketplaceMetrics.trackEvent('rating_given', {)
-      rating,
-      has_review: !!reviewText,
-      review_length: reviewText?.length || 0,
-      user_role: userRole,
-    }, templateId, 'template', rating);
+  marketplaceMetrics.trackEvent('rating_given', {)
+  rating,
+  has_review: !!reviewText,
+  review_length: reviewText?.length || 0,
+  user_role: userRole,
+}, templateId, 'template', rating);
     if (reviewText) {
-      marketplaceMetrics.trackEvent('review_submitted', {)
-        rating,
-        review_length: reviewText.length,
-        user_role: userRole,
-      }, templateId, 'template');
-    }
+  marketplaceMetrics.trackEvent('review_submitted', {)
+  rating,
+  review_length: reviewText.length,
+  user_role: userRole,
+}, templateId, 'template');
   }, [userRole]);
   // Premium and subscription tracking
   const trackPremiumAccess = useCallback((feature: string, context?: string) => {
-    marketplaceMetrics.trackEvent('premium_accessed', {)
-      premium_feature: feature,
-      access_context: context,
-      user_role: userRole,
-    });
+  marketplaceMetrics.trackEvent('premium_accessed', {)
+  premium_feature: feature,
+  access_context: context,
+  user_role: userRole,
+});
   }, [userRole]);
   const trackSubscriptionStart = useCallback((planType: string, planPrice: number) => {
-    marketplaceMetrics.trackEvent('subscription_started', {)
-      plan_type: planType,
-      user_role: userRole,
-      conversion_source: 'marketplace',
-    }, undefined, undefined, planPrice);
+  marketplaceMetrics.trackEvent('subscription_started', {)
+  plan_type: planType,
+  user_role: userRole,
+  conversion_source: 'marketplace',
+}, undefined, undefined, planPrice);
   }, [userRole]);
   // Recommendation tracking
-  const trackRecommendationShown = useCallback((templateIds: string[], algorithm: string, context: string) => {
-    marketplaceMetrics.trackEvent('recommendation_shown', {)
-      template_ids: templateIds,
-      algorithm,
-      context,
-      recommendation_count: templateIds.length,
-      user_role: userRole,
-    });
+  const trackRecommendationShown = useCallback((templateIds: string, algorithm: string, context: string) => {
+  marketplaceMetrics.trackEvent('recommendation_shown', {)
+  template_ids: templateIds,
+  algorithm,
+  context,
+  recommendation_count: templateIds.length,
+  user_role: userRole,
+});
   }, [userRole]);
   const trackRecommendationClicked = useCallback((templateId: string, position: number, algorithm: string) => {
-    marketplaceMetrics.trackEvent('recommendation_clicked', {)
-      position,
-      algorithm,
-      user_role: userRole,
-    }, templateId, 'template');
+  marketplaceMetrics.trackEvent('recommendation_clicked', {)
+  position,
+  algorithm,
+  user_role: userRole,
+}, templateId, 'template');
   }, [userRole]);
   // Analytics data fetchers
   const getTemplateAnalytics = useCallback((templateId: string): TemplateMetrics | null => {
@@ -198,9 +190,8 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
     return marketplaceMetrics.getCreatorAnalytics(creatorId);
   }, []);
   const getTopPerformingTemplates = useCallback(;);
-    (metric: 'revenue' | 'downloads' | 'rating' = 'revenue',)
-      limit: number = 10,
-    ) => {
+    (metric: 'revenue' | 'downloads' | 'rating' = 'revenue');
+  limit: number = 10) => {,
       return marketplaceMetrics.getTopPerformingTemplates(metric, limit);
     }, []);
   const getSearchAnalytics = useCallback(() => {
@@ -214,41 +205,34 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
       setDashboardData(dashboard);
       setInsights(marketplaceInsights);
     } catch (error) {
-      console.error('Failed to refresh marketplace metrics:', error);
-    } finally {
+  console.error('Failed to refresh marketplace metrics:', error);
+} finally {
       setIsLoading(false);
-    }
   }, []);
   // Auto-track clicks on marketplace elements
   useEffect(() => {
-    if (!trackUserInteractions || !enableAutoTracking) return;
-    const trackClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      const templateLink = target.closest('[data-template-id]');
-      const creatorLink = target.closest('[data-creator-id]');
-      const categoryLink = target.closest('[data-category]');
-      if (templateLink) {
-        const templateId = templateLink.getAttribute('data-template-id');
-        const action = target.getAttribute('data-action') || 'click';
-        if (templateId && action === 'preview') {
-          trackTemplatePreview(templateId);
-        }
-      }
-      if (creatorLink) {
-        const creatorId = creatorLink.getAttribute('data-creator-id');
-        if (creatorId) {
-          marketplaceMetrics.trackEvent('creator_profile_viewed', {)
-            click_context: 'template_page',
-            user_role: userRole,
-          }, creatorId, 'creator');
-        }
-      }
+  if (!trackUserInteractions || !enableAutoTracking) return;
+  const trackClick = (event: MouseEvent) => {,
+  const target = event.target as HTMLElement;
+  const templateLink = target.closest('[data-template-id]');
+  const creatorLink = target.closest('[data-creator-id]');
+  const categoryLink = target.closest('[data-category]');
+  if (templateLink) {
+  const templateId = templateLink.getAttribute('data-template-id');
+  const action = target.getAttribute('data-action') || 'click';
+  if (templateId && action === 'preview') {
+  trackTemplatePreview(templateId);
+  if (creatorLink) {
+  const creatorId = creatorLink.getAttribute('data-creator-id');
+  if (creatorId) {
+  marketplaceMetrics.trackEvent('creator_profile_viewed', {)
+  click_context: 'template_page',
+  user_role: userRole,
+}, creatorId, 'creator');
       if (categoryLink) {
         const category = categoryLink.getAttribute('data-category');
         if (category) {
           trackCategoryBrowse(category);
-        }
-      }
     };
     document.addEventListener('click', trackClick);
     return () => document.removeEventListener('click', trackClick);
@@ -293,10 +277,10 @@ export const useMarketplaceMetrics = (config: MarketplaceMetricsConfig = {}) => 
       entityType?: 'template' | 'creator' | 'category' | 'collection',
       value?: number
     ) => {
-      marketplaceMetrics.trackEvent(eventType, {)
-        ...properties,
-        user_role: userRole,
-      }, entityId, entityType, value);
+  marketplaceMetrics.trackEvent(eventType, {)
+  ...properties,
+  user_role: userRole,
+}, entityId, entityType, value);
     }, [userRole]),
     // Direct access to marketplace metrics instance
     marketplaceMetrics

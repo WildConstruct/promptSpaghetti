@@ -7,6 +7,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
+}
 export interface ReferrerPolicyConfig {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface ReferrerPolicyConfig {
       method?: string | string[];
       policy: ReferrerPolicyValue;
       exactMatch: boolean;
+}
     }>;
     domainSpecific?: Array<{
       domain: string;
@@ -76,6 +78,7 @@ export type ReferrerPolicyValue =
   | 'strict-origin-when-cross-origin'
   | 'unsafe-url';
 
+}
 export interface ReferrerViolation {
   id: string;
   timestamp: Date;
@@ -86,6 +89,7 @@ export interface ReferrerViolation {
     userAgent: string;
     ip: string;
     userId?: string;
+}
   };
   
   referrer: {
@@ -119,6 +123,7 @@ export interface ReferrerViolation {
   };
 }
 
+}
 export interface ReferrerPolicyStatistics {
   timeRange: { start: Date; end: Date };
   
@@ -261,6 +266,7 @@ export class ReferrerPolicyService {
     configId?: string;
     message: string;
   }> {
+
     try {
       // Validate policy values
       const validation = this.validatePolicyConfig(configData);
@@ -317,6 +323,7 @@ export class ReferrerPolicyService {
     success: boolean;
     message: string;
   }> {
+
     try {
       const existingConfig = this.configs.get(configId);
       if (!existingConfig) {
@@ -476,6 +483,7 @@ export class ReferrerPolicyService {
       severities?: string[];
     }
   ): Promise<ReferrerPolicyStatistics> {
+
     try {
       // Filter violations by time range and filters
       let filteredViolations = this.violations.filter(v => 
@@ -518,19 +526,19 @@ export class ReferrerPolicyService {
           violationsDetected: filteredViolations.length,
           blockedRequests: filteredViolations.filter(v => v.violation.blocked).length,
           averageResponseTime
-        },
+  }
         policies: {
           byValue: this.groupByProperty(filteredViolations, v => v.referrer.expectedPolicy),
           byPath: this.calculatePolicyByPath(filteredViolations),
           byDomain: this.calculatePolicyByDomain(filteredViolations),
           effectiveness: this.calculatePolicyEffectiveness(filteredViolations)
-        },
+  }
         violations: {
           byType: this.groupByProperty(filteredViolations, v => v.violation.type),
           bySeverity: this.groupByProperty(filteredViolations, v => v.violation.severity),
           byOrigin: this.groupByProperty(filteredViolations, v => v.referrer.origin),
           trends: this.calculateViolationTrends(filteredViolations)
-        },
+  }
         compliance: {
           policyCompliance: this.calculatePolicyCompliance(filteredViolations),
           securityScore: this.calculateSecurityScore(filteredViolations),
@@ -550,6 +558,7 @@ export class ReferrerPolicyService {
   // Private helper methods
 
   private async getPolicyForRequest(request: FastifyRequest): Promise<ReferrerPolicyConfig | null> {
+
     try {
       const cacheKey = `referrer_policy:${request.url}`;
       const cached = await this.redis.get(cacheKey);
@@ -621,6 +630,7 @@ export class ReferrerPolicyService {
     shouldBlock: boolean;
     reason?: string;
   }> {
+
     try {
       const referrerUrl = new URL(referrerHeader);
       const requestUrl = new URL(request.url, `http://${request.headers.host}`);
@@ -774,6 +784,7 @@ export class ReferrerPolicyService {
     expectedPolicy: ReferrerPolicyValue,
     validation: { valid: boolean; shouldBlock: boolean; reason?: string }
   ): Promise<void> {
+
     try {
       const violation: ReferrerViolation = {
         id: this.generateViolationId(),
@@ -784,25 +795,25 @@ export class ReferrerPolicyService {
           userAgent: (request.headers['user-agent'] as string) || 'unknown',
           ip: request.ip,
           userId: (request as any).user?.id
-        },
+  }
         referrer: {
           header: referrerHeader,
           expectedPolicy,
           origin: new URL(referrerHeader).origin,
           isSecure: referrerHeader.startsWith('https:')
-        },
+  }
         violation: {
           type: this.determineViolationType(validation.reason),
           severity: this.determineSeverity(validation.reason),
           description: validation.reason || 'Unknown violation',
           blocked: validation.shouldBlock,
           action: validation.shouldBlock ? 'block' : 'warn'
-        },
+  }
         response: {
           status: validation.shouldBlock ? 403 : 200,
           headers: {},
           redirected: false
-        },
+  }
         metadata: {
           configId: 'default',
           environment: process.env.NODE_ENV || 'development',
@@ -823,6 +834,7 @@ export class ReferrerPolicyService {
   }
 
   private async updateStatistics(policy: ReferrerPolicyValue, responseTime: number): Promise<void> {
+
     this.statistics.set('total_requests', (this.statistics.get('total_requests') || 0) + 1);
     this.statistics.set('policies_applied', (this.statistics.get('policies_applied') || 0) + 1);
     
@@ -838,6 +850,7 @@ export class ReferrerPolicyService {
     policy: ReferrerPolicyValue,
     config: ReferrerPolicyConfig
   ): Promise<void> {
+
     if (Math.random() * 100 < config.reporting.sampleRate) {
       console.log('Referrer policy applied:', {
         url: request.url,
@@ -850,6 +863,7 @@ export class ReferrerPolicyService {
   }
 
   private async savePolicyConfig(config: ReferrerPolicyConfig): Promise<void> {
+
     await this.redis.setex(
       `referrer_policy_config:${config.id}`,
       86400,
@@ -858,6 +872,7 @@ export class ReferrerPolicyService {
   }
 
   private async clearPolicyCache(): Promise<void> {
+
     // Note: RedisService might not have a keys method, implement cache clearing differently
     try {
       // For now, implement a simpler cache clearing approach
@@ -882,22 +897,22 @@ export class ReferrerPolicyService {
             path: '/admin',
             policy: 'no-referrer',
             exactMatch: false
-          },
+  }
           {
             path: '/api/auth',
             policy: 'no-referrer',
             exactMatch: false
-          },
+  }
           {
             path: '/api/payment',
             policy: 'no-referrer',
             exactMatch: false
           }
         ]
-      },
+  }
       scope: {
         global: true
-      },
+  }
       security: {
         strictMode: true,
         preventDowngrade: true,
@@ -905,13 +920,13 @@ export class ReferrerPolicyService {
         blockUnsafeReferrers: true,
         allowedOrigins: ['https://localhost:3000'],
         blockedOrigins: []
-      },
+  }
       reporting: {
         enabled: true,
         reportOnlyMode: false,
         sampleRate: 10,
         includeUserAgent: true
-      },
+  }
       metadata: {
         createdBy: 'system',
         createdAt: new Date(),

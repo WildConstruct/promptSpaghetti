@@ -15,10 +15,12 @@ import { AuditService } from '../auth/services/AuditService';
 // Mock implementations
 class MockDeviceFingerprintingService {
   async generateFingerprint(components: unknown): Promise<string> {
+
     return `fp_${JSON.stringify(components).split('').reduce((a, b) => a + b.charCodeAt(0), 0)}`;
   }
 
   async calculateTrustScore(fingerprint: string, context: unknown): Promise<number> {
+
     // Mock trust score based on fingerprint characteristics
     if (fingerprint.includes('suspicious')) return 20;
     if (fingerprint.includes('trusted')) return 90;
@@ -28,6 +30,7 @@ class MockDeviceFingerprintingService {
 
 class MockGeolocationService {
   async getGeolocationData(ipAddress: string): Promise<GeolocationData> {
+
     const mockData: Record<string, GeolocationData> = {
       '192.168.1.1': {
         country: 'United States',
@@ -39,7 +42,7 @@ class MockGeolocationService {
         coordinates: { latitude: 37.7749, longitude: -122.4194 },
         confidence: 0.9,
         source: 'ipapi'
-      },
+  }
       '8.8.8.8': {
         country: 'United States',
         countryCode: 'US',
@@ -51,7 +54,7 @@ class MockGeolocationService {
         isVpn: true,
         confidence: 0.8,
         source: 'ipapi'
-      },
+  }
       '1.2.3.4': {
         country: 'Germany',
         countryCode: 'DE',
@@ -90,6 +93,7 @@ class MockDatabaseService {
   ]);
 
   async query(sql: string, params: any[] = []): Promise<{ rows: any[] }> {
+
     // Handle CREATE TABLE
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
@@ -199,14 +203,17 @@ class MockRedisService {
   private cache: Map<string, string> = new Map();
 
   async setex(key: string, expiry: number, value: string): Promise<void> {
+
     this.cache.set(key, value);
   }
 
   async get(key: string): Promise<string | null> {
+
     return this.cache.get(key) || null;
   }
 
   async del(key: string): Promise<void> {
+
     this.cache.delete(key);
   }
 
@@ -219,6 +226,7 @@ class MockAuditService {
   public events: any[] = [];
 
   async logEvent(event: unknown): Promise<void> {
+
     this.events.push({
       ...event,
       timestamp: new Date()
@@ -265,7 +273,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           locationStability: 0.15,
           securityEvents: 0.15,
           verificationLevel: 0.10
-        },
+  }
         thresholds: {
           highTrust: 80,
           mediumTrust: 60,
@@ -295,7 +303,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           audioFingerprint: 'audio123',
           availableFonts: ['Arial', 'Times New Roman'],
           plugins: []
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123',
         sessionId: 'session123'
@@ -324,7 +332,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           audioFingerprint: 'audio456',
           availableFonts: ['Arial'],
           plugins: []
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -347,7 +355,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           canvasFingerprint: 'original_canvas',
           webglFingerprint: 'original_webgl'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -361,7 +369,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           canvasFingerprint: 'changed_canvas',
           webglFingerprint: 'changed_webgl'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -402,7 +410,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           userAgent: 'Mozilla/5.0',
           spoofingDetected: true
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -419,7 +427,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           userAgent: 'Mozilla/5.0',
           canvasFingerprint: 'trusted_canvas'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -434,7 +442,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           userAgent: 'Mozilla/5.0',
           spoofingDetected: true,
           canvasFingerprint: 'suspicious_canvas'
-        },
+  }
         ipAddress: '1.2.3.4', // Tor IP
         userId: 'user123'
       };
@@ -591,7 +599,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         {
           fingerprint: 'device1',
           components: JSON.stringify({ canvasFingerprint: 'same_canvas' })
-        },
+  }
         {
           fingerprint: 'device2',
           components: JSON.stringify({ canvasFingerprint: 'same_canvas' })
@@ -677,7 +685,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           canvasFingerprint: 'original_canvas',
           webglFingerprint: 'original_webgl'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -689,7 +697,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         components: {
           canvasFingerprint: 'changed_canvas',
           webglFingerprint: 'changed_webgl'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -708,7 +716,7 @@ describe('EnhancedDeviceIdentificationService', () => {
           webglFingerprint: 'changed',
           audioFingerprint: 'changed',
           userAgent: 'changed'
-        },
+  }
         ipAddress: '192.168.1.1',
         userId: 'user123'
       };
@@ -768,7 +776,7 @@ describe('EnhancedDeviceIdentificationService', () => {
         query: jest.fn<unknown[], unknown>().mockImplementation((sql: string) => {
           queries.push(sql);
           return Promise.resolve({ rows: [] });
-        })
+  }
       };
 
       const service = new EnhancedDeviceIdentificationService(

@@ -5,15 +5,13 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 interface TemplateCreationWizardProps {
-  graphData: unknown; // The current graph to turn into a template
-  isOpen: boolean;
+  graphData: unknown; // The current graph to turn into a template,
+  isOpen: boolean;,
   onClose: () => void;
-  onComplete: (template: ProjectTemplate) => void;
+  onComplete: (template: ProjectTemplate) => void;,
   templateManager: ProjectTemplateManager;
-}
-type WizardStep = 'basic' | 'variables' | 'customization' | 'preview' | 'publish';
-
-export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
+  type WizardStep = 'basic' | 'variables' | 'customization' | 'preview' | 'publish';
+  export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({,)
   graphData,
   isOpen,
   onClose,
@@ -22,37 +20,35 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
 }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('basic');
   const [templateData, setTemplateData] = useState<Partial<ProjectTemplate>>({)
-    name: '',
-    description: '',
-    category: '',
-    tags: [],
-    version: '1.0.0',
-    complexity_level: 'beginner',
-    estimated_time: 30,
-    prerequisites: [],
-    learning_objectives: [],
-    is_public: false,
-    is_featured: false,
-    variables: [],
-    customization_points: [],
-    graph_data: graphData,
-  });
-  const [categories, setCategories] = useState<TemplateCategory[]>([]);
+  name: '',
+  description: '',
+  category: '',
+  tags: [],
+  version: '1.0.0',
+  complexity_level: 'beginner',
+  estimated_time: 30,
+  prerequisites: [],
+  learning_objectives: [],
+  is_public: false,
+  is_featured: false,
+  variables: [],
+  customization_points: [],
+  graph_data: graphData,
+});
+  const [categories, setCategories] = useState<TemplateCategory>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   useEffect(() => {
     if (isOpen) {
       loadCategories();
       setTemplateData(prev => ({ ...prev, graph_data: graphData }));
-    }
   }, [isOpen, graphData]);
   const loadCategories = async () => {
     try {
       const cats = templateManager.getCategories();
       setCategories(cats);
     } catch (error) {
-      console.error('Failed to load categories:', error);
-    }
-  };
+  console.error('Failed to load categories:', error);
+};
   const steps: { key: WizardStep; title: string; description: string }[] = [
     { key: 'basic', title: 'Basic Information', description: 'Template name, description, and category' },
     { key: 'variables', title: 'Variables', description: 'Define configurable variables' },
@@ -64,29 +60,23 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
   const validateCurrentStep = (): boolean => {
     const newErrors: Record<string, string> = {};
     switch (currentStep) {
-    case 'basic':
-      if (!templateData.name?.trim()) {
-        newErrors.name = 'Template name is required';
-      }
-      if (!templateData.description?.trim()) {
-        newErrors.description = 'Description is required';
-      }
-      if (!templateData.category) {
-        newErrors.category = 'Category is required';
-      }
-      if (!templateData.estimated_time || templateData.estimated_time <= 0) {
-        newErrors.estimated_time = 'Estimated time must be greater than 0';
-      }
-      break;
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  case 'basic':,
+  if (!templateData.name?.trim()) {
+  newErrors.name = 'Template name is required';
+  if (!templateData.description?.trim()) {
+  newErrors.description = 'Description is required';
+  if (!templateData.category) {
+  newErrors.category = 'Category is required';
+  if (!templateData.estimated_time || templateData.estimated_time <= 0) {
+  newErrors.estimated_time = 'Estimated time must be greater than 0';
+  break;
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
   const nextStep = () => {
     if (validateCurrentStep()) {
       const nextIndex = Math.min(currentStepIndex + 1, steps.length - 1);
       setCurrentStep(steps[nextIndex].key);
-    }
   };
   const prevStep = () => {
     const prevIndex = Math.max(currentStepIndex - 1, 0);
@@ -100,77 +90,76 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
     } catch (error) {
       console.error('Failed to create template:', error);
       setErrors({ publish: 'Failed to create template. Please try again.' });
-    }
   };
   const updateTemplateData = (updates: Partial<ProjectTemplate>) => {
     setTemplateData(prev => ({ ...prev, ...updates }));
     // Clear related errors
     const newErrors = { ...errors };
     Object.keys(updates).forEach(key => {)
-      delete newErrors[key];
+  delete newErrors[key];
     });
     setErrors(newErrors);
   };
   const addVariable = () => {
-    const newVariable: TemplateVariable = {
-      id: crypto.randomUUID(),
-      name: '',
-      label: '',
-      type: 'text',
-      description: '',
-      default_value: '',
-      required: false,
-    };
+  const newVariable: TemplateVariable = {,
+  id: crypto.randomUUID(),
+  name: '',
+  label: '',
+  type: 'text',
+  description: '',
+  default_value: '',
+  required: false,
+};
     setTemplateData(prev => ({)
-      ...prev,
-      variables: [...(prev.variables || []), newVariable]
-    }));
+  ...prev,
+  variables: [...(prev.variables || []), newVariable],
+}));
   };
   const updateVariable = (index: number, updates: Partial<TemplateVariable>) => {
     setTemplateData(prev => ({)
-      ...prev,
+  ...prev,
       variables: prev.variables?.map((variable, i) => 
         i === index ? { ...variable, ...updates } : variable
       ) || []
     }));
   };
   const removeVariable = (index: number) => {
-    setTemplateData(prev => ({)
-      ...prev,
-      variables: prev.variables?.filter((_, i) => i !== index) || []
-    }));
+  setTemplateData(prev => ({)
+  ...prev,
+  variables: prev.variables?.filter((_, i) => i !== index) || [],
+}));
   };
   const addCustomizationPoint = () => {
-    const newPoint: CustomizationPoint = {
-      id: crypto.randomUUID(),
-      name: '',
-      type: 'node_properties',
-      target_nodes: [],
-      properties: [],
-      description: '',
-      ui_component: 'input',
-    };
+  const newPoint: CustomizationPoint = {,
+  id: crypto.randomUUID(),
+  name: '',
+  type: 'node_properties',
+  target_nodes: [],
+  properties: [],
+  description: '',
+  ui_component: 'input',
+};
     setTemplateData(prev => ({)
-      ...prev,
-      customization_points: [...(prev.customization_points || []), newPoint]
-    }));
+  ...prev,
+  customization_points: [...(prev.customization_points || []), newPoint],
+}));
   };
   const updateCustomizationPoint = (index: number, updates: Partial<CustomizationPoint>) => {
     setTemplateData(prev => ({)
-      ...prev,
+  ...prev,
       customization_points: prev.customization_points?.map((point, i) => 
         i === index ? { ...point, ...updates } : point
       ) || []
     }));
   };
   const removeCustomizationPoint = (index: number) => {
-    setTemplateData(prev => ({)
-      ...prev,
-      customization_points: prev.customization_points?.filter((_, i) => i !== index) || []
-    }));
+  setTemplateData(prev => ({)
+  ...prev,
+  customization_points: prev.customization_points?.filter((_, i) => i !== index) || [],
+}));
   };
   if (!isOpen) return null;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -201,21 +190,21 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
                 className={`flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`}
               >
                 <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                  index <= currentStepIndex 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 text-gray-500'
-                }`}>
+  index <= currentStepIndex
+  ? 'bg-blue-500 text-white'
+  : 'bg-gray-200 text-gray-500',
+}`}>
                   {index < currentStepIndex ? '✓' : index + 1}
                 </div>
                 <span className={`ml-2 text-sm ${
-                  index <= currentStepIndex ? 'text-gray-900' : 'text-gray-500'
-                }`}>
+  index <= currentStepIndex ? 'text-gray-900' : 'text-gray-500',
+}`}>
                   {step.title}
                 </span>
                 {index < steps.length - 1 && ()
                   <div className={`flex-1 h-0.5 mx-4 ${
-                    index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200'
-                  }`} />
+  index < currentStepIndex ? 'bg-blue-500' : 'bg-gray-200',
+}`} />
                 )}
               </div>
             ))}
@@ -299,23 +288,21 @@ export const TemplateCreationWizard: React.FC<TemplateCreationWizardProps> = ({)
 
 // Step Components
 interface BasicInfoStepProps {
-  data: Partial<ProjectTemplate>;
-  categories: TemplateCategory[];
+  data: Partial<ProjectTemplate>;,
+  categories: TemplateCategory;
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
-}
 const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors, onChange }) => {
   const [newTag, setNewTag] = useState('');
   const addTag = () => {
     if (newTag.trim() && !data.tags?.includes(newTag.trim())) {
       onChange({ tags: [...(data.tags || []), newTag.trim()] });
       setNewTag('');
-    }
   };
   const removeTag = (tag: string) => {
     onChange({ tags: data.tags?.filter(t => t !== tag) || [] });
   };
-  return ();
+  return;
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -328,8 +315,8 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             onChange={(e) => onChange({ name: e.target.value })}
             placeholder="Enter template name"
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.name ? 'border-red-300' : 'border-gray-300'
-            }`}
+  errors.name ? 'border-red-300' : 'border-gray-300',
+}`}
           />
           {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
         </div>
@@ -341,8 +328,8 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             value={data.category || ''}
             onChange={(e) => onChange({ category: e.target.value })}
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.category ? 'border-red-300' : 'border-gray-300'
-            }`}
+  errors.category ? 'border-red-300' : 'border-gray-300',
+}`}
           >
             <option value="">Select a category</option>
             {categories.map(category => ()
@@ -362,8 +349,8 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
           placeholder="Describe what this template does and when to use it"
           rows={3}
           className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            errors.description ? 'border-red-300' : 'border-gray-300'
-          }`}
+  errors.description ? 'border-red-300' : 'border-gray-300',
+}`}
         />
         {errors.description && <p className="text-sm text-red-600 mt-1">{errors.description}</p>}
       </div>
@@ -393,8 +380,8 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
             placeholder="30"
             min="1"
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              errors.estimated_time ? 'border-red-300' : 'border-gray-300'
-            }`}
+  errors.estimated_time ? 'border-red-300' : 'border-gray-300',
+}`}
           />
           {errors.estimated_time && <p className="text-sm text-red-600 mt-1">{errors.estimated_time}</p>}
         </div>
@@ -442,13 +429,12 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({ data, categories, errors,
   );
 };
 interface VariablesStepProps {
-  variables: TemplateVariable[];
+  variables: TemplateVariable;,
   onAdd: () => void;
-  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;
+  onUpdate: (index: number, updates: Partial<TemplateVariable>) => void;,
   onRemove: (index: number) => void;
-}
 const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdate, onRemove }) => {
-  return ();
+  return;
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -566,15 +552,14 @@ const VariablesStep: React.FC<VariablesStepProps> = ({ variables, onAdd, onUpdat
   );
 };
 interface CustomizationStepProps {
-  points: CustomizationPoint[];
+  points: CustomizationPoint;,
   graphData: unknown;
-  onAdd: () => void;
-  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;
+  onAdd: () => void;,
+  onUpdate: (index: number, updates: Partial<CustomizationPoint>) => void;,
   onRemove: (index: number) => void;
-}
 const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData, onAdd, onUpdate, onRemove }) => {
   const _____availableNodes = graphData?.nodes?.map((node: Error) => node.id) || [];
-  return ();
+  return;
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -673,9 +658,8 @@ const CustomizationStep: React.FC<CustomizationStepProps> = ({ points, graphData
 };
 interface PreviewStepProps {
   template: ProjectTemplate;
-}
 const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
-  return ();
+  return;
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Template Preview</h3>
       <div className="bg-gray-50 rounded-lg p-6">
@@ -730,12 +714,11 @@ const PreviewStep: React.FC<PreviewStepProps> = ({ template }) => {
   );
 };
 interface PublishStepProps {
-  data: Partial<ProjectTemplate>;
+  data: Partial<ProjectTemplate>;,
   errors: Record<string, string>;
   onChange: (updates: Partial<ProjectTemplate>) => void;
-}
 const PublishStep: React.FC<PublishStepProps> = ({ data, errors, onChange }) => {
-  return ();
+  return;
     <div className="space-y-6">
       <h3 className="text-lg font-medium text-gray-900">Publish Template</h3>
       <div className="space-y-4">

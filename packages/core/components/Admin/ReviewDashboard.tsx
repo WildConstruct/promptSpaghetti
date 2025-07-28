@@ -36,34 +36,30 @@ interface ReviewDashboardProps {
   onReviewSelect?: (review: ReviewItem) => void;
   onAssignmentAction?: (action: AssignmentAction) => void;
   className?: string;
-}
-interface AssignmentAction {
-  type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';
+  interface AssignmentAction {
+  type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';,
   reviewId: string;
   reviewerId?: string;
   data?: unknown;
-}
-interface DashboardSummary {
-  totalActiveReviews: number;
+  interface DashboardSummary {
+  totalActiveReviews: number;,
   pendingAssignments: number;
-  overdueReviews: number;
+  overdueReviews: number;,
   escalatedReviews: number;
-  averageCompletionTime: number;
+  averageCompletionTime: number;,
   reviewerUtilization: number;
-  qualityScore: number;
+  qualityScore: number;,
   throughput: number;
-}
-interface DashboardFilters {
-  reviewType?: ReviewType[];
-  status?: ReviewStatus[];
-  priority?: ReviewPriority[];
-  assignedTo?: string[];
-  dateRange?: {
-    startDate: Date;
-    endDate: Date;
-  };
+  interface DashboardFilters {
+  reviewType?: ReviewType;
+  status?: ReviewStatus;
+  priority?: ReviewPriority;
+  assignedTo?: string;
+  dateRange?: {,
+  startDate: Date;,
+  endDate: Date;
+};
   searchQuery?: string;
-}
 
 export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
   onReviewSelect,
@@ -72,31 +68,31 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
 }) => {
   // State management
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [activeReviews, setActiveReviews] = useState<ReviewItem[]>([]);
-  const [pendingAssignments, _____setPendingAssignments] = useState<ReviewAssignment[]>([]);
-  const [escalatedReviews, _____setEscalatedReviews] = useState<ReviewItem[]>([]);
-  const [overdueReviews, _____setOverdueReviews] = useState<ReviewItem[]>([]);
-  const [recentDecisions, _____setRecentDecisions] = useState<ReviewDecision[]>([]);
+  const [activeReviews, setActiveReviews] = useState<ReviewItem>([]);
+  const [pendingAssignments, _____setPendingAssignments] = useState<ReviewAssignment>([]);
+  const [escalatedReviews, _____setEscalatedReviews] = useState<ReviewItem>([]);
+  const [overdueReviews, _____setOverdueReviews] = useState<ReviewItem>([]);
+  const [recentDecisions, _____setRecentDecisions] = useState<ReviewDecision>([]);
   const [filters, setFilters] = useState<DashboardFilters>({});
   const [selectedTab, setSelectedTab] = useState<'overview' | 'queue' | 'assignments' | 'analytics'>('overview');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   // Load dashboard data
   const loadDashboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-      // Simulate API calls - would be replaced with actual service calls
-      const mockSummary: DashboardSummary = {
-        totalActiveReviews: 156,
-        pendingAssignments: 23,
-        overdueReviews: 8,
-        escalatedReviews: 5,
-        averageCompletionTime: 18.5, // hours
-        reviewerUtilization: 78,
-        qualityScore: 92,
-        throughput: 45 // reviews per day,
-      };
-      const mockActiveReviews: ReviewItem[] = [
+  try {
+  setLoading(true);
+  // Simulate API calls - would be replaced with actual service calls
+  const mockSummary: DashboardSummary = {,
+  totalActiveReviews: 156,
+  pendingAssignments: 23,
+  overdueReviews: 8,
+  escalatedReviews: 5,
+  averageCompletionTime: 18.5, // hours,
+  reviewerUtilization: 78,
+  qualityScore: 92,
+  throughput: 45 // reviews per day,
+};
+      const mockActiveReviews: ReviewItem = [
         {
           reviewId: 'FR-12345',
           reviewType: 'fraud_case',
@@ -108,15 +104,15 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
           description: 'Suspicious payment pattern detected for user account',
           data: { fraudScore: 87, transactionAmount: 2500 },
           metadata: {,
-            sourceData: {},
+  sourceData: {},
             businessContext: 'Payment fraud investigation',
             riskLevel: 'high',
             tags: ['payment', 'fraud', 'high-value'],
             flagged: true,
             estimatedReviewTime: 45,
-            complexity: 'complex',
-          },
-          assignedTo: 'reviewer-001',
+            complexity: 'complex';
+  },
+  assignedTo: 'reviewer-001',
           assignedAt: new Date('2025-01-20T10:00:00Z'),
           reviewCriteria: [],
           decisions: [],
@@ -130,16 +126,14 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
           dependencies: [],
           requiresConsensus: false,
           autoEscalationEnabled: true,
-        }
         // More mock reviews would be added here
       ];
       setSummary(mockSummary);
       setActiveReviews(mockActiveReviews);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
-    } finally {
+  console.error('Failed to load dashboard data:', error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const refreshDashboard = useCallback(async () => {
     setRefreshing(true);
@@ -154,13 +148,10 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
     let filtered = activeReviews;
     if (filters.reviewType?.length) {
       filtered = filtered.filter(review => filters.reviewType!.includes(review.reviewType));
-    }
     if (filters.status?.length) {
       filtered = filtered.filter(review => filters.status!.includes(review.status));
-    }
     if (filters.priority?.length) {
       filtered = filtered.filter(review => filters.priority!.includes(review.priority));
-    }
     if (filters.searchQuery) {
       const query = filters.searchQuery.toLowerCase();
       filtered = filtered.filter(review =>)
@@ -168,7 +159,6 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
         review.description.toLowerCase().includes(query) ||
         review.reviewId.toLowerCase().includes(query)
       );
-    }
     return filtered;
   }, [activeReviews, filters]);
   // Event handlers
@@ -182,7 +172,7 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
   if (loading) {
-    return ();
+    return;
       <div className={`review-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
@@ -190,8 +180,7 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`review-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -277,15 +266,15 @@ export const ReviewDashboard: React.FC<ReviewDashboardProps> = ({)
 };
 
 // Overview Tab Component
-const OverviewTab: React.FC<{
+const OverviewTab: React.FC<{,
   summary: DashboardSummary | null;
-  escalatedReviews: ReviewItem[];
-  overdueReviews: ReviewItem[];
-  recentDecisions: ReviewDecision[];
+  escalatedReviews: ReviewItem;,
+  overdueReviews: ReviewItem;
+  recentDecisions: ReviewDecision;,
   onReviewSelect: (review: ReviewItem) => void;
 }> = ({ summary, escalatedReviews, overdueReviews, recentDecisions, onReviewSelect }) => {
   if (!summary) return <div>Loading...</div>;
-  return ();
+  return;
     <div className="overview-tab">
       {/* Summary Cards */}
       <div className="summary-cards">
@@ -361,14 +350,14 @@ const OverviewTab: React.FC<{
 };
 
 // Queue Tab Component
-const QueueTab: React.FC<{
-  reviews: ReviewItem[];
-  filters: DashboardFilters;
-  onFilterChange: (filters: Partial<DashboardFilters>) => void;
-  onReviewSelect: (review: ReviewItem) => void;
+const QueueTab: React.FC<{,
+  reviews: ReviewItem;
+  filters: DashboardFilters;,
+  onFilterChange: (filters: Partial<DashboardFilters>) => void;,
+  onReviewSelect: (review: ReviewItem) => void;,
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, filters, onFilterChange, onReviewSelect, onAssignmentAction }) => {
-  return ();
+  return;
     <div className="queue-tab">
       {/* Filters */}
       <ReviewFilters
@@ -386,14 +375,14 @@ const QueueTab: React.FC<{
 };
 
 // Supporting Components
-const SummaryCard: React.FC<{
+const SummaryCard: React.FC<{,
   title: string;
-  value: string | number;
+  value: string | number;,
   icon: React.ReactNode;
   trend?: { value: number; direction: 'up' | 'down' };
   className?: string;
 }> = ({ title, value, icon, trend, className = '' }) => {
-  return ();
+  return;
     <div className={`summary-card ${className}`}>}
       <div className="card-header">
         <span className="card-icon">{icon}</span>
@@ -409,14 +398,14 @@ const SummaryCard: React.FC<{
     </div>
   );
 };
-const PrioritySection: React.FC<{
+const PrioritySection: React.FC<{,
   title: string;
-  icon: React.ReactNode;
-  reviews: ReviewItem[];
+  icon: React.ReactNode;,
+  reviews: ReviewItem;
   onReviewSelect: (review: ReviewItem) => void;
   className?: string;
 }> = ({ title, icon, reviews, onReviewSelect, className = '' }) => {
-  return ();
+  return;
     <div className={`priority-section ${className}`}>}
       <div className="section-header">
         {icon}
@@ -435,18 +424,18 @@ const PrioritySection: React.FC<{
     </div>
   );
 };
-const ReviewSummaryCard: React.FC<{
+const ReviewSummaryCard: React.FC<{,
   review: ReviewItem;
   onClick: () => void;
 }> = ({ review, onClick }) => {
   const priorityColors = {
-    emergency: 'bg-red-500',
-    urgent: 'bg-orange-500',
-    high: 'bg-yellow-500',
-    medium: 'bg-blue-500',
-    low: 'bg-gray-500',
-  };
-  return ();
+  emergency: 'bg-red-500',
+  urgent: 'bg-orange-500',
+  high: 'bg-yellow-500',
+  medium: 'bg-blue-500',
+  low: 'bg-gray-500',
+};
+  return;
     <div className="review-summary-card" onClick={onClick}>
       <div className="card-content">
         <div className="review-header">
@@ -470,32 +459,32 @@ const ReviewSummaryCard: React.FC<{
 };
 
 // Placeholder components for other tabs
-const AssignmentsTab: React.FC<{
-  pendingAssignments: ReviewAssignment[];
+const AssignmentsTab: React.FC<{,
+  pendingAssignments: ReviewAssignment;
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ pendingAssignments, onAssignmentAction }) => {
-  return ();
+  return;
     <div className="assignments-tab">
       <h2>Pending Assignments</h2>
       {/* Assignment management interface would go here */}
     </div>
   );
 };
-const AnalyticsTab: React.FC<{
+const AnalyticsTab: React.FC<{,
   summary: DashboardSummary | null;
 }> = ({ summary }) => {
-  return ();
+  return;
     <div className="analytics-tab">
       <h2>Review Analytics</h2>
       {/* Analytics charts and reports would go here */}
     </div>
   );
 };
-const ReviewFilters: React.FC<{
+const ReviewFilters: React.FC<{,
   filters: DashboardFilters;
   onFilterChange: (filters: Partial<DashboardFilters>) => void;
 }> = ({ filters, onFilterChange }) => {
-  return ();
+  return;
     <div className="review-filters">
       <div className="filter-row">
         <div className="search-box">
@@ -515,12 +504,12 @@ const ReviewFilters: React.FC<{
     </div>
   );
 };
-const ReviewList: React.FC<{
-  reviews: ReviewItem[];
-  onReviewSelect: (review: ReviewItem) => void;
+const ReviewList: React.FC<{,
+  reviews: ReviewItem;
+  onReviewSelect: (review: ReviewItem) => void;,
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ reviews, onReviewSelect, onAssignmentAction }) => {
-  return ();
+  return;
     <div className="review-list">
       {reviews.map(review => ()
         <ReviewListItem
@@ -533,12 +522,12 @@ const ReviewList: React.FC<{
     </div>
   );
 };
-const ReviewListItem: React.FC<{
+const ReviewListItem: React.FC<{,
   review: ReviewItem;
-  onSelect: () => void;
+  onSelect: () => void;,
   onAssignmentAction: (action: AssignmentAction) => void;
 }> = ({ review, onSelect, onAssignmentAction }) => {
-  return ();
+  return;
     <div className="review-list-item" onClick={onSelect}>
       {/* Review item content would go here */}
       <div className="review-summary">

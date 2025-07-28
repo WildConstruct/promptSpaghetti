@@ -12,9 +12,7 @@ import { Workspace, WorkspaceWithMembership } from '../../types/workspace';
 interface WorkspaceManagerProps {
   userId: string;
   onWorkspaceSelect?: (workspace: Workspace) => void;
-}
-
-export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
+  export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({,)
   userId,
   onWorkspaceSelect
 }) => {
@@ -43,9 +41,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       setShowCreateModal(false);
       onWorkspaceSelect?.(newWorkspace);
     } catch (error) {
-      console.error('Failed to create workspace:', error);
-    }
-  };
+  console.error('Failed to create workspace:', error);
+};
   const handleInviteUser = async (data: { userId: string; role: string }) => {
     if (!selectedWorkspace) return;
     try {
@@ -53,9 +50,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       setShowInviteModal(false);
       // Optionally refresh or show success message
     } catch (error) {
-      console.error('Failed to invite user:', error);
-    }
-  };
+  console.error('Failed to invite user:', error);
+};
   const handleWorkspaceUpdate = async (updates: { name?: string; description?: string }) => {
     if (!selectedWorkspace) return;
     try {
@@ -63,9 +59,8 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       setSelectedWorkspace(updatedWorkspace);
       setShowSettings(false);
     } catch (error) {
-      console.error('Failed to update workspace:', error);
-    }
-  };
+  console.error('Failed to update workspace:', error);
+};
   const handleWorkspaceArchive = async () => {
     if (!selectedWorkspace) return;
     try {
@@ -74,14 +69,13 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
       setShowSettings(false);
       refreshWorkspaces();
     } catch (error) {
-      console.error('Failed to archive workspace:', error);
-    }
-  };
+  console.error('Failed to archive workspace:', error);
+};
   const canManageWorkspace = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
   const canInviteUsers = selectedWorkspace?.role_permissions && ;
     (selectedWorkspace.role_permissions & (1 << 15)) !== 0; // USER_INVITE
-  return ();
+  return;
     <div className="workspace-manager">
       <div className="workspace-manager__header">
         <h2>Workspaces</h2>
@@ -151,7 +145,6 @@ export const WorkspaceManager: React.FC<WorkspaceManagerProps> = ({)
                     {selectedWorkspace.membership?.joined_at 
                       ? new Date(selectedWorkspace.membership.joined_at).toLocaleDateString()
                       : 'N/A'
-                    }
                   </span>
                 </div>
               </div>

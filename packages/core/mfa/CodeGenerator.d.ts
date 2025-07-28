@@ -13,17 +13,18 @@
  * - Anti-enumeration protections
  */
 import { EventEmitter } from 'events';
+
 export interface CodeGenerationOptions {
     length: number;
     format: 'numeric' | 'alphanumeric' | 'alphabetic';
     excludeAmbiguous: boolean;
     customAlphabet?: string;
-}
+
 export interface CodeValidationOptions {
     allowedAttempts: number;
     timeWindowMinutes: number;
     constantTimeValidation: boolean;
-}
+
 export interface VerificationCodeData {
     id: string;
     codeHash: string;
@@ -37,13 +38,12 @@ export interface VerificationCodeData {
     maxAttempts: number;
     used: boolean;
     metadata?: Record<string, any>;
-}
+
 export interface ValidationResult {
     valid: boolean;
     code?: VerificationCodeData;
     reason?: 'expired' | 'used' | 'invalid' | 'rate_limited' | 'not_found';
     attemptsRemaining?: number;
-}
 declare const SECURITY_CONFIG: {
     readonly HASH_ALGORITHM: "sha256";
     readonly HASH_ITERATIONS: 100000;
@@ -102,7 +102,6 @@ export declare class SecureCodeGenerator extends EventEmitter {
     private constantTimeValidation;
     private createValidationResult;
     private sleep;
-}
 /**
  * High-level factory for common verification code scenarios
  */
@@ -141,7 +140,7 @@ export declare class VerificationCodeFactory {
      * Validate any verification code
      */
     validateVerificationCode(inputCode: string, storedCode: VerificationCodeData): Promise<ValidationResult>;
-}
+
 export declare const codeGenerator: SecureCodeGenerator;
 export declare const verificationCodeFactory: VerificationCodeFactory;
 export declare const CodeUtils: {

@@ -13,6 +13,7 @@
  * - Automated segment lifecycle management
  */
 import { ConversionCohort, UserSegment, FlexibleConversionEvent, BehaviorPattern, DropOffPoint, FunnelSegmentMetrics } from './ConversionDataModel';
+
 export interface CohortAnalysisResult {
     cohortId: string;
     analysisDate: number;
@@ -48,7 +49,7 @@ export interface CohortAnalysisResult {
         consistency: number;
         confidence: number;
     };
-}
+
 export interface SegmentAnalysisResult {
     segmentId: string;
     analysisDate: number;
@@ -78,7 +79,7 @@ export interface SegmentAnalysisResult {
         personalization: PersonalizationSuggestion[];
         interventions: InterventionRecommendation[];
     };
-}
+
 export interface PathwayAnalysis {
     pathway: string[];
     frequency: number;
@@ -86,27 +87,27 @@ export interface PathwayAnalysis {
     averageTimeToComplete: number;
     averageValue: number;
     dropOffPoints: string[];
-}
+
 export interface DropOffAnalysis {
     totalDropOffs: number;
     dropOffRate: number;
     topDropOffPoints: DropOffPoint[];
     recoveryOpportunities: RecoveryOpportunity[];
     seasonalPatterns: SeasonalDropOff[];
-}
+
 export interface RecoveryOpportunity {
     dropOffPoint: string;
     potentialRecovery: number;
     recommendedActions: string[];
     estimatedImpact: number;
     implementationComplexity: 'low' | 'medium' | 'high';
-}
+
 export interface SeasonalDropOff {
     period: string;
     dropOffMultiplier: number;
     affectedSegments: string[];
     confidence: number;
-}
+
 export interface EngagementPattern {
     patternType: 'temporal' | 'behavioral' | 'contextual' | 'value-based';
     pattern: string;
@@ -115,7 +116,7 @@ export interface EngagementPattern {
     conversionImpact: number;
     retentionImpact: number;
     recommendations: string[];
-}
+
 export interface ValueSegmentation {
     segments: Array<{,
         name: string;
@@ -133,7 +134,7 @@ export interface ValueSegmentation {
         standardDeviation: number;
         percentiles: Map<number, number>;
     };
-}
+
 export interface CohortComparison {
     cohortId: string;
     comparisonPeriod: string;
@@ -142,7 +143,7 @@ export interface CohortComparison {
     valueDelta: number;
     significance: number;
     insights: string[];
-}
+
 export interface CohortBenchmark {
     benchmarkCohortId: string;
     benchmarkName: string;
@@ -154,7 +155,7 @@ export interface CohortBenchmark {
     };
     relativePerformance: number;
     insights: string[];
-}
+
 export interface IndustryBenchmark {
     industry: string;
     retentionBenchmarks: Map<number, number>;
@@ -166,7 +167,7 @@ export interface IndustryBenchmark {
     };
     dataSource: string;
     lastUpdated: number;
-}
+
 export interface InterventionPoint {
     day: number;
     userCount: number;
@@ -178,14 +179,14 @@ export interface InterventionPoint {
         costOfIntervention: number;
         roi: number;
     };
-}
+
 export interface DemographicBreakdown {
     ageGroups: Map<string, number>;
     geoDistribution: Map<string, number>;
     deviceTypes: Map<string, number>;
     acquisitionChannels: Map<string, number>;
     accountTypes: Map<string, number>;
-}
+
 export interface BehavioralProfile {
     averageSessionsPerUser: number;
     averageSessionDuration: number;
@@ -194,7 +195,7 @@ export interface BehavioralProfile {
     activityPatterns: BehaviorPattern[];
     preferredTimes: Map<string, number>;
     contentPreferences: Map<string, number>;
-}
+
 export interface ValueDistribution {
     totalValue: number;
     averageValue: number;
@@ -203,14 +204,14 @@ export interface ValueDistribution {
     highValueThreshold: number;
     highValueUsers: number;
     valueGrowthRate: number;
-}
+
 export interface SegmentConversionMetrics {
     overallConversionRate: number;
     conversionsByFunnel: Map<string, number>;
     averageTimeToConvert: number;
     conversionValueDistribution: ValueDistribution;
     topConversionPaths: PathwayAnalysis[];
-}
+
 export interface SegmentEngagementMetrics {
     averageEngagementScore: number;
     sessionMetrics: {,
@@ -226,7 +227,7 @@ export interface SegmentEngagementMetrics {
         likeRate: number;
         commentRate: number;
     };
-}
+
 export interface SegmentRevenueMetrics {
     totalRevenue: number;
     averageRevenuePerUser: number;
@@ -235,7 +236,7 @@ export interface SegmentRevenueMetrics {
     monthlyRecurringRevenue?: number;
     customerLifetimeValue: number;
     paybackPeriod: number;
-}
+
 export interface SegmentRetentionMetrics {
     retentionRates: Map<number, number>;
     churnRate: number;
@@ -243,7 +244,7 @@ export interface SegmentRetentionMetrics {
     retentionCohorts: Map<string, number>;
     seasonalRetention: Map<string, number>;
     retentionByChannel: Map<string, number>;
-}
+
 export interface SegmentTransition {
     fromSegment: string;
     toSegment: string;
@@ -251,7 +252,7 @@ export interface SegmentTransition {
     averageTimeToTransition: number;
     triggerEvents: string[];
     transitionValue: number;
-}
+
 export interface SegmentOptimization {
     area: string;
     currentPerformance: number;
@@ -265,7 +266,7 @@ export interface SegmentOptimization {
     };
     implementationEffort: 'low' | 'medium' | 'high';
     priority: 'high' | 'medium' | 'low';
-}
+
 export interface TargetingRecommendation {
     channel: string;
     targetingCriteria: string[];
@@ -275,7 +276,7 @@ export interface TargetingRecommendation {
     estimatedRevenue: number;
     roi: number;
     confidence: number;
-}
+
 export interface PersonalizationSuggestion {
     feature: string;
     personalizationType: 'content' | 'ui' | 'messaging' | 'pricing' | 'timing';
@@ -283,7 +284,7 @@ export interface PersonalizationSuggestion {
     expectedImpact: number;
     implementationComplexity: 'low' | 'medium' | 'high';
     dataRequirements: string[];
-}
+
 export interface InterventionRecommendation {
     triggerCondition: string;
     interventionType: 'email' | 'push' | 'in_app' | 'discount' | 'support';
@@ -292,7 +293,6 @@ export interface InterventionRecommendation {
     expectedResponse: number;
     cost: number;
     priority: 'high' | 'medium' | 'low';
-}
 /**
  * Cohort and Segment Manager
  * Manages the complete lifecycle of cohorts and segments
@@ -382,7 +382,7 @@ export declare class CohortSegmentManager {
     private generateCrossSegmentRecommendations;
     private generateCohortId;
     private generateSegmentId;
-}
+
 export interface AnalysisOptions {
     useCache?: boolean;
     includePredictions?: boolean;
@@ -392,14 +392,14 @@ export interface AnalysisOptions {
         end: number;
     };
     customMetrics?: string[];
-}
+
 export interface CrossSegmentInsights {
     segmentOverlaps: SegmentOverlap[];
     performanceComparisons: PerformanceComparison[];
     cohortTrends: CohortTrend[];
     opportunityAnalysis: OptimizationOpportunity[];
     recommendations: CrossSegmentRecommendation[];
-}
+
 export interface SegmentOverlap {
     segmentIds: string[];
     overlapSize: number;
@@ -410,20 +410,20 @@ export interface SegmentOverlap {
         retentionRate: number;
         averageValue: number;
     };
-}
+
 export interface PerformanceComparison {
     segmentIds: string[];
     metrics: Record<string, number>;
     significance: number;
     insights: string[];
-}
+
 export interface CohortTrend {
     metric: string;
     trend: 'improving' | 'declining' | 'stable';
     magnitude: number;
     confidence: number;
     affectedCohorts: string[];
-}
+
 export interface OptimizationOpportunity {
     area: string;
     segments: string[];
@@ -431,14 +431,13 @@ export interface OptimizationOpportunity {
     potentialImprovement: number;
     estimatedImpact: number;
     implementationEffort: 'low' | 'medium' | 'high';
-}
+
 export interface CrossSegmentRecommendation {
     type: 'consolidation' | 'split' | 'targeting' | 'optimization';
     description: string;
     affectedSegments: string[];
     expectedImpact: number;
     priority: 'high' | 'medium' | 'low';
-}
 /**
  * Factory function to create CohortSegmentManager
  */

@@ -5,6 +5,7 @@
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface PolicyRule {
     id: string;
     name: string;
@@ -13,7 +14,7 @@ export interface PolicyRule {
     action: string;
     enabled: boolean;
     priority: number;
-}
+
 export interface MarketplacePolicyTemplate {
     templateId: string;
     name: string;
@@ -27,10 +28,10 @@ export interface MarketplacePolicyTemplate {
         timeframes: Record<string, number>;
         actions: string[];
     };
-}
+
 export interface MarketplacePolicyConfigProps {
     className?: string;
-}
+
 export declare const MarketplacePolicyConfig: React.FC<MarketplacePolicyConfigProps>;
 export default MarketplacePolicyConfig;
 //# sourceMappingURL=MarketplacePolicyConfig.d.ts.map

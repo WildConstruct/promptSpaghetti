@@ -15,11 +15,11 @@ export interface NodeAnnotation {
     status: 'open' | 'in_progress' | 'resolved' | 'approved' | 'rejected' | 'on_hold';
     timestamp: string;
     lastModified: string;
-    attachments: NodeAnnotationAttachment[];
-    replies: NodeAnnotationReply[];
-    tags: string[];
+    attachments: NodeAnnotationAttachment;
+    replies: NodeAnnotationReply;
+    tags: string;
     visibility: 'public' | 'private' | 'team_only' | 'director_only';
-    linkedAnnotations: string[];
+    linkedAnnotations: string;
     estimatedTime?: number;
     deadline?: string;
     assignee?: VFXUser;
@@ -39,7 +39,7 @@ export interface NodeAnnotationReply {
     author: VFXUser;
     timestamp: string;
     reactions: {
-        [emoji: string]: VFXUser[];
+        [emoji: string]: VFXUser;
     };
 }
 export interface VFXUser {
@@ -53,7 +53,7 @@ export interface NodeAnnotationSystemProps {
     nodeId: string;
     nodeName: string;
     nodeType: string;
-    annotations: NodeAnnotation[];
+    annotations: NodeAnnotation;
     currentUser: VFXUser;
     onAnnotationCreate: (annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'>) => void;
     onAnnotationUpdate: (annotationId: string, updates: Partial<NodeAnnotation>) => void;

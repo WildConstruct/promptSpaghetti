@@ -26,6 +26,7 @@ import {
   CorrelationRule,
   ResponseAutomation
 } from '../SecurityAlertingAnalytics';
+
 export interface UseSecurityAlertingConfigOptions {
     configId?: string;
     autoSave?: boolean;
@@ -36,13 +37,13 @@ export interface UseSecurityAlertingConfigOptions {
     onValidationError?: (errors: ValidationError[]) => void;
     onSaveSuccess?: () => void;
     onSaveError?: (error: Error) => void;
-}
+
 export interface ValidationError {
     field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
     code: string;
-}
+
 export interface ConfigurationState {
     config: SecurityAlertingConfig;
     originalConfig: SecurityAlertingConfig;
@@ -55,7 +56,7 @@ export interface ConfigurationState {
     validationWarnings: ValidationError[];
     securityScore: number;
     configVersion: number;
-}
+
 export interface UseSecurityAlertingConfigReturn {
     state: ConfigurationState;
     actions: {,
@@ -82,7 +83,7 @@ export interface UseSecurityAlertingConfigReturn {
         };
         getRecommendations: () => ConfigRecommendation[];
     };
-}
+
 export interface ConfigRecommendation {
     field: string;
     current: any;
@@ -90,7 +91,6 @@ export interface ConfigRecommendation {
     reason: string;
     impact: 'security' | 'performance' | 'compliance';
     priority: 'high' | 'medium' | 'low';
-}
 /**
  * Hook for managing security alerting configuration
  */

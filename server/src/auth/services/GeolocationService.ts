@@ -4,6 +4,7 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
+}
 export interface GeolocationData {
   country: string;
   countryCode: string;
@@ -15,6 +16,7 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
+}
   };
   isp?: string;
   organization?: string;
@@ -27,6 +29,7 @@ export interface GeolocationData {
   source: 'cloudflare' | 'ipapi' | 'maxmind' | 'cache' | 'fallback';
 }
 
+}
 export interface LocationHistory {
   userId: string;
   location: GeolocationData;
@@ -35,7 +38,9 @@ export interface LocationHistory {
   frequency: number;
   isTypical: boolean;
 }
+}
 
+}
 export interface GeolocationConfig {
   // API configurations
   ipApiKey?: string;
@@ -51,6 +56,7 @@ export interface GeolocationConfig {
   newLocationThresholdKm: number;
   typicalLocationUpdateThreshold: number;
   suspiciousLocationPatterns: string[];
+}
 }
 
 export class GeolocationService {
@@ -95,6 +101,7 @@ export class GeolocationService {
       'x-forwarded-for'?: string;
     }
   ): Promise<GeolocationData> {
+
     // Validate IP address
     if (!this.isValidIP(ipAddress)) {
       return this.createFallbackGeolocation(ipAddress, fallbackHeaders);
@@ -150,6 +157,7 @@ export class GeolocationService {
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
   }> {
+
     // Get user's location history
     const locationHistory = await this.getUserLocationHistory(userId);
     
@@ -174,6 +182,7 @@ export class GeolocationService {
    * Get user's historical locations
    */
   async getUserLocationHistory(userId: string): Promise<LocationHistory[]> {
+
     const result = await this.db.query(`
       SELECT 
         location_data,
@@ -264,6 +273,7 @@ export class GeolocationService {
     location: GeolocationData,
     analysis: { isNew: boolean; isTypical: boolean }
   ): Promise<void> {
+
     const locationKey = this.getLocationKey(location);
     
     // Check if location already exists for user
@@ -325,6 +335,7 @@ export class GeolocationService {
    * Get geolocation from IP-API service
    */
   private async getLocationFromIPAPI(ipAddress: string): Promise<GeolocationData | null> {
+
     try {
       // Note: In production, you'd use the Pro version for HTTPS and higher limits
       const response = await fetch(
@@ -370,6 +381,7 @@ export class GeolocationService {
    * Get geolocation from MaxMind (placeholder - requires MaxMind SDK)
    */
   private async getLocationFromMaxMind(ipAddress: string): Promise<GeolocationData | null> {
+
     // Placeholder implementation
     // In production, you would use the MaxMind Node.js SDK
     console.log(`MaxMind lookup for ${ipAddress} - not implemented`);
@@ -423,6 +435,7 @@ export class GeolocationService {
    * Cache geolocation data in Redis
    */
   private async cacheGeolocation(ipAddress: string, data: GeolocationData): Promise<void> {
+
     const cacheKey = `geolocation:${ipAddress}`;
     const expirySeconds = this.config.cacheExpiryHours * 3600;
     
@@ -433,6 +446,7 @@ export class GeolocationService {
    * Get cached geolocation data from Redis
    */
   private async getCachedGeolocation(ipAddress: string): Promise<GeolocationData | null> {
+
     const cacheKey = `geolocation:${ipAddress}`;
     const cached = await this.redis.get(cacheKey);
     
@@ -541,6 +555,7 @@ export class GeolocationService {
    * Initialize database tables for geolocation tracking
    */
   async initializeSchema(): Promise<void> {
+
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS user_location_history (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -554,7 +569,7 @@ export class GeolocationService {
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW(),
         UNIQUE(user_id, location_key)
-      )
+
     `);
 
     await this.db.query(`

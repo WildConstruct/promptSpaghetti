@@ -9,7 +9,7 @@ import { useGraphStore } from '../graphStore';
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: jest.fn<unknown[], unknown>()
+  useGraphStore: jest.fn<unknown, unknown>(),
 }));
 
 // Mock external dependencies
@@ -19,13 +19,13 @@ jest.mock('reactflow', () => ({)
   Background: () => <div>Background</div>,
   Controls: () => <div>Controls</div>,
   MiniMap: () => <div>MiniMap</div>,
-  useReactFlow: () => ({),
-    fitView: jest.fn<unknown[], unknown>(),
-    setNodes: jest.fn<unknown[], unknown>(),
-    setEdges: jest.fn<unknown[], unknown>()
-  }),
+  useReactFlow: () => ({,)
+  fitView: jest.fn<unknown, unknown>(),
+  setNodes: jest.fn<unknown, unknown>(),
+  setEdges: jest.fn<unknown, unknown>(),
+}),
   useViewport: () => ({ x: 0, y: 0, zoom: 1 }),
-  addEdge: jest.fn<unknown[], unknown>()
+  addEdge: jest.fn<unknown, unknown>()
 }));
 
 // Mock other components
@@ -70,10 +70,10 @@ jest.mock('../nodeSchemas', () => ({)
   nodeSchemas: {}
 }));
 jest.mock('../utils/canvasOptimization', () => ({)
-  useCanvasOptimization: () => ({),
-    optimizer: {},
+  useCanvasOptimization: () => ({,)
+  optimizer: {},
     metrics: { fps: 60, visibleNodes: 10 },
-    isPerformanceGood: true,
+    isPerformanceGood: true;
   }),
   CanvasOptimizer: {}
 }));
@@ -126,9 +126,8 @@ jest.mock('../components/Modal/SettingsModal', () => ({)
 jest.mock('../components/ContextualHelp', () => ({)
   ContextualHelpSystem: () => <div>ContextualHelpSystem</div>,
   helpContentManager: {,
-    updateProgress: jest.fn<unknown[], unknown>(),
-    markContentViewed: jest.fn<unknown[], unknown>()
-  }
+  updateProgress: jest.fn<unknown, unknown>(),
+  markContentViewed: jest.fn<unknown, unknown>(),
 }));
 jest.mock('../components/TemplateDialogs/SaveTemplateDialog', () => ({)
   SaveTemplateDialog: () => <div>SaveTemplateDialog</div>,
@@ -209,33 +208,33 @@ jest.mock('../PreviewModal', () => ({)
   PreviewModal: () => <div>PreviewModal</div>,
 }));
 jest.mock('../usePreviewSeeds', () => ({)
-  usePreviewSeeds: () => ({),
-    runPreview: jest.fn<unknown[], unknown>(),
-    previewResults: [],
-    previewLoading: false,
-    previewError: null,
-    cancelPreview: jest.fn<unknown[], unknown>()
-  })
+  usePreviewSeeds: () => ({,)
+  runPreview: jest.fn<unknown, unknown>(),
+  previewResults: [],
+  previewLoading: false,
+  previewError: null,
+  cancelPreview: jest.fn<unknown, unknown>(),
+}
 }));
 jest.mock('../hooks/useValidation', () => ({)
-  useValidation: () => ({),
-    errors: [],
-    validateGraph: jest.fn<unknown[], unknown>()
-  })
+  useValidation: () => ({,)
+  errors: [],
+  validateGraph: jest.fn<unknown, unknown>(),
+}
 }));
 jest.mock('../hooks/useAutosave', () => ({)
-  useAutosave: () => ({),
-    showRestorePrompt: false,
-    restoreDraft: jest.fn<unknown[], unknown>(),
-    setShowRestorePrompt: jest.fn<unknown[], unknown>()
-  })
+  useAutosave: () => ({,)
+  showRestorePrompt: false,
+  restoreDraft: jest.fn<unknown, unknown>(),
+  setShowRestorePrompt: jest.fn<unknown, unknown>(),
+}
 }));
 jest.mock('../hooks/useNodeUtils', () => ({)
-  useNodeUtils: () => ({),
-    addNode: jest.fn<unknown[], unknown>(),
-    updateNode: jest.fn<unknown[], unknown>(),
-    removeNode: jest.fn<unknown[], unknown>()
-  })
+  useNodeUtils: () => ({,)
+  addNode: jest.fn<unknown, unknown>(),
+  updateNode: jest.fn<unknown, unknown>(),
+  removeNode: jest.fn<unknown, unknown>(),
+}
 }));
 const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphStore>;
 describe('GraphEditor Save Functionality', () => {
@@ -244,14 +243,14 @@ describe('GraphEditor Save Functionality', () => {
     edges: [],
     currentProject: null,
     hasUnsavedChanges: false,
-    newProject: jest.fn<unknown[], unknown>(),
-    markProjectModified: jest.fn<unknown[], unknown>(),
-    saveAsTemplate: jest.fn<unknown[], unknown>(),
-    applyTemplate: jest.fn<unknown[], unknown>(),
+    newProject: jest.fn<unknown, unknown>(),
+    markProjectModified: jest.fn<unknown, unknown>(),
+    saveAsTemplate: jest.fn<unknown, unknown>(),
+    applyTemplate: jest.fn<unknown, unknown>(),
     // Add other required store properties
     stickyNotes: [],
     annotations: {,
-      stickyNotes: [],
+  stickyNotes: [],
       nodeLabels: {},
       nodeLabelConfigs: {},
       regionGroups: [],
@@ -261,65 +260,64 @@ describe('GraphEditor Save Functionality', () => {
       regionGroupPreferences: {},
       connectionAnnotationPreferences: {},
       metadata: {,
-        author: 'Test',
-        created: new Date().toISOString(),
-        modified: new Date().toISOString(),
-        version: '1.0.0',
-      }
-    },
-    projectSettings: {,
-      autoSave: true,
-      backupInterval: 5,
-      maxBackups: 10,
-    },
-    isAutoSaveEnabled: true,
-    setNodes: jest.fn<unknown[], unknown>(),
-    setEdges: jest.fn<unknown[], unknown>(),
-    addNode: jest.fn<unknown[], unknown>(),
-    addEdge: jest.fn<unknown[], unknown>(),
-    updateNode: jest.fn<unknown[], unknown>(),
-    addVariation: jest.fn<unknown[], unknown>(),
-    removeVariation: jest.fn<unknown[], unknown>(),
-    updateVariation: jest.fn<unknown[], unknown>(),
-    reorderVariations: jest.fn<unknown[], unknown>(),
-    duplicateNode: jest.fn<unknown[], unknown>(),
-    deleteNode: jest.fn<unknown[], unknown>(),
-    setStickyNotes: jest.fn<unknown[], unknown>(),
-    addStickyNote: jest.fn<unknown[], unknown>(),
-    updateStickyNote: jest.fn<unknown[], unknown>(),
-    deleteStickyNote: jest.fn<unknown[], unknown>(),
-    setNodeLabelConfigs: jest.fn<unknown[], unknown>(),
-    addNodeLabelConfig: jest.fn<unknown[], unknown>(),
-    updateNodeLabelConfig: jest.fn<unknown[], unknown>(),
-    deleteNodeLabelConfig: jest.fn<unknown[], unknown>(),
-    setLabelPreferences: jest.fn<unknown[], unknown>(),
-    setRegionGroups: jest.fn<unknown[], unknown>(),
-    addRegionGroup: jest.fn<unknown[], unknown>(),
-    updateRegionGroup: jest.fn<unknown[], unknown>(),
-    deleteRegionGroup: jest.fn<unknown[], unknown>(),
-    setRegionGroupPreferences: jest.fn<unknown[], unknown>(),
-    setConnectionLabels: jest.fn<unknown[], unknown>(),
-    addConnectionLabel: jest.fn<unknown[], unknown>(),
-    updateConnectionLabel: jest.fn<unknown[], unknown>(),
-    removeConnectionLabel: jest.fn<unknown[], unknown>(),
-    setConnectionAnnotations: jest.fn<unknown[], unknown>(),
-    addConnectionAnnotation: jest.fn<unknown[], unknown>(),
-    updateConnectionAnnotation: jest.fn<unknown[], unknown>(),
-    removeConnectionAnnotation: jest.fn<unknown[], unknown>(),
-    setConnectionAnnotationPreferences: jest.fn<unknown[], unknown>(),
-    saveProject: jest.fn<unknown[], unknown>(),
-    loadProject: jest.fn<unknown[], unknown>(),
-    saveProjectToServer: jest.fn<unknown[], unknown>(),
-    loadProjectFromServer: jest.fn<unknown[], unknown>(),
-    updateProjectOnServer: jest.fn<unknown[], unknown>(),
-    deleteProjectFromServer: jest.fn<unknown[], unknown>(),
-    listUserProjects: jest.fn<unknown[], unknown>(),
-    setCurrentProject: jest.fn<unknown[], unknown>(),
-    updateProjectSettings: jest.fn<unknown[], unknown>(),
-    markProjectSaved: jest.fn<unknown[], unknown>(),
-    getGraphData: jest.fn<unknown[], unknown>(),
-    loadGraphData: jest.fn<unknown[], unknown>(),
-    getTemplateCompatibleData: jest.fn<unknown[], unknown>()
+  author: 'Test',
+  created: new Date().toISOString(),
+  modified: new Date().toISOString(),
+  version: '1.0.0',
+},
+  projectSettings: {,
+  autoSave: true,
+  backupInterval: 5,
+  maxBackups: 10,
+},
+  isAutoSaveEnabled: true,
+    setNodes: jest.fn<unknown, unknown>(),
+    setEdges: jest.fn<unknown, unknown>(),
+    addNode: jest.fn<unknown, unknown>(),
+    addEdge: jest.fn<unknown, unknown>(),
+    updateNode: jest.fn<unknown, unknown>(),
+    addVariation: jest.fn<unknown, unknown>(),
+    removeVariation: jest.fn<unknown, unknown>(),
+    updateVariation: jest.fn<unknown, unknown>(),
+    reorderVariations: jest.fn<unknown, unknown>(),
+    duplicateNode: jest.fn<unknown, unknown>(),
+    deleteNode: jest.fn<unknown, unknown>(),
+    setStickyNotes: jest.fn<unknown, unknown>(),
+    addStickyNote: jest.fn<unknown, unknown>(),
+    updateStickyNote: jest.fn<unknown, unknown>(),
+    deleteStickyNote: jest.fn<unknown, unknown>(),
+    setNodeLabelConfigs: jest.fn<unknown, unknown>(),
+    addNodeLabelConfig: jest.fn<unknown, unknown>(),
+    updateNodeLabelConfig: jest.fn<unknown, unknown>(),
+    deleteNodeLabelConfig: jest.fn<unknown, unknown>(),
+    setLabelPreferences: jest.fn<unknown, unknown>(),
+    setRegionGroups: jest.fn<unknown, unknown>(),
+    addRegionGroup: jest.fn<unknown, unknown>(),
+    updateRegionGroup: jest.fn<unknown, unknown>(),
+    deleteRegionGroup: jest.fn<unknown, unknown>(),
+    setRegionGroupPreferences: jest.fn<unknown, unknown>(),
+    setConnectionLabels: jest.fn<unknown, unknown>(),
+    addConnectionLabel: jest.fn<unknown, unknown>(),
+    updateConnectionLabel: jest.fn<unknown, unknown>(),
+    removeConnectionLabel: jest.fn<unknown, unknown>(),
+    setConnectionAnnotations: jest.fn<unknown, unknown>(),
+    addConnectionAnnotation: jest.fn<unknown, unknown>(),
+    updateConnectionAnnotation: jest.fn<unknown, unknown>(),
+    removeConnectionAnnotation: jest.fn<unknown, unknown>(),
+    setConnectionAnnotationPreferences: jest.fn<unknown, unknown>(),
+    saveProject: jest.fn<unknown, unknown>(),
+    loadProject: jest.fn<unknown, unknown>(),
+    saveProjectToServer: jest.fn<unknown, unknown>(),
+    loadProjectFromServer: jest.fn<unknown, unknown>(),
+    updateProjectOnServer: jest.fn<unknown, unknown>(),
+    deleteProjectFromServer: jest.fn<unknown, unknown>(),
+    listUserProjects: jest.fn<unknown, unknown>(),
+    setCurrentProject: jest.fn<unknown, unknown>(),
+    updateProjectSettings: jest.fn<unknown, unknown>(),
+    markProjectSaved: jest.fn<unknown, unknown>(),
+    getGraphData: jest.fn<unknown, unknown>(),
+    loadGraphData: jest.fn<unknown, unknown>(),
+    getTemplateCompatibleData: jest.fn<unknown, unknown>()
   };
   beforeEach(() => {
     mockUseGraphStore.mockReturnValue(mockGraphStoreState as unknown);
@@ -349,10 +347,10 @@ describe('GraphEditor Save Functionality', () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
     // Simulate Ctrl+S
     fireEvent.keyDown(document, {)
-      key: 's',
-      ctrlKey: true,
-      preventDefault: jest.fn<unknown[], unknown>()
-    });
+  key: 's',
+  ctrlKey: true,
+  preventDefault: jest.fn<unknown, unknown>(),
+});
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
@@ -361,10 +359,10 @@ describe('GraphEditor Save Functionality', () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
     // Simulate Cmd+S (metaKey)
     fireEvent.keyDown(document, {)
-      key: 's',
-      metaKey: true,
-      preventDefault: jest.fn<unknown[], unknown>()
-    });
+  key: 's',
+  metaKey: true,
+  preventDefault: jest.fn<unknown, unknown>(),
+});
     await waitFor(() => {
       expect(screen.getByTestId('save-dialog')).toBeInTheDocument();
     });
@@ -373,22 +371,22 @@ describe('GraphEditor Save Functionality', () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
     // Simulate Ctrl+O
     fireEvent.keyDown(document, {)
-      key: 'o',
-      ctrlKey: true,
-      preventDefault: jest.fn<unknown[], unknown>()
-    });
+  key: 'o',
+  ctrlKey: true,
+  preventDefault: jest.fn<unknown, unknown>(),
+});
     await waitFor(() => {
       expect(screen.getByTestId('load-dialog')).toBeInTheDocument();
     });
   });
   test('prevents default browser behavior for save shortcuts', async () => {
-    const preventDefault = jest.fn<unknown[], unknown>();
+    const preventDefault = jest.fn<unknown, unknown>();
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
     fireEvent.keyDown(document, {)
-      key: 's',
-      ctrlKey: true,
-      preventDefault
-    });
+  key: 's',
+  ctrlKey: true,
+  preventDefault
+});
     expect(preventDefault).toHaveBeenCalled();
   });
   test('closes save dialog when close button is clicked', async () => {
@@ -426,10 +424,10 @@ describe('GraphEditor Save Functionality', () => {
     render(<GraphEditor initialNodes={[]} initialEdges={[]} />);
     // Simulate Alt+S (should not open save dialog)
     fireEvent.keyDown(document, {)
-      key: 's',
-      altKey: true,
-      preventDefault: jest.fn<unknown[], unknown>()
-    });
+  key: 's',
+  altKey: true,
+  preventDefault: jest.fn<unknown, unknown>(),
+});
     // Save dialog should not open
     expect(screen.queryByTestId('save-dialog')).not.toBeInTheDocument();
   });

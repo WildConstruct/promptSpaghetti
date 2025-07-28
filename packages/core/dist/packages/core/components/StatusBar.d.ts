@@ -1,3 +1,2 @@
-import React from 'react';
-export declare const showEncryptionDetails: boolean, setShowEncryptionDetails: React.Dispatch<React.SetStateAction<boolean>>;
+export {};
 //# sourceMappingURL=StatusBar.d.ts.map

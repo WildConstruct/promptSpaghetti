@@ -22,6 +22,7 @@ import {
   ExportJobWithTemplate,
   ExportScheduleWithStats
 } from '../types/export';
+
 interface UseExportState {
     templates: ExportTemplate[];
     jobs: ExportJob[];
@@ -32,13 +33,15 @@ interface UseExportState {
     statistics: ExportStatistics | null;
     loading: boolean;
     error: string | null;
-}
+
+
 interface UseExportActions {
     fetchTemplates: (options?: {),
         format?: ExportFormat;
         isPublic?: boolean;
         limit?: number;
         offset?: number;
+
     }) => Promise<void>;
     createTemplate: (template: CreateExportTemplate) => Promise<ExportTemplate>;
     updateTemplate: (id: string, updates: UpdateExportTemplate) => Promise<ExportTemplate>;
@@ -96,7 +99,7 @@ interface UseExportActions {
     refetch: () => Promise<void>;
     clearError: () => void;
     setLoading: (loading: boolean) => void;
-}
+
 export type UseExportReturn = UseExportState & UseExportActions;
 export declare const useExport: ({ projectId }: {)
     projectId: string;

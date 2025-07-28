@@ -5,6 +5,7 @@
  * Adapter for Stable Diffusion models (local and hosted)
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface StableDiffusionConfig {
     endpoint: string;
     apiType: 'automatic1111' | 'comfyui' | 'stability-ai' | 'replicate' | 'custom';
@@ -12,7 +13,7 @@ export interface StableDiffusionConfig {
     timeout?: number;
     maxRetries?: number;
     defaultModel?: string;
-}
+
 export interface StableDiffusionRequestOptions {
     prompt: string;
     negative_prompt?: string;
@@ -50,12 +51,12 @@ export interface StableDiffusionRequestOptions {
     hr_second_pass_steps?: number;
     hr_resize_x?: number;
     hr_resize_y?: number;
-}
+
 export interface StableDiffusionResponse {
     images: string[];
     parameters: Record<string, any>;
     info: string;
-}
+
 export interface StableDiffusionGenerationResult {
     images: Array<{,
         base64: string;
@@ -77,7 +78,7 @@ export interface StableDiffusionGenerationResult {
         computeUnits: number;
         estimatedCost: number;
     };
-}
+
 export interface ModelInfo {
     name: string;
     filename: string;
@@ -85,7 +86,7 @@ export interface ModelInfo {
     size?: number;
     description?: string;
     tags?: string[];
-}
+
 export declare class StableDiffusionAdapter extends BaseAIModel {
     private config;
     private availableModels;
@@ -117,6 +118,6 @@ export declare class StableDiffusionAdapter extends BaseAIModel {
     private _processGenerationResponse;
     private _extractSeedFromResponse;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default StableDiffusionAdapter;
 //# sourceMappingURL=StableDiffusionAdapter.d.ts.map

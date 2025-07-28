@@ -7,9 +7,9 @@
 import React from 'react';
 import { GraphEditorState, GraphEditorProps, NodePaletteProps, InspectorProps, CanvasProps, GraphDomainEvents, Graph, Node, ValidationError, GraphEditorConfig } from './types/GraphTypes';
 export interface IGraphValidationService {
-    validateGraph(graph: Graph): Promise<ValidationError[]>;
-    validateNode(node: Node): ValidationError[];
-    validateConnection(sourceId: string, targetId: string, graph: Graph): ValidationError[];
+    validateGraph(graph: Graph): Promise<ValidationError>;
+    validateNode(node: Node): ValidationError;
+    validateConnection(sourceId: string, targetId: string, graph: Graph): ValidationError;
     isValidGraph(graph: Graph): boolean;
 }
 export interface IGraphOperationsService {
@@ -30,9 +30,9 @@ export interface IGraphOperationsService {
     exportGraph(graph: Graph): any;
 }
 export interface IGraphExecutionService {
-    executeGraph(graph: Graph, seeds: number[]): Promise<Record<string, any>>;
+    executeGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
     executeNode(node: Node, context: any): Promise<any>;
-    previewGraph(graph: Graph, seeds: number[]): Promise<Record<string, any>>;
+    previewGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
     cancelExecution(): void;
     getExecutionStatus(): 'idle' | 'running' | 'completed' | 'error';
 }
@@ -57,18 +57,18 @@ export interface IGraphEditorDomain {
     hooks: {
         useGraphState: () => GraphEditorState;
         useNodeSelection: () => {
-            selectedNodeIds: string[];
-            selectNodes: (nodeIds: string[], isMultiSelect?: boolean) => void;
+            selectedNodeIds: string;
+            selectNodes: (nodeIds: string, isMultiSelect?: boolean) => void;
             clearSelection: () => void;
             isSelected: (nodeId: string) => boolean;
         };
         useGraphValidation: () => {
-            errors: ValidationError[];
-            validateGraph: (graph: Graph) => Promise<ValidationError[]>;
+            errors: ValidationError;
+            validateGraph: (graph: Graph) => Promise<ValidationError>;
             isValid: boolean;
         };
         usePreviewSeeds: () => {
-            seeds: number[];
+            seeds: number;
             results: Record<string, any>;
             isExecuting: boolean;
             executePreview: (graph: Graph) => Promise<void>;
@@ -105,7 +105,7 @@ export interface IGraphEditorDomain {
     };
     events: GraphDomainEvents & {
         subscribe: (event: keyof GraphDomainEvents, callback: Function) => () => void;
-        emit: (event: keyof GraphDomainEvents, ...args: any[]) => void;
+        emit: (event: keyof GraphDomainEvents, ...args: any) => void;
     };
     config: {
         getConfig: () => GraphEditorConfig;
@@ -116,8 +116,8 @@ export interface IGraphEditorDomain {
         createEmptyGraph: () => Graph;
         cloneGraph: (graph: Graph) => Graph;
         getNodeById: (graph: Graph, nodeId: string) => Node | undefined;
-        getConnectedNodes: (graph: Graph, nodeId: string) => Node[];
-        findNodeByType: (graph: Graph, nodeType: string) => Node[];
+        getConnectedNodes: (graph: Graph, nodeId: string) => Node;
+        findNodeByType: (graph: Graph, nodeType: string) => Node;
         calculateGraphBounds: (graph: Graph) => {
             width: number;
             height: number;

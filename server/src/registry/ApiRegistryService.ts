@@ -47,6 +47,7 @@ export class ApiRegistryService extends EventEmitter {
   // =============================================================================
 
   private async initializeRegistry(): Promise<void> {
+
     try {
       await this.loadFromDatabase();
       
@@ -71,6 +72,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   private async loadFromDatabase(): Promise<void> {
+
     try {
       // Load services
       const servicesQuery = `
@@ -114,6 +116,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   private async performAutoDiscovery(): Promise<void> {
+
     // Auto-discovery implementation would scan the application
     // to find registered routes and endpoints
     console.log('Starting API auto-discovery...');
@@ -148,7 +151,7 @@ export class ApiRegistryService extends EventEmitter {
         tags: ['core', 'graph', 'execution'],
         categories: ['graph-operations'],
         owner: 'core-team'
-      },
+  }
       {
         name: 'Export Graph',
         description: 'Export graph to GeneratorBundle format',
@@ -173,6 +176,7 @@ export class ApiRegistryService extends EventEmitter {
   // =============================================================================
 
   async registerService(service: Partial<ApiService>, registeredBy: string): Promise<ApiService> {
+
     const serviceId = service.serviceId || this.generateServiceId(service.name!);
     
     const fullService: ApiService = {
@@ -227,6 +231,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   async registerEndpoint(endpoint: Partial<ApiEndpoint>, registeredBy: string): Promise<ApiEndpoint> {
+
     const endpointId = endpoint.endpointId || this.generateEndpointId(endpoint.path!, endpoint.method!);
     
     const fullEndpoint: ApiEndpoint = {
@@ -270,7 +275,7 @@ export class ApiRegistryService extends EventEmitter {
         breakingChanges: [],
         deprecatedFeatures: [],
         migrationRequired: false 
-      },
+  }
       dependencies: endpoint.dependencies || [],
       consumers: endpoint.consumers || [],
       relatedEndpoints: endpoint.relatedEndpoints || []
@@ -310,6 +315,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   async updateEndpoint(endpointId: string, updates: Partial<ApiEndpoint>, updatedBy: string): Promise<ApiEndpoint | null> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return null;
@@ -340,6 +346,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   async deprecateEndpoint(endpointId: string, deprecatedBy: string, reason?: string): Promise<boolean> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return false;
@@ -383,6 +390,7 @@ export class ApiRegistryService extends EventEmitter {
   // =============================================================================
 
   async searchRegistry(filters: ApiRegistryFilters): Promise<ApiRegistrySearchResult> {
+
     let endpoints = Array.from(this.endpoints.values());
     let services = Array.from(this.services.values());
     
@@ -463,6 +471,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   async discoverApi(endpointId: string): Promise<ApiDiscoveryResult | null> {
+
     const endpoint = this.endpoints.get(endpointId);
     if (!endpoint) {
       return null;
@@ -497,6 +506,7 @@ export class ApiRegistryService extends EventEmitter {
   // =============================================================================
 
   async generateAnalytics(timeRange: { start: Date; end: Date }): Promise<RegistryAnalytics> {
+
     const endpoints = Array.from(this.endpoints.values());
     const services = Array.from(this.services.values());
     
@@ -564,7 +574,7 @@ export class ApiRegistryService extends EventEmitter {
         topServices,
         usageByCategory: this.calculateUsageByCategory(endpoints),
         usageByVisibility: this.calculateUsageByVisibility(endpoints)
-      },
+  }
       health: {
         healthyEndpoints,
         degradedEndpoints,
@@ -573,14 +583,14 @@ export class ApiRegistryService extends EventEmitter {
         averageResponseTime,
         errorRate,
         topErrors: this.calculateTopErrors(endpoints)
-      },
+  }
       growth: {
         newEndpoints,
         deprecatedEndpoints,
         updatedEndpoints,
         growthRate: (newEndpoints - deprecatedEndpoints) / Math.max(endpoints.length - newEndpoints, 1) * 100,
         adoptionRate: newEndpoints / Math.max(endpoints.length, 1) * 100
-      },
+  }
       compliance: {
         documentedEndpoints,
         authenticatedEndpoints,
@@ -609,6 +619,7 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   private async performHealthChecks(): Promise<void> {
+
     for (const endpoint of this.endpoints.values()) {
       try {
         // Perform health check (simplified)
@@ -693,16 +704,19 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   private async storeService(service: ApiService): Promise<void> {
+
     // Database storage implementation
     console.log(`Storing service: ${service.serviceId}`);
   }
 
   private async storeEndpoint(endpoint: ApiEndpoint): Promise<void> {
+
     // Database storage implementation  
     console.log(`Storing endpoint: ${endpoint.endpointId}`);
   }
 
   private async logEvent(event: RegistryEvent): Promise<void> {
+
     this.eventHistory.push(event);
     
     // Log to audit service
@@ -714,7 +728,7 @@ export class ApiRegistryService extends EventEmitter {
         entityId: event.entityId,
         changes: event.changes,
         metadata: event.metadata
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -791,12 +805,13 @@ export class ApiRegistryService extends EventEmitter {
           e.serviceId === endpoint.serviceId ||
           e.categories.some(cat => endpoint.categories.includes(cat)) ||
           e.tags.some(tag => endpoint.tags.includes(tag))
-        )
-      )
+
+
       .slice(0, 5);
   }
 
   private async generateRecommendations(endpoint: ApiEndpoint): Promise<any[]> {
+
     // Recommendation engine implementation
     return [];
   }
@@ -853,18 +868,22 @@ export class ApiRegistryService extends EventEmitter {
   }
 
   async getEndpoint(endpointId: string): Promise<ApiEndpoint | null> {
+
     return this.endpoints.get(endpointId) || null;
   }
 
   async getService(serviceId: string): Promise<ApiService | null> {
+
     return this.services.get(serviceId) || null;
   }
 
   async getAllServices(): Promise<ApiService[]> {
+
     return Array.from(this.services.values());
   }
 
   async getAllEndpoints(): Promise<ApiEndpoint[]> {
+
     return Array.from(this.endpoints.values());
   }
 }

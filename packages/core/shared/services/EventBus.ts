@@ -4,8 +4,8 @@
  * 
  * Event-driven communication system for cross-domain messaging
  */
-type EventCallback = (...args: any[]) => void;
-type EventMap = Record<string, EventCallback[]>;
+type EventCallback = (...args: any) => void;
+type EventMap = Record<string, EventCallback>;
 
 export class EventBus {
   private events: EventMap = {};
@@ -16,90 +16,73 @@ export class EventBus {
   subscribe(event: string, callback: EventCallback): () => void {
     if (!this.events[event]) {
       this.events[event] = [];
-    }
     if (this.events[event].length >= this.maxListeners) {
       console.warn(`EventBus: Maximum listeners (${this.maxListeners}) reached for event "${event}"`);}
-    }
     this.events[event].push(callback);
     // Return unsubscribe function
     return () => {
       this.unsubscribe(event, callback);
     };
-  }
   /**
    * Unsubscribe from an event
    */
   unsubscribe(event: string, callback: EventCallback): void {
-    if (!this.events[event]) return;
-    const index = this.events[event].indexOf(callback);
-    if (index > -1) {
-      this.events[event].splice(index, 1);
-    }
-    // Clean up empty event arrays
-    if (this.events[event].length === 0) {
-      delete this.events[event];
-    }
-  }
+  if (!this.events[event]) return;
+  const index = this.events[event].indexOf(callback);
+  if (index > -1) {
+  this.events[event].splice(index, 1);
+  // Clean up empty event arrays
+  if (this.events[event].length === 0) {
+  delete this.events[event];
   /**
-   * Emit an event to all subscribers
-   */
-  emit(event: string, ...args: any[]): void {
-    if (!this.events[event]) return;
-    // Create a copy to avoid issues if callbacks modify the array
-    const callbacks = [...this.events[event]];
-    callbacks.forEach(callback => {)
-      try {
-        callback(...args);
-      } catch (error) {
+  * Emit an event to all subscribers
+  */
+  emit(event: string, ...args: any): void {,
+  if (!this.events[event]) return;
+  // Create a copy to avoid issues if callbacks modify the array
+  const callbacks = [...this.events[event]];
+  callbacks.forEach(callback => {)
+  try {
+  callback(...args);
+} catch (error) {
         console.error(`EventBus: Error in event callback for "${event}":`, error);}
-      }
     });
-  }
   /**
    * Subscribe to an event that will only fire once
    */
   once(event: string, callback: EventCallback): () => void {
-    const onceCallback = (...args: any[]) => {
-      callback(...args);
-      this.unsubscribe(event, onceCallback);
-    };
+  const onceCallback = (...args: any) => {,
+  callback(...args);
+  this.unsubscribe(event, onceCallback);
+};
     return this.subscribe(event, onceCallback);
-  }
   /**
    * Get all active event names
    */
-  getEvents(): string[] {
-    return Object.keys(this.events);
-  }
+  getEvents(): string {
+  return Object.keys(this.events);
   /**
-   * Get number of listeners for an event
-   */
-  getListenerCount(event: string): number {
-    return this.events[event]?.length ?? 0;
-  }
+  * Get number of listeners for an event
+  */
+  getListenerCount(event: string): number {,
+  return this.events[event]?.length ?? 0;
   /**
-   * Remove all listeners for a specific event
-   */
-  removeAllListeners(event?: string): void {
-    if (event) {
-      delete this.events[event];
-    } else {
+  * Remove all listeners for a specific event
+  */
+  removeAllListeners(event?: string): void {,
+  if (event) {
+  delete this.events[event];
+} else {
       this.events = {};
-    }
-  }
   /**
    * Set maximum number of listeners per event
    */
   setMaxListeners(max: number): void {
-    this.maxListeners = max;
-  }
-}
-
-// Global event bus instance
-export const globalEventBus = new EventBus();
-
-// Domain event constants
-export const DOMAIN_EVENTS = {
+  this.maxListeners = max;
+  // Global event bus instance
+  export const globalEventBus = new EventBus();
+  // Domain event constants
+  export const DOMAIN_EVENTS = {
   // Graph Editor Events
   GRAPH_MODIFIED: 'graph:modified',
   NODE_SELECTED: 'graph:node:selected',
@@ -141,35 +124,34 @@ import { useEffect, useRef } from 'react';
 
 export const useEventBus = () => {
   const eventBusRef = useRef(globalEventBus);
-  const subscribe = (event: string, callback: EventCallback) => {
-    return eventBusRef.current.subscribe(event, callback);
-  };
-  const emit = (event: string, ...args: any[]) => {
+  const subscribe = (event: string, callback: EventCallback) => {,
+  return eventBusRef.current.subscribe(event, callback);
+};
+  const emit = (event: string, ...args: any) => {
     eventBusRef.current.emit(event, ...args);
   };
   const once = (event: string, callback: EventCallback) => {
     return eventBusRef.current.once(event, callback);
   };
   return {
-    subscribe,
-    emit,
-    once,
-    eventBus: eventBusRef.current,
-  };
+  subscribe,
+  emit,
+  once,
+  eventBus: eventBusRef.current,
+};
 };
 
 // React hook for subscribing to specific events
 export const useEventSubscription = ()
-  event: string | string[], 
+  event: string | string, 
   callback: EventCallback, 
-  deps: any[] = [],
-) => {
+  deps: any = []) => {,
   const { subscribe } = useEventBus();
   useEffect(() => {
-    const events = Array.isArray(event) ? event : [event];
-    const unsubscribeFunctions = events.map(e => subscribe(e, callback));
-    return () => {
-      unsubscribeFunctions.forEach(unsub => unsub());
-    };
+  const events = Array.isArray(event) ? event : [event];
+  const unsubscribeFunctions = events.map(e => subscribe(e, callback));
+  return () => {
+  unsubscribeFunctions.forEach(unsub => unsub());
+};
   }, [event, callback, subscribe, ...deps]);
 };

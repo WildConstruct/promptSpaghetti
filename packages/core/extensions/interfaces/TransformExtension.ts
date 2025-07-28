@@ -6,10 +6,11 @@ import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 
 // Transform Extension Interface
+
 export interface TransformExtension extends BaseExtension {
   readonly extensionType: 'transform';
   // Transform registration
-  getTransformDefinitions(): TransformDefinition[];
+  getTransformDefinitions(): TransformDefinition;
   createTransformInstance(transformId: string, config: unknown): DataTransform;
   // Transform validation
   validateTransformConfig(transformId: string, config: unknown): ExtensionValidationResult;
@@ -20,11 +21,9 @@ export interface TransformExtension extends BaseExtension {
   onTransformError?(transform: DataTransform, error: Error): void;
   // Pipeline support
   supportsPipeline(): boolean;
-  createPipeline?(transforms: DataTransform[]): TransformPipeline;
-}
-
-// Data Transform Interface
-export interface DataTransform {
+  createPipeline?(transforms: DataTransform): TransformPipeline;
+  // Data Transform Interface
+  export interface DataTransform {
   readonly id: string;
   readonly name: string;
   readonly type: TransformType;
@@ -45,9 +44,8 @@ export interface DataTransform {
   // Lifecycle
   initialize(context: ExtensionContext): Promise<void>;
   dispose(): Promise<void>;
+  // Transform Types
 }
-
-// Transform Types
 export enum TransformType {
   TEXT = 'text',
   JSON = 'json',
@@ -58,20 +56,18 @@ export enum TransformType {
   BOOLEAN = 'boolean',
   DATE = 'date',
   CUSTOM = 'custom'
-}
-
-// Transform Definition
-export interface TransformDefinition {
+  // Transform Definition
+  export interface TransformDefinition {
   // Basic metadata
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   version: string;
   type: TransformType;
   // Transform class
   transformClass: new (id: string, config: any) => DataTransform;
   // Schema definitions
-  inputSchema: z.ZodSchema<any>;
+  inputSchema: z.ZodSchema<any>;,
   outputSchema: z.ZodSchema<any>;
   configSchema: z.ZodSchema<any>;
   // UI configuration
@@ -82,9 +78,8 @@ export interface TransformDefinition {
   pipeline: TransformPipelineConfiguration;
   // Metadata
   metadata: TransformMetadata;
+  // Transform UI Configuration
 }
-
-// Transform UI Configuration
 export interface TransformUIConfiguration {
   // Visual representation
   icon?: string;
@@ -96,9 +91,8 @@ export interface TransformUIConfiguration {
   preview?: TransformPreviewConfiguration;
   // Help configuration
   help?: TransformHelpConfiguration;
+  // Transform Editor Configuration
 }
-
-// Transform Editor Configuration
 export interface TransformEditorConfiguration {
   // Custom editor component
   component?: React.ComponentType<TransformEditorProps>;
@@ -109,18 +103,16 @@ export interface TransformEditorConfiguration {
   fields?: Record<string, TransformFieldConfiguration>;
   // Validation
   validation?: TransformEditorValidation;
+  // Transform Editor Props
 }
-
-// Transform Editor Props
 export interface TransformEditorProps {
-  transform: DataTransform;
+  transform: DataTransform;,
   config: any;
   onChange: (config: any) => void;
-  onTest?: (input: any) => void;
+  onTest?: (input: any) => void;,
   context: ExtensionContext;
+  // Transform Field Configuration
 }
-
-// Transform Field Configuration
 export interface TransformFieldConfiguration {
   type: 'text' | 'textarea' | 'number' | 'boolean' | 'select' | 'json' | 'code' | 'custom';
   label?: string;
@@ -137,17 +129,16 @@ export interface TransformFieldConfiguration {
   min?: number;
   max?: number;
   step?: number;
-}
 
 // Transform Editor Validation
+}
 export interface TransformEditorValidation {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
   showErrors?: boolean;
   customValidation?: (config: any) => ExtensionValidationResult;
+  // Transform Preview Configuration
 }
-
-// Transform Preview Configuration
 export interface TransformPreviewConfiguration {
   // Preview component
   component?: React.ComponentType<TransformPreviewProps>;
@@ -157,34 +148,32 @@ export interface TransformPreviewConfiguration {
   sampleInput?: any;
   // Preview mode
   mode?: 'input-output' | 'side-by-side' | 'overlay';
+  // Transform Preview Props
 }
-
-// Transform Preview Props
 export interface TransformPreviewProps {
-  transform: DataTransform;
+  transform: DataTransform;,
   input: any;
   output: any;
   error?: Error;
   context: ExtensionContext;
+  // Transform Help Configuration
 }
-
-// Transform Help Configuration
 export interface TransformHelpConfiguration {
   // Documentation
   documentation?: string;
-  examples?: TransformExample[];
+  examples?: TransformExample;
   // Interactive help
   interactive?: boolean;
   tutorial?: string;
   // Links
-  links?: Array<{
-    title: string;
-    url: string;
-    type: 'documentation' | 'example' | 'tutorial' | 'reference';
-  }>;
-}
+  links?: Array<{,
+  title: string;,
+  url: string;
+  type: 'documentation' | 'example' | 'tutorial' | 'reference';
+}>;
 
 // Transform Runtime Configuration
+}
 export interface TransformRuntimeConfiguration {
   // Execution settings
   timeout?: number;
@@ -197,9 +186,8 @@ export interface TransformRuntimeConfiguration {
   caching?: TransformCachingConfiguration;
   // Streaming settings
   streaming?: TransformStreamingConfiguration;
+  // Transform Performance Configuration
 }
-
-// Transform Performance Configuration
 export interface TransformPerformanceConfiguration {
   // Memory limits
   maxMemoryUsage?: number;
@@ -211,44 +199,43 @@ export interface TransformPerformanceConfiguration {
   // Parallel processing
   parallelism?: number;
   // Optimization hints
-  optimizationHints?: {
-    cpuIntensive?: boolean;
-    ioIntensive?: boolean;
-    memoryIntensive?: boolean;
-  };
-}
+  optimizationHints?: {,
+  cpuIntensive?: boolean;
+  ioIntensive?: boolean;
+  memoryIntensive?: boolean;
+};
 
 // Transform Security Configuration
+}
 export interface TransformSecurityConfiguration {
   // Sandboxing
   sandboxed?: boolean;
   // Permissions
-  permissions?: string[];
+  permissions?: string;
   // Input validation
-  inputValidation?: {
-    sanitize?: boolean;
-    allowedTypes?: string[];
-    maxSize?: number;
-  };
+  inputValidation?: {,
+  sanitize?: boolean;
+  allowedTypes?: string;
+  maxSize?: number;
+};
   // Output validation
   outputValidation?: {
-    sanitize?: boolean;
-    allowedTypes?: string[];
-    maxSize?: number;
-  };
-}
+  sanitize?: boolean;
+  allowedTypes?: string;
+  maxSize?: number;
+};
 
 // Transform Caching Configuration
+}
 export interface TransformCachingConfiguration {
   enabled?: boolean;
   strategy?: 'memory' | 'disk' | 'distributed';
   ttl?: number;
   maxSize?: number;
   keyGenerator?: (input: any, config: any) => string;
-  invalidationRules?: string[];
+  invalidationRules?: string;
+  // Transform Streaming Configuration
 }
-
-// Transform Streaming Configuration
 export interface TransformStreamingConfiguration {
   enabled?: boolean;
   chunkSize?: number;
@@ -256,102 +243,100 @@ export interface TransformStreamingConfiguration {
   parallelChunks?: number;
   // Stream processing
   streamProcessor?: (chunk: any) => any;
-  chunkCombiner?: (chunks: any[]) => any;
+  chunkCombiner?: (chunks: any) => any;
+  // Transform Pipeline Configuration
 }
-
-// Transform Pipeline Configuration
 export interface TransformPipelineConfiguration {
   // Pipeline support
   supportsComposition?: boolean;
   compositionType?: 'sequential' | 'parallel' | 'conditional';
   // Input/output compatibility
-  inputCompatibility?: string[];
-  outputCompatibility?: string[];
+  inputCompatibility?: string;
+  outputCompatibility?: string;
   // Pipeline optimization
-  optimization?: {
-    fuseable?: boolean;
-    parallelizable?: boolean;
-    cacheable?: boolean;
-  };
-}
+  optimization?: {,
+  fuseable?: boolean;
+  parallelizable?: boolean;
+  cacheable?: boolean;
+};
 
 // Transform Metadata
+}
 export interface TransformMetadata {
-  author: string;
+  author: string;,
   license: string;
   repository?: string;
   documentation?: string;
-  examples?: TransformExample[];
+  examples?: TransformExample;
   // Performance characteristics
-  performance?: {
-    complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';
-    memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
-    scalability: 'excellent' | 'good' | 'moderate' | 'limited';
-  };
+  performance?: {,
+  complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';,
+  memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
+  scalability: 'excellent' | 'good' | 'moderate' | 'limited';
+};
   // Compatibility
   compatibility?: {
-    minVersion: string;
-    maxVersion?: string;
-    deprecated?: boolean;
-    deprecationMessage?: string;
-  };
+  minVersion: string;
+  maxVersion?: string;
+  deprecated?: boolean;
+  deprecationMessage?: string;
+};
   // Categories and tags
-  categories?: string[];
-  tags?: string[];
-  keywords?: string[];
-}
+  categories?: string;
+  tags?: string;
+  keywords?: string;
 
 // Transform Example
+}
 export interface TransformExample {
-  name: string;
+  name: string;,
   description: string;
-  input: any;
+  input: any;,
   output: any;
   config?: any;
   explanation?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  // Transform Context
 }
-
-// Transform Context
 export interface TransformContext {
   // Basic context
-  transformId: string;
+  transformId: string;,
   executionId: string;
   timestamp: Date;
   // Extension context
   extensionContext: ExtensionContext;
   // Performance tracking
   performance: {,
-    startTime: number;
-    endTime?: number;
-    memoryUsage?: number;
-  };
+  startTime: number;
+  endTime?: number;
+  memoryUsage?: number;
+};
   // Metadata
   metadata: {,
-    inputSize?: number;
-    outputSize?: number;
-    transformVersion: string;
-  };
+  inputSize?: number;
+  outputSize?: number;
+  transformVersion: string;
+};
   // Pipeline context
   pipeline?: {
-    position: number;
-    total: number;
-    previousOutput?: any;
-    nextTransform?: string;
-  };
+  position: number;,
+  total: number;
+  previousOutput?: any;
+  nextTransform?: string;
+};
   // Caching context
   cache?: {
-    enabled: boolean;
-    key?: string;
-    hit?: boolean;
-  };
-}
+  enabled: boolean;
+  key?: string;
+  hit?: boolean;
+};
 
 // Transform Pipeline Interface
+}
 export interface TransformPipeline {
   readonly id: string;
   readonly name: string;
-  readonly transforms: DataTransform[];
+  readonly transforms: DataTransform;
   // Pipeline execution
   execute(input: any, context: TransformContext): Promise<any> | any;
   // Pipeline validation
@@ -364,48 +349,45 @@ export interface TransformPipeline {
   moveTransform(transformId: string, newPosition: number): void;
   // Pipeline metadata
   getMetadata(): PipelineMetadata;
+  // Pipeline Metadata
 }
-
-// Pipeline Metadata
 export interface PipelineMetadata {
-  transformCount: number;
+  transformCount: number;,
   estimatedExecutionTime: number;
-  estimatedMemoryUsage: number;
+  estimatedMemoryUsage: number;,
   inputType: string;
-  outputType: string;
-  compatibility: string[];
+  outputType: string;,
+  compatibility: string;
+  // Transform Registry Interface
 }
-
-// Transform Registry Interface
 export interface TransformRegistry {
   // Registration
   register(definition: TransformDefinition): void;
   unregister(transformId: string): void;
   // Lookup
   get(transformId: string): TransformDefinition | undefined;
-  getAll(): TransformDefinition[];
-  getByType(type: TransformType): TransformDefinition[];
-  getByCategory(category: string): TransformDefinition[];
+  getAll(): TransformDefinition;
+  getByType(type: TransformType): TransformDefinition;
+  getByCategory(category: string): TransformDefinition;
   // Search
-  search(query: string): TransformDefinition[];
-  filter(predicate: (definition: TransformDefinition) => boolean): TransformDefinition[];
+  search(query: string): TransformDefinition;
+  filter(predicate: (definition: TransformDefinition) => boolean): TransformDefinition;
   // Compatibility
-  getCompatible(inputType: string, outputType: string): TransformDefinition[];
+  getCompatible(inputType: string, outputType: string): TransformDefinition;
   // Validation
   validate(definition: TransformDefinition): ExtensionValidationResult;
   // Events
   on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
   off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
+  // Transform Factory Interface
 }
-
-// Transform Factory Interface
 export interface TransformFactory {
   // Creation
   create(transformId: string, config: any): DataTransform;
-  createPipeline(transforms: DataTransform[]): TransformPipeline;
+  createPipeline(transforms: DataTransform): TransformPipeline;
   // Validation
   validateConfig(transformId: string, config: any): ExtensionValidationResult;
-  validatePipeline(transforms: DataTransform[]): ExtensionValidationResult;
+  validatePipeline(transforms: DataTransform): ExtensionValidationResult;
   // Schema access
   getInputSchema(transformId: string): z.ZodSchema<any>;
   getOutputSchema(transformId: string): z.ZodSchema<any>;
@@ -414,9 +396,8 @@ export interface TransformFactory {
   supports(transformId: string): boolean;
   supportsType(type: TransformType): boolean;
   supportsPipeline(): boolean;
+  // Transform Execution Monitor
 }
-
-// Transform Execution Monitor
 export interface TransformExecutionMonitor {
   // Monitoring
   onExecutionStart(transform: DataTransform, input: any, context: TransformContext): void;
@@ -427,25 +408,23 @@ export interface TransformExecutionMonitor {
   getAllMetrics(): Map<string, TransformExecutionMetrics>;
   // Events
   on(event: 'execution' | 'error' | 'performance', listener: (data: any) => void): void;
+  // Transform Execution Metrics
 }
-
-// Transform Execution Metrics
 export interface TransformExecutionMetrics {
-  transformId: string;
+  transformId: string;,
   totalExecutions: number;
-  successfulExecutions: number;
+  successfulExecutions: number;,
   failedExecutions: number;
-  averageExecutionTime: number;
+  averageExecutionTime: number;,
   minExecutionTime: number;
-  maxExecutionTime: number;
+  maxExecutionTime: number;,
   averageMemoryUsage: number;
-  totalInputSize: number;
+  totalInputSize: number;,
   totalOutputSize: number;
   lastExecuted: Date;
   lastError?: Error;
+  // Transform Extension Helper Functions
 }
-
-// Transform Extension Helper Functions
 export namespace TransformExtensionHelpers {
   export function createTransformDefinition(config: Partial<TransformDefinition>): TransformDefinition {
     return {
@@ -469,35 +448,32 @@ export namespace TransformExtensionHelpers {
         getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
         async initialize() {}
         async dispose() {}
-      },
-      inputSchema: config.inputSchema || z.any(),
+  },
+  inputSchema: config.inputSchema || z.any(),
       outputSchema: config.outputSchema || z.any(),
       configSchema: config.configSchema || z.object({}),
       ui: config.ui || {},
       runtime: config.runtime || {},
       pipeline: config.pipeline || {},
       metadata: config.metadata || {,
-        author: 'Unknown',
-        license: 'MIT',
-      }
-    };
-  }
+  author: 'Unknown',
+  license: 'MIT',
+};
   export function validateTransformDefinition(definition: TransformDefinition): ExtensionValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
-    // Basic validation
-    if (!definition.id) errors.push('Transform ID is required');
-    if (!definition.name) errors.push('Transform name is required');
-    if (!definition.transformClass) errors.push('Transform class is required');
-    // Schema validation
-    if (!definition.inputSchema) errors.push('Input schema is required');
-    if (!definition.outputSchema) errors.push('Output schema is required');
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  const errors: string = [];
+  const warnings: string = [];
+  // Basic validation
+  if (!definition.id) errors.push('Transform ID is required');
+  if (!definition.name) errors.push('Transform name is required');
+  if (!definition.transformClass) errors.push('Transform class is required');
+  // Schema validation
+  if (!definition.inputSchema) errors.push('Input schema is required');
+  if (!definition.outputSchema) errors.push('Output schema is required');
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   export function createTransformRegistry(): TransformRegistry {
     const registry = new Map<string, TransformDefinition>();
     const eventEmitter = new EventTarget();
@@ -505,52 +481,48 @@ export namespace TransformExtensionHelpers {
       register(definition: TransformDefinition) {
         registry.set(definition.id, definition);
         eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-      },
+  }
       unregister(transformId: string) {
         const definition = registry.get(transformId);
         if (definition) {
           registry.delete(transformId);
           eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
-        }
-      },
+  }
       get(transformId: string) {
         return registry.get(transformId);
-      },
+  }
       getAll() {
         return Array.from(registry.values());
-      },
+  }
       getByType(type: TransformType) {
         return Array.from(registry.values()).filter(def => def.type === type);
-      },
+  }
       getByCategory(category: string) {
         return Array.from(registry.values()).filter(def => def.ui.category === category);
-      },
+  }
       search(query: string) {
         const lowercaseQuery = query.toLowerCase();
         return Array.from(registry.values()).filter(def =>)
           def.name.toLowerCase().includes(lowercaseQuery) ||
           def.description.toLowerCase().includes(lowercaseQuery)
         );
-      },
+  }
       filter(predicate: (definition: TransformDefinition) => boolean) {
         return Array.from(registry.values()).filter(predicate);
-      },
+  }
       getCompatible(inputType: string, outputType: string) {
         return Array.from(registry.values()).filter(def => {)
-          const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
+  const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
           const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
           return inputCompatible && outputCompatible;
         });
-      },
+  }
       validate(definition: TransformDefinition) {
         return validateTransformDefinition(definition);
-      },
+  }
       on(event: string, listener: any) {
         eventEmitter.addEventListener(event, listener);
-      },
+  }
       off(event: string, listener: any) {
         eventEmitter.removeEventListener(event, listener);
-      }
     };
-  }
-}

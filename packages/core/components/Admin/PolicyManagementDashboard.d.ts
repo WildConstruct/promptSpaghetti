@@ -5,6 +5,7 @@
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface PolicyData {
     id: string;
     name: string;
@@ -20,7 +21,8 @@ export interface PolicyData {
     version: string;
     createdBy: string;
     updatedAt: Date;
-}
+
+
 export interface PolicyViolationData {
     violationId: string;
     policyId: string;
@@ -33,10 +35,11 @@ export interface PolicyViolationData {
     status: 'pending' | 'reviewed' | 'dismissed' | 'enforced';
     reviewedBy?: string;
     description: string;
-}
+
+
 export interface PolicyManagementDashboardProps {
     className?: string;
-}
+
 export declare const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>;
 export default PolicyManagementDashboard;
 //# sourceMappingURL=PolicyManagementDashboard.d.ts.map

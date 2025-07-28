@@ -24,6 +24,7 @@ export class AuditDAO {
   constructor(private db: Database) {}
 
   async initializeTables(): Promise<void> {
+
     const tables = [
       // Audit events table
       `CREATE TABLE IF NOT EXISTS audit_events (
@@ -187,6 +188,7 @@ export class AuditDAO {
 
   // Create audit event
   async createAuditEvent(request: CreateAuditEventRequest, context: AuditContext): Promise<AuditEvent> {
+
     const id = `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = new Date();
 
@@ -291,6 +293,7 @@ export class AuditDAO {
 
   // Query audit events
   async queryAuditEvents(query: AuditEventQuery): Promise<AuditEventResponse> {
+
     let sql = 'SELECT * FROM audit_events WHERE 1=1';
     let countSql = 'SELECT COUNT(*) as total FROM audit_events WHERE 1=1';
     const params: unknown[] = [];
@@ -373,7 +376,7 @@ export class AuditDAO {
           if (err) reject(err);
           else resolve((row as { total: number }).total);
         });
-      })
+  }
     ]);
 
     // Generate summary
@@ -386,13 +389,14 @@ export class AuditDAO {
         limit,
         total,
         totalPages: Math.ceil(total / limit)
-      },
+  }
       summary
     };
   }
 
   // Get audit statistics
   async getAuditStatistics(startDate?: Date, endDate?: Date): Promise<AuditStatistics> {
+
     const params: unknown[] = [];
     let timeFilter = '';
 
@@ -440,8 +444,8 @@ export class AuditDAO {
               else resolve(row);
             });
           }
-        })
-      )
+  }
+
     );
 
     // Calculate time-based statistics
@@ -481,7 +485,7 @@ export class AuditDAO {
         p50: 0,
         p95: 0,
         p99: 0
-      },
+  }
       generatedAt: now
     };
 
@@ -490,6 +494,7 @@ export class AuditDAO {
 
   // Create compliance report
   async createComplianceReport(request: CreateComplianceReportRequest, generatedBy: string): Promise<ComplianceReport> {
+
     const id = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const generatedAt = new Date();
 
@@ -604,6 +609,7 @@ export class AuditDAO {
   }
 
   private async calculateRetentionPeriod(event: AuditEvent): Promise<number> {
+
     // Get configuration from database or use defaults
     const config = await this.getAuditConfiguration();
     
@@ -615,6 +621,7 @@ export class AuditDAO {
   }
 
   private async enrichLocationData(ipAddress?: string): Promise<AuditEvent['location']> {
+
     if (!ipAddress || ipAddress === '127.0.0.1' || ipAddress === '::1') {
       return undefined;
     }
@@ -625,6 +632,7 @@ export class AuditDAO {
   }
 
   private async updateAuditTrail(event: AuditEvent): Promise<void> {
+
     if (!event.resourceId) return;
 
     await new Promise<void>((resolve, reject) => {
@@ -654,6 +662,7 @@ export class AuditDAO {
   }
 
   private async updateSessionStatistics(event: AuditEvent): Promise<void> {
+
     if (!event.sessionId) return;
 
     const updateFields = [];
@@ -688,6 +697,7 @@ export class AuditDAO {
   }
 
   private async getAuditConfiguration(): Promise<AuditConfiguration | null> {
+
     return new Promise((resolve, reject) => {
       this.db.get('SELECT * FROM audit_configuration ORDER BY created_at DESC LIMIT 1', (err, row: unknown) => {
         if (err) reject(err);
@@ -698,6 +708,7 @@ export class AuditDAO {
   }
 
   private async getEventCount(startDate: Date): Promise<number> {
+
     return new Promise((resolve, reject) => {
       this.db.get(
         'SELECT COUNT(*) as count FROM audit_events WHERE timestamp >= ?',
@@ -722,6 +733,7 @@ export class AuditDAO {
     events: AuditEvent[],
     query: AuditEventQuery
   ): Promise<AuditEventResponse['summary']> {
+
     const eventsByCategory: Record<AuditCategory, number> = {} as Record<AuditCategory, number>;
     const eventsBySeverity: Record<AuditSeverity, number> = {} as Record<AuditSeverity, number>;
     const uniqueActors = new Set<string>();
@@ -739,8 +751,7 @@ export class AuditDAO {
       uniqueActors: uniqueActors.size,
       timeRange: {
         start: query.startDate ? new Date(query.startDate) : new Date(0),
-        end: query.endDate ? new Date(query.endDate) : new Date()
-      }
+        end: query.endDate ? new Date(query.endDate) : new Date(}
     };
   }
 

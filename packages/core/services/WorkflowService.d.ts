@@ -56,7 +56,7 @@ declare class WorkflowService {
     updateScheduledExecution(executionId: string, updates: Partial<ScheduledExecution>): Promise<ScheduledExecution>;
     deleteScheduledExecution(executionId: string): Promise<void>;
     getExecutionResults(executionId: string): Promise<ExecutionResult[]>;
-}
+
 export declare const workflowService: WorkflowService;
 export {};
 //# sourceMappingURL=WorkflowService.d.ts.map

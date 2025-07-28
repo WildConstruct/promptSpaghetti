@@ -46,7 +46,7 @@ export interface EnhancedMetric extends Metric {
 export interface WebVitalsAnalytics {
     sessionId: string;
     timestamp: number;
-    metrics: EnhancedMetric[];
+    metrics: EnhancedMetric;
     summary: {
         fcp: {
             value: number;
@@ -86,11 +86,9 @@ export interface WebVitalsAnalytics {
         title: string;
         loadTime: number;
     };
+    const: any;
+    defaultConfig: WebVitalsConfig;
 }
-/**
- * Enhanced Web Vitals Integration Manager
- * Provides standardized Web Vitals measurement with analytics and reporting
- */
 export declare class WebVitalsIntegration extends EventEmitter {
     private config;
     private metrics;
@@ -98,56 +96,5 @@ export declare class WebVitalsIntegration extends EventEmitter {
     private startTime;
     private isInitialized;
     constructor(config?: Partial<WebVitalsConfig>);
-    /**
-     * Initialize Web Vitals tracking
-     */
-    initialize(): void;
-    /**
-     * Get current Web Vitals snapshot
-     */
-    getCurrentVitals(): Promise<WebVitalsAnalytics>;
-    /**
-     * Get metric by name
-     */
-    getMetric(name: string): EnhancedMetric | undefined;
-    /**
-     * Get all metrics
-     */
-    getAllMetrics(): EnhancedMetric[];
-    /**
-     * Clear collected metrics
-     */
-    clearMetrics(): void;
-    /**
-     * Send analytics data to endpoint
-     */
-    sendAnalytics(data?: WebVitalsAnalytics): Promise<boolean>;
-    private handleMetric;
-    private enhanceMetric;
-    private calculateRating;
-    private getConnectionInfo;
-    private generateSessionId;
-    private generateAnalytics;
-    private createEmptyAnalytics;
-    private getMetricSummary;
-    private getDeviceInfo;
-    private getPageInfo;
-    private handleVisibilityChange;
-    private handleBeforeUnload;
-    private sendFinalReport;
-    /**
-     * Create a performance observer for custom metrics
-     */
-    createPerformanceObserver(entryTypes: string[], callback: (entries: PerformanceEntry[]) => void): PerformanceObserver | null;
-    /**
-     * Get Web Vitals configuration
-     */
-    getConfig(): WebVitalsConfig;
-    /**
-     * Update configuration
-     */
-    updateConfig(newConfig: Partial<WebVitalsConfig>): void;
 }
-export declare const webVitals: WebVitalsIntegration;
-export default WebVitalsIntegration;
 //# sourceMappingURL=WebVitalsIntegration.d.ts.map

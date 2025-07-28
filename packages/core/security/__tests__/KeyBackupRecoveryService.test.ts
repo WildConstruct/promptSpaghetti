@@ -21,31 +21,31 @@ jest.mock('../KeyManagementService');
 describe('KeyBackupRecoveryService', () => {
   let service: KeyBackupRecoveryService;
   let mockKeyManagementService: jest.Mocked<KeyManagementService>;
-  const testConfig: BackupConfiguration = {
-    enableAutomaticBackup: false, // Disable for tests
-    fullBackupIntervalHours: 24,
-    incrementalBackupIntervalHours: 6,
-    retentionPolicyDays: 90,
-    defaultTier: BackupStorageTier.LOCAL,
-    enableMultiTierStorage: true,
-    storageLocations: [],
-    encryptBackups: true,
-    useKeyEscrow: true,
-    escrowThreshold: 3,
-    backupEncryptionKeyRotationDays: 30,
-    enableAutomaticVerification: false, // Disable for tests
-    verificationIntervalHours: 24,
-    verificationSamplePercentage: 10,
-    auditRetentionDays: 2555,
-    complianceMode: true,
-    encryptionStandard: 'aes-256-gcm',
-    emergencyProceduresEnabled: true,
-    emergencyContactNotification: true,
-    emergencyDecryptionKeys: ['emergency-key-1', 'emergency-key-2'],
-    compressionEnabled: true,
-    maxConcurrentBackups: 3,
-    backupTimeoutMinutes: 60,
-  };
+  const testConfig: BackupConfiguration = {,
+  enableAutomaticBackup: false, // Disable for tests,
+  fullBackupIntervalHours: 24,
+  incrementalBackupIntervalHours: 6,
+  retentionPolicyDays: 90,
+  defaultTier: BackupStorageTier.LOCAL,
+  enableMultiTierStorage: true,
+  storageLocations: [],
+  encryptBackups: true,
+  useKeyEscrow: true,
+  escrowThreshold: 3,
+  backupEncryptionKeyRotationDays: 30,
+  enableAutomaticVerification: false, // Disable for tests,
+  verificationIntervalHours: 24,
+  verificationSamplePercentage: 10,
+  auditRetentionDays: 2555,
+  complianceMode: true,
+  encryptionStandard: 'aes-256-gcm',
+  emergencyProceduresEnabled: true,
+  emergencyContactNotification: true,
+  emergencyDecryptionKeys: ['emergency-key-1', 'emergency-key-2'],
+  compressionEnabled: true,
+  maxConcurrentBackups: 3,
+  backupTimeoutMinutes: 60,
+};
   beforeEach(() => {
     jest.useFakeTimers();
     mockKeyManagementService = new KeyManagementService({} as any) as jest.Mocked<KeyManagementService>;
@@ -62,7 +62,7 @@ describe('KeyBackupRecoveryService', () => {
   describe('Backup Creation', () => {
     test('should create full backup', async () => {
       const backup = await service.createBackup(BackupType.FULL, {)
-        description: 'Test full backup',
+  description: 'Test full backup',
         tags: { environment: 'test' }
       });
       expect(backup).toBeDefined();
@@ -81,45 +81,45 @@ describe('KeyBackupRecoveryService', () => {
       expect(backup.expiresAt).toBeInstanceOf(Date);
     });
     test('should create incremental backup', async () => {
-      const backup = await service.createBackup(BackupType.INCREMENTAL, {)
-        description: 'Test incremental backup',
-      });
+  const backup = await service.createBackup(BackupType.INCREMENTAL, {)
+  description: 'Test incremental backup',
+});
       expect(backup.type).toBe(BackupType.INCREMENTAL);
       expect(backup.status).toBe(BackupStatus.COMPLETED);
     });
     test('should create selective backup with specific keys', async () => {
-      const specificKeys = ['key1', 'key2'];
-      const backup = await service.createBackup(BackupType.SELECTIVE, {)
-        specificKeys,
-        description: 'Test selective backup',
-      });
+  const specificKeys = ['key1', 'key2'];
+  const backup = await service.createBackup(BackupType.SELECTIVE, {)
+  specificKeys,
+  description: 'Test selective backup',
+});
       expect(backup.type).toBe(BackupType.SELECTIVE);
       expect(backup.keyCount).toBe(specificKeys.length);
     });
     test('should create emergency backup', async () => {
-      const backup = await service.createBackup(BackupType.EMERGENCY, {)
-        emergency: true,
-        description: 'Emergency backup',
-      });
+  const backup = await service.createBackup(BackupType.EMERGENCY, {)
+  emergency: true,
+  description: 'Emergency backup',
+});
       expect(backup.type).toBe(BackupType.EMERGENCY);
       expect(backup.recoveryComplexity).toBe('critical');
       expect(backup.requiredApprovals).toBe(2);
     });
     test('should emit backupCreated event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('backupCreated', eventHandler);
-      const backup = await service.createBackup(BackupType.FULL);
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          backupId: backup.id,
-          type: BackupType.FULL,
-          keyCount: expect.any(Number),
-          size: expect.any(Number),
-        })
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('backupCreated', eventHandler);
+  const backup = await service.createBackup(BackupType.FULL);
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  backupId: backup.id,
+  type: BackupType.FULL,
+  keyCount: expect.any(Number),
+  size: expect.any(Number),
+}
       );
     });
     test('should handle backup creation errors', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
+      const errorHandler = jest.fn<unknown, unknown>();
       service.on('backupFailed', errorHandler);
       // Force an error by providing invalid configuration
       const invalidService = new KeyBackupRecoveryService(;);
@@ -161,17 +161,17 @@ describe('KeyBackupRecoveryService', () => {
       expect(verification.issues[0].severity).toBe('critical');
     });
     test('should emit backupVerified event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('backupVerified', eventHandler);
-      const backup = await service.createBackup(BackupType.FULL);
-      await service.verifyBackup(backup.id);
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          backupId: backup.id,
-          successful: true,
-          issues: 0,
-          verificationTime: expect.any(Number),
-        })
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('backupVerified', eventHandler);
+  const backup = await service.createBackup(BackupType.FULL);
+  await service.verifyBackup(backup.id);
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  backupId: backup.id,
+  successful: true,
+  issues: 0,
+  verificationTime: expect.any(Number),
+}
       );
     });
     test('should handle verification of non-existent backup', async () => {
@@ -180,20 +180,20 @@ describe('KeyBackupRecoveryService', () => {
     });
   });
   describe('Key Recovery', () => {
-    test('should recover keys from backup', async () => {
-      const backup = await service.createBackup(BackupType.FULL);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'recovery-1',
-        type: RecoveryType.COMPLETE,
-        backupId: backup.id,
-        overwriteExisting: true,
-        verifyBeforeRestore: true,
-        createRecoveryPoint: false,
-        requestedBy: 'test-user',
-        approvals: [{,
-          approver: 'admin-user',
-          approvedAt: new Date(),
-        }],
+  test('should recover keys from backup', async () => {
+  const backup = await service.createBackup(BackupType.FULL);
+  const recoveryRequest: RecoveryRequest = {,
+  id: 'recovery-1',
+  type: RecoveryType.COMPLETE,
+  backupId: backup.id,
+  overwriteExisting: true,
+  verifyBeforeRestore: true,
+  createRecoveryPoint: false,
+  requestedBy: 'test-user',
+  approvals: [{,
+  approver: 'admin-user',
+  approvedAt: new Date(),
+}],
         emergencyProcedure: false,
         reason: 'Test recovery',
         urgency: 'medium',
@@ -213,20 +213,20 @@ describe('KeyBackupRecoveryService', () => {
       expect(result.duration).toBeGreaterThan(0);
     });
     test('should perform selective recovery', async () => {
-      const backup = await service.createBackup(BackupType.FULL);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'recovery-selective',
-        type: RecoveryType.SELECTIVE,
-        backupId: backup.id,
-        specificKeys: ['key1'],
-        overwriteExisting: false,
-        verifyBeforeRestore: false,
-        createRecoveryPoint: false,
-        requestedBy: 'test-user',
-        approvals: [{,
-          approver: 'admin-user',
-          approvedAt: new Date(),
-        }],
+  const backup = await service.createBackup(BackupType.FULL);
+  const recoveryRequest: RecoveryRequest = {,
+  id: 'recovery-selective',
+  type: RecoveryType.SELECTIVE,
+  backupId: backup.id,
+  specificKeys: ['key1'],
+  overwriteExisting: false,
+  verifyBeforeRestore: false,
+  createRecoveryPoint: false,
+  requestedBy: 'test-user',
+  approvals: [{,
+  approver: 'admin-user',
+  approvedAt: new Date(),
+}],
         emergencyProcedure: false,
         reason: 'Selective recovery test',
         urgency: 'low',
@@ -237,11 +237,11 @@ describe('KeyBackupRecoveryService', () => {
       expect(result.status).toBe(RecoveryStatus.COMPLETED);
     });
     test('should handle emergency recovery', async () => {
-      const backup = await service.createBackup(BackupType.EMERGENCY, {)
-        emergency: true,
-      });
-      const recoveryRequest: RecoveryRequest = {
-        id: 'emergency-recovery',
+  const backup = await service.createBackup(BackupType.EMERGENCY, {)
+  emergency: true,
+});
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'emergency-recovery',
         type: RecoveryType.EMERGENCY,
         backupId: backup.id,
         overwriteExisting: true,
@@ -263,8 +263,8 @@ describe('KeyBackupRecoveryService', () => {
     });
     test('should fail recovery with insufficient approvals', async () => {
       const backup = await service.createBackup(BackupType.EMERGENCY);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'insufficient-approvals',
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'insufficient-approvals',
         type: RecoveryType.EMERGENCY,
         backupId: backup.id,
         overwriteExisting: true,
@@ -282,11 +282,11 @@ describe('KeyBackupRecoveryService', () => {
         .rejects.toThrow('Emergency recovery requires at least 2 approvals');
     });
     test('should emit recoveryCompleted event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
+      const eventHandler = jest.fn<unknown, unknown>();
       service.on('recoveryCompleted', eventHandler);
       const backup = await service.createBackup(BackupType.FULL);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'test-recovery',
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'test-recovery',
         type: RecoveryType.COMPLETE,
         backupId: backup.id,
         overwriteExisting: true,
@@ -303,11 +303,11 @@ describe('KeyBackupRecoveryService', () => {
       await service.recoverKeys(recoveryRequest);
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          requestId: recoveryRequest.id,
-          status: RecoveryStatus.COMPLETED,
-          recoveredKeys: expect.any(Number),
-          duration: expect.any(Number),
-        })
+  requestId: recoveryRequest.id,
+  status: RecoveryStatus.COMPLETED,
+  recoveredKeys: expect.any(Number),
+  duration: expect.any(Number),
+}
       );
     });
   });
@@ -328,27 +328,27 @@ describe('KeyBackupRecoveryService', () => {
       expect(completedBackups).toHaveLength(3);
     });
     test('should list backups with date filters', async () => {
-      const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // 1 day ago;
-      const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day from now;
-      await service.createBackup(BackupType.FULL);
-      const recentBackups = service.listBackups({ )
-        createdAfter: pastDate,
-        createdBefore: futureDate ,
-      });
+  const pastDate = new Date(Date.now() - 24 * 60 * 60 * 1000); // 1 day ago;
+  const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day from now;
+  await service.createBackup(BackupType.FULL);
+  const recentBackups = service.listBackups({ )
+  createdAfter: pastDate,
+  createdBefore: futureDate,
+});
       expect(recentBackups).toHaveLength(1);
     });
     test('should delete backup', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('backupDeleted', eventHandler);
-      const backup = await service.createBackup(BackupType.FULL);
-      await service.deleteBackup(backup.id, 'Test deletion');
-      const backups = service.listBackups();
-      expect(backups.find(b => b.id === backup.id)).toBeUndefined();
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          backupId: backup.id,
-          reason: 'Test deletion',
-        })
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('backupDeleted', eventHandler);
+  const backup = await service.createBackup(BackupType.FULL);
+  await service.deleteBackup(backup.id, 'Test deletion');
+  const backups = service.listBackups();
+  expect(backups.find(b => b.id === backup.id)).toBeUndefined();
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  backupId: backup.id,
+  reason: 'Test deletion',
+}
       );
     });
     test('should handle deletion of non-existent backup', async () => {
@@ -372,8 +372,8 @@ describe('KeyBackupRecoveryService', () => {
     });
     test('should track recovery statistics', async () => {
       const backup = await service.createBackup(BackupType.FULL);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'stats-test',
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'stats-test',
         type: RecoveryType.COMPLETE,
         backupId: backup.id,
         overwriteExisting: true,
@@ -419,15 +419,15 @@ describe('KeyBackupRecoveryService', () => {
       expect(verification.issues.some(issue => issue.type === 'metadata_mismatch')).toBe(true);
     });
     test('should handle verification errors gracefully', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('backupVerificationFailed', eventHandler);
-      await expect(service.verifyBackup('invalid-backup-id'))
-        .rejects.toThrow('Backup not found');
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          backupId: 'invalid-backup-id',
-          error: 'Backup not found',
-        })
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('backupVerificationFailed', eventHandler);
+  await expect(service.verifyBackup('invalid-backup-id'))
+  .rejects.toThrow('Backup not found');
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  backupId: 'invalid-backup-id',
+  error: 'Backup not found',
+}
       );
     });
   });
@@ -437,8 +437,8 @@ describe('KeyBackupRecoveryService', () => {
       const backup1 = await service.createBackup(BackupType.FULL);
       jest.advanceTimersByTime(60000); // 1 minute
       const targetTime = new Date(backup1.createdAt.getTime() + 30000); // 30 seconds after first backup;
-      const recoveryRequest: RecoveryRequest = {
-        id: 'pit-recovery',
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'pit-recovery',
         type: RecoveryType.POINT_IN_TIME,
         targetTimestamp: targetTime,
         overwriteExisting: true,
@@ -474,7 +474,7 @@ describe('KeyBackupRecoveryService', () => {
   });
   describe('Error Handling', () => {
     test('should handle storage errors during backup', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
+      const errorHandler = jest.fn<unknown, unknown>();
       service.on('backupFailed', errorHandler);
       // This would test storage errors, but since we're using mocks,
       // we'll verify the error handling structure is in place
@@ -482,8 +482,8 @@ describe('KeyBackupRecoveryService', () => {
     });
     test('should handle network errors during recovery', async () => {
       const backup = await service.createBackup(BackupType.FULL);
-      const recoveryRequest: RecoveryRequest = {
-        id: 'network-error-test',
+      const recoveryRequest: RecoveryRequest = {,
+  id: 'network-error-test',
         type: RecoveryType.COMPLETE,
         backupId: 'non-existent-backup',
         overwriteExisting: true,
@@ -502,10 +502,10 @@ describe('KeyBackupRecoveryService', () => {
     });
   });
   describe('Compliance and Audit', () => {
-    test('should maintain audit logs', async () => {
-      const backup = await service.createBackup(BackupType.FULL, {)
-        description: 'Audit test backup',
-      });
+  test('should maintain audit logs', async () => {
+  const backup = await service.createBackup(BackupType.FULL, {)
+  description: 'Audit test backup',
+});
       await service.verifyBackup(backup.id);
       await service.deleteBackup(backup.id, 'Audit test cleanup');
       expect(backup.accessLog).toHaveLength(3); // created, verified, deleted
@@ -518,14 +518,14 @@ describe('KeyBackupRecoveryService', () => {
       // Simulate many access events
       for (let i = 0; i < 150; i++) {
         backup.accessLog.push({)
-          id: `access-${i}`,}
-          timestamp: new Date(),
+  id: `access-${i}`}
+},
+  timestamp: new Date(),
           action: 'accessed',
           userId: 'test-user',
           ipAddress: '127.0.0.1',
           details: {}
         });
-      }
       // Trigger log trimming by adding another event
       await service.verifyBackup(backup.id);
       expect(backup.accessLog.length).toBeLessThanOrEqual(100);

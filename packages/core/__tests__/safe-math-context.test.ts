@@ -90,10 +90,10 @@ describe('Safe Math Context', () => {
     });
   });
   describe('Safe Math Functions', () => {
-    let safeMath: any;
-    beforeEach(() => {
-      safeMath = createSafeMathContext();
-    });
+  let safeMath: any;
+  beforeEach(() => {
+  safeMath = createSafeMathContext();
+});
     describe('Math.min', () => {
       it('should work with valid numbers', () => {
         expect(safeMath.min(1, 2, 3)).toBe(1);
@@ -256,12 +256,12 @@ describe('Safe Math Context', () => {
   describe('validateMathFunctionCall', () => {
     it('should validate safe functions', () => {
       SAFE_MATH_FUNCTIONS.forEach(func => {)
-        expect(validateMathFunctionCall(func)).toBe(true);
+  expect(validateMathFunctionCall(func)).toBe(true);
       });
     });
     it('should reject blocked functions', () => {
       BLOCKED_MATH_FUNCTIONS.forEach(func => {)
-        expect(validateMathFunctionCall(func)).toBe(false);
+  expect(validateMathFunctionCall(func)).toBe(false);
       });
     });
     it('should reject unknown functions', () => {
@@ -282,20 +282,19 @@ describe('Safe Math Context', () => {
       expect(blocked.every(e => !e.allowed)).toBe(true);
     });
     it('should provide summary statistics', () => {
-      MathFunctionAuditor.logAttempt('min', true, 'Allowed', 'test');
-      MathFunctionAuditor.logAttempt('min', true, 'Allowed', 'test');
-      MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
-      MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
-      MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
-      const summary = MathFunctionAuditor.getSummary();
-      expect(summary['min:allowed']).toBe(2);
-      expect(summary['random:blocked']).toBe(3);
-    });
+  MathFunctionAuditor.logAttempt('min', true, 'Allowed', 'test');
+  MathFunctionAuditor.logAttempt('min', true, 'Allowed', 'test');
+  MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
+  MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
+  MathFunctionAuditor.logAttempt('random', false, 'Blocked', 'test');
+  const summary = MathFunctionAuditor.getSummary();
+  expect(summary['min:allowed']).toBe(2);
+  expect(summary['random:blocked']).toBe(3);
+});
     it('should limit audit log size', () => {
       // Generate many events
       for (let i = 0; i < 1100; i++) {
         MathFunctionAuditor.logAttempt('test', true, 'Test', 'test');
-      }
       const log = MathFunctionAuditor.getAuditLog();
       expect(log.length).toBeLessThanOrEqual(1000);
     });

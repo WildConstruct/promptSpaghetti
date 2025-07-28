@@ -5,5 +5,5 @@ interface ImportDialogProps {
     className?: string;
 }
 export declare const ImportDialog: React.FC<ImportDialogProps>;
-export default ImportDialog;
+export {};
 //# sourceMappingURL=ImportDialog.d.ts.map

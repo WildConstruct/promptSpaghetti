@@ -9,6 +9,7 @@ import { GraphOperation, CollaborativeMessage, UserPresence, MutationEngineConfi
 /**
  * WebSocket service interface for collaborative features
  */
+
 export interface WebSocketService {
     connect(url: string): Promise<void>;
     disconnect(): Promise<void>;
@@ -17,7 +18,8 @@ export interface WebSocketService {
     on(event: string, callback: (data: any) => void): void;
     off(event: string, callback: (data: any) => void): void;
     isConnected(): boolean;
-}
+
+
 /**
  * Simple WebSocket implementation for collaborative editing
  */
@@ -32,7 +34,7 @@ export declare class SimpleWebSocketService extends EventEmitter implements WebS
     broadcast(message: CollaborativeMessage): Promise<void>;
     isConnected(): boolean;
     private attemptReconnect;
-}
+
 /**
  * Manages collaborative editing synchronization and conflict resolution
  */
@@ -89,5 +91,5 @@ export declare class CollaborativeSync extends EventEmitter {
     private processQueuedOperations;
     private cleanupStaleData;
     private generateSessionId;
-}
+
 //# sourceMappingURL=CollaborativeSync.d.ts.map

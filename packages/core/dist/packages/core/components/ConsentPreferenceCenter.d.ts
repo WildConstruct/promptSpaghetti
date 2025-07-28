@@ -40,7 +40,7 @@ interface CommunicationPreferences {
 interface ChannelPreference {
     enabled: boolean;
     frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'NEVER';
-    topics: string[];
+    topics: string;
     quietHours: {
         enabled: boolean;
         start: string;
@@ -79,9 +79,9 @@ interface SharingPreferences {
 }
 interface SharingConsent {
     enabled: boolean;
-    purposes: string[];
-    recipientTypes: string[];
-    geographicRestrictions: string[];
+    purposes: string;
+    recipientTypes: string;
+    geographicRestrictions: string;
     requiresNotification: boolean;
 }
 type DataRequestType = 'ACCESS' | 'PORTABILITY' | 'RECTIFICATION' | 'ERASURE' | 'RESTRICTION' | 'OBJECTION';

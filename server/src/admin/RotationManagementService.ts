@@ -50,6 +50,7 @@ export enum RotationPriority {
   EMERGENCY = 'emergency'
 }
 
+}
 export interface RotationPolicy {
   policyId: string;
   name: string;
@@ -66,7 +67,9 @@ export interface RotationPolicy {
   rollbackPolicy: RollbackPolicy;
   metadata: RotationPolicyMetadata;
 }
+}
 
+}
 export interface RotationRequirements {
   keyLength: number;
   complexity: 'simple' | 'medium' | 'complex' | 'maximum';
@@ -77,14 +80,18 @@ export interface RotationRequirements {
   expirationDays?: number;
   renewalThresholdDays?: number;
 }
+}
 
+}
 export interface NotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
   events: NotificationEvent[];
   escalationRules: EscalationRule[];
 }
+}
 
+}
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'teams';
   target: string;
@@ -92,20 +99,26 @@ export interface NotificationChannel {
   enabled: boolean;
   template?: string;
 }
+}
 
+}
 export interface NotificationEvent {
   event: 'rotation_due' | 'rotation_started' | 'rotation_completed' | 'rotation_failed' | 'credential_expired';
   advanceNotice: number; // milliseconds
   enabled: boolean;
 }
+}
 
+}
 export interface EscalationRule {
   condition: 'failed_rotation' | 'overdue_rotation' | 'expired_credential';
   delay: number; // milliseconds
   action: 'notify_admin' | 'emergency_rotation' | 'disable_service' | 'create_incident';
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface RollbackPolicy {
   enabled: boolean;
   automaticRollback: boolean;
@@ -114,7 +127,9 @@ export interface RollbackPolicy {
   validationChecks: string[];
   preserveHistory: number; // number of previous versions to keep
 }
+}
 
+}
 export interface RotationPolicyMetadata {
   createdBy: string;
   createdAt: Date;
@@ -124,14 +139,18 @@ export interface RotationPolicyMetadata {
   compliance: ComplianceRequirement[];
   auditTrail: string[];
 }
+}
 
+}
 export interface ComplianceRequirement {
   standard: string; // e.g., 'SOC2', 'PCI-DSS', 'HIPAA', 'GDPR'
   requirement: string;
   mandatoryRotationPeriod: number; // milliseconds
   auditFrequency: number; // milliseconds
 }
+}
 
+}
 export interface ManagedCredential {
   credentialId: string;
   name: string;
@@ -148,7 +167,9 @@ export interface ManagedCredential {
   dependencies: CredentialDependency[];
   metadata: CredentialMetadata;
 }
+}
 
+}
 export interface CredentialVersion {
   versionId: string;
   version: number;
@@ -161,7 +182,9 @@ export interface CredentialVersion {
   validationResult?: ValidationResult;
   rollbackCapable: boolean;
 }
+}
 
+}
 export interface CredentialConfiguration {
   scope: 'global' | 'service' | 'user' | 'environment';
   environment: string[];
@@ -170,14 +193,18 @@ export interface CredentialConfiguration {
   restrictions: AccessRestriction[];
   customSettings: Record<string, any>;
 }
+}
 
+}
 export interface AccessRestriction {
   type: 'ip_range' | 'time_window' | 'usage_count' | 'geo_location' | 'custom';
   value: string;
   enabled: boolean;
   description: string;
 }
+}
 
+}
 export interface CredentialDependency {
   dependencyId: string;
   type: 'service' | 'database' | 'api' | 'certificate' | 'user';
@@ -187,7 +214,9 @@ export interface CredentialDependency {
   validationEndpoint?: string;
   rollbackSupport: boolean;
 }
+}
 
+}
 export interface CredentialMetadata {
   owner: string;
   team: string;
@@ -198,7 +227,9 @@ export interface CredentialMetadata {
   tags: Record<string, string>;
   customAttributes: Record<string, any>;
 }
+}
 
+}
 export interface RotationJob {
   jobId: string;
   credentialId: string;
@@ -216,7 +247,9 @@ export interface RotationJob {
   rollbackJob?: RollbackJob;
   metadata: JobMetadata;
 }
+}
 
+}
 export interface RotationAttempt {
   attemptId: string;
   attempt: number;
@@ -228,7 +261,9 @@ export interface RotationAttempt {
   rollbackRequired: boolean;
   validationResults: ValidationResult[];
 }
+}
 
+}
 export interface RotationStep {
   stepId: string;
   name: string;
@@ -241,7 +276,9 @@ export interface RotationStep {
   error?: string;
   rollbackData?: any;
 }
+}
 
+}
 export interface RotationError {
   errorId: string;
   timestamp: Date;
@@ -253,7 +290,9 @@ export interface RotationError {
   recoverable: boolean;
   retryable: boolean;
 }
+}
 
+}
 export interface RollbackJob {
   rollbackJobId: string;
   originalJobId: string;
@@ -264,7 +303,9 @@ export interface RollbackJob {
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   steps: RollbackStep[];
 }
+}
 
+}
 export interface RollbackStep {
   stepId: string;
   name: string;
@@ -273,7 +314,9 @@ export interface RollbackStep {
   rollbackAction: string;
   completedAt?: Date;
 }
+}
 
+}
 export interface ValidationResult {
   validationId: string;
   timestamp: Date;
@@ -283,14 +326,18 @@ export interface ValidationResult {
   details: ValidationDetails;
   recommendations: string[];
 }
+}
 
+}
 export interface ValidationDetails {
   checks: ValidationCheck[];
   metrics: Record<string, number>;
   compliance: ComplianceCheck[];
   warnings: string[];
 }
+}
 
+}
 export interface ValidationCheck {
   name: string;
   passed: boolean;
@@ -298,14 +345,18 @@ export interface ValidationCheck {
   actual: any;
   severity: 'info' | 'warning' | 'error' | 'critical';
 }
+}
 
+}
 export interface ComplianceCheck {
   standard: string;
   requirement: string;
   compliant: boolean;
   details: string;
 }
+}
 
+}
 export interface JobMetadata {
   initiatedBy: string;
   reason: string;
@@ -315,11 +366,14 @@ export interface JobMetadata {
   estimatedDuration: number;
   actualDuration?: number;
 }
+}
 
+}
 export interface RotationAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   totalRotations: number;
   successfulRotations: number;
@@ -333,6 +387,7 @@ export interface RotationAnalytics {
   recommendations: string[];
 }
 
+}
 export interface ComplianceMetrics {
   overallCompliance: number; // percentage
   standardCompliance: Record<string, number>;
@@ -340,7 +395,9 @@ export interface ComplianceMetrics {
   expiredCredentials: number;
   complianceViolations: ComplianceViolation[];
 }
+}
 
+}
 export interface ComplianceViolation {
   violationId: string;
   credentialId: string;
@@ -351,14 +408,18 @@ export interface ComplianceViolation {
   resolved: boolean;
   resolution?: string;
 }
+}
 
+}
 export interface RotationTrends {
   rotationFrequency: TrendData;
   successRate: TrendData;
   averageDuration: TrendData;
   errorRate: TrendData;
 }
+}
 
+}
 export interface TrendData {
   current: number;
   previous: number;
@@ -367,12 +428,16 @@ export interface TrendData {
   trend: 'increasing' | 'decreasing' | 'stable';
   dataPoints: DataPoint[];
 }
+}
 
+}
 export interface DataPoint {
   timestamp: Date;
   value: number;
 }
+}
 
+}
 export interface RotationErrorAnalysis {
   errorType: string;
   count: number;
@@ -380,6 +445,7 @@ export interface RotationErrorAnalysis {
   averageResolutionTime: number;
   topAffectedCredentials: string[];
   recommendedActions: string[];
+}
 }
 
 // ==========================================
@@ -410,6 +476,7 @@ export class RotationManagementService {
   async createRotationPolicy(
     policy: Omit<RotationPolicy, 'policyId' | 'metadata'>
   ): Promise<string> {
+
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const rotationPolicy: RotationPolicy = {
@@ -462,6 +529,7 @@ export class RotationManagementService {
     policyId: string, 
     updates: Partial<RotationPolicy>
   ): Promise<void> {
+
     const existingPolicy = this.rotationPolicies.get(policyId);
     if (!existingPolicy) {
       throw new Error(`Rotation policy not found: ${policyId}`);
@@ -514,6 +582,7 @@ export class RotationManagementService {
   async registerCredential(
     credential: Omit<ManagedCredential, 'credentialId' | 'currentVersion' | 'versions' | 'status' | 'nextRotationDue' | 'lastRotated' | 'rotationCount' | 'metadata'>
   ): Promise<string> {
+
     const credentialId = `cred_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const policy = this.rotationPolicies.get(credential.policyId);
@@ -592,6 +661,7 @@ export class RotationManagementService {
     reason: string = 'Manual rotation',
     priority: RotationPriority = RotationPriority.MEDIUM
   ): Promise<string> {
+
     const credential = this.managedCredentials.get(credentialId);
     if (!credential) {
       throw new Error(`Credential not found: ${credentialId}`);
@@ -656,6 +726,7 @@ export class RotationManagementService {
   // ==========================================
 
   private async processRotationJob(job: RotationJob): Promise<void> {
+
     const startTime = performance.now();
     
     try {
@@ -794,6 +865,7 @@ export class RotationManagementService {
   }
 
   private async getRotationSteps(job: RotationJob): Promise<RotationStepConfig[]> {
+
     const credential = this.managedCredentials.get(job.credentialId)!;
     const policy = this.rotationPolicies.get(job.policyId)!;
 
@@ -802,32 +874,32 @@ export class RotationManagementService {
         name: 'validate_prerequisites',
         description: 'Validate rotation prerequisites',
         execute: async () => this.validateRotationPrerequisites(credential, policy)
-      },
+  }
       {
         name: 'generate_new_credential',
         description: 'Generate new credential value',
         execute: async () => this.generateCredential(credential.type, policy.requirements)
-      },
+  }
       {
         name: 'validate_new_credential',
         description: 'Validate new credential',
         execute: async (newValue: string) => this.validateCredential(newValue, policy.requirements)
-      },
+  }
       {
         name: 'update_credential_store',
         description: 'Update credential in secure store',
         execute: async (newValue: string) => this.updateCredentialStore(credential, newValue)
-      },
+  }
       {
         name: 'distribute_to_services',
         description: 'Distribute new credential to dependent services',
         execute: async () => this.distributeCredential(credential)
-      },
+  }
       {
         name: 'verify_functionality',
         description: 'Verify services are functioning with new credential',
         execute: async () => this.verifyCredentialFunctionality(credential)
-      },
+  }
       {
         name: 'cleanup_old_credential',
         description: 'Clean up old credential after grace period',
@@ -843,6 +915,7 @@ export class RotationManagementService {
     step: RotationStep, 
     stepConfig: RotationStepConfig
   ): Promise<any> {
+
     console.log(`Executing rotation step: ${step.name} for job ${job.jobId}`);
     
     try {
@@ -865,6 +938,7 @@ export class RotationManagementService {
   // ==========================================
 
   private async generateCredential(type: RotationType, requirements: RotationRequirements): Promise<string> {
+
     switch (type) {
     case RotationType.API_KEY:
       return this.generateApiKey(requirements);
@@ -953,6 +1027,7 @@ export class RotationManagementService {
     credential: string, 
     requirements: RotationRequirements
   ): Promise<ValidationResult> {
+
     const validationId = `val_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
     const checks: ValidationCheck[] = [];
     
@@ -1006,10 +1081,10 @@ export class RotationManagementService {
           score: score,
           passedChecks,
           totalChecks
-        },
+  }
         compliance: [],
         warnings: checks.filter(c => !c.passed && c.severity === 'warning').map(c => c.name)
-      },
+  }
       recommendations: passed ? [] : [
         'Regenerate credential with stronger requirements',
         'Review credential policy configuration',
@@ -1019,6 +1094,7 @@ export class RotationManagementService {
   }
 
   private async encryptCredential(credential: string, salt: string): Promise<string> {
+
     const algorithm = 'aes-256-gcm';
     const key = crypto.scryptSync('epic17-credential-encryption-key', salt, 32);
     const iv = crypto.randomBytes(16);
@@ -1031,6 +1107,7 @@ export class RotationManagementService {
   }
 
   private async decryptCredential(encryptedCredential: string, salt: string): Promise<string> {
+
     const algorithm = 'aes-256-gcm';
     const key = crypto.scryptSync('epic17-credential-encryption-key', salt, 32);
     
@@ -1059,6 +1136,7 @@ export class RotationManagementService {
   }
 
   private async checkScheduledRotations(): Promise<void> {
+
     const now = Date.now();
     
     for (const [credentialId, credential] of this.managedCredentials) {
@@ -1076,6 +1154,7 @@ export class RotationManagementService {
   }
 
   private async processJobQueue(): Promise<void> {
+
     // Sort jobs by priority and scheduled time
     this.jobQueue.sort((a, b) => {
       const priorityOrder = {
@@ -1101,6 +1180,7 @@ export class RotationManagementService {
   }
 
   private async scheduleRotation(credentialId: string): Promise<void> {
+
     const credential = this.managedCredentials.get(credentialId);
     if (!credential) return;
 
@@ -1135,6 +1215,7 @@ export class RotationManagementService {
   // ==========================================
 
   private async validatePolicyConfiguration(policy: RotationPolicy): Promise<void> {
+
     if (policy.rotationInterval < 60000) {
       throw new Error('Rotation interval must be at least 1 minute');
     }
@@ -1200,6 +1281,7 @@ export class RotationManagementService {
   }
 
   private async delay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -1212,31 +1294,37 @@ export class RotationManagementService {
   // ==========================================
 
   private async validateRotationPrerequisites(credential: ManagedCredential, policy: RotationPolicy): Promise<boolean> {
+
     // Mock validation - would check dependencies, services health, etc.
     return true;
   }
 
   private async updateCredentialStore(credential: ManagedCredential, newValue: string): Promise<void> {
+
     console.log(`Updating credential store for ${credential.credentialId}`);
     // Would update secure credential storage
   }
 
   private async distributeCredential(credential: ManagedCredential): Promise<void> {
+
     console.log(`Distributing credential ${credential.credentialId} to dependencies`);
     // Would distribute to dependent services
   }
 
   private async verifyCredentialFunctionality(credential: ManagedCredential): Promise<void> {
+
     console.log(`Verifying functionality for credential ${credential.credentialId}`);
     // Would verify services are working with new credential
   }
 
   private async scheduleCredentialCleanup(credential: ManagedCredential, gracePeriod: number): Promise<void> {
+
     console.log(`Scheduling cleanup for credential ${credential.credentialId} in ${gracePeriod}ms`);
     // Would schedule old credential removal after grace period
   }
 
   private async updateCredentialAfterRotation(job: RotationJob, attempt: RotationAttempt): Promise<void> {
+
     const credential = this.managedCredentials.get(job.credentialId)!;
     
     // Update rotation count and last rotated time
@@ -1249,29 +1337,35 @@ export class RotationManagementService {
   }
 
   private async initiateRollback(job: RotationJob, reason: string): Promise<void> {
+
     console.log(`Initiating rollback for job ${job.jobId}: ${reason}`);
     // Would implement rollback logic
   }
 
   private async sendRotationNotification(job: RotationJob, event: string): Promise<void> {
+
     console.log(`Sending notification for job ${job.jobId}: ${event}`);
     // Would send notifications via configured channels
   }
 
   private async rescheduleCredentialRotations(policyId: string): Promise<void> {
+
     console.log(`Rescheduling rotations for policy ${policyId}`);
     // Would reschedule all credentials using this policy
   }
 
   private async persistRotationPolicy(policy: RotationPolicy): Promise<void> {
+
     console.log(`Persisting rotation policy: ${policy.policyId}`);
   }
 
   private async persistCredential(credential: ManagedCredential): Promise<void> {
+
     console.log(`Persisting credential: ${credential.credentialId}`);
   }
 
   private async persistRotationJob(job: RotationJob): Promise<void> {
+
     console.log(`Persisting rotation job: ${job.jobId}`);
   }
 
@@ -1280,6 +1374,7 @@ export class RotationManagementService {
   // ==========================================
 
   async getRotationPolicies(filters?: { type?: RotationType }): Promise<RotationPolicy[]> {
+
     let policies = Array.from(this.rotationPolicies.values());
     
     if (filters?.type) {
@@ -1290,10 +1385,12 @@ export class RotationManagementService {
   }
 
   async getRotationPolicy(policyId: string): Promise<RotationPolicy | null> {
+
     return this.rotationPolicies.get(policyId) || null;
   }
 
   async getManagedCredentials(filters?: { status?: RotationStatus; type?: RotationType }): Promise<ManagedCredential[]> {
+
     let credentials = Array.from(this.managedCredentials.values());
     
     if (filters?.status) {
@@ -1308,6 +1405,7 @@ export class RotationManagementService {
   }
 
   async getRotationJobs(filters?: { status?: RotationStatus; credentialId?: string }): Promise<RotationJob[]> {
+
     let jobs = Array.from(this.activeJobs.values());
     
     if (filters?.status) {
@@ -1324,6 +1422,7 @@ export class RotationManagementService {
   async getRotationAnalytics(
     timeRange: { start: Date; end: Date }
   ): Promise<RotationAnalytics> {
+
     // Mock analytics - would analyze actual rotation data
     return {
       timeRange,
@@ -1347,7 +1446,7 @@ export class RotationManagementService {
         overdueRotations: 2,
         expiredCredentials: 1,
         complianceViolations: []
-      },
+  }
       trends: {
         rotationFrequency: {
           current: 45,
@@ -1356,7 +1455,7 @@ export class RotationManagementService {
           changePercentage: 18.4,
           trend: 'increasing',
           dataPoints: []
-        },
+  }
         successRate: {
           current: 93.3,
           previous: 91.2,
@@ -1364,7 +1463,7 @@ export class RotationManagementService {
           changePercentage: 2.3,
           trend: 'increasing',
           dataPoints: []
-        },
+  }
         averageDuration: {
           current: 45000,
           previous: 52000,
@@ -1372,7 +1471,7 @@ export class RotationManagementService {
           changePercentage: -13.5,
           trend: 'decreasing',
           dataPoints: []
-        },
+  }
         errorRate: {
           current: 6.7,
           previous: 8.8,
@@ -1381,7 +1480,7 @@ export class RotationManagementService {
           trend: 'decreasing',
           dataPoints: []
         }
-      },
+  }
       topErrors: [
         {
           errorType: 'network_timeout',
@@ -1405,9 +1504,11 @@ export class RotationManagementService {
 // HELPER INTERFACES
 // ==========================================
 
+}
 interface RotationStepConfig {
   name: string;
   description: string;
   execute: (input?: any) => Promise<any>;
   rollbackData?: () => Promise<any>;
+}
 }

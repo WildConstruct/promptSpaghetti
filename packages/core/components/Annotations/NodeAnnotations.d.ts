@@ -5,6 +5,7 @@
  * Supports performance notes, creative direction, technical specs, and director approvals.
  */
 import React from 'react';
+
 export interface NodeAnnotation {
     id: string;
     nodeId: string;
@@ -23,7 +24,7 @@ export interface NodeAnnotation {
     estimatedTime?: number;
     deadline?: string;
     assignee?: VFXUser;
-}
+
 export interface NodeAnnotationAttachment {
     id: string;
     type: 'image' | 'video' | 'audio' | 'link' | 'file';
@@ -32,7 +33,7 @@ export interface NodeAnnotationAttachment {
     thumbnail?: string;
     size?: number;
     duration?: number;
-}
+
 export interface NodeAnnotationReply {
     id: string;
     content: string;
@@ -41,14 +42,14 @@ export interface NodeAnnotationReply {
     reactions: {,
         [emoji: string]: VFXUser[];
     };
-}
+
 export interface VFXUser {
     id: string;
     name: string;
     role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
     avatar?: string;
     email: string;
-}
+
 export interface NodeAnnotationSystemProps {
     nodeId: string;
     nodeName: string;
@@ -61,7 +62,7 @@ export interface NodeAnnotationSystemProps {
     onReplyCreate: (annotationId: string, reply: Omit<NodeAnnotationReply, 'id' | 'timestamp' | 'reactions'>) => void;
     className?: string;
     compact?: boolean;
-}
+
 export declare const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps>;
 export default NodeAnnotationSystem;
 //# sourceMappingURL=NodeAnnotations.d.ts.map

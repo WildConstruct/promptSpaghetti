@@ -9,6 +9,7 @@
  * - Automated dependency resolution suggestions
  */
 import { EventEmitter } from 'events';
+
 export interface ToggleDependency {
     id: string;
     sourceToggleId: string;
@@ -21,7 +22,7 @@ export interface ToggleDependency {
     metadata: DependencyMetadata;
     created: Date;
     lastValidated: Date;
-}
+
 export declare enum DependencyType {
     REQUIRES = "requires",// Source requires target to be active
     BLOCKS = "blocks",// Source blocks target from being active
@@ -29,13 +30,13 @@ export declare enum DependencyType {
     ENHANCES = "enhances",// Source enhances target functionality
     FOLLOWS = "follows",// Source should activate after target
     PRECEDES = "precedes"
-}
+
 export declare enum DependencyRelationship {
     HARD = "hard",// Strict dependency - cannot be violated
     SOFT = "soft",// Preference - can be overridden with warning
     CONDITIONAL = "conditional",// Depends on conditions
     CONTEXTUAL = "contextual"
-}
+
 export interface DependencyMetadata {
     category: string;
     epic?: string;
@@ -45,7 +46,7 @@ export interface DependencyMetadata {
     businessImpact: string;
     technicalNotes: string[];
     overrideHistory: DependencyOverride[];
-}
+
 export interface DependencyOverride {
     id: string;
     actor: string;
@@ -54,7 +55,7 @@ export interface DependencyOverride {
     duration?: number;
     approved: boolean;
     approver?: string;
-}
+
 export interface DependencyGraph {
     nodes: ToggleNode[];
     edges: DependencyEdge[];
@@ -62,7 +63,7 @@ export interface DependencyGraph {
     criticalPaths: CriticalPath[];
     conflicts: DependencyConflict[];
     metrics: GraphMetrics;
-}
+
 export interface ToggleNode {
     id: string;
     toggleId: string;
@@ -80,7 +81,7 @@ export interface ToggleNode {
         activationCount: number;
         lastActivated?: Date;
     };
-}
+
 export interface DependencyEdge {
     id: string;
     source: string;
@@ -94,7 +95,7 @@ export interface DependencyEdge {
         validated: Date;
         violations: number;
     };
-}
+
 export interface DependencyCluster {
     id: string;
     name: string;
@@ -102,7 +103,7 @@ export interface DependencyCluster {
     type: 'feature' | 'epic' | 'story' | 'system';
     strength: number;
     external: string[];
-}
+
 export interface CriticalPath {
     id: string;
     toggles: string[];
@@ -111,7 +112,7 @@ export interface CriticalPath {
     estimatedActivationTime: number;
     bottlenecks: string[];
     alternatives: string[][];
-}
+
 export interface DependencyConflict {
     id: string;
     type: ConflictType;
@@ -120,14 +121,14 @@ export interface DependencyConflict {
     description: string;
     resolution: ConflictResolution[];
     impact: ConflictImpact;
-}
+
 export declare enum ConflictType {
     CIRCULAR_DEPENDENCY = "circular_dependency",
     MUTUAL_EXCLUSION = "mutual_exclusion",
     TIMING_CONFLICT = "timing_conflict",
     RESOURCE_CONFLICT = "resource_conflict",
     BUSINESS_LOGIC = "business_logic"
-}
+
 export interface ConflictResolution {
     id: string;
     type: 'remove_dependency' | 'change_type' | 'add_condition' | 'manual_override';
@@ -135,13 +136,13 @@ export interface ConflictResolution {
     automated: boolean;
     confidence: number;
     impact: string;
-}
+
 export interface ConflictImpact {
     affectedToggles: number;
     userImpact: 'none' | 'minimal' | 'moderate' | 'significant';
     businessRisk: 'low' | 'medium' | 'high' | 'critical';
     estimatedDowntime?: number;
-}
+
 export interface GraphMetrics {
     totalToggles: number;
     totalDependencies: number;
@@ -151,14 +152,14 @@ export interface GraphMetrics {
     conflictCount: number;
     healthScore: number;
     lastAnalyzed: Date;
-}
+
 export interface DependencyAnalysis {
     graph: DependencyGraph;
     violations: DependencyViolation[];
     recommendations: DependencyRecommendation[];
     impactAssessment: ImpactAssessment;
     riskFactors: RiskFactor[];
-}
+
 export interface DependencyViolation {
     id: string;
     type: ViolationType;
@@ -169,14 +170,14 @@ export interface DependencyViolation {
     detected: Date;
     resolved?: Date;
     resolution?: string;
-}
+
 export declare enum ViolationType {
     MISSING_DEPENDENCY = "missing_dependency",
     CIRCULAR_REFERENCE = "circular_reference",
     CONFLICTING_STATES = "conflicting_states",
     ORPHANED_TOGGLE = "orphaned_toggle",
     INCONSISTENT_RELATIONSHIP = "inconsistent_relationship"
-}
+
 export interface DependencyRecommendation {
     id: string;
     type: RecommendationType;
@@ -187,7 +188,7 @@ export interface DependencyRecommendation {
     expectedBenefit: string;
     estimatedEffort: number;
     automated: boolean;
-}
+
 export declare enum RecommendationType {
     ADD_DEPENDENCY = "add_dependency",
     REMOVE_DEPENDENCY = "remove_dependency",
@@ -195,7 +196,7 @@ export declare enum RecommendationType {
     CREATE_CLUSTER = "create_cluster",
     OPTIMIZE_PATH = "optimize_path",
     RESOLVE_CONFLICT = "resolve_conflict"
-}
+
 export interface ImpactAssessment {
     directImpact: ToggleImpact[];
     indirectImpact: ToggleImpact[];
@@ -204,7 +205,7 @@ export interface ImpactAssessment {
     estimatedUsers: number;
     riskScore: number;
     mitigation: string[];
-}
+
 export interface ToggleImpact {
     toggleId: string;
     impactType: 'activation' | 'deactivation' | 'modification' | 'dependency_change';
@@ -212,7 +213,7 @@ export interface ToggleImpact {
     description: string;
     affectedFeatures: string[];
     userExperienceChange: string;
-}
+
 export interface RiskFactor {
     category: 'technical' | 'business' | 'user_experience' | 'compliance';
     risk: string;
@@ -220,7 +221,7 @@ export interface RiskFactor {
     impact: number;
     score: number;
     mitigation: string[];
-}
+
 export interface DependencyServiceConfig {
     detection: {,
         autoDetectDependencies: boolean;
@@ -246,7 +247,6 @@ export interface DependencyServiceConfig {
         impactAnalysisDepth: number;
         recommendationEngine: boolean;
     };
-}
 /**
  * Feature Toggle Dependency Management Service
  *
@@ -332,6 +332,6 @@ export declare class FeatureToggleDependencyService extends EventEmitter {
     private findMutualExclusions;
     private generateExclusionResolutions;
     private assessExclusionImpact;
-}
+
 export default FeatureToggleDependencyService;
 //# sourceMappingURL=FeatureToggleDependencyService.d.ts.map

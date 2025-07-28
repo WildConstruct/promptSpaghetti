@@ -5,9 +5,9 @@
 import React from 'react';
 import { Experiment, ExperimentTemplate, KnowledgeBaseEntry } from '../../types/experiment';
 export interface ExperimentManagerProps {
-    experiments: Experiment[];
-    templates: ExperimentTemplate[];
-    knowledgeBase: KnowledgeBaseEntry[];
+    experiments: Experiment;
+    templates: ExperimentTemplate;
+    knowledgeBase: KnowledgeBaseEntry;
     onCreateExperiment: (template?: ExperimentTemplate) => void;
     onEditExperiment: (id: string) => void;
     onViewResults: (id: string) => void;

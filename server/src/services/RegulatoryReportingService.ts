@@ -5,6 +5,7 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface RegulatoryReport {
   reportId: string;
   regulation: ComplianceRegulation;
@@ -16,6 +17,7 @@ export interface RegulatoryReport {
   summary: ReportSummary;
   sections: ReportSection[];
   metadata: ReportMetadata;
+}
 }
 
 export enum ComplianceRegulation {
@@ -36,6 +38,7 @@ export enum ReportType {
   PRIVACY_IMPACT = 'PRIVACY_IMPACT'
 }
 
+}
 export interface ReportSummary {
   totalDataSubjects: number;
   totalConsentRecords: number;
@@ -44,7 +47,9 @@ export interface ReportSummary {
   keyFindings: string[];
   recommendations: string[];
 }
+}
 
+}
 export interface ReportSection {
   sectionId: string;
   title: string;
@@ -52,23 +57,30 @@ export interface ReportSection {
   charts?: ChartData[];
   compliance: SectionCompliance;
 }
+}
 
+}
 export interface ReportData {
   category: string;
   metrics: Record<string, any>;
   details: unknown[];
 }
+}
 
+}
 export interface ChartData {
   type: 'bar' | 'line' | 'pie' | 'table';
   title: string;
   data: Record<string, unknown>[];
 }
+}
 
+}
 export interface SectionCompliance {
   status: ComplianceStatus;
   score: number;
   issues: ComplianceIssue[];
+}
 }
 
 export enum ComplianceStatus {
@@ -78,13 +90,16 @@ export enum ComplianceStatus {
   UNDER_REVIEW = 'UNDER_REVIEW'
 }
 
+}
 export interface ComplianceIssue {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
   recommendation: string;
   dueDate?: Date;
 }
+}
 
+}
 export interface ReportMetadata {
   version: string;
   dataSource: string;
@@ -92,6 +107,7 @@ export interface ReportMetadata {
   nextReviewDate: Date;
   approvalRequired: boolean;
   confidentiality: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
+}
 }
 
 export class RegulatoryReportingService {
@@ -110,6 +126,7 @@ export class RegulatoryReportingService {
     periodEnd: Date,
     generatedBy: string
   ): Promise<RegulatoryReport> {
+
     const reportId = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const summary = await this.generateReportSummary(regulation, reportType, periodStart, periodEnd);
@@ -147,6 +164,7 @@ export class RegulatoryReportingService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<ReportSummary> {
+
     const [totalDataSubjects, totalConsentRecords, activeViolations] = await Promise.all([
       this.getTotalDataSubjects(periodStart, periodEnd),
       this.getTotalConsentRecords(periodStart, periodEnd),
@@ -173,6 +191,7 @@ export class RegulatoryReportingService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<ReportSection[]> {
+
     const sections: ReportSection[] = [];
 
     switch (regulation) {
@@ -195,6 +214,7 @@ export class RegulatoryReportingService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<ReportSection[]> {
+
     const sections: ReportSection[] = [];
 
     // Consent Management Section
@@ -209,7 +229,7 @@ export class RegulatoryReportingService {
           validConsents: consentData.valid,
           expiredConsents: consentData.expired,
           withdrawnConsents: consentData.withdrawn
-        },
+  }
         details: consentData.details
       }],
       compliance: await this.assessGDPRConsentCompliance(consentData)
@@ -227,7 +247,7 @@ export class RegulatoryReportingService {
           deletionRequests: rightsData.deletion,
           portabilityRequests: rightsData.portability,
           averageResponseTime: rightsData.avgResponseTime
-        },
+  }
         details: rightsData.details
       }],
       compliance: await this.assessRightsCompliance(rightsData)
@@ -241,6 +261,7 @@ export class RegulatoryReportingService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<ReportSection[]> {
+
     const sections: ReportSection[] = [];
 
     // Consumer Rights Section
@@ -264,6 +285,7 @@ export class RegulatoryReportingService {
     periodStart: Date,
     periodEnd: Date
   ): Promise<ReportSection[]> {
+
     const sections: ReportSection[] = [];
 
     // PHI Access Section
@@ -283,6 +305,7 @@ export class RegulatoryReportingService {
   }
 
   private async getTotalDataSubjects(periodStart: Date, periodEnd: Date): Promise<number> {
+
     const query = `
       SELECT COUNT(DISTINCT user_id) as total
       FROM user_accounts
@@ -293,6 +316,7 @@ export class RegulatoryReportingService {
   }
 
   private async getTotalConsentRecords(periodStart: Date, periodEnd: Date): Promise<number> {
+
     const query = `
       SELECT COUNT(*) as total
       FROM user_policy_acceptances
@@ -303,6 +327,7 @@ export class RegulatoryReportingService {
   }
 
   private async getActiveViolations(periodStart: Date, periodEnd: Date): Promise<number> {
+
     const query = `
       SELECT COUNT(*) as total
       FROM compliance_violations
@@ -346,6 +371,7 @@ export class RegulatoryReportingService {
     _____periodStart: Date,
     _____periodEnd: Date
   ): Promise<string[]> {
+
     const findings: string[] = [];
     
     // Add regulation-specific findings
@@ -421,6 +447,7 @@ export class RegulatoryReportingService {
   }
 
   private async saveReport(report: RegulatoryReport): Promise<void> {
+
     const query = `
       INSERT INTO regulatory_reports (
         report_id, regulation, report_type, period_start, period_end,
@@ -441,6 +468,7 @@ export class RegulatoryReportingService {
   }
 
   private async logReportGeneration(report: RegulatoryReport): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'REGULATORY_REPORT_GENERATED',
       userId: report.generatedBy,
@@ -449,33 +477,38 @@ export class RegulatoryReportingService {
         regulation: report.regulation,
         reportType: report.reportType,
         complianceScore: report.summary.complianceScore
-      },
+  }
       timestamp: report.generatedAt
     });
   }
 
   // Placeholder methods for specific data retrieval
   private async getConsentData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
+
     // Implementation would retrieve actual consent data
     return { total: 0, valid: 0, expired: 0, withdrawn: 0, details: [] };
   }
 
   private async getDataSubjectRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
+
     // Implementation would retrieve data subject rights request data
     return { access: 0, deletion: 0, portability: 0, avgResponseTime: 0, details: [] };
   }
 
   private async getCCPAConsumerRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
+
     // Implementation would retrieve CCPA-specific data
     return { metrics: {}, details: [] };
   }
 
   private async getPHIAccessData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
+
     // Implementation would retrieve HIPAA PHI access data
     return { metrics: {}, details: [] };
   }
 
   private async assessGDPRConsentCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
+
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 95,
@@ -484,6 +517,7 @@ export class RegulatoryReportingService {
   }
 
   private async assessRightsCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
+
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 90,
@@ -492,6 +526,7 @@ export class RegulatoryReportingService {
   }
 
   private async assessCCPACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
+
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 88,
@@ -500,6 +535,7 @@ export class RegulatoryReportingService {
   }
 
   private async assessHIPAACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
+
     return {
       status: ComplianceStatus.COMPLIANT,
       score: 92,

@@ -18,19 +18,19 @@ describe('PrerequisiteSystemService', () => {
   let mockUserId: string;
   let mockPrerequisite: Prerequisite;
   beforeEach(() => {
-    service = new PrerequisiteSystemService();
-    mockUserId = '550e8400-e29b-41d4-a716-446655440000';
-    mockPrerequisite = {
-      id: '550e8400-e29b-41d4-a716-446655440001',
-      name: 'Basic JavaScript',
-      description: 'Introduction to JavaScript programming fundamentals',
-      type: 'tutorial',
-      requiredScore: 80,
-      requiredTime: 120,
-      validityPeriod: 365,
-      category: 'programming',
-      isActive: true,
-    };
+  service = new PrerequisiteSystemService();
+  mockUserId = '550e8400-e29b-41d4-a716-446655440000';
+  mockPrerequisite = {
+  id: '550e8400-e29b-41d4-a716-446655440001',
+  name: 'Basic JavaScript',
+  description: 'Introduction to JavaScript programming fundamentals',
+  type: 'tutorial',
+  requiredScore: 80,
+  requiredTime: 120,
+  validityPeriod: 365,
+  category: 'programming',
+  isActive: true,
+};
   });
   describe('createPrerequisite', () => {
     it('should create a valid prerequisite successfully', async () => {
@@ -40,42 +40,42 @@ describe('PrerequisiteSystemService', () => {
       expect(result.errors).toBeUndefined();
     });
     it('should reject prerequisite with invalid schema', async () => {
-      const invalidPrerequisite = {
-        ...mockPrerequisite,
-        name: '', // Invalid: empty name
-        requiredScore: 150 // Invalid: score > 100,
-      };
+  const invalidPrerequisite = {
+  ...mockPrerequisite,
+  name: '', // Invalid: empty name,
+  requiredScore: 150 // Invalid: score > 100,
+};
       const result = await service.createPrerequisite(invalidPrerequisite as Prerequisite, mockUserId);
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.errors?.length).toBeGreaterThan(0);
     });
     it('should reject prerequisite with malicious content', async () => {
-      const maliciousPrerequisite = {
-        ...mockPrerequisite,
-        name: '<script>alert("xss")</script>',
-        description: 'DROP TABLE users; --'
-      };
+  const maliciousPrerequisite = {
+  ...mockPrerequisite,
+  name: '<script>alert("xss")</script>',
+  description: 'DROP TABLE users; --',
+};
       const result = await service.createPrerequisite(maliciousPrerequisite, mockUserId);
       expect(result.success).toBe(false);
       expect(result.errors).toContain('Potentially dangerous script content detected');
     });
     it('should handle extremely long content gracefully', async () => {
-      const longPrerequisite = {
-        ...mockPrerequisite,
-        name: 'A'.repeat(200), // Exceeds maximum length
-        description: 'B'.repeat(1000) // Exceeds maximum length,
-      };
+  const longPrerequisite = {
+  ...mockPrerequisite,
+  name: 'A'.repeat(200), // Exceeds maximum length,
+  description: 'B'.repeat(1000) // Exceeds maximum length,
+};
       const result = await service.createPrerequisite(longPrerequisite, mockUserId);
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
     });
     it('should validate special characters in names', async () => {
-      const specialCharsPrerequisite = {
-        ...mockPrerequisite,
-        name: 'JavaScript & TypeScript (Advanced)',
-        description: 'Learn advanced JavaScript and TypeScript concepts',
-      };
+  const specialCharsPrerequisite = {
+  ...mockPrerequisite,
+  name: 'JavaScript & TypeScript (Advanced)',
+  description: 'Learn advanced JavaScript and TypeScript concepts',
+};
       const result = await service.createPrerequisite(specialCharsPrerequisite, mockUserId);
       expect(result.success).toBe(true);
     });
@@ -94,13 +94,13 @@ describe('PrerequisiteSystemService', () => {
       await service.createPrerequisite(mockPrerequisite, mockUserId);
     });
     it('should allow access when prerequisites are met', async () => {
-      // Mock completed progress
-      await service.updateProgress(mockUserId, mockPrerequisite.id, {)
-        status: 'completed',
-        score: 85,
-        completedAt: new Date(),
-        attempts: 1,
-      });
+  // Mock completed progress
+  await service.updateProgress(mockUserId, mockPrerequisite.id, {)
+  status: 'completed',
+  score: 85,
+  completedAt: new Date(),
+  attempts: 1,
+});
       const result = await service.evaluatePrerequisites(mockUserId, [mockPrerequisite.id]);
       expect(result.canProceed).toBe(true);
       expect(result.evaluation.satisfiedPrerequisites).toContain(mockPrerequisite.id);
@@ -112,44 +112,44 @@ describe('PrerequisiteSystemService', () => {
       expect(result.recommendations.length).toBeGreaterThan(0);
     });
     it('should handle score requirements correctly', async () => {
-      // Score too low
-      await service.updateProgress(mockUserId, mockPrerequisite.id, {)
-        status: 'completed',
-        score: 60, // Below required 80
-        completedAt: new Date(),
-        attempts: 1,
-      });
+  // Score too low
+  await service.updateProgress(mockUserId, mockPrerequisite.id, {)
+  status: 'completed',
+  score: 60, // Below required 80,
+  completedAt: new Date(),
+  attempts: 1,
+});
       const result = await service.evaluatePrerequisites(mockUserId, [mockPrerequisite.id]);
       expect(result.canProceed).toBe(false);
       expect(result.evaluation.missingPrerequisites).toContain(mockPrerequisite.id);
     });
     it('should handle expired prerequisites', async () => {
-      const expiredDate = new Date();
-      expiredDate.setDate(expiredDate.getDate() - 400); // Older than validity period
-      await service.updateProgress(mockUserId, mockPrerequisite.id, {)
-        status: 'completed',
-        score: 85,
-        completedAt: expiredDate,
-        attempts: 1,
-      });
+  const expiredDate = new Date();
+  expiredDate.setDate(expiredDate.getDate() - 400); // Older than validity period
+  await service.updateProgress(mockUserId, mockPrerequisite.id, {)
+  status: 'completed',
+  score: 85,
+  completedAt: expiredDate,
+  attempts: 1,
+});
       const result = await service.evaluatePrerequisites(mockUserId, [mockPrerequisite.id]);
       expect(result.canProceed).toBe(false);
     });
     it('should handle multiple prerequisites correctly', async () => {
-      const secondPrerequisite: Prerequisite = {
-        ...mockPrerequisite,
-        id: '550e8400-e29b-41d4-a716-446655440002',
-        name: 'Advanced JavaScript',
-      };
+  const secondPrerequisite: Prerequisite = {,
+  ...mockPrerequisite,
+  id: '550e8400-e29b-41d4-a716-446655440002',
+  name: 'Advanced JavaScript',
+};
       await service.createPrerequisite(secondPrerequisite, mockUserId);
       // Complete first prerequisite only
       await service.updateProgress(mockUserId, mockPrerequisite.id, {)
-        status: 'completed',
-        score: 85,
-        completedAt: new Date(),
-        attempts: 1,
-      });
-      const result = await service.evaluatePrerequisites(mockUserId, [;);
+  status: 'completed',
+  score: 85,
+  completedAt: new Date(),
+  attempts: 1,
+});
+      const result = await service.evaluatePrerequisites(mockUserId, [);
         mockPrerequisite.id,
         secondPrerequisite.id
       ]);
@@ -163,20 +163,20 @@ describe('PrerequisiteSystemService', () => {
       await service.createPrerequisite(mockPrerequisite, mockUserId);
     });
     it('should update progress successfully', async () => {
-      const progressData: Partial<UserProgress> = {
-        status: 'in_progress',
-        score: 50,
-        attempts: 1,
-      };
+  const progressData: Partial<UserProgress> = {,
+  status: 'in_progress',
+  score: 50,
+  attempts: 1,
+};
       const result = await service.updateProgress(mockUserId, mockPrerequisite.id, progressData);
       expect(result.success).toBe(true);
       expect(result.errors).toBeUndefined();
     });
     it('should validate progress data schema', async () => {
-      const invalidProgressData = {
-        status: 'invalid_status', // Invalid enum value
-        score: 150 // Invalid: score > 100,
-      };
+  const invalidProgressData = {
+  status: 'invalid_status', // Invalid enum value,
+  score: 150 // Invalid: score > 100,
+};
       const result = await service.updateProgress(;);
         mockUserId, 
         mockPrerequisite.id, 
@@ -186,11 +186,11 @@ describe('PrerequisiteSystemService', () => {
       expect(result.errors).toBeDefined();
     });
     it('should handle non-existent prerequisite', async () => {
-      const nonExistentId = '550e8400-e29b-41d4-a716-446655440999';
-      const result = await service.updateProgress(mockUserId, nonExistentId, {)
-        status: 'completed',
-        score: 85,
-      });
+  const nonExistentId = '550e8400-e29b-41d4-a716-446655440999';
+  const result = await service.updateProgress(mockUserId, nonExistentId, {)
+  status: 'completed',
+  score: 85,
+});
       expect(result.success).toBe(false);
       expect(result.errors).toContain('Prerequisite not found');
     });
@@ -217,16 +217,16 @@ describe('DependencyResolver', () => {
   let resolver: DependencyResolver;
   let mockPrerequisite: Prerequisite;
   beforeEach(() => {
-    resolver = new DependencyResolver();
-    mockPrerequisite = {
-      id: '550e8400-e29b-41d4-a716-446655440001',
-      name: 'Test Prerequisite',
-      description: 'Test prerequisite for unit testing',
-      type: 'tutorial',
-      requiredScore: 80,
-      category: 'test',
-      isActive: true,
-    };
+  resolver = new DependencyResolver();
+  mockPrerequisite = {
+  id: '550e8400-e29b-41d4-a716-446655440001',
+  name: 'Test Prerequisite',
+  description: 'Test prerequisite for unit testing',
+  type: 'tutorial',
+  requiredScore: 80,
+  category: 'test',
+  isActive: true,
+};
   });
   describe('addPrerequisite', () => {
     it('should add valid prerequisite', () => {
@@ -235,11 +235,11 @@ describe('DependencyResolver', () => {
       expect(result.errors).toBeUndefined();
     });
     it('should reject invalid prerequisite schema', () => {
-      const invalidPrerequisite = {
-        ...mockPrerequisite,
-        id: 'invalid-uuid', // Invalid UUID
-        requiredScore: -1 // Invalid negative score,
-      };
+  const invalidPrerequisite = {
+  ...mockPrerequisite,
+  id: 'invalid-uuid', // Invalid UUID,
+  requiredScore: -1 // Invalid negative score,
+};
       const result = resolver.addPrerequisite(invalidPrerequisite as Prerequisite);
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
@@ -250,44 +250,44 @@ describe('DependencyResolver', () => {
       resolver.addPrerequisite(mockPrerequisite);
     });
     it('should add valid prerequisite group', () => {
-      const group: PrerequisiteGroup = {
-        id: '550e8400-e29b-41d4-a716-446655440002',
-        name: 'JavaScript Basics',
-        description: 'Basic JavaScript prerequisites',
-        prerequisites: [mockPrerequisite.id],
-        operator: 'AND',
-      };
+  const group: PrerequisiteGroup = {,
+  id: '550e8400-e29b-41d4-a716-446655440002',
+  name: 'JavaScript Basics',
+  description: 'Basic JavaScript prerequisites',
+  prerequisites: [mockPrerequisite.id],
+  operator: 'AND',
+};
       const result = resolver.addPrerequisiteGroup(group);
       expect(result.success).toBe(true);
     });
     it('should reject group with missing prerequisites', () => {
-      const group: PrerequisiteGroup = {
-        id: '550e8400-e29b-41d4-a716-446655440002',
-        name: 'Test Group',
-        description: 'Test group with missing prerequisites',
-        prerequisites: ['550e8400-e29b-41d4-a716-446655440999'], // Non-existent
-        operator: 'AND',
-      };
+  const group: PrerequisiteGroup = {,
+  id: '550e8400-e29b-41d4-a716-446655440002',
+  name: 'Test Group',
+  description: 'Test group with missing prerequisites',
+  prerequisites: ['550e8400-e29b-41d4-a716-446655440999'], // Non-existent,
+  operator: 'AND',
+};
       const result = resolver.addPrerequisiteGroup(group);
       expect(result.success).toBe(false);
       expect(result.errors?.[0]).toContain('Missing prerequisites');
     });
     it('should detect circular dependencies', () => {
-      // Create a second prerequisite
-      const secondPrerequisite: Prerequisite = {
-        ...mockPrerequisite,
-        id: '550e8400-e29b-41d4-a716-446655440003',
-        name: 'Second Prerequisite',
-      };
+  // Create a second prerequisite
+  const secondPrerequisite: Prerequisite = {,
+  ...mockPrerequisite,
+  id: '550e8400-e29b-41d4-a716-446655440003',
+  name: 'Second Prerequisite',
+};
       resolver.addPrerequisite(secondPrerequisite);
       // Create circular dependency
-      const circularGroup: PrerequisiteGroup = {
-        id: mockPrerequisite.id, // Same ID as prerequisite creates cycle
-        name: 'Circular Group',
-        description: 'This creates a circular dependency',
-        prerequisites: [secondPrerequisite.id],
-        operator: 'AND',
-      };
+      const circularGroup: PrerequisiteGroup = {,
+  id: mockPrerequisite.id, // Same ID as prerequisite creates cycle,
+  name: 'Circular Group',
+  description: 'This creates a circular dependency',
+  prerequisites: [secondPrerequisite.id],
+  operator: 'AND',
+};
       const result = resolver.addPrerequisiteGroup(circularGroup);
       // Should detect circular dependency
       expect(result.success).toBe(false);
@@ -329,7 +329,7 @@ describe('PrerequisiteSecurity', () => {
         'function() { /* malicious */ }'
       ];
       maliciousInputs.forEach(input => {)
-        const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
+  const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Potentially dangerous script content detected');
       });
@@ -342,7 +342,7 @@ describe('PrerequisiteSecurity', () => {
         'INSERT INTO users VALUES'
       ];
       sqlInjectionInputs.forEach(input => {)
-        const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
+  const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Potentially dangerous SQL patterns detected');
       });
@@ -355,7 +355,7 @@ describe('PrerequisiteSecurity', () => {
         '..%5c..%5cwindows%5csystem32'
       ];
       pathTraversalInputs.forEach(input => {)
-        const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
+  const result = PrerequisiteSecurity.validatePrerequisiteInput(input);
         expect(result.isValid).toBe(false);
         expect(result.errors).toContain('Path traversal attempt detected');
       });
@@ -400,7 +400,7 @@ describe('PrerequisiteSecurity', () => {
       const validActions = ['view', 'create', 'update', 'delete', 'assign', 'complete'];
       const userId = '550e8400-e29b-41d4-a716-446655440000';
       validActions.forEach(action => {)
-        const isValid = PrerequisiteSecurity.validateUserPermissions(userId, action);
+  const isValid = PrerequisiteSecurity.validateUserPermissions(userId, action);
         expect(isValid).toBe(true);
       });
     });
@@ -408,82 +408,82 @@ describe('PrerequisiteSecurity', () => {
 });
 describe('Schema Validation', () => {
   describe('prerequisiteSchema', () => {
-    it('should validate correct prerequisite data', () => {
-      const validData = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        name: 'JavaScript Basics',
-        description: 'Learn the fundamentals of JavaScript programming',
-        type: 'tutorial',
-        requiredScore: 80,
-        requiredTime: 120,
-        validityPeriod: 365,
-        category: 'programming',
-        isActive: true,
-      };
+  it('should validate correct prerequisite data', () => {
+  const validData = {
+  id: '550e8400-e29b-41d4-a716-446655440000',
+  name: 'JavaScript Basics',
+  description: 'Learn the fundamentals of JavaScript programming',
+  type: 'tutorial',
+  requiredScore: 80,
+  requiredTime: 120,
+  validityPeriod: 365,
+  category: 'programming',
+  isActive: true,
+};
       const result = schemas.prerequisite.safeParse(validData);
       expect(result.success).toBe(true);
     });
     it('should reject invalid UUID', () => {
-      const invalidData = {
-        id: 'not-a-uuid',
-        name: 'Test',
-        description: 'Test description',
-        type: 'tutorial',
-        category: 'test',
-        isActive: true,
-      };
+  const invalidData = {
+  id: 'not-a-uuid',
+  name: 'Test',
+  description: 'Test description',
+  type: 'tutorial',
+  category: 'test',
+  isActive: true,
+};
       const result = schemas.prerequisite.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
     it('should reject invalid type enum', () => {
-      const invalidData = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        name: 'Test',
-        description: 'Test description',
-        type: 'invalid_type',
-        category: 'test',
-        isActive: true,
-      };
+  const invalidData = {
+  id: '550e8400-e29b-41d4-a716-446655440000',
+  name: 'Test',
+  description: 'Test description',
+  type: 'invalid_type',
+  category: 'test',
+  isActive: true,
+};
       const result = schemas.prerequisite.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
     it('should reject scores outside valid range', () => {
-      const invalidData = {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        name: 'Test',
-        description: 'Test description',
-        type: 'tutorial',
-        requiredScore: 150, // Invalid: > 100
-        category: 'test',
-        isActive: true,
-      };
+  const invalidData = {
+  id: '550e8400-e29b-41d4-a716-446655440000',
+  name: 'Test',
+  description: 'Test description',
+  type: 'tutorial',
+  requiredScore: 150, // Invalid: > 100,
+  category: 'test',
+  isActive: true,
+};
       const result = schemas.prerequisite.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
   });
   describe('userProgressSchema', () => {
-    it('should validate correct progress data', () => {
-      const validData = {
-        userId: '550e8400-e29b-41d4-a716-446655440000',
-        prerequisiteId: '550e8400-e29b-41d4-a716-446655440001',
-        status: 'completed',
-        score: 85,
-        completedAt: new Date(),
-        currentStep: 0,
-        progress: 100,
-        timeSpent: 120,
-        attempts: 1,
-      };
+  it('should validate correct progress data', () => {
+  const validData = {
+  userId: '550e8400-e29b-41d4-a716-446655440000',
+  prerequisiteId: '550e8400-e29b-41d4-a716-446655440001',
+  status: 'completed',
+  score: 85,
+  completedAt: new Date(),
+  currentStep: 0,
+  progress: 100,
+  timeSpent: 120,
+  attempts: 1,
+};
       const result = schemas.userProgress.safeParse(validData);
       expect(result.success).toBe(true);
     });
     it('should reject invalid status enum', () => {
-      const invalidData = {
-        userId: '550e8400-e29b-41d4-a716-446655440000',
-        prerequisiteId: '550e8400-e29b-41d4-a716-446655440001',
-        status: 'invalid_status',
-        attempts: 1,
-      };
+  const invalidData = {
+  userId: '550e8400-e29b-41d4-a716-446655440000',
+  prerequisiteId: '550e8400-e29b-41d4-a716-446655440001',
+  status: 'invalid_status',
+  attempts: 1,
+};
       const result = schemas.userProgress.safeParse(invalidData);
       expect(result.success).toBe(false);
     });
@@ -494,20 +494,18 @@ describe('Schema Validation', () => {
 describe('Edge Cases and Stress Tests', () => {
   let service: PrerequisiteSystemService;
   beforeEach(() => {
-    service = new PrerequisiteSystemService();
-  });
+  service = new PrerequisiteSystemService();
+});
   it('should handle null and undefined inputs gracefully', async () => {
     // These should be caught by TypeScript, but test runtime behavior
     try {
       await service.createPrerequisite(null as any, 'test-user');
     } catch (error) {
       expect(error).toBeDefined();
-    }
     try {
       await service.evaluatePrerequisites('test-user', null as any);
     } catch (error) {
       expect(error).toBeDefined();
-    }
   });
   it('should handle very large prerequisite lists', async () => {
     const largePrerequisiteList = Array.from({ length: 1000 }, (_, i) => 
@@ -519,14 +517,14 @@ describe('Edge Cases and Stress Tests', () => {
     expect(result.canProceed).toBe(false); // None exist, so can't proceed
   });
   it('should handle concurrent operations safely', async () => {
-    const prerequisite: Prerequisite = {
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Concurrent Test',
-      description: 'Test for concurrent operations',
-      type: 'tutorial',
-      category: 'test',
-      isActive: true,
-    };
+  const prerequisite: Prerequisite = {,
+  id: '550e8400-e29b-41d4-a716-446655440000',
+  name: 'Concurrent Test',
+  description: 'Test for concurrent operations',
+  type: 'tutorial',
+  category: 'test',
+  isActive: true,
+};
     // Create multiple concurrent operations
     const promises = Array.from({ length: 10 }, () => 
       service.createPrerequisite(prerequisite, 'test-user')
@@ -535,7 +533,7 @@ describe('Edge Cases and Stress Tests', () => {
     // All should complete (though may not all succeed due to duplicates)
     expect(results).toHaveLength(10);
     results.forEach(result => {)
-      expect(result).toBeDefined();
+  expect(result).toBeDefined();
       expect(typeof result.success).toBe('boolean');
     });
   });

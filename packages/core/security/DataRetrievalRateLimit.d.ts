@@ -28,7 +28,7 @@ export declare enum DataEndpointCategory {
     DATA_ANALYTICS = "data_analytics",
     DATA_BACKUP = "data_backup",
     DATA_SYNC = "data_sync"
-}
+
 export interface DataRetrievalLimits {
     classification: DataClassificationLevel;
     operation: DataOperation;
@@ -54,7 +54,7 @@ export interface DataRetrievalLimits {
         locationMultiplier: number;
         deviceTrustMultiplier: number;
     };
-}
+
 export interface DataAccessAttempt {
     userId: string;
     resourceId: string;
@@ -68,7 +68,7 @@ export interface DataAccessAttempt {
     success: boolean;
     rateLimited: boolean;
     riskScore: number;
-}
+
 export interface RetrievalMetrics {
     totalRequests: number;
     totalBytesTransferred: number;
@@ -80,7 +80,7 @@ export interface RetrievalMetrics {
     operationBreakdown: Record<DataOperation, number>;
     peakUsageTimes: TimeUsagePattern[];
     suspiciousActivity: SuspiciousActivity[];
-}
+
 export interface UserDataUsage {
     userId: string;
     requestCount: number;
@@ -90,14 +90,14 @@ export interface UserDataUsage {
     lastAccess: Date;
     riskScore: number;
     anomalyScore: number;
-}
+
 export interface TimeUsagePattern {
     hour: number;
     dayOfWeek: number;
     requestCount: number;
     averageRiskScore: number;
     topOperations: DataOperation[];
-}
+
 export interface SuspiciousActivity {
     userId: string;
     activityType: 'UNUSUAL_VOLUME' | 'OFF_HOURS_ACCESS' | 'PRIVILEGE_ESCALATION' | 'BULK_DOWNLOAD' | 'RAPID_REQUESTS';
@@ -106,7 +106,7 @@ export interface SuspiciousActivity {
     timestamp: Date;
     evidence: Record<string, any>;
     riskScore: number;
-}
+
 export interface DataRetrievalConfig {
     enableVolumeTracking: boolean;
     enableBehaviorAnalysis: boolean;
@@ -117,7 +117,7 @@ export interface DataRetrievalConfig {
     classificationLimits: Record<DataClassificationLevel, DataRetrievalLimits>;
     alertThresholds: AlertThresholds;
     exemptions: DataAccessExemption[];
-}
+
 export interface GlobalDataLimits {
     maxConcurrentUsers: number;
     maxDailyBytes: number;
@@ -129,7 +129,7 @@ export interface GlobalDataLimits {
         thresholdMemoryPercent: number;
         throttlePercent: number;
     };
-}
+
 export interface AlertThresholds {
     volumeSpike: {,
         percentIncrease: number;
@@ -147,7 +147,7 @@ export interface AlertThresholds {
         warningThreshold: number;
         criticalThreshold: number;
     };
-}
+
 export interface DataAccessExemption {
     id: string;
     userId?: string;
@@ -160,12 +160,11 @@ export interface DataAccessExemption {
     approvedBy: string;
     approvedAt: Date;
     auditRequired: boolean;
-}
+
 export interface ExemptionCondition {
     type: 'TIME_RANGE' | 'OPERATION' | 'CLASSIFICATION' | 'EMERGENCY' | 'BUSINESS_CRITICAL';
     specification: Record<string, any>;
     required: boolean;
-}
 /**
  * Enhanced Data Retrieval Rate Limiting Service
  */
@@ -227,14 +226,14 @@ export declare class DataRetrievalRateLimit extends EventEmitter {
     private calculateAnomalyScore;
     private initializeUserQuota;
     private getSecondsUntilMidnight;
-}
+
 export interface DataRequestDetails {
     operation: DataOperation;
     estimatedBytes: number;
     estimatedRecords: number;
     requestType: 'SINGLE' | 'BATCH' | 'STREAM';
     context: Record<string, any>;
-}
+
 export interface DataRetrievalDecision {
     decision: 'ALLOW' | 'DENY';
     reason: string;
@@ -251,7 +250,7 @@ export interface DataRetrievalDecision {
         evaluationTime: number;
         appliedLimits: string[];
     };
-}
+
 export interface UserQuota {
     userId: string;
     dailyByteLimit: number;
@@ -262,12 +261,12 @@ export interface UserQuota {
     requestsUsed: number;
     resetAt: Date;
     lastUpdated: Date;
-}
+
 export interface AnomalyCheck {
     isAnomalous: boolean;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     description: string;
     evidence: Record<string, any>;
-}
+
 export default DataRetrievalRateLimit;
 //# sourceMappingURL=DataRetrievalRateLimit.d.ts.map

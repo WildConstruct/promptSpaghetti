@@ -14,8 +14,7 @@ export function withHelp<P extends object>()
     const { showHelpHints } = useHelpSystem();
     if (!showHelpHints) {
       return <WrappedComponent {...props} />;
-    }
-    return ();
+    return;
       <ContextualTooltip content={helpContent}>
         <WrappedComponent {...props} />
       </ContextualTooltip>
@@ -23,21 +22,19 @@ export function withHelp<P extends object>()
   };
   WithHelpComponent.displayName = `withHelp(${WrappedComponent.displayName || WrappedComponent.name})`;}
   return WithHelpComponent;
-}
 
 // Enhanced input field with integrated help
+
 export interface HelpfulInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  helpId: string;
+  helpId: string;,
   helpTitle: string;
   helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
-  helpExamples?: string[];
+  helpExamples?: string;
   helpShortcut?: string;
   label?: string;
   error?: string;
-}
-
-export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
+  export const HelpfulInput: React.FC<HelpfulInputProps> = ({,)
   helpId,
   helpTitle,
   helpDescription,
@@ -53,29 +50,29 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
   const helpContent = useFieldHelp(helpId, {)
-    title: helpTitle,
-    description: helpDescription,
-    category: helpCategory,
-    trigger: 'focus',
-    position: 'right',
-    showOnDisclosureLevel: [complexityLevel],
-    examples: helpExamples,
-    shortcut: helpShortcut,
-    priority: helpCategory === 'basic' ? 'high' : 'medium',
-  });
+  title: helpTitle,
+  description: helpDescription,
+  category: helpCategory,
+  trigger: 'focus',
+  position: 'right',
+  showOnDisclosureLevel: [complexityLevel],
+  examples: helpExamples,
+  shortcut: helpShortcut,
+  priority: helpCategory === 'basic' ? 'high' : 'medium',
+});
   const inputElement = (;);
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4, ...style }}>
       {label && ()
         <label
           htmlFor={helpId}
           style={{
-            fontSize: 12,
-            fontWeight: 500,
-            color: '#e2e8f0',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-          }}
+  fontSize: 12,
+  fontWeight: 500,
+  color: '#e2e8f0',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+}}
         >
           {label}
           {helpCategory === 'advanced' && ()
@@ -90,26 +87,26 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
         id={helpId}
         className={`helpful-input ${className}`}
         style={{
-          padding: '6px 8px',
-          background: '#4a5568',
-          border: error ? '1px solid #e53e3e' : '1px solid #718096',
-          borderRadius: 4,
-          color: '#e2e8f0',
-          fontSize: 12,
-          outline: 'none',
-          transition: 'border-color 0.2s ease',
-          ...inputProps.style
-        }}
+  padding: '6px 8px',
+  background: '#4a5568',
+  border: error ? '1px solid #e53e3e' : '1px solid #718096',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 12,
+  outline: 'none',
+  transition: 'border-color 0.2s ease',
+  ...inputProps.style
+}}
         {...inputProps}
       />
       {error && ()
         <div style={{
-          fontSize: 10,
-          color: '#e53e3e',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 4,
-        }}>
+  fontSize: 10,
+  color: '#e53e3e',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+}}>
           ⚠️ {error}
         </div>
       )}
@@ -117,8 +114,7 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
   );
   if (!showHelpHints || !helpContent) {
     return inputElement;
-  }
-  return ();
+  return;
     <ContextualTooltip content={helpContent}>
       {inputElement}
     </ContextualTooltip>
@@ -126,18 +122,17 @@ export const HelpfulInput: React.FC<HelpfulInputProps> = ({)
 };
 
 // Enhanced button with integrated help
+
 export interface HelpfulButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  helpId: string;
+  helpId: string;,
   helpTitle: string;
   helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
-  helpExamples?: string[];
+  helpExamples?: string;
   helpShortcut?: string;
   variant?: 'primary' | 'secondary' | 'danger';
   size?: 'small' | 'medium' | 'large';
-}
-
-export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
+  export const HelpfulButton: React.FC<HelpfulButtonProps> = ({,)
   helpId,
   helpTitle,
   helpDescription,
@@ -154,16 +149,16 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
   const helpContent = useFieldHelp(helpId, {)
-    title: helpTitle,
-    description: helpDescription,
-    category: helpCategory,
-    trigger: 'hover',
-    position: 'top',
-    showOnDisclosureLevel: [complexityLevel],
-    examples: helpExamples,
-    shortcut: helpShortcut,
-    priority: helpCategory === 'basic' ? 'high' : 'medium',
-  });
+  title: helpTitle,
+  description: helpDescription,
+  category: helpCategory,
+  trigger: 'hover',
+  position: 'top',
+  showOnDisclosureLevel: [complexityLevel],
+  examples: helpExamples,
+  shortcut: helpShortcut,
+  priority: helpCategory === 'basic' ? 'high' : 'medium',
+});
   const getButtonStyles = () => {
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: 10 },
@@ -176,14 +171,14 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
       danger: { background: '#e53e3e', color: 'white' }
     };
     return {
-      border: 'none',
-      borderRadius: 4,
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-      fontWeight: 500,
-      ...sizeStyles[size],
-      ...variantStyles[variant]
-    };
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  fontWeight: 500,
+  ...sizeStyles[size],
+  ...variantStyles[variant]
+};
   };
   const buttonElement = (;);
     <button
@@ -199,8 +194,7 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
   );
   if (!showHelpHints || !helpContent) {
     return buttonElement;
-  }
-  return ();
+  return;
     <ContextualTooltip content={helpContent}>
       {buttonElement}
     </ContextualTooltip>
@@ -208,20 +202,20 @@ export const HelpfulButton: React.FC<HelpfulButtonProps> = ({)
 };
 
 // Section wrapper with help integration
+
 export interface HelpfulSectionProps {
-  helpId: string;
+  helpId: string;,
   helpTitle: string;
-  helpDescription: string;  
+  helpDescription: string;
   helpCategory?: 'basic' | 'advanced' | 'debug';
-  helpExamples?: string[];
-  title: string;
+  helpExamples?: string;
+  title: string;,
   children: React.ReactNode;
   collapsible?: boolean;
   defaultExpanded?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }
-
 export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
   helpId,
   helpTitle,
@@ -239,39 +233,39 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
   const { complexityLevel } = useUISettingsStore();
   const { showHelpHints } = useHelpSystem();
   const helpContent = useFieldHelp(helpId, {)
-    title: helpTitle,
-    description: helpDescription,
-    category: helpCategory,
-    trigger: 'hover',
-    position: 'right',
-    showOnDisclosureLevel: [complexityLevel],
-    examples: helpExamples,
-    priority: helpCategory === 'basic' ? 'high' : 'medium',
-  });
+  title: helpTitle,
+  description: helpDescription,
+  category: helpCategory,
+  trigger: 'hover',
+  position: 'right',
+  showOnDisclosureLevel: [complexityLevel],
+  examples: helpExamples,
+  priority: helpCategory === 'basic' ? 'high' : 'medium',
+});
   const headerElement = (;);
     <div
       style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '8px 12px',
-        background: '#2d3748',
-        borderRadius: collapsible ? '4px 4px 0 0' : 4,
-        border: '1px solid #4a5568',
-        cursor: collapsible ? 'pointer' : 'default',
-      }}
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '8px 12px',
+  background: '#2d3748',
+  borderRadius: collapsible ? '4px 4px 0 0' : 4,
+  border: '1px solid #4a5568',
+  cursor: collapsible ? 'pointer' : 'default',
+}}
       onClick={collapsible ? () => setIsExpanded(!isExpanded) : undefined}
     >
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-      }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+}}>
         <span style={{
-          fontSize: 12,
-          fontWeight: 600,
-          color: '#e2e8f0',
-        }}>
+  fontSize: 12,
+  fontWeight: 600,
+  color: '#e2e8f0',
+}}>
           {title}
         </span>
         {helpCategory === 'advanced' && ()
@@ -283,11 +277,11 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
       </div>
       {collapsible && ()
         <span style={{
-          fontSize: 10,
-          color: '#a0aec0',
-          transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.2s ease',
-        }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+  transition: 'transform 0.2s ease',
+}}>
           ▼
         </span>
       )}
@@ -307,12 +301,12 @@ export const HelpfulSection: React.FC<HelpfulSectionProps> = ({)
       )}
       {(!collapsible || isExpanded) && ()
         <div style={{
-          padding: 12,
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderTop: 'none',
-          borderRadius: '0 0 4px 4px',
-        }}>
+  padding: 12,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderTop: 'none',
+  borderRadius: '0 0 4px 4px',
+}}>
           {children}
         </div>
       )}
@@ -329,7 +323,7 @@ export const useContextualHelp = (helpContent: HelpContent) => {
   }, [helpContent.id]);
   const wrapWithHelp = (element: React.ReactElement) => {
     if (!showHelpHints) return element;
-    return ();
+    return;
       <ContextualTooltip content={helpContent}>
         {element}
       </ContextualTooltip>
@@ -339,25 +333,25 @@ export const useContextualHelp = (helpContent: HelpContent) => {
 };
 
 // Onboarding overlay component
-export const OnboardingOverlay: React.FC<{
+export const OnboardingOverlay: React.FC<{,
   isActive: boolean;
   children: React.ReactNode;
 }> = ({ isActive, children }) => {
   if (!isActive) return <>{children}</>;
-  return ();
+  return;
     <div style={{ position: 'relative' }}>
       {/* Backdrop */}
       <div
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.7)',
-          zIndex: 1500,
-          pointerEvents: isActive ? 'all' : 'none',
-        }}
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0, 0, 0, 0.7)',
+  zIndex: 1500,
+  pointerEvents: isActive ? 'all' : 'none',
+}}
       />
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 1600 }}>

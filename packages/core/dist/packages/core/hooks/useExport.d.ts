@@ -1,11 +1,11 @@
 import { ExportTemplate, CreateExportTemplate, UpdateExportTemplate, ExportJob, CreateExportJob, UpdateExportJob, ExportSchedule, CreateExportSchedule, UpdateExportSchedule, ExportShare, CreateExportShare, UpdateExportShare, ExportAnalytics, CreateExportAnalytics, ExportFormatDefinition, ExportFormat, ExportJobStatus, ExportProgress, ExportStatistics, ExportTemplateWithStats, ExportJobWithTemplate, ExportScheduleWithStats } from '../types/export';
 interface UseExportState {
-    templates: ExportTemplate[];
-    jobs: ExportJob[];
-    schedules: ExportSchedule[];
-    shares: ExportShare[];
-    analytics: ExportAnalytics[];
-    formatDefinitions: ExportFormatDefinition[];
+    templates: ExportTemplate;
+    jobs: ExportJob;
+    schedules: ExportSchedule;
+    shares: ExportShare;
+    analytics: ExportAnalytics;
+    formatDefinitions: ExportFormatDefinition;
     statistics: ExportStatistics | null;
     loading: boolean;
     error: string | null;
@@ -51,30 +51,11 @@ interface UseExportActions {
     createAnalytics: (analytics: CreateExportAnalytics) => Promise<ExportAnalytics>;
     fetchFormatDefinitions: () => Promise<void>;
     getFormatDefinition: (formatName: string) => Promise<ExportFormatDefinition>;
-    validateFormatOptions: (formatName: string, options: any) => Promise<{
-        valid: boolean;
-        errors: string[];
-        validatedOptions: any;
-    }>;
-    fetchStatistics: () => Promise<void>;
-    getTemplates: (options?: any) => Promise<ExportTemplate[]>;
-    getTemplateStats: (id: string) => Promise<any>;
-    shareTemplate: (id: string, options: any) => Promise<void>;
-    previewTemplate: (template: ExportTemplate) => Promise<any>;
-    getTemplateCollaborators: (id: string) => Promise<any[]>;
-    getTemplateActivity: (id: string) => Promise<any[]>;
-    getTemplateAnalytics: (id: string) => Promise<any>;
-    inviteCollaborator: (id: string, invite: any) => Promise<any>;
-    updateCollaboratorRole: (templateId: string, userId: string, role: string) => Promise<void>;
-    removeCollaborator: (templateId: string, userId: string) => Promise<void>;
-    updateShareSettings: (id: string, settings: any) => Promise<void>;
-    generateShareLink: (id: string) => Promise<string>;
-    forkTemplate: (id: string) => Promise<ExportTemplate>;
-    refetch: () => Promise<void>;
-    clearError: () => void;
-    setLoading: (loading: boolean) => void;
+    validateFormatOptions: () => ;
+    formatName: string;
+    options: any;
+    Promise(): any;
 }
 export type UseExportReturn = UseExportState & UseExportActions;
-export declare const setLoading: (loading: boolean) => void;
 export {};
 //# sourceMappingURL=useExport.d.ts.map

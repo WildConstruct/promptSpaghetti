@@ -20,30 +20,29 @@ describe('KeyManagementService', () => {
   let service: KeyManagementService;
   const testRequesterId = 'test-user-123';
   beforeEach(() => {
-    jest.useFakeTimers();
-    service = new KeyManagementService({)
-      defaultTier: StorageTier.WARM,
-      hotCacheSize: 100,
-      warmStorageEncryption: true,
-      coldStorageLocation: '/tmp/test',
-      masterKeyRotationDays: 90,
-      defaultKeyExpirationDays: 365,
-      requireKeyApproval: false,
-      enableHSMIntegration: false,
-      cacheEnabled: true,
-      cacheTTL: 3600000,
-      backgroundRotationEnabled: false, // Disable for tests
-      auditRetentionDays: 2555,
-      complianceMode: true,
-      encryptionAtRest: true,
-      keyDerivationComplexity: 'medium',
-      performanceMonitoring: false, // Disable for tests
-      alertThresholds: {,
-        keyUsageRate: 1000,
-        failureRate: 0.01,
-        responseTime: 100,
-      }
-    });
+  jest.useFakeTimers();
+  service = new KeyManagementService({)
+  defaultTier: StorageTier.WARM,
+  hotCacheSize: 100,
+  warmStorageEncryption: true,
+  coldStorageLocation: '/tmp/test',
+  masterKeyRotationDays: 90,
+  defaultKeyExpirationDays: 365,
+  requireKeyApproval: false,
+  enableHSMIntegration: false,
+  cacheEnabled: true,
+  cacheTTL: 3600000,
+  backgroundRotationEnabled: false, // Disable for tests,
+  auditRetentionDays: 2555,
+  complianceMode: true,
+  encryptionAtRest: true,
+  keyDerivationComplexity: 'medium',
+  performanceMonitoring: false, // Disable for tests,
+  alertThresholds: {,
+  keyUsageRate: 1000,
+  failureRate: 0.01,
+  responseTime: 100,
+});
   });
   afterEach(() => {
     jest.useRealTimers();
@@ -51,14 +50,14 @@ describe('KeyManagementService', () => {
     service.destroy();
   });
   describe('Key Generation', () => {
-    test('should generate symmetric encryption key', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        name: 'test-encryption-key',
-        keySize: 256,
-      };
+  test('should generate symmetric encryption key', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  name: 'test-encryption-key',
+  keySize: 256,
+};
       const key = await service.generateKey(options);
       expect(key).toBeDefined();
       expect(key.metadata.id).toMatch(/^key_\d+_[a-f0-9]{32}$/);
@@ -72,12 +71,12 @@ describe('KeyManagementService', () => {
       expect(key.metadata.checksumSHA256).toMatch(/^[a-f0-9]{64}$/);
     });
     test('should generate RSA key pair', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.ASYMMETRIC_RSA,
-        purpose: KeyPurpose.TOKEN_SIGNING,
-        algorithm: KeyAlgorithm.RSA_2048,
-        keySize: 2048,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.ASYMMETRIC_RSA,
+  purpose: KeyPurpose.TOKEN_SIGNING,
+  algorithm: KeyAlgorithm.RSA_2048,
+  keySize: 2048,
+};
       const key = await service.generateKey(options);
       expect(key.metadata.type).toBe(KeyType.ASYMMETRIC_RSA);
       expect(key.metadata.keySize).toBe(2048);
@@ -86,12 +85,12 @@ describe('KeyManagementService', () => {
       expect(key.metadata.purpose).toBe(KeyPurpose.TOKEN_SIGNING);
     });
     test('should generate HMAC key', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.HMAC,
-        purpose: KeyPurpose.API_AUTHENTICATION,
-        algorithm: KeyAlgorithm.HMAC_SHA256,
-        keySize: 256,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.HMAC,
+  purpose: KeyPurpose.API_AUTHENTICATION,
+  algorithm: KeyAlgorithm.HMAC_SHA256,
+  keySize: 256,
+};
       const key = await service.generateKey(options);
       expect(key.metadata.type).toBe(KeyType.HMAC);
       expect(key.metadata.algorithm).toBe(KeyAlgorithm.HMAC_SHA256);
@@ -100,15 +99,14 @@ describe('KeyManagementService', () => {
       expect(key.wrappedKeyData).toBeDefined();
     });
     test('should generate derivation key with parameters', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.DERIVATION,
-        purpose: KeyPurpose.PASSWORD_HASHING,
-        algorithm: KeyAlgorithm.PBKDF2_SHA256,
-        derivationParams: {,
-          iterations: 150000,
-          keyLength: 32,
-        }
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.DERIVATION,
+  purpose: KeyPurpose.PASSWORD_HASHING,
+  algorithm: KeyAlgorithm.PBKDF2_SHA256,
+  derivationParams: {,
+  iterations: 150000,
+  keyLength: 32,
+};
       const key = await service.generateKey(options);
       expect(key.metadata.type).toBe(KeyType.DERIVATION);
       expect(key.derivationParameters).toBeDefined();
@@ -118,21 +116,21 @@ describe('KeyManagementService', () => {
       expect(key.derivationParameters!.salt).toBeDefined();
     });
     test('should emit keyGenerated event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('keyGenerated', eventHandler);
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.SESSION_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('keyGenerated', eventHandler);
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.SESSION_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const key = await service.generateKey(options);
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          keyId: key.metadata.id,
-          type: KeyType.SYMMETRIC,
-          purpose: KeyPurpose.SESSION_ENCRYPTION,
-          algorithm: KeyAlgorithm.AES_256_GCM,
-        })
+  keyId: key.metadata.id,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.SESSION_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+}
       );
     });
     test('should validate generation options', async () => {
@@ -143,26 +141,26 @@ describe('KeyManagementService', () => {
         .rejects.toThrow('Key type, purpose, and algorithm are required');
     });
     test('should handle key generation errors', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
-      service.on('keyGenerationError', errorHandler);
-      const options: KeyGenerationOptions = {
-        type: 'invalid' as KeyType,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  const errorHandler = jest.fn<unknown, unknown>();
+  service.on('keyGenerationError', errorHandler);
+  const options: KeyGenerationOptions = {,
+  type: 'invalid' as KeyType,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       await expect(service.generateKey(options))
         .rejects.toThrow();
       expect(errorHandler).toHaveBeenCalled();
     });
   });
   describe('Key Retrieval', () => {
-    test('should retrieve generated key', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        tier: StorageTier.HOT,
-      };
+  test('should retrieve generated key', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  tier: StorageTier.HOT,
+};
       const generatedKey = await service.generateKey(options);
       const retrievedKey = await service.getKey(generatedKey.metadata.id, testRequesterId);
       expect(retrievedKey).toBeDefined();
@@ -176,11 +174,11 @@ describe('KeyManagementService', () => {
       expect(key).toBeNull();
     });
     test('should update key usage on retrieval', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const generatedKey = await service.generateKey(options);
       // Retrieve multiple times
       await service.getKey(generatedKey.metadata.id, testRequesterId);
@@ -188,12 +186,12 @@ describe('KeyManagementService', () => {
       expect(key!.metadata.usageCount).toBe(2);
     });
     test('should cache hot-tier keys', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.SESSION_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        tier: StorageTier.HOT,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.SESSION_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  tier: StorageTier.HOT,
+};
       const generatedKey = await service.generateKey(options);
       // First retrieval
       await service.getKey(generatedKey.metadata.id, testRequesterId);
@@ -202,12 +200,12 @@ describe('KeyManagementService', () => {
       expect(key).toBeDefined();
     });
     test('should handle expired keys', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 1,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 1,
+};
       const generatedKey = await service.generateKey(options);
       // Fast forward past expiration
       jest.advanceTimersByTime(2 * 24 * 60 * 60 * 1000); // 2 days
@@ -216,19 +214,19 @@ describe('KeyManagementService', () => {
     });
   });
   describe('Key Rotation', () => {
-    test('should rotate expiring key', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 7,
-      };
+  test('should rotate expiring key', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 7,
+};
       const originalKey = await service.generateKey(options);
       // Fast forward to near expiration
       jest.advanceTimersByTime(6 * 24 * 60 * 60 * 1000); // 6 days
-      const rotationOptions: KeyRotationOptions = {
-        rotationReason: 'scheduled_rotation',
-      };
+      const rotationOptions: KeyRotationOptions = {,
+  rotationReason: 'scheduled_rotation',
+};
       const newKey = await service.rotateKey(originalKey.metadata.id, testRequesterId, rotationOptions);
       expect(newKey.metadata.id).not.toBe(originalKey.metadata.id);
       expect(newKey.metadata.type).toBe(originalKey.metadata.type);
@@ -241,47 +239,47 @@ describe('KeyManagementService', () => {
       expect(oldKey!.metadata.status).toBe(KeyStatus.RETIRED);
     });
     test('should force rotation when requested', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 365 // Not expiring soon,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 365 // Not expiring soon,
+};
       const originalKey = await service.generateKey(options);
-      const rotationOptions: KeyRotationOptions = {
-        forceRotation: true,
-        rotationReason: 'security_concern',
-      };
+      const rotationOptions: KeyRotationOptions = {,
+  forceRotation: true,
+  rotationReason: 'security_concern',
+};
       const newKey = await service.rotateKey(originalKey.metadata.id, testRequesterId, rotationOptions);
       expect(newKey.metadata.id).not.toBe(originalKey.metadata.id);
     });
     test('should emit keyRotated event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('keyRotated', eventHandler);
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 7,
-      };
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('keyRotated', eventHandler);
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 7,
+};
       const originalKey = await service.generateKey(options);
       jest.advanceTimersByTime(6 * 24 * 60 * 60 * 1000);
       await service.rotateKey(originalKey.metadata.id, testRequesterId);
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          oldKeyId: originalKey.metadata.id,
-          newKeyId: expect.any(String),
-        })
+  oldKeyId: originalKey.metadata.id,
+  newKeyId: expect.any(String),
+}
       );
     });
   });
   describe('Key Revocation', () => {
-    test('should revoke key', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  test('should revoke key', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const key = await service.generateKey(options);
       await service.revokeKey(key.metadata.id, testRequesterId, 'Security breach');
       const revokedKey = await service.getKey(key.metadata.id, testRequesterId);
@@ -289,21 +287,21 @@ describe('KeyManagementService', () => {
       expect(revokedKey!.metadata.revokedAt).toBeDefined();
     });
     test('should emit keyRevoked event', async () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      service.on('keyRevoked', eventHandler);
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  const eventHandler = jest.fn<unknown, unknown>();
+  service.on('keyRevoked', eventHandler);
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const key = await service.generateKey(options);
       await service.revokeKey(key.metadata.id, testRequesterId, 'Test revocation');
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          keyId: key.metadata.id,
-          reason: 'Test revocation',
-          requesterId: testRequesterId,
-        })
+  keyId: key.metadata.id,
+  reason: 'Test revocation',
+  requesterId: testRequesterId,
+}
       );
     });
     test('should handle non-existent key revocation', async () => {
@@ -312,19 +310,19 @@ describe('KeyManagementService', () => {
     });
   });
   describe('Key Derivation', () => {
-    test('should derive key using PBKDF2', async () => {
-      const parentOptions: KeyGenerationOptions = {
-        type: KeyType.DERIVATION,
-        purpose: KeyPurpose.PASSWORD_HASHING,
-        algorithm: KeyAlgorithm.PBKDF2_SHA256,
-      };
+  test('should derive key using PBKDF2', async () => {
+  const parentOptions: KeyGenerationOptions = {,
+  type: KeyType.DERIVATION,
+  purpose: KeyPurpose.PASSWORD_HASHING,
+  algorithm: KeyAlgorithm.PBKDF2_SHA256,
+};
       const parentKey = await service.generateKey(parentOptions);
-      const derivationParams: KeyDerivationParameters = {
-        algorithm: KeyAlgorithm.PBKDF2_SHA256,
-        salt: Buffer.from('test-salt'),
-        iterations: 100000,
-        keyLength: 32,
-      };
+      const derivationParams: KeyDerivationParameters = {,
+  algorithm: KeyAlgorithm.PBKDF2_SHA256,
+  salt: Buffer.from('test-salt'),
+  iterations: 100000,
+  keyLength: 32,
+};
       const derivedKey = await service.deriveKey(;);
         parentKey.metadata.id,
         derivationParams,
@@ -337,20 +335,20 @@ describe('KeyManagementService', () => {
       expect(derivedKey.keyData!.length).toBe(32);
     });
     test('should derive key using Scrypt', async () => {
-      const parentOptions: KeyGenerationOptions = {
-        type: KeyType.DERIVATION,
-        purpose: KeyPurpose.PASSWORD_HASHING,
-        algorithm: KeyAlgorithm.SCRYPT,
-      };
+  const parentOptions: KeyGenerationOptions = {,
+  type: KeyType.DERIVATION,
+  purpose: KeyPurpose.PASSWORD_HASHING,
+  algorithm: KeyAlgorithm.SCRYPT,
+};
       const parentKey = await service.generateKey(parentOptions);
-      const derivationParams: KeyDerivationParameters = {
-        algorithm: KeyAlgorithm.SCRYPT,
-        salt: Buffer.from('test-salt'),
-        iterations: 16384,
-        memoryFactor: 8,
-        parallelism: 1,
-        keyLength: 32,
-      };
+      const derivationParams: KeyDerivationParameters = {,
+  algorithm: KeyAlgorithm.SCRYPT,
+  salt: Buffer.from('test-salt'),
+  iterations: 16384,
+  memoryFactor: 8,
+  parallelism: 1,
+  keyLength: 32,
+};
       const derivedKey = await service.deriveKey(;);
         parentKey.metadata.id,
         derivationParams,
@@ -359,116 +357,116 @@ describe('KeyManagementService', () => {
       expect(derivedKey.derivationParameters!.algorithm).toBe(KeyAlgorithm.SCRYPT);
     });
     test('should handle parent key not found', async () => {
-      const derivationParams: KeyDerivationParameters = {
-        algorithm: KeyAlgorithm.PBKDF2_SHA256,
-        salt: Buffer.from('test-salt'),
-        iterations: 100000,
-        keyLength: 32,
-      };
+  const derivationParams: KeyDerivationParameters = {,
+  algorithm: KeyAlgorithm.PBKDF2_SHA256,
+  salt: Buffer.from('test-salt'),
+  iterations: 100000,
+  keyLength: 32,
+};
       await expect(service.deriveKey('non-existent', derivationParams, testRequesterId))
         .rejects.toThrow('Parent key not found');
     });
   });
   describe('Key Search', () => {
-    test('should search keys by type', async () => {
-      // Generate keys of different types
+  test('should search keys by type', async () => {
+  // Generate keys of different types
+  await service.generateKey({)
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+});
       await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      });
-      await service.generateKey({)
-        type: KeyType.HMAC,
-        purpose: KeyPurpose.API_AUTHENTICATION,
-        algorithm: KeyAlgorithm.HMAC_SHA256,
-      });
-      const criteria: KeySearchCriteria = {
-        type: KeyType.SYMMETRIC,
-      };
+  type: KeyType.HMAC,
+  purpose: KeyPurpose.API_AUTHENTICATION,
+  algorithm: KeyAlgorithm.HMAC_SHA256,
+});
+      const criteria: KeySearchCriteria = {,
+  type: KeyType.SYMMETRIC,
+};
       const results = await service.searchKeys(criteria, testRequesterId);
       expect(results).toHaveLength(1);
       expect(results[0].type).toBe(KeyType.SYMMETRIC);
     });
     test('should search keys by purpose', async () => {
+  await service.generateKey({)
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+});
       await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      });
-      await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.SESSION_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      });
-      const criteria: KeySearchCriteria = {
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-      };
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.SESSION_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+});
+      const criteria: KeySearchCriteria = {,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+};
       const results = await service.searchKeys(criteria, testRequesterId);
       expect(results).toHaveLength(1);
       expect(results[0].purpose).toBe(KeyPurpose.DATA_ENCRYPTION);
     });
     test('should search keys by status', async () => {
-      const key = await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      });
+  const key = await service.generateKey({)
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+});
       await service.revokeKey(key.metadata.id, testRequesterId, 'test');
-      const criteria: KeySearchCriteria = {
-        status: KeyStatus.REVOKED,
-      };
+      const criteria: KeySearchCriteria = {,
+  status: KeyStatus.REVOKED,
+};
       const results = await service.searchKeys(criteria, testRequesterId);
       expect(results).toHaveLength(1);
       expect(results[0].status).toBe(KeyStatus.REVOKED);
     });
     test('should search keys by tags', async () => {
       await service.generateKey({)
-        type: KeyType.SYMMETRIC,
+  type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
         tags: { environment: 'production', service: 'auth' }
       });
       await service.generateKey({)
-        type: KeyType.SYMMETRIC,
+  type: KeyType.SYMMETRIC,
         purpose: KeyPurpose.DATA_ENCRYPTION,
         algorithm: KeyAlgorithm.AES_256_GCM,
         tags: { environment: 'staging', service: 'auth' }
       });
-      const criteria: KeySearchCriteria = {
-        tags: { environment: 'production' }
+      const criteria: KeySearchCriteria = {,
+  tags: { environment: 'production' }
       };
       const results = await service.searchKeys(criteria, testRequesterId);
       expect(results).toHaveLength(1);
       expect(results[0].tags.environment).toBe('production');
     });
     test('should search keys by expiration date', async () => {
-      const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now;
+  const futureDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now;
+  await service.generateKey({)
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 1 // Expires soon,
+});
       await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 1 // Expires soon,
-      });
-      await service.generateKey({)
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 365 // Expires later,
-      });
-      const criteria: KeySearchCriteria = {
-        expiringBefore: futureDate,
-      };
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 365 // Expires later,
+});
+      const criteria: KeySearchCriteria = {,
+  expiringBefore: futureDate,
+};
       const results = await service.searchKeys(criteria, testRequesterId);
       expect(results).toHaveLength(1);
     });
   });
   describe('Key Export', () => {
-    test('should export key for backup', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  test('should export key for backup', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const key = await service.generateKey(options);
       const exportData = await service.exportKey(key.metadata.id, testRequesterId);
       expect(exportData).toBeDefined();
@@ -480,15 +478,14 @@ describe('KeyManagementService', () => {
     });
   });
   describe('Performance Metrics', () => {
-    test('should track performance metrics', async () => {
-      // Generate some keys
-      for (let i = 0; i < 5; i++) {
-        await service.generateKey({)
-          type: KeyType.SYMMETRIC,
-          purpose: KeyPurpose.DATA_ENCRYPTION,
-          algorithm: KeyAlgorithm.AES_256_GCM,
-        });
-      }
+  test('should track performance metrics', async () => {
+  // Generate some keys
+  for (let i = 0; i < 5; i++) {
+  await service.generateKey({)
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+});
       const metrics = service.getPerformanceMetrics();
       expect(metrics).toBeDefined();
       expect(metrics.totalKeyCount).toBe(5);
@@ -498,43 +495,43 @@ describe('KeyManagementService', () => {
     });
   });
   describe('Error Handling', () => {
-    test('should handle invalid key algorithms', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: 'invalid-algorithm' as KeyAlgorithm,
-      };
+  test('should handle invalid key algorithms', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: 'invalid-algorithm' as KeyAlgorithm,
+};
       await expect(service.generateKey(options))
         .rejects.toThrow();
     });
     test('should handle invalid key sizes', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        keySize: 64 // Too small,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  keySize: 64 // Too small,
+};
       await expect(service.generateKey(options))
         .rejects.toThrow('Key size must be at least 128 bits');
     });
     test('should handle invalid expiration days', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        expirationDays: 0,
-      };
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  expirationDays: 0,
+};
       await expect(service.generateKey(options))
         .rejects.toThrow('Expiration must be at least 1 day');
     });
   });
   describe('Audit Trail', () => {
-    test('should log key events', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-      };
+  test('should log key events', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+};
       const key = await service.generateKey(options);
       await service.getKey(key.metadata.id, testRequesterId);
       await service.revokeKey(key.metadata.id, testRequesterId, 'test');
@@ -546,13 +543,13 @@ describe('KeyManagementService', () => {
     });
   });
   describe('Key Wrapping', () => {
-    test('should wrap and unwrap keys properly', async () => {
-      const options: KeyGenerationOptions = {
-        type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.DATA_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
-        tier: StorageTier.COLD,
-      };
+  test('should wrap and unwrap keys properly', async () => {
+  const options: KeyGenerationOptions = {,
+  type: KeyType.SYMMETRIC,
+  purpose: KeyPurpose.DATA_ENCRYPTION,
+  algorithm: KeyAlgorithm.AES_256_GCM,
+  tier: StorageTier.COLD,
+};
       const key = await service.generateKey(options);
       // Key should be wrapped in cold storage
       expect(key.wrappedKeyData).toBeDefined();

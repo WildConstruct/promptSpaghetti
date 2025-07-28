@@ -12,6 +12,7 @@ import { ApiKeyUsageAnalytics } from './ApiManagementService';
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
+}
 export interface ApiOptimizationRecommendation {
   id: string;
   type: 'performance' | 'security' | 'cost' | 'reliability' | 'scalability';
@@ -23,6 +24,7 @@ export interface ApiOptimizationRecommendation {
     performanceImprovement?: number; // Percentage improvement
     securityRisk?: 'low' | 'medium' | 'high' | 'critical';
     reliabilityImprovement?: number; // Uptime improvement percentage
+}
   };
   recommendation: {
     action: string;
@@ -40,12 +42,14 @@ export interface ApiOptimizationRecommendation {
   category: string;
 }
 
+}
 export interface ApiOptimizationInsights {
   summary: {
     totalRecommendations: number;
     criticalIssues: number;
     estimatedSavings: number;
     performanceGains: number;
+}
   };
   recommendations: ApiOptimizationRecommendation[];
   trends: {
@@ -67,11 +71,13 @@ export interface ApiOptimizationInsights {
   };
 }
 
+}
 export interface OptimizationAnalysisConfig {
   timeWindow: number; // Days to analyze
   includeBenchmarks: boolean;
   focusAreas: Array<'performance' | 'security' | 'cost' | 'reliability'>;
   minimumUsage: number; // Minimum API calls to include in analysis
+}
 }
 
 export class ApiOptimizationService {
@@ -97,6 +103,7 @@ export class ApiOptimizationService {
       minimumUsage: 100
     }
   ): Promise<ApiOptimizationInsights> {
+
     // Collect API analytics data
     const analyticsData = await this.collectAnalyticsData(config);
     
@@ -128,6 +135,7 @@ export class ApiOptimizationService {
     analyticsData: ApiKeyUsageAnalytics[],
     config: OptimizationAnalysisConfig
   ): Promise<ApiOptimizationRecommendation[]> {
+
     const recommendations: ApiOptimizationRecommendation[] = [];
 
     for (const analytics of analyticsData) {
@@ -159,7 +167,7 @@ export class ApiOptimizationService {
         const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
         if (severityDiff !== 0) return severityDiff;
         return b.recommendation.priority - a.recommendation.priority;
-      })
+  }
       .slice(0, 20); // Limit to top 20 recommendations
   }
 
@@ -169,6 +177,7 @@ export class ApiOptimizationService {
   private async generatePerformanceRecommendations(
     analytics: ApiKeyUsageAnalytics
   ): Promise<ApiOptimizationRecommendation[]> {
+
     const recommendations: ApiOptimizationRecommendation[] = [];
 
     // High latency detection
@@ -182,7 +191,7 @@ export class ApiOptimizationService {
         impact: {
           performanceImprovement: 60,
           reliabilityImprovement: 25
-        },
+  }
         recommendation: {
           action: 'Optimize slow endpoints and implement caching',
           implementation: [
@@ -194,7 +203,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 8,
           priority: 9
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -203,12 +212,12 @@ export class ApiOptimizationService {
           currentPerformance: {
             averageLatency: analytics.performance.averageLatency,
             p95Latency: analytics.performance.p95Latency
-          },
+  }
           expectedPerformance: {
             averageLatency: 400,
             p95Latency: 800
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'Response Time Optimization'
       });
@@ -225,7 +234,7 @@ export class ApiOptimizationService {
         impact: {
           reliabilityImprovement: 80,
           performanceImprovement: 20
-        },
+  }
         recommendation: {
           action: 'Investigate and fix error-prone endpoints',
           implementation: [
@@ -237,7 +246,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 12,
           priority: 10
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -246,12 +255,12 @@ export class ApiOptimizationService {
           currentPerformance: {
             errorRate: analytics.usage.errorRate,
             successRate: analytics.performance.successRate
-          },
+  }
           expectedPerformance: {
             errorRate: 2,
             successRate: 98
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'Error Rate Reduction'
       });
@@ -266,6 +275,7 @@ export class ApiOptimizationService {
   private async generateSecurityRecommendations(
     analytics: ApiKeyUsageAnalytics
   ): Promise<ApiOptimizationRecommendation[]> {
+
     const recommendations: ApiOptimizationRecommendation[] = [];
 
     // Suspicious activity detection
@@ -278,7 +288,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" shows ${analytics.security.suspiciousActivity} suspicious activities, indicating potential security risks.`,
         impact: {
           securityRisk: 'high'
-        },
+  }
         recommendation: {
           action: 'Implement enhanced security monitoring',
           implementation: [
@@ -290,19 +300,19 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 6,
           priority: 9
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             suspiciousActivity: analytics.security.suspiciousActivity,
             uniqueIPs: analytics.security.uniqueIPs
-          },
+  }
           expectedPerformance: {
             suspiciousActivity: 0,
             uniqueIPs: analytics.security.uniqueIPs
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'Security Enhancement'
       });
@@ -318,7 +328,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" is being used from ${analytics.security.uniqueIPs} unique IP addresses, which may indicate key sharing or compromise.`,
         impact: {
           securityRisk: 'medium'
-        },
+  }
         recommendation: {
           action: 'Review IP usage patterns and implement restrictions',
           implementation: [
@@ -330,17 +340,17 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 4,
           priority: 6
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             uniqueIPs: analytics.security.uniqueIPs
-          },
+  }
           expectedPerformance: {
             uniqueIPs: 50
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'IP Management'
       });
@@ -355,6 +365,7 @@ export class ApiOptimizationService {
   private async generateCostRecommendations(
     analytics: ApiKeyUsageAnalytics
   ): Promise<ApiOptimizationRecommendation[]> {
+
     const recommendations: ApiOptimizationRecommendation[] = [];
 
     // High usage with high error rate (wasteful)
@@ -371,7 +382,7 @@ export class ApiOptimizationService {
         impact: {
           estimatedSavings,
           performanceImprovement: 15
-        },
+  }
         recommendation: {
           action: 'Reduce failed requests to optimize costs',
           implementation: [
@@ -383,7 +394,7 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 6,
           priority: 7
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: analytics.endpoints
@@ -392,12 +403,12 @@ export class ApiOptimizationService {
           currentPerformance: {
             errorRate: analytics.usage.errorRate,
             wastedCalls
-          },
+  }
           expectedPerformance: {
             errorRate: 3,
             wastedCalls: analytics.usage.totalCalls * 0.03
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'Cost Optimization'
       });
@@ -412,6 +423,7 @@ export class ApiOptimizationService {
   private async generateReliabilityRecommendations(
     analytics: ApiKeyUsageAnalytics
   ): Promise<ApiOptimizationRecommendation[]> {
+
     const recommendations: ApiOptimizationRecommendation[] = [];
 
     // Low uptime
@@ -424,7 +436,7 @@ export class ApiOptimizationService {
         description: `API key "${analytics.name}" shows uptime of ${analytics.performance.uptime}%, below acceptable standards (>99%).`,
         impact: {
           reliabilityImprovement: 99.9 - analytics.performance.uptime
-        },
+  }
         recommendation: {
           action: 'Improve system reliability and monitoring',
           implementation: [
@@ -436,17 +448,17 @@ export class ApiOptimizationService {
           ],
           timeToImplement: 16,
           priority: 10
-        },
+  }
         metrics: {
           affectedKeys: [analytics.keyId],
           affectedEndpoints: [],
           currentPerformance: {
             uptime: analytics.performance.uptime
-          },
+  }
           expectedPerformance: {
             uptime: 99.9
           }
-        },
+  }
         generatedAt: new Date(),
         category: 'Uptime Improvement'
       });
@@ -461,6 +473,7 @@ export class ApiOptimizationService {
   private async collectAnalyticsData(
     config: OptimizationAnalysisConfig
   ): Promise<ApiKeyUsageAnalytics[]> {
+
     // This would integrate with the existing ApiManagementService
     // For now, return mock data structure
     return [];
@@ -487,7 +500,7 @@ export class ApiOptimizationService {
         responseTime: 300,
         errorRate: 2.5,
         uptime: 99.5
-      },
+  }
       yourPerformance: {
         responseTime: analyticsData.reduce(
           (acc,
@@ -508,7 +521,7 @@ export class ApiOptimizationService {
         responseTime: 300,
         errorRate: 2.5,
         uptime: 99.5
-      },
+  }
       yourPerformance: {
         responseTime: 0,
         errorRate: 0,
@@ -536,6 +549,7 @@ export class ApiOptimizationService {
    * Get optimization recommendations for a specific API key
    */
   async getKeySpecificRecommendations(keyId: string): Promise<ApiOptimizationRecommendation[]> {
+
     const config: OptimizationAnalysisConfig = {
       timeWindow: 7,
       includeBenchmarks: false,
@@ -562,6 +576,7 @@ export class ApiOptimizationService {
       securityEnhancement: string;
     };
   }> {
+
     const insights = await this.generateOptimizationInsights();
     
     return {

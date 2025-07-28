@@ -14,25 +14,32 @@
 import { Graph } from '../../../../packages/core/graphSchema';
 import crypto from 'crypto';
 
+}
 export interface PreviewResult {
   seed: number;
   output: string;
 }
+}
 
+}
 export interface CachedPreviewResult {
   results: PreviewResult[];
   timestamp: number;
   ttl: number;
   executionTimeMs: number;
 }
+}
 
+}
 export interface PreviewCacheConfig {
   maxCacheSize: number;
   defaultTtlMs: number;
   enableDeduplication: boolean;
   enableMetrics: boolean;
 }
+}
 
+}
 export interface PreviewCacheMetrics {
   cacheHits: number;
   cacheMisses: number;
@@ -41,6 +48,7 @@ export interface PreviewCacheMetrics {
   averageExecutionTime: number;
   cacheSize: number;
   deduplicationHits: number;
+}
 }
 
 /**
@@ -115,6 +123,7 @@ class RequestDeduplicator {
   private pendingRequests = new Map<string, Promise<PreviewResult[]>>();
 
   async deduplicate<T>(key: string, executor: () => Promise<T>): Promise<T> {
+
     // Check if there's already a pending request for this key
     if (this.pendingRequests.has(key)) {
       return this.pendingRequests.get(key) as Promise<T>;
@@ -196,6 +205,7 @@ export class PreviewCache {
     seedStart: number,
     executor: () => Promise<PreviewResult[]>
   ): Promise<PreviewResult[]> {
+
     const cacheKey = this.generateCacheKey(graph, runs, seedStart);
     
     if (this.config.enableMetrics) {

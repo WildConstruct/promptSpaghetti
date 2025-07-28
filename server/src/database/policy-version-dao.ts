@@ -29,6 +29,7 @@ export class PolicyVersionDAO {
   // ============================================================================
 
   async createPolicy(request: CreatePolicyRequest, createdBy: string): Promise<Policy> {
+
     const query = `
       INSERT INTO policies (policy_key, name, description, category, created_by)
       VALUES ($1, $2, $3, $4, $5)
@@ -47,6 +48,7 @@ export class PolicyVersionDAO {
   }
 
   async getPolicyById(policyId: string): Promise<Policy | null> {
+
     const query = `
       SELECT id, policy_key, name, description, category, created_by, created_at, updated_at
       FROM policies
@@ -58,6 +60,7 @@ export class PolicyVersionDAO {
   }
 
   async getPolicyByKey(policyKey: string): Promise<Policy | null> {
+
     const query = `
       SELECT id, policy_key, name, description, category, created_by, created_at, updated_at
       FROM policies
@@ -73,6 +76,7 @@ export class PolicyVersionDAO {
     limit: number = 50,
     category?: string
   ): Promise<{ policies: Policy[]; total: number }> {
+
     let query = `
       SELECT id, policy_key, name, description, category, created_by, created_at, updated_at
       FROM policies
@@ -93,7 +97,7 @@ export class PolicyVersionDAO {
       this.db.query(
         `SELECT COUNT(*) as total FROM policies${category ? ' WHERE category = $1' : ''}`,
         category ? [category] : []
-      )
+
     ]);
 
     return {
@@ -111,6 +115,7 @@ export class PolicyVersionDAO {
     request: CreatePolicyVersionRequest,
     createdBy: string
   ): Promise<PolicyVersion> {
+
     // Generate next version number
     const version = await this.generateNextVersion(policyId, request.changeType || 'update');
     const [major, minor, patch] = version.split('.').map(Number);
@@ -121,7 +126,7 @@ export class PolicyVersionDAO {
         title, content, content_type, change_type, change_summary,
         compliance_frameworks, tags, severity_level, effective_date, expiration_date,
         metadata, created_by
-      )
+
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
       RETURNING *
     `;
@@ -150,6 +155,7 @@ export class PolicyVersionDAO {
   }
 
   async getPolicyVersionById(versionId: string): Promise<PolicyVersion | null> {
+
     const query = `
       SELECT *
       FROM policy_versions
@@ -161,6 +167,7 @@ export class PolicyVersionDAO {
   }
 
   async getPolicyVersionByNumber(policyId: string, version: string): Promise<PolicyVersion | null> {
+
     const query = `
       SELECT *
       FROM policy_versions
@@ -176,6 +183,7 @@ export class PolicyVersionDAO {
     request: UpdatePolicyVersionRequest,
     ___updatedBy: string
   ): Promise<PolicyVersion> {
+
     // Build dynamic update query
     const updateFields: string[] = [];
     const params: unknown[] = [];
@@ -255,6 +263,7 @@ export class PolicyVersionDAO {
   }
 
   async deletePolicyVersion(versionId: string): Promise<boolean> {
+
     const query = `
       DELETE FROM policy_versions
       WHERE id = $1 AND status = 'draft'
@@ -272,6 +281,7 @@ export class PolicyVersionDAO {
     policyId: string,
     searchQuery: Partial<PolicyVersionSearchQuery> = {}
   ): Promise<PolicyVersionListResponse> {
+
     const {
       status,
       complianceFrameworks,
@@ -382,7 +392,7 @@ export class PolicyVersionDAO {
         pageSize,
         total,
         totalPages
-      },
+  }
       policy
     };
   }
@@ -397,6 +407,7 @@ export class PolicyVersionDAO {
     updatedBy: string,
     notes?: string
   ): Promise<PolicyVersion> {
+
     const updates = ['status = $2', 'updated_at = NOW()'];
     const params: unknown[] = [versionId, status];
     let paramIndex = 3;
@@ -423,6 +434,7 @@ export class PolicyVersionDAO {
   }
 
   async getCurrentPolicyVersion(policyId: string): Promise<PolicyVersion | null> {
+
     const query = `
       SELECT get_current_policy_version($1) as current_version_id
     `;
@@ -442,12 +454,14 @@ export class PolicyVersionDAO {
   // ============================================================================
 
   async generateNextVersion(policyId: string, changeType: ChangeType = 'update'): Promise<string> {
+
     const query = 'SELECT generate_next_version($1, $2) as next_version';
     const result = await this.db.query(query, [policyId, changeType]);
     return result.rows[0].next_version;
   }
 
   async getVersionHistory(policyId: string): Promise<PolicyVersion[]> {
+
     const query = `
       SELECT *
       FROM policy_versions
@@ -472,10 +486,11 @@ export class PolicyVersionDAO {
     changeReason: string,
     createdBy: string
   ): Promise<PolicyVersionChange> {
+
     const query = `
       INSERT INTO policy_version_changes (
         version_id, change_type, field_path, old_value, new_value, change_reason, created_by
-      )
+
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
     `;
@@ -494,6 +509,7 @@ export class PolicyVersionDAO {
   }
 
   async getVersionChanges(versionId: string): Promise<PolicyVersionChange[]> {
+
     const query = `
       SELECT *
       FROM policy_version_changes

@@ -7,6 +7,7 @@
 import React from 'react';
 import { Template } from './TemplatePreviewModal';
 import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../embed/EmbeddableContent';
+
 export interface EmbeddedTemplatePreviewProps {
     template: Template;
     embedConfig: EmbedConfiguration;
@@ -26,12 +27,14 @@ export interface EmbeddedTemplatePreviewProps {
     showPurchaseButton?: boolean;
     maxWidth?: number;
     maxHeight?: number;
-}
+
+
 export interface ShareMethod {
     type: 'link' | 'embed' | 'social' | 'email' | 'copy';
     platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
     customization?: EmbedCustomization;
-}
+
+
 export interface EmbedCustomization {
     size: EmbedSize;
     theme: EmbedTheme;
@@ -39,7 +42,8 @@ export interface EmbedCustomization {
     layout: EmbedLayout;
     branding: EmbedBranding;
     social: EmbedSocialConfig;
-}
+
+
 export interface EmbedLayout {
     orientation: 'horizontal' | 'vertical' | 'grid';
     showHeader: boolean;
@@ -49,7 +53,8 @@ export interface EmbedLayout {
     spacing: 'tight' | 'normal' | 'loose';
     borderRadius: number;
     shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-}
+
+
 export interface EmbedBranding {
     showLogo: boolean;
     showTitle: boolean;
@@ -61,12 +66,13 @@ export interface EmbedBranding {
         accent: string;
         background: string;
         text: string;
+
     };
     customFonts?: {
         heading: string;
         body: string;
     };
-}
+
 export interface EmbedSocialConfig {
     showLikes: boolean;
     showShares: boolean;
@@ -76,14 +82,15 @@ export interface EmbedSocialConfig {
     enableInteraction: boolean;
     showAuthorInfo: boolean;
     showStats: boolean;
-}
+
+
 export interface PreviewSize {
     width: number;
     height: number;
     label: string;
     icon: React.ComponentType<unknown>;
     description: string;
-}
+
 export declare const PREVIEW_SIZES: PreviewSize[];
 export declare const EmbedCodeGenerator: React.FC<{
     template: Template;

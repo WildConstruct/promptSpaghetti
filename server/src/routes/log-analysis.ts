@@ -20,6 +20,7 @@ import {
 import { Database } from '../database/connection';
 
 // Request type definitions
+}
 interface IngestLogRequest {
   Body: {
     level: LogLevel;
@@ -28,9 +29,11 @@ interface IngestLogRequest {
     message: string;
     context?: Record<string, any>;
     metadata?: Record<string, any>;
+}
   };
 }
 
+}
 interface BatchIngestLogsRequest {
   Body: {
     logs: Array<{
@@ -47,10 +50,12 @@ interface BatchIngestLogsRequest {
       user_agent?: string;
       stack_trace?: string;
       metadata?: Record<string, any>;
+}
     }>;
   };
 }
 
+}
 interface CreateAnalysisRuleRequest {
   Body: {
     name: string;
@@ -65,6 +70,7 @@ interface CreateAnalysisRuleRequest {
       statistical_window_minutes?: number;
       ml_model?: string;
       custom_function?: string;
+}
     };
     anomaly_type: AnomalyType;
     severity: AlertSeverity;
@@ -84,6 +90,7 @@ interface CreateAnalysisRuleRequest {
   };
 }
 
+}
 interface CreateAnalysisSessionRequest {
   Body: {
     name: string;
@@ -94,6 +101,7 @@ interface CreateAnalysisSessionRequest {
     time_range: {
       start_time: string;
       end_time?: string;
+}
     };
     filters?: {
       components?: string[];
@@ -106,6 +114,7 @@ interface CreateAnalysisSessionRequest {
   };
 }
 
+}
 interface ListLogEntriesRequest {
   Querystring: {
     source?: LogSource;
@@ -117,9 +126,11 @@ interface ListLogEntriesRequest {
     search?: string;
     page?: number;
     pageSize?: number;
+}
   };
 }
 
+}
 interface ListAnalysisRulesRequest {
   Querystring: {
     enabled?: boolean;
@@ -127,9 +138,11 @@ interface ListAnalysisRulesRequest {
     severity?: AlertSeverity;
     page?: number;
     pageSize?: number;
+}
   };
 }
 
+}
 interface ListAlertsRequest {
   Querystring: {
     status?: 'new' | 'acknowledged' | 'investigating' | 'resolved' | 'false_positive';
@@ -140,15 +153,18 @@ interface ListAlertsRequest {
     end_date?: string;
     page?: number;
     pageSize?: number;
+}
   };
 }
 
+}
 interface GetAnalyticsRequest {
   Querystring: {
     start_date: string;
     end_date: string;
     source?: LogSource;
     include_patterns?: boolean;
+}
   };
 }
 
@@ -177,18 +193,18 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           level: { 
             type: 'string', 
             enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-          },
+  }
           source: { 
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-          },
+  }
           component: { type: 'string', maxLength: 200 },
           message: { type: 'string' },
           context: { type: 'object' },
           metadata: { type: 'object' }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -240,12 +256,12 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
                 level: { 
                   type: 'string', 
                   enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-                },
+  }
                 source: { 
                   type: 'string', 
                   enum: ['application', 'database', 'web_server', 'system', 
                     'security', 'audit', 'performance', 'user_activity']
-                },
+  }
                 component: { type: 'string' },
                 message: { type: 'string' },
                 context: { type: 'object' },
@@ -260,7 +276,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -315,11 +331,11 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-          },
+  }
           level: { 
             type: 'string', 
             enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
-          },
+  }
           component: { type: 'string' },
           start_time: { type: 'string', format: 'date-time' },
           end_time: { type: 'string', format: 'date-time' },
@@ -328,7 +344,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 1000, default: 100 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -403,33 +419,33 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
               enum: ['application', 'database', 'web_server', 'system', 
                 'security', 'audit', 'performance', 'user_activity']
             }
-          },
+  }
           log_levels: { 
             type: 'array', 
             items: { 
               type: 'string', 
               enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
             }
-          },
+  }
           pattern_type: { 
             type: 'string', 
             enum: ['regex', 'keyword', 'statistical', 'ml_based', 'custom']
-          },
+  }
           pattern_definition: { type: 'object' },
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-          },
+  }
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-          },
+  }
           trigger_conditions: { type: 'object' },
           actions: { type: 'object' }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -474,15 +490,15 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-          },
+  }
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-          },
+  }
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -554,7 +570,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           analysis_type: { 
             type: 'string', 
             enum: ['real_time', 'batch', 'historical', 'custom']
-          },
+  }
           log_sources: { 
             type: 'array', 
             items: { 
@@ -562,14 +578,14 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
               enum: ['application', 'database', 'web_server', 'system', 
                 'security', 'audit', 'performance', 'user_activity']
             }
-          },
+  }
           log_levels: { 
             type: 'array', 
             items: { 
               type: 'string', 
               enum: ['debug', 'info', 'warn', 'error', 'fatal', 'trace']
             }
-          },
+  }
           time_range: {
             type: 'object',
             required: ['start_time'],
@@ -577,14 +593,14 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
               start_time: { type: 'string', format: 'date-time' },
               end_time: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           filters: { type: 'object' },
           analysis_rules: { 
             type: 'array', 
             items: { type: 'string' }
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -638,7 +654,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         properties: {
           sessionId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -683,24 +699,24 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string', 
             enum: ['new', 'acknowledged', 'investigating', 'resolved', 'false_positive']
-          },
+  }
           severity: { 
             type: 'string', 
             enum: ['critical', 'high', 'medium', 'low', 'info']
-          },
+  }
           anomaly_type: { 
             type: 'string', 
             enum: ['error_spike', 'performance_degradation', 'unusual_activity',
               'security_threat', 'system_failure', 'data_anomaly',
               'access_anomaly', 'volume_anomaly']
-          },
+  }
           assigned_to: { type: 'string' },
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           page: { type: 'integer', minimum: 1, default: 1 },
           pageSize: { type: 'integer', minimum: 1, maximum: 100, default: 20 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -770,7 +786,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         properties: {
           alertId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -821,10 +837,10 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['application', 'database', 'web_server', 'system', 
               'security', 'audit', 'performance', 'user_activity']
-          },
+  }
           include_patterns: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -922,7 +938,7 @@ export async function logAnalysisRoutes(fastify: FastifyInstance) {
         properties: {
           action: { type: 'string', enum: ['start', 'stop'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',

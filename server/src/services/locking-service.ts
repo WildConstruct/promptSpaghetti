@@ -5,6 +5,7 @@ import { WorkflowDAO } from '../database/workflow-dao';
 import { Database } from '../database/connection';
 import { WorkflowLock } from '../database/workflow-models';
 
+}
 export interface LockRequest {
   resource_id: string;
   user_id: string;
@@ -15,7 +16,9 @@ export interface LockRequest {
   force?: boolean;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface LockPolicy {
   id: string;
   workspace_id: string;
@@ -45,7 +48,9 @@ export interface LockPolicy {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface LockConflict {
   id: string;
   resource_id: string;
@@ -58,7 +63,9 @@ export interface LockConflict {
   resolved_at?: Date;
   resolution_action?: string;
 }
+}
 
+}
 export interface LockQueue {
   id: string;
   resource_id: string;
@@ -69,7 +76,9 @@ export interface LockQueue {
   estimated_wait_time?: number;
   notification_sent: boolean;
 }
+}
 
+}
 export interface LockNotification {
   id: string;
   user_id: string;
@@ -83,7 +92,9 @@ export interface LockNotification {
   read_at?: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface LockingStatistics {
   total_locks: number;
   active_locks: number;
@@ -97,6 +108,7 @@ export interface LockingStatistics {
     resource_id: string;
     conflict_count: number;
     avg_wait_time: number;
+}
   }>;
 }
 
@@ -114,6 +126,7 @@ export class LockingService {
   // =============================================================================
 
   async createLockPolicy(data: Omit<LockPolicy, 'id' | 'created_at' | 'updated_at'>): Promise<LockPolicy> {
+
     const result = await this.db.query(`
       INSERT INTO lock_policies (
         workspace_id, name, description, max_locks_per_user, max_locks_per_resource,
@@ -148,6 +161,7 @@ export class LockingService {
   }
 
   async getLockPolicy(workspaceId: string): Promise<LockPolicy | null> {
+
     const result = await this.db.query(`
       SELECT * FROM lock_policies 
       WHERE workspace_id = $1 
@@ -174,6 +188,7 @@ export class LockingService {
     queue_position?: number;
     error?: string;
   }> {
+
     return this.db.transaction(async (client) => {
       // Get lock policy
       const policy = await this.getLockPolicy(request.resource_id);
@@ -254,6 +269,7 @@ export class LockingService {
     request: LockRequest,
     policy: LockPolicy | null
   ): Promise<LockConflict> {
+
     const strategy = policy?.conflict_resolution_strategy || 'reject';
     
     const conflict = await this.createLockConflict(
@@ -288,6 +304,7 @@ export class LockingService {
     blockingLockId: string,
     strategy: string
   ): Promise<LockConflict> {
+
     const result = await this.db.query(`
       INSERT INTO lock_conflicts (
         resource_id, requesting_user_id, blocking_lock_id, 
@@ -313,6 +330,7 @@ export class LockingService {
     error?: string;
     notification_sent?: boolean;
   }> {
+
     return this.db.transaction(async (client) => {
       // Get the lock
       const lockResult = await client.query(
@@ -368,6 +386,7 @@ export class LockingService {
   }
 
   private async canBreakLock(userId: string, lock: WorkflowLock, policy: LockPolicy): Promise<boolean> {
+
     // Check if user has required role
     const userRoles = await this.getUserRoles(userId, lock.workspace_id);
     const hasRequiredRole = policy.lock_breaking_roles.some(role => userRoles.includes(role));
@@ -376,6 +395,7 @@ export class LockingService {
   }
 
   private async getUserRoles(userId: string, workspaceId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT ar.name as role_name
       FROM acl_assignments aa
@@ -391,6 +411,7 @@ export class LockingService {
   // =============================================================================
 
   private async addToLockQueue(request: LockRequest): Promise<LockQueue> {
+
     const priority = this.calculateQueuePriority(request);
     
     const result = await this.db.query(`
@@ -428,6 +449,7 @@ export class LockingService {
   }
 
   private async estimateWaitTime(resourceId: string): Promise<number> {
+
     // Get current locks on resource
     const locks = await this.getResourceLocks(resourceId);
     
@@ -447,6 +469,7 @@ export class LockingService {
   }
 
   private async processLockQueue(resourceId: string): Promise<void> {
+
     // Get next queued request
     const queueResult = await this.db.query(`
       SELECT * FROM lock_queue
@@ -491,6 +514,7 @@ export class LockingService {
     type: 'acquired' | 'released' | 'broken' | 'expiring',
     metadata: Record<string, any> = {}
   ): Promise<void> {
+
     const titles = {
       acquired: 'Lock Acquired',
       released: 'Lock Released',
@@ -521,6 +545,7 @@ export class LockingService {
   }
 
   private async sendQueueNotification(userId: string, queueEntry: LockQueue): Promise<void> {
+
     const position = await this.getQueuePosition(queueEntry.id);
     
     await this.db.query(`
@@ -537,6 +562,7 @@ export class LockingService {
   }
 
   private async getQueuePosition(queueEntryId: string): Promise<number> {
+
     const result = await this.db.query(`
       SELECT COUNT(*) + 1 as position
       FROM lock_queue lq1
@@ -553,6 +579,7 @@ export class LockingService {
   // =============================================================================
 
   async releaseExpiredLocks(): Promise<number> {
+
     const result = await this.db.query(`
       DELETE FROM workflow_locks
       WHERE expires_at < NOW() AND auto_release = true
@@ -572,6 +599,7 @@ export class LockingService {
   }
 
   async sendExpirationWarnings(): Promise<number> {
+
     const result = await this.db.query(`
       SELECT * FROM workflow_locks
       WHERE expires_at > NOW() 
@@ -581,7 +609,7 @@ export class LockingService {
         WHERE lock_id = workflow_locks.id 
         AND notification_type = 'expiring'
         AND sent_at > NOW() - INTERVAL '1 hour'
-      )
+
     `);
 
     for (const lock of result.rows) {
@@ -596,6 +624,7 @@ export class LockingService {
   // =============================================================================
 
   async getLockingStatistics(workspaceId: string): Promise<LockingStatistics> {
+
     const [
       totalResult,
       activeResult,
@@ -656,6 +685,7 @@ export class LockingService {
   // =============================================================================
 
   private async getUserLocks(userId: string): Promise<WorkflowLock[]> {
+
     const result = await this.db.query(`
       SELECT * FROM workflow_locks 
       WHERE locked_by = $1 
@@ -666,6 +696,7 @@ export class LockingService {
   }
 
   private async getResourceLocks(resourceId: string): Promise<WorkflowLock[]> {
+
     const result = await this.db.query(`
       SELECT * FROM workflow_locks 
       WHERE resource_id = $1 
@@ -681,6 +712,7 @@ export class LockingService {
     actionType: string,
     reason?: string
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO lock_actions (lock_id, user_id, action_type, reason)
       VALUES ($1, $2, $3, $4)
@@ -688,6 +720,7 @@ export class LockingService {
   }
 
   private async notifyLockOwner(lock: WorkflowLock, request: LockRequest): Promise<void> {
+
     await this.db.query(`
       INSERT INTO lock_notifications (
         user_id, lock_id, resource_id, notification_type, title, message, metadata
@@ -703,6 +736,7 @@ export class LockingService {
   }
 
   private async escalateLockConflict(_____conflict: LockConflict, _____policy: LockPolicy | null): Promise<void> {
+
     // Implementation would escalate to administrators or managers
     // This is a placeholder for escalation logic
   }
@@ -715,6 +749,7 @@ export class LockingService {
     success: boolean;
     error?: string;
   }> {
+
     return this.db.transaction(async (client) => {
       // Get the lock
       const lockResult = await client.query(
@@ -750,6 +785,7 @@ export class LockingService {
   }
 
   async updateLockPolicy(workspaceId: string, data: Omit<LockPolicy, 'id' | 'created_at' | 'updated_at'>): Promise<LockPolicy> {
+
     const result = await this.db.query(`
       UPDATE lock_policies SET
         name = $2,
@@ -794,6 +830,7 @@ export class LockingService {
   }
 
   async getLockQueue(resourceId: string): Promise<LockQueue[]> {
+
     const result = await this.db.query(`
       SELECT * FROM lock_queue
       WHERE resource_id = $1
@@ -807,6 +844,7 @@ export class LockingService {
     success: boolean;
     error?: string;
   }> {
+
     const result = await this.db.query(`
       DELETE FROM lock_queue
       WHERE id = $1 AND user_id = $2
@@ -820,6 +858,7 @@ export class LockingService {
   }
 
   async getLockConflicts(workspaceId: string, status?: string): Promise<LockConflict[]> {
+
     let query = `
       SELECT lc.*, r.name as resource_name, u.name as requesting_user_name
       FROM lock_conflicts lc
@@ -845,6 +884,7 @@ export class LockingService {
     success: boolean;
     error?: string;
   }> {
+
     return this.db.transaction(async (client) => {
       // Get the conflict
       const conflictResult = await client.query(
@@ -887,6 +927,7 @@ export class LockingService {
   }
 
   async getLockNotifications(userId: string, unreadOnly: boolean = false): Promise<LockNotification[]> {
+
     let query = `
       SELECT * FROM lock_notifications
       WHERE user_id = $1
@@ -906,6 +947,7 @@ export class LockingService {
     success: boolean;
     error?: string;
   }> {
+
     const result = await this.db.query(`
       UPDATE lock_notifications 
       SET read_at = NOW()

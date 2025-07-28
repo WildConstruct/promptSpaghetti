@@ -33,7 +33,7 @@ export class DatabaseTimeoutIntegration {
       async () => {
         const stmt = this.db.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-      },
+  }
       'database',
       'query',
       operationId
@@ -56,11 +56,11 @@ export class DatabaseTimeoutIntegration {
       async () => {
         const stmt = this.db.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-      },
+  }
       async () => {
         const stmt = readOnlyDb.prepare(sql);
         return params ? stmt.all(...params) : stmt.all();
-      },
+  }
       'database',
       'query'
     );
@@ -76,7 +76,7 @@ export class DatabaseTimeoutIntegration {
     return this.timeoutManager.executeWithTimeout(
       async () => {
         return this.db.transaction(operation)();
-      },
+  }
       'database',
       'transaction',
       operationId
@@ -93,7 +93,7 @@ export class DatabaseTimeoutIntegration {
     return this.timeoutManager.executeWithTimeout(
       async () => {
         this.db.exec(migrationSql);
-      },
+  }
       'database',
       'migration',
       operationId
@@ -151,7 +151,7 @@ export class RedisTimeoutIntegration {
       async () => {
         const client = this.redis.getClient();
         return client.publish(channel, message);
-      },
+  }
       'redis',
       'publish',
       operationId
@@ -177,7 +177,7 @@ export class RedisTimeoutIntegration {
         const value = await getValue();
         await this.redis.cache(key, value, ttl);
         return value;
-      },
+  }
       async () => {
         // Fallback to in-memory cache
         if (inMemoryCache) {
@@ -196,7 +196,7 @@ export class RedisTimeoutIntegration {
           });
         }
         return value;
-      },
+  }
       'redis',
       'operation'
     );
@@ -343,7 +343,7 @@ export class FileTimeoutIntegration {
             createWriteStream(destinationPath)
           );
         }
-      },
+  }
       'file',
       'download',
       operationId
@@ -460,7 +460,7 @@ export class APITimeoutIntegration {
         }
         
         return response.json() as T;
-      },
+  }
       'api',
       apiType,
       operationId
@@ -481,7 +481,7 @@ export class APITimeoutIntegration {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
-      },
+  }
       'webhook',
       operationId
     );
@@ -508,14 +508,14 @@ export class APITimeoutIntegration {
           throw new Error(`Notification failed: ${response.statusText}`);
         }
         return response.json();
-      },
+  }
       async () => {
         const response = await fetch(fallbackUrl, options);
         if (!response.ok) {
           throw new Error(`Fallback notification failed: ${response.statusText}`);
         }
         return response.json();
-      },
+  }
       'api',
       'notification'
     );
@@ -536,7 +536,7 @@ export class HealthCheckTimeoutIntegration {
       async () => {
         const result = db.prepare('SELECT 1 as test').get() as { test: number };
         return result.test === 1;
-      },
+  }
       'database',
       'query',
       'health_check_db'
@@ -563,7 +563,7 @@ export class HealthCheckTimeoutIntegration {
       async () => {
         const response = await fetch(`${url}/health`);
         return response.ok;
-      },
+  }
       'api',
       'authentication',
       'health_check_external'

@@ -438,7 +438,7 @@ describe('UnifiedEventBus', () => {
         data: {
           action: legacyEvent.action,
           userId: legacyEvent.user
-        },
+  }
         metadata: {
           legacyId: legacyEvent.id,
           migrated: true

@@ -5,21 +5,20 @@ export interface PresenceUser {
   userId: string;
   userName?: string;
   userAvatar?: string;
-  status: 'active' | 'idle' | 'away' | 'offline';
+  status: 'active' | 'idle' | 'away' | 'offline';,
   lastSeen: number;
-  cursor?: {
-    x: number;
-    y: number;
-    nodeId?: string;
-  };
-  selection?: string[];
+  cursor?: {,
+  x: number;,
+  y: number;
+  nodeId?: string;
+};
+  selection?: string;
   currentTool?: string;
   isTyping?: boolean;
   focusedNodeId?: string;
 }
-
 export interface PresencePanelProps {
-  users: PresenceUser[];
+  users: PresenceUser;,
   currentUserId: string;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
@@ -29,7 +28,6 @@ export interface PresencePanelProps {
   maxAvatars?: number;
   className?: string;
 }
-
 export const PresencePanel: React.FC<PresencePanelProps> = ({)
   users,
   currentUserId,
@@ -46,12 +44,12 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
   const idleUsers = users.filter(user => user.status === 'idle');
   const awayUsers = users.filter(user => user.status === 'away');
   const typingUsers = users.filter(user => user.isTyping);
-  const formatLastSeen = (timestamp: number): string => {
-    const now = Date.now();
-    const diff = now - timestamp;
-    if (diff < 60000) { // Less than 1 minute
-      return 'Just now';
-    } else if (diff < 3600000) { // Less than 1 hour
+  const formatLastSeen = (timestamp: number): string => {,
+  const now = Date.now();
+  const diff = now - timestamp;
+  if (diff < 60000) { // Less than 1 minute
+  return 'Just now';
+} else if (diff < 3600000) { // Less than 1 hour
       const minutes = Math.floor(diff / 60000);
       return `${minutes}m ago`;}
     } else if (diff < 86400000) { // Less than 1 day
@@ -60,26 +58,21 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
     } else {
       const days = Math.floor(diff / 86400000);
       return `${days}d ago`;}
-    }
   };
   const getActivityText = (user: PresenceUser): string => {
     if (user.isTyping) {
       return 'Typing...';
-    }
     if (user.currentTool) {
       return `Using ${user.currentTool}`;}
-    }
     if (user.focusedNodeId) {
       return 'Editing node';
-    }
     if (user.selection && user.selection.length > 0) {
       return `Selected ${user.selection.length} item${user.selection.length > 1 ? 's' : ''}`;}
-    }
     return 'Viewing';
   };
   if (!showDetailedView) {
     // Compact view - just avatars
-    return ();
+    return;
       <div className={`flex items-center space-x-2 ${className}`}>}
         <UserAvatarList
           users={users}
@@ -98,9 +91,8 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
         )}
       </div>
     );
-  }
   // Detailed view - expandable panel
-  return ();
+  return;
     <div className={`bg-white rounded-lg shadow-lg border ${className}`}>}
       {/* Header */}
       <div 
@@ -210,16 +202,15 @@ export const PresencePanel: React.FC<PresencePanelProps> = ({)
   );
 };
 interface UserPresenceItemProps {
-  user: PresenceUser;
+  user: PresenceUser;,
   isCurrentUser: boolean;
   isFollowing: boolean;
   onUserClick?: (userId: string) => void;
   onFollowUser?: (userId: string) => void;
   onUnfollowUser?: () => void;
-  formatLastSeen: (timestamp: number) => string;
+  formatLastSeen: (timestamp: number) => string;,
   getActivityText: (user: PresenceUser) => string;
-}
-const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
+  const UserPresenceItem: React.FC<UserPresenceItemProps> = ({,)
   user,
   isCurrentUser,
   isFollowing,
@@ -232,7 +223,6 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
   const handleClick = () => {
     if (!isCurrentUser && onUserClick) {
       onUserClick(user.userId);
-    }
   };
   const handleFollowClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -240,13 +230,12 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
       onUnfollowUser();
     } else if (!isFollowing && onFollowUser) {
       onFollowUser(user.userId);
-    }
   };
-  return ();
+  return;
     <div
       className={`flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${
-        !isCurrentUser && onUserClick ? 'cursor-pointer' : ''
-      } ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`}
+  !isCurrentUser && onUserClick ? 'cursor-pointer' : '',
+} ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`}
       onClick={handleClick}
     >
       <div className="flex items-center space-x-3 min-w-0 flex-1">
@@ -284,10 +273,10 @@ const UserPresenceItem: React.FC<UserPresenceItemProps> = ({)
         <button
           onClick={handleFollowClick}
           className={`px-2 py-1 text-xs font-medium rounded ${
-            isFollowing
-              ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
+  isFollowing
+  ? 'bg-blue-100 text-blue-800 hover:bg-blue-200',
+  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+}`}
         >
           {isFollowing ? 'Following' : 'Follow'}
         </button>

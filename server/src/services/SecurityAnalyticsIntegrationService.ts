@@ -17,6 +17,7 @@ import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 import { DiagnosticService } from '../admin/DiagnosticService';
 
+}
 export interface SecurityAnalyticsIntegrationConfig {
   epic1_analytics_integration: {
     enabled: boolean;
@@ -25,6 +26,7 @@ export interface SecurityAnalyticsIntegrationConfig {
     performance_event_forwarding: boolean;
     batch_size: number;
     flush_interval_ms: number;
+}
   };
   
   epic17_admin_integration: {
@@ -54,6 +56,7 @@ export interface SecurityAnalyticsIntegrationConfig {
   };
 }
 
+}
 export interface SecurityPerformanceMetrics {
   timestamp: number;
   performance_score: number;
@@ -66,7 +69,9 @@ export interface SecurityPerformanceMetrics {
   compliance_violations: number;
   system_availability_percent: number;
 }
+}
 
+}
 export interface SecurityAnalyticsAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -79,6 +84,7 @@ export interface SecurityAnalyticsAlert {
   created_at: number;
   resolved_at?: number;
   resolved_by?: string;
+}
 }
 
 export class SecurityAnalyticsIntegrationService extends EventEmitter {
@@ -110,6 +116,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Initialize the integration service with Epic 1 and Epic 17 systems
    */
   async initialize(): Promise<void> {
+
     try {
       // Initialize performance monitoring
       await this.performanceMonitor.initialize();
@@ -140,6 +147,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Epic 1 Analytics Foundation Integration
    */
   private async initializeEpic1Integration(): Promise<void> {
+
     const { analytics_collector, analytics_dao } = this.config.epic1_analytics_integration;
 
     // Register performance event handler
@@ -194,6 +202,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Epic 17 Admin/Auth Systems Integration
    */
   private async initializeEpic17Integration(): Promise<void> {
+
     const { health_check_framework, diagnostic_service } = this.config.epic17_admin_integration;
 
     // Register security health checks
@@ -215,7 +224,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
             active_threats: metrics.active_threats_detected
           }
         };
-      },
+  }
       interval_ms: 30000, // Check every 30 seconds
       timeout_ms: 5000
     });
@@ -273,6 +282,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Collect current security analytics performance metrics
    */
   private async collectCurrentMetrics(): Promise<SecurityPerformanceMetrics> {
+
     const performanceProfile = await this.performanceMonitor.getCurrentPerformanceProfile();
     const systemMetrics = await this.performanceMonitor.getSystemMetrics();
     const securityMetrics = await this.performanceMonitor.getSecurityMetrics();
@@ -295,6 +305,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Analyze metrics for potential alerts
    */
   private async analyzeMetricsForAlerts(metrics: SecurityPerformanceMetrics): Promise<SecurityAnalyticsAlert[]> {
+
     const alerts: SecurityAnalyticsAlert[] = [];
 
     // Performance degradation alert
@@ -361,6 +372,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Store security metrics in Epic 1 analytics database
    */
   private async storeSecurityMetrics(metrics: SecurityPerformanceMetrics): Promise<void> {
+
     if (!this.config.epic1_analytics_integration.enabled) return;
 
     try {
@@ -387,6 +399,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Notify Epic 17 admin systems of security alerts
    */
   private async notifyAdminSystems(alert: SecurityAnalyticsAlert): Promise<void> {
+
     if (!this.config.epic17_admin_integration.admin_notification_enabled) return;
 
     try {
@@ -403,7 +416,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
           affected_components: alert.affected_components,
           recommended_actions: alert.recommended_actions,
           performance_metrics: alert.metrics
-        },
+  }
         created_at: alert.created_at
       });
 
@@ -416,13 +429,14 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Perform deep diagnostics for Epic 17 integration
    */
   private async performDeepDiagnostics(): Promise<unknown> {
+
     const diagnostics = {
       timestamp: Date.now(),
       integration_status: {
         epic1_analytics: this.config.epic1_analytics_integration.enabled,
         epic17_admin: this.config.epic17_admin_integration.enabled,
         real_time_monitoring: this.isMonitoring
-      },
+  }
       current_metrics: await this.getCurrentPerformanceMetrics(),
       performance_history: this.metricsBuffer.slice(-10), // Last 10 metrics
       recent_alerts: this.alertsBuffer.slice(-5), // Last 5 alerts
@@ -430,10 +444,9 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         buffer_sizes: {
           metrics: this.metricsBuffer.length,
           alerts: this.alertsBuffer.length
-        },
+  }
         monitoring_active: this.isMonitoring,
-        last_flush: this.getLastFlushTime()
-      }
+        last_flush: this.getLastFlushTime(}
     };
 
     return diagnostics;
@@ -443,6 +456,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Get current performance metrics
    */
   private async getCurrentPerformanceMetrics(): Promise<SecurityPerformanceMetrics> {
+
     return await this.collectCurrentMetrics();
   }
 
@@ -450,6 +464,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Flush metrics buffer to Epic 1 analytics
    */
   private async flushMetricsBuffer(): Promise<void> {
+
     if (this.metricsBuffer.length === 0) return;
 
     try {
@@ -497,6 +512,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
    * Stop monitoring and cleanup
    */
   async shutdown(): Promise<void> {
+
     this.isMonitoring = false;
     
     if (this.monitoringInterval) {

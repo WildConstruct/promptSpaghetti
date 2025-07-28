@@ -4,40 +4,39 @@ import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 // Type definitions for workflow entities
+
 export interface WorkflowState {
-  id: string;
+  id: string;,
   workspace_id: string;
   name: string;
   description?: string;
   color: string;
   icon?: string;
-  is_initial: boolean;
+  is_initial: boolean;,
   is_final: boolean;
-  is_locked: boolean;
+  is_locked: boolean;,
   sort_order: number;
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
 }
-
 export interface WorkflowTransition {
-  id: string;
+  id: string;,
   workspace_id: string;
   from_state_id?: string;
-  to_state_id: string;
+  to_state_id: string;,
   name: string;
   description?: string;
-  requires_approval: boolean;
+  requires_approval: boolean;,
   required_permissions: bigint;
   conditions: Record<string, unknown>;
   created_at: Date;
 }
-
 export interface WorkflowApproval {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   transition_id: string;
-  requester_id: string;
+  requester_id: string;,
   status: 'pending' | 'approved' | 'rejected' | 'cancelled';
   requested_at: Date;
   due_date?: Date;
@@ -46,65 +45,61 @@ export interface WorkflowApproval {
   approved_at?: Date;
   rejection_reason?: string;
   approval_comment?: string;
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
 }
-
 export interface WorkflowLock {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   locked_by: string;
   lock_type: 'edit' | 'state_change' | 'delete' | 'custom';
   lock_reason?: string;
   locked_at: Date;
   expires_at?: Date;
-  auto_release: boolean;
+  auto_release: boolean;,
   metadata: Record<string, unknown>;
 }
-
 export interface WorkflowHistoryEntry {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   action_type: string;
   previous_state_id?: string;
   new_state_id?: string;
-  actor_id: string;
+  actor_id: string;,
   action_timestamp: Date;
   approval_id?: string;
   transition_id?: string;
   comment?: string;
   metadata: Record<string, unknown>;
 }
-
 export interface WorkflowStatistics {
-  total_states: number;
+  total_states: number;,
   total_transitions: number;
-  pending_approvals: number;
+  pending_approvals: number;,
   active_locks: number;
-  scheduled_executions: number;
+  scheduled_executions: number;,
   resources_by_state: Record<string, number>;
   approval_stats: {,
-    pending: number;
-    approved: number;
-    rejected: number;
-    cancelled: number;
-    avg_approval_time_hours: number;
-  };
+  pending: number;,
+  approved: number;
+  rejected: number;,
+  cancelled: number;
+  avg_approval_time_hours: number;
+};
   lock_stats: {,
-    total_active: number;
-    by_type: Record<string, number>;
-    avg_lock_duration_hours: number;
-  };
+  total_active: number;
+  by_type: Record<string, number>;
+  avg_lock_duration_hours: number;
+};
   schedule_stats: {,
-    total_active: number;
-    by_type: Record<string, number>;
-    successful_executions: number;
-    failed_executions: number;
-  };
+  total_active: number;
+  by_type: Record<string, number>;
+  successful_executions: number;,
+  failed_executions: number;
+};
 }
-
 export interface StateTransitionResult {
   success: boolean;
   new_state_id?: string;
@@ -112,76 +107,71 @@ export interface StateTransitionResult {
   approval_id?: string;
   error?: string;
   workflow_history_id?: string;
-}
-
-// Store interface
-interface WorkflowStore {
+  // Store interface
+  interface WorkflowStore {
   // State
-  states: WorkflowState[];
-  transitions: WorkflowTransition[];
-  approvals: WorkflowApproval[];
-  locks: WorkflowLock[];
-  history: WorkflowHistoryEntry[];
+  states: WorkflowState;,
+  transitions: WorkflowTransition;
+  approvals: WorkflowApproval;,
+  locks: WorkflowLock;
+  history: WorkflowHistoryEntry;,
   statistics: WorkflowStatistics | null;
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
   // Actions - State Management
-  fetchStates: (workspaceId: string) => Promise<void>;
-  createState: (data: Partial<WorkflowState>) => Promise<WorkflowState>;
-  updateState: (id: string, updates: Partial<WorkflowState>) => Promise<WorkflowState>;
+  fetchStates: (workspaceId: string) => Promise<void>;,
+  createState: (data: Partial<WorkflowState>) => Promise<WorkflowState>;,
+  updateState: (id: string, updates: Partial<WorkflowState>) => Promise<WorkflowState>;,
   deleteState: (id: string) => Promise<void>;
   // Actions - Transition Management
   fetchTransitions: (workspaceId: string, fromStateId?: string) => Promise<void>;
-  createTransition: (data: Partial<WorkflowTransition>) => Promise<WorkflowTransition>;
+  createTransition: (data: Partial<WorkflowTransition>) => Promise<WorkflowTransition>;,
   deleteTransition: (id: string) => Promise<void>;
   // Actions - State Transitions
   transitionResourceState: (),
-    resourceId: string,
-    toStateId: string,
-    actorId: string,
-    options?: {
-      comment?: string;
-      metadata?: Record<string, unknown>;
-      force?: boolean;
-      lockDuration?: number;
-    }
+  resourceId: string,
+  toStateId: string,
+  actorId: string,
+  options?: {,
+  comment?: string;
+  metadata?: Record<string, unknown>;
+  force?: boolean;
+  lockDuration?: number;
   ) => Promise<StateTransitionResult>;
   // Actions - Approval Management
   fetchApprovals: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
-  createApproval: (data: Partial<WorkflowApproval>) => Promise<WorkflowApproval>;
+  createApproval: (data: Partial<WorkflowApproval>) => Promise<WorkflowApproval>;,
   approveWorkflow: (approvalId: string, approverId: string, comment?: string) => Promise<StateTransitionResult>;
   rejectWorkflow: (approvalId: string, rejectorId: string, reason: string) => Promise<boolean>;
   // Actions - Lock Management
   fetchLocks: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
   acquireLock: (),
-    resourceId: string,
-    userId: string,
-    lockType?: 'edit' | 'state_change' | 'delete' | 'custom',
-    options?: {
-      reason?: string;
-      duration?: number;
-      metadata?: Record<string, unknown>;
-    }
+  resourceId: string,
+  userId: string,
+  lockType?: 'edit' | 'state_change' | 'delete' | 'custom',
+  options?: {,
+  reason?: string;
+  duration?: number;
+  metadata?: Record<string, unknown>;
   ) => Promise<WorkflowLock>;
-  releaseLock: (lockId: string, userId: string) => Promise<boolean>;
+  releaseLock: (lockId: string, userId: string) => Promise<boolean>;,
   releaseLocksByResource: (resourceId: string, userId: string, lockType?: string) => Promise<number>;
   // Actions - History and Statistics
   fetchHistory: (workspaceId: string, filters?: Record<string, string>) => Promise<void>;
   fetchStatistics: (workspaceId: string) => Promise<void>;
   // Actions - Utilities
-  validateStateTransition: (resourceId: string, toStateId: string) => Promise<{
-    valid: boolean;
-    transition?: WorkflowTransition;
-    error?: string;
-  }>;
-  canUserTransitionState: (userId: string, resourceId: string, toStateId: string) => Promise<boolean>;
+  validateStateTransition: (resourceId: string, toStateId: string) => Promise<{,
+  valid: boolean;
+  transition?: WorkflowTransition;
+  error?: string;
+}>;
+  canUserTransitionState: (userId: string, resourceId: string, toStateId: string) => Promise<boolean>;,
   isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
   performMaintenance: () => Promise<unknown>;
   // Internal actions
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
+  setLoading: (loading: boolean) => void;,
+  setError: (error: string | null) => void;,
   clearError: () => void;
-}
 
 // API base URL
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -190,24 +180,22 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 async function apiCall(endpoint: string, options: RequestInit = {}) {
   const url = `${API_BASE}/api/workflow${endpoint}`;}
   const response = await fetch(url, {)
-    ...options,
-    headers: {,
-      'Content-Type': 'application/json',
-      'x-user-id': 'current-user-id', // TODO: Get from auth context
-      ...options.headers
-    }
-  });
+  ...options,
+  headers: {,
+  'Content-Type': 'application/json',
+  'x-user-id': 'current-user-id', // TODO: Get from auth context,
+  ...options.headers
+});
   if (!response.ok) {
     throw new Error(`API call failed: ${response.status} ${response.statusText}`);}
-  }
   return response.json();
-}
 
 // Create the store
+}
 export const useWorkflowStore = create<WorkflowStore>()()
   devtools();
     (set, get) => ({)
-      // Initial state
+  // Initial state
       states: [],
       transitions: [],
       approvals: [],
@@ -224,55 +212,52 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ states, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch states', loading: false });
-        }
-      },
-      createState: async (data: Partial<WorkflowState>) => {,
+  },
+  createState: async (data: Partial<WorkflowState>) => {,
         try {
           set({ loading: true, error: null });
           const newState = await apiCall('/states', {)
-            method: 'POST',
-            body: JSON.stringify(data),
-          });
+  method: 'POST',
+  body: JSON.stringify(data),
+});
           set(state => ({ )
             states: [...state.states, newState].sort((a, b) => a.sort_order - b.sort_order),
-            loading: false ,
-          }));
+            loading: false ;
+  }));
           return newState;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to create state', loading: false });
           throw error;
-        }
-      },
-      updateState: async (id: string, updates: Partial<WorkflowState>) => {
+  },
+  updateState: async (id: string, updates: Partial<WorkflowState>) => {
         try {
           set({ loading: true, error: null });
           const updatedState = await apiCall(`/states/${id}`, {)}
-            method: 'PUT',
-            body: JSON.stringify(updates),
-          });
+  },
+  method: 'PUT',
+            body: JSON.stringify(updates);
+  });
           set(state => ({)
-            states: state.states.map(s => s.id === id ? updatedState : s),
-            loading: false,
-          }));
+  states: state.states.map(s => s.id === id ? updatedState : s),
+  loading: false,
+}));
           return updatedState;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to update state', loading: false });
           throw error;
-        }
-      },
-      deleteState: async (id: string) => {,
+  },
+  deleteState: async (id: string) => {,
         try {
           set({ loading: true, error: null });
           await apiCall(`/states/${id}`, { method: 'DELETE' });}
           set(state => ({)
-            states: state.states.filter(s => s.id !== id),
-            loading: false,
-          }));
+  states: state.states.filter(s => s.id !== id),
+  loading: false,
+}));
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to delete state', loading: false });
           throw error;
-        }
-      },
+  }
       // Transition management actions
       fetchTransitions: async (workspaceId: string, fromStateId?: string) => {
         try {
@@ -282,38 +267,35 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ transitions, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch transitions', loading: false });
-        }
-      },
-      createTransition: async (data: Partial<WorkflowTransition>) => {,
+  },
+  createTransition: async (data: Partial<WorkflowTransition>) => {,
         try {
           set({ loading: true, error: null });
           const newTransition = await apiCall('/transitions', {)
-            method: 'POST',
-            body: JSON.stringify(data),
-          });
+  method: 'POST',
+  body: JSON.stringify(data),
+});
           set(state => ({ )
             transitions: [...state.transitions, newTransition],
-            loading: false ,
-          }));
+            loading: false ;
+  }));
           return newTransition;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to create transition', loading: false });
           throw error;
-        }
-      },
-      deleteTransition: async (id: string) => {,
+  },
+  deleteTransition: async (id: string) => {,
         try {
           set({ loading: true, error: null });
           await apiCall(`/transitions/${id}`, { method: 'DELETE' });}
           set(state => ({)
-            transitions: state.transitions.filter(t => t.id !== id),
-            loading: false,
-          }));
+  transitions: state.transitions.filter(t => t.id !== id),
+  loading: false,
+}));
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to delete transition', loading: false });
           throw error;
-        }
-      },
+  }
       // State transition actions
       transitionResourceState: async (),
         resourceId: string,
@@ -324,19 +306,19 @@ export const useWorkflowStore = create<WorkflowStore>()()
         try {
           set({ loading: true, error: null });
           const result = await apiCall(`/resources/${resourceId}/transition`, {)}
-            method: 'POST',
-            body: JSON.stringify({),
-              to_state_id: toStateId,
-              ...options
-            })
+  },
+  method: 'POST',
+            body: JSON.stringify({,)
+  to_state_id: toStateId,
+  ...options
+}
           });
           set({ loading: false });
           return result;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to transition state', loading: false });
           throw error;
-        }
-      },
+  }
       // Approval management actions
       fetchApprovals: async (workspaceId: string, filters = {}) => {
         try {
@@ -346,69 +328,67 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ approvals, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch approvals', loading: false });
-        }
-      },
-      createApproval: async (data: Partial<WorkflowApproval>) => {,
+  },
+  createApproval: async (data: Partial<WorkflowApproval>) => {,
         try {
           set({ loading: true, error: null });
           const newApproval = await apiCall('/approvals', {)
-            method: 'POST',
-            body: JSON.stringify(data),
-          });
+  method: 'POST',
+  body: JSON.stringify(data),
+});
           set(state => ({ )
             approvals: [...state.approvals, newApproval],
-            loading: false ,
-          }));
+            loading: false ;
+  }));
           return newApproval;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to create approval', loading: false });
           throw error;
-        }
-      },
-      approveWorkflow: async (approvalId: string, approverId: string, comment?: string) => {
+  },
+  approveWorkflow: async (approvalId: string, approverId: string, comment?: string) => {
         try {
           set({ loading: true, error: null });
           const result = await apiCall(`/approvals/${approvalId}/approve`, {)}
-            method: 'POST',
+  },
+  method: 'POST',
             body: JSON.stringify({ comment })
           });
           // Update approval status in local state
           set(state => ({)
-            approvals: state.approvals.map(a => ),
+  approvals: state.approvals.map(a => ),
               a.id === approvalId 
                 ? { ...a, status: 'approved' as const, approved_by: approverId, approved_at: new Date() }
                 : a
             ),
-            loading: false,
-          }));
+            loading: false;
+  }));
           return result;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to approve workflow', loading: false });
           throw error;
-        }
-      },
-      rejectWorkflow: async (approvalId: string, rejectorId: string, reason: string) => {
+  },
+  rejectWorkflow: async (approvalId: string, rejectorId: string, reason: string) => {
         try {
           set({ loading: true, error: null });
           const result = await apiCall(`/approvals/${approvalId}/reject`, {)}
-            method: 'POST',
+  },
+  method: 'POST',
             body: JSON.stringify({ reason })
           });
           // Update approval status in local state
           set(state => ({)
-            approvals: state.approvals.map(a => ),
+  approvals: state.approvals.map(a => ),
               a.id === approvalId 
                 ? { ...a, status: 'rejected' as const, approved_by: rejectorId, rejection_reason: reason }
                 : a
             ),
-            loading: false,
-          }));
+            loading: false;
+  }));
           return result;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to reject workflow', loading: false });
           throw error;
-        }
-      },
+  }
       // Lock management actions
       fetchLocks: async (workspaceId: string, filters = {}) => {
         try {
@@ -418,9 +398,8 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ locks, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch locks', loading: false });
-        }
-      },
-      acquireLock: async (),
+  },
+  acquireLock: async (),
         resourceId: string,
         userId: string,
         lockType = 'edit',
@@ -429,55 +408,53 @@ export const useWorkflowStore = create<WorkflowStore>()()
         try {
           set({ loading: true, error: null });
           const newLock = await apiCall('/locks', {)
-            method: 'POST',
-            body: JSON.stringify({),
-              resource_id: resourceId,
-              lock_type: lockType,
-              ...options
-            })
+  method: 'POST',
+  body: JSON.stringify({,)
+  resource_id: resourceId,
+  lock_type: lockType,
+  ...options
+}
           });
           set(state => ({ )
             locks: [...state.locks, newLock],
-            loading: false ,
-          }));
+            loading: false ;
+  }));
           return newLock;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to acquire lock', loading: false });
           throw error;
-        }
-      },
-      releaseLock: async (lockId: string, userId: string) => {
+  },
+  releaseLock: async (lockId: string, userId: string) => {
         try {
           set({ loading: true, error: null });
           await apiCall(`/locks/${lockId}`, { method: 'DELETE' });}
           set(state => ({)
-            locks: state.locks.filter(l => l.id !== lockId),
-            loading: false,
-          }));
+  locks: state.locks.filter(l => l.id !== lockId),
+  loading: false,
+}));
           return true;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to release lock', loading: false });
           throw error;
-        }
-      },
-      releaseLocksByResource: async (resourceId: string, userId: string, lockType?: string) => {
+  },
+  releaseLocksByResource: async (resourceId: string, userId: string, lockType?: string) => {
         try {
           set({ loading: true, error: null });
           const queryParams = lockType ? `?lock_type=${lockType}` : '';}
           const result = await apiCall(`/locks/resource/${resourceId}${queryParams}`, {)}
-            method: 'DELETE',
-          });
+  },
+  method: 'DELETE';
+  });
           // Remove locks from local state
           set(state => ({)
-            locks: state.locks.filter(l => l.resource_id !== resourceId || (lockType && l.lock_type !== lockType)),
-            loading: false,
-          }));
+  locks: state.locks.filter(l => l.resource_id !== resourceId || (lockType && l.lock_type !== lockType)),
+  loading: false,
+}));
           return result.released_count;
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to release locks', loading: false });
           throw error;
-        }
-      },
+  }
       // History and statistics actions
       fetchHistory: async (workspaceId: string, filters = {}) => {
         try {
@@ -487,55 +464,47 @@ export const useWorkflowStore = create<WorkflowStore>()()
           set({ history, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch history', loading: false });
-        }
-      },
-      fetchStatistics: async (workspaceId: string) => {,
+  },
+  fetchStatistics: async (workspaceId: string) => {,
         try {
           set({ loading: true, error: null });
           const statistics = await apiCall(`/statistics/${workspaceId}`);}
           set({ statistics, loading: false });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : 'Failed to fetch statistics', loading: false });
-        }
-      },
+  }
       // Utility actions
       validateStateTransition: async (resourceId: string, toStateId: string) => {
         try {
           return await apiCall(`/validate/transition?resource_id=${resourceId}&to_state_id=${toStateId}&user_id=current-user-id`);}
         } catch (error) {
           return { valid: false, error: error instanceof Error ? error.message : 'Validation failed' };
-        }
-      },
-      canUserTransitionState: async (userId: string, resourceId: string, toStateId: string) => {
+  },
+  canUserTransitionState: async (userId: string, resourceId: string, toStateId: string) => {
         try {
           const result = await apiCall(`/validate/transition?resource_id=${resourceId}&to_state_id=${toStateId}&user_id=${userId}`);}
           return result.can_transition;
         } catch (error) {
           return false;
-        }
-      },
-      isResourceLocked: async (resourceId: string, lockType?: string) => {
+  },
+  isResourceLocked: async (resourceId: string, lockType?: string) => {
         try {
           const queryParams = lockType ? `?lock_type=${lockType}` : '';}
           const result = await apiCall(`/validate/lock?resource_id=${resourceId}${queryParams}`);}
           return result.is_locked;
         } catch (error) {
           return false;
-        }
-      },
-      performMaintenance: async () => {,
+  },
+  performMaintenance: async () => {,
         try {
           return await apiCall('/maintenance', { method: 'POST' });
         } catch (error) {
           throw error;
-        }
-      },
+  }
       // Internal actions
       setLoading: (loading: boolean) => set({ loading }),
       setError: (error: string | null) => set({ error }),
       clearError: () => set({ error: null })
     }),
     {
-      name: 'workflow-store',
-    }
-);
+      name: 'workflow-store');

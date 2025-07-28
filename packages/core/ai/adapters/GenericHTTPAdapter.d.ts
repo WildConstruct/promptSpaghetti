@@ -5,6 +5,7 @@
  * Flexible adapter for custom AI model endpoints following REST conventions
  */
 import { BaseAIModel, ModelMetadata, ModelCapabilities, CostEstimate } from '../BaseAIModel';
+
 export interface HTTPConfig {
     baseURL: string;
     apiKey?: string;
@@ -13,7 +14,8 @@ export interface HTTPConfig {
     maxRetries?: number;
     authType?: 'bearer' | 'api-key' | 'custom';
     healthEndpoint?: string;
-}
+
+
 export interface HTTPRequestOptions {
     endpoint?: string;
     method?: 'POST' | 'GET' | 'PUT' | 'PATCH';
@@ -21,7 +23,8 @@ export interface HTTPRequestOptions {
     timeout?: number;
     retries?: number;
     parameters?: Record<string, unknown>;
-}
+
+
 export interface HTTPRequestMapping {
     inputPath: string;
     outputPath: string;
@@ -29,7 +32,8 @@ export interface HTTPRequestMapping {
     usagePath?: string;
     errorPath?: string;
     statusPath?: string;
-}
+
+
 export interface GenericHTTPResponse {
     status: number;
     data: unknown;
@@ -38,8 +42,9 @@ export interface GenericHTTPResponse {
         input_tokens?: number;
         output_tokens?: number;
         total_tokens?: number;
+
     };
-}
+
 export declare class GenericHTTPAdapter extends BaseAIModel {
     private config;
     private requestMapping;
@@ -67,6 +72,6 @@ export declare class GenericHTTPAdapter extends BaseAIModel {
     private _setValueByPath;
     private _getValueByPath;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default GenericHTTPAdapter;
 //# sourceMappingURL=GenericHTTPAdapter.d.ts.map

@@ -4,7 +4,7 @@
  *
  * Concrete implementation of BaseAIModel for Anthropic Claude models
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel, AIModelType, AIModelProvider } from '../BaseAIModel';
 export interface AnthropicConfig {
     apiKey: string;
     baseURL?: string;
@@ -17,10 +17,10 @@ export interface AnthropicRequestOptions {
     max_tokens?: number;
     top_p?: number;
     top_k?: number;
-    stop_sequences?: string[];
+    stop_sequences?: string;
     stream?: boolean;
     system?: string;
-    tools?: unknown[];
+    tools?: unknown;
     tool_choice?: {
         type: 'auto' | 'any' | 'tool';
         name?: string;
@@ -28,49 +28,32 @@ export interface AnthropicRequestOptions {
 }
 export interface ClaudeMessage {
     role: 'user' | 'assistant';
-    content: string | Array<{
-        type: 'text' | 'image';
-        text?: string;
-        source?: {
-            type: 'base64';
-            media_type: string;
-            data: string;
-        };
-    }>;
+    content: string | Array<{}, type>;
 }
 export interface AnthropicResponse {
     id: string;
     type: 'message';
     role: 'assistant';
-    content: Array<{
-        type: 'text';
-        text: string;
-    }>;
-    model: string;
-    stop_reason: 'end_turn' | 'max_tokens' | 'stop_sequence' | 'tool_use';
-    stop_sequence?: string;
-    usage: {
-        input_tokens: number;
-        output_tokens: number;
-    };
+    content: Array<{}, type>;
+    'text': any;
+    text: string;
 }
 export declare class AnthropicAdapter extends BaseAIModel {
     private config;
     private apiEndpoint;
     constructor(id: string, config: AnthropicConfig, modelName?: string);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: AnthropicRequestOptions): Promise<unknown>;
-    cleanup(): Promise<void>;
-    estimate(input: unknown, options?: AnthropicRequestOptions): Promise<CostEstimate>;
-    static getModelCostPerToken(modelName: string): number;
-    static getModelMaxTokens(modelName: string): number;
-    static getModelAverageLatency(modelName: string): number;
-    private _testConnection;
-    private _makeRequest;
-    private _convertToMessages;
-    private _extractContent;
-    private _estimateTokenCount;
-    protected _performHealthCheck(): Promise<void>;
+    provider: AIModelProvider.ANTHROPIC;
+    type: AIModelType.TEXT;
+    costPerToken: AnthropicAdapter.getModelCostPerToken;
+    modelName: any;
+    averageLatency: AnthropicAdapter.getModelAverageLatency;
+    modelName: any;
+    maxConcurrency: 20;
+    rateLimit: {
+        requestsPerMinute: 1000;
+        tokensPerMinute: 80000;
+    };
+    tags: ['chat', 'reasoning', 'analysis', 'multimodal'];
+    lastUpdated: new () => Date;
 }
-export default AnthropicAdapter;
 //# sourceMappingURL=AnthropicAdapter.d.ts.map

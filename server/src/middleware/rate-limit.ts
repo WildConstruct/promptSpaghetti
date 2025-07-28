@@ -30,6 +30,7 @@ import { RedisService } from '../auth/database/RedisService';
 // Types and Interfaces
 // ========================================
 
+}
 export interface RateLimitMiddlewareConfig {
   redis?: RedisService;
   configManager?: RateLimitConfigurationManager;
@@ -42,11 +43,14 @@ export interface RateLimitMiddlewareConfig {
   onLimitReached?: (request: FastifyRequest, reply: FastifyReply, result: RateLimitResult) => void;
   errorHandler?: (error: Error, request: FastifyRequest, reply: FastifyReply) => void;
 }
+}
 
+}
 export interface EndpointRateLimitConfig {
   path: string;
   method?: string | string[];
   config: Partial<RateLimitConfig>;
+}
 }
 
 // Augment Fastify request to include rate limit info
@@ -57,6 +61,7 @@ declare module 'fastify' {
       remaining: number;
       resetTime: Date;
       exceeded: boolean;
+}
     };
     userId?: string | number;
     sessionId?: string;
@@ -72,10 +77,12 @@ class RedisClientAdapter implements RedisClient {
   constructor(private redisService: RedisService) {}
 
   async get(key: string): Promise<string | null> {
+
     return this.redisService.get(key);
   }
 
   async set(key: string, value: string, options?: { EX?: number; PX?: number }): Promise<string | null> {
+
     if (options?.EX) {
       await this.redisService.setex(key, options.EX, value);
     } else if (options?.PX) {
@@ -87,39 +94,47 @@ class RedisClientAdapter implements RedisClient {
   }
 
   async incr(key: string): Promise<number> {
+
     return this.redisService.incr(key);
   }
 
   async expire(key: string, seconds: number): Promise<number> {
+
     await this.redisService.expire(key, seconds);
     return 1;
   }
 
   async pexpire(key: string, milliseconds: number): Promise<number> {
+
     await this.redisService.expire(key, Math.ceil(milliseconds / 1000));
     return 1;
   }
 
   async ttl(key: string): Promise<number> {
+
     return this.redisService.ttl(key);
   }
 
   async del(key: string): Promise<number> {
+
     await this.redisService.del(key);
     return 1;
   }
 
   async eval(script: string, keys: string[], args: string[]): Promise<unknown> {
+
     const client = this.redisService.getClient();
     return client.eval(script, keys.length, ...keys, ...args);
   }
 
   async ping(): Promise<string> {
+
     const healthy = await this.redisService.healthCheck();
     return healthy ? 'PONG' : '';
   }
 
   async quit(): Promise<string> {
+
     await this.redisService.close();
     return 'OK';
   }
@@ -195,8 +210,7 @@ export class RateLimitMiddleware {
         path: request.url,
         userAgent: request.headers['user-agent'],
         headers: request.headers as Record<string, string>,
-        timestamp: Date.now()
-      };
+        timestamp: Date.now(};
     };
   }
 
@@ -447,12 +461,13 @@ export function createRateLimitPlugin(config: RateLimitMiddlewareConfig = {}) {
 // Preset Configurations
 // ========================================
 
-export 
+
 // Type augmentation for Fastify
 declare module 'fastify' {
   interface FastifyInstance {
     rateLimit: RateLimitMiddleware;
     rateLimitEndpoint: (config: Partial<RateLimitConfig>) => ReturnType<RateLimitMiddleware['createEndpointMiddleware']>;
+}
   }
 }
 

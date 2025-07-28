@@ -6,8 +6,8 @@
  */
 import { EventEmitter } from 'events';
 import { z } from 'zod';
-import { UnifiedEventBus, UnifiedAnalyticsEvent } from './UnifiedEventBus';
-import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
+import { UnifiedEventBus } from './UnifiedEventBus';
+import { AnalyticsAuthorizationService } from './AnalyticsAuthorization';
 export declare enum WSMessageType {
     SUBSCRIBE = "subscribe",
     UNSUBSCRIBE = "unsubscribe",
@@ -16,107 +16,17 @@ export declare enum WSMessageType {
     ERROR = "error",
     AUTH = "auth",
     CONFIG = "config",
-    METRICS = "metrics"
+    METRICS = "metrics",
+    export,
+    const,
+    WSMessageSchema,
+    type,
+    z,
+    nativeEnum
 }
-export declare const WSMessageSchema: z.ZodObject<{
-    type: z.ZodNativeEnum<typeof WSMessageType>;
-    id: z.ZodOptional<z.ZodString>;
-    payload: z.ZodOptional<z.ZodUnknown>;
-    timestamp: z.ZodNumber;
-    clientId: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id?: string;
-    type?: WSMessageType;
-    timestamp?: number;
-    payload?: unknown;
-    clientId?: string;
-}, {
-    id?: string;
-    type?: WSMessageType;
-    timestamp?: number;
-    payload?: unknown;
-    clientId?: string;
-}>;
 export type WSMessage = z.infer<typeof WSMessageSchema>;
-export declare const SubscriptionConfigSchema: z.ZodObject<{
-    subscriptionId: z.ZodString;
-    filter: z.ZodOptional<z.ZodObject<{
-        types: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        categories: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        severities: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        userId: z.ZodOptional<z.ZodString>;
-        organizationId: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        userId?: string;
-        categories?: string[];
-        organizationId?: string;
-        types?: string[];
-        severities?: string[];
-        sources?: string[];
-    }, {
-        userId?: string;
-        categories?: string[];
-        organizationId?: string;
-        types?: string[];
-        severities?: string[];
-        sources?: string[];
-    }>>;
-    batchSize: z.ZodDefault<z.ZodNumber>;
-    batchTimeoutMs: z.ZodDefault<z.ZodNumber>;
-    includeMetadata: z.ZodDefault<z.ZodBoolean>;
-    maxQueueSize: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    filter?: {
-        userId?: string;
-        categories?: string[];
-        organizationId?: string;
-        types?: string[];
-        severities?: string[];
-        sources?: string[];
-    };
-    includeMetadata?: boolean;
-    batchSize?: number;
-    subscriptionId?: string;
-    batchTimeoutMs?: number;
-    maxQueueSize?: number;
-}, {
-    filter?: {
-        userId?: string;
-        categories?: string[];
-        organizationId?: string;
-        types?: string[];
-        severities?: string[];
-        sources?: string[];
-    };
-    includeMetadata?: boolean;
-    batchSize?: number;
-    subscriptionId?: string;
-    batchTimeoutMs?: number;
-    maxQueueSize?: number;
-}>;
+export declare const SubscriptionConfigSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
-interface ClientConnection {
-    id: string;
-    ws: WebSocket | any;
-    authContext?: AuthContext;
-    subscriptions: Map<string, SubscriptionConfig>;
-    isAuthenticated: boolean;
-    lastHeartbeat: number;
-    eventQueue: UnifiedAnalyticsEvent[];
-    connected: boolean;
-    ipAddress?: string;
-    userAgent?: string;
-}
-interface ConnectionStats {
-    totalConnections: number;
-    activeConnections: number;
-    authenticatedConnections: number;
-    totalSubscriptions: number;
-    messagesPerSecond: number;
-    bytesPerSecond: number;
-    errorRate: number;
-}
 interface WSServerConfig {
     port: number;
     heartbeatInterval: number;
@@ -126,7 +36,7 @@ interface WSServerConfig {
     requireAuthentication: boolean;
     enableCompression: boolean;
     enableCors: boolean;
-    corsOrigins: string[];
+    corsOrigins: string;
 }
 /**
  * WebSocket Streaming Server
@@ -142,177 +52,11 @@ export declare class WebSocketStreamingServer extends EventEmitter {
     private stats;
     private heartbeatTimer;
     private metricsTimer;
-    constructor(eventBus: UnifiedEventBus, authService: AnalyticsAuthorizationService, config?: Partial<WSServerConfig>);
-    /**
-     * Start WebSocket server
-     */
-    start(): Promise<void>;
-    /**
-     * Stop WebSocket server
-     */
-    stop(): Promise<void>;
-    /**
-     * Handle new client connection
-     */
-    handleConnection(ws: any, request: any): Promise<void>;
-    /**
-     * Handle client message
-     */
-    private handleMessage;
-    /**
-     * Handle client authentication
-     */
-    private handleAuthentication;
-    /**
-     * Handle subscription request
-     */
-    private handleSubscription;
-    /**
-     * Handle unsubscription request
-     */
-    private handleUnsubscription;
-    /**
-     * Handle heartbeat
-     */
-    private handleHeartbeat;
-    /**
-     * Handle configuration request
-     */
-    private handleConfigRequest;
-    /**
-     * Handle client disconnection
-     */
-    private handleDisconnection;
-    /**
-     * Handle client error
-     */
-    private handleError;
-    /**
-     * Setup event bus subscription for broadcasting
-     */
-    private setupEventBusSubscription;
-    /**
-     * Broadcast event to matching subscribers
-     */
-    private broadcastEvent;
-    /**
-     * Send event to specific client
-     */
-    private sendEventToClient;
-    /**
-     * Flush client event queue
-     */
-    private flushClientQueue;
-    /**
-     * Check if event matches subscription filter
-     */
-    private eventMatchesFilter;
-    /**
-     * Send heartbeats to all clients
-     */
-    private sendHeartbeats;
-    /**
-     * Update connection statistics
-     */
-    private updateMetrics;
-    /**
-     * Send message to client
-     */
-    private sendMessage;
-    /**
-     * Send error message to client
-     */
-    private sendError;
-    /**
-     * Disconnect client
-     */
-    private disconnectClient;
-    /**
-     * Generate unique client ID
-     */
-    private generateClientId;
-    /**
-     * Public API Methods
-     */
-    /**
-     * Get connection statistics
-     */
-    getStats(): ConnectionStats;
-    /**
-     * Get connected clients
-     */
-    getClients(): Array<{
-        id: string;
-        isAuthenticated: boolean;
-        subscriptions: number;
-        lastHeartbeat: number;
-        ipAddress?: string;
-    }>;
-    /**
-     * Broadcast custom message to all clients
-     */
-    broadcastMessage(message: WSMessage, filter?: (client: ClientConnection) => boolean): Promise<void>;
-    /**
-     * Get client by ID
-     */
-    getClient(clientId: string): ClientConnection | null;
-    /**
-     * Force disconnect client
-     */
-    forceDisconnect(clientId: string, reason?: string): Promise<boolean>;
+    constructor();
+    eventBus: UnifiedEventBus;
+    authService: AnalyticsAuthorizationService;
+    config: Partial<WSServerConfig>;
+    super(): any;
 }
-/**
- * WebSocket Client for testing and integration
- */
-export declare class WebSocketAnalyticsClient extends EventEmitter {
-    private ws;
-    private url;
-    private authToken?;
-    private subscriptions;
-    private reconnectInterval;
-    private heartbeatTimer;
-    private connected;
-    constructor(url: string, authToken?: string);
-    /**
-     * Connect to WebSocket server
-     */
-    connect(): Promise<void>;
-    /**
-     * Disconnect from server
-     */
-    disconnect(): void;
-    /**
-     * Authenticate with server
-     */
-    authenticate(token: string): void;
-    /**
-     * Subscribe to events
-     */
-    subscribe(config: SubscriptionConfig): void;
-    /**
-     * Unsubscribe from events
-     */
-    unsubscribe(subscriptionId: string): void;
-    /**
-     * Send message to server
-     */
-    private send;
-    /**
-     * Handle incoming message
-     */
-    private handleMessage;
-    /**
-     * Start heartbeat
-     */
-    private startHeartbeat;
-    /**
-     * Stop heartbeat
-     */
-    private stopHeartbeat;
-    /**
-     * Get connection status
-     */
-    isConnected(): boolean;
-}
-export default WebSocketStreamingServer;
+export {};
 //# sourceMappingURL=WebSocketStreaming.d.ts.map

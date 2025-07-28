@@ -5,6 +5,7 @@
  * Manages presentation modes, screenshot mode, and demo optimizations
  */
 import React from 'react';
+
 export interface DemoModeConfig {
     screenshotMode: boolean;
     presentationFocus: boolean;
@@ -12,12 +13,13 @@ export interface DemoModeConfig {
     accessibilityMode: boolean;
     brandingVisible: boolean;
     debugElementsHidden: boolean;
-}
+
+
 export interface DemoModeManagerProps {
     children: React.ReactNode;
     onModeChange?: (config: DemoModeConfig) => void;
     initialConfig?: Partial<DemoModeConfig>;
-}
+
 export declare const DemoModeManager: React.FC<DemoModeManagerProps>;
 export default DemoModeManager;
 //# sourceMappingURL=DemoModeManager.d.ts.map

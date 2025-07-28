@@ -6,6 +6,7 @@
  */
 import { PerformanceMonitor } from './PerformanceMonitor';
 import { EventEmitter } from 'events';
+
 export interface PerformanceReport {
     generatedAt: number;
     timeRange: {,
@@ -70,7 +71,7 @@ export interface PerformanceReport {
             severity: string;
         }>;
     };
-}
+
 export interface PerformanceBenchmark {
     nodeType: string;
     target: {,
@@ -87,7 +88,7 @@ export interface PerformanceBenchmark {
     };
     status: 'exceeds' | 'meets' | 'below' | 'critical';
     improvement: number;
-}
+
 export interface PerformanceInsight {
     id: string;
     timestamp: number;
@@ -100,7 +101,6 @@ export interface PerformanceInsight {
     affectedNodes: string[];
     confidence: number;
     automatable: boolean;
-}
 /**
  * Advanced performance analytics and reporting system
  */
@@ -162,6 +162,6 @@ export declare class PerformanceAnalytics extends EventEmitter {
     private analyzeTrends;
     private analyzeAlerts;
     private generateInsightId;
-}
+
 export default PerformanceAnalytics;
 //# sourceMappingURL=PerformanceAnalytics.d.ts.map

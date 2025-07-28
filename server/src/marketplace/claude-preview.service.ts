@@ -5,10 +5,12 @@ import { MarketplaceDAO } from './dao';
 import { PreviewRequest, PreviewResponse } from './types';
 import * as crypto from 'crypto';
 
+}
 interface ClaudeAPIResponse {
   content: Array<{
     type: string;
     text: string;
+}
   }>;
   usage: {
     input_tokens: number;
@@ -16,6 +18,7 @@ interface ClaudeAPIResponse {
   };
 }
 
+}
 interface CachedPreview {
   output: string;
   cost_estimate: number;
@@ -23,6 +26,7 @@ interface CachedPreview {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
+}
   };
   cached_at: Date;
 }
@@ -43,6 +47,7 @@ export class ClaudePreviewService {
    * Generate a protected preview of a template
    */
   async generatePreview(userId: string, request: PreviewRequest): Promise<PreviewResponse> {
+
     // Rate limiting check
     await this.checkRateLimit(userId);
 
@@ -99,6 +104,7 @@ export class ClaudePreviewService {
    * Get template preview metadata without generating
    */
   async getPreviewMetadata(templateId: string, versionId?: string): Promise<any> {
+
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -243,6 +249,7 @@ export class ClaudePreviewService {
    * Call Claude API with the prepared prompt
    */
   private async callClaudeAPI(prompt: string, model: string): Promise<ClaudeAPIResponse> {
+
     const apiKey = process.env.CLAUDE_API_KEY;
     if (!apiKey) {
       throw new Error('Claude API key not configured');
@@ -255,7 +262,7 @@ export class ClaudePreviewService {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
           'anthropic-version': '2023-06-01'
-        },
+  }
         body: JSON.stringify({
           model: model,
           max_tokens: 1000, // Limit tokens for previews
@@ -265,7 +272,7 @@ export class ClaudePreviewService {
               content: prompt
             }
           ]
-        })
+  }
       });
 
       if (!response.ok) {
@@ -367,6 +374,7 @@ export class ClaudePreviewService {
    * Check if user owns the template
    */
   private async checkTemplateOwnership(userId: string, templateId: string): Promise<boolean> {
+
     const query = `
       SELECT 1 FROM marketplace_purchases 
       WHERE buyer_id = $1 AND template_id = $2 AND status = 'succeeded'
@@ -392,6 +400,7 @@ export class ClaudePreviewService {
    * Rate limiting check
    */
   private async checkRateLimit(userId: string): Promise<void> {
+
     if (!this.redis) return;
 
     const key = `rate_limit:preview:${userId}`;
@@ -409,6 +418,7 @@ export class ClaudePreviewService {
    * Cache preview result
    */
   private async cachePreview(key: string, preview: Omit<PreviewResponse, 'cached'>): Promise<void> {
+
     if (!this.redis) return;
 
     const cached: CachedPreview = {
@@ -423,6 +433,7 @@ export class ClaudePreviewService {
    * Get cached preview
    */
   private async getCachedPreview(key: string): Promise<CachedPreview | null> {
+
     if (!this.redis) return null;
 
     const cached = await this.redis.get(key);
@@ -445,6 +456,7 @@ export class ClaudePreviewService {
     versionId?: string,
     cached: boolean = false
   ): Promise<void> {
+
     await this.dao.recordEvent({
       event_type: 'preview',
       user_id: userId,

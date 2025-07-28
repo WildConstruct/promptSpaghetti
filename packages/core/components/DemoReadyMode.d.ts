@@ -8,11 +8,12 @@
  * - Provides performance monitoring for smooth demos
  */
 import React from 'react';
+
 interface DemoReadyModeProps {
     children: React.ReactNode;
     enabled?: boolean;
     onToggle?: (enabled: boolean) => void;
-}
+
 export declare const DemoReadyMode: React.FC<DemoReadyModeProps>;
 export declare const useDemoMode: () => {
     enabled: boolean;

@@ -1,5 +1,3 @@
-import { VFXExportFormat } from '../types/VFXExport';
-import { Node, Edge } from 'reactflow';
 export interface ReproducibilityValidationOptions {
     strictMode?: boolean;
     allowApproximate?: boolean;
@@ -11,9 +9,9 @@ export interface ReproducibilityValidationReport {
     isValid: boolean;
     exactReproducible: boolean;
     approximateReproducible: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
-    suggestions: ValidationSuggestion[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
+    suggestions: ValidationSuggestion;
     integrity: {
         configurationValid: boolean;
         seedsValid: boolean;
@@ -48,35 +46,6 @@ export interface ValidationSuggestion {
 export declare class ReproducibilityValidator {
     private static instance;
     static getInstance(): ReproducibilityValidator;
-    /**
-     * Comprehensive validation of VFX export reproducibility
-     */
-    validateReproducibility(exportData: VFXExportFormat, options?: ReproducibilityValidationOptions): ReproducibilityValidationReport;
-    private validateRandomizationState;
-    private validateNodeRngStates;
-    private validateNodeConfigurations;
-    private validateNodeReproducibilityData;
-    private validateVersionCompatibility;
-    private validateDataIntegrity;
-    private validateGraphIntegrity;
-    private calculatePerformanceEstimates;
-    private calculateComplexityScore;
-    private estimateMemoryRequirement;
-    private generateSuggestions;
-    private assessOverallValidity;
-    /**
-     * Test actual reproduction by re-executing with exported data
-     */
-    testReproduction(exportData: VFXExportFormat, originalGraph: {
-        nodes: Node[];
-        edges: Edge[];
-    }): Promise<{
-        success: boolean;
-        identicalResults: boolean;
-        differences: string[];
-        reproductionTime: number;
-    }>;
-    private calculateConfigurationHash;
-    private calculateReproducibilityHash;
+    if(extraSeeds: any, length: any): any;
 }
 //# sourceMappingURL=ReproducibilityValidator.d.ts.map

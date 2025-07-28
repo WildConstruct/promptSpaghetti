@@ -23,6 +23,7 @@ import {
 } from '../database/feature-toggle-models';
 
 // Enhanced evaluation interfaces
+}
 export interface EnhancedEvaluationContext extends ToggleEvaluationContext {
   // Claude-specific context
   claudeContext?: ClaudeEvaluationContext;
@@ -39,6 +40,7 @@ export interface EnhancedEvaluationContext extends ToggleEvaluationContext {
   cacheStrategy?: CacheStrategy;
 }
 
+}
 export interface ClaudeEvaluationContext {
   modelVersion?: string;
   promptType?: 'creative' | 'analytical' | 'conversational' | 'code';
@@ -49,7 +51,9 @@ export interface ClaudeEvaluationContext {
   costImpact?: 'none' | 'low' | 'medium' | 'high';
   qualityImpact?: 'none' | 'positive' | 'neutral' | 'negative';
 }
+}
 
+}
 export interface PerformanceHints {
   cacheTTL?: number;
   precompileRules?: boolean;
@@ -57,13 +61,16 @@ export interface PerformanceHints {
   maxEvaluationTime?: number; // milliseconds
   priority?: 'low' | 'normal' | 'high' | 'critical';
 }
+}
 
+}
 export interface DependencyEvaluationContext {
   enforceDependencies?: boolean;
   cascadeEvaluation?: boolean;
   maxDepth?: number;
   impactAnalysis?: boolean;
   rollbackOnFailure?: boolean;
+}
 }
 
 export enum CacheStrategy {
@@ -74,6 +81,7 @@ export enum CacheStrategy {
 }
 
 // Enhanced evaluation result
+}
 export interface EnhancedEvaluationResult extends ToggleEvaluationResult {
   // Performance metrics
   evaluationTime: number; // milliseconds
@@ -101,6 +109,7 @@ export interface EnhancedEvaluationResult extends ToggleEvaluationResult {
   };
 }
 
+}
 export interface DependencyStatus {
   checked: boolean;
   violations: DependencyViolation[];
@@ -109,7 +118,9 @@ export interface DependencyStatus {
   requirements: string[];
   canActivate: boolean;
 }
+}
 
+}
 export interface DependencyViolation {
   type: DependencyType;
   sourceToggle: string;
@@ -117,34 +128,44 @@ export interface DependencyViolation {
   severity: 'warning' | 'error' | 'critical';
   canOverride: boolean;
 }
+}
 
+}
 export interface DependencyWarning {
   message: string;
   toggleId: string;
   recommendation: string;
 }
+}
 
+}
 export interface CascadeEffect {
   targetToggle: string;
   effect: 'activate' | 'deactivate' | 'modify' | 'warn';
   reason: string;
   confidence: number; // 0.0-1.0
 }
+}
 
+}
 export interface RiskAssessment {
   riskScore: number; // 0.0-1.0
   factors: RiskFactor[];
   mitigation: string[];
   recommendation: 'proceed' | 'caution' | 'review' | 'block';
 }
+}
 
+}
 export interface RiskFactor {
   category: 'technical' | 'business' | 'user_experience' | 'performance' | 'cost';
   factor: string;
   score: number; // 0.0-1.0
   weight: number; // importance multiplier
 }
+}
 
+}
 export interface EvaluationTrace {
   steps: TraceStep[];
   totalTime: number;
@@ -152,14 +173,18 @@ export interface EvaluationTrace {
   ruleEvaluations: number;
   dependencyChecks: number;
 }
+}
 
+}
 export interface TraceStep {
   step: string;
   timestamp: number;
   duration: number;
   details: unknown;
 }
+}
 
+}
 export interface RuleEvaluationResult {
   ruleName: string;
   matched: boolean;
@@ -167,8 +192,10 @@ export interface RuleEvaluationResult {
   executionTime: number;
   metadata: Record<string, unknown>;
 }
+}
 
 // Advanced rule evaluation engine
+}
 export interface AdvancedRule {
   id: string;
   name: string;
@@ -185,9 +212,11 @@ export interface AdvancedRule {
     version: number;
     description?: string;
     tags: string[];
+}
   };
 }
 
+}
 export interface RuleCondition {
   type: ConditionType;
   attribute: string;
@@ -195,6 +224,7 @@ export interface RuleCondition {
   value: Error;
   weight?: number; // for weighted evaluation
   nested?: RuleCondition[]; // for complex nested conditions
+}
 }
 
 export enum ConditionType {
@@ -226,11 +256,13 @@ export enum ConditionOperator {
   NOT_BETWEEN = 'not_between'
 }
 
+}
 export interface RuleAction {
   type: ActionType;
   target?: string;
   value?: unknown;
   metadata?: unknown;
+}
 }
 
 export enum ActionType {
@@ -243,6 +275,7 @@ export enum ActionType {
 }
 
 // Configuration
+}
 export interface EnhancedEvaluationConfig {
   performance: {
     maxEvaluationTime: number;
@@ -251,6 +284,7 @@ export interface EnhancedEvaluationConfig {
     enableBulkOptimization: boolean;
     enableParallelEvaluation: boolean;
     maxConcurrentEvaluations: number;
+}
   };
   
   dependencies: {
@@ -333,6 +367,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     key: string,
     context: EnhancedEvaluationContext = {}
   ): Promise<EnhancedEvaluationResult> {
+
     const startTime = Date.now();
     const evaluationId = context.evaluationId || this.generateEvaluationId();
     const trace: EvaluationTrace = {
@@ -542,14 +577,14 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
         enableBulkOptimization: true,
         enableParallelEvaluation: true,
         maxConcurrentEvaluations: 50
-      },
+  }
       dependencies: {
         enableDependencyChecking: true,
         enableCascadeEvaluation: true,
         maxDependencyDepth: 5,
         enableImpactAnalysis: true,
         enableRiskAssessment: true
-      },
+  }
       claude: {
         enableCostTracking: true,
         enableQualityTracking: true,
@@ -560,13 +595,13 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
           medium: 0.50,
           high: 1.0
         }
-      },
+  }
       debugging: {
         enableTracing: false,
         traceLevel: 'basic',
         maxTraceHistory: 1000,
         enableMetrics: true
-      },
+  }
       caching: {
         enableCaching: true,
         defaultStrategy: CacheStrategy.DEPENDENCY_AWARE,
@@ -617,6 +652,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     _____key: string,
     _____context: EnhancedEvaluationContext
   ): Promise<EnhancedEvaluationResult | null> {
+
     // Implementation would check cache based on cache strategy
     return null; // Placeholder
   }
@@ -625,6 +661,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     key: string,
     _____context: EnhancedEvaluationContext
   ): Promise<DependencyStatus> {
+
     try {
       const validation = await this.dependencyService.validateToggleActivation(key);
       
@@ -663,6 +700,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
   }
 
   private async getAdvancedRules(_____key: string): Promise<AdvancedRule[]> {
+
     // Implementation would fetch advanced rules for this toggle
     return []; // Placeholder
   }
@@ -672,11 +710,13 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     context: EnhancedEvaluationContext,
     baseResult: ToggleEvaluationResult
   ): Promise<{ result: ToggleEvaluationResult; evaluations: RuleEvaluationResult[] }> {
+
     // Implementation would evaluate advanced rules
     return { result: baseResult, evaluations: [] }; // Placeholder
   }
 
   private async calculateCascadeEffects(key: string, action: 'activate' | 'deactivate'): Promise<CascadeEffect[]> {
+
     try {
       const impact = await this.dependencyService.getImpactAnalysis(key, action);
       
@@ -708,6 +748,7 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     context: EnhancedEvaluationContext,
     dependencyStatus?: DependencyStatus
   ): Promise<RiskAssessment> {
+
     const factors: RiskFactor[] = [];
     let totalRisk = 0;
 
@@ -918,10 +959,12 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
     _____context: EnhancedEvaluationContext,
     _____result: EnhancedEvaluationResult
   ): Promise<void> {
+
     // Implementation would cache based on cache strategy
   }
 
   private async recordPerformanceMetrics(key: string, result: EnhancedEvaluationResult): Promise<void> {
+
     if (!this.config.debugging.enableMetrics) return;
     
     const metrics = this.performanceMetrics.get(key) || [];
@@ -968,18 +1011,23 @@ export class EnhancedToggleEvaluationService extends EventEmitter {
 }
 
 // Supporting interfaces for internal use
+}
 interface CompiledRule {
   id: string;
   compiledCondition: Function;
   metadata: Record<string, unknown>;
 }
+}
 
+}
 interface CachedEvaluation {
   result: EnhancedEvaluationResult;
   timestamp: number;
   ttl: number;
 }
+}
 
+}
 interface PerformanceMetric {
   timestamp: number;
   evaluationTime: number;
@@ -987,19 +1035,24 @@ interface PerformanceMetric {
   ruleEvaluations: number;
   dependencyChecks: number;
 }
+}
 
+}
 interface EvaluationContext {
   id: string;
   key: string;
   context: EnhancedEvaluationContext;
   startTime: number;
 }
+}
 
+}
 interface EvaluationHistoryEntry {
   key: string;
   result: EnhancedEvaluationResult;
   timestamp: number;
   context: unknown;
+}
 }
 
 export default EnhancedToggleEvaluationService;

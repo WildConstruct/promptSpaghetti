@@ -20,9 +20,7 @@ interface FilePreviewProps {
   style?: React.CSSProperties;
   /** CSS class name */
   className?: string;
-}
-
-export const FilePreview: React.FC<FilePreviewProps> = ({)
+  export const FilePreview: React.FC<FilePreviewProps> = ({,)
   file,
   mode = 'compact',
   isHover = false,
@@ -35,23 +33,22 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   const [isLoadingThumbnail, setIsLoadingThumbnail] = useState(false);
   // Generate thumbnail if not cached
   useEffect(() => {
-    if (!thumbnail && !isLoadingThumbnail) {
-      setIsLoadingThumbnail(true);
-      projectManager.generateThumbnail(file)
-        .then(setThumbnail)
-        .catch((error) => {
-          console.warn('Failed to generate thumbnail:', error);
-        })
+  if (!thumbnail && !isLoadingThumbnail) {
+  setIsLoadingThumbnail(true);
+  projectManager.generateThumbnail(file)
+  .then(setThumbnail)
+  .catch((error) => {
+  console.warn('Failed to generate thumbnail:', error);
+}
         .finally(() => setIsLoadingThumbnail(false));
-    }
   }, [file, thumbnail, isLoadingThumbnail]);
   // Memoized stats calculation
   const fileStats = useMemo(() => {
-    const nodeCount = file.nodeCount;
-    return {
-      totalNodes: nodeCount,
-      hasContent: nodeCount > 0,
-    };
+  const nodeCount = file.nodeCount;
+  return {
+  totalNodes: nodeCount,
+  hasContent: nodeCount > 0,
+};
   }, [file.nodeCount]);
   // Format file size
   const formatFileSize = useCallback((bytes: number): string => {
@@ -77,70 +74,67 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
   // Render thumbnail
   const renderThumbnail = useCallback(() => {
     if (thumbnail) {
-      return ();
+      return;
         <img
           src={thumbnail}
           alt={`${file.name} preview`}
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: '4px',
-          }}
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  borderRadius: '4px',
+}}
         />
       );
-    }
     if (isLoadingThumbnail) {
-      return ();
-        <div style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f8f9fa',
-          color: '#6c757d',
-          fontSize: '12px',
-          border: '1px solid #dee2e6',
-          borderRadius: '4px',
-        }}>
+  return;
+  <div style={{
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#f8f9fa',
+  color: '#6c757d',
+  fontSize: '12px',
+  border: '1px solid #dee2e6',
+  borderRadius: '4px',
+}}>
           Loading...
         </div>
       );
-    }
     const { hasContent, totalNodes } = fileStats;
     if (!hasContent) {
-      return ();
-        <div style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#f8f9fa',
-          color: '#6c757d',
-          fontSize: mode === 'full' ? '14px' : '12px',
-          border: '2px dashed #dee2e6',
-          borderRadius: '4px',
-        }}>
+  return;
+  <div style={{
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#f8f9fa',
+  color: '#6c757d',
+  fontSize: mode === 'full' ? '14px' : '12px',
+  border: '2px dashed #dee2e6',
+  borderRadius: '4px',
+}}>
           Empty Graph
         </div>
       );
-    }
     // Fallback visual representation
-    return ();
+    return;
       <div style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#fff',
-        border: '1px solid #dee2e6',
-        borderRadius: '4px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '12px',
-        color: '#6c757d',
-      }}>
+  width: '100%',
+  height: '100%',
+  backgroundColor: '#fff',
+  border: '1px solid #dee2e6',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '12px',
+  color: '#6c757d',
+}}>
 {totalNodes} nodes
       </div>
     );
@@ -152,30 +146,30 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
     e.stopPropagation();
     onToggleFavorite?.(file);
   }, [onToggleFavorite, file]);
-  const baseStyles: React.CSSProperties = {
-    backgroundColor: '#fff',
-    border: '1px solid #dee2e6',
-    borderRadius: '8px',
-    cursor: onClick ? 'pointer' : 'default',
-    transition: 'all 0.2s ease',
-    ...(isHover && {)
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-      transform: 'translateY(-2px)',
-    }),
+  const baseStyles: React.CSSProperties = {,
+  backgroundColor: '#fff',
+  border: '1px solid #dee2e6',
+  borderRadius: '8px',
+  cursor: onClick ? 'pointer' : 'default',
+  transition: 'all 0.2s ease',
+  ...(isHover && {)
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  transform: 'translateY(-2px)',
+}),
     ...style
   };
   if (mode === 'compact') {
-    return ();
+    return;
       <div
         className={className}
         style={{
-          ...baseStyles,
-          padding: '12px',
-          display: 'flex',
-          gap: '12px',
-          alignItems: 'center',
-          minHeight: '80px',
-        }}
+  ...baseStyles,
+  padding: '12px',
+  display: 'flex',
+  gap: '12px',
+  alignItems: 'center',
+  minHeight: '80px',
+}}
         onClick={handleClick}
         role={onClick ? 'button' : undefined}
         tabIndex={onClick ? 0 : undefined}
@@ -184,7 +178,6 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             handleClick();
-          }
         } : undefined}
       >
         {/* Thumbnail */}
@@ -194,32 +187,32 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
         {/* File info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{
-            fontSize: '14px',
-            fontWeight: '600',
-            color: '#333',
-            marginBottom: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}>
+  fontSize: '14px',
+  fontWeight: '600',
+  color: '#333',
+  marginBottom: '4px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}}>
 {file.metadata?.title || file.name}
           </div>
           <div style={{
-            fontSize: '12px',
-            color: '#666',
-            marginBottom: '4px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}>
+  fontSize: '12px',
+  color: '#666',
+  marginBottom: '4px',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}}>
             {file.metadata.description || 'No description'}
           </div>
           <div style={{
-            fontSize: '11px',
-            color: '#999',
-            display: 'flex',
-            gap: '12px',
-          }}>
+  fontSize: '11px',
+  color: '#999',
+  display: 'flex',
+  gap: '12px',
+}}>
             <span>{fileStats.totalNodes} nodes</span>
             <span>{formatFileSize(file.size)}</span>
             <span>{formatRelativeTime(file.lastModified)}</span>
@@ -231,13 +224,13 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
             <button
               onClick={handleFavoriteClick}
               style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '4px',
-                color: file.isFavorite ? '#ffc107' : '#ccc',
-                fontSize: '16px',
-              }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '4px',
+  color: file.isFavorite ? '#ffc107' : '#ccc',
+  fontSize: '16px',
+}}
               title={file.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
               ⭐
@@ -246,44 +239,43 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
         </div>
       </div>
     );
-  }
   // Full mode for detailed previews/modals
-  return ();
+  return;
     <div
       className={className}
       style={{
-        ...baseStyles,
-        padding: '20px',
-        maxWidth: '500px',
-      }}
+  ...baseStyles,
+  padding: '20px',
+  maxWidth: '500px',
+}}
       onClick={handleClick}
     >
       {/* Header */}
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: '16px',
-      }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  marginBottom: '16px',
+}}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <h3 style={{
-            margin: '0 0 8px 0',
-            fontSize: '18px',
-            fontWeight: '600',
-            color: '#333',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}>
+  margin: '0 0 8px 0',
+  fontSize: '18px',
+  fontWeight: '600',
+  color: '#333',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}}>
             {file.metadata?.title || file.name}
           </h3>
           {file.metadata.description && ()
             <p style={{
-              margin: '0 0 8px 0',
-              fontSize: '14px',
-              color: '#666',
-              lineHeight: '1.4',
-            }}>
+  margin: '0 0 8px 0',
+  fontSize: '14px',
+  color: '#666',
+  lineHeight: '1.4',
+}}>
               {file.metadata.description}
             </p>
           )}
@@ -292,14 +284,14 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
           <button
             onClick={handleFavoriteClick}
             style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '4px',
-              color: file.isFavorite ? '#ffc107' : '#ccc',
-              fontSize: '18px',
-              marginLeft: '12px',
-            }}
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '4px',
+  color: file.isFavorite ? '#ffc107' : '#ccc',
+  fontSize: '18px',
+  marginLeft: '12px',
+}}
             title={file.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             ⭐
@@ -308,10 +300,10 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
       </div>
       {/* Thumbnail */}
       <div style={{
-        width: '100%',
-        height: '120px',
-        marginBottom: '16px',
-      }}>
+  width: '100%',
+  height: '120px',
+  marginBottom: '16px',
+}}>
         {renderThumbnail()}
       </div>
       {/* Metadata */}
@@ -356,7 +348,7 @@ export const FilePreview: React.FC<FilePreviewProps> = ({)
 // Memoized component for performance
 const MemoizedFilePreview = React.memo(FilePreview, (prevProps, nextProps) => {
   // Only re-render if file properties change
-  return ();
+  return;
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.file.isFavorite === nextProps.file.isFavorite &&

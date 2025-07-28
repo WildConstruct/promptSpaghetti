@@ -3,6 +3,7 @@
  * Main activity feed interface for workspace activity
  */
 import React from 'react';
+
 interface ActivityFeedProps {
     workspaceId: string;
     userId: string;
@@ -11,7 +12,7 @@ interface ActivityFeedProps {
     showFilters?: boolean;
     maxItems?: number;
     compact?: boolean;
-}
+
 export declare const ActivityFeed: React.FC<ActivityFeedProps>;
 export default ActivityFeed;
 //# sourceMappingURL=ActivityFeed.d.ts.map

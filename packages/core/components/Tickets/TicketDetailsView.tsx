@@ -14,20 +14,17 @@ import {
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
 interface TicketDetailsViewProps {
-  ticket: MarketplaceTicket;
+  ticket: MarketplaceTicket;,
   ticketService: Epic16TicketIntegrationService;
-  userId: string;
+  userId: string;,
   userRole: 'user' | 'agent' | 'admin';
   onClose?: () => void;
   onTicketUpdate?: (ticket: MarketplaceTicket) => void;
-}
-interface CommentFormData {
-  content: string;
+  interface CommentFormData {
+  content: string;,
   visibility: 'public' | 'internal' | 'private';
-  attachments: File[];
-}
-
-export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
+  attachments: File;
+  export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({,)
   ticket,
   ticketService,
   userId,
@@ -39,10 +36,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [commentForm, setCommentForm] = useState<CommentFormData>({)
-    content: '',
-    visibility: 'public',
-    attachments: [],
-  });
+  content: '',
+  visibility: 'public',
+  attachments: [],
+});
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [showAssignment, setShowAssignment] = useState(false);
   const [showEscalation, setShowEscalation] = useState(false);
@@ -57,19 +54,19 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
   }, [userRole]);
   // SLA calculations
   const slaStatus = useMemo(() => {
-    const now = new Date();
-    const responseDeadline = currentTicket.sla.responseTime.deadline;
-    const resolutionDeadline = currentTicket.sla.resolutionTime.deadline;
-    const responseTimeRemaining = responseDeadline.getTime() - now.getTime();
-    const resolutionTimeRemaining = resolutionDeadline.getTime() - now.getTime();
-    return {
-      responseOverdue: responseTimeRemaining < 0 && !currentTicket.sla.responseTime.actual,
-      resolutionOverdue: resolutionTimeRemaining < 0 && !currentTicket.sla.resolutionTime.actual,
-      responseWarning: responseTimeRemaining > 0 && responseTimeRemaining < (currentTicket.sla.responseTime.warningThreshold * 60 * 1000),
-      resolutionWarning: resolutionTimeRemaining > 0 && resolutionTimeRemaining < (currentTicket.sla.resolutionTime.warningThreshold * 60 * 1000),
-      responseTimeRemaining: Math.max(0, responseTimeRemaining),
-      resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining)
-    };
+  const now = new Date();
+  const responseDeadline = currentTicket.sla.responseTime.deadline;
+  const resolutionDeadline = currentTicket.sla.resolutionTime.deadline;
+  const responseTimeRemaining = responseDeadline.getTime() - now.getTime();
+  const resolutionTimeRemaining = resolutionDeadline.getTime() - now.getTime();
+  return {
+  responseOverdue: responseTimeRemaining < 0 && !currentTicket.sla.responseTime.actual,
+  resolutionOverdue: resolutionTimeRemaining < 0 && !currentTicket.sla.resolutionTime.actual,
+  responseWarning: responseTimeRemaining > 0 && responseTimeRemaining < (currentTicket.sla.responseTime.warningThreshold * 60 * 1000),
+  resolutionWarning: resolutionTimeRemaining > 0 && resolutionTimeRemaining < (currentTicket.sla.resolutionTime.warningThreshold * 60 * 1000),
+  responseTimeRemaining: Math.max(0, responseTimeRemaining),
+  resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining),
+};
   }, [currentTicket]);
   // Format time remaining
   const formatTimeRemaining = (ms: number): string => {
@@ -82,43 +79,40 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
       return `${hours}h ${minutes}m`;}
     } else {
       return `${minutes}m`;}
-    }
   };
   // Handle comment submission
   const handleCommentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!commentForm.content.trim()) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const newComment = await ticketService.addComment(currentTicket.id, {)
-        content: commentForm.content,
-        author: userId,
-        authorType: userRole === 'user' ? 'user' : 'agent',
-        visibility: commentForm.visibility,
-        attachments: [], // Simplified - would handle file uploads
-        mentions: [],
-      });
+  e.preventDefault();
+  if (!commentForm.content.trim()) return;
+  setLoading(true);
+  setError(null);
+  try {
+  const newComment = await ticketService.addComment(currentTicket.id, {)
+  content: commentForm.content,
+  author: userId,
+  authorType: userRole === 'user' ? 'user' : 'agent',
+  visibility: commentForm.visibility,
+  attachments: [], // Simplified - would handle file uploads,
+  mentions: [],
+});
       if (newComment) {
-        const updatedTicket = {
-          ...currentTicket,
-          comments: [...currentTicket.comments, newComment],
-          updatedAt: new Date(),
-        };
+  const updatedTicket = {
+  ...currentTicket,
+  comments: [...currentTicket.comments, newComment],
+  updatedAt: new Date(),
+};
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
         // Reset form
         setCommentForm({)
-          content: '',
-          visibility: 'public',
-          attachments: [],
-        });
-      }
+  content: '',
+  visibility: 'public',
+  attachments: [],
+});
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add comment');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to add comment');
+} finally {
       setLoading(false);
-    }
   };
   // Handle status update
   const handleStatusUpdate = async (newStatus: TicketStatus) => {
@@ -130,12 +124,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
         setShowStatusUpdate(false);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update status');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to update status');
+} finally {
       setLoading(false);
-    }
   };
   // Handle assignment
   const handleAssignment = async (assigneeId: string) => {
@@ -147,12 +139,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
         setShowAssignment(false);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to assign ticket');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to assign ticket');
+} finally {
       setLoading(false);
-    }
   };
   // Handle escalation
   const handleEscalation = async (reason: string) => {
@@ -164,23 +154,21 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
         setCurrentTicket(updatedTicket);
         onTicketUpdate?.(updatedTicket);
         setShowEscalation(false);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
+} finally {
       setLoading(false);
-    }
   };
   // Filter comments based on visibility permissions
   const visibleComments = useMemo(() => {
     return currentTicket.comments.filter(comment => {)
-      if (comment.visibility === 'public') return true;
+  if (comment.visibility === 'public') return true;
       if (comment.visibility === 'internal' && canViewInternal) return true;
       if (comment.visibility === 'private' && (comment.author === userId || userRole === 'admin')) return true;
       return false;
     });
   }, [currentTicket.comments, canViewInternal, userId, userRole]);
-  return ();
+  return;
     <div className="ticket-details-view h-full flex flex-col bg-white">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -252,15 +240,14 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Response SLA</span>
               <span className={`text-xs font-medium ${
-                slaStatus.responseOverdue ? 'text-red-600' : 
-                  slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600'
-              }`}>
+  slaStatus.responseOverdue ? 'text-red-600' :,
+  slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600',
+}`}>
                 {currentTicket.sla.responseTime.actual 
                   ? `Responded in ${currentTicket.sla.responseTime.actual}m`}
                   : slaStatus.responseOverdue 
                     ? 'OVERDUE' 
                     : formatTimeRemaining(slaStatus.responseTimeRemaining)
-                }
               </span>
             </div>
           </div>
@@ -268,15 +255,14 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">Resolution SLA</span>
               <span className={`text-xs font-medium ${
-                slaStatus.resolutionOverdue ? 'text-red-600' : 
-                  slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600'
-              }`}>
+  slaStatus.resolutionOverdue ? 'text-red-600' :,
+  slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600',
+}`}>
                 {currentTicket.sla.resolutionTime.actual 
                   ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h`}
                   : slaStatus.resolutionOverdue 
                     ? 'OVERDUE' 
                     : formatTimeRemaining(slaStatus.resolutionTimeRemaining)
-                }
               </span>
             </div>
           </div>
@@ -389,10 +375,10 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
                   <div key={integration.system} className="flex items-center justify-between p-2 bg-white rounded border">
                     <span className="text-sm font-medium">{integration.system}</span>
                     <span className={`px-2 py-1 text-xs rounded ${
-                      integration.status === 'synced' ? 'bg-green-100 text-green-800' :
-                        integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                    }`}>
+  integration.status === 'synced' ? 'bg-green-100 text-green-800' :,
+  integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-red-100 text-red-800'
+}`}>
                       {integration.status}
                     </span>
                   </div>
@@ -432,19 +418,19 @@ export const TicketDetailsView: React.FC<TicketDetailsViewProps> = ({)
 // Helper Components
 const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
   const colors = {
-    [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
-    [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
-    [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
-    [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
-    [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
-    [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
-    [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
-    [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
-    [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
-    [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-    [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
-  };
-  return ();
+  [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
+  [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
+  [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
+  [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
+  [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
+  [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
+  [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
+  [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
+  [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
+  [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
+  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+};
+  return;
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
       {status.replace('_', ' ').toUpperCase()}
     </span>
@@ -452,13 +438,13 @@ const StatusBadge: React.FC<{ status: TicketStatus }> = ({ status }) => {
 };
 const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => {
   const colors = {
-    [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
-    [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
-    [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
-    [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-    [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
-  };
-  return ();
+  [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
+  [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
+  [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
+  [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
+  [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+};
+  return;
     <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
       {priority.toUpperCase()}
     </span>
@@ -466,11 +452,11 @@ const PriorityBadge: React.FC<{ priority: TicketPriority }> = ({ priority }) => 
 };
 const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean }> = ({ comment, canViewInternal }) => {
   const visibilityColors = {
-    public: 'bg-green-100 text-green-800',
-    internal: 'bg-yellow-100 text-yellow-800',
-    private: 'bg-red-100 text-red-800',
-  };
-  return ();
+  public: 'bg-green-100 text-green-800',
+  internal: 'bg-yellow-100 text-yellow-800',
+  private: 'bg-red-100 text-red-800',
+};
+  return;
     <div className="bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center space-x-2">
@@ -492,7 +478,7 @@ const CommentItem: React.FC<{ comment: TicketComment; _canViewInternal: boolean 
   );
 };
 const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment }) => {
-  return ();
+  return;
     <div className="flex items-center justify-between p-2 bg-white rounded border">
       <div className="flex items-center space-x-2">
         <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -506,13 +492,13 @@ const AttachmentItem: React.FC<{ attachment: TicketAttachment }> = ({ attachment
 };
 
 // Modal Components (simplified implementations)
-const StatusUpdateModal: React.FC<{
+const StatusUpdateModal: React.FC<{,
   currentStatus: TicketStatus;
-  onStatusUpdate: (status: TicketStatus) => void;
+  onStatusUpdate: (status: TicketStatus) => void;,
   onClose: () => void;
 }> = ({ currentStatus, onStatusUpdate, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState(currentStatus);
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
@@ -551,11 +537,11 @@ const StatusUpdateModal: React.FC<{
 };
 const AssignmentModal: React.FC<{
   currentAssignee?: string;
-  onAssign: (assigneeId: string) => void;
+  onAssign: (assigneeId: string) => void;,
   onClose: () => void;
 }> = ({ currentAssignee, onAssign, onClose }) => {
   const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">
@@ -592,12 +578,12 @@ const AssignmentModal: React.FC<{
     </div>
   );
 };
-const EscalationModal: React.FC<{
-  onEscalate: (reason: string) => void;
+const EscalationModal: React.FC<{,
+  onEscalate: (reason: string) => void;,
   onClose: () => void;
 }> = ({ onEscalate, onClose }) => {
   const [reason, setReason] = useState('');
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="px-6 py-4 border-b border-gray-200">

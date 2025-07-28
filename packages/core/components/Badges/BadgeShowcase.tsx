@@ -35,7 +35,6 @@ export interface BadgeShowcaseProps {
   enableNotifications?: boolean;
   className?: string;
 }
-
 export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   userId,
   variant = 'full',
@@ -68,45 +67,43 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   const statistics = getStatistics();
   const leaderboardPosition = getLeaderboardPosition();
   const getBadgeIcon = (iconString: string) => {
-    // Map emoji strings to React icons for consistency
-    const iconMap: Record<string, React.ReactNode> = {
-      '✉️': <Shield className="w-4 h-4" />,
-      '🆔': <Award className="w-4 h-4" />,
-      '🎭': <Star className="w-4 h-4" />,
-      '🌟': <Zap className="w-4 h-4" />,
-      '🏆': <Trophy className="w-4 h-4" />,
-      '💎': <Crown className="w-4 h-4" />,
-      '💰': <Target className="w-4 h-4" />,
-      '🔥': <TrendingUp className="w-4 h-4" />,
-      '⭐': <Star className="w-4 h-4" />,
-      '🎓': <Users className="w-4 h-4" />,
-      '🚀': <Gift className="w-4 h-4" />,
-      '👥': <Users className="w-4 h-4" />,
-      '🎯': <Target className="w-4 h-4" />,
-      '👑': <Crown className="w-4 h-4" />
-    };
+  // Map emoji strings to React icons for consistency
+  const iconMap: Record<string, React.ReactNode> = {,
+  '✉️': <Shield className="w-4 h-4" />,
+  '🆔': <Award className="w-4 h-4" />,
+  '🎭': <Star className="w-4 h-4" />,
+  '🌟': <Zap className="w-4 h-4" />,
+  '🏆': <Trophy className="w-4 h-4" />,
+  '💎': <Crown className="w-4 h-4" />,
+  '💰': <Target className="w-4 h-4" />,
+  '🔥': <TrendingUp className="w-4 h-4" />,
+  '⭐': <Star className="w-4 h-4" />,
+  '🎓': <Users className="w-4 h-4" />,
+  '🚀': <Gift className="w-4 h-4" />,
+  '👥': <Users className="w-4 h-4" />,
+  '🎯': <Target className="w-4 h-4" />,
+  '👑': <Crown className="w-4 h-4" />,
+};
     return iconMap[iconString] || <Award className="w-4 h-4" />;
   };
   const getTierColor = (tier: string) => {
-    switch (tier) {
-    case 'diamond': return 'tier-diamond';
-    case 'platinum': return 'tier-platinum';
-    case 'gold': return 'tier-gold';
-    case 'silver': return 'tier-silver';
-    case 'bronze': return 'tier-bronze';
-    default: return 'tier-bronze';
-    }
-  };
+  switch (tier) {
+  case 'diamond': return 'tier-diamond';
+  case 'platinum': return 'tier-platinum';
+  case 'gold': return 'tier-gold';
+  case 'silver': return 'tier-silver';
+  case 'bronze': return 'tier-bronze';
+  default: return 'tier-bronze';
+};
   const getRarityColor = (rarity: string) => {
-    switch (rarity) {
-    case 'legendary': return 'rarity-legendary';
-    case 'epic': return 'rarity-epic';
-    case 'rare': return 'rarity-rare';
-    case 'uncommon': return 'rarity-uncommon';
-    case 'common': return 'rarity-common';
-    default: return 'rarity-common';
-    }
-  };
+  switch (rarity) {
+  case 'legendary': return 'rarity-legendary';
+  case 'epic': return 'rarity-epic';
+  case 'rare': return 'rarity-rare';
+  case 'uncommon': return 'rarity-uncommon';
+  case 'common': return 'rarity-common';
+  default: return 'rarity-common';
+};
   const renderOverview = () => (;);
     <div className="badge-overview">
       <div className="overview-stats">
@@ -192,12 +189,12 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       )}
     </div>
   );
-  const renderBadgeGrid = (badges: unknown[]) => (;);
+  const renderBadgeGrid = (badges: unknown) => (;);
     <div className="badge-grid">
       {badges.map((badge, index) => {
         const isUnlocked = userBadges.some(ub => ub.badgeId === badge.id);
         const progress = getBadgeProgress(badge.id);
-        return ();
+        return;
           <Card key={badge.id} className={`badge-card ${isUnlocked ? 'unlocked' : 'locked'} ${getTierColor(badge.tier)}`}>}
             <CardContent className="badge-content">
               <div className="badge-header">
@@ -255,7 +252,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   );
   const renderNotifications = () => {
     if (recentUnlocks.length === 0) return null;
-    return ();
+    return;
       <Card className="badge-notifications">
         <CardHeader>
           <div className="notifications-header">
@@ -277,7 +274,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
             {recentUnlocks.map((unlock, index) => {
               const badge = availableBadges.find(b => b.id === unlock.badgeId);
               if (!badge) return null;
-              return ();
+              return;
                 <div key={index} className="notification-item">
                   <div className="notification-content">
                     <div className="notification-badge">
@@ -313,7 +310,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
   const renderNextBadges = () => {
     const nextBadges = getNextBadges(6);
     if (nextBadges.length === 0) return null;
-    return ();
+    return;
       <Card className="next-badges">
         <CardHeader>
           <CardTitle>
@@ -343,26 +340,23 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
     );
   };
   const getFilteredBadges = () => {
-    let filtered = availableBadges;
-    if (selectedCategory !== 'all') {
-      filtered = getBadgesByCategory(selectedCategory as any);
-    }
-    if (selectedTier !== 'all') {
-      filtered = filtered.filter(badge => badge.tier === selectedTier);
-    }
-    // Sort badges
-    switch (sortBy) {
-    case 'date':
-      filtered = [...filtered].sort((a, b) => {
-        const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
-        const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
-        if (aUnlocked && bUnlocked) {
-          return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
-        }
-        if (aUnlocked) return -1;
-        if (bUnlocked) return 1;
-        return 0;
-      });
+  let filtered = availableBadges;
+  if (selectedCategory !== 'all') {
+  filtered = getBadgesByCategory(selectedCategory as any);
+  if (selectedTier !== 'all') {
+  filtered = filtered.filter(badge => badge.tier === selectedTier);
+  // Sort badges
+  switch (sortBy) {
+  case 'date':,
+  filtered = [...filtered].sort((a, b) => {
+  const aUnlocked = userBadges.find(ub => ub.badgeId === a.id);
+  const bUnlocked = userBadges.find(ub => ub.badgeId === b.id);
+  if (aUnlocked && bUnlocked) {
+  return bUnlocked.unlockedAt - aUnlocked.unlockedAt;
+  if (aUnlocked) return -1;
+  if (bUnlocked) return 1;
+  return 0;
+});
       break;
     case 'points':
       filtered = [...filtered].sort((a, b) => b.points - a.points);
@@ -374,19 +368,17 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
           (rarityOrder[a.rarity as keyof typeof rarityOrder] || 0)
       );
       break;
-    }
     return filtered;
   };
   if (isLoading) {
-    return ();
+    return;
       <div className="badge-showcase loading">
         <div className="loading-spinner"></div>
         <p>Loading badges...</p>
       </div>
     );
-  }
   if (variant === 'minimal') {
-    return ();
+    return;
       <div className={`badge-showcase minimal ${className}`}>}
         <div className="minimal-stats">
           <div className="mini-stat">
@@ -404,9 +396,8 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         </div>
       </div>
     );
-  }
   if (variant === 'compact') {
-    return ();
+    return;
       <div className={`badge-showcase compact ${className}`}>}
         <Card>
           <CardHeader>
@@ -430,9 +421,9 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
               </div>
               <div className="recent-badges">
                 {userBadges.slice(0, 5).map(badge => {)
-                  const badgeData = availableBadges.find(b => b.id === badge.badgeId);
+  const badgeData = availableBadges.find(b => b.id === badge.badgeId);
                   if (!badgeData) return null;
-                  return ();
+                  return;
                     <div key={badge.badgeId} className="recent-badge-mini">
                       {getBadgeIcon(badgeData.icon)}
                     </div>
@@ -444,8 +435,7 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`badge-showcase full ${className}`}>}
       <div className="showcase-header">
         <h2>Badges & Achievements</h2>
@@ -565,122 +555,97 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
       </Tabs>
       <style>{`
         .badge-showcase {
-          max-width: 1200px;
-          margin: 0 auto;
+          max-width: 1200px;,
+  margin: 0 auto;
           padding: 1rem;
-        }
         .showcase-header {
           text-align: center;
           margin-bottom: 2rem;
-        }
         .showcase-header h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .showcase-header p {
           color: #6b7280;
           font-size: 1.125rem;
-        }
         .badge-overview {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .overview-stats {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .stat-card {
           transition: transform 0.2s ease;
-        }
-        .stat-card:hover {
-          transform: translateY(-2px);
-        }
+        .stat-card:hover {,
+  transform: translateY(-2px);
         .stat-content {
           display: flex;
-          align-items: center;
-          gap: 1rem;
+          align-items: center;,
+  gap: 1rem;
           padding: 1.5rem;
-        }
         .stat-icon {
           flex-shrink: 0;
-        }
         .stat-info {
           flex: 1;
-        }
         .stat-value {
           font-size: 1.75rem;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .badge-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 1rem;
-        }
         .badge-card {
-          position: relative;
-          transition: all 0.2s ease;
+          position: relative;,
+  transition: all 0.2s ease;
           border-left: 4px solid transparent;
-        }
         .badge-card.unlocked {
           background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
           border-left-color: #10b981;
-        }
         .badge-card.locked {
           background: #f9fafb;
-          border-left-color: #e5e7eb;
-          opacity: 0.8;
-        }
-        .badge-card:hover {
-          transform: translateY(-2px);
+          border-left-color: #e5e7eb;,
+  opacity: 0.8;
+        .badge-card:hover {,
+  transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
         .badge-content {
           padding: 1.5rem;
-        }
         .badge-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
-        }
         .badge-icon {
-          width: 3rem;
-          height: 3rem;
-          border-radius: 50%;
-          display: flex;
+          width: 3rem;,
+  height: 3rem;
+          border-radius: 50%;,
+  display: flex;
           align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          justify-content: center;,
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: white;
-        }
         .badge-info {
           margin-bottom: 1rem;
-        }
         .badge-name {
           font-size: 1.125rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .badge-description {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.5rem;
-        }
         .badge-points {
           font-size: 0.75rem;
-          font-weight: 600;
-          color: #059669;
-        }
+          font-weight: 600;,
+  color: #059669;
         .tier-diamond { border-left-color: #a855f7; }
         .tier-platinum { border-left-color: #06b6d4; }
         .tier-gold { border-left-color: #f59e0b; }
@@ -692,96 +657,78 @@ export const BadgeShowcase: React.FC<BadgeShowcaseProps> = ({)
         .rarity-uncommon { background: linear-gradient(135deg, #d97706, #f59e0b); }
         .rarity-common { background: linear-gradient(135deg, #6b7280, #9ca3af); }
         .filters {
-          display: flex;
-          gap: 1rem;
+          display: flex;,
+  gap: 1rem;
           margin-bottom: 1.5rem;
           flex-wrap: wrap;
-        }
         .empty-state {
-          text-align: center;
-          padding: 3rem;
+          text-align: center;,
+  padding: 3rem;
           color: #6b7280;
-        }
         .empty-state h3 {
           font-size: 1.25rem;
-          font-weight: 600;
-          margin: 1rem 0 0.5rem;
-        }
+          font-weight: 600;,
+  margin: 1rem 0 0.5rem;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          padding: 4rem;
+          align-items: center;,
+  padding: 4rem;
           gap: 1rem;
-        }
         .loading-spinner {
-          width: 2rem;
-          height: 2rem;
+          width: 2rem;,
+  height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         /* Compact and minimal variants */
         .minimal {
           padding: 0.5rem;
-        }
         .minimal-stats {
-          display: flex;
-          gap: 1rem;
+          display: flex;,
+  gap: 1rem;
           align-items: center;
-        }
         .mini-stat {
           display: flex;
-          align-items: center;
-          gap: 0.25rem;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 0.25rem;
+          font-size: 0.875rem;,
+  color: #6b7280;
         .compact .compact-overview {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .compact-stats {
-          display: flex;
-          gap: 1rem;
-        }
+          display: flex;,
+  gap: 1rem;
         .compact-stat {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 0.25rem;
-        }
+          align-items: center;,
+  gap: 0.25rem;
         .recent-badges {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .recent-badge-mini {
-          width: 2rem;
-          height: 2rem;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-          color: white;
-          display: flex;
+          width: 2rem;,
+  height: 2rem;
+          border-radius: 50%;,
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          color: white;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
         @media (max-width: 768px) {
           .badge-grid {
             grid-template-columns: 1fr;
-          }
           .overview-stats {
             grid-template-columns: repeat(2, 1fr);
-          }
           .filters {
             flex-direction: column;
-          }
-        }
       `}</style>
     </div>
   );

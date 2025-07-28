@@ -13,6 +13,7 @@ import {
 } from '../database/audit-models';
 
 // Request type definitions
+}
 interface QueryAuditEventsRequest {
   Querystring: {
     startDate?: string;
@@ -36,32 +37,41 @@ interface QueryAuditEventsRequest {
     limit?: number;
     sortBy?: 'timestamp' | 'severity' | 'eventType' | 'actorEmail';
     sortOrder?: 'asc' | 'desc';
+}
   };
 }
 
+}
 interface GetStatisticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
+}
   };
 }
 
+}
 interface CreateComplianceReportRequestBody {
   Body: CreateComplianceReportRequest;
 }
+}
 
+}
 interface ExportAuditLogsRequest {
   Querystring: AuditEventQuery & {
     format?: 'json' | 'csv' | 'xml' | 'pdf';
     includeMetadata?: boolean;
     includeIntegrityData?: boolean;
+}
   };
 }
 
+}
 interface GetAuditTrailRequest {
   Params: {
     resourceType: string;
     resourceId: string;
+}
   };
   Querystring: {
     limit?: number;
@@ -96,7 +106,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
           sortBy: { type: 'string', enum: ['timestamp', 'severity', 'eventType', 'actorEmail'], default: 'timestamp' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
         }
-      },
+  }
       security: [{ bearerAuth: [] }]
     }
   }, async (request: FastifyRequest<QueryAuditEventsRequest>, reply: FastifyReply) => {
@@ -150,7 +160,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
           metadata: {
             queryParameters: query,
             resultCount: result.events.length
-          },
+  }
           complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
         });
       }
@@ -180,7 +190,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
         }
-      },
+  }
       security: [{ bearerAuth: [] }]
     }
   }, async (request: FastifyRequest<GetStatisticsRequest>, reply: FastifyReply) => {
@@ -214,11 +224,11 @@ export async function auditRoutes(fastify: FastifyInstance) {
           reportType: { 
             type: 'string', 
             enum: ['access_report', 'change_report', 'security_report', 'retention_report'] 
-          },
+  }
           standard: { 
             type: 'string', 
             enum: Object.values(ComplianceStandard) 
-          },
+  }
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' },
           scope: {
@@ -228,10 +238,10 @@ export async function auditRoutes(fastify: FastifyInstance) {
               resourceTypes: { type: 'array', items: { type: 'string' } },
               eventTypes: { type: 'array', items: { type: 'string' } }
             }
-          },
+  }
           format: { type: 'string', enum: ['json', 'pdf', 'csv', 'xml'], default: 'json' }
         }
-      },
+  }
       security: [{ bearerAuth: [] }]
     }
   }, async (request: FastifyRequest<CreateComplianceReportRequestBody>, reply: FastifyReply) => {
@@ -255,7 +265,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
             standard: report.standard,
             eventCount: report.events.length,
             violationCount: report.violations.length
-          },
+  }
           complianceStandards: [request.body.standard]
         });
       }
@@ -295,7 +305,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
           includeMetadata: { type: 'boolean', default: true },
           includeIntegrityData: { type: 'boolean', default: false }
         }
-      },
+  }
       security: [{ bearerAuth: [] }]
     }
   }, async (request: FastifyRequest<ExportAuditLogsRequest>, reply: FastifyReply) => {
@@ -324,7 +334,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
             eventCount: result.events.length,
             includeMetadata: request.query.includeMetadata,
             includeIntegrityData: request.query.includeIntegrityData
-          },
+  }
           complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.GDPR]
         });
       }
@@ -361,7 +371,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
             format: 'json',
             eventCount: result.events.length,
             query: request.query
-          },
+  }
           events: result.events,
           summary: result.summary
         });
@@ -384,16 +394,16 @@ export async function auditRoutes(fastify: FastifyInstance) {
         properties: {
           resourceType: { type: 'string' },
           resourceId: { type: 'string' }
-        },
+  }
         required: ['resourceType', 'resourceId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 1000, default: 100 },
           page: { type: 'number', minimum: 1, default: 1 }
         }
-      },
+  }
       security: [{ bearerAuth: [] }]
     }
   }, async (request: FastifyRequest<GetAuditTrailRequest>, reply: FastifyReply) => {
@@ -471,7 +481,7 @@ export async function auditRoutes(fastify: FastifyInstance) {
           totalEvents: stats.totalEvents,
           eventsToday: stats.eventsToday,
           uniqueUsers: stats.uniqueUsers
-        },
+  }
         services: {
           database: 'connected',
           eventProcessing: 'active',
@@ -494,16 +504,19 @@ export async function auditRoutes(fastify: FastifyInstance) {
 
   // Helper methods for export functionality (would be implemented)
   async function exportAsCSV(events: AuditEvent[], options: Record<string, unknown>): Promise<string> {
+
     // CSV export implementation
     return 'CSV export not yet implemented';
   }
 
   async function exportAsXML(events: AuditEvent[], options: Record<string, unknown>): Promise<string> {
+
     // XML export implementation
     return 'XML export not yet implemented';
   }
 
   async function exportAsPDF(events: AuditEvent[], options: Record<string, unknown>): Promise<Buffer> {
+
     // PDF export implementation
     return Buffer.from('PDF export not yet implemented');
   }

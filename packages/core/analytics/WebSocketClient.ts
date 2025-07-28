@@ -14,53 +14,51 @@ export enum WebSocketMessageType {
   HEARTBEAT = 'heartbeat',
   SUBSCRIPTION = 'subscription',
   UNSUBSCRIPTION = 'unsubscription'
-}
-/**
- * WebSocket message structure
- */
-export interface WebSocketMessage {
-  type: WebSocketMessageType;
+  /**
+  * WebSocket message structure
+  */
+  export interface WebSocketMessage {
+  type: WebSocketMessageType;,
   data: any;
   timestamp: number;
   id?: string;
+  /**
+  * Subscription configuration
+  */
 }
-/**
- * Subscription configuration
- */
 export interface SubscriptionConfig {
   topic: string;
-  filters?: {
-    userId?: number;
-    organizationId?: number;
-    eventTypes?: string[];
-    minSeverity?: 'info' | 'warning' | 'critical';
-  };
+  filters?: {,
+  userId?: number;
+  organizationId?: number;
+  eventTypes?: string;
+  minSeverity?: 'info' | 'warning' | 'critical';
+};
   throttle?: number; // Minimum time between updates in ms
-}
 /**
  * WebSocket client configuration
  */
+}
 export interface WebSocketClientConfig {
-  url: string;
+  url: string;,
   reconnectInterval: number;
-  maxReconnectAttempts: number;
+  maxReconnectAttempts: number;,
   heartbeatInterval: number;
-  subscriptionTimeout: number;
+  subscriptionTimeout: number;,
   enableLogging: boolean;
   apiKey?: string;
   userId?: number;
   organizationId?: number;
+  /**
+  * WebSocket connection state
+  */
 }
-/**
- * WebSocket connection state
- */
 export enum ConnectionState {
   DISCONNECTED = 'disconnected',
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
   RECONNECTING = 'reconnecting',
   FAILED = 'failed'
-}
 /**
  * Real-time WebSocket client for analytics updates
  */
@@ -72,21 +70,20 @@ export class WebSocketClient extends EventEmitter {
   private heartbeatTimer: NodeJS.Timeout | null = null;
   private reconnectTimer: NodeJS.Timeout | null = null;
   private subscriptions: Map<string, SubscriptionConfig> = new Map();
-  private messageQueue: WebSocketMessage[] = [];
+  private messageQueue: WebSocketMessage = [];
   private lastMessageId: string | null = null;
   constructor(config: Partial<WebSocketClientConfig> = {}) {
-    super();
-    this.config = {
-      url: 'ws://localhost:8000/ws/analytics',
-      reconnectInterval: 5000,
-      maxReconnectAttempts: 10,
-      heartbeatInterval: 30000,
-      subscriptionTimeout: 10000,
-      enableLogging: false,
-      ...config
-    };
+  super();
+  this.config = {
+  url: 'ws://localhost:8000/ws/analytics',
+  reconnectInterval: 5000,
+  maxReconnectAttempts: 10,
+  heartbeatInterval: 30000,
+  subscriptionTimeout: 10000,
+  enableLogging: false,
+  ...config
+};
     this.setupEventListeners();
-  }
   /**
    * Connect to WebSocket server
    */
@@ -95,7 +92,6 @@ export class WebSocketClient extends EventEmitter {
       if (this.connectionState === ConnectionState.CONNECTED) {
         resolve();
         return;
-      }
       this.connectionState = ConnectionState.CONNECTING;
       this.log('Connecting to WebSocket server...');
       try {
@@ -119,62 +115,53 @@ export class WebSocketClient extends EventEmitter {
           if (this.connectionState === ConnectionState.CONNECTING) {
             this.socket?.close();
             reject(new Error('Connection timeout'));
-          }
         }, this.config.subscriptionTimeout);
       } catch (error) {
         this.connectionState = ConnectionState.FAILED;
         reject(error);
-      }
     });
-  }
   /**
    * Disconnect from WebSocket server
    */
   disconnect(): void {
-    this.log('Disconnecting from WebSocket server...');
-    this.connectionState = ConnectionState.DISCONNECTED;
-    this.reconnectAttempts = 0;
-    if (this.heartbeatTimer) {
-      clearInterval(this.heartbeatTimer);
-      this.heartbeatTimer = null;
-    }
-    if (this.reconnectTimer) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
-    }
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
-    }
-    this.subscriptions.clear();
-    this.messageQueue = [];
-  }
+  this.log('Disconnecting from WebSocket server...');
+  this.connectionState = ConnectionState.DISCONNECTED;
+  this.reconnectAttempts = 0;
+  if (this.heartbeatTimer) {
+  clearInterval(this.heartbeatTimer);
+  this.heartbeatTimer = null;
+  if (this.reconnectTimer) {
+  clearTimeout(this.reconnectTimer);
+  this.reconnectTimer = null;
+  if (this.socket) {
+  this.socket.close();
+  this.socket = null;
+  this.subscriptions.clear();
+  this.messageQueue = [];
   /**
-   * Subscribe to a topic
-   */
-  subscribe(topic: string, config?: Partial<SubscriptionConfig>): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const subscriptionConfig: SubscriptionConfig = {
-        topic,
-        filters: {,
-          userId: this.config.userId,
-          organizationId: this.config.organizationId,
-          ...config?.filters
-        },
-        throttle: config?.throttle || 1000,
-      };
+  * Subscribe to a topic
+  */
+  subscribe(topic: string, config?: Partial<SubscriptionConfig>): Promise<void> {,
+  return new Promise((resolve, reject) => {
+  const subscriptionConfig: SubscriptionConfig = {,
+  topic,
+  filters: {,
+  userId: this.config.userId,
+  organizationId: this.config.organizationId,
+  ...config?.filters
+},
+  throttle: config?.throttle || 1000;
+  };
       this.subscriptions.set(topic, subscriptionConfig);
       if (this.connectionState === ConnectionState.CONNECTED) {
-        this.sendMessage({)
-          type: WebSocketMessageType.SUBSCRIPTION,
-          data: subscriptionConfig,
-          timestamp: Date.now(),
-        });
-      }
+  this.sendMessage({)
+  type: WebSocketMessageType.SUBSCRIPTION,
+  data: subscriptionConfig,
+  timestamp: Date.now(),
+});
       this.log(`Subscribed to topic: ${topic}`);}
       resolve();
     });
-  }
   /**
    * Unsubscribe from a topic
    */
@@ -183,26 +170,21 @@ export class WebSocketClient extends EventEmitter {
       this.subscriptions.delete(topic);
       if (this.connectionState === ConnectionState.CONNECTED) {
         this.sendMessage({)
-          type: WebSocketMessageType.UNSUBSCRIPTION,
+  type: WebSocketMessageType.UNSUBSCRIPTION,
           data: { topic },
-          timestamp: Date.now(),
-        });
-      }
+          timestamp: Date.now();
+  });
       this.log(`Unsubscribed from topic: ${topic}`);}
-    }
-  }
   /**
    * Get current connection state
    */
   getConnectionState(): ConnectionState {
     return this.connectionState;
-  }
   /**
    * Get active subscriptions
    */
-  getSubscriptions(): string[] {
+  getSubscriptions(): string {
     return Array.from(this.subscriptions.keys());
-  }
   /**
    * Send a message to the server
    */
@@ -214,50 +196,44 @@ export class WebSocketClient extends EventEmitter {
       } catch (error) {
         this.log(`Failed to send message: ${error}`);}
         this.emit('error', error);
-      }
     } else {
-      // Queue message for when connection is established
-      this.messageQueue.push(message);
-    }
-  }
+  // Queue message for when connection is established
+  this.messageQueue.push(message);
   /**
-   * Handle connection open
-   */
-  private handleConnectionOpen(): void {
-    this.log('WebSocket connection established');
-    this.connectionState = ConnectionState.CONNECTED;
-    this.reconnectAttempts = 0;
-    // Send authentication if API key is provided
-    if (this.config.apiKey) {
-      this.sendMessage({)
-        type: WebSocketMessageType.SUBSCRIPTION,
-        data: {,
-          auth: {,
-            apiKey: this.config.apiKey,
-            userId: this.config.userId,
-            organizationId: this.config.organizationId,
-          }
-        },
-        timestamp: Date.now(),
-      });
-    }
+  * Handle connection open
+  */
+  private handleConnectionOpen(): void {,
+  this.log('WebSocket connection established');
+  this.connectionState = ConnectionState.CONNECTED;
+  this.reconnectAttempts = 0;
+  // Send authentication if API key is provided
+  if (this.config.apiKey) {
+  this.sendMessage({)
+  type: WebSocketMessageType.SUBSCRIPTION,
+  data: {,
+  auth: {,
+  apiKey: this.config.apiKey,
+  userId: this.config.userId,
+  organizationId: this.config.organizationId,
+},
+  timestamp: Date.now();
+  });
     // Send queued messages
     this.messageQueue.forEach(message => {)
-      this.sendMessage(message);
+  this.sendMessage(message);
     });
     this.messageQueue = [];
     // Re-establish subscriptions
     this.subscriptions.forEach((config, topic) => {
-      this.sendMessage({)
-        type: WebSocketMessageType.SUBSCRIPTION,
-        data: config,
-        timestamp: Date.now(),
-      });
+  this.sendMessage({)
+  type: WebSocketMessageType.SUBSCRIPTION,
+  data: config,
+  timestamp: Date.now(),
+});
     });
     // Start heartbeat
     this.startHeartbeat();
     this.emit('connected');
-  }
   /**
    * Handle connection close
    */
@@ -268,7 +244,6 @@ export class WebSocketClient extends EventEmitter {
     if (this.heartbeatTimer) {
       clearInterval(this.heartbeatTimer);
       this.heartbeatTimer = null;
-    }
     this.emit('disconnected', { code: event.code, reason: event.reason });
     // Attempt to reconnect if not manually disconnected
     if (event.code !== 1000 && this.reconnectAttempts < this.config.maxReconnectAttempts) {
@@ -276,15 +251,12 @@ export class WebSocketClient extends EventEmitter {
     } else if (this.reconnectAttempts >= this.config.maxReconnectAttempts) {
       this.connectionState = ConnectionState.FAILED;
       this.emit('reconnect_failed');
-    }
-  }
   /**
    * Handle connection error
    */
   private handleConnectionError(error: Event): void {
     this.log(`WebSocket error: ${error}`);}
     this.emit('error', error);
-  }
   /**
    * Handle incoming message
    */
@@ -324,21 +296,17 @@ export class WebSocketClient extends EventEmitter {
         break;
       default:
         this.log(`Unknown message type: ${message.type}`);}
-      }
       // Emit generic message event
       this.emit('message', message);
     } catch (error) {
       this.log(`Failed to parse message: ${error}`);}
       this.emit('error', error);
-    }
-  }
   /**
    * Attempt to reconnect
    */
   private attemptReconnect(): void {
     if (this.connectionState === ConnectionState.RECONNECTING) {
       return;
-    }
     this.connectionState = ConnectionState.RECONNECTING;
     this.reconnectAttempts++;
     this.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.config.maxReconnectAttempts})...`);}
@@ -354,23 +322,20 @@ export class WebSocketClient extends EventEmitter {
         } else {
           this.connectionState = ConnectionState.FAILED;
           this.emit('reconnect_failed');
-        }
       });
     }, this.config.reconnectInterval);
     this.emit('reconnecting', this.reconnectAttempts);
-  }
   /**
    * Start heartbeat
    */
   private startHeartbeat(): void {
     this.heartbeatTimer = setInterval(() => {
       this.sendMessage({)
-        type: WebSocketMessageType.HEARTBEAT,
+  type: WebSocketMessageType.HEARTBEAT,
         data: { timestamp: Date.now() },
-        timestamp: Date.now(),
-      });
+        timestamp: Date.now();
+  });
     }, this.config.heartbeatInterval);
-  }
   /**
    * Setup event listeners
    */
@@ -383,75 +348,64 @@ export class WebSocketClient extends EventEmitter {
       window.addEventListener('online', () => {
         if (this.connectionState === ConnectionState.DISCONNECTED) {
           this.connect();
-        }
       });
       window.addEventListener('offline', () => {
         this.disconnect();
       });
-    }
-  }
   /**
    * Log message (if logging is enabled)
    */
   private log(message: string, data?: any): void {
     if (this.config.enableLogging) {
       console.log(`[WebSocketClient] ${message}`, data);}
-    }
-  }
-}
 /**
  * Analytics WebSocket client with predefined subscriptions
  */
 export class AnalyticsWebSocketClient extends WebSocketClient {
   constructor(config: Partial<WebSocketClientConfig> = {}) {
-    super(config);
-    this.setupAnalyticsListeners();
-  }
+  super(config);
+  this.setupAnalyticsListeners();
   /**
-   * Subscribe to analytics dashboard updates
-   */
-  async subscribeToDashboard(): Promise<void> {
-    await this.subscribe('dashboard', {)
-      filters: {,
-        eventTypes: ['analytics_update', 'performance_metric']
-      },
-      throttle: 5000 // Update every 5 seconds,
-    });
-  }
+  * Subscribe to analytics dashboard updates
+  */
+  async subscribeToDashboard(): Promise<void> {,
+  await this.subscribe('dashboard', {)
+  filters: {,
+  eventTypes: ['analytics_update', 'performance_metric'],
+},
+  throttle: 5000 // Update every 5 seconds;
+  });
   /**
    * Subscribe to cost alerts
    */
   async subscribeToCostAlerts(): Promise<void> {
-    await this.subscribe('cost_alerts', {)
-      filters: {,
-        eventTypes: ['cost_alert', 'budget_alert'],
-        minSeverity: 'warning',
-      },
-      throttle: 1000 // Immediate alerts,
-    });
-  }
+  await this.subscribe('cost_alerts', {)
+  filters: {,
+  eventTypes: ['cost_alert', 'budget_alert'],
+  minSeverity: 'warning',
+},
+  throttle: 1000 // Immediate alerts;
+  });
   /**
    * Subscribe to recommendations
    */
   async subscribeToRecommendations(): Promise<void> {
-    await this.subscribe('recommendations', {)
-      filters: {,
-        eventTypes: ['recommendation'],
-      },
-      throttle: 10000 // Update every 10 seconds,
-    });
-  }
+  await this.subscribe('recommendations', {)
+  filters: {,
+  eventTypes: ['recommendation'],
+},
+  throttle: 10000 // Update every 10 seconds;
+  });
   /**
    * Subscribe to user activity
    */
   async subscribeToUserActivity(): Promise<void> {
-    await this.subscribe('user_activity', {)
-      filters: {,
-        eventTypes: ['user_activity'],
-      },
-      throttle: 2000 // Update every 2 seconds,
-    });
-  }
+  await this.subscribe('user_activity', {)
+  filters: {,
+  eventTypes: ['user_activity'],
+},
+  throttle: 2000 // Update every 2 seconds;
+  });
   /**
    * Setup analytics-specific event listeners
    */
@@ -471,8 +425,6 @@ export class AnalyticsWebSocketClient extends WebSocketClient {
     this.on('recommendation', (data) => {
       this.emit('new_recommendation', data);
     });
-  }
-}
 /**
  * Create analytics WebSocket client instance
  */

@@ -247,7 +247,7 @@ router.get('/:reviewId',
             usability: review.usability_rating,
             documentation: review.documentation_rating,
             support: review.support_rating
-          },
+  }
           overallRating: review.overall_rating,
           timestamp: review.timestamp,
           verified: review.verified,

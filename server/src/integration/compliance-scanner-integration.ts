@@ -19,6 +19,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
+}
 export interface ComplianceScannerIntegrationConfig {
   enabledEnvironments: ('development' | 'staging' | 'production')[];
   autoStart: boolean;
@@ -26,6 +27,7 @@ export interface ComplianceScannerIntegrationConfig {
   gracefulShutdownTimeout: number; // milliseconds
   enableMetrics: boolean;
   enableDashboard: boolean;
+}
 }
 
 export class ComplianceScannerIntegration {
@@ -53,6 +55,7 @@ export class ComplianceScannerIntegration {
       analyticsCollector: AnalyticsCollector;
     }
   ): Promise<void> {
+
     if (this.isIntegrated) {
       throw new Error('Compliance scanner integration already active');
     }
@@ -85,6 +88,7 @@ export class ComplianceScannerIntegration {
    * Register API routes for compliance scanner management
    */
   private async registerApiRoutes(server: FastifyInstance): Promise<void> {
+
     // Scanner status endpoint
     server.get('/api/compliance/scanners/status', async (request, reply) => {
       try {

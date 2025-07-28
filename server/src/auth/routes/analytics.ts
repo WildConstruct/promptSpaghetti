@@ -97,7 +97,7 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           stepData: {
             formType: request.body.formType,
             stepNumber: request.body.stepNumber
-          },
+  }
           durationMs: request.body.durationMs
         }
       );
@@ -182,14 +182,14 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Access denied' });
         return;
       }
-    },
+  }
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -209,7 +209,7 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   percentage: { type: 'number' }
                 }
               }
-            },
+  }
             sourceBreakdown: { type: 'object' }
           }
         }
@@ -233,14 +233,14 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Access denied' });
         return;
       }
-    },
+  }
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -257,7 +257,7 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   averageTime: { type: 'number' }
                 }
               }
-            },
+  }
             stepCompletionRates: { type: 'object' }
           }
         }
@@ -281,15 +281,15 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Access denied' });
         return;
       }
-    },
+  }
     schema: {
       params: {
         type: 'object',
         properties: {
           experimentName: { type: 'string' }
-        },
+  }
         required: ['experimentName']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -305,7 +305,7 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
                   conversionRate: { type: 'number' }
                 }
               }
-            },
+  }
             winner: { type: 'string' },
             confidence: { type: 'number' }
           }
@@ -329,14 +329,14 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Access denied' });
         return;
       }
-    },
+  }
     schema: {
       querystring: {
         type: 'object',
         properties: {
           timeframe: { type: 'string', enum: ['day', 'week', 'month'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -368,9 +368,9 @@ export async function analyticsRoutes(fastify: FastifyInstance) {
           eventName: { type: 'string' },
           eventData: { type: 'object' },
           sessionId: { type: 'string' }
-        },
+  }
         required: ['eventName']
-      },
+  }
       response: {
         200: {
           type: 'object',

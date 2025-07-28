@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Export options props
  */
+
 export interface ExportOptionsProps {
     analyticsClient: AnalyticsClient;
     timeRange: {,
@@ -10,7 +11,6 @@ export interface ExportOptionsProps {
         endTime: number;
     };
     className?: string;
-}
 /**
  * Export options component
  */

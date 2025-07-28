@@ -7,41 +7,41 @@
 import React from 'react';
 
 // Dashboard configuration types
+
 export interface AdminDashboardConfig {
   layout: {,
-    columns: number;
-    gaps: 'small' | 'medium' | 'large';
-    responsive: boolean;
-  };
+  columns: number;,
+  gaps: 'small' | 'medium' | 'large';
+  responsive: boolean;
+};
   widgets: {,
-    autoRefresh: boolean;
-    refreshInterval: number;
-    showHeaders: boolean;
-    collapsible: boolean;
-  };
+  autoRefresh: boolean;
+  refreshInterval: number;,
+  showHeaders: boolean;
+  collapsible: boolean;
+};
   permissions: {,
-    canEdit: boolean;
-    canExport: boolean;
-    canViewSensitive: boolean;
-  };
+  canEdit: boolean;
+  canExport: boolean;,
+  canViewSensitive: boolean;
+};
   theme: {,
-    variant: 'light' | 'dark' | 'auto';
-    density: 'compact' | 'comfortable' | 'spacious';
-  };
-}
+  variant: 'light' | 'dark' | 'auto';
+  density: 'compact' | 'comfortable' | 'spacious';
+};
 
 // Widget types
+}
 export interface WidgetDefinition {
-  id: string;
+  id: string;,
   type: string;
   title: string;
   description?: string;
-  component: React.ComponentType<WidgetProps>;
+  component: React.ComponentType<WidgetProps>;,
   config: WidgetConfig;
-  permissions?: string[];
+  permissions?: string;
   category: 'security' | 'analytics' | 'users' | 'system' | 'custom';
 }
-
 export interface WidgetConfig {
   refreshInterval?: number;
   autoRefresh?: boolean;
@@ -51,86 +51,80 @@ export interface WidgetConfig {
   exportable?: boolean;
   [key: string]: any;
 }
-
 export interface WidgetProps {
-  id: string;
+  id: string;,
   config: WidgetConfig;
   onConfigChange?: (config: WidgetConfig) => void;
   onError?: (error: Error) => void;
   onDataUpdate?: (data: any) => void;
   className?: string;
+  // Dashboard layout types
 }
-
-// Dashboard layout types
 export interface DashboardLayout {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  widgets: DashboardWidgetInstance[];
+  widgets: DashboardWidgetInstance;,
   config: AdminDashboardConfig;
-  permissions: string[];
+  permissions: string;,
   createdBy: string;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export interface DashboardWidgetInstance {
-  id: string;
+  id: string;,
   widgetType: string;
+
   position: { row: number; col: number };
   size: { width: number; height: number };
   config: WidgetConfig;
   title?: string;
   visible: boolean;
-}
 
 // Admin dashboard state
+}
 export interface AdminDashboardState {
-  layout: DashboardLayout | null;
+  layout: DashboardLayout | null;,
   widgets: Record<string, WidgetDefinition>;
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
-  config: AdminDashboardConfig;
+  config: AdminDashboardConfig;,
   editMode: boolean;
   selectedWidgetId: string | null;
+  // User and permission types
 }
-
-// User and permission types
 export interface AdminUser {
-  id: string;
+  id: string;,
   email: string;
-  name: string;
+  name: string;,
   role: UserRole;
-  permissions: Permission[];
+  permissions: Permission;,
   status: 'active' | 'inactive' | 'suspended';
   lastLogin?: Date;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export interface UserRole {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
-  permissions: Permission[];
+  description: string;,
+  permissions: Permission;
   isSystemRole: boolean;
 }
-
 export interface Permission {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   resource: string;
   action: 'read' | 'write' | 'delete' | 'admin';
+  // Security types
 }
-
-// Security types
 export interface SecurityAlert {
-  id: string;
+  id: string;,
   type: 'warning' | 'error' | 'info';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   title: string;
-  message: string;
+  message: string;,
   source: string;
   timestamp: Date;
   userId?: string;
@@ -138,114 +132,110 @@ export interface SecurityAlert {
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
 }
-
 export interface SecurityMetrics {
-  activeUsers: number;
+  activeUsers: number;,
   failedLogins: number;
-  suspiciousActivity: number;
+  suspiciousActivity: number;,
   dataBreaches: number;
   vulnerabilities: {,
-    critical: number;
-    high: number;
-    medium: number;
-    low: number;
-  };
+  critical: number;,
+  high: number;
+  medium: number;,
+  low: number;
+};
   complianceScore: number;
-}
 
 // API Management types
+}
 export interface ApiKey {
-  id: string;
+  id: string;,
   name: string;
-  key: string;
+  key: string;,
   userId: string;
-  permissions: string[];
+  permissions: string;,
   rateLimit: {,
-    requests: number;
-    period: 'minute' | 'hour' | 'day';
-  };
+  requests: number;,
+  period: 'minute' | 'hour' | 'day';
+};
   usage: {,
-    totalRequests: number;
-    lastUsed?: Date;
-  };
+  totalRequests: number;
+  lastUsed?: Date;
+};
   status: 'active' | 'inactive' | 'revoked';
   expiresAt?: Date;
   createdAt: Date;
 }
-
 export interface ApiEndpoint {
-  id: string;
+  id: string;,
   path: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';,
   description: string;
-  permissions: string[];
-  rateLimit?: {
-    requests: number;
-    period: 'minute' | 'hour' | 'day';
-  };
+  permissions: string;
+  rateLimit?: {,
+  requests: number;,
+  period: 'minute' | 'hour' | 'day';
+};
   usage: {,
-    totalRequests: number;
-    averageResponseTime: number;
-    errorRate: number;
-  };
+  totalRequests: number;
+  averageResponseTime: number;,
+  errorRate: number;
+};
   status: 'active' | 'deprecated' | 'disabled';
-}
 
 // System metrics types
+}
 export interface SystemMetrics {
   performance: {,
-    cpu: number;
-    memory: number;
-    disk: number;
-    network: number;
-  };
+  cpu: number;,
+  memory: number;
+  disk: number;,
+  network: number;
+};
   health: {,
-    database: 'healthy' | 'warning' | 'error';
-    cache: 'healthy' | 'warning' | 'error';
-    api: 'healthy' | 'warning' | 'error';
-    storage: 'healthy' | 'warning' | 'error';
-  };
-  uptime: number;
+  database: 'healthy' | 'warning' | 'error';
+  cache: 'healthy' | 'warning' | 'error';,
+  api: 'healthy' | 'warning' | 'error';
+  storage: 'healthy' | 'warning' | 'error';
+};
+  uptime: number;,
   version: string;
   environment: 'development' | 'staging' | 'production';
-}
 
 // Event types for domain communication
-export interface AdminDomainEvents {
-  onDashboardLoaded: (layout: DashboardLayout) => void;
-  onWidgetAdded: (widget: DashboardWidgetInstance) => void;
-  onWidgetRemoved: (widgetId: string) => void;
-  onWidgetConfigChanged: (widgetId: string, config: WidgetConfig) => void;
-  onLayoutChanged: (layout: DashboardLayout) => void;
-  onUserUpdated: (user: AdminUser) => void;
-  onSecurityAlert: (alert: SecurityAlert) => void;
-  onPermissionChanged: (userId: string, permissions: Permission[]) => void;
-  onApiKeyCreated: (apiKey: ApiKey) => void;
-  onApiKeyRevoked: (apiKeyId: string) => void;
 }
-
-// Component prop types
+export interface AdminDomainEvents {
+  onDashboardLoaded: (layout: DashboardLayout) => void;,
+  onWidgetAdded: (widget: DashboardWidgetInstance) => void;,
+  onWidgetRemoved: (widgetId: string) => void;,
+  onWidgetConfigChanged: (widgetId: string, config: WidgetConfig) => void;,
+  onLayoutChanged: (layout: DashboardLayout) => void;,
+  onUserUpdated: (user: AdminUser) => void;,
+  onSecurityAlert: (alert: SecurityAlert) => void;,
+  onPermissionChanged: (userId: string, permissions: Permission) => void;,
+  onApiKeyCreated: (apiKey: ApiKey) => void;,
+  onApiKeyRevoked: (apiKeyId: string) => void;
+  // Component prop types
+}
 export interface AdminDashboardProps {
-  userId: string;
-  permissions: Permission[];
+  userId: string;,
+  permissions: Permission;
   config?: Partial<AdminDashboardConfig>;
   onConfigChange?: (config: AdminDashboardConfig) => void;
   onError?: (error: Error) => void;
   className?: string;
 }
-
 export interface WidgetGridProps {
-  layout: DashboardLayout;
+  layout: DashboardLayout;,
   editMode: boolean;
+
   onWidgetMove: (widgetId: string, position: { row: number; col: number }) => void;
   onWidgetResize: (widgetId: string, size: { width: number; height: number }) => void;
   onWidgetRemove: (widgetId: string) => void;
   className?: string;
 }
-
 export interface WidgetLibraryProps {
-  availableWidgets: WidgetDefinition[];
+  availableWidgets: WidgetDefinition;,
   onWidgetAdd: (widgetType: string, position: { row: number; col: number }) => void;
-  userPermissions: Permission[];
+  userPermissions: Permission;
   className?: string;
 }

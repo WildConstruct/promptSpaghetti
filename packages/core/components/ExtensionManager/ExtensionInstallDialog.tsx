@@ -7,10 +7,9 @@ import { ExtensionManifest, parseExtensionManifest } from '../../extensions/Exte
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
 
 export interface ExtensionInstallDialogProps {
-  onInstall: (extension: ExtensionManifest) => Promise<void>;
+  onInstall: (extension: ExtensionManifest) => Promise<void>;,
   onCancel: () => void;
 }
-
 export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
   onInstall,
   onCancel
@@ -25,38 +24,34 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<'select' | 'validate' | 'confirm'>('select');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    setError(null);
-    try {
-      if (file.name.endsWith('.json')) {
-        // Direct manifest file
-        const content = await file.text();
-        setManifestContent(content);
-        await validateManifest(content);
-      } else if (file.name.endsWith('.zip') || file.name.endsWith('.tar.gz')) {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {,
+  const file = event.target.files?.[0];
+  if (!file) return;
+  setError(null);
+  try {
+  if (file.name.endsWith('.json')) {
+  // Direct manifest file
+  const content = await file.text();
+  setManifestContent(content);
+  await validateManifest(content);
+} else if (file.name.endsWith('.zip') || file.name.endsWith('.tar.gz')) {
         // Extension package
         setError('Extension packages are not yet supported. Please select a manifest.json file.');
       } else {
         setError('Please select a valid manifest.json file or extension package.');
-      }
     } catch (err) {
       setError(`Failed to read file: ${err}`);}
-    }
   };
   const handleUrlInstall = async () => {
     if (!manifestUrl.trim()) {
       setError('Please enter a valid URL');
       return;
-    }
     setError(null);
     setIsValidating(true);
     try {
       const response = await fetch(manifestUrl);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
-      }
       const content = await response.text();
       setManifestContent(content);
       await validateManifest(content);
@@ -64,43 +59,40 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       setError(`Failed to fetch manifest: ${err}`);}
     } finally {
       setIsValidating(false);
-    }
   };
   const handleDevInstall = async () => {
-    if (!devPath.trim()) {
-      setError('Please enter a valid path');
-      return;
-    }
-    setError(null);
-    setIsValidating(true);
-    try {
-      // In a real implementation, this would use a file system API
-      // For now, simulate loading a development extension
-      const mockManifest = {
-        manifest_version: '1.0',
-        id: 'dev-extension',
-        name: 'Development Extension',
-        version: '0.1.0',
-        description: 'Development extension loaded from local path',
-        author: 'Developer',
-        extension_type: 'node' as const,
-        capabilities: {,
-          provides: ['test-functionality'],
-          requires: ['runtime-nodes'],
-        },
-        dependencies: {,
-          system_version: '^1.0.0',
-        },
-        permissions: ['data-processing'],
+  if (!devPath.trim()) {
+  setError('Please enter a valid path');
+  return;
+  setError(null);
+  setIsValidating(true);
+  try {
+  // In a real implementation, this would use a file system API
+  // For now, simulate loading a development extension
+  const mockManifest = {
+  manifest_version: '1.0',
+  id: 'dev-extension',
+  name: 'Development Extension',
+  version: '0.1.0',
+  description: 'Development extension loaded from local path',
+  author: 'Developer',
+  extension_type: 'node' as const,
+  capabilities: {,
+  provides: ['test-functionality'],
+  requires: ['runtime-nodes'],
+},
+  dependencies: {,
+  system_version: '^1.0.0',
+},
+  permissions: ['data-processing'],
         runtime: {,
-          entry_point: 'dist/index',
-          node_types: ['TestNode'],
-        },
-        development: {,
-          path: devPath,
-          auto_reload: true,
-        }
-      };
+  entry_point: 'dist/index',
+  node_types: ['TestNode'],
+},
+  development: {,
+  path: devPath,
+  auto_reload: true,
+};
       const content = JSON.stringify(mockManifest, null, 2);
       setManifestContent(content);
       await validateManifest(content);
@@ -108,34 +100,30 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       setError(`Failed to load development extension: ${err}`);}
     } finally {
       setIsValidating(false);
-    }
   };
   const validateManifest = async (content: string) => {
-    setIsValidating(true);
-    setError(null);
-    try {
-      // Parse and validate manifest
-      const manifest = parseExtensionManifest(content);
-      setParsedManifest(manifest);
-      // Check compatibility
-      const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility(;);
-        manifest,
-        {
-          systemVersion: '1.0.0',
-          platform: 'web',
-          availableExtensions: new Map(),
-          grantedPermissions: ['data-processing', 'ui-components']
-        }
-      );
-      setCompatibilityResult(compatibility);
-      setStep('validate');
-    } catch (err) {
+  setIsValidating(true);
+  setError(null);
+  try {
+  // Parse and validate manifest
+  const manifest = parseExtensionManifest(content);
+  setParsedManifest(manifest);
+  // Check compatibility
+  const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility(;);
+  manifest,
+  {
+  systemVersion: '1.0.0',
+  platform: 'web',
+  availableExtensions: new Map(),
+  grantedPermissions: ['data-processing', 'ui-components']);
+  setCompatibilityResult(compatibility);
+  setStep('validate');
+} catch (err) {
       setError(`Invalid manifest: ${err}`);}
       setParsedManifest(null);
       setCompatibilityResult(null);
     } finally {
       setIsValidating(false);
-    }
   };
   const handleInstall = async () => {
     if (!parsedManifest) return;
@@ -143,7 +131,6 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       await onInstall(parsedManifest);
     } catch (err) {
       setError(`Installation failed: ${err}`);}
-    }
   };
   const renderSelectStep = () => (;);
     <div className="install-step select-step">
@@ -398,7 +385,7 @@ export const ExtensionInstallDialog: React.FC<ExtensionInstallDialogProps> = ({)
       </div>
     </div>
   );
-  return ();
+  return;
     <div className="extension-install-dialog-overlay">
       <div className="extension-install-dialog">
         <div className="dialog-header">

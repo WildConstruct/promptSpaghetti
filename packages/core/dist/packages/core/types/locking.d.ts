@@ -33,7 +33,7 @@ export interface LockPolicy {
     auto_lock_on_state_change: boolean;
     auto_lock_duration_minutes: number;
     allow_lock_breaking: boolean;
-    lock_breaking_roles: string[];
+    lock_breaking_roles: string;
     require_justification: boolean;
     conflict_resolution_strategy: 'queue' | 'reject' | 'notify' | 'escalate';
     escalation_timeout_minutes: number;
@@ -84,17 +84,16 @@ export interface LockingStatistics {
     by_user: Record<string, number>;
     avg_lock_duration_minutes: number;
     conflict_rate: number;
-    most_contended_resources: Array<{
-        resource_id: string;
-        conflict_count: number;
-        avg_wait_time: number;
-    }>;
+    most_contended_resources: Array<{}, resource_id>;
+    string: any;
+    conflict_count: number;
+    avg_wait_time: number;
 }
 export interface LockingState {
-    locks: WorkflowLock[];
-    conflicts: LockConflict[];
-    queue: LockQueue[];
-    notifications: LockNotification[];
+    locks: WorkflowLock;
+    conflicts: LockConflict;
+    queue: LockQueue;
+    notifications: LockNotification;
     statistics: LockingStatistics;
     policy: LockPolicy | null;
     isLoading: boolean;

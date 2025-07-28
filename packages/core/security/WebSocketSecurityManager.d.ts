@@ -14,6 +14,7 @@ import { KeyManagementService } from './KeyManagementService';
 import { DataClassifier, ClassificationLevel } from './DataClassifier';
 import { DeviceFingerprintingService } from './DeviceFingerprintingService';
 import { TrustedDeviceManager } from './TrustedDeviceManager';
+
 export interface WebSocketSecurityConfig {
     enableMessageEncryption: boolean;
     encryptionKeyRotationMinutes: number;
@@ -37,7 +38,7 @@ export interface WebSocketSecurityConfig {
     enableCSRFProtection: boolean;
     allowedOrigins: string[];
     requireSecureTransport: boolean;
-}
+
 export interface ConnectionSecurityContext {
     connectionId: string;
     userId: string;
@@ -67,7 +68,7 @@ export interface ConnectionSecurityContext {
         repeatedLoginAttempts: boolean;
         anomalousPatterns: boolean;
     };
-}
+
 export interface SecureWebSocketMessage {
     id: string;
     type: string;
@@ -82,7 +83,7 @@ export interface SecureWebSocketMessage {
     originConnectionId: string;
     originUserId: string;
     processingPath: string[];
-}
+
 export interface SecurityEvent {
     id: string;
     type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
@@ -92,7 +93,7 @@ export interface SecurityEvent {
     timestamp: Date;
     description: string;
     metadata: Record<string, any>;
-}
+
 export interface ThreatDetectionRule {
     id: string;
     name: string;
@@ -102,7 +103,6 @@ export interface ThreatDetectionRule {
     timeWindowMinutes: number;
     action: 'log' | 'warn' | 'block' | 'disconnect';
     description: string;
-}
 /**
  * WebSocket Security Manager
  */
@@ -199,6 +199,6 @@ export declare class WebSocketSecurityManager extends EventEmitter {
      * Cleanup and shutdown
      */
     destroy(): void;
-}
+
 export default WebSocketSecurityManager;
 //# sourceMappingURL=WebSocketSecurityManager.d.ts.map

@@ -13,93 +13,83 @@ import { AlertTriangle, CheckCircle, XCircle, AlertCircle, Activity, Zap, Databa
 
 // Types for health monitoring
 interface HealthStatus {
-  overall: HealthScore;
-  components: ComponentHealth[];
-  metrics: SystemMetrics;
-  alerts: SystemAlert[];
-  lastUpdated: string;
+  overall: HealthScore;,
+  components: ComponentHealth;
+  metrics: SystemMetrics;,
+  alerts: SystemAlert;
+  lastUpdated: string;,
   trends: HealthTrends;
-}
-interface HealthScore {
-  score: number; // 0-100
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';
+  interface HealthScore {
+  score: number; // 0-100,
+  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';,
   message: string;
-  recommendations: string[];
-}
-interface ComponentHealth {
-  name: string;
+  recommendations: string;
+  interface ComponentHealth {
+  name: string;,
   category: 'system' | 'database' | 'cache' | 'external' | 'filesystem' | 'authentication';
-  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';
+  status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY' | 'CRITICAL' | 'UNKNOWN';,
   score: number;
   responseTime?: number;
   lastCheck: string;
   message?: string;
   metrics?: Record<string, number>;
-  dependencies?: string[];
-}
-interface SystemMetrics {
+  dependencies?: string;
+  interface SystemMetrics {
   cpu: {,
-    usage: number;
-    cores: number;
-    temperature?: number;
-  };
+  usage: number;,
+  cores: number;
+  temperature?: number;
+};
   memory: {,
-    used: number;
-    total: number;
-    available: number;
-    usage: number;
-  };
+  used: number;
+  total: number;,
+  available: number;
+  usage: number;
+};
   disk: {,
-    used: number;
-    total: number;
-    usage: number;
-    iops?: number;
-  };
+  used: number;
+  total: number;,
+  usage: number;
+  iops?: number;
+};
   network: {,
-    bytesIn: number;
-    bytesOut: number;
-    connections: number;
-    latency?: number;
-  };
+  bytesIn: number;
+  bytesOut: number;,
+  connections: number;
+  latency?: number;
+};
   database: {,
-    connections: number;
-    maxConnections: number;
-    queryTime: number;
-    queueSize: number;
-  };
-}
+  connections: number;
+  maxConnections: number;,
+  queryTime: number;
+  queueSize: number;
+};
 interface SystemAlert {
-  id: string;
+  id: string;,
   type: 'error' | 'warning' | 'info';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   title: string;
   message: string;
   component?: string;
-  timestamp: string;
+  timestamp: string;,
   acknowledged: boolean;
   escalated: boolean;
   resolvedAt?: string;
-}
-interface HealthTrends {
-  healthScore: TrendData[];
-  responseTime: TrendData[];
-  errorRate: TrendData[];
+  interface HealthTrends {
+  healthScore: TrendData;,
+  responseTime: TrendData;
+  errorRate: TrendData;,
   uptime: number;
-}
-interface TrendData {
-  timestamp: string;
+  interface TrendData {
+  timestamp: string;,
   value: number;
-}
-
-// Props interface
-interface HealthDashboardProps {
+  // Props interface
+  interface HealthDashboardProps {
   refreshInterval?: number;
   autoRefresh?: boolean;
   showDetails?: boolean;
   onAlertAction?: (alertId: string, action: 'acknowledge' | 'resolve') => void;
-}
-
-export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
+  export const HealthDashboard: React.FC<HealthDashboardProps> = ({,)
   refreshInterval = 30000, // 30 seconds
   autoRefresh = true,
   showDetails = true,
@@ -118,15 +108,13 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
       const response = await fetch('/api/system/health/dashboard');
       if (!response.ok) {
         throw new Error(`Health API error: ${response.status}`);}
-      }
       const data = await response.json();
       setHealthStatus(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch health status');
-      console.error('Health dashboard fetch error:', err);
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to fetch health status');
+  console.error('Health dashboard fetch error:', err);
+} finally {
       setLoading(false);
-    }
   }, []);
   // Auto-refresh effect
   useEffect(() => {
@@ -134,37 +122,33 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
     if (autoRefresh && refreshInterval > 0) {
       const interval = setInterval(fetchHealthStatus, refreshInterval);
       return () => clearInterval(interval);
-    }
   }, [fetchHealthStatus, autoRefresh, refreshInterval]);
   // Helper functions
   const getStatusColor = (status: string): string => {
-    switch (status.toUpperCase()) {
-    case 'HEALTHY': return 'text-green-600 bg-green-100';
-    case 'DEGRADED': return 'text-yellow-600 bg-yellow-100';
-    case 'UNHEALTHY': return 'text-orange-600 bg-orange-100';
-    case 'CRITICAL': return 'text-red-600 bg-red-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status.toUpperCase()) {
+  case 'HEALTHY': return 'text-green-600 bg-green-100';
+  case 'DEGRADED': return 'text-yellow-600 bg-yellow-100';
+  case 'UNHEALTHY': return 'text-orange-600 bg-orange-100';
+  case 'CRITICAL': return 'text-red-600 bg-red-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getStatusIcon = (status: string) => {
-    switch (status.toUpperCase()) {
-    case 'HEALTHY': return <CheckCircle className="w-5 h-5 text-green-600" />;
-    case 'DEGRADED': return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
-    case 'UNHEALTHY': return <AlertCircle className="w-5 h-5 text-orange-600" />;
-    case 'CRITICAL': return <XCircle className="w-5 h-5 text-red-600" />;
-    default: return <AlertCircle className="w-5 h-5 text-gray-600" />;
-    }
-  };
+  switch (status.toUpperCase()) {
+  case 'HEALTHY': return <CheckCircle className="w-5 h-5 text-green-600" />;
+  case 'DEGRADED': return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
+  case 'UNHEALTHY': return <AlertCircle className="w-5 h-5 text-orange-600" />;
+  case 'CRITICAL': return <XCircle className="w-5 h-5 text-red-600" />;
+  default: return <AlertCircle className="w-5 h-5 text-gray-600" />;
+};
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'database': return <Database className="w-5 h-5" />;
-    case 'system': return <Activity className="w-5 h-5" />;
-    case 'cache': return <Zap className="w-5 h-5" />;
-    case 'external': return <Wifi className="w-5 h-5" />;
-    case 'filesystem': return <HardDrive className="w-5 h-5" />;
-    default: return <Activity className="w-5 h-5" />;
-    }
-  };
+  switch (category) {
+  case 'database': return <Database className="w-5 h-5" />;
+  case 'system': return <Activity className="w-5 h-5" />;
+  case 'cache': return <Zap className="w-5 h-5" />;
+  case 'external': return <Wifi className="w-5 h-5" />;
+  case 'filesystem': return <HardDrive className="w-5 h-5" />;
+  default: return <Activity className="w-5 h-5" />;
+};
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -187,12 +171,12 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
       await fetchHealthStatus(); // Refresh data
       onAlertAction?.(alertId, action);
     } catch (err) {
-      console.error(`Failed to ${action} alert:`, err);}
-    }
+      console.error(`Failed to ${action},)}
+  alert:`, err);}
   };
   // Loading state
   if (loading) {
-    return ();
+    return;
       <div className="p-6 space-y-6">
         <div className="flex items-center space-x-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -205,10 +189,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   // Error state
   if (error) {
-    return ();
+    return;
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center space-x-3">
@@ -227,9 +210,8 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (!healthStatus) return null;
-  return ();
+  return;
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -274,10 +256,10 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
             <div className="w-full bg-gray-200 rounded-full h-3">
               <div
                 className={`h-3 rounded-full transition-all duration-300 ${
-                  healthStatus.overall.score >= 90 ? 'bg-green-600' :
-                    healthStatus.overall.score >= 70 ? 'bg-yellow-500' :
-                      healthStatus.overall.score >= 50 ? 'bg-orange-500' : 'bg-red-600'
-                }`}
+  healthStatus.overall.score >= 90 ? 'bg-green-600' :,
+  healthStatus.overall.score >= 70 ? 'bg-yellow-500' :,
+  healthStatus.overall.score >= 50 ? 'bg-orange-500' : 'bg-red-600',
+}`}
                 style={{ width: `${healthStatus.overall.score}%` }}
               ></div>
             </div>
@@ -308,17 +290,18 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
             { id: 'overview', label: 'Overview' },
             { id: 'components', label: 'Components' },
             { id: 'metrics', label: 'Metrics' },
-            { id: 'alerts', label: `Alerts (${healthStatus.alerts.filter(a => !a.acknowledged).length})` },}
+            { id: 'alerts', label: `Alerts (${healthStatus.alerts.filter(a => !a.acknowledged).length})` }
+}
             { id: 'trends', label: 'Trends' }
           ].map((tab) => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               {tab.label}
             </button>
@@ -361,9 +344,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
-                      healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.cpu.usage}%` }}
                   ></div>
                 </div>
@@ -377,9 +360,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
-                      healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.memory.usage}%` }}
                   ></div>
                 </div>
@@ -393,9 +376,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
-                      healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.disk.usage}%` }}
                   ></div>
                 </div>
@@ -484,19 +467,19 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
               <div
                 key={alert.id}
                 className={`bg-white rounded-lg shadow-md p-6 border-l-4 ${
-                  alert.severity === 'critical' ? 'border-red-500' :
-                    alert.severity === 'high' ? 'border-orange-500' :
-                      alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500'
-                }`}
+  alert.severity === 'critical' ? 'border-red-500' :,
+  alert.severity === 'high' ? 'border-orange-500' :,
+  alert.severity === 'medium' ? 'border-yellow-500' : 'border-blue-500',
+}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        alert.severity === 'critical' ? 'bg-red-100 text-red-800' :
-                          alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :
-                            alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
-                      }`}>
+  alert.severity === 'critical' ? 'bg-red-100 text-red-800' :,
+  alert.severity === 'high' ? 'bg-orange-100 text-orange-800' :,
+  alert.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800',
+}`}>
                         {alert.severity.toUpperCase()}
                       </span>
                       {alert.component && ()
@@ -559,9 +542,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.cpu.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.cpu.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.cpu.usage}%` }}
                   ></div>
                 </div>
@@ -581,9 +564,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.memory.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.memory.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.memory.usage}%` }}
                   ></div>
                 </div>
@@ -603,9 +586,9 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :
-                        healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600'
-                    }`}
+  healthStatus.metrics.disk.usage > 90 ? 'bg-red-600' :,
+  healthStatus.metrics.disk.usage > 70 ? 'bg-yellow-500' : 'bg-green-600',
+}`}
                     style={{ width: `${healthStatus.metrics.disk.usage}%` }}
                   ></div>
                 </div>
@@ -709,10 +692,10 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="text-xs text-gray-500 mt-1">
                   {healthStatus.trends.responseTime.length > 1 && ()
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 1]?.value <= 
-                      healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 2]?.value 
-                        ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
+  healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 1]?.value <=
+  healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 2]?.value
+  ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800',
+}`}>
                       {healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 1]?.value <= 
                        healthStatus.trends.responseTime[healthStatus.trends.responseTime.length - 2]?.value 
                         ? '↓ Improving' : '↑ Slower'}
@@ -731,10 +714,10 @@ export const HealthDashboard: React.FC<HealthDashboardProps> = ({)
                 <div className="text-xs text-gray-500 mt-1">
                   {healthStatus.trends.errorRate.length > 1 && ()
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                      healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 1]?.value <= 
-                      healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 2]?.value 
-                        ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
+  healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 1]?.value <=
+  healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 2]?.value
+  ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800',
+}`}>
                       {healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 1]?.value <= 
                        healthStatus.trends.errorRate[healthStatus.trends.errorRate.length - 2]?.value 
                         ? '↓ Improving' : '↑ Increasing'}

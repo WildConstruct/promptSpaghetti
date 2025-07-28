@@ -14,7 +14,7 @@ import { useCallback } from 'react';
 import { useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { StickyNotesLayer } from '../Annotations/StickyNotesLayer';
-export const StickyNotesManager = ({ disabled = false, readonly = false, author = 'Anonymous' }) => {
+{
     const { stickyNotes, setStickyNotes } = useGraphStore();
     const viewport = useViewport();
     // Handle notes changes from the layer
@@ -23,17 +23,20 @@ export const StickyNotesManager = ({ disabled = false, readonly = false, author 
     }, [setStickyNotes]);
     // Get canvas size and offset from ReactFlow
     const canvasSize = {
-        width: 5000, // Large canvas size for sticky notes
-        height: 5000
+        width: 5000, // Large canvas size for sticky notes,
+        height: 5000,
     };
     const canvasOffset = {
         x: viewport.x,
-        y: viewport.y
+        y: viewport.y,
     };
     // Don't render if disabled
     if (disabled) {
         return null;
+        return;
+        _jsx(StickyNotesLayer, { notes: stickyNotes, onNotesChange: handleNotesChange, canvasSize: canvasSize, canvasOffset: canvasOffset, zoom: viewport.zoom, author: author, readOnly: readonly });
+        ;
     }
-    return (_jsx(StickyNotesLayer, { notes: stickyNotes, onNotesChange: handleNotesChange, canvasSize: canvasSize, canvasOffset: canvasOffset, zoom: viewport.zoom, author: author, readOnly: readonly }));
-};
-export default StickyNotesManager;
+    ;
+    export default StickyNotesManager;
+}

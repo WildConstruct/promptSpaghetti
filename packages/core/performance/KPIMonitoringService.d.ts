@@ -5,6 +5,7 @@
 import { EventEmitter } from 'events';
 import { KPISnapshot } from './PerformanceKPIs';
 import { BaselineSnapshot } from './PerformanceBaseline';
+
 export interface KPIAlert {
     id: string;
     kpiId: string;
@@ -19,7 +20,7 @@ export interface KPIAlert {
     recommendations: string[];
     timestamp: number;
     acknowledged: boolean;
-}
+
 export interface KPIMonitoringConfig {
     monitoringInterval: number;
     alertingEnabled: boolean;
@@ -44,7 +45,7 @@ export interface KPIMonitoringConfig {
         includeRecommendations: boolean;
         emailRecipients: string[];
     };
-}
+
 export interface KPITrendAnalysis {
     kpiId: string;
     trend: 'improving' | 'stable' | 'degrading';
@@ -56,7 +57,6 @@ export interface KPITrendAnalysis {
         nextMonth: number;
         confidence: number;
     };
-}
 /**
  * KPI Monitoring Service
  * Provides real-time monitoring, alerting, and trend analysis for performance KPIs
@@ -199,6 +199,6 @@ export declare class KPIMonitoringService extends EventEmitter {
         activeAlerts: number;
         lastCycle?: number;
     };
-}
+
 export default KPIMonitoringService;
 //# sourceMappingURL=KPIMonitoringService.d.ts.map

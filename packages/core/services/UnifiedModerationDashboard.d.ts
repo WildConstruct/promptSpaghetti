@@ -6,6 +6,7 @@
  * a single, comprehensive dashboard interface. Integrates automated moderation,
  * workflow management, queue processing, and analytics.
  */
+
 export interface UnifiedDashboardConfig {
     enableRealTimeUpdates: boolean;
     autoRefreshInterval: number;
@@ -16,7 +17,7 @@ export interface UnifiedDashboardConfig {
     defaultModerationMode: 'manual' | 'assisted' | 'automated';
     escalationThreshold: number;
     workloadDistributionMode: 'round_robin' | 'expertise_based' | 'workload_balanced';
-}
+
 export interface DashboardOverview {
     timestamp: Date;
     summary: {,
@@ -45,7 +46,7 @@ export interface DashboardOverview {
         violationTrend: 'increasing' | 'decreasing' | 'stable';
         performanceTrend: 'improving' | 'declining' | 'stable';
     };
-}
+
 export interface ModerationAlert {
     id: string;
     type: 'queue_backlog' | 'sla_breach' | 'policy_violation' | 'system_error' | 'performance_issue';
@@ -55,7 +56,7 @@ export interface ModerationAlert {
     data?: Record<string, unknown>;
     acknowledged: boolean;
     assignedTo?: string;
-}
+
 export interface ModerationWorkload {
     moderatorId: string;
     currentLoad: number;
@@ -70,7 +71,7 @@ export interface ModerationWorkload {
         end: string;
         timezone: string;
     };
-}
+
 export interface AdvancedSearchQuery {
     contentTypes?: string[];
     statuses?: string[];
@@ -91,7 +92,7 @@ export interface AdvancedSearchQuery {
     sortOrder?: 'asc' | 'desc';
     limit?: number;
     offset?: number;
-}
+
 export interface BulkModerationAction {
     actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
     itemIds: string[];
@@ -99,7 +100,7 @@ export interface BulkModerationAction {
     assignTo?: string;
     metadata?: Record<string, unknown>;
     scheduledFor?: Date;
-}
+
 export interface DashboardMetrics {
     realTime: {,
         activeModerators: number;
@@ -130,7 +131,6 @@ export interface DashboardMetrics {
             peakHours: string[];
         };
     };
-}
 /**
  * Unified Moderation Dashboard Service
  *
@@ -225,6 +225,6 @@ export declare class UnifiedModerationDashboard {
     private getRealTimeMetrics;
     private getHistoricalMetrics;
     private generatePredictions;
-}
+
 export default UnifiedModerationDashboard;
 //# sourceMappingURL=UnifiedModerationDashboard.d.ts.map

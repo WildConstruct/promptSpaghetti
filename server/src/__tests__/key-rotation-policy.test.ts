@@ -375,7 +375,7 @@ describe('KeyRotationPolicyService', () => {
           rotationIntervalDays: 30,
           overlapPeriodHours: 2,
           priority: 100
-        },
+  }
         {
           id: 'policy-usage',
           policyName: 'usage_policy',
@@ -571,7 +571,7 @@ describe('KeyRotationPolicyService', () => {
       rotationWindow: {
         startTime: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
         endTime: new Date(Date.now() + 60 * 60 * 1000) // 1 hour from now
-      },
+  }
       approvalRequired: false
     };
 
@@ -605,7 +605,7 @@ describe('KeyRotationPolicyService', () => {
             policyId: 'policy-1',
             scheduleId: 'schedule-123'
           }
-        })
+  }
       );
 
       expect(mockDb.query).toHaveBeenCalledWith(
@@ -751,7 +751,7 @@ describe('KeyRotationPolicyService', () => {
           approval_required: false,
           created_at: new Date(),
           updated_at: new Date()
-        },
+  }
         {
           id: 'schedule-2',
           policy_id: 'policy-2',
@@ -856,7 +856,7 @@ describe('KeyRotationPolicyService', () => {
           createdBy: testUserId,
           isActive: true,
           priority: 100
-        })
+  }
       ).rejects.toThrow('Failed to create rotation policy');
     });
 
@@ -934,7 +934,7 @@ describe('KeyRotationPolicyService', () => {
         expect.objectContaining({
           action: 'key_rotation_policy_created',
           severity: 'info'
-        })
+  }
       );
     });
 

@@ -1,25 +1,17 @@
-/**
- * Activity Store
- * Epic 17.4 - System Configuration & Monitoring
- * Task: E17-1753114397068-6657F3
- *
- * Zustand store for managing activity data state in the frontend.
- * Provides reactive state management for activity tracking and monitoring.
- */
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics } from '../types/ActivityDataModel';
 interface ActivityState {
-    activities: Activity[];
+    activities: Activity;
     currentActivity: Activity | null;
     metrics: ActivityMetrics | null;
     isLoading: boolean;
     error: string | null;
-    selectedActivityIds: string[];
+    selectedActivityIds: string;
     currentQuery: ActivityQuery;
     queryResult: ActivityQueryResult | null;
     lastQueryTime: string | null;
     isStreamConnected: boolean;
     streamSubscriptionId: string | null;
-    recentActivities: Activity[];
+    recentActivities: Activity;
     activeFilters: Partial<ActivityQuery>;
     viewMode: 'list' | 'timeline' | 'analytics';
     sortBy: 'timestamp' | 'severity' | 'type' | 'user';
@@ -31,7 +23,7 @@ interface ActivityState {
     hasPreviousPage: boolean;
 }
 interface ActivityActions {
-    setActivities: (activities: Activity[]) => void;
+    setActivities: (activities: Activity) => void;
     addActivity: (activity: Activity) => void;
     updateActivity: (id: string, updates: Partial<Activity>) => void;
     removeActivity: (id: string) => void;
@@ -69,33 +61,10 @@ interface ActivityActions {
     reset: () => void;
 }
 type ActivityStore = ActivityState & ActivityActions;
-export declare const useActivityStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ActivityStore>, "subscribe"> & {
-    subscribe: {
-        (listener: (selectedState: ActivityStore, previousSelectedState: ActivityStore) => void): () => void;
-        <U>(selector: (state: ActivityStore) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
-            equalityFn?: (a: U, b: U) => boolean;
-            fireImmediately?: boolean;
-        }): () => void;
-    };
-}>;
 export declare const activitySelectors: {
-    getFilteredActivities: (state: ActivityStore) => Activity[];
-    getGroupedActivities: (state: ActivityStore) => Record<string, Activity[]>;
-    getSelectedActivities: (state: ActivityStore) => Activity[];
-    hasActiveFilters: (state: ActivityStore) => boolean;
-    getSummaryStats: (state: ActivityStore) => {
-        total: number;
-        byType: Record<string, number>;
-        bySeverity: Record<string, number>;
-        errors: number;
-        recent: number;
-    };
+    getFilteredActivities: (state: ActivityStore) => Activity;
+    getGroupedActivities: (state: ActivityStore) => any;
 };
-export declare const useActivityStream: () => {
-    startStream: (filters: ActivityQuery) => Promise<void>;
-    stopStream: () => void;
-    isConnected: boolean;
-    subscriptionId: string;
-};
+export declare const useActivityStream: () => void;
 export default useActivityStore;
 //# sourceMappingURL=activityStore.d.ts.map

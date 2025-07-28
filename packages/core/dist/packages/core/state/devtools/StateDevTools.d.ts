@@ -6,7 +6,7 @@
  * Advanced state inspection with time-travel debugging and performance analysis
  */
 import { EventEmitter } from 'events';
-import { StateSnapshot, StateChange } from '../containers/BaseStateContainer';
+import { StateChange } from '../containers/BaseStateContainer';
 export interface StateInspectionConfig {
     enableTimeTravel: boolean;
     enablePerformanceTracking: boolean;
@@ -18,13 +18,13 @@ export interface StateInspectionConfig {
     enableNetworkTracking: boolean;
 }
 export interface DependencyGraph {
-    nodes: DependencyNode[];
-    edges: DependencyEdge[];
+    nodes: DependencyNode;
+    edges: DependencyEdge;
     metadata: {
         totalNodes: number;
         totalEdges: number;
-        circularDependencies: string[];
-        criticalPaths: string[][];
+        circularDependencies: string;
+        criticalPaths: string[];
         lastUpdated: number;
         complexity: number;
     };
@@ -43,8 +43,8 @@ export interface DependencyNode {
     metadata: {
         lastModified: number;
         accessCount: number;
-        dependencies: string[];
-        dependents: string[];
+        dependencies: string;
+        dependents: string;
         performance: {
             averageExecutionTime: number;
             totalExecutions: number;
@@ -74,9 +74,9 @@ export interface PerformanceReport {
         cacheEfficiency: number;
         networkLatency: number;
     };
-    bottlenecks: PerformanceBottleneck[];
-    recommendations: PerformanceRecommendation[];
-    trends: PerformanceTrend[];
+    bottlenecks: PerformanceBottleneck;
+    recommendations: PerformanceRecommendation;
+    trends: PerformanceTrend;
     domainAnalysis: Map<string, DomainPerformance>;
 }
 export interface PerformanceBottleneck {
@@ -87,7 +87,7 @@ export interface PerformanceBottleneck {
     location: string;
     impact: number;
     frequency: number;
-    suggestions: string[];
+    suggestions: string;
     timeframe: {
         start: number;
         end: number;
@@ -125,7 +125,7 @@ export interface DomainPerformance {
     memoryUsage: number;
     errorRate: number;
     cacheHitRate: number;
-    dependencies: string[];
+    dependencies: string;
     criticalPath: boolean;
 }
 export interface ReplayEnvironment {
@@ -137,13 +137,13 @@ export interface ReplayEnvironment {
         created: number;
         totalChanges: number;
         timespan: number;
-        domains: string[];
+        domains: string;
     };
 }
 export interface StateValidationResult {
     valid: boolean;
-    errors: StateValidationError[];
-    warnings: StateValidationWarning[];
+    errors: StateValidationError;
+    warnings: StateValidationWarning;
     performance: {
         validationTime: number;
         memoryImpact: number;
@@ -175,81 +175,9 @@ export declare class StateDevTools extends EventEmitter {
     private memoryTracker;
     private networkTracker;
     constructor(config?: Partial<StateInspectionConfig>);
-    recordStateChange<T>(snapshot: StateSnapshot<T>, domain: string): void;
-    replayStateChanges(fromTimestamp: number, toTimestamp: number, options?: {
-        stepDelay?: number;
-        highlightChanges?: boolean;
-        showDiff?: boolean;
-        domains?: string[];
-        speed?: number;
-    }): ReplayEnvironment;
     private executeReplay;
-    stopReplay(): void;
-    visualizeStateDependencies(options?: {
-        domains?: string[];
-        includeComponents?: boolean;
-        includeSelectors?: boolean;
-        includeCrossDomainLinks?: boolean;
-        layout?: 'hierarchical' | 'force' | 'circular' | 'tree';
-        depth?: number;
-    }): DependencyGraph;
-    detectStateBottlenecks(timeRange?: {
-        start: number;
-        end: number;
-    }): PerformanceReport;
-    validateStateIntegrity<T>(state: T, domain: string, options?: {
-        deep?: boolean;
-        checkReferences?: boolean;
-        validateSchema?: boolean;
-        checkMemoryLeaks?: boolean;
-    }): StateValidationResult;
-    startRecording(): void;
-    stopRecording(): void;
-    getRecordingStatus(): {
-        isRecording: boolean;
-        isReplaying: boolean;
-        historySize: number;
-        memoryUsage: number;
-        uptime: number;
-    };
-    private getStateChangesBetween;
-    private createReplayEnvironment;
-    private getBaseStateForReplay;
-    private getReplayState;
-    private applyChangeToReplayState;
-    private calculateStateDiff;
-    private highlightStateChanges;
-    private delay;
-    private buildDependencyGraph;
-    private applyLayout;
-    private analyzeGraphComplexity;
-    private detectCircularDependencies;
-    private dfsCircularDetection;
-    private identifyCriticalPaths;
-    private generatePerformanceSummary;
-    private identifyBottlenecks;
-    private generateRecommendations;
-    private analyzeTrends;
-    private analyzeDomainPerformance;
-    private validateStateStructure;
-    private validateStateReferences;
-    private validateStateSchema;
-    private detectMemoryLeaks;
-    private getDependencyCount;
-    private setupTracking;
-    private collectPerformanceMetrics;
-    private generateEnvironmentId;
-    getStateHistory(): StateSnapshot<any>[];
-    getDependencyGraph(): DependencyGraph;
-    getPerformanceMetrics(): Map<string, number[]>;
-    clearHistory(): void;
-    exportSession(): {
-        config: StateInspectionConfig;
-        history: StateSnapshot<any>[];
-        metrics: any;
-        dependencyGraph: DependencyGraph;
-    };
-    importSession(sessionData: any): void;
+    stepDelay: number;
+    highlightChanges: boolean;
+    showDiff: boolean;
 }
-export declare const globalStateDevTools: StateDevTools;
 //# sourceMappingURL=StateDevTools.d.ts.map

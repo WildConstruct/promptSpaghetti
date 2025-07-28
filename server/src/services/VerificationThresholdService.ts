@@ -5,6 +5,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface RiskFactor {
   factor: string;
   weight: number;
@@ -12,7 +13,9 @@ export interface RiskFactor {
   description: string;
   source: 'device' | 'location' | 'behavior' | 'time' | 'security';
 }
+}
 
+}
 export interface VerificationContext {
   userId: string;
   ipAddress?: string;
@@ -24,10 +27,12 @@ export interface VerificationContext {
     country?: string;
     city?: string;
     timezone?: string;
+}
   };
   timestamp: Date;
 }
 
+}
 export interface VerificationRequirement {
   required: boolean;
   level: 'none' | 'email' | 'sms' | 'totp' | 'hardware_key' | 'admin_approval';
@@ -39,10 +44,12 @@ export interface VerificationRequirement {
     available: boolean;
     reason?: string;
     requiresAdminApproval?: boolean;
+}
   };
   recommendations: string[];
 }
 
+}
 export interface ThresholdConfig {
   // Risk score thresholds (0-100 scale)
   lowRisk: number;        // 0-30: No additional verification
@@ -57,6 +64,7 @@ export interface ThresholdConfig {
     behaviorAnomalies: number; // Unusual patterns
     timeFactors: number;      // Off-hours access
     securityEvents: number;   // Recent security incidents
+}
   };
 
   // Time-based factors
@@ -106,7 +114,7 @@ export class VerificationThresholdService {
         behaviorAnomalies: 25,
         timeFactors: 15,
         securityEvents: 15
-      },
+  }
       offHoursMultiplier: 1.5,
       weekendMultiplier: 1.2,
       trustDecayDays: 30,
@@ -127,6 +135,7 @@ export class VerificationThresholdService {
   }
 
   async assessVerificationRequirement(context: VerificationContext): Promise<VerificationRequirement> {
+
     try {
       // Calculate risk factors
       const factors = await this.calculateRiskFactors(context);
@@ -187,6 +196,7 @@ export class VerificationThresholdService {
   }
 
   private async calculateRiskFactors(context: VerificationContext): Promise<RiskFactor[]> {
+
     const factors: RiskFactor[] = [];
 
     // Device Trust Factor
@@ -243,6 +253,7 @@ export class VerificationThresholdService {
   }
 
   private async calculateDeviceTrust(context: VerificationContext): Promise<{ score: number; description: string }> {
+
     if (!context.deviceFingerprint) {
       return { score: 60, description: 'No device fingerprint available' };
     }
@@ -295,6 +306,7 @@ export class VerificationThresholdService {
   }
 
   private async calculateLocationRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
+
     if (!context.geoLocation?.country || !context.ipAddress) {
       return { score: 40, description: 'Location information unavailable' };
     }
@@ -353,6 +365,7 @@ export class VerificationThresholdService {
   }
 
   private async calculateBehaviorRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
+
     // Analyze recent behavior patterns
     const _____recentActivity = await this.db.query(`
       SELECT 
@@ -447,6 +460,7 @@ export class VerificationThresholdService {
   }
 
   private async calculateSecurityRisk(context: VerificationContext): Promise<{ score: number; description: string }> {
+
     // Check for recent security events
     const securityEvents = await this.db.query(`
       SELECT 
@@ -508,6 +522,7 @@ export class VerificationThresholdService {
   }
 
   private async determineThreshold(context: VerificationContext, baseRiskScore: number): Promise<number> {
+
     // Get action-specific threshold
     const action = context.requestedAction || 'default';
     const actionConfig = this.config.actionThresholds[action];
@@ -539,6 +554,7 @@ export class VerificationThresholdService {
     context: VerificationContext, 
     riskScore: number
   ): Promise<VerificationRequirement['bypass']> {
+
     // Check if user has recent successful verification
     const recentVerification = await this.redis.get(`verification_bypass:${context.userId}`);
     if (recentVerification) {
@@ -602,6 +618,7 @@ export class VerificationThresholdService {
   }
 
   private async logAssessment(context: VerificationContext, requirement: VerificationRequirement): Promise<void> {
+
     await this.auditService.logEvent({
       userId: context.userId,
       action: 'verification_threshold_assessment',
@@ -616,7 +633,7 @@ export class VerificationThresholdService {
           score: f.score,
           weight: f.weight
         }))
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       sessionId: context.sessionId,
@@ -630,6 +647,7 @@ export class VerificationThresholdService {
     success: boolean,
     method?: string
   ): Promise<void> {
+
     if (success) {
       // Set grace period for bypass (5 minutes for email, 30 minutes for TOTP)
       const gracePeriod = level === 'email' ? 300 : 1800;
@@ -648,12 +666,13 @@ export class VerificationThresholdService {
         method,
         success,
         gracePeriodSeconds: success ? (level === 'email' ? 300 : 1800) : 0
-      },
+  }
       severity: success ? 'info' : 'warning'
     });
   }
 
   async updateThresholdConfig(updates: Partial<ThresholdConfig>): Promise<ThresholdConfig> {
+
     this.config = { ...this.config, ...updates };
     
     await this.auditService.logEvent({

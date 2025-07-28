@@ -20,6 +20,7 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
+}
 export interface SearchQuery {
   query?: string;              // Text search query
   categories?: string[];       // Filter by categories
@@ -32,6 +33,7 @@ export interface SearchQuery {
   dateRange?: {              // Filter by creation date
     start?: Date;
     end?: Date;
+}
   };
   priceRange?: {             // Filter by price (if applicable)
     min?: number;
@@ -42,6 +44,7 @@ export interface SearchQuery {
   limit?: number;
 }
 
+}
 export interface SearchFacets {
   categories: Array<{ name: string; count: number; subcategories?: Array<{ name: string; count: number }> }>;
   tags: Array<{ name: string; count: number }>;
@@ -51,6 +54,7 @@ export interface SearchFacets {
   dateRanges: Array<{ range: string; count: number }>;
 }
 
+}
 export interface SearchResult {
   id: string;
   title: string;
@@ -64,6 +68,7 @@ export interface SearchResult {
     name: string;
     verified: boolean;
     avatar?: string;
+}
   };
   rating: {
     average: number;
@@ -91,6 +96,7 @@ export interface SearchResult {
   };
 }
 
+}
 export interface SearchResponse {
   results: SearchResult[];
   total: number;
@@ -102,20 +108,25 @@ export interface SearchResponse {
   page: number;
   limit: number;
 }
+}
 
+}
 export interface SearchSuggestion {
   query: string;
   type: 'completion' | 'correction' | 'related';
   confidence: number;
   category?: string;
 }
+}
 
+}
 export interface TrendingSearch {
   query: string;
   count: number;
   growth: number;
   category?: string;
   timeframe: '1h' | '24h' | '7d' | '30d';
+}
 }
 
 @Injectable()
@@ -137,6 +148,7 @@ export class TemplateSearchService {
    * Perform advanced template search with faceted filtering
    */
   async search(query: SearchQuery, userId?: string): Promise<SearchResponse> {
+
     const startTime = Date.now();
 
     try {
@@ -204,6 +216,7 @@ export class TemplateSearchService {
     userId?: string, 
     limit: number = 10
   ): Promise<SearchSuggestion[]> {
+
     try {
       if (partial.length < 2) return [];
 
@@ -254,6 +267,7 @@ export class TemplateSearchService {
     category?: string,
     limit: number = 10
   ): Promise<TrendingSearch[]> {
+
     try {
       const cacheKey = `trending:${timeframe}:${category || 'all'}:${limit}`;
       const cached = await this.redis.get(cacheKey);
@@ -458,6 +472,7 @@ export class TemplateSearchService {
   }
 
   private async getCachedResults(searchKey: string): Promise<SearchResponse | null> {
+
     try {
       const cached = await this.redis.get(`results:${searchKey}`);
       return cached ? JSON.parse(cached) : null;
@@ -467,6 +482,7 @@ export class TemplateSearchService {
   }
 
   private async cacheResults(searchKey: string, response: SearchResponse): Promise<void> {
+
     try {
       await this.redis.setex(`results:${searchKey}`, 300, JSON.stringify(response));
     } catch (error) {
@@ -475,6 +491,7 @@ export class TemplateSearchService {
   }
 
   private async buildSearchSQL(query: SearchQuery, userId?: string): Promise<{ sqlQuery: string; params: any[] }> {
+
     let baseQuery = `
       SELECT DISTINCT
         t.*,
@@ -580,6 +597,7 @@ export class TemplateSearchService {
   }
 
   private async buildFacets(query: SearchQuery): Promise<SearchFacets> {
+
     // Simplified facet building - would implement full faceted search
     return {
       categories: [],
@@ -596,6 +614,7 @@ export class TemplateSearchService {
     searchQuery: string,
     userId?: string
   ): Promise<SearchResult[]> {
+
     return rows.map(row => ({
       id: row.id,
       title: row.title,
@@ -609,17 +628,17 @@ export class TemplateSearchService {
         name: row.author_name,
         verified: row.author_verified,
         avatar: row.author_avatar
-      },
+  }
       rating: {
         average: parseFloat(row.average_rating) || 0,
         count: parseInt(row.review_count) || 0,
         distribution: row.rating_distribution || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
-      },
+  }
       usage: {
         downloadCount: row.download_count || 0,
         viewCount: row.view_count || 0,
         bookmarkCount: row.bookmark_count || 0
-      },
+  }
       metadata: {
         createdAt: row.created_at,
         updatedAt: row.updated_at,
@@ -627,7 +646,7 @@ export class TemplateSearchService {
         verified: row.verified || false,
         premium: row.premium || false,
         price: row.price
-      },
+  }
       relevanceScore: parseInt(row.relevance_score) || 0,
       highlightedSnippets: this.generateHighlights(row, searchQuery)
     }));
@@ -649,16 +668,19 @@ export class TemplateSearchService {
   }
 
   private async generateSuggestions(query: string, userId?: string): Promise<string[]> {
+
     // Simplified suggestion generation
     return [];
   }
 
   private async getRelatedQueries(query: string, userId?: string): Promise<string[]> {
+
     // Simplified related query generation
     return [];
   }
 
   private async getTemplateTitleSuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
+
     const query = `
       SELECT title, download_count
       FROM marketplace_templates 
@@ -678,16 +700,19 @@ export class TemplateSearchService {
   }
 
   private async getTagSuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
+
     // Simplified tag suggestions
     return [];
   }
 
   private async getCategorySuggestions(partial: string, limit: number): Promise<SearchSuggestion[]> {
+
     // Simplified category suggestions  
     return [];
   }
 
   private async getTrendingSuggestions(partial: string, userId?: string, limit: number): Promise<SearchSuggestion[]> {
+
     // Simplified trending suggestions
     return [];
   }
@@ -709,6 +734,7 @@ export class TemplateSearchService {
     searchTime: number,
     fromCache: boolean
   ): Promise<void> {
+
     try {
       await this.pool.query(`
         INSERT INTO marketplace_search_events (
@@ -731,6 +757,7 @@ export class TemplateSearchService {
    * Cleanup resources
    */
   async destroy(): Promise<void> {
+
     try {
       await this.redis.quit();
       console.log('TemplateSearchService destroyed successfully');

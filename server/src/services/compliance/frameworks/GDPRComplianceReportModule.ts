@@ -15,6 +15,7 @@ import {
   ComplianceReportType 
 } from '../StandardComplianceReportingService';
 
+}
 export interface GDPRComplianceReport extends StandardComplianceReport {
   gdprSpecific: {
     dataSubjectRights: DataSubjectRightsReport;
@@ -30,6 +31,7 @@ export interface GDPRComplianceReport extends StandardComplianceReport {
   };
 }
 
+}
 export interface DataSubjectRightsReport {
   reportingPeriod: ReportingPeriod;
   summary: {
@@ -37,6 +39,7 @@ export interface DataSubjectRightsReport {
     totalRequestsProcessed: number;
     averageResponseTimeHours: number;
     complianceRate: number; // % within 30-day requirement
+}
   };
   requestBreakdown: {
     accessRequests: RequestTypeStats;
@@ -76,6 +79,7 @@ export interface DataSubjectRightsReport {
   };
 }
 
+}
 export interface RequestTypeStats {
   received: number;
   processed: number;
@@ -85,9 +89,11 @@ export interface RequestTypeStats {
     simple: number;
     moderate: number;
     complex: number;
+}
   };
 }
 
+}
 export interface ProcessingActivityReport {
   activityId: string;
   activityName: string;
@@ -95,6 +101,7 @@ export interface ProcessingActivityReport {
     name: string;
     contact: ContactInfo;
     representative?: ContactInfo;
+}
   };
   processor?: {
     name: string;
@@ -137,12 +144,14 @@ export interface ProcessingActivityReport {
   complianceStatus: 'compliant' | 'non_compliant' | 'under_review';
 }
 
+}
 export interface ConsentManagementReport {
   consentMechanism: {
     consentCollectionMethods: ConsentMethod[];
     granularityLevel: 'purpose_specific' | 'activity_specific' | 'global';
     withdrawalMechanism: WithdrawalMethod[];
     recordKeeping: ConsentRecordKeeping;
+}
   };
   consentMetrics: {
     totalConsentRequests: number;
@@ -174,6 +183,7 @@ export interface ConsentManagementReport {
   };
 }
 
+}
 export interface DataTransferReport {
   transferId: string;
   transferType: 'adequacy_decision' | 'standard_contractual_clauses' | 'binding_corporate_rules' | 'derogation';
@@ -182,6 +192,7 @@ export interface DataTransferReport {
     country: string;
     adequacyDecisionStatus: boolean;
     safeguardsMechanism: string[];
+}
   };
   dataCategories: string[];
   transferFrequency: 'one_time' | 'regular' | 'continuous';
@@ -211,6 +222,7 @@ export interface DataTransferReport {
   complianceStatus: 'compliant' | 'suspended' | 'under_review';
 }
 
+}
 export interface PIAReport {
   piaId: string;
   assessmentScope: {
@@ -218,6 +230,7 @@ export interface PIAReport {
     dataTypes: string[];
     dataSubjects: string[];
     purposes: string[];
+}
   };
   necessityAssessment: {
     proportionalityTest: AssessmentResult;
@@ -254,6 +267,7 @@ export interface PIAReport {
   complianceStatus: 'adequate' | 'needs_improvement' | 'non_compliant';
 }
 
+}
 export interface BreachNotificationReport {
   incidentId: string;
   breachDetails: {
@@ -263,6 +277,7 @@ export interface BreachNotificationReport {
     approximateRecordsAffected: number;
     causeOfBreach: string;
     unauthorizedAccess: boolean;
+}
   };
   riskAssessment: {
     riskToRights: 'low' | 'moderate' | 'high';
@@ -302,6 +317,7 @@ export interface BreachNotificationReport {
   };
 }
 
+}
 export interface DPOReport {
   dpoDetails: {
     name: string;
@@ -309,6 +325,7 @@ export interface DPOReport {
     qualifications: string[];
     appointmentDate: Date;
     independenceAssurance: boolean;
+}
   };
   dpoActivities: {
     trainingProvided: TrainingActivity[];
@@ -351,6 +368,7 @@ export class GDPRComplianceReportModule {
     period: ReportingPeriod,
     _____includeDetails: boolean = true
   ): Promise<GDPRComplianceReport> {
+
     console.log(`🇪🇺 Generating GDPR compliance report for period ${period.startDate} to ${period.endDate}`);
 
     const [
@@ -408,6 +426,7 @@ export class GDPRComplianceReportModule {
    * Generate data subject rights compliance report
    */
   private async generateDataSubjectRightsReport(period: ReportingPeriod): Promise<DataSubjectRightsReport> {
+
     // Query data subject rights requests from period
     const requestsData = await this.queryDataSubjectRequests(period);
     
@@ -418,7 +437,7 @@ export class GDPRComplianceReportModule {
         totalRequestsProcessed: requestsData.processed,
         averageResponseTimeHours: requestsData.avgResponseTime,
         complianceRate: requestsData.withinDeadline / requestsData.total * 100
-      },
+  }
       requestBreakdown: {
         accessRequests: this.analyzeRequestType(requestsData, 'access'),
         rectificationRequests: this.analyzeRequestType(requestsData, 'rectification'),
@@ -426,7 +445,7 @@ export class GDPRComplianceReportModule {
         portabilityRequests: this.analyzeRequestType(requestsData, 'portability'),
         restrictionRequests: this.analyzeRequestType(requestsData, 'restriction'),
         objectionRequests: this.analyzeRequestType(requestsData, 'objection')
-      },
+  }
       responseTimeAnalysis: {
         within24Hours: requestsData.within24h,
         within7Days: requestsData.within7d,
@@ -434,21 +453,21 @@ export class GDPRComplianceReportModule {
         exceededDeadline: requestsData.exceeded,
         averageResponseTime: requestsData.avgResponseTime,
         longestResponseTime: requestsData.maxResponseTime
-      },
+  }
       requestOutcomes: {
         granted: requestsData.granted,
         partiallyGranted: requestsData.partiallyGranted,
         denied: requestsData.denied,
         withdrawn: requestsData.withdrawn,
         pending: requestsData.pending
-      },
+  }
       communicationChannels: {
         email: requestsData.channels.email,
         webForm: requestsData.channels.webForm,
         phone: requestsData.channels.phone,
         mail: requestsData.channels.mail,
         other: requestsData.channels.other
-      },
+  }
       qualityMetrics: {
         customerSatisfactionScore: requestsData.satisfaction,
         complaintRate: requestsData.complaints / requestsData.total * 100,
@@ -462,6 +481,7 @@ export class GDPRComplianceReportModule {
    * Generate processing activity reports for all registered activities
    */
   private async generateProcessingActivityReports(_____period: ReportingPeriod): Promise<ProcessingActivityReport[]> {
+
     const activities = await this.getProcessingActivities();
     
     return Promise.all(activities.map(async (activity) => {
@@ -490,6 +510,7 @@ export class GDPRComplianceReportModule {
    * Generate consent management compliance report
    */
   private async generateConsentManagementReport(period: ReportingPeriod): Promise<ConsentManagementReport> {
+
     const consentData = await this.queryConsentData(period);
     
     return {
@@ -498,7 +519,7 @@ export class GDPRComplianceReportModule {
         granularityLevel: consentData.granularity,
         withdrawalMechanism: consentData.withdrawalMethods,
         recordKeeping: consentData.recordKeeping
-      },
+  }
       consentMetrics: {
         totalConsentRequests: consentData.totalRequests,
         consentGranted: consentData.granted,
@@ -507,20 +528,20 @@ export class GDPRComplianceReportModule {
         partialConsent: consentData.partial,
         consentRate: consentData.granted / consentData.totalRequests * 100,
         withdrawalRate: consentData.withdrawn / consentData.granted * 100
-      },
+  }
       consentValidation: {
         freeConsent: await this.validateConsentCriteria('free'),
         specificConsent: await this.validateConsentCriteria('specific'),
         informedConsent: await this.validateConsentCriteria('informed'),
         unambiguousConsent: await this.validateConsentCriteria('unambiguous'),
         withdrawableConsent: await this.validateConsentCriteria('withdrawable')
-      },
+  }
       childrenConsent: {
         ageVerificationMechanism: consentData.ageVerification,
         parentalConsentProcess: consentData.parentalConsent,
         specialProtections: consentData.childProtections,
         complianceRate: consentData.childComplianceRate
-      },
+  }
       consentRefreshCycle: {
         refreshFrequency: consentData.refreshFrequency,
         lastRefreshCampaign: consentData.lastRefresh,
@@ -532,6 +553,7 @@ export class GDPRComplianceReportModule {
 
   // Additional helper methods for data gathering and analysis
   private async queryDataSubjectRequests(_____period: ReportingPeriod): Promise<unknown> {
+
     // Implementation would query actual data subject rights database
     return {
       total: 150,
@@ -554,7 +576,7 @@ export class GDPRComplianceReportModule {
         phone: 10,
         mail: 5,
         other: 0
-      },
+  }
       satisfaction: 8.5,
       complaints: 3,
       appeals: 2,
@@ -589,7 +611,8 @@ export class GDPRComplianceReportModule {
   private async assessProcessingRisk(_____activityId: string): Promise<unknown> { return {}; }
   private assessActivityCompliance(_____activity: unknown): 'compliant' | 'non_compliant' | 'under_review' { return 'compliant'; }
   private async queryConsentData(_____period: ReportingPeriod): Promise<unknown> { return {}; }
-  private async validateConsentCriteria(_____criteria: string): Promise<ValidationResult> { 
+  private async validateConsentCriteria(_____criteria: string): Promise<ValidationResult> {
+
     return { isValid: true, score: 95, details: '' }; 
   }
   private async generateDataTransferReports(_____period: ReportingPeriod): Promise<DataTransferReport[]> { return []; }
@@ -602,17 +625,21 @@ export class GDPRComplianceReportModule {
 }
 
 // Supporting types and interfaces
+}
 interface ContactInfo {
   name: string;
   email: string;
   phone: string;
   address: string;
 }
+}
 
+}
 interface ValidationResult {
   isValid: boolean;
   score: number;
   details: string;
+}
 }
 
 enum LegalBasisType {
@@ -624,175 +651,231 @@ enum LegalBasisType {
   LEGITIMATE_INTERESTS = 'legitimate_interests'
 }
 
+}
 interface PersonalDataCategory {
   category: string;
   description: string;
   sensitivity: 'low' | 'medium' | 'high';
 }
+}
 
+}
 interface SpecialCategoryData {
   category: string;
   legalBasis: string;
   safeguards: string[];
 }
+}
 
+}
 interface DataSubjectCategory {
   category: string;
   description: string;
   vulnerabilityFactors: string[];
 }
+}
 
+}
 interface InternalRecipient {
   department: string;
   purpose: string;
   accessLevel: string;
 }
+}
 
+}
 interface ExternalRecipient {
   organization: string;
   relationship: string;
   safeguards: string[];
 }
+}
 
+}
 interface ThirdCountryTransfer {
   country: string;
   adequacyDecision: boolean;
   safeguards: string[];
 }
+}
 
+}
 interface RetentionPeriod {
   duration: string;
   justification: string;
   reviewFrequency: string;
 }
+}
 
+}
 interface RetentionException {
   reason: string;
   extendedPeriod: string;
   authorization: string;
 }
+}
 
+}
 interface TechnicalMeasure {
   measure: string;
   implementation: string;
   effectiveness: string;
 }
+}
 
+}
 interface OrganizationalMeasure {
   measure: string;
   implementation: string;
   effectiveness: string;
 }
+}
 
+}
 interface AccessControlMeasure {
   type: string;
   implementation: string;
   coverage: string;
 }
+}
 
+}
 interface ConsentMethod {
   method: string;
   implementation: string;
   compliance: boolean;
 }
+}
 
+}
 interface WithdrawalMethod {
   method: string;
   accessibility: string;
   ease: string;
 }
+}
 
+}
 interface ConsentRecordKeeping {
   storageMethod: string;
   retentionPeriod: string;
   accessibility: string;
 }
+}
 
+}
 interface ContractualClause {
   type: string;
   version: string;
   lastUpdated: Date;
 }
+}
 
+}
 interface AssessmentResult {
   result: 'pass' | 'fail' | 'partial';
   score: number;
   findings: string[];
 }
+}
 
+}
 interface PrivacyRisk {
   risk: string;
   likelihood: string;
   impact: string;
   severity: string;
 }
+}
 
+}
 interface DataSubjectRight {
   right: string;
   affected: boolean;
   impactLevel: string;
 }
+}
 
+}
 interface RiskLikelihood {
   level: 'low' | 'medium' | 'high';
   justification: string;
 }
+}
 
+}
 interface RiskImpact {
   level: 'low' | 'medium' | 'high';
   justification: string;
 }
+}
 
+}
 interface MitigationMeasure {
   measure: string;
   effectiveness: string;
   implementation: string;
 }
+}
 
+}
 interface SANotificationDetails {
   notificationDate: Date;
   content: string;
   followUpRequired: boolean;
 }
+}
 
+}
 interface DSNotificationDetails {
   notificationDate: Date;
   method: string;
   content: string;
 }
+}
 
+}
 interface PublicNotificationDetails {
   publicationDate: Date;
   channels: string[];
   content: string;
 }
+}
 
+}
 interface TrainingActivity {
   topic: string;
   audience: string;
   date: Date;
   effectiveness: number;
 }
+}
 
+}
 interface AdviceActivity {
   topic: string;
   recipient: string;
   date: Date;
   outcome: string;
 }
+}
 
+}
 interface AuditActivity {
   scope: string;
   date: Date;
   findings: string[];
   recommendations: string[];
 }
+}
 
+}
 interface MeetingActivity {
   type: string;
   participants: string[];
   date: Date;
   outcomes: string[];
+}
 }
 
 // Additional interfaces that would be fully implemented

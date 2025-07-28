@@ -5,6 +5,7 @@
  * Part of Epic 17.5.2 - Featured Content Tools (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface ContentCriteria {
     min_rating?: number;
     min_download_count?: number;
@@ -25,12 +26,12 @@ export interface ContentCriteria {
     exclude_current_promotions?: boolean;
     max_content_count?: number;
     diversification_rules?: DiversificationRule[];
-}
+
 export interface DiversificationRule {
     attribute: string;
     max_percentage: number;
     enforce_uniqueness: boolean;
-}
+
 export interface SelectionCriteriaTemplate {
     id: string;
     name: string;
@@ -42,7 +43,7 @@ export interface SelectionCriteriaTemplate {
     created_by: string;
     created_at: Date;
     last_used?: Date;
-}
+
 export interface ContentSelectionPreview {
     total_matches: number;
     sample_content: Array<{,
@@ -66,10 +67,10 @@ export interface ContentSelectionPreview {
         expected_conversion_rate: number;
         confidence_level: number;
     };
-}
+
 export interface ContentSelectionCriteriaProps {
     className?: string;
-}
+
 export declare const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps>;
 export default ContentSelectionCriteria;
 //# sourceMappingURL=ContentSelectionCriteria.d.ts.map

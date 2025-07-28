@@ -438,13 +438,13 @@ export async function registerActivityHistoryRoutes(
             workdayVsWeekend: { workday: 0.8, weekend: 0.2 },
             peakActivity: '10:00-11:00',
             averageSessionDuration: 1800 // seconds
-          },
+  }
           trends: {
             activityGrowth: '+15%',
             sessionLengthTrend: '+5%',
             resourceUsageTrend: '+10%'
           }
-        },
+  }
         generatedAt: new Date().toISOString()
       };
 
@@ -519,7 +519,7 @@ export async function registerActivityHistoryRoutes(
         success: true,
         data: {
           recordedCount: activities.length
-        },
+  }
         message: `Successfully recorded ${activities.length} activities`
       });
 
@@ -592,7 +592,7 @@ export async function registerActivityHistoryRoutes(
           totalRecords: 0,
           sizeBytes: 0,
           retentionDate: new Date()
-        },
+  }
         generatedAt: new Date().toISOString()
       };
 

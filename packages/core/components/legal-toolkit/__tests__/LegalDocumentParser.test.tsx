@@ -25,7 +25,7 @@ const createMockFile = (name: string, size: number, type: string, content?: stri
   return file;
 };
 describe('LegalDocumentParser Component', () => {
-  const mockOnDocumentParsed = jest.fn<unknown[], unknown>();
+  const mockOnDocumentParsed = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -198,23 +198,23 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
       await waitFor(() => {
-        expect(mockOnDocumentParsed).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            id: expect.any(String),
-            title: expect.any(String),
-            type: expect.any(String),
-            content: expect.any(String),
-            metadata: expect.objectContaining({),
-              jurisdiction: expect.any(String),
-              practiceArea: expect.any(Array),
-              tags: expect.any(Array),
-              confidentialityLevel: expect.any(String),
-            }),
+  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  id: expect.any(String),
+  title: expect.any(String),
+  type: expect.any(String),
+  content: expect.any(String),
+  metadata: expect.objectContaining({,)
+  jurisdiction: expect.any(String),
+  practiceArea: expect.any(Array),
+  tags: expect.any(Array),
+  confidentialityLevel: expect.any(String),
+}),
             status: expect.any(String),
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
-            version: expect.any(String),
-          })
+            version: expect.any(String);
+  }
         );
       }, { timeout: 10000 });
     });
@@ -230,15 +230,15 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, contractFile);
       await waitFor(() => {
-        expect(mockOnDocumentParsed).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            type: 'contract',
-            title: expect.stringMatching(/service.agreement/i),
-            metadata: expect.objectContaining({),
-              practiceArea: expect.arrayContaining([expect.any(String)]),
-              tags: expect.arrayContaining([expect.any(String)]),
-            })
-          })
+  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: 'contract',
+  title: expect.stringMatching(/service.agreement/i),
+  metadata: expect.objectContaining({,)
+  practiceArea: expect.arrayContaining([expect.any(String)]),
+  tags: expect.arrayContaining([expect.any(String)]),
+}
+  }
         );
       }, { timeout: 10000 });
     });
@@ -272,11 +272,11 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, validFile);
       await waitFor(() => {
-        expect(screen.getByText(/Document Type:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Jurisdiction:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Practice Areas:/i)).toBeInTheDocument();
-        expect(screen.getByText(/Parties:/i)).toBeInTheDocument();
-      }, { timeout: 10000 });
+  expect(screen.getByText(/Document Type:/i)).toBeInTheDocument();
+  expect(screen.getByText(/Jurisdiction:/i)).toBeInTheDocument();
+  expect(screen.getByText(/Practice Areas:/i)).toBeInTheDocument();
+  expect(screen.getByText(/Parties:/i)).toBeInTheDocument();
+}, { timeout: 10000 });
     });
     it('shows extracted content preview', async () => {
       const user = userEvent.setup();
@@ -332,10 +332,10 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, contractFile);
       await waitFor(() => {
-        expect(mockOnDocumentParsed).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            type: 'contract',
-          })
+  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: 'contract',
+}
         );
       }, { timeout: 10000 });
     });
@@ -356,10 +356,10 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, policyFile);
       await waitFor(() => {
-        expect(mockOnDocumentParsed).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            type: 'policy',
-          })
+  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: 'policy',
+}
         );
       }, { timeout: 10000 });
     });
@@ -380,10 +380,10 @@ describe('LegalDocumentParser Component', () => {
       const fileInput = screen.getByLabelText(/choose file/i);
       await user.upload(fileInput, unknownFile);
       await waitFor(() => {
-        expect(mockOnDocumentParsed).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            type: expect.oneOf(['contract', 'policy']) // Should default to first supported type
-          })
+  expect(mockOnDocumentParsed).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: expect.oneOf(['contract', 'policy']) // Should default to first supported type,
+}
         );
       }, { timeout: 10000 });
     });
@@ -469,10 +469,9 @@ describe('LegalDocumentParser Component', () => {
       );
       const dropZone = screen.getByTestId('upload-dropzone');
       fireEvent.dragOver(dropZone, {)
-        dataTransfer: {,
-          types: ['Files'],
-        }
-      });
+  dataTransfer: {,
+  types: ['Files'],
+});
       expect(dropZone).toHaveClass('drag-over');
     });
     it('handles file drop events', async () => {
@@ -485,10 +484,9 @@ describe('LegalDocumentParser Component', () => {
       const dropZone = screen.getByTestId('upload-dropzone');
       const validFile = createMockFile('contract.pdf', 1000, 'application/pdf');
       fireEvent.drop(dropZone, {)
-        dataTransfer: {,
-          files: [validFile],
-        }
-      });
+  dataTransfer: {,
+  files: [validFile],
+});
       await waitFor(() => {
         expect(screen.getByText(/Parsing document/i)).toBeInTheDocument();
       });

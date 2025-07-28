@@ -17,64 +17,55 @@ import {
 /**
  * Hook for subscribing to events with automatic cleanup
  */
-export function useEventSubscription<T extends BaseEvent = BaseEvent>()
-  filter: EventFilter,
+export function useEventSubscription<T extends BaseEvent = BaseEvent>(filter: EventFilter,)
   handler: EventHandler<T>,
   options?: {
-    priority?: EventPriority;
-    once?: boolean;
-    enabled?: boolean;
-  }
-): void {
+  priority?: EventPriority;
+  once?: boolean;
+  enabled?: boolean;
+  ): void {,
   const handlerRef = useRef(handler);
   const subscriptionIdRef = useRef<string | null>(null);
   // Update handler reference
   handlerRef.current = handler;
   useEffect(() => {
-    // Skip if disabled
-    if (options?.enabled === false) {
-      return;
-    }
-    // Create stable wrapper for handler
-    const stableHandler: EventHandler<T> = (event) => {
-      handlerRef.current(event);
-    };
+  // Skip if disabled
+  if (options?.enabled === false) {
+  return;
+  // Create stable wrapper for handler
+  const stableHandler: EventHandler<T> = (event) => {,
+  handlerRef.current(event);
+};
     // Subscribe to events
     subscriptionIdRef.current = globalEventBus.subscribe()
       filter,
       stableHandler,
       {
-        priority: options?.priority ?? EventPriority.MEDIUM,
-        once: options?.once ?? false,
-      }
-    );
-    // Cleanup on unmount or dependency change
-    return () => {
-      if (subscriptionIdRef.current) {
-        globalEventBus.unsubscribe(subscriptionIdRef.current);
-        subscriptionIdRef.current = null;
-      }
-    };
+  priority: options?.priority ?? EventPriority.MEDIUM,
+  once: options?.once ?? false);
+  // Cleanup on unmount or dependency change
+  return () => {
+  if (subscriptionIdRef.current) {
+  globalEventBus.unsubscribe(subscriptionIdRef.current);
+  subscriptionIdRef.current = null;
+};
   }, [
     JSON.stringify(filter), 
     options?.priority, 
     options?.once, 
     options?.enabled
   ]);
-}
 /**
  * Hook for publishing events
  */
 export function useEventPublisher() {
-  return useCallback(async (event: BaseEvent) => {
-    try {
-      await globalEventBus.publish(event);
-    } catch (error) {
-      console.error('Failed to publish event:', error);
-      throw error;
-    }
-  }, []);
-}
+  return useCallback(async (event: BaseEvent) => {,
+  try {
+  await globalEventBus.publish(event);
+} catch (error) {
+  console.error('Failed to publish event:', error);
+  throw error;
+}, []);
 /**
  * Hook for workflow events
  */
@@ -112,7 +103,6 @@ export function useWorkflowEvents(userId?: string) {
     publishTaskCompleted,
     publishTemplateUsed
   };
-}
 /**
  * Hook for analytics events
  */
@@ -150,7 +140,6 @@ export function useAnalyticsEvents(userId?: string) {
     trackFeatureUsage,
     trackPerformance
   };
-}
 /**
  * Hook for UI events
  */
@@ -204,12 +193,11 @@ export function useUIEvents(componentName: string, userId?: string, sessionId?: 
     publishUserInteraction,
     publishStateChange
   };
-}
 /**
  * Hook for event history and querying
  */
 export function useEventHistory(filter?: EventFilter, limit?: number) {
-  const [history, setHistory] = useState<BaseEvent[]>([]);
+  const [history, setHistory] = useState<BaseEvent>([]);
   const [loading, setLoading] = useState(false);
   const refreshHistory = useCallback(() => {
     setLoading(true);
@@ -217,10 +205,9 @@ export function useEventHistory(filter?: EventFilter, limit?: number) {
       const events = globalEventBus.getHistory(filter, limit);
       setHistory(events);
     } catch (error) {
-      console.error('Failed to get event history:', error);
-    } finally {
+  console.error('Failed to get event history:', error);
+} finally {
       setLoading(false);
-    }
   }, [filter, limit]);
   // Auto-refresh on filter change
   useEffect(() => {
@@ -231,7 +218,7 @@ export function useEventHistory(filter?: EventFilter, limit?: number) {
     filter || {},
     () => {
       refreshHistory();
-    },
+  }
     { priority: EventPriority.LOW }
   );
   return {
@@ -239,7 +226,6 @@ export function useEventHistory(filter?: EventFilter, limit?: number) {
     loading,
     refreshHistory
   };
-}
 /**
  * Hook for event statistics and monitoring
  */
@@ -257,36 +243,32 @@ export function useEventStats() {
     ...stats,
     refreshStats
   };
-}
 /**
  * Hook for debounced event publishing
  */
 export function useDebouncedEventPublisher(delay: number = 300) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const publish = useEventPublisher();
-  const debouncedPublish = useCallback((event: BaseEvent) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      publish(event);
-    }, delay);
+  const debouncedPublish = useCallback((event: BaseEvent) => {,
+  if (timeoutRef.current) {
+  clearTimeout(timeoutRef.current);
+  timeoutRef.current = setTimeout(() => {
+  publish(event);
+}, delay);
   }, [publish, delay]);
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
     };
   }, []);
   return debouncedPublish;
-}
 /**
  * Hook for batched event publishing
  */
 export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: number = 1000) {
-  const batchRef = useRef<BaseEvent[]>([]);
+  const batchRef = useRef<BaseEvent>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const publish = useEventPublisher();
   const flushBatch = useCallback(async () => {
@@ -297,20 +279,17 @@ export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: 
     try {
       await Promise.all(batch.map(event => publish(event)));
     } catch (error) {
-      console.error('Failed to publish event batch:', error);
-    }
-  }, [publish]);
+  console.error('Failed to publish event batch:', error);
+}, [publish]);
   const addToBatch = useCallback((event: BaseEvent) => {
     batchRef.current.push(event);
     // Flush if batch is full
     if (batchRef.current.length >= batchSize) {
       flushBatch();
       return;
-    }
     // Set timer to flush batch
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
-    }
     timeoutRef.current = setTimeout(flushBatch, flushInterval);
   }, [batchSize, flushInterval, flushBatch]);
   // Cleanup on unmount
@@ -318,7 +297,6 @@ export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
       // Flush remaining events
       flushBatch();
     };
@@ -327,7 +305,6 @@ export function useBatchedEventPublisher(batchSize: number = 10, flushInterval: 
     addToBatch,
     flushBatch
   };
-}
 /**
  * Hook for conditional event subscriptions
  */
@@ -336,16 +313,15 @@ export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>
   filter: EventFilter,
   handler: EventHandler<T>,
   options?: {
-    priority?: EventPriority;
-    checkInterval?: number;
-  }
+  priority?: EventPriority;
+  checkInterval?: number;
   const [enabled, setEnabled] = useState(condition());
   const checkInterval = options?.checkInterval ?? 1000;
   // Periodically check condition
   useEffect(() => {
-    const interval = setInterval(() => {
-      setEnabled(condition());
-    }, checkInterval);
+  const interval = setInterval(() => {
+  setEnabled(condition());
+}, checkInterval);
     return () => clearInterval(interval);
   }, [condition, checkInterval]);
   // Subscribe when enabled
@@ -353,40 +329,36 @@ export function useConditionalEventSubscription<T extends BaseEvent = BaseEvent>
     filter,
     handler,
     {
-      priority: options?.priority,
-      enabled
-    }
+  priority: options?.priority,
+  enabled
   );
   return enabled;
-}
-/**
- * Hook for event-driven state updates
- */
-export function useEventState<T>()
+  /**
+  * Hook for event-driven state updates
+  */
+  export function useEventState<T>()
   initialState: T,
   filter: EventFilter,
-  updateFn: (currentState: T, event: BaseEvent) => T
-): [T, React.Dispatch<React.SetStateAction<T>>] {
+  updateFn: (currentState: T, event: BaseEvent) => T): [T, React.Dispatch<React.SetStateAction<T>>] {,
   const [state, setState] = useState<T>(initialState);
   useEventSubscription();
-    filter,
-    (event: BaseEvent) => {
-      setState(currentState => updateFn(currentState, event));
-    },
+  filter,
+  (event: BaseEvent) => {,
+  setState(currentState => updateFn(currentState, event));
+}
     { priority: EventPriority.HIGH }
   );
   return [state, setState];
-}
 /**
  * Performance monitoring hook for events
  */
 export function useEventPerformanceMonitor() {
   const [metrics, setMetrics] = useState({)
-    totalEvents: 0,
-    eventsPerSecond: 0,
-    avgProcessingTime: 0,
-    errorRate: 0,
-  });
+  totalEvents: 0,
+  eventsPerSecond: 0,
+  avgProcessingTime: 0,
+  errorRate: 0,
+});
   useEffect(() => {
     let eventCount = 0;
     let errorCount = 0;
@@ -396,18 +368,18 @@ export function useEventPerformanceMonitor() {
     const subscriptionId = globalEventBus.subscribe(;);
       {},
       (event: BaseEvent) => {
-        eventCount++;
-        const processingTime = Date.now() - event.timestamp.getTime();
-        totalProcessingTime += processingTime;
-        // Update metrics
-        const elapsed = Date.now() - startTime;
-        setMetrics({)
-          totalEvents: eventCount,
-          eventsPerSecond: (eventCount / elapsed) * 1000,
-          avgProcessingTime: totalProcessingTime / eventCount,
-          errorRate: errorCount / eventCount,
-        });
-      },
+  eventCount++;
+  const processingTime = Date.now() - event.timestamp.getTime();
+  totalProcessingTime += processingTime;
+  // Update metrics
+  const elapsed = Date.now() - startTime;
+  setMetrics({)
+  totalEvents: eventCount,
+  eventsPerSecond: (eventCount / elapsed) * 1000,
+  avgProcessingTime: totalProcessingTime / eventCount,
+  errorRate: errorCount / eventCount,
+});
+  }
       { priority: EventPriority.LOW }
     );
     // Subscribe to error events
@@ -415,7 +387,7 @@ export function useEventPerformanceMonitor() {
       { types: ['handler_error', 'system_error'] },
       () => {
         errorCount++;
-      },
+  }
       { priority: EventPriority.LOW }
     );
     return () => {
@@ -424,4 +396,3 @@ export function useEventPerformanceMonitor() {
     };
   }, []);
   return metrics;
-}

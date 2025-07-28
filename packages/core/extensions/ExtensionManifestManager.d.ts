@@ -91,7 +91,7 @@ export declare class ExtensionManifestManager {
     private findMissingDependencies;
     private findCircularDependencies;
     private compareVersions;
-}
+
 export declare class ExtensionManifestBuilder {
     private manifest;
     constructor();
@@ -155,7 +155,7 @@ export declare class ExtensionManifestBuilder {
     }): ExtensionManifestBuilder;
     build(): ExtensionManifest;
     buildJSON(): string;
-}
+
 interface ManifestLoadResult {
     success: boolean;
     manifest?: ExtensionManifest;
@@ -165,22 +165,25 @@ interface ManifestLoadResult {
         path: string;
         message: string;
         code: string;
+
     }>;
-}
+
 interface ManifestBatchLoadResult {
     success: boolean;
     results: ManifestLoadResult[];
     errors: string[];
     totalFound: number;
     totalLoaded: number;
-}
+
+
 interface ManifestDependencyInfo {
     manifest?: ExtensionManifest;
     dependencies: ExtensionManifest[];
     dependents: ExtensionManifest[];
     missingDependencies: string[];
     circularDependencies: string[];
-}
+
+
 interface ManifestStatistics {
     total: number;
     byType: Record<string, number>;
@@ -192,7 +195,7 @@ interface ManifestStatistics {
     oldestVersion: string;
     newestVersion: string;
     cached: number;
-}
+
 export declare const extensionManifestManager: ExtensionManifestManager;
 export declare const extensionManifestBuilder: ExtensionManifestBuilder;
 export {};

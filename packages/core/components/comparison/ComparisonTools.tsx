@@ -77,112 +77,107 @@ import {
 } from '../../types/comparison';
 
 // Enhanced comparison interfaces
+
 export interface ComparisonItem {
-  id: string;
+  id: string;,
   name: string;
-  type: 'graph' | 'content' | 'config' | 'schema' | 'permission';
+  type: 'graph' | 'content' | 'config' | 'schema' | 'permission';,
   version: string;
-  lastModified: Date;
+  lastModified: Date;,
   author: string;
-  size: number;
+  size: number;,
   checksum: string;
   metadata: Record<string, any>;
 }
-
 export interface ComparisonSession {
-  id: string;
+  id: string;,
   name: string;
-  sourceItem: ComparisonItem;
+  sourceItem: ComparisonItem;,
   targetItem: ComparisonItem;
-  comparisonType: ComparisonType;
+  comparisonType: ComparisonType;,
   viewMode: ViewMode;
-  highlightMode: HighlightMode;
+  highlightMode: HighlightMode;,
   filters: ComparisonFilters;
-  annotations: ComparisonAnnotation[];
+  annotations: ComparisonAnnotation;,
   createdAt: Date;
-  lastAccessed: Date;
+  lastAccessed: Date;,
   isBookmarked: boolean;
 }
-
 export interface ComparisonFilters {
-  showUnchanged: boolean;
+  showUnchanged: boolean;,
   showMetadata: boolean;
-  nodeTypes: string[];
-  changeTypes: MatchType[];
-  confidenceThreshold: number;
+  nodeTypes: string;,
+  changeTypes: MatchType;
+  confidenceThreshold: number;,
   severityLevels: ('low' | 'medium' | 'high' | 'critical')[];
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
+  dateRange?: {,
+  start: Date;,
+  end: Date;
+};
   author?: string;
   searchQuery?: string;
 }
-
 export interface ComparisonAnnotation {
-  id: string;
+  id: string;,
   type: 'comment' | 'highlight' | 'bookmark' | 'issue';
-  targetId: string; // node/edge/property ID
+  targetId: string; // node/edge/property ID,
   title: string;
   content: string;
   severity?: 'low' | 'medium' | 'high' | 'critical';
-  author: string;
+  author: string;,
   createdAt: Date;
   resolved: boolean;
   position?: { x: number; y: number };
 }
-
 export interface ComparisonMetrics {
-  structuralSimilarity: number;
+  structuralSimilarity: number;,
   semanticSimilarity: number;
-  visualSimilarity: number;
+  visualSimilarity: number;,
   overallSimilarity: number;
-  complexity: number;
+  complexity: number;,
   impactScore: number;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';,
   performanceImpact: {,
-    estimated: boolean;
-    cpuDelta: number;
-    memoryDelta: number;
-    networkDelta: number;
-  };
-  breakingChanges: number;
+  estimated: boolean;,
+  cpuDelta: number;
+  memoryDelta: number;,
+  networkDelta: number;
+};
+  breakingChanges: number;,
   deprecations: number;
   newFeatures: number;
 }
-
 export interface ComparisonReport {
-  session: ComparisonSession;
+  session: ComparisonSession;,
   comparison: GraphComparison;
-  metrics: ComparisonMetrics;
+  metrics: ComparisonMetrics;,
   summary: {,
-    title: string;
-    description: string;
-    recommendations: string[];
-    warnings: string[];
-    errors: string[];
-  };
+  title: string;,
+  description: string;
+  recommendations: string;,
+  warnings: string;
+  errors: string;
+};
   timeline: Array<{,
-    timestamp: Date;
-    event: string;
-    impact: 'low' | 'medium' | 'high';
-    description: string;
-  }>;
+  timestamp: Date;
+  event: string;,
+  impact: 'low' | 'medium' | 'high';
+  description: string;
+}>;
   exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
-}
 
 // Main Comparison Tools Component
+}
 export interface ComparisonToolsProps {
-  sessions: ComparisonSession[];
+  sessions: ComparisonSession;
   activeSessionId?: string;
-  onSessionSelect: (sessionId: string) => void;
-  onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;
-  onSessionUpdate: (sessionId: string, updates: Partial<ComparisonSession>) => void;
-  onSessionDelete: (sessionId: string) => void;
+  onSessionSelect: (sessionId: string) => void;,
+  onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;,
+  onSessionUpdate: (sessionId: string, updates: Partial<ComparisonSession>) => void;,
+  onSessionDelete: (sessionId: string) => void;,
   onExportReport: (sessionId: string, format: string) => void;
   className?: string;
 }
-
 export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
   sessions,
   activeSessionId,
@@ -193,60 +188,54 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
   onExportReport,
   className = ''
 }) => {
-  const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
+  const [selectedSessions, setSelectedSessions] = useState<string>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'timeline'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'similarity' | 'changes'>('date');
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, _____setFilters] = useState({)
-    types: [] as ComparisonType[],
+  types: [] as ComparisonType,
     dateRange: null as { start: Date; end: Date } | null,
-    authors: [] as string[],
-    bookmarkedOnly: false,
+    authors: [] as string,
+    bookmarkedOnly: false;
   });
   const filteredSessions = useMemo(() => {
     return sessions.filter(session => {)
-      // Search filter
+  // Search filter
       if (searchQuery && !session.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
           !session.sourceItem.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
           !session.targetItem.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
-      }
       // Type filter
       if (filters.types.length > 0 && !filters.types.includes(session.comparisonType)) {
         return false;
-      }
       // Bookmarked filter
       if (filters.bookmarkedOnly && !session.isBookmarked) {
         return false;
-      }
       // Date range filter
       if (filters.dateRange) {
         if (session.createdAt < filters.dateRange.start || session.createdAt > filters.dateRange.end) {
           return false;
-        }
-      }
       return true;
     });
   }, [sessions, searchQuery, filters]);
   const sortedSessions = useMemo(() => {
-    return [...filteredSessions].sort((a, b) => {
-      switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name);
-      case 'date':
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      case 'similarity':
-        // Would need comparison results to sort by similarity
-        return 0;
-      case 'changes':
-        // Would need change count to sort by changes
-        return 0;
-      default:
-        return 0;
-      }
-    });
+  return [...filteredSessions].sort((a, b) => {
+  switch (sortBy) {
+  case 'name':,
+  return a.name.localeCompare(b.name);
+  case 'date':,
+  return b.createdAt.getTime() - a.createdAt.getTime();
+  case 'similarity':,
+  // Would need comparison results to sort by similarity
+  return 0;
+  case 'changes':,
+  // Would need change count to sort by changes
+  return 0;
+  default:,
+  return 0;
+});
   }, [filteredSessions, sortBy]);
-  return ();
+  return;
     <div className={`comparison-tools ${className}`}>}
       <Card className="comparison-tools-card">
         <CardHeader>
@@ -344,12 +333,11 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
                   isSelected={selectedSessions.includes(session.id)}
                   onSelect={() => onSessionSelect(session.id)}
                   onToggleSelection={(selected) => {
-                    setSelectedSessions(prev => )
-                      selected 
-                        ? [...prev, session.id]
-                        : prev.filter(id => id !== session.id)
-                    );
-                  }}
+  setSelectedSessions(prev => )
+  selected
+  ? [...prev, session.id]
+  : prev.filter(id => id !== session.id));
+}}
                   onUpdate={(updates) => onSessionUpdate(session.id, updates)}
                   onDelete={() => onSessionDelete(session.id)}
                   onExport={(format) => onExportReport(session.id, format)}
@@ -367,12 +355,11 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
                   isSelected={selectedSessions.includes(session.id)}
                   onSelect={() => onSessionSelect(session.id)}
                   onToggleSelection={(selected) => {
-                    setSelectedSessions(prev => )
-                      selected 
-                        ? [...prev, session.id]
-                        : prev.filter(id => id !== session.id)
-                    );
-                  }}
+  setSelectedSessions(prev => )
+  selected
+  ? [...prev, session.id]
+  : prev.filter(id => id !== session.id));
+}}
                   onUpdate={(updates) => onSessionUpdate(session.id, updates)}
                   onDelete={() => onSessionDelete(session.id)}
                 />
@@ -394,16 +381,15 @@ export const ComparisonTools: React.FC<ComparisonToolsProps> = ({)
 
 // Comparison Session Card Component
 interface ComparisonSessionCardProps {
-  session: ComparisonSession;
+  session: ComparisonSession;,
   isActive: boolean;
-  isSelected: boolean;
+  isSelected: boolean;,
   onSelect: () => void;
-  onToggleSelection: (selected: boolean) => void;
-  onUpdate: (updates: Partial<ComparisonSession>) => void;
+  onToggleSelection: (selected: boolean) => void;,
+  onUpdate: (updates: Partial<ComparisonSession>) => void;,
   onDelete: () => void;
   onExport: (format: string) => void;
-}
-const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({)
+  const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({,)
   session,
   isActive,
   isSelected,
@@ -414,7 +400,7 @@ const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({)
   onExport
 }) => {
   const [showActions, setShowActions] = useState(false);
-  return ();
+  return;
     <div 
       className={`comparison-session-card ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
@@ -496,9 +482,9 @@ const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({)
       <div className="session-meta">
         <div className="session-badges">
           <Badge variant={
-            session.comparisonType === 'structural' ? 'secondary' :
-              session.comparisonType === 'semantic' ? 'default' : 'destructive'
-          }>
+  session.comparisonType === 'structural' ? 'secondary' :,
+  session.comparisonType === 'semantic' ? 'default' : 'destructive',
+}>
             {session.comparisonType}
           </Badge>
           <Badge variant="outline">
@@ -526,15 +512,14 @@ const ComparisonSessionCard: React.FC<ComparisonSessionCardProps> = ({)
 
 // Comparison Session Row Component
 interface ComparisonSessionRowProps {
-  session: ComparisonSession;
+  session: ComparisonSession;,
   isActive: boolean;
-  isSelected: boolean;
+  isSelected: boolean;,
   onSelect: () => void;
-  onToggleSelection: (selected: boolean) => void;
-  onUpdate: (updates: Partial<ComparisonSession>) => void;
+  onToggleSelection: (selected: boolean) => void;,
+  onUpdate: (updates: Partial<ComparisonSession>) => void;,
   onDelete: () => void;
-}
-const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({)
+  const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({,)
   session,
   isActive,
   isSelected,
@@ -543,7 +528,7 @@ const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({)
   onUpdate,
   onDelete
 }) => {
-  return ();
+  return;
     <div 
       className={`comparison-session-row ${isActive ? 'active' : ''} ${isSelected ? 'selected' : ''}`}
       onClick={onSelect}
@@ -617,32 +602,30 @@ const ComparisonSessionRow: React.FC<ComparisonSessionRowProps> = ({)
 
 // Comparison Timeline Component
 interface ComparisonTimelineProps {
-  sessions: ComparisonSession[];
+  sessions: ComparisonSession;
   activeSessionId?: string;
   onSessionSelect: (sessionId: string) => void;
-}
-const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({)
+  const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({,)
   sessions,
   activeSessionId,
   onSessionSelect
 }) => {
   const groupedSessions = useMemo(() => {
-    const groups: Record<string, ComparisonSession[]> = {};
+    const groups: Record<string, ComparisonSession> = {};
     sessions.forEach(session => {)
-      const dateKey = session.createdAt.toDateString();
+  const dateKey = session.createdAt.toDateString();
       if (!groups[dateKey]) {
         groups[dateKey] = [];
-      }
       groups[dateKey].push(session);
     });
     return Object.entries(groups)
       .sort(([a], [b]) => new Date(b).getTime() - new Date(a).getTime())
       .map(([date, sessions]) => ({)
-        date: new Date(date),
-        sessions: sessions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      }));
+  date: new Date(date),
+  sessions: sessions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
+}));
   }, [sessions]);
-  return ();
+  return;
     <div className="comparison-timeline">
       {groupedSessions.map(({ date, sessions }) => ()
         <div key={date.toDateString()} className="timeline-group">
@@ -651,8 +634,8 @@ const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({)
               weekday: 'long', 
               year: 'numeric', 
               month: 'long', 
-              day: 'numeric' ,
-            })}</h3>
+              day: 'numeric' ;
+  })}</h3>
             <div className="session-count">{sessions.length} comparisons</div>
           </div>
           <div className="timeline-sessions">
@@ -669,8 +652,8 @@ const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({)
                     <div className="session-time">
                       {session.createdAt.toLocaleTimeString([], { )
                         hour: '2-digit', 
-                        minute: '2-digit' ,
-                      })}
+                        minute: '2-digit' ;
+  })}
                     </div>
                   </div>
                   <div className="session-details">
@@ -695,16 +678,16 @@ const ComparisonTimeline: React.FC<ComparisonTimelineProps> = ({)
 };
 
 // Advanced Diff Viewer Component
+
 export interface AdvancedDiffViewerProps {
-  comparison: GraphComparison;
+  comparison: GraphComparison;,
   session: ComparisonSession;
-  onSessionUpdate: (updates: Partial<ComparisonSession>) => void;
+  onSessionUpdate: (updates: Partial<ComparisonSession>) => void;,
   onAnnotationAdd: (annotation: Omit<ComparisonAnnotation, 'id' | 'createdAt'>) => void;
-  onAnnotationUpdate: (id: string, updates: Partial<ComparisonAnnotation>) => void;
+  onAnnotationUpdate: (id: string, updates: Partial<ComparisonAnnotation>) => void;,
   onAnnotationDelete: (id: string) => void;
   className?: string;
 }
-
 export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
   comparison,
   session,
@@ -729,7 +712,7 @@ export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
       filters: { ...session.filters, ...filters }
     });
   }, [session.filters, onSessionUpdate]);
-  return ();
+  return;
     <div className={`advanced-diff-viewer ${className}`}>}
       <div className="diff-viewer-header">
         <div className="diff-viewer-title">
@@ -791,17 +774,16 @@ export const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps> = ({)
 
 // Diff Viewer Toolbar
 interface DiffViewerToolbarProps {
-  session: ComparisonSession;
+  session: ComparisonSession;,
   comparison: GraphComparison;
-  onViewModeChange: (mode: ViewMode) => void;
-  onHighlightModeChange: (mode: HighlightMode) => void;
-  onFiltersChange: (filters: Partial<ComparisonFilters>) => void;
+  onViewModeChange: (mode: ViewMode) => void;,
+  onHighlightModeChange: (mode: HighlightMode) => void;,
+  onFiltersChange: (filters: Partial<ComparisonFilters>) => void;,
   zoomLevel: number;
-  onZoomChange: (zoom: number) => void;
+  onZoomChange: (zoom: number) => void;,
   showAnnotations: boolean;
   onToggleAnnotations: (show: boolean) => void;
-}
-const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({)
+  const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({,)
   session,
   comparison,
   onViewModeChange,
@@ -812,7 +794,7 @@ const DiffViewerToolbar: React.FC<DiffViewerToolbarProps> = ({)
   showAnnotations,
   onToggleAnnotations
 }) => {
-  return ();
+  return;
     <div className="diff-viewer-toolbar">
       <div className="toolbar-section">
         <label>View Mode:</label>

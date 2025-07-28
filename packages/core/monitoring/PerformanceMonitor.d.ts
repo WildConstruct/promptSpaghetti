@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { AdvancedExecutionContext } from '../runtime/advanced';
+
 export interface PerformanceMetrics {
     nodeId: string;
     nodeType: string;
@@ -29,7 +30,7 @@ export interface PerformanceMetrics {
     errors: string[];
     warnings: string[];
     customMetrics: Map<string, number | string | boolean>;
-}
+
 export interface AggregatedMetrics {
     nodeType: string;
     totalExecutions: number;
@@ -48,7 +49,7 @@ export interface AggregatedMetrics {
     performanceTrend: 'improving' | 'stable' | 'degrading';
     lastUpdated: number;
     optimizationRecommendations: string[];
-}
+
 export interface PerformanceAlert {
     id: string;
     timestamp: number;
@@ -59,7 +60,7 @@ export interface PerformanceAlert {
     message: string;
     details: Record<string, any>;
     resolved: boolean;
-}
+
 export interface PerformanceMonitorConfig {
     enableMemoryTracking: boolean;
     enableContextTracking: boolean;
@@ -74,7 +75,6 @@ export interface PerformanceMonitorConfig {
     retentionPeriod: number;
     alertCooldown: number;
     maxAlerts: number;
-}
 /**
  * Comprehensive performance monitoring system
  */
@@ -150,6 +150,6 @@ export declare class PerformanceMonitor extends EventEmitter {
     private cleanup;
     private generateExecutionId;
     private generateAlertId;
-}
+
 export default PerformanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map

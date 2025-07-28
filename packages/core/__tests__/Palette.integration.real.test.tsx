@@ -9,22 +9,21 @@ import { Node, Edge } from 'reactflow';
 // Helper to create proper drag events with coordinates
 const createDragEvent = (type: string, clientX: number, clientY: number, dataTransferData: string) => {
   const event = new MouseEvent(type, {)
-    bubbles: true,
-    cancelable: true,
-    clientX,
-    clientY
-  }) as any;
+  bubbles: true,
+  cancelable: true,
+  clientX,
+  clientY
+}) as any;
   // Add dataTransfer for drag events
   event.dataTransfer = {
-    getData: (format: string) => {,
-      if (format === 'application/reactflow' || format === 'application/node-type') {
-        return dataTransferData;
-      }
-      return '';
-    },
-    setData: jest.fn(),
+  getData: (format: string) => {,
+  if (format === 'application/reactflow' || format === 'application/node-type') {
+  return dataTransferData;
+  return '';
+},
+  setData: jest.fn(),
     dropEffect: 'move',
-    effectAllowed: 'all',
+    effectAllowed: 'all';
   };
   return event;
 };
@@ -41,8 +40,8 @@ const waitForReactFlowReady = async () => {
   });
 };
 describe('Palette sidebar integration (Real ReactFlow)', () => {
-  const initialNodes: Node[] = [];
-  const initialEdges: Edge[] = [];
+  const initialNodes: Node = [];
+  const initialEdges: Edge = [];
   beforeEach(() => {
     // Clear any console warnings
     jest.spyOn(console, 'warn').mockImplementation(() => {});
@@ -69,7 +68,6 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
         const paletteItem = screen.getByRole('button', { name: new RegExp(nodeType, 'i') });
         expect(paletteItem).toBeInTheDocument();
       });
-    }
   });
   it('Palette items have proper draggable attributes', async () => {
     render(<GraphEditor initialNodes={initialNodes} initialEdges={initialEdges} />);
@@ -98,7 +96,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
     });
     // Simulate drag and drop
     fireEvent.dragStart(outputBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     // Create and dispatch the drop event
     const dropEvent = createDragEvent('drop', 150, 150, 'Output');
@@ -129,7 +127,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /Subject/i });
     });
     fireEvent.dragStart(subjectBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const firstDropEvent = createDragEvent('drop', 100, 100, 'Subject');
     fireEvent(pane!, firstDropEvent);
@@ -143,7 +141,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /Action/i });
     });
     fireEvent.dragStart(actionBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const secondDropEvent = createDragEvent('drop', 250, 150, 'Action');
     fireEvent(pane!, secondDropEvent);
@@ -171,7 +169,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /SetVariable/i });
     });
     fireEvent.dragStart(setVarBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const setVarDropEvent = createDragEvent('drop', 100, 100, 'SetVariable');
     fireEvent(pane!, setVarDropEvent);
@@ -180,7 +178,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /GetVariable/i });
     });
     fireEvent.dragStart(getVarBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const getVarDropEvent = createDragEvent('drop', 300, 100, 'GetVariable');
     fireEvent(pane!, getVarDropEvent);
@@ -208,7 +206,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /WeightedChoice/i });
     });
     fireEvent.dragStart(weightedChoiceBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const weightedChoiceDropEvent = createDragEvent('drop', 100, 100, 'WeightedChoice');
     fireEvent(pane!, weightedChoiceDropEvent);
@@ -217,7 +215,7 @@ describe('Palette sidebar integration (Real ReactFlow)', () => {
       return screen.getByRole('button', { name: /Concat/i });
     });
     fireEvent.dragStart(concatBtn, {)
-      dataTransfer: { setData: jest.fn() }
+  dataTransfer: { setData: jest.fn() }
     });
     const concatDropEvent = createDragEvent('drop', 300, 100, 'Concat');
     fireEvent(pane!, concatDropEvent);

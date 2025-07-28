@@ -15,8 +15,8 @@ export interface EngagementMetricsTrendAnalysisProps {
     onExport?: (data: EngagementMetricsExportData) => void;
 }
 export interface EngagementMetricsConfig {
-    metrics: EngagementMetric[];
-    timeRanges: TimeRange[];
+    metrics: EngagementMetric;
+    timeRanges: TimeRange;
     segmentation: SegmentationConfig;
     benchmarks: BenchmarkConfig;
     alerting: AlertingConfig;
@@ -27,11 +27,11 @@ export interface EngagementMetric {
     type: MetricType;
     calculation: MetricCalculation;
     visualization: VisualizationConfig;
-    thresholds: MetricThreshold[];
+    thresholds: MetricThreshold;
 }
 export type MetricType = 'count' | 'rate' | 'duration' | 'score' | 'percentage' | 'ratio';
 export interface TrendAnalysisConfig {
-    algorithms: TrendAlgorithm[];
+    algorithms: TrendAlgorithm;
     forecasting: ForecastingConfig;
     seasonality: SeasonalityConfig;
     anomalyDetection: AnomalyDetectionConfig;
@@ -39,8 +39,8 @@ export interface TrendAnalysisConfig {
 }
 export interface EngagementMetricsData {
     timestamp: number;
-    metrics: MetricValue[];
-    segmentData: SegmentMetrics[];
+    metrics: MetricValue;
+    segmentData: SegmentMetrics;
     metadata: MetricsMetadata;
 }
 export interface MetricValue {
@@ -54,8 +54,8 @@ export interface TrendAnalysis {
     metric: string;
     trend: TrendData;
     forecast: ForecastData;
-    insights: TrendInsight[];
-    anomalies: TrendAnomaly[];
+    insights: TrendInsight;
+    anomalies: TrendAnomaly;
 }
 export interface TrendData {
     direction: TrendDirection;
@@ -73,11 +73,11 @@ export interface TimeRange {
 }
 export interface SegmentationConfig {
     enabled: boolean;
-    segments: string[];
+    segments: string;
 }
 export interface BenchmarkConfig {
     enabled: boolean;
-    benchmarks: Benchmark[];
+    benchmarks: Benchmark;
 }
 export interface Benchmark {
     name: string;
@@ -86,7 +86,7 @@ export interface Benchmark {
 }
 export interface AlertingConfig {
     enabled: boolean;
-    thresholds: AlertThreshold[];
+    thresholds: AlertThreshold;
 }
 export interface AlertThreshold {
     metricId: string;
@@ -117,25 +117,25 @@ export interface TrendAlgorithm {
 export interface ForecastingConfig {
     enabled: boolean;
     horizon: number;
-    models: string[];
+    models: string;
 }
 export interface SeasonalityConfig {
     enabled: boolean;
-    periods: number[];
+    periods: number;
 }
 export interface AnomalyDetectionConfig {
     enabled: boolean;
     sensitivity: number;
-    methods: string[];
+    methods: string;
 }
 export interface TrendReportingConfig {
     enabled: boolean;
     frequency: 'daily' | 'weekly' | 'monthly';
-    recipients: string[];
+    recipients: string;
 }
 export interface SegmentMetrics {
     segment: string;
-    metrics: MetricValue[];
+    metrics: MetricValue;
 }
 export interface MetricsMetadata {
     lastUpdated: number;
@@ -143,10 +143,10 @@ export interface MetricsMetadata {
     sampleSize: number;
 }
 export interface ForecastData {
-    predictions: ForecastPrediction[];
+    predictions: ForecastPrediction;
     accuracy: number;
     model: string;
-    factors: ForecastFactor[];
+    factors: ForecastFactor;
 }
 export interface ForecastPrediction {
     timestamp: number;
@@ -184,11 +184,11 @@ export interface TrendAlert {
     timestamp: number;
     threshold: number;
     actualValue: number;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface EngagementMetricsExportData {
-    metricsData: EngagementMetricsData[];
-    trendAnalyses: TrendAnalysis[];
+    metricsData: EngagementMetricsData;
+    trendAnalyses: TrendAnalysis;
     timeRange: {
         start: number;
         end: number;
@@ -197,7 +197,7 @@ export interface EngagementMetricsExportData {
         exportTimestamp: number;
         version: string;
         totalDataPoints: number;
-        metricsIncluded: string[];
+        metricsIncluded: string;
     };
 }
 export default EngagementMetricsTrendAnalysis;

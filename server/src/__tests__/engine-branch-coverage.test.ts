@@ -34,7 +34,7 @@ describe('Engine Branch Coverage', () => {
             type: 'WeightedChoice',
             choices: [{ value: 'test', weight: 1 }]
             // Intentionally omitting 'inputs' property
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
@@ -62,7 +62,7 @@ describe('Engine Branch Coverage', () => {
               { value: 'A', weight: 1 },
               { value: 'B', weight: 1 }
             ]
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
@@ -90,7 +90,7 @@ describe('Engine Branch Coverage', () => {
               { value: 'A', weight: 1 },
               { value: 'B', weight: 1 }
             ]
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
@@ -118,7 +118,7 @@ describe('Engine Branch Coverage', () => {
               { value: 'A', weight: 1 },
               { value: 'B', weight: 1 }
             ]
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
@@ -148,22 +148,22 @@ describe('Engine Branch Coverage', () => {
             id: 'A',
             type: 'WeightedChoice',
             choices: [{ value: 'valueA', weight: 1 }]
-          },
+  }
           {
             id: 'B',
             type: 'Concat',
             inputs: ['A']
-          },
+  }
           {
             id: 'C',
             type: 'Concat',
             inputs: ['A']
-          },
+  }
           {
             id: 'D',
             type: 'Concat',
             inputs: ['B', 'C']
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
@@ -188,20 +188,20 @@ describe('Engine Branch Coverage', () => {
             type: 'SetVariable',
             key: 'counter',
             value: 0
-          },
+  }
           // Reference and update (in a real scenario, this would be more complex)
           {
             id: 'set2',
             type: 'SetVariable',
             key: 'counter',
             value: 1
-          },
+  }
           // Get the final value
           {
             id: 'get1',
             type: 'GetVariable',
             key: 'counter'
-          },
+  }
           // Output
           {
             id: 'output1',
@@ -228,17 +228,17 @@ describe('Engine Branch Coverage', () => {
             id: 'choice1',
             type: 'WeightedChoice',
             choices: [{ value: 'first', weight: 1 }]
-          },
+  }
           {
             id: 'choice2',
             type: 'WeightedChoice',
             choices: [{ value: 'second', weight: 1 }]
-          },
+  }
           {
             id: 'output1',
             type: 'Output',
             inputs: ['choice1']
-          },
+  }
           {
             id: 'output2',
             type: 'Output',

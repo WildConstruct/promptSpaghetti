@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
+}
 export interface IPLimitingRule {
   id: string;
   name: string;
@@ -15,6 +16,7 @@ export interface IPLimitingRule {
   
   ipTargets: {
     specificIPs?: string[];
+}
     ipRanges?: Array<{ start: string; end: string; cidr?: string }>;
     countries?: string[];
     regions?: string[];
@@ -85,6 +87,7 @@ export interface IPLimitingRule {
   createdBy: string;
 }
 
+}
 export interface GeolocationData {
   ip: string;
   country: string;
@@ -104,7 +107,9 @@ export interface GeolocationData {
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   lastUpdated: Date;
 }
+}
 
+}
 export interface DeviceFingerprint {
   id: string;
   userId: string;
@@ -123,7 +128,9 @@ export interface DeviceFingerprint {
   lastSeen: Date;
   violationCount: number;
 }
+}
 
+}
 export interface UserBehaviorProfile {
   userId: string;
   accountCreated: Date;
@@ -133,6 +140,7 @@ export interface UserBehaviorProfile {
   loginPatterns: {
     commonHours: number[]; // 0-23
     commonDays: number[]; // 0-6
+}
     commonLocations: Array<{ country: string; region: string; frequency: number }>;
     averageSessionDuration: number; // minutes
     deviceRotation: number; // devices per month
@@ -158,6 +166,7 @@ export interface UserBehaviorProfile {
   lastUpdated: Date;
 }
 
+}
 export interface LimitingViolation {
   id: string;
   userId?: string;
@@ -174,6 +183,7 @@ export interface LimitingViolation {
     geolocation?: GeolocationData;
     deviceFingerprint?: string;
     sessionId?: string;
+}
   };
   actionTaken: string[];
   resolved: boolean;
@@ -216,6 +226,7 @@ export class IPAccountLimitingService extends EventEmitter {
     message?: string;
     banDuration?: number;
   }> {
+
     const { ip, userId, userAgent, endpoint, method } = request;
     
     // Check if IP is explicitly banned
@@ -313,6 +324,7 @@ export class IPAccountLimitingService extends EventEmitter {
    * Add IP to trusted list
    */
   async addTrustedIP(ip: string, addedBy: string, reason: string): Promise<void> {
+
     this.trustedIPs.add(ip);
     
     await this.logSecurityEvent('ip_trusted', ip, addedBy, {
@@ -330,6 +342,7 @@ export class IPAccountLimitingService extends EventEmitter {
     bannedBy: string,
     duration?: number
   ): Promise<void> {
+
     const ban = {
       reason,
       expiresAt: duration ? new Date(Date.now() + duration) : undefined
@@ -442,18 +455,18 @@ export class IPAccountLimitingService extends EventEmitter {
         countries: ['CN', 'RU', 'KP', 'IR'], // Example high-risk countries
         vpnDetection: true,
         torDetection: true
-      },
+  }
       accountTargets: {},
       behaviorTriggers: {},
       restrictions: {
         requireAdditionalAuth: ['captcha', 'mfa']
-      },
+  }
       actions: {
         immediate: ['flag', 'captcha']
-      },
+  }
       exemptions: {
         emergencyOverride: true
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -471,11 +484,11 @@ export class IPAccountLimitingService extends EventEmitter {
       behaviorTriggers: {
         rapidRequests: { requests: 10, timeWindow: 60 }, // 10 requests in 60 seconds
         failedLogins: { attempts: 5, timeWindow: 300 } // 5 failed logins in 5 minutes
-      },
+  }
       restrictions: {
         blockCompletely: false,
         requireAdditionalAuth: ['captcha', 'mfa']
-      },
+  }
       actions: {
         immediate: ['monitor', 'captcha'],
         escalation: [
@@ -483,7 +496,7 @@ export class IPAccountLimitingService extends EventEmitter {
           { threshold: 5, action: 'temp_ban', duration: 60 * 60 * 1000 }, // 1 hour
           { threshold: 10, action: 'manual_review' }
         ]
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -499,14 +512,14 @@ export class IPAccountLimitingService extends EventEmitter {
       ipTargets: {},
       accountTargets: {
         verificationLevels: ['unverified', 'email']
-      },
+  }
       behaviorTriggers: {
         deviceChanges: { count: 5, timeWindow: 24 }, // 5 different devices in 24 hours
         locationChanges: { distance: 1000, timeWindow: 60 } // 1000km in 60 minutes
-      },
+  }
       restrictions: {
         requireAdditionalAuth: ['mfa', 'email_verification']
-      },
+  }
       actions: {
         immediate: ['flag', 'monitor'],
         notifications: [{
@@ -514,7 +527,7 @@ export class IPAccountLimitingService extends EventEmitter {
           recipients: ['user', 'security_team'],
           methods: ['email', 'dashboard']
         }]
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -526,6 +539,7 @@ export class IPAccountLimitingService extends EventEmitter {
   }
 
   private async getGeolocationData(ip: string): Promise<GeolocationData> {
+
     // Check cache first
     let geoData = this.geolocationCache.get(ip);
     
@@ -562,6 +576,7 @@ export class IPAccountLimitingService extends EventEmitter {
     userAgent: string, 
     headers: Record<string, string>
   ): Promise<DeviceFingerprint> {
+
     const fingerprintData = {
       userAgent,
       acceptLanguage: headers['accept-language'] || '',
@@ -606,6 +621,7 @@ export class IPAccountLimitingService extends EventEmitter {
   }
 
   private async getUserBehaviorProfile(userId: string): Promise<UserBehaviorProfile> {
+
     let profile = this.userProfiles.get(userId);
     
     if (!profile) {
@@ -620,7 +636,7 @@ export class IPAccountLimitingService extends EventEmitter {
           commonLocations: [{ country: 'US', region: 'CA', frequency: 0.8 }],
           averageSessionDuration: 45,
           deviceRotation: 2
-        },
+  }
         accessPatterns: {
           commonEndpoints: [
             { endpoint: '/api/dashboard', frequency: 0.4 },
@@ -629,7 +645,7 @@ export class IPAccountLimitingService extends EventEmitter {
           dataUsage: { upload: 1024 * 1024, download: 5 * 1024 * 1024 },
           requestRate: 2.5,
           errorRate: 0.05
-        },
+  }
         securityEvents: {
           totalViolations: 0,
           recentViolations: 0,
@@ -637,7 +653,7 @@ export class IPAccountLimitingService extends EventEmitter {
           passwordChanges: 0,
           mfaChanges: 0,
           accountLocks: 0
-        },
+  }
         lastUpdated: new Date()
       };
       
@@ -652,6 +668,7 @@ export class IPAccountLimitingService extends EventEmitter {
     geoData: GeolocationData,
     userProfile?: UserBehaviorProfile
   ): Promise<IPLimitingRule[]> {
+
     const rules = [];
     
     for (const rule of this.rules.values()) {
@@ -671,6 +688,7 @@ export class IPAccountLimitingService extends EventEmitter {
     geoData: GeolocationData,
     userProfile?: UserBehaviorProfile
   ): Promise<boolean> {
+
     // Check IP targeting
     if (rule.ipTargets.countries?.includes(geoData.countryCode)) return true;
     if (rule.ipTargets.vpnDetection && geoData.isVPN) return true;
@@ -704,6 +722,7 @@ export class IPAccountLimitingService extends EventEmitter {
     restrictions: string[];
     requiresAuth: string[];
   }> {
+
     const violations: LimitingViolation[] = [];
     const restrictions: string[] = [];
     const requiresAuth: string[] = [];
@@ -759,7 +778,7 @@ export class IPAccountLimitingService extends EventEmitter {
         geolocation: context.geoData,
         deviceFingerprint: context.deviceFingerprint?.fingerprint,
         sessionId: context.request.sessionId
-      },
+  }
       actionTaken: rule.actions.immediate,
       resolved: false
     };
@@ -813,17 +832,20 @@ export class IPAccountLimitingService extends EventEmitter {
   }
 
   private async getRecentRequests(ip: string, timeWindowSeconds: number): Promise<number> {
+
     // Mock implementation - would count actual recent requests
     return Math.floor(Math.random() * 20);
   }
 
   private async getRecentViolations(userId: string, days: number): Promise<LimitingViolation[]> {
+
     const userViolations = this.violations.get(userId) || [];
     const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
     return userViolations.filter(v => v.timestamp >= cutoff);
   }
 
   private async recordViolation(violation: LimitingViolation): Promise<void> {
+
     const key = violation.userId || violation.ip;
     const violations = this.violations.get(key) || [];
     violations.push(violation);
@@ -835,6 +857,7 @@ export class IPAccountLimitingService extends EventEmitter {
     request: any,
     hasViolations: boolean
   ): Promise<void> {
+
     const profile = await this.getUserBehaviorProfile(userId);
     
     if (hasViolations) {
@@ -884,6 +907,7 @@ export class IPAccountLimitingService extends EventEmitter {
   }
 
   private async logSecurityEvent(action: string, target: string, performedBy: string, metadata: any): Promise<void> {
+
     console.log(`Security Event: ${action} for ${target} by ${performedBy}`, metadata);
   }
 }

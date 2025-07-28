@@ -12,6 +12,7 @@ import {
 /**
  * Template storage interface - can be implemented for local/server storage
  */
+
 export interface TemplateStorage {
     save(template: Template): Promise<Template>;
     load(id: string): Promise<Template | null>;
@@ -19,7 +20,8 @@ export interface TemplateStorage {
     update(id: string, updates: Partial<Template>): Promise<Template>;
     delete(id: string): Promise<void>;
     search(filter: TemplateFilter): Promise<Template[]>;
-}
+
+
 /**
  * Local storage implementation
  */
@@ -33,7 +35,7 @@ export declare class LocalTemplateStorage implements TemplateStorage {
     update(id: string, updates: Partial<Template>): Promise<Template>;
     delete(id: string): Promise<void>;
     search(filter: TemplateFilter): Promise<Template[]>;
-}
+
 /**
  * Main Template Service
  */
@@ -84,6 +86,6 @@ export declare class TemplateService {
     private calculateComplexity;
     private estimateOutputLength;
     private calculateAverageRating;
-}
+
 export declare const templateService: TemplateService;
 //# sourceMappingURL=TemplateService.d.ts.map

@@ -6,17 +6,19 @@
  */
 import React from 'react';
 import '../../styles/smoothAnimations.css';
+
 export interface ProfessionalSpinnerProps {
     size?: 'small' | 'medium' | 'large' | 'xl';
     variant?: 'primary' | 'secondary' | 'accent' | 'cinema4d';
     type?: 'spinner' | 'dots' | 'pulse' | 'bars' | 'ring';
     message?: string;
     progress?: number;
-}
+
 export declare const ProfessionalSpinner: React.FC<ProfessionalSpinnerProps>;
 /**
  * Full-screen professional loading overlay
  */
+
 export interface LoadingOverlayProps {
     visible: boolean;
     message?: string;
@@ -24,16 +26,17 @@ export interface LoadingOverlayProps {
     variant?: 'primary' | 'secondary' | 'accent' | 'cinema4d';
     backdrop?: 'blur' | 'solid' | 'transparent';
     onCancel?: () => void;
-}
+
 export declare const LoadingOverlay: React.FC<LoadingOverlayProps>;
 /**
  * Inline loading state for smaller components
  */
+
 export interface InlineLoaderProps {
     loading: boolean;
     size?: 'small' | 'medium';
     text?: string;
     children: React.ReactNode;
-}
+
 export declare const InlineLoader: React.FC<InlineLoaderProps>;
 //# sourceMappingURL=ProfessionalSpinner.d.ts.map

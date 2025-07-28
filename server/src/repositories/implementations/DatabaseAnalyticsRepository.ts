@@ -19,6 +19,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   constructor(private db: Database.Database) {}
 
   async recordEvent(event: AnalyticsEvent): Promise<string> {
+
     const eventId = this.generateEventId();
     const stmt = this.db.prepare(`
       INSERT INTO analytics_events (id, type, user_id, graph_id, timestamp, data, metadata)
@@ -39,6 +40,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   }
 
   async getEventsByUser(userId: UserId, options?: QueryOptions): Promise<AnalyticsEvent[]> {
+
     const { query, params } = this.buildQuery('user_id = ?', [userId], options);
     const stmt = this.db.prepare(query);
     const rows = stmt.all(...params) as any[];
@@ -47,6 +49,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   }
 
   async getEventsByGraph(graphId: GraphId, options?: QueryOptions): Promise<AnalyticsEvent[]> {
+
     const { query, params } = this.buildQuery('graph_id = ?', [graphId], options);
     const stmt = this.db.prepare(query);
     const rows = stmt.all(...params) as any[];
@@ -55,6 +58,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   }
 
   async getEventsByType(eventType: AnalyticsEventType, options?: QueryOptions): Promise<AnalyticsEvent[]> {
+
     const { query, params } = this.buildQuery('type = ?', [eventType], options);
     const stmt = this.db.prepare(query);
     const rows = stmt.all(...params) as any[];
@@ -63,6 +67,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   }
 
   async getPerformanceMetrics(options?: PerformanceQueryOptions): Promise<PerformanceMetric[]> {
+
     let whereClause = 'type = ?';
     const params: any[] = [AnalyticsEventType.PERFORMANCE_METRIC];
     
@@ -100,6 +105,7 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
   }
 
   async getUserUsageStats(userId: UserId, timeRange?: TimeRange): Promise<UsageStats> {
+
     const timeClause = timeRange ? 
       'AND timestamp BETWEEN ? AND ?' : '';
     const timeParams = timeRange ? 
@@ -150,12 +156,12 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
       })),
       timeRange: timeRange || {
         startDate: new Date(0),
-        endDate: new Date()
-      }
+        endDate: new Date(}
     };
   }
 
   async getSystemStats(timeRange?: TimeRange): Promise<SystemStats> {
+
     const timeClause = timeRange ? 
       'WHERE timestamp BETWEEN ? AND ?' : '';
     const timeParams = timeRange ? 
@@ -218,12 +224,12 @@ export class DatabaseAnalyticsRepository implements AnalyticsRepository {
       })),
       timeRange: timeRange || {
         startDate: new Date(0),
-        endDate: new Date()
-      }
+        endDate: new Date(}
     };
   }
 
   async deleteOldEvents(olderThanDays: number): Promise<number> {
+
     const cutoffTime = Date.now() - (olderThanDays * 24 * 60 * 60 * 1000);
     const stmt = this.db.prepare('DELETE FROM analytics_events WHERE timestamp < ?');
     const result = stmt.run(cutoffTime);

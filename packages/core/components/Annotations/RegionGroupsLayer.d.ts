@@ -9,6 +9,7 @@
 import React from 'react';
 import { Node } from 'reactflow';
 import { RegionGroup as RegionGroupType, RegionGroupPreferences } from '../../types/CollaborationTypes';
+
 interface RegionGroupsLayerProps {
     nodes: Node[];
     regionGroups: RegionGroupType[];
@@ -21,9 +22,10 @@ interface RegionGroupsLayerProps {
     canvasOffset?: {
         x: number;
         y: number;
+
     };
     zoom?: number;
-}
+
 export declare const RegionGroupsLayer: React.FC<RegionGroupsLayerProps>;
 export default RegionGroupsLayer;
 //# sourceMappingURL=RegionGroupsLayer.d.ts.map

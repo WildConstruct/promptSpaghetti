@@ -40,22 +40,20 @@ import type {
 } from '../../auth/IdentityValidation';
 
 export interface VerificationQueueProps {
-  request: IdentityValidationRequest;
+  request: IdentityValidationRequest;,
   onBack: () => void;
   onStatusUpdate: (requestId: string, status: ValidationStatus, notes?: string) => void;
   onRequestUpdate?: (requestId: string, updates: Partial<IdentityValidationRequest>) => void;
   className?: string;
 }
-
 export interface ReviewDecision {
-  status: ValidationStatus;
+  status: ValidationStatus;,
   reviewNotes: string;
-  nextSteps: string[];
+  nextSteps: string;,
   flagged: boolean;
-  requiresSeniorReview: boolean;
+  requiresSeniorReview: boolean;,
   confidenceLevel: number;
 }
-
 export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   request,
   onBack,
@@ -65,45 +63,43 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
 }) => {
   const [_____activeSection, _____setActiveSection] = useState('details');
   const [reviewDecision, setReviewDecision] = useState<Partial<ReviewDecision>>({)
-    status: 'pending',
-    reviewNotes: '',
-    nextSteps: [],
-    flagged: false,
-    requiresSeniorReview: false,
-    confidenceLevel: 80,
-  });
+  status: 'pending',
+  reviewNotes: '',
+  nextSteps: [],
+  flagged: false,
+  requiresSeniorReview: false,
+  confidenceLevel: 80,
+});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const getVerificationTypeIcon = (type: IdentityValidationType) => {
-    const icons = {
-      email_verification: Mail,
-      phone_verification: Phone,
-      government_id: FileText,
-      professional_credentials: Award,
-      portfolio_verification: Camera,
-      social_media_verification: ExternalLink,
-      basic_profile: User,
-      industry_affiliation: Award,
-      address_verification: MapPin,
-      payment_method_verification: FileText,
-    };
+  const icons = {
+  email_verification: Mail,
+  phone_verification: Phone,
+  government_id: FileText,
+  professional_credentials: Award,
+  portfolio_verification: Camera,
+  social_media_verification: ExternalLink,
+  basic_profile: User,
+  industry_affiliation: Award,
+  address_verification: MapPin,
+  payment_method_verification: FileText,
+};
     return icons[type] || FileText;
   };
   const getStatusColor = (status: ValidationStatus) => {
-    switch (status) {
-    case 'approved': return 'text-green-600 bg-green-100';
-    case 'rejected': return 'text-red-600 bg-red-100';
-    case 'pending': return 'text-yellow-600 bg-yellow-100';
-    case 'in_review': return 'text-blue-600 bg-blue-100';
-    case 'requires_update': return 'text-orange-600 bg-orange-100';
-    case 'expired': return 'text-gray-600 bg-gray-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'approved': return 'text-green-600 bg-green-100';
+  case 'rejected': return 'text-red-600 bg-red-100';
+  case 'pending': return 'text-yellow-600 bg-yellow-100';
+  case 'in_review': return 'text-blue-600 bg-blue-100';
+  case 'requires_update': return 'text-orange-600 bg-orange-100';
+  case 'expired': return 'text-gray-600 bg-gray-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const handleSubmitDecision = async () => {
     if (!reviewDecision.status || !reviewDecision.reviewNotes) {
       alert('Please provide a status and review notes before submitting.');
       return;
-    }
     setIsSubmitting(true);
     try {
       // Simulate API call
@@ -111,15 +107,14 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       onStatusUpdate(request.requestId, reviewDecision.status!, reviewDecision.reviewNotes);
       onBack();
     } catch (error) {
-      console.error('Error submitting review decision:', error);
-      alert('Error submitting review decision. Please try again.');
-    } finally {
+  console.error('Error submitting review decision:', error);
+  alert('Error submitting review decision. Please try again.');
+} finally {
       setIsSubmitting(false);
-    }
   };
   const renderRequestDetails = () => {
     const Icon = getVerificationTypeIcon(request.type);
-    return ();
+    return;
       <Card className="request-details">
         <CardHeader>
           <div className="details-header">
@@ -208,21 +203,20 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
     </Card>
   );
   const renderVerificationData = () => {
-    switch (request.type) {
-    case 'government_id':
-      return renderGovernmentIdData();
-    case 'professional_credentials':
-      return renderProfessionalCredentialsData();
-    case 'social_media_verification':
-      return renderSocialMediaData();
-    default:
-      return renderGenericVerificationData();
-    }
-  };
+  switch (request.type) {
+  case 'government_id':,
+  return renderGovernmentIdData();
+  case 'professional_credentials':,
+  return renderProfessionalCredentialsData();
+  case 'social_media_verification':,
+  return renderSocialMediaData();
+  default:,
+  return renderGenericVerificationData();
+};
   const renderGovernmentIdData = () => {
     const govId = request.data.governmentId;
     if (!govId) return null;
-    return ();
+    return;
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Government ID Verification</CardTitle>
@@ -270,7 +264,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   const renderProfessionalCredentialsData = () => {
     const credentials = request.data.professionalCredentials;
     if (!credentials) return null;
-    return ();
+    return;
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Professional Credentials</CardTitle>
@@ -334,7 +328,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
   const renderSocialMediaData = () => {
     const profiles = request.data.socialMediaProfiles;
     if (!profiles) return null;
-    return ();
+    return;
       <Card className="verification-data">
         <CardHeader>
           <CardTitle>Social Media Verification</CardTitle>
@@ -415,8 +409,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
               value={reviewDecision.status || 'pending'}
               onChange={(e) => setReviewDecision(prev => ({ )
                 ...prev, 
-                status: e.target.value as ValidationStatus ,
-              }))}
+                status: e.target.value as ValidationStatus ;
+  }))}
               className="form-select"
             >
               <option value="pending">Pending</option>
@@ -431,8 +425,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
               value={reviewDecision.reviewNotes || ''}
               onChange={(e) => setReviewDecision(prev => ({ )
                 ...prev, 
-                reviewNotes: e.target.value ,
-              }))}
+                reviewNotes: e.target.value ;
+  }))}
               placeholder="Provide detailed notes about your review decision..."
               rows={4}
               className="form-textarea"
@@ -448,8 +442,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
                 value={reviewDecision.confidenceLevel || 80}
                 onChange={(e) => setReviewDecision(prev => ({ )
                   ...prev, 
-                  confidenceLevel: parseInt(e.target.value) ,
-                }))}
+                  confidenceLevel: parseInt(e.target.value) ;
+  }))}
                 className="slider"
               />
               <span className="confidence-value">{reviewDecision.confidenceLevel || 80}%</span>
@@ -462,8 +456,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
                 checked={reviewDecision.flagged || false}
                 onChange={(e) => setReviewDecision(prev => ({ )
                   ...prev, 
-                  flagged: e.target.checked ,
-                }))}
+                  flagged: e.target.checked ;
+  }))}
               />
               <Flag className="w-4 h-4 text-red-500" />
               Flag for attention
@@ -474,8 +468,8 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
                 checked={reviewDecision.requiresSeniorReview || false}
                 onChange={(e) => setReviewDecision(prev => ({ )
                   ...prev, 
-                  requiresSeniorReview: e.target.checked ,
-                }))}
+                  requiresSeniorReview: e.target.checked ;
+  }))}
               />
               <AlertCircle className="w-4 h-4 text-orange-500" />
               Requires senior review
@@ -485,7 +479,7 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </CardContent>
     </Card>
   );
-  return ();
+  return;
     <div className={`verification-queue ${className}`}>}
       <div className="queue-header">
         <Button onClick={onBack} variant="outline">
@@ -528,224 +522,179 @@ export const VerificationQueue: React.FC<VerificationQueueProps> = ({)
       </div>
       <style>{`
         .verification-queue {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .queue-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .header-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .queue-content {
           display: grid;
-          grid-template-columns: 1fr 400px;
-          gap: 1.5rem;
-        }
+          grid-template-columns: 1fr 400px;,
+  gap: 1.5rem;
         .content-main {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .content-sidebar {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .details-header {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .details-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .detail-item {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex-direction: column;,
+  gap: 0.25rem;
         .detail-label {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: 0.75rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .detail-value {
-          font-size: 0.875rem;
-          color: #1f2937;
+          font-size: 0.875rem;,
+  color: #1f2937;
           font-weight: 600;
-        }
         .profile-grid, .data-grid, .metadata-grid {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .profile-item, .data-item, .metadata-item {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 0.75rem;
+          padding: 0.75rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .profile-label, .data-label, .metadata-label {
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           min-width: 100px;
-        }
         .profile-value, .data-value, .metadata-value {
-          color: #1f2937;
-          flex: 1;
-        }
+          color: #1f2937;,
+  flex: 1;
         .document-images, .credentials-list, .portfolio-list, .profiles-list {
           margin-top: 1rem;
-        }
         .document-images h4, .credentials-list h4, .portfolio-list h4 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.75rem;
-        }
         .images-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
           gap: 0.75rem;
-        }
         .image-item {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 0.5rem;
+          padding: 1rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
           text-align: center;
-        }
         .credential-item, .portfolio-item, .profile-item {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 0.75rem;
+          padding: 0.75rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
           margin-bottom: 0.5rem;
-        }
         .credential-info, .portfolio-info, .profile-info {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex: 1;,
+  display: flex;
+          flex-direction: column;,
+  gap: 0.25rem;
         .credential-title, .portfolio-title, .profile-platform {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .credential-details, .portfolio-details, .profile-url, .profile-followers {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .data-dump {
-          background: #f9fafb;
-          padding: 1rem;
+          background: #f9fafb;,
+  padding: 1rem;
           border-radius: 6px;
           font-size: 0.75rem;
           overflow-x: auto;
-        }
         .review-form {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-select, .form-textarea {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .form-select:focus, .form-textarea:focus {
-          outline: none;
+        .form-select:focus, .form-textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .confidence-slider {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
+          align-items: center;,
+  gap: 0.75rem;
         .slider {
           flex: 1;
-        }
         .confidence-value {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           min-width: 40px;
-        }
         .form-checkboxes {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .checkbox-label {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.875rem;
-          cursor: pointer;
-        }
+          align-items: center;,
+  gap: 0.5rem;
+          font-size: 0.875rem;,
+  cursor: pointer;
         .action-buttons {
           margin-top: 1rem;
-        }
         .submit-button {
-          width: 100%;
-          background: #059669;
+          width: 100%;,
+  background: #059669;
           border-color: #059669;
-        }
-        .submit-button:hover:not(:disabled) {
-          background: #047857;
+        .submit-button:hover:not(:disabled) {,
+  background: #047857;
           border-color: #047857;
-        }
-        .submit-button:disabled {
-          opacity: 0.5;
+        .submit-button:disabled {,
+  opacity: 0.5;
           cursor: not-allowed;
-        }
         @media (max-width: 1024px) {
           .queue-content {
             grid-template-columns: 1fr;
-          }
           .content-sidebar {
             order: -1;
-          }
-        }
         @media (max-width: 768px) {
           .queue-header {
             flex-direction: column;
-            align-items: stretch;
-            gap: 1rem;
-          }
+            align-items: stretch;,
+  gap: 1rem;
           .details-grid {
             grid-template-columns: 1fr;
-          }
           .images-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );

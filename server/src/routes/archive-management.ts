@@ -271,7 +271,7 @@ export async function archiveManagementRoutes(
             complianceRequirements: archiveData.complianceRequirements,
             validateOnCreate: archiveData.validateOnCreate,
             notifyOnComplete: archiveData.notifyOnComplete
-          },
+  }
           priority: archiveData.priority
         }
       );
@@ -287,7 +287,7 @@ export async function archiveManagementRoutes(
           createdAt: archiveRecord.createdAt,
           expiresAt: archiveRecord.expiresAt,
           estimatedProcessingTime: '5-15 minutes' // This would be calculated based on source size
-        },
+  }
         message: 'Archive creation initiated successfully'
       });
 
@@ -476,7 +476,7 @@ export async function archiveManagementRoutes(
           status: 'requested',
           estimatedTime: this.calculateEstimatedRestoreTime(restoreData.restoreType),
           trackingUrl: `/api/archives/${archiveId}/restore/${restoreId}`
-        },
+  }
         message: 'Archive restoration requested successfully'
       });
 
@@ -725,7 +725,7 @@ export async function archiveManagementRoutes(
           operation: bulkOperation.operation,
           status: 'queued',
           estimatedTime: result.estimatedTime
-        },
+  }
         message: `Bulk operation queued: ${bulkOperation.operation} on ${bulkOperation.archiveIds.length} archives`
       });
 
@@ -776,7 +776,7 @@ export async function archiveManagementRoutes(
             processingQueue: health.processingQueue,
             retentionPolicies: health.retentionPolicies,
             validation: health.validation
-          },
+  }
           metrics: {
             totalArchives: health.metrics.totalArchives,
             healthyArchives: health.metrics.healthyArchives,
@@ -786,7 +786,7 @@ export async function archiveManagementRoutes(
             averageCompressionRatio: health.metrics.averageCompressionRatio,
             queuedJobs: health.metrics.queuedJobs,
             processingJobs: health.metrics.processingJobs
-          },
+  }
           recommendations: health.recommendations || []
         }
       });
@@ -847,7 +847,7 @@ export async function archiveManagementRoutes(
           validationType,
           status: 'queued',
           estimatedTime: validationJob.estimatedTime
-        },
+  }
         message: 'Archive validation scheduled successfully'
       });
 

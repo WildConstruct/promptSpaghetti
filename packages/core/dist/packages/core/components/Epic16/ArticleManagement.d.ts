@@ -13,9 +13,9 @@ export interface Article {
     slug: string;
     status: 'draft' | 'published' | 'archived' | 'review';
     category: ArticleCategory;
-    tags: string[];
+    tags: string;
     author: ArticleAuthor;
-    collaborators?: ArticleAuthor[];
+    collaborators?: ArticleAuthor;
     createdAt: Date;
     updatedAt: Date;
     publishedAt?: Date;
@@ -26,12 +26,12 @@ export interface Article {
     readTime: number;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     featured: boolean;
-    attachments?: ArticleAttachment[];
-    relatedArticles?: string[];
+    attachments?: ArticleAttachment;
+    relatedArticles?: string;
     seo: {
         metaTitle?: string;
         metaDescription?: string;
-        keywords?: string[];
+        keywords?: string;
     };
     analytics: {
         averageRating: number;
@@ -73,9 +73,9 @@ export interface ArticleAttachment {
 }
 export interface ArticleFilter {
     status?: Article['status'][];
-    category?: string[];
-    tags?: string[];
-    author?: string[];
+    category?: string;
+    tags?: string;
+    author?: string;
     difficulty?: Article['difficulty'][];
     dateRange?: {
         start: Date;
@@ -89,8 +89,8 @@ export interface ArticleSort {
     direction: 'asc' | 'desc';
 }
 export interface ArticleManagementProps {
-    articles: Article[];
-    categories: ArticleCategory[];
+    articles: Article;
+    categories: ArticleCategory;
     currentUser: ArticleAuthor;
     onCreateArticle: (article: Partial<Article>) => Promise<Article>;
     onUpdateArticle: (id: string, article: Partial<Article>) => Promise<Article>;
@@ -103,23 +103,11 @@ export interface ArticleManagementProps {
     onUpdateCategory: (id: string, category: Partial<ArticleCategory>) => Promise<ArticleCategory>;
     className?: string;
 }
-export declare const ArticleList: React.FC<{
-    articles: Article[];
-    filter: ArticleFilter;
-    sort: ArticleSort;
-    onEdit: (article: Article) => void;
-    onDelete: (article: Article) => void;
-    onDuplicate: (article: Article) => void;
-    onView: (article: Article) => void;
-    currentUser: ArticleAuthor;
-}>;
+export declare const ArticleList: React.FC<{}, articles>, Article: any;
 export declare const ArticleEditor: React.FC<{
     article?: Article;
-    categories: ArticleCategory[];
-    onSave: (article: Partial<Article>) => Promise<void>;
-    onCancel: () => void;
-    onUploadAttachment: (file: File) => Promise<ArticleAttachment>;
-}>;
+    categories: ArticleCategory;
+}, onSave>;
 export declare const ArticleManagement: React.FC<ArticleManagementProps>;
 export default ArticleManagement;
 //# sourceMappingURL=ArticleManagement.d.ts.map

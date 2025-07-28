@@ -53,6 +53,7 @@ export enum EnforcementStatus {
 }
 
 // Core interfaces
+}
 export interface PolicyViolation {
   id: string;
   policy_id: string;
@@ -73,7 +74,9 @@ export interface PolicyViolation {
   enforcement_actions: EnforcementAction[];
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ViolationEvidence {
   type: 'content' | 'behavior' | 'metadata' | 'transaction' | 'user_report';
   data: Record<string, unknown>;
@@ -82,7 +85,9 @@ export interface ViolationEvidence {
   attachments?: EvidenceAttachment[];
   ai_analysis?: AIAnalysisResult;
 }
+}
 
+}
 export interface EvidenceAttachment {
   id: string;
   type: 'screenshot' | 'document' | 'log' | 'recording';
@@ -91,7 +96,9 @@ export interface EvidenceAttachment {
   mime_type: string;
   size: number;
 }
+}
 
+}
 export interface AIAnalysisResult {
   model_version: string;
   confidence: number;
@@ -100,13 +107,17 @@ export interface AIAnalysisResult {
   flags: string[];
   processed_at: Date;
 }
+}
 
+}
 export interface Prediction {
   category: string;
   confidence: number;
   explanation: string;
 }
+}
 
+}
 export interface ViolationResolution {
   resolution_type: 'dismissed' | 'warning_issued' | 'action_taken' | 'escalated';
   reason: string;
@@ -115,7 +126,9 @@ export interface ViolationResolution {
   resolved_at: Date;
   resolved_by: string;
 }
+}
 
+}
 export interface EnforcementAction {
   id: string;
   violation_id: string;
@@ -131,7 +144,9 @@ export interface EnforcementAction {
   appeal_deadline?: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface EnforcementParameters {
   duration_hours?: number;
   restriction_level?: string;
@@ -141,13 +156,17 @@ export interface EnforcementParameters {
   appeal_allowed?: boolean;
   escalation_triggers?: EscalationTrigger[];
 }
+}
 
+}
 export interface EscalationTrigger {
   condition: string;
   action: string;
   notify_roles: string[];
 }
+}
 
+}
 export interface ViolationDetectionRule {
   id: string;
   policy_id: string;
@@ -163,7 +182,9 @@ export interface ViolationDetectionRule {
   updated_at: Date;
   created_by: string;
 }
+}
 
+}
 export interface DetectionCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex' | 'ai_classify';
@@ -171,7 +192,9 @@ export interface DetectionCondition {
   weight: number;
   logical_operator?: 'and' | 'or';
 }
+}
 
+}
 export interface AIModelConfig {
   model_name: string;
   version: string;
@@ -179,40 +202,52 @@ export interface AIModelConfig {
   features: string[];
   preprocessing: PreprocessingConfig;
 }
+}
 
+}
 export interface PreprocessingConfig {
   text_normalization: boolean;
   content_extraction: boolean;
   feature_engineering: string[];
 }
+}
 
+}
 export interface RuleEnforcementConfig {
   severity_mapping: Record<string, ViolationSeverity>;
   automatic_actions: AutomaticAction[];
   escalation_rules: EscalationRule[];
   grace_period_hours: number;
 }
+}
 
+}
 export interface AutomaticAction {
   trigger_confidence: number;
   action_type: EnforcementActionType;
   parameters: EnforcementParameters;
   requires_review: boolean;
 }
+}
 
+}
 export interface EscalationRule {
   condition: EscalationCondition;
   action: string;
   notify_users: string[];
   delay_hours: number;
 }
+}
 
+}
 export interface EscalationCondition {
   type: 'violation_count' | 'severity_threshold' | 'time_elapsed' | 'appeal_filed';
   threshold: number;
   time_window_hours?: number;
 }
+}
 
+}
 export interface ViolationReport {
   reporter_id?: string;
   reporter_type: 'user' | 'admin' | 'system';
@@ -224,7 +259,9 @@ export interface ViolationReport {
   additional_context?: string;
   anonymous: boolean;
 }
+}
 
+}
 export interface EnforcementDashboard {
   summary: EnforcementSummary;
   recent_violations: PolicyViolation[];
@@ -233,7 +270,9 @@ export interface EnforcementDashboard {
   escalated_cases: PolicyViolation[];
   analytics: EnforcementAnalytics;
 }
+}
 
+}
 export interface EnforcementSummary {
   total_violations: number;
   violations_by_severity: Record<ViolationSeverity, number>;
@@ -243,7 +282,9 @@ export interface EnforcementSummary {
   resolution_rate: number;
   avg_resolution_time_hours: number;
 }
+}
 
+}
 export interface EnforcementAnalytics {
   detection_accuracy: number;
   false_positive_rate: number;
@@ -251,19 +292,24 @@ export interface EnforcementAnalytics {
   enforcement_effectiveness: Record<EnforcementActionType, EffectivenessMetric>;
   trend_data: TrendData[];
 }
+}
 
+}
 export interface EffectivenessMetric {
   usage_count: number;
   success_rate: number;
   repeat_violation_rate: number;
   appeal_rate: number;
 }
+}
 
+}
 export interface TrendData {
   date: Date;
   violation_count: number;
   action_count: number;
   resolution_time: number;
+}
 }
 
 export class MarketplacePolicyEnforcementService {
@@ -271,6 +317,7 @@ export class MarketplacePolicyEnforcementService {
 
   // Initialize schema
   async initializeSchema(): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -379,6 +426,7 @@ export class MarketplacePolicyEnforcementService {
     ruleData: Omit<ViolationDetectionRule, 'id' | 'created_at' | 'updated_at'>,
     creatorId: string
   ): Promise<ViolationDetectionRule> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -424,6 +472,7 @@ export class MarketplacePolicyEnforcementService {
     contentData: unknown,
     ownerId: string
   ): Promise<PolicyViolation[]> {
+
     const violations: PolicyViolation[] = [];
     const client = await this.pool.connect();
 
@@ -479,6 +528,7 @@ export class MarketplacePolicyEnforcementService {
     report: ViolationReport,
     reporterId?: string
   ): Promise<PolicyViolation> {
+
     const client = await this.pool.connect();
     try {
       const violationId = await this.generateViolationId();
@@ -507,7 +557,7 @@ export class MarketplacePolicyEnforcementService {
               additional_context: report.additional_context,
               reporter_id: report.anonymous ? null : reporterId,
               anonymous: report.anonymous
-            },
+  }
             source: 'user_report',
             collected_at: new Date()
           }),
@@ -540,6 +590,7 @@ export class MarketplacePolicyEnforcementService {
     actionId: string,
     executorId: string
   ): Promise<{ success: boolean; message: string }> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -597,6 +648,7 @@ export class MarketplacePolicyEnforcementService {
 
   // Get enforcement dashboard data
   async getEnforcementDashboard(__adminId: string): Promise<EnforcementDashboard> {
+
     const client = await this.pool.connect();
     try {
       // Get summary statistics
@@ -635,7 +687,7 @@ export class MarketplacePolicyEnforcementService {
           [ViolationSeverity.MEDIUM]: parseInt(summaryResult.rows[0].medium_severity) || 0,
           [ViolationSeverity.HIGH]: parseInt(summaryResult.rows[0].high_severity) || 0,
           [ViolationSeverity.CRITICAL]: parseInt(summaryResult.rows[0].critical_severity) || 0
-        },
+  }
         violations_by_type: {}, // Would be populated with actual data
         active_actions: actionsResult.rows.length,
         pending_reviews: parseInt(summaryResult.rows[0].pending_reviews) || 0,
@@ -664,6 +716,7 @@ export class MarketplacePolicyEnforcementService {
     content: string,
     contentType: string
   ): Promise<{ violations: ViolationType[]; confidence: number; reasoning: string }> {
+
     // Check cache first
     const contentHash = this.generateContentHash(content);
     const cached = await this.getCachedPrediction(contentHash);
@@ -687,6 +740,7 @@ export class MarketplacePolicyEnforcementService {
     contentData: unknown,
     contentId: string
   ): Promise<{ detected: boolean; confidence: number; evidence: Error }> {
+
     let score = 0;
     let totalWeight = 0;
     const evidence = [];
@@ -714,8 +768,7 @@ export class MarketplacePolicyEnforcementService {
         type: 'rule_evaluation',
         data: evidence,
         source: rule.name,
-        collected_at: new Date()
-      }
+        collected_at: new Date(}
     };
   }
 
@@ -766,6 +819,7 @@ export class MarketplacePolicyEnforcementService {
     detection: { detected: boolean; confidence: number; evidence: Error },
     client: PoolClient
   ): Promise<PolicyViolation> {
+
     const violationId = await this.generateViolationId();
     
     const result = await client.query(
@@ -798,6 +852,7 @@ export class MarketplacePolicyEnforcementService {
     enforcementConfig: RuleEnforcementConfig,
     client: PoolClient
   ): Promise<void> {
+
     for (const autoAction of enforcementConfig.automatic_actions) {
       if (violation.confidence_score >= autoAction.trigger_confidence) {
         await client.query(
@@ -817,6 +872,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async performEnforcementAction(action: unknown, __executorId: string): Promise<unknown> {
+
     // Implementation would perform the actual enforcement action
     // (suspend account, delist content, send warning, etc.)
     console.log(`Executing ${action.action_type} for violation ${action.violation_id}`);
@@ -824,6 +880,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async updateViolationStatusIfComplete(violationId: string, client: PoolClient): Promise<void> {
+
     const pendingActions = await client.query(
       'SELECT COUNT(*) FROM marketplace_enforcement_actions WHERE violation_id = $1 AND status = $2',
       [violationId, EnforcementStatus.PENDING]
@@ -838,6 +895,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async calculateEnforcementAnalytics(__client: PoolClient): Promise<EnforcementAnalytics> {
+
     // Simplified analytics calculation
     return {
       detection_accuracy: 0.85,
@@ -852,6 +910,7 @@ export class MarketplacePolicyEnforcementService {
     content: string,
     __contentType: string
   ): Promise<{ violations: ViolationType[]; confidence: number; reasoning: string }> {
+
     // Simulate AI classification - in production, call actual AI service
     await new Promise(resolve => setTimeout(resolve, 100));
     
@@ -883,6 +942,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async getCachedPrediction(contentHash: string): Promise<unknown> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -897,6 +957,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async cachePrediction(contentHash: string, prediction: unknown): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query(
@@ -922,6 +983,7 @@ export class MarketplacePolicyEnforcementService {
   }
 
   private async generateViolationId(): Promise<string> {
+
     return `VIO-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`;
   }
 
@@ -993,6 +1055,7 @@ export class MarketplacePolicyEnforcementService {
     client: PoolClient,
     entry: { action: string; user_id: string; details: unknown }
   ): Promise<void> {
+
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

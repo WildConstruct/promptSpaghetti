@@ -10,33 +10,30 @@ import { useGraphStore } from '../graphStore';
 import { usePreviewStateStore } from '../stores/previewStateStore';
 import { debounce } from 'lodash';
 interface GraphChangeAnalysis {
-  changeType: 'structural' | 'content' | 'cosmetic';
-  affectedNodes: string[];
-  affectedEdges: string[];
-  significance: number; // 0-1 scale
+  changeType: 'structural' | 'content' | 'cosmetic';,
+  affectedNodes: string;
+  affectedEdges: string;,
+  significance: number; // 0-1 scale,
   shouldTriggerPreview: boolean;
-}
-interface PreviewSyncOptions {
+  interface PreviewSyncOptions {
   enabled?: boolean;
   debounceMs?: number;
   significanceThreshold?: number;
   maxAutoRefreshRate?: number;
   enablePerformanceTracking?: boolean;
-}
-interface PreviewSyncReturn {
-  isEnabled: boolean;
+  interface PreviewSyncReturn {
+  isEnabled: boolean;,
   isSyncing: boolean;
-  lastSyncTime: number | null;
+  lastSyncTime: number | null;,
   syncCount: number;
-  enableSync: (enabled: boolean) => void;
+  enableSync: (enabled: boolean) => void;,
   forceSyncNow: () => Promise<void>;
-  getChangeAnalysis: () => GraphChangeAnalysis | null;
+  getChangeAnalysis: () => GraphChangeAnalysis | null;,
   performanceMetrics: {,
-    avgSyncTime: number;
-    successRate: number;
-    cacheHitRate: number;
-  };
-}
+  avgSyncTime: number;,
+  successRate: number;
+  cacheHitRate: number;
+};
 
 // Generate hash for graph objects for change detection
 const generateGraphHash = (graph: any): string => {
@@ -53,7 +50,6 @@ const generateGraphHash = (graph: any): string => {
     return btoa(stableStringify(graph)).slice(0, 16);
   } catch {
     return `hash_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  }
 };
 
 // Analyze graph changes to determine significance
@@ -61,26 +57,23 @@ const analyzeGraphChanges = (;);
   oldGraph: any,
   newGraph: any,
   oldHash: string,
-  newHash: string,
-): GraphChangeAnalysis => {
+  newHash: string): GraphChangeAnalysis => {,
   if (oldHash === newHash) {
-    return {
-      changeType: 'cosmetic',
-      affectedNodes: [],
-      affectedEdges: [],
-      significance: 0,
-      shouldTriggerPreview: false,
-    };
-  }
+  return {
+  changeType: 'cosmetic',
+  affectedNodes: [],
+  affectedEdges: [],
+  significance: 0,
+  shouldTriggerPreview: false,
+};
   if (!oldGraph || !newGraph) {
-    return {
-      changeType: 'structural',
-      affectedNodes: [],
-      affectedEdges: [],
-      significance: 1,
-      shouldTriggerPreview: true,
-    };
-  }
+  return {
+  changeType: 'structural',
+  affectedNodes: [],
+  affectedEdges: [],
+  significance: 1,
+  shouldTriggerPreview: true,
+};
   const oldNodes = new Set((oldGraph.nodes || []).map((n: any) => n.id));
   const newNodes = new Set((newGraph.nodes || []).map((n: any) => n.id));
   const oldEdges = new Set((oldGraph.edges || []).map((e: any) => e.id));
@@ -93,16 +86,15 @@ const analyzeGraphChanges = (;);
   const structuralChanges = nodesAdded.length + nodesRemoved.length + ;
                            edgesAdded.length + edgesRemoved.length;
   if (structuralChanges > 0) {
-    return {
-      changeType: 'structural',
-      affectedNodes: [...nodesAdded, ...nodesRemoved],
-      affectedEdges: [...edgesAdded, ...edgesRemoved],
-      significance: Math.min(1, structuralChanges / 10), // Cap at 1.0
-      shouldTriggerPreview: true,
-    };
-  }
+  return {
+  changeType: 'structural',
+  affectedNodes: [...nodesAdded, ...nodesRemoved],
+  affectedEdges: [...edgesAdded, ...edgesRemoved],
+  significance: Math.min(1, structuralChanges / 10), // Cap at 1.0,
+  shouldTriggerPreview: true,
+};
   // Check for content changes in existing nodes
-  const changedNodes: string[] = [];
+  const changedNodes: string = [];
   const commonNodes = [...oldNodes].filter(id => newNodes.has(id));
   for (const nodeId of commonNodes) {
     const oldNode = (oldGraph.nodes || []).find((n: any) => n.id === nodeId);
@@ -112,30 +104,24 @@ const analyzeGraphChanges = (;);
       const oldData = { ...oldNode.data };
       const newData = { ...newNode.data };
       if (JSON.stringify(oldData) !== JSON.stringify(newData)) {
-        changedNodes.push(nodeId);
-      }
-    }
-  }
+  changedNodes.push(nodeId);
   if (changedNodes.length > 0) {
-    return {
-      changeType: 'content',
-      affectedNodes: changedNodes,
-      affectedEdges: [],
-      significance: Math.min(0.8, changedNodes.length / 5), // Content changes are less significant
-      shouldTriggerPreview: changedNodes.length > 0,
-    };
-  }
+  return {
+  changeType: 'content',
+  affectedNodes: changedNodes,
+  affectedEdges: [],
+  significance: Math.min(0.8, changedNodes.length / 5), // Content changes are less significant,
+  shouldTriggerPreview: changedNodes.length > 0,
+};
   // If we reach here, it's likely a cosmetic change
   return {
-    changeType: 'cosmetic',
-    affectedNodes: [],
-    affectedEdges: [],
-    significance: 0.1,
-    shouldTriggerPreview: false,
-  };
+  changeType: 'cosmetic',
+  affectedNodes: [],
+  affectedEdges: [],
+  significance: 0.1,
+  shouldTriggerPreview: false,
 };
-
-export 
+};
   // Graph store state
   const { nodes, edges, getGraphData } = useGraphStore();
   // Preview state store
@@ -156,24 +142,24 @@ export
   const syncCountRef = useRef(0);
   const isSyncingRef = useRef(false);
   const performanceDataRef = useRef({)
-    syncTimes: [] as number[],
-    successCount: 0,
-    totalAttempts: 0,
-  });
+  syncTimes: [] as number,
+  successCount: 0,
+  totalAttempts: 0,
+});
   const lastChangeAnalysisRef = useRef<GraphChangeAnalysis | null>(null);
   // Get current graph data
   const currentGraph = useMemo(() => ({ nodes, edges }), [nodes, edges]);
   const currentGraphHash = useMemo(() => generateGraphHash(currentGraph), [currentGraph]);
   // Performance metrics calculation
   const performanceMetricsCalc = useMemo(() => {
-    const data = performanceDataRef.current;
-    return {
-      avgSyncTime: data.syncTimes.length > 0 ,
-        ? data.syncTimes.reduce((sum, time) => sum + time, 0) / data.syncTimes.length 
-        : 0,
-      successRate: data.totalAttempts > 0 ? data.successCount / data.totalAttempts : 1,
-      cacheHitRate: performanceMetrics.cacheHitRate,
-    };
+  const data = performanceDataRef.current;
+  return {
+  avgSyncTime: data.syncTimes.length > 0 ,
+  ? data.syncTimes.reduce((sum, time) => sum + time, 0) / data.syncTimes.length
+  : 0,
+  successRate: data.totalAttempts > 0 ? data.successCount / data.totalAttempts : 1,
+  cacheHitRate: performanceMetrics.cacheHitRate,
+};
   }, [performanceMetrics.cacheHitRate, performanceDataRef.current]);
   // Import usePreviewSeeds for actual preview execution
   // Initialize preview runner
@@ -184,100 +170,94 @@ export
         // We can't use the hook here, so we'll need to handle this differently
         // For now, we'll create a simpler API call function
       } catch (error) {
-        console.warn('Failed to initialize preview runner:', error);
-      }
-    };
+  console.warn('Failed to initialize preview runner:', error);
+};
     initializePreviewRunner();
   }, []);
   // Execute preview with caching and performance tracking
   const executePreview = useCallback(async (graph: any, forceRefresh = false): Promise<boolean> => {
-    if (isSyncingRef.current) return false;
-    isSyncingRef.current = true;
-    const startTime = Date.now();
-    performanceDataRef.current.totalAttempts++;
-    try {
-      const graphHash = generateGraphHash(graph);
-      // Check cache first (unless forced refresh)
-      if (!forceRefresh) {
-        const cached = getCachedResults(graphHash);
-        if (cached && cached.results.length > 0) {
-          // Use cached results
-          usePreviewStateStore.setState({)
-            results: cached.results,
-            performanceStats: cached.performanceStats,
-            lastUpdateTimestamp: Date.now(),
-          });
+  if (isSyncingRef.current) return false;
+  isSyncingRef.current = true;
+  const startTime = Date.now();
+  performanceDataRef.current.totalAttempts++;
+  try {
+  const graphHash = generateGraphHash(graph);
+  // Check cache first (unless forced refresh)
+  if (!forceRefresh) {
+  const cached = getCachedResults(graphHash);
+  if (cached && cached.results.length > 0) {
+  // Use cached results
+  usePreviewStateStore.setState({)
+  results: cached.results,
+  performanceStats: cached.performanceStats,
+  lastUpdateTimestamp: Date.now(),
+});
           performanceDataRef.current.successCount++;
           return true;
-        }
-      }
       // Execute actual preview
       const response = await fetch('/preview', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({),
-          graph,
-          runs: 5,
-          seedStart: Math.floor(Math.random() * 10000),
-        })
+  graph,
+  runs: 5,
+  seedStart: Math.floor(Math.random() * 10000),
+}
       });
       if (!response.ok) {
         throw new Error(`Preview API error: ${response.status}`);}
-      }
       const data = await response.json();
       // Transform results
-      const results = data.results.map((result: any) => ({)
-        seed: result.seed,
-        output: result.output?.startsWith('Error:') ? undefined : result.output,
-        error: result.output?.startsWith('Error:') ? result.output : undefined,
-        executionTimeMs: result.executionTimeMs,
-        executionPath: result.executionPath,
-        weightChoices: result.weightChoices || [],
-        usedNodeIds: result.executionPath?.nodeExecutionOrder || [],
-        usedEdgeIds: [],
-      }));
+      const results = data.results.map((result: any) => ({,)
+  seed: result.seed,
+  output: result.output?.startsWith('Error:') ? undefined : result.output,
+  error: result.output?.startsWith('Error:') ? result.output : undefined,
+  executionTimeMs: result.executionTimeMs,
+  executionPath: result.executionPath,
+  weightChoices: result.weightChoices || [],
+  usedNodeIds: result.executionPath?.nodeExecutionOrder || [],
+  usedEdgeIds: [],
+}));
       // Calculate performance stats
       const executionTimes = results;
         .map((r: any) => r.executionTimeMs)
         .filter((t: any): t is number => typeof t === 'number');
       const performanceStats = executionTimes.length > 0 ? {
-        totalTime: Date.now() - startTime,
-        averageTime: Math.round(executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length)
-      } : null;
+  totalTime: Date.now() - startTime,
+  averageTime: Math.round(executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length),
+} : null;
       // Update store
       usePreviewStateStore.setState({)
-        results,
-        performanceStats,
-        error: null,
-        aggregateError: null,
-        lastUpdateTimestamp: Date.now(),
-      });
+  results,
+  performanceStats,
+  error: null,
+  aggregateError: null,
+  lastUpdateTimestamp: Date.now(),
+});
       // Cache results
       setCachedResults(graphHash, results, performanceStats);
       // Update performance tracking
       if (enablePerformanceTracking) {
-        const syncTime = Date.now() - startTime;
-        performanceDataRef.current.syncTimes.push(syncTime);
-        performanceDataRef.current.syncTimes = performanceDataRef.current.syncTimes.slice(-50); // Keep last 50
-        updatePerformanceMetrics({)
-          totalExecutionTime: performanceMetrics.totalExecutionTime + syncTime,
-          averageExecutionTime: performanceMetricsCalc.avgSyncTime,
-          lastExecutionCount: performanceMetrics.lastExecutionCount + 1,
-        });
-      }
+  const syncTime = Date.now() - startTime;
+  performanceDataRef.current.syncTimes.push(syncTime);
+  performanceDataRef.current.syncTimes = performanceDataRef.current.syncTimes.slice(-50); // Keep last 50
+  updatePerformanceMetrics({)
+  totalExecutionTime: performanceMetrics.totalExecutionTime + syncTime,
+  averageExecutionTime: performanceMetricsCalc.avgSyncTime,
+  lastExecutionCount: performanceMetrics.lastExecutionCount + 1,
+});
       performanceDataRef.current.successCount++;
       lastSyncTimeRef.current = Date.now();
       syncCountRef.current++;
       return true;
     } catch (error) {
-      console.error('Preview sync failed:', error);
-      usePreviewStateStore.setState({)
-        error: error instanceof Error ? error.message : 'Preview sync failed',
-      });
+  console.error('Preview sync failed:', error);
+  usePreviewStateStore.setState({)
+  error: error instanceof Error ? error.message : 'Preview sync failed',
+});
       return false;
     } finally {
       isSyncingRef.current = false;
-    }
   }, [
     getCachedResults,
     setCachedResults,
@@ -291,34 +271,31 @@ export
     () => debounce((graph: any, analysis: GraphChangeAnalysis) => {
       if (analysis.shouldTriggerPreview && analysis.significance >= significanceThreshold) {
         executePreview(graph);
-      }
     }, debounceMs),
     [debounceMs, significanceThreshold, executePreview]
   );
   // Handle graph changes
   useEffect(() => {
-    if (!isRealTimeEnabled || !enabled) return;
-    const oldGraph = lastGraphRef.current;
-    const oldHash = lastGraphHash;
-    // Analyze changes
-    const analysis = analyzeGraphChanges(oldGraph, currentGraph, oldHash || '', currentGraphHash);
-    lastChangeAnalysisRef.current = analysis;
-    // Update graph hash
-    updateGraphHash(currentGraphHash);
-    lastGraphRef.current = currentGraph;
-    // Check rate limiting
-    const timeSinceLastSync = lastSyncTimeRef.current ;
-      ? Date.now() - lastSyncTimeRef.current 
-      : maxAutoRefreshRate;
-    if (timeSinceLastSync < maxAutoRefreshRate) {
-      console.log('Preview sync rate limited');
-      return;
-    }
-    // Check if auto refresh should trigger
-    if (shouldAutoRefresh(analysis.significance)) {
-      debouncedSync(currentGraph, analysis);
-    }
-  }, [
+  if (!isRealTimeEnabled || !enabled) return;
+  const oldGraph = lastGraphRef.current;
+  const oldHash = lastGraphHash;
+  // Analyze changes
+  const analysis = analyzeGraphChanges(oldGraph, currentGraph, oldHash || '', currentGraphHash);
+  lastChangeAnalysisRef.current = analysis;
+  // Update graph hash
+  updateGraphHash(currentGraphHash);
+  lastGraphRef.current = currentGraph;
+  // Check rate limiting
+  const timeSinceLastSync = lastSyncTimeRef.current ;
+  ? Date.now() - lastSyncTimeRef.current
+  : maxAutoRefreshRate;
+  if (timeSinceLastSync < maxAutoRefreshRate) {
+  console.log('Preview sync rate limited');
+  return;
+  // Check if auto refresh should trigger
+  if (shouldAutoRefresh(analysis.significance)) {
+  debouncedSync(currentGraph, analysis);
+}, [
     currentGraph,
     currentGraphHash,
     isRealTimeEnabled,
@@ -349,13 +326,13 @@ export
     };
   }, [debouncedSync]);
   return {
-    isEnabled: isRealTimeEnabled && enabled,
-    isSyncing: isSyncingRef.current,
-    lastSyncTime: lastSyncTimeRef.current,
-    syncCount: syncCountRef.current,
-    enableSync,
-    forceSyncNow,
-    getChangeAnalysis,
-    performanceMetrics: performanceMetricsCalc,
-  };
+  isEnabled: isRealTimeEnabled && enabled,
+  isSyncing: isSyncingRef.current,
+  lastSyncTime: lastSyncTimeRef.current,
+  syncCount: syncCountRef.current,
+  enableSync,
+  forceSyncNow,
+  getChangeAnalysis,
+  performanceMetrics: performanceMetricsCalc,
+};
 };

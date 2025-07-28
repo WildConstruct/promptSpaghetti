@@ -6,6 +6,7 @@
  * insights about the creative range and consistency of prompt outputs.
  */
 import { PreviewResultWithPath } from '../types/ExecutionPath';
+
 export interface VarianceMetrics {
     overallVariance: 'low' | 'medium' | 'high';
     varianceScore: number;
@@ -22,21 +23,21 @@ export interface VarianceMetrics {
         creativityScore: number;
     };
     suggestions: VarianceSuggestion[];
-}
+
 export interface VarianceSuggestion {
     type: 'increase' | 'decrease' | 'optimize';
     category: 'weights' | 'structure' | 'content' | 'execution';
     message: string;
     impact: 'low' | 'medium' | 'high';
     actionable: boolean;
-}
+
 export interface DiversityIndicator {
     metric: string;
     value: number;
     level: 'low' | 'medium' | 'high';
     description: string;
     color: string;
-}
+
 export declare class VarianceAnalysisService {
     /**
      * Analyzes variance across multiple preview results
@@ -84,6 +85,6 @@ export declare class VarianceAnalysisService {
     private calculateStringSimilarity;
     private categorizeMetric;
     private getMetricColor;
-}
+
 export declare const varianceAnalysisService: VarianceAnalysisService;
 //# sourceMappingURL=VarianceAnalysisService.d.ts.map

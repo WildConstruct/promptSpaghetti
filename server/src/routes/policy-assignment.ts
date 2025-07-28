@@ -20,6 +20,7 @@ import {
 } from '../types/PolicyAssignmentTypes';
 
 // Request/Response schemas
+}
 interface CreateAssignmentRequest {
   Body: {
     policyId: string;
@@ -34,9 +35,11 @@ interface CreateAssignmentRequest {
     conditions?: any[];
     inheritance?: any;
     metadata?: any;
+}
   };
 }
 
+}
 interface BulkAssignmentRequest {
   Body: {
     title: string;
@@ -49,10 +52,12 @@ interface BulkAssignmentRequest {
       dryRun?: boolean;
       executionMode?: string;
       rollbackOnError?: boolean;
+}
     };
   };
 }
 
+}
 interface GetAssignmentsRequest {
   Querystring: {
     targetType?: AssignmentTargetType;
@@ -62,31 +67,40 @@ interface GetAssignmentsRequest {
     page?: number;
     limit?: number;
     includeInherited?: boolean;
+}
   };
 }
 
+}
 interface AssignmentByIdRequest {
   Params: {
     assignmentId: string;
+}
   };
 }
 
+}
 interface BulkAssignmentByIdRequest {
   Params: {
     bulkAssignmentId: string;
+}
   };
 }
 
+}
 interface ConflictAnalysisRequest {
   Body: {
     assignments: any[];
+}
   };
 }
 
+}
 interface EffectivePoliciesRequest {
   Params: {
     targetType: AssignmentTargetType;
     targetId: string;
+}
   };
   Querystring: {
     contextDate?: string;
@@ -107,7 +121,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
       targetType: { 
         type: 'string', 
         enum: ['USER', 'ROLE', 'TEAM', 'ORG_UNIT', 'DEPARTMENT', 'LOCATION', 'DATA_TYPE', 'SYSTEM'] 
-      },
+  }
       targetId: { type: 'string', minLength: 1 },
       targetDisplayName: { type: 'string' },
       effectiveDate: { type: 'string', format: 'date-time' },
@@ -130,24 +144,24 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         minItems: 1,
         maxItems: 1000,
         items: assignmentSchema
-      },
+  }
       strategy: {
         type: 'object',
         properties: {
           conflictResolution: { 
             type: 'string', 
             enum: ['MOST_RESTRICTIVE', 'LEAST_RESTRICTIVE', 'HIGHEST_PRIORITY', 'EXPLICIT_OVERRIDE', 'MANUAL_REVIEW'] 
-          },
+  }
           inheritanceHandling: { 
             type: 'string', 
             enum: ['PRESERVE_EXISTING', 'OVERRIDE_EXISTING', 'MERGE_WITH_EXISTING', 'SKIP_INHERITED'] 
-          },
+  }
           approvalRequired: { type: 'boolean' },
           dryRun: { type: 'boolean' },
           executionMode: { 
             type: 'string', 
             enum: ['IMMEDIATE', 'SCHEDULED', 'STAGED', 'MANUAL_TRIGGER'] 
-          },
+  }
           rollbackOnError: { type: 'boolean' }
         }
       }
@@ -169,7 +183,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
             data: { type: 'object' },
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           description: 'Invalid request data',
           type: 'object',
@@ -395,7 +409,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
           targetType: { type: 'string' },
           targetId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -498,7 +512,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           assignmentId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -629,7 +643,7 @@ export default async function policyAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           assignmentId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['childTargetType', 'childTargetId'],

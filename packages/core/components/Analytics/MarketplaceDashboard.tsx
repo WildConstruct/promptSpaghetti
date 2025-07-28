@@ -30,7 +30,6 @@ export interface MarketplaceDashboardProps {
   timeRange?: string;
   className?: string;
 }
-
 export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   userId,
   userRole = 'director',
@@ -46,7 +45,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     refreshData
   } = useMarketplaceMetrics({ userRole });
   const [selectedMetric, setSelectedMetric] = useState<'revenue' | 'downloads' | 'rating'>('revenue');
-  const [topTemplates, setTopTemplates] = useState<any[]>([]);
+  const [topTemplates, setTopTemplates] = useState<any>([]);
   const [searchData, setSearchData] = useState<unknown>(null);
   useEffect(() => {
     if (!isLoading && dashboardData) {
@@ -54,28 +53,26 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
       const search = getSearchAnalytics();
       setTopTemplates(templates);
       setSearchData(search);
-    }
   }, [isLoading, dashboardData, selectedMetric, getTopPerformingTemplates, getSearchAnalytics]);
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {)
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
+  return new Intl.NumberFormat('en-US', {)
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+}).format(amount);
   };
   const formatNumber = (num: number) => {
     if (num >= 1000000) {
       return `${(num / 1000000).toFixed(1)}M`;}
     } else if (num >= 1000) {
       return `${(num / 1000).toFixed(1)}K`;}
-    }
     return num.toString();
   };
   const renderOverviewMetrics = () => {
     if (!dashboardData) return null;
     const { overview, trends } = dashboardData;
-    return ();
+    return;
       <div className="overview-metrics">
         <div className="metrics-grid">
           <Card className="metric-card revenue">
@@ -175,7 +172,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   };
   const renderTopCategories = () => {
     if (!dashboardData?.trends.topCategories) return null;
-    return ();
+    return;
       <Card className="top-categories-card">
         <CardHeader>
           <CardTitle>Top Performing Categories</CardTitle>
@@ -204,7 +201,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   const renderTopTemplates = () => {
-    return ();
+    return;
       <Card className="top-templates-card">
         <CardHeader>
           <div className="templates-header">
@@ -256,7 +253,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
   };
   const renderSearchAnalytics = () => {
     if (!searchData) return null;
-    return ();
+    return;
       <div className="search-analytics">
         <Card className="search-overview">
           <CardHeader>
@@ -303,7 +300,7 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   const renderInsights = () => {
-    return ();
+    return;
       <Card className="insights-card">
         <CardHeader>
           <CardTitle>Marketplace Insights</CardTitle>
@@ -337,14 +334,13 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
     );
   };
   if (isLoading) {
-    return ();
+    return;
       <div className="marketplace-dashboard loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace analytics...</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`marketplace-dashboard ${className}`}>}
       <div className="dashboard-header">
         <h2>Marketplace Analytics</h2>
@@ -378,211 +374,168 @@ export const MarketplaceDashboard: React.FC<MarketplaceDashboardProps> = ({)
       <style>{`
         .marketplace-dashboard {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
+          flex-direction: column;,
+  gap: 1.5rem;
           padding: 1rem;
-        }
         .dashboard-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .dashboard-header h2 {
           margin: 0;
           font-size: 1.5rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 1rem;
           margin-bottom: 2rem;
-        }
         .metric-card {
           transition: transform 0.2s ease;
-        }
-        .metric-card:hover {
-          transform: translateY(-2px);
-        }
+        .metric-card:hover {,
+  transform: translateY(-2px);
         .metric-title {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-size: 0.875rem;
-          font-weight: 500;
-          color: #6b7280;
-        }
+          font-weight: 500;,
+  color: #6b7280;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin: 0.5rem 0;
-        }
         .metric-trend {
           display: flex;
-          align-items: center;
-          gap: 0.25rem;
+          align-items: center;,
+  gap: 0.25rem;
           font-size: 0.875rem;
-        }
         .trend-value {
-          font-weight: 600;
-          color: #059669;
-        }
+          font-weight: 600;,
+  color: #059669;
         .trend-period {
           color: #9ca3af;
-        }
         .metric-subtitle {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .rating-stars {
-          display: flex;
-          gap: 0.125rem;
+          display: flex;,
+  gap: 0.125rem;
           margin-top: 0.25rem;
-        }
         .categories-list, .templates-list, .queries-list, .insights-list {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .category-item, .template-item, .query-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 1rem;
+          justify-content: space-between;,
+  padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
-        }
         .category-info, .template-info, .query-info {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .category-rank, .template-rank, .query-rank {
-          font-weight: 600;
-          color: #6b7280;
+          font-weight: 600;,
+  color: #6b7280;
           min-width: 2rem;
-        }
         .category-name, .template-name, .query-text {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .category-revenue, .metric-primary {
           font-size: 1.1rem;
-          font-weight: 600;
-          color: #059669;
-        }
+          font-weight: 600;,
+  color: #059669;
         .metric-secondary {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          display: flex;,
+  gap: 1rem;
+          font-size: 0.875rem;,
+  color: #6b7280;
         .query-stats {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .search-analytics {
           display: grid;
-          grid-template-columns: 1fr 2fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 2fr;,
+  gap: 1rem;
         .search-metrics {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .search-stat {
           text-align: center;
-        }
         .stat-value {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .stat-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .insight-item {
-          display: flex;
-          gap: 1rem;
-          padding: 1rem;
-          border: 1px solid #e5e7eb;
+          display: flex;,
+  gap: 1rem;
+          padding: 1rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 8px;
           border-left: 4px solid;
-        }
         .insight-item.high {
           border-left-color: #dc2626;
-        }
         .insight-item.medium {
           border-left-color: #f59e0b;
-        }
         .insight-item.low {
           border-left-color: #10b981;
-        }
         .insight-icon {
-          flex-shrink: 0;
-          padding: 0.5rem;
+          flex-shrink: 0;,
+  padding: 0.5rem;
           background: #f3f4f6;
           border-radius: 8px;
-        }
         .insight-content {
           flex: 1;
-        }
         .insight-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 0.5rem;
-        }
         .insight-title {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .insight-description {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.75rem;
-        }
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          padding: 4rem;
+          align-items: center;,
+  padding: 4rem;
           gap: 1rem;
-        }
         .loading-spinner {
-          width: 2rem;
-          height: 2rem;
+          width: 2rem;,
+  height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         @media (max-width: 768px) {
           .metrics-grid {
             grid-template-columns: 1fr;
-          }
           .search-analytics {
             grid-template-columns: 1fr;
-          }
           .templates-header {
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: column;,
+  gap: 1rem;
             align-items: stretch;
-          }
-        }
       `}</style>
     </div>
   );

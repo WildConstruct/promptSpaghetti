@@ -7,7 +7,7 @@ export interface OpenAIAgentConfig {
     useJsonMode: boolean;
     maxRetries: number;
     retryTemperatureReduction: number;
-}
+
 export interface GraphGenerationRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -17,7 +17,7 @@ export interface GraphGenerationRequest {
     focusAreas?: string[];
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
-}
+
 export interface GenerationResult {
     success: boolean;
     graph?: string;
@@ -30,7 +30,7 @@ export interface GenerationResult {
         tokenCount: number;
         generationTime: number;
     };
-}
+
 export declare class OpenAIGraphAgent {
     private config;
     private baseSystemPrompt;
@@ -59,7 +59,6 @@ export declare class OpenAIGraphAgent {
      * Generate mock response for development/testing
      */
     private generateMockResponse;
-}
 /**
  * Default configuration for OpenAI agent
  */
@@ -67,8 +66,7 @@ export declare const defaultOpenAIConfig: OpenAIAgentConfig;
 /**
  * Utility function to create and use OpenAI agent
  */
-export declare function generateGraphWithOpenAI()
-  request: GraphGenerationRequest,
+export declare function generateGraphWithOpenAI(request: GraphGenerationRequest,)
   config?: Partial<OpenAIAgentConfig>
 ): Promise<GenerationResult>;
 //# sourceMappingURL=openai-agent.d.ts.map

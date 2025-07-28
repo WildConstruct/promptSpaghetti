@@ -7,6 +7,7 @@ import { SessionService, ActiveSession } from './SessionService';
 import { AuditService } from './AuditService';
 import { RedisService } from '../database/RedisService';
 
+}
 export interface SessionMetrics {
   totalActiveSessions: number;
   sessionsByDevice: Record<string, number>;
@@ -15,7 +16,9 @@ export interface SessionMetrics {
   suspiciousActivities: number;
   concurrentSessionsPerUser: Record<string, number>;
 }
+}
 
+}
 export interface SessionAlert {
   id: string;
   type: 'concurrent_limit' | 'suspicious_location' | 'unusual_device' | 'rapid_location_change' | 'session_hijack_attempt';
@@ -28,7 +31,9 @@ export interface SessionAlert {
   resolvedAt?: Date;
   resolvedBy?: string;
 }
+}
 
+}
 export interface MonitoringRule {
   id: string;
   name: string;
@@ -38,9 +43,12 @@ export interface MonitoringRule {
   parameters: Record<string, any>;
   action: 'alert' | 'block' | 'require_2fa' | 'notify_user';
 }
+}
 
+}
 export interface SessionAnalytics {
   userId?: string;
+}
   timeRange: { start: Date; end: Date };
   metrics: {
     totalSessions: number;
@@ -118,6 +126,7 @@ export class SessionMonitoringService {
 
   // Perform a monitoring cycle
   private async performMonitoringCycle(): Promise<void> {
+
     const metrics = await this.collectMetrics();
     await this.checkForAnomalies(metrics);
     await this.updateMetricsCache(metrics);
@@ -125,6 +134,7 @@ export class SessionMonitoringService {
 
   // Collect current session metrics
   async collectMetrics(): Promise<SessionMetrics> {
+
     const activeSessionsResult = await this.dbService.query(`
       SELECT 
         COUNT(*) as total,
@@ -194,6 +204,7 @@ export class SessionMonitoringService {
 
   // Check for anomalies and generate alerts
   private async checkForAnomalies(metrics: SessionMetrics): Promise<void> {
+
     // Check concurrent session limits
     for (const [userId, count] of Object.entries(metrics.concurrentSessionsPerUser)) {
       if (count > this.alertThresholds.maxConcurrentSessions) {
@@ -221,6 +232,7 @@ export class SessionMonitoringService {
 
   // Check for rapid location changes
   private async checkRapidLocationChanges(): Promise<void> {
+
     const result = await this.dbService.query(`
       WITH session_locations AS (
         SELECT 
@@ -232,7 +244,7 @@ export class SessionMonitoringService {
           LAG(created_at) OVER (PARTITION BY user_id ORDER BY created_at) as prev_created
         FROM user_sessions
         WHERE created_at > NOW() - INTERVAL '24 hours'
-      )
+
       SELECT *
       FROM session_locations
       WHERE prev_ip IS NOT NULL 
@@ -272,6 +284,7 @@ export class SessionMonitoringService {
 
   // Check for suspicious devices
   private async checkSuspiciousDevices(): Promise<void> {
+
     const result = await this.dbService.query(`
       SELECT DISTINCT
         s.user_id,
@@ -308,6 +321,7 @@ export class SessionMonitoringService {
 
   // Check for potential session hijacking
   private async checkSessionHijacking(): Promise<void> {
+
     const result = await this.dbService.query(`
       SELECT 
         session_token,
@@ -350,6 +364,7 @@ export class SessionMonitoringService {
 
   // Create an alert
   async createAlert(alertData: Omit<SessionAlert, 'id' | 'createdAt' | 'resolved'>): Promise<SessionAlert> {
+
     const id = require('crypto').randomUUID();
     const now = new Date();
 
@@ -383,7 +398,7 @@ export class SessionMonitoringService {
         alertType: alert.type,
         severity: alert.severity,
         details: alert.details
-      },
+  }
       sessionId: alert.sessionId,
       severity: alert.severity as any
     });
@@ -398,6 +413,7 @@ export class SessionMonitoringService {
 
   // Handle critical alerts
   private async handleCriticalAlert(alert: SessionAlert): Promise<void> {
+
     // Notify user immediately
     await this.notifyUserOfSecurityAlert(alert);
 
@@ -409,6 +425,7 @@ export class SessionMonitoringService {
 
   // Resolve an alert
   async resolveAlert(alertId: string, resolvedBy: string): Promise<void> {
+
     const now = new Date();
 
     await this.dbService.query(`
@@ -431,6 +448,7 @@ export class SessionMonitoringService {
     type?: string;
     severity?: string;
   }): Promise<SessionAlert[]> {
+
     let query = 'SELECT * FROM session_alerts WHERE NOT resolved';
     const params: any[] = [];
     let paramIndex = 1;
@@ -473,6 +491,7 @@ export class SessionMonitoringService {
     userId?: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<SessionAnalytics> {
+
     const range = timeRange || {
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
       end: new Date()
@@ -590,13 +609,14 @@ export class SessionMonitoringService {
         mostActiveHours,
         commonDevices,
         commonLocations
-      },
+  }
       anomalies
     };
   }
 
   // Update metrics cache
   private async updateMetricsCache(metrics: SessionMetrics): Promise<void> {
+
     const cacheKey = 'session_metrics:current';
     await this.redisService.setex(
       cacheKey,
@@ -604,12 +624,13 @@ export class SessionMonitoringService {
       JSON.stringify({
         metrics,
         timestamp: new Date()
-      })
+  }
     );
   }
 
   // Get cached metrics
   async getCachedMetrics(): Promise<SessionMetrics | null> {
+
     const cacheKey = 'session_metrics:current';
     const cached = await this.redisService.get(cacheKey);
     
@@ -628,6 +649,7 @@ export class SessionMonitoringService {
 
   // Helper: Get location from IP address
   private async getLocationFromIP(ipAddress: string): Promise<any> {
+
     // In production, use a real IP geolocation service
     // For now, return mock data
     return {
@@ -660,6 +682,7 @@ export class SessionMonitoringService {
     deviceInfo: any,
     userAgent: string
   ): Promise<number> {
+
     // Get user's device history
     const historyResult = await this.dbService.query(`
       SELECT device_info, user_agent, COUNT(*) as usage_count
@@ -699,6 +722,7 @@ export class SessionMonitoringService {
 
   // Helper: Notify user of security alert
   private async notifyUserOfSecurityAlert(alert: SessionAlert): Promise<void> {
+
     // Get user email
     const userResult = await this.dbService.query(
       'SELECT email FROM users WHERE id = $1',
@@ -759,6 +783,7 @@ Security Team
 
   // Get monitoring rules
   async getMonitoringRules(): Promise<MonitoringRule[]> {
+
     const result = await this.dbService.query(
       'SELECT * FROM session_monitoring_rules WHERE enabled = true ORDER BY name'
     );
@@ -776,6 +801,7 @@ Security Team
 
   // Update monitoring rule
   async updateMonitoringRule(ruleId: string, updates: Partial<MonitoringRule>): Promise<void> {
+
     const allowedFields = ['name', 'enabled', 'threshold', 'parameters', 'action'];
     const updateFields = Object.keys(updates).filter(key => allowedFields.includes(key));
     

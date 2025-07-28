@@ -16,6 +16,7 @@ import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { Database } from '../database';
 
 // Request/Response type definitions
+}
 interface DetectFraudRequest {
   Body: {
     type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
@@ -31,10 +32,12 @@ interface DetectFraudRequest {
       userAgent: string;
       source: string;
       environment: 'web' | 'mobile' | 'api';
+}
     };
   };
 }
 
+}
 interface PaymentFraudRequest {
   Body: {
     transactionId: string;
@@ -45,6 +48,7 @@ interface PaymentFraudRequest {
       cardLast4?: string;
       cardBin?: string;
       billing?: Record<string, unknown>;
+}
     };
     context: {
       ipAddress: string;
@@ -55,6 +59,7 @@ interface PaymentFraudRequest {
   };
 }
 
+}
 interface AccountFraudRequest {
   Body: {
     userId: string;
@@ -63,10 +68,12 @@ interface AccountFraudRequest {
       userAgent: string;
       source: string;
       environment: 'web' | 'mobile' | 'api';
+}
     };
   };
 }
 
+}
 interface CreateReviewCaseRequest {
   Body: {
     entityType: 'user' | 'transaction' | 'account';
@@ -75,9 +82,11 @@ interface CreateReviewCaseRequest {
     reason: string;
     priority?: 'low' | 'medium' | 'high' | 'urgent';
     evidence?: Array<Record<string, unknown>>;
+}
   };
 }
 
+}
 interface ReviewDecisionRequest {
   Body: {
     decision: 'approve' | 'reject' | 'escalate' | 'modify';
@@ -85,9 +94,11 @@ interface ReviewDecisionRequest {
     confidence: number;
     actions?: string[];
     modifiedFraudScore?: number;
+}
   };
 }
 
+}
 interface CreateAlertRequest {
   Body: {
     severity: 'info' | 'warning' | 'critical' | 'urgent';
@@ -100,9 +111,11 @@ interface CreateAlertRequest {
     detectionMethod?: string;
     expiresAt?: string;
     tags?: string[];
+}
   };
 }
 
+}
 interface FraudRuleRequest {
   Body: {
     name: string;
@@ -114,15 +127,18 @@ interface FraudRuleRequest {
     actions: Array<Record<string, unknown>>;
     thresholds: Array<Record<string, unknown>>;
     tags?: string[];
+}
   };
 }
 
+}
 interface AnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     format?: 'json' | 'csv';
     includeInsights?: boolean;
+}
   };
 }
 
@@ -181,7 +197,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -197,13 +213,13 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                   requiresReview: { type: 'boolean' },
                   autoBlocked: { type: 'boolean' }
                 }
-              },
+  }
               processingTime: { type: 'number' }
             }
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<DetectFraudRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -247,7 +263,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             autoBlocked: result.autoBlocked,
             riskFactors: result.riskFactors,
             detectionMethod: result.detectionMethod
-          },
+  }
           processingTime
         });
 
@@ -289,7 +305,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                 cardBin: { type: 'string' },
                 billing: { type: 'object' }
               }
-            },
+  }
             context: {
               type: 'object',
               required: ['ipAddress', 'userAgent', 'source', 'environment'],
@@ -303,7 +319,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<PaymentFraudRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -377,7 +393,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AccountFraudRequest>, reply: FastifyReply) => {
       try {
         const currentUserId = request.user?.id;
@@ -450,7 +466,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateReviewCaseRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -490,7 +506,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             primary: 'manual_review' as const,
             secondary: [],
             processingTime: 0
-          },
+  }
           timestamp: new Date(),
           requiresReview: true,
           autoBlocked: false
@@ -552,7 +568,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -613,7 +629,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             caseId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['analystId'],
@@ -622,7 +638,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -680,7 +696,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             caseId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['decision', 'reason', 'confidence'],
@@ -693,7 +709,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -758,7 +774,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             type: { 
               type: 'string', 
               enum: ['high_fraud_score', 'new_fraud_pattern', 'system_anomaly', 'manual_review_required'] 
-            },
+  }
             title: { type: 'string', minLength: 5 },
             description: { type: 'string', minLength: 10 },
             fraudScore: { type: 'number', minimum: 0, maximum: 100 },
@@ -770,7 +786,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateAlertRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -853,7 +869,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -916,7 +932,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -980,7 +996,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -1041,7 +1057,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
         description: 'Retrieve real-time fraud monitoring dashboard data',
         security: [{ bearerAuth: [] }]
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -1103,7 +1119,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -1177,7 +1193,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<FraudRuleRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -1235,7 +1251,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
         summary: 'Fraud system health',
         description: 'Check health status of fraud monitoring system'
       }
-    },
+  }
     async (request, reply) => {
       try {
         const health = {
@@ -1247,14 +1263,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             database: 'operational',
             mlModels: 'disabled',
             rulesEngine: 'operational'
-          },
+  }
           metrics: {
             avgProcessingTime: 150,
             successRate: 99.5,
             errorRate: 0.5,
             alertsActive: 0,
             reviewQueueSize: 0
-          },
+  }
           configuration: {
             realTimeMonitoring: true,
             mlModelsEnabled: false,

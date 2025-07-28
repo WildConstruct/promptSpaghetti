@@ -13,6 +13,7 @@ import { PolicyManagementService } from './PolicyManagementService';
 import { AutomatedEnforcementService } from '../services/trust/AutomatedEnforcementService';
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 
+}
 export interface PolicyTemplateCreateRequest {
   name: string;
   description: string;
@@ -20,7 +21,9 @@ export interface PolicyTemplateCreateRequest {
   severity: 'low' | 'medium' | 'high' | 'critical';
   defaultConfig: Record<string, unknown>;
 }
+}
 
+}
 export interface ViolationReviewRequest {
   decision: 'dismiss' | 'enforce';
   notes?: string;
@@ -28,9 +31,11 @@ export interface ViolationReviewRequest {
     actionType?: 'suspend' | 'restrict' | 'flag' | 'require_verification' | 'block_transaction' | 'quarantine_template';
     severity?: 'low' | 'medium' | 'high' | 'critical';
     expiresAt?: string;
+}
   };
 }
 
+}
 export interface EnforcementRequestCreate {
   entityType: 'user' | 'template' | 'transaction';
   entityId: string;
@@ -40,10 +45,13 @@ export interface EnforcementRequestCreate {
   evidence?: Record<string, unknown>;
   expiresAt?: string;
 }
+}
 
+}
 export interface EnforcementRequestProcess {
   decision: 'approve' | 'reject';
   rejectionReason?: string;
+}
 }
 
 export class AdminEnforcementController {
@@ -455,7 +463,7 @@ export class AdminEnforcementController {
           automatedEnforcement: 'healthy',
           trustScoring: 'healthy',
           database: 'healthy'
-        },
+  }
         metrics: {
           uptime: process.uptime(),
           memoryUsage: process.memoryUsage(),

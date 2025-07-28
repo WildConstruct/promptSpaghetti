@@ -12,6 +12,7 @@ import {
   OperationContext,
   ValidationResult
 } from '../types/DataClassification';
+
 export interface EncryptionPolicy {
     id: string;
     name: string;
@@ -23,7 +24,8 @@ export interface EncryptionPolicy {
     complianceFrameworks: string[];
     effectiveDate: Date;
     version: string;
-}
+
+
 export interface EncryptionAlgorithm {
     name: string;
     keyLength: number;
@@ -34,7 +36,8 @@ export interface EncryptionAlgorithm {
     fipsCompliant: boolean;
     quantumResistant: boolean;
     deprecatedDate?: Date;
-}
+
+
 export interface KeyManagementPolicy {
     keyRotationDays: number;
     keyEscrowRequired: boolean;
@@ -44,7 +47,8 @@ export interface KeyManagementPolicy {
     multiPartyControl: boolean;
     keyRecoveryProcedure: string;
     auditLogging: boolean;
-}
+
+
 export interface EncryptionCompliance {
     dataId: string;
     classification: DataClassificationLevel;
@@ -57,7 +61,8 @@ export interface EncryptionCompliance {
     violations: string[];
     recommendations: string[];
     assessmentDate: Date;
-}
+
+
 export interface EncryptionAuditEvent {
     id: string;
     timestamp: Date;
@@ -69,7 +74,7 @@ export interface EncryptionAuditEvent {
     keyId: string;
     result: 'SUCCESS' | 'FAILURE' | 'WARNING';
     details: Record<string, any>;
-}
+
 export declare class ClassificationEncryptionPolicyService {
     private encryptionPolicies;
     private approvedAlgorithms;
@@ -165,6 +170,6 @@ export declare class ClassificationEncryptionPolicyService {
      * Increment policy version
      */
     private incrementVersion;
-}
+
 export default ClassificationEncryptionPolicyService;
 //# sourceMappingURL=ClassificationEncryptionPolicyService.d.ts.map

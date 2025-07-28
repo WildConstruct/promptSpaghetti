@@ -20,6 +20,7 @@ import {
   ConversionCohort
 } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface FunnelVisualizationProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -33,7 +34,7 @@ export interface FunnelVisualizationProps {
     realTimeUpdates?: boolean;
     onStepClick?: (step: ConversionStep, metrics: StepMetrics) => void;
     onConfigChange?: (config: FunnelConfiguration) => void;
-}
+
 export interface StepMetrics {
     stepId: string;
     name: string;
@@ -46,13 +47,13 @@ export interface StepMetrics {
     previousStepConversionRate?: number;
     valueGenerated: number;
     topExitReasons: ExitReason[];
-}
+
 export interface ExitReason {
     reason: string;
     percentage: number;
     count: number;
     category: 'user_action' | 'technical_issue' | 'design_friction' | 'external_factor';
-}
+
 export interface FunnelConfiguration {
     displayMode: 'standard' | 'horizontal' | 'sankey' | 'waterfall';
     colorScheme: 'default' | 'conversion_focused' | 'drop_off_focused' | 'value_focused';
@@ -61,24 +62,25 @@ export interface FunnelConfiguration {
     grouping: FunnelGrouping;
     refreshInterval: number;
     animations: boolean;
-}
+
 export type MetricDisplay = 'conversion_rate' | 'drop_off_rate' | 'user_count' | 'value_generated' | 'time_spent' | 'exit_reasons';
+
 export interface FunnelFilter {
     type: 'segment' | 'cohort' | 'time_range' | 'device' | 'location' | 'source';
     value: string | number;
     operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than';
-}
+
 export interface FunnelGrouping {
     dimension: 'none' | 'segment' | 'cohort' | 'device' | 'source' | 'time_period';
     interval?: 'hour' | 'day' | 'week' | 'month';
-}
+
 export interface FunnelComparisonData {
     baseline: FunnelMetrics;
     comparison: FunnelMetrics;
     type: 'time_period' | 'segment' | 'ab_test';
     significance: number;
     insights: ComparisonInsight[];
-}
+
 export interface FunnelMetrics {
     funnelId: string;
     totalEntries: number;
@@ -87,7 +89,7 @@ export interface FunnelMetrics {
     averageTimeToConvert: number;
     totalValue: number;
     stepMetrics: StepMetrics[];
-}
+
 export interface ComparisonInsight {
     type: 'improvement' | 'decline' | 'neutral';
     stepId?: string;
@@ -96,7 +98,6 @@ export interface ComparisonInsight {
     significance: number;
     description: string;
     recommendation?: string;
-}
 /**
  * Main Funnel Visualization Component
  */

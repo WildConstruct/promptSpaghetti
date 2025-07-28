@@ -12,6 +12,7 @@ import { SecurityStatisticalAnalysisEngine } from './SecurityStatisticalAnalysis
 import { SecurityMLToolsEngine } from './SecurityMLToolsEngine';
 import { SecurityIntelligenceIncidentResponse, SecurityIncident } from './SecurityIntelligenceIncidentResponse';
 
+}
 export interface InvestigationQuery {
   query_id: string;
   name: string;
@@ -30,6 +31,7 @@ export interface InvestigationQuery {
         operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in' | 'regex';
         value: Error;
         logical_operator?: 'and' | 'or';
+}
       }>;
     }>;
     
@@ -91,6 +93,7 @@ export interface InvestigationQuery {
   };
 }
 
+}
 export interface InvestigationResult {
   result_id: string;
   query_id: string;
@@ -107,6 +110,7 @@ export interface InvestigationResult {
     query_optimization_applied: boolean;
     warnings: string[];
     errors: string[];
+}
   };
   
   raw_data: {
@@ -259,6 +263,7 @@ export interface InvestigationResult {
   };
 }
 
+}
 export interface Investigation {
   investigation_id: string;
   title: string;
@@ -275,6 +280,7 @@ export interface Investigation {
     category: 'incident_response' | 'threat_hunting' | 'compliance_audit' | 'forensic_analysis' | 'vulnerability_assessment';
     related_incidents: string[];
     related_tickets: string[];
+}
   };
   
   investigation_timeline: Array<{
@@ -347,6 +353,7 @@ export interface Investigation {
   };
 }
 
+}
 export interface QueryTemplate {
   template_id: string;
   name: string;
@@ -363,6 +370,7 @@ export interface QueryTemplate {
       required: boolean;
       default_value?: unknown;
       validation_rules?: Record<string, any>;
+}
     }>;
     
     example_values: Record<string, any>;
@@ -463,14 +471,14 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
               categories: ['insider_threat', 'compromised_account']
             }
           }
-        },
+  }
         parameters: [
           {
             name: 'user_id',
             type: 'string',
             description: 'User ID to analyze',
             required: true
-          },
+  }
           {
             name: 'time_period_days',
             type: 'number',
@@ -482,11 +490,10 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         example_values: {
           user_id: 'john.doe',
           time_period_days: 14
-        },
+  }
         expected_results: 'User activity timeline, behavioral anomalies, risk assessment',
         performance_notes: 'Typically completes in 30-60 seconds for 30-day analysis'
-      },
-      
+  }
       metadata: {
         created_by: 'system',
         created_at: Date.now(),
@@ -535,14 +542,14 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
               categories: ['lateral_movement', 'data_exfiltration', 'malware']
             }
           }
-        },
+  }
         parameters: [
           {
             name: 'source_ip',
             type: 'string',
             description: 'Source IP address to analyze',
             required: true
-          },
+  }
           {
             name: 'include_internal_traffic',
             type: 'boolean',
@@ -554,11 +561,10 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         example_values: {
           source_ip: '192.168.1.100',
           include_internal_traffic: true
-        },
+  }
         expected_results: 'Network communication patterns, suspicious destinations, data volumes',
         performance_notes: 'Performance varies based on traffic volume; use time filters for large datasets'
-      },
-      
+  }
       metadata: {
         created_by: 'system',
         created_at: Date.now(),
@@ -590,6 +596,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     queryDef: Omit<InvestigationQuery,
     'query_id' | 'created_at' | 'updated_at'>
   ): Promise<string> {
+
     const query_id = `query_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     
     const query: InvestigationQuery = {
@@ -611,6 +618,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   async executeQuery(query_id: string, force_refresh: boolean = false): Promise<string> {
+
     const query = this.queries.get(query_id);
     if (!query) {
       throw new Error(`Query ${query_id} not found`);
@@ -666,6 +674,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async processExecutionQueue(): Promise<void> {
+
     while (this.executionQueue.length > 0 && this.activeExecutions.size < this.maxConcurrentExecutions) {
       const { query_id, execution_id } = this.executionQueue.shift()!;
       this.executeQueryAsync(query_id, execution_id);
@@ -673,6 +682,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async executeQueryAsync(query_id: string, execution_id: string): Promise<void> {
+
     const query = this.queries.get(query_id);
     if (!query) return;
     
@@ -702,6 +712,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async performAnalysis(query: InvestigationQuery, execution_id: string): Promise<InvestigationResult> {
+
     const result_id = `result_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const startTime = Date.now();
     
@@ -736,8 +747,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         query_optimization_applied: true,
         warnings: [],
         errors: []
-      },
-      
+  }
       raw_data: rawData,
       aggregated_results: aggregatedResults,
       ml_insights: mlInsights,
@@ -749,6 +759,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async collectData(query: InvestigationQuery): Promise<unknown> {
+
     // Simulate data collection from various sources
     const mockData = {
       total_matches: Math.floor(Math.random() * 10000) + 100,
@@ -775,6 +786,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async performAggregation(rawData: unknown, query: InvestigationQuery): Promise<unknown> {
+
     return {
       summary_statistics: {
         total_events: rawData.total_matches,
@@ -782,8 +794,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         unique_ips: Math.floor(Math.random() * 200) + 100,
         time_span_hours: 24,
         peak_activity_hour: Math.floor(Math.random() * 24)
-      },
-      
+  }
       temporal_patterns: Array.from({ length: 24 }, (_, i) => ({
         timestamp: Date.now() - (23 - i) * 3600000,
         value: Math.floor(Math.random() * 100) + 10,
@@ -813,6 +824,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async generateMLInsights(rawData: unknown, query: InvestigationQuery): Promise<unknown> {
+
     return {
       anomaly_detection: {
         anomalies_found: Math.floor(Math.random() * 20) + 5,
@@ -820,7 +832,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           'behavioral': Math.floor(Math.random() * 10),
           'temporal': Math.floor(Math.random() * 8),
           'volumetric': Math.floor(Math.random() * 6)
-        },
+  }
         top_anomalies: Array.from({ length: 5 }, (_, i) => ({
           anomaly_id: `anom_${i}`,
           score: Math.random() * 50 + 50,
@@ -828,8 +840,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           affected_entities: [`entity_${i}`],
           timestamp: Date.now() - Math.random() * 86400000
         }))
-      },
-      
+  }
       pattern_recognition: {
         patterns_identified: Array.from({ length: 3 }, (_, i) => ({
           pattern_id: `pattern_${i}`,
@@ -847,8 +858,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           mitre_technique: `T10${i + 1}0`,
           kill_chain_stage: ['reconnaissance', 'initial_access', 'persistence'][i]
         }))
-      },
-      
+  }
       behavioral_analysis: {
         baseline_deviations: Array.from({ length: 5 }, (_, i) => ({
           entity_id: `entity_${i}`,
@@ -866,20 +876,19 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           first_observed: Date.now() - Math.random() * 604800000,
           pattern_description: `Behavior change pattern ${i + 1}`
         }))
-      },
-      
+  }
       threat_classification: {
         threat_categories: {
           'insider_threat': Math.random() * 0.3,
           'external_attack': Math.random() * 0.4,
           'malware': Math.random() * 0.2,
           'phishing': Math.random() * 0.1
-        },
+  }
         confidence_scores: {
           'high_confidence': Math.random() * 0.4 + 0.6,
           'medium_confidence': Math.random() * 0.3 + 0.3,
           'low_confidence': Math.random() * 0.3
-        },
+  }
         ioc_matches: Array.from({ length: 2 }, (_, i) => ({
           ioc_type: ['ip', 'domain'][i],
           ioc_value: i === 0 ? '192.168.1.100' : 'suspicious.example.com',
@@ -896,6 +905,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     aggregatedResults: unknown,
     mlInsights: unknown
   ): Promise<any[]> {
+
     return Array.from({ length: 5 }, (_, i) => ({
       lead_id: `lead_${i}`,
       lead_type: ['follow_up_query', 'deeper_analysis', 'related_investigation', 'escalation'][Math.floor(Math.random() * 4)],
@@ -913,6 +923,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async generateVisualizationData(rawData: unknown, aggregatedResults: unknown): Promise<unknown> {
+
     return {
       timeline_events: Array.from({ length: 20 }, (_, i) => ({
         timestamp: Date.now() - Math.random() * 86400000,
@@ -937,8 +948,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           strength: Math.random(),
           timestamp: Date.now() - Math.random() * 86400000
         }))
-      },
-      
+  }
       geographic_data: Array.from({ length: 10 }, (_, i) => ({
         location: `Location ${i}`,
         latitude: Math.random() * 180 - 90,
@@ -953,7 +963,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
           title: 'Activity Timeline',
           data: aggregatedResults.temporal_patterns,
           config: { xAxis: 'timestamp', yAxis: 'value' }
-        },
+  }
         {
           chart_type: 'bar',
           title: 'Entity Activity Distribution',
@@ -969,6 +979,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     investigationDef: Omit<Investigation,
     'investigation_id' | 'investigation_metadata'>
   ): Promise<string> {
+
     const investigation_id = `inv_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     
     const investigation: Investigation = {
@@ -982,7 +993,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         category: 'threat_hunting',
         related_incidents: [],
         related_tickets: []
-      },
+  }
       ...investigationDef
     };
     
@@ -1006,6 +1017,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   async addQueryToInvestigation(investigation_id: string, query_id: string): Promise<void> {
+
     const investigation = this.investigations.get(investigation_id);
     if (!investigation) {
       throw new Error(`Investigation ${investigation_id} not found`);
@@ -1034,6 +1046,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
     finding: Omit<Investigation['findings'][0],
     'finding_id'>
   ): Promise<string> {
+
     const investigation = this.investigations.get(investigation_id);
     if (!investigation) {
       throw new Error(`Investigation ${investigation_id} not found`);
@@ -1067,6 +1080,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   
   // Template Management
   async createQueryFromTemplate(template_id: string, parameters: Record<string, any>): Promise<string> {
+
     const template = this.queryTemplates.get(template_id);
     if (!template) {
       throw new Error(`Template ${template_id} not found`);
@@ -1122,7 +1136,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         cache_ttl_hours: 4,
         priority: 'medium',
         notification_on_completion: false
-      },
+  }
       sharing_config: {
         visibility: 'private',
         allowed_users: [],
@@ -1135,6 +1149,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   
   // Utility Methods
   private async cleanupExpiredResults(): Promise<void> {
+
     const now = Date.now();
     const expiredResults: string[] = [];
     
@@ -1158,6 +1173,7 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
   }
   
   private async monitorPerformance(): Promise<void> {
+
     const stats = {
       active_queries: this.activeExecutions.size,
       queued_queries: this.executionQueue.length,
@@ -1225,19 +1241,19 @@ export class SecurityAdHocAnalysisEngine extends EventEmitter {
         total: this.queries.size,
         active_executions: this.activeExecutions.size,
         queued: this.executionQueue.length
-      },
+  }
       investigations: {
         total: this.investigations.size,
         active: Array.from(this.investigations.values())
           .filter(inv => inv.status === 'active').length
-      },
+  }
       templates: {
         total: this.queryTemplates.size,
         most_used: Array.from(this.queryTemplates.values())
           .sort((a, b) => b.metadata.usage_count - a.metadata.usage_count)
           .slice(0, 5)
           .map(t => ({ id: t.template_id, name: t.name, usage_count: t.metadata.usage_count }))
-      },
+  }
       performance: {
         average_execution_time_ms: this.calculateAverageExecutionTime(),
         cache_hit_rate: this.calculateCacheHitRate(),

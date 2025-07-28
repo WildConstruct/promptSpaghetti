@@ -54,7 +54,7 @@ export interface ConfigurationMetadata {
     status: 'draft' | 'pending_approval' | 'approved' | 'deprecated';
     checksum: string;
     size: number;
-    tags: string[];
+    tags: string;
     classification: DataClassificationLevel;
 }
 export interface ConfigurationChangeRequest {
@@ -64,14 +64,14 @@ export interface ConfigurationChangeRequest {
     reason: string;
     urgency: 'low' | 'medium' | 'high' | 'critical';
     scheduledAt?: Date;
-    approvers?: string[];
+    approvers?: string;
 }
 export interface ConfigurationValidationResult {
     isValid: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
     securityScore: number;
-    complianceIssues: ComplianceIssue[];
+    complianceIssues: ComplianceIssue;
     performanceImpact: PerformanceImpact;
 }
 export interface ValidationError {
@@ -101,9 +101,6 @@ export interface PerformanceImpact {
     networkImpact: 'low' | 'medium' | 'high';
     estimatedCost: number;
 }
-/**
- * Service for managing security alerting configurations
- */
 export declare class SecurityAlertingConfigurationService extends EventEmitter {
     private configs;
     private metadata;
@@ -112,48 +109,5 @@ export declare class SecurityAlertingConfigurationService extends EventEmitter {
     private options;
     private backupTimer;
     constructor(options?: Partial<SecurityAlertingConfigurationServiceOptions>);
-    /**
-     * Initialize the configuration service
-     */
-    private initializeService;
-    /**
-     * Get configuration by ID
-     */
-    getConfiguration(configId: string): Promise<SecurityAlertingConfig | null>;
-    /**
-     * Save configuration
-     */
-    saveConfiguration(configId: string, config: SecurityAlertingConfig, metadata?: Partial<ConfigurationMetadata>): Promise<boolean>;
-    /**
-     * Validate configuration
-     */
-    validateConfiguration(config: SecurityAlertingConfig): Promise<ConfigurationValidationResult>;
-    /**
-     * List all configurations
-     */
-    listConfigurations(): Promise<ConfigurationMetadata[]>;
-    /**
-     * Delete configuration
-     */
-    deleteConfiguration(configId: string, deletedBy: string): Promise<boolean>;
-    /**
-     * Create backup of all configurations
-     */
-    createBackup(): Promise<string>;
-    /**
-     * Private helper methods
-     */
-    private loadConfigurations;
-    private loadConfiguration;
-    private storeConfiguration;
-    private sanitizeConfiguration;
-    private calculateChecksum;
-    private calculateEstimatedCost;
-    private startBackupTimer;
-    /**
-     * Cleanup resources
-     */
-    destroy(): void;
 }
-export default SecurityAlertingConfigurationService;
 //# sourceMappingURL=SecurityAlertingConfigurationService.d.ts.map

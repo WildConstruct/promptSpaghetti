@@ -8,26 +8,26 @@ declare class BrowserEventEmitter {
     private events;
     on(event: string, listener: Function): void;
     emit(event: string, ...args: any[]): void;
-}
+
 export declare enum ClassificationLevel {
     PUBLIC = "public",
     INTERNAL = "internal",
     CONFIDENTIAL = "confidential",
     RESTRICTED = "restricted"
-}
+
 export declare enum DataCategory {
     PII = "pii",
     AUTHENTICATION = "authentication",
     SYSTEM_CONFIG = "system_config",
     OPERATIONAL = "operational",
     BUSINESS = "business"
-}
+
 export declare enum ComplianceFramework {
     GDPR = "gdpr",
     NIST = "nist",
     HIPAA = "hipaa",
     PCI_DSS = "pci_dss"
-}
+
 export interface ClassificationRule {
     id: string;
     name: string;
@@ -40,12 +40,12 @@ export interface ClassificationRule {
     complianceRequirements: ComplianceFramework[];
     priority: number;
     enabled: boolean;
-}
+
 export interface ContextRule {
     field: string;
     condition: 'equals' | 'contains' | 'matches' | 'exists';
     value?: string | RegExp;
-}
+
 export interface ClassificationResult {
     level: ClassificationLevel;
     category: DataCategory;
@@ -56,7 +56,7 @@ export interface ClassificationResult {
     retentionPeriod: string;
     accessControls: string[];
     reasoning: string[];
-}
+
 export interface DataElement {
     id: string;
     fieldName: string;
@@ -65,7 +65,7 @@ export interface DataElement {
     context: Record<string, any>;
     source: string;
     timestamp: Date;
-}
+
 export interface ClassificationMetadata {
     classifiedAt: Date;
     classifiedBy: string;
@@ -73,7 +73,6 @@ export interface ClassificationMetadata {
     reviewDate: Date;
     lastModified: Date;
     approvedBy?: string;
-}
 /**
  * Comprehensive data classification engine
  */
@@ -128,7 +127,6 @@ export declare class DataClassifier extends BrowserEventEmitter {
     private determineClassification;
     private getDefaultClassification;
     private getAccessControls;
-}
 /**
  * Classification policy manager
  */
@@ -138,7 +136,7 @@ export declare class ClassificationPolicyManager {
     getPolicy(id: string): ClassificationPolicy | undefined;
     getAllPolicies(): ClassificationPolicy[];
     validateCompliance(classification: ClassificationResult, policyId: string): ComplianceValidationResult;
-}
+
 export interface ClassificationPolicy {
     id: string;
     name: string;
@@ -155,12 +153,12 @@ export interface ClassificationPolicy {
         frequency: string;
         scope: string[];
     };
-}
+
 export interface ComplianceValidationResult {
     compliant: boolean;
     violations: string[];
     policy: string;
     timestamp: Date;
-}
+
 export default DataClassifier;
 //# sourceMappingURL=DataClassifier.d.ts.map

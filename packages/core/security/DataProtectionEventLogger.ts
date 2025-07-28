@@ -28,239 +28,213 @@ export enum DataProtectionEventType {
   REGULATORY_ALERT = 'regulatory_alert',
   POLICY_UPDATE_APPLIED = 'policy_update_applied',
   COMPLIANCE_AUDIT_ACCESS = 'compliance_audit_access'
-}
-
-export enum DataSensitivityLevel {
+  export enum DataSensitivityLevel {
   PUBLIC = 'public',
   INTERNAL = 'internal',
   CONFIDENTIAL = 'confidential',
   RESTRICTED = 'restricted',
   PII = 'pii',
   SPECIAL_CATEGORY = 'special_category'
-}
-
-export enum ComplianceFramework {
+  export enum ComplianceFramework {
   GDPR = 'gdpr',
   CCPA = 'ccpa',
   SOX = 'sox',
   HIPAA = 'hipaa',
   CUSTOM = 'custom'
-}
-
-export interface DataProtectionEvent {
-  eventType: DataProtectionEventType;
+  export interface DataProtectionEvent {
+  eventType: DataProtectionEventType;,
   timestamp: Date;
-  correlationId: string;
+  correlationId: string;,
   userId: string;
   dataSubject?: string;
-  resourceType: string;
+  resourceType: string;,
   resourceId: string;
-  dataClassification: DataSensitivityLevel;
+  dataClassification: DataSensitivityLevel;,
   operation: 'read' | 'write' | 'export' | 'delete' | 'share' | 'anonymize';
   legalBasis?: string;
   consentId?: string;
   retentionPolicy?: string;
-  automatedDecision: boolean;
-  complianceFrameworks: ComplianceFramework[];
+  automatedDecision: boolean;,
+  complianceFrameworks: ComplianceFramework;
   metadata?: Record<string, any>;
 }
-
 export interface DataDeletionEvent extends DataProtectionEvent {
-  deletionJobId: string;
+  deletionJobId: string;,
   scheduledTime: Date;
   executionTime?: Date;
-  deletionRule: string;
+  deletionRule: string;,
   affectedRecords: {,
-    expected: number;
-    processed: number;
-    successful: number;
-    failed: number;
-  };
-  failureReasons?: string[];
-  exemptionReasons?: string[];
-}
+  expected: number;,
+  processed: number;
+  successful: number;,
+  failed: number;
+};
+  failureReasons?: string;
+  exemptionReasons?: string;
 
 export interface PrivacyRequestEvent extends DataProtectionEvent {
-  requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';
+  requestType: 'access' | 'rectification' | 'erasure' | 'portability' | 'restriction' | 'objection';,
   requestId: string;
-  requestDate: Date;
+  requestDate: Date;,
   responseDeadline: Date;
-  status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';
-  dataCategories: string[];
-  processingPurposes: string[];
-}
-
-export interface PolicyViolationEvent extends DataProtectionEvent {
-  violationType: string;
+  status: 'received' | 'processing' | 'completed' | 'rejected' | 'overdue';,
+  dataCategories: string;
+  processingPurposes: string;
+  export interface PolicyViolationEvent extends DataProtectionEvent {
+  violationType: string;,
   policyId: string;
-  policyVersion: string;
+  policyVersion: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  riskScore: number;
-  mitigationActions: string[];
+  riskScore: number;,
+  mitigationActions: string;
   requiresNotification: boolean;
   notificationDeadline?: Date;
-}
-/**
- * Data Protection Event Logger
- * Provides specialized logging for privacy and compliance events
- */
-export class DataProtectionEventLogger {
+  /**
+  * Data Protection Event Logger
+  * Provides specialized logging for privacy and compliance events
+  */
+  export class DataProtectionEventLogger {
   private securityLogger: SecurityLogger;
   private auditLogger: AuditLogger;
   private complianceMode: boolean;
   private retentionPolicies: Map<ComplianceFramework, number>;
   constructor();
-    securityLogger?: SecurityLogger,
-    auditLogger?: AuditLogger,
-    options: {,
-      complianceMode?: boolean;
-      retentionPolicies?: Map<ComplianceFramework, number>;
-    } = {}
+  securityLogger?: SecurityLogger,
+  auditLogger?: AuditLogger,
+  options: {,
+  complianceMode?: boolean;
+  retentionPolicies?: Map<ComplianceFramework, number>;
+} = {}
     this.securityLogger = securityLogger || new SecurityLogger();
     this.auditLogger = auditLogger || new AuditLogger();
     this.complianceMode = options.complianceMode ?? true;
     this.retentionPolicies = options.retentionPolicies || this.getDefaultRetentionPolicies();
-  }
   /**
    * Log a data protection event
    */
   async logDataProtectionEvent(event: DataProtectionEvent): Promise<void> {
-    try {
-      // Validate event data
-      this.validateEvent(event);
-      // Create security event for general logging
-      const securityEvent = {
-        eventId: this.generateEventId(),
-        timestamp: event.timestamp,
-        level: this.determineEventLevel(event.eventType),
-        category: 'data_protection',
-        source: 'DataProtectionEventLogger',
-        action: event.eventType,
-        userId: event.userId,
-        resourceId: event.resourceId,
-        details: {,
-          eventType: event.eventType,
-          dataClassification: event.dataClassification,
-          operation: event.operation,
-          complianceFrameworks: event.complianceFrameworks,
-          automatedDecision: event.automatedDecision,
-          ...event.metadata
-        },
-        outcome: 'success',
-        correlationId: event.correlationId,
-      };
+  try {
+  // Validate event data
+  this.validateEvent(event);
+  // Create security event for general logging
+  const securityEvent = {
+  eventId: this.generateEventId(),
+  timestamp: event.timestamp,
+  level: this.determineEventLevel(event.eventType),
+  category: 'data_protection',
+  source: 'DataProtectionEventLogger',
+  action: event.eventType,
+  userId: event.userId,
+  resourceId: event.resourceId,
+  details: {,
+  eventType: event.eventType,
+  dataClassification: event.dataClassification,
+  operation: event.operation,
+  complianceFrameworks: event.complianceFrameworks,
+  automatedDecision: event.automatedDecision,
+  ...event.metadata
+},
+  outcome: 'success',
+        correlationId: event.correlationId;
+  };
       // Log to security logger
       // Log to security logger (method may vary by implementation)
       console.log('Security event:', securityEvent);
       // Log to audit logger if compliance mode is enabled
       if (this.complianceMode) {
-        console.log('Audit event:', {)
-          timestamp: event.timestamp,
-          userId: event.userId,
-          action: event.eventType,
-          resourceType: event.resourceType,
-          resourceId: event.resourceId,
-          outcome: 'success',
-          details: {,
-            dataSubject: event.dataSubject,
-            legalBasis: event.legalBasis,
-            consentId: event.consentId,
-            retentionPolicy: event.retentionPolicy,
-            complianceFrameworks: event.complianceFrameworks,
-          },
-          correlationId: event.correlationId,
-        });
-      }
+  console.log('Audit event:', {,)
+  timestamp: event.timestamp,
+  userId: event.userId,
+  action: event.eventType,
+  resourceType: event.resourceType,
+  resourceId: event.resourceId,
+  outcome: 'success',
+  details: {,
+  dataSubject: event.dataSubject,
+  legalBasis: event.legalBasis,
+  consentId: event.consentId,
+  retentionPolicy: event.retentionPolicy,
+  complianceFrameworks: event.complianceFrameworks,
+},
+  correlationId: event.correlationId;
+  });
       // Check for alerting conditions
       await this.checkAlertingRules(event);
     } catch (error) {
       console.error('Failed to log data protection event:', error);
       throw new Error(`Data protection event logging failed: ${error.message}`);}
-    }
-  }
   /**
    * Log a data deletion event with detailed tracking
    */
   async logDataDeletionEvent(event: DataDeletionEvent): Promise<void> {
-    const extendedEvent: DataProtectionEvent = {
-      ...event,
-      metadata: {,
-        ...event.metadata,
-        deletionJobId: event.deletionJobId,
-        scheduledTime: event.scheduledTime.toISOString(),
-        executionTime: event.executionTime?.toISOString(),
-        deletionRule: event.deletionRule,
-        affectedRecords: event.affectedRecords,
-        failureReasons: event.failureReasons,
-        exemptionReasons: event.exemptionReasons,
-      }
-    };
+  const extendedEvent: DataProtectionEvent = {,
+  ...event,
+  metadata: {,
+  ...event.metadata,
+  deletionJobId: event.deletionJobId,
+  scheduledTime: event.scheduledTime.toISOString(),
+  executionTime: event.executionTime?.toISOString(),
+  deletionRule: event.deletionRule,
+  affectedRecords: event.affectedRecords,
+  failureReasons: event.failureReasons,
+  exemptionReasons: event.exemptionReasons,
+};
     await this.logDataProtectionEvent(extendedEvent);
     // Additional specialized logging for deletion events
     if (event.eventType === DataProtectionEventType.DATA_DELETION_FAILED && event.failureReasons?.length) {
-      await this.logFailedDeletionAlert(event);
-    }
-  }
+  await this.logFailedDeletionAlert(event);
   /**
-   * Log a privacy request event (GDPR/CCPA requests)
-   */
-  async logPrivacyRequestEvent(event: PrivacyRequestEvent): Promise<void> {
-    const extendedEvent: DataProtectionEvent = {
-      ...event,
-      metadata: {,
-        ...event.metadata,
-        requestType: event.requestType,
-        requestId: event.requestId,
-        requestDate: event.requestDate.toISOString(),
-        responseDeadline: event.responseDeadline.toISOString(),
-        status: event.status,
-        dataCategories: event.dataCategories,
-        processingPurposes: event.processingPurposes,
-      }
-    };
+  * Log a privacy request event (GDPR/CCPA requests)
+  */
+  async logPrivacyRequestEvent(event: PrivacyRequestEvent): Promise<void> {,
+  const extendedEvent: DataProtectionEvent = {,
+  ...event,
+  metadata: {,
+  ...event.metadata,
+  requestType: event.requestType,
+  requestId: event.requestId,
+  requestDate: event.requestDate.toISOString(),
+  responseDeadline: event.responseDeadline.toISOString(),
+  status: event.status,
+  dataCategories: event.dataCategories,
+  processingPurposes: event.processingPurposes,
+};
     await this.logDataProtectionEvent(extendedEvent);
     // Check for overdue requests
     if (event.status === 'overdue' || (new Date() > event.responseDeadline && event.status === 'processing')) {
-      await this.logOverduePrivacyRequestAlert(event);
-    }
-  }
+  await this.logOverduePrivacyRequestAlert(event);
   /**
-   * Log a policy violation event
-   */
-  async logPolicyViolationEvent(event: PolicyViolationEvent): Promise<void> {
-    const extendedEvent: DataProtectionEvent = {
-      ...event,
-      eventType: DataProtectionEventType.POLICY_VIOLATION_DETECTED,
-      metadata: {,
-        ...event.metadata,
-        violationType: event.violationType,
-        policyId: event.policyId,
-        policyVersion: event.policyVersion,
-        severity: event.severity,
-        riskScore: event.riskScore,
-        mitigationActions: event.mitigationActions,
-        requiresNotification: event.requiresNotification,
-        notificationDeadline: event.notificationDeadline?.toISOString(),
-      }
-    };
+  * Log a policy violation event
+  */
+  async logPolicyViolationEvent(event: PolicyViolationEvent): Promise<void> {,
+  const extendedEvent: DataProtectionEvent = {,
+  ...event,
+  eventType: DataProtectionEventType.POLICY_VIOLATION_DETECTED,
+  metadata: {,
+  ...event.metadata,
+  violationType: event.violationType,
+  policyId: event.policyId,
+  policyVersion: event.policyVersion,
+  severity: event.severity,
+  riskScore: event.riskScore,
+  mitigationActions: event.mitigationActions,
+  requiresNotification: event.requiresNotification,
+  notificationDeadline: event.notificationDeadline?.toISOString(),
+};
     await this.logDataProtectionEvent(extendedEvent);
     // Immediate alerting for high-severity violations
     if (event.severity === 'critical' || event.severity === 'high') {
       await this.logCriticalViolationAlert(event);
-    }
-  }
   /**
    * Generate compliance report data for a specific framework and time period
    */
-  async generateComplianceReport()
-    framework: ComplianceFramework,
+  async generateComplianceReport(framework: ComplianceFramework,)
     startDate: Date,
-    endDate: Date,
-  ): Promise<ComplianceReport> {
+    endDate: Date): Promise<ComplianceReport> {,
     // This would integrate with the audit logger to retrieve events
     // and generate compliance-specific reports
     // TODO: Implement proper audit logger integration
-    const events: unknown[] = [];
+    const events: unknown = [];
     const filteredEvents = events.filter(event => ;);
       (event as any).details?.complianceFrameworks?.includes(framework)
     );
@@ -273,176 +247,155 @@ export class DataProtectionEventLogger {
       violations: this.aggregateViolations(filteredEvents),
       privacyRequests: this.aggregatePrivacyRequests(filteredEvents),
       retentionCompliance: this.calculateRetentionCompliance(filteredEvents, framework),
-      generatedAt: new Date(),
-    };
-  }
+      generatedAt: new Date();
+  };
   private validateEvent(event: DataProtectionEvent): void {
-    if (!event.eventType) {
-      throw new Error('Event type is required');
-    }
-    if (!event.userId) {
-      throw new Error('User ID is required');
-    }
-    if (!event.resourceType || !event.resourceId) {
-      throw new Error('Resource type and ID are required');
-    }
-    if (!event.complianceFrameworks?.length) {
-      throw new Error('At least one compliance framework must be specified');
-    }
-  }
-  private determineEventLevel(eventType: DataProtectionEventType): string {
-    const criticalEvents = [;
-      DataProtectionEventType.POLICY_VIOLATION_DETECTED,
-      DataProtectionEventType.DATA_DELETION_FAILED,
-      DataProtectionEventType.REGULATORY_ALERT
-    ];
-    const highEvents = [;
-      DataProtectionEventType.CONSENT_WITHDRAWN,
-      DataProtectionEventType.RIGHT_TO_ERASURE,
-      DataProtectionEventType.COMPLIANCE_RULE_TRIGGERED
-    ];
-    if (criticalEvents.includes(eventType)) return 'CRITICAL';
-    if (highEvents.includes(eventType)) return 'HIGH';
-    return 'MEDIUM';
-  }
-  private async checkAlertingRules(event: DataProtectionEvent): Promise<void> {
-    // Implementation would check configured alerting rules
-    // and trigger notifications as needed
-  }
-  private async logFailedDeletionAlert(event: DataDeletionEvent): Promise<void> {
-    console.log('Security alert:', {)
-      eventId: this.generateEventId(),
-      timestamp: new Date(),
-      level: 'HIGH',
-      category: 'data_protection_alert',
-      source: 'DataProtectionEventLogger',
-      action: 'deletion_failure_alert',
-      userId: event.userId,
-      resourceId: event.resourceId,
-      details: {,
-        deletionJobId: event.deletionJobId,
-        failureReasons: event.failureReasons,
-        affectedRecords: event.affectedRecords,
-      },
-      outcome: 'alert_triggered',
-      correlationId: event.correlationId,
-    });
-  }
+  if (!event.eventType) {
+  throw new Error('Event type is required');
+  if (!event.userId) {
+  throw new Error('User ID is required');
+  if (!event.resourceType || !event.resourceId) {
+  throw new Error('Resource type and ID are required');
+  if (!event.complianceFrameworks?.length) {
+  throw new Error('At least one compliance framework must be specified');
+  private determineEventLevel(eventType: DataProtectionEventType): string {,
+  const criticalEvents = [;
+  DataProtectionEventType.POLICY_VIOLATION_DETECTED,
+  DataProtectionEventType.DATA_DELETION_FAILED,
+  DataProtectionEventType.REGULATORY_ALERT
+  ];
+  const highEvents = [;
+  DataProtectionEventType.CONSENT_WITHDRAWN,
+  DataProtectionEventType.RIGHT_TO_ERASURE,
+  DataProtectionEventType.COMPLIANCE_RULE_TRIGGERED
+  ];
+  if (criticalEvents.includes(eventType)) return 'CRITICAL';
+  if (highEvents.includes(eventType)) return 'HIGH';
+  return 'MEDIUM';
+  private async checkAlertingRules(event: DataProtectionEvent): Promise<void> {,
+  // Implementation would check configured alerting rules
+  // and trigger notifications as needed
+  private async logFailedDeletionAlert(event: DataDeletionEvent): Promise<void> {,
+  console.log('Security alert:', {,)
+  eventId: this.generateEventId(),
+  timestamp: new Date(),
+  level: 'HIGH',
+  category: 'data_protection_alert',
+  source: 'DataProtectionEventLogger',
+  action: 'deletion_failure_alert',
+  userId: event.userId,
+  resourceId: event.resourceId,
+  details: {,
+  deletionJobId: event.deletionJobId,
+  failureReasons: event.failureReasons,
+  affectedRecords: event.affectedRecords,
+},
+  outcome: 'alert_triggered',
+      correlationId: event.correlationId;
+  });
   private async logOverduePrivacyRequestAlert(event: PrivacyRequestEvent): Promise<void> {
-    console.log('Security alert:', {)
-      eventId: this.generateEventId(),
-      timestamp: new Date(),
-      level: 'HIGH',
-      category: 'privacy_request_alert',
-      source: 'DataProtectionEventLogger',
-      action: 'privacy_request_overdue',
-      userId: event.userId,
-      resourceId: event.requestId,
-      details: {,
-        requestType: event.requestType,
-        responseDeadline: event.responseDeadline.toISOString(),
-        daysPastDue: Math.floor((new Date().getTime() - event.responseDeadline.getTime()) / (1000 * 60 * 60 * 24)),
-      },
-      outcome: 'alert_triggered',
-      correlationId: event.correlationId,
-    });
-  }
+  console.log('Security alert:', {,)
+  eventId: this.generateEventId(),
+  timestamp: new Date(),
+  level: 'HIGH',
+  category: 'privacy_request_alert',
+  source: 'DataProtectionEventLogger',
+  action: 'privacy_request_overdue',
+  userId: event.userId,
+  resourceId: event.requestId,
+  details: {,
+  requestType: event.requestType,
+  responseDeadline: event.responseDeadline.toISOString(),
+  daysPastDue: Math.floor((new Date().getTime() - event.responseDeadline.getTime()) / (1000 * 60 * 60 * 24)),
+},
+  outcome: 'alert_triggered',
+      correlationId: event.correlationId;
+  });
   private async logCriticalViolationAlert(event: PolicyViolationEvent): Promise<void> {
-    console.log('Security alert:', {)
-      eventId: this.generateEventId(),
-      timestamp: new Date(),
-      level: 'CRITICAL',
-      category: 'policy_violation_alert',
-      source: 'DataProtectionEventLogger',
-      action: 'critical_violation_detected',
-      userId: event.userId,
-      resourceId: event.resourceId,
-      details: {,
-        violationType: event.violationType,
-        policyId: event.policyId,
-        severity: event.severity,
-        riskScore: event.riskScore,
-        requiresNotification: event.requiresNotification,
-      },
-      outcome: 'alert_triggered',
-      correlationId: event.correlationId,
-    });
-  }
+  console.log('Security alert:', {,)
+  eventId: this.generateEventId(),
+  timestamp: new Date(),
+  level: 'CRITICAL',
+  category: 'policy_violation_alert',
+  source: 'DataProtectionEventLogger',
+  action: 'critical_violation_detected',
+  userId: event.userId,
+  resourceId: event.resourceId,
+  details: {,
+  violationType: event.violationType,
+  policyId: event.policyId,
+  severity: event.severity,
+  riskScore: event.riskScore,
+  requiresNotification: event.requiresNotification,
+},
+  outcome: 'alert_triggered',
+      correlationId: event.correlationId;
+  });
   private generateEventId(): string {
     return `dpe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  }
   private getDefaultRetentionPolicies(): Map<ComplianceFramework, number> {
-    const policies = new Map<ComplianceFramework, number>();
-    policies.set(ComplianceFramework.GDPR, 6 * 365); // 6 years in days
-    policies.set(ComplianceFramework.CCPA, 3 * 365); // 3 years in days
-    policies.set(ComplianceFramework.SOX, 7 * 365); // 7 years in days
-    policies.set(ComplianceFramework.HIPAA, 6 * 365); // 6 years in days
-    return policies;
-  }
-  private aggregateEventTypes(events: unknown[]): Record<string, number> {
-    return events.reduce((acc: Record<string, number>, event) => {
-      const type = (event as any).action;
-      acc[type] = (acc[type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-  }
-  private aggregateDataSubjects(events: unknown[]): Record<string, number> {
-    return events.reduce((acc: Record<string, number>, event) => {
-      const subject = (event as any).details?.dataSubject;
-      if (subject) {
-        acc[subject] = (acc[subject] || 0) + 1;
-      }
-      return acc;
-    }, {} as Record<string, number>);
-  }
-  private aggregateViolations(events: unknown[]): unknown[] {
-    return events.filter(event => )
-      (event as any).action === DataProtectionEventType.POLICY_VIOLATION_DETECTED
-    );
-  }
-  private aggregatePrivacyRequests(events: unknown[]): unknown[] {
-    const privacyRequestTypes = [;
-      DataProtectionEventType.PRIVACY_REQUEST_RECEIVED,
-      DataProtectionEventType.DATA_SUBJECT_ACCESS,
-      DataProtectionEventType.DATA_PORTABILITY_REQUEST,
-      DataProtectionEventType.RIGHT_TO_ERASURE
-    ];
-    return events.filter(event => )
-      privacyRequestTypes.includes((event as any).action)
-    );
-  }
-  private calculateRetentionCompliance(events: unknown[], framework: ComplianceFramework): ComplianceMetrics {
-    const retentionDays = this.retentionPolicies.get(framework) || 365;
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
-    const oldEvents = events.filter(event => new Date((event as any).timestamp) < cutoffDate);
-    const retainedOldEvents = oldEvents.filter(event => !(event as any).details?.deleted);
-    return {
-      totalEvents: events.length,
-      pastRetentionEvents: oldEvents.length,
-      improperllyRetainedEvents: retainedOldEvents.length,
-      compliancePercentage: oldEvents.length > 0 ,
-        ? Math.round(((oldEvents.length - retainedOldEvents.length) / oldEvents.length) * 100)
-        : 100
-    };
-  }
-}
+  const policies = new Map<ComplianceFramework, number>();
+  policies.set(ComplianceFramework.GDPR, 6 * 365); // 6 years in days
+  policies.set(ComplianceFramework.CCPA, 3 * 365); // 3 years in days
+  policies.set(ComplianceFramework.SOX, 7 * 365); // 7 years in days
+  policies.set(ComplianceFramework.HIPAA, 6 * 365); // 6 years in days
+  return policies;
+  private aggregateEventTypes(events: unknown): Record<string, number> {,
+  return events.reduce((acc: Record<string, number>, event) => {,
+  const type = (event as any).action;
+  acc[type] = (acc[type] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+  private aggregateDataSubjects(events: unknown): Record<string, number> {
+  return events.reduce((acc: Record<string, number>, event) => {,
+  const subject = (event as any).details?.dataSubject;
+  if (subject) {
+  acc[subject] = (acc[subject] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+  private aggregateViolations(events: unknown): unknown {
+  return events.filter(event => )
+  (event as any).action === DataProtectionEventType.POLICY_VIOLATION_DETECTED
+  );
+  private aggregatePrivacyRequests(events: unknown): unknown {,
+  const privacyRequestTypes = [;
+  DataProtectionEventType.PRIVACY_REQUEST_RECEIVED,
+  DataProtectionEventType.DATA_SUBJECT_ACCESS,
+  DataProtectionEventType.DATA_PORTABILITY_REQUEST,
+  DataProtectionEventType.RIGHT_TO_ERASURE
+  ];
+  return events.filter(event => )
+  privacyRequestTypes.includes((event as any).action)
+  );
+  private calculateRetentionCompliance(events: unknown, framework: ComplianceFramework): ComplianceMetrics {,
+  const retentionDays = this.retentionPolicies.get(framework) || 365;
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
+  const oldEvents = events.filter(event => new Date((event as any).timestamp) < cutoffDate);
+  const retainedOldEvents = oldEvents.filter(event => !(event as any).details?.deleted);
+  return {
+  totalEvents: events.length,
+  pastRetentionEvents: oldEvents.length,
+  improperllyRetainedEvents: retainedOldEvents.length,
+  compliancePercentage: oldEvents.length > 0 ,
+  ? Math.round(((oldEvents.length - retainedOldEvents.length) / oldEvents.length) * 100)
+  : 100,
+};
 
 export interface ComplianceReport {
-  framework: ComplianceFramework;
+  framework: ComplianceFramework;,
   reportPeriod: { start: Date; end: Date };
-  eventCount: number;
+  eventCount: number;,
   eventTypes: Record<string, number>;
   dataSubjects: Record<string, number>;
-  violations: unknown[];
-  privacyRequests: unknown[];
-  retentionCompliance: ComplianceMetrics;
+  violations: unknown;,
+  privacyRequests: unknown;
+  retentionCompliance: ComplianceMetrics;,
   generatedAt: Date;
 }
-
 export interface ComplianceMetrics {
-  totalEvents: number;
+  totalEvents: number;,
   pastRetentionEvents: number;
-  improperllyRetainedEvents: number;
+  improperllyRetainedEvents: number;,
   compliancePercentage: number;
 }

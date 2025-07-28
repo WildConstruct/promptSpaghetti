@@ -19,28 +19,25 @@ interface ConsentBannerProps {
   showCustomizeButton?: boolean;
   autoHide?: boolean;
   respectDoNotTrack?: boolean;
-}
-interface ConsentPreferences {
-  essential: boolean;
+  interface ConsentPreferences {
+  essential: boolean;,
   functional: boolean;
-  analytics: boolean;
+  analytics: boolean;,
   marketing: boolean;
-  advertising: boolean;
+  advertising: boolean;,
   socialMedia: boolean;
   personalization: boolean;
-}
-interface ConsentPurpose {
-  id: string;
+  interface ConsentPurpose {
+  id: string;,
   category: keyof ConsentPreferences;
-  name: string;
+  name: string;,
   description: string;
-  essential: boolean;
-  examples: string[];
-  dataTypes: string[];
+  essential: boolean;,
+  examples: string;
+  dataTypes: string;,
   retention: string;
-  thirdParties: string[];
-}
-const defaultConsents: ConsentPreferences = {
+  thirdParties: string;
+  const defaultConsents: ConsentPreferences = {,
   essential: true,
   functional: false,
   analytics: false,
@@ -49,86 +46,84 @@ const defaultConsents: ConsentPreferences = {
   socialMedia: false,
   personalization: false,
 };
-const consentPurposes: ConsentPurpose[] = [
+const consentPurposes: ConsentPurpose = [
   {
-    id: 'essential',
-    category: 'essential',
-    name: 'Essential Cookies',
-    description: 'Necessary for the website to function properly',
-    essential: true,
-    examples: ['Authentication', 'Security', 'Session management'],
-    dataTypes: ['Session ID', 'Security tokens', 'User preferences'],
-    retention: '30 days',
-    thirdParties: [],
-  },
+  id: 'essential',
+  category: 'essential',
+  name: 'Essential Cookies',
+  description: 'Necessary for the website to function properly',
+  essential: true,
+  examples: ['Authentication', 'Security', 'Session management'],
+  dataTypes: ['Session ID', 'Security tokens', 'User preferences'],
+  retention: '30 days',
+  thirdParties: [],
+}
   {
-    id: 'functional',
-    category: 'functional',
-    name: 'Functional Cookies',
-    description: 'Enable enhanced functionality and personalization',
-    essential: false,
-    examples: ['Language preferences', 'Region selection', 'Theme settings'],
-    dataTypes: ['Language code', 'Timezone', 'UI preferences'],
-    retention: '1 year',
-    thirdParties: [],
-  },
+  id: 'functional',
+  category: 'functional',
+  name: 'Functional Cookies',
+  description: 'Enable enhanced functionality and personalization',
+  essential: false,
+  examples: ['Language preferences', 'Region selection', 'Theme settings'],
+  dataTypes: ['Language code', 'Timezone', 'UI preferences'],
+  retention: '1 year',
+  thirdParties: [],
+}
   {
-    id: 'analytics',
-    category: 'analytics',
-    name: 'Analytics Cookies',
-    description: 'Help us understand how visitors interact with our website',
-    essential: false,
-    examples: ['Page views', 'Click tracking', 'Performance metrics'],
-    dataTypes: ['Usage statistics', 'Performance data', 'Error logs'],
-    retention: '2 years',
-    thirdParties: ['Google Analytics', 'Adobe Analytics']
-  },
+  id: 'analytics',
+  category: 'analytics',
+  name: 'Analytics Cookies',
+  description: 'Help us understand how visitors interact with our website',
+  essential: false,
+  examples: ['Page views', 'Click tracking', 'Performance metrics'],
+  dataTypes: ['Usage statistics', 'Performance data', 'Error logs'],
+  retention: '2 years',
+  thirdParties: ['Google Analytics', 'Adobe Analytics'],
+}
   {
-    id: 'marketing',
-    category: 'marketing',
-    name: 'Marketing Cookies',
-    description: 'Used to deliver relevant advertisements and track campaigns',
-    essential: false,
-    examples: ['Ad targeting', 'Campaign tracking', 'Email marketing'],
-    dataTypes: ['Interests', 'Demographics', 'Campaign interactions'],
-    retention: '1 year',
-    thirdParties: ['Google Ads', 'Facebook Pixel', 'LinkedIn Insight']
-  },
+  id: 'marketing',
+  category: 'marketing',
+  name: 'Marketing Cookies',
+  description: 'Used to deliver relevant advertisements and track campaigns',
+  essential: false,
+  examples: ['Ad targeting', 'Campaign tracking', 'Email marketing'],
+  dataTypes: ['Interests', 'Demographics', 'Campaign interactions'],
+  retention: '1 year',
+  thirdParties: ['Google Ads', 'Facebook Pixel', 'LinkedIn Insight'],
+}
   {
-    id: 'advertising',
-    category: 'advertising',
-    name: 'Advertising Cookies',
-    description: 'Used by advertising networks to deliver targeted ads',
-    essential: false,
-    examples: ['Ad personalization', 'Frequency capping', 'Cross-site tracking'],
-    dataTypes: ['Browsing history', 'Ad interactions', 'Device info'],
-    retention: '1 year',
-    thirdParties: ['Google AdSense', 'Amazon DSP', 'The Trade Desk']
-  },
+  id: 'advertising',
+  category: 'advertising',
+  name: 'Advertising Cookies',
+  description: 'Used by advertising networks to deliver targeted ads',
+  essential: false,
+  examples: ['Ad personalization', 'Frequency capping', 'Cross-site tracking'],
+  dataTypes: ['Browsing history', 'Ad interactions', 'Device info'],
+  retention: '1 year',
+  thirdParties: ['Google AdSense', 'Amazon DSP', 'The Trade Desk'],
+}
   {
-    id: 'socialMedia',
-    category: 'socialMedia',
-    name: 'Social Media Cookies',
-    description: 'Enable social media features and track social sharing',
-    essential: false,
-    examples: ['Social login', 'Share buttons', 'Social widgets'],
-    dataTypes: ['Social profile', 'Sharing activity', 'Social connections'],
-    retention: '1 year',
-    thirdParties: ['Facebook', 'Twitter', 'LinkedIn', 'YouTube']
-  },
+  id: 'socialMedia',
+  category: 'socialMedia',
+  name: 'Social Media Cookies',
+  description: 'Enable social media features and track social sharing',
+  essential: false,
+  examples: ['Social login', 'Share buttons', 'Social widgets'],
+  dataTypes: ['Social profile', 'Sharing activity', 'Social connections'],
+  retention: '1 year',
+  thirdParties: ['Facebook', 'Twitter', 'LinkedIn', 'YouTube'],
+}
   {
-    id: 'personalization',
-    category: 'personalization',
-    name: 'Personalization Cookies',
-    description: 'Customize content and user experience based on preferences',
-    essential: false,
-    examples: ['Content recommendations', 'Layout preferences', 'Personal dashboard'],
-    dataTypes: ['Content preferences', 'Behavior patterns', 'Personal settings'],
-    retention: '2 years',
-    thirdParties: ['Recommendation engines', 'Content platforms']
-  }
-];
-const ConsentBanner: React.FC<ConsentBannerProps> = ({)
+  id: 'personalization',
+  category: 'personalization',
+  name: 'Personalization Cookies',
+  description: 'Customize content and user experience based on preferences',
+  essential: false,
+  examples: ['Content recommendations', 'Layout preferences', 'Personal dashboard'],
+  dataTypes: ['Content preferences', 'Behavior patterns', 'Personal settings'],
+  retention: '2 years',
+  thirdParties: ['Recommendation engines', 'Content platforms']];
+  const ConsentBanner: React.FC<ConsentBannerProps> = ({,)
   onConsentUpdate,
   onClose,
   country = 'US',
@@ -156,40 +151,38 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({)
     if (respectDoNotTrack && navigator.doNotTrack === '1') {
       handleRejectAll();
       return;
-    }
     // Auto-hide after delay if configured
     if (autoHide) {
       const timer = setTimeout(() => {
         setIsVisible(false);
       }, 10000); // 10 seconds
       return () => clearTimeout(timer);
-    }
   }, [country, autoHide, respectDoNotTrack]);
   const handleAcceptAll = useCallback(() => {
-    const allConsents: ConsentPreferences = {
-      essential: true,
-      functional: true,
-      analytics: true,
-      marketing: true,
-      advertising: true,
-      socialMedia: true,
-      personalization: true,
-    };
+  const allConsents: ConsentPreferences = {,
+  essential: true,
+  functional: true,
+  analytics: true,
+  marketing: true,
+  advertising: true,
+  socialMedia: true,
+  personalization: true,
+};
     setConsents(allConsents);
     onConsentUpdate?.(allConsents);
     setIsVisible(false);
     onClose?.();
   }, [onConsentUpdate, onClose]);
   const handleRejectAll = useCallback(() => {
-    const minimalConsents: ConsentPreferences = {
-      essential: true,
-      functional: false,
-      analytics: false,
-      marketing: false,
-      advertising: false,
-      socialMedia: false,
-      personalization: false,
-    };
+  const minimalConsents: ConsentPreferences = {,
+  essential: true,
+  functional: false,
+  analytics: false,
+  marketing: false,
+  advertising: false,
+  socialMedia: false,
+  personalization: false,
+};
     setConsents(minimalConsents);
     onConsentUpdate?.(minimalConsents);
     setIsVisible(false);
@@ -202,57 +195,53 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({)
     onClose?.();
   }, [consents, onConsentUpdate, onClose]);
   const handleConsentChange = useCallback((category: keyof ConsentPreferences, value: boolean) => {
-    if (category === 'essential') return; // Essential cookies cannot be disabled
-    setConsents(prev => ({)
-      ...prev,
-      [category]: value
-    }));
+  if (category === 'essential') return; // Essential cookies cannot be disabled
+  setConsents(prev => ({)
+  ...prev,
+  [category]: value,
+}));
   }, []);
   const getThemeClasses = () => {
-    if (theme === 'dark') {
-      return 'bg-gray-900 text-white border-gray-700';
-    }
-    if (theme === 'auto') {
-      return 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700';
-    }
-    return 'bg-white text-gray-900 border-gray-200';
-  };
+  if (theme === 'dark') {
+  return 'bg-gray-900 text-white border-gray-700';
+  if (theme === 'auto') {
+  return 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700';
+  return 'bg-white text-gray-900 border-gray-200';
+};
   const getPositionClasses = () => {
-    switch (position) {
-    case 'top':
-      return 'top-0 left-0 right-0';
-    case 'bottom':
-      return 'bottom-0 left-0 right-0';
-    case 'overlay':
-      return 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4';
-    case 'modal':
-      return 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4';
-    default:
-      return 'bottom-0 left-0 right-0';
-    }
-  };
+  switch (position) {
+  case 'top':,
+  return 'top-0 left-0 right-0';
+  case 'bottom':,
+  return 'bottom-0 left-0 right-0';
+  case 'overlay':,
+  return 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4';
+  case 'modal':,
+  return 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4';
+  default:,
+  return 'bottom-0 left-0 right-0';
+};
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'essential':
-      return <Shield className="w-5 h-5 text-green-600" />;
-    case 'functional':
-      return <Settings className="w-5 h-5 text-blue-600" />;
-    case 'analytics':
-      return <Eye className="w-5 h-5 text-purple-600" />;
-    case 'marketing':
-      return <Target className="w-5 h-5 text-orange-600" />;
-    case 'advertising':
-      return <MessageSquare className="w-5 h-5 text-red-600" />;
-    case 'socialMedia':
-      return <MessageSquare className="w-5 h-5 text-indigo-600" />;
-    case 'personalization':
-      return <Cookie className="w-5 h-5 text-pink-600" />;
-    default:
-      return <Cookie className="w-5 h-5 text-gray-600" />;
-    }
-  };
+  switch (category) {
+  case 'essential':,
+  return <Shield className="w-5 h-5 text-green-600" />;
+  case 'functional':,
+  return <Settings className="w-5 h-5 text-blue-600" />;
+  case 'analytics':,
+  return <Eye className="w-5 h-5 text-purple-600" />;
+  case 'marketing':,
+  return <Target className="w-5 h-5 text-orange-600" />;
+  case 'advertising':,
+  return <MessageSquare className="w-5 h-5 text-red-600" />;
+  case 'socialMedia':,
+  return <MessageSquare className="w-5 h-5 text-indigo-600" />;
+  case 'personalization':,
+  return <Cookie className="w-5 h-5 text-pink-600" />;
+  default:,
+  return <Cookie className="w-5 h-5 text-gray-600" />;
+};
   if (!isVisible) return null;
-  return ();
+  return;
     <div className={`fixed z-50 ${getPositionClasses()}`}>}
       <div className={`border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`}>}
         {!showDetails ? ()
@@ -340,30 +329,30 @@ const ConsentBanner: React.FC<ConsentBannerProps> = ({)
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'overview'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  activeTab === 'overview'
+  ? 'border-blue-600 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 Overview
               </button>
               <button
                 onClick={() => setActiveTab('categories')}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'categories'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  activeTab === 'categories'
+  ? 'border-blue-600 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 Categories
               </button>
               <button
                 onClick={() => setActiveTab('vendors')}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === 'vendors'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  activeTab === 'vendors'
+  ? 'border-blue-600 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 Third Parties
               </button>

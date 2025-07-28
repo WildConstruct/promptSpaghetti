@@ -145,7 +145,7 @@ describe('LoginService', () => {
           userId: mockUser.id,
           action: 'login_success',
           severity: 'info'
-        })
+  }
       );
     });
 
@@ -161,7 +161,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           action: 'brute_force_attempt',
           severity: 'warning'
-        })
+  }
       );
     });
 
@@ -178,7 +178,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           action: 'login_failed',
           severity: 'warning'
-        })
+  }
       );
     });
 
@@ -268,7 +268,7 @@ describe('LoginService', () => {
           displayName: mockUser.displayName,
           ipAddress: mockContext.ipAddress,
           userAgent: mockContext.userAgent
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
@@ -277,8 +277,8 @@ describe('LoginService', () => {
           action: 'suspicious_login',
           details: expect.objectContaining({
             reason: 'new_device'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -296,8 +296,8 @@ describe('LoginService', () => {
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
             type: 'rapid_attempts'
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -322,7 +322,7 @@ describe('LoginService', () => {
           userId,
           action: 'logout',
           severity: 'info'
-        })
+  }
       );
     });
 
@@ -359,7 +359,7 @@ describe('LoginService', () => {
           userId: tokenPayload.sub,
           action: 'token_refreshed',
           severity: 'info'
-        })
+  }
       );
     });
 
@@ -376,7 +376,7 @@ describe('LoginService', () => {
         expect.objectContaining({
           action: 'token_refresh_failed',
           severity: 'warning'
-        })
+  }
       );
     });
   });
@@ -404,14 +404,14 @@ describe('LoginService', () => {
           userId: mockUser.id,
           action: 'account_unlocked',
           severity: 'info'
-        })
+  }
       );
 
       expect(mockEmailService.sendAccountUnlocked).toHaveBeenCalledWith(
         mockUser.email,
         expect.objectContaining({
           displayName: mockUser.displayName
-        })
+  }
       );
     });
 
@@ -524,8 +524,8 @@ describe('LoginService', () => {
           action: 'suspicious_activity_detected',
           details: expect.objectContaining({
             type: 'multiple_emails'
-          })
-        })
+  }
+  }
       );
     });
 

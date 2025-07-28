@@ -52,7 +52,7 @@ const alertConfigSchema = z.object({
       afterMinutes: z.number().min(1),
       contacts: z.array(z.string().email())
     }).optional()
-  })
+  }
 });
 
 const exportRequestSchema = z.object({
@@ -66,10 +66,12 @@ const exportRequestSchema = z.object({
   }).optional()
 });
 
+}
 interface AdminRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   apiKeyService: ApiKeyManagementService;
+}
 }
 
 export async function apiManagementAdminRoutes(
@@ -111,7 +113,7 @@ export async function apiManagementAdminRoutes(
         properties: {
           timeRange: { type: 'string', enum: ['1h', '6h', '24h', '7d', '30d'], default: '24h' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -190,9 +192,9 @@ export async function apiManagementAdminRoutes(
         type: 'object',
         properties: {
           keyId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['keyId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -474,9 +476,9 @@ export async function apiManagementAdminRoutes(
           keyIds: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 100 },
           parameters: { type: 'object' }, // Operation-specific parameters
           reason: { type: 'string', maxLength: 500 }
-        },
+  }
         required: ['operation', 'keyIds']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -541,25 +543,25 @@ export async function apiManagementAdminRoutes(
             requestsPerMinute: 100,
             requestsPerHour: 3000,
             requestsPerDay: 50000
-          },
+  }
           maxLimits: {
             requestsPerMinute: 10000,
             requestsPerHour: 500000,
             requestsPerDay: 10000000
           }
-        },
+  }
         security: {
           keyRotationPolicy: {
             warningDays: 30,
             enforceRotation: true,
             maxKeyAge: 365
-          },
+  }
           alertThresholds: {
             errorRate: 0.05,
             latency: 1000,
             usageSpike: 5.0
           }
-        },
+  }
         features: {
           ipWhitelisting: true,
           scopeBasedAccess: true,
@@ -567,7 +569,7 @@ export async function apiManagementAdminRoutes(
           realTimeMonitoring: true,
           bulkOperations: true,
           exportCapabilities: ['json', 'csv', 'excel']
-        },
+  }
         limits: {
           maxKeysPerUser: 10,
           maxBulkOperations: 100,
@@ -602,7 +604,7 @@ export async function apiManagementAdminRoutes(
           database: dbHealthy ? 'healthy' : 'unhealthy',
           apiKeyService: 'healthy',
           auditService: 'healthy'
-        },
+  }
         features: [
           'Comprehensive API key management dashboard',
           'Real-time usage monitoring and analytics',

@@ -15,6 +15,7 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
+}
 export interface ActivityRecord {
   id: string;
   userId: string;
@@ -31,7 +32,9 @@ export interface ActivityRecord {
   userAgent?: string;
   location?: GeolocationData;
 }
+}
 
+}
 export interface ActivityDetails {
   // Core activity data
   title: string;
@@ -60,7 +63,9 @@ export interface ActivityDetails {
   sensitive?: boolean;
   internal?: boolean;
 }
+}
 
+}
 export interface ActivityMetadata {
   // System metadata
   apiVersion?: string;
@@ -86,7 +91,9 @@ export interface ActivityMetadata {
   retentionPeriod?: number;
   anonymize?: boolean;
 }
+}
 
+}
 export interface GeolocationData {
   country?: string;
   region?: string;
@@ -94,6 +101,7 @@ export interface GeolocationData {
   coordinates?: {
     latitude: number;
     longitude: number;
+}
   };
   timezone?: string;
 }
@@ -166,6 +174,7 @@ export enum ActivityCategory {
   CUSTOM = 'custom'
 }
 
+}
 export interface ActivityQuery {
   userId?: string;
   sessionId?: string;
@@ -186,12 +195,15 @@ export interface ActivityQuery {
   sortBy?: 'timestamp' | 'activityType' | 'category';
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface ActivitySummary {
   userId: string;
   dateRange: {
     start: Date;
     end: Date;
+}
   };
   totalActivities: number;
   uniqueSessions: number;
@@ -217,6 +229,7 @@ export interface ActivitySummary {
   }>;
 }
 
+}
 export interface ActivityExport {
   userId: string;
   exportDate: Date;
@@ -224,6 +237,7 @@ export interface ActivityExport {
   dateRange: {
     start: Date;
     end: Date;
+}
   };
   format: 'json' | 'csv' | 'xml';
   activities: ActivityRecord[];
@@ -266,6 +280,7 @@ export class ActivityHistoryService {
       location?: GeolocationData;
     } = {}
   ): Promise<void> {
+
     const activity: Omit<ActivityRecord, 'id'> = {
       userId,
       sessionId: context.sessionId,
@@ -277,7 +292,7 @@ export class ActivityHistoryService {
       details: {
         title: this.generateActivityTitle(activityType, details),
         ...details
-      },
+  }
       metadata,
       timestamp: new Date(),
       ipAddress: context.ipAddress,
@@ -316,6 +331,7 @@ export class ActivityHistoryService {
       location?: GeolocationData;
     };
   }>): Promise<void> {
+
     const activityRecords = activities.map(activity => ({
       id: this.generateActivityId(),
       userId: activity.userId,
@@ -329,7 +345,7 @@ export class ActivityHistoryService {
       details: {
         title: this.generateActivityTitle(activity.activityType, activity.details),
         ...activity.details
-      },
+  }
       metadata: activity.metadata || {},
       timestamp: new Date(),
       ipAddress: activity.context?.ipAddress,
@@ -354,6 +370,7 @@ export class ActivityHistoryService {
     totalCount: number;
     hasMore: boolean;
   }> {
+
     const conditions = [];
     const values = [];
     let paramIndex = 1;
@@ -467,6 +484,7 @@ export class ActivityHistoryService {
     startDate: Date,
     endDate: Date
   ): Promise<ActivitySummary> {
+
     const baseQuery = `
       SELECT 
         activity_type,
@@ -548,7 +566,7 @@ export class ActivityHistoryService {
       trends: {
         dailyActivity,
         hourlyActivity
-      },
+  }
       topActivities
     };
   }
@@ -567,6 +585,7 @@ export class ActivityHistoryService {
       includeSummary?: boolean;
     } = {}
   ): Promise<ActivityExport> {
+
     const query: ActivityQuery = {
       userId,
       startDate,
@@ -619,6 +638,7 @@ export class ActivityHistoryService {
    * Process the batch queue
    */
   private async processBatch(): Promise<void> {
+
     if (this.batchQueue.length === 0) return;
 
     const batch = [...this.batchQueue];
@@ -641,6 +661,7 @@ export class ActivityHistoryService {
    * Insert activities into database
    */
   private async insertActivities(activities: ActivityRecord[]): Promise<void> {
+
     if (activities.length === 0) return;
 
     const query = `
@@ -833,7 +854,7 @@ export class ActivityHistoryService {
       details: {
         ...activity.details,
         sensitive: undefined
-      },
+  }
       metadata: {
         ...activity.metadata,
         organizationId: undefined,
@@ -854,6 +875,7 @@ export class ActivityHistoryService {
   }
 
   private async cleanupOldActivities(): Promise<void> {
+
     // This would implement retention policy cleanup
     // For now, just log that cleanup was attempted
     console.log('Activity cleanup check completed');

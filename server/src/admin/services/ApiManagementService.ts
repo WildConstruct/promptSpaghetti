@@ -11,6 +11,7 @@ import { ApiKeyManagementService } from '../../auth/services/ApiKeyManagementSer
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
+}
 export interface ApiKeyUsageAnalytics {
   keyId: string;
   name: string;
@@ -24,6 +25,7 @@ export interface ApiKeyUsageAnalytics {
     errorRate: number;
     averageResponseTime: number;
     rateLimitHits: number;
+}
   };
   performance: {
     averageLatency: number;
@@ -52,6 +54,7 @@ export interface ApiKeyUsageAnalytics {
   };
 }
 
+}
 export interface SystemHealthMetrics {
   overview: {
     totalKeys: number;
@@ -63,6 +66,7 @@ export interface SystemHealthMetrics {
     callsLast24h: number;
     overallErrorRate: number;
     averageResponseTime: number;
+}
   };
   performance: {
     currentRPS: number;
@@ -84,6 +88,7 @@ export interface SystemHealthMetrics {
   };
 }
 
+}
 export interface AlertConfiguration {
   id: string;
   name: string;
@@ -95,6 +100,7 @@ export interface AlertConfiguration {
     usageSpike?: number;
     rateLimitViolations?: number;
     timeWindow: number; // minutes
+}
   };
   actions: {
     email?: string[];
@@ -118,6 +124,7 @@ export class ApiManagementService {
    * Get comprehensive analytics for a specific API key
    */
   async getApiKeyAnalytics(keyId: string): Promise<ApiKeyUsageAnalytics> {
+
     try {
       // Get basic key information
       const keyQuery = `
@@ -216,19 +223,19 @@ export class ApiManagementService {
           errorRate,
           averageResponseTime: parseFloat(usage.avg_response_time) || 0,
           rateLimitHits: parseInt(usage.rate_limit_hits) || 0
-        },
+  }
         performance: {
           averageLatency: parseFloat(usage.avg_response_time) || 0,
           p95Latency: parseFloat(usage.p95_latency) || 0,
           p99Latency: parseFloat(usage.p99_latency) || 0,
           successRate,
           uptime: successRate * 100 // Simplified uptime calculation
-        },
+  }
         security: {
           uniqueIPs: parseInt(usage.unique_ips) || 0,
           suspiciousActivity: 0, // Would be calculated based on specific rules
           ipWhitelistViolations: 0 // Would track violations
-        },
+  }
         endpoints: endpointResult.rows.map(row => ({
           path: row.path,
           method: row.method,
@@ -260,6 +267,7 @@ export class ApiManagementService {
    * Get system-wide health and performance metrics
    */
   async getSystemHealthMetrics(): Promise<SystemHealthMetrics> {
+
     try {
       // Get global statistics from API key service
       const globalStats = await this.apiKeyService.getStatistics();
@@ -310,20 +318,20 @@ export class ApiManagementService {
           callsLast24h: parseInt(callStats.calls_24h) || 0,
           overallErrorRate: parseFloat(callStats.error_rate) || 0,
           averageResponseTime: parseFloat(callStats.avg_response_time) || 0
-        },
+  }
         performance: {
           currentRPS,
           peakRPS: currentRPS * 2, // Would track actual peak
           averageLatency: parseFloat(callStats.avg_response_time) || 0,
           errorRate: parseFloat(callStats.error_rate) || 0,
           serviceUptime: 99.9 // Would be calculated from monitoring data
-        },
+  }
         security: {
           activeAlerts: 0, // Would come from alerting system
           blockedRequests: 0, // Would track blocked requests
           suspiciousActivity: 0, // Would track suspicious patterns
           rateLimitViolations: parseInt(callStats.rate_limit_violations) || 0
-        },
+  }
         trends: {
           usage: trendsResult.rows.map(row => ({
             timestamp: new Date(row.timestamp),
@@ -611,7 +619,7 @@ export class ApiManagementService {
           errorRate,
           averageLatency: avgLatency,
           costEstimate: estimatedCost
-        },
+  }
         keyBreakdown: breakdownResult.rows.map(row => ({
           keyId: row.key_id,
           keyName: row.key_name || 'Unknown',
@@ -634,6 +642,7 @@ export class ApiManagementService {
    * Configure alert rules for API monitoring
    */
   async configureAlert(config: AlertConfiguration): Promise<boolean> {
+
     try {
       const query = `
         INSERT INTO api_alert_configs (
@@ -688,6 +697,7 @@ export class ApiManagementService {
     recordCount: number;
     expiresAt: Date;
   }> {
+
     try {
       // This would generate and store the export file
       // For now, return a mock response

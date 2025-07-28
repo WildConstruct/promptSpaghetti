@@ -25,9 +25,9 @@ export interface ContentData {
     body?: string;
     description?: string;
     excerpt?: string;
-    images?: MediaAsset[];
-    videos?: MediaAsset[];
-    documents?: MediaAsset[];
+    images?: MediaAsset;
+    videos?: MediaAsset;
+    documents?: MediaAsset;
     fields?: Record<string, any>;
     customData?: Record<string, any>;
 }
@@ -48,16 +48,16 @@ export interface MediaAsset {
 export interface ContentMetadata {
     seoTitle?: string;
     seoDescription?: string;
-    keywords?: string[];
+    keywords?: string;
     canonicalUrl?: string;
-    categories?: string[];
-    tags?: string[];
-    collections?: string[];
+    categories?: string;
+    tags?: string;
+    collections?: string;
     language: string;
     localizations?: Record<string, string>;
-    relatedContent?: string[];
+    relatedContent?: string;
     parentContent?: string;
-    childContent?: string[];
+    childContent?: string;
     workflow?: {
         stage: 'draft' | 'review' | 'approved' | 'rejected' | 'final';
         assignee?: string;
@@ -65,7 +65,7 @@ export interface ContentMetadata {
         approver?: string;
         deadline?: Date;
         priority: 'low' | 'medium' | 'high' | 'urgent';
-        notes?: WorkflowNote[];
+        notes?: WorkflowNote;
     };
 }
 export interface WorkflowNote {
@@ -80,19 +80,19 @@ export interface ContentScheduling {
     unpublishAt?: Date;
     timezone: string;
     recurrence?: RecurrencePattern;
-    promotions?: PromotionSchedule[];
+    promotions?: PromotionSchedule;
     archiveAt?: Date;
     deleteAt?: Date;
-    conditions?: ScheduleCondition[];
-    prerequisites?: string[];
-    blocks?: string[];
+    conditions?: ScheduleCondition;
+    prerequisites?: string;
+    blocks?: string;
 }
 export interface RecurrencePattern {
     type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
     interval: number;
-    daysOfWeek?: number[];
-    daysOfMonth?: number[];
-    monthsOfYear?: number[];
+    daysOfWeek?: number;
+    daysOfMonth?: number;
+    monthsOfYear?: number;
     endDate?: Date;
     occurrences?: number;
     customPattern?: string;
@@ -105,10 +105,10 @@ export interface PromotionSchedule {
     endDate: Date;
     priority: number;
     targeting?: {
-        audience?: string[];
+        audience?: string;
         demographics?: Record<string, any>;
         behavioral?: Record<string, any>;
-        geographic?: string[];
+        geographic?: string;
     };
 }
 export interface ScheduleCondition {
@@ -124,28 +124,21 @@ export interface ContentPerformance {
     comments: number;
     conversionRate?: number;
     revenue?: number;
-    metrics?: Array<{
-        timestamp: Date;
-        views: number;
-        engagement: number;
-        shares: number;
-    }>;
-    variants?: Array<{
-        id: string;
-        name: string;
-        traffic: number;
-        performance: ContentPerformance;
-    }>;
+    metrics?: Array<{}, timestamp>;
+    Date: any;
+    views: number;
+    engagement: number;
+    shares: number;
 }
 export type ContentType = 'article' | 'blog_post' | 'page' | 'product' | 'event' | 'announcement' | 'promotion' | 'newsletter' | 'social_post' | 'video' | 'podcast' | 'gallery' | 'document';
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'unpublished' | 'archived' | 'deleted' | 'error';
 export interface ContentFilter {
-    types?: ContentType[];
-    statuses?: ContentStatus[];
-    categories?: string[];
-    tags?: string[];
-    collections?: string[];
-    authors?: string[];
+    types?: ContentType;
+    statuses?: ContentStatus;
+    categories?: string;
+    tags?: string;
+    collections?: string;
+    authors?: string;
     dateRange?: {
         start?: Date;
         end?: Date;
@@ -157,13 +150,13 @@ export interface ContentFilter {
         end: Date;
     };
     language?: string;
-    workflowStage?: string[];
+    workflowStage?: string;
 }
 export interface ScheduleBatch {
     id: string;
     name: string;
     description?: string;
-    contentIds: string[];
+    contentIds: string;
     operation: BatchOperation;
     schedule: BatchSchedule;
     status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
@@ -171,7 +164,7 @@ export interface ScheduleBatch {
         total: number;
         completed: number;
         failed: number;
-        errors: BatchError[];
+        errors: BatchError;
     };
     createdAt: Date;
     createdBy: string;
@@ -201,34 +194,15 @@ export interface SchedulingStats {
     scheduledContent: number;
     publishedToday: number;
     unpublishedToday: number;
-    upcomingSchedules: Array<{
-        date: Date;
-        count: number;
-        items: Array<{
-            id: string;
-            title: string;
-            type: ContentType;
-            operation: string;
-        }>;
-    }>;
-    performanceMetrics: {
-        averageViewsPerPost: number;
-        topPerformingContent: Array<{
-            id: string;
-            title: string;
-            views: number;
-            engagement: number;
-        }>;
-        contentTypePerformance: Record<ContentType, {
-            count: number;
-            averageViews: number;
-            averageEngagement: number;
-        }>;
-    };
+    upcomingSchedules: Array<{}, date>;
+    Date: any;
+    count: number;
+    items: Array<{}, id>;
+    string: any;
+    title: string;
+    type: ContentType;
+    operation: string;
 }
-/**
- * Content Scheduling Service
- */
 export declare class ContentSchedulingService {
     private static instance;
     private content;
@@ -237,53 +211,12 @@ export declare class ContentSchedulingService {
     private scheduler;
     private constructor();
     static getInstance(): ContentSchedulingService;
-    /**
-     * Content Management
-     */
-    createContent(contentData: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt' | 'performance'>, createdBy: string): Promise<ContentItem>;
-    updateContent(contentId: string, updates: Partial<ContentItem>, updatedBy: string): Promise<ContentItem | null>;
-    deleteContent(contentId: string, deletedBy: string): Promise<boolean>;
-    /**
-     * Scheduling Operations
-     */
-    scheduleContent(contentId: string, scheduling: ContentScheduling, scheduledBy: string): Promise<boolean>;
-    publishContent(contentId: string, publishedBy: string): Promise<boolean>;
-    unpublishContent(contentId: string, unpublishedBy: string): Promise<boolean>;
-    /**
-     * Batch Operations
-     */
-    createBatch(name: string, contentIds: string[], operation: BatchOperation, schedule: BatchSchedule, createdBy: string): Promise<ScheduleBatch>;
-    executeBatch(batchId: string): Promise<boolean>;
-    /**
-     * Data Retrieval
-     */
-    getContent(filter?: ContentFilter): ContentItem[];
-    getSchedulingStats(): SchedulingStats;
-    getBatches(status?: ScheduleBatch['status']): ScheduleBatch[];
-    /**
-     * Event Handling
-     */
-    subscribe(listenerId: string, callback: (event: SchedulingEvent) => void): void;
-    unsubscribe(listenerId: string): void;
-    private startScheduler;
-    private processScheduledItems;
-    private checkScheduleConditions;
-    private executeBatchOperation;
-    private scheduleBatchExecution;
-    private notifyListeners;
-    private generateContentId;
-    private generateBatchId;
-    private sleep;
-}
-export interface SchedulingEvent {
-    type: string;
-    data: any;
-    timestamp: Date;
+    default: throw;
 }
 export declare const contentSchedulingService: ContentSchedulingService;
-export declare const createContent: (contentData: Omit<ContentItem, "id" | "createdAt" | "updatedAt" | "performance">, createdBy: string) => Promise<ContentItem>;
-export declare const scheduleContent: (contentId: string, scheduling: ContentScheduling, scheduledBy: string) => Promise<boolean>;
-export declare const publishContent: (contentId: string, publishedBy: string) => Promise<boolean>;
-export declare const getContent: (filter?: ContentFilter) => ContentItem[];
-export declare const getSchedulingStats: () => SchedulingStats;
+export declare const createContent: (contentData: Omit<ContentItem, "id" | "createdAt" | "updatedAt" | "performance">, createdBy: string) => any;
+export declare const scheduleContent: (contentId: string, scheduling: ContentScheduling, scheduledBy: string) => any;
+export declare const publishContent: (contentId: string, publishedBy: string) => any;
+export declare const getContent: (filter?: ContentFilter) => any;
+export declare const getSchedulingStats: () => any;
 //# sourceMappingURL=ContentSchedulingService.d.ts.map

@@ -19,6 +19,7 @@ import { ErrorFactory } from '../../errors/ErrorFactory';
 /**
  * A conditional branch with condition expression and output value
  */
+
 export interface ConditionalBranch {
   /** JavaScript-like expression to evaluate (e.g., "variable > 5", "hasFlag('debug')") */
   condition: string;
@@ -26,42 +27,41 @@ export interface ConditionalBranch {
   output: string;
   /** Optional label for UI display */
   label?: string;
+  /**
+  * Configuration for conditional evaluation
+  */
 }
-/**
- * Configuration for conditional evaluation
- */
 export interface ConditionalConfig {
   /** Whether to allow access to execution context variables */
   allowVariableAccess?: boolean;
   /** Whether to enable strict mode (throws on undefined variables) */
   strictMode?: boolean;
   /** Custom functions available in expressions */
-  customFunctions?: Record<string, (...args: unknown[]) => any>;
+  customFunctions?: Record<string, (...args: unknown) => any>;
+  /**
+  * Advanced conditional node with expression-based branching logic
+  * Supports multiple conditions, variable access, and custom functions
+  */
 }
-/**
- * Advanced conditional node with expression-based branching logic
- * Supports multiple conditions, variable access, and custom functions
- */
 export class ConditionalNode extends AdvancedRuntimeNode<string> {
   private ioHandler: AdvancedIOHandler;
-  private branches: ConditionalBranch[];
+  private branches: ConditionalBranch;
   private defaultOutput: string;
   private conditionalConfig: ConditionalConfig;
   constructor();
     id: string, 
-    branches: ConditionalBranch[] = [],
+    branches: ConditionalBranch = [],
     defaultOutput: string = '',
     config: ConditionalConfig = {}
     // Configure as deterministic, non-cacheable (depends on variables), stateless
-    const nodeConfig: AdvancedNodeConfig = {
-      deterministic: true,
-      cacheable: false, // Don't cache since output depends on variable state
-      stateful: false,
-      performanceHints: {,
-        expectedExecutionTime: 'fast',
-        memoryUsage: 'low',
-      }
-    };
+    const nodeConfig: AdvancedNodeConfig = {,
+  deterministic: true,
+  cacheable: false, // Don't cache since output depends on variable state,
+  stateful: false,
+  performanceHints: {,
+  expectedExecutionTime: 'fast',
+  memoryUsage: 'low',
+};
     super(id, nodeConfig);
     this.branches = branches;
     this.defaultOutput = defaultOutput;
@@ -74,33 +74,32 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
     // Set up I/O specification
     const ioSpec = new IOSpecBuilder();
       .addInput({)
-        id: 'conditions',
-        label: 'Condition Expressions',
-        dataType: 'array',
-        required: false,
-        defaultValue: [],
-        description: 'Array of condition expressions to evaluate',
-      })
+  id: 'conditions',
+  label: 'Condition Expressions',
+  dataType: 'array',
+  required: false,
+  defaultValue: [],
+  description: 'Array of condition expressions to evaluate',
+}
       .addInput({)
-        id: 'outputs',
-        label: 'Condition Outputs',
-        dataType: 'stringArray',
-        required: false,
-        defaultValue: [],
-        description: 'Array of outputs corresponding to conditions',
-      })
+  id: 'outputs',
+  label: 'Condition Outputs',
+  dataType: 'stringArray',
+  required: false,
+  defaultValue: [],
+  description: 'Array of outputs corresponding to conditions',
+}
       .addInput({)
-        id: 'default',
-        label: 'Default Output',
-        dataType: 'string',
-        required: false,
-        defaultValue: '',
-        description: 'Default output when no conditions match',
-      })
+  id: 'default',
+  label: 'Default Output',
+  dataType: 'string',
+  required: false,
+  defaultValue: '',
+  description: 'Default output when no conditions match',
+}
       .addTextOutput('result', 'Conditional Result')
       .build();
     this.ioHandler = new AdvancedIOHandler(ioSpec);
-  }
   /**
    * Execute conditional logic by evaluating expressions in order
    */
@@ -117,110 +116,95 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
           const conditionResult = this.evaluateCondition(branch.condition, ctx);
           if (conditionResult) {
             return branch.output;
-          }
         } catch (error) {
           // Always re-throw security-related errors regardless of strict mode
           const errorMessage = error instanceof Error ? error.message : String(error);
           if (errorMessage.includes('Dangerous pattern detected')) {
             throw error;
-          }
           // In non-strict mode, treat evaluation errors as false
           if (this.conditionalConfig.strictMode) {
             throw ErrorFactory.createNodeExecutionError()
               this.id || 'conditional',
               'condition_evaluation',
-              `Condition evaluation failed: ${branch.condition}`,}
+              `Condition evaluation failed: ${branch.condition}`}
+}
               error,
               { operation: 'evaluate_condition' }
             );
-          }
           // Continue to next condition
-        }
-      }
       // No conditions matched, return default
       return this.defaultOutput;
     });
-  }
   /**
    * Comprehensive validation of conditional configuration
    */
   validate(): ValidationResult {
-    const errors: string[] = [];
-    const warnings: string[] = [];
+    const errors: string = [];
+    const warnings: string = [];
     // Validate branches
     if (this.branches.length === 0) {
       warnings.push('No conditional branches configured - will always return default output');
-    }
     // Validate individual branches
     this.branches.forEach((branch, index) => {
       if (!branch.condition || branch.condition.trim() === '') {
         errors.push(`Branch ${index} has empty condition`);}
-      }
       if (branch.output === undefined || branch.output === null) {
         warnings.push(`Branch ${index} has undefined output`);}
-      }
       // Basic syntax validation for common patterns
       const condition = branch.condition.trim();
       if (condition.includes('==')) {
         warnings.push(`Branch ${index}: Consider using '===' instead of '==' for strict equality`);}
-      }
       // Check for potentially dangerous expressions
       if (condition.includes('eval(') || condition.includes('Function(')) {
         errors.push(`Branch ${index}: Dangerous expression detected - eval/Function not allowed`);}
-      }
     });
     // Validate default output
     if (this.defaultOutput === undefined || this.defaultOutput === null) {
-      warnings.push('Default output is undefined - consider providing a fallback value');
-    }
-    return {
-      valid: errors.length === 0,
-      errors,
-      warnings
-    };
-  }
+  warnings.push('Default output is undefined - consider providing a fallback value');
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings
+};
   /**
    * Serialize node data for persistence
    */
   serialize(): AdvancedNodeData {
-    return {
-      id: this.id,
-      type: 'Conditional',
-      config: this.getConfig(),
-      data: {,
-        branches: this.branches,
-        defaultOutput: this.defaultOutput,
-        conditionalConfig: this.conditionalConfig,
-      },
-      metadata: {,
-        version: '1.0.0',
-        created: new Date().toISOString(),
-      }
-    };
-  }
+  return {
+  id: this.id,
+  type: 'Conditional',
+  config: this.getConfig(),
+  data: {,
+  branches: this.branches,
+  defaultOutput: this.defaultOutput,
+  conditionalConfig: this.conditionalConfig,
+},
+  metadata: {,
+  version: '1.0.0',
+  created: new Date().toISOString(),
+};
   /**
    * Get effective branches from constructor data or dynamic inputs
    */
-  private getEffectiveBranches(_______ctx: AdvancedExecutionContext): ConditionalBranch[] {
-    // For now, use constructor branches
-    // In full implementation, would merge with dynamic inputs from I/O system
-    return this.branches;
-  }
+  private getEffectiveBranches(_______ctx: AdvancedExecutionContext): ConditionalBranch {
+  // For now, use constructor branches
+  // In full implementation, would merge with dynamic inputs from I/O system
+  return this.branches;
   /**
-   * Evaluate a condition expression against the execution context
-   */
-  private evaluateCondition(expression: string, ctx: AdvancedExecutionContext): boolean {
-    try {
-      // Log expression evaluation start
-      securityAudit.logEvent()
-        SecuritySeverity.INFO,
-        SecurityEventCategory.EXPRESSION_VALIDATION,
-        'Evaluating conditional expression',
-        { 
-          nodeId: this.id,
-          expression,
-          strictMode: this.conditionalConfig.strictMode,
-        },
+  * Evaluate a condition expression against the execution context
+  */
+  private evaluateCondition(expression: string, ctx: AdvancedExecutionContext): boolean {,
+  try {
+  // Log expression evaluation start
+  securityAudit.logEvent()
+  SecuritySeverity.INFO,
+  SecurityEventCategory.EXPRESSION_VALIDATION,
+  'Evaluating conditional expression',
+  {
+  nodeId: this.id,
+  expression,
+  strictMode: this.conditionalConfig.strictMode,
+}
         false
       );
       // Create a safe evaluation context
@@ -230,29 +214,25 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       // Convert result to boolean
       return Boolean(result);
     } catch (error) {
-      // Always re-throw security-related errors regardless of strict mode
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      if (errorMessage.includes('Dangerous pattern detected') || errorMessage.includes('Expression evaluation failed')) {
-        throw error;
-      }
-      if (this.conditionalConfig.strictMode) {
-        throw error;
-      }
-      // In non-strict mode, log the error for debugging but return false
-      securityAudit.logEvent()
-        SecuritySeverity.WARNING,
-        SecurityEventCategory.EXPRESSION_VALIDATION,
-        'Expression evaluation failed in non-strict mode',
-        { 
-          nodeId: this.id,
-          expression,
-          error: errorMessage,
-        },
+  // Always re-throw security-related errors regardless of strict mode
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  if (errorMessage.includes('Dangerous pattern detected') || errorMessage.includes('Expression evaluation failed')) {
+  throw error;
+  if (this.conditionalConfig.strictMode) {
+  throw error;
+  // In non-strict mode, log the error for debugging but return false
+  securityAudit.logEvent()
+  SecuritySeverity.WARNING,
+  SecurityEventCategory.EXPRESSION_VALIDATION,
+  'Expression evaluation failed in non-strict mode',
+  {
+  nodeId: this.id,
+  expression,
+  error: errorMessage,
+}
         false
       );
       return false;
-    }
-  }
   /**
    * Create a safe evaluation context with variables and functions
    */
@@ -263,27 +243,24 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
     );
     // Add additional convenience functions if variable access is allowed
     if (this.conditionalConfig.allowVariableAccess) {
-      evalContext.hasVariable = (name: string) => name in ctx.variables;
-      evalContext.getVariable = (name: string, defaultValue?: any) => 
-        ctx.variables[name] !== undefined ? ctx.variables[name] : defaultValue;
-    }
-    // Add custom functions from config
-    Object.assign(evalContext, this.conditionalConfig.customFunctions);
-    // Add conditional-specific utility functions
-    evalContext.matches = (str: string, pattern: string) => {
-      try {
-        return new RegExp(pattern).test(String(str));
-      } catch (e) {
+  evalContext.hasVariable = (name: string) => name in ctx.variables;
+  evalContext.getVariable = (name: string, defaultValue?: any) =>,
+  ctx.variables[name] !== undefined ? ctx.variables[name] : defaultValue;
+  // Add custom functions from config
+  Object.assign(evalContext, this.conditionalConfig.customFunctions);
+  // Add conditional-specific utility functions
+  evalContext.matches = (str: string, pattern: string) => {,
+  try {
+  return new RegExp(pattern).test(String(str));
+} catch (e) {
         throw ErrorFactory.createValidationError()
           'pattern',
           pattern,
           'valid regex pattern',
           { operation: 'regex_validation' }
         );
-      }
     };
     return evalContext;
-  }
   /**
    * Safely evaluate an expression with limited scope
    */
@@ -297,25 +274,24 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
       throw ErrorFactory.createNodeExecutionError()
         'expression-evaluator',
         'expression_evaluation', 
-        `Expression evaluation failed: ${expression}`,}
+        `Expression evaluation failed: ${expression}`}
+}
         error,
         { operation: 'evaluate_expression' }
       );
-    }
-  }
   /**
    * Sanitize expression to prevent dangerous operations
    */
   private sanitizeExpression(expression: string): string {
     // Remove dangerous patterns
     const dangerous = [;
-      /eval\s*\(/gi,)
-      /Function\s*\(/gi,)
+      /eval\s*\(/gi)
+      /Function\s*\(/gi)
       /constructor/gi,
       /prototype/gi,
       /__proto__/gi,
-      /import\s*\(/gi,)
-      /require\s*\(/gi,)
+      /import\s*\(/gi)
+      /require\s*\(/gi)
       /process\./gi,
       /global\./gi,
       /window\./gi,
@@ -327,33 +303,25 @@ export class ConditionalNode extends AdvancedRuntimeNode<string> {
         // Log the dangerous pattern detection
         securityAudit.logExpressionBlocked()
           expression,
-          `Dangerous pattern detected: ${pattern.source}`,}
+          `Dangerous pattern detected: ${pattern.source}`}
+}
           { 
             nodeId: this.id,
             nodeType: 'Conditional',
-            additionalData: { ,
-              pattern: pattern.source,
-              patternIndex: dangerous.indexOf(pattern),
-            }
-          }
-        );
+            additionalData: {,
+  pattern: pattern.source,
+              patternIndex: dangerous.indexOf(pattern));
         throw new Error(`Dangerous pattern detected: ${pattern.source}`);}
-      }
-    }
     return sanitized;
-  }
-}
 /**
  * Factory function for creating Conditional nodes
  */
-export function createConditionalNode()
-  id: string,
-  branches: ConditionalBranch[],
+export function createConditionalNode(id: string,)
+  branches: ConditionalBranch,
   defaultOutput?: string,
   config?: ConditionalConfig
 ): ConditionalNode {
   return new ConditionalNode(id, branches, defaultOutput, config);
-}
 /**
  * Common condition patterns for easy setup
  */
@@ -361,32 +329,24 @@ export function createConditionalNode()
  * Utility for building complex conditional branches
  */
 export class ConditionalBuilder {
-  private branches: ConditionalBranch[] = [];
+  private branches: ConditionalBranch = [];
   private defaultOutput: string = '';
   if(condition: string, output: string, label?: string): ConditionalBuilder {
     this.branches.push({ condition, output, label });
     return this;
-  }
   elseIf(condition: string, output: string, label?: string): ConditionalBuilder {
     return this.if(condition, output, label);
-  }
   else(output: string): ConditionalBuilder {
     this.defaultOutput = output;
     return this;
-  }
   build(id: string, config?: ConditionalConfig): ConditionalNode {
     return new ConditionalNode(id, this.branches, this.defaultOutput, config);
-  }
-  getBranches(): ConditionalBranch[] {
+  getBranches(): ConditionalBranch {
     return this.branches;
-  }
   getDefaultOutput(): string {
     return this.defaultOutput;
-  }
-}
 /**
  * Fluent API for building conditional nodes
  */
 export function conditional(_______id: string): ConditionalBuilder {
   return new ConditionalBuilder();
-}

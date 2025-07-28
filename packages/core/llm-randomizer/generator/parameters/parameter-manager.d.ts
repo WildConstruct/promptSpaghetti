@@ -1,4 +1,5 @@
 import { RandomizerParameters, ParameterPreset, ValidationResult } from './parameter-schema';
+
 export interface ParameterHistory {
     id: string;
     parameters: RandomizerParameters;
@@ -6,13 +7,12 @@ export interface ParameterHistory {
     success: boolean;
     generationTime?: number;
     errorCount?: number;
-}
+
 export interface ParameterManagerOptions {
     enableHistory: boolean;
     maxHistorySize: number;
     autoSave: boolean;
     storageKey: string;
-}
 /**
  * Manages randomizer parameters, presets, and history
  */
@@ -138,5 +138,5 @@ export declare class ParameterManager {
      * Generate unique ID
      */
     private generateId;
-}
+
 //# sourceMappingURL=parameter-manager.d.ts.map

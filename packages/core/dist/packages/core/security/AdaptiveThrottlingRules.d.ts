@@ -11,7 +11,7 @@
  * analytics insights for intelligent decision-making.
  */
 import { EventEmitter } from 'events';
-import { RateLimitingService, ThreatLevel } from './RateLimitingService';
+import { ThreatLevel } from './RateLimitingService';
 import { ApiUsagePatternQuotaRecommendations } from './ApiUsagePatternQuotaRecommendations';
 import { ApiScalingAnalyticsIntegration } from './ApiScalingAnalyticsIntegration';
 export interface ThrottlingAnalyticsConfig {
@@ -84,19 +84,19 @@ export interface LoadPredictionData {
 export interface PerformanceAnomalyData {
     anomalyType: string;
     severity: number;
-    affectedEndpoints: string[];
+    affectedEndpoints: string;
     recommendation: string;
     confidence?: number;
     anomalyScore?: number;
     [key: string]: unknown;
 }
 export interface ThrottlingDecisionContext extends ThrottlingContext {
-    analyticsInsights: ThrottlingAnalyticsInsight[];
+    analyticsInsights: ThrottlingAnalyticsInsight;
     historicalPerformance: {
-        requestVolume: number[];
-        successRate: number[];
-        averageLatency: number[];
-        errorRates: number[];
+        requestVolume: number;
+        successRate: number;
+        averageLatency: number;
+        errorRates: number;
     };
     patternAnalysis: {
         currentPattern: string;
@@ -134,11 +134,11 @@ export interface ThrottlingRule {
     enabled: boolean;
     priority: number;
     mode: ThrottlingMode;
-    triggerConditions: ThrottlingCondition[];
+    triggerConditions: ThrottlingCondition;
     baseDelay: number;
     maxDelay: number;
     adaptiveMultiplier: number;
-    escalationSteps: ThrottlingStep[];
+    escalationSteps: ThrottlingStep;
     failureThreshold: number;
     recoveryTimeout: number;
     halfOpenRequests: number;
@@ -151,7 +151,7 @@ export interface ThrottlingRule {
     logViolations: boolean;
     analyticsConfig?: ThrottlingAnalyticsConfig;
     lastAnalyticsUpdate?: Date;
-    activeInsights?: ThrottlingAnalyticsInsight[];
+    activeInsights?: ThrottlingAnalyticsInsight;
     performanceHistory?: {
         throttlingEffectiveness: number;
         falsePositiveRate: number;
@@ -230,7 +230,6 @@ export interface SystemMetrics {
     queueDepth: number;
 }
 export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
-    private rateLimitingService;
     private rules;
     private circuitBreakerStates;
     private tokenBuckets;
@@ -241,196 +240,14 @@ export declare class AdaptiveThrottlingRulesEngine extends EventEmitter {
     private analyticsInsights;
     private analyticsEnabled;
     private lastAnalyticsUpdate;
-    constructor(rateLimitingService: RateLimitingService, initializeDefaults?: boolean, analyticsConfig?: {
+    constructor();
+    private rateLimitingService;
+    initializeDefaults: boolean;
+    analyticsConfig?: {
         usagePatternAnalytics?: ApiUsagePatternQuotaRecommendations;
         scalingAnalytics?: ApiScalingAnalyticsIntegration;
         enableAnalytics?: boolean;
-    });
-    /**
-     * Add a new throttling rule
-     */
-    addRule(rule: ThrottlingRule): void;
-    /**
-     * Apply throttling rules to a request context with Epic 31 analytics insights
-     */
-    applyThrottling(context: ThrottlingContext): Promise<ThrottlingResult>;
-    /**
-     * Update system metrics
-     */
-    updateSystemMetrics(metrics: Partial<SystemMetrics>): void;
-    /**
-     * Get current system condition
-     */
-    getSystemCondition(): SystemCondition;
-    /**
-     * Convert SystemCondition string to numeric code for analytics
-     */
-    private getSystemConditionCode;
-    /**
-     * Get throttling statistics
-     */
-    getStatistics(): {
-        rulesCount: number;
-        activeRules: number;
-        circuitBreakers: Record<string, CircuitBreakerState>;
-        tokenBuckets: Record<string, {
-            tokens: number;
-            capacity: number;
-        }>;
-        systemCondition: SystemCondition;
-        systemMetrics: SystemMetrics;
+        super(): any;
     };
-    /**
-     * Initialize analytics integration event listeners
-     */
-    private initializeAnalyticsIntegration;
-    /**
-     * Update analytics insights from Epic 31 services
-     */
-    private updateAnalyticsInsights;
-    /**
-     * Enhance context with analytics data
-     */
-    private enhanceContextWithAnalytics;
-    /**
-     * Apply rule with analytics-enhanced decision making
-     */
-    private applyRuleWithAnalytics;
-    /**
-     * Apply analytics-based adjustments to throttling decision
-     */
-    private applyAnalyticsAdjustments;
-    /**
-     * Apply individual insight adjustment
-     */
-    private applyInsightAdjustment;
-    /**
-     * Record throttling decision for analytics learning
-     */
-    private recordThrottlingDecision;
-    /**
-     * Get pattern-based insights
-     */
-    private getPatternBasedInsights;
-    /**
-     * Get scaling-based insights
-     */
-    private getScalingBasedInsights;
-    /**
-     * Update insights for rules
-     */
-    private updateInsightsForRules;
-    /**
-     * Get historical performance data
-     */
-    private getHistoricalPerformance;
-    /**
-     * Get pattern analysis
-     */
-    private getPatternAnalysis;
-    /**
-     * Get scaling context
-     */
-    private getScalingContext;
-    /**
-     * Start analytics update cycle
-     */
-    private startAnalyticsUpdateCycle;
-    /**
-     * Handle pattern detected event
-     */
-    private handlePatternDetected;
-    /**
-     * Handle abuse detected event
-     */
-    private handleAbuseDetected;
-    /**
-     * Handle quota recommendation event
-     */
-    private handleQuotaRecommendation;
-    /**
-     * Handle scaling recommendation event
-     */
-    private handleScalingRecommendation;
-    /**
-     * Handle load prediction event
-     */
-    private handleLoadPrediction;
-    /**
-     * Handle performance anomaly event
-     */
-    private handlePerformanceAnomaly;
-    /**
-     * Update rule performance history
-     */
-    private updateRulePerformanceHistory;
-    /**
-     * Get analytics-enhanced statistics
-     */
-    getAnalyticsStatistics(): {
-        analyticsEnabled: boolean;
-        lastUpdate: Date;
-        totalInsights: number;
-        insightsByType: Record<string, number>;
-        insightsByRule: Record<string, number>;
-        averageConfidence: number;
-        performanceMetrics: {
-            averageEffectiveness: number;
-            averageFalsePositiveRate: number;
-            averageAdaptationSuccessRate: number;
-        };
-    };
-    private validateRule;
-    private findMatchingRules;
-    private evaluateCondition;
-    private evaluateStringCondition;
-    private evaluateNumericCondition;
-    private evaluateUserPattern;
-    private applyRule;
-    private applyAdaptiveThrottling;
-    private applyProgressiveThrottling;
-    private applyCircuitBreaker;
-    private applyLoadShedding;
-    private applyBandwidthShaping;
-    private getThreatMultiplier;
-    private getDefaultSystemMetrics;
-    private refreshSystemMetrics;
-    private initializeDefaultRules;
-    private startMetricsCollection;
-    /**
-     * Record successful request (for circuit breaker recovery)
-     */
-    recordSuccess(ruleId: string): void;
-    /**
-     * Record failed request (for circuit breaker triggering)
-     */
-    recordFailure(ruleId: string): void;
-    /**
-     * Enable or disable the throttling engine
-     */
-    setEnabled(enabled: boolean): void;
-    /**
-     * Get a specific rule
-     */
-    getRule(id: string): ThrottlingRule | undefined;
-    /**
-     * Get recent throttling attempts for integration with rate limiting
-     */
-    getRecentThrottlingAttempts(identifier: string, endpoint: string): Array<{
-        timestamp: Date;
-        action: string;
-        delay: number;
-        ruleId: string;
-        success: boolean;
-    }>;
-    /**
-     * Remove a rule
-     */
-    removeRule(id: string): boolean;
-    /**
-     * Clean up resources
-     */
-    cleanup(): void;
 }
-export default AdaptiveThrottlingRulesEngine;
 //# sourceMappingURL=AdaptiveThrottlingRules.d.ts.map

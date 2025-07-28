@@ -86,12 +86,12 @@ export interface CorrectionsTheme {
         tablet: string;
         desktop: string;
     };
-}
+
 export declare }
 interface CorrectionsThemeProviderProps {
     children: ReactNode;
     initialTheme?: 'light' | 'dark';
-}
+
 export declare export declare             color: string;
             border: string;
             padding: string;

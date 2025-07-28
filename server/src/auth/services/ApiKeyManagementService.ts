@@ -13,6 +13,7 @@ import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 
+}
 export interface ApiKeyConfig {
   keyLength: number;
   defaultExpirationDays: number;
@@ -24,9 +25,11 @@ export interface ApiKeyConfig {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
+}
   };
 }
 
+}
 export interface ApiKey {
   keyId: string;
   userId: string;
@@ -43,6 +46,7 @@ export interface ApiKey {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
+}
   };
   ipWhitelist?: string[];
   metadata: {
@@ -53,6 +57,7 @@ export interface ApiKey {
   };
 }
 
+}
 export interface CreateApiKeyRequest {
   name: string;
   description?: string;
@@ -62,11 +67,13 @@ export interface CreateApiKeyRequest {
     requestsPerMinute?: number;
     requestsPerHour?: number;
     requestsPerDay?: number;
+}
   };
   ipWhitelist?: string[];
   purpose: string;
 }
 
+}
 export interface ApiKeyValidationResult {
   valid: boolean;
   keyId?: string;
@@ -78,6 +85,7 @@ export interface ApiKeyValidationResult {
       minute: number;
       hour: number;
       day: number;
+}
     };
     resetTimes: {
       minute: Date;
@@ -130,6 +138,7 @@ export class ApiKeyManagementService {
     request: CreateApiKeyRequest,
     createdBy: string
   ): Promise<{ apiKey: ApiKey; rawKey: string }> {
+
     // Validate scopes
     const invalidScopes = request.scopes.filter(scope => !this.config.allowedScopes.includes(scope));
     if (invalidScopes.length > 0) {
@@ -166,7 +175,7 @@ export class ApiKeyManagementService {
         requestsPerMinute: request.rateLimits?.requestsPerMinute || this.config.rateLimitDefaults.requestsPerMinute,
         requestsPerHour: request.rateLimits?.requestsPerHour || this.config.rateLimitDefaults.requestsPerHour,
         requestsPerDay: request.rateLimits?.requestsPerDay || this.config.rateLimitDefaults.requestsPerDay
-      },
+  }
       ipWhitelist: request.ipWhitelist,
       metadata: {
         createdBy,
@@ -193,7 +202,7 @@ export class ApiKeyManagementService {
         expiresAt: expiresAt.toISOString(),
         purpose: request.purpose,
         createdBy
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
@@ -213,6 +222,7 @@ export class ApiKeyManagementService {
     requiredScope?: string,
     ipAddress?: string
   ): Promise<ApiKeyValidationResult> {
+
     try {
       const keyHash = this.hashApiKey(rawKey);
       const keyPrefix = rawKey.substring(0, 8);
@@ -236,7 +246,7 @@ export class ApiKeyManagementService {
             keyPrefix,
             reason: 'key_not_found',
             ipAddress
-          },
+  }
           riskLevel: 'HIGH',
           compliance: {
             frameworks: ['SOC2'],
@@ -258,7 +268,7 @@ export class ApiKeyManagementService {
             reason: 'key_inactive',
             status: apiKey.status,
             ipAddress
-          },
+  }
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
@@ -280,7 +290,7 @@ export class ApiKeyManagementService {
             keyPrefix,
             expiresAt: apiKey.expiresAt.toISOString(),
             ipAddress
-          },
+  }
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
@@ -302,7 +312,7 @@ export class ApiKeyManagementService {
               keyPrefix,
               ipAddress,
               allowedIPs: apiKey.ipWhitelist
-            },
+  }
             riskLevel: 'HIGH',
             compliance: {
               frameworks: ['SOC2'],
@@ -325,7 +335,7 @@ export class ApiKeyManagementService {
             requiredScope,
             availableScopes: apiKey.scopes,
             ipAddress
-          },
+  }
           riskLevel: 'MEDIUM',
           compliance: {
             frameworks: ['SOC2'],
@@ -347,7 +357,7 @@ export class ApiKeyManagementService {
             keyPrefix,
             rateLimits: apiKey.rateLimits,
             ipAddress
-          },
+  }
           riskLevel: 'LOW',
           compliance: {
             frameworks: ['SOC2'],
@@ -374,7 +384,7 @@ export class ApiKeyManagementService {
           keyPrefix,
           scope: requiredScope,
           ipAddress
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -397,7 +407,7 @@ export class ApiKeyManagementService {
         details: {
           error: error.message,
           ipAddress
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['SOC2'],
@@ -416,6 +426,7 @@ export class ApiKeyManagementService {
     userId: string, 
     options: { includeInactive?: boolean } = {}
   ): Promise<ApiKey[]> {
+
     try {
       let query = `
         SELECT key_id, user_id, key_hash, key_prefix, name, description,
@@ -448,6 +459,7 @@ export class ApiKeyManagementService {
     revokedBy: string,
     reason?: string
   ): Promise<boolean> {
+
     try {
       const apiKey = await this.getApiKeyById(keyId);
       if (!apiKey) {
@@ -466,7 +478,7 @@ export class ApiKeyManagementService {
           name: apiKey.name,
           revokedBy,
           reason: reason || 'Manual revocation'
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -489,6 +501,7 @@ export class ApiKeyManagementService {
     keyId: string,
     rotatedBy: string
   ): Promise<{ newApiKey: ApiKey; rawKey: string } | null> {
+
     try {
       const oldKey = await this.getApiKeyById(keyId);
       if (!oldKey || oldKey.status !== 'active') {
@@ -505,7 +518,7 @@ export class ApiKeyManagementService {
           rateLimits: oldKey.rateLimits,
           ipWhitelist: oldKey.ipWhitelist,
           purpose: oldKey.metadata.purpose
-        },
+  }
         rotatedBy
       );
 
@@ -525,7 +538,7 @@ export class ApiKeyManagementService {
           newKeyId: newApiKey.keyId,
           rotatedBy,
           rotationCount: newApiKey.metadata.rotationCount
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -545,6 +558,7 @@ export class ApiKeyManagementService {
    * Get API key statistics
    */
   async getStatistics(userId?: string): Promise<any> {
+
     try {
       const baseQuery = `
         SELECT 
@@ -637,6 +651,7 @@ export class ApiKeyManagementService {
   }
 
   private async storeApiKey(apiKey: ApiKey): Promise<void> {
+
     const query = `
       INSERT INTO api_keys (
         key_id, user_id, key_hash, key_prefix, name, description,
@@ -665,6 +680,7 @@ export class ApiKeyManagementService {
   }
 
   private async getApiKeyByHash(keyHash: string): Promise<ApiKey | null> {
+
     const query = `
       SELECT key_id, user_id, key_hash, key_prefix, name, description,
              scopes, created_at, expires_at, last_used_at, status,
@@ -684,6 +700,7 @@ export class ApiKeyManagementService {
   }
 
   private async getApiKeyById(keyId: string): Promise<ApiKey | null> {
+
     const query = `
       SELECT key_id, user_id, key_hash, key_prefix, name, description,
              scopes, created_at, expires_at, last_used_at, status,
@@ -703,6 +720,7 @@ export class ApiKeyManagementService {
   }
 
   private async updateApiKeyStatus(keyId: string, status: ApiKey['status']): Promise<void> {
+
     const query = `
       UPDATE api_keys 
       SET status = $1, updated_at = NOW()
@@ -713,6 +731,7 @@ export class ApiKeyManagementService {
   }
 
   private async updateLastUsed(keyId: string): Promise<void> {
+
     // Update last used timestamp asynchronously for performance
     setImmediate(async () => {
       try {
@@ -737,6 +756,7 @@ export class ApiKeyManagementService {
   }
 
   private async getCachedKey(keyHash: string): Promise<ApiKey | null> {
+
     const cached = this.keyCache.get(keyHash);
     if (!cached) return null;
 
@@ -770,6 +790,7 @@ export class ApiKeyManagementService {
     remaining: { minute: number; hour: number; day: number };
     resetTimes: { minute: Date; hour: Date; day: Date };
   }> {
+
     // Use rate limit service to check limits
     const keyIdentifier = `apikey:${apiKey.keyId}`;
     
@@ -802,7 +823,7 @@ export class ApiKeyManagementService {
         minute: minuteCheck.remainingRequests || 0,
         hour: hourCheck.remainingRequests || 0,
         day: dayCheck.remainingRequests || 0
-      },
+  }
       resetTimes: {
         minute: minuteCheck.resetTime || new Date(),
         hour: hourCheck.resetTime || new Date(),
@@ -891,7 +912,7 @@ export class ApiKeyManagementService {
         totalCalls: parseInt(row.total_calls) || 0,
         lastMonth: parseInt(row.last_month_calls) || 0,
         errorCount: parseInt(row.error_count) || 0
-      },
+  }
       recentActivity: await this.getRecentActivity(row.key_id)
     }));
 
@@ -1054,6 +1075,7 @@ export class ApiKeyManagementService {
    * Admin revoke API key with audit trail
    */
   async adminRevokeApiKey(keyId: string, revokedBy: string, reason: string): Promise<boolean> {
+
     try {
       const key = await this.getApiKeyById(keyId);
       if (!key || key.status === 'revoked') {
@@ -1082,7 +1104,7 @@ export class ApiKeyManagementService {
               '{revocationReason}',
               to_jsonb($3::text),
               true
-            )
+
         WHERE key_id = $1
       `;
 
@@ -1101,7 +1123,7 @@ export class ApiKeyManagementService {
           revokedBy,
           reason,
           adminAction: true
-        },
+  }
         ipAddress: undefined,
         userAgent: undefined
       });
@@ -1117,6 +1139,7 @@ export class ApiKeyManagementService {
    * Suspend API key
    */
   async suspendApiKey(keyId: string, suspendedBy: string, reason: string, duration?: string): Promise<boolean> {
+
     try {
       const key = await this.getApiKeyById(keyId);
       if (!key || key.status !== 'active') {
@@ -1163,7 +1186,7 @@ export class ApiKeyManagementService {
               '{suspensionEnds}',
               to_jsonb($4::text),
               true
-            )
+
         WHERE key_id = $1
       `;
 
@@ -1188,7 +1211,7 @@ export class ApiKeyManagementService {
           reason,
           duration: duration || 'permanent',
           suspensionEnds: suspensionEnds?.toISOString()
-        },
+  }
         ipAddress: undefined,
         userAgent: undefined
       });
@@ -1209,9 +1232,10 @@ export class ApiKeyManagementService {
       requestsPerMinute: number;
       requestsPerHour: number;
       requestsPerDay: number;
-    }, 
+  }
     updatedBy: string
   ): Promise<boolean> {
+
     try {
       const key = await this.getApiKeyById(keyId);
       if (!key) {
@@ -1233,7 +1257,7 @@ export class ApiKeyManagementService {
               '{lastRateLimitUpdatedBy}',
               to_jsonb($4::text),
               true
-            )
+
         WHERE key_id = $1
       `;
 
@@ -1257,7 +1281,7 @@ export class ApiKeyManagementService {
           oldRateLimits: key.rateLimits,
           newRateLimits: rateLimits,
           updatedBy
-        },
+  }
         ipAddress: undefined,
         userAgent: undefined
       });
@@ -1332,7 +1356,7 @@ export class ApiKeyManagementService {
         processedCount,
         failedCount,
         results
-      },
+  }
       ipAddress: undefined,
       userAgent: undefined
     });

@@ -24,6 +24,7 @@ import { RateLimiter } from '../../packages/core/security/RateLimiter';
 // REQUEST/RESPONSE INTERFACES
 // ============================================================================
 
+}
 interface InitializePerformanceThrottlingRequest {
   config: APIPerformanceThrottlingConfig;
   integration_settings?: {
@@ -31,9 +32,11 @@ interface InitializePerformanceThrottlingRequest {
     intelligent_throttling_enabled: boolean;
     predictive_load_management_enabled: boolean;
     real_time_adjustments_enabled: boolean;
+}
   };
 }
 
+}
 interface PerformThrottlingAdjustmentRequest {
   context?: {
     endpoint?: string;
@@ -42,6 +45,7 @@ interface PerformThrottlingAdjustmentRequest {
     geographic_region?: string;
     application_type?: string;
     request_priority?: 'low' | 'medium' | 'high' | 'critical';
+}
   };
   adjustment_preferences?: {
     auto_apply_adjustments: boolean;
@@ -57,12 +61,14 @@ interface PerformThrottlingAdjustmentRequest {
   };
 }
 
+}
 interface OptimizePerformanceThrottlingRequest {
   optimization_scope: {
     endpoints?: string[];
     user_tiers?: string[];
     time_window_hours?: number;
     optimization_objectives: ('performance' | 'cost' | 'reliability' | 'user_experience')[];
+}
   };
   optimization_constraints?: {
     max_performance_degradation_percent: number;
@@ -80,11 +86,13 @@ interface OptimizePerformanceThrottlingRequest {
   };
 }
 
+}
 interface GetPerformanceAnalyticsRequest {
   analytics_scope: {
     time_range: {
       start_timestamp: number;
       end_timestamp: number;
+}
     };
     dimensions?: ('endpoint' | 'user_tier' | 'geographic' | 'temporal' | 'device_type')[];
     metrics?: ('performance' | 'throttling' | 'tier_analytics' | 'predictive' | 'optimization')[];
@@ -97,11 +105,13 @@ interface GetPerformanceAnalyticsRequest {
   };
 }
 
+}
 interface GetPerformanceMetricsRequest {
   metrics_scope: {
     real_time?: boolean;
     historical_window_hours?: number;
     metric_categories?: ('response_time' | 'throughput' | 'error_rates' | 'resource_utilization' | 'quality')[];
+}
   };
   filtering?: {
     endpoints?: string[];
@@ -110,6 +120,7 @@ interface GetPerformanceMetricsRequest {
   };
 }
 
+}
 interface UpdateThrottlingConfigRequest {
   config_updates: Partial<APIPerformanceThrottlingConfig>;
   update_scope?: {
@@ -119,11 +130,13 @@ interface UpdateThrottlingConfigRequest {
       enabled: boolean;
       rollback_delay_minutes: number;
       success_criteria: string[];
+}
     };
   };
 }
 
 // Response interfaces
+}
 interface APIResponse {
   success: boolean;
   data?: any;
@@ -133,6 +146,7 @@ interface APIResponse {
     request_id: string;
     processing_time_ms: number;
     api_version: string;
+}
   };
 }
 
@@ -144,7 +158,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
   fastify: FastifyInstance,
   performanceThrottlingService: APIPerformanceThrottlingService
 ): Promise<void> {
-  
+
   // ============================================================================
   // SERVICE INITIALIZATION AND CONFIGURATION
   // ============================================================================
@@ -161,7 +175,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
           config: {
             type: 'object',
             description: 'Complete performance throttling configuration'
-          },
+  }
           integration_settings: {
             type: 'object',
             properties: {
@@ -172,7 +186,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -228,7 +242,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
           active_features: activeFeatures,
           performance_monitoring_status: request.body.config.performance_monitoring.enabled ? 'active' : 'inactive',
           integration_status: integrationStatus
-        },
+  }
         metadata: {
           timestamp: Date.now(),
           request_id: `init-${Date.now()}`,
@@ -273,7 +287,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
               application_type: { type: 'string' },
               request_priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
             }
-          },
+  }
           adjustment_preferences: {
             type: 'object',
             properties: {
@@ -282,7 +296,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
               max_adjustment_factor: { type: 'number', minimum: 0.1, maximum: 10 },
               rollback_on_failure: { type: 'boolean' }
             }
-          },
+  }
           performance_targets: {
             type: 'object',
             properties: {
@@ -293,7 +307,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -315,7 +329,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
                       expected_impact: { type: 'string' }
                     }
                   }
-                },
+  }
                 performance_analysis: { type: 'object' },
                 tier_assignments: { type: 'array' },
                 effectiveness_score: { type: 'number' }
@@ -348,7 +362,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
               adj
             ) => sum + adj.confidence_score, 0) / adjustmentResult.adjustments_applied.length || 0
           }
-        },
+  }
         metadata: {
           timestamp: Date.now(),
           request_id: `adjust-${Date.now()}`,
@@ -396,7 +410,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
                 items: { type: 'string', enum: ['performance', 'cost', 'reliability', 'user_experience'] }
               }
             }
-          },
+  }
           optimization_constraints: {
             type: 'object',
             properties: {
@@ -410,7 +424,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
                 }
               }
             }
-          },
+  }
           machine_learning_preferences: {
             type: 'object',
             properties: {
@@ -421,7 +435,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -439,7 +453,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
                     memory_percent: { type: 'number' },
                     network_percent: { type: 'number' }
                   }
-                },
+  }
                 sla_compliance_improvement: { type: 'number' }
               }
             }
@@ -466,7 +480,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             cost_savings_estimated: optimizationResult.resource_savings.cpu_percent * 100 + optimizationResult.resource_savings.memory_percent * 150, // Mock calculation
             roi_projection: optimizationResult.performance_improvement * 1.2
           }
-        },
+  }
         metadata: {
           timestamp: Date.now(),
           request_id: `optimize-${Date.now()}`,
@@ -513,17 +527,17 @@ export async function registerAPIPerformanceThrottlingRoutes(
                   start_timestamp: { type: 'number' },
                   end_timestamp: { type: 'number' }
                 }
-              },
+  }
               dimensions: {
                 type: 'array',
                 items: { type: 'string', enum: ['endpoint', 'user_tier', 'geographic', 'temporal', 'device_type'] }
-              },
+  }
               metrics: {
                 type: 'array',
                 items: { type: 'string', enum: ['performance', 'throttling', 'tier_analytics', 'predictive', 'optimization'] }
               }
             }
-          },
+  }
           aggregation_settings: {
             type: 'object',
             properties: {
@@ -534,7 +548,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -588,7 +602,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             last_updated: Date.now(),
             coverage_percentage: 98.5
           }
-        },
+  }
         metadata: {
           timestamp: Date.now(),
           request_id: `analytics-${Date.now()}`,
@@ -633,7 +647,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
                 items: { type: 'string', enum: ['response_time', 'throughput', 'error_rates', 'resource_utilization', 'quality'] }
               }
             }
-          },
+  }
           filtering: {
             type: 'object',
             properties: {
@@ -646,7 +660,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -675,23 +689,23 @@ export async function registerAPIPerformanceThrottlingRoutes(
           p95_ms: Math.floor(Math.random() * 500) + 100,
           p99_ms: Math.floor(Math.random() * 1000) + 200,
           trend: 'stable'
-        },
+  }
         throughput: {
           current_rps: Math.floor(Math.random() * 1000) + 100,
           peak_rps: Math.floor(Math.random() * 1500) + 500,
           avg_rps: Math.floor(Math.random() * 800) + 200,
           trend: 'increasing'
-        },
+  }
         error_rates: {
           current_error_rate: Math.random() * 2,
           p95_error_rate: Math.random() * 5,
           trend: 'improving'
-        },
+  }
         resource_utilization: {
           cpu_percent: Math.random() * 80 + 10,
           memory_percent: Math.random() * 70 + 20,
           network_io_percent: Math.random() * 60 + 15
-        },
+  }
         quality_metrics: {
           availability_percent: 99.5 + Math.random() * 0.5,
           performance_score: 70 + Math.random() * 30,
@@ -707,7 +721,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
           standard: 850,
           degraded: 200,
           critical: 50
-        },
+  }
         system_status: 'optimal'
       };
       
@@ -737,7 +751,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             coverage_endpoints: request.body.filtering?.endpoints?.length || 'all',
             sampling_rate: '100%'
           }
-        },
+  }
         metadata: {
           timestamp: Date.now(),
           request_id: `metrics-${Date.now()}`,
@@ -776,7 +790,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
           config_updates: {
             type: 'object',
             description: 'Partial configuration updates to apply'
-          },
+  }
           update_scope: {
             type: 'object',
             properties: {
@@ -793,7 +807,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -824,7 +838,7 @@ export async function registerAPIPerformanceThrottlingRoutes(
           configuration_sections: Object.keys(request.body.config_updates),
           affected_endpoints: request.body.update_scope?.affected_endpoints || ['all'],
           applied_immediately: request.body.update_scope?.apply_immediately || false
-        },
+  }
         rollback_plan: request.body.update_scope?.rollback_plan || {
           enabled: false,
           message: 'No rollback plan specified'
@@ -902,13 +916,13 @@ export async function registerAPIPerformanceThrottlingRoutes(
           active_throttling_rules: 24,
           recent_adjustments_count: 15,
           optimization_effectiveness: 88.5
-        },
+  }
         integration_status: {
           performance_monitoring: 'connected',
           intelligent_throttling: 'connected',
           predictive_load_management: 'connected',
           security_analytics: 'connected'
-        },
+  }
         resource_usage: {
           cpu_usage_percent: Math.random() * 20 + 5,
           memory_usage_mb: Math.floor(Math.random() * 500) + 100,

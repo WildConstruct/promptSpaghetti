@@ -96,7 +96,7 @@ describe('Security Headers', () => {
       mockReply = {
         header: jest.fn((name: string, value: string) => {
           headersSent[name.toLowerCase()] = value;
-        })
+  }
       };
     });
 

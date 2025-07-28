@@ -8,11 +8,12 @@
  * Epic: 17 - Backstage Admin Controls
  */
 import React from 'react';
+
 interface ScheduleManagementDashboardProps {
     className?: string;
     userId?: string;
     userRole?: string;
-}
+
 export declare const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardProps>;
 export default ScheduleManagementDashboard;
 //# sourceMappingURL=ScheduleManagementDashboard.d.ts.map

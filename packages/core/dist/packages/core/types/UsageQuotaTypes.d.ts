@@ -38,7 +38,7 @@ export type UsageUnit = 'requests' | 'bytes' | 'megabytes' | 'tokens' | 'executi
 export interface QuotaScope {
     type: ScopeType;
     value?: string;
-    conditions?: ScopeCondition[];
+    conditions?: ScopeCondition;
 }
 export type ScopeType = 'user' | 'organization' | 'tier' | 'role' | 'global' | 'conditional';
 export interface ScopeCondition {
@@ -50,7 +50,7 @@ export interface ScopeCondition {
 export type EnforcementAction = 'warn' | 'throttle' | 'soft_block' | 'hard_block' | 'review' | 'degrade' | 'redirect' | 'upgrade_prompt';
 export type ResetBehavior = 'automatic' | 'manual' | 'rolling' | 'cascade';
 export interface QuotaConfiguration {
-    warningThresholds: number[];
+    warningThresholds: number;
     emergencyMultiplier: number;
     integrateWithRateLimit: boolean;
     integrateWithFraudDetection: boolean;
@@ -66,8 +66,8 @@ export interface QuotaMetadata {
     description: string;
     category: QuotaCategory;
     businessJustification: string;
-    technicalConstraints: string[];
-    relatedQuotas: string[];
+    technicalConstraints: string;
+    relatedQuotas: string;
     averageUsage: number;
     peakUsage: number;
     violationRate: number;
@@ -141,7 +141,7 @@ export interface AppealDetails {
     submittedAt: Date;
     submittedBy: string;
     reason: string;
-    evidence?: string[];
+    evidence?: string;
     reviewedBy?: string;
     reviewedAt?: Date;
     decision?: 'approved' | 'denied' | 'partial';
@@ -160,8 +160,8 @@ export interface UsageAnalytics {
     violationRate: number;
     usageTrend: TrendDirection;
     trendSignificance: number;
-    seasonalPatterns: SeasonalPattern[];
-    topUsers: UserUsageSummary[];
+    seasonalPatterns: SeasonalPattern;
+    topUsers: UserUsageSummary;
     usageDistribution: UsageDistribution;
     averageResponseTime: number;
     systemLoad: number;
@@ -175,7 +175,7 @@ export interface AnalyticsPeriod {
 export type TrendDirection = 'increasing' | 'stable' | 'decreasing';
 export interface SeasonalPattern {
     period: 'hourly' | 'daily' | 'weekly' | 'monthly';
-    pattern: number[];
+    pattern: number;
     confidence: number;
     description: string;
 }
@@ -190,8 +190,8 @@ export interface UserUsageSummary {
 }
 export interface UsageDistribution {
     percentiles: Record<number, number>;
-    buckets: DistributionBucket[];
-    outliers: OutlierUser[];
+    buckets: DistributionBucket;
+    outliers: OutlierUser;
 }
 export interface DistributionBucket {
     min: number;
@@ -231,7 +231,7 @@ export interface QuotaCheckResult {
     enforcementAction?: EnforcementAction;
     enforcementReason?: string;
     retryAfter?: Date;
-    recommendations: QuotaRecommendation[];
+    recommendations: QuotaRecommendation;
 }
 export interface QuotaRecommendation {
     type: 'upgrade_plan' | 'reduce_usage' | 'optimize_requests' | 'contact_support';
@@ -244,13 +244,13 @@ export interface QuotaUsageSummary {
     userId: string;
     organizationId?: string;
     summaryPeriod: AnalyticsPeriod;
-    quotas: QuotaUsageDetail[];
+    quotas: QuotaUsageDetail;
     totalViolations: number;
     activeViolations: number;
     riskScore: number;
-    projectedUsage: ProjectedUsage[];
+    projectedUsage: ProjectedUsage;
     quotaExhaustionDate?: Date;
-    upgradeRecommendations: QuotaRecommendation[];
+    upgradeRecommendations: QuotaRecommendation;
 }
 export interface QuotaUsageDetail {
     quotaId: string;
@@ -292,7 +292,7 @@ export type AdminOperationType = 'create_quota' | 'update_quota' | 'delete_quota
 export interface OperationResult {
     success: boolean;
     affectedRecords: number;
-    warnings: string[];
+    warnings: string;
     details: Record<string, any>;
 }
 export interface QuotaTemplate {
@@ -300,12 +300,12 @@ export interface QuotaTemplate {
     templateName: string;
     description: string;
     category: 'free_tier' | 'pro_tier' | 'enterprise_tier' | 'custom' | 'emergency';
-    quotaDefinitions: QuotaTemplateDefinition[];
+    quotaDefinitions: QuotaTemplateDefinition;
     createdBy: string;
     createdAt: Date;
     lastUsed?: Date;
     usageCount: number;
-    validationRules: TemplateValidationRule[];
+    validationRules: TemplateValidationRule;
     enabled: boolean;
 }
 export interface QuotaTemplateDefinition {
@@ -315,8 +315,8 @@ export interface QuotaTemplateDefinition {
     limitPeriod: TimePeriod;
     limitUnit: UsageUnit;
     enforcementAction: EnforcementAction;
-    variableFields: string[];
-    conditionalRules: ConditionalRule[];
+    variableFields: string;
+    conditionalRules: ConditionalRule;
 }
 export interface ConditionalRule {
     condition: string;
@@ -357,8 +357,8 @@ export interface QuotaNotificationSettings {
 export interface NotificationTemplate {
     subject: string;
     body: string;
-    variables: string[];
-    channels: string[];
+    variables: string;
+    channels: string;
     urgency: 'low' | 'medium' | 'high' | 'critical';
 }
 export interface QuotaPerformanceSettings {
@@ -374,7 +374,7 @@ export interface EmergencyQuotaSettings {
     emergencyDuration: number;
     adminOverrideEnabled: boolean;
     automaticRecovery: boolean;
-    escalationChain: string[];
+    escalationChain: string;
 }
 export interface QuotaEventLog {
     eventId: string;

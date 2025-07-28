@@ -29,6 +29,7 @@ export class LicenseService {
     buyerId: string,
     licenseType: LicenseType
   ): Promise<TemplateLicense> {
+
     const licenseId = crypto.randomUUID();
     const licenseKey = this.generateLicenseKey(templateId, buyerId);
     
@@ -67,6 +68,7 @@ export class LicenseService {
     license?: TemplateLicense;
     reason?: string;
   }> {
+
     try {
       const result = await this.db.query(
         `SELECT * FROM template_licenses 
@@ -142,6 +144,7 @@ export class LicenseService {
     limit: number;
     hasMore: boolean;
   }> {
+
     let whereClause = 'buyer_id = ?';
     const params = [userId];
 
@@ -201,6 +204,7 @@ export class LicenseService {
     toUserEmail: string,
     reason: string
   ): Promise<LicenseTransfer> {
+
     // Verify license ownership and transfer eligibility
     const license = await this.getLicenseById(licenseId);
     if (!license || license.buyer_id !== fromUserId) {
@@ -256,6 +260,7 @@ export class LicenseService {
     transferId: string,
     adminUserId: string
   ): Promise<void> {
+
     const transfer = await this.getTransferById(transferId);
     if (!transfer) {
       throw new Error('Transfer request not found');
@@ -298,6 +303,7 @@ export class LicenseService {
     reason: string,
     adminUserId?: string
   ): Promise<void> {
+
     await this.updateLicenseStatus(licenseId, LicenseStatus.SUSPENDED, {
       suspension_reason: reason,
       suspended_by: adminUserId,
@@ -310,6 +316,7 @@ export class LicenseService {
     reason: string,
     adminUserId?: string
   ): Promise<void> {
+
     await this.updateLicenseStatus(licenseId, LicenseStatus.REVOKED, {
       revocation_reason: reason,
       revoked_by: adminUserId,
@@ -321,6 +328,7 @@ export class LicenseService {
     licenseId: string,
     adminUserId?: string
   ): Promise<void> {
+
     const license = await this.getLicenseById(licenseId);
     if (!license) {
       throw new Error('License not found');
@@ -439,7 +447,7 @@ export class LicenseService {
         totalUsage: usageStats[0]?.total_usage || 0,
         averageUsage: Math.round(usageStats[0]?.average_usage || 0),
         topUsers: topUsers || []
-      },
+  }
       transferStats: {
         totalTransfers: transferStats[0]?.total_transfers || 0,
         pendingTransfers: transferStats[0]?.pending_transfers || 0
@@ -518,27 +526,27 @@ export class LicenseService {
         redistribution: false,
         modification: true,
         attribution_required: false
-      },
+  }
       [LicenseType.COMMERCIAL]: {
         commercial_use: true,
         redistribution: false,
         modification: true,
         attribution_required: false
-      },
+  }
       [LicenseType.ENTERPRISE]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true,
         attribution_required: false
-      },
+  }
       [LicenseType.EDUCATIONAL]: {
         commercial_use: false,
         redistribution: false,
         modification: true,
         educational_only: true,
         attribution_required: true
-      },
+  }
       [LicenseType.UNLIMITED]: {
         commercial_use: true,
         redistribution: true,
@@ -560,6 +568,7 @@ export class LicenseService {
   }
 
   private async saveLicense(license: TemplateLicense): Promise<void> {
+
     await this.db.query(
       `INSERT INTO template_licenses 
        (id, purchase_id, template_id, version_id, buyer_id, license_type, license_key, 
@@ -577,6 +586,7 @@ export class LicenseService {
   }
 
   private async incrementUsage(licenseId: string): Promise<void> {
+
     await this.db.query(
       `UPDATE template_licenses 
        SET usage_count = usage_count + 1, last_used_at = datetime('now'), updated_at = datetime('now')
@@ -586,6 +596,7 @@ export class LicenseService {
   }
 
   private async expireLicense(licenseId: string): Promise<void> {
+
     await this.updateLicenseStatus(licenseId, LicenseStatus.EXPIRED);
   }
 
@@ -594,6 +605,7 @@ export class LicenseService {
     status: LicenseStatus,
     metadata: Record<string, any> = {}
   ): Promise<void> {
+
     const license = await this.getLicenseById(licenseId);
     if (!license) {
       throw new Error('License not found');
@@ -610,6 +622,7 @@ export class LicenseService {
   }
 
   private async getLicenseById(licenseId: string): Promise<TemplateLicense | null> {
+
     const result = await this.db.query(
       'SELECT * FROM template_licenses WHERE id = ?',
       [licenseId]
@@ -619,6 +632,7 @@ export class LicenseService {
   }
 
   private async getTransferById(transferId: string): Promise<LicenseTransfer | null> {
+
     const result = await this.db.query(
       'SELECT * FROM license_transfers WHERE id = ?',
       [transferId]

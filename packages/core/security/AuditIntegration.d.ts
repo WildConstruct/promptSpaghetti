@@ -13,6 +13,7 @@ import { DataClassificationLevel, type OperationContext } from '../types/DataCla
 /**
  * Configuration for audit integration
  */
+
 export interface AuditIntegrationConfig {
     auditLogger: AuditLogger;
     classificationEnforcer?: ClassificationEnforcer;
@@ -21,7 +22,6 @@ export interface AuditIntegrationConfig {
     logDeniedAccess?: boolean;
     logClassificationChanges?: boolean;
     enrichWithClassification?: boolean;
-}
 /**
  * Audit integration service
  */
@@ -86,10 +86,10 @@ export declare class AuditIntegration {
         groupBy?: 'user' | 'classification' | 'operation';
         includeDetails?: boolean;
     }): Promise<ComplianceReport>;
-}
 /**
  * Compliance report structure
  */
+
 export interface ComplianceReport {
     period: {,
         start: Date;
@@ -107,7 +107,6 @@ export interface ComplianceReport {
         highRiskOperations: number;
     };
     details?: AuditLogEntry[];
-}
 /**
  * Factory function to create audit integration
  */

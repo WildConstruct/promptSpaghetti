@@ -21,6 +21,7 @@ import { PredictiveAPILoadManager } from '../services/PredictiveAPILoadManager';
 // Global intelligent throttling manager instance
 let intelligentThrottlingManager: IntelligentThrottlingManager | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -29,6 +30,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface InitializeIntelligentThrottlingRequest {
   throttling_configuration: {
     analytics_integration: {
@@ -37,6 +39,7 @@ interface InitializeIntelligentThrottlingRequest {
       pattern_detection_sensitivity?: number;
       adaptive_learning_rate?: number;
       real_time_adjustment_enabled?: boolean;
+}
     };
     throttling_strategies: {
       usage_based_throttling?: {
@@ -115,6 +118,7 @@ interface InitializeIntelligentThrottlingRequest {
   };
 }
 
+}
 interface MakeThrottlingDecisionRequest {
   request_context: {
     user_id: string;
@@ -124,6 +128,7 @@ interface MakeThrottlingDecisionRequest {
       ip_address?: string;
       request_size_bytes?: number;
       expected_response_size_bytes?: number;
+}
     };
     resource_requirements?: {
       cpu_intensive?: boolean;
@@ -140,6 +145,7 @@ interface MakeThrottlingDecisionRequest {
   };
 }
 
+}
 interface AnalyzeUserUsageRequest {
   analysis_configuration: {
     user_id: string;
@@ -148,6 +154,7 @@ interface AnalyzeUserUsageRequest {
     include_behavior_analysis?: boolean;
     include_pattern_detection?: boolean;
     include_anomaly_detection?: boolean;
+}
   };
   comparison_settings?: {
     compare_to_user_baseline?: boolean;
@@ -157,6 +164,7 @@ interface AnalyzeUserUsageRequest {
   };
 }
 
+}
 interface GetThrottlingEffectivenessRequest {
   effectiveness_analysis: {
     time_window_hours: number;
@@ -164,6 +172,7 @@ interface GetThrottlingEffectivenessRequest {
     include_user_impact_analysis?: boolean;
     include_business_metrics?: boolean;
     include_performance_impact?: boolean;
+}
   };
   filtering_options?: {
     user_tiers?: string[];
@@ -201,7 +210,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   adaptive_learning_rate: { type: 'number', minimum: 0.001, maximum: 1 },
                   real_time_adjustment_enabled: { type: 'boolean' }
                 }
-              },
+  }
               throttling_strategies: {
                 type: 'object',
                 properties: {
@@ -213,7 +222,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       throttle_reduction_factor: { type: 'number', minimum: 0.1, maximum: 1 },
                       recovery_multiplier: { type: 'number', minimum: 1, maximum: 3 }
                     }
-                  },
+  }
                   predictive_throttling: {
                     type: 'object',
                     properties: {
@@ -222,7 +231,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       preemptive_throttling_enabled: { type: 'boolean' },
                       load_spike_protection: { type: 'boolean' }
                     }
-                  },
+  }
                   adaptive_throttling: {
                     type: 'object',
                     properties: {
@@ -231,7 +240,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       performance_target_response_time_ms: { type: 'number', minimum: 50, maximum: 5000 },
                       error_rate_threshold: { type: 'number', minimum: 0.01, maximum: 0.5 }
                     }
-                  },
+  }
                   user_behavior_throttling: {
                     type: 'object',
                     properties: {
@@ -242,7 +251,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                     }
                   }
                 }
-              },
+  }
               dynamic_rate_limits: {
                 type: 'object',
                 required: ['base_rate_limits'],
@@ -255,7 +264,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       burst_capacity: { type: 'number', minimum: 1, maximum: 1000 },
                       concurrent_requests: { type: 'number', minimum: 1, maximum: 1000 }
                     }
-                  },
+  }
                   adjustment_parameters: {
                     type: 'object',
                     properties: {
@@ -264,7 +273,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       adjustment_granularity: { type: 'number', minimum: 0.01, maximum: 1 },
                       cooldown_period_seconds: { type: 'number', minimum: 10, maximum: 3600 }
                     }
-                  },
+  }
                   user_tier_multipliers: {
                     type: 'object',
                     properties: {
@@ -274,7 +283,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                     }
                   }
                 }
-              },
+  }
               usage_pattern_analysis: {
                 type: 'object',
                 properties: {
@@ -282,12 +291,12 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   pattern_recognition_algorithms: { 
                     type: 'array', 
                     items: { type: 'string', enum: ['statistical', 'machine_learning', 'time_series', 'anomaly_detection'] }
-                  },
+  }
                   historical_data_window_hours: { type: 'number', minimum: 1, maximum: 8760 },
                   pattern_significance_threshold: { type: 'number', minimum: 0, maximum: 1 },
                   seasonal_adjustment_enabled: { type: 'boolean' }
                 }
-              },
+  }
               throttling_enforcement: {
                 type: 'object',
                 properties: {
@@ -297,7 +306,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   whitelist_bypass_enabled: { type: 'boolean' },
                   emergency_override_enabled: { type: 'boolean' }
                 }
-              },
+  }
               monitoring: {
                 type: 'object',
                 required: ['real_time_metrics_enabled', 'throttling_effectiveness_tracking', 'user_impact_monitoring', 'alert_thresholds'],
@@ -313,12 +322,12 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                       system_overload_threshold: { type: 'number', minimum: 0, maximum: 100 },
                       user_satisfaction_threshold: { type: 'number', minimum: 0, maximum: 100 }
                     }
-                  },
+  }
                   notification_channels: { type: 'array', items: { type: 'string' } }
                 }
               }
             }
-          },
+  }
           integration_settings: {
             type: 'object',
             properties: {
@@ -328,7 +337,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -349,7 +358,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -437,7 +446,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   request_size_bytes: { type: 'number', minimum: 0 },
                   expected_response_size_bytes: { type: 'number', minimum: 0 }
                 }
-              },
+  }
               resource_requirements: {
                 type: 'object',
                 properties: {
@@ -448,7 +457,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                 }
               }
             }
-          },
+  }
           decision_options: {
             type: 'object',
             properties: {
@@ -459,7 +468,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -484,7 +493,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -546,7 +555,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
               include_pattern_detection: { type: 'boolean' },
               include_anomaly_detection: { type: 'boolean' }
             }
-          },
+  }
           comparison_settings: {
             type: 'object',
             properties: {
@@ -557,7 +566,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -579,7 +588,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -662,7 +671,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
               include_business_metrics: { type: 'boolean' },
               include_performance_impact: { type: 'boolean' }
             }
-          },
+  }
           filtering_options: {
             type: 'object',
             properties: {
@@ -673,7 +682,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -695,7 +704,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -781,7 +790,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -800,7 +809,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
               dynamic_limits: {},
               health_indicators: { overall_health: 'unknown' }
             }
-          },
+  }
           timestamp: Date.now()
         };
       }
@@ -815,7 +824,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
           decision_making_accuracy: 87,
           system_resource_impact: 12,
           user_satisfaction_score: 88
-        },
+  }
         performance_metrics: {
           average_decision_time_ms: 45,
           analytics_processing_time_ms: 120,
@@ -865,7 +874,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -891,7 +900,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
           system_load_factor: 0.85,
           predictive_adjustment: 0.92,
           analytics_confidence: 0.88
-        },
+  }
         performance_impact: {
           expected_latency_improvement: 15,
           expected_throughput_change: 8,
@@ -918,6 +927,7 @@ export default async function intelligentThrottlingRoutes(fastify: FastifyInstan
 
 // Helper function to create configuration from request
 async function createIntelligentThrottlingConfig(requestConfig: any): Promise<IntelligentThrottlingConfig> {
+
   return {
     analytics_integration: {
       enabled: requestConfig.analytics_integration.enabled,
@@ -925,33 +935,33 @@ async function createIntelligentThrottlingConfig(requestConfig: any): Promise<In
       pattern_detection_sensitivity: requestConfig.analytics_integration.pattern_detection_sensitivity || 0.8,
       adaptive_learning_rate: requestConfig.analytics_integration.adaptive_learning_rate || 0.01,
       real_time_adjustment_enabled: requestConfig.analytics_integration.real_time_adjustment_enabled !== false
-    },
+  }
     throttling_strategies: {
       usage_based_throttling: {
         enabled: requestConfig.throttling_strategies.usage_based_throttling?.enabled !== false,
         usage_threshold_percentile: requestConfig.throttling_strategies.usage_based_throttling?.usage_threshold_percentile || 90,
         throttle_reduction_factor: requestConfig.throttling_strategies.usage_based_throttling?.throttle_reduction_factor || 0.5,
         recovery_multiplier: requestConfig.throttling_strategies.usage_based_throttling?.recovery_multiplier || 1.5
-      },
+  }
       predictive_throttling: {
         enabled: requestConfig.throttling_strategies.predictive_throttling?.enabled !== false,
         prediction_confidence_threshold: requestConfig.throttling_strategies.predictive_throttling?.prediction_confidence_threshold || 0.8,
         preemptive_throttling_enabled: requestConfig.throttling_strategies.predictive_throttling?.preemptive_throttling_enabled !== false,
         load_spike_protection: requestConfig.throttling_strategies.predictive_throttling?.load_spike_protection !== false
-      },
+  }
       adaptive_throttling: {
         enabled: requestConfig.throttling_strategies.adaptive_throttling?.enabled !== false,
         adaptation_interval_seconds: requestConfig.throttling_strategies.adaptive_throttling?.adaptation_interval_seconds || 60,
         performance_target_response_time_ms: requestConfig.throttling_strategies.adaptive_throttling?.performance_target_response_time_ms || 200,
         error_rate_threshold: requestConfig.throttling_strategies.adaptive_throttling?.error_rate_threshold || 0.05
-      },
+  }
       user_behavior_throttling: {
         enabled: requestConfig.throttling_strategies.user_behavior_throttling?.enabled !== false,
         behavior_profiling_enabled: requestConfig.throttling_strategies.user_behavior_throttling?.behavior_profiling_enabled !== false,
         suspicious_activity_detection: requestConfig.throttling_strategies.user_behavior_throttling?.suspicious_activity_detection !== false,
         progressive_throttling: requestConfig.throttling_strategies.user_behavior_throttling?.progressive_throttling !== false
       }
-    },
+  }
     dynamic_rate_limits: {
       base_rate_limits: requestConfig.dynamic_rate_limits.base_rate_limits,
       adjustment_parameters: {
@@ -959,27 +969,27 @@ async function createIntelligentThrottlingConfig(requestConfig: any): Promise<In
         max_decrease_factor: requestConfig.dynamic_rate_limits.adjustment_parameters?.max_decrease_factor || 0.3,
         adjustment_granularity: requestConfig.dynamic_rate_limits.adjustment_parameters?.adjustment_granularity || 0.1,
         cooldown_period_seconds: requestConfig.dynamic_rate_limits.adjustment_parameters?.cooldown_period_seconds || 300
-      },
+  }
       user_tier_multipliers: {
         free_tier: requestConfig.dynamic_rate_limits.user_tier_multipliers?.free_tier || 1.0,
         premium_tier: requestConfig.dynamic_rate_limits.user_tier_multipliers?.premium_tier || 3.0,
         enterprise_tier: requestConfig.dynamic_rate_limits.user_tier_multipliers?.enterprise_tier || 10.0
       }
-    },
+  }
     usage_pattern_analysis: {
       enabled: requestConfig.usage_pattern_analysis?.enabled !== false,
       pattern_recognition_algorithms: requestConfig.usage_pattern_analysis?.pattern_recognition_algorithms || ['statistical', 'time_series'],
       historical_data_window_hours: requestConfig.usage_pattern_analysis?.historical_data_window_hours || 168,
       pattern_significance_threshold: requestConfig.usage_pattern_analysis?.pattern_significance_threshold || 0.7,
       seasonal_adjustment_enabled: requestConfig.usage_pattern_analysis?.seasonal_adjustment_enabled !== false
-    },
+  }
     throttling_enforcement: {
       enforcement_mode: requestConfig.throttling_enforcement?.enforcement_mode || 'adaptive',
       grace_period_seconds: requestConfig.throttling_enforcement?.grace_period_seconds || 30,
       progressive_penalties: requestConfig.throttling_enforcement?.progressive_penalties !== false,
       whitelist_bypass_enabled: requestConfig.throttling_enforcement?.whitelist_bypass_enabled || false,
       emergency_override_enabled: requestConfig.throttling_enforcement?.emergency_override_enabled !== false
-    },
+  }
     monitoring: requestConfig.monitoring
   };
 }
@@ -1043,6 +1053,7 @@ function generateOptimizationRecommendations(metrics: any, filtering: any): stri
 
 // Initialize the intelligent throttling manager service
 async function initializeIntelligentThrottlingManager(fastify: FastifyInstance): Promise<void> {
+
   // Service will be initialized via API endpoint
   fastify.log.info('Intelligent Throttling Management service ready for initialization');
 }

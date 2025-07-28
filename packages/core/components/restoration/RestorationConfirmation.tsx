@@ -29,13 +29,11 @@ import {
 } from '../../types/restoration';
 const { Title, Text } = Typography;
 interface RestorationConfirmationProps {
-  preview: RestorationPreviewResponse;
+  preview: RestorationPreviewResponse;,
   config: RestorationConfig;
-  onConfirm: () => void;
+  onConfirm: () => void;,
   onCancel: () => void;
-}
-
-export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({)
+  export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = ({,)
   preview,
   config,
   onConfirm,
@@ -48,22 +46,16 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
     const actions = [];
     if (preview.preview.nodesToAdd.length > 0) {
       actions.push({ type: 'add', count: preview.preview.nodesToAdd.length, item: 'nodes' });
-    }
     if (preview.preview.nodesToUpdate.length > 0) {
       actions.push({ type: 'update', count: preview.preview.nodesToUpdate.length, item: 'nodes' });
-    }
     if (preview.preview.nodesToDelete.length > 0) {
       actions.push({ type: 'delete', count: preview.preview.nodesToDelete.length, item: 'nodes' });
-    }
     if (preview.preview.edgesToAdd.length > 0) {
       actions.push({ type: 'add', count: preview.preview.edgesToAdd.length, item: 'edges' });
-    }
     if (preview.preview.edgesToUpdate.length > 0) {
       actions.push({ type: 'update', count: preview.preview.edgesToUpdate.length, item: 'edges' });
-    }
     if (preview.preview.edgesToDelete.length > 0) {
       actions.push({ type: 'delete', count: preview.preview.edgesToDelete.length, item: 'edges' });
-    }
     return actions;
   };
   const getConflictSummary = () => {
@@ -72,10 +64,10 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
       return acc;
     }, {} as Record<string, number>);
     return Object.entries(conflictTypes).map(([type, count]) => ({)
-      type,
-      count,
-      description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS],
-    }));
+  type,
+  count,
+  description: CONFLICT_DESCRIPTIONS[type as keyof typeof CONFLICT_DESCRIPTIONS],
+}));
   };
   const getActionIcon = (type: string) => {
     switch (type) {
@@ -87,32 +79,28 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
       return <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
     default:
       return <InfoCircleOutlined />;
-    }
   };
   const _____getActionColor = (type: string) => {
-    switch (type) {
-    case 'add':
-      return 'success';
-    case 'update':
-      return 'processing';
-    case 'delete':
-      return 'error';
-    default:
-      return 'default';
-    }
-  };
+  switch (type) {
+  case 'add':,
+  return 'success';
+  case 'update':,
+  return 'processing';
+  case 'delete':,
+  return 'error';
+  default:,
+  return 'default';
+};
   const formatDuration = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}
-    }
     const seconds = Math.floor(milliseconds / 1000);
     if (seconds < 60) {
       return `${seconds}s`;}
-    }
     const minutes = Math.floor(seconds / 60);
     return `${minutes}m ${seconds % 60}s`;}
   };
-  return ();
+  return;
     <div>
       {/* Risk Assessment */}
       {isHighRisk && ()
@@ -169,10 +157,10 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
               title="Risk Level"
               value={preview.summary.riskLevel.toUpperCase()}
               prefix={<SafetyOutlined />}
-              valueStyle={{ 
-                color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : ,
-                  preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600'
-              }}
+              valueStyle={{
+  color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : ,
+  preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600',
+}}
             />
           </Card>
         </Col>
@@ -257,27 +245,25 @@ export const RestorationConfirmation: React.FC<RestorationConfirmationProps> = (
             <List
               size="small"
               dataSource={[
-                { 
-                  text: 'Backup will be created before restoration', 
-                  enabled: config.createBackup,
-                  icon: <SafetyOutlined />,
-                },
-                { 
-                  text: 'Current changes will be preserved where possible', 
-                  enabled: config.preserveCurrentChanges,
-                  icon: <CheckCircleOutlined />,
-                },
-                { 
-                  text: 'Operation can be monitored in real-time', 
-                  enabled: true,
-                  icon: <InfoCircleOutlined />,
-                },
+                {
+  text: 'Backup will be created before restoration',
+  enabled: config.createBackup,
+  icon: <SafetyOutlined />,
+}
+                {
+  text: 'Current changes will be preserved where possible',
+  enabled: config.preserveCurrentChanges,
+  icon: <CheckCircleOutlined />,
+}
+                {
+  text: 'Operation can be monitored in real-time',
+  enabled: true,
+  icon: <InfoCircleOutlined />,
+}
                 { 
                   text: 'Notification will be sent on completion', 
                   enabled: config.notifyOnCompletion,
-                  icon: <InfoCircleOutlined />,
-                }
-              ]}
+                  icon: <InfoCircleOutlined />]}
               renderItem={(item) => ()
                 <List.Item>
                   <Space>

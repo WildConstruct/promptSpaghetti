@@ -20,19 +20,19 @@ export interface HelpContent {
     title: string;
     content: string;
     filmTerminology?: string;
-    actionItems?: string[];
-    relatedFeatures?: string[];
+    actionItems?: string;
+    relatedFeatures?: string;
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
     context: {
-        triggerElements?: string[];
-        nodeTypes?: string[];
-        actions?: string[];
+        triggerElements?: string;
+        nodeTypes?: string;
+        actions?: string;
         conditions?: Record<string, any>;
     };
 }
 export interface ContextualHelpProps {
-    nodes: Node[];
-    edges: Edge[];
+    nodes: Node;
+    edges: Edge;
     selectedNodeId?: string;
     selectedEdgeId?: string;
     userLevel?: 'beginner' | 'intermediate' | 'advanced' | 'professional';

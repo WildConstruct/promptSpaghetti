@@ -16,15 +16,15 @@ export interface EnhancedPreviewResult {
     output?: string;
     error?: string;
     executionTimeMs?: number;
-    usedNodeIds?: string[];
-    usedEdgeIds?: string[];
+    usedNodeIds?: string;
+    usedEdgeIds?: string;
     metadata?: {
         createdAt: Date;
         wordCount?: number;
         characterCount?: number;
         estimatedReadingTime?: number;
         contentType?: 'dialogue' | 'action' | 'description' | 'mixed';
-        tags?: string[];
+        tags?: string;
         rating?: 1 | 2 | 3 | 4 | 5;
         notes?: string;
     };

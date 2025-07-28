@@ -1,5 +1,6 @@
 import React from 'react';
 import { ZodSchema, ZodTypeAny } from 'zod';
+
 export interface BaseNodeEditorProps {
     nodeId: string;
     nodeData: Record<string, unknown>;
@@ -7,7 +8,8 @@ export interface BaseNodeEditorProps {
     onChange: (partial: Record<string, unknown>) => void;
     className?: string;
     children?: React.ReactNode;
-}
+
+
 export interface EditorFieldProps {
     label: string;
     value: unknown;
@@ -17,7 +19,7 @@ export interface EditorFieldProps {
     onChange: (value: unknown) => void;
     placeholder?: string;
     disabled?: boolean;
-}
+
 export declare const BaseNodeEditor: React.FC<BaseNodeEditorProps>;
 export default BaseNodeEditor;
 //# sourceMappingURL=BaseNodeEditor.d.ts.map

@@ -10,40 +10,39 @@ export interface CrossModelTestResult {
   claude?: any;
   gemini?: any;
   comparison: {,
-    allSucceeded: boolean;
-    successCount: number;
-    totalAttempts: number;
-    averageGenerationTime: number;
-    consistencyScore: number;
-  };
+  allSucceeded: boolean;,
+  successCount: number;
+  totalAttempts: number;,
+  averageGenerationTime: number;
+  consistencyScore: number;
+};
 }
-
 export class CrossModelTester {
   /**
-   * Test all three models with the same request
-   */
-  async testAllModels(baseRequest: any): Promise<CrossModelTestResult> {
-    const startTime = Date.now();
-    // Adapt request for each model's interface
-    const openAIRequest: GraphGenerationRequest = {
-      purpose: baseRequest.purpose,
-      complexity: baseRequest.complexity,
-      nodeCount: baseRequest.nodeCount,
-      nodeTypes: baseRequest.nodeTypes || [],
-      specificRequirements: baseRequest.specificRequirements,
-      focusAreas: baseRequest.focusAreas,
-      style: baseRequest.style,
-      domain: baseRequest.domain,
-    };
+  * Test all three models with the same request
+  */
+  async testAllModels(baseRequest: any): Promise<CrossModelTestResult> {,
+  const startTime = Date.now();
+  // Adapt request for each model's interface
+  const openAIRequest: GraphGenerationRequest = {,
+  purpose: baseRequest.purpose,
+  complexity: baseRequest.complexity,
+  nodeCount: baseRequest.nodeCount,
+  nodeTypes: baseRequest.nodeTypes || [],
+  specificRequirements: baseRequest.specificRequirements,
+  focusAreas: baseRequest.focusAreas,
+  style: baseRequest.style,
+  domain: baseRequest.domain,
+};
     const claudeRequest: ClaudeGenerationRequest = {
-      ...openAIRequest,
-      userContext: baseRequest.context,
-    };
+  ...openAIRequest,
+  userContext: baseRequest.context,
+};
     const geminiRequest: GeminiGenerationRequest = {
-      ...openAIRequest,
-      constraints: baseRequest.constraints,
-      examples: baseRequest.examples,
-    };
+  ...openAIRequest,
+  constraints: baseRequest.constraints,
+  examples: baseRequest.examples,
+};
     // Run all models concurrently
     const [openaiResult, claudeResult, geminiResult] = await Promise.allSettled([)
       generateGraphWithOpenAI(openAIRequest),
@@ -51,8 +50,8 @@ export class CrossModelTester {
       generateGraphWithGemini(geminiRequest)
     ]);
     // Extract results
-    const results: CrossModelTestResult = {
-      openai: openaiResult.status === 'fulfilled' ? openaiResult.value : { success: false, error: openaiResult.reason },
+    const results: CrossModelTestResult = {,
+  openai: openaiResult.status === 'fulfilled' ? openaiResult.value : { success: false, error: openaiResult.reason },
       claude: claudeResult.status === 'fulfilled' ? claudeResult.value : { success: false, error: claudeResult.reason },
       gemini: geminiResult.status === 'fulfilled' ? geminiResult.value : { success: false, error: geminiResult.reason },
       comparison: this.calculateComparison([),
@@ -62,164 +61,155 @@ export class CrossModelTester {
       ])
     };
     return results;
-  }
   /**
    * Calculate comparison metrics
    */
-  private calculateComparison(results: any[]): CrossModelTestResult['comparison'] {
-    const validResults = results.filter(r => r && r.success);
-    const successCount = validResults.length;
-    const totalAttempts = results.reduce((sum, r) => sum + (r?.attempts || 0), 0);
-    const totalTime = validResults.reduce((sum, r) => sum + (r?.metadata?.generationTime || 0), 0);
-    return {
-      allSucceeded: successCount === 3,
-      successCount,
-      totalAttempts,
-      averageGenerationTime: validResults.length > 0 ? totalTime / validResults.length : 0,
-      consistencyScore: this.calculateConsistencyScore(validResults),
-    };
-  }
+  private calculateComparison(results: any): CrossModelTestResult['comparison'] {
+  const validResults = results.filter(r => r && r.success);
+  const successCount = validResults.length;
+  const totalAttempts = results.reduce((sum, r) => sum + (r?.attempts || 0), 0);
+  const totalTime = validResults.reduce((sum, r) => sum + (r?.metadata?.generationTime || 0), 0);
+  return {
+  allSucceeded: successCount === 3,
+  successCount,
+  totalAttempts,
+  averageGenerationTime: validResults.length > 0 ? totalTime / validResults.length : 0,
+  consistencyScore: this.calculateConsistencyScore(validResults),
+};
   /**
    * Calculate consistency score between successful results
    */
-  private calculateConsistencyScore(results: any[]): number {
-    if (results.length < 2) return results.length > 0 ? 1.0 : 0.0;
-    // Simple consistency based on graph structure similarity
-    const graphs = results.map(r => r.graph).filter(Boolean);
-    if (graphs.length < 2) return 0.5;
-    let similarities = 0;
-    let comparisons = 0;
-    for (let i = 0; i < graphs.length; i++) {
-      for (let j = i + 1; j < graphs.length; j++) {
-        similarities += this.calculateGraphSimilarity(graphs[i], graphs[j]);
-        comparisons++;
-      }
-    }
-    return comparisons > 0 ? similarities / comparisons : 0.0;
-  }
+  private calculateConsistencyScore(results: any): number {
+  if (results.length < 2) return results.length > 0 ? 1.0 : 0.0;
+  // Simple consistency based on graph structure similarity
+  const graphs = results.map(r => r.graph).filter(Boolean);
+  if (graphs.length < 2) return 0.5;
+  let similarities = 0;
+  let comparisons = 0;
+  for (let i = 0; i < graphs.length; i++) {
+  for (let j = i + 1; j < graphs.length; j++) {
+  similarities += this.calculateGraphSimilarity(graphs[i], graphs[j]);
+  comparisons++;
+  return comparisons > 0 ? similarities / comparisons : 0.0;
   /**
-   * Calculate similarity between two graphs (basic implementation)
-   */
-  private calculateGraphSimilarity(graph1: string, graph2: string): number {
-    // Count common patterns
-    const patterns = [;
-      /type:\s*(\w+)/g,
-      /---NODES---/,
-      /---EDGES---/,
-      /---END---/,
-      /version:\s*[\d.]+/
-    ];
-    let matches = 0;
-    let total = 0;
-    patterns.forEach(pattern => {)
-      const matches1 = (graph1.match(pattern) || []).length;
-      const matches2 = (graph2.match(pattern) || []).length;
-      matches += Math.min(matches1, matches2);
-      total += Math.max(matches1, matches2);
-    });
+  * Calculate similarity between two graphs (basic implementation)
+  */
+  private calculateGraphSimilarity(graph1: string, graph2: string): number {,
+  // Count common patterns
+  const patterns = [;
+  /type:\s*(\w+)/g,
+  /---NODES---/,
+  /---EDGES---/,
+  /---END---/,
+  /version:\s*[\d.]+/];
+  let matches = 0;
+  let total = 0;
+  patterns.forEach(pattern => {)
+  const matches1 = (graph1.match(pattern) || []).length;
+  const matches2 = (graph2.match(pattern) || []).length;
+  matches += Math.min(matches1, matches2);
+  total += Math.max(matches1, matches2);
+});
     return total > 0 ? matches / total : 0.0;
-  }
-}
 /**
  * Predefined test cases for cross-model comparison
  */
 export const testCases = {
   /**
-   * Simple test case
-   */
+  * Simple test case
+  */
   simpleGreeting: {,
-    purpose: 'Generate personalized greetings',
-    complexity: 'simple' as const,
-    nodeCount: 5,
-    nodeTypes: ['WeightedChoice', 'GetVariable', 'Concat', 'Output'],
-    specificRequirements: [,
-      'Include user\'s name from variable',
-      'Multiple greeting options',
-      'Friendly and welcoming tone'
-    ],
-    style: 'creative' as const,
-    domain: 'social interaction',
-  },
+  purpose: 'Generate personalized greetings',
+  complexity: 'simple' as const,
+  nodeCount: 5,
+  nodeTypes: ['WeightedChoice', 'GetVariable', 'Concat', 'Output'],
+  specificRequirements: [,
+  'Include user\'s name from variable',
+  'Multiple greeting options',
+  'Friendly and welcoming tone'
+  ],
+  style: 'creative' as const,
+  domain: 'social interaction',
+}
   /**
    * Moderate complexity test case
    */
   contentGenerator: {,
-    purpose: 'Create adaptive content based on user preferences',
-    complexity: 'moderate' as const,
-    nodeCount: 15,
-    nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Concat', 'Output'],
-    specificRequirements: [,
-      'Adapt to user\'s experience level',
-      'Include conditional branching',
-      'Support multiple content types'
-    ],
-    focusAreas: ['personalization', 'content quality', 'user experience'],
-    style: 'balanced' as const,
-    domain: 'educational content',
-  },
+  purpose: 'Create adaptive content based on user preferences',
+  complexity: 'moderate' as const,
+  nodeCount: 15,
+  nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Concat', 'Output'],
+  specificRequirements: [,
+  'Adapt to user\'s experience level',
+  'Include conditional branching',
+  'Support multiple content types'
+  ],
+  focusAreas: ['personalization', 'content quality', 'user experience'],
+  style: 'balanced' as const,
+  domain: 'educational content',
+}
   /**
    * Complex test case with advanced features
    */
   intelligentTutor: {,
-    purpose: 'Build an adaptive tutoring system that adjusts to student responses',
-    complexity: 'complex' as const,
-    nodeCount: 30,
-    nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform', 'Output'],
-    specificRequirements: [,
-      'Track student progress dynamically',
-      'Provide personalized feedback',
-      'Adapt difficulty based on performance',
-      'Include assessment and remediation paths'
-    ],
-    focusAreas: ['adaptive learning', 'feedback loops', 'performance tracking'],
-    style: 'logical' as const,
-    domain: 'education technology',
-    constraints: [,
-      'No inappropriate content',
-      'Educational focus required',
-      'Clear learning objectives'
-    ]
-  },
+  purpose: 'Build an adaptive tutoring system that adjusts to student responses',
+  complexity: 'complex' as const,
+  nodeCount: 30,
+  nodeTypes: ['WeightedAdvanced', 'Conditional', 'Sequential', 'Markov', 'PythonTransform', 'Output'],
+  specificRequirements: [,
+  'Track student progress dynamically',
+  'Provide personalized feedback',
+  'Adapt difficulty based on performance',
+  'Include assessment and remediation paths'
+  ],
+  focusAreas: ['adaptive learning', 'feedback loops', 'performance tracking'],
+  style: 'logical' as const,
+  domain: 'education technology',
+  constraints: [,
+  'No inappropriate content',
+  'Educational focus required',
+  'Clear learning objectives'
+  ]
+}
   /**
    * Creative writing assistant
    */
   storyGenerator: {,
-    purpose: 'Generate interactive story scenarios with branching narratives',
-    complexity: 'moderate' as const,
-    nodeCount: 20,
-    nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Markov', 'Output'],
-    specificRequirements: [,
-      'Multiple story paths',
-      'Character development options',
-      'Genre-appropriate content'
-    ],
-    focusAreas: ['narrative structure', 'character development', 'plot progression'],
-    style: 'creative' as const,
-    domain: 'creative writing',
-    examples: [,
-      'Choose-your-own-adventure style',
-      'Character-driven narratives',
-      'Multiple endings possible'
-    ]
-  },
+  purpose: 'Generate interactive story scenarios with branching narratives',
+  complexity: 'moderate' as const,
+  nodeCount: 20,
+  nodeTypes: ['WeightedChoice', 'Conditional', 'Sequential', 'Markov', 'Output'],
+  specificRequirements: [,
+  'Multiple story paths',
+  'Character development options',
+  'Genre-appropriate content'
+  ],
+  focusAreas: ['narrative structure', 'character development', 'plot progression'],
+  style: 'creative' as const,
+  domain: 'creative writing',
+  examples: [,
+  'Choose-your-own-adventure style',
+  'Character-driven narratives',
+  'Multiple endings possible'
+  ]
+}
   /**
    * Data processing pipeline
    */
   dataProcessor: {,
-    purpose: 'Create a data transformation and analysis pipeline',
-    complexity: 'complex' as const,
-    nodeCount: 25,
-    nodeTypes: ['PythonTransform', 'Conditional', 'Sequential', 'WeightedChoice', 'Output'],
-    specificRequirements: [,
-      'Input validation and cleaning',
-      'Multiple analysis methods',
-      'Conditional processing based on data characteristics',
-      'Output formatting options'
-    ],
-    focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
-    style: 'logical' as const,
-    domain: 'data science',
-  }
+  purpose: 'Create a data transformation and analysis pipeline',
+  complexity: 'complex' as const,
+  nodeCount: 25,
+  nodeTypes: ['PythonTransform', 'Conditional', 'Sequential', 'WeightedChoice', 'Output'],
+  specificRequirements: [,
+  'Input validation and cleaning',
+  'Multiple analysis methods',
+  'Conditional processing based on data characteristics',
+  'Output formatting options'
+  ],
+  focusAreas: ['data quality', 'analysis accuracy', 'performance optimization'],
+  style: 'logical' as const,
+  domain: 'data science',
 };
 /**
  * Run comprehensive cross-model tests
@@ -227,11 +217,11 @@ export const testCases = {
 export async function runCrossModelTests(): Promise<{
   testResults: Record<string, CrossModelTestResult>;
   summary: {,
-    totalTests: number;
-    successfulTests: number;
-    averageConsistency: number;
+  totalTests: number;
+    successfulTests: number;,
+  averageConsistency: number;
     modelPerformance: {,
-      openai: { successRate: number; avgTime: number };
+  openai: { successRate: number; avgTime: number };
       claude: { successRate: number; avgTime: number };
       gemini: { successRate: number; avgTime: number };
     };
@@ -245,22 +235,19 @@ export async function runCrossModelTests(): Promise<{
     try {
       testResults[testName] = await tester.testAllModels(testCase);
     } catch (error) {
-      console.error(`Test ${testName} failed:`, error);}
+      console.error(`Test ${testName},)}
+  failed:`, error);}
       testResults[testName] = {
-        comparison: {,
-          allSucceeded: false,
-          successCount: 0,
-          totalAttempts: 0,
-          averageGenerationTime: 0,
-          consistencyScore: 0,
-        }
-      };
-    }
-  }
+  comparison: {,
+  allSucceeded: false,
+  successCount: 0,
+  totalAttempts: 0,
+  averageGenerationTime: 0,
+  consistencyScore: 0,
+};
   // Calculate summary statistics
   const summary = calculateSummaryStats(testResults);
   return { testResults, summary };
-}
 /**
  * Calculate summary statistics across all tests
  */
@@ -275,30 +262,28 @@ function calculateSummaryStats(testResults: Record<string, CrossModelTestResult>
   const claudeResults = tests.map(t => t.claude).filter(Boolean);
   const geminiResults = tests.map(t => t.gemini).filter(Boolean);
   const modelPerformance = {
-    openai: {,
-      successRate: openaiResults.filter(r => r.success).length / Math.max(openaiResults.length, 1),
-      avgTime: openaiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(openaiResults.length, 1)
-    },
-    claude: {,
-      successRate: claudeResults.filter(r => r.success).length / Math.max(claudeResults.length, 1),
-      avgTime: claudeResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(claudeResults.length, 1)
-    },
-    gemini: {,
-      successRate: geminiResults.filter(r => r.success).length / Math.max(geminiResults.length, 1),
-      avgTime: geminiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(geminiResults.length, 1)
-    }
-  };
+  openai: {,
+  successRate: openaiResults.filter(r => r.success).length / Math.max(openaiResults.length, 1),
+  avgTime: openaiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(openaiResults.length, 1),
+},
+  claude: {,
+  successRate: claudeResults.filter(r => r.success).length / Math.max(claudeResults.length, 1),
+  avgTime: claudeResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(claudeResults.length, 1),
+},
+  gemini: {,
+  successRate: geminiResults.filter(r => r.success).length / Math.max(geminiResults.length, 1),
+  avgTime: geminiResults.reduce((sum, r) => sum + (r.metadata?.generationTime || 0), 0) / Math.max(geminiResults.length, 1),
+};
   return {
     totalTests,
     successfulTests,
     averageConsistency,
     modelPerformance
   };
-}
 /**
  * Generate a comparative report
  */
-export function generateTestReport(results: {)
+export function generateTestReport(results: {,)
   testResults: Record<string, CrossModelTestResult>;
   summary: any;
 }): string {
@@ -321,4 +306,3 @@ export function generateTestReport(results: {)
     report += `- **Avg Generation Time**: ${result.comparison.averageGenerationTime.toFixed(0)}ms\n\n`;}
   });
   return report;
-}

@@ -19,12 +19,14 @@
  * @since 2025-07-22
  */
 import { SecurityMetrics, SecurityAlert, ComplianceStatus } from './SecurityDashboardMain';
+
 export interface SecurityAction {
     type: string;
     payload: unknown;
     timestamp: Date;
     executedBy: string;
-}
+
+
 export interface DataServiceConfig {
     baseUrl: string;
     wsUrl: string;
@@ -32,13 +34,14 @@ export interface DataServiceConfig {
     timeout: number;
     retryAttempts: number;
     cacheTimeout: number;
-}
+
+
 export interface ApiResponse<T> {
     success: boolean;
     data?: T;
     error?: string;
     timestamp: Date;
-}
+
 /**
  * Security Dashboard Data Service
  */
@@ -115,6 +118,6 @@ export declare class SecurityDashboardDataService {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default SecurityDashboardDataService;
 //# sourceMappingURL=SecurityDashboardDataService.d.ts.map

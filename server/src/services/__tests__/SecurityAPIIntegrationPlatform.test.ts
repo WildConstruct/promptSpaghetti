@@ -42,7 +42,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         performance_event_forwarding: true,
         batch_size: 50,
         flush_interval_ms: 10000
-      },
+  }
       epic17_admin_integration: {
         enabled: true,
         auth_guard: new AdminAuthGuard(),
@@ -50,7 +50,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         diagnostic_service: new DiagnosticService(),
         admin_notification_enabled: true,
         security_alert_threshold: 10
-      },
+  }
       performance_monitoring: {
         real_time_monitoring_enabled: true,
         performance_threshold_ms: 1000,
@@ -58,7 +58,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         cpu_threshold_percent: 80,
         alert_on_degradation: true,
         auto_optimization_enabled: false
-      },
+  }
       security_features: {
         threat_detection_enabled: true,
         anomaly_detection_sensitivity: 0.8,
@@ -79,7 +79,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         max_requests_per_minute: 1000,
         burst_limit: 200,
         window_size_ms: 60000
-      },
+  }
       external_integrations: {
         siem_tools: {
           enabled: true,
@@ -87,31 +87,31 @@ describe('SecurityAPIIntegrationPlatform', () => {
           webhook_endpoints: ['https://siem.example.com/webhook'],
           api_keys: { test: 'key123' },
           data_format: 'json'
-        },
+  }
         threat_intelligence: {
           enabled: true,
           providers: ['virustotal', 'threatcrowd'],
           update_interval_minutes: 30,
           confidence_threshold: 0.7
-        },
+  }
         vulnerability_scanners: {
           enabled: true,
           supported_scanners: ['nessus', 'openvas'],
           scan_schedules: { daily: '0 2 * * *' }
         }
-      },
+  }
       real_time_processing: {
         enabled: true,
         stream_buffer_size: 1000,
         processing_threads: 2,
         batch_processing_interval_ms: 2000,
         priority_queue_enabled: true
-      },
+  }
       data_streaming: {
         enabled: true,
         websocket_enabled: true,
         compression_enabled: true
-      },
+  }
       microservices: {
         enabled: true,
         service_discovery_enabled: true,
@@ -179,7 +179,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'api_key',
           credentials: { key: 'test123' }
-        },
+  }
         capabilities: ['event_forwarding', 'alert_management'],
         data_format: 'json',
         status: 'inactive',
@@ -211,7 +211,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'api_key',
           credentials: {}
-        },
+  }
         capabilities: [],
         data_format: 'json',
         status: 'inactive',
@@ -235,7 +235,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'api_key',
           credentials: { key: 'test' }
-        },
+  }
         capabilities: ['threat_feeds'],
         data_format: 'json',
         status: 'active',
@@ -317,7 +317,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'api_key',
           credentials: { key: 'forward_test' }
-        },
+  }
         capabilities: ['event_forwarding'],
         data_format: 'json',
         status: 'active',
@@ -498,7 +498,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'basic_auth',
           credentials: { username: 'test', password: 'test' }
-        },
+  }
         capabilities: ['vulnerability_scanning'],
         data_format: 'xml',
         status: 'inactive',
@@ -527,7 +527,7 @@ describe('SecurityAPIIntegrationPlatform', () => {
         authentication: {
           type: 'api_key',
           credentials: {}
-        },
+  }
         capabilities: [],
         data_format: 'json',
         status: 'inactive',

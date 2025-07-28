@@ -35,8 +35,8 @@ export interface PolicyVersion {
     createdBy: string;
     reviewedBy?: string;
     publishedBy?: string;
-    complianceFrameworks: ComplianceFramework[];
-    tags: string[];
+    complianceFrameworks: ComplianceFramework;
+    tags: string;
     severityLevel: SeverityLevel;
     metadata: Record<string, any>;
     createdAt: Date;
@@ -48,7 +48,7 @@ export type ContentType = 'markdown' | 'html' | 'json' | 'plain_text';
 export type SeverityLevel = 'low' | 'medium' | 'high' | 'critical';
 export type ComplianceFramework = 'GDPR' | 'CCPA' | 'SOX' | 'HIPAA' | 'PCI_DSS' | 'ISO_27001' | 'content_moderation' | 'intellectual_property' | 'community_standards' | 'user_safety' | 'quality_assurance' | 'data_protection';
 export interface PolicyContent {
-    sections: PolicySection[];
+    sections: PolicySection;
     summary?: string;
     lastModified?: Date;
     wordCount?: number;
@@ -59,7 +59,7 @@ export interface PolicySection {
     title: string;
     content: string;
     order?: number;
-    subsections?: PolicySection[];
+    subsections?: PolicySection;
     metadata?: Record<string, any>;
 }
 export interface PolicyVersionChange {
@@ -107,8 +107,8 @@ export interface CreatePolicyVersionRequest {
     contentType?: ContentType;
     changeType?: ChangeType;
     changeSummary?: string;
-    complianceFrameworks?: ComplianceFramework[];
-    tags?: string[];
+    complianceFrameworks?: ComplianceFramework;
+    tags?: string;
     severityLevel?: SeverityLevel;
     effectiveDate?: Date;
     expirationDate?: Date;
@@ -119,8 +119,8 @@ export interface UpdatePolicyVersionRequest {
     content?: PolicyContent;
     contentType?: ContentType;
     changeSummary?: string;
-    complianceFrameworks?: ComplianceFramework[];
-    tags?: string[];
+    complianceFrameworks?: ComplianceFramework;
+    tags?: string;
     severityLevel?: SeverityLevel;
     effectiveDate?: Date;
     expirationDate?: Date;
@@ -133,7 +133,7 @@ export interface PublishPolicyVersionRequest {
 export interface PolicyVersionComparison {
     fromVersion: PolicyVersion;
     toVersion: PolicyVersion;
-    changes: PolicyVersionDiff[];
+    changes: PolicyVersionDiff;
     summary: {
         addedSections: number;
         removedSections: number;
@@ -152,7 +152,7 @@ export interface PolicyVersionDiff {
 export type DiffType = 'added' | 'removed' | 'modified' | 'moved';
 export type DiffImpact = 'low' | 'medium' | 'high' | 'breaking';
 export interface PolicyVersionListResponse {
-    versions: PolicyVersion[];
+    versions: PolicyVersion;
     pagination: {
         page: number;
         pageSize: number;
@@ -163,9 +163,9 @@ export interface PolicyVersionListResponse {
 }
 export interface PolicyVersionSearchQuery {
     policyId?: string;
-    status?: PolicyStatus[];
-    complianceFrameworks?: ComplianceFramework[];
-    tags?: string[];
+    status?: PolicyStatus;
+    complianceFrameworks?: ComplianceFramework;
+    tags?: string;
     createdBy?: string;
     createdAfter?: Date;
     createdBefore?: Date;
@@ -186,19 +186,17 @@ export interface PolicyVersionAnalytics {
     averageTimeToPublish: number;
     mostActiveContributor: string;
     complianceFrameworkUsage: Record<ComplianceFramework, number>;
-    versionsByMonth: Array<{
-        month: string;
-        count: number;
-    }>;
-    changeTypeDistribution: Record<ChangeType, number>;
+    versionsByMonth: Array<{}, month>;
+    string: any;
+    count: number;
 }
 export interface PolicyWorkflowState {
     currentStatus: PolicyStatus;
-    allowedTransitions: PolicyStatus[];
+    allowedTransitions: PolicyStatus;
     requiredApprovals: number;
     currentApprovals: number;
-    pendingReviewers: string[];
-    blockers: WorkflowBlocker[];
+    pendingReviewers: string;
+    blockers: WorkflowBlocker;
 }
 export interface WorkflowBlocker {
     type: BlockerType;
@@ -219,9 +217,9 @@ export interface PolicyVersionEvent {
 export type PolicyEventType = 'version_created' | 'version_updated' | 'version_published' | 'version_deprecated' | 'version_archived' | 'approval_requested' | 'approval_granted' | 'approval_rejected' | 'compliance_check_completed' | 'rollback_performed';
 export interface PolicyVersionValidation {
     isValid: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
-    complianceStatus: ComplianceValidation[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
+    complianceStatus: ComplianceValidation;
 }
 export interface ValidationError {
     field: string;
@@ -238,13 +236,13 @@ export interface ValidationWarning {
 export interface ComplianceValidation {
     framework: ComplianceFramework;
     status: 'compliant' | 'non_compliant' | 'unknown';
-    checkedRequirements: string[];
-    missingRequirements: string[];
+    checkedRequirements: string;
+    missingRequirements: string;
     notes?: string;
 }
 export interface PolicyVersionConfig {
     maxVersionsPerPolicy: number;
-    defaultComplianceFrameworks: ComplianceFramework[];
+    defaultComplianceFrameworks: ComplianceFramework;
     requiredApprovals: Record<SeverityLevel, number>;
     autoArchiveAfterDays: number;
     enableAutomaticVersioning: boolean;

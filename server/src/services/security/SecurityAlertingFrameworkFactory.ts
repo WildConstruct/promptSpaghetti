@@ -29,6 +29,7 @@ import { ProjectHealthAlertService } from '../project-health-alert-service';
 import { AttributionService } from '../attribution-service';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 
+}
 export interface FrameworkInitializationOptions {
   // Database configuration
   database: Database;
@@ -55,13 +56,16 @@ export interface FrameworkInitializationOptions {
   environment?: 'development' | 'staging' | 'production';
   logLevel?: 'error' | 'warn' | 'info' | 'debug';
 }
+}
 
+}
 export interface FrameworkComponents {
   framework: UnifiedSecurityAlertingFramework;
   configurationManager: AlertingConfigurationManager;
   securityAnalytics: SecurityAlertingAnalytics;
   healthMonitoring: HealthMonitoringService;
   projectHealthService: ProjectHealthAlertService;
+}
 }
 
 /**
@@ -73,6 +77,7 @@ export class SecurityAlertingFrameworkFactory {
    * Create complete security alerting framework with all components
    */
   static async createFramework(options: FrameworkInitializationOptions): Promise<FrameworkComponents> {
+
     logger.info('Initializing Security Alerting Framework', {
       environment: options.environment || 'development',
       enableSecurityAnalytics: options.enableSecurityAnalytics !== false,
@@ -149,7 +154,7 @@ export class SecurityAlertingFrameworkFactory {
         processingTimeout: 5000,
         batchSize: 10,
         ...options.configurationOverrides
-      },
+  }
       ...options
     };
     
@@ -266,7 +271,7 @@ export class SecurityAlertingFrameworkFactory {
         failedAccessAttempts: 5,
         dataExfiltrationThreshold: 100, // MB
         anomalyScoreThreshold: 0.8
-      },
+  }
       correlationRules: [],
       responseAutomation: {
         enabled: environment === 'production',
@@ -278,7 +283,7 @@ export class SecurityAlertingFrameworkFactory {
           bypassApprovers: [],
           auditRequired: true,
           timeLimit: 3600000 // 1 hour
-        },
+  }
         responseTemplates: []
       }
     };
@@ -295,7 +300,7 @@ export class SecurityAlertingFrameworkFactory {
       enabled: true,
       configuration: {
         logLevel: environment === 'production' ? 'error' : 'info'
-      },
+  }
       conditions: [],
       rateLimits: {
         maxPerMinute: 100,
@@ -315,7 +320,7 @@ export class SecurityAlertingFrameworkFactory {
           recipients: ['security@company.com', 'ops@company.com'],
           subject: '[CRITICAL] Security Alert: {{title}}',
           template: 'critical-alert'
-        },
+  }
         conditions: [
           {
             field: 'priority',
@@ -353,7 +358,7 @@ export class SecurityAlertingFrameworkFactory {
             type: 'EMAIL',
             parameters: {
               recipients: ['security-oncall@company.com']
-            },
+  }
             conditions: [],
             enabled: true
           }
@@ -368,7 +373,7 @@ export class SecurityAlertingFrameworkFactory {
           {
             condition: 'status',
             value: 'NEW'
-          },
+  }
           {
             condition: 'priority',
             value: 'CRITICAL'
@@ -379,7 +384,7 @@ export class SecurityAlertingFrameworkFactory {
             type: 'PAGER',
             parameters: {
               service: 'security-team'
-            },
+  }
             conditions: [],
             enabled: true
           }
@@ -402,7 +407,7 @@ export class SecurityAlertingFrameworkFactory {
             type: 'PAGER',
             parameters: {
               service: 'executive-team'
-            },
+  }
             conditions: [],
             enabled: true
           }
@@ -425,7 +430,7 @@ export class SecurityAlertingFrameworkFactory {
             type: 'EMAIL',
             parameters: {
               recipients: ['dev-team@company.com']
-            },
+  }
             conditions: [],
             enabled: true
           }
@@ -440,6 +445,7 @@ export class SecurityAlertingFrameworkFactory {
     configuration: AlertingConfiguration,
     options: FrameworkInitializationOptions
   ): Promise<SecurityAlertingAnalytics> {
+
     if (options.enableSecurityAnalytics === false) {
       // Return mock analytics for testing
       return {} as SecurityAlertingAnalytics;
@@ -490,6 +496,7 @@ export class SecurityAlertingFrameworkFactory {
     configurationManager: AlertingConfigurationManager,
     options: FrameworkInitializationOptions
   ): Promise<void> {
+
     // Apply default alert rules
     const defaultRules = this.createDefaultAlertRules(options.environment || 'development');
     
@@ -519,7 +526,7 @@ export class SecurityAlertingFrameworkFactory {
           operator: 'IN' as const,
           value: ['SECURITY_INCIDENT', 'THREAT_DETECTION'],
           weight: 1.0
-        },
+  }
         {
           field: 'priority',
           operator: 'IN' as const,
@@ -536,7 +543,7 @@ export class SecurityAlertingFrameworkFactory {
           parameters: {
             template: 'critical-security-alert',
             priority: 'high'
-          },
+  }
           conditions: [],
           enabled: true
         }
@@ -557,7 +564,7 @@ export class SecurityAlertingFrameworkFactory {
           operator: 'EQUALS' as const,
           value: 'SYSTEM_HEALTH',
           weight: 1.0
-        },
+  }
         {
           field: 'severity',
           operator: 'IN' as const,
@@ -574,7 +581,7 @@ export class SecurityAlertingFrameworkFactory {
           parameters: {
             url: '/api/system-health/alert',
             method: 'POST'
-          },
+  }
           conditions: [],
           enabled: environment === 'production'
         }
@@ -596,6 +603,7 @@ export class SecurityAlertingFrameworkFactory {
       configurationManager: AlertingConfigurationManager;
     }
   ): Promise<void> {
+
     // Setup cross-component event handlers
     components.configurationManager.on('alertRuleCreated', (data) => {
       logger.info('New alert rule created', {

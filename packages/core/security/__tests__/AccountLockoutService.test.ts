@@ -18,16 +18,15 @@ describe('AccountLockoutService', () => {
   let service: AccountLockoutService;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    const OriginalDate = Date;
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-    // Mock the Date constructor
-    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
-      if (value !== undefined) {
-        return new OriginalDate(value);
-      }
-      return mockDate;
-    });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  const OriginalDate = Date;
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+  // Mock the Date constructor
+  const mockDateConstructor = jest.fn<unknown, unknown>().mockImplementation((value?: unknown) => {,
+  if (value !== undefined) {
+  return new OriginalDate(value);
+  return mockDate;
+});
     global.Date = mockDateConstructor as any;
     global.Date.now = jest.fn(() => mockDate.getTime());
     service = new AccountLockoutService();
@@ -65,8 +64,6 @@ describe('AccountLockoutService', () => {
         } else if (testCase.expectedHours) {
           const expectedTime = new Date(mockDate.getTime() + testCase.expectedHours * 60 * 60 * 1000);
           expect(lockout!.expiryTime).toEqual(expectedTime);
-        }
-      }
     });
     test('should not set expiry for manual lockout reasons', async () => {
       const manualReasons = [;
@@ -78,7 +75,6 @@ describe('AccountLockoutService', () => {
         const lockoutId = await service.createLockout('user', 'test@example.com', reason);
         const lockout = service.getLockout(lockoutId);
         expect(lockout!.expiryTime).toBeUndefined();
-      }
     });
     test('should create audit trail entry on lockout creation', async () => {
       const lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.SUSPICIOUS_ACTIVITY);
@@ -90,20 +86,20 @@ describe('AccountLockoutService', () => {
     });
   });
   describe('Administrator Unlock Functionality', () => {
-    let lockoutId: string;
-    beforeEach(async () => {
-      lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
-    });
+  let lockoutId: string;
+  beforeEach(async () => {
+  lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
+});
     test('should allow super admin to unlock without approval', async () => {
-      const unlockRequest: UnlockRequest = {
-        lockoutId,
-        adminId: AdminRole.SUPER_ADMIN,
-        reason: 'User verified via phone',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'Legitimate user confirmed identity',
-        approvalRequired: false,
-      };
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: AdminRole.SUPER_ADMIN,
+  reason: 'User verified via phone',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Legitimate user confirmed identity',
+  approvalRequired: false,
+};
       const result = await service.adminUnlock(lockoutId, unlockRequest);
       expect(result.success).toBe(true);
       expect(result.message).toBe('Account successfully unlocked');
@@ -113,15 +109,15 @@ describe('AccountLockoutService', () => {
       expect(lockout!.unlockTime).toEqual(mockDate);
     });
     test('should require approval for security admin unlock', async () => {
-      const unlockRequest: UnlockRequest = {
-        lockoutId,
-        adminId: AdminRole.SECURITY_ADMIN,
-        reason: 'User contacted support',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'User provided verification',
-        approvalRequired: false,
-      };
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: AdminRole.SECURITY_ADMIN,
+  reason: 'User contacted support',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'User provided verification',
+  approvalRequired: false,
+};
       const result = await service.adminUnlock(lockoutId, unlockRequest);
       expect(result.success).toBe(true);
       expect(result.requiresApproval).toBe(true);
@@ -130,30 +126,30 @@ describe('AccountLockoutService', () => {
       expect(lockout!.status).toBe(LockoutStatus.PENDING_REVIEW);
     });
     test('should deny unlock for insufficient permissions', async () => {
-      const unlockRequest: UnlockRequest = {
-        lockoutId,
-        adminId: 'invalid-admin' as AdminRole,
-        reason: 'Testing',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'Test',
-        approvalRequired: false,
-      };
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: 'invalid-admin' as AdminRole,
+  reason: 'Testing',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Test',
+  approvalRequired: false,
+};
       const result = await service.adminUnlock(lockoutId, unlockRequest);
       expect(result.success).toBe(false);
       expect(result.message).toBe('Insufficient permissions to unlock account');
     });
     test('should prevent unlock of already unlocked account', async () => {
-      // First unlock
-      const unlockRequest: UnlockRequest = {
-        lockoutId,
-        adminId: AdminRole.SUPER_ADMIN,
-        reason: 'First unlock',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'Test',
-        approvalRequired: false,
-      };
+  // First unlock
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: AdminRole.SUPER_ADMIN,
+  reason: 'First unlock',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Test',
+  approvalRequired: false,
+};
       await service.adminUnlock(lockoutId, unlockRequest);
       // Attempt second unlock
       const secondResult = await service.adminUnlock(lockoutId, unlockRequest);
@@ -162,10 +158,10 @@ describe('AccountLockoutService', () => {
     });
   });
   describe('Emergency Unlock Functionality', () => {
-    let lockoutId: string;
-    beforeEach(async () => {
-      lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.SECURITY_POLICY_VIOLATION);
-    });
+  let lockoutId: string;
+  beforeEach(async () => {
+  lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.SECURITY_POLICY_VIOLATION);
+});
     test('should perform emergency unlock with valid code', async () => {
       const adminId = 'emergency-admin';
       const emergencyCode = service.generateEmergencyCode(adminId);
@@ -199,20 +195,20 @@ describe('AccountLockoutService', () => {
     });
   });
   describe('Approval Workflow', () => {
-    let lockoutId: string;
-    let adminActionId: string;
-    beforeEach(async () => {
-      lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
-      // Create approval request
-      const unlockRequest: UnlockRequest = {
-        lockoutId,
-        adminId: AdminRole.SECURITY_ADMIN,
-        reason: 'User verification',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'Verified user identity',
-        approvalRequired: false,
-      };
+  let lockoutId: string;
+  let adminActionId: string;
+  beforeEach(async () => {
+  lockoutId = await service.createLockout('user123', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
+  // Create approval request
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: AdminRole.SECURITY_ADMIN,
+  reason: 'User verification',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Verified user identity',
+  approvalRequired: false,
+};
       await service.adminUnlock(lockoutId, unlockRequest);
       const lockout = service.getLockout(lockoutId);
       adminActionId = lockout!.adminActions[0].id;
@@ -267,26 +263,26 @@ describe('AccountLockoutService', () => {
       expect(service.isUserLockedOut(userId)).toBe(true);
     });
     test('should retrieve pending lockouts', async () => {
-      const lockoutId1 = await service.createLockout(;);
-        'user1',
-        'test1@example.com',
-        LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
-      );
-      const lockoutId2 = await service.createLockout(;);
-        'user2',
-        'test2@example.com',
-        LockoutReason.SECURITY_POLICY_VIOLATION
-      );
-      // Create pending review for first lockout
-      const unlockRequest: UnlockRequest = {
-        lockoutId: lockoutId1,
-        adminId: AdminRole.HELP_DESK,
-        reason: 'User request',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'User contacted support',
-        approvalRequired: false,
-      };
+  const lockoutId1 = await service.createLockout(;);
+  'user1',
+  'test1@example.com',
+  LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
+  );
+  const lockoutId2 = await service.createLockout(;);
+  'user2',
+  'test2@example.com',
+  LockoutReason.SECURITY_POLICY_VIOLATION
+  );
+  // Create pending review for first lockout
+  const unlockRequest: UnlockRequest = {,
+  lockoutId: lockoutId1,
+  adminId: AdminRole.HELP_DESK,
+  reason: 'User request',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'User contacted support',
+  approvalRequired: false,
+};
       await service.adminUnlock(lockoutId1, unlockRequest);
       const pending = service.getPendingLockouts();
       expect(pending).toHaveLength(1);
@@ -307,11 +303,11 @@ describe('AccountLockoutService', () => {
       expect(stats.topAffectedUsers).toContainEqual({ userId: 'user1', count: 2 });
     });
     test('should filter statistics by date range', async () => {
-      await service.createLockout('user1', 'test1@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
-      const stats = service.getLockoutStatistics({)
-        start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
-        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
-      });
+  await service.createLockout('user1', 'test1@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS);
+  const stats = service.getLockoutStatistics({)
+  start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
+  end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
+});
       expect(stats.totalLockouts).toBe(1);
     });
   });
@@ -350,15 +346,15 @@ describe('AccountLockoutService', () => {
       });
       service.createLockout('user123', 'test@example.com', LockoutReason.EXCESSIVE_FAILED_ATTEMPTS)
         .then(lockoutId => {)
-          const unlockRequest: UnlockRequest = {
-            lockoutId,
-            adminId: AdminRole.SUPER_ADMIN,
-            reason: 'Test unlock',
-            method: UnlockMethod.ADMIN_OVERRIDE,
-            urgency: 'medium',
-            justification: 'Testing',
-            approvalRequired: false,
-          };
+  const unlockRequest: UnlockRequest = {,
+  lockoutId,
+  adminId: AdminRole.SUPER_ADMIN,
+  reason: 'Test unlock',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Testing',
+  approvalRequired: false,
+};
           return service.adminUnlock(lockoutId, unlockRequest);
         });
     });
@@ -370,39 +366,39 @@ describe('AccountLockoutService', () => {
       });
       service.createLockout('user123', 'test@example.com', LockoutReason.SECURITY_POLICY_VIOLATION)
         .then(lockoutId => {)
-          const code = service.generateEmergencyCode('emergency-admin');
+  const code = service.generateEmergencyCode('emergency-admin');
           return service.emergencyUnlock(lockoutId, 'emergency-admin', code, 'Critical issue');
         });
     });
   });
   describe('Error Handling', () => {
-    test('should throw error for non-existent lockout', async () => {
-      const unlockRequest: UnlockRequest = {
-        lockoutId: 'non-existent',
-        adminId: AdminRole.SUPER_ADMIN,
-        reason: 'Test',
-        method: UnlockMethod.ADMIN_OVERRIDE,
-        urgency: 'medium',
-        justification: 'Test',
-        approvalRequired: false,
-      };
+  test('should throw error for non-existent lockout', async () => {
+  const unlockRequest: UnlockRequest = {,
+  lockoutId: 'non-existent',
+  adminId: AdminRole.SUPER_ADMIN,
+  reason: 'Test',
+  method: UnlockMethod.ADMIN_OVERRIDE,
+  urgency: 'medium',
+  justification: 'Test',
+  approvalRequired: false,
+};
       await expect()
-        service.adminUnlock('non-existent',)
+        service.adminUnlock('non-existent')
         unlockRequest
       )).rejects.toThrow('Lockout not found: non-existent');
     });
     test('should throw error for non-existent admin action', async () => {
-      const lockoutId = await service.createLockout(;);
-        'user',
-        'test@example.com',
-        LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
-      );
-      await expect()
-        service.approveUnlock(lockoutId,)
-        'non-existent-action',
-        'approver',
-        true
-      )).rejects.toThrow('Admin action not found: non-existent-action');
-    });
+  const lockoutId = await service.createLockout(;);
+  'user',
+  'test@example.com',
+  LockoutReason.EXCESSIVE_FAILED_ATTEMPTS
+  );
+  await expect()
+  service.approveUnlock(lockoutId)
+  'non-existent-action',
+  'approver',
+  true
+  )).rejects.toThrow('Admin action not found: non-existent-action');
+});
   });
 });

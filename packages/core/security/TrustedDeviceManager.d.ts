@@ -28,20 +28,20 @@ export declare enum TrustStatus {
     EXPIRED = "expired",
     REVOKED = "revoked",
     SUSPICIOUS = "suspicious"
-}
+
 export declare enum VerificationMethod {
     EMAIL = "email",
     SMS = "sms",
     PUSH = "push",
     MFA = "mfa",
     ADMIN = "admin"
-}
+
 export declare enum TrustLevel {
     FULL = "full",// Complete trust, bypass all MFA
     PARTIAL = "partial",// Bypass some MFA, still require for sensitive operations
     LIMITED = "limited",// Only remember device, still require MFA
     NONE = "none"
-}
+
 export interface TrustedDevice {
     id: string;
     userId: string;
@@ -79,7 +79,7 @@ export interface TrustedDevice {
         verificationIntervalDays: number;
     };
     metadata: Record<string, any>;
-}
+
 export interface DeviceVerificationRequest {
     userId: string;
     deviceFingerprint: DeviceFingerprint;
@@ -87,7 +87,7 @@ export interface DeviceVerificationRequest {
     verificationMethod: VerificationMethod;
     challenge?: string;
     metadata?: Record<string, any>;
-}
+
 export interface TrustDecision {
     trusted: boolean;
     device?: TrustedDevice;
@@ -103,7 +103,7 @@ export interface TrustDecision {
         notRevoked: boolean;
         recentlyVerified: boolean;
     };
-}
+
 export interface TrustedDeviceConfig {
     maxDevicesPerUser: number;
     defaultTrustDurationDays: number;
@@ -120,7 +120,6 @@ export interface TrustedDeviceConfig {
     verificationMethods: VerificationMethod[];
     enableAnomalyDetection: boolean;
     enableAutoRenewal: boolean;
-}
 /**
  * Trusted Device Manager Service
  */
@@ -173,6 +172,6 @@ export declare class TrustedDeviceManager extends EventEmitter {
     private startMaintenanceTimer;
     private performMaintenance;
     private shouldAutoRenew;
-}
+
 export default TrustedDeviceManager;
 //# sourceMappingURL=TrustedDeviceManager.d.ts.map

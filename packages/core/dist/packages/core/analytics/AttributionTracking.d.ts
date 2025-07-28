@@ -20,8 +20,8 @@ import { EventEmitter } from 'events';
 export interface AttributionConfig {
     trackingId: string;
     attribution: AttributionSettings;
-    models: AttributionModel[];
-    channels: ChannelConfig[];
+    models: AttributionModel;
+    channels: ChannelConfig;
     privacy: PrivacySettings;
     storage: StorageSettings;
     reporting: ReportingSettings;
@@ -65,7 +65,7 @@ export interface DeduplicationConfig {
     enabled: boolean;
     strategy: 'first' | 'last' | 'unique' | 'position';
     window: number;
-    fields: string[];
+    fields: string;
 }
 export interface AttributionModel {
     id: string;
@@ -74,7 +74,7 @@ export interface AttributionModel {
     description: string;
     configuration: ModelConfiguration;
     weights: AttributionWeights;
-    rules: AttributionRule[];
+    rules: AttributionRule;
     isDefault: boolean;
     isActive: boolean;
     version: string;
@@ -92,26 +92,26 @@ export interface ModelConfiguration {
     parameters: Record<string, any>;
 }
 export interface AttributionWeights {
-    byPosition: PositionWeight[];
-    byChannel: ChannelWeight[];
-    byTouchType: TouchTypeWeight[];
-    byTimeDecay: TimeDecayWeight[];
-    byCustom: CustomWeight[];
+    byPosition: PositionWeight;
+    byChannel: ChannelWeight;
+    byTouchType: TouchTypeWeight;
+    byTimeDecay: TimeDecayWeight;
+    byCustom: CustomWeight;
 }
 export interface PositionWeight {
     position: 'first' | 'middle' | 'last' | number;
     weight: number;
-    conditions?: WeightCondition[];
+    conditions?: WeightCondition;
 }
 export interface ChannelWeight {
     channel: string;
     weight: number;
-    conditions?: WeightCondition[];
+    conditions?: WeightCondition;
 }
 export interface TouchTypeWeight {
     touchType: string;
     weight: number;
-    conditions?: WeightCondition[];
+    conditions?: WeightCondition;
 }
 export interface TimeDecayWeight {
     daysFromConversion: number;
@@ -122,7 +122,7 @@ export interface CustomWeight {
     dimension: string;
     value: string;
     weight: number;
-    conditions?: WeightCondition[];
+    conditions?: WeightCondition;
 }
 export interface WeightCondition {
     field: string;
@@ -142,7 +142,7 @@ export interface RuleCondition {
     operator: string;
     value: any;
     logicalOperator?: 'AND' | 'OR' | 'NOT';
-    nested?: RuleCondition[];
+    nested?: RuleCondition;
 }
 export interface RuleAction {
     type: 'include' | 'exclude' | 'modify' | 'redirect';
@@ -178,7 +178,7 @@ export interface TouchPointCapture {
 }
 export interface ChannelTrackingConfig {
     utmTracking: UTMTracking;
-    customParameters: CustomParameter[];
+    customParameters: CustomParameter;
     crossDomainTracking: boolean;
     cookieDomain: string;
     sessionTimeout: number;
@@ -189,7 +189,7 @@ export interface UTMTracking {
     campaign: boolean;
     term: boolean;
     content: boolean;
-    customDimensions: string[];
+    customDimensions: string;
 }
 export interface CustomParameter {
     name: string;
@@ -202,7 +202,7 @@ export interface ChannelMetadata {
     description: string;
     cost: CostConfig;
     performance: PerformanceMetrics;
-    tags: string[];
+    tags: string;
     created: Date;
     updated: Date;
 }
@@ -229,9 +229,9 @@ export interface CustomerJourney {
     userId?: string;
     anonymousId: string;
     deviceId?: string;
-    sessionIds: string[];
-    touchPoints: TouchPoint[];
-    conversions: Conversion[];
+    sessionIds: string;
+    touchPoints: TouchPoint;
+    conversions: Conversion;
     attribution: JourneyAttribution;
     timeline: JourneyTimeline;
     metadata: JourneyMetadata;
@@ -268,7 +268,7 @@ export interface PageData {
     title: string;
     path: string;
     category?: string;
-    tags: string[];
+    tags: string;
     contentId?: string;
     author?: string;
     publishDate?: Date;
@@ -287,8 +287,8 @@ export interface BehaviorData {
     pageViews: number;
     timeOnSite: number;
     bounceRate: number;
-    previousVisits: Date[];
-    interactionHistory: InteractionEvent[];
+    previousVisits: Date;
+    interactionHistory: InteractionEvent;
 }
 export interface InteractionEvent {
     type: string;
@@ -327,7 +327,7 @@ export interface ExperimentContext {
     allocation: number;
 }
 export interface AudienceContext {
-    segments: string[];
+    segments: string;
     lookalike?: string;
     predictedValue?: number;
     churnRisk?: number;
@@ -381,7 +381,7 @@ export interface ConversionValue {
     custom: Record<string, number>;
 }
 export interface ConversionAttribution {
-    touchPoints: TouchPointAttribution[];
+    touchPoints: TouchPointAttribution;
     models: Record<string, ModelAttribution>;
     primary: ModelAttribution;
     assisted: ModelAttribution;
@@ -389,7 +389,7 @@ export interface ConversionAttribution {
 }
 export interface ModelAttribution {
     model: string;
-    credit: TouchPointCredit[];
+    credit: TouchPointCredit;
     confidence: number;
     methodology: string;
 }
@@ -412,7 +412,7 @@ export interface FunnelData {
     position: number;
     completion: boolean;
     dropoff?: boolean;
-    micro_conversions: MicroConversion[];
+    micro_conversions: MicroConversion;
 }
 export interface MicroConversion {
     type: string;
@@ -445,11 +445,11 @@ export interface TransactionData {
     shipping: number;
     discount: number;
     paymentMethod: string;
-    products: ProductData[];
+    products: ProductData;
 }
 export interface FormData {
     formId: string;
-    fields: FormField[];
+    fields: FormField;
     completion: number;
     timeToComplete: number;
     abandonmentPoint?: string;
@@ -472,14 +472,14 @@ export interface JourneyAttribution {
     models: Record<string, JourneyModelAttribution>;
     primary: string;
     touchPointCount: number;
-    conversionPath: string[];
+    conversionPath: string;
     timeToConversion: number;
     assist_interactions: number;
     direct_interactions: number;
 }
 export interface JourneyModelAttribution {
     model: string;
-    distribution: ChannelDistribution[];
+    distribution: ChannelDistribution;
     totalCredit: number;
     confidence: number;
 }
@@ -496,14 +496,14 @@ export interface JourneyTimeline {
     duration: number;
     touchPointsByDay: Record<string, number>;
     conversionsByDay: Record<string, number>;
-    engagementPeaks: Date[];
+    engagementPeaks: Date;
 }
 export interface JourneyMetadata {
     source: string;
     quality: QualityScore;
     completeness: CompletenessScore;
-    anomalies: AnomalyData[];
-    tags: string[];
+    anomalies: AnomalyData;
+    tags: string;
 }
 export interface QualityScore {
     overall: number;
@@ -597,16 +597,16 @@ export interface BackupConfig {
 export interface ReportingSettings {
     realTime: boolean;
     batchInterval: number;
-    aggregationLevels: AggregationLevel[];
-    dimensions: ReportDimension[];
-    metrics: ReportMetric[];
-    exports: ExportConfig[];
+    aggregationLevels: AggregationLevel;
+    dimensions: ReportDimension;
+    metrics: ReportMetric;
+    exports: ExportConfig;
 }
 export interface AggregationLevel {
     name: string;
     granularity: 'minute' | 'hour' | 'day' | 'week' | 'month';
-    dimensions: string[];
-    metrics: string[];
+    dimensions: string;
+    metrics: string;
 }
 export interface ReportDimension {
     name: string;
@@ -625,7 +625,7 @@ export interface ExportConfig {
     format: 'csv' | 'json' | 'parquet' | 'avro';
     destination: ExportDestination;
     schedule: ExportSchedule;
-    filters: ExportFilter[];
+    filters: ExportFilter;
 }
 export interface ExportDestination {
     type: 'file' | 'database' | 'api' | 'warehouse';
@@ -645,15 +645,15 @@ export interface ExportFilter {
     value: any;
 }
 export interface IntegrationSettings {
-    dataImport: DataImportConfig[];
-    webhooks: WebhookConfig[];
-    apis: APIConfig[];
-    connectors: ConnectorConfig[];
+    dataImport: DataImportConfig;
+    webhooks: WebhookConfig;
+    apis: APIConfig;
+    connectors: ConnectorConfig;
 }
 export interface DataImportConfig {
     name: string;
     source: ImportSource;
-    mapping: FieldMapping[];
+    mapping: FieldMapping;
     schedule: ImportSchedule;
     validation: ValidationConfig;
 }
@@ -674,7 +674,7 @@ export interface ImportSchedule {
 }
 export interface ValidationConfig {
     enabled: boolean;
-    rules: ValidationRule[];
+    rules: ValidationRule;
     errorHandling: 'skip' | 'fail' | 'log';
 }
 export interface ValidationRule {
@@ -686,7 +686,7 @@ export interface ValidationRule {
 export interface WebhookConfig {
     name: string;
     url: string;
-    events: string[];
+    events: string;
     authentication?: AuthConfig;
     retryPolicy: RetryPolicy;
     enabled: boolean;
@@ -706,7 +706,7 @@ export interface APIConfig {
     baseUrl: string;
     authentication: AuthConfig;
     rateLimiting: RateLimitConfig;
-    endpoints: EndpointConfig[];
+    endpoints: EndpointConfig;
 }
 export interface RateLimitConfig {
     requestsPerSecond: number;
@@ -717,7 +717,7 @@ export interface EndpointConfig {
     path: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     purpose: string;
-    parameters: ParameterConfig[];
+    parameters: ParameterConfig;
 }
 export interface ParameterConfig {
     name: string;
@@ -730,7 +730,7 @@ export interface ConnectorConfig {
     type: 'google_analytics' | 'facebook_ads' | 'google_ads' | 'salesforce' | 'custom';
     credentials: Record<string, string>;
     syncSettings: SyncSettings;
-    fieldMapping: FieldMapping[];
+    fieldMapping: FieldMapping;
 }
 export interface SyncSettings {
     frequency: 'realtime' | 'hourly' | 'daily';
@@ -748,143 +748,5 @@ export declare class AttributionTracker extends EventEmitter {
     private isProcessing;
     private processingTimer?;
     constructor(config: Partial<AttributionConfig>);
-    trackTouchPoint(data: Partial<TouchPoint>): Promise<string>;
-    trackConversion(data: Partial<Conversion>): Promise<string>;
-    getJourney(journeyId: string): Promise<CustomerJourney | null>;
-    getUserJourneys(userId: string): Promise<CustomerJourney[]>;
-    mergeJourneys(sourceJourneyId: string, targetJourneyId: string): Promise<CustomerJourney>;
-    calculateAttribution(conversionId: string, modelId?: string): Promise<ConversionAttribution>;
-    getAttributionReport(timeRange: {
-        start: Date;
-        end: Date;
-    }, options?: {
-        models?: string[];
-        channels?: string[];
-        dimensions?: string[];
-        metrics?: string[];
-    }): Promise<AttributionReport>;
-    addAttributionModel(model: Omit<AttributionModel, 'id' | 'created' | 'updated'>): Promise<string>;
-    updateAttributionModel(modelId: string, updates: Partial<AttributionModel>): Promise<void>;
-    removeAttributionModel(modelId: string): Promise<void>;
-    addChannel(channel: Omit<ChannelConfig, 'id'>): Promise<string>;
-    updateChannel(channelId: string, updates: Partial<ChannelConfig>): Promise<void>;
-    linkDevices(deviceIds: string[], userId?: string): Promise<void>;
-    deleteUserData(userId: string): Promise<void>;
-    anonymizeUserData(userId: string): Promise<void>;
-    exportUserData(userId: string): Promise<any>;
-    updateConfig(updates: Partial<AttributionConfig>): void;
-    getConfig(): AttributionConfig;
-    flush(): Promise<void>;
-    stop(): Promise<void>;
-    getChannelPerformance(timeRange: {
-        start: Date;
-        end: Date;
-    }): Promise<ChannelPerformanceReport>;
-    getConversionPaths(timeRange: {
-        start: Date;
-        end: Date;
-    }, options?: {
-        limit?: number;
-        minTouchPoints?: number;
-        channels?: string[];
-    }): Promise<ConversionPath[]>;
-    getAttributionInsights(timeRange: {
-        start: Date;
-        end: Date;
-    }): Promise<AttributionInsights>;
-    private mergeDefaultConfig;
-    private initializeModels;
-    private initializeChannels;
-    private startProcessing;
-    private stopProcessing;
-    private processQueues;
-    private createTouchPoint;
-    private createConversion;
-    private processTouchPoint;
-    private processConversion;
-    private computeAttribution;
-    private computeFirstTouchAttribution;
-    private computeLastTouchAttribution;
-    private computeLinearAttribution;
-    private computeTimeDecayAttribution;
-    private computePositionBasedAttribution;
-    private computeCustomAttribution;
-    private findOrCreateJourney;
-    private createJourney;
-    private updateJourneyTimeline;
-    private getRelevantTouchPoints;
-    private getJourneysInRange;
-    private getConversionsInRange;
-    private findConversion;
-    private performJourneyMerge;
-    private mergeDeviceJourneys;
-    private generateJourneyId;
-    private generateTouchPointId;
-    private generateConversionId;
-    private generateModelId;
-    private generateChannelId;
-    private generateSessionId;
-    private generateAnonymousId;
-    private getSeason;
-    private cleanup;
-    private generateAttributionReport;
-    private calculateChannelPerformance;
-    private analyzeConversionPaths;
-    private generateInsights;
 }
-export interface AttributionReport {
-    id: string;
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
-    summary: {
-        totalJourneys: number;
-        totalConversions: number;
-        totalTouchPoints: number;
-        averageJourneyLength: number;
-        conversionRate: number;
-    };
-    models: any[];
-    channels: any[];
-    paths: any[];
-    insights: any[];
-    generatedAt: Date;
-}
-export interface ChannelPerformanceReport {
-    channels: any[];
-    summary: {
-        totalChannels: number;
-        totalTouchPoints: number;
-        totalConversions: number;
-        averageCPA: number;
-        averageROAS: number;
-    };
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
-    generatedAt: Date;
-}
-export interface ConversionPath {
-    id: string;
-    path: string[];
-    touchPoints: number;
-    conversions: number;
-    conversionRate: number;
-    averageValue: number;
-    frequency: number;
-}
-export interface AttributionInsights {
-    trends: any[];
-    anomalies: any[];
-    opportunities: any[];
-    recommendations: any[];
-    confidence: number;
-    generatedAt: Date;
-}
-declare const _default: {
-    AttributionTracker: typeof AttributionTracker;
-};
-export default _default;
 //# sourceMappingURL=AttributionTracking.d.ts.map

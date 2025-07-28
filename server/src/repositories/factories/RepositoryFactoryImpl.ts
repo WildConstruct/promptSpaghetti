@@ -40,6 +40,7 @@ export class RepositoryFactoryImpl implements RepositoryFactory {
   }
 
   async initialize(): Promise<void> {
+
     // Initialize database connection
     if (this.config.storage.type === 'database') {
       this.db = getDatabase();
@@ -51,7 +52,7 @@ export class RepositoryFactoryImpl implements RepositoryFactory {
         socket: {
           host: this.config.cache.host || 'localhost',
           port: this.config.cache.port || 6379
-        },
+  }
         database: this.config.cache.database || 0
       });
       
@@ -110,6 +111,7 @@ export class RepositoryFactoryImpl implements RepositoryFactory {
   }
 
   async close(): Promise<void> {
+
     // Close Redis connection
     if (this.redis) {
       await this.redis.quit();
@@ -132,6 +134,7 @@ export class RepositoryFactoryImpl implements RepositoryFactory {
   }
 
   async healthCheck(): Promise<RepositoryHealth> {
+
     const health: RepositoryHealth = {
       graph: false,
       user: false,
@@ -204,6 +207,7 @@ export class DatabaseTransactionContext {
   }
 
   async commit(): Promise<void> {
+
     if (this.committed || this.rolledBack) {
       throw new Error('Transaction already finalized');
     }
@@ -218,6 +222,7 @@ export class DatabaseTransactionContext {
   }
 
   async rollback(): Promise<void> {
+
     if (this.committed || this.rolledBack) {
       return; // Already finalized
     }
@@ -231,6 +236,7 @@ export class DatabaseTransactionContext {
     db: Database.Database, 
     operation: (ctx: DatabaseTransactionContext) => Promise<T>
   ): Promise<T> {
+
     const transaction = db.transaction(() => {
       // Transaction body will be executed when commit() is called
     });
@@ -258,10 +264,10 @@ export function createRepositoryFactory(overrides?: Partial<RepositoryConfig>): 
     database: {
       type: 'sqlite',
       path: './data/database.db'
-    },
+  }
     cache: {
       type: 'memory'
-    },
+  }
     storage: {
       type: 'database'
     }

@@ -11,6 +11,7 @@
  * - Revenue attribution
  * - User journey analytics
  */
+
 export interface ConversionEvent {
     id: string;
     userId: string;
@@ -26,9 +27,10 @@ export interface ConversionEvent {
         campaignSource?: string;
         experimentGroup?: string;
     };
-}
+
 export type ConversionEventType = 'user_signup' | 'email_verified' | 'profile_completed' | 'first_project_created' | 'tutorial_completed' | 'node_created' | 'first_connection_made' | 'first_preview_generated' | 'advanced_feature_used' | 'project_saved' | 'project_shared' | 'daily_active_user' | 'weekly_active_user' | 'session_started' | 'feature_discovered' | 'help_content_viewed' | 'feedback_provided' | 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_renewed' | 'subscription_cancelled' | 'template_used' | 'template_shared' | 'export_generated' | 'collaboration_invited' | 'marketplace_visited' | 'category_browsed' | 'template_viewed' | 'template_previewed' | 'template_purchased';
 export type ConversionCategory = 'acquisition' | 'activation' | 'retention' | 'revenue' | 'referral';
+
 export interface ConversionFunnel {
     id: string;
     name: string;
@@ -36,7 +38,7 @@ export interface ConversionFunnel {
     steps: ConversionStep[];
     timeWindow: number;
     category: ConversionCategory;
-}
+
 export interface ConversionStep {
     id: string;
     name: string;
@@ -44,7 +46,7 @@ export interface ConversionStep {
     required: boolean;
     conditions?: Record<string, any>;
     timeout?: number;
-}
+
 export interface ConversionMetrics {
     funnel: string;
     period: {,
@@ -69,7 +71,7 @@ export interface ConversionMetrics {
             rate: number;
         };
     };
-}
+
 export declare class ConversionTracker {
     private events;
     private funnels;
@@ -161,7 +163,7 @@ export declare class ConversionTracker {
     private calculateSessionDurations;
     private flushEvents;
     private startEventFlushing;
-}
+
 export declare const conversionTracker: ConversionTracker;
 export default conversionTracker;
 //# sourceMappingURL=ConversionTracker.d.ts.map

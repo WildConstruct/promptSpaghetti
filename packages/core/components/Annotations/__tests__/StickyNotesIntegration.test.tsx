@@ -10,7 +10,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ReactFlowProvider } from 'reactflow';
 import { StickyNotesLayer } from '../StickyNotesLayer';
 import { StickyNote } from '../../../types/CollaborationTypes';
-const mockNotes: StickyNote[] = [
+const mockNotes: StickyNote = [
   {
     id: 'note-1',
     position: { x: 100, y: 100 },
@@ -19,18 +19,16 @@ const mockNotes: StickyNote[] = [
     size: { width: 200, height: 150 },
     author: 'Test Author',
     timestamp: '2024-01-01T12:00:00Z',
-    zIndex: 1,
-  }
-];
+    zIndex: 1];
 const defaultProps = {
   notes: mockNotes,
-  onNotesChange: jest.fn<unknown[], unknown>(),
+  onNotesChange: jest.fn<unknown, unknown>(),
   canvasSize: { width: 1000, height: 800 },
   canvasOffset: { x: 0, y: 0 },
   zoom: 1,
   author: 'Test Author',
-  readOnly: false,
-};
+  readOnly: false;
+  };
 describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -44,8 +42,8 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        pointerEvents: 'none',
-      });
+  pointerEvents: 'none',
+});
     });
     test('individual sticky notes have pointer-events: all to receive their own events', () => {
       render();
@@ -55,8 +53,8 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const note = screen.getByText('Test note').closest('[data-testid="sticky-note"]');
       expect(note).toHaveStyle({)
-        pointerEvents: 'all',
-      });
+  pointerEvents: 'all',
+});
     });
     test('sticky notes layer has high z-index to appear above graph elements', () => {
       render();
@@ -66,8 +64,8 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        zIndex: '1000',
-      });
+  zIndex: '1000',
+});
     });
     test('individual notes have z-index based on their note.zIndex + base z-index', () => {
       render();
@@ -77,11 +75,11 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const note = screen.getByText('Test note').closest('[data-testid="sticky-note"]');
       expect(note).toHaveStyle({)
-        zIndex: '1001' // 1000 (base) + 1 (note.zIndex),
-      });
+  zIndex: '1001' // 1000 (base) + 1 (note.zIndex),
+});
     });
     test('mouse events on empty canvas areas do not create notes when clicking on graph elements', () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
@@ -103,8 +101,8 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       const notesContainer = layer.querySelector('div[style*="pointer-events: auto"]');
       expect(notesContainer).toBeInTheDocument();
       expect(notesContainer).toHaveStyle({)
-        pointerEvents: 'auto',
-      });
+  pointerEvents: 'auto',
+});
     });
   });
   describe('Canvas Integration', () => {
@@ -120,15 +118,15 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        width: '1000px',
-        height: '800px',
-      });
+  width: '1000px',
+  height: '800px',
+});
     });
     test('handles zoom levels correctly', () => {
-      const propsWithZoom = {
-        ...defaultProps,
-        zoom: 0.5,
-      };
+  const propsWithZoom = {
+  ...defaultProps,
+  zoom: 0.5,
+};
       render();
         <ReactFlowProvider>
           <StickyNotesLayer {...propsWithZoom} />
@@ -137,9 +135,9 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       // Layer should still maintain its size but the zoom is handled by transform
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        width: '1000px',
-        height: '800px',
-      });
+  width: '1000px',
+  height: '800px',
+});
     });
     test('canvas boundaries are respected', () => {
       const largeCanvasProps = {
@@ -153,41 +151,41 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       );
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        width: '5000px',
-        height: '3000px',
-        overflow: 'hidden',
-      });
+  width: '5000px',
+  height: '3000px',
+  overflow: 'hidden',
+});
     });
   });
   describe('Event Handling', () => {
     test('layer prevents default behavior on double-click to avoid graph interference', () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
         </ReactFlowProvider>
       );
       const layer = screen.getByTestId('sticky-notes-layer');
-      const mockPreventDefault = jest.fn<unknown[], unknown>();
-      const mockStopPropagation = jest.fn<unknown[], unknown>();
+      const mockPreventDefault = jest.fn<unknown, unknown>();
+      const mockStopPropagation = jest.fn<unknown, unknown>();
       const doubleClickEvent = new MouseEvent('dblclick', { )
         bubbles: true,
         clientX: 400,
-        clientY: 300,
-      });
+        clientY: 300;
+  });
       // Override preventDefault and stopPropagation
       Object.defineProperty(doubleClickEvent, 'preventDefault', {)
-        value: mockPreventDefault,
-      });
+  value: mockPreventDefault,
+});
       Object.defineProperty(doubleClickEvent, 'stopPropagation', {)
-        value: mockStopPropagation,
-      });
+  value: mockStopPropagation,
+});
       fireEvent(layer, doubleClickEvent);
       expect(mockPreventDefault).toHaveBeenCalled();
       expect(mockStopPropagation).toHaveBeenCalled();
     });
     test('clicking on existing notes does not interfere with graph selection', () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />
@@ -199,8 +197,8 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
       expect(onNotesChange).not.toHaveBeenCalledWith()
         expect.arrayContaining([)
           expect.objectContaining({)
-            content: '',
-          })
+  content: '',
+}
         ])
       );
     });
@@ -232,15 +230,17 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   describe('Performance Impact on Graph', () => {
     test('large numbers of notes do not significantly impact render performance', () => {
       const manyNotes = Array.from({ length: 50 }, (_, i) => ({)
-        id: `note-${i}`,}
-        position: { x: (i % 10) * 220, y: Math.floor(i / 10) * 170 },
-        content: `Note ${i}`,}
-        color: 'yellow' as const,
+  id: `note-${i}`}
+},
+  position: { x: (i % 10) * 220, y: Math.floor(i / 10) * 170 },
+        content: `Note ${i}`}
+},
+  color: 'yellow' as const,
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: new Date().toISOString(),
-        zIndex: i,
-      }));
+        zIndex: i;
+  }));
       const startTime = performance.now();
       render();
         <ReactFlowProvider>
@@ -267,7 +267,7 @@ describe('Sticky Notes Integration - Graph Interaction Safety', () => {
   });
   describe('State Management Integration', () => {
     test('notes changes do not interfere with graph state updates', () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render();
         <ReactFlowProvider>
           <StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />

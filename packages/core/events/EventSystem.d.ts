@@ -11,6 +11,7 @@
  */
 import { EventEmitter } from 'events';
 import { z } from 'zod';
+
 export interface BaseEvent {
     type: string;
     timestamp: Date;
@@ -19,13 +20,13 @@ export interface BaseEvent {
     userId?: string;
     sessionId?: string;
     metadata?: Record<string, unknown>;
-}
+
 export declare enum EventPriority {
     CRITICAL = "critical",// System errors, security issues
     HIGH = "high",// User actions, workflow changes
     MEDIUM = "medium",// Analytics, notifications
     LOW = "low"
-}
+
 export declare enum EventCategory {
     COLLABORATION = "collaboration",
     WORKFLOW = "workflow",
@@ -34,14 +35,14 @@ export declare enum EventCategory {
     SYSTEM = "system",
     UI = "ui",
     PERFORMANCE = "performance"
-}
+
 export declare export interface EventSubscription {
     id: string;
     filter: EventFilter;
     handler: EventHandler;
     priority: EventPriority;
     once?: boolean;
-}
+
 export type EventMiddleware = (event: BaseEvent, next: () => void) => void | Promise<void>;
 export declare class EventBus extends EventEmitter {
     private subscriptions;
@@ -93,7 +94,7 @@ export declare class EventBus extends EventEmitter {
     private priorityOrder;
     private addToHistory;
     private enableEventHistory;
-}
+
 export declare     type: string;
     nodeId: string;
     data: any;

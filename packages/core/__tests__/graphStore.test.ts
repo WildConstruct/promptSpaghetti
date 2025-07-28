@@ -21,19 +21,19 @@ describe('Graph Store', () => {
   });
   describe('setNodes', () => {
     it('should replace the nodes array with a new array', () => {
-      const mockNodes: Node[] = [
+      const mockNodes: Node = [
         {
           id: 'n1',
           type: 'default',
           position: { x: 100, y: 100 },
           data: { label: 'Node 1' }
-        },
+  }
         {
           id: 'n2',
           type: 'default',
           position: { x: 200, y: 200 },
           data: { label: 'Node 2' }
-        }
+
       ];
       const store = useGraphStore.getState();
       act(() => {
@@ -44,31 +44,29 @@ describe('Graph Store', () => {
     });
   });
   describe('setEdges', () => {
-    it('should replace the edges array with a new array', () => {
-      const mockEdges: Edge[] = [
+  it('should replace the edges array with a new array', () => {
+  const mockEdges: Edge = [
+  {
+  id: 'e1',
+  source: 'n1',
+  target: 'n2',
+}
         {
-          id: 'e1',
-          source: 'n1',
-          target: 'n2',
-        },
-        {
-          id: 'e2',
-          source: 'n2',
-          target: 'n3',
-        }
-      ];
-      const store = useGraphStore.getState();
-      act(() => {
-        store.setEdges(mockEdges);
-      });
+  id: 'e2',
+  source: 'n2',
+  target: 'n3'];
+  const store = useGraphStore.getState();
+  act(() => {
+  store.setEdges(mockEdges);
+});
       expect(useGraphStore.getState().edges).toHaveLength(2);
       expect(useGraphStore.getState().edges).toEqual(mockEdges);
     });
   });
   describe('addNode', () => {
     it('should add a new node to the nodes array', () => {
-      const mockNode: Node = {
-        id: 'n1',
+      const mockNode: Node = {,
+  id: 'n1',
         type: 'default',
         position: { x: 100, y: 100 },
         data: { label: 'New Node' }
@@ -80,8 +78,8 @@ describe('Graph Store', () => {
       expect(useGraphStore.getState().nodes).toHaveLength(1);
       expect(useGraphStore.getState().nodes[0]).toEqual(mockNode);
       // Add a second node and check both exist
-      const secondNode: Node = {
-        id: 'n2',
+      const secondNode: Node = {,
+  id: 'n2',
         type: 'output',
         position: { x: 200, y: 200 },
         data: { label: 'Another Node' }
@@ -94,12 +92,12 @@ describe('Graph Store', () => {
     });
   });
   describe('addEdge', () => {
-    it('should add a new edge to the edges array', () => {
-      const mockEdge: Edge = {
-        id: 'e1',
-        source: 'n1',
-        target: 'n2',
-      };
+  it('should add a new edge to the edges array', () => {
+  const mockEdge: Edge = {,
+  id: 'e1',
+  source: 'n1',
+  target: 'n2',
+};
       const store = useGraphStore.getState();
       act(() => {
         store.addEdge(mockEdge);
@@ -107,11 +105,11 @@ describe('Graph Store', () => {
       expect(useGraphStore.getState().edges).toHaveLength(1);
       expect(useGraphStore.getState().edges[0]).toEqual(mockEdge);
       // Add a second edge and check both exist
-      const secondEdge: Edge = {
-        id: 'e2',
-        source: 'n2',
-        target: 'n3',
-      };
+      const secondEdge: Edge = {,
+  id: 'e2',
+  source: 'n2',
+  target: 'n3',
+};
       act(() => {
         store.addEdge(secondEdge);
       });
@@ -122,19 +120,19 @@ describe('Graph Store', () => {
   describe('updateNode', () => {
     it('should update a node with the provided partial data', () => {
       // Setup initial nodes
-      const mockNodes: Node[] = [
+      const mockNodes: Node = [
         {
           id: 'n1',
           type: 'default',
           position: { x: 100, y: 100 },
           data: { label: 'Node 1', value: 'old' }
-        },
+  }
         {
           id: 'n2',
           type: 'default',
           position: { x: 200, y: 200 },
           data: { label: 'Node 2', value: 'test' }
-        }
+
       ];
       const store = useGraphStore.getState();
       act(() => {
@@ -157,13 +155,13 @@ describe('Graph Store', () => {
     });
     it('should not modify any nodes if the nodeId is not found', () => {
       // Setup initial nodes
-      const mockNodes: Node[] = [
+      const mockNodes: Node = [
         {
           id: 'n1',
           type: 'default',
           position: { x: 100, y: 100 },
           data: { label: 'Node 1' }
-        }
+
       ];
       const store = useGraphStore.getState();
       act(() => {

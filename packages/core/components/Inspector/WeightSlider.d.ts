@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface WeightSliderProps {
     value: number;
     onChange: (value: number) => void;
@@ -9,7 +10,8 @@ interface WeightSliderProps {
     showNumeric?: boolean;
     label?: string;
     className?: string;
-}
+
+
 /**
  * Professional visual weight slider component for Epic 8
  * Meets Cinema 4D/Substance Designer quality standards

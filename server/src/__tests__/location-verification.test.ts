@@ -21,6 +21,7 @@ import { RedisService } from '../auth/database/RedisService';
 // Mock implementations
 class MockGeolocationService {
   async getGeolocationData(ipAddress: string, headers?: unknown): Promise<GeolocationData> {
+
     // Return different geo data based on IP for testing
     if (ipAddress === '192.168.1.1') {
       return {
@@ -201,6 +202,7 @@ class MockEmailService {
   public sentEmails: any[] = [];
 
   async sendLocationVerification(userId: string, data: unknown): Promise<void> {
+
     this.sentEmails.push({
       type: 'locationVerification',
       userId,
@@ -214,6 +216,7 @@ class MockAuditService {
   public events: any[] = [];
 
   async logEvent(event: unknown): Promise<void> {
+
     this.events.push({
       ...event,
       timestamp: new Date()
@@ -227,6 +230,7 @@ class MockDatabaseService {
   ]);
 
   async query(sql: string, params: any[] = []): Promise<{ rows: any[] }> {
+
     // Handle CREATE TABLE
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
@@ -299,10 +303,12 @@ class MockRedisService {
   private cache: Map<string, string> = new Map();
 
   async setex(key: string, expiry: number, value: string): Promise<void> {
+
     this.cache.set(key, value);
   }
 
   async get(key: string): Promise<string | null> {
+
     return this.cache.get(key) || null;
   }
 
@@ -708,7 +714,7 @@ describe('LocationVerificationService', () => {
         query: jest.fn<unknown[], unknown>().mockImplementation((sql: string) => {
           queries.push(sql);
           return Promise.resolve({ rows: [] });
-        })
+  }
       };
 
       const service = new LocationVerificationService(

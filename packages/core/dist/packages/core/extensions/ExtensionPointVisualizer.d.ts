@@ -17,8 +17,8 @@ export interface ExtensionPointNode {
     category: ExtensionPointCategory;
     priority: string;
     lifecycle: string;
-    interfaces: string[];
-    dependencies: string[];
+    interfaces: string;
+    dependencies: string;
     location: string;
 }
 export interface ExtensionPointEdge {
@@ -28,9 +28,9 @@ export interface ExtensionPointEdge {
     label?: string;
 }
 export interface ExtensionPointGraph {
-    nodes: ExtensionPointNode[];
-    edges: ExtensionPointEdge[];
-    categories: Record<ExtensionPointCategory, ExtensionPointNode[]>;
+    nodes: ExtensionPointNode;
+    edges: ExtensionPointEdge;
+    categories: Record<ExtensionPointCategory, ExtensionPointNode>;
 }
 export declare class ExtensionPointVisualizer {
     private static instance;
@@ -44,38 +44,7 @@ export declare class ExtensionPointVisualizer {
      * Generate extension point relationship map
      */
     generateRelationshipMap(options?: VisualizationOptions): string;
-    /**
-     * Generate extension point hierarchy
-     */
-    generateHierarchy(options?: VisualizationOptions): string;
-    /**
-     * Generate architecture overview
-     */
-    generateArchitectureOverview(options?: VisualizationOptions): string;
-    /**
-     * Build graph structure from extension points
-     */
-    private buildGraph;
-    /**
-     * Generate Mermaid diagram
-     */
-    private generateMermaid;
-    /**
-     * Generate Graphviz diagram
-     */
-    private generateGraphviz;
-    /**
-     * Generate JSON representation
-     */
-    private generateJSON;
-    /**
-     * Generate Mermaid styling
-     */
-    private generateMermaidStyling;
-    /**
-     * Sanitize ID for use in diagrams
-     */
-    private sanitizeId;
+    mermaid: any;
+    '    end\n': any;
 }
-export declare const extensionPointVisualizer: ExtensionPointVisualizer;
 //# sourceMappingURL=ExtensionPointVisualizer.d.ts.map

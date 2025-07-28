@@ -7,6 +7,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import * as crypto from 'crypto';
 
+}
 export interface DataClassificationConfig {
   enabled: boolean;
   defaultClassification: DataClassification;
@@ -20,6 +21,7 @@ export interface DataClassificationConfig {
     restricted: boolean;
     internal: boolean;
     public: boolean;
+}
   };
   approvalRequired: {
     confidential: boolean;
@@ -47,6 +49,7 @@ export interface DataClassificationConfig {
 export type DataClassification = 'public' | 'internal' | 'confidential' | 'restricted';
 export type TransferDestination = DataClassification | 'external';
 
+}
 export interface ClassificationRule {
   id: string;
   name: string;
@@ -58,14 +61,18 @@ export interface ClassificationRule {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ClassificationCondition {
   field: string; // 'content', 'metadata', 'filename', 'size', 'source'
   operator: 'contains' | 'matches' | 'equals' | 'gt' | 'lt' | 'in' | 'pattern';
   value: string | number | string[];
   caseSensitive?: boolean;
 }
+}
 
+}
 export interface TransferPolicy {
   id: string;
   name: string;
@@ -82,17 +89,21 @@ export interface TransferPolicy {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 export type TransferType = 'api_export' | 'file_download' | 'data_sync' | 'backup' | 'migration' | 'sharing';
 export type PolicyAction = 'allow' | 'deny' | 'require_approval' | 'encrypt_only';
 export type AuditLevel = 'none' | 'basic' | 'detailed' | 'full';
 
+}
 export interface TransferCondition {
   type: 'user_role' | 'time_window' | 'location' | 'approval_status' | 'encryption_status';
   operator: 'equals' | 'in' | 'between' | 'not_in';
+}
   value: string | string[] | { start: string; end: string };
 }
 
+}
 export interface DataTransferRequest {
   id: string;
   dataId: string;
@@ -110,7 +121,9 @@ export interface DataTransferRequest {
   encryptionRequired: boolean;
   auditRequired: boolean;
 }
+}
 
+}
 export interface TransferDecision {
   requestId: string;
   action: PolicyAction;
@@ -123,7 +136,9 @@ export interface TransferDecision {
   conditions: string[];
   decidedAt: Date;
 }
+}
 
+}
 export interface ClassificationResult {
   dataId: string;
   classification: DataClassification;
@@ -134,7 +149,9 @@ export interface ClassificationResult {
   metadata: Record<string, any>;
   classifiedAt: Date;
 }
+}
 
+}
 export interface TransferAuditEvent {
   id: string;
   requestId: string;
@@ -150,7 +167,9 @@ export interface TransferAuditEvent {
   metadata: Record<string, any>;
   timestamp: Date;
 }
+}
 
+}
 export interface ClassificationDriftEvent {
   id: string;
   dataId: string;
@@ -165,15 +184,18 @@ export interface ClassificationDriftEvent {
   metadata: Record<string, any>;
   detectedAt: Date;
 }
+}
 
 export type DriftType = 'upgrade' | 'downgrade' | 'lateral' | 'oscillation';
 export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface DriftAnalysisResult {
   analysisId: string;
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   totalDataItems: number;
   driftEvents: number;
@@ -195,6 +217,7 @@ export interface DriftAnalysisResult {
   recommendations: string[];
 }
 
+}
 export interface DriftAlert {
   id: string;
   type: 'significant_change' | 'rapid_change' | 'classification_downgrade' | 'classification_upgrade' | 'rule_instability';
@@ -204,6 +227,7 @@ export interface DriftAlert {
   affectedPercentage: number;
   timeWindow: string;
   createdAt: Date;
+}
 }
 
 export const defaultDataClassificationConfig: DataClassificationConfig = {
@@ -219,20 +243,20 @@ export const defaultDataClassificationConfig: DataClassificationConfig = {
     restricted: true,
     internal: false,
     public: false
-  },
+  }
   approvalRequired: {
     confidential: true,
     restricted: true,
     internal: false,
     public: false
-  },
+  }
   driftDetection: {
     enabled: true,
     thresholds: {
       significantChange: 10.0, // 10% of data items changed classification
       rapidChange: 5.0, // 5% change within time window
       timeWindow: 24 // 24 hours for rapid change detection
-    },
+  }
     alerting: {
       enabled: true,
       notifyOnSignificant: true,
@@ -262,6 +286,7 @@ export class DataClassificationService {
   }
 
   async initialize(): Promise<void> {
+
     try {
       // Create database tables if they don't exist
       await this.createTables();
@@ -285,6 +310,7 @@ export class DataClassificationService {
     metadata: Record<string, any> = {},
     filename?: string
   ): Promise<ClassificationResult> {
+
     try {
       // Check cache first
       const cacheKey = `classification:${dataId}`;
@@ -364,6 +390,7 @@ export class DataClassificationService {
   }
 
   async evaluateTransferRequest(request: DataTransferRequest): Promise<TransferDecision> {
+
     try {
       // Find applicable transfer policies
       const policies = this.config.transferPolicies
@@ -371,7 +398,7 @@ export class DataClassificationService {
           policy.enabled &&
           policy.sourceClassification === request.sourceClassification &&
           policy.transferType === request.transferType
-        )
+
         .sort((a, b) => a.name.localeCompare(b.name)); // Deterministic ordering
 
       let decision: TransferDecision | null = null;
@@ -432,6 +459,7 @@ export class DataClassificationService {
     rule: Omit<ClassificationRule,
     'id' | 'createdAt' | 'updatedAt'>
   ): Promise<ClassificationRule> {
+
     try {
       const ruleId = this.generateId('rule');
       const now = new Date();
@@ -472,7 +500,7 @@ export class DataClassificationService {
           ruleId,
           ruleName: rule.name,
           classification: rule.classification
-        },
+  }
         severity: 'info'
       });
 
@@ -484,6 +512,7 @@ export class DataClassificationService {
   }
 
   async createTransferPolicy(policy: Omit<TransferPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<TransferPolicy> {
+
     try {
       const policyId = this.generateId('policy');
       const now = new Date();
@@ -529,7 +558,7 @@ export class DataClassificationService {
           policyName: policy.name,
           action: policy.action,
           sourceClassification: policy.sourceClassification
-        },
+  }
         severity: 'info'
       });
 
@@ -541,6 +570,7 @@ export class DataClassificationService {
   }
 
   async getClassificationHistory(dataId: string): Promise<ClassificationResult[]> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM data_classifications 
@@ -572,6 +602,7 @@ export class DataClassificationService {
     endDate?: Date;
     limit?: number;
   } = {}): Promise<TransferAuditEvent[]> {
+
     try {
       let query = 'SELECT * FROM transfer_audit_log WHERE 1=1';
       const params: unknown[] = [];
@@ -633,6 +664,7 @@ export class DataClassificationService {
   }
 
   async analyzeDrift(timeRange: { start: Date; end: Date }): Promise<DriftAnalysisResult> {
+
     try {
       const analysisId = this.generateId('drift_analysis');
       
@@ -718,6 +750,7 @@ export class DataClassificationService {
     severity?: DriftSeverity;
     limit?: number;
   } = {}): Promise<ClassificationDriftEvent[]> {
+
     try {
       let query = 'SELECT * FROM classification_drift_events WHERE 1=1';
       const params: unknown[] = [];
@@ -784,6 +817,7 @@ export class DataClassificationService {
     endDate?: Date;
     limit?: number;
   } = {}): Promise<DriftAlert[]> {
+
     try {
       let query = 'SELECT * FROM classification_drift_alerts WHERE 1=1';
       const params: unknown[] = [];
@@ -837,6 +871,7 @@ export class DataClassificationService {
   // Private helper methods
 
   private async createTables(): Promise<void> {
+
     const tables = [
       // Classification rules table
       `CREATE TABLE IF NOT EXISTS data_classification_rules (
@@ -970,6 +1005,7 @@ export class DataClassificationService {
   }
 
   private async loadClassificationRules(): Promise<void> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM data_classification_rules 
@@ -995,6 +1031,7 @@ export class DataClassificationService {
   }
 
   private async loadTransferPolicies(): Promise<void> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM data_transfer_policies 
@@ -1028,6 +1065,7 @@ export class DataClassificationService {
     rule: ClassificationRule,
     data: { content: string; metadata: Record<string, any>; filename: string; size: number }
   ): Promise<{ matches: boolean; confidence: number; reasoning: string[] }> {
+
     const reasoning: string[] = [];
     let matchCount = 0;
     
@@ -1135,6 +1173,7 @@ export class DataClassificationService {
     policy: TransferPolicy,
     request: DataTransferRequest
   ): Promise<{ applicable: boolean; reasoning: string[]; conditions: string[] }> {
+
     const reasoning: string[] = [];
     const conditions: string[] = [];
     let applicable = true;
@@ -1227,6 +1266,7 @@ export class DataClassificationService {
   }
 
   private async storeClassification(result: ClassificationResult): Promise<void> {
+
     const classificationId = this.generateId('classification');
     
     await this.db.query(`
@@ -1247,6 +1287,7 @@ export class DataClassificationService {
   }
 
   private async storeTransferDecision(decision: TransferDecision): Promise<void> {
+
     const decisionId = this.generateId('decision');
     
     await this.db.query(`
@@ -1270,6 +1311,7 @@ export class DataClassificationService {
   }
 
   private async auditClassification(result: ClassificationResult): Promise<void> {
+
     try {
       await this.auditService.logEvent({
         userId: undefined,
@@ -1280,7 +1322,7 @@ export class DataClassificationService {
           confidence: result.confidence,
           ruleId: result.ruleId,
           ruleName: result.ruleName
-        },
+  }
         severity: 'info'
       });
     } catch (error) {
@@ -1289,6 +1331,7 @@ export class DataClassificationService {
   }
 
   private async auditTransferDecision(request: DataTransferRequest, decision: TransferDecision): Promise<void> {
+
     try {
       const auditId = this.generateId('audit');
       
@@ -1327,7 +1370,7 @@ export class DataClassificationService {
           policyId: decision.policyId,
           requiresApproval: decision.requiresApproval,
           requiresEncryption: decision.requiresEncryption
-        },
+  }
         severity: decision.action === 'deny' ? 'warning' : 'info'
       });
     } catch (error) {
@@ -1343,6 +1386,7 @@ export class DataClassificationService {
     previousClassification: ClassificationResult,
     newClassification: ClassificationResult
   ): Promise<void> {
+
     try {
       // Only detect drift if classification actually changed
       if (previousClassification.classification === newClassification.classification) {
@@ -1391,7 +1435,7 @@ export class DataClassificationService {
           newConfidence: newClassification.confidence,
           timeSinceLastClassification: new Date().getTime() - previousClassification.classifiedAt.getTime(),
           isOscillation
-        },
+  }
         detectedAt: new Date()
       };
 
@@ -1491,6 +1535,7 @@ export class DataClassificationService {
   }
 
   private async storeDriftEvent(event: ClassificationDriftEvent): Promise<void> {
+
     await this.db.query(`
       INSERT INTO classification_drift_events (
         id, data_id, previous_classification, new_classification,
@@ -1514,6 +1559,7 @@ export class DataClassificationService {
   }
 
   private async checkAndCreateDriftAlerts(driftEvent: ClassificationDriftEvent): Promise<void> {
+
     const alerts: DriftAlert[] = [];
 
     // Check for downgrade alerts
@@ -1565,6 +1611,7 @@ export class DataClassificationService {
   }
 
   private async storeDriftAlert(alert: DriftAlert): Promise<void> {
+
     await this.db.query(`
       INSERT INTO classification_drift_alerts (
         id, type, severity, message, data_items,
@@ -1583,6 +1630,7 @@ export class DataClassificationService {
   }
 
   private async auditDriftDetection(driftEvent: ClassificationDriftEvent): Promise<void> {
+
     try {
       await this.auditService.logEvent({
         userId: undefined,
@@ -1594,7 +1642,7 @@ export class DataClassificationService {
           previousClassification: driftEvent.previousClassification,
           newClassification: driftEvent.newClassification,
           confidence: driftEvent.confidence
-        },
+  }
         severity: driftEvent.severity === 'critical' ? 'warning' : 'info'
       });
     } catch (error) {
@@ -1603,6 +1651,7 @@ export class DataClassificationService {
   }
 
   private async getTotalClassificationsInRange(start: Date, end: Date): Promise<number> {
+
     try {
       const result = await this.db.query(`
         SELECT COUNT(DISTINCT data_id) as count
@@ -1622,6 +1671,7 @@ export class DataClassificationService {
     driftPercentage: number,
     timeRange: { start: Date; end: Date }
   ): Promise<DriftAlert[]> {
+
     const alerts: DriftAlert[] = [];
 
     // Check for significant change threshold

@@ -17,14 +17,13 @@ import {
   DEFAULT_STICKY_NOTE 
 } from '../../types/CollaborationTypes';
 interface StickyNotesLayerProps {
-  notes: StickyNoteType[];
-  onNotesChange: (notes: StickyNoteType[]) => void;
+  notes: StickyNoteType;,
+  onNotesChange: (notes: StickyNoteType) => void;,
   canvasSize: { width: number; height: number };
   canvasOffset: { x: number; y: number };
   zoom: number;
   author?: string;
   readOnly?: boolean;
-}
 
 export const layerRef = useRef<HTMLDivElement>(null);
   // Generate unique ID for new notes
@@ -33,23 +32,22 @@ export const layerRef = useRef<HTMLDivElement>(null);
   }, []);
   // Handle sticky note actions
   const handleNoteAction = useCallback((action: StickyNoteAction) => {
-    const noteId = action.noteId;
-    switch (action.type) {
-      case 'create': {
-        const newNote: StickyNoteType = {
-          ...DEFAULT_STICKY_NOTE,
-          id: generateNoteId(),
-          author,
-          timestamp: new Date().toISOString(),
-          position: action.position || DEFAULT_STICKY_NOTE.position,
-          content: action.content || '',
-          color: action.color || DEFAULT_STICKY_NOTE.color,
-          zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1
-        };
+  const noteId = action.noteId;
+  switch (action.type) {
+  case 'create': {,
+  const newNote: StickyNoteType = {,
+  ...DEFAULT_STICKY_NOTE,
+  id: generateNoteId(),
+  author,
+  timestamp: new Date().toISOString(),
+  position: action.position || DEFAULT_STICKY_NOTE.position,
+  content: action.content || '',
+  color: action.color || DEFAULT_STICKY_NOTE.color,
+  zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1,
+};
         onNotesChange([...notes, newNote]);
         setSelectedNoteId(newNote.id);
         break;
-      }
       case 'update': {
         if (!noteId || !action.note) break;
         const updatedNotes = notes.map(note => ;);
@@ -59,16 +57,13 @@ export const layerRef = useRef<HTMLDivElement>(null);
         );
         onNotesChange(updatedNotes);
         break;
-      }
       case 'delete': {
         if (!noteId) break;
         const filteredNotes = notes.filter(note => note.id !== noteId);
         onNotesChange(filteredNotes);
         if (selectedNoteId === noteId) {
           setSelectedNoteId(null);
-        }
         break;
-      }
       case 'move': {
         if (!noteId || !action.position) break;
         const updatedNotes = notes.map(note => ;);
@@ -77,12 +72,10 @@ export const layerRef = useRef<HTMLDivElement>(null);
                 ...note, 
                 position: action.position!,
                 zIndex: Math.max(...notes.map(n => n.zIndex || 1000), 1000) + 1 
-              }
             : note
         );
         onNotesChange(updatedNotes);
         break;
-      }
       case 'resize': {
         if (!noteId || !action.size) break;
         const updatedNotes = notes.map(note => ;);
@@ -92,17 +85,15 @@ export const layerRef = useRef<HTMLDivElement>(null);
         );
         onNotesChange(updatedNotes);
         break;
-      }
       case 'startEdit': {
-        if (!noteId) break;
-        const updatedNotes = notes.map(note => ({)
-          ...note,
-          isEditing: note.id === noteId,
-        }));
+  if (!noteId) break;
+  const updatedNotes = notes.map(note => ({)
+  ...note,
+  isEditing: note.id === noteId,
+}));
         onNotesChange(updatedNotes);
         setSelectedNoteId(noteId);
         break;
-      }
       case 'stopEdit': {
         if (!noteId) break;
         const updatedNotes = notes.map(note => ;);
@@ -112,8 +103,6 @@ export const layerRef = useRef<HTMLDivElement>(null);
         );
         onNotesChange(updatedNotes);
         break;
-      }
-    }
   }, [notes, onNotesChange, author, generateNoteId, selectedNoteId]);
   // Handle context menu
   const handleContextMenu = useCallback((e: React.MouseEvent, noteId: string) => {
@@ -123,7 +112,7 @@ export const layerRef = useRef<HTMLDivElement>(null);
     const note = notes.find(n => n.id === noteId);
     if (!note) return;
     setContextMenu({)
-      x: e.clientX,
+  x: e.clientX,
       y: e.clientY,
       noteId,
       canEdit: !readOnly,
@@ -131,62 +120,60 @@ export const layerRef = useRef<HTMLDivElement>(null);
       onEdit: () => {,
         handleNoteAction({ type: 'startEdit', noteId });
         setContextMenu(null);
-      },
-      onDelete: () => {,
+  },
+  onDelete: () => {,
         handleNoteAction({ type: 'delete', noteId });
         setContextMenu(null);
-      },
-      onChangeColor: (color: StickyNoteColor) => {,
+  },
+  onChangeColor: (color: StickyNoteColor) => {,
         handleNoteAction({ )
           type: 'update', 
           noteId, 
           note: { color } 
         });
         setContextMenu(null);
-      },
-      onDuplicate: () => {,
-        const duplicatedNote: StickyNoteType = {
-          ...note,
-          id: generateNoteId(),
-          position: {,
-            x: note.position.x + 20,
-            y: note.position.y + 20,
-          },
-          timestamp: new Date().toISOString(),
+  },
+  onDuplicate: () => {,
+  const duplicatedNote: StickyNoteType = {,
+  ...note,
+  id: generateNoteId(),
+  position: {,
+  x: note.position.x + 20,
+  y: note.position.y + 20,
+},
+  timestamp: new Date().toISOString(),
           author,
-          isEditing: false,
-        };
+          isEditing: false;
+  };
         onNotesChange([...notes, duplicatedNote]);
         setSelectedNoteId(duplicatedNote.id);
         setContextMenu(null);
-      }
     });
   }, [notes, readOnly, handleNoteAction, author, generateNoteId, onNotesChange]);
   // Handle canvas double-click to create new note
   const handleCanvasDoubleClick = useCallback((e: React.MouseEvent) => {
-    if (readOnly) return;
-    // Only create note if clicking on empty canvas (not on existing notes)
-    const target = e.target as HTMLElement;
-    if (target.closest('.sticky-note')) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const rect = layerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const position = {
-      x: (e.clientX - rect.left - canvasOffset.x) / zoom,
-      y: (e.clientY - rect.top - canvasOffset.y) / zoom,
-    };
+  if (readOnly) return;
+  // Only create note if clicking on empty canvas (not on existing notes)
+  const target = e.target as HTMLElement;
+  if (target.closest('.sticky-note')) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const rect = layerRef.current?.getBoundingClientRect();
+  if (!rect) return;
+  const position = {
+  x: (e.clientX - rect.left - canvasOffset.x) / zoom,
+  y: (e.clientY - rect.top - canvasOffset.y) / zoom,
+};
     handleNoteAction({)
-      type: 'create',
-      position
-    });
+  type: 'create',
+  position
+});
   }, [readOnly, canvasOffset, zoom, handleNoteAction]);
   // Handle click outside to deselect notes
   const handleLayerClick = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (!target.closest('.sticky-note')) {
       setSelectedNoteId(null);
-    }
   }, []);
   // Handle note selection
   const handleNoteClick = useCallback((noteId: string) => {
@@ -200,7 +187,6 @@ export const layerRef = useRef<HTMLDivElement>(null);
     if (contextMenu) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
-    }
   }, [contextMenu]);
   // Keyboard shortcuts
   useEffect(() => {
@@ -211,32 +197,29 @@ export const layerRef = useRef<HTMLDivElement>(null);
         const selectedNote = notes.find(n => n.id === selectedNoteId);
         if (selectedNote && !selectedNote.isEditing) {
           handleNoteAction({ type: 'delete', noteId: selectedNoteId });
-        }
-      }
       // Escape to deselect
       if (e.key === 'Escape') {
         setSelectedNoteId(null);
         setContextMenu(null);
-      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [readOnly, selectedNoteId, notes, handleNoteAction]);
-  return ();
+  return;
     <>
       <div
         ref={layerRef}
         className="sticky-notes-layer"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: canvasSize.width,
-          height: canvasSize.height,
-          pointerEvents: 'none', // Allow graph interactions to pass through
-          zIndex: 1000,
-          overflow: 'hidden',
-        }}
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: canvasSize.width,
+  height: canvasSize.height,
+  pointerEvents: 'none', // Allow graph interactions to pass through,
+  zIndex: 1000,
+  overflow: 'hidden',
+}}
         onDoubleClick={handleCanvasDoubleClick}
         onClick={handleLayerClick}
       >

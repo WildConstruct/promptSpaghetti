@@ -26,8 +26,7 @@ interface ActivityFeedProps {
   showFilters?: boolean;
   showSearch?: boolean;
   realTime?: boolean;
-}
-const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = {
+  const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = {,
   'project_created': FileText,
   'project_updated': Edit3,
   'project_deleted': Trash2,
@@ -49,7 +48,7 @@ const ACTIVITY_ICONS: Record<ActivityEventType, React.ComponentType<unknown>> = 
   'branch_merged': GitBranch,
   'template_applied': FileText,
   'collaboration_started': Users,
-  'collaboration_ended': Users
+  'collaboration_ended': Users,
 };
 const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'project_created': 'text-green-500',
@@ -73,7 +72,7 @@ const ACTIVITY_COLORS: Record<ActivityEventType, string> = {
   'branch_merged': 'text-purple-500',
   'template_applied': 'text-blue-500',
   'collaboration_started': 'text-green-500',
-  'collaboration_ended': 'text-gray-500'
+  'collaboration_ended': 'text-gray-500',
 };
 
 export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' | 'all'>('all');
@@ -89,27 +88,26 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
     loadMore,
     realTimeConnection
   } = useActivityFeed({)
-    workspaceId,
-    projectId,
-    userId,
-    searchTerm,
-    typeFilter: typeFilter === 'all' ? undefined : typeFilter,
-    dateFilter: dateFilter === 'all' ? undefined : dateFilter,
-    actorFilter: actorFilter === 'all' ? undefined : actorFilter,
-    realTime
-  });
+  workspaceId,
+  projectId,
+  userId,
+  searchTerm,
+  typeFilter: typeFilter === 'all' ? undefined : typeFilter,
+  dateFilter: dateFilter === 'all' ? undefined : dateFilter,
+  actorFilter: actorFilter === 'all' ? undefined : actorFilter,
+  realTime
+});
   const handleRefresh = useCallback(() => {
     refreshActivities();
   }, [refreshActivities]);
   const handleLoadMore = useCallback(() => {
     if (hasMore && !loading) {
       loadMore();
-    }
   }, [hasMore, loading, loadMore]);
   const renderActivityItem = (activity: ActivityEvent) => {
     const Icon = ACTIVITY_ICONS[activity.type] || Activity;
     const iconColor = ACTIVITY_COLORS[activity.type] || 'text-gray-500';
-    return ();
+    return;
       <div key={activity.id} className="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
         {/* Icon */}
         <div className={`flex-shrink-0 p-1 rounded-full bg-gray-100 ${iconColor}`}>}
@@ -169,7 +167,7 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
       </div>
     );
   };
-  return ();
+  return;
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
@@ -187,10 +185,10 @@ export const [dateFilter, setDateFilter] = useState<'today' | 'week' | 'month' |
             {/* Real-time connection indicator */}
             {realTime && ()
               <div className={`w-2 h-2 rounded-full ${
-                realTimeConnection?.status === 'connected' ? 'bg-green-400' :
-                realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :
-                'bg-red-400'
-              }`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
+  realTimeConnection?.status === 'connected' ? 'bg-green-400' :,
+  realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' :,
+  'bg-red-400'
+}`} title={`Connection: ${realTimeConnection?.status || 'disconnected'}`} />}
             )}
             <button
               onClick={handleRefresh}

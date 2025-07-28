@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+
 export interface DataSource {
     id: string;
     name: string;
@@ -35,14 +36,14 @@ export interface DataSource {
         lastSync?: string;
         version?: string;
     };
-}
+
 export interface DataTransform {
     id: string;
     name: string;
     type: 'map' | 'filter' | 'aggregate' | 'validate' | 'normalize';
     config: Record<string, any>;
     enabled: boolean;
-}
+
 export interface HistoricalQuery {
     era: string | string[];
     region?: string | string[];
@@ -54,7 +55,7 @@ export interface HistoricalQuery {
     offset?: number;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
-}
+
 export interface QueryResult<T = any> {
     success: boolean;
     data: T[];
@@ -69,7 +70,7 @@ export interface QueryResult<T = any> {
     };
     error?: string;
     warnings?: string[];
-}
+
 export declare class DataSourceManager extends EventEmitter {
     private static instance;
     private dataSources;
@@ -145,6 +146,6 @@ export declare class DataSourceManager extends EventEmitter {
     private generateMockDescription;
     private generateMockMaterials;
     private generateQueryHash;
-}
+
 export declare const dataSourceManager: DataSourceManager;
 //# sourceMappingURL=DataSourceManager.d.ts.map

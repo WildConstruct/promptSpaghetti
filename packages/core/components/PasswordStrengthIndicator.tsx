@@ -28,61 +28,59 @@ export interface PasswordStrengthIndicatorProps {
   onValidationChange?: (result: PasswordValidationResult) => void;
   debounceMs?: number;
 }
-
 export interface PasswordStrengthDisplayProps {
-  result: PasswordValidationResult;
+  result: PasswordValidationResult;,
   showDetails: boolean;
-  showSuggestions: boolean;
+  showSuggestions: boolean;,
   showCrackTime: boolean;
-  showEntropy: boolean;
+  showEntropy: boolean;,
   compact: boolean;
   theme: 'light' | 'dark';
-}
-
-// ========================================
-// Strength Meter Component
-// ========================================
-const StrengthMeter: React.FC<{
-  score: number;
+  // ========================================
+  // Strength Meter Component
+  // ========================================
+  const StrengthMeter: React.FC<{,
+  score: number;,
   strength: PasswordValidationResult['strength'];
-  compact: boolean;
+  compact: boolean;,
   theme: 'light' | 'dark';
 }> = ({ score, strength, compact, theme }) => {
-  const getStrengthColor = (strength: PasswordValidationResult['strength']): string => {
-    const colors = {
-      'very-weak': '#dc2626', // red-600
-      'weak': '#ea580c',      // orange-600
-      'fair': '#d97706',      // amber-600
-      'good': '#65a30d',      // lime-600
-      'strong': '#16a34a',    // green-600
-      'very-strong': '#059669' // emerald-600
-    };
+  const getStrengthColor = (strength: PasswordValidationResult['strength']): string => {,
+  const colors = {
+  'very-weak': '#dc2626', // red-600,
+  'weak': '#ea580c',      // orange-600,
+  'fair': '#d97706',      // amber-600,
+  'good': '#65a30d',      // lime-600,
+  'strong': '#16a34a',    // green-600,
+  'very-strong': '#059669' // emerald-600,
+};
     return colors[strength];
   };
   const getStrengthLabel = (strength: PasswordValidationResult['strength']): string => {
-    const labels = {
-      'very-weak': 'Very Weak',
-      'weak': 'Weak',
-      'fair': 'Fair',
-      'good': 'Good',
-      'strong': 'Strong',
-      'very-strong': 'Very Strong'
-    };
+  const labels = {
+  'very-weak': 'Very Weak',
+  'weak': 'Weak',
+  'fair': 'Fair',
+  'good': 'Good',
+  'strong': 'Strong',
+  'very-strong': 'Very Strong',
+};
     return labels[strength];
   };
   const strengthColor = getStrengthColor(strength);
   const strengthLabel = getStrengthLabel(strength);
   const progressWidth = Math.max(5, score); // Minimum 5% width for visibility;
   if (compact) {
-    return ();
+    return;
       <div className="flex items-center gap-2">
         <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full transition-all duration-300 ease-in-out"
             style={{
-              width: `${progressWidth}%`,}
-              backgroundColor: strengthColor,
-            }}
+              width: `${progressWidth}%`}
+},
+  backgroundColor: strengthColor;
+  }}
           />
         </div>
         <span
@@ -93,8 +91,7 @@ const StrengthMeter: React.FC<{
         </span>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-2">
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium text-gray-700">Password Strength</span>
@@ -109,9 +106,10 @@ const StrengthMeter: React.FC<{
         <div
           className="h-full transition-all duration-300 ease-in-out rounded-full"
           style={{
-            width: `${progressWidth}%`,}
-            backgroundColor: strengthColor,
-          }}
+            width: `${progressWidth}%`}
+},
+  backgroundColor: strengthColor;
+  }}
         />
       </div>
     </div>
@@ -121,14 +119,14 @@ const StrengthMeter: React.FC<{
 // ========================================
 // Rule Results Display
 // ========================================
-const RuleResultsDisplay: React.FC<{
+const RuleResultsDisplay: React.FC<{,
   ruleResults: PasswordValidationResult['ruleResults'];
-  passedRules: number;
+  passedRules: number;,
   totalRules: number;
   theme: 'light' | 'dark';
 }> = ({ ruleResults, passedRules, totalRules, theme }) => {
   if (ruleResults.length === 0) return null;
-  return ();
+  return;
     <div className="space-y-2">
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium text-gray-700">Requirements</span>
@@ -140,11 +138,11 @@ const RuleResultsDisplay: React.FC<{
         {ruleResults.map((result, index) => ()
           <div key={index} className="flex items-center gap-2 text-xs">
             <span className={`w-2 h-2 rounded-full ${
-              result.passed ? 'bg-green-500' : 'bg-red-500'
-            }`} />
+  result.passed ? 'bg-green-500' : 'bg-red-500',
+}`} />
             <span className={`flex-1 ${
-              result.passed ? 'text-green-700' : 'text-red-600'
-            }`}>
+  result.passed ? 'text-green-700' : 'text-red-600',
+}`}>
               {result.message}
             </span>
             <span className="text-gray-400">
@@ -160,12 +158,12 @@ const RuleResultsDisplay: React.FC<{
 // ========================================
 // Suggestions Display
 // ========================================
-const SuggestionsDisplay: React.FC<{
-  suggestions: string[];
+const SuggestionsDisplay: React.FC<{,
+  suggestions: string;
   theme: 'light' | 'dark';
 }> = ({ suggestions, theme }) => {
   if (suggestions.length === 0) return null;
-  return ();
+  return;
     <div className="space-y-2">
       <span className="text-sm font-medium text-gray-700">Suggestions</span>
       <div className="space-y-1">
@@ -188,14 +186,14 @@ const SuggestionsDisplay: React.FC<{
 // ========================================
 // Additional Info Display
 // ========================================
-const AdditionalInfoDisplay: React.FC<{
+const AdditionalInfoDisplay: React.FC<{,
   result: PasswordValidationResult;
-  showCrackTime: boolean;
+  showCrackTime: boolean;,
   showEntropy: boolean;
   theme: 'light' | 'dark';
 }> = ({ result, showCrackTime, showEntropy, theme }) => {
   if (!showCrackTime && !showEntropy) return null;
-  return ();
+  return;
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-200">
       {showEntropy && result.entropy && ()
         <div className="space-y-1">
@@ -232,7 +230,7 @@ const PasswordStrengthDisplay: React.FC<PasswordStrengthDisplayProps> = ({)
 }) => {
   const hasAdditionalInfo = showCrackTime || showEntropy;
   const hasDetails = showDetails || showSuggestions || hasAdditionalInfo;
-  return ();
+  return;
     <div className={`space-y-3 ${compact ? 'space-y-2' : ''}`}>}
       <StrengthMeter
         score={result.score}
@@ -303,8 +301,7 @@ const useDebounedValidation = (;);
   password: string,
   validator: PasswordComplexityValidator,
   context?: PasswordValidationContext,
-  debounceMs: number = 300,
-) => {
+  debounceMs: number = 300) => {,
   const [result, setResult] = useState<PasswordValidationResult | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   useEffect(() => {
@@ -312,28 +309,26 @@ const useDebounedValidation = (;);
       setResult(null);
       setIsValidating(false);
       return;
-    }
     setIsValidating(true);
     const timeoutId = setTimeout(async () => {
       try {
         const validationResult = await validator.validatePassword(password, context);
         setResult(validationResult);
       } catch (error) {
-        console.error('Password validation error:', error);
-        setResult({)
-          valid: false,
-          score: 0,
-          strength: 'very-weak',
-          ruleResults: [],
-          errors: ['Validation failed'],
-          warnings: [],
-          suggestions: [],
-          passedRules: 0,
-          totalRules: 0,
-        });
+  console.error('Password validation error:', error);
+  setResult({)
+  valid: false,
+  score: 0,
+  strength: 'very-weak',
+  ruleResults: [],
+  errors: ['Validation failed'],
+  warnings: [],
+  suggestions: [],
+  passedRules: 0,
+  totalRules: 0,
+});
       } finally {
         setIsValidating(false);
-      }
     }, debounceMs);
     return () => {
       clearTimeout(timeoutId);
@@ -345,7 +340,7 @@ const useDebounedValidation = (;);
 // ========================================
 // Main Password Strength Indicator Component
 // ========================================
-
+}
 export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({)
   password,
   context,
@@ -365,15 +360,13 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
   const passwordValidator = validator || defaultValidator;
   // Determine theme
   const resolvedTheme = useMemo(() => {
-    if (theme === 'auto') {
-      // Check for dark mode preference
-      if (typeof window !== 'undefined') {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      return 'light';
-    }
-    return theme;
-  }, [theme]);
+  if (theme === 'auto') {
+  // Check for dark mode preference
+  if (typeof window !== 'undefined') {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return 'light';
+  return theme;
+}, [theme]);
   // Get validation result with debouncing
   const { result, isValidating } = useDebounedValidation()
     password, 
@@ -385,26 +378,22 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
   useEffect(() => {
     if (result && onValidationChange) {
       onValidationChange(result);
-    }
   }, [result, onValidationChange]);
   // Don't render anything if no password
   if (!password) {
     return null;
-  }
   // Show loading state during validation
   if (isValidating && !result) {
-    return ();
+    return;
       <div className={`flex items-center gap-2 ${className}`}>}
         <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
         <span className="text-sm text-gray-500">Analyzing password...</span>
       </div>
     );
-  }
   // Don't render if no result available
   if (!result) {
     return null;
-  }
-  return ();
+  return;
     <div className={`password-strength-indicator ${className}`}>}
       <PasswordStrengthDisplay
         result={result}
@@ -432,14 +421,14 @@ export const usePasswordStrength = ()
   const passwordValidator = validator || defaultValidator;
   const { result, isValidating } = useDebounedValidation(password, passwordValidator, context);
   return {
-    result,
-    isValidating,
-    isValid: result?.valid || false,
-    score: result?.score || 0,
-    strength: result?.strength || 'very-weak',
-    suggestions: result?.suggestions || [],
-    errors: result?.errors || [],
-  };
+  result,
+  isValidating,
+  isValid: result?.valid || false,
+  score: result?.score || 0,
+  strength: result?.strength || 'very-weak',
+  suggestions: result?.suggestions || [],
+  errors: result?.errors || [],
+};
 };
 
 // ========================================

@@ -14,12 +14,12 @@ export interface UTDGNode {
         era?: HistoricalEra;
         genre?: Genre;
         style?: Style;
-        tags: string[];
+        tags: string;
         confidence: number;
-        sources: string[];
+        sources: string;
         lastUpdated: Date;
     };
-    relationships: UTDGRelationship[];
+    relationships: UTDGRelationship;
 }
 export interface UTDGRelationship {
     id: string;
@@ -36,28 +36,28 @@ export interface UTDGRelationship {
     };
 }
 export interface UTDGQuery {
-    nodeTypes?: string[];
-    relationshipTypes?: string[];
-    eras?: HistoricalEra[];
-    genres?: Genre[];
-    styles?: Style[];
-    tags?: string[];
+    nodeTypes?: string;
+    relationshipTypes?: string;
+    eras?: HistoricalEra;
+    genres?: Genre;
+    styles?: Style;
+    tags?: string;
     confidenceThreshold?: number;
     maxResults?: number;
     includeRelationships?: boolean;
     spatialConstraints?: {
-        regions?: string[];
-        excludeRegions?: string[];
+        regions?: string;
+        excludeRegions?: string;
     };
     temporalConstraints?: {
         startYear?: number;
         endYear?: number;
-        seasons?: string[];
+        seasons?: string;
     };
     socialConstraints?: {
-        socialClasses?: string[];
-        professions?: string[];
-        genders?: string[];
+        socialClasses?: string;
+        professions?: string;
+        genders?: string;
     };
 }
 export interface UTDGContext {
@@ -84,11 +84,11 @@ export interface UTDGContentSuggestion {
     content: any;
     confidence: number;
     reasoning: string;
-    alternatives: any[];
+    alternatives: any;
     historicalAccuracy: {
         score: number;
-        violations: string[];
-        suggestions: string[];
+        violations: string;
+        suggestions: string;
     };
 }
 export declare class UTDGFoundation {
@@ -110,75 +110,5 @@ export declare class UTDGFoundation {
      * Build core knowledge graph structure
      */
     private buildCoreKnowledgeGraph;
-    /**
-     * Integrate medieval content into UTDG
-     */
-    private integrateMedievalContent;
-    /**
-     * Build relationships between historical elements
-     */
-    private buildHistoricalRelationships;
-    /**
-     * Add node to the graph
-     */
-    addNode(node: UTDGNode): void;
-    /**
-     * Add relationship to the graph
-     */
-    addRelationship(relationship: UTDGRelationship): void;
-    /**
-     * Query the UTDG for relevant content
-     */
-    query(query: UTDGQuery): UTDGNode[];
-    /**
-     * Generate content suggestions based on context
-     */
-    generateContentSuggestions(context: UTDGContext): UTDGContentSuggestion[];
-    /**
-     * Validate historical accuracy of content
-     */
-    private validateHistoricalAccuracy;
-    /**
-     * Update search indices
-     */
-    private updateIndices;
-    /**
-     * Validate graph consistency
-     */
-    private validateGraphConsistency;
-    /**
-     * Check for circular dependencies in the graph
-     */
-    private hasCircularDependency;
-    /**
-     * Helper methods for social class properties
-     */
-    private getSocialClassEconomicPower;
-    private getSocialClassPoliticalInfluence;
-    private getSocialClassMobility;
-    private getSocialClassOccupations;
-    /**
-     * Get graph statistics
-     */
-    getGraphStats(): {
-        totalNodes: number;
-        totalRelationships: number;
-        nodesByType: Record<string, number>;
-        nodesByEra: Record<string, number>;
-        averageConfidence: number;
-    };
-    /**
-     * Export graph data for external use
-     */
-    exportGraph(): {
-        nodes: UTDGNode[];
-        relationships: UTDGRelationship[];
-        metadata: {
-            exportDate: Date;
-            version: string;
-            stats: any;
-        };
-    };
 }
-export default UTDGFoundation;
 //# sourceMappingURL=UTDGFoundation.d.ts.map

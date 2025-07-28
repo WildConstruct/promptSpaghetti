@@ -7,13 +7,14 @@
  */
 import React from 'react';
 import { ExportTemplate } from '../../types/export';
+
 interface TemplateCollaborationPanelProps {
     template: ExportTemplate;
     visible?: boolean;
     onClose?: () => void;
     projectId?: string;
     className?: string;
-}
+
 export declare const TemplateCollaborationPanel: React.FC<TemplateCollaborationPanelProps>;
 export default TemplateCollaborationPanel;
 //# sourceMappingURL=TemplateCollaborationPanel.d.ts.map

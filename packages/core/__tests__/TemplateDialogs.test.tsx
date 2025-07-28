@@ -10,14 +10,13 @@ import { TemplateSaveData, Template } from '../types/TemplateTypes';
 // Mock the template service
 jest.mock('../services/TemplateService', () => ({)
   templateService: {,
-    searchTemplates: jest.fn<unknown[], unknown>(),
-    instantiateTemplate: jest.fn<unknown[], unknown>(),
-    deleteTemplate: jest.fn<unknown[], unknown>()
-  }
+  searchTemplates: jest.fn<unknown, unknown>(),
+  instantiateTemplate: jest.fn<unknown, unknown>(),
+  deleteTemplate: jest.fn<unknown, unknown>(),
 }));
 describe('SaveTemplateDialog', () => {
-  const mockOnSave = jest.fn<unknown[], unknown>();
-  const mockOnClose = jest.fn<unknown[], unknown>();
+  const mockOnSave = jest.fn<unknown, unknown>();
+  const mockOnClose = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -165,14 +164,14 @@ describe('SaveTemplateDialog', () => {
     await user.click(annotationsCheckbox); // Uncheck it
     await user.click(saveButton);
     await waitFor(() => {
-      expect(mockOnSave).toHaveBeenCalledWith({)
-        name: 'Complete Template',
-        description: 'A complete test template',
-        category: 'narrative',
-        tags: ['complete', 'test'],
-        isPublic: true,
-        includeAnnotations: false,
-      });
+  expect(mockOnSave).toHaveBeenCalledWith({)
+  name: 'Complete Template',
+  description: 'A complete test template',
+  category: 'narrative',
+  tags: ['complete', 'test'],
+  isPublic: true,
+  includeAnnotations: false,
+});
     });
   });
   it('should handle save errors', async () => {
@@ -266,14 +265,14 @@ describe('SaveTemplateDialog', () => {
     expect(screen.getByLabelText(/Template Name/)).toHaveValue('');
   });
   it('should populate initial data', () => {
-    const initialData: Partial<TemplateSaveData> = {
-      name: 'Pre-filled Template',
-      description: 'Pre-filled description',
-      category: 'character',
-      tags: ['pre-filled', 'test'],
-      isPublic: true,
-      includeAnnotations: false,
-    };
+  const initialData: Partial<TemplateSaveData> = {,
+  name: 'Pre-filled Template',
+  description: 'Pre-filled description',
+  category: 'character',
+  tags: ['pre-filled', 'test'],
+  isPublic: true,
+  includeAnnotations: false,
+};
     render();
       <SaveTemplateDialog
         isOpen={true}
@@ -292,9 +291,9 @@ describe('SaveTemplateDialog', () => {
   });
 });
 describe('TemplateBrowser', () => {
-  const mockOnClose = jest.fn<unknown[], unknown>();
-  const mockOnApplyTemplate = jest.fn<unknown[], unknown>();
-  const sampleTemplates: Template[] = [
+  const mockOnClose = jest.fn<unknown, unknown>();
+  const mockOnApplyTemplate = jest.fn<unknown, unknown>();
+  const sampleTemplates: Template = [
     {
       id: 'template-1',
       name: 'Character Generator',
@@ -310,37 +309,32 @@ describe('TemplateBrowser', () => {
           rating: 5,
           comment: 'Great template!',
           timestamp: '2023-01-01T00:00:00.000Z',
-          helpful: 3,
-        }
-      ],
+          helpful: 3],
       graph: {,
-        nodes: [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
+  nodes: [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         edges: [],
         annotations: {,
-          stickyNotes: [],
+  stickyNotes: [],
           nodeLabels: {},
           regionGroups: [],
           connectionLabels: {},
           metadata: {,
-            author: 'test',
-            created: '2023-01-01',
-            modified: '2023-01-01',
-            version: '1.0.0',
-          }
-        }
-      },
-      metadata: {,
-        created: '2023-01-01T00:00:00.000Z',
-        lastModified: '2023-01-01T00:00:00.000Z',
-        usageCount: 10,
-        tags: ['fantasy', 'rpg'],
-        complexity: 'simple',
-        nodeCount: 1,
-        estimatedOutputLength: 100,
-        isPublic: true,
-        language: 'en',
-      }
-    },
+  author: 'test',
+  created: '2023-01-01',
+  modified: '2023-01-01',
+  version: '1.0.0',
+},
+  metadata: {,
+  created: '2023-01-01T00:00:00.000Z',
+  lastModified: '2023-01-01T00:00:00.000Z',
+  usageCount: 10,
+  tags: ['fantasy', 'rpg'],
+  complexity: 'simple',
+  nodeCount: 1,
+  estimatedOutputLength: 100,
+  isPublic: true,
+  language: 'en',
+}
     {
       id: 'template-2',
       name: 'Setting Builder',
@@ -351,26 +345,24 @@ describe('TemplateBrowser', () => {
       rating: 3.8,
       reviews: [],
       graph: {,
-        nodes: [,
+  nodes: [,
           { id: 'n1', type: 'WeightedChoice', position: { x: 0, y: 0 }, data: {} },
           { id: 'n2', type: 'Output', position: { x: 100, y: 0 }, data: {} }
         ],
         edges: [{ id: 'e1', source: 'n1', target: 'n2', type: 'step' }],
         annotations: {,
-          stickyNotes: [],
+  stickyNotes: [],
           nodeLabels: {},
           regionGroups: [],
           connectionLabels: {},
           metadata: {,
-            author: 'test',
-            created: '2023-01-01',
-            modified: '2023-01-01',
-            version: '1.0.0',
-          }
-        }
-      },
-      metadata: {,
-        created: '2023-01-02T00:00:00.000Z',
+  author: 'test',
+  created: '2023-01-01',
+  modified: '2023-01-01',
+  version: '1.0.0',
+},
+  metadata: {,
+  created: '2023-01-02T00:00:00.000Z',
         lastModified: '2023-01-02T00:00:00.000Z',
         usageCount: 5,
         tags: ['worldbuilding'],
@@ -378,10 +370,7 @@ describe('TemplateBrowser', () => {
         nodeCount: 2,
         estimatedOutputLength: 200,
         isPublic: true,
-        language: 'en',
-      }
-    }
-  ];
+        language: 'en'];
   beforeEach(() => {
     jest.clearAllMocks();
     const { templateService } = require('../services/TemplateService');
@@ -425,10 +414,10 @@ describe('TemplateBrowser', () => {
     const searchInput = screen.getByPlaceholderText('Search templates...');
     await user.type(searchInput, 'character');
     await waitFor(() => {
-      expect(templateService.searchTemplates).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          searchTerm: 'character',
-        })
+  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  searchTerm: 'character',
+}
       );
     });
   });
@@ -445,10 +434,10 @@ describe('TemplateBrowser', () => {
     const categorySelect = screen.getByLabelText(/Category/);
     await user.selectOptions(categorySelect, 'character');
     await waitFor(() => {
-      expect(templateService.searchTemplates).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          category: 'character',
-        })
+  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  category: 'character',
+}
       );
     });
   });
@@ -465,10 +454,10 @@ describe('TemplateBrowser', () => {
     const sortSelect = screen.getByLabelText(/Sort By/);
     await user.selectOptions(sortSelect, 'rating');
     await waitFor(() => {
-      expect(templateService.searchTemplates).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          sortBy: 'rating',
-        })
+  expect(templateService.searchTemplates).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  sortBy: 'rating',
+}
       );
     });
   });
@@ -516,11 +505,11 @@ describe('TemplateBrowser', () => {
     expect(mockOnApplyTemplate).toHaveBeenCalledWith()
       'template-1',
       expect.objectContaining({)
-        preservePositions: false,
-        mergeWithCurrent: false,
-        offsetX: 100,
-        offsetY: 100,
-      })
+  preservePositions: false,
+  mergeWithCurrent: false,
+  offsetX: 100,
+  offsetY: 100,
+}
     );
   });
   it('should handle instantiation options', async () => {
@@ -545,9 +534,9 @@ describe('TemplateBrowser', () => {
     expect(mockOnApplyTemplate).toHaveBeenCalledWith()
       'template-1',
       expect.objectContaining({)
-        preservePositions: true,
-        mergeWithCurrent: true,
-      })
+  preservePositions: true,
+  mergeWithCurrent: true,
+}
     );
   });
   it('should handle view mode switch', async () => {
@@ -608,7 +597,7 @@ describe('TemplateBrowser', () => {
     // Find delete button (should only appear for templates by current author)
     const deleteButton = screen.getByTitle('Delete template');
     // Mock window.confirm
-    window.confirm = jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown);
+    window.confirm = jest.fn<unknown, unknown>().mockReturnValue(true as unknown as unknown);
     await user.click(deleteButton);
     expect(window.confirm).toHaveBeenCalledWith()
       'Are you sure you want to delete this template? This action cannot be undone.'

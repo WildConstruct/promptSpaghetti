@@ -14,6 +14,7 @@ import SMSRateLimitingService, {
   RateLimitAlgorithm
 } from '../services/SMSRateLimitingService';
 
+}
 interface SendSMSBody {
   to: string;
   message: string;
@@ -25,22 +26,29 @@ interface SendSMSBody {
   scheduledAt?: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 interface BatchSendSMSBody {
   messages: SendSMSBody[];
   queueImmediate?: boolean;
 }
+}
 
+}
 interface UpdateConfigBody {
   configs: Array<{
     configId: string;
     config: Partial<RateLimitConfig>;
+}
   }>;
 }
 
+}
 interface RateLimitCheckParams {
   scope: RateLimitScope;
   identifier: string;
+}
 }
 
 // Initialize the SMS rate limiting service
@@ -69,16 +77,16 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: {
             type: 'string',
             enum: Object.values(SMSMessageType)
-          },
+  }
           from: { type: 'string' },
           userId: { type: 'string' },
           tenantId: { type: 'string' },
           priority: { type: 'number', minimum: 1, maximum: 10 },
           scheduledAt: { type: 'string', format: 'date-time' },
           metadata: { type: 'object' }
-        },
+  }
         required: ['to', 'message', 'type']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -87,9 +95,9 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
             messageId: { type: 'string' },
             queuePosition: { type: 'number' },
             estimatedDeliveryTime: { type: 'string', format: 'date-time' }
-          },
+  }
           required: ['success']
-        },
+  }
         429: {
           type: 'object',
           properties: {
@@ -184,16 +192,16 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                 priority: { type: 'number', minimum: 1, maximum: 10 },
                 scheduledAt: { type: 'string', format: 'date-time' },
                 metadata: { type: 'object' }
-              },
+  }
               required: ['to', 'message', 'type']
-            },
+  }
             minItems: 1,
             maxItems: 100
-          },
+  }
           queueImmediate: { type: 'boolean' }
-        },
+  }
         required: ['messages']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -209,7 +217,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                   error: { type: 'string' }
                 }
               }
-            },
+  }
             summary: {
               type: 'object',
               properties: {
@@ -286,12 +294,12 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: {
             type: 'string',
             enum: [SMSMessageType.SECURITY_ALERT, SMSMessageType.SYSTEM_ALERT]
-          },
+  }
           from: { type: 'string' },
           userId: { type: 'string' },
           tenantId: { type: 'string' },
           metadata: { type: 'object' }
-        },
+  }
         required: ['to', 'message', 'type']
       }
     }
@@ -387,7 +395,7 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
             enum: Object.values(RateLimitScope)
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -446,11 +454,11 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
                     enabled: { type: 'boolean' }
                   }
                 }
-              },
+  }
               required: ['configId', 'config']
             }
           }
-        },
+  }
         required: ['configs']
       }
     }
@@ -506,9 +514,9 @@ export default async function smsRateLimitingRoutes(fastify: FastifyInstance) {
           type: { type: 'string', enum: Object.values(SMSMessageType) },
           userId: { type: 'string' },
           tenantId: { type: 'string' }
-        },
+  }
         required: ['to', 'type']
-      },
+  }
       response: {
         200: {
           type: 'object',

@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { EventEmitter } from 'events';
 import jwt from 'jsonwebtoken';
 
+}
 export interface SessionConfig {
   sessionDuration: number; // seconds
   refreshTokenDuration: number; // seconds
@@ -23,6 +24,7 @@ export interface SessionConfig {
     sameSite: 'strict' | 'lax' | 'none';
     domain?: string;
     path: string;
+}
   };
   sessionRotation: {
     enabled: boolean;
@@ -38,6 +40,7 @@ export interface SessionConfig {
   };
 }
 
+}
 export interface Session {
   id: string;
   userId: string;
@@ -50,6 +53,7 @@ export interface Session {
     previousTokens?: Array<{
       token: string;
       validUntil: Date;
+}
     }>;
   };
   
@@ -97,6 +101,7 @@ export interface Session {
   };
 }
 
+}
 export interface DeviceProfile {
   id: string;
   userId: string;
@@ -109,6 +114,7 @@ export interface DeviceProfile {
     registeredFrom: string;
     verificationMethod: 'email' | 'sms' | 'push' | 'manual';
     verifiedAt?: Date;
+}
   };
   
   trustInfo: {
@@ -138,6 +144,7 @@ export interface DeviceProfile {
   };
 }
 
+}
 export interface SessionActivity {
   sessionId: string;
   timestamp: Date;
@@ -147,6 +154,7 @@ export interface SessionActivity {
   statusCode?: number;
   responseTime?: number;
   metadata: Record<string, any>;
+}
 }
 
 export class EnhancedSessionService extends EventEmitter {
@@ -187,6 +195,7 @@ export class EnhancedSessionService extends EventEmitter {
     };
     cookieOptions: any;
   }> {
+
     // Validate concurrent sessions
     await this.validateConcurrentSessions(userId);
     
@@ -208,7 +217,7 @@ export class EnhancedSessionService extends EventEmitter {
         sessionToken: tokens.sessionToken,
         refreshToken: tokens.refreshToken,
         csrfToken: tokens.csrfToken
-      },
+  }
       metadata: {
         createdAt: new Date(),
         lastActivity: new Date(),
@@ -218,19 +227,19 @@ export class EnhancedSessionService extends EventEmitter {
         ipAddress: context.ipAddress,
         deviceFingerprint: context.deviceFingerprint,
         geolocation: context.geolocation
-      },
+  }
       security: {
         mfaVerified: context.mfaVerified || false,
         riskScore: securityAssessment.riskScore,
         trustLevel: securityAssessment.trustLevel,
         securityFlags: securityAssessment.flags,
         encryptionVersion: 1
-      },
+  }
       permissions: {
         scopes: context.scopes || ['basic'],
         restrictions: securityAssessment.restrictions,
         impersonating: context.impersonatedBy
-      },
+  }
       status: 'active',
       analytics: {
         requestCount: 0,
@@ -291,6 +300,7 @@ export class EnhancedSessionService extends EventEmitter {
     reason?: string;
     requiresAction?: string[];
   }> {
+
     // Check if token is blacklisted
     if (this.blacklistedTokens.has(sessionToken)) {
       return {
@@ -386,6 +396,7 @@ export class EnhancedSessionService extends EventEmitter {
     };
     reason?: string;
   }> {
+
     // Verify refresh token
     let decoded: any;
     try {
@@ -453,6 +464,7 @@ export class EnhancedSessionService extends EventEmitter {
    * Implement session expiration with grace periods
    */
   async implementSessionExpiration(): Promise<void> {
+
     for (const [sessionId, session] of this.sessions.entries()) {
       const now = new Date();
       
@@ -501,6 +513,7 @@ export class EnhancedSessionService extends EventEmitter {
     success: boolean;
     message: string;
   }> {
+
     const session = this.sessions.get(sessionId);
     if (!session) {
       return {
@@ -623,6 +636,7 @@ export class EnhancedSessionService extends EventEmitter {
   // Private helper methods
 
   private async validateConcurrentSessions(userId: string): Promise<void> {
+
     const userSessionIds = this.userSessions.get(userId) || new Set();
     const activeSessions = Array.from(userSessionIds)
       .map(id => this.sessions.get(id))
@@ -644,6 +658,7 @@ export class EnhancedSessionService extends EventEmitter {
     userId: string,
     context: any
   ): Promise<DeviceProfile> {
+
     const fingerprint = context.deviceFingerprint || this.generateDeviceFingerprint(context);
     const existingDevice = Array.from(this.deviceProfiles.values())
       .find(d => d.userId === userId && d.fingerprint === fingerprint);
@@ -662,13 +677,13 @@ export class EnhancedSessionService extends EventEmitter {
         registeredAt: new Date(),
         registeredFrom: context.ipAddress,
         verificationMethod: 'manual'
-      },
+  }
       trustInfo: {
         trusted: false,
         trustLevel: 0,
         lastVerified: new Date(),
         verificationCount: 0
-      },
+  }
       sessionHistory: [],
       metadata: {
         platform: this.detectPlatform(context.userAgent),
@@ -694,6 +709,7 @@ export class EnhancedSessionService extends EventEmitter {
     flags: string[];
     restrictions: string[];
   }> {
+
     let riskScore = 0;
     const flags = [];
     const restrictions = [];
@@ -780,6 +796,7 @@ export class EnhancedSessionService extends EventEmitter {
     refreshToken: string;
     csrfToken: string;
   }> {
+
     // Store previous tokens if configured
     if (this.config.sessionRotation.keepPreviousValid) {
       if (!session.tokens.previousTokens) {
@@ -813,6 +830,7 @@ export class EnhancedSessionService extends EventEmitter {
   }
 
   private async storeSession(session: Session): Promise<void> {
+
     this.sessions.set(session.id, session);
     
     const userSessions = this.userSessions.get(session.userId) || new Set();
@@ -825,6 +843,7 @@ export class EnhancedSessionService extends EventEmitter {
     session?: Session;
     reason?: string;
   }> {
+
     // Validate device fingerprint if required
     if (this.config.requireDeviceFingerprint && session.metadata.deviceFingerprint) {
       const currentFingerprint = this.generateDeviceFingerprint(context);
@@ -894,6 +913,7 @@ export class EnhancedSessionService extends EventEmitter {
   }
 
   private async expireSession(sessionId: string): Promise<void> {
+
     const session = this.sessions.get(sessionId);
     if (!session) return;
     
@@ -914,6 +934,7 @@ export class EnhancedSessionService extends EventEmitter {
     activityType: SessionActivity['activityType'],
     metadata: Record<string, any>
   ): Promise<void> {
+
     const activity: SessionActivity = {
       sessionId,
       timestamp: new Date(),
@@ -978,6 +999,7 @@ export class EnhancedSessionService extends EventEmitter {
   }
 
   private async performMaintenance(): Promise<void> {
+
     // Implement session expiration
     await this.implementSessionExpiration();
     

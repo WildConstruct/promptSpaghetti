@@ -18,6 +18,7 @@ import * as bcrypt from 'bcrypt';
 // Epic 17 Password Management Types
 // =============================================================================
 
+}
 export interface Epic17PasswordConfig {
   // API Key Secret Management
   apiKeySecretLength: number;
@@ -32,6 +33,7 @@ export interface Epic17PasswordConfig {
     requireNumbers: boolean;
     requireSymbols: boolean;
     minUniqueChars: number;
+}
   };
   adminPasswordMaxAge: number; // days
   adminPasswordHistoryCount: number;
@@ -58,6 +60,7 @@ export interface Epic17PasswordConfig {
   retentionDays: number;
 }
 
+}
 export interface ApiKeySecret {
   keyId: string;
   secretId: string;
@@ -74,9 +77,11 @@ export interface ApiKeySecret {
     rotationReason?: string;
     strength: number;
     entropy: number;
+}
   };
 }
 
+}
 export interface AdminCredential {
   credentialId: string;
   userId: string;
@@ -106,9 +111,11 @@ export interface AdminCredential {
     lastModifiedBy?: string;
     reasonForChange?: string;
     approvedBy?: string;
+}
   };
 }
 
+}
 export interface ServiceAuthentication {
   serviceId: string;
   serviceName: string;
@@ -118,6 +125,7 @@ export interface ServiceAuthentication {
     backup?: string;
     certificate?: string;
     privateKey?: string;
+}
   };
   encryptionMethod: string;
   rotationSchedule: {
@@ -135,6 +143,7 @@ export interface ServiceAuthentication {
   };
 }
 
+}
 export interface PasswordSecurityEvent {
   eventId: string;
   eventType: 'creation' | 'rotation' | 'access' | 'failure' | 'breach' | 'compromise';
@@ -148,12 +157,14 @@ export interface PasswordSecurityEvent {
     userAgent?: string;
     location?: string;
     riskScore?: number;
+}
   };
   timestamp: Date;
   resolved: boolean;
   resolutionNotes?: string;
 }
 
+}
 export interface VaultEntry {
   vaultId: string;
   entryType: 'api_key_secret' | 'admin_password' | 'service_token' | 'encryption_key';
@@ -165,6 +176,7 @@ export interface VaultEntry {
     algorithm: string;
     iterations: number;
     salt: string;
+}
   };
   accessLog: Array<{
     accessedAt: Date;
@@ -206,7 +218,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
         requireNumbers: true,
         requireSymbols: true,
         minUniqueChars: 8
-      },
+  }
       adminPasswordMaxAge: 90,
       adminPasswordHistoryCount: 12,
       
@@ -245,6 +257,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
    * Generate secure API key secret with entropy tracking
    */
   async generateApiKeySecret(keyId: string, createdBy: string): Promise<{ secret: string; secretId: string }> {
+
     try {
       const secret = this.generateSecureSecret(this.config.apiKeySecretLength);
       const secretId = crypto.randomUUID();
@@ -315,6 +328,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
    * Verify API key secret with rate limiting and logging
    */
   async verifyApiKeySecret(keyId: string, providedSecret: string): Promise<boolean> {
+
     try {
       // Check if key is locked due to failed attempts
       const lockStatus = await this.checkKeyLockStatus(keyId);
@@ -416,6 +430,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
    * Rotate API key secret with zero-downtime strategy
    */
   async rotateApiKeySecret(keyId: string, rotatedBy: string, reason?: string): Promise<{ newSecret: string; secretId: string }> {
+
     try {
       // Generate new secret
       const newSecret = this.generateSecureSecret(this.config.apiKeySecretLength);
@@ -489,6 +504,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     isTemporary: boolean = false,
     setBy?: string
   ): Promise<{ credentialId: string; mustChangeAt?: Date }> {
+
     try {
       // Validate password strength
       const validation = this.validateAdminPassword(password);
@@ -591,6 +607,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
    * Verify administrative password with enhanced security checks
    */
   async verifyAdminPassword(userId: string, password: string, sourceIP?: string): Promise<boolean> {
+
     try {
       // Get active credential
       const credData = await this.database.query(`
@@ -726,6 +743,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     scope: string[] = [],
     rotationIntervalHours: number = 24
   ): Promise<ServiceAuthentication> {
+
     try {
       const serviceId = crypto.randomUUID();
       
@@ -771,7 +789,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           enabled: rotationIntervalHours > 0,
           intervalHours: rotationIntervalHours,
           nextRotationAt
-        },
+  }
         accessScope: scope,
         status: 'active',
         metadata: {
@@ -842,6 +860,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
     keyIdentifier: string,
     value: string
   ): Promise<void> {
+
     try {
       const vaultId = crypto.randomUUID();
       const iv = crypto.randomBytes(16);
@@ -869,7 +888,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
           algorithm: 'pbkdf2',
           iterations: 100000,
           salt: salt.toString('hex')
-        },
+  }
         accessLog: [],
         createdAt: new Date()
       };
@@ -945,7 +964,8 @@ export class Epic17PasswordManagementService extends EventEmitter {
     if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) score += 10;
     
     // Pattern penalties
-    if (/(.)\1{2,}/.test(password)) score -= 10; // Repeated characters
+    if (/(.)\1{2
+}/.test(password)) score -= 10; // Repeated characters
     if (/123|abc|qwe/i.test(password)) score -= 15; // Sequential characters
     
     // Entropy bonus
@@ -1010,6 +1030,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
    * Log security events with structured data
    */
   private async logSecurityEvent(event: Omit<PasswordSecurityEvent, 'eventId' | 'timestamp' | 'resolved'>): Promise<void> {
+
     try {
       const securityEvent: PasswordSecurityEvent = {
         eventId: crypto.randomUUID(),
@@ -1061,6 +1082,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   // =============================================================================
 
   private async initializeService(): Promise<void> {
+
     try {
       // Initialize database tables if they don't exist
       await this.initializeTables();
@@ -1082,6 +1104,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   private async initializeTables(): Promise<void> {
+
     // This would contain the CREATE TABLE statements for all Epic 17 password management tables
     // Implementation would include proper schema creation
     console.log('📊 Epic 17 password management database tables initialized');
@@ -1123,6 +1146,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   private async cleanupExpiredSecrets(): Promise<void> {
+
     try {
       const result = await this.database.query(`
         UPDATE epic17_api_key_secrets 
@@ -1139,6 +1163,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   private async cleanupSecurityEvents(): Promise<void> {
+
     try {
       const retentionDate = new Date(Date.now() - this.config.retentionDays * 24 * 60 * 60 * 1000);
       
@@ -1158,26 +1183,31 @@ export class Epic17PasswordManagementService extends EventEmitter {
   // Additional helper methods would be implemented here...
   
   private async checkKeyLockStatus(keyId: string): Promise<{ isLocked: boolean; reason?: string }> {
+
     // Implementation for checking if a key is locked
     return { isLocked: false };
   }
 
   private async lockApiKey(keyId: string, reason: string): Promise<void> {
+
     // Implementation for locking an API key
     console.log(`🔒 Locked API key ${keyId}: ${reason}`);
   }
 
   private async checkPasswordHistory(userId: string, password: string): Promise<{ allowed: boolean; reason?: string }> {
+
     // Implementation for checking password history
     return { allowed: true };
   }
 
   private async checkPasswordBreach(password: string): Promise<{ isBreached: boolean; breachCount?: number }> {
+
     // Implementation for checking password breaches
     return { isBreached: false };
   }
 
   private async addToPasswordHistory(userId: string, hashedPassword: string, credentialId: string): Promise<void> {
+
     // Implementation for adding to password history
   }
 
@@ -1193,6 +1223,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   private async generateServiceCertificate(serviceName: string): Promise<{ certificate: string; privateKey: string }> {
+
     // Implementation for generating service certificates
     return {
       certificate: '-----BEGIN CERTIFICATE-----\n[certificate data]\n-----END CERTIFICATE-----',
@@ -1201,17 +1232,20 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   private async encryptServiceCredentials(credentials: any): Promise<any> {
+
     // Implementation for encrypting service credentials
     return credentials;
   }
 
   private async rotateServiceCredentials(serviceId: string): Promise<void> {
+
     // Implementation for rotating service credentials
     console.log(`🔄 Rotating credentials for service ${serviceId}`);
   }
 
   // Public management methods
   async getPasswordSecurityMetrics(): Promise<any> {
+
     try {
       const metrics = await this.database.query(`
         SELECT 
@@ -1231,6 +1265,7 @@ export class Epic17PasswordManagementService extends EventEmitter {
   }
 
   async forceRotateAllSecrets(): Promise<void> {
+
     // Emergency rotation of all secrets
     console.log('🚨 Starting emergency rotation of all secrets...');
     // Implementation would handle bulk rotation

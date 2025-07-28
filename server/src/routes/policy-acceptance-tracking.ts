@@ -51,7 +51,7 @@ const RecordAcceptanceSchema = z.object({
       documentsViewed: z.array(z.string()).default([]),
       viewDuration: z.number().min(0),
       hesitationTime: z.number().min(0)
-    })
+  }
   }),
   consentData: z.object({
     consentId: z.string(),
@@ -266,12 +266,12 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           policyType: { 
             type: 'string',
             enum: ['PRIVACY_POLICY', 'TERMS_OF_SERVICE', 'COOKIE_POLICY', 'DATA_PROCESSING', 'MARKETING_CONSENT', 'RESEARCH_CONSENT']
-          },
+  }
           acceptanceType: { type: 'string', enum: ['INITIAL', 'RENEWAL', 'UPDATE', 'RECONFIRMATION'], default: 'INITIAL' },
           acceptanceMethod: { 
             type: 'string',
             enum: ['CLICK_THROUGH', 'ELECTRONIC_SIGNATURE', 'OPT_IN_CHECKBOX', 'DIGITAL_SIGNATURE', 'BIOMETRIC', 'TWO_FACTOR']
-          },
+  }
           acceptanceContext: {
             type: 'object',
             properties: {
@@ -290,12 +290,12 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   documentsViewed: { type: 'array', items: { type: 'string' }, default: [] },
                   viewDuration: { type: 'number', minimum: 0 },
                   hesitationTime: { type: 'number', minimum: 0 }
-                },
+  }
                 required: ['timeOnPage', 'scrollPercentage', 'clicksBeforeAcceptance', 'viewDuration', 'hesitationTime']
               }
-            },
+  }
             required: ['ipAddress', 'userAgent', 'sessionId', 'pageUrl', 'deviceFingerprint', 'interactionMetrics']
-          },
+  }
           consentData: {
             type: 'object',
             properties: {
@@ -312,10 +312,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                     required: { type: 'boolean' },
                     granted: { type: 'boolean' },
                     grantedAt: { type: 'string', format: 'date-time' }
-                  },
+  }
                   required: ['consentId', 'purpose', 'dataTypes', 'required', 'granted']
                 }
-              },
+  }
               legalBasis: {
                 type: 'array',
                 items: {
@@ -326,10 +326,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                     regulation: { type: 'string' },
                     article: { type: 'string' },
                     justification: { type: 'string' }
-                  },
+  }
                   required: ['basisType', 'description', 'regulation', 'justification']
                 }
-              },
+  }
               processingPurposes: { type: 'array', items: { type: 'object' } },
               dataCategories: { type: 'array', items: { type: 'string' } },
               retentionPeriod: { type: 'number', minimum: 1, default: 365 },
@@ -338,13 +338,13 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
               marketingConsent: { type: 'object' },
               cookieConsent: { type: 'object' },
               dataTransfers: { type: 'array', items: { type: 'object' }, default: [] }
-            },
+  }
             required: ['consentId', 'granularConsents', 'legalBasis', 'processingPurposes', 'dataCategories']
-          },
+  }
           metadata: { type: 'object', default: {} }
-        },
+  }
         required: ['policyId', 'policyVersion', 'policyType', 'acceptanceMethod', 'acceptanceContext', 'consentData']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -418,14 +418,14 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                 scheduledAt: { type: 'string', format: 'date-time' },
                 status: { type: 'string', enum: ['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED'], default: 'SCHEDULED' },
                 evidence: { type: 'array', items: { type: 'string' }, default: [] }
-              },
+  }
               required: ['actionId', 'actionType', 'targetData', 'scheduledAt']
-            },
+  }
             default: []
           }
-        },
+  }
         required: ['acceptanceId', 'withdrawalType', 'withdrawalScope', 'reason']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -481,9 +481,9 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-        },
+  }
         required: ['userId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -502,7 +502,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   status: { type: 'string' }
                 }
               }
-            },
+  }
             complianceFlags: {
               type: 'array',
               items: {
@@ -515,7 +515,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   raisedAt: { type: 'string', format: 'date-time' }
                 }
               }
-            },
+  }
             riskScore: { type: 'number' },
             renewalRequests: {
               type: 'array',
@@ -594,15 +594,15 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-        },
+  }
         required: ['userId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['JSON', 'CSV', 'XML'], default: 'JSON' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -703,7 +703,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           policyTypes: { type: 'array', items: { type: 'string' } },
           flagTypes: { type: 'array', items: { type: 'string' } }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',

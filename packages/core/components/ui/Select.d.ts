@@ -1,10 +1,11 @@
 import React from 'react';
+
 interface SelectProps {
     children?: React.ReactNode;
     onValueChange?: (value: string) => void;
     value?: string;
     defaultValue?: string;
-}
+
 export declare const Select: React.FC<SelectProps>;
 export declare const SelectTrigger: React.FC<React.HTMLAttributes<HTMLButtonElement>>;
 export declare const SelectValue: React.FC<{

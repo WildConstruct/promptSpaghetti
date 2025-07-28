@@ -40,8 +40,9 @@ import { Template } from './TemplatePreviewModal';
 import { EmbedConfiguration, EmbedTheme, EmbedSize, EmbedFeatures } from '../embed/EmbeddableContent';
 
 // Enhanced types for embedded template previews
+
 export interface EmbeddedTemplatePreviewProps {
-  template: Template;
+  template: Template;,
   embedConfig: EmbedConfiguration;
   showCustomization?: boolean;
   onCustomize?: (config: Partial<EmbedConfiguration>) => void;
@@ -60,72 +61,65 @@ export interface EmbeddedTemplatePreviewProps {
   maxWidth?: number;
   maxHeight?: number;
 }
-
 export interface ShareMethod {
   type: 'link' | 'embed' | 'social' | 'email' | 'copy';
   platform?: 'twitter' | 'linkedin' | 'facebook' | 'reddit' | 'discord';
   customization?: EmbedCustomization;
 }
-
 export interface EmbedCustomization {
-  size: EmbedSize;
+  size: EmbedSize;,
   theme: EmbedTheme;
-  features: EmbedFeatures;
+  features: EmbedFeatures;,
   layout: EmbedLayout;
-  branding: EmbedBranding;
+  branding: EmbedBranding;,
   social: EmbedSocialConfig;
 }
-
 export interface EmbedLayout {
-  orientation: 'horizontal' | 'vertical' | 'grid';
+  orientation: 'horizontal' | 'vertical' | 'grid';,
   showHeader: boolean;
-  showFooter: boolean;
+  showFooter: boolean;,
   showSidebar: boolean;
-  contentAlignment: 'left' | 'center' | 'right';
+  contentAlignment: 'left' | 'center' | 'right';,
   spacing: 'tight' | 'normal' | 'loose';
-  borderRadius: number;
+  borderRadius: number;,
   shadow: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 }
-
 export interface EmbedBranding {
-  showLogo: boolean;
+  showLogo: boolean;,
   showTitle: boolean;
-  showAuthor: boolean;
+  showAuthor: boolean;,
   showPoweredBy: boolean;
-  customColors?: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    text: string;
-  };
+  customColors?: {,
+  primary: string;,
+  secondary: string;
+  accent: string;,
+  background: string;
+  text: string;
+};
   customFonts?: {
-    heading: string;
-    body: string;
-  };
+  heading: string;,
+  body: string;
+};
 }
-
 export interface EmbedSocialConfig {
-  showLikes: boolean;
+  showLikes: boolean;,
   showShares: boolean;
-  showComments: boolean;
+  showComments: boolean;,
   showRating: boolean;
-  showDownloads: boolean;
+  showDownloads: boolean;,
   enableInteraction: boolean;
-  showAuthorInfo: boolean;
+  showAuthorInfo: boolean;,
   showStats: boolean;
 }
-
 export interface PreviewSize {
-  width: number;
+  width: number;,
   height: number;
-  label: string;
+  label: string;,
   icon: React.ComponentType<unknown>;
   description: string;
+  // Predefined preview sizes
 }
-
-// Predefined preview sizes
-export const PREVIEW_SIZES: PreviewSize[] = [
+export const PREVIEW_SIZES: PreviewSize = [
   { width: 320, height: 568, label: 'Mobile', icon: DevicePhoneMobileIcon, description: 'iPhone/Android portrait' },
   { width: 768, height: 1024, label: 'Tablet', icon: TabletIcon, description: 'iPad portrait' },
   { width: 1024, height: 768, label: 'Tablet Landscape', icon: TabletIcon, description: 'iPad landscape' },
@@ -135,9 +129,9 @@ export const PREVIEW_SIZES: PreviewSize[] = [
 ];
 
 // Embed code generation component
-export const EmbedCodeGenerator: React.FC<{
+export const EmbedCodeGenerator: React.FC<{,
   template: Template;
-  customization: EmbedCustomization;
+  customization: EmbedCustomization;,
   onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
 }> = ({ template, customization, onCustomizationChange }) => {
   const [activeTab, setActiveTab] = useState<'iframe' | 'javascript' | 'react'>('iframe');
@@ -145,13 +139,14 @@ export const EmbedCodeGenerator: React.FC<{
   const embedCode = useMemo(() => {
     const baseUrl = `${window.location.origin}/embed/template/${template.id}`;}
     const params = new URLSearchParams({)
-      theme: customization.theme.name,
-      size: `${customization.size.width}x${customization.size.height}`,}
-      features: JSON.stringify(customization.features),
+  theme: customization.theme.name,
+      size: `${customization.size.width}x${customization.size.height}`}
+},
+  features: JSON.stringify(customization.features),
       layout: JSON.stringify(customization.layout),
       branding: JSON.stringify(customization.branding),
-      social: JSON.stringify(customization.social),
-    });
+      social: JSON.stringify(customization.social);
+  });
     switch (activeTab) {
     case 'iframe':
       return `<iframe
@@ -184,17 +179,24 @@ export const EmbedCodeGenerator: React.FC<{
       return `import { EmbeddedTemplatePreview } from '@promptspaghetti/components';
 <EmbeddedTemplatePreview
   template={{
-    id: "${template.id}",}
-    title: "${template.title}",}
-    description: "${template.description}"}
+    id: "${template.id}"}
+},
+  title: "${template.title}"}
+},
+  description: "${template.description}"}
   }}
   embedConfig={{
-    theme: "${customization.theme.name}",}
-    size: { width: ${customization.size.width}, height: ${customization.size.height} },}
-    features: ${JSON.stringify(customization.features, null, 2)},}
-    layout: ${JSON.stringify(customization.layout, null, 2)},}
-    branding: ${JSON.stringify(customization.branding, null, 2)},}
-    social: ${JSON.stringify(customization.social, null, 2)}
+    theme: "${customization.theme.name}"}
+},
+  size: { width: ${customization.size.width}, height: ${customization.size.height} }
+},
+  features: ${JSON.stringify(customization.features, null, 2)}
+},
+  layout: ${JSON.stringify(customization.layout, null, 2)}
+},
+  branding: ${JSON.stringify(customization.branding, null, 2)}
+},
+  social: ${JSON.stringify(customization.social, null, 2)}
   }}
   variant="standard"
   interactive={true}
@@ -202,7 +204,6 @@ export const EmbedCodeGenerator: React.FC<{
 />`;
     default:
       return '';
-    }
   }, [template, customization, activeTab]);
   const copyToClipboard = useCallback(async () => {
     try {
@@ -210,10 +211,9 @@ export const EmbedCodeGenerator: React.FC<{
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy code:', err);
-    }
-  }, [embedCode]);
-  return ();
+  console.error('Failed to copy code:', err);
+}, [embedCode]);
+  return;
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <div className="flex items-center justify-between p-4">
@@ -236,10 +236,10 @@ export const EmbedCodeGenerator: React.FC<{
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`py-3 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               {tab.label}
             </button>
@@ -256,39 +256,39 @@ export const EmbedCodeGenerator: React.FC<{
 };
 
 // Customization panel component
-export const EmbedCustomizationPanel: React.FC<{
+export const EmbedCustomizationPanel: React.FC<{,
   customization: EmbedCustomization;
-  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;
+  onCustomizationChange: (updates: Partial<EmbedCustomization>) => void;,
   previewSize: PreviewSize;
   onPreviewSizeChange: (size: PreviewSize) => void;
 }> = ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
   const [activeSection, setActiveSection] = useState<'size' | 'theme' | 'layout' | 'features' | 'branding'>('size');
   const updateSize = useCallback((updates: Partial<EmbedSize>) => {
     onCustomizationChange({)
-      size: { ...customization.size, ...updates }
+  size: { ...customization.size, ...updates }
     });
   }, [customization.size, onCustomizationChange]);
   const updateTheme = useCallback((updates: Partial<EmbedTheme>) => {
     onCustomizationChange({)
-      theme: { ...customization.theme, ...updates }
+  theme: { ...customization.theme, ...updates }
     });
   }, [customization.theme, onCustomizationChange]);
   const updateLayout = useCallback((updates: Partial<EmbedLayout>) => {
     onCustomizationChange({)
-      layout: { ...customization.layout, ...updates }
+  layout: { ...customization.layout, ...updates }
     });
   }, [customization.layout, onCustomizationChange]);
   const updateFeatures = useCallback((updates: Partial<EmbedFeatures>) => {
     onCustomizationChange({)
-      features: { ...customization.features, ...updates }
+  features: { ...customization.features, ...updates }
     });
   }, [customization.features, onCustomizationChange]);
   const updateBranding = useCallback((updates: Partial<EmbedBranding>) => {
     onCustomizationChange({)
-      branding: { ...customization.branding, ...updates }
+  branding: { ...customization.branding, ...updates }
     });
   }, [customization.branding, onCustomizationChange]);
-  return ();
+  return;
     <div className="bg-white border border-gray-200 rounded-lg">
       <div className="border-b border-gray-200">
         <h3 className="font-semibold text-gray-900 p-4">Customize Embed</h3>
@@ -301,15 +301,15 @@ export const EmbedCustomizationPanel: React.FC<{
             { id: 'branding', label: 'Branding', icon: PaintBrushIcon }
           ].map((section) => {
             const Icon = section.icon;
-            return ();
+            return;
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id as any)}
                 className={`flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm ${
-                  activeSection === section.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+  activeSection === section.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
               >
                 <Icon className="h-4 w-4" />
                 {section.label}
@@ -325,13 +325,13 @@ export const EmbedCustomizationPanel: React.FC<{
             <div className="grid grid-cols-2 gap-3 mb-4">
               {PREVIEW_SIZES.map((size) => {
                 const Icon = size.icon;
-                return ();
+                return;
                   <button
                     key={size.label}
                     onClick={() => onPreviewSizeChange(size)}
                     className={`flex items-center gap-3 p-3 border rounded-lg text-left hover:bg-gray-50 ${
-                      previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
-                    }`}
+  previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200',
+}`}
                   >
                     <Icon className="h-5 w-5 text-gray-600" />
                     <div>
@@ -378,8 +378,8 @@ export const EmbedCustomizationPanel: React.FC<{
                   key={theme}
                   onClick={() => updateTheme({ name: theme as any })}
                   className={`p-3 border rounded-lg text-center capitalize ${
-                    customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'
-                  }`}
+  customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
+}`}
                 >
                   {theme}
                 </button>
@@ -395,22 +395,20 @@ export const EmbedCustomizationPanel: React.FC<{
                       type="color"
                       value={value}
                       onChange={(e) => updateBranding({)
-                        customColors: {,
-                          ...customization.branding.customColors,
-                          [key]: e.target.value
-                        }
-                      })}
+  customColors: {,
+  ...customization.branding.customColors,
+  [key]: e.target.value,
+})}
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <input
                       type="text"
                       value={value}
                       onChange={(e) => updateBranding({)
-                        customColors: {,
-                          ...customization.branding.customColors,
-                          [key]: e.target.value
-                        }
-                      })}
+  customColors: {,
+  ...customization.branding.customColors,
+  [key]: e.target.value,
+})}
                       className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
                     />
                   </div>
@@ -429,10 +427,10 @@ export const EmbedCustomizationPanel: React.FC<{
                     key={orientation}
                     onClick={() => updateLayout({ orientation: orientation as any })}
                     className={`px-3 py-2 border rounded-md text-sm capitalize ${
-                      customization.layout.orientation === orientation 
-                        ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                        : 'border-gray-300 hover:bg-gray-50'
-                    }`}
+  customization.layout.orientation === orientation
+  ? 'border-blue-500 bg-blue-50 text-blue-700'
+  : 'border-gray-300 hover:bg-gray-50',
+}`}
                   >
                     {orientation}
                   </button>
@@ -447,10 +445,10 @@ export const EmbedCustomizationPanel: React.FC<{
                     key={alignment}
                     onClick={() => updateLayout({ contentAlignment: alignment as any })}
                     className={`px-3 py-2 border rounded-md text-sm capitalize ${
-                      customization.layout.contentAlignment === alignment 
-                        ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                        : 'border-gray-300 hover:bg-gray-50'
-                    }`}
+  customization.layout.contentAlignment === alignment
+  ? 'border-blue-500 bg-blue-50 text-blue-700'
+  : 'border-gray-300 hover:bg-gray-50',
+}`}
                   >
                     {alignment}
                   </button>
@@ -546,56 +544,54 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [previewSize, setPreviewSize] = useState<PreviewSize>(PREVIEW_SIZES[1]); // Default to tablet
   const [customization, setCustomization] = useState<EmbedCustomization>({)
-    size: { width: previewSize.width, height: previewSize.height, responsive: true },
+  size: { width: previewSize.width, height: previewSize.height, responsive: true },
     theme: { name: 'light', colors: {}, fonts: {} },
     features: {,
-      showPreview: true,
-      showMetadata: true,
-      showActions: showSocialActions,
-      showComments: false,
-      enableInteraction: interactive,
-      enableSharing: true,
-      enablePurchase: showPurchaseButton,
-      showRating: true,
-    },
-    layout: {,
-      orientation: 'vertical',
-      showHeader: true,
-      showFooter: true,
-      showSidebar: false,
-      contentAlignment: 'center',
-      spacing: 'normal',
-      borderRadius: 8,
-      shadow: 'md',
-    },
-    branding: {,
-      showLogo: true,
-      showTitle: true,
-      showAuthor: true,
-      showPoweredBy: true,
-      customColors: {,
-        primary: '#3B82F6',
-        secondary: '#64748B',
-        accent: '#10B981',
-        background: '#FFFFFF',
-        text: '#1F2937',
-      }
-    },
-    social: {,
-      showLikes: true,
-      showShares: true,
-      showComments: false,
-      showRating: true,
-      showDownloads: true,
-      enableInteraction: interactive,
-      showAuthorInfo: true,
-      showStats: showMetrics,
-    }
-  });
+  showPreview: true,
+  showMetadata: true,
+  showActions: showSocialActions,
+  showComments: false,
+  enableInteraction: interactive,
+  enableSharing: true,
+  enablePurchase: showPurchaseButton,
+  showRating: true,
+},
+  layout: {,
+  orientation: 'vertical',
+  showHeader: true,
+  showFooter: true,
+  showSidebar: false,
+  contentAlignment: 'center',
+  spacing: 'normal',
+  borderRadius: 8,
+  shadow: 'md',
+},
+  branding: {,
+  showLogo: true,
+  showTitle: true,
+  showAuthor: true,
+  showPoweredBy: true,
+  customColors: {,
+  primary: '#3B82F6',
+  secondary: '#64748B',
+  accent: '#10B981',
+  background: '#FFFFFF',
+  text: '#1F2937',
+},
+  social: {,
+  showLikes: true,
+  showShares: true,
+  showComments: false,
+  showRating: true,
+  showDownloads: true,
+  enableInteraction: interactive,
+  showAuthorInfo: true,
+  showStats: showMetrics,
+});
   // Update customization when preview size changes
   useEffect(() => {
     setCustomization(prev => ({)
-      ...prev,
+  ...prev,
       size: { ...prev.size, width: previewSize.width, height: previewSize.height }
     }));
   }, [previewSize]);
@@ -608,18 +604,17 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
     onShare?.({ ...method, customization });
   }, [onShare, customization]);
   const getVariantStyles = () => {
-    switch (variant) {
-    case 'compact':
-      return 'p-3 text-sm';
-    case 'detailed':
-      return 'p-6 text-base';
-    case 'showcase':
-      return 'p-8 text-lg';
-    default:
-      return 'p-4 text-sm';
-    }
-  };
-  return ();
+  switch (variant) {
+  case 'compact':,
+  return 'p-3 text-sm';
+  case 'detailed':,
+  return 'p-6 text-base';
+  case 'showcase':,
+  return 'p-8 text-lg';
+  default:,
+  return 'p-4 text-sm';
+};
+  return;
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -665,20 +660,20 @@ export const EmbeddedTemplatePreview: React.FC<EmbeddedTemplatePreviewProps> = (
           </div>
           <div 
             className="border border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center"
-            style={{ 
-              maxWidth: maxWidth || 'none',
-              maxHeight: maxHeight || 'none',
-              minHeight: '400px',
-            }}
+            style={{
+  maxWidth: maxWidth || 'none',
+  maxHeight: maxHeight || 'none',
+  minHeight: '400px',
+}}
           >
             <div 
               className="bg-white border border-gray-200 rounded shadow-md overflow-hidden"
-              style={{ 
-                width: Math.min(customization.size.width, maxWidth || customization.size.width),
-                height: Math.min(customization.size.height, maxHeight || customization.size.height),
-                maxWidth: '100%',
-                maxHeight: '100%',
-              }}
+              style={{
+  width: Math.min(customization.size.width, maxWidth || customization.size.width),
+  height: Math.min(customization.size.height, maxHeight || customization.size.height),
+  maxWidth: '100%',
+  maxHeight: '100%',
+}}
             >
               {/* Simulated embedded content */}
               <div className={`h-full flex flex-col ${getVariantStyles()}`}>}

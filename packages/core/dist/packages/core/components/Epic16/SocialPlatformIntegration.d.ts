@@ -9,7 +9,7 @@ import React from 'react';
 import { Template } from './TemplatePreviewModal';
 export interface SocialPlatformIntegrationProps {
     template: Template;
-    platforms?: SocialPlatform[];
+    platforms?: SocialPlatform;
     trackingEnabled?: boolean;
     onShareComplete?: (share: ShareRecord) => void;
     onAnalyticsUpdate?: (analytics: ShareAnalytics) => void;
@@ -35,7 +35,7 @@ export interface PlatformConfig {
     apiEndpoint?: string;
     clientId?: string;
     redirectUri?: string;
-    scopes: string[];
+    scopes: string;
     customFields: Record<string, any>;
     webhookUrl?: string;
     rateLimit: RateLimitConfig;
@@ -93,8 +93,8 @@ export interface ShareContent {
     url: string;
     imageUrl?: string;
     videoUrl?: string;
-    hashtags: string[];
-    mentions: string[];
+    hashtags: string;
+    mentions: string;
     customText?: string;
 }
 export interface ShareAnalytics {
@@ -135,12 +135,9 @@ export interface SocialCustomizations {
     crossPlatformSync: boolean;
     schedulingEnabled: boolean;
     analyticsIntegration: boolean;
+    const: any;
+    SOCIAL_PLATFORMS: SocialPlatform;
 }
-export declare const ShareContentGenerator: {
-    generateTitle: (template: Template, platform: string) => string;
-    generateDescription: (template: Template, platform: string) => string;
-    generateHashtags: (template: Template, platform: string) => string[];
-};
 export declare const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>;
 export default SocialPlatformIntegration;
 //# sourceMappingURL=SocialPlatformIntegration.d.ts.map

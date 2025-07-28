@@ -19,155 +19,139 @@ export enum AssignmentType {
   ROLE = 'role',
   TEAM = 'team',
   QUOTA = 'quota'
-}
-
-export enum BulkOperationType {
+  export enum BulkOperationType {
   ASSIGN = 'assign',
   REVOKE = 'revoke',
   UPDATE = 'update',
   TRANSFER = 'transfer'
-}
-
-export interface BulkAssignmentTarget {
-  id: string;
+  export interface BulkAssignmentTarget {
+  id: string;,
   type: 'user' | 'team' | 'service' | 'role';
   name: string;
   email?: string;
   department?: string;
-  currentAssignments?: Assignment[];
-  conflicts?: AssignmentConflict[];
+  currentAssignments?: Assignment;
+  conflicts?: AssignmentConflict;
   metadata?: Record<string, any>;
 }
-
 export interface Assignment {
-  id: string;
+  id: string;,
   assignmentType: AssignmentType;
-  resourceId: string;
+  resourceId: string;,
   resourceName: string;
   assignedAt: Date;
   expiresAt?: Date;
-  status: 'active' | 'expired' | 'suspended';
+  status: 'active' | 'expired' | 'suspended';,
   assignedBy: string;
   metadata?: Record<string, any>;
 }
-
 export interface AssignmentConflict {
-  type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
+  type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';,
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  affectedAssignments: string[];
+  severity: 'low' | 'medium' | 'high' | 'critical';,
+  affectedAssignments: string;
   resolution?: 'skip' | 'override' | 'merge' | 'escalate';
 }
-
 export interface BulkAssignmentOperation {
-  operationId: string;
+  operationId: string;,
   operationType: BulkOperationType;
-  assignmentType: AssignmentType;
-  targets: BulkAssignmentTarget[];
-  resources: AssignmentResource[];
+  assignmentType: AssignmentType;,
+  targets: BulkAssignmentTarget;
+  resources: AssignmentResource;,
   parameters: BulkAssignmentParameters;
   template?: AssignmentTemplate;
   status: 'draft' | 'validating' | 'pending_approval' | 'executing' | 'completed' | 'failed' | 'cancelled';
   progress?: BulkAssignmentProgress;
-  conflicts?: AssignmentConflict[];
-  results?: BulkAssignmentResult[];
+  conflicts?: AssignmentConflict;
+  results?: BulkAssignmentResult;
 }
-
 export interface AssignmentResource {
-  id: string;
+  id: string;,
   type: AssignmentType;
   name: string;
   description?: string;
   tier?: 'basic' | 'standard' | 'premium' | 'enterprise';
-  permissions?: string[];
-  restrictions?: string[];
+  permissions?: string;
+  restrictions?: string;
   quotaLimits?: Record<string, number>;
   metadata?: Record<string, any>;
 }
-
 export interface BulkAssignmentParameters {
-  executionMode: 'immediate' | 'scheduled' | 'staged';
+  executionMode: 'immediate' | 'scheduled' | 'staged';,
   batchSize: number;
-  maxConcurrency: number;
+  maxConcurrency: number;,
   continueOnError: boolean;
   notifyTargets: boolean;
   scheduledAt?: Date;
   expirationDate?: Date;
-  gracePeriod?: number; // hours
-  rollbackOnFailure: boolean;
+  gracePeriod?: number; // hours,
+  rollbackOnFailure: boolean;,
   requireApproval: boolean;
-  autoResolveConflicts: boolean;
+  autoResolveConflicts: boolean;,
   customProperties: Record<string, any>;
 }
-
 export interface AssignmentTemplate {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   assignmentType: AssignmentType;
-  operationType: BulkOperationType;
+  operationType: BulkOperationType;,
   defaultParameters: Partial<BulkAssignmentParameters>;
-  defaultResources: string[];
-  targetFilters: TargetFilter[];
+  defaultResources: string;,
+  targetFilters: TargetFilter;
   usage: {,
-    timesUsed: number;
-    lastUsed?: Date;
-    successRate: number;
-  };
-  createdBy: string;
+  timesUsed: number;
+  lastUsed?: Date;
+  successRate: number;
+};
+  createdBy: string;,
   createdAt: Date;
   isSystemTemplate: boolean;
 }
-
 export interface TargetFilter {
-  field: string;
+  field: string;,
   operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
   value: Error;
   logicalOperator?: 'AND' | 'OR';
 }
-
 export interface BulkAssignmentProgress {
-  totalTargets: number;
+  totalTargets: number;,
   processedTargets: number;
-  successfulAssignments: number;
+  successfulAssignments: number;,
   failedAssignments: number;
-  skippedAssignments: number;
+  skippedAssignments: number;,
   conflictsResolved: number;
-  currentBatch: number;
+  currentBatch: number;,
   totalBatches: number;
   percentComplete: number;
-  estimatedTimeRemaining?: number; // minutes
+  estimatedTimeRemaining?: number; // minutes,
   currentStep: string;
 }
-
 export interface BulkAssignmentResult {
-  targetId: string;
+  targetId: string;,
   targetName: string;
-  status: 'success' | 'failed' | 'skipped' | 'partial';
-  assignedResources: string[];
-  errors?: string[];
-  warnings?: string[];
-  conflictsEncountered?: AssignmentConflict[];
-  processingTime: number; // milliseconds
+  status: 'success' | 'failed' | 'skipped' | 'partial';,
+  assignedResources: string;
+  errors?: string;
+  warnings?: string;
+  conflictsEncountered?: AssignmentConflict;
+  processingTime: number; // milliseconds,
   metadata?: Record<string, any>;
+  // =============================================================================
+  // Main Bulk Assignment Tools Component
+  // =============================================================================
 }
-
-// =============================================================================
-// Main Bulk Assignment Tools Component
-// =============================================================================
-
 export interface BulkAssignmentToolsProps {
-  assignmentType: AssignmentType;
+  assignmentType: AssignmentType;,
   operationType: BulkOperationType;
-  availableTargets: BulkAssignmentTarget[];
-  availableResources: AssignmentResource[];
-  availableTemplates: AssignmentTemplate[];
+  availableTargets: BulkAssignmentTarget;,
+  availableResources: AssignmentResource;
+  availableTemplates: AssignmentTemplate;,
   onExecute: (operation: BulkAssignmentOperation) => Promise<string>;
   onCancel?: (operationId: string) => Promise<void>;
   onTemplateCreate?: (template: Omit<AssignmentTemplate, 'id' | 'createdAt' | 'usage'>) => Promise<string>;
   readonly?: boolean;
 }
-
 export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
   assignmentType,
   operationType,
@@ -181,13 +165,13 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
 }) => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [operation, setOperation] = useState<BulkAssignmentOperation>({)
-    operationId: '',
+  operationId: '',
     operationType,
     assignmentType,
     targets: [],
     resources: [],
     parameters: {,
-      executionMode: 'immediate',
+  executionMode: 'immediate',
       batchSize: 50,
       maxConcurrency: 5,
       continueOnError: true,
@@ -196,8 +180,8 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
       requireApproval: false,
       autoResolveConflicts: false,
       customProperties: {}
-    },
-    status: 'draft',
+  },
+  status: 'draft';
   });
   const steps = [;
     { number: 1, title: 'Select Targets', description: 'Choose users, teams, or services' },
@@ -207,19 +191,17 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
     { number: 5, title: 'Execute', description: 'Run the bulk assignment' }
   ];
   const canProceedToNextStep = useMemo(() => {
-    switch (currentStep) {
-    case 1: return operation.targets.length > 0;
-    case 2: return operation.resources.length > 0;
-    case 3: return true; // Parameters have defaults
-    case 4: return operation.conflicts?.every(c => c.resolution) ?? true;
-    case 5: return operation.status === 'draft';
-    default: return false;
-    }
-  }, [currentStep, operation]);
+  switch (currentStep) {
+  case 1: return operation.targets.length > 0;
+  case 2: return operation.resources.length > 0;
+  case 3: return true; // Parameters have defaults,
+  case 4: return operation.conflicts?.every(c => c.resolution) ?? true;
+  case 5: return operation.status === 'draft';
+  default: return false;
+}, [currentStep, operation]);
   const handleStepChange = (step: number) => {
     if (step <= currentStep + 1 && step >= 1) {
       setCurrentStep(step);
-    }
   };
   const handleExecute = async () => {
     try {
@@ -229,9 +211,8 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
     } catch (error) {
       setOperation(prev => ({ ...prev, status: 'failed' }));
       console.error('Failed to execute bulk assignment:', error);
-    }
   };
-  return ();
+  return;
     <div className="bulk-assignment-tools">
       <BulkAssignmentHeader
         assignmentType={assignmentType}
@@ -240,11 +221,11 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
         onTemplateLoad={(template) => {
           // Load template configuration
           setOperation(prev => ({)
-            ...prev,
+  ...prev,
             template,
             parameters: { ...prev.parameters, ...template.defaultParameters },
-            resources: availableResources.filter(r => template.defaultResources.includes(r.id)),
-          }));
+            resources: availableResources.filter(r => template.defaultResources.includes(r.id));
+  }));
         }}
         availableTemplates={availableTemplates}
       />
@@ -306,15 +287,15 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
         onNext={() => handleStepChange(currentStep + 1)}
         onExecute={handleExecute}
         onReset={() => {
-          setCurrentStep(1);
-          setOperation(prev => ({)
-            ...prev,
-            targets: [],
-            resources: [],
-            status: 'draft',
-            conflicts: [],
-            results: [],
-          }));
+  setCurrentStep(1);
+  setOperation(prev => ({)
+  ...prev,
+  targets: [],
+  resources: [],
+  status: 'draft',
+  conflicts: [],
+  results: [],
+}));
         }}
         isExecuting={operation.status === 'executing'}
         readonly={readonly}
@@ -327,13 +308,12 @@ export const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps> = ({)
 // Bulk Assignment Header Component
 // =============================================================================
 interface BulkAssignmentHeaderProps {
-  assignmentType: AssignmentType;
+  assignmentType: AssignmentType;,
   operationType: BulkOperationType;
-  operation: BulkAssignmentOperation;
-  availableTemplates: AssignmentTemplate[];
+  operation: BulkAssignmentOperation;,
+  availableTemplates: AssignmentTemplate;
   onTemplateLoad: (template: AssignmentTemplate) => void;
-}
-const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({)
+  const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({,)
   assignmentType,
   operationType,
   operation,
@@ -341,35 +321,35 @@ const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({)
   onTemplateLoad
 }) => {
   const getOperationTitle = () => {
-    const typeNames = {
-      [AssignmentType.API_KEY]: 'API Keys',
-      [AssignmentType.PERMISSION]: 'Permissions',
-      [AssignmentType.ROLE]: 'Roles',
-      [AssignmentType.TEAM]: 'Team Memberships',
-      [AssignmentType.QUOTA]: 'Usage Quotas'
-    };
+  const typeNames = {
+  [AssignmentType.API_KEY]: 'API Keys',
+  [AssignmentType.PERMISSION]: 'Permissions',
+  [AssignmentType.ROLE]: 'Roles',
+  [AssignmentType.TEAM]: 'Team Memberships',
+  [AssignmentType.QUOTA]: 'Usage Quotas',
+};
     const operationNames = {
-      [BulkOperationType.ASSIGN]: 'Assign',
-      [BulkOperationType.REVOKE]: 'Revoke',
-      [BulkOperationType.UPDATE]: 'Update',
-      [BulkOperationType.TRANSFER]: 'Transfer'
-    };
+  [BulkOperationType.ASSIGN]: 'Assign',
+  [BulkOperationType.REVOKE]: 'Revoke',
+  [BulkOperationType.UPDATE]: 'Update',
+  [BulkOperationType.TRANSFER]: 'Transfer',
+};
     return `${operationNames[operationType]} ${typeNames[assignmentType]}`;}
   };
   const getOperationIcon = () => {
-    const icons = {
-      [AssignmentType.API_KEY]: '🔑',
-      [AssignmentType.PERMISSION]: '🔐',
-      [AssignmentType.ROLE]: '👤',
-      [AssignmentType.TEAM]: '👥',
-      [AssignmentType.QUOTA]: '📊'
-    };
+  const icons = {
+  [AssignmentType.API_KEY]: '🔑',
+  [AssignmentType.PERMISSION]: '🔐',
+  [AssignmentType.ROLE]: '👤',
+  [AssignmentType.TEAM]: '👥',
+  [AssignmentType.QUOTA]: '📊',
+};
     return icons[assignmentType];
   };
   const applicableTemplates = availableTemplates.filter(;);
     template => template.assignmentType === assignmentType && template.operationType === operationType
   );
-  return ();
+  return;
     <div className="bulk-assignment-header">
       <div className="operation-title">
         <span className="operation-icon">{getOperationIcon()}</span>
@@ -410,17 +390,16 @@ const BulkAssignmentHeader: React.FC<BulkAssignmentHeaderProps> = ({)
 // =============================================================================
 interface BulkAssignmentWizardProps {
   steps: Array<{ number: number; title: string; description: string }>;
-  currentStep: number;
-  onStepChange: (step: number) => void;
+  currentStep: number;,
+  onStepChange: (step: number) => void;,
   canProceed: boolean;
-}
 const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
   steps,
   currentStep,
   onStepChange,
   canProceed
 }) => {
-  return ();
+  return;
     <div className="bulk-assignment-wizard">
       {steps.map((step) => ()
         <div
@@ -444,13 +423,12 @@ const BulkAssignmentWizard: React.FC<BulkAssignmentWizardProps> = ({)
 // Target Selection Step Component
 // =============================================================================
 interface TargetSelectionStepProps {
-  targets: BulkAssignmentTarget[];
-  selectedTargets: BulkAssignmentTarget[];
-  onTargetsChange: (targets: BulkAssignmentTarget[]) => void;
+  targets: BulkAssignmentTarget;,
+  selectedTargets: BulkAssignmentTarget;
+  onTargetsChange: (targets: BulkAssignmentTarget) => void;,
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
-}
-const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
+  const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({,)
   targets,
   selectedTargets,
   onTargetsChange,
@@ -463,7 +441,7 @@ const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
   const [showConflicts, setShowConflicts] = useState(false);
   const filteredTargets = useMemo(() => {
     return targets.filter(target => {)
-      const matchesSearch = target.name.toLowerCase().includes(searchTerm.toLowerCase()) ||;
+  const matchesSearch = target.name.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                            target.email?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === 'all' || target.type === filterType;
       const matchesDepartment = !filterDepartment || target.department === filterDepartment;
@@ -474,7 +452,7 @@ const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
   }, [targets, searchTerm, filterType, filterDepartment, showConflicts]);
   const departments = useMemo(() => {
     const depts = new Set(targets.map(t => t.department).filter(Boolean));
-    return Array.from(depts) as string[];
+    return Array.from(depts) as string;
   }, [targets]);
   const handleTargetToggle = (target: BulkAssignmentTarget) => {
     const isSelected = selectedTargets.some(t => t.id === target.id);
@@ -482,16 +460,14 @@ const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
       onTargetsChange(selectedTargets.filter(t => t.id !== target.id));
     } else {
       onTargetsChange([...selectedTargets, target]);
-    }
   };
   const handleSelectAll = () => {
     if (selectedTargets.length === filteredTargets.length) {
       onTargetsChange([]);
     } else {
       onTargetsChange(filteredTargets);
-    }
   };
-  return ();
+  return;
     <div className="target-selection-step">
       <div className="selection-controls">
         <div className="search-filters">
@@ -577,13 +553,12 @@ const TargetSelectionStep: React.FC<TargetSelectionStepProps> = ({)
 // Target Card Component
 // =============================================================================
 interface TargetCardProps {
-  target: BulkAssignmentTarget;
+  target: BulkAssignmentTarget;,
   selected: boolean;
-  onToggle: () => void;
+  onToggle: () => void;,
   assignmentType: AssignmentType;
   operationType: BulkOperationType;
-}
-const TargetCard: React.FC<TargetCardProps> = ({)
+  const TargetCard: React.FC<TargetCardProps> = ({,)
   target,
   selected,
   onToggle,
@@ -591,20 +566,20 @@ const TargetCard: React.FC<TargetCardProps> = ({)
   operationType
 }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const getTypeIcon = (type: string) => {
-    const icons = {
-      'user': '👤',
-      'team': '👥',
-      'service': '⚙️',
-      'role': '🎭'
-    };
+  const getTypeIcon = (type: string) => {,
+  const icons = {
+  'user': '👤',
+  'team': '👥',
+  'service': '⚙️',
+  'role': '🎭',
+};
     return icons[type as keyof typeof icons] || '📄';
   };
   const currentAssignments = target.currentAssignments?.filter(;);
     assignment => assignment.assignmentType === assignmentType
   ) || [];
   const conflicts = target.conflicts || [];
-  return ();
+  return;
     <div className={`target-card ${selected ? 'selected' : ''}`}>}
       <div className="target-header">
         <input
@@ -684,17 +659,16 @@ const TargetCard: React.FC<TargetCardProps> = ({)
 // Action Buttons Component
 // =============================================================================
 interface BulkAssignmentActionsProps {
-  currentStep: number;
+  currentStep: number;,
   totalSteps: number;
-  canProceed: boolean;
+  canProceed: boolean;,
   onPrevious: () => void;
-  onNext: () => void;
+  onNext: () => void;,
   onExecute: () => void;
-  onReset: () => void;
+  onReset: () => void;,
   isExecuting: boolean;
   readonly: boolean;
-}
-const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({)
+  const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({,)
   currentStep,
   totalSteps,
   canProceed,
@@ -705,7 +679,7 @@ const BulkAssignmentActions: React.FC<BulkAssignmentActionsProps> = ({)
   isExecuting,
   readonly
 }) => {
-  return ();
+  return;
     <div className="bulk-assignment-actions">
       <div className="primary-actions">
         {currentStep > 1 && ()

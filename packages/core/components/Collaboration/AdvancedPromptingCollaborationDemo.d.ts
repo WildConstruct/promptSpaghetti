@@ -5,9 +5,10 @@
  * collaboration features into the Wild Construct film industry demo.
  */
 import React from 'react';
+
 interface AdvancedPromptingCollaborationDemoProps {
     className?: string;
-}
+
 export declare const AdvancedPromptingCollaborationDemo: React.FC<AdvancedPromptingCollaborationDemoProps>;
 export {};
 //# sourceMappingURL=AdvancedPromptingCollaborationDemo.d.ts.map

@@ -41,14 +41,15 @@ export declare class ExtensionDevelopmentKit {
     private getTypeSpecificExample;
     private testPhase;
     private toPascalCase;
-}
+
 interface ExtensionSkeletonConfig {
     id: string;
     name: string;
     type: 'node' | 'ui' | 'transform' | 'storage';
     author: string;
     description: string;
-}
+
+
 interface TestExtensionConfig {
     id?: string;
     name?: string;
@@ -57,19 +58,21 @@ interface TestExtensionConfig {
     author?: string;
     dependencies?: string[];
     permissions?: string[];
-}
+
+
 interface LifecycleTestResult {
     success: boolean;
     phases: LifecyclePhaseResult[];
     errors: Error[];
     duration: number;
-}
+
+
 interface LifecyclePhaseResult {
     phase: string;
     success: boolean;
     duration: number;
     error?: Error;
-}
+
 export declare const extensionDevelopmentKit: ExtensionDevelopmentKit;
 export {};
 //# sourceMappingURL=ExtensionDevelopmentTools.d.ts.map

@@ -17,5 +17,4 @@ export interface ExtensionDetailViewProps {
     onClose: () => void;
 }
 export declare const ExtensionDetailView: React.FC<ExtensionDetailViewProps>;
-export default ExtensionDetailView;
 //# sourceMappingURL=ExtensionDetailView.d.ts.map

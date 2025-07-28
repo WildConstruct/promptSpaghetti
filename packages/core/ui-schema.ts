@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 // Base UI Node - only user-relevant fields
 export const UIBaseNode = z.object({)
-  name: z.string().optional(),           // User-friendly label (optional)
+  name: z.string().optional(),           // User-friendly label (optional),
   description: z.string().optional()    // User description (optional),
 });
 
@@ -51,18 +51,18 @@ export const UIGetVariableNode = UIBaseNode.extend({)
 // Advanced nodes with simplified interfaces
 export const UIConditionalNode = UIBaseNode.extend({)
   type: z.literal('Conditional'),
-  conditions: z.array(z.object({),
-    when: z.string(),                    // Simple condition text
-    then: z.string(),                    // Output when true
-    label: z.string().optional()        // User label for this condition,
-  })).default([]),
-  otherwise: z.string().optional()      // Default case,
-});
+  conditions: z.array(z.object({,)
+  when: z.string(),                    // Simple condition text,
+  then: z.string(),                    // Output when true,
+  label: z.string().optional()        // User label for this condition,
+})).default([]),
+  otherwise: z.string().optional()      // Default case;
+  });
 
 export const UISequentialNode = UIBaseNode.extend({)
   type: z.literal('Sequential'),
   items: z.array(z.string()).default([]),
-  mode: z.enum(['in-order', 'cycle', 'random']).default('in-order')
+  mode: z.enum(['in-order', 'cycle', 'random']).default('in-order'),
 });
 
 // Union of all UI node types
@@ -88,28 +88,29 @@ export type UINode = z.infer<typeof UIAnyNode>;
 export type UIGraph = z.infer<typeof UIGraph>;
 
 // Utility type for extracting variables from templates
+
 export interface ExtractedVariable {
-  name: string;                          // Variable name (without braces)
-  placeholder: string;                   // Full placeholder text {name}
+  name: string;                          // Variable name (without braces),
+  placeholder: string;                   // Full placeholder text {name},
   position: number;                      // Position in template
-}
 
 // UI State management for progressive disclosure
-export interface NodeUIState {
-  basic: UINode;                         // Always visible fields
-  advanced?: {                           // Advanced options (collapsed by default)
-    performance?: boolean;               // Show performance settings
-    debugging?: boolean;                 // Show debug information
-  };
-  connections?: {                        // Visual connection state
-    inputs: string[];                    // Connected input node IDs
-    outputs: string[];                   // Connected output node IDs
-  };
 }
+export interface NodeUIState {
+  basic: UINode;                         // Always visible fields,
+  advanced?: {                           // Advanced options (collapsed by default),
+  performance?: boolean;               // Show performance settings,
+  debugging?: boolean;                 // Show debug information,
+};
+  connections?: {                        // Visual connection state
+    inputs: string;                    // Connected input node IDs,
+  outputs: string;                   // Connected output node IDs
+  };
 
 // Template parsing utilities interface
+}
 export interface TemplateParser {
-  extractVariables(template: string): ExtractedVariable[];
-  validateTemplate(template: string): { valid: boolean; errors: string[] };
+  extractVariables(template: string): ExtractedVariable;
+  validateTemplate(template: string): { valid: boolean; errors: string };
   previewTemplate(template: string, variables: Record<string, string>): string;
 }

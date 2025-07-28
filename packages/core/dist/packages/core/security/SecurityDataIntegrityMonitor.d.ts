@@ -21,9 +21,9 @@ export interface DataIntegrityCheck {
     parameters: {
         hashAlgorithm?: 'sha256' | 'sha512' | 'md5';
         expectedSchema?: any;
-        referenceFields?: string[];
+        referenceFields?: string;
         timeWindow?: number;
-        businessRules?: string[];
+        businessRules?: string;
         signatureVerification?: {
             publicKeyPath: string;
             algorithmSuite: 'RSA' | 'ECDSA' | 'EdDSA';
@@ -34,7 +34,7 @@ export interface DataIntegrityCheck {
         frequency: 'continuous' | 'hourly' | 'daily' | 'weekly' | 'on_demand';
         interval?: number;
         cronExpression?: string;
-        triggerEvents?: string[];
+        triggerEvents?: string;
     };
     thresholds: {
         errorThreshold: number;
@@ -47,7 +47,7 @@ export interface DataIntegrityCheck {
     };
     remediation: {
         autoRemediate: boolean;
-        actions: AutoRemediationAction[];
+        actions: AutoRemediationAction;
         rollbackSupported: boolean;
         requiresApproval: boolean;
     };
@@ -64,10 +64,10 @@ export interface AutoRemediationAction {
     parameters: {
         backupSource?: string;
         targetLocation?: string;
-        notificationRecipients?: string[];
+        notificationRecipients?: string;
         quarantineLocation?: string;
         lockDuration?: number;
-        keyRotationScope?: string[];
+        keyRotationScope?: string;
     };
     safetyChecks: {
         requiresConfirmation: boolean;
@@ -97,7 +97,7 @@ export interface IntegrityCheckResult {
         recordsSkipped: number;
         errorRate: number;
     };
-    findings: IntegrityFinding[];
+    findings: IntegrityFinding;
     performance: {
         executionTime: number;
         throughput: number;
@@ -107,7 +107,7 @@ export interface IntegrityCheckResult {
             io: number;
         };
     };
-    remediationResults?: RemediationResult[];
+    remediationResults?: RemediationResult;
     metadata: {
         checksum: string;
         version: string;
@@ -124,8 +124,8 @@ export interface IntegrityFinding {
     description: string;
     affectedData: {
         location: string;
-        recordIds: string[];
-        fields: string[];
+        recordIds: string;
+        fields: string;
         estimatedImpact: 'low' | 'medium' | 'high' | 'critical';
     };
     evidence: {
@@ -142,8 +142,8 @@ export interface IntegrityFinding {
         };
     };
     context: {
-        relatedFindings: string[];
-        possibleCauses: string[];
+        relatedFindings: string;
+        possibleCauses: string;
         riskAssessment: string;
         businessImpact: string;
         technicalImpact: string;
@@ -154,7 +154,7 @@ export interface IntegrityFinding {
         resolvedBy?: string;
         resolvedAt?: number;
         resolutionNotes?: string;
-        preventiveActions?: string[];
+        preventiveActions?: string;
     };
     firstDetected: number;
     lastSeen: number;
@@ -175,14 +175,9 @@ export interface RemediationResult {
     };
     errors?: Array<{
         recordId: string;
-        error: string;
-        severity: 'warning' | 'error' | 'critical';
-    }>;
-    verification: {
-        verificationRun: boolean;
-        verificationPassed: boolean;
-        residualIssues: number;
-    };
+    }, error>;
+    string: any;
+    severity: 'warning' | 'error' | 'critical';
 }
 export interface DataIntegrityMetrics {
     overallIntegrityScore: number;
@@ -247,13 +242,13 @@ export interface DataIntegrityConfig {
         enabled: boolean;
         immediateNotification: {
             severityThreshold: IntegrityFinding['severity'];
-            recipients: string[];
+            recipients: string;
             channels: ('email' | 'sms' | 'slack' | 'webhook')[];
         };
         summaryReports: {
             enabled: boolean;
             frequency: 'daily' | 'weekly' | 'monthly';
-            recipients: string[];
+            recipients: string;
             includeMetrics: boolean;
         };
     };
@@ -262,7 +257,7 @@ export interface DataIntegrityConfig {
             enabled: boolean;
             endpoint: string;
             apiKey: string;
-            eventTypes: string[];
+            eventTypes: string;
         };
         backup: {
             enabled: boolean;
@@ -277,15 +272,12 @@ export interface DataIntegrityConfig {
         };
     };
     compliance: {
-        frameworks: string[];
+        frameworks: string;
         requireDigitalSignatures: boolean;
         immutableLogging: boolean;
         changeApprovalRequired: boolean;
     };
 }
-/**
- * Security Data Integrity Monitor
- */
 export declare class SecurityDataIntegrityMonitor extends EventEmitter {
     private config;
     private integrityChecks;
@@ -293,166 +285,9 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
     private checkHistory;
     private activeFindings;
     private remediationQueue;
-    private metrics;
-    private performanceCounters;
-    private scheduledChecks;
-    private remediationProcessor?;
-    private checksumCache;
-    private baselineData;
-    constructor(config?: Partial<DataIntegrityConfig>);
-    /**
-     * Initialize the integrity monitoring system
-     */
-    private initialize;
-    /**
-     * Register a new integrity check
-     */
-    registerIntegrityCheck(check: Omit<DataIntegrityCheck, 'id' | 'createdAt' | 'lastUpdated'>): Promise<string>;
-    /**
-     * Execute an integrity check
-     */
-    executeIntegrityCheck(checkId: string, triggeredBy?: 'schedule' | 'event' | 'manual', correlationId?: string): Promise<string>;
-    /**
-     * Get integrity check results
-     */
-    getCheckResults(checkId: string, limit?: number, status?: IntegrityCheckResult['status']): IntegrityCheckResult[];
-    /**
-     * Get active findings
-     */
-    getActiveFindings(filters?: {
-        severity?: IntegrityFinding['severity'];
-        category?: IntegrityFinding['category'];
-        status?: IntegrityFinding['resolution']['status'];
-        dataType?: DataIntegrityCheck['target']['dataType'];
-    }): IntegrityFinding[];
-    /**
-     * Resolve a finding
-     */
-    resolveFinding(findingId: string, resolution: 'resolved' | 'false_positive' | 'accepted_risk', resolvedBy: string, notes?: string, preventiveActions?: string[]): Promise<boolean>;
-    /**
-     * Trigger automatic remediation for a finding
-     */
-    triggerRemediation(findingId: string, actionId: string, priority?: number, delay?: number): Promise<boolean>;
-    /**
-     * Get integrity metrics
-     */
-    getIntegrityMetrics(timeRange?: {
-        start: number;
-        end: number;
-    }): DataIntegrityMetrics;
-    /**
-     * Generate integrity report
-     */
-    generateIntegrityReport(timeRange: {
-        start: number;
-        end: number;
-    }, includeDetails?: boolean): {
-        summary: {
-            reportId: string;
-            generatedAt: number;
-            timeRange: {
-                start: number;
-                end: number;
-            };
-            overallIntegrityScore: number;
-            dataHealthStatus: 'healthy' | 'warning' | 'critical';
-            totalChecksRun: number;
-            totalFindings: number;
-            criticalFindings: number;
-        };
-        checksExecuted: Array<{
-            checkId: string;
-            checkName: string;
-            executionCount: number;
-            successRate: number;
-            averageExecutionTime: number;
-            findingsGenerated: number;
-        }>;
-        findingsSummary: {
-            bySeverity: Record<IntegrityFinding['severity'], number>;
-            byCategory: Record<IntegrityFinding['category'], number>;
-            topAffectedDataTypes: Array<{
-                dataType: string;
-                count: number;
-            }>;
-            resolutionStats: {
-                resolved: number;
-                open: number;
-                falsePositives: number;
-                acceptedRisks: number;
-            };
-        };
-        remediationSummary: {
-            totalRemediations: number;
-            successfulRemediations: number;
-            failedRemediations: number;
-            averageRemediationTime: number;
-            topRemediationActions: Array<{
-                action: string;
-                count: number;
-                successRate: number;
-            }>;
-        };
-        recommendations: string[];
-        complianceStatus: {
-            framework: string;
-            compliant: boolean;
-            issues: string[];
-        }[];
-    };
-    private executeHashVerification;
-    private executeSchemaValidation;
-    private executeReferentialIntegrityCheck;
-    private executeTemporalConsistencyCheck;
-    private executeBusinessRuleCheck;
-    private executeDigitalSignatureVerification;
-    private retrieveDataForCheck;
-    private calculateHash;
-    private getExpectedHash;
-    private setExpectedHash;
-    private validateAgainstSchema;
-    private validateReference;
-    private evaluateBusinessRule;
-    private verifyDigitalSignature;
-    private applyThrottling;
-    private processFindings;
-    private findSimilarFinding;
-    private getSeverityPriority;
-    private storeCheckResult;
-    private updateMetrics;
-    private calculateOverallIntegrityScore;
-    private sendImmediateNotification;
-    private createNotificationMessage;
-    private scheduleCheck;
-    private startScheduledChecks;
-    private startRemediationProcessor;
-    private processRemediationQueue;
-    private executeRemediation;
-    private getRemediationAction;
-    private setupCleanupRoutines;
-    private cleanupOldData;
-    private loadDefaultIntegrityChecks;
-    private initializeMetrics;
-    private getResultsInTimeRange;
-    private getFindingsInTimeRange;
-    private calculateIntegrityScore;
-    private determineHealthStatus;
-    private aggregateCheckExecutions;
-    private summarizeFindings;
-    private getTopAffectedDataTypes;
-    private summarizeRemediations;
-    private generateRecommendations;
-    private assessComplianceStatus;
-    private calculateMetricsForTimeRange;
-    private generateCheckId;
-    private generateExecutionId;
-    private generateFindingId;
-    private generateReportId;
-    private generateResultChecksum;
-    /**
-     * Shutdown the integrity monitor
-     */
-    shutdown(): void;
+    string: any;
+    actionId: string;
+    priority: number;
+    scheduledTime: number;
 }
-export default SecurityDataIntegrityMonitor;
 //# sourceMappingURL=SecurityDataIntegrityMonitor.d.ts.map

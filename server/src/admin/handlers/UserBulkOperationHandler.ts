@@ -10,6 +10,7 @@ import { DatabaseService } from '../../auth/database/DatabaseService';
 import { RBACService } from '../../auth/services/RBACService';
 import { AuditService } from '../../auth/services/AuditService';
 
+}
 export interface UserBulkOperationParameters {
   // Status operations
   status?: 'active' | 'suspended' | 'deactivated' | 'locked';
@@ -35,6 +36,7 @@ export interface UserBulkOperationParameters {
   permissions?: Array<{
     resource: string;
     actions: string[];
+}
   }>;
   
   // Metadata operations
@@ -45,6 +47,7 @@ export interface UserBulkOperationParameters {
   exportFormat?: 'json' | 'csv' | 'xml';
 }
 
+}
 export interface UserOperationResult {
   userId: string;
   previousStatus?: string;
@@ -53,6 +56,7 @@ export interface UserOperationResult {
   affectedPermissions?: string[];
   sessionTerminationCount?: number;
   notificationSent?: boolean;
+}
 }
 
 export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOperationParameters, UserOperationResult> {
@@ -90,6 +94,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     operation: string, 
     parameters: UserBulkOperationParameters
   ): Promise<{ valid: boolean; error?: string }> {
+
     try {
       // Check if user exists
       const userResult = await this.dbService.query(
@@ -171,6 +176,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     parameters: UserBulkOperationParameters,
     context: BulkOperationContext
   ): Promise<UserOperationResult> {
+
     const result: UserOperationResult = { userId: targetId };
 
     try {
@@ -258,7 +264,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         details: {
           error: error instanceof Error ? error.message : String(error),
           operationId: context.operationId
-        },
+  }
         severity: 'error'
       });
 
@@ -272,6 +278,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     parameters: UserBulkOperationParameters,
     result: UserOperationResult
   ): Promise<void> {
+
     try {
       switch (operation) {
       case 'activate':
@@ -325,6 +332,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult, 
     context: BulkOperationContext
   ): Promise<void> {
+
     const userResult = await this.dbService.query(
       'SELECT status FROM users WHERE id = $1',
       [userId]
@@ -345,6 +353,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult, 
     context: BulkOperationContext
   ): Promise<void> {
+
     const userResult = await this.dbService.query(
       'SELECT status FROM users WHERE id = $1',
       [userId]
@@ -366,6 +375,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     const userResult = await this.dbService.query(
       'SELECT status FROM users WHERE id = $1',
       [userId]
@@ -391,6 +401,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     const userResult = await this.dbService.query(
       'SELECT status FROM users WHERE id = $1',
       [userId]
@@ -415,6 +426,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult, 
     context: BulkOperationContext
   ): Promise<void> {
+
     const userResult = await this.dbService.query(
       'SELECT status FROM users WHERE id = $1',
       [userId]
@@ -436,6 +448,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.roleId) return;
 
     await this.rbacService.assignRole({
@@ -456,6 +469,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.roleId) return;
 
     await this.rbacService.revokeRole(
@@ -478,6 +492,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.roleIds) return;
 
     for (const roleId of parameters.roleIds) {
@@ -500,6 +515,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.roleIds) return;
 
     for (const roleId of parameters.roleIds) {
@@ -524,6 +540,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     // Generate temporary password or trigger password reset flow
     const tempPassword = this.generateTempPassword();
     const hashedPassword = await this.hashPassword(tempPassword);
@@ -545,6 +562,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     const expirationDate = parameters.passwordExpirationDays ?
       new Date(Date.now() + parameters.passwordExpirationDays * 24 * 60 * 60 * 1000) :
       new Date(); // Expire immediately
@@ -560,6 +578,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     const sessionResult = await this.dbService.query(
       'SELECT COUNT(*) as count FROM user_sessions WHERE user_id = $1 AND expires_at > NOW()',
       [userId]
@@ -579,6 +598,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     // This would integrate with notification service
     // For now, just log the notification
     await this.auditService.logAction({
@@ -590,7 +610,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
         message: parameters.notificationMessage,
         template: parameters.notificationTemplate,
         operationId: context.operationId
-      },
+  }
       severity: 'info'
     });
 
@@ -603,6 +623,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.permissions) return;
 
     const affectedPermissions = [];
@@ -630,6 +651,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.permissions) return;
 
     const affectedPermissions = [];
@@ -657,6 +679,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     if (!parameters.metadata) return;
 
     await this.dbService.query(
@@ -671,6 +694,7 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
     result: UserOperationResult,
     context: BulkOperationContext
   ): Promise<void> {
+
     // Get user data for export
     const userResult = await this.dbService.query(
       'SELECT * FROM users WHERE id = $1',
@@ -696,12 +720,14 @@ export class UserBulkOperationHandler implements BulkOperationHandler<UserBulkOp
   }
 
   private async hashPassword(password: string): Promise<string> {
+
     // This would use proper password hashing (bcrypt, etc.)
     // For now, return a mock hash
     return `hashed_${password}`;
   }
 
   private async sendPasswordResetNotification(userId: string, tempPassword: string): Promise<void> {
+
     // This would integrate with email service
     console.log(`Password reset notification sent to user ${userId}`);
   }

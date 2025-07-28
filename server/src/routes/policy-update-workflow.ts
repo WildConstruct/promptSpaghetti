@@ -81,7 +81,7 @@ const SubmitUpdateRequestSchema = z.object({
       mitigationMeasures: z.array(z.string()).default([]),
       residualRisk: z.enum(['VERY_LOW', 'LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH'] as const),
       acceptanceCriteria: z.array(z.string()).default([])
-    })
+  }
   }),
   priority: z.enum(['LOW', 'NORMAL', 'HIGH', 'CRITICAL', 'EMERGENCY'] as const).default('NORMAL'),
   effectiveDate: z.string().datetime().transform(val => new Date(val)),
@@ -240,7 +240,7 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
           policyType: { 
             type: 'string',
             enum: ['PRIVACY_POLICY', 'TERMS_OF_SERVICE', 'DATA_PROCESSING', 'COOKIE_POLICY', 'SECURITY_POLICY', 'RETENTION_POLICY', 'ACCESS_POLICY', 'COMPLIANCE_POLICY']
-          },
+  }
           currentVersion: { type: 'string', minLength: 1 },
           proposedVersion: { type: 'string', minLength: 1 },
           title: { type: 'string', minLength: 5 },
@@ -260,17 +260,17 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                 legalBasis: { type: 'string' },
                 affectedUsers: { type: 'array', items: { type: 'string' }, default: [] },
                 breakingChange: { type: 'boolean', default: false }
-              },
+  }
               required: ['changeId', 'changeType', 'section', 'oldContent', 'newContent', 'rationale']
             }
-          },
+  }
           justification: { type: 'string', minLength: 50 },
           priority: { type: 'string', enum: ['LOW', 'NORMAL', 'HIGH', 'CRITICAL', 'EMERGENCY'], default: 'NORMAL' },
           effectiveDate: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-        },
+  }
         required: ['policyId', 'policyType', 'currentVersion', 'proposedVersion', 'title', 'description', 'changes', 'justification', 'effectiveDate']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -327,17 +327,17 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           decision: { type: 'string', enum: ['APPROVED', 'REJECTED', 'APPROVED_WITH_CONDITIONS'] },
           comments: { type: 'string' }
-        },
+  }
         required: ['decision']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -400,9 +400,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -415,9 +415,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
               strategyType: { type: 'string', enum: ['IMMEDIATE', 'CANARY', 'BLUE_GREEN', 'FEATURE_FLAG', 'PHASED'] },
               parameters: { type: 'object', default: {} },
               canaryPercentage: { type: 'number', minimum: 1, maximum: 100 }
-            },
+  }
             required: ['strategyType']
-          },
+  }
           schedule: {
             type: 'object',
             properties: {
@@ -432,16 +432,16 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                     duration: { type: 'number', minimum: 1 },
                     successThreshold: { type: 'number', minimum: 0, maximum: 100, default: 95 },
                     rollbackThreshold: { type: 'number', minimum: 0, maximum: 100, default: 5 }
-                  },
+  }
                   required: ['phaseId', 'phaseName', 'targetPercentage', 'duration']
-                },
+  }
                 default: []
-              },
+  }
               rollbackTriggers: { type: 'array', items: { type: 'string' }, default: [] },
               successCriteria: { type: 'array', items: { type: 'string' }, default: [] },
               monitoringPeriod: { type: 'number', minimum: 1, default: 24 }
             }
-          },
+  }
           validationResults: {
             type: 'array',
             items: {
@@ -453,14 +453,14 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
                 recommendations: { type: 'array', items: { type: 'string' }, default: [] },
                 validatedAt: { type: 'string', format: 'date-time' },
                 validatorId: { type: 'string' }
-              },
+  }
               required: ['validationType', 'status', 'validatedAt', 'validatorId']
-            },
+  }
             default: []
           }
-        },
+  }
         required: ['policyVersionId', 'deploymentType', 'targetEnvironments', 'rolloutStrategy', 'schedule']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -570,9 +570,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-        },
+  }
         required: ['policyId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -639,9 +639,9 @@ export async function policyUpdateWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       response: {
         200: {
           type: 'object',

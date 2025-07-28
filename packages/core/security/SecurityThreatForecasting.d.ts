@@ -10,6 +10,7 @@
 import { EventEmitter } from 'events';
 import { SecurityEvent, ThreatType } from './PredictiveSecurityAnalytics';
 import { SecurityAnomaly } from './SecurityAnomalyDetector';
+
 export interface ThreatForecast {
     forecastId: string;
     timestamp: Date;
@@ -24,7 +25,7 @@ export interface ThreatForecast {
     riskMetrics: ForecastRiskMetrics;
     recommendations: ForecastRecommendation[];
     modelMetadata: ForecastModelMetadata;
-}
+
 export declare enum ForecastType {
     SHORT_TERM = "short_term",// 0-4 hours
     MEDIUM_TERM = "medium_term",// 4-24 hours
@@ -32,7 +33,7 @@ export declare enum ForecastType {
     SEASONAL = "seasonal",// Weekly/monthly patterns
     TREND_BASED = "trend_based",// Trend extrapolation
     SCENARIO_BASED = "scenario_based"
-}
+
 export interface SeasonalFactor {
     period: SeasonalPeriod;
     amplitude: number;
@@ -40,14 +41,14 @@ export interface SeasonalFactor {
     strength: number;
     nextPeak: Date;
     historicalPattern: number[];
-}
+
 export declare enum SeasonalPeriod {
     HOURLY = "hourly",
     DAILY = "daily",
     WEEKLY = "weekly",
     MONTHLY = "monthly",
     QUARTERLY = "quarterly"
-}
+
 export interface TrendComponent {
     trendType: TrendType;
     direction: 'increasing' | 'decreasing' | 'stable';
@@ -56,7 +57,7 @@ export interface TrendComponent {
     durability: number;
     confidence: number;
     changePoints: ChangePoint[];
-}
+
 export declare enum TrendType {
     LINEAR = "linear",
     EXPONENTIAL = "exponential",
@@ -64,13 +65,14 @@ export declare enum TrendType {
     POLYNOMIAL = "polynomial",
     CYCLICAL = "cyclical",
     VOLATILE = "volatile"
-}
+
 export interface ChangePoint {
     timestamp: Date;
     magnitude: number;
     type: 'level_shift' | 'trend_change' | 'variance_change';
     confidence: number;
-}
+
+
 export interface ForecastRiskMetrics {
     expectedValue: number;
     valueAtRisk: number;
@@ -78,13 +80,15 @@ export interface ForecastRiskMetrics {
     volatilityIndex: number;
     uncertaintyRange: [number, number];
     scenarioRisks: ScenarioRisk[];
-}
+
+
 export interface ScenarioRisk {
     scenario: string;
     probability: number;
     impact: number;
     description: string;
-}
+
+
 export interface ForecastRecommendation {
     type: RecommendationType;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -93,7 +97,7 @@ export interface ForecastRecommendation {
     implementationCost: number;
     timeframe: string;
     dependencies: string[];
-}
+
 export declare enum RecommendationType {
     PROACTIVE_DEFENSE = "proactive_defense",
     RESOURCE_SCALING = "resource_scaling",
@@ -102,7 +106,7 @@ export declare enum RecommendationType {
     MONITORING_ENHANCEMENT = "monitoring_enhancement",
     TRAINING_RECOMMENDATION = "training_recommendation",
     INFRASTRUCTURE_CHANGE = "infrastructure_change"
-}
+
 export interface ForecastModelMetadata {
     modelName: string;
     modelVersion: string;
@@ -112,7 +116,7 @@ export interface ForecastModelMetadata {
     features: string[];
     hyperparameters: Record<string, unknown>;
     lastUpdated: Date;
-}
+
 export declare enum ForecastAlgorithm {
     ARIMA = "arima",
     LSTM = "lstm",
@@ -122,19 +126,21 @@ export declare enum ForecastAlgorithm {
     RANDOM_FOREST = "random_forest",
     GRADIENT_BOOSTING = "gradient_boosting",
     ENSEMBLE = "ensemble"
-}
+
 export interface ModelAccuracyMetrics {
     mape: number;
     rmse: number;
     mae: number;
     r2Score: number;
     directionalAccuracy: number;
-}
+
+
 export interface TimeSeriesData {
     timestamp: Date;
     value: number;
     metadata: Record<string, unknown>;
-}
+
+
 export interface ForecastingConfig {
     enableRealTimeForecasting: boolean;
     forecastUpdateInterval: number;
@@ -145,7 +151,8 @@ export interface ForecastingConfig {
     enableEnsembleModels: boolean;
     maxHistoryDays: number;
     minDataPointsForForecast: number;
-}
+
+
 export interface ThreatScenario {
     scenarioId: string;
     name: string;
@@ -156,19 +163,21 @@ export interface ThreatScenario {
     expectedIntensity: number;
     likelihood: number;
     impactAssessment: ScenarioImpact;
-}
+
+
 export interface ScenarioTrigger {
     triggerType: 'metric_threshold' | 'anomaly_count' | 'time_based' | 'external_event';
     condition: string;
     weight: number;
-}
+
+
 export interface ScenarioImpact {
     businessImpact: number;
     technicalImpact: number;
     reputationalImpact: number;
     financialImpact: number;
     complianceImpact: number;
-}
+
 export declare class SecurityThreatForecasting extends EventEmitter {
     private config;
     private timeSeriesData;
@@ -242,6 +251,6 @@ export declare class SecurityThreatForecasting extends EventEmitter {
     getTimeSeriesData(seriesKey: string): TimeSeriesData[];
     updateConfiguration(newConfig: Partial<ForecastingConfig>): void;
     destroy(): void;
-}
+
 export default SecurityThreatForecasting;
 //# sourceMappingURL=SecurityThreatForecasting.d.ts.map

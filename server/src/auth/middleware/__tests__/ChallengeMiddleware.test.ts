@@ -54,7 +54,7 @@ describe('ChallengeMiddleware', () => {
           method: 'POST',
           challengeType: ChallengeType.MATH_PUZZLE,
           riskThreshold: 0.3
-        },
+  }
         {
           path: '/api/protected',
           challengeType: ChallengeType.RECAPTCHA_V2,
@@ -64,7 +64,7 @@ describe('ChallengeMiddleware', () => {
       defaultChallenge: {
         type: ChallengeType.TEXT_CAPTCHA,
         difficulty: ChallengeDifficulty.MEDIUM
-      },
+  }
       bypassTokens: ['test-bypass-token'],
       trustProxy: true
     });
@@ -76,7 +76,7 @@ describe('ChallengeMiddleware', () => {
       headers: {
         'user-agent': 'test-agent',
         'x-forwarded-for': '192.168.1.1'
-      },
+  }
       ip: '127.0.0.1',
       body: {},
       log: {
@@ -148,8 +148,8 @@ describe('ChallengeMiddleware', () => {
           challenge: expect.objectContaining({
             id: 'test-challenge-id',
             type: ChallengeType.TEXT_CAPTCHA
-          })
-        })
+  }
+  }
       );
     });
 
@@ -243,7 +243,7 @@ describe('ChallengeMiddleware', () => {
               ipAddress: '192.168.1.1',
               fingerprint: undefined
             }
-          })
+  }
         );
 
         expect(mockReply.send).toHaveBeenCalledWith({
@@ -251,7 +251,7 @@ describe('ChallengeMiddleware', () => {
           challenge: expect.objectContaining({
             id: 'test-challenge-id',
             type: ChallengeType.TEXT_CAPTCHA
-          })
+  }
         });
       });
 
@@ -265,7 +265,7 @@ describe('ChallengeMiddleware', () => {
           expect.objectContaining({
             type: ChallengeType.TEXT_CAPTCHA,
             difficulty: ChallengeDifficulty.MEDIUM
-          })
+  }
         );
       });
 

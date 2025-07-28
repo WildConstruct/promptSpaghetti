@@ -17,6 +17,7 @@ import { SessionLimitManager, SessionLimitMetrics } from './SessionLimitManager'
 // import { SessionLimitViolation } from './SessionLimitManager';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -30,7 +31,9 @@ export interface AlertRule {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface AlertCondition {
   metric: string;
   operator: 'gt' | 'gte' | 'lt' | 'lte' | 'eq' | 'neq';
@@ -38,14 +41,18 @@ export interface AlertCondition {
   timeWindow: number; // minutes
   aggregation: 'sum' | 'avg' | 'max' | 'min' | 'count';
 }
+}
 
+}
 export interface AlertAction {
   type: 'email' | 'webhook' | 'slack' | 'pagerduty' | 'websocket' | 'log';
   target: string;
   template?: string;
   enabled: boolean;
 }
+}
 
+}
 export interface Alert {
   id: string;
   ruleId: string;
@@ -62,13 +69,16 @@ export interface Alert {
   createdAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface MonitoringDashboard {
   overview: {
     totalActiveSessions: number;
     violationsLast24h: number;
     averageResponseTime: number;
     systemHealth: 'healthy' | 'warning' | 'critical';
+}
   };
   realTimeMetrics: {
     sessionsPerMinute: number;
@@ -125,6 +135,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Initialize the monitoring system
    */
   async initialize(): Promise<void> {
+
     try {
       // Create database tables
       await this.createTables();
@@ -189,6 +200,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Create or update an alert rule
    */
   async createAlertRule(rule: Omit<AlertRule, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+
     try {
       const ruleId = require('crypto').randomUUID();
       const now = new Date();
@@ -237,6 +249,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Get monitoring dashboard data
    */
   async getDashboard(): Promise<MonitoringDashboard> {
+
     try {
       const now = new Date();
       const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -281,7 +294,7 @@ export class SessionLimitMonitor extends EventEmitter {
           violationsLast24h,
           averageResponseTime: currentMetrics.performance.averageCheckTime,
           systemHealth
-        },
+  }
         realTimeMetrics,
         trends,
         alerts: {
@@ -300,6 +313,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Acknowledge an alert
    */
   async acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void> {
+
     try {
       const now = new Date();
       
@@ -328,6 +342,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Resolve an alert
    */
   async resolveAlert(alertId: string, resolvedBy: string): Promise<void> {
+
     try {
       const now = new Date();
       
@@ -356,6 +371,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Get alert rules
    */
   async getAlertRules(): Promise<AlertRule[]> {
+
     return Array.from(this.alertRules.values());
   }
   
@@ -363,6 +379,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Update alert rule
    */
   async updateAlertRule(ruleId: string, updates: Partial<AlertRule>): Promise<void> {
+
     try {
       const rule = this.alertRules.get(ruleId);
       if (!rule) {
@@ -404,6 +421,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Delete alert rule
    */
   async deleteAlertRule(ruleId: string): Promise<void> {
+
     try {
       await this.dbService.query('DELETE FROM session_limit_alert_rules WHERE id = $1', [ruleId]);
       this.alertRules.delete(ruleId);
@@ -420,6 +438,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Manually trigger an alert for testing
    */
   async triggerTestAlert(ruleId: string): Promise<void> {
+
     try {
       const rule = this.alertRules.get(ruleId);
       if (!rule) {
@@ -452,6 +471,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Get performance metrics
    */
   async getPerformanceMetrics(timeRange: { start: Date; end: Date }): Promise<unknown> {
+
     try {
       const result = await this.dbService.query(`
         SELECT 
@@ -485,6 +505,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Cleanup old data
    */
   async cleanup(): Promise<void> {
+
     try {
       const cutoffDate = new Date(Date.now() - this.METRICS_RETENTION_HOURS * 60 * 60 * 1000);
       
@@ -518,6 +539,7 @@ export class SessionLimitMonitor extends EventEmitter {
    * Shutdown the monitor
    */
   async shutdown(): Promise<void> {
+
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
     }
@@ -537,6 +559,7 @@ export class SessionLimitMonitor extends EventEmitter {
   // Private methods
   
   private async createTables(): Promise<void> {
+
     // Alert rules table
     await this.dbService.query(`
       CREATE TABLE IF NOT EXISTS session_limit_alert_rules (
@@ -551,7 +574,7 @@ export class SessionLimitMonitor extends EventEmitter {
         tags JSONB,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
     
     // Alerts table
@@ -571,7 +594,7 @@ export class SessionLimitMonitor extends EventEmitter {
         resolved_at TIMESTAMP,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         metadata JSONB
-      )
+
     `);
     
     // Metrics storage table
@@ -583,7 +606,7 @@ export class SessionLimitMonitor extends EventEmitter {
         violations_total INTEGER NOT NULL,
         performance_data JSONB,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
     
     // Performance logs table
@@ -596,7 +619,7 @@ export class SessionLimitMonitor extends EventEmitter {
         error_message TEXT,
         metadata JSONB,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
     
     // Create indexes
@@ -612,6 +635,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async loadAlertRules(): Promise<void> {
+
     const result = await this.dbService.query('SELECT * FROM session_limit_alert_rules');
     
     for (const row of result.rows) {
@@ -632,6 +656,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async performMonitoringCycle(): Promise<void> {
+
     // Get current metrics
     const metrics = await this.sessionLimitManager.getMetrics();
     
@@ -648,6 +673,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async evaluateAlertRule(rule: AlertRule, metrics: SessionLimitMetrics): Promise<void> {
+
     // Check cooldown
     const cooldownKey = `${this.ALERT_COOLDOWN_CACHE_PREFIX}${rule.id}`;
     const inCooldown = await this.redisService.exists(cooldownKey);
@@ -706,6 +732,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async getMetricValue(condition: AlertCondition, metrics: SessionLimitMetrics): Promise<number> {
+
     switch (condition.metric) {
     case 'active_sessions_total':
       return metrics.activeSessionsTotal;
@@ -742,6 +769,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async createAlert(alert: Alert): Promise<void> {
+
     // Save to database
     await this.dbService.query(`
       INSERT INTO session_limit_alerts (
@@ -775,6 +803,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async executeAlertActions(alert: Alert, actions: AlertAction[]): Promise<void> {
+
     for (const action of actions) {
       if (!action.enabled) continue;
       
@@ -787,6 +816,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async executeAlertAction(alert: Alert, action: AlertAction): Promise<void> {
+
     switch (action.type) {
     case 'websocket':
       if (this.connectionManager) {
@@ -810,11 +840,13 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async sendWebhookAlert(webhookUrl: string, alert: Alert): Promise<void> {
+
     // Implementation for webhook alerts
     console.log(`Sending webhook alert to ${webhookUrl}:`, alert.title);
   }
   
   private async collectAndStoreMetrics(): Promise<void> {
+
     try {
       const metrics = await this.sessionLimitManager.getMetrics();
       
@@ -842,6 +874,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async processAlerts(): Promise<void> {
+
     // Auto-resolve alerts that are no longer applicable
     // Implementation would check current conditions against active alerts
   }
@@ -862,6 +895,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async getRealTimeMetrics(): Promise<unknown> {
+
     // Implementation for real-time metrics calculation
     return {
       sessionsPerMinute: 0,
@@ -872,6 +906,7 @@ export class SessionLimitMonitor extends EventEmitter {
   }
   
   private async getTrends(): Promise<unknown> {
+
     // Implementation for trend calculation
     return {
       sessionTrends: [],

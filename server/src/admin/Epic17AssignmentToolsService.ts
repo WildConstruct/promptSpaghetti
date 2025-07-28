@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // Assignment Tools Types and Interfaces
 // =============================================================================
 
+}
 export interface AssignmentToolsConfig {
   // Assignment limits
   maxAssignmentsPerUser: number;
@@ -29,6 +30,7 @@ export interface AssignmentToolsConfig {
     enabled: boolean;
     rules: AutoAssignmentRule[];
     evaluationInterval: number; // minutes
+}
   };
   
   // Approval workflows
@@ -93,6 +95,7 @@ export enum AssignmentStatus {
   REJECTED = 'rejected'
 }
 
+}
 export interface Assignment {
   assignmentId: string;
   assignmentType: AssignmentType;
@@ -147,7 +150,9 @@ export interface Assignment {
   complianceFlags: string[];
   auditTrail: AssignmentAuditEntry[];
 }
+}
 
+}
 export interface AssignmentScope {
   organizationId?: string;
   teamIds: string[];
@@ -164,12 +169,14 @@ export interface AssignmentScope {
     start: string; // HH:MM
     end: string;   // HH:MM
     days: number[]; // 0-6, Sunday = 0
+}
   };
   
   // Custom scope attributes
   customScope: Record<string, any>;
 }
 
+}
 export interface AssignmentContext {
   purpose: string;
   businessJustification: string;
@@ -191,7 +198,9 @@ export interface AssignmentContext {
   dependencies: string[];
   downstreamImpact: string[];
 }
+}
 
+}
 export interface AssignmentPermission {
   permissionId: string;
   action: string;
@@ -199,7 +208,9 @@ export interface AssignmentPermission {
   effect: 'allow' | 'deny';
   conditions?: Record<string, any>;
 }
+}
 
+}
 export interface AssignmentCondition {
   conditionId: string;
   type: 'time' | 'location' | 'device' | 'network' | 'usage' | 'custom';
@@ -208,7 +219,9 @@ export interface AssignmentCondition {
   description: string;
   enabled: boolean;
 }
+}
 
+}
 export interface AssignmentRestriction {
   restrictionId: string;
   type: 'time_based' | 'usage_based' | 'location_based' | 'device_based' | 'custom';
@@ -216,7 +229,9 @@ export interface AssignmentRestriction {
   description: string;
   enforced: boolean;
 }
+}
 
+}
 export interface AssignmentApprovalRequest {
   requestId: string;
   requestedAt: Date;
@@ -244,7 +259,9 @@ export interface AssignmentApprovalRequest {
   decisionReason?: string;
   conditions?: string[];
 }
+}
 
+}
 export interface AssignmentApproval {
   approvalId: string;
   approvedBy: string;
@@ -253,7 +270,9 @@ export interface AssignmentApproval {
   comments?: string;
   conditions?: string[];
 }
+}
 
+}
 export interface AssignmentUsageTracking {
   totalAccesses: number;
   lastAccessAt?: Date;
@@ -266,6 +285,7 @@ export interface AssignmentUsageTracking {
     action: string;
     count: number;
     lastUsed: Date;
+}
   }>;
   
   // Performance metrics
@@ -279,6 +299,7 @@ export interface AssignmentUsageTracking {
   complianceScore: number; // 0-100
 }
 
+}
 export interface AssignmentAccessInfo {
   accessId: string;
   accessedAt: Date;
@@ -291,7 +312,9 @@ export interface AssignmentAccessInfo {
   responseTime: number; // milliseconds
   details: Record<string, any>;
 }
+}
 
+}
 export interface AssignmentAuditEntry {
   entryId: string;
   timestamp: Date;
@@ -302,7 +325,9 @@ export interface AssignmentAuditEntry {
   reason?: string;
   details: Record<string, any>;
 }
+}
 
+}
 export interface AutoAssignmentRule {
   ruleId: string;
   name: string;
@@ -328,28 +353,36 @@ export interface AutoAssignmentRule {
     timesTriggered: number;
     lastTriggered?: Date;
     successRate: number;
+}
   };
 }
 
+}
 export interface AutoAssignmentTrigger {
   type: 'user_created' | 'team_joined' | 'role_granted' | 'key_created' | 'project_assigned' | 'custom';
   filters: Record<string, any>;
   conditions: Record<string, any>;
 }
+}
 
+}
 export interface AutoAssignmentCondition {
   field: string;
   operator: string;
   value: any;
   logicalOperator?: 'AND' | 'OR';
 }
+}
 
+}
 export interface AutoAssignmentAction {
   type: 'assign_key' | 'assign_permission' | 'assign_role' | 'create_team' | 'send_notification' | 'custom';
   parameters: Record<string, any>;
   conditions?: Record<string, any>;
 }
+}
 
+}
 export interface AssignmentTemplate {
   templateId: string;
   name: string;
@@ -372,6 +405,7 @@ export interface AssignmentTemplate {
     timesUsed: number;
     lastUsed?: Date;
     averageRating: number;
+}
   };
   
   // Template settings
@@ -381,6 +415,7 @@ export interface AssignmentTemplate {
   requiredApproval: boolean;
 }
 
+}
 export interface BulkAssignmentOperation {
   operationId: string;
   operationType: 'assign' | 'revoke' | 'update' | 'transfer';
@@ -413,7 +448,9 @@ export interface BulkAssignmentOperation {
   estimatedCompletion?: Date;
   reason: string;
 }
+}
 
+}
 export interface BulkAssignmentResult {
   assignmentId: string;
   success: boolean;
@@ -421,13 +458,16 @@ export interface BulkAssignmentResult {
   details?: Record<string, any>;
   processedAt: Date;
 }
+}
 
+}
 export interface BulkAssignmentError {
   assignmentId: string;
   errorType: string;
   errorMessage: string;
   errorDetails: Record<string, any>;
   retryable: boolean;
+}
 }
 
 // =============================================================================
@@ -462,8 +502,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         enabled: true,
         rules: [],
         evaluationInterval: 15 // 15 minutes
-      },
-      
+  }
       // Approval workflows  
       approval: {
         enabled: true,
@@ -471,41 +510,36 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           highValueKeys: true,
           crossOrgAssignments: true,
           adminRoleAssignments: true
-        },
+  }
         approvalTimeout: 72 // 72 hours
-      },
-      
+  }
       // Delegation settings
       delegation: {
         enabled: true,
         allowSubDelegation: true,
         maxDelegationDuration: 30, // 30 days
         requireJustification: true
-      },
-      
+  }
       // Assignment validation
       validation: {
         strictMode: true,
         conflictDetection: true,
         capacityChecking: true,
         dependencyValidation: true
-      },
-      
+  }
       // Notifications
       notifications: {
         onAssignment: true,
         onRevocation: true,
         onExpiration: true,
         reminderDays: [30, 7, 1]
-      },
-      
+  }
       // Audit and compliance
       audit: {
         logAllAssignments: true,
         complianceReporting: true,
         retentionDays: 2557 // 7 years
-      },
-      
+  }
       ...config
     };
 
@@ -541,6 +575,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       skipApproval?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const assignmentId = crypto.randomUUID();
       
@@ -600,7 +635,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           businessHours: options.scope?.businessHours,
           customScope: options.scope?.customScope || {},
           ...templateConfig.scope
-        },
+  }
         context: {
           purpose: options.context?.purpose || 'Standard assignment',
           businessJustification: options.context?.businessJustification || options.reason || 'No justification provided',
@@ -616,7 +651,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           dependencies: options.context?.dependencies || [],
           downstreamImpact: options.context?.downstreamImpact || [],
           ...templateConfig.context
-        },
+  }
         permissions: options.permissions || templateConfig.permissions || [],
         
         // Lifecycle
@@ -650,8 +685,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
           complianceViolations: 0,
           lastComplianceCheck: new Date(),
           complianceScore: 100
-        },
-        
+  }
         // Metadata
         reason: options.reason || 'Assignment created',
         tags: options.tags || [],
@@ -715,6 +749,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
    * Activate assignment (either approved or direct activation)
    */
   async activateAssignment(assignmentId: string): Promise<boolean> {
+
     try {
       const assignment = this.activeAssignments.get(assignmentId);
       if (!assignment) {
@@ -795,6 +830,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       notifyAssignee?: boolean;
     } = {}
   ): Promise<boolean> {
+
     try {
       const assignment = this.activeAssignments.get(assignmentId);
       if (!assignment) {
@@ -850,6 +886,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       canSubDelegate?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const originalAssignment = this.activeAssignments.get(originalAssignmentId);
       if (!originalAssignment) {
@@ -985,6 +1022,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       skipApproval?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const operationId = crypto.randomUUID();
       
@@ -1060,6 +1098,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       enabled?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const ruleId = crypto.randomUUID();
       
@@ -1115,6 +1154,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     triggerType: AutoAssignmentTrigger['type'],
     eventData: Record<string, any>
   ): Promise<string[]> {
+
     try {
       const triggeredRules: string[] = [];
       
@@ -1189,7 +1229,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       defaultPermissions?: AssignmentPermission[];
       defaultConditions?: AssignmentCondition[];
       defaultRestrictions?: AssignmentRestriction[];
-    },
+  }
     createdBy: string,
     options: {
       isSystemTemplate?: boolean;
@@ -1197,6 +1237,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
       requireApproval?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const templateId = crypto.randomUUID();
       
@@ -1217,7 +1258,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
         usage: {
           timesUsed: 0,
           averageRating: 0
-        },
+  }
         isActive: true,
         isSystemTemplate: options.isSystemTemplate || false,
         allowedRoles: options.allowedRoles || [],
@@ -1255,6 +1296,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   // =============================================================================
 
   private async initializeAssignmentTools(): Promise<void> {
+
     try {
       // Load existing assignments
       await this.loadActiveAssignments();
@@ -1289,6 +1331,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
     resourceType: string,
     assignedBy: string
   ): Promise<{ valid: boolean; errors: string[] }> {
+
     const errors: string[] = [];
     
     // Check assignment limits
@@ -1361,6 +1404,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
 
   // Database and storage operations
   private async storeAssignment(assignment: Assignment): Promise<void> {
+
     await this.database.query(`
       INSERT INTO epic17_assignments (
         assignment_id, assignment_type, status, assignee_id, assignee_type,
@@ -1396,6 +1440,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   }
 
   private async assessComplianceFlags(assignmentType: AssignmentType, assigneeId: string, resourceId: string): Promise<string[]> {
+
     // Implementation would assess compliance requirements
     return [];
   }
@@ -1416,7 +1461,8 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   private async sendAssignmentNotification(assignment: Assignment, event: string, data?: any): Promise<void> { }
   private async updateAssignmentStatus(assignmentId: string, status: AssignmentStatus): Promise<void> { }
   private async updateAssignment(assignmentId: string, assignment: Assignment): Promise<void> { }
-  private async createApprovalRequest(assignment: Assignment): Promise<AssignmentApprovalRequest> { 
+  private async createApprovalRequest(assignment: Assignment): Promise<AssignmentApprovalRequest> {
+
     return {} as AssignmentApprovalRequest; 
   }
   private async processBulkAssignment(operationId: string, assignments: any): Promise<void> { }
@@ -1447,6 +1493,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   }
 
   async getAssignment(assignmentId: string): Promise<Assignment | null> {
+
     return this.activeAssignments.get(assignmentId) || null;
   }
 
@@ -1459,6 +1506,7 @@ export class Epic17AssignmentToolsService extends EventEmitter {
   }
 
   async getBulkOperationStatus(operationId: string): Promise<BulkAssignmentOperation | null> {
+
     return this.bulkOperations.get(operationId) || null;
   }
 }

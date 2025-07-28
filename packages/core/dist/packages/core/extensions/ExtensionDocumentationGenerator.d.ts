@@ -34,34 +34,10 @@ export declare class ExtensionDocumentationGenerator {
      * Generate extension point index
      */
     generateIndex(): string;
-    /**
-     * Generate search index for extension points
-     */
-    generateSearchIndex(): any;
-    /**
-     * Generate markdown documentation
-     */
-    private generateMarkdown;
-    /**
-     * Generate markdown for a single extension point
-     */
-    private generateMarkdownExtensionPoint;
-    /**
-     * Generate HTML documentation
-     */
-    private generateHTML;
-    /**
-     * Generate HTML for a single extension point
-     */
-    private generateHTMLExtensionPoint;
-    /**
-     * Generate JSON documentation
-     */
-    private generateJSON;
-    /**
-     * Escape HTML characters
-     */
-    private escapeHtml;
+    markdown: any;
+    '- **By Category**:\n': any;
+    Object: any;
+    entries(stats: any, byCategory: any): any;
+    forEach(): any;
 }
-export declare const extensionDocumentationGenerator: ExtensionDocumentationGenerator;
 //# sourceMappingURL=ExtensionDocumentationGenerator.d.ts.map

@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { ContentVersion } from '../../community/ContentVersionManager';
+
 export interface ContentVersionControlProps {
     contentId: string;
     currentVersionId: string;
@@ -16,7 +17,7 @@ export interface ContentVersionControlProps {
     showEditorialWorkflow?: boolean;
     readOnly?: boolean;
     className?: string;
-}
+
 export declare const ContentVersionControl: React.FC<ContentVersionControlProps>;
 export default ContentVersionControl;
 //# sourceMappingURL=ContentVersionControl.d.ts.map

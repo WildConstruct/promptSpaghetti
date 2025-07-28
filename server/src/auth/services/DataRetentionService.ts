@@ -15,6 +15,7 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -26,7 +27,9 @@ export interface RetentionPolicy {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface DataType {
   type: string;
   category: 'user_data' | 'session_data' | 'audit_log' | 'analytics' | 'system_data';
@@ -34,7 +37,9 @@ export interface DataType {
   required: boolean; // Cannot be deleted
   sensitive: boolean; // Requires special handling
 }
+}
 
+}
 export interface RetentionSchedule {
   policyId: string;
   scheduledAt: Date;
@@ -44,7 +49,9 @@ export interface RetentionSchedule {
   recordsDeleted: number;
   errors?: string[];
 }
+}
 
+}
 export interface DataExportRequest {
   id: string;
   userId: string;
@@ -56,7 +63,9 @@ export interface DataExportRequest {
   expiresAt: Date;
   createdAt: Date;
 }
+}
 
+}
 export interface RetentionReport {
   periodStart: Date;
   periodEnd: Date;
@@ -68,6 +77,7 @@ export interface RetentionReport {
   errors: string[];
   executionTime: number; // Milliseconds
 }
+}
 
 // Default data types in the system
 export const DEFAULT_DATA_TYPES: DataType[] = [
@@ -77,42 +87,42 @@ export const DEFAULT_DATA_TYPES: DataType[] = [
     description: 'User account information (email, profile)',
     required: false,
     sensitive: true
-  },
+  }
   {
     type: 'authentication_logs',
     category: 'audit_log',
     description: 'Login/logout and authentication events',
     required: false,
     sensitive: true
-  },
+  }
   {
     type: 'session_data',
     category: 'session_data',
     description: 'User session tokens and state',
     required: false,
     sensitive: true
-  },
+  }
   {
     type: 'project_data',
     category: 'user_data',
     description: 'User-created projects and graphs',
     required: false,
     sensitive: false
-  },
+  }
   {
     type: 'usage_analytics',
     category: 'analytics',
     description: 'User behavior and usage statistics',
     required: false,
     sensitive: false
-  },
+  }
   {
     type: 'error_logs',
     category: 'system_data',
     description: 'Application error logs and diagnostics',
     required: true,
     sensitive: false
-  },
+  }
   {
     type: 'audit_trails',
     category: 'audit_log',
@@ -134,7 +144,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 1095, // 3 years
     deleteType: 'soft',
     isActive: true
-  },
+  }
   {
     name: 'Session Data - Short Term',
     description: 'Short-term retention for session and temporary data',
@@ -144,7 +154,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 90, // 3 months
     deleteType: 'hard',
     isActive: true
-  },
+  }
   {
     name: 'Analytics - Medium Term',
     description: 'Analytics data retention for business insights',
@@ -154,7 +164,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 730, // 2 years
     deleteType: 'archive',
     isActive: true
-  },
+  }
   {
     name: 'Authentication Logs - Security',
     description: 'Authentication logs for security and compliance',
@@ -164,7 +174,7 @@ export const DEFAULT_RETENTION_POLICIES: Omit<RetentionPolicy, 'id' | 'createdAt
     retentionPeriod: 2555, // 7 years (compliance requirement)
     deleteType: 'archive',
     isActive: true
-  },
+  }
   {
     name: 'Deleted User Cleanup',
     description: 'Hard delete soft-deleted user accounts after grace period',
@@ -190,6 +200,7 @@ export class DataRetentionService {
    * Initialize retention policies with default values
    */
   async initializeDefaultPolicies(): Promise<void> {
+
     try {
       // Check if policies already exist
       const existingPolicies = await this.getRetentionPolicies();
@@ -215,6 +226,7 @@ export class DataRetentionService {
   async createRetentionPolicy(
     policy: Omit<RetentionPolicy, 'id' | 'createdAt' | 'updatedAt'>
   ): Promise<RetentionPolicy> {
+
     const query = `
       INSERT INTO data_retention_policies 
       (name, description, data_types, retention_period_days, delete_type, is_active)
@@ -247,6 +259,7 @@ export class DataRetentionService {
    * Get all retention policies
    */
   async getRetentionPolicies(activeOnly: boolean = false): Promise<RetentionPolicy[]> {
+
     const query = activeOnly
       ? 'SELECT * FROM data_retention_policies WHERE is_active = true ORDER BY created_at'
       : 'SELECT * FROM data_retention_policies ORDER BY created_at';
@@ -262,6 +275,7 @@ export class DataRetentionService {
     policyId: string,
     updates: Partial<Omit<RetentionPolicy, 'id' | 'createdAt' | 'updatedAt'>>
   ): Promise<RetentionPolicy> {
+
     const fields = [];
     const values = [];
     let valueIndex = 1;
@@ -309,6 +323,7 @@ export class DataRetentionService {
    * Execute retention policies (cleanup expired data)
    */
   async executeRetentionPolicies(): Promise<RetentionReport> {
+
     const startTime = Date.now();
     const periodStart = new Date();
     let totalProcessed = 0;
@@ -378,6 +393,7 @@ export class DataRetentionService {
     recordsDeleted: number;
     errors: string[];
   }> {
+
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - policy.retentionPeriod);
     
@@ -413,6 +429,7 @@ export class DataRetentionService {
     cutoffDate: Date,
     deleteType: 'soft' | 'hard' | 'archive'
   ): Promise<{ processed: number; deleted: number }> {
+
     let processed = 0;
     let deleted = 0;
 
@@ -484,7 +501,7 @@ export class DataRetentionService {
           WHERE updated_at < $1 
           AND user_id IN (
             SELECT id FROM users WHERE deleted_at IS NOT NULL
-          )
+
           AND deleted_at IS NULL
           RETURNING id
         `, [cutoffDate]);
@@ -505,6 +522,7 @@ export class DataRetentionService {
     purpose: 'user_request' | 'legal_hold' | 'compliance' | 'migration',
     dataTypes: string[]
   ): Promise<DataExportRequest> {
+
     const exportRequest: Omit<DataExportRequest, 'id'> = {
       userId,
       requestedBy,
@@ -555,6 +573,7 @@ export class DataRetentionService {
    * Process a data export request
    */
   private async processDataExport(exportId: string): Promise<void> {
+
     try {
       // Update status to processing
       await this.db.query(
@@ -615,6 +634,7 @@ export class DataRetentionService {
     userId: string,
     dataTypes: string[]
   ): Promise<{ data: any; recordCount: number }> {
+
     const exportData: any = {};
     let recordCount = 0;
 
@@ -657,7 +677,7 @@ export class DataRetentionService {
         exportedAt: new Date().toISOString(),
         dataTypes,
         ...exportData
-      },
+  }
       recordCount
     };
   }
@@ -666,6 +686,7 @@ export class DataRetentionService {
    * Archive authentication logs to separate table
    */
   private async archiveAuthenticationLogs(cutoffDate: Date): Promise<void> {
+
     // Move old logs to archive table
     await this.db.query(`
       INSERT INTO audit_logs_archive 
@@ -685,6 +706,7 @@ export class DataRetentionService {
    * Archive analytics data
    */
   private async archiveAnalyticsData(cutoffDate: Date): Promise<void> {
+
     // Implementation would move analytics data to cold storage
     // For now, just mark as archived
     await this.db.query(`
@@ -698,6 +720,7 @@ export class DataRetentionService {
    * Store export data (placeholder - would integrate with secure storage)
    */
   private async storeExportData(exportId: string, exportData: any): Promise<string> {
+
     // In production, would upload to S3/Azure/GCP with encryption
     // For now, return a placeholder URL
     return `https://exports.example.com/data/${exportId}.json`;
@@ -712,6 +735,7 @@ export class DataRetentionService {
     recordsDeleted: number,
     errors: string[]
   ): Promise<void> {
+
     const query = `
       INSERT INTO retention_schedule_executions 
       (policy_id, executed_at, status, records_processed, records_deleted, errors)
@@ -733,6 +757,7 @@ export class DataRetentionService {
    * Get retention execution history
    */
   async getRetentionHistory(limit: number = 50): Promise<RetentionSchedule[]> {
+
     const query = `
       SELECT 
         rse.*,
@@ -776,6 +801,7 @@ export class DataRetentionService {
    * Schedule automatic retention policy execution
    */
   async scheduleAutomaticRetention(): Promise<void> {
+
     // This would integrate with a cron job system or task scheduler
     // For now, log that scheduling was requested
     await this.auditService.logAction('system', 'data_retention', 'schedule_configured', {

@@ -50,7 +50,7 @@ export declare enum BackupStatus {
     VERIFYING = "verifying",
     VERIFIED = "verified",
     CORRUPTED = "corrupted"
-}
+
 export declare enum RecoveryStatus {
     PENDING = "pending",
     RUNNING = "running",
@@ -58,7 +58,7 @@ export declare enum RecoveryStatus {
     FAILED = "failed",
     VALIDATING = "validating",
     VALIDATED = "validated"
-}
+
 export interface BackupMetadata {
     backupId: string;
     backupName: string;
@@ -80,7 +80,7 @@ export interface BackupMetadata {
     format: string;
     compressed: boolean;
     encrypted: boolean;
-}
+
 export interface RecoveryMetadata {
     recoveryId: string;
     backupId: string;
@@ -94,7 +94,7 @@ export interface RecoveryMetadata {
         passed: boolean;
         issues: string[];
     };
-}
+
 export interface BackupProgress {
     backupId: string;
     status: BackupStatus;
@@ -112,7 +112,6 @@ export interface BackupProgress {
         eventsPerSecond: number;
         bytesPerSecond: number;
     };
-}
 /**
  * Backup and Recovery System
  *
@@ -254,6 +253,6 @@ export declare class BackupRecoverySystem {
         oldestBackup?: number;
         newestBackup?: number;
     };
-}
+
 export default BackupRecoverySystem;
 //# sourceMappingURL=BackupRecoverySystem.d.ts.map

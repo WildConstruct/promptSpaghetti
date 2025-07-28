@@ -7,7 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RegionGroup } from '../RegionGroup';
 import { RegionGroup as RegionGroupType, REGION_GROUP_COLORS } from '../../../types/CollaborationTypes';
-const mockGroup: RegionGroupType = {
+const mockGroup: RegionGroupType = {,
   id: 'test-group-1',
   label: 'Test Group',
   description: 'Test group description',
@@ -27,9 +27,9 @@ const mockGroup: RegionGroupType = {
   zIndex: 0,
   author: 'Test Author',
   timestamp: '2024-01-01T12:00:00Z',
-  lastModified: '2024-01-01T12:00:00Z',
-};
-const mockOnAction = jest.fn<unknown[], unknown>();
+  lastModified: '2024-01-01T12:00:00Z';
+  };
+const mockOnAction = jest.fn<unknown, unknown>();
 describe('RegionGroup Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -46,13 +46,13 @@ describe('RegionGroup Component', () => {
       const groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toBeInTheDocument();
       expect(groupElement).toHaveStyle({)
-        position: 'absolute',
-        left: '100px',
-        top: '100px',
-        width: '300px',
-        height: '200px',
-        border: '2px solid #3b82f6',
-      });
+  position: 'absolute',
+  left: '100px',
+  top: '100px',
+  width: '300px',
+  height: '200px',
+  border: '2px solid #3b82f6',
+});
     });
     test('displays group label and node count', () => {
       render();
@@ -78,7 +78,7 @@ describe('RegionGroup Component', () => {
       );
       const groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toHaveStyle({)
-        border: `2px solid ${REGION_GROUP_COLORS.blue.primary}`}
+  border: `2px solid ${REGION_GROUP_COLORS.blue.primary}`}
       });
     });
     test('shows collapse/expand button', () => {
@@ -138,9 +138,9 @@ describe('RegionGroup Component', () => {
       const collapseButton = screen.getByTitle('Collapse group');
       await user.click(collapseButton);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'collapse',
-        groupId: 'test-group-1',
-      });
+  type: 'collapse',
+  groupId: 'test-group-1',
+});
     });
     test('handles expand when collapsed', async () => {
       const user = userEvent.setup();
@@ -155,9 +155,9 @@ describe('RegionGroup Component', () => {
       const expandButton = screen.getByTitle('Expand group');
       await user.click(expandButton);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'expand',
-        groupId: 'test-group-1',
-      });
+  type: 'expand',
+  groupId: 'test-group-1',
+});
     });
     test('starts label editing on double-click', async () => {
       const user = userEvent.setup();
@@ -203,7 +203,7 @@ describe('RegionGroup Component', () => {
       await user.clear(input);
       await user.type(input, 'Updated Label{enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
+  type: 'update',
         groupId: 'test-group-1',
         group: { label: 'Updated Label' }
       });
@@ -331,9 +331,9 @@ describe('RegionGroup Component', () => {
       );
       const groupElement = screen.getByTestId('region-group-test-group-1');
       expect(groupElement).toHaveStyle({)
-        transform: 'scale(1.02)',
-        zIndex: '100' // Base zIndex + selected bonus,
-      });
+  transform: 'scale(1.02)',
+  zIndex: '100' // Base zIndex + selected bonus,
+});
     });
     test('applies hover effects during interaction', () => {
       render();
@@ -347,9 +347,9 @@ describe('RegionGroup Component', () => {
       // Simulate drag start
       fireEvent.mouseDown(groupElement, { clientX: 150, clientY: 150 });
       expect(groupElement).toHaveStyle({)
-        cursor: 'grabbing',
-        transition: 'none',
-      });
+  cursor: 'grabbing',
+  transition: 'none',
+});
     });
     test('shows appropriate cursor based on interaction state', () => {
       const { rerender } = render()
@@ -452,10 +452,10 @@ describe('RegionGroup Component', () => {
   });
   describe('Performance', () => {
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestWrapper = ({ group }: { group: RegionGroupType }) => {
         renderSpy();
-        return ();
+        return;
           <RegionGroup
             group={group}
             onAction={mockOnAction}
@@ -488,7 +488,6 @@ describe('RegionGroup Component', () => {
       for (let i = 0; i < 10; i++) {
         fireEvent.mouseDown(groupElement, { clientX: 100 + i, clientY: 100 + i });
         fireEvent.mouseUp(groupElement);
-      }
       // Should not crash or cause performance issues
       expect(groupElement).toBeInTheDocument();
     });

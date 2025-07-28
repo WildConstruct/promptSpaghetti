@@ -14,7 +14,7 @@ import {
   StickyNoteAction
 } from '../../types/CollaborationTypes';
 interface StickyNoteProps {
-  note: StickyNoteType;
+  note: StickyNoteType;,
   onAction: (action: StickyNoteAction) => void;
   onContextMenu?: (e: React.MouseEvent, noteId: string) => void;
   selected?: boolean;
@@ -22,9 +22,7 @@ interface StickyNoteProps {
   canDelete?: boolean;
   canMove?: boolean;
   canResize?: boolean;
-}
-
-export const StickyNote: React.FC<StickyNoteProps> = ({)
+  export const StickyNote: React.FC<StickyNoteProps> = ({,)
   note,
   onAction,
   onContextMenu,
@@ -38,7 +36,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
   const [isResizing, setIsResizing] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [resizeStart, setResizeStart] = useState({ )
-    x: 0, y: 0, width: 0, height: 0 
+    x: 0, y: 0, width: 0, height: 0 ;
   });
   const noteRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,76 +45,73 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
   const handleContentChange = useCallback((content: string) => {
     if (content.length <= STICKY_NOTE_CONSTRAINTS.maxContentLength) {
       onAction({)
-        type: 'update',
+  type: 'update',
         noteId: note.id,
         note: { content }
       });
-    }
   }, [note.id, onAction]);
   // Handle color changes
   const handleColorChange = useCallback((color: StickyNoteColor) => {
     onAction({)
-      type: 'update',
+  type: 'update',
       noteId: note.id,
       note: { color }
     });
   }, [note.id, onAction]);
   // Start editing mode
   const startEditing = useCallback(() => {
-    if (canEdit) {
-      onAction({)
-        type: 'startEdit',
-        noteId: note.id,
-      });
-    }
+  if (canEdit) {
+  onAction({)
+  type: 'startEdit',
+  noteId: note.id,
+});
   }, [note.id, onAction, canEdit]);
   // Stop editing mode
   const stopEditing = useCallback(() => {
-    onAction({)
-      type: 'stopEdit',
-      noteId: note.id,
-    });
+  onAction({)
+  type: 'stopEdit',
+  noteId: note.id,
+});
   }, [note.id, onAction]);
   // Handle mouse down for dragging
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!canMove || note.isEditing || isResizing) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const rect = noteRef.current?.getBoundingClientRect();
-    if (rect) {
-      setDragOffset({)
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
+  if (!canMove || note.isEditing || isResizing) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const rect = noteRef.current?.getBoundingClientRect();
+  if (rect) {
+  setDragOffset({)
+  x: e.clientX - rect.left,
+  y: e.clientY - rect.top,
+});
       setIsDragging(true);
-    }
   }, [canMove, note.isEditing, isResizing]);
   // Handle resize mouse down
   const handleResizeMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!canResize) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setResizeStart({)
-      x: e.clientX,
-      y: e.clientY,
-      width: note.size.width,
-      height: note.size.height,
-    });
+  if (!canResize) return;
+  e.preventDefault();
+  e.stopPropagation();
+  setResizeStart({)
+  x: e.clientX,
+  y: e.clientY,
+  width: note.size.width,
+  height: note.size.height,
+});
     setIsResizing(true);
   }, [canResize, note.size]);
   // Handle global mouse move
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        const newPosition = {
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        };
+  const handleMouseMove = (e: MouseEvent) => {,
+  if (isDragging) {
+  const newPosition = {
+  x: e.clientX - dragOffset.x,
+  y: e.clientY - dragOffset.y,
+};
         onAction({)
-          type: 'move',
-          noteId: note.id,
-          position: newPosition,
-        });
+  type: 'move',
+  noteId: note.id,
+  position: newPosition,
+});
       } else if (isResizing) {
         const deltaX = e.clientX - resizeStart.x;
         const deltaY = e.clientY - resizeStart.y;
@@ -129,11 +124,10 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
           Math.min(STICKY_NOTE_CONSTRAINTS.maxHeight, resizeStart.height + deltaY)
         );
         onAction({)
-          type: 'resize',
+  type: 'resize',
           noteId: note.id,
           size: { width: newWidth, height: newHeight }
         });
-      }
     };
     const handleMouseUp = () => {
       setIsDragging(false);
@@ -146,14 +140,12 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
-    }
   }, [isDragging, isResizing, dragOffset, resizeStart, note.id, onAction]);
   // Auto-focus textarea when editing starts
   useEffect(() => {
     if (note.isEditing && textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.select();
-    }
   }, [note.isEditing]);
   // Handle keyboard shortcuts
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -161,7 +153,6 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
       stopEditing();
     } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       stopEditing();
-    }
   }, [stopEditing]);
   // Handle right-click context menu
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
@@ -169,7 +160,7 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
     e.stopPropagation();
     onContextMenu?.(e, note.id);
   }, [onContextMenu, note.id]);
-  return ();
+  return;
     <div
       ref={noteRef}
       className="sticky-note"
@@ -180,17 +171,19 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         width: note.size.width,
         height: note.size.height,
         background: colorInfo.background,
-        border: `2px solid ${selected ? '#4d7cff' : colorInfo.border}`,}
-        borderRadius: 8,
-        boxShadow: `0 4px 12px ${colorInfo.shadow}, 0 2px 4px rgba(0,0,0,0.1)`,}
-        cursor: isDragging ? 'grabbing' : (canMove && !note.isEditing ? 'grab' : 'default'),
+        border: `2px solid ${selected ? '#4d7cff' : colorInfo.border}`}
+},
+  borderRadius: 8,
+        boxShadow: `0 4px 12px ${colorInfo.shadow}, 0 2px 4px rgba(0,0,0,0.1)`}
+},
+  cursor: isDragging ? 'grabbing' : (canMove && !note.isEditing ? 'grab' : 'default'),
         zIndex: note.zIndex || 1000,
         userSelect: 'none',
         fontFamily: 'system-ui, -apple-system, sans-serif',
         transition: isDragging || isResizing ? 'none' : 'all 0.2s ease',
         transform: selected ? 'scale(1.02)' : 'scale(1)',
-        opacity: isDragging ? 0.8 : 1,
-      }}
+        opacity: isDragging ? 0.8 : 1;
+  }}
       onMouseDown={handleMouseDown}
       onContextMenu={handleContextMenu}
       onDoubleClick={startEditing}
@@ -201,19 +194,20 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '8px 10px',
-        borderBottom: `1px solid ${colorInfo.border}20`,}
-        fontSize: 11,
+        borderBottom: `1px solid ${colorInfo.border}20`}
+},
+  fontSize: 11,
         fontWeight: 500,
         color: colorInfo.text,
-        opacity: 0.8,
-      }}>
+        opacity: 0.8;
+  }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div style={{
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: colorInfo.border,
-          }} />
+  width: 8,
+  height: 8,
+  borderRadius: '50%',
+  background: colorInfo.border,
+}} />
           <span>{colorInfo.category}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -231,12 +225,13 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
                   height: 12,
                   borderRadius: '50%',
                   background: info.background,
-                  border: `1px solid ${info.border}`,}
-                  cursor: 'pointer',
+                  border: `1px solid ${info.border}`}
+},
+  cursor: 'pointer',
                   opacity: note.color === color ? 1 : 0.6,
                   transform: note.color === color ? 'scale(1.2)' : 'scale(1)',
-                  transition: 'all 0.15s ease',
-                }}
+                  transition: 'all 0.15s ease';
+  }}
                 title={info.description}
               />
             ))}
@@ -249,20 +244,20 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
                 onAction({ type: 'delete', noteId: note.id });
               }}
               style={{
-                width: 16,
-                height: 16,
-                borderRadius: 4,
-                background: 'transparent',
-                border: 'none',
-                color: colorInfo.text,
-                cursor: 'pointer',
-                fontSize: 12,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                opacity: 0.6,
-                transition: 'opacity 0.15s ease',
-              }}
+  width: 16,
+  height: 16,
+  borderRadius: 4,
+  background: 'transparent',
+  border: 'none',
+  color: colorInfo.text,
+  cursor: 'pointer',
+  fontSize: 12,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.6,
+  transition: 'opacity 0.15s ease',
+}}
               onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
               title="Delete note"
@@ -274,10 +269,10 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
       </div>
       {/* Note Content */}
       <div style={{
-        padding: '8px 12px',
-        height: 'calc(100% - 40px)',
-        overflow: 'hidden',
-      }}>
+  padding: '8px 12px',
+  height: 'calc(100% - 40px)',
+  overflow: 'hidden',
+}}>
         {note.isEditing ? ()
           <textarea
             ref={textareaRef}
@@ -287,30 +282,30 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
             onKeyDown={handleKeyDown}
             placeholder="Enter your note here... (Ctrl+Enter to save, Esc to cancel)"
             style={{
-              width: '100%',
-              height: '100%',
-              border: 'none',
-              outline: 'none',
-              background: 'transparent',
-              color: colorInfo.text,
-              fontSize: 13,
-              fontFamily: 'inherit',
-              resize: 'none',
-              lineHeight: 1.4,
-            }}
+  width: '100%',
+  height: '100%',
+  border: 'none',
+  outline: 'none',
+  background: 'transparent',
+  color: colorInfo.text,
+  fontSize: 13,
+  fontFamily: 'inherit',
+  resize: 'none',
+  lineHeight: 1.4,
+}}
           />
         ) : ()
           <div
             style={{
-              width: '100%',
-              height: '100%',
-              color: colorInfo.text,
-              fontSize: 13,
-              lineHeight: 1.4,
-              wordWrap: 'break-word',
-              overflow: 'auto',
-              cursor: canEdit ? 'text' : 'default',
-            }}
+  width: '100%',
+  height: '100%',
+  color: colorInfo.text,
+  fontSize: 13,
+  lineHeight: 1.4,
+  wordWrap: 'break-word',
+  overflow: 'auto',
+  cursor: canEdit ? 'text' : 'default',
+}}
             onClick={canEdit ? startEditing : undefined}
           >
             {note.content || ()
@@ -326,41 +321,41 @@ export const StickyNote: React.FC<StickyNoteProps> = ({)
         <div
           onMouseDown={handleResizeMouseDown}
           style={{
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            width: 16,
-            height: 16,
-            cursor: 'nw-resize',
-            background: colorInfo.border,
-            borderRadius: '8px 0 6px 0',
-            opacity: 0.6,
-            transition: 'opacity 0.15s ease',
-          }}
+  position: 'absolute',
+  bottom: 0,
+  right: 0,
+  width: 16,
+  height: 16,
+  cursor: 'nw-resize',
+  background: colorInfo.border,
+  borderRadius: '8px 0 6px 0',
+  opacity: 0.6,
+  transition: 'opacity 0.15s ease',
+}}
           onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
           onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
         >
           <div style={{
-            position: 'absolute',
-            bottom: 2,
-            right: 2,
-            width: 3,
-            height: 3,
-            background: 'white',
-            borderRadius: '50%',
-          }} />
+  position: 'absolute',
+  bottom: 2,
+  right: 2,
+  width: 3,
+  height: 3,
+  background: 'white',
+  borderRadius: '50%',
+}} />
         </div>
       )}
       {/* Author and timestamp info */}
       <div style={{
-        position: 'absolute',
-        bottom: -20,
-        left: 0,
-        fontSize: 9,
-        color: '#6b7280',
-        opacity: selected ? 1 : 0,
-        transition: 'opacity 0.2s ease',
-      }}>
+  position: 'absolute',
+  bottom: -20,
+  left: 0,
+  fontSize: 9,
+  color: '#6b7280',
+  opacity: selected ? 1 : 0,
+  transition: 'opacity 0.2s ease',
+}}>
         {note.author} • {new Date(note.timestamp).toLocaleString()}
       </div>
     </div>

@@ -42,8 +42,8 @@ export interface StickyNote {
     collaboration: {
         locked: boolean;
         lockedBy?: string;
-        comments: StickyNoteComment[];
-        mentions: string[];
+        comments: StickyNoteComment;
+        mentions: string;
     };
 }
 export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange' | 'pink' | 'gray';
@@ -61,7 +61,7 @@ export interface StickyNoteComment {
 export interface StickyNoteGroup {
     id: string;
     name: string;
-    notes: string[];
+    notes: string;
     position: {
         x: number;
         y: number;
@@ -81,12 +81,12 @@ export interface StickyNoteFilter {
         end: string;
     };
     textSearch?: string;
-    tags?: string[];
+    tags?: string;
 }
 export interface StickyNoteState {
     notes: Record<string, StickyNote>;
     groups: Record<string, StickyNoteGroup>;
-    selection: string[];
+    selection: string;
     activeNote?: string;
     filter: StickyNoteFilter;
     settings: {
@@ -123,13 +123,13 @@ export interface StickyNoteActions {
     stopEditing: () => void;
     updateContent: (id: string, content: StickyNote['content']) => void;
     updateAppearance: (id: string, appearance: Partial<StickyNote['appearance']>) => void;
-    createGroup: (noteIds: string[], name: string) => string;
+    createGroup: (noteIds: string, name: string) => string;
     addToGroup: (groupId: string, noteId: string) => void;
     removeFromGroup: (groupId: string, noteId: string) => void;
     deleteGroup: (groupId: string) => void;
     setFilter: (filter: Partial<StickyNoteFilter>) => void;
     clearFilter: () => void;
-    searchNotes: (query: string) => string[];
+    searchNotes: (query: string) => string;
     exportNotes: (format: 'json' | 'markdown' | 'html') => string;
     importNotes: (data: string, format: 'json') => void;
     lockNote: (id: string) => void;
@@ -172,13 +172,13 @@ export interface StickyNoteTemplate {
     };
     createdAt: string;
     usageCount: number;
-    tags: string[];
+    tags: string;
 }
 export interface StickyNoteTemplateLibrary {
     templates: Record<string, StickyNoteTemplate>;
-    categories: StickyNoteCategory[];
-    recentlyUsed: string[];
-    favorites: string[];
+    categories: StickyNoteCategory;
+    recentlyUsed: string;
+    favorites: string;
 }
 export interface StickyNotePersistence {
     save: (state: StickyNoteState) => Promise<void>;

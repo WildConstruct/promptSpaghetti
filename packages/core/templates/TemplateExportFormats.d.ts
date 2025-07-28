@@ -4,15 +4,17 @@
  */
 import { ProjectTemplate } from './ProjectTemplateManager';
 import { TemplateVersion } from './TemplateVersionManager';
+
 export interface FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: any): Promise<string | ArrayBuffer>;
     import(data: string | ArrayBuffer, options?: any): Promise<ProjectTemplate>;
     validate(data: string | ArrayBuffer): Promise<{
         valid: boolean;
         errors: string[];
+
     }>;
     getMetadata(data: string | ArrayBuffer): Promise<any>;
-}
+
 export declare class JSONFormatProcessor implements FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_info?: boolean;
@@ -25,7 +27,7 @@ export declare class JSONFormatProcessor implements FormatProcessor {
         errors: string[];
     }>;
     getMetadata(data: string): Promise<any>;
-}
+
 export declare class YAMLFormatProcessor implements FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_info?: boolean;
@@ -37,7 +39,7 @@ export declare class YAMLFormatProcessor implements FormatProcessor {
         errors: string[];
     }>;
     getMetadata(data: string): Promise<any>;
-}
+
 export declare class BundleFormatProcessor implements FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_dependencies?: boolean;
@@ -55,7 +57,7 @@ export declare class BundleFormatProcessor implements FormatProcessor {
     private generateExamples;
     private verifyBundle;
     private calculateChecksum;
-}
+
 export declare class ZipFormatProcessor implements FormatProcessor {
     export(template: ProjectTemplate, version?: TemplateVersion, options?: {)
         include_version_history?: boolean;
@@ -69,7 +71,7 @@ export declare class ZipFormatProcessor implements FormatProcessor {
     }>;
     getMetadata(data: ArrayBuffer): Promise<any>;
     private generateReadme;
-}
+
 export declare class TemplateFormatRegistry {
     private processors;
     constructor();
@@ -77,5 +79,5 @@ export declare class TemplateFormatRegistry {
     getProcessor(format: string): FormatProcessor;
     getSupportedFormats(): string[];
     detectFormat(data: string | ArrayBuffer): Promise<string | null>;
-}
+
 //# sourceMappingURL=TemplateExportFormats.d.ts.map

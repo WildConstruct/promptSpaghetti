@@ -1,9 +1,3 @@
-/**
- * React Hook for Trust Indicators Integration
- *
- * Provides utilities for displaying and managing trust indicators
- * across the Wild Construct platform interface.
- */
 import { TrustScore } from '../auth/IdentityValidation';
 export interface TrustIndicatorConfig {
     userId?: string;
@@ -25,7 +19,7 @@ export interface EnhancedTrustData {
         portfolio: boolean;
         social: boolean;
     };
-    badges: string[];
+    badges: string;
     communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
     trustTrend: 'improving' | 'stable' | 'declining';
 }
@@ -36,53 +30,5 @@ export interface TrustDisplayOptions {
     compactMode?: boolean;
     theme?: 'light' | 'dark' | 'auto';
 }
-export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => {
-    trustData: EnhancedTrustData;
-    isLoading: boolean;
-    error: string;
-    lastUpdated: Date;
-    loadTrustData: (forceRefresh?: boolean) => Promise<void>;
-    refreshTrustData: () => Promise<void>;
-    getTrustLevel: (score?: number) => "professional" | "basic" | "expert" | "verified" | "unverified";
-    getTrustLevelColor: (level: string) => string;
-    getTrustLevelBenefits: (level: string) => string[];
-    formatTrustScore: (score?: number) => string;
-    getTrustScoreColor: (score?: number) => string;
-    trustScore: number;
-    trustTier: "professional" | "basic" | "expert" | "verified" | "unverified";
-    verificationStatus: {
-        email: boolean;
-        phone: boolean;
-        identity: boolean;
-        professional: boolean;
-        portfolio: boolean;
-        social: boolean;
-    };
-    verificationCount: number;
-    shouldShowVerificationPrompt: boolean;
-    getNextVerificationStep: () => string | null;
-    communityStanding: "excellent" | "good" | "poor" | "fair" | "unrated";
-    getCommunityStandingColor: (standing: string) => string;
-    trustTrend: "stable" | "improving" | "declining";
-    getTrustTrendIcon: (trend: string) => string;
-    getTrustTrendColor: (trend: string) => string;
-    badges: string[];
-    getDisplayBadges: (maxBadges?: number) => string[];
-    getRemainingBadgeCount: (maxBadges?: number) => number;
-    templateCount: number;
-    downloadCount: number;
-    averageRating: number;
-    reputationScore: number;
-    canSellTemplates: boolean;
-    canAccessPremiumFeatures: boolean;
-    isVerifiedCreator: boolean;
-    isProfessionalCreator: boolean;
-    hasEmailVerification: boolean;
-    hasPhoneVerification: boolean;
-    hasIdentityVerification: boolean;
-    hasProfessionalVerification: boolean;
-    hasPortfolioVerification: boolean;
-    hasSocialVerification: boolean;
-};
-export default useTrustIndicators;
+export declare const useTrustIndicators: (config?: TrustIndicatorConfig) => void;
 //# sourceMappingURL=useTrustIndicators.d.ts.map

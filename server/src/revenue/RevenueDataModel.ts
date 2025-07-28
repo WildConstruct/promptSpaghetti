@@ -43,6 +43,7 @@ export enum RevenueEventType {
 }
 
 // Revenue Attribution Models
+}
 export interface RevenueAttribution {
   id: string;
   transaction_id: string;
@@ -56,8 +57,10 @@ export interface RevenueAttribution {
   commission_cents: number;
   created_at: Date;
 }
+}
 
 // Template Revenue Performance
+}
 export interface TemplateRevenueMetrics {
   template_id: string;
   version_id?: string;
@@ -81,6 +84,7 @@ export interface TemplateRevenueMetrics {
     license_type: LicenseType;
     count: number;
     revenue_cents: number;
+}
   }>;
   
   // Time-based Metrics
@@ -93,6 +97,7 @@ export interface TemplateRevenueMetrics {
 }
 
 // Creator Revenue Analytics
+}
 export interface CreatorRevenueMetrics {
   creator_id: string;
   
@@ -115,6 +120,7 @@ export interface CreatorRevenueMetrics {
     license_type: LicenseType;
     count: number;
     revenue_cents: number;
+}
   }>;
   
   // Payout Information
@@ -128,6 +134,7 @@ export interface CreatorRevenueMetrics {
 }
 
 // Revenue Event extending Epic 1 AnalyticsEvent
+}
 export interface RevenueEvent extends AnalyticsEvent {
   type: RevenueEventType;
   revenue_data: {
@@ -164,6 +171,7 @@ export interface RevenueEvent extends AnalyticsEvent {
 }
 
 // Pricing Tier and Discount Tracking
+}
 export interface PricingTier {
   id: string;
   name: string;
@@ -176,6 +184,7 @@ export interface PricingTier {
   volume_discounts: Array<{
     min_quantity: number;
     discount_percentage: number;
+}
   }>;
   
   // Geographic Pricing
@@ -195,6 +204,7 @@ export interface PricingTier {
 }
 
 // Discount and Promotion Tracking
+}
 export interface DiscountCode {
   id: string;
   code: string;
@@ -224,8 +234,10 @@ export interface DiscountCode {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Revenue Aggregation for Real-time Analytics
+}
 export interface RevenueAggregation {
   id: string;
   aggregation_type: 'hourly' | 'daily' | 'weekly' | 'monthly';
@@ -245,6 +257,7 @@ export interface RevenueAggregation {
     revenue_cents: number;
     transaction_count: number;
     success_rate: number;
+}
   }>;
   
   // Geographic Breakdown
@@ -273,6 +286,7 @@ export interface RevenueAggregation {
 }
 
 // Revenue Forecast Data
+}
 export interface RevenueForecast {
   id: string;
   forecast_type: 'template' | 'creator' | 'global';
@@ -299,6 +313,7 @@ export interface RevenueForecast {
     predicted_revenue_cents: number;
     confidence_interval_upper: number;
     confidence_interval_lower: number;
+}
   }>;
   
   // Model Performance
@@ -327,7 +342,7 @@ export const RevenueEventSchema = z.object({
     utm_source: z.string().optional(),
     utm_medium: z.string().optional(),
     utm_campaign: z.string().optional()
-  })
+  }
 });
 
 export const PricingTierSchema = z.object({

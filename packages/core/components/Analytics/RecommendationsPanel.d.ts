@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Recommendations panel props
  */
+
 export interface RecommendationsPanelProps {
     recommendations: unknown[];
     analyticsClient: AnalyticsClient;
@@ -10,7 +11,8 @@ export interface RecommendationsPanelProps {
     organizationId?: number;
     onRefresh?: () => void;
     className?: string;
-}
+
+
 /**
  * Recommendations panel component
  */

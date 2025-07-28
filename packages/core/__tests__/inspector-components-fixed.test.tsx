@@ -14,21 +14,21 @@ import { VariationList } from '../components/Inspector/VariationList';
 import { z } from 'zod';
 
 // Mock dependencies
-const mockUpdateNodeData = jest.fn<unknown[], unknown>();
-const mockDeleteNode = jest.fn<unknown[], unknown>();
+const mockUpdateNodeData = jest.fn<unknown, unknown>();
+const mockDeleteNode = jest.fn<unknown, unknown>();
 jest.mock('../hooks/useNodeUtils', () => ({)
-  useNodeUtils: () => ({),
-    updateNodeData: mockUpdateNodeData,
-    deleteNode: mockDeleteNode,
-  })
+  useNodeUtils: () => ({,)
+  updateNodeData: mockUpdateNodeData,
+  deleteNode: mockDeleteNode,
+}
 }));
 jest.mock('reactflow', () => ({)
-  useReactFlow: () => ({),
-    getNodes: jest.fn(() => []),
-    getEdges: jest.fn(() => []),
-    setNodes: jest.fn<unknown[], unknown>(),
-    setEdges: jest.fn<unknown[], unknown>()
-  })
+  useReactFlow: () => ({,)
+  getNodes: jest.fn(() => []),
+  getEdges: jest.fn(() => []),
+  setNodes: jest.fn<unknown, unknown>(),
+  setEdges: jest.fn<unknown, unknown>(),
+}
 }));
 const mockGraphStore = {
   selectedNodeId: 'test-node-id',
@@ -37,18 +37,16 @@ const mockGraphStore = {
       id: 'test-node-id',
       type: 'WeightedChoice',
       data: {,
-        choices: [,
+  choices: [,
           { weight: 0.5, value: 'Option A' },
           { weight: 0.5, value: 'Option B' }
         ]
-      }
-    }
   ],
-  updateNode: jest.fn<unknown[], unknown>(),
-  addVariation: jest.fn<unknown[], unknown>(),
-  removeVariation: jest.fn<unknown[], unknown>(),
-  updateVariation: jest.fn<unknown[], unknown>(),
-  reorderVariations: jest.fn<unknown[], unknown>()
+  updateNode: jest.fn<unknown, unknown>(),
+  addVariation: jest.fn<unknown, unknown>(),
+  removeVariation: jest.fn<unknown, unknown>(),
+  updateVariation: jest.fn<unknown, unknown>(),
+  reorderVariations: jest.fn<unknown, unknown>()
 };
 jest.mock('../graphStore', () => ({)
   useGraphStore: jest.fn(() => mockGraphStore),
@@ -62,20 +60,14 @@ class TestErrorBoundary extends React.Component<
   constructor(props: { children: React.ReactNode; onError?: (error: Error) => void }) {
     super(props);
     this.state = { hasError: false };
-  }
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
-  }
   componentDidCatch(error: Error) {
     this.props.onError?.(error);
-  }
   render() {
     if (this.state.hasError) {
       return <div data-testid="error-boundary">Something went wrong: {this.state.error?.message}</div>;
-    }
     return this.props.children;
-  }
-}
 describe('Inspector Components - Fixed for 80% Coverage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -85,26 +77,25 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     jest.useRealTimers();
   });
   describe('InspectorPanel - Error Handling & Edge Cases', () => {
-    const mockSchema = z.object({)
-      label: z.string().default('Test Node'),
-      value: z.string().default(''),
-      variations: z.array(z.string()).default([]),
-    });
+  const mockSchema = z.object({)
+  label: z.string().default('Test Node'),
+  value: z.string().default(''),
+  variations: z.array(z.string()).default([]),
+});
     const mockNode = {
-      id: 'test-node',
-      type: 'TestNode',
-      data: {,
-        label: 'Test Node',
-        value: 'test value',
-        variations: ['var1', 'var2']
-      }
-    };
+  id: 'test-node',
+  type: 'TestNode',
+  data: {,
+  label: 'Test Node',
+  value: 'test value',
+  variations: ['var1', 'var2'],
+};
     it('should handle null node gracefully', () => {
       render();
         <InspectorPanel
           node={null}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       expect(screen.getByText(/No node selected/i)).toBeInTheDocument();
@@ -114,18 +105,18 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         <InspectorPanel
           node={undefined as any}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       expect(screen.getByText(/No node selected/i)).toBeInTheDocument();
     });
     it('should call onClose when provided', () => {
-      const onClose = jest.fn<unknown[], unknown>();
+      const onClose = jest.fn<unknown, unknown>();
       render();
         <InspectorPanel
           node={mockNode}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
           onClose={onClose}
         />
       );
@@ -133,10 +124,9 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       if (closeButton) {
         fireEvent.click(closeButton);
         expect(onClose).toHaveBeenCalledTimes(1);
-      }
     });
     it('should handle onChange errors gracefully', async () => {
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
@@ -155,7 +145,6 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         await userEvent.type(input, 'test');
         // Should handle error gracefully
         expect(onError).toHaveBeenCalled();
-      }
     });
     it('should handle resize operations efficiently', async () => {
       const startTime = performance.now();
@@ -163,13 +152,12 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         <InspectorPanel
           node={mockNode}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       // Simulate multiple resize operations
       for (let i = 0; i < 100; i++) {
         window.dispatchEvent(new Event('resize'));
-      }
       const endTime = performance.now();
       // Should handle resizes efficiently (< 100ms for 100 operations)
       expect(endTime - startTime).toBeLessThan(100);
@@ -180,7 +168,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
           <InspectorPanel
             node={mockNode}
             schema={null}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();
@@ -198,14 +186,14 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     });
   });
   describe('BaseNodeEditor - Error Handling', () => {
-    const mockSchema = z.object({)
-      label: z.string(),
-      value: z.number(),
-    });
+  const mockSchema = z.object({)
+  label: z.string(),
+  value: z.number(),
+});
     const mockNodeData = {
-      label: 'Test Node',
-      value: 123,
-    };
+  label: 'Test Node',
+  value: 123,
+};
     it('should handle malformed nodeData gracefully', () => {
       expect(() => {
         render();
@@ -213,7 +201,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             nodeId="test-node"
             nodeData={null as any}
             schema={mockSchema}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           >
             <div>Test Content</div>
           </BaseNodeEditor>
@@ -227,7 +215,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             nodeId="test-node"
             nodeData={mockNodeData}
             schema={null as any}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           >
             <div>Test Content</div>
           </BaseNodeEditor>
@@ -235,7 +223,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       }).not.toThrow();
     });
     it('should handle onChange errors gracefully', () => {
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
@@ -261,7 +249,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             nodeId=""
             nodeData={mockNodeData}
             schema={mockSchema}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           >
             <div>Test Content</div>
           </BaseNodeEditor>
@@ -275,7 +263,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             nodeId={undefined as any}
             nodeData={mockNodeData}
             schema={mockSchema}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           >
             <div>Test Content</div>
           </BaseNodeEditor>
@@ -284,13 +272,13 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     });
   });
   describe('TextFieldEditor - Performance & Error Handling', () => {
-    const mockProps = {
-      label: 'Test Field',
-      value: 'test value',
-      fieldKey: 'testField',
-      zodType: z.string(),
-      onChange: jest.fn<unknown[], unknown>()
-    };
+  const mockProps = {
+  label: 'Test Field',
+  value: 'test value',
+  fieldKey: 'testField',
+  zodType: z.string(),
+  onChange: jest.fn<unknown, unknown>(),
+};
     it('should handle null/undefined values gracefully', () => {
       expect(() => {
         render();
@@ -332,11 +320,11 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       expect(input.value).toBe(specialValue);
     });
     it('should handle onChange errors gracefully', async () => {
-      const onChange = jest.fn<unknown[], unknown>().mockImplementation(() => {
+      const onChange = jest.fn<unknown, unknown>().mockImplementation(() => {
         throw new Error('onChange error');
       });
       const user = userEvent.setup();
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <TextFieldEditor
@@ -392,13 +380,13 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     });
   });
   describe('TextAreaEditor - Performance & Error Handling', () => {
-    const mockProps = {
-      label: 'Test TextArea',
-      value: 'test value',
-      fieldKey: 'testField',
-      zodType: z.string(),
-      onChange: jest.fn<unknown[], unknown>()
-    };
+  const mockProps = {
+  label: 'Test TextArea',
+  value: 'test value',
+  fieldKey: 'testField',
+  zodType: z.string(),
+  onChange: jest.fn<unknown, unknown>(),
+};
     it('should handle very large text content', () => {
       const largeText = 'Line 1\\n'.repeat(1000);
       render();
@@ -457,7 +445,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       value: 'option1',
       fieldKey: 'testField',
       zodType: z.enum(['option1', 'option2']),
-      onChange: jest.fn<unknown[], unknown>(),
+      onChange: jest.fn<unknown, unknown>(),
       options: [,
         { value: 'option1', label: 'Option 1' },
         { value: 'option2', label: 'Option 2' }
@@ -537,7 +525,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
   describe('CollapsibleSection - Performance & Error Handling', () => {
     it('should handle rapid toggle operations', async () => {
       const user = userEvent.setup();
-      const onToggle = jest.fn<unknown[], unknown>();
+      const onToggle = jest.fn<unknown, unknown>();
       let collapsed = false;
       const { rerender } = render()
         <CollapsibleSection title="Test Section" collapsed={collapsed} onToggle={onToggle}>
@@ -554,14 +542,13 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             <div>Content</div>
           </CollapsibleSection>
         );
-      }
       // Should not crash and toggle should have been called
       expect(onToggle).toHaveBeenCalledTimes(10);
     });
     it('should handle null children gracefully', () => {
       expect(() => {
         render();
-          <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+          <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
             {null}
           </CollapsibleSection>
         );
@@ -570,7 +557,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     it('should handle undefined children gracefully', () => {
       expect(() => {
         render();
-          <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+          <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
             {undefined}
           </CollapsibleSection>
         );
@@ -588,7 +575,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         </div>
       );
       render();
-        <CollapsibleSection title="Complex Section" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+        <CollapsibleSection title="Complex Section" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
           {complexContent}
         </CollapsibleSection>
       );
@@ -601,7 +588,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         throw new Error('Toggle error');
       });
       const user = userEvent.setup();
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <CollapsibleSection title="Test Section" collapsed={false} onToggle={onToggle}>
@@ -616,7 +603,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     it('should handle empty title gracefully', () => {
       expect(() => {
         render();
-          <CollapsibleSection title="" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+          <CollapsibleSection title="" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
             <div>Content</div>
           </CollapsibleSection>
         );
@@ -624,14 +611,14 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     });
   });
   describe('VariationList - Performance & Error Handling', () => {
-    const mockProps = {
-      nodeId: 'test-node',
-      variations: ['var1', 'var2'],
-      onAdd: jest.fn<unknown[], unknown>(),
-      onRemove: jest.fn<unknown[], unknown>(),
-      onUpdate: jest.fn<unknown[], unknown>(),
-      onReorder: jest.fn<unknown[], unknown>()
-    };
+  const mockProps = {
+  nodeId: 'test-node',
+  variations: ['var1', 'var2'],
+  onAdd: jest.fn<unknown, unknown>(),
+  onRemove: jest.fn<unknown, unknown>(),
+  onUpdate: jest.fn<unknown, unknown>(),
+  onReorder: jest.fn<unknown, unknown>(),
+};
     it('should handle large number of variations efficiently', () => {
       const manyVariations = Array.from({ length: 1000 }, (_, i) => `Variation ${i}`);}
       const startTime = performance.now();
@@ -646,11 +633,11 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       expect(endTime - startTime).toBeLessThan(500);
     });
     it('should handle onAdd errors gracefully', async () => {
-      const onAdd = jest.fn<unknown[], unknown>().mockImplementation(() => {
+      const onAdd = jest.fn<unknown, unknown>().mockImplementation(() => {
         throw new Error('onAdd error');
       });
       const user = userEvent.setup();
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <VariationList
@@ -663,7 +650,6 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       if (addButton) {
         await user.click(addButton);
         expect(onError).toHaveBeenCalled();
-      }
     });
     it('should handle empty variations array', () => {
       render();
@@ -707,7 +693,6 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       const addButton = screen.queryByText(/Add/i);
       if (addButton) {
         expect(addButton).toBeDisabled();
-      }
     });
     it('should handle placeholder text', () => {
       render();
@@ -727,21 +712,21 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
           value=""
           fieldKey="test"
           zodType={z.string()}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       // Should not throw on unmount
       expect(() => unmount()).not.toThrow();
     });
     it('should cleanup timers on unmount', () => {
-      const mockSchema = z.object({)
-        label: z.string(),
-      });
+  const mockSchema = z.object({)
+  label: z.string(),
+});
       const { unmount } = render()
         <InspectorPanel
           node={{ id: 'test', type: 'Test', data: { label: 'test' } }}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       // Should cleanup timers
@@ -753,7 +738,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     });
     it('should cleanup CollapsibleSection event listeners', () => {
       const { unmount } = render()
-        <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+        <CollapsibleSection title="Test" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
           <div>Content</div>
         </CollapsibleSection>
       );
@@ -764,30 +749,30 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         <VariationList
           nodeId="test"
           variations={['var1']}
-          onAdd={jest.fn<unknown[], unknown>()}
-          onRemove={jest.fn<unknown[], unknown>()}
-          onUpdate={jest.fn<unknown[], unknown>()}
+          onAdd={jest.fn<unknown, unknown>()}
+          onRemove={jest.fn<unknown, unknown>()}
+          onUpdate={jest.fn<unknown, unknown>()}
         />
       );
       expect(() => unmount()).not.toThrow();
     });
   });
   describe('Accessibility & Code Quality', () => {
-    it('should provide proper ARIA labels and roles', () => {
-      const mockSchema = z.object({)
-        label: z.string(),
-      });
+  it('should provide proper ARIA labels and roles', () => {
+  const mockSchema = z.object({)
+  label: z.string(),
+});
       render();
         <InspectorPanel
           node={{ id: 'test', type: 'Test', data: { label: 'test' } }}
           schema={mockSchema}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       // Check for basic accessibility attributes
       const buttons = screen.getAllByRole('button');
       buttons.forEach(button => {)
-        // Should have some form of accessible name
+  // Should have some form of accessible name
         expect();
           button.getAttribute('aria-label') || 
           button.getAttribute('title') || 
@@ -803,7 +788,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
           value=""
           fieldKey="test"
           zodType={z.string()}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
         />
       );
       // Should be able to tab to the input
@@ -811,14 +796,14 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
       expect(document.activeElement).toBe(screen.getByRole('textbox'));
     });
     it('should follow TypeScript strict mode requirements', () => {
-      const mockSchema = z.object({)
-        label: z.string(),
-      });
+  const mockSchema = z.object({)
+  label: z.string(),
+});
       const strictProps = {
         node: { id: 'test', type: 'Test', data: { label: 'test' } } as const,
         schema: mockSchema,
-        onChange: jest.fn<unknown[], unknown>() as (data: unknown) => void
-      };
+        onChange: jest.fn<unknown, unknown>() as (data: unknown) => void;
+  };
       expect(() => {
         render(<InspectorPanel {...strictProps} />);
       }).not.toThrow();
@@ -826,7 +811,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
     it('should handle focus management properly', async () => {
       const user = userEvent.setup();
       render();
-        <CollapsibleSection title="Test Section" collapsed={false} onToggle={jest.fn<unknown[], unknown>()}>
+        <CollapsibleSection title="Test Section" collapsed={false} onToggle={jest.fn<unknown, unknown>()}>
           <input type="text" />
         </CollapsibleSection>
       );
@@ -840,9 +825,9 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
         <VariationList
           nodeId="test"
           variations={['var1', 'var2']}
-          onAdd={jest.fn<unknown[], unknown>()}
-          onRemove={jest.fn<unknown[], unknown>()}
-          onUpdate={jest.fn<unknown[], unknown>()}
+          onAdd={jest.fn<unknown, unknown>()}
+          onRemove={jest.fn<unknown, unknown>()}
+          onUpdate={jest.fn<unknown, unknown>()}
         />
       );
       // Should have proper labels for screen readers
@@ -854,7 +839,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
   });
   describe('Edge Cases and Boundary Conditions', () => {
     it('should handle concurrent state updates gracefully', async () => {
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <TextFieldEditor
@@ -884,7 +869,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
           <InspectorPanel
             node={{ id: 'test', type: 'Test', data: { label: 'test' } }}
             schema={z.object({ label: z.string() })}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();
@@ -901,7 +886,7 @@ describe('Inspector Components - Fixed for 80% Coverage', () => {
             value={circularRef.name}
             fieldKey="test"
             zodType={z.string()}
-            onChange={jest.fn<unknown[], unknown>()}
+            onChange={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();

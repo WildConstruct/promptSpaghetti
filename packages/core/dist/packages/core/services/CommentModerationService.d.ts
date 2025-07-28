@@ -1,11 +1,3 @@
-/**
- * Epic 16 Comment Moderation Service
- * Task: E16-1753114247008-F23213 - Develop comment moderation
- *
- * Specialized service for comment moderation that integrates with existing
- * moderation infrastructure. Provides comment-specific moderation capabilities,
- * bulk operations, and real-time processing.
- */
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
 export interface CommentModerationRequest {
     commentId: string;
@@ -74,17 +66,17 @@ export interface CommentModerationQueue {
     filters: CommentModerationFilters;
     priority: number;
     autoAssign: boolean;
-    assignedModerators: string[];
+    assignedModerators: string;
     slaMinutes: number;
     enableAutoModeration: boolean;
-    escalationRules: EscalationRule[];
+    escalationRules: EscalationRule;
 }
 export interface EscalationRule {
     condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
     threshold: number;
     action: 'escalate' | 'auto_reject' | 'require_supervisor' | 'flag_urgent';
     escalateTo?: string;
-    notifyStakeholders: string[];
+    notifyStakeholders: string;
 }
 export interface CommentModerationStats {
     totalComments: number;
@@ -94,33 +86,15 @@ export interface CommentModerationStats {
     flaggedComments: number;
     escalatedComments: number;
     avgProcessingTimeMinutes: number;
-    moderatorWorkload: Array<{
-        moderatorId: string;
-        assignedComments: number;
-        completedToday: number;
-        avgTimeMinutes: number;
-        accuracy: number;
-    }>;
-    toxicityDistribution: {
-        low: number;
-        medium: number;
-        high: number;
-        critical: number;
-    };
-    qualityDistribution: {
-        excellent: number;
-        good: number;
-        fair: number;
-        poor: number;
-    };
-    recentTrends: {
-        volumeChange24h: number;
-        toxicityChange24h: number;
-        qualityChange24h: number;
-    };
+    moderatorWorkload: Array<{}, moderatorId>;
+    string: any;
+    assignedComments: number;
+    completedToday: number;
+    avgTimeMinutes: number;
+    accuracy: number;
 }
 export interface BulkModerationRequest {
-    commentIds: string[];
+    commentIds: string;
     action: CommentModerationAction;
     moderatorId: string;
     reason: string;
@@ -133,20 +107,11 @@ export interface BulkModerationResult {
     totalItems: number;
     successful: number;
     failed: number;
-    results: CommentModerationResult[];
-    errors: Array<{
-        commentId: string;
-        error: string;
-    }>;
-    processingTimeMs: number;
-    summary: Record<string, number>;
+    results: CommentModerationResult;
+    errors: Array<{}, commentId>;
+    string: any;
+    error: string;
 }
-/**
- * Comment Moderation Service
- *
- * Provides specialized moderation capabilities for comments, integrating
- * with existing moderation infrastructure while adding comment-specific features.
- */
 export declare class CommentModerationService {
     private automatedService;
     private workflowService;
@@ -155,78 +120,6 @@ export declare class CommentModerationService {
     private moderationQueues;
     private realtimeSubscriptions;
     constructor(baseUrl?: string);
-    /**
-     * Moderate a single comment
-     */
-    moderateComment(request: CommentModerationRequest): Promise<CommentModerationResult>;
-    /**
-     * Execute bulk moderation actions
-     */
-    bulkModerateComments(request: BulkModerationRequest): Promise<BulkModerationResult>;
-    /**
-     * Get moderation queue with filtering
-     */
-    getModerationQueue(queueId: string, filters?: CommentModerationFilters): Promise<{
-        items: any[];
-        totalCount: number;
-        queueInfo: CommentModerationQueue;
-        stats: Partial<CommentModerationStats>;
-    }>;
-    /**
-     * Get comprehensive moderation statistics
-     */
-    getModerationStats(timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<CommentModerationStats>;
-    /**
-     * Create or update moderation queue
-     */
-    createModerationQueue(queue: CommentModerationQueue): Promise<void>;
-    /**
-     * Subscribe to real-time moderation updates
-     */
-    subscribeToModerationUpdates(subscriberId: string, filters: CommentModerationFilters, callback: (update: any) => void): Promise<void>;
-    /**
-     * Auto-moderate comments based on ML analysis
-     */
-    autoModerateComments(resourceId: string, resourceType: CommentableResourceType, options?: {
-        toxicityThreshold?: number;
-        qualityThreshold?: number;
-        spamThreshold?: number;
-        enableAutoApproval?: boolean;
-        enableAutoRejection?: boolean;
-    }): Promise<{
-        processed: number;
-        autoApproved: number;
-        autoRejected: number;
-        flaggedForReview: number;
-        errors: number;
-    }>;
-    private initializeDefaultQueues;
-    private validateModerationRequest;
-    private getCommentData;
-    private executeModerationAction;
-    private approveComment;
-    private rejectComment;
-    private flagComment;
-    private hideComment;
-    private deleteComment;
-    private escalateComment;
-    private updateModerationAnalytics;
-    private sendModerationNotification;
-    private chunkArray;
-    private processBatchParallel;
-    private processBatchSequential;
-    private fetchCommentsForModeration;
-    private calculateQueueStats;
-    private getBasicModerationStats;
-    private getModeratorWorkloadStats;
-    private getDistributionStats;
-    private getTrendStats;
-    private validateQueueConfig;
-    private setupAutoAssignment;
-    private makeAutoModerationDecision;
+    catch(error: any): void;
 }
-export default CommentModerationService;
 //# sourceMappingURL=CommentModerationService.d.ts.map

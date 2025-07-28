@@ -15,36 +15,36 @@ describe('ClassificationAccessControlService', () => {
   let mockRequest: AccessRequest;
   let mockContext: OperationContext;
   beforeEach(() => {
-    service = new ClassificationAccessControlService();
-    mockContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session123',
-      purpose: 'data analysis',
-      environment: 'production',
-      timestamp: new Date(),
-      source: '192.168.1.100',
-      requestId: 'req123',
-    };
+  service = new ClassificationAccessControlService();
+  mockContext = {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session123',
+  purpose: 'data analysis',
+  environment: 'production',
+  timestamp: new Date(),
+  source: '192.168.1.100',
+  requestId: 'req123',
+};
     mockUserProfile = {
-      userId: 'user123',
-      roles: ['analyst', 'user'],
-      clearanceLevel: 'INTERNAL' as DataClassificationLevel,
-      permissions: ['data.read', 'data.analyze'],
-      restrictions: [],
-      mfaVerified: true,
-      lastAuthenticationAt: new Date(),
-      authenticationLevel: 'MFA',
-    };
+  userId: 'user123',
+  roles: ['analyst', 'user'],
+  clearanceLevel: 'INTERNAL' as DataClassificationLevel,
+  permissions: ['data.read', 'data.analyze'],
+  restrictions: [],
+  mfaVerified: true,
+  lastAuthenticationAt: new Date(),
+  authenticationLevel: 'MFA',
+};
     mockRequest = {
-      userId: 'user123',
-      dataId: 'data123',
-      classification: 'INTERNAL' as DataClassificationLevel,
-      operation: 'read',
-      purpose: 'data analysis',
-      context: mockContext,
-      requestedAt: new Date(),
-    };
+  userId: 'user123',
+  dataId: 'data123',
+  classification: 'INTERNAL' as DataClassificationLevel,
+  operation: 'read',
+  purpose: 'data analysis',
+  context: mockContext,
+  requestedAt: new Date(),
+};
   });
   describe('Default Policy Initialization', () => {
     it('should initialize with default policies for all classification levels', () => {
@@ -83,55 +83,55 @@ describe('ClassificationAccessControlService', () => {
       expect(decision.auditRequired).toBe(true);
     });
     it('should deny access when user lacks sufficient clearance', async () => {
-      // Give user sufficient authentication but insufficient clearance
-      const userWithStrongAuth = {
-        ...mockUserProfile,
-        authenticationLevel: 'STRONG_MFA' as const // Satisfies RESTRICTED auth requirement,
-      };
+  // Give user sufficient authentication but insufficient clearance
+  const userWithStrongAuth = {
+  ...mockUserProfile,
+  authenticationLevel: 'STRONG_MFA' as const // Satisfies RESTRICTED auth requirement,
+};
       await service.registerUserProfile(userWithStrongAuth);
       const highClassificationRequest = {
-        ...mockRequest,
-        classification: 'RESTRICTED' as DataClassificationLevel,
-      };
+  ...mockRequest,
+  classification: 'RESTRICTED' as DataClassificationLevel,
+};
       const decision = await service.evaluateAccess(highClassificationRequest);
       expect(decision.granted).toBe(false);
       expect(decision.reason).toContain('Insufficient clearance level');
       expect(decision.monitoringLevel).toBe('ENHANCED');
     });
     it('should deny access when user profile is not found', async () => {
-      const unknownUserRequest = {
-        ...mockRequest,
-        userId: 'unknown_user',
-      };
+  const unknownUserRequest = {
+  ...mockRequest,
+  userId: 'unknown_user',
+};
       const decision = await service.evaluateAccess(unknownUserRequest);
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('User profile not found');
     });
     it('should deny access when authentication level is insufficient', async () => {
-      const weakAuthProfile = {
-        ...mockUserProfile,
-        authenticationLevel: 'STANDARD' as const,
-      };
+  const weakAuthProfile = {
+  ...mockUserProfile,
+  authenticationLevel: 'STANDARD' as const,
+};
       await service.registerUserProfile(weakAuthProfile);
       const confidentialRequest = {
-        ...mockRequest,
-        classification: 'CONFIDENTIAL' as DataClassificationLevel,
-      };
+  ...mockRequest,
+  classification: 'CONFIDENTIAL' as DataClassificationLevel,
+};
       const decision = await service.evaluateAccess(confidentialRequest);
       expect(decision.granted).toBe(false);
       expect(decision.reason).toContain('Insufficient authentication level');
     });
     it('should require approval workflow for confidential data', async () => {
-      const mfaProfile = {
-        ...mockUserProfile,
-        clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
-        authenticationLevel: 'MFA' as const,
-      };
+  const mfaProfile = {
+  ...mockUserProfile,
+  clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
+  authenticationLevel: 'MFA' as const,
+};
       await service.registerUserProfile(mfaProfile);
       const confidentialRequest = {
-        ...mockRequest,
-        classification: 'CONFIDENTIAL' as DataClassificationLevel,
-      };
+  ...mockRequest,
+  classification: 'CONFIDENTIAL' as DataClassificationLevel,
+};
       const decision = await service.evaluateAccess(confidentialRequest);
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('Approval workflow required');
@@ -149,14 +149,13 @@ describe('ClassificationAccessControlService', () => {
       for (const request of requests) {
         const decision = await service.evaluateAccess(request);
         expect(decision.granted).toBe(true);
-      }
     });
     it('should deny access to higher classification levels', async () => {
-      // Update profile to have sufficient authentication for higher levels
-      const userWithStrongAuth = {
-        ...mockUserProfile,
-        authenticationLevel: 'STRONG_MFA' as const // Satisfies all auth requirements,
-      };
+  // Update profile to have sufficient authentication for higher levels
+  const userWithStrongAuth = {
+  ...mockUserProfile,
+  authenticationLevel: 'STRONG_MFA' as const // Satisfies all auth requirements,
+};
       await service.registerUserProfile(userWithStrongAuth);
       const requests = [;
         { ...mockRequest, classification: 'CONFIDENTIAL' as DataClassificationLevel },
@@ -166,23 +165,22 @@ describe('ClassificationAccessControlService', () => {
         const decision = await service.evaluateAccess(request);
         expect(decision.granted).toBe(false);
         expect(decision.reason).toContain('Insufficient clearance level');
-      }
     });
   });
   describe('Access Conditions Generation', () => {
-    beforeEach(async () => {
-      const confidentialProfile = {
-        ...mockUserProfile,
-        clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
-        authenticationLevel: 'MFA' as const,
-      };
+  beforeEach(async () => {
+  const confidentialProfile = {
+  ...mockUserProfile,
+  clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
+  authenticationLevel: 'MFA' as const,
+};
       await service.registerUserProfile(confidentialProfile);
     });
     it('should generate time restrictions for confidential data', async () => {
-      const confidentialRequest = {
-        ...mockRequest,
-        classification: 'CONFIDENTIAL' as DataClassificationLevel,
-      };
+  const confidentialRequest = {
+  ...mockRequest,
+  classification: 'CONFIDENTIAL' as DataClassificationLevel,
+};
       // Note: This will fail approval workflow, but we can check conditions
       const decision = await service.evaluateAccess(confidentialRequest);
       const timeRestriction = decision.conditions.find(c => c.type === 'TIME_RESTRICTION');
@@ -215,10 +213,10 @@ describe('ClassificationAccessControlService', () => {
       expect(auditEvents[0].dataId).toBe('data123');
     });
     it('should create audit events for denied access', async () => {
-      const restrictedRequest = {
-        ...mockRequest,
-        classification: 'RESTRICTED' as DataClassificationLevel,
-      };
+  const restrictedRequest = {
+  ...mockRequest,
+  classification: 'RESTRICTED' as DataClassificationLevel,
+};
       await service.evaluateAccess(restrictedRequest);
       const auditEvents = service.getAuditEvents('user123');
       expect(auditEvents).toHaveLength(1);
@@ -226,15 +224,15 @@ describe('ClassificationAccessControlService', () => {
       expect(auditEvents[0].result).toBe('FAILURE');
     });
     it('should filter audit events by user and data ID', async () => {
-      const anotherRequest = {
-        ...mockRequest,
-        userId: 'user456',
-        dataId: 'data456',
-      };
+  const anotherRequest = {
+  ...mockRequest,
+  userId: 'user456',
+  dataId: 'data456',
+};
       const anotherProfile = {
-        ...mockUserProfile,
-        userId: 'user456',
-      };
+  ...mockUserProfile,
+  userId: 'user456',
+};
       await service.registerUserProfile(anotherProfile);
       await service.evaluateAccess(mockRequest);
       await service.evaluateAccess(anotherRequest);
@@ -253,21 +251,21 @@ describe('ClassificationAccessControlService', () => {
       expect(decision.granted).toBe(true);
     });
     it('should update user clearance levels', async () => {
-      await service.registerUserProfile(mockUserProfile);
-      const result = await service.updateUserClearance('user123', 'CONFIDENTIAL');
-      expect(result.valid).toBe(true);
-      expect(result.errors).toHaveLength(0);
-      // Test access to confidential data
-      const confidentialRequest = {
-        ...mockRequest,
-        classification: 'CONFIDENTIAL' as DataClassificationLevel,
-      };
+  await service.registerUserProfile(mockUserProfile);
+  const result = await service.updateUserClearance('user123', 'CONFIDENTIAL');
+  expect(result.valid).toBe(true);
+  expect(result.errors).toHaveLength(0);
+  // Test access to confidential data
+  const confidentialRequest = {
+  ...mockRequest,
+  classification: 'CONFIDENTIAL' as DataClassificationLevel,
+};
       // Update profile to have MFA authentication for confidential access
       const updatedProfile = {
-        ...mockUserProfile,
-        clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
-        authenticationLevel: 'MFA' as const,
-      };
+  ...mockUserProfile,
+  clearanceLevel: 'CONFIDENTIAL' as DataClassificationLevel,
+  authenticationLevel: 'MFA' as const,
+};
       await service.registerUserProfile(updatedProfile);
       // This should still fail due to approval workflow, but clearance check should pass
       const decision = await service.evaluateAccess(confidentialRequest);
@@ -280,29 +278,28 @@ describe('ClassificationAccessControlService', () => {
     });
   });
   describe('Policy Management', () => {
-    it('should update access policies', async () => {
-      const updates = {
-        requirements: {,
-          authenticationLevel: 'BIOMETRIC' as const,
-          authorizationRequired: true,
-          approvalWorkflow: false,
-          timeRestrictions: false,
-          purposeLimitation: true,
-          auditLogging: 'ENHANCED' as const,
-          exportRestrictions: true,
-        }
-      };
+  it('should update access policies', async () => {
+  const updates = {
+  requirements: {,
+  authenticationLevel: 'BIOMETRIC' as const,
+  authorizationRequired: true,
+  approvalWorkflow: false,
+  timeRestrictions: false,
+  purposeLimitation: true,
+  auditLogging: 'ENHANCED' as const,
+  exportRestrictions: true,
+};
       await service.updateAccessPolicy('INTERNAL', updates);
       const updatedPolicy = service.getAccessPolicy('INTERNAL');
       expect(updatedPolicy?.requirements.authenticationLevel).toBe('BIOMETRIC');
       expect(updatedPolicy?.lastModified).toBeInstanceOf(Date);
     });
     it('should increment version when updating policies', async () => {
-      const originalPolicy = service.getAccessPolicy('INTERNAL');
-      const originalVersion = originalPolicy?.version;
-      await service.updateAccessPolicy('INTERNAL', {)
-        name: 'Updated Internal Policy',
-      });
+  const originalPolicy = service.getAccessPolicy('INTERNAL');
+  const originalVersion = originalPolicy?.version;
+  await service.updateAccessPolicy('INTERNAL', {)
+  name: 'Updated Internal Policy',
+});
       const updatedPolicy = service.getAccessPolicy('INTERNAL');
       expect(updatedPolicy?.version).not.toBe(originalVersion);
       expect(updatedPolicy?.name).toBe('Updated Internal Policy');
@@ -318,74 +315,74 @@ describe('ClassificationAccessControlService', () => {
       await service.registerUserProfile(mockUserProfile);
     });
     it('should validate time restrictions during business hours', async () => {
-      const businessHourContext = {
-        ...mockContext,
-        timestamp: new Date('2024-01-15T14:00:00Z') // Monday 2 PM,
-      };
+  const businessHourContext = {
+  ...mockContext,
+  timestamp: new Date('2024-01-15T14:00:00Z') // Monday 2 PM,
+};
       const timeCondition = {
-        type: 'TIME_RESTRICTION' as const,
-        description: 'Business hours only',
-        parameters: {,
-          startHour: 9,
-          endHour: 17,
-          businessDaysOnly: true,
-        },
-        mandatory: true,
-      };
+  type: 'TIME_RESTRICTION' as const,
+  description: 'Business hours only',
+  parameters: {,
+  startHour: 9,
+  endHour: 17,
+  businessDaysOnly: true,
+},
+  mandatory: true;
+  };
       const result = await service.validateAccessConditions([timeCondition], businessHourContext);
       expect(result.valid).toBe(true);
     });
     it('should reject access outside business hours', async () => {
-      const afterHoursContext = {
-        ...mockContext,
-        timestamp: new Date('2024-01-15T20:00:00Z') // Monday 8 PM,
-      };
+  const afterHoursContext = {
+  ...mockContext,
+  timestamp: new Date('2024-01-15T20:00:00Z') // Monday 8 PM,
+};
       const timeCondition = {
-        type: 'TIME_RESTRICTION' as const,
-        description: 'Business hours only',
-        parameters: {,
-          startHour: 9,
-          endHour: 17,
-          businessDaysOnly: true,
-        },
-        mandatory: true,
-      };
+  type: 'TIME_RESTRICTION' as const,
+  description: 'Business hours only',
+  parameters: {,
+  startHour: 9,
+  endHour: 17,
+  businessDaysOnly: true,
+},
+  mandatory: true;
+  };
       const result = await service.validateAccessConditions([timeCondition], afterHoursContext);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Access attempted outside allowed time window');
     });
     it('should validate purpose limitations', async () => {
-      const purposeCondition = {
-        type: 'PURPOSE_LIMITATION' as const,
-        description: 'Purpose restricted',
-        parameters: {,
-          allowedPurposes: ['data analysis', 'reporting']
-        },
-        mandatory: true,
-      };
+  const purposeCondition = {
+  type: 'PURPOSE_LIMITATION' as const,
+  description: 'Purpose restricted',
+  parameters: {,
+  allowedPurposes: ['data analysis', 'reporting'],
+},
+  mandatory: true;
+  };
       let result = await service.validateAccessConditions([purposeCondition], mockContext);
       expect(result.valid).toBe(true);
       const invalidPurposeContext = {
-        ...mockContext,
-        purpose: 'data mining',
-      };
+  ...mockContext,
+  purpose: 'data mining',
+};
       result = await service.validateAccessConditions([purposeCondition], invalidPurposeContext);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Access purpose does not match approved purpose');
     });
     it('should validate export restrictions', async () => {
-      const exportRestriction = {
-        type: 'EXPORT_RESTRICTED' as const,
-        description: 'Export not allowed',
-        parameters: {,
-          allowExport: false,
-        },
-        mandatory: true,
-      };
+  const exportRestriction = {
+  type: 'EXPORT_RESTRICTED' as const,
+  description: 'Export not allowed',
+  parameters: {,
+  allowExport: false,
+},
+  mandatory: true;
+  };
       const exportContext = {
-        ...mockContext,
-        operation: 'export' as const,
-      };
+  ...mockContext,
+  operation: 'export' as const,
+};
       const result = await service.validateAccessConditions([exportRestriction], exportContext);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Export operation not permitted for this classification');
@@ -398,10 +395,10 @@ describe('ClassificationAccessControlService', () => {
       const publicDecision = await service.evaluateAccess(publicRequest);
       expect(publicDecision.monitoringLevel).toBe('STANDARD');
       const confidentialProfile = {
-        ...mockUserProfile,
-        clearanceLevel: 'RESTRICTED' as DataClassificationLevel,
-        authenticationLevel: 'STRONG_MFA' as const,
-      };
+  ...mockUserProfile,
+  clearanceLevel: 'RESTRICTED' as DataClassificationLevel,
+  authenticationLevel: 'STRONG_MFA' as const,
+};
       await service.registerUserProfile(confidentialProfile);
       const restrictedRequest = { ...mockRequest, classification: 'RESTRICTED' as DataClassificationLevel };
       const restrictedDecision = await service.evaluateAccess(restrictedRequest);

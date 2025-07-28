@@ -31,13 +31,13 @@ export declare enum MonitoringEventType {
     ANOMALY_DETECTED = "anomaly_detected",
     THRESHOLD_EXCEEDED = "threshold_exceeded",
     ERROR_OCCURRED = "error_occurred"
-}
+
 export declare enum AlertSeverity {
     INFO = "info",
     WARNING = "warning",
     ERROR = "error",
     CRITICAL = "critical"
-}
+
 export interface MonitoringEvent {
     id: string;
     type: MonitoringEventType;
@@ -48,7 +48,7 @@ export interface MonitoringEvent {
     severity: AlertSeverity;
     source: string;
     userId?: string;
-}
+
 export interface ClassificationPerformanceMetrics {
     totalClassifications: number;
     averageResponseTime: number;
@@ -59,7 +59,7 @@ export interface ClassificationPerformanceMetrics {
     cacheHitRate: number;
     queueDepth: number;
     lastUpdated: Date;
-}
+
 export interface ClassificationStatistics {
     byLevel: Record<ClassificationLevel, number>;
     byCategory: Record<DataCategory, number>;
@@ -71,7 +71,7 @@ export interface ClassificationStatistics {
         start: Date;
         end: Date;
     };
-}
+
 export interface ComplianceMetrics {
     totalViolations: number;
     violationsByFramework: Record<ComplianceFramework, number>;
@@ -80,7 +80,7 @@ export interface ComplianceMetrics {
     criticalViolations: number;
     resolvedViolations: number;
     pendingRemediation: number;
-}
+
 export interface ClassificationAnomaly {
     id: string;
     type: 'volume' | 'pattern' | 'timing' | 'classification_change';
@@ -91,7 +91,7 @@ export interface ClassificationAnomaly {
     expectedPattern: any;
     actualPattern: any;
     recommendation: string;
-}
+
 export interface AlertConfig {
     enabled: boolean;
     thresholds: {,
@@ -107,7 +107,7 @@ export interface AlertConfig {
     };
     recipients: string[];
     webhookUrl?: string;
-}
+
 export interface MonitorConfig {
     enableRealTimeMonitoring: boolean;
     enablePerformanceTracking: boolean;
@@ -117,7 +117,6 @@ export interface MonitorConfig {
     aggregationIntervalMinutes: number;
     alertConfig: AlertConfig;
     dashboardRefreshIntervalSeconds: number;
-}
 /**
  * Classification Monitoring Service
  */
@@ -215,6 +214,6 @@ export declare class ClassificationMonitor extends EventEmitter {
      * Stop monitoring and cleanup
      */
     destroy(): void;
-}
+
 export default ClassificationMonitor;
 //# sourceMappingURL=ClassificationMonitor.d.ts.map

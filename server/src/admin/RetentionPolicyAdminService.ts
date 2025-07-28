@@ -19,12 +19,14 @@ import {
 } from '../services/DataRetentionFrameworkService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
+}
 export interface AdminRetentionPolicy extends RetentionPolicy {
   adminSettings: AdminPolicySettings;
   statistics: PolicyStatistics;
   compliance: ComplianceStatus;
 }
 
+}
 export interface AdminPolicySettings {
   autoEnforcement: boolean;
   requireApproval: boolean;
@@ -35,6 +37,7 @@ export interface AdminPolicySettings {
   auditRequired: boolean;
   riskAssessment: RiskLevel;
   businessJustification?: string;
+}
 }
 
 export enum EscalationLevel {
@@ -60,6 +63,7 @@ export enum RiskLevel {
   CRITICAL = 'critical'
 }
 
+}
 export interface PolicyStatistics {
   recordsManaged: number;
   recordsDeleted: number;
@@ -72,7 +76,9 @@ export interface PolicyStatistics {
   lastEnforcement?: Date;
   nextScheduledReview: Date;
 }
+}
 
+}
 export interface ComplianceStatus {
   isCompliant: boolean;
   complianceScore: number; // 0-100
@@ -82,7 +88,9 @@ export interface ComplianceStatus {
   certificationStatus: CertificationStatus;
   riskAssessment: RiskAssessment;
 }
+}
 
+}
 export interface ComplianceIssue {
   issueId: string;
   type: IssueType;
@@ -93,6 +101,7 @@ export interface ComplianceIssue {
   resolvedAt?: Date;
   resolution?: string;
   assignedTo?: string;
+}
 }
 
 export enum IssueType {
@@ -120,6 +129,7 @@ export enum CertificationStatus {
   NOT_APPLICABLE = 'not_applicable'
 }
 
+}
 export interface RiskAssessment {
   overallRisk: RiskLevel;
   dataVolume: number;
@@ -128,6 +138,7 @@ export interface RiskAssessment {
   businessImpact: BusinessImpact;
   recommendedActions: string[];
   lastAssessment: Date;
+}
 }
 
 export enum SensitivityLevel {
@@ -146,6 +157,7 @@ export enum BusinessImpact {
   CRITICAL = 'critical'
 }
 
+}
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -161,6 +173,7 @@ export interface PolicyTemplate {
   usageCount: number;
   averageCompliance: number;
 }
+}
 
 export enum PolicyCategory {
   PERSONAL_DATA = 'personal_data',
@@ -172,6 +185,7 @@ export enum PolicyCategory {
   LEGAL = 'legal'
 }
 
+}
 export interface RetentionException {
   exceptionId: string;
   policyId: string;
@@ -188,6 +202,7 @@ export interface RetentionException {
   riskAssessment: string;
   conditions: string[];
   reviewRequired: boolean;
+}
 }
 
 export enum ExceptionType {
@@ -207,6 +222,7 @@ export enum ExceptionStatus {
   REVOKED = 'revoked'
 }
 
+}
 export interface RetentionReport {
   reportId: string;
   reportType: RetentionReportType;
@@ -221,6 +237,7 @@ export interface RetentionReport {
   exportFormats: ExportFormat[];
   distributionList: string[];
 }
+}
 
 export enum RetentionReportType {
   COMPLIANCE_AUDIT = 'compliance_audit',
@@ -231,6 +248,7 @@ export enum RetentionReportType {
   EXCEPTION_REVIEW = 'exception_review'
 }
 
+}
 export interface ReportScope {
   policies: string[];
   dataCategories: DataCategory[];
@@ -239,13 +257,17 @@ export interface ReportScope {
   includeExceptions: boolean;
   includeArchived: boolean;
 }
+}
 
+}
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   granularity: 'day' | 'week' | 'month' | 'quarter' | 'year';
 }
+}
 
+}
 export interface RetentionReportSummary {
   totalRecords: number;
   totalPolicies: number;
@@ -257,7 +279,9 @@ export interface RetentionReportSummary {
   costSavings: number;
   recommendations: number;
 }
+}
 
+}
 export interface ReportFinding {
   findingId: string;
   type: FindingType;
@@ -270,6 +294,7 @@ export interface ReportFinding {
   timeline: string;
   assignedTo?: string;
 }
+}
 
 export enum FindingType {
   NON_COMPLIANCE = 'non_compliance',
@@ -279,6 +304,7 @@ export enum FindingType {
   ANOMALY = 'anomaly'
 }
 
+}
 export interface ComplianceMetrics {
   overallScore: number; // 0-100
   policyCompliance: number;
@@ -289,13 +315,16 @@ export interface ComplianceMetrics {
   certificationStatus: CertificationStatus[];
   keyIndicators: KeyIndicator[];
 }
+}
 
+}
 export interface KeyIndicator {
   name: string;
   value: number;
   target: number;
   trend: 'improving' | 'stable' | 'declining';
   importance: 'low' | 'medium' | 'high';
+}
 }
 
 export enum ExportFormat {
@@ -306,6 +335,7 @@ export enum ExportFormat {
   XML = 'xml'
 }
 
+}
 export interface BulkPolicyOperation {
   operationId: string;
   type: BulkOperationType;
@@ -318,6 +348,7 @@ export interface BulkPolicyOperation {
   results: BulkOperationResults;
   initiatedBy: string;
 }
+}
 
 export enum BulkOperationType {
   APPLY_POLICY = 'apply_policy',
@@ -329,6 +360,7 @@ export enum BulkOperationType {
   COMPLIANCE_CHECK = 'compliance_check'
 }
 
+}
 export interface BulkOperationScope {
   policyIds?: string[];
   dataCategories?: DataCategory[];
@@ -336,7 +368,9 @@ export interface BulkOperationScope {
   departments?: string[];
   ageThreshold?: number; // days
 }
+}
 
+}
 export interface BulkOperationParameters {
   dryRun?: boolean;
   batchSize?: number;
@@ -344,6 +378,7 @@ export interface BulkOperationParameters {
   requireApproval?: boolean;
   notifyAffected?: boolean;
   reason?: string;
+}
 }
 
 export enum BulkOperationStatus {
@@ -355,6 +390,7 @@ export enum BulkOperationStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 export interface BulkOperationResults {
   recordsProcessed: number;
   recordsSucceeded: number;
@@ -363,11 +399,14 @@ export interface BulkOperationResults {
   warnings: string[];
   summary: string;
 }
+}
 
+}
 export interface BulkOperationError {
   recordId: string;
   error: string;
   code: string;
+}
 }
 
 export class RetentionPolicyAdminService {
@@ -404,6 +443,7 @@ export class RetentionPolicyAdminService {
     adminSettings: AdminPolicySettings,
     createdBy: string
   ): Promise<AdminRetentionPolicy> {
+
     console.log(`📋 Creating admin retention policy: ${policyData.name}`);
 
     // Create base policy through framework
@@ -441,7 +481,7 @@ export class RetentionPolicyAdminService {
         categories: adminPolicy.categories,
         autoEnforcement: adminSettings.autoEnforcement,
         riskLevel: adminSettings.riskAssessment
-      },
+  }
       severity: 'info'
     });
 
@@ -458,6 +498,7 @@ export class RetentionPolicyAdminService {
     complianceStatus?: 'compliant' | 'non_compliant' | 'at_risk';
     isActive?: boolean;
   } = {}): Promise<AdminRetentionPolicy[]> {
+
     const basePolicies = await this.retentionFramework.getAllPolicies();
     const adminPolicies: AdminRetentionPolicy[] = [];
 
@@ -486,6 +527,7 @@ export class RetentionPolicyAdminService {
     settings: Partial<AdminPolicySettings>,
     updatedBy: string
   ): Promise<AdminRetentionPolicy> {
+
     console.log(`📝 Updating admin settings for policy: ${policyId}`);
 
     const currentSettings = await this.getAdminPolicySettings(policyId);
@@ -511,7 +553,7 @@ export class RetentionPolicyAdminService {
         changes: Object.keys(settings),
         previousRisk: currentSettings.riskAssessment,
         newRisk: settings.riskAssessment
-      },
+  }
       severity: 'info'
     });
 
@@ -531,6 +573,7 @@ export class RetentionPolicyAdminService {
     templateData: Omit<PolicyTemplate, 'templateId' | 'createdAt' | 'usageCount' | 'averageCompliance'>,
     createdBy: string
   ): Promise<PolicyTemplate> {
+
     console.log(`📄 Creating policy template: ${templateData.name}`);
 
     const templateId = this.generateTemplateId();
@@ -553,7 +596,7 @@ export class RetentionPolicyAdminService {
         name: template.name,
         category: template.category,
         isPublic: template.isPublic
-      },
+  }
       severity: 'info'
     });
 
@@ -570,9 +613,10 @@ export class RetentionPolicyAdminService {
       description?: string;
       adminSettings?: Partial<AdminPolicySettings>;
       customization?: any;
-    },
+  }
     createdBy: string
   ): Promise<AdminRetentionPolicy> {
+
     console.log(`🏗️ Creating policy from template: ${templateId}`);
 
     const template = await this.getPolicyTemplate(templateId);
@@ -613,6 +657,7 @@ export class RetentionPolicyAdminService {
     exceptionData: Omit<RetentionException, 'exceptionId' | 'requestedAt' | 'status'>,
     requestedBy: string
   ): Promise<RetentionException> {
+
     console.log(`⚠️ Creating retention exception for policy: ${exceptionData.policyId}`);
 
     const exceptionId = this.generateExceptionId();
@@ -643,7 +688,7 @@ export class RetentionPolicyAdminService {
         recordId: exceptionData.recordId,
         type: exceptionData.type,
         reason: exceptionData.reason
-      },
+  }
       severity: 'warning'
     });
 
@@ -659,6 +704,7 @@ export class RetentionPolicyAdminService {
     approvedBy: string,
     reason?: string
   ): Promise<RetentionException> {
+
     console.log(`⚖️ Processing retention exception: ${exceptionId} - ${decision}`);
 
     const exception = await this.getRetentionException(exceptionId);
@@ -690,7 +736,7 @@ export class RetentionPolicyAdminService {
         recordId: exception.recordId,
         reason,
         requestedBy: exception.requestedBy
-      },
+  }
       severity: decision === 'approve' ? 'warning' : 'info'
     });
 
@@ -708,6 +754,7 @@ export class RetentionPolicyAdminService {
     scope: ReportScope,
     assessorId: string
   ): Promise<ComplianceMetrics> {
+
     console.log('🔍 Performing comprehensive compliance assessment');
 
     const policies = await this.getPoliciesInScope(scope);
@@ -750,7 +797,7 @@ export class RetentionPolicyAdminService {
         scope: scope.policies.length + ' policies',
         overallScore,
         criticalIssues: issues.filter(i => i.severity === IssueSeverity.CRITICAL).length
-      },
+  }
       severity: 'info'
     });
 
@@ -766,6 +813,7 @@ export class RetentionPolicyAdminService {
     period: ReportPeriod,
     generatedBy: string
   ): Promise<RetentionReport> {
+
     console.log(`📊 Generating ${reportType} report`);
 
     const reportId = this.generateReportId();
@@ -799,7 +847,7 @@ export class RetentionPolicyAdminService {
         reportType,
         complianceScore: compliance.overallScore,
         findingsCount: findings.length
-      },
+  }
       severity: 'info'
     });
 
@@ -819,6 +867,7 @@ export class RetentionPolicyAdminService {
     parameters: BulkOperationParameters,
     initiatedBy: string
   ): Promise<BulkPolicyOperation> {
+
     console.log(`🔄 Executing bulk operation: ${type}`);
 
     const operationId = this.generateOperationId();
@@ -837,7 +886,7 @@ export class RetentionPolicyAdminService {
         errors: [],
         warnings: [],
         summary: ''
-      },
+  }
       initiatedBy
     };
 
@@ -853,7 +902,7 @@ export class RetentionPolicyAdminService {
         operationId,
         type,
         dryRun: parameters.dryRun || false
-      },
+  }
       severity: 'info'
     });
 
@@ -926,6 +975,7 @@ export class RetentionPolicyAdminService {
 
   // Placeholder methods for actual implementation
   private async getAdminRetentionPolicy(policyId: string): Promise<AdminRetentionPolicy> {
+
     // Check cache first
     const cached = this.policyCache.get(policyId);
     if (cached) {
@@ -947,6 +997,7 @@ export class RetentionPolicyAdminService {
   }
 
   private async getAdminPolicySettings(policyId: string): Promise<AdminPolicySettings> {
+
     // Check cache first
     const cached = this.adminSettingsCache.get(policyId);
     if (cached) {
@@ -967,9 +1018,11 @@ export class RetentionPolicyAdminService {
   }
 
   private async storeAdminPolicySettings(policyId: string, settings: AdminPolicySettings): Promise<void> {
+
     this.adminSettingsCache.set(policyId, settings);
   }
   private async calculatePolicyStatistics(policyId: string): Promise<PolicyStatistics> {
+
     return {
       recordsManaged: 1000,
       recordsDeleted: 50,
@@ -984,6 +1037,7 @@ export class RetentionPolicyAdminService {
   }
 
   private async assessPolicyCompliance(policyId: string): Promise<ComplianceStatus> {
+
     return {
       isCompliant: true,
       complianceScore: 92,
@@ -998,15 +1052,15 @@ export class RetentionPolicyAdminService {
         jurisdictionalComplexity: 3,
         businessImpact: BusinessImpact.MODERATE,
         recommendedActions: ['Regular monitoring', 'Quarterly reviews'],
-        lastAssessment: new Date()
-      }
+        lastAssessment: new Date(}
     };
   }
 
   private async schedulePolicyReview(policyId: string, frequency: ReviewFrequency): Promise<void> {}
   private async triggerComplianceReassessment(policyId: string): Promise<void> {}
   private async storePolicyTemplate(template: PolicyTemplate): Promise<void> {}
-  private async getPolicyTemplate(templateId: string): Promise<PolicyTemplate | null> { 
+  private async getPolicyTemplate(templateId: string): Promise<PolicyTemplate | null> {
+
     // For testing purposes, return a mock template for 'template-123'
     if (templateId === 'template-123') {
       return {
@@ -1025,7 +1079,7 @@ export class RetentionPolicyAdminService {
           exemptionLimit: 3,
           auditRequired: true,
           riskAssessment: RiskLevel.HIGH
-        },
+  }
         applicableDataTypes: [DataCategory.PERSONAL_IDENTIFIABLE, DataCategory.BEHAVIORAL],
         isPublic: true,
         createdBy: 'admin',
@@ -1042,7 +1096,8 @@ export class RetentionPolicyAdminService {
     exception: RetentionException,
     escalationLevel?: EscalationLevel
   ): Promise<void> {}
-  private async getRetentionException(exceptionId: string): Promise<RetentionException | null> { 
+  private async getRetentionException(exceptionId: string): Promise<RetentionException | null> {
+
     // For testing purposes, return mock exceptions for known test IDs
     if (exceptionId === 'exception-789') {
       return {
@@ -1087,7 +1142,8 @@ export class RetentionPolicyAdminService {
   private async updateRetentionException(exception: RetentionException): Promise<void> {}
   private async applyRetentionException(exception: RetentionException): Promise<void> {}
   private async approveException(exceptionId: string, approvedBy: string, reason: string): Promise<void> {}
-  private async getPoliciesInScope(scope: ReportScope): Promise<AdminRetentionPolicy[]> { 
+  private async getPoliciesInScope(scope: ReportScope): Promise<AdminRetentionPolicy[]> {
+
     // Return at least one mock policy for testing
     return [{
       policyId: 'policy-1',
@@ -1115,6 +1171,7 @@ export class RetentionPolicyAdminService {
     scope: ReportScope,
     period: ReportPeriod
   ): Promise<RetentionReportSummary> {
+
     return {
       totalRecords: 10000,
       totalPolicies: 25,
@@ -1137,6 +1194,7 @@ export class RetentionPolicyAdminService {
   private async storeRetentionReport(report: RetentionReport): Promise<void> {}
   private async storeBulkOperation(operation: BulkPolicyOperation): Promise<void> {}
   private async processBulkOperationAsync(operation: BulkPolicyOperation): Promise<void> {
+
     // Background processing implementation
     setTimeout(() => {
       console.log(`✅ Bulk operation completed: ${operation.operationId}`);

@@ -12,19 +12,19 @@ export declare enum ExtensionPointCategory {
     VALIDATION = "validation",
     VISUALIZATION = "visualization",
     STORAGE = "storage"
-}
+
 export declare enum ExtensionPointLifecycle {
     EXPERIMENTAL = "experimental",
     STABLE = "stable",
     DEPRECATED = "deprecated",
     REMOVED = "removed"
-}
+
 export declare enum ExtensionPointPriority {
     CRITICAL = "critical",
     HIGH = "high",
     MEDIUM = "medium",
     LOW = "low"
-}
+
 export declare const ExtensionPointSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
@@ -335,6 +335,6 @@ export declare class ExtensionPointRegistry {
      * Compare version strings
      */
     private compareVersions;
-}
+
 export declare const extensionPointRegistry: ExtensionPointRegistry;
 //# sourceMappingURL=ExtensionPointRegistry.d.ts.map

@@ -22,8 +22,8 @@ export interface FunnelVisualizationProps {
         start: number;
         end: number;
     };
-    segments?: UserSegment[];
-    cohorts?: ConversionCohort[];
+    segments?: UserSegment;
+    cohorts?: ConversionCohort;
     comparisonMode?: 'none' | 'time_period' | 'segment' | 'ab_test';
     realTimeUpdates?: boolean;
     onStepClick?: (step: ConversionStep, metrics: StepMetrics) => void;
@@ -40,7 +40,7 @@ export interface StepMetrics {
     averageTimeSpent: number;
     previousStepConversionRate?: number;
     valueGenerated: number;
-    topExitReasons: ExitReason[];
+    topExitReasons: ExitReason;
 }
 export interface ExitReason {
     reason: string;
@@ -51,8 +51,8 @@ export interface ExitReason {
 export interface FunnelConfiguration {
     displayMode: 'standard' | 'horizontal' | 'sankey' | 'waterfall';
     colorScheme: 'default' | 'conversion_focused' | 'drop_off_focused' | 'value_focused';
-    showMetrics: MetricDisplay[];
-    filterCriteria: FunnelFilter[];
+    showMetrics: MetricDisplay;
+    filterCriteria: FunnelFilter;
     grouping: FunnelGrouping;
     refreshInterval: number;
     animations: boolean;
@@ -72,7 +72,7 @@ export interface FunnelComparisonData {
     comparison: FunnelMetrics;
     type: 'time_period' | 'segment' | 'ab_test';
     significance: number;
-    insights: ComparisonInsight[];
+    insights: ComparisonInsight;
 }
 export interface FunnelMetrics {
     funnelId: string;
@@ -81,7 +81,7 @@ export interface FunnelMetrics {
     overallConversionRate: number;
     averageTimeToConvert: number;
     totalValue: number;
-    stepMetrics: StepMetrics[];
+    stepMetrics: StepMetrics;
 }
 export interface ComparisonInsight {
     type: 'improvement' | 'decline' | 'neutral';
@@ -92,9 +92,5 @@ export interface ComparisonInsight {
     description: string;
     recommendation?: string;
 }
-/**
- * Main Funnel Visualization Component
- */
 export declare const FunnelVisualization: React.FC<FunnelVisualizationProps>;
-export default FunnelVisualization;
 //# sourceMappingURL=FunnelVisualization.d.ts.map

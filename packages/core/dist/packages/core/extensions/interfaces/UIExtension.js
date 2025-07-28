@@ -1,8 +1,3 @@
-/**
- * UI Extension Interface - Epic 8.4 Story 8.4.2
- * Defines interfaces for extending the user interface system
- */
-// UI Component Categories
 export var UIComponentCategory;
 (function (UIComponentCategory) {
     UIComponentCategory["EDITOR"] = "editor";
@@ -13,8 +8,22 @@ export var UIComponentCategory;
     UIComponentCategory["WIDGET"] = "widget";
     UIComponentCategory["OVERLAY"] = "overlay";
     UIComponentCategory["CUSTOM"] = "custom";
+    // UI Component UI Configuration
+    UIComponentCategory[UIComponentCategory["export"] = void 0] = "export";
+    UIComponentCategory[UIComponentCategory["interface"] = void 0] = "interface";
+    UIComponentCategory[UIComponentCategory["UIComponentUIConfiguration"] = void 0] = "UIComponentUIConfiguration";
 })(UIComponentCategory || (UIComponentCategory = {}));
-// Menu Target
+{
+    // Layout
+    layout ?  : UIComponentLayout;
+    // Styling
+    styling ?  : UIComponentStyling;
+    // Responsive behavior
+    responsive ?  : UIComponentResponsive;
+    // Accessibility
+    accessibility ?  : UIComponentAccessibility;
+    // UI Component Layout
+}
 export var MenuTarget;
 (function (MenuTarget) {
     MenuTarget["MAIN_MENU"] = "main";
@@ -24,8 +33,23 @@ export var MenuTarget;
     MenuTarget["INSPECTOR"] = "inspector";
     MenuTarget["GRAPH"] = "graph";
     MenuTarget["CUSTOM"] = "custom";
+    // Keybinding Contribution
+    MenuTarget[MenuTarget["export"] = void 0] = "export";
+    MenuTarget[MenuTarget["interface"] = void 0] = "interface";
+    MenuTarget[MenuTarget["KeybindingContribution"] = void 0] = "KeybindingContribution";
 })(MenuTarget || (MenuTarget = {}));
-// UI Extension Helper Functions
+{
+    id: string;
+    key: string;
+    command: string;
+    when ?  : string; // Boolean expression,
+    args ?  : any;
+    // Platform-specific
+    mac ?  : string;
+    win ?  : string;
+    linux ?  : string;
+    // Theme Interface
+}
 export var UIExtensionHelpers;
 (function (UIExtensionHelpers) {
     function createTheme(partial) {
@@ -58,24 +82,24 @@ export var UIExtensionHelpers;
                     lg: '1.125rem',
                     xl: '1.25rem',
                     '2xl': '1.5rem',
-                    '3xl': '1.875rem'
+                    '3xl': '1.875rem',
                 },
                 fontWeight: {
                     light: 300,
                     normal: 400,
                     medium: 500,
                     semibold: 600,
-                    bold: 700
+                    bold: 700,
                 },
                 lineHeight: {
                     tight: 1.25,
                     normal: 1.5,
-                    relaxed: 1.75
+                    relaxed: 1.75,
                 },
                 letterSpacing: {
                     tight: '-0.025em',
                     normal: '0em',
-                    wide: '0.025em'
+                    wide: '0.025em',
                 },
                 ...partial.typography
             },
@@ -101,19 +125,19 @@ export var UIExtensionHelpers;
                 width: {
                     thin: '1px',
                     normal: '2px',
-                    thick: '4px'
+                    thick: '4px',
                 },
                 radius: {
                     none: '0',
                     sm: '0.125rem',
                     md: '0.25rem',
                     lg: '0.5rem',
-                    full: '9999px'
+                    full: '9999px',
                 },
                 style: {
                     solid: 'solid',
                     dashed: 'dashed',
-                    dotted: 'dotted'
+                    dotted: 'dotted',
                 },
                 ...partial.borders
             },
@@ -121,68 +145,68 @@ export var UIExtensionHelpers;
                 duration: {
                     fast: '150ms',
                     normal: '200ms',
-                    slow: '300ms'
+                    slow: '300ms',
                 },
                 easing: {
                     linear: 'linear',
                     ease: 'ease',
                     easeIn: 'ease-in',
                     easeOut: 'ease-out',
-                    easeInOut: 'ease-in-out'
+                    easeInOut: 'ease-in-out',
                 },
                 ...partial.transitions
             },
             custom: partial.custom
         };
+        function createCommand(partial) {
+            return {
+                id: partial.id || 'custom-command',
+                title: partial.title || 'Custom Command',
+                description: partial.description,
+                category: partial.category,
+                icon: partial.icon,
+                handler: partial.handler || (() => { }),
+                enablement: partial.enablement,
+                keybinding: partial.keybinding,
+                context: partial.context
+            };
+            function createMenu(partial) {
+                return {
+                    id: partial.id || 'custom-menu',
+                    label: partial.label || 'Custom Menu',
+                    icon: partial.icon,
+                    order: partial.order || 0,
+                    type: partial.type || 'item',
+                    command: partial.command,
+                    submenu: partial.submenu,
+                    when: partial.when,
+                    menu: partial.menu || MenuTarget.CUSTOM,
+                };
+                function validateUIComponent(definition) {
+                    const errors = [];
+                    const warnings = [];
+                    // Basic validation
+                    if (!definition.id)
+                        errors.push('Component ID is required');
+                    if (!definition.name)
+                        errors.push('Component name is required');
+                    if (!definition.component)
+                        errors.push('Component class is required');
+                    // React component validation
+                    if (definition.component && typeof definition.component !== 'function') {
+                        errors.push('Component must be a valid React component');
+                        return {
+                            valid: errors.length === 0,
+                            errors,
+                            warnings
+                        };
+                    }
+                }
+                UIExtensionHelpers.validateUIComponent = validateUIComponent;
+            }
+            UIExtensionHelpers.createMenu = createMenu;
+        }
+        UIExtensionHelpers.createCommand = createCommand;
     }
     UIExtensionHelpers.createTheme = createTheme;
-    function createCommand(partial) {
-        return {
-            id: partial.id || 'custom-command',
-            title: partial.title || 'Custom Command',
-            description: partial.description,
-            category: partial.category,
-            icon: partial.icon,
-            handler: partial.handler || (() => { }),
-            enablement: partial.enablement,
-            keybinding: partial.keybinding,
-            context: partial.context
-        };
-    }
-    UIExtensionHelpers.createCommand = createCommand;
-    function createMenu(partial) {
-        return {
-            id: partial.id || 'custom-menu',
-            label: partial.label || 'Custom Menu',
-            icon: partial.icon,
-            order: partial.order || 0,
-            type: partial.type || 'item',
-            command: partial.command,
-            submenu: partial.submenu,
-            when: partial.when,
-            menu: partial.menu || MenuTarget.CUSTOM
-        };
-    }
-    UIExtensionHelpers.createMenu = createMenu;
-    function validateUIComponent(definition) {
-        const errors = [];
-        const warnings = [];
-        // Basic validation
-        if (!definition.id)
-            errors.push('Component ID is required');
-        if (!definition.name)
-            errors.push('Component name is required');
-        if (!definition.component)
-            errors.push('Component class is required');
-        // React component validation
-        if (definition.component && typeof definition.component !== 'function') {
-            errors.push('Component must be a valid React component');
-        }
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
-    }
-    UIExtensionHelpers.validateUIComponent = validateUIComponent;
 })(UIExtensionHelpers || (UIExtensionHelpers = {}));

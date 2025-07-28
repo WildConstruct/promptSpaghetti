@@ -445,24 +445,25 @@ export type SettingItem = z.infer<typeof SettingItemSchema>;
 /**
  * Settings change event
  */
+
 export interface SettingsChangeEvent {
     key: string;
     value: any;
     previousValue: any;
     timestamp: Date;
     source: 'user' | 'system' | 'import';
-}
 /**
  * Settings validation result
  */
+
 export interface SettingsValidationResult {
     valid: boolean;
     errors: string[];
     warnings: string[];
-}
 /**
  * Settings export/import format
  */
+
 export interface SettingsExport {
     settings: AdvancedSettings;
     metadata: {,
@@ -470,5 +471,5 @@ export interface SettingsExport {
         version: string;
         appVersion: string;
     };
-}
+
 //# sourceMappingURL=types.d.ts.map

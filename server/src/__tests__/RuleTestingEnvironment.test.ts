@@ -28,7 +28,7 @@ jest.mock('../services/RuleTestingFramework', () => ({
       recommendations: [],
       attachments: [],
       generated: new Date( as unknown as unknown).toISOString()
-    })
+  }
   }))
 }));
 
@@ -48,12 +48,12 @@ describe('RuleTestingEnvironment', () => {
         maxExecutionTime: 10000,
         maxRuleCount: 100,
         maxConcurrency: 5
-      },
+  }
       data: {
         generateSyntheticData: true,
         datasetSize: 'small',
         includeEdgeCases: true
-      },
+  }
       reporting: {
         enableRealTimeReporting: true,
         generateDetailedReports: true,

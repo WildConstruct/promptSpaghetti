@@ -4,19 +4,18 @@ import React from 'react';
 import { ViewMode, HighlightMode } from '../../types/comparison';
 
 export interface ComparisonToolbarProps {
-  viewMode: ViewMode;
+  viewMode: ViewMode;,
   highlightMode: HighlightMode;
-  showUnchanged: boolean;
+  showUnchanged: boolean;,
   showMetadata: boolean;
-  zoomLevel: number;
-  onViewModeChange: (mode: ViewMode) => void;
-  onHighlightModeChange: (mode: HighlightMode) => void;
-  onShowUnchangedChange: (show: boolean) => void;
-  onShowMetadataChange: (show: boolean) => void;
+  zoomLevel: number;,
+  onViewModeChange: (mode: ViewMode) => void;,
+  onHighlightModeChange: (mode: HighlightMode) => void;,
+  onShowUnchangedChange: (show: boolean) => void;,
+  onShowMetadataChange: (show: boolean) => void;,
   onZoomChange: (zoom: number) => void;
   className?: string;
 }
-
 export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({)
   viewMode,
   highlightMode,
@@ -30,7 +29,7 @@ export const ComparisonToolbar: React.FC<ComparisonToolbarProps> = ({)
   onZoomChange,
   className = ''
 }) => {
-  return ();
+  return;
     <div className={`bg-gray-50 px-4 py-3 ${className}`}>}
       <div className="flex flex-wrap items-center gap-4">
         {/* View Mode */}

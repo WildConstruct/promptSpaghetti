@@ -19,7 +19,7 @@ export declare enum TimeoutPolicy {
     FLEXIBLE = "flexible",
     ADAPTIVE = "adaptive",
     PROGRESSIVE = "progressive"
-}
+
 export declare enum TimeoutReason {
     IDLE = "idle",
     ABSOLUTE = "absolute",
@@ -27,14 +27,14 @@ export declare enum TimeoutReason {
     MANUAL = "manual",
     POLICY = "policy",
     EMERGENCY = "emergency"
-}
+
 export declare enum ActivityLevel {
     NONE = "none",
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface TimeoutConfiguration {
     sessionId: string;
     policy: TimeoutPolicy;
@@ -53,7 +53,7 @@ export interface TimeoutConfiguration {
     securityLevelOverride?: number;
     deviceTrustFactor: number;
     locationTrustFactor: number;
-}
+
 export interface ActivityData {
     timestamp: Date;
     type: 'mouse' | 'keyboard' | 'touch' | 'api' | 'navigation' | 'interaction';
@@ -61,7 +61,7 @@ export interface ActivityData {
     endpoint?: string;
     duration?: number;
     metadata?: Record<string, any>;
-}
+
 export interface SessionTimeoutState {
     sessionId: string;
     configuration: TimeoutConfiguration;
@@ -85,7 +85,7 @@ export interface SessionTimeoutState {
     };
     status: 'active' | 'warning' | 'grace' | 'expired' | 'extended';
     timeoutReason?: TimeoutReason;
-}
+
 export interface TimeoutEvent {
     sessionId: string;
     eventType: 'warning' | 'timeout' | 'extension' | 'renewal';
@@ -95,7 +95,6 @@ export interface TimeoutEvent {
     userNotified: boolean;
     actionRequired: boolean;
     metadata?: Record<string, any>;
-}
 /**
  * Comprehensive session timeout management service
  */
@@ -170,7 +169,7 @@ export declare class SessionTimeoutController extends EventEmitter {
      * Destroy the timeout controller and clean up resources
      */
     destroy(): void;
-}
+
 export declare const sessionTimeoutController: SessionTimeoutController;
 export default SessionTimeoutController;
 //# sourceMappingURL=SessionTimeoutController.d.ts.map

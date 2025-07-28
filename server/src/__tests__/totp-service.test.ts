@@ -147,7 +147,7 @@ describe('TOTPService', () => {
         expect.objectContaining({
           userId: testUserId,
           action: 'totp_enrollment_completed'
-        })
+  }
       );
     });
 
@@ -246,7 +246,7 @@ describe('TOTPService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'totp_authentication_success'
-        })
+  }
       );
     });
 
@@ -349,7 +349,7 @@ describe('TOTPService', () => {
             window_start: pastWindowStart,
             blocked_until: null
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] }); // Update query
 
       const result = await totpService.checkRateLimit(testUserId, ipAddress, 'authentication');
@@ -396,7 +396,7 @@ describe('TOTPService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'totp_configuration_disabled'
-        })
+  }
       );
     });
   });

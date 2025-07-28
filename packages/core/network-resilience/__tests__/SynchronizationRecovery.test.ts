@@ -2,27 +2,27 @@ import { SynchronizationRecovery, DocumentState, DocumentOperation } from '../Sy
 describe('SynchronizationRecovery', () => {
   let recovery: SynchronizationRecovery;
   beforeEach(() => {
-    recovery = new SynchronizationRecovery({)
-      maxDeltaSize: 1024 * 1024,
-      maxOperationsPerBatch: 10,
-      checksumValidation: true,
-      conflictDetection: true,
-      autoResolveConflicts: true,
-      compressionEnabled: false,
-      progressReporting: true,
-      maxRecoveryTime: 10000,
-      enableDependencyTracking: true,
-      validateIntegrity: true,
-      backupBeforeRecovery: false // Disable for tests,
-    });
+  recovery = new SynchronizationRecovery({)
+  maxDeltaSize: 1024 * 1024,
+  maxOperationsPerBatch: 10,
+  checksumValidation: true,
+  conflictDetection: true,
+  autoResolveConflicts: true,
+  compressionEnabled: false,
+  progressReporting: true,
+  maxRecoveryTime: 10000,
+  enableDependencyTracking: true,
+  validateIntegrity: true,
+  backupBeforeRecovery: false // Disable for tests,
+});
   });
   afterEach(() => {
     recovery.cleanup();
   });
   describe('Delta Calculation', () => {
     test('should calculate delta between local and server state', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local-checksum',
         lastModified: Date.now() - 1000,
         operations: [,
@@ -34,13 +34,11 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'Node 1' },
             timestamp: Date.now() - 2000,
             userId: 'user1',
-            version: 1,
-          }
-        ],
+            version: 1],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 3,
+      const serverState: DocumentState = {,
+  version: 3,
         checksum: 'server-checksum',
         lastModified: Date.now(),
         operations: [,
@@ -54,8 +52,8 @@ describe('SynchronizationRecovery', () => {
             oldData: { title: 'Node 1' },
             timestamp: Date.now() - 1000,
             userId: 'user2',
-            version: 2,
-          },
+            version: 2;
+  }
           {
             id: 'op3',
             type: 'create',
@@ -64,9 +62,7 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'Node 2' },
             timestamp: Date.now() - 500,
             userId: 'user1',
-            version: 3,
-          }
-        ],
+            version: 3],
         metadata: {}
       };
       const delta = await recovery.calculateDelta(localState, serverState);
@@ -77,8 +73,8 @@ describe('SynchronizationRecovery', () => {
       expect(delta.operations[1].id).toBe('op3');
     });
     test('should return empty delta for matching versions', async () => {
-      const state: DocumentState = {
-        version: 1,
+      const state: DocumentState = {,
+  version: 1,
         checksum: 'same-checksum',
         lastModified: Date.now(),
         operations: [],
@@ -90,15 +86,15 @@ describe('SynchronizationRecovery', () => {
       expect(delta.toVersion).toBe(1);
     });
     test('should detect checksum mismatch', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local-checksum',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 1,
+      const serverState: DocumentState = {,
+  version: 1,
         checksum: 'different-checksum',
         lastModified: Date.now(),
         operations: [],
@@ -110,7 +106,7 @@ describe('SynchronizationRecovery', () => {
   });
   describe('Conflict Detection', () => {
     test('should detect concurrent edits', async () => {
-      const operations: DocumentOperation[] = [
+      const operations: DocumentOperation = [
         {
           id: 'op1',
           type: 'update',
@@ -119,8 +115,8 @@ describe('SynchronizationRecovery', () => {
           data: { title: 'Title A' },
           timestamp: Date.now(),
           userId: 'user1',
-          version: 2,
-        },
+          version: 2;
+  }
         {
           id: 'op2',
           type: 'update',
@@ -129,11 +125,9 @@ describe('SynchronizationRecovery', () => {
           data: { title: 'Title B' },
           timestamp: Date.now() + 100,
           userId: 'user2',
-          version: 3,
-        }
-      ];
-      const localState: DocumentState = {
-        version: 1,
+          version: 3];
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'checksum',
         lastModified: Date.now(),
         operations: [],
@@ -147,7 +141,7 @@ describe('SynchronizationRecovery', () => {
       expect(conflicts[0].operation2.id).toBe('op2');
     });
     test('should provide resolution options for conflicts', async () => {
-      const operations: DocumentOperation[] = [
+      const operations: DocumentOperation = [
         {
           id: 'op1',
           type: 'update',
@@ -156,8 +150,8 @@ describe('SynchronizationRecovery', () => {
           data: { title: 'Title A' },
           timestamp: Date.now(),
           userId: 'user1',
-          version: 2,
-        },
+          version: 2;
+  }
         {
           id: 'op2',
           type: 'update',
@@ -166,11 +160,9 @@ describe('SynchronizationRecovery', () => {
           data: { title: 'Title B' },
           timestamp: Date.now() + 100,
           userId: 'user2',
-          version: 3,
-        }
-      ];
-      const localState: DocumentState = {
-        version: 1,
+          version: 3];
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'checksum',
         lastModified: Date.now(),
         operations: [],
@@ -184,15 +176,15 @@ describe('SynchronizationRecovery', () => {
   });
   describe('Recovery Process', () => {
     test('should perform full recovery process', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now() - 1000,
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 2,
+      const serverState: DocumentState = {,
+  version: 2,
         checksum: 'server',
         lastModified: Date.now(),
         operations: [,
@@ -204,14 +196,12 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'New Node' },
             timestamp: Date.now() - 500,
             userId: 'user1',
-            version: 2,
-          }
-        ],
+            version: 2],
         metadata: {}
       };
-      const progressEvents: any[] = [];
+      const progressEvents: any = [];
       recovery.on('recovery_progress', (progress) => progressEvents.push(progress));
-      const successEvents: any[] = [];
+      const successEvents: any = [];
       recovery.on('recovery_success', (event) => successEvents.push(event));
       const delta = await recovery.startRecovery(;);
         'test-doc',
@@ -224,11 +214,11 @@ describe('SynchronizationRecovery', () => {
       expect(successEvents).toHaveLength(1);
     });
     test('should handle recovery timeout', async () => {
-      const recovery = new SynchronizationRecovery({)
-        maxRecoveryTime: 100 // Very short timeout,
-      });
-      const localState: DocumentState = {
-        version: 1,
+  const recovery = new SynchronizationRecovery({)
+  maxRecoveryTime: 100 // Very short timeout,
+});
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
@@ -243,8 +233,8 @@ describe('SynchronizationRecovery', () => {
       recovery.cleanup();
     });
     test('should prevent concurrent recovery', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
@@ -257,15 +247,15 @@ describe('SynchronizationRecovery', () => {
       await promise1;
     });
     test('should handle operation application failures', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 2,
+      const serverState: DocumentState = {,
+  version: 2,
         checksum: 'server',
         lastModified: Date.now(),
         operations: [,
@@ -277,9 +267,7 @@ describe('SynchronizationRecovery', () => {
             data: null, // Invalid data
             timestamp: Date.now(),
             userId: 'user1',
-            version: 2,
-          }
-        ],
+            version: 2],
         metadata: {}
       };
       const delta = await recovery.startRecovery(;);
@@ -299,43 +287,43 @@ describe('SynchronizationRecovery', () => {
         id: conflictId,
         type: 'concurrent_edit' as const,
         operation1: {,
-          id: 'op1',
+  id: 'op1',
           type: 'update' as const,
           target: 'node' as const,
           targetId: 'node1',
           data: { title: 'Title A' },
           timestamp: Date.now(),
           userId: 'user1',
-          version: 2,
-        },
-        operation2: {,
-          id: 'op2',
+          version: 2;
+  },
+  operation2: {,
+  id: 'op2',
           type: 'update' as const,
           target: 'node' as const,
           targetId: 'node1',
           data: { title: 'Title B' },
           timestamp: Date.now() + 100,
           userId: 'user2',
-          version: 3,
-        },
-        description: 'Test conflict',
+          version: 3;
+  },
+  description: 'Test conflict',
         resolutionOptions: [{,
-          strategy: 'theirs' as const,
-          description: 'Use second operation',
-          confidence: 0.8,
-        }],
+  strategy: 'theirs' as const,
+  description: 'Use second operation',
+  confidence: 0.8,
+}],
         autoResolvable: true,
-        severity: 'medium' as const,
-      };
+        severity: 'medium' as const;
+  };
       // Add conflict to pending conflicts
       (recovery as any).pendingConflicts.set(conflictId, conflict);
-      const resolvedEvents: any[] = [];
+      const resolvedEvents: any = [];
       recovery.on('conflict_resolved', (event) => resolvedEvents.push(event));
       const result = await recovery.resolveConflict(conflictId, {)
-        strategy: 'theirs',
-        description: 'Use second operation',
-        confidence: 0.8,
-      });
+  strategy: 'theirs',
+  description: 'Use second operation',
+  confidence: 0.8,
+});
       expect(result).toBe(true);
       expect(resolvedEvents).toHaveLength(1);
       expect(recovery.getPendingConflicts()).toHaveLength(0);
@@ -346,23 +334,23 @@ describe('SynchronizationRecovery', () => {
         id: conflictId,
         type: 'concurrent_edit' as const,
         operation1: {,
-          id: 'op1',
+  id: 'op1',
           type: 'update' as const,
           target: 'node' as const,
           targetId: 'node1',
           data: { title: 'Title A' },
           timestamp: Date.now(),
           userId: 'user1',
-          version: 2,
-        },
-        description: 'Test conflict',
+          version: 2;
+  },
+  description: 'Test conflict',
         resolutionOptions: [],
         autoResolvable: false,
-        severity: 'high' as const,
-      };
+        severity: 'high' as const;
+  };
       (recovery as any).pendingConflicts.set(conflictId, conflict);
       const result = await recovery.resolveConflict(conflictId, {)
-        strategy: 'manual',
+  strategy: 'manual',
         description: 'Custom resolution',
         confidence: 1.0,
         result: { title: 'Manually Resolved Title' }
@@ -370,26 +358,26 @@ describe('SynchronizationRecovery', () => {
       expect(result).toBe(true);
     });
     test('should fail to resolve non-existent conflict', async () => {
-      await expect(recovery.resolveConflict('non-existent', {)
-        strategy: 'mine',
-        description: 'Test',
-        confidence: 1.0,
-      })).rejects.toThrow('Conflict non-existent not found');
+  await expect(recovery.resolveConflict('non-existent', {)
+  strategy: 'mine',
+  description: 'Test',
+  confidence: 1.0,
+})).rejects.toThrow('Conflict non-existent not found');
     });
   });
   describe('Progress Tracking', () => {
     test('should track recovery progress', async () => {
       const progress = recovery.getRecoveryProgress();
       expect(progress).toBeNull(); // No recovery in progress
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 2,
+      const serverState: DocumentState = {,
+  version: 2,
         checksum: 'server',
         lastModified: Date.now(),
         operations: [,
@@ -401,12 +389,10 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'Node 1' },
             timestamp: Date.now(),
             userId: 'user1',
-            version: 2,
-          }
-        ],
+            version: 2],
         metadata: {}
       };
-      const progressEvents: any[] = [];
+      const progressEvents: any = [];
       recovery.on('recovery_progress', (progress) => {
         progressEvents.push(progress);
       });
@@ -417,8 +403,8 @@ describe('SynchronizationRecovery', () => {
       expect(progressEvents.some(p => p.phase === 'completed')).toBe(true);
     });
     test('should cancel recovery', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
@@ -428,7 +414,7 @@ describe('SynchronizationRecovery', () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         return localState;
       };
-      const cancelledEvents: any[] = [];
+      const cancelledEvents: any = [];
       recovery.on('recovery_cancelled', () => cancelledEvents.push({}));
       const recoveryPromise = recovery.startRecovery('test-doc', localState, slowProvider);
       // Cancel after a short delay
@@ -441,15 +427,15 @@ describe('SynchronizationRecovery', () => {
   });
   describe('Statistics', () => {
     test('should track recovery statistics', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 2,
+      const serverState: DocumentState = {,
+  version: 2,
         checksum: 'server',
         lastModified: Date.now(),
         operations: [,
@@ -461,9 +447,7 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'Node 1' },
             timestamp: Date.now(),
             userId: 'user1',
-            version: 2,
-          }
-        ],
+            version: 2],
         metadata: {}
       };
       const initialStats = recovery.getStats();
@@ -476,8 +460,8 @@ describe('SynchronizationRecovery', () => {
       expect(updatedStats.averageRecoveryTime).toBeGreaterThan(0);
     });
     test('should track failure statistics', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
@@ -490,7 +474,6 @@ describe('SynchronizationRecovery', () => {
         await recovery.startRecovery('test-doc', localState, failingProvider);
       } catch (error) {
         // Expected to fail
-      }
       const stats = recovery.getStats();
       expect(stats.totalRecoveries).toBe(1);
       expect(stats.failedRecoveries).toBe(1);
@@ -508,30 +491,33 @@ describe('SynchronizationRecovery', () => {
   describe('Batch Processing', () => {
     test('should process operations in batches', async () => {
       const operations = Array.from({ length: 25 }, (_, i) => ({)
-        id: `op${i}`,}
-        type: 'create' as const,
+  id: `op${i}`}
+},
+  type: 'create' as const,
         target: 'node' as const,
-        targetId: `node${i}`,}
-        data: { title: `Node ${i}` },}
-        timestamp: Date.now() + i,
+        targetId: `node${i}`}
+},
+  data: { title: `Node ${i}` }
+},
+  timestamp: Date.now() + i,
         userId: 'user1',
-        version: i + 2,
-      }));
-      const localState: DocumentState = {
-        version: 1,
+        version: i + 2;
+  }));
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 26,
+      const serverState: DocumentState = {,
+  version: 26,
         checksum: 'server',
         lastModified: Date.now(),
         operations,
         metadata: {}
       };
-      const batchEvents: any[] = [];
+      const batchEvents: any = [];
       recovery.on('batch_processed', (event) => batchEvents.push(event));
       await recovery.startRecovery('test-doc', localState, async () => serverState);
       expect(batchEvents.length).toBeGreaterThan(1); // Should process in multiple batches
@@ -540,15 +526,15 @@ describe('SynchronizationRecovery', () => {
   });
   describe('Error Handling', () => {
     test('should handle invalid operations gracefully', async () => {
-      const localState: DocumentState = {
-        version: 1,
+      const localState: DocumentState = {,
+  version: 1,
         checksum: 'local',
         lastModified: Date.now(),
         operations: [],
         metadata: {}
       };
-      const serverState: DocumentState = {
-        version: 2,
+      const serverState: DocumentState = {,
+  version: 2,
         checksum: 'server',
         lastModified: Date.now(),
         operations: [,
@@ -560,8 +546,8 @@ describe('SynchronizationRecovery', () => {
             data: { title: 'Test' },
             timestamp: Date.now() + 100000, // Future timestamp
             userId: 'user1',
-            version: 2,
-          } as any
+            version: 2;
+  } as any
         ],
         metadata: {}
       };
@@ -571,7 +557,7 @@ describe('SynchronizationRecovery', () => {
       expect(delta.conflicts.length).toBeGreaterThan(0);
     });
     test('should validate operation dependencies', async () => {
-      const operations: DocumentOperation[] = [
+      const operations: DocumentOperation = [
         {
           id: 'op2',
           type: 'update',
@@ -581,15 +567,12 @@ describe('SynchronizationRecovery', () => {
           timestamp: Date.now(),
           userId: 'user1',
           version: 2,
-          dependencies: ['op1'] // Depends on missing operation,
-        }
-      ];
+          dependencies: ['op1'] // Depends on missing operation];
       try {
         await (recovery as any).validateDependencies(operations[0], []);
         fail('Should have thrown dependency error');
       } catch (error) {
         expect((error as Error).message).toContain('Missing dependency');
-      }
     });
   });
 });

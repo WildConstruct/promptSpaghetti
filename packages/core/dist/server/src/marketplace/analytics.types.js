@@ -38,6 +38,71 @@ export var DashboardLayout;
     DashboardLayout["CHARTS"] = "charts";
     DashboardLayout["MIXED"] = "mixed";
 })(DashboardLayout || (DashboardLayout = {}));
+;
+timestamp: Date;
+created_at: Date;
+;
+demographics: {
+    top_countries: Array;
+    device_breakdown: Array;
+    user_segments: Array;
+}
+;
+trends: {
+    daily_metrics: Array;
+    growth_rates: {
+        views_growth: number;
+        downloads_growth: number;
+        revenue_growth: number;
+    }
+    ;
+}
+;
+;
+performance_summary: {
+    views_trend: number;
+    downloads_trend: number;
+    revenue_trend: number;
+    rating_trend: number;
+    market_share: number;
+    ranking_position: number;
+}
+;
+traffic_metrics: {
+    unique_visitors: number;
+    returning_visitors: number;
+    bounce_rate: number;
+    average_session_duration: number;
+    top_referrers: Array;
+}
+;
+financial_metrics: {
+    gross_revenue: number;
+    net_revenue: number;
+    platform_fee: number;
+    payout_amount: number;
+    revenue_by_template: Array;
+}
+;
+;
+sort ?  : {
+    field: string,
+    direction: 'asc' | 'desc'
+};
+limit ?  : number;
+offset ?  : number;
+;
+is_scheduled: boolean;
+schedule ?  : {
+    frequency: 'daily' | 'weekly' | 'monthly',
+    time: string,
+    recipients: string[]
+};
+created_at: Date;
+updated_at: Date;
+;
+recommendations ?  : string[];
+created_at: Date;
 // Zod Validation Schemas
 export const AnalyticsEventSchema = z.object({
     template_id: z.string().uuid(),

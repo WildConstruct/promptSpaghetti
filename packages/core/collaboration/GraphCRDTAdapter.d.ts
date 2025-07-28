@@ -3,13 +3,13 @@
  * Bridges existing graph schema with CRDT collaborative editing
  */
 import { Node, Edge, Graph } from '../graphSchema';
+
 export interface CollaborativeGraphOptions {
     documentId: string;
     userId: string;
     onGraphChange?: (graph: Graph) => void;
     onUserPresence?: (users: Map<string, unknown>) => void;
     onConnectionStatus?: (connected: boolean) => void;
-}
 /**
  * Adapter that wraps the existing graph model with CRDT capabilities
  */
@@ -142,12 +142,10 @@ export declare class GraphCRDTAdapter {
      * Cleanup resources
      */
     destroy(): void;
-}
 /**
  * Factory function to create collaborative graph adapter
  */
-export declare function createCollaborativeGraph()
-  options: CollaborativeGraphOptions,
+export declare function createCollaborativeGraph(options: CollaborativeGraphOptions,)
   initialGraph?: Graph
 ): GraphCRDTAdapter;
 //# sourceMappingURL=GraphCRDTAdapter.d.ts.map

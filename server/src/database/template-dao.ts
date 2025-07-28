@@ -36,6 +36,7 @@ export class TemplateDAO {
   // ====== TEMPLATE OPERATIONS ======
 
   async createTemplate(data: CreateProjectTemplate, userId: string): Promise<ProjectTemplate> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -45,7 +46,7 @@ export class TemplateDAO {
         category, tags, difficulty_level, version, compatibility_version,
         estimated_time_minutes, visibility, is_featured, customizable_fields,
         default_values, validation_rules, created_by, created_at, updated_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -76,6 +77,7 @@ export class TemplateDAO {
   }
 
   async getTemplate(id: string): Promise<ProjectTemplate | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         id, workspace_id, name, description, template_data, thumbnail_url,
@@ -95,6 +97,7 @@ export class TemplateDAO {
   }
 
   async getTemplateWithStats(id: string, userId?: string): Promise<ProjectTemplateWithStats | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         t.id, t.workspace_id, t.name, t.description, t.template_data, t.thumbnail_url,
@@ -295,6 +298,7 @@ export class TemplateDAO {
     data: UpdateProjectTemplate,
     ___userId: string
   ): Promise<ProjectTemplate | null> {
+
     const setClause: string[] = [];
     const params: unknown[] = [];
 
@@ -378,6 +382,7 @@ export class TemplateDAO {
   }
 
   async archiveTemplate(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare(`
       UPDATE project_templates
       SET archived_at = ?, updated_at = ?
@@ -390,6 +395,7 @@ export class TemplateDAO {
   }
 
   async publishTemplate(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare(`
       UPDATE project_templates
       SET published_at = ?, updated_at = ?
@@ -404,6 +410,7 @@ export class TemplateDAO {
   // ====== TEMPLATE USAGE OPERATIONS ======
 
   async createTemplateUsage(data: CreateTemplateUsage, userId: string): Promise<TemplateUsage> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -411,7 +418,7 @@ export class TemplateDAO {
       INSERT INTO template_usages (
         id, template_id, user_id, project_id, workspace_id,
         customizations_applied, source, started_at, last_accessed_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -431,6 +438,7 @@ export class TemplateDAO {
   }
 
   async getTemplateUsage(id: string): Promise<TemplateUsage | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         id, template_id, user_id, project_id, workspace_id,
@@ -451,6 +459,7 @@ export class TemplateDAO {
     data: UpdateTemplateUsage,
     userId: string
   ): Promise<TemplateUsage | null> {
+
     const setClause: string[] = [];
     const params: unknown[] = [];
 
@@ -501,13 +510,14 @@ export class TemplateDAO {
   // ====== TEMPLATE REVIEWS OPERATIONS ======
 
   async createTemplateReview(data: CreateTemplateReview, userId: string): Promise<TemplateReview> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
     const stmt = this.db.prepare(`
       INSERT INTO template_reviews (
         id, template_id, user_id, rating, title, review_text, created_at, updated_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -526,6 +536,7 @@ export class TemplateDAO {
   }
 
   async getTemplateReview(id: string): Promise<TemplateReview | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         id, template_id, user_id, rating, title, review_text,
@@ -620,6 +631,7 @@ export class TemplateDAO {
   // ====== TEMPLATE FAVORITES OPERATIONS ======
 
   async addTemplateFavorite(templateId: string, userId: string, workspaceId?: string): Promise<TemplateFavorite> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -640,6 +652,7 @@ export class TemplateDAO {
   }
 
   async removeTemplateFavorite(templateId: string, userId: string): Promise<boolean> {
+
     const stmt = this.db.prepare(`
       DELETE FROM template_favorites
       WHERE template_id = ? AND user_id = ?
@@ -705,6 +718,7 @@ export class TemplateDAO {
   // ====== TEMPLATE CATEGORIES OPERATIONS ======
 
   async getTemplateCategories(): Promise<TemplateCategory[]> {
+
     const stmt = this.db.prepare(`
       SELECT id, name, description, icon_name, sort_order, is_active, created_at, updated_at
       FROM template_categories
@@ -728,6 +742,7 @@ export class TemplateDAO {
   // ====== ANALYTICS AND REPORTING ======
 
   async getTemplateAnalytics(templateId: string, days = 30): Promise<TemplateAnalytics> {
+
     const since = new Date();
     since.setDate(since.getDate() - days);
 
@@ -793,13 +808,13 @@ export class TemplateDAO {
         average_completion_time: usageRows.length > 0 ? usageRows[0].avg_completion_time || 0 : 0,
         usage_by_source: usageBySource,
         usage_trend: usageTrend.sort((a, b) => a.date.localeCompare(b.date))
-      },
+  }
       rating_stats: {
         average_rating: averageRating,
         rating_distribution: ratingDistribution,
         review_count: reviewCount,
         recent_reviews: [] // TODO: Implement recent reviews
-      },
+  }
       performance_metrics: {
         conversion_rate: 0.85, // TODO: Calculate actual conversion rate
         retention_rate: 0.65, // TODO: Calculate actual retention rate

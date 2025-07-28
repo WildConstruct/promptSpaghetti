@@ -4,7 +4,7 @@ export interface UserCursorProps {
   userId: string;
   userName?: string;
   userAvatar?: string;
-  x: number;
+  x: number;,
   y: number;
   color?: string;
   visible?: boolean;
@@ -13,7 +13,6 @@ export interface UserCursorProps {
   nodeId?: string;
   className?: string;
 }
-
 export const UserCursor: React.FC<UserCursorProps> = ({)
   userId,
   userName,
@@ -30,14 +29,14 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
   if (!visible) return null;
   const cursorColor = color || getUserColor(userId);
   const displayName = userName || userId;
-  return ();
+  return;
     <div
       className={`absolute pointer-events-none z-50 transition-all duration-200 ${className}`}
       style={{
-        left: x,
-        top: y,
-        transform: 'translate(-2px, -2px)'
-      }}
+  left: x,
+  top: y,
+  transform: 'translate(-2px, -2px)',
+}}
     >
       {/* Cursor pointer */}
       <svg
@@ -88,26 +87,25 @@ export const UserCursor: React.FC<UserCursorProps> = ({)
 
 export interface UserCursorOverlayProps {
   cursors: Array<{,
-    userId: string;
-    userName?: string;
-    userAvatar?: string;
-    x: number;
-    y: number;
-    nodeId?: string;
-    visible?: boolean;
-  }>;
+  userId: string;
+  userName?: string;
+  userAvatar?: string;
+  x: number;,
+  y: number;
+  nodeId?: string;
+  visible?: boolean;
+}>;
   followingUserId?: string;
   showLabels?: boolean;
   className?: string;
 }
-
 export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
   cursors,
   followingUserId,
   showLabels = true,
   className = ''
 }) => {
-  return ();
+  return;
     <div className={`absolute inset-0 pointer-events-none ${className}`}>}
       {cursors.map(cursor => ()
         <UserCursor
@@ -129,15 +127,15 @@ export const UserCursorOverlay: React.FC<UserCursorOverlayProps> = ({)
 };
 
 // Selection highlight component
+
 export interface UserSelectionProps {
   userId: string;
   userName?: string;
-  nodeIds: string[];
+  nodeIds: string;
   color?: string;
   opacity?: number;
   showLabel?: boolean;
 }
-
 export const UserSelection: React.FC<UserSelectionProps> = ({)
   userId,
   userName,
@@ -147,13 +145,13 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
   showLabel = false
 }) => {
   const selectionColor = color || getUserColor(userId);
-  return ();
+  return;
     <>
       {nodeIds.map(nodeId => {)
-        const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);}
+  const nodeElement = document.querySelector(`[data-id="${nodeId}"]`);}
         if (!nodeElement) return null;
         const rect = nodeElement.getBoundingClientRect();
-        return ();
+        return;
           <div
             key={`${userId}-${nodeId}`}
             className="absolute pointer-events-none border-2 rounded"
@@ -163,9 +161,10 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
               width: rect.width,
               height: rect.height,
               borderColor: selectionColor,
-              backgroundColor: `${selectionColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`,}
-              zIndex: 10,
-            }}
+              backgroundColor: `${selectionColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`}
+},
+  zIndex: 10;
+  }}
           >
             {showLabel && ()
               <div
@@ -183,15 +182,15 @@ export const UserSelection: React.FC<UserSelectionProps> = ({)
 };
 
 // Typing indicator
+
 export interface TypingIndicatorProps {
   users: Array<{,
-    userId: string;
-    userName?: string;
-    nodeId?: string;
-  }>;
+  userId: string;
+  userName?: string;
+  nodeId?: string;
+}>;
   className?: string;
 }
-
 export const TypingIndicator: React.FC<TypingIndicatorProps> = ({)
   users,
   className = ''
@@ -203,7 +202,7 @@ export const TypingIndicator: React.FC<TypingIndicatorProps> = ({)
     : userNames.length === 2
       ? `${userNames[0]} and ${userNames[1]} are typing...`}
       : `${userNames[0]} and ${userNames.length - 1} others are typing...`;}
-  return ();
+  return;
     <div className={`flex items-center space-x-2 text-sm text-gray-600 ${className}`}>}
       <div className="flex space-x-1">
         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
@@ -232,6 +231,4 @@ function getUserColor(userId: string): string {
   let hash = 0;
   for (let i = 0; i < userId.length; i++) {
     hash = userId.charCodeAt(i) + ((hash << 5) - hash);
-  }
   return colors[Math.abs(hash) % colors.length];
-}

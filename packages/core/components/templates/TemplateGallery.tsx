@@ -5,26 +5,24 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ProjectTemplate, TemplateCategory, ProjectTemplateManager } from '../../templates/ProjectTemplateManager';
 interface TemplateGalleryProps {
-  templateManager: ProjectTemplateManager;
+  templateManager: ProjectTemplateManager;,
   onTemplateSelect: (template: ProjectTemplate, customizations: Record<string, any>) => void;
   onTemplatePreview: (template: ProjectTemplate) => void;
   className?: string;
-}
-
-export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
+  export const TemplateGallery: React.FC<TemplateGalleryProps> = ({,)
   templateManager,
   onTemplateSelect,
   onTemplatePreview,
   className = ''
 }) => {
-  const [templates, setTemplates] = useState<ProjectTemplate[]>([]);
-  const [categories, setCategories] = useState<TemplateCategory[]>([]);
+  const [templates, setTemplates] = useState<ProjectTemplate>([]);
+  const [categories, setCategories] = useState<TemplateCategory>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [complexityFilter, setComplexityFilter] = useState<string>('');
   const [sortBy, setSortBy] = useState<'popularity' | 'rating' | 'newest' | 'name'>('popularity');
-  const [featuredTemplates, setFeaturedTemplates] = useState<ProjectTemplate[]>([]);
+  const [featuredTemplates, setFeaturedTemplates] = useState<ProjectTemplate>([]);
   useEffect(() => {
     loadTemplates();
     loadCategories();
@@ -34,38 +32,35 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
     loadTemplates();
   }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
   const loadTemplates = async () => {
-    try {
-      setLoading(true);
-      const result = await templateManager.searchTemplates({)
-        query: searchQuery || undefined,
-        category: selectedCategory || undefined,
-        complexity: complexityFilter || undefined,
-        sort_by: sortBy,
-        limit: 50,
-      });
+  try {
+  setLoading(true);
+  const result = await templateManager.searchTemplates({)
+  query: searchQuery || undefined,
+  category: selectedCategory || undefined,
+  complexity: complexityFilter || undefined,
+  sort_by: sortBy,
+  limit: 50,
+});
       setTemplates(result.templates);
     } catch (error) {
-      console.error('Failed to load templates:', error);
-    } finally {
+  console.error('Failed to load templates:', error);
+} finally {
       setLoading(false);
-    }
   };
   const loadCategories = async () => {
     try {
       const cats = templateManager.getCategories();
       setCategories(cats);
     } catch (error) {
-      console.error('Failed to load categories:', error);
-    }
-  };
+  console.error('Failed to load categories:', error);
+};
   const loadFeaturedTemplates = async () => {
     try {
       const featured = await templateManager.getFeaturedTemplates();
       setFeaturedTemplates(featured);
     } catch (error) {
-      console.error('Failed to load featured templates:', error);
-    }
-  };
+  console.error('Failed to load featured templates:', error);
+};
   const handleTemplateUse = (template: ProjectTemplate) => {
     // For now, pass empty customizations - this could open a customization dialog
     onTemplateSelect(template, {});
@@ -73,15 +68,14 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
   const filteredTemplates = useMemo(() => {
     if (!searchQuery && !selectedCategory && !complexityFilter) {
       return templates;
-    }
     return templates;
   }, [templates, searchQuery, selectedCategory, complexityFilter]);
   const _____complexityColors = {
-    beginner: 'bg-green-100 text-green-800',
-    intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800',
-  };
-  return ();
+  beginner: 'bg-green-100 text-green-800',
+  intermediate: 'bg-yellow-100 text-yellow-800',
+  advanced: 'bg-red-100 text-red-800',
+};
+  return;
     <div className={`template-gallery ${className}`}>}
       {/* Header */}
       <div className="mb-6">
@@ -188,18 +182,17 @@ export const TemplateGallery: React.FC<TemplateGalleryProps> = ({)
   );
 };
 interface TemplateCardProps {
-  template: ProjectTemplate;
+  template: ProjectTemplate;,
   onUse: () => void;
   onPreview: () => void;
   featured?: boolean;
-}
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onPreview, featured = false }) => {
   const complexityColors = {
-    beginner: 'bg-green-100 text-green-800',
-    intermediate: 'bg-yellow-100 text-yellow-800',
-    advanced: 'bg-red-100 text-red-800',
-  };
-  return ();
+  beginner: 'bg-green-100 text-green-800',
+  intermediate: 'bg-yellow-100 text-yellow-800',
+  advanced: 'bg-red-100 text-red-800',
+};
+  return;
     <div className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`}>}
       {featured && ()
         <div className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-t-lg">

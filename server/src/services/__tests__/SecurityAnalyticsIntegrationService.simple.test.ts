@@ -87,7 +87,7 @@ describe('SecurityAnalyticsIntegrationService - Basic Functionality', () => {
         performance_event_forwarding: true,
         batch_size: 10,
         flush_interval_ms: 1000
-      },
+  }
       epic17_admin_integration: {
         enabled: true,
         auth_guard: {} as any,
@@ -95,7 +95,7 @@ describe('SecurityAnalyticsIntegrationService - Basic Functionality', () => {
         diagnostic_service: mockDiagnosticService as any,
         admin_notification_enabled: true,
         security_alert_threshold: 5
-      },
+  }
       performance_monitoring: {
         real_time_monitoring_enabled: false, // Disable for simpler testing
         performance_threshold_ms: 500,
@@ -103,7 +103,7 @@ describe('SecurityAnalyticsIntegrationService - Basic Functionality', () => {
         cpu_threshold_percent: 70,
         alert_on_degradation: true,
         auto_optimization_enabled: false
-      },
+  }
       security_features: {
         threat_detection_enabled: true,
         anomaly_detection_sensitivity: 0.8,
@@ -308,7 +308,7 @@ describe('SecurityAnalyticsIntegrationService - Basic Functionality', () => {
         expect.objectContaining({
           error: expect.any(Error),
           context: 'initialization'
-        })
+  }
       );
     });
   });

@@ -10,58 +10,55 @@ import { conversionTracker } from '../../analytics/ConversionTracker';
 import { performanceMonitor } from '../../utils/PerformanceMonitor';
 
 export interface RealTimeMetricsProps {
-  metrics: unknown;
+  metrics: unknown;,
   loading: boolean;
 }
-
 export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loading }) => {
   const [liveData, setLiveData] = useState({)
-    activeUsers: 0,
-    conversionsLast24h: 0,
-    averageSessionDuration: 0,
-    healthScore: 100,
-    topConvertingFunnel: '',
-    recentEvents: [],
-  });
+  activeUsers: 0,
+  conversionsLast24h: 0,
+  averageSessionDuration: 0,
+  healthScore: 100,
+  topConvertingFunnel: '',
+  recentEvents: [],
+});
   const [_____updateCount, setUpdateCount] = useState(0);
   useEffect(() => {
-    if (metrics) {
-      setLiveData(prev => ({)
-        ...prev,
-        activeUsers: metrics.activeUsers || 0,
-        conversionsLast24h: metrics.conversionsLast24h || 0,
-        averageSessionDuration: metrics.averageSessionDuration || 0,
-        topConvertingFunnel: metrics.topConvertingFunnel || '',
-        healthScore: metrics.performance?.healthScore || 100,
-        recentEvents: metrics.recentEvents || [],
-      }));
-    }
+  if (metrics) {
+  setLiveData(prev => ({)
+  ...prev,
+  activeUsers: metrics.activeUsers || 0,
+  conversionsLast24h: metrics.conversionsLast24h || 0,
+  averageSessionDuration: metrics.averageSessionDuration || 0,
+  topConvertingFunnel: metrics.topConvertingFunnel || '',
+  healthScore: metrics.performance?.healthScore || 100,
+  recentEvents: metrics.recentEvents || [],
+}));
   }, [metrics]);
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Fetch real-time updates
-      const dashboardData = conversionTracker.getDashboardData();
-      const performanceData = performanceMonitor.getDashboardData();
-      setLiveData(prev => ({)
-        ...prev,
-        activeUsers: dashboardData.realTimeMetrics.activeUsers,
-        conversionsLast24h: dashboardData.realTimeMetrics.conversionsLast24h,
-        averageSessionDuration: dashboardData.realTimeMetrics.averageSessionDuration,
-        healthScore: performanceData.overview.healthScore,
-        topConvertingFunnel: dashboardData.realTimeMetrics.topConvertingFunnel,
-      }));
+  const interval = setInterval(() => {
+  // Fetch real-time updates
+  const dashboardData = conversionTracker.getDashboardData();
+  const performanceData = performanceMonitor.getDashboardData();
+  setLiveData(prev => ({)
+  ...prev,
+  activeUsers: dashboardData.realTimeMetrics.activeUsers,
+  conversionsLast24h: dashboardData.realTimeMetrics.conversionsLast24h,
+  averageSessionDuration: dashboardData.realTimeMetrics.averageSessionDuration,
+  healthScore: performanceData.overview.healthScore,
+  topConvertingFunnel: dashboardData.realTimeMetrics.topConvertingFunnel,
+}));
       setUpdateCount(prev => prev + 1);
     }, 5000); // Update every 5 seconds
     return () => clearInterval(interval);
   }, []);
   if (loading) {
-    return ();
+    return;
       <div className="real-time-metrics loading">
         <div className="loading-spinner"></div>
         <p>Loading real-time metrics...</p>
       </div>
     );
-  }
   const formatDuration = (ms: number): string => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
@@ -72,7 +69,7 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
     if (score >= 70) return 'warning';
     return 'destructive';
   };
-  return ();
+  return;
     <div className="real-time-metrics">
       <div className="metrics-header">
         <h3>Live Metrics</h3>
@@ -141,83 +138,68 @@ export const RealTimeMetrics: React.FC<RealTimeMetricsProps> = ({ metrics, loadi
       <style>{`
         .real-time-metrics {
           margin-bottom: 2rem;
-        }
         .metrics-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 1rem;
-        }
         .metrics-header h3 {
           margin: 0;
           font-size: 1.2rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .metric-card {
-          position: relative;
-          transition: transform 0.2s ease;
-        }
-        .metric-card:hover {
-          transform: translateY(-2px);
-        }
+          position: relative;,
+  transition: transform 0.2s ease;
+        .metric-card:hover {,
+  transform: translateY(-2px);
         .metric-title {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-size: 0.875rem;
-          font-weight: 500;
-          color: #6b7280;
-        }
+          font-weight: 500;,
+  color: #6b7280;
         .live-indicator {
-          width: 8px;
-          height: 8px;
+          width: 8px;,
+  height: 8px;
           background: #10b981;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
+          border-radius: 50%;,
+  animation: pulse 2s infinite;
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
-        }
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin: 0.5rem 0;
-        }
         .funnel-name {
           font-size: 1.1rem;
           font-weight: 600;
-        }
         .metric-subtitle {
-          font-size: 0.75rem;
-          color: #9ca3af;
-        }
+          font-size: 0.75rem;,
+  color: #9ca3af;
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          padding: 2rem;
+          align-items: center;,
+  padding: 2rem;
           gap: 1rem;
-        }
         .loading-spinner {
-          width: 2rem;
-          height: 2rem;
+          width: 2rem;,
+  height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
       `}</style>
     </div>
   );

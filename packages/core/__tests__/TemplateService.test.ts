@@ -23,14 +23,14 @@ describe('TemplateService', () => {
     }),
     clear: jest.fn(() => {,
       mockLocalStorage.store = {};
-    })
+  }
   };
   beforeEach(() => {
-    // Reset localStorage mock
-    mockLocalStorage.clear();
-    Object.defineProperty(window, 'localStorage', {)
-      value: mockLocalStorage,
-    });
+  // Reset localStorage mock
+  mockLocalStorage.clear();
+  Object.defineProperty(window, 'localStorage', {)
+  value: mockLocalStorage,
+});
     storage = new LocalTemplateStorage();
     service = new TemplateService(storage);
   });
@@ -38,42 +38,38 @@ describe('TemplateService', () => {
     jest.clearAllMocks();
   });
   describe('createFromGraph', () => {
-    const sampleNodes: Node[] = [
+    const sampleNodes: Node = [
       {
         id: 'node-1',
         type: 'WeightedChoice',
         position: { x: 100, y: 200 },
         data: {,
-          nodeType: 'WeightedChoice',
+  nodeType: 'WeightedChoice',
           choices: [,
             { value: 'Option A', weight: 1 },
             { value: 'Option B', weight: 2 }
           ]
-        }
-      },
+  }
       {
         id: 'node-2',
         type: 'Output',
         position: { x: 300, y: 200 },
         data: { nodeType: 'Output' }
-      }
     ];
-    const sampleEdges: Edge[] = [
+    const sampleEdges: Edge = [
       {
-        id: 'edge-1',
-        source: 'node-1',
-        target: 'node-2',
-        type: 'step',
-      }
-    ];
-    const sampleSaveData: TemplateSaveData = {
-      name: 'Test Template',
-      description: 'A test template for unit testing',
-      category: 'general',
-      tags: ['test', 'example'],
-      isPublic: false,
-      includeAnnotations: true,
-    };
+  id: 'edge-1',
+  source: 'node-1',
+  target: 'node-2',
+  type: 'step'];
+  const sampleSaveData: TemplateSaveData = {,
+  name: 'Test Template',
+  description: 'A test template for unit testing',
+  category: 'general',
+  tags: ['test', 'example'],
+  isPublic: false,
+  includeAnnotations: true,
+};
     it('should create template from graph data', async () => {
       const template = await service.createFromGraph(;);
         sampleNodes,
@@ -104,17 +100,21 @@ describe('TemplateService', () => {
       expect(simpleTemplate.metadata.complexity).toBe('simple');
       // Medium graph (10 nodes, 5 edges = 15 total elements)
       const mediumNodes = Array.from({ length: 10 }, (_, i) => ({)
-        id: `node-${i}`,}
-        type: 'WeightedChoice',
+  id: `node-${i}`}
+},
+  type: 'WeightedChoice',
         position: { x: i * 100, y: 100 },
         data: { nodeType: 'WeightedChoice', choices: [] }
       }));
       const mediumEdges = Array.from({ length: 5 }, (_, i) => ({)
-        id: `edge-${i}`,}
-        source: `node-${i}`,}
-        target: `node-${i + 1}`,}
-        type: 'step',
-      }));
+  id: `edge-${i}`}
+},
+  source: `node-${i}`}
+},
+  target: `node-${i + 1}`}
+},
+  type: 'step';
+  }));
       const mediumTemplate = await service.createFromGraph(;);
         mediumNodes,
         mediumEdges,
@@ -124,17 +124,21 @@ describe('TemplateService', () => {
       expect(mediumTemplate.metadata.complexity).toBe('medium');
       // Complex graph (20 nodes, 10 edges = 30 total elements)
       const complexNodes = Array.from({ length: 20 }, (_, i) => ({)
-        id: `node-${i}`,}
-        type: 'WeightedChoice',
+  id: `node-${i}`}
+},
+  type: 'WeightedChoice',
         position: { x: i * 100, y: 100 },
         data: { nodeType: 'WeightedChoice', choices: [] }
       }));
       const complexEdges = Array.from({ length: 10 }, (_, i) => ({)
-        id: `edge-${i}`,}
-        source: `node-${i}`,}
-        target: `node-${i + 1}`,}
-        type: 'step',
-      }));
+  id: `edge-${i}`}
+},
+  source: `node-${i}`}
+},
+  target: `node-${i + 1}`}
+},
+  type: 'step';
+  }));
       const complexTemplate = await service.createFromGraph(;);
         complexNodes,
         complexEdges,
@@ -144,44 +148,41 @@ describe('TemplateService', () => {
       expect(complexTemplate.metadata.complexity).toBe('complex');
     });
     it('should validate template before saving', async () => {
-      const invalidSaveData = {
-        ...sampleSaveData,
-        name: '' // Invalid name,
-      };
+  const invalidSaveData = {
+  ...sampleSaveData,
+  name: '' // Invalid name,
+};
       await expect()
         service.createFromGraph(sampleNodes, sampleEdges, invalidSaveData, 'test-author')
       ).rejects.toThrow('Template validation failed');
     });
     it('should extract annotations correctly', async () => {
-      const nodesWithLabels: Node[] = [
+      const nodesWithLabels: Node = [
         {
           ...sampleNodes[0],
           data: { ...sampleNodes[0].data, label: 'Custom Label 1' }
-        },
+  }
         {
           ...sampleNodes[1],
           data: { ...sampleNodes[1].data, label: 'Custom Label 2' }
-        }
       ];
-      const edgesWithLabels: Edge[] = [
+      const edgesWithLabels: Edge = [
         {
-          ...sampleEdges[0],
-          label: 'Connection Label',
-        }
-      ];
-      const template = await service.createFromGraph(;);
-        nodesWithLabels,
-        edgesWithLabels,
-        sampleSaveData,
-        'test-author'
-      );
-      expect(template.graph.annotations.nodeLabels).toEqual({)
-        'node-1': 'Custom Label 1',
-        'node-2': 'Custom Label 2'
-      });
+  ...sampleEdges[0],
+  label: 'Connection Label'];
+  const template = await service.createFromGraph(;);
+  nodesWithLabels,
+  edgesWithLabels,
+  sampleSaveData,
+  'test-author'
+  );
+  expect(template.graph.annotations.nodeLabels).toEqual({)
+  'node-1': 'Custom Label 1',
+  'node-2': 'Custom Label 2',
+});
       expect(template.graph.annotations.connectionLabels).toEqual({)
-        'edge-1': 'Connection Label'
-      });
+  'edge-1': 'Connection Label',
+});
     });
   });
   describe('searchTemplates', () => {
@@ -192,13 +193,13 @@ describe('TemplateService', () => {
           [{ id: 'n1', type: 'WeightedChoice', position: { x: 0, y: 0 }, data: {} }],
           [],
           {
-            name: 'Character Generator',
-            description: 'Generates character descriptions',
-            category: 'character',
-            tags: ['fantasy', 'rpg'],
-            isPublic: true,
-            includeAnnotations: true,
-          },
+  name: 'Character Generator',
+  description: 'Generates character descriptions',
+  category: 'character',
+  tags: ['fantasy', 'rpg'],
+  isPublic: true,
+  includeAnnotations: true,
+}
           'author1'
         ),
         await service.createFromGraph()
@@ -208,13 +209,13 @@ describe('TemplateService', () => {
           ],
           [{ id: 'e1', source: 'n1', target: 'n2', type: 'step' }],
           {
-            name: 'Setting Builder',
-            description: 'Creates detailed settings',
-            category: 'setting',
-            tags: ['worldbuilding', 'environment'],
-            isPublic: true,
-            includeAnnotations: true,
-          },
+  name: 'Setting Builder',
+  description: 'Creates detailed settings',
+  category: 'setting',
+  tags: ['worldbuilding', 'environment'],
+  isPublic: true,
+  includeAnnotations: true,
+}
           'author2'
       ];
       // Manually set ratings for testing
@@ -247,15 +248,15 @@ describe('TemplateService', () => {
       expect(results[0].rating).toBeGreaterThanOrEqual(4.0);
     });
     it('should sort results correctly', async () => {
-      const byRating = await service.searchTemplates({ )
-        sortBy: 'rating', 
-        sortOrder: 'desc' ,
-      });
+  const byRating = await service.searchTemplates({ )
+  sortBy: 'rating',
+  sortOrder: 'desc',
+});
       expect(byRating[0].rating).toBeGreaterThanOrEqual(byRating[1].rating);
       const byName = await service.searchTemplates({ )
         sortBy: 'name', 
-        sortOrder: 'asc' ,
-      });
+        sortOrder: 'asc' ;
+  });
       expect(byName[0].name.toLowerCase()).toBeLessThanOrEqual()
         byName[1].name.toLowerCase()
       );
@@ -275,27 +276,26 @@ describe('TemplateService', () => {
             type: 'WeightedChoice',
             position: { x: 100, y: 200 },
             data: { nodeType: 'WeightedChoice', choices: [{ value: 'Test', weight: 1 }] }
-          }
         ],
         [],
         {
-          name: 'Test Template',
-          description: 'For instantiation testing',
-          category: 'general',
-          tags: [],
-          isPublic: false,
-          includeAnnotations: true,
-        },
+  name: 'Test Template',
+  description: 'For instantiation testing',
+  category: 'general',
+  tags: [],
+  isPublic: false,
+  includeAnnotations: true,
+}
         'test-author'
       );
     });
     it('should instantiate template with default options', async () => {
-      const options: TemplateInstantiationOptions = {
-        preservePositions: false,
-        mergeWithCurrent: false,
-        offsetX: 50,
-        offsetY: 75,
-      };
+  const options: TemplateInstantiationOptions = {,
+  preservePositions: false,
+  mergeWithCurrent: false,
+  offsetX: 50,
+  offsetY: 75,
+};
       const result = await service.instantiateTemplate(template.id, options);
       expect(result.nodes).toHaveLength(1);
       expect(result.edges).toHaveLength(0);
@@ -306,42 +306,40 @@ describe('TemplateService', () => {
       expect(result.nodes[0].id).not.toBe('original-node');
     });
     it('should preserve positions when requested', async () => {
-      const options: TemplateInstantiationOptions = {
-        preservePositions: true,
-        mergeWithCurrent: false,
-      };
+  const options: TemplateInstantiationOptions = {,
+  preservePositions: true,
+  mergeWithCurrent: false,
+};
       const result = await service.instantiateTemplate(template.id, options);
       expect(result.nodes[0].position.x).toBe(100);
       expect(result.nodes[0].position.y).toBe(200);
     });
     it('should apply customization values', async () => {
-      const options: TemplateInstantiationOptions = {
-        preservePositions: true,
-        mergeWithCurrent: false,
-        customizationValues: {,
-          [template.graph.nodes[0].id]: {
-            customProperty: 'customized value',
-          }
-        }
-      };
+  const options: TemplateInstantiationOptions = {,
+  preservePositions: true,
+  mergeWithCurrent: false,
+  customizationValues: {,
+  [template.graph.nodes[0].id]: {,
+  customProperty: 'customized value',
+};
       const result = await service.instantiateTemplate(template.id, options);
       expect(result.nodes[0].data.customProperty).toBe('customized value');
     });
     it('should increment usage count', async () => {
-      const originalUsage = template.metadata.usageCount;
-      await service.instantiateTemplate(template.id, {)
-        preservePositions: true,
-        mergeWithCurrent: false,
-      });
+  const originalUsage = template.metadata.usageCount;
+  await service.instantiateTemplate(template.id, {)
+  preservePositions: true,
+  mergeWithCurrent: false,
+});
       const updatedTemplate = await service.loadTemplate(template.id);
       expect(updatedTemplate!.metadata.usageCount).toBe(originalUsage + 1);
     });
     it('should throw error for nonexistent template', async () => {
-      await expect()
-        service.instantiateTemplate('nonexistent-id', {)
-          preservePositions: true,
-          mergeWithCurrent: false,
-        })
+  await expect()
+  service.instantiateTemplate('nonexistent-id', {)
+  preservePositions: true,
+  mergeWithCurrent: false,
+}
       ).rejects.toThrow('Template with id "nonexistent-id" not found');
     });
   });
@@ -352,23 +350,23 @@ describe('TemplateService', () => {
         [{ id: 'n1', type: 'Output', position: { x: 0, y: 0 }, data: {} }],
         [],
         {
-          name: 'Reviewable Template',
-          description: 'For review testing',
-          category: 'general',
-          tags: [],
-          isPublic: true,
-          includeAnnotations: true,
-        },
+  name: 'Reviewable Template',
+  description: 'For review testing',
+  category: 'general',
+  tags: [],
+  isPublic: true,
+  includeAnnotations: true,
+}
         'test-author'
       );
     });
     it('should add review and update rating', async () => {
-      const review = await service.addReview(template.id, {)
-        author: 'reviewer1',
-        rating: 5,
-        comment: 'Excellent template!',
-        helpful: 0,
-      });
+  const review = await service.addReview(template.id, {)
+  author: 'reviewer1',
+  rating: 5,
+  comment: 'Excellent template!',
+  helpful: 0,
+});
       expect(review.id).toBeDefined();
       expect(review.timestamp).toBeDefined();
       expect(review.rating).toBe(5);
@@ -378,37 +376,37 @@ describe('TemplateService', () => {
       expect(updatedTemplate!.reviews).toHaveLength(1);
     });
     it('should calculate average rating correctly', async () => {
+  await service.addReview(template.id, {)
+  author: 'reviewer1',
+  rating: 5,
+  comment: 'Great!',
+  helpful: 0,
+});
       await service.addReview(template.id, {)
-        author: 'reviewer1',
-        rating: 5,
-        comment: 'Great!',
-        helpful: 0,
-      });
-      await service.addReview(template.id, {)
-        author: 'reviewer2', 
-        rating: 3,
-        comment: 'Good but could be better',
-        helpful: 0,
-      });
+  author: 'reviewer2',
+  rating: 3,
+  comment: 'Good but could be better',
+  helpful: 0,
+});
       const updatedTemplate = await service.loadTemplate(template.id);
       expect(updatedTemplate!.rating).toBe(4); // (5 + 3) / 2
       expect(updatedTemplate!.reviews).toHaveLength(2);
     });
     it('should throw error for nonexistent template', async () => {
-      await expect()
-        service.addReview('nonexistent-id', {)
-          author: 'reviewer',
-          rating: 5,
-          comment: 'Great!',
-          helpful: 0,
-        })
+  await expect()
+  service.addReview('nonexistent-id', {)
+  author: 'reviewer',
+  rating: 5,
+  comment: 'Great!',
+  helpful: 0,
+}
       ).rejects.toThrow('Template with id "nonexistent-id" not found');
     });
   });
   describe('validateTemplate', () => {
     it('should validate valid template', async () => {
-      const validTemplate: Template = {
-        id: 'test-id',
+      const validTemplate: Template = {,
+  id: 'test-id',
         name: 'Valid Template',
         description: 'A valid template',
         category: 'general',
@@ -417,102 +415,91 @@ describe('TemplateService', () => {
         rating: 0,
         reviews: [],
         graph: {,
-          nodes: [,
+  nodes: [,
             {
               id: 'node1',
               type: 'WeightedChoice',
               position: { x: 0, y: 0 },
               data: {}
-            },
+  }
             {
               id: 'node2',
               type: 'Output',
               position: { x: 100, y: 0 },
               data: {}
-            }
           ],
           edges: [,
             {
               id: 'edge1',
               source: 'node1',
               target: 'node2',
-              type: 'step',
-            }
-          ],
+              type: 'step'],
           annotations: {,
-            stickyNotes: [],
+  stickyNotes: [],
             nodeLabels: {},
             regionGroups: [],
             connectionLabels: {},
             metadata: {,
-              author: 'test',
-              created: '2023-01-01',
-              modified: '2023-01-01',
-              version: '1.0.0',
-            }
-          }
-        },
-        metadata: {,
-          created: '2023-01-01',
-          lastModified: '2023-01-01',
-          usageCount: 0,
-          tags: [],
-          complexity: 'simple',
-          nodeCount: 2,
-          estimatedOutputLength: 50,
-          isPublic: false,
-          language: 'en',
-        }
-      };
+  author: 'test',
+  created: '2023-01-01',
+  modified: '2023-01-01',
+  version: '1.0.0',
+},
+  metadata: {,
+  created: '2023-01-01',
+  lastModified: '2023-01-01',
+  usageCount: 0,
+  tags: [],
+  complexity: 'simple',
+  nodeCount: 2,
+  estimatedOutputLength: 50,
+  isPublic: false,
+  language: 'en',
+};
       const validation = await service.validateTemplate(validTemplate);
       expect(validation.isValid).toBe(true);
       expect(validation.errors).toEqual([]);
     });
     it('should detect validation errors', async () => {
-      const invalidTemplate: Template = {
-        id: 'test-id',
-        name: '', // Invalid: empty name
-        description: '',
+      const invalidTemplate: Template = {,
+  id: 'test-id',
+        name: '', // Invalid: empty name,
+  description: '',
         category: 'general',
         version: '1.0.0',
         author: 'test-author',
         rating: 0,
         reviews: [],
         graph: {,
-          nodes: [], // Invalid: no nodes
-          edges: [,
+  nodes: [], // Invalid: no nodes,
+  edges: [,
             {
               id: 'edge1',
-              source: 'nonexistent', // Invalid: references nonexistent node
-              target: 'also-nonexistent',
-              type: 'step',
-            }
-          ],
+              source: 'nonexistent', // Invalid: references nonexistent node,
+  target: 'also-nonexistent',
+              type: 'step'],
           annotations: {,
-            stickyNotes: [],
+  stickyNotes: [],
             nodeLabels: {},
             regionGroups: [],
             connectionLabels: {},
             metadata: {,
-              author: 'test',
-              created: '2023-01-01',
-              modified: '2023-01-01',
-              version: '1.0.0',
-            }
-          }
-        },
-        metadata: {,
-          created: '2023-01-01',
-          lastModified: '2023-01-01',
-          usageCount: 0,
-          tags: [],
-          complexity: 'simple',
-          nodeCount: 0,
-          estimatedOutputLength: 0,
-          isPublic: false,
-          language: 'en',
-        }
-      };
+  author: 'test',
+  created: '2023-01-01',
+  modified: '2023-01-01',
+  version: '1.0.0',
+},
+  metadata: {,
+  created: '2023-01-01',
+  lastModified: '2023-01-01',
+  usageCount: 0,
+  tags: [],
+  complexity: 'simple',
+  nodeCount: 0,
+  estimatedOutputLength: 0,
+  isPublic: false,
+  language: 'en',
+};
       const validation = await service.validateTemplate(invalidTemplate);
       expect(validation.isValid).toBe(false);
       expect(validation.errors).toContain('Template name is required');
@@ -529,8 +516,8 @@ describe('TemplateService', () => {
         throw new Error('Storage quota exceeded');
       });
       const storage = new LocalTemplateStorage();
-      const template: Template = {
-        id: 'test-id',
+      const template: Template = {,
+  id: 'test-id',
         name: 'Test Template',
         description: 'Test',
         category: 'general',
@@ -554,8 +541,8 @@ describe('TemplateService', () => {
     });
     it('should prevent duplicate names', async () => {
       const storage = new LocalTemplateStorage();
-      const template1: Template = {
-        id: 'id-1',
+      const template1: Template = {,
+  id: 'id-1',
         name: 'Duplicate Name',
         description: 'First template',
         category: 'general',
@@ -567,10 +554,10 @@ describe('TemplateService', () => {
         metadata: {} as any
       };
       const template2: Template = {
-        ...template1,
-        id: 'id-2',
-        description: 'Second template',
-      };
+  ...template1,
+  id: 'id-2',
+  description: 'Second template',
+};
       await storage.save(template1);
       await expect(storage.save(template2)).rejects.toThrow()
         'Template with name "Duplicate Name" already exists'

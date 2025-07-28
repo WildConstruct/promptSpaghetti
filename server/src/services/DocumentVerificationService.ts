@@ -6,6 +6,7 @@ import { PDFDocument } from 'pdf-lib';
 import * as fs from 'fs';
 
 // Document validation results
+}
 export interface DocumentValidation {
   document_id: string;
   is_valid: boolean;
@@ -17,6 +18,7 @@ export interface DocumentValidation {
     text_readable: boolean;
     tampering_detected: boolean;
     metadata_consistent: boolean;
+}
   };
   extracted_data?: {
     text_content?: string;
@@ -33,6 +35,7 @@ export interface DocumentValidation {
   processing_notes: string;
 }
 
+}
 export interface DocumentAnalysis {
   document_id: string;
   file_type: string;
@@ -43,11 +46,14 @@ export interface DocumentAnalysis {
   flags: string[];
   processing_time_ms: number;
 }
+}
 
+}
 export interface OCRResult {
   text: string;
   confidence: number;
   regions: Array<{
+}
     bbox: { x: number; y: number; width: number; height: number };
     text: string;
     confidence: number;
@@ -63,6 +69,7 @@ export class DocumentVerificationService {
 
   // Initialize document verification schema
   async initializeSchema(): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -131,6 +138,7 @@ export class DocumentVerificationService {
 
   // Validate document integrity and quality
   async validateDocument(documentId: string, filePath: string): Promise<DocumentValidation> {
+
     const startTime = Date.now();
     
     try {
@@ -145,7 +153,7 @@ export class DocumentVerificationService {
           text_readable: false,
           tampering_detected: false,
           metadata_consistent: false
-        },
+  }
         issues: [],
         recommendations: [],
         processing_notes: ''
@@ -191,6 +199,7 @@ export class DocumentVerificationService {
     filePath: string, 
     analysisType: 'identity' | 'business' | 'address' | 'financial'
   ): Promise<DocumentAnalysis> {
+
     const startTime = Date.now();
 
     try {
@@ -231,6 +240,7 @@ export class DocumentVerificationService {
 
   // Perform OCR on document
   async performOCR(documentId: string, filePath: string): Promise<OCRResult> {
+
     try {
       const fileBuffer = await fs.promises.readFile(filePath);
       const fileType = await this.detectFileType(fileBuffer);
@@ -276,6 +286,7 @@ export class DocumentVerificationService {
 
   // Get document validation results
   async getDocumentValidation(documentId: string): Promise<DocumentValidation | null> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -305,6 +316,7 @@ export class DocumentVerificationService {
 
   // Get document analysis results
   async getDocumentAnalysis(documentId: string): Promise<DocumentAnalysis[]> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -329,6 +341,7 @@ export class DocumentVerificationService {
 
   // Private helper methods
   private async detectFileType(buffer: Buffer): Promise<string> {
+
     // PDF signature
     if (buffer.slice(0, 4).toString() === '%PDF') {
       return 'pdf';
@@ -350,6 +363,7 @@ export class DocumentVerificationService {
   }
 
   private async validatePDF(buffer: Buffer, validation: DocumentValidation): Promise<void> {
+
     try {
       const pdfDoc = await PDFDocument.load(buffer);
       const pageCount = pdfDoc.getPageCount();
@@ -381,6 +395,7 @@ export class DocumentVerificationService {
   }
 
   private async validateImage(buffer: Buffer, validation: DocumentValidation): Promise<void> {
+
     try {
       const metadata = await sharp(buffer).metadata();
       
@@ -437,6 +452,7 @@ export class DocumentVerificationService {
   }
 
   private async convertPDFToImage(pdfBuffer: Buffer): Promise<Buffer> {
+
     try {
       const pdfDoc = await PDFDocument.load(pdfBuffer);
       const pages = pdfDoc.getPages();
@@ -454,7 +470,7 @@ export class DocumentVerificationService {
           channels: 3,
           background: { r: 255, g: 255, b: 255 }
         }
-      })
+  }
         .png()
         .toBuffer();
 
@@ -465,6 +481,7 @@ export class DocumentVerificationService {
   }
 
   private async simulateOCR(__imageBuffer: Buffer): Promise<OCRResult> {
+
     // Simulate OCR processing - in production, use Tesseract.js or cloud OCR service
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing time
     
@@ -486,6 +503,7 @@ export class DocumentVerificationService {
     ocrResult: OCRResult,
     __filePath: string
   ): Promise<DocumentAnalysis> {
+
     const analysis: DocumentAnalysis = {
       document_id: documentId,
       file_type: 'identity',
@@ -543,6 +561,7 @@ export class DocumentVerificationService {
     ocrResult: OCRResult,
     __filePath: string
   ): Promise<DocumentAnalysis> {
+
     const analysis: DocumentAnalysis = {
       document_id: documentId,
       file_type: 'business',
@@ -594,6 +613,7 @@ export class DocumentVerificationService {
     __ocrResult: OCRResult,
     __filePath: string
   ): Promise<DocumentAnalysis> {
+
     // Similar implementation for address document analysis
     return {
       document_id: documentId,
@@ -612,6 +632,7 @@ export class DocumentVerificationService {
     __ocrResult: OCRResult,
     __filePath: string
   ): Promise<DocumentAnalysis> {
+
     // Similar implementation for financial document analysis
     return {
       document_id: documentId,
@@ -648,6 +669,7 @@ export class DocumentVerificationService {
   }
 
   private async storeValidationResults(validation: DocumentValidation): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query(
@@ -671,6 +693,7 @@ export class DocumentVerificationService {
   }
 
   private async storeAnalysisResults(analysis: DocumentAnalysis): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query(
@@ -683,7 +706,7 @@ export class DocumentVerificationService {
           verification_status,
           flags,
           processing_time_ms
-        )
+
          VALUES ($1, $2, $3, $4, $5, $6, $7)`,
         [
           analysis.document_id,

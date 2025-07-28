@@ -9,8 +9,8 @@ export interface BaseExtension {
     readonly version: string;
     readonly description: string;
     readonly author: string;
-    readonly dependencies: string[];
-    readonly permissions: string[];
+    readonly dependencies: string;
+    readonly permissions: string;
     readonly extensionType: string;
     initialize(): Promise<void>;
     activate(): Promise<void>;
@@ -38,25 +38,25 @@ export interface ExtensionContext {
     readonly api: ExtensionAPIContext;
 }
 export interface ExtensionLogger {
-    debug(message: string, ...args: any[]): void;
-    info(message: string, ...args: any[]): void;
-    warn(message: string, ...args: any[]): void;
-    error(message: string, ...args: any[]): void;
-    trace(message: string, ...args: any[]): void;
+    debug(message: string, ...args: any): void;
+    info(message: string, ...args: any): void;
+    warn(message: string, ...args: any): void;
+    error(message: string, ...args: any): void;
+    trace(message: string, ...args: any): void;
 }
 export interface ExtensionStorage {
     get<T>(key: string): Promise<T | undefined>;
     set<T>(key: string, value: T): Promise<void>;
     delete(key: string): Promise<void>;
     clear(): Promise<void>;
-    keys(): Promise<string[]>;
+    keys(): Promise<string>;
     getScoped(scope: string): ExtensionStorage;
 }
 export interface ExtensionEventEmitter {
-    on(event: string, listener: (...args: any[]) => void): void;
-    off(event: string, listener: (...args: any[]) => void): void;
-    emit(event: string, ...args: any[]): void;
-    once(event: string, listener: (...args: any[]) => void): void;
+    on(event: string, listener: (...args: any) => void): void;
+    off(event: string, listener: (...args: any) => void): void;
+    emit(event: string, ...args: any): void;
+    once(event: string, listener: (...args: any) => void): void;
     removeAllListeners(event?: string): void;
 }
 export interface ExtensionRuntime {
@@ -66,7 +66,7 @@ export interface ExtensionRuntime {
     getPerformanceMetrics(): PerformanceMetrics;
     registerNode(nodeDefinition: NodeDefinition): void;
     unregisterNode(nodeId: string): void;
-    getRegisteredNodes(): NodeDefinition[];
+    getRegisteredNodes(): NodeDefinition;
 }
 export interface ExtensionUIContext {
     registerComponent(componentId: string, component: React.ComponentType<any>): void;
@@ -125,7 +125,7 @@ export interface MenuItem {
     shortcut?: string;
     action: () => void;
     disabled?: boolean;
-    submenu?: MenuItem[];
+    submenu?: MenuItem;
 }
 export interface Notification {
     id?: string;
@@ -133,7 +133,7 @@ export interface Notification {
     title: string;
     message: string;
     duration?: number;
-    actions?: NotificationAction[];
+    actions?: NotificationAction;
 }
 export interface NotificationAction {
     label: string;
@@ -195,146 +195,11 @@ export declare enum ExtensionLifecycleState {
     DEACTIVATING = "deactivating",
     DEACTIVATED = "deactivated",
     ERROR = "error",
-    DISPOSED = "disposed"
+    DISPOSED = "disposed",
+    export,
+    enum,
+    ExtensionErrorType
 }
-export declare enum ExtensionErrorType {
-    INITIALIZATION_ERROR = "initialization_error",
-    ACTIVATION_ERROR = "activation_error",
-    RUNTIME_ERROR = "runtime_error",
-    CONFIGURATION_ERROR = "configuration_error",
-    DEPENDENCY_ERROR = "dependency_error",
-    PERMISSION_ERROR = "permission_error",
-    VALIDATION_ERROR = "validation_error"
-}
-export declare class ExtensionError extends Error {
-    readonly type: ExtensionErrorType;
-    readonly extensionId: string;
-    readonly cause?: Error;
-    constructor(type: ExtensionErrorType, extensionId: string, message: string, cause?: Error);
-}
-export interface ExtensionValidationResult {
-    valid: boolean;
-    errors: string[];
-    warnings: string[];
-}
-export declare const ExtensionManifestSchema: z.ZodObject<{
-    id: z.ZodString;
-    name: z.ZodString;
-    version: z.ZodString;
-    description: z.ZodString;
-    author: z.ZodString;
-    license: z.ZodString;
-    engines: z.ZodObject<{
-        promptSpaghetti: z.ZodString;
-        node: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        node?: string;
-        promptSpaghetti?: string;
-    }, {
-        node?: string;
-        promptSpaghetti?: string;
-    }>;
-    dependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    optionalDependencies: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    permissions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    main: z.ZodOptional<z.ZodString>;
-    browser: z.ZodOptional<z.ZodString>;
-    contributes: z.ZodOptional<z.ZodObject<{
-        nodes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        commands: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        menus: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        themes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        languages: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        nodes?: string[];
-        commands?: string[];
-        menus?: string[];
-        themes?: string[];
-        languages?: string[];
-    }, {
-        nodes?: string[];
-        commands?: string[];
-        menus?: string[];
-        themes?: string[];
-        languages?: string[];
-    }>>;
-    repository: z.ZodOptional<z.ZodString>;
-    homepage: z.ZodOptional<z.ZodString>;
-    bugs: z.ZodOptional<z.ZodString>;
-    keywords: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    configuration: z.ZodOptional<z.ZodObject<{
-        type: z.ZodLiteral<"object">;
-        properties: z.ZodRecord<z.ZodString, z.ZodAny>;
-    }, "strip", z.ZodTypeAny, {
-        type?: "object";
-        properties?: Record<string, any>;
-    }, {
-        type?: "object";
-        properties?: Record<string, any>;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    id?: string;
-    name?: string;
-    description?: string;
-    version?: string;
-    author?: string;
-    main?: string;
-    configuration?: {
-        type?: "object";
-        properties?: Record<string, any>;
-    };
-    permissions?: string[];
-    license?: string;
-    engines?: {
-        node?: string;
-        promptSpaghetti?: string;
-    };
-    dependencies?: string[];
-    optionalDependencies?: string[];
-    browser?: string;
-    contributes?: {
-        nodes?: string[];
-        commands?: string[];
-        menus?: string[];
-        themes?: string[];
-        languages?: string[];
-    };
-    repository?: string;
-    homepage?: string;
-    bugs?: string;
-    keywords?: string[];
-}, {
-    id?: string;
-    name?: string;
-    description?: string;
-    version?: string;
-    author?: string;
-    main?: string;
-    configuration?: {
-        type?: "object";
-        properties?: Record<string, any>;
-    };
-    permissions?: string[];
-    license?: string;
-    engines?: {
-        node?: string;
-        promptSpaghetti?: string;
-    };
-    dependencies?: string[];
-    optionalDependencies?: string[];
-    browser?: string;
-    contributes?: {
-        nodes?: string[];
-        commands?: string[];
-        menus?: string[];
-        themes?: string[];
-        languages?: string[];
-    };
-    repository?: string;
-    homepage?: string;
-    bugs?: string;
-    keywords?: string[];
-}>;
 export type ExtensionManifest = z.infer<typeof ExtensionManifestSchema>;
 export { NodeExtension, NodeDefinition as NodeExtensionDefinition, NodeCategory } from './NodeExtension';
 export { UIExtension } from './UIExtension';

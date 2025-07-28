@@ -43,64 +43,60 @@ import {
 // Epic 16 theme imports removed
 
 export interface TutorialStep {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   content: string;
   type: 'introduction' | 'demonstration' | 'interaction' | 'practice' | 'quiz' | 'completion';
-  duration?: number; // in seconds
+  duration?: number; // in seconds,
   videoUrl?: string;
   imageUrl?: string;
-  highlightElements?: string[]; // CSS selectors for UI highlighting
-  requirements?: string[];
-  tips?: string[];
-  actions?: TutorialAction[];
+  highlightElements?: string; // CSS selectors for UI highlighting,
+  requirements?: string;
+  tips?: string;
+  actions?: TutorialAction;
 }
-
 export interface TutorialAction {
-  id: string;
+  id: string;,
   type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
   selector?: string;
   value?: string;
   message?: string;
   completed: boolean;
 }
-
 export interface Tutorial {
-  id: string;
+  id: string;,
   title: string;
-  description: string;
+  description: string;,
   category: 'getting-started' | 'template-creation' | 'marketplace' | 'collaboration' | 'advanced';
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: number; // in minutes
-  prerequisites?: string[];
-  steps: TutorialStep[];
+  difficulty: 'beginner' | 'intermediate' | 'advanced';,
+  estimatedTime: number; // in minutes,
+  prerequisites?: string;
+  steps: TutorialStep;,
   completionRewards: {,
-    xp: number;
-    badge?: string;
-    certificate?: string;
-  };
-  tags: string[];
+  xp: number;
+  badge?: string;
+  certificate?: string;
+};
+  tags: string;,
   rating: number;
-  completionCount: number;
+  completionCount: number;,
   createdAt: Date;
   updatedAt: Date;
 }
-
 export interface TutorialProgress {
-  tutorialId: string;
+  tutorialId: string;,
   currentStepIndex: number;
-  completed: boolean;
+  completed: boolean;,
   startedAt: Date;
   completedAt?: Date;
-  timeSpent: number; // in seconds
-  stepsCompleted: string[];
+  timeSpent: number; // in seconds,
+  stepsCompleted: string;
   score?: number;
 }
-
 export interface TutorialPlayerProps {
   tutorial?: Tutorial;
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onComplete?: (tutorial: Tutorial, progress: TutorialProgress) => void;
   onStepComplete?: (stepId: string, tutorial: Tutorial) => void;
@@ -109,7 +105,6 @@ export interface TutorialPlayerProps {
   enableInteractions?: boolean;
   className?: string;
 }
-
 export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   tutorial,
   isOpen,
@@ -134,20 +129,19 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const videoRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
-    if (tutorial && isOpen) {
-      const newProgress: TutorialProgress = {
-        tutorialId: tutorial.id,
-        currentStepIndex: 0,
-        completed: false,
-        startedAt: new Date(),
-        timeSpent: 0,
-        stepsCompleted: [],
-      };
+  if (tutorial && isOpen) {
+  const newProgress: TutorialProgress = {,
+  tutorialId: tutorial.id,
+  currentStepIndex: 0,
+  completed: false,
+  startedAt: new Date(),
+  timeSpent: 0,
+  stepsCompleted: [],
+};
       setProgress(newProgress);
       setCurrentStepIndex(0);
       setTimeSpent(0);
       setCompletedActions(new Set());
-    }
   }, [tutorial, isOpen]);
   useEffect(() => {
     if (isOpen && isPlaying) {
@@ -157,12 +151,9 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
     } else {
       if (timerRef.current) {
         clearInterval(timerRef.current);
-      }
-    }
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
-      }
     };
   }, [isOpen, isPlaying]);
   if (!tutorial) return null;
@@ -170,40 +161,36 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const totalSteps = tutorial.steps.length;
   const progressPercentage = ((currentStepIndex + 1) / totalSteps) * 100;
   const handleNext = () => {
-    if (currentStepIndex < totalSteps - 1) {
-      const newIndex = currentStepIndex + 1;
-      setCurrentStepIndex(newIndex);
-      onStepComplete?.(currentStep.id, tutorial);
-      if (progress) {
-        const updatedProgress = {
-          ...progress,
-          currentStepIndex: newIndex,
-          stepsCompleted: [...progress.stepsCompleted, currentStep.id],
-          timeSpent
-        };
+  if (currentStepIndex < totalSteps - 1) {
+  const newIndex = currentStepIndex + 1;
+  setCurrentStepIndex(newIndex);
+  onStepComplete?.(currentStep.id, tutorial);
+  if (progress) {
+  const updatedProgress = {
+  ...progress,
+  currentStepIndex: newIndex,
+  stepsCompleted: [...progress.stepsCompleted, currentStep.id],
+  timeSpent
+};
         setProgress(updatedProgress);
-      }
     } else {
       handleComplete();
-    }
   };
   const handlePrevious = () => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
-    }
   };
   const handleComplete = () => {
-    if (progress) {
-      const completedProgress = {
-        ...progress,
-        completed: true,
-        completedAt: new Date(),
-        timeSpent,
-        score: Math.round((completedActions.size / getTotalActions()) * 100),
-      };
+  if (progress) {
+  const completedProgress = {
+  ...progress,
+  completed: true,
+  completedAt: new Date(),
+  timeSpent,
+  score: Math.round((completedActions.size / getTotalActions()) * 100),
+};
       setProgress(completedProgress);
       onComplete?.(tutorial, completedProgress);
-    }
   };
   const handleActionComplete = (actionId: string) => {
     setCompletedActions(prev => new Set(prev).add(actionId));
@@ -219,27 +206,25 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;}
   };
   const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (difficulty) {
+  case 'beginner': return 'bg-green-100 text-green-800';
+  case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+  case 'advanced': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'getting-started': return <BookOpen className="w-4 h-4" />;
-    case 'template-creation': return <Target className="w-4 h-4" />;
-    case 'marketplace': return <Download className="w-4 h-4" />;
-    case 'collaboration': return <Users className="w-4 h-4" />;
-    case 'advanced': return <Zap className="w-4 h-4" />;
-    default: return <BookOpen className="w-4 h-4" />;
-    }
-  };
+  switch (category) {
+  case 'getting-started': return <BookOpen className="w-4 h-4" />;
+  case 'template-creation': return <Target className="w-4 h-4" />;
+  case 'marketplace': return <Download className="w-4 h-4" />;
+  case 'collaboration': return <Users className="w-4 h-4" />;
+  case 'advanced': return <Zap className="w-4 h-4" />;
+  default: return <BookOpen className="w-4 h-4" />;
+};
   const renderStepContent = () => {
     switch (currentStep.type) {
     case 'introduction':
-      return ();
+      return;
         <div className="text-center space-y-4">
           <div className="p-4 bg-blue-50 rounded-lg">
             <Lightbulb className="w-12 h-12 text-blue-600 mx-auto mb-4" />
@@ -250,7 +235,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'demonstration':
-      return ();
+      return;
         <div className="space-y-4">
           <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
             {currentStep.videoUrl ? ()
@@ -283,7 +268,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'interaction':
-      return ();
+      return;
         <div className="space-y-4">
           <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
             <div className="flex items-center gap-2 mb-2">
@@ -299,10 +284,10 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
                 <div
                   key={action.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border ${
-                    completedActions.has(action.id) 
-                      ? 'bg-green-50 border-green-200' 
-                      : 'bg-gray-50 border-gray-200'
-                  }`}
+  completedActions.has(action.id)
+  ? 'bg-green-50 border-green-200'
+  : 'bg-gray-50 border-gray-200',
+}`}
                 >
                   {completedActions.has(action.id) ? ()
                     <CheckCircle className="w-5 h-5 text-green-600" />
@@ -329,7 +314,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'practice':
-      return ();
+      return;
         <div className="space-y-4">
           <div className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
             <div className="flex items-center gap-2 mb-2">
@@ -355,7 +340,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     case 'completion':
-      return ();
+      return;
         <div className="text-center space-y-6">
           <div className="p-6 bg-green-50 rounded-lg">
             <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
@@ -398,14 +383,13 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         </div>
       );
     default:
-      return ();
+      return;
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">{currentStep.title}</h3>
           <p className="text-gray-600">{currentStep.description}</p>
           <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: currentStep.content }} />
         </div>
       );
-    }
   };
   const renderStepList = () => (;);
     <div className="space-y-2">
@@ -413,12 +397,12 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
         <div
           key={step.id}
           className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-            index === currentStepIndex 
-              ? 'bg-blue-100 text-blue-800' 
-              : index < currentStepIndex
-                ? 'bg-green-50 text-green-700'
-                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
-          }`}
+  index === currentStepIndex
+  ? 'bg-blue-100 text-blue-800'
+  : index < currentStepIndex,
+  ? 'bg-green-50 text-green-700'
+  : 'bg-gray-50 text-gray-600 hover:bg-gray-100',
+}`}
           onClick={() => setCurrentStepIndex(index)}
         >
           {index < currentStepIndex ? ()
@@ -441,7 +425,7 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
       ))}
     </div>
   );
-  return ();
+  return;
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className={`max-w-6xl h-[90vh] flex flex-col ${isFullscreen ? 'max-w-full h-full' : ''} ${className}`}>}
         <DialogHeader className="flex-shrink-0">
@@ -619,14 +603,14 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 };
 
 // Tutorial Browser Component
+
 export interface TutorialBrowserProps {
-  tutorials: Tutorial[];
+  tutorials: Tutorial;,
   onSelectTutorial: (tutorial: Tutorial) => void;
   onStartTutorial?: (tutorial: Tutorial) => void;
   userProgress?: { [tutorialId: string]: TutorialProgress };
   className?: string;
 }
-
 export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   tutorials,
   onSelectTutorial,
@@ -639,7 +623,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
   const [searchTerm, setSearchTerm] = useState('');
   const getFilteredTutorials = () => {
     return tutorials.filter(tutorial => {)
-      const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
+  const matchesCategory = selectedCategory === 'all' || tutorial.category === selectedCategory;
       const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
       const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                            tutorial.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -647,24 +631,22 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
     });
   };
   const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-    case 'beginner': return 'bg-green-100 text-green-800';
-    case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-    case 'advanced': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (difficulty) {
+  case 'beginner': return 'bg-green-100 text-green-800';
+  case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+  case 'advanced': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-    case 'getting-started': return <BookOpen className="w-4 h-4" />;
-    case 'template-creation': return <Target className="w-4 h-4" />;
-    case 'marketplace': return <Download className="w-4 h-4" />;
-    case 'collaboration': return <Users className="w-4 h-4" />;
-    case 'advanced': return <Zap className="w-4 h-4" />;
-    default: return <BookOpen className="w-4 h-4" />;
-    }
-  };
-  return ();
+  switch (category) {
+  case 'getting-started': return <BookOpen className="w-4 h-4" />;
+  case 'template-creation': return <Target className="w-4 h-4" />;
+  case 'marketplace': return <Download className="w-4 h-4" />;
+  case 'collaboration': return <Users className="w-4 h-4" />;
+  case 'advanced': return <Zap className="w-4 h-4" />;
+  default: return <BookOpen className="w-4 h-4" />;
+};
+  return;
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Tutorial Library</h1>
@@ -714,7 +696,7 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
           const progress = userProgress[tutorial.id];
           const isCompleted = progress?.completed || false;
           const progressPercentage = progress ? (progress.currentStepIndex / tutorial.steps.length) * 100 : 0;
-          return ();
+          return;
             <Card key={tutorial.id} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-3">

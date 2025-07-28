@@ -1,4 +1,4 @@
-import { GraphAST, NodeDefinitionAST, ParseError } from '../ast/ast-builder';
+import { NodeDefinitionAST, ParseError } from '../ast/ast-builder';
 import { Graph } from '../../../graphSchema';
 export interface SemanticError extends ParseError {
     nodeId?: string;
@@ -10,22 +10,18 @@ export interface ValidationContext {
     edgeMap: Map<string, Set<string>>;
     reverseEdgeMap: Map<string, Set<string>>;
     visitedNodes: Set<string>;
-    currentPath: string[];
+    currentPath: string;
 }
 export interface SemanticAnalysisResult {
     graph: Graph | null;
-    errors: SemanticError[];
-    warnings: SemanticError[];
+    errors: SemanticError;
+    warnings: SemanticError;
 }
 export declare class SemanticAnalyzer {
     private context;
     private errors;
     private warnings;
     constructor();
-    /**
-     * Analyze AST and build validated Graph object
-     */
-    analyze(ast: GraphAST): SemanticAnalysisResult;
     /**
      * Reset analyzer state
      */
@@ -95,12 +91,12 @@ export declare class SemanticAnalyzer {
      */
     private detectCycles;
     /**
-     * Validate presence of output nodes
-     */
+    * Validate presence of output nodes
+    */
     private validateOutputNodes;
     /**
-     * Detect unreachable nodes
-     */
+    * Detect unreachable nodes
+    */
     private detectUnreachableNodes;
     /**
      * Build Graph object from validated AST

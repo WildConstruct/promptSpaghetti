@@ -55,9 +55,10 @@ const SessionLimitConfigSchema = z.object({
     highConcurrentSessions: z.number().min(1).max(100),
     suspiciousActivity: z.number().min(1).max(50),
     geographicAnomalies: z.number().min(1).max(20)
-  })
+  }
 });
 
+}
 export interface ConfigurationTemplate {
   id: string;
   name: string;
@@ -69,11 +70,14 @@ export interface ConfigurationTemplate {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ConfigurationAuditLog {
   id: string;
   configId: string;
   action: 'created' | 'updated' | 'deleted' | 'applied';
+}
   changes: Record<string, { old: unknown; new: unknown }>;
   userId: string;
   timestamp: Date;
@@ -105,6 +109,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     scope: 'global' | 'organization' | 'user',
     targetId?: string
   ): Promise<SessionLimitConfig> {
+
     try {
       const cacheKey = `${scope}:${targetId || 'default'}`;
       
@@ -150,6 +155,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     userId: string,
     reason?: string
   ): Promise<void> {
+
     try {
       // Validate configuration
       const validatedConfig = this.validateConfiguration(config);
@@ -201,6 +207,7 @@ export class SessionLimitConfigManager extends EventEmitter {
    * Get configuration templates
    */
   async getConfigurationTemplates(category?: string): Promise<ConfigurationTemplate[]> {
+
     try {
       let query = 'SELECT * FROM session_limit_config_templates';
       const params: unknown[] = [];
@@ -239,6 +246,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     template: Omit<ConfigurationTemplate, 'id' | 'createdAt' | 'updatedAt'>,
     userId: string
   ): Promise<string> {
+
     try {
       const templateId = require('crypto').randomUUID();
       const now = new Date();
@@ -288,6 +296,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     userId: string,
     reason?: string
   ): Promise<void> {
+
     try {
       // Get template
       const templateResult = await this.dbService.query(
@@ -332,6 +341,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     targetId: string | null,
     limit: number = 50
   ): Promise<ConfigurationAuditLog[]> {
+
     try {
       const result = await this.dbService.query(`
         SELECT * FROM session_limit_config_audit_log
@@ -390,6 +400,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     userId: string,
     organizationId?: string
   ): Promise<SessionLimitConfig> {
+
     try {
       // Start with global configuration
       let config = await this.loadConfiguration('global');
@@ -420,6 +431,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     scope: string,
     targetId?: string
   ): Promise<void> {
+
     // Implementation would depend on WebSocket integration
     // This is a placeholder for the real-time update system
     console.log(`Subscribed ${connectionId} to config updates for ${scope}:${targetId}`);
@@ -518,6 +530,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     targetId: string | null,
     userId: string
   ): Promise<void> {
+
     const configId = targetId ? `${scope}_${targetId}` : scope;
     const now = new Date();
     
@@ -570,11 +583,13 @@ export class SessionLimitConfigManager extends EventEmitter {
   }
   
   private async invalidateRedisCache(scope: string, targetId: string | null): Promise<void> {
+
     const pattern = `session_limits:config:${scope}:${targetId || '*'}`;
     await this.redisService.invalidateCache(pattern);
   }
   
   private async incrementConfigVersion(): Promise<void> {
+
     await this.redisService.incr(this.CONFIG_VERSION_KEY);
   }
   
@@ -586,6 +601,7 @@ export class SessionLimitConfigManager extends EventEmitter {
     userId: string,
     reason?: string
   ): Promise<void> {
+
     const changes: Record<string, { old: unknown; new: unknown }> = {};
     
     Object.keys(newConfig).forEach(key => {

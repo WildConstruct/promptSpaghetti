@@ -9,14 +9,14 @@ import { Graph, Node, Edge } from '../../graphSchema';
 
 // Mock the GraphCRDTAdapter
 jest.mock('../../collaboration/GraphCRDTAdapter', () => ({)
-  GraphCRDTAdapter: jest.fn<unknown[], unknown>().mockImplementation((options) => ({)
-    addNode: jest.fn((node, position) => {
+  GraphCRDTAdapter: jest.fn<unknown, unknown>().mockImplementation((options) => ({)
+  addNode: jest.fn((node, position) => {
       // Simulate adding a node and triggering callback
       setTimeout(() => {
         const newGraph = {
           nodes: [{ ...node, position }],
-          edges: [],
-        };
+          edges: [];
+  };
         options.onGraphChange?.(newGraph);
       }, 0);
     }),
@@ -24,8 +24,8 @@ jest.mock('../../collaboration/GraphCRDTAdapter', () => ({)
       setTimeout(() => {
         const newGraph = {
           nodes: [{ id: nodeId, ...updates }],
-          edges: [],
-        };
+          edges: [];
+  };
         options.onGraphChange?.(newGraph);
       }, 0);
     }),
@@ -36,48 +36,48 @@ jest.mock('../../collaboration/GraphCRDTAdapter', () => ({)
       }, 0);
     }),
     addEdge: jest.fn((edge) => {,
-      setTimeout(() => {
-        const newGraph = {
-          nodes: [],
-          edges: [edge],
-        };
+  setTimeout(() => {
+  const newGraph = {
+  nodes: [],
+  edges: [edge],
+};
         options.onGraphChange?.(newGraph);
       }, 0);
     }),
-    deleteEdge: jest.fn<unknown[], unknown>(),
-    updateNodePosition: jest.fn<unknown[], unknown>(),
-    setUserPresence: jest.fn<unknown[], unknown>(),
-    applyRemoteUpdate: jest.fn<unknown[], unknown>(),
+    deleteEdge: jest.fn<unknown, unknown>(),
+    updateNodePosition: jest.fn<unknown, unknown>(),
+    setUserPresence: jest.fn<unknown, unknown>(),
+    applyRemoteUpdate: jest.fn<unknown, unknown>(),
     getDocumentState: jest.fn(() => new Uint8Array([1, 2, 3])),
     createSnapshot: jest.fn(() => new Uint8Array([4, 5, 6])),
-    getMetrics: jest.fn(() => ({),
-      documentSize: 100,
+    getMetrics: jest.fn(() => ({,)
+  documentSize: 100,
       nodeCount: 2,
       edgeCount: 1,
       syncState: { connected: true, lastSync: Date.now() }
     })),
-    getSyncState: jest.fn(() => ({),
-      documentId: 'test-doc',
-      userId: 'user1',
-      connected: true,
-      lastSync: Date.now(),
-    })),
-    destroy: jest.fn<unknown[], unknown>()
+    getSyncState: jest.fn(() => ({,)
+  documentId: 'test-doc',
+  userId: 'user1',
+  connected: true,
+  lastSync: Date.now(),
+})),
+    destroy: jest.fn<unknown, unknown>()
   }))
 }));
 describe('Collaborative Flow Tests', () => {
   beforeEach(() => {
     // Reset the store before each test
     useCollaborativeGraphStore.setState({)
-      graph: { nodes: [], edges: [] },
+  graph: { nodes: [], edges: [] },
       isCollaborative: false,
       collaborationEnabled: false,
       connectedUsers: new Map(),
       isConnected: false,
       connectionStatus: 'disconnected',
       crdtAdapter: undefined,
-      localPresence: undefined,
-    });
+      localPresence: undefined;
+  });
   });
   describe('Collaboration Initialization Flow', () => {
     test('should enable collaboration successfully', async () => {
@@ -85,13 +85,13 @@ describe('Collaborative Flow Tests', () => {
       expect(result.current.collaborationEnabled).toBe(false);
       expect(result.current.connectionStatus).toBe('disconnected');
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       expect(result.current.collaborationEnabled).toBe(true);
       expect(result.current.isCollaborative).toBe(true);
@@ -105,13 +105,13 @@ describe('Collaborative Flow Tests', () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       // Enable first
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       expect(result.current.collaborationEnabled).toBe(true);
       // Then disable
@@ -132,23 +132,23 @@ describe('Collaborative Flow Tests', () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       // Enable collaboration
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
-      const testNode: Node = {
-        id: 'node1',
+      const testNode: Node = {,
+  id: 'node1',
         type: 'WeightedChoice',
         choices: [,
           { value: 'Option A', weight: 0.5 },
           { value: 'Option B', weight: 0.5 }
         ],
-        inputs: [],
-      };
+        inputs: [];
+  };
       // Add node in collaborative mode
       await act(async () => {
         result.current.addNode(testNode, { x: 100, y: 200 });
@@ -162,13 +162,13 @@ describe('Collaborative Flow Tests', () => {
     test('should handle collaborative node updates', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const updates = {
         choices: [,
@@ -187,13 +187,13 @@ describe('Collaborative Flow Tests', () => {
     test('should handle collaborative node deletion', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       await act(async () => {
         result.current.deleteNode('node1');
@@ -206,21 +206,21 @@ describe('Collaborative Flow Tests', () => {
     test('should handle collaborative edge creation', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
-      const testEdge: Edge = {
-        id: 'edge1',
-        source: 'node1',
-        target: 'node2',
-        sourceHandle: 'output',
-        targetHandle: 'input',
-      };
+      const testEdge: Edge = {,
+  id: 'edge1',
+  source: 'node1',
+  target: 'node2',
+  sourceHandle: 'output',
+  targetHandle: 'input',
+};
       await act(async () => {
         result.current.addEdge(testEdge);
         await new Promise(resolve => setTimeout(resolve, 10));
@@ -231,13 +231,13 @@ describe('Collaborative Flow Tests', () => {
     test('should handle collaborative edge deletion', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       act(() => {
         result.current.deleteEdge('edge1');
@@ -250,13 +250,13 @@ describe('Collaborative Flow Tests', () => {
     test('should update local user presence', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const presenceUpdate = {
         cursor: { nodeId: 'node1', position: { x: 150, y: 250 } },
@@ -272,32 +272,32 @@ describe('Collaborative Flow Tests', () => {
     test('should update user cursor position', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       act(() => {
         result.current.updateUserCursor('node1', { x: 300, y: 400 });
       });
       expect(result.current.localPresence?.cursor).toEqual({)
-        nodeId: 'node1',
+  nodeId: 'node1',
         position: { x: 300, y: 400 }
       });
     });
     test('should update user selection', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       act(() => {
         result.current.updateUserSelection(['node1', 'node2', 'node3']);
@@ -310,32 +310,32 @@ describe('Collaborative Flow Tests', () => {
         // Simulate multiple users connected
         const connectedUsers = new Map();
         connectedUsers.set('user1', {)
-          userId: 'user1',
+  userId: 'user1',
           name: 'User 1',
           color: '#0066cc',
           cursor: { nodeId: 'node1', position: { x: 100, y: 100 } },
           selection: ['node1'],
-          lastSeen: Date.now(),
-        });
+          lastSeen: Date.now();
+  });
         connectedUsers.set('user2', {)
-          userId: 'user2',
+  userId: 'user2',
           name: 'User 2',
           color: '#cc6600',
           cursor: { nodeId: 'node2', position: { x: 200, y: 200 } },
           selection: ['node2'],
-          lastSeen: Date.now(),
-        });
+          lastSeen: Date.now();
+  });
         // Manually update connected users to simulate the callback
         useCollaborativeGraphStore.setState({ connectedUsers });
       });
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: mockOnUserPresence,
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: mockOnUserPresence,
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       // Simulate users connecting
       act(() => {
@@ -350,13 +350,13 @@ describe('Collaborative Flow Tests', () => {
     test('should apply remote updates', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const remoteUpdate = new Uint8Array([1, 2, 3, 4, 5]);
       act(() => {
@@ -367,13 +367,13 @@ describe('Collaborative Flow Tests', () => {
     test('should get document state for synchronization', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const documentState = result.current.getDocumentState();
       expect(documentState).toBeInstanceOf(Uint8Array);
@@ -382,13 +382,13 @@ describe('Collaborative Flow Tests', () => {
     test('should create snapshots', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const snapshot = result.current.createSnapshot();
       expect(snapshot).toBeInstanceOf(Uint8Array);
@@ -399,19 +399,19 @@ describe('Collaborative Flow Tests', () => {
     test('should handle connection status changes', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       const mockOnConnectionStatus = jest.fn((connected) => {
-        useCollaborativeGraphStore.setState({)
-          isConnected: connected,
-          connectionStatus: connected ? 'connected' : 'disconnected',
-        });
+  useCollaborativeGraphStore.setState({)
+  isConnected: connected,
+  connectionStatus: connected ? 'connected' : 'disconnected',
+});
       });
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: mockOnConnectionStatus,
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: mockOnConnectionStatus,
+});
       });
       // Simulate connection established
       act(() => {
@@ -431,13 +431,13 @@ describe('Collaborative Flow Tests', () => {
     test('should provide collaboration metrics', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const metrics = result.current.getMetrics();
       expect(metrics).toBeDefined();
@@ -449,13 +449,13 @@ describe('Collaborative Flow Tests', () => {
     test('should provide sync state information', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const syncState = result.current.getSyncState();
       expect(syncState).toBeDefined();
@@ -468,12 +468,12 @@ describe('Collaborative Flow Tests', () => {
   describe('Non-Collaborative Mode Operations', () => {
     test('should handle node operations in non-collaborative mode', () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
-      const testNode: Node = {
-        id: 'node1',
+      const testNode: Node = {,
+  id: 'node1',
         type: 'WeightedChoice',
         choices: [{ value: 'Test', weight: 1 }],
-        inputs: [],
-      };
+        inputs: [];
+  };
       act(() => {
         result.current.addNode(testNode);
       });
@@ -494,11 +494,11 @@ describe('Collaborative Flow Tests', () => {
     });
     test('should handle edge operations in non-collaborative mode', () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
-      const testEdge: Edge = {
-        id: 'edge1',
-        source: 'node1',
-        target: 'node2',
-      };
+      const testEdge: Edge = {,
+  id: 'edge1',
+  source: 'node1',
+  target: 'node2',
+};
       act(() => {
         result.current.addEdge(testEdge);
       });
@@ -524,13 +524,13 @@ describe('Collaborative Flow Tests', () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       const newGraph: Graph = { nodes: [], edges: [] };
       act(() => {
@@ -544,13 +544,13 @@ describe('Collaborative Flow Tests', () => {
     test('should handle operations when adapter is not available', async () => {
       const { result } = renderHook(() => useCollaborativeGraphStore());
       await act(async () => {
-        await result.current.enableCollaboration({)
-          documentId: 'test-doc',
-          userId: 'user1',
-          onGraphChange: jest.fn<unknown[], unknown>(),
-          onUserPresence: jest.fn<unknown[], unknown>(),
-          onConnectionStatus: jest.fn<unknown[], unknown>()
-        });
+  await result.current.enableCollaboration({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: jest.fn<unknown, unknown>(),
+  onUserPresence: jest.fn<unknown, unknown>(),
+  onConnectionStatus: jest.fn<unknown, unknown>(),
+});
       });
       // Manually set adapter to undefined to simulate error condition
       act(() => {

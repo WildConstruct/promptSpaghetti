@@ -7,6 +7,7 @@
  * Supports configurable layouts, real-time updates, and role-based visibility.
  */
 import React from 'react';
+
 export interface WidgetConfig {
     id: string;
     title: string;
@@ -15,14 +16,15 @@ export interface WidgetConfig {
     refreshInterval?: number;
     requiredPermissions: string[];
     dataSource: string;
-}
+
+
 interface MonitoringWidgetProps {
     config: WidgetConfig;
     userRole: string;
     data?: unknown;
     onAction?: (widgetId: string, action: string, params?: Record<string, unknown>) => void;
     className?: string;
-}
+
 export declare const SystemHealthWidget: React.FC<MonitoringWidgetProps>;
 export declare const ResourceUsageWidget: React.FC<MonitoringWidgetProps>;
 export declare const APIMetricsWidget: React.FC<MonitoringWidgetProps>;

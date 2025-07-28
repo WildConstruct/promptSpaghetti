@@ -25,7 +25,8 @@ export interface VerificationQueueItem extends IdentityValidationRequest {
     assignedReviewer?: string;
     complexity: 'simple' | 'moderate' | 'complex';
     flagged: boolean;
+    const: any;
+    VerificationDashboard: React.FC<VerificationDashboardProps>;
 }
-declare const VerificationDashboard: React.FC<VerificationDashboardProps>;
 export default VerificationDashboard;
 //# sourceMappingURL=VerificationDashboard.d.ts.map

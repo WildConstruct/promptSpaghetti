@@ -14,6 +14,7 @@ import {
   DelegationCondition
 } from './DataPermissionHierarchy';
 import { DataClassificationLevel, OperationContext, DataOperation } from '../types/DataClassification';
+
 export interface PermissionRequest {
     id: string;
     requesterId: string;
@@ -25,7 +26,8 @@ export interface PermissionRequest {
     context: OperationContext;
     requestedAt: Date;
     expiresAt?: Date;
-}
+
+
 export interface PermissionGrant {
     id: string;
     requestId: string;
@@ -40,14 +42,16 @@ export interface PermissionGrant {
     revokedAt?: Date;
     revokedBy?: string;
     auditTrail: PermissionAuditEntry[];
-}
+
+
 export interface PermissionAuditEntry {
     timestamp: Date;
     userId: string;
     action: 'GRANTED' | 'USED' | 'DENIED' | 'REVOKED' | 'DELEGATED' | 'ESCALATED' | 'EXPIRED';
     details: Record<string, any>;
     riskScore: number;
-}
+
+
 export interface EscalationRequest {
     id: string;
     originalRequestId: string;
@@ -62,8 +66,9 @@ export interface EscalationRequest {
         decisionBy: string;
         decisionAt: Date;
         reason: string;
+
     };
-}
+
 export interface EscalationStepStatus {
     stepId: string;
     status: 'PENDING' | 'APPROVED' | 'DENIED' | 'TIMEOUT' | 'SKIPPED';
@@ -72,14 +77,16 @@ export interface EscalationStepStatus {
     startedAt: Date;
     completedAt?: Date;
     timeoutAt: Date;
-}
+
+
 export interface StepApproval {
     approver: string;
     decision: 'APPROVED' | 'DENIED';
     timestamp: Date;
     comments?: string;
     conditions?: PermissionCondition[];
-}
+
+
 export interface DelegationRequest {
     id: string;
     delegatorId: string;
@@ -93,7 +100,8 @@ export interface DelegationRequest {
     createdAt: Date;
     approvedAt?: Date;
     approvedBy?: string;
-}
+
+
 export interface HierarchyAnalysis {
     userLevel: number;
     effectivePermissions: OperationPermission[];
@@ -102,7 +110,8 @@ export interface HierarchyAnalysis {
     restrictions: PermissionRestriction[];
     escalationPaths: string[];
     riskProfile: HierarchyRiskProfile;
-}
+
+
 export interface DelegationGrant {
     id: string;
     delegatorId: string;
@@ -111,21 +120,23 @@ export interface DelegationGrant {
     expiresAt: Date;
     usageRemaining?: number;
     source: 'DIRECT' | 'INHERITED' | 'EMERGENCY';
-}
+
+
 export interface PermissionRestriction {
     type: 'TIME' | 'CONTEXT' | 'VOLUME' | 'FREQUENCY' | 'APPROVAL';
     description: string;
     configuration: Record<string, any>;
     active: boolean;
     bypassable: boolean;
-}
+
+
 export interface HierarchyRiskProfile {
     overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     riskFactors: string[];
     mitigationStatus: 'COMPLETE' | 'PARTIAL' | 'NONE';
     lastAssessment: Date;
     recommendedActions: string[];
-}
+
 export declare class DataPermissionHierarchyManager extends EventEmitter {
     private hierarchy;
     private activeGrants;
@@ -203,6 +214,6 @@ export declare class DataPermissionHierarchyManager extends EventEmitter {
     private startCleanupTasks;
     private cleanupExpiredGrants;
     private cleanupExpiredRequests;
-}
+
 export default DataPermissionHierarchyManager;
 //# sourceMappingURL=DataPermissionHierarchyManager.d.ts.map

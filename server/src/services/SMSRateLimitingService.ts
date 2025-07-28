@@ -42,6 +42,7 @@ export enum SMSMessageType {
 }
 
 // Rate limit configuration
+}
 export interface RateLimitConfig {
   algorithm: RateLimitAlgorithm;
   scope: RateLimitScope;
@@ -52,8 +53,10 @@ export interface RateLimitConfig {
   priority: number;               // Higher number = higher priority (1-10)
   enabled: boolean;
 }
+}
 
 // SMS message data
+}
 export interface SMSMessage {
   id: string;
   to: string;
@@ -70,8 +73,10 @@ export interface SMSMessage {
   maxRetries: number;
   createdAt: Date;
 }
+}
 
 // Rate limit result
+}
 export interface RateLimitResult {
   allowed: boolean;
   reason?: string;
@@ -83,8 +88,10 @@ export interface RateLimitResult {
   scope: string;
   metadata?: Record<string, any>;
 }
+}
 
 // Queue status
+}
 export interface QueueStatus {
   pending: number;
   processing: number;
@@ -94,8 +101,10 @@ export interface QueueStatus {
   oldestPendingAge: number; // milliseconds
   queueHealthScore: number; // 0-100
 }
+}
 
 // Rate limiting storage interface
+}
 interface RateLimitStorage {
   get(key: string): Promise<unknown>;
   set(key: string, value: Error, ttlMs?: number): Promise<void>;
@@ -103,6 +112,7 @@ interface RateLimitStorage {
   expire(key: string, ttlMs: number): Promise<void>;
   delete(key: string): Promise<boolean>;
   cleanup(): Promise<void>;
+}
 }
 
 /**
@@ -112,6 +122,7 @@ class MemoryRateLimitStorage implements RateLimitStorage {
   private store: Map<string, { value: Error; expires?: Date }> = new Map();
 
   async get(key: string): Promise<unknown> {
+
     const item = this.store.get(key);
     if (!item) return null;
     
@@ -124,11 +135,13 @@ class MemoryRateLimitStorage implements RateLimitStorage {
   }
 
   async set(key: string, value: Error, ttlMs?: number): Promise<void> {
+
     const expires = ttlMs ? new Date(Date.now() + ttlMs) : undefined;
     this.store.set(key, { value, expires });
   }
 
   async increment(key: string, amount: number = 1): Promise<number> {
+
     const current = (await this.get(key)) || 0;
     const newValue = current + amount;
     await this.set(key, newValue);
@@ -136,6 +149,7 @@ class MemoryRateLimitStorage implements RateLimitStorage {
   }
 
   async expire(key: string, ttlMs: number): Promise<void> {
+
     const item = this.store.get(key);
     if (item) {
       item.expires = new Date(Date.now() + ttlMs);
@@ -143,10 +157,12 @@ class MemoryRateLimitStorage implements RateLimitStorage {
   }
 
   async delete(key: string): Promise<boolean> {
+
     return this.store.delete(key);
   }
 
   async cleanup(): Promise<void> {
+
     const now = new Date();
     for (const [key, item] of this.store.entries()) {
       if (item.expires && item.expires < now) {
@@ -204,7 +220,7 @@ export class SMSRateLimitingService extends EventEmitter {
           priority: 5,
           enabled: true
         }
-      },
+  }
       // Per-user limits
       {
         id: 'per_user_sms_limit',
@@ -216,7 +232,7 @@ export class SMSRateLimitingService extends EventEmitter {
           priority: 7,
           enabled: true
         }
-      },
+  }
       // Per-phone limits (anti-spam)
       {
         id: 'per_phone_sms_limit',
@@ -228,7 +244,7 @@ export class SMSRateLimitingService extends EventEmitter {
           priority: 8,
           enabled: true
         }
-      },
+  }
       // Security alerts (highest priority)
       {
         id: 'security_alert_limit',
@@ -242,7 +258,7 @@ export class SMSRateLimitingService extends EventEmitter {
           priority: 10,
           enabled: true
         }
-      },
+  }
       // Marketing messages (lower priority)
       {
         id: 'marketing_sms_limit',
@@ -266,6 +282,7 @@ export class SMSRateLimitingService extends EventEmitter {
    * Check if SMS send is allowed by rate limits
    */
   async checkRateLimit(message: SMSMessage): Promise<RateLimitResult> {
+
     const applicableConfigs = this.getApplicableConfigs(message);
     
     // Check each applicable rate limit
@@ -307,6 +324,7 @@ export class SMSRateLimitingService extends EventEmitter {
    * Queue SMS message for sending with rate limiting
    */
   async queueSMS(message: Omit<SMSMessage, 'id' | 'createdAt' | 'retryCount'>): Promise<string> {
+
     const smsMessage: SMSMessage = {
       id: this.generateMessageId(),
       createdAt: new Date(),
@@ -340,6 +358,7 @@ export class SMSRateLimitingService extends EventEmitter {
    * Send SMS immediately (bypass queue) - for critical messages only
    */
   async sendSMSImmediate(message: Omit<SMSMessage, 'id' | 'createdAt' | 'retryCount'>): Promise<boolean> {
+
     const smsMessage: SMSMessage = {
       id: this.generateMessageId(),
       createdAt: new Date(),
@@ -374,8 +393,7 @@ export class SMSRateLimitingService extends EventEmitter {
       completed: totalProcessed,
       averageProcessingTime: totalProcessed > 0 ? totalProcessingTime / totalProcessed : 0,
       oldestPendingAge: oldestPending ? Date.now() - oldestPending.getTime() : 0,
-      queueHealthScore: this.calculateQueueHealthScore()
-    };
+      queueHealthScore: this.calculateQueueHealthScore(};
   }
 
   /**
@@ -489,6 +507,7 @@ export class SMSRateLimitingService extends EventEmitter {
     key: string,
     message: SMSMessage
   ): Promise<RateLimitResult> {
+
     switch (config.algorithm) {
     case RateLimitAlgorithm.TOKEN_BUCKET:
       return await this.evaluateTokenBucket(config, key);
@@ -506,6 +525,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async evaluateTokenBucket(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
+
     const bucketKey = `${key}:tokens`;
     const lastRefillKey = `${key}:last_refill`;
     
@@ -546,6 +566,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async evaluateSlidingWindow(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
+
     const windowKey = `${key}:window`;
     const now = Date.now();
     const windowStart = now - config.windowSizeMs;
@@ -585,6 +606,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async evaluateFixedWindow(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
+
     const windowKey = `${key}:fixed_window`;
     const now = Date.now();
     const windowStart = Math.floor(now / config.windowSizeMs) * config.windowSizeMs;
@@ -625,6 +647,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async evaluateLeakyBucket(config: RateLimitConfig, key: string): Promise<RateLimitResult> {
+
     const bucketKey = `${key}:leak_bucket`;
     const lastLeakKey = `${key}:last_leak`;
     
@@ -666,6 +689,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async evaluateAdaptive(config: RateLimitConfig, key: string, message: SMSMessage): Promise<RateLimitResult> {
+
     // Adaptive rate limiting based on system load and message priority
     const systemLoadKey = 'system_load';
     const systemLoad = await this.storage.get(systemLoadKey) || 0.5; // 0.0 - 1.0
@@ -715,6 +739,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async startQueueProcessing(): Promise<void> {
+
     if (this.isProcessing) return;
     
     this.isProcessing = true;
@@ -734,6 +759,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async processNextMessages(): Promise<void> {
+
     const maxConcurrent = 5; // Process up to 5 messages concurrently
     const availableSlots = maxConcurrent - this.processingQueue.size;
     
@@ -778,6 +804,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async processSMSMessage(message: SMSMessage): Promise<boolean> {
+
     const startTime = Date.now();
     
     try {
@@ -850,6 +877,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async getCurrentUsage(config: RateLimitConfig, key: string): Promise<number> {
+
     // This is a simplified implementation - actual usage calculation would depend on the algorithm
     const data = await this.storage.get(key);
     if (!data) return 0;
@@ -867,6 +895,7 @@ export class SMSRateLimitingService extends EventEmitter {
   }
 
   private async getAllKeysForConfig(_____config: RateLimitConfig): Promise<string[]> {
+
     // This is a placeholder - actual implementation would scan storage for keys matching the pattern
     return [];
   }
@@ -883,10 +912,12 @@ export class SMSRateLimitingService extends EventEmitter {
 }
 
 // SMS Provider interface
+}
 export interface SMSProvider {
   name: string;
   sendSMS(message: SMSMessage): Promise<boolean>;
   isAvailable(): boolean;
+}
   getStatus(): { healthy: boolean; lastError?: string; };
 }
 

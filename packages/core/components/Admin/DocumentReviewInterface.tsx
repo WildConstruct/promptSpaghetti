@@ -33,11 +33,11 @@ import {
 } from 'lucide-react';
 
 export interface DocumentData {
-  id: string;
+  id: string;,
   type: 'image' | 'pdf' | 'document';
-  fileName: string;
+  fileName: string;,
   fileSize: number;
-  uploadDate: Date;
+  uploadDate: Date;,
   mimeType: string;
   url: string;
   thumbnailUrl?: string;
@@ -48,29 +48,26 @@ export interface DocumentData {
     extractedText?: string;
   };
 }
-
 export interface DocumentReviewProps {
-  documents: DocumentData[];
+  documents: DocumentData;,
   requestId: string;
-  userId: string;
+  userId: string;,
   documentType: string;
-  onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;
+  onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;,
   onBack: () => void;
   className?: string;
 }
-
 export interface ReviewAnnotation {
-  id: string;
-  x: number; // percentage
-  y: number; // percentage
-  width: number; // percentage
-  height: number; // percentage
-  type: 'highlight' | 'redact' | 'question' | 'approve' | 'reject';
+  id: string;,
+  x: number; // percentage,
+  y: number; // percentage,
+  width: number; // percentage,
+  height: number; // percentage,
+  type: 'highlight' | 'redact' | 'question' | 'approve' | 'reject';,
   note: string;
-  reviewer: string;
+  reviewer: string;,
   timestamp: Date;
 }
-
 export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
   documents,
   requestId,
@@ -84,7 +81,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
   const [zoom, setZoom] = useState(100);
   const [rotation, setRotation] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [annotations, setAnnotations] = useState<ReviewAnnotation[]>([]);
+  const [annotations, setAnnotations] = useState<ReviewAnnotation>([]);
   const [activeAnnotationType, setActiveAnnotationType] = useState<ReviewAnnotation['type'] | null>(null);
   const [reviewNotes, setReviewNotes] = useState<Record<string, string>>({});
   const [reviewDecisions, setReviewDecisions] = useState<Record<string, boolean | null>>({});
@@ -101,20 +98,20 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
     setRotation(prev => (prev + 90) % 360);
   };
   const handleNextDocument = () => {
-    setCurrentDocumentIndex(prev => )
-      prev < documents.length - 1 ? prev + 1 : prev
-    );
-  };
+  setCurrentDocumentIndex(prev => )
+  prev < documents.length - 1 ? prev + 1 : prev);
+};
   const handlePrevDocument = () => {
-    setCurrentDocumentIndex(prev => prev > 0 ? prev - 1 : prev);
-  };
+  setCurrentDocumentIndex(prev => prev > 0 ? prev - 1 : prev);
+};
   const handleDocumentClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!activeAnnotationType) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 100;
     const y = ((event.clientY - rect.top) / rect.height) * 100;
-    const newAnnotation: ReviewAnnotation = {
-      id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,}
+    const newAnnotation: ReviewAnnotation = {,
+  id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
+}
       x,
       y,
       width: 10, // Default size
@@ -122,8 +119,8 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       type: activeAnnotationType,
       note: '',
       reviewer: 'current_admin', // Would come from auth context
-      timestamp: new Date(),
-    };
+      timestamp: new Date();
+  };
     setAnnotations(prev => [...prev, newAnnotation]);
     setActiveAnnotationType(null);
   };
@@ -133,34 +130,31 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
     );
   };
   const handleDocumentReview = (approved: boolean) => {
-    const notes = reviewNotes[currentDocument.id] || '';
-    if (!notes.trim()) {
-      alert('Please provide review notes before making a decision.');
-      return;
-    }
-    setReviewDecisions(prev => ({)
-      ...prev,
-      [currentDocument.id]: approved
-    }));
+  const notes = reviewNotes[currentDocument.id] || '';
+  if (!notes.trim()) {
+  alert('Please provide review notes before making a decision.');
+  return;
+  setReviewDecisions(prev => ({)
+  ...prev,
+  [currentDocument.id]: approved,
+}));
     onReviewComplete(currentDocument.id, approved, notes);
   };
   const getDocumentTypeIcon = (type: string) => {
-    switch (type) {
-    case 'image': return Image;
-    case 'pdf': return FileText;
-    default: return FileText;
-    }
-  };
+  switch (type) {
+  case 'image': return Image;
+  case 'pdf': return FileText;
+  default: return FileText;
+};
   const getAnnotationColor = (type: ReviewAnnotation['type']) => {
-    switch (type) {
-    case 'highlight': return '#fbbf24';
-    case 'redact': return '#ef4444';
-    case 'question': return '#3b82f6';
-    case 'approve': return '#10b981';
-    case 'reject': return '#ef4444';
-    default: return '#6b7280';
-    }
-  };
+  switch (type) {
+  case 'highlight': return '#fbbf24';
+  case 'redact': return '#ef4444';
+  case 'question': return '#3b82f6';
+  case 'approve': return '#10b981';
+  case 'reject': return '#ef4444';
+  default: return '#6b7280';
+};
   const formatFileSize = (bytes: number) => {
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
@@ -168,12 +162,11 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
-    }
     return `${size.toFixed(1)} ${units[unitIndex]}`;}
   };
   const renderDocumentViewer = () => {
     const DocumentIcon = getDocumentTypeIcon(currentDocument.type);
-    return ();
+    return;
       <div className="document-viewer">
         <div className="viewer-toolbar">
           <div className="toolbar-left">
@@ -240,11 +233,15 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
                 key={annotation.id}
                 className="annotation"
                 style={{
-                  left: `${annotation.x}%`,}
-                  top: `${annotation.y}%`,}
-                  width: `${annotation.width}%`,}
-                  height: `${annotation.height}%`,}
-                  borderColor: getAnnotationColor(annotation.type),
+                  left: `${annotation.x}%`}
+},
+  top: `${annotation.y}%`}
+},
+  width: `${annotation.width}%`}
+},
+  height: `${annotation.height}%`}
+},
+  borderColor: getAnnotationColor(annotation.type),
                   backgroundColor: `${getAnnotationColor(annotation.type)}20`}
                 }}
                 title={annotation.note}
@@ -351,10 +348,10 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
             <div className="metadata-item">
               <span className="metadata-label">Quality</span>
               <Badge className={
-                currentDocument.metadata.quality === 'high' ? 'text-green-600 bg-green-100' :
-                  currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' :
-                    'text-red-600 bg-red-100'
-              }>
+  currentDocument.metadata.quality === 'high' ? 'text-green-600 bg-green-100' :,
+  currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' :,
+  'text-red-600 bg-red-100'
+}>
                 {currentDocument.metadata.quality.toUpperCase()}
               </Badge>
             </div>
@@ -385,9 +382,9 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
             <Textarea
               value={reviewNotes[currentDocument.id] || ''}
               onChange={(e) => setReviewNotes(prev => ({)
-                ...prev,
-                [currentDocument.id]: e.target.value
-              }))}
+  ...prev,
+  [currentDocument.id]: e.target.value,
+}))}
               placeholder="Provide detailed notes about this document..."
               rows={4}
               className="form-textarea"
@@ -469,7 +466,7 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </CardContent>
     </Card>
   );
-  return ();
+  return;
     <div className={`document-review-interface ${className}`}>}
       <div className="interface-header">
         <Button onClick={onBack} variant="outline">
@@ -494,358 +491,291 @@ export const DocumentReviewInterface: React.FC<DocumentReviewProps> = ({)
       </div>
       <style>{`
         .document-review-interface {
-          max-width: 1600px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
+          max-width: 1600px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
           min-height: 100vh;
-        }
         .interface-header {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 0.875rem;
-        }
         .interface-layout {
           display: grid;
-          grid-template-columns: 1fr 400px;
-          gap: 1.5rem;
+          grid-template-columns: 1fr 400px;,
+  gap: 1.5rem;
           flex: 1;
-        }
         .main-content {
           display: flex;
           flex-direction: column;
           min-height: 0;
-        }
         .sidebar-content {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
+          flex-direction: column;,
+  gap: 1rem;
           overflow-y: auto;
-        }
         .document-viewer {
-          background: white;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          display: flex;
-          flex-direction: column;
-          flex: 1;
+          background: white;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  display: flex;
+          flex-direction: column;,
+  flex: 1;
           min-height: 0;
-        }
         .viewer-toolbar {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 0.75rem 1rem;
-          border-bottom: 1px solid #e5e7eb;
-          background: #f9fafb;
+          justify-content: space-between;,
+  padding: 0.75rem 1rem;
+          border-bottom: 1px solid #e5e7eb;,
+  background: #f9fafb;
           border-radius: 8px 8px 0 0;
-        }
         .toolbar-left {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .document-info {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .document-name {
-          font-size: 0.875rem;
-          color: #1f2937;
+          font-size: 0.875rem;,
+  color: #1f2937;
           font-weight: 600;
-          max-width: 200px;
-          overflow: hidden;
+          max-width: 200px;,
+  overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-        }
         .toolbar-center {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .toolbar-right {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .zoom-level {
-          font-size: 0.875rem;
-          color: #374151;
+          font-size: 0.875rem;,
+  color: #374151;
           font-weight: 500;
           min-width: 40px;
           text-align: center;
-        }
         .viewer-container {
-          flex: 1;
-          position: relative;
-          overflow: auto;
-          background: #f3f4f6;
+          flex: 1;,
+  position: relative;
+          overflow: auto;,
+  background: #f3f4f6;
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 400px;
-        }
         .viewer-container.fullscreen {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
+          position: fixed;,
+  top: 0;
+          left: 0;,
+  right: 0;
           bottom: 0;
-          z-index: 1000;
-          background: white;
-        }
+          z-index: 1000;,
+  background: white;
         .document-display {
-          position: relative;
-          transition: transform 0.2s ease;
+          position: relative;,
+  transition: transform 0.2s ease;
           cursor: ${activeAnnotationType ? 'crosshair' : 'default'};}
-        }
         .document-image {
           max-width: 100%;
           max-height: 100%;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
         .document-placeholder {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 1rem;
+          align-items: center;,
+  gap: 1rem;
           padding: 4rem;
-          text-align: center;
-          color: #6b7280;
-        }
+          text-align: center;,
+  color: #6b7280;
         .annotation {
-          position: absolute;
-          border: 2px solid;
+          position: absolute;,
+  border: 2px solid;
           pointer-events: none;
-        }
         .annotation-buttons {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .annotation-help {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-top: 0.75rem;
-          padding: 0.75rem;
+          align-items: center;,
+  gap: 0.5rem;
+          margin-top: 0.75rem;,
+  padding: 0.75rem;
           background: #eff6ff;
           border-radius: 6px;
-          font-size: 0.875rem;
-          color: #1e40af;
-        }
+          font-size: 0.875rem;,
+  color: #1e40af;
         .metadata-grid {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .metadata-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem 0;
+          align-items: center;,
+  padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
-        }
         .metadata-item:last-child {
           border-bottom: none;
-        }
         .metadata-label {
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           font-size: 0.875rem;
-        }
         .metadata-value {
           color: #1f2937;
           font-size: 0.875rem;
-        }
         .document-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           margin-top: 1rem;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
-        }
         .review-form {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-textarea {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
-          resize: vertical;
-        }
-        .form-textarea:focus {
-          outline: none;
+          font-size: 0.875rem;,
+  resize: vertical;
+        .form-textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .review-status {
           margin: 0.5rem 0;
-        }
         .status-display {
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding: 1rem;
+          justify-content: center;,
+  padding: 1rem;
           border-radius: 6px;
-        }
         .status.approved {
-          background: #d1fae5;
-          color: #065f46;
-        }
+          background: #d1fae5;,
+  color: #065f46;
         .status.rejected {
-          background: #fee2e2;
-          color: #991b1b;
-        }
+          background: #fee2e2;,
+  color: #991b1b;
         .status {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-weight: 500;
-        }
         .review-actions {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .approve-button {
           background: #059669;
           border-color: #059669;
-        }
-        .approve-button:hover:not(:disabled) {
-          background: #047857;
+        .approve-button:hover:not(:disabled) {,
+  background: #047857;
           border-color: #047857;
-        }
         .reject-button {
           color: #dc2626;
           border-color: #dc2626;
-        }
-        .reject-button:hover:not(:disabled) {
-          background: #dc2626;
+        .reject-button:hover:not(:disabled) {,
+  background: #dc2626;
           color: white;
-        }
         .no-annotations {
           color: #6b7280;
           font-style: italic;
-          text-align: center;
-          padding: 2rem;
-        }
+          text-align: center;,
+  padding: 2rem;
         .annotations {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .annotation-item {
           border: 1px solid #e5e7eb;
-          border-radius: 6px;
-          padding: 0.75rem;
-        }
+          border-radius: 6px;,
+  padding: 0.75rem;
         .annotation-header {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-bottom: 0.5rem;
-        }
         .annotation-color {
-          width: 12px;
-          height: 12px;
+          width: 12px;,
+  height: 12px;
           border-radius: 50%;
-        }
         .annotation-type {
           font-size: 0.75rem;
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           flex: 1;
-        }
         .annotation-time {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .annotation-note {
           width: 100%;
           font-size: 0.875rem;
-        }
         .approve-btn {
           background: #059669;
-          border-color: #059669;
-          color: white;
-        }
-        .approve-btn:hover {
-          background: #047857;
+          border-color: #059669;,
+  color: white;
+        .approve-btn:hover {,
+  background: #047857;
           border-color: #047857;
-        }
         .reject-btn {
           background: #dc2626;
-          border-color: #dc2626;
-          color: white;
-        }
-        .reject-btn:hover {
-          background: #b91c1c;
+          border-color: #dc2626;,
+  color: white;
+        .reject-btn:hover {,
+  background: #b91c1c;
           border-color: #b91c1c;
-        }
         @media (max-width: 1200px) {
           .interface-layout {
             grid-template-columns: 1fr;
-          }
           .sidebar-content {
             order: -1;
             flex-direction: row;
-            overflow-x: auto;
-            gap: 0.75rem;
-          }
+            overflow-x: auto;,
+  gap: 0.75rem;
           .sidebar-content > * {
             min-width: 300px;
-          }
-        }
         @media (max-width: 768px) {
           .interface-header {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-          }
+            align-items: flex-start;,
+  gap: 0.75rem;
           .viewer-toolbar {
-            flex-direction: column;
-            gap: 0.75rem;
-          }
+            flex-direction: column;,
+  gap: 0.75rem;
           .toolbar-left,
           .toolbar-center,
           .toolbar-right {
             justify-content: center;
-          }
           .sidebar-content {
             flex-direction: column;
-          }
           .sidebar-content > * {
             min-width: auto;
-          }
           .annotation-buttons {
             justify-content: center;
-          }
-        }
       `}</style>
     </div>
   );

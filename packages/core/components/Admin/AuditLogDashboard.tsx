@@ -72,7 +72,6 @@ interface AuditLogDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-}
 const SEVERITY_CONFIG = {
   low: { color: 'text-blue-600 bg-blue-100', icon: Minus, label: 'Low' },
   medium: { color: 'text-yellow-600 bg-yellow-100', icon: AlertCircle, label: 'Medium' },
@@ -118,16 +117,16 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   const [error, setError] = useState<string | null>(null);
   // Filter state
   const [currentFilter, setCurrentFilter] = useState<AdvancedSearchFilter>({});
-  const [_savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
-  const [_filterPresets, _setFilterPresets] = useState<Record<string, FilterPreset[]>>({});
+  const [_savedFilters, setSavedFilters] = useState<SavedFilter>([]);
+  const [_filterPresets, _setFilterPresets] = useState<Record<string, FilterPreset>>({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchSuggestions, _setSearchSuggestions] = useState<string[]>([]);
+  const [searchSuggestions, _setSearchSuggestions] = useState<string>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   // UI state
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
-  const [expandedEvents, setExpandedEvents] = useState<string[]>([]);
+  const [selectedEvents, setSelectedEvents] = useState<string>([]);
+  const [expandedEvents, setExpandedEvents] = useState<string>([]);
   const [showSaveFilterDialog, setShowSaveFilterDialog] = useState(false);
   const [filterName, setFilterName] = useState('');
   // Analytics state
@@ -143,7 +142,6 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
         performSearch();
       }, 500); // Debounce search
       return () => clearTimeout(timeoutId);
-    }
   }, [currentFilter, searchQuery]);
   const loadInitialData = useCallback(async () => {
     try {
@@ -153,145 +151,147 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       // Perform initial search with default filter
       await performSearch();
     } catch (err) {
-      setError('Failed to load audit data');
-      console.error('Load error:', err);
-    } finally {
+  setError('Failed to load audit data');
+  console.error('Load error:', err);
+} finally {
       setLoading(false);
-    }
   }, []);
   const performSearch = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const filter: AdvancedSearchFilter = {
-        ...currentFilter,
-        search: searchQuery ? {,
-          query: searchQuery,
-          fields: ['description', 'action', 'actor_email', 'resource_name'],
-          operator: 'OR',
-          highlight: true,
-        } : undefined,
+  try {
+  setLoading(true);
+  setError(null);
+  const filter: AdvancedSearchFilter = {,
+  ...currentFilter,
+  search: searchQuery ? {,
+  query: searchQuery,
+  fields: ['description', 'action', 'actor_email', 'resource_name'],
+  operator: 'OR',
+  highlight: true,
+} : undefined,
         output: {,
-          page: 1,
-          limit: 50,
-          sortBy: 'timestamp',
-          sortOrder: 'desc',
-          includeMetadata: true,
-          includeContext: true,
-        }
-      };
+  page: 1,
+  limit: 50,
+  sortBy: 'timestamp',
+  sortOrder: 'desc',
+  includeMetadata: true,
+  includeContext: true,
+};
       // This would call the AuditFilteringService
-      const mockResults: FilteredSearchResponse = {
-        events: generateMockEvents(20),
-        pagination: {,
-          page: 1,
-          limit: 50,
-          total: 150,
-          totalPages: 3,
-        },
-        summary: {,
-          totalEvents: 150,
-          eventsByCategory: {,
-            authentication: 45,
-            authorization: 32,
-            data_modification: 28,
-            security: 15,
-            system_configuration: 20,
-            compliance: 6,
-            performance: 3,
-            error: 1,
-          },
-          eventsBySeverity: {,
-            low: 85,
-            medium: 45,
-            high: 15,
-            critical: 5,
-          },
-          uniqueActors: 12,
+      const mockResults: FilteredSearchResponse = {,
+  events: generateMockEvents(20),
+  pagination: {,
+  page: 1,
+  limit: 50,
+  total: 150,
+  totalPages: 3,
+},
+  summary: {,
+  totalEvents: 150,
+  eventsByCategory: {,
+  authentication: 45,
+  authorization: 32,
+  data_modification: 28,
+  security: 15,
+  system_configuration: 20,
+  compliance: 6,
+  performance: 3,
+  error: 1,
+},
+  eventsBySeverity: {,
+  low: 85,
+  medium: 45,
+  high: 15,
+  critical: 5,
+},
+  uniqueActors: 12,
           timeRange: {,
-            start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-            end: new Date(),
-          }
-        },
-        performance: {,
-          queryTime: 234,
-          totalRecords: 1250,
-          filteredRecords: 150,
-          cacheHit: false,
-        },
-        filterSummary: {,
-          appliedFilters: Object.keys(filter).filter(key => ),
-            filter[key as keyof AdvancedSearchFilter] !== undefined
-          ),
-          filterCount: Object.keys(filter).length,
-          resultReduction: 88,
-        }
-      };
+  start: new Date(Date.now() - 24 * 60 * 60 * 1000),
+  end: new Date(),
+},
+  performance: {,
+  queryTime: 234,
+  totalRecords: 1250,
+  filteredRecords: 150,
+  cacheHit: false,
+},
+  filterSummary: {,
+  appliedFilters: Object.keys(filter).filter(key => ),
+  filter[key as keyof AdvancedSearchFilter] !== undefined
+  ),
+  filterCount: Object.keys(filter).length,
+  resultReduction: 88,
+};
       setSearchResults(mockResults);
     } catch (err) {
-      setError('Search failed');
-      console.error('Search error:', err);
-    } finally {
+  setError('Search failed');
+  console.error('Search error:', err);
+} finally {
       setLoading(false);
-    }
   };
-  const generateMockEvents = (count: number): AuditEvent[] => {
-    const events: AuditEvent[] = [];
+  const generateMockEvents = (count: number): AuditEvent => {
+    const events: AuditEvent = [];
     const eventTypes = Object.values(AuditEventType);
     const categories = Object.values(AuditCategory);
     const severities = Object.values(AuditSeverity);
     const outcomes = ['success', 'failure', 'partial'] as const;
     for (let i = 0; i < count; i++) {
       events.push({)
-        id: `audit_${Date.now()}_${i}`,}
-        eventType: eventTypes[Math.floor(Math.random() * eventTypes.length)],
+  id: `audit_${Date.now()}_${i}`}
+},
+  eventType: eventTypes[Math.floor(Math.random() * eventTypes.length)],
         category: categories[Math.floor(Math.random() * categories.length)],
         severity: severities[Math.floor(Math.random() * severities.length)],
-        actorId: `user_${Math.floor(Math.random() * 10)}`,}
-        actorType: 'user',
-        actorEmail: `user${Math.floor(Math.random() * 10)}@example.com`,}
-        actorRole: 'admin',
+        actorId: `user_${Math.floor(Math.random() * 10)}`}
+},
+  actorType: 'user',
+        actorEmail: `user${Math.floor(Math.random() * 10)}@example.com`}
+},
+  actorRole: 'admin',
         resourceType: 'feature_toggle',
-        resourceId: `toggle_${Math.floor(Math.random() * 100)}`,}
-        resourceName: `Feature ${Math.floor(Math.random() * 100)}`,}
-        action: 'update',
-        description: `User performed ${eventTypes[Math.floor(Math.random() * eventTypes.length)]} action`,}
-        outcome: outcomes[Math.floor(Math.random() * outcomes.length)],
+        resourceId: `toggle_${Math.floor(Math.random() * 100)}`}
+},
+  resourceName: `Feature ${Math.floor(Math.random() * 100)}`}
+},
+  action: 'update',
+        description: `User performed ${eventTypes[Math.floor(Math.random() * eventTypes.length)]} action`}
+},
+  outcome: outcomes[Math.floor(Math.random() * outcomes.length)],
         beforeValue: { enabled: false },
         afterValue: { enabled: true },
         changedFields: ['enabled'],
-        sessionId: `session_${Math.floor(Math.random() * 20)}`,}
-        ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`,}
-        userAgent: 'Mozilla/5.0 (compatible)',
+        sessionId: `session_${Math.floor(Math.random() * 20)}`}
+},
+  ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`}
+},
+  userAgent: 'Mozilla/5.0 (compatible)',
         metadata: {,
-          source: 'admin_panel',
-          version: '1.0.0',
-        },
-        tags: [],
+  source: 'admin_panel',
+  version: '1.0.0',
+},
+  tags: [],
         complianceStandards: [ComplianceStandard.SOC2],
         timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
-        duration: Math.floor(Math.random() * 1000),
-      });
-    }
+        duration: Math.floor(Math.random() * 1000);
+  });
     return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   };
   const applyTimeFilter = (preset: TimePreset) => {
     setCurrentFilter(prev => ({)
-      ...prev,
+  ...prev,
       timeRange: { preset }
     }));
   };
-  const applySeverityFilter = (severities: AuditSeverity[]) => {
-    setCurrentFilter(prev => ({)
-      ...prev,
-      severities: severities.length > 0 ? severities : undefined,
-    }));
+  const applySeverityFilter = (severities: AuditSeverity) => {
+  setCurrentFilter(prev => ({)
+  ...prev,
+  severities: severities.length > 0 ? severities : undefined,
+}));
   };
-  const applyCategoryFilter = (categories: AuditCategory[]) => {
-    setCurrentFilter(prev => ({)
-      ...prev,
-      categories: categories.length > 0 ? categories : undefined,
-    }));
+  const applyCategoryFilter = (categories: AuditCategory) => {
+  setCurrentFilter(prev => ({)
+  ...prev,
+  categories: categories.length > 0 ? categories : undefined,
+}));
   };
   const clearFilters = () => {
     setCurrentFilter({});
@@ -303,54 +303,51 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       console.log(`Exporting ${searchResults?.events.length} events as ${format}`);}
     } catch (err) {
       setError('Export failed');
-    }
   };
   const saveCurrentFilter = async () => {
     if (!filterName.trim()) return;
     try {
       // This would call the AuditFilteringService saveFilter method
-      const savedFilter: SavedFilter = {
-        id: `filter_${Date.now()}`,}
-        name: filterName,
+      const savedFilter: SavedFilter = {,
+  id: `filter_${Date.now()}`}
+},
+  name: filterName,
         filter: currentFilter,
         createdBy: userId || 'unknown',
         createdAt: new Date(),
         updatedAt: new Date(),
         isPublic: false,
         tags: [],
-        usageCount: 0,
-      };
+        usageCount: 0;
+  };
       setSavedFilters(prev => [savedFilter, ...prev]);
       setShowSaveFilterDialog(false);
       setFilterName('');
     } catch (err) {
       setError('Failed to save filter');
-    }
   };
   const toggleEventExpansion = (eventId: string) => {
-    setExpandedEvents(prev => )
-      prev.includes(eventId) 
-        ? prev.filter(id => id !== eventId)
-        : [...prev, eventId]
-    );
-  };
+  setExpandedEvents(prev => )
+  prev.includes(eventId)
+  ? prev.filter(id => id !== eventId)
+  : [...prev, eventId]);
+};
   const toggleEventSelection = (eventId: string) => {
-    setSelectedEvents(prev => )
-      prev.includes(eventId) 
-        ? prev.filter(id => id !== eventId)
-        : [...prev, eventId]
-    );
-  };
+  setSelectedEvents(prev => )
+  prev.includes(eventId)
+  ? prev.filter(id => id !== eventId)
+  : [...prev, eventId]);
+};
   const formatTimestamp = (timestamp: Date) => {
-    return new Intl.DateTimeFormat('en-US', {)
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      timeZoneName: 'short',
-    }).format(timestamp);
+  return new Intl.DateTimeFormat('en-US', {)
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  timeZoneName: 'short',
+}).format(timestamp);
   };
   const renderEventCard = (event: AuditEvent) => {
     const SeverityIcon = SEVERITY_CONFIG[event.severity].icon;
@@ -358,7 +355,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
     const OutcomeIcon = OUTCOME_CONFIG[event.outcome].icon;
     const isExpanded = expandedEvents.includes(event.id);
     const isSelected = selectedEvents.includes(event.id);
-    return ();
+    return;
       <Card key={event.id} className={`mb-4 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>}
         <CardContent className="p-4">
           <div className="flex items-start justify-between">
@@ -580,7 +577,6 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                             applySeverityFilter([...severities, severity as AuditSeverity]);
                           } else {
                             applySeverityFilter(severities.filter(s => s !== severity));
-                          }
                         }}
                         className="rounded border-gray-300 mr-2"
                       />
@@ -606,7 +602,6 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                             applyCategoryFilter([...categories, category as AuditCategory]);
                           } else {
                             applyCategoryFilter(categories.filter(c => c !== category));
-                          }
                         }}
                         className="rounded border-gray-300 mr-2"
                       />
@@ -627,18 +622,17 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
                         type="checkbox"
                         checked={currentFilter.outcomes?.includes(outcome as any) || false}
                         onChange={(e) => {
-                          const outcomes = currentFilter.outcomes || [];
-                          if (e.target.checked) {
-                            setCurrentFilter(prev => ({)
-                              ...prev,
-                              outcomes: [...outcomes, outcome as any]
-                            }));
+  const outcomes = currentFilter.outcomes || [];
+  if (e.target.checked) {
+  setCurrentFilter(prev => ({)
+  ...prev,
+  outcomes: [...outcomes, outcome as any],
+}));
                           } else {
-                            setCurrentFilter(prev => ({)
-                              ...prev,
-                              outcomes: outcomes.filter(o => o !== outcome),
-                            }));
-                          }
+  setCurrentFilter(prev => ({)
+  ...prev,
+  outcomes: outcomes.filter(o => o !== outcome),
+}));
                         }}
                         className="rounded border-gray-300 mr-2"
                       />
@@ -666,7 +660,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
   );
   const renderSummaryStats = () => {
     if (!searchResults) return null;
-    return ();
+    return;
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
           <CardContent className="p-4">
@@ -763,7 +757,7 @@ export const AuditLogDashboard: React.FC<AuditLogDashboardProps> = ({)
       </div>
     </div>
   );
-  return ();
+  return;
     <div className={`audit-log-dashboard ${className}`}>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Audit Logs</h1>

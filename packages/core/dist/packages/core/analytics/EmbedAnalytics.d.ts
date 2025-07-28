@@ -21,7 +21,7 @@ export interface EmbedConfig {
     embedId: string;
     trackingEnabled: boolean;
     domain: string;
-    allowedDomains: string[];
+    allowedDomains: string;
     privacyLevel: 'minimal' | 'standard' | 'detailed';
     sessionTracking: boolean;
     userConsent: boolean;
@@ -165,7 +165,7 @@ export interface ReferrerContext {
     content?: string;
 }
 export interface ExperimentContext {
-    activeExperiments: ActiveExperiment[];
+    activeExperiments: ActiveExperiment;
     cohort?: string;
     segment?: string;
 }
@@ -207,8 +207,8 @@ export interface EngagementMetrics {
 export interface ConversionMetrics {
     embedId: string;
     timestamp: Date;
-    goalCompletions: GoalCompletion[];
-    funnelSteps: FunnelStep[];
+    goalCompletions: GoalCompletion;
+    funnelSteps: FunnelStep;
     revenueImpact: number;
     leadGeneration: number;
     signupRate: number;
@@ -233,7 +233,7 @@ export interface FunnelStep {
 export interface AttributionData {
     firstTouch: TouchPoint;
     lastTouch: TouchPoint;
-    touchPoints: TouchPoint[];
+    touchPoints: TouchPoint;
     modelType: 'first-touch' | 'last-touch' | 'linear' | 'time-decay' | 'position-based';
 }
 export interface TouchPoint {
@@ -248,9 +248,9 @@ export interface AnalyticsReport {
     name: string;
     type: ReportType;
     timeRange: TimeRange;
-    filters: ReportFilter[];
-    metrics: ReportMetric[];
-    dimensions: string[];
+    filters: ReportFilter;
+    metrics: ReportMetric;
+    dimensions: string;
     data: ReportData;
     generatedAt: Date;
     generatedBy: string;
@@ -275,10 +275,10 @@ export interface ReportMetric {
 }
 export interface ReportData {
     summary: SummaryData;
-    timeSeries: TimeSeriesData[];
-    breakdown: BreakdownData[];
-    comparisons: ComparisonData[];
-    insights: InsightData[];
+    timeSeries: TimeSeriesData;
+    breakdown: BreakdownData;
+    comparisons: ComparisonData;
+    insights: InsightData;
 }
 export interface SummaryData {
     totalEvents: number;
@@ -287,7 +287,7 @@ export interface SummaryData {
     averageSessionDuration: number;
     bounceRate: number;
     conversionRate: number;
-    topMetrics: TopMetric[];
+    topMetrics: TopMetric;
 }
 export interface TopMetric {
     name: string;
@@ -301,11 +301,10 @@ export interface TimeSeriesData {
 }
 export interface BreakdownData {
     dimension: string;
-    values: Array<{
-        name: string;
-        value: number;
-        percentage: number;
-    }>;
+    values: Array<{}, name>;
+    string: any;
+    value: number;
+    percentage: number;
 }
 export interface ComparisonData {
     metric: string;
@@ -328,10 +327,10 @@ export interface ExperimentConfig {
     description: string;
     hypothesis: string;
     status: 'draft' | 'running' | 'paused' | 'completed' | 'archived';
-    variants: ExperimentVariant[];
+    variants: ExperimentVariant;
     allocation: AllocationStrategy;
     targeting: TargetingCriteria;
-    goals: ExperimentGoal[];
+    goals: ExperimentGoal;
     duration: ExperimentDuration;
     significance: SignificanceConfig;
 }
@@ -349,8 +348,8 @@ export interface AllocationStrategy {
     method: 'hash' | 'random' | 'deterministic';
 }
 export interface TargetingCriteria {
-    includeCriteria: TargetingRule[];
-    excludeCriteria: TargetingRule[];
+    includeCriteria: TargetingRule;
+    excludeCriteria: TargetingRule;
     sampleSize?: number;
     samplePercentage?: number;
 }
@@ -385,7 +384,7 @@ export interface SignificanceConfig {
 export interface ExperimentResult {
     experimentId: string;
     variant: string;
-    metrics: ExperimentMetric[];
+    metrics: ExperimentMetric;
     significance: StatisticalSignificance;
     sampleSize: number;
     conversionRate: number;
@@ -427,115 +426,5 @@ export declare class EmbedAnalytics extends EventEmitter {
     private flushTimer?;
     private performanceObserver?;
     constructor(config: Partial<EmbedConfig>);
-    initialize(): Promise<void>;
-    track(eventType: EventType, action: string, properties?: Record<string, any>): void;
-    trackPageView(page?: Partial<PageContext>): void;
-    trackInteraction(element: string, action: string, properties?: Record<string, any>): void;
-    trackConversion(goalId: string, value?: number, properties?: Record<string, any>): void;
-    trackError(error: Error, context?: Record<string, any>): void;
-    trackPerformance(metrics: Partial<PerformanceMetrics>): void;
-    trackCustomEvent(action: string, category: string, properties?: Record<string, any>): void;
-    startSession(): string;
-    updateSessionActivity(): void;
-    endSession(): void;
-    getExperimentVariant(experimentId: string): string | null;
-    trackExperimentGoal(experimentId: string, goalId: string, value?: number): void;
-    generateReport(type: ReportType, timeRange: TimeRange, filters?: ReportFilter[], metrics?: ReportMetric[]): Promise<AnalyticsReport>;
-    getPerformanceMetrics(timeRange: TimeRange): Promise<PerformanceMetrics[]>;
-    getEngagementMetrics(timeRange: TimeRange): Promise<EngagementMetrics[]>;
-    getConversionMetrics(timeRange: TimeRange): Promise<ConversionMetrics[]>;
-    setUserConsent(consent: ConsentData): void;
-    anonymizeUser(): void;
-    purgeUserData(userId: string): Promise<void>;
-    updateConfig(updates: Partial<EmbedConfig>): void;
-    getConfig(): EmbedConfig;
-    flush(): Promise<void>;
-    stop(): void;
-    getStatus(): {
-        tracking: boolean;
-        queueSize: number;
-        sessionCount: number;
-        errors: number;
-    };
-    private initializeTracking;
-    private initializeSession;
-    private createEvent;
-    private buildEventContext;
-    private getPageContext;
-    private getUserContext;
-    private getDeviceContext;
-    private getSessionContext;
-    private getEmbedContext;
-    private getReferrerContext;
-    private getExperimentContext;
-    private enqueueEvent;
-    private processEventQueue;
-    private sendEvents;
-    private shouldSample;
-    private setupPerformanceMonitoring;
-    private trackPerformanceEntry;
-    private setupEventListeners;
-    private startBatchProcessing;
-    private stopBatchProcessing;
-    private startTracking;
-    private stopTracking;
-    private cleanup;
-    private generateEventId;
-    private generateSessionId;
-    private generateReportId;
-    private getCurrentSessionId;
-    private getUserId;
-    private getAnonymousId;
-    private getSessionCookie;
-    private setSessionCookie;
-    private clearSessionCookie;
-    private hasExistingSessions;
-    private getTrafficSource;
-    private getTrafficMedium;
-    private calculateScrollDepth;
-    private getTimeOnPage;
-    private sanitizeProperties;
-    private extractMetrics;
-    private extractDimensions;
-    private getDeviceType;
-    private getOS;
-    private getOSVersion;
-    private getBrowser;
-    private getBrowserVersion;
-    private getConnectionType;
-    private isDarkMode;
-    private isReturningUser;
-    private getUserSegment;
-    private getUserAttributes;
-    private getUserPreferences;
-    private getConsentData;
-    private getEmbedVersion;
-    private getEmbedType;
-    private getEmbedSize;
-    private getEmbedPosition;
-    private isEmbedVisible;
-    private getEmbedLoadTime;
-    private getEmbedRenderTime;
-    private getEmbedInteractionCount;
-    private getCampaign;
-    private getTerm;
-    private getContent;
-    private getUserCohort;
-    private getAllocatedVariant;
-    private allocateVariant;
-    private clearUserCookies;
-    private deleteUserData;
-    private getErrorCount;
-    private setupBrowserTracking;
-    private getReportDimensions;
-    private queryAnalyticsData;
-    private generateInsights;
-    private queryPerformanceData;
-    private queryEngagementData;
-    private queryConversionData;
 }
-declare const _default: {
-    EmbedAnalytics: typeof EmbedAnalytics;
-};
-export default _default;
 //# sourceMappingURL=EmbedAnalytics.d.ts.map

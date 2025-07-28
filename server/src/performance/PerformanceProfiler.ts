@@ -18,6 +18,7 @@ import { join } from 'path';
 /**
  * Performance metrics collection interfaces
  */
+}
 export interface CPUMetrics {
   user: number;
   system: number;
@@ -25,7 +26,9 @@ export interface CPUMetrics {
   percentage: number;
   loadAverage: number[];
 }
+}
 
+}
 export interface MemoryMetrics {
   rss: number;
   heapTotal: number;
@@ -34,7 +37,9 @@ export interface MemoryMetrics {
   arrayBuffers: number;
   heapUtilization: number;
 }
+}
 
+}
 export interface DatabaseMetrics {
   connectionCount: number;
   activeQueries: number;
@@ -43,7 +48,9 @@ export interface DatabaseMetrics {
   errorCount: number;
   connectionPoolUtilization: number;
 }
+}
 
+}
 export interface ApplicationMetrics {
   requestsPerSecond: number;
   averageResponseTime: number;
@@ -53,7 +60,9 @@ export interface ApplicationMetrics {
   gcFrequency: number;
   gcDuration: number;
 }
+}
 
+}
 export interface SystemMetrics {
   diskUsage: number;
   networkIO: {
@@ -61,11 +70,13 @@ export interface SystemMetrics {
     bytesOut: number;
     packetsIn: number;
     packetsOut: number;
+}
   };
   fileDescriptors: number;
   threadCount: number;
 }
 
+}
 export interface PerformanceSnapshot {
   timestamp: number;
   cpu: CPUMetrics;
@@ -75,7 +86,9 @@ export interface PerformanceSnapshot {
   system: SystemMetrics;
   customMetrics: Record<string, any>;
 }
+}
 
+}
 export interface ProfilingConfig {
   sampleInterval: number; // milliseconds
   databaseEnabled: boolean;
@@ -88,6 +101,7 @@ export interface ProfilingConfig {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
+}
   };
 }
 
@@ -122,7 +136,7 @@ export class PerformanceProfiler extends EventEmitter {
         memoryUsage: 85, // %
         responseTime: 2000, // ms
         errorRate: 5 // %
-      },
+  }
       ...config
     };
 
@@ -134,6 +148,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Start performance profiling
    */
   async startProfiling(): Promise<void> {
+
     if (this.isRunning) {
       console.warn('Performance profiling is already running');
       return;
@@ -179,6 +194,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Stop performance profiling
    */
   async stopProfiling(): Promise<PerformanceSnapshot[]> {
+
     if (!this.isRunning) {
       console.warn('Performance profiling is not running');
       return this.snapshots;
@@ -217,6 +233,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Collect performance snapshot
    */
   private async collectSnapshot(): Promise<void> {
+
     try {
       const timestamp = Date.now();
 
@@ -253,6 +270,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Collect CPU metrics
    */
   private async collectCPUMetrics(): Promise<CPUMetrics> {
+
     const currentCPU = cpuUsage(this.baselineCPU || undefined);
     const totalCPU = currentCPU.user + currentCPU.system;
     
@@ -300,6 +318,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Collect database metrics
    */
   private async collectDatabaseMetrics(): Promise<DatabaseMetrics> {
+
     if (!this.config.databaseEnabled || !this.databaseConnection) {
       return {
         connectionCount: 0,
@@ -370,6 +389,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Collect system metrics
    */
   private async collectSystemMetrics(): Promise<SystemMetrics> {
+
     if (!this.config.systemMetricsEnabled) {
       return {
         diskUsage: 0,
@@ -480,6 +500,7 @@ export class PerformanceProfiler extends EventEmitter {
    * Generate performance report
    */
   private async generateReport(): Promise<void> {
+
     if (this.snapshots.length === 0) {
       console.warn('No snapshots to generate report');
       return;
@@ -492,7 +513,7 @@ export class PerformanceProfiler extends EventEmitter {
         duration: Date.now() - this.startTime,
         snapshotCount: this.snapshots.length,
         sampleInterval: this.config.sampleInterval
-      },
+  }
       summary: this.generateSummaryMetrics(),
       snapshots: this.snapshots,
       recommendations: this.generateRecommendations()
@@ -522,17 +543,17 @@ export class PerformanceProfiler extends EventEmitter {
         average: this.average(cpuValues),
         max: Math.max(...cpuValues),
         min: Math.min(...cpuValues)
-      },
+  }
       memory: {
         average: this.average(memoryValues),
         max: Math.max(...memoryValues),
         min: Math.min(...memoryValues)
-      },
+  }
       responseTime: {
         average: this.average(responseTimeValues),
         max: Math.max(...responseTimeValues),
         min: Math.min(...responseTimeValues)
-      },
+  }
       totalRequests: this.requestCounter,
       totalErrors: this.errorCounter,
       overallErrorRate: this.requestCounter > 0 ? (this.errorCounter / this.requestCounter) * 100 : 0
@@ -589,12 +610,14 @@ export class PerformanceProfiler extends EventEmitter {
   }
 
   private async initializeDatabaseMetrics(): Promise<void> {
+
     // This would initialize database connection for metrics collection
     // Implementation depends on your database setup
     console.log('Database metrics initialized');
   }
 
   private async queryDatabaseStats(): Promise<any> {
+
     // Mock implementation - replace with actual database queries
     return {
       connections: 1,

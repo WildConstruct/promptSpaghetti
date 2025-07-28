@@ -4,6 +4,7 @@
  * Professional preview system with individual result management,
  * designed for film industry workflows.
  */
+
 export interface EnhancedPreviewConfig {
     maxResults?: number;
     enableProfessionalMetadata?: boolean;
@@ -11,7 +12,7 @@ export interface EnhancedPreviewConfig {
     enableVarianceAnalysis?: boolean;
     seedStrategy?: 'random' | 'sequential' | 'custom';
     customSeeds?: number[];
-}
+
 export interface VarianceAnalysis {
     wordCountVariance: number;
     lengthDistribution: {,
@@ -29,7 +30,7 @@ export interface VarianceAnalysis {
     creativityScore: number;
     professionalSuitability: number;
     genreConsistency: number;
-}
+
 export interface PreviewPerformanceStats {
     totalExecutionTime: number;
     averageExecutionTime: number;
@@ -38,6 +39,6 @@ export interface PreviewPerformanceStats {
     throughput: number;
     failureRate: number;
     cacheHitRate?: number;
-}
+
 export declare const useEnhancedPreviewResultManagement: () => any;
 //# sourceMappingURL=useEnhancedPreview.d.ts.map

@@ -6,48 +6,44 @@ import { renderHook, act } from '@testing-library/react';
 import { usePreviewSeeds } from '../usePreviewSeeds';
 
 // Mock fetch
-global.fetch = jest.fn<unknown[], unknown>() as jest.MockedFunction<typeof fetch>;
+global.fetch = jest.fn<unknown, unknown>() as jest.MockedFunction<typeof fetch>;
 const mockGraph = {
   id: 'test-graph',
   nodes: [,
     { id: 'node1', type: 'Output', inputs: [] }
   ],
   edges: [],
-  seed: 12345,
-};
+  seed: 12345;
+  };
 const mockApiResponse = {
   results: [,
+  {
+  seed: 11111,
+  output: 'Result 1',
+  executionTimeMs: 100,
+  executionPath: {,
+  id: 'exec_1',
+  seed: 11111,
+  nodeExecutionOrder: ['node1'],
+  randomizationPoints: [],
+}
     {
-      seed: 11111,
-      output: 'Result 1',
-      executionTimeMs: 100,
-      executionPath: {,
-        id: 'exec_1',
-        seed: 11111,
-        nodeExecutionOrder: ['node1'],
-        randomizationPoints: [],
-      }
-    },
-    {
-      seed: 22222,
-      output: 'Result 2',
-      executionTimeMs: 150,
-      executionPath: {,
-        id: 'exec_2',
-        seed: 22222,
-        nodeExecutionOrder: ['node1'],
-        randomizationPoints: [],
-      }
-    }
-  ]
-};
+  seed: 22222,
+  output: 'Result 2',
+  executionTimeMs: 150,
+  executionPath: {,
+  id: 'exec_2',
+  seed: 22222,
+  nodeExecutionOrder: ['node1'],
+  randomizationPoints: []];
+  };
 describe('usePreviewSeeds - Individual Result Management', () => {
   beforeEach(() => {
-    (fetch as jest.MockedFunction<typeof fetch>).mockClear();
-    (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({)
-      ok: true,
-      json: async ( as unknown) => mockApiResponse,
-    } as Response);
+  (fetch as jest.MockedFunction<typeof fetch>).mockClear();
+  (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue({)
+  ok: true,
+  json: async ( as unknown) => mockApiResponse,
+} as Response);
   });
   describe('Result Locking', () => {
     it('should lock a result and update state', async () => {
@@ -128,27 +124,26 @@ describe('usePreviewSeeds - Individual Result Management', () => {
     });
   });
   describe('Individual Result Regeneration', () => {
-    it('should regenerate a specific result without affecting others', async () => {
-      (fetch as jest.MockedFunction<typeof fetch>)
+  it('should regenerate a specific result without affecting others', async () => {
+  (fetch as jest.MockedFunction<typeof fetch>)
+  .mockResolvedValueOnce({)
+  ok: true,
+  json: async () => mockApiResponse,
+} as Response)
         .mockResolvedValueOnce({)
-          ok: true,
-          json: async () => mockApiResponse,
-        } as Response)
-        .mockResolvedValueOnce({)
-          ok: true,
-          json: async () => ({),
-            results: [{,
-              seed: 99999,
-              output: 'Regenerated Result',
-              executionTimeMs: 200,
-              executionPath: {,
-                id: 'exec_new',
-                seed: 99999,
-                nodeExecutionOrder: ['node1'],
-                randomizationPoints: [],
-              }
-            }]
-          })
+  ok: true,
+  json: async () => ({,)
+  results: [{,
+  seed: 99999,
+  output: 'Regenerated Result',
+  executionTimeMs: 200,
+  executionPath: {,
+  id: 'exec_new',
+  seed: 99999,
+  nodeExecutionOrder: ['node1'],
+  randomizationPoints: [],
+}]
+  }
         } as Response);
       const { result } = renderHook(() => usePreviewSeeds());
       // Generate initial results
@@ -190,11 +185,11 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       expect(fetch).toHaveBeenCalledTimes(1); // Only the initial call
     });
     it('should handle regeneration errors gracefully', async () => {
-      (fetch as jest.MockedFunction<typeof fetch>)
-        .mockResolvedValueOnce({)
-          ok: true,
-          json: async () => mockApiResponse,
-        } as Response)
+  (fetch as jest.MockedFunction<typeof fetch>)
+  .mockResolvedValueOnce({)
+  ok: true,
+  json: async () => mockApiResponse,
+} as Response)
         .mockRejectedValueOnce(new Error('Network error'));
       const { result } = renderHook(() => usePreviewSeeds());
       await act(async () => {
@@ -211,16 +206,16 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       expect(result.current.error).toContain('Failed to regenerate result');
     });
     it('should track regenerating state correctly', async () => {
-      // Mock a delayed response to test regenerating state
-      let resolveRegeneration: (value: unknown) => void;
-      const regenerationPromise = new Promise(resolve => {)
-        resolveRegeneration = resolve;
-      });
+  // Mock a delayed response to test regenerating state
+  let resolveRegeneration: (value: unknown) => void;
+  const regenerationPromise = new Promise(resolve => {)
+  resolveRegeneration = resolve;
+});
       (fetch as jest.MockedFunction<typeof fetch>)
         .mockResolvedValueOnce({)
-          ok: true,
-          json: async () => mockApiResponse,
-        } as Response)
+  ok: true,
+  json: async () => mockApiResponse,
+} as Response)
         .mockImplementationOnce(() => regenerationPromise as Promise<Response>);
       const { result } = renderHook(() => usePreviewSeeds());
       await act(async () => {
@@ -235,15 +230,15 @@ describe('usePreviewSeeds - Individual Result Management', () => {
       expect(result.current.regeneratingResults).toEqual([0]);
       // Complete regeneration
       act(() => {
-        resolveRegeneration!({)
-          ok: true,
-          json: async () => ({),
-            results: [{,
-              seed: 99999,
-              output: 'Regenerated',
-              executionTimeMs: 100,
-            }]
-          })
+  resolveRegeneration!({)
+  ok: true,
+  json: async () => ({,)
+  results: [{,
+  seed: 99999,
+  output: 'Regenerated',
+  executionTimeMs: 100,
+}]
+  }
         });
       });
       await act(async () => {

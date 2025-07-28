@@ -66,7 +66,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         trend_analysis_enabled: true,
         seasonal_analysis_enabled: true,
         correlation_analysis_enabled: true
-      },
+  }
       time_series_algorithms: {
         statistical_methods: ['arima', 'sarima', 'holt_winters', 'linear_regression'],
         machine_learning_models: ['lstm', 'gru', 'transformer', 'random_forest'],
@@ -75,7 +75,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         anomaly_detection_algorithms: ['isolation_forest', 'local_outlier_factor', 'one_class_svm', 'lstm_autoencoder'],
         forecasting_algorithms: ['prophet', 'arima', 'lstm', 'exponential_smoothing'],
         seasonality_detection_methods: ['fft', 'acf', 'stl_decomposition', 'x13_arima']
-      },
+  }
       data_processing: {
         sampling_intervals: ['1m', '5m', '15m', '1h', '1d', '1w'],
         aggregation_methods: ['mean', 'sum', 'max', 'min', 'median', 'std'],
@@ -84,7 +84,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         missing_data_handling: ['interpolation', 'forward_fill', 'backward_fill', 'mean_imputation'],
         outlier_detection_methods: ['iqr', 'z_score', 'modified_z_score', 'isolation_forest'],
         data_validation_enabled: true
-      },
+  }
       security_metrics: {
         threat_volumes: true,
         attack_frequencies: true,
@@ -94,7 +94,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         compliance_metrics: true,
         user_behavior_metrics: true,
         system_performance_metrics: true
-      },
+  }
       forecasting_capabilities: {
         short_term_forecasting: true,
         medium_term_forecasting: true,
@@ -104,7 +104,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         uncertainty_quantification: true,
         adaptive_forecasting: true,
         multi_horizon_forecasting: true
-      },
+  }
       alerting_thresholds: {
         anomaly_sensitivity: 0.05,
         trend_change_threshold: 0.15,
@@ -127,7 +127,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           source_systems: ['siem', 'ids'],
           tags: ['security', 'threats']
         }
-      },
+  }
       {
         name: 'Attack Frequency Series',
         type: 'attack_frequency',
@@ -138,7 +138,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
           source_systems: ['firewall', 'waf'],
           tags: ['security', 'attacks']
         }
-      },
+  }
       {
         name: 'Risk Score Series',
         type: 'risk_score',
@@ -706,7 +706,7 @@ describe('SecurityTimeSeriesAnalysisEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 30,
           end: Date.now()
-        },
+  }
         include_forecasts: true,
         include_anomalies: true,
         include_correlations: true

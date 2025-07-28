@@ -8,9 +8,8 @@ import { WorkflowManager } from './components/WorkflowManager';
 import { NotificationSystem } from './components/NotificationSystem';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
 interface CorrectionsPanelProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-}
 type FilterType = 'all' | 'active' | 'inactive' | 'regex' | 'text' | 'draft' | 'published' | 'deprecated';
 type SortType = 'name' | 'priority' | 'created' | 'updated' | 'usage';
 type ViewMode = 'list' | 'grid' | 'compact';
@@ -31,16 +30,16 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const [testText, setTestText] = useState('');
   // New rule form state
   const [newRule, setNewRule] = useState({)
-    name: '',
-    description: '',
-    findPattern: '',
-    replaceWith: '',
-    isRegex: false,
-    isActive: true,
-    priority: rules.length,
-    category: '',
-    tags: [] as string[],
-  });
+  name: '',
+  description: '',
+  findPattern: '',
+  replaceWith: '',
+  isRegex: false,
+  isActive: true,
+  priority: rules.length,
+  category: '',
+  tags: [] as string,
+});
   // Import/Export state
   const [importContent, setImportContent] = useState('');
   const [importFilename, setImportFilename] = useState('');
@@ -57,72 +56,68 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   }, []);
   // Filter and sort rules
   const filteredAndSortedRules = useMemo(() => {
-    let filtered = rules;
-    // Apply search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(rule =>)
-        rule.name.toLowerCase().includes(query) ||
-        rule.description?.toLowerCase().includes(query) ||
-        rule.findPattern.toLowerCase().includes(query) ||
-        rule.replaceWith.toLowerCase().includes(query)
-      );
-    }
-    // Apply type filter
-    switch (filterType) {
-    case 'active':
-      filtered = filtered.filter(rule => rule.isActive);
-      break;
-    case 'inactive':
-      filtered = filtered.filter(rule => !rule.isActive);
-      break;
-    case 'regex':
-      filtered = filtered.filter(rule => rule.isRegex);
-      break;
-    case 'text':
-      filtered = filtered.filter(rule => !rule.isRegex);
-      break;
-    case 'draft':
-      filtered = filtered.filter(rule => rule.status === 'draft');
-      break;
-    case 'published':
-      filtered = filtered.filter(rule => rule.status === 'published');
-      break;
-    case 'deprecated':
-      filtered = filtered.filter(rule => rule.status === 'deprecated');
-      break;
-    }
-    // Apply sorting
-    switch (sortType) {
-    case 'name':
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case 'priority':
-      filtered.sort((a, b) => a.priority - b.priority);
-      break;
-    case 'created':
-      filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      break;
-    case 'updated':
-      filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-      break;
-    }
-    return filtered;
-  }, [rules, searchQuery, filterType, sortType]);
+  let filtered = rules;
+  // Apply search filter
+  if (searchQuery) {
+  const query = searchQuery.toLowerCase();
+  filtered = filtered.filter(rule =>)
+  rule.name.toLowerCase().includes(query) ||
+  rule.description?.toLowerCase().includes(query) ||
+  rule.findPattern.toLowerCase().includes(query) ||
+  rule.replaceWith.toLowerCase().includes(query)
+  );
+  // Apply type filter
+  switch (filterType) {
+  case 'active':,
+  filtered = filtered.filter(rule => rule.isActive);
+  break;
+  case 'inactive':,
+  filtered = filtered.filter(rule => !rule.isActive);
+  break;
+  case 'regex':,
+  filtered = filtered.filter(rule => rule.isRegex);
+  break;
+  case 'text':,
+  filtered = filtered.filter(rule => !rule.isRegex);
+  break;
+  case 'draft':,
+  filtered = filtered.filter(rule => rule.status === 'draft');
+  break;
+  case 'published':,
+  filtered = filtered.filter(rule => rule.status === 'published');
+  break;
+  case 'deprecated':,
+  filtered = filtered.filter(rule => rule.status === 'deprecated');
+  break;
+  // Apply sorting
+  switch (sortType) {
+  case 'name':,
+  filtered.sort((a, b) => a.name.localeCompare(b.name));
+  break;
+  case 'priority':,
+  filtered.sort((a, b) => a.priority - b.priority);
+  break;
+  case 'created':,
+  filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  break;
+  case 'updated':,
+  filtered.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  break;
+  return filtered;
+}, [rules, searchQuery, filterType, sortType]);
   // Event handlers
   const handleAddRule = useCallback(() => {
-    if (newRule.name.trim() && newRule.findPattern.trim()) {
-      addRule(newRule);
-      setNewRule({)
-        name: '',
-        description: '',
-        findPattern: '',
-        replaceWith: '',
-        isRegex: false,
-        isActive: true,
-        priority: rules.length,
-      });
-    }
+  if (newRule.name.trim() && newRule.findPattern.trim()) {
+  addRule(newRule);
+  setNewRule({)
+  name: '',
+  description: '',
+  findPattern: '',
+  replaceWith: '',
+  isRegex: false,
+  isActive: true,
+  priority: rules.length,
+});
   }, [newRule, addRule, rules.length]);
   const handleUpdateRule = useCallback((rule: CorrectionRule) => {
     updateRule(rule.id, rule);
@@ -131,14 +126,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
   const handleDeleteRule = useCallback((id: string) => {
     if (window.confirm('Are you sure you want to delete this correction rule?')) {
       deleteRule(id);
-    }
   }, [deleteRule]);
   const handleBulkAction = useCallback((action: 'delete' | 'activate' | 'deactivate') => {
     if (selectedRules.size === 0) return;
     const confirmed = window.confirm(`Are you sure you want to ${action} ${selectedRules.size} rule(s)?`);}
     if (!confirmed) return;
     selectedRules.forEach(ruleId => {)
-      switch (action) {
+  switch (action) {
       case 'delete':
         deleteRule(ruleId);
         break;
@@ -148,7 +142,6 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       case 'deactivate':
         updateRule(ruleId, { isActive: false });
         break;
-      }
     });
     setSelectedRules(new Set());
   }, [selectedRules, deleteRule, updateRule]);
@@ -157,14 +150,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       setSelectedRules(new Set());
     } else {
       setSelectedRules(new Set(filteredAndSortedRules.map(rule => rule.id)));
-    }
   }, [selectedRules.size, filteredAndSortedRules]);
   const handleExport = useCallback(async () => {
-    try {
-      const result = await exportRules(exportFormat, {)
-        includeInactive: filterType === 'all' || filterType === 'inactive',
-        includeStatistics: true,
-      });
+  try {
+  const result = await exportRules(exportFormat, {)
+  includeInactive: filterType === 'all' || filterType === 'inactive',
+  includeStatistics: true,
+});
       if (result.success && result.data && result.filename) {
         const url = window.URL.createObjectURL(result.data);
         const a = document.createElement('a');
@@ -175,19 +167,17 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
       } else {
-        console.error('Export failed:', result.error);
-      }
-    } catch (error) {
-      console.error('Export failed:', error);
-    }
-  }, [exportFormat, exportRules, filterType]);
+  console.error('Export failed:', result.error);
+} catch (error) {
+  console.error('Export failed:', error);
+}, [exportFormat, exportRules, filterType]);
   const handleImport = useCallback(async () => {
-    if (!importContent || !importFilename) return;
-    try {
-      const result = await importRules(importContent, importFilename, {)
-        skipDuplicates: true,
-        merge: true,
-      });
+  if (!importContent || !importFilename) return;
+  try {
+  const result = await importRules(importContent, importFilename, {)
+  skipDuplicates: true,
+  merge: true,
+});
       if (result.success) {
         alert(`Successfully imported ${result.importedCount} correction rules`);}
         setImportContent('');
@@ -195,59 +185,57 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       } else {
         console.error('Import failed:', result.error);
         alert(`Import failed: ${result.error}`);}
-      }
     } catch (error) {
-      console.error('Import failed:', error);
-      alert('Import failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
-    }
-  }, [importContent, importFilename, importRules]);
+  console.error('Import failed:', error);
+  alert('Import failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+}, [importContent, importFilename, importRules]);
   const handleTestCorrections = useCallback(() => {
     return applyCorrections(testText);
   }, [testText, applyCorrections]);
   const panelWidth = isMobile ? '100%' : isCollapsed ? '60px' : '500px';
   // Don't render if panel is closed or corrections are not enabled
   if (!isOpen || !isEnabled) return null;
-  return ();
+  return;
     <div
       style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: panelWidth,
-        background: '#23272f',
-        color: '#fff',
-        borderLeft: '1px solid #444',
-        zIndex: 1000,
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        transition: 'width 0.3s ease',
-      }}
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  width: panelWidth,
+  background: '#23272f',
+  color: '#fff',
+  borderLeft: '1px solid #444',
+  zIndex: 1000,
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'width 0.3s ease',
+}}
       data-testid="corrections-manager-panel"
     >
       {/* Header */}
-      <div style={{ 
-        padding: '12px 16px', 
-        borderBottom: '1px solid #444',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        minHeight: '48px',
-      }}>
+      <div style={{
+  padding: '12px 16px',
+  borderBottom: '1px solid #444',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  minHeight: '48px',
+}}>
         {!isCollapsed && ()
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 600 }}>
                 Corrections Manager
               </h2>
-              <span style={{ 
-                background: '#4a5568', 
-                padding: '2px 6px', 
-                borderRadius: '10px', 
-                fontSize: '11px',
-                fontWeight: 500,
-              }}>
+              <span style={{
+  background: '#4a5568',
+  padding: '2px 6px',
+  borderRadius: '10px',
+  fontSize: '11px',
+  fontWeight: 500,
+}}>
                 {filteredAndSortedRules.length}/{rules.length}
               </span>
             </div>
@@ -255,14 +243,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               <button
                 onClick={() => setIsCollapsed(true)}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#a0aec0',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  background: 'none',
+  border: 'none',
+  color: '#a0aec0',
+  cursor: 'pointer',
+  padding: '4px',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
                 title="Collapse panel"
               >
                 ←
@@ -270,14 +258,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               <button
                 onClick={onClose}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#a0aec0',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  borderRadius: '4px',
-                  fontSize: '16px',
-                }}
+  background: 'none',
+  border: 'none',
+  color: '#a0aec0',
+  cursor: 'pointer',
+  padding: '4px',
+  borderRadius: '4px',
+  fontSize: '16px',
+}}
                 title="Close panel"
               >
                 ×
@@ -290,25 +278,25 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
             <button
               onClick={() => setIsCollapsed(false)}
               style={{
-                background: 'none',
-                border: 'none',
-                color: '#a0aec0',
-                cursor: 'pointer',
-                padding: '4px',
-                borderRadius: '4px',
-                fontSize: '14px',
-              }}
+  background: 'none',
+  border: 'none',
+  color: '#a0aec0',
+  cursor: 'pointer',
+  padding: '4px',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               title="Expand panel"
             >
               →
             </button>
             <div style={{
-              writing: 'vertical-rl',
-              textOrientation: 'mixed',
-              fontSize: '12px',
-              color: '#a0aec0',
-              transform: 'rotate(180deg)',
-            }}>
+  writing: 'vertical-rl',
+  textOrientation: 'mixed',
+  fontSize: '12px',
+  color: '#a0aec0',
+  transform: 'rotate(180deg)',
+}}>
               Corrections
             </div>
           </div>
@@ -326,35 +314,35 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search rules..."
                 style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                }}
+  width: '100%',
+  padding: '8px 12px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '6px',
+  fontSize: '14px',
+}}
               />
             </div>
             {/* Filters and Controls */}
-            <div style={{ 
-              display: 'flex', 
-              gap: '8px', 
-              marginBottom: '12px',
-              flexWrap: 'wrap',
-            }}>
+            <div style={{
+  display: 'flex',
+  gap: '8px',
+  marginBottom: '12px',
+  flexWrap: 'wrap',
+}}>
               {/* Filter */}
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value as FilterType)}
                 style={{
-                  padding: '6px 8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                }}
+  padding: '6px 8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '12px',
+}}
               >
                 <option value="all">All Rules</option>
                 <option value="active">Active</option>
@@ -370,13 +358,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 value={sortType}
                 onChange={(e) => setSortType(e.target.value as SortType)}
                 style={{
-                  padding: '6px 8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                }}
+  padding: '6px 8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '12px',
+}}
               >
                 <option value="priority">Priority</option>
                 <option value="name">Name</option>
@@ -388,13 +376,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 value={viewMode}
                 onChange={(e) => setViewMode(e.target.value as ViewMode)}
                 style={{
-                  padding: '6px 8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                }}
+  padding: '6px 8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '12px',
+}}
               >
                 <option value="list">List</option>
                 <option value="grid">Grid</option>
@@ -406,14 +394,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               <button
                 onClick={handleSelectAll}
                 style={{
-                  padding: '6px 12px',
-                  background: '#4a5568',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
+  padding: '6px 12px',
+  background: '#4a5568',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
               >
                 {selectedRules.size === filteredAndSortedRules.length ? 'Deselect All' : 'Select All'}
               </button>
@@ -422,42 +410,42 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   <button
                     onClick={() => handleBulkAction('activate')}
                     style={{
-                      padding: '6px 12px',
-                      background: '#38a169',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
+  padding: '6px 12px',
+  background: '#38a169',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                   >
                     Activate ({selectedRules.size})
                   </button>
                   <button
                     onClick={() => handleBulkAction('deactivate')}
                     style={{
-                      padding: '6px 12px',
-                      background: '#e53e3e',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
+  padding: '6px 12px',
+  background: '#e53e3e',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                   >
                     Deactivate ({selectedRules.size})
                   </button>
                   <button
                     onClick={() => handleBulkAction('delete')}
                     style={{
-                      padding: '6px 12px',
-                      background: '#e53e3e',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
+  padding: '6px 12px',
+  background: '#e53e3e',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                   >
                     Delete ({selectedRules.size})
                   </button>
@@ -466,60 +454,60 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               <button
                 onClick={() => setShowImportExport(!showImportExport)}
                 style={{
-                  padding: '6px 12px',
-                  background: '#63b3ed',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
+  padding: '6px 12px',
+  background: '#63b3ed',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
               >
                 Import/Export
               </button>
               <button
                 onClick={() => setShowStats(!showStats)}
                 style={{
-                  padding: '6px 12px',
-                  background: '#9f7aea',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
+  padding: '6px 12px',
+  background: '#9f7aea',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
               >
                 Stats
               </button>
               <button
                 onClick={() => setShowWorkflow(!showWorkflow)}
                 style={{
-                  padding: '6px 12px',
-                  background: '#63b3ed',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                  position: 'relative',
-                }}
+  padding: '6px 12px',
+  background: '#63b3ed',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+  position: 'relative',
+}}
               >
                 Workflow
                 {getDraftRules().length > 0 && ()
                   <span style={{
-                    position: 'absolute',
-                    top: '-4px',
-                    right: '-4px',
-                    background: '#fbb040',
-                    color: '#1a202c',
-                    borderRadius: '50%',
-                    width: '16px',
-                    height: '16px',
-                    fontSize: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+  position: 'absolute',
+  top: '-4px',
+  right: '-4px',
+  background: '#fbb040',
+  color: '#1a202c',
+  borderRadius: '50%',
+  width: '16px',
+  height: '16px',
+  fontSize: '10px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}>
                     {getDraftRules().length}
                   </span>
                 )}
@@ -528,14 +516,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
           </div>
           {/* Import/Export Section */}
           {showImportExport && ()
-            <div style={{ 
-              padding: '16px', 
-              background: '#1e2228', 
-              borderBottom: '1px solid #444',
-              margin: '0 16px',
-              borderRadius: '6px',
-              marginBottom: '16px',
-            }}>
+            <div style={{
+  padding: '16px',
+  background: '#1e2228',
+  borderBottom: '1px solid #444',
+  margin: '0 16px',
+  borderRadius: '6px',
+  marginBottom: '16px',
+}}>
               <h3 style={{ fontSize: '14px', margin: '0 0 12px 0', fontWeight: 600 }}>
                 Import/Export
               </h3>
@@ -549,13 +537,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                     value={exportFormat}
                     onChange={(e) => setExportFormat(e.target.value as 'json' | 'yaml' | 'csv')}
                     style={{
-                      padding: '6px 8px',
-                      background: '#2a2e37',
-                      color: '#fff',
-                      border: '1px solid #444',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                    }}
+  padding: '6px 8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '12px',
+}}
                   >
                     <option value="json">JSON</option>
                     <option value="yaml">YAML</option>
@@ -564,14 +552,14 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   <button
                     onClick={handleExport}
                     style={{
-                      padding: '6px 12px',
-                      background: '#38a169',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
+  padding: '6px 12px',
+  background: '#38a169',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                   >
                     Export
                   </button>
@@ -594,31 +582,30 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                         setImportContent(e.target?.result as string);
                       };
                       reader.readAsText(file);
-                    }
                   }}
                   style={{
-                    width: '100%',
-                    padding: '6px',
-                    background: '#2a2e37',
-                    color: '#fff',
-                    border: '1px solid #444',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    marginBottom: '8px',
-                  }}
+  width: '100%',
+  padding: '6px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '12px',
+  marginBottom: '8px',
+}}
                 />
                 {importContent && ()
                   <button
                     onClick={handleImport}
                     style={{
-                      padding: '6px 12px',
-                      background: '#63b3ed',
-                      color: '#fff',
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                    }}
+  padding: '6px 12px',
+  background: '#63b3ed',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                   >
                     Import
                   </button>
@@ -636,30 +623,30 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               onChange={(e) => setTestText(e.target.value)}
               placeholder="Enter text to test corrections..."
               style={{
-                width: '100%',
-                minHeight: '60px',
-                padding: '8px',
-                background: '#2a2e37',
-                color: '#fff',
-                border: '1px solid #444',
-                borderRadius: '6px',
-                resize: 'vertical',
-                fontSize: '14px',
-              }}
+  width: '100%',
+  minHeight: '60px',
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '6px',
+  resize: 'vertical',
+  fontSize: '14px',
+}}
             />
             {testText && ()
               <div style={{ marginTop: '8px' }}>
                 <strong style={{ fontSize: '12px', color: '#a0aec0' }}>Result:</strong>
                 <div
                   style={{
-                    padding: '8px',
-                    background: '#1e2228',
-                    border: '1px solid #444',
-                    borderRadius: '6px',
-                    marginTop: '4px',
-                    fontSize: '14px',
-                    wordBreak: 'break-word',
-                  }}
+  padding: '8px',
+  background: '#1e2228',
+  border: '1px solid #444',
+  borderRadius: '6px',
+  marginTop: '4px',
+  fontSize: '14px',
+  wordBreak: 'break-word',
+}}
                 >
                   {handleTestCorrections()}
                 </div>
@@ -668,12 +655,12 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
           </div>
           {/* Rules List */}
           <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              marginBottom: '16px' ,
-            }}>
+            <div style={{
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '16px',
+}}>
               <h3 style={{ fontSize: '14px', margin: 0, fontWeight: 600 }}>
                 Rules ({filteredAndSortedRules.length})
               </h3>
@@ -682,17 +669,16 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   onClick={() => {
                     if (window.confirm('This will add default correction rules. Continue?')) {
                       DEFAULT_CORRECTION_RULES.forEach(rule => addRule(rule));
-                    }
                   }}
                   style={{
-                    padding: '6px 12px',
-                    background: '#4a5568',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                  }}
+  padding: '6px 12px',
+  background: '#4a5568',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                 >
                   Load Defaults
                 </button>
@@ -700,17 +686,16 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                   onClick={() => {
                     if (window.confirm('This will delete all correction rules. Continue?')) {
                       clearAllRules();
-                    }
                   }}
                   style={{
-                    padding: '6px 12px',
-                    background: '#e53e3e',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                  }}
+  padding: '6px 12px',
+  background: '#e53e3e',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
                 >
                   Clear All
                 </button>
@@ -722,19 +707,19 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 <div
                   key={rule.id}
                   style={{
-                    background: selectedRules.has(rule.id) ? '#2d3748' : '#2a2e37',
-                    border: '1px solid #444',
-                    borderRadius: '6px',
-                    padding: '12px',
-                    transition: 'background 0.2s ease',
-                  }}
+  background: selectedRules.has(rule.id) ? '#2d3748' : '#2a2e37',
+  border: '1px solid #444',
+  borderRadius: '6px',
+  padding: '12px',
+  transition: 'background 0.2s ease',
+}}
                 >
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'space-between', 
-                    marginBottom: '8px' ,
-                  }}>
+                  <div style={{
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '8px',
+}}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <input
                         type="checkbox"
@@ -745,7 +730,6 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                             newSelected.add(rule.id);
                           } else {
                             newSelected.delete(rule.id);
-                          }
                           setSelectedRules(newSelected);
                         }}
                         style={{ marginRight: '4px' }}
@@ -760,29 +744,29 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                         {rule.name}
                       </strong>
                       {rule.isRegex && ()
-                        <span style={{ 
-                          background: '#4a5568', 
-                          color: '#fff', 
-                          padding: '2px 6px', 
-                          borderRadius: '2px', 
-                          fontSize: '10px',
-                          fontWeight: 500,
-                        }}>
+                        <span style={{
+  background: '#4a5568',
+  color: '#fff',
+  padding: '2px 6px',
+  borderRadius: '2px',
+  fontSize: '10px',
+  fontWeight: 500,
+}}>
                           REGEX
                         </span>
                       )}
                       {rule.status && ()
-                        <span style={{ 
-                          background: rule.status === 'draft' ? '#fbb040' : ,
-                            rule.status === 'published' ? '#68d391' : 
-                              rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
-                          color: '#1a202c', 
-                          padding: '2px 6px', 
-                          borderRadius: '2px', 
-                          fontSize: '10px',
-                          fontWeight: 500,
-                          marginLeft: '4px',
-                        }}>
+                        <span style={{
+  background: rule.status === 'draft' ? '#fbb040' : ,
+  rule.status === 'published' ? '#68d391' :,
+  rule.status === 'deprecated' ? '#e53e3e' : '#a0aec0',
+  color: '#1a202c',
+  padding: '2px 6px',
+  borderRadius: '2px',
+  fontSize: '10px',
+  fontWeight: 500,
+  marginLeft: '4px',
+}}>
                           {rule.status.toUpperCase()}
                         </span>
                       )}
@@ -791,61 +775,61 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                       <button
                         onClick={() => setEditingRule(rule)}
                         style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#63b3ed',
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                        }}
+  background: 'none',
+  border: 'none',
+  color: '#63b3ed',
+  cursor: 'pointer',
+  fontSize: '12px',
+  padding: '4px 8px',
+  borderRadius: '4px',
+}}
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteRule(rule.id)}
                         style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#e53e3e',
-                          cursor: 'pointer',
-                          fontSize: '12px',
-                          padding: '4px 8px',
-                          borderRadius: '4px',
-                        }}
+  background: 'none',
+  border: 'none',
+  color: '#e53e3e',
+  cursor: 'pointer',
+  fontSize: '12px',
+  padding: '4px 8px',
+  borderRadius: '4px',
+}}
                       >
                         Delete
                       </button>
                     </div>
                   </div>
                   {rule.description && ()
-                    <p style={{ 
-                      fontSize: '12px', 
-                      color: '#a0aec0', 
-                      margin: '4px 0 8px 0' ,
-                    }}>
+                    <p style={{
+  fontSize: '12px',
+  color: '#a0aec0',
+  margin: '4px 0 8px 0',
+}}>
                       {rule.description}
                     </p>
                   )}
                   <div style={{ fontSize: '12px', marginBottom: '4px' }}>
                     <span style={{ color: '#68d391', fontWeight: 500 }}>Find:</span>
-                    <code style={{ 
-                      background: '#1e2228', 
-                      padding: '2px 4px', 
-                      borderRadius: '2px',
-                      marginLeft: '4px',
-                    }}>
+                    <code style={{
+  background: '#1e2228',
+  padding: '2px 4px',
+  borderRadius: '2px',
+  marginLeft: '4px',
+}}>
                       {rule.findPattern}
                     </code>
                   </div>
                   <div style={{ fontSize: '12px' }}>
                     <span style={{ color: '#63b3ed', fontWeight: 500 }}>Replace:</span>
-                    <code style={{ 
-                      background: '#1e2228', 
-                      padding: '2px 4px', 
-                      borderRadius: '2px',
-                      marginLeft: '4px',
-                    }}>
+                    <code style={{
+  background: '#1e2228',
+  padding: '2px 4px',
+  borderRadius: '2px',
+  marginLeft: '4px',
+}}>
                       {rule.replaceWith}
                     </code>
                   </div>
@@ -853,11 +837,11 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
               ))}
             </div>
             {filteredAndSortedRules.length === 0 && ()
-              <div style={{ 
-                textAlign: 'center', 
-                padding: '40px', 
-                color: '#a0aec0' ,
-              }}>
+              <div style={{
+  textAlign: 'center',
+  padding: '40px',
+  color: '#a0aec0',
+}}>
                 <p>No correction rules found.</p>
                 {searchQuery && ()
                   <p style={{ fontSize: '12px' }}>
@@ -868,11 +852,11 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
             )}
           </div>
           {/* Add New Rule Section */}
-          <div style={{ 
-            padding: '16px', 
-            borderTop: '1px solid #444',
-            background: '#1e2228',
-          }}>
+          <div style={{
+  padding: '16px',
+  borderTop: '1px solid #444',
+  background: '#1e2228',
+}}>
             <h3 style={{ fontSize: '14px', marginBottom: '12px', fontWeight: 600 }}>
               Add New Rule
             </h3>
@@ -883,13 +867,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setNewRule(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Rule name"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -897,13 +881,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setNewRule(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Description (optional)"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -911,13 +895,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setNewRule(prev => ({ ...prev, findPattern: e.target.value }))}
                 placeholder="Find pattern"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -925,13 +909,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setNewRule(prev => ({ ...prev, replaceWith: e.target.value }))}
                 placeholder="Replace with"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
@@ -957,15 +941,15 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onClick={handleAddRule}
                 disabled={!newRule.name.trim() || !newRule.findPattern.trim()}
                 style={{
-                  background: newRule.name.trim() && newRule.findPattern.trim() ? '#38a169' : '#4a5568',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                }}
+  background: newRule.name.trim() && newRule.findPattern.trim() ? '#38a169' : '#4a5568',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
+  fontSize: '14px',
+  fontWeight: 500,
+}}
               >
                 Add Rule
               </button>
@@ -977,28 +961,28 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
       {editingRule && ()
         <div
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1001,
-          }}
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0, 0, 0, 0.8)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1001,
+}}
         >
           <div
             style={{
-              background: '#23272f',
-              padding: '24px',
-              borderRadius: '8px',
-              width: isMobile ? '90%' : '400px',
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              overflow: 'auto',
-            }}
+  background: '#23272f',
+  padding: '24px',
+  borderRadius: '8px',
+  width: isMobile ? '90%' : '400px',
+  maxWidth: '90vw',
+  maxHeight: '90vh',
+  overflow: 'auto',
+}}
           >
             <h3 style={{ marginBottom: '16px', fontSize: '16px', fontWeight: 600 }}>
               Edit Rule
@@ -1010,13 +994,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, name: e.target.value }) : null)}
                 placeholder="Rule name"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -1024,13 +1008,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, description: e.target.value }) : null)}
                 placeholder="Description (optional)"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -1038,13 +1022,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, findPattern: e.target.value }) : null)}
                 placeholder="Find pattern"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <input
                 type="text"
@@ -1052,13 +1036,13 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, replaceWith: e.target.value }) : null)}
                 placeholder="Replace with"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  fontSize: '14px',
+}}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
@@ -1084,32 +1068,32 @@ export const CorrectionsManagerPanel: React.FC<CorrectionsPanelProps> = ({ isOpe
                 <button
                   onClick={() => handleUpdateRule(editingRule)}
                   style={{
-                    background: '#38a169',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 1,
-                    fontSize: '14px',
-                    fontWeight: 500,
-                  }}
+  background: '#38a169',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  flex: 1,
+  fontSize: '14px',
+  fontWeight: 500,
+}}
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setEditingRule(null)}
                   style={{
-                    background: '#4a5568',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 1,
-                    fontSize: '14px',
-                    fontWeight: 500,
-                  }}
+  background: '#4a5568',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  flex: 1,
+  fontSize: '14px',
+  fontWeight: 500,
+}}
                 >
                   Cancel
                 </button>

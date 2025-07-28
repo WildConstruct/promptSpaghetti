@@ -138,7 +138,7 @@ export function runMigrations(): boolean {
         version VARCHAR(50) NOT NULL,
         applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UNIQUE(version)
-      )
+
     `);
     
     // Get list of applied migrations

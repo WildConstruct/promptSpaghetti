@@ -74,8 +74,8 @@ export interface ChangeEvent {
     recorded_at: string;
     client_info?: any;
     workspace_id?: string;
-    affected_nodes: string[];
-    affected_properties: string[];
+    affected_nodes: string;
+    affected_properties: string;
     change_magnitude: number;
     workflow_state?: string;
     approval_required: boolean;
@@ -122,99 +122,13 @@ export interface SnapshotCreationOptions {
     approval_status?: string;
 }
 export declare class VersionHistoryManager {
-    private apiClient;
-    private projectId;
-    private userId;
     private snapshots;
     private branches;
     private changeEvents;
     private currentSessionId;
-    constructor(apiClient: any, projectId: string, userId: string);
-    createSnapshot(graphData: any, options?: SnapshotCreationOptions): Promise<VersionSnapshot>;
-    getSnapshots(filter?: VersionHistoryFilter): Promise<{
-        snapshots: VersionSnapshot[];
-        total: number;
-    }>;
-    getSnapshot(snapshotId: string): Promise<VersionSnapshot>;
-    getSnapshotData(snapshotId: string): Promise<any>;
-    deleteSnapshot(snapshotId: string): Promise<void>;
-    compareFreshSnapshots(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff>;
-    getSnapshotDiff(fromSnapshotId: string, toSnapshotId: string): Promise<VersionDiff>;
-    private computeDiff;
-    createBranch(name: string, options?: {
-        description?: string;
-        branch_type?: 'feature' | 'hotfix' | 'experiment';
-        parent_branch_id?: string;
-        base_snapshot_id?: string;
-        visibility?: 'private' | 'workspace' | 'public';
-    }): Promise<Branch>;
-    getBranches(): Promise<Branch[]>;
-    switchBranch(branchName: string): Promise<Branch>;
-    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {
-        merge_message?: string;
-        strategy?: 'merge' | 'squash' | 'rebase';
-        delete_source?: boolean;
-    }): Promise<VersionSnapshot>;
-    recordChangeEvent(event: {
-        event_type: string;
-        event_data: any;
-        affected_nodes: string[];
-        change_magnitude: number;
-        workflow_state?: string;
-        approval_required?: boolean;
-    }): Promise<ChangeEvent>;
-    getChangeEvents(filter?: {
-        start_date?: string;
-        end_date?: string;
-        author_id?: string;
-        event_types?: string[];
-        limit?: number;
-        offset?: number;
-    }): Promise<{
-        events: ChangeEvent[];
-        total: number;
-    }>;
-    addAnnotation(snapshotId: string, annotation: {
-        annotation_type?: 'comment' | 'review' | 'approval' | 'flag';
-        title?: string;
-        content_markdown: string;
-        priority?: 'low' | 'normal' | 'high' | 'critical';
-        target_element_id?: string;
-        target_coordinates?: {
-            x: number;
-            y: number;
-        };
-    }): Promise<VersionAnnotation>;
-    getAnnotations(snapshotId: string): Promise<VersionAnnotation[]>;
-    resolveAnnotation(annotationId: string, resolutionNote?: string): Promise<VersionAnnotation>;
-    private extractNodeIds;
-    private extractAffectedProperties;
-    private calculateChangeMagnitude;
-    getVersionStatistics(): Promise<{
-        total_snapshots: number;
-        total_branches: number;
-        total_changes: number;
-        most_active_authors: Array<{
-            author_id: string;
-            change_count: number;
-        }>;
-        change_frequency: Array<{
-            date: string;
-            count: number;
-        }>;
-        branch_activity: Array<{
-            branch_name: string;
-            snapshot_count: number;
-        }>;
-    }>;
-    startNewSession(): void;
-    cleanupOldData(options?: {
-        days_old?: number;
-        keep_milestones?: boolean;
-        keep_tagged_versions?: boolean;
-    }): Promise<{
-        deleted_snapshots: number;
-        deleted_diffs: number;
-    }>;
+    constructor();
+    private apiClient;
+    private projectId;
+    private userId;
 }
 //# sourceMappingURL=VersionHistoryManager.d.ts.map

@@ -33,39 +33,29 @@ export declare enum SeverityLevel {
 export declare enum FallbackMethod {
     AUDIO_CAPTCHA = "audio_captcha",
     LARGE_TEXT_DISPLAY = "large_text_display",
-    HIGH_CONTRAST_MODE = "high_contrast_mode",
-    SIMPLIFIED_INTERFACE = "simplified_interface",
     VOICE_AUTHENTICATION = "voice_authentication",
-    GESTURE_AUTHENTICATION = "gesture_authentication",
-    ASSISTED_INPUT = "assisted_input",
-    EXTENDED_TIMEOUTS = "extended_timeouts",
-    ALTERNATIVE_VERIFICATION = "alternative_verification",
+    SIMPLIFIED_INTERFACE = "simplified_interface",
     HUMAN_ASSISTANCE = "human_assistance",
-    EMAIL_VERIFICATION = "email_verification",
-    PHONE_VERIFICATION = "phone_verification",
-    BACKUP_CODES = "backup_codes"
+    ASSISTED_INPUT = "assisted_input"
+}
+export declare enum InterfaceAdaptation {
+    FONT_SIZE_INCREASE = "font_size_increase",
+    CONTRAST_ENHANCEMENT = "contrast_enhancement",
+    MOTION_REDUCTION = "motion_reduction",
+    TIMEOUT_EXTENSION = "timeout_extension",
+    COLOR_ADJUSTMENT = "color_adjustment",
+    FOCUS_INDICATORS = "focus_indicators",
+    ERROR_CLARIFICATION = "error_clarification",
+    AUDIO_DESCRIPTIONS = "audio_descriptions",
+    CAPTIONS = "captions",
+    SIMPLIFIED_LAYOUT = "simplified_layout"
 }
 export declare enum AssistiveTechnology {
     SCREEN_READER = "screen_reader",
     MAGNIFIER = "magnifier",
     VOICE_CONTROL = "voice_control",
-    EYE_TRACKER = "eye_tracker",
-    SWITCH_ACCESS = "switch_access",
-    KEYBOARD_ONLY = "keyboard_only",
-    TOUCH_ASSISTANCE = "touch_assistance",
-    COGNITIVE_ASSISTANT = "cognitive_assistant"
-}
-export declare enum InterfaceAdaptation {
-    FONT_SIZE_INCREASE = "font_size_increase",
-    CONTRAST_ENHANCEMENT = "contrast_enhancement",
-    COLOR_ADJUSTMENT = "color_adjustment",
-    MOTION_REDUCTION = "motion_reduction",
-    TIMEOUT_EXTENSION = "timeout_extension",
-    SIMPLIFIED_LAYOUT = "simplified_layout",
-    AUDIO_DESCRIPTIONS = "audio_descriptions",
-    CAPTIONS = "captions",
-    FOCUS_INDICATORS = "focus_indicators",
-    ERROR_CLARIFICATION = "error_clarification"
+    SWITCH_NAVIGATION = "switch_navigation",
+    EYE_TRACKING = "eye_tracking"
 }
 export interface UserAccessibilityProfile {
     userId: string;
@@ -82,7 +72,7 @@ export interface UserAccessibilityProfile {
         visualEnabled: boolean;
         hapticEnabled: boolean;
         animationsReduced: boolean;
-        colorBlindnessType?: 'protanopia' | 'deuteranopia' | 'tritanopia' | 'monochromacy';
+        colorBlindnessType?: string;
     };
     verificationMethods: {
         primary: string[];
@@ -183,7 +173,7 @@ export interface EmergencyBypass {
     usageCount: number;
     maxUsages: number;
     conditions: {
-        ipRestriction?: string[];
+        ipRestriction?: string;
         timeRestriction?: {
             start: string;
             end: string;
@@ -207,84 +197,16 @@ export declare class AccessibilityManager extends EventEmitter {
     private accessibilityMetrics;
     constructor();
     /**
-     * Create or update user accessibility profile
-     */
-    createAccessibilityProfile(userId: string, profileData: Partial<UserAccessibilityProfile>): Promise<UserAccessibilityProfile>;
+    * Create or update user accessibility profile
+    */
+    createAccessibilityProfile(): any;
+    userId: string;
+    profileData: Partial<UserAccessibilityProfile>;
     /**
      * Analyze user context and recommend accessibility accommodations
      */
-    analyzeAccessibilityNeeds(userId: string, context: AccessibilityContext): Promise<{
-        recommendedFallbacks: FallbackMethod[];
-        requiredAdaptations: InterfaceAdaptation[];
-        estimatedDifficulty: 'low' | 'medium' | 'high' | 'critical';
-        alternatives: Array<{
-            method: string;
-            accessibility: number;
-            estimated_time: number;
-            requirements: string[];
-        }>;
-    }>;
-    /**
-     * Validate accessibility compliance for authentication flow
-     */
-    validateAccessibilityCompliance(authenticationFlow: unknown, userProfile?: UserAccessibilityProfile): AccessibilityValidationResult;
-    /**
-     * Create emergency accessibility bypass
-     */
-    createEmergencyBypass(userId: string, reason: string, authorizedBy: string, durationHours?: number, maxUsages?: number): Promise<string>;
-    /**
-     * Use emergency accessibility bypass
-     */
-    useEmergencyBypass(bypassId: string, context: Record<string, unknown>): {
-        allowed: boolean;
-        reason?: string;
-        remainingUses?: number;
-    };
-    /**
-     * Get accessibility adaptation recommendations
-     */
-    getAdaptationRecommendations(userId: string, _currentInterface: unknown): {
-        adaptations: Array<{
-            type: InterfaceAdaptation;
-            priority: 'high' | 'medium' | 'low';
-            implementation: {
-                css?: Record<string, string>;
-                js?: string;
-                html?: string;
-            };
-            description: string;
-        }>;
-        estimatedImpact: number;
-    };
-    /**
-     * Get accessibility statistics and metrics
-     */
-    getAccessibilityMetrics(): {
-        totalUsers: number;
-        usersWithProfiles: number;
-        accessibilityNeeds: Record<AccessibilityNeed, number>;
-        fallbackUsage: Record<FallbackMethod, number>;
-        complianceScores: {
-            average: number;
-            distribution: Record<'A' | 'AA' | 'AAA' | 'Non-compliant', number>;
-        };
-        emergencyBypasses: {
-            active: number;
-            used: number;
-            expired: number;
-        };
-        topIssues: Array<{
-            issue: string;
-            frequency: number;
-            severity: 'critical' | 'major' | 'minor';
-        }>;
-    };
-    private calculateDifficultyScore;
-    private generateAuthenticationAlternatives;
-    private getColorBlindnessFilter;
-    private initializeFallbackConfigurations;
-    private startComplianceMonitoring;
-    private updateComplianceMetrics;
+    analyzeAccessibilityNeeds(): any;
+    userId: string;
+    context: AccessibilityContext;
 }
-export default AccessibilityManager;
 //# sourceMappingURL=AccessibilityManager.d.ts.map

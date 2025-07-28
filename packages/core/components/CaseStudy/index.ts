@@ -56,27 +56,26 @@ export const CASE_STUDY_DEFAULTS = {
 // Filter presets for common use cases
 export const CASE_STUDY_FILTER_PRESETS = {
   featured: {,
-    featuredOnly: true,
-    status: ['featured' as const],
-  },
+  featuredOnly: true,
+  status: ['featured' as const],
+},
   beginner: {,
-    difficulty: ['beginner' as const],
-  },
+  difficulty: ['beginner' as const],
+},
   advanced: {,
-    difficulty: ['advanced' as const, 'expert' as const]
-  },
+  difficulty: ['advanced' as const, 'expert' as const],
+},
   templateSuccess: {,
-    type: ['template-success' as const],
-  },
+  type: ['template-success' as const],
+},
   roiAnalysis: {,
-    type: ['roi-analysis' as const],
-  },
+  type: ['roi-analysis' as const],
+},
   industryShowcase: {,
-    type: ['industry-showcase' as const],
-  },
+  type: ['industry-showcase' as const],
+},
   recentlyPublished: {,
-    publishedAfter: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-  }
+  publishedAfter: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
 } as const;
 
 // Sort presets

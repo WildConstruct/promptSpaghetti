@@ -29,6 +29,7 @@ import { FeatureToggleService } from '../services/feature-toggle-service';
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
 // Core Algorithm Interfaces
+}
 export interface ToggleResolutionRequest {
   toggleKeys: string[];
   context: ToggleEvaluationContext;
@@ -39,7 +40,9 @@ export interface ToggleResolutionRequest {
   enableCaching?: boolean;
   enableOptimizations?: boolean;
 }
+}
 
+}
 export interface ToggleResolutionResult {
   resolutions: Record<string, ToggleEvaluationResult>;
   metadata: ResolutionMetadata;
@@ -48,7 +51,9 @@ export interface ToggleResolutionResult {
   conflicts: ConflictReport[];
   dependencyGraph?: DependencyGraphNode[];
 }
+}
 
+}
 export interface ResolutionMetadata {
   strategy: ResolutionStrategy;
   totalToggleCount: number;
@@ -59,7 +64,9 @@ export interface ResolutionMetadata {
   resolutionTime: number;
   optimizationsApplied: string[];
 }
+}
 
+}
 export interface PerformanceMetrics {
   totalEvaluationTime: number;
   averageToggleTime: number;
@@ -70,7 +77,9 @@ export interface PerformanceMetrics {
   cpuTime: number;
   networkRequests: number;
 }
+}
 
+}
 export interface ResolutionWarning {
   type: 'dependency_cycle' | 'performance_degradation' | 'cache_miss' | 'timeout_risk' | 'conflict_detected';
   message: string;
@@ -79,7 +88,9 @@ export interface ResolutionWarning {
   recommendation: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface ConflictReport {
   type: 'mutual_exclusion' | 'dependency_conflict' | 'version_mismatch' | 'rule_contradiction';
   toggleKeys: string[];
@@ -88,7 +99,9 @@ export interface ConflictReport {
   fallbackValue?: any;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface DependencyGraphNode {
   toggleKey: string;
   dependencies: string[];
@@ -97,6 +110,7 @@ export interface DependencyGraphNode {
   evaluationOrder: number;
   hasCycles: boolean;
   criticalPath: boolean;
+}
 }
 
 export enum ResolutionStrategy {
@@ -118,6 +132,7 @@ export enum TogglePriority {
   DEBUG = 5          // Debug/development toggles
 }
 
+}
 export interface ToggleResolutionConfig {
   maxConcurrency: number;
   cacheTimeout: number;
@@ -128,6 +143,7 @@ export interface ToggleResolutionConfig {
   enableCircuitBreaker: boolean;
   enableOptimizations: boolean;
   fallbackValues: Record<string, any>;
+}
 }
 
 // Circuit Breaker for Resilience
@@ -142,6 +158,7 @@ class CircuitBreaker {
   ) {}
 
   async execute<T>(operation: () => Promise<T>): Promise<T> {
+
     if (this.state === 'open') {
       if (Date.now() - this.lastFailureTime > this.timeout) {
         this.state = 'half_open';
@@ -206,6 +223,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
    * Main resolution method - intelligently resolves multiple toggles
    */
   async resolveToggles(request: ToggleResolutionRequest): Promise<ToggleResolutionResult> {
+
     const startTime = Date.now();
     const strategy = request.strategy || ResolutionStrategy.DEPENDENCY_AWARE;
     
@@ -222,7 +240,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
           dependencyCount: 0,
           resolutionTime: 0,
           optimizationsApplied: []
-        },
+  }
         performance: {
           totalEvaluationTime: 0,
           averageToggleTime: 0,
@@ -232,7 +250,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
           memoryUsage: 0,
           cpuTime: 0,
           networkRequests: 0
-        },
+  }
         warnings: [],
         conflicts: []
       };
@@ -633,7 +651,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
         request.toggleKeys.map(async toggleKey => {
           const evaluation = await this.toggleService.evaluateToggle(toggleKey, request.context);
           return { toggleKey, evaluation };
-        })
+  }
       );
 
       const timeoutPromise = new Promise<never>((_, reject) => {
@@ -712,6 +730,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
   // Helper Methods
 
   private async buildDependencyGraph(toggleKeys: string[]): Promise<DependencyGraphNode[]> {
+
     const cacheKey = toggleKeys.sort().join(':');
     if (this.dependencyCache.has(cacheKey)) {
       return this.dependencyCache.get(cacheKey)!;
@@ -739,6 +758,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     visiting: Set<string>,
     depth: number
   ): Promise<void> {
+
     if (visited.has(toggleKey)) return;
     if (visiting.has(toggleKey)) {
       // Cycle detected
@@ -848,6 +868,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     toggleKeys: string[],
     context: ToggleEvaluationContext
   ): Promise<ConflictReport[]> {
+
     const conflicts: ConflictReport[] = [];
 
     // Get all toggle definitions
@@ -877,6 +898,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     toggle1: FeatureToggle,
     toggle2: FeatureToggle
   ): Promise<ConflictReport | null> {
+
     // Check for explicit mutual exclusion rules
     const dependencies1 = await this.toggleDAO.getToggleDependencies(toggle1.key);
     const dependencies2 = await this.toggleDAO.getToggleDependencies(toggle2.key);
@@ -941,6 +963,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     dependencies: string[],
     resolutions: Record<string, ToggleEvaluationResult>
   ): Promise<boolean> {
+
     for (const dep of dependencies) {
       const resolution = resolutions[dep];
       if (!resolution || !resolution.enabled) {
@@ -1094,6 +1117,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
     request: ToggleResolutionRequest,
     error: any
   ): Promise<ToggleResolutionResult> {
+
     const resolutions: Record<string, ToggleEvaluationResult> = {};
     
     for (const toggleKey of request.toggleKeys) {
@@ -1116,7 +1140,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
         dependencyCount: 0,
         resolutionTime: 0,
         optimizationsApplied: ['fallback_strategy']
-      },
+  }
       performance: {
         totalEvaluationTime: 0,
         averageToggleTime: 0,
@@ -1126,7 +1150,7 @@ export class ToggleResolutionAlgorithm extends EventEmitter {
         memoryUsage: 0,
         cpuTime: 0,
         networkRequests: 0
-      },
+  }
       warnings: [{
         type: 'performance_degradation',
         message: 'Resolution failed, fallback strategy applied',

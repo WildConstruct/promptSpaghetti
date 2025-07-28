@@ -14,14 +14,12 @@ import {
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
 interface Epic16LearningPathsProps {
-  userId: string;
+  userId: string;,
   userRole: 'user' | 'creator' | 'admin';
   userTier: 'free' | 'premium' | 'enterprise';
   onAnalytics?: (analytics: unknown) => void;
   onCertification?: (certification: unknown) => void;
-}
-
-export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
+  export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({,)
   userId,
   userRole,
   userTier,
@@ -54,17 +52,15 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
           if (completedUserId === userId) {
             // Handle path completion
             console.log(`Path ${pathId} completed by user ${userId}`);}
-          }
         });
         learningService.on('skillUnlocked', (skill) => {
-          // Handle skill unlock notifications
-          console.log('Skill unlocked:', skill);
-        });
+  // Handle skill unlock notifications
+  console.log('Skill unlocked:', skill);
+});
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
-      } finally {
+  setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
+} finally {
         setLoading(false);
-      }
     };
     initializeService();
     // Cleanup event listeners
@@ -86,25 +82,21 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
       if (!enrollment) {
         const newEnrollment = await learningService.enrollUser(userId, path.id);
         setUserEnrollment(newEnrollment);
-      }
       setCurrentView('viewer');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load learning path');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load learning path');
+} finally {
       setLoading(false);
-    }
   }, [learningService, userId]);
   // Handle progress updates
   const handleProgress = useCallback((progress: number) => {
-    if (userEnrollment) {
-      setUserEnrollment({)
-        ...userEnrollment,
-        progress: {,
-          ...userEnrollment.progress,
-          overallProgress: progress,
-        }
-      });
-    }
+  if (userEnrollment) {
+  setUserEnrollment({)
+  ...userEnrollment,
+  progress: {,
+  ...userEnrollment.progress,
+  overallProgress: progress,
+});
   }, [userEnrollment]);
   // Handle path completion
   const handlePathComplete = useCallback(() => {
@@ -121,7 +113,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
   }, []);
   // Render loading state
   if (loading && !selectedPath) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -129,10 +121,9 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
         </div>
       </div>
     );
-  }
   // Render error state
   if (error && !selectedPath) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <div className="flex-shrink-0">
@@ -157,8 +148,7 @@ export const Epic16LearningPaths: React.FC<Epic16LearningPathsProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="epic16-learning-paths h-full">
       {currentView === 'dashboard' && ()
         <div className="h-full">

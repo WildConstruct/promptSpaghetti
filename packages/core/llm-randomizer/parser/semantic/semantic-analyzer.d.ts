@@ -1,9 +1,10 @@
 import { GraphAST, NodeDefinitionAST, ParseError } from '../ast/ast-builder';
 import { Graph } from '../../../graphSchema';
+
 export interface SemanticError extends ParseError {
     nodeId?: string;
     errorCode: string;
-}
+
 export interface ValidationContext {
     nodeIds: Set<string>;
     nodeMap: Map<string, NodeDefinitionAST>;
@@ -11,12 +12,13 @@ export interface ValidationContext {
     reverseEdgeMap: Map<string, Set<string>>;
     visitedNodes: Set<string>;
     currentPath: string[];
-}
+
+
 export interface SemanticAnalysisResult {
     graph: Graph | null;
     errors: SemanticError[];
     warnings: SemanticError[];
-}
+
 export declare class SemanticAnalyzer {
     private context;
     private errors;
@@ -117,5 +119,5 @@ export declare class SemanticAnalyzer {
     private hasBlockingErrors;
     private addError;
     private addWarning;
-}
+
 //# sourceMappingURL=semantic-analyzer.d.ts.map

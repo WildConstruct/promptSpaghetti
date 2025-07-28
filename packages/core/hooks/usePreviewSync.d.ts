@@ -11,14 +11,12 @@ interface GraphChangeAnalysis {
     affectedEdges: string[];
     significance: number;
     shouldTriggerPreview: boolean;
-}
 interface PreviewSyncOptions {
     enabled?: boolean;
     debounceMs?: number;
     significanceThreshold?: number;
     maxAutoRefreshRate?: number;
     enablePerformanceTracking?: boolean;
-}
 interface PreviewSyncReturn {
     isEnabled: boolean;
     isSyncing: boolean;
@@ -32,7 +30,7 @@ interface PreviewSyncReturn {
         successRate: number;
         cacheHitRate: number;
     };
-}
+
 export declare const usePreviewSync: (options?: PreviewSyncOptions) => PreviewSyncReturn;
 export {};
 //# sourceMappingURL=usePreviewSync.d.ts.map

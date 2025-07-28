@@ -5,12 +5,13 @@
  * Adapter for RunwayML Gen-2 and Gen-3 video generation models
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface RunwayMLConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
-}
+
 export interface RunwayMLRequestOptions {
     text_prompt: string;
     image_prompt?: string;
@@ -29,7 +30,7 @@ export interface RunwayMLRequestOptions {
     camera_motion?: 'static' | 'pan_left' | 'pan_right' | 'tilt_up' | 'tilt_down' | 'zoom_in' | 'zoom_out' | 'dolly_forward' | 'dolly_backward';
     enhance_prompt?: boolean;
     negative_prompt?: string;
-}
+
 export interface RunwayMLGenerationResult {
     video: {,
         url?: string;
@@ -60,7 +61,7 @@ export interface RunwayMLGenerationResult {
         cost: number;
         processing_time: number;
     };
-}
+
 export interface RunwayMLTask {
     id: string;
     status: 'PENDING' | 'RUNNING' | 'SUCCEEDED' | 'FAILED';
@@ -71,7 +72,7 @@ export interface RunwayMLTask {
     started_at?: string;
     completed_at?: string;
     output?: string[];
-}
+
 export declare class RunwayMLAdapter extends BaseAIModel {
     private config;
     private availableModels;
@@ -98,6 +99,6 @@ export declare class RunwayMLAdapter extends BaseAIModel {
     private _makeRequest;
     private _calculateCredits;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default RunwayMLAdapter;
 //# sourceMappingURL=RunwayMLAdapter.d.ts.map

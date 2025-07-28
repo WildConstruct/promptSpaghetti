@@ -24,6 +24,7 @@ export class TokenService implements ITokenService {
   }
 
   async generateAccessToken(user: User, scopes?: string[]): Promise<string> {
+
     const payload: Omit<JWTPayload, 'iat' | 'exp'> = {
       sub: user.id,
       email: user.email,
@@ -54,6 +55,7 @@ export class TokenService implements ITokenService {
     expiresIn: string = '90d',
     name?: string
   ): Promise<{ token: string; tokenId: string }> {
+
     const tokenId = require('crypto').randomUUID();
     
     const payload = {
@@ -79,6 +81,7 @@ export class TokenService implements ITokenService {
   }
 
   async generateRefreshToken(user: User): Promise<string> {
+
     const payload = {
       sub: user.id,
       type: 'refresh',
@@ -98,6 +101,7 @@ export class TokenService implements ITokenService {
   }
 
   async verifyAccessToken(token: string): Promise<JWTPayload> {
+
     try {
       // Check if token is revoked
       const isRevoked = await this.isTokenRevoked(token);
@@ -121,6 +125,7 @@ export class TokenService implements ITokenService {
   }
 
   async verifyRefreshToken(token: string): Promise<JWTPayload> {
+
     try {
       // Verify JWT signature and claims
       const payload = jwt.verify(token, this.publicKey, {
@@ -149,6 +154,7 @@ export class TokenService implements ITokenService {
   }
 
   async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+
     // Verify refresh token
     const payload = await this.verifyRefreshToken(refreshToken);
     
@@ -191,6 +197,7 @@ export class TokenService implements ITokenService {
   }
 
   async revokeToken(token: string): Promise<void> {
+
     try {
       // Decode token to get expiry time (don't verify - we want to revoke even invalid tokens)
       const decoded = jwt.decode(token) as any;
@@ -212,6 +219,7 @@ export class TokenService implements ITokenService {
   }
 
   async revokeAllUserTokens(userId: string): Promise<void> {
+
     // Remove all refresh tokens for user
     await this.db.query(`
       UPDATE user_sessions 
@@ -231,6 +239,7 @@ export class TokenService implements ITokenService {
   }
 
   async revokeSessionTokens(sessionId: string): Promise<void> {
+
     // Revoke session tokens
     await this.db.query(`
       UPDATE user_sessions 
@@ -240,6 +249,7 @@ export class TokenService implements ITokenService {
   }
 
   async revokeApiToken(tokenId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE api_tokens 
       SET revoked = true, revoked_at = NOW() 
@@ -248,6 +258,7 @@ export class TokenService implements ITokenService {
   }
 
   async getUserApiTokens(userId: string): Promise<any[]> {
+
     const result = await this.db.query(`
       SELECT id, name, scopes, expires_at, created_at, last_used_at, revoked
       FROM api_tokens
@@ -267,6 +278,7 @@ export class TokenService implements ITokenService {
   }
 
   async validateApiToken(token: string): Promise<boolean> {
+
     try {
       const payload = await this.verifyAccessToken(token);
       
@@ -298,6 +310,7 @@ export class TokenService implements ITokenService {
   }
 
   async hasScope(token: string, requiredScope: string): Promise<boolean> {
+
     try {
       const payload = await this.verifyAccessToken(token);
       const scopes = (payload as any).scopes || [];
@@ -310,6 +323,7 @@ export class TokenService implements ITokenService {
   }
 
   async isTokenRevoked(token: string): Promise<boolean> {
+
     try {
       // Check if specific token is revoked
       const isRevoked = await this.redis.exists(`revoked_token:${token}`);
@@ -336,6 +350,7 @@ export class TokenService implements ITokenService {
   }
 
   private async storeRefreshToken(userId: string, token: string): Promise<void> {
+
     const decoded = jwt.decode(token) as any;
     const expiresAt = new Date(decoded.exp * 1000);
 
@@ -346,6 +361,7 @@ export class TokenService implements ITokenService {
   }
 
   private async validateRefreshToken(userId: string, token: string): Promise<boolean> {
+
     const result = await this.db.query(`
       SELECT id FROM user_sessions 
       WHERE user_id = $1 AND refresh_token = $2 AND expires_at > NOW() AND revoked = false
@@ -355,6 +371,7 @@ export class TokenService implements ITokenService {
   }
 
   private async revokeRefreshToken(userId: string, token: string): Promise<void> {
+
     await this.db.query(`
       UPDATE user_sessions 
       SET revoked = true, revoked_at = NOW() 
@@ -370,6 +387,7 @@ export class TokenService implements ITokenService {
     name?: string,
     expiresIn?: string
   ): Promise<void> {
+
     const decoded = jwt.decode(token) as any;
     const expiresAt = new Date(decoded.exp * 1000);
 
@@ -380,6 +398,7 @@ export class TokenService implements ITokenService {
   }
 
   private async getUserRoles(userId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT r.name 
       FROM roles r
@@ -391,6 +410,7 @@ export class TokenService implements ITokenService {
   }
 
   private async getUserPermissions(userId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT DISTINCT CONCAT(p.resource, ':', p.action) as permission
       FROM permissions p
@@ -403,6 +423,7 @@ export class TokenService implements ITokenService {
   }
 
   private async getUserPrimaryOrganization(userId: string): Promise<string | undefined> {
+
     const result = await this.db.query(`
       SELECT tm.team_id, t.organization_id
       FROM team_members tm
@@ -416,6 +437,7 @@ export class TokenService implements ITokenService {
   }
 
   private async getUserTeams(userId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT team_id FROM team_members WHERE user_id = $1
     `, [userId]);
@@ -451,7 +473,7 @@ export class TokenService implements ITokenService {
       publicKeyEncoding: {
         type: 'spki',
         format: 'pem'
-      },
+  }
       privateKeyEncoding: {
         type: 'pkcs8',
         format: 'pem'

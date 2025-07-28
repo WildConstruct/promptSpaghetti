@@ -192,6 +192,7 @@ export type ReferralCampaign = z.infer<typeof ReferralCampaignSchema>;
 // Fraud Detection Configuration
 // =============================================================================
 
+}
 export interface FraudDetectionConfig {
   enableRealTimeDetection: boolean;
   maxClicksPerIp: number;
@@ -204,11 +205,13 @@ export interface FraudDetectionConfig {
   quarantinePeriod: number; // hours
   autoRejectThreshold: number; // risk score 0-1
 }
+}
 
 // =============================================================================
 // Main Referral Detection Service
 // =============================================================================
 
+}
 export interface ReferralDetectionConfig {
   enableTracking: boolean;
   cookieDomain: string;
@@ -229,6 +232,7 @@ export interface ReferralDetectionConfig {
   rewardService: string;
   fraudDetectionService: string;
   notificationService: string;
+}
 }
 
 export class ReferralDetectionService extends EventEmitter {
@@ -267,6 +271,7 @@ export class ReferralDetectionService extends EventEmitter {
       sessionId: string;
     }
   ): Promise<ReferralTrackingData> {
+
     const startTime = Date.now();
 
     try {
@@ -386,6 +391,7 @@ export class ReferralDetectionService extends EventEmitter {
       metadata?: Record<string, unknown>;
     }
   ): Promise<void> {
+
     try {
       const referralData = await this.getReferralData(referralId);
       if (!referralData) {
@@ -455,6 +461,7 @@ export class ReferralDetectionService extends EventEmitter {
   // =========================================================================
 
   private async runFraudDetection(referralData: ReferralTrackingData): Promise<void> {
+
     const fraudScore = await this.calculateFraudScore(referralData);
     
     // Update fraud risk level based on score
@@ -483,6 +490,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async calculateFraudScore(referralData: ReferralTrackingData): Promise<number> {
+
     let totalScore = 0;
     let ruleCount = 0;
 
@@ -570,8 +578,8 @@ export class ReferralDetectionService extends EventEmitter {
   async updateTouchpoint(
     sessionId: string,
     source: ReferralSource,
-    timestamp: Date = new Date()
-  ): Promise<void> {
+    timestamp: Date = new Date( ): Promise<void> {
+
     const existingReferrals = await this.getReferralsBySession(sessionId);
     
     for (const referral of existingReferrals) {
@@ -591,6 +599,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async recalculateAttribution(referral: ReferralTrackingData): Promise<void> {
+
     const touchpoints = referral.touchpointSequence;
     
     switch (referral.attributionModel) {
@@ -651,6 +660,7 @@ export class ReferralDetectionService extends EventEmitter {
   // =========================================================================
 
   async createReferralCampaign(campaign: Omit<ReferralCampaign, 'id' | 'stats' | 'createdAt' | 'updatedAt'>): Promise<ReferralCampaign> {
+
     const fullCampaign: ReferralCampaign = {
       ...campaign,
       id: crypto.randomUUID(),
@@ -661,7 +671,7 @@ export class ReferralDetectionService extends EventEmitter {
         conversionRate: 0,
         avgOrderValue: 0,
         roi: 0
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -681,6 +691,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   async updateCampaignStats(campaignId: string, stats: Partial<ReferralCampaign['stats']>): Promise<void> {
+
     const campaign = await this.getCampaignData(campaignId);
     if (!campaign) {
       throw new Error(`Campaign ${campaignId} not found`);
@@ -757,7 +768,7 @@ export class ReferralDetectionService extends EventEmitter {
         totalRewardsPaid,
         roi,
         topSources
-      },
+  }
       details: referrals
     };
   }
@@ -796,6 +807,7 @@ export class ReferralDetectionService extends EventEmitter {
     trackingData: Record<string, string>,
     request: { headers: Record<string, string> }
   ): Promise<ReferralSource> {
+
     // Check UTM source first
     if (trackingData.utm_source) {
       const source = trackingData.utm_source.toLowerCase();
@@ -840,6 +852,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async generateDeviceFingerprint(request: { headers: Record<string, string> }): Promise<string> {
+
     const components = [
       request.headers['user-agent'] || '',
       request.headers['accept-language'] || '',
@@ -856,6 +869,7 @@ export class ReferralDetectionService extends EventEmitter {
     city?: string;
     timezone?: string;
   }> {
+
     // In a real implementation, this would call a geolocation service
     // For now, return mock data
     return {
@@ -867,6 +881,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async lookupReferrer(referralCode: string): Promise<{ id: string } | null> {
+
     // In a real implementation, this would query the database
     // For now, return mock data
     return { id: crypto.randomUUID() };
@@ -921,37 +936,45 @@ export class ReferralDetectionService extends EventEmitter {
 
   // Mock database methods (would be replaced with actual database calls)
   private async storeReferralData(_data: ReferralTrackingData): Promise<void> {
+
     // Implementation would store in database
   }
 
   private async getReferralData(_id: string): Promise<ReferralTrackingData | null> {
+
     // Implementation would query database
     return null;
   }
 
   private async updateReferralData(_id: string, _data: ReferralTrackingData): Promise<void> {
+
     // Implementation would update database
   }
 
   private async storeCampaignData(_data: ReferralCampaign): Promise<void> {
+
     // Implementation would store in database
   }
 
   private async getCampaignData(_id: string): Promise<ReferralCampaign | null> {
+
     // Implementation would query database
     return null;
   }
 
   private async updateCampaignData(_id: string, _data: ReferralCampaign): Promise<void> {
+
     // Implementation would update database
   }
 
   private async searchReferrals(_criteria: Record<string, unknown>): Promise<ReferralTrackingData[]> {
+
     // Implementation would search database
     return [];
   }
 
   private async getReferralsBySession(_sessionId: string): Promise<ReferralTrackingData[]> {
+
     // Implementation would query database
     return [];
   }
@@ -977,6 +1000,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async validateRewardEligibility(_data: ReferralTrackingData): Promise<boolean> {
+
     // Implementation would validate reward eligibility
     return true;
   }
@@ -986,6 +1010,7 @@ export class ReferralDetectionService extends EventEmitter {
     type: 'cash' | 'credit' | 'discount' | 'free_template';
     currency: string;
   }> {
+
     // Implementation would calculate reward based on campaign rules
     return {
       amount: 10.00,
@@ -995,6 +1020,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async processReward(_data: ReferralTrackingData): Promise<void> {
+
     // Implementation would process reward payment
     this.emit('rewardProcessed', {
       referralId: _data.id,
@@ -1039,6 +1065,7 @@ export class ReferralDetectionService extends EventEmitter {
   }
 
   private async processBatch(): Promise<void> {
+
     const batchSize = Math.min(this.config.batchSize, this.processingQueue.length);
     const batch = this.processingQueue.splice(0, batchSize);
 

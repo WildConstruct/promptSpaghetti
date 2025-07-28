@@ -12,6 +12,7 @@
  * - Persistent alert history
  * - Alert filtering and prioritization
  */
+
 export interface AlertRule {
     id: string;
     name: string;
@@ -29,7 +30,8 @@ export interface AlertRule {
     createdAt: Date;
     updatedAt: Date;
     createdBy: string;
-}
+
+
 export interface AlertCondition {
     id: string;
     field: string;
@@ -37,7 +39,8 @@ export interface AlertCondition {
     value: string | number | boolean;
     aggregation?: 'sum' | 'avg' | 'min' | 'max' | 'count';
     timeWindow?: number;
-}
+
+
 export interface AlertAction {
     id: string;
     type: 'notification' | 'email' | 'webhook' | 'script' | 'create_task';
@@ -47,26 +50,30 @@ export interface AlertAction {
         maxRetries: number;
         retryDelay: number;
         backoffMultiplier?: number;
+
     };
-}
+
 export interface AlertThreshold {
     id: string;
     name: string;
     value: number;
     comparison: 'above' | 'below' | 'equals';
     severity: AlertSeverity;
-}
+
+
 export interface AlertEscalation {
     enabled: boolean;
     stages: AlertEscalationStage[];
-}
+
+
 export interface AlertEscalationStage {
     id: string;
     delayMinutes: number;
     severity: AlertSeverity;
     actions: AlertAction[];
     condition?: 'unacknowledged' | 'unresolved' | 'recurring';
-}
+
+
 export interface Alert {
     id: string;
     ruleId: string;
@@ -100,12 +107,13 @@ export interface Alert {
     color?: string;
     priority: AlertPriority;
     tags: string[];
-}
+
 export type AlertType = 'performance' | 'error' | 'security' | 'system' | 'user_action' | 'business' | 'data_quality' | 'compliance' | 'resource_usage' | 'workflow';
 export type AlertCategory = 'execution' | 'authentication' | 'authorization' | 'data_processing' | 'ui_interaction' | 'api_request' | 'database' | 'external_service' | 'configuration' | 'maintenance';
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'suppressed' | 'expired';
 export type AlertPriority = 'urgent' | 'high' | 'normal' | 'low';
+
 export interface AlertFilter {
     types?: AlertType[];
     categories?: AlertCategory[];
@@ -116,9 +124,10 @@ export interface AlertFilter {
     dateRange?: {
         start: Date;
         end: Date;
+
     };
     searchQuery?: string;
-}
+
 export interface AlertStats {
     total: number;
     active: number;
@@ -131,7 +140,8 @@ export interface AlertStats {
     averageResolutionTime: number;
     escalationRate: number;
     acknowledmentRate: number;
-}
+
+
 /**
  * Enhanced Alert System Service
  */
@@ -215,7 +225,7 @@ export declare class AlertSystem {
     private callWebhook;
     private executeScript;
     private createTask;
-}
+
 export declare const alertSystem: AlertSystem;
 export declare const triggerAlert: (ruleId: string, context: Record<string, any>, overrides?: Partial<Alert>) => Promise<Alert | null>;
 export declare const acknowledgeAlert: (alertId: string, acknowledgedBy: string, note?: string) => boolean;

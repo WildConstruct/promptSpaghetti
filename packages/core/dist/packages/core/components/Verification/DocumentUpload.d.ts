@@ -6,11 +6,11 @@
  */
 import React from 'react';
 interface DocumentUploadProps {
-    acceptedTypes?: string[];
+    acceptedTypes?: string;
     maxFileSize?: number;
     maxFiles?: number;
-    onFilesChange: (files: File[]) => void;
-    existingFiles?: UploadedFile[];
+    onFilesChange: (files: File) => void;
+    existingFiles?: UploadedFile;
     disabled?: boolean;
     placeholder?: string;
 }

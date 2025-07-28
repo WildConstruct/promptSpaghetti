@@ -23,6 +23,7 @@ import {
 } from '../../../packages/core/types/EnforcementTypes';
 
 // Request/Response type definitions
+}
 interface CreateEnforcementActionRequest {
   Body: {
     targetType: TargetType;
@@ -36,6 +37,7 @@ interface CreateEnforcementActionRequest {
       type: 'temporary' | 'permanent' | 'conditional';
       duration?: number;
       condition?: string;
+}
     };
     effectiveFrom?: Date;
     effectiveUntil?: Date;
@@ -43,6 +45,7 @@ interface CreateEnforcementActionRequest {
   };
 }
 
+}
 interface ListEnforcementActionsRequest {
   Querystring: {
     targetType?: TargetType;
@@ -55,9 +58,11 @@ interface ListEnforcementActionsRequest {
     toDate?: string;
     limit?: number;
     offset?: number;
+}
   };
 }
 
+}
 interface CreateViolationReportRequest {
   Body: {
     targetType: TargetType;
@@ -69,10 +74,12 @@ interface CreateViolationReportRequest {
     detectionMethod?: {
       method: string;
       confidence: number;
+}
     };
   };
 }
 
+}
 interface SubmitAppealRequest {
   Body: {
     enforcementActionId: string;
@@ -82,6 +89,7 @@ interface SubmitAppealRequest {
       claimsInnocence?: boolean;
       claimsError?: boolean;
       newEvidence?: boolean;
+}
     };
     description: string;
     evidence?: any[];
@@ -93,19 +101,23 @@ interface SubmitAppealRequest {
   };
 }
 
+}
 interface ProcessAppealDecisionRequest {
   Body: {
     outcome: 'approved' | 'denied' | 'partially_approved';
     reasoning: string;
     modifiedActions?: any[];
+}
   };
 }
 
+}
 interface AnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     format?: 'json' | 'csv';
+}
   };
 }
 
@@ -146,7 +158,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 'transaction_block', 'payment_hold', 'verification_required', 'feature_restriction',
                 'marketplace_ban', 'shadow_ban', 'rate_limit', 'manual_review_required'
               ]
-            },
+  }
             severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
             reason: { type: 'string', description: 'Reason for the enforcement action' },
             description: { type: 'string', description: 'Detailed description of the action' },
@@ -154,7 +166,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               type: 'array', 
               items: { type: 'object' },
               description: 'Supporting evidence for the action'
-            },
+  }
             duration: {
               type: 'object',
               properties: {
@@ -162,12 +174,12 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 duration: { type: 'number', description: 'Duration in minutes for temporary actions' },
                 condition: { type: 'string', description: 'Condition for conditional actions' }
               }
-            },
+  }
             effectiveFrom: { type: 'string', format: 'date-time' },
             effectiveUntil: { type: 'string', format: 'date-time' },
             tags: { type: 'array', items: { type: 'string' } }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -185,10 +197,10 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                   reason: { type: 'string' },
                   createdAt: { type: 'string', format: 'date-time' }
                 }
-              },
+  }
               message: { type: 'string' }
             }
-          },
+  }
           400: {
             type: 'object',
             properties: {
@@ -199,7 +211,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateEnforcementActionRequest>, reply: FastifyReply) => {
       try {
         // Verify admin permissions
@@ -241,7 +253,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             targetId: action.targetId,
             reason: action.reason,
             createdAt: action.createdAt
-          },
+  }
           message: 'Enforcement action created successfully'
         });
 
@@ -273,7 +285,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           properties: {
             id: { type: 'string', description: 'Enforcement action ID' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -281,7 +293,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               action: { type: 'object' }
             }
-          },
+  }
           404: {
             type: 'object',
             properties: {
@@ -291,7 +303,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -361,7 +373,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -381,7 +393,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<ListEnforcementActionsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -448,7 +460,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           properties: {
             id: { type: 'string', description: 'Enforcement action ID' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -460,7 +472,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -526,7 +538,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 'legal_compliance', 'terms_of_service', 'community_guidelines', 'payment_issues',
                 'technical_violation'
               ]
-            },
+  }
             description: { type: 'string', minLength: 10 },
             severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
             evidence: { type: 'array', items: { type: 'object' } },
@@ -538,7 +550,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -551,13 +563,13 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                   status: { type: 'string' },
                   reportedAt: { type: 'string', format: 'date-time' }
                 }
-              },
+  }
               message: { type: 'string' }
             }
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateViolationReportRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -581,7 +593,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             reportId: report.reportId,
             status: report.status,
             reportedAt: report.reportedAt
-          },
+  }
           message: 'Violation report submitted successfully'
         });
 
@@ -614,7 +626,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -686,7 +698,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
                 claimsError: { type: 'boolean' },
                 newEvidence: { type: 'boolean' }
               }
-            },
+  }
             description: { type: 'string', minLength: 10 },
             evidence: { type: 'array', items: { type: 'object' } },
             requestedOutcome: {
@@ -701,7 +713,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<SubmitAppealRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -726,7 +738,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             status: appeal.status,
             submittedAt: appeal.submittedAt,
             reviewDeadline: appeal.reviewDeadline
-          },
+  }
           message: 'Appeal submitted successfully'
         });
 
@@ -757,7 +769,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           properties: {
             id: { type: 'string', description: 'Appeal ID' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['outcome', 'reasoning'],
@@ -768,7 +780,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -801,7 +813,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             status: appeal.status,
             decision: appeal.decision,
             decidedAt: appeal.decidedAt
-          },
+  }
           message: 'Appeal decision processed successfully'
         });
 
@@ -840,7 +852,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -900,7 +912,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
         description: 'Retrieve summary data for enforcement dashboard',
         security: [{ bearerAuth: [] }]
       }
-    },
+  }
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -965,7 +977,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
         summary: 'Enforcement system health',
         description: 'Check health status of enforcement system'
       }
-    },
+  }
     async (request, reply) => {
       try {
         // Basic health checks
@@ -976,7 +988,7 @@ export async function enforcementActionsRoutes(fastify: FastifyInstance) {
             enforcementService: 'operational',
             database: 'operational',
             automation: 'operational'
-          },
+  }
           metrics: {
             pendingActions: 0,
             pendingReports: 0,

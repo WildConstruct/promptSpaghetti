@@ -377,13 +377,13 @@ export async function dataClassificationRoutes(
             internal: 0,
             confidential: 0,
             restricted: 0
-          },
+  }
           totalTransferRequests: 0,
           transferDecisions: {
             allowed: 0,
             denied: 0,
             pending_approval: 0
-          },
+  }
           rulesCount: 0,
           policiesCount: 0
         }

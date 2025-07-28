@@ -15,6 +15,7 @@ import { RateLimitService } from './RateLimitService';
 import { DatabaseService } from '../database/DatabaseService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 
+}
 export interface RegistrationAnalytics {
   totalRegistrations: number;
   dailyRegistrations: number;
@@ -25,6 +26,7 @@ export interface RegistrationAnalytics {
     emailVerified: number;
     profileCompleted: number;
     firstLogin: number;
+}
   };
   dropOffPoints: Array<{
     step: string;
@@ -33,12 +35,14 @@ export interface RegistrationAnalytics {
   }>;
 }
 
+}
 export interface RegistrationValidation {
   isValid: boolean;
   errors: Array<{
     field: string;
     message: string;
     code: string;
+}
   }>;
   warnings: Array<{
     field: string;
@@ -84,6 +88,7 @@ export class RegistrationService {
       referrer?: string;
     }
   ): Promise<RegisterResponse> {
+
     // Rate limiting check
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -159,7 +164,7 @@ export class RegistrationService {
           source: context.source,
           referrer: context.referrer,
           hasInvitation: !!invitation
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -181,6 +186,7 @@ export class RegistrationService {
   }
 
   async validateRegistration(request: RegisterRequest): Promise<RegistrationValidation> {
+
     const errors: Array<{ field: string; message: string; code: string }> = [];
     const warnings: Array<{ field: string; message: string; code: string }> = [];
     const suggestions: Array<{ field: string; suggestion: string }> = [];
@@ -232,6 +238,7 @@ export class RegistrationService {
     email: string,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     // Rate limiting
     const rateLimitResult = await this.rateLimitService.checkIPRateLimit(
       context.ipAddress || 'unknown',
@@ -265,6 +272,7 @@ export class RegistrationService {
   }
 
   async getRegistrationAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RegistrationAnalytics> {
+
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -329,7 +337,7 @@ export class RegistrationService {
           'registration_failed', 
           'validation_failed',
           'rate_limited'
-        )
+
         AND created_at >= NOW() - INTERVAL '${timeframes[timeframe]}'
         GROUP BY action
         ORDER BY count DESC
@@ -352,7 +360,7 @@ export class RegistrationService {
           emailVerified: parseInt(funnelResult.rows[0]?.email_verified || '0'),
           profileCompleted: parseInt(funnelResult.rows[0]?.profile_completed || '0'),
           firstLogin: parseInt(funnelResult.rows[0]?.first_login || '0')
-        },
+  }
         dropOffPoints: dropOffResult.rows.map(row => ({
           step: row.step,
           count: parseInt(row.count),
@@ -578,6 +586,7 @@ export class RegistrationService {
   }
 
   private async validateInvitation(token: string): Promise<UserInvitation | null> {
+
     const result = await this.db.query(`
       SELECT * FROM user_invitations 
       WHERE token = $1 
@@ -589,6 +598,7 @@ export class RegistrationService {
   }
 
   private async acceptInvitation(invitation: UserInvitation, user: User): Promise<void> {
+
     await this.db.transaction(async (client) => {
       // Mark invitation as accepted
       await client.query(`
@@ -619,6 +629,7 @@ export class RegistrationService {
     user: User,
     context: { ipAddress?: string; userAgent?: string }
   ): Promise<void> {
+
     if (!user.emailVerificationToken) {
       throw new Error('No email verification token found');
     }
@@ -647,6 +658,7 @@ export class RegistrationService {
     context: any,
     additionalData?: any
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO registration_analytics (
@@ -694,7 +706,7 @@ export class RegistrationService {
       .filter(commonDomain => {
         const distance = getSimilarity(domain, commonDomain);
         return distance <= 2 && distance > 0; // Similar but not exact
-      })
+  }
       .slice(0, 1); // Return top suggestion
   }
 
@@ -721,6 +733,7 @@ export class RegistrationService {
   }
 
   private async toPublicUser(user: User): Promise<any> {
+
     // This would use the same logic as AuthenticationService.toPublicUser
     // For now, return a simplified version
     return {

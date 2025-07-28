@@ -124,6 +124,7 @@ type QualityAssessment = z.infer<typeof QualityAssessmentSchema>;
 type DatasetVersion = z.infer<typeof DatasetVersionSchema>;
 type ExportJob = z.infer<typeof ExportJobSchema>;
 
+}
 interface DatasetCreateRequest {
   name: string;
   description?: string;
@@ -133,7 +134,9 @@ interface DatasetCreateRequest {
   labels?: string[];
   source?: 'upload' | 'api' | 'synthetic' | 'augmented';
 }
+}
 
+}
 interface DatasetImportRequest {
   name: string;
   source_url?: string;
@@ -143,10 +146,12 @@ interface DatasetImportRequest {
     field: string;
     rule_type: 'required' | 'type' | 'range' | 'regex' | 'custom';
     parameters?: Record<string, unknown>;
+}
   }>;
   auto_labeling?: boolean;
 }
 
+}
 interface LabelingTaskRequest {
   dataset_id: string;
   task_name: string;
@@ -158,9 +163,11 @@ interface LabelingTaskRequest {
     consensus_threshold?: number;
     minimum_annotators?: number;
     expert_review_percentage?: number;
+}
   };
 }
 
+}
 interface DataAugmentationRequest {
   dataset_id: string;
   augmentation_techniques: string[];
@@ -168,14 +175,18 @@ interface DataAugmentationRequest {
   preserve_labels: boolean;
   quality_threshold: number;
 }
+}
 
+}
 interface QualityAssessmentRequest {
   dataset_id: string;
   assessment_type: QualityAssessment['type'];
   parameters?: Record<string, unknown>;
   generate_report: boolean;
 }
+}
 
+}
 interface DatasetVersionRequest {
   dataset_id: string;
   version_name: string;
@@ -184,17 +195,21 @@ interface DatasetVersionRequest {
     type: 'added' | 'modified' | 'deleted' | 'relabeled';
     count: number;
     description?: string;
+}
   }>;
   parent_version_id?: string;
 }
 
+}
 interface ExportRequest {
   format: string;
   includeMetadata: boolean;
   versionId?: string;
   filter?: Record<string, unknown>;
 }
+}
 
+}
 interface DatasetListOptions {
   page: number;
   limit: number;
@@ -202,9 +217,11 @@ interface DatasetListOptions {
     type?: string;
     status?: string;
     search?: string;
+}
   };
 }
 
+}
 interface DatasetStatistics {
   totalSamples: number;
   labelDistribution: Record<string, number>;
@@ -213,6 +230,7 @@ interface DatasetStatistics {
     consistency: number;
     bias: number;
     duplication: number;
+}
   };
   sizeMetrics: {
     totalSizeBytes: number;
@@ -249,6 +267,7 @@ export class TrainingDataService {
    * Create a new training dataset
    */
   async createDataset(request: DatasetCreateRequest): Promise<Dataset> {
+
     try {
       const dataset: Dataset = {
         id: this.generateUUID(),
@@ -293,6 +312,7 @@ export class TrainingDataService {
    * Import dataset from external source
    */
   async importDataset(request: DatasetImportRequest): Promise<ImportJob> {
+
     try {
       const importJob: ImportJob = {
         id: this.generateUUID(),
@@ -317,6 +337,7 @@ export class TrainingDataService {
    * Get dataset by ID
    */
   async getDataset(id: string): Promise<Dataset | null> {
+
     return this.datasets.get(id) || null;
   }
 
@@ -327,6 +348,7 @@ export class TrainingDataService {
     datasets: Dataset[];
     total: number;
   }> {
+
     let datasets = Array.from(this.datasets.values());
 
     // Apply filters
@@ -364,6 +386,7 @@ export class TrainingDataService {
    * Create labeling task
    */
   async createLabelingTask(request: LabelingTaskRequest): Promise<LabelingTask> {
+
     try {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
@@ -382,7 +405,7 @@ export class TrainingDataService {
           totalSamples: dataset.size,
           completedSamples: 0,
           consensusAchieved: 0
-        },
+  }
         createdAt: new Date().toISOString(),
         assignmentStrategy: request.assignment_strategy || 'round_robin'
       };
@@ -402,6 +425,7 @@ export class TrainingDataService {
    * Get labeling task by ID
    */
   async getLabelingTask(id: string): Promise<LabelingTask | null> {
+
     return this.labelingTasks.get(id) || null;
   }
 
@@ -409,6 +433,7 @@ export class TrainingDataService {
    * Augment dataset with various techniques
    */
   async augmentData(request: DataAugmentationRequest): Promise<AugmentationJob> {
+
     try {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
@@ -440,6 +465,7 @@ export class TrainingDataService {
    * Assess dataset quality
    */
   async assessQuality(request: QualityAssessmentRequest): Promise<QualityAssessment> {
+
     try {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
@@ -458,6 +484,7 @@ export class TrainingDataService {
    * Create dataset version
    */
   async createDatasetVersion(request: DatasetVersionRequest): Promise<DatasetVersion> {
+
     try {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
@@ -492,6 +519,7 @@ export class TrainingDataService {
    * Get dataset versions
    */
   async getDatasetVersions(datasetId: string): Promise<DatasetVersion[]> {
+
     return this.datasetVersions.get(datasetId) || [];
   }
 
@@ -499,6 +527,7 @@ export class TrainingDataService {
    * Export dataset
    */
   async exportDataset(datasetId: string, options: ExportRequest): Promise<ExportJob> {
+
     try {
       const dataset = await this.getDataset(datasetId);
       if (!dataset) {
@@ -529,6 +558,7 @@ export class TrainingDataService {
    * Delete dataset
    */
   async deleteDataset(id: string): Promise<void> {
+
     const dataset = await this.getDataset(id);
     if (!dataset) {
       throw new Error('Dataset not found');
@@ -548,6 +578,7 @@ export class TrainingDataService {
    * Get job status (generic for all job types)
    */
   async getJobStatus(jobId: string): Promise<ImportJob | AugmentationJob | ExportJob | null> {
+
     return this.importJobs.get(jobId) || 
            this.augmentationJobs.get(jobId) || 
            this.exportJobs.get(jobId) || 
@@ -587,6 +618,7 @@ export class TrainingDataService {
    * Get dataset statistics
    */
   async getDatasetStatistics(datasetId: string): Promise<DatasetStatistics> {
+
     const dataset = await this.getDataset(datasetId);
     if (!dataset) {
       throw new Error('Dataset not found');
@@ -601,19 +633,18 @@ export class TrainingDataService {
         consistency: dataset.qualityMetrics?.consistencyScore || 90,
         bias: dataset.qualityMetrics?.biasScore || 75,
         duplication: dataset.qualityMetrics?.duplicationRate || 3
-      },
+  }
       sizeMetrics: {
         totalSizeBytes: dataset.size * 1024, // Approximate
         averageSampleSize: 1024,
         minSampleSize: 256,
         maxSampleSize: 4096
-      },
+  }
       temporalMetrics: {
         creationRate: this.generateTemporalMetrics('creation'),
         labelingRate: this.generateTemporalMetrics('labeling')
-      },
-      generatedAt: new Date().toISOString()
-    };
+  }
+      generatedAt: new Date().toISOString(};
 
     return statistics;
   }
@@ -629,6 +660,7 @@ export class TrainingDataService {
   }
 
   private async simulateImportJob(jobId: string, request: DatasetImportRequest): Promise<void> {
+
     const job = this.importJobs.get(jobId);
     if (!job) return;
 
@@ -752,6 +784,7 @@ export class TrainingDataService {
   }
 
   private async performQualityAssessment(request: QualityAssessmentRequest): Promise<QualityAssessment> {
+
     const assessmentResults: Record<string, unknown> = {};
     const recommendations: string[] = [];
     let score = 85; // Base score
@@ -803,8 +836,7 @@ export class TrainingDataService {
       score: Math.max(0, Math.min(100, score)),
       recommendations,
       reportUrl: request.generate_report ? `https://api.example.com/reports/quality-${this.generateUUID()}.pdf` : undefined,
-      completedAt: new Date().toISOString()
-    };
+      completedAt: new Date().toISOString(};
   }
 
   private estimateExportSize(dataset: Dataset, options: ExportRequest): string {
@@ -874,7 +906,7 @@ export class TrainingDataService {
           biasScore: 78,
           duplicationRate: 2.1
         }
-      },
+  }
       {
         id: this.generateUUID(),
         name: 'Medical NER Dataset',

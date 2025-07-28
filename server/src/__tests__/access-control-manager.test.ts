@@ -316,7 +316,7 @@ describe('AccessControlManager', () => {
             type: 'operation' as const,
             operator: 'equals',
             value: 'destroy'
-          },
+  }
           action: 'require_approval' as const
         }],
         priority: 90,
@@ -429,12 +429,12 @@ describe('AccessControlManager', () => {
           context: { ...mockContext, timestamp: new Date('2025-07-20T14:00:00Z') },
           operation: 'encrypt' as KeyOperation,
           expectedRisk: 'low'
-        },
+  }
         {
           context: { ...mockContext, timestamp: new Date('2025-07-20T02:00:00Z') },
           operation: 'destroy' as KeyOperation,
           expectedRisk: 'critical'
-        },
+  }
         {
           context: { ...mockContext, riskScore: 75 },
           operation: 'export' as KeyOperation,
@@ -481,7 +481,7 @@ describe('AccessControlManager', () => {
           constraint: { type: 'time', operator: 'between', value: [8, 18] },
           timestamp: new Date('2025-07-20T14:00:00Z'), // 2 PM
           expected: true
-        },
+  }
         {
           constraint: { type: 'time', operator: 'between', value: [8, 18] },
           timestamp: new Date('2025-07-20T22:00:00Z'), // 10 PM

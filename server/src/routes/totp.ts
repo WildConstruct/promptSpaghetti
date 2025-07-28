@@ -4,23 +4,29 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { TOTPService } from '../auth/services/TOTPService';
 
+}
 interface TOTPEnrollmentRequest {
   accountName?: string;
   options?: {
     algorithm?: 'SHA1' | 'SHA256' | 'SHA512';
     digits?: number;
     period?: number;
+}
   };
 }
 
+}
 interface TOTPVerificationRequest {
   configurationId: string;
   code: string;
 }
+}
 
+}
 interface TOTPAuthenticationRequest {
   code: string;
   isBackupCode?: boolean;
+}
 }
 
 export async function totpRoutes(
@@ -405,7 +411,7 @@ export async function totpRoutes(
           codeValidation: isValid.valid ? 'ok' : 'failed',
           database: 'connected', // Assume connected if we got this far
           timeSync: isValid.drift === 0 ? 'ok' : 'drift_detected'
-        },
+  }
         timeRemaining: isValid.timeRemaining,
         timestamp: new Date().toISOString()
       };
@@ -491,31 +497,31 @@ export async function totpRoutes(
           method: 'POST',
           description: 'Start TOTP enrollment process',
           auth: 'required'
-        },
+  }
         {
           path: '/totp/verify-enrollment',
           method: 'POST',
           description: 'Complete TOTP enrollment with verification',
           auth: 'required'
-        },
+  }
         {
           path: '/totp/authenticate',
           method: 'POST',
           description: 'Authenticate with TOTP code or backup code',
           auth: 'required'
-        },
+  }
         {
           path: '/totp/status',
           method: 'GET',
           description: 'Get current TOTP configuration status',
           auth: 'required'
-        },
+  }
         {
           path: '/totp/regenerate-backup-codes',
           method: 'POST',
           description: 'Generate new backup codes',
           auth: 'required'
-        },
+  }
         {
           path: '/totp/disable',
           method: 'POST',

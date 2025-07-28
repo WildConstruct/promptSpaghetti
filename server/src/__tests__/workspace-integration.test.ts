@@ -438,7 +438,7 @@ describe('Workspace Integration Tests', () => {
           mockComment.id, 
           { content_markdown: 'Updated' }, 
           differentUser
-        )
+
       ).rejects.toThrow('Insufficient permissions to edit this comment');
     });
   });
@@ -568,7 +568,7 @@ describe('Workspace Integration Tests', () => {
           inviteeId, 
           'editor', 
           mockUser
-        )
+
       ).rejects.toThrow('Insufficient permissions to invite users');
     });
 
@@ -581,7 +581,7 @@ describe('Workspace Integration Tests', () => {
           inviteeId, 
           'invalid-role', 
           mockUser
-        )
+
       ).rejects.toThrow('Role \'invalid-role\' not found');
     });
   });

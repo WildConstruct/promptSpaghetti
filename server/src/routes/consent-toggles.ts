@@ -9,31 +9,41 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import ConsentFeatureToggleService, { ConsentAwareContext, FeatureConsentMapping } from '../services/ConsentFeatureToggleService';
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
+}
 interface EvaluateToggleParams {
   key: string;
 }
+}
 
+}
 interface EvaluateToggleQuery {
   userId?: string;
   sessionId?: string;
   orgId?: string;
   includeConsentData?: boolean;
 }
+}
 
+}
 interface BatchEvaluateBody {
   keys: string[];
   context?: ConsentAwareContext;
   includeConsentData?: boolean;
 }
+}
 
+}
 interface RegisterMappingBody {
   mappings: FeatureConsentMapping[];
 }
+}
 
+}
 interface ConsentStatusBody {
   consents: Record<string, string>;
   userId?: string;
   sessionId?: string;
+}
 }
 
 // Initialize the consent-aware toggle service
@@ -64,9 +74,9 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           key: { type: 'string' }
-        },
+  }
         required: ['key']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -75,7 +85,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           orgId: { type: 'string' },
           includeConsentData: { type: 'boolean' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -90,11 +100,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
                 variantKey: { type: 'string' },
                 ruleMatched: { type: 'string' },
                 metadata: { type: 'object' }
-              },
+  }
               required: ['enabled', 'value', 'reason']
-            },
+  }
             consentInfo: { type: 'object' }
-          },
+  }
           required: ['success', 'result']
         }
       }
@@ -156,7 +166,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             items: { type: 'string' },
             minItems: 1,
             maxItems: 50
-          },
+  }
           context: {
             type: 'object',
             properties: {
@@ -165,11 +175,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
               orgId: { type: 'string' },
               consents: { type: 'object' }
             }
-          },
+  }
           includeConsentData: { type: 'boolean' }
-        },
+  }
         required: ['keys']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -177,7 +187,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             results: { type: 'object' },
             consentInfo: { type: 'object' }
-          },
+  }
           required: ['success', 'results']
         }
       }
@@ -238,7 +248,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             mappings: { type: 'object' }
-          },
+  }
           required: ['success', 'mappings']
         }
       }
@@ -281,23 +291,23 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
                 requiredConsents: {
                   type: 'array',
                   items: { type: 'string' }
-                },
+  }
                 requiredConsentLogic: {
                   type: 'string',
                   enum: ['AND', 'OR']
-                },
+  }
                 fallbackBehavior: {
                   type: 'string',
                   enum: ['disable', 'default', 'minimal']
-                },
+  }
                 consentExplanation: { type: 'string' }
-              },
+  }
               required: ['featureKey', 'requiredConsents', 'requiredConsentLogic', 'fallbackBehavior']
             }
           }
-        },
+  }
         required: ['mappings']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -305,7 +315,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' },
             registeredCount: { type: 'number' }
-          },
+  }
           required: ['success']
         }
       }
@@ -343,9 +353,9 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           key: { type: 'string' }
-        },
+  }
         required: ['key']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -356,9 +366,9 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             requiredConsents: {
               type: 'array',
               items: { type: 'string' }
-            },
+  }
             mapping: { type: 'object' }
-          },
+  }
           required: ['success', 'featureKey', 'isConsentRequired']
         }
       }
@@ -403,14 +413,14 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           userId: { type: 'string' },
           sessionId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-          },
+  }
           required: ['success']
         }
       }
@@ -449,7 +459,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             mappingsCount: { type: 'number' },
             consentCheckingEnabled: { type: 'boolean' }
-          },
+  }
           required: ['success', 'status']
         }
       }

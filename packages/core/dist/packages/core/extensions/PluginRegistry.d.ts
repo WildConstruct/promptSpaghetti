@@ -1,12 +1,4 @@
-/**
- * Plugin Registry with Version & Dependency Management
- *
- * Centralized registry for managing plugins with version resolution,
- * dependency management, and integration with existing extension system.
- *
- * Task: T-1752989144373-766 - Build plugin loader with version & dependency resolution
- */
-import { PluginSource, LoadedPlugin } from './PluginLoader';
+import { PluginSource } from './PluginLoader';
 import { EventEmitter } from 'events';
 export interface RemotePlugin {
     id: string;
@@ -17,7 +9,7 @@ export interface RemotePlugin {
     downloadUrl: string;
     repository?: string;
     homepage?: string;
-    keywords: string[];
+    keywords: string;
     dependencies?: Record<string, string>;
     verified: boolean;
     downloads: number;
@@ -37,7 +29,7 @@ export interface PluginRegistryConfig {
     cacheDirectory: string;
     autoUpdateCheck: boolean;
     allowRemoteSources: boolean;
-    remoteRegistries: string[];
+    remoteRegistries: string;
     updateCheckInterval: number;
     maxCacheAge: number;
     enableTelemetry: boolean;
@@ -83,57 +75,5 @@ export declare class PluginRegistry extends EventEmitter {
     private remotePluginCache;
     private updateCheckTimer?;
     constructor(config?: Partial<PluginRegistryConfig>);
-    /**
-     * Install a plugin from various sources
-     */
-    installPlugin(pluginIdentifier: string, options?: PluginInstallOptions): Promise<LoadedPlugin>;
-    /**
-     * Uninstall a plugin
-     */
-    uninstallPlugin(pluginId: string, removeData?: boolean): Promise<void>;
-    /**
-     * Update a plugin to latest version
-     */
-    updatePlugin(pluginId: string): Promise<LoadedPlugin>;
-    /**
-     * Search for plugins in remote registries
-     */
-    searchPlugins(options?: PluginSearchOptions): Promise<RemotePlugin[]>;
-    /**
-     * Check for plugin updates
-     */
-    checkForUpdates(): Promise<PluginUpdate[]>;
-    /**
-     * Get plugin registry statistics
-     */
-    getStats(): PluginRegistryStats;
-    /**
-     * Get all installed plugins
-     */
-    getInstalledPlugins(): LoadedPlugin[];
-    /**
-     * Get a specific plugin
-     */
-    getPlugin(pluginId: string): LoadedPlugin | undefined;
-    /**
-     * Enable auto-update checking
-     */
-    enableAutoUpdateCheck(): void;
-    /**
-     * Disable auto-update checking
-     */
-    disableAutoUpdateCheck(): void;
-    private initializeRegistry;
-    private resolvePluginSource;
-    private checkForConflicts;
-    private installDependencies;
-    private findDependentPlugins;
-    private getUpdateType;
-    private saveInstallationRecord;
-    private removeInstallationRecord;
-    private loadInstalledPlugins;
-    private createPluginBackup;
-    private restorePluginBackup;
-    private removePluginData;
 }
 //# sourceMappingURL=PluginRegistry.d.ts.map

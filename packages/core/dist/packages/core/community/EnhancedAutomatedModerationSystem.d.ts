@@ -25,7 +25,7 @@ export interface EnhancedModerationRequest extends ModerationRequest {
         learning_path_id?: string;
         community_id?: string;
         parent_content_id?: string;
-        related_content_ids?: string[];
+        related_content_ids?: string;
     };
     marketplace_context?: {
         template_category?: string;
@@ -44,7 +44,7 @@ export interface EnhancedModerationRequest extends ModerationRequest {
         skill_domain?: SkillDomain;
         target_skill_level?: SkillLevel;
         educational_value?: number;
-        learning_objectives?: string[];
+        learning_objectives?: string;
         assessment_context?: boolean;
     };
     enhanced_user_context: {
@@ -57,8 +57,8 @@ export interface EnhancedModerationRequest extends ModerationRequest {
     business_context?: {
         revenue_generating?: boolean;
         brand_sensitive?: boolean;
-        regulatory_implications?: string[];
-        compliance_requirements?: string[];
+        regulatory_implications?: string;
+        compliance_requirements?: string;
         stakeholder_visibility?: 'internal' | 'external' | 'public' | 'regulatory';
     };
 }
@@ -68,7 +68,7 @@ export interface ContributionHistory {
     rejected_contributions: number;
     average_quality_score: number;
     recent_activity_trend: 'increasing' | 'stable' | 'decreasing';
-    specialization_areas: string[];
+    specialization_areas: string;
 }
 export interface ModerationHistory {
     total_content_moderated: number;
@@ -79,17 +79,17 @@ export interface ModerationHistory {
     violation_severity_trend: 'improving' | 'stable' | 'worsening';
 }
 export interface EnhancedModerationResult extends ModerationResult {
-    workflow_recommendations: WorkflowRecommendation[];
+    workflow_recommendations: WorkflowRecommendation;
     escalation_analysis: EscalationAnalysis;
     business_impact_assessment: BusinessImpactAssessment;
     community_moderation?: CommunityModerationResult;
     learning_moderation?: LearningModerationResult;
     marketplace_moderation?: MarketplaceModerationResult;
-    follow_up_actions: FollowUpAction[];
-    monitoring_requirements: MonitoringRequirement[];
+    follow_up_actions: FollowUpAction;
+    monitoring_requirements: MonitoringRequirement;
     filtering_result?: ContentFilteringResult;
     contribution_workflow_impact?: ContributionWorkflowImpact;
-    predictive_insights: PredictiveInsight[];
+    predictive_insights: PredictiveInsight;
     pattern_analysis: PatternAnalysis;
     processing_breakdown: ProcessingBreakdown;
     resource_utilization: ResourceUtilization;
@@ -100,22 +100,22 @@ export interface WorkflowRecommendation {
     rationale: string;
     expected_outcome: string;
     time_estimate_hours: number;
-    resource_requirements: string[];
+    resource_requirements: string;
     success_probability: number;
 }
 export interface EscalationAnalysis {
     escalation_recommended: boolean;
     escalation_urgency: ModerationPriority;
-    escalation_path: string[];
-    escalation_triggers: string[];
-    stakeholders_to_notify: string[];
+    escalation_path: string;
+    escalation_triggers: string;
+    stakeholders_to_notify: string;
     escalation_timeline: EscalationTimeline;
 }
 export interface EscalationTimeline {
-    immediate_actions: string[];
-    short_term_actions: string[];
-    medium_term_actions: string[];
-    long_term_monitoring: string[];
+    immediate_actions: string;
+    short_term_actions: string;
+    medium_term_actions: string;
+    long_term_monitoring: string;
 }
 export interface BusinessImpactAssessment {
     impact_score: number;
@@ -126,7 +126,7 @@ export interface BusinessImpactAssessment {
         regulatory_impact: number;
         operational_impact: number;
     };
-    mitigation_strategies: MitigationStrategy[];
+    mitigation_strategies: MitigationStrategy;
     cost_benefit_analysis: CostBenefitAnalysis;
 }
 export interface MitigationStrategy {
@@ -157,8 +157,8 @@ export interface CommunityModerationResult {
     };
     contribution_lifecycle_impact: {
         workflow_stage_recommendation: WorkflowStage;
-        quality_gate_status: string[];
-        reviewer_assignment_suggestions: string[];
+        quality_gate_status: string;
+        reviewer_assignment_suggestions: string;
         timeline_impact: string;
     };
 }
@@ -171,7 +171,7 @@ export interface LearningModerationResult {
         difficulty_level_verification: boolean;
         skill_domain_accuracy: boolean;
         prerequisite_validation: boolean;
-        learning_outcome_prediction: string[];
+        learning_outcome_prediction: string;
     };
     instructional_quality: {
         clarity_score: number;
@@ -180,9 +180,9 @@ export interface LearningModerationResult {
         practical_applicability: number;
     };
     learning_analytics_integration: {
-        tracking_requirements: string[];
-        success_metrics_definition: string[];
-        personalization_opportunities: string[];
+        tracking_requirements: string;
+        success_metrics_definition: string;
+        personalization_opportunities: string;
     };
 }
 export interface MarketplaceModerationResult {
@@ -215,16 +215,16 @@ export interface FollowUpAction {
     responsible_party: string;
     due_date: string;
     priority: ModerationPriority;
-    dependencies: string[];
-    success_criteria: string[];
+    dependencies: string;
+    success_criteria: string;
 }
 export interface MonitoringRequirement {
     monitoring_type: 'content_performance' | 'user_behavior' | 'system_metrics' | 'business_impact';
     monitoring_duration: string;
     monitoring_frequency: string;
-    alert_conditions: string[];
+    alert_conditions: string;
     escalation_thresholds: Record<string, number>;
-    reporting_requirements: string[];
+    reporting_requirements: string;
 }
 export interface PredictiveInsight {
     insight_type: 'trend_prediction' | 'risk_forecast' | 'opportunity_identification' | 'anomaly_detection';
@@ -232,21 +232,21 @@ export interface PredictiveInsight {
     confidence_level: number;
     time_horizon: 'short_term' | 'medium_term' | 'long_term';
     potential_impact: 'low' | 'medium' | 'high';
-    recommended_proactive_actions: string[];
+    recommended_proactive_actions: string;
 }
 export interface PatternAnalysis {
-    content_patterns: ContentPattern[];
-    user_patterns: UserPattern[];
-    temporal_patterns: TemporalPattern[];
-    anomaly_indicators: AnomalyIndicator[];
+    content_patterns: ContentPattern;
+    user_patterns: UserPattern;
+    temporal_patterns: TemporalPattern;
+    anomaly_indicators: AnomalyIndicator;
 }
 export interface ContentPattern {
     pattern_type: string;
     pattern_description: string;
     frequency: number;
     trend: 'increasing' | 'stable' | 'decreasing';
-    associated_risks: string[];
-    mitigation_suggestions: string[];
+    associated_risks: string;
+    mitigation_suggestions: string;
 }
 export interface UserPattern {
     user_id: string;
@@ -260,20 +260,20 @@ export interface TemporalPattern {
     pattern_strength: number;
     business_correlation: string;
     resource_planning_impact: string;
-    optimization_opportunities: string[];
+    optimization_opportunities: string;
 }
 export interface AnomalyIndicator {
     anomaly_type: string;
     severity: FilteringSeverity;
     detection_confidence: number;
     investigation_priority: ModerationPriority;
-    potential_causes: string[];
+    potential_causes: string;
 }
 export interface ProcessingBreakdown {
     total_processing_time_ms: number;
     stage_timings: Record<string, number>;
-    bottleneck_identification: string[];
-    optimization_opportunities: string[];
+    bottleneck_identification: string;
+    optimization_opportunities: string;
     resource_efficiency_score: number;
 }
 export interface ResourceUtilization {
@@ -285,27 +285,15 @@ export interface ResourceUtilization {
     queue_depth: number;
 }
 export interface ContributionWorkflowImpact {
-    workflow_stage_changes: Array<{
-        from_stage: WorkflowStage;
-        to_stage: WorkflowStage;
-        reason: string;
-        timeline_impact: string;
-    }>;
-    quality_gate_results: Array<{
-        gate_name: string;
-        passed: boolean;
-        score: number;
-        recommendations: string[];
-    }>;
-    reviewer_assignment_changes: Array<{
-        reviewer_type: string;
-        assignment_reason: string;
-        expected_completion: string;
-    }>;
+    workflow_stage_changes: Array<{}, from_stage>;
+    WorkflowStage: any;
+    to_stage: WorkflowStage;
+    reason: string;
+    timeline_impact: string;
 }
 export interface EnhancedModerationService {
     moderateContentEnhanced(request: EnhancedModerationRequest): Promise<EnhancedModerationResult>;
-    moderateBatchEnhanced(requests: EnhancedModerationRequest[]): Promise<EnhancedModerationResult[]>;
+    moderateBatchEnhanced(requests: EnhancedModerationRequest): Promise<EnhancedModerationResult>;
     moderateContribution(contribution: ContributionSubmission): Promise<EnhancedModerationResult>;
     moderateTemplateSubmission(templateData: any): Promise<EnhancedModerationResult>;
     moderateTutorialContent(tutorialData: any): Promise<EnhancedModerationResult>;
@@ -320,14 +308,14 @@ export interface EnhancedModerationService {
     getPredictiveAnalytics(): Promise<ModerationPredictiveAnalytics>;
     getWorkflowEfficiencyMetrics(): Promise<WorkflowEfficiencyMetrics>;
     optimizeModerationWorkflows(): Promise<WorkflowOptimizationResult>;
-    updateModerationPolicies(policies: ModerationPolicy[]): Promise<void>;
+    updateModerationPolicies(policies: ModerationPolicy): Promise<void>;
     calibrateModerationThresholds(calibrationData: any): Promise<CalibrationResult>;
 }
 export interface AppealData {
     content_id: string;
     original_decision: ModerationAction;
     appeal_reason: string;
-    additional_evidence: string[];
+    additional_evidence: string;
     user_explanation: string;
     requested_action: string;
 }
@@ -336,7 +324,7 @@ export interface AppealResult {
     decision: 'upheld' | 'overturned' | 'modified' | 'escalated';
     new_moderation_result?: EnhancedModerationResult;
     explanation: string;
-    additional_actions: string[];
+    additional_actions: string;
 }
 export interface CommunityFeedback {
     feedback_type: 'quality_rating' | 'content_report' | 'improvement_suggestion' | 'expert_review';
@@ -345,50 +333,50 @@ export interface CommunityFeedback {
     expert_validation: boolean;
 }
 export interface ModerationInsights {
-    volume_trends: VolumeTrend[];
-    quality_trends: QualityTrend[];
-    efficiency_metrics: EfficiencyMetric[];
-    user_behavior_insights: UserBehaviorInsight[];
-    content_category_performance: CategoryPerformance[];
-    workflow_optimization_opportunities: OptimizationOpportunity[];
+    volume_trends: VolumeTrend;
+    quality_trends: QualityTrend;
+    efficiency_metrics: EfficiencyMetric;
+    user_behavior_insights: UserBehaviorInsight;
+    content_category_performance: CategoryPerformance;
+    workflow_optimization_opportunities: OptimizationOpportunity;
 }
 export interface ModerationPredictiveAnalytics {
-    volume_predictions: VolumePrediction[];
-    quality_forecasts: QualityForecast[];
-    resource_requirement_predictions: ResourcePrediction[];
-    risk_assessments: RiskAssessment[];
-    emerging_trend_identification: TrendIdentification[];
+    volume_predictions: VolumePrediction;
+    quality_forecasts: QualityForecast;
+    resource_requirement_predictions: ResourcePrediction;
+    risk_assessments: RiskAssessment;
+    emerging_trend_identification: TrendIdentification;
 }
 export interface WorkflowEfficiencyMetrics {
     average_processing_time_by_workflow: Record<ModerationWorkflowType, number>;
-    bottleneck_analysis: BottleneckAnalysis[];
+    bottleneck_analysis: BottleneckAnalysis;
     resource_utilization_efficiency: number;
     user_satisfaction_by_workflow: Record<ModerationWorkflowType, number>;
     cost_efficiency_analysis: CostEfficiencyAnalysis;
 }
 export interface WorkflowOptimizationResult {
-    optimization_recommendations: OptimizationRecommendation[];
-    expected_efficiency_gains: EfficiencyGain[];
-    implementation_roadmap: ImplementationStep[];
+    optimization_recommendations: OptimizationRecommendation;
+    expected_efficiency_gains: EfficiencyGain;
+    implementation_roadmap: ImplementationStep;
     risk_assessment: OptimizationRiskAssessment;
 }
 export interface ModerationPolicy {
     policy_id: string;
     policy_name: string;
-    content_types: MarketplaceContentType[];
-    moderation_contexts: EnhancedModerationContext[];
-    policy_rules: PolicyRule[];
-    escalation_criteria: EscalationCriteria[];
-    enforcement_actions: EnforcementAction[];
+    content_types: MarketplaceContentType;
+    moderation_contexts: EnhancedModerationContext;
+    policy_rules: PolicyRule;
+    escalation_criteria: EscalationCriteria;
+    enforcement_actions: EnforcementAction;
     effective_date: string;
     review_date: string;
     policy_version: string;
 }
 export interface CalibrationResult {
     calibration_success: boolean;
-    threshold_adjustments: ThresholdAdjustment[];
+    threshold_adjustments: ThresholdAdjustment;
     expected_performance_improvement: number;
-    validation_results: ValidationResult[];
+    validation_results: ValidationResult;
     rollback_plan: RollbackPlan;
 }
 export interface VolumeTrend {
@@ -472,44 +460,11 @@ export declare class EnhancedModerationServiceImpl implements EnhancedModeration
     private contributionService;
     private analyticsService;
     private apiClient;
-    constructor(baseModerationService: AutomatedModerationService, contentFilteringService: MarketplaceContentFilteringServiceImpl, contributionService: ContributionManagementService, analyticsService: LearningAnalyticsServiceImpl, apiClient: any);
-    moderateContentEnhanced(request: EnhancedModerationRequest): Promise<EnhancedModerationResult>;
-    moderateBatchEnhanced(requests: EnhancedModerationRequest[]): Promise<EnhancedModerationResult[]>;
-    moderateContribution(contribution: ContributionSubmission): Promise<EnhancedModerationResult>;
-    moderateTemplateSubmission(templateData: any): Promise<EnhancedModerationResult>;
-    moderateTutorialContent(tutorialData: any): Promise<EnhancedModerationResult>;
-    moderateCommunityContent(communityData: any): Promise<EnhancedModerationResult>;
-    filterContentStream(contentStream: AsyncIterable<EnhancedModerationRequest>): AsyncIterable<EnhancedModerationResult>;
-    flagContentForImmediateReview(contentId: string, reason: string): Promise<void>;
-    processAppeal(appealData: AppealData): Promise<AppealResult>;
-    reassessContent(contentId: string, reassessmentReason: string): Promise<EnhancedModerationResult>;
-    integrateCommunityFeedback(contentId: string, communityFeedback: CommunityFeedback): Promise<void>;
-    escalateToCommunityModeration(contentId: string, escalationReason: string): Promise<void>;
-    getModerationInsights(timeRange: string): Promise<ModerationInsights>;
-    getPredictiveAnalytics(): Promise<ModerationPredictiveAnalytics>;
-    getWorkflowEfficiencyMetrics(): Promise<WorkflowEfficiencyMetrics>;
-    optimizeModerationWorkflows(): Promise<WorkflowOptimizationResult>;
-    updateModerationPolicies(policies: ModerationPolicy[]): Promise<void>;
-    calibrateModerationThresholds(calibrationData: any): Promise<CalibrationResult>;
-    private createFilteringRequest;
-    private mapToMarketplaceContentType;
-    private inferUserRole;
-    private determineFilteringCategories;
-    private determineStrictnessLevel;
-    private mapPriority;
-    private assessBusinessImpact;
-    private generateWorkflowRecommendations;
-    private performEscalationAnalysis;
-    private performContextSpecificModeration;
-    private generatePredictiveInsights;
-    private analyzePatterns;
-    private determineFollowUpActions;
-    private defineMonitoringRequirements;
-    private generateProcessingBreakdown;
-    private calculateResourceUtilization;
-    private trackEnhancedModerationEvent;
-    private shouldExecuteAutomatedActions;
-    private executeAutomatedActions;
-    private updateContributionWorkflow;
+    constructor();
+    baseModerationService: AutomatedModerationService;
+    contentFilteringService: MarketplaceContentFilteringServiceImpl;
+    contributionService: ContributionManagementService;
+    analyticsService: LearningAnalyticsServiceImpl;
+    apiClient: any;
 }
 //# sourceMappingURL=EnhancedAutomatedModerationSystem.d.ts.map

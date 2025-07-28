@@ -22,21 +22,21 @@ export declare enum BackupType {
     DIFFERENTIAL = "differential",// Changes since last full backup
     SELECTIVE = "selective",// Specific keys only
     EMERGENCY = "emergency"
-}
+
 export declare enum RecoveryType {
     COMPLETE = "complete",// Full key store recovery
     SELECTIVE = "selective",// Specific keys recovery
     POINT_IN_TIME = "point_in_time",// Recovery to specific timestamp
     EMERGENCY = "emergency",// Emergency recovery procedure
     VERIFICATION = "verification"
-}
+
 export declare enum BackupStorageTier {
     LOCAL = "local",// Local filesystem
     REMOTE = "remote",// Remote secure storage
     CLOUD = "cloud",// Cloud storage service
     OFFLINE = "offline",// Offline/air-gapped storage
     ESCROW = "escrow"
-}
+
 export declare enum BackupStatus {
     PENDING = "pending",
     IN_PROGRESS = "in_progress",
@@ -45,7 +45,7 @@ export declare enum BackupStatus {
     VERIFIED = "verified",
     CORRUPTED = "corrupted",
     EXPIRED = "expired"
-}
+
 export declare enum RecoveryStatus {
     PENDING = "pending",
     IN_PROGRESS = "in_progress",
@@ -53,7 +53,7 @@ export declare enum RecoveryStatus {
     FAILED = "failed",
     PARTIAL = "partial",
     VERIFICATION_FAILED = "verification_failed"
-}
+
 export interface BackupMetadata {
     id: string;
     type: BackupType;
@@ -82,7 +82,8 @@ export interface BackupMetadata {
     checksums: Record<string, string>;
     createdBy: string;
     accessLog: BackupAccessEvent[];
-}
+
+
 export interface BackupVerificationResult {
     id: string;
     backupId: string;
@@ -99,7 +100,8 @@ export interface BackupVerificationResult {
     missingKeys: string[];
     verificationTime: number;
     issues: BackupIssue[];
-}
+
+
 export interface BackupIssue {
     severity: 'low' | 'medium' | 'high' | 'critical';
     type: 'corruption' | 'missing_data' | 'encryption_error' | 'integrity_failure' | 'metadata_mismatch';
@@ -107,7 +109,8 @@ export interface BackupIssue {
     affectedKeys?: string[];
     resolution?: string;
     detectedAt: Date;
-}
+
+
 export interface RecoveryRequest {
     id: string;
     type: RecoveryType;
@@ -124,13 +127,15 @@ export interface RecoveryRequest {
     urgency: 'low' | 'medium' | 'high' | 'critical';
     createdAt: Date;
     metadata: Record<string, any>;
-}
+
+
 export interface RecoveryApproval {
     approver: string;
     approvedAt: Date;
     signature?: string;
     conditions?: string[];
-}
+
+
 export interface RecoveryResult {
     id: string;
     requestId: string;
@@ -144,7 +149,8 @@ export interface RecoveryResult {
     verificationResult?: BackupVerificationResult;
     errors: string[];
     warnings: string[];
-}
+
+
 export interface BackupAccessEvent {
     id: string;
     timestamp: Date;
@@ -153,7 +159,8 @@ export interface BackupAccessEvent {
     ipAddress: string;
     userAgent?: string;
     details: Record<string, any>;
-}
+
+
 export interface BackupConfiguration {
     enableAutomaticBackup: boolean;
     fullBackupIntervalHours: number;
@@ -178,7 +185,8 @@ export interface BackupConfiguration {
     compressionEnabled: boolean;
     maxConcurrentBackups: number;
     backupTimeoutMinutes: number;
-}
+
+
 export interface BackupStorageLocation {
     id: string;
     tier: BackupStorageTier;
@@ -189,18 +197,20 @@ export interface BackupStorageLocation {
         password?: string;
         apiKey?: string;
         certificatePath?: string;
+
     };
     maxSize: number;
     retentionDays: number;
     redundancy: number;
-}
+
 export interface BackupPackage {
     metadata: BackupMetadata;
     encryptedData: Buffer;
     keyManifest: KeyManifestEntry[];
     checksums: Record<string, string>;
     signature: string;
-}
+
+
 export interface KeyManifestEntry {
     keyId: string;
     keyType: KeyType;
@@ -212,7 +222,8 @@ export interface KeyManifestEntry {
     encrypted: boolean;
     offset: number;
     length: number;
-}
+
+
 export interface BackupStatistics {
     totalBackups: number;
     successfulBackups: number;
@@ -227,7 +238,8 @@ export interface BackupStatistics {
     lastBackupTime?: Date;
     nextScheduledBackup?: Date;
     criticalIssues: number;
-}
+
+
 /**
  * Key Backup and Recovery Service
  */
@@ -310,6 +322,6 @@ export declare class KeyBackupRecoveryService extends EventEmitter {
      * Cleanup and shutdown
      */
     destroy(): void;
-}
+
 export default KeyBackupRecoveryService;
 //# sourceMappingURL=KeyBackupRecoveryService.d.ts.map

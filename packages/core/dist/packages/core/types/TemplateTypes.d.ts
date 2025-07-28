@@ -10,25 +10,19 @@ export interface Template {
     version: string;
     author: string;
     rating: number;
-    reviews: Review[];
+    reviews: Review;
     graph: GraphData;
     metadata: TemplateMetadata;
 }
-/**
- * Complete graph data including annotations from Epic 8.7
- */
 export interface GraphData {
-    nodes: Node[];
-    edges: Edge[];
+    nodes: Node;
+    edges: Edge;
     annotations: GraphAnnotations;
 }
-/**
- * Epic 8.7 annotation system as defined in story architecture
- */
 export interface GraphAnnotations {
-    stickyNotes: StickyNote[];
+    stickyNotes: StickyNote;
     nodeLabels: Record<string, string>;
-    regionGroups: RegionGroup[];
+    regionGroups: RegionGroup;
     connectionLabels: Record<string, string>;
     metadata: {
         author: string;
@@ -62,12 +56,9 @@ export interface RegionGroup {
         width: number;
         height: number;
     };
-    nodeIds: string[];
+    nodeIds: string;
     collapsed: boolean;
 }
-/**
- * Review system for templates
- */
 export interface Review {
     id: string;
     author: string;
@@ -76,14 +67,11 @@ export interface Review {
     timestamp: string;
     helpful: number;
 }
-/**
- * Template metadata
- */
 export interface TemplateMetadata {
     created: string;
     lastModified: string;
     usageCount: number;
-    tags: string[];
+    tags: string;
     complexity: 'simple' | 'medium' | 'complex';
     nodeCount: number;
     estimatedOutputLength: number;
@@ -91,36 +79,27 @@ export interface TemplateMetadata {
     parentTemplateId?: string;
     language: string;
 }
-/**
- * Template category system
- */
 export type TemplateCategory = 'character' | 'setting' | 'mood' | 'action' | 'dialogue' | 'world-building' | 'narrative' | 'technical' | 'vfx' | 'general';
 /**
  * Template sharing and permissions
  */
 export interface TemplateSharing {
     isPublic: boolean;
-    sharedWith: string[];
+    sharedWith: string;
     permissions: 'view' | 'edit' | 'admin';
     shareUrl?: string;
     team?: string;
 }
-/**
- * Template search and filtering
- */
 export interface TemplateFilter {
     category?: TemplateCategory;
     author?: string;
-    tags?: string[];
+    tags?: string;
     minRating?: number;
     complexity?: TemplateMetadata['complexity'];
     searchTerm?: string;
     sortBy?: 'name' | 'created' | 'rating' | 'usage' | 'modified';
     sortOrder?: 'asc' | 'desc';
 }
-/**
- * Template instantiation options
- */
 export interface TemplateInstantiationOptions {
     preservePositions: boolean;
     mergeWithCurrent: boolean;
@@ -128,63 +107,51 @@ export interface TemplateInstantiationOptions {
     offsetY?: number;
     customizationValues?: Record<string, any>;
 }
-/**
- * Template validation result
- */
 export interface TemplateValidation {
     isValid: boolean;
-    errors: string[];
-    warnings: string[];
+    errors: string;
+    warnings: string;
     compatibility: {
         version: string;
-        features: string[];
-        missingFeatures: string[];
+        features: string;
+        missingFeatures: string;
     };
 }
-/**
- * Template library state
- */
 export interface TemplateLibraryState {
-    templates: Template[];
-    categories: TemplateCategory[];
+    templates: Template;
+    categories: TemplateCategory;
     isLoading: boolean;
     error: string | null;
     filter: TemplateFilter;
     selectedTemplate: Template | null;
 }
-/**
- * Template operations
- */
 export interface TemplateOperations {
     saveTemplate: (template: Omit<Template, 'id'>) => Promise<Template>;
     loadTemplate: (id: string) => Promise<Template>;
     updateTemplate: (id: string, updates: Partial<Template>) => Promise<Template>;
     deleteTemplate: (id: string) => Promise<void>;
-    searchTemplates: (filter: TemplateFilter) => Promise<Template[]>;
-    getTemplatesByCategory: (category: TemplateCategory) => Promise<Template[]>;
-    getPopularTemplates: (limit?: number) => Promise<Template[]>;
-    getRecentTemplates: (limit?: number) => Promise<Template[]>;
-    instantiateTemplate: (templateId: string, options: TemplateInstantiationOptions) => Promise<GraphData>;
+    searchTemplates: (filter: TemplateFilter) => Promise<Template>;
+    getTemplatesByCategory: (category: TemplateCategory) => Promise<Template>;
+    getPopularTemplates: (limit?: number) => Promise<Template>;
+    getRecentTemplates: (limit?: number) => Promise<Template>;
+    instantiateTemplate: () => ;
+    templateId: string;
+    options: TemplateInstantiationOptions;
+    Promise<GraphData>(): any;
     shareTemplate: (templateId: string, sharing: TemplateSharing) => Promise<string>;
     importSharedTemplate: (shareUrl: string) => Promise<Template>;
     addReview: (templateId: string, review: Omit<Review, 'id' | 'timestamp'>) => Promise<Review>;
-    getReviews: (templateId: string) => Promise<Review[]>;
+    getReviews: (templateId: string) => Promise<Review>;
     validateTemplate: (template: Template) => Promise<TemplateValidation>;
 }
-/**
- * Template save dialog data
- */
 export interface TemplateSaveData {
     name: string;
     description: string;
     category: TemplateCategory;
-    tags: string[];
+    tags: string;
     isPublic: boolean;
     includeAnnotations: boolean;
 }
-/**
- * Template browser UI state
- */
 export interface TemplateBrowserState {
     isOpen: boolean;
     viewMode: 'grid' | 'list';
@@ -194,9 +161,6 @@ export interface TemplateBrowserState {
     showOnlyMyTemplates: boolean;
     previewTemplate: Template | null;
 }
-/**
- * Template event types for component communication
- */
 export type TemplateEvent = {
     type: 'template-saved';
     template: Template;
@@ -217,8 +181,8 @@ export type TemplateEvent = {
  * Template compatibility with existing graph system
  */
 export interface TemplateCompatibility {
-    supportsNodeTypes: string[];
-    requiredFeatures: string[];
+    supportsNodeTypes: string;
+    requiredFeatures: string;
     minEditorVersion: string;
     annotations: {
         stickyNotes: boolean;

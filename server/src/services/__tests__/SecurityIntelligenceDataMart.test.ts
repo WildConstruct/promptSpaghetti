@@ -25,14 +25,14 @@ describe('SecurityIntelligenceDataMart', () => {
           threat_intelligence_days: 730,
           incident_data_years: 7,
           audit_logs_years: 10
-        },
+  }
         performance_optimization: {
           enable_partitioning: true,
           enable_indexing_strategy: true,
           enable_materialized_views: true,
           enable_compression: true,
           enable_parallel_processing: true
-        },
+  }
         scalability_settings: {
           max_concurrent_connections: 100,
           batch_processing_size: 1000,
@@ -40,7 +40,7 @@ describe('SecurityIntelligenceDataMart', () => {
           memory_allocation_mb: 4096,
           storage_growth_threshold_gb: 1000
         }
-      },
+  }
       data_sources: {
         real_time_feeds: {
           security_events: true,
@@ -49,14 +49,14 @@ describe('SecurityIntelligenceDataMart', () => {
           network_telemetry: true,
           endpoint_data: true,
           application_logs: true
-        },
+  }
         batch_imports: {
           external_threat_feeds: true,
           vulnerability_databases: true,
           compliance_reports: true,
           historical_data: true,
           third_party_integrations: true
-        },
+  }
         api_integrations: {
           siem_platforms: ['splunk', 'qradar', 'sentinel'],
           threat_intelligence_providers: ['virustotal', 'otx', 'misp'],
@@ -64,7 +64,7 @@ describe('SecurityIntelligenceDataMart', () => {
           compliance_tools: ['rsa_archer', 'metricstream'],
           external_databases: ['nvd', 'cve', 'cwe']
         }
-      },
+  }
       data_modeling: {
         dimensional_design: {
           time_dimensions: ['hour', 'day', 'week', 'month', 'quarter', 'year'],
@@ -73,7 +73,7 @@ describe('SecurityIntelligenceDataMart', () => {
           threat_actor_dimensions: true,
           asset_dimensions: true,
           technique_dimensions: true
-        },
+  }
         fact_tables: {
           security_events: true,
           threat_incidents: true,
@@ -81,7 +81,7 @@ describe('SecurityIntelligenceDataMart', () => {
           compliance_measurements: true,
           performance_metrics: true,
           risk_scores: true
-        },
+  }
         analytical_models: {
           threat_landscape: true,
           risk_trending: true,
@@ -90,7 +90,7 @@ describe('SecurityIntelligenceDataMart', () => {
           threat_actor_profiling: true,
           campaign_tracking: true
         }
-      },
+  }
       data_quality: {
         validation_rules: {
           schema_enforcement: true,
@@ -99,7 +99,7 @@ describe('SecurityIntelligenceDataMart', () => {
           data_freshness_checks: true,
           completeness_validation: true,
           accuracy_verification: true
-        },
+  }
         quality_metrics: {
           track_completeness: true,
           track_accuracy: true,
@@ -107,7 +107,7 @@ describe('SecurityIntelligenceDataMart', () => {
           track_timeliness: true,
           track_validity: true,
           track_uniqueness: true
-        },
+  }
         remediation_policies: {
           automatic_correction: true,
           quarantine_invalid_data: true,
@@ -115,7 +115,7 @@ describe('SecurityIntelligenceDataMart', () => {
           retry_failed_validations: true,
           escalate_quality_issues: true
         }
-      },
+  }
       access_control: {
         rbac_integration: true,
         classification_levels: ['public', 'internal', 'confidential', 'restricted'],
@@ -125,7 +125,7 @@ describe('SecurityIntelligenceDataMart', () => {
         audit_all_access: true,
         encryption_at_rest: true,
         encryption_in_transit: true
-      },
+  }
       analytics_capabilities: {
         real_time_analytics: true,
         batch_analytics: true,
@@ -165,7 +165,7 @@ describe('SecurityIntelligenceDataMart', () => {
           timestamp: expect.any(Number),
           configuration: config,
           schema_version: expect.any(String)
-        })
+  }
       );
     });
 
@@ -393,7 +393,7 @@ describe('SecurityIntelligenceDataMart', () => {
           real_time_enabled: expect.any(Boolean),
           batch_enabled: expect.any(Boolean),
           timestamp: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -528,7 +528,7 @@ describe('SecurityIntelligenceDataMart', () => {
         expect.objectContaining({
           analytics_types: expect.any(Array),
           generation_timestamp: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -636,7 +636,7 @@ describe('SecurityIntelligenceDataMart', () => {
           optimizations_applied: expect.any(Array),
           performance_improvement: expect.any(Number),
           timestamp: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -738,7 +738,7 @@ describe('SecurityIntelligenceDataMart', () => {
             threat_intelligence_days: 1095,
             incident_data_years: 10,
             audit_logs_years: 15
-          },
+  }
           scalability_settings: {
             max_concurrent_connections: 200,
             batch_processing_size: 2000,
@@ -767,7 +767,7 @@ describe('SecurityIntelligenceDataMart', () => {
             network_telemetry: false,
             endpoint_data: true,
             application_logs: false
-          },
+  }
           api_integrations: {
             siem_platforms: ['splunk'],
             threat_intelligence_providers: ['virustotal'],
@@ -796,7 +796,7 @@ describe('SecurityIntelligenceDataMart', () => {
             threat_actor_dimensions: true,
             asset_dimensions: false,
             technique_dimensions: true
-          },
+  }
           fact_tables: {
             security_events: true,
             threat_incidents: true,
@@ -826,7 +826,7 @@ describe('SecurityIntelligenceDataMart', () => {
             data_freshness_checks: false,
             completeness_validation: true,
             accuracy_verification: false
-          },
+  }
           remediation_policies: {
             automatic_correction: false,
             quarantine_invalid_data: true,
@@ -1018,7 +1018,7 @@ describe('SecurityIntelligenceDataMart', () => {
             threat_actor_dimensions: false,
             asset_dimensions: false,
             technique_dimensions: false
-          },
+  }
           fact_tables: {
             security_events: true,
             threat_incidents: false,
@@ -1026,7 +1026,7 @@ describe('SecurityIntelligenceDataMart', () => {
             compliance_measurements: false,
             performance_metrics: false,
             risk_scores: false
-          },
+  }
           analytical_models: {
             threat_landscape: true,
             risk_trending: false,

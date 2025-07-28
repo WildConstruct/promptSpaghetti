@@ -10,6 +10,7 @@ import {
   CreateAuditEventRequest
 } from '../database/audit-models';
 
+}
 export interface AuditMiddlewareOptions {
   enabled?: boolean;
   excludeRoutes?: string[];
@@ -19,6 +20,7 @@ export interface AuditMiddlewareOptions {
   logSecurityEvents?: boolean;
   sensitiveHeaders?: string[];
   sensitiveParams?: string[];
+}
 }
 
 export class AuditMiddleware {
@@ -89,8 +91,7 @@ export class AuditMiddleware {
     return {
       logToggleCreated: async (toggleId: string, toggleData: Record<string, unknown>) => {
         await this.auditService.logToggleCreated(toggleId, toggleData, context);
-      },
-
+  }
       logToggleUpdated: async (
         toggleId: string,
         beforeData: Record<string,
@@ -99,16 +100,13 @@ export class AuditMiddleware {
         unknown>
       ) => {
         await this.auditService.logToggleUpdated(toggleId, beforeData, afterData, context);
-      },
-
+  }
       logToggleEnabled: async (toggleId: string, toggleName: string) => {
         await this.auditService.logToggleEnabled(toggleId, toggleName, context);
-      },
-
+  }
       logToggleDisabled: async (toggleId: string, toggleName: string) => {
         await this.auditService.logToggleDisabled(toggleId, toggleName, context);
-      },
-
+  }
       logToggleDeleted: async (toggleId: string, toggleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.TOGGLE_DELETED,
@@ -132,12 +130,10 @@ export class AuditMiddleware {
     return {
       logScheduleCreated: async (scheduleId: string, scheduleData: Record<string, unknown>) => {
         await this.auditService.logScheduleCreated(scheduleId, scheduleData, context);
-      },
-
+  }
       logScheduleExecuted: async (scheduleId: string, scheduleName: string, execution: Record<string, unknown>) => {
         await this.auditService.logScheduleExecuted(scheduleId, scheduleName, execution, context);
-      },
-
+  }
       logScheduleDeleted: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_DELETED,
@@ -150,8 +146,7 @@ export class AuditMiddleware {
           description: `Schedule "${scheduleName}" was deleted`,
           outcome: 'success'
         }, context);
-      },
-
+  }
       logSchedulePaused: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_PAUSED,
@@ -164,8 +159,7 @@ export class AuditMiddleware {
           description: `Schedule "${scheduleName}" was paused`,
           outcome: 'success'
         }, context);
-      },
-
+  }
       logScheduleResumed: async (scheduleId: string, scheduleName: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SCHEDULE_RESUMED,
@@ -200,8 +194,7 @@ export class AuditMiddleware {
           outcome: 'success',
           afterValue: this.sanitizeUserData(userData)
         }, context);
-      },
-
+  }
       logUserUpdated: async (
         userId: string,
         beforeData: Record<string,
@@ -222,8 +215,7 @@ export class AuditMiddleware {
           beforeValue: this.sanitizeUserData(beforeData),
           afterValue: this.sanitizeUserData(afterData)
         }, context);
-      },
-
+  }
       logUserDeleted: async (userId: string, userEmail: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.USER_DELETED,
@@ -236,8 +228,7 @@ export class AuditMiddleware {
           description: `User ${userEmail} was deleted`,
           outcome: 'success'
         }, context);
-      },
-
+  }
       logPasswordChanged: async (userId: string, userEmail: string) => {
         await this.auditService.logEvent({
           eventType: AuditEventType.PASSWORD_CHANGED,
@@ -273,8 +264,7 @@ export class AuditMiddleware {
           beforeValue,
           afterValue
         }, context);
-      },
-
+  }
       logSystemStartup: async () => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SYSTEM_STARTUP,
@@ -285,8 +275,7 @@ export class AuditMiddleware {
           description: 'System started up',
           outcome: 'success'
         }, context);
-      },
-
+  }
       logSystemShutdown: async () => {
         await this.auditService.logEvent({
           eventType: AuditEventType.SYSTEM_SHUTDOWN,
@@ -379,6 +368,7 @@ export class AuditMiddleware {
   }
 
   private async logSecurityEvents(request: FastifyRequest, context: AuditContext): Promise<void> {
+
     // Log suspicious patterns
     const userAgent = request.headers['user-agent'] || '';
     const ip = this.getClientIP(request);
@@ -411,6 +401,7 @@ export class AuditMiddleware {
     duration: number,
     context: AuditContext
   ): Promise<void> {
+
     const shouldLog = (reply.statusCode >= 400 && this.options.logFailedRequests) ||
                      (reply.statusCode < 400 && this.options.logSuccessfulRequests);
 
@@ -452,6 +443,7 @@ export class AuditMiddleware {
     duration: number,
     context: AuditContext
   ): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: AuditEventType.API_ERROR,
       category: AuditCategory.ERROR,
@@ -465,7 +457,7 @@ export class AuditMiddleware {
         code: (error as any).code || 'INTERNAL_ERROR',
         message: error.message,
         stack: error.stack
-      },
+  }
       metadata: {
         duration,
         endpoint: request.url,
@@ -539,6 +531,7 @@ declare module 'fastify' {
       schedules: ReturnType<AuditMiddleware['createScheduleAuditor']>;
       users: ReturnType<AuditMiddleware['createUserAuditor']>;
       system: ReturnType<AuditMiddleware['createSystemAuditor']>;
+}
     };
   }
 }

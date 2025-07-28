@@ -9,18 +9,22 @@ export class ExtensionPointDocumentationGenerator {
      */
     generateDocumentation() {
         return [];
-    }
-    /**
-     * Generate documentation for a specific extension point
-     */
-    generateForExtensionPoint(pointName) {
-        return null;
-    }
-    /**
-     * Export documentation in various formats
-     */
-    exportDocumentation(format = 'markdown') {
-        return '';
+        /**
+         * Generate documentation for a specific extension point
+         */
+        generateForExtensionPoint(pointName, string);
+        ExtensionPointDocumentation | null;
+        {
+            return null;
+            /**
+             * Export documentation in various formats
+             */
+            exportDocumentation(format, 'markdown' | 'html' | 'json', 'markdown');
+            string;
+            {
+                return '';
+                export default ExtensionPointDocumentationGenerator;
+            }
+        }
     }
 }
-export default ExtensionPointDocumentationGenerator;

@@ -47,5 +47,5 @@ export declare class GraphValidator extends EventEmitter {
     private simulateOperation;
     private hasCycles;
     private findOrphanedNodes;
-}
+
 //# sourceMappingURL=GraphValidator.d.ts.map

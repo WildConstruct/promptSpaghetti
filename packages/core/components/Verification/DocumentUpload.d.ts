@@ -5,6 +5,7 @@
  * Supports multiple file types with preview and validation.
  */
 import React from 'react';
+
 interface DocumentUploadProps {
     acceptedTypes?: string[];
     maxFileSize?: number;
@@ -13,7 +14,8 @@ interface DocumentUploadProps {
     existingFiles?: UploadedFile[];
     disabled?: boolean;
     placeholder?: string;
-}
+
+
 interface UploadedFile {
     id: string;
     name: string;
@@ -21,7 +23,7 @@ interface UploadedFile {
     type: string;
     url: string;
     uploadedAt: Date;
-}
+
 export declare const DocumentUpload: React.FC<DocumentUploadProps>;
 export default DocumentUpload;
 //# sourceMappingURL=DocumentUpload.d.ts.map

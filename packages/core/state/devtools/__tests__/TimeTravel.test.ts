@@ -7,28 +7,27 @@ import { TimeTravel, TimeTravelConfig, globalTimeTravel } from '../TimeTravel';
 describe('TimeTravel', () => {
   let timeTravel: TimeTravel;
   beforeEach(() => {
-    timeTravel = new TimeTravel();
-    jest.clearAllMocks();
-  });
+  timeTravel = new TimeTravel();
+  jest.clearAllMocks();
+});
   afterEach(() => {
     timeTravel.removeAllListeners();
     timeTravel.stopRecording();
   });
   describe('Initialization', () => {
-    it('should initialize with default configuration', () => {
-      const config: TimeTravelConfig = {
-        maxHistorySize: 500,
-        enableBranching: true,
-        enableSnapshots: true,
-        enableDiffing: true,
-        compressionEnabled: false,
-        persistHistory: false,
-        autoSnapshot: {,
-          enabled: false,
-          interval: 30000,
-          maxSnapshots: 10,
-        }
-      };
+  it('should initialize with default configuration', () => {
+  const config: TimeTravelConfig = {,
+  maxHistorySize: 500,
+  enableBranching: true,
+  enableSnapshots: true,
+  enableDiffing: true,
+  compressionEnabled: false,
+  persistHistory: false,
+  autoSnapshot: {,
+  enabled: false,
+  interval: 30000,
+  maxSnapshots: 10,
+};
       const timeTravelWithConfig = new TimeTravel(config);
       expect(timeTravelWithConfig).toBeInstanceOf(TimeTravel);
     });
@@ -59,9 +58,9 @@ describe('TimeTravel', () => {
         metadata: { domain: 'test', step: 1 }
       };
       const entryId = timeTravel.recordStateSnapshot(snapshot, 'test-domain', {)
-        description: 'Test snapshot',
-        tags: ['test', 'snapshot']
-      });
+  description: 'Test snapshot',
+  tags: ['test', 'snapshot'],
+});
       expect(entryId).toBeDefined();
       const timeline = timeTravel.getTimeline();
       expect(timeline).toHaveLength(1);
@@ -76,12 +75,12 @@ describe('TimeTravel', () => {
         timestamp: Date.now(),
         type: 'UPDATE',
         payload: { count: 2 },
-        source: 'local',
-      };
+        source: 'local';
+  };
       const entryId = timeTravel.recordStateChange(change, 'test-domain', {)
-        description: 'Update count',
-        tags: ['update'],
-      });
+  description: 'Update count',
+  tags: ['update'],
+});
       expect(entryId).toBeDefined();
       const timeline = timeTravel.getTimeline();
       expect(timeline).toHaveLength(1);
@@ -92,19 +91,18 @@ describe('TimeTravel', () => {
       const entries = [];
       for (let i = 0; i < 5; i++) {
         const snapshot = {
-          id: `snapshot_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           state: { index: i },
           metadata: { step: i }
         };
         entries.push(timeTravel.recordStateSnapshot(snapshot, 'test'));
-      }
       const timeline = timeTravel.getTimeline();
       expect(timeline).toHaveLength(5);
       // Should be in chronological order
       for (let i = 1; i < timeline.length; i++) {
         expect(timeline[i].timestamp).toBeGreaterThanOrEqual(timeline[i - 1].timestamp);
-      }
     });
     it('should respect history size limit', () => {
       const limitedTimeTravel = new TimeTravel({ maxHistorySize: 3 });
@@ -112,13 +110,13 @@ describe('TimeTravel', () => {
       // Record more entries than the limit
       for (let i = 0; i < 5; i++) {
         const snapshot = {
-          id: `snapshot_${i}`,}
-          timestamp: Date.now() + i,
+          id: `snapshot_${i}`}
+},
+  timestamp: Date.now() + i,
           state: { index: i },
           metadata: {}
         };
         limitedTimeTravel.recordStateSnapshot(snapshot, 'test');
-      }
       const timeline = limitedTimeTravel.getTimeline();
       expect(timeline).toHaveLength(3);
       limitedTimeTravel.stopRecording();
@@ -130,13 +128,13 @@ describe('TimeTravel', () => {
       // Record some test entries
       for (let i = 0; i < 5; i++) {
         const snapshot = {
-          id: `nav_snapshot_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `nav_snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           state: { step: i },
           metadata: { index: i }
         };
         timeTravel.recordStateSnapshot(snapshot, 'nav-test');
-      }
     });
     it('should navigate to specific positions', () => {
       const success = timeTravel.goToPosition(2);
@@ -195,16 +193,16 @@ describe('TimeTravel', () => {
       expect(endState.canGoForward).toBe(false);
     });
     it('should emit position change events', () => {
-      const eventHandler = jest.fn();
-      timeTravel.on('positionChanged', eventHandler);
-      timeTravel.goToPosition(1);
-      expect(eventHandler).toHaveBeenCalledWith({)
-        previousPosition: -1,
-        currentPosition: 1,
-        entry: expect.any(Object),
-        canGoBack: true,
-        canGoForward: true,
-      });
+  const eventHandler = jest.fn();
+  timeTravel.on('positionChanged', eventHandler);
+  timeTravel.goToPosition(1);
+  expect(eventHandler).toHaveBeenCalledWith({)
+  previousPosition: -1,
+  currentPosition: 1,
+  entry: expect.any(Object),
+  canGoBack: true,
+  canGoForward: true,
+});
     });
   });
   describe('Branching', () => {
@@ -213,21 +211,21 @@ describe('TimeTravel', () => {
       // Create some timeline entries
       for (let i = 0; i < 3; i++) {
         const snapshot = {
-          id: `branch_snapshot_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `branch_snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           state: { step: i },
           metadata: { index: i }
         };
         timeTravel.recordStateSnapshot(snapshot, 'branch-test');
-      }
     });
     it('should create new branches', () => {
-      timeTravel.goToPosition(1);
-      const branchId = timeTravel.createBranch('feature-branch', {)
-        description: 'Feature development branch',
-        author: 'developer',
-        tags: ['feature'],
-      });
+  timeTravel.goToPosition(1);
+  const branchId = timeTravel.createBranch('feature-branch', {)
+  description: 'Feature development branch',
+  author: 'developer',
+  tags: ['feature'],
+});
       expect(branchId).toBeDefined();
       const branches = timeTravel.getBranches();
       expect(branches).toHaveLength(2); // main + new branch
@@ -253,12 +251,12 @@ describe('TimeTravel', () => {
       expect(switchHandler).toHaveBeenCalled();
     });
     it('should merge branches', () => {
-      const sourceBranchId = timeTravel.createBranch('source');
-      const targetBranchId = timeTravel.createBranch('target');
-      const mergeEntryId = timeTravel.mergeBranch(sourceBranchId, targetBranchId, {)
-        strategy: 'merge-commit',
-        message: 'Merge source into target',
-      });
+  const sourceBranchId = timeTravel.createBranch('source');
+  const targetBranchId = timeTravel.createBranch('target');
+  const mergeEntryId = timeTravel.mergeBranch(sourceBranchId, targetBranchId, {)
+  strategy: 'merge-commit',
+  message: 'Merge source into target',
+});
       expect(mergeEntryId).toBeDefined();
       const timeline = timeTravel.getTimeline();
       const mergeEntry = timeline.find(e => e.id === mergeEntryId);
@@ -271,24 +269,24 @@ describe('TimeTravel', () => {
       // Create timeline entries
       for (let i = 0; i < 3; i++) {
         const snapshot = {
-          id: `marker_snapshot_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `marker_snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           state: { step: i },
           metadata: { index: i }
         };
         timeTravel.recordStateSnapshot(snapshot, 'marker-test');
-      }
     });
     it('should add markers to timeline entries', () => {
-      const timeline = timeTravel.getTimeline();
-      const entryId = timeline[1].id;
-      const markerId = timeTravel.addMarker({)
-        entryId,
-        name: 'Important Point',
-        description: 'This is an important point in the timeline',
-        color: '#ff0000',
-        type: 'milestone',
-      });
+  const timeline = timeTravel.getTimeline();
+  const entryId = timeline[1].id;
+  const markerId = timeTravel.addMarker({)
+  entryId,
+  name: 'Important Point',
+  description: 'This is an important point in the timeline',
+  color: '#ff0000',
+  type: 'milestone',
+});
       expect(markerId).toBeDefined();
       const markers = timeTravel.getMarkers();
       expect(markers).toHaveLength(1);
@@ -296,33 +294,33 @@ describe('TimeTravel', () => {
       expect(markers[0].entryId).toBe(entryId);
     });
     it('should remove markers', () => {
-      const timeline = timeTravel.getTimeline();
-      const entryId = timeline[0].id;
-      const markerId = timeTravel.addMarker({)
-        entryId,
-        name: 'Temporary Marker',
-        description: 'Will be removed',
-        color: '#00ff00',
-        type: 'bookmark',
-      });
+  const timeline = timeTravel.getTimeline();
+  const entryId = timeline[0].id;
+  const markerId = timeTravel.addMarker({)
+  entryId,
+  name: 'Temporary Marker',
+  description: 'Will be removed',
+  color: '#00ff00',
+  type: 'bookmark',
+});
       expect(timeTravel.getMarkers()).toHaveLength(1);
       const removed = timeTravel.removeMarker(markerId);
       expect(removed).toBe(true);
       expect(timeTravel.getMarkers()).toHaveLength(0);
     });
     it('should emit marker events', () => {
-      const addHandler = jest.fn();
-      const removeHandler = jest.fn();
-      timeTravel.on('markerAdded', addHandler);
-      timeTravel.on('markerRemoved', removeHandler);
-      const timeline = timeTravel.getTimeline();
-      const markerId = timeTravel.addMarker({)
-        entryId: timeline[0].id,
-        name: 'Test Marker',
-        description: 'Test',
-        color: '#0000ff',
-        type: 'test',
-      });
+  const addHandler = jest.fn();
+  const removeHandler = jest.fn();
+  timeTravel.on('markerAdded', addHandler);
+  timeTravel.on('markerRemoved', removeHandler);
+  const timeline = timeTravel.getTimeline();
+  const markerId = timeTravel.addMarker({)
+  entryId: timeline[0].id,
+  name: 'Test Marker',
+  description: 'Test',
+  color: '#0000ff',
+  type: 'test',
+});
       timeTravel.removeMarker(markerId);
       expect(addHandler).toHaveBeenCalled();
       expect(removeHandler).toHaveBeenCalled();
@@ -334,20 +332,20 @@ describe('TimeTravel', () => {
       // Create timeline entries
       for (let i = 0; i < 5; i++) {
         const change = {
-          id: `replay_change_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `replay_change_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           type: 'UPDATE',
           payload: { step: i },
-          source: 'local',
-        };
+          source: 'local';
+  };
         timeTravel.recordStateChange(change, 'replay-test');
-      }
     });
     it('should create replay sessions', () => {
-      const sessionId = timeTravel.createReplaySession('Test Session', {)
-        description: 'Test replay session',
-        speed: 2,
-      });
+  const sessionId = timeTravel.createReplaySession('Test Session', {)
+  description: 'Test replay session',
+  speed: 2,
+});
       expect(sessionId).toBeDefined();
       const sessions = timeTravel.getReplaySessions();
       expect(sessions).toHaveLength(1);
@@ -355,11 +353,11 @@ describe('TimeTravel', () => {
       expect(sessions[0].playbackSpeed).toBe(2);
     });
     it('should start replay sessions', () => {
-      const sessionId = timeTravel.createReplaySession('Auto Session');
-      const success = timeTravel.startReplay(sessionId, {)
-        autoPlay: false,
-        speed: 1,
-      });
+  const sessionId = timeTravel.createReplaySession('Auto Session');
+  const success = timeTravel.startReplay(sessionId, {)
+  autoPlay: false,
+  speed: 1,
+});
       expect(success).toBe(true);
       const state = timeTravel.getTimeTravelState();
       expect(state.isReplaying).toBe(true);
@@ -441,90 +439,89 @@ describe('TimeTravel', () => {
         const isSnapshot = i % 2 === 0;
         if (isSnapshot) {
           const snapshot = {
-            id: `query_snapshot_${i}`,}
-            timestamp: Date.now() + i * 1000,
+            id: `query_snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
             state: { index: i, domain },
             metadata: {}
           };
           timeTravel.recordStateSnapshot(snapshot, domain, {)
-            tags: ['test', domain]
-          });
+  tags: ['test', domain],
+});
         } else {
           const change = {
-            id: `query_change_${i}`,}
-            timestamp: Date.now() + i * 1000,
+            id: `query_change_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
             type: 'UPDATE',
             payload: { index: i },
-            source: 'local',
-          };
+            source: 'local';
+  };
           timeTravel.recordStateChange(change, domain, {)
-            tags: ['test', domain]
-          });
-        }
-      }
+  tags: ['test', domain],
+});
     });
     it('should query timeline by time range', () => {
-      const now = Date.now();
-      const results = timeTravel.queryTimeline({)
-        timeRange: {,
-          start: now + 2000,
-          end: now + 6000,
-        }
-      });
+  const now = Date.now();
+  const results = timeTravel.queryTimeline({)
+  timeRange: {,
+  start: now + 2000,
+  end: now + 6000,
+});
       expect(results.length).toBe(5); // Entries 2, 3, 4, 5, 6
       results.forEach(entry => {)
-        expect(entry.timestamp).toBeGreaterThanOrEqual(now + 2000);
+  expect(entry.timestamp).toBeGreaterThanOrEqual(now + 2000);
         expect(entry.timestamp).toBeLessThanOrEqual(now + 6000);
       });
     });
     it('should query timeline by domains', () => {
-      const results = timeTravel.queryTimeline({)
-        domains: ['domain-a'],
-      });
+  const results = timeTravel.queryTimeline({)
+  domains: ['domain-a'],
+});
       expect(results.length).toBe(5); // Half the entries
       results.forEach(entry => {)
-        expect(entry.domain).toBe('domain-a');
+  expect(entry.domain).toBe('domain-a');
       });
     });
     it('should query timeline by types', () => {
-      const results = timeTravel.queryTimeline({)
-        types: ['snapshot'],
-      });
+  const results = timeTravel.queryTimeline({)
+  types: ['snapshot'],
+});
       expect(results.length).toBe(5); // Half the entries
       results.forEach(entry => {)
-        expect(entry.type).toBe('snapshot');
+  expect(entry.type).toBe('snapshot');
       });
     });
     it('should query timeline by tags', () => {
-      const results = timeTravel.queryTimeline({)
-        tags: ['domain-b'],
-      });
+  const results = timeTravel.queryTimeline({)
+  tags: ['domain-b'],
+});
       expect(results.length).toBe(5); // Half the entries
       results.forEach(entry => {)
-        expect(entry.metadata.tags).toContain('domain-b');
+  expect(entry.metadata.tags).toContain('domain-b');
       });
     });
     it('should support pagination', () => {
-      const page1 = timeTravel.queryTimeline({)
-        limit: 3,
-        offset: 0,
-      });
+  const page1 = timeTravel.queryTimeline({)
+  limit: 3,
+  offset: 0,
+});
       const page2 = timeTravel.queryTimeline({)
-        limit: 3,
-        offset: 3,
-      });
+  limit: 3,
+  offset: 3,
+});
       expect(page1).toHaveLength(3);
       expect(page2).toHaveLength(3);
       expect(page1[0].id).not.toBe(page2[0].id);
     });
     it('should search timeline by text', () => {
-      const results = timeTravel.searchTimeline('domain-a', {)
-        fields: ['tags'],
-        caseSensitive: false,
-      });
+  const results = timeTravel.searchTimeline('domain-a', {)
+  fields: ['tags'],
+  caseSensitive: false,
+});
       expect(results.length).toBe(5);
       results.forEach(entry => {)
-        expect(entry.metadata.tags.join(' ').toLowerCase()).toContain('domain-a');
+  expect(entry.metadata.tags.join(' ').toLowerCase()).toContain('domain-a');
       });
     });
   });
@@ -534,13 +531,13 @@ describe('TimeTravel', () => {
       // Create some test data
       for (let i = 0; i < 3; i++) {
         const snapshot = {
-          id: `data_snapshot_${i}`,}
-          timestamp: Date.now() + i * 1000,
+          id: `data_snapshot_${i}`}
+},
+  timestamp: Date.now() + i * 1000,
           state: { index: i },
           metadata: {}
         };
         timeTravel.recordStateSnapshot(snapshot, 'data-test');
-      }
     });
     it('should export history data', () => {
       const exportData = timeTravel.exportHistory();

@@ -99,8 +99,8 @@ describe('SessionRotationService', () => {
           details: expect.objectContaining({
             changeType: 'role_added',
             sessionRotationRequired: true
-          })
-        })
+  }
+  }
       );
     });
 
@@ -308,7 +308,7 @@ describe('SessionRotationService', () => {
             { change_type: 'role_removed', count: '10' },
             { change_type: 'permission_added', count: '17' }
           ]
-        })
+  }
         // Mock top users
         .mockResolvedValueOnce({
           rows: [
@@ -325,7 +325,7 @@ describe('SessionRotationService', () => {
           role_added: 15,
           role_removed: 10,
           permission_added: 17
-        },
+  }
         topUsers: [
           { userId: 'user-1', rotationCount: 8 },
           { userId: 'user-2', rotationCount: 5 }

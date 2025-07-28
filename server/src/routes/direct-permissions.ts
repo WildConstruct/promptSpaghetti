@@ -381,7 +381,7 @@ export async function directPermissionsRoutes(
           totalPages,
           hasNextPage: page < totalPages,
           hasPreviousPage: page > 1
-        },
+  }
         metadata: {
           searchCriteria: searchQuery,
           resultsFound: permissions.length
@@ -479,7 +479,7 @@ export async function directPermissionsRoutes(
         data: {
           expiredCount,
           cleanupAt: new Date().toISOString()
-        },
+  }
         message: `Cleaned up ${expiredCount} expired permission${expiredCount !== 1 ? 's' : ''}`
       });
 
@@ -547,7 +547,7 @@ export async function directPermissionsRoutes(
           permissionSearch: 'available',
           automaticExpiration: 'operational',
           auditLogging: 'operational'
-        },
+  }
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };

@@ -5,6 +5,7 @@
  * formatted reporting, auto-fix capabilities, and progress monitoring.
  */
 import { PrerequisiteReport } from './Epic16PrerequisiteSystem';
+
 export interface PrerequisiteRunnerOptions {
     categories?: string[];
     skipChecks?: string[];
@@ -18,14 +19,15 @@ export interface PrerequisiteRunnerOptions {
     colors?: boolean;
     configFile?: string;
     environment?: 'development' | 'staging' | 'production';
-}
+
+
 export interface PrerequisiteRunnerResult {
     success: boolean;
     report: PrerequisiteReport;
     autoFixResults?: Record<string, boolean>;
     outputPath?: string;
     duration: number;
-}
+
 export declare class Epic16PrerequisiteRunner {
     private system;
     private options;
@@ -51,7 +53,7 @@ export declare class Epic16PrerequisiteRunner {
     private generateMarkdownReport;
     private displaySummary;
     private log;
-}
+
 /**
  * Create a prerequisite runner with CLI-friendly defaults
  */

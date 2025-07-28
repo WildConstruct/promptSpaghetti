@@ -9,6 +9,7 @@
 import React from 'react';
 import { Node } from 'reactflow';
 import { NodeLabelConfig, NodeLabelPreferences } from '../../types/CollaborationTypes';
+
 interface NodeLabelsLayerProps {
     nodes: Node[];
     labelConfigs: Record<string, NodeLabelConfig>;
@@ -22,9 +23,10 @@ interface NodeLabelsLayerProps {
     canvasOffset?: {
         x: number;
         y: number;
+
     };
     zoom?: number;
-}
+
 export declare const NodeLabelsLayer: React.FC<NodeLabelsLayerProps>;
 export default NodeLabelsLayer;
 //# sourceMappingURL=NodeLabelsLayer.d.ts.map

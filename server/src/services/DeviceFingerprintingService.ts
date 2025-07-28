@@ -6,6 +6,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
+}
 export interface DeviceFingerprint {
   fingerprint: string;
   components: {
@@ -28,6 +29,7 @@ export interface DeviceFingerprint {
     webRTC?: {
       localIP?: string;
       publicIP?: string;
+}
     };
   };
   metadata: {
@@ -39,6 +41,7 @@ export interface DeviceFingerprint {
   };
 }
 
+}
 export interface DeviceTrustProfile {
   deviceId: string;
   fingerprint: string;
@@ -51,6 +54,7 @@ export interface DeviceTrustProfile {
     country: string;
     city: string;
     timestamp: Date;
+}
   }>;
   behaviorMetrics: {
     consistencyScore: number;
@@ -66,6 +70,7 @@ export interface DeviceTrustProfile {
   }>;
 }
 
+}
 export interface DeviceFingerprintConfig {
   enabled: boolean;
   
@@ -78,6 +83,7 @@ export interface DeviceFingerprintConfig {
     collectPlugins: boolean;
     collectWebRTC: boolean;
     collectHardware: boolean;
+}
   };
   
   // Trust scoring
@@ -131,6 +137,7 @@ export class DeviceFingerprintingService {
   }
 
   async initialize(): Promise<void> {
+
     // Create database tables for device fingerprinting
     await this.initializeTables();
     
@@ -138,6 +145,7 @@ export class DeviceFingerprintingService {
   }
 
   private async initializeTables(): Promise<void> {
+
     // Device fingerprints table
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS device_fingerprints (
@@ -152,7 +160,7 @@ export class DeviceFingerprintingService {
         is_blocked BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Device-user associations table
@@ -167,7 +175,7 @@ export class DeviceFingerprintingService {
         is_primary BOOLEAN DEFAULT false,
         is_trusted BOOLEAN DEFAULT false,
         created_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Device trust profiles table
@@ -183,7 +191,7 @@ export class DeviceFingerprintingService {
         metadata JSONB,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Device security events table
@@ -199,7 +207,7 @@ export class DeviceFingerprintingService {
         resolved_by VARCHAR(255),
         resolved_at TIMESTAMP,
         created_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Create indexes for performance
@@ -225,6 +233,7 @@ export class DeviceFingerprintingService {
   }
 
   async generateFingerprint(components: Partial<DeviceFingerprint['components']>): Promise<string> {
+
     // Validate required components
     if (!components.userAgent || !components.timezone || !components.language) {
       throw new Error('Missing required fingerprint components');
@@ -272,7 +281,7 @@ export class DeviceFingerprintingService {
       // Plugin list (sorted for consistency)
       ...(this.config.components.collectPlugins && {
         plugins: components.plugins?.sort()
-      })
+  }
     };
 
     // Apply privacy settings
@@ -296,6 +305,7 @@ export class DeviceFingerprintingService {
       location?: { country: string; city: string };
     }
   ): Promise<DeviceTrustProfile> {
+
     try {
       // Check if device exists
       const existingDevice = await this.getDeviceByFingerprint(fingerprint);
@@ -343,6 +353,7 @@ export class DeviceFingerprintingService {
   }
 
   private async getDeviceByFingerprint(fingerprint: string): Promise<unknown> {
+
     const result = await this.db.query(
       'SELECT * FROM device_fingerprints WHERE fingerprint = $1',
       [fingerprint]
@@ -354,6 +365,7 @@ export class DeviceFingerprintingService {
     fingerprint: string,
     components: Partial<DeviceFingerprint['components']>
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE device_fingerprints 
       SET 
@@ -369,6 +381,7 @@ export class DeviceFingerprintingService {
     fingerprint: string,
     components: Partial<DeviceFingerprint['components']>
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_fingerprints (fingerprint, components)
       VALUES ($1, $2)
@@ -376,6 +389,7 @@ export class DeviceFingerprintingService {
   }
 
   private async updateUserAssociation(fingerprint: string, userId: string): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_user_associations (device_fingerprint, user_id)
       VALUES ($1, $2)
@@ -387,6 +401,7 @@ export class DeviceFingerprintingService {
   }
 
   private async createUserAssociation(fingerprint: string, userId: string): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_user_associations (device_fingerprint, user_id)
       VALUES ($1, $2)
@@ -397,6 +412,7 @@ export class DeviceFingerprintingService {
     fingerprint: string,
     location: { country: string; city: string }
   ): Promise<void> {
+
     const profile = await this.db.query(
       'SELECT location_history FROM device_trust_profiles WHERE fingerprint = $1',
       [fingerprint]
@@ -421,6 +437,7 @@ export class DeviceFingerprintingService {
   }
 
   private async createTrustProfile(fingerprint: string): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_trust_profiles (fingerprint, trust_score, verification_status)
       VALUES ($1, $2, 'unverified')
@@ -431,6 +448,7 @@ export class DeviceFingerprintingService {
     fingerprint: string,
     userId?: string
   ): Promise<DeviceTrustProfile> {
+
     // Get device data
     const device = await this.getDeviceByFingerprint(fingerprint);
     const profile = await this.getTrustProfile(fingerprint);
@@ -503,6 +521,7 @@ export class DeviceFingerprintingService {
   }
 
   private async getTrustProfile(fingerprint: string): Promise<unknown> {
+
     const result = await this.db.query(
       'SELECT * FROM device_trust_profiles WHERE fingerprint = $1',
       [fingerprint]
@@ -511,6 +530,7 @@ export class DeviceFingerprintingService {
   }
 
   private async getUserAssociations(fingerprint: string): Promise<any[]> {
+
     const result = await this.db.query(
       'SELECT * FROM device_user_associations WHERE device_fingerprint = $1',
       [fingerprint]
@@ -519,6 +539,7 @@ export class DeviceFingerprintingService {
   }
 
   private async getSecurityEvents(fingerprint: string): Promise<any[]> {
+
     const result = await this.db.query(
       'SELECT * FROM device_security_events WHERE device_fingerprint = $1 ORDER BY created_at DESC',
       [fingerprint]
@@ -527,6 +548,7 @@ export class DeviceFingerprintingService {
   }
 
   private async updateTrustScore(fingerprint: string, trustScore: number): Promise<void> {
+
     await this.db.query(`
       UPDATE device_trust_profiles
       SET trust_score = $2, updated_at = NOW()
@@ -541,6 +563,7 @@ export class DeviceFingerprintingService {
   }
 
   private async calculateBehaviorMetrics(fingerprint: string): Promise<DeviceTrustProfile['behaviorMetrics']> {
+
     // Get access patterns from audit logs
     const accessPatterns = await this.db.query(`
       SELECT 
@@ -590,6 +613,7 @@ export class DeviceFingerprintingService {
     description: string,
     contextData?: Record<string, unknown>
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_security_events (
         device_fingerprint, event_type, severity, description, context_data
@@ -604,12 +628,13 @@ export class DeviceFingerprintingService {
         severity,
         description,
         ...contextData
-      },
+  }
       severity: severity === 'high' ? 'error' : severity === 'medium' ? 'warning' : 'info'
     });
   }
 
   private async cacheDeviceProfile(fingerprint: string, profile: DeviceTrustProfile): Promise<void> {
+
     try {
       const cacheKey = `device_profile:${fingerprint}`;
       await this.redis.setex(
@@ -633,6 +658,7 @@ export class DeviceFingerprintingService {
     riskFactors: string[];
     requiresAdditionalVerification: boolean;
   }> {
+
     try {
       // Check if device is blocked
       const device = await this.getDeviceByFingerprint(fingerprint);
@@ -742,6 +768,7 @@ export class DeviceFingerprintingService {
     locations: unknown[];
     securityEvents: unknown[];
   }> {
+
     const device = await this.getDeviceByFingerprint(fingerprint);
     if (!device) {
       throw new Error('Device not found');
@@ -782,6 +809,7 @@ export class DeviceFingerprintingService {
     userId: string,
     trustedBy: string
   ): Promise<void> {
+
     // Update device trust status
     await this.db.query(`
       UPDATE device_user_associations
@@ -814,6 +842,7 @@ export class DeviceFingerprintingService {
     reason: string,
     blockedBy: string
   ): Promise<void> {
+
     // Update device block status
     await this.db.query(`
       UPDATE device_fingerprints

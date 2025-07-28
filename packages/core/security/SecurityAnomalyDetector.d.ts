@@ -8,6 +8,7 @@
  * Task: E31-1753313263581-019263
  */
 import { EventEmitter } from 'events';
+
 export interface AnomalyDetectionConfig {
     enableRealTimeDetection: boolean;
     detectionSensitivity: number;
@@ -18,7 +19,8 @@ export interface AnomalyDetectionConfig {
     enableCorrelationAnalysis: boolean;
     autoResponseEnabled: boolean;
     escalationRules: EscalationRule[];
-}
+
+
 export interface SecurityAnomaly {
     id: string;
     timestamp: Date;
@@ -39,7 +41,7 @@ export interface SecurityAnomaly {
     resolvedAt?: Date;
     resolvedBy?: string;
     resolutionNotes?: string;
-}
+
 export declare enum AnomalyType {
     METRIC_THRESHOLD_BREACH = "metric_threshold_breach",
     STATISTICAL_OUTLIER = "statistical_outlier",
@@ -53,14 +55,14 @@ export declare enum AnomalyType {
     ERROR_RATE_SPIKE = "error_rate_spike",
     CAPACITY_ANOMALY = "capacity_anomaly",
     BEHAVIORAL_DRIFT = "behavioral_drift"
-}
+
 export declare enum AnomalySeverity {
     INFO = "info",
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface AnomalyRiskAssessment {
     businessImpact: number;
     securityImpact: number;
@@ -71,7 +73,8 @@ export interface AnomalyRiskAssessment {
     estimatedDowntime: number;
     affectedUserCount: number;
     dataExposureRisk: number;
-}
+
+
 export interface SecurityAlert {
     id: string;
     timestamp: Date;
@@ -90,7 +93,7 @@ export interface SecurityAlert {
     resolvedAt?: Date;
     suppressUntil?: Date;
     metadata: Record<string, unknown>;
-}
+
 export declare enum AlertType {
     THRESHOLD_BREACH = "threshold_breach",
     ANOMALY_DETECTED = "anomaly_detected",
@@ -102,7 +105,7 @@ export declare enum AlertType {
     ERROR_SPIKE = "error_spike",
     AVAILABILITY_ALERT = "availability_alert",
     CORRELATION_ALERT = "correlation_alert"
-}
+
 export interface NotificationChannel {
     channelType: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
     target: string;
@@ -110,13 +113,15 @@ export interface NotificationChannel {
     severity: AnomalySeverity[];
     rateLimiting: RateLimitConfig;
     template?: string;
-}
+
+
 export interface RateLimitConfig {
     maxAlertsPerHour: number;
     maxAlertsPerDay: number;
     burstLimit: number;
     cooldownPeriod: number;
-}
+
+
 export interface EscalationRule {
     id: string;
     name: string;
@@ -125,12 +130,14 @@ export interface EscalationRule {
     targetChannels: NotificationChannel[];
     autoEscalate: boolean;
     maxEscalationLevel: number;
-}
+
+
 export interface EscalationCondition {
     field: 'severity' | 'anomalyType' | 'businessImpact' | 'affectedSystems';
     operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'in';
     value: unknown;
-}
+
+
 export interface MetricBaseline {
     metricName: string;
     systemName: string;
@@ -145,13 +152,15 @@ export interface MetricBaseline {
     lastUpdated: Date;
     seasonalPatterns: SeasonalPattern[];
     trendCoefficient: number;
-}
+
+
 export interface SeasonalPattern {
     period: 'hourly' | 'daily' | 'weekly' | 'monthly';
     pattern: number[];
     strength: number;
     phase: number;
-}
+
+
 export interface AnomalyDetectionModel {
     modelId: string;
     modelType: DetectionModelType;
@@ -165,7 +174,7 @@ export interface AnomalyDetectionModel {
     lastTrained: Date;
     trainingDataSize: number;
     parameters: Record<string, unknown>;
-}
+
 export declare enum DetectionModelType {
     STATISTICAL_THRESHOLD = "statistical_threshold",
     Z_SCORE = "z_score",
@@ -175,7 +184,7 @@ export declare enum DetectionModelType {
     AUTOENCODER = "autoencoder",
     LSTM_AUTOENCODER = "lstm_autoencoder",
     CHANGEPOINT_DETECTION = "changepoint_detection"
-}
+
 export interface SecurityMetric {
     id: string;
     timestamp: Date;
@@ -185,7 +194,7 @@ export interface SecurityMetric {
     unit: string;
     tags: Record<string, string>;
     metadata: Record<string, unknown>;
-}
+
 export declare class SecurityAnomalyDetector extends EventEmitter {
     private config;
     private detectedAnomalies;
@@ -259,6 +268,6 @@ export declare class SecurityAnomalyDetector extends EventEmitter {
     addDetectionModel(model: AnomalyDetectionModel): void;
     removeDetectionModel(modelId: string): boolean;
     destroy(): void;
-}
+
 export default SecurityAnomalyDetector;
 //# sourceMappingURL=SecurityAnomalyDetector.d.ts.map

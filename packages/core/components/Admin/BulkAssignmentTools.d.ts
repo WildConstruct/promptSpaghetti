@@ -14,13 +14,13 @@ export declare enum AssignmentType {
     ROLE = "role",
     TEAM = "team",
     QUOTA = "quota"
-}
+
 export declare enum BulkOperationType {
     ASSIGN = "assign",
     REVOKE = "revoke",
     UPDATE = "update",
     TRANSFER = "transfer"
-}
+
 export interface BulkAssignmentTarget {
     id: string;
     type: 'user' | 'team' | 'service' | 'role';
@@ -30,7 +30,7 @@ export interface BulkAssignmentTarget {
     currentAssignments?: Assignment[];
     conflicts?: AssignmentConflict[];
     metadata?: Record<string, any>;
-}
+
 export interface Assignment {
     id: string;
     assignmentType: AssignmentType;
@@ -41,14 +41,14 @@ export interface Assignment {
     status: 'active' | 'expired' | 'suspended';
     assignedBy: string;
     metadata?: Record<string, any>;
-}
+
 export interface AssignmentConflict {
     type: 'duplicate' | 'incompatible' | 'quota_exceeded' | 'permission_denied';
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     affectedAssignments: string[];
     resolution?: 'skip' | 'override' | 'merge' | 'escalate';
-}
+
 export interface BulkAssignmentOperation {
     operationId: string;
     operationType: BulkOperationType;
@@ -61,7 +61,7 @@ export interface BulkAssignmentOperation {
     progress?: BulkAssignmentProgress;
     conflicts?: AssignmentConflict[];
     results?: BulkAssignmentResult[];
-}
+
 export interface AssignmentResource {
     id: string;
     type: AssignmentType;
@@ -72,7 +72,7 @@ export interface AssignmentResource {
     restrictions?: string[];
     quotaLimits?: Record<string, number>;
     metadata?: Record<string, any>;
-}
+
 export interface BulkAssignmentParameters {
     executionMode: 'immediate' | 'scheduled' | 'staged';
     batchSize: number;
@@ -86,7 +86,7 @@ export interface BulkAssignmentParameters {
     requireApproval: boolean;
     autoResolveConflicts: boolean;
     customProperties: Record<string, any>;
-}
+
 export interface AssignmentTemplate {
     id: string;
     name: string;
@@ -104,13 +104,13 @@ export interface AssignmentTemplate {
     createdBy: string;
     createdAt: Date;
     isSystemTemplate: boolean;
-}
+
 export interface TargetFilter {
     field: string;
     operator: 'eq' | 'ne' | 'in' | 'not_in' | 'contains' | 'starts_with';
     value: Error;
     logicalOperator?: 'AND' | 'OR';
-}
+
 export interface BulkAssignmentProgress {
     totalTargets: number;
     processedTargets: number;
@@ -123,7 +123,7 @@ export interface BulkAssignmentProgress {
     percentComplete: number;
     estimatedTimeRemaining?: number;
     currentStep: string;
-}
+
 export interface BulkAssignmentResult {
     targetId: string;
     targetName: string;
@@ -134,7 +134,7 @@ export interface BulkAssignmentResult {
     conflictsEncountered?: AssignmentConflict[];
     processingTime: number;
     metadata?: Record<string, any>;
-}
+
 export interface BulkAssignmentToolsProps {
     assignmentType: AssignmentType;
     operationType: BulkOperationType;
@@ -145,7 +145,7 @@ export interface BulkAssignmentToolsProps {
     onCancel?: (operationId: string) => Promise<void>;
     onTemplateCreate?: (template: Omit<AssignmentTemplate, 'id' | 'createdAt' | 'usage'>) => Promise<string>;
     readonly?: boolean;
-}
+
 export declare const BulkAssignmentTools: React.FC<BulkAssignmentToolsProps>;
 export default BulkAssignmentTools;
 //# sourceMappingURL=BulkAssignmentTools.d.ts.map

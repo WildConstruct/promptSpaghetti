@@ -206,7 +206,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           categories: { type: 'array', items: { type: 'string' } },
           includeExpired: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -275,7 +275,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           limit: { type: 'integer', minimum: 1, maximum: 1000, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -334,7 +334,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           activity.purpose.toLowerCase().includes(searchTerm) ||
           activity.dataAccessed.some(data => 
             data.dataType.toLowerCase().includes(searchTerm)
-          )
+
         );
       }
 
@@ -375,7 +375,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           requestType: { 
             type: 'string', 
             enum: ['ACCESS', 'RECTIFICATION', 'ERASURE', 'PORTABILITY', 'RESTRICTION', 'OBJECTION']
-          },
+  }
           dataCategories: { type: 'array', items: { type: 'string' } },
           timeRange: {
             type: 'object',
@@ -383,14 +383,14 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           specificData: { type: 'array', items: { type: 'string' } },
           reason: { type: 'string' },
           urgency: { type: 'string', enum: ['STANDARD', 'URGENT', 'EMERGENCY'], default: 'STANDARD' },
           preferredFormat: { type: 'string', enum: ['JSON', 'XML', 'CSV', 'PDF', 'HUMAN_READABLE'], default: 'JSON' }
-        },
+  }
         required: ['requestType']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -452,9 +452,9 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -559,7 +559,7 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
           dataRetentionPreferences: { type: 'object' },
           accessControlPreferences: { type: 'object' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -613,17 +613,17 @@ export async function transparencyRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           categoryId: { type: 'string' }
-        },
+  }
         required: ['categoryId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10 },
           confirmationToken: { type: 'string', minLength: 1 }
-        },
+  }
         required: ['reason', 'confirmationToken']
-      },
+  }
       response: {
         200: {
           type: 'object',

@@ -8,9 +8,9 @@ import type { TemplateVariables, EmailTemplate } from '../templates/EmailTemplat
 describe('EmailTemplateManager', () => {
   let templateManager: EmailTemplateManager;
   beforeEach(() => {
-    // Create template manager with test directory
-    templateManager = new EmailTemplateManager();
-  });
+  // Create template manager with test directory
+  templateManager = new EmailTemplateManager();
+});
   describe('Template Loading', () => {
     test('should load all default templates', () => {
       const templates = templateManager.getAllTemplates();
@@ -44,15 +44,15 @@ describe('EmailTemplateManager', () => {
     });
   });
   describe('Template Rendering', () => {
-    const testVariables: TemplateVariables = {
-      displayName: 'John Doe',
-      emailAddress: 'john.doe@example.com',
-      code: '123456',
-      expiryMinutes: '10',
-      securityWarning: 'Unusual login location detected.',
-      setupUrl: 'https://promptscape.com/setup',
-      trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif',
-    };
+  const testVariables: TemplateVariables = {,
+  displayName: 'John Doe',
+  emailAddress: 'john.doe@example.com',
+  code: '123456',
+  expiryMinutes: '10',
+  securityWarning: 'Unusual login location detected.',
+  setupUrl: 'https://promptscape.com/setup',
+  trackingPixelUrl: 'https://analytics.promptscape.com/pixel.gif',
+};
     test('should render HTML template correctly', () => {
       const result = templateManager.renderTemplate('mfa-verification', testVariables, 'html');
       expect(result).toBeTruthy();
@@ -71,12 +71,12 @@ describe('EmailTemplateManager', () => {
       expect(result!.content).toContain('10 minutes');
     });
     test('should handle missing optional variables gracefully', () => {
-      const minimalVariables: TemplateVariables = {
-        displayName: 'Jane Doe',
-        emailAddress: 'jane@example.com',
-        code: '654321',
-        expiryMinutes: '5',
-      };
+  const minimalVariables: TemplateVariables = {,
+  displayName: 'Jane Doe',
+  emailAddress: 'jane@example.com',
+  code: '654321',
+  expiryMinutes: '5',
+};
       const result = templateManager.renderTemplate('mfa-verification', minimalVariables, 'html');
       expect(result).toBeTruthy();
       expect(result!.content).toContain('Jane Doe');
@@ -100,10 +100,10 @@ describe('EmailTemplateManager', () => {
       expect(result).toBeNull();
     });
     test('should validate variables when requested', () => {
-      const incompleteVariables: Partial<TemplateVariables> = {
-        displayName: 'Test User',
-        // Missing required variables
-      };
+  const incompleteVariables: Partial<TemplateVariables> = {,
+  displayName: 'Test User',
+  // Missing required variables
+};
       expect(() => {
         templateManager.renderTemplate()
           'mfa-verification', 
@@ -122,10 +122,10 @@ describe('EmailTemplateManager', () => {
       expect(validation.errors).toHaveLength(0);
     });
     test('should detect missing required variables', () => {
-      const incompleteVariables: Partial<TemplateVariables> = {
-        displayName: 'Test User',
-        // Missing other required variables
-      };
+  const incompleteVariables: Partial<TemplateVariables> = {,
+  displayName: 'Test User',
+  // Missing other required variables
+};
       const validation = templateManager.validateTemplate(;);
         'mfa-verification', 
         incompleteVariables as TemplateVariables
@@ -135,10 +135,10 @@ describe('EmailTemplateManager', () => {
       expect(validation.errors[0]).toContain('missing variables');
     });
     test('should detect unused variables', () => {
-      const testVariables = {
-        ...TemplateTestUtils.generateTestData(),
-        unusedVariable: 'This should generate a warning',
-      };
+  const testVariables = {
+  ...TemplateTestUtils.generateTestData(),
+  unusedVariable: 'This should generate a warning',
+};
       const validation = templateManager.validateTemplate('mfa-verification', testVariables);
       expect(validation.warnings.length).toBeGreaterThan(0);
       expect(validation.warnings[0]).toContain('Unused variables');
@@ -151,27 +151,27 @@ describe('EmailTemplateManager', () => {
   });
   describe('Template Management', () => {
     test('should add new template', () => {
-      const customTemplate: EmailTemplate = {
-        subject: 'Test Subject',
+      const customTemplate: EmailTemplate = {,
+  subject: 'Test Subject',
         htmlTemplate: '<p>Hello {{name}}</p>',
         textTemplate: 'Hello {{name}}',
         variables: ['name'],
         description: 'Test template',
-        category: 'notification',
-      };
+        category: 'notification';
+  };
       templateManager.addTemplate('custom-test', customTemplate);
       const retrieved = templateManager.getTemplate('custom-test');
       expect(retrieved).toEqual(customTemplate);
     });
     test('should remove template', () => {
-      const customTemplate: EmailTemplate = {
-        subject: 'Test Subject',
-        htmlTemplate: '<p>Test</p>',
-        textTemplate: 'Test',
-        variables: [],
-        description: 'Test template',
-        category: 'notification',
-      };
+  const customTemplate: EmailTemplate = {,
+  subject: 'Test Subject',
+  htmlTemplate: '<p>Test</p>',
+  textTemplate: 'Test',
+  variables: [],
+  description: 'Test template',
+  category: 'notification',
+};
       templateManager.addTemplate('to-remove', customTemplate);
       expect(templateManager.getTemplate('to-remove')).toBeTruthy();
       const removed = templateManager.removeTemplate('to-remove');
@@ -235,26 +235,26 @@ describe('EmailTemplateManager', () => {
   });
   describe('Template Engine Features', () => {
     test('should process helper functions', () => {
-      const templateWithHelpers: EmailTemplate = {
-        subject: 'Test {{capitalize name}}',
+      const templateWithHelpers: EmailTemplate = {,
+  subject: 'Test {{capitalize name}}',
         htmlTemplate: '<p>Hello {{uppercase name}} and {{lowercase title}}</p>',
         textTemplate: 'Hello {{uppercase name}}',
         variables: ['name', 'title'],
         description: 'Test helpers',
-        category: 'notification',
-      };
+        category: 'notification';
+  };
       templateManager.addTemplate('helper-test', templateWithHelpers);
       const result = templateManager.renderTemplate('helper-test', {)
-        name: 'john',
-        title: 'DEVELOPER',
-      } as TemplateVariables);
+  name: 'john',
+  title: 'DEVELOPER',
+} as TemplateVariables);
       expect(result!.subject).toContain('John'); // Capitalized
       expect(result!.content).toContain('JOHN'); // Uppercase
       expect(result!.content).toContain('developer'); // Lowercase
     });
     test('should handle nested conditionals', () => {
-      const complexTemplate: EmailTemplate = {
-        subject: 'Test',
+      const complexTemplate: EmailTemplate = {,
+  subject: 'Test',
         htmlTemplate: `,
           {{#if hasWarning}}
             <div class="warning">
@@ -268,14 +268,14 @@ describe('EmailTemplateManager', () => {
         textTemplate: 'Simple text',
         variables: ['hasWarning', 'isUrgent', 'warningMessage'],
         description: 'Test complex conditionals',
-        category: 'notification',
-      };
+        category: 'notification';
+  };
       templateManager.addTemplate('complex-test', complexTemplate);
       const result = templateManager.renderTemplate('complex-test', {)
-        hasWarning: true,
-        isUrgent: true,
-        warningMessage: 'System alert',
-      } as TemplateVariables);
+  hasWarning: true,
+  isUrgent: true,
+  warningMessage: 'System alert',
+} as TemplateVariables);
       expect(result!.content).toContain('URGENT:');
       expect(result!.content).toContain('System alert');
     });
@@ -291,9 +291,9 @@ describe('EmailTemplateManager', () => {
       expect(hasErrors).toBe(false);
       // Log any warnings for review
       results.forEach(result => {)
-        if (result.warnings.length > 0) {
-          console.warn(`Template ${result.templateName} warnings:`, result.warnings);}
-        }
+  if (result.warnings.length > 0) {
+          console.warn(`Template ${result.templateName},)}
+  warnings:`, result.warnings);}
       });
     });
     test('should render all templates without errors', () => {
@@ -310,34 +310,33 @@ describe('EmailTemplateManager', () => {
         // Content should not contain unprocessed template variables
         expect(htmlResult!.content).not.toMatch(/\{\{\w+\}\}/);
         expect(textResult!.content).not.toMatch(/\{\{\w+\}\}/);
-      }
     });
   });
   describe('Security Considerations', () => {
     test('should not execute JavaScript in templates', () => {
-      const maliciousTemplate: EmailTemplate = {
-        subject: 'Test',
+      const maliciousTemplate: EmailTemplate = {,
+  subject: 'Test',
         htmlTemplate: '<script>alert("xss")</script><p>{{name}}</p>',
         textTemplate: 'Hello {{name}}',
         variables: ['name'],
         description: 'Test XSS protection',
-        category: 'notification',
-      };
+        category: 'notification';
+  };
       templateManager.addTemplate('security-test', maliciousTemplate);
       const result = templateManager.renderTemplate('security-test', {)
-        name: 'Test User',
-      } as TemplateVariables);
+  name: 'Test User',
+} as TemplateVariables);
       // Script tags should be preserved as text, not executed
       expect(result!.content).toContain('<script>');
       expect(result!.content).toContain('Test User');
     });
     test('should handle potentially dangerous variable content', () => {
-      const testVariables = {
-        displayName: '<script>alert("hack")</script>John',
-        emailAddress: 'test@example.com',
-        code: '123456',
-        expiryMinutes: '10',
-      };
+  const testVariables = {
+  displayName: '<script>alert("hack")</script>John',
+  emailAddress: 'test@example.com',
+  code: '123456',
+  expiryMinutes: '10',
+};
       const result = templateManager.renderTemplate('mfa-verification', testVariables);
       // Should preserve the content as-is (templates are trusted, variables are data)
       expect(result!.content).toContain('<script>alert("hack")</script>John');
@@ -353,8 +352,6 @@ describe('EmailTemplateManager', () => {
         for (const [templateName] of templates) {
           templateManager.renderTemplate(templateName, testData, 'html');
           templateManager.renderTemplate(templateName, testData, 'text');
-        }
-      }
       const endTime = Date.now();
       const duration = endTime - startTime;
       // Should complete within reasonable time (adjust threshold as needed)
@@ -382,7 +379,7 @@ describe('TemplateTestUtils', () => {
     const results = TemplateTestUtils.testAllTemplates(templateManager);
     expect(results.length).toBeGreaterThan(0);
     results.forEach(result => {)
-      expect(result).toHaveProperty('templateName');
+  expect(result).toHaveProperty('templateName');
       expect(result).toHaveProperty('valid');
       expect(result).toHaveProperty('errors');
       expect(result).toHaveProperty('warnings');

@@ -54,8 +54,7 @@ export async function setupRateLimiting(
       legacyHeaders: false,
       message: 'Too many requests, please try again later.',
       statusCode: 429
-    },
-
+  }
     // Custom key extractor to include more context
     keyExtractor: (request) => ({
       ip: request.ip,
@@ -82,8 +81,7 @@ export async function setupRateLimiting(
       // Fail open - allow the request if rate limiting fails
       // In production, you might want to fail closed instead
       return;
-    },
-
+  }
     // Custom handler when limit is reached
     onLimitReached: (request, reply, result) => {
       // Log rate limit violations
@@ -134,22 +132,22 @@ export async function setupRateLimiting(
           });
         }
       }
-    },
+  }
     {
       path: '/auth/register',
       method: 'POST',
       config: RateLimitPresets.authentication()
-    },
+  }
     {
       path: '/auth/password-reset/request',
       method: 'POST',
       config: RateLimitPresets.passwordReset()
-    },
+  }
     {
       path: '/auth/password-reset/confirm',
       method: 'POST',
       config: RateLimitPresets.passwordReset()
-    },
+  }
     {
       path: '/auth/refresh',
       method: 'POST',
@@ -157,7 +155,7 @@ export async function setupRateLimiting(
         windowMs: 5 * 60 * 1000, // 5 minutes
         maxRequests: 10
       }
-    },
+  }
     {
       path: '/auth/change-password',
       method: 'POST',
@@ -165,8 +163,7 @@ export async function setupRateLimiting(
         windowMs: 5 * 60 * 1000, // 5 minutes
         maxRequests: 3 // Very restrictive for password changes
       }
-    },
-
+  }
     // OAuth endpoints
     {
       path: '/auth/oauth',
@@ -174,8 +171,7 @@ export async function setupRateLimiting(
         windowMs: 15 * 60 * 1000,
         maxRequests: 20
       }
-    },
-
+  }
     // API endpoints - moderate limits
     {
       path: '/preview',
@@ -185,31 +181,31 @@ export async function setupRateLimiting(
         maxRequests: 30,
         message: 'Preview generation rate limit exceeded. Please wait before generating more previews.'
       }
-    },
+  }
     {
       path: '/api/corrections',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/workspace',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/workflow',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/approval',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/locking',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/randomizer',
       config: RateLimitPresets.api()
-    },
+  }
     {
       path: '/api/analytics',
       config: {
@@ -217,18 +213,17 @@ export async function setupRateLimiting(
         maxRequests: 300,
         skipSuccessfulRequests: true // Only count errors
       }
-    },
+  }
     {
       path: '/api/marketplace',
       config: RateLimitPresets.api()
-    },
-
+  }
     // File upload endpoints - strict limits
     {
       path: '/api/marketplace/submissions/*/files',
       method: 'POST',
       config: RateLimitPresets.fileUpload()
-    },
+  }
     {
       path: '/auth/profile/avatar',
       method: 'POST',
@@ -237,8 +232,7 @@ export async function setupRateLimiting(
         maxRequests: 5, // Very restrictive for avatar uploads
         message: 'Avatar upload rate limit exceeded. Please try again later.'
       }
-    },
-
+  }
     // WebSocket connection attempts
     {
       path: '/ws',
@@ -247,22 +241,21 @@ export async function setupRateLimiting(
         maxRequests: 10,
         message: 'Too many WebSocket connection attempts'
       }
-    },
+  }
     {
       path: '/ws/status',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 100
       }
-    },
+  }
     {
       path: '/ws/documents',
       config: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 50
       }
-    },
-
+  }
     // Health check endpoints - no limits
     {
       path: '/health',
@@ -270,15 +263,14 @@ export async function setupRateLimiting(
         windowMs: 1000,
         maxRequests: Number.MAX_SAFE_INTEGER
       }
-    },
+  }
     {
       path: '/',
       config: {
         windowMs: 1000,
         maxRequests: Number.MAX_SAFE_INTEGER
       }
-    },
-    
+  }
     // Admin endpoints - restricted but higher limits for monitoring
     {
       path: '/admin/rate-limits',
@@ -383,7 +375,7 @@ export async function setupRateLimiting(
           field: 'user-agent',
           operator: 'equals',
           value: ''
-        },
+  }
         {
           type: 'header',
           field: 'accept',

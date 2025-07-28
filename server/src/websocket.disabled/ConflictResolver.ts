@@ -21,6 +21,7 @@ export enum ResolutionStrategy {
   POSITIONAL_OFFSET = 'positional_offset'
 }
 
+}
 export interface ConflictOperation {
   id: string;
   type: ConflictType;
@@ -33,7 +34,9 @@ export interface ConflictOperation {
   timestamp: number;
   documentId: string;
 }
+}
 
+}
 export interface Conflict {
   id: string;
   type: ConflictType;
@@ -50,7 +53,9 @@ export interface Conflict {
   autoResolved: boolean;
   description: string;
 }
+}
 
+}
 export interface ResolutionResult {
   conflict: Conflict;
   resolvedValue: any;
@@ -59,10 +64,12 @@ export interface ResolutionResult {
   metadata?: {
     mergedFields?: string[];
     discardedOperations?: string[];
+}
     offsetApplied?: { x: number; y: number };
   };
 }
 
+}
 export interface ConflictResolverConfig {
   defaultStrategy: ResolutionStrategy;
   autoResolveThreshold: number; // ms
@@ -71,6 +78,7 @@ export interface ConflictResolverConfig {
   enableSemanticMerge: boolean;
   preserveConflictHistory: boolean;
   conflictHistoryRetention: number; // ms
+}
 }
 
 export class ConflictResolver extends EventEmitter {

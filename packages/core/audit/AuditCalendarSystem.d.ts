@@ -18,14 +18,14 @@ export declare enum AuditActivityType {
     TRAINING_SESSION = "training_session",
     INCIDENT_REVIEW = "incident_review",
     RETENTION_CLEANUP = "retention_cleanup"
-}
+
 export declare enum SchedulePriority {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical",
     REGULATORY = "regulatory"
-}
+
 export declare enum RecurrencePattern {
     NONE = "none",
     DAILY = "daily",
@@ -35,7 +35,7 @@ export declare enum RecurrencePattern {
     SEMI_ANNUAL = "semi_annual",
     ANNUAL = "annual",
     CUSTOM = "custom"
-}
+
 export declare enum ScheduleStatus {
     SCHEDULED = "scheduled",
     IN_PROGRESS = "in_progress",
@@ -44,14 +44,14 @@ export declare enum ScheduleStatus {
     DELAYED = "delayed",
     FAILED = "failed",
     OVERDUE = "overdue"
-}
+
 export declare enum NotificationTiming {
     IMMEDIATE = "immediate",
     ONE_HOUR = "one_hour",
     ONE_DAY = "one_day",
     ONE_WEEK = "one_week",
     TWO_WEEKS = "two_weeks"
-}
+
 export declare const AuditScheduleSchema: z.ZodObject<{
     id: z.ZodString;
     title: z.ZodString;
@@ -627,7 +627,7 @@ export declare class AuditCalendarSystem {
     private generateTimelineAnalysis;
     private getWeekStart;
     private calculateResourceUtilization;
-}
+
 export declare         title: string;
         start: Date;
         end: Date;

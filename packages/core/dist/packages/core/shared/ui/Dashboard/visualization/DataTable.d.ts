@@ -29,7 +29,7 @@ export interface TableAction<T = any> {
     variant?: 'default' | 'primary' | 'danger';
 }
 export interface DataTableProps<T = any> {
-    data: T[];
+    data: T;
     columns: TableColumn<T>[];
     pagination?: {
         pageSize?: number;
@@ -39,8 +39,8 @@ export interface DataTableProps<T = any> {
     } | false;
     rowSelection?: {
         type?: 'checkbox' | 'radio';
-        selectedRowKeys?: React.Key[];
-        onChange?: (selectedRowKeys: React.Key[], selectedRows: T[]) => void;
+        selectedRowKeys?: React.Key;
+        onChange?: (selectedRowKeys: React.Key, selectedRows: T) => void;
         getCheckboxProps?: (record: T) => {
             disabled?: boolean;
         };
@@ -62,6 +62,8 @@ export interface DataTableProps<T = any> {
     emptyText?: string;
     className?: string;
 }
-export declare const DataTable: <T extends Record<string, any>>({ data, columns, pagination, rowSelection, actions, size, bordered, striped, hoverable, loading, rowKey, rowClassName, onRowClick, searchable, searchPlaceholder, globalFilter, exportable, exportFileName, emptyText, className }: DataTableProps<T>) => import("react/jsx-runtime").JSX.Element;
+export declare const DataTable: <T extends Record<string, any>>({}: {}) => any, columns: any, pagination: {
+    pageSize: number;
+}, rowSelection: any, actions: any, size = "medium", bordered = false, striped = false, hoverable = true, loading = false, rowKey = "id", rowClassName: any, onRowClick: any, searchable = true, searchPlaceholder = "Search...", globalFilter = true, exportable = false, exportFileName = "table-data", emptyText = "No data available", className = "";
 export default DataTable;
 //# sourceMappingURL=DataTable.d.ts.map

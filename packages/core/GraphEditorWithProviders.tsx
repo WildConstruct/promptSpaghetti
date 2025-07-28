@@ -57,9 +57,9 @@ import {
 } from './icons';
 
 export interface GraphEditorWithProvidersProps {
-  initialNodes: Node[];
-  initialEdges: Edge[];
-  validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
+  initialNodes: Node;,
+  initialEdges: Edge;
+  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
   // Provider configuration
   enableBuiltInProviders?: {
     consoleLogger?: boolean;
@@ -67,127 +67,123 @@ export interface GraphEditorWithProvidersProps {
     validation?: boolean;
   };
   // Custom providers
-  providers?: ProviderHook[];
+  providers?: ProviderHook;
   // Provider event handlers
   onProviderRegistered?: (hook: ProviderHook) => void;
   onProviderUnregistered?: (hookId: string) => void;
   onProviderError?: (error: Error, hookId: string) => void;
-}
 
 // Node type definitions (same as original GraphEditor)
-const NODE_TYPES: NodeMeta[] = [
+const NODE_TYPES: NodeMeta = [
   // Text Node Types
   {
-    id: 'Subject',
-    label: 'Subject',
-    icon: '👤',
-    tooltip: 'Text subject with grammatical forms',
-    category: 'text',
-  },
+  id: 'Subject',
+  label: 'Subject',
+  icon: '👤',
+  tooltip: 'Text subject with grammatical forms',
+  category: 'text',
+}
   {
-    id: 'Connector',
-    label: 'Connector',
-    icon: '🔗',
-    tooltip: 'Grammar connector between elements',
-    category: 'text',
-  },
+  id: 'Connector',
+  label: 'Connector',
+  icon: '🔗',
+  tooltip: 'Grammar connector between elements',
+  category: 'text',
+}
   {
-    id: 'Attribute',
-    label: 'Attribute',
-    icon: '🏷️',
-    tooltip: 'Descriptive attribute for nouns',
-    category: 'text',
-  },
+  id: 'Attribute',
+  label: 'Attribute',
+  icon: '🏷️',
+  tooltip: 'Descriptive attribute for nouns',
+  category: 'text',
+}
   {
-    id: 'Action',
-    label: 'Action',
-    icon: '⚡',
-    tooltip: 'Action verb with tense options',
-    category: 'text',
-  },
+  id: 'Action',
+  label: 'Action',
+  icon: '⚡',
+  tooltip: 'Action verb with tense options',
+  category: 'text',
+}
   // Original Node Types
   {
-    id: 'WeightedChoice',
-    label: 'WeightedChoice',
-    icon: WeightedChoiceIcon,
-    tooltip: 'Branch with weighted options',
-    category: 'logic',
-  },
+  id: 'WeightedChoice',
+  label: 'WeightedChoice',
+  icon: WeightedChoiceIcon,
+  tooltip: 'Branch with weighted options',
+  category: 'logic',
+}
   {
-    id: 'Concat',
-    label: 'Concat',
-    icon: ConcatIcon,
-    tooltip: 'Concatenate child prompts',
-    category: 'logic',
-  },
+  id: 'Concat',
+  label: 'Concat',
+  icon: ConcatIcon,
+  tooltip: 'Concatenate child prompts',
+  category: 'logic',
+}
   {
-    id: 'Output',
-    label: 'Output',
-    icon: OutputIcon,
-    tooltip: 'Final output node',
-    category: 'output',
-  },
+  id: 'Output',
+  label: 'Output',
+  icon: OutputIcon,
+  tooltip: 'Final output node',
+  category: 'output',
+}
   {
-    id: 'Include',
-    label: 'Include',
-    icon: IncludeIcon,
-    tooltip: 'Include another bundle',
-    category: 'logic',
-  },
+  id: 'Include',
+  label: 'Include',
+  icon: IncludeIcon,
+  tooltip: 'Include another bundle',
+  category: 'logic',
+}
   {
-    id: 'SetVariable',
-    label: 'SetVariable',
-    icon: SetVariableIcon,
-    tooltip: 'Set a variable',
-    category: 'variable',
-  },
+  id: 'SetVariable',
+  label: 'SetVariable',
+  icon: SetVariableIcon,
+  tooltip: 'Set a variable',
+  category: 'variable',
+}
   {
-    id: 'GetVariable',
-    label: 'GetVariable',
-    icon: GetVariableIcon,
-    tooltip: 'Read a variable',
-    category: 'variable',
-  },
+  id: 'GetVariable',
+  label: 'GetVariable',
+  icon: GetVariableIcon,
+  tooltip: 'Read a variable',
+  category: 'variable',
+}
   // Epic 7 Advanced Node Types
   {
-    id: 'WeightedAdvanced',
-    label: 'WeightedAdvanced',
-    icon: '🎲',
-    tooltip: 'Advanced weighted choice with distributions',
-    category: 'advanced',
-  },
+  id: 'WeightedAdvanced',
+  label: 'WeightedAdvanced',
+  icon: '🎲',
+  tooltip: 'Advanced weighted choice with distributions',
+  category: 'advanced',
+}
   {
-    id: 'Conditional',
-    label: 'Conditional',
-    icon: '🔀',
-    tooltip: 'Expression-based conditional branching',
-    category: 'advanced',
-  },
+  id: 'Conditional',
+  label: 'Conditional',
+  icon: '🔀',
+  tooltip: 'Expression-based conditional branching',
+  category: 'advanced',
+}
   {
-    id: 'Sequential',
-    label: 'Sequential',
-    icon: '🔄',
-    tooltip: 'Sequential processing with patterns',
-    category: 'advanced',
-  },
+  id: 'Sequential',
+  label: 'Sequential',
+  icon: '🔄',
+  tooltip: 'Sequential processing with patterns',
+  category: 'advanced',
+}
   {
-    id: 'Markov',
-    label: 'Markov',
-    icon: '🕸️',
-    tooltip: 'Markov chain state transitions',
-    category: 'advanced',
-  },
+  id: 'Markov',
+  label: 'Markov',
+  icon: '🕸️',
+  tooltip: 'Markov chain state transitions',
+  category: 'advanced',
+}
   {
-    id: 'PythonTransform',
-    label: 'PythonTransform',
-    icon: '🐍',
-    tooltip: 'Python script transformation',
-    category: 'transform',
-  }
-];
-
-// Inner component that has access to React Flow instance
-const GraphEditorWithProvidersInner: React.FC<GraphEditorWithProvidersProps> = ({)
+  id: 'PythonTransform',
+  label: 'PythonTransform',
+  icon: '🐍',
+  tooltip: 'Python script transformation',
+  category: 'transform'];
+  // Inner component that has access to React Flow instance
+  const GraphEditorWithProvidersInner: React.FC<GraphEditorWithProvidersProps> = ({,)
   initialNodes,
   initialEdges,
   validateConnection,
@@ -197,7 +193,7 @@ const GraphEditorWithProvidersInner: React.FC<GraphEditorWithProvidersProps> = (
   onProviderUnregistered,
   onProviderError
 }) => {
-  return ();
+  return;
     <EditorProviderWrapper
       initialNodes={initialNodes}
       initialEdges={initialEdges}
@@ -225,15 +221,14 @@ const GraphEditorWithProvidersInner: React.FC<GraphEditorWithProvidersProps> = (
 
 // Core GraphEditor component with provider integration
 interface GraphEditorCoreProps {
-  initialNodes: Node[];
-  initialEdges: Edge[];
-  validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
+  initialNodes: Node;,
+  initialEdges: Edge;
+  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;,
   registry: ProviderRegistry;
-  editorContext: EditorStateContext;
+  editorContext: EditorStateContext;,
   editorActions: EditorActions;
   isProviderLoading: boolean;
-}
-const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
+  const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({,)
   initialNodes,
   initialEdges,
   validateConnection,
@@ -242,20 +237,20 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
   isProviderLoading
 }) => {
   // Local state management (similar to original GraphEditor)
-  const [nodes, setNodes] = useState<Node[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
+  const [nodes, setNodes] = useState<Node>(initialNodes);
+  const [edges, setEdges] = useState<Edge>(initialEdges);
   const [statusMessage, setStatusMessage] = useState<string>('');
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [paletteCollapsed, setPaletteCollapsed] = useState(false);
   // Preview modal state
   const [previewOpen, setPreviewOpen] = useState(false);
   const {
-    loading: previewLoading,
-    error: previewError,
-    results: previewResults,
-    runPreview,
-    cancelPreview
-  } = usePreviewSeeds();
+  loading: previewLoading,
+  error: previewError,
+  results: previewResults,
+  runPreview,
+  cancelPreview
+} = usePreviewSeeds();
   const reactFlowInstance = useReactFlow();
   const graphStore = useGraphStore();
   // Custom hooks
@@ -265,7 +260,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
   const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
   const { errors, styledEdges, styledNodes } = useValidation({)
-    edges,
+  edges,
     nodes,
     highlightNodeIds,
     highlightEdgeIds,
@@ -285,11 +280,10 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       setNodes(prev => [...prev, node]);
       graphStore.markProjectModified();
     } catch (error) {
-      console.error('Failed to add node:', error);
-      setStatusMessage('Failed to add node');
-      setTimeout(() => setStatusMessage(''), 3000);
-    }
-  }, [editorActions, graphStore]);
+  console.error('Failed to add node:', error);
+  setStatusMessage('Failed to add node');
+  setTimeout(() => setStatusMessage(''), 3000);
+}, [editorActions, graphStore]);
   const handleNodeUpdate = useCallback(async (nodeId: string, data: Record<string, unknown>) => {
     try {
       await editorActions.updateNode(nodeId, data);
@@ -300,11 +294,10 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       ));
       graphStore.markProjectModified();
     } catch (error) {
-      console.error('Failed to update node:', error);
-      setStatusMessage('Failed to update node');
-      setTimeout(() => setStatusMessage(''), 3000);
-    }
-  }, [editorActions, graphStore]);
+  console.error('Failed to update node:', error);
+  setStatusMessage('Failed to update node');
+  setTimeout(() => setStatusMessage(''), 3000);
+}, [editorActions, graphStore]);
   const handleNodeRemove = useCallback(async (nodeId: string) => {
     try {
       await editorActions.removeNode(nodeId);
@@ -312,14 +305,12 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       setEdges(prev => prev.filter(e => e.source !== nodeId && e.target !== nodeId));
       if (selectedNodeId === nodeId) {
         setSelectedNodeId(null);
-      }
       graphStore.markProjectModified();
     } catch (error) {
-      console.error('Failed to remove node:', error);
-      setStatusMessage('Failed to remove node');
-      setTimeout(() => setStatusMessage(''), 3000);
-    }
-  }, [editorActions, selectedNodeId, graphStore]);
+  console.error('Failed to remove node:', error);
+  setStatusMessage('Failed to remove node');
+  setTimeout(() => setStatusMessage(''), 3000);
+}, [editorActions, selectedNodeId, graphStore]);
   // Memoized node render component
   const NodeRender = useMemo(() => {
     const NodeRenderComponent = (props: { id: string; data: Record<string, unknown>; selected?: boolean }) => ()
@@ -353,7 +344,8 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
   const onConnect: OnConnect = useCallback()
     async (connection: Connection) => {
       const newEdge = {
-        id: `${connection.source}-${connection.target}`,}
+        id: `${connection.source}-${connection.target}`}
+}
         ...connection
       } as Edge;
       try {
@@ -361,36 +353,36 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
         setEdges((eds) => addEdge(connection, eds));
         graphStore.markProjectModified();
       } catch (error) {
-        console.error('Failed to add edge:', error);
-        setStatusMessage('Failed to connect nodes');
-        setTimeout(() => setStatusMessage(''), 3000);
-      }
-    },
+  console.error('Failed to add edge:', error);
+  setStatusMessage('Failed to connect nodes');
+  setTimeout(() => setStatusMessage(''), 3000);
+}
     [editorActions, graphStore]
   );
   // Handle drop on canvas: create node of given type at position
   const handleDrop = useCallback(;);
     (event: React.DragEvent) => {
-      event.preventDefault();
-      const nodeType = event.dataTransfer.getData('application/node-type');
-      if (!nodeType || !(nodeType in nodeSchemas)) return;
-      // Use React Flow's screenToFlowPosition for accurate positioning
-      const position = reactFlowInstance.screenToFlowPosition({)
-        x: event.clientX,
-        y: event.clientY,
-      });
+  event.preventDefault();
+  const nodeType = event.dataTransfer.getData('application/node-type');
+  if (!nodeType || !(nodeType in nodeSchemas)) return;
+  // Use React Flow's screenToFlowPosition for accurate positioning
+  const position = reactFlowInstance.screenToFlowPosition({)
+  x: event.clientX,
+  y: event.clientY,
+});
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
-      const newNode: Node = {
-        id: `${nodeType}-${Date.now()}`,}
-        type: 'default',
+      const newNode: Node = {,
+  id: `${nodeType}-${Date.now()}`}
+},
+  type: 'default',
         position,
         data: { ...params, nodeType: nodeType },
-        selected: false,
-      };
+        selected: false;
+  };
       handleNodeAdd(newNode);
-    },
+  }
     [reactFlowInstance, handleNodeAdd]
   );
   // Allow drop on canvas
@@ -404,7 +396,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
   }, []);
   // Node change handlers with provider integration
   const onNodesChange: OnNodesChange = useCallback()
-    (changes: NodeChange[]) => {
+    (changes: NodeChange) => {
       setNodes((nds) => {
         return nds.map((node) => {
           const change = changes.find((c) => 'id' in c && c.id === node.id);
@@ -413,22 +405,21 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       });
       // Check for node deletions and handle via provider system
       changes.forEach(change => {)
-        if (change.type === 'remove' && 'id' in change) {
+  if (change.type === 'remove' && 'id' in change) {
           handleNodeRemove(change.id);
-        }
       });
-    },
+  }
     [handleNodeRemove]
   );
   const onEdgesChange: OnEdgesChange = useCallback()
-    (changes: EdgeChange[]) => {
+    (changes: EdgeChange) => {
       setEdges((eds) => {
         return eds.map((edge) => {
           const change = changes.find((c) => 'id' in c && c.id === edge.id);
           return change ? { ...edge, ...change } : edge;
         });
       });
-    },
+  }
     []
   );
   // Enhanced preview handler with provider integration
@@ -439,32 +430,31 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
       runPreview({ nodes, edges });
       setPreviewOpen(true);
     } catch (error) {
-      console.error('Preview failed:', error);
-      setStatusMessage('Preview execution failed');
-      setTimeout(() => setStatusMessage(''), 3000);
-    }
-  }, [editorActions, nodes, edges, runPreview]);
+  console.error('Preview failed:', error);
+  setStatusMessage('Preview execution failed');
+  setTimeout(() => setStatusMessage(''), 3000);
+}, [editorActions, nodes, edges, runPreview]);
   // Provider status indicator
   const renderProviderStatus = () => {
-    const hooks = registry.getHooks();
-    const activeHooks = hooks.length;
-    return ();
-      <div style={{
-        position: 'absolute',
-        top: '10px',
-        left: '10px',
-        background: 'rgba(0, 0, 0, 0.7)',
-        color: 'white',
-        padding: '4px 8px',
-        borderRadius: '4px',
-        fontSize: '12px',
-        zIndex: 1000,
-      }}>
+  const hooks = registry.getHooks();
+  const activeHooks = hooks.length;
+  return;
+  <div style={{
+  position: 'absolute',
+  top: '10px',
+  left: '10px',
+  background: 'rgba(0, 0, 0, 0.7)',
+  color: 'white',
+  padding: '4px 8px',
+  borderRadius: '4px',
+  fontSize: '12px',
+  zIndex: 1000,
+}}>
         Providers: {activeHooks} active {isProviderLoading && '(loading...)'}
       </div>
     );
   };
-  return ();
+  return;
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {renderProviderStatus()}
       <div style={{ display: 'flex', height: '100%' }}>
@@ -531,7 +521,7 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
         errors={errors}
         onPreview={handlePreview}
         onSaveJson={() => {
-          const blob = new Blob([;);
+          const blob = new Blob([);
             JSON.stringify({ nodes, edges }, null, 2)
           ], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
@@ -574,12 +564,10 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
             setHighlightEdgeIds(new Set(res.usedEdgeIds));
           } else {
             setHighlightEdgeIds(new Set());
-          }
           if (res?.usedNodeIds) {
             setHighlightNodeIds(new Set(res.usedNodeIds));
           } else {
             setHighlightNodeIds(new Set());
-          }
         }}
       />
     </div>
@@ -587,8 +575,9 @@ const GraphEditorCore: React.FC<GraphEditorCoreProps> = ({)
 };
 
 // Wrapper component with ReactFlowProvider
+}
 export const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps> = (props) => {
-  return ();
+  return;
     <ReactFlowProvider>
       <GraphEditorWithProvidersInner {...props} />
     </ReactFlowProvider>
@@ -598,24 +587,23 @@ export const GraphEditorWithProviders: React.FC<GraphEditorWithProvidersProps> =
 // Example usage and built-in providers
 export },
   onNodeAdd: (node) => {,
-    console.log('[Analytics] Node added:', node.data?.nodeType);
-    // Could send analytics event here
-    return node;
-  },
+  console.log('[Analytics] Node added:', node.data?.nodeType);
+  // Could send analytics event here
+  return node;
+},
   onExecutionError: (error) => {,
-    console.error('[Analytics] Execution error:', error.message);
-    // Could send error analytics here
-  },
+  console.error('[Analytics] Execution error:', error.message);
+  // Could send error analytics here
+},
   customActions: {,
-    getAnalytics: (context) => ({),
-      nodeCount: context.nodes.length,
-      edgeCount: context.edges.length,
-      nodeTypes: context.nodes.reduce((acc, node) => {
-        const type = node.data?.nodeType as string || 'unknown';
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>)
-    })
+  getAnalytics: (context) => ({,)
+  nodeCount: context.nodes.length,
+  edgeCount: context.edges.length,
+  nodeTypes: context.nodes.reduce((acc, node) => {,
+  const type = node.data?.nodeType as string || 'unknown';
+  acc[type] = (acc[type] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>)
   }
 });
 

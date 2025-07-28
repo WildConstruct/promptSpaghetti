@@ -18,40 +18,42 @@ import { HelpProvider } from '../components/Help/HelpContentManager';
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({),
-    complexityLevel: 'basic',
-    debugMode: false,
-    shouldShowTechnicalFields: () => false,
-  })
+  useUISettingsStore: () => ({,)
+  complexityLevel: 'basic',
+  debugMode: false,
+  shouldShowTechnicalFields: () => false,
+}
 }));
 
 // Also need to mock this for all files that use it
 jest.mock('../../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({),
-    complexityLevel: 'basic',
-    debugMode: false,
-    shouldShowTechnicalFields: () => false,
-  })
+  useUISettingsStore: () => ({,)
+  complexityLevel: 'basic',
+  debugMode: false,
+  shouldShowTechnicalFields: () => false,
+}
 }));
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({),
-    nodes: [],
-    edges: [],
-  })
+  useGraphStore: () => ({,)
+  nodes: [],
+  edges: [],
+}
 }));
 
 // Common test props for all editors
-const createMockNodeData = (type: string) => ({)
+const createMockNodeData = (type: string) => ({,)
   id: 'test-node-id',
   type,
-  name: `Test ${type}`,}
-  label: `Test ${type}`,}
+  name: `Test ${type}`}
+},
+  label: `Test ${type}`}
+},
   x: 100,
-  y: 100,
-});
-const mockOnChange = jest.fn<unknown[], unknown>();
+  y: 100;
+  });
+const mockOnChange = jest.fn<unknown, unknown>();
 
 // Test wrapper with help provider
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => ()
@@ -110,7 +112,6 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
         await waitFor(() => {
           expect(screen.getByText('Output Template')).toBeInTheDocument();
         });
-      }
     });
   });
   describe('OutputEditor Integration', () => {
@@ -327,9 +328,7 @@ describe('Inspector Integration - Progressive Disclosure Pattern', () => {
           await new Promise(resolve => setImmediate(resolve));
           // At least one editor should show help content
           // (We don't require all because some might have different trigger types)
-        }
         unmount();
-      }
     });
   });
   describe('Help System Integration', () => {

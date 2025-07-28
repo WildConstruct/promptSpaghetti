@@ -43,6 +43,7 @@ export type CollaborativePermission = keyof typeof COLLABORATIVE_PERMISSIONS;
 /**
  * Collaboration settings for workspaces
  */
+}
 export interface CollaborationSettings {
   max_concurrent_editors: number;        // Default: 10
   auto_save_interval: number;            // Milliseconds, default: 5000
@@ -51,20 +52,24 @@ export interface CollaborationSettings {
   allow_anonymous_viewers: boolean;      // Guest access
   session_timeout: number;               // Minutes, default: 30
 }
+}
 
 /**
  * Resource quotas for workspace limits
  */
+}
 export interface ResourceQuotas {
   max_projects: number;                  // Default: 100
   max_resources_per_project: number;     // Default: 1000
   max_storage_bytes: number;             // Default: 1GB
   max_concurrent_sessions: number;       // Default: 25
 }
+}
 
 /**
  * Current usage statistics
  */
+}
 export interface UsageStats {
   current_projects: number;
   current_resources: number;
@@ -72,10 +77,12 @@ export interface UsageStats {
   active_sessions: number;
   last_activity_at: Date;
 }
+}
 
 /**
  * Enhanced workspace interface extending base Workspace
  */
+}
 export interface EnhancedWorkspace extends Workspace {
   // Epic 23 collaborative enhancements
   collaboration_settings: CollaborationSettings;
@@ -100,6 +107,7 @@ export enum IsolationLevel {
 /**
  * Workspace isolation configuration
  */
+}
 export interface WorkspaceIsolation {
   workspace_id: string;
   isolation_level: IsolationLevel;
@@ -108,6 +116,7 @@ export interface WorkspaceIsolation {
     allow_resource_sharing: boolean;
     allow_user_discovery: boolean;
     allow_project_imports: boolean;
+}
   };
 }
 
@@ -118,16 +127,19 @@ export interface WorkspaceIsolation {
 /**
  * Collaboration-specific settings for roles
  */
+}
 export interface CollaborationRoleSettings {
   max_concurrent_edits: number;         // How many resources can edit simultaneously
   priority_level: 'low' | 'normal' | 'high' | 'critical'; // Conflict resolution priority
   auto_save_enabled: boolean;           // Can use auto-save
   session_duration_minutes: number;     // Max session length
 }
+}
 
 /**
  * Enhanced role interface with collaborative features
  */
+}
 export interface CollaborativeRole extends Role {
   collaboration_settings: CollaborationRoleSettings;
   quota_overrides?: Partial<ResourceQuotas>; // Role-specific quota modifications
@@ -136,7 +148,7 @@ export interface CollaborativeRole extends Role {
 /**
  * Predefined collaborative system roles
  */
-export 
+
 // =============================================================================
 // ENHANCED RESOURCE MODEL
 // =============================================================================
@@ -144,6 +156,7 @@ export
 /**
  * Edit session information for real-time collaboration
  */
+}
 export interface EditSession {
   id: string;
   resource_id: string;
@@ -157,6 +170,7 @@ export interface EditSession {
     client_id: string;              // Browser/device identifier
     user_agent: string;
     ip_address?: string;
+}
   };
   
   editing_state: {
@@ -178,6 +192,7 @@ export interface EditSession {
 /**
  * Cursor position for real-time cursor tracking
  */
+}
 export interface CursorPosition {
   user_id: string;
   resource_id: string;
@@ -187,6 +202,7 @@ export interface CursorPosition {
     line?: number;                 // For text content
     column?: number;
     offset?: number;               // Character offset
+}
   };
   timestamp: Date;
   is_typing: boolean;
@@ -195,6 +211,7 @@ export interface CursorPosition {
 /**
  * Selection range for collaborative editing
  */
+}
 export interface SelectionRange {
   user_id: string;
   resource_id: string;
@@ -203,10 +220,12 @@ export interface SelectionRange {
   selection_type: 'text' | 'node' | 'component' | 'region';
   timestamp: Date;
 }
+}
 
 /**
  * Conflict marker for version control
  */
+}
 export interface ConflictMarker {
   id: string;
   resource_id: string;
@@ -218,10 +237,12 @@ export interface ConflictMarker {
   resolved_at?: Date;
   resolved_by?: string;
 }
+}
 
 /**
  * Pending merge information
  */
+}
 export interface PendingMerge {
   id: string;
   from_branch: string;
@@ -233,10 +254,12 @@ export interface PendingMerge {
   conflicts: ConflictMarker[];
   status: 'pending' | 'approved' | 'rejected' | 'merged';
 }
+}
 
 /**
  * Collaborative state for resources
  */
+}
 export interface CollaborativeState {
   is_collaborative: boolean;        // Can be edited collaboratively
   active_editors: string[];         // Currently editing user IDs
@@ -246,10 +269,12 @@ export interface CollaborativeState {
   locked_at?: Date;
   lock_expires_at?: Date;
 }
+}
 
 /**
  * Version control information
  */
+}
 export interface VersionControl {
   current_branch: string;           // Default: 'main'
   available_branches: string[];
@@ -257,30 +282,36 @@ export interface VersionControl {
   merge_conflicts: ConflictMarker[];
   pending_merges: PendingMerge[];
 }
+}
 
 /**
  * User presence data for resources
  */
+}
 export interface PresenceData {
   active_viewers: UserPresence[];   // Users currently viewing
   last_presence_update: Date;
   cursor_positions: CursorPosition[];
   selection_ranges: SelectionRange[];
 }
+}
 
 /**
  * Performance optimization hints
  */
+}
 export interface OptimizationHints {
   is_large_resource: boolean;       // > 1MB or complex structure
   requires_chunking: boolean;       // For efficient real-time sync
   cache_strategy: 'aggressive' | 'normal' | 'minimal';
   priority: 'low' | 'normal' | 'high';
 }
+}
 
 /**
  * Enhanced resource interface with collaborative features
  */
+}
 export interface CollaborativeResource extends Resource {
   collaborative_state: CollaborativeState;
   version_control: VersionControl;
@@ -295,16 +326,19 @@ export interface CollaborativeResource extends Resource {
 /**
  * User presence status information
  */
+}
 export interface PresenceStatus {
   status: 'online' | 'idle' | 'away' | 'do_not_disturb' | 'offline';
   custom_message?: string;
   last_seen_at: Date;
   is_mobile: boolean;
 }
+}
 
 /**
  * Current user context within workspace
  */
+}
 export interface UserCurrentContext {
   current_project_id?: string;
   current_resource_id?: string;
@@ -312,20 +346,24 @@ export interface UserCurrentContext {
   cursor_position?: CursorPosition;
   selection_range?: SelectionRange;
 }
+}
 
 /**
  * User's collaboration state
  */
+}
 export interface CollaborationState {
   is_editing: boolean;
   editing_resources: string[];      // Resource IDs currently editing
   can_be_interrupted: boolean;      // For conflict resolution
   collaboration_role: string;       // Current role in this context
 }
+}
 
 /**
  * Session metadata for presence tracking
  */
+}
 export interface SessionMetadata {
   session_id: string;
   client_type: 'web' | 'desktop' | 'mobile';
@@ -333,10 +371,12 @@ export interface SessionMetadata {
   connection_quality: 'excellent' | 'good' | 'fair' | 'poor';
   latency_ms?: number;
 }
+}
 
 /**
  * Complete user presence information
  */
+}
 export interface UserPresence {
   user_id: string;
   workspace_id: string;
@@ -348,6 +388,7 @@ export interface UserPresence {
   
   timestamp: Date;
 }
+}
 
 // =============================================================================
 // WORKSPACE CONTEXT MANAGEMENT
@@ -356,6 +397,7 @@ export interface UserPresence {
 /**
  * Navigation state within workspace
  */
+}
 export interface NavigationState {
   current_view: 'dashboard' | 'projects' | 'resources' | 'settings' | 'collaboration';
   current_project_id?: string;
@@ -364,20 +406,24 @@ export interface NavigationState {
   recent_projects: string[];        // Recently accessed project IDs
   recent_resources: string[];       // Recently accessed resource IDs
 }
+}
 
 /**
  * Collaboration context for user
  */
+}
 export interface CollaborationContext {
   active_sessions: EditSession[];
   visible_users: UserPresence[];
   notification_preferences: NotificationPreferences;
   collaboration_mode: 'individual' | 'paired' | 'team' | 'review';
 }
+}
 
 /**
  * User workspace preferences
  */
+}
 export interface WorkspacePreferences {
   default_project_template?: string;
   auto_save_interval: number;
@@ -386,20 +432,24 @@ export interface WorkspacePreferences {
   presence_visibility: boolean;
   conflict_resolution_preference: 'ask' | 'auto_merge' | 'manual';
 }
+}
 
 /**
  * Cache state for performance optimization
  */
+}
 export interface CacheState {
   cached_projects: Map<string, Date>;     // Project ID -> Last cached
   cached_resources: Map<string, Date>;    // Resource ID -> Last cached
   cache_size_bytes: number;
   last_cache_cleanup: Date;
 }
+}
 
 /**
  * Complete workspace context for a user
  */
+}
 export interface WorkspaceContext {
   workspace_id: string;
   user_id: string;
@@ -412,10 +462,12 @@ export interface WorkspaceContext {
   last_updated: Date;
   expires_at: Date;
 }
+}
 
 /**
  * Notification preferences for workspace
  */
+}
 export interface NotificationPreferences {
   workspace_id: string;
   user_id: string;
@@ -427,6 +479,7 @@ export interface NotificationPreferences {
     mentions: boolean;
     system_announcements: boolean;
     quota_warnings: boolean;
+}
   };
   
   delivery_methods: {
@@ -452,6 +505,7 @@ export interface NotificationPreferences {
 /**
  * Unsaved changes during workspace switch
  */
+}
 export interface UnsavedChange {
   resource_id: string;
   change_type: 'content' | 'metadata' | 'structure';
@@ -459,10 +513,12 @@ export interface UnsavedChange {
   timestamp: Date;
   auto_save_eligible: boolean;
 }
+}
 
 /**
  * Context preservation during workspace switching
  */
+}
 export interface WorkspaceSwitchContext {
   user_id: string;
   from_workspace_id?: string;
@@ -474,6 +530,7 @@ export interface WorkspaceSwitchContext {
     open_resources: string[];
     unsaved_changes: UnsavedChange[];
     active_sessions: string[];      // Session IDs to maintain
+}
   };
   
   // Security context
@@ -500,6 +557,7 @@ export interface WorkspaceSwitchContext {
 /**
  * Comprehensive quota tracking
  */
+}
 export interface DetailedResourceQuotas {
   workspace_id: string;
   
@@ -535,10 +593,12 @@ export interface DetailedResourceQuotas {
   last_updated: Date;
   next_reset: Date;
 }
+}
 
 /**
  * Quota usage event for tracking
  */
+}
 export interface QuotaUsageEvent {
   id: string;
   workspace_id: string;
@@ -551,6 +611,7 @@ export interface QuotaUsageEvent {
     project_id?: string;
     session_id?: string;
     operation: string;
+}
   };
 }
 
@@ -632,6 +693,7 @@ export function createEmptyUsageStats(): UsageStats {
 /**
  * Interface for creating enhanced workspaces
  */
+}
 export interface CreateEnhancedWorkspace {
   name: string;
   description?: string;
@@ -639,10 +701,12 @@ export interface CreateEnhancedWorkspace {
   resource_quotas?: Partial<ResourceQuotas>;
   settings?: Record<string, any>;
 }
+}
 
 /**
  * Interface for creating collaborative resources
  */
+}
 export interface CreateCollaborativeResource {
   name: string;
   type: Resource['type'];
@@ -650,6 +714,7 @@ export interface CreateCollaborativeResource {
   content_data?: Record<string, any>;
   is_collaborative?: boolean;
   optimization_hints?: Partial<OptimizationHints>;
+}
 }
 
 // =============================================================================

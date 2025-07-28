@@ -4,24 +4,15 @@ export type ViewMode = 'side-by-side' | 'overlay' | 'unified';
 export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
 export interface GraphData {
     id: string;
-    nodes: Array<{
-        id: string;
-        type: string;
-        position: {
-            x: number;
-            y: number;
-        };
-        data: Record<string, unknown>;
-        [key: string]: unknown;
-    }>;
-    edges: Array<{
-        id: string;
-        source: string;
-        target: string;
-        data?: Record<string, unknown>;
-        [key: string]: unknown;
-    }>;
-    metadata?: Record<string, unknown>;
+    nodes: Array<{}>;
+    id: string;
+    type: string;
+    position: {
+        x: number;
+        y: number;
+    };
+    data: Record<string, unknown>;
+    [key: string]: unknown;
 }
 export interface ChangeSummary {
     total_changes: number;
@@ -39,14 +30,11 @@ export interface NodeChange {
     change_type: MatchType;
     old_properties?: Record<string, unknown>;
     new_properties?: Record<string, unknown>;
-    property_changes: Array<{
-        field: string;
-        old_value: unknown;
-        new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
-    position_changed: boolean;
-    visual_changes: Record<string, unknown>;
+    property_changes: Array<{}, field>;
+    string: any;
+    old_value: unknown;
+    new_value: unknown;
+    change_type: 'added' | 'removed' | 'modified';
 }
 export interface EdgeChange {
     id: string;
@@ -55,13 +43,11 @@ export interface EdgeChange {
     change_type: MatchType;
     old_properties?: Record<string, unknown>;
     new_properties?: Record<string, unknown>;
-    property_changes: Array<{
-        field: string;
-        old_value: unknown;
-        new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
-    connection_changed: boolean;
+    property_changes: Array<{}, field>;
+    string: any;
+    old_value: unknown;
+    new_value: unknown;
+    change_type: 'added' | 'removed' | 'modified';
 }
 export interface NodeMatchResult {
     id: string;
@@ -97,12 +83,12 @@ export interface GraphComparison {
     comparison_type: ComparisonType;
     similarity_score: number;
     changes_summary: ChangeSummary;
-    added_nodes: NodeChange[];
-    removed_nodes: NodeChange[];
-    modified_nodes: NodeChange[];
-    added_edges: EdgeChange[];
-    removed_edges: EdgeChange[];
-    modified_edges: EdgeChange[];
+    added_nodes: NodeChange;
+    removed_nodes: NodeChange;
+    modified_nodes: NodeChange;
+    added_edges: EdgeChange;
+    removed_edges: EdgeChange;
+    modified_edges: EdgeChange;
     node_diffs: Record<string, unknown>;
     edge_diffs: Record<string, unknown>;
     property_diffs: Record<string, unknown>;
@@ -113,10 +99,10 @@ export interface GraphComparison {
 export interface DetailedComparison extends GraphComparison {
     source_data: GraphData;
     target_data: GraphData;
-    node_matches: NodeMatchResult[];
-    edge_matches: EdgeMatchResult[];
+    node_matches: NodeMatchResult;
+    edge_matches: EdgeMatchResult;
     algorithm_metadata: {
-        steps_executed: string[];
+        steps_executed: string;
         performance_metrics: Record<string, number>;
         confidence_distribution: Record<string, number>;
     };
@@ -185,7 +171,7 @@ export interface PaginationOptions {
     limit?: number;
 }
 export interface PaginatedResult<T> {
-    data: T[];
+    data: T;
     total: number;
     page: number;
     limit: number;
@@ -210,36 +196,32 @@ export interface ApiResponse<T> {
     metadata?: Record<string, unknown>;
 }
 export interface BatchComparisonRequest {
-    comparisons: Array<{
-        source_version_id: string;
-        target_version_id: string;
-        comparison_type?: ComparisonType;
-    }>;
+    comparisons: Array<{}, source_version_id>;
+    string: any;
+    target_version_id: string;
+    comparison_type?: ComparisonType;
 }
 export interface BatchComparisonResult {
-    successful: Array<{
-        similarity_score: number;
-        changes_summary: ChangeSummary;
-        comparison_id: string;
-        source_version_id: string;
-        target_version_id: string;
-    }>;
-    failed: Array<{
-        error: string;
-    }>;
-    total_requested: number;
-    successful_count: number;
-    failed_count: number;
+    successful: Array<{}, similarity_score>;
+    number: any;
+    changes_summary: ChangeSummary;
+    comparison_id: string;
+    source_version_id: string;
+    target_version_id: string;
 }
 export declare class ComparisonError extends Error {
+    constructor();
+    message: string;
     code: string;
     details?: Record<string, unknown>;
-    constructor(message: string, code: string, details?: Record<string, unknown>);
+    super(message: any): any;
 }
 export declare class DiffSessionError extends Error {
+    constructor();
+    message: string;
     code: string;
     sessionId?: string;
-    constructor(message: string, code: string, sessionId?: string);
+    super(message: any): any;
 }
 export interface ComparisonEvent {
     type: 'comparison_started' | 'comparison_completed' | 'comparison_failed';

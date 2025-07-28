@@ -27,12 +27,12 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const { query, params } = QueryBuilder
       .insert('workspaces')
       .values({)
-        name: data.name,
-        description: data.description,
-        settings: bindParams.json(data.settings),
-        created_by: bindParams.userId(data.created_by),
-        is_active: data.is_active,
-      })
+  name: data.name,
+  description: data.description,
+  settings: bindParams.json(data.settings),
+  created_by: bindParams.userId(data.created_by),
+  is_active: data.is_active,
+}
       .returning()
       .build();
     const result = await this.db.query<Workspace>(query, params);
@@ -45,7 +45,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       data.created_by
     );
     return workspace;
-  }
   async getWorkspace(id: WorkspaceId): Promise<Workspace | null> {
     const { query, params } = QueryBuilder
       .select()
@@ -54,7 +53,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Workspace>(query, params);
     return result.rows[0] || null;
-  }
   async updateWorkspace(id: WorkspaceId, data: Partial<Workspace>): Promise<Workspace> {
     const updateData: Record<string, unknown> = {};
     if (data.name !== undefined) updateData.name = data.name;
@@ -70,9 +68,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<Workspace>(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Workspace ${id} not found`);}
-    }
     return result.rows[0];
-  }
   async deleteWorkspace(id: WorkspaceId): Promise<void> {
     const { query, params } = QueryBuilder
       .update('workspaces')
@@ -82,9 +78,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error(`Workspace ${id} not found`);}
-    }
-  }
-  async getWorkspacesByUser(userId: UserId): Promise<Workspace[]> {
+  async getWorkspacesByUser(userId: UserId): Promise<Workspace> {
     const { query, params } = QueryBuilder
       .select([)
         'w.id', 'w.name', 'w.description', 'w.settings', 
@@ -97,19 +91,18 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Workspace>(query, params);
     return result.rows;
-  }
   // Project management
   async createProject(data: Omit<Project, 'id' | 'created_at' | 'updated_at' | 'last_activity_at'>): Promise<Project> {
     const { query, params } = QueryBuilder
       .insert('projects')
       .values({)
-        workspace_id: bindParams.workspaceId(data.workspace_id),
-        name: data.name,
-        description: data.description,
-        settings: bindParams.json(data.settings),
-        created_by: bindParams.userId(data.created_by),
-        is_active: data.is_active,
-      })
+  workspace_id: bindParams.workspaceId(data.workspace_id),
+  name: data.name,
+  description: data.description,
+  settings: bindParams.json(data.settings),
+  created_by: bindParams.userId(data.created_by),
+  is_active: data.is_active,
+}
       .returning()
       .build();
     const result = await this.db.query<Project>(query, params);
@@ -122,7 +115,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       data.created_by
     );
     return project;
-  }
   async getProject(id: ProjectId): Promise<Project | null> {
     const { query, params } = QueryBuilder
       .select()
@@ -131,7 +123,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Project>(query, params);
     return result.rows[0] || null;
-  }
   async updateProject(id: ProjectId, data: Partial<Project>): Promise<Project> {
     const updateData: Record<string, unknown> = {};
     if (data.name !== undefined) updateData.name = data.name;
@@ -147,9 +138,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<Project>(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Project ${id} not found`);}
-    }
     return result.rows[0];
-  }
   async deleteProject(id: ProjectId): Promise<void> {
     const { query, params } = QueryBuilder
       .update('projects')
@@ -159,9 +148,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error(`Project ${id} not found`);}
-    }
-  }
-  async getProjectsByWorkspace(workspaceId: WorkspaceId): Promise<Project[]> {
+  async getProjectsByWorkspace(workspaceId: WorkspaceId): Promise<Project> {
     const { query, params } = QueryBuilder
       .select()
       .from('projects')
@@ -170,8 +157,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Project>(query, params);
     return result.rows;
-  }
-  async getProjectsByUser(userId: UserId): Promise<Project[]> {
+  async getProjectsByUser(userId: UserId): Promise<Project> {
     const { query, params } = QueryBuilder
       .select([)
         'p.id', 'p.workspace_id', 'p.name', 'p.description', 'p.settings',
@@ -184,25 +170,23 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Project>(query, params);
     return result.rows;
-  }
   // Resource management
   async createResource(data: Omit<Resource, 'id' | 'created_at' | 'updated_at' | 'version'>): Promise<Resource> {
     const { query, params } = QueryBuilder
       .insert('resources')
       .values({)
-        project_id: bindParams.projectId(data.project_id),
-        name: data.name,
-        type: data.type,
-        content: bindParams.json(data.content),
-        metadata: bindParams.json(data.metadata),
-        created_by: bindParams.userId(data.created_by),
-        is_active: data.is_active,
-      })
+  project_id: bindParams.projectId(data.project_id),
+  name: data.name,
+  type: data.type,
+  content: bindParams.json(data.content),
+  metadata: bindParams.json(data.metadata),
+  created_by: bindParams.userId(data.created_by),
+  is_active: data.is_active,
+}
       .returning()
       .build();
     const result = await this.db.query<Resource>(query, params);
     return result.rows[0];
-  }
   async getResource(id: ResourceId): Promise<Resource | null> {
     const { query, params } = QueryBuilder
       .select()
@@ -211,7 +195,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Resource>(query, params);
     return result.rows[0] || null;
-  }
   async updateResource(id: ResourceId, data: Partial<Resource>): Promise<Resource> {
     const updateData: Record<string, unknown> = { version: 'version + 1' };
     if (data.name !== undefined) updateData.name = data.name;
@@ -228,9 +211,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<Resource>(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Resource ${id} not found`);}
-    }
     return result.rows[0];
-  }
   async deleteResource(id: ResourceId): Promise<void> {
     const { query, params } = QueryBuilder
       .update('resources')
@@ -240,62 +221,51 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error(`Resource ${id} not found`);}
-    }
-  }
-  async getResourcesByProject(projectId: ProjectId, type?: ResourceType): Promise<Resource[]> {
+  async getResourcesByProject(projectId: ProjectId, type?: ResourceType): Promise<Resource> {
     const builder = QueryBuilder;
       .select()
       .from('resources')
       .where('project_id = $1 AND is_active = true', bindParams.projectId(projectId));
     if (type) {
       builder.where('type = $1', type);
-    }
     const { query, params } = builder.orderBy('updated_at', 'DESC').build();
     const result = await this.db.query<Resource>(query, params);
     return result.rows;
-  }
   // Membership management
-  async addWorkspaceMember()
-    workspaceId: WorkspaceId, 
+  async addWorkspaceMember(workspaceId: WorkspaceId, )
     userId: UserId, 
     role: WorkspaceRole, 
-    invitedBy: UserId,
-  ): Promise<WorkspaceMember> {
+    invitedBy: UserId): Promise<WorkspaceMember> {,
     const { query, params } = QueryBuilder
       .insert('workspace_members')
       .values({)
-        workspace_id: bindParams.workspaceId(workspaceId),
-        user_id: bindParams.userId(userId),
-        role,
-        invited_by: bindParams.userId(invitedBy),
-      })
+  workspace_id: bindParams.workspaceId(workspaceId),
+  user_id: bindParams.userId(userId),
+  role,
+  invited_by: bindParams.userId(invitedBy),
+}
       .returning()
       .build();
     const result = await this.db.query<WorkspaceMember>(query, params);
     return result.rows[0];
-  }
   async removeWorkspaceMember(workspaceId: WorkspaceId, userId: UserId): Promise<void> {
     const { query, params } = QueryBuilder
       .update('workspace_members')
       .set({ is_active: false })
-      .where('workspace_id = $1 AND user_id = $2', )
+      .where('workspace_id = $1 AND user_id = $2')
         bindParams.workspaceId(workspaceId), 
         bindParams.userId(userId)
       .build();
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error('Workspace member not found');
-    }
-  }
-  async updateWorkspaceMemberRole()
-    workspaceId: WorkspaceId, 
+  async updateWorkspaceMemberRole(workspaceId: WorkspaceId, )
     userId: UserId, 
-    role: WorkspaceRole,
-  ): Promise<WorkspaceMember> {
+    role: WorkspaceRole): Promise<WorkspaceMember> {,
     const { query, params } = QueryBuilder
       .update('workspace_members')
       .set({ role })
-      .where('workspace_id = $1 AND user_id = $2', )
+      .where('workspace_id = $1 AND user_id = $2')
         bindParams.workspaceId(workspaceId), 
         bindParams.userId(userId)
       .returning()
@@ -303,10 +273,8 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<WorkspaceMember>(query, params);
     if (result.rows.length === 0) {
       throw new Error('Workspace member not found');
-    }
     return result.rows[0];
-  }
-  async getWorkspaceMembers(workspaceId: WorkspaceId): Promise<WorkspaceMember[]> {
+  async getWorkspaceMembers(workspaceId: WorkspaceId): Promise<WorkspaceMember> {
     const { query, params } = QueryBuilder
       .select()
       .from('workspace_members')
@@ -315,48 +283,40 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<WorkspaceMember>(query, params);
     return result.rows;
-  }
-  async addProjectMember()
-    projectId: ProjectId, 
+  async addProjectMember(projectId: ProjectId, )
     userId: UserId, 
     role: ProjectRole, 
-    invitedBy: UserId,
-  ): Promise<ProjectMember> {
+    invitedBy: UserId): Promise<ProjectMember> {,
     const { query, params } = QueryBuilder
       .insert('project_members')
       .values({)
-        project_id: bindParams.projectId(projectId),
-        user_id: bindParams.userId(userId),
-        role,
-        invited_by: bindParams.userId(invitedBy),
-      })
+  project_id: bindParams.projectId(projectId),
+  user_id: bindParams.userId(userId),
+  role,
+  invited_by: bindParams.userId(invitedBy),
+}
       .returning()
       .build();
     const result = await this.db.query<ProjectMember>(query, params);
     return result.rows[0];
-  }
   async removeProjectMember(projectId: ProjectId, userId: UserId): Promise<void> {
     const { query, params } = QueryBuilder
       .update('project_members')
       .set({ is_active: false })
-      .where('project_id = $1 AND user_id = $2', )
+      .where('project_id = $1 AND user_id = $2')
         bindParams.projectId(projectId), 
         bindParams.userId(userId)
       .build();
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error('Project member not found');
-    }
-  }
-  async updateProjectMemberRole()
-    projectId: ProjectId, 
+  async updateProjectMemberRole(projectId: ProjectId, )
     userId: UserId, 
-    role: ProjectRole,
-  ): Promise<ProjectMember> {
+    role: ProjectRole): Promise<ProjectMember> {,
     const { query, params } = QueryBuilder
       .update('project_members')
       .set({ role })
-      .where('project_id = $1 AND user_id = $2', )
+      .where('project_id = $1 AND user_id = $2')
         bindParams.projectId(projectId), 
         bindParams.userId(userId)
       .returning()
@@ -364,10 +324,8 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<ProjectMember>(query, params);
     if (result.rows.length === 0) {
       throw new Error('Project member not found');
-    }
     return result.rows[0];
-  }
-  async getProjectMembers(projectId: ProjectId): Promise<ProjectMember[]> {
+  async getProjectMembers(projectId: ProjectId): Promise<ProjectMember> {
     const { query, params } = QueryBuilder
       .select()
       .from('project_members')
@@ -376,30 +334,26 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<ProjectMember>(query, params);
     return result.rows;
-  }
   // Activity tracking
   async logActivity(event: Omit<ActivityEvent, 'id' | 'created_at'>): Promise<ActivityEvent> {
     const { query, params } = QueryBuilder
       .insert('activity_events')
       .values({)
-        workspace_id: bindParams.workspaceId(event.workspace_id),
-        project_id: event.project_id ? bindParams.projectId(event.project_id) : null,
-        resource_id: event.resource_id ? bindParams.resourceId(event.resource_id) : null,
-        user_id: bindParams.userId(event.user_id),
-        type: event.type,
-        details: bindParams.json(event.details),
-        metadata: bindParams.json(event.metadata),
-      })
+  workspace_id: bindParams.workspaceId(event.workspace_id),
+  project_id: event.project_id ? bindParams.projectId(event.project_id) : null,
+  resource_id: event.resource_id ? bindParams.resourceId(event.resource_id) : null,
+  user_id: bindParams.userId(event.user_id),
+  type: event.type,
+  details: bindParams.json(event.details),
+  metadata: bindParams.json(event.metadata),
+}
       .returning()
       .build();
     const result = await this.db.query<ActivityEvent>(query, params);
     return result.rows[0];
-  }
-  async getWorkspaceActivity()
-    workspaceId: WorkspaceId, 
+  async getWorkspaceActivity(workspaceId: WorkspaceId, )
     limit: number = 50, 
-    offset: number = 0,
-  ): Promise<ActivityEvent[]> {
+    offset: number = 0): Promise<ActivityEvent> {,
     const { query, params } = QueryBuilder
       .select()
       .from('activity_events')
@@ -410,26 +364,24 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<ActivityEvent>(query, params);
     return result.rows;
-  }
   // Comments
   async createComment(data: Omit<Comment, 'id' | 'created_at' | 'updated_at'>): Promise<Comment> {
     const { query, params } = QueryBuilder
       .insert('comments')
       .values({)
-        workspace_id: bindParams.workspaceId(data.workspace_id),
-        project_id: data.project_id ? bindParams.projectId(data.project_id) : null,
-        resource_id: data.resource_id ? bindParams.resourceId(data.resource_id) : null,
-        parent_comment_id: data.parent_comment_id || null,
-        user_id: bindParams.userId(data.user_id),
-        content: data.content,
-        metadata: bindParams.json(data.metadata),
-      })
+  workspace_id: bindParams.workspaceId(data.workspace_id),
+  project_id: data.project_id ? bindParams.projectId(data.project_id) : null,
+  resource_id: data.resource_id ? bindParams.resourceId(data.resource_id) : null,
+  parent_comment_id: data.parent_comment_id || null,
+  user_id: bindParams.userId(data.user_id),
+  content: data.content,
+  metadata: bindParams.json(data.metadata),
+}
       .returning()
       .build();
     const result = await this.db.query<Comment>(query, params);
     return result.rows[0];
-  }
-  async getComments(resourceId: ResourceId): Promise<Comment[]> {
+  async getComments(resourceId: ResourceId): Promise<Comment> {
     const { query, params } = QueryBuilder
       .select()
       .from('comments')
@@ -438,7 +390,6 @@ export class WorkspaceDAO implements WorkspaceOperations {
       .build();
     const result = await this.db.query<Comment>(query, params);
     return result.rows;
-  }
   async updateComment(id: string, content: string): Promise<Comment> {
     const { query, params } = QueryBuilder
       .update('comments')
@@ -449,9 +400,7 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query<Comment>(query, params);
     if (result.rows.length === 0) {
       throw new Error(`Comment ${id} not found`);}
-    }
     return result.rows[0];
-  }
   async deleteComment(id: string): Promise<void> {
     const { query, params } = QueryBuilder
       .update('comments')
@@ -461,42 +410,37 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error(`Comment ${id} not found`);}
-    }
-  }
   // Notifications
   async createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification> {
     const { query, params } = QueryBuilder
       .insert('notifications')
       .values({)
-        user_id: bindParams.userId(data.user_id),
-        workspace_id: bindParams.workspaceId(data.workspace_id),
-        project_id: data.project_id ? bindParams.projectId(data.project_id) : null,
-        type: data.type,
-        title: data.title,
-        message: data.message,
-        data: bindParams.json(data.data),
-        is_active: data.is_active,
-      })
+  user_id: bindParams.userId(data.user_id),
+  workspace_id: bindParams.workspaceId(data.workspace_id),
+  project_id: data.project_id ? bindParams.projectId(data.project_id) : null,
+  type: data.type,
+  title: data.title,
+  message: data.message,
+  data: bindParams.json(data.data),
+  is_active: data.is_active,
+}
       .returning()
       .build();
     const result = await this.db.query<Notification>(query, params);
     return result.rows[0];
-  }
-  async getUserNotifications(userId: UserId, unreadOnly: boolean = false): Promise<Notification[]> {
+  async getUserNotifications(userId: UserId, unreadOnly: boolean = false): Promise<Notification> {
     const builder = QueryBuilder;
       .select()
       .from('notifications')
       .where('user_id = $1 AND is_active = true', bindParams.userId(userId));
     if (unreadOnly) {
       builder.where('read_at IS NULL');
-    }
     const { query, params } = builder
       .orderBy('created_at', 'DESC')
       .limit(100)
       .build();
     const result = await this.db.query<Notification>(query, params);
     return result.rows;
-  }
   async markNotificationRead(id: string): Promise<void> {
     const { query, params } = QueryBuilder
       .update('notifications')
@@ -506,6 +450,3 @@ export class WorkspaceDAO implements WorkspaceOperations {
     const result = await this.db.query(query, params);
     if (result.rowCount === 0) {
       throw new Error(`Notification ${id} not found`);}
-    }
-  }
-}

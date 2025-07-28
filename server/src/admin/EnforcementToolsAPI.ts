@@ -19,6 +19,7 @@ import {
   EnforcementPolicy
 } from '../services/trust/AutomatedEnforcementService';
 
+}
 export interface ViolationReport {
   reportId: string;
   type: 'fraud' | 'abuse' | 'violation' | 'security' | 'quality';
@@ -38,9 +39,11 @@ export interface ViolationReport {
     reason: string;
     resolvedBy: string;
     resolvedAt: Date;
+}
   };
 }
 
+}
 export interface EnforcementStats {
   totalActions: number;
   pendingReviews: number;
@@ -54,6 +57,7 @@ export interface EnforcementStats {
     flags: number;
     blocks: number;
     quarantines: number;
+}
   };
   severityBreakdown: {
     low: number;
@@ -141,6 +145,7 @@ export class EnforcementToolsAPI {
    * Get enforcement statistics
    */
   private async getEnforcementStats(request: any, reply: any): Promise<any> {
+
     try {
       const db = await this.databaseService.getDatabase();
       
@@ -188,13 +193,13 @@ export class EnforcementToolsAPI {
           flags: actionBreakdown.find(a => a.action_type === 'flag')?.count || 0,
           blocks: actionBreakdown.find(a => a.action_type === 'block_transaction')?.count || 0,
           quarantines: actionBreakdown.find(a => a.action_type === 'quarantine_template')?.count || 0
-        },
+  }
         severityBreakdown: {
           low: severityBreakdown.find(s => s.severity === 'low')?.count || 0,
           medium: severityBreakdown.find(s => s.severity === 'medium')?.count || 0,
           high: severityBreakdown.find(s => s.severity === 'high')?.count || 0,
           critical: severityBreakdown.find(s => s.severity === 'critical')?.count || 0
-        },
+  }
         effectivenessMetrics: {
           successRate: totalActions.count > 0 ? Math.round(((totalActions.count - totalReversals.count) / totalActions.count) * 100) : 100,
           appealRate: totalActions.count > 0 ? Math.round((totalAppealsEver.count / totalActions.count) * 100) : 0,
@@ -219,6 +224,7 @@ export class EnforcementToolsAPI {
    * Get enforcement actions with filtering
    */
   private async getEnforcementActions(request: any, reply: any): Promise<any> {
+
     try {
       const { 
         limit = 20, 
@@ -301,6 +307,7 @@ export class EnforcementToolsAPI {
    * Create manual enforcement action
    */
   private async createManualAction(request: any, reply: any): Promise<any> {
+
     try {
       const { entityType, entityId, actionType, severity, reason, triggeredBy = 'manual_review' } = request.body;
       const currentUser = request.user?.id || 'admin';
@@ -389,6 +396,7 @@ export class EnforcementToolsAPI {
    * Approve enforcement action
    */
   private async approveAction(request: any, reply: any): Promise<any> {
+
     try {
       const { actionId } = request.params;
       const currentUser = request.user?.id || 'admin';
@@ -448,6 +456,7 @@ export class EnforcementToolsAPI {
    * Reverse enforcement action
    */
   private async reverseAction(request: any, reply: any): Promise<any> {
+
     try {
       const { actionId } = request.params;
       const { reason } = request.body;
@@ -504,6 +513,7 @@ export class EnforcementToolsAPI {
    * Get violation reports
    */
   private async getViolationReports(request: any, reply: any): Promise<any> {
+
     try {
       const { limit = 20, offset = 0, status, type, severity } = request.query;
       
@@ -565,6 +575,7 @@ export class EnforcementToolsAPI {
    * Create violation report
    */
   private async createViolationReport(request: any, reply: any): Promise<any> {
+
     try {
       const { type, severity, description, evidence, userId, templateId, transactionId } = request.body;
       const currentUser = request.user?.id || 'admin';
@@ -601,6 +612,7 @@ export class EnforcementToolsAPI {
    * Get enforcement policies
    */
   private async getEnforcementPolicies(request: any, reply: any): Promise<any> {
+
     try {
       const db = await this.databaseService.getDatabase();
       
@@ -632,6 +644,7 @@ export class EnforcementToolsAPI {
    * Update enforcement policy
    */
   private async updateEnforcementPolicy(request: any, reply: any): Promise<any> {
+
     try {
       const { policyId } = request.params;
       const policy = request.body;
@@ -674,6 +687,7 @@ export class EnforcementToolsAPI {
    * Get enforcement dashboard data
    */
   private async getEnforcementDashboard(request: any, reply: any): Promise<any> {
+
     try {
       const [stats, recentActions, pendingReviews, activeReports] = await Promise.all([
         this.getEnforcementStats(request, { send: () => {}, code: () => ({ send: (data: any) => data.data }) }),
@@ -749,6 +763,7 @@ export class EnforcementToolsAPI {
   }
 
   private async reverseEnforcementEffects(actionRow: any): Promise<void> {
+
     const db = await this.databaseService.getDatabase();
     
     try {

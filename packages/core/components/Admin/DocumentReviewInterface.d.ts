@@ -5,6 +5,7 @@
  * Part of Epic 17.5.5 - Verification System
  */
 import React from 'react';
+
 export interface DocumentData {
     id: string;
     type: 'image' | 'pdf' | 'document';
@@ -18,12 +19,13 @@ export interface DocumentData {
         dimensions?: {
             width: number;
             height: number;
+
         };
         pages?: number;
         quality?: 'low' | 'medium' | 'high';
         extractedText?: string;
     };
-}
+
 export interface DocumentReviewProps {
     documents: DocumentData[];
     requestId: string;
@@ -32,7 +34,8 @@ export interface DocumentReviewProps {
     onReviewComplete: (documentId: string, approved: boolean, notes: string) => void;
     onBack: () => void;
     className?: string;
-}
+
+
 export interface ReviewAnnotation {
     id: string;
     x: number;
@@ -43,7 +46,7 @@ export interface ReviewAnnotation {
     note: string;
     reviewer: string;
     timestamp: Date;
-}
+
 export declare const DocumentReviewInterface: React.FC<DocumentReviewProps>;
 export default DocumentReviewInterface;
 //# sourceMappingURL=DocumentReviewInterface.d.ts.map

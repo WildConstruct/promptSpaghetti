@@ -5,7 +5,7 @@ export interface VisualDiffPanelProps {
     initialTargetVersionId?: string;
     onClose?: () => void;
     className?: string;
+    const: any;
+    VisualDiffPanel: React.FC<VisualDiffPanelProps>;
 }
-declare const VisualDiffPanel: React.FC<VisualDiffPanelProps>;
-export default VisualDiffPanel;
 //# sourceMappingURL=VisualDiffPanel.d.ts.map

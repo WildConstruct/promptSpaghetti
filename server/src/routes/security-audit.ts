@@ -213,7 +213,7 @@ export async function securityAuditRoutes(
           passRate: statistics.passRate.toFixed(1),
           alertsLast24h: statistics.alertsLast24h,
           averageScoreLast24h: averageScoreLast24h.toFixed(1)
-        },
+  }
         endpoints: Object.entries(statistics.endpoints).map(([endpoint, data]) => ({
           endpoint,
           lastAudit: data.lastAudit,
@@ -225,7 +225,7 @@ export async function securityAuditRoutes(
         trends: {
           scoreHistory,
           alertsByType
-        },
+  }
         recentAlerts: recentHistory
           .filter(r => r.alerts.length > 0)
           .slice(0, 10)
@@ -261,10 +261,10 @@ export async function securityAuditRoutes(
               'source-file': { type: 'string' },
               'line-number': { type: 'number' },
               'column-number': { type: 'number' }
-            },
+  }
             required: ['document-uri', 'violated-directive']
           }
-        },
+  }
         required: ['csp-report']
       }
     }
@@ -281,31 +281,31 @@ export async function securityAuditRoutes(
           description: 'Prevents XSS attacks by controlling resource loading',
           severity: 'high',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP'
-        },
+  }
         {
           name: 'X-Frame-Options',
           description: 'Prevents clickjacking attacks',
           severity: 'medium',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options'
-        },
+  }
         {
           name: 'X-Content-Type-Options',
           description: 'Prevents MIME type sniffing attacks',
           severity: 'medium',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options'
-        },
+  }
         {
           name: 'Strict-Transport-Security',
           description: 'Enforces HTTPS connections',
           severity: 'high',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security'
-        },
+  }
         {
           name: 'Referrer-Policy',
           description: 'Controls referrer information disclosure',
           severity: 'low',
           moreInfo: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy'
-        },
+  }
         {
           name: 'Permissions-Policy',
           description: 'Controls browser feature access',

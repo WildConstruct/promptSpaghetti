@@ -27,6 +27,7 @@ import {
 } from '../services/compliance/ComplianceReportScheduler';
 
 // Request/Response type definitions
+}
 interface GenerateReportRequest {
   Body: {
     framework: ComplianceFramework;
@@ -39,26 +40,32 @@ interface GenerateReportRequest {
       focusOnTrends?: boolean;
       includeFinancialImpact?: boolean;
       customSections?: string[];
+}
     };
   };
 }
 
+}
 interface ValidateReportRequest {
   Body: {
     reportId?: string;
     report?: any;
     validationLevel?: 'basic' | 'standard' | 'comprehensive';
+}
   };
 }
 
+}
 interface QualityAssessmentRequest {
   Body: {
     reportId: string;
     assessorId: string;
     assessmentLevel?: 'basic' | 'standard' | 'comprehensive';
+}
   };
 }
 
+}
 interface ScheduleReportRequest {
   Body: {
     name: string;
@@ -72,6 +79,7 @@ interface ScheduleReportRequest {
       startDate: string;
       endDate?: string;
       executionTime: string;
+}
     };
     recipients: Array<{
       name: string;
@@ -138,11 +146,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             framework: { 
               type: 'string',
               enum: Object.values(ComplianceFramework)
-            },
+  }
             reportType: { 
               type: 'string',
               enum: Object.values(ComplianceReportType)
-            },
+  }
             period: {
               type: 'object',
               required: ['startDate', 'endDate', 'periodType'],
@@ -154,7 +162,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                   enum: ['monthly', 'quarterly', 'annual', 'custom'] 
                 }
               }
-            },
+  }
             options: {
               type: 'object',
               properties: {
@@ -167,7 +175,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -181,7 +189,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<GenerateReportRequest>, reply: FastifyReply) => {
       try {
         const startTime = Date.now();
@@ -244,12 +252,12 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               enum: ['basic', 'standard', 'comprehensive'],
               default: 'standard'
             }
-          },
+  }
           oneOf: [
             { required: ['reportId'] },
             { required: ['report'] }
           ]
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -261,7 +269,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<ValidateReportRequest>, reply: FastifyReply) => {
       try {
         const { reportId, report, validationLevel = 'standard' } = request.body;
@@ -321,7 +329,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               default: 'standard'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -333,7 +341,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<QualityAssessmentRequest>, reply: FastifyReply) => {
       try {
         const { reportId, assessorId, assessmentLevel = 'standard' } = request.body;
@@ -393,11 +401,11 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             framework: { 
               type: 'string',
               enum: Object.values(ComplianceFramework)
-            },
+  }
             reportType: { 
               type: 'string',
               enum: Object.values(ComplianceReportType)
-            },
+  }
             schedule: {
               type: 'object',
               required: ['frequency', 'timezone', 'startDate', 'executionTime'],
@@ -405,18 +413,18 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
                 frequency: { 
                   type: 'string',
                   enum: ['daily', 'weekly', 'monthly', 'quarterly', 'annually', 'custom']
-                },
+  }
                 cronExpression: { type: 'string' },
                 timezone: { type: 'string' },
                 startDate: { type: 'string', format: 'date' },
                 endDate: { type: 'string', format: 'date' },
                 executionTime: { type: 'string', pattern: '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$' }
               }
-            },
+  }
             isActive: { type: 'boolean', default: true },
             createdBy: { type: 'string' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -428,7 +436,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<ScheduleReportRequest>, reply: FastifyReply) => {
       try {
         const scheduleData = request.body;
@@ -444,7 +452,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             ...scheduleData.schedule,
             startDate: new Date(scheduleData.schedule.startDate),
             endDate: scheduleData.schedule.endDate ? new Date(scheduleData.schedule.endDate) : undefined
-          },
+  }
           recipients: scheduleData.recipients.map(r => ({
             ...r,
             id: crypto.randomUUID()
@@ -489,7 +497,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             isActive: { type: 'boolean' },
             createdBy: { type: 'string' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -502,7 +510,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const filter = request.query as any;
@@ -544,7 +552,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           properties: {
             scheduleId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -557,7 +565,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -569,7 +577,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { scheduleId } = request.params as { scheduleId: string };
@@ -617,13 +625,13 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           properties: {
             scheduleId: { type: 'string' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
             historyLimit: { type: 'number', default: 50 }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -636,7 +644,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { scheduleId } = request.params as { scheduleId: string };
@@ -680,7 +688,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           properties: {
             reportId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['format'],
@@ -688,7 +696,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
             format: { 
               type: 'string', 
               enum: ['pdf', 'excel', 'json', 'html', 'docx'] 
-            },
+  }
             options: {
               type: 'object',
               properties: {
@@ -702,7 +710,7 @@ export async function complianceReportsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { reportId } = request.params as { reportId: string };

@@ -32,12 +32,14 @@ class MockEventRepository implements EventRepository {
   private nextId = 1;
 
   async save(event: UnifiedAnalyticsEvent): Promise<string> {
+
     const savedEvent = { ...event, id: event.id || `event-${this.nextId++}` };
     this.events.push(savedEvent);
     return savedEvent.id;
   }
 
   async saveBatch(events: UnifiedAnalyticsEvent[]): Promise<string[]> {
+
     const ids: string[] = [];
     for (const event of events) {
       ids.push(await this.save(event));
@@ -46,10 +48,12 @@ class MockEventRepository implements EventRepository {
   }
 
   async findById(id: string): Promise<UnifiedAnalyticsEvent | null> {
+
     return this.events.find(e => e.id === id) || null;
   }
 
   async findMany(options: unknown): Promise<UnifiedAnalyticsEvent[]> {
+
     let filtered = [...this.events];
 
     if (options.filter) {
@@ -76,6 +80,7 @@ class MockEventRepository implements EventRepository {
   }
 
   async count(filter?: EventFilter): Promise<number> {
+
     if (!filter) return this.events.length;
     
     return this.events.filter(event => {
@@ -88,6 +93,7 @@ class MockEventRepository implements EventRepository {
   }
 
   async delete(id: string): Promise<boolean> {
+
     const index = this.events.findIndex(e => e.id === id);
     if (index >= 0) {
       this.events.splice(index, 1);
@@ -97,6 +103,7 @@ class MockEventRepository implements EventRepository {
   }
 
   async deleteBatch(ids: string[]): Promise<number> {
+
     let deleted = 0;
     for (const id of ids) {
       if (await this.delete(id)) deleted++;
@@ -105,6 +112,7 @@ class MockEventRepository implements EventRepository {
   }
 
   async getStatistics(filter?: EventFilter): Promise<any> {
+
     const events = filter ? await this.findMany({ filter }) : this.events;
     return {
       totalEvents: events.length,
@@ -115,12 +123,13 @@ class MockEventRepository implements EventRepository {
       timeRange: {
         earliest: Math.min(...events.map(e => e.timestamp)),
         latest: Math.max(...events.map(e => e.timestamp))
-      },
+  }
       storageSize: JSON.stringify(events).length
     };
   }
 
   async getAggregations(): Promise<any[]> {
+
     return [];
   }
 
@@ -129,14 +138,17 @@ class MockEventRepository implements EventRepository {
   }
 
   async cleanup(retentionDays: number): Promise<number> {
+
     return 0;
   }
 
   async archive(beforeDate: number): Promise<number> {
+
     return 0;
   }
 
   async optimize(): Promise<void> {
+
     // Mock optimization
   }
 
@@ -257,7 +269,7 @@ describe('PerformanceMonitoringService', () => {
           component: 'api-server',
           environment: 'production',
           region: 'us-east-1' 
-        },
+  }
         tags: ['infrastructure', 'cpu', 'monitoring']
       });
 

@@ -20,9 +20,7 @@ interface NodeLabelsManagerProps {
   selectedNodeId?: string | null;
   onNodeHover?: (nodeId: string | null) => void;
   onNodeFocus?: (nodeId: string | null) => void;
-}
-
-export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({)
+  export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({,)
   disabled = false,
   readonly = false,
   author = 'Anonymous',
@@ -65,14 +63,13 @@ export const NodeLabelsManager: React.FC<NodeLabelsManagerProps> = ({)
   }, [reactFlowInstance, handleNodeHover]);
   // Get canvas size and offset from ReactFlow
   const canvasOffset = {
-    x: viewport.x,
-    y: viewport.y,
-  };
+  x: viewport.x,
+  y: viewport.y,
+};
   // Don't render if disabled
   if (disabled) {
     return null;
-  }
-  return ();
+  return;
     <NodeLabelsLayer
       nodes={nodes}
       labelConfigs={annotations.nodeLabelConfigs}

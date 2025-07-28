@@ -19,6 +19,7 @@ import { RateLimitingService, ThreatLevel } from '../../../../packages/core/secu
 // Middleware Configuration
 // ========================================
 
+}
 export interface AdaptiveThrottlingConfig {
   enabled: boolean;
   skipHealthChecks: boolean;
@@ -32,7 +33,9 @@ export interface AdaptiveThrottlingConfig {
   onThrottled?: (request: FastifyRequest, result: ThrottlingResult) => void;
   onError?: (error: Error, request: FastifyRequest) => void;
 }
+}
 
+}
 export interface SystemMonitor {
   getCPUUsage(): Promise<number>;
   getMemoryUsage(): Promise<number>;
@@ -41,6 +44,7 @@ export interface SystemMonitor {
   getAverageResponseTime(): number;
   getErrorRate(): number;
   getQueueDepth(): number;
+}
 }
 
 // ========================================
@@ -56,6 +60,7 @@ class DefaultSystemMonitor implements SystemMonitor {
   private queueDepth: number = 0;
 
   async getCPUUsage(): Promise<number> {
+
     // Simplified CPU usage estimation
     // In production, use actual system monitoring libraries
     const loadAvg = process.cpuUsage();
@@ -63,6 +68,7 @@ class DefaultSystemMonitor implements SystemMonitor {
   }
 
   async getMemoryUsage(): Promise<number> {
+
     const usage = process.memoryUsage();
     const totalMemory = require('os').totalmem();
     return (usage.heapUsed / totalMemory) * 100;
@@ -199,8 +205,7 @@ export class AdaptiveThrottlingMiddleware {
   getStatistics() {
     return {
       engine: this.engine.getStatistics(),
-      systemMetrics: this.getSystemMetrics()
-    };
+      systemMetrics: this.getSystemMetrics(};
   }
 
   /**
@@ -263,6 +268,7 @@ export class AdaptiveThrottlingMiddleware {
   }
 
   private async buildThrottlingContext(request: FastifyRequest): Promise<ThrottlingContext> {
+
     // Extract IP address (considering trusted proxies)
     const ip = this.extractClientIP(request);
 
@@ -379,6 +385,7 @@ export class AdaptiveThrottlingMiddleware {
     result: ThrottlingResult,
     startTime: number
   ): Promise<void> {
+
     const monitor = this.monitor as DefaultSystemMonitor;
 
     switch (result.action) {
@@ -454,6 +461,7 @@ export class AdaptiveThrottlingMiddleware {
   }
 
   private async delay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -462,6 +470,7 @@ export class AdaptiveThrottlingMiddleware {
   }
 
   private async getSystemMetrics(): Promise<SystemMetrics> {
+
     return {
       cpuUsage: await this.monitor.getCPUUsage(),
       memoryUsage: await this.monitor.getMemoryUsage(),
@@ -469,8 +478,7 @@ export class AdaptiveThrottlingMiddleware {
       requestsPerSecond: this.monitor.getRequestsPerSecond(),
       averageResponseTime: this.monitor.getAverageResponseTime(),
       errorRate: this.monitor.getErrorRate(),
-      queueDepth: this.monitor.getQueueDepth()
-    };
+      queueDepth: this.monitor.getQueueDepth(};
   }
 
   private startMetricsCollection(): void {
@@ -547,6 +555,7 @@ export function createAdaptiveThrottlingPlugin(
 declare module 'fastify' {
   interface FastifyInstance {
     adaptiveThrottling: AdaptiveThrottlingMiddleware;
+}
   }
 }
 

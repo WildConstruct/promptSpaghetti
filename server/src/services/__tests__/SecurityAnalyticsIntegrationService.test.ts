@@ -73,7 +73,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         performance_event_forwarding: true,
         batch_size: 10,
         flush_interval_ms: 1000
-      },
+  }
       epic17_admin_integration: {
         enabled: true,
         auth_guard: new AdminAuthGuard() as jest.Mocked<AdminAuthGuard>,
@@ -81,7 +81,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         diagnostic_service: mockDiagnosticService,
         admin_notification_enabled: true,
         security_alert_threshold: 5
-      },
+  }
       performance_monitoring: {
         real_time_monitoring_enabled: true,
         performance_threshold_ms: 500,
@@ -89,7 +89,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         cpu_threshold_percent: 70,
         alert_on_degradation: true,
         auto_optimization_enabled: false
-      },
+  }
       security_features: {
         threat_detection_enabled: true,
         anomaly_detection_sensitivity: 0.8,
@@ -118,14 +118,14 @@ describe('SecurityAnalyticsIntegrationService', () => {
         expect.objectContaining({
           id: 'security_analytics_performance',
           name: 'Security Analytics Performance Monitor'
-        })
+  }
       );
 
       expect(mockDiagnosticService.registerDiagnostic).toHaveBeenCalledWith(
         expect.objectContaining({
           id: 'security_analytics_deep_diagnostics',
           name: 'Security Analytics Deep Diagnostics'
-        })
+  }
       );
     });
 
@@ -152,7 +152,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         expect.objectContaining({
           error: expect.any(Error),
           context: 'initialization'
-        })
+  }
       );
     });
   });
@@ -290,7 +290,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
           duration: 150,
           memoryUsage: 64,
           cpuUsage: 25
-        })
+  }
       );
     });
 
@@ -317,7 +317,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
           type: 'security_performance_metric',
           timestamp: mockMetrics.timestamp,
           data: JSON.stringify(mockMetrics)
-        })
+  }
       );
     });
 
@@ -340,7 +340,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         expect.objectContaining({
           error: expect.any(Error),
           context: 'store_security_metrics'
-        })
+  }
       );
     });
   });
@@ -364,7 +364,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
           performance_score: 85,
           active_threats_detected: 20,
           system_availability_percent: 99.5
-        },
+  }
         affected_components: ['threat_detection'],
         recommended_actions: ['Immediate investigation required'],
         created_at: Date.now()
@@ -378,7 +378,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
           severity: 'critical',
           title: 'Critical Security Threat Detected',
           source: 'security_analytics_integration'
-        })
+  }
       );
     });
 
@@ -391,12 +391,12 @@ describe('SecurityAnalyticsIntegrationService', () => {
           epic1_analytics: true,
           epic17_admin: true,
           real_time_monitoring: expect.any(Boolean)
-        },
+  }
         current_metrics: expect.any(Object),
         system_health: expect.objectContaining({
           buffer_sizes: expect.any(Object),
           monitoring_active: expect.any(Boolean)
-        })
+  }
       });
     });
 
@@ -424,7 +424,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         expect.objectContaining({
           error: expect.any(Error),
           context: 'notify_admin_systems'
-        })
+  }
       );
     });
   });
@@ -545,7 +545,7 @@ describe('SecurityAnalyticsIntegrationService', () => {
         expect.objectContaining({
           error: expect.any(Error),
           context: 'performance_monitor'
-        })
+  }
       );
     });
 

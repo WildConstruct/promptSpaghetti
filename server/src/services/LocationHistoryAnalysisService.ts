@@ -6,6 +6,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import { LocationData } from './LocationDetectionService';
 
+}
 export interface LocationCluster {
   id: string;
   label: 'home' | 'work' | 'frequent' | 'occasional';
@@ -14,6 +15,7 @@ export interface LocationCluster {
     longitude: number;
     country: string;
     city: string;
+}
   };
   radius: number; // in kilometers
   accessCount: number;
@@ -25,6 +27,7 @@ export interface LocationCluster {
   verificationMethod?: 'user_confirmed' | 'pattern_analysis' | 'device_correlation';
 }
 
+}
 export interface TravelPattern {
   routeId: string;
   origin: LocationCluster;
@@ -37,9 +40,11 @@ export interface TravelPattern {
     unusualSpeed: boolean;
     impossibleTiming: boolean;
     frequencyAnomaly: boolean;
+}
   };
 }
 
+}
 export interface UserLocationProfile {
   userId: string;
   clusters: LocationCluster[];
@@ -49,6 +54,7 @@ export interface UserLocationProfile {
     predictabilityScore: number; // 0-100, higher = more predictable
     riskScore: number; // 0-100, overall location-based risk
     anomalyCount: number;
+}
   };
   insights: {
     primaryLocation?: LocationCluster;
@@ -61,6 +67,7 @@ export interface UserLocationProfile {
   profileVersion: string;
 }
 
+}
 export interface LocationAnomaly {
   id: string;
   userId: string;
@@ -74,6 +81,7 @@ export interface LocationAnomaly {
     travelTime?: number;
     distanceFromExpected?: number;
     riskFactors: string[];
+}
   };
   resolved: boolean;
   falsePositive: boolean;
@@ -85,6 +93,7 @@ export interface LocationAnomaly {
   };
 }
 
+}
 export interface LocationRiskAssessment {
   overall: number;
   factors: {
@@ -94,12 +103,14 @@ export interface LocationRiskAssessment {
     frequencyAnomalies: number;
     geopoliticalRisk: number;
     networkRisk: number;
+}
   };
   recommendations: string[];
   actionRequired: boolean;
   suggestedActions: string[];
 }
 
+}
 export interface LocationHistoryAnalysisConfig {
   enabled: boolean;
   
@@ -109,6 +120,7 @@ export interface LocationHistoryAnalysisConfig {
     maxDistanceKm: number;
     minTimeForHomeDetection: number; // days
     confidenceThreshold: number;
+}
   };
   
   // Travel analysis
@@ -162,6 +174,7 @@ export class LocationHistoryAnalysisService {
   }
 
   async initialize(): Promise<void> {
+
     // Create additional tables for history analysis
     await this.initializeAnalysisTables();
     
@@ -172,6 +185,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async initializeAnalysisTables(): Promise<void> {
+
     // Location clusters table
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS user_location_clusters (
@@ -192,7 +206,7 @@ export class LocationHistoryAnalysisService {
         verification_method VARCHAR(50),
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Travel patterns table
@@ -210,7 +224,7 @@ export class LocationHistoryAnalysisService {
         anomalies JSONB,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // User location profiles table
@@ -225,7 +239,7 @@ export class LocationHistoryAnalysisService {
         profile_version VARCHAR(20) DEFAULT '1.0',
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Location anomalies table
@@ -244,7 +258,7 @@ export class LocationHistoryAnalysisService {
         resolution_data JSONB,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Create indexes for performance
@@ -268,6 +282,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async loadProfileCache(): Promise<void> {
+
     // Load frequently accessed profiles into Redis cache
     const recentProfiles = await this.db.query(`
       SELECT user_id, profile_version 
@@ -287,6 +302,7 @@ export class LocationHistoryAnalysisService {
   }
 
   async analyzeUserLocationHistory(userId: string, forceRefresh = false): Promise<UserLocationProfile> {
+
     const cacheKey = `location_profile:${userId}`;
     
     // Check cache first unless force refresh is requested
@@ -339,7 +355,7 @@ export class LocationHistoryAnalysisService {
         clustersFound: clusters.length,
         travelPatternsFound: travelPatterns.length,
         overallRiskScore: riskMetrics.riskScore
-      },
+  }
       severity: 'info'
     });
 
@@ -380,7 +396,7 @@ export class LocationHistoryAnalysisService {
         isVpn: row.is_vpn,
         isTor: row.is_tor,
         isMalicious: row.is_malicious
-      },
+  }
       accessTime: row.last_access,
       accessCount: row.access_count
     }));
@@ -390,6 +406,7 @@ export class LocationHistoryAnalysisService {
     userId: string,
     locationHistory: Array<{location: LocationData; accessTime: Date; accessCount: number}>
   ): Promise<LocationCluster[]> {
+
     const clusters: LocationCluster[] = [];
     const processedLocations = new Set<string>();
 
@@ -454,7 +471,7 @@ export class LocationHistoryAnalysisService {
             longitude: centerLon,
             country: locationEntry.location.country || 'Unknown',
             city: locationEntry.location.city || 'Unknown'
-          },
+  }
           radius: Math.max(...nearbyLocations.map(loc => 
             this.calculateDistance(centerLat, centerLon, loc.location.latitude!, loc.location.longitude!)
           )),
@@ -541,6 +558,7 @@ export class LocationHistoryAnalysisService {
     clusters: LocationCluster[],
     locationHistory: Array<{location: LocationData; accessTime: Date; accessCount: number}>
   ): Promise<TravelPattern[]> {
+
     const patterns: TravelPattern[] = [];
     const travelRoutes = new Map<string, {
       count: number;
@@ -706,6 +724,7 @@ export class LocationHistoryAnalysisService {
     clusters: LocationCluster[],
     travelPatterns: TravelPattern[]
   ): Promise<UserLocationProfile['riskMetrics']> {
+
     // Calculate mobility score (how often user travels)
     const mobilityScore = Math.min(100, (travelPatterns.length * 10) + (clusters.length * 5));
 
@@ -735,6 +754,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async getRecentAnomalyCount(userId: string): Promise<number> {
+
     const result = await this.db.query(`
       SELECT COUNT(*) as count 
       FROM location_anomalies 
@@ -751,6 +771,7 @@ export class LocationHistoryAnalysisService {
     travelPatterns: TravelPattern[],
     _____riskMetrics: UserLocationProfile['riskMetrics']
   ): Promise<UserLocationProfile['insights']> {
+
     // Find primary location (highest confidence home or work)
     const primaryLocation = clusters
       .filter(c => c.label === 'home' || c.label === 'work')
@@ -802,6 +823,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async storeUserProfile(profile: UserLocationProfile): Promise<void> {
+
     await this.db.query(`
       INSERT INTO user_location_profiles (
         user_id, clusters_data, travel_patterns_data, risk_metrics, insights,
@@ -876,6 +898,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async getStoredProfile(userId: string): Promise<UserLocationProfile> {
+
     const result = await this.db.query(`
       SELECT * FROM user_location_profiles WHERE user_id = $1
     `, [userId]);
@@ -897,6 +920,7 @@ export class LocationHistoryAnalysisService {
   }
 
   async assessLocationRisk(userId: string, currentLocation: LocationData): Promise<LocationRiskAssessment> {
+
     const profile = await this.analyzeUserLocationHistory(userId);
     const nearestCluster = this.findNearestCluster(currentLocation, profile.clusters);
 
@@ -973,6 +997,7 @@ export class LocationHistoryAnalysisService {
   }
 
   async detectLocationAnomalies(userId: string): Promise<LocationAnomaly[]> {
+
     const _____profile = await this.analyzeUserLocationHistory(userId);
     const anomalies: LocationAnomaly[] = [];
 
@@ -1006,7 +1031,7 @@ export class LocationHistoryAnalysisService {
           location,
           context: {
             riskFactors: riskAssessment.recommendations
-          },
+  }
           resolved: false,
           falsePositive: false
         };
@@ -1038,6 +1063,7 @@ export class LocationHistoryAnalysisService {
   }
 
   private async storeAnomaly(anomaly: LocationAnomaly): Promise<void> {
+
     await this.db.query(`
       INSERT INTO location_anomalies (
         id, user_id, anomaly_type, severity, description,

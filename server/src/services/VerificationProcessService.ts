@@ -36,6 +36,7 @@ export enum DocumentType {
 }
 
 // Interfaces
+}
 export interface VerificationRequest {
   id?: string;
   user_id: string;
@@ -50,6 +51,7 @@ export interface VerificationRequest {
     business_info?: unknown;
     documents?: VerificationDocument[];
     notes?: string;
+}
   };
   admin_notes?: string;
   rejection_reason?: string;
@@ -57,6 +59,7 @@ export interface VerificationRequest {
   updated_at?: Date;
 }
 
+}
 export interface VerificationDocument {
   id?: string;
   request_id: string;
@@ -70,7 +73,9 @@ export interface VerificationDocument {
   verified: boolean;
   verification_notes?: string;
 }
+}
 
+}
 export interface VerificationQueueItem {
   id: string;
   user_id: string;
@@ -82,7 +87,9 @@ export interface VerificationQueueItem {
   document_count: number;
   days_pending: number;
 }
+}
 
+}
 export interface VerificationDecision {
   request_id: string;
   decision: 'approve' | 'reject';
@@ -90,7 +97,9 @@ export interface VerificationDecision {
   rejection_reason?: string;
   follow_up_required?: boolean;
 }
+}
 
+}
 export interface VerificationStats {
   total_pending: number;
   total_under_review: number;
@@ -100,6 +109,7 @@ export interface VerificationStats {
     pending: number;
     approved: number;
     rejected: number;
+}
   }>;
 }
 
@@ -117,6 +127,7 @@ export class VerificationProcessService {
 
   // Initialize verification tables
   async initializeSchema(): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -181,6 +192,7 @@ export class VerificationProcessService {
     verificationType: VerificationType,
     metadata: Record<string, unknown> = {}
   ): Promise<VerificationRequest> {
+
     // Check for existing pending request
     const existingRequest = await this.getUserActiveRequest(userId, verificationType);
     if (existingRequest) {
@@ -223,9 +235,10 @@ export class VerificationProcessService {
       buffer: Buffer;
       mimetype: string;
       size: number;
-    },
+  }
     documentType: DocumentType
   ): Promise<VerificationDocument> {
+
     // Validate file
     if (file.size > this.MAX_FILE_SIZE) {
       throw new BadRequestException('File size exceeds 10MB limit');
@@ -295,6 +308,7 @@ export class VerificationProcessService {
       sort_order?: 'asc' | 'desc';
     } = {}
   ): Promise<{ items: VerificationQueueItem[]; total: number }> {
+
     const {
       status,
       type,
@@ -383,6 +397,7 @@ export class VerificationProcessService {
     adminUserId: string,
     decision: VerificationDecision
   ): Promise<VerificationRequest> {
+
     const request = await this.getVerificationRequest(decision.request_id);
     if (!request) {
       throw new NotFoundException('Verification request not found');
@@ -445,6 +460,7 @@ export class VerificationProcessService {
 
   // Get verification statistics (admin)
   async getVerificationStatistics(timeframe: 'week' | 'month' | 'quarter' = 'month'): Promise<VerificationStats> {
+
     const days = timeframe === 'week' ? 7 : timeframe === 'month' ? 30 : 90;
     
     const client = await this.pool.connect();
@@ -498,6 +514,7 @@ export class VerificationProcessService {
 
   // Get user's verification requests
   async getUserVerificationRequests(userId: string): Promise<VerificationRequest[]> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -509,7 +526,7 @@ export class VerificationProcessService {
              'file_size', vd.file_size,
              'uploaded_at', vd.uploaded_at,
              'verified', vd.verified
-           )
+
          ) FILTER (WHERE vd.id IS NOT NULL) as documents
          FROM verification_requests vr
          LEFT JOIN verification_documents vd ON vr.id = vd.request_id
@@ -533,6 +550,7 @@ export class VerificationProcessService {
 
   // Private helper methods
   private async getVerificationRequest(requestId: string): Promise<VerificationRequest | null> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -546,6 +564,7 @@ export class VerificationProcessService {
   }
 
   private async getUserActiveRequest(userId: string, type: VerificationType): Promise<VerificationRequest | null> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -567,6 +586,7 @@ export class VerificationProcessService {
     userId: string,
     verificationType: VerificationType
   ): Promise<void> {
+
     // Update user's verification badges in marketplace
     await client.query(
       `INSERT INTO user_verification_badges (user_id, badge_type, verified_at)
@@ -579,6 +599,7 @@ export class VerificationProcessService {
   }
 
   private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
+
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

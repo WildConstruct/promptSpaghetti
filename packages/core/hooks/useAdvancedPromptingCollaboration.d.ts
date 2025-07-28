@@ -5,6 +5,7 @@
  * with the existing graph editor, export system, and VFX pipeline.
  */
 import { AdvancedPromptingCollaborationService, PromptingMethodologySession, FilmIndustryUser, MARSRegionTemplate, ZadaPromptPattern, FilmIndustryRole } from '../services/AdvancedPromptingCollaborationService';
+
 export interface AdvancedCollaborationConfig {
     enableRealTimeSync: boolean;
     enableMARSRegions: boolean;
@@ -12,7 +13,8 @@ export interface AdvancedCollaborationConfig {
     enableVFXExport: boolean;
     autoSaveInterval: number;
     maxCollaborators: number;
-}
+
+
 export interface AdvancedCollaborationState {
     collaborationService: AdvancedPromptingCollaborationService | null;
     currentUser: FilmIndustryUser | null;
@@ -21,7 +23,8 @@ export interface AdvancedCollaborationState {
     connectedUsers: FilmIndustryUser[];
     isConnected: boolean;
     lastSync: Date | null;
-}
+
+
 export interface AdvancedCollaborationActions {
     initializeCollaboration: (user: FilmIndustryUser, config?: Partial<AdvancedCollaborationConfig>) => Promise<void>;
     createSession: (title: string, methodology: 'zada' | 'mars' | 'hybrid' | 'custom') => Promise<PromptingMethodologySession>;
@@ -32,7 +35,8 @@ export interface AdvancedCollaborationActions {
     exportToVFXPipeline: () => Promise<any>;
     applyMARSRegionToGraph: (regionId: string, nodeIds: string[]) => Promise<void>;
     applyZadaPatternToGraph: (patternId: string) => Promise<void>;
-}
+
+
 /**
  * Advanced Prompting Collaboration Hook
  *

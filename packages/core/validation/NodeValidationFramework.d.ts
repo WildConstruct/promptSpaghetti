@@ -5,6 +5,7 @@
  * Comprehensive validation framework for runtime nodes with security, type safety, and performance validation
  */
 import { ValidationResult, AdvancedNodeData } from '../runtime/advanced';
+
 export interface NodeValidationConfig {
     /** Enable strict type checking */
     strictTypeValidation: boolean;
@@ -20,7 +21,7 @@ export interface NodeValidationConfig {
     maxMemoryUsage: number;
     /** Maximum execution time per node (milliseconds) */
     maxExecutionTime: number;
-}
+
 export interface NodeValidationResult extends ValidationResult {
     /** Security-specific validation results */
     security: {,
@@ -46,27 +47,26 @@ export interface NodeValidationResult extends ValidationResult {
         passed: boolean;
         schemaErrors: string[];
     };
-}
+
 export interface SecurityThreat {
     type: 'injection' | 'eval' | 'prototype_pollution' | 'xss' | 'unsafe_function' | 'dangerous_import';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     location: string;
     recommendation: string;
-}
+
 export interface PerformanceIssue {
     type: 'memory' | 'execution_time' | 'infinite_loop' | 'inefficient_algorithm';
     severity: 'low' | 'medium' | 'high';
     description: string;
     impact: string;
     suggestion: string;
-}
+
 export interface TypeError {
     expected: string;
     actual: string;
     field: string;
     description: string;
-}
 /**
  * Core Node Validation Framework
  * Provides comprehensive validation for runtime nodes
@@ -135,7 +135,6 @@ export declare class NodeValidationFramework {
     private getSecurityThreatType;
     private getSecurityThreatSeverity;
     private getSecurityRecommendation;
-}
 /**
  * Validation utilities for common validation scenarios
  */
@@ -155,6 +154,6 @@ export declare class NodeValidationUtils {
      * Batch validate multiple nodes
      */
     static validateNodeBatch(nodes: AdvancedNodeData[]): NodeValidationResult[];
-}
+
 export default NodeValidationFramework;
 //# sourceMappingURL=NodeValidationFramework.d.ts.map

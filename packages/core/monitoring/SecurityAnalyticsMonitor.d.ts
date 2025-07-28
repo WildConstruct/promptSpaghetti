@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { PerformanceMonitor, PerformanceAlert } from './PerformanceMonitor';
 import { SecurityEvent } from '../security/AlertingSystem';
+
 export interface SecurityAnalyticsMetrics {
     threatDetectionMetrics: {,
         threatsDetected: number;
@@ -44,7 +45,7 @@ export interface SecurityAnalyticsMetrics {
         meanTimeToResolution: number;
         escalationRate: number;
     };
-}
+
 export interface SecuritySystemHealth {
     systemId: string;
     systemType: 'firewall' | 'ids' | 'siem' | 'auth' | 'compliance' | 'backup' | 'encryption';
@@ -65,7 +66,7 @@ export interface SecuritySystemHealth {
     configurationVersion: string;
     lastConfigUpdate: number;
     pendingUpdates: number;
-}
+
 export interface SecurityAnalyticsAlert extends PerformanceAlert {
     securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
     affectedSystems: string[];
@@ -73,7 +74,7 @@ export interface SecurityAnalyticsAlert extends PerformanceAlert {
     complianceImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
     recommendedActions: string[];
     relatedEvents: string[];
-}
+
 export interface SecurityAnalyticsConfig {
     performanceConfig: {,
         enableMemoryTracking: boolean;
@@ -104,7 +105,6 @@ export interface SecurityAnalyticsConfig {
         auditIntegration: boolean;
         threatIntelIntegration: boolean;
     };
-}
 /**
  * Security Analytics Monitor extending Epic 1 Performance Monitor
  */
@@ -219,6 +219,6 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
     private aggregateSecurityMetrics;
     private correlateSecurityAlerts;
     private generateAlertId;
-}
+
 export default SecurityAnalyticsMonitor;
 //# sourceMappingURL=SecurityAnalyticsMonitor.d.ts.map

@@ -17,6 +17,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { ActivityHistoryService, ActivityRecord, ActivityType, ActivityCategory, ActivityQuery } from './ActivityHistoryService';
 
+}
 export interface TimelineEvent {
   id: string;
   userId: string;
@@ -35,7 +36,9 @@ export interface TimelineEvent {
   duration?: number;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface TimelineFilter {
   userId: string;
   startDate?: Date;
@@ -49,13 +52,16 @@ export interface TimelineFilter {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 export interface UserActivityInsights {
   userId: string;
   analysisDate: Date;
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   
   // Activity patterns
@@ -110,6 +116,7 @@ export interface UserActivityInsights {
   };
 }
 
+}
 export interface ActivityCorrelation {
   primaryActivity: ActivityRecord;
   relatedActivities: ActivityRecord[];
@@ -118,6 +125,7 @@ export interface ActivityCorrelation {
     strength: number; // 0-1
     confidence: number; // 0-1
     description: string;
+}
   };
   timeline: Array<{
     timestamp: Date;
@@ -126,6 +134,7 @@ export interface ActivityCorrelation {
   }>;
 }
 
+}
 export interface ActivityStream {
   userId: string;
   streamId: string;
@@ -134,6 +143,7 @@ export interface ActivityStream {
   lastUpdated: Date;
   updateFrequency: number; // seconds
   activeConnections: number;
+}
 }
 
 export class ActivityTimelineService {
@@ -161,6 +171,7 @@ export class ActivityTimelineService {
     totalCount: number;
     hasMore: boolean;
   }> {
+
     try {
       // Get activities within the time range
       const activityQuery: ActivityQuery = {
@@ -196,10 +207,10 @@ export class ActivityTimelineService {
           timeRange: {
             start: activityQuery.startDate?.toISOString(),
             end: activityQuery.endDate?.toISOString()
-          },
+  }
           eventCount: events.length,
           groupingMode: filter.groupingMode
-        },
+  }
         severity: 'info'
       });
 
@@ -212,7 +223,7 @@ export class ActivityTimelineService {
         resourceType: 'activity_timeline',
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -227,6 +238,7 @@ export class ActivityTimelineService {
     filter: TimelineFilter,
     updateFrequency: number = 30
   ): Promise<string> {
+
     const streamId = require('crypto').randomUUID();
     
     // Get initial timeline
@@ -269,7 +281,7 @@ export class ActivityTimelineService {
       details: {
         streamId,
         updateFrequency
-      },
+  }
       severity: 'info'
     });
     
@@ -284,6 +296,7 @@ export class ActivityTimelineService {
     activityId: string,
     lookbackHours: number = 24
   ): Promise<ActivityCorrelation[]> {
+
     try {
       // Get the primary activity
       const primaryActivity = await this.getActivityById(activityId);
@@ -315,7 +328,7 @@ export class ActivityTimelineService {
         resourceId: activityId,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -330,6 +343,7 @@ export class ActivityTimelineService {
     format: 'json' | 'csv' | 'pdf' = 'json',
     adminId: string
   ): Promise<Buffer> {
+
     try {
       const timeline = await this.generateUserTimeline({
         ...filter,
@@ -365,7 +379,7 @@ export class ActivityTimelineService {
             start: filter.startDate?.toISOString(),
             end: filter.endDate?.toISOString()
           }
-        },
+  }
         severity: 'info'
       });
 
@@ -380,7 +394,7 @@ export class ActivityTimelineService {
         details: {
           format,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -390,6 +404,7 @@ export class ActivityTimelineService {
   // Private helper methods
 
   private async getActivitiesFromHistory(query: ActivityQuery): Promise<ActivityRecord[]> {
+
     // This would integrate with the existing ActivityHistoryService
     // For now, return mock data
     const mockActivities: ActivityRecord[] = [
@@ -404,11 +419,11 @@ export class ActivityTimelineService {
           title: 'User logged in',
           description: 'User successfully authenticated',
           success: true
-        },
+  }
         metadata: {
           clientType: 'web',
           organizationId: 'org-123'
-        },
+  }
         timestamp: new Date(Date.now() - 60 * 60 * 1000),
         ipAddress: '192.168.1.1',
         userAgent: 'Mozilla/5.0'
@@ -422,6 +437,7 @@ export class ActivityTimelineService {
     activities: ActivityRecord[],
     filter: TimelineFilter
   ): Promise<TimelineEvent[]> {
+
     const events: TimelineEvent[] = [];
     
     switch (filter.groupingMode) {
@@ -561,6 +577,7 @@ export class ActivityTimelineService {
     startDate: Date,
     endDate: Date
   ): Promise<UserActivityInsights> {
+
     // This would analyze the user's activity patterns
     // For now, return mock insights
     return {
@@ -577,14 +594,14 @@ export class ActivityTimelineService {
           { location: 'New York', count: 8, firstSeen: startDate, lastSeen: endDate },
           { location: 'San Francisco', count: 4, firstSeen: startDate, lastSeen: endDate }
         ]
-      },
+  }
       behavior: {
         activityScore: 85,
         consistencyScore: 78,
         productivityTrend: 'increasing',
         riskLevel: 'low',
         anomalyFlags: []
-      },
+  }
       features: {
         mostUsedFeatures: [
           { feature: 'Graph Editor', usage: 50, trend: 'up' },
@@ -594,7 +611,7 @@ export class ActivityTimelineService {
           { feature: 'Export', firstUsed: new Date(), usage: 5 }
         ],
         abandonedFeatures: []
-      },
+  }
       collaboration: {
         collaborationScore: 65,
         averageSharesPerDay: 2.5,
@@ -605,11 +622,13 @@ export class ActivityTimelineService {
   }
 
   private async getTotalActivityCount(userId: string, startDate: Date, endDate: Date): Promise<number> {
+
     // This would count activities from the database
     return 150; // Mock count
   }
 
   private async updateActivityStream(streamId: string): Promise<void> {
+
     const stream = this.activeStreams.get(streamId);
     if (!stream) return;
 
@@ -627,6 +646,7 @@ export class ActivityTimelineService {
   }
 
   private async getActivityById(activityId: string): Promise<ActivityRecord | null> {
+
     // This would query the activity from the database
     return null; // Mock implementation
   }
@@ -635,11 +655,13 @@ export class ActivityTimelineService {
     primaryActivity: ActivityRecord,
     relatedActivities: ActivityRecord[]
   ): Promise<ActivityCorrelation[]> {
+
     // This would implement correlation analysis algorithms
     return []; // Mock implementation
   }
 
   private async convertTimelineToCSV(events: TimelineEvent[]): Promise<Buffer> {
+
     const headers = ['Timestamp', 'Title', 'Category', 'Type', 'Description', 'Location', 'Device'];
     const rows = events.map(event => [
       event.timestamp.toISOString(),
@@ -656,6 +678,7 @@ export class ActivityTimelineService {
   }
 
   private async convertTimelineToPDF(timeline: any): Promise<Buffer> {
+
     // This would implement PDF generation
     return Buffer.from('PDF content would go here'); // Mock implementation
   }

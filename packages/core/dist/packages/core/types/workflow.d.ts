@@ -226,11 +226,11 @@ export interface WorkflowComponentProps {
     onLockReleased?: (lockId: string) => void;
 }
 export interface UseWorkflowReturn {
-    states: WorkflowState[];
-    transitions: WorkflowTransition[];
-    approvals: WorkflowApproval[];
-    locks: WorkflowLock[];
-    history: WorkflowHistoryEntry[];
+    states: WorkflowState;
+    transitions: WorkflowTransition;
+    approvals: WorkflowApproval;
+    locks: WorkflowLock;
+    history: WorkflowHistoryEntry;
     statistics: WorkflowStatistics | null;
     loading: boolean;
     error: string | null;
@@ -242,7 +242,7 @@ export interface UseWorkflowReturn {
     canTransitionState: (resourceId: string, toStateId: string) => Promise<boolean>;
     isResourceLocked: (resourceId: string, lockType?: string) => Promise<boolean>;
     getResourceState: (resourceId: string) => WorkflowState | null;
-    getAvailableTransitions: (currentStateId: string) => WorkflowTransition[];
+    getAvailableTransitions: (currentStateId: string) => WorkflowTransition;
 }
 export interface WorkflowApiResponse<T> {
     data: T;

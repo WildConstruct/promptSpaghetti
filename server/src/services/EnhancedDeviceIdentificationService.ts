@@ -8,6 +8,7 @@ import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 import crypto from 'crypto';
 
+}
 export interface EnhancedDeviceProfile {
   deviceId: string;
   fingerprint: string;
@@ -23,6 +24,7 @@ export interface EnhancedDeviceProfile {
     behavior: BehaviorProfile;
     network: NetworkProfile;
     security: SecurityProfile;
+}
   };
   
   // Trust factors
@@ -55,6 +57,7 @@ export interface EnhancedDeviceProfile {
   };
 }
 
+}
 export interface BrowserProfile {
   userAgent: string;
   userAgentParsed: {
@@ -63,6 +66,7 @@ export interface BrowserProfile {
     os: string;
     osVersion: string;
     device: string;
+}
   };
   language: string;
   languages: string[];
@@ -73,6 +77,7 @@ export interface BrowserProfile {
   cookieEnabled: boolean;
 }
 
+}
 export interface HardwareProfile {
   screenResolution: string;
   screenColorDepth: number;
@@ -83,6 +88,7 @@ export interface HardwareProfile {
   gpu: {
     vendor: string;
     renderer: string;
+}
   };
   battery: {
     level: number | null;
@@ -90,6 +96,7 @@ export interface HardwareProfile {
   };
 }
 
+}
 export interface BehaviorProfile {
   mouseMovement: MouseBehavior;
   keyboardDynamics: KeyboardBehavior;
@@ -97,7 +104,9 @@ export interface BehaviorProfile {
   scrollBehavior: ScrollBehavior;
   interactionPatterns: InteractionPattern[];
 }
+}
 
+}
 export interface NetworkProfile {
   ipAddress: string;
   ipHistory: string[];
@@ -109,7 +118,9 @@ export interface NetworkProfile {
   proxyDetected: boolean;
   torDetected: boolean;
 }
+}
 
+}
 export interface SecurityProfile {
   canvasFingerprint: string;
   webglFingerprint: string;
@@ -121,7 +132,9 @@ export interface SecurityProfile {
   automationDetected: boolean;
   spoofingDetected: boolean;
 }
+}
 
+}
 export interface UserAssociation {
   userId: string;
   firstSeen: Date;
@@ -130,14 +143,18 @@ export interface UserAssociation {
   verified: boolean;
   trustLevel: number;
 }
+}
 
+}
 export interface LocationHistory {
   geolocation: GeolocationData;
   firstSeen: Date;
   lastSeen: Date;
   frequency: number;
 }
+}
 
+}
 export interface FingerprintHistory {
   fingerprint: string;
   components: unknown;
@@ -145,7 +162,9 @@ export interface FingerprintHistory {
   lastSeen: Date;
   transitionReason?: string;
 }
+}
 
+}
 export interface SecurityEvent {
   eventId: string;
   type: string;
@@ -153,7 +172,9 @@ export interface SecurityEvent {
   timestamp: Date;
   details: unknown;
 }
+}
 
+}
 export interface AnomalyReport {
   anomalyId: string;
   type: 'fingerprint_change' | 'location_jump' | 'behavior_deviation' | 'security_violation';
@@ -165,61 +186,79 @@ export interface AnomalyReport {
     newValue?: unknown;
     deviation?: number;
     recommendation?: string;
+}
   };
 }
 
 // Behavioral biometrics interfaces
+}
 export interface MouseBehavior {
   averageSpeed: number;
   averageAcceleration: number;
   clickPatterns: ClickPattern[];
   movementPatterns: MovementPattern[];
 }
+}
 
+}
 export interface KeyboardBehavior {
   typingSpeed: number;
   dwellTime: number;    // Time key is held
   flightTime: number;   // Time between keystrokes
   patterns: KeystrokePattern[];
 }
+}
 
+}
 export interface TouchBehavior {
   touchPressure: number[];
   touchArea: number[];
   swipeVelocity: number[];
   multiTouchPatterns: unknown[];
 }
+}
 
+}
 export interface ScrollBehavior {
   scrollSpeed: number;
   scrollAcceleration: number;
   scrollPatterns: unknown[];
 }
+}
 
+}
 export interface ClickPattern {
   averageInterval: number;
   doubleClickSpeed: number;
   rightClickRatio: number;
 }
+}
 
+}
 export interface MovementPattern {
   curvature: number;
   jitter: number;
   straightness: number;
 }
+}
 
+}
 export interface KeystrokePattern {
   digraph: string;  // Two-key combination
   averageTime: number;
   standardDeviation: number;
 }
+}
 
+}
 export interface InteractionPattern {
   action: string;
   frequency: number;
   timing: number[];
 }
+}
 
+}
 export interface DeviceIdentificationConfig {
   // Trust scoring weights
   trustWeights: {
@@ -229,6 +268,7 @@ export interface DeviceIdentificationConfig {
     locationStability: number;
     securityEvents: number;
     verificationLevel: number;
+}
   };
   
   // Thresholds
@@ -276,26 +316,26 @@ export class EnhancedDeviceIdentificationService {
         locationStability: 0.15,
         securityEvents: 0.15,
         verificationLevel: 0.10
-      },
+  }
       thresholds: {
         highTrust: 80,
         mediumTrust: 60,
         lowTrust: 40,
         suspiciousChange: 30,
         criticalAnomaly: 50
-      },
+  }
       features: {
         behavioralBiometrics: true,
         machineLearnin
         : false,
         crossDeviceLinking: true,
         realTimeMonitoring: true
-      },
+  }
       cache: {
         deviceProfileTTL: 3600,        // 1 hour
         behaviorDataTTL: 300,          // 5 minutes
         anomalyDataTTL: 86400          // 24 hours
-      },
+  }
       ...config
     };
   }
@@ -317,6 +357,7 @@ export class EnhancedDeviceIdentificationService {
     anomalies: AnomalyReport[];
     recommendations: string[];
   }> {
+
     try {
       // Check cache first
       const cachedProfile = await this.getCachedDeviceProfile(request.fingerprint);
@@ -368,7 +409,7 @@ export class EnhancedDeviceIdentificationService {
         details: {
           fingerprint: request.fingerprint,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: request.ipAddress,
         severity: 'error'
       });
@@ -412,6 +453,7 @@ export class EnhancedDeviceIdentificationService {
     userId: string,
     verified: boolean = false
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_user_associations (
         device_fingerprint, user_id, first_seen, last_seen, 
@@ -436,6 +478,7 @@ export class EnhancedDeviceIdentificationService {
    * Get device history for user
    */
   async getUserDevices(userId: string): Promise<EnhancedDeviceProfile[]> {
+
     const result = await this.db.query(`
       SELECT DISTINCT device_fingerprint 
       FROM device_user_associations 
@@ -463,6 +506,7 @@ export class EnhancedDeviceIdentificationService {
     reason: string,
     adminId?: string
   ): Promise<void> {
+
     const trustLevel = trusted ? 90 : 10;
     
     await this.db.query(`
@@ -479,7 +523,7 @@ export class EnhancedDeviceIdentificationService {
         trusted,
         trustLevel,
         reason
-      },
+  }
       severity: 'info'
     });
 
@@ -495,6 +539,7 @@ export class EnhancedDeviceIdentificationService {
     indicators: string[];
     relatedDevices: string[];
   }> {
+
     // Check for devices with similar fingerprints
     const result = await this.db.query(`
       SELECT fingerprint, components, last_seen 
@@ -504,7 +549,7 @@ export class EnhancedDeviceIdentificationService {
           SELECT components->>'canvasFingerprint' 
           FROM device_fingerprints 
           WHERE fingerprint = $1
-        )
+
     `, [fingerprint]);
 
     const indicators: string[] = [];
@@ -547,6 +592,7 @@ export class EnhancedDeviceIdentificationService {
   // Private helper methods
 
   private async getOrCreateDeviceProfile(request: unknown): Promise<EnhancedDeviceProfile> {
+
     let profile = await this.getDeviceProfile(request.fingerprint);
     
     if (!profile) {
@@ -557,6 +603,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async createNewDeviceProfile(request: unknown): Promise<EnhancedDeviceProfile> {
+
     const deviceId = this.generateDeviceId();
     const now = new Date();
     
@@ -582,7 +629,7 @@ export class EnhancedDeviceIdentificationService {
         locationStability: 100,
         securityEvents: 0,
         verificationLevel: 0
-      },
+  }
       history: {
         users: [],
         locations: [{
@@ -598,7 +645,7 @@ export class EnhancedDeviceIdentificationService {
           lastSeen: now
         }],
         securityEvents: []
-      },
+  }
       anomalies: [],
       metadata: {
         lastUpdated: now,
@@ -615,6 +662,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getDeviceProfile(fingerprint: string): Promise<EnhancedDeviceProfile | null> {
+
     const result = await this.db.query(`
       SELECT * FROM device_fingerprints WHERE fingerprint = $1
     `, [fingerprint]);
@@ -640,7 +688,7 @@ export class EnhancedDeviceIdentificationService {
         locations: await this.getLocationHistory(fingerprint),
         fingerprints: await this.getFingerprintHistory(row.device_id),
         securityEvents: await this.getSecurityEvents(fingerprint)
-      },
+  }
       anomalies: await this.getRecentAnomalies(fingerprint),
       metadata: {
         lastUpdated: row.last_updated,
@@ -665,7 +713,7 @@ export class EnhancedDeviceIdentificationService {
         mimeTypes: components.mimeTypes || [],
         doNotTrack: components.doNotTrack || false,
         cookieEnabled: components.cookieEnabled || false
-      },
+  }
       hardware: {
         screenResolution: components.screenResolution || '',
         screenColorDepth: components.screenColorDepth || 0,
@@ -676,19 +724,19 @@ export class EnhancedDeviceIdentificationService {
         gpu: {
           vendor: components.webglVendor || '',
           renderer: components.webglRenderer || ''
-        },
+  }
         battery: {
           level: components.batteryLevel || null,
           charging: components.charging || null
         }
-      },
+  }
       behavior: {
         mouseMovement: { averageSpeed: 0, averageAcceleration: 0, clickPatterns: [], movementPatterns: [] },
         keyboardDynamics: { typingSpeed: 0, dwellTime: 0, flightTime: 0, patterns: [] },
         touchBehavior: { touchPressure: [], touchArea: [], swipeVelocity: [], multiTouchPatterns: [] },
         scrollBehavior: { scrollSpeed: 0, scrollAcceleration: 0, scrollPatterns: [] },
         interactionPatterns: []
-      },
+  }
       network: {
         ipAddress: components.ipAddress || '',
         ipHistory: [],
@@ -699,7 +747,7 @@ export class EnhancedDeviceIdentificationService {
         vpnDetected: false,
         proxyDetected: false,
         torDetected: false
-      },
+  }
       security: {
         canvasFingerprint: components.canvasFingerprint || '',
         webglFingerprint: components.webglFingerprint || '',
@@ -739,6 +787,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async detectAnomalies(profile: EnhancedDeviceProfile, request: unknown): Promise<AnomalyReport[]> {
+
     const anomalies: AnomalyReport[] = [];
     
     // Check for fingerprint changes
@@ -850,6 +899,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async calculateTrustScore(profile: EnhancedDeviceProfile): Promise<number> {
+
     const factors = await this.calculateTrustFactors(profile);
     profile.trustFactors = factors;
     
@@ -862,6 +912,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async calculateTrustFactors(profile: EnhancedDeviceProfile): Promise<typeof profile.trustFactors> {
+
     const now = Date.now();
     const ageInDays = (now - profile.firstSeen.getTime()) / (1000 * 60 * 60 * 24);
     
@@ -913,6 +964,7 @@ export class EnhancedDeviceIdentificationService {
     profile: EnhancedDeviceProfile,
     anomalies: AnomalyReport[]
   ): Promise<TrustDecision> {
+
     const criticalAnomalies = anomalies.filter(a => a.severity === 'critical');
     const highAnomalies = anomalies.filter(a => a.severity === 'high');
     
@@ -984,6 +1036,7 @@ export class EnhancedDeviceIdentificationService {
   // Database operations
   
   private async storeDeviceProfile(profile: EnhancedDeviceProfile): Promise<void> {
+
     await this.db.query(`
       INSERT INTO device_fingerprints (
         device_id, fingerprint, components, trust_score,
@@ -1002,6 +1055,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async updateDeviceComponents(profile: EnhancedDeviceProfile, request: unknown): Promise<void> {
+
     profile.components = this.parseDeviceComponents(request.components);
     profile.lastSeen = new Date();
     profile.metadata.updateCount++;
@@ -1019,6 +1073,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getUserAssociations(fingerprint: string): Promise<UserAssociation[]> {
+
     const result = await this.db.query(`
       SELECT * FROM device_user_associations 
       WHERE device_fingerprint = $1 
@@ -1036,6 +1091,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getLocationHistory(fingerprint: string): Promise<LocationHistory[]> {
+
     const result = await this.db.query(`
       SELECT * FROM device_location_history 
       WHERE device_fingerprint = $1 
@@ -1052,6 +1108,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getFingerprintHistory(deviceId: string): Promise<FingerprintHistory[]> {
+
     const result = await this.db.query(`
       SELECT * FROM device_fingerprint_history 
       WHERE device_id = $1 
@@ -1069,6 +1126,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getSecurityEvents(fingerprint: string): Promise<SecurityEvent[]> {
+
     const result = await this.db.query(`
       SELECT * FROM device_security_events 
       WHERE device_fingerprint = $1 
@@ -1086,6 +1144,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async getRecentAnomalies(fingerprint: string): Promise<AnomalyReport[]> {
+
     const result = await this.db.query(`
       SELECT * FROM device_anomalies 
       WHERE device_fingerprint = $1 
@@ -1105,6 +1164,7 @@ export class EnhancedDeviceIdentificationService {
   // Caching methods
   
   private async getCachedDeviceProfile(fingerprint: string): Promise<EnhancedDeviceProfile | null> {
+
     const cached = await this.redis.get(`device_profile:${fingerprint}`);
     if (cached) {
       return JSON.parse(cached);
@@ -1113,6 +1173,7 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async cacheDeviceProfile(profile: EnhancedDeviceProfile): Promise<void> {
+
     await this.redis.setex(
       `device_profile:${profile.fingerprint}`,
       this.config.cache.deviceProfileTTL,
@@ -1143,6 +1204,7 @@ export class EnhancedDeviceIdentificationService {
     request: unknown,
     decision: TrustDecision
   ): Promise<void> {
+
     await this.auditService.logEvent({
       action: 'device_identified',
       userId: request.userId,
@@ -1153,7 +1215,7 @@ export class EnhancedDeviceIdentificationService {
         riskLevel: profile.riskLevel,
         decision: decision.decision,
         anomalyCount: profile.anomalies.length
-      },
+  }
       ipAddress: request.ipAddress,
       sessionId: request.sessionId,
       severity: 'info'
@@ -1161,10 +1223,12 @@ export class EnhancedDeviceIdentificationService {
   }
 
   private async updateUserAssociations(profile: EnhancedDeviceProfile): Promise<void> {
+
     profile.history.users = await this.getUserAssociations(profile.fingerprint);
   }
 
   private async analyzeBehavior(profile: EnhancedDeviceProfile, _____behaviorData: unknown): Promise<void> {
+
     // Placeholder for behavioral analysis
     // Would implement mouse movement, keyboard dynamics, etc.
     console.log('Analyzing behavior for device:', profile.deviceId);
@@ -1174,6 +1238,7 @@ export class EnhancedDeviceIdentificationService {
     profile: EnhancedDeviceProfile,
     request: unknown
   ): Promise<unknown> {
+
     // Quick processing for cached devices
     const anomalies = await this.detectAnomalies(profile, request);
     const trustDecision = await this.makeTrustDecision(profile, anomalies);
@@ -1204,6 +1269,7 @@ export class EnhancedDeviceIdentificationService {
    * Initialize database schema
    */
   async initializeSchema(): Promise<void> {
+
     // Extended schema for enhanced device identification
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS device_anomalies (
@@ -1216,7 +1282,7 @@ export class EnhancedDeviceIdentificationService {
         resolved BOOLEAN DEFAULT false,
         resolved_at TIMESTAMP,
         resolution_notes TEXT
-      )
+
     `);
 
     await this.db.query(`
@@ -1238,7 +1304,7 @@ export class EnhancedDeviceIdentificationService {
         first_seen TIMESTAMP DEFAULT NOW(),
         last_seen TIMESTAMP DEFAULT NOW(),
         transition_reason TEXT
-      )
+
     `);
 
     await this.db.query(`
@@ -1254,7 +1320,7 @@ export class EnhancedDeviceIdentificationService {
         first_seen TIMESTAMP DEFAULT NOW(),
         last_seen TIMESTAMP DEFAULT NOW(),
         frequency INTEGER DEFAULT 1
-      )
+
     `);
 
     await this.db.query(`
@@ -1264,8 +1330,10 @@ export class EnhancedDeviceIdentificationService {
   }
 }
 
+}
 export interface TrustDecision {
   decision: 'allow' | 'monitor' | 'challenge' | 'block';
   reason: string;
   requiresAction: string[];
+}
 }

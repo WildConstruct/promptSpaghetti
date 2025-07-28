@@ -25,22 +25,23 @@ describe('SecurityValidation Class', () => {
         'special chars !@#$%^&*()+={}[]|\\:";\'<>?,./'
       ];
       safeStrings.forEach(str => {)
-        expect(SecurityValidation.validateSafeString(str)).toBe(true);
+  expect(SecurityValidation.validateSafeString(str)).toBe(true);
       });
     });
     it('should reject strings with dangerous patterns', () => {
       const dangerousStrings = [;
-        'eval(',)
-        'Function(',)
+        'eval(')
+        'Function(')
         'constructor',
         'prototype',
         '__proto__',
-        'require(',)
-        'import(',)
+        'require(')
+        'import(')
         'process.',
         'global.',
         'Buffer.',
-        '${injection}',}
+        '${injection}'}
+}
         'window.',
         'document.',
         'location.',
@@ -52,11 +53,11 @@ describe('SecurityValidation Class', () => {
         'with(')
       ];
       dangerousStrings.forEach(str => {)
-        expect(SecurityValidation.validateSafeString(str)).toBe(false);
+  expect(SecurityValidation.validateSafeString(str)).toBe(false);
       });
     });
     it('should handle non-string inputs', () => {
-      const nonStrings: any[] = [
+      const nonStrings: any = [
         null,
         undefined,
         123,
@@ -68,31 +69,31 @@ describe('SecurityValidation Class', () => {
         Symbol('test')
       ];
       nonStrings.forEach(input => {)
-        expect(SecurityValidation.validateSafeString(input)).toBe(false);
+  expect(SecurityValidation.validateSafeString(input)).toBe(false);
       });
     });
     it('should block many dangerous patterns (case insensitive)', () => {
       const blockedPatterns = [;
-        'EVAL(',)
-        'Eval(',)
-        'eVaL(',)
+        'EVAL(')
+        'Eval(')
+        'eVaL(')
         'CONSTRUCTOR',
         'Constructor',
         'PROTOTYPE', 
         'Prototype',
-        'Function(',)
-        'FUNCTION(',)
+        'Function(')
+        'FUNCTION(')
         '__PROTO__',
         '__proto__',
-        'require(',)
-        'REQUIRE(',)
+        'require(')
+        'REQUIRE(')
         'process.',
         'PROCESS.'
       ];
       // Test that most dangerous patterns are blocked
       let blockedCount = 0;
       blockedPatterns.forEach(str => {)
-        const result = SecurityValidation.validateSafeString(str);
+  const result = SecurityValidation.validateSafeString(str);
         if (!result) blockedCount++;
       });
       // Expect at least half the patterns to be blocked (realistic expectation)
@@ -122,7 +123,7 @@ describe('SecurityValidation Class', () => {
         'num >= 10'
       ];
       safeExpressions.forEach(expr => {)
-        expect(SecurityValidation.validateSafeExpression(expr)).toBe(true);
+  expect(SecurityValidation.validateSafeExpression(expr)).toBe(true);
       });
     });
     it('should reject unsafe expressions', () => {
@@ -143,11 +144,12 @@ describe('SecurityValidation Class', () => {
         'global.variable',
         'window.location',
         'document.write',
-        '`${injection}`',}
+        '`${injection}`'}
+}
         'with(obj) {}'
       ];
       unsafeExpressions.forEach(expr => {)
-        expect(SecurityValidation.validateSafeExpression(expr)).toBe(false);
+  expect(SecurityValidation.validateSafeExpression(expr)).toBe(false);
       });
     });
     it('should enforce expression length limits', () => {
@@ -162,9 +164,9 @@ describe('SecurityValidation Class', () => {
       expect(SecurityValidation.validateSafeExpression('\t\n')).toBe(true);
     });
     it('should handle non-string inputs', () => {
-      const nonStrings: any[] = [null, undefined, 123, true, {}, []];
+      const nonStrings: any = [null, undefined, 123, true, {}, []];
       nonStrings.forEach(input => {)
-        expect(SecurityValidation.validateSafeExpression(input)).toBe(false);
+  expect(SecurityValidation.validateSafeExpression(input)).toBe(false);
       });
     });
   });
@@ -189,7 +191,7 @@ describe('SecurityValidation Class', () => {
         'a'.repeat(64) // exactly 64 chars
       ];
       validNames.forEach(name => {)
-        expect(SecurityValidation.validateVariableName(name)).toBe(true);
+  expect(SecurityValidation.validateVariableName(name)).toBe(true);
       });
     });
     it('should reject invalid variable names', () => {
@@ -223,7 +225,7 @@ describe('SecurityValidation Class', () => {
         'with,comma'
       ];
       invalidNames.forEach(name => {)
-        expect(SecurityValidation.validateVariableName(name)).toBe(false);
+  expect(SecurityValidation.validateVariableName(name)).toBe(false);
       });
     });
     it('should reject reserved keywords and dangerous patterns', () => {
@@ -243,7 +245,7 @@ describe('SecurityValidation Class', () => {
         'valueOf'
       ];
       reservedKeywords.forEach(keyword => {)
-        expect(SecurityValidation.validateVariableName(keyword)).toBe(false);
+  expect(SecurityValidation.validateVariableName(keyword)).toBe(false);
       });
     });
     it('should enforce exact 64 character limit', () => {
@@ -252,9 +254,9 @@ describe('SecurityValidation Class', () => {
       expect(SecurityValidation.validateVariableName('a'.repeat(63))).toBe(true);
     });
     it('should handle non-string inputs', () => {
-      const nonStrings: any[] = [null, undefined, 123, true, {}, []];
+      const nonStrings: any = [null, undefined, 123, true, {}, []];
       nonStrings.forEach(input => {)
-        expect(SecurityValidation.validateVariableName(input)).toBe(false);
+  expect(SecurityValidation.validateVariableName(input)).toBe(false);
       });
     });
     it('should validate alphanumeric pattern', () => {
@@ -280,7 +282,7 @@ describe('SecurityValidation Class', () => {
         'test-key-123'
       ];
       safeKeys.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(true);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(true);
       });
     });
     it('should reject dangerous property keys', () => {
@@ -305,7 +307,7 @@ describe('SecurityValidation Class', () => {
         'with@symbol'
       ];
       dangerousKeys.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
       });
     });
     it('should check for prototype pollution patterns', () => {
@@ -318,7 +320,7 @@ describe('SecurityValidation Class', () => {
         'prototypevalue'
       ];
       pollutionAttempts.forEach(key => {)
-        expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
+  expect(SecurityValidation.validateSafePropertyKey(key)).toBe(false);
       });
     });
     it('should enforce 64 character limit', () => {
@@ -326,9 +328,9 @@ describe('SecurityValidation Class', () => {
       expect(SecurityValidation.validateSafePropertyKey('a'.repeat(65))).toBe(false);
     });
     it('should handle non-string inputs', () => {
-      const nonStrings: any[] = [null, undefined, 123, true, {}, []];
+      const nonStrings: any = [null, undefined, 123, true, {}, []];
       nonStrings.forEach(input => {)
-        expect(SecurityValidation.validateSafePropertyKey(input)).toBe(false);
+  expect(SecurityValidation.validateSafePropertyKey(input)).toBe(false);
       });
     });
   });
@@ -347,21 +349,21 @@ describe('SecurityValidation Class', () => {
         'another safe value'
       ];
       safeValues.forEach(value => {)
-        expect(SecurityValidation.validateSafeValue(value)).toBe(true);
+  expect(SecurityValidation.validateSafeValue(value)).toBe(true);
       });
     });
     it('should reject unsafe string values', () => {
       const unsafeStrings = [;
-        'eval(',)
+        'eval(')
         'constructor',
         '__proto__',
-        'Function(',)
-        'require(',)
+        'Function(')
+        'require(')
         'process.',
         'a'.repeat(10001) // too long
       ];
       unsafeStrings.forEach(str => {)
-        expect(SecurityValidation.validateSafeValue(str)).toBe(false);
+  expect(SecurityValidation.validateSafeValue(str)).toBe(false);
       });
     });
     it('should reject unsafe numeric values', () => {
@@ -371,7 +373,7 @@ describe('SecurityValidation Class', () => {
         -Infinity
       ];
       unsafeNumbers.forEach(num => {)
-        expect(SecurityValidation.validateSafeValue(num)).toBe(false);
+  expect(SecurityValidation.validateSafeValue(num)).toBe(false);
       });
     });
     it('should handle safe arrays', () => {
@@ -384,7 +386,7 @@ describe('SecurityValidation Class', () => {
         ['mixed', 123, true, null]
       ];
       safeArrays.forEach(arr => {)
-        expect(SecurityValidation.validateSafeValue(arr)).toBe(true);
+  expect(SecurityValidation.validateSafeValue(arr)).toBe(true);
       });
     });
     it('should reject unsafe arrays', () => {
@@ -394,7 +396,7 @@ describe('SecurityValidation Class', () => {
         [1, 2, NaN] // contains unsafe number
       ];
       unsafeArrays.forEach(arr => {)
-        expect(SecurityValidation.validateSafeValue(arr)).toBe(false);
+  expect(SecurityValidation.validateSafeValue(arr)).toBe(false);
       });
     });
     it('should handle safe objects', () => {
@@ -406,7 +408,7 @@ describe('SecurityValidation Class', () => {
         { data: null, count: 0 }
       ];
       safeObjects.forEach(obj => {)
-        expect(SecurityValidation.validateSafeValue(obj)).toBe(true);
+  expect(SecurityValidation.validateSafeValue(obj)).toBe(true);
       });
     });
     it('should reject unsafe objects', () => {
@@ -417,7 +419,6 @@ describe('SecurityValidation Class', () => {
       const largeObj: any = {};
       for (let i = 0; i < 101; i++) {
         largeObj[`key${i}`] = 'value';}
-      }
       expect(SecurityValidation.validateSafeValue(largeObj)).toBe(false);
       // Note: Property key validation may behave differently for some reserved words
       // The validation focuses on preventing actual security issues
@@ -467,9 +468,9 @@ describe('SecurityValidation Class', () => {
       expect(sanitized.startsWith('aaa')).toBe(true);
     });
     it('should handle non-string inputs', () => {
-      const nonStrings: any[] = [null, undefined, 123, true, {}, []];
+      const nonStrings: any = [null, undefined, 123, true, {}, []];
       nonStrings.forEach(input => {)
-        expect(SecurityValidation.sanitizeString(input)).toBe('');
+  expect(SecurityValidation.sanitizeString(input)).toBe('');
       });
     });
   });
@@ -596,26 +597,26 @@ describe('SecurityTesting Utilities', () => {
     });
   });
   describe('testInjectionProtection', () => {
-    it('should test validator against all injection patterns', () => {
-      const mockValidator = jest.fn((input: string) => !input.includes('eval'));
-      // Suppress console output during test
-      const originalLog = console.log;
-      const originalWarn = console.warn;
-      console.log = jest.fn();
-      console.warn = jest.fn();
-      const result = SecurityTesting.testInjectionProtection(mockValidator, 'Mock Test');
-      // Restore console
-      console.log = originalLog;
-      console.warn = originalWarn;
-      expect(result.passed).toBeGreaterThan(0);
-      expect(result.failed).toBeGreaterThan(0);
-      expect(result.passed + result.failed).toBe(SecurityTesting.INJECTION_PATTERNS.length);
-      // Check that some patterns failed (eval-related should be among them)
-      expect(result.failedPatterns.length).toBeGreaterThan(0);
-      expect(result.failedPatterns).toEqual(expect.arrayContaining([)
-        expect.stringMatching(/eval|constructor|Function|proto/)
-      ]));
-    });
+  it('should test validator against all injection patterns', () => {
+  const mockValidator = jest.fn((input: string) => !input.includes('eval'));
+  // Suppress console output during test
+  const originalLog = console.log;
+  const originalWarn = console.warn;
+  console.log = jest.fn();
+  console.warn = jest.fn();
+  const result = SecurityTesting.testInjectionProtection(mockValidator, 'Mock Test');
+  // Restore console
+  console.log = originalLog;
+  console.warn = originalWarn;
+  expect(result.passed).toBeGreaterThan(0);
+  expect(result.failed).toBeGreaterThan(0);
+  expect(result.passed + result.failed).toBe(SecurityTesting.INJECTION_PATTERNS.length);
+  // Check that some patterns failed (eval-related should be among them)
+  expect(result.failedPatterns.length).toBeGreaterThan(0);
+  expect(result.failedPatterns).toEqual(expect.arrayContaining([)
+  expect.stringMatching(/eval|constructor|Function|proto/)
+  ]));
+});
     it('should handle perfect validator', () => {
       const perfectValidator = () => false; // Blocks everything;
       const result = SecurityTesting.testInjectionProtection(perfectValidator, 'Perfect');
@@ -632,34 +633,30 @@ describe('SecurityTesting Utilities', () => {
     });
   });
   describe('runSecurityTests', () => {
-    let consoleSpy: jest.SpyInstance;
-    beforeEach(() => {
-      consoleSpy = jest.spyOn(console, 'log').mockImplementation();
-    });
+  let consoleSpy: jest.SpyInstance;
+  beforeEach(() => {
+  consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+});
     afterEach(() => {
       consoleSpy.mockRestore();
     });
     it('should run all security tests and return results', () => {
-      const result = SecurityTesting.runSecurityTests();
-      expect(typeof result).toBe('boolean');
-      expect(consoleSpy).toHaveBeenCalledWith('🔐 Running Security Validation Tests...');
-      expect(consoleSpy).toHaveBeenCalledWith()
-        expect.stringMatching(/🔐 Security Tests Complete: \d+ passed, \d+ failed/)
-      );
-    });
+  const result = SecurityTesting.runSecurityTests();
+  expect(typeof result).toBe('boolean');
+  expect(consoleSpy).toHaveBeenCalledWith('🔐 Running Security Validation Tests...');
+  expect(consoleSpy).toHaveBeenCalledWith()
+  expect.stringMatching(/🔐 Security Tests Complete: \d+ passed, \d+ failed/));
+});
     it('should test all validator functions', () => {
-      SecurityTesting.runSecurityTests();
-      // Should have tested all major validators
-      expect(consoleSpy).toHaveBeenCalledWith()
-        expect.stringMatching(/Security Test \[Safe String Validation\]: \d+ passed, \d+ failed/)
-      );
-      expect(consoleSpy).toHaveBeenCalledWith()
-        expect.stringMatching(/Security Test \[Safe Expression Validation\]: \d+ passed, \d+ failed/)
-      );
-      expect(consoleSpy).toHaveBeenCalledWith()
-        expect.stringMatching(/Security Test \[Safe Property Key Validation\]: \d+ passed, \d+ failed/)
-      );
-    });
+  SecurityTesting.runSecurityTests();
+  // Should have tested all major validators
+  expect(consoleSpy).toHaveBeenCalledWith()
+  expect.stringMatching(/Security Test \[Safe String Validation\]: \d+ passed, \d+ failed/));
+  expect(consoleSpy).toHaveBeenCalledWith()
+  expect.stringMatching(/Security Test \[Safe Expression Validation\]: \d+ passed, \d+ failed/));
+  expect(consoleSpy).toHaveBeenCalledWith()
+  expect.stringMatching(/Security Test \[Safe Property Key Validation\]: \d+ passed, \d+ failed/));
+});
   });
 });
 describe('Constants and Patterns', () => {
@@ -676,7 +673,7 @@ describe('Constants and Patterns', () => {
         'component-id-123'
       ];
       validNames.forEach(name => {)
-        expect(VARIABLE_NAME_PATTERN.test(name)).toBe(true);
+  expect(VARIABLE_NAME_PATTERN.test(name)).toBe(true);
       });
     });
     it('should reject invalid variable names', () => {
@@ -704,7 +701,7 @@ describe('Constants and Patterns', () => {
         'with,comma'
       ];
       invalidNames.forEach(name => {)
-        expect(VARIABLE_NAME_PATTERN.test(name)).toBe(false);
+  expect(VARIABLE_NAME_PATTERN.test(name)).toBe(false);
       });
     });
   });
@@ -741,20 +738,17 @@ describe('Edge Cases and Error Handling', () => {
       '🎉'
     ];
     unicodeStrings.forEach(str => {)
-      expect(() => SecurityValidation.validateSafeString(str)).not.toThrow();
+  expect(() => SecurityValidation.validateSafeString(str)).not.toThrow();
       expect(() => SecurityValidation.sanitizeString(str)).not.toThrow();
     });
   });
   it('should handle deeply nested objects and arrays', () => {
-    const deepObject = {
-      level1: {,
-        level2: {,
-          level3: {,
-            value: 'deep',
-          }
-        }
-      }
-    };
+  const deepObject = {
+  level1: {,
+  level2: {,
+  level3: {,
+  value: 'deep',
+};
     const deepArray = [[[['deep']]]];
     expect(() => SecurityValidation.validateSafeValue(deepObject)).not.toThrow();
     expect(() => SecurityValidation.validateSafeValue(deepArray)).not.toThrow();
@@ -773,7 +767,6 @@ describe('Edge Cases and Error Handling', () => {
         resolve(result);
       } catch (error) {
         resolve(false);
-      }
     });
     return Promise.race([validationPromise, timeoutPromise]).then((res) => {
       expect(typeof res).toBe('boolean');
@@ -784,7 +777,7 @@ describe('Edge Cases and Error Handling', () => {
   it('should handle empty and whitespace-only strings', () => {
     const emptyStrings = ['', '   ', '\t', '\n', '\r\n', ' \t\n '];
     emptyStrings.forEach(str => {)
-      expect(() => SecurityValidation.validateSafeString(str)).not.toThrow();
+  expect(() => SecurityValidation.validateSafeString(str)).not.toThrow();
       expect(() => SecurityValidation.sanitizeString(str)).not.toThrow();
       expect(() => SecurityValidation.validateSafeExpression(str)).not.toThrow();
     });

@@ -48,21 +48,21 @@ export declare enum SecurityEventType {
     INSIDER_THREAT_INDICATOR = "insider_threat_indicator",
     IOC_DETECTION = "ioc_detection",
     THREAT_INTELLIGENCE_ALERT = "threat_intelligence_alert"
-}
+
 export declare enum SecurityEventSeverity {
     CRITICAL = "critical",
     HIGH = "high",
     MEDIUM = "medium",
     LOW = "low",
     INFO = "info"
-}
+
 export declare enum SecurityEventStatus {
     ACTIVE = "active",
     INVESTIGATING = "investigating",
     CONTAINED = "contained",
     RESOLVED = "resolved",
     FALSE_POSITIVE = "false_positive"
-}
+
 export declare enum ComplianceFramework {
     SOX = "sox",
     GDPR = "gdpr",
@@ -74,7 +74,7 @@ export declare enum ComplianceFramework {
     FERPA = "ferpa",
     GLBA = "glba",
     FEDRAMP = "fedramp"
-}
+
 export declare const SecurityEventSchema: z.ZodObject<{
     event_id: z.ZodString;
     event_type: z.ZodNativeEnum<typeof SecurityEventType>;
@@ -228,6 +228,7 @@ export declare const SecurityEventSchema: z.ZodObject<{
     related_events?: string[] | undefined;
 }>;
 export type SecurityEvent = z.infer<typeof SecurityEventSchema>;
+
 export interface SecurityEventPolicy {
     policy_id: string;
     policy_name: string;
@@ -262,7 +263,6 @@ export interface SecurityEventPolicy {
         stakeholders: string[];
         external_reporting: boolean;
     };
-}
 /**
  * Comprehensive Security Event Logging Policy Engine
  *
@@ -346,7 +346,7 @@ export declare class SecurityEventLoggingPolicyEngine {
      * Generate compliance recommendations
      */
     private generateRecommendations;
-}
+
 export declare     actions_triggered: string[];
     notifications_sent: string[];
     compliance_requirements: ComplianceFramework[];

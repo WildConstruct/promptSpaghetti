@@ -9,6 +9,7 @@ import { VerificationThresholdService } from './VerificationThresholdService';
 import { EmailService } from '../auth/services/EmailService';
 import { EventEmitter } from 'events';
 
+}
 export interface NewDeviceContext {
   userId: string;
   deviceFingerprint: string;
@@ -19,6 +20,7 @@ export interface NewDeviceContext {
     city: string;
     latitude?: number;
     longitude?: number;
+}
   };
   metadata?: {
     loginTime: Date;
@@ -27,6 +29,7 @@ export interface NewDeviceContext {
   };
 }
 
+}
 export interface NewDeviceDetectionResult {
   isNewDevice: boolean;
   deviceId?: string;
@@ -38,10 +41,12 @@ export interface NewDeviceDetectionResult {
     fingerprint: string;
     similarity: number;
     lastSeen: Date;
+}
   }>;
   recommendations: string[];
 }
 
+}
 export interface NewDevicePolicy {
   enabled: boolean;
   
@@ -51,6 +56,7 @@ export interface NewDevicePolicy {
     considerLocationChange: boolean;
     considerUserAgentChange: boolean;
     maxSimilarDevices: number;
+}
   };
   
   // Risk assessment
@@ -128,6 +134,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   async detectNewDevice(context: NewDeviceContext): Promise<NewDeviceDetectionResult> {
+
     try {
       // Check cache first
       const cacheKey = `new_device:${context.userId}:${context.deviceFingerprint}`;
@@ -217,6 +224,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async getUserDevices(userId: string): Promise<any[]> {
+
     try {
       const result = await this.db.query(`
         SELECT 
@@ -264,6 +272,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     context: NewDeviceContext,
     existingDevice: Error
   ): Promise<{ suspicious: boolean; reasons: string[] }> {
+
     const reasons: string[] = [];
 
     // Check location change
@@ -330,6 +339,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     context: NewDeviceContext,
     similarDevices: unknown[]
   ): Promise<number> {
+
     let riskScore = this.policy.riskAssessment.newDeviceBaseRisk;
 
     // Check user trust level
@@ -442,6 +452,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async getUserTrustLevel(userId: string): Promise<number> {
+
     try {
       const result = await this.db.query(`
         SELECT 
@@ -484,6 +495,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async checkSuspiciousPatterns(context: NewDeviceContext): Promise<string[]> {
+
     const patterns: string[] = [];
 
     // Check for rapid device switching
@@ -519,6 +531,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async checkRecentBreaches(userId: string): Promise<boolean> {
+
     const result = await this.db.query(`
       SELECT COUNT(*) as breach_count
       FROM security_events
@@ -531,6 +544,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async assessLocationRisk(userId: string, location: unknown): Promise<number> {
+
     // This would integrate with LocationDetectionService
     // For now, simple implementation
     let risk = 0;
@@ -583,6 +597,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async getRecentSecurityEvents(userId: string): Promise<any[]> {
+
     const result = await this.db.query(`
       SELECT * FROM security_events
       WHERE user_id = $1
@@ -612,6 +627,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     context: NewDeviceContext,
     result: NewDeviceDetectionResult
   ): Promise<void> {
+
     if (!this.emailService) return;
 
     try {
@@ -676,7 +692,7 @@ export class NewDeviceDetectionService extends EventEmitter {
           deviceFingerprint: context.deviceFingerprint,
           riskLevel: result.riskLevel,
           notificationType: 'email'
-        },
+  }
         severity: 'info'
       });
     } catch (error) {
@@ -688,6 +704,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     context: NewDeviceContext,
     result: NewDeviceDetectionResult
   ): Promise<void> {
+
     try {
       await this.auditService.logEvent({
         userId: context.userId,
@@ -700,7 +717,7 @@ export class NewDeviceDetectionService extends EventEmitter {
           requiresVerification: result.requiresVerification,
           location: context.location,
           similarDevicesCount: result.similarDevices?.length || 0
-        },
+  }
         severity: result.riskLevel === 'critical' ? 'error' : 
           result.riskLevel === 'high' ? 'warning' : 'info',
         ipAddress: context.ipAddress,
@@ -712,6 +729,7 @@ export class NewDeviceDetectionService extends EventEmitter {
   }
 
   private async cacheResult(key: string, result: NewDeviceDetectionResult): Promise<void> {
+
     try {
       await this.redis.setex(
         key,
@@ -728,6 +746,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     deviceFingerprint: string,
     approvalMethod: string
   ): Promise<boolean> {
+
     try {
       // Mark device as trusted
       await this.deviceService.markDeviceAsTrusted(deviceFingerprint, userId, userId);
@@ -739,7 +758,7 @@ export class NewDeviceDetectionService extends EventEmitter {
         details: {
           deviceFingerprint,
           approvalMethod
-        },
+  }
         severity: 'info'
       });
 
@@ -762,6 +781,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     deviceFingerprint: string,
     reason: string
   ): Promise<boolean> {
+
     try {
       // Block device
       await this.deviceService.blockDevice(deviceFingerprint, reason, userId);
@@ -773,7 +793,7 @@ export class NewDeviceDetectionService extends EventEmitter {
         details: {
           deviceFingerprint,
           reason
-        },
+  }
         severity: 'warning'
       });
 
@@ -800,6 +820,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     verificationMethods?: string[];
     attemptsRemaining?: number;
   }> {
+
     try {
       // Check if device is already verified
       const device = await this.db.query(`

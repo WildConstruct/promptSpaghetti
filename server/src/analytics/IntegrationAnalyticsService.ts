@@ -17,6 +17,7 @@ import { AnalyticsCollector } from './AnalyticsCollector';
 // Core Integration Analytics Interfaces
 // =============================================================================
 
+}
 export interface IntegrationEvent {
   eventId: string;
   timestamp: Date;
@@ -50,7 +51,9 @@ export interface IntegrationEvent {
   context: IntegrationContext;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface IntegrationMetrics {
   integrationId: string;
   integrationName: string;
@@ -67,6 +70,7 @@ export interface IntegrationMetrics {
     peakUsageHour: number;
     dataTransferred: number; // bytes
     averagePayloadSize: number; // bytes
+}
   };
   
   // Performance Metrics
@@ -118,6 +122,7 @@ export interface IntegrationMetrics {
   };
 }
 
+}
 export interface IntegrationAnalyticsDashboard {
   // Overview Statistics
   overview: {
@@ -130,6 +135,7 @@ export interface IntegrationAnalyticsDashboard {
     overallSuccessRate: number;
     totalCost: number;
     costSavings: number;
+}
   };
   
   // Top Performing Integrations
@@ -231,12 +237,14 @@ export interface IntegrationAnalyticsDashboard {
   timestamp: Date;
 }
 
+}
 export interface IntegrationAnalyticsReport {
   reportId: string;
   generatedAt: Date;
   period: {
     startDate: Date;
     endDate: Date;
+}
   };
   
   // Executive Summary
@@ -359,6 +367,7 @@ export enum ErrorCategory {
 }
 
 // Supporting interfaces
+}
 export interface IntegrationOperationDetails {
   endpoint?: string;
   method?: string;
@@ -367,7 +376,9 @@ export interface IntegrationOperationDetails {
   payload?: any;
   query?: Record<string, any>;
 }
+}
 
+}
 export interface ResourceUsage {
   cpuUsage?: number;
   memoryUsage?: number;
@@ -375,7 +386,9 @@ export interface ResourceUsage {
   diskUsage?: number;
   connectionCount?: number;
 }
+}
 
+}
 export interface CostData {
   baseCost: number;
   variableCost: number;
@@ -385,7 +398,9 @@ export interface CostData {
   costPerMB?: number;
   billingUnit: string;
 }
+}
 
+}
 export interface IntegrationContext {
   userId?: string;
   sessionId?: string;
@@ -396,7 +411,9 @@ export interface IntegrationContext {
   region?: string;
   tenantId?: string;
 }
+}
 
+}
 export interface ErrorPattern {
   pattern: string;
   count: number;
@@ -405,7 +422,9 @@ export interface ErrorPattern {
   frequency: number;
   impact: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface IntegrationError {
   errorId: string;
   timestamp: Date;
@@ -418,7 +437,9 @@ export interface IntegrationError {
   resolution?: string;
   resolvedAt?: Date;
 }
+}
 
+}
 export interface CostTrend {
   direction: 'increasing' | 'decreasing' | 'stable';
   changePercentage: number;
@@ -426,9 +447,11 @@ export interface CostTrend {
   historicalData: Array<{
     date: Date;
     cost: number;
+}
   }>;
 }
 
+}
 export interface CostOptimization {
   type: 'reduce_requests' | 'optimize_payload' | 'use_cache' | 'batch_operations' | 'upgrade_plan' | 'switch_provider';
   description: string;
@@ -438,7 +461,9 @@ export interface CostOptimization {
   implementationTime: string;
   priority: number;
 }
+}
 
+}
 export interface UsageTrend {
   integrationId: string;
   trend: 'increasing' | 'decreasing' | 'stable';
@@ -446,9 +471,11 @@ export interface UsageTrend {
   dataPoints: Array<{
     date: Date;
     value: number;
+}
   }>;
 }
 
+}
 export interface PerformanceTrend {
   integrationId: string;
   metric: 'response_time' | 'throughput' | 'error_rate';
@@ -457,9 +484,11 @@ export interface PerformanceTrend {
   dataPoints: Array<{
     date: Date;
     value: number;
+}
   }>;
 }
 
+}
 export interface ErrorTrend {
   integrationId: string;
   errorCategory: ErrorCategory;
@@ -468,9 +497,11 @@ export interface ErrorTrend {
   dataPoints: Array<{
     date: Date;
     count: number;
+}
   }>;
 }
 
+}
 export interface PerformanceRecommendation {
   type: 'connection_pooling' | 'caching' | 'load_balancing' | 'retry_strategy' | 'timeout_optimization';
   integrationId: string;
@@ -479,7 +510,9 @@ export interface PerformanceRecommendation {
   implementationComplexity: 'low' | 'medium' | 'high';
   priority: number;
 }
+}
 
+}
 export interface ReliabilityRecommendation {
   type: 'circuit_breaker' | 'health_checks' | 'failover' | 'monitoring' | 'alerting';
   integrationId: string;
@@ -488,7 +521,9 @@ export interface ReliabilityRecommendation {
   implementationComplexity: 'low' | 'medium' | 'high';
   priority: number;
 }
+}
 
+}
 export interface SecurityRecommendation {
   type: 'authentication' | 'authorization' | 'encryption' | 'audit_logging' | 'access_control';
   integrationId: string;
@@ -497,7 +532,9 @@ export interface SecurityRecommendation {
   implementationComplexity: 'low' | 'medium' | 'high';
   priority: number;
 }
+}
 
+}
 export interface UsageProjection {
   integrationId: string;
   projectedUsage: number;
@@ -505,7 +542,9 @@ export interface UsageProjection {
   timeframe: string;
   factors: string[];
 }
+}
 
+}
 export interface CapacityProjection {
   integrationId: string;
   currentCapacity: number;
@@ -514,7 +553,9 @@ export interface CapacityProjection {
   recommendedAction: string;
   timeframe: string;
 }
+}
 
+}
 export interface CostProjection {
   integrationId: string;
   currentMonthlyCost: number;
@@ -523,7 +564,9 @@ export interface CostProjection {
   drivers: string[];
   confidence: number;
 }
+}
 
+}
 export interface RiskAssessment {
   integrationId: string;
   riskType: 'performance' | 'availability' | 'security' | 'cost';
@@ -532,6 +575,7 @@ export interface RiskAssessment {
   likelihood: number;
   impact: number;
   mitigationSteps: string[];
+}
 }
 
 // =============================================================================
@@ -579,6 +623,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
    * Initialize Integration Analytics Service
    */
   public async initialize(): Promise<void> {
+
     console.log('📊 Initializing Integration Analytics Service...');
     
     try {
@@ -606,7 +651,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
         details: {
           config: this.config,
           timestamp: new Date()
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -707,8 +752,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
       performanceAnalysis,
       costAnalysis,
       usagePatterns,
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   /**
@@ -719,6 +763,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
     endDate: Date,
     integrationIds?: string[]
   ): Promise<IntegrationAnalyticsReport> {
+
     console.log(`📈 Generating Integration Analytics Report: ${startDate.toISOString()} to ${endDate.toISOString()}`);
 
     const reportId = `integration_report_${Date.now()}`;
@@ -775,11 +820,13 @@ export class IntegrationAnalyticsService extends EventEmitter {
   }
 
   private async loadHistoricalData(): Promise<void> {
+
     // Implementation for loading historical integration data
     console.log('📚 Loading historical integration data...');
   }
 
   private async setupIntegrationMonitoring(): Promise<void> {
+
     // Implementation for setting up integration health monitoring
     console.log('🔍 Setting up integration monitoring...');
   }
@@ -913,6 +960,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
   }
 
   private async persistReport(report: IntegrationAnalyticsReport): Promise<void> {
+
     // Implementation for persisting report to database
   }
 
@@ -920,6 +968,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
    * Stop the integration analytics service
    */
   public async stop(): Promise<void> {
+
     console.log('⏹️ Stopping Integration Analytics Service...');
     
     this.isCollecting = false;
@@ -939,7 +988,7 @@ export class IntegrationAnalyticsService extends EventEmitter {
         totalEvents: Array.from(this.events.values()).reduce((sum, events) => sum + events.length, 0),
         totalIntegrations: this.integrationHealthMap.size,
         timestamp: new Date()
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2'],
@@ -953,12 +1002,14 @@ export class IntegrationAnalyticsService extends EventEmitter {
 }
 
 // Configuration interface
+}
 export interface IntegrationAnalyticsConfig {
   eventCollection: {
     enabled: boolean;
     interval: number; // milliseconds
     maxEventsInMemory: number;
     persistenceBatchSize: number;
+}
   };
   
   metricAggregation: {

@@ -11,7 +11,7 @@ import {
 export userId: string; 
   workspaceId?: string; 
 }): UseNotificationsReturn => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -22,9 +22,9 @@ export userId: string;
   const [cursor, setCursor] = useState<string | undefined>();
   // Real-time connection state
   const [realTimeConnection, setRealTimeConnection] = useState<RealTimeNotificationConnection>({)
-    status: 'disconnected',
-    reconnectAttempts: 0,
-  });
+  status: 'disconnected',
+  reconnectAttempts: 0,
+});
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   // API base URL
@@ -35,9 +35,8 @@ export userId: string;
       if (reset) {
         setLoading(true);
         setCursor(undefined);
-      }
       const params = new URLSearchParams({)
-        userId,
+  userId,
         ...(workspaceId && { workspaceId }),
         ...(filter !== 'all' && { type: filter }),
         ...(unreadOnly && { unread: 'true' }),
@@ -46,52 +45,46 @@ export userId: string;
       const response = await fetch(`${apiBase}?${params}`);}
       if (!response.ok) {
         throw new Error(`Failed to fetch notifications: ${response.statusText}`);}
-      }
       const data = await response.json();
       if (reset) {
         setNotifications(data.notifications);
       } else {
         setNotifications(prev => [...prev, ...data.notifications]);
-      }
       setUnreadCount(data.unread_count);
       setHasMore(data.has_more);
       setCursor(data.next_cursor);
       setError(null);
     } catch (err) {
-      setError(err as Error);
-      console.error('Failed to fetch notifications:', err);
-    } finally {
+  setError(err as Error);
+  console.error('Failed to fetch notifications:', err);
+} finally {
       setLoading(false);
-    }
   }, [userId, workspaceId, filter, unreadOnly, cursor]);
   // Fetch notification stats
   const fetchStats = useCallback(async () => {
     try {
       const params = new URLSearchParams({)
-        userId,
+  userId,
         ...(workspaceId && { workspaceId })
       });
       const response = await fetch(`${apiBase}/stats?${params}`);}
       if (response.ok) {
         const data = await response.json();
         setStats(data);
-      }
     } catch (err) {
-      console.error('Failed to fetch notification stats:', err);
-    }
-  }, [userId, workspaceId]);
+  console.error('Failed to fetch notification stats:', err);
+}, [userId, workspaceId]);
   // Mark notification as read
   const markAsRead = useCallback(async (id: string) => {
     try {
       const response = await fetch(`${apiBase}/${id}/read`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json'
-        }
-      });
+  'Content-Type': 'application/json',
+});
       if (!response.ok) {
         throw new Error('Failed to mark notification as read');
-      }
       // Update local state
       setNotifications(prev => )
         prev.map(notification => )
@@ -101,26 +94,24 @@ export userId: string;
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (err) {
-      console.error('Failed to mark notification as read:', err);
-      throw err;
-    }
-  }, []);
+  console.error('Failed to mark notification as read:', err);
+  throw err;
+}, []);
   // Mark all notifications as read
   const markAllAsRead = useCallback(async () => {
     try {
       const params = new URLSearchParams({)
-        userId,
+  userId,
         ...(workspaceId && { workspaceId })
       });
       const response = await fetch(`${apiBase}/read-all?${params}`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json'
-        }
-      });
+  'Content-Type': 'application/json',
+});
       if (!response.ok) {
         throw new Error('Failed to mark all notifications as read');
-      }
       // Update local state
       const now = new Date().toISOString();
       setNotifications(prev => )
@@ -128,30 +119,27 @@ export userId: string;
       );
       setUnreadCount(0);
     } catch (err) {
-      console.error('Failed to mark all notifications as read:', err);
-      throw err;
-    }
-  }, [userId, workspaceId]);
+  console.error('Failed to mark all notifications as read:', err);
+  throw err;
+}, [userId, workspaceId]);
   // Delete notification
   const deleteNotification = useCallback(async (id: string) => {
     try {
       const response = await fetch(`${apiBase}/${id}`, {)}
-        method: 'DELETE',
-      });
+  },
+  method: 'DELETE';
+  });
       if (!response.ok) {
         throw new Error('Failed to delete notification');
-      }
       // Update local state
       const deletedNotification = notifications.find(n => n.id === id);
       setNotifications(prev => prev.filter(notification => notification.id !== id));
       if (deletedNotification && !deletedNotification.read_at) {
         setUnreadCount(prev => Math.max(0, prev - 1));
-      }
     } catch (err) {
-      console.error('Failed to delete notification:', err);
-      throw err;
-    }
-  }, [notifications]);
+  console.error('Failed to delete notification:', err);
+  throw err;
+}, [notifications]);
   // Refresh notifications
   const refreshNotifications = useCallback(async () => {
     await fetchNotifications(true);
@@ -172,82 +160,75 @@ export userId: string;
   }, []);
   // WebSocket connection management
   const connectWebSocket = useCallback(() => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      return;
-    }
-    setRealTimeConnection(prev => ({ )
-      ...prev, 
-      status: 'connecting' ,
-    }));
+  if (wsRef.current?.readyState === WebSocket.OPEN) {
+  return;
+  setRealTimeConnection(prev => ({ )
+  ...prev,
+  status: 'connecting',
+}));
     const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/notifications`;}
     const ws = new WebSocket(`${wsUrl}?userId=${userId}${workspaceId ? `&workspaceId=${workspaceId}` : ''}`);}
     ws.onopen = () => {
-      setRealTimeConnection({)
-        status: 'connected',
-        lastConnected: new Date(),
-        reconnectAttempts: 0,
-      });
+  setRealTimeConnection({)
+  status: 'connected',
+  lastConnected: new Date(),
+  reconnectAttempts: 0,
+});
       // Clear any pending reconnect timeout
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
         reconnectTimeoutRef.current = null;
-      }
     };
     ws.onmessage = (event) => {
-      try {
-        const notificationEvent: NotificationEvent = JSON.parse(event.data);
-        switch (notificationEvent.type) {
-          case 'notification_created':
-            setNotifications(prev => [notificationEvent.notification, ...prev]);
-            if (!notificationEvent.notification.read_at) {
-              setUnreadCount(prev => prev + 1);
-            }
-            break;
-          case 'notification_updated':
-            setNotifications(prev => )
-              prev.map(n => )
-                n.id === notificationEvent.notification.id 
-                  ? notificationEvent.notification 
-                  : n
-            );
-            break;
-          case 'notification_deleted':
-            const deletedNotification = notifications.find(n => n.id === notificationEvent.notification.id);
-            setNotifications(prev => )
-              prev.filter(n => n.id !== notificationEvent.notification.id)
-            );
-            if (deletedNotification && !deletedNotification.read_at) {
-              setUnreadCount(prev => Math.max(0, prev - 1));
-            }
-            break;
-        }
-        // Refresh stats
-        fetchStats();
-      } catch (err) {
-        console.error('Failed to parse WebSocket message:', err);
-      }
-    };
+  try {
+  const notificationEvent: NotificationEvent = JSON.parse(event.data);
+  switch (notificationEvent.type) {
+  case 'notification_created':,
+  setNotifications(prev => [notificationEvent.notification, ...prev]);
+  if (!notificationEvent.notification.read_at) {
+  setUnreadCount(prev => prev + 1);
+  break;
+  case 'notification_updated':,
+  setNotifications(prev => )
+  prev.map(n => )
+  n.id === notificationEvent.notification.id
+  ? notificationEvent.notification
+  : n);
+  break;
+  case 'notification_deleted':,
+  const deletedNotification = notifications.find(n => n.id === notificationEvent.notification.id);
+  setNotifications(prev => )
+  prev.filter(n => n.id !== notificationEvent.notification.id)
+  );
+  if (deletedNotification && !deletedNotification.read_at) {
+  setUnreadCount(prev => Math.max(0, prev - 1));
+  break;
+  // Refresh stats
+  fetchStats();
+} catch (err) {
+  console.error('Failed to parse WebSocket message:', err);
+};
     ws.onclose = () => {
-      setRealTimeConnection(prev => ({ )
-        ...prev, 
-        status: 'disconnected' ,
-      }));
+  setRealTimeConnection(prev => ({ )
+  ...prev,
+  status: 'disconnected',
+}));
       // Attempt to reconnect with exponential backoff
       const reconnectDelay = Math.min(1000 * Math.pow(2, realTimeConnection.reconnectAttempts), 30000);
       reconnectTimeoutRef.current = setTimeout(() => {
-        setRealTimeConnection(prev => ({)
-          ...prev,
-          reconnectAttempts: prev.reconnectAttempts + 1,
-        }));
+  setRealTimeConnection(prev => ({)
+  ...prev,
+  reconnectAttempts: prev.reconnectAttempts + 1,
+}));
         connectWebSocket();
       }, reconnectDelay);
     };
     ws.onerror = (error) => {
-      setRealTimeConnection(prev => ({ )
-        ...prev, 
-        status: 'error',
-        error: 'WebSocket connection error',
-      }));
+  setRealTimeConnection(prev => ({ )
+  ...prev,
+  status: 'error',
+  error: 'WebSocket connection error',
+}));
     };
     wsRef.current = ws;
   }, [userId, workspaceId, realTimeConnection.reconnectAttempts, notifications, fetchStats]);
@@ -258,10 +239,8 @@ export userId: string;
     return () => {
       if (wsRef.current) {
         wsRef.current.close();
-      }
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
-      }
     };
   }, []);
   // Refetch when filter or unreadOnly changes

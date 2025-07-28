@@ -159,8 +159,8 @@ describe('Escalation Procedures System', () => {
             ruleId: rule.ruleId,
             name: 'Fraud Alert Rule',
             category: EscalationCategory.FRAUD_DETECTION
-          })
-        })
+  }
+  }
       );
     });
     
@@ -224,8 +224,8 @@ describe('Escalation Procedures System', () => {
             ruleId: rule.ruleId,
             changes: updates,
             version: 2
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -255,7 +255,7 @@ describe('Escalation Procedures System', () => {
             notificationMethods: [],
             responseTimeLimit: 60,
             resolutionTimeLimit: 240
-          },
+  }
           {
             levelId: 'level2',
             level: 1,
@@ -317,8 +317,8 @@ describe('Escalation Procedures System', () => {
             sourceType: 'fraud_detection',
             sourceId: 'fraud_123',
             ruleId: testRule.ruleId
-          })
-        })
+  }
+  }
       );
     });
     
@@ -353,8 +353,8 @@ describe('Escalation Procedures System', () => {
             fromLevel: 0,
             toLevel: 1,
             reason: 'Automatic escalation due to timeout'
-          })
-        })
+  }
+  }
       );
     });
     
@@ -398,8 +398,8 @@ describe('Escalation Procedures System', () => {
             caseId: escalationCase.caseId,
             resolutionType: 'resolved',
             level: 1
-          })
-        })
+  }
+  }
       );
     });
     
@@ -646,7 +646,7 @@ describe('Escalation Procedures System', () => {
           { testData: i },
           testRule.ruleId,
           EscalationPriority.MEDIUM
-        )
+
       );
       
       const cases = await Promise.all(casePromises);

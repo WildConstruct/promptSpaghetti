@@ -686,28 +686,28 @@ export async function categoryManagementRoutes(
           description: 'System-wide configuration categories',
           allowsChildren: true,
           defaultAccessLevel: 'admin_only'
-        },
+  }
         {
           domain: 'user_activities',
           name: 'User Activities',
           description: 'User activity and behavior categories',
           allowsChildren: false,
           defaultAccessLevel: 'read_only'
-        },
+  }
         {
           domain: 'admin_tools',
           name: 'Administrative Tools',
           description: 'Administrative tool and management categories',
           allowsChildren: true,
           defaultAccessLevel: 'admin_only'
-        },
+  }
         {
           domain: 'content_management',
           name: 'Content Management',
           description: 'Content creation and management categories',
           allowsChildren: true,
           defaultAccessLevel: 'read_write'
-        },
+  }
         {
           domain: 'security',
           name: 'Security',
@@ -755,13 +755,13 @@ export async function categoryManagementRoutes(
           bulkOperations: 'operational',
           analytics: 'operational',
           templateSystem: 'operational'
-        },
+  }
         metrics: {
           totalCategories: 0, // Would query actual count
           totalDomains: 25,
           averageHierarchyDepth: 2.3,
           uptime: process.uptime()
-        },
+  }
         environment: process.env.NODE_ENV || 'development'
       };
 

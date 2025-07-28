@@ -12,12 +12,14 @@ import { AnalyticsDAO } from '../database/analytics-dao';
 import { AnalyticsEventType } from '../analytics/AnalyticsCollector';
 
 // User Segmentation Types
+}
 export interface TargetingRule {
   id: string;
   attribute: string;
   operator: RuleOperator;
   value: Error;
   logicalOperator?: 'AND' | 'OR';
+}
 }
 
 export type RuleOperator = 
@@ -27,6 +29,7 @@ export type RuleOperator =
   | 'in' | 'not_in' | 'exists' | 'not_exists'
   | 'between' | 'within_days' | 'older_than_days';
 
+}
 export interface UserSegment {
   id: string;
   name: string;
@@ -53,7 +56,9 @@ export interface UserSegment {
   category?: string;
   version: string;
 }
+}
 
+}
 export interface CreateSegmentRequest {
   name: string;
   description?: string;
@@ -63,7 +68,9 @@ export interface CreateSegmentRequest {
   isActive?: boolean;
   createdBy: string;
 }
+}
 
+}
 export interface UpdateSegmentRequest {
   id: string;
   name?: string;
@@ -74,7 +81,9 @@ export interface UpdateSegmentRequest {
   isActive?: boolean;
   updatedBy: string;
 }
+}
 
+}
 export interface SegmentQuery {
   search?: string;
   isActive?: boolean;
@@ -87,7 +96,9 @@ export interface SegmentQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 export interface SegmentEvaluationResult {
   segmentId: string;
   userId: string;
@@ -98,20 +109,25 @@ export interface SegmentEvaluationResult {
   confidence: number; // 0-100
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface BatchEvaluationRequest {
   segmentIds: string[];
   userIds?: string[];
   userQuery?: UserQuery;
   includeDetails?: boolean;
 }
+}
 
+}
 export interface UserQuery {
   attributes?: Record<string, any>;
   events?: {
     types: AnalyticsEventType[];
     timeWindow?: number;
     minOccurrences?: number;
+}
   };
   registrationPeriod?: {
     startDate: string;
@@ -119,6 +135,7 @@ export interface UserQuery {
   };
 }
 
+}
 export interface BatchEvaluationResult {
   requestId: string;
   segmentResults: SegmentUserMatch[];
@@ -126,7 +143,9 @@ export interface BatchEvaluationResult {
   executionTimeMs: number;
   timestamp: string;
 }
+}
 
+}
 export interface SegmentUserMatch {
   segmentId: string;
   segmentName: string;
@@ -135,7 +154,9 @@ export interface SegmentUserMatch {
   matchRate: number; // percentage
   sampleResults?: SegmentEvaluationResult[];
 }
+}
 
+}
 export interface SegmentMetrics {
   segmentId: string;
   totalUsers: number;
@@ -147,6 +168,7 @@ export interface SegmentMetrics {
   engagementScore?: number;
   demographics: {
     averageAge?: number;
+}
     topLocations: Array<{ location: string; count: number }>;
     deviceTypes: Array<{ device: string; count: number }>;
   };
@@ -170,6 +192,7 @@ export class UserSegmentationService {
 
   // Segment Management
   async createSegment(request: CreateSegmentRequest): Promise<UserSegment> {
+
     const segmentId = `segment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Generate rule IDs
@@ -214,6 +237,7 @@ export class UserSegmentationService {
   }
 
   async updateSegment(request: UpdateSegmentRequest): Promise<UserSegment | null> {
+
     const existingSegment = this.segments.get(request.id);
     if (!existingSegment) {
       throw new Error(`Segment with ID ${request.id} not found`);
@@ -266,6 +290,7 @@ export class UserSegmentationService {
   }
 
   async deleteSegment(segmentId: string, deletedBy: string): Promise<boolean> {
+
     const segment = this.segments.get(segmentId);
     if (!segment) return false;
 
@@ -290,10 +315,12 @@ export class UserSegmentationService {
   }
 
   async getSegment(segmentId: string): Promise<UserSegment | null> {
+
     return this.segments.get(segmentId) || null;
   }
 
   async querySegments(query: SegmentQuery): Promise<{ segments: UserSegment[]; total: number }> {
+
     let segments = Array.from(this.segments.values());
 
     // Apply filters
@@ -352,6 +379,7 @@ export class UserSegmentationService {
 
   // User Evaluation
   async evaluateUserForSegment(userId: string, segmentId: string): Promise<SegmentEvaluationResult> {
+
     const startTime = Date.now();
     
     // Check cache
@@ -399,6 +427,7 @@ export class UserSegmentationService {
   }
 
   async batchEvaluateSegments(request: BatchEvaluationRequest): Promise<BatchEvaluationResult> {
+
     const startTime = Date.now();
     const requestId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -445,12 +474,12 @@ export class UserSegmentationService {
       segmentResults,
       totalUsers: userIds.length,
       executionTimeMs: Date.now() - startTime,
-      timestamp: new Date().toISOString()
-    };
+      timestamp: new Date().toISOString(};
   }
 
   // Analytics Integration
   async getSegmentMetrics(segmentId: string, timeWindow?: { start: string; end: string }): Promise<SegmentMetrics> {
+
     const segment = this.segments.get(segmentId);
     if (!segment) {
       throw new Error(`Segment ${segmentId} not found`);
@@ -481,7 +510,7 @@ export class UserSegmentationService {
           { device: 'Mobile', count: 290 },
           { device: 'Tablet', count: 80 }
         ]
-      },
+  }
       trends: {
         dailyGrowth: this.generateMockTrendData('daily', 30),
         weeklyGrowth: this.generateMockTrendData('weekly', 12)
@@ -491,6 +520,7 @@ export class UserSegmentationService {
 
   // Helper Methods
   private async validateSegmentRules(rules: TargetingRule[]): Promise<void> {
+
     for (const rule of rules) {
       // Validate operator for attribute type
       if (!this.isValidOperatorForAttribute(rule.attribute, rule.operator)) {
@@ -505,6 +535,7 @@ export class UserSegmentationService {
   }
 
   private async estimateSegmentSize(rules: TargetingRule[]): Promise<number> {
+
     // Convert to cohort criteria for estimation
     const _____criteria = this.convertRulesToCohortCriteria(rules);
     
@@ -539,6 +570,7 @@ export class UserSegmentationService {
     failedRules: string[];
     confidence: number;
   }> {
+
     const matchedRules: string[] = [];
     const failedRules: string[] = [];
     
@@ -672,6 +704,7 @@ export class UserSegmentationService {
   }
 
   private async createCohortFromSegment(segment: UserSegment): Promise<void> {
+
     const criteria = this.convertRulesToCohortCriteria(segment.rules);
     
     const cohortDefinition: CohortDefinition = {
@@ -682,7 +715,7 @@ export class UserSegmentationService {
       timeframe: {
         startDate: new Date(segment.createdAt).getTime(),
         endDate: undefined
-      },
+  }
       type: 'custom',
       isActive: segment.isActive,
       createdAt: new Date(segment.createdAt).getTime(),
@@ -693,12 +726,14 @@ export class UserSegmentationService {
   }
 
   private async updateCohortFromSegment(segment: UserSegment): Promise<void> {
+
     // Update the associated cohort
     const _____cohortId = this.getCohortIdForSegment(segment.id);
     // Would call cohortAnalyzer.updateCohort() here
   }
 
   private async deleteCohortForSegment(segmentId: string): Promise<void> {
+
     const cohortId = this.getCohortIdForSegment(segmentId);
     await this.cohortAnalyzer.deleteCohort(cohortId);
   }
@@ -732,6 +767,7 @@ export class UserSegmentationService {
   }
 
   private async findUsersMatchingQuery(userQuery?: UserQuery): Promise<string[]> {
+
     // This would query the database for users matching the criteria
     // For now, return mock user IDs
     const userCount = Math.floor(Math.random() * 100) + 20;
@@ -763,6 +799,7 @@ export class UserSegmentationService {
   }
 
   private async logSegmentAction(action: string, segment: UserSegment, userId: string): Promise<void> {
+
     console.log(`Segment ${action}:`, {
       segmentId: segment.id,
       segmentName: segment.name,
@@ -791,7 +828,7 @@ export class UserSegmentationService {
         tags: ['engagement', 'default'],
         category: 'engagement',
         version: '1.0.0'
-      },
+  }
       {
         name: 'New Users',
         description: 'Users who registered within the last 7 days',
@@ -808,7 +845,7 @@ export class UserSegmentationService {
         tags: ['acquisition', 'default'],
         category: 'acquisition',
         version: '1.0.0'
-      },
+  }
       {
         name: 'Premium Users',
         description: 'Users with premium subscription',

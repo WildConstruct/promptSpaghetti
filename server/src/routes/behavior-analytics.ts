@@ -7,22 +7,28 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { BehaviorAnalyticsService, SessionBehaviorData } from '../auth/services/BehaviorAnalyticsService';
 import { requireAuth } from '../middleware/auth';
 
+}
 interface AnalyzeBehaviorRequest {
   Body: {
     sessionData: SessionBehaviorData;
     userId?: string; // Optional, defaults to authenticated user
+}
   };
 }
 
+}
 interface GetProfileRequest {
   Params: {
     userId: string;
+}
   };
 }
 
+}
 interface UpdateProfileRequest {
   Params: {
     userId: string;
+}
   };
   Body: {
     updateType: 'reset' | 'recalibrate' | 'suspend';
@@ -30,6 +36,7 @@ interface UpdateProfileRequest {
   };
 }
 
+}
 interface GetAnomaliesRequest {
   Querystring: {
     userId?: string;
@@ -40,12 +47,15 @@ interface GetAnomaliesRequest {
     resolved?: boolean;
     limit?: number;
     offset?: number;
+}
   };
 }
 
+}
 interface ResolveAnomalyRequest {
   Params: {
     anomalyId: string;
+}
   };
   Body: {
     resolution: 'false_positive' | 'confirmed' | 'mitigated';
@@ -53,15 +63,19 @@ interface ResolveAnomalyRequest {
   };
 }
 
+}
 interface GetRiskScoreRequest {
   Params: {
     userId: string;
+}
   };
 }
 
+}
 interface GetPatternsRequest {
   Params: {
     userId: string;
+}
   };
   Querystring: {
     type?: string;
@@ -105,7 +119,7 @@ export async function behaviorAnalyticsRoutes(
                     success: { type: 'boolean' }
                   }
                 }
-              },
+  }
               resources: {
                 type: 'array',
                 items: {
@@ -119,7 +133,7 @@ export async function behaviorAnalyticsRoutes(
                     duration: { type: 'number' }
                   }
                 }
-              },
+  }
               interactions: {
                 type: 'array',
                 items: {
@@ -132,7 +146,7 @@ export async function behaviorAnalyticsRoutes(
                     metadata: { type: 'object' }
                   }
                 }
-              },
+  }
               errors: {
                 type: 'array',
                 items: {
@@ -148,10 +162,10 @@ export async function behaviorAnalyticsRoutes(
                 }
               }
             }
-          },
+  }
           userId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -175,7 +189,7 @@ export async function behaviorAnalyticsRoutes(
                   resolved: { type: 'boolean' }
                 }
               }
-            },
+  }
             recommendation: { type: 'string', enum: ['allow', 'monitor', 'challenge', 'block'] },
             confidence: { type: 'number' },
             reasoning: { type: 'array', items: { type: 'string' } }
@@ -235,7 +249,7 @@ export async function behaviorAnalyticsRoutes(
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -256,7 +270,7 @@ export async function behaviorAnalyticsRoutes(
                 typicalActionsPerSession: { type: 'object' },
                 errorRate: { type: 'number' }
               }
-            },
+  }
             patterns: {
               type: 'array',
               items: {
@@ -270,7 +284,7 @@ export async function behaviorAnalyticsRoutes(
                   confidence: { type: 'number' }
                 }
               }
-            },
+  }
             recentAnomalies: {
               type: 'array',
               items: {
@@ -315,7 +329,7 @@ export async function behaviorAnalyticsRoutes(
           weekdayVsWeekendRatio: profile.baseline.weekdayVsWeekendRatio,
           typicalActionsPerSession: profile.baseline.typicalActionsPerSession,
           errorRate: profile.baseline.errorRate
-        },
+  }
         patterns: profile.patterns.map((p: Record<string, unknown>) => ({
           id: p.id,
           type: p.type,
@@ -355,7 +369,7 @@ export async function behaviorAnalyticsRoutes(
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['updateType'],
@@ -479,7 +493,7 @@ export async function behaviorAnalyticsRoutes(
         properties: {
           anomalyId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['resolution'],
@@ -576,7 +590,7 @@ export async function behaviorAnalyticsRoutes(
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -659,7 +673,7 @@ export async function behaviorAnalyticsRoutes(
                 suspicious: { type: 'number' },
                 blocked: { type: 'number' }
               }
-            },
+  }
             totalAnomalies: { type: 'number' },
             unresolvedAnomalies: { type: 'number' },
             anomaliesBySeverity: {
@@ -670,7 +684,7 @@ export async function behaviorAnalyticsRoutes(
                 high: { type: 'number' },
                 critical: { type: 'number' }
               }
-            },
+  }
             averageRiskScore: { type: 'number' },
             highRiskUsers: { type: 'number' }
           }

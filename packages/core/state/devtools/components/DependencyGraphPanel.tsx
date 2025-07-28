@@ -7,12 +7,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { DependencyGraph } from '../StateDevTools';
 
 export interface DependencyGraphPanelProps {
-  dependencyGraph: DependencyGraph | null;
+  dependencyGraph: DependencyGraph | null;,
   onGenerateGraph: () => void;
-  selectedDomain: string;
+  selectedDomain: string;,
   onDomainChange: (domain: string) => void;
 }
-
 export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   dependencyGraph,
   onGenerateGraph,
@@ -21,12 +20,12 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
 }) => {
   const [layout, setLayout] = useState<'hierarchical' | 'force' | 'circular'>('hierarchical');
   const [filters, setFilters] = useState({)
-    includeComponents: true,
-    includeSelectors: true,
-    includeCrossDomainLinks: true,
-    showLabels: true,
-    showMetrics: false,
-  });
+  includeComponents: true,
+  includeSelectors: true,
+  includeCrossDomainLinks: true,
+  showLabels: true,
+  showMetrics: false,
+});
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [zoom, setZoom] = useState(1);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -34,8 +33,8 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     setFilters(prev => ({ ...prev, [key]: value }));
   };
   const handleNodeClick = (nodeId: string) => {
-    setSelectedNode(selectedNode === nodeId ? null : nodeId);
-  };
+  setSelectedNode(selectedNode === nodeId ? null : nodeId);
+};
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev * 1.2, 5));
   };
@@ -46,15 +45,14 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     setZoom(1);
   };
   const getNodeColor = (type: string) => {
-    switch (type) {
-      case 'state': return '#61dafb';
-      case 'component': return '#98c379';
-      case 'selector': return '#d19a66';
-      case 'middleware': return '#c678dd';
-      case 'domain': return '#f39c12';
-      default: return '#95a5a6';
-    }
-  };
+  switch (type) {
+  case 'state': return '#61dafb';
+  case 'component': return '#98c379';
+  case 'selector': return '#d19a66';
+  case 'middleware': return '#c678dd';
+  case 'domain': return '#f39c12';
+  default: return '#95a5a6';
+};
   const getNodeSize = (node: any) => {
     if (!filters.showMetrics) return 20;
     const baseSize = 15;
@@ -68,7 +66,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
   };
   const renderGraph = () => {
     if (!dependencyGraph || dependencyGraph.nodes.length === 0) {
-      return ();
+      return;
         <div className="empty-graph">
           <span>🔗</span>
           <p>No dependency graph generated</p>
@@ -77,15 +75,14 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           </button>
         </div>
       );
-    }
     const { nodes, edges } = dependencyGraph;
     const filteredNodes = nodes.filter(node => {)
-      if (!filters.includeComponents && node.type === 'component') return false;
+  if (!filters.includeComponents && node.type === 'component') return false;
       if (!filters.includeSelectors && node.type === 'selector') return false;
       return true;
     });
     const filteredEdges = edges.filter(edge => {)
-      const fromNode = filteredNodes.find(n => n.id === edge.from);
+  const fromNode = filteredNodes.find(n => n.id === edge.from);
       const toNode = filteredNodes.find(n => n.id === edge.to);
       if (!fromNode || !toNode) return false;
       if (!filters.includeCrossDomainLinks && fromNode.domain !== toNode.domain) return false;
@@ -93,7 +90,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     });
     const svgWidth = 800;
     const svgHeight = 600;
-    return ();
+    return;
       <svg
         ref={svgRef}
         width={svgWidth}
@@ -114,14 +111,14 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         {/* Edges */}
         <g className="edges">
           {filteredEdges.map(edge => {)
-            const fromNode = filteredNodes.find(n => n.id === edge.from);
+  const fromNode = filteredNodes.find(n => n.id === edge.from);
             const toNode = filteredNodes.find(n => n.id === edge.to);
             if (!fromNode || !toNode) return null;
             const isDifferentDomain = fromNode.domain !== toNode.domain;
             const strokeWidth = Math.max(1, edge.weight * 3);
             const strokeColor = isDifferentDomain ? '#f39c12' : '#61dafb';
             const opacity = isDifferentDomain ? 0.6 : 0.8;
-            return ();
+            return;
               <g key={edge.id}>
                 <line
                   x1={fromNode.position.x}
@@ -165,12 +162,12 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
         {/* Nodes */}
         <g className="nodes">
           {filteredNodes.map(node => {)
-            const nodeSize = getNodeSize(node);
+  const nodeSize = getNodeSize(node);
             const nodeColor = getNodeColor(node.type);
             const isSelected = selectedNode === node.id;
             const strokeWidth = isSelected ? 3 : 1;
             const strokeColor = isSelected ? '#fff' : nodeColor;
-            return ();
+            return;
               <g key={node.id} className="node" onClick={() => handleNodeClick(node.id)}>
                 <circle
                   cx={node.position.x}
@@ -214,7 +211,7 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
     );
   };
   const selectedNodeData = selectedNode && dependencyGraph?.nodes.find(n => n.id === selectedNode);
-  return ();
+  return;
     <div className="dependency-graph-panel">
       {/* Controls */}
       <div className="graph-controls">
@@ -227,7 +224,6 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
                 [...new Set(dependencyGraph.nodes.map(node => node.domain))].map(domain => ()
                   <option key={domain} value={domain}>{domain}</option>
                 ))
-              }
             </select>
           </label>
         </div>
@@ -407,27 +403,24 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
       )}
       <style jsx>{`
         .dependency-graph-panel {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          background: var(--devtools-bg, #1e1e1e);
-        }
+          height: 100%;,
+  display: flex;
+          flex-direction: column;,
+  background: var(--devtools-bg, #1e1e1e);
         .graph-controls {
           display: flex;
-          align-items: center;
-          gap: 16px;
+          align-items: center;,
+  gap: 16px;
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
           flex-wrap: wrap;
-        }
         .control-group {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 12px;
-          color: var(--devtools-text, #fff);
-        }
+          align-items: center;,
+  gap: 8px;
+          font-size: 12px;,
+  color: var(--devtools-text, #fff);
         .control-group select {
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
@@ -435,189 +428,154 @@ export const DependencyGraphPanel: React.FC<DependencyGraphPanelProps> = ({)
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-        }
         .checkbox-label {
           display: flex;
-          align-items: center;
-          gap: 4px;
+          align-items: center;,
+  gap: 4px;
           cursor: pointer;
-        }
         .checkbox-label input[type="checkbox"] {
           margin: 0;
-        }
         .zoom-btn {
           background: var(--devtools-btn-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
+          border-radius: 4px;,
+  cursor: pointer;
           font-size: 12px;
           min-width: 30px;
-        }
-        .zoom-btn:hover {
-          background: var(--devtools-hover, #404040);
-        }
+        .zoom-btn:hover {,
+  background: var(--devtools-hover, #404040);
         .zoom-level {
           min-width: 50px;
           text-align: center;
-          font-size: 11px;
-          color: var(--devtools-text-secondary, #aaa);
-        }
+          font-size: 11px;,
+  color: var(--devtools-text-secondary, #aaa);
         .regenerate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;
-          color: #000;
+          border: none;,
+  color: #000;
           padding: 6px 12px;
-          border-radius: 4px;
-          cursor: pointer;
+          border-radius: 4px;,
+  cursor: pointer;
           font-size: 12px;
           font-weight: 500;
-        }
         .graph-content {
-          flex: 1;
-          display: flex;
+          flex: 1;,
+  display: flex;
           overflow: hidden;
-        }
         .graph-viewer {
-          flex: 1;
-          overflow: auto;
+          flex: 1;,
+  overflow: auto;
           display: flex;
           align-items: center;
-          justify-content: center;
-          background: var(--devtools-graph-bg, #1a1a1a);
-        }
+          justify-content: center;,
+  background: var(--devtools-graph-bg, #1a1a1a);
         .dependency-graph-svg {
           border: 1px solid var(--devtools-border, #333);
-          border-radius: 4px;
-          background: var(--devtools-bg, #1e1e1e);
-        }
+          border-radius: 4px;,
+  background: var(--devtools-bg, #1e1e1e);
         .empty-graph {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          height: 400px;
+          justify-content: center;,
+  height: 400px;
           color: var(--devtools-text-secondary, #aaa);
           text-align: center;
-        }
         .empty-graph span {
           font-size: 48px;
           margin-bottom: 16px;
-        }
         .generate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;
-          color: #000;
+          border: none;,
+  color: #000;
           padding: 8px 16px;
-          border-radius: 4px;
-          cursor: pointer;
+          border-radius: 4px;,
+  cursor: pointer;
           font-size: 14px;
           margin-top: 16px;
-        }
         .node-circle {
-          cursor: pointer;
-          transition: all 0.2s;
-        }
+          cursor: pointer;,
+  transition: all 0.2s;
         .node-circle:hover {
-          stroke-width: 2;
-          filter: brightness(1.2);
-        }
+          stroke-width: 2;,
+  filter: brightness(1.2);
         .node-label,
         .node-metric,
         .edge-label {
           pointer-events: none;
           user-select: none;
-        }
         .node-details {
           width: 300px;
           border-left: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
           padding: 16px;
           overflow-y: auto;
-        }
         .node-details h4 {
           margin: 0 0 16px 0;
-          font-size: 14px;
-          color: var(--devtools-text, #fff);
+          font-size: 14px;,
+  color: var(--devtools-text, #fff);
           border-bottom: 1px solid var(--devtools-border, #333);
           padding-bottom: 8px;
-        }
         .detail-section {
           margin-bottom: 16px;
-        }
         .detail-section h5 {
           margin: 0 0 8px 0;
-          font-size: 12px;
-          color: var(--devtools-text, #fff);
+          font-size: 12px;,
+  color: var(--devtools-text, #fff);
           text-transform: uppercase;
-        }
         .detail-item {
           display: flex;
           justify-content: space-between;
           margin-bottom: 4px;
           font-size: 11px;
-        }
         .detail-label {
           color: var(--devtools-text-secondary, #aaa);
-        }
         .detail-value {
           color: var(--devtools-text, #fff);
           font-weight: 500;
-        }
         .error-count {
           color: #e74c3c !important;
-        }
         .relationship-list {
           max-height: 150px;
           overflow-y: auto;
-        }
         .relationship-item {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           margin-bottom: 4px;
           font-size: 11px;
-        }
         .relationship-item.dependency {
           color: #61dafb;
-        }
         .relationship-item.dependent {
           color: #98c379;
-        }
         .relationship-arrow {
           font-weight: bold;
-        }
         .relationship-id {
           color: var(--devtools-text, #fff);
           font-family: monospace;
-        }
         .graph-stats {
-          display: flex;
-          gap: 24px;
+          display: flex;,
+  gap: 24px;
           padding: 12px;
           border-top: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
-        }
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 4px;
-        }
+          align-items: center;,
+  gap: 4px;
         .stat-label {
-          font-size: 10px;
-          color: var(--devtools-text-secondary, #aaa);
+          font-size: 10px;,
+  color: var(--devtools-text-secondary, #aaa);
           text-transform: uppercase;
-        }
         .stat-value {
-          font-size: 14px;
-          color: var(--devtools-text, #fff);
+          font-size: 14px;,
+  color: var(--devtools-text, #fff);
           font-weight: 600;
-        }
         .circular-deps {
           color: #e74c3c !important;
-        }
       `}</style>
     </div>
   );

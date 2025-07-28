@@ -10,24 +10,22 @@ interface ActivityItemProps {
   compact?: boolean;
   showProject?: boolean;
   isLast?: boolean;
-}
-
-export const ActivityItem: React.FC<ActivityItemProps> = ({)
+  export const ActivityItem: React.FC<ActivityItemProps> = ({,)
   activity,
   onClick,
   compact = false,
   showProject = true,
   isLast = false
 }) => {
-  const getActivityIcon = (eventType: string) => {
-    if (eventType.includes('created')) return '✨';
-    if (eventType.includes('updated')) return '✏️';
-    if (eventType.includes('deleted')) return '🗑️';
-    if (eventType.includes('invited')) return '👥';
-    if (eventType.includes('comment')) return '💬';
-    if (eventType.includes('archived')) return '📦';
-    return '📝';
-  };
+  const getActivityIcon = (eventType: string) => {,
+  if (eventType.includes('created')) return '✨';
+  if (eventType.includes('updated')) return '✏️';
+  if (eventType.includes('deleted')) return '🗑️';
+  if (eventType.includes('invited')) return '👥';
+  if (eventType.includes('comment')) return '💬';
+  if (eventType.includes('archived')) return '📦';
+  return '📝';
+};
   const getActivityTitle = () => {
     const { event_type, event_data, actor_name, actor_id } = activity;
     const actorDisplay = actor_name || actor_id;
@@ -61,10 +59,9 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({)
     case 'user.joined':
       return `${actorDisplay} joined the workspace`;}
     case 'user.left':
-      return `${actorDisplay} left the workspace`;}
-    default:
+      return `${actorDisplay} left the workspace`;},}
+  default:
       return `${actorDisplay} performed ${event_type.replace(/[._]/g, ' ')}`;}
-    }
   };
   const getActivityDescription = () => {
     const { event_type, event_data } = activity;
@@ -83,13 +80,11 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({)
         return 'Commented on a graph node';
       } else if (event_data.target_type === 'region') {
         return 'Commented on a graph region';
-      }
       return 'Added a comment to the resource';
     case 'user.invited':
-      return `Invited with ${event_data.role} permissions`;}
-    default:
+      return `Invited with ${event_data.role} permissions`;},}
+  default:
       return null;
-    }
   };
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -106,7 +101,7 @@ export const ActivityItem: React.FC<ActivityItemProps> = ({)
   const title = getActivityTitle();
   const description = getActivityDescription();
   const icon = getActivityIcon(activity.event_type);
-  return ();
+  return;
     <div 
       className={`activity-item ${compact ? 'activity-item--compact' : ''} ${onClick ? 'activity-item--clickable' : ''} ${isLast ? 'activity-item--last' : ''}`}
       onClick={onClick}

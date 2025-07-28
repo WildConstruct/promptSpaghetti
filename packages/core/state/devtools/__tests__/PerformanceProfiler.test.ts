@@ -9,46 +9,43 @@ import { PerformanceProfiler, PerformanceProfilerConfig, globalPerformanceProfil
 const mockPerformance = {
   now: jest.fn(() => Date.now()),
   memory: {,
-    usedJSHeapSize: 50 * 1024 * 1024, // 50MB
-    totalJSHeapSize: 100 * 1024 * 1024, // 100MB
-    jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
-  }
+  usedJSHeapSize: 50 * 1024 * 1024, // 50MB,
+  totalJSHeapSize: 100 * 1024 * 1024, // 100MB,
+  jsHeapSizeLimit: 2 * 1024 * 1024 * 1024 // 2GB,
 };
 global.performance = mockPerformance as any;
 describe('PerformanceProfiler', () => {
   let profiler: PerformanceProfiler;
   beforeEach(() => {
-    profiler = new PerformanceProfiler();
-    jest.clearAllMocks();
-    mockPerformance.now.mockImplementation(() => Date.now());
-  });
+  profiler = new PerformanceProfiler();
+  jest.clearAllMocks();
+  mockPerformance.now.mockImplementation(() => Date.now());
+});
   afterEach(() => {
     profiler.removeAllListeners();
     // Stop any active profiles
     const activeProfiles = profiler.getActiveProfiles();
     activeProfiles.forEach(profile => {)
-      if (profile.endTime === 0) {
+  if (profile.endTime === 0) {
         profiler.stopProfile(profile.id);
-      }
     });
   });
   describe('Initialization', () => {
-    it('should initialize with default configuration', () => {
-      const config: PerformanceProfilerConfig = {
-        sampleRate: 50,
-        maxSamples: 5000,
-        enableMemoryProfiling: true,
-        enableNetworkProfiling: false,
-        enableRenderProfiling: true,
-        enableCacheProfiling: true,
-        trackingDuration: 600000,
-        alertThresholds: {,
-          updateLatency: 50,
-          memoryUsage: 200 * 1024 * 1024,
-          renderTime: 8,
-          cacheHitRate: 0.9,
-        }
-      };
+  it('should initialize with default configuration', () => {
+  const config: PerformanceProfilerConfig = {,
+  sampleRate: 50,
+  maxSamples: 5000,
+  enableMemoryProfiling: true,
+  enableNetworkProfiling: false,
+  enableRenderProfiling: true,
+  enableCacheProfiling: true,
+  trackingDuration: 600000,
+  alertThresholds: {,
+  updateLatency: 50,
+  memoryUsage: 200 * 1024 * 1024,
+  renderTime: 8,
+  cacheHitRate: 0.9,
+};
       const profilerWithConfig = new PerformanceProfiler(config);
       expect(profilerWithConfig).toBeInstanceOf(PerformanceProfiler);
     });
@@ -59,11 +56,11 @@ describe('PerformanceProfiler', () => {
     });
   });
   describe('Profile Management', () => {
-    it('should start performance profiles', () => {
-      const profileId = profiler.startProfile('Test Profile', {)
-        duration: 5000,
-        domains: ['test-domain'],
-      });
+  it('should start performance profiles', () => {
+  const profileId = profiler.startProfile('Test Profile', {)
+  duration: 5000,
+  domains: ['test-domain'],
+});
       expect(profileId).toBeDefined();
       expect(profiler.isProfilingActive()).toBe(true);
       expect(profiler.getCurrentProfileId()).toBe(profileId);
@@ -96,13 +93,13 @@ describe('PerformanceProfiler', () => {
       const profileId = profiler.startProfile('Event Test', { duration: 10 });
       profiler.stopProfile(profileId);
       expect(startHandler).toHaveBeenCalledWith({)
-        profileId,
-        name: 'Event Test',
-        options: expect.any(Object),
-      });
+  profileId,
+  name: 'Event Test',
+  options: expect.any(Object),
+});
       expect(completeHandler).toHaveBeenCalledWith({)
-        profile: expect.any(Object),
-      });
+  profile: expect.any(Object),
+});
     });
     it('should auto-stop profiles after duration', (done) => {
       const completeHandler = jest.fn();
@@ -126,7 +123,6 @@ describe('PerformanceProfiler', () => {
         // Simulate some work
         for (let i = 0; i < 1000; i++) {
           Math.sqrt(i);
-        }
         return 'result';
       };
       const result = profiler.sampleOperation(;);
@@ -137,19 +133,19 @@ describe('PerformanceProfiler', () => {
       );
       expect(result).toBe('result');
       expect(sampleHandler).toHaveBeenCalledWith({)
-        sample: expect.objectContaining({),
-          domain: 'test-domain',
-          operation: 'test-operation',
-          metrics: expect.objectContaining({),
-            duration: expect.any(Number),
-            memoryBefore: expect.any(Number),
-            memoryAfter: expect.any(Number),
-            memoryDelta: expect.any(Number),
-            cpuUsage: expect.any(Number),
-            errorCount: 0,
-          }),
+  sample: expect.objectContaining({,)
+  domain: 'test-domain',
+  operation: 'test-operation',
+  metrics: expect.objectContaining({,)
+  duration: expect.any(Number),
+  memoryBefore: expect.any(Number),
+  memoryAfter: expect.any(Number),
+  memoryDelta: expect.any(Number),
+  cpuUsage: expect.any(Number),
+  errorCount: 0,
+}),
           metadata: { testMetadata: true }
-        })
+  }
       });
     });
     it('should handle operation errors', () => {
@@ -173,36 +169,33 @@ describe('PerformanceProfiler', () => {
     });
   });
   describe('Memory Profiling', () => {
-    it('should take memory snapshots', () => {
-      const snapshotHandler = jest.fn();
-      profiler.on('memorySnapshotTaken', snapshotHandler);
-      const snapshot = profiler.takeMemorySnapshot();
-      expect(snapshot).toEqual({)
-        timestamp: expect.any(Number),
-        totalHeapSize: 100 * 1024 * 1024,
-        usedHeapSize: 50 * 1024 * 1024,
-        heapSizeLimit: 2 * 1024 * 1024 * 1024,
-        objects: expect.any(Map),
-        leaks: expect.any(Array),
-      });
+  it('should take memory snapshots', () => {
+  const snapshotHandler = jest.fn();
+  profiler.on('memorySnapshotTaken', snapshotHandler);
+  const snapshot = profiler.takeMemorySnapshot();
+  expect(snapshot).toEqual({)
+  timestamp: expect.any(Number),
+  totalHeapSize: 100 * 1024 * 1024,
+  usedHeapSize: 50 * 1024 * 1024,
+  heapSizeLimit: 2 * 1024 * 1024 * 1024,
+  objects: expect.any(Map),
+  leaks: expect.any(Array),
+});
       expect(snapshotHandler).toHaveBeenCalledWith({ snapshot });
     });
     it('should maintain snapshot history', () => {
       for (let i = 0; i < 5; i++) {
         profiler.takeMemorySnapshot();
-      }
       const snapshots = profiler.getMemorySnapshots();
       expect(snapshots).toHaveLength(5);
       // Should be in chronological order
       for (let i = 1; i < snapshots.length; i++) {
         expect(snapshots[i].timestamp).toBeGreaterThanOrEqual(snapshots[i - 1].timestamp);
-      }
     });
     it('should limit snapshot history size', () => {
       // Take more than the limit (100)
       for (let i = 0; i < 150; i++) {
         profiler.takeMemorySnapshot();
-      }
       const snapshots = profiler.getMemorySnapshots();
       expect(snapshots.length).toBeLessThanOrEqual(100);
     });
@@ -216,21 +209,20 @@ describe('PerformanceProfiler', () => {
         const elements = [];
         for (let i = 0; i < 100; i++) {
           elements.push({ id: i, type: 'div', props: {} });
-        }
         return elements;
       };
       const result = profiler.profileRender('TestComponent', mockRenderFunction);
       expect(result).toBeDefined();
       expect(renderHandler).toHaveBeenCalledWith({)
-        profile: expect.objectContaining({),
-          componentName: 'TestComponent',
+  profile: expect.objectContaining({,)
+  componentName: 'TestComponent',
           renderTime: expect.any(Number),
           props: {},
           state: {},
           hooks: [],
           children: [],
-          updates: expect.any(Object),
-        })
+          updates: expect.any(Object);
+  }
       });
     });
     it('should track render profiles by component', () => {
@@ -244,20 +236,20 @@ describe('PerformanceProfiler', () => {
       expect(renderProfiles.get('ComponentB')).toHaveLength(1);
     });
     it('should create alerts for slow renders', () => {
-      const alertHandler = jest.fn();
-      profiler.on('alertCreated', alertHandler);
-      // Mock slow render
-      mockPerformance.now
-        .mockReturnValueOnce(1000)  // Start time
-        .mockReturnValueOnce(1100); // End time (100ms render)
-      profiler.profileRender('SlowComponent', () => 'slow');
-      expect(alertHandler).toHaveBeenCalledWith({)
-        alert: expect.objectContaining({),
-          level: 'warning',
-          message: expect.stringContaining('Slow render in SlowComponent'),
-          metric: 'renderTime',
-          value: 100,
-        })
+  const alertHandler = jest.fn();
+  profiler.on('alertCreated', alertHandler);
+  // Mock slow render
+  mockPerformance.now
+  .mockReturnValueOnce(1000)  // Start time
+  .mockReturnValueOnce(1100); // End time (100ms render)
+  profiler.profileRender('SlowComponent', () => 'slow');
+  expect(alertHandler).toHaveBeenCalledWith({)
+  alert: expect.objectContaining({,)
+  level: 'warning',
+  message: expect.stringContaining('Slow render in SlowComponent'),
+  metric: 'renderTime',
+  value: 100,
+}
       });
     });
   });
@@ -266,20 +258,20 @@ describe('PerformanceProfiler', () => {
       profiler.startProfile('Alert Test');
     });
     it('should create performance alerts', () => {
-      const alertHandler = jest.fn();
-      profiler.on('alertCreated', alertHandler);
-      // Sample a slow operation
-      mockPerformance.now
-        .mockReturnValueOnce(1000)  // Start
-        .mockReturnValueOnce(1200); // End (200ms)
-      profiler.sampleOperation('test-domain', 'slow-operation', () => 'result');
-      expect(alertHandler).toHaveBeenCalledWith({)
-        alert: expect.objectContaining({),
-          level: 'warning',
-          message: expect.stringContaining('Slow operation'),
-          metric: 'duration',
-          value: 200,
-        })
+  const alertHandler = jest.fn();
+  profiler.on('alertCreated', alertHandler);
+  // Sample a slow operation
+  mockPerformance.now
+  .mockReturnValueOnce(1000)  // Start
+  .mockReturnValueOnce(1200); // End (200ms)
+  profiler.sampleOperation('test-domain', 'slow-operation', () => 'result');
+  expect(alertHandler).toHaveBeenCalledWith({)
+  alert: expect.objectContaining({,)
+  level: 'warning',
+  message: expect.stringContaining('Slow operation'),
+  metric: 'duration',
+  value: 200,
+}
       });
     });
     it('should manage alert history', () => {
@@ -289,7 +281,6 @@ describe('PerformanceProfiler', () => {
           .mockReturnValueOnce(1000 + i)
           .mockReturnValueOnce(1200 + i);
         profiler.sampleOperation('test', `operation-${i}`, () => 'result');}
-      }
       const alerts = profiler.getAlerts();
       expect(alerts.length).toBeGreaterThan(0);
       expect(alerts.length).toBeLessThanOrEqual(5);
@@ -309,33 +300,31 @@ describe('PerformanceProfiler', () => {
     });
   });
   describe('Configuration', () => {
-    it('should update configuration', () => {
-      const configHandler = jest.fn();
-      profiler.on('configUpdated', configHandler);
-      const newConfig = {
-        sampleRate: 200,
-        alertThresholds: {,
-          updateLatency: 200,
-          memoryUsage: 150 * 1024 * 1024,
-          renderTime: 32,
-          cacheHitRate: 0.7,
-        }
-      };
+  it('should update configuration', () => {
+  const configHandler = jest.fn();
+  profiler.on('configUpdated', configHandler);
+  const newConfig = {
+  sampleRate: 200,
+  alertThresholds: {,
+  updateLatency: 200,
+  memoryUsage: 150 * 1024 * 1024,
+  renderTime: 32,
+  cacheHitRate: 0.7,
+};
       profiler.updateConfig(newConfig);
       expect(configHandler).toHaveBeenCalledWith({)
-        config: expect.objectContaining(newConfig),
-      });
+  config: expect.objectContaining(newConfig),
+});
     });
     it('should respect updated thresholds', () => {
-      // Update threshold to be very low
-      profiler.updateConfig({)
-        alertThresholds: {,
-          updateLatency: 1, // 1ms threshold
-          memoryUsage: 1024, // 1KB
-          renderTime: 1,
-          cacheHitRate: 0.99,
-        }
-      });
+  // Update threshold to be very low
+  profiler.updateConfig({)
+  alertThresholds: {,
+  updateLatency: 1, // 1ms threshold,
+  memoryUsage: 1024, // 1KB,
+  renderTime: 1,
+  cacheHitRate: 0.99,
+});
       profiler.startProfile('Threshold Test');
       const alertHandler = jest.fn();
       profiler.on('alertCreated', alertHandler);
@@ -350,7 +339,6 @@ describe('PerformanceProfiler', () => {
       // Generate some sample data
       for (let i = 0; i < 3; i++) {
         profiler.sampleOperation('export-domain', `operation-${i}`, () => `result-${i}`);}
-      }
       profiler.takeMemorySnapshot();
       profiler.profileRender('ExportComponent', () => 'exported');
     });
@@ -414,7 +402,6 @@ describe('PerformanceProfiler', () => {
         expect(recommendation).toHaveProperty('title');
         expect(recommendation).toHaveProperty('implementation');
         expect(recommendation).toHaveProperty('metrics');
-      }
     });
   });
   describe('Global Instance', () => {
@@ -466,7 +453,6 @@ describe('PerformanceProfiler', () => {
           // Simulate minimal work
           return Math.random();
         });
-      }
       const endTime = Date.now();
       const duration = endTime - startTime;
       // Should complete within reasonable time

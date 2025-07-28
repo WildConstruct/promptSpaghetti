@@ -8,6 +8,7 @@
  */
 import { PluginSource, LoadedPlugin } from './PluginLoader';
 import { EventEmitter } from 'events';
+
 export interface RemotePlugin {
     id: string;
     name: string;
@@ -24,7 +25,8 @@ export interface RemotePlugin {
     rating: number;
     createdAt: Date;
     updatedAt: Date;
-}
+
+
 export interface PluginUpdate {
     pluginId: string;
     currentVersion: string;
@@ -32,7 +34,8 @@ export interface PluginUpdate {
     updateType: 'patch' | 'minor' | 'major';
     changelog?: string;
     breaking: boolean;
-}
+
+
 export interface PluginRegistryConfig {
     cacheDirectory: string;
     autoUpdateCheck: boolean;
@@ -42,14 +45,16 @@ export interface PluginRegistryConfig {
     maxCacheAge: number;
     enableTelemetry: boolean;
     developmentMode: boolean;
-}
+
+
 export interface PluginInstallOptions {
     version?: string;
     skipDependencies?: boolean;
     force?: boolean;
     source?: PluginSource;
     activateAfterInstall?: boolean;
-}
+
+
 export interface PluginSearchOptions {
     query?: string;
     category?: string;
@@ -60,7 +65,8 @@ export interface PluginSearchOptions {
     offset?: number;
     sortBy?: 'name' | 'downloads' | 'rating' | 'updated';
     sortOrder?: 'asc' | 'desc';
-}
+
+
 export interface PluginRegistryStats {
     totalPlugins: number;
     activePlugins: number;
@@ -72,7 +78,7 @@ export interface PluginRegistryStats {
     updateCheckLastRun?: Date;
     availableUpdates: number;
     cacheSize: number;
-}
+
 export declare class PluginRegistry extends EventEmitter {
     private baseRegistry;
     private pluginLoader;
@@ -135,5 +141,5 @@ export declare class PluginRegistry extends EventEmitter {
     private createPluginBackup;
     private restorePluginBackup;
     private removePluginData;
-}
+
 //# sourceMappingURL=PluginRegistry.d.ts.map

@@ -7,46 +7,42 @@ export interface DiffLegendProps {
   highlightMode: HighlightMode;
   className?: string;
 }
-
 export const DiffLegend: React.FC<DiffLegendProps> = ({)
   highlightMode,
   className = ''
 }) => {
   const legendItems = [;
+  {
+  type: 'added',
+  label: 'Added',
+  color: '#10b981',
+  bgColor: '#ecfdf5',
+  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions',
+}
     {
-      type: 'added',
-      label: 'Added',
-      color: '#10b981',
-      bgColor: '#ecfdf5',
-      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'additions',
-    },
+  type: 'removed',
+  label: 'Removed',
+  color: '#ef4444',
+  bgColor: '#fef2f2',
+  visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions',
+}
     {
-      type: 'removed',
-      label: 'Removed',
-      color: '#ef4444',
-      bgColor: '#fef2f2',
-      visible: highlightMode === 'all' || highlightMode === 'changes' || highlightMode === 'deletions',
-    },
-    {
-      type: 'modified',
-      label: 'Modified',
-      color: '#f59e0b',
-      bgColor: '#fffbeb',
-      visible: highlightMode === 'all' || highlightMode === 'changes',
-    },
+  type: 'modified',
+  label: 'Modified',
+  color: '#f59e0b',
+  bgColor: '#fffbeb',
+  visible: highlightMode === 'all' || highlightMode === 'changes',
+}
     {
       type: 'unchanged',
       label: 'Unchanged',
       color: '#6b7280',
       bgColor: '#f9fafb',
-      visible: highlightMode === 'all',
-    }
-  ];
+      visible: highlightMode === 'all'];
   const visibleItems = legendItems.filter(item => item.visible);
   if (visibleItems.length === 0) {
     return null;
-  }
-  return ();
+  return;
     <div className={`bg-white rounded-lg shadow-lg border border-gray-200 p-3 ${className}`}>}
       <h4 className="text-sm font-medium text-gray-900 mb-2">Legend</h4>
       <div className="space-y-2">
@@ -55,9 +51,9 @@ export const DiffLegend: React.FC<DiffLegendProps> = ({)
             <div
               className="w-4 h-4 rounded border-2 flex-shrink-0"
               style={{
-                borderColor: item.color,
-                backgroundColor: item.bgColor,
-              }}
+  borderColor: item.color,
+  backgroundColor: item.bgColor,
+}}
             />
             <span className="text-sm text-gray-700">{item.label}</span>
           </div>

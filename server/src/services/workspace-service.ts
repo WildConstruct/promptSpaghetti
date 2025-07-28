@@ -33,6 +33,7 @@ import {
   PERMISSIONS
 } from '../database/workspace-models';
 
+}
 export interface WorkspaceServiceOptions {
   getUserInfo?: (userId: string) => Promise<{ name: string; avatar?: string } | null>;
   sendNotification?: (notification: Notification) => Promise<void>;
@@ -47,6 +48,7 @@ export class WorkspaceService {
   // ====== WORKSPACE OPERATIONS ======
 
   async createWorkspace(data: CreateWorkspace, userId: string): Promise<Workspace> {
+
     // Validate workspace name
     if (!data.name.trim()) {
       throw new Error('Workspace name is required');
@@ -71,6 +73,7 @@ export class WorkspaceService {
   }
 
   async getWorkspace(id: string, userId: string): Promise<Workspace | null> {
+
     const workspace = await this.dao.getWorkspace(id);
     if (!workspace) return null;
 
@@ -96,6 +99,7 @@ export class WorkspaceService {
     data: UpdateWorkspace,
     userId: string
   ): Promise<Workspace | null> {
+
     // Check permissions
     const hasAccess = await this.checkWorkspaceAccess(id, userId, PERMISSIONS.WORKSPACE_WRITE);
     if (!hasAccess) {
@@ -117,6 +121,7 @@ export class WorkspaceService {
   }
 
   async archiveWorkspace(id: string, userId: string): Promise<boolean> {
+
     // Check permissions (only admin can archive)
     const hasAccess = await this.checkWorkspaceAccess(id, userId, PERMISSIONS.WORKSPACE_ADMIN);
     if (!hasAccess) {
@@ -140,6 +145,7 @@ export class WorkspaceService {
   // ====== PROJECT OPERATIONS ======
 
   async createProject(data: CreateProject, userId: string): Promise<Project> {
+
     // Check permissions
     const hasAccess = await this.checkWorkspaceAccess(
       data.workspace_id,
@@ -158,6 +164,7 @@ export class WorkspaceService {
   }
 
   async getProject(id: string, userId: string): Promise<Project | null> {
+
     const project = await this.dao.getProject(id);
     if (!project) return null;
 
@@ -194,6 +201,7 @@ export class WorkspaceService {
     data: UpdateProject,
     userId: string
   ): Promise<Project | null> {
+
     const project = await this.dao.getProject(id);
     if (!project) return null;
 
@@ -211,6 +219,7 @@ export class WorkspaceService {
   }
 
   async deleteProject(id: string, userId: string): Promise<boolean> {
+
     const project = await this.dao.getProject(id);
     if (!project) return false;
 
@@ -230,6 +239,7 @@ export class WorkspaceService {
   // ====== RESOURCE OPERATIONS ======
 
   async createResource(data: CreateResource, userId: string): Promise<Resource> {
+
     const project = await this.dao.getProject(data.project_id);
     if (!project) {
       throw new Error('Project not found');
@@ -253,6 +263,7 @@ export class WorkspaceService {
   }
 
   async getResource(id: string, userId: string): Promise<Resource | null> {
+
     const resource = await this.dao.getResource(id);
     if (!resource) return null;
 
@@ -280,6 +291,7 @@ export class WorkspaceService {
     roleName: string,
     invitedBy: string
   ): Promise<void> {
+
     // Check permissions
     const hasAccess = await this.checkWorkspaceAccess(workspaceId, invitedBy, PERMISSIONS.USER_INVITE);
     if (!hasAccess) {
@@ -297,7 +309,7 @@ export class WorkspaceService {
       {
         user_id: userIdToInvite,
         workspace_id: workspaceId
-      },
+  }
       invitedBy
     );
 
@@ -308,7 +320,7 @@ export class WorkspaceService {
         role_id: role.id,
         scope_type: 'workspace',
         scope_id: workspaceId
-      },
+  }
       invitedBy
     );
 
@@ -355,6 +367,7 @@ export class WorkspaceService {
   }
 
   async getActivityEventById(eventId: string, userId: string): Promise<ActivityEventWithActorInfo | null> {
+
     const event = await this.dao.getActivityEventById(eventId);
     if (!event) return null;
 
@@ -368,6 +381,7 @@ export class WorkspaceService {
   }
 
   async getActivityEventTypes(workspaceId: string, userId: string): Promise<string[]> {
+
     // Check access
     const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, PERMISSIONS.ACTIVITY_READ);
     if (!hasAccess) {
@@ -445,6 +459,7 @@ export class WorkspaceService {
   // ====== COMMENT OPERATIONS ======
 
   async createComment(data: CreateComment): Promise<Comment> {
+
     // Validate content
     if (!data.content || !data.content.trim()) {
       throw new Error('Comment content is required');
@@ -498,6 +513,7 @@ export class WorkspaceService {
     updates: UpdateComment,
     userId: string
   ): Promise<Comment | null> {
+
     const comment = await this.dao.getComment(commentId);
     if (!comment) {
       throw new Error('Comment not found');
@@ -523,6 +539,7 @@ export class WorkspaceService {
   }
 
   async deleteComment(commentId: string, userId: string): Promise<boolean> {
+
     const comment = await this.dao.getComment(commentId);
     if (!comment) {
       return false;
@@ -619,6 +636,7 @@ export class WorkspaceService {
     userId: string,
     resolved: boolean = true
   ): Promise<Comment | null> {
+
     const comment = await this.dao.getComment(commentId);
     if (!comment) {
       throw new Error('Comment not found');
@@ -651,6 +669,7 @@ export class WorkspaceService {
     userId: string,
     requiredPermission: number
   ): Promise<boolean> {
+
     return this.dao.hasPermissions(userId, workspaceId, requiredPermission);
   }
 
@@ -661,6 +680,7 @@ export class WorkspaceService {
     userId: string,
     requestingUserId: string
   ): Promise<{ permissions: number; roles: unknown[] } | null> {
+
     // Check if requesting user can view permissions (admin permission required)
     const hasAccess = await this.checkWorkspaceAccess(
       workspaceId,
@@ -702,6 +722,7 @@ export class WorkspaceService {
     newRoleName: string,
     requestingUserId: string
   ): Promise<boolean> {
+
     // Check permissions (admin required to change roles)
     const hasAccess = await this.checkWorkspaceAccess(
       workspaceId,
@@ -741,6 +762,7 @@ export class WorkspaceService {
     targetUserId: string,
     requestingUserId: string
   ): Promise<boolean> {
+
     // Check permissions (admin or user remove permission required)
     const hasAccess = await this.checkWorkspaceAccess(
       workspaceId,
@@ -783,6 +805,7 @@ export class WorkspaceService {
     userId: string,
     targetWorkspaceId: string
   ): Promise<{ success: boolean; workspaceInfo?: unknown; permissions?: number }> {
+
     // Verify user has access to target workspace
     const hasAccess = await this.checkWorkspaceAccess(
       targetWorkspaceId,
@@ -822,7 +845,7 @@ export class WorkspaceService {
         name: workspace.name,
         description: workspace.description,
         owner_id: workspace.owner_id
-      },
+  }
       permissions: userPermissions.permissions
     };
   }
@@ -837,6 +860,7 @@ export class WorkspaceService {
     resourceType: 'projects' | 'resources' | 'storage',
     requestedAmount: number = 1
   ): Promise<{ allowed: boolean; current: number; limit: number; reason?: string }> {
+
     const workspace = await this.dao.getWorkspace(workspaceId);
     if (!workspace) {
       return { allowed: false, current: 0, limit: 0, reason: 'Workspace not found' };
@@ -889,6 +913,7 @@ export class WorkspaceService {
     workspaceId: string,
     requiredPermission: number = PERMISSIONS.WORKSPACE_READ
   ): Promise<void> {
+
     const hasAccess = await this.checkWorkspaceAccess(workspaceId, userId, requiredPermission);
     if (!hasAccess) {
       throw new Error('Cross-tenant access violation: User does not have access to this workspace');
@@ -898,6 +923,7 @@ export class WorkspaceService {
   // ====== NOTIFICATIONS ======
 
   async createNotification(data: CreateNotification): Promise<Notification> {
+
     const notification = await this.dao.createNotification(data);
     
     if (this.options.sendNotification) {
@@ -908,6 +934,7 @@ export class WorkspaceService {
   }
 
   async markNotificationAsRead(____id: string, ____userId: string): Promise<boolean> {
+
     // Implementation would mark notification as read
     // For now, return true
     return true;

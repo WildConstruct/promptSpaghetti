@@ -16,25 +16,30 @@ import { GraphCRDT } from './GraphCRDT';
 /**
  * Result of operational transformation
  */
+
 export interface TransformResult {
     op1: MutationOperation | null;
     op2: MutationOperation | null;
     conflict?: ConflictOperation;
     requiresResolution: boolean;
-}
+
+
 /**
  * Batch operation result
  */
+
 export interface BatchResult {
     success: boolean;
     appliedOperations: MutationOperation[];
     failedOperations: MutationOperation[];
     conflicts: ConflictOperation[];
     rollbackRequired: boolean;
-}
+
+
 /**
  * Operation queue item
  */
+
 export interface QueuedOperation {
     operation: MutationOperation;
     priority: OperationPriority;
@@ -42,7 +47,8 @@ export interface QueuedOperation {
     retryCount: number;
     maxRetries: number;
     timestamp: number;
-}
+
+
 /**
  * Coordinates graph mutations with conflict resolution and operational transform
  */
@@ -191,6 +197,6 @@ export declare class MutationCoordinator {
         maxOperationHistory: number;
         operationTimeout: number;
     };
-}
+
 export default MutationCoordinator;
 //# sourceMappingURL=MutationCoordinator.d.ts.map

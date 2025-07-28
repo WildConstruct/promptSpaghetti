@@ -25,26 +25,22 @@ interface EmailMFAConfig {
         maxDailyEmails: number;
         cooldownMinutes: number;
     };
-}
 interface EmailTemplate {
     subject: string;
     htmlTemplate: string;
     textTemplate: string;
     variables: string[];
-}
 interface EmailSendResult {
     messageId: string;
     status: 'sent' | 'failed';
     error?: string;
     timestamp: Date;
-}
 interface RiskAssessmentContext {
     ipAddress: string;
     userAgent: string;
     location?: string;
     deviceFingerprint?: string;
     previousAttempts: number;
-}
 interface EmailService {
     sendEmail(to: string, template: EmailTemplate, variables: Record<string, string>): Promise<EmailSendResult>;
     validateEmailAddress(email: string): Promise<boolean>;
@@ -52,7 +48,6 @@ interface EmailService {
         valid: boolean;
         risk: number;
     }>;
-}
 interface EmailMFAStorage {
     saveConfiguration(config: EmailConfiguration): Promise<void>;
     getConfiguration(userId: string): Promise<EmailConfiguration | null>;
@@ -70,7 +65,7 @@ interface EmailMFAStorage {
     updateRateLimitState(userId: string, action: string, count: number): Promise<void>;
     logVerificationAttempt(attempt: unknown): Promise<void>;
     logSecurityEvent(event: unknown): Promise<void>;
-}
+
 export declare class EmailMFAProvider {
     private config;
     private emailService;
@@ -97,6 +92,6 @@ export declare class EmailMFAProvider {
     updateEmailAddress(userId: string, configurationId: string, newEmailAddress: string): Promise<void>;
     disableMethod(userId: string, configurationId: string): Promise<void>;
     revokeMethod(userId: string, configurationId: string): Promise<void>;
-}
+
 export default EmailMFAProvider;
 //# sourceMappingURL=EmailMFAProvider.d.ts.map

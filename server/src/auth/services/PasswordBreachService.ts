@@ -17,6 +17,7 @@ import { AuditService } from './AuditService';
 import { RateLimitService } from './RateLimitService';
 import { logger } from '../../utils/logger';
 
+}
 export interface BreachCheckResult {
   isBreached: boolean;
   occurrenceCount: number;
@@ -26,20 +27,25 @@ export interface BreachCheckResult {
   cacheHit: boolean;
   responseTime: number;
 }
+}
 
+}
 export interface BreachCheckOptions {
   skipCache?: boolean;
   includeMetadata?: boolean;
   timeout?: number;
   retryAttempts?: number;
 }
+}
 
+}
 export interface BreachMetadata {
   apiVersion: string;
   responseHeaders: Record<string, string>;
   requestId: string;
   paddingEnabled: boolean;
   anonymityLevel: number;
+}
 }
 
 export class PasswordBreachService {
@@ -77,6 +83,7 @@ export class PasswordBreachService {
     userId?: string, 
     options: BreachCheckOptions = {}
   ): Promise<BreachCheckResult> {
+
     const startTime = Date.now();
     const requestId = this.generateRequestId();
     
@@ -150,6 +157,7 @@ export class PasswordBreachService {
     hashPrefix: string, 
     options: BreachCheckOptions
   ): Promise<{ response: string; metadata: BreachMetadata }> {
+
     const url = `${this.API_BASE_URL}/range/${hashPrefix}`;
     const timeout = options.timeout || this.DEFAULT_TIMEOUT;
     const requestId = this.generateRequestId();
@@ -277,6 +285,7 @@ export class PasswordBreachService {
    * Check rate limit for user
    */
   private async checkRateLimit(userId: string): Promise<void> {
+
     const rateLimitKey = `password_breach_check:${userId}`;
     const isAllowed = await this.rateLimitService.checkRateLimit(rateLimitKey, {
       window: 60, // 1 minute
@@ -339,6 +348,7 @@ export class PasswordBreachService {
     result: BreachCheckResult,
     requestId: string
   ): Promise<void> {
+
     if (!userId) return;
 
     try {
@@ -353,7 +363,7 @@ export class PasswordBreachService {
           responseTime: result.responseTime,
           cacheHit: result.cacheHit,
           hashPrefix: result.hashPrefix // Safe to log prefix for debugging
-        },
+  }
         riskLevel: result.isBreached ? 'HIGH' : 'LOW',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
@@ -371,6 +381,7 @@ export class PasswordBreachService {
     error: any,
     requestId: string
   ): Promise<void> {
+
     try {
       await this.auditService.logEvent({
         eventType: 'PASSWORD_BREACH_CHECK_ERROR',
@@ -379,7 +390,7 @@ export class PasswordBreachService {
           requestId,
           error: error.message || 'Unknown error',
           errorType: error.name || 'Error'
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
@@ -421,6 +432,7 @@ export class PasswordBreachService {
   }
 
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -475,6 +487,7 @@ export class PasswordBreachService {
    * Test API connectivity
    */
   public async testAPIConnectivity(): Promise<{ success: boolean; responseTime: number; error?: string }> {
+
     const startTime = Date.now();
     
     try {

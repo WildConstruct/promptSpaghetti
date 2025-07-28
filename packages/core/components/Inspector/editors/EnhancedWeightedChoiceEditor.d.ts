@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface EnhancedWeightedChoiceEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
-}
+
 /**
  * Epic 8.4 - Enhanced WeightedChoice Editor with Progressive Disclosure
  *

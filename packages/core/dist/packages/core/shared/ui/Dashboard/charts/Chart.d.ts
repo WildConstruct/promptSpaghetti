@@ -15,12 +15,12 @@ export interface ChartDataPoint {
 }
 export interface ChartSeries {
     name: string;
-    data: ChartDataPoint[];
+    data: ChartDataPoint;
     color?: string;
     type?: ChartType;
 }
 export interface ChartProps {
-    series: ChartSeries[];
+    series: ChartSeries;
     type?: ChartType;
     height?: number;
     width?: number | string;

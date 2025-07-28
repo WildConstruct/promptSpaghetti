@@ -59,10 +59,12 @@ const AVAILABLE_SCOPES = [
   '*' // Full access (super admin only)
 ];
 
+}
 interface ApiKeyManagementRouteContext {
   databaseService: DatabaseService;
   auditService: AuditService;
   rateLimitService: RateLimitService;
+}
 }
 
 export async function apiKeyManagementRoutes(
@@ -151,7 +153,7 @@ export async function apiKeyManagementRoutes(
                 rateLimits: { type: 'object' },
                 status: { type: 'string' }
               }
-            },
+  }
             rawKey: { type: 'string' },
             warning: { type: 'string' }
           }
@@ -219,7 +221,7 @@ export async function apiKeyManagementRoutes(
           createdAt: apiKey.createdAt.toISOString(),
           rateLimits: apiKey.rateLimits,
           status: apiKey.status
-        },
+  }
         rawKey,
         warning: 'Store this API key securely. It will not be shown again.'
       });
@@ -242,7 +244,7 @@ export async function apiKeyManagementRoutes(
         properties: {
           includeInactive: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -265,7 +267,7 @@ export async function apiKeyManagementRoutes(
                   metadata: { type: 'object' }
                 }
               }
-            },
+  }
             count: { type: 'number' }
           }
         }
@@ -322,9 +324,9 @@ export async function apiKeyManagementRoutes(
           apiKey: { type: 'string' },
           requiredScope: { type: 'string' },
           ipAddress: { type: 'string' }
-        },
+  }
         required: ['apiKey']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -381,7 +383,7 @@ export async function apiKeyManagementRoutes(
                 rotatedAt: { type: 'string' },
                 rotationCount: { type: 'number' }
               }
-            },
+  }
             newApiKey: {
               type: 'object',
               properties: {
@@ -392,7 +394,7 @@ export async function apiKeyManagementRoutes(
                 expiresAt: { type: 'string' },
                 createdAt: { type: 'string' }
               }
-            },
+  }
             rawKey: { type: 'string' },
             message: { type: 'string' }
           }
@@ -441,7 +443,7 @@ export async function apiKeyManagementRoutes(
           newKeyId: newApiKey.keyId,
           rotatedAt: new Date().toISOString(),
           rotationCount: newApiKey.metadata.rotationCount
-        },
+  }
         newApiKey: {
           keyId: newApiKey.keyId,
           keyPrefix: newApiKey.keyPrefix,
@@ -449,7 +451,7 @@ export async function apiKeyManagementRoutes(
           scopes: newApiKey.scopes,
           expiresAt: newApiKey.expiresAt?.toISOString(),
           createdAt: newApiKey.createdAt.toISOString()
-        },
+  }
         rawKey,
         message: 'API key rotated successfully. Old key will be revoked in 24 hours.'
       });
@@ -616,7 +618,7 @@ export async function apiKeyManagementRoutes(
                 topScopes: { type: 'array' },
                 averageKeyAge: { type: 'number' }
               }
-            },
+  }
             timestamp: { type: 'string' }
           }
         }
@@ -666,7 +668,7 @@ export async function apiKeyManagementRoutes(
           sortBy: { type: 'string', enum: ['createdAt', 'lastUsedAt', 'totalCalls'], default: 'createdAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -802,7 +804,7 @@ export async function apiKeyManagementRoutes(
         properties: {
           keyId: { type: 'string' },
           reason: { type: 'string' }
-        },
+  }
         required: ['keyId', 'reason']
       }
     }
@@ -859,7 +861,7 @@ export async function apiKeyManagementRoutes(
           keyId: { type: 'string' },
           reason: { type: 'string' },
           duration: { type: 'string' } // e.g., '24h', '7d', 'permanent'
-        },
+  }
         required: ['keyId', 'reason']
       }
     }
@@ -921,10 +923,10 @@ export async function apiKeyManagementRoutes(
               requestsPerMinute: { type: 'number', minimum: 1 },
               requestsPerHour: { type: 'number', minimum: 1 },
               requestsPerDay: { type: 'number', minimum: 1 }
-            },
+  }
             required: ['requestsPerMinute', 'requestsPerHour', 'requestsPerDay']
           }
-        },
+  }
         required: ['keyId', 'rateLimits']
       }
     }
@@ -981,7 +983,7 @@ export async function apiKeyManagementRoutes(
           operation: { type: 'string', enum: ['revoke', 'suspend', 'rate_limit'] },
           keyIds: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 100 },
           parameters: { type: 'object' } // Operation-specific parameters
-        },
+  }
         required: ['operation', 'keyIds']
       }
     }

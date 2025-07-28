@@ -5,15 +5,15 @@
  * Domain-specific state management for graph editing functionality
  */
 import { BaseStateContainer, ValidationResult } from '../../../state/containers/BaseStateContainer';
-import { DomainStateContainer, DomainStateChange } from '../../../state/orchestration/StateOrchestrator';
+import { DomainStateContainer } from '../../../state/orchestration/StateOrchestrator';
 import { GraphSchema } from '../../types/GraphTypes';
 export interface GraphState {
     nodes: Record<string, GraphNode>;
     edges: Record<string, GraphEdge>;
     metadata: GraphMetadata;
     selection: {
-        selectedNodes: string[];
-        selectedEdges: string[];
+        selectedNodes: string;
+        selectedEdges: string;
         isMultiSelect: boolean;
     };
     viewport: {
@@ -25,7 +25,7 @@ export interface GraphState {
         isRunning: boolean;
         currentNodeId?: string;
         results: Record<string, any>;
-        errors: ExecutionError[];
+        errors: ExecutionError;
     };
     history: {
         canUndo: boolean;
@@ -35,7 +35,7 @@ export interface GraphState {
     };
     collaboration: {
         isConnected: boolean;
-        activeUsers: CollaboratorInfo[];
+        activeUsers: CollaboratorInfo;
         cursors: Record<string, CursorPosition>;
     };
     performance: {
@@ -92,7 +92,7 @@ export interface GraphMetadata {
     created: number;
     modified: number;
     author: string;
-    tags: string[];
+    tags: string;
     isPublic: boolean;
     schema: GraphSchema;
     settings: {
@@ -148,11 +148,11 @@ export type GraphOperation = {
     edgeId: string;
 } | {
     type: 'SELECT_NODES';
-    nodeIds: string[];
+    nodeIds: string;
     append?: boolean;
 } | {
     type: 'SELECT_EDGES';
-    edgeIds: string[];
+    edgeIds: string;
     append?: boolean;
 } | {
     type: 'CLEAR_SELECTION';
@@ -175,7 +175,7 @@ export type GraphOperation = {
 };
 export interface GraphTransaction {
     id: string;
-    operations: GraphOperation[];
+    operations: GraphOperation;
     timestamp: number;
     userId?: string;
     description?: string;
@@ -186,30 +186,69 @@ export declare class GraphStateContainer extends BaseStateContainer<GraphState> 
     private nodePositionCache;
     private validationCache;
     constructor(initialGraph?: Partial<GraphState>);
-    getInitialState(): GraphState;
-    validateState(state: GraphState): ValidationResult;
-    getDomainName(): string;
-    applyOperation(operation: GraphOperation, userId?: string): Promise<void>;
-    applyTransaction(transaction: GraphTransaction): Promise<void>;
-    private applyOperationToState;
-    applyExternalChange(change: DomainStateChange): Promise<void>;
-    canAcceptChange(change: DomainStateChange): boolean;
-    prepareForTransaction(transactionId: string): Promise<void>;
-    commitTransaction(transactionId: string): Promise<void>;
-    rollbackTransaction(transactionId: string): Promise<void>;
-    getSelectedNodes(): GraphNode[];
-    getSelectedEdges(): GraphEdge[];
-    getNodeById(nodeId: string): GraphNode | undefined;
-    getEdgeById(edgeId: string): GraphEdge | undefined;
-    getConnectedNodes(nodeId: string): GraphNode[];
-    getExecutionResults(): Record<string, any>;
-    private detectCycles;
-    private setNestedProperty;
-    private setupEventHandlers;
-    private updatePerformanceMetrics;
-    private estimateMemoryUsage;
-    private emitDomainEvents;
-    private generateId;
-    private generateChangeId;
+    if(initialGraph: any): {
+        nodes: {};
+        edges: {};
+        metadata: {
+            id: any;
+            name: string;
+            version: string;
+            created: number;
+            modified: number;
+            author: string;
+            tags: any[];
+            isPublic: boolean;
+            schema: {
+                version: string;
+                nodeTypes: any[];
+                edgeTypes: any[];
+            };
+            settings: {
+                snapToGrid: boolean;
+                gridSize: number;
+                showGrid: boolean;
+                nodeSpacing: number;
+                autoLayout: boolean;
+            };
+            selection: {
+                selectedNodes: any[];
+                selectedEdges: any[];
+                isMultiSelect: boolean;
+            };
+            viewport: {
+                x: number;
+                y: number;
+                zoom: number;
+            };
+            execution: {
+                isRunning: boolean;
+                results: {};
+                errors: any[];
+            };
+            history: {
+                canUndo: boolean;
+                canRedo: boolean;
+                currentIndex: number;
+                maxSize: number;
+            };
+            collaboration: {
+                isConnected: boolean;
+                activeUsers: any[];
+                cursors: {};
+            };
+            performance: {
+                nodeCount: number;
+                edgeCount: number;
+                lastRenderTime: number;
+                memoryUsage: number;
+            };
+            validateState(state: GraphState): ValidationResult;
+            message: string;
+            value: any;
+            code: string;
+        };
+        if(: any, node: any): any;
+        "": any;
+    };
 }
 //# sourceMappingURL=GraphStateContainer.d.ts.map

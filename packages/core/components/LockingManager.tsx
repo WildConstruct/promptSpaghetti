@@ -11,12 +11,10 @@ import { LockQueueVisualization } from './LockQueueVisualization';
 import { LockNotifications } from './LockNotifications';
 import { LockPolicyEditor } from './LockPolicyEditor';
 interface LockingManagerProps {
-  workspaceId: string;
+  workspaceId: string;,
   userId: string;
   onLockStateChange?: (resourceId: string, isLocked: boolean) => void;
-}
-
-export const LockingManager: React.FC<LockingManagerProps> = ({)
+  export const LockingManager: React.FC<LockingManagerProps> = ({,)
   workspaceId,
   userId,
   onLockStateChange
@@ -66,46 +64,40 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
     return () => clearInterval(interval);
   }, [workspaceId, userId]);
   const handleLockRequest = useCallback(async (resourceId: string, lockType: string, reason?: string) => {
-    try {
-      const result = await acquireLock({)
-        resource_id: resourceId,
-        user_id: userId,
-        lock_type: lockType,
-        scope: 'resource',
-        reason
-      });
+  try {
+  const result = await acquireLock({)
+  resource_id: resourceId,
+  user_id: userId,
+  lock_type: lockType,
+  scope: 'resource',
+  reason
+});
       if (result.success) {
         onLockStateChange?.(resourceId, true);
         setShowRequestDialog(false);
         setSelectedResource(null);
-      }
     } catch (error) {
-      console.error('Failed to acquire lock:', error);
-    }
-  }, [userId, acquireLock, onLockStateChange]);
+  console.error('Failed to acquire lock:', error);
+}, [userId, acquireLock, onLockStateChange]);
   const handleLockRelease = useCallback(async (lockId: string, resourceId: string) => {
     try {
       const result = await releaseLock(lockId, userId);
       if (result.success) {
         onLockStateChange?.(resourceId, false);
-      }
     } catch (error) {
-      console.error('Failed to release lock:', error);
-    }
-  }, [userId, releaseLock, onLockStateChange]);
+  console.error('Failed to release lock:', error);
+}, [userId, releaseLock, onLockStateChange]);
   const handleLockBreak = useCallback(async (lockId: string, resourceId: string, justification: string) => {
     try {
       const result = await breakLock(lockId, userId, justification);
       if (result.success) {
         onLockStateChange?.(resourceId, false);
         setShowBreakingWorkflow(false);
-      }
     } catch (error) {
-      console.error('Failed to break lock:', error);
-    }
-  }, [userId, breakLock, onLockStateChange]);
+  console.error('Failed to break lock:', error);
+}, [userId, breakLock, onLockStateChange]);
   const filteredLocks = locks.filter(lock => {)
-    const matchesSearch = !searchTerm || ;
+  const matchesSearch = !searchTerm || ;
       lock.resource_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       lock.lock_reason?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = lockTypeFilter === 'all' || lock.lock_type === lockTypeFilter;
@@ -114,14 +106,13 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
   });
   const unreadNotifications = notifications.filter(n => !n.read_at).length;
   if (isLoading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <span className="ml-2 text-gray-600">Loading lock information...</span>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-4">
@@ -150,40 +141,40 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'overview'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+  activeTab === 'overview'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
           >
             Overview
           </button>
           <button
             onClick={() => setActiveTab('locks')}
             className={`pb-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'locks'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+  activeTab === 'locks'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
           >
             Active Locks ({filteredLocks.length})
           </button>
           <button
             onClick={() => setActiveTab('queue')}
             className={`pb-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'queue'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+  activeTab === 'queue'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
           >
             Queue ({queue.length})
           </button>
           <button
             onClick={() => setActiveTab('notifications')}
             className={`pb-2 px-1 border-b-2 font-medium text-sm relative ${
-              activeTab === 'notifications'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+  activeTab === 'notifications'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
           >
             Notifications
             {unreadNotifications > 0 && ()
@@ -195,10 +186,10 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
           <button
             onClick={() => setActiveTab('policy')}
             className={`pb-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'policy'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+  activeTab === 'policy'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
           >
             Policy
           </button>
@@ -336,18 +327,18 @@ export const LockingManager: React.FC<LockingManagerProps> = ({)
           <LockQueueVisualization
             queue={queue}
             onRemoveFromQueue={(queueId) => {
-              // Implementation for removing from queue
-              console.log('Remove from queue:', queueId);
-            }}
+  // Implementation for removing from queue
+  console.log('Remove from queue:', queueId);
+}}
           />
         )}
         {activeTab === 'notifications' && ()
           <LockNotifications
             notifications={notifications}
             onMarkAsRead={(notificationId) => {
-              // Implementation for marking as read
-              console.log('Mark as read:', notificationId);
-            }}
+  // Implementation for marking as read
+  console.log('Mark as read:', notificationId);
+}}
           />
         )}
         {activeTab === 'policy' && ()

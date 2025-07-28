@@ -88,5 +88,5 @@ export declare class TrendingCommentsService {
     private generateMockCommentContent;
     private generateMockHashtags;
     private generateMockEngagements;
-}
+
 //# sourceMappingURL=TrendingCommentsService.d.ts.map

@@ -19,7 +19,7 @@ interface Epic16InteractiveElementsProps {
     };
     onElementInteraction?: (elementId: string, interaction: unknown) => void;
     onAnalyticsUpdate?: (analytics: unknown) => void;
-}
+
 export declare const Epic16InteractiveElements: React.FC<Epic16InteractiveElementsProps>;
 export default Epic16InteractiveElements;
 //# sourceMappingURL=Epic16InteractiveElements.d.ts.map

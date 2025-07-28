@@ -346,7 +346,7 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
           healthcareService: healthStatus[0],
           medicalTerminology: healthStatus[1],
           hipaaCompliance: healthStatus[2]
-        },
+  }
         checkedAt: new Date().toISOString()
       };
     } catch (error) {

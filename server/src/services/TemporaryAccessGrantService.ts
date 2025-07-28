@@ -17,6 +17,7 @@ import {
   OperationContext 
 } from '../../../packages/core/types/DataClassification';
 
+}
 export interface TemporaryAccessGrant {
   id: string;
   requestId?: string;
@@ -41,7 +42,9 @@ export interface TemporaryAccessGrant {
   revokedAt?: Date;
   lastUsedAt?: Date;
 }
+}
 
+}
 export interface GrantedPermission {
   operation: DataOperation;
   dataClassification: DataClassificationLevel;
@@ -54,7 +57,9 @@ export interface GrantedPermission {
   rateLimits: RateLimit[];
   auditLevel: 'STANDARD' | 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME';
 }
+}
 
+}
 export interface RateLimit {
   type: 'REQUESTS_PER_MINUTE' | 'REQUESTS_PER_HOUR' | 'DATA_VOLUME_PER_DAY' | 'CONCURRENT_SESSIONS';
   limit: number;
@@ -62,7 +67,9 @@ export interface RateLimit {
   burstAllowed: boolean;
   burstLimit?: number;
 }
+}
 
+}
 export interface AccessScope {
   type: 'RESOURCE_SPECIFIC' | 'CLASSIFICATION_LEVEL' | 'DEPARTMENT' | 'PROJECT' | 'GLOBAL';
   targets: ScopeTarget[];
@@ -71,20 +78,26 @@ export interface AccessScope {
   cascadingPermissions: boolean;
   contextualRestrictions: ContextualRestriction[];
 }
+}
 
+}
 export interface ScopeTarget {
   type: 'RESOURCE_ID' | 'RESOURCE_PATTERN' | 'CLASSIFICATION' | 'DEPARTMENT' | 'PROJECT';
   value: string;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ContextualRestriction {
   type: 'LOCATION' | 'DEVICE' | 'NETWORK' | 'TIME_OF_DAY' | 'USER_ATTRIBUTE';
   specification: RestrictionSpecification;
   enforcement: 'STRICT' | 'FLEXIBLE' | 'ADVISORY';
   fallbackBehavior: 'DENY' | 'DEGRADE' | 'WARN' | 'AUDIT';
 }
+}
 
+}
 export interface RestrictionSpecification {
   attribute: string;
   operator: 'EQUALS' | 'IN' | 'NOT_IN' | 'CONTAINS' | 'MATCHES' | 'RANGE';
@@ -92,7 +105,9 @@ export interface RestrictionSpecification {
   tolerance?: number;
   customValidation?: string;
 }
+}
 
+}
 export interface GrantTimeWindow {
   startTime?: Date;
   endTime: Date;
@@ -106,21 +121,27 @@ export interface GrantTimeWindow {
   maxExtensions: number;
   extensionDuration: number; // hours
 }
+}
 
+}
 export interface TimeRange {
   startHour: number; // 0-23
   endHour: number;
   daysOfWeek: number[]; // 0-6, Sunday = 0
   exceptions: TimeException[];
 }
+}
 
+}
 export interface TimeException {
   date: Date;
   allowed: boolean;
   reason: string;
   approvedBy: string;
 }
+}
 
+}
 export interface BlackoutPeriod {
   start: Date;
   end: Date;
@@ -129,7 +150,9 @@ export interface BlackoutPeriod {
   overridable: boolean;
   overrideRequiresApproval: boolean;
 }
+}
 
+}
 export interface AccessCondition {
   id: string;
   type: 'MFA_REQUIRED' | 'APPROVAL_REQUIRED' | 'SUPERVISION_REQUIRED' | 'AUDIT_ENHANCED' | 'VPN_REQUIRED' | 'DEVICE_TRUSTED';
@@ -140,19 +163,24 @@ export interface AccessCondition {
   verificationRequired: boolean;
   reVerificationInterval?: number; // minutes
 }
+}
 
+}
 export interface ConditionSpecification {
   parameters: Record<string, any>;
   validation: ValidationRule[];
   dependencies: string[]; // IDs of other conditions
   conflictsWith: string[]; // IDs of conflicting conditions
 }
+}
 
+}
 export interface ValidationRule {
   type: 'PRESENCE' | 'FORMAT' | 'RANGE' | 'CUSTOM';
   specification: Record<string, any>;
   errorMessage: string;
   severity: 'ERROR' | 'WARNING' | 'INFO';
+}
 }
 
 export type GrantStatus = 
@@ -164,6 +192,7 @@ export type GrantStatus =
   | 'USED_UP'
   | 'FAILED_CONDITIONS';
 
+}
 export interface GrantUsage {
   totalRequests: number;
   successfulRequests: number;
@@ -177,7 +206,9 @@ export interface GrantUsage {
   violationCount: number;
   lastViolation?: GrantViolation;
 }
+}
 
+}
 export interface GrantViolation {
   id: string;
   type: 'SCOPE_VIOLATION' | 'TIME_VIOLATION' | 'CONDITION_VIOLATION' | 'RATE_LIMIT_VIOLATION' | 'SECURITY_VIOLATION';
@@ -188,14 +219,18 @@ export interface GrantViolation {
   resolution?: string;
   impact: ViolationImpact;
 }
+}
 
+}
 export interface ViolationImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   affectedResources: string[];
   mitigationActions: string[];
   escalationRequired: boolean;
 }
+}
 
+}
 export interface GrantMonitoring {
   enabled: boolean;
   realTimeTracking: boolean;
@@ -205,7 +240,9 @@ export interface GrantMonitoring {
   reportingFrequency: 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
   retentionPeriod: number; // days
 }
+}
 
+}
 export interface AlertThreshold {
   metric: string;
   operator: 'GREATER_THAN' | 'LESS_THAN' | 'EQUALS' | 'PERCENTAGE_INCREASE';
@@ -215,7 +252,9 @@ export interface AlertThreshold {
   action: 'LOG' | 'ALERT' | 'SUSPEND' | 'REVOKE';
   recipients: string[];
 }
+}
 
+}
 export interface AnomalyDetectionConfig {
   enabled: boolean;
   sensitivity: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -223,20 +262,26 @@ export interface AnomalyDetectionConfig {
   detectionMethods: AnomalyDetectionMethod[];
   responseActions: AnomalyResponseAction[];
 }
+}
 
+}
 export interface AnomalyDetectionMethod {
   type: 'STATISTICAL' | 'MACHINE_LEARNING' | 'RULE_BASED' | 'BEHAVIORAL';
   configuration: Record<string, any>;
   weight: number;
 }
+}
 
+}
 export interface AnomalyResponseAction {
   trigger: 'ANOMALY_DETECTED' | 'ANOMALY_CONFIRMED' | 'ANOMALY_SEVERE';
   action: 'LOG' | 'ALERT' | 'SUSPEND' | 'REQUIRE_REAUTH' | 'ESCALATE';
   parameters: Record<string, any>;
   automatic: boolean;
 }
+}
 
+}
 export interface ComplianceCheck {
   framework: 'GDPR' | 'HIPAA' | 'SOC2' | 'FedRAMP' | 'FISMA' | 'ISO27001' | 'NIST';
   requirement: string;
@@ -245,7 +290,9 @@ export interface ComplianceCheck {
   checkFunction: string;
   remediationActions: string[];
 }
+}
 
+}
 export interface GrantSecurity {
   encryptionRequired: boolean;
   keyRotationInterval: number; // hours
@@ -256,7 +303,9 @@ export interface GrantSecurity {
   secureChannelRequired: boolean;
   certificateBasedAuth: boolean;
 }
+}
 
+}
 export interface AccessToken {
   id: string;
   type: 'BEARER' | 'OAUTH2' | 'JWT' | 'CUSTOM';
@@ -270,7 +319,9 @@ export interface AccessToken {
   lastUsed?: Date;
   usage: TokenUsage;
 }
+}
 
+}
 export interface TokenUsage {
   requestCount: number;
   lastRequest?: Date;
@@ -278,13 +329,17 @@ export interface TokenUsage {
   userAgents: string[];
   errors: TokenError[];
 }
+}
 
+}
 export interface TokenError {
   timestamp: Date;
   error: string;
   context: Record<string, any>;
 }
+}
 
+}
 export interface GrantCompliance {
   frameworks: ComplianceFramework[];
   auditTrail: ComplianceAuditEntry[];
@@ -292,7 +347,9 @@ export interface GrantCompliance {
   violations: ComplianceViolation[];
   attestations: ComplianceAttestation[];
 }
+}
 
+}
 export interface ComplianceFramework {
   name: string;
   version: string;
@@ -302,7 +359,9 @@ export interface ComplianceFramework {
   status: 'COMPLIANT' | 'NON_COMPLIANT' | 'PARTIALLY_COMPLIANT' | 'PENDING_REVIEW';
   nextReview: Date;
 }
+}
 
+}
 export interface ComplianceRequirement {
   id: string;
   description: string;
@@ -311,7 +370,9 @@ export interface ComplianceRequirement {
   evidence: string[];
   lastVerified: Date;
 }
+}
 
+}
 export interface ComplianceAuditEntry {
   id: string;
   timestamp: Date;
@@ -323,7 +384,9 @@ export interface ComplianceAuditEntry {
   details: Record<string, any>;
   evidence: string[];
 }
+}
 
+}
 export interface ComplianceCertification {
   id: string;
   framework: string;
@@ -334,7 +397,9 @@ export interface ComplianceCertification {
   certificateNumber: string;
   status: 'VALID' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED';
 }
+}
 
+}
 export interface ComplianceViolation {
   id: string;
   framework: string;
@@ -346,7 +411,9 @@ export interface ComplianceViolation {
   resolution?: string;
   impact: ComplianceImpact;
 }
+}
 
+}
 export interface ComplianceImpact {
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   affectedSystems: string[];
@@ -354,7 +421,9 @@ export interface ComplianceImpact {
   businessImpact: string;
   mitigationPlan: string[];
 }
+}
 
+}
 export interface ComplianceAttestation {
   id: string;
   attesterId: string;
@@ -368,7 +437,9 @@ export interface ComplianceAttestation {
   witnessed: boolean;
   witnessId?: string;
 }
+}
 
+}
 export interface GrantMetadata {
   createdBy: string;
   approvedBy: string[];
@@ -385,7 +456,9 @@ export interface GrantMetadata {
   lastModified: Date;
   lastModifiedBy: string;
 }
+}
 
+}
 export interface GrantRiskAssessment {
   overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskFactors: RiskFactor[];
@@ -396,7 +469,9 @@ export interface GrantRiskAssessment {
   reviewRequired: boolean;
   nextReview: Date;
 }
+}
 
+}
 export interface RiskFactor {
   category: 'DATA_SENSITIVITY' | 'USER_PRIVILEGE' | 'ACCESS_SCOPE' | 'TIME_DURATION' | 'CONTEXT' | 'COMPLIANCE';
   description: string;
@@ -405,7 +480,9 @@ export interface RiskFactor {
   score: number; // 1-100
   mitigated: boolean;
 }
+}
 
+}
 export interface RiskMitigation {
   riskFactorId: string;
   strategy: 'AVOID' | 'MITIGATE' | 'TRANSFER' | 'ACCEPT';
@@ -418,7 +495,9 @@ export interface RiskMitigation {
   verified: boolean;
   verificationDate?: Date;
 }
+}
 
+}
 export interface GrantCreationRequest {
   requestId?: string;
   granteeId: string;
@@ -433,7 +512,9 @@ export interface GrantCreationRequest {
   security?: Partial<GrantSecurity>;
   customAttributes?: Record<string, any>;
 }
+}
 
+}
 export interface GrantRevocationRequest {
   grantId: string;
   reason: string;
@@ -442,7 +523,9 @@ export interface GrantRevocationRequest {
   notifyGrantee: boolean;
   auditRequired: boolean;
 }
+}
 
+}
 export interface GrantExtensionRequest {
   grantId: string;
   requestedBy: string;
@@ -451,7 +534,9 @@ export interface GrantExtensionRequest {
   urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   approverRequired: boolean;
 }
+}
 
+}
 export interface GrantValidationResult {
   valid: boolean;
   violations: GrantValidationViolation[];
@@ -459,7 +544,9 @@ export interface GrantValidationResult {
   riskScore: number;
   recommendations: string[];
 }
+}
 
+}
 export interface GrantValidationViolation {
   type: 'SCOPE_VIOLATION' | 'TIME_VIOLATION' | 'CONDITION_VIOLATION' | 'SECURITY_VIOLATION' | 'COMPLIANCE_VIOLATION';
   description: string;
@@ -467,14 +554,18 @@ export interface GrantValidationViolation {
   blockingViolation: boolean;
   remediation: string[];
 }
+}
 
+}
 export interface GrantValidationWarning {
   type: 'RISK_WARNING' | 'COMPLIANCE_WARNING' | 'SECURITY_WARNING' | 'PERFORMANCE_WARNING';
   description: string;
   impact: string;
   recommendation: string;
 }
+}
 
+}
 export interface GrantSearchFilters {
   granteeId?: string;
   granterId?: string;
@@ -490,7 +581,9 @@ export interface GrantSearchFilters {
   emergencyGrants?: boolean;
   activeOnly?: boolean;
 }
+}
 
+}
 export interface GrantAnalytics {
   totalGrants: number;
   activeGrants: number;
@@ -506,7 +599,9 @@ export interface GrantAnalytics {
   topGranters: GranterStatistics[];
   recentActivity: GrantActivity[];
 }
+}
 
+}
 export interface GranteeStatistics {
   granteeId: string;
   granteeName: string;
@@ -516,7 +611,9 @@ export interface GranteeStatistics {
   riskScore: number;
   lastActivity: Date;
 }
+}
 
+}
 export interface GranterStatistics {
   granterId: string;
   granterName: string;
@@ -525,13 +622,16 @@ export interface GranterStatistics {
   averageGrantDuration: number;
   riskAssessmentAccuracy: number;
 }
+}
 
+}
 export interface GrantActivity {
   timestamp: Date;
   grantId: string;
   activity: 'CREATED' | 'ACTIVATED' | 'USED' | 'EXTENDED' | 'SUSPENDED' | 'REVOKED' | 'EXPIRED';
   userId: string;
   details: Record<string, any>;
+}
 }
 
 /**
@@ -577,6 +677,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     granterId: string,
     granterContext: OperationContext
   ): Promise<TemporaryAccessGrant> {
+
     try {
       // Validate the grant request
       const validation = await this.validateGrantRequest(request);
@@ -610,15 +711,15 @@ export class TemporaryAccessGrantService extends EventEmitter {
         accessScope: {
           ...request.accessScope,
           contextualRestrictions: await this.buildContextualRestrictions(request, riskAssessment)
-        },
+  }
         timeWindow: {
           ...request.timeWindow,
           allowedHours: await this.getDefaultAllowedHours(riskAssessment.overallRisk),
           blackoutPeriods: await this.getApplicableBlackoutPeriods(
             request.timeWindow.startTime,
             request.timeWindow.endTime
-          )
-        },
+
+  }
         conditions: request.conditions?.map((c, index) => ({
           ...c,
           id: `condition_${index}`,
@@ -635,7 +736,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           operationCounts: {} as Record<DataOperation, number>,
           resourcesAccessed: [],
           violationCount: 0
-        },
+  }
         monitoring: {
           enabled: true,
           realTimeTracking: riskAssessment.overallRisk === 'HIGH' || riskAssessment.overallRisk === 'CRITICAL',
@@ -645,7 +746,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           reportingFrequency: this.determineReportingFrequency(riskAssessment.overallRisk),
           retentionPeriod: await this.getRetentionPeriod(request.permissions),
           ...request.monitoring
-        },
+  }
         security: {
           encryptionRequired: true,
           keyRotationInterval: riskAssessment.overallRisk === 'CRITICAL' ? 1 : 24,
@@ -656,14 +757,14 @@ export class TemporaryAccessGrantService extends EventEmitter {
           secureChannelRequired: true,
           certificateBasedAuth: riskAssessment.overallRisk === 'CRITICAL',
           ...request.security
-        },
+  }
         compliance: {
           frameworks: await this.getApplicableFrameworks(request.permissions),
           auditTrail: [],
           certifications: [],
           violations: [],
           attestations: []
-        },
+  }
         metadata: {
           createdBy: granterId,
           approvedBy: [],
@@ -679,7 +780,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           version: '1.0',
           lastModified: new Date(),
           lastModifiedBy: granterId
-        },
+  }
         createdAt: new Date(),
         expiresAt: request.timeWindow.endTime
       };
@@ -701,7 +802,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           permissions: request.permissions.map(p => p.operation),
           duration: Math.round((request.timeWindow.endTime.getTime() - Date.now()) / (1000 * 60 * 60)),
           riskLevel: riskAssessment.overallRisk
-        },
+  }
         context: granterContext,
         outcome: {
           success: true,
@@ -733,7 +834,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           error: error.message,
           granteeId: request.granteeId,
           permissions: request.permissions.map(p => p.operation)
-        },
+  }
         context: granterContext,
         outcome: {
           success: false,
@@ -754,6 +855,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     activatorId: string,
     context: OperationContext
   ): Promise<void> {
+
     const grant = this.grants.get(grantId);
     if (!grant) {
       throw new Error('Grant not found');
@@ -807,7 +909,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         granteeId: grant.granteeId,
         permissions: grant.permissions.map(p => p.operation),
         duration: Math.round((grant.expiresAt.getTime() - Date.now()) / (1000 * 60 * 60))
-      },
+  }
       context,
       outcome: {
         success: true,
@@ -832,6 +934,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     resourceId: string,
     context: OperationContext
   ): Promise<GrantValidationResult> {
+
     const grant = this.grants.get(grantId);
     if (!grant) {
       return {
@@ -979,6 +1082,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     request: GrantRevocationRequest,
     context: OperationContext
   ): Promise<void> {
+
     const grant = this.grants.get(request.grantId);
     if (!grant) {
       throw new Error('Grant not found');
@@ -1021,7 +1125,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         reason: request.reason,
         immediate: request.immediate,
         revokedBy: request.revokedBy
-      },
+  }
       evidence: []
     });
 
@@ -1035,7 +1139,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         reason: request.reason,
         immediate: request.immediate,
         granteeId: grant.granteeId
-      },
+  }
       context,
       outcome: {
         success: true,
@@ -1070,6 +1174,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     request: GrantExtensionRequest,
     context: OperationContext
   ): Promise<TemporaryAccessGrant> {
+
     const grant = this.grants.get(request.grantId);
     if (!grant) {
       throw new Error('Grant not found');
@@ -1120,7 +1225,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         extensionDuration: request.extensionDuration,
         justification: request.justification,
         newExpirationTime: newExpirationTime.toISOString()
-      },
+  }
       evidence: []
     });
 
@@ -1134,7 +1239,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         extensionHours: request.extensionDuration,
         justification: request.justification,
         newExpiration: newExpirationTime
-      },
+  }
       context,
       outcome: {
         success: true,
@@ -1157,6 +1262,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
    * Get grant by ID
    */
   async getGrant(grantId: string): Promise<TemporaryAccessGrant | null> {
+
     return this.grants.get(grantId) || null;
   }
 
@@ -1164,6 +1270,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
    * Search grants with filters
    */
   async searchGrants(filters: GrantSearchFilters): Promise<TemporaryAccessGrant[]> {
+
     const grants = Array.from(this.grants.values());
     
     return grants.filter(grant => {
@@ -1229,6 +1336,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   async getGrantAnalytics(
     timeframe?: { start: Date; end: Date }
   ): Promise<GrantAnalytics> {
+
     const grants = Array.from(this.grants.values());
     const filteredGrants = timeframe 
       ? grants.filter(g => g.createdAt >= timeframe.start && g.createdAt <= timeframe.end)
@@ -1300,6 +1408,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   // Helper methods
 
   private async validateGrantRequest(request: GrantCreationRequest): Promise<GrantValidationResult> {
+
     const violations: GrantValidationViolation[] = [];
     const warnings: GrantValidationWarning[] = [];
     let riskScore = 0;
@@ -1366,6 +1475,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     request: GrantCreationRequest,
     granterId: string
   ): Promise<GrantRiskAssessment> {
+
     const riskFactors: RiskFactor[] = [];
     
     // Assess data sensitivity
@@ -1487,6 +1597,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     request: GrantCreationRequest,
     riskAssessment: GrantRiskAssessment
   ): Promise<ContextualRestriction[]> {
+
     const restrictions: ContextualRestriction[] = [];
 
     // Add location restrictions for high-risk grants
@@ -1498,7 +1609,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           operator: 'IN',
           value: ['US', 'CA', 'GB'],
           tolerance: 0
-        },
+  }
         enforcement: 'STRICT',
         fallbackBehavior: 'DENY'
       });
@@ -1512,7 +1623,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
         operator: 'EQUALS',
         value: true,
         tolerance: 0
-      },
+  }
       enforcement: riskAssessment.overallRisk === 'CRITICAL' ? 'STRICT' : 'FLEXIBLE',
       fallbackBehavior: 'WARN'
     });
@@ -1521,6 +1632,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async getDefaultAllowedHours(riskLevel: string): Promise<TimeRange[]> {
+
     if (riskLevel === 'CRITICAL') {
       // Business hours only for critical risk
       return [{
@@ -1544,6 +1656,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     startTime?: Date,
     endTime?: Date
   ): Promise<BlackoutPeriod[]> {
+
     // In a real implementation, this would fetch from a blackout period service
     return [];
   }
@@ -1551,6 +1664,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async buildAlertThresholds(
     riskAssessment: GrantRiskAssessment
   ): Promise<AlertThreshold[]> {
+
     const thresholds: AlertThreshold[] = [];
 
     // Request rate threshold
@@ -1581,6 +1695,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async buildAnomalyDetectionConfig(
     riskAssessment: GrantRiskAssessment
   ): Promise<AnomalyDetectionConfig> {
+
     return {
       enabled: riskAssessment.overallRisk === 'HIGH' || riskAssessment.overallRisk === 'CRITICAL',
       sensitivity: riskAssessment.overallRisk === 'CRITICAL' ? 'HIGH' : 'MEDIUM',
@@ -1590,7 +1705,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           type: 'STATISTICAL',
           configuration: { threshold: 2.5 },
           weight: 0.4
-        },
+  }
         {
           type: 'BEHAVIORAL',
           configuration: { pattern_analysis: true },
@@ -1603,7 +1718,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
           action: 'LOG',
           parameters: {},
           automatic: true
-        },
+  }
         {
           trigger: 'ANOMALY_SEVERE',
           action: 'SUSPEND',
@@ -1617,6 +1732,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async buildComplianceChecks(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
   ): Promise<ComplianceCheck[]> {
+
     const checks: ComplianceCheck[] = [];
 
     // GDPR check for personal data access
@@ -1646,6 +1762,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async getRetentionPeriod(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
   ): Promise<number> {
+
     const hasRestrictedData = permissions.some(p => p.dataClassification === 'RESTRICTED');
     return hasRestrictedData ? 2555 : 365; // 7 years for restricted, 1 year for others
   }
@@ -1653,6 +1770,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   private async getApplicableFrameworks(
     permissions: Omit<GrantedPermission, 'riskLevel' | 'auditLevel'>[]
   ): Promise<ComplianceFramework[]> {
+
     const frameworks: ComplianceFramework[] = [];
 
     // Add GDPR for EU data
@@ -1681,6 +1799,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async generateAccessTokens(grant: TemporaryAccessGrant): Promise<AccessToken[]> {
+
     const tokens: AccessToken[] = [];
 
     // Generate JWT token
@@ -1720,6 +1839,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     grant: TemporaryAccessGrant,
     context: OperationContext
   ): Promise<GrantValidationResult> {
+
     const violations: GrantValidationViolation[] = [];
     const warnings: GrantValidationWarning[] = [];
 
@@ -1793,6 +1913,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     timeWindow: GrantTimeWindow,
     _____context: OperationContext
   ): Promise<{ valid: boolean; reason?: string }> {
+
     const now = new Date();
     
     // Check if grant has expired
@@ -1835,6 +1956,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     condition: AccessCondition,
     context: OperationContext
   ): Promise<{ valid: boolean; reason?: string; remediation?: string[] }> {
+
     switch (condition.type) {
     case 'MFA_REQUIRED':
       // Check if MFA was used in this session
@@ -1873,6 +1995,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     operation: DataOperation,
     _____context: OperationContext
   ): Promise<{ valid: boolean; reason?: string }> {
+
     const permission = grant.permissions.find(p => p.operation === operation);
     if (!permission) {
       return { valid: false, reason: 'Operation not permitted' };
@@ -1897,6 +2020,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     _____resourceId: string,
     _____context: OperationContext
   ): Promise<{ anomalyDetected: boolean; description?: string }> {
+
     if (!grant.monitoring.anomalyDetection.enabled) {
       return { anomalyDetected: false };
     }
@@ -1931,6 +2055,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     resourceId: string,
     context: OperationContext
   ): Promise<void> {
+
     grant.usage.totalRequests++;
     grant.usage.successfulRequests++;
     grant.usage.lastRequestTime = new Date();
@@ -1991,16 +2116,19 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async getUserName(userId: string): Promise<string> {
+
     // In a real implementation, this would fetch from user service
     return `User ${userId}`;
   }
 
   private async getUserEmail(userId: string): Promise<string> {
+
     // In a real implementation, this would fetch from user service
     return `${userId}@company.com`;
   }
 
   private async userExists(userId: string): Promise<boolean> {
+
     // In a real implementation, this would check user service
     return userId !== '';
   }
@@ -2035,6 +2163,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async performCleanup(): Promise<void> {
+
     const now = new Date();
     
     for (const [grantId, grant] of this.grants.entries()) {
@@ -2076,6 +2205,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async performMonitoring(): Promise<void> {
+
     for (const grant of this.grants.values()) {
       if (grant.status !== 'ACTIVE' || !grant.monitoring.enabled) {
         continue;
@@ -2113,6 +2243,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
   }
 
   private async getMetricValue(grant: TemporaryAccessGrant, metric: string): Promise<number> {
+
     switch (metric) {
     case 'requests_per_hour':
       return grant.usage.totalRequests; // Simplified
@@ -2143,6 +2274,7 @@ export class TemporaryAccessGrantService extends EventEmitter {
     threshold: AlertThreshold,
     value: number
   ): Promise<void> {
+
     const alert = {
       grantId: grant.id,
       metric: threshold.metric,

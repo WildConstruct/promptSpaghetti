@@ -28,15 +28,15 @@ import {
 } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Comparison interfaces
+
 export interface FunnelComparisonProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
   primaryFunnel: ConversionFunnelDefinition;
-  comparisonMode: ComparisonMode;
+  comparisonMode: ComparisonMode;,
   comparisonConfig: ComparisonConfiguration;
-  onInsightGenerated?: (insights: ComparisonInsight[]) => void;
+  onInsightGenerated?: (insights: ComparisonInsight) => void;
   onExportRequest?: (data: ComparisonExportData) => void;
 }
-
 export type ComparisonMode = 
   | 'time_period'
   | 'funnel_variant'
@@ -47,208 +47,191 @@ export type ComparisonMode =
   | 'device_type';
 
 export interface ComparisonConfiguration {
-  mode: ComparisonMode;
+  mode: ComparisonMode;,
   baseline: ComparisonTarget;
-  comparison: ComparisonTarget;
+  comparison: ComparisonTarget;,
   timeRange: { start: number; end: number };
-  significanceLevel: number; // 0.05 for 95% confidence
+  significanceLevel: number; // 0.05 for 95% confidence,
   minimumSampleSize: number;
-  includeStatisticalTests: boolean;
+  includeStatisticalTests: boolean;,
   autoGenerateInsights: boolean;
 }
-
 export interface ComparisonTarget {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  filters?: ComparisonFilter[];
+  filters?: ComparisonFilter;
   funnelDefinition?: ConversionFunnelDefinition;
   metadata?: Record<string, any>;
 }
-
 export interface ComparisonFilter {
-  type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';
+  type: 'segment' | 'cohort' | 'timeRange' | 'geography' | 'device' | 'custom';,
   field: string;
-  operator: string;
+  operator: string;,
   value: Error;
   description?: string;
 }
-
 export interface ComparisonResult {
-  baseline: FunnelPerformanceData;
+  baseline: FunnelPerformanceData;,
   comparison: FunnelPerformanceData;
-  delta: PerformanceDelta;
-  statisticalTests: StatisticalTestResult[];
-  insights: ComparisonInsight[];
+  delta: PerformanceDelta;,
+  statisticalTests: StatisticalTestResult;
+  insights: ComparisonInsight;,
   metadata: ComparisonMetadata;
 }
-
 export interface FunnelPerformanceData {
-  targetId: string;
+  targetId: string;,
   totalEntries: number;
-  totalConversions: number;
+  totalConversions: number;,
   overallConversionRate: number;
-  averageTimeToConvert: number;
+  averageTimeToConvert: number;,
   totalValue: number;
-  stepPerformance: StepPerformanceData[];
+  stepPerformance: StepPerformanceData;,
   additionalMetrics: Record<string, number>;
 }
-
 export interface StepPerformanceData {
-  stepId: string;
+  stepId: string;,
   stepName: string;
-  order: number;
+  order: number;,
   entries: number;
-  conversions: number;
+  conversions: number;,
   conversionRate: number;
-  dropOffCount: number;
+  dropOffCount: number;,
   dropOffRate: number;
-  averageTimeSpent: number;
+  averageTimeSpent: number;,
   value: number;
 }
-
 export interface PerformanceDelta {
   overallConversionRate: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;,
+  relative: number;
+  direction: 'improvement' | 'decline' | 'no_change';
+};
   totalConversions: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;
+  relative: number;,
+  direction: 'improvement' | 'decline' | 'no_change';
+};
   averageTimeToConvert: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;
+  relative: number;,
+  direction: 'improvement' | 'decline' | 'no_change';
+};
   totalValue: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
-  stepDeltas: StepDelta[];
+  absolute: number;
+  relative: number;,
+  direction: 'improvement' | 'decline' | 'no_change';
+};
+  stepDeltas: StepDelta;
 }
-
 export interface StepDelta {
-  stepId: string;
+  stepId: string;,
   conversionRate: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;,
+  relative: number;
+  direction: 'improvement' | 'decline' | 'no_change';
+};
   dropOffRate: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;
+  relative: number;,
+  direction: 'improvement' | 'decline' | 'no_change';
+};
 }
-
 export interface StatisticalTestResult {
-  testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';
+  testType: 'chi_square' | 'z_test' | 'fishers_exact' | 't_test';,
   metric: string;
   stepId?: string;
-  pValue: number;
+  pValue: number;,
   statisticValue: number;
-  isSignificant: boolean;
+  isSignificant: boolean;,
   confidenceInterval: [number, number];
   effectSize: number;
   powerAnalysis?: PowerAnalysisResult;
 }
-
 export interface PowerAnalysisResult {
-  currentPower: number;
+  currentPower: number;,
   requiredSampleSize: number;
-  detectedEffectSize: number;
-  recommendations: string[];
+  detectedEffectSize: number;,
+  recommendations: string;
 }
-
 export interface ComparisonInsight {
-  type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
+  type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';,
   severity: 'critical' | 'high' | 'medium' | 'low' | 'info';
-  title: string;
+  title: string;,
   description: string;
   metric?: string;
   stepId?: string;
   evidence: InsightEvidence;
-  recommendations?: string[];
+  recommendations?: string;
   priority: number;
 }
-
 export interface InsightEvidence {
   statisticalTest?: StatisticalTestResult;
   sampleSizes: { baseline: number; comparison: number };
-  effectSize: number;
+  effectSize: number;,
   confidenceLevel: number;
   additionalContext?: Record<string, any>;
 }
-
 export interface ComparisonMetadata {
-  comparisonId: string;
+  comparisonId: string;,
   generatedAt: number;
-  configuration: ComparisonConfiguration;
+  configuration: ComparisonConfiguration;,
   dataQuality: {,
-    baselineSampleSize: number;
-    comparisonSampleSize: number;
-    dataCompleteness: number;
-    outlierCount: number;
-    confidenceLevel: number;
-  };
-  executionTime: number;
+  baselineSampleSize: number;,
+  comparisonSampleSize: number;
+  dataCompleteness: number;,
+  outlierCount: number;
+  confidenceLevel: number;
+};
+  executionTime: number;,
   cacheHit: boolean;
 }
-
 export interface ComparisonExportData {
-  comparison: ComparisonResult;
+  comparison: ComparisonResult;,
   rawData: {,
-    baselineEvents: FlexibleConversionEvent[];
-    comparisonEvents: FlexibleConversionEvent[];
-  };
-  visualizations: ComparisonVisualization[];
+  baselineEvents: FlexibleConversionEvent;,
+  comparisonEvents: FlexibleConversionEvent;
+};
+  visualizations: ComparisonVisualization;,
   reportSummary: string;
 }
-
 export interface ComparisonVisualization {
-  type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';
+  type: 'funnel_chart' | 'delta_chart' | 'significance_heatmap' | 'timeline_chart';,
   title: string;
   data: Record<string, unknown>;
   configuration: unknown;
 }
-
 export interface ABTestIntegration {
-  experimentId: string;
+  experimentId: string;,
   experimentName: string;
-  variants: ABTestVariant[];
+  variants: ABTestVariant;,
   trafficAllocation: Record<string, number>;
-  status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';
+  status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';,
   startDate: number;
   endDate?: number;
-  primaryMetric: string;
-  secondaryMetrics: string[];
-  hypothesis: string;
+  primaryMetric: string;,
+  secondaryMetrics: string;
+  hypothesis: string;,
   successCriteria: ABTestSuccessCriteria;
 }
-
 export interface ABTestVariant {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   funnelDefinition: ConversionFunnelDefinition;
-  trafficPercentage: number;
+  trafficPercentage: number;,
   isControl: boolean;
 }
-
 export interface ABTestSuccessCriteria {
-  minimumDetectableEffect: number;
+  minimumDetectableEffect: number;,
   significanceLevel: number;
-  power: number;
-  minimumRunTime: number; // days
+  power: number;,
+  minimumRunTime: number; // days,
   minimumSampleSize: number;
+  /**
+  * Main Funnel Comparison Component
+  */
 }
-/**
- * Main Funnel Comparison Component
- */
 export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
   analyticsInfrastructure,
   primaryFunnel,
@@ -275,37 +258,32 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
       setComparisonResult(result);
       if (comparisonConfig.autoGenerateInsights && result.insights.length > 0) {
         onInsightGenerated?.(result.insights);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load comparison data');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load comparison data');
+} finally {
       setLoading(false);
-    }
   }, [analyticsInfrastructure, primaryFunnel, comparisonConfig, onInsightGenerated]);
   useEffect(() => {
     loadComparisonData();
   }, [loadComparisonData]);
   const handleExport = useCallback(() => {
-    if (comparisonResult && onExportRequest) {
-      const exportData: ComparisonExportData = {
-        comparison: comparisonResult,
-        rawData: {,
-          baselineEvents: [], // TODO: Include actual raw data
-          comparisonEvents: [],
-        },
-        visualizations: generateComparisonVisualizations(comparisonResult),
-        reportSummary: generateReportSummary(comparisonResult),
-      };
+  if (comparisonResult && onExportRequest) {
+  const exportData: ComparisonExportData = {,
+  comparison: comparisonResult,
+  rawData: {,
+  baselineEvents: [], // TODO: Include actual raw data,
+  comparisonEvents: [],
+},
+  visualizations: generateComparisonVisualizations(comparisonResult),
+        reportSummary: generateReportSummary(comparisonResult);
+  };
       onExportRequest(exportData);
-    }
   }, [comparisonResult, onExportRequest]);
   if (loading) {
     return <ComparisonLoadingState />;
-  }
   if (error || !comparisonResult) {
     return <ComparisonErrorState error={error || 'No data available'} onRetry={loadComparisonData} />;
-  }
-  return ();
+  return;
     <div className="funnel-comparison">
       <ComparisonHeader
         configuration={comparisonConfig}
@@ -363,20 +341,19 @@ export const FunnelComparison: React.FC<FunnelComparisonProps> = ({)
  * Comparison Header Component
  */
 interface ComparisonHeaderProps {
-  configuration: ComparisonConfiguration;
+  configuration: ComparisonConfiguration;,
   result: ComparisonResult;
-  viewMode: string;
-  onViewModeChange: (mode: 'overview' | 'detailed' | 'statistical') => void;
+  viewMode: string;,
+  onViewModeChange: (mode: 'overview' | 'detailed' | 'statistical') => void;,
   onExport: () => void;
-}
-const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({)
+  const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({,)
   configuration,
   result,
   viewMode,
   onViewModeChange,
   onExport
 }) => {
-  return ();
+  return;
     <div className="comparison-header">
       <div className="header-info">
         <h2>Funnel Comparison</h2>
@@ -413,18 +390,17 @@ const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({)
  * Comparison Summary Component
  */
 interface ComparisonSummaryProps {
-  baseline: FunnelPerformanceData;
+  baseline: FunnelPerformanceData;,
   comparison: FunnelPerformanceData;
-  delta: PerformanceDelta;
+  delta: PerformanceDelta;,
   mode: ComparisonMode;
-}
-const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({)
+  const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({,)
   baseline,
   comparison,
   delta,
   mode
 }) => {
-  return ();
+  return;
     <div className="comparison-summary">
       <div className="summary-grid">
         <MetricComparisonCard
@@ -463,16 +439,15 @@ const ComparisonSummary: React.FC<ComparisonSummaryProps> = ({)
  * Metric Comparison Card Component
  */
 interface MetricComparisonCardProps {
-  title: string;
+  title: string;,
   baseline: number;
-  comparison: number;
+  comparison: number;,
   delta: {,
-    absolute: number;
-    relative: number;
-    direction: 'improvement' | 'decline' | 'no_change';
-  };
+  absolute: number;,
+  relative: number;
+  direction: 'improvement' | 'decline' | 'no_change';
+};
   format: 'number' | 'percentage' | 'duration' | 'currency';
-}
 const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
   title,
   baseline,
@@ -487,12 +462,11 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
       case 'duration':
         return formatDuration(value);
       case 'currency':
-        return `$${value.toLocaleString()}`;}
-      default:
+        return `$${value.toLocaleString()}`;},}
+  default:
         return value.toLocaleString();
-    }
   };
-  return ();
+  return;
     <div className="metric-comparison-card">
       <h4 className="metric-title">{title}</h4>
       <div className="metric-values">
@@ -524,11 +498,10 @@ const MetricComparisonCard: React.FC<MetricComparisonCardProps> = ({)
  * Insights Panel Component
  */
 interface InsightsPanelProps {
-  insights: ComparisonInsight[];
+  insights: ComparisonInsight;,
   selectedInsight: ComparisonInsight | null;
   onInsightSelect: (insight: ComparisonInsight) => void;
-}
-const InsightsPanel: React.FC<InsightsPanelProps> = ({)
+  const InsightsPanel: React.FC<InsightsPanelProps> = ({,)
   insights,
   selectedInsight,
   onInsightSelect
@@ -538,12 +511,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({)
       // Sort by priority first, then by severity
       if (a.priority !== b.priority) {
         return b.priority - a.priority;
-      }
       const severityOrder = { critical: 4, high: 3, medium: 2, low: 1, info: 0 };
       return severityOrder[b.severity] - severityOrder[a.severity];
     });
   }, [insights]);
-  return ();
+  return;
     <div className="insights-panel">
       <h3>Key Insights</h3>
       <div className="insights-grid">
@@ -563,12 +535,11 @@ const InsightsPanel: React.FC<InsightsPanelProps> = ({)
  * Insight Card Component
  */
 interface InsightCardProps {
-  insight: ComparisonInsight;
+  insight: ComparisonInsight;,
   isSelected: boolean;
   onClick: () => void;
-}
 const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick }) => {
-  return ();
+  return;
     <div 
       className={`insight-card ${insight.severity} ${isSelected ? 'selected' : ''}`}
       onClick={onClick}
@@ -604,16 +575,15 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight, isSelected, onClick 
  * Overview Comparison Component
  */
 interface OverviewComparisonProps {
-  baseline: FunnelPerformanceData;
+  baseline: FunnelPerformanceData;,
   comparison: FunnelPerformanceData;
   delta: PerformanceDelta;
-}
-const OverviewComparison: React.FC<OverviewComparisonProps> = ({)
+  const OverviewComparison: React.FC<OverviewComparisonProps> = ({,)
   baseline,
   comparison,
   delta
 }) => {
-  return ();
+  return;
     <div className="overview-comparison">
       <div className="funnel-charts">
         <div className="baseline-funnel">
@@ -637,15 +607,14 @@ const OverviewComparison: React.FC<OverviewComparisonProps> = ({)
  * Simple Funnel Chart Component
  */
 interface SimpleFunnelChartProps {
-  steps: StepPerformanceData[];
-}
+  steps: StepPerformanceData;
 const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
   const maxEntries = Math.max(...steps.map(s => s.entries));
-  return ();
+  return;
     <div className="simple-funnel-chart">
       {steps.map((step, index) => {
         const width = (step.entries / maxEntries) * 100;
-        return ();
+        return;
           <div key={step.stepId} className="funnel-step">
             <div 
               className="step-bar"
@@ -669,16 +638,15 @@ const SimpleFunnelChart: React.FC<SimpleFunnelChartProps> = ({ steps }) => {
  * Step-by-Step Comparison Component
  */
 interface StepByStepComparisonProps {
-  baselineSteps: StepPerformanceData[];
-  comparisonSteps: StepPerformanceData[];
-  stepDeltas: StepDelta[];
-}
-const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({)
+  baselineSteps: StepPerformanceData;,
+  comparisonSteps: StepPerformanceData;
+  stepDeltas: StepDelta;
+  const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({,)
   baselineSteps,
   comparisonSteps,
   stepDeltas
 }) => {
-  return ();
+  return;
     <div className="step-by-step-comparison">
       <h4>Step-by-Step Analysis</h4>
       <div className="steps-table">
@@ -693,7 +661,7 @@ const StepByStepComparison: React.FC<StepByStepComparisonProps> = ({)
           const comparisonStep = comparisonSteps.find(s => s.stepId === baselineStep.stepId);
           const delta = stepDeltas.find(d => d.stepId === baselineStep.stepId);
           if (!comparisonStep || !delta) return null;
-          return ();
+          return;
             <div key={baselineStep.stepId} className="table-row">
               <div className="step-name">{baselineStep.stepName}</div>
               <div className="baseline-rate">{baselineStep.conversionRate.toFixed(1)}%</div>
@@ -744,9 +712,8 @@ const ComparisonLoadingState: React.FC = () => ()
   </div>
 );
 interface ComparisonErrorStateProps {
-  error: string;
+  error: string;,
   onRetry: () => void;
-}
 const ComparisonErrorState: React.FC<ComparisonErrorStateProps> = ({ error, onRetry }) => ()
   <div className="comparison-error">
     <div className="error-message">
@@ -769,53 +736,50 @@ function formatDuration(milliseconds: number): string {
   if (hours > 0) return `${hours}h ${minutes % 60}m`;}
   if (minutes > 0) return `${minutes}m ${seconds % 60}s`;}
   return `${seconds}s`;}
-}
-async function performFunnelComparison()
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure,
+async function performFunnelComparison(analyticsInfrastructure: ConversionAnalyticsInfrastructure,)
   funnelDefinition: ConversionFunnelDefinition,
-  configuration: ComparisonConfiguration,
-): Promise<ComparisonResult> {
+  configuration: ComparisonConfiguration): Promise<ComparisonResult> {,
   // Simplified implementation - in production would perform actual statistical analysis
-  const baselineData: FunnelPerformanceData = {
-    targetId: configuration.baseline.id,
-    totalEntries: 1000,
-    totalConversions: 150,
-    overallConversionRate: 15.0,
-    averageTimeToConvert: 86400000,
-    totalValue: 3750,
-    stepPerformance: funnelDefinition.steps.map((step, index) => ({)
-      stepId: step.id,
-      stepName: step.name,
-      order: step.order,
-      entries: 1000 - (index * 150),
-      conversions: 1000 - ((index + 1) * 150),
-      conversionRate: index < funnelDefinition.steps.length - 1 ? 82.4 : 100,
-      dropOffCount: 150,
-      dropOffRate: 17.6,
-      averageTimeSpent: 120000,
-      value: 500,
-    })),
+  const baselineData: FunnelPerformanceData = {,
+  targetId: configuration.baseline.id,
+  totalEntries: 1000,
+  totalConversions: 150,
+  overallConversionRate: 15.0,
+  averageTimeToConvert: 86400000,
+  totalValue: 3750,
+  stepPerformance: funnelDefinition.steps.map((step, index) => ({,)
+  stepId: step.id,
+  stepName: step.name,
+  order: step.order,
+  entries: 1000 - (index * 150),
+  conversions: 1000 - ((index + 1) * 150),
+  conversionRate: index < funnelDefinition.steps.length - 1 ? 82.4 : 100,
+  dropOffCount: 150,
+  dropOffRate: 17.6,
+  averageTimeSpent: 120000,
+  value: 500,
+})),
     additionalMetrics: {}
   };
-  const comparisonData: FunnelPerformanceData = {
-    targetId: configuration.comparison.id,
-    totalEntries: 1200,
-    totalConversions: 216,
-    overallConversionRate: 18.0,
-    averageTimeToConvert: 72000000,
-    totalValue: 5400,
-    stepPerformance: funnelDefinition.steps.map((step, index) => ({)
-      stepId: step.id,
-      stepName: step.name,
-      order: step.order,
-      entries: 1200 - (index * 150),
-      conversions: 1200 - ((index + 1) * 150),
-      conversionRate: index < funnelDefinition.steps.length - 1 ? 87.5 : 100,
-      dropOffCount: 150,
-      dropOffRate: 12.5,
-      averageTimeSpent: 100000,
-      value: 600,
-    })),
+  const comparisonData: FunnelPerformanceData = {,
+  targetId: configuration.comparison.id,
+  totalEntries: 1200,
+  totalConversions: 216,
+  overallConversionRate: 18.0,
+  averageTimeToConvert: 72000000,
+  totalValue: 5400,
+  stepPerformance: funnelDefinition.steps.map((step, index) => ({,)
+  stepId: step.id,
+  stepName: step.name,
+  order: step.order,
+  entries: 1200 - (index * 150),
+  conversions: 1200 - ((index + 1) * 150),
+  conversionRate: index < funnelDefinition.steps.length - 1 ? 87.5 : 100,
+  dropOffCount: 150,
+  dropOffRate: 12.5,
+  averageTimeSpent: 100000,
+  value: 600,
+})),
     additionalMetrics: {}
   };
   const delta = calculatePerformanceDelta(baselineData, comparisonData);
@@ -828,25 +792,24 @@ async function performFunnelComparison()
     statisticalTests,
     insights,
     metadata: {,
-      comparisonId: `comparison-${Date.now()}`,}
-      generatedAt: Date.now(),
+  comparisonId: `comparison-${Date.now()}`}
+},
+  generatedAt: Date.now(),
       configuration,
       dataQuality: {,
-        baselineSampleSize: baselineData.totalEntries,
-        comparisonSampleSize: comparisonData.totalEntries,
-        dataCompleteness: 0.95,
-        outlierCount: 5,
-        confidenceLevel: 1 - configuration.significanceLevel,
-      },
-      executionTime: 1500,
-      cacheHit: false,
-    }
+  baselineSampleSize: baselineData.totalEntries,
+  comparisonSampleSize: comparisonData.totalEntries,
+  dataCompleteness: 0.95,
+  outlierCount: 5,
+  confidenceLevel: 1 - configuration.significanceLevel,
+},
+  executionTime: 1500,
+      cacheHit: false;
   };
-}
-function calculatePerformanceDelta()
-  baseline: FunnelPerformanceData,
-  comparison: FunnelPerformanceData,
-): PerformanceDelta {
+function calculatePerformanceDelta(()
+    baseline: FunnelPerformanceData,
+    comparison: FunnelPerformanceData,
+  ): PerformanceDelta {
   const calculateDelta = (baseValue: number, compValue: number) => {
     const absolute = compValue - baseValue;
     const relative = baseValue > 0 ? (absolute / baseValue) * 100 : 0;
@@ -854,25 +817,22 @@ function calculatePerformanceDelta()
     return { absolute, relative, direction: direction as any };
   };
   return {
-    overallConversionRate: calculateDelta(baseline.overallConversionRate, comparison.overallConversionRate),
-    totalConversions: calculateDelta(baseline.totalConversions, comparison.totalConversions),
-    averageTimeToConvert: calculateDelta(baseline.averageTimeToConvert, comparison.averageTimeToConvert),
-    totalValue: calculateDelta(baseline.totalValue, comparison.totalValue),
-    stepDeltas: baseline.stepPerformance.map(baseStep => {),
-      const compStep = comparison.stepPerformance.find(s => s.stepId === baseStep.stepId);
-      return {
-        stepId: baseStep.stepId,
-        conversionRate: calculateDelta(baseStep.conversionRate, compStep?.conversionRate || 0),
-        dropOffRate: calculateDelta(baseStep.dropOffRate, compStep?.dropOffRate || 0)
-      };
-    })
+  overallConversionRate: calculateDelta(baseline.overallConversionRate, comparison.overallConversionRate),
+  totalConversions: calculateDelta(baseline.totalConversions, comparison.totalConversions),
+  averageTimeToConvert: calculateDelta(baseline.averageTimeToConvert, comparison.averageTimeToConvert),
+  totalValue: calculateDelta(baseline.totalValue, comparison.totalValue),
+  stepDeltas: baseline.stepPerformance.map(baseStep => {,)
+  const compStep = comparison.stepPerformance.find(s => s.stepId === baseStep.stepId);
+  return {
+  stepId: baseStep.stepId,
+  conversionRate: calculateDelta(baseStep.conversionRate, compStep?.conversionRate || 0),
+  dropOffRate: calculateDelta(baseStep.dropOffRate, compStep?.dropOffRate || 0),
+};
+  }
   };
-}
-function performStatisticalTests()
-  baseline: FunnelPerformanceData,
+function performStatisticalTests(baseline: FunnelPerformanceData,)
   comparison: FunnelPerformanceData,
-  configuration: ComparisonConfiguration,
-): StatisticalTestResult[] {
+  configuration: ComparisonConfiguration): StatisticalTestResult {,
   // Simplified statistical test implementation
   return [
     {
@@ -882,52 +842,43 @@ function performStatisticalTests()
       statisticValue: 2.28,
       isSignificant: true,
       confidenceInterval: [0.5, 5.2],
-      effectSize: 0.15,
-    }
-  ];
-}
-function generateComparisonInsights()
-  baseline: FunnelPerformanceData,
+      effectSize: 0.15];
+function generateComparisonInsights(baseline: FunnelPerformanceData,)
   comparison: FunnelPerformanceData,
   delta: PerformanceDelta,
-  statisticalTests: StatisticalTestResult[],
-): ComparisonInsight[] {
-  const insights: ComparisonInsight[] = [];
+  statisticalTests: StatisticalTestResult): ComparisonInsight {,
+  const insights: ComparisonInsight = [];
   // Overall conversion rate insight
   if (delta.overallConversionRate.direction === 'improvement' && Math.abs(delta.overallConversionRate.relative) > 5) {
     insights.push({)
-      type: 'significant_improvement',
+  type: 'significant_improvement',
       severity: 'high',
       title: 'Significant Conversion Rate Improvement',
-      description: `The comparison funnel shows a ${delta.overallConversionRate.relative.toFixed(1)}% relative improvement in conversion rate.`,}
-      metric: 'overall_conversion_rate',
+      description: `The comparison funnel shows a ${delta.overallConversionRate.relative.toFixed(1)}% relative improvement in conversion rate.`}
+},
+  metric: 'overall_conversion_rate',
       evidence: {,
-        statisticalTest: statisticalTests.find(t => t.metric === 'overall_conversion_rate'),
+  statisticalTest: statisticalTests.find(t => t.metric === 'overall_conversion_rate'),
         sampleSizes: { baseline: baseline.totalEntries, comparison: comparison.totalEntries },
         effectSize: 0.15,
-        confidenceLevel: 0.95,
-      },
-      recommendations: [,
+        confidenceLevel: 0.95;
+  },
+  recommendations: [,
         'Consider implementing the comparison funnel configuration as the new standard',
         'Monitor the performance over time to ensure sustained improvement'
       ],
-      priority: 10,
-    });
-  }
+      priority: 10;
+  });
   return insights;
-}
-function generateComparisonVisualizations(result: ComparisonResult): ComparisonVisualization[] {
+function generateComparisonVisualizations(result: ComparisonResult): ComparisonVisualization {
   return [
     {
       type: 'funnel_chart',
       title: 'Funnel Performance Comparison',
       data: { baseline: result.baseline, comparison: result.comparison },
       configuration: { showDelta: true }
-    }
   ];
-}
 function generateReportSummary(result: ComparisonResult): string {
   return `Funnel comparison completed with ${result.insights.length} key insights identified.`;}
-}
 
 export default FunnelComparison;

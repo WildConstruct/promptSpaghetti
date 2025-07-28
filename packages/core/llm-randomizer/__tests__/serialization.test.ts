@@ -8,8 +8,8 @@ describe('Epic 12 - LLM Serialization Format', () => {
   describe('GraphSerializer', () => {
     describe('Basic Serialization', () => {
       test('should serialize simple weighted choice graph', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             {
               id: 'choice1',
               type: 'WeightedChoice',
@@ -17,14 +17,12 @@ describe('Epic 12 - LLM Serialization Format', () => {
                 { value: 'Hello', weight: 0.6 },
                 { value: 'Hi', weight: 0.4 }
               ]
-            },
+  }
             {
-              id: 'output1',
-              type: 'Output',
-              inputs: ['choice1'],
-            }
-          ]
-        };
+  id: 'output1',
+  type: 'Output',
+  inputs: ['choice1']];
+  };
         const result = GraphSerializer.serialize(graph);
         expect(result).toContain('version: 1.0.0');
         expect(result).toContain('---NODES---');
@@ -35,17 +33,17 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('---END---');
       });
       test('should include metadata when provided', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             { id: 'test', type: 'Output' }
           ]
         };
-        const metadata: SerializationMetadata = {
-          name: 'Test Graph',
-          description: 'A test graph',
-          author: 'test-agent',
-          created: '2025-07-17T12:00:00Z',
-        };
+        const metadata: SerializationMetadata = {,
+  name: 'Test Graph',
+  description: 'A test graph',
+  author: 'test-agent',
+  created: '2025-07-17T12:00:00Z',
+};
         const result = GraphSerializer.serialize(graph, metadata);
         expect(result).toContain('name: "Test Graph"');
         expect(result).toContain('description: "A test graph"');
@@ -53,20 +51,19 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('created: 2025-07-17T12:00:00Z');
       });
       test('should include checksum by default', () => {
-        const graph: Graph = {
-          nodes: [{ id: 'test', type: 'Output' }]
+        const graph: Graph = {,
+  nodes: [{ id: 'test', type: 'Output' }]
         };
         const result = GraphSerializer.serialize(graph);
         expect(result).toMatch(/checksum: [a-f0-9]{16}/);
       });
       test('should support compact format', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             {
               id: 'test',
               type: 'WeightedChoice',
               choices: [{ value: 'test', weight: 1 }]
-            }
           ]
         };
         const result = GraphSerializer.serialize(graph, undefined, { compactFormat: true });
@@ -77,20 +74,17 @@ describe('Epic 12 - LLM Serialization Format', () => {
     });
     describe('Advanced Node Serialization', () => {
       test('should serialize WeightedAdvanced node', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             {
               id: 'advanced1',
               type: 'WeightedAdvanced',
               choices: [{ value: 'Option A', weight: 2.5 }],
               distributionConfig: {,
-                type: 'exponential',
+  type: 'exponential',
                 parameters: { decay: 0.5 },
-                normalize: true,
-              }
-            }
-          ]
-        };
+                normalize: true];
+  };
         const result = GraphSerializer.serialize(graph);
         expect(result).toContain('type: WeightedAdvanced');
         expect(result).toContain('choices:');
@@ -98,26 +92,21 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('type: "exponential"');
       });
       test('should serialize Conditional node', () => {
-        const graph: Graph = {
-          nodes: [,
-            {
-              id: 'conditional1',
-              type: 'Conditional',
-              branches: [,
-                {
-                  condition: 'variable == "test"',
-                  output: 'Match',
-                  label: 'test_check',
-                }
-              ],
-              defaultOutput: 'No match',
-              conditionalConfig: {,
-                allowVariableAccess: true,
-                strictMode: false,
-              }
-            }
-          ]
-        };
+  const graph: Graph = {,
+  nodes: [,
+  {
+  id: 'conditional1',
+  type: 'Conditional',
+  branches: [,
+  {
+  condition: 'variable == "test"',
+  output: 'Match',
+  label: 'test_check'],
+  defaultOutput: 'No match',
+  conditionalConfig: {,
+  allowVariableAccess: true,
+  strictMode: false];
+  };
         const result = GraphSerializer.serialize(graph);
         expect(result).toContain('type: Conditional');
         expect(result).toContain('branches:');
@@ -125,43 +114,39 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('config:');
       });
       test('should serialize Sequential node', () => {
-        const graph: Graph = {
-          nodes: [,
-            {
-              id: 'seq1',
-              type: 'Sequential',
-              sequence: ['First', 'Second', 'Third'],
-              pattern: {,
-                type: 'cyclical',
-                config: {,
-                  allowRepeats: false,
-                }
-              }
-            }
-          ]
-        };
+  const graph: Graph = {,
+  nodes: [,
+  {
+  id: 'seq1',
+  type: 'Sequential',
+  sequence: ['First', 'Second', 'Third'],
+  pattern: {,
+  type: 'cyclical',
+  config: {,
+  allowRepeats: false];
+  };
         const result = GraphSerializer.serialize(graph);
         expect(result).toContain('type: Sequential');
         expect(result).toContain('sequence: ["First", "Second", "Third"]');
         expect(result).toContain('pattern:');
       });
       test('should serialize Markov node', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             {
               id: 'markov1',
               type: 'Markov',
               states: {,
-                start: {,
-                  transitions: { middle: 0.7, end: 0.3 }
-                },
-                middle: {,
-                  transitions: { end: 1.0 }
-                },
-                end: {}
-              },
-              initialState: 'start',
-            } as any // Type assertion for test
+  start: {;
+  transitions: { middle: 0.7, end: 0.3 }
+  },
+  middle: {,
+  transitions: { end: 1.0 }
+  },
+  end: {}
+  },
+  initialState: 'start';
+  } as any // Type assertion for test
           ]
         };
         const result = GraphSerializer.serialize(graph);
@@ -170,16 +155,16 @@ describe('Epic 12 - LLM Serialization Format', () => {
         expect(result).toContain('initial: "start"');
       });
       test('should serialize PythonTransform node', () => {
-        const graph: Graph = {
-          nodes: [,
-            {
-              id: 'python1',
-              type: 'PythonTransform',
-              code: 'def transform(input_data):\n    return input_data.upper()',
-              timeout: 30,
-              memoryLimit: '512MB',
-              allowedModules: ['re', 'json']
-            } as any // Type assertion for test
+  const graph: Graph = {,
+  nodes: [,
+  {
+  id: 'python1',
+  type: 'PythonTransform',
+  code: 'def transform(input_data):\n    return input_data.upper()',
+  timeout: 30,
+  memoryLimit: '512MB',
+  allowedModules: ['re', 'json'],
+} as any // Type assertion for test
           ]
         };
         const result = GraphSerializer.serialize(graph);
@@ -196,8 +181,8 @@ describe('Epic 12 - LLM Serialization Format', () => {
         }).toThrow('Graph must contain at least one node');
       });
       test('should throw on duplicate node IDs', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             { id: 'duplicate', type: 'Output' },
             { id: 'duplicate', type: 'Concat' }
           ]
@@ -207,22 +192,20 @@ describe('Epic 12 - LLM Serialization Format', () => {
         }).toThrow('Graph contains duplicate node IDs');
       });
       test('should throw on invalid node references', () => {
-        const graph: Graph = {
-          nodes: [,
-            {
-              id: 'node1',
-              type: 'Concat',
-              inputs: ['nonexistent'],
-            }
-          ]
-        };
+  const graph: Graph = {,
+  nodes: [,
+  {
+  id: 'node1',
+  type: 'Concat',
+  inputs: ['nonexistent']];
+  };
         expect(() => {
           GraphSerializer.serialize(graph);
         }).toThrow('references non-existent input');
       });
       test('should detect cycles', () => {
-        const graph: Graph = {
-          nodes: [,
+        const graph: Graph = {,
+  nodes: [,
             { id: 'node1', type: 'Concat', inputs: ['node2'] },
             { id: 'node2', type: 'Concat', inputs: ['node1'] }
           ]
@@ -234,199 +217,199 @@ describe('Epic 12 - LLM Serialization Format', () => {
     });
   });
   describe('FormatValidator', () => {
-    describe('Valid Format Validation', () => {
-      test('should validate minimal valid format', () => {
-        const content = `version: 1.0.0;
----NODES---
-test_node:
+  describe('Valid Format Validation', () => {
+  test('should validate minimal valid format', () => {
+  const content = `version: 1.0.0;
+  ---NODES---
+  test_node:,
   type: Output,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(true);
-        expect(result.errors).toHaveLength(0);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(true);
+  expect(result.errors).toHaveLength(0);
+});
       test('should validate complex graph', () => {
-        const content = `version: 1.0.0;
-checksum: abc123,
-metadata:
+  const content = `version: 1.0.0;,;
+  checksum: abc123,
+  metadata:,
   name: "Test Graph",
   author: "claude",
----NODES---
-choice1:
+  ---NODES---
+  choice1:,
   type: WeightedChoice,
-  props:
-    choices:
-      - value: "Hello"
-        weight: 0.6,
-      - value: "Hi"
-        weight: 0.4,
-concat1:
+  props:,
+  choices:,
+  - value: "Hello",
+  weight: 0.6,
+  - value: "Hi",
+  weight: 0.4,
+  concat1:,
   type: Concat,
-  inputs: ["choice1", "name_var"]
-name_var:
+  inputs: ["choice1", "name_var"],
+  name_var:,
   type: GetVariable,
-  props:
-    key: "user_name",
-output1:
+  props:,
+  key: "user_name",
+  output1:,
   type: Output,
   inputs: ["concat1"],
----EDGES---
-choice1 -> concat1
-name_var -> concat1
-concat1 -> output1
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(true);
-        expect(result.errors.filter(e => e.severity === 'error')).toHaveLength(0);
-      });
+  ---EDGES---
+  choice1 -> concat1
+  name_var -> concat1
+  concat1 -> output1
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(true);
+  expect(result.errors.filter(e => e.severity === 'error')).toHaveLength(0);
+});
     });
     describe('Error Detection', () => {
-      test('should detect missing version', () => {
-        const content = `---NODES---;
-test:
+  test('should detect missing version', () => {
+  const content = `---NODES---;
+  test:,
   type: Output,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('Missing required version'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('Missing required version'))).toBe(true);
+});
       test('should detect unsupported version', () => {
-        const content = `version: 2.0.0;
----NODES---
-test:
+  const content = `version: 2.0.0;
+  ---NODES---
+  test:,
   type: Output,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('Unsupported version'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('Unsupported version'))).toBe(true);
+});
       test('should detect invalid node type', () => {
-        const content = `version: 1.0.0;
----NODES---
-test:
+  const content = `version: 1.0.0;
+  ---NODES---
+  test:,
   type: InvalidType,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('invalid type'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('invalid type'))).toBe(true);
+});
       test('should detect missing required properties', () => {
-        const content = `version: 1.0.0;
----NODES---
-choice1:
+  const content = `version: 1.0.0;
+  ---NODES---
+  choice1:,
   type: WeightedChoice,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('missing required choices'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('missing required choices'))).toBe(true);
+});
       test('should detect cycles', () => {
-        const content = `version: 1.0.0;
----NODES---
-node1:
+  const content = `version: 1.0.0;
+  ---NODES---
+  node1:,
   type: Concat,
   inputs: ["node2"],
-node2:
+  node2:,
   type: Concat,
   inputs: ["node1"],
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('Cycle detected'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('Cycle detected'))).toBe(true);
+});
       test('should detect invalid node references', () => {
-        const content = `version: 1.0.0;
----NODES---
-node1:
+  const content = `version: 1.0.0;
+  ---NODES---
+  node1:,
   type: Concat,
   inputs: ["nonexistent"],
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('non-existent input'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('non-existent input'))).toBe(true);
+});
       test('should detect duplicate node IDs', () => {
-        const content = `version: 1.0.0;
----NODES---
-duplicate:
+  const content = `version: 1.0.0;
+  ---NODES---
+  duplicate:,
   type: Output,
-duplicate:
+  duplicate:,
   type: Concat,
----END---`;
-        const result = validateFormat(content);
-        expect(result.isValid).toBe(false);
-        expect(result.errors.some(e => e.message.includes('Duplicate node ID'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.isValid).toBe(false);
+  expect(result.errors.some(e => e.message.includes('Duplicate node ID'))).toBe(true);
+});
     });
     describe('Warning Generation', () => {
-      test('should warn about isolated nodes', () => {
-        const content = `version: 1.0.0;
----NODES---
-connected:
+  test('should warn about isolated nodes', () => {
+  const content = `version: 1.0.0;
+  ---NODES---
+  connected:,
   type: Output,
   inputs: ["source"],
-source:
+  source:,
   type: WeightedChoice,
-  props:
-    choices:
-      - value: "test"
-        weight: 1,
-isolated:
+  props:,
+  choices:,
+  - value: "test",
+  weight: 1,
+  isolated:,
   type: Concat,
----END---`;
-        const result = validateFormat(content);
-        expect(result.warnings.some(w => w.message.includes('isolated'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.warnings.some(w => w.message.includes('isolated'))).toBe(true);
+});
       test('should warn about missing output nodes', () => {
-        const content = `version: 1.0.0;
----NODES---
-node1:
+  const content = `version: 1.0.0;
+  ---NODES---
+  node1:,
   type: Concat,
----END---`;
-        const result = validateFormat(content);
-        expect(result.warnings.some(w => w.message.includes('no Output nodes'))).toBe(true);
-      });
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.warnings.some(w => w.message.includes('no Output nodes'))).toBe(true);
+});
       test('should warn about unreachable nodes', () => {
-        const content = `version: 1.0.0;
----NODES---
-root:
+  const content = `version: 1.0.0;
+  ---NODES---
+  root:,
   type: WeightedChoice,
-  props:
-    choices:
-      - value: "test"
-        weight: 1,
-connected:
+  props:,
+  choices:,
+  - value: "test",
+  weight: 1,
+  connected:,
   type: Output,
   inputs: ["root"],
-unreachable:
+  unreachable:,
   type: Concat,
   inputs: ["also_unreachable"],
-also_unreachable:
+  also_unreachable:,
   type: GetVariable,
-  props:
-    key: "test",
----END---`;
-        const result = validateFormat(content);
-        expect(result.warnings.some(w => w.message.includes('unreachable'))).toBe(true);
-      });
+  props:,
+  key: "test",
+  ---END---`;
+  const result = validateFormat(content);
+  expect(result.warnings.some(w => w.message.includes('unreachable'))).toBe(true);
+});
     });
     describe('Utility Functions', () => {
-      test('isValidFormat should return boolean', () => {
-        const validContent = `version: 1.0.0;
----NODES---
-test:
+  test('isValidFormat should return boolean', () => {
+  const validContent = `version: 1.0.0;
+  ---NODES---
+  test:,
   type: Output,
----END---`;
-        const invalidContent = 'invalid format';
-        expect(isValidFormat(validContent)).toBe(true);
-        expect(isValidFormat(invalidContent)).toBe(false);
-      });
+  ---END---`;
+  const invalidContent = 'invalid format';
+  expect(isValidFormat(validContent)).toBe(true);
+  expect(isValidFormat(invalidContent)).toBe(false);
+});
     });
   });
   describe('Round-trip Conversion', () => {
     test('should serialize and validate complex graph', () => {
-      const graph: Graph = {
-        nodes: [,
+      const graph: Graph = {,
+  nodes: [,
           {
             id: 'greeting_choice',
             type: 'WeightedChoice',
@@ -435,29 +418,27 @@ test:
               { value: 'Hi', weight: 0.3 },
               { value: 'Greetings', weight: 0.3 }
             ]
-          },
+  }
           {
-            id: 'name_var',
-            type: 'GetVariable',
-            key: 'user_name',
-          },
+  id: 'name_var',
+  type: 'GetVariable',
+  key: 'user_name',
+}
           {
-            id: 'greeting_concat',
-            type: 'Concat',
-            inputs: ['greeting_choice', 'name_var']
-          },
+  id: 'greeting_concat',
+  type: 'Concat',
+  inputs: ['greeting_choice', 'name_var'],
+}
           {
-            id: 'final_output',
-            type: 'Output',
-            inputs: ['greeting_concat'],
-          }
-        ]
-      };
-      const metadata: SerializationMetadata = {
-        name: 'Greeting Generator',
-        description: 'Generates personalized greetings',
-        author: 'claude-agent',
-      };
+  id: 'final_output',
+  type: 'Output',
+  inputs: ['greeting_concat']];
+  };
+      const metadata: SerializationMetadata = {,
+  name: 'Greeting Generator',
+  description: 'Generates personalized greetings',
+  author: 'claude-agent',
+};
       const serialized = GraphSerializer.serialize(graph, metadata);
       const validation = validateFormat(serialized);
       expect(validation.isValid).toBe(true);

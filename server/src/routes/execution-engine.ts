@@ -310,7 +310,7 @@ export async function executionEngineRoutes(
           startTime: result.startTime,
           stepsTotal: executionRequest.operation.steps.length,
           trackingUrl: `/api/executions/${result.executionId}`
-        },
+  }
         message: 'Execution started successfully'
       });
 
@@ -379,13 +379,13 @@ export async function executionEngineRoutes(
           completedSteps: execution.stepResults.size,
           totalSteps: execution.request.operation.steps.length,
           percentage: (execution.stepResults.size / execution.request.operation.steps.length) * 100
-        },
+  }
         startTime: execution.startTime,
         operation: {
           type: execution.request.operation.type,
           name: execution.request.operation.name,
           version: execution.request.operation.version
-        },
+  }
         requestedBy: execution.request.requestedBy,
         priority: execution.request.priority
       };
@@ -666,11 +666,11 @@ export async function executionEngineRoutes(
           cpu: 0,
           memory: 0,
           disk: 0
-        },
+  }
         dependencies: {
           available: [],
           unavailable: []
-        },
+  }
         permissions: {
           granted: [],
           missing: []
@@ -718,7 +718,7 @@ export async function executionEngineRoutes(
           loggingService: 'healthy',
           resourcePool: 'healthy',
           stepHandlers: 'healthy'
-        },
+  }
         metrics: {
           activeExecutions: 0,
           queuedExecutions: 0,
@@ -730,7 +730,7 @@ export async function executionEngineRoutes(
             memory: 45.2,
             disk: 15.8
           }
-        },
+  }
         capabilities: {
           maxConcurrentExecutions: 100,
           supportedOperationTypes: Object.values(ExecutionOperationType),

@@ -134,7 +134,7 @@ describe('Expiration Management System', () => {
           policy.id,
           100000, // exceeds maxTtl of 86400
           mockUser.id
-        )
+
       ).rejects.toThrow('exceeds maximum allowed TTL');
 
       // Test below min TTL
@@ -145,7 +145,7 @@ describe('Expiration Management System', () => {
           policy.id,
           200, // below minTtl of 300
           mockUser.id
-        )
+
       ).rejects.toThrow('below minimum allowed TTL');
     });
 
@@ -364,7 +364,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: mockPolicy
       });
 
@@ -384,7 +384,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/rules',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           resourceId: 'api-test-resource',
           resourceType: 'jwt_token',
@@ -446,7 +446,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/renew/jwt_token/renew-test-resource',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           requestedTtl: 7200,
           reason: 'API test renewal'
@@ -475,7 +475,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/revoke/jwt_token/revoke-test-resource',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           reason: 'API test revocation'
         }
@@ -572,7 +572,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(unauthorizedUser)}`
-        },
+  }
         payload: mockPolicy
       });
 
@@ -585,7 +585,7 @@ describe('Expiration Management System', () => {
         url: '/api/expiration/policies',
         headers: {
           'Authorization': `Bearer ${generateTestToken(mockUser)}`
-        },
+  }
         payload: {
           name: '', // Invalid empty name
           resourceType: 'invalid_type', // Invalid resource type
@@ -619,7 +619,7 @@ describe('Expiration Management System', () => {
           policy.id,
           3600,
           mockUser.id
-        )
+
       ];
 
       const results = await Promise.allSettled(promises);
@@ -653,7 +653,7 @@ describe('Expiration Management System', () => {
           'nonexistent-policy',
           3600,
           mockUser.id
-        )
+
       ).rejects.toThrow('not found');
     });
 

@@ -40,22 +40,20 @@ import {
 
 export interface ExperimentBuilderProps {
   experiment?: Experiment;
-  onSave: (experiment: Partial<Experiment>) => Promise<void>;
+  onSave: (experiment: Partial<Experiment>) => Promise<void>;,
   onPreview: (variant: ExperimentVariant) => Promise<{ cost: number; tokens: number; latency: number }>;
-  onStart: (experimentId: string) => Promise<void>;
+  onStart: (experimentId: string) => Promise<void>;,
   onPause: (experimentId: string) => Promise<void>;
   className?: string;
-}
 interface BuilderState {
-  experiment: Partial<Experiment>;
+  experiment: Partial<Experiment>;,
   activeTab: string;
-  validationErrors: string[];
+  validationErrors: string;,
   previewResults: Record<string, { cost: number; tokens: number; latency: number }>;
-  saving: boolean;
+  saving: boolean;,
   estimatedSampleSize: number;
   estimatedDuration: number;
 }
-
 export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   experiment,
   onSave,
@@ -65,8 +63,8 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
   className = ''
 }) => {
   const [state, setState] = useState<BuilderState>({)
-    experiment: experiment || {,
-      name: '',
+  experiment: experiment || {,
+  name: '',
       type: 'prompt' as ExperimentType,
       hypothesis: '',
       description: '',
@@ -78,57 +76,55 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
       metrics: [],
       status: 'draft' as ExperimentStatus,
       schedule: {},
-      tags: [],
-    },
-    activeTab: 'setup',
+      tags: [];
+  },
+  activeTab: 'setup',
     validationErrors: [],
     previewResults: {},
     saving: false,
     estimatedSampleSize: 0,
-    estimatedDuration: 0,
+    estimatedDuration: 0;
   });
   /**
    * Update experiment field
    */
   const updateExperiment = useCallback((field: string, value: unknown) => {
-    setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        [field]: value
-      }
-    }));
+  setState(prev => ({)
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  [field]: value,
+}));
   }, []);
   /**
    * Add a new variant
    */
   const addVariant = useCallback(() => {
     const newVariantId = `variant-${Date.now()}`;}
-    const newVariant: ExperimentVariant = {
-      id: newVariantId,
-      name: `Variant ${state.experiment.variants?.length || 1}`,}
-      description: '',
-    };
+    const newVariant: ExperimentVariant = {,
+  id: newVariantId,
+      name: `Variant ${state.experiment.variants?.length || 1}`}
+},
+  description: '';
+  };
     const updatedVariants = [...(state.experiment.variants || []), newVariant];
     const updatedAllocation = { ...state.experiment.trafficAllocation };
     // Redistribute traffic equally
     const equalShare = Math.floor(100 / updatedVariants.length);
     updatedVariants.forEach(variant => {)
-      updatedAllocation[variant.id] = equalShare;
+  updatedAllocation[variant.id] = equalShare;
     });
     // Handle remainder
     const remainder = 100 - (equalShare * updatedVariants.length);
     if (remainder > 0) {
-      updatedAllocation[updatedVariants[0].id] += remainder;
-    }
-    setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        variants: updatedVariants,
-        trafficAllocation: updatedAllocation,
-      }
-    }));
+  updatedAllocation[updatedVariants[0].id] += remainder;
+  setState(prev => ({)
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  variants: updatedVariants,
+  trafficAllocation: updatedAllocation,
+}));
   }, [state.experiment.variants, state.experiment.trafficAllocation]);
   /**
    * Remove a variant
@@ -141,21 +137,18 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
     if (updatedVariants.length > 0) {
       const equalShare = Math.floor(100 / updatedVariants.length);
       updatedVariants.forEach(variant => {)
-        updatedAllocation[variant.id] = equalShare;
+  updatedAllocation[variant.id] = equalShare;
       });
       const remainder = 100 - (equalShare * updatedVariants.length);
       if (remainder > 0) {
-        updatedAllocation[updatedVariants[0].id] += remainder;
-      }
-    }
-    setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        variants: updatedVariants,
-        trafficAllocation: updatedAllocation,
-      }
-    }));
+  updatedAllocation[updatedVariants[0].id] += remainder;
+  setState(prev => ({)
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  variants: updatedVariants,
+  trafficAllocation: updatedAllocation,
+}));
   }, [state.experiment.variants, state.experiment.trafficAllocation]);
   /**
    * Update variant
@@ -167,49 +160,47 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
         : variant
     ) || [];
     setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        variants: updatedVariants,
-      }
-    }));
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  variants: updatedVariants,
+}));
   }, [state.experiment.variants]);
   /**
    * Update traffic allocation
    */
   const updateAllocation = useCallback((variantId: string, percentage: number) => {
-    const updatedAllocation = {
-      ...state.experiment.trafficAllocation,
-      [variantId]: percentage
-    };
+  const updatedAllocation = {
+  ...state.experiment.trafficAllocation,
+  [variantId]: percentage,
+};
     setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        trafficAllocation: updatedAllocation,
-      }
-    }));
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  trafficAllocation: updatedAllocation,
+}));
   }, [state.experiment.trafficAllocation]);
   /**
    * Add metric
    */
   const addMetric = useCallback(() => {
-    const newMetric: ExperimentMetric = {
-      id: `metric-${Date.now()}`,}
-      name: '',
+    const newMetric: ExperimentMetric = {,
+  id: `metric-${Date.now()}`}
+},
+  name: '',
       type: 'conversion',
       isPrimary: state.experiment.metrics?.length === 0,
       isGuardrail: false,
-      expectedDirection: 'increase',
-    };
+      expectedDirection: 'increase';
+  };
     const updatedMetrics = [...(state.experiment.metrics || []), newMetric];
     setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        metrics: updatedMetrics,
-      }
-    }));
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  metrics: updatedMetrics,
+}));
   }, [state.experiment.metrics]);
   /**
    * Update metric
@@ -221,62 +212,51 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
         : metric
     ) || [];
     setState(prev => ({)
-      ...prev,
-      experiment: {,
-        ...prev.experiment,
-        metrics: updatedMetrics,
-      }
-    }));
+  ...prev,
+  experiment: {,
+  ...prev.experiment,
+  metrics: updatedMetrics,
+}));
   }, [state.experiment.metrics]);
   /**
    * Preview variant
    */
   const previewVariant = useCallback(async (variant: ExperimentVariant) => {
-    try {
-      const result = await onPreview(variant);
-      setState(prev => ({)
-        ...prev,
-        previewResults: {,
-          ...prev.previewResults,
-          [variant.id]: result
-        }
-      }));
+  try {
+  const result = await onPreview(variant);
+  setState(prev => ({)
+  ...prev,
+  previewResults: {,
+  ...prev.previewResults,
+  [variant.id]: result,
+}));
     } catch (error) {
-      console.error('Preview failed:', error);
-    }
-  }, [onPreview]);
+  console.error('Preview failed:', error);
+}, [onPreview]);
   /**
    * Validate experiment
    */
   const validateExperiment = useCallback(() => {
-    const errors: string[] = [];
+    const errors: string = [];
     if (!state.experiment.name?.trim()) {
       errors.push('Experiment name is required');
-    }
     if (!state.experiment.hypothesis?.trim()) {
       errors.push('Hypothesis is required');
-    }
     if (!state.experiment.variants || state.experiment.variants.length < 2) {
       errors.push('At least 2 variants are required');
-    }
     if (state.experiment.variants && state.experiment.variants.length > 12) {
       errors.push('Maximum 12 variants allowed');
-    }
     // Validate traffic allocation
     if (state.experiment.trafficAllocation) {
       const total = Object.values(state.experiment.trafficAllocation).reduce((sum, pct) => sum + pct, 0);
       if (Math.abs(total - 100) > 0.1) {
         errors.push('Traffic allocation must sum to 100%');
-      }
-    }
     // Validate metrics
     if (!state.experiment.metrics || state.experiment.metrics.length === 0) {
       errors.push('At least one success metric is required');
-    }
     const primaryMetrics = state.experiment.metrics?.filter(m => m.isPrimary) || [];
     if (primaryMetrics.length !== 1) {
       errors.push('Exactly one primary metric is required');
-    }
     setState(prev => ({ ...prev, validationErrors: errors }));
     return errors.length === 0;
   }, [state.experiment]);
@@ -289,10 +269,9 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
     try {
       await onSave(state.experiment);
     } catch (error) {
-      console.error('Save failed:', error);
-    } finally {
+  console.error('Save failed:', error);
+} finally {
       setState(prev => ({ ...prev, saving: false }));
-    }
   }, [state.experiment, validateExperiment, onSave]);
   /**
    * Start experiment
@@ -302,34 +281,32 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
     try {
       await onStart(state.experiment.id);
       setState(prev => ({)
-        ...prev,
+  ...prev,
         experiment: { ...prev.experiment, status: 'running' as ExperimentStatus }
       }));
     } catch (error) {
-      console.error('Start failed:', error);
-    }
-  }, [state.experiment, validateExperiment, onStart]);
+  console.error('Start failed:', error);
+}, [state.experiment, validateExperiment, onStart]);
   /**
    * Calculate sample size estimation (simplified)
    */
   useEffect(() => {
-    const primaryMetric = state.experiment.metrics?.find(m => m.isPrimary);
-    if (primaryMetric && primaryMetric.minimumDetectableEffect) {
-      // Simplified sample size calculation
-      const baselineRate = 0.1; // 10% baseline assumption;
-      const mde = primaryMetric.minimumDetectableEffect;
-      // Basic formula for proportions
-      const sampleSize = Math.ceil(;);
-        2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / Math.pow(mde, 2)
-      );
-      setState(prev => ({)
-        ...prev,
-        estimatedSampleSize: sampleSize,
-        estimatedDuration: Math.ceil(sampleSize / 100) // Assume 100 users/hour,
-      }));
-    }
+  const primaryMetric = state.experiment.metrics?.find(m => m.isPrimary);
+  if (primaryMetric && primaryMetric.minimumDetectableEffect) {
+  // Simplified sample size calculation
+  const baselineRate = 0.1; // 10% baseline assumption;
+  const mde = primaryMetric.minimumDetectableEffect;
+  // Basic formula for proportions
+  const sampleSize = Math.ceil(;);
+  2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / Math.pow(mde, 2)
+  );
+  setState(prev => ({)
+  ...prev,
+  estimatedSampleSize: sampleSize,
+  estimatedDuration: Math.ceil(sampleSize / 100) // Assume 100 users/hour,
+}));
   }, [state.experiment.metrics]);
-  return ();
+  return;
     <div className={`experiment-builder ${className}`}>}
       {/* Header */}
       <div className="builder-header">
@@ -579,7 +556,7 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
               <div className="space-y-3">
                 {state.experiment.variants?.map((variant) => {
                   const percentage = state.experiment.trafficAllocation?.[variant.id] || 0;
-                  return ();
+                  return;
                     <div key={variant.id} className="flex items-center space-x-3">
                       <div className="w-24 text-sm font-medium">{variant.name}:</div>
                       <Progress value={percentage} className="flex-1" />
@@ -707,9 +684,9 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     type="datetime-local"
                     value={state.experiment.schedule?.startAt?.toISOString().slice(0, 16) || ''}
                     onChange={(e) => updateExperiment('schedule', {)
-                      ...state.experiment.schedule,
-                      startAt: e.target.value ? new Date(e.target.value) : undefined,
-                    })}
+  ...state.experiment.schedule,
+  startAt: e.target.value ? new Date(e.target.value) : undefined,
+})}
                   />
                 </div>
                 <div>
@@ -718,9 +695,9 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     type="datetime-local"
                     value={state.experiment.schedule?.endAt?.toISOString().slice(0, 16) || ''}
                     onChange={(e) => updateExperiment('schedule', {)
-                      ...state.experiment.schedule,
-                      endAt: e.target.value ? new Date(e.target.value) : undefined,
-                    })}
+  ...state.experiment.schedule,
+  endAt: e.target.value ? new Date(e.target.value) : undefined,
+})}
                   />
                 </div>
               </div>
@@ -744,12 +721,11 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     min="0"
                     value={state.experiment.schedule?.autoStop?.minSampleSize || ''}
                     onChange={(e) => updateExperiment('schedule', {)
-                      ...state.experiment.schedule,
-                      autoStop: {,
-                        ...state.experiment.schedule?.autoStop,
-                        minSampleSize: parseInt(e.target.value) || undefined,
-                      }
-                    })}
+  ...state.experiment.schedule,
+  autoStop: {,
+  ...state.experiment.schedule?.autoStop,
+  minSampleSize: parseInt(e.target.value) || undefined,
+})}
                     placeholder="1000"
                   />
                 </div>
@@ -764,12 +740,11 @@ export const ExperimentBuilder: React.FC<ExperimentBuilderProps> = ({)
                     step="0.01"
                     value={state.experiment.schedule?.autoStop?.maxPValue || ''}
                     onChange={(e) => updateExperiment('schedule', {)
-                      ...state.experiment.schedule,
-                      autoStop: {,
-                        ...state.experiment.schedule?.autoStop,
-                        maxPValue: parseFloat(e.target.value) || undefined,
-                      }
-                    })}
+  ...state.experiment.schedule,
+  autoStop: {,
+  ...state.experiment.schedule?.autoStop,
+  maxPValue: parseFloat(e.target.value) || undefined,
+})}
                     placeholder="0.05"
                   />
                 </div>

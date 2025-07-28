@@ -12,6 +12,7 @@ import {
   ClassificationRule,
   ValidationResult
 } from '../../types/DataClassification';
+
 interface DataElement {
     id: string;
     name: string;
@@ -19,14 +20,15 @@ interface DataElement {
     content?: string;
     metadata?: Record<string, any>;
     existingClassification?: DataClassification;
-}
+
+
 interface BulkClassificationToolsProps {
     dataElements: DataElement[];
     classificationRules?: ClassificationRule[];
     onBulkClassification: (classifications: DataClassification[]) => void;
     onValidationResults?: (results: ValidationResult[]) => void;
     context?: ClassificationContext;
-}
+
 export declare const BulkClassificationTools: React.FC<BulkClassificationToolsProps>;
 export default BulkClassificationTools;
 //# sourceMappingURL=BulkClassificationTools.d.ts.map

@@ -72,13 +72,16 @@ type ValidationResult = z.infer<typeof ValidationResultSchema>;
 type ClinicalWorkflow = z.infer<typeof ClinicalWorkflowSchema>;
 type WorkflowTemplate = z.infer<typeof WorkflowTemplateSchema>;
 
+}
 interface MedicalTextProcessingOptions {
   deidentify?: boolean;
   mapTerminology?: boolean;
   extractEntities?: boolean;
   validateCodes?: boolean;
 }
+}
 
+}
 interface ProcessedMedicalText {
   original: string;
   deidentified?: string;
@@ -86,12 +89,16 @@ interface ProcessedMedicalText {
   terminologyMappings: TerminologyMapping[];
   validationResults: ValidationResult[];
 }
+}
 
+}
 interface HealthcareDataValidationOptions {
   version?: string;
   strict?: boolean;
 }
+}
 
+}
 interface HealthcareDataValidationResult {
   isValid: boolean;
   errors: string[];
@@ -99,10 +106,13 @@ interface HealthcareDataValidationResult {
   validatedFields: string[];
   detectedVersion?: string;
 }
+}
 
+}
 interface ClinicalWorkflowOptions {
   templateId?: string;
   customizations?: Record<string, unknown>;
+}
 }
 
 export class HealthcareService {
@@ -123,6 +133,7 @@ export class HealthcareService {
     text: string, 
     options: MedicalTextProcessingOptions = {}
   ): Promise<ProcessedMedicalText> {
+
     const {
       deidentify = true,
       mapTerminology = true,
@@ -184,6 +195,7 @@ export class HealthcareService {
     format: 'fhir' | 'hl7v2' | 'hl7v3' | 'cda' | 'dicom',
     options: HealthcareDataValidationOptions = {}
   ): Promise<HealthcareDataValidationResult> {
+
     const { version, strict = true } = options;
     const _____errors: string[] = [];
     const warnings: string[] = [];
@@ -222,6 +234,7 @@ export class HealthcareService {
     patientData: Record<string, unknown>,
     options: ClinicalWorkflowOptions = {}
   ): Promise<ClinicalWorkflow> {
+
     const { templateId, customizations = {} } = options;
 
     try {
@@ -275,6 +288,7 @@ export class HealthcareService {
    * Get available workflow templates
    */
   async getWorkflowTemplates(): Promise<WorkflowTemplate[]> {
+
     return this.workflowTemplates;
   }
 
@@ -309,16 +323,19 @@ export class HealthcareService {
   // Private helper methods
 
   private async extractMedicalEntities(text: string): Promise<MedicalEntity[]> {
+
     // Mock implementation - in production would use NLP models like spaCy or Transformers
     const entities: MedicalEntity[] = [];
     
     // Simple regex-based entity extraction for demo purposes
     const patterns = [
       { pattern: /\b\d{3}-\d{2}-\d{4}\b/g, label: 'SSN' as const },
-      { pattern: /\b\d{10,}\b/g, label: 'MEDICAL_RECORD_NUMBER' as const },
+      { pattern: /\b\d{10
+}\b/g, label: 'MEDICAL_RECORD_NUMBER' as const },
       { pattern: /\b\d{1,2}\/\d{1,2}\/\d{4}\b/g, label: 'DATE' as const },
       { pattern: /\b\d{3}-\d{3}-\d{4}\b/g, label: 'PHONE' as const },
-      { pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, label: 'EMAIL' as const }
+      { pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
+}\b/g, label: 'EMAIL' as const }
     ];
 
     patterns.forEach(({ pattern, label }) => {
@@ -338,6 +355,7 @@ export class HealthcareService {
   }
 
   private async mapMedicalTerminology(text: string): Promise<TerminologyMapping[]> {
+
     // Mock terminology mapping - would integrate with actual UMLS/LOINC services
     const commonMedicalTerms = [
       { term: 'hypertension', concept: 'C0020538', vocabulary: 'umls' as const },
@@ -364,6 +382,7 @@ export class HealthcareService {
   }
 
   private async validateMedicalCodes(text: string): Promise<ValidationResult[]> {
+
     // Mock medical code validation
     const results: ValidationResult[] = [];
     
@@ -389,6 +408,7 @@ export class HealthcareService {
     data: Record<string, unknown>,
     _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
     const validatedFields: string[] = [];
@@ -419,6 +439,7 @@ export class HealthcareService {
     data: Record<string, unknown>,
     _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
+
     // Mock HL7v2 validation
     return {
       isValid: true,
@@ -433,6 +454,7 @@ export class HealthcareService {
     data: Record<string, unknown>,
     _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
+
     // Mock HL7v3 validation
     return {
       isValid: true,
@@ -447,6 +469,7 @@ export class HealthcareService {
     data: Record<string, unknown>,
     _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
+
     // Mock CDA validation
     return {
       isValid: true,
@@ -461,6 +484,7 @@ export class HealthcareService {
     data: Record<string, unknown>,
     _____options: HealthcareDataValidationOptions
   ): Promise<HealthcareDataValidationResult> {
+
     // Mock DICOM validation
     return {
       isValid: true,
@@ -476,6 +500,7 @@ export class HealthcareService {
     patientData: Record<string, unknown>,
     customizations: Record<string, unknown>
   ): Promise<string> {
+
     let content = template.template;
 
     // Simple template variable replacement
@@ -517,7 +542,7 @@ Assessment and Plan:
 Provider: {{providerName}}
 Date: {{documentDate}}`,
         version: '1.0'
-      },
+  }
       {
         id: 'discharge_summary_standard',
         name: 'Standard Discharge Summary',

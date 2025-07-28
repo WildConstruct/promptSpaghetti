@@ -18,7 +18,6 @@ interface CompressedGraphData {
         compression_ratio: number;
         original_size: number;
     };
-}
 /**
  * Optimized graph storage with hybrid Map/Array architecture
  */
@@ -137,6 +136,6 @@ export declare class OptimizedGraphStorage {
     private compressEdges;
     private static decompressNodes;
     private static decompressEdges;
-}
+
 export {};
 //# sourceMappingURL=OptimizedGraphStorage.d.ts.map

@@ -14,20 +14,18 @@ import {
   Epic16TicketIntegrationService
 } from '../../services/Epic16TicketIntegrationService';
 interface TicketManagementDashboardProps {
-  ticketService: Epic16TicketIntegrationService;
+  ticketService: Epic16TicketIntegrationService;,
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onTicketSelect?: (ticket: MarketplaceTicket) => void;
-}
 interface TicketFilters {
-  status: TicketStatus[];
-  type: MarketplaceTicketType[];
-  priority: TicketPriority[];
-  category: TicketCategory[];
+  status: TicketStatus;,
+  type: MarketplaceTicketType;
+  priority: TicketPriority;,
+  category: TicketCategory;
   assignedTo?: string;
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
-}
 
 export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps> = ({)
   ticketService,
@@ -36,66 +34,64 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
   onTicketSelect
 }) => {
   // State management
-  const [tickets, setTickets] = useState<MarketplaceTicket[]>([]);
+  const [tickets, setTickets] = useState<MarketplaceTicket>([]);
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<TicketFilters>({)
-    status: [],
-    type: [],
-    priority: [],
-    category: [],
-    searchQuery: '',
-  });
+  status: [],
+  type: [],
+  priority: [],
+  category: [],
+  searchQuery: '',
+});
   const [pagination, setPagination] = useState({)
-    page: 0,
-    limit: 25,
-    total: 0,
-    hasMore: false,
-  });
+  page: 0,
+  limit: 25,
+  total: 0,
+  hasMore: false,
+});
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   const [metrics, setMetrics] = useState<unknown>(null);
   // Load tickets
   const loadTickets = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const filterCriteria = {
-        status: filters.status.length > 0 ? filters.status : undefined,
-        type: filters.type.length > 0 ? filters.type : undefined,
-        priority: filters.priority.length > 0 ? filters.priority : undefined,
-        category: filters.category.length > 0 ? filters.category[0] : undefined,
-        assignedTo: filters.assignedTo,
-        dateRange: filters.dateRange,
-        limit: pagination.limit,
-        offset: pagination.page * pagination.limit,
-      };
+  setLoading(true);
+  setError(null);
+  try {
+  const filterCriteria = {
+  status: filters.status.length > 0 ? filters.status : undefined,
+  type: filters.type.length > 0 ? filters.type : undefined,
+  priority: filters.priority.length > 0 ? filters.priority : undefined,
+  category: filters.category.length > 0 ? filters.category[0] : undefined,
+  assignedTo: filters.assignedTo,
+  dateRange: filters.dateRange,
+  limit: pagination.limit,
+  offset: pagination.page * pagination.limit,
+};
       const result = await ticketService.getTickets(filterCriteria);
       setTickets(result.tickets);
       setPagination(prev => ({)
-        ...prev,
-        total: result.total,
-        hasMore: result.hasMore,
-      }));
+  ...prev,
+  total: result.total,
+  hasMore: result.hasMore,
+}));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load tickets');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load tickets');
+} finally {
       setLoading(false);
-    }
   }, [ticketService, filters, pagination.page, pagination.limit]);
   // Load metrics
   const loadMetrics = useCallback(async () => {
-    try {
-      const timeRange = {
-        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date(),
-      };
+  try {
+  const timeRange = {
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
+  end: new Date(),
+};
       const metricsData = await ticketService.getTicketMetrics(timeRange);
       setMetrics(metricsData);
     } catch (err) {
-      console.error('Failed to load metrics:', err);
-    }
-  }, [ticketService]);
+  console.error('Failed to load metrics:', err);
+}, [ticketService]);
   // Effects
   useEffect(() => {
     loadTickets();
@@ -123,57 +119,52 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         const updatedTicket = tickets.find(t => t.id === ticketId);
         if (updatedTicket) {
           setSelectedTicket({ ...updatedTicket, status: newStatus });
-        }
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update ticket status');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to update ticket status');
+};
   // Handle ticket assignment
   const handleAssignment = async (ticketId: string, assigneeId: string) => {
     try {
       await ticketService.assignTicket(ticketId, assigneeId, userId);
       await loadTickets();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to assign ticket');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to assign ticket');
+};
   // Handle ticket escalation
   const handleEscalation = async (ticketId: string, reason: string) => {
     try {
       await ticketService.escalateTicket(ticketId, reason, userId);
       await loadTickets();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
+};
   // Reset filters
   const resetFilters = () => {
-    setFilters({)
-      status: [],
-      type: [],
-      priority: [],
-      category: [],
-      searchQuery: '',
-    });
+  setFilters({)
+  status: [],
+  type: [],
+  priority: [],
+  category: [],
+  searchQuery: '',
+});
     setPagination(prev => ({ ...prev, page: 0 }));
   };
   // Render status badge
   const renderStatusBadge = (status: TicketStatus) => {
-    const colors = {
-      [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
-      [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
-      [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
-      [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
-      [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
-      [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
-      [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
-      [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
-      [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
-      [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-      [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
-    };
-    return ();
+  const colors = {
+  [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
+  [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
+  [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
+  [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
+  [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
+  [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
+  [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
+  [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
+  [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
+  [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
+  [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+};
+    return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
         {status.replace('_', ' ').toUpperCase()}
       </span>
@@ -181,21 +172,21 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
   };
   // Render priority badge
   const renderPriorityBadge = (priority: TicketPriority) => {
-    const colors = {
-      [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
-      [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
-      [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
-      [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-      [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
-    };
-    return ();
+  const colors = {
+  [TicketPriority.LOW]: 'bg-gray-100 text-gray-800',
+  [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
+  [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
+  [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
+  [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+};
+    return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
         {priority.toUpperCase()}
       </span>
     );
   };
   if (loading && tickets.length === 0) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -203,8 +194,7 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="ticket-management-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -451,18 +441,17 @@ export const TicketManagementDashboard: React.FC<TicketManagementDashboardProps>
 
 // Ticket List Item Component
 interface TicketListItemProps {
-  ticket: MarketplaceTicket;
+  ticket: MarketplaceTicket;,
   onSelect: () => void;
-  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void;
-  onAssign: (ticketId: string, assigneeId: string) => void;
-  onEscalate: (ticketId: string, reason: string) => void;
+  onStatusUpdate: (ticketId: string, newStatus: TicketStatus) => void;,
+  onAssign: (ticketId: string, assigneeId: string) => void;,
+  onEscalate: (ticketId: string, reason: string) => void;,
   currentUserId: string;
-  userRole: 'user' | 'agent' | 'admin';
+  userRole: 'user' | 'agent' | 'admin';,
   selected: boolean;
-  renderStatusBadge: (status: TicketStatus) => React.ReactNode;
+  renderStatusBadge: (status: TicketStatus) => React.ReactNode;,
   renderPriorityBadge: (priority: TicketPriority) => React.ReactNode;
-}
-const TicketListItem: React.FC<TicketListItemProps> = ({)
+  const TicketListItem: React.FC<TicketListItemProps> = ({,)
   ticket,
   onSelect,
   onStatusUpdate,
@@ -478,7 +467,7 @@ const TicketListItem: React.FC<TicketListItemProps> = ({)
   const canModify = userRole === 'admin' || (userRole === 'agent' && ticket.assignedTo === currentUserId);
   const isOverdue = ticket.sla.responseTime.deadline < new Date() && !ticket.sla.responseTime.actual;
   const isSLAWarning = ticket.sla.responseTime.deadline.getTime() - Date.now() < (ticket.sla.responseTime.warningThreshold * 60 * 1000);
-  return ();
+  return;
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
       onClick={onSelect}

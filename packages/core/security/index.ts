@@ -391,23 +391,19 @@ export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSe
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
 
 // Utility functions for security integration
-export export export export export export export 
+export export export export 
 // Security event severity mapping utilities
 export if (threatLevel >= 3) return 'medium';
   return 'low';
 };
-
-export 
   // Base severity score
   const severityScores = { low: 1, medium: 3, high: 6, critical: 10 };
   score += severityScores[event.severity] || 1;
   // Impact multipliers
   if (event.details?.affected_users && event.details.affected_users.length > 0) {
     score *= 1 + (event.details.affected_users.length / 100);
-  }
   if (event.details?.affected_systems && event.details.affected_systems.length > 1) {
     score *= 1.5;
-  }
   // Historical pattern analysis
   if (historicalData) {
     const recentSimilarEvents = historicalData.filter(e => ;);
@@ -417,22 +413,20 @@ export
     );
     if (recentSimilarEvents.length > 3) {
       score *= 2; // Pattern indicates potential attack
-    }
-  }
   return Math.min(score, 100); // Cap at 100
 };
 
 export timeRange: { start: number; end: number }
 ): {
   summary: {,
-    total_events: number;
-    critical_count: number;
-    resolved_count: number;
-    avg_response_time: number;
-  };
+  total_events: number;,
+  critical_count: number;
+  resolved_count: number;,
+  avg_response_time: number;
+};
   top_threats: Array<{ type: string; count: number }>;
   affected_systems: Array<{ system: string; incident_count: number }>;
-  recommendations: string[];
+  recommendations: string;
 } => {
   const filteredEvents = events.filter(e => ;);
     e.timestamp >= timeRange.start && e.timestamp <= timeRange.end
@@ -448,7 +442,7 @@ export timeRange: { start: number; end: number }
   // Count by type
   const typeCounts: Record<string, number> = {};
   filteredEvents.forEach(e => {)
-    typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
+  typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
   });
   const topThreats = Object.entries(typeCounts);
     .map(([type, count]) => ({ type: type as SecurityEvent['type'], count }))
@@ -457,36 +451,32 @@ export timeRange: { start: number; end: number }
   // Count by affected systems
   const systemCounts: Record<string, number> = {};
   filteredEvents.forEach(e => {)
-    e.details.affected_systems.forEach(system => {)
-      systemCounts[system] = (systemCounts[system] || 0) + 1;
+  e.details.affected_systems.forEach(system => {)
+  systemCounts[system] = (systemCounts[system] || 0) + 1;
     });
   });
   const affectedSystems = Object.entries(systemCounts);
     .map(([system, incident_count]) => ({ system, incident_count }))
     .sort((a, b) => b.incident_count - a.incident_count);
   // Generate recommendations
-  const recommendations: string[] = [];
+  const recommendations: string = [];
   if (criticalEvents.length > filteredEvents.length * 0.1) {
     recommendations.push('High number of critical events detected - review security posture');
-  }
   if (avgResponseTime > 3600000) { // 1 hour
     recommendations.push('Average response time exceeds 1 hour - improve incident response procedures');
-  }
   if (topThreats.length > 0 && topThreats[0].count > filteredEvents.length * 0.3) {
     recommendations.push(`${topThreats[0].type} events are dominant - focus prevention efforts here`);}
-  }
   const unresolvedCount = filteredEvents.filter(e => e.status !== 'resolved').length;
   if (unresolvedCount > filteredEvents.length * 0.2) {
-    recommendations.push('High number of unresolved events - ensure adequate staffing');
-  }
+  recommendations.push('High number of unresolved events - ensure adequate staffing');
   return {
-    summary: {,
-      total_events: filteredEvents.length,
-      critical_count: criticalEvents.length,
-      resolved_count: resolvedEvents.length,
-      avg_response_time: avgResponseTime,
-    },
-    top_threats: topThreats,
+  summary: {,
+  total_events: filteredEvents.length,
+  critical_count: criticalEvents.length,
+  resolved_count: resolvedEvents.length,
+  avg_response_time: avgResponseTime,
+},
+  top_threats: topThreats,
     affected_systems: affectedSystems,
     recommendations
   };

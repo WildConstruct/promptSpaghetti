@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AnomalyDetectionService } from '../services/AnomalyDetectionService';
 
+}
 interface AnomalyFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   resolved?: boolean;
@@ -11,17 +12,22 @@ interface AnomalyFilters {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface ResolveAnomalyRequest {
   resolvedBy: string;
   falsePositive?: boolean;
   notes?: string;
 }
+}
 
+}
 interface UpdatePatternRequest {
   enabled?: boolean;
   threshold?: number;
   severity?: 'low' | 'medium' | 'high' | 'critical';
+}
 }
 
 export async function anomalyDetectionRoutes(
@@ -331,7 +337,7 @@ export async function anomalyDetectionRoutes(
           critical: recentAnomalies.filter(a => a.severity === 'critical').length,
           high: recentAnomalies.filter(a => a.severity === 'high').length,
           unresolved: recentAnomalies.filter(a => !a.resolved).length
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -355,12 +361,12 @@ export async function anomalyDetectionRoutes(
           running: isRunning,
           checkInterval: (anomalyService as any).config.checkIntervalSeconds,
           patternsEnabled: (anomalyService as any).config.patterns.filter((p: any) => p.enabled).length
-        },
+  }
         statistics: {
           totalAnomalies: stats.total_anomalies,
           recentAnomalies: stats.anomalies_24h,
           criticalCount: stats.critical_anomalies
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -391,19 +397,19 @@ export async function anomalyDetectionRoutes(
         {
           name: 'Brute Force Login Detection',
           description: 'Detects multiple failed login attempts from the same IP'
-        },
+  }
         {
           name: 'Credential Stuffing Detection',
           description: 'Detects login attempts across multiple accounts from same IP'
-        },
+  }
         {
           name: 'Privilege Escalation Detection',
           description: 'Detects rapid role changes or permission escalations'
-        },
+  }
         {
           name: 'Data Access Anomalies',
           description: 'Detects unusual data access patterns or bulk retrieval'
-        },
+  }
         {
           name: 'Geographic Anomalies',
           description: 'Detects login from unusual geographic locations'
@@ -422,37 +428,37 @@ export async function anomalyDetectionRoutes(
           method: 'GET',
           description: 'Get all anomaly events with filtering',
           auth: 'security role required'
-        },
+  }
         {
           path: '/anomalies/:id',
           method: 'GET',
           description: 'Get specific anomaly by ID',
           auth: 'security role required'
-        },
+  }
         {
           path: '/anomalies/:id/resolve',
           method: 'POST',
           description: 'Resolve an anomaly (mark as handled)',
           auth: 'admin or security role required'
-        },
+  }
         {
           path: '/anomalies/statistics',
           method: 'GET',
           description: 'Get anomaly detection statistics',
           auth: 'security role required'
-        },
+  }
         {
           path: '/anomalies/patterns',
           method: 'GET',
           description: 'Get all detection patterns',
           auth: 'admin or security role required'
-        },
+  }
         {
           path: '/anomalies/patterns/:id',
           method: 'PATCH',
           description: 'Update detection pattern configuration',
           auth: 'admin role required'
-        },
+  }
         {
           path: '/anomalies/check',
           method: 'POST',

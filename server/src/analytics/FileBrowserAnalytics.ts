@@ -58,6 +58,7 @@ export enum FileBrowserEventType {
 /**
  * File operation event data
  */
+}
 export interface FileOperationEvent extends AnalyticsEvent {
   type: FileBrowserEventType;
   metadata: {
@@ -78,6 +79,7 @@ export interface FileOperationEvent extends AnalyticsEvent {
 /**
  * Download statistics aggregation
  */
+}
 export interface DownloadStats {
   fileId: string;
   fileName: string;
@@ -92,6 +94,7 @@ export interface DownloadStats {
     daily: Map<string, number>;
     weekly: Map<string, number>;
     monthly: Map<string, number>;
+}
   };
   downloadsByUserAgent: Map<string, number>;
   downloadsByLocation: Map<string, number>;
@@ -102,10 +105,12 @@ export interface DownloadStats {
 /**
  * Usage analytics aggregation
  */
+}
 export interface UsageAnalytics {
   timeframe: {
     startDate: Date;
     endDate: Date;
+}
   };
   overview: {
     totalOperations: number;
@@ -140,12 +145,14 @@ export interface UsageAnalytics {
 /**
  * Developer insights for file browser optimization
  */
+}
 export interface DeveloperInsights {
   systemHealth: {
     overallScore: number; // 0-100
     reliability: number;
     performance: number;
     usability: number;
+}
   };
   recommendations: Array<{
     category: 'performance' | 'usability' | 'features' | 'security';
@@ -175,6 +182,7 @@ export interface DeveloperInsights {
 /**
  * Configuration for file browser analytics
  */
+}
 export interface FileBrowserAnalyticsConfig {
   enabled: boolean;
   trackDownloads: boolean;
@@ -185,6 +193,7 @@ export interface FileBrowserAnalyticsConfig {
   anonymizeUserData: boolean;
   generateInsights: boolean;
   insightGenerationInterval: number; // milliseconds
+}
 }
 
 /**
@@ -391,6 +400,7 @@ export class FileBrowserAnalytics extends EventEmitter {
     startDate: Date,
     endDate: Date
   ): Promise<UsageAnalytics> {
+
     const window = this.analyticsCollector.getAnalyticsWindow(
       startDate.getTime(),
       endDate.getTime()
@@ -465,7 +475,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         totalUploads,
         averageSessionDuration: 0, // TODO: Calculate from session data
         errorRate: fileBrowserEvents.length > 0 ? (errorCount / fileBrowserEvents.length) * 100 : 0
-      },
+  }
       operationBreakdown: operationCounts,
       fileTypePopularity: fileTypeCounts,
       searchMetrics: {
@@ -473,12 +483,12 @@ export class FileBrowserAnalytics extends EventEmitter {
         uniqueSearchTerms: searchData.searchTerms.size,
         averageResultsClicked: searchData.totalSearches > 0 ? searchData.totalClicked / searchData.totalSearches : 0,
         topSearchTerms: [] // TODO: Implement top search terms aggregation
-      },
+  }
       performanceMetrics: {
         averageLoadTime,
         averageOperationTime: averageLoadTime,
         slowestOperations: [] // TODO: Implement slowest operations tracking
-      },
+  }
       userBehaviorPatterns: {
         mostUsedFeatures: Array.from(operationCounts.entries()).map(([feature, count]) => ({ feature, usageCount: count })),
         commonUserFlows: [], // TODO: Implement user flow analysis
@@ -491,6 +501,7 @@ export class FileBrowserAnalytics extends EventEmitter {
    * Generate developer insights
    */
   async generateInsights(): Promise<DeveloperInsights> {
+
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     const now = new Date();
     const analytics = await this.getUsageAnalytics(oneWeekAgo, now);
@@ -501,7 +512,7 @@ export class FileBrowserAnalytics extends EventEmitter {
         reliability: Math.max(0, 100 - analytics.overview.errorRate),
         performance: this.calculatePerformanceScore(analytics),
         usability: this.calculateUsabilityScore(analytics)
-      },
+  }
       recommendations: this.generateRecommendations(analytics),
       alerts: this.generateAlerts(analytics),
       trends: {
@@ -562,7 +573,7 @@ export class FileBrowserAnalytics extends EventEmitter {
           daily: new Map(),
           weekly: new Map(),
           monthly: new Map()
-        },
+  }
         downloadsByUserAgent: new Map(),
         downloadsByLocation: new Map(),
         peakDownloadHour: 0,

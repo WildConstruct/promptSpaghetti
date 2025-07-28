@@ -86,7 +86,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
                   recommendedActions: { type: 'array', items: { type: 'string' } }
                 }
               }
-            },
+  }
             total: { type: 'number' },
             hasMore: { type: 'boolean' }
           }
@@ -195,9 +195,9 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         type: 'object',
         properties: {
           alertId: { type: 'string' }
-        },
+  }
         required: ['alertId']
-      },
+  }
       body: {
         type: 'object',
         required: ['action'],
@@ -254,9 +254,9 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         type: 'object',
         properties: {
           projectId: { type: 'string' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -317,7 +317,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
         type: 'object',
         properties: {
           workspaceId: { type: 'string' }
-        },
+  }
         required: ['workspaceId']
       }
     }
@@ -365,7 +365,7 @@ export default async function projectHealthAlertsRoutes(fastify: FastifyInstance
           alertsByType,
           projectsWithIssues: projectsWithIssues.length,
           mostCommonIssue: Object.entries(alertsByType).sort(([,a], [,b]) => b - a)[0]?.[0] || null
-        },
+  }
         recentAlerts: alerts
           .sort((a, b) => new Date(b.detectedAt).getTime() - new Date(a.detectedAt).getTime())
           .slice(0, 5), // 5 most recent alerts

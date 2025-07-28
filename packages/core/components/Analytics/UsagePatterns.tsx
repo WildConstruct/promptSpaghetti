@@ -15,7 +15,6 @@ interface HeatMapProps {
   data: Array<{ x: number; y: number; intensity: number }>;
   width?: number;
   height?: number;
-}
 /**
  * Canvas heat map component
  */
@@ -33,7 +32,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
     const minIntensity = Math.min(...data.map(d => d.intensity));
     // Draw heat map points
     data.forEach(point => {)
-      const normalized = (point.intensity - minIntensity) / (maxIntensity - minIntensity);
+  const normalized = (point.intensity - minIntensity) / (maxIntensity - minIntensity);
       const alpha = Math.max(0.1, normalized);
       // Create radial gradient for each point
       const gradient = ctx.createRadialGradient(;);
@@ -48,7 +47,7 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
       ctx.fill();
     });
   }, [data, width, height]);
-  return ();
+  return;
     <div className="heat-map-container">
       <canvas
         ref={canvasRef}
@@ -73,15 +72,14 @@ const CanvasHeatMap: React.FC<HeatMapProps> = ({ data, width = 600, height = 400
 /**
  * User journey flow component
  */
-const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) => {
+const UserJourneyFlow: React.FC<{ journeyData: unknown }> = ({ journeyData }) => {
   if (!journeyData || journeyData.length === 0) {
-    return ();
+    return;
       <div className="text-center py-8 text-gray-500">
         No journey data available
       </div>
     );
-  }
-  return ();
+  return;
     <div className="journey-flow">
       <div className="space-y-4">
         {journeyData.slice(0, 10).map((flow, index) => ()
@@ -109,28 +107,28 @@ const UserJourneyFlow: React.FC<{ journeyData: unknown[] }> = ({ journeyData }) 
 /**
  * Usage patterns props
  */
+
 export interface UsagePatternsProps {
-  analyticsClient: AnalyticsClient;
+  analyticsClient: AnalyticsClient;,
   timeRange: { startTime: number; endTime: number };
   userId?: number;
   organizationId?: number;
-}
 /**
  * Usage patterns state
  */
 interface UsagePatternsState {
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
-  heatMapData: unknown[];
+  heatMapData: unknown;,
   hourlyPattern: unknown;
-  dailyPattern: unknown;
+  dailyPattern: unknown;,
   weeklyPattern: unknown;
-  journeyFlows: unknown[];
+  journeyFlows: unknown;,
   selectedPattern: 'hourly' | 'daily' | 'weekly';
+  /**
+  * Usage patterns component
+  */
 }
-/**
- * Usage patterns component
- */
 export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   analyticsClient,
   timeRange,
@@ -138,15 +136,15 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
   organizationId
 }) => {
   const [state, setState] = useState<UsagePatternsState>({)
-    loading: true,
-    error: null,
-    heatMapData: [],
-    hourlyPattern: null,
-    dailyPattern: null,
-    weeklyPattern: null,
-    journeyFlows: [],
-    selectedPattern: 'hourly',
-  });
+  loading: true,
+  error: null,
+  heatMapData: [],
+  hourlyPattern: null,
+  dailyPattern: null,
+  weeklyPattern: null,
+  journeyFlows: [],
+  selectedPattern: 'hourly',
+});
   /**
    * Load usage patterns data
    */
@@ -161,7 +159,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
       ]);
       if (!heatMapResponse.success) {
         throw new Error('Failed to load heat map data');
-      }
       // Generate mock journey flows data
       const mockJourneyFlows = [;
         { sourceStep: 'Landing', targetStep: 'Node Creation', userCount: 150, percentage: 25.5, averageTime: 30000, successRate: 0.85 },
@@ -174,22 +171,21 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
         { sourceStep: 'Execution', targetStep: 'Save', userCount: 25, percentage: 4.3, averageTime: 12000, successRate: 0.96 }
       ];
       setState(prev => ({)
-        ...prev,
-        loading: false,
-        heatMapData: heatMapResponse.data || [],
-        hourlyPattern: hourlyResponse.success ? hourlyResponse.data : null,
-        dailyPattern: dailyResponse.success ? dailyResponse.data : null,
-        weeklyPattern: weeklyResponse.success ? weeklyResponse.data : null,
-        journeyFlows: mockJourneyFlows,
-      }));
+  ...prev,
+  loading: false,
+  heatMapData: heatMapResponse.data || [],
+  hourlyPattern: hourlyResponse.success ? hourlyResponse.data : null,
+  dailyPattern: dailyResponse.success ? dailyResponse.data : null,
+  weeklyPattern: weeklyResponse.success ? weeklyResponse.data : null,
+  journeyFlows: mockJourneyFlows,
+}));
     } catch (error) {
-      console.error('Failed to load usage data:', error);
-      setState(prev => ({)
-        ...prev,
-        loading: false,
-        error: error instanceof Error ? error.message : 'Failed to load usage data',
-      }));
-    }
+  console.error('Failed to load usage data:', error);
+  setState(prev => ({)
+  ...prev,
+  loading: false,
+  error: error instanceof Error ? error.message : 'Failed to load usage data',
+}));
   }, [analyticsClient, timeRange]);
   /**
    * Handle pattern selection change
@@ -201,43 +197,43 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
    * Get current pattern data
    */
   const getCurrentPatternData = useCallback(() => {
-    switch (state.selectedPattern) {
-    case 'hourly':
-      return state.hourlyPattern;
-    case 'daily':
-      return state.dailyPattern;
-    case 'weekly':
-      return state.weeklyPattern;
-    default:
-      return null;
-    }
-  }, [state.selectedPattern, state.hourlyPattern, state.dailyPattern, state.weeklyPattern]);
+  switch (state.selectedPattern) {
+  case 'hourly':,
+  return state.hourlyPattern;
+  case 'daily':,
+  return state.dailyPattern;
+  case 'weekly':,
+  return state.weeklyPattern;
+  default:,
+  return null;
+}, [state.selectedPattern, state.hourlyPattern, state.dailyPattern, state.weeklyPattern]);
   /**
    * Format pattern data for charts
    */
   const formatPatternData = useCallback((patternData: unknown) => {
-    if (!patternData || !patternData.data) return [];
-    return patternData.data.map((item: unknown) => ({)
-      period: new Date(item.period).toLocaleDateString(),
-      value: item.value,
-      timestamp: new Date(item.period).getTime(),
-    }));
+  if (!patternData || !patternData.data) return [];
+  return patternData.data.map((item: unknown) => ({,)
+  period: new Date(item.period).toLocaleDateString(),
+  value: item.value,
+  timestamp: new Date(item.period).getTime(),
+}));
   }, []);
   /**
    * Generate hourly distribution data
    */
   const generateHourlyDistribution = useCallback(() => {
-    if (!state.hourlyPattern || !state.hourlyPattern.data) return [];
-    const hourlyData = new Array(24).fill(0);
-    state.hourlyPattern.data.forEach((item: unknown) => {
-      const hour = new Date(item.period).getHours();
-      hourlyData[hour] += item.value;
-    });
+  if (!state.hourlyPattern || !state.hourlyPattern.data) return [];
+  const hourlyData = new Array(24).fill(0);
+  state.hourlyPattern.data.forEach((item: unknown) => {,
+  const hour = new Date(item.period).getHours();
+  hourlyData[hour] += item.value;
+});
     return hourlyData.map((value, hour) => ({)
-      hour: `${hour.toString().padStart(2, '0')}:00`,}
+  hour: `${hour.toString().padStart(2, '0')}:00`}
+}
       value,
-      percentage: (value / Math.max(...hourlyData)) * 100,
-    }));
+      percentage: (value / Math.max(...hourlyData)) * 100;
+  }));
   }, [state.hourlyPattern]);
   /**
    * Load data on mount
@@ -246,7 +242,7 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
     loadUsageData();
   }, [loadUsageData]);
   if (state.loading) {
-    return ();
+    return;
       <div className="usage-patterns">
         <div className="loading-container">
           <div className="loading-spinner"></div>
@@ -254,9 +250,8 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
         </div>
       </div>
     );
-  }
   if (state.error) {
-    return ();
+    return;
       <div className="usage-patterns">
         <Alert variant="destructive">
           <AlertDescription>
@@ -273,11 +268,10 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
         </Alert>
       </div>
     );
-  }
   const currentPattern = getCurrentPatternData();
   const patternChartData = formatPatternData(currentPattern);
   const hourlyDistribution = generateHourlyDistribution();
-  return ();
+  return;
     <div className="usage-patterns">
       <Tabs defaultValue="patterns" className="w-full">
         <TabsList className="grid grid-cols-4 w-full">
@@ -431,7 +425,6 @@ export const UsagePatterns: React.FC<UsagePatternsProps> = ({)
                       {state.heatMapData.length > 0 ? 
                         (state.heatMapData.reduce((sum, point) => sum + point.intensity, 0) / state.heatMapData.length).toFixed(1) : 
                         '0'
-                      }
                     </div>
                     <div className="text-sm text-gray-600">Avg Intensity</div>
                   </div>

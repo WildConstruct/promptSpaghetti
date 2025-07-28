@@ -13,9 +13,9 @@ export interface OptimizationProfile {
     description: string;
     target_system: 'database' | 'cache' | 'query_engine' | 'storage' | 'network' | 'application';
     config: {
-        optimization_goals: OptimizationGoal[];
-        performance_targets: PerformanceTarget[];
-        constraints: OptimizationConstraint[];
+        optimization_goals: OptimizationGoal;
+        performance_targets: PerformanceTarget;
+        constraints: OptimizationConstraint;
         analysis_scope: AnalysisScope;
     };
     analysis: {
@@ -36,7 +36,7 @@ export interface OptimizationProfile {
         baseline_metrics: Record<string, number>;
         current_metrics: Record<string, number>;
         improvement_percentage: Record<string, number>;
-        optimization_history: OptimizationResult[];
+        optimization_history: OptimizationResult;
     };
     created_by: string;
     created_at: number;
@@ -51,7 +51,7 @@ export interface OptimizationGoal {
     target_value: number;
     improvement_target_percentage: number;
     deadline?: number;
-    success_criteria: string[];
+    success_criteria: string;
 }
 export interface PerformanceTarget {
     metric_name: string;
@@ -72,9 +72,9 @@ export interface OptimizationConstraint {
 }
 export interface AnalysisScope {
     time_range_days: number;
-    data_sources: string[];
-    metrics_to_analyze: string[];
-    comparison_periods: string[];
+    data_sources: string;
+    metrics_to_analyze: string;
+    comparison_periods: string;
     granularity: 'minute' | 'hour' | 'day';
     include_dependencies: boolean;
 }
@@ -84,8 +84,8 @@ export interface OptimizationTool {
     description: string;
     tool_type: 'analyzer' | 'tuner' | 'monitor' | 'benchmark' | 'predictor' | 'visualizer';
     capabilities: {
-        supported_systems: string[];
-        analysis_types: string[];
+        supported_systems: string;
+        analysis_types: string;
         automation_level: 'manual' | 'semi_automated' | 'fully_automated';
         real_time_capable: boolean;
         batch_processing: boolean;
@@ -97,8 +97,8 @@ export interface OptimizationTool {
             max_memory_mb: number;
             max_disk_io_mb: number;
         };
-        output_formats: string[];
-        integration_apis: string[];
+        output_formats: string;
+        integration_apis: string;
     };
     usage: {
         total_executions: number;
@@ -121,7 +121,7 @@ export interface OptimizationJob {
     job_type: 'analysis' | 'tuning' | 'benchmarking' | 'monitoring' | 'prediction' | 'validation';
     config: {
         profile_id: string;
-        tools_to_use: string[];
+        tools_to_use: string;
         execution_mode: 'sequential' | 'parallel' | 'pipeline';
         retry_on_failure: boolean;
         max_retries: number;
@@ -130,7 +130,7 @@ export interface OptimizationJob {
     schedule: {
         type: 'manual' | 'scheduled' | 'triggered' | 'continuous';
         cron_expression?: string;
-        trigger_conditions?: TriggerCondition[];
+        trigger_conditions?: TriggerCondition;
         continuous_interval_minutes?: number;
     };
     execution: {
@@ -142,7 +142,7 @@ export interface OptimizationJob {
         estimated_completion?: number;
     };
     results: {
-        optimization_recommendations: OptimizationRecommendation[];
+        optimization_recommendations: OptimizationRecommendation;
         performance_analysis: PerformanceAnalysis;
         cost_benefit_analysis: CostBenefitAnalysis;
         risk_assessment: RiskAssessment;
@@ -167,17 +167,17 @@ export interface OptimizationRecommendation {
         reversibility: 'easy' | 'moderate' | 'difficult';
     };
     implementation: {
-        steps: string[];
-        prerequisites: string[];
-        validation_tests: string[];
-        rollback_procedure: string[];
+        steps: string;
+        prerequisites: string;
+        validation_tests: string;
+        rollback_procedure: string;
         estimated_downtime_minutes: number;
     };
     supporting_data: {
         analysis_results: Record<string, any>;
         benchmark_comparisons: Record<string, number>;
         statistical_confidence: number;
-        test_results: TestResult[];
+        test_results: TestResult;
     };
     status: 'pending' | 'approved' | 'in_progress' | 'implemented' | 'rejected' | 'deferred';
     assigned_to?: string;
@@ -222,24 +222,12 @@ export interface PerformanceAnalysis {
             error_types: Record<string, number>;
         };
     };
-    bottlenecks: Array<{
-        component: string;
-        severity: 'low' | 'medium' | 'high' | 'critical';
-        description: string;
-        impact_percentage: number;
-        recommended_actions: string[];
-    }>;
-    capacity_analysis: {
-        current_capacity_utilization: number;
-        projected_growth_rate: number;
-        time_to_capacity_limit_days: number;
-        scaling_recommendations: string[];
-    };
-    comparative_analysis: {
-        vs_previous_period: Record<string, number>;
-        vs_industry_benchmark: Record<string, number>;
-        vs_theoretical_optimal: Record<string, number>;
-    };
+    bottlenecks: Array<{}, component>;
+    string: any;
+    severity: 'low' | 'medium' | 'high' | 'critical';
+    description: string;
+    impact_percentage: number;
+    recommended_actions: string;
 }
 export interface CostBenefitAnalysis {
     analysis_id: string;
@@ -279,27 +267,7 @@ export interface CostBenefitAnalysis {
 }
 export interface RiskAssessment {
     assessment_id: string;
-    risks: Array<{
-        risk_type: 'performance' | 'security' | 'compliance' | 'operational' | 'financial' | 'technical';
-        description: string;
-        probability: 'low' | 'medium' | 'high';
-        impact: 'low' | 'medium' | 'high' | 'critical';
-        risk_score: number;
-        mitigation_strategies: string[];
-        contingency_plans: string[];
-    }>;
-    overall_risk: {
-        risk_level: 'low' | 'medium' | 'high' | 'critical';
-        confidence_score: number;
-        key_risk_factors: string[];
-        recommended_risk_controls: string[];
-    };
-    compliance_impact: {
-        affected_regulations: string[];
-        compliance_risks: string[];
-        additional_controls_needed: string[];
-        audit_implications: string[];
-    };
+    risks: Array<{}, risk_type>;
 }
 export interface ExecutionSummary {
     summary_id: string;
@@ -324,21 +292,16 @@ export interface ExecutionSummary {
         recommendation_confidence_score: number;
         user_satisfaction_score?: number;
     };
-    issues: Array<{
-        severity: 'info' | 'warning' | 'error' | 'critical';
-        component: string;
-        message: string;
-        resolution_suggestion?: string;
-    }>;
+    issues: Array<{}, severity>;
 }
 export interface NotificationSettings {
     enabled: boolean;
     channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
-    recipients: string[];
+    recipients: string;
     notification_triggers: ('job_start' | 'job_complete' | 'job_failure' | 'high_priority_recommendation')[];
     escalation_enabled: boolean;
     escalation_delay_minutes: number;
-    escalation_recipients: string[];
+    escalation_recipients: string;
 }
 export interface TriggerCondition {
     condition_type: 'performance_threshold' | 'cost_threshold' | 'error_rate' | 'capacity_utilization' | 'custom_metric';
@@ -380,8 +343,8 @@ export interface OptimizationResult {
         rollback_required: boolean;
         user_acceptance_score: number;
     };
-    lessons_learned: string[];
-    future_recommendations: string[];
+    lessons_learned: string;
+    future_recommendations: string;
 }
 export interface OptimizationEvent {
     id: string;
@@ -395,22 +358,22 @@ export interface OptimizationEvent {
     tool_id?: string;
     recommendation_id?: string;
     impact: {
-        affected_systems: string[];
+        affected_systems: string;
         performance_change: Record<string, number>;
         cost_impact: number;
         user_impact_level: 'none' | 'low' | 'medium' | 'high';
     };
     context: {
         system_state: Record<string, any>;
-        environmental_factors: string[];
-        related_events: string[];
-        troubleshooting_hints: string[];
+        environmental_factors: string;
+        related_events: string;
+        troubleshooting_hints: string;
     };
     response: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
-        resolution_actions: string[];
+        resolution_actions: string;
         resolved_at?: number;
     };
 }
@@ -428,52 +391,5 @@ export declare class SecurityOptimizationTools extends EventEmitter {
     private recommendationInterval?;
     private validationInterval?;
     constructor();
-    createOptimizationProfile(profile: Omit<OptimizationProfile, 'id' | 'created_at' | 'last_updated' | 'last_analyzed' | 'results'>): Promise<string>;
-    createOptimizationJob(job: Omit<OptimizationJob, 'id' | 'created_at' | 'last_updated' | 'execution' | 'results'>): Promise<string>;
-    executeOptimizationJob(jobId: string, triggeredBy?: string): Promise<string>;
-    private performOptimizationJob;
-    private executeJobPhase;
-    private collectAnalysisData;
-    private performPerformanceAnalysis;
-    private identifyBottlenecks;
-    private performCostBenefitAnalysis;
-    private performRiskAssessment;
-    private generateOptimizationRecommendations;
-    private validateRecommendations;
-    private generateExecutionSummary;
-    private collectBaselineMetrics;
-    private sendJobNotification;
-    private createJobNotificationMessage;
-    getSystemStatus(): {
-        active_profiles: number;
-        running_jobs: number;
-        pending_recommendations: number;
-        total_optimizations_applied: number;
-        avg_performance_improvement: number;
-        system_efficiency_score: number;
-        recent_events: OptimizationEvent[];
-    };
-    private initializeDefaultTools;
-    private initializeDefaultProfiles;
-    private scheduleJob;
-    private scheduleContinuousJob;
-    private startContinuousMonitoring;
-    private startPeriodicAnalysis;
-    private startRecommendationEngine;
-    private startValidationMonitoring;
-    private performContinuousMonitoring;
-    private performPeriodicAnalysis;
-    private updateRecommendationPriorities;
-    private validateImplementedOptimizations;
-    private triggerAnalysisJob;
-    getOptimizationProfiles(): OptimizationProfile[];
-    getOptimizationTools(): OptimizationTool[];
-    getOptimizationJobs(): OptimizationJob[];
-    getRecommendations(): OptimizationRecommendation[];
-    getEvents(): OptimizationEvent[];
-    exportConfiguration(): Promise<string>;
-    importConfiguration(configJson: string): Promise<void>;
-    shutdown(): void;
 }
-export default SecurityOptimizationTools;
 //# sourceMappingURL=SecurityOptimizationTools.d.ts.map

@@ -45,18 +45,18 @@ export interface IdentityValidationData {
         number: string;
         expirationDate: string;
         issuingAuthority: string;
-        documentImages: string[];
+        documentImages: string;
     };
     professionalCredentials?: {
         role: 'director' | 'producer' | 'screenwriter' | 'cinematographer' | 'editor' | 'other';
         experience: 'student' | 'emerging' | 'professional' | 'veteran';
-        credentials: ProfessionalCredential[];
-        portfolio: PortfolioItem[];
+        credentials: ProfessionalCredential;
+        portfolio: PortfolioItem;
     };
     industryAffiliations?: {
-        unions: string[];
-        organizations: string[];
-        certifications: Certification[];
+        unions: string;
+        organizations: string;
+        certifications: Certification;
     };
     socialMediaProfiles?: {
         platform: 'linkedin' | 'twitter' | 'instagram' | 'imdb' | 'website';
@@ -108,10 +108,10 @@ export interface ValidationResult {
     confidence: number;
     verifiedAt: number;
     expiresAt?: number;
-    evidence: ValidationEvidence[];
-    flags: ValidationFlag[];
+    evidence: ValidationEvidence;
+    flags: ValidationFlag;
     reviewNotes?: string;
-    nextSteps?: string[];
+    nextSteps?: string;
 }
 export interface ValidationEvidence {
     type: 'document_scan' | 'api_verification' | 'manual_review' | 'third_party_check';
@@ -136,7 +136,7 @@ export interface TrustScore {
         activity: number;
     };
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
-    badges: string[];
+    badges: string;
     lastUpdated: number;
 }
 export declare class IdentityValidationService {
@@ -152,53 +152,11 @@ export declare class IdentityValidationService {
     /**
      * Submit identity validation request
      */
-    submitValidationRequest(userId: string, type: IdentityValidationType, data: Partial<IdentityValidationData>, metadata?: Partial<IdentityValidationRequest['metadata']>): Promise<{
-        requestId: string;
-        status: ValidationStatus;
-    }>;
-    private processValidationRequest;
-    private performValidation;
-    private validateProfessionalCredentials;
-    private validateSingleCredential;
-    private validatePortfolioItem;
-    private calculateExpirationDate;
-    private generateReviewNotes;
-    private generateNextSteps;
-    /**
-     * Update user trust score based on validation results
-     */
-    private updateUserTrustScore;
-    private calculateTrustScore;
-    /**
-     * Get validation status for a request
-     */
-    getValidationStatus(requestId: string): IdentityValidationRequest | null;
-    /**
-     * Get validation result
-     */
-    getValidationResult(requestId: string): ValidationResult | null;
-    /**
-     * Get user's trust score
-     */
-    getUserTrustScore(userId: string): TrustScore | null;
-    /**
-     * Get all validation requests for a user
-     */
-    getUserValidations(userId: string): IdentityValidationRequest[];
-    /**
-     * Get user validation summary
-     */
-    getUserValidationSummary(userId: string): {
-        totalRequests: number;
-        approvedCount: number;
-        pendingCount: number;
-        rejectedCount: number;
-        trustScore: TrustScore | null;
-        completedValidations: IdentityValidationType[];
-        missingValidations: IdentityValidationType[];
-    };
-    private generateRequestId;
+    submitValidationRequest(): any;
+    userId: string;
+    type: IdentityValidationType;
+    data: Partial<IdentityValidationData>;
+    metadata: Partial<IdentityValidationRequest['metadata']>;
+    Promise(): void;
 }
-export declare const identityValidationService: IdentityValidationService;
-export default identityValidationService;
 //# sourceMappingURL=IdentityValidation.d.ts.map

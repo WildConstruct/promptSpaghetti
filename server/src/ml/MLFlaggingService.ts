@@ -12,6 +12,7 @@
 import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface MLFlaggingConfig {
   enableContentModeration: boolean;
   enableSecurityThreatDetection: boolean;
@@ -26,10 +27,12 @@ export interface MLFlaggingConfig {
     compliance?: string;
     anomaly?: string;
     promptInjection?: string;
+}
   };
   fallbackToRuleBased: boolean;
 }
 
+}
 export interface FlaggingRequest {
   content: string;
   contentType: 'text' | 'json' | 'graph' | 'prompt' | 'code';
@@ -42,6 +45,7 @@ export interface FlaggingRequest {
     sessionId?: string;
     requestId?: string;
     metadata?: Record<string, unknown>;
+}
   };
   categories: FlaggingCategory[];
 }
@@ -56,6 +60,7 @@ export type FlaggingCategory =
   | 'malware'
   | 'phishing';
 
+}
 export interface FlaggingResult {
   flagged: boolean;
   confidence: number;
@@ -67,7 +72,9 @@ export interface FlaggingResult {
   processingTime: number;
   fallbackUsed: boolean;
 }
+}
 
+}
 export interface FlaggedCategory {
   category: FlaggingCategory;
   confidence: number;
@@ -76,7 +83,9 @@ export interface FlaggedCategory {
   severity: 'low' | 'medium' | 'high';
   subcategories?: string[];
 }
+}
 
+}
 export interface MLModel {
   id: string;
   name: string;
@@ -88,7 +97,9 @@ export interface MLModel {
   lastUpdated: Date;
   configuration?: Record<string, unknown>;
 }
+}
 
+}
 export interface FlaggingEvent {
   id: string;
   requestId: string;
@@ -104,7 +115,9 @@ export interface FlaggingEvent {
   reviewedAt?: Date;
   reviewNotes?: string;
 }
+}
 
+}
 export interface FlaggingStats {
   totalRequests: number;
   flaggedRequests: number;
@@ -115,6 +128,7 @@ export interface FlaggingStats {
   averageConfidence: number;
   averageProcessingTime: number;
   modelAccuracy: Record<string, number>;
+}
 }
 
 // Rule-based fallback patterns
@@ -137,10 +151,12 @@ const SECURITY_PATTERNS = {
     /(jailbreak|dan\s+mode|developer\s+mode)/i
   ],
   dataLeak: [
-    /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,})\b/g, // Email
+    /\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
+})\b/g, // Email
     /\b(\d{3}-\d{2}-\d{4})\b/g, // SSN
     /\b(\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4})\b/g, // Credit card
-    /\b(api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*["\']?([a-zA-Z0-9]{20,})["\']?/i
+    /\b(api[_-]?key|secret[_-]?key|access[_-]?token)\s*[:=]\s*["\']?([a-zA-Z0-9]{20
+})["\']?/i
   ]
 };
 
@@ -198,6 +214,7 @@ export class MLFlaggingService {
    * Initialize the ML flagging system
    */
   async initialize(): Promise<void> {
+
     try {
       await this.loadModels();
       console.log('MLFlaggingService initialized successfully');
@@ -211,6 +228,7 @@ export class MLFlaggingService {
    * Flag content using ML models and rule-based fallbacks
    */
   async flagContent(request: FlaggingRequest): Promise<FlaggingResult> {
+
     const startTime = Date.now();
     const requestId = `flag_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -308,6 +326,7 @@ export class MLFlaggingService {
     category: FlaggingCategory,
     context?: FlaggingRequest['context']
   ): Promise<FlaggedCategory | null> {
+
     const model = this.models.get(category);
     
     if (!model || !model.isActive) {
@@ -344,6 +363,7 @@ export class MLFlaggingService {
     content: string,
     context?: FlaggingRequest['context']
   ): Promise<FlaggedCategory | null> {
+
     if (!model.endpoint) {
       throw new Error('Model endpoint not configured');
     }
@@ -354,12 +374,12 @@ export class MLFlaggingService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': process.env.ML_API_KEY ? `Bearer ${process.env.ML_API_KEY}` : ''
-        },
+  }
         body: JSON.stringify({
           content,
           model_version: model.version,
           context: context || {}
-        })
+  }
       });
 
       if (!response.ok) {
@@ -390,6 +410,7 @@ export class MLFlaggingService {
    * Rule-based flagging fallback
    */
   private async ruleBasedFlagging(content: string, category: FlaggingCategory): Promise<FlaggedCategory | null> {
+
     const patterns = this.getRulePatternsForCategory(category);
     const matches: string[] = [];
     let maxConfidence = 0;
@@ -518,6 +539,7 @@ export class MLFlaggingService {
    * Store flagging event in database
    */
   private async storeFlaggingEvent(event: FlaggingEvent): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO ml_flagging_events (
@@ -557,6 +579,7 @@ export class MLFlaggingService {
     startDate?: Date, 
     endDate?: Date
   ): Promise<FlaggingStats> {
+
     const whereClause = this.buildWhereClause(organizationId, startDate, endDate);
     const params = this.buildQueryParams(organizationId, startDate, endDate);
 
@@ -651,6 +674,7 @@ export class MLFlaggingService {
     organizationId?: string,
     flaggedOnly: boolean = false
   ): Promise<FlaggingEvent[]> {
+
     try {
       const whereConditions = ['1 = 1'];
       const params: any[] = [];
@@ -694,7 +718,7 @@ export class MLFlaggingService {
           explanation: event.explanation,
           processingTime: event.processing_time,
           fallbackUsed: Boolean(event.fallback_used)
-        },
+  }
         timestamp: event.timestamp,
         processed: Boolean(event.processed),
         reviewStatus: event.review_status,
@@ -717,6 +741,7 @@ export class MLFlaggingService {
     reviewedBy: string,
     notes?: string
   ): Promise<boolean> {
+
     try {
       const result = await this.db.query(`
         UPDATE ml_flagging_events 
@@ -742,6 +767,7 @@ export class MLFlaggingService {
    * Load ML models from database
    */
   private async loadModels(): Promise<void> {
+
     try {
       const models = await this.db.query(
         'SELECT * FROM ml_models WHERE is_active = 1 ORDER BY category, version DESC'

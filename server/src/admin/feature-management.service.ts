@@ -6,6 +6,7 @@ import { EventEmitter } from 'events';
 import { FeatureToggleService } from '../services/feature-toggle-service';
 import { EnhancedToggleEvaluationService } from '../services/EnhancedToggleEvaluationService';
 
+}
 export interface FeatureToggleAdmin {
   id: string;
   key: string;
@@ -25,6 +26,7 @@ export interface FeatureToggleAdmin {
     user_ids: string[];
     percentage: number;
     rules: TargetingRule[];
+}
   };
   
   scheduling?: {
@@ -53,13 +55,16 @@ export interface FeatureToggleAdmin {
   health_status?: FeatureHealthStatus;
 }
 
+}
 export interface TargetingRule {
   field: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains' | 'regex' | 'greater_than' | 'less_than';
   value: any;
   condition?: 'and' | 'or';
 }
+}
 
+}
 export interface RollbackCondition {
   metric: string;
   threshold: number;
@@ -67,12 +72,15 @@ export interface RollbackCondition {
   window_minutes: number;
   action: 'disable' | 'rollback' | 'alert';
 }
+}
 
+}
 export interface AuditLogEntry {
   id: string;
   user_id: string;
   user_name: string;
   action: 'created' | 'updated' | 'enabled' | 'disabled' | 'deleted' | 'emergency_override';
+}
   changes: Record<string, { old: any; new: any }>;
   reason?: string;
   timestamp: string;
@@ -80,6 +88,7 @@ export interface AuditLogEntry {
   user_agent?: string;
 }
 
+}
 export interface FeatureUsageStats {
   total_evaluations: number;
   evaluations_last_24h: number;
@@ -88,7 +97,9 @@ export interface FeatureUsageStats {
   error_rate_percentage: number;
   last_evaluation: string;
 }
+}
 
+}
 export interface FeatureHealthStatus {
   status: 'healthy' | 'warning' | 'critical' | 'disabled';
   issues: string[];
@@ -96,7 +107,9 @@ export interface FeatureHealthStatus {
   performance_score: number;
   availability_percentage: number;
 }
+}
 
+}
 export interface FeatureDashboardStats {
   total_features: number;
   enabled_features: number;
@@ -109,7 +122,9 @@ export interface FeatureDashboardStats {
   avg_response_time: number;
   recent_changes: AuditLogEntry[];
 }
+}
 
+}
 export interface CreateFeatureRequest {
   key: string;
   name: string;
@@ -122,6 +137,7 @@ export interface CreateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
+}
   };
   scheduling?: {
     enable_at?: string;
@@ -142,6 +158,7 @@ export interface CreateFeatureRequest {
   };
 }
 
+}
 export interface UpdateFeatureRequest {
   name?: string;
   description?: string;
@@ -152,6 +169,7 @@ export interface UpdateFeatureRequest {
     user_ids?: string[];
     percentage?: number;
     rules?: TargetingRule[];
+}
   };
   scheduling?: {
     enable_at?: string;
@@ -186,6 +204,7 @@ export class FeatureManagementService extends EventEmitter {
 
   // Feature CRUD operations
   async createFeature(adminUserId: string, featureData: CreateFeatureRequest): Promise<FeatureToggleAdmin> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -266,6 +285,7 @@ export class FeatureManagementService extends EventEmitter {
     adminUserId: string,
     updates: UpdateFeatureRequest
   ): Promise<FeatureToggleAdmin> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -364,6 +384,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   async toggleFeature(featureId: string, adminUserId: string, enabled: boolean, reason?: string): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -395,6 +416,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   async deleteFeature(featureId: string, adminUserId: string, reason?: string): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -445,6 +467,7 @@ export class FeatureManagementService extends EventEmitter {
     has_scheduling?: boolean;
     search?: string;
   }): Promise<FeatureToggleAdmin[]> {
+
     let query = `
       SELECT 
         f.*,
@@ -490,6 +513,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   async getFeatureById(featureId: string): Promise<FeatureToggleAdmin | null> {
+
     const result = await this.db.query(`
       SELECT 
         f.*,
@@ -507,6 +531,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   async getFeatureAuditLog(featureId: string, limit = 50): Promise<AuditLogEntry[]> {
+
     const result = await this.db.query(`
       SELECT 
         al.*,
@@ -532,6 +557,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   async getDashboardStats(): Promise<FeatureDashboardStats> {
+
     const [featuresResult, evaluationsResult, changesResult] = await Promise.all([
       this.db.query(`
         SELECT 
@@ -597,6 +623,7 @@ export class FeatureManagementService extends EventEmitter {
 
   // Emergency controls
   async emergencyDisableFeature(featureId: string, adminUserId: string, reason: string): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -624,6 +651,7 @@ export class FeatureManagementService extends EventEmitter {
 
   // Private helper methods
   private async validateDependencies(dependencies: { requires?: string[]; conflicts_with?: string[] }): Promise<void> {
+
     if (dependencies.requires) {
       const existingFeatures = await this.db.query(
         'SELECT key FROM admin_feature_toggles WHERE key = ANY($1)',
@@ -659,6 +687,7 @@ export class FeatureManagementService extends EventEmitter {
     changes: Record<string, { old: any; new: any }>,
     reason?: string
   ): Promise<void> {
+
     await client.query(`
       INSERT INTO feature_audit_log (feature_id, user_id, action, changes, reason)
       VALUES ($1, $2, $3, $4, $5)
@@ -689,7 +718,7 @@ export class FeatureManagementService extends EventEmitter {
         avg_response_time_ms: row.avg_response_time_ms || 0,
         error_rate_percentage: row.error_rate_percentage || 0,
         last_evaluation: row.last_evaluation
-      },
+  }
       health_status: {
         status: row.health_status_status || 'healthy',
         issues: row.issues ? JSON.parse(row.issues) : [],
@@ -732,6 +761,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   private async processScheduledToggles(): Promise<void> {
+
     const now = new Date().toISOString();
     
     const scheduledFeatures = await this.db.query(`
@@ -740,7 +770,7 @@ export class FeatureManagementService extends EventEmitter {
       AND (
         (scheduling::jsonb ->> 'enable_at')::timestamp <= $1 OR
         (scheduling::jsonb ->> 'disable_at')::timestamp <= $1
-      )
+
     `, [now]);
 
     for (const feature of scheduledFeatures.rows) {
@@ -757,6 +787,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   private async updateUsageStatistics(): Promise<void> {
+
     // This would integrate with actual usage tracking system
     // For now, we'll just update the last_check timestamps
     await this.db.query(`
@@ -767,6 +798,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   private async performHealthChecks(): Promise<void> {
+
     const features = await this.db.query(`
       SELECT id, key, enabled, monitoring FROM admin_feature_toggles
       WHERE monitoring IS NOT NULL
@@ -803,6 +835,7 @@ export class FeatureManagementService extends EventEmitter {
   }
 
   private async calculateHealthScore(featureId: string): Promise<number> {
+
     // Simplified health score calculation
     // In a real implementation, this would check response times, error rates, etc.
     const stats = await this.db.query(

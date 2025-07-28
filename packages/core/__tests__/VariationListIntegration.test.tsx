@@ -4,22 +4,22 @@ import { WeightedChoiceEditor } from '../components/Inspector/editors/WeightedCh
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({),
-    addVariation: jest.fn(),
-    removeVariation: jest.fn(),
-    updateVariation: jest.fn(),
-    reorderVariations: jest.fn(),
-  })
+  useGraphStore: () => ({,)
+  addVariation: jest.fn(),
+  removeVariation: jest.fn(),
+  updateVariation: jest.fn(),
+  reorderVariations: jest.fn(),
+}
 }));
 describe('VariationList Integration with Editors', () => {
   const mockNodeData = {
-    id: 'test-choice-node',
-    type: 'WeightedChoice' as const,
-    label: 'Test Choice',
-    choices: ['Option A', 'Option B'],
-    weights: [1, 2],
-    variations: [],
-  };
+  id: 'test-choice-node',
+  type: 'WeightedChoice' as const,
+  label: 'Test Choice',
+  choices: ['Option A', 'Option B'],
+  weights: [1, 2],
+  variations: [],
+};
   const mockOnChange = jest.fn();
   beforeEach(() => {
     jest.clearAllMocks();
@@ -57,9 +57,9 @@ describe('VariationList Integration with Editors', () => {
     fireEvent.click(screen.getByRole('button', { name: /add/i }));
     // Verify onChange was called with the updated choices
     expect(mockOnChange).toHaveBeenCalledWith({)
-      choices: ['Option A', 'Option B', 'Option C'],
-      weights: [1, 2, 1]
-    });
+  choices: ['Option A', 'Option B', 'Option C'],
+  weights: [1, 2, 1],
+});
   });
   it('supports quick entry mode toggle', () => {
     render();
@@ -78,11 +78,11 @@ describe('VariationList Integration with Editors', () => {
     expect(screen.getByRole('button', { name: /Add All/i })).toBeInTheDocument();
   });
   it('shows variation count in the interface', () => {
-    const nodeDataWithChoices = {
-      ...mockNodeData,
-      choices: ['A', 'B', 'C'],
-      weights: [1, 1, 1]
-    };
+  const nodeDataWithChoices = {
+  ...mockNodeData,
+  choices: ['A', 'B', 'C'],
+  weights: [1, 1, 1],
+};
     render();
       <WeightedChoiceEditor
         nodeId={nodeDataWithChoices.id}

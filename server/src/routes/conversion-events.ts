@@ -16,6 +16,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { ConversionEvent } from '../../packages/core/analytics/ConversionTracker';
 import { EnhancedConversionEvent } from '../../packages/core/analytics/ConversionFunnelArchitecture';
 
+}
 export interface ConversionEventBatch {
   events: EnhancedConversionEvent[];
   metadata: {
@@ -24,9 +25,11 @@ export interface ConversionEventBatch {
     source: string;
     version?: string;
     clientId?: string;
+}
   };
 }
 
+}
 export interface ConversionEventQuery {
   startTime?: number;
   endTime?: number;
@@ -37,14 +40,18 @@ export interface ConversionEventQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 export interface ConversionEventValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
   processedEvent?: EnhancedConversionEvent;
 }
+}
 
+}
 export interface ConversionEventResponse {
   success: boolean;
   message?: string;
@@ -55,6 +62,7 @@ export interface ConversionEventResponse {
     duplicates: number;
     invalid: number;
     batchId: string;
+}
   };
 }
 
@@ -75,6 +83,7 @@ class ConversionEventsService {
    * Process batch of conversion events
    */
   public async processBatch(batch: ConversionEventBatch): Promise<ConversionEventResponse> {
+
     const { events, metadata } = batch;
     
     // Validate batch size
@@ -263,8 +272,7 @@ class ConversionEventsService {
         latency: Date.now() - event.timestamp,
         serverId: this.generateServerId(),
         batchId: metadata.batchId,
-        processedAt: Date.now()
-      },
+        processedAt: Date.now(},
       metadata: {
         ...event.metadata,
         serverProcessed: true,
@@ -419,7 +427,7 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'object' },
             maxItems: 1000
-          },
+  }
           metadata: {
             type: 'object',
             required: ['batchId', 'timestamp', 'source'],
@@ -432,7 +440,7 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -492,7 +500,7 @@ export async function registerConversionEventRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 1000 },
           offset: { type: 'number', minimum: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',

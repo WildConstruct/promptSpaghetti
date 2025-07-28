@@ -9,12 +9,13 @@
  */
 import React from 'react';
 import { ToggleCondition, ToggleConditionsService } from '../../services/ToggleConditionsService';
+
 interface ToggleConditionsManagerProps {
     conditionsService: ToggleConditionsService;
     toggleId: string;
     onConditionsChange?: (conditions: ToggleCondition[]) => void;
     onClose?: () => void;
-}
+
 export declare const ToggleConditionsManager: React.FC<ToggleConditionsManagerProps>;
 export default ToggleConditionsManager;
 //# sourceMappingURL=ToggleConditionsManager.d.ts.map

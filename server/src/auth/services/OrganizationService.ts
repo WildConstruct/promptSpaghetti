@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
+}
 export interface CreateOrganizationData {
   name: string;
   slug?: string;
@@ -16,7 +17,9 @@ export interface CreateOrganizationData {
   settings?: Record<string, any>;
   branding?: Record<string, any>;
 }
+}
 
+}
 export interface UpdateOrganizationData {
   name?: string;
   description?: string;
@@ -26,7 +29,9 @@ export interface UpdateOrganizationData {
   settings?: Record<string, any>;
   branding?: Record<string, any>;
 }
+}
 
+}
 export interface CreateTeamData {
   organizationId: string;
   parentTeamId?: string;
@@ -34,21 +39,27 @@ export interface CreateTeamData {
   description?: string;
   settings?: Record<string, any>;
 }
+}
 
+}
 export interface UpdateTeamData {
   name?: string;
   description?: string;
   parentTeamId?: string;
   settings?: Record<string, any>;
 }
+}
 
+}
 export interface TeamMemberData {
   teamId: string;
   userId: string;
   role: 'owner' | 'admin' | 'member' | 'viewer';
   invitedBy?: string;
 }
+}
 
+}
 export interface OrganizationStats {
   totalMembers: number;
   totalTeams: number;
@@ -58,6 +69,7 @@ export interface OrganizationStats {
     maxUsers: number;
     maxTeams: number;
     maxStorage: number;
+}
   };
   usage: {
     users: number;
@@ -90,6 +102,7 @@ export class OrganizationService {
     createdBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Organization> {
+
     const transaction = await this.dbService.transaction();
     
     try {
@@ -186,7 +199,7 @@ export class OrganizationService {
           organizationName: data.name,
           slug,
           plan: data.plan || 'free'
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -220,6 +233,7 @@ export class OrganizationService {
     updatedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Organization> {
+
     const now = new Date();
 
     // Get existing organization
@@ -258,7 +272,7 @@ export class OrganizationService {
           description: existing.description,
           plan: existing.plan
         }
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -284,6 +298,7 @@ export class OrganizationService {
     deletedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const transaction = await this.dbService.transaction();
     
     try {
@@ -313,7 +328,7 @@ export class OrganizationService {
         DELETE FROM team_members 
         WHERE team_id IN (
           SELECT id FROM teams WHERE organization_id = $1
-        )
+
       `, [organizationId]);
 
       // Remove organization-specific roles
@@ -321,14 +336,14 @@ export class OrganizationService {
         DELETE FROM user_roles 
         WHERE role_id IN (
           SELECT id FROM roles WHERE organization_id = $1
-        )
+
       `, [organizationId]);
 
       await transaction.query(`
         DELETE FROM permissions 
         WHERE role_id IN (
           SELECT id FROM roles WHERE organization_id = $1
-        )
+
       `, [organizationId]);
 
       await transaction.query(`
@@ -347,7 +362,7 @@ export class OrganizationService {
         details: {
           organizationName: organization.name,
           slug: organization.slug
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -359,6 +374,7 @@ export class OrganizationService {
   }
 
   async getOrganizationById(organizationId: string): Promise<Organization | null> {
+
     const result = await this.dbService.query(`
       SELECT * FROM organizations 
       WHERE id = $1 AND deleted_at IS NULL
@@ -372,6 +388,7 @@ export class OrganizationService {
   }
 
   async getOrganizationBySlug(slug: string): Promise<Organization | null> {
+
     const result = await this.dbService.query(`
       SELECT * FROM organizations 
       WHERE slug = $1 AND deleted_at IS NULL
@@ -385,6 +402,7 @@ export class OrganizationService {
   }
 
   async getUserOrganizations(userId: string): Promise<Organization[]> {
+
     const result = await this.dbService.query(`
       SELECT DISTINCT o.* FROM organizations o
       INNER JOIN roles r ON o.id = r.organization_id
@@ -403,6 +421,7 @@ export class OrganizationService {
     createdBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Team> {
+
     const teamId = require('crypto').randomUUID();
     const now = new Date();
 
@@ -439,7 +458,7 @@ export class OrganizationService {
         teamName: data.name,
         organizationId: data.organizationId,
         parentTeamId: data.parentTeamId
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -465,6 +484,7 @@ export class OrganizationService {
     updatedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<Team> {
+
     const now = new Date();
 
     const existing = await this.getTeamById(teamId);
@@ -498,7 +518,7 @@ export class OrganizationService {
           description: existing.description,
           parentTeamId: existing.parentTeamId
         }
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -521,6 +541,7 @@ export class OrganizationService {
     deletedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const transaction = await this.dbService.transaction();
     
     try {
@@ -564,7 +585,7 @@ export class OrganizationService {
         details: {
           teamName: team.name,
           organizationId: team.organizationId
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -576,6 +597,7 @@ export class OrganizationService {
   }
 
   async getTeamById(teamId: string): Promise<Team | null> {
+
     const result = await this.dbService.query(`
       SELECT * FROM teams 
       WHERE id = $1 AND deleted_at IS NULL
@@ -589,6 +611,7 @@ export class OrganizationService {
   }
 
   async getOrganizationTeams(organizationId: string): Promise<Team[]> {
+
     const result = await this.dbService.query(`
       SELECT * FROM teams 
       WHERE organization_id = $1 AND deleted_at IS NULL
@@ -599,6 +622,7 @@ export class OrganizationService {
   }
 
   async getTeamHierarchy(organizationId: string): Promise<Team[]> {
+
     const result = await this.dbService.query(`
       WITH RECURSIVE team_hierarchy AS (
         SELECT *, 0 as level, ARRAY[name] as path
@@ -611,7 +635,7 @@ export class OrganizationService {
         FROM teams t
         INNER JOIN team_hierarchy th ON t.parent_team_id = th.id
         WHERE t.deleted_at IS NULL
-      )
+
       SELECT * FROM team_hierarchy ORDER BY path
     `, [organizationId]);
 
@@ -627,6 +651,7 @@ export class OrganizationService {
     data: TeamMemberData,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<TeamMember> {
+
     const memberId = require('crypto').randomUUID();
     const now = new Date();
 
@@ -655,7 +680,7 @@ export class OrganizationService {
         teamId: data.teamId,
         addedUserId: data.userId,
         role: data.role
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -679,6 +704,7 @@ export class OrganizationService {
     removedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const result = await this.dbService.query(`
       DELETE FROM team_members 
       WHERE team_id = $1 AND user_id = $2
@@ -699,7 +725,7 @@ export class OrganizationService {
         teamId,
         removedUserId: userId,
         previousRole: result.rows[0].role
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -713,6 +739,7 @@ export class OrganizationService {
     updatedBy: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const result = await this.dbService.query(`
       UPDATE team_members 
       SET role = $1
@@ -735,7 +762,7 @@ export class OrganizationService {
         targetUserId: userId,
         newRole,
         previousRole: result.rows[0].role
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -743,6 +770,7 @@ export class OrganizationService {
   }
 
   async getTeamMembers(teamId: string): Promise<any[]> {
+
     const result = await this.dbService.query(`
       SELECT tm.*, u.email, up.display_name, up.first_name, up.last_name, up.avatar_url
       FROM team_members tm
@@ -770,6 +798,7 @@ export class OrganizationService {
   }
 
   async getUserTeams(userId: string, organizationId?: string): Promise<Team[]> {
+
     let query = `
       SELECT t.* FROM teams t
       INNER JOIN team_members tm ON t.id = tm.team_id
@@ -790,6 +819,7 @@ export class OrganizationService {
 
   // Statistics and Analytics
   async getOrganizationStats(organizationId: string): Promise<OrganizationStats> {
+
     const [membersResult, teamsResult, planResult] = await Promise.all([
       this.dbService.query(`
         SELECT COUNT(DISTINCT ur.user_id) as total_members

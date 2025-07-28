@@ -18,28 +18,28 @@ export declare enum PasswordStrength {
     FAIR = "fair",
     GOOD = "good",
     STRONG = "strong"
-}
+
 export declare enum ResetStep {
     REQUEST = "request",
     VERIFY = "verify",
     RESET = "reset",
     SUCCESS = "success"
-}
+
 export interface PasswordResetRequest {
     email: string;
     ipAddress?: string;
     userAgent?: string;
     metadata?: Record<string, any>;
-}
+
 export interface TokenVerification {
     token: string;
     email: string;
-}
+
 export interface PasswordResetData {
     token: string;
     newPassword: string;
     confirmPassword: string;
-}
+
 export interface PasswordValidation {
     isValid: boolean;
     strength: PasswordStrength;
@@ -52,7 +52,7 @@ export interface PasswordValidation {
         numbers: boolean;
         symbols: boolean;
     };
-}
+
 export interface PasswordResetFlowProps {
     onResetComplete?: (success: boolean, email: string) => void;
     onStepChange?: (step: ResetStep) => void;
@@ -61,7 +61,7 @@ export interface PasswordResetFlowProps {
     brandName?: string;
     supportEmail?: string;
     customValidation?: (password: string) => PasswordValidation;
-}
+
 export declare const PasswordResetFlow: React.FC<PasswordResetFlowProps>;
 export declare enum SecurityEvent {
     RESET_REQUESTED = "password_reset_requested",
@@ -71,6 +71,6 @@ export declare enum SecurityEvent {
     PASSWORD_RESET_COMPLETED = "password_reset_completed",
     PASSWORD_RESET_FAILED = "password_reset_failed",
     RESET_CODE_RESENT = "reset_code_resent"
-}
+
 export default PasswordResetFlow;
 //# sourceMappingURL=PasswordResetFlow.d.ts.map

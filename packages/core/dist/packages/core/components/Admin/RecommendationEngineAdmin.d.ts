@@ -33,7 +33,7 @@ export interface FeaturedContentConfig {
     };
     content_filters: {
         min_quality_score: number;
-        exclude_categories: string[];
+        exclude_categories: string;
         featured_categories_boost: Record<string, number>;
         creator_tier_weights: Record<string, number>;
     };
@@ -45,7 +45,7 @@ export interface FeaturedContentConfig {
     };
     ab_testing: {
         enabled: boolean;
-        variants: ABTestVariant[];
+        variants: ABTestVariant;
         traffic_allocation: number;
     };
 }
@@ -71,32 +71,14 @@ export interface RecommendationMetrics {
     };
     algorithm_performance: Record<string, {
         precision: number;
-        recall: number;
-        f1_score: number;
-        latency_ms: number;
-        cache_hit_rate: number;
-    }>;
-    featured_content_performance: {
-        impressions: number;
-        clicks: number;
-        conversions: number;
-        revenue: number;
-        top_performing_content: Array<{
-            id: string;
-            title: string;
-            performance_score: number;
-        }>;
-    };
-    real_time_stats: {
-        current_recommendations_per_minute: number;
-        active_users: number;
-        cache_utilization: number;
-        model_accuracy: number;
-    };
+    }, recall>;
+    number: any;
+    f1_score: number;
+    latency_ms: number;
+    cache_hit_rate: number;
 }
 export interface RecommendationEngineAdminProps {
     className?: string;
 }
 export declare const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>;
-export default RecommendationEngineAdmin;
 //# sourceMappingURL=RecommendationEngineAdmin.d.ts.map

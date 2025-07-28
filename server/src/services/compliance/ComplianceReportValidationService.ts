@@ -15,6 +15,7 @@ import {
   ReportingPeriod 
 } from './StandardComplianceReportingService';
 
+}
 export interface ValidationResult {
   isValid: boolean;
   overallScore: number;
@@ -27,7 +28,9 @@ export interface ValidationResult {
   validatedBy: string;
   nextValidationDue?: Date;
 }
+}
 
+}
 export interface ValidationSummary {
   totalChecks: number;
   passedChecks: number;
@@ -39,7 +42,9 @@ export interface ValidationSummary {
   accuracyScore: number;
   complianceScore: number;
 }
+}
 
+}
 export interface ValidationCheck {
   id: string;
   category: ValidationCategory;
@@ -59,7 +64,9 @@ export interface ValidationCheck {
   executedAt: Date;
   executionTimeMs: number;
 }
+}
 
+}
 export interface ValidationThreshold {
   minValue?: number;
   maxValue?: number;
@@ -68,7 +75,9 @@ export interface ValidationThreshold {
   allowedValues?: unknown[];
   customRule?: ValidationRule;
 }
+}
 
+}
 export interface ValidationRule {
   ruleId: string;
   ruleName: string;
@@ -77,7 +86,9 @@ export interface ValidationRule {
   parameters: Record<string, any>;
   errorMessage: string;
 }
+}
 
+}
 export interface ValidationRecommendation {
   id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -90,7 +101,9 @@ export interface ValidationRecommendation {
   actionItems: ActionItem[];
   relatedChecks: string[];
 }
+}
 
+}
 export interface ActionItem {
   action: string;
   owner: string;
@@ -98,7 +111,9 @@ export interface ActionItem {
   status: 'pending' | 'in_progress' | 'completed';
   dependencies?: string[];
 }
+}
 
+}
 export interface ValidationEvidence {
   evidenceId: string;
   evidenceType: 'calculation' | 'query_result' | 'system_log' | 'document' | 'screenshot';
@@ -107,6 +122,7 @@ export interface ValidationEvidence {
   timestamp: Date;
   hash: string;
   metadata: Record<string, any>;
+}
 }
 
 export enum ValidationCategory {
@@ -122,12 +138,14 @@ export enum ValidationCategory {
   AUDIT_TRAIL = 'audit_trail'
 }
 
+}
 export interface ValidationConfiguration {
   enabledCategories: ValidationCategory[];
   severityThresholds: {
     critical: number;
     high: number;
     medium: number;
+}
   };
   frameworkSpecificRules: Map<ComplianceFramework, ValidationRule[]>;
   customValidators: CustomValidator[];
@@ -135,6 +153,7 @@ export interface ValidationConfiguration {
   autoRemediationEnabled: boolean;
 }
 
+}
 export interface CustomValidator {
   validatorId: string;
   name: string;
@@ -142,6 +161,7 @@ export interface CustomValidator {
   category: ValidationCategory;
   applicableFrameworks: ComplianceFramework[];
   validatorFunction: (report: StandardComplianceReport) => Promise<ValidationCheck>;
+}
 }
 
 export class ComplianceReportValidationService {
@@ -161,6 +181,7 @@ export class ComplianceReportValidationService {
     report: StandardComplianceReport,
     validationLevel: 'basic' | 'standard' | 'comprehensive' = 'standard'
   ): Promise<ValidationResult> {
+
     console.log(`🔍 Starting ${validationLevel} validation for report: ${report.id}`);
     
     const _____startTime = Date.now();
@@ -222,6 +243,7 @@ export class ComplianceReportValidationService {
     elementPath: string,
     expectedValue?: any
   ): Promise<ValidationCheck> {
+
     const elementValue = this.getValueByPath(report, elementPath);
     
     const check: ValidationCheck = {
@@ -266,6 +288,7 @@ export class ComplianceReportValidationService {
   async validateCrossReferences(
     report: StandardComplianceReport
   ): Promise<ValidationCheck[]> {
+
     const checks: ValidationCheck[] = [];
 
     // Example: Validate that executive summary score matches detailed findings
@@ -302,6 +325,7 @@ export class ComplianceReportValidationService {
   async validateRegulatoryCompliance(
     report: StandardComplianceReport
   ): Promise<ValidationCheck[]> {
+
     const checks: ValidationCheck[] = [];
     const framework = report.framework;
 
@@ -326,6 +350,7 @@ export class ComplianceReportValidationService {
   async validateCalculations(
     report: StandardComplianceReport
   ): Promise<ValidationCheck[]> {
+
     const checks: ValidationCheck[] = [];
 
     // Validate percentage calculations
@@ -365,6 +390,7 @@ export class ComplianceReportValidationService {
     checks: ValidationCheck[],
     report: StandardComplianceReport
   ): Promise<ValidationRecommendation[]> {
+
     const recommendations: ValidationRecommendation[] = [];
 
     // Group failed/warning checks by category
@@ -405,7 +431,7 @@ export class ComplianceReportValidationService {
         expression: 'value >= 0 && value <= 100',
         parameters: { field: 'overallComplianceScore' },
         errorMessage: 'Compliance score must be between 0 and 100'
-      },
+  }
       {
         ruleId: 'VR002',
         ruleName: 'Required Fields Present',
@@ -413,7 +439,7 @@ export class ComplianceReportValidationService {
         expression: 'value !== null && value !== undefined',
         parameters: { requiredFields: ['id', 'framework', 'generatedAt'] },
         errorMessage: 'Required fields must be present'
-      },
+  }
       {
         ruleId: 'VR003',
         ruleName: 'Date Format Validation',
@@ -437,6 +463,7 @@ export class ComplianceReportValidationService {
     report: StandardComplianceReport,
     level: string
   ): Promise<ValidationRule[]> {
+
     // Return appropriate validation rules based on level
     const allRules = Array.from(this.validationRules.values());
     
@@ -454,6 +481,7 @@ export class ComplianceReportValidationService {
     report: StandardComplianceReport,
     rule: ValidationRule
   ): Promise<ValidationCheck> {
+
     const startTime = Date.now();
     
     const check: ValidationCheck = {
@@ -495,6 +523,7 @@ export class ComplianceReportValidationService {
     report: StandardComplianceReport,
     rule: ValidationRule
   ): Promise<boolean> {
+
     // Simple rule evaluation - would be expanded based on rule type
     switch (rule.ruleType) {
     case 'mathematical':
@@ -634,6 +663,7 @@ export class ComplianceReportValidationService {
     report: StandardComplianceReport,
     check: ValidationCheck
   ): Promise<ValidationEvidence[]> {
+
     const evidence: ValidationEvidence[] = [];
 
     // Generate evidence for the validation check
@@ -660,31 +690,37 @@ export class ComplianceReportValidationService {
     reportId: string,
     evidence: ValidationEvidence[]
   ): Promise<void> {
+
     this.evidenceStore.set(reportId, evidence);
     console.log(`📋 Stored ${evidence.length} validation evidence items for report: ${reportId}`);
   }
 
   // Additional helper methods would be implemented...
   private async calculateScoreFromFindings(_____findings: unknown): Promise<number> { return 94.2; }
-  private async validateRiskCalculation(_____report: StandardComplianceReport): Promise<ValidationCheck> { 
+  private async validateRiskCalculation(_____report: StandardComplianceReport): Promise<ValidationCheck> {
+
     return {} as ValidationCheck; 
   }
   private async executeRegulatoryRule(
     _____report: StandardComplianceReport,
     _____rule: ValidationRule
-  ): Promise<ValidationCheck> { 
+  ): Promise<ValidationCheck> {
+
     return {} as ValidationCheck; 
   }
-  private async validateCommonRequirements(_____report: StandardComplianceReport): Promise<ValidationCheck[]> { 
+  private async validateCommonRequirements(_____report: StandardComplianceReport): Promise<ValidationCheck[]> {
+
     return []; 
   }
   private async generateCategoryRecommendation(
     _____category: ValidationCategory,
     _____checks: ValidationCheck[]
-  ): Promise<ValidationRecommendation> { 
+  ): Promise<ValidationRecommendation> {
+
     return {} as ValidationRecommendation; 
   }
-  private async generateFrameworkRecommendations(_____report: StandardComplianceReport): Promise<ValidationRecommendation[]> { 
+  private async generateFrameworkRecommendations(_____report: StandardComplianceReport): Promise<ValidationRecommendation[]> {
+
     return []; 
   }
 }
@@ -698,7 +734,7 @@ export class ValidationConfigurationFactory {
         critical: 0,
         high: 70,
         medium: 85
-      },
+  }
       frameworkSpecificRules: new Map(),
       customValidators: [],
       evidenceRetentionDays: 2555, // 7 years
@@ -717,7 +753,7 @@ export class ValidationConfigurationFactory {
         critical: 0,
         high: 60,
         medium: 80
-      },
+  }
       frameworkSpecificRules: new Map(),
       customValidators: [],
       evidenceRetentionDays: 30,

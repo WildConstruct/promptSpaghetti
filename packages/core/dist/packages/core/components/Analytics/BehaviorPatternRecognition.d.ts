@@ -20,7 +20,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface BehaviorPatternRecognitionProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     patternConfig: PatternRecognitionConfig;
-    sessionData: SessionBehaviorData[];
+    sessionData: SessionBehaviorData;
     realTimeMode?: boolean;
     onPatternDetected?: (pattern: DetectedPattern) => void;
     onAnomalyDetected?: (anomaly: BehaviorAnomaly) => void;
@@ -28,10 +28,10 @@ export interface BehaviorPatternRecognitionProps {
     onExport?: (data: PatternRecognitionExportData) => void;
 }
 export interface PatternRecognitionConfig {
-    algorithms: RecognitionAlgorithm[];
-    thresholds: PatternThreshold[];
-    features: FeatureExtraction[];
-    models: PatternModel[];
+    algorithms: RecognitionAlgorithm;
+    thresholds: PatternThreshold;
+    features: FeatureExtraction;
+    models: PatternModel;
     clustering: ClusteringConfig;
     anomalyDetection: AnomalyDetectionConfig;
     realTimeSettings: RealTimeProcessingSettings;
@@ -50,7 +50,7 @@ export interface AlgorithmParameters {
     [key: string]: unknown;
     learningRate?: number;
     iterations?: number;
-    features?: string[];
+    features?: string;
     windowSize?: number;
     threshold?: number;
 }
@@ -82,8 +82,8 @@ export type FeatureType = 'temporal' | 'spatial' | 'sequential' | 'frequency' | 
 export interface FeatureExtractor {
     method: ExtractionMethod;
     parameters: ExtractionParameters;
-    preprocessing: PreprocessingStep[];
-    postprocessing: PostprocessingStep[];
+    preprocessing: PreprocessingStep;
+    postprocessing: PostprocessingStep;
 }
 export type ExtractionMethod = 'time_series_features' | 'n_gram_analysis' | 'statistical_moments' | 'frequency_analysis' | 'path_analysis' | 'interaction_features' | 'content_features' | 'contextual_features';
 export interface ExtractionParameters {
@@ -108,7 +108,7 @@ export interface PatternModel {
     version: string;
     trainedOn: number;
     performance: ModelPerformance;
-    features: ModelFeature[];
+    features: ModelFeature;
     hyperparameters: ModelHyperparameters;
 }
 export type ModelType = 'supervised' | 'unsupervised' | 'semi_supervised' | 'reinforcement' | 'deep_learning' | 'ensemble';
@@ -130,8 +130,8 @@ export interface ModelHyperparameters {
     [key: string]: unknown;
 }
 export interface ClusteringConfig {
-    algorithms: ClusteringAlgorithm[];
-    distanceMetrics: DistanceMetric[];
+    algorithms: ClusteringAlgorithm;
+    distanceMetrics: DistanceMetric;
     clusterCount: ClusterCountStrategy;
     validation: ClusterValidation;
 }
@@ -150,13 +150,13 @@ export interface ClusterCountStrategy {
     maxClusters: number;
 }
 export interface ClusterValidation {
-    metrics: ClusterMetric[];
+    metrics: ClusterMetric;
     crossValidation: boolean;
     stabilityAnalysis: boolean;
 }
 export type ClusterMetric = 'silhouette' | 'calinski_harabasz' | 'davies_bouldin' | 'adjusted_rand';
 export interface AnomalyDetectionConfig {
-    methods: AnomalyDetectionMethod[];
+    methods: AnomalyDetectionMethod;
     sensitivity: 'low' | 'medium' | 'high';
     threshold: number;
     windowSize: number;
@@ -180,8 +180,8 @@ export interface SessionBehaviorData {
     userId?: string;
     timestamp: number;
     duration: number;
-    interactions: BehaviorInteraction[];
-    navigationPath: NavigationStep[];
+    interactions: BehaviorInteraction;
+    navigationPath: NavigationStep;
     features: ExtractedFeatures;
     context: SessionContext;
 }
@@ -249,16 +249,16 @@ export interface TemporalFeatures {
     sessionDuration: number;
     averageInteractionInterval: number;
     interactionRate: number;
-    pauseDurations: number[];
+    pauseDurations: number;
     peakActivityTime: number;
-    activityDistribution: number[];
+    activityDistribution: number;
 }
 export interface SpatialFeatures {
-    mouseTrackingData: MousePoint[];
-    clickHeatmap: HeatmapPoint[];
+    mouseTrackingData: MousePoint;
+    clickHeatmap: HeatmapPoint;
     scrollPattern: ScrollPattern;
-    viewportUtilization: ViewportArea[];
-    elementInteractionDensity: ElementDensity[];
+    viewportUtilization: ViewportArea;
+    elementInteractionDensity: ElementDensity;
 }
 export interface MousePoint {
     x: number;
@@ -275,9 +275,9 @@ export interface HeatmapPoint {
 }
 export interface ScrollPattern {
     totalScrollDistance: number;
-    scrollVelocity: number[];
-    scrollDirection: ScrollDirection[];
-    pausePoints: ScrollPause[];
+    scrollVelocity: number;
+    scrollDirection: ScrollDirection;
+    pausePoints: ScrollPause;
 }
 export type ScrollDirection = 'up' | 'down' | 'left' | 'right';
 export interface ScrollPause {
@@ -305,19 +305,19 @@ export interface ElementDensity {
     attention: number;
 }
 export interface SequentialFeatures {
-    interactionSequences: InteractionSequence[];
-    navigationPatterns: NavigationPattern[];
-    pageFlow: PageTransition[];
-    behaviorChains: BehaviorChain[];
+    interactionSequences: InteractionSequence;
+    navigationPatterns: NavigationPattern;
+    pageFlow: PageTransition;
+    behaviorChains: BehaviorChain;
 }
 export interface InteractionSequence {
-    sequence: InteractionType[];
+    sequence: InteractionType;
     frequency: number;
     avgDuration: number;
     confidence: number;
 }
 export interface NavigationPattern {
-    pattern: string[];
+    pattern: string;
     frequency: number;
     avgCompletionTime: number;
     conversionRate?: number;
@@ -330,7 +330,7 @@ export interface PageTransition {
     abandonmentRate: number;
 }
 export interface BehaviorChain {
-    actions: string[];
+    actions: string;
     probability: number;
     avgDuration: number;
     outcome: 'conversion' | 'abandonment' | 'continuation';
@@ -367,9 +367,9 @@ export interface SpatialStatistics {
     symmetry: number;
 }
 export interface FrequencyStatistics {
-    mostFrequentActions: ActionFrequency[];
-    actionClusters: ActionCluster[];
-    periodicPatterns: PeriodicPattern[];
+    mostFrequentActions: ActionFrequency;
+    actionClusters: ActionCluster;
+    periodicPatterns: PeriodicPattern;
 }
 export interface ActionFrequency {
     action: string;
@@ -377,7 +377,7 @@ export interface ActionFrequency {
     percentage: number;
 }
 export interface ActionCluster {
-    actions: string[];
+    actions: string;
     frequency: number;
     coherence: number;
 }
@@ -391,9 +391,9 @@ export interface BehaviorialFeatures {
     engagementLevel: number;
     explorationScore: number;
     decisionMakingStyle: DecisionMakingStyle;
-    intentSignals: IntentSignal[];
-    frustrationIndicators: FrustrationIndicator[];
-    confidenceIndicators: ConfidenceIndicator[];
+    intentSignals: IntentSignal;
+    frustrationIndicators: FrustrationIndicator;
+    confidenceIndicators: ConfidenceIndicator;
 }
 export type DecisionMakingStyle = 'quick' | 'deliberate' | 'explorative' | 'hesitant' | 'impulsive';
 export interface IntentSignal {
@@ -427,7 +427,7 @@ export interface DeviceContext {
         width: number;
         height: number;
     };
-    inputMethods: string[];
+    inputMethods: string;
 }
 export interface EnvironmentContext {
     networkSpeed: 'slow' | 'medium' | 'fast';
@@ -471,17 +471,17 @@ export interface DetectedPattern {
     confidence: number;
     frequency: number;
     support: number;
-    instances: PatternInstance[];
+    instances: PatternInstance;
     features: PatternFeatures;
-    insights: PatternInsight[];
-    recommendations: PatternRecommendation[];
+    insights: PatternInsight;
+    recommendations: PatternRecommendation;
 }
 export interface PatternInstance {
     instanceId: string;
     sessionId: string;
     timestamp: number;
     duration: number;
-    elements: PatternElement[];
+    elements: PatternElement;
     context: InstanceContext;
 }
 export interface PatternElement {
@@ -497,10 +497,10 @@ export interface InstanceContext {
     conversionOutcome?: boolean;
 }
 export interface PatternFeatures {
-    temporal: TemporalPatternFeature[];
-    spatial: SpatialPatternFeature[];
-    sequential: SequentialPatternFeature[];
-    contextual: ContextualPatternFeature[];
+    temporal: TemporalPatternFeature;
+    spatial: SpatialPatternFeature;
+    sequential: SequentialPatternFeature;
+    contextual: ContextualPatternFeature;
 }
 export interface TemporalPatternFeature {
     name: string;
@@ -523,7 +523,7 @@ export interface SpatialPatternFeature {
 }
 export interface SequentialPatternFeature {
     name: string;
-    sequence: string[];
+    sequence: string;
     probability: number;
     length: number;
     description: string;
@@ -541,7 +541,7 @@ export interface PatternInsight {
     description: string;
     impact: ImpactLevel;
     actionable: boolean;
-    evidence: EvidenceItem[];
+    evidence: EvidenceItem;
 }
 export type InsightType = 'user_behavior' | 'conversion_opportunity' | 'usability_issue' | 'engagement_pattern' | 'navigation_preference' | 'performance_impact';
 export type ImpactLevel = 'low' | 'medium' | 'high' | 'critical';
@@ -562,18 +562,18 @@ export interface PatternRecommendation {
 }
 export type RecommendationType = 'ui_optimization' | 'content_improvement' | 'navigation_enhancement' | 'performance_optimization' | 'personalization' | 'accessibility_improvement';
 export interface ImplementationGuide {
-    steps: ImplementationStep[];
+    steps: ImplementationStep;
     complexity: 'low' | 'medium' | 'high';
     estimatedTime: string;
-    requiredSkills: string[];
-    tools: string[];
+    requiredSkills: string;
+    tools: string;
 }
 export interface ImplementationStep {
     stepNumber: number;
     title: string;
     description: string;
     code?: string;
-    resources: string[];
+    resources: string;
 }
 export interface ExpectedImpact {
     conversionIncrease: number;
@@ -588,8 +588,8 @@ export interface BehaviorAnomaly {
     severity: AnommalySeverity;
     description: string;
     detectedAt: number;
-    sessionIds: string[];
-    features: AnomalyFeature[];
+    sessionIds: string;
+    features: AnomalyFeature;
     context: AnomalyContext;
     investigation: AnomalyInvestigation;
 }
@@ -609,8 +609,8 @@ export interface AnomalyContext {
         start: number;
         end: number;
     };
-    geographicDistribution?: GeographicData[];
-    deviceDistribution: DeviceData[];
+    geographicDistribution?: GeographicData;
+    deviceDistribution: DeviceData;
 }
 export interface GeographicData {
     region: string;
@@ -623,15 +623,15 @@ export interface DeviceData {
     percentage: number;
 }
 export interface AnomalyInvestigation {
-    possibleCauses: PossibleCause[];
-    relatedEvents: RelatedEvent[];
-    recommendations: InvestigationRecommendation[];
-    followUpActions: FollowUpAction[];
+    possibleCauses: PossibleCause;
+    relatedEvents: RelatedEvent;
+    recommendations: InvestigationRecommendation;
+    followUpActions: FollowUpAction;
 }
 export interface PossibleCause {
     cause: string;
     probability: number;
-    evidence: string[];
+    evidence: string;
     impact: string;
 }
 export interface RelatedEvent {
@@ -644,7 +644,7 @@ export interface InvestigationRecommendation {
     action: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
     timeline: string;
-    resources: string[];
+    resources: string;
 }
 export interface FollowUpAction {
     actionId: string;
@@ -661,14 +661,14 @@ export interface BehaviorInsight {
     relevance: number;
     actionable: boolean;
     data: InsightData;
-    visualizations: InsightVisualization[];
+    visualizations: InsightVisualization;
 }
 export type BehaviorInsightType = 'user_journey_optimization' | 'conversion_bottleneck' | 'engagement_opportunity' | 'usability_improvement' | 'personalization_potential' | 'performance_enhancement';
 export interface InsightData {
-    metrics: InsightMetric[];
-    trends: InsightTrend[];
-    comparisons: InsightComparison[];
-    correlations: InsightCorrelation[];
+    metrics: InsightMetric;
+    trends: InsightTrend;
+    comparisons: InsightComparison;
+    correlations: InsightCorrelation;
 }
 export interface InsightMetric {
     name: string;
@@ -682,7 +682,7 @@ export interface InsightTrend {
     direction: 'increasing' | 'decreasing' | 'stable' | 'volatile';
     strength: number;
     timeframe: string;
-    dataPoints: TrendDataPoint[];
+    dataPoints: TrendDataPoint;
 }
 export interface TrendDataPoint {
     timestamp: number;
@@ -727,11 +727,11 @@ export interface VisualizationConfig {
     responsive: boolean;
 }
 export interface PatternRecognitionExportData {
-    patterns: DetectedPattern[];
-    anomalies: BehaviorAnomaly[];
-    insights: BehaviorInsight[];
-    sessionData: SessionBehaviorData[];
-    models: PatternModel[];
+    patterns: DetectedPattern;
+    anomalies: BehaviorAnomaly;
+    insights: BehaviorInsight;
+    sessionData: SessionBehaviorData;
+    models: PatternModel;
     performance: SystemPerformance;
     metadata: ExportMetadata;
 }
@@ -752,7 +752,7 @@ export interface ExportMetadata {
         start: number;
         end: number;
     };
-    algorithms: string[];
+    algorithms: string;
 }
 export declare const BehaviorPatternRecognition: React.FC<BehaviorPatternRecognitionProps>;
 export default BehaviorPatternRecognition;

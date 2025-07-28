@@ -8,6 +8,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
+}
 export interface KeyExchangeConfig {
   // Algorithm configuration
   algorithm: 'secp256r1' | 'secp384r1' | 'secp521r1';
@@ -29,7 +30,9 @@ export interface KeyExchangeConfig {
   enableSecurityAlerts: boolean;
   riskThreshold: number; // 0-100
 }
+}
 
+}
 export interface KeyExchangeSession {
   id: string;
   sessionId: string;
@@ -49,7 +52,9 @@ export interface KeyExchangeSession {
   ipAddress?: string;
   userAgent?: string;
 }
+}
 
+}
 export interface DerivedKey {
   keyId: string;
   purpose: 'encryption' | 'authentication' | 'signing' | 'session' | 'api_access';
@@ -59,7 +64,9 @@ export interface DerivedKey {
   usageCount: number;
   maxUsageCount?: number;
 }
+}
 
+}
 export interface KeyExchangeResult {
   sessionId: string;
   serverPublicKey: string;
@@ -70,9 +77,11 @@ export interface KeyExchangeResult {
     kdf: string;
     iterations: number;
     saltLength: number;
+}
   };
 }
 
+}
 export interface SharedSecretResult {
   sessionId: string;
   success: boolean;
@@ -80,6 +89,7 @@ export interface SharedSecretResult {
     [purpose: string]: {
       keyId: string;
       expiresAt?: Date;
+}
     };
   };
   securityWarnings?: string[];
@@ -115,6 +125,7 @@ export class KeyExchangeService extends EventEmitter {
     ipAddress?: string,
     userAgent?: string
   ): Promise<KeyExchangeResult> {
+
     try {
       // Generate session ID
       const sessionId = this.generateSecureSessionId();
@@ -211,6 +222,7 @@ export class KeyExchangeService extends EventEmitter {
       maxUsage?: number;
     }> = []
   ): Promise<SharedSecretResult> {
+
     try {
       // Get session
       const session = await this.getSession(sessionId);
@@ -336,6 +348,7 @@ export class KeyExchangeService extends EventEmitter {
     expiryHours?: number,
     maxUsage?: number
   ): Promise<DerivedKey> {
+
     // Validate key length
     if (![16, 24, 32, 48, 64].includes(keyLength)) {
       throw new Error(`Invalid key length: ${keyLength}`);
@@ -360,7 +373,7 @@ export class KeyExchangeService extends EventEmitter {
       INSERT INTO derived_keys (
         session_id, key_id, key_purpose, derivation_info, key_length,
         expires_at, max_usage_count, security_context
-      ) 
+
       SELECT id, $1, $2, $3, $4, $5, $6, $7
       FROM key_exchange_sessions 
       WHERE session_id = $8
@@ -399,6 +412,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   async getSessionStatus(sessionId: string): Promise<KeyExchangeSession | null> {
+
     try {
       const result = await this.db.query(`
         SELECT 
@@ -436,6 +450,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   async revokeDerivedKey(keyId: string, reason: string): Promise<boolean> {
+
     try {
       const result = await this.db.query(`
         UPDATE derived_keys 
@@ -467,6 +482,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   async getActiveSessions(userId?: string): Promise<KeyExchangeSession[]> {
+
     try {
       const query = userId ? 
         `SELECT * FROM key_exchange_sessions WHERE user_id = $1 AND state IN (
@@ -608,6 +624,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   private async getDecryptedPrivateKey(sessionId: string): Promise<string> {
+
     const result = await this.db.query(
       'SELECT server_private_key FROM key_exchange_sessions WHERE session_id = $1',
       [sessionId]
@@ -635,6 +652,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   private async getSession(sessionId: string): Promise<KeyExchangeSession | null> {
+
     // Try cache first
     const cached = await this.redis.get(`session:${sessionId}`);
     if (cached) {
@@ -646,14 +664,17 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   private async cacheSessionData(sessionId: string, data: Record<string, unknown>): Promise<void> {
+
     await this.redis.setex(`session:${sessionId}`, 900, JSON.stringify(data)); // 15 minutes
   }
 
   private async cacheDerivedKey(keyId: string, keyBuffer: Buffer, ttl: number): Promise<void> {
+
     await this.redis.setex(`derived_key:${keyId}`, ttl, keyBuffer.toString('base64'));
   }
 
   private async enforceConcurrentSessionLimits(userId?: string): Promise<void> {
+
     if (!userId) return;
     
     const activeCount = await this.db.query(`
@@ -668,6 +689,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   private async expireSession(sessionId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE key_exchange_sessions 
       SET state = 'expired', last_activity = NOW()
@@ -676,6 +698,7 @@ export class KeyExchangeService extends EventEmitter {
   }
 
   private async failSession(sessionId: string, reason: string): Promise<void> {
+
     await this.db.query(`
       UPDATE key_exchange_sessions 
       SET state = 'failed', failure_reason = $1, last_activity = NOW()
@@ -692,6 +715,7 @@ export class KeyExchangeService extends EventEmitter {
     eventType: string,
     eventData: unknown
   ): Promise<void> {
+
     if (!this.config.auditAllOperations) return;
     
     try {
@@ -701,7 +725,7 @@ export class KeyExchangeService extends EventEmitter {
         details: {
           sessionId,
           ...eventData
-        },
+  }
         severity: eventType.includes('failed') || eventType.includes('security') ? 'error' : 'info'
       });
     } catch (error) {

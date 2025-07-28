@@ -1,6 +1,7 @@
 // Epic 16 Story 16.1 - Search Analytics Service
 import { Pool, PoolClient } from 'pg';
 
+}
 interface SearchQuery {
   query: string;
   user_id?: string;
@@ -10,12 +11,15 @@ interface SearchQuery {
   ip_address?: string;
   user_agent?: string;
 }
+}
 
+}
 interface SearchAnalytics {
   period_start: Date;
   period_end: Date;
   total_searches: number;
   unique_users: number;
+}
   top_queries: Array<{ query: string; count: number; avg_results: number }>;
   popular_filters: Array<{ filter: string; value: string; count: number }>;
   zero_result_queries: Array<{ query: string; count: number }>;
@@ -27,17 +31,20 @@ interface SearchAnalytics {
   };
 }
 
+}
 interface SearchSuggestion {
   suggestion: string;
   frequency: number;
   category?: string;
   result_count: number;
 }
+}
 
 export class SearchAnalyticsService {
   constructor(private db: Pool) {}
 
   async logSearch(searchData: SearchQuery): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query(`
@@ -64,6 +71,7 @@ export class SearchAnalyticsService {
     endDate: Date,
     userId?: string
   ): Promise<SearchAnalytics> {
+
     const client = await this.db.connect();
     try {
       // Base query filters
@@ -153,7 +161,7 @@ export class SearchAnalyticsService {
           LEFT JOIN marketplace_events e ON e.session_id = s.session_id
             AND e.created_at > s.created_at
             AND e.created_at < s.created_at + INTERVAL '1 hour'
-        )
+
         SELECT 
           COUNT(DISTINCT CASE WHEN event_type = 'view' THEN session_id END)::FLOAT / 
             NULLIF(COUNT(DISTINCT session_id), 0) as search_to_view,
@@ -202,6 +210,7 @@ export class SearchAnalyticsService {
   }
 
   async getSearchSuggestions(query: string, limit: number = 10): Promise<SearchSuggestion[]> {
+
     const client = await this.db.connect();
     try {
       // Get suggestions based on:
@@ -244,7 +253,7 @@ export class SearchAnalyticsService {
             AND EXISTS (
               SELECT 1 FROM unnest(tags) tag 
               WHERE tag ILIKE $1 || '%'
-            )
+
           GROUP BY unnest(tags)
         ),
         category_suggestions AS (
@@ -260,7 +269,7 @@ export class SearchAnalyticsService {
           WHERE c.name ILIKE $1 || '%'
             AND c.is_active = true
           GROUP BY c.id, c.name
-        )
+
         SELECT suggestion, frequency, category, result_count
         FROM (
           SELECT * FROM query_suggestions
@@ -321,7 +330,7 @@ export class SearchAnalyticsService {
             AND created_at < NOW() - INTERVAL '${interval}'
             AND query != ''
           GROUP BY query
-        )
+
         SELECT 
           c.query,
           c.current_count as count,
@@ -376,7 +385,7 @@ export class SearchAnalyticsService {
           FROM weekly_counts
           GROUP BY query
           HAVING COUNT(*) >= 2
-        )
+
         SELECT query
         FROM growth_calc
         WHERE growth_rate > 0.5 AND avg_weekly >= 5

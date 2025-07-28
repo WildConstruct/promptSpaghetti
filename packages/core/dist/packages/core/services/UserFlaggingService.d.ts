@@ -1,12 +1,3 @@
-/**
- * Epic 16 User Flagging Service
- * Task: E16-1753114247010-121CC7 - Create flagging functionality
- *
- * Service that bridges user-initiated flagging with the existing ML flagging
- * infrastructure. Handles user reports, integrates with automated moderation,
- * and provides flagging status tracking.
- */
-import { FlagSubmission, FlaggingStatus } from '../components/Flagging/FlaggingButton';
 export interface UserFlagReport {
     id: string;
     contentId: string;
@@ -63,21 +54,10 @@ export interface FlaggingAnalytics {
         pending: number;
         avgResolutionTimeHours: number;
     };
-    topReporters: Array<{
-        userId: string;
-        reportCount: number;
-        accuracy: number;
-    }>;
-    contentTrends: {
-        mostFlaggedContentTypes: Record<string, number>;
-        flagVolumeByHour: number[];
-        flagVolumeByDay: number[];
-    };
-    moderationEfficiency: {
-        avgResponseTimeHours: number;
-        accuracyRate: number;
-        escalationRate: number;
-    };
+    topReporters: Array<{}, userId>;
+    string: any;
+    reportCount: number;
+    accuracy: number;
 }
 export interface FlaggingConfig {
     enableUserFlagging: boolean;
@@ -85,7 +65,7 @@ export interface FlaggingConfig {
     maxFlagsPerContent: number;
     autoEscalationThreshold: number;
     enableDuplicateDetection: boolean;
-    requireJustification: string[];
+    requireJustification: string;
     anonymousReporting: boolean;
     notifyContentOwner: boolean;
     integrationSettings: {
@@ -95,93 +75,20 @@ export interface FlaggingConfig {
         autoModerationThreshold: number;
     };
 }
-/**
- * User Flagging Service
- *
- * Handles user-initiated content flagging and integrates with the existing
- * ML flagging infrastructure for comprehensive content moderation.
- */
 export declare class UserFlaggingService {
     private baseUrl;
     private config;
     private flagReports;
     private contentSummaries;
     constructor(baseUrl?: string, config?: Partial<FlaggingConfig>);
-    /**
-     * Submit a user flag report
-     */
-    submitFlag(submission: FlagSubmission): Promise<{
-        reportId: string;
-        status: 'accepted' | 'rejected' | 'duplicate';
-        message: string;
-        estimatedResolutionHours?: number;
-    }>;
-    /**
-     * Get flagging status for content
-     */
-    getFlaggingStatus(contentId: string, userId?: string): Promise<FlaggingStatus>;
-    /**
-     * Get user's flag reports
-     */
-    getUserFlagReports(userId: string, options?: {
-        status?: 'pending' | 'investigating' | 'resolved' | 'dismissed';
-        timeRange?: {
-            start: Date;
-            end: Date;
-        };
-        limit?: number;
-        offset?: number;
-    }): Promise<{
-        reports: UserFlagReport[];
-        totalCount: number;
-        stats: {
-            totalReports: number;
-            pendingReports: number;
-            resolvedReports: number;
-            accuracyRate: number;
-        };
-    }>;
-    /**
-     * Get flagging analytics
-     */
-    getFlaggingAnalytics(timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<FlaggingAnalytics>;
-    /**
-     * Update flag report status (for moderators)
-     */
-    updateFlagStatus(reportId: string, update: {
-        status: 'investigating' | 'resolved' | 'dismissed';
-        moderatorId: string;
-        moderatorNote?: string;
-        resolution?: FlagResolution;
-    }): Promise<void>;
-    private validateFlagSubmission;
-    private checkRateLimits;
     private checkForDuplicates;
     private createFlagReport;
-    private integrateMlFlagging;
-    private updateContentSummary;
-    private checkAutoEscalation;
-    private getContentSummary;
-    private hasUserFlagged;
-    private mapContentStatusToFlaggingStatus;
-    private getLatestResolutionDate;
-    private getLatestModeratorNote;
-    private getSeverityForReason;
-    private getCategoryForReason;
-    private calculateEstimatedResolution;
-    private determineContentStatus;
-    private calculateModerationPriority;
-    private calculateUserAccuracy;
-    private aggregateByField;
+    const report: UserFlagReport;
+    items: T;
+    field: keyof T;
+    Record<string, number>(): any;
     private calculateResolutionStats;
     private calculateTopReporters;
-    private calculateContentTrends;
-    private calculateModerationEfficiency;
-    private notifyContentOwner;
-    private notifyReporter;
+    sort(): any;
 }
-export default UserFlaggingService;
 //# sourceMappingURL=UserFlaggingService.d.ts.map

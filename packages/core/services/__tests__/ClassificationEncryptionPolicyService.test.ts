@@ -16,17 +16,17 @@ describe('ClassificationEncryptionPolicyService', () => {
   let service: ClassificationEncryptionPolicyService;
   let mockContext: OperationContext;
   beforeEach(() => {
-    service = new ClassificationEncryptionPolicyService();
-    mockContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session123',
-      purpose: 'data analysis',
-      environment: 'production',
-      timestamp: new Date(),
-      source: '192.168.1.100',
-      requestId: 'req123',
-    };
+  service = new ClassificationEncryptionPolicyService();
+  mockContext = {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session123',
+  purpose: 'data analysis',
+  environment: 'production',
+  timestamp: new Date(),
+  source: '192.168.1.100',
+  requestId: 'req123',
+};
   });
   describe('Default Encryption Policies', () => {
     it('should initialize encryption policies for all classification levels', () => {
@@ -102,14 +102,14 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(restrictedAlgorithms.some(alg => alg.quantumResistant)).toBe(true);
     });
     it('should allow adding new approved algorithms', () => {
-      const newAlgorithm: EncryptionAlgorithm = {
-        name: 'NEW-ALGORITHM-512',
-        keyLength: 512,
-        approved: true,
-        minClassification: 'CONFIDENTIAL',
-        fipsCompliant: true,
-        quantumResistant: true,
-      };
+  const newAlgorithm: EncryptionAlgorithm = {,
+  name: 'NEW-ALGORITHM-512',
+  keyLength: 512,
+  approved: true,
+  minClassification: 'CONFIDENTIAL',
+  fipsCompliant: true,
+  quantumResistant: true,
+};
       service.addApprovedAlgorithm(newAlgorithm);
       const confidentialAlgorithms = service.getApprovedAlgorithms('CONFIDENTIAL');
       expect(confidentialAlgorithms.some(alg => alg.name === 'NEW-ALGORITHM-512')).toBe(true);
@@ -124,44 +124,44 @@ describe('ClassificationEncryptionPolicyService', () => {
     });
   });
   describe('Encryption Compliance Validation', () => {
-    it('should validate compliant encryption for internal data', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256',
-          keyLength: 256,
-          lastRotationDate: new Date(),
-        },
+  it('should validate compliant encryption for internal data', async () => {
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256',
+  keyLength: 256,
+  lastRotationDate: new Date(),
+}
         mockContext
       );
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
     it('should detect encryption requirement violations', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'CONFIDENTIAL',
-        {
-          encrypted: false,
-        },
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'CONFIDENTIAL',
+  {
+  encrypted: false,
+}
         mockContext
       );
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Encryption is mandatory for CONFIDENTIAL data but data is not encrypted');
     });
     it('should validate algorithm compliance', async () => {
-      // Test with inappropriate algorithm
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'CONFIDENTIAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-128', // Too weak for confidential
-          keyLength: 128,
-          lastRotationDate: new Date(),
-        },
+  // Test with inappropriate algorithm
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'CONFIDENTIAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-128', // Too weak for confidential,
+  keyLength: 128,
+  lastRotationDate: new Date(),
+}
         mockContext
       );
       expect(result.valid).toBe(false);
@@ -170,15 +170,15 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should validate key length requirements', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256',
-          keyLength: 128, // Too short for AES-256
-          lastRotationDate: new Date(),
-        },
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256',
+  keyLength: 128, // Too short for AES-256,
+  lastRotationDate: new Date(),
+}
         mockContext
       );
       expect(result.valid).toBe(false);
@@ -187,17 +187,17 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should validate key rotation compliance', async () => {
-      const oldRotationDate = new Date();
-      oldRotationDate.setDate(oldRotationDate.getDate() - 365); // 1 year ago
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'CONFIDENTIAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256-GCM',
-          keyLength: 256,
-          lastRotationDate: oldRotationDate,
-        },
+  const oldRotationDate = new Date();
+  oldRotationDate.setDate(oldRotationDate.getDate() - 365); // 1 year ago
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'CONFIDENTIAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256-GCM',
+  keyLength: 256,
+  lastRotationDate: oldRotationDate,
+}
         mockContext
       );
       expect(result.warnings.some(warning => )
@@ -205,15 +205,15 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should record compliance assessments', async () => {
-      await service.validateEncryptionCompliance()
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256',
-          keyLength: 256,
-          lastRotationDate: new Date(),
-        },
+  await service.validateEncryptionCompliance()
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256',
+  keyLength: 256,
+  lastRotationDate: new Date(),
+}
         mockContext
       );
       const records = service.getComplianceRecords('INTERNAL');
@@ -224,14 +224,14 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(record?.encryptionStatus).toBe('ENCRYPTED');
     });
     it('should handle invalid classification levels gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INVALID' as DataClassificationLevel,
-        {
-          encrypted: true,
-          algorithm: 'AES-256',
-          keyLength: 256,
-        },
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INVALID' as DataClassificationLevel,
+  {
+  encrypted: true,
+  algorithm: 'AES-256',
+  keyLength: 256,
+}
         mockContext
       );
       expect(result.valid).toBe(false);
@@ -239,16 +239,16 @@ describe('ClassificationEncryptionPolicyService', () => {
     });
   });
   describe('Audit Event Recording', () => {
-    it('should record audit events for compliance checks', async () => {
-      await service.validateEncryptionCompliance()
-        'data123',
-        'CONFIDENTIAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256-GCM',
-          keyLength: 256,
-          lastRotationDate: new Date(),
-        },
+  it('should record audit events for compliance checks', async () => {
+  await service.validateEncryptionCompliance()
+  'data123',
+  'CONFIDENTIAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256-GCM',
+  keyLength: 256,
+  lastRotationDate: new Date(),
+}
         mockContext
       );
       const auditEvents = service.getAuditEvents('CONFIDENTIAL', 'COMPLIANCE_CHECK');
@@ -304,17 +304,16 @@ describe('ClassificationEncryptionPolicyService', () => {
     });
   });
   describe('Policy Management', () => {
-    it('should allow updating encryption policies', async () => {
-      const updates: Partial<EncryptionPolicy> = {
-        requirements: {,
-          required: true,
-          algorithm: 'AES-256-XTS',
-          keyLength: 256,
-          keyRotationDays: 60,
-          hsmRequired: true,
-          keyEscrow: true,
-        }
-      };
+  it('should allow updating encryption policies', async () => {
+  const updates: Partial<EncryptionPolicy> = {,
+  requirements: {,
+  required: true,
+  algorithm: 'AES-256-XTS',
+  keyLength: 256,
+  keyRotationDays: 60,
+  hsmRequired: true,
+  keyEscrow: true,
+};
       await service.updateEncryptionPolicy('INTERNAL', updates);
       const updatedPolicy = service.getEncryptionPolicy('INTERNAL');
       expect(updatedPolicy?.requirements.algorithm).toBe('AES-256-XTS');
@@ -322,11 +321,11 @@ describe('ClassificationEncryptionPolicyService', () => {
       expect(updatedPolicy?.requirements.hsmRequired).toBe(true);
     });
     it('should increment version when updating policies', async () => {
-      const originalPolicy = service.getEncryptionPolicy('INTERNAL');
-      const originalVersion = originalPolicy?.version;
-      await service.updateEncryptionPolicy('INTERNAL', {)
-        name: 'Updated Internal Encryption Policy',
-      });
+  const originalPolicy = service.getEncryptionPolicy('INTERNAL');
+  const originalVersion = originalPolicy?.version;
+  await service.updateEncryptionPolicy('INTERNAL', {)
+  name: 'Updated Internal Encryption Policy',
+});
       const updatedPolicy = service.getEncryptionPolicy('INTERNAL');
       expect(updatedPolicy?.version).not.toBe(originalVersion);
       expect(updatedPolicy?.name).toBe('Updated Internal Encryption Policy');
@@ -443,32 +442,32 @@ describe('ClassificationEncryptionPolicyService', () => {
         alg.minClassification === 'RESTRICTED'
       );
       restrictedOnlyAlgorithms.forEach(alg => {)
-        expect(publicAlgorithms.some(pubAlg => pubAlg.name === alg.name)).toBe(false);
+  expect(publicAlgorithms.some(pubAlg => pubAlg.name === alg.name)).toBe(false);
       });
     });
   });
   describe('Error Handling and Edge Cases', () => {
-    it('should handle empty encryption status gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: false,
-        },
+  it('should handle empty encryption status gracefully', async () => {
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: false,
+}
         mockContext
       );
       expect(result.valid).toBe(false);
       expect(result.errors.some(error => error.includes('mandatory'))).toBe(true);
     });
     it('should handle unknown algorithms gracefully', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: true,
-          algorithm: 'UNKNOWN-ALGORITHM',
-          keyLength: 256,
-        },
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: true,
+  algorithm: 'UNKNOWN-ALGORITHM',
+  keyLength: 256,
+}
         mockContext
       );
       expect(result.valid).toBe(false);
@@ -477,15 +476,15 @@ describe('ClassificationEncryptionPolicyService', () => {
       )).toBe(true);
     });
     it('should handle missing last rotation date appropriately', async () => {
-      const result = await service.validateEncryptionCompliance(;);
-        'data123',
-        'INTERNAL',
-        {
-          encrypted: true,
-          algorithm: 'AES-256',
-          keyLength: 256,
-          // lastRotationDate is missing
-        },
+  const result = await service.validateEncryptionCompliance(;);
+  'data123',
+  'INTERNAL',
+  {
+  encrypted: true,
+  algorithm: 'AES-256',
+  keyLength: 256,
+  // lastRotationDate is missing
+}
         mockContext
       );
       // Should still validate basic encryption requirements

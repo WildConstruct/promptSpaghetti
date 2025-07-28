@@ -24,22 +24,22 @@ import {
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({),
-    complexityLevel: 'basic',
-  })
+  useUISettingsStore: () => ({,)
+  complexityLevel: 'basic',
+}
 }));
 describe('ContextualTooltip', () => {
-  const mockHelpContent: HelpContent = {
-    id: 'test-help',
-    title: 'Test Feature',
-    description: 'This is a test feature that helps users understand functionality.',
-    category: 'basic',
-    trigger: 'hover',
-    position: 'top',
-    examples: ['Example 1', 'Example 2'],
-    shortcut: 'Ctrl+T',
-    priority: 'high',
-  };
+  const mockHelpContent: HelpContent = {,
+  id: 'test-help',
+  title: 'Test Feature',
+  description: 'This is a test feature that helps users understand functionality.',
+  category: 'basic',
+  trigger: 'hover',
+  position: 'top',
+  examples: ['Example 1', 'Example 2'],
+  shortcut: 'Ctrl+T',
+  priority: 'high',
+};
   it('renders children without tooltip initially', () => {
     render();
       <ContextualTooltip content={mockHelpContent}>
@@ -160,7 +160,6 @@ describe('ContextualTooltip', () => {
         expect(screen.getByText(testCase.icon)).toBeInTheDocument();
       });
       unmount();
-    }
   });
 });
 describe('HelpProvider and useHelpSystem', () => {
@@ -174,7 +173,7 @@ describe('HelpProvider and useHelpSystem', () => {
       startOnboarding,
       completeOnboarding
     } = useHelpSystem();
-    return ();
+    return;
       <div>
         <div data-testid="help-content-count">{helpContent.length}</div>
         <div data-testid="onboarding-enabled">{onboardingEnabled.toString()}</div>
@@ -436,13 +435,13 @@ describe('withHelp HOC', () => {
   const TestButton = ({ children, ...props }: unknown) => ()
     <button {...props}>{children}</button>
   );
-  const helpContent: HelpContent = {
-    id: 'hoc-test',
-    title: 'HOC Test',
-    description: 'This tests the withHelp HOC',
-    category: 'basic',
-    trigger: 'hover',
-  };
+  const helpContent: HelpContent = {,
+  id: 'hoc-test',
+  title: 'HOC Test',
+  description: 'This tests the withHelp HOC',
+  category: 'basic',
+  trigger: 'hover',
+};
   it('wraps component with help when hints are enabled', async () => {
     const WrappedButton = withHelp(TestButton, helpContent);
     render();
@@ -471,7 +470,7 @@ describe('withHelp HOC', () => {
 describe('HelpSystemSettings', () => {
   const TestWrapper = () => {
     const { showHelpHints, onboardingComplete } = useHelpSystem();
-    return ();
+    return;
       <div>
         <div data-testid="hints-enabled">{showHelpHints.toString()}</div>
         <div data-testid="onboarding-complete">{onboardingComplete.toString()}</div>
@@ -530,7 +529,7 @@ describe('Built-in Help Content', () => {
   });
   it('has proper help content structure', () => {
     BUILT_IN_HELP_CONTENT.forEach(content => {)
-      expect(content).toHaveProperty('id');
+  expect(content).toHaveProperty('id');
       expect(content).toHaveProperty('title');
       expect(content).toHaveProperty('description');
       expect(content).toHaveProperty('category');

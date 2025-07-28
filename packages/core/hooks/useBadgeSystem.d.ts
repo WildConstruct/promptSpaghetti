@@ -4,12 +4,13 @@
  * Provides easy-to-use React integration for the badge and achievement system.
  */
 import { Badge, UserBadge, UserBadgeProgress, BadgeUnlockEvent, BadgeCategory } from '../gamification/BadgeSystem';
+
 export interface BadgeSystemHookConfig {
     userId?: string;
     autoCheckBadges?: boolean;
     enableNotifications?: boolean;
     checkInterval?: number;
-}
+
 export declare const useBadgeSystem: (config?: BadgeSystemHookConfig) => {
     userProgress: UserBadgeProgress | null;
     userBadges: UserBadge[];

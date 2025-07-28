@@ -7,7 +7,7 @@ export interface NodeMeta {
     tooltip: string;
 }
 interface PaletteProps {
-    nodes: NodeMeta[];
+    nodes: NodeMeta;
     collapsed: boolean;
     onToggle: () => void;
     onDragStart?: (nodeId: string) => void;

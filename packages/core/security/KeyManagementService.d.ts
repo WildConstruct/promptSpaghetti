@@ -25,7 +25,7 @@ export declare enum KeyType {
     ENCRYPTION = "encryption",
     SIGNING = "signing",
     WRAPPING = "wrapping"
-}
+
 export declare enum KeyPurpose {
     SESSION_ENCRYPTION = "session_encryption",
     DATA_ENCRYPTION = "data_encryption",
@@ -37,7 +37,7 @@ export declare enum KeyPurpose {
     DATABASE_ENCRYPTION = "database_encryption",
     FILE_ENCRYPTION = "file_encryption",
     COMMUNICATION_ENCRYPTION = "communication_encryption"
-}
+
 export declare enum KeyStatus {
     ACTIVE = "active",
     EXPIRED = "expired",
@@ -45,14 +45,14 @@ export declare enum KeyStatus {
     COMPROMISED = "compromised",
     PENDING_ACTIVATION = "pending_activation",
     RETIRED = "retired"
-}
+
 export declare enum StorageTier {
     HOT = "hot",// In-memory cache, fastest access
     WARM = "warm",// Encrypted database storage
     COLD = "cold",// Encrypted file storage
     ARCHIVE = "archive",// Long-term encrypted backup
     HSM = "hsm"
-}
+
 export declare enum KeyAlgorithm {
     AES_256_GCM = "aes-256-gcm",
     AES_256_CBC = "aes-256-cbc",
@@ -68,7 +68,7 @@ export declare enum KeyAlgorithm {
     PBKDF2_SHA256 = "pbkdf2-sha256",
     SCRYPT = "scrypt",
     ARGON2ID = "argon2id"
-}
+
 export interface KeyMetadata {
     id: string;
     name: string;
@@ -101,7 +101,7 @@ export interface KeyMetadata {
     checksumSHA256: string;
     tags: Record<string, string>;
     metadata: Record<string, any>;
-}
+
 export interface CryptographicKey {
     metadata: KeyMetadata;
     keyData?: Buffer;
@@ -109,7 +109,7 @@ export interface CryptographicKey {
     privateKey?: Buffer;
     wrappedKeyData?: Buffer;
     derivationParameters?: KeyDerivationParameters;
-}
+
 export interface KeyDerivationParameters {
     algorithm: KeyAlgorithm;
     salt: Buffer;
@@ -118,7 +118,7 @@ export interface KeyDerivationParameters {
     parallelism?: number;
     keyLength: number;
     additionalData?: Buffer;
-}
+
 export interface KeyAccessPolicy {
     requireMultiAuth: boolean;
     minApprovals: number;
@@ -134,7 +134,7 @@ export interface KeyAccessPolicy {
     requireSecureChannel: boolean;
     maxConcurrentAccess: number;
     sessionTimeout: number;
-}
+
 export interface KeyAuditEvent {
     id: string;
     timestamp: Date;
@@ -145,7 +145,7 @@ export interface KeyAuditEvent {
     userAgent?: string;
     details: Record<string, any>;
     riskScore: number;
-}
+
 export interface KeyGenerationOptions {
     type: KeyType;
     purpose: KeyPurpose;
@@ -160,14 +160,14 @@ export interface KeyGenerationOptions {
     derivationParams?: Partial<KeyDerivationParameters>;
     metadata?: Record<string, any>;
     tags?: Record<string, string>;
-}
+
 export interface KeyRotationOptions {
     forceRotation?: boolean;
     gracePeriodDays?: number;
     notifyUsers?: boolean;
     automatedRotation?: boolean;
     rotationReason?: string;
-}
+
 export interface KeySearchCriteria {
     type?: KeyType;
     purpose?: KeyPurpose;
@@ -179,7 +179,7 @@ export interface KeySearchCriteria {
     tags?: Record<string, string>;
     authorizedUser?: string;
     complianceLevel?: string;
-}
+
 export interface KeyManagementConfig {
     defaultTier: StorageTier;
     hotCacheSize: number;
@@ -203,7 +203,7 @@ export interface KeyManagementConfig {
         failureRate: number;
         responseTime: number;
     };
-}
+
 export interface HSMConfiguration {
     provider: 'aws-cloudhsm' | 'azure-keyvault' | 'gcp-hsm' | 'pkcs11';
     endpoint: string;
@@ -215,7 +215,7 @@ export interface HSMConfiguration {
     };
     keySlots: number[];
     partitionLabel?: string;
-}
+
 export interface KeyPerformanceMetrics {
     operationsPerSecond: number;
     averageResponseTime: number;
@@ -226,7 +226,6 @@ export interface KeyPerformanceMetrics {
     storageUtilization: Record<StorageTier, number>;
     hotPathOperations: number;
     slowPathOperations: number;
-}
 /**
  * Key Management Service
  */
@@ -317,6 +316,6 @@ export declare class KeyManagementService extends EventEmitter {
      * Cleanup and shutdown
      */
     destroy(): void;
-}
+
 export default KeyManagementService;
 //# sourceMappingURL=KeyManagementService.d.ts.map

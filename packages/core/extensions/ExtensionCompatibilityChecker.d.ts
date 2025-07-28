@@ -74,14 +74,14 @@ export declare class ExtensionCompatibilityChecker {
      * Initialize default compatibility rules
      */
     private initializeDefaultRules;
-}
+
 export interface CompatibilityContext {
     systemVersion: string;
     platform: string;
     availableExtensions: Map<string, ExtensionManifest>;
     grantedPermissions: string[];
     browserInfo?: Record<string, string>;
-}
+
 export interface ExtensionCompatibilityResult {
     compatible: boolean;
     issues: CompatibilityIssue[];
@@ -92,12 +92,10 @@ export interface ExtensionCompatibilityResult {
     platformCheck: CompatibilityCheck;
     permissionCheck: CompatibilityCheck;
     securityCheck: CompatibilityCheck;
-}
 interface CompatibilityCheck {
     compatible: boolean;
     issues: CompatibilityIssue[];
     warnings: string[];
-}
 interface CompatibilityRule {
     id: string;
     name: string;
@@ -106,7 +104,7 @@ interface CompatibilityRule {
         compatible: boolean;
         issues: CompatibilityIssue[];
     };
-}
+
 export declare const extensionCompatibilityChecker: ExtensionCompatibilityChecker;
 export {};
 //# sourceMappingURL=ExtensionCompatibilityChecker.d.ts.map

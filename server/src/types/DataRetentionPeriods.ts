@@ -2,6 +2,7 @@
 // Define retention periods by data category for compliance
 // Task: T-1752989143998-476
 
+}
 export interface DataRetentionPeriod {
   category: DataCategory;
   subcategory?: string;
@@ -12,6 +13,7 @@ export interface DataRetentionPeriod {
   archiveBeforeDeletion: boolean;
   reviewRequired: boolean;
   exceptions: RetentionException[];
+}
 }
 
 export enum DataCategory {
@@ -47,11 +49,13 @@ export enum Jurisdiction {
   GLOBAL = 'GLOBAL'
 }
 
+}
 export interface RetentionException {
   condition: string;
   extendedPeriod: number; // additional days
   reason: string;
   approval: ApprovalLevel;
+}
 }
 
 export enum ApprovalLevel {
@@ -79,7 +83,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         extendedPeriod: 365,
         reason: 'Contract fulfillment',
         approval: ApprovalLevel.AUTOMATIC
-      },
+  }
       {
         condition: 'legal_dispute',
         extendedPeriod: 3650,
@@ -87,8 +91,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.LEGAL
       }
     ]
-  },
-  
+  }
   // Financial Data
   {
     category: DataCategory.FINANCIAL,
@@ -107,8 +110,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.LEGAL
       }
     ]
-  },
-  
+  }
   // Health Information
   {
     category: DataCategory.HEALTH,
@@ -127,8 +129,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.SUPERVISOR
       }
     ]
-  },
-  
+  }
   // Behavioral Data
   {
     category: DataCategory.BEHAVIORAL,
@@ -147,8 +148,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.SUPERVISOR
       }
     ]
-  },
-  
+  }
   // Technical Data
   {
     category: DataCategory.TECHNICAL,
@@ -167,8 +167,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.SUPERVISOR
       }
     ]
-  },
-  
+  }
   // Communication Data
   {
     category: DataCategory.COMMUNICATION,
@@ -187,8 +186,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.LEGAL
       }
     ]
-  },
-  
+  }
   // User Preferences
   {
     category: DataCategory.PREFERENCE,
@@ -200,8 +198,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
     archiveBeforeDeletion: false,
     reviewRequired: false,
     exceptions: []
-  },
-  
+  }
   // Audit Logs
   {
     category: DataCategory.AUDIT_LOG,
@@ -220,8 +217,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.DPO
       }
     ]
-  },
-  
+  }
   // Security Data
   {
     category: DataCategory.SECURITY,
@@ -240,8 +236,7 @@ export const STANDARD_RETENTION_PERIODS: DataRetentionPeriod[] = [
         approval: ApprovalLevel.SUPERVISOR
       }
     ]
-  },
-  
+  }
   // Marketing Data
   {
     category: DataCategory.MARKETING,

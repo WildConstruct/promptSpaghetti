@@ -5,6 +5,7 @@
 /**
  * Performance threshold configuration for Epic 17 operations
  */
+}
 export interface PerformanceThreshold {
   /** Warning threshold in milliseconds */
   warning: number;
@@ -26,6 +27,7 @@ export interface PerformanceThreshold {
   
   /** Optional environment-specific overrides */
   environmentOverrides?: Record<string, Partial<Pick<PerformanceThreshold, 'warning' | 'critical'>>>;
+}
 }
 
 /**
@@ -54,6 +56,7 @@ export enum AlertSeverity {
 /**
  * Performance measurement result
  */
+}
 export interface PerformanceMeasurement {
   /** Operation identifier */
   operation: string;
@@ -73,10 +76,12 @@ export interface PerformanceMeasurement {
   /** Request identifier for tracing */
   requestId?: string;
 }
+}
 
 /**
  * Threshold validation result
  */
+}
 export interface ThresholdValidationResult {
   /** Whether the measurement passed the threshold */
   passed: boolean;
@@ -93,10 +98,12 @@ export interface ThresholdValidationResult {
   /** Recommendations for improvement if threshold was breached */
   recommendations?: string[];
 }
+}
 
 /**
  * Performance alert configuration
  */
+}
 export interface PerformanceAlert {
   /** Alert identifier */
   id: string;
@@ -122,10 +129,12 @@ export interface PerformanceAlert {
   /** Optional alert tags */
   tags?: string[];
 }
+}
 
 /**
  * Epic 17 specific health check result
  */
+}
 export interface HealthCheckResult {
   /** Health check identifier */
   checkId: string;
@@ -148,10 +157,12 @@ export interface HealthCheckResult {
   /** Threshold validation result */
   thresholdResult?: ThresholdValidationResult;
 }
+}
 
 /**
  * System health status aggregation
  */
+}
 export interface SystemHealthStatus {
   /** Overall system health */
   healthy: boolean;
@@ -165,6 +176,7 @@ export interface SystemHealthStatus {
     slowestOperation: string;
     fastestOperation: string;
     thresholdBreaches: number;
+}
   };
   
   /** System uptime */

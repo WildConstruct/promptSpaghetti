@@ -4,7 +4,7 @@
  */
 import React, { useState, useRef, useEffect } from 'react';
 interface CommentFormProps {
-  onSubmit: (content: string) => Promise<void>;
+  onSubmit: (content: string) => Promise<void>;,
   onCancel: () => void;
   initialValue?: string;
   placeholder?: string;
@@ -12,9 +12,7 @@ interface CommentFormProps {
   userId: string;
   compact?: boolean;
   autoFocus?: boolean;
-}
-
-export const CommentForm: React.FC<CommentFormProps> = ({)
+  export const CommentForm: React.FC<CommentFormProps> = ({,)
   onSubmit,
   onCancel,
   initialValue = '',
@@ -31,14 +29,12 @@ export const CommentForm: React.FC<CommentFormProps> = ({)
   useEffect(() => {
     if (autoFocus && textareaRef.current) {
       textareaRef.current.focus();
-    }
   }, [autoFocus]);
   useEffect(() => {
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;}
-    }
   }, [content]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,20 +44,17 @@ export const CommentForm: React.FC<CommentFormProps> = ({)
       await onSubmit(content.trim());
       setContent('');
     } catch (error) {
-      console.error('Failed to submit comment:', error);
-    } finally {
+  console.error('Failed to submit comment:', error);
+} finally {
       setSubmitting(false);
-    }
   };
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSubmit(e);
-    }
     if (e.key === 'Escape') {
       e.preventDefault();
       onCancel();
-    }
   };
   const insertFormatting = (before: string, after: string = '') => {
     if (!textareaRef.current) return;
@@ -80,11 +73,10 @@ export const CommentForm: React.FC<CommentFormProps> = ({)
         const newCursorPos = start + before.length + selectedText.length;
         textarea.setSelectionRange(newCursorPos, newCursorPos);
         textarea.focus();
-      }
     }, 0);
   };
   const isExpanded = focused || content.length > 0;
-  return ();
+  return;
     <div className={`comment-form ${compact ? 'comment-form--compact' : ''} ${isExpanded ? 'comment-form--expanded' : ''}`}>}
       <div className="comment-form__avatar">
         <div className="user-avatar user-avatar--small">

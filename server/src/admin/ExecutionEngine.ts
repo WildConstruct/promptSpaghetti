@@ -26,6 +26,7 @@ import { ArchiveManagementService } from './ArchiveManagementService';
 import { UploaderService } from './UploaderArchitecture';
 import { BulkOperationFramework } from './BulkOperationFramework';
 
+}
 export interface ExecutionRequest {
   id: string;
   operation: ExecutionOperation;
@@ -38,7 +39,9 @@ export interface ExecutionRequest {
   configuration: ExecutionConfiguration;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ExecutionOperation {
   type: ExecutionOperationType;
   name: string;
@@ -52,7 +55,9 @@ export interface ExecutionOperation {
   timeoutMs?: number;
   retryPolicy?: RetryPolicy;
 }
+}
 
+}
 export interface ExecutionStep {
   id: string;
   name: string;
@@ -68,13 +73,17 @@ export interface ExecutionStep {
   estimatedDuration?: number;
   resourceRequirements?: ResourceRequirements;
 }
+}
 
+}
 export interface ExecutionCondition {
   type: 'javascript' | 'jsonLogic' | 'custom';
   expression: string;
   parameters?: Record<string, any>;
 }
+}
 
+}
 export interface ExecutionRequestContext {
   userId?: string;
   sessionId?: string;
@@ -85,7 +94,9 @@ export interface ExecutionRequestContext {
   securityContext: SecurityExecutionContext;
   environmentContext: EnvironmentContext;
 }
+}
 
+}
 export interface BusinessContext {
   department?: string;
   costCenter?: string;
@@ -95,7 +106,9 @@ export interface BusinessContext {
   approvedAt?: Date;
   businessJustification?: string;
 }
+}
 
+}
 export interface SecurityExecutionContext {
   requiredPermissions: string[];
   elevatedPrivileges: boolean;
@@ -104,7 +117,9 @@ export interface SecurityExecutionContext {
   auditRequired: boolean;
   encryptionRequired: boolean;
 }
+}
 
+}
 export interface EnvironmentContext {
   environment: string;
   region?: string;
@@ -112,7 +127,9 @@ export interface EnvironmentContext {
   cluster?: string;
   nodeId?: string;
 }
+}
 
+}
 export interface ExecutionDependency {
   type: DependencyType;
   identifier: string;
@@ -121,7 +138,9 @@ export interface ExecutionDependency {
   healthCheckUrl?: string;
   timeoutMs?: number;
 }
+}
 
+}
 export interface ExecutionConfiguration {
   executionMode: ExecutionMode;
   parallelism?: ParallelismConfig;
@@ -131,14 +150,18 @@ export interface ExecutionConfiguration {
   persistence: PersistenceConfig;
   recovery: RecoveryConfig;
 }
+}
 
+}
 export interface ParallelismConfig {
   maxConcurrentSteps: number;
   stepBatching: boolean;
   batchSize?: number;
   resourcePooling: boolean;
 }
+}
 
+}
 export interface ResourceLimits {
   maxCpuUsage: number; // percentage
   maxMemoryUsage: number; // bytes
@@ -148,7 +171,9 @@ export interface ResourceLimits {
   maxFileHandles: number;
   timeoutMs: number;
 }
+}
 
+}
 export interface ResourceRequirements {
   estimatedCpuUsage: number;
   estimatedMemoryUsage: number;
@@ -157,7 +182,9 @@ export interface ResourceRequirements {
   requiredServices: string[];
   exclusiveResources?: string[];
 }
+}
 
+}
 export interface MonitoringConfig {
   enableMetricsCollection: boolean;
   metricsInterval: number;
@@ -165,7 +192,9 @@ export interface MonitoringConfig {
   alertThresholds: AlertThreshold[];
   healthCheckInterval: number;
 }
+}
 
+}
 export interface AlertThreshold {
   metric: string;
   operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
@@ -173,7 +202,9 @@ export interface AlertThreshold {
   severity: 'low' | 'medium' | 'high' | 'critical';
   suppressionPeriod?: number;
 }
+}
 
+}
 export interface NotificationConfig {
   enabled: boolean;
   channels: NotificationChannel[];
@@ -181,26 +212,34 @@ export interface NotificationConfig {
   events: NotificationEvent[];
   templates?: Record<string, string>;
 }
+}
 
+}
 export interface NotificationChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'teams';
   endpoint: string;
   authentication?: Record<string, any>;
   enabled: boolean;
 }
+}
 
+}
 export interface NotificationRecipient {
   type: 'user' | 'role' | 'group';
   identifier: string;
   channels: string[];
 }
+}
 
+}
 export interface NotificationEvent {
   event: ExecutionEventType;
   severity: string[];
   conditions?: Record<string, any>;
 }
+}
 
+}
 export interface PersistenceConfig {
   saveIntermediateResults: boolean;
   compressionEnabled: boolean;
@@ -208,7 +247,9 @@ export interface PersistenceConfig {
   retentionPeriod: number;
   storageLocation?: string;
 }
+}
 
+}
 export interface RecoveryConfig {
   enableCheckpointing: boolean;
   checkpointInterval: number;
@@ -216,7 +257,9 @@ export interface RecoveryConfig {
   rollbackStrategy: 'automatic' | 'manual' | 'conditional';
   compensationEnabled: boolean;
 }
+}
 
+}
 export interface ValidationRule {
   type: 'pre-execution' | 'post-execution' | 'step-validation';
   validator: string;
@@ -224,7 +267,9 @@ export interface ValidationRule {
   errorMessage: string;
   severity: 'warning' | 'error' | 'critical';
 }
+}
 
+}
 export interface RetryPolicy {
   maxAttempts: number;
   backoffStrategy: 'linear' | 'exponential' | 'fixed';
@@ -232,6 +277,7 @@ export interface RetryPolicy {
   maxDelayMs: number;
   retryableErrors?: string[];
   nonRetryableErrors?: string[];
+}
 }
 
 export enum ExecutionOperationType {
@@ -322,6 +368,7 @@ export enum ExecutionEventType {
   TIMEOUT = 'timeout'
 }
 
+}
 export interface ExecutionContext {
   executionId: string;
   request: ExecutionRequest;
@@ -333,7 +380,9 @@ export interface ExecutionContext {
   checkpoints: ExecutionCheckpoint[];
   alerts: ExecutionAlert[];
 }
+}
 
+}
 export interface ExecutionResourceUsage {
   cpuUsage: number;
   memoryUsage: number;
@@ -344,7 +393,9 @@ export interface ExecutionResourceUsage {
   startTime: Date;
   lastUpdated: Date;
 }
+}
 
+}
 export interface ExecutionCheckpoint {
   id: string;
   stepId: string;
@@ -352,7 +403,9 @@ export interface ExecutionCheckpoint {
   state: Record<string, any>;
   resourceUsage: ExecutionResourceUsage;
 }
+}
 
+}
 export interface ExecutionAlert {
   id: string;
   type: string;
@@ -362,7 +415,9 @@ export interface ExecutionAlert {
   acknowledged: boolean;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface ExecutionResult {
   executionId: string;
   status: ExecutionStatus;
@@ -376,7 +431,9 @@ export interface ExecutionResult {
   metrics: ExecutionMetrics;
   resourceUsage: ExecutionResourceUsage;
 }
+}
 
+}
 export interface ExecutionError {
   stepId?: string;
   code: string;
@@ -385,7 +442,9 @@ export interface ExecutionError {
   timestamp: Date;
   recoverable: boolean;
 }
+}
 
+}
 export interface ExecutionWarning {
   stepId?: string;
   code: string;
@@ -393,7 +452,9 @@ export interface ExecutionWarning {
   details?: Record<string, any>;
   timestamp: Date;
 }
+}
 
+}
 export interface ExecutionMetrics {
   totalSteps: number;
   completedSteps: number;
@@ -405,10 +466,12 @@ export interface ExecutionMetrics {
   errorRate: number;
   performanceScore: number;
 }
+}
 
 /**
  * Step Handler Interface
  */
+}
 export interface StepHandler {
   name: string;
   version: string;
@@ -421,19 +484,24 @@ export interface StepHandler {
   getEstimatedDuration?(step: ExecutionStep): number;
   getResourceRequirements?(step: ExecutionStep): ResourceRequirements;
 }
+}
 
+}
 export interface ValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
 }
+}
 
+}
 export interface StepResult {
   success: boolean;
   output?: any;
   error?: string;
   metrics?: Record<string, number>;
   checkpointData?: Record<string, any>;
+}
 }
 
 /**
@@ -492,6 +560,7 @@ export class ExecutionEngine extends EventEmitter {
    * Execute an operation
    */
   async executeOperation(request: ExecutionRequest): Promise<ExecutionResult> {
+
     try {
       // Validate request
       await this.validateExecutionRequest(request);
@@ -566,6 +635,7 @@ export class ExecutionEngine extends EventEmitter {
    * Cancel an execution
    */
   async cancelExecution(executionId: string, reason: string): Promise<void> {
+
     const context = this.activeExecutions.get(executionId);
     if (!context) {
       throw new Error('Execution not found or not active');
@@ -589,6 +659,7 @@ export class ExecutionEngine extends EventEmitter {
    * Get execution status
    */
   async getExecutionStatus(executionId: string): Promise<ExecutionContext | null> {
+
     return this.activeExecutions.get(executionId) || null;
   }
   
@@ -596,6 +667,7 @@ export class ExecutionEngine extends EventEmitter {
    * Perform the actual execution
    */
   private async performExecution(context: ExecutionContext): Promise<ExecutionResult> {
+
     const { request } = context;
     const startTime = new Date();
     
@@ -661,6 +733,7 @@ export class ExecutionEngine extends EventEmitter {
     executionPlan: ExecutionPlan,
     context: ExecutionContext
   ): Promise<StepExecutionResult[]> {
+
     const results: StepExecutionResult[] = [];
     
     for (const batch of executionPlan.batches) {
@@ -718,6 +791,7 @@ export class ExecutionEngine extends EventEmitter {
     step: ExecutionStep,
     context: ExecutionContext
   ): Promise<StepExecutionResult> {
+
     const startTime = new Date();
     context.currentStep = step;
     
@@ -813,6 +887,7 @@ export class ExecutionEngine extends EventEmitter {
   // Private helper methods
   
   private async validateExecutionRequest(request: ExecutionRequest): Promise<void> {
+
     // Implementation would validate the execution request
     if (!request.operation || !request.operation.steps || request.operation.steps.length === 0) {
       throw new Error('Invalid execution request: no steps defined');
@@ -820,6 +895,7 @@ export class ExecutionEngine extends EventEmitter {
   }
   
   private async checkDependencies(request: ExecutionRequest): Promise<void> {
+
     // Implementation would check all dependencies
     if (request.dependencies) {
       for (const dependency of request.dependencies) {
@@ -829,12 +905,14 @@ export class ExecutionEngine extends EventEmitter {
   }
   
   private async validatePermissions(request: ExecutionRequest): Promise<void> {
+
     // Implementation would validate permissions
     const requiredPermissions = request.context.securityContext.requiredPermissions;
     // Check permissions logic here
   }
   
   private async reserveResources(request: ExecutionRequest): Promise<ResourceReservation> {
+
     // Implementation would reserve resources
     return this.resourcePool.reserve(request.operation.resourceRequirements || {
       estimatedCpuUsage: 10,
@@ -846,6 +924,7 @@ export class ExecutionEngine extends EventEmitter {
   }
   
   private async releaseResources(reservation: ResourceReservation): Promise<void> {
+
     // Implementation would release resources
     this.resourcePool.release(reservation);
   }
@@ -875,15 +954,16 @@ export class ExecutionEngine extends EventEmitter {
       databaseConnections: 0,
       fileHandles: 0,
       startTime: new Date(),
-      lastUpdated: new Date()
-    };
+      lastUpdated: new Date(};
   }
   
   private async runPreExecutionValidation(context: ExecutionContext): Promise<void> {
+
     // Implementation would run pre-execution validation
   }
   
   private async buildExecutionPlan(steps: ExecutionStep[]): Promise<ExecutionPlan> {
+
     // Implementation would build execution plan based on dependencies
     return {
       batches: [steps] // Simple sequential execution for now
@@ -891,6 +971,7 @@ export class ExecutionEngine extends EventEmitter {
   }
   
   private async runPostExecutionValidation(context: ExecutionContext): Promise<void> {
+
     // Implementation would run post-execution validation
   }
   
@@ -918,15 +999,18 @@ export class ExecutionEngine extends EventEmitter {
   }
   
   private async evaluateCondition(condition: ExecutionCondition, context: ExecutionContext): Promise<boolean> {
+
     // Implementation would evaluate execution condition
     return true; // Simplified for now
   }
   
   private async validateDependency(dependency: ExecutionDependency): Promise<void> {
+
     // Implementation would validate dependency
   }
   
   private async delay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
@@ -945,10 +1029,13 @@ export class ExecutionEngine extends EventEmitter {
 
 // Supporting interfaces and classes
 
+}
 interface ExecutionPlan {
   batches: ExecutionStep[][];
 }
+}
 
+}
 interface StepExecutionResult {
   stepId: string;
   success: boolean;
@@ -960,12 +1047,15 @@ interface StepExecutionResult {
   attempts?: number;
   skipped?: boolean;
 }
+}
 
+}
 interface ResourceReservation {
   id: string;
   resources: ResourceRequirements;
   reservedAt: Date;
   expiresAt: Date;
+}
 }
 
 class ResourcePool {
@@ -976,6 +1066,7 @@ class ResourcePool {
   }
   
   async reserve(requirements: ResourceRequirements): Promise<ResourceReservation> {
+
     // Implementation would reserve resources from pool
     return {
       id: `reservation_${Date.now()}`,
@@ -986,10 +1077,12 @@ class ResourcePool {
   }
   
   async release(reservation: ResourceReservation): Promise<void> {
+
     // Implementation would release resources back to pool
   }
 }
 
+}
 export interface ExecutionEngineConfig {
   maxConcurrentExecutions: number;
   defaultTimeout: number;
@@ -1002,6 +1095,7 @@ export interface ExecutionEngineConfig {
     maxMemoryUsage: number;
     maxDiskUsage: number;
     maxNetworkBandwidth: number;
+}
   };
 }
 

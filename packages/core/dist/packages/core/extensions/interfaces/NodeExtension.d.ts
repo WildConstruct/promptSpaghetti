@@ -7,8 +7,8 @@ import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './Ex
 import { RuntimeNode, AdvancedRuntimeNode, ExecutionContext, AdvancedExecutionContext } from '../../runtime';
 export interface NodeExtension extends BaseExtension {
     readonly extensionType: 'node';
-    getNodeDefinitions(): NodeDefinition[];
-    getNodeTypes(): NodeDefinition[];
+    getNodeDefinitions(): NodeDefinition;
+    getNodeTypes(): NodeDefinition;
     createNodeInstance(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
     createNode(nodeType: string, nodeId: string, config: any): RuntimeNode<any>;
     validateNodeConfig(nodeType: string, config: any): ExtensionValidationResult;
@@ -38,9 +38,15 @@ export declare enum NodeCategory {
     TRANSFORM = "transform",
     CONTROL = "control",
     UTILITY = "utility",
-    CUSTOM = "custom"
+    CUSTOM = "custom",
+    export,
+    type,
+    NodeClass,
+    string,
+    config,
+    any,
+    RuntimeNode
 }
-export type NodeClass = (new (id: string, config: any) => RuntimeNode<any>) | (new (id: string, config: any) => AdvancedRuntimeNode<any>);
 export interface NodeUIConfiguration {
     icon?: string;
     color?: string;
@@ -116,9 +122,9 @@ export interface NodePerformanceHints {
 }
 export interface NodeSecuritySettings {
     sandboxed?: boolean;
-    permissions?: string[];
-    allowedNetworkAccess?: string[];
-    allowedFileAccess?: string[];
+    permissions?: string;
+    allowedNetworkAccess?: string;
+    allowedFileAccess?: string;
     maxMemoryUsage?: number;
     maxExecutionTime?: number;
 }
@@ -134,7 +140,7 @@ export interface NodeMetadata {
     license: string;
     repository?: string;
     documentation?: string;
-    examples?: NodeExample[];
+    examples?: NodeExample;
     changelog?: string;
     compatibility?: {
         minVersion: string;
@@ -142,8 +148,8 @@ export interface NodeMetadata {
         deprecatedIn?: string;
         removedIn?: string;
     };
-    tags?: string[];
-    keywords?: string[];
+    tags?: string;
+    keywords?: string;
 }
 export interface NodeExample {
     name: string;
@@ -156,7 +162,7 @@ export interface NodeValidation {
     configValidation?: (config: any) => ExtensionValidationResult;
     runtimeValidation?: (node: RuntimeNode<any>, context: ExecutionContext) => ExtensionValidationResult;
     contextValidation?: (context: ExecutionContext) => ExtensionValidationResult;
-    customRules?: NodeValidationRule[];
+    customRules?: NodeValidationRule;
 }
 export interface NodeValidationRule {
     name: string;
@@ -168,10 +174,10 @@ export interface NodeRegistry {
     register(definition: NodeDefinition): void;
     unregister(nodeId: string): void;
     get(nodeId: string): NodeDefinition | undefined;
-    getAll(): NodeDefinition[];
-    getByCategory(category: NodeCategory): NodeDefinition[];
-    search(query: string): NodeDefinition[];
-    filter(predicate: (definition: NodeDefinition) => boolean): NodeDefinition[];
+    getAll(): NodeDefinition;
+    getByCategory(category: NodeCategory): NodeDefinition;
+    search(query: string): NodeDefinition;
+    filter(predicate: (definition: NodeDefinition) => boolean): NodeDefinition;
     validate(definition: NodeDefinition): ExtensionValidationResult;
     on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
     off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: NodeDefinition) => void): void;
@@ -193,7 +199,7 @@ export interface NodeExecutionContextExtensions {
         memoryUsage?: number;
     };
     securityContext: {
-        permissions: string[];
+        permissions: string;
         sandboxed: boolean;
         resourceLimits: {
             memory?: number;
@@ -232,7 +238,5 @@ export interface NodeExecutionMetrics {
 }
 export declare namespace NodeExtensionHelpers {
     function createNodeDefinition(config: Partial<NodeDefinition>): NodeDefinition;
-    function validateNodeDefinition(definition: NodeDefinition): ExtensionValidationResult;
-    function createNodeRegistry(): NodeRegistry;
 }
 //# sourceMappingURL=NodeExtension.d.ts.map

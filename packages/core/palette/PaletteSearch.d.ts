@@ -2,22 +2,26 @@ import { NodeMeta } from '../Palette';
 /**
  * Search result with relevance scoring
  */
+
 export interface SearchResult {
     node: NodeMeta;
     relevance: number;
     matchedFields: string[];
     categories: string[];
-}
+
+
 /**
  * Search options configuration
  */
+
 export interface SearchOptions {
     fuzzyThreshold?: number;
     maxResults?: number;
     includeCategories?: boolean;
     sortByRelevance?: boolean;
     minimumRelevance?: number;
-}
+
+
 /**
  * Advanced palette search engine
  */
@@ -65,7 +69,7 @@ export declare class PaletteSearch {
      * Build search index for efficient searching
      */
     private buildSearchIndex;
-}
+
 /**
  * Utility function to highlight search terms in text
  */

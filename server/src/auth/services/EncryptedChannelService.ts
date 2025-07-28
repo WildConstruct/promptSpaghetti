@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
+}
 export interface EncryptedChannel {
   id: string;
   name: string;
@@ -21,9 +22,11 @@ export interface EncryptedChannel {
     maxParticipants: number;
     ttl?: number; // Time to live in seconds
     requireMFA?: boolean;
+}
   };
 }
 
+}
 export interface EncryptedMessage {
   id: string;
   channelId: string;
@@ -38,9 +41,11 @@ export interface EncryptedMessage {
     contentLength: number;
     checksum: string;
     priority: 'low' | 'normal' | 'high' | 'urgent';
+}
   };
 }
 
+}
 export interface ChannelKey {
   version: number;
   key: Buffer;
@@ -49,13 +54,16 @@ export interface ChannelKey {
   expiresAt?: Date;
   algorithm: string;
 }
+}
 
+}
 export interface MessageTransmissionResult {
   success: boolean;
   messageId?: string;
   error?: string;
   deliveredTo: string[];
   failedDeliveries: string[];
+}
 }
 
 export class EncryptedChannelService extends EventEmitter {
@@ -84,6 +92,7 @@ export class EncryptedChannelService extends EventEmitter {
       algorithm?: 'aes-256-gcm' | 'chacha20-poly1305';
     }
   ): Promise<EncryptedChannel> {
+
     const channelId = this.generateChannelId();
     const algorithm = options.algorithm || 'aes-256-gcm';
     
@@ -141,6 +150,7 @@ export class EncryptedChannelService extends EventEmitter {
     messageType: EncryptedMessage['messageType'] = 'text',
     priority: 'low' | 'normal' | 'high' | 'urgent' = 'normal'
   ): Promise<MessageTransmissionResult> {
+
     const channel = this.channels.get(channelId);
     if (!channel || !channel.isActive) {
       return {
@@ -343,6 +353,7 @@ export class EncryptedChannelService extends EventEmitter {
     newParticipants: string[],
     addedBy: string
   ): Promise<{ success: boolean; added: string[]; failed: string[] }> {
+
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(addedBy)) {
       return { success: false, added: [], failed: newParticipants };
@@ -388,6 +399,7 @@ export class EncryptedChannelService extends EventEmitter {
     participantsToRemove: string[],
     removedBy: string
   ): Promise<{ success: boolean; removed: string[]; failed: string[] }> {
+
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(removedBy)) {
       return { success: false, removed: [], failed: participantsToRemove };
@@ -436,6 +448,7 @@ export class EncryptedChannelService extends EventEmitter {
    * Connect user to channel for real-time messaging
    */
   async connectToChannel(channelId: string, userId: string): Promise<boolean> {
+
     const channel = this.channels.get(channelId);
     if (!channel || !channel.participants.includes(userId)) {
       return false;
@@ -459,6 +472,7 @@ export class EncryptedChannelService extends EventEmitter {
    * Disconnect user from channel
    */
   async disconnectFromChannel(channelId: string, userId: string): Promise<void> {
+
     const connections = this.activeConnections.get(channelId);
     if (connections) {
       connections.delete(userId);
@@ -475,6 +489,7 @@ export class EncryptedChannelService extends EventEmitter {
    * Rotate channel encryption key
    */
   private async rotateChannelKey(channelId: string, reason: string): Promise<void> {
+
     const channel = this.channels.get(channelId);
     const keyMap = this.channelKeys.get(channelId);
     
@@ -511,6 +526,7 @@ export class EncryptedChannelService extends EventEmitter {
     algorithm: string, 
     version: number = 1
   ): Promise<ChannelKey> {
+
     const salt = `${channelId}-v${version}-${Date.now()}`;
     const key = crypto.pbkdf2Sync(this.masterKey, salt, 100000, 32, 'sha256');
 
@@ -531,6 +547,7 @@ export class EncryptedChannelService extends EventEmitter {
     key: Buffer,
     algorithm: string
   ): Promise<{ encryptedContent: string; iv: string; tag: string }> {
+
     const iv = crypto.randomBytes(12); // 96-bit IV for GCM
     const cipher = crypto.createCipher(algorithm, key);
     
@@ -558,6 +575,7 @@ export class EncryptedChannelService extends EventEmitter {
     key: Buffer,
     algorithm: string
   ): Promise<string> {
+
     const decipher = crypto.createDecipher(algorithm, key);
     decipher.setAuthTag(Buffer.from(tag, 'base64'));
     
@@ -582,6 +600,7 @@ export class EncryptedChannelService extends EventEmitter {
   }
 
   private async deliverMessage(participantId: string, message: EncryptedMessage): Promise<void> {
+
     // Implementation would deliver message via WebSocket, SSE, or other real-time mechanism
     console.log(`Delivering message ${message.id} to participant ${participantId}`);
     this.emit('messageDelivered', participantId, message);
@@ -593,6 +612,7 @@ export class EncryptedChannelService extends EventEmitter {
     userId?: string,
     metadata?: Record<string, any>
   ): Promise<void> {
+
     console.log(`Channel Event [${channelId}]: ${action} by ${userId || 'system'}`, metadata);
   }
 
@@ -630,6 +650,7 @@ export class EncryptedChannelService extends EventEmitter {
   }
 
   private async deactivateChannel(channelId: string, reason: string): Promise<void> {
+
     const channel = this.channels.get(channelId);
     if (channel) {
       channel.isActive = false;

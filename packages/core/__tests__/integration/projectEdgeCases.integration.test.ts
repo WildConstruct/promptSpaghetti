@@ -15,10 +15,10 @@ const mockConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {
 
 // Mock localStorage
 const mockLocalStorage = {
-  getItem: jest.fn<unknown[], unknown>(),
-  setItem: jest.fn<unknown[], unknown>(),
-  removeItem: jest.fn<unknown[], unknown>(),
-  hasOwnProperty: jest.fn<unknown[], unknown>()
+  getItem: jest.fn<unknown, unknown>(),
+  setItem: jest.fn<unknown, unknown>(),
+  removeItem: jest.fn<unknown, unknown>(),
+  hasOwnProperty: jest.fn<unknown, unknown>(),
 };
 Object.defineProperty(window, 'localStorage', {)
   value: mockLocalStorage,
@@ -28,19 +28,18 @@ Object.defineProperty(window, 'localStorage', {)
 const mockCreateElement = jest.fn(() => ({)
   href: '',
   download: '',
-  click: jest.fn<unknown[], unknown>(),
+  click: jest.fn<unknown, unknown>(),
   style: { display: '' }
 }));
 global.document = {
   createElement: mockCreateElement,
   body: {,
-    appendChild: jest.fn<unknown[], unknown>(),
-    removeChild: jest.fn<unknown[], unknown>()
-  }
+  appendChild: jest.fn<unknown, unknown>(),
+  removeChild: jest.fn<unknown, unknown>(),
 } as any;
 global.URL = {
   createObjectURL: jest.fn(() => 'mock-url'),
-  revokeObjectURL: jest.fn<unknown[], unknown>()
+  revokeObjectURL: jest.fn<unknown, unknown>(),
 } as any;
 global.Blob = jest.fn(() => ({ size: 1024 })) as any;
 describe('Project Edge Cases Integration Tests', () => {
@@ -59,23 +58,27 @@ describe('Project Edge Cases Integration Tests', () => {
       // Create a massive graph
       const largeGraph = {
         nodes: Array.from({ length: 1000 }, (_, i) => ({)
-          id: `node-${i}`,}
-          type: 'default' as const,
+  id: `node-${i}`}
+},
+  type: 'default' as const,
           position: { x: (i % 50) * 50, y: Math.floor(i / 50) * 50 },
           data: {,
-            nodeType: 'weighted-choice',
-            label: `Node ${i}`,}
-            variations: Array.from({ length: 50 }, (_, j) => 
+  nodeType: 'weighted-choice',
+            label: `Node ${i}`}
+},
+  variations: Array.from({ length: 50 }, (_, j) => 
               `This is a very long variation text for node ${i}, variation ${j} with lots of content to test serialization performance and memory usage`}
-          }
         })),
         edges: Array.from({ length: 999 }, (_, i) => ({)
-          id: `edge-${i}`,}
-          source: `node-${i}`,}
-          target: `node-${i + 1}`,}
-          sourceHandle: 'output',
-          targetHandle: 'input',
-        }))
+  id: `edge-${i}`}
+},
+  source: `node-${i}`}
+},
+  target: `node-${i + 1}`}
+},
+  sourceHandle: 'output',
+          targetHandle: 'input';
+  }))
       };
       const metadata = createDefaultMetadata('Massive Test Project', 'Test User');
       const settings = createDefaultSettings();
@@ -89,7 +92,6 @@ describe('Project Edge Cases Integration Tests', () => {
         } catch (error) {
           clearTimeout(timeout);
           reject(error);
-        }
       });
       const serializeResult = await serializePromise as any;
       expect(serializeResult.success).toBe(true);
@@ -100,21 +102,21 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(deserializeResult.data!.graph.nodes).toHaveLength(1000);
     });
     test('handles graphs with circular references in data', () => {
-      // Create nodes with potential circular references
-      const nodeData: Record<string, unknown> = {
-        nodeType: 'custom',
-        label: 'Circular Test',
-      };
+  // Create nodes with potential circular references
+  const nodeData: Record<string, unknown> = {,
+  nodeType: 'custom',
+  label: 'Circular Test',
+};
       (nodeData as Record<string, unknown>).self = nodeData; // Circular reference
       const graphWithCircular = {
         nodes: [{,
-          id: 'circular-node',
+  id: 'circular-node',
           type: 'default' as const,
           position: { x: 0, y: 0 },
-          data: nodeData,
-        }],
-        edges: [],
-      };
+          data: nodeData;
+  }],
+        edges: [];
+  };
       const metadata = createDefaultMetadata('Circular Test', 'Test User');
       const settings = createDefaultSettings();
       // Should handle circular references gracefully
@@ -128,16 +130,15 @@ describe('Project Edge Cases Integration Tests', () => {
       for (let i = 0; i < 100; i++) {
         current.nested = { level: i };
         current = current.nested;
-      }
       const deepGraph = {
         nodes: [{,
-          id: 'deep-node',
+  id: 'deep-node',
           type: 'default' as const,
           position: { x: 0, y: 0 },
-          data: deepData,
-        }],
-        edges: [],
-      };
+          data: deepData;
+  }],
+        edges: [];
+  };
       const metadata = createDefaultMetadata('Deep Test', 'Test User');
       const settings = createDefaultSettings();
       const result = serializeProject(deepGraph, metadata, settings);
@@ -150,17 +151,17 @@ describe('Project Edge Cases Integration Tests', () => {
       const largeTextContent = 'A'.repeat(10000); // 10KB string per node;
       const memoryTestGraph = {
         nodes: Array.from({ length: 100 }, (_, i) => ({)
-          id: `memory-node-${i}`,}
-          type: 'default' as const,
+  id: `memory-node-${i}`}
+},
+  type: 'default' as const,
           position: { x: i * 10, y: i * 10 },
           data: {,
-            nodeType: 'text',
+  nodeType: 'text',
             content: largeTextContent,
             variations: Array.from({ length: 10 }, () => largeTextContent)
-          }
         })),
-        edges: [],
-      };
+        edges: [];
+  };
       const metadata = createDefaultMetadata('Memory Test', 'Test User');
       const settings = createDefaultSettings();
       // Should not crash due to memory issues
@@ -172,15 +173,17 @@ describe('Project Edge Cases Integration Tests', () => {
     test('handles concurrent operations on recent projects', () => {
       // Simulate multiple concurrent operations
       const operations = Array.from({ length: 10 }, (_, i) => ({)
-        name: `Concurrent Project ${i}`,}
-        metadata: createDefaultMetadata(`Project ${i}`, 'Test User'),}
-        thumbnail: RecentProjectsManager.generateThumbnail([], []),
-        fileSize: 1024 * i,
-      }));
+  name: `Concurrent Project ${i}`}
+},
+  metadata: createDefaultMetadata(`Project ${i}`, 'Test User')}
+},
+  thumbnail: RecentProjectsManager.generateThumbnail([], []),
+        fileSize: 1024 * i;
+  }));
       // Add all projects concurrently
       expect(() => {
         operations.forEach(op => {)
-          RecentProjectsManager.addRecentProject(op);
+  RecentProjectsManager.addRecentProject(op);
         });
       }).not.toThrow();
       // Should only keep the 5 most recent
@@ -196,8 +199,8 @@ describe('Project Edge Cases Integration Tests', () => {
         metadata: createDefaultMetadata('Test', 'User'),
         settings: createDefaultSettings(),
         graph: { nodes: [], edges: [] },
-        exportedAt: new Date().toISOString(),
-      };
+        exportedAt: new Date().toISOString();
+  };
       // Test with missing graph property
       const corruptedProject1 = { ...validProject };
       delete (corruptedProject1 as any).graph;
@@ -206,20 +209,19 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(result1.error).toBeDefined();
       // Test with invalid metadata
       const corruptedProject2 = {
-        ...validProject,
-        metadata: null,
-      };
+  ...validProject,
+  metadata: null,
+};
       const result2 = deserializeProject(JSON.stringify(corruptedProject2));
       expect(result2.success).toBe(false);
       expect(result2.error).toBeDefined();
       // Test with malformed nodes array
       const corruptedProject3 = {
-        ...validProject,
-        graph: {,
-          nodes: 'not an array',
-          edges: [],
-        }
-      };
+  ...validProject,
+  graph: {,
+  nodes: 'not an array',
+  edges: [],
+};
       const result3 = deserializeProject(JSON.stringify(corruptedProject3));
       expect(result3.success).toBe(false);
       expect(result3.error).toBeDefined();
@@ -231,8 +233,8 @@ describe('Project Edge Cases Integration Tests', () => {
         metadata: createDefaultMetadata('Test', 'User'),
         settings: createDefaultSettings(),
         graph: { nodes: [], edges: [] },
-        exportedAt: new Date().toISOString(),
-      };
+        exportedAt: new Date().toISOString();
+  };
       const validJson = JSON.stringify(validProject);
       // Test with truncated JSON
       const truncatedJson = validJson.substring(0, validJson.length / 2);
@@ -255,11 +257,11 @@ describe('Project Edge Cases Integration Tests', () => {
         throw new DOMException('Quota exceeded', 'QuotaExceededError');
       });
       const entry = {
-        name: 'Test Project',
-        metadata: createDefaultMetadata('Test', 'User'),
-        thumbnail: 'data:image/svg+xml;base64,test',
-        fileSize: 1024,
-      };
+  name: 'Test Project',
+  metadata: createDefaultMetadata('Test', 'User'),
+  thumbnail: 'data:image/svg+xml;base64,test',
+  fileSize: 1024,
+};
       // Should not crash when quota is exceeded
       expect(() => {
         RecentProjectsManager.addRecentProject(entry);
@@ -292,10 +294,10 @@ describe('Project Edge Cases Integration Tests', () => {
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
-          name: 'Test Project',
-          fileName: 'test.psg',
-          author: 'User',
-        },
+  name: 'Test Project',
+  fileName: 'test.psg',
+  author: 'User',
+}
         settings
       );
       expect(result.success).toBe(false);
@@ -313,10 +315,10 @@ describe('Project Edge Cases Integration Tests', () => {
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
-          name: 'Test Project',
-          fileName: 'test.psg',
-          author: 'User',
-        },
+  name: 'Test Project',
+  fileName: 'test.psg',
+  author: 'User',
+}
         settings
       );
       expect(result.success).toBe(false);
@@ -334,10 +336,10 @@ describe('Project Edge Cases Integration Tests', () => {
       const result = await ProjectManager.saveProjectToDevice(;);
         graph,
         {
-          name: 'Test Project',
-          fileName: 'test.psg',
-          author: 'User',
-        },
+  name: 'Test Project',
+  fileName: 'test.psg',
+  author: 'User',
+}
         settings
       );
       expect(result.success).toBe(false);
@@ -350,18 +352,17 @@ describe('Project Edge Cases Integration Tests', () => {
     test('handles Unicode characters in project names and content', () => {
       const unicodeGraph = {
         nodes: [{,
-          id: 'unicode-node',
+  id: 'unicode-node',
           type: 'default' as const,
           position: { x: 0, y: 0 },
           data: {,
-            nodeType: 'text',
-            label: '测试节点 🌟 العقدة الاختبار',
-            content: 'Content with emoji 🚀 and unicode ñáéíóú',
-            variations: ['变体 1', 'Variação 2', 'вариант 3']
-          }
-        }],
-        edges: [],
-      };
+  nodeType: 'text',
+  label: '测试节点 🌟 العقدة الاختبار',
+  content: 'Content with emoji 🚀 and unicode ñáéíóú',
+  variations: ['变体 1', 'Variação 2', 'вариант 3'],
+}],
+        edges: [];
+  };
       const metadata = createDefaultMetadata(;);
         'Unicode Test Project 🌍',
         'Test User 用户'
@@ -382,9 +383,10 @@ describe('Project Edge Cases Integration Tests', () => {
         { nodes: [], edges: [] },
         {
           name: veryLongName,
-          fileName: `${veryLongName}.psg`,}
-          author: 'User',
-        },
+          fileName: `${veryLongName}.psg`}
+},
+  author: 'User';
+  }
         createDefaultSettings();
       );
       expect(result.success).toBe(true);
@@ -402,10 +404,12 @@ describe('Project Edge Cases Integration Tests', () => {
         ProjectManager.saveProjectToDevice()
           graph,
           {
-            name: `Rapid Save ${i}`,}
-            fileName: `rapid-${i}.psg`,}
-            author: 'User',
-          },
+            name: `Rapid Save ${i}`}
+},
+  fileName: `rapid-${i}.psg`}
+},
+  author: 'User';
+  }
           settings
       );
       const results = await Promise.allSettled(savePromises);
@@ -414,15 +418,15 @@ describe('Project Edge Cases Integration Tests', () => {
       expect(successful.length).toBeGreaterThan(10); // At least half should succeed
     });
     test('handles mixed read/write operations on recent projects', () => {
-      // Simulate mixed operations
-      const operations = [;
-        () => RecentProjectsManager.getRecentProjects(),
-        () => RecentProjectsManager.addRecentProject({)
-          name: 'Mixed Op 1',
-          metadata: createDefaultMetadata('Test 1', 'User'),
-          thumbnail: 'data:image/svg+xml;base64,test1',
-          fileSize: 1024,
-        }),
+  // Simulate mixed operations
+  const operations = [;
+  () => RecentProjectsManager.getRecentProjects(),
+  () => RecentProjectsManager.addRecentProject({)
+  name: 'Mixed Op 1',
+  metadata: createDefaultMetadata('Test 1', 'User'),
+  thumbnail: 'data:image/svg+xml;base64,test1',
+  fileSize: 1024,
+}),
         () => RecentProjectsManager.getRecentProjects(),
         () => RecentProjectsManager.updateLastAccess('Mixed Op 1'),
         () => RecentProjectsManager.getRecentProjects(),

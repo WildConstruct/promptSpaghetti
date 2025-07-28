@@ -38,13 +38,13 @@ export interface EmbedContent {
     javascript?: string;
     data?: ContentData;
     template?: TemplateConfig;
-    components: ComponentConfig[];
+    components: ComponentConfig;
     layout: LayoutConfig;
-    interactions: InteractionConfig[];
+    interactions: InteractionConfig;
 }
 export interface ContentData {
     static: Record<string, any>;
-    dynamic: DynamicDataConfig[];
+    dynamic: DynamicDataConfig;
     realTime: boolean;
     refreshInterval?: number;
     cachingStrategy: 'none' | 'browser' | 'cdn' | 'aggressive';
@@ -102,23 +102,23 @@ export interface ComponentConfig {
     version: string;
     config: Record<string, any>;
     styling: ComponentStyling;
-    events: ComponentEvent[];
-    dependencies?: string[];
+    events: ComponentEvent;
+    dependencies?: string;
     async: boolean;
     lazy: boolean;
 }
 export type ComponentType = 'button' | 'input' | 'select' | 'textarea' | 'checkbox' | 'radio' | 'slider' | 'datepicker' | 'image' | 'video' | 'audio' | 'chart' | 'table' | 'list' | 'card' | 'modal' | 'tooltip' | 'progress' | 'spinner' | 'custom';
 export interface ComponentStyling {
     css?: string;
-    classes?: string[];
+    classes?: string;
     inline?: Record<string, string>;
     theme?: string;
     responsive?: ResponsiveConfig;
-    animations?: AnimationConfig[];
+    animations?: AnimationConfig;
 }
 export interface ResponsiveConfig {
     breakpoints: Record<string, number>;
-    rules: ResponsiveRule[];
+    rules: ResponsiveRule;
     strategy: 'mobile-first' | 'desktop-first';
 }
 export interface ResponsiveRule {
@@ -164,7 +164,7 @@ export interface GridConfig {
     columns: number | 'auto';
     rows: number | 'auto';
     gap: SpacingValue;
-    areas?: string[][];
+    areas?: string[];
     autoFlow: 'row' | 'column' | 'row dense' | 'column dense';
 }
 export interface FlexboxConfig {
@@ -218,11 +218,11 @@ export interface EmbedStyling {
     customCSS?: string;
     variables: Record<string, string>;
     responsive: ResponsiveConfig;
-    animations: AnimationConfig[];
-    fonts: FontConfig[];
+    animations: AnimationConfig;
+    fonts: FontConfig;
     colors: ColorPalette;
     spacing: SpacingScale;
-    shadows: ShadowConfig[];
+    shadows: ShadowConfig;
     borders: BorderConfig;
 }
 export interface ThemeConfig {
@@ -298,7 +298,7 @@ export interface FontConfig {
     family: string;
     source: 'google' | 'adobe' | 'system' | 'custom';
     url?: string;
-    weights: number[];
+    weights: number;
     styles: ('normal' | 'italic')[];
     display: 'auto' | 'block' | 'swap' | 'fallback' | 'optional';
 }
@@ -340,8 +340,8 @@ export interface EmbedBehavior {
 }
 export interface SandboxConfig {
     enabled: boolean;
-    permissions: SandboxPermission[];
-    allowedDomains: string[];
+    permissions: SandboxPermission;
+    allowedDomains: string;
     cspDirectives: Record<string, string>;
 }
 export type SandboxPermission = 'allow-scripts' | 'allow-forms' | 'allow-popups' | 'allow-modals' | 'allow-orientation-lock' | 'allow-pointer-lock' | 'allow-presentation' | 'allow-same-origin' | 'allow-top-navigation' | 'allow-downloads';
@@ -379,8 +379,8 @@ export interface FallbackConfig {
 export interface CommunicationConfig {
     enabled: boolean;
     protocol: 'postMessage' | 'custom';
-    allowedOrigins: string[];
-    messageTypes: string[];
+    allowedOrigins: string;
+    messageTypes: string;
     encryption?: EncryptionConfig;
 }
 export interface EncryptionConfig {
@@ -391,7 +391,7 @@ export interface EncryptionConfig {
     privateKey?: string;
 }
 export interface LifecycleConfig {
-    hooks: LifecycleHook[];
+    hooks: LifecycleHook;
     autoMount: boolean;
     autoDestroy: boolean;
     persistState: boolean;
@@ -419,7 +419,7 @@ export interface CachingConfig {
 }
 export interface MonitoringConfig {
     enabled: boolean;
-    metrics: string[];
+    metrics: string;
     sampling: number;
     reporting: ReportingConfig;
 }
@@ -445,9 +445,9 @@ export interface CSPConfig {
 }
 export interface CORSConfig {
     enabled: boolean;
-    allowedOrigins: string[];
-    allowedMethods: string[];
-    allowedHeaders: string[];
+    allowedOrigins: string;
+    allowedMethods: string;
+    allowedHeaders: string;
     credentials: boolean;
     maxAge: number;
 }
@@ -471,27 +471,27 @@ export interface SanitizationConfig {
     jsSanitizer?: JSSanitizerConfig;
 }
 export interface HTMLSanitizerConfig {
-    allowedTags: string[];
-    allowedAttributes: Record<string, string[]>;
-    allowedSchemes: string[];
-    allowedClasses: string[];
+    allowedTags: string;
+    allowedAttributes: Record<string, string>;
+    allowedSchemes: string;
+    allowedClasses: string;
 }
 export interface CSSSanitizerConfig {
-    allowedProperties: string[];
-    allowedValues: Record<string, string[]>;
-    allowedUnits: string[];
-    blockedSelectors: string[];
+    allowedProperties: string;
+    allowedValues: Record<string, string>;
+    allowedUnits: string;
+    blockedSelectors: string;
 }
 export interface JSSanitizerConfig {
-    allowedFunctions: string[];
-    blockedKeywords: string[];
+    allowedFunctions: string;
+    blockedKeywords: string;
     maxExecutionTime: number;
     memoryLimit: number;
 }
 export interface AnalyticsConfig {
     enabled: boolean;
     trackingId?: string;
-    events: AnalyticsEvent[];
+    events: AnalyticsEvent;
     sampling: number;
     privacy: PrivacyConfig;
 }
@@ -509,8 +509,8 @@ export interface PrivacyConfig {
     dataRetention: number;
 }
 export interface PermissionConfig {
-    required: Permission[];
-    optional: Permission[];
+    required: Permission;
+    optional: Permission;
     requestOnDemand: boolean;
     gracefulDegradation: boolean;
 }
@@ -526,9 +526,9 @@ export interface EmbedMetadata {
     version: string;
     author: AuthorInfo;
     license: string;
-    keywords: string[];
+    keywords: string;
     category: string;
-    tags: string[];
+    tags: string;
     documentation?: string;
     repository?: string;
     homepage?: string;
@@ -553,96 +553,12 @@ export declare class EmbeddableContent extends EventEmitter {
     private communicationChannel?;
     private state;
     constructor(config: EmbedConfig);
-    initialize(container: HTMLElement | string): Promise<void>;
-    load(): Promise<void>;
-    update(updates: Partial<EmbedConfig>): Promise<void>;
-    destroy(): Promise<void>;
-    sendMessage(type: string, data: any): void;
-    updateContent(content: Partial<EmbedContent>): Promise<void>;
-    updateData(data: Record<string, any>): Promise<void>;
-    setState(key: string, value: any): void;
-    getState(key?: string): any;
-    track(event: string, properties?: Record<string, any>): void;
-    getContainer(): HTMLElement | null;
-    getIframe(): HTMLIFrameElement | null;
-    isReady(): boolean;
-    getConfig(): EmbedConfig;
-    private createSecureIframe;
-    private renderDirectly;
     private loadContent;
     private renderTemplate;
     private renderHTML;
     private renderComponents;
     private renderComponent;
-    private loadDependencies;
-    private loadDependency;
-    private applyStyles;
-    private buildCSS;
-    private buildThemeCSS;
-    private buildResponsiveCSS;
-    private buildAnimationCSS;
-    private injectCSS;
-    private injectHTML;
-    private setupInteractions;
-    private setupInteraction;
-    private createInteractionHandler;
-    private executeAction;
-    private setupCommunication;
-    private processMessage;
-    private setupResponsiveBehavior;
-    private setupSecurity;
-    private executeLifecycleHook;
-    private showLoadingState;
-    private hideLoadingState;
-    private showErrorState;
-    private showSkeleton;
-    private showSpinner;
-    private showPlaceholder;
-    private buildIframeSrc;
-    private buildCSPString;
-    private gatherTemplateData;
-    private processTemplate;
-    private sanitizeHTML;
-    private applyComponentStyles;
-    private setupComponentEvents;
-    private getAllDependencies;
-    private applyTheme;
-    private evaluateCondition;
-    private handleSubmitAction;
-    private handleToggleAction;
-    private handleAnimateAction;
-    private handleUpdateAction;
-    private executeCustomCallback;
-    private handleResize;
-    private handleUpdate;
-    private handleStateMessage;
-    private handleContainerResize;
-    private applyCsp;
-    private setupRateLimit;
-    private executeAsyncHook;
-    private executeSyncHook;
-    private renderWithData;
-    private persistState;
-    private debounce;
-    private throttle;
+    element: any;
+    id: string;
 }
-export declare class EmbedBuilder {
-    private config;
-    constructor(id: string, type: EmbedType);
-    title(title: string): this;
-    content(content: Partial<EmbedContent>): this;
-    styling(styling: Partial<EmbedStyling>): this;
-    behavior(behavior: Partial<EmbedBehavior>): this;
-    security(security: Partial<SecurityConfig>): this;
-    analytics(analytics: Partial<AnalyticsConfig>): this;
-    permissions(permissions: Partial<PermissionConfig>): this;
-    metadata(metadata: Partial<EmbedMetadata>): this;
-    build(): EmbedConfig;
-    private validateConfig;
-}
-declare const _default: {
-    EmbeddableContent: typeof EmbeddableContent;
-    EmbedBuilder: typeof EmbedBuilder;
-};
-export default _default;
 //# sourceMappingURL=EmbeddableContent.d.ts.map

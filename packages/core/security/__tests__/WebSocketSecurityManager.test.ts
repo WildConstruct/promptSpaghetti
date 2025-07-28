@@ -26,39 +26,38 @@ describe('WebSocketSecurityManager', () => {
   let mockDataClassifier: jest.Mocked<DataClassifier>;
   let mockFingerprintService: jest.Mocked<DeviceFingerprintingService>;
   let mockTrustedDeviceManager: jest.Mocked<TrustedDeviceManager>;
-  const testConfig: WebSocketSecurityConfig = {
-    enableMessageEncryption: true,
-    encryptionKeyRotationMinutes: 60,
-    requireE2EEncryption: false,
-    requireDeviceVerification: true,
-    enableMFAForHighRisk: true,
-    sessionTimeoutMinutes: 30,
-    maxConcurrentSessions: 10,
-    enableAnomalyDetection: true,
-    rateLimitMessagesPerMinute: 100,
-    suspiciousBehaviorThreshold: 5,
-    blockSuspiciousIPs: true,
-    enableDataClassification: true,
-    enforceClassificationPolicies: true,
-    logClassifiedData: true,
-    enableSecurityAuditLog: true,
-    auditLogRetentionDays: 90,
-    complianceMode: true,
-    enableCertificatePinning: true,
-    pinnedCertificates: ['cert1', 'cert2'],
-    enableCSRFProtection: true,
-    allowedOrigins: ['https://example.com'],
-    requireSecureTransport: true,
-  };
+  const testConfig: WebSocketSecurityConfig = {,
+  enableMessageEncryption: true,
+  encryptionKeyRotationMinutes: 60,
+  requireE2EEncryption: false,
+  requireDeviceVerification: true,
+  enableMFAForHighRisk: true,
+  sessionTimeoutMinutes: 30,
+  maxConcurrentSessions: 10,
+  enableAnomalyDetection: true,
+  rateLimitMessagesPerMinute: 100,
+  suspiciousBehaviorThreshold: 5,
+  blockSuspiciousIPs: true,
+  enableDataClassification: true,
+  enforceClassificationPolicies: true,
+  logClassifiedData: true,
+  enableSecurityAuditLog: true,
+  auditLogRetentionDays: 90,
+  complianceMode: true,
+  enableCertificatePinning: true,
+  pinnedCertificates: ['cert1', 'cert2'],
+  enableCSRFProtection: true,
+  allowedOrigins: ['https://example.com'],
+  requireSecureTransport: true,
+};
   const testConnectionRequest = {
-    ipAddress: '192.168.1.100',
-    userAgent: 'Mozilla/5.0 (Test Browser)',
-    origin: 'https://example.com',
-    headers: {,
-      'accept': 'application/json',
-      'accept-language': 'en-US'
-    }
-  };
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0 (Test Browser)',
+  origin: 'https://example.com',
+  headers: {,
+  'accept': 'application/json',
+  'accept-language': 'en-US',
+};
   beforeEach(() => {
     jest.useFakeTimers();
     // Create mocked services
@@ -76,68 +75,66 @@ describe('WebSocketSecurityManager', () => {
     jest.spyOn(mockTrustedDeviceManager, 'verifyDevice');
     // Setup default mock implementations
     mockFingerprintService.generateFingerprint.mockResolvedValue({)
-      id: 'fingerprint-123',
-      type: 'ENHANCED' as any,
-      confidence: 95,
-      createdAt: new Date(),
-      lastSeen: new Date(),
-      seenCount: 1,
-      basic: {,
-        userAgent: testConnectionRequest.userAgent,
-        language: 'en-US',
-        platform: 'Test',
-        cookieEnabled: true,
-        doNotTrack: false,
-        timezone: 'UTC',
-        timezoneOffset: 0,
-      }
-    } as any);
+  id: 'fingerprint-123',
+  type: 'ENHANCED' as any,
+  confidence: 95,
+  createdAt: new Date(),
+  lastSeen: new Date(),
+  seenCount: 1,
+  basic: {,
+  userAgent: testConnectionRequest.userAgent,
+  language: 'en-US',
+  platform: 'Test',
+  cookieEnabled: true,
+  doNotTrack: false,
+  timezone: 'UTC',
+  timezoneOffset: 0,
+} as any);
     mockFingerprintService.assessRisk.mockReturnValue({)
-      deviceId: 'fingerprint-123',
-      overallRisk: RiskLevel.LOW,
-      riskScore: 15,
-      factors: [],
-      recommendations: [],
-      timestamp: new Date(),
-    });
+  deviceId: 'fingerprint-123',
+  overallRisk: RiskLevel.LOW,
+  riskScore: 15,
+  factors: [],
+  recommendations: [],
+  timestamp: new Date(),
+});
     mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({)
-      trusted: false,
-      reason: 'Device not previously trusted',
-      riskScore: 30,
-      requiresVerification: true,
-      factors: {,
-        deviceMatch: false,
-        locationMatch: true,
-        riskAcceptable: true,
-        timingNormal: true,
-      }
-    } as any);
+  trusted: false,
+  reason: 'Device not previously trusted',
+  riskScore: 30,
+  requiresVerification: true,
+  factors: {,
+  deviceMatch: false,
+  locationMatch: true,
+  riskAcceptable: true,
+  timingNormal: true,
+} as any);
     mockTrustedDeviceManager.verifyDevice.mockResolvedValue({)
-      id: 'device-123',
-      userId: 'user-456',
-      deviceId: 'fingerprint-123',
-      status: 'TRUSTED',
-      trustLevel: 'FULL',
-    } as any);
+  id: 'device-123',
+  userId: 'user-456',
+  deviceId: 'fingerprint-123',
+  status: 'TRUSTED',
+  trustLevel: 'FULL',
+} as any);
     mockDataClassifier.classify.mockReturnValue({)
-      level: ClassificationLevel.INTERNAL,
-      category: DataCategory.OPERATIONAL,
-      confidence: 90,
-      matchedRules: [],
-      complianceRequirements: [],
-      encryptionRequired: false,
-      retentionPeriod: '1 year',
-      accessControls: [],
-      reasoning: [],
-    });
+  level: ClassificationLevel.INTERNAL,
+  category: DataCategory.OPERATIONAL,
+  confidence: 90,
+  matchedRules: [],
+  complianceRequirements: [],
+  encryptionRequired: false,
+  retentionPeriod: '1 year',
+  accessControls: [],
+  reasoning: [],
+});
     mockKeyManagementService.generateKey.mockResolvedValue({)
-      metadata: {,
-        id: 'session-key-123',
-        name: 'test-session-key',
-        status: 'ACTIVE' as any,
-      },
-      keyData: Buffer.from('test-encryption-key-data'),
-    } as any);
+  metadata: {,
+  id: 'session-key-123',
+  name: 'test-session-key',
+  status: 'ACTIVE' as any,
+},
+  keyData: Buffer.from('test-encryption-key-data');
+  } as any);
     // Initialize security manager
     securityManager = new WebSocketSecurityManager()
       testConfig,
@@ -172,21 +169,21 @@ describe('WebSocketSecurityManager', () => {
       expect(context.deviceFingerprint).toBe('fingerprint-123');
       expect(context.connectedAt).toBeInstanceOf(Date);
       expect(mockFingerprintService.generateFingerprint).toHaveBeenCalledWith({)
-        ipAddress: testConnectionRequest.ipAddress,
-        userAgent: testConnectionRequest.userAgent,
-        headers: testConnectionRequest.headers,
-      });
+  ipAddress: testConnectionRequest.ipAddress,
+  userAgent: testConnectionRequest.userAgent,
+  headers: testConnectionRequest.headers,
+});
       expect(mockKeyManagementService.generateKey).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'symmetric',
-          purpose: 'session_encryption',
-          algorithm: 'aes-256-gcm',
-        })
+  type: 'symmetric',
+  purpose: 'session_encryption',
+  algorithm: 'aes-256-gcm',
+}
       );
     });
     test('should handle high-risk connections', async () => {
       mockFingerprintService.assessRisk.mockReturnValue({)
-        deviceId: 'fingerprint-123',
+  deviceId: 'fingerprint-123',
         overallRisk: RiskLevel.HIGH,
         riskScore: 85,
         factors: [,
@@ -194,8 +191,8 @@ describe('WebSocketSecurityManager', () => {
           { category: 'behavior', factor: 'suspicious_patterns', impact: 0.7, confidence: 85, description: 'Suspicious patterns' }
         ],
         recommendations: ['require_mfa'],
-        timestamp: new Date(),
-      });
+        timestamp: new Date();
+  });
       const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
@@ -206,18 +203,17 @@ describe('WebSocketSecurityManager', () => {
       expect(context.flags.vpnDetected).toBe(true);
     });
     test('should handle trusted devices', async () => {
-      mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({)
-        trusted: true,
-        reason: 'Device is trusted',
-        riskScore: 10,
-        requiresVerification: false,
-        factors: {,
-          deviceMatch: true,
-          locationMatch: true,
-          riskAcceptable: true,
-          timingNormal: true,
-        }
-      } as any);
+  mockTrustedDeviceManager.checkDeviceTrust.mockResolvedValue({)
+  trusted: true,
+  reason: 'Device is trusted',
+  riskScore: 10,
+  requiresVerification: false,
+  factors: {,
+  deviceMatch: true,
+  locationMatch: true,
+  riskAcceptable: true,
+  timingNormal: true,
+} as any);
       const context = await securityManager.initializeConnection(;);
         'conn-123',
         'user-456',
@@ -234,43 +230,43 @@ describe('WebSocketSecurityManager', () => {
     });
   });
   describe('Authentication', () => {
-    let context: ConnectionSecurityContext;
-    beforeEach(async () => {
-      context = await securityManager.initializeConnection()
-        'conn-123',
-        'user-456',
-        testConnectionRequest
-      );
-    });
+  let context: ConnectionSecurityContext;
+  beforeEach(async () => {
+  context = await securityManager.initializeConnection()
+  'conn-123',
+  'user-456',
+  testConnectionRequest
+  );
+});
     test('should authenticate with valid credentials', async () => {
-      const result = await securityManager.authenticateConnection('conn-123', {)
-        token: 'valid-token-12345',
-        mfaCode: '123456',
-      });
+  const result = await securityManager.authenticateConnection('conn-123', {)
+  token: 'valid-token-12345',
+  mfaCode: '123456',
+});
       expect(result).toBe(true);
       const updatedContext = securityManager.getConnectionContext('conn-123');
       expect(updatedContext?.isAuthenticated).toBe(true);
       expect(updatedContext?.trustLevel).toBe('basic');
     });
     test('should reject invalid token', async () => {
-      const result = await securityManager.authenticateConnection('conn-123', {)
-        token: 'invalid',
-      });
+  const result = await securityManager.authenticateConnection('conn-123', {)
+  token: 'invalid',
+});
       expect(result).toBe(false);
       const updatedContext = securityManager.getConnectionContext('conn-123');
       expect(updatedContext?.isAuthenticated).toBe(false);
       expect(updatedContext?.suspiciousActivityCount).toBe(1);
     });
     test('should require MFA for high-risk connections', async () => {
-      // Create high-risk context
-      mockFingerprintService.assessRisk.mockReturnValue({)
-        deviceId: 'fingerprint-123',
-        overallRisk: RiskLevel.HIGH,
-        riskScore: 85,
-        factors: [],
-        recommendations: [],
-        timestamp: new Date(),
-      });
+  // Create high-risk context
+  mockFingerprintService.assessRisk.mockReturnValue({)
+  deviceId: 'fingerprint-123',
+  overallRisk: RiskLevel.HIGH,
+  riskScore: 85,
+  factors: [],
+  recommendations: [],
+  timestamp: new Date(),
+});
       // Initialize a high-risk connection
       const highRiskContext = await securityManager.initializeConnection(;);
         'conn-456',
@@ -279,44 +275,43 @@ describe('WebSocketSecurityManager', () => {
       );
       // Authentication without MFA should fail
       const result1 = await securityManager.authenticateConnection('conn-456', {)
-        token: 'valid-token-12345',
-      });
+  token: 'valid-token-12345',
+});
       expect(result1).toBe(false);
       // Authentication with MFA should succeed
       const result2 = await securityManager.authenticateConnection('conn-456', {)
-        token: 'valid-token-12345',
-        mfaCode: '123456',
-      });
+  token: 'valid-token-12345',
+  mfaCode: '123456',
+});
       expect(result2).toBe(true);
     });
     test('should handle device verification', async () => {
-      const result = await securityManager.authenticateConnection('conn-123', {)
-        token: 'valid-token-12345',
-        deviceVerificationToken: 'device-token-123',
-      });
+  const result = await securityManager.authenticateConnection('conn-123', {)
+  token: 'valid-token-12345',
+  deviceVerificationToken: 'device-token-123',
+});
       expect(result).toBe(true);
       expect(mockTrustedDeviceManager.verifyDevice).toHaveBeenCalledWith('device-token-123');
     });
   });
   describe('Message Encryption/Decryption', () => {
-    let context: ConnectionSecurityContext;
-    beforeEach(async () => {
-      context = await securityManager.initializeConnection()
-        'conn-123',
-        'user-456',
-        testConnectionRequest
-      );
-      await securityManager.authenticateConnection('conn-123', {)
-        token: 'valid-token-12345',
-      });
+  let context: ConnectionSecurityContext;
+  beforeEach(async () => {
+  context = await securityManager.initializeConnection()
+  'conn-123',
+  'user-456',
+  testConnectionRequest
+  );
+  await securityManager.authenticateConnection('conn-123', {)
+  token: 'valid-token-12345',
+});
     });
     test('should encrypt outgoing messages', async () => {
       const message = {
         type: 'graph_update',
         payload: {,
-          nodeId: 'node-123',
+  nodeId: 'node-123',
           data: { name: 'Test Node' }
-        }
       };
       const secureMessage = await securityManager.encryptMessage('conn-123', message);
       expect(secureMessage).toBeDefined();
@@ -336,9 +331,8 @@ describe('WebSocketSecurityManager', () => {
       const originalMessage = {
         type: 'presence_update',
         payload: {,
-          cursor: { x: 100, y: 200 },
+  cursor: { x: 100, y: 200 },
           selection: ['node-1', 'node-2']
-        }
       };
       const secureMessage = await securityManager.encryptMessage('conn-123', originalMessage);
       // Then decrypt it
@@ -349,59 +343,58 @@ describe('WebSocketSecurityManager', () => {
       expect(decryptedMessage.metadata.encrypted).toBe(true);
     });
     test('should handle classification-based encryption', async () => {
-      // Mock confidential data classification
-      mockDataClassifier.classify.mockReturnValue({)
-        level: ClassificationLevel.CONFIDENTIAL,
-        category: DataCategory.PII,
-        confidence: 95,
-        matchedRules: ['pii_detected'],
-        complianceRequirements: [],
-        encryptionRequired: true,
-        retentionPeriod: '7 years',
-        accessControls: [],
-        reasoning: ['PII detected'],
-      });
+  // Mock confidential data classification
+  mockDataClassifier.classify.mockReturnValue({)
+  level: ClassificationLevel.CONFIDENTIAL,
+  category: DataCategory.PII,
+  confidence: 95,
+  matchedRules: ['pii_detected'],
+  complianceRequirements: [],
+  encryptionRequired: true,
+  retentionPeriod: '7 years',
+  accessControls: [],
+  reasoning: ['PII detected'],
+});
       const message = {
-        type: 'user_data',
-        payload: {,
-          email: 'user@example.com',
-          ssn: '123-45-6789',
-        }
-      };
+  type: 'user_data',
+  payload: {,
+  email: 'user@example.com',
+  ssn: '123-45-6789',
+};
       const secureMessage = await securityManager.encryptMessage('conn-123', message);
       expect(secureMessage.encrypted).toBe(true);
       expect(secureMessage.classification).toBe(ClassificationLevel.CONFIDENTIAL);
     });
     test('should reject messages with invalid signatures', async () => {
-      const secureMessage: SecureWebSocketMessage = {
-        id: 'msg-123',
-        type: 'test',
-        payload: 'encrypted-data',
-        encrypted: true,
-        signed: true,
-        classification: ClassificationLevel.INTERNAL,
-        timestamp: Date.now(),
-        originConnectionId: 'conn-123',
-        originUserId: 'user-456',
-        processingPath: [],
-        signature: 'invalid-signature',
-      };
+  const secureMessage: SecureWebSocketMessage = {,
+  id: 'msg-123',
+  type: 'test',
+  payload: 'encrypted-data',
+  encrypted: true,
+  signed: true,
+  classification: ClassificationLevel.INTERNAL,
+  timestamp: Date.now(),
+  originConnectionId: 'conn-123',
+  originUserId: 'user-456',
+  processingPath: [],
+  signature: 'invalid-signature',
+};
       await expect()
         securityManager.decryptMessage('conn-123', secureMessage)
       ).rejects.toThrow('Message signature verification failed');
     });
   });
   describe('Threat Detection', () => {
-    let context: ConnectionSecurityContext;
-    beforeEach(async () => {
-      context = await securityManager.initializeConnection()
-        'conn-123',
-        'user-456',
-        testConnectionRequest
-      );
-      await securityManager.authenticateConnection('conn-123', {)
-        token: 'valid-token-12345',
-      });
+  let context: ConnectionSecurityContext;
+  beforeEach(async () => {
+  context = await securityManager.initializeConnection()
+  'conn-123',
+  'user-456',
+  testConnectionRequest
+  );
+  await securityManager.authenticateConnection('conn-123', {)
+  token: 'valid-token-12345',
+});
     });
     test('should detect rate limit violations', async () => {
       const eventHandler = jest.fn();
@@ -414,55 +407,52 @@ describe('WebSocketSecurityManager', () => {
         };
         const secureMessage = await securityManager.encryptMessage('conn-123', message);
         await securityManager.decryptMessage('conn-123', secureMessage);
-      }
       // Check if rate limit warning was logged
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'threat_detected',
-          severity: 'warning',
-          description: 'Rate limit exceeded',
-        })
+  type: 'threat_detected',
+  severity: 'warning',
+  description: 'Rate limit exceeded',
+}
       );
     });
     test('should detect anomalous message patterns', async () => {
-      const eventHandler = jest.fn();
-      securityManager.on('securityEvent', eventHandler);
-      // Send an unusually large message
-      const largeMessage = {
-        type: 'large_data',
-        payload: {,
-          data: 'x'.repeat(50000) // 50KB of data,
-        }
-      };
+  const eventHandler = jest.fn();
+  securityManager.on('securityEvent', eventHandler);
+  // Send an unusually large message
+  const largeMessage = {
+  type: 'large_data',
+  payload: {,
+  data: 'x'.repeat(50000) // 50KB of data,
+};
       // Send some normal messages first to establish baseline
       for (let i = 0; i < 10; i++) {
         const normalMessage = { type: 'normal', payload: { data: 'small' } };
         const secureMessage = await securityManager.encryptMessage('conn-123', normalMessage);
         await securityManager.decryptMessage('conn-123', secureMessage);
-      }
       // Send the large message
       const secureMessage = await securityManager.encryptMessage('conn-123', largeMessage);
       await securityManager.decryptMessage('conn-123', secureMessage);
       // Check if anomaly was detected
       expect(eventHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'anomaly',
-          severity: 'warning',
-          description: 'Unusually large message detected',
-        })
+  type: 'anomaly',
+  severity: 'warning',
+  description: 'Unusually large message detected',
+}
       );
     });
     test('should block connections for security violations', async () => {
-      const blockHandler = jest.fn();
-      securityManager.on('connectionBlocked', blockHandler);
-      await securityManager.blockConnection('conn-123', 'Test security violation', 60000);
-      expect(securityManager.isConnectionBlocked('conn-123', testConnectionRequest.ipAddress)).toBe(true);
-      expect(blockHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          connectionId: 'conn-123',
-          reason: 'Test security violation',
-          duration: 60000,
-        })
+  const blockHandler = jest.fn();
+  securityManager.on('connectionBlocked', blockHandler);
+  await securityManager.blockConnection('conn-123', 'Test security violation', 60000);
+  expect(securityManager.isConnectionBlocked('conn-123', testConnectionRequest.ipAddress)).toBe(true);
+  expect(blockHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  connectionId: 'conn-123',
+  reason: 'Test security violation',
+  duration: 60000,
+}
       );
     });
     test('should clean up blocked connections after timeout', async () => {
@@ -513,22 +503,22 @@ describe('WebSocketSecurityManager', () => {
     });
   });
   describe('Security Statistics', () => {
-    test('should provide comprehensive security statistics', async () => {
-      // Create some connections
-      await securityManager.initializeConnection('conn-1', 'user-1', testConnectionRequest);
-      await securityManager.initializeConnection('conn-2', 'user-2', testConnectionRequest);
-      // Authenticate one connection
-      await securityManager.authenticateConnection('conn-1', {)
-        token: 'valid-token-12345',
-      });
+  test('should provide comprehensive security statistics', async () => {
+  // Create some connections
+  await securityManager.initializeConnection('conn-1', 'user-1', testConnectionRequest);
+  await securityManager.initializeConnection('conn-2', 'user-2', testConnectionRequest);
+  // Authenticate one connection
+  await securityManager.authenticateConnection('conn-1', {)
+  token: 'valid-token-12345',
+});
       const stats = securityManager.getSecurityStats();
       expect(stats).toEqual()
         expect.objectContaining({)
-          totalConnections: 2,
-          authenticatedConnections: 1,
-          encryptedConnections: 2, // Both have encryption keys
-          avgRiskScore: expect.any(Number),
-        })
+  totalConnections: 2,
+  authenticatedConnections: 1,
+  encryptedConnections: 2, // Both have encryption keys,
+  avgRiskScore: expect.any(Number),
+}
       );
       expect(typeof stats.avgRiskScore).toBe('number');
       expect(stats.avgRiskScore).toBeGreaterThanOrEqual(0);

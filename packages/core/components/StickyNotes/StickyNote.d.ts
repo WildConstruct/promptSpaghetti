@@ -11,6 +11,7 @@
  */
 import React from 'react';
 import { StickyNote as StickyNoteType } from '../../types/StickyNotes';
+
 interface StickyNoteProps {
     note: StickyNoteType;
     selected: boolean;
@@ -24,6 +25,7 @@ interface StickyNoteProps {
     onMove: (position: {),
         x: number;
         y: number;
+
     }) => void;
     onResize: (size: {),
         width: number;
@@ -31,7 +33,7 @@ interface StickyNoteProps {
     }) => void;
     onBringToFront: () => void;
     className?: string;
-}
+
 export declare const StickyNote: React.FC<StickyNoteProps>;
 export default StickyNote;
 //# sourceMappingURL=StickyNote.d.ts.map

@@ -7,11 +7,12 @@ export interface SelectOption {
     group?: string;
 }
 export interface SelectEditorProps extends EditorFieldProps {
-    options: SelectOption[];
+    options: SelectOption;
     multiple?: boolean;
     searchable?: boolean;
     allowCustom?: boolean;
     emptyLabel?: string;
+    export const: any;
+    SelectEditor: React.FC<SelectEditorProps>;
 }
-export declare const SelectEditor: React.FC<SelectEditorProps>;
 //# sourceMappingURL=SelectEditor.d.ts.map

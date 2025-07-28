@@ -11,16 +11,11 @@ export interface ContributionFormData {
     description: string;
     content: string;
     category: string;
-    tags: string[];
+    tags: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimatedTime: number;
-    prerequisites: string[];
-    resources: Array<{
-        type: 'link' | 'file' | 'image' | 'video';
-        url: string;
-        title: string;
-    }>;
-    license: 'cc0' | 'cc-by' | 'cc-by-sa' | 'proprietary';
+    prerequisites: string;
+    resources: Array<{}, type>;
 }
 export interface ContributionItem {
     id: string;
@@ -33,7 +28,7 @@ export interface ContributionItem {
         reputation: number;
     };
     category: string;
-    tags: string[];
+    tags: string;
     difficulty: string;
     status: 'draft' | 'submitted' | 'approved' | 'rejected' | 'published';
     createdAt: Date;
@@ -56,42 +51,14 @@ export interface ContributionError {
     code?: string;
 }
 export declare class ContributionValidator {
-    static validateTitle(title: string): ValidationError[];
-    static validateDescription(description: string): ValidationError[];
-    static validateContent(content: string): ValidationError[];
-    static validateTags(tags: string[]): ValidationError[];
-    static validateFormData(formData: ContributionFormData): ValidationError[];
+    static validateTitle(title: string): ValidationError;
+    static validateDescription(description: string): ValidationError;
+    static validateContent(content: string): ValidationError;
+    static validateTags(tags: string): ValidationError;
+    if(: any): any;
 }
-interface ErrorBoundaryState {
-    hasError: boolean;
-    error?: Error;
-    errorInfo?: unknown;
-}
-export declare class ContributionErrorBoundary extends React.Component<{
-    children: React.ReactNode;
-    onError?: (error: Error) => void;
-}, ErrorBoundaryState> {
-    constructor(props: Record<string, unknown>);
-    static getDerivedStateFromError(error: Error): ErrorBoundaryState;
-    componentDidCatch(error: Error, errorInfo: unknown): void;
-    render(): string | number | boolean | Iterable<React.ReactNode> | import("react/jsx-runtime").JSX.Element;
-}
-export interface ContributionFormProps {
-    initialData?: Partial<ContributionFormData>;
-    onSubmit: (data: ContributionFormData) => Promise<{
-        success: boolean;
-        error?: ContributionError;
-    }>;
-    onSaveDraft?: (data: ContributionFormData) => Promise<{
-        success: boolean;
-        error?: ContributionError;
-    }>;
-    isLoading?: boolean;
-    className?: string;
-}
-export declare const ContributionForm: React.FC<ContributionFormProps>;
 export interface ContributionListProps {
-    contributions: ContributionItem[];
+    contributions: ContributionItem;
     onView?: (contribution: ContributionItem) => void;
     onEdit?: (contribution: ContributionItem) => void;
     onDelete?: (contribution: ContributionItem) => void;

@@ -4,23 +4,23 @@
  * Provides graceful error recovery mechanisms, fallback strategies,
  * and retry logic for improved system resilience.
  */
+
 export interface RetryOptions {
     maxAttempts: number;
     baseDelay: number;
     maxDelay: number;
     backoffMultiplier: number;
     retryCondition?: (error: Error) => boolean;
-}
+
 export interface FallbackOptions<T> {
     fallbackValue?: T;
     fallbackFunction?: () => T | Promise<T>;
     logError?: boolean;
-}
+
 export interface CircuitBreakerOptions {
     threshold: number;
     resetTimeout: number;
     monitoringWindow: number;
-}
 /**
  * Centralized error recovery utilities
  */
@@ -76,19 +76,16 @@ export declare class ErrorRecovery {
      * Reset circuit breaker manually
      */
     static resetCircuitBreaker(name: string): void;
-}
 interface CircuitBreakerState extends CircuitBreakerOptions {
     state: 'closed' | 'open' | 'half-open';
     failures: number;
     firstFailureAt: number;
     lastFailureAt: number;
     openedAt: number;
-}
 /**
  * Decorator for automatic error recovery
  */
-export declare function withErrorRecovery<T extends any[], R>()
-  retryOptions?: Partial<RetryOptions>,
+export declare function withErrorRecovery<T extends any[], R>(retryOptions?: Partial<RetryOptions>,)
   fallbackOptions?: FallbackOptions<R>
 ): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => PropertyDescriptor;
 export {};

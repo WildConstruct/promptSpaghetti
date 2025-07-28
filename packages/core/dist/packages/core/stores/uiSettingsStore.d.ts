@@ -5,7 +5,7 @@ export interface NodePreferences {
 }
 export interface NodeTypePreferences {
     disclosureLevel: 'basic' | 'advanced' | 'debug';
-    collapsedSections: string[];
+    collapsedSections: string;
 }
 export interface UISettings {
     debugMode: boolean;
@@ -34,7 +34,7 @@ interface UISettingsState extends UISettings {
     setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => void;
     setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => void;
     setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => void;
-    setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => void;
+    setNodeTypeCollapsedSections: (nodeType: string, sections: string) => void;
     setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void;
     clearNodePreferences: (nodeId?: string) => void;
     shouldShowTechnicalFields: () => boolean;
@@ -45,19 +45,9 @@ interface UISettingsState extends UISettings {
     applyFilmmakerPreset: () => void;
     applyDeveloperPreset: () => void;
     applyDemoPreset: () => void;
+    const: any;
+    DEFAULT_SETTINGS: UISettings;
 }
-export declare const useUISettingsStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<UISettingsState>, "persist"> & {
-    persist: {
-        setOptions: (options: Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>) => void;
-        clearStorage: () => void;
-        rehydrate: () => Promise<void> | void;
-        hasHydrated: () => boolean;
-        onHydrate: (fn: (state: UISettingsState) => void) => () => void;
-        onFinishHydration: (fn: (state: UISettingsState) => void) => () => void;
-        getOptions: () => Partial<import("zustand/middleware").PersistOptions<UISettingsState, any>>;
-    };
-}>;
-export declare const shouldShowField: (fieldName: string, fieldType?: string, store?: ReturnType<typeof useUISettingsStore>) => boolean;
-export declare const classifyField: (fieldName: string, fieldType?: string) => "basic" | "advanced" | "technical";
+export declare const useUISettingsStore: import("zustand").UseBoundStore<import("zustand").StoreApi<UISettingsState>>;
 export {};
 //# sourceMappingURL=uiSettingsStore.d.ts.map

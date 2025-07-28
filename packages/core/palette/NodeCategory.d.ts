@@ -2,6 +2,7 @@ import React from 'react';
 /**
  * Node category metadata
  */
+
 export interface NodeCategory {
     id: string;
     name: string;
@@ -19,7 +20,6 @@ export interface NodeCategory {
         difficulty?: 'beginner' | 'intermediate' | 'advanced';
         usage?: 'common' | 'specialized' | 'experimental';
     };
-}
 /**
  * Special category IDs for system categories
  */
@@ -63,11 +63,11 @@ export declare function getCategoryColor(categoryId: string, opacity?: number): 
 /**
  * Category filter options
  */
+
 export interface CategoryFilterOptions {
     difficulty?: 'beginner' | 'intermediate' | 'advanced';
     usage?: 'common' | 'specialized' | 'experimental';
     expanded?: boolean;
-}
 /**
  * Filter categories by options
  */

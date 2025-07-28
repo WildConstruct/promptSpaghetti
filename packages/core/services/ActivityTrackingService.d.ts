@@ -7,6 +7,7 @@
  * Provides comprehensive activity monitoring with real-time streaming and analytics.
  */
 import { Activity, ActivityQuery, ActivityQueryResult, ActivityMetrics, ActivityStream, ActivityStreamEvent, ActivityRetentionPolicy, ActivitySeverity, BaseActivity } from '../types/ActivityDataModel';
+
 export interface ActivityStorage {
     create(activity: Activity): Promise<Activity>;
     findById(id: string): Promise<Activity | null>;
@@ -15,14 +16,16 @@ export interface ActivityStorage {
     delete(id: string): Promise<boolean>;
     bulkCreate(activities: Activity[]): Promise<Activity[]>;
     getMetrics(query: ActivityQuery): Promise<ActivityMetrics>;
-}
+
+
 export interface ActivityStreaming {
     createStream(filters: ActivityQuery): Promise<ActivityStream>;
     destroyStream(subscriptionId: string): Promise<boolean>;
     publishActivity(activity: Activity): Promise<void>;
     subscribe(subscriptionId: string, callback: (event: ActivityStreamEvent) => void): Promise<void>;
     unsubscribe(subscriptionId: string): Promise<void>;
-}
+
+
 export interface ActivityServiceConfig {
     storage: ActivityStorage;
     streaming?: ActivityStreaming;
@@ -34,7 +37,7 @@ export interface ActivityServiceConfig {
     flushInterval?: number;
     enableCompression?: boolean;
     enableEncryption?: boolean;
-}
+
 export declare class ActivityTrackingService {
     private config;
     private pendingActivities;
@@ -118,7 +121,7 @@ export declare class ActivityTrackingService {
     private validateActivity;
     private mapThreatLevelToSeverity;
     private getApiCallSeverity;
-}
+
 export declare function createActivityTrackingService(config: ActivityServiceConfig): ActivityTrackingService;
 export declare const DEFAULT_ACTIVITY_CONFIG: Partial<ActivityServiceConfig>;
 export default ActivityTrackingService;

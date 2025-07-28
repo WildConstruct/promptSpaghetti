@@ -18,6 +18,7 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { ActivityHistoryService, ActivityType } from './ActivityHistoryService';
 
+}
 export interface UserProfile {
   id: string;
   userId: string;
@@ -69,7 +70,9 @@ export interface UserProfile {
   isFollowing?: boolean;
   mutualConnectionsCount?: number;
 }
+}
 
+}
 export interface PrivacySettings {
   profileVisibility: 'public' | 'connections' | 'private';
   emailVisibility: 'public' | 'connections' | 'private';
@@ -88,7 +91,9 @@ export interface PrivacySettings {
   emailNotifications: boolean;
   marketingEmails: boolean;
 }
+}
 
+}
 export interface UserPreferences {
   id: string;
   userId: string;
@@ -97,7 +102,9 @@ export interface UserPreferences {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ProfileCompletionStatus {
   overall: number;
   sections: {
@@ -106,6 +113,7 @@ export interface ProfileCompletionStatus {
     contact: number;
     social: number;
     preferences: number;
+}
   };
   nextSteps: string[];
   completedSteps: string[];
@@ -134,6 +142,7 @@ export enum PreferenceCategory {
   ACCESSIBILITY = 'accessibility'
 }
 
+}
 export interface UserConnection {
   id: string;
   followerId: string;
@@ -143,7 +152,9 @@ export interface UserConnection {
   createdAt: Date;
   acceptedAt?: Date;
 }
+}
 
+}
 export interface ProfileSearchQuery {
   query?: string;
   skills?: string[];
@@ -160,11 +171,14 @@ export interface ProfileSearchQuery {
   sortBy?: 'relevance' | 'name' | 'recent' | 'activity' | 'connections';
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface ProfileSearchResult {
   profiles: UserProfile[];
   totalCount: number;
   facets: {
+}
     skills: Array<{ skill: string; count: number }>;
     locations: Array<{ location: string; count: number }>;
     companies: Array<{ company: string; count: number }>;
@@ -173,6 +187,7 @@ export interface ProfileSearchResult {
   };
 }
 
+}
 export interface ProfileAnalytics {
   userId: string;
   profileViews: {
@@ -181,6 +196,7 @@ export interface ProfileAnalytics {
     today: number;
     thisWeek: number;
     thisMonth: number;
+}
   };
   viewerDemographics: {
     byLocation: Record<string, number>;
@@ -205,6 +221,7 @@ export interface ProfileAnalytics {
   };
 }
 
+}
 export interface ProfileUpdate {
   displayName?: string;
   firstName?: string;
@@ -230,6 +247,7 @@ export interface ProfileUpdate {
   industry?: string;
   privacySettings?: Partial<PrivacySettings>;
 }
+}
 
 export class UserProfileService {
   private db: Database;
@@ -254,6 +272,7 @@ export class UserProfileService {
     viewerId?: string,
     includePrivate: boolean = false
   ): Promise<UserProfile | null> {
+
     const query = `
       SELECT 
         p.*,
@@ -279,7 +298,7 @@ export class UserProfileService {
       ) following ON p.user_id = following.follower_id
       LEFT JOIN user_connections conn ON (
         conn.follower_id = $2 AND conn.following_id = p.user_id AND conn.status = 'accepted'
-      )
+
       WHERE p.user_id = $1
     `;
 
@@ -319,6 +338,7 @@ export class UserProfileService {
     updates: ProfileUpdate,
     updatedBy: string
   ): Promise<UserProfile> {
+
     // Validate the updates
     this.validateProfileUpdate(updates);
 
@@ -371,7 +391,7 @@ export class UserProfileService {
         previousValue: existingProfile,
         newValue: updates,
         success: true
-      },
+  }
       { correlationId: userId }
     );
 
@@ -394,6 +414,7 @@ export class UserProfileService {
     query: ProfileSearchQuery,
     searcherId?: string
   ): Promise<ProfileSearchResult> {
+
     const conditions = [];
     const values = [];
     let paramIndex = 1;
@@ -560,6 +581,7 @@ export class UserProfileService {
    * Get user preferences by category
    */
   async getUserPreferences(userId: string, category?: PreferenceCategory): Promise<UserPreferences[]> {
+
     let query = 'SELECT * FROM user_preferences WHERE user_id = $1';
     const values = [userId];
 
@@ -590,6 +612,7 @@ export class UserProfileService {
     settings: Record<string, any>,
     updatedBy: string
   ): Promise<UserPreferences> {
+
     const query = `
       INSERT INTO user_preferences (user_id, category, settings)
       VALUES ($1, $2, $3)
@@ -608,7 +631,7 @@ export class UserProfileService {
         changeType: 'update',
         newValue: settings,
         success: true
-      },
+  }
       { correlationId: userId }
     );
 
@@ -631,6 +654,7 @@ export class UserProfileService {
     action: 'follow' | 'unfollow' | 'block',
     connectionType: 'follow' | 'collaborate' | 'teammate' = 'follow'
   ): Promise<UserConnection | null> {
+
     if (followerId === followingId) {
       throw new Error('Cannot follow yourself');
     }
@@ -693,6 +717,7 @@ export class UserProfileService {
    * Get profile analytics
    */
   async getProfileAnalytics(userId: string): Promise<ProfileAnalytics> {
+
     // This would implement comprehensive analytics
     // For now, return basic placeholder data
     
@@ -704,12 +729,12 @@ export class UserProfileService {
         today: 0,
         thisWeek: 0,
         thisMonth: 0
-      },
+  }
       viewerDemographics: {
         byLocation: {},
         byCompany: {},
         byIndustry: {}
-      },
+  }
       connectionGrowth: [],
       skillPopularity: [],
       engagementMetrics: {
@@ -728,6 +753,7 @@ export class UserProfileService {
    */
   
   private async createDefaultProfile(userId: string): Promise<UserProfile> {
+
     // Get user info
     const userResult = await this.db.query(
       'SELECT email, created_at FROM users WHERE id = $1',
@@ -748,7 +774,7 @@ export class UserProfileService {
       ) VALUES (
         $1, 'UTC', 'en-US', 'MM/dd/yyyy', '12h', 'light', 'en',
         '{}', '{}', 'beginner', 10, 'public'
-      )
+
       RETURNING *
     `;
 
@@ -786,6 +812,7 @@ export class UserProfileService {
   }
 
   private async calculateCompletionScore(userId: string): Promise<number> {
+
     const profile = await this.getUserProfile(userId, userId, true);
     if (!profile) return 0;
 
@@ -865,6 +892,7 @@ export class UserProfileService {
   }
 
   private async recordProfileView(profileUserId: string, viewerId: string): Promise<void> {
+
     // Update view count
     await this.db.query(
       'UPDATE user_profiles SET view_count = view_count + 1, last_viewed_at = NOW() WHERE user_id = $1',
@@ -885,6 +913,7 @@ export class UserProfileService {
   }
 
   private async updatePrivacySettings(userId: string, settings: Partial<PrivacySettings>): Promise<void> {
+
     // Get current settings
     const currentPrefs = await this.getUserPreferences(userId, PreferenceCategory.PRIVACY);
     const currentSettings = currentPrefs.length > 0 ? currentPrefs[0].settings : {};
@@ -901,6 +930,7 @@ export class UserProfileService {
   }
 
   private async generateSearchFacets(whereClause: string, values: any[]): Promise<any> {
+
     // Generate facets for search filtering
     // This would implement actual facet queries
     return {
@@ -966,7 +996,7 @@ export class UserProfileService {
         contact: 0,
         social: 0,
         preferences: 0
-      },
+  }
       nextSteps: [],
       completedSteps: []
     };

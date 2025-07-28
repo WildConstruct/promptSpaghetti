@@ -19,6 +19,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 import { MarketplaceDAO } from './dao';
 
+}
 interface IndexOperation {
   id: string;
   operation: 'rebuild' | 'optimize' | 'update' | 'delete' | 'warm';
@@ -30,7 +31,9 @@ interface IndexOperation {
   errorMessage?: string;
   metadata: any;
 }
+}
 
+}
 interface IndexHealth {
   indexName: string;
   status: 'green' | 'yellow' | 'red';
@@ -42,6 +45,7 @@ interface IndexHealth {
     relocatingShards: number;
     initializingShards: number;
     unassignedShards: number;
+}
   };
   settings: any;
   mappings: any;
@@ -59,6 +63,7 @@ interface IndexHealth {
   };
 }
 
+}
 interface IndexOptimizationRecommendation {
   category: 'mappings' | 'settings' | 'queries' | 'shards' | 'replicas';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -70,7 +75,9 @@ interface IndexOptimizationRecommendation {
   implementation: string;
   estimatedImprovement: string;
 }
+}
 
+}
 interface BulkIndexResult {
   operationId: string;
   total: number;
@@ -80,6 +87,7 @@ interface BulkIndexResult {
   errors: Array<{
     documentId: string;
     error: string;
+}
   }>;
 }
 
@@ -117,6 +125,7 @@ export class SearchIndexManager {
    * Get comprehensive index health information
    */
   async getIndexHealth(): Promise<IndexHealth> {
+
     try {
       const [
         healthResponse,
@@ -149,7 +158,7 @@ export class SearchIndexManager {
           relocatingShards: health.relocating_shards,
           initializingShards: health.initializing_shards,
           unassignedShards: health.unassigned_shards
-        },
+  }
         settings,
         mappings,
         stats: {
@@ -158,7 +167,7 @@ export class SearchIndexManager {
           indexingRate: stats.total.indexing.index_total || 0,
           searchRate: stats.total.search.query_total || 0,
           mergeRate: stats.total.merges.total || 0
-        },
+  }
         performance
       };
     } catch (error) {
@@ -174,6 +183,7 @@ export class SearchIndexManager {
     batchSize: number = 1000,
     enableOptimization: boolean = true
   ): Promise<string> {
+
     try {
       const operationId = this.generateOperationId();
       
@@ -212,6 +222,7 @@ export class SearchIndexManager {
    * Optimize index performance
    */
   async optimizeIndex(): Promise<string> {
+
     try {
       const operationId = this.generateOperationId();
       
@@ -253,6 +264,7 @@ export class SearchIndexManager {
     documents: any[],
     batchSize: number = 1000
   ): Promise<BulkIndexResult> {
+
     try {
       const operationId = this.generateOperationId();
       const startTime = Date.now();
@@ -340,6 +352,7 @@ export class SearchIndexManager {
    * Get optimization recommendations
    */
   async getOptimizationRecommendations(): Promise<IndexOptimizationRecommendation[]> {
+
     try {
       const health = await this.getIndexHealth();
       const recommendations: IndexOptimizationRecommendation[] = [];
@@ -422,6 +435,7 @@ export class SearchIndexManager {
    * Get operation status
    */
   async getOperationStatus(operationId: string): Promise<IndexOperation | null> {
+
     const operation = this.activeOperations.get(operationId);
     if (operation) {
       return operation;
@@ -460,6 +474,7 @@ export class SearchIndexManager {
    * Cancel running operation
    */
   async cancelOperation(operationId: string): Promise<boolean> {
+
     const operation = this.activeOperations.get(operationId);
     if (!operation) {
       return false;
@@ -479,6 +494,7 @@ export class SearchIndexManager {
    * Warm up index for better performance
    */
   async warmupIndex(): Promise<void> {
+
     try {
       // Execute common queries to warm up caches
       const warmupQueries = [
@@ -488,7 +504,7 @@ export class SearchIndexManager {
             query: 'ai prompt template',
             fields: ['title^3', 'description^2', 'tags']
           }
-        },
+  }
         {
           bool: {
             filter: [
@@ -520,6 +536,7 @@ export class SearchIndexManager {
     batchSize: number,
     enableOptimization: boolean
   ): Promise<void> {
+
     const operation = this.activeOperations.get(operationId);
     if (!operation) return;
 
@@ -587,6 +604,7 @@ export class SearchIndexManager {
   }
 
   private async optimizeIndexSettings(): Promise<void> {
+
     try {
       await this.client.indices.putSettings({
         index: this.INDEX_NAME,
@@ -606,12 +624,14 @@ export class SearchIndexManager {
   }
 
   private async optimizeMappings(): Promise<void> {
+
     // Mapping optimization would require reindexing
     // This is a placeholder for mapping analysis and recommendations
     console.log('Mapping optimization analysis completed');
   }
 
   private async performForcemerge(): Promise<void> {
+
     try {
       await this.client.indices.forcemerge({
         index: this.INDEX_NAME,
@@ -624,6 +644,7 @@ export class SearchIndexManager {
   }
 
   private async switchIndexAlias(newIndexName: string): Promise<void> {
+
     try {
       await this.client.indices.updateAliases({
         body: {
@@ -640,6 +661,7 @@ export class SearchIndexManager {
   }
 
   private async calculatePerformanceMetrics(): Promise<any> {
+
     try {
       // Get query performance from database
       const queryMetrics = await this.pool.query(`
@@ -666,6 +688,7 @@ export class SearchIndexManager {
   }
 
   private async analyzeMappings(mappings: any): Promise<IndexOptimizationRecommendation[]> {
+
     const recommendations: IndexOptimizationRecommendation[] = [];
 
     try {
@@ -747,6 +770,7 @@ export class SearchIndexManager {
   }
 
   private async saveOperationStatus(operation: IndexOperation): Promise<void> {
+
     try {
       const query = `
         INSERT INTO marketplace_search_index_status (
@@ -817,6 +841,7 @@ export class SearchIndexManager {
    * Get index diagnostic information
    */
   async getIndexDiagnostics(): Promise<any> {
+
     try {
       const [health, stats, segments] = await Promise.all([
         this.getIndexHealth(),
@@ -830,12 +855,12 @@ export class SearchIndexManager {
           count: segments.body.indices[this.INDEX_NAME]?.total?.segments?.count || 0,
           memory: segments.body.indices[this.INDEX_NAME]?.total?.segments?.memory_in_bytes || 0,
           version_map_memory: segments.body.indices[this.INDEX_NAME]?.total?.segments?.version_map_memory_in_bytes || 0
-        },
+  }
         refresh_stats: {
           total: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.total || 0,
           time_in_millis: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.total_time_in_millis || 0,
           external_total: stats.body.indices[this.INDEX_NAME]?.total?.refresh?.external_total || 0
-        },
+  }
         indexing_stats: {
           total: stats.body.indices[this.INDEX_NAME]?.total?.indexing?.index_total || 0,
           time_in_millis: stats.body.indices[this.INDEX_NAME]?.total?.indexing?.index_time_in_millis || 0,
@@ -852,6 +877,7 @@ export class SearchIndexManager {
    * Clear index cache
    */
   async clearCache(cacheTypes: string[] = ['query', 'fielddata', 'request']): Promise<void> {
+
     try {
       await this.client.indices.clearCache({
         index: this.INDEX_NAME,
@@ -871,6 +897,7 @@ export class SearchIndexManager {
    * Create index backup
    */
   async createBackup(snapshotName?: string): Promise<string> {
+
     try {
       const backupName = snapshotName || `${this.INDEX_NAME}_backup_${Date.now()}`;
       
@@ -889,6 +916,7 @@ export class SearchIndexManager {
    * Validate index mapping against new schema
    */
   async validateMapping(newMapping: any): Promise<{ isValid: boolean; conflicts: string[]; warnings: string[] }> {
+
     try {
       const currentMapping = await this.client.indices.getMapping({ index: this.INDEX_NAME });
       const current = currentMapping.body[this.INDEX_NAME].mappings;
@@ -944,6 +972,7 @@ export class SearchIndexManager {
    * Get index lifecycle policy status
    */
   async getLifecycleStatus(): Promise<any> {
+
     try {
       // This would integrate with Elasticsearch ILM API
       return {
@@ -964,6 +993,7 @@ export class SearchIndexManager {
    * Destroy service and clean up resources
    */
   async destroy(): Promise<void> {
+
     try {
       // Cancel any running operations
       for (const [operationId] of this.activeOperations) {

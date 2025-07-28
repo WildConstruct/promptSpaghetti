@@ -33,12 +33,10 @@ import {
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
 interface RestoreProgressPanelProps {
-  progress: RestorationProgressResponse;
+  progress: RestorationProgressResponse;,
   onCancel: () => void;
   showDetails?: boolean;
-}
-
-export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
+  export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({,)
   progress,
   onCancel,
   showDetails = false
@@ -59,44 +57,39 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
       return <StopOutlined style={{ color: '#d9d9d9' }} />;
     default:
       return <InfoCircleOutlined />;
-    }
   };
   const getStatusColor = (status: RestorationStatus) => {
-    switch (status) {
-    case 'pending':
-      return 'warning';
-    case 'in_progress':
-      return 'processing';
-    case 'completed':
-      return 'success';
-    case 'failed':
-      return 'error';
-    case 'cancelled':
-      return 'default';
-    default:
-      return 'default';
-    }
-  };
+  switch (status) {
+  case 'pending':,
+  return 'warning';
+  case 'in_progress':,
+  return 'processing';
+  case 'completed':,
+  return 'success';
+  case 'failed':,
+  return 'error';
+  case 'cancelled':,
+  return 'default';
+  default:,
+  return 'default';
+};
   const getProgressStatus = () => {
-    switch (progress.status) {
-    case 'completed':
-      return 'success';
-    case 'failed':
-      return 'exception';
-    case 'cancelled':
-      return 'exception';
-    default:
-      return 'active';
-    }
-  };
+  switch (progress.status) {
+  case 'completed':,
+  return 'success';
+  case 'failed':,
+  return 'exception';
+  case 'cancelled':,
+  return 'exception';
+  default:,
+  return 'active';
+};
   const formatTime = (milliseconds: number) => {
     if (milliseconds < 1000) {
       return `${milliseconds}ms`;}
-    }
     const seconds = Math.floor(milliseconds / 1000);
     if (seconds < 60) {
       return `${seconds}s`;}
-    }
     const minutes = Math.floor(seconds / 60);
     return `${minutes}m ${seconds % 60}s`;}
   };
@@ -108,7 +101,7 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
   const isCompleted = progress.status === 'completed';
   const isFailed = progress.status === 'failed';
   const isCancelled = progress.status === 'cancelled';
-  return ();
+  return;
     <div>
       {/* Status Header */}
       <Card style={{ marginBottom: '16px' }}>
@@ -180,9 +173,9 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
               value={progress.conflictsResolved}
               suffix={`/ ${progress.totalConflicts}`}
               prefix={<WarningOutlined />}
-              valueStyle={{ 
-                color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600' ,
-              }}
+              valueStyle={{
+  color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600',
+}}
             />
           </Card>
         </Col>
@@ -247,7 +240,6 @@ export const RestoreProgressPanel: React.FC<RestoreProgressPanelProps> = ({)
             >
               {detailsVisible ? 'Hide' : 'Show'} Details
             </Button>
-          }
         >
           <Collapse>
             <Panel header="Operation Progress" key="operations">

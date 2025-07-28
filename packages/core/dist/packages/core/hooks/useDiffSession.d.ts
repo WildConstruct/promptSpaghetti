@@ -9,6 +9,8 @@ interface UseDiffSessionResult {
     deleteSession: (sessionId: string) => Promise<void>;
     clearError: () => void;
 }
-export declare const useDiffSession: () => UseDiffSessionResult;
+export declare const useDiffSession: () => UseDiffSessionResult, headers: {
+    'Content-Type': 'application/json';
+};
 export {};
 //# sourceMappingURL=useDiffSession.d.ts.map

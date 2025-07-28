@@ -17,6 +17,7 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { DataRetentionService } from './DataRetentionService';
 
+}
 export interface MergeRequest {
   id: string;
   primaryAccountId: string;
@@ -30,7 +31,9 @@ export interface MergeRequest {
   completedAt?: Date;
   errorMessage?: string;
 }
+}
 
+}
 export interface MergeStrategy {
   profileMerge: 'keep_primary' | 'keep_secondary' | 'merge_fields' | 'manual';
   preferenceMerge: 'keep_primary' | 'keep_secondary' | 'merge_categories';
@@ -39,7 +42,9 @@ export interface MergeStrategy {
   sessionHandling: 'transfer_all' | 'invalidate_secondary' | 'keep_separate';
   preserveAuditTrail: boolean;
 }
+}
 
+}
 export interface ConflictResolution {
   field: string;
   primaryValue: any;
@@ -48,7 +53,9 @@ export interface ConflictResolution {
   resolvedValue?: any;
   reason?: string;
 }
+}
 
+}
 export interface MergeSummary {
   mergeRequestId: string;
   primaryAccountId: string;
@@ -64,12 +71,14 @@ export interface MergeSummary {
     oauthAccounts: number;
     sessions: number;
     uploads: number;
+}
   };
   conflictsResolved: number;
   errors: string[];
   rollbackPlan?: RollbackPlan;
 }
 
+}
 export interface RollbackPlan {
   id: string;
   mergeRequestId: string;
@@ -77,7 +86,9 @@ export interface RollbackPlan {
   createdAt: Date;
   expiresAt: Date;
 }
+}
 
+}
 export interface RollbackAction {
   type: 'restore_record' | 'delete_record' | 'update_field' | 'restore_relationship';
   table: string;
@@ -85,7 +96,9 @@ export interface RollbackAction {
   originalData: any;
   currentData: any;
 }
+}
 
+}
 export interface AccountMergePreview {
   primaryAccount: {
     id: string;
@@ -94,6 +107,7 @@ export interface AccountMergePreview {
     projectCount: number;
     lastLoginAt: Date;
     createdAt: Date;
+}
   };
   secondaryAccount: {
     id: string;
@@ -137,6 +151,7 @@ export class AccountMergingService {
     secondaryAccountId: string,
     requestedBy: string
   ): Promise<AccountMergePreview> {
+
     // Validate accounts exist and are different
     if (primaryAccountId === secondaryAccountId) {
       throw new Error('Cannot merge an account with itself');
@@ -182,7 +197,7 @@ export class AccountMergingService {
         projectCount: primaryAccount.projectCount,
         lastLoginAt: primaryAccount.last_login_at,
         createdAt: primaryAccount.created_at
-      },
+  }
       secondaryAccount: {
         id: secondaryAccount.id,
         email: secondaryAccount.email,
@@ -190,7 +205,7 @@ export class AccountMergingService {
         projectCount: secondaryAccount.projectCount,
         lastLoginAt: secondaryAccount.last_login_at,
         createdAt: secondaryAccount.created_at
-      },
+  }
       conflicts,
       recommendedStrategy,
       estimatedDuration: this.estimateMergeDuration(primaryAccount, secondaryAccount),
@@ -208,6 +223,7 @@ export class AccountMergingService {
     strategy: MergeStrategy,
     conflictResolutions: ConflictResolution[] = []
   ): Promise<MergeRequest> {
+
     // Validate the merge is allowed
     await this.validateMergeRequest(primaryAccountId, secondaryAccountId, requestedBy);
 
@@ -256,6 +272,7 @@ export class AccountMergingService {
    * Process a merge request
    */
   async processMergeRequest(mergeRequestId: string): Promise<MergeSummary> {
+
     const startTime = new Date();
     
     // Get merge request
@@ -320,6 +337,7 @@ export class AccountMergingService {
     mergeRequest: MergeRequest, 
     rollbackPlan: RollbackPlan
   ): Promise<MergeSummary> {
+
     const summary: MergeSummary = {
       mergeRequestId: mergeRequest.id,
       primaryAccountId: mergeRequest.primaryAccountId,
@@ -335,7 +353,7 @@ export class AccountMergingService {
         oauthAccounts: 0,
         sessions: 0,
         uploads: 0
-      },
+  }
       conflictsResolved: mergeRequest.conflictResolutions.length,
       errors: [],
       rollbackPlan
@@ -406,6 +424,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     
     try {
@@ -464,6 +483,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     let mergedCount = 0;
 
@@ -514,6 +534,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     let mergedCount = 0;
 
@@ -547,6 +568,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     let mergedCount = 0;
 
@@ -596,6 +618,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     let mergedCount = 0;
 
@@ -636,6 +659,7 @@ export class AccountMergingService {
     mergedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
 
     try {
@@ -659,6 +683,7 @@ export class AccountMergingService {
    * Merge API keys
    */
   private async mergeApiKeys(mergeRequest: MergeRequest): Promise<void> {
+
     // Transfer API keys from secondary to primary account
     await this.db.query(`
       UPDATE api_keys 
@@ -671,6 +696,7 @@ export class AccountMergingService {
    * Get account details for merging
    */
   private async getAccountDetails(accountId: string): Promise<any> {
+
     const query = `
       SELECT 
         u.*,
@@ -699,6 +725,7 @@ export class AccountMergingService {
     primaryAccount: any, 
     secondaryAccount: any
   ): Promise<ConflictResolution[]> {
+
     const conflicts: ConflictResolution[] = [];
 
     // Profile conflicts
@@ -827,6 +854,7 @@ export class AccountMergingService {
    * Create rollback plan
    */
   private async createRollbackPlan(mergeRequest: MergeRequest): Promise<RollbackPlan> {
+
     const rollbackPlan: RollbackPlan = {
       id: `rollback_${mergeRequest.id}`,
       mergeRequestId: mergeRequest.id,
@@ -848,11 +876,11 @@ export class AccountMergingService {
    * - getMergeRequest()
    * - updateMergeRequestStatus()
    * - validateMergeRequest()
-   * - rollbackMerge()
-   * etc.
+   * - rollbackMerge(* etc.
    */
 
   private async getMergeRequest(mergeRequestId: string): Promise<MergeRequest | null> {
+
     const result = await this.db.query(
       'SELECT * FROM account_merge_requests WHERE id = $1',
       [mergeRequestId]
@@ -884,6 +912,7 @@ export class AccountMergingService {
     errorMessage?: string,
     completedAt?: Date
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE account_merge_requests 
       SET status = $1, error_message = $2, completed_at = $3, updated_at = NOW()
@@ -896,6 +925,7 @@ export class AccountMergingService {
     secondaryAccountId: string,
     requestedBy: string
   ): Promise<void> {
+
     // Check if user has permission to merge these accounts
     // Implementation would depend on permission system
     

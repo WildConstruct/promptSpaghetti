@@ -40,6 +40,7 @@ export class FeedbackService {
    * Create new feedback
    */
   async createFeedback(data: CreateFeedbackRequest, authorId: string): Promise<Feedback> {
+
     const validatedData = validateCreateFeedbackRequest(data);
     
     const client = await this.db.connect();
@@ -87,6 +88,7 @@ export class FeedbackService {
    * Get feedback by ID
    */
   async getFeedbackById(feedbackId: string): Promise<Feedback> {
+
     const result = await this.db.query(`
       SELECT 
         f.*,
@@ -124,6 +126,7 @@ export class FeedbackService {
     total: number;
     hasMore: boolean;
   }> {
+
     const validatedFilter = validateFeedbackFilter(filter);
     
     // Build WHERE clause
@@ -261,6 +264,7 @@ export class FeedbackService {
     data: UpdateFeedbackRequest, 
     userId: string
   ): Promise<Feedback> {
+
     const validatedData = validateUpdateFeedbackRequest(data);
     
     const client = await this.db.connect();
@@ -356,6 +360,7 @@ export class FeedbackService {
    * Delete feedback
    */
   async deleteFeedback(feedbackId: string, userId: string): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -410,6 +415,7 @@ export class FeedbackService {
     userId: string, 
     voteType: 'helpful' | 'not_helpful'
   ): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -460,13 +466,14 @@ export class FeedbackService {
     content: string,
     parentReplyId?: string
   ): Promise<FeedbackReply> {
+
     const replyId = crypto.randomUUID();
     const now = new Date();
 
     const result = await this.db.query(`
       INSERT INTO feedback_replies (
         id, feedback_id, parent_reply_id, author_id, content, status, created_at, updated_at
-      )
+
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
     `, [replyId, feedbackId, parentReplyId || null, userId, content, 'visible', now, now]);
@@ -492,6 +499,7 @@ export class FeedbackService {
     moderatorId: string,
     request: ModerateFeedbackRequest
   ): Promise<Feedback> {
+
     const validatedRequest = validateModerateFeedbackRequest(request);
     
     const client = await this.db.connect();
@@ -561,6 +569,7 @@ export class FeedbackService {
    * Get feedback summary for a target
    */
   async getFeedbackSummary(targetId: string): Promise<FeedbackSummary> {
+
     const result = await this.db.query(`
       SELECT * FROM feedback_summaries WHERE target_id = $1
     `, [targetId]);
@@ -577,6 +586,7 @@ export class FeedbackService {
    * Generate and cache feedback summary
    */
   private async generateFeedbackSummary(targetId: string): Promise<FeedbackSummary> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -631,7 +641,7 @@ export class FeedbackService {
           3: parseInt(rating.rating_3) || 0,
           4: parseInt(rating.rating_4) || 0,
           5: parseInt(rating.rating_5) || 0
-        },
+  }
         totalReviews: 0, // Would be calculated from feedback stats
         verifiedReviews: 0,
         averageDifficulty: 0,
@@ -678,6 +688,7 @@ export class FeedbackService {
     userId: string,
     feedbackType: FeedbackType
   ): Promise<void> {
+
     // Check if user has already provided feedback of this type for this target
     if (['rating', 'review'].includes(feedbackType)) {
       const existingFeedback = await this.db.query(
@@ -707,6 +718,7 @@ export class FeedbackService {
     attachmentIds: string[],
     client: unknown
   ): Promise<void> {
+
     for (const attachmentId of attachmentIds) {
       await client.query(
         'UPDATE feedback_attachments SET feedback_id = $1 WHERE id = $2',
@@ -716,6 +728,7 @@ export class FeedbackService {
   }
 
   private async updateFeedbackSummary(targetId: string, client: unknown): Promise<void> {
+
     // Invalidate cached summary to force regeneration
     await client.query(
       'DELETE FROM feedback_summaries WHERE target_id = $1',
@@ -730,10 +743,11 @@ export class FeedbackService {
     metadata: Record<string, unknown>,
     client: unknown
   ): Promise<void> {
+
     await client.query(`
       INSERT INTO feedback_activity_log (
         id, feedback_id, action, user_id, metadata, created_at
-      )
+
       VALUES ($1, $2, $3, $4, $5, $6)
     `, [
       crypto.randomUUID(),

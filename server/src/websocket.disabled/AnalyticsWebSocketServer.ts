@@ -26,16 +26,19 @@ export enum WebSocketMessageType {
 /**
  * WebSocket message structure
  */
+}
 export interface WebSocketMessage {
   type: WebSocketMessageType;
   data: any;
   timestamp: number;
   id?: string;
 }
+}
 
 /**
  * Client connection info
  */
+}
 export interface ClientConnection {
   id: string;
   socket: WebSocket;
@@ -45,10 +48,12 @@ export interface ClientConnection {
   lastActivity: number;
   isAuthenticated: boolean;
 }
+}
 
 /**
  * Subscription configuration
  */
+}
 export interface SubscriptionConfig {
   topic: string;
   filters?: {
@@ -56,6 +61,7 @@ export interface SubscriptionConfig {
     organizationId?: number;
     eventTypes?: string[];
     minSeverity?: 'info' | 'warning' | 'critical';
+}
   };
   throttle?: number;
 }
@@ -140,7 +146,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
         status: 'connected',
         clientId: client.id,
         timestamp: Date.now()
-      },
+  }
       timestamp: Date.now(),
       id: uuidv4()
     });
@@ -314,6 +320,7 @@ export class AnalyticsWebSocketServer extends EventEmitter {
    * Send initial data for a topic
    */
   private async sendTopicData(clientId: string, topic: string, filters?: any): Promise<void> {
+
     const client = this.clients.get(clientId);
     if (!client) return;
 

@@ -7,7 +7,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * by selecting multiple nodes through mouse drag operation.
  */
 import { useState, useCallback, useRef, useEffect } from 'react';
-export const DragSelectBox = ({ onSelectionComplete, onSelectionCancel, canvasOffset, zoom, isActive }) => {
+{
     const [isDragging, setIsDragging] = useState(false);
     const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
     const [currentPoint, setCurrentPoint] = useState({ x: 0, y: 0 });
@@ -22,7 +22,7 @@ export const DragSelectBox = ({ onSelectionComplete, onSelectionCancel, canvasOf
             x: (minX - canvasOffset.x) / zoom,
             y: (minY - canvasOffset.y) / zoom,
             width: (maxX - minX) / zoom,
-            height: (maxY - minY) / zoom
+            height: (maxY - minY) / zoom,
         };
     }, [startPoint, currentPoint, canvasOffset, zoom]);
     // Handle mouse down to start selection
@@ -62,22 +62,24 @@ export const DragSelectBox = ({ onSelectionComplete, onSelectionCancel, canvasOf
             else {
                 onSelectionCancel();
             }
+            ;
+            const handleKeyDown = (e) => {
+                if (e.key === 'Escape') {
+                    setIsDragging(false);
+                    onSelectionCancel();
+                }
+                ;
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseUp);
+                document.addEventListener('keydown', handleKeyDown);
+                return () => {
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                    document.removeEventListener('keydown', handleKeyDown);
+                };
+            }, [isDragging, getSelectionBounds, onSelectionComplete, onSelectionCancel];
         };
-        const handleKeyDown = (e) => {
-            if (e.key === 'Escape') {
-                setIsDragging(false);
-                onSelectionCancel();
-            }
-        };
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-        document.addEventListener('keydown', handleKeyDown);
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-            document.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [isDragging, getSelectionBounds, onSelectionComplete, onSelectionCancel]);
+    });
     // Don't render if not active
     if (!isActive)
         return null;
@@ -85,26 +87,28 @@ export const DragSelectBox = ({ onSelectionComplete, onSelectionCancel, canvasOf
         left: Math.min(startPoint.x, currentPoint.x),
         top: Math.min(startPoint.y, currentPoint.y),
         width: Math.abs(currentPoint.x - startPoint.x),
-        height: Math.abs(currentPoint.y - startPoint.y)
+        height: Math.abs(currentPoint.y - startPoint.y),
     } : { display: 'none' };
-    return (_jsx(_Fragment, { children: _jsxs("div", { ref: overlayRef, "data-testid": "drag-select-overlay", style: {
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 10000,
-                cursor: 'crosshair',
-                pointerEvents: 'all'
-            }, onMouseDown: handleMouseDown, children: [_jsx("div", { "data-testid": "drag-select-box", style: {
-                        position: 'absolute',
-                        border: '2px dashed #3b82f6',
-                        background: 'rgba(59, 130, 246, 0.1)',
-                        borderRadius: '4px',
-                        pointerEvents: 'none',
-                        transition: 'none',
-                        ...selectionStyle
-                    } }), !isDragging && (_jsxs("div", { style: {
+    return;
+    _jsxs(_Fragment, { children: [_jsxs("div", { ref: overlayRef, "data-testid": "drag-select-overlay", style: {
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 10000,
+                    cursor: 'crosshair',
+                    pointerEvents: 'all',
+                }, onMouseDown: handleMouseDown, children: [_jsx("div", { "data-testid": "drag-select-box", style: {
+                            position: 'absolute',
+                            border: '2px dashed #3b82f6',
+                            background: 'rgba(59, 130, 246, 0.1)',
+                            borderRadius: '4px',
+                            pointerEvents: 'none',
+                            transition: 'none',
+                            ...selectionStyle
+                        } }), !isDragging && ()
+                        < div, "style=", {
                         position: 'absolute',
                         top: '50%',
                         left: '50%',
@@ -117,24 +121,33 @@ export const DragSelectBox = ({ onSelectionComplete, onSelectionCancel, canvasOf
                         fontFamily: 'system-ui, -apple-system, sans-serif',
                         textAlign: 'center',
                         pointerEvents: 'none',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-                    }, children: [_jsx("div", { style: { fontWeight: 600, marginBottom: '4px' }, children: "\uD83C\uDFAF Create Region Group" }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.9 }, children: ["Drag to select nodes and create a group", _jsx("br", {}), "Press ", _jsx("kbd", { style: {
-                                        background: 'rgba(255, 255, 255, 0.2)',
-                                        padding: '2px 6px',
-                                        borderRadius: '3px',
-                                        fontSize: '11px'
-                                    }, children: "Esc" }), " to cancel"] })] })), isDragging && (_jsxs("div", { style: {
-                        position: 'absolute',
-                        left: Math.max(startPoint.x, currentPoint.x) + 10,
-                        top: Math.min(startPoint.y, currentPoint.y) - 35,
-                        background: 'rgba(0, 0, 0, 0.8)',
-                        color: 'white',
-                        padding: '4px 8px',
-                        borderRadius: '4px',
-                        fontSize: '11px',
-                        fontFamily: 'system-ui, -apple-system, sans-serif',
-                        pointerEvents: 'none',
-                        whiteSpace: 'nowrap'
-                    }, children: [Math.round(Math.abs(currentPoint.x - startPoint.x) / zoom), " \u00D7 ", Math.round(Math.abs(currentPoint.y - startPoint.y) / zoom)] }))] }) }));
-};
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                    }, ">", _jsx("div", { style: { fontWeight: 600, marginBottom: '4px' }, children: "\uD83C\uDFAF Create Region Group" }), _jsxs("div", { style: { fontSize: '12px', opacity: 0.9 }, children: ["Drag to select nodes and create a group", _jsx("br", {}), "Press ", _jsx("kbd", { style: {
+                                    background: 'rgba(255, 255, 255, 0.2)',
+                                    padding: '2px 6px',
+                                    borderRadius: '3px',
+                                    fontSize: '11px',
+                                }, children: "Esc" }), " to cancel"] })] }), ")}", isDragging && ()
+                < div, "style=", {
+                position: 'absolute',
+                left: Math.max(startPoint.x, currentPoint.x) + 10,
+                top: Math.min(startPoint.y, currentPoint.y) - 35,
+                background: 'rgba(0, 0, 0, 0.8)',
+                color: 'white',
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '11px',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                pointerEvents: 'none',
+                whiteSpace: 'nowrap',
+            }, ">", Math.round(Math.abs(currentPoint.x - startPoint.x) / zoom), " \u00D7 ", Math.round(Math.abs(currentPoint.y - startPoint.y) / zoom)] });
+    div >
+    ;
+}
+div >
+;
+ >
+;
+;
+;
 export default DragSelectBox;

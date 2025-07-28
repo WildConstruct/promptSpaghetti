@@ -10,7 +10,7 @@ export declare enum AIModelType {
     AUDIO = "audio",
     VIDEO = "video",
     MULTIMODAL = "multimodal"
-}
+
 export declare enum AIModelProvider {
     OPENAI = "openai",
     ANTHROPIC = "anthropic",
@@ -23,7 +23,7 @@ export declare enum AIModelProvider {
     SORA = "sora",
     LOCAL = "local",
     CUSTOM = "custom"
-}
+
 export declare enum AIModelStatus {
     INITIALIZING = "initializing",
     READY = "ready",
@@ -31,7 +31,7 @@ export declare enum AIModelStatus {
     ERROR = "error",
     OFFLINE = "offline",
     MAINTENANCE = "maintenance"
-}
+
 export interface ModelCapabilities {
     inputTypes: string[];
     outputTypes: string[];
@@ -41,7 +41,8 @@ export interface ModelCapabilities {
     supportsStreaming?: boolean;
     supportsAsync?: boolean;
     customParameters?: Record<string, unknown>;
-}
+
+
 export interface ModelMetadata {
     name: string;
     version: string;
@@ -55,10 +56,11 @@ export interface ModelMetadata {
     rateLimit?: {
         requestsPerMinute: number;
         tokensPerMinute?: number;
+
     };
     tags?: string[];
     lastUpdated: Date;
-}
+
 export interface CostEstimate {
     estimatedCost: number;
     currency: string;
@@ -66,9 +68,10 @@ export interface CostEstimate {
         inputCost: number;
         outputCost: number;
         processingCost: number;
+
     };
     confidence: number;
-}
+
 export interface HealthStatus {
     status: AIModelStatus;
     uptime: number;
@@ -81,9 +84,10 @@ export interface HealthStatus {
         cpuUsage?: number;
         diskSpace?: number;
         networkLatency?: number;
+
     };
     issues?: string[];
-}
+
 export interface AIRequest {
     id: string;
     input: unknown;
@@ -94,9 +98,10 @@ export interface AIRequest {
         priority?: 'low' | 'normal' | 'high' | 'urgent';
         timeout?: number;
         retryCount?: number;
+
     };
     createdAt: Date;
-}
+
 export interface AIResponse {
     id: string;
     requestId: string;
@@ -108,6 +113,7 @@ export interface AIResponse {
         tokensUsed?: {
             input: number;
             output: number;
+
         };
         quality?: number;
     };
@@ -117,7 +123,7 @@ export interface AIResponse {
         details?: unknown;
     };
     completedAt: Date;
-}
+
 export declare abstract class BaseAIModel {
     protected _id: string;
     protected _metadata: ModelMetadata;
@@ -148,12 +154,13 @@ export declare abstract class BaseAIModel {
     protected _assessOutputQuality(output: unknown): Promise<number>;
     protected _performHealthCheck(): Promise<void>;
     protected _processBatch(requests: AIRequest[]): Promise<AIResponse[]>;
-}
+
 export interface AIModelFactory {
     createModel(config: ModelConfiguration): Promise<BaseAIModel>;
     getSupportedTypes(): AIModelType[];
     getDefaultConfiguration(type: AIModelType): ModelConfiguration;
-}
+
+
 export interface ModelConfiguration {
     id: string;
     type: AIModelType;
@@ -164,15 +171,15 @@ export interface ModelConfiguration {
     parameters?: Record<string, unknown>;
     capabilities?: Partial<ModelCapabilities>;
     metadata?: Partial<ModelMetadata>;
-}
+
 export declare class ModelInitializationError extends Error {
     constructor(modelId: string, cause: string);
-}
+
 export declare class ModelProcessingError extends Error {
     constructor(modelId: string, cause: string);
-}
+
 export declare class ModelUnavailableError extends Error {
     constructor(modelId: string);
-}
+
 export { BaseAIModel as default };
 //# sourceMappingURL=BaseAIModel.d.ts.map

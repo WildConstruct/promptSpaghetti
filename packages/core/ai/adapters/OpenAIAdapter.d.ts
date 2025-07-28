@@ -5,13 +5,14 @@
  * Concrete implementation of BaseAIModel for OpenAI GPT models
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface OpenAIConfig {
     apiKey: string;
     baseURL?: string;
     organization?: string;
     timeout?: number;
     maxRetries?: number;
-}
+
 export interface OpenAIRequestOptions {
     model?: string;
     temperature?: number;
@@ -27,14 +28,14 @@ export interface OpenAIRequestOptions {
     };
     tools?: unknown[];
     tool_choice?: string | object;
-}
+
 export interface ChatMessage {
     role: 'system' | 'user' | 'assistant' | 'tool';
     content: string;
     name?: string;
     tool_calls?: unknown[];
     tool_call_id?: string;
-}
+
 export interface OpenAIResponse {
     id: string;
     object: string;
@@ -51,7 +52,7 @@ export interface OpenAIResponse {
         completion_tokens: number;
         total_tokens: number;
     };
-}
+
 export declare class OpenAIAdapter extends BaseAIModel {
     private config;
     private apiEndpoint;
@@ -69,6 +70,6 @@ export declare class OpenAIAdapter extends BaseAIModel {
     private _extractContent;
     private _estimateTokenCount;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default OpenAIAdapter;
 //# sourceMappingURL=OpenAIAdapter.d.ts.map

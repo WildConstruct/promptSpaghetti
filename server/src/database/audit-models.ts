@@ -98,6 +98,7 @@ export enum ComplianceStandard {
 }
 
 // Core audit event model
+}
 export interface AuditEvent {
   id: string;
   eventType: AuditEventType;
@@ -141,6 +142,7 @@ export interface AuditEvent {
     coordinates?: {
       latitude: number;
       longitude: number;
+}
     };
   };
   
@@ -169,6 +171,7 @@ export interface AuditEvent {
 }
 
 // Audit trail for tracking changes over time
+}
 export interface AuditTrail {
   id: string;
   resourceType: string;
@@ -180,8 +183,10 @@ export interface AuditTrail {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 // Audit session for tracking user sessions
+}
 export interface AuditSession {
   id: string;
   sessionId: string;
@@ -209,8 +214,10 @@ export interface AuditSession {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 // Compliance report model
+}
 export interface ComplianceReport {
   id: string;
   reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';
@@ -223,6 +230,7 @@ export interface ComplianceReport {
     userIds?: string[];
     resourceTypes?: string[];
     eventTypes?: AuditEventType[];
+}
   };
   
   // Report data
@@ -256,6 +264,7 @@ export interface ComplianceReport {
 }
 
 // Audit configuration
+}
 export interface AuditConfiguration {
   id: string;
   
@@ -289,6 +298,7 @@ export interface AuditConfiguration {
     dayOfWeek?: number;
     dayOfMonth?: number;
     time: string; // HH:mm format
+}
   };
   
   // Notification settings
@@ -301,6 +311,7 @@ export interface AuditConfiguration {
 }
 
 // Audit statistics
+}
 export interface AuditStatistics {
   totalEvents: number;
   eventsByType: Record<AuditEventType, number>;
@@ -318,6 +329,7 @@ export interface AuditStatistics {
     userId: string;
     userEmail: string;
     eventCount: number;
+}
   }>;
   
   // Resource statistics
@@ -347,6 +359,7 @@ export interface AuditStatistics {
 }
 
 // Request/Response types for API
+}
 export interface CreateAuditEventRequest {
   eventType: AuditEventType;
   category: AuditCategory;
@@ -363,7 +376,9 @@ export interface CreateAuditEventRequest {
   tags?: string[];
   complianceStandards?: ComplianceStandard[];
 }
+}
 
+}
 export interface AuditEventQuery {
   // Time filters
   startDate?: string;
@@ -402,7 +417,9 @@ export interface AuditEventQuery {
   sortBy?: 'timestamp' | 'severity' | 'eventType' | 'actorEmail';
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface AuditEventResponse {
   events: AuditEvent[];
   pagination: {
@@ -410,6 +427,7 @@ export interface AuditEventResponse {
     limit: number;
     total: number;
     totalPages: number;
+}
   };
   summary: {
     totalEvents: number;
@@ -423,6 +441,7 @@ export interface AuditEventResponse {
   };
 }
 
+}
 export interface CreateComplianceReportRequest {
   reportType: ComplianceReport['reportType'];
   standard: ComplianceStandard;
@@ -431,8 +450,10 @@ export interface CreateComplianceReportRequest {
   scope?: ComplianceReport['scope'];
   format?: ComplianceReport['format'];
 }
+}
 
 // Audit middleware context
+}
 export interface AuditContext {
   actorId?: string;
   actorType: 'user' | 'system' | 'service' | 'anonymous';
@@ -446,8 +467,10 @@ export interface AuditContext {
   userAgent?: string;
   metadata?: Record<string, any>;
 }
+}
 
 // Export configuration for different formats
+}
 export interface ExportConfiguration {
   format: 'json' | 'csv' | 'xml' | 'pdf';
   includeMetadata: boolean;
@@ -456,6 +479,7 @@ export interface ExportConfiguration {
   encryption?: {
     algorithm: string;
     keyId: string;
+}
   };
   digitalSignature?: boolean;
 }

@@ -9,6 +9,7 @@ import { PerformanceMonitor, PerformanceMetrics, AggregatedMetrics } from './Per
 import { Epic17PerformanceMonitor, AdminPerformanceMetric, AdminOperation, SystemIntegration, ComplianceLevel } from '../../server/src/monitoring/Epic17PerformanceMonitor';
 import { SecurityAnalyticsMonitor, SecurityAnalyticsMetrics, SecuritySystemHealth } from './SecurityAnalyticsMonitor';
 import { SecurityEvent, CrossSystemAlertingSystem } from '../security/AlertingSystem';
+
 export interface IntegratedSecurityMetrics {
     performanceMetrics: {,
         nodeExecutionMetrics: PerformanceMetrics[];
@@ -45,7 +46,7 @@ export interface IntegratedSecurityMetrics {
         systemHealthTrend: 'improving' | 'stable' | 'degrading';
         integratedHealthScore: number;
     };
-}
+
 export interface IntegratedAlertRule {
     ruleId: string;
     name: string;
@@ -98,7 +99,7 @@ export interface IntegratedAlertRule {
         category: 'performance' | 'security' | 'compliance' | 'operational';
         riskLevel: 'low' | 'medium' | 'high' | 'critical';
     };
-}
+
 export interface IntegratedDashboardData {
     realTimeStatus: {,
         timestamp: number;
@@ -184,7 +185,7 @@ export interface IntegratedDashboardData {
             }>;
         };
     };
-}
+
 export interface IntegrationConfig {
     epic1Integration: {,
         enabled: boolean;
@@ -218,7 +219,6 @@ export interface IntegrationConfig {
         enableRealTimeUpdates: boolean;
         maxHistoricalDataPoints: number;
     };
-}
 /**
  * Integrated monitoring system combining Epic 1, Epic 17, and Security Analytics
  */
@@ -355,6 +355,6 @@ export declare class Epic1Epic17SecurityIntegration extends EventEmitter {
     private collectEpic17Data;
     private collectSecurityData;
     private performIntegratedAnalysis;
-}
+
 export default Epic1Epic17SecurityIntegration;
 //# sourceMappingURL=Epic1Epic17SecurityIntegration.d.ts.map

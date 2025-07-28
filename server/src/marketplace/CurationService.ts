@@ -18,6 +18,7 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
+}
 export interface CurationCriteria {
   originality: number;      // 0-1 - How original/unique is the content
   quality: number;          // 0-1 - Overall technical quality
@@ -26,7 +27,9 @@ export interface CurationCriteria {
   marketFit: number;        // 0-1 - How well it fits market needs
   safety: number;           // 0-1 - Content safety and appropriateness
 }
+}
 
+}
 export interface CurationItem {
   id: string;
   templateId: string;
@@ -41,6 +44,7 @@ export interface CurationItem {
     category: string;
     complexity: 'beginner' | 'intermediate' | 'advanced';
     estimatedUseTime: number; // minutes
+}
   };
   
   // Curation assessment
@@ -79,6 +83,7 @@ export interface CurationItem {
   };
 }
 
+}
 export interface CuratorProfile {
   id: string;
   userId: string;
@@ -98,6 +103,7 @@ export interface CuratorProfile {
     throughputScore: number;   // Reviews per week
     qualityScore: number;      // Quality of feedback provided
     overallRating: number;     // Combined performance score
+}
   };
   
   // Workload
@@ -114,6 +120,7 @@ export interface CuratorProfile {
   lastActive: Date;
 }
 
+}
 export interface CurationQueue {
   highPriority: CurationItem[];
   standard: CurationItem[];
@@ -126,9 +133,11 @@ export interface CurationQueue {
     averageWaitTime: number;
     completionRate: number;
     curatorUtilization: number;
+}
   };
 }
 
+}
 export interface QualityTrend {
   period: 'day' | 'week' | 'month';
   timestamp: Date;
@@ -137,6 +146,7 @@ export interface QualityTrend {
     submissionCount: number;
     approvalRate: number;
     revisionRate: number;
+}
     topCategories: Array<{ category: string; count: number; quality: number }>;
     curatorEfficiency: number;
   };
@@ -165,6 +175,7 @@ export class CurationService {
     submittedBy: string,
     metadata?: any
   ): Promise<string> {
+
     try {
       // Get template content for analysis
       const templateData = await this.getTemplateData(templateId);
@@ -187,7 +198,7 @@ export class CurationService {
           category: templateData.category,
           complexity: this.assessComplexity(templateData),
           estimatedUseTime: this.estimateUseTime(templateData)
-        },
+  }
         aiAssessment,
         status: aiAssessment.overallScore > 0.8 ? 'pending_curator' : 'pending_ai',
         priority: this.calculatePriority(aiAssessment, templateData),
@@ -227,6 +238,7 @@ export class CurationService {
     status?: string;
     limit?: number;
   } = {}): Promise<CurationQueue> {
+
     try {
       const { curatorId, category, priority, status, limit = 50 } = options;
 
@@ -317,6 +329,7 @@ export class CurationService {
    * Assign curation item to curator
    */
   async assignToCurator(curationId: string, curatorId?: string): Promise<void> {
+
     try {
       // Auto-select curator if not specified
       if (!curatorId) {
@@ -357,6 +370,7 @@ export class CurationService {
     qualityScore: number,
     modifications: string[] = []
   ): Promise<void> {
+
     try {
       const overriddenAI = await this.checkAIOverride(curationId, decision);
 
@@ -444,6 +458,7 @@ export class CurationService {
    * Get quality trends and insights
    */
   async getQualityTrends(period: 'day' | 'week' | 'month' = 'week'): Promise<QualityTrend[]> {
+
     try {
       const intervalMap = {
         day: '1 day',
@@ -489,6 +504,7 @@ export class CurationService {
   // Private helper methods
 
   private async performAIAssessment(templateData: any): Promise<CurationItem['aiAssessment']> {
+
     // Simplified AI assessment - would integrate with actual ML service
     const criteria: CurationCriteria = {
       originality: this.assessOriginality(templateData),
@@ -635,6 +651,7 @@ export class CurationService {
   }
 
   private async getTemplateData(templateId: string): Promise<any> {
+
     const query = `
       SELECT title, description, category, tags, metadata
       FROM marketplace_templates 
@@ -645,6 +662,7 @@ export class CurationService {
   }
 
   private async selectOptimalCurator(curationId: string): Promise<string | null> {
+
     // Find curator with lowest current load and matching specialization
     const query = `
       SELECT c.id, c.current_load, c.specializations, c.performance_rating
@@ -660,6 +678,7 @@ export class CurationService {
   }
 
   private async storeCurationItem(item: CurationItem): Promise<void> {
+
     const query = `
       INSERT INTO marketplace_curation_queue (
         id, template_id, submitted_by, submitted_at, content, ai_assessment,
@@ -696,21 +715,25 @@ export class CurationService {
   }
 
   private async getCuratorProfile(curatorId: string): Promise<CuratorProfile> {
+
     // Implementation would fetch from curator profiles table
     return {} as CuratorProfile;
   }
 
   private async getCuratorRecentReviews(curatorId: string): Promise<any[]> {
+
     // Implementation would fetch recent reviews
     return [];
   }
 
   private async getCuratorTrends(curatorId: string): Promise<any> {
+
     // Implementation would calculate trends
     return { weeklyThroughput: [], qualityTrend: [], categoryDistribution: {} };
   }
 
   private async getCurationStatistics(): Promise<CurationQueue['statistics']> {
+
     const query = `
       SELECT 
         COUNT(*) FILTER (WHERE status IN ('pending_curator', 'pending_ai')) as total_pending,
@@ -732,12 +755,14 @@ export class CurationService {
   }
 
   private async updateQueueStatistics(): Promise<void> {
+
     // Update cached queue statistics
     const stats = await this.getCurationStatistics();
     await this.redis.setex('queue_stats', 300, JSON.stringify(stats));
   }
 
   private async updateCuratorWorkload(curatorId: string, action: 'assigned' | 'completed'): Promise<void> {
+
     const increment = action === 'assigned' ? 1 : -1;
     const query = `
       UPDATE marketplace_curators 
@@ -748,10 +773,12 @@ export class CurationService {
   }
 
   private async updateCuratorPerformance(curatorId: string, decision: string, qualityScore: number): Promise<void> {
+
     // Implementation would update curator performance metrics
   }
 
   private async logCurationAction(curationId: string, action: string, userId: string): Promise<void> {
+
     const query = `
       INSERT INTO marketplace_curation_log (curation_id, action, user_id, timestamp)
       VALUES ($1, $2, $3, NOW())
@@ -760,6 +787,7 @@ export class CurationService {
   }
 
   private async checkAIOverride(curationId: string, decision: string): Promise<boolean> {
+
     // Check if curator decision differs from AI recommendation
     const query = `
       SELECT ai_assessment->>'overallScore' as ai_score
@@ -774,6 +802,7 @@ export class CurationService {
   }
 
   private async triggerPublication(curationId: string): Promise<void> {
+
     // Implementation would trigger template publication workflow
     console.log(`Triggering publication for curation item: ${curationId}`);
   }
@@ -782,6 +811,7 @@ export class CurationService {
    * Cleanup resources
    */
   async destroy(): Promise<void> {
+
     try {
       await this.redis.quit();
       console.log('CurationService destroyed successfully');

@@ -28,6 +28,7 @@ export enum FileType {
 }
 
 // Template submission interface
+}
 export interface TemplateSubmission {
   id: string;
   template_id: string;
@@ -44,8 +45,10 @@ export interface TemplateSubmission {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Submission data structure
+}
 export interface SubmissionData {
   // Template metadata
   title: string;
@@ -74,8 +77,10 @@ export interface SubmissionData {
   is_first_submission: boolean;
   previous_version_id?: string;
 }
+}
 
 // Validation result interface
+}
 export interface ValidationResult {
   id: string;
   rule_id: string;
@@ -89,10 +94,12 @@ export interface ValidationResult {
     line?: number;
     column?: number;
     field?: string;
+}
   };
 }
 
 // File upload interface
+}
 export interface UploadedFile {
   id: string;
   submission_id: string;
@@ -105,8 +112,10 @@ export interface UploadedFile {
   validation_errors: string[];
   uploaded_at: Date;
 }
+}
 
 // Submission review interface
+}
 export interface SubmissionReview {
   id: string;
   submission_id: string;
@@ -117,13 +126,16 @@ export interface SubmissionReview {
   detailed_feedback: ReviewFeedback[];
   created_at: Date;
 }
+}
 
 // Review feedback structure
+}
 export interface ReviewFeedback {
   category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
   rating: number; // 1-5
   comments: string;
   suggestions: string[];
+}
 }
 
 // Zod schemas for validation

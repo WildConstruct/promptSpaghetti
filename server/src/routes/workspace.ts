@@ -70,7 +70,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
     getUserInfo: async (userId: string) => {
       // Mock implementation - in real app, this would fetch from user service
       return { name: `User ${userId}`, avatar: undefined };
-    },
+  }
     sendNotification: async (notification) => {
       // Mock implementation - in real app, this would send via email/push service
       fastify.log.info('Notification sent:', notification.title);
@@ -89,7 +89,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -271,7 +271,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -523,7 +523,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -579,7 +579,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
             user_id: z.string(),
             count: z.number()
           }))
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -651,7 +651,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -796,7 +796,7 @@ export async function workspaceRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {

@@ -1,7 +1,3 @@
-/**
- * Compliance Historical Analysis Service
- * Provides historical trend analysis and reporting for compliance metrics
- */
 export interface HistoricalDataPoint {
     timestamp: Date;
     value: number;
@@ -36,7 +32,7 @@ export interface ComplianceTrendReport {
         trendDirection: 'up' | 'down' | 'stable';
         volatility: number;
         complianceRate: number;
-        recommendations: string[];
+        recommendations: string;
     }[];
     keyEvents: {
         date: Date;
@@ -64,7 +60,7 @@ export interface ComplianceForecasting {
         riskLevel: 'low' | 'medium' | 'high';
     }[];
     forecastAccuracy: number;
-    assumptions: string[];
+    assumptions: string;
     riskFactors: {
         factor: string;
         impact: 'high' | 'medium' | 'low';
@@ -97,52 +93,8 @@ export declare class ComplianceHistoricalAnalyzer {
     private auditTrails;
     constructor();
     /**
-     * Initialize with sample historical data for demonstration
-     */
+    * Initialize with sample historical data for demonstration
+    */
     private initializeHistoricalData;
-    /**
-     * Generate comprehensive trend report for a specific framework
-     */
-    generateTrendReport(framework: string, startDate: Date, endDate: Date): Promise<ComplianceTrendReport>;
-    /**
-     * Generate compliance forecasting
-     */
-    generateForecast(baselineId: string, forecastHorizon?: number): Promise<ComplianceForecasting>;
-    /**
-     * Create audit trail entry
-     */
-    createAuditTrail(auditData: Omit<ComplianceAuditTrail, 'auditId'>): Promise<ComplianceAuditTrail>;
-    /**
-     * Get compliance history for a specific metric
-     */
-    getMetricHistory(framework: string, metric: string, startDate?: Date, endDate?: Date): HistoricalDataPoint[];
-    /**
-     * Export historical data for external analysis
-     */
-    exportHistoricalData(framework?: string): {
-        metadata: {
-            exportDate: Date;
-            framework?: string;
-            totalDataPoints: number;
-            dateRange: {
-                earliest: Date;
-                latest: Date;
-            };
-        };
-        data: HistoricalDataPoint[];
-    };
-    private getBaselineForMetric;
-    private getCategoryForMetric;
-    private determineComplianceStatus;
-    private calculateDuration;
-    private groupDataPointsByMetric;
-    private calculateVolatility;
-    private calculateTrendDirection;
-    private calculateLinearTrend;
-    private generateMetricRecommendations;
-    private identifyKeyEvents;
-    private calculateForecastAccuracy;
-    private findHistoricalKeyForBaseline;
 }
-export declare const complianceHistoricalAnalyzer: ComplianceHistoricalAnalyzer;
 //# sourceMappingURL=ComplianceHistoricalAnalyzer.d.ts.map

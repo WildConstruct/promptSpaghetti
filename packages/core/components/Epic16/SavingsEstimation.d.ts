@@ -35,13 +35,12 @@ interface SavingsBreakdown {
         capacityIncrease: number;
         errorReduction: number;
     };
-}
 interface SavingsEstimationProps {
     className?: string;
     onSavingsChange?: (savings: SavingsBreakdown) => void;
     comparisonMode?: 'detailed' | 'summary';
     industryPreset?: 'content' | 'development' | 'marketing' | 'research';
-}
+
 export declare const SavingsEstimation: React.FC<SavingsEstimationProps>;
 export default SavingsEstimation;
 //# sourceMappingURL=SavingsEstimation.d.ts.map

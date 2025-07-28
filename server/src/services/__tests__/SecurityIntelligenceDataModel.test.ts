@@ -29,11 +29,11 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             consumer_groups: ['security-analytics-group'],
             batch_size: 1000,
             max_poll_interval: 300000
-          },
+  }
           processing_parallelism: 4,
           checkpoint_interval: 10000,
           watermark_delay: 5000
-        },
+  }
         stream_analytics: {
           correlation_window_minutes: 15,
           anomaly_detection_enabled: true,
@@ -43,7 +43,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             { metric: 'anomaly_score', threshold: 90 }
           ]
         }
-      },
+  }
       batch_processing: {
         enabled: true,
         etl_schedules: {
@@ -51,19 +51,19 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           daily_jobs: [{ job_name: 'vuln_aggregation', schedule: '0 2 * * *' }],
           weekly_jobs: [{ job_name: 'trend_analysis', schedule: '0 2 * * 0' }],
           monthly_jobs: [{ job_name: 'compliance_reporting', schedule: '0 2 1 * *' }]
-        },
+  }
         ml_training: {
           model_retraining_schedule: '0 3 * * 0',
           feature_engineering_pipeline: { features: ['threat_indicators', 'asset_characteristics'] },
           model_validation_config: { validation_method: 'time_series_split' },
           automated_deployment: true
-        },
+  }
         analytics_aggregation: {
           metric_rollup_intervals: ['5m', '1h', '1d'],
           aggregation_functions: [{ function_name: 'avg' }, { function_name: 'count' }],
           materialized_view_refresh: '*/15 * * * *'
         }
-      },
+  }
       data_quality: {
         validation_stages: [
           { stage_name: 'schema_validation', rules: ['required_fields', 'data_types'] },
@@ -81,7 +81,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           { policy_name: 'quarantine', actions: ['isolate_record'] }
         ],
         quality_monitoring: { monitoring_interval: 300 }
-      },
+  }
       performance_optimization: {
         caching_strategy: { strategy_type: 'multi_tier' },
         partitioning_strategy: { partition_type: 'time_based' },
@@ -117,7 +117,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           timestamp: expect.any(Number),
           configuration: config,
           schema_version: expect.any(String)
-        })
+  }
       );
     });
 
@@ -429,7 +429,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           stream_name: 'test_stream',
           results: expect.any(Object),
           timestamp: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -768,7 +768,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
           optimization_id: expect.any(String),
           results: expect.any(Object),
           timestamp: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -865,7 +865,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
             'threat',
             { threat_name: `Large Threat Dataset ${i}`, data_size: 'large' },
             { processing_priority: 'high' }
-          )
+
         );
       }
 
@@ -955,7 +955,7 @@ describe('SecurityIntelligenceDataModelEngine', () => {
               consumer_groups: ['group1', 'group2', 'group3'],
               batch_size: 5000,
               max_poll_interval: 600000
-            },
+  }
             processing_parallelism: 16
           }
         }
@@ -985,11 +985,11 @@ describe('SecurityIntelligenceDataModelEngine', () => {
               consumer_groups: ['custom-group'],
               batch_size: 2000,
               max_poll_interval: 180000
-            },
+  }
             processing_parallelism: 8,
             checkpoint_interval: 5000,
             watermark_delay: 2000
-          },
+  }
           stream_analytics: {
             correlation_window_minutes: 30,
             anomaly_detection_enabled: false,

@@ -18,6 +18,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 // OpenID Connect Types and Interfaces
+}
 export interface OpenIDConnectConfiguration {
   issuer: string;
   authorization_endpoint: string;
@@ -50,7 +51,9 @@ export interface OpenIDConnectConfiguration {
   op_tos_uri?: string;
   code_challenge_methods_supported: string[];
 }
+}
 
+}
 export interface IDTokenClaims {
   iss: string;           // Issuer identifier
   sub: string;           // Subject identifier  
@@ -85,7 +88,9 @@ export interface IDTokenClaims {
   address?: AddressClaim;
   updated_at?: number;
 }
+}
 
+}
 export interface AddressClaim {
   formatted?: string;
   street_address?: string;
@@ -94,7 +99,9 @@ export interface AddressClaim {
   postal_code?: string;
   country?: string;
 }
+}
 
+}
 export interface UserInfoClaims {
   sub: string;
   name?: string;
@@ -117,7 +124,9 @@ export interface UserInfoClaims {
   address?: AddressClaim;
   updated_at?: number;
 }
+}
 
+}
 export interface JWKSKey {
   kty: string;           // Key type
   use: string;           // Public key use
@@ -131,11 +140,15 @@ export interface JWKSKey {
   n: string;             // RSA modulus
   e: string;             // RSA exponent
 }
+}
 
+}
 export interface JWKSDocument {
   keys: JWKSKey[];
 }
+}
 
+}
 export interface OIDCAuthenticationContext {
   userId: string;
   sessionId: string;
@@ -146,6 +159,7 @@ export interface OIDCAuthenticationContext {
   scopes: string[];
   nonce?: string;
   maxAge?: number;
+}
 }
 
 /**
@@ -300,6 +314,7 @@ export class OpenIDConnectService {
     authContext: OIDCAuthenticationContext,
     accessToken?: string
   ): Promise<string> {
+
     try {
       // Get user information
       const user = await this.getUserById(authContext.userId);
@@ -358,7 +373,7 @@ export class OpenIDConnectService {
           scopes: authContext.scopes,
           hasNonce: !!authContext.nonce,
           tokenLength: idToken.length
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -376,7 +391,7 @@ export class OpenIDConnectService {
           userId: authContext.userId,
           clientId: authContext.clientId,
           error: error.message
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -394,6 +409,7 @@ export class OpenIDConnectService {
    * Verifies JWT ID token according to OIDC specification
    */
   async validateIDToken(idToken: string, clientId: string, nonce?: string): Promise<IDTokenClaims> {
+
     try {
       // Verify JWT signature and standard claims
       const decoded = jwt.verify(idToken, this.publicKey!, {
@@ -420,7 +436,7 @@ export class OpenIDConnectService {
           sub: decoded.sub,
           hasNonce: !!decoded.nonce,
           authTime: decoded.auth_time
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -438,7 +454,7 @@ export class OpenIDConnectService {
           clientId,
           error: error.message,
           hasNonce: !!nonce
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -456,6 +472,7 @@ export class OpenIDConnectService {
    * Implements OIDC UserInfo endpoint functionality
    */
   async getUserInfo(accessToken: string, requestedScopes?: string[]): Promise<UserInfoClaims> {
+
     try {
       // Validate access token
       const tokenPayload = await this.tokenService.verifyAccessToken(accessToken);
@@ -482,7 +499,7 @@ export class OpenIDConnectService {
           clientId: tokenPayload.aud,
           scopes,
           claimsReturned: Object.keys(userInfo).length
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0', 'GDPR'],
@@ -499,7 +516,7 @@ export class OpenIDConnectService {
         details: {
           error: error.message,
           tokenProvided: !!accessToken
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -517,6 +534,7 @@ export class OpenIDConnectService {
    * Provides public keys for ID token verification
    */
   async generateJWKS(): Promise<JWKSDocument> {
+
     try {
       if (!this.publicKey) {
         throw new Error('Public key not available for JWKS generation');
@@ -547,7 +565,7 @@ export class OpenIDConnectService {
           keyId: this.keyId,
           algorithm: 'RS256',
           keyCount: jwks.keys.length
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -564,7 +582,7 @@ export class OpenIDConnectService {
         details: {
           error: error.message,
           keyId: this.keyId
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['OIDC1.0'],
@@ -615,6 +633,7 @@ export class OpenIDConnectService {
     user: unknown,
     scopes: string[]
   ): Promise<void> {
+
     // Profile scope claims
     if (scopes.includes('profile')) {
       if (user.name) claims.name = user.name;
@@ -667,6 +686,7 @@ export class OpenIDConnectService {
    * Retrieves user data for claim generation
    */
   private async getUserById(userId: string): Promise<unknown> {
+
     try {
       const result = await this.db.query(`
         SELECT 
@@ -730,6 +750,7 @@ export class OpenIDConnectService {
    * Verifies OIDC service functionality
    */
   async healthCheck(): Promise<boolean> {
+
     try {
       // Verify keys are loaded
       if (!this.privateKey || !this.publicKey) {

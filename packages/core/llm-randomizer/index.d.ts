@@ -6,6 +6,7 @@ export * from './generator';
  * Main LLM Randomizer System API
  * Provides end-to-end graph generation workflow
  */
+
 export interface LLMRandomizerWorkflow {
     generateWithLLM: (request: any, provider?: string) => Promise<any>;
     parseFromLLM: (llmOutput: string) => Promise<any>;
@@ -18,8 +19,9 @@ export interface LLMRandomizerWorkflow {
         serializedGraph: string;
         errors: any[];
         warnings: any[];
+
     }>;
-}
+
 /**
  * Complete LLM Randomizer System implementation
  */
@@ -30,5 +32,5 @@ export declare class LLMRandomizerSystem implements LLMRandomizerWorkflow {
     validateAndSerialize(graph: any): Promise<string>;
     fullWorkflow(request: any, provider?: string): Promise<any>;
     private normalizeParameters;
-}
+
 //# sourceMappingURL=index.d.ts.map

@@ -29,6 +29,7 @@ import {
 // SERVICE INTERFACES
 // =============================================================================
 
+}
 export interface ConflictResolutionConfig {
   default_strategy: ResolutionStrategy;
   auto_resolution_enabled: boolean;
@@ -38,7 +39,9 @@ export interface ConflictResolutionConfig {
   notification_enabled: boolean;
   conflict_threshold_seconds: number; // Time window for conflict detection
 }
+}
 
+}
 export interface ConflictNotification {
   type: 'conflict_detected' | 'conflict_resolved' | 'resolution_failed' | 'rollback_performed';
   resource_id: string;
@@ -50,7 +53,9 @@ export interface ConflictNotification {
   severity: ConflictSeverity;
   requires_user_action: boolean;
 }
+}
 
+}
 export interface ConflictAnalysis {
   resource_id: string;
   conflict_probability: number;    // 0-1 probability of conflict
@@ -58,6 +63,7 @@ export interface ConflictAnalysis {
   recommended_strategy: ResolutionStrategy;
   prevention_suggestions: string[];
   estimated_resolution_time: number;
+}
 }
 
 // =============================================================================
@@ -102,6 +108,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Start monitoring a resource for conflicts
    */
   async startConflictMonitoring(resourceId: string): Promise<void> {
+
     if (this.activeMonitoring.has(resourceId)) {
       return; // Already monitoring
     }
@@ -142,6 +149,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Check a resource for active conflicts
    */
   async checkResourceForConflicts(resourceId: string): Promise<ConflictMarker[]> {
+
     try {
       // Get active edit sessions for the resource
       const activeSessions = await this.workspaceDAO.getActiveEditSessions(resourceId);
@@ -173,6 +181,7 @@ export class ConflictResolutionService extends EventEmitter {
     conflicts: ConflictMarker[],
     sessions: EditSession[]
   ): Promise<void> {
+
     const workspaceId = sessions[0]?.workspace_id;
     if (!workspaceId) return;
 
@@ -209,6 +218,7 @@ export class ConflictResolutionService extends EventEmitter {
     conflicts: ConflictMarker[],
     notification: ConflictNotification
   ): Promise<void> {
+
     try {
       // Create rollback point before attempting resolution
       if (this.config.rollback_enabled) {
@@ -288,6 +298,7 @@ export class ConflictResolutionService extends EventEmitter {
     userResolution?: unknown,
     userId?: string
   ): Promise<ResolutionResult> {
+
     try {
       // Verify user has permission to resolve conflicts
       if (userId) {
@@ -371,6 +382,7 @@ export class ConflictResolutionService extends EventEmitter {
     rollbackId?: string,
     userId?: string
   ): Promise<boolean> {
+
     try {
       // Verify user has permission to perform rollback
       if (userId) {
@@ -443,6 +455,7 @@ export class ConflictResolutionService extends EventEmitter {
     label?: string,
     userId?: string
   ): Promise<string> {
+
     const currentContent = await this.getCurrentResourceContent(resourceId);
     const rollbackId = this.conflictEngine.createRollbackPoint(
       resourceId,
@@ -462,6 +475,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Analyze conflict risk for a resource
    */
   async analyzeConflictRisk(resourceId: string): Promise<ConflictAnalysis> {
+
     // Check cache first
     const cached = this.conflictAnalysisCache.get(resourceId);
     if (cached) {
@@ -655,6 +669,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Send conflict notification to affected users
    */
   private async sendConflictNotification(notification: ConflictNotification): Promise<void> {
+
     // This would integrate with the notification system
     // For now, just emit an event
     this.emit('conflict_notification', notification);
@@ -664,6 +679,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Apply conflict resolution to resource
    */
   private async applyResolution(resourceId: string, result: ResolutionResult): Promise<void> {
+
     if (result.resolved_content) {
       await this.updateResourceContent(resourceId, result.resolved_content);
     }
@@ -676,6 +692,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Get current resource content
    */
   private async getCurrentResourceContent(resourceId: string): Promise<any> {
+
     // This would fetch the actual resource content from the database
     // For now, return a placeholder
     return { content: 'resource_content', timestamp: new Date() };
@@ -685,6 +702,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Update resource content
    */
   private async updateResourceContent(resourceId: string, content: unknown): Promise<void> {
+
     // This would update the actual resource content in the database
     console.log(`Updating resource ${resourceId} with new content`);
   }
@@ -693,6 +711,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Create initial rollback point for a resource
    */
   private async createInitialRollbackPoint(resourceId: string): Promise<void> {
+
     const currentContent = await this.getCurrentResourceContent(resourceId);
     this.conflictEngine.createRollbackPoint(
       resourceId,
@@ -705,6 +724,7 @@ export class ConflictResolutionService extends EventEmitter {
    * End all edit sessions for a resource
    */
   private async endAllEditSessions(resourceId: string): Promise<void> {
+
     const activeSessions = await this.workspaceDAO.getActiveEditSessions(resourceId);
     
     for (const session of activeSessions) {
@@ -716,6 +736,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Get resource presence data
    */
   private async getResourcePresence(resourceId: string): Promise<UserPresence[]> {
+
     // This would get presence data for users viewing/editing the resource
     // For now, return empty array
     return [];
@@ -743,6 +764,7 @@ export class ConflictResolutionService extends EventEmitter {
    * Assess resource complexity
    */
   private async assessResourceComplexity(resourceId: string): Promise<number> {
+
     // This would analyze the resource structure complexity
     // For now, return moderate complexity
     return 0.5;

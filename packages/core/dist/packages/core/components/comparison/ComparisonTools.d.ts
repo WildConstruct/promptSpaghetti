@@ -38,7 +38,7 @@ export interface ComparisonSession {
     viewMode: ViewMode;
     highlightMode: HighlightMode;
     filters: ComparisonFilters;
-    annotations: ComparisonAnnotation[];
+    annotations: ComparisonAnnotation;
     createdAt: Date;
     lastAccessed: Date;
     isBookmarked: boolean;
@@ -46,8 +46,8 @@ export interface ComparisonSession {
 export interface ComparisonFilters {
     showUnchanged: boolean;
     showMetadata: boolean;
-    nodeTypes: string[];
-    changeTypes: MatchType[];
+    nodeTypes: string;
+    changeTypes: MatchType;
     confidenceThreshold: number;
     severityLevels: ('low' | 'medium' | 'high' | 'critical')[];
     dateRange?: {
@@ -97,20 +97,18 @@ export interface ComparisonReport {
     summary: {
         title: string;
         description: string;
-        recommendations: string[];
-        warnings: string[];
-        errors: string[];
+        recommendations: string;
+        warnings: string;
+        errors: string;
     };
-    timeline: Array<{
-        timestamp: Date;
-        event: string;
-        impact: 'low' | 'medium' | 'high';
-        description: string;
-    }>;
-    exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
+    timeline: Array<{}, timestamp>;
+    Date: any;
+    event: string;
+    impact: 'low' | 'medium' | 'high';
+    description: string;
 }
 export interface ComparisonToolsProps {
-    sessions: ComparisonSession[];
+    sessions: ComparisonSession;
     activeSessionId?: string;
     onSessionSelect: (sessionId: string) => void;
     onSessionCreate: (source: ComparisonItem, target: ComparisonItem) => void;
@@ -120,30 +118,6 @@ export interface ComparisonToolsProps {
     className?: string;
 }
 export declare const ComparisonTools: React.FC<ComparisonToolsProps>;
-interface ComparisonSessionCardProps {
-    session: ComparisonSession;
-    isActive: boolean;
-    isSelected: boolean;
-    onSelect: () => void;
-    onToggleSelection: (selected: boolean) => void;
-    onUpdate: (updates: Partial<ComparisonSession>) => void;
-    onDelete: () => void;
-    onExport: (format: string) => void;
-}
-interface ComparisonSessionRowProps {
-    session: ComparisonSession;
-    isActive: boolean;
-    isSelected: boolean;
-    onSelect: () => void;
-    onToggleSelection: (selected: boolean) => void;
-    onUpdate: (updates: Partial<ComparisonSession>) => void;
-    onDelete: () => void;
-}
-interface ComparisonTimelineProps {
-    sessions: ComparisonSession[];
-    activeSessionId?: string;
-    onSessionSelect: (sessionId: string) => void;
-}
 export interface AdvancedDiffViewerProps {
     comparison: GraphComparison;
     session: ComparisonSession;
@@ -157,9 +131,9 @@ export declare const AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps>;
 declare const _default: {
     ComparisonTools: React.FC<ComparisonToolsProps>;
     AdvancedDiffViewer: React.FC<AdvancedDiffViewerProps>;
-    ComparisonSessionCard: React.FC<ComparisonSessionCardProps>;
-    ComparisonSessionRow: React.FC<ComparisonSessionRowProps>;
-    ComparisonTimeline: React.FC<ComparisonTimelineProps>;
+    ComparisonSessionCard: any;
+    ComparisonSessionRow: any;
+    ComparisonTimeline: any;
 };
 export default _default;
 //# sourceMappingURL=ComparisonTools.d.ts.map

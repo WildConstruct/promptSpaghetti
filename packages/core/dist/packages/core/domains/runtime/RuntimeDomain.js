@@ -1,10 +1,3 @@
-/**
- * Runtime Domain Interface
- * REFACTOR-005: Domain-Driven Architecture
- *
- * Main interface and export for the runtime execution domain
- */
-// Event constants for cross-domain communication
 export const RUNTIME_DOMAIN_EVENTS = {
     EXECUTION_STARTED: 'runtime:execution:started',
     EXECUTION_COMPLETED: 'runtime:execution:completed',
@@ -21,5 +14,5 @@ export const RUNTIME_DOMAIN_EVENTS = {
     METRICS_UPDATED: 'runtime:metrics:updated',
     CACHE_CLEARED: 'runtime:cache:cleared',
     PROFILING_STARTED: 'runtime:profiling:started',
-    PROFILING_COMPLETED: 'runtime:profiling:completed'
+    PROFILING_COMPLETED: 'runtime:profiling:completed',
 };

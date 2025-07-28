@@ -30,58 +30,56 @@ jest.mock('react-icons/fi', () => ({)
 }));
 
 // Mock nodes for testing
-const mockNodes: NodeMeta[] = [
+const mockNodes: NodeMeta = [
   {
-    id: 'Subject',
-    label: 'Character',
-    icon: '👤',
-    category: 'content',
-    tooltip: 'Define characters, people, or entities in your content'
-  },
+  id: 'Subject',
+  label: 'Character',
+  icon: '👤',
+  category: 'content',
+  tooltip: 'Define characters, people, or entities in your content',
+}
   {
-    id: 'WeightedChoice',
-    label: 'Random Selection',
-    icon: '🎲',
-    category: 'flow',
-    tooltip: 'Choose randomly from multiple options with different likelihood',
-  },
+  id: 'WeightedChoice',
+  label: 'Random Selection',
+  icon: '🎲',
+  category: 'flow',
+  tooltip: 'Choose randomly from multiple options with different likelihood',
+}
   {
-    id: 'Conditional',
-    label: 'If/Then',
-    icon: '🔀',
-    category: 'advanced',
-    tooltip: 'Choose different creative paths based on conditions',
-  },
+  id: 'Conditional',
+  label: 'If/Then',
+  icon: '🔀',
+  category: 'advanced',
+  tooltip: 'Choose different creative paths based on conditions',
+}
   {
-    id: 'Output',
-    label: 'Result',
-    icon: '📝',
-    category: 'output',
-    tooltip: 'Final generated content ready for use',
-  },
+  id: 'Output',
+  label: 'Result',
+  icon: '📝',
+  category: 'output',
+  tooltip: 'Final generated content ready for use',
+}
   {
     id: 'SetVariable',
     label: 'Store Value',
     icon: '💾',
     category: 'memory',
-    tooltip: 'Save a value to use later in your workflow',
-  }
-];
+    tooltip: 'Save a value to use later in your workflow'];
 
 // Mock favorites manager
 const mockFavoritesManager = {
   getFavorites: jest.fn(() => []),
   addChangeListener: jest.fn(() => () => {}),
-  toggleFavorite: jest.fn<unknown[], unknown>()
+  toggleFavorite: jest.fn<unknown, unknown>()
 };
 (getFavoritesManager as jest.Mock).mockReturnValue(mockFavoritesManager as unknown);
 describe('TabbedPalette', () => {
   const defaultProps = {
-    nodes: mockNodes,
-    collapsed: false,
-    onToggle: jest.fn<unknown[], unknown>(),
-    onDragStart: jest.fn<unknown[], unknown>()
-  };
+  nodes: mockNodes,
+  collapsed: false,
+  onToggle: jest.fn<unknown, unknown>(),
+  onDragStart: jest.fn<unknown, unknown>(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
     mockFavoritesManager.getFavorites.mockReturnValue([] as unknown);
@@ -109,7 +107,7 @@ describe('TabbedPalette', () => {
     test('should render all nodes in expanded view', () => {
       render(<TabbedPalette {...defaultProps} />);
       mockNodes.forEach(node => {)
-        expect(screen.getByText(node.label)).toBeInTheDocument();
+  expect(screen.getByText(node.label)).toBeInTheDocument();
       });
     });
   });
@@ -134,22 +132,20 @@ describe('TabbedPalette', () => {
   });
   describe('Node Interaction', () => {
     test('should call onDragStart when node is dragged', () => {
-      const onDragStart = jest.fn<unknown[], unknown>();
+      const onDragStart = jest.fn<unknown, unknown>();
       render(<TabbedPalette {...defaultProps} onDragStart={onDragStart} />);
       const nodeElement = screen.getByText('Character').closest('[draggable="true"]');
       expect(nodeElement).toBeInTheDocument();
       if (nodeElement) {
-        fireEvent.dragStart(nodeElement, {)
-          dataTransfer: {,
-            setData: jest.fn<unknown[], unknown>()
-          }
-        });
+  fireEvent.dragStart(nodeElement, {)
+  dataTransfer: {,
+  setData: jest.fn<unknown, unknown>(),
+});
         expect(onDragStart).toHaveBeenCalledWith('Subject');
-      }
     });
     test('should handle keyboard navigation', async () => {
       const user = userEvent.setup();
-      const onDragStart = jest.fn<unknown[], unknown>();
+      const onDragStart = jest.fn<unknown, unknown>();
       render(<TabbedPalette {...defaultProps} onDragStart={onDragStart} />);
       const nodeElement = screen.getByText('Character').closest('[role="button"]');
       expect(nodeElement).toBeInTheDocument();
@@ -157,7 +153,6 @@ describe('TabbedPalette', () => {
         nodeElement.focus();
         await user.keyboard('{Enter}');
         expect(onDragStart).toHaveBeenCalledWith('Subject');
-      }
     });
     test('should show tooltips on hover', () => {
       render(<TabbedPalette {...defaultProps} />);
@@ -196,7 +191,6 @@ describe('TabbedPalette', () => {
       if (clearButton) {
         await user.click(clearButton);
         expect(searchInput).toHaveValue('');
-      }
     });
     test('should handle empty search results', async () => {
       const user = userEvent.setup();
@@ -228,7 +222,6 @@ describe('TabbedPalette', () => {
       if (starButton) {
         await user.click(starButton);
         expect(mockFavoritesManager.toggleFavorite).toHaveBeenCalled();
-      }
     });
     test('should not show favorite buttons when favorites disabled', () => {
       render(<TabbedPalette {...defaultProps} showFavorites={false} />);
@@ -266,7 +259,6 @@ describe('TabbedPalette', () => {
         await user.click(categoryHeader);
         // Should toggle collapsed state
         expect(screen.getByTestId('chevron-right')).toBeInTheDocument();
-      }
     });
     test('should support keyboard navigation for categories', async () => {
       const user = userEvent.setup();
@@ -278,7 +270,6 @@ describe('TabbedPalette', () => {
         await user.keyboard('{Enter}');
         // Should toggle collapsed state
         expect(screen.getByTestId('chevron-right')).toBeInTheDocument();
-      }
     });
   });
   describe('Tab Navigation', () => {
@@ -297,7 +288,6 @@ describe('TabbedPalette', () => {
         await user.click(flowTab);
         // Should switch to flow category
         expect(flowTab).toHaveStyle({ color: expect.any(String) });
-      }
     });
     test('should show active tab indicator', () => {
       render(<TabbedPalette {...defaultProps} defaultActiveTab="content" />);
@@ -334,7 +324,6 @@ describe('TabbedPalette', () => {
         const tooltipId = nodeElement.getAttribute('aria-describedby');
         const tooltipElement = screen.getByText('Define characters, people, or entities in your content');
         expect(tooltipElement).toHaveAttribute('id', tooltipId);
-      }
     });
   });
   describe('Performance and Edge Cases', () => {
@@ -344,13 +333,13 @@ describe('TabbedPalette', () => {
       expect(screen.queryByText('Content Building')).not.toBeInTheDocument();
     });
     test('should handle nodes with missing properties', () => {
-      const incompleteNodes: NodeMeta[] = [
-        {
-          id: 'incomplete',
-          label: '',
-          icon: '',
-          tooltip: '',
-        } as NodeMeta
+  const incompleteNodes: NodeMeta = [
+  {
+  id: 'incomplete',
+  label: '',
+  icon: '',
+  tooltip: '',
+} as NodeMeta
       ];
       render(<TabbedPalette {...defaultProps} nodes={incompleteNodes} />);
       // Should not crash
@@ -369,16 +358,17 @@ describe('TabbedPalette', () => {
       expect(screen.getByLabelText('Collapse palette')).toBeInTheDocument();
     });
     test('should handle large number of nodes', () => {
-      const manyNodes: NodeMeta[] = [];
+      const manyNodes: NodeMeta = [];
       for (let i = 0; i < 100; i++) {
         manyNodes.push({)
-          id: `node${i}`,}
-          label: `Node ${i}`,}
-          icon: '📊',
+  id: `node${i}`}
+},
+  label: `Node ${i}`}
+},
+  icon: '📊',
           category: 'content',
           tooltip: `Test node ${i}`}
         });
-      }
       render(<TabbedPalette {...defaultProps} nodes={manyNodes} />);
       // Should render without performance issues
       expect(screen.getByLabelText('Enhanced Node Palette')).toBeInTheDocument();
@@ -403,7 +393,7 @@ describe('TabbedPalette', () => {
     });
     test('should call onToggle when collapse button is clicked', async () => {
       const user = userEvent.setup();
-      const onToggle = jest.fn<unknown[], unknown>();
+      const onToggle = jest.fn<unknown, unknown>();
       render(<TabbedPalette {...defaultProps} onToggle={onToggle} />);
       const toggleButton = screen.getByLabelText('Collapse palette');
       await user.click(toggleButton);

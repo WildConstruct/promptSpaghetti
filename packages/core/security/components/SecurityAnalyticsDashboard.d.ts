@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { SecurityEventAnalytics, SecurityInsight, SecurityPattern, ThreatCategory } from '../SecurityEventAnalytics';
+
 export interface SecurityAnalyticsDashboardProps {
     analytics: SecurityEventAnalytics;
     theme?: 'light' | 'dark' | 'cinema';
@@ -15,7 +16,8 @@ export interface SecurityAnalyticsDashboardProps {
     allowedInsights?: ThreatCategory[];
     onThreatDetected?: (threat: SecurityPattern) => void;
     onCriticalAlert?: (insight: SecurityInsight) => void;
-}
+
+
 /**
  * Comprehensive security analytics dashboard for executive and operational use
  */

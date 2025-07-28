@@ -6,9 +6,9 @@ describe('MarkovNode', () => {
   let ctx: AdvancedExecutionContext;
   beforeEach(() => {
     ctx = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
-      seed: 12345,
-    });
+  variables: {},
+      seed: 12345;
+  });
   });
   describe('StandardTransitionMatrix', () => {
     test('should create valid transition matrix', () => {
@@ -107,13 +107,12 @@ describe('MarkovNode', () => {
           first: { second: 1.0 },
           second: { third: 1.0 },
           third: { third: 1.0 } // Absorbing state
-        },
+  }
         'first'
       );
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 5; i++) {
         results.push(node.run(ctx));
-      }
       expect(results).toEqual(['first', 'second', 'third', 'third', 'third']);
     });
     test('should handle probabilistic transitions with deterministic seeds', () => {
@@ -123,32 +122,30 @@ describe('MarkovNode', () => {
         {
           heads: { heads: 0.6, tails: 0.4 },
           tails: { heads: 0.3, tails: 0.7 }
-        },
+  }
         'heads'
       );
       // Multiple executions with same seed should be deterministic
-      const results1: string[] = [];
+      const results1: string = [];
       for (let i = 0; i < 10; i++) {
         results1.push(node.run(ctx));
-      }
       // Reset and run again with same seed - create fresh context
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
-        variables: {},
-        seed: 12345 // Same seed,
-      });
+  variables: {},
+        seed: 12345 // Same seed;
+  });
       const node2 = createMarkovNode(;);
         'markov1', // Same node ID
         ['heads', 'tails'],
         {
           heads: { heads: 0.6, tails: 0.4 },
           tails: { heads: 0.3, tails: 0.7 }
-        },
+  }
         'heads'
       );
-      const results2: string[] = [];
+      const results2: string = [];
       for (let i = 0; i < 10; i++) {
         results2.push(node2.run(ctx2));
-      }
       expect(results1).toEqual(results2);
     });
     test('should respect termination conditions', () => {
@@ -158,21 +155,18 @@ describe('MarkovNode', () => {
         {
           active: { active: 0.8, terminated: 0.2 },
           terminated: { terminated: 1.0 }
-        },
+  }
         'active',
         {
-          maxTransitions: 3,
-          terminationStates: ['terminated'],
-        }
-      );
-      const results: string[] = [];
-      for (let i = 0; i < 10; i++) {
-        results.push(node.run(ctx));
-      }
-      // Should not exceed maxTransitions or continue after termination
-      const transitionCount = node.getCurrentMarkovState(ctx)?.transitionCount || 0;
-      expect(transitionCount).toBeLessThanOrEqual(3);
-    });
+  maxTransitions: 3,
+  terminationStates: ['terminated']);
+  const results: string = [];
+  for (let i = 0; i < 10; i++) {
+  results.push(node.run(ctx));
+  // Should not exceed maxTransitions or continue after termination
+  const transitionCount = node.getCurrentMarkovState(ctx)?.transitionCount || 0;
+  expect(transitionCount).toBeLessThanOrEqual(3);
+});
   });
   describe('MarkovNode Configuration', () => {
     test('should handle maxTransitions configuration', () => {
@@ -183,10 +177,9 @@ describe('MarkovNode', () => {
         'A',
         { maxTransitions: 2 }
       );
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 5; i++) {
         results.push(node.run(ctx));
-      }
       const state = node.getCurrentMarkovState(ctx);
       expect(state?.transitionCount).toBeLessThanOrEqual(2);
     });
@@ -198,7 +191,7 @@ describe('MarkovNode', () => {
           running: { running: 0.6, stopped: 0.3, error: 0.1 },
           stopped: { running: 0.8, stopped: 0.2 },
           error: { error: 1.0 }
-        },
+  }
         'running',
         { terminationStates: ['error'] }
       );
@@ -209,7 +202,6 @@ describe('MarkovNode', () => {
         state.currentState = 'error';
         node.run(ctx); // Should not transition from error
         expect(node.getCurrentMarkovState(ctx)?.currentState).toBe('error');
-      }
     });
     test('should handle loop detection', () => {
       const node = createMarkovNode(;);
@@ -219,10 +211,9 @@ describe('MarkovNode', () => {
         'A',
         { detectLoops: true }
       );
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 15; i++) {
         results.push(node.run(ctx));
-      }
       // Should detect loop and stop transitioning
       const finalState = node.getCurrentMarkovState(ctx);
       expect(finalState?.currentState).toBe('A');
@@ -368,16 +359,17 @@ describe('MarkovNode', () => {
     test('should execute within performance expectations', () => {
       const node = createMarkovNode(;);
         'perf-test',
-        Array.from({length: 100}, (_, i) => `state${i}`),}
+        Array.from({length: 100}, (_, i) => `state${i}`)}
+}
         Object.fromEntries(Array.from({length: 100}, (_, i) => [
-          `state${i}`, }
+          `state${i}`}
+}
           { [`state${(i + 1) % 100}`]: 1.0 }
         ]))
       );
       const startTime = Date.now();
       for (let i = 0; i < 1000; i++) {
         node.run(ctx);
-      }
       const duration = Date.now() - startTime;
       expect(duration).toBeLessThan(1000); // Should complete in under 1 second
     });
@@ -389,25 +381,23 @@ describe('MarkovNode', () => {
           det1: { det2: 0.6, det3: 0.4 },
           det2: { det1: 0.3, det3: 0.7 },
           det3: { det1: 0.8, det2: 0.2 }
-        },
+  }
         'det1'
       );
       // Run 1
       const node1 = createTestNode();
-      const results1: string[] = [];
+      const results1: string = [];
       for (let i = 0; i < 20; i++) {
         results1.push(node1.run(ctx));
-      }
       // Run 2 with fresh context but same seed
       const ctx2 = AdvancedExecutionUtils.enhanceContext({)
-        variables: {},
-        seed: 12345,
-      });
+  variables: {},
+        seed: 12345;
+  });
       const node2 = createTestNode();
-      const results2: string[] = [];
+      const results2: string = [];
       for (let i = 0; i < 20; i++) {
         results2.push(node2.run(ctx2));
-      }
       expect(results1).toEqual(results2);
     });
   });

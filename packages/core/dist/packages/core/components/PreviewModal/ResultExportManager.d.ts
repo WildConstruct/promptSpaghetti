@@ -38,11 +38,13 @@ export interface ExportOptions {
     };
 }
 export interface ResultExportManagerProps {
-    results: EnhancedPreviewResult[];
-    selectedResultIds: string[];
-    onExportComplete?: (exportedResultIds: string[], format: ExportFormat) => void;
+    results: EnhancedPreviewResult;
+    selectedResultIds: string;
+    onExportComplete?: (exportedResultIds: string, format: ExportFormat) => void;
     onExportError?: (error: Error) => void;
     className?: string;
+    const: any;
+    EXPORT_FORMATS: ExportFormat;
 }
 export declare const ResultExportManager: React.FC<ResultExportManagerProps>;
 //# sourceMappingURL=ResultExportManager.d.ts.map

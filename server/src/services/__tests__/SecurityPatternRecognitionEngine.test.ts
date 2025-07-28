@@ -64,7 +64,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         behavioral_analysis_enabled: true,
         temporal_pattern_analysis: true,
         spatial_pattern_analysis: true
-      },
+  }
       threat_clustering: {
         enabled: true,
         clustering_algorithms: ['dbscan', 'hierarchical', 'kmeans', 'graph_clustering'],
@@ -72,12 +72,12 @@ describe('SecurityPatternRecognitionEngine', () => {
           high_similarity: 0.8,
           medium_similarity: 0.6,
           low_similarity: 0.4
-        },
+  }
         auto_clustering_enabled: true,
         manual_clustering_allowed: true,
         cluster_validation_enabled: true,
         cross_reference_clustering: true
-      },
+  }
       pattern_types: {
         attack_patterns: true,
         behavioral_patterns: true,
@@ -87,7 +87,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         data_access_patterns: true,
         anomaly_patterns: true,
         compliance_patterns: true
-      },
+  }
       analysis_algorithms: {
         machine_learning_enabled: true,
         deep_learning_models: true,
@@ -97,7 +97,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         network_analysis: true,
         natural_language_processing: true,
         computer_vision_analysis: false
-      },
+  }
       data_sources: {
         security_logs: true,
         network_traffic: true,
@@ -107,7 +107,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         user_behavior_data: true,
         system_performance_metrics: true,
         compliance_audit_data: true
-      },
+  }
       output_settings: {
         real_time_alerts: true,
         batch_reporting: true,
@@ -130,7 +130,7 @@ describe('SecurityPatternRecognitionEngine', () => {
           source_ip: '192.168.1.100',
           user_agent: 'Mozilla/5.0...',
           event_type: 'authentication_failure'
-        },
+  }
         {
           timestamp: Date.now() - 3600000,
           log_level: 'WARNING',
@@ -646,7 +646,7 @@ describe('SecurityPatternRecognitionEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 7,
           end: Date.now()
-        },
+  }
         include_predictions: true,
         include_recommendations: true
       };

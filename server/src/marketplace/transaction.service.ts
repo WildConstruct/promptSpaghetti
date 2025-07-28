@@ -51,6 +51,7 @@ export class TransactionService {
   // =============================================
 
   async createCart(userId: string): Promise<ShoppingCart> {
+
     const cartId = crypto.randomUUID();
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
@@ -77,6 +78,7 @@ export class TransactionService {
   }
 
   async getCart(cartId: string, userId: string): Promise<ShoppingCart | null> {
+
     const result = await this.db.query(
       'SELECT * FROM shopping_carts WHERE id = ? AND user_id = ? AND expires_at > datetime(\'now\')',
       [cartId, userId]
@@ -100,6 +102,7 @@ export class TransactionService {
   }
 
   async addToCart(userId: string, cartData: any): Promise<ShoppingCart> {
+
     const validated = AddToCartSchema.parse(cartData);
     
     // Get or create cart
@@ -144,6 +147,7 @@ export class TransactionService {
   }
 
   async updateCartItem(userId: string, cartId: string, updateData: any): Promise<ShoppingCart> {
+
     const validated = UpdateCartSchema.parse(updateData);
     const cart = await this.getCart(cartId, userId);
     
@@ -176,6 +180,7 @@ export class TransactionService {
   }
 
   async clearCart(userId: string, cartId: string): Promise<void> {
+
     await this.db.query(
       'DELETE FROM shopping_carts WHERE id = ? AND user_id = ?',
       [cartId, userId]
@@ -187,6 +192,7 @@ export class TransactionService {
   // =============================================
 
   async createPaymentIntent(userId: string, paymentData: any): Promise<PaymentIntent> {
+
     const validated = CreatePaymentIntentSchema.parse(paymentData);
     const cart = await this.getCart(validated.cart_id, userId);
     
@@ -234,7 +240,7 @@ export class TransactionService {
       metadata: {
         risk_assessment_id: riskAssessment.id,
         billing_address: validated.billing_address
-      },
+  }
       created_at: new Date(),
       updated_at: new Date()
     };
@@ -256,6 +262,7 @@ export class TransactionService {
   }
 
   async processPayment(userId: string, paymentData: any): Promise<Order> {
+
     const validated = ProcessPaymentSchema.parse(paymentData);
     const paymentIntent = await this.getPaymentIntent(validated.payment_intent_id, userId);
     
@@ -299,6 +306,7 @@ export class TransactionService {
   // =============================================
 
   async createOrder(paymentIntent: PaymentIntent, transaction: Transaction): Promise<Order> {
+
     const cart = await this.getCart(paymentIntent.cart_id, paymentIntent.user_id);
     if (!cart) throw new Error('Cart not found');
 
@@ -374,6 +382,7 @@ export class TransactionService {
   }
 
   async fulfillOrder(order: Order): Promise<void> {
+
     try {
       // Generate licenses for each item
       for (const item of order.items) {
@@ -416,6 +425,7 @@ export class TransactionService {
   // =============================================
 
   async generateLicense(order: Order, orderItem: OrderItem): Promise<TemplateLicense> {
+
     const licenseId = crypto.randomUUID();
     const licenseKey = this.generateLicenseKey();
     
@@ -458,6 +468,7 @@ export class TransactionService {
   }
 
   async validateLicense(licenseKey: string, templateId: string, userId: string): Promise<boolean> {
+
     const result = await this.db.query(
       'SELECT * FROM template_licenses WHERE license_key = ? AND template_id = ? AND buyer_id = ? AND status = \'active\'',
       [licenseKey, templateId, userId]
@@ -491,6 +502,7 @@ export class TransactionService {
   // =============================================
 
   async createRefundRequest(userId: string, refundData: any): Promise<RefundRequest> {
+
     const validated = CreateRefundRequestSchema.parse(refundData);
     
     // Verify purchase ownership
@@ -533,6 +545,7 @@ export class TransactionService {
   // =============================================
 
   private async getActiveCart(userId: string): Promise<ShoppingCart | null> {
+
     const result = await this.db.query(
       'SELECT * FROM shopping_carts WHERE user_id = ? AND expires_at > datetime(\'now\') ORDER BY created_at DESC LIMIT 1',
       [userId]
@@ -556,6 +569,7 @@ export class TransactionService {
   }
 
   private async updateCartTotals(cart: ShoppingCart): Promise<ShoppingCart> {
+
     const subtotal = cart.items.reduce((sum, item) => sum + (item.unit_price_cents * item.quantity), 0);
     cart.total_cents = subtotal + cart.tax_cents + cart.shipping_cents;
     cart.updated_at = new Date();
@@ -580,6 +594,7 @@ export class TransactionService {
   }
 
   private async calculateTax(cart: ShoppingCart, billingAddress: BillingAddress): Promise<void> {
+
     // Simple tax calculation - in production, use a tax service like TaxJar
     const taxRate = billingAddress.country === 'US' ? 0.08 : 0.0;
     const subtotal = cart.items.reduce((sum, item) => sum + (item.unit_price_cents * item.quantity), 0);
@@ -587,6 +602,7 @@ export class TransactionService {
   }
 
   private async assessRisk(userId: string, cart: ShoppingCart, billingAddress: BillingAddress): Promise<RiskAssessment> {
+
     // Simplified risk assessment - in production, use more sophisticated analysis
     let riskScore = 0;
     const riskFactors: string[] = [];
@@ -625,8 +641,7 @@ export class TransactionService {
       velocity_checks: { recent_transactions: recentTransactions },
       recommendation: recommendation as any,
       automated_decision: true,
-      created_at: new Date()
-    };
+      created_at: new Date(};
 
     return assessment;
   }
@@ -682,24 +697,24 @@ export class TransactionService {
         commercial_use: false,
         redistribution: false,
         modification: true
-      },
+  }
       [LicenseType.COMMERCIAL]: {
         commercial_use: true,
         redistribution: false,
         modification: true
-      },
+  }
       [LicenseType.ENTERPRISE]: {
         commercial_use: true,
         redistribution: true,
         modification: true,
         white_label: true
-      },
+  }
       [LicenseType.EDUCATIONAL]: {
         commercial_use: false,
         redistribution: false,
         modification: true,
         educational_only: true
-      },
+  }
       [LicenseType.UNLIMITED]: {
         commercial_use: true,
         redistribution: true,
@@ -712,11 +727,13 @@ export class TransactionService {
 
   // Placeholder methods for database operations
   private async getTemplate(templateId: string): Promise<MarketplaceTemplate | null> {
+
     const result = await this.db.query('SELECT * FROM marketplace_templates WHERE id = ?', [templateId]);
     return result[0] || null;
   }
 
   private async getTemplateVersion(templateId: string, versionId?: string): Promise<TemplateVersion | null> {
+
     if (versionId) {
       const result = await this.db.query('SELECT * FROM template_versions WHERE id = ? AND template_id = ?', [versionId, templateId]);
       return result[0] || null;
@@ -730,6 +747,7 @@ export class TransactionService {
   }
 
   private async checkExistingPurchase(userId: string, templateId: string): Promise<boolean> {
+
     const result = await this.db.query(
       'SELECT 1 FROM marketplace_purchases WHERE buyer_id = ? AND template_id = ? AND status = ?',
       [userId, templateId, 'succeeded']
@@ -738,6 +756,7 @@ export class TransactionService {
   }
 
   private async getPaymentIntent(intentId: string, userId: string): Promise<PaymentIntent | null> {
+
     const result = await this.db.query(
       'SELECT * FROM payment_intents WHERE id = ? AND user_id = ?',
       [intentId, userId]
@@ -765,6 +784,7 @@ export class TransactionService {
   }
 
   private async updatePaymentIntentStatus(intentId: string, status: string): Promise<void> {
+
     await this.db.query(
       'UPDATE payment_intents SET status = ?, updated_at = datetime("now") WHERE id = ?',
       [status, intentId]
@@ -772,6 +792,7 @@ export class TransactionService {
   }
 
   private async createTransaction(paymentIntent: PaymentIntent, type: TransactionType): Promise<Transaction> {
+
     const transactionId = crypto.randomUUID();
     const fee = Math.round(paymentIntent.amount_cents * 0.029 + 30); // Stripe fee
     
@@ -814,11 +835,13 @@ export class TransactionService {
   }
 
   private async generateInvoice(order: Order): Promise<void> {
+
     // Placeholder for invoice generation
     this.fastify.log.info(`Generating invoice for order ${order.order_number}`);
   }
 
   private async getUserAge(userId: string): Promise<number> {
+
     // Return user age in days
     const result = await this.db.query('SELECT created_at FROM users WHERE id = ?', [userId]);
     if (result.length === 0) return 0;
@@ -829,6 +852,7 @@ export class TransactionService {
   }
 
   private async getRecentTransactionCount(userId: string): Promise<number> {
+
     const result = await this.db.query(
       'SELECT COUNT(*) as count FROM transactions WHERE user_id = ? AND created_at > datetime(\'now\', \'-24 hours\')',
       [userId]
@@ -837,6 +861,7 @@ export class TransactionService {
   }
 
   private async getUserPurchase(userId: string, purchaseId: string): Promise<any> {
+
     const result = await this.db.query(
       'SELECT * FROM orders WHERE id = ? AND user_id = ?',
       [purchaseId, userId]

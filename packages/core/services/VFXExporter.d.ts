@@ -114,5 +114,5 @@ export declare class WildConstructVFXExporter implements VFXExporter {
      * Normalize weights to sum to 1.0
      */
     private normalizeWeights;
-}
+
 export declare export declare //# sourceMappingURL=VFXExporter.d.ts.map

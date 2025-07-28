@@ -6,16 +6,16 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { DataClassificationLevel, EncryptionRequirements, OperationContext, ValidationResult } from '../types/DataClassification';
+import { DataClassificationLevel, EncryptionRequirements } from '../types/DataClassification';
 export interface EncryptionPolicy {
     id: string;
     name: string;
     description: string;
     classification: DataClassificationLevel;
     requirements: EncryptionRequirements;
-    algorithms: EncryptionAlgorithm[];
+    algorithms: EncryptionAlgorithm;
     keyManagement: KeyManagementPolicy;
-    complianceFrameworks: string[];
+    complianceFrameworks: string;
     effectiveDate: Date;
     version: string;
 }
@@ -49,8 +49,8 @@ export interface EncryptionCompliance {
     keyRotationCompliant: boolean;
     lastRotationDate?: Date;
     complianceScore: number;
-    violations: string[];
-    recommendations: string[];
+    violations: string;
+    recommendations: string;
     assessmentDate: Date;
 }
 export interface EncryptionAuditEvent {
@@ -72,94 +72,16 @@ export declare class ClassificationEncryptionPolicyService {
     private auditEvents;
     constructor();
     /**
-     * Initialize approved encryption algorithms
-     */
+    * Initialize approved encryption algorithms
+    */
     private initializeApprovedAlgorithms;
     /**
-     * Initialize default encryption policies for each classification level
-     */
+    * Initialize default encryption policies for each classification level
+    */
     private initializeDefaultEncryptionPolicies;
-    /**
-     * Get approved algorithms for a classification level
-     */
-    private getAlgorithmsForClassification;
     /**
      * Check if algorithm is approved for classification level
      */
     private isAlgorithmApprovedForClassification;
-    /**
-     * Get encryption policy for classification level
-     */
-    getEncryptionPolicy(classification: DataClassificationLevel): EncryptionPolicy | undefined;
-    /**
-     * Validate encryption compliance for data
-     */
-    validateEncryptionCompliance(dataId: string, classification: DataClassificationLevel, encryptionStatus: {
-        encrypted: boolean;
-        algorithm?: string;
-        keyLength?: number;
-        lastRotationDate?: Date;
-    }, context: OperationContext): Promise<ValidationResult>;
-    /**
-     * Validate encryption algorithm
-     */
-    private validateEncryptionAlgorithm;
-    /**
-     * Validate key rotation compliance
-     */
-    private validateKeyRotation;
-    /**
-     * Calculate compliance score
-     */
-    private calculateComplianceScore;
-    /**
-     * Record audit event
-     */
-    private recordAuditEvent;
-    /**
-     * Get encryption requirements for classification level
-     */
-    getEncryptionRequirements(classification: DataClassificationLevel): EncryptionRequirements | undefined;
-    /**
-     * Get approved algorithms for classification level
-     */
-    getApprovedAlgorithms(classification?: DataClassificationLevel): EncryptionAlgorithm[];
-    /**
-     * Get all algorithms (including deprecated ones)
-     */
-    getAllAlgorithms(): EncryptionAlgorithm[];
-    /**
-     * Get compliance records
-     */
-    getComplianceRecords(classification?: DataClassificationLevel): EncryptionCompliance[];
-    /**
-     * Get audit events
-     */
-    getAuditEvents(classification?: DataClassificationLevel, eventType?: string): EncryptionAuditEvent[];
-    /**
-     * Update encryption policy
-     */
-    updateEncryptionPolicy(classification: DataClassificationLevel, updates: Partial<EncryptionPolicy>): Promise<void>;
-    /**
-     * Add or update approved algorithm
-     */
-    addApprovedAlgorithm(algorithm: EncryptionAlgorithm): void;
-    /**
-     * Deprecate algorithm
-     */
-    deprecateAlgorithm(algorithmName: string, deprecationDate: Date): void;
-    /**
-     * Get overall compliance score for classification level
-     */
-    getOverallComplianceScore(classification: DataClassificationLevel): number;
-    /**
-     * Get encryption recommendations for classification level
-     */
-    getEncryptionRecommendations(classification: DataClassificationLevel): string[];
-    /**
-     * Increment policy version
-     */
-    private incrementVersion;
 }
-export default ClassificationEncryptionPolicyService;
 //# sourceMappingURL=ClassificationEncryptionPolicyService.d.ts.map

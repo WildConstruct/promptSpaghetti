@@ -14,8 +14,8 @@ import {
 describe('PasswordGuidanceService - Basic Tests', () => {
   let service: PasswordGuidanceService;
   beforeEach(() => {
-    service = new PasswordGuidanceService();
-  });
+  service = new PasswordGuidanceService();
+});
   test('should create service instance', () => {
     expect(service).toBeInstanceOf(PasswordGuidanceService);
   });
@@ -26,32 +26,32 @@ describe('PasswordGuidanceService - Basic Tests', () => {
     expect(actions[0].category).toBe(GuidanceCategory.IMMEDIATE_ACTIONS);
   });
   test('should create guidance session', async () => {
-    const userId = 'test-user';
-    const indicators: CompromiseIndicator[] = [{
-      type: CompromiseType.DATA_BREACH,
-      description: 'Password found in breach',
-      confidence: 90,
-      source: 'test',
-      detectedAt: new Date(),
-      evidence: ['test evidence'],
-      affectedAccounts: [userId],
-    }];
+  const userId = 'test-user';
+  const indicators: CompromiseIndicator = [{,
+  type: CompromiseType.DATA_BREACH,
+  description: 'Password found in breach',
+  confidence: 90,
+  source: 'test',
+  detectedAt: new Date(),
+  evidence: ['test evidence'],
+  affectedAccounts: [userId],
+}];
     const session = await service.assessPasswordCompromise(userId, indicators);
     expect(session.userId).toBe(userId);
     expect(session.status).toBe('active');
     expect(session.recommendations.length).toBeGreaterThan(0);
   });
   test('should track action completion', async () => {
-    const userId = 'test-user';
-    const indicators: CompromiseIndicator[] = [{
-      type: CompromiseType.WEAK_PASSWORD,
-      description: 'Password too weak',
-      confidence: 100,
-      source: 'test',
-      detectedAt: new Date(),
-      evidence: [],
-      affectedAccounts: [userId],
-    }];
+  const userId = 'test-user';
+  const indicators: CompromiseIndicator = [{,
+  type: CompromiseType.WEAK_PASSWORD,
+  description: 'Password too weak',
+  confidence: 100,
+  source: 'test',
+  detectedAt: new Date(),
+  evidence: [],
+  affectedAccounts: [userId],
+}];
     const session = await service.assessPasswordCompromise(userId, indicators);
     const actionId = session.recommendations[0].id;
     const result = service.markActionCompleted(session.id, actionId);

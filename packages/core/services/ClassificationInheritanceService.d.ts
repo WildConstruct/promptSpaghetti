@@ -11,6 +11,7 @@ import {
   ClassificationContext,
   ValidationResult
 } from '../types/DataClassification';
+
 export interface InheritanceRule {
     id: string;
     name: string;
@@ -20,33 +21,33 @@ export interface InheritanceRule {
     conditions: InheritanceCondition[];
     action: InheritanceAction;
     overridePolicy: OverridePolicy;
-}
+
 export interface InheritanceCondition {
     type: 'PARENT_TYPE' | 'PARENT_CLASSIFICATION' | 'CHILD_TYPE' | 'RELATIONSHIP_TYPE' | 'CONTEXT_MATCH';
     field: string;
     operator: 'EQUALS' | 'CONTAINS' | 'MATCHES' | 'IN' | 'NOT_IN';
     value: string | string[];
     required: boolean;
-}
+
 export interface InheritanceAction {
     type: 'INHERIT_EXACT' | 'INHERIT_ELEVATED' | 'INHERIT_REDUCED' | 'APPLY_MINIMUM' | 'APPLY_CUSTOM';
     customClassification?: DataClassificationLevel;
     elevationLevel?: number;
     rationale: string;
-}
+
 export interface OverridePolicy {
     allowManualOverride: boolean;
     requireApprovalForOverride: boolean;
     maxOverrideLevel?: DataClassificationLevel;
     overrideReasons: string[];
-}
+
 export interface DataRelationship {
     parentId: string;
     childId: string;
     relationshipType: 'CONTAINS' | 'DERIVES_FROM' | 'PROCESSES' | 'REFERENCES' | 'AGGREGATES';
     strength: 'WEAK' | 'MODERATE' | 'STRONG' | 'ABSOLUTE';
     metadata?: Record<string, any>;
-}
+
 export interface InheritanceContext {
     parentElement: {,
         id: string;
@@ -62,7 +63,7 @@ export interface InheritanceContext {
     };
     relationship: DataRelationship;
     businessContext?: ClassificationContext;
-}
+
 export interface InheritanceResult {
     elementId: string;
     inheritedClassification: DataClassification;
@@ -70,14 +71,13 @@ export interface InheritanceResult {
     confidence: number;
     requiresReview: boolean;
     validationResult: ValidationResult;
-}
+
 export interface AppliedRule {
     ruleId: string;
     ruleName: string;
     priority: number;
     rationale: string;
     confidence: number;
-}
 /**
  * Service for managing classification inheritance rules and applying them
  */
@@ -153,5 +153,5 @@ export declare class ClassificationInheritanceService {
      * Batch apply inheritance to multiple child elements
      */
     batchApplyInheritance(contexts: InheritanceContext[]): Promise<Map<string, InheritanceResult>>;
-}
+
 //# sourceMappingURL=ClassificationInheritanceService.d.ts.map

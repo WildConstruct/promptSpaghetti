@@ -52,6 +52,36 @@ export var DataSensitivityLevel;
     DataSensitivityLevel["RESTRICTED"] = "RESTRICTED";
     DataSensitivityLevel["TOP_SECRET"] = "TOP_SECRET";
 })(DataSensitivityLevel || (DataSensitivityLevel = {}));
+;
+timezone: string;
+exceptions: ScheduleException[];
+;
+requestedData: {
+    type: string;
+    classification: DataClassificationLevel;
+    sensitivityLevel: DataSensitivityLevel;
+    operations: DataOperation[];
+}
+;
+riskScore ?  : number;
+;
+;
+summary: {
+    totalPolicies: number;
+    activePolicies: number;
+    violations: number;
+    warnings: number;
+}
+;
+findings: ComplianceFinding[];
+recommendations: ComplianceRecommendation[];
+attestation: {
+    attested: boolean;
+    attestedBy ?  : string;
+    attestationDate ?  : Date;
+    comments ?  : string;
+}
+;
 /**
  * Security Dashboard Policy Management System
  */
@@ -882,4 +912,5 @@ export class SecurityDashboardPolicies extends EventEmitter {
         logger.info('Security Dashboard Policies destroyed');
     }
 }
+;
 export default SecurityDashboardPolicies;

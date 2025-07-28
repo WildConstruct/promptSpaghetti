@@ -190,7 +190,7 @@ describe('Compression System Tests', () => {
         header: jest.fn((name, value) => {
           compressionHeaders[name] = value;
           return mockReply;
-        })
+  }
       };
       
             const handler = middleware.getHandler();

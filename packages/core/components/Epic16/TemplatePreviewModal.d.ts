@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { MarketplaceTemplate } from './MarketplaceCard';
+
 interface PreviewResult {
     output: string;
     cost: number;
@@ -13,7 +14,8 @@ interface PreviewResult {
     tokens: number;
     model: string;
     executionTime: number;
-}
+
+
 interface TemplatePreviewModalProps {
     template: MarketplaceTemplate;
     isOpen: boolean;
@@ -25,8 +27,9 @@ interface TemplatePreviewModalProps {
         id: string;
         name: string;
         tier: 'free' | 'pro' | 'enterprise';
+
     };
-}
+
 export declare const TemplatePreviewModal: React.FC<TemplatePreviewModalProps>;
 export default TemplatePreviewModal;
 //# sourceMappingURL=TemplatePreviewModal.d.ts.map

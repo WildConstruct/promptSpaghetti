@@ -50,61 +50,59 @@ interface ActivityTimelineProps {
   showFilters?: boolean;
   maxItems?: number;
   className?: string;
-}
-/**
- * Activity type configurations for UI styling
- */
-const ACTIVITY_TYPE_CONFIG = {
+  /**
+  * Activity type configurations for UI styling
+  */
+  const ACTIVITY_TYPE_CONFIG = {
   user_interaction: {,
-    icon: User,
-    color: 'text-blue-600 bg-blue-50 border-blue-200',
-    badgeColor: 'bg-blue-100 text-blue-800',
-  },
+  icon: User,
+  color: 'text-blue-600 bg-blue-50 border-blue-200',
+  badgeColor: 'bg-blue-100 text-blue-800',
+},
   system_event: {,
-    icon: Settings,
-    color: 'text-gray-600 bg-gray-50 border-gray-200',
-    badgeColor: 'bg-gray-100 text-gray-800',
-  },
+  icon: Settings,
+  color: 'text-gray-600 bg-gray-50 border-gray-200',
+  badgeColor: 'bg-gray-100 text-gray-800',
+},
   graph_operation: {,
-    icon: GitBranch,
-    color: 'text-green-600 bg-green-50 border-green-200',
-    badgeColor: 'bg-green-100 text-green-800',
-  },
+  icon: GitBranch,
+  color: 'text-green-600 bg-green-50 border-green-200',
+  badgeColor: 'bg-green-100 text-green-800',
+},
   file_operation: {,
-    icon: FileText,
-    color: 'text-purple-600 bg-purple-50 border-purple-200',
-    badgeColor: 'bg-purple-100 text-purple-800',
-  },
+  icon: FileText,
+  color: 'text-purple-600 bg-purple-50 border-purple-200',
+  badgeColor: 'bg-purple-100 text-purple-800',
+},
   collaboration: {,
-    icon: Users,
-    color: 'text-orange-600 bg-orange-50 border-orange-200',
-    badgeColor: 'bg-orange-100 text-orange-800',
-  },
+  icon: Users,
+  color: 'text-orange-600 bg-orange-50 border-orange-200',
+  badgeColor: 'bg-orange-100 text-orange-800',
+},
   performance: {,
-    icon: Zap,
-    color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-    badgeColor: 'bg-yellow-100 text-yellow-800',
-  },
+  icon: Zap,
+  color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
+  badgeColor: 'bg-yellow-100 text-yellow-800',
+},
   error: {,
-    icon: AlertTriangle,
-    color: 'text-red-600 bg-red-50 border-red-200',
-    badgeColor: 'bg-red-100 text-red-800',
-  },
+  icon: AlertTriangle,
+  color: 'text-red-600 bg-red-50 border-red-200',
+  badgeColor: 'bg-red-100 text-red-800',
+},
   authentication: {,
-    icon: User,
-    color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-    badgeColor: 'bg-indigo-100 text-indigo-800',
-  },
+  icon: User,
+  color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
+  badgeColor: 'bg-indigo-100 text-indigo-800',
+},
   admin: {,
-    icon: Settings,
-    color: 'text-gray-700 bg-gray-100 border-gray-300',
-    badgeColor: 'bg-gray-200 text-gray-900',
-  },
+  icon: Settings,
+  color: 'text-gray-700 bg-gray-100 border-gray-300',
+  badgeColor: 'bg-gray-200 text-gray-900',
+},
   integration: {,
-    icon: Globe,
-    color: 'text-teal-600 bg-teal-50 border-teal-200',
-    badgeColor: 'bg-teal-100 text-teal-800',
-  }
+  icon: Globe,
+  color: 'text-teal-600 bg-teal-50 border-teal-200',
+  badgeColor: 'bg-teal-100 text-teal-800',
 };
 /**
  * Impact level configurations
@@ -127,15 +125,15 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
   maxItems = 50,
   className
 }) => {
-  const [activities, setActivities] = useState<ActivityEvent[]>([]);
+  const [activities, setActivities] = useState<ActivityEvent>([]);
   const [stats, setStats] = useState<ActivityStats | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('timeline');
   const [filter, setFilter] = useState<ActivityFilter>({)
-    userIds: userId ? [userId] : undefined,
-    workspaceIds: workspaceId ? [workspaceId] : undefined,
-    projectIds: projectId ? [projectId] : undefined,
-    limit: maxItems,
-  });
+  userIds: userId ? [userId] : undefined,
+  workspaceIds: workspaceId ? [workspaceId] : undefined,
+  projectIds: projectId ? [projectId] : undefined,
+  limit: maxItems,
+});
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActivity, setSelectedActivity] = useState<ActivityEvent | null>(null);
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'all'>('week');
@@ -162,16 +160,14 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
       default:
         startDate = new Date(0);
         break;
-      }
       const updatedFilter = {
         ...filter,
         dateRange: dateRange !== 'all' ? { start: startDate, end: now } : undefined,
-        searchQuery: searchQuery || undefined,
-      };
+        searchQuery: searchQuery || undefined;
+  };
       setActivities(activityTimeline.getActivities(updatedFilter));
       if (showStats) {
         setStats(activityTimeline.getActivityStats(updatedFilter));
-      }
     };
     loadData();
     // Subscribe to real-time updates
@@ -185,12 +181,11 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
   }, [filter, searchQuery, dateRange, maxItems, showStats]);
   // Group activities by date for timeline view
   const groupedActivities = useMemo(() => {
-    const groups: Record<string, ActivityEvent[]> = {};
+    const groups: Record<string, ActivityEvent> = {};
     activities.forEach(activity => {)
-      const dateKey = activity.timestamp.toDateString();
+  const dateKey = activity.timestamp.toDateString();
       if (!groups[dateKey]) {
         groups[dateKey] = [];
-      }
       groups[dateKey].push(activity);
     });
     return groups;
@@ -200,16 +195,16 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
     setFilter(prev => ({ ...prev, ...updates }));
   };
   const resetFilters = () => {
-    setFilter({)
-      userIds: userId ? [userId] : undefined,
-      workspaceIds: workspaceId ? [workspaceId] : undefined,
-      projectIds: projectId ? [projectId] : undefined,
-      limit: maxItems,
-    });
+  setFilter({)
+  userIds: userId ? [userId] : undefined,
+  workspaceIds: workspaceId ? [workspaceId] : undefined,
+  projectIds: projectId ? [projectId] : undefined,
+  limit: maxItems,
+});
     setSearchQuery('');
     setDateRange('week');
   };
-  return ();
+  return;
     <div className={`activity-timeline space-y-6 ${className}`}>}
       {/* Header */}
       <div className="flex justify-between items-center">
@@ -319,9 +314,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 value={filter.types?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    types: value === 'all' ? undefined : [value as ActivityType] ,
-                  })
-                }
+                    types: value === 'all' ? undefined : [value as ActivityType] ;
+  }
               >
                 <option value="all">All Types</option>
                 <option value="user_interaction">User Interactions</option>
@@ -335,9 +329,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 value={filter.impactLevels?.[0] || 'all'}
                 onValueChange={(value) => 
                   updateFilter({ )
-                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact] ,
-                  })
-                }
+                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact] ;
+  }
               >
                 <option value="all">All Impact Levels</option>
                 <option value="critical">Critical</option>
@@ -351,8 +344,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                   size="sm"
                   onClick={() => updateFilter({ )
                     successOnly: filter.successOnly ? undefined : true,
-                    errorsOnly: undefined ,
-                  })}
+                    errorsOnly: undefined ;
+  })}
                 >
                   <CheckCircle className="w-4 h-4 mr-1" />
                   Success
@@ -362,8 +355,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                   size="sm"
                   onClick={() => updateFilter({ )
                     errorsOnly: filter.errorsOnly ? undefined : true,
-                    successOnly: undefined ,
-                  })}
+                    successOnly: undefined ;
+  })}
                 >
                   <XCircle className="w-4 h-4 mr-1" />
                   Errors
@@ -424,11 +417,10 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
  * Timeline View Component
  */
 interface TimelineViewProps {
-  groupedActivities: Record<string, ActivityEvent[]>;
-  onSelectActivity: (activity: ActivityEvent) => void;
+  groupedActivities: Record<string, ActivityEvent>;
+  onSelectActivity: (activity: ActivityEvent) => void;,
   compact: boolean;
-}
-const TimelineView: React.FC<TimelineViewProps> = ({)
+  const TimelineView: React.FC<TimelineViewProps> = ({,)
   groupedActivities,
   onSelectActivity,
   compact
@@ -437,15 +429,14 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
     new Date(b).getTime() - new Date(a).getTime()
   );
   if (dates.length === 0) {
-    return ();
+    return;
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
         <p className="text-gray-500">Try adjusting your filters to see more results.</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-8">
       {dates.map(dateKey => ()
         <div key={dateKey}>
@@ -453,11 +444,11 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
             <Calendar className="w-4 h-4 text-gray-400 mr-2" />
             <h3 className="text-sm font-medium text-gray-900">
               {new Date(dateKey).toLocaleDateString('en-US', {)
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})}
             </h3>
             <div className="flex-1 border-t border-gray-200 ml-4" />
             <Badge variant="outline" size="sm">
@@ -484,25 +475,23 @@ const TimelineView: React.FC<TimelineViewProps> = ({)
  * List View Component
  */
 interface ListViewProps {
-  activities: ActivityEvent[];
-  onSelectActivity: (activity: ActivityEvent) => void;
+  activities: ActivityEvent;,
+  onSelectActivity: (activity: ActivityEvent) => void;,
   compact: boolean;
-}
-const ListView: React.FC<ListViewProps> = ({)
+  const ListView: React.FC<ListViewProps> = ({,)
   activities,
   onSelectActivity,
   compact
 }) => {
   if (activities.length === 0) {
-    return ();
+    return;
       <div className="text-center py-8">
         <ActivityIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No activities found</h3>
         <p className="text-gray-500">Try adjusting your filters to see more results.</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-2">
       {activities.map(activity => ()
         <ActivityCard
@@ -520,12 +509,11 @@ const ListView: React.FC<ListViewProps> = ({)
  * Analytics View Component
  */
 interface AnalyticsViewProps {
-  stats: ActivityStats | null;
-  activities: ActivityEvent[];
-}
+  stats: ActivityStats | null;,
+  activities: ActivityEvent;
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
-  return ();
+  return;
     <div className="space-y-6">
       {/* Activity Distribution */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -536,7 +524,7 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
           <CardContent>
             <div className="space-y-3">
               {Object.entries(stats.byType)
-                .sort(([, a], [, b]) => b - a)
+                .sort(([ a], [ b]) => b - a)
                 .map(([type, count]) => ()
                   <div key={type} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -617,13 +605,12 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
  * Activity Card Component
  */
 interface ActivityCardProps {
-  activity: ActivityEvent;
+  activity: ActivityEvent;,
   onClick: () => void;
   compact?: boolean;
   showTimestamp?: boolean;
   showDate?: boolean;
-}
-const ActivityCard: React.FC<ActivityCardProps> = ({)
+  const ActivityCard: React.FC<ActivityCardProps> = ({,)
   activity,
   onClick,
   compact = false,
@@ -633,11 +620,11 @@ const ActivityCard: React.FC<ActivityCardProps> = ({)
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const impactConfig = IMPACT_CONFIG[activity.impact];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-  return ();
-    <div
-      className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${
-        compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50'
-      }`}
+  return;
+  <div
+  className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${,}
+  compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50',
+}`}
       onClick={onClick}
     >
       <div className="flex items-start space-x-3">
@@ -678,7 +665,6 @@ const ActivityCard: React.FC<ActivityCardProps> = ({)
                 {showDate 
                   ? activity.timestamp.toLocaleDateString()
                   : activity.timestamp.toLocaleTimeString()
-                }
               </span>
             )}
             {activity.duration && ()
@@ -700,16 +686,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({)
  * Activity Detail Modal
  */
 interface ActivityDetailModalProps {
-  activity: ActivityEvent;
+  activity: ActivityEvent;,
   onClose: () => void;
-}
-const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({)
+  const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({,)
   activity,
   onClose
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-auto">
         <div className="p-6">

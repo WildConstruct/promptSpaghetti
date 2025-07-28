@@ -323,11 +323,6 @@ export interface AuthConfig {
         github: OAuthProviderConfig;
         microsoft: OAuthProviderConfig;
     };
-    emailService?: {
-        apiKey: string;
-        fromEmail: string;
-        fromName: string;
-    };
 }
 export interface IUserService {
     createUser(data: RegisterRequest): Promise<User>;
@@ -376,7 +371,7 @@ export interface IAuditService {
         endDate?: Date;
         limit?: number;
         offset?: number;
-    }): Promise<AuditLog[]>;
+    }): any;
 }
 export interface PasswordResetToken {
     userId: string;
@@ -511,30 +506,17 @@ export interface ChallengeConfig {
             v3Enabled: boolean;
             v3Threshold: number;
         };
-        hcaptcha?: {
-            siteKey: string;
-            secretKey: string;
-            enabled: boolean;
-        };
-        custom?: {
-            enabled: boolean;
-            difficulty: ChallengeDifficulty;
-            maxAttempts: number;
-            expiryMinutes: number;
-        };
     };
-    rules: ChallengeRule[];
-    escalation: {
+    hcaptcha?: {
+        siteKey: string;
+        secretKey: string;
         enabled: boolean;
-        thresholds: {
-            failedAttempts: number;
-            timeWindow: number;
-            escalateAfter: number;
-        };
     };
-    progressive: {
+    custom?: {
         enabled: boolean;
-        stages: ProgressiveStage[];
+        difficulty: ChallengeDifficulty;
+        maxAttempts: number;
+        expiryMinutes: number;
     };
 }
 export interface ChallengeRule {
@@ -565,7 +547,6 @@ export interface ProgressiveStage {
         failedAttempts: number;
         timeWindow: number;
     };
-    escalationDelay: number;
 }
 export interface ChallengeSession {
     id: string;
@@ -613,6 +594,6 @@ export interface IChallengeService {
         endDate?: Date;
         userId?: string;
         challengeType?: ChallengeType;
-    }): Promise<ChallengeStats>;
+    }): any;
 }
 //# sourceMappingURL=types.d.ts.map

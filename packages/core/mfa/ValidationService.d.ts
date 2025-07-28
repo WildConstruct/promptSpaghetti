@@ -6,6 +6,7 @@
  */
 import { EventEmitter } from 'events';
 import { VerificationCodeData, ValidationResult } from './CodeGenerator';
+
 export interface VerificationCodeStorage {
     save(code: VerificationCodeData): Promise<void>;
     findById(id: string): Promise<VerificationCodeData | null>;
@@ -14,12 +15,12 @@ export interface VerificationCodeStorage {
     delete(id: string): Promise<void>;
     deleteExpired(): Promise<number>;
     findByUser(userId: string): Promise<VerificationCodeData[]>;
-}
+
 export interface RateLimiter {
     isAllowed(key: string, limit: number, windowMs: number): Promise<boolean>;
     increment(key: string, windowMs: number): Promise<number>;
     reset(key: string): Promise<void>;
-}
+
 export interface ValidationServiceConfig {
     rateLimiting: {,
         enabled: boolean;
@@ -41,7 +42,7 @@ export interface ValidationServiceConfig {
         logFailedAttempts: boolean;
         blockAfterFailures: number;
     };
-}
+
 export interface ValidationAttempt {
     id: string;
     userId: string;
@@ -52,13 +53,12 @@ export interface ValidationAttempt {
     ipAddress?: string;
     userAgent?: string;
     timestamp: Date;
-}
+
 export interface SuspiciousActivity {
     type: 'rapid_fire' | 'enumeration' | 'expired_code_use' | 'brute_force';
     userId: string;
     details: Record<string, any>;
     timestamp: Date;
-}
 /**
  * Comprehensive validation service with security monitoring
  */
@@ -131,9 +131,8 @@ export declare class ValidationService extends EventEmitter {
     private startCleanupSchedule;
     private logValidationAttempt;
     private checkForSuspiciousActivity;
-}
-export declare function createValidationService()
-  storage: VerificationCodeStorage,
+
+export declare function createValidationService(storage: VerificationCodeStorage,)
   rateLimiter: RateLimiter,
   environment?: 'development' | 'production'
 ): ValidationService;

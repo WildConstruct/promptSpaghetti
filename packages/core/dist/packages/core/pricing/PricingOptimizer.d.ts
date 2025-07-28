@@ -12,11 +12,11 @@ export interface PricingModel {
     type: 'usage_based' | 'tiered' | 'flat_rate' | 'value_based' | 'dynamic';
     basePrice: number;
     currency: string;
-    tiers?: PricingTier[];
-    usageMetrics?: UsageMetric[];
+    tiers?: PricingTier;
+    usageMetrics?: UsageMetric;
     demandMultiplier?: number;
     complexityMultiplier?: number;
-    volumeDiscounts?: VolumeDiscount[];
+    volumeDiscounts?: VolumeDiscount;
     aiOptimization: {
         enabled: boolean;
         strategy: 'maximize_revenue' | 'maximize_adoption' | 'competitive' | 'value_based';
@@ -28,7 +28,7 @@ export interface PricingModel {
         studioTierMultiplier: number;
         productionScaleFactors: Record<'indie' | 'mid_budget' | 'blockbuster', number>;
         contentTypeMultipliers: Record<'script' | 'storyboard' | 'concept_art' | 'marketing', number>;
-        seasonalAdjustments: SeasonalPricing[];
+        seasonalAdjustments: SeasonalPricing;
     };
     createdAt: number;
     updatedAt: number;
@@ -40,7 +40,7 @@ export interface PricingTier {
     minUsage: number;
     maxUsage: number | null;
     pricePerUnit: number;
-    features: string[];
+    features: string;
     discountPercentage?: number;
 }
 export interface UsageMetric {
@@ -74,9 +74,9 @@ export interface PricingCalculationRequest {
 export interface PricingCalculationResult {
     totalPrice: number;
     currency: string;
-    breakdown: PricingBreakdown[];
-    discounts: PricingDiscount[];
-    taxes?: Tax[];
+    breakdown: PricingBreakdown;
+    discounts: PricingDiscount;
+    taxes?: Tax;
     billingPeriod: 'one_time' | 'monthly' | 'annual';
     aiInsights: {
         priceOptimality: number;
@@ -89,7 +89,7 @@ export interface PricingCalculationResult {
         seasonalImpact: number;
         studioTierImpact: number;
         productionScaleImpact: number;
-        marketTrends: string[];
+        marketTrends: string;
     };
     createdAt: number;
     validUntil: number;
@@ -100,7 +100,7 @@ export interface PricingBreakdown {
     quantity: number;
     unitPrice: number;
     subtotal: number;
-    multipliers?: PricingMultiplier[];
+    multipliers?: PricingMultiplier;
 }
 export interface PricingMultiplier {
     type: 'demand' | 'complexity' | 'urgency' | 'seasonal' | 'studio_tier' | 'volume';
@@ -130,7 +130,7 @@ export interface PricingAnalytics {
     revenueGrowthRate: number;
     totalCalculations: number;
     uniqueCustomers: number;
-    topUsagePatterns: UsagePattern[];
+    topUsagePatterns: UsagePattern;
     priceElasticity: number;
     demandSensitivity: number;
     competitiveAdvantage: number;
@@ -164,9 +164,6 @@ export interface PricingOptimizationConfig {
         awardsSeasonPremium: boolean;
     };
 }
-/**
- * AI-driven pricing optimization engine for film industry applications
- */
 export declare class PricingOptimizer extends EventEmitter {
     private models;
     private analytics;
@@ -180,107 +177,10 @@ export declare class PricingOptimizer extends EventEmitter {
      * Initialize optimization scheduling
      */
     private initializeOptimization;
-    /**
-     * Add or update a pricing model
-     */
-    addPricingModel(model: PricingModel): void;
-    /**
-     * Calculate pricing for a given request
-     */
-    calculatePricing(request: PricingCalculationRequest): Promise<PricingCalculationResult>;
-    /**
-     * Get pricing analytics for a model
-     */
-    getAnalytics(modelId: string, period?: {
-        start: number;
-        end: number;
-    }): PricingAnalytics | null;
-    /**
-     * Run AI-driven pricing optimization
-     */
-    runOptimization(): Promise<void>;
-    /**
-     * Generate demand forecast for a pricing model
-     */
-    generateDemandForecast(modelId: string, period: number): Promise<DemandForecast>;
-    /**
-     * Get competitive pricing analysis
-     */
-    getCompetitiveAnalysis(modelId: string): Promise<CompetitiveAnalysis>;
-    /**
-     * Optimize pricing for specific market conditions
-     */
-    optimizeForMarketConditions(modelId: string, conditions: MarketConditions): Promise<PricingOptimizationResult>;
-    /**
-     * Shutdown the pricing optimizer
-     */
-    shutdown(): void;
     private calculateBasePricing;
     private applyAIOptimizations;
-    private applyIndustryAdjustments;
-    private applyDiscountsAndTaxes;
-    private recordPricingCalculation;
-    private createEmptyAnalytics;
-    private calculateComplexityScore;
-    private getSeasonalAdjustment;
-    private getCurrentSeasonalPeriod;
-    private extractUsagePattern;
-    private getSeasonalFactors;
-    private getIndustryTrends;
-    private generateOptimizationRecommendations;
-    private shouldApplyOptimization;
-    private applyOptimization;
-    private generateMarketBasedRecommendations;
-    private calculateExpectedImpact;
-    private calculateConfidenceScore;
-    private assessImplementationRisk;
+    request: PricingCalculationRequest;
+    baseResult: PricingCalculationResult;
+    Promise<PricingCalculationResult>(): any;
 }
-export interface DemandForecast {
-    period: number;
-    expectedDemandChange: number;
-    confidence: number;
-    factors: Array<{
-        name: string;
-        impact: number;
-    }>;
-}
-export interface CompetitiveAnalysis {
-    position: 'below_market' | 'at_market' | 'above_market';
-    competitorCount: number;
-    averagePrice: number;
-    priceRange: {
-        min: number;
-        max: number;
-    };
-    marketShare: number;
-    differentiationFactors: string[];
-}
-export interface OptimizationRecommendation {
-    type: 'price_increase' | 'price_decrease' | 'dynamic_pricing' | 'tier_adjustment';
-    confidence: number;
-    expectedImpact: number;
-    description: string;
-    suggestedChange: number;
-}
-export interface MarketConditions {
-    demandLevel: 'low' | 'medium' | 'high';
-    competitiveIntensity: 'low' | 'medium' | 'high';
-    seasonality: 'low' | 'medium' | 'high';
-    economicIndicators: Record<string, number>;
-}
-export interface PricingOptimizationResult {
-    modelId: string;
-    recommendations: MarketOptimizationRecommendation[];
-    expectedImpact: number;
-    confidence: number;
-    implementationRisk: 'low' | 'medium' | 'high';
-}
-export interface MarketOptimizationRecommendation {
-    type: 'competitive_alignment' | 'demand_optimization' | 'seasonal_adjustment' | 'tier_restructure';
-    priority: 'low' | 'medium' | 'high';
-    impact: number;
-    confidence: number;
-    description: string;
-}
-export default PricingOptimizer;
 //# sourceMappingURL=PricingOptimizer.d.ts.map

@@ -5,14 +5,12 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from '../../templates/ProjectTemplateManager';
 interface TemplateCustomizationDialogProps {
-  template: ProjectTemplate;
+  template: ProjectTemplate;,
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void;,
   onConfirm: (customizations: Record<string, any>) => void;
   onPreview: (customizations: Record<string, any>) => void;
-}
-
-export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps> = ({)
+  export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogProps> = ({,)
   template,
   isOpen,
   onClose,
@@ -27,24 +25,22 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
       // Initialize customizations with default values
       const initialCustomizations: Record<string, any> = {};
       template.variables.forEach(variable => {)
-        initialCustomizations[variable.id] = variable.default_value;
+  initialCustomizations[variable.id] = variable.default_value;
       });
       template.customization_points.forEach(point => {)
-        initialCustomizations[point.id] = undefined;
+  initialCustomizations[point.id] = undefined;
       });
       setCustomizations(initialCustomizations);
       setErrors({});
-    }
   }, [isOpen, template]);
   const validateCustomizations = (): boolean => {
     const newErrors: Record<string, string> = {};
     // Validate variables
     template.variables.forEach(variable => {)
-      const value = customizations[variable.id];
+  const value = customizations[variable.id];
       if (variable.required && (value === undefined || value === '' || value === null)) {
         newErrors[variable.id] = `${variable.label} is required`;}
         return;
-      }
       if (value !== undefined && value !== '' && variable.validation) {
         const validation = variable.validation;
         if (variable.type === 'number') {
@@ -55,45 +51,37 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             newErrors[variable.id] = `${variable.label} must be at least ${validation.min}`;}
           } else if (validation.max !== undefined && numValue > validation.max) {
             newErrors[variable.id] = `${variable.label} must be at most ${validation.max}`;}
-          }
-        }
         if (variable.type === 'text' && validation.pattern) {
           const regex = new RegExp(validation.pattern);
           if (!regex.test(String(value))) {
             newErrors[variable.id] = `${variable.label} format is invalid`;}
-          }
-        }
-      }
     });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleCustomizationChange = (id: string, value: Error) => {
-    setCustomizations(prev => ({)
-      ...prev,
-      [id]: value
-    }));
+  setCustomizations(prev => ({)
+  ...prev,
+  [id]: value,
+}));
     // Clear error for this field
     if (errors[id]) {
       setErrors(prev => {)
-        const newErrors = { ...prev };
+  const newErrors = { ...prev };
         delete newErrors[id];
         return newErrors;
       });
-    }
   };
   const handlePreview = () => {
     if (validateCustomizations()) {
       onPreview(customizations);
-    }
   };
   const handleConfirm = () => {
     if (validateCustomizations()) {
       onConfirm(customizations);
-    }
   };
   if (!isOpen) return null;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         {/* Header */}
@@ -119,20 +107,20 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
             <button
               onClick={() => setActiveTab('variables')}
               className={`py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === 'variables'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+  activeTab === 'variables'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
             >
               Variables ({template.variables.length})
             </button>
             <button
               onClick={() => setActiveTab('customization')}
               className={`py-3 px-4 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === 'customization'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+  activeTab === 'customization'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
             >
               Customization ({template.customization_points.length})
             </button>
@@ -216,40 +204,39 @@ export const TemplateCustomizationDialog: React.FC<TemplateCustomizationDialogPr
   );
 };
 interface VariableEditorProps {
-  variable: TemplateVariable;
+  variable: TemplateVariable;,
   value: Error;
   error?: string;
   onChange: (value: Error) => void;
-}
 const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error, onChange }) => {
   const renderInput = () => {
     switch (variable.type) {
     case 'text':
-      return ();
+      return;
         <input
           type="text"
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
           placeholder={variable.description}
           className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            error ? 'border-red-300' : 'border-gray-300'
-          }`}
+  error ? 'border-red-300' : 'border-gray-300',
+}`}
         />
       );
     case 'textarea':
-      return ();
+      return;
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
           placeholder={variable.description}
           rows={3}
           className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            error ? 'border-red-300' : 'border-gray-300'
-          }`}
+  error ? 'border-red-300' : 'border-gray-300',
+}`}
         />
       );
     case 'number':
-      return ();
+      return;
         <input
           type="number"
           value={value || ''}
@@ -258,12 +245,12 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
           min={variable.validation?.min}
           max={variable.validation?.max}
           className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            error ? 'border-red-300' : 'border-gray-300'
-          }`}
+  error ? 'border-red-300' : 'border-gray-300',
+}`}
         />
       );
     case 'boolean':
-      return ();
+      return;
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -275,13 +262,13 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
         </label>
       );
     case 'select':
-      return ();
+      return;
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
           className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-            error ? 'border-red-300' : 'border-gray-300'
-          }`}
+  error ? 'border-red-300' : 'border-gray-300',
+}`}
         >
           <option value="">Select an option</option>
           {variable.validation?.options?.map(option => ()
@@ -291,9 +278,8 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
       );
     default:
       return null;
-    }
   };
-  return ();
+  return;
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {variable.label}
@@ -310,15 +296,14 @@ const VariableEditor: React.FC<VariableEditorProps> = ({ variable, value, error,
   );
 };
 interface CustomizationPointEditorProps {
-  point: CustomizationPoint;
+  point: CustomizationPoint;,
   value: Error;
   onChange: (value: Error) => void;
-}
 const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ point, value, onChange }) => {
   const renderInput = () => {
     switch (point.ui_component) {
     case 'input':
-      return ();
+      return;
         <input
           type="text"
           value={value || ''}
@@ -328,7 +313,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         />
       );
     case 'select':
-      return ();
+      return;
         <select
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -339,7 +324,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </select>
       );
     case 'color_picker':
-      return ();
+      return;
         <div className="flex items-center space-x-2">
           <input
             type="color"
@@ -357,7 +342,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </div>
       );
     case 'slider':
-      return ();
+      return;
         <div className="space-y-2">
           <input
             type="range"
@@ -371,7 +356,7 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
         </div>
       );
     case 'toggle':
-      return ();
+      return;
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -384,9 +369,8 @@ const CustomizationPointEditor: React.FC<CustomizationPointEditorProps> = ({ poi
       );
     default:
       return null;
-    }
   };
-  return ();
+  return;
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-700">
         {point.name}

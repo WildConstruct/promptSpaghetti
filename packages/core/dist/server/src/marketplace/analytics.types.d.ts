@@ -51,8 +51,6 @@ export interface AnalyticsEvent {
             city?: string;
         };
     };
-    timestamp: Date;
-    created_at: Date;
 }
 export interface TemplateMetrics {
     template_id: string;
@@ -70,36 +68,6 @@ export interface TemplateMetrics {
         error_count: number;
         success_rate: number;
         conversion_rate: number;
-    };
-    demographics: {
-        top_countries: Array<{
-            country: string;
-            count: number;
-            percentage: number;
-        }>;
-        device_breakdown: Array<{
-            device: string;
-            count: number;
-            percentage: number;
-        }>;
-        user_segments: Array<{
-            segment: string;
-            count: number;
-            percentage: number;
-        }>;
-    };
-    trends: {
-        daily_metrics: Array<{
-            date: Date;
-            views: number;
-            downloads: number;
-            revenue: number;
-        }>;
-        growth_rates: {
-            views_growth: number;
-            downloads_growth: number;
-            revenue_growth: number;
-        };
     };
 }
 export interface CreatorDashboard {
@@ -122,37 +90,6 @@ export interface CreatorDashboard {
             revenue: number;
         };
     };
-    performance_summary: {
-        views_trend: number;
-        downloads_trend: number;
-        revenue_trend: number;
-        rating_trend: number;
-        market_share: number;
-        ranking_position: number;
-    };
-    traffic_metrics: {
-        unique_visitors: number;
-        returning_visitors: number;
-        bounce_rate: number;
-        average_session_duration: number;
-        top_referrers: Array<{
-            source: string;
-            visits: number;
-            percentage: number;
-        }>;
-    };
-    financial_metrics: {
-        gross_revenue: number;
-        net_revenue: number;
-        platform_fee: number;
-        payout_amount: number;
-        revenue_by_template: Array<{
-            template_id: string;
-            title: string;
-            revenue: number;
-            percentage: number;
-        }>;
-    };
 }
 export interface AnalyticsQuery {
     creator_id?: string;
@@ -170,12 +107,6 @@ export interface AnalyticsQuery {
         min_value?: number;
         max_value?: number;
     };
-    sort?: {
-        field: string;
-        direction: 'asc' | 'desc';
-    };
-    limit?: number;
-    offset?: number;
 }
 export interface CustomReport {
     id: string;
@@ -191,16 +122,8 @@ export interface CustomReport {
             show_grid: boolean;
             color_scheme: string;
         };
-        refresh_interval?: number;
     };
-    is_scheduled: boolean;
-    schedule?: {
-        frequency: 'daily' | 'weekly' | 'monthly';
-        time: string;
-        recipients: string[];
-    };
-    created_at: Date;
-    updated_at: Date;
+    refresh_interval?: number;
 }
 export interface AnalyticsInsight {
     id: string;
@@ -214,8 +137,6 @@ export interface AnalyticsInsight {
         change_percentage: number;
         confidence_score: number;
     };
-    recommendations?: string[];
-    created_at: Date;
 }
 export declare const AnalyticsEventSchema: z.ZodObject<{
     template_id: z.ZodString;
@@ -608,12 +529,12 @@ export declare const CustomReportSchema: z.ZodObject<{
         };
         refresh_interval?: number;
     };
-    is_scheduled?: boolean;
     schedule?: {
         time?: string;
         frequency?: "monthly" | "daily" | "weekly";
         recipients?: string[];
     };
+    is_scheduled?: boolean;
 }, {
     name?: string;
     description?: string;
@@ -650,12 +571,12 @@ export declare const CustomReportSchema: z.ZodObject<{
         };
         refresh_interval?: number;
     };
-    is_scheduled?: boolean;
     schedule?: {
         time?: string;
         frequency?: "monthly" | "daily" | "weekly";
         recipients?: string[];
     };
+    is_scheduled?: boolean;
 }>;
 export type AnalyticsEventInput = z.infer<typeof AnalyticsEventSchema>;
 export type AnalyticsQueryInput = z.infer<typeof AnalyticsQuerySchema>;

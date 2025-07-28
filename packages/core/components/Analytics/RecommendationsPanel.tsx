@@ -48,11 +48,10 @@ interface RecommendationItemProps {
   onApply?: (recommendationId: string) => void;
   onDismiss?: (recommendationId: string) => void;
   onFeedback?: (recommendationId: string, feedback: 'positive' | 'negative') => void;
-}
-/**
- * Recommendation item component
- */
-const RecommendationItem: React.FC<RecommendationItemProps> = ({)
+  /**
+  * Recommendation item component
+  */
+  const RecommendationItem: React.FC<RecommendationItemProps> = ({,)
   recommendation,
   onApply,
   onDismiss,
@@ -68,8 +67,6 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({)
         await onApply(recommendation.id || 'unknown');
       } finally {
         setIsProcessing(false);
-      }
-    }
   }, [recommendation.id, onApply]);
   const handleDismiss = useCallback(async () => {
     if (onDismiss) {
@@ -78,30 +75,26 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({)
         await onDismiss(recommendation.id || 'unknown');
       } finally {
         setIsProcessing(false);
-      }
-    }
   }, [recommendation.id, onDismiss]);
   const handleFeedback = useCallback(async (feedbackType: 'positive' | 'negative') => {
     if (onFeedback) {
       setFeedback(feedbackType);
       await onFeedback(recommendation.id || 'unknown', feedbackType);
-    }
   }, [recommendation.id, onFeedback]);
   const IconComponent = RECOMMENDATION_TYPE_ICONS[recommendation.type as keyof typeof RECOMMENDATION_TYPE_ICONS] || Lightbulb;
   const priorityClass = PRIORITY_COLORS[recommendation.priority as keyof typeof PRIORITY_COLORS] || PRIORITY_COLORS.medium;
   const getImpactIcon = (impact: string) => {
-    switch (impact) {
-    case 'high':
-      return <TrendingUp className="w-4 h-4 text-red-600" />;
-    case 'medium':
-      return <TrendingUp className="w-4 h-4 text-yellow-600" />;
-    case 'low':
-      return <TrendingUp className="w-4 h-4 text-green-600" />;
-    default:
-      return <TrendingUp className="w-4 h-4 text-gray-600" />;
-    }
-  };
-  return ();
+  switch (impact) {
+  case 'high':,
+  return <TrendingUp className="w-4 h-4 text-red-600" />;
+  case 'medium':,
+  return <TrendingUp className="w-4 h-4 text-yellow-600" />;
+  case 'low':,
+  return <TrendingUp className="w-4 h-4 text-green-600" />;
+  default:,
+  return <TrendingUp className="w-4 h-4 text-gray-600" />;
+};
+  return;
     <Card className={`recommendation-item ${priorityClass} border-l-4`}>}
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
@@ -239,20 +232,19 @@ const RecommendationItem: React.FC<RecommendationItemProps> = ({)
  * Recommendation summary props
  */
 interface RecommendationSummaryProps {
-  recommendations: unknown[];
+  recommendations: unknown;
   onRefresh?: () => void;
-}
-/**
- * Recommendation summary component
- */
-const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({)
+  /**
+  * Recommendation summary component
+  */
+  const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({,)
   recommendations,
   onRefresh
 }) => {
   const totalSavings = recommendations.reduce((sum, rec) => sum + (rec.estimatedSavings || 0), 0);
   const highPriorityCount = recommendations.filter(rec => rec.priority === 'high').length;
   const implementedCount = recommendations.filter(rec => rec.implementationProgress === 100).length;
-  return ();
+  return;
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
       <Card>
         <CardHeader className="pb-2">
@@ -319,17 +311,18 @@ const RecommendationSummary: React.FC<RecommendationSummaryProps> = ({)
 /**
  * Recommendations panel props
  */
+
 export interface RecommendationsPanelProps {
-  recommendations: unknown[];
+  recommendations: unknown;,
   analyticsClient: AnalyticsClient;
   userId?: number;
   organizationId?: number;
   onRefresh?: () => void;
   className?: string;
+  /**
+  * Recommendations panel component
+  */
 }
-/**
- * Recommendations panel component
- */
 export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
   recommendations,
   analyticsClient,
@@ -344,7 +337,7 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
    * Filter recommendations
    */
   const filteredRecommendations = recommendations.filter(rec => {)
-    if (filter === 'all') return true;
+  if (filter === 'all') return true;
     return rec.priority === filter;
   });
   /**
@@ -355,55 +348,51 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
       const priorityOrder = { high: 3, medium: 2, low: 1 };
       return (priorityOrder[b.priority as keyof typeof priorityOrder] || 0) - 
              (priorityOrder[a.priority as keyof typeof priorityOrder] || 0);
-    }
     if (sortBy === 'savings') {
       return (b.estimatedSavings || 0) - (a.estimatedSavings || 0);
-    }
     if (sortBy === 'impact') {
       const impactOrder = { high: 3, medium: 2, low: 1 };
       return (impactOrder[b.impact as keyof typeof impactOrder] || 0) - 
              (impactOrder[a.impact as keyof typeof impactOrder] || 0);
-    }
     return 0;
   });
   /**
    * Handle apply recommendation
    */
   const handleApplyRecommendation = useCallback(async (recommendationId: string) => {
-    // This would implement the actual recommendation application logic
-    console.log('Applying recommendation:', recommendationId);
-    // You could call specific APIs based on the recommendation type
-  }, []);
+  // This would implement the actual recommendation application logic
+  console.log('Applying recommendation:', recommendationId);
+  // You could call specific APIs based on the recommendation type
+}, []);
   /**
    * Handle dismiss recommendation
    */
   const handleDismissRecommendation = useCallback(async (recommendationId: string) => {
-    // This would implement the recommendation dismissal logic
-    console.log('Dismissing recommendation:', recommendationId);
-  }, []);
+  // This would implement the recommendation dismissal logic
+  console.log('Dismissing recommendation:', recommendationId);
+}, []);
   /**
    * Handle recommendation feedback
    */
   const handleRecommendationFeedback = useCallback(async (;);
     recommendationId: string, 
-    feedback: 'positive' | 'negative',
-  ) => {
-    // This would send feedback to the analytics system
-    console.log('Recommendation feedback:', recommendationId, feedback);
-  }, []);
+    feedback: 'positive' | 'negative') => {,
+  // This would send feedback to the analytics system
+  console.log('Recommendation feedback:', recommendationId, feedback);
+}, []);
   /**
    * Group recommendations by type
    */
   const getRecommendationsByType = () => {
-    const types = {
-      cost_reduction: recommendations.filter(r => r.type === 'model_switch' || r.type === 'usage_optimization' || r.type === 'budget_adjustment'),
-      performance: recommendations.filter(r => r.type === 'performance_improvement'),
-      feature_adoption: recommendations.filter(r => r.type === 'feature_adoption'),
-    };
+  const types = {
+  cost_reduction: recommendations.filter(r => r.type === 'model_switch' || r.type === 'usage_optimization' || r.type === 'budget_adjustment'),
+  performance: recommendations.filter(r => r.type === 'performance_improvement'),
+  feature_adoption: recommendations.filter(r => r.type === 'feature_adoption'),
+};
     return types;
   };
   if (recommendations.length === 0) {
-    return ();
+    return;
       <div className={`recommendations-panel ${className}`}>}
         <Card>
           <CardContent className="text-center py-8">
@@ -422,9 +411,8 @@ export const RecommendationsPanel: React.FC<RecommendationsPanelProps> = ({)
         </Card>
       </div>
     );
-  }
   const recommendationsByType = getRecommendationsByType();
-  return ();
+  return;
     <div className={`recommendations-panel ${className}`}>}
       <RecommendationSummary recommendations={recommendations} onRefresh={onRefresh} />
       <Tabs defaultValue="all" className="w-full">

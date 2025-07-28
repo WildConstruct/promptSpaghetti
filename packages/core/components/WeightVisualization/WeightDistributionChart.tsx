@@ -10,7 +10,7 @@ import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export type ChartType = 'pie' | 'bar' | 'donut';
 
 export interface WeightDistributionChartProps {
-  options: WeightControlOption[];
+  options: WeightControlOption;
   type?: ChartType;
   width?: number;
   height?: number;
@@ -21,28 +21,26 @@ export interface WeightDistributionChartProps {
   animationDuration?: number;
   onOptionHover?: (option: WeightControlOption | null) => void;
   onOptionClick?: (option: WeightControlOption) => void;
-}
-
-// Professional color schemes for visualization
-const COLOR_SCHEMES = {
+  // Professional color schemes for visualization
+  const COLOR_SCHEMES = {
   professional: [,
-    '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
-    '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
+  '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+  '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#6366f1'
   ],
   cinema4d: [,
-    '#ff7c00', '#4d9eff', '#00d4aa', '#ff4757', '#9c88ff',
-    '#ffa502', '#2ed573', '#ff6b6b', '#5f27cd', '#00d2d3'
+  '#ff7c00', '#4d9eff', '#00d4aa', '#ff4757', '#9c88ff',
+  '#ffa502', '#2ed573', '#ff6b6b', '#5f27cd', '#00d2d3'
   ],
   warm: [,
-    '#ff6b6b', '#ffa500', '#ff7f50', '#dc143c', '#ff1493',
-    '#ff69b4', '#ffb347', '#ff8c00', '#ff4500', '#ff6347'
+  '#ff6b6b', '#ffa500', '#ff7f50', '#dc143c', '#ff1493',
+  '#ff69b4', '#ffb347', '#ff8c00', '#ff4500', '#ff6347'
   ],
   cool: [,
-    '#4169e1', '#00ced1', '#32cd32', '#20b2aa', '#4682b4',
-    '#6495ed', '#00bfff', '#1e90ff', '#87ceeb', '#87cefa'
+  '#4169e1', '#00ced1', '#32cd32', '#20b2aa', '#4682b4',
+  '#6495ed', '#00bfff', '#1e90ff', '#87ceeb', '#87cefa'
   ]
 } as const;
-
+}
 export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = ({)
   options,
   type = 'pie',
@@ -59,18 +57,18 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
   // Calculate normalized weights and percentages
   const processedOptions = useMemo(() => {
-    const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
-    return options.map((option, index) => {
-      const normalizedWeight = totalWeight > 0 ? option.weight / totalWeight : 1 / options.length;
-      const percentage = normalizedWeight * 100;
-      const color = COLOR_SCHEMES[colorScheme][index % COLOR_SCHEMES[colorScheme].length];
-      return {
-        ...option,
-        normalizedWeight,
-        percentage,
-        color,
-        index
-      };
+  const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
+  return options.map((option, index) => {
+  const normalizedWeight = totalWeight > 0 ? option.weight / totalWeight : 1 / options.length;
+  const percentage = normalizedWeight * 100;
+  const color = COLOR_SCHEMES[colorScheme][index % COLOR_SCHEMES[colorScheme].length];
+  return {
+  ...option,
+  normalizedWeight,
+  percentage,
+  color,
+  index
+};
     });
   }, [options, colorScheme]);
   // Handle option interactions
@@ -88,7 +86,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     const radius = Math.min(width, height) * 0.35;
     const innerRadius = type === 'donut' ? radius * 0.6 : 0;
     let cumulativeAngle = 0;
-    return ();
+    return;
       <g>
         {processedOptions.map((option) => {
           const startAngle = cumulativeAngle;
@@ -115,7 +113,7 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
           const labelRadius = radius * (type === 'donut' ? 0.8 : 0.7);
           const labelX = centerX + Math.cos(labelAngle) * labelRadius;
           const labelY = centerY + Math.sin(labelAngle) * labelRadius;
-          return ();
+          return;
             <g key={option.id}>
               <path
                 d={pathData}
@@ -125,10 +123,11 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
                 style={{
                   transform,
                   transformOrigin,
-                  transition: `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,}
-                  filter: isHovered ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none',
-                  cursor: 'pointer',
-                }}
+                  transition: `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`}
+},
+  filter: isHovered ? 'brightness(1.1) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none',
+                  cursor: 'pointer';
+  }}
                 onMouseEnter={() => handleOptionHover(option)}
                 onMouseLeave={() => handleOptionHover(null)}
                 onClick={() => handleOptionClick(option)}
@@ -188,13 +187,13 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     const chartHeight = height - margin.top - margin.bottom;
     const barHeight = Math.max(16, chartHeight / options.length - 8);
     const maxBarWidth = chartWidth * 0.8;
-    return ();
+    return;
       <g transform={`translate(${margin.left}, ${margin.top})`}>}
         {processedOptions.map((option, index) => {
           const y = index * (barHeight + 8);
           const barWidth = option.normalizedWeight * maxBarWidth;
           const isHovered = hoveredOption === option.id;
-          return ();
+          return;
             <g key={option.id}>
               {/* Bar background */}
               <rect
@@ -219,10 +218,11 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
                     0,
                     0.2,
                     1
-                  ), filter ${animationDuration}ms`,}
-                  filter: isHovered ? 'brightness(1.1) drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none',
-                  cursor: 'pointer',
-                }}
+                  ), filter ${animationDuration}ms`}
+},
+  filter: isHovered ? 'brightness(1.1) drop-shadow(0 2px 4px rgba(0,0,0,0.2))' : 'none',
+                  cursor: 'pointer';
+  }}
                 onMouseEnter={() => handleOptionHover(option)}
                 onMouseLeave={() => handleOptionHover(null)}
                 onClick={() => handleOptionClick(option)}
@@ -276,29 +276,29 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
   const Legend: React.FC = () => ()
     <div
       style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: 12,
-        marginTop: 16,
-        padding: 12,
-        background: 'rgba(31, 41, 55, 0.5)',
-        borderRadius: 8,
-        border: '1px solid rgba(55, 65, 81, 0.6)'
-      }}
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 12,
+  marginTop: 16,
+  padding: 12,
+  background: 'rgba(31, 41, 55, 0.5)',
+  borderRadius: 8,
+  border: '1px solid rgba(55, 65, 81, 0.6)',
+}}
     >
       {processedOptions.map((option) => ()
         <div
           key={option.id}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '4px 8px',
-            borderRadius: 4,
-            background: hoveredOption === option.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-            cursor: 'pointer',
-            transition: 'background 0.2s ease',
-          }}
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  padding: '4px 8px',
+  borderRadius: 4,
+  background: hoveredOption === option.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+  cursor: 'pointer',
+  transition: 'background 0.2s ease',
+}}
           onMouseEnter={() => handleOptionHover(option)}
           onMouseLeave={() => handleOptionHover(null)}
           onClick={() => handleOptionClick(option)}
@@ -314,10 +314,10 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
           />
           <span
             style={{
-              fontSize: 11,
-              color: '#e5e7eb',
-              fontWeight: 500,
-            }}
+  fontSize: 11,
+  color: '#e5e7eb',
+  fontWeight: 500,
+}}
           >
             {option.text} ({option.percentage.toFixed(1)}%)
           </span>
@@ -326,33 +326,32 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
     </div>
   );
   if (options.length === 0) {
-    return ();
-      <div
-        style={{
-          width,
-          height,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#6b7280',
-          fontSize: 12,
-          fontStyle: 'italic',
-        }}
+  return;
+  <div
+  style={{
+  width,
+  height,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#6b7280',
+  fontSize: 12,
+  fontStyle: 'italic',
+}}
       >
         No options to visualize
       </div>
     );
-  }
-  return ();
+  return;
     <div style={{ position: 'relative' }}>
       <svg
         width={width}
         height={height}
         role="img"
         style={{
-          background: 'transparent',
-          overflow: 'visible',
-        }}
+  background: 'transparent',
+  overflow: 'visible',
+}}
       >
         {type === 'bar' ? <BarChart /> : <PieChart />}
       </svg>
@@ -361,20 +360,20 @@ export const WeightDistributionChart: React.FC<WeightDistributionChartProps> = (
       {hoveredOption && ()
         <div
           style={{
-            position: 'absolute',
-            top: -40,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'rgba(0, 0, 0, 0.9)',
-            color: 'white',
-            padding: '6px 12px',
-            borderRadius: 6,
-            fontSize: 11,
-            fontWeight: 500,
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap',
-            zIndex: 1000,
-          }}
+  position: 'absolute',
+  top: -40,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  background: 'rgba(0, 0, 0, 0.9)',
+  color: 'white',
+  padding: '6px 12px',
+  borderRadius: 6,
+  fontSize: 11,
+  fontWeight: 500,
+  pointerEvents: 'none',
+  whiteSpace: 'nowrap',
+  zIndex: 1000,
+}}
         >
           {processedOptions.find(opt => opt.id === hoveredOption)?.text}
           {showPercentages && ` (${processedOptions.find(opt => opt.id === hoveredOption)?.percentage.toFixed(1)}%)`}

@@ -4,148 +4,134 @@
 import { validateFormat } from '../../serialization/validator';
 
 export interface GeminiAgentConfig {
-  apiKey: string;
+  apiKey: string;,
   model: string;
-  temperature: number;
+  temperature: number;,
   maxOutputTokens: number;
-  maxRetries: number;
+  maxRetries: number;,
   retryTemperatureReduction: number;
   useStructuredOutput: boolean;
-  safetySettings?: Array<{
-    category: string;
-    threshold: string;
-  }>;
-  stopSequences?: string[];
+  safetySettings?: Array<{,
+  category: string;,
+  threshold: string;
+}>;
+  stopSequences?: string;
 }
-
 export interface GeminiGenerationRequest {
-  purpose: string;
+  purpose: string;,
   complexity: 'simple' | 'moderate' | 'complex';
-  nodeCount: number;
-  nodeTypes: string[];
-  specificRequirements?: string[];
-  focusAreas?: string[];
+  nodeCount: number;,
+  nodeTypes: string;
+  specificRequirements?: string;
+  focusAreas?: string;
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
-  constraints?: string[];
-  examples?: string[];
+  constraints?: string;
+  examples?: string;
 }
-
 export interface GeminiGenerationResult {
   success: boolean;
   graph?: string;
-  errors?: string[];
-  warnings?: string[];
+  errors?: string;
+  warnings?: string;
   attempts: number;
-  safetyRatings?: Array<{
-    category: string;
-    probability: string;
-  }>;
+  safetyRatings?: Array<{,
+  category: string;,
+  probability: string;
+}>;
   metadata: {,
-    model: string;
-    temperature: number;
-    tokenCount: number;
-    generationTime: number;
-  };
+  model: string;
+  temperature: number;,
+  tokenCount: number;
+  generationTime: number;
+};
 }
-
 export class GeminiGraphAgent {
   private config: GeminiAgentConfig;
   private basePrompt: string;
-  constructor(config: GeminiAgentConfig) {
-    this.config = config;
-    this.basePrompt = this.buildGeminiPrompt();
-  }
+  constructor(config: GeminiAgentConfig) {,
+  this.config = config;
+  this.basePrompt = this.buildGeminiPrompt();
   /**
-   * Generate a graph using Gemini with structured output
-   */
-  async generateGraph(request: GeminiGenerationRequest): Promise<GeminiGenerationResult> {
-    const startTime = Date.now();
-    let attempts = 0;
-    let currentTemperature = this.config.temperature;
-    while (attempts < this.config.maxRetries) {
-      attempts++;
-      try {
-        const prompt = this.buildRequestPrompt(request);
-        const response = await this.callGemini(prompt, currentTemperature);
-        if (response.success && response.content) {
-          // Extract graph content from response
-          const graphContent = this.extractGraphFromResponse(response.content);
-          if (graphContent) {
-            // Validate the generated graph
-            const validation = validateFormat(graphContent);
-            if (validation.isValid) {
-              return {
-                success: true,
-                graph: graphContent,
-                warnings: validation.warnings.map(w => w.message),
-                attempts,
-                safetyRatings: response.safetyRatings,
-                metadata: {,
-                  model: this.config.model,
-                  temperature: currentTemperature,
-                  tokenCount: response.tokenCount || 0,
-                  generationTime: Date.now() - startTime,
-                }
-              };
+  * Generate a graph using Gemini with structured output
+  */
+  async generateGraph(request: GeminiGenerationRequest): Promise<GeminiGenerationResult> {,
+  const startTime = Date.now();
+  let attempts = 0;
+  let currentTemperature = this.config.temperature;
+  while (attempts < this.config.maxRetries) {
+  attempts++;
+  try {
+  const prompt = this.buildRequestPrompt(request);
+  const response = await this.callGemini(prompt, currentTemperature);
+  if (response.success && response.content) {
+  // Extract graph content from response
+  const graphContent = this.extractGraphFromResponse(response.content);
+  if (graphContent) {
+  // Validate the generated graph
+  const validation = validateFormat(graphContent);
+  if (validation.isValid) {
+  return {
+  success: true,
+  graph: graphContent,
+  warnings: validation.warnings.map(w => w.message),
+  attempts,
+  safetyRatings: response.safetyRatings,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: response.tokenCount || 0,
+  generationTime: Date.now() - startTime,
+};
             } else {
               // Validation failed - try again with corrections
               console.log(`Attempt ${attempts} failed validation:`, validation.errors);}
               if (attempts === this.config.maxRetries) {
-                return {
-                  success: false,
-                  errors: validation.errors.map(e => e.message),
-                  attempts,
-                  safetyRatings: response.safetyRatings,
-                  metadata: {,
-                    model: this.config.model,
-                    temperature: currentTemperature,
-                    tokenCount: response.tokenCount || 0,
-                    generationTime: Date.now() - startTime,
-                  }
-                };
-              }
-            }
+  return {
+  success: false,
+  errors: validation.errors.map(e => e.message),
+  attempts,
+  safetyRatings: response.safetyRatings,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: response.tokenCount || 0,
+  generationTime: Date.now() - startTime,
+};
           } else {
             console.log(`Attempt ${attempts} - no valid graph extracted`);}
-          }
         } else {
-          console.log(`Attempt ${attempts} failed:`, response.error);}
+          console.log(`Attempt ${attempts},)}
+  failed:`, response.error);}
           // Check if failure was due to safety filters
           if (response.safetyRatings?.some(rating => )
             ['MEDIUM', 'HIGH'].includes(rating.probability))) {
-            return {
-              success: false,
-              errors: ['Content blocked by safety filters'],
-              attempts,
-              safetyRatings: response.safetyRatings,
-              metadata: {,
-                model: this.config.model,
-                temperature: currentTemperature,
-                tokenCount: 0,
-                generationTime: Date.now() - startTime,
-              }
-            };
-          }
-        }
+  return {
+  success: false,
+  errors: ['Content blocked by safety filters'],
+  attempts,
+  safetyRatings: response.safetyRatings,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: 0,
+  generationTime: Date.now() - startTime,
+};
       } catch (error) {
-        console.error(`Attempt ${attempts} error:`, error);}
-      }
+        console.error(`Attempt ${attempts},)}
+  error:`, error);}
       // Reduce temperature for retry
       currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
-    }
     return {
-      success: false,
-      errors: ['Maximum retry attempts exceeded'],
-      attempts,
-      metadata: {,
-        model: this.config.model,
-        temperature: currentTemperature,
-        tokenCount: 0,
-        generationTime: Date.now() - startTime,
-      }
-    };
-  }
+  success: false,
+  errors: ['Maximum retry attempts exceeded'],
+  attempts,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: 0,
+  generationTime: Date.now() - startTime,
+};
   /**
    * Build Gemini-optimized base prompt
    */
@@ -155,8 +141,8 @@ export class GeminiGraphAgent {
 Generate creative and practical graphs that solve real problems while strictly adhering to the format specification.
 ## OUTPUT FORMAT SPECIFICATION
 **CRITICAL**: Your output must follow this exact structure:
-\`\`\`yaml
-version: 1.0.0,
+\`\`\`yaml,
+  version: 1.0.0,
 metadata:
   name: "Descriptive Name",
   description: "Clear purpose statement",
@@ -237,16 +223,15 @@ Before outputting, verify:
 □ Proper YAML syntax used
 □ Graph serves stated purpose effectively
 Generate structured, creative, and functional graphs.`;
-  }
   /**
    * Build request-specific prompt
    */
   private buildRequestPrompt(request: GeminiGenerationRequest): string {
-    const complexityDescriptions = {
-      simple: '3-8 nodes with straightforward logic flow',
-      moderate: '8-20 nodes with some branching and multiple features',
-      complex: '20-50 nodes with advanced logic and sophisticated workflows',
-    };
+  const complexityDescriptions = {
+  simple: '3-8 nodes with straightforward logic flow',
+  moderate: '8-20 nodes with some branching and multiple features',
+  complex: '20-50 nodes with advanced logic and sophisticated workflows',
+};
     let prompt = `## GENERATION REQUEST;
 **Purpose**: ${request.purpose}
 **Complexity**: ${request.complexity} (${complexityDescriptions[request.complexity]})}
@@ -254,31 +239,25 @@ Generate structured, creative, and functional graphs.`;
 **Style**: ${request.style || 'balanced'}`;}
     if (request.domain) {
       prompt += `\n**Domain**: ${request.domain}`;}
-    }
     if (request.nodeTypes.length > 0) {
       prompt += `\n**Preferred Node Types**: ${request.nodeTypes.join(', ')}`;}
-    }
     if (request.specificRequirements?.length) {
       prompt += '\n\n**Specific Requirements**:';
       request.specificRequirements.forEach(req => {)
-        prompt += `\n- ${req}`;}
+  prompt += `\n- ${req}`;}
       });
-    }
     if (request.focusAreas?.length) {
       prompt += `\n\n**Focus Areas**: ${request.focusAreas.join(', ')}`;}
-    }
     if (request.constraints?.length) {
       prompt += '\n\n**Constraints**:';
       request.constraints.forEach(constraint => {)
-        prompt += `\n- ${constraint}`;}
+  prompt += `\n- ${constraint}`;}
       });
-    }
     if (request.examples?.length) {
       prompt += '\n\n**Example Context**:';
       request.examples.forEach(example => {)
-        prompt += `\n- ${example}`;}
+  prompt += `\n- ${example}`;}
       });
-    }
     prompt += `\n\n## YOUR TASK
 Create a complete, valid graph that:
 1. Fulfills the specified purpose effectively
@@ -288,7 +267,6 @@ Create a complete, valid graph that:
 5. Maintains clear, logical structure
 **Generate the complete graph now:**`;
     return prompt;
-  }
   /**
    * Extract graph content from Gemini response
    */
@@ -297,20 +275,16 @@ Create a complete, valid graph that:
     const yamlBlockMatch = response.match(/```(?:yaml|yml)\n([\s\S]*?)\n```/);
     if (yamlBlockMatch) {
       return yamlBlockMatch[1].trim();
-    }
     // Look for any code blocks
     const codeBlockMatch = response.match(/```\n?([\s\S]*?)\n?```/);
     if (codeBlockMatch) {
       const content = codeBlockMatch[1].trim();
       if (content.includes('version:') && content.includes('---END---')) {
         return content;
-      }
-    }
     // Look for version: to ---END--- pattern
     const versionMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
     if (versionMatch) {
       return versionMatch[0].trim();
-    }
     // Check if response contains expected structure elements
     if (response.includes('version:') && response.includes('---NODES---')) {
       // Try to extract everything from version to end
@@ -322,17 +296,13 @@ Create a complete, valid graph that:
         const endIndex = content.indexOf('---END---');
         if (endIndex !== -1) {
           content = content.substring(0, endIndex + 9); // Include ---END---
-        }
         return content.trim();
-      }
-    }
     return null;
-  }
   /**
    * Call Gemini API with error handling
    */
-  private async callGemini(prompt: string, temperature: number): Promise<{
-    success: boolean;
+  private async callGemini(prompt: string, temperature: number): Promise<{,
+  success: boolean;
     content?: string;
     error?: string;
     tokenCount?: number;
@@ -365,12 +335,10 @@ Create a complete, valid graph that:
         ]
       };
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Unknown error',
+};
   /**
    * Generate mock Gemini response
    */
@@ -388,12 +356,12 @@ content_type:
   type: WeightedChoice,
   props:
     choices:
-      - value: "informative"
-        weight: 0.4,
-      - value: "creative"
-        weight: 0.3,
-      - value: "analytical"
-        weight: 0.3,
+      - value: "informative",
+  weight: 0.4,
+      - value: "creative",
+  weight: 0.3,
+      - value: "analytical",
+  weight: 0.3,
 topic_focus:
   type: GetVariable,
   props:
@@ -402,12 +370,12 @@ complexity_level:
   type: WeightedChoice,
   props:
     choices:
-      - value: "beginner-friendly"
-        weight: 0.4,
-      - value: "intermediate"
-        weight: 0.4,
-      - value: "advanced"
-        weight: 0.2,
+      - value: "beginner-friendly",
+  weight: 0.4,
+      - value: "intermediate",
+  weight: 0.4,
+      - value: "advanced",
+  weight: 0.2,
 content_structure:
   type: Sequential,
   props:
@@ -420,11 +388,11 @@ personalized_content:
   type: Conditional,
   props:
     branches:
-      - condition: "content_type == 'creative'"
-        output: "Let your imagination guide this exploration",
+      - condition: "content_type == 'creative'",
+  output: "Let your imagination guide this exploration",
         label: "creative_intro",
-      - condition: "content_type == 'analytical'"
-        output: "Let's examine this systematically",
+      - condition: "content_type == 'analytical'",
+  output: "Let's examine this systematically",
         label: "analytical_intro",
     default: "Here's what you need to know",
 final_assembly:
@@ -442,12 +410,10 @@ final_assembly -> output_result
 ---END---
 \`\`\`
 This graph creates a flexible content generation system that adapts based on content type, topic focus, and complexity level, with conditional personalization and sequential structure.`;
-  }
-}
 /**
  * Default configuration for Gemini agent
  */
-export const defaultGeminiConfig: GeminiAgentConfig = {
+export const defaultGeminiConfig: GeminiAgentConfig = {,
   apiKey: process.env.GOOGLE_API_KEY || '',
   model: 'gemini-1.5-pro',
   temperature: 0.7,
@@ -461,15 +427,14 @@ export const defaultGeminiConfig: GeminiAgentConfig = {
     { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
     { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' }
   ],
-  stopSequences: ['---END---', 'Human:', 'Assistant:']
-};
+  stopSequences: ['---END---', 'Human:', 'Assistant:'];
+  };
 /**
  * Utility function to create and use Gemini agent
  */
-export async function generateGraphWithGemini()
-  request: GeminiGenerationRequest,
-  config: Partial<GeminiAgentConfig> = {}
-): Promise<GeminiGenerationResult> {
+export async function generateGraphWithGemini(()
+    request: GeminiGenerationRequest,
+    config: Partial<GeminiAgentConfig> = {}
+  ): Promise<GeminiGenerationResult> {
   const agent = new GeminiGraphAgent({ ...defaultGeminiConfig, ...config });
   return agent.generateGraph(request);
-}

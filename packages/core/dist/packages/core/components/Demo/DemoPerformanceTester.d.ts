@@ -14,11 +14,11 @@ export interface PerformanceTestResult {
     memoryUsage: number;
     testDuration: number;
     passedThreshold: boolean;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface DemoPerformanceTesterProps {
     onTestComplete?: (result: PerformanceTestResult) => void;
-    onGraphGenerated?: (nodes: Node[], edges: Edge[]) => void;
+    onGraphGenerated?: (nodes: Node, edges: Edge) => void;
     targetFPS?: number;
     maxRenderTime?: number;
 }

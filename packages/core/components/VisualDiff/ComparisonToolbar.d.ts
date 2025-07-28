@@ -1,5 +1,6 @@
 import React from 'react';
 import { ViewMode, HighlightMode } from '../../types/comparison';
+
 export interface ComparisonToolbarProps {
     viewMode: ViewMode;
     highlightMode: HighlightMode;
@@ -12,6 +13,6 @@ export interface ComparisonToolbarProps {
     onShowMetadataChange: (show: boolean) => void;
     onZoomChange: (zoom: number) => void;
     className?: string;
-}
+
 export declare const ComparisonToolbar: React.FC<ComparisonToolbarProps>;
 //# sourceMappingURL=ComparisonToolbar.d.ts.map

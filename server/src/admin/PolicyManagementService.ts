@@ -17,6 +17,7 @@ import {
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface PolicyTemplate {
   templateId: string;
   name: string;
@@ -28,7 +29,9 @@ export interface PolicyTemplate {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface PolicyViolation {
   violationId: string;
   policyId: string;
@@ -44,7 +47,9 @@ export interface PolicyViolation {
   notes?: string;
   enforcementActions?: string[];
 }
+}
 
+}
 export interface AdminEnforcementRequest {
   requestId: string;
   entityType: 'user' | 'template' | 'transaction';
@@ -61,7 +66,9 @@ export interface AdminEnforcementRequest {
   approvedAt?: Date;
   rejectionReason?: string;
 }
+}
 
+}
 export interface PolicyEnforcementStats {
   totalPolicies: number;
   activePolicies: number;
@@ -74,6 +81,7 @@ export interface PolicyEnforcementStats {
     policyId: string;
     policyName: string;
     violationCount: number;
+}
   }>;
 }
 
@@ -106,6 +114,7 @@ export class PolicyManagementService {
     template: Omit<PolicyTemplate,
     'templateId' | 'createdAt' | 'updatedAt'>
   ): Promise<PolicyTemplate> {
+
     const templateId = this.generateTemplateId();
     
     const newTemplate: PolicyTemplate = {
@@ -141,6 +150,7 @@ export class PolicyManagementService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ templates: PolicyTemplate[]; total: number }> {
+
     const { category, isSystemTemplate, limit = 50, offset = 0 } = options;
     
     let query = `
@@ -197,6 +207,7 @@ export class PolicyManagementService {
     templateId: string,
     overrides: Partial<EnforcementPolicy> = {}
   ): Promise<EnforcementPolicy> {
+
     const template = await this.getPolicyTemplate(templateId);
     if (!template) {
       throw new Error(`Policy template not found: ${templateId}`);
@@ -222,7 +233,7 @@ export class PolicyManagementService {
         templateId: template.templateId,
         policyId: policy.policyId,
         policyName: policy.name
-      },
+  }
       severity: 'info'
     });
 
@@ -242,6 +253,7 @@ export class PolicyManagementService {
     policyIds?: string[];
     severity?: 'low' | 'medium' | 'high' | 'critical';
   } = {}): Promise<PolicyViolation[]> {
+
     console.log('🔍 Scanning for policy violations', options);
     
     const violations: PolicyViolation[] = [];
@@ -270,6 +282,7 @@ export class PolicyManagementService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ violations: PolicyViolation[]; total: number }> {
+
     const { status, entityType, severity, limit = 50, offset = 0 } = options;
     
     let query = `
@@ -337,6 +350,7 @@ export class PolicyManagementService {
     notes?: string,
     enforcementOverrides?: Partial<EnforcementAction>
   ): Promise<void> {
+
     const violation = await this.getViolation(violationId);
     if (!violation) {
       throw new Error(`Violation not found: ${violationId}`);
@@ -381,7 +395,7 @@ export class PolicyManagementService {
         notes,
         entityType: violation.entityType,
         entityId: violation.entityId
-      },
+  }
       severity: decision === 'enforce' ? 'warning' : 'info'
     });
   }
@@ -397,6 +411,7 @@ export class PolicyManagementService {
     request: Omit<AdminEnforcementRequest,
     'requestId' | 'requestedAt' | 'status'>
   ): Promise<AdminEnforcementRequest> {
+
     const requestId = this.generateRequestId();
     
     const newRequest: AdminEnforcementRequest = {
@@ -431,7 +446,7 @@ export class PolicyManagementService {
         entityType: newRequest.entityType,
         entityId: newRequest.entityId,
         actionType: newRequest.actionType
-      },
+  }
       severity: 'info'
     });
 
@@ -447,6 +462,7 @@ export class PolicyManagementService {
     approvedBy: string,
     rejectionReason?: string
   ): Promise<void> {
+
     const request = await this.getEnforcementRequest(requestId);
     if (!request) {
       throw new Error(`Enforcement request not found: ${requestId}`);
@@ -480,7 +496,7 @@ export class PolicyManagementService {
         rejectionReason,
         entityType: request.entityType,
         entityId: request.entityId
-      },
+  }
       severity: decision === 'approve' ? 'warning' : 'info'
     });
   }
@@ -493,6 +509,7 @@ export class PolicyManagementService {
    * Get policy enforcement statistics
    */
   async getEnforcementStats(): Promise<PolicyEnforcementStats> {
+
     const [
       totalPolicies,
       activePolicies,
@@ -530,6 +547,7 @@ export class PolicyManagementService {
   // =============================================================================
 
   private async getPolicyTemplate(templateId: string): Promise<PolicyTemplate | null> {
+
     const result = await this.db.query(`
       SELECT template_id, name, description, category, severity, default_config, 
              is_system_template, created_at, updated_at
@@ -554,18 +572,21 @@ export class PolicyManagementService {
   }
 
   private async getActivePolicies(policyIds?: string[]): Promise<EnforcementPolicy[]> {
+
     // This would integrate with AutomatedEnforcementService to get active policies
     // For now, return empty array as placeholder
     return [];
   }
 
   private async scanPolicyViolations(policy: EnforcementPolicy, options: unknown): Promise<PolicyViolation[]> {
+
     // Implementation would scan for violations based on policy rules
     // This is a placeholder that would integrate with trust scoring and detection logic
     return [];
   }
 
   private async storeViolation(violation: PolicyViolation): Promise<void> {
+
     await this.db.query(`
       INSERT INTO policy_violations 
       (violation_id, policy_id, entity_type, entity_id, violation_type, severity, 
@@ -586,6 +607,7 @@ export class PolicyManagementService {
   }
 
   private async getViolation(violationId: string): Promise<PolicyViolation | null> {
+
     const result = await this.db.query(`
       SELECT * FROM policy_violations WHERE violation_id = $1
     `, [violationId]);
@@ -614,6 +636,7 @@ export class PolicyManagementService {
     violation: PolicyViolation, 
     overrides?: Partial<EnforcementAction>
   ): Promise<EnforcementAction> {
+
     return {
       actionId: this.generateActionId(),
       entityType: violation.entityType,
@@ -631,6 +654,7 @@ export class PolicyManagementService {
   }
 
   private async getEnforcementRequest(requestId: string): Promise<AdminEnforcementRequest | null> {
+
     const result = await this.db.query(`
       SELECT * FROM enforcement_requests WHERE request_id = $1
     `, [requestId]);
@@ -657,6 +681,7 @@ export class PolicyManagementService {
   }
 
   private async createEnforcementFromRequest(request: AdminEnforcementRequest): Promise<EnforcementAction> {
+
     return {
       actionId: this.generateActionId(),
       entityType: request.entityType,
@@ -674,32 +699,38 @@ export class PolicyManagementService {
   }
 
   private async storeEnforcementPolicy(policy: EnforcementPolicy): Promise<void> {
+
     // This would integrate with AutomatedEnforcementService's config system
     console.log(`📝 Storing enforcement policy: ${policy.name}`);
   }
 
   // Statistics helper methods
   private async getTotalPoliciesCount(): Promise<number> {
+
     const result = await this.db.query('SELECT COUNT(*) FROM policy_templates');
     return parseInt(result.rows[0].count);
   }
 
   private async getActivePoliciesCount(): Promise<number> {
+
     // This would count active policies from the enforcement system
     return 0;
   }
 
   private async getTotalViolationsCount(): Promise<number> {
+
     const result = await this.db.query('SELECT COUNT(*) FROM policy_violations');
     return parseInt(result.rows[0].count || '0');
   }
 
   private async getPendingViolationsCount(): Promise<number> {
+
     const result = await this.db.query('SELECT COUNT(*) FROM policy_violations WHERE status = \'pending\'');
     return parseInt(result.rows[0].count || '0');
   }
 
   private async getTodayEnforcementCount(): Promise<number> {
+
     const result = await this.db.query(`
       SELECT COUNT(*) FROM enforcement_actions 
       WHERE action_timestamp >= CURRENT_DATE

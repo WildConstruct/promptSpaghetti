@@ -8,6 +8,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
 
+}
 export interface Role {
   id: string;
   name: string;
@@ -19,7 +20,9 @@ export interface Role {
   updatedAt: Date;
   isActive: boolean;
 }
+}
 
+}
 export interface Permission {
   id: string;
   action: KeyOperation;
@@ -27,14 +30,18 @@ export interface Permission {
   constraints?: PermissionConstraint[];
   scope: 'global' | 'organizational' | 'project' | 'personal';
 }
+}
 
+}
 export interface PermissionConstraint {
   type: 'time' | 'location' | 'purpose' | 'security_level' | 'data_classification' | 'approval_required';
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | 'between';
   value: Error;
+}
   metadata?: { [key: string]: unknown };
 }
 
+}
 export interface UserRole {
   userId: string;
   roleId: string;
@@ -44,7 +51,9 @@ export interface UserRole {
   isActive: boolean;
   conditions?: PermissionConstraint[];
 }
+}
 
+}
 export interface AccessRequest {
   id: string;
   userId: string;
@@ -61,7 +70,9 @@ export interface AccessRequest {
   approvalWorkflowId?: string;
   expiresAt?: Date;
 }
+}
 
+}
 export interface AccessPolicy {
   id: string;
   name: string;
@@ -73,14 +84,18 @@ export interface AccessPolicy {
   updatedAt: Date;
   createdBy: string;
 }
+}
 
+}
 export interface PolicyRule {
   id: string;
   condition: PolicyCondition;
   action: 'allow' | 'deny' | 'require_approval' | 'require_mfa' | 'log_warning';
+}
   metadata?: { [key: string]: unknown };
 }
 
+}
 export interface PolicyCondition {
   type: 'user' | 'role' | 'time' | 'location' | 'device' | 'key_properties' | 'operation' | 'data_classification';
   operator: string;
@@ -88,7 +103,9 @@ export interface PolicyCondition {
   logicalOperator?: 'and' | 'or';
   subConditions?: PolicyCondition[];
 }
+}
 
+}
 export interface AccessContext {
   userId: string;
   sessionId?: string;
@@ -99,9 +116,11 @@ export interface AccessContext {
   timestamp: Date;
   mfaVerified?: boolean;
   riskScore?: number;
+}
   additionalContext?: { [key: string]: unknown };
 }
 
+}
 export interface GeoLocation {
   country: string;
   region: string;
@@ -109,6 +128,7 @@ export interface GeoLocation {
   latitude?: number;
   longitude?: number;
   timezone?: string;
+}
 }
 
 export type KeyOperation = 
@@ -132,6 +152,7 @@ export type KeyOperation =
 
 export type ResourceType = 'key' | 'key_group' | 'backup' | 'audit_log' | 'policy' | 'role';
 
+}
 export interface AccessDecision {
   allowed: boolean;
   reason: string;
@@ -142,18 +163,23 @@ export interface AccessDecision {
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
   additionalFactorsRequired?: string[];
 }
+}
 
+}
 export interface ConditionalAccessRequirement {
   type: 'mfa' | 'device_verification' | 'location_verification' | 'time_restriction' | 'approval';
   description: string;
+}
   parameters?: { [key: string]: unknown };
 }
 
+}
 export interface TimeRestriction {
   startTime: string; // HH:MM format
   endTime: string;
   daysOfWeek: number[]; // 0-6, Sunday = 0
   timezone: string;
+}
 }
 
 export class AccessControlManager extends EventEmitter {
@@ -188,6 +214,7 @@ export class AccessControlManager extends EventEmitter {
     operation: KeyOperation,
     context: AccessContext
   ): Promise<AccessDecision> {
+
     try {
       // Get user roles and permissions
       const userRoles = await this.getUserRoles(context.userId);
@@ -299,6 +326,7 @@ export class AccessControlManager extends EventEmitter {
    * Create or update a role
    */
   async createRole(role: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>): Promise<Role> {
+
     try {
       const roleId = crypto.randomUUID();
       const now = new Date();
@@ -353,6 +381,7 @@ export class AccessControlManager extends EventEmitter {
     expiresAt?: Date,
     conditions?: PermissionConstraint[]
   ): Promise<UserRole> {
+
     try {
       const userRole: UserRole = {
         userId,
@@ -396,7 +425,7 @@ export class AccessControlManager extends EventEmitter {
           targetUserId: userId, 
           roleId, 
           expiresAt: expiresAt?.toISOString() 
-        },
+  }
         severity: 'info'
       });
       
@@ -413,6 +442,7 @@ export class AccessControlManager extends EventEmitter {
    * Create access policy
    */
   async createPolicy(policy: Omit<AccessPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<AccessPolicy> {
+
     try {
       const policyId = crypto.randomUUID();
       const now = new Date();
@@ -462,6 +492,7 @@ export class AccessControlManager extends EventEmitter {
    * Submit access request for approval
    */
   async submitAccessRequest(request: Omit<AccessRequest, 'id' | 'requestedAt' | 'status'>): Promise<AccessRequest> {
+
     try {
       const requestId = crypto.randomUUID();
       
@@ -500,7 +531,7 @@ export class AccessControlManager extends EventEmitter {
           keyId: request.keyId, 
           operation: request.operation,
           urgency: request.urgency 
-        },
+  }
         severity: 'info'
       });
       
@@ -516,6 +547,7 @@ export class AccessControlManager extends EventEmitter {
   // Private helper methods
 
   private async getUserRoles(userId: string): Promise<Role[]> {
+
     try {
       // Check cache first
       const cached = await this.redis.get(`user_roles:${userId}`);
@@ -555,6 +587,7 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async getUserPermissions(userId: string): Promise<Permission[]> {
+
     const roles = await this.getUserRoles(userId);
     const permissions: Permission[] = [];
     
@@ -581,6 +614,7 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async getRole(roleId: string): Promise<Role | null> {
+
     if (this.roleCache.has(roleId)) {
       return this.roleCache.get(roleId)!;
     }
@@ -621,6 +655,7 @@ export class AccessControlManager extends EventEmitter {
     keyId: string,
     context: AccessContext
   ): Promise<boolean> {
+
     for (const permission of permissions) {
       if (permission.action === operation || permission.action === '*') {
         // Check constraints
@@ -647,6 +682,7 @@ export class AccessControlManager extends EventEmitter {
     keyId: string,
     context: AccessContext
   ): Promise<boolean> {
+
     for (const constraint of constraints) {
       const constraintMet = await this.evaluateConstraint(constraint, keyId, context);
       if (!constraintMet) {
@@ -661,6 +697,7 @@ export class AccessControlManager extends EventEmitter {
     keyId: string,
     context: AccessContext
   ): Promise<boolean> {
+
     switch (constraint.type) {
     case 'time':
       return this.evaluateTimeConstraint(constraint, context);
@@ -705,6 +742,7 @@ export class AccessControlManager extends EventEmitter {
     constraint: PermissionConstraint,
     keyId: string
   ): Promise<boolean> {
+
     try {
       const result = await this.db.query(`
         SELECT security_level FROM master_keys WHERE key_id = $1
@@ -745,6 +783,7 @@ export class AccessControlManager extends EventEmitter {
     _____operation: KeyOperation,
     _____context: AccessContext
   ): Promise<AccessPolicy[]> {
+
     // This would be expanded to filter policies based on various criteria
     return Array.from(this.policyCache.values())
       .filter(policy => policy.isEnabled)
@@ -757,6 +796,7 @@ export class AccessControlManager extends EventEmitter {
     operation: KeyOperation,
     context: AccessContext
   ): Promise<{ action: string; reason?: string }> {
+
     // Evaluate policies in priority order
     for (const policy of policies) {
       for (const rule of policy.rules) {
@@ -785,6 +825,7 @@ export class AccessControlManager extends EventEmitter {
     operation: KeyOperation,
     context: AccessContext
   ): Promise<boolean> {
+
     // Simplified condition evaluation - would be expanded
     switch (condition.type) {
     case 'operation':
@@ -806,6 +847,7 @@ export class AccessControlManager extends EventEmitter {
     operation: KeyOperation,
     context: AccessContext
   ): Promise<ConditionalAccessRequirement[]> {
+
     const requirements: ConditionalAccessRequirement[] = [];
     
     // Example: Require MFA for high-risk operations
@@ -825,6 +867,7 @@ export class AccessControlManager extends EventEmitter {
     _____context: AccessContext,
     _____userRoles: Role[]
   ): Promise<string[]> {
+
     const requiredApprovals: string[] = [];
     
     // Check if key requires approval for this operation
@@ -885,6 +928,7 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async getTimeRestrictions(_____userId: string, _____operation: KeyOperation): Promise<TimeRestriction[]> {
+
     // This would query user-specific or role-specific time restrictions
     return [];
   }
@@ -894,6 +938,7 @@ export class AccessControlManager extends EventEmitter {
     operation: KeyOperation,
     _____context: AccessContext
   ): Promise<string[]> {
+
     const factors: string[] = [];
     
     if (['destroy', 'export'].includes(operation)) {
@@ -910,6 +955,7 @@ export class AccessControlManager extends EventEmitter {
     context: AccessContext,
     decision: AccessDecision
   ): Promise<void> {
+
     try {
       await this.auditService.logEvent({
         userId: context.userId,
@@ -922,7 +968,7 @@ export class AccessControlManager extends EventEmitter {
           riskLevel: decision.riskLevel,
           sessionId: context.sessionId,
           ipAddress: context.ipAddress
-        },
+  }
         severity: decision.allowed ? 'info' : 'warning',
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
@@ -933,6 +979,7 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async initializeDefaultRoles(): Promise<void> {
+
     // Initialize system roles
     const defaultRoles = [
       {
@@ -943,7 +990,7 @@ export class AccessControlManager extends EventEmitter {
         ],
         isSystemRole: true,
         isActive: true
-      },
+  }
       {
         name: 'key_operator',
         description: 'Standard key operations',
@@ -955,7 +1002,7 @@ export class AccessControlManager extends EventEmitter {
         ],
         isSystemRole: true,
         isActive: true
-      },
+  }
       {
         name: 'key_viewer',
         description: 'Read-only key metadata access',
@@ -983,6 +1030,7 @@ export class AccessControlManager extends EventEmitter {
   }
 
   private async initializeDefaultPolicies(): Promise<void> {
+
     // Initialize default security policies
     const defaultPolicies = [
       {
@@ -995,14 +1043,14 @@ export class AccessControlManager extends EventEmitter {
               type: 'operation' as const,
               operator: 'in',
               value: ['destroy', 'export', 'modify_acl']
-            },
+  }
             action: 'require_mfa' as const
           }
         ],
         priority: 100,
         isEnabled: true,
         createdBy: 'system'
-      },
+  }
       {
         name: 'business_hours_policy',
         description: 'Restricts sensitive operations to business hours',
@@ -1013,7 +1061,7 @@ export class AccessControlManager extends EventEmitter {
               type: 'time' as const,
               operator: 'between',
               value: [8, 18] // 8 AM to 6 PM
-            },
+  }
             action: 'allow' as const
           }
         ],

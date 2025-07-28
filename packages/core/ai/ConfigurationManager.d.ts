@@ -6,6 +6,7 @@
  */
 import { ModelConfiguration, AIModelProvider } from './BaseAIModel';
 import { ModelRegistration } from './AIModelFactory';
+
 export interface EnvironmentConfig {
     name: string;
     description: string;
@@ -24,26 +25,26 @@ export interface EnvironmentConfig {
         enableHealthChecks: boolean;
         enableMetrics: boolean;
     };
-}
+
 export interface ConfigurationSchema {
     version: string;
     environments: Record<string, EnvironmentConfig>;
     modelTemplates: Record<string, Partial<ModelConfiguration>>;
     providerDefaults: Record<AIModelProvider, Partial<ModelConfiguration>>;
     validationRules: ValidationRule[];
-}
+
 export interface ValidationRule {
     id: string;
     name: string;
     description: string;
     validate: (config: ModelConfiguration) => ValidationResult;
-}
+
 export interface ValidationResult {
     valid: boolean;
     errors: string[];
     warnings: string[];
     suggestions: string[];
-}
+
 export interface ConfigurationUpdate {
     path: string;
     value: unknown;
@@ -51,7 +52,7 @@ export interface ConfigurationUpdate {
     modelId?: string;
     timestamp: Date;
     reason?: string;
-}
+
 export interface ConfigurationHistory {
     updates: ConfigurationUpdate[];
     snapshots: Array<{,
@@ -59,7 +60,7 @@ export interface ConfigurationHistory {
         config: ConfigurationSchema;
         version: string;
     }>;
-}
+
 export declare class ConfigurationValidator {
     private rules;
     constructor();
@@ -68,7 +69,7 @@ export declare class ConfigurationValidator {
     validate(config: ModelConfiguration): ValidationResult;
     validateEnvironment(envConfig: EnvironmentConfig): ValidationResult;
     private _initializeDefaultRules;
-}
+
 export declare class ConfigurationManager {
     private schema;
     private validator;
@@ -99,6 +100,6 @@ export declare class ConfigurationManager {
     private _createDefaultSchema;
     private _recordUpdate;
     private _createSnapshot;
-}
+
 export default ConfigurationManager;
 //# sourceMappingURL=ConfigurationManager.d.ts.map

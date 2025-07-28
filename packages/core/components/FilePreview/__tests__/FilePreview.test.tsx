@@ -10,29 +10,28 @@ import { projectManager } from '../../../projectManager';
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
   projectManager: {,
-    generateThumbnail: jest.fn(),
-    getMockFile: jest.fn(),
-  }
+  generateThumbnail: jest.fn(),
+  getMockFile: jest.fn(),
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 describe('FilePreview Component', () => {
   const mockFile = {
-    id: 'test-file-1',
-    name: 'test-graph.psg',
-    path: '/projects/test/test-graph.psg',
-    size: 1024,
-    lastModified: new Date('2025-01-15T10:00:00Z'),
-    nodeCount: 15,
-    metadata: {,
-      title: 'Test Graph',
-      description: 'A test graph for unit testing',
-      tags: ['test', 'graph'],
-      author: 'Test User',
-      version: '1.0.0',
-      created: new Date('2025-01-10T10:00:00Z'),
-      thumbnail: 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4='
-    },
-    isFavorite: false,
+  id: 'test-file-1',
+  name: 'test-graph.psg',
+  path: '/projects/test/test-graph.psg',
+  size: 1024,
+  lastModified: new Date('2025-01-15T10:00:00Z'),
+  nodeCount: 15,
+  metadata: {,
+  title: 'Test Graph',
+  description: 'A test graph for unit testing',
+  tags: ['test', 'graph'],
+  author: 'Test User',
+  version: '1.0.0',
+  created: new Date('2025-01-10T10:00:00Z'),
+  thumbnail: 'data:image/svg+xml;base64,PHN2Zz48L3N2Zz4=',
+},
+  isFavorite: false;
   };
   const mockThumbnail = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjgwIj48L3N2Zz4=';
   beforeEach(() => {
@@ -212,20 +211,20 @@ describe('FilePreview Component', () => {
     });
   });
   describe('Error Boundaries', () => {
-    it('handles invalid date objects', () => {
-      const fileWithInvalidDate = {
-        ...mockFile,
-        lastModified: new Date('invalid-date'),
-      };
+  it('handles invalid date objects', () => {
+  const fileWithInvalidDate = {
+  ...mockFile,
+  lastModified: new Date('invalid-date'),
+};
       expect(() => {
         render(<FilePreview file={fileWithInvalidDate} mode="compact" />);
       }).not.toThrow();
     });
     it('handles missing metadata object', () => {
-      const fileWithoutMetadata = {
-        ...mockFile,
-        metadata: undefined as any,
-      };
+  const fileWithoutMetadata = {
+  ...mockFile,
+  metadata: undefined as any,
+};
       expect(() => {
         render(<FilePreview file={fileWithoutMetadata} mode="full" />);
       }).not.toThrow();

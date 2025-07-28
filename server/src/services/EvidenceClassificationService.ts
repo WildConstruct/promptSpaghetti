@@ -17,6 +17,7 @@ import * as crypto from 'crypto';
 // Evidence Classification Interfaces
 // =============================================================================
 
+}
 export interface EvidenceClassificationConfig {
   enabled: boolean;
   autoClassificationEnabled: boolean;
@@ -26,6 +27,7 @@ export interface EvidenceClassificationConfig {
     enabled: boolean;
     patterns: SensitivityPattern[];
     scoring: SensitivityScoring;
+}
   };
   contentAnalysis: {
     enabled: boolean;
@@ -46,6 +48,7 @@ export interface EvidenceClassificationConfig {
   };
 }
 
+}
 export interface EvidenceClassificationRule {
   id: string;
   name: string;
@@ -61,7 +64,9 @@ export interface EvidenceClassificationRule {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface EvidenceClassificationCondition {
   field: 'content' | 'metadata' | 'filename' | 'size' | 'source' | 'evidence_type' | 'compliance_framework';
   operator: 'contains' | 'matches' | 'equals' | 'gt' | 'lt' | 'in' | 'pattern' | 'exists';
@@ -69,7 +74,9 @@ export interface EvidenceClassificationCondition {
   caseSensitive?: boolean;
   weight?: number; // Weight for confidence calculation
 }
+}
 
+}
 export interface SensitivityPattern {
   id: string;
   name: string;
@@ -79,13 +86,16 @@ export interface SensitivityPattern {
   weight: number;
   description: string;
 }
+}
 
+}
 export interface SensitivityScoring {
   thresholds: {
     public: number;
     internal: number;
     confidential: number;
     restricted: number;
+}
   };
   weightingFactors: {
     contentMatch: number;
@@ -95,11 +105,14 @@ export interface SensitivityScoring {
   };
 }
 
+}
 export interface ClassificationAction {
   type: 'notify' | 'encrypt' | 'restrict_access' | 'require_approval' | 'audit_log';
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface EvidenceClassificationResult {
   evidenceId: string;
   classification: DataClassification;
@@ -111,7 +124,9 @@ export interface EvidenceClassificationResult {
   warnings: string[];
   timestamp: Date;
 }
+}
 
+}
 export interface SensitivityAnalysisResult {
   overallScore: number;
   patterns: {
@@ -119,6 +134,7 @@ export interface SensitivityAnalysisResult {
     matches: number;
     score: number;
     locations: string[];
+}
   }[];
   contentAnalysis: {
     textScore: number;
@@ -127,6 +143,7 @@ export interface SensitivityAnalysisResult {
   };
 }
 
+}
 export interface EvidenceItem {
   id: string;
   type: string;
@@ -143,6 +160,7 @@ export interface EvidenceItem {
     classifiedBy: string;
     method: string;
     confidence: number;
+}
   };
 }
 
@@ -180,6 +198,7 @@ export class EvidenceClassificationService {
     evidence: EvidenceItem,
     manualClassification?: DataClassification
   ): Promise<EvidenceClassificationResult> {
+
     try {
       // Manual classification takes precedence
       if (manualClassification) {
@@ -203,6 +222,7 @@ export class EvidenceClassificationService {
    * Bulk classify multiple evidence items
    */
   async classifyEvidenceBulk(evidenceItems: EvidenceItem[]): Promise<EvidenceClassificationResult[]> {
+
     const results: EvidenceClassificationResult[] = [];
     
     for (const evidence of evidenceItems) {
@@ -232,6 +252,7 @@ export class EvidenceClassificationService {
    * Re-classify evidence based on updated rules or requirements
    */
   async reclassifyEvidence(evidenceId: string): Promise<EvidenceClassificationResult> {
+
     const evidence = await this.loadEvidence(evidenceId);
     if (!evidence) {
       throw new Error(`Evidence not found: ${evidenceId}`);
@@ -259,6 +280,7 @@ export class EvidenceClassificationService {
     reasoning: string[];
     confidence: number;
   }> {
+
     const analysis = await this.performSensitivityAnalysis(evidence);
     const matchingRules = await this.findMatchingRules(evidence);
     
@@ -276,6 +298,7 @@ export class EvidenceClassificationService {
    * Update classification configuration
    */
   async updateConfig(config: Partial<EvidenceClassificationConfig>): Promise<void> {
+
     this.config = { ...this.config, ...config };
     await this.saveConfig();
   }
@@ -287,6 +310,7 @@ export class EvidenceClassificationService {
     rule: Omit<EvidenceClassificationRule,
     'id' | 'createdAt' | 'updatedAt'>
   ): Promise<string> {
+
     const newRule: EvidenceClassificationRule = {
       ...rule,
       id: this.generateRuleId(),
@@ -305,6 +329,7 @@ export class EvidenceClassificationService {
   // =============================================================================
 
   private async performAutomaticClassification(evidence: EvidenceItem): Promise<EvidenceClassificationResult> {
+
     const analysisResults = await Promise.all([
       this.performSensitivityAnalysis(evidence),
       this.performContentAnalysis(evidence),
@@ -331,11 +356,11 @@ export class EvidenceClassificationService {
       sensitivityAnalysis,
       recommendations: classification.recommendations,
       warnings: classification.warnings,
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   private async performSensitivityAnalysis(evidence: EvidenceItem): Promise<SensitivityAnalysisResult> {
+
     const patterns = this.config.sensitivityAnalysis.patterns;
     const contentMatches: unknown[] = [];
     let overallScore = 0;
@@ -373,6 +398,7 @@ export class EvidenceClassificationService {
   }
 
   private async performContentAnalysis(evidence: EvidenceItem): Promise<unknown> {
+
     if (!this.config.contentAnalysis.enabled) {
       return { enabled: false };
     }
@@ -400,6 +426,7 @@ export class EvidenceClassificationService {
   }
 
   private async performComplianceAnalysis(evidence: EvidenceItem): Promise<unknown> {
+
     if (!evidence.complianceFramework) {
       return { applicable: false };
     }
@@ -426,6 +453,7 @@ export class EvidenceClassificationService {
   }
 
   private async findMatchingRules(evidence: EvidenceItem): Promise<EvidenceClassificationRule[]> {
+
     const matchingRules: EvidenceClassificationRule[] = [];
 
     for (const rule of this.config.classificationRules) {
@@ -530,8 +558,7 @@ export class EvidenceClassificationService {
       appliedRules: [],
       recommendations: [],
       warnings: [],
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   private performInheritedClassification(evidence: EvidenceItem): EvidenceClassificationResult {
@@ -554,8 +581,7 @@ export class EvidenceClassificationService {
       appliedRules: [],
       recommendations: [`Classification inherited from ${evidence.auditRequirement ? 'audit requirement' : 'evidence type'}`],
       warnings: [],
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   private findPatternMatches(content: string, pattern: SensitivityPattern): string[] {
@@ -771,7 +797,8 @@ export class EvidenceClassificationService {
     const patterns = [
       /\b\d{3}-\d{2}-\d{4}\b/, // SSN
       /\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b/, // Credit card
-      /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}/ // Email
+      /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
+}/ // Email
     ];
     
     return patterns.some(pattern => pattern.test(text));
@@ -839,6 +866,7 @@ export class EvidenceClassificationService {
   }
 
   private async loadEvidence(__evidenceId: string): Promise<EvidenceItem | null> {
+
     // This would load from database
     // Implementation depends on evidence storage schema
     return null;
@@ -849,6 +877,7 @@ export class EvidenceClassificationService {
     oldClassification: DataClassification,
     newClassification: DataClassification
   ): Promise<void> {
+
     await this.auditService.logActivity({
       type: 'evidence_reclassification',
       details: {
@@ -861,6 +890,7 @@ export class EvidenceClassificationService {
   }
 
   private async saveConfig(): Promise<void> {
+
     // Save configuration to persistent storage
     await this.databaseService.query(
       'INSERT OR REPLACE INTO evidence_classification_config (id, config) VALUES (1, ?)',
@@ -869,6 +899,7 @@ export class EvidenceClassificationService {
   }
 
   private async loadConfig(): Promise<void> {
+
     const result = await this.databaseService.query(
       'SELECT config FROM evidence_classification_config WHERE id = 1'
     );
@@ -901,7 +932,7 @@ export class EvidenceClassificationService {
             sensitivity: 'restricted',
             weight: 1.0,
             description: 'Detects US Social Security Numbers'
-          },
+  }
           {
             id: 'cc_pattern',
             name: 'Credit Card Number',
@@ -910,11 +941,12 @@ export class EvidenceClassificationService {
             sensitivity: 'restricted',
             weight: 1.0,
             description: 'Detects credit card numbers'
-          },
+  }
           {
             id: 'email_pattern',
             name: 'Email Address',
-            pattern: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}/g,
+            pattern: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
+}/g,
             type: 'regex',
             sensitivity: 'confidential',
             weight: 0.6,
@@ -927,7 +959,7 @@ export class EvidenceClassificationService {
             internal: 0.3,
             confidential: 0.7,
             restricted: 1.0
-          },
+  }
           weightingFactors: {
             contentMatch: 0.4,
             metadataMatch: 0.2,
@@ -935,18 +967,18 @@ export class EvidenceClassificationService {
             contextMatch: 0.2
           }
         }
-      },
+  }
       contentAnalysis: {
         enabled: true,
         textAnalysisEnabled: true,
         metadataAnalysisEnabled: true,
         structuralAnalysisEnabled: true
-      },
+  }
       auditIntegration: {
         enabled: true,
         inheritFromRequirement: true,
         escalateOnHighRisk: true
-      },
+  }
       notifications: {
         enabled: true,
         notifyOnReclassification: true,

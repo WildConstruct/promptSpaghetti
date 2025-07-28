@@ -5,46 +5,45 @@ import { NodeMeta } from '../Palette';
 export interface SearchResult {
     node: NodeMeta;
     relevance: number;
-    matchedFields: string[];
-    categories: string[];
+    matchedFields: string;
+    categories: string;
 }
-/**
- * Search options configuration
- */
 export interface SearchOptions {
     fuzzyThreshold?: number;
     maxResults?: number;
     includeCategories?: boolean;
     sortByRelevance?: boolean;
     minimumRelevance?: number;
+    /**
+    * Default search options
+    */
+    const: any;
+    DEFAULT_SEARCH_OPTIONS: Required<SearchOptions>;
 }
-/**
- * Advanced palette search engine
- */
 export declare class PaletteSearch {
     private nodes;
     private searchIndex;
-    constructor(nodes: NodeMeta[]);
+    constructor(nodes: NodeMeta);
     /**
      * Update nodes and rebuild search index
      */
-    updateNodes(nodes: NodeMeta[]): void;
+    updateNodes(nodes: NodeMeta): void;
     /**
      * Perform search with relevance scoring
      */
-    search(query: string, options?: SearchOptions): SearchResult[];
+    search(query: string, options?: SearchOptions): SearchResult;
     /**
      * Get search suggestions based on partial query
      */
-    getSuggestions(partialQuery: string, maxSuggestions?: number): string[];
+    getSuggestions(partialQuery: string, maxSuggestions?: number): string;
     /**
      * Search within specific categories
      */
-    searchInCategories(query: string, categoryIds: string[], options?: SearchOptions): SearchResult[];
+    searchInCategories(query: string, categoryIds: string, options?: SearchOptions): SearchResult;
     /**
      * Get popular search terms
      */
-    getPopularTerms(limit?: number): string[];
+    getPopularTerms(limit?: number): string;
     /**
      * Parse search query into terms
      */
@@ -58,20 +57,12 @@ export declare class PaletteSearch {
      */
     private calculateFuzzyScore;
     /**
-     * Calculate Levenshtein distance between two strings
-     */
+    * Calculate Levenshtein distance between two strings
+    */
     private levenshteinDistance;
     /**
-     * Build search index for efficient searching
-     */
+    * Build search index for efficient searching
+    */
     private buildSearchIndex;
 }
-/**
- * Utility function to highlight search terms in text
- */
-export declare function highlightSearchTerms(text: string, searchTerms: string[]): string;
-/**
- * Create search engine instance
- */
-export declare function createPaletteSearch(nodes: NodeMeta[]): PaletteSearch;
 //# sourceMappingURL=PaletteSearch.d.ts.map

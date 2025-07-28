@@ -27,6 +27,7 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
+}
 export interface UsageControlResponse<T = any> {
   success: boolean;
   data?: T;
@@ -39,6 +40,7 @@ export interface UsageControlResponse<T = any> {
   };
 }
 
+}
 export interface CreateUsageLimitRequest {
   name: string;
   description: string;
@@ -54,6 +56,7 @@ export interface CreateUsageLimitRequest {
     operations?: string[];
     ipAddresses?: string[];
     apiKeys?: string[];
+}
   };
   configuration?: {
     burstAllowance?: number;
@@ -69,6 +72,7 @@ export interface CreateUsageLimitRequest {
   };
 }
 
+}
 export interface UpdateUsageLimitRequest {
   name?: string;
   description?: string;
@@ -84,10 +88,12 @@ export interface UpdateUsageLimitRequest {
     operations?: string[];
     ipAddresses?: string[];
     apiKeys?: string[];
+}
   };
   configuration?: any;
 }
 
+}
 export interface UsageCheckRequest {
   userId?: string;
   apiKey?: string;
@@ -97,11 +103,14 @@ export interface UsageCheckRequest {
   method: string;
   requestSize?: number;
 }
+}
 
+}
 export interface UsageAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
+}
   };
   filters?: {
     userIds?: string[];
@@ -111,12 +120,14 @@ export interface UsageAnalyticsRequest {
   includeDetails?: boolean;
 }
 
+}
 export interface UsageControlConfigRequest {
   globalLimits?: {
     requestsPerMinute?: number;
     requestsPerHour?: number;
     bandwidthPerHour?: number; // bytes
     concurrentConnections?: number;
+}
   };
   enforcementMode?: 'strict' | 'permissive' | 'monitoring_only';
   alerting?: {
@@ -131,10 +142,12 @@ export interface UsageControlConfigRequest {
   }>;
 }
 
+}
 export interface BulkUsageActionRequest {
   action: 'enable' | 'disable' | 'reset' | 'delete';
   limitIds: string[];
   reason?: string;
+}
 }
 
 // ==========================================
@@ -198,7 +211,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               operations: { type: 'array', items: { type: 'string' } },
               ipAddresses: { type: 'array', items: { type: 'string' } },
               apiKeys: { type: 'array', items: { type: 'string' } }
-            },
+  }
             additionalProperties: false
           }
         }
@@ -216,7 +229,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         scope: {
           global: false,
           ...request.body.scope
-        },
+  }
         configuration: {
           burstAllowance: 10,
           gracePeriod: 1000,
@@ -313,7 +326,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           total: limits.length,
           offset,
           limit
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `list_limits_${Date.now()}`,
@@ -338,7 +351,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-        },
+  }
         required: ['limitId']
       }
     }
@@ -386,9 +399,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-        },
+  }
         required: ['limitId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -425,7 +438,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         data: {
           limitId: request.params.limitId,
           message: 'Usage limit updated successfully'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -450,7 +463,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           limitId: { type: 'string' }
-        },
+  }
         required: ['limitId']
       }
     }
@@ -477,7 +490,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         data: {
           limitId: request.params.limitId,
           message: 'Usage limit deleted successfully'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `delete_limit_${Date.now()}`,
@@ -557,7 +570,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           retryAfter: decision.retryAfter,
           quotaRemaining: decision.quotaRemaining,
           warnings: decision.warnings
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `usage_check_${Date.now()}`,
@@ -602,7 +615,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           filters: {
             type: 'object',
             properties: {
@@ -610,7 +623,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               endpoints: { type: 'array', items: { type: 'string' } },
               operations: { type: 'array', items: { type: 'string' } }
             }
-          },
+  }
           includeDetails: { type: 'boolean', default: true }
         }
       }
@@ -689,9 +702,9 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         type: 'object',
         properties: {
           userId: { type: 'string' }
-        },
+  }
         required: ['userId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -720,7 +733,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           userId: request.params.userId,
           timeRange: request.query.timeRange,
           ...stats
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `user_stats_${Date.now()}`,
@@ -811,7 +824,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           successCount,
           errorCount,
           results
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -924,13 +937,13 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
           requestsPerHour: 50000,
           bandwidthPerHour: 1024 * 1024 * 1024, // 1GB
           concurrentConnections: 100
-        },
+  }
         enforcementMode: 'strict',
         alerting: {
           enabled: true,
           channels: ['email', 'slack'],
           thresholds: [75, 90, 95]
-        },
+  }
         exemptions: []
       };
 
@@ -967,7 +980,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
               bandwidthPerHour: { type: 'number', minimum: 1 },
               concurrentConnections: { type: 'number', minimum: 1 }
             }
-          },
+  }
           enforcementMode: { type: 'string', enum: ['strict', 'permissive', 'monitoring_only'] },
           alerting: {
             type: 'object',
@@ -1002,7 +1015,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
         success: true,
         data: {
           message: 'Usage control configuration updated successfully'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `update_config_${Date.now()}`,
@@ -1039,7 +1052,7 @@ export const usageControlAPI: FastifyPluginAsync = async (fastify: FastifyInstan
             rateLimiting: 'operational',
             analytics: 'operational',
             monitoring: 'operational'
-          },
+  }
           metrics: {
             activeUsers: snapshot.activeUsers,
             currentConnections: snapshot.currentConnections,

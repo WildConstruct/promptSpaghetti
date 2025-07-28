@@ -4,6 +4,7 @@
  *
  * Utilities for image format conversion, compression, metadata extraction, and optimization
  */
+
 export interface ImageMetadata {
     width: number;
     height: number;
@@ -20,7 +21,7 @@ export interface ImageMetadata {
         seed?: number;
         parameters?: Record<string, any>;
     };
-}
+
 export interface ImageProcessingOptions {
     format?: 'jpeg' | 'png' | 'webp' | 'avif';
     quality?: number;
@@ -31,13 +32,13 @@ export interface ImageProcessingOptions {
     optimize?: boolean;
     progressive?: boolean;
     removeMetadata?: boolean;
-}
+
 export interface ImageVariationOptions {
     count: number;
     strength: number;
     seed?: number;
     preserveStyle?: boolean;
-}
+
 export interface ImageBatchProcessingOptions {
     concurrency?: number;
     outputFormat?: 'jpeg' | 'png' | 'webp';
@@ -52,7 +53,7 @@ export interface ImageBatchProcessingOptions {
         position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
         opacity: number;
     };
-}
+
 export declare class ImageProcessor {
     private canvas;
     private ctx;
@@ -105,6 +106,6 @@ export declare class ImageProcessor {
     private _getImageData;
     private _rgbToHsl;
     private _hslToRgb;
-}
+
 export default ImageProcessor;
 //# sourceMappingURL=ImageProcessor.d.ts.map

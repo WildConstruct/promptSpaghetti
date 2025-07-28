@@ -618,7 +618,7 @@ export async function organizationRoutes(fastify: FastifyInstance) {
           userId,
           role: role as 'owner' | 'admin' | 'member' | 'viewer',
           invitedBy: request.user.id
-        },
+  }
         context
       );
 

@@ -33,15 +33,15 @@ describe('nodeDataUtils', () => {
     });
   });
   describe('variation management', () => {
-    const mockNode: SubjectNodeData = {
-      id: 'test',
-      label: 'Test',
-      type: 'Subject' as const,
-      variations: ['var1', 'var2'],
-      subjects: ['test'],
-      singularForm: 'test',
-      pluralForm: 'tests',
-    };
+  const mockNode: SubjectNodeData = {,
+  id: 'test',
+  label: 'Test',
+  type: 'Subject' as const,
+  variations: ['var1', 'var2'],
+  subjects: ['test'],
+  singularForm: 'test',
+  pluralForm: 'tests',
+};
     it('adds variation to node', () => {
       const result = addVariationToNode(mockNode, 'var3');
       expect(result.variations).toEqual(['var1', 'var2', 'var3']);
@@ -60,24 +60,24 @@ describe('nodeDataUtils', () => {
     });
   });
   describe('variation utilities', () => {
-    const nodeWithVariations: SubjectNodeData = {
-      id: 'test',
-      label: 'Test',
-      type: 'Subject' as const,
-      variations: ['apple', 'banana', 'cherry'],
-      subjects: ['test'],
-      singularForm: 'test',
-      pluralForm: 'tests',
-    };
-    const nodeWithoutVariations: SubjectNodeData = {
-      id: 'test',
-      label: 'Test',
-      type: 'Subject' as const,
-      variations: [],
-      subjects: ['test'],
-      singularForm: 'test',
-      pluralForm: 'tests',
-    };
+  const nodeWithVariations: SubjectNodeData = {,
+  id: 'test',
+  label: 'Test',
+  type: 'Subject' as const,
+  variations: ['apple', 'banana', 'cherry'],
+  subjects: ['test'],
+  singularForm: 'test',
+  pluralForm: 'tests',
+};
+    const nodeWithoutVariations: SubjectNodeData = {,
+  id: 'test',
+  label: 'Test',
+  type: 'Subject' as const,
+  variations: [],
+  subjects: ['test'],
+  singularForm: 'test',
+  pluralForm: 'tests',
+};
     it('detects if node has variations', () => {
       expect(hasVariations(nodeWithVariations)).toBe(true);
       expect(hasVariations(nodeWithoutVariations)).toBe(false);
@@ -99,55 +99,55 @@ describe('nodeDataUtils', () => {
     });
   });
   describe('validation', () => {
-    it('validates valid node data', () => {
-      const validNode: SubjectNodeData = {
-        id: 'test',
-        label: 'Test Node',
-        type: 'Subject' as const,
-        variations: ['var1'],
-        subjects: ['test'],
-        singularForm: 'test',
-        pluralForm: 'tests',
-      };
+  it('validates valid node data', () => {
+  const validNode: SubjectNodeData = {,
+  id: 'test',
+  label: 'Test Node',
+  type: 'Subject' as const,
+  variations: ['var1'],
+  subjects: ['test'],
+  singularForm: 'test',
+  pluralForm: 'tests',
+};
       const result = validateNodeDataLegacy(validNode);
       expect(result.valid).toBe(true);
       expect(result.errors).toEqual([]);
     });
     it('validates invalid node data', () => {
-      const invalidNode: SubjectNodeData = {
-        id: '',
-        label: '',
-        type: 'Subject' as const,
-        variations: [],
-        subjects: ['test'],
-        singularForm: 'test',
-        pluralForm: 'tests',
-      };
+  const invalidNode: SubjectNodeData = {,
+  id: '',
+  label: '',
+  type: 'Subject' as const,
+  variations: [],
+  subjects: ['test'],
+  singularForm: 'test',
+  pluralForm: 'tests',
+};
       const result = validateNodeDataLegacy(invalidNode);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Node label is required');
       expect(result.errors).toContain('Node ID is required');
     });
     it('validates WeightedChoice specific rules', () => {
-      const invalidWeightedChoice = {
-        id: 'test',
-        label: 'Test',
-        type: 'WeightedChoice' as const,
-        options: ['a', 'b'],
-        weights: [1] // Mismatch with options length,
-      };
+  const invalidWeightedChoice = {
+  id: 'test',
+  label: 'Test',
+  type: 'WeightedChoice' as const,
+  options: ['a', 'b'],
+  weights: [1] // Mismatch with options length,
+};
       const result = validateNodeDataLegacy(invalidWeightedChoice);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Number of options must match number of weights');
     });
     it('validates variable names', () => {
-      const invalidSetVariable = {
-        id: 'test',
-        label: 'Test',
-        type: 'SetVariable' as const,
-        name: '',
-        value: 'test',
-      };
+  const invalidSetVariable = {
+  id: 'test',
+  label: 'Test',
+  type: 'SetVariable' as const,
+  name: '',
+  value: 'test',
+};
       const result = validateNodeDataLegacy(invalidSetVariable);
       expect(result.valid).toBe(false);
       expect(result.errors).toContain('Variable name is required');

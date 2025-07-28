@@ -27,7 +27,7 @@ export interface RestoreConflict {
 export interface RestorePreview {
     restore_id: string;
     snapshot_id: string;
-    conflicts: RestoreConflict[];
+    conflicts: RestoreConflict;
     changes_summary: {
         nodes_to_add: number;
         nodes_to_remove: number;
@@ -41,9 +41,9 @@ export interface RestorePreview {
     risk_level: 'low' | 'medium' | 'high' | 'critical';
     backup_required: boolean;
     collaborator_impact: {
-        active_users: string[];
-        potential_conflicts: string[];
-        recommended_actions: string[];
+        active_users: string;
+        potential_conflicts: string;
+        recommended_actions: string;
     };
 }
 export interface RestoreResult {
@@ -62,8 +62,8 @@ export interface RestoreResult {
         properties_changed: number;
     };
     duration_ms: number;
-    warnings: string[];
-    errors: string[];
+    warnings: string;
+    errors: string;
 }
 export interface RestoreState {
     id: string;
@@ -77,52 +77,12 @@ export interface RestoreState {
     error_message?: string;
 }
 export declare class VersionRestoreManager {
+    private activeRestores;
+    private restoreHistory;
+    constructor();
     private apiClient;
     private projectId;
     private userId;
     private versionHistoryManager;
-    private activeRestores;
-    private restoreHistory;
-    constructor(apiClient: any, projectId: string, userId: string, versionHistoryManager: any);
-    createRestorePreview(snapshotId: string, currentGraphData: any, options?: RestoreOptions): Promise<RestorePreview>;
-    executeRestore(snapshotId: string, options?: RestoreOptions, conflictResolutions?: Record<string, 'keep_current' | 'use_restore' | 'merge' | 'custom'>): Promise<{
-        restoreId: string;
-        result: Promise<RestoreResult>;
-    }>;
-    private performRestore;
-    private createBackupSnapshot;
-    private getCurrentGraphData;
-    private detectConflicts;
-    private detectDataConflicts;
-    private detectWorkflowConflicts;
-    private detectDependencyConflicts;
-    private resolveConflicts;
-    private applyConflictResolution;
-    private mergeConflictValues;
-    private mergeNodeValues;
-    private mergeEdgeValues;
-    private mergePropertyValues;
-    private validateRestorePermissions;
-    private calculateChangesToApply;
-    private calculateFullRestore;
-    private calculateSelectiveRestore;
-    private calculateMergeRestore;
-    private applyChanges;
-    private restoreMetadata;
-    private notifyCollaborators;
-    private updateRestoreState;
-    private hasSignificantDifferences;
-    private suggestResolution;
-    private calculateConflictSeverity;
-    private isAutoResolvable;
-    private isDependencyAvailable;
-    private updateElement;
-    private checkRestorePermission;
-    private checkProjectLock;
-    private validateWorkflowTransition;
-    private updateWorkflowState;
-    getRestoreState(restoreId: string): RestoreState | null;
-    getRestoreHistory(): RestoreResult[];
-    cancelRestore(restoreId: string): Promise<void>;
 }
 //# sourceMappingURL=VersionRestoreManager.d.ts.map

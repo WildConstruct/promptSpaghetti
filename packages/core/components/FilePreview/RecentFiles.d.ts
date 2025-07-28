@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import { PSGFile } from '../../projectManager';
+
 interface RecentFilesProps {
     /** Maximum number of recent files to display */
     limit?: number;
@@ -14,7 +15,7 @@ interface RecentFilesProps {
     style?: React.CSSProperties;
     /** CSS class name */
     className?: string;
-}
+
 export declare const RecentFiles: React.FC<RecentFilesProps>;
 declare const MemoizedRecentFiles: React.NamedExoticComponent<RecentFilesProps>;
 export default MemoizedRecentFiles;

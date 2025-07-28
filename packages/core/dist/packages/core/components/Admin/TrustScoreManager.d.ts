@@ -21,7 +21,7 @@ export interface UserTrustData {
     accountStatus: 'active' | 'suspended' | 'under_review';
     lastActivity: Date;
     joinDate: Date;
-    riskFlags: string[];
+    riskFlags: string;
 }
 export interface TrustScoreAdjustment {
     userId: string;

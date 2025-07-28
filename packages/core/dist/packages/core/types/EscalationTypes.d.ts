@@ -13,569 +13,13 @@ export declare enum EscalationTriggerType {
     MANUAL = "manual",
     AUTOMATED = "automated",
     CONDITIONAL = "conditional",
-    PRIORITY_BASED = "priority_based"
+    PRIORITY_BASED = "priority_based",
+    export,
+    enum,
+    EscalationStatus
 }
-export declare enum EscalationStatus {
-    PENDING = "pending",
-    IN_PROGRESS = "in_progress",
-    ESCALATED = "escalated",
-    RESOLVED = "resolved",
-    CANCELLED = "cancelled",
-    EXPIRED = "expired"
-}
-export declare enum EscalationPriority {
-    LOW = "low",
-    MEDIUM = "medium",
-    HIGH = "high",
-    URGENT = "urgent",
-    CRITICAL = "critical"
-}
-export declare enum EscalationCategory {
-    FRAUD_DETECTION = "fraud_detection",
-    APPEAL_PROCESS = "appeal_process",
-    POLICY_VIOLATION = "policy_violation",
-    SYSTEM_INCIDENT = "system_incident",
-    COMPLIANCE_ISSUE = "compliance_issue",
-    SECURITY_ALERT = "security_alert",
-    CUSTOMER_COMPLAINT = "customer_complaint",
-    TECHNICAL_ISSUE = "technical_issue",
-    BUSINESS_CRITICAL = "business_critical",
-    REGULATORY = "regulatory"
-}
-export declare enum NotificationType {
-    EMAIL = "email",
-    SMS = "sms",
-    PUSH = "push",
-    SLACK = "slack",
-    TEAMS = "teams",
-    WEBHOOK = "webhook",
-    DASHBOARD = "dashboard"
-}
-export declare enum EscalationActionType {
-    NOTIFICATION = "notification",
-    ASSIGNMENT = "assignment",
-    STATUS_CHANGE = "status_change",
-    DATA_COLLECTION = "data_collection",
-    EXTERNAL_API = "external_api",
-    WORKFLOW = "workflow",
-    CUSTOM = "custom"
-}
-export declare enum AssignmentType {
-    INDIVIDUAL = "individual",
-    GROUP = "group",
-    ROLE = "role",
-    QUEUE = "queue",
-    AUTOMATIC = "automatic"
-}
-export declare const EscalationConditionSchema: z.ZodObject<{
-    conditionId: z.ZodString;
-    type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-    field: z.ZodString;
-    operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-    value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-    logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-}, "strip", z.ZodTypeAny, {
-    value?: string | number | boolean;
-    type?: "value" | "custom" | "time" | "count" | "percentage";
-    operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-    field?: string;
-    logicalOperator?: "AND" | "OR";
-    conditionId?: string;
-}, {
-    value?: string | number | boolean;
-    type?: "value" | "custom" | "time" | "count" | "percentage";
-    operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-    field?: string;
-    logicalOperator?: "AND" | "OR";
-    conditionId?: string;
-}>;
-export declare const NotificationMethodSchema: z.ZodObject<{
-    type: z.ZodNativeEnum<typeof NotificationType>;
-    address: z.ZodString;
-    priority: z.ZodNativeEnum<typeof EscalationPriority>;
-    immediateDelivery: z.ZodBoolean;
-    retryCount: z.ZodOptional<z.ZodNumber>;
-    retryInterval: z.ZodOptional<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    priority?: EscalationPriority;
-    type?: NotificationType;
-    address?: string;
-    retryCount?: number;
-    immediateDelivery?: boolean;
-    retryInterval?: number;
-}, {
-    priority?: EscalationPriority;
-    type?: NotificationType;
-    address?: string;
-    retryCount?: number;
-    immediateDelivery?: boolean;
-    retryInterval?: number;
-}>;
-export declare const EscalationActionSchema: z.ZodObject<{
-    actionId: z.ZodString;
-    type: z.ZodNativeEnum<typeof EscalationActionType>;
-    configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-    executeImmediately: z.ZodBoolean;
-    rollbackable: z.ZodBoolean;
-}, "strip", z.ZodTypeAny, {
-    type?: EscalationActionType;
-    configuration?: Record<string, unknown>;
-    actionId?: string;
-    executeImmediately?: boolean;
-    rollbackable?: boolean;
-}, {
-    type?: EscalationActionType;
-    configuration?: Record<string, unknown>;
-    actionId?: string;
-    executeImmediately?: boolean;
-    rollbackable?: boolean;
-}>;
-export declare const EscalationLevelSchema: z.ZodObject<{
-    levelId: z.ZodString;
-    level: z.ZodNumber;
-    name: z.ZodString;
-    description: z.ZodString;
-    assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
-    assignmentTarget: z.ZodString;
-    notificationMethods: z.ZodArray<z.ZodObject<{
-        type: z.ZodNativeEnum<typeof NotificationType>;
-        address: z.ZodString;
-        priority: z.ZodNativeEnum<typeof EscalationPriority>;
-        immediateDelivery: z.ZodBoolean;
-        retryCount: z.ZodOptional<z.ZodNumber>;
-        retryInterval: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }, {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }>, "many">;
-    notificationTemplate: z.ZodOptional<z.ZodString>;
-    responseTimeLimit: z.ZodNumber;
-    resolutionTimeLimit: z.ZodNumber;
-    automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
-        actionId: z.ZodString;
-        type: z.ZodNativeEnum<typeof EscalationActionType>;
-        configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-        executeImmediately: z.ZodBoolean;
-        rollbackable: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }, {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }>, "many">>;
-    requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
-        conditionId: z.ZodString;
-        type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-        field: z.ZodString;
-        operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-        value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-        logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-    }, "strip", z.ZodTypeAny, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    name?: string;
-    description?: string;
-    level?: number;
-    requiredActions?: string[];
-    escalationCriteria?: {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }[];
-    levelId?: string;
-    assignmentType?: AssignmentType;
-    assignmentTarget?: string;
-    notificationMethods?: {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }[];
-    notificationTemplate?: string;
-    responseTimeLimit?: number;
-    resolutionTimeLimit?: number;
-    automaticActions?: {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }[];
-}, {
-    name?: string;
-    description?: string;
-    level?: number;
-    requiredActions?: string[];
-    escalationCriteria?: {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }[];
-    levelId?: string;
-    assignmentType?: AssignmentType;
-    assignmentTarget?: string;
-    notificationMethods?: {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }[];
-    notificationTemplate?: string;
-    responseTimeLimit?: number;
-    resolutionTimeLimit?: number;
-    automaticActions?: {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }[];
-}>;
-export declare const EscalationRuleSchema: z.ZodObject<{
-    ruleId: z.ZodString;
-    name: z.ZodString;
-    description: z.ZodString;
-    category: z.ZodNativeEnum<typeof EscalationCategory>;
-    enabled: z.ZodBoolean;
-    triggerType: z.ZodNativeEnum<typeof EscalationTriggerType>;
-    conditions: z.ZodArray<z.ZodObject<{
-        conditionId: z.ZodString;
-        type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-        field: z.ZodString;
-        operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-        value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-        logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-    }, "strip", z.ZodTypeAny, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }>, "many">;
-    escalationPath: z.ZodArray<z.ZodObject<{
-        levelId: z.ZodString;
-        level: z.ZodNumber;
-        name: z.ZodString;
-        description: z.ZodString;
-        assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
-        assignmentTarget: z.ZodString;
-        notificationMethods: z.ZodArray<z.ZodObject<{
-            type: z.ZodNativeEnum<typeof NotificationType>;
-            address: z.ZodString;
-            priority: z.ZodNativeEnum<typeof EscalationPriority>;
-            immediateDelivery: z.ZodBoolean;
-            retryCount: z.ZodOptional<z.ZodNumber>;
-            retryInterval: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }, {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }>, "many">;
-        notificationTemplate: z.ZodOptional<z.ZodString>;
-        responseTimeLimit: z.ZodNumber;
-        resolutionTimeLimit: z.ZodNumber;
-        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            actionId: z.ZodString;
-            type: z.ZodNativeEnum<typeof EscalationActionType>;
-            configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-            executeImmediately: z.ZodBoolean;
-            rollbackable: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }, {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }>, "many">>;
-        requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            conditionId: z.ZodString;
-            type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-            field: z.ZodString;
-            operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-            value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-            logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-        }, "strip", z.ZodTypeAny, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }, {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }>, "many">;
-    initialDelay: z.ZodOptional<z.ZodNumber>;
-    escalationInterval: z.ZodOptional<z.ZodNumber>;
-    maxEscalationTime: z.ZodOptional<z.ZodNumber>;
-    businessHoursOnly: z.ZodOptional<z.ZodBoolean>;
-    allowWeekends: z.ZodOptional<z.ZodBoolean>;
-    timeZone: z.ZodOptional<z.ZodString>;
-    createdBy: z.ZodString;
-    createdAt: z.ZodDate;
-    lastModified: z.ZodDate;
-    version: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    createdAt?: Date;
-    name?: string;
-    description?: string;
-    category?: EscalationCategory;
-    version?: number;
-    lastModified?: Date;
-    enabled?: boolean;
-    conditions?: {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }[];
-    ruleId?: string;
-    createdBy?: string;
-    triggerType?: EscalationTriggerType;
-    initialDelay?: number;
-    escalationPath?: {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }[];
-    escalationInterval?: number;
-    maxEscalationTime?: number;
-    businessHoursOnly?: boolean;
-    allowWeekends?: boolean;
-    timeZone?: string;
-}, {
-    createdAt?: Date;
-    name?: string;
-    description?: string;
-    category?: EscalationCategory;
-    version?: number;
-    lastModified?: Date;
-    enabled?: boolean;
-    conditions?: {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }[];
-    ruleId?: string;
-    createdBy?: string;
-    triggerType?: EscalationTriggerType;
-    initialDelay?: number;
-    escalationPath?: {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }[];
-    escalationInterval?: number;
-    maxEscalationTime?: number;
-    businessHoursOnly?: boolean;
-    allowWeekends?: boolean;
-    timeZone?: string;
-}>;
+export declare const EscalationLevelSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
+export declare const EscalationRuleSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
 export interface EscalationCondition {
     conditionId: string;
     type: 'value' | 'time' | 'count' | 'percentage' | 'custom';
@@ -606,13 +50,13 @@ export interface EscalationLevel {
     description: string;
     assignmentType: AssignmentType;
     assignmentTarget: string;
-    notificationMethods: NotificationMethod[];
+    notificationMethods: NotificationMethod;
     notificationTemplate?: string;
     responseTimeLimit: number;
     resolutionTimeLimit: number;
-    automaticActions?: EscalationAction[];
-    requiredActions?: string[];
-    escalationCriteria?: EscalationCondition[];
+    automaticActions?: EscalationAction;
+    requiredActions?: string;
+    escalationCriteria?: EscalationCondition;
 }
 export interface EscalationRule {
     ruleId: string;
@@ -621,8 +65,8 @@ export interface EscalationRule {
     category: EscalationCategory;
     enabled: boolean;
     triggerType: EscalationTriggerType;
-    conditions: EscalationCondition[];
-    escalationPath: EscalationLevel[];
+    conditions: EscalationCondition;
+    escalationPath: EscalationLevel;
     initialDelay?: number;
     escalationInterval?: number;
     maxEscalationTime?: number;
@@ -676,8 +120,8 @@ export interface EscalationResolution {
     resolvedBy: string;
     resolutionTime: number;
     satisfactionRating?: number;
-    lessonsLearned?: string[];
-    improvementSuggestions?: string[];
+    lessonsLearned?: string;
+    improvementSuggestions?: string;
 }
 export interface EscalationCase {
     caseId: string;
@@ -697,13 +141,13 @@ export interface EscalationCase {
     responseDeadline?: Date;
     resolutionDeadline?: Date;
     resolvedAt?: Date;
-    escalationPath: EscalationPathStep[];
-    notifications: EscalationNotification[];
-    actions: EscalationActionLog[];
+    escalationPath: EscalationPathStep;
+    notifications: EscalationNotification;
+    actions: EscalationActionLog;
     resolution?: EscalationResolution;
     resolutionNotes?: string;
     followUpRequired?: boolean;
-    tags: string[];
+    tags: string;
     metadata: Record<string, any>;
 }
 export interface EscalationCategoryMetrics {
@@ -712,7 +156,7 @@ export interface EscalationCategoryMetrics {
     averageResolutionTime: number;
     escalationRate: number;
     satisfactionScore: number;
-    topIssues: string[];
+    topIssues: string;
 }
 export interface EscalationLevelMetrics {
     level: number;
@@ -743,7 +187,7 @@ export interface EscalationMetrics {
     slaComplianceRate: number;
     categoryMetrics: Map<EscalationCategory, EscalationCategoryMetrics>;
     levelMetrics: Map<number, EscalationLevelMetrics>;
-    trends: EscalationTrend[];
+    trends: EscalationTrend;
     satisfactionScore: number;
     ruleEffectivenessScore: number;
 }
@@ -753,8 +197,8 @@ export interface EscalationAlert {
     severity: 'info' | 'warning' | 'critical';
     title: string;
     message: string;
-    affectedCases: string[];
-    recommendedActions: string[];
+    affectedCases: string;
+    recommendedActions: string;
     createdAt: Date;
 }
 export interface EscalationRecommendation {
@@ -787,18 +231,18 @@ export interface EscalationDashboard {
         overdueResolutions: number;
         averageWaitTime: number;
     };
-    recentEscalations: EscalationCase[];
-    urgentCases: EscalationCase[];
+    recentEscalations: EscalationCase;
+    urgentCases: EscalationCase;
     performance: {
         slaCompliance: number;
         firstCallResolution: number;
         customerSatisfaction: number;
         averageHandleTime: number;
     };
-    workloadDistribution: WorkloadAssignment[];
-    categoryBreakdown: CategoryBreakdown[];
-    alerts: EscalationAlert[];
-    recommendations: EscalationRecommendation[];
+    workloadDistribution: WorkloadAssignment;
+    categoryBreakdown: CategoryBreakdown;
+    alerts: EscalationAlert;
+    recommendations: EscalationRecommendation;
 }
 export interface CreateEscalationRuleRequest {
     name: string;
@@ -806,7 +250,7 @@ export interface CreateEscalationRuleRequest {
     category: EscalationCategory;
     enabled?: boolean;
     triggerType: EscalationTriggerType;
-    conditions: EscalationCondition[];
+    conditions: EscalationCondition;
     escalationPath: Omit<EscalationLevel, 'levelId'>[];
     initialDelay?: number;
     escalationInterval?: number;
@@ -820,8 +264,8 @@ export interface UpdateEscalationRuleRequest {
     description?: string;
     category?: EscalationCategory;
     enabled?: boolean;
-    conditions?: EscalationCondition[];
-    escalationPath?: EscalationLevel[];
+    conditions?: EscalationCondition;
+    escalationPath?: EscalationLevel;
     initialDelay?: number;
     escalationInterval?: number;
     maxEscalationTime?: number;
@@ -843,8 +287,8 @@ export interface ResolveCaseRequest {
     resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged';
     resolutionNotes?: string;
     satisfactionRating?: number;
-    lessonsLearned?: string[];
-    improvementSuggestions?: string[];
+    lessonsLearned?: string;
+    improvementSuggestions?: string;
 }
 export interface GetEscalationCasesQuery {
     status?: EscalationStatus;
@@ -883,7 +327,7 @@ export interface EscalationAPIResponse<T = any> {
     message?: string;
 }
 export interface PaginatedResponse<T> {
-    items: T[];
+    items: T;
     pagination: {
         page: number;
         limit: number;
@@ -895,14 +339,14 @@ export interface EscalationRuleTestResult {
     ruleId: string;
     testData: Record<string, any>;
     wouldTrigger: boolean;
-    matchedConditions: string[];
+    matchedConditions: string;
     suggestedLevel: number;
     estimatedEscalationPath: {
         level: number;
         assignee: string;
         estimatedTime: number;
     }[];
-    warnings: string[];
+    warnings: string;
 }
 export interface AssigneePerformance {
     assignee: string;
@@ -916,7 +360,7 @@ export interface AssigneePerformance {
     escalationRate: number;
     satisfactionScore: number;
     workloadUtilization: number;
-    specializations: EscalationCategory[];
+    specializations: EscalationCategory;
 }
 export interface EscalationIntegration {
     integrationId: string;
@@ -924,7 +368,7 @@ export interface EscalationIntegration {
     type: 'webhook' | 'api' | 'email' | 'slack' | 'teams' | 'custom';
     configuration: Record<string, any>;
     enabled: boolean;
-    events: EscalationEventType[];
+    events: EscalationEventType;
     credentials?: Record<string, string>;
     rateLimits?: {
         requestsPerMinute: number;
@@ -940,23 +384,17 @@ export declare enum EscalationEventType {
     SLA_BREACH = "sla_breach",
     ASSIGNMENT_CHANGED = "assignment_changed",
     NOTIFICATION_SENT = "notification_sent",
-    ACTION_EXECUTED = "action_executed"
-}
-export interface EscalationEvent {
-    eventId: string;
-    type: EscalationEventType;
-    caseId: string;
-    timestamp: Date;
-    data: Record<string, any>;
-    triggeredBy: string;
-    integrations?: string[];
+    ACTION_EXECUTED = "action_executed",
+    export,
+    interface,
+    EscalationEvent
 }
 export interface EscalationServiceConfig {
     defaultTimezone: string;
     businessHours: {
         startTime: string;
         endTime: string;
-        daysOfWeek: number[];
+        daysOfWeek: number;
     };
     notifications: {
         retryAttempts: number;
@@ -979,522 +417,18 @@ export interface EscalationServiceConfig {
 }
 declare const _default: {
     EscalationTriggerType: typeof EscalationTriggerType;
-    EscalationStatus: typeof EscalationStatus;
-    EscalationPriority: typeof EscalationPriority;
-    EscalationCategory: typeof EscalationCategory;
-    NotificationType: typeof NotificationType;
-    EscalationActionType: typeof EscalationActionType;
-    AssignmentType: typeof AssignmentType;
+    EscalationStatus: any;
+    EscalationPriority: any;
+    EscalationCategory: any;
+    NotificationType: any;
+    EscalationActionType: any;
+    AssignmentType: any;
     EscalationEventType: typeof EscalationEventType;
-    EscalationConditionSchema: z.ZodObject<{
-        conditionId: z.ZodString;
-        type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-        field: z.ZodString;
-        operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-        value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-        logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-    }, "strip", z.ZodTypeAny, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }, {
-        value?: string | number | boolean;
-        type?: "value" | "custom" | "time" | "count" | "percentage";
-        operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-        field?: string;
-        logicalOperator?: "AND" | "OR";
-        conditionId?: string;
-    }>;
-    NotificationMethodSchema: z.ZodObject<{
-        type: z.ZodNativeEnum<typeof NotificationType>;
-        address: z.ZodString;
-        priority: z.ZodNativeEnum<typeof EscalationPriority>;
-        immediateDelivery: z.ZodBoolean;
-        retryCount: z.ZodOptional<z.ZodNumber>;
-        retryInterval: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }, {
-        priority?: EscalationPriority;
-        type?: NotificationType;
-        address?: string;
-        retryCount?: number;
-        immediateDelivery?: boolean;
-        retryInterval?: number;
-    }>;
-    EscalationActionSchema: z.ZodObject<{
-        actionId: z.ZodString;
-        type: z.ZodNativeEnum<typeof EscalationActionType>;
-        configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-        executeImmediately: z.ZodBoolean;
-        rollbackable: z.ZodBoolean;
-    }, "strip", z.ZodTypeAny, {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }, {
-        type?: EscalationActionType;
-        configuration?: Record<string, unknown>;
-        actionId?: string;
-        executeImmediately?: boolean;
-        rollbackable?: boolean;
-    }>;
-    EscalationLevelSchema: z.ZodObject<{
-        levelId: z.ZodString;
-        level: z.ZodNumber;
-        name: z.ZodString;
-        description: z.ZodString;
-        assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
-        assignmentTarget: z.ZodString;
-        notificationMethods: z.ZodArray<z.ZodObject<{
-            type: z.ZodNativeEnum<typeof NotificationType>;
-            address: z.ZodString;
-            priority: z.ZodNativeEnum<typeof EscalationPriority>;
-            immediateDelivery: z.ZodBoolean;
-            retryCount: z.ZodOptional<z.ZodNumber>;
-            retryInterval: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }, {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }>, "many">;
-        notificationTemplate: z.ZodOptional<z.ZodString>;
-        responseTimeLimit: z.ZodNumber;
-        resolutionTimeLimit: z.ZodNumber;
-        automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            actionId: z.ZodString;
-            type: z.ZodNativeEnum<typeof EscalationActionType>;
-            configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-            executeImmediately: z.ZodBoolean;
-            rollbackable: z.ZodBoolean;
-        }, "strip", z.ZodTypeAny, {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }, {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }>, "many">>;
-        requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-        escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
-            conditionId: z.ZodString;
-            type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-            field: z.ZodString;
-            operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-            value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-            logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-        }, "strip", z.ZodTypeAny, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }, {
-        name?: string;
-        description?: string;
-        level?: number;
-        requiredActions?: string[];
-        escalationCriteria?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        levelId?: string;
-        assignmentType?: AssignmentType;
-        assignmentTarget?: string;
-        notificationMethods?: {
-            priority?: EscalationPriority;
-            type?: NotificationType;
-            address?: string;
-            retryCount?: number;
-            immediateDelivery?: boolean;
-            retryInterval?: number;
-        }[];
-        notificationTemplate?: string;
-        responseTimeLimit?: number;
-        resolutionTimeLimit?: number;
-        automaticActions?: {
-            type?: EscalationActionType;
-            configuration?: Record<string, unknown>;
-            actionId?: string;
-            executeImmediately?: boolean;
-            rollbackable?: boolean;
-        }[];
-    }>;
-    EscalationRuleSchema: z.ZodObject<{
-        ruleId: z.ZodString;
-        name: z.ZodString;
-        description: z.ZodString;
-        category: z.ZodNativeEnum<typeof EscalationCategory>;
-        enabled: z.ZodBoolean;
-        triggerType: z.ZodNativeEnum<typeof EscalationTriggerType>;
-        conditions: z.ZodArray<z.ZodObject<{
-            conditionId: z.ZodString;
-            type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-            field: z.ZodString;
-            operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-            value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-            logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-        }, "strip", z.ZodTypeAny, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }, {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }>, "many">;
-        escalationPath: z.ZodArray<z.ZodObject<{
-            levelId: z.ZodString;
-            level: z.ZodNumber;
-            name: z.ZodString;
-            description: z.ZodString;
-            assignmentType: z.ZodNativeEnum<typeof AssignmentType>;
-            assignmentTarget: z.ZodString;
-            notificationMethods: z.ZodArray<z.ZodObject<{
-                type: z.ZodNativeEnum<typeof NotificationType>;
-                address: z.ZodString;
-                priority: z.ZodNativeEnum<typeof EscalationPriority>;
-                immediateDelivery: z.ZodBoolean;
-                retryCount: z.ZodOptional<z.ZodNumber>;
-                retryInterval: z.ZodOptional<z.ZodNumber>;
-            }, "strip", z.ZodTypeAny, {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }, {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }>, "many">;
-            notificationTemplate: z.ZodOptional<z.ZodString>;
-            responseTimeLimit: z.ZodNumber;
-            resolutionTimeLimit: z.ZodNumber;
-            automaticActions: z.ZodOptional<z.ZodArray<z.ZodObject<{
-                actionId: z.ZodString;
-                type: z.ZodNativeEnum<typeof EscalationActionType>;
-                configuration: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-                executeImmediately: z.ZodBoolean;
-                rollbackable: z.ZodBoolean;
-            }, "strip", z.ZodTypeAny, {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }, {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }>, "many">>;
-            requiredActions: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-            escalationCriteria: z.ZodOptional<z.ZodArray<z.ZodObject<{
-                conditionId: z.ZodString;
-                type: z.ZodEnum<["value", "time", "count", "percentage", "custom"]>;
-                field: z.ZodString;
-                operator: z.ZodEnum<["eq", "ne", "gt", "gte", "lt", "lte", "contains", "regex"]>;
-                value: z.ZodUnion<[z.ZodString, z.ZodNumber, z.ZodBoolean]>;
-                logicalOperator: z.ZodOptional<z.ZodEnum<["AND", "OR"]>>;
-            }, "strip", z.ZodTypeAny, {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }, {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }>, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            name?: string;
-            description?: string;
-            level?: number;
-            requiredActions?: string[];
-            escalationCriteria?: {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }[];
-            levelId?: string;
-            assignmentType?: AssignmentType;
-            assignmentTarget?: string;
-            notificationMethods?: {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }[];
-            notificationTemplate?: string;
-            responseTimeLimit?: number;
-            resolutionTimeLimit?: number;
-            automaticActions?: {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }[];
-        }, {
-            name?: string;
-            description?: string;
-            level?: number;
-            requiredActions?: string[];
-            escalationCriteria?: {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }[];
-            levelId?: string;
-            assignmentType?: AssignmentType;
-            assignmentTarget?: string;
-            notificationMethods?: {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }[];
-            notificationTemplate?: string;
-            responseTimeLimit?: number;
-            resolutionTimeLimit?: number;
-            automaticActions?: {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }[];
-        }>, "many">;
-        initialDelay: z.ZodOptional<z.ZodNumber>;
-        escalationInterval: z.ZodOptional<z.ZodNumber>;
-        maxEscalationTime: z.ZodOptional<z.ZodNumber>;
-        businessHoursOnly: z.ZodOptional<z.ZodBoolean>;
-        allowWeekends: z.ZodOptional<z.ZodBoolean>;
-        timeZone: z.ZodOptional<z.ZodString>;
-        createdBy: z.ZodString;
-        createdAt: z.ZodDate;
-        lastModified: z.ZodDate;
-        version: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        createdAt?: Date;
-        name?: string;
-        description?: string;
-        category?: EscalationCategory;
-        version?: number;
-        lastModified?: Date;
-        enabled?: boolean;
-        conditions?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        ruleId?: string;
-        createdBy?: string;
-        triggerType?: EscalationTriggerType;
-        initialDelay?: number;
-        escalationPath?: {
-            name?: string;
-            description?: string;
-            level?: number;
-            requiredActions?: string[];
-            escalationCriteria?: {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }[];
-            levelId?: string;
-            assignmentType?: AssignmentType;
-            assignmentTarget?: string;
-            notificationMethods?: {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }[];
-            notificationTemplate?: string;
-            responseTimeLimit?: number;
-            resolutionTimeLimit?: number;
-            automaticActions?: {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }[];
-        }[];
-        escalationInterval?: number;
-        maxEscalationTime?: number;
-        businessHoursOnly?: boolean;
-        allowWeekends?: boolean;
-        timeZone?: string;
-    }, {
-        createdAt?: Date;
-        name?: string;
-        description?: string;
-        category?: EscalationCategory;
-        version?: number;
-        lastModified?: Date;
-        enabled?: boolean;
-        conditions?: {
-            value?: string | number | boolean;
-            type?: "value" | "custom" | "time" | "count" | "percentage";
-            operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-            field?: string;
-            logicalOperator?: "AND" | "OR";
-            conditionId?: string;
-        }[];
-        ruleId?: string;
-        createdBy?: string;
-        triggerType?: EscalationTriggerType;
-        initialDelay?: number;
-        escalationPath?: {
-            name?: string;
-            description?: string;
-            level?: number;
-            requiredActions?: string[];
-            escalationCriteria?: {
-                value?: string | number | boolean;
-                type?: "value" | "custom" | "time" | "count" | "percentage";
-                operator?: "regex" | "gt" | "lt" | "eq" | "ne" | "gte" | "lte" | "contains";
-                field?: string;
-                logicalOperator?: "AND" | "OR";
-                conditionId?: string;
-            }[];
-            levelId?: string;
-            assignmentType?: AssignmentType;
-            assignmentTarget?: string;
-            notificationMethods?: {
-                priority?: EscalationPriority;
-                type?: NotificationType;
-                address?: string;
-                retryCount?: number;
-                immediateDelivery?: boolean;
-                retryInterval?: number;
-            }[];
-            notificationTemplate?: string;
-            responseTimeLimit?: number;
-            resolutionTimeLimit?: number;
-            automaticActions?: {
-                type?: EscalationActionType;
-                configuration?: Record<string, unknown>;
-                actionId?: string;
-                executeImmediately?: boolean;
-                rollbackable?: boolean;
-            }[];
-        }[];
-        escalationInterval?: number;
-        maxEscalationTime?: number;
-        businessHoursOnly?: boolean;
-        allowWeekends?: boolean;
-        timeZone?: string;
-    }>;
+    EscalationConditionSchema: any;
+    NotificationMethodSchema: any;
+    EscalationActionSchema: any;
+    EscalationLevelSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
+    EscalationRuleSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
 };
 export default _default;
 //# sourceMappingURL=EscalationTypes.d.ts.map

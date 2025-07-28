@@ -619,7 +619,7 @@ describe('Error Handling', () => {
       service.searchTransactions({ 
         page: 0, // Invalid page
         limit: 10 
-      })
+  }
     ).rejects.toThrow();
   });
 

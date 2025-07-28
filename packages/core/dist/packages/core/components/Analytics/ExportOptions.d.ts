@@ -11,9 +11,5 @@ export interface ExportOptionsProps {
     };
     className?: string;
 }
-/**
- * Export options component
- */
 export declare const ExportOptions: React.FC<ExportOptionsProps>;
-export default ExportOptions;
 //# sourceMappingURL=ExportOptions.d.ts.map

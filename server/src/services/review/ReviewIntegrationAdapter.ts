@@ -32,6 +32,7 @@ import {
   EnforcementAppeal
 } from '../../../../packages/core/types/EnforcementTypes';
 
+}
 export interface IntegrationConfig {
   enabled: boolean;
   autoCreateReviews: boolean;
@@ -40,7 +41,9 @@ export interface IntegrationConfig {
   escalationThresholds: Record<string, number>;
   integrationMappings: IntegrationMapping[];
 }
+}
 
+}
 export interface IntegrationMapping {
   sourceSystem: SourceSystem;
   sourceType: string;
@@ -48,6 +51,7 @@ export interface IntegrationMapping {
   priorityMapping: Record<string, ReviewPriority>;
   complexityMapping: Record<string, ReviewComplexity>;
   criteriaMapping: Record<string, string[]>;
+}
 }
 
 export class ReviewIntegrationAdapter {
@@ -85,7 +89,7 @@ export class ReviewIntegrationAdapter {
         fraud_case: 85,
         security_alert: 90,
         enforcement_appeal: 75
-      },
+  }
       integrationMappings: this.getDefaultMappings(),
       ...config
     };
@@ -101,6 +105,7 @@ export class ReviewIntegrationAdapter {
    * Initialize all integrations
    */
   private async initializeIntegrations(): Promise<void> {
+
     if (!this.config.enabled) {
       console.log('🔌 Review integrations disabled');
       return;
@@ -146,6 +151,7 @@ export class ReviewIntegrationAdapter {
       additionalContext?: unknown;
     } = {}
   ): Promise<ReviewItem | null> {
+
     if (!this.config.enabled || !this.config.autoCreateReviews) {
       console.log(`🚫 Auto-creation disabled for ${sourceSystem}`);
       return null;
@@ -233,6 +239,7 @@ export class ReviewIntegrationAdapter {
     status: string,
     decision?: any
   ): Promise<void> {
+
     if (!this.config.syncBidirectional) {
       return;
     }
@@ -284,6 +291,7 @@ export class ReviewIntegrationAdapter {
   // =============================================================================
 
   private async initializeFraudIntegration(): Promise<void> {
+
     console.log('🔌 Initializing fraud monitoring integration...');
 
     this.integrationStatus.set('fraud_monitoring', {
@@ -303,6 +311,7 @@ export class ReviewIntegrationAdapter {
    * Handle fraud case review creation
    */
   async handleFraudCaseReview(fraudCase: FraudReviewCase): Promise<ReviewItem | null> {
+
     const sourceData = {
       caseId: fraudCase.caseId,
       fraudScore: fraudCase.fraudScore,
@@ -330,6 +339,7 @@ export class ReviewIntegrationAdapter {
    * Handle fraud alert review creation
    */
   async handleFraudAlertReview(alert: FraudAlert): Promise<ReviewItem | null> {
+
     const sourceData = {
       alertId: alert.alertId,
       severity: alert.severity,
@@ -354,6 +364,7 @@ export class ReviewIntegrationAdapter {
   }
 
   private async syncToFraudSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
+
     // Sync review status back to fraud monitoring system
     if (review.sourceId.startsWith('FC-')) {
       // This is a fraud case - update the case status
@@ -371,6 +382,7 @@ export class ReviewIntegrationAdapter {
   // =============================================================================
 
   private async initializeEnforcementIntegration(): Promise<void> {
+
     console.log('🔌 Initializing enforcement actions integration...');
 
     this.integrationStatus.set('enforcement_actions', {
@@ -388,6 +400,7 @@ export class ReviewIntegrationAdapter {
    * Handle enforcement action review creation
    */
   async handleEnforcementActionReview(action: EnforcementAction): Promise<ReviewItem | null> {
+
     const sourceData = {
       actionId: action.actionId,
       actionType: action.actionType,
@@ -414,6 +427,7 @@ export class ReviewIntegrationAdapter {
    * Handle enforcement appeal review creation
    */
   async handleEnforcementAppealReview(appeal: EnforcementAppeal): Promise<ReviewItem | null> {
+
     const sourceData = {
       appealId: appeal.appealId,
       actionId: appeal.actionId,
@@ -435,6 +449,7 @@ export class ReviewIntegrationAdapter {
   }
 
   private async syncToEnforcementSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
+
     // Sync review status back to enforcement system
     console.log(`🔄 Updating enforcement item ${review.sourceId} status: ${status}`);
     // Would call EnforcementActionService to update status
@@ -445,6 +460,7 @@ export class ReviewIntegrationAdapter {
   // =============================================================================
 
   private async initializeVerificationIntegration(): Promise<void> {
+
     console.log('🔌 Initializing verification queue integration...');
 
     this.integrationStatus.set('identity_verification', {
@@ -462,6 +478,7 @@ export class ReviewIntegrationAdapter {
    * Handle identity verification review creation
    */
   async handleIdentityVerificationReview(verificationData: unknown): Promise<ReviewItem | null> {
+
     const sourceData = {
       verificationId: verificationData.id,
       userId: verificationData.userId,
@@ -483,6 +500,7 @@ export class ReviewIntegrationAdapter {
   }
 
   private async syncToVerificationSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
+
     // Sync review status back to verification system
     console.log(`🔄 Updating verification ${review.sourceId} status: ${status}`);
     // Would update verification queue status
@@ -493,6 +511,7 @@ export class ReviewIntegrationAdapter {
   // =============================================================================
 
   private async initializeMarketplaceIntegration(): Promise<void> {
+
     console.log('🔌 Initializing marketplace integration...');
 
     this.integrationStatus.set('marketplace', {
@@ -510,6 +529,7 @@ export class ReviewIntegrationAdapter {
    * Handle template submission review creation
    */
   async handleTemplateSubmissionReview(submission: unknown): Promise<ReviewItem | null> {
+
     const sourceData = {
       submissionId: submission.id,
       templateData: submission.template,
@@ -531,6 +551,7 @@ export class ReviewIntegrationAdapter {
   }
 
   private async syncToMarketplaceSystem(review: ReviewItem, status: string, decision?: any): Promise<void> {
+
     // Sync review status back to marketplace system
     console.log(`🔄 Updating marketplace item ${review.sourceId} status: ${status}`);
     // Would update marketplace submission status
@@ -551,16 +572,16 @@ export class ReviewIntegrationAdapter {
           medium: 'medium',
           high: 'high',
           urgent: 'urgent'
-        },
+  }
         complexityMapping: {
           simple: 'simple',
           complex: 'complex',
           expert: 'expert_required'
-        },
+  }
         criteriaMapping: {
           fraud_case: ['fraud_assessment', 'risk_analysis', 'evidence_review']
         }
-      },
+  }
       {
         sourceSystem: 'enforcement_actions',
         sourceType: 'appeal',
@@ -569,15 +590,15 @@ export class ReviewIntegrationAdapter {
           low: 'medium',
           medium: 'high',
           high: 'urgent'
-        },
+  }
         complexityMapping: {
           simple: 'moderate',
           complex: 'complex'
-        },
+  }
         criteriaMapping: {
           appeal: ['appeal_validity', 'evidence_review', 'policy_compliance']
         }
-      },
+  }
       {
         sourceSystem: 'marketplace',
         sourceType: 'template_submission',
@@ -585,12 +606,12 @@ export class ReviewIntegrationAdapter {
         priorityMapping: {
           standard: 'medium',
           expedited: 'high'
-        },
+  }
         complexityMapping: {
           simple: 'simple',
           advanced: 'moderate',
           enterprise: 'complex'
-        },
+  }
         criteriaMapping: {
           template: ['quality_check', 'safety_review', 'compliance_check']
         }
@@ -621,6 +642,7 @@ export class ReviewIntegrationAdapter {
     complexity: ReviewComplexity,
     additionalContext?: any
   ): Promise<ReviewMetadata> {
+
     return {
       sourceData,
       businessContext: this.extractBusinessContext(sourceSystem, sourceType, sourceData),
@@ -707,6 +729,7 @@ export class ReviewIntegrationAdapter {
   }
 
   private async processSyncQueue(): Promise<void> {
+
     while (this.processingQueue && this.syncQueue.length > 0) {
       const event = this.syncQueue.shift();
       if (event) {
@@ -725,11 +748,13 @@ export class ReviewIntegrationAdapter {
   }
 
   private async processIntegrationEvent(event: IntegrationEvent): Promise<void> {
+
     // Process integration events from the queue
     console.log(`Processing integration event: ${event.type}`);
   }
 
   private async logIntegrationEvent(type: string, data: Record<string, unknown>): Promise<void> {
+
     await this.auditService.logEvent({
       userId: 'system',
       action: `integration_${type}`,
@@ -772,6 +797,7 @@ export class ReviewIntegrationAdapter {
 }
 
 // Supporting interfaces
+}
 interface IntegrationStatus {
   system: SourceSystem;
   status: 'active' | 'inactive' | 'error';
@@ -779,11 +805,14 @@ interface IntegrationStatus {
   errorCount: number;
   totalProcessed: number;
 }
+}
 
+}
 interface IntegrationEvent {
   type: string;
   sourceSystem: SourceSystem;
   data: Record<string, unknown>;
   timestamp: Date;
   processed: boolean;
+}
 }

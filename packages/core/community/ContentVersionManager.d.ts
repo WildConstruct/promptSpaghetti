@@ -5,6 +5,7 @@
  * Version control system for community contributions (articles, tutorials, case studies).
  * Adapts the proven TemplateVersionManager pattern for content versioning.
  */
+
 export interface CommunityContent {
     id: string;
     type: 'article' | 'tutorial' | 'case-study' | 'guide' | 'documentation';
@@ -35,14 +36,14 @@ export interface CommunityContent {
         publishSchedule?: string;
         lastReview?: string;
     };
-}
+
 export interface ContentSection {
     id: string;
     title: string;
     level: number;
     anchor: string;
     children?: ContentSection[];
-}
+
 export interface ContentMetadata {
     readingTime: number;
     wordCount: number;
@@ -51,7 +52,7 @@ export interface ContentMetadata {
     prerequisites: string[];
     learningObjectives: string[];
     relatedContent: string[];
-}
+
 export interface ContentMediaAttachment {
     id: string;
     type: 'image' | 'video' | 'audio' | 'document' | 'interactive';
@@ -69,7 +70,7 @@ export interface ContentMediaAttachment {
     };
     duration?: number;
     position: number;
-}
+
 export interface ContentVersion {
     id: string;
     content_id: string;
@@ -101,7 +102,7 @@ export interface ContentVersion {
     quality_metrics: ContentQualityScore;
     plagiarism_check?: PlagiarismResult;
     fact_check?: FactCheckResult;
-}
+
 export interface ReviewFeedback {
     id: string;
     reviewer_id: string;
@@ -113,7 +114,7 @@ export interface ReviewFeedback {
     severity: 'low' | 'medium' | 'high' | 'critical';
     status: 'open' | 'addressed' | 'dismissed';
     resolution?: string;
-}
+
 export interface ContentContributor {
     user_id: string;
     name: string;
@@ -121,7 +122,7 @@ export interface ContentContributor {
     contribution: string;
     contribution_date: string;
     attribution_visible: boolean;
-}
+
 export interface ContentQualityScore {
     overall_score: number;
     dimensions: {,
@@ -144,7 +145,7 @@ export interface ContentQualityScore {
         style_consistency: number;
         target_audience_fit: number;
     };
-}
+
 export interface PlagiarismResult {
     overall_similarity: number;
     sources_found: Array<{,
@@ -155,7 +156,7 @@ export interface PlagiarismResult {
     }>;
     confidence_level: number;
     check_date: string;
-}
+
 export interface FactCheckResult {
     overall_accuracy: number;
     claims_checked: number;
@@ -168,7 +169,7 @@ export interface FactCheckResult {
     }>;
     check_date: string;
     checker_id?: string;
-}
+
 export interface ContentImportOptions {
     format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
     source: string | File | ArrayBuffer;
@@ -186,7 +187,7 @@ export interface ContentImportOptions {
     assign_reviewer?: string;
     target_status?: 'draft' | 'review';
     import_notes?: string;
-}
+
 export interface ContentExportOptions {
     format: 'markdown' | 'html' | 'pdf' | 'docx' | 'epub' | 'content_bundle';
     include_version_history?: boolean;
@@ -206,7 +207,7 @@ export interface ContentExportOptions {
         custom_css?: string;
         include_toc?: boolean;
     };
-}
+
 export interface ContentVersionDiff {
     content_changes: Array<{,
         section: string;
@@ -245,7 +246,7 @@ export interface ContentVersionDiff {
         feedback_added: number;
         feedback_resolved: number;
     };
-}
+
 export declare class ContentVersionManager {
     private contentId;
     private userId;
@@ -328,7 +329,7 @@ export declare class ContentVersionManager {
     }): Promise<ContentQualityScore>;
     private generateNextVersion;
     private calculateQualityMetrics;
-}
+
 export interface ContentBundle {
     format_version: string;
     created_at: string;
@@ -348,5 +349,5 @@ export interface ContentBundle {
     };
     checksums: Record<string, string>;
     signature?: string;
-}
+
 //# sourceMappingURL=ContentVersionManager.d.ts.map

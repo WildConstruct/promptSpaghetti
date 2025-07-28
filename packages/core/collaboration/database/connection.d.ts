@@ -1,4 +1,5 @@
 import { PoolClient, QueryResult } from 'pg';
+
 export interface DatabaseConfig {
     host: string;
     port: number;
@@ -9,7 +10,7 @@ export interface DatabaseConfig {
     connectionTimeoutMillis?: number;
     idleTimeoutMillis?: number;
     max?: number;
-}
+
 export declare class DatabaseConnection {
     private pool;
     private isConnected;
@@ -33,7 +34,7 @@ export declare class DatabaseConnection {
         idleCount: any;
         waitingCount: any;
     };
-}
+
 export declare const ValidationHelpers: {
     isValidUUID(id: string): boolean;
 };
@@ -62,7 +63,7 @@ export declare class QueryBuilder {
     set(assignments: Record<string, any>): this;
     values(data: Record<string, any>): this;
     returning(columns?: string[] | string): this;
-}
+
 export declare class MigrationRunner {
     private db;
     constructor(db: DatabaseConnection);
@@ -70,5 +71,5 @@ export declare class MigrationRunner {
     getAppliedMigrations(): Promise<string[]>;
     applyMigration(version: string, sql: string): Promise<void>;
     rollbackMigration(version: string): Promise<void>;
-}
+
 //# sourceMappingURL=connection.d.ts.map

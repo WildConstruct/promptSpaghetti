@@ -48,6 +48,7 @@ export class ExportService {
     mimeType?: string;
     error?: string;
   }> {
+
     try {
       // Get rules to export
       const rules = options.ruleIds 
@@ -86,7 +87,7 @@ export class ExportService {
           format_version: '1.0',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        },
+  }
         rules: exportedRules,
         statistics
       };
@@ -150,6 +151,7 @@ export class ExportService {
     setId?: number;
     error?: string;
   }> {
+
     try {
       // Get rules
       const rules = ruleIds.map(id => this.dao.getRuleById(id)).filter(Boolean);
@@ -170,7 +172,7 @@ export class ExportService {
           format_version: '1.0',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        },
+  }
         rules: rules.map(ruleToExportFormat)
       };
 
@@ -242,6 +244,7 @@ export class ExportService {
     errors?: string[];
     warnings?: string[];
   }> {
+
     try {
       // Detect format
       const format = detectFormat(filename, content);
@@ -326,6 +329,7 @@ export class ExportService {
     errors: string[];
     warnings: string[];
   }> {
+
     let importedCount = 0;
     let skippedCount = 0;
     const errors: string[] = [];
@@ -469,6 +473,7 @@ export class ExportService {
     mimeType?: string;
     error?: string;
   }> {
+
     try {
       const set = this.getCorrectionSetById(setId, userId);
       

@@ -84,7 +84,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             data: { type: 'object' },
             metadata: { type: 'object' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -130,7 +130,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'object' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -179,7 +179,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'object' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -273,7 +273,7 @@ export async function chargebackManagementRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             data: { type: 'array' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {

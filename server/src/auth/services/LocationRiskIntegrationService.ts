@@ -11,6 +11,7 @@ import {
 import { LoginAttempt } from './LoginService';
 import { DatabaseService } from '../database/DatabaseService';
 
+}
 export interface EnhancedSecurityAnalysis {
   riskScore: RiskScore;
   geolocationData: GeolocationData;
@@ -19,6 +20,7 @@ export interface EnhancedSecurityAnalysis {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
+}
   };
   recommendations: string[];
   requiresAdditionalVerification: boolean;
@@ -56,6 +58,7 @@ export class LocationRiskIntegrationService {
       };
     }
   ): Promise<EnhancedSecurityAnalysis> {
+
     // Get comprehensive geolocation data
     const geolocationData = await this.geolocationService.getGeolocationData(
       context.ipAddress || '',
@@ -71,7 +74,7 @@ export class LocationRiskIntegrationService {
         loginAttempt.userId,
         context.ipAddress || '',
         geolocationData
-      )
+
       : {
         isNewLocation: true,
         isTypicalLocation: false,
@@ -99,7 +102,7 @@ export class LocationRiskIntegrationService {
         region: geolocationData.region,
         city: geolocationData.city,
         coordinates: geolocationData.coordinates
-      },
+  }
       timestamp: loginAttempt.timestamp,
       success: loginAttempt.success,
       sessionId: undefined, // Not available in this context
@@ -143,6 +146,7 @@ export class LocationRiskIntegrationService {
    * Build user profile for risk scoring from database
    */
   private async buildUserProfile(userId: string): Promise<UserProfile> {
+
     // Get user's location history
     const locationHistory = await this.geolocationService.getUserLocationHistory(userId);
     
@@ -197,6 +201,7 @@ export class LocationRiskIntegrationService {
     userId?: string,
     ipAddress?: string
   ): Promise<RiskLoginAttempt[]> {
+
     let query = `
       SELECT 
         user_id,
@@ -302,6 +307,7 @@ export class LocationRiskIntegrationService {
     mfaEnabled: boolean;
     riskLevel: 'low' | 'medium' | 'high';
   }> {
+
     const result = await this.db.query(`
       SELECT 
         created_at,

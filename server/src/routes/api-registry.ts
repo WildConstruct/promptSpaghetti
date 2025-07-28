@@ -18,6 +18,7 @@ import {
 } from '../registry/ApiRegistryModel';
 
 // Request/Response Types
+}
 interface RegisterServiceRequest {
   name: string;
   description?: string;
@@ -33,6 +34,7 @@ interface RegisterServiceRequest {
     externalDocs?: {
       description: string;
       url: string;
+}
     };
   };
   owner?: string;
@@ -44,6 +46,7 @@ interface RegisterServiceRequest {
   complianceLabels?: string[];
 }
 
+}
 interface RegisterEndpointRequest {
   name: string;
   description?: string;
@@ -62,6 +65,7 @@ interface RegisterEndpointRequest {
     location?: string;
     name?: string;
     scheme?: string;
+}
   };
   permissions?: string[];
   scopes?: string[];
@@ -90,6 +94,7 @@ interface RegisterEndpointRequest {
   maintainer?: string;
 }
 
+}
 interface UpdateEndpointRequest {
   name?: string;
   description?: string;
@@ -98,12 +103,14 @@ interface UpdateEndpointRequest {
   documentation?: {
     summary?: string;
     description?: string;
+}
   };
   tags?: string[];
   categories?: string[];
   rateLimits?: any;
 }
 
+}
 interface SearchQuery {
   serviceIds?: string;
   statuses?: string;
@@ -118,7 +125,9 @@ interface SearchQuery {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 interface AnalyticsQuery {
   startDate: string;
   endDate: string;
@@ -126,6 +135,7 @@ interface AnalyticsQuery {
   includeHealth?: boolean;
   includeGrowth?: boolean;
   includeCompliance?: boolean;
+}
 }
 
 /**
@@ -408,7 +418,7 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         properties: {
           endpointId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -469,7 +479,7 @@ export async function apiRegistryRoutes(fastify: FastifyInstance) {
         properties: {
           endpointId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {

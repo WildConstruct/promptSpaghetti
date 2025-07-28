@@ -50,9 +50,6 @@
  * @since 2024-01-01
  */
 import { EventEmitter } from 'events';
-/**
- * Main Security Alerting Analytics Service
- */
 export class SecurityAlertingAnalytics extends EventEmitter {
     config;
     alerts = [];
@@ -71,10 +68,13 @@ export class SecurityAlertingAnalytics extends EventEmitter {
         this.loadResponseTemplates();
         this.initializeMLModels();
         this.startPeriodicTasks();
+        /**
+        * Process incoming security alert
+        */
     }
     /**
-     * Process incoming security alert
-     */
+    * Process incoming security alert
+    */
     async processAlert(alert) {
         try {
             // Store alert
@@ -83,325 +83,374 @@ export class SecurityAlertingAnalytics extends EventEmitter {
             // Real-time analysis if enabled
             if (this.config.enableRealTimeAnalytics) {
                 await this.performRealTimeAnalysis(alert);
+                // Pattern analysis if enabled
+                if (this.config.enablePatternAnalysis) {
+                    await this.analyzePatterns(alert);
+                    // Threat intelligence correlation if enabled
+                    if (this.config.enableThreatIntelligence) {
+                        await this.correlateThreatIntelligence(alert);
+                        // Automated response if enabled
+                        if (this.config.enableAutomatedResponse) {
+                            await this.triggerAutomatedResponse(alert);
+                            // Emit processed alert event
+                            this.emit('alertProcessed', {});
+                            alert,
+                                timestamp;
+                            new Date(),
+                                analysisResults;
+                            await this.getAlertAnalysis(alert.id),
+                            ;
+                        }
+                        ;
+                    }
+                    try { }
+                    catch (error) {
+                        this.emit('processingError', {});
+                        alert,
+                            error;
+                        error.message,
+                            timestamp;
+                        new Date(),
+                        ;
+                    }
+                    ;
+                    /**
+                     * Get comprehensive analytics dashboard
+                     */
+                }
+                /**
+                 * Get comprehensive analytics dashboard
+                 */
             }
-            // Pattern analysis if enabled
-            if (this.config.enablePatternAnalysis) {
-                await this.analyzePatterns(alert);
-            }
-            // Threat intelligence correlation if enabled
-            if (this.config.enableThreatIntelligence) {
-                await this.correlateThreatIntelligence(alert);
-            }
-            // Automated response if enabled
-            if (this.config.enableAutomatedResponse) {
-                await this.triggerAutomatedResponse(alert);
-            }
-            // Emit processed alert event
-            this.emit('alertProcessed', {
-                alert,
-                timestamp: new Date(),
-                analysisResults: await this.getAlertAnalysis(alert.id)
-            });
+            /**
+             * Get comprehensive analytics dashboard
+             */
         }
-        catch (error) {
-            this.emit('processingError', {
-                alert,
-                error: error.message,
-                timestamp: new Date()
-            });
+        /**
+         * Get comprehensive analytics dashboard
+         */
+        finally {
         }
+        /**
+         * Get comprehensive analytics dashboard
+         */
     }
-    /**
-     * Get comprehensive analytics dashboard
-     */
-    getAnalyticsDashboard() {
-        return {
-            metrics: this.getMetrics(),
-            activePatterns: this.getActivePatterns(),
-            threatSummary: this.getTopThreats(10),
-            recommendations: this.getRecommendations(),
-            performance: this.getPerformanceMetrics()
-        };
-    }
-    /**
-     * Get real-time threat intelligence
-     */
-    getThreatIntelligence() {
-        return { ...this.threatIntelligence };
-    }
-    /**
-     * Get alert patterns
-     */
-    getAlertPatterns(limit = 50, patternType) {
+}
+return {
+    metrics: this.getMetrics(),
+    activePatterns: this.getActivePatterns(),
+    threatSummary: this.getTopThreats(10),
+    recommendations: this.getRecommendations(),
+    performance: this.getPerformanceMetrics(),
+};
+getThreatIntelligence();
+ThreatIntelligence;
+{
+    return { ...this.threatIntelligence };
+    getAlertPatterns(limit, number = 50);
+    patternType ?  : AlertPattern['patternType'];
+    AlertPattern;
+    {
         let patterns = Array.from(this.patterns.values());
         if (patternType) {
             patterns = patterns.filter(p => p.patternType === patternType);
-        }
-        return patterns
-            .sort((a, b) => b.riskScore - a.riskScore)
-            .slice(0, limit);
-    }
-    /**
-     * Perform correlation analysis
-     */
-    async performCorrelationAnalysis(timeWindow = 3600000 // 1 hour default
-    ) {
-        const recentAlerts = this.getRecentAlerts(timeWindow);
-        const correlatedPatterns = [];
-        for (const rule of this.correlationRules.values()) {
-            if (!rule.enabled)
-                continue;
-            const matchingAlerts = this.findMatchingAlerts(recentAlerts, rule);
-            if (matchingAlerts.length >= 2) {
-                const pattern = await this.createCorrelatedPattern(matchingAlerts, rule);
-                correlatedPatterns.push(pattern);
-                this.patterns.set(pattern.patternId, pattern);
-            }
-        }
-        return correlatedPatterns;
-    }
-    /**
-     * Generate threat assessment report
-     */
-    generateThreatAssessment() {
-        const overallRiskScore = this.calculateOverallRiskScore();
-        const topThreats = this.getTopThreats(10);
-        const riskByClassification = this.calculateRiskByClassification();
-        const recommendations = this.generateRecommendations();
-        const trends = this.analyzeTrends();
-        const compliance = this.assessComplianceImpact();
-        return {
-            overallRiskScore,
-            topThreats,
-            riskByClassification,
-            recommendations,
-            trends,
-            compliance
-        };
-    }
-    /**
-     * Update ML models with new data
-     */
-    async updateMLModels() {
-        if (!this.config.machinelearningEnabled)
-            return;
-        for (const model of this.mlModels.values()) {
-            if (model.status === 'ACTIVE') {
-                await this.retrainModel(model);
-            }
-        }
-    }
-    /**
-     * Get performance metrics
-     */
-    getMetrics() {
-        return { ...this.metrics };
-    }
-    /**
-     * Add correlation rule
-     */
-    addCorrelationRule(rule) {
-        this.correlationRules.set(rule.id, rule);
-        this.emit('correlationRuleAdded', rule);
-    }
-    /**
-     * Remove correlation rule
-     */
-    removeCorrelationRule(ruleId) {
-        const removed = this.correlationRules.delete(ruleId);
-        if (removed) {
-            this.emit('correlationRuleRemoved', ruleId);
-        }
-        return removed;
-    }
-    // Private implementation methods...
-    async performRealTimeAnalysis(alert) {
-        // Analyze alert in real-time
-        const analysis = {
-            timestamp: new Date(),
-            alertId: alert.id,
-            riskScore: this.calculateAlertRiskScore(alert),
-            threatType: this.classifyThreatType(alert),
-            urgency: this.calculateUrgency(alert),
-            relatedAlerts: this.findRelatedAlerts(alert)
-        };
-        this.emit('realTimeAnalysis', analysis);
-        // Check for immediate escalation
-        if (analysis.urgency === 'CRITICAL') {
-            this.emit('criticalAlert', { alert, analysis });
-        }
-    }
-    async analyzePatterns(alert) {
-        // Find existing patterns this alert might belong to
-        const matchingPatterns = this.findMatchingPatterns(alert);
-        if (matchingPatterns.length === 0) {
-            // Create new pattern if this could be the start of one
-            const newPattern = await this.createNewPattern(alert);
-            if (newPattern) {
-                this.patterns.set(newPattern.patternId, newPattern);
-                this.emit('newPatternDetected', newPattern);
-            }
-        }
-        else {
-            // Update existing patterns
-            for (const pattern of matchingPatterns) {
-                pattern.alerts.push(alert);
-                pattern.lastUpdated = new Date();
-                pattern.frequency++;
-                // Recalculate pattern metrics
-                await this.updatePatternMetrics(pattern);
-                this.emit('patternUpdated', pattern);
-            }
-        }
-    }
-    async correlateThreatIntelligence(alert) {
-        const matches = [];
-        // Check against threat indicators
-        for (const indicator of this.threatIntelligence.indicators) {
-            if (this.matchesIndicator(alert, indicator)) {
-                matches.push(indicator);
-            }
-        }
-        if (matches.length > 0) {
-            this.metrics.threatIntelligenceMatches++;
-            this.emit('threatIntelligenceMatch', {
-                alert,
-                matches,
-                timestamp: new Date()
-            });
-        }
-    }
-    async triggerAutomatedResponse(alert) {
-        if (!this.config.responseAutomation.enabled)
-            return;
-        const applicableTemplates = this.findApplicableResponseTemplates(alert);
-        for (const template of applicableTemplates) {
-            if (template.effectiveness >= this.config.responseAutomation.confidenceThreshold) {
-                await this.executeResponseTemplate(template, alert);
-            }
-        }
-    }
-    initializeMetrics() {
-        this.metrics = {
-            totalAlerts: 0,
-            alertsByType: {},
-            alertsBySeverity: {},
-            alertsByClassification: {},
-            alertsByOperation: {},
-            averageResponseTime: 0,
-            falsePositiveRate: 0,
-            correlatedAlerts: 0,
-            escalatedAlerts: 0,
-            automatedResponses: 0,
-            manualInterventions: 0,
-            threatIntelligenceMatches: 0,
-            trendsAnalysis: {
-                alertVolumeGrowth: 0,
-                topThreats: [],
-                topTargets: [],
-                timePatterns: [],
-                geographicDistribution: [],
-                userBehaviorTrends: [],
-                systemPerformanceImpact: {
-                    systemLatency: 0,
-                    processingOverhead: 0,
-                    storageUtilization: 0,
-                    networkImpact: 0,
-                    alertProcessingTime: 0,
-                    falsePositiveRatio: 0
+            return patterns
+                .sort((a, b) => b.riskScore - a.riskScore)
+                .slice(0, limit);
+            async;
+            performCorrelationAnalysis();
+            timeWindow: number = 3600000; // 1 hour default): Promise<AlertPattern> {,
+            const recentAlerts = this.getRecentAlerts(timeWindow);
+            const correlatedPatterns = [];
+            for (const rule of this.correlationRules.values()) {
+                if (!rule.enabled)
+                    continue;
+                const matchingAlerts = this.findMatchingAlerts(recentAlerts, rule);
+                if (matchingAlerts.length >= 2) {
+                    const pattern = await this.createCorrelatedPattern(matchingAlerts, rule);
+                    correlatedPatterns.push(pattern);
+                    this.patterns.set(pattern.patternId, pattern);
+                    return correlatedPatterns;
+                    generateThreatAssessment();
+                    {
+                        overallRiskScore: number;
+                        topThreats: ThreatSummary;
+                        riskByClassification: Record;
+                        recommendations: string;
+                        trends: TrendAnalysis;
+                        compliance: ComplianceImpact;
+                        const overallRiskScore = this.calculateOverallRiskScore();
+                        const topThreats = this.getTopThreats(10);
+                        const riskByClassification = this.calculateRiskByClassification();
+                        const recommendations = this.generateRecommendations();
+                        const trends = this.analyzeTrends();
+                        const compliance = this.assessComplianceImpact();
+                        return {
+                            overallRiskScore,
+                            topThreats,
+                            riskByClassification,
+                            recommendations,
+                            trends,
+                            compliance
+                        };
+                        async;
+                        updateMLModels();
+                        Promise < void  > {
+                            : .config.machinelearningEnabled, return: ,
+                            : .mlModels.values()
+                        };
+                        {
+                            if (model.status === 'ACTIVE') {
+                                await this.retrainModel(model);
+                                getMetrics();
+                                AlertMetrics;
+                                {
+                                    return { ...this.metrics };
+                                    addCorrelationRule(rule, CorrelationRule);
+                                    void {
+                                        this: .correlationRules.set(rule.id, rule),
+                                        this: .emit('correlationRuleAdded', rule),
+                                        /**
+                                        * Remove correlation rule
+                                        */
+                                        removeCorrelationRule(ruleId) {
+                                            const removed = this.correlationRules.delete(ruleId);
+                                            if (removed) {
+                                                this.emit('correlationRuleRemoved', ruleId);
+                                                return removed;
+                                                // Private implementation methods...
+                                            }
+                                            // Private implementation methods...
+                                        }
+                                        // Private implementation methods...
+                                        ,
+                                        // Private implementation methods...
+                                        async performRealTimeAnalysis(alert) {
+                                            // Analyze alert in real-time
+                                            const analysis = {
+                                                timestamp: new Date(),
+                                                alertId: alert.id,
+                                                riskScore: this.calculateAlertRiskScore(alert),
+                                                threatType: this.classifyThreatType(alert),
+                                                urgency: this.calculateUrgency(alert),
+                                                relatedAlerts: this.findRelatedAlerts(alert),
+                                            };
+                                            this.emit('realTimeAnalysis', analysis);
+                                            // Check for immediate escalation
+                                            if (analysis.urgency === 'CRITICAL') {
+                                                this.emit('criticalAlert', { alert, analysis });
+                                            }
+                                        },
+                                        async analyzePatterns(alert) {
+                                            // Find existing patterns this alert might belong to
+                                            const matchingPatterns = this.findMatchingPatterns(alert);
+                                            if (matchingPatterns.length === 0) {
+                                                // Create new pattern if this could be the start of one
+                                                const newPattern = await this.createNewPattern(alert);
+                                                if (newPattern) {
+                                                    this.patterns.set(newPattern.patternId, newPattern);
+                                                    this.emit('newPatternDetected', newPattern);
+                                                }
+                                                else {
+                                                    // Update existing patterns
+                                                    for (const pattern of matchingPatterns) {
+                                                        pattern.alerts.push(alert);
+                                                        pattern.lastUpdated = new Date();
+                                                        pattern.frequency++;
+                                                        // Recalculate pattern metrics
+                                                        await this.updatePatternMetrics(pattern);
+                                                        this.emit('patternUpdated', pattern);
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        async correlateThreatIntelligence(alert) {
+                                            const matches = [];
+                                            // Check against threat indicators
+                                            for (const indicator of this.threatIntelligence.indicators) {
+                                                if (this.matchesIndicator(alert, indicator)) {
+                                                    matches.push(indicator);
+                                                    if (matches.length > 0) {
+                                                        this.metrics.threatIntelligenceMatches++;
+                                                        this.emit('threatIntelligenceMatch', {});
+                                                        alert,
+                                                            matches,
+                                                            timestamp;
+                                                        new Date(),
+                                                        ;
+                                                    }
+                                                    ;
+                                                }
+                                            }
+                                        },
+                                        async triggerAutomatedResponse(alert) {
+                                            if (!this.config.responseAutomation.enabled)
+                                                return;
+                                            const applicableTemplates = this.findApplicableResponseTemplates(alert);
+                                            for (const template of applicableTemplates) {
+                                                if (template.effectiveness >= this.config.responseAutomation.confidenceThreshold) {
+                                                    await this.executeResponseTemplate(template, alert);
+                                                }
+                                            }
+                                        },
+                                        initializeMetrics() {
+                                            this.metrics = {
+                                                totalAlerts: 0,
+                                                alertsByType: {},
+                                                alertsBySeverity: {},
+                                                alertsByClassification: {},
+                                                alertsByOperation: {},
+                                                averageResponseTime: 0,
+                                                falsePositiveRate: 0,
+                                                correlatedAlerts: 0,
+                                                escalatedAlerts: 0,
+                                                automatedResponses: 0,
+                                                manualInterventions: 0,
+                                                threatIntelligenceMatches: 0,
+                                                trendsAnalysis: {
+                                                    alertVolumeGrowth: 0,
+                                                    topThreats: [],
+                                                    topTargets: [],
+                                                    timePatterns: [],
+                                                    geographicDistribution: [],
+                                                    userBehaviorTrends: [],
+                                                    systemPerformanceImpact: {
+                                                        systemLatency: 0,
+                                                        processingOverhead: 0,
+                                                        storageUtilization: 0,
+                                                        networkImpact: 0,
+                                                        alertProcessingTime: 0,
+                                                        falsePositiveRatio: 0,
+                                                    },
+                                                    initializeThreatIntelligence() {
+                                                        this.threatIntelligence = {
+                                                            threatFeeds: [],
+                                                            indicators: [],
+                                                            campaigns: [],
+                                                            attribution: [],
+                                                            predictions: [],
+                                                            contextualData: {
+                                                                industryThrends: [],
+                                                                geopoliticalFactors: [],
+                                                                vulnerabilityCorrelations: [],
+                                                                seasonalPatterns: [],
+                                                                emergingThreats: [],
+                                                            },
+                                                            loadCorrelationRules() {
+                                                                // Load default correlation rules
+                                                                for (const rule of this.config.correlationRules) {
+                                                                    this.correlationRules.set(rule.id, rule);
+                                                                }
+                                                            },
+                                                            loadResponseTemplates() {
+                                                                // Load default response templates
+                                                                for (const template of this.config.responseAutomation.responseTemplates) {
+                                                                    this.responseTemplates.set(template.id, template);
+                                                                }
+                                                            },
+                                                            initializeMLModels() {
+                                                                if (!this.config.machinelearningEnabled)
+                                                                    return;
+                                                                // Initialize default ML models
+                                                                const defaultModels = this.createDefaultMLModels();
+                                                                for (const model of defaultModels) {
+                                                                    this.mlModels.set(model.modelId, model);
+                                                                }
+                                                            },
+                                                            startPeriodicTasks() {
+                                                                // Update threat intelligence periodically
+                                                                setInterval(() => {
+                                                                    this.updateThreatIntelligence();
+                                                                }, this.config.threatIntelligenceUpdate);
+                                                                // Cleanup old alerts
+                                                                setInterval(() => {
+                                                                    this.cleanupOldAlerts();
+                                                                }, 24 * 60 * 60 * 1000); // Daily
+                                                                // Retrain ML models
+                                                                if (this.config.machinelearningEnabled) {
+                                                                    setInterval(() => {
+                                                                        this.updateMLModels();
+                                                                    }, 7 * 24 * 60 * 60 * 1000);
+                                                                    // Additional helper methods would be implemented here...
+                                                                }
+                                                                // Additional helper methods would be implemented here...
+                                                            } // Weekly
+                                                            // Additional helper methods would be implemented here...
+                                                            , // Weekly
+                                                            // Additional helper methods would be implemented here...
+                                                            updateMetrics(alert) { },
+                                                            getAlertAnalysis(alertId) { /* Implementation */ return Promise.resolve({}); },
+                                                            getActivePatterns() { /* Implementation */ return []; },
+                                                            getTopThreats(limit) { /* Implementation */ return []; },
+                                                            getRecommendations() { /* Implementation */ return []; },
+                                                            getPerformanceMetrics() { /* Implementation */ return {}; },
+                                                            getRecentAlerts(timeWindow) { /* Implementation */ return []; }
+                                                        }();
+                                                        alerts: SecurityAlert,
+                                                            rule;
+                                                        CorrelationRule,
+                                                        ;
+                                                        SecurityAlert;
+                                                        { /* Implementation */
+                                                            return [];
+                                                        }
+                                                    }
+                                                }(),
+                                                alerts: SecurityAlert,
+                                                rule: CorrelationRule,
+                                                Promise() { /* Implementation */ return Promise.resolve({}); },
+                                                calculateOverallRiskScore() { /* Implementation */ return 0; },
+                                                calculateRiskByClassification() { /* Implementation */ return {}; },
+                                                generateRecommendations() { /* Implementation */ return []; },
+                                                analyzeTrends() { /* Implementation */ return {}; },
+                                                assessComplianceImpact() { /* Implementation */ return []; },
+                                                retrainModel(model) { /* Implementation */ return Promise.resolve(); },
+                                                calculateAlertRiskScore(alert) { /* Implementation */ return 0; },
+                                                classifyThreatType(alert) { /* Implementation */ return ''; },
+                                                calculateUrgency(alert) { /* Implementation */ return ''; },
+                                                findRelatedAlerts(alert) { /* Implementation */ return []; },
+                                                findMatchingPatterns(alert) { /* Implementation */ return []; },
+                                                createNewPattern(alert) { /* Implementation */ return Promise.resolve(null); },
+                                                updatePatternMetrics(pattern) { /* Implementation */ return Promise.resolve(); }
+                                            }();
+                                            alert: SecurityAlert,
+                                                indicator;
+                                            ThreatIndicator,
+                                            ;
+                                            boolean;
+                                            { /* Implementation */
+                                                return false;
+                                            }
+                                        },
+                                        findApplicableResponseTemplates(alert) { /* Implementation */ return []; }
+                                    }();
+                                    template: ResponseTemplate,
+                                        alert;
+                                    SecurityAlert,
+                                    ;
+                                    Promise < void  > { /* Implementation */ return: Promise.resolve() };
+                                    updateThreatIntelligence();
+                                    void { /* Implementation */};
+                                    cleanupOldAlerts();
+                                    void { /* Implementation */};
+                                    createDefaultMLModels();
+                                    MLModel;
+                                    { /* Implementation */
+                                        return [];
+                                    }
+                                    destroy();
+                                    void {
+                                        this: .removeAllListeners(),
+                                        // Stop any running timers
+                                        // Implementation would track and clear intervals
+                                        export: , default: SecurityAlertingAnalytics
+                                    };
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        };
-    }
-    initializeThreatIntelligence() {
-        this.threatIntelligence = {
-            threatFeeds: [],
-            indicators: [],
-            campaigns: [],
-            attribution: [],
-            predictions: [],
-            contextualData: {
-                industryThrends: [],
-                geopoliticalFactors: [],
-                vulnerabilityCorrelations: [],
-                seasonalPatterns: [],
-                emergingThreats: []
-            }
-        };
-    }
-    loadCorrelationRules() {
-        // Load default correlation rules
-        for (const rule of this.config.correlationRules) {
-            this.correlationRules.set(rule.id, rule);
         }
-    }
-    loadResponseTemplates() {
-        // Load default response templates
-        for (const template of this.config.responseAutomation.responseTemplates) {
-            this.responseTemplates.set(template.id, template);
-        }
-    }
-    initializeMLModels() {
-        if (!this.config.machinelearningEnabled)
-            return;
-        // Initialize default ML models
-        const defaultModels = this.createDefaultMLModels();
-        for (const model of defaultModels) {
-            this.mlModels.set(model.modelId, model);
-        }
-    }
-    startPeriodicTasks() {
-        // Update threat intelligence periodically
-        setInterval(() => {
-            this.updateThreatIntelligence();
-        }, this.config.threatIntelligenceUpdate);
-        // Cleanup old alerts
-        setInterval(() => {
-            this.cleanupOldAlerts();
-        }, 24 * 60 * 60 * 1000); // Daily
-        // Retrain ML models
-        if (this.config.machinelearningEnabled) {
-            setInterval(() => {
-                this.updateMLModels();
-            }, 7 * 24 * 60 * 60 * 1000); // Weekly
-        }
-    }
-    // Additional helper methods would be implemented here...
-    updateMetrics(alert) { }
-    getAlertAnalysis(alertId) { /* Implementation */ return Promise.resolve({}); }
-    getActivePatterns() { /* Implementation */ return []; }
-    getTopThreats(limit) { /* Implementation */ return []; }
-    getRecommendations() { /* Implementation */ return []; }
-    getPerformanceMetrics() { /* Implementation */ return {}; }
-    getRecentAlerts(timeWindow) { /* Implementation */ return []; }
-    findMatchingAlerts(alerts, rule) { /* Implementation */ return []; }
-    createCorrelatedPattern(alerts, rule) { /* Implementation */ return Promise.resolve({}); }
-    calculateOverallRiskScore() { /* Implementation */ return 0; }
-    calculateRiskByClassification() { /* Implementation */ return {}; }
-    generateRecommendations() { /* Implementation */ return []; }
-    analyzeTrends() { /* Implementation */ return {}; }
-    assessComplianceImpact() { /* Implementation */ return []; }
-    retrainModel(model) { /* Implementation */ return Promise.resolve(); }
-    calculateAlertRiskScore(alert) { /* Implementation */ return 0; }
-    classifyThreatType(alert) { /* Implementation */ return ''; }
-    calculateUrgency(alert) { /* Implementation */ return ''; }
-    findRelatedAlerts(alert) { /* Implementation */ return []; }
-    findMatchingPatterns(alert) { /* Implementation */ return []; }
-    createNewPattern(alert) { /* Implementation */ return Promise.resolve(null); }
-    updatePatternMetrics(pattern) { /* Implementation */ return Promise.resolve(); }
-    matchesIndicator(alert, indicator) { /* Implementation */ return false; }
-    findApplicableResponseTemplates(alert) { /* Implementation */ return []; }
-    executeResponseTemplate(template, alert) { /* Implementation */ return Promise.resolve(); }
-    updateThreatIntelligence() { }
-    cleanupOldAlerts() { }
-    createDefaultMLModels() { /* Implementation */ return []; }
-    /**
-     * Cleanup resources and stop service
-     */
-    destroy() {
-        this.removeAllListeners();
-        // Stop any running timers
-        // Implementation would track and clear intervals
     }
 }
-export default SecurityAlertingAnalytics;

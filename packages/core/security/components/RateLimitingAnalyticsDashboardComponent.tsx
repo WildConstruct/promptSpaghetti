@@ -22,32 +22,29 @@ interface RateLimitingAnalyticsDashboardProps {
   analyticsDashboard: RateLimitingAnalyticsDashboard;
   className?: string;
   theme?: 'light' | 'dark';
-  refreshInterval?: number; // seconds
+  refreshInterval?: number; // seconds,
   enableRealTimeUpdates?: boolean;
   showAdvancedFeatures?: boolean;
-}
-interface MetricCard {
-  id: string;
+  interface MetricCard {
+  id: string;,
   title: string;
   value: string | number;
   unit?: string;
-  trend: 'up' | 'down' | 'stable';
+  trend: 'up' | 'down' | 'stable';,
   trendValue: number;
-  status: 'good' | 'warning' | 'critical';
+  status: 'good' | 'warning' | 'critical';,
   description: string;
-}
-interface AlertSummary {
-  total: number;
+  interface AlertSummary {
+  total: number;,
   byType: Record<string, number>;
   bySeverity: Record<string, number>;
   recent: Array<{,
-    id: string;
-    type: string;
-    severity: string;
-    message: string;
-    timestamp: Date;
-  }>;
-}
+  id: string;,
+  type: string;
+  severity: string;,
+  message: string;
+  timestamp: Date;
+}>;
 
 // ========================================
 // Main Dashboard Component
@@ -87,28 +84,22 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
         setPredictiveInsights(summary.predictiveInsights);
         setDashboardVisualization(summary.dashboardVisualization);
         setLastUpdate(new Date());
-      }
     } catch (err) {
-      if (mountedRef.current) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to load analytics data';
-        setError(errorMessage);
-      }
-    } finally {
+  if (mountedRef.current) {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to load analytics data';
+  setError(errorMessage);
+} finally {
       if (mountedRef.current) {
         setIsLoading(false);
-      }
-    }
   }, [analyticsDashboard]);
   // Set up real-time updates
   useEffect(() => {
     loadAnalyticsData();
     if (enableRealTimeUpdates) {
       updateTimerRef.current = setInterval(loadAnalyticsData, refreshInterval * 1000);
-    }
     return () => {
       if (updateTimerRef.current) {
         clearInterval(updateTimerRef.current);
-      }
     };
   }, [loadAnalyticsData, enableRealTimeUpdates, refreshInterval]);
   // Listen for analytics events
@@ -116,15 +107,13 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
     const handleAnalyticsProcessed = () => {
       if (mountedRef.current) {
         loadAnalyticsData();
-      }
     };
     const handleAnalyticsError = (errorData: { error: any }) => {
-      if (mountedRef.current) {
-        const errorMessage = errorData.error instanceof Error ? ;
-          errorData.error.message : 'Analytics processing error';
-        setError(errorMessage);
-      }
-    };
+  if (mountedRef.current) {
+  const errorMessage = errorData.error instanceof Error ? ;
+  errorData.error.message : 'Analytics processing error';
+  setError(errorMessage);
+};
     analyticsDashboard.on('analyticsProcessed', handleAnalyticsProcessed);
     analyticsDashboard.on('analyticsError', handleAnalyticsError);
     return () => {
@@ -142,21 +131,21 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   // ========================================
   // Data Processing and Calculations
   // ========================================
-  const metricCards = useMemo((): MetricCard[] => {
-    if (!securityAnalytics) return [];
-    const cards: MetricCard[] = [];
-    // System Health Card
-    cards.push({)
-      id: 'system-health',
-      title: 'System Health',
-      value: securityAnalytics.performanceAnalytics.systemHealth.overallScore,
-      unit: '%',
-      trend: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 85 ? 'up' : 'down',
-      trendValue: 2.3,
-      status: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 90 ? 'good' : ,
-             securityAnalytics.performanceAnalytics.systemHealth.overallScore > 75 ? 'warning' : 'critical',
-      description: 'Overall system health and performance score',
-    });
+  const metricCards = useMemo((): MetricCard => {
+  if (!securityAnalytics) return [];
+  const cards: MetricCard = [];
+  // System Health Card
+  cards.push({)
+  id: 'system-health',
+  title: 'System Health',
+  value: securityAnalytics.performanceAnalytics.systemHealth.overallScore,
+  unit: '%',
+  trend: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 85 ? 'up' : 'down',
+  trendValue: 2.3,
+  status: securityAnalytics.performanceAnalytics.systemHealth.overallScore > 90 ? 'good' : ,
+  securityAnalytics.performanceAnalytics.systemHealth.overallScore > 75 ? 'warning' : 'critical',
+  description: 'Overall system health and performance score',
+});
     // Threat Level Card
     const threatLevelMap = {
       [ThreatLevel.LOW]: { value: 1, color: 'good' },
@@ -166,60 +155,60 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
     };
     const currentThreat = threatLevelMap[securityAnalytics.threatAnalysis.currentThreatLevel];
     cards.push({)
-      id: 'threat-level',
-      title: 'Threat Level',
-      value: securityAnalytics.threatAnalysis.currentThreatLevel.toUpperCase(),
-      trend: 'stable',
-      trendValue: 0,
-      status: currentThreat.color as 'good' | 'warning' | 'critical',
-      description: 'Current system threat assessment level',
-    });
+  id: 'threat-level',
+  title: 'Threat Level',
+  value: securityAnalytics.threatAnalysis.currentThreatLevel.toUpperCase(),
+  trend: 'stable',
+  trendValue: 0,
+  status: currentThreat.color as 'good' | 'warning' | 'critical',
+  description: 'Current system threat assessment level',
+});
     // Capacity Utilization Card
     cards.push({)
-      id: 'capacity',
-      title: 'Capacity',
-      value: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity,
-      unit: '%',
-      trend: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 80 ? 'up' : 'stable',
-      trendValue: 5.2,
-      status: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 85 ? 'critical' : ,
-             securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 70 ? 'warning' : 'good',
-      description: 'Current system capacity utilization',
-    });
+  id: 'capacity',
+  title: 'Capacity',
+  value: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity,
+  unit: '%',
+  trend: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 80 ? 'up' : 'stable',
+  trendValue: 5.2,
+  status: securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 85 ? 'critical' : ,
+  securityAnalytics.performanceAnalytics.capacityAnalysis.currentCapacity > 70 ? 'warning' : 'good',
+  description: 'Current system capacity utilization',
+});
     // Revenue Impact Card
     cards.push({)
-      id: 'revenue-impact',
-      title: 'Security ROI',
-      value: securityAnalytics.businessIntelligence.revenueImpact.securityROI.toFixed(0),
-      unit: '%',
-      trend: 'up',
-      trendValue: 12.8,
-      status: securityAnalytics.businessIntelligence.revenueImpact.securityROI > 200 ? 'good' : 'warning',
-      description: 'Return on investment from security measures',
-    });
+  id: 'revenue-impact',
+  title: 'Security ROI',
+  value: securityAnalytics.businessIntelligence.revenueImpact.securityROI.toFixed(0),
+  unit: '%',
+  trend: 'up',
+  trendValue: 12.8,
+  status: securityAnalytics.businessIntelligence.revenueImpact.securityROI > 200 ? 'good' : 'warning',
+  description: 'Return on investment from security measures',
+});
     // Attack Patterns Card
     cards.push({)
-      id: 'attack-patterns',
-      title: 'Active Threats',
-      value: securityAnalytics.threatAnalysis.attackPatterns.length,
-      trend: securityAnalytics.threatAnalysis.attackPatterns.length > 2 ? 'up' : 'stable',
-      trendValue: securityAnalytics.threatAnalysis.attackPatterns.length,
-      status: securityAnalytics.threatAnalysis.attackPatterns.length > 3 ? 'critical' : ,
-             securityAnalytics.threatAnalysis.attackPatterns.length > 1 ? 'warning' : 'good',
-      description: 'Number of detected attack patterns',
-    });
+  id: 'attack-patterns',
+  title: 'Active Threats',
+  value: securityAnalytics.threatAnalysis.attackPatterns.length,
+  trend: securityAnalytics.threatAnalysis.attackPatterns.length > 2 ? 'up' : 'stable',
+  trendValue: securityAnalytics.threatAnalysis.attackPatterns.length,
+  status: securityAnalytics.threatAnalysis.attackPatterns.length > 3 ? 'critical' : ,
+  securityAnalytics.threatAnalysis.attackPatterns.length > 1 ? 'warning' : 'good',
+  description: 'Number of detected attack patterns',
+});
     // Response Time SLA Card
     cards.push({)
-      id: 'response-sla',
-      title: 'Response SLA',
-      value: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance,
-      unit: '%',
-      trend: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'up' : 'down',
-      trendValue: -1.2,
-      status: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'good' : ,
-             securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 85 ? 'warning' : 'critical',
-      description: 'Response time SLA compliance percentage',
-    });
+  id: 'response-sla',
+  title: 'Response SLA',
+  value: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance,
+  unit: '%',
+  trend: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'up' : 'down',
+  trendValue: -1.2,
+  status: securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 95 ? 'good' : ,
+  securityAnalytics.performanceAnalytics.slaCompliance.responseTimeSLA.compliance > 85 ? 'warning' : 'critical',
+  description: 'Response time SLA compliance percentage',
+});
     return cards;
   }, [securityAnalytics]);
   const alertSummary = useMemo((): AlertSummary => {
@@ -228,32 +217,31 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
         total: 0,
         byType: {},
         bySeverity: {},
-        recent: [],
-      };
-    }
+        recent: [];
+  };
     const alerts = dashboardVisualization.alertPanels;
     const byType: Record<string, number> = {};
     const bySeverity: Record<string, number> = {};
     alerts.forEach(alert => {)
-      byType[alert.alertType] = (byType[alert.alertType] || 0) + 1;
+  byType[alert.alertType] = (byType[alert.alertType] || 0) + 1;
       bySeverity[alert.severity] = (bySeverity[alert.severity] || 0) + 1;
     });
     const recent = alerts;
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
       .slice(0, 5)
       .map(alert => ({)
-        id: alert.panelId,
-        type: alert.alertType,
-        severity: alert.severity,
-        message: alert.message,
-        timestamp: alert.timestamp,
-      }));
+  id: alert.panelId,
+  type: alert.alertType,
+  severity: alert.severity,
+  message: alert.message,
+  timestamp: alert.timestamp,
+}));
     return {
-      total: alerts.length,
-      byType,
-      bySeverity,
-      recent
-    };
+  total: alerts.length,
+  byType,
+  bySeverity,
+  recent
+};
   }, [dashboardVisualization]);
   // ========================================
   // Event Handlers
@@ -292,7 +280,6 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           break;
         default:
           throw new Error('Unsupported format');
-      }
       const blob = new Blob([exportData], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -303,10 +290,9 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Export failed:', error);
-      setError('Failed to export data');
-    }
-  };
+  console.error('Export failed:', error);
+  setError('Failed to export data');
+};
   // ========================================
   // Render Helpers
   // ========================================
@@ -326,10 +312,10 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
           </p>
           <div className="flex items-baseline space-x-2 mt-2">
             <p className={`text-3xl font-semibold ${
-              metric.status === 'critical' ? 'text-red-600 dark:text-red-400' :
-              metric.status === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :
-              'text-gray-900 dark:text-white'
-            }`}>
+  metric.status === 'critical' ? 'text-red-600 dark:text-red-400' :,
+  metric.status === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :,
+  'text-gray-900 dark:text-white',
+}`}>
               {metric.value}
             </p>
             {metric.unit && ()
@@ -401,11 +387,11 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                 {Object.entries(alertSummary.bySeverity).map(([severity, count]) => ()
                   <div key={severity} className="flex justify-between text-sm">
                     <span className={`capitalize ${
-                      severity === 'critical' ? 'text-red-600 dark:text-red-400' :
-                      severity === 'error' ? 'text-red-500 dark:text-red-400' :
-                      severity === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :
-                      'text-blue-600 dark:text-blue-400'
-                    }`}>
+  severity === 'critical' ? 'text-red-600 dark:text-red-400' :,
+  severity === 'error' ? 'text-red-500 dark:text-red-400' :,
+  severity === 'warning' ? 'text-yellow-600 dark:text-yellow-400' :,
+  'text-blue-600 dark:text-blue-400',
+}`}>
                       {severity}:
                     </span>
                     <span className="font-medium">{count}</span>
@@ -451,7 +437,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   );
   const renderThreatAnalysis = () => {
     if (!securityAnalytics) return null;
-    return ();
+    return;
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Attack Patterns */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -496,8 +482,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
                       <div>Source IPs: {pattern.sourceIPs.join(', ')}</div>
                     </div>
                     <div className="mt-3">
-                      <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Countermeasures:
+                      <p className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">,
+  Countermeasures:
                       </p>
                       <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                         {pattern.countermeasures.map((measure, index) => ()
@@ -549,7 +535,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   };
   const renderPredictiveInsights = () => {
     if (!predictiveInsights || !showAdvancedFeatures) return null;
-    return ();
+    return;
       <div className="space-y-6">
         {/* Threat Predictions */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -718,7 +704,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
   // Main Render
   // ========================================
   if (error) {
-    return ();
+    return;
       <div className={`p-8 ${className}`}>}
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
           <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
@@ -734,9 +720,8 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
         </div>
       </div>
     );
-  }
   if (isLoading && !securityAnalytics) {
-    return ();
+    return;
       <div className={`p-8 ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -746,8 +731,7 @@ export const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnaly
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`p-6 ${className} ${theme === 'dark' ? 'dark' : ''}`}>}
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -825,10 +809,8 @@ function convertToCSV(data: any): string {
     ['Active Threats', data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0, 'Active', new Date().toISOString()]
   ];
   return [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-}
 function generatePDFContent(data: any): string {
   // Simple PDF content generation - in production, this would use a proper PDF library
   return `Analytics Report Generated: ${new Date().toISOString()}\n\nSystem Health: ${data.securityAnalytics?.performanceAnalytics?.systemHealth?.overallScore || 0}%\nThreat Level: ${data.securityAnalytics?.threatAnalysis?.currentThreatLevel || 'LOW'}\nActive Threats: ${data.securityAnalytics?.threatAnalysis?.attackPatterns?.length || 0}`;}
-}
 
 export default RateLimitingAnalyticsDashboardComponent;

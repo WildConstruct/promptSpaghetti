@@ -34,6 +34,7 @@ import {
   applyTemplateCustomizations
 } from '../database/template-models';
 
+}
 export interface TemplateServiceOptions {
   getUserInfo?: (userId: string) => Promise<{ name: string; avatar?: string } | null>;
   checkWorkspaceAccess?: (workspaceId: string, userId: string, permission: number) => Promise<boolean>;
@@ -51,6 +52,7 @@ export class TemplateService {
   // ====== TEMPLATE OPERATIONS ======
 
   async createTemplate(data: CreateProjectTemplate, userId: string): Promise<ProjectTemplate> {
+
     // Validate template name
     if (!data.name.trim()) {
       throw new Error('Template name is required');
@@ -100,6 +102,7 @@ export class TemplateService {
   }
 
   async getTemplate(id: string, userId: string): Promise<ProjectTemplateWithStats | null> {
+
     const template = await this.templateDAO.getTemplateWithStats(id, userId);
     if (!template) return null;
 
@@ -142,6 +145,7 @@ export class TemplateService {
     data: UpdateProjectTemplate,
     userId: string
   ): Promise<ProjectTemplate | null> {
+
     const template = await this.templateDAO.getTemplate(id);
     if (!template) return null;
 
@@ -186,6 +190,7 @@ export class TemplateService {
   }
 
   async archiveTemplate(id: string, userId: string): Promise<boolean> {
+
     const template = await this.templateDAO.getTemplate(id);
     if (!template) return false;
 
@@ -220,6 +225,7 @@ export class TemplateService {
   }
 
   async publishTemplate(id: string, userId: string): Promise<boolean> {
+
     const template = await this.templateDAO.getTemplate(id);
     if (!template) return false;
 
@@ -260,6 +266,7 @@ export class TemplateService {
     projectData: { name: string; description?: string; workspace_id: string },
     userId: string
   ): Promise<{ project: unknown; usage: TemplateUsage }> {
+
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -329,9 +336,10 @@ export class TemplateService {
       time_to_complete_minutes?: number;
       user_rating?: number;
       user_feedback?: string;
-    },
+  }
     userId: string
   ): Promise<TemplateUsage | null> {
+
     const data: UpdateTemplateUsage = {
       ...completionData,
       completed_at: completionData.completion_status === 'completed' ? new Date() : undefined
@@ -343,6 +351,7 @@ export class TemplateService {
   // ====== TEMPLATE REVIEWS OPERATIONS ======
 
   async createTemplateReview(data: CreateTemplateReview, userId: string): Promise<TemplateReview> {
+
     const template = await this.templateDAO.getTemplate(data.template_id);
     if (!template) {
       throw new Error('Template not found');
@@ -385,6 +394,7 @@ export class TemplateService {
   // ====== TEMPLATE FAVORITES OPERATIONS ======
 
   async addTemplateFavorite(templateId: string, userId: string): Promise<TemplateFavorite> {
+
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -400,6 +410,7 @@ export class TemplateService {
   }
 
   async removeTemplateFavorite(templateId: string, userId: string): Promise<boolean> {
+
     return this.templateDAO.removeTemplateFavorite(templateId, userId);
   }
 
@@ -413,12 +424,14 @@ export class TemplateService {
   // ====== TEMPLATE CATEGORIES OPERATIONS ======
 
   async getTemplateCategories(): Promise<TemplateCategory[]> {
+
     return this.templateDAO.getTemplateCategories();
   }
 
   // ====== ANALYTICS AND REPORTING ======
 
   async getTemplateAnalytics(templateId: string, userId: string, days = 30): Promise<TemplateAnalytics> {
+
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -447,6 +460,7 @@ export class TemplateService {
     format: 'json' | 'yaml' | 'zip' = 'json',
     includeAnalytics = false
   ): Promise<TemplateExport> {
+
     const template = await this.templateDAO.getTemplate(templateId);
     if (!template) {
       throw new Error('Template not found');
@@ -466,7 +480,7 @@ export class TemplateService {
         exported_at: new Date().toISOString(),
         exported_by: userId,
         export_format: format
-      },
+  }
       template
     };
 
@@ -490,6 +504,7 @@ export class TemplateService {
     userId: string,
     workspaceId?: string
   ): Promise<ProjectTemplate> {
+
     const createData: CreateProjectTemplate = {
       ...templateData.template,
       workspace_id: workspaceId,
@@ -511,6 +526,7 @@ export class TemplateService {
   // ====== HELPER METHODS ======
 
   private async getUserWorkspaceIds(userId: string): Promise<string[]> {
+
     try {
       const result = await this.workspaceDAO.getWorkspacesForUser(userId);
       return result.data.map(w => w.id);
@@ -525,6 +541,7 @@ export class TemplateService {
     _____userId: string,
     _____format: 'json' | 'yaml' | 'zip'
   ): Promise<void> {
+
     // This would be implemented to track downloads for analytics
     // For now, we'll skip the implementation
   }

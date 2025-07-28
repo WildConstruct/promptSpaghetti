@@ -6,6 +6,7 @@ import { PSGFile } from '../projectManager';
 /**
  * Serialization format options
  */
+
 export interface SerializationOptions {
     format: 'json' | 'binary' | 'compressed';
     compression?: 'gzip' | 'lz4' | 'brotli';
@@ -13,10 +14,10 @@ export interface SerializationOptions {
     incremental?: boolean;
     splitLargeGraphs?: boolean;
     includeMetadata?: boolean;
-}
 /**
  * Serialization result with performance metrics
  */
+
 export interface SerializationResult {
     data: string | ArrayBuffer;
     format: string;
@@ -24,7 +25,6 @@ export interface SerializationResult {
     compressionRatio?: number;
     serializationTime: number;
     chunks?: number;
-}
 /**
  * Performance-optimized serialization system
  */
@@ -74,5 +74,5 @@ export declare class OptimizedSerializer {
     private createDelta;
     private calculateChecksum;
     private simpleLZCompress;
-}
+
 //# sourceMappingURL=OptimizedSerializer.d.ts.map

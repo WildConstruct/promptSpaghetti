@@ -20,14 +20,14 @@ export declare enum SessionSecurityLevel {
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum SessionState {
     ACTIVE = "active",
     EXPIRED = "expired",
     REVOKED = "revoked",
     SUSPENDED = "suspended",
     LOCKED = "locked"
-}
+
 export declare enum SessionTerminationReason {
     MANUAL_LOGOUT = "manual_logout",
     TIMEOUT = "timeout",
@@ -37,7 +37,7 @@ export declare enum SessionTerminationReason {
     DEVICE_LOST = "device_lost",
     PASSWORD_CHANGE = "password_change",
     MFA_CHANGE = "mfa_change"
-}
+
 export interface SessionConfiguration {
     maxAge: number;
     rotationInterval: number;
@@ -54,7 +54,7 @@ export interface SessionConfiguration {
         iterations: number;
         saltLength: number;
     };
-}
+
 export interface SecureSession {
     id: string;
     userId: string;
@@ -109,7 +109,7 @@ export interface SecureSession {
         newTokenHash: string;
         reason: string;
     }>;
-}
+
 export interface SessionContext {
     ipAddress: string;
     userAgent: string;
@@ -126,7 +126,7 @@ export interface SessionContext {
         hasVpn: boolean;
         hasProxy: boolean;
     };
-}
+
 export interface SessionValidationResult {
     isValid: boolean;
     session?: SecureSession;
@@ -143,7 +143,7 @@ export interface SessionValidationResult {
         description: string;
         confidence: number;
     }>;
-}
+
 export interface ActivityPattern {
     userId: string;
     deviceId: string;
@@ -156,7 +156,6 @@ export interface ActivityPattern {
     };
     lastUpdated: Date;
     confidence: number;
-}
 /**
  * Comprehensive secure session management service
  */
@@ -246,7 +245,7 @@ export declare class SecureSessionManager extends EventEmitter {
      * Destroy the session manager and clean up resources
      */
     destroy(): void;
-}
+
 export declare const secureSessionManager: SecureSessionManager;
 export default SecureSessionManager;
 //# sourceMappingURL=SecureSessionManager.d.ts.map

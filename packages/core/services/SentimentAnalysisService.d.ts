@@ -79,5 +79,5 @@ export declare class SentimentAnalysisService {
     private generateMockEmotions;
     private generateMockToxicity;
     private getDefaultConfig;
-}
+
 //# sourceMappingURL=SentimentAnalysisService.d.ts.map

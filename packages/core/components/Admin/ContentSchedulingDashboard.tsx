@@ -58,7 +58,6 @@ interface ContentSchedulingDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-}
 const CONTENT_TYPE_CONFIG = {
   article: { color: 'text-blue-600 bg-blue-100', icon: FileText },
   blog_post: { color: 'text-green-600 bg-green-100', icon: Edit },
@@ -90,8 +89,8 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [content, setContent] = useState<ContentItem[]>([]);
-  const [batches, setBatches] = useState<ScheduleBatch[]>([]);
+  const [content, setContent] = useState<ContentItem>([]);
+  const [batches, setBatches] = useState<ScheduleBatch>([]);
   const [stats, setStats] = useState<SchedulingStats | null>(null);
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -108,14 +107,14 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
     return () => clearInterval(interval);
   }, []);
   const loadData = async () => {
-    try {
-      setIsLoading(true);
-      // Build filter
-      const contentFilter: ContentFilter = {
-        searchQuery: searchQuery || undefined,
-        types: typeFilter !== 'all' ? [typeFilter] : undefined,
-        statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-      };
+  try {
+  setIsLoading(true);
+  // Build filter
+  const contentFilter: ContentFilter = {,
+  searchQuery: searchQuery || undefined,
+  types: typeFilter !== 'all' ? [typeFilter] : undefined,
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
+};
       // Add date range filter
       if (dateRange !== 'all') {
         const now = new Date();
@@ -134,9 +133,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
           break;
         default:
           start = new Date(0);
-        }
         contentFilter.dateRange = { start, end: now };
-      }
       // Load content
       const contentList = contentSchedulingService.getContent(contentFilter);
       setContent(contentList);
@@ -147,60 +144,52 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       const batchList = contentSchedulingService.getBatches();
       setBatches(batchList);
     } catch (error) {
-      console.error('Failed to load scheduling data:', error);
-    } finally {
+  console.error('Failed to load scheduling data:', error);
+} finally {
       setIsLoading(false);
-    }
   };
   const handlePublishContent = async (contentId: string) => {
     try {
       await contentSchedulingService.publishContent(contentId, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to publish content:', error);
-    }
-  };
+  console.error('Failed to publish content:', error);
+};
   const handleUnpublishContent = async (contentId: string) => {
     try {
       await contentSchedulingService.unpublishContent(contentId, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to unpublish content:', error);
-    }
-  };
+  console.error('Failed to unpublish content:', error);
+};
   const handleScheduleContent = async (contentId: string, publishAt: Date) => {
-    try {
-      await contentSchedulingService.scheduleContent(contentId, {)
-        publishAt,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      }, userId || 'admin');
+  try {
+  await contentSchedulingService.scheduleContent(contentId, {)
+  publishAt,
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+}, userId || 'admin');
       loadData();
     } catch (error) {
-      console.error('Failed to schedule content:', error);
-    }
-  };
+  console.error('Failed to schedule content:', error);
+};
   const filteredContent = useMemo(() => {
     return content.filter(item => {)
-      if (searchQuery) {
+  if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!item.title.toLowerCase().includes(query) &&
             !item.content.description?.toLowerCase().includes(query) &&
             !item.metadata.tags?.some(tag => tag.toLowerCase().includes(query))) {
           return false;
-        }
-      }
       if (typeFilter !== 'all' && item.type !== typeFilter) {
         return false;
-      }
       if (statusFilter !== 'all' && item.status !== statusFilter) {
         return false;
-      }
       return true;
     });
   }, [content, searchQuery, typeFilter, statusFilter]);
   const renderOverview = () => {
     if (!stats) return <div>Loading overview...</div>;
-    return ();
+    return;
       <div className="overview-section">
         <div className="metrics-grid">
           <Card>
@@ -312,8 +301,9 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                     <div className="item-chart">
                       <div 
                         className="performance-bar"
-                        style={{ 
-                          width: `${Math.min(),}
+                        style={{
+  width: `${Math.min(),}
+}
                             100,
                             (item.views / Math.max(...stats.performanceMetrics.topPerformingContent.map(c => c.views)
                           ))) * 100)}%` 
@@ -447,7 +437,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
   );
   const renderAnalytics = () => {
     if (!stats) return <div>Loading analytics...</div>;
-    return ();
+    return;
       <div className="analytics-section">
         <div className="analytics-grid">
           <Card>
@@ -459,7 +449,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
                 {Object.entries(stats.performanceMetrics.contentTypePerformance).map(([type, performance]) => {
                   const config = CONTENT_TYPE_CONFIG[type as ContentType];
                   const Icon = config.icon;
-                  return ();
+                  return;
                     <div key={type} className="type-item">
                       <div className="type-info">
                         <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -489,7 +479,7 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       </div>
     );
   };
-  return ();
+  return;
     <div className={`content-scheduling-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -537,308 +527,245 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
       )}
       <style>{`
         .content-scheduling-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .overview-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .metric-item {
           display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-        }
+          align-items: flex-start;,
+  gap: 0.75rem;
         .metric-info {
           flex: 1;
-        }
         .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.25rem;
-        }
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .metric-change {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .metric-change.positive {
           color: #059669;
-        }
         .upcoming-section {
           margin-top: 1rem;
-        }
         .upcoming-schedules {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .schedule-item {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 0.75rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 0.75rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .schedule-date {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           min-width: 120px;
-          font-weight: 500;
-          color: #1f2937;
-        }
+          font-weight: 500;,
+  color: #1f2937;
         .schedule-preview {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex: 1;,
+  display: flex;
+          flex-direction: column;,
+  gap: 0.25rem;
         .preview-item {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-size: 0.875rem;
-        }
         .item-title {
           color: #1f2937;
-        }
         .preview-more {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: 0.75rem;,
+  color: #6b7280;
           margin-top: 0.25rem;
-        }
         .performance-section {
           margin-top: 1rem;
-        }
         .performance-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .performance-item {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 0.75rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 0.75rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .item-info {
           flex: 1;
-        }
         .item-title {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .item-stats {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          display: flex;,
+  gap: 1rem;
+          font-size: 0.875rem;,
+  color: #6b7280;
         .item-chart {
-          width: 100px;
-          height: 4px;
+          width: 100px;,
+  height: 4px;
           background: #e5e7eb;
-          border-radius: 2px;
-          overflow: hidden;
-        }
+          border-radius: 2px;,
+  overflow: hidden;
         .performance-bar {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s ease;
-        }
         .content-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 1rem;,
+  background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
-        }
         .search-filters {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
+          align-items: center;,
+  gap: 0.75rem;
         .search-bar {
-          position: relative;
-          display: flex;
+          position: relative;,
+  display: flex;
           align-items: center;
-        }
         .search-bar .lucide {
-          position: absolute;
-          left: 0.75rem;
+          position: absolute;,
+  left: 0.75rem;
           z-index: 1;
-        }
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
-        }
         .action-buttons {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .content-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
           gap: 1rem;
-        }
         .batch-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .batch-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .batch-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .batch-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .analytics-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .analytics-grid {
-          display: grid;
-          gap: 1rem;
-        }
+          display: grid;,
+  gap: 1rem;
         .type-performance {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .type-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 0.75rem;
+          align-items: center;,
+  padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .type-info {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .type-name {
-          font-weight: 500;
-          color: #1f2937;
+          font-weight: 500;,
+  color: #1f2937;
           text-transform: capitalize;
-        }
         .type-stats {
-          display: flex;
-          gap: 1rem;
-        }
+          display: flex;,
+  gap: 1rem;
         .stat {
           display: flex;
-          align-items: center;
-          gap: 0.25rem;
+          align-items: center;,
+  gap: 0.25rem;
           font-size: 0.875rem;
-        }
         .stat-label {
           color: #6b7280;
-        }
         .stat-value {
           color: #1f2937;
           font-weight: 500;
-        }
         .empty-state {
-          text-align: center;
-          padding: 4rem 2rem;
+          text-align: center;,
+  padding: 4rem 2rem;
           color: #6b7280;
-        }
         .empty-state h3 {
           color: #1f2937;
-        }
         @media (max-width: 768px) {
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .content-controls {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .search-filters {
             flex-direction: column;
             align-items: stretch;
-          }
           .search-input {
             min-width: auto;
-          }
           .content-grid {
             grid-template-columns: 1fr;
-          }
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
           .schedule-item {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .type-item {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .type-stats {
             justify-content: space-between;
-          }
-        }
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );
@@ -846,27 +773,26 @@ export const ContentSchedulingDashboard: React.FC<ContentSchedulingDashboardProp
 
 // Content Card Component
 interface ContentCardProps {
-  content: ContentItem;
-  onSelect: (content: ContentItem) => void;
-  onPublish: (contentId: string) => void;
-  onUnpublish: (contentId: string) => void;
+  content: ContentItem;,
+  onSelect: (content: ContentItem) => void;,
+  onPublish: (contentId: string) => void;,
+  onUnpublish: (contentId: string) => void;,
   onSchedule: (contentId: string, publishAt: Date) => void;
   userRole?: string;
-}
-const ContentCard: React.FC<ContentCardProps> = ({ )
-  content, 
-  onSelect, 
-  onPublish, 
-  onUnpublish, 
-  onSchedule, 
-  userRole 
+  const ContentCard: React.FC<ContentCardProps> = ({ ),
+  content,
+  onSelect,
+  onPublish,
+  onUnpublish,
+  onSchedule,
+  userRole
 }) => {
   const typeConfig = CONTENT_TYPE_CONFIG[content.type];
   const statusConfig = STATUS_CONFIG[content.status];
   const TypeIcon = typeConfig.icon;
   const StatusIcon = statusConfig.icon;
   const canPublish = userRole === 'admin' || userRole === 'editor';
-  return ();
+  return;
     <Card className="content-card">
       <CardContent className="p-4">
         <div className="content-card-header">
@@ -960,60 +886,49 @@ const ContentCard: React.FC<ContentCardProps> = ({ )
       <style>{`
         .content-card {
           transition: box-shadow 0.2s ease;
-        }
         .content-card:hover {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
         .content-card-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .content-title {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
           line-height: 1.4;
-        }
         .content-description {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           line-height: 1.4;
-        }
         .content-badges {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
+          flex-direction: column;,
+  gap: 0.25rem;
           align-items: flex-end;
-        }
         .content-details {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          flex-direction: column;,
+  gap: 0.5rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .detail-item {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
-        }
         .detail-label {
           color: #6b7280;
           font-weight: 500;
-        }
         .detail-value {
           color: #1f2937;
           text-align: right;
-        }
         .content-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           flex-wrap: wrap;
-        }
       `}</style>
     </Card>
   );
@@ -1021,25 +936,23 @@ const ContentCard: React.FC<ContentCardProps> = ({ )
 
 // Batch Card Component
 interface BatchCardProps {
-  batch: ScheduleBatch;
-  onExecute: (batchId: string) => void;
+  batch: ScheduleBatch;,
+  onExecute: (batchId: string) => void;,
   onCancel: (batchId: string) => void;
-}
 const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'pending': return 'text-yellow-600 bg-yellow-100';
-    case 'processing': return 'text-blue-600 bg-blue-100';
-    case 'completed': return 'text-green-600 bg-green-100';
-    case 'failed': return 'text-red-600 bg-red-100';
-    case 'cancelled': return 'text-gray-600 bg-gray-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  const getStatusColor = (status: string) => {,
+  switch (status) {
+  case 'pending': return 'text-yellow-600 bg-yellow-100';
+  case 'processing': return 'text-blue-600 bg-blue-100';
+  case 'completed': return 'text-green-600 bg-green-100';
+  case 'failed': return 'text-red-600 bg-red-100';
+  case 'cancelled': return 'text-gray-600 bg-gray-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const progressPercentage = batch.progress.total > 0 ;
     ? (batch.progress.completed / batch.progress.total) * 100 
     : 0;
-  return ();
+  return;
     <Card className="batch-card">
       <CardContent className="p-4">
         <div className="batch-header">
@@ -1084,45 +997,36 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
       <style>{`
         .batch-card {
           transition: box-shadow 0.2s ease;
-        }
         .batch-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .batch-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .batch-operation {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .batch-progress {
           margin-bottom: 1rem;
-        }
         .progress-bar {
-          height: 4px;
-          background: #e5e7eb;
-          border-radius: 2px;
-          overflow: hidden;
+          height: 4px;,
+  background: #e5e7eb;
+          border-radius: 2px;,
+  overflow: hidden;
           margin-bottom: 0.5rem;
-        }
         .progress-fill {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s ease;
-        }
         .progress-text {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .batch-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
       `}</style>
     </Card>
   );
@@ -1130,18 +1034,17 @@ const BatchCard: React.FC<BatchCardProps> = ({ batch, onExecute, onCancel }) => 
 
 // Content Detail Modal Component (simplified)
 interface ContentDetailModalProps {
-  content: ContentItem;
+  content: ContentItem;,
   onClose: () => void;
   onUpdate: () => void;
   userRole?: string;
-}
-const ContentDetailModal: React.FC<ContentDetailModalProps> = ({)
+  const ContentDetailModal: React.FC<ContentDetailModalProps> = ({,)
   content,
   onClose,
   onUpdate,
   userRole
 }) => {
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1234,85 +1137,70 @@ const ContentDetailModal: React.FC<ContentDetailModalProps> = ({)
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;
-          inset: 0;
+          position: fixed;,
+  inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 1000;
-        }
         .modal-content {
           background: white;
-          border-radius: 8px;
-          width: 90vw;
+          border-radius: 8px;,
+  width: 90vw;
           max-width: 700px;
-          max-height: 80vh;
-          overflow: auto;
-        }
+          max-height: 80vh;,
+  overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 1.5rem;
+          align-items: center;,
+  padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
-        }
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .modal-body {
           padding: 1.5rem;
-        }
         .content-details {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
-        }
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .detail-item {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex-direction: column;,
+  gap: 0.25rem;
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
           font-size: 0.875rem;
-        }
         .detail-item span {
           color: #1f2937;
           font-size: 0.875rem;
-        }
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
+          justify-content: flex-end;,
+  gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
-        }
         @media (max-width: 768px) {
           .detail-grid {
             grid-template-columns: 1fr;
-          }
           .modal-content {
             width: 95vw;
             max-height: 90vh;
-          }
-        }
       `}</style>
     </div>
   );

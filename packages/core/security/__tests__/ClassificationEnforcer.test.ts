@@ -16,10 +16,10 @@ describe('ClassificationEnforcer', () => {
   let enforcer: ClassificationEnforcer;
   const mockDate = new Date('2025-01-21T12:00:00.000Z');
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.setSystemTime(mockDate);
-    enforcer = new ClassificationEnforcer();
-  });
+  jest.useFakeTimers();
+  jest.setSystemTime(mockDate);
+  enforcer = new ClassificationEnforcer();
+});
   afterEach(() => {
     jest.useRealTimers();
   });
@@ -29,11 +29,11 @@ describe('ClassificationEnforcer', () => {
       expect(enforcer).toBeInstanceOf(ClassificationEnforcer);
     });
     it('should create enforcer with custom configuration', () => {
-      const config: Partial<ClassificationEnforcementConfig> = {
-        strictMode: true,
-        blockViolations: true,
-        gracePeriodDays: 0,
-      };
+  const config: Partial<ClassificationEnforcementConfig> = {,
+  strictMode: true,
+  blockViolations: true,
+  gracePeriodDays: 0,
+};
       const enforcer = new ClassificationEnforcer(config);
       expect(enforcer).toBeInstanceOf(ClassificationEnforcer);
     });
@@ -47,16 +47,16 @@ describe('ClassificationEnforcer', () => {
     });
   });
   describe('enforceClassification', () => {
-    const baseOperation: OperationContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session456',
-      purpose: 'business-analytics',
-      environment: 'production',
-      timestamp: new Date(),
-      source: 'api',
-      requestId: 'req789',
-    };
+  const baseOperation: OperationContext = {,
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business-analytics',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+};
     it('should allow PUBLIC data access with minimal controls', async () => {
       const result = await enforcer.enforceClassification(;);
         'PUBLIC',
@@ -88,20 +88,20 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toContain('Authorization required but not present');
     });
     it('should enforce RESTRICTED data requirements strictly', async () => {
-      const result = await enforcer.enforceClassification(;);
-        'RESTRICTED',
-        baseOperation,
-        ['auth-standard']
-      );
-      expect(result.classification).toBe('RESTRICTED');
-      expect(result.violations).toContain('Required authentication level: STRONG_MFA');
-      expect(result.riskScore).toBeGreaterThan(70);
-    });
+  const result = await enforcer.enforceClassification(;);
+  'RESTRICTED',
+  baseOperation,
+  ['auth-standard']
+  );
+  expect(result.classification).toBe('RESTRICTED');
+  expect(result.violations).toContain('Required authentication level: STRONG_MFA');
+  expect(result.riskScore).toBeGreaterThan(70);
+});
     it('should validate write operations require encryption', async () => {
-      const writeOperation: OperationContext = {
-        ...baseOperation,
-        operation: 'write',
-      };
+  const writeOperation: OperationContext = {,
+  ...baseOperation,
+  operation: 'write',
+};
       const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         writeOperation,
@@ -110,10 +110,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toContain('Encryption required for storage');
     });
     it('should validate export operations', async () => {
-      const exportOperation: OperationContext = {
-        ...baseOperation,
-        operation: 'export',
-      };
+  const exportOperation: OperationContext = {,
+  ...baseOperation,
+  operation: 'export',
+};
       const result = await enforcer.enforceClassification(;);
         'RESTRICTED',
         exportOperation,
@@ -124,10 +124,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.requiredControls).toContain('end-to-end-encryption');
     });
     it('should validate share operations', async () => {
-      const shareOperation: OperationContext = {
-        ...baseOperation,
-        operation: 'share',
-      };
+  const shareOperation: OperationContext = {,
+  ...baseOperation,
+  operation: 'share',
+};
       const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         shareOperation,
@@ -137,10 +137,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.requiredControls).toContain('approval-workflow');
     });
     it('should check environment restrictions', async () => {
-      const devOperation: OperationContext = {
-        ...baseOperation,
-        environment: 'development',
-      };
+  const devOperation: OperationContext = {,
+  ...baseOperation,
+  environment: 'development',
+};
       const result = await enforcer.enforceClassification(;);
         'RESTRICTED',
         devOperation,
@@ -149,10 +149,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toContain('Storage location \'development\' not approved');
     });
     it('should allow operations in grace period', async () => {
-      const gracePeriodEnforcer = new ClassificationEnforcer({)
-        gracePeriodDays: 30,
-        blockViolations: true,
-      });
+  const gracePeriodEnforcer = new ClassificationEnforcer({)
+  gracePeriodDays: 30,
+  blockViolations: true,
+});
       const result = await gracePeriodEnforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
@@ -162,9 +162,9 @@ describe('ClassificationEnforcer', () => {
       expect(result.allowed).toBe(true);
     });
     it('should block operations in strict mode', async () => {
-      const strictEnforcer = new ClassificationEnforcer({)
-        strictMode: true,
-      });
+  const strictEnforcer = new ClassificationEnforcer({)
+  strictMode: true,
+});
       const result = await strictEnforcer.enforceClassification(;);
         'CONFIDENTIAL',
         baseOperation,
@@ -174,11 +174,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations.length).toBeGreaterThan(0);
     });
     it('should handle exempted users', async () => {
-      const exemptedEnforcer = new ClassificationEnforcer({)
-        exemptions: {,
-          users: ['user123'],
-        }
-      });
+  const exemptedEnforcer = new ClassificationEnforcer({)
+  exemptions: {,
+  users: ['user123'],
+});
       const result = await exemptedEnforcer.enforceClassification(;);
         'RESTRICTED',
         baseOperation,
@@ -188,19 +187,18 @@ describe('ClassificationEnforcer', () => {
       expect(result.violations).toHaveLength(0);
     });
     it('should apply policy overrides', async () => {
-      const overrideEnforcer = new ClassificationEnforcer({)
-        policyOverrides: new Map([),
-          ['CONFIDENTIAL', {
-            access: {,
-              authenticationLevel: 'STANDARD',
-              authorizationRequired: false,
-              approvalWorkflow: false,
-              timeRestrictions: false,
-              purposeLimitation: false,
-              auditLogging: 'STANDARD',
-              exportRestrictions: false,
-            }
-          }]
+  const overrideEnforcer = new ClassificationEnforcer({)
+  policyOverrides: new Map([),
+  ['CONFIDENTIAL', {
+  access: {,
+  authenticationLevel: 'STANDARD',
+  authorizationRequired: false,
+  approvalWorkflow: false,
+  timeRestrictions: false,
+  purposeLimitation: false,
+  auditLogging: 'STANDARD',
+  exportRestrictions: false,
+}]
         ])
       });
       const result = await overrideEnforcer.enforceClassification(;);
@@ -251,11 +249,11 @@ describe('ClassificationEnforcer', () => {
       expect(result.recommendations).toContain('Implement role-based access control');
     });
     it('should handle enforcement errors gracefully', async () => {
-      // Create operation that might cause internal errors
-      const badOperation: OperationContext = {
-        ...baseOperation,
-        operation: 'invalid-op' as OperationContext['operation'],
-      };
+  // Create operation that might cause internal errors
+  const badOperation: OperationContext = {,
+  ...baseOperation,
+  operation: 'invalid-op' as OperationContext['operation'],
+};
       const result = await enforcer.enforceClassification(;);
         'CONFIDENTIAL',
         badOperation,
@@ -267,119 +265,107 @@ describe('ClassificationEnforcer', () => {
     });
   });
   describe('makeAccessDecision', () => {
-    it('should grant access for properly authenticated users', async () => {
-      const decision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'PUBLIC',
-        'read',
-        {
-          sessionId: 'session789',
-          purpose: 'business-analytics',
-        }
-      );
-      expect(decision.granted).toBe(true);
-      expect(decision.reason).toBe('All access requirements met');
-      expect(decision.conditions).toBeDefined();
-      expect(decision.expiresAt).toBeDefined();
-    });
+  it('should grant access for properly authenticated users', async () => {
+  const decision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'PUBLIC',
+  'read',
+  {
+  sessionId: 'session789',
+  purpose: 'business-analytics');
+  expect(decision.granted).toBe(true);
+  expect(decision.reason).toBe('All access requirements met');
+  expect(decision.conditions).toBeDefined();
+  expect(decision.expiresAt).toBeDefined();
+});
     it('should deny access for insufficient authentication', async () => {
       const decision = await enforcer.makeAccessDecision(;);
         'user123',
         'data456',
         'RESTRICTED',
-        'read',
-      );
+        'read');
       expect(decision.granted).toBe(false);
       expect(decision.reason).toBe('Insufficient authentication level');
       expect(decision.requiredAuthentication).toBe('STRONG_MFA');
     });
     it('should check time restrictions for sensitive operations', async () => {
-      // Set time to outside business hours
-      jest.setSystemTime(new Date('2025-01-21T22:00:00.000Z'));
-      const decision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'CONFIDENTIAL',
-        'export',
-      );
-      expect(decision.granted).toBe(false);
-      expect(decision.reason).toBe('Operation not allowed outside business hours');
-    });
+  // Set time to outside business hours
+  jest.setSystemTime(new Date('2025-01-21T22:00:00.000Z'));
+  const decision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'CONFIDENTIAL',
+  'export');
+  expect(decision.granted).toBe(false);
+  expect(decision.reason).toBe('Operation not allowed outside business hours');
+});
     it('should check weekend restrictions', async () => {
-      // Set time to Saturday
-      jest.setSystemTime(new Date('2025-01-25T12:00:00.000Z'));
-      const decision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'CONFIDENTIAL',
-        'share',
-      );
-      expect(decision.granted).toBe(false);
-      expect(decision.reason).toBe('Operation not allowed on weekends');
-    });
+  // Set time to Saturday
+  jest.setSystemTime(new Date('2025-01-25T12:00:00.000Z'));
+  const decision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'CONFIDENTIAL',
+  'share');
+  expect(decision.granted).toBe(false);
+  expect(decision.reason).toBe('Operation not allowed on weekends');
+});
     it('should check purpose limitations', async () => {
-      const decision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'RESTRICTED',
-        'read',
-        {
-          purpose: 'marketing',
-        }
-      );
-      expect(decision.granted).toBe(false);
-      expect(decision.reason).toBe('Purpose not allowed for this classification');
-    });
+  const decision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'RESTRICTED',
+  'read',
+  {
+  purpose: 'marketing');
+  expect(decision.granted).toBe(false);
+  expect(decision.reason).toBe('Purpose not allowed for this classification');
+});
     it('should set appropriate access expiration', async () => {
-      const publicDecision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'PUBLIC',
-        'read',
-      );
-      const restrictedDecision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'RESTRICTED',
-        'read',
-        {
-          purpose: 'security-incident',
-        }
-      );
-      const publicExpiration = publicDecision.expiresAt!.getTime() - mockDate.getTime();
-      const restrictedExpiration = restrictedDecision.expiresAt!.getTime() - mockDate.getTime();
-      // PUBLIC data expires in 30 days
-      expect(publicExpiration).toBe(30 * 24 * 60 * 60 * 1000);
-      // RESTRICTED data expires in 4 hours
-      expect(restrictedExpiration).toBe(4 * 60 * 60 * 1000);
-    });
+  const publicDecision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'PUBLIC',
+  'read');
+  const restrictedDecision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'RESTRICTED',
+  'read',
+  {
+  purpose: 'security-incident');
+  const publicExpiration = publicDecision.expiresAt!.getTime() - mockDate.getTime();
+  const restrictedExpiration = restrictedDecision.expiresAt!.getTime() - mockDate.getTime();
+  // PUBLIC data expires in 30 days
+  expect(publicExpiration).toBe(30 * 24 * 60 * 60 * 1000);
+  // RESTRICTED data expires in 4 hours
+  expect(restrictedExpiration).toBe(4 * 60 * 60 * 1000);
+});
     it('should include appropriate access conditions', async () => {
-      const decision = await enforcer.makeAccessDecision(;);
-        'user123',
-        'data456',
-        'RESTRICTED',
-        'read',
-        {
-          purpose: 'critical-operations',
-        }
-      );
-      expect(decision.conditions).toContain('No unauthorized sharing');
-      expect(decision.conditions).toContain('Must not be cached locally');
-      expect(decision.conditions).toContain('Access monitored in real-time');
-    });
+  const decision = await enforcer.makeAccessDecision(;);
+  'user123',
+  'data456',
+  'RESTRICTED',
+  'read',
+  {
+  purpose: 'critical-operations');
+  expect(decision.conditions).toContain('No unauthorized sharing');
+  expect(decision.conditions).toContain('Must not be cached locally');
+  expect(decision.conditions).toContain('Access monitored in real-time');
+});
   });
   describe('validateOperation', () => {
-    const baseOperation: OperationContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session456',
-      purpose: 'business',
-      environment: 'production',
-      timestamp: new Date(),
-      source: 'api',
-      requestId: 'req789',
-    };
+  const baseOperation: OperationContext = {,
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+};
     it('should validate read operations', async () => {
       const result = await enforcer.validateOperation(;);
         baseOperation,
@@ -390,10 +376,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.controls).toContain('enhanced-audit-logging');
     });
     it('should validate write operations require encryption', async () => {
-      const writeOp: OperationContext = {
-        ...baseOperation,
-        operation: 'write',
-      };
+  const writeOp: OperationContext = {,
+  ...baseOperation,
+  operation: 'write',
+};
       const result = await enforcer.validateOperation(;);
         writeOp,
         'CONFIDENTIAL',
@@ -404,10 +390,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.controls).toContain('audit-trail');
     });
     it('should validate delete operations', async () => {
-      const deleteOp: OperationContext = {
-        ...baseOperation,
-        operation: 'delete',
-      };
+  const deleteOp: OperationContext = {,
+  ...baseOperation,
+  operation: 'delete',
+};
       const result = await enforcer.validateOperation(;);
         deleteOp,
         'CONFIDENTIAL',
@@ -418,10 +404,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.controls).toContain('deletion-audit');
     });
     it('should validate export operations', async () => {
-      const exportOp: OperationContext = {
-        ...baseOperation,
-        operation: 'export',
-      };
+  const exportOp: OperationContext = {,
+  ...baseOperation,
+  operation: 'export',
+};
       const result = await enforcer.validateOperation(;);
         exportOp,
         'RESTRICTED',
@@ -433,10 +419,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.controls).toContain('end-to-end-encryption');
     });
     it('should validate share operations', async () => {
-      const shareOp: OperationContext = {
-        ...baseOperation,
-        operation: 'share',
-      };
+  const shareOp: OperationContext = {,
+  ...baseOperation,
+  operation: 'share',
+};
       const result = await enforcer.validateOperation(;);
         shareOp,
         'CONFIDENTIAL',
@@ -448,11 +434,11 @@ describe('ClassificationEnforcer', () => {
       expect(result.controls).toContain('certificate-pinning');
     });
     it('should check environment restrictions', async () => {
-      const devOp: OperationContext = {
-        ...baseOperation,
-        operation: 'write',
-        environment: 'development',
-      };
+  const devOp: OperationContext = {,
+  ...baseOperation,
+  operation: 'write',
+  environment: 'development',
+};
       const result = await enforcer.validateOperation(;);
         devOp,
         'RESTRICTED',
@@ -462,10 +448,10 @@ describe('ClassificationEnforcer', () => {
       expect(result.issues).toContain('Environment \'development\' not approved for this classification');
     });
     it('should check third-party processing restrictions', async () => {
-      const thirdPartyOp: OperationContext = {
-        ...baseOperation,
-        source: 'third-party',
-      };
+  const thirdPartyOp: OperationContext = {,
+  ...baseOperation,
+  source: 'third-party',
+};
       const result = await enforcer.validateOperation(;);
         thirdPartyOp,
         'RESTRICTED',
@@ -476,22 +462,22 @@ describe('ClassificationEnforcer', () => {
     });
   });
   describe('Audit Logging', () => {
-    it('should log enforcement decisions', async () => {
-      const auditingEnforcer = new ClassificationEnforcer({)
-        auditLogging: true,
-      });
+  it('should log enforcement decisions', async () => {
+  const auditingEnforcer = new ClassificationEnforcer({)
+  auditLogging: true,
+});
       await auditingEnforcer.enforceClassification()
         'CONFIDENTIAL',
         {
-          operation: 'read',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req789',
-        },
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+}
         ['auth-mfa', 'authorization']
       );
       const auditLog = auditingEnforcer.getAuditLog();
@@ -500,22 +486,22 @@ describe('ClassificationEnforcer', () => {
       expect(auditLog[0].classification).toBe('CONFIDENTIAL');
     });
     it('should log access denials', async () => {
-      const strictEnforcer = new ClassificationEnforcer({)
-        strictMode: true,
-        auditLogging: true,
-      });
+  const strictEnforcer = new ClassificationEnforcer({)
+  strictMode: true,
+  auditLogging: true,
+});
       await strictEnforcer.enforceClassification()
         'RESTRICTED',
         {
-          operation: 'export',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req789',
-        },
+  operation: 'export',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+}
         []
       );
       const auditLog = strictEnforcer.getAuditLog();
@@ -524,18 +510,18 @@ describe('ClassificationEnforcer', () => {
       expect(auditLog[0].result).toBe('FAILURE');
     });
     it('should include violation details in audit', async () => {
-      await enforcer.enforceClassification()
-        'CONFIDENTIAL',
-        {
-          operation: 'write',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req789',
-        },
+  await enforcer.enforceClassification()
+  'CONFIDENTIAL',
+  {
+  operation: 'write',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+}
         []
       );
       const auditLog = enforcer.getAuditLog();
@@ -549,20 +535,20 @@ describe('ClassificationEnforcer', () => {
     });
   });
   describe('Integration Scenarios', () => {
-    it('should handle complete authentication flow', async () => {
-      // Start with basic auth
-      let result = await enforcer.enforceClassification(;);
-        'INTERNAL',
-        {
-          operation: 'read',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req789',
-        },
+  it('should handle complete authentication flow', async () => {
+  // Start with basic auth
+  let result = await enforcer.enforceClassification(;);
+  'INTERNAL',
+  {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req789',
+}
         ['auth-standard']
       );
       expect(result.allowed).toBe(true);
@@ -570,15 +556,15 @@ describe('ClassificationEnforcer', () => {
       result = await enforcer.enforceClassification()
         'CONFIDENTIAL',
         {
-          operation: 'read',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req790',
-        },
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req790',
+}
         ['auth-standard']
       );
       expect(result.violations).toContain('Required authentication level: MFA');
@@ -586,34 +572,34 @@ describe('ClassificationEnforcer', () => {
       result = await enforcer.enforceClassification()
         'CONFIDENTIAL',
         {
-          operation: 'read',
-          userId: 'user123',
-          sessionId: 'session456',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'req791',
-        },
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session456',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'req791',
+}
         ['auth-mfa', 'authorization']
       );
       expect(result.allowed).toBe(true);
     });
     it('should handle data lifecycle operations', async () => {
-      const dataId = 'data123';
-      const userId = 'user456';
-      // Create - should require encryption
-      let result = await enforcer.validateOperation(;);
-        {
-          operation: 'write',
-          userId,
-          sessionId: 'session789',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'create-req',
-        },
+  const dataId = 'data123';
+  const userId = 'user456';
+  // Create - should require encryption
+  let result = await enforcer.validateOperation(;);
+  {
+  operation: 'write',
+  userId,
+  sessionId: 'session789',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'create-req',
+}
         'CONFIDENTIAL',
         { id: dataId }
       );
@@ -621,15 +607,15 @@ describe('ClassificationEnforcer', () => {
       // Read - should require enhanced audit
       result = await enforcer.validateOperation()
         {
-          operation: 'read',
-          userId,
-          sessionId: 'session789',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'read-req',
-        },
+  operation: 'read',
+  userId,
+  sessionId: 'session789',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'read-req',
+}
         'CONFIDENTIAL',
         { id: dataId }
       );
@@ -637,15 +623,15 @@ describe('ClassificationEnforcer', () => {
       // Export - should be restricted
       result = await enforcer.validateOperation()
         {
-          operation: 'export',
-          userId,
-          sessionId: 'session789',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'export-req',
-        },
+  operation: 'export',
+  userId,
+  sessionId: 'session789',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'export-req',
+}
         'CONFIDENTIAL',
         { id: dataId }
       );
@@ -653,15 +639,15 @@ describe('ClassificationEnforcer', () => {
       // Delete - should check retention
       result = await enforcer.validateOperation()
         {
-          operation: 'delete',
-          userId,
-          sessionId: 'session789',
-          purpose: 'business',
-          environment: 'production',
-          timestamp: new Date(),
-          source: 'api',
-          requestId: 'delete-req',
-        },
+  operation: 'delete',
+  userId,
+  sessionId: 'session789',
+  purpose: 'business',
+  environment: 'production',
+  timestamp: new Date(),
+  source: 'api',
+  requestId: 'delete-req',
+}
         'CONFIDENTIAL',
         { id: dataId }
       );

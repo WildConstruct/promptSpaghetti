@@ -48,31 +48,31 @@ describe('LocationDetectionService', () => {
           ipgeolocation: 'test-api-key',
           ipstack: 'test-api-key'
         }
-      },
+  }
       riskThresholds: {
         newCountry: 50,
         newCity: 25,
         impossibleTravel: 80,
         proxyDetection: 60,
         maliciousIP: 90
-      },
+  }
       impossibleTravel: {
         enabled: true,
         maxSpeedKmh: 1000, // Commercial aircraft speed
         minimumTimeMinutes: 10,
         alertThresholdKm: 100
-      },
+  }
       cache: {
         ipLocationTtl: 3600,
         userLocationTtl: 1800,
         riskScoreTtl: 900
-      },
+  }
       regionalRisk: {
         enabled: true,
         highRiskCountries: ['XX', 'YY'], // Fictional country codes
         highRiskRegions: ['high-risk-region'],
         riskWeights: { 'XX': 70, 'YY': 60 }
-      },
+  }
       notifications: {
         enabled: true,
         alertOnNewCountry: true,
@@ -169,7 +169,7 @@ describe('LocationDetectionService', () => {
       (fetch as jest.Mock)
         .mockResolvedValueOnce({
           json: () => Promise.resolve({ status: 'fail', message: 'API error' })
-        })
+  }
         // Mock IPGeolocation success
         .mockResolvedValueOnce({
           json: () => Promise.resolve({
@@ -178,7 +178,7 @@ describe('LocationDetectionService', () => {
             city: 'Mountain View',
             latitude: '37.4419',
             longitude: '-122.1430'
-          })
+  }
         });
 
       const location = await locationService.detectLocation(testUserId, testIP);
@@ -243,7 +243,7 @@ describe('LocationDetectionService', () => {
           country: 'Germany',
           countryCode: 'DE',
           city: 'Berlin'
-        })
+  }
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -298,7 +298,7 @@ describe('LocationDetectionService', () => {
           city: 'London',
           lat: 51.5074,
           lon: -0.1278
-        })
+  }
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -342,7 +342,7 @@ describe('LocationDetectionService', () => {
           countryCode: 'US',
           city: 'New York',
           proxy: true // Proxy detected
-        })
+  }
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -386,7 +386,7 @@ describe('LocationDetectionService', () => {
           city: 'Unknown',
           proxy: true,
           hosting: false
-        })
+  }
       });
 
       // Mock Tor detection (would be enhanced with threat intel)
@@ -429,7 +429,7 @@ describe('LocationDetectionService', () => {
             source: 'threat_feed',
             description: 'Known malware C&C server'
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // New country
         .mockResolvedValueOnce({ rows: [{ count: '0' }] }) // New city
         .mockResolvedValueOnce({ rows: [] }); // No recent location
@@ -439,7 +439,7 @@ describe('LocationDetectionService', () => {
           status: 'success',
           country: 'Unknown',
           countryCode: 'XX'
-        })
+  }
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -482,7 +482,7 @@ describe('LocationDetectionService', () => {
           country: 'High Risk Country',
           countryCode: 'XX', // Matches config high-risk country
           city: 'High Risk City'
-        })
+  }
       });
 
       await locationService.detectLocation(testUserId, testIP);
@@ -830,7 +830,7 @@ describe('LocationDetectionService', () => {
         connection: {
           isp: 'Telstra Corporation',
           asn: 1221
-        },
+  }
         security: {
           is_proxy: false,
           is_vpn: false,

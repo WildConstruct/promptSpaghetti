@@ -25,20 +25,20 @@ export interface ConversionFunnelDefinition {
         enableParallelPaths: boolean;
         dropOffGracePeriod: number;
     };
-    steps: ConversionStep[];
-    conditionalPaths: ConditionalPath[];
+    steps: ConversionStep;
+    conditionalPaths: ConditionalPath;
     successCriteria: SuccessCriteria;
     analytics: {
         enableRealTimeTracking: boolean;
         retentionPeriod: number;
         cohortTrackingEnabled: boolean;
-        segmentationRules: SegmentationRule[];
+        segmentationRules: SegmentationRule;
     };
     metadata: {
         createdAt: number;
         updatedAt: number;
         createdBy: string;
-        tags: string[];
+        tags: string;
         businessContext: string;
         expectedConversionRate: number;
         benchmarkData?: BenchmarkData;
@@ -53,24 +53,24 @@ export interface ConversionStep {
     isRequired: boolean;
     isTerminal: boolean;
     eventCriteria: EventCriteria;
-    conditions: StepCondition[];
+    conditions: StepCondition;
     timeConstraints: {
         minTimeFromPrevious?: number;
         maxTimeFromPrevious?: number;
         maxTimeFromStart?: number;
-        allowedTimeWindows?: TimeWindow[];
+        allowedTimeWindows?: TimeWindow;
     };
     successMetrics: {
         expectedCompletionRate: number;
         averageTimeToComplete: number;
-        criticalSuccessFactors: string[];
+        criticalSuccessFactors: string;
     };
-    branches: StepBranch[];
+    branches: StepBranch;
     metadata: {
         businessValue: number;
         complexity: 'low' | 'medium' | 'high';
-        dependencies: string[];
-        optimizationOpportunities: string[];
+        dependencies: string;
+        optimizationOpportunities: string;
     };
 }
 export type StepType = 'entry_point' | 'engagement' | 'decision_point' | 'action' | 'validation' | 'conversion' | 'exit_point';
@@ -78,9 +78,9 @@ export type FunnelCategory = 'acquisition' | 'activation' | 'engagement' | 'mone
 export interface EventCriteria {
     eventType: string;
     eventPattern?: string;
-    propertyMatchers: PropertyMatcher[];
-    valueConstraints?: ValueConstraint[];
-    contextRequirements?: ContextRequirement[];
+    propertyMatchers: PropertyMatcher;
+    valueConstraints?: ValueConstraint;
+    contextRequirements?: ContextRequirement;
 }
 export interface PropertyMatcher {
     propertyPath: string;
@@ -93,8 +93,8 @@ export interface ValueConstraint {
     field: 'value' | 'timestamp' | 'duration';
     min?: number;
     max?: number;
-    exactValues?: number[];
-    excludeValues?: number[];
+    exactValues?: number;
+    excludeValues?: number;
 }
 export interface ContextRequirement {
     type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';
@@ -110,7 +110,7 @@ export interface StepCondition {
 }
 export interface ConditionLogic {
     operator: 'AND' | 'OR' | 'NOT';
-    conditions: SimpleCondition[];
+    conditions: SimpleCondition;
     customValidator?: string;
 }
 export interface SimpleCondition {
@@ -122,7 +122,7 @@ export interface SimpleCondition {
 export interface TimeWindow {
     start: string;
     end: string;
-    daysOfWeek: number[];
+    daysOfWeek: number;
     timezone?: string;
 }
 export interface StepBranch {
@@ -141,7 +141,7 @@ export interface ConditionalPath {
     name: string;
     description: string;
     entryConditions: ConditionLogic;
-    steps: string[];
+    steps: string;
     priority: number;
     isDefault: boolean;
 }
@@ -151,16 +151,11 @@ export interface SuccessCriteria {
         requirements: ConditionLogic;
         weight: number;
     };
-    secondary: Array<{
-        stepId: string;
-        requirements: ConditionLogic;
-        weight: number;
-        isOptional: boolean;
-    }>;
-    scoreCalculation: {
-        method: 'weighted' | 'binary' | 'progressive' | 'custom';
-        customFormula?: string;
-    };
+    secondary: Array<{}, stepId>;
+    string: any;
+    requirements: ConditionLogic;
+    weight: number;
+    isOptional: boolean;
 }
 export interface SegmentationRule {
     id: string;
@@ -177,8 +172,8 @@ export interface SegmentationRule {
 }
 export interface BenchmarkData {
     industryAverageConversionRate: number;
-    competitorData?: CompetitorBenchmark[];
-    historicalData?: HistoricalBenchmark[];
+    competitorData?: CompetitorBenchmark;
+    historicalData?: HistoricalBenchmark;
     goalConversionRate: number;
     lastUpdated: number;
 }
@@ -186,20 +181,16 @@ export interface CompetitorBenchmark {
     name: string;
     conversionRate: number;
     averageTimeToConvert: number;
-    dropOffPoints: string[];
-    strengths: string[];
+    dropOffPoints: string;
+    strengths: string;
 }
 export interface HistoricalBenchmark {
     period: string;
     conversionRate: number;
     volume: number;
     averageValue: number;
-    topDropOffPoints: string[];
+    topDropOffPoints: string;
 }
-/**
- * Enhanced Conversion Event Schema
- * Extends the base conversion event with flexible property validation
- */
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
     flexibleProperties: {
         [key: string]: FlexibleProperty;
@@ -208,9 +199,9 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
     validation: {
         isValid: boolean;
         score: number;
-        errors: ValidationError[];
-        warnings: ValidationWarning[];
-        appliedRules: string[];
+        errors: ValidationError;
+        warnings: ValidationWarning;
+        appliedRules: string;
     };
     funnelContext: {
         funnelId: string;
@@ -218,12 +209,12 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         stepOrder: number;
         pathId?: string;
         timeInFunnel: number;
-        previousSteps: string[];
+        previousSteps: string;
         isBacktracking: boolean;
     };
     userContext: {
-        segmentIds: string[];
-        cohortIds: string[];
+        segmentIds: string;
+        cohortIds: string;
         lifetimeValue: number;
         riskScore: number;
         engagementScore: number;
@@ -238,7 +229,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         price: number;
         rating: number;
         popularity: number;
-        tags: string[];
+        tags: string;
     };
     sessionContext: {
         isNewSession: boolean;
@@ -265,10 +256,10 @@ export type PropertyType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 
 export interface PropertySchema {
     type: PropertyType;
     required: boolean;
-    constraints: PropertyConstraint[];
+    constraints: PropertyConstraint;
     defaultValue?: any;
-    transformations?: PropertyTransformation[];
-    relationships?: PropertyRelationship[];
+    transformations?: PropertyTransformation;
+    relationships?: PropertyRelationship;
 }
 export interface PropertyConstraint {
     type: 'format' | 'range' | 'length' | 'pattern' | 'custom';
@@ -312,9 +303,6 @@ export interface LocationData {
     };
     ipHash: string;
 }
-/**
- * Cohort Tracking Structures
- */
 export interface ConversionCohort {
     id: string;
     name: string;
@@ -327,10 +315,10 @@ export interface ConversionCohort {
         minSize?: number;
     };
     analysis: {
-        retentionPeriods: number[];
+        retentionPeriods: number;
         analysisWindow: number;
-        metricCalculations: MetricCalculation[];
-        comparisonCohorts?: string[];
+        metricCalculations: MetricCalculation;
+        comparisonCohorts?: string;
     };
     state: {
         currentSize: number;
@@ -340,17 +328,17 @@ export interface ConversionCohort {
         completionRate: number;
     };
     performance: {
-        conversionRates: TimeSeriesData[];
-        retentionRates: TimeSeriesData[];
+        conversionRates: TimeSeriesData;
+        retentionRates: TimeSeriesData;
         averageTimeToConvert: number;
-        topDropOffPoints: DropOffPoint[];
+        topDropOffPoints: DropOffPoint;
         valueMetrics: ValueMetrics;
     };
     metadata: {
         businessContext: string;
         hypothesis: string;
         expectedOutcome: string;
-        tags: string[];
+        tags: string;
         owner: string;
     };
 }
@@ -359,7 +347,7 @@ export interface UserSegment {
     name: string;
     description: string;
     definition: {
-        rules: SegmentationRule[];
+        rules: SegmentationRule;
         operator: 'AND' | 'OR';
         updateFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
         isStatic: boolean;
@@ -377,7 +365,7 @@ export interface UserSegment {
         averageLifetimeValue: number;
         engagementScore: number;
         retentionRate: number;
-        behaviorPatterns: BehaviorPattern[];
+        behaviorPatterns: BehaviorPattern;
     };
     funnelMetrics: Map<string, FunnelSegmentMetrics>;
     metadata: {
@@ -406,8 +394,8 @@ export interface DropOffPoint {
     dropOffRate: number;
     volume: number;
     averageTimeSpent: number;
-    commonExitActions: string[];
-    recoveryOpportunities: string[];
+    commonExitActions: string;
+    recoveryOpportunities: string;
 }
 export interface ValueMetrics {
     totalRevenue: number;
@@ -420,12 +408,12 @@ export interface ValueMetrics {
 export interface BehaviorPattern {
     id: string;
     name: string;
-    pattern: string[];
+    pattern: string;
     frequency: number;
     conversionImpact: number;
     timePattern?: {
-        preferredDays: number[];
-        preferredHours: number[];
+        preferredDays: number;
+        preferredHours: number;
         seasonality?: string;
     };
 }
@@ -433,10 +421,10 @@ export interface FunnelSegmentMetrics {
     funnelId: string;
     conversionRate: number;
     averageTimeToConvert: number;
-    dropOffPoints: DropOffPoint[];
+    dropOffPoints: DropOffPoint;
     completionRate: number;
     backtrackingRate: number;
-    pathPreferences: PathPreference[];
+    pathPreferences: PathPreference;
 }
 export interface PathPreference {
     pathId: string;
@@ -445,9 +433,6 @@ export interface PathPreference {
     conversionRate: number;
     averageTime: number;
 }
-/**
- * Entity Relationship Structures
- */
 export interface UserEntity {
     id: string;
     profile: {
@@ -468,9 +453,9 @@ export interface UserEntity {
         sessionCount: number;
         totalTimeSpent: number;
         averageSessionDuration: number;
-        devicePreferences: DevicePreference[];
-        locationHistory: LocationData[];
-        activityPatterns: ActivityPattern[];
+        devicePreferences: DevicePreference;
+        locationHistory: LocationData;
+        activityPatterns: ActivityPattern;
     };
     value: {
         lifetimeValue: number;
@@ -480,16 +465,16 @@ export interface UserEntity {
         churnRisk: number;
     };
     segmentation: {
-        currentSegments: string[];
-        segmentHistory: SegmentChange[];
-        cohorts: CohortMembership[];
+        currentSegments: string;
+        segmentHistory: SegmentChange;
+        cohorts: CohortMembership;
         riskScore: number;
         engagementScore: number;
     };
     preferences: {
         privacySettings: PrivacySettings;
-        communicationPreferences: CommunicationPreference[];
-        contentPreferences: ContentPreference[];
+        communicationPreferences: CommunicationPreference;
+        contentPreferences: ContentPreference;
         notificationSettings: NotificationSettings;
     };
 }
@@ -501,7 +486,7 @@ export interface TemplateEntity {
         creatorId: string;
         category: string;
         subcategory?: string;
-        tags: string[];
+        tags: string;
         createdDate: number;
         lastUpdated: number;
     };
@@ -526,7 +511,7 @@ export interface TemplateEntity {
     revenue: {
         totalRevenue: number;
         price: number;
-        priceHistory: PriceChange[];
+        priceHistory: PriceChange;
         averageRevenuePerUser: number;
         monthlyRecurringRevenue?: number;
     };
@@ -591,7 +576,7 @@ export interface PrivacySettings {
 export interface CommunicationPreference {
     channel: 'email' | 'sms' | 'push' | 'in_app';
     frequency: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'never';
-    topics: string[];
+    topics: string;
 }
 export interface ContentPreference {
     category: string;
@@ -616,8 +601,8 @@ export interface TemplateFunnelMetrics {
     conversions: number;
     conversionRate: number;
     averageTimeToConvert: number;
-    dropOffPoints: DropOffPoint[];
-    topSegments: string[];
+    dropOffPoints: DropOffPoint;
+    topSegments: string;
 }
 export interface PriceChange {
     date: number;
@@ -631,56 +616,22 @@ export interface TrendData {
     magnitude: number;
     confidence: number;
     timeframe: string;
-    dataPoints: TimeSeriesData[];
+    dataPoints: TimeSeriesData;
 }
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
-    peaks: Array<{
-        period: string;
-        multiplier: number;
-    }>;
-    confidence: number;
+    peaks: Array<{}, period>;
+    string: any;
+    multiplier: number;
 }
-/**
- * Data Relationship Manager
- * Manages complex relationships between users, templates, and conversion data
- */
 export declare class ConversionDataRelationshipManager {
     private userCache;
     private templateCache;
     private cohortCache;
     private segmentCache;
     /**
-     * Build enriched conversion event with full entity relationships
-     */
-    enrichConversionEvent(baseEvent: EnhancedConversionEvent, includeRelatedData?: boolean): Promise<FlexibleConversionEvent>;
-    /**
-     * Get or create user entity
-     */
-    private getUserEntity;
-    /**
-     * Get or create template entity
-     */
-    private getTemplateEntity;
-    /**
-     * Build flexible properties with schema validation
-     */
-    private buildFlexibleProperties;
-    private buildUserContext;
-    private buildTemplateContext;
-    private buildSessionContext;
-    private validateFlexibleEvent;
-    private createDefaultUserEntity;
-    private createDefaultTemplateEntity;
-    private inferPropertyType;
-    private calculateProfileCompleteness;
-    private calculateTimeInFunnel;
-    private getPreviousSteps;
-    private isBacktracking;
-    private isNewSession;
-    private calculateSessionDuration;
-    private getSessionPageViews;
-    private categorizeReferrer;
+    * Build enriched conversion event with full entity relationships
+    */
+    enrichConversionEvent(): any;
 }
-export default ConversionDataRelationshipManager;
 //# sourceMappingURL=ConversionDataModel.d.ts.map

@@ -4,27 +4,27 @@ import { SafeExpressionEvaluator } from '../expression-evaluator';
 import { createConditionalNodeFilter, NodeSafetyLevel } from '../ast-node-whitelist';
 describe('SafeExpressionEvaluator', () => {
   const createSafeContext = () => ({)
-    x: 10,
-    y: 5,
-    name: 'test',
-    active: true,
-    user: {,
-      id: 123,
-      status: 'active',
-    },
-    Math: {,
-      min: Math.min,
-      max: Math.max,
-      floor: Math.floor,
-      ceil: Math.ceil,
-      round: Math.round,
-      abs: Math.abs,
-    },
-    startsWith: (str: string, prefix: string) => str.startsWith(prefix),
+  x: 10,
+  y: 5,
+  name: 'test',
+  active: true,
+  user: {,
+  id: 123,
+  status: 'active',
+},
+  Math: {,
+  min: Math.min,
+  max: Math.max,
+  floor: Math.floor,
+  ceil: Math.ceil,
+  round: Math.round,
+  abs: Math.abs,
+},
+  startsWith: (str: string, prefix: string) => str.startsWith(prefix),
     endsWith: (str: string, suffix: string) => str.endsWith(suffix),
     includes: (str: string, substring: string) => str.includes(substring),
     length: (value: any) => value.length,
-    getType: (value: any) => typeof value,
+    getType: (value: any) => typeof value;
   });
   describe('Basic Expression Evaluation', () => {
     it('should evaluate numeric literals', () => {
@@ -99,12 +99,12 @@ describe('SafeExpressionEvaluator', () => {
     });
   });
   describe('Conditional (Ternary) Operations', () => {
-    it('should evaluate ternary expressions', () => {
-      const context = createSafeContext();
-      expect(SafeExpressionEvaluator.evaluate('x > y ? \"greater\" : \"not greater\"', context)).toBe('greater');
-      expect(SafeExpressionEvaluator.evaluate('x < y ? x : y', context)).toBe(5);
-      expect(SafeExpressionEvaluator.evaluate('active ? 1 : 0', context)).toBe(1);
-    });
+  it('should evaluate ternary expressions', () => {
+  const context = createSafeContext();
+  expect(SafeExpressionEvaluator.evaluate('x > y ? \"greater\" : \"not greater\"', context)).toBe('greater');
+  expect(SafeExpressionEvaluator.evaluate('x < y ? x : y', context)).toBe(5);
+  expect(SafeExpressionEvaluator.evaluate('active ? 1 : 0', context)).toBe(1);
+});
   });
   describe('Member Access', () => {
     it('should evaluate dot notation member access', () => {
@@ -200,42 +200,38 @@ describe('SafeExpressionEvaluator', () => {
         .toThrow(/Attempted to call a non-function/);
     });
     it('should only allow whitelisted functions', () => {
-      const context = { 
-        ...createSafeContext(),
-        unauthorizedFunction: () => 'should not be callable',
-      };
+  const context = {
+  ...createSafeContext(),
+  unauthorizedFunction: () => 'should not be callable',
+};
       // Functions not explicitly in the context should not be callable
       expect(() => SafeExpressionEvaluator.evaluate('unauthorizedFunction()', context))
         .toThrow(/Function call not allowed/);
     });
   });
   describe('Complex Expressions', () => {
-    it('should evaluate complex nested expressions', () => {
-      const context = createSafeContext();
-      const expression = 'x > 5 && (user.status === \"active\" ? Math.max(x, y) : 0) > 8';
-      expect(SafeExpressionEvaluator.evaluate(expression, context)).toBe(true);
-    });
+  it('should evaluate complex nested expressions', () => {
+  const context = createSafeContext();
+  const expression = 'x > 5 && (user.status === \"active\" ? Math.max(x, y) : 0) > 8';
+  expect(SafeExpressionEvaluator.evaluate(expression, context)).toBe(true);
+});
     it('should handle multiple levels of member access', () => {
-      const context = {
-        data: {,
-          user: {,
-            profile: {,
-              settings: {,
-                theme: 'dark',
-              }
-            }
-          }
-        }
-      };
+  const context = {
+  data: {,
+  user: {,
+  profile: {,
+  settings: {,
+  theme: 'dark',
+};
       expect(SafeExpressionEvaluator.evaluate('data.user.profile.settings.theme', context)).toBe('dark');
     });
   });
   describe('Error Cases', () => {
-    it('should throw error for undefined variables', () => {
-      const context = createSafeContext();
-      expect(() => SafeExpressionEvaluator.evaluate('undefinedVariable', context))
-        .toThrow(/Undefined variable: undefinedVariable/);
-    });
+  it('should throw error for undefined variables', () => {
+  const context = createSafeContext();
+  expect(() => SafeExpressionEvaluator.evaluate('undefinedVariable', context))
+  .toThrow(/Undefined variable: undefinedVariable/);
+});
     it('should throw error for unknown operators', () => {
       // This would be caught by the parser, but let's test anyway
       const context = createSafeContext();

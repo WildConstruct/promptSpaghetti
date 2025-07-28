@@ -2,7 +2,6 @@ import React from 'react';
 interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
   value?: number;
   max?: number;
-}
 
 export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>()
   ({ className, value = 0, max = 100, ...props }, ref) => ()

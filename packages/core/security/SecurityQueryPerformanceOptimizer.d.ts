@@ -7,6 +7,7 @@
  * providing real-time query optimization, adaptive caching strategies, and performance analytics.
  */
 import { EventEmitter } from 'events';
+
 export interface QueryPerformanceProfile {
     id: string;
     query_hash: string;
@@ -59,7 +60,7 @@ export interface QueryPerformanceProfile {
     created_at: number;
     last_updated: number;
     last_analyzed: number;
-}
+
 export interface CacheStrategy {
     strategy_type: 'result_cache' | 'query_cache' | 'partial_cache' | 'adaptive_cache' | 'distributed_cache';
     cache_level: 'query' | 'page' | 'row' | 'computed_result';
@@ -73,7 +74,7 @@ export interface CacheStrategy {
         frequency_threshold: number;
         auto_optimize: boolean;
     };
-}
+
 export interface SeasonalUsagePattern {
     pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     peak_periods: Array<{,
@@ -83,7 +84,7 @@ export interface SeasonalUsagePattern {
     }>;
     trend_direction: 'increasing' | 'stable' | 'decreasing';
     confidence_score: number;
-}
+
 export interface QueryOptimizationRule {
     id: string;
     name: string;
@@ -114,7 +115,7 @@ export interface QueryOptimizationRule {
     priority: number;
     created_by: string;
     created_at: number;
-}
+
 export interface QueryExecution {
     id: string;
     query_profile_id: string;
@@ -159,7 +160,7 @@ export interface QueryExecution {
         stack_trace?: string;
     };
     warnings: string[];
-}
+
 export interface ExecutionPlan {
     plan_id: string;
     plan_type: 'sequential' | 'parallel' | 'distributed' | 'cached';
@@ -173,7 +174,7 @@ export interface ExecutionPlan {
         storage_mb: number;
         network_bandwidth_mbps: number;
     };
-}
+
 export interface ExecutionStep {
     step_id: string;
     step_type: 'table_scan' | 'index_scan' | 'join' | 'aggregation' | 'sort' | 'filter' | 'cache_lookup';
@@ -185,7 +186,7 @@ export interface ExecutionStep {
     execution_time_ms?: number;
     optimization_suggestions: string[];
     alternative_approaches: string[];
-}
+
 export interface IndexUsage {
     index_name: string;
     table_name: string;
@@ -195,7 +196,7 @@ export interface IndexUsage {
     rows_estimated: number;
     rows_actual?: number;
     effectiveness_score: number;
-}
+
 export interface CacheInteraction {
     cache_type: 'query_cache' | 'result_cache' | 'index_cache' | 'page_cache';
     cache_key: string;
@@ -203,7 +204,7 @@ export interface CacheInteraction {
     cache_size_mb: number;
     access_time_ms: number;
     data_freshness: number;
-}
+
 export interface PerformanceAlert {
     id: string;
     alert_type: 'slow_query' | 'high_resource_usage' | 'cache_miss_spike' | 'optimization_opportunity' | 'performance_regression';
@@ -235,7 +236,7 @@ export interface PerformanceAlert {
         resolution_notes?: string;
         effectiveness_rating?: number;
     };
-}
+
 export interface CacheConfiguration {
     cache_id: string;
     cache_name: string;
@@ -270,7 +271,7 @@ export interface CacheConfiguration {
         partition_count: number;
         rebalancing_enabled: boolean;
     };
-}
+
 export interface OptimizationReport {
     report_id: string;
     generated_at: number;
@@ -312,7 +313,7 @@ export interface OptimizationReport {
         after_optimization: PerformanceMetrics;
         improvement_details: Record<string, number>;
     };
-}
+
 export interface PerformanceMetrics {
     avg_response_time_ms: number;
     p95_response_time_ms: number;
@@ -322,7 +323,7 @@ export interface PerformanceMetrics {
     cpu_utilization_percent: number;
     memory_utilization_percent: number;
     error_rate_percent: number;
-}
+
 export declare class SecurityQueryPerformanceOptimizer extends EventEmitter {
     private queryProfiles;
     private optimizationRules;
@@ -404,6 +405,6 @@ export declare class SecurityQueryPerformanceOptimizer extends EventEmitter {
     };
     performMaintenance(): Promise<void>;
     shutdown(): Promise<void>;
-}
+
 export default SecurityQueryPerformanceOptimizer;
 //# sourceMappingURL=SecurityQueryPerformanceOptimizer.d.ts.map

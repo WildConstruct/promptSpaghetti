@@ -2,13 +2,15 @@ import React from 'react';
 /**
  * Metrics overview props
  */
+
 export interface MetricsOverviewProps {
     summary: unknown;
     dashboardData: unknown;
     conversionData?: unknown;
     performanceData?: unknown;
     loading: boolean;
-}
+
+
 /**
  * Metrics overview component
  */

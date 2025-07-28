@@ -6,11 +6,12 @@
  */
 import React from 'react';
 import { type ArticleAuthor } from './index';
+
 export interface KnowledgeBaseDemoProps {
     initialMode?: 'browse' | 'manage';
     currentUser?: ArticleAuthor;
     className?: string;
-}
+
 export declare const KnowledgeBaseDemo: React.FC<KnowledgeBaseDemoProps>;
 export default KnowledgeBaseDemo;
 //# sourceMappingURL=KnowledgeBaseDemo.d.ts.map

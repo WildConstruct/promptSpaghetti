@@ -5,6 +5,7 @@
  * Tracks discovery, usage, contributions, achievements, and learning milestones.
  */
 import React from 'react';
+
 export interface UserProgress {
     userId: string;
     level: number;
@@ -15,7 +16,8 @@ export interface UserProgress {
     lastActivity: Date;
     streakDays: number;
     longestStreak: number;
-}
+
+
 export interface EngagementMetrics {
     templatesViewed: number;
     searchesPerformed: number;
@@ -37,7 +39,8 @@ export interface EngagementMetrics {
     skillsLearned: string[];
     certificationsEarned: number;
     learningPathsCompleted: number;
-}
+
+
 export interface Milestone {
     id: string;
     title: string;
@@ -52,7 +55,8 @@ export interface Milestone {
     icon: string;
     tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
     rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-}
+
+
 export interface ProgressTrackerProps {
     userId: string;
     variant?: 'full' | 'compact' | 'dashboard';
@@ -61,7 +65,7 @@ export interface ProgressTrackerProps {
     onMilestoneComplete?: (milestone: Milestone) => void;
     onLevelUp?: (newLevel: number, oldLevel: number) => void;
     className?: string;
-}
+
 export declare const ProgressTracker: React.FC<ProgressTrackerProps>;
 export default ProgressTracker;
 //# sourceMappingURL=ProgressTracker.d.ts.map

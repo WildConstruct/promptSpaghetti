@@ -17,6 +17,7 @@
 import React from 'react';
 import { ConversionFunnelDefinition, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface DropoffHeatmapProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -31,8 +32,9 @@ export interface DropoffHeatmapProps {
     realTimeUpdates?: boolean;
     onDropoffPointClick?: (analysis: DropoffPointAnalysis) => void;
     onExport?: (data: DropoffExportData) => void;
-}
+
 export type HeatmapMode = 'absolute' | 'relative' | 'severity' | 'opportunity' | 'temporal';
+
 export interface DropoffAnalysisData {
     stepAnalysis: StepDropoffAnalysis[];
     transitionAnalysis: TransitionDropoffAnalysis[];
@@ -41,7 +43,7 @@ export interface DropoffAnalysisData {
     rootCauseAnalysis: RootCauseAnalysis[];
     recoveryOpportunities: RecoveryOpportunity[];
     overallInsights: DropoffInsight[];
-}
+
 export interface StepDropoffAnalysis {
     stepId: string;
     stepName: string;
@@ -55,7 +57,7 @@ export interface StepDropoffAnalysis {
     technicalAnalysis: TechnicalAnalysis;
     contentAnalysis: ContentAnalysis;
     recoveryPotential: number;
-}
+
 export interface TransitionDropoffAnalysis {
     fromStepId: string;
     toStepId: string;
@@ -67,7 +69,7 @@ export interface TransitionDropoffAnalysis {
     averageTransitionTime: number;
     commonDropOffReasons: DropoffReason[];
     recoveryActions: string[];
-}
+
 export interface TemporalDropoffPattern {
     period: 'hour' | 'day' | 'week' | 'month';
     periodValue: number;
@@ -78,7 +80,7 @@ export interface TemporalDropoffPattern {
         trend: 'increasing' | 'decreasing' | 'stable';
     }>;
     insights: string[];
-}
+
 export interface SegmentDropoffAnalysis {
     segmentId: string;
     segmentName: string;
@@ -91,7 +93,7 @@ export interface SegmentDropoffAnalysis {
     }>;
     uniqueDropOffReasons: DropoffReason[];
     segmentInsights: string[];
-}
+
 export interface RootCauseAnalysis {
     stepId: string;
     stepName: string;
@@ -100,7 +102,7 @@ export interface RootCauseAnalysis {
     confidence: number;
     evidenceQuality: 'high' | 'medium' | 'low';
     recommendations: CauseRecommendation[];
-}
+
 export interface DropoffCause {
     category: 'technical' | 'user_experience' | 'content' | 'external' | 'design';
     subcategory: string;
@@ -110,7 +112,7 @@ export interface DropoffCause {
     evidence: Evidence[];
     mitigationComplexity: 'low' | 'medium' | 'high';
     expectedImprovement: number;
-}
+
 export interface ContributingFactor {
     factor: string;
     weight: number;
@@ -118,14 +120,14 @@ export interface ContributingFactor {
     measurable: boolean;
     currentValue?: number;
     targetValue?: number;
-}
+
 export interface Evidence {
     type: 'user_feedback' | 'analytics' | 'technical_logs' | 'usability_testing';
     description: string;
     strength: 'strong' | 'moderate' | 'weak';
     source: string;
     timestamp: number;
-}
+
 export interface CauseRecommendation {
     title: string;
     description: string;
@@ -134,7 +136,7 @@ export interface CauseRecommendation {
     expectedImpact: number;
     implementationSteps: string[];
     successMetrics: string[];
-}
+
 export interface RecoveryOpportunity {
     stepId: string;
     stepName: string;
@@ -144,7 +146,7 @@ export interface RecoveryOpportunity {
     strategicInitiatives: StrategicInitiative[];
     timeToImpact: number;
     confidenceLevel: number;
-}
+
 export interface QuickWin {
     title: string;
     description: string;
@@ -152,7 +154,7 @@ export interface QuickWin {
     expectedImpact: number;
     implementationTime: number;
     requirements: string[];
-}
+
 export interface StrategicInitiative {
     title: string;
     description: string;
@@ -161,7 +163,7 @@ export interface StrategicInitiative {
     implementationTime: number;
     dependencies: string[];
     successMetrics: string[];
-}
+
 export interface DropoffReason {
     reason: string;
     category: string;
@@ -169,46 +171,46 @@ export interface DropoffReason {
     count: number;
     confidence: number;
     severity: 'critical' | 'high' | 'medium' | 'low';
-}
+
 export interface BenchmarkComparison {
     industryAverage: number;
     topPerformers: number;
     yourPerformance: number;
     percentile: number;
     improvementPotential: number;
-}
+
 export interface UserBehaviorAnalysis {
     averageTimeOnStep: number;
     interactionPatterns: InteractionPattern[];
     exitBehaviors: ExitBehavior[];
     recoveryAttempts: number;
-}
+
 export interface InteractionPattern {
     pattern: string;
     frequency: number;
     conversionImpact: number;
     description: string;
-}
+
 export interface ExitBehavior {
     behavior: string;
     percentage: number;
     description: string;
     preventable: boolean;
-}
+
 export interface TechnicalAnalysis {
     pageLoadTime: number;
     errorRate: number;
     performanceScore: number;
     accessibilityIssues: AccessibilityIssue[];
     mobileCompatibility: number;
-}
+
 export interface AccessibilityIssue {
     type: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
     description: string;
     impact: string;
     fixComplexity: 'low' | 'medium' | 'high';
-}
+
 export interface ContentAnalysis {
     clarityScore: number;
     complexityScore: number;
@@ -216,7 +218,7 @@ export interface ContentAnalysis {
     completionRate: number;
     commonConfusionPoints: string[];
     improvementSuggestions: string[];
-}
+
 export interface DropoffInsight {
     type: 'pattern' | 'anomaly' | 'opportunity' | 'risk';
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -227,13 +229,13 @@ export interface DropoffInsight {
     confidence: number;
     recommendations: string[];
     timeframe: string;
-}
+
 export interface DropoffPointAnalysis {
     stepId: string;
     analysis: StepDropoffAnalysis;
     rootCause: RootCauseAnalysis;
     recovery: RecoveryOpportunity;
-}
+
 export interface DropoffExportData {
     heatmapMode: HeatmapMode;
     data: DropoffAnalysisData;
@@ -254,7 +256,6 @@ export interface DropoffExportData {
         };
         analysisDepth: 'basic' | 'detailed' | 'comprehensive';
     };
-}
 /**
  * Main Drop-off Heatmap Component
  */

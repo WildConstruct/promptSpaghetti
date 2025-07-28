@@ -40,6 +40,7 @@ export enum ETLJobStatus {
 }
 
 // ETL Job Configuration
+}
 export interface ETLJobConfig {
   id: string;
   type: ETLJobType;
@@ -58,8 +59,10 @@ export interface ETLJobConfig {
   retry_count: number;
   max_retries: number;
 }
+}
 
 // Revenue Fact Table Schema
+}
 export interface RevenueFact {
   id: string;
   
@@ -114,6 +117,7 @@ export interface RevenueFact {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 export class RevenueETLService extends EventEmitter {
   private dbConnection: any;
@@ -140,6 +144,7 @@ export class RevenueETLService extends EventEmitter {
    * Execute ETL job
    */
   async executeETLJob(jobConfig: ETLJobConfig): Promise<void> {
+
     const startTime = performance.now();
     
     try {
@@ -188,6 +193,7 @@ export class RevenueETLService extends EventEmitter {
    * Load revenue events into fact table with dimensional modeling
    */
   private async executeRevenueFactLoad(jobConfig: ETLJobConfig): Promise<void> {
+
     const query = `
       SELECT 
         re.id,
@@ -280,6 +286,7 @@ export class RevenueETLService extends EventEmitter {
    * Transform revenue event to fact table format
    */
   private async transformToRevenueFact(event: any): Promise<RevenueFact> {
+
     const eventDate = new Date(event.timestamp);
     
     // Calculate derived measures
@@ -353,14 +360,14 @@ export class RevenueETLService extends EventEmitter {
       reconciliation_status: 'pending',
       
       created_at: new Date(),
-      updated_at: new Date()
-    };
+      updated_at: new Date(};
   }
 
   /**
    * Aggregate template revenue metrics
    */
   private async executeTemplateMetricsAggregation(jobConfig: ETLJobConfig): Promise<void> {
+
     const query = `
       WITH template_revenue_data AS (
         SELECT 
@@ -384,22 +391,21 @@ export class RevenueETLService extends EventEmitter {
               'license_type', rf.license_type,
               'count', COUNT(*) OVER (PARTITION BY rf.license_type),
               'revenue_cents', SUM(rf.gross_revenue_cents) OVER (PARTITION BY rf.license_type)
-            )
+
           ) as license_breakdown
           
         FROM revenue_facts rf
         WHERE rf.template_id IS NOT NULL
         AND rf.created_at BETWEEN $1 AND $2
         GROUP BY rf.template_id, rf.creator_id
-      )
-      
+
       INSERT INTO template_revenue_metrics (
         template_id, creator_id, total_revenue_cents, gross_revenue_cents,
         net_revenue_cents, commission_cents, refund_cents, transaction_count,
         unique_buyers, repeat_purchase_rate, average_order_value_cents,
         license_breakdown, first_sale_at, last_sale_at,
         period_start, period_end, updated_at
-      )
+
       SELECT 
         template_id, creator_id, total_revenue_cents, total_revenue_cents,
         net_revenue_cents, commission_cents, refund_cents, transaction_count,
@@ -435,6 +441,7 @@ export class RevenueETLService extends EventEmitter {
    * Aggregate creator revenue metrics
    */
   private async executeCreatorMetricsAggregation(jobConfig: ETLJobConfig): Promise<void> {
+
     const query = `
       WITH creator_revenue_data AS (
         SELECT 
@@ -467,15 +474,14 @@ export class RevenueETLService extends EventEmitter {
               'license_type', rf.license_type,
               'count', COUNT(*) OVER (PARTITION BY rf.license_type),
               'revenue_cents', SUM(rf.commission_cents) OVER (PARTITION BY rf.license_type)
-            )
+
           ) as revenue_by_license_type
           
         FROM revenue_facts rf
         WHERE rf.creator_id IS NOT NULL
         AND rf.created_at BETWEEN $1 AND $2
         GROUP BY rf.creator_id
-      )
-      
+
       INSERT INTO creator_revenue_metrics (
         creator_id, total_earnings_cents, pending_payout_cents,
         paid_out_cents, lifetime_earnings_cents, template_count,
@@ -483,7 +489,7 @@ export class RevenueETLService extends EventEmitter {
         top_template_id, top_template_revenue_cents, revenue_by_license_type,
         payout_frequency, next_payout_date, payment_method,
         period_start, period_end, updated_at
-      )
+
       SELECT 
         creator_id, total_earnings_cents, total_earnings_cents,
         0, total_earnings_cents, template_count,
@@ -515,6 +521,7 @@ export class RevenueETLService extends EventEmitter {
    * Execute revenue reconciliation
    */
   private async executeRevenueReconciliation(jobConfig: ETLJobConfig): Promise<void> {
+
     // Reconcile revenue facts with source transactions
     const reconciliationQuery = `
       UPDATE revenue_facts rf
@@ -538,7 +545,7 @@ export class RevenueETLService extends EventEmitter {
       INSERT INTO etl_reconciliation_log (
         fact_id, transaction_id, discrepancy_type, 
         expected_amount, actual_amount, created_at
-      )
+
       SELECT 
         rf.id, rf.transaction_id, 'amount_mismatch',
         t.net_amount_cents, rf.net_revenue_cents, NOW()
@@ -558,6 +565,7 @@ export class RevenueETLService extends EventEmitter {
    * Execute historical backfill
    */
   private async executeHistoricalBackfill(jobConfig: ETLJobConfig): Promise<void> {
+
     // This would implement a more complex backfill process
     // for historical data that needs to be processed
     const backfillQuery = `
@@ -566,7 +574,7 @@ export class RevenueETLService extends EventEmitter {
         amount_cents, currency, transaction_id, order_id,
         template_id, creator_id, revenue_type, payment_provider,
         license_type, country_code, metadata, created_at
-      )
+
       SELECT 
         'hist_' || t.id,
         'transaction_completed',
@@ -598,7 +606,7 @@ export class RevenueETLService extends EventEmitter {
       AND NOT EXISTS (
         SELECT 1 FROM revenue_events re 
         WHERE re.transaction_id = t.id
-      )
+
     `;
 
     await this.dbConnection.query(backfillQuery, [
@@ -609,6 +617,7 @@ export class RevenueETLService extends EventEmitter {
 
   // Helper methods
   private async loadRevenueFactsBatch(facts: RevenueFact[]): Promise<void> {
+
     if (facts.length === 0) return;
 
     const values = facts.map((fact, index) => {
@@ -670,6 +679,7 @@ export class RevenueETLService extends EventEmitter {
   }
 
   private async calculateDaysSinceLastPurchase(userId: string, currentDate: Date): Promise<number> {
+
     // Implementation would query for last purchase date
     return 0; // Placeholder
   }
@@ -700,6 +710,7 @@ export class RevenueETLService extends EventEmitter {
   }
 
   private async calculateCommission(event: any): Promise<number> {
+
     if (event.creator_id && event.revenue_type === 'purchase') {
       // Default commission rate - would be fetched from creator settings
       return Math.round(event.amount_cents * 0.7);
@@ -713,6 +724,7 @@ export class RevenueETLService extends EventEmitter {
     startedAt?: Date, 
     completedAt?: Date
   ): Promise<void> {
+
     const updates: string[] = ['status = $2'];
     const params: any[] = [jobId, status];
     
@@ -731,6 +743,7 @@ export class RevenueETLService extends EventEmitter {
   }
 
   private async handleJobError(jobConfig: ETLJobConfig, error: Error): Promise<void> {
+
     const retryCount = jobConfig.retry_count + 1;
     
     if (retryCount <= jobConfig.max_retries) {

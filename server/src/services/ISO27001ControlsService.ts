@@ -11,6 +11,7 @@
 
 import { ComplianceRuleEngine, ComplianceRule, ComplianceFramework } from './ComplianceRuleEngine';
 
+}
 export interface ISO27001Control {
   controlId: string;
   controlNumber: string;
@@ -28,7 +29,9 @@ export interface ISO27001Control {
   status: ControlStatus;
   metadata: ControlMetadata;
 }
+}
 
+}
 export interface ISO27001Implementation {
   requirements: string[];
   guidelines: string[];
@@ -39,7 +42,9 @@ export interface ISO27001Implementation {
   validation: ValidationRequirement[];
   metrics: ControlMetric[];
 }
+}
 
+}
 export interface ISO27001Evidence {
   evidenceId: string;
   type: EvidenceType;
@@ -51,7 +56,9 @@ export interface ISO27001Evidence {
   responsible: string;
   automated: boolean;
 }
+}
 
+}
 export interface ISO27001ComplianceMapping {
   soc2Mapping: string[];
   gdprMapping: string[];
@@ -60,7 +67,9 @@ export interface ISO27001ComplianceMapping {
   cisMapping: string[];
   customMappings: CustomMapping[];
 }
+}
 
+}
 export interface ImplementationProcedure {
   procedureId: string;
   name: string;
@@ -70,7 +79,9 @@ export interface ImplementationProcedure {
   responsible: string;
   documentation: string[];
 }
+}
 
+}
 export interface ProcedureStep {
   stepId: string;
   order: number;
@@ -80,7 +91,9 @@ export interface ProcedureStep {
   prerequisites: string[];
   outputs: string[];
 }
+}
 
+}
 export interface ResponsibleRole {
   role: string;
   responsibility: string;
@@ -88,7 +101,9 @@ export interface ResponsibleRole {
   qualifications: string[];
   training: string[];
 }
+}
 
+}
 export interface ValidationRequirement {
   validationId: string;
   type: ValidationType;
@@ -97,14 +112,18 @@ export interface ValidationRequirement {
   criteria: ValidationCriteria;
   responsible: string;
 }
+}
 
+}
 export interface ValidationCriteria {
   passCriteria: string[];
   failCriteria: string[];
   measurements: string[];
   thresholds: ValidationThreshold[];
 }
+}
 
+}
 export interface ValidationThreshold {
   metric: string;
   target: number;
@@ -112,7 +131,9 @@ export interface ValidationThreshold {
   critical: number;
   unit: string;
 }
+}
 
+}
 export interface ControlMetric {
   metricId: string;
   name: string;
@@ -124,21 +145,27 @@ export interface ControlMetric {
   source: string;
   automated: boolean;
 }
+}
 
+}
 export interface EvidenceRetention {
   period: number;
   unit: RetentionUnit;
   disposal: DisposalMethod;
   archival: ArchivalRequirement;
 }
+}
 
+}
 export interface CustomMapping {
   framework: string;
   mapping: string[];
   notes: string;
   verified: boolean;
 }
+}
 
+}
 export interface ControlMetadata {
   version: string;
   lastUpdated: Date;
@@ -149,7 +176,9 @@ export interface ControlMetadata {
   references: ControlReference[];
   changeHistory: ControlChange[];
 }
+}
 
+}
 export interface ControlReference {
   type: ReferenceType;
   identifier: string;
@@ -157,7 +186,9 @@ export interface ControlReference {
   url?: string;
   version?: string;
 }
+}
 
+}
 export interface ControlChange {
   changeId: string;
   date: Date;
@@ -166,12 +197,15 @@ export interface ControlChange {
   impact: ChangeImpact;
   approvedBy: string;
 }
+}
 
+}
 export interface ArchivalRequirement {
   required: boolean;
   method: ArchivalMethod;
   location: string;
   access: ArchivalAccess;
+}
 }
 
 // Enums
@@ -394,7 +428,7 @@ export class ISO27001ControlsService {
                 duration: '2 days',
                 prerequisites: ['Business impact assessment'],
                 outputs: ['Policy requirements document']
-              },
+  }
               {
                 stepId: 'A.5.1.P1.S2', 
                 order: 2,
@@ -403,7 +437,7 @@ export class ISO27001ControlsService {
                 duration: '5 days',
                 prerequisites: ['Policy requirements document'],
                 outputs: ['Draft policy document']
-              },
+  }
               {
                 stepId: 'A.5.1.P1.S3',
                 order: 3,
@@ -449,7 +483,7 @@ export class ISO27001ControlsService {
                   unit: 'percentage'
                 }
               ]
-            },
+  }
             responsible: 'Internal Audit'
           }
         ],
@@ -466,7 +500,7 @@ export class ISO27001ControlsService {
             automated: true
           }
         ]
-      },
+  }
       evidence: [
         {
           evidenceId: 'A.5.1.E1',
@@ -484,7 +518,7 @@ export class ISO27001ControlsService {
               location: 'Corporate archive',
               access: ArchivalAccess.WITHIN_24H
             }
-          },
+  }
           location: 'Policy management system',
           responsible: 'Information Security Manager',
           automated: false
@@ -498,7 +532,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PM-1'],
         cisMapping: ['CSC-1'],
         customMappings: []
-      },
+  }
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -549,7 +583,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.ANNUALLY,
         validation: [],
         metrics: []
-      },
+  }
       evidence: [],
       relatedControls: ['A.5.1', 'A.6.1'],
       complianceMapping: {
@@ -559,7 +593,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PM-2'],
         cisMapping: ['CSC-2'],
         customMappings: []
-      },
+  }
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.MEDIUM,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -613,7 +647,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.ONCE,
         validation: [],
         metrics: []
-      },
+  }
       evidence: [],
       relatedControls: ['A.6.2', 'A.6.3'],
       complianceMapping: {
@@ -623,7 +657,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PS-3'],
         cisMapping: ['CSC-16'],
         customMappings: []
-      },
+  }
       maturityLevel: ISO27001MaturityLevel.BASIC,
       riskLevel: ControlRiskLevel.MEDIUM,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -672,7 +706,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.CONTINUOUS,
         validation: [],
         metrics: []
-      },
+  }
       evidence: [],
       relatedControls: ['A.7.2', 'A.7.3'],
       complianceMapping: {
@@ -682,7 +716,7 @@ export class ISO27001ControlsService {
         nistMapping: ['PE-3'],
         cisMapping: ['CSC-11'],
         customMappings: []
-      },
+  }
       maturityLevel: ISO27001MaturityLevel.INTERMEDIATE,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -724,7 +758,7 @@ export class ISO27001ControlsService {
         frequency: ImplementationFrequency.CONTINUOUS,
         validation: [],
         metrics: []
-      },
+  }
       evidence: [],
       relatedControls: ['A.8.2', 'A.8.3'],
       complianceMapping: {
@@ -734,7 +768,7 @@ export class ISO27001ControlsService {
         nistMapping: ['AC-19'],
         cisMapping: ['CSC-1'],
         customMappings: []
-      },
+  }
       maturityLevel: ISO27001MaturityLevel.INTERMEDIATE,
       riskLevel: ControlRiskLevel.HIGH,
       status: ControlStatus.NOT_IMPLEMENTED,
@@ -813,6 +847,7 @@ export class ISO27001ControlsService {
    * Update control status
    */
   public async updateControlStatus(controlId: string, status: ControlStatus): Promise<boolean> {
+
     const control = this.controls.get(controlId);
     if (!control) {
       return false;
@@ -838,6 +873,7 @@ export class ISO27001ControlsService {
    * Generate compliance rules for ISO 27001 controls
    */
   public async generateComplianceRules(): Promise<ComplianceRule[]> {
+
     const rules: ComplianceRule[] = [];
 
     for (const control of this.controls.values()) {
@@ -860,7 +896,7 @@ export class ISO27001ControlsService {
             conditions: [],
             triggers: [],
             exemptions: []
-          },
+  }
           dataTypes: [],
           processingActivities: [],
           geographicScope: {} as Record<string, unknown>,
@@ -868,7 +904,7 @@ export class ISO27001ControlsService {
           temporalScope: {} as Record<string, unknown>,
           technicalScope: {} as Record<string, unknown>,
           exceptions: []
-        },
+  }
         conditions: [],
         actions: [],
         conflicts: [],
@@ -942,6 +978,7 @@ export class ISO27001ControlsService {
    * Integrate with compliance engine
    */
   public async integrateWithComplianceEngine(): Promise<void> {
+
     const rules = await this.generateComplianceRules();
     
     for (const rule of rules) {
@@ -1016,6 +1053,7 @@ export class ISO27001ControlsService {
   }
 }
 
+}
 export interface ISO27001ComplianceReport {
   reportId: string;
   generatedAt: Date;
@@ -1026,6 +1064,7 @@ export interface ISO27001ComplianceReport {
   themeSummary: Record<ISO27001Theme, number>;
   gapAnalysis: ISO27001Control[];
   recommendations: string[];
+}
 }
 
 export default ISO27001ControlsService;

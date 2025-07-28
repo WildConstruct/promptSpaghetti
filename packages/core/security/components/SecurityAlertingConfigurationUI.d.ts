@@ -30,6 +30,7 @@
 import React from 'react';
 import { SecurityAlertingConfig } from '../SecurityAlertingAnalytics';
 import { ComplianceFramework } from '../SecurityLogger';
+
 export interface SecurityAlertingConfigurationUIProps {
     currentConfig: SecurityAlertingConfig;
     onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;
@@ -39,23 +40,27 @@ export interface SecurityAlertingConfigurationUIProps {
     theme?: 'light' | 'dark' | 'cinema';
     readOnly?: boolean;
     allowAdvancedSettings?: boolean;
-}
+
+
 export interface ValidationResult {
     isValid: boolean;
     errors: ConfigValidationError[];
     warnings: ConfigValidationWarning[];
     securityScore: number;
-}
+
+
 export interface ConfigValidationError {
     field: string;
     message: string;
     severity: 'error' | 'critical';
-}
+
+
 export interface ConfigValidationWarning {
     field: string;
     message: string;
     impact: 'low' | 'medium' | 'high';
-}
+
+
 /**
  * Advanced security alerting configuration interface
  */

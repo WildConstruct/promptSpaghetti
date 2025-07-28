@@ -8,27 +8,24 @@ import { BaseError, ErrorSeverity, ErrorCode } from './index';
 import { ErrorFactory } from './ErrorFactory';
 
 export interface RetryOptions {
-  maxAttempts: number;
+  maxAttempts: number;,
   baseDelay: number;
-  maxDelay: number;
+  maxDelay: number;,
   backoffMultiplier: number;
   retryCondition?: (error: Error) => boolean;
 }
-
 export interface FallbackOptions<T> {
   fallbackValue?: T;
   fallbackFunction?: () => T | Promise<T>;
   logError?: boolean;
-}
-
-export interface CircuitBreakerOptions {
-  threshold: number;
+  export interface CircuitBreakerOptions {
+  threshold: number;,
   resetTimeout: number;
   monitoringWindow: number;
+  /**
+  * Centralized error recovery utilities
+  */
 }
-/**
- * Centralized error recovery utilities
- */
 export class ErrorRecovery {
   private static circuitBreakers = new Map<string, CircuitBreakerState>();
   /**
@@ -53,9 +50,7 @@ export class ErrorRecovery {
             ErrorCode.API_ERROR,
             ErrorCode.RATE_LIMIT_ERROR
           ].includes(error.code) && error.severity !== ErrorSeverity.CRITICAL;
-        }
         return false;
-      }
     } = options;
     let lastError: Error;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -66,7 +61,6 @@ export class ErrorRecovery {
         // Don't retry on non-retryable errors
         if (!retryCondition(lastError)) {
           throw ErrorFactory.wrapUnknownError(error, context);
-        }
         // Don't delay after the last attempt
         if (attempt < maxAttempts) {
           const delay = Math.min(;);
@@ -74,20 +68,20 @@ export class ErrorRecovery {
             maxDelay
           );
           console.warn()
-            `Operation '${context}' failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay}ms:`,}
+            `Operation '${context}' failed (attempt ${attempt}/${maxAttempts}), retrying in ${delay},}
+  ms:`;
+  }
             lastError.message
           );
           await this.delay(delay);
-        }
-      }
-    }
     // All attempts failed
     throw ErrorFactory.createRecoverableError()
-      `Operation '${context}' failed after ${maxAttempts} attempts: ${lastError.message}`,}
+      `Operation '${context}' failed after ${maxAttempts},}
+  attempts: ${lastError.message}`}
+}
       context,
       () => this.withRetry(operation, context, options)
     );
-  }
   /**
    * Execute operation with fallback on failure
    */
@@ -102,26 +96,21 @@ export class ErrorRecovery {
     } catch (error) {
       if (logError) {
         console.error(`Operation '${context}' failed, using fallback:`, error);}
-      }
       // Execute fallback function if provided
       if (fallbackFunction) {
         try {
           return await Promise.resolve(fallbackFunction());
         } catch (fallbackError) {
           throw ErrorFactory.createGraphExecutionError()
-            `Both operation and fallback failed for '${context}': ${(error as Error).message}`,}
+            `Both operation and fallback failed for '${context}': ${(error as Error).message}`}
+}
             error as Error
           );
-        }
-      }
       // Return fallback value if provided
       if (fallbackValue !== undefined) {
         return fallbackValue;
-      }
       // No fallback available
       throw ErrorFactory.wrapUnknownError(error, context);
-    }
-  }
   /**
    * Execute operation with circuit breaker pattern
    */
@@ -137,7 +126,7 @@ export class ErrorRecovery {
       monitoringWindow = 300000 // 5 minutes
     } = options;
     const breaker = this.getOrCreateCircuitBreaker(circuitName, {)
-      threshold,
+  threshold,
       resetTimeout,
       monitoringWindow
     });
@@ -147,14 +136,13 @@ export class ErrorRecovery {
       if (now - breaker.openedAt < resetTimeout) {
         throw ErrorFactory.createAPIError()
           503,
-          `Circuit breaker '${circuitName}' is open`,}
+          `Circuit breaker '${circuitName}' is open`}
+}
           circuitName
         );
       } else {
         // Move to half-open state
         breaker.state = 'half-open';
-      }
-    }
     try {
       const result = await operation();
       // Success - reset or keep closed
@@ -162,7 +150,6 @@ export class ErrorRecovery {
         breaker.state = 'closed';
         breaker.failures = 0;
         breaker.lastFailureAt = 0;
-      }
       return result;
     } catch (error) {
       // Record failure
@@ -173,28 +160,23 @@ export class ErrorRecovery {
         breaker.failures = 1;
         breaker.firstFailureAt = now;
       } else if (breaker.failures === 1) {
-        breaker.firstFailureAt = now;
-      }
-      // Open circuit if threshold exceeded
-      if (breaker.failures >= threshold) {
-        breaker.state = 'open';
-        breaker.openedAt = now;
-      }
-      throw ErrorFactory.wrapUnknownError(error, context);
-    }
-  }
+  breaker.firstFailureAt = now;
+  // Open circuit if threshold exceeded
+  if (breaker.failures >= threshold) {
+  breaker.state = 'open';
+  breaker.openedAt = now;
+  throw ErrorFactory.wrapUnknownError(error, context);
   /**
-   * Execute multiple operations with graceful degradation
-   */
+  * Execute multiple operations with graceful degradation
+  */
   static async withGracefulDegradation<T>()
-    operations: Array<{,
-      operation: () => Promise<T>;
-      name: string;
-      priority: 'critical' | 'important' | 'optional';
-    }>,
-    context: string,
-  ): Promise<{
-    results: Array<{ name: string; result?: T; error?: Error; skipped?: boolean }>;
+  operations: Array<{,
+  operation: () => Promise<T>;,
+  name: string;
+  priority: 'critical' | 'important' | 'optional';
+}>,
+    context: string): Promise<{;
+  results: Array<{ name: string; result?: T; error?: Error; skipped?: boolean }>;
     success: boolean;
   }> {
     const results: Array<{ name: string; result?: T; error?: Error; skipped?: boolean }> = [];
@@ -209,7 +191,6 @@ export class ErrorRecovery {
       if (hasCriticalFailure && priority === 'optional') {
         results.push({ name, skipped: true });
         continue;
-      }
       try {
         const result = await operation();
         results.push({ name, result });
@@ -217,15 +198,11 @@ export class ErrorRecovery {
         results.push({ name, error: error as Error });
         if (priority === 'critical') {
           hasCriticalFailure = true;
-        }
         console.warn(`Operation '${name}' failed in ${context}:`, error);}
-      }
-    }
     return {
-      results,
-      success: !hasCriticalFailure,
-    };
-  }
+  results,
+  success: !hasCriticalFailure,
+};
   /**
    * Validate operation before execution with recovery suggestions
    */
@@ -243,9 +220,7 @@ export class ErrorRecovery {
         'valid state',
         { operation: 'validation' }
       );
-    }
     return operation();
-  }
   /**
    * Execute operation with timeout and recovery
    */
@@ -259,7 +234,8 @@ export class ErrorRecovery {
       setTimeout(() => {
         reject(ErrorFactory.createAPIError()
           408,
-          `Operation '${context}' timed out after ${timeoutMs}ms`,}
+          `Operation '${context}' timed out after ${timeoutMs}ms`}
+}
           context
         ));
       }, timeoutMs);
@@ -270,10 +246,7 @@ export class ErrorRecovery {
       if (recoveryFn && error instanceof BaseError && error.code === ErrorCode.API_ERROR) {
         console.warn(`Operation '${context}' timed out, attempting recovery`);}
         return recoveryFn();
-      }
       throw error;
-    }
-  }
   /**
    * Execute operation with resource cleanup
    */
@@ -281,13 +254,12 @@ export class ErrorRecovery {
     operation: () => Promise<T>,
     resourceAcquirer: () => Promise<R> | R,
     resourceReleaser: (resource: R) => Promise<void> | void,
-    context: string,
-  ): Promise<T> {
-    let resource: R | undefined;
-    try {
-      resource = await Promise.resolve(resourceAcquirer());
-      return await operation();
-    } catch (error) {
+    context: string): Promise<T> {,
+  let resource: R | undefined;
+  try {
+  resource = await Promise.resolve(resourceAcquirer());
+  return await operation();
+} catch (error) {
       throw ErrorFactory.wrapUnknownError(error, context);
     } finally {
       if (resource !== undefined) {
@@ -295,36 +267,27 @@ export class ErrorRecovery {
           await Promise.resolve(resourceReleaser(resource));
         } catch (cleanupError) {
           console.error(`Failed to cleanup resource in '${context}':`, cleanupError);}
-        }
-      }
-    }
-  }
   // Private utility methods
   private static delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  private static getOrCreateCircuitBreaker()
-    name: string,
-    options: CircuitBreakerOptions,
-  ): CircuitBreakerState {
-    if (!this.circuitBreakers.has(name)) {
-      this.circuitBreakers.set(name, {)
-        state: 'closed',
-        failures: 0,
-        firstFailureAt: 0,
-        lastFailureAt: 0,
-        openedAt: 0,
-        ...options
-      });
-    }
+  return new Promise(resolve => setTimeout(resolve, ms));
+  private static getOrCreateCircuitBreaker(()
+  name: string,
+  options: CircuitBreakerOptions): CircuitBreakerState {,
+  if (!this.circuitBreakers.has(name)) {
+  this.circuitBreakers.set(name, {)
+  state: 'closed',
+  failures: 0,
+  firstFailureAt: 0,
+  lastFailureAt: 0,
+  openedAt: 0,
+  ...options
+});
     return this.circuitBreakers.get(name)!;
-  }
   /**
    * Get circuit breaker status for monitoring
    */
   static getCircuitBreakerStatus(name: string): CircuitBreakerState | null {
     return this.circuitBreakers.get(name) || null;
-  }
   /**
    * Reset circuit breaker manually
    */
@@ -336,24 +299,19 @@ export class ErrorRecovery {
       breaker.firstFailureAt = 0;
       breaker.lastFailureAt = 0;
       breaker.openedAt = 0;
-    }
-  }
-}
 interface CircuitBreakerState extends CircuitBreakerOptions {
-  state: 'closed' | 'open' | 'half-open';
+  state: 'closed' | 'open' | 'half-open';,
   failures: number;
-  firstFailureAt: number;
+  firstFailureAt: number;,
   lastFailureAt: number;
   openedAt: number;
-}
 /**
  * Decorator for automatic error recovery
  */
-export function withErrorRecovery<T extends any[], R>()
+export function withErrorRecovery<T extends any, R>()
   retryOptions?: Partial<RetryOptions>,
   fallbackOptions?: FallbackOptions<R>
-  return function ()
-    target: any,
+  return function (target: any,)
     propertyKey: string,
     descriptor: PropertyDescriptor,
     const originalMethod = descriptor.value;
@@ -367,16 +325,11 @@ export function withErrorRecovery<T extends any[], R>()
         } catch (error) {
           if (fallbackOptions) {
             return ErrorRecovery.withFallback(operation, context, fallbackOptions);
-          }
           throw error;
-        }
-      }
       // Apply fallback logic if specified
       if (fallbackOptions) {
         return ErrorRecovery.withFallback(operation, context, fallbackOptions);
-      }
       return operation();
     };
     return descriptor;
   };
-}

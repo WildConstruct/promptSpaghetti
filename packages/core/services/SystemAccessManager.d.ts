@@ -14,6 +14,7 @@
  * - Session management
  * - Resource-based permissions
  */
+
 export interface SystemUser {
     id: string;
     username: string;
@@ -39,7 +40,7 @@ export interface SystemUser {
     termsAccepted?: Date;
     privacyPolicyAccepted?: Date;
     dataRetentionConsent?: boolean;
-}
+
 export interface UserProfile {
     firstName?: string;
     lastName?: string;
@@ -51,7 +52,7 @@ export interface UserProfile {
     phoneNumber?: string;
     organization?: string;
     manager?: string;
-}
+
 export interface UserRole {
     id: string;
     roleId: string;
@@ -62,7 +63,7 @@ export interface UserRole {
     expiresAt?: Date;
     scope: RoleScope;
     context?: Record<string, any>;
-}
+
 export interface DirectPermission {
     id: string;
     permission: string;
@@ -74,12 +75,12 @@ export interface DirectPermission {
     grantedBy: string;
     expiresAt?: Date;
     conditions?: PermissionCondition[];
-}
+
 export interface PermissionCondition {
     type: 'time' | 'location' | 'device' | 'mfa' | 'approval';
     constraint: Record<string, any>;
     description: string;
-}
+
 export interface SystemRole {
     id: string;
     name: string;
@@ -97,14 +98,14 @@ export interface SystemRole {
     createdAt: Date;
     updatedAt: Date;
     createdBy: string;
-}
+
 export interface RolePermission {
     permission: string;
     resource: string;
     actions: string[];
     scope: PermissionScope;
     conditions?: PermissionCondition[];
-}
+
 export interface AccessRequest {
     id: string;
     requesterId: string;
@@ -127,7 +128,7 @@ export interface AccessRequest {
     respondedAt?: Date;
     expiresAt?: Date;
     auditTrail: AccessAuditEntry[];
-}
+
 export interface AccessApprover {
     userId: string;
     displayName: string;
@@ -136,7 +137,7 @@ export interface AccessApprover {
     status: ApprovalStatus;
     respondedAt?: Date;
     comments?: string;
-}
+
 export interface AccessAuditEntry {
     id: string;
     timestamp: Date;
@@ -145,7 +146,7 @@ export interface AccessAuditEntry {
     details: Record<string, any>;
     ipAddress?: string;
     userAgent?: string;
-}
+
 export interface AccessRestriction {
     type: RestrictionType;
     description: string;
@@ -154,7 +155,7 @@ export interface AccessRestriction {
     conditions: Record<string, any>;
     appliedBy: string;
     appliedAt: Date;
-}
+
 export interface SystemAccess {
     id: string;
     userId: string;
@@ -163,12 +164,12 @@ export interface SystemAccess {
     grantedBy: string;
     lastUsed?: Date;
     restrictions: SystemRestriction[];
-}
+
 export interface SystemRestriction {
     type: 'ip_whitelist' | 'time_window' | 'mfa_required' | 'approval_required' | 'read_only';
     configuration: Record<string, any>;
     description: string;
-}
+
 export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pending' | 'deactivated';
 export type SystemAccessLevel = 'none' | 'basic' | 'advanced' | 'admin' | 'super_admin' | 'system';
 export type SecurityClearance = 'public' | 'internal' | 'confidential' | 'restricted' | 'top_secret';
@@ -180,6 +181,7 @@ export type AccessUrgency = 'low' | 'medium' | 'high' | 'critical';
 export type AccessRequestStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'withdrawn';
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated';
 export type RestrictionType = 'time' | 'location' | 'device' | 'resource' | 'action' | 'network';
+
 export interface AccessFilter {
     userIds?: string[];
     roles?: string[];
@@ -192,7 +194,7 @@ export interface AccessFilter {
     searchQuery?: string;
     includeInactive?: boolean;
     securityClearance?: SecurityClearance[];
-}
+
 export interface AccessStats {
     totalUsers: number;
     activeUsers: number;
@@ -214,7 +216,6 @@ export interface AccessStats {
         overdueCertifications: number;
         pendingReviews: number;
     };
-}
 /**
  * System Access Management Service
  */
@@ -280,7 +281,7 @@ export declare class SystemAccessManager {
     private startMaintenanceTasks;
     private cleanupExpiredAccess;
     private processExpiredRequests;
-}
+
 export declare const systemAccessManager: SystemAccessManager;
 export declare const createUser: (userData: Omit<SystemUser, "id" | "createdAt" | "updatedAt">, createdBy: string) => Promise<SystemUser>;
 export declare const assignRole: (userId: string, roleId: string, assignedBy: string, options?: any) => Promise<boolean>;

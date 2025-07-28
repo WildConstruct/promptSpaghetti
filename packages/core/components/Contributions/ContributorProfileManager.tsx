@@ -13,12 +13,11 @@ import {
 } from '../../types/contributions';
 
 export interface ContributorProfileManagerProps {
-  profile: ContributorProfile;
+  profile: ContributorProfile;,
   onProfileUpdate: (profile: ContributorProfile) => void;
   readOnly?: boolean;
   className?: string;
 }
-
 export const ContributorProfileManager: React.FC<ContributorProfileManagerProps> = ({)
   profile,
   onProfileUpdate,
@@ -39,7 +38,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     // Clear errors for updated fields
     const updatedFields = Object.keys(updates);
     setErrors(prev => {)
-      const newErrors = { ...prev };
+  const newErrors = { ...prev };
       updatedFields.forEach(field => delete newErrors[field]);
       return newErrors;
     });
@@ -49,13 +48,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     const newErrors: Record<string, string> = {};
     if (!formData.displayName?.trim()) {
       newErrors.displayName = 'Display name is required';
-    }
     if (formData.bio && formData.bio.length > 500) {
       newErrors.bio = 'Bio must be less than 500 characters';
-    }
     if (formData.website && !isValidUrl(formData.website)) {
       newErrors.website = 'Please enter a valid URL';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -66,7 +62,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       return true;
     } catch {
       return false;
-    }
   };
   // Handle save
   const handleSave = async () => {
@@ -76,26 +71,25 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       // Validate with Zod
       // API call would go here
       const response = await fetch(`/api/marketplace/contributors/${profile.id}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
-        },
-        body: JSON.stringify(formData),
-      });
+  },
+  body: JSON.stringify(formData);
+  });
       if (!response.ok) {
         throw new Error('Failed to update profile');
-      }
       const updatedProfile = await response.json();
       onProfileUpdate(updatedProfile);
       setEditMode(false);
     } catch (err) {
-      setErrors({ )
-        save: err instanceof Error ? err.message : 'Failed to save profile' ,
-      });
+  setErrors({ )
+  save: err instanceof Error ? err.message : 'Failed to save profile',
+});
     } finally {
       setSaving(false);
-    }
   };
   // Handle cancel
   const handleCancel = () => {
@@ -105,31 +99,29 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
   };
   // Add skill
   const addSkill = (skill: string) => {
-    if (skill.trim() && !formData.skills?.includes(skill.trim())) {
-      updateFormData({ )
-        skills: [...(formData.skills || []), skill.trim()]
-      });
-    }
+  if (skill.trim() && !formData.skills?.includes(skill.trim())) {
+  updateFormData({ )
+  skills: [...(formData.skills || []), skill.trim()],
+});
   };
   // Remove skill
   const removeSkill = (index: number) => {
-    updateFormData({)
-      skills: formData.skills?.filter((_, i) => i !== index) || []
-    });
+  updateFormData({)
+  skills: formData.skills?.filter((_, i) => i !== index) || [],
+});
   };
   // Add expertise
   const addExpertise = (expertise: string) => {
-    if (expertise.trim() && !formData.expertise?.includes(expertise.trim())) {
-      updateFormData({ )
-        expertise: [...(formData.expertise || []), expertise.trim()]
-      });
-    }
+  if (expertise.trim() && !formData.expertise?.includes(expertise.trim())) {
+  updateFormData({ )
+  expertise: [...(formData.expertise || []), expertise.trim()],
+});
   };
   // Remove expertise
   const removeExpertise = (index: number) => {
-    updateFormData({)
-      expertise: formData.expertise?.filter((_, i) => i !== index) || []
-    });
+  updateFormData({)
+  expertise: formData.expertise?.filter((_, i) => i !== index) || [],
+});
   };
   // Get level badge styling
   const getLevelBadgeStyle = (level: ContributorLevel) => {
@@ -144,7 +136,7 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
     return styles[level] || styles.newcomer;
   };
   const levelStyle = getLevelBadgeStyle(profile.level);
-  return ();
+  return;
     <div className={`contributor-profile-manager ${className}`}>}
       {/* Profile Header */}
       <div className="profile-header">
@@ -154,9 +146,9 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
               {profile.displayName.charAt(0).toUpperCase()}
             </div>
             <div className="level-badge" style={{
-              backgroundColor: levelStyle.bg,
-              color: levelStyle.color,
-            }}>
+  backgroundColor: levelStyle.bg,
+  color: levelStyle.color,
+}}>
               <span className="level-icon">{levelStyle.icon}</span>
               <span className="level-text">{profile.level}</span>
             </div>
@@ -345,7 +337,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                           e.preventDefault();
                           addExpertise(e.currentTarget.value);
                           e.currentTarget.value = '';
-                        }
                       }}
                     />
                     <div className="tags-list">
@@ -375,7 +366,6 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                           e.preventDefault();
                           addSkill(e.currentTarget.value);
                           e.currentTarget.value = '';
-                        }
                       }}
                     />
                     <div className="tags-list">
@@ -516,11 +506,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnComment ?? true}
                     onChange={(e) => updateFormData({)
-                      notificationPreferences: {,
-                        ...formData.notificationPreferences,
-                        emailOnComment: e.target.checked,
-                      }
-                    })}
+  notificationPreferences: {,
+  ...formData.notificationPreferences,
+  emailOnComment: e.target.checked,
+})}
                     disabled={!editMode && !readOnly}
                   />
                   Email when someone comments on my contributions
@@ -532,11 +521,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnLike ?? false}
                     onChange={(e) => updateFormData({)
-                      notificationPreferences: {,
-                        ...formData.notificationPreferences,
-                        emailOnLike: e.target.checked,
-                      }
-                    })}
+  notificationPreferences: {,
+  ...formData.notificationPreferences,
+  emailOnLike: e.target.checked,
+})}
                     disabled={!editMode && !readOnly}
                   />
                   Email when someone likes my contributions
@@ -548,11 +536,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     type="checkbox"
                     checked={formData.notificationPreferences?.emailOnFeature ?? true}
                     onChange={(e) => updateFormData({)
-                      notificationPreferences: {,
-                        ...formData.notificationPreferences,
-                        emailOnFeature: e.target.checked,
-                      }
-                    })}
+  notificationPreferences: {,
+  ...formData.notificationPreferences,
+  emailOnFeature: e.target.checked,
+})}
                     disabled={!editMode && !readOnly}
                   />
                   Email when my contributions are featured
@@ -564,11 +551,10 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
                     type="checkbox"
                     checked={formData.notificationPreferences?.weeklyDigest ?? true}
                     onChange={(e) => updateFormData({)
-                      notificationPreferences: {,
-                        ...formData.notificationPreferences,
-                        weeklyDigest: e.target.checked,
-                      }
-                    })}
+  notificationPreferences: {,
+  ...formData.notificationPreferences,
+  weeklyDigest: e.target.checked,
+})}
                     disabled={!editMode && !readOnly}
                   />
                   Weekly digest of community activity
@@ -580,404 +566,331 @@ export const ContributorProfileManager: React.FC<ContributorProfileManagerProps>
       </div>
       <style>{`
         .contributor-profile-manager {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          overflow: hidden;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 12px;,
+  overflow: hidden;
         .profile-header {
           padding: 24px;
-          border-bottom: 1px solid #e5e7eb;
-          display: flex;
+          border-bottom: 1px solid #e5e7eb;,
+  display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 20px;
-        }
+          align-items: flex-start;,
+  gap: 20px;
         .header-main {
-          display: flex;
-          gap: 20px;
+          display: flex;,
+  gap: 20px;
           flex: 1;
-        }
         .avatar-section {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .avatar {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: #ffffff;
-          display: flex;
+          width: 80px;,
+  height: 80px;
+          border-radius: 50%;,
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          color: #ffffff;,
+  display: flex;
           align-items: center;
           justify-content: center;
           font-size: 32px;
           font-weight: 700;
-        }
         .level-badge {
           padding: 4px 8px;
           border-radius: 12px;
           font-size: 12px;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          gap: 4px;
+          font-weight: 600;,
+  display: flex;
+          align-items: center;,
+  gap: 4px;
           text-transform: capitalize;
-        }
         .profile-info {
           flex: 1;
-        }
         .profile-info h2 {
           margin: 0 0 8px 0;
           font-size: 28px;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .bio {
-          margin: 0 0 12px 0;
-          color: #6b7280;
+          margin: 0 0 12px 0;,
+  color: #6b7280;
           line-height: 1.5;
-        }
         .location {
           display: flex;
-          align-items: center;
-          gap: 6px;
+          align-items: center;,
+  gap: 6px;
           color: #6b7280;
           font-size: 14px;
-        }
         .edit-actions {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-          gap: 1px;
-          background: #e5e7eb;
-        }
+          gap: 1px;,
+  background: #e5e7eb;
         .stat-item {
-          background: #ffffff;
-          padding: 16px;
+          background: #ffffff;,
+  padding: 16px;
           text-align: center;
-        }
         .stat-value {
           font-size: 24px;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 4px;
-        }
         .stat-label {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .profile-tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
-          background: #f8fafc;
-        }
+          border-bottom: 1px solid #e5e7eb;,
+  background: #f8fafc;
         .tab-btn {
-          background: none;
-          border: none;
-          padding: 16px 24px;
-          cursor: pointer;
-          font-weight: 500;
-          color: #6b7280;
-          border-bottom: 3px solid transparent;
-          transition: all 0.2s ease;
-        }
-        .tab-btn:hover {
-          color: #3b82f6;
+          background: none;,
+  border: none;
+          padding: 16px 24px;,
+  cursor: pointer;
+          font-weight: 500;,
+  color: #6b7280;
+          border-bottom: 3px solid transparent;,
+  transition: all 0.2s ease;
+        .tab-btn:hover {,
+  color: #3b82f6;
           background: #f1f5f9;
-        }
         .tab-btn.active {
           color: #3b82f6;
-          border-bottom-color: #3b82f6;
-          background: #ffffff;
-        }
+          border-bottom-color: #3b82f6;,
+  background: #ffffff;
         .tab-content {
           padding: 24px;
-        }
         .form-group {
           margin-bottom: 20px;
-        }
         .form-group label {
           display: block;
           margin-bottom: 6px;
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-group input,
         .form-group textarea,
         .form-group select {
-          width: 100%;
-          padding: 10px 12px;
+          width: 100%;,
+  padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;
-          transition: border-color 0.2s ease;
-        }
+          font-size: 14px;,
+  transition: border-color 0.2s ease;
         .form-group input:focus,
-        .form-group textarea:focus {
-          outline: none;
+        .form-group textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
         .form-group input.error,
         .form-group textarea.error {
           border-color: #ef4444;
-        }
         .char-count {
           text-align: right;
-          font-size: 12px;
-          color: #9ca3af;
+          font-size: 12px;,
+  color: #9ca3af;
           margin-top: 4px;
-        }
         .social-inputs {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .tags-input input {
           margin-bottom: 8px;
-        }
         .tags-list,
         .tags-display {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
+          flex-wrap: wrap;,
+  gap: 6px;
         .tag {
-          background: #3b82f6;
-          color: #ffffff;
+          background: #3b82f6;,
+  color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
+          font-weight: 500;,
+  display: flex;
+          align-items: center;,
+  gap: 4px;
         .tags-display .tag {
-          background: #e5e7eb;
-          color: #4b5563;
-        }
+          background: #e5e7eb;,
+  color: #4b5563;
         .tag-remove {
-          background: none;
-          border: none;
-          color: #ffffff;
-          cursor: pointer;
-          font-size: 14px;
-          padding: 0;
-          margin: 0;
-          width: 16px;
+          background: none;,
+  border: none;
+          color: #ffffff;,
+  cursor: pointer;
+          font-size: 14px;,
+  padding: 0;
+          margin: 0;,
+  width: 16px;
           height: 16px;
-          border-radius: 50%;
-          display: flex;
+          border-radius: 50%;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
-        .tag-remove:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
+        .tag-remove:hover {,
+  background: rgba(255, 255, 255, 0.2);
         .detail-section {
           margin-bottom: 24px;
-        }
         .detail-section h4 {
           margin: 0 0 12px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .detail-section p {
-          margin: 0;
-          color: #6b7280;
+          margin: 0;,
+  color: #6b7280;
           line-height: 1.5;
-        }
         .links-list {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .link-item {
           color: #3b82f6;
           text-decoration: none;
-          font-size: 14px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          font-size: 14px;,
+  display: flex;
+          align-items: center;,
+  gap: 8px;
         .link-item:hover {
           text-decoration: underline;
-        }
         .badges-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
-        }
         .badge-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
-          display: flex;
-          gap: 12px;
-        }
+          border-radius: 8px;,
+  padding: 16px;
+          display: flex;,
+  gap: 12px;
         .badge-icon {
-          width: 48px;
-          height: 48px;
+          width: 48px;,
+  height: 48px;
           border-radius: 8px;
-        }
         .badge-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .badge-info p {
           margin: 0 0 4px 0;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .earned-date {
-          font-size: 11px;
-          color: #9ca3af;
-        }
+          font-size: 11px;,
+  color: #9ca3af;
         .achievements-list {
           display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+          flex-direction: column;,
+  gap: 16px;
         .achievement-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
+          border-radius: 8px;,
+  padding: 16px;
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 16px;
-        }
+          align-items: center;,
+  gap: 16px;
         .achievement-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .achievement-info p {
           margin: 0;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .achievement-progress {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           min-width: 120px;
-        }
         .progress-bar {
-          flex: 1;
-          height: 8px;
+          flex: 1;,
+  height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .progress-fill {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s ease;
-        }
         .progress-text {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           font-weight: 500;
           min-width: 32px;
-        }
         .preference-item {
           margin-bottom: 16px;
-        }
         .preference-label {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           cursor: pointer;
-          font-size: 14px;
-          color: #374151;
-        }
+          font-size: 14px;,
+  color: #374151;
         .empty-text {
           color: #9ca3af;
-          font-style: italic;
-          margin: 0;
-        }
+          font-style: italic;,
+  margin: 0;
         .error-message {
           color: #ef4444;
           font-size: 12px;
           margin-top: 4px;
-        }
         .btn-primary,
         .btn-secondary,
         .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border: 1px solid transparent;
-        }
+          font-weight: 500;,
+  cursor: pointer;
+          transition: all 0.2s ease;,
+  border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;
-          color: #ffffff;
-        }
-        .btn-primary:hover:not(:disabled) {
-          background: #2563eb;
-        }
+          background: #3b82f6;,
+  color: #ffffff;
+        .btn-primary:hover:not(:disabled) {,
+  background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;
-          color: #374151;
+          background: #f3f4f6;,
+  color: #374151;
           border-color: #d1d5db;
-        }
-        .btn-secondary:hover {
-          background: #e5e7eb;
-        }
+        .btn-secondary:hover {,
+  background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;
-          color: #374151;
+          background: #ffffff;,
+  color: #374151;
           border-color: #d1d5db;
-        }
-        .btn-outline:hover {
-          background: #f9fafb;
-        }
-        .btn-primary:disabled {
-          opacity: 0.5;
+        .btn-outline:hover {,
+  background: #f9fafb;
+        .btn-primary:disabled {,
+  opacity: 0.5;
           cursor: not-allowed;
-        }
         @media (max-width: 768px) {
           .profile-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .header-main {
             flex-direction: column;
             align-items: center;
             text-align: center;
-          }
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
           .profile-tabs {
             overflow-x: auto;
-          }
           .tab-btn {
             white-space: nowrap;
-          }
           .badges-grid {
             grid-template-columns: 1fr;
-          }
           .achievement-item {
             flex-direction: column;
             align-items: stretch;
-          }
-        }
       `}</style>
     </div>
   );

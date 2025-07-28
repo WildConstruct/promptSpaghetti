@@ -26,7 +26,7 @@ export declare enum ExemptionType {
     DEVICE_TRUST = "device_trust",
     SECURITY_HEADERS = "security_headers",
     CONTENT_SECURITY_POLICY = "content_security_policy"
-}
+
 export declare enum ExemptionScope {
     USER = "user",
     IP_ADDRESS = "ip_address",
@@ -36,7 +36,7 @@ export declare enum ExemptionScope {
     ROLE = "role",
     DOMAIN = "domain",
     GLOBAL = "global"
-}
+
 export declare enum ExemptionStatus {
     ACTIVE = "active",
     EXPIRED = "expired",
@@ -44,14 +44,14 @@ export declare enum ExemptionStatus {
     PENDING_APPROVAL = "pending_approval",
     DENIED = "denied",
     SUSPENDED = "suspended"
-}
+
 export declare enum ExemptionPriority {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical",
     EMERGENCY = "emergency"
-}
+
 export declare enum ExemptionReason {
     BUSINESS_CRITICAL = "business_critical",
     EMERGENCY_ACCESS = "emergency_access",
@@ -63,7 +63,7 @@ export declare enum ExemptionReason {
     ACCESSIBILITY = "accessibility",
     PERFORMANCE = "performance",
     USER_EXPERIENCE = "user_experience"
-}
+
 export interface SecurityExemption {
     id: string;
     type: ExemptionType;
@@ -145,7 +145,7 @@ export interface SecurityExemption {
             source: string;
         }>;
     };
-}
+
 export interface ExemptionAuditEntry {
     id: string;
     timestamp: Date;
@@ -159,7 +159,7 @@ export interface ExemptionAuditEntry {
     details: Record<string, any>;
     ipAddress?: string;
     userAgent?: string;
-}
+
 export interface ExemptionRequest {
     type: ExemptionType;
     scope: ExemptionScope;
@@ -174,7 +174,7 @@ export interface ExemptionRequest {
     mitigations: string[];
     autoRenew?: boolean;
     emergencyOverride?: boolean;
-}
+
 export interface ExemptionUsageContext {
     endpoint?: string;
     ipAddress?: string;
@@ -183,7 +183,7 @@ export interface ExemptionUsageContext {
     requestId?: string;
     sessionId?: string;
     metadata?: Record<string, any>;
-}
+
 export interface ExemptionQuery {
     types?: ExemptionType[];
     scopes?: ExemptionScope[];
@@ -199,7 +199,7 @@ export interface ExemptionQuery {
     tags?: string[];
     limit?: number;
     offset?: number;
-}
+
 export interface ExemptionPolicy {
     type: ExemptionType;
     scope: ExemptionScope;
@@ -211,7 +211,6 @@ export interface ExemptionPolicy {
     emergencyOverrideAllowed: boolean;
     usageTracking: boolean;
     complianceRequired: boolean;
-}
 /**
  * Comprehensive exemption management service
  */
@@ -317,7 +316,7 @@ export declare class ExemptionManager extends EventEmitter {
     private initializeDefaultPolicies;
     private startMaintenanceTimer;
     private processAutoRenewal;
-}
+
 export declare const exemptionManager: ExemptionManager;
 export default ExemptionManager;
 //# sourceMappingURL=ExemptionManager.d.ts.map

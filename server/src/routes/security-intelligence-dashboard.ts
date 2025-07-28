@@ -21,39 +21,49 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
 // Request/Response Type Definitions
+}
 interface CreateDashboardRequest {
   Body: {
     name: string;
     widgets: DashboardWidget[];
     user_id?: string;
+}
   };
 }
 
+}
 interface UpdateDashboardRequest {
   Params: {
     dashboardId: string;
+}
   };
   Body: {
     widgets: DashboardWidget[];
   };
 }
 
+}
 interface GetDashboardRequest {
   Params: {
     dashboardId: string;
+}
   };
 }
 
+}
 interface DeleteDashboardRequest {
   Params: {
     dashboardId: string;
+}
   };
 }
 
+}
 interface GetWidgetDataRequest {
   Params: {
     dashboardId: string;
     widgetId: string;
+}
   };
   Querystring: {
     refresh?: boolean;
@@ -61,17 +71,21 @@ interface GetWidgetDataRequest {
   };
 }
 
+}
 interface GetSecurityAnalyticsRequest {
   Querystring: {
     start_time?: string;
     end_time?: string;
     include_predictions?: boolean;
+}
   };
 }
 
+}
 interface ExportDashboardRequest {
   Params: {
     dashboardId: string;
+}
   };
   Querystring: {
     format?: 'json' | 'csv' | 'pdf';
@@ -94,7 +108,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         historical_data_retention_days: 365,
         cache_ttl_seconds: 300,
         max_concurrent_dashboards: 1000
-      },
+  }
       analytics: {
         enabled: true,
         aggregation_intervals: [300, 3600, 86400, 604800],
@@ -103,7 +117,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         predictive_analytics_enabled: true,
         correlation_analysis_enabled: true,
         risk_scoring_enabled: true
-      },
+  }
       visualization: {
         enabled: true,
         chart_types: ['line', 'bar', 'pie', 'scatter', 'heatmap', 'geo', 'network', 'sankey', 'treemap', 'radar'],
@@ -112,7 +126,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         export_formats: ['png', 'pdf', 'svg', 'csv', 'json', 'excel'],
         real_time_charts: true,
         geo_mapping_enabled: true
-      },
+  }
       alerts: {
         enabled: true,
         threshold_based_alerts: true,
@@ -121,7 +135,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         alert_channels: ['email', 'slack', 'webhook', 'sms'],
         escalation_rules: true,
         auto_acknowledgment: false
-      },
+  }
       performance: {
         query_timeout_ms: 30000,
         max_data_points: 50000,
@@ -129,7 +143,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         cache_optimization: true,
         lazy_loading: true,
         compression_enabled: true
-      },
+  }
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
@@ -225,7 +239,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
                     y: { type: 'number' },
                     z_index: { type: 'number' }
                   }
-                },
+  }
                 size: {
                   type: 'object',
                   properties: {
@@ -235,10 +249,10 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
                 }
               }
             }
-          },
+  }
           user_id: { type: 'string' }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -246,7 +260,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             dashboard_id: { type: 'string' },
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -285,7 +299,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         properties: {
           dashboardId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -293,7 +307,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             dashboard_id: { type: 'string' },
             widgets: { type: 'array' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -330,21 +344,21 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         properties: {
           dashboardId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['widgets'],
         properties: {
           widgets: { type: 'array' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -380,14 +394,14 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         properties: {
           dashboardId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
           properties: {
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -422,14 +436,14 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
           dashboardId: { type: 'string' },
           widgetId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           refresh: { type: 'boolean' },
           filters: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -439,7 +453,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
             timestamp: { type: 'number' },
             cached: { type: 'boolean' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -503,7 +517,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
           end_time: { type: 'string', format: 'date-time' },
           include_predictions: { type: 'boolean' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -590,7 +604,7 @@ const securityIntelligenceDashboardRoutes: FastifyPluginAsync = async (fastify) 
         properties: {
           dashboardId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {

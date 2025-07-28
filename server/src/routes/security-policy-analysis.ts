@@ -19,6 +19,7 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 // Global engine instance
 let policyAnalysisEngine: SecurityPolicyAnalysisEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -27,22 +28,28 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface PolicyAnalysisRequest {
   policy: SecurityPolicy;
   analysis_type?: 'pre_deployment' | 'post_deployment' | 'periodic_review';
   include_simulation?: boolean;
 }
+}
 
+}
 interface PolicyValidationRequest {
   policy: SecurityPolicy;
   validation_level?: 'basic' | 'comprehensive';
   compliance_standards?: string[];
 }
+}
 
+}
 interface PolicyComparisonRequest {
   current_policy: SecurityPolicy;
   new_policy: SecurityPolicy;
   include_detailed_analysis?: boolean;
+}
 }
 
 /**
@@ -52,6 +59,7 @@ async function initializePolicyAnalysisEngine(
   platform: SecurityAPIIntegrationPlatform,
   optimizationEngine: SecurityOptimizationEngine
 ): Promise<SecurityPolicyAnalysisEngine> {
+
   if (policyAnalysisEngine) {
     return policyAnalysisEngine;
   }
@@ -63,7 +71,7 @@ async function initializePolicyAnalysisEngine(
       impact_simulation_enabled: true,
       compliance_checking_enabled: true,
       historical_analysis_enabled: true
-    },
+  }
     validation_framework: {
       enabled: true,
       automated_validation: true,
@@ -76,7 +84,7 @@ async function initializePolicyAnalysisEngine(
       ],
       compliance_standards: ['SOX', 'PCI_DSS', 'HIPAA', 'GDPR', 'SOC2'],
       risk_assessment_enabled: true
-    },
+  }
     policy_categories: {
       access_control: true,
       authentication: true,
@@ -85,7 +93,7 @@ async function initializePolicyAnalysisEngine(
       network_security: true,
       compliance: true,
       incident_response: true
-    },
+  }
     impact_assessment: {
       user_impact_analysis: true,
       system_impact_analysis: true,
@@ -93,7 +101,7 @@ async function initializePolicyAnalysisEngine(
       security_impact_analysis: true,
       compliance_impact_analysis: true,
       cost_impact_analysis: true
-    },
+  }
     approval_workflow: {
       enabled: true,
       require_approval_for: ['high', 'critical'],
@@ -140,7 +148,7 @@ export default async function securityPolicyAnalysisRoutes(
               category: {
                 type: 'string',
                 enum: ['access_control', 'authentication', 'authorization', 'data_protection', 'network_security', 'compliance', 'incident_response']
-              },
+  }
               version: { type: 'string' },
               policy_rules: {
                 type: 'array',
@@ -155,7 +163,7 @@ export default async function securityPolicyAnalysisRoutes(
                     exceptions: { type: 'array' }
                   }
                 }
-              },
+  }
               metadata: {
                 type: 'object',
                 properties: {
@@ -166,7 +174,7 @@ export default async function securityPolicyAnalysisRoutes(
                   compliance_mappings: { type: 'array', items: { type: 'string' } },
                   risk_level: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
                 }
-              },
+  }
               enforcement: {
                 type: 'object',
                 properties: {
@@ -177,11 +185,11 @@ export default async function securityPolicyAnalysisRoutes(
                 }
               }
             }
-          },
+  }
           analysis_type: {
             type: 'string',
             enum: ['pre_deployment', 'post_deployment', 'periodic_review']
-          },
+  }
           include_simulation: { type: 'boolean' }
         }
       }
@@ -216,7 +224,7 @@ export default async function securityPolicyAnalysisRoutes(
             estimated_affected_users: analysis.impact_assessment.user_impact.affected_users,
             estimated_cost_impact: analysis.impact_assessment.cost_impact.total_cost_impact
           }
-        },
+  }
         message: 'Policy analysis completed successfully',
         timestamp: Date.now()
       };
@@ -247,7 +255,7 @@ export default async function securityPolicyAnalysisRoutes(
           validation_level: {
             type: 'string',
             enum: ['basic', 'comprehensive']
-          },
+  }
           compliance_standards: {
             type: 'array',
             items: { type: 'string' }
@@ -288,13 +296,13 @@ export default async function securityPolicyAnalysisRoutes(
             high_errors: filteredErrors.filter(e => e.severity === 'high').length,
             total_warnings: filteredWarnings.length,
             compliance_violations: filteredViolations.length
-          },
+  }
           validation_errors: filteredErrors,
           validation_warnings: filteredWarnings,
           compliance_violations: filteredViolations,
           recommendations: validationResults.recommendations,
           validation_score: Math.max(0, 100 - (filteredErrors.length * 10) - (filteredWarnings.length * 2))
-        },
+  }
         message: validationResults.validation_passed ? 'Policy validation passed' : 'Policy validation found issues',
         timestamp: Date.now()
       };
@@ -358,7 +366,7 @@ export default async function securityPolicyAnalysisRoutes(
           recommendations: comparison.recommendations,
           approval_required: this.determineApprovalRequired(comparison),
           ...detailedAnalysis
-        },
+  }
         message: comparison.changes_detected ? 'Policy changes detected and analyzed' : 'No significant changes detected',
         timestamp: Date.now()
       };
@@ -412,7 +420,7 @@ export default async function securityPolicyAnalysisRoutes(
             estimated_cost_impact: analysis.impact_assessment.cost_impact.total_cost_impact
           })),
           trends: this.calculatePolicyTrends(history)
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -455,7 +463,7 @@ export default async function securityPolicyAnalysisRoutes(
             validation_passed: analysis.validation_results.validation_passed
           })),
           insights: this.generatePolicyInsights(analytics)
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -494,15 +502,15 @@ export default async function securityPolicyAnalysisRoutes(
             validation_pass_rate: analytics.validation_metrics.overall_validation_pass_rate,
             average_security_score: analytics.impact_trends.average_security_impact,
             average_compliance_score: analytics.impact_trends.average_compliance_score
-          },
+  }
           system_metrics: {
             analysis_engine_initialized: true,
             validation_rules_loaded: true,
             compliance_frameworks_loaded: true,
             recent_analysis_count: analytics.recent_analyses.length
-          },
+  }
           last_check: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -513,7 +521,7 @@ export default async function securityPolicyAnalysisRoutes(
           healthy: false,
           engine_status: 'error',
           error_message: error.message
-        },
+  }
         error: 'Failed to get engine health status',
         timestamp: Date.now()
       };

@@ -7,6 +7,7 @@
 import React from 'react';
 import { ShareRecord } from './SocialPlatformIntegration';
 import { Template } from './TemplatePreviewModal';
+
 export interface ShareTrackingManagerProps {
     templateId: string;
     template?: Template;
@@ -16,7 +17,7 @@ export interface ShareTrackingManagerProps {
     className?: string;
     realTimeUpdates?: boolean;
     showAdvancedMetrics?: boolean;
-}
+
 export interface ShareTrackingData {
     totalShares: number;
     platformBreakdown: Record<string, PlatformShareData>;
@@ -26,7 +27,7 @@ export interface ShareTrackingData {
     performanceMetrics: AggregatedMetrics;
     alerts: ShareAlert[];
     recommendations: ShareRecommendation[];
-}
+
 export interface PlatformShareData {
     platform: string;
     totalShares: number;
@@ -35,7 +36,7 @@ export interface PlatformShareData {
     revenueGenerated: number;
     topPerformingContent: string;
     trends: TrendData;
-}
+
 export interface TimeSeriesPoint {
     timestamp: Date;
     shares: number;
@@ -44,21 +45,21 @@ export interface TimeSeriesPoint {
     conversions: number;
     revenue: number;
     platform?: string;
-}
+
 export interface ConversionFunnelData {
     awareness: FunnelStage;
     interest: FunnelStage;
     consideration: FunnelStage;
     purchase: FunnelStage;
     advocacy: FunnelStage;
-}
+
 export interface FunnelStage {
     stage: string;
     count: number;
     percentage: number;
     dropOffRate: number;
     averageTime: number;
-}
+
 export interface DemographicAnalysis {
     topAgeGroups: {,
         group: string;
@@ -80,7 +81,7 @@ export interface DemographicAnalysis {
         usage: number;
         performance: number;
     }[];
-}
+
 export interface AggregatedMetrics {
     totalReach: number;
     engagementRate: number;
@@ -90,13 +91,13 @@ export interface AggregatedMetrics {
     customerAcquisitionCost: number;
     lifetimeValue: number;
     returnOnInvestment: number;
-}
+
 export interface TrendData {
     direction: 'up' | 'down' | 'stable';
     percentage: number;
     significance: 'high' | 'medium' | 'low';
     period: string;
-}
+
 export interface ShareAlert {
     id: string;
     type: 'success' | 'warning' | 'error' | 'info';
@@ -106,7 +107,7 @@ export interface ShareAlert {
     platform?: string;
     actionRequired: boolean;
     dismissed: boolean;
-}
+
 export interface ShareRecommendation {
     id: string;
     type: 'content' | 'timing' | 'platform' | 'targeting';
@@ -116,7 +117,7 @@ export interface ShareRecommendation {
     impact: string;
     effort: 'low' | 'medium' | 'high';
     confidence: number;
-}
+
 export interface ShareTrackingFilters {
     dateRange: {,
         start: Date;
@@ -127,7 +128,7 @@ export interface ShareTrackingFilters {
     minEngagement: number;
     regions: string[];
     devices: string[];
-}
+
 export declare const ShareTrackingUtils: {
     calculateTrend: (current: number, previous: number) => TrendData;
     aggregateShareData: (shares: ShareRecord[]) => ShareTrackingData;

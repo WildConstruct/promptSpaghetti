@@ -4,7 +4,7 @@
  *
  * Adapter for OpenAI's TTS models with voice selection and SSML support
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel } from '../BaseAIModel';
 export interface OpenAITTSConfig {
     apiKey: string;
     baseURL?: string;
@@ -59,34 +59,17 @@ export interface VoiceInfo {
     gender: 'male' | 'female' | 'neutral';
     accent?: string;
     age?: 'young' | 'middle' | 'old';
-    style?: string[];
+    style?: string;
     preview_url?: string;
 }
 export declare class OpenAITTSAdapter extends BaseAIModel {
     private config;
     private availableVoices;
     constructor(id: string, config: OpenAITTSConfig, model?: string);
-    initialize(): Promise<void>;
-    process(input: any, options?: TTSRequestOptions): Promise<TTSGenerationResult>;
-    cleanup(): Promise<void>;
-    estimate(input: any, options?: TTSRequestOptions): Promise<CostEstimate>;
-    getAvailableVoices(): Promise<VoiceInfo[]>;
-    generateWithCustomVoice(text: string, voiceId: string, options?: Partial<TTSRequestOptions>): Promise<TTSGenerationResult>;
-    generateSSML(ssmlText: string, voice?: string, options?: Partial<TTSRequestOptions>): Promise<TTSGenerationResult>;
-    batchGenerate(texts: string[], options?: TTSRequestOptions): Promise<TTSGenerationResult[]>;
-    static getModelCostPerCharacter(model: string): number;
-    static getVoiceCharacteristics(voice: string): Partial<VoiceInfo>;
-    private _initializeVoices;
-    private _testConnection;
+    catch(error: any): void;
     private _extractText;
     private _processOptions;
-    private _generateSpeech;
-    private _analyzeAudioData;
-    private _estimateAudioDuration;
-    private _getSampleRate;
-    private _getBitrate;
-    private _calculateCost;
-    protected _performHealthCheck(): Promise<void>;
+    text?: string;
+    Required<Pick>(): any;
 }
-export default OpenAITTSAdapter;
 //# sourceMappingURL=OpenAITTSAdapter.d.ts.map

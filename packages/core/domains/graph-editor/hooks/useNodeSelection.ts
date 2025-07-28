@@ -13,17 +13,17 @@ export const useNodeSelection = () => {
   const getSelectedNodes = useGraphEditorStore((state) => state.getSelectedNodes);
   const isNodeSelected = useGraphEditorStore((state) => state.isNodeSelected);
   const actions = useGraphEditorStore((state) => ({)
-    selectNodes: state.selectNodes,
-    clearSelection: state.clearSelection,
-    toggleNodeSelection: state.toggleNodeSelection,
-  }));
-  const selectNodes = useCallback((nodeIds: string[], isMultiSelect = false) => {
+  selectNodes: state.selectNodes,
+  clearSelection: state.clearSelection,
+  toggleNodeSelection: state.toggleNodeSelection,
+}));
+  const selectNodes = useCallback((nodeIds: string, isMultiSelect = false) => {
     actions.selectNodes(nodeIds, isMultiSelect);
   }, [actions]);
   const selectSingleNode = useCallback((nodeId: string) => {
     actions.selectNodes([nodeId], false);
   }, [actions]);
-  const addToSelection = useCallback((nodeIds: string[]) => {
+  const addToSelection = useCallback((nodeIds: string) => {
     actions.selectNodes(nodeIds, true);
   }, [actions]);
   const toggleSelection = useCallback((nodeId: string) => {
@@ -36,28 +36,28 @@ export const useNodeSelection = () => {
     const allNodeIds = useGraphEditorStore.getState().graph.nodes.map(n => n.id);
     actions.selectNodes(allNodeIds, false);
   }, [actions]);
-  const getSelectedNodes = useCallback((): Node[] => {
+  const getSelectedNodes = useCallback((): Node => {
     return useGraphEditorStore.getState().getSelectedNodes();
   }, []);
   const isSelected = useCallback((nodeId: string): boolean => {
     return isNodeSelected(nodeId);
   }, [isNodeSelected]);
   return {
-    // State
-    selectedNodeIds,
-    selectedNodes: getSelectedNodes(),
-    hasSelection: selectedNodeIds.length > 0,
-    selectionCount: selectedNodeIds.length,
-    isMultiSelection: selectedNodeIds.length > 1,
-    // Actions
-    selectNodes,
-    selectSingleNode,
-    addToSelection,
-    toggleSelection,
-    clearSelection,
-    selectAll,
-    // Utilities
-    isSelected,
-    getSelectedNodes
-  };
+  // State
+  selectedNodeIds,
+  selectedNodes: getSelectedNodes(),
+  hasSelection: selectedNodeIds.length > 0,
+  selectionCount: selectedNodeIds.length,
+  isMultiSelection: selectedNodeIds.length > 1,
+  // Actions
+  selectNodes,
+  selectSingleNode,
+  addToSelection,
+  toggleSelection,
+  clearSelection,
+  selectAll,
+  // Utilities
+  isSelected,
+  getSelectedNodes
+};
 };

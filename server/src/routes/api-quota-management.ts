@@ -24,6 +24,7 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // Request/Response Interfaces
 // ============================================================================
 
+}
 interface APIResponse {
   success: boolean;
   data?: unknown;
@@ -31,33 +32,43 @@ interface APIResponse {
   timestamp: number;
   request_id: string;
 }
+}
 
+}
 interface InitializeQuotaManagementRequest {
   config: APIQuotaManagementConfig;
   enable_real_time_monitoring: boolean;
   enable_auto_optimization: boolean;
 }
+}
 
+}
 interface RunQuotaAnalysisRequest {
   analysis_scope: 'comprehensive' | 'forecasting_only' | 'optimization_only' | 'governance_only';
   forecast_horizon_hours?: number;
   include_recommendations: boolean;
   include_business_intelligence: boolean;
 }
+}
 
+}
 interface ApplyQuotaRecommendationsRequest {
   recommendation_ids: string[];
   apply_mode: 'immediate' | 'scheduled' | 'preview_only';
   scheduled_execution_time?: number;
   approval_workflow_enabled: boolean;
 }
+}
 
+}
 interface UpdateQuotaConfigurationRequest {
   config_updates: Partial<APIQuotaManagementConfig>;
   update_mode: 'merge' | 'replace';
   validate_before_apply: boolean;
 }
+}
 
+}
 interface GenerateUsageForecastRequest {
   forecast_type: 'short_term' | 'long_term' | 'hybrid';
   forecast_horizon_hours: number;
@@ -65,11 +76,14 @@ interface GenerateUsageForecastRequest {
   include_anomaly_detection: boolean;
   forecasting_algorithms?: ('time_series' | 'regression' | 'neural_network' | 'ensemble')[];
 }
+}
 
+}
 interface GetQuotaInsightsRequest {
   insight_types: ('optimization_opportunities' | 'risk_assessments' | 'business_impact' | 'governance_metrics')[];
   aggregation_level: 'global' | 'tenant' | 'endpoint' | 'detailed';
   time_window_hours: number;
+}
 }
 
 // ============================================================================
@@ -79,6 +93,7 @@ interface GetQuotaInsightsRequest {
 let quotaManagementService: APIQuotaManagementUsageForecastingService;
 
 async function initializeServices(): Promise<void> {
+
   const performanceMonitoring = new PerformanceMonitoringService({} as any, {} as any);
   const capacityPlanning = new APICapacityPlanningScalingAnalyticsService(
     {} as any,
@@ -110,7 +125,7 @@ async function initializeServices(): Promise<void> {
       auto_quota_adjustment: true,
       quota_buffer_percentage: 20,
       emergency_quota_management: true
-    },
+  }
     usage_forecasting: {
       real_time_forecasting: {
         enabled: true,
@@ -118,7 +133,7 @@ async function initializeServices(): Promise<void> {
         forecast_horizon_hours: 24,
         accuracy_threshold: 0.85,
         forecasting_algorithms: ['time_series', 'regression', 'neural_network', 'ensemble']
-      },
+  }
       predictive_forecasting: {
         enabled: true,
         long_term_horizon_days: 30,
@@ -126,7 +141,7 @@ async function initializeServices(): Promise<void> {
         trend_analysis: true,
         external_factors_integration: true,
         business_calendar_integration: true
-      },
+  }
       machine_learning_forecasting: {
         enabled: true,
         model_types: ['arima', 'lstm', 'prophet', 'xgboost', 'ensemble'],
@@ -134,7 +149,7 @@ async function initializeServices(): Promise<void> {
         model_retraining_frequency_hours: 24,
         forecast_uncertainty_quantification: true
       }
-    },
+  }
     quota_optimization: {
       optimization_strategies: ['cost_efficiency', 'performance_maximization', 'resource_utilization', 'business_value'],
       optimization_frequency_hours: 6,
@@ -148,7 +163,7 @@ async function initializeServices(): Promise<void> {
         adjustment_cooldown_minutes: 30,
         rollback_on_performance_degradation: true
       }
-    },
+  }
     business_integration: {
       business_rules_engine: {
         enabled: true,
@@ -156,14 +171,14 @@ async function initializeServices(): Promise<void> {
         sla_compliance_integration: true,
         revenue_based_prioritization: true,
         cost_center_allocation: true
-      },
+  }
       financial_modeling: {
         enabled: true,
         usage_cost_calculation: true,
         revenue_attribution: true,
         profitability_analysis: true,
         budget_constraint_integration: true
-      },
+  }
       stakeholder_management: {
         enabled: true,
         quota_request_workflow: true,
@@ -190,6 +205,7 @@ async function initializeServices(): Promise<void> {
 // ============================================================================
 
 export default async function quotaManagementRoutes(fastify: FastifyInstance): Promise<void> {
+
   await initializeServices();
 
   // ============================================================================
@@ -207,7 +223,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           enable_real_time_monitoring: { type: 'boolean', default: true },
           enable_auto_optimization: { type: 'boolean', default: true }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -221,7 +237,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
                 configuration_summary: { type: 'object' },
                 monitoring_endpoints: { type: 'array' }
               }
-            },
+  }
             timestamp: { type: 'number' },
             request_id: { type: 'string' }
           }
@@ -260,13 +276,13 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           last_health_check: Date.now(),
           active_monitoring: enable_real_time_monitoring,
           auto_optimization: enable_auto_optimization
-        },
+  }
         configuration_summary: {
           quota_management_enabled: config.quota_management.enabled,
           forecasting_algorithms: config.usage_forecasting.real_time_forecasting.forecasting_algorithms,
           optimization_strategies: config.quota_optimization.optimization_strategies,
           business_integration: config.business_integration.business_rules_engine.enabled
-        },
+  }
         monitoring_endpoints: [
           '/api/quota-management/status',
           '/api/quota-management/metrics',
@@ -305,7 +321,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           analysis_scope: { 
             type: 'string', 
             enum: ['comprehensive', 'forecasting_only', 'optimization_only', 'governance_only'] 
-          },
+  }
           forecast_horizon_hours: { type: 'number', minimum: 1, maximum: 720 },
           include_recommendations: { type: 'boolean', default: true },
           include_business_intelligence: { type: 'boolean', default: true }
@@ -387,7 +403,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           confidence_intervals_included: include_confidence_intervals,
           anomaly_detection_included: include_anomaly_detection,
           generation_timestamp: Date.now()
-        },
+  }
         business_insights: {
           peak_usage_periods: forecastData.usage_predictions.daily_forecasts
             .sort((a, b) => b.peak_usage_prediction - a.peak_usage_prediction)
@@ -396,7 +412,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
             estimated_cost_range: '$5,000 - $8,500',
             optimization_potential: '15-25%',
             risk_factors: ['seasonal_spikes', 'business_events', 'market_trends']
-          },
+  }
           recommended_actions: [
             'Monitor usage patterns during peak periods',
             'Consider proactive scaling for high-demand forecasts',
@@ -462,7 +478,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           rollback_available: true,
           rollback_window_hours: 24,
           rollback_complexity: 'low'
-        },
+  }
         monitoring_setup: {
           monitoring_enabled: true,
           alert_thresholds_configured: true,
@@ -507,7 +523,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
               type: 'string', 
               enum: ['optimization_opportunities', 'risk_assessments', 'business_impact', 'governance_metrics'] 
             }
-          },
+  }
           aggregation_level: { type: 'string', enum: ['global', 'tenant', 'endpoint', 'detailed'] },
           time_window_hours: { type: 'number', minimum: 1, maximum: 8760 }
         }
@@ -543,8 +559,7 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           time_window_hours,
           data_points_analyzed: Math.floor(time_window_hours * 4), // Assuming 15-minute intervals
           confidence_score: 0.87
-        },
-        
+  }
         actionable_insights: [
           'Top 3 tenants consuming 65% of quota - consider tier adjustments',
           'Forecast indicates 25% usage increase next month - proactive scaling recommended',
@@ -656,23 +671,20 @@ export default async function quotaManagementRoutes(fastify: FastifyInstance): P
           last_analysis_timestamp: Date.now() - 300000, // 5 minutes ago
           memory_usage: process.memoryUsage(),
           active_connections: 42
-        },
-        
+  }
         quota_system_status: {
           total_quotas_managed: 156,
           active_forecasting_models: 4,
           optimization_jobs_running: 2,
           last_optimization_timestamp: Date.now() - 21600000, // 6 hours ago
           average_forecast_accuracy: 0.892
-        },
-        
+  }
         business_metrics: {
           cost_savings_this_month: 12500,
           quota_utilization_efficiency: 0.78,
           sla_compliance_rate: 0.995,
           user_satisfaction_score: 4.3
-        },
-        
+  }
         recent_activities: [
           { timestamp: Date.now() - 900000, activity: 'Quota optimization completed', impact: 'positive' },
           { timestamp: Date.now() - 1800000, activity: 'Usage forecast updated', impact: 'informational' },

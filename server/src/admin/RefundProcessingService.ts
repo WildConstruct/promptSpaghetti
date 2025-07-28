@@ -13,6 +13,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { FinancialDataLifecycleService } from '../financial/FinancialDataLifecycleService';
 
+}
 export interface RefundRequest {
   refundId: string;
   purchaseId: string;
@@ -39,6 +40,7 @@ export interface RefundRequest {
     originalAmount: number;
     purchaseDate: Date;
     stripePaymentIntentId?: string;
+}
   };
   
   // Processing details
@@ -90,6 +92,7 @@ export enum RefundStatus {
   CANCELLED = 'cancelled'
 }
 
+}
 export interface RefundWorkflowStep {
   stepId: string;
   action: 'created' | 'assigned' | 'reviewed' | 'approved' | 'rejected' | 'processed' | 'completed';
@@ -99,7 +102,9 @@ export interface RefundWorkflowStep {
   previousStatus?: RefundStatus;
   newStatus: RefundStatus;
 }
+}
 
+}
 export interface RefundNote {
   noteId: string;
   authorId: string;
@@ -107,7 +112,9 @@ export interface RefundNote {
   type: 'internal' | 'customer_facing' | 'creator_notification';
   createdAt: Date;
 }
+}
 
+}
 export interface RefundPolicy {
   policyId: string;
   name: string;
@@ -131,7 +138,9 @@ export interface RefundPolicy {
   creatorLiabilityPercent: number; // 0-100
   escrowHoldPeriod: number; // Hours
 }
+}
 
+}
 export interface RefundStats {
   totalRequests: number;
   pendingRequests: number;
@@ -146,6 +155,7 @@ export interface RefundStats {
     creatorsAffected: number;
     totalCreatorDeductions: number;
     avgDeductionAmount: number;
+}
   };
   
   performance: {
@@ -183,6 +193,7 @@ export class RefundProcessingService {
    * Initialize refund processing service
    */
   public async initialize(): Promise<void> {
+
     console.log('💰 Initializing Refund Processing Service...');
     
     // Load refund policies
@@ -206,6 +217,7 @@ export class RefundProcessingService {
     description?: string;
     priority?: 'low' | 'medium' | 'high' | 'urgent';
   }): Promise<RefundRequest> {
+
     console.log(`💸 Creating refund request for purchase: ${request.purchaseId}`);
     
     // Get original purchase details
@@ -245,7 +257,7 @@ export class RefundProcessingService {
         originalAmount: purchase.originalAmount,
         purchaseDate: purchase.purchaseDate,
         stripePaymentIntentId: purchase.stripePaymentIntentId
-      },
+  }
       approvalRequired,
       creatorAdjustment: this.calculateCreatorImpact(purchase, refundAmount, policy),
       createdAt: new Date(),
@@ -292,6 +304,7 @@ export class RefundProcessingService {
    * Approve a refund request
    */
   public async approveRefund(refundId: string, approverId: string, notes?: string): Promise<void> {
+
     console.log(`✅ Approving refund: ${refundId}`);
     
     const refundRequest = await this.getRefundRequest(refundId);
@@ -348,6 +361,7 @@ export class RefundProcessingService {
    * Reject a refund request
    */
   public async rejectRefund(refundId: string, rejectedBy: string, reason: string): Promise<void> {
+
     console.log(`❌ Rejecting refund: ${refundId}`);
     
     const refundRequest = await this.getRefundRequest(refundId);
@@ -401,6 +415,7 @@ export class RefundProcessingService {
    * Process approved refund (execute via Stripe)
    */
   public async processRefund(refundId: string, processedBy: string): Promise<void> {
+
     console.log(`🔄 Processing refund: ${refundId}`);
     
     const refundRequest = await this.getRefundRequest(refundId);
@@ -514,6 +529,7 @@ export class RefundProcessingService {
    * Get refund statistics
    */
   public async getRefundStats(dateRange?: { start: Date; end: Date }): Promise<RefundStats> {
+
     const db = await this.databaseService.getDatabase();
     
     let dateFilter = '';
@@ -580,6 +596,7 @@ export class RefundProcessingService {
   // Private helper methods
 
   private async getPurchaseDetails(purchaseId: string): Promise<any> {
+
     const db = await this.databaseService.getDatabase();
     return await db.get(`
       SELECT 
@@ -596,6 +613,7 @@ export class RefundProcessingService {
   }
 
   private async validateRefundEligibility(purchase: any, request: any): Promise<void> {
+
     const policy = await this.getApplicablePolicy(purchase, request);
     
     // Check time limit
@@ -636,6 +654,7 @@ export class RefundProcessingService {
   }
 
   private async executeStripeRefund(paymentIntentId: string, amount: number, metadata: any): Promise<any> {
+
     // This would integrate with Stripe API
     console.log(`🔄 Executing Stripe refund: ${paymentIntentId} for ${amount} cents`);
     
@@ -650,11 +669,13 @@ export class RefundProcessingService {
   }
 
   private async processCreatorAdjustment(refundRequest: RefundRequest): Promise<void> {
+
     console.log(`⚖️ Processing creator adjustment for refund: ${refundRequest.refundId}`);
     // Implementation would adjust creator account balance
   }
 
   private async updatePurchaseRefundStatus(refundRequest: RefundRequest): Promise<void> {
+
     const db = await this.databaseService.getDatabase();
     await db.run(`
       UPDATE marketplace_purchases 
@@ -672,6 +693,7 @@ export class RefundProcessingService {
   }
 
   private async registerRefundWithFinancialSystem(refundRequest: RefundRequest, stripeRefund: any): Promise<void> {
+
     await this.financialService.recordTransaction({
       transactionId: stripeRefund.id,
       transactionType: 'refund',
@@ -687,6 +709,7 @@ export class RefundProcessingService {
   }
 
   private async loadRefundPolicies(): Promise<void> {
+
     // Load policies from database
     console.log('📋 Loading refund policies...');
     
@@ -711,6 +734,7 @@ export class RefundProcessingService {
   }
 
   private async getApplicablePolicy(purchase: any, request: any): Promise<RefundPolicy> {
+
     // Return default policy - in real implementation, would choose based on purchase context
     return this.policies.get('default-refund-policy')!;
   }
@@ -721,16 +745,19 @@ export class RefundProcessingService {
   }
 
   private async notifyCustomerRefundRejected(refundRequest: RefundRequest, reason: string): Promise<void> {
+
     console.log(`📧 Notifying customer of refund rejection: ${refundRequest.refundId}`);
     // Implementation would send email/notification to customer
   }
 
   private async notifyRefundCompleted(refundRequest: RefundRequest): Promise<void> {
+
     console.log(`📧 Notifying parties of refund completion: ${refundRequest.refundId}`);
     // Implementation would notify customer and creator
   }
 
   private async calculatePerformanceMetrics(dateRange?: { start: Date; end: Date }): Promise<any> {
+
     // Calculate performance metrics - mock implementation
     return {
       avgProcessingTime: 4.5, // hours
@@ -738,7 +765,7 @@ export class RefundProcessingService {
         creatorsAffected: 25,
         totalCreatorDeductions: 150000, // cents
         avgDeductionAmount: 6000 // cents
-      },
+  }
       performance: {
         approvalRate: 0.85,
         avgResolutionTime: 6.2, // hours
@@ -750,6 +777,7 @@ export class RefundProcessingService {
 
   // Database operations
   private async storeRefundRequest(refund: RefundRequest): Promise<void> {
+
     const db = await this.databaseService.getDatabase();
     await db.run(`
       INSERT INTO refund_requests 
@@ -768,6 +796,7 @@ export class RefundProcessingService {
   }
 
   private async getRefundRequest(refundId: string): Promise<RefundRequest | null> {
+
     const db = await this.databaseService.getDatabase();
     const row = await db.get('SELECT * FROM refund_requests WHERE refund_id = ?', [refundId]);
     
@@ -802,6 +831,7 @@ export class RefundProcessingService {
   }
 
   private async updateRefundRequest(refund: RefundRequest): Promise<void> {
+
     const db = await this.databaseService.getDatabase();
     await db.run(`
       UPDATE refund_requests 

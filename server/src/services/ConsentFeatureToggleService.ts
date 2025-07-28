@@ -40,6 +40,7 @@ export enum ConsentStatus {
 }
 
 // Extended context to include consent information
+}
 export interface ConsentAwareContext extends ToggleEvaluationContext {
   consents?: Record<ConsentType, ConsentStatus>;
   consentVersion?: string;
@@ -47,6 +48,7 @@ export interface ConsentAwareContext extends ToggleEvaluationContext {
 }
 
 // Feature to consent mapping
+}
 export interface FeatureConsentMapping {
   featureKey: string;
   requiredConsents: ConsentType[];
@@ -54,14 +56,17 @@ export interface FeatureConsentMapping {
   fallbackBehavior: 'disable' | 'default' | 'minimal';
   consentExplanation?: string;
 }
+}
 
 // Configuration for consent-aware feature toggle
+}
 export interface ConsentToggleConfig {
   enableConsentChecking: boolean;
   strictMode: boolean; // if true, deny access if consent status is uncertain
   defaultConsentStatus: ConsentStatus; // used when consent is unknown
   auditConsentUsage: boolean;
   consentCacheTimeout: number; // minutes
+}
 }
 
 export class ConsentFeatureToggleService extends FeatureToggleService {
@@ -101,6 +106,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
     key: string,
     context: ConsentAwareContext = {}
   ): Promise<ToggleEvaluationResult> {
+
     try {
       // First, get the standard toggle evaluation
       const baseResult = await super.evaluateToggle(key, context);
@@ -247,6 +253,7 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
    * Invalidate consent cache for user/session
    */
   async invalidateConsentCache(userId?: string, sessionId?: string): Promise<void> {
+
     // This would clear cached consent data for the user/session
     // Implementation depends on caching strategy
     if (this.consentService?.clearCache) {
@@ -265,28 +272,28 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'disable',
         consentExplanation: 'Analytics tracking requires analytics consent'
-      },
+  }
       {
         featureKey: 'marketing_features',
         requiredConsents: [ConsentType.MARKETING],
         requiredConsentLogic: 'AND', 
         fallbackBehavior: 'disable',
         consentExplanation: 'Marketing features require marketing consent'
-      },
+  }
       {
         featureKey: 'personalized_recommendations',
         requiredConsents: [ConsentType.PERSONALIZATION, ConsentType.ANALYTICS],
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'minimal',
         consentExplanation: 'Personalized recommendations require personalization and analytics consent'
-      },
+  }
       {
         featureKey: 'social_sharing',
         requiredConsents: [ConsentType.SOCIAL_MEDIA],
         requiredConsentLogic: 'AND',
         fallbackBehavior: 'disable',
         consentExplanation: 'Social sharing requires social media consent'
-      },
+  }
       {
         featureKey: 'performance_monitoring',
         requiredConsents: [ConsentType.PERFORMANCE],
@@ -418,15 +425,19 @@ export class ConsentFeatureToggleService extends FeatureToggleService {
 
 // Supporting interfaces
 
+}
 interface ConsentEvaluationDetails {
   requiredConsents: ConsentType[];
   consentStatuses: Record<ConsentType, ConsentStatus>;
   logic: 'AND' | 'OR';
 }
+}
 
+}
 interface ConsentServiceInterface {
   getConsents(userId?: string, sessionId?: string): Promise<Record<ConsentType, ConsentStatus>>;
   clearCache?(userId?: string, sessionId?: string): Promise<void>;
+}
 }
 
 export default ConsentFeatureToggleService;

@@ -75,8 +75,8 @@ describe('Standardized Authentication Framework', () => {
           details: expect.objectContaining({
             providerId: 'github',
             name: 'GitHub Webhooks'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -126,7 +126,7 @@ describe('Standardized Authentication Framework', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'WEBHOOK_SIGNATURE_INVALID'
-        })
+  }
       );
     });
 
@@ -215,7 +215,7 @@ describe('Standardized Authentication Framework', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'WEBHOOK_PROVIDER_UPDATED'
-        })
+  }
       );
     });
 
@@ -230,7 +230,7 @@ describe('Standardized Authentication Framework', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'WEBHOOK_PROVIDER_REMOVED'
-        })
+  }
       );
     });
 
@@ -372,7 +372,7 @@ describe('Standardized Authentication Framework', () => {
           error: 'Insufficient scope permissions',
           required: ['read:data', 'write:data'],
           available: ['read:data']
-        })
+  }
       );
     });
 
@@ -399,7 +399,7 @@ describe('Standardized Authentication Framework', () => {
         expect.objectContaining({
           error: 'Insufficient permissions',
           required: ['security:*']
-        })
+  }
       );
     });
 
@@ -482,7 +482,7 @@ describe('Standardized Authentication Framework', () => {
       expect(mockReply.send).toHaveBeenCalledWith(
         expect.objectContaining({
           error: 'Authentication middleware error'
-        })
+  }
       );
     });
   });
@@ -565,7 +565,7 @@ describe('Standardized Authentication Framework', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           eventType: 'WEBHOOK_PROVIDER_REGISTERED'
-        })
+  }
       );
 
       // Additional audit events would be verified based on the specific authentication flows tested

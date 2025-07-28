@@ -755,6 +755,7 @@ export declare const RestorationStatsResponseSchema: z.ZodObject<{
 export type RestorationPreviewResponse = z.infer<typeof RestorationPreviewResponseSchema>;
 export type RestorationProgressResponse = z.infer<typeof RestorationProgressResponseSchema>;
 export type RestorationStatsResponse = z.infer<typeof RestorationStatsResponseSchema>;
+
 export interface RestorationContext {
     projectId: string;
     userId: string;
@@ -762,14 +763,14 @@ export interface RestorationContext {
     targetSnapshot?: any;
     currentState: any;
     config: RestorationConfig;
-}
+
 export interface ConflictResolutionResult {
     conflictId: string;
     resolved: boolean;
     resolvedValue?: any;
     strategy: ResolutionStrategy;
     errorMessage?: string;
-}
+
 export interface RestorationResult {
     success: boolean;
     restorationAttemptId: string;
@@ -778,20 +779,20 @@ export interface RestorationResult {
     errorMessage?: string;
     duration: number;
     backupSnapshotId?: string;
-}
+
 export interface RestorationEvent {
     type: 'progress' | 'conflict' | 'completed' | 'failed' | 'cancelled';
     restorationAttemptId: string;
     data: any;
     timestamp: Date;
-}
+
 export interface ConflictEvent {
     type: 'conflict_detected' | 'conflict_resolved';
     conflictId: string;
     restorationAttemptId: string;
     data: any;
     timestamp: Date;
-}
+
 export declare const RestorationFilterSchema: z.ZodObject<{
     projectId: z.ZodOptional<z.ZodString>;
     initiatedBy: z.ZodOptional<z.ZodString>;

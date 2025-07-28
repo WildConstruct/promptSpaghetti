@@ -14,12 +14,13 @@ describe('PreviewSection', () => {
     jest.clearAllMocks();
   });
   const createMockNode = (type: string, data: any = {}) => ({)
-    id: `test-${type}`,}
+  id: `test-${type}`}
+}
     type,
     data: {,
-      label: `Test ${type}`,}
+  label: `Test ${type}`}
+}
       ...data
-    }
   });
   describe('Basic Rendering', () => {
     it('renders preview section with default settings', () => {
@@ -43,10 +44,10 @@ describe('PreviewSection', () => {
     });
   });
   describe('Node Types with Variations', () => {
-    it('displays variations with highlight info', async () => {
-      const node = createMockNode('Subject', {)
-        variations: ['cat', 'dog', 'bird']
-      });
+  it('displays variations with highlight info', async () => {
+  const node = createMockNode('Subject', {)
+  variations: ['cat', 'dog', 'bird'],
+});
       mockHasVariations.mockReturnValue(true);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -55,9 +56,9 @@ describe('PreviewSection', () => {
       });
     });
     it('uses getRandomVariation for nodes with variations', async () => {
-      const node = createMockNode('Action', {)
-        variations: ['run', 'jump', 'fly']
-      });
+  const node = createMockNode('Action', {)
+  variations: ['run', 'jump', 'fly'],
+});
       mockHasVariations.mockReturnValue(true);
       mockGetRandomVariation.mockReturnValue('jump');
       render(<PreviewSection node={node} />);
@@ -66,9 +67,9 @@ describe('PreviewSection', () => {
       });
     });
     it('generates multiple examples with different variations', async () => {
-      const node = createMockNode('Subject', {)
-        variations: ['apple', 'banana', 'cherry']
-      });
+  const node = createMockNode('Subject', {)
+  variations: ['apple', 'banana', 'cherry'],
+});
       mockHasVariations.mockReturnValue(true);
       render(<PreviewSection node={node} />);
       // Change number of examples to 5
@@ -82,10 +83,10 @@ describe('PreviewSection', () => {
     });
   });
   describe('Node Types without Variations', () => {
-    it('renders WeightedChoice options correctly', async () => {
-      const node = createMockNode('WeightedChoice', {)
-        options: ['red', 'blue', 'green']
-      });
+  it('renders WeightedChoice options correctly', async () => {
+  const node = createMockNode('WeightedChoice', {)
+  options: ['red', 'blue', 'green'],
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -93,9 +94,9 @@ describe('PreviewSection', () => {
       });
     });
     it('renders Concat with delimiter', async () => {
-      const node = createMockNode('Concat', {)
-        delimiter: ' - ',
-      });
+  const node = createMockNode('Concat', {)
+  delimiter: ' - ',
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -103,9 +104,9 @@ describe('PreviewSection', () => {
       });
     });
     it('renders Output with prompt', async () => {
-      const node = createMockNode('Output', {)
-        prompt: 'Generate a story about adventure',
-      });
+  const node = createMockNode('Output', {)
+  prompt: 'Generate a story about adventure',
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -113,10 +114,10 @@ describe('PreviewSection', () => {
       });
     });
     it('renders SetVariable correctly', async () => {
-      const node = createMockNode('SetVariable', {)
-        name: 'mood',
-        value: 'happy',
-      });
+  const node = createMockNode('SetVariable', {)
+  name: 'mood',
+  value: 'happy',
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -124,9 +125,9 @@ describe('PreviewSection', () => {
       });
     });
     it('renders GetVariable correctly', async () => {
-      const node = createMockNode('GetVariable', {)
-        name: 'score',
-      });
+  const node = createMockNode('GetVariable', {)
+  name: 'score',
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -134,9 +135,9 @@ describe('PreviewSection', () => {
       });
     });
     it('handles missing data gracefully', async () => {
-      const node = createMockNode('WeightedChoice', {)
-        options: [],
-      });
+  const node = createMockNode('WeightedChoice', {)
+  options: [],
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       await waitFor(() => {
@@ -145,10 +146,10 @@ describe('PreviewSection', () => {
     });
   });
   describe('Interactive Controls', () => {
-    it('updates number of examples when input changes', async () => {
-      const node = createMockNode('WeightedChoice', {)
-        options: ['test'],
-      });
+  it('updates number of examples when input changes', async () => {
+  const node = createMockNode('WeightedChoice', {)
+  options: ['test'],
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       const examplesInput = screen.getByDisplayValue('3');
@@ -161,9 +162,9 @@ describe('PreviewSection', () => {
       });
     });
     it('refreshes examples when refresh button is clicked', async () => {
-      const node = createMockNode('WeightedChoice', {)
-        options: ['option1', 'option2']
-      });
+  const node = createMockNode('WeightedChoice', {)
+  options: ['option1', 'option2'],
+});
       mockHasVariations.mockReturnValue(false);
       render(<PreviewSection node={node} />);
       const refreshButton = screen.getByTitle('Refresh examples');
@@ -229,9 +230,9 @@ describe('PreviewSection', () => {
       });
     });
     it('handles errors in variation processing', async () => {
-      const node = createMockNode('Subject', {)
-        variations: ['test'],
-      });
+  const node = createMockNode('Subject', {)
+  variations: ['test'],
+});
       mockHasVariations.mockReturnValue(true);
       mockGetRandomVariation.mockImplementation(() => {
         throw new Error('Test error');

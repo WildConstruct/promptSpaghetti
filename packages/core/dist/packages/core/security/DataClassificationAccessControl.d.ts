@@ -13,27 +13,24 @@ import { PermissionCondition } from './DataPermissionHierarchy';
 export interface AccessControlModel {
     rbac: RBACModel;
     abac: ABACModel;
-    policies: ClassificationAccessPolicy[];
+    policies: ClassificationAccessPolicy;
     decisionEngine: AccessDecisionEngine;
 }
-/**
- * Role-Based Access Control (RBAC) Model
- */
 export interface RBACModel {
-    roles: DataClassificationRole[];
-    permissions: DataClassificationPermission[];
+    roles: DataClassificationRole;
+    permissions: DataClassificationPermission;
     roleHierarchy: RoleHierarchy;
-    userRoleAssignments: UserRoleAssignment[];
+    userRoleAssignments: UserRoleAssignment;
 }
 export interface DataClassificationRole {
     id: string;
     name: string;
     description: string;
     category: 'SYSTEM' | 'FUNCTIONAL' | 'DATA_OWNER' | 'ADMINISTRATIVE';
-    permissions: string[];
+    permissions: string;
     maxClassificationLevel: DataClassificationLevel;
-    constraints: RoleConstraint[];
-    parentRoles: string[];
+    constraints: RoleConstraint;
+    parentRoles: string;
     isActive: boolean;
     metadata: {
         createdBy: string;
@@ -49,8 +46,8 @@ export interface DataClassificationPermission {
     description: string;
     operation: DataOperation;
     resourceType: ResourceType;
-    classificationLevels: DataClassificationLevel[];
-    conditions: PermissionCondition[];
+    classificationLevels: DataClassificationLevel;
+    conditions: PermissionCondition;
     effect: 'ALLOW' | 'DENY';
     priority: number;
 }
@@ -61,22 +58,22 @@ export interface RoleConstraint {
     metadata?: Record<string, any>;
 }
 export interface RoleHierarchy {
-    hierarchy: RoleLevel[];
-    inheritanceRules: InheritanceRule[];
+    hierarchy: RoleLevel;
+    inheritanceRules: InheritanceRule;
 }
 export interface RoleLevel {
     level: number;
     name: string;
     description: string;
-    roles: string[];
+    roles: string;
     automaticInheritance: boolean;
     maxClassificationAccess: DataClassificationLevel;
 }
 export interface InheritanceRule {
     parentRole: string;
     childRole: string;
-    inheritedPermissions: string[];
-    conditions: RoleConstraint[];
+    inheritedPermissions: string;
+    conditions: RoleConstraint;
 }
 export interface UserRoleAssignment {
     userId: string;
@@ -84,8 +81,8 @@ export interface UserRoleAssignment {
     assignedBy: string;
     assignedAt: Date;
     expiresAt?: Date;
-    conditions: AssignmentCondition[];
-    approvals: RoleApproval[];
+    conditions: AssignmentCondition;
+    approvals: RoleApproval;
     status: 'ACTIVE' | 'PENDING' | 'SUSPENDED' | 'EXPIRED';
 }
 export interface AssignmentCondition {
@@ -99,19 +96,16 @@ export interface RoleApproval {
     comments?: string;
     approvalLevel: 'MANAGER' | 'DATA_OWNER' | 'SECURITY_OFFICER' | 'ADMIN';
 }
-/**
- * Attribute-Based Access Control (ABAC) Model
- */
 export interface ABACModel {
     subjects: SubjectAttributes;
     objects: ObjectAttributes;
     actions: ActionAttributes;
     environment: EnvironmentAttributes;
-    policies: ABACPolicy[];
+    policies: ABACPolicy;
 }
 export interface SubjectAttributes {
     userId: string;
-    roles: string[];
+    roles: string;
     clearanceLevel: DataClassificationLevel;
     department: string;
     jobTitle: string;
@@ -119,7 +113,7 @@ export interface SubjectAttributes {
     device: DeviceAttributes;
     behaviorProfile: BehaviorProfile;
     riskScore: number;
-    certifications: string[];
+    certifications: string;
     lastActivity: Date;
     mfaVerified: boolean;
     trustLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'MAXIMUM';
@@ -131,8 +125,8 @@ export interface ObjectAttributes {
     createdAt: Date;
     lastModified: Date;
     retentionPeriod: number;
-    complianceFrameworks: string[];
-    tags: string[];
+    complianceFrameworks: string;
+    tags: string;
     sensitivity: 'NORMAL' | 'SENSITIVE' | 'HIGHLY_SENSITIVE' | 'TOP_SECRET';
     businessValue: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     dataType: string;
@@ -179,24 +173,24 @@ export interface DeviceAttributes {
     lastSeen: Date;
 }
 export interface BehaviorProfile {
-    normalAccessPatterns: AccessPattern[];
+    normalAccessPatterns: AccessPattern;
     anomalyScore: number;
-    typicalHours: number[];
-    typicalLocations: string[];
+    typicalHours: number;
+    typicalLocations: string;
     accessFrequency: 'LOW' | 'MEDIUM' | 'HIGH';
     dataAccessPatterns: Record<DataClassificationLevel, AccessPattern>;
 }
 export interface AccessPattern {
-    operations: string[];
+    operations: string;
     frequency: number;
-    timeRanges: TimeRange[];
-    locations: string[];
-    dataTypes: string[];
+    timeRanges: TimeRange;
+    locations: string;
+    dataTypes: string;
 }
 export interface TimeRange {
     start: string;
     end: string;
-    daysOfWeek: number[];
+    daysOfWeek: number;
 }
 export interface NetworkAttributes {
     ipAddress: string;
@@ -210,7 +204,7 @@ export interface SecurityContext {
     authenticationMethod: 'PASSWORD' | 'MFA' | 'CERTIFICATE' | 'BIOMETRIC' | 'SSO';
     sessionAge: number;
     sessionRisk: number;
-    recentSecurityEvents: SecurityEvent[];
+    recentSecurityEvents: SecurityEvent;
     complianceStatus: 'COMPLIANT' | 'NON_COMPLIANT' | 'UNDER_REVIEW';
 }
 export interface SecurityEvent {
@@ -226,17 +220,17 @@ export interface ABACPolicy {
     target: PolicyTarget;
     rule: PolicyRule;
     effect: 'PERMIT' | 'DENY' | 'INDETERMINATE';
-    obligations: PolicyObligation[];
+    obligations: PolicyObligation;
     priority: number;
     enabled: boolean;
     version: string;
     metadata: PolicyMetadata;
 }
 export interface PolicyTarget {
-    subjects: AttributeExpression[];
-    objects: AttributeExpression[];
-    actions: AttributeExpression[];
-    environment: AttributeExpression[];
+    subjects: AttributeExpression;
+    objects: AttributeExpression;
+    actions: AttributeExpression;
+    environment: AttributeExpression;
 }
 export interface AttributeExpression {
     attribute: string;
@@ -251,7 +245,7 @@ export interface PolicyRule {
 export interface RuleCondition {
     type: 'SIMPLE' | 'COMPLEX';
     expression: string | ComplexExpression;
-    subConditions?: RuleCondition[];
+    subConditions?: RuleCondition;
     operator?: 'AND' | 'OR' | 'NOT';
 }
 export interface ComplexExpression {
@@ -273,38 +267,35 @@ export interface PolicyMetadata {
     approvedBy?: string;
     approvedAt?: Date;
     reviewDue: Date;
-    tags: string[];
-    complianceFrameworks: string[];
+    tags: string;
+    complianceFrameworks: string;
     riskAssessment: string;
 }
-/**
- * Classification-Specific Access Policies
- */
 export interface ClassificationAccessPolicy {
     id: string;
     name: string;
     classification: DataClassificationLevel;
-    accessRules: ClassificationAccessRule[];
+    accessRules: ClassificationAccessRule;
     handlingRequirements: HandlingRequirements;
-    exceptions: PolicyException[];
-    approvalWorkflows: ApprovalWorkflow[];
-    monitoringRequirements: MonitoringRequirement[];
-    violationActions: ViolationAction[];
+    exceptions: PolicyException;
+    approvalWorkflows: ApprovalWorkflow;
+    monitoringRequirements: MonitoringRequirement;
+    violationActions: ViolationAction;
     metadata: PolicyMetadata;
 }
 export interface ClassificationAccessRule {
     id: string;
     operation: DataOperation;
     subjects: SubjectCriteria;
-    conditions: AccessCondition[];
+    conditions: AccessCondition;
     effect: 'ALLOW' | 'DENY' | 'CONDITIONAL';
-    requirements: AccessRequirement[];
+    requirements: AccessRequirement;
     priority: number;
 }
 export interface SubjectCriteria {
-    roles: string[];
+    roles: string;
     clearanceLevel: DataClassificationLevel;
-    departments: string[];
+    departments: string;
     attributes: Record<string, any>;
 }
 export interface AccessCondition {
@@ -325,7 +316,7 @@ export interface AccessRequirement {
 }
 export interface RequirementSpecification {
     parameters: Record<string, any>;
-    validation: ValidationRule[];
+    validation: ValidationRule;
 }
 export interface ValidationRule {
     type: string;
@@ -338,24 +329,24 @@ export interface PolicyException {
     grantedBy: string;
     grantedAt: Date;
     expiresAt: Date;
-    conditions: AccessCondition[];
+    conditions: AccessCondition;
     auditRequired: boolean;
     riskAcceptance: string;
 }
 export interface ApprovalWorkflow {
     id: string;
     name: string;
-    operations: DataOperation[];
-    steps: ApprovalStep[];
-    timeouts: WorkflowTimeout[];
-    escalations: EscalationRule[];
+    operations: DataOperation;
+    steps: ApprovalStep;
+    timeouts: WorkflowTimeout;
+    escalations: EscalationRule;
 }
 export interface ApprovalStep {
     id: string;
     order: number;
     approvers: ApproverSpecification;
     requiredApprovals: number;
-    conditions: AccessCondition[];
+    conditions: AccessCondition;
     timeoutHours: number;
 }
 export interface ApproverSpecification {
@@ -375,10 +366,10 @@ export interface EscalationRule {
 export interface MonitoringRequirement {
     type: 'REALTIME' | 'BATCH' | 'ALERT' | 'AUDIT';
     specification: MonitoringSpecification;
-    thresholds: MonitoringThreshold[];
+    thresholds: MonitoringThreshold;
 }
 export interface MonitoringSpecification {
-    metrics: string[];
+    metrics: string;
     frequency: string;
     retention: number;
     alerting: boolean;
@@ -393,11 +384,8 @@ export interface ViolationAction {
     type: 'IMMEDIATE' | 'DELAYED' | 'MANUAL';
     action: 'BLOCK' | 'ALERT' | 'REVOKE' | 'AUDIT' | 'ESCALATE';
     parameters: Record<string, any>;
-    conditions: AccessCondition[];
+    conditions: AccessCondition;
 }
-/**
- * Access Decision Engine
- */
 export interface AccessDecisionEngine {
     evaluateAccess(request: AccessRequest): Promise<AccessDecision>;
     evaluateRBAC(request: AccessRequest): Promise<RBACDecision>;
@@ -417,45 +405,41 @@ export interface AccessDecision {
     decision: 'PERMIT' | 'DENY' | 'INDETERMINATE';
     reason: string;
     confidence: number;
-    obligations: PolicyObligation[];
-    conditions: AccessCondition[];
-    monitoring: MonitoringRequirement[];
+    obligations: PolicyObligation;
+    conditions: AccessCondition;
+    monitoring: MonitoringRequirement;
     auditRequired: boolean;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     metadata: DecisionMetadata;
 }
 export interface RBACDecision {
     permitted: boolean;
-    matchedRoles: string[];
-    matchedPermissions: string[];
-    denialReasons: string[];
-    requirements: AccessRequirement[];
+    matchedRoles: string;
+    matchedPermissions: string;
+    denialReasons: string;
+    requirements: AccessRequirement;
 }
 export interface ABACDecision {
     permitted: boolean;
-    matchedPolicies: string[];
-    obligations: PolicyObligation[];
-    conditions: AccessCondition[];
+    matchedPolicies: string;
+    obligations: PolicyObligation;
+    conditions: AccessCondition;
     confidence: number;
 }
 export interface DecisionMetadata {
     evaluationTime: number;
-    policiesEvaluated: string[];
-    rolesEvaluated: string[];
+    policiesEvaluated: string;
+    rolesEvaluated: string;
     cacheHit: boolean;
     version: string;
 }
-/**
- * Operation and Resource Types
- */
 export type DataOperation = 'READ' | 'WRITE' | 'UPDATE' | 'DELETE' | 'EXPORT' | 'SHARE' | 'COPY' | 'MOVE' | 'CLASSIFY' | 'DECLASSIFY' | 'SEARCH' | 'AGGREGATE' | 'TRANSFORM' | 'BACKUP' | 'RESTORE' | 'ARCHIVE' | 'PURGE' | 'AUDIT' | 'APPROVE';
 export type ResourceType = 'DOCUMENT' | 'DATABASE' | 'FILE' | 'API' | 'SYSTEM' | 'REPORT' | 'DATASET' | 'MODEL' | 'CONFIGURATION' | 'LOG' | 'BACKUP' | 'METADATA';
 /**
  * Standard Classification Roles
  */
-export 
 /**
  * Standard Access Control Matrix
  */
-default AccessControlModel;
+export default AccessControlModel;
 //# sourceMappingURL=DataClassificationAccessControl.d.ts.map

@@ -27,10 +27,4 @@ export interface StateSystemConfig {
 }
 export declare const defaultStateConfig: StateSystemConfig;
 export declare function initializeStateSystem(config?: Partial<StateSystemConfig>): Promise<void>;
-export declare function getStateSystemHealth(): {
-    orchestrator: any;
-    conflictResolver: any;
-    domains: string[];
-    status: 'healthy' | 'degraded' | 'error';
-};
 //# sourceMappingURL=index.d.ts.map

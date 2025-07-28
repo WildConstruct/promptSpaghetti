@@ -6,7 +6,7 @@ interface WorkflowStateIndicatorProps {
     showLabel?: boolean;
     size?: 'sm' | 'md' | 'lg';
     className?: string;
-}
+
 export declare const WorkflowStateIndicator: React.FC<WorkflowStateIndicatorProps>;
 export declare const isCurrent: (stateId: WorkflowState) => boolean;
 interface WorkflowStateHistoryProps {
@@ -18,7 +18,7 @@ interface WorkflowStateHistoryProps {
         comment?: string;
     }>;
     className?: string;
-}
+
 export declare const WorkflowStateHistory: React.FC<WorkflowStateHistoryProps>;
 export {};
 //# sourceMappingURL=WorkflowStateIndicator.d.ts.map

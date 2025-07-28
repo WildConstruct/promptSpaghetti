@@ -28,66 +28,63 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
   const [selectedClause, setSelectedClause] = useState<ContractClause | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'clauses' | 'risks' | 'compliance'>('overview');
   const analyzeContract = useCallback(async () => {
-    setIsAnalyzing(true);
-    setAnalysisProgress(0);
-    setCurrentStep('Starting analysis...');
-    try {
-      // Step 1: Document preprocessing
-      setCurrentStep('Preprocessing document...');
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setAnalysisProgress(20);
-      // Step 2: Clause identification
-      setCurrentStep('Identifying contract clauses...');
-      const clauses = await identifyClauses(document.content);
-      onClauseIdentified(clauses);
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      setAnalysisProgress(50);
-      // Step 3: Risk assessment
-      setCurrentStep('Performing risk assessment...');
-      const riskAssessment = await assessRisks(clauses, document.content);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setAnalysisProgress(75);
-      // Step 4: Compliance checking (if detailed or comprehensive analysis)
-      let complianceChecks: ComplianceCheck[] = [];
-      if (analysisType !== 'basic') {
-        setCurrentStep('Checking regulatory compliance...');
-        complianceChecks = await checkCompliance(document, clauses);
-        await new Promise(resolve => setTimeout(resolve, 800));
-      }
-      setAnalysisProgress(90);
-      // Step 5: Generate recommendations
-      setCurrentStep('Generating recommendations...');
-      const recommendations = generateRecommendations(clauses, riskAssessment, complianceChecks);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setAnalysisProgress(100);
-      const finalAnalysis: ContractAnalysis = {
-        documentId: document.id,
-        clauses,
-        riskAssessment,
-        complianceChecks,
-        recommendations,
-        confidence: calculateConfidence(clauses, riskAssessment),
-        processingTime: Date.now() - startTime,
-      };
+  setIsAnalyzing(true);
+  setAnalysisProgress(0);
+  setCurrentStep('Starting analysis...');
+  try {
+  // Step 1: Document preprocessing,
+  setCurrentStep('Preprocessing document...');
+  await new Promise(resolve => setTimeout(resolve, 800));
+  setAnalysisProgress(20);
+  // Step 2: Clause identification,
+  setCurrentStep('Identifying contract clauses...');
+  const clauses = await identifyClauses(document.content);
+  onClauseIdentified(clauses);
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  setAnalysisProgress(50);
+  // Step 3: Risk assessment,
+  setCurrentStep('Performing risk assessment...');
+  const riskAssessment = await assessRisks(clauses, document.content);
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  setAnalysisProgress(75);
+  // Step 4: Compliance checking (if detailed or comprehensive analysis),
+  let complianceChecks: ComplianceCheck = [];
+  if (analysisType !== 'basic') {
+  setCurrentStep('Checking regulatory compliance...');
+  complianceChecks = await checkCompliance(document, clauses);
+  await new Promise(resolve => setTimeout(resolve, 800));
+  setAnalysisProgress(90);
+  // Step 5: Generate recommendations,
+  setCurrentStep('Generating recommendations...');
+  const recommendations = generateRecommendations(clauses, riskAssessment, complianceChecks);
+  await new Promise(resolve => setTimeout(resolve, 500));
+  setAnalysisProgress(100);
+  const finalAnalysis: ContractAnalysis = {,
+  documentId: document.id,
+  clauses,
+  riskAssessment,
+  complianceChecks,
+  recommendations,
+  confidence: calculateConfidence(clauses, riskAssessment),
+  processingTime: Date.now() - startTime,
+};
       setAnalysis(finalAnalysis);
       onAnalysisComplete(finalAnalysis);
       setCurrentStep('Analysis complete!');
     } catch (error) {
-      console.error('Contract analysis error:', error);
-      setCurrentStep('Analysis failed');
-    } finally {
+  console.error('Contract analysis error:', error);
+  setCurrentStep('Analysis failed');
+} finally {
       setTimeout(() => setIsAnalyzing(false), 1000);
-    }
   }, [document, analysisType, onClauseIdentified, onAnalysisComplete]);
   const startTime = Date.now();
   useEffect(() => {
     if (document && document.content) {
       analyzeContract();
-    }
   }, [document, analyzeContract]);
-  const identifyClauses = async (_____content: string): Promise<ContractClause[]> => {
+  const identifyClauses = async (_____content: string): Promise<ContractClause> => {
     // Mock clause identification - in real implementation would use AI/ML
-    const clauses: ContractClause[] = [
+    const clauses: ContractClause = [
       {
         id: 'clause_1',
         type: 'Termination Clause',
@@ -97,8 +94,8 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         riskLevel: 'medium',
         standardCompliance: true,
         position: { start: 1250, end: 1580 },
-        suggestions: ['Consider adding termination for cause provisions'],
-      },
+        suggestions: ['Consider adding termination for cause provisions'];
+  }
       {
         id: 'clause_2',
         type: 'Payment Terms',
@@ -108,7 +105,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         riskLevel: 'low',
         standardCompliance: true,
         position: { start: 890, end: 1120 }
-      },
+  }
       {
         id: 'clause_3',
         type: 'Liability Limitation',
@@ -123,7 +120,7 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
           'Add exceptions for certain types of damages',
           'Review with legal counsel'
         ]
-      },
+  }
       {
         id: 'clause_4',
         type: 'Confidentiality',
@@ -133,93 +130,83 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         riskLevel: 'medium',
         standardCompliance: true,
         position: { start: 1650, end: 1950 }
-      }
     ];
     return clauses;
   };
-  const assessRisks = async (clauses: ContractClause[], _____content: string): Promise<RiskAssessment> => {
-    const highRiskClauses = clauses.filter(c => c.riskLevel === 'high' || c.riskLevel === 'critical');
-    const _____nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
-    return {
-      overallRisk: highRiskClauses.length > 0 ? 'high' : 'medium',
-      riskFactors: [,
+  const assessRisks = async (clauses: ContractClause, _____content: string): Promise<RiskAssessment> => {
+  const highRiskClauses = clauses.filter(c => c.riskLevel === 'high' || c.riskLevel === 'critical');
+  const _____nonCompliantClauses = clauses.filter(c => !c.standardCompliance);
+  return {
+  overallRisk: highRiskClauses.length > 0 ? 'high' : 'medium',
+  riskFactors: [,
+  {
+  type: 'Liability Exposure',
+  description: 'Unlimited liability exposure in certain clauses',
+  impact: 'high',
+  likelihood: 'medium',
+  mitigation: ['Add liability caps', 'Include mutual indemnification', 'Define excluded damages'],
+}
         {
-          type: 'Liability Exposure',
-          description: 'Unlimited liability exposure in certain clauses',
-          impact: 'high',
-          likelihood: 'medium',
-          mitigation: ['Add liability caps', 'Include mutual indemnification', 'Define excluded damages']
-        },
-        {
-          type: 'Termination Risk',
-          description: 'Broad termination rights without cause',
-          impact: 'medium',
-          likelihood: 'low',
-          mitigation: ['Add notice requirements', 'Include termination fees', 'Define cause events']
-        }
-      ],
-      mitigation: [,
-        'Review high-risk clauses with legal counsel',
-        'Consider adding protective provisions',
-        'Negotiate mutual terms where applicable'
-      ],
-      score: 72 // Out of 100,
-    };
+  type: 'Termination Risk',
+  description: 'Broad termination rights without cause',
+  impact: 'medium',
+  likelihood: 'low',
+  mitigation: ['Add notice requirements', 'Include termination fees', 'Define cause events']],
+  mitigation: [,
+  'Review high-risk clauses with legal counsel',
+  'Consider adding protective provisions',
+  'Negotiate mutual terms where applicable'
+  ],
+  score: 72 // Out of 100,
+};
   };
-  const checkCompliance = async (_____document: unknown, _____clauses: ContractClause[]): Promise<ComplianceCheck[]> => {
-    return [
+  const checkCompliance = async (_____document: unknown, _____clauses: ContractClause): Promise<ComplianceCheck> => {
+  return [
+  {
+  id: 'comp_1',
+  regulation: 'GDPR Article 28',
+  requirement: 'Data Processing Agreement requirements',
+  status: 'partial',
+  severity: 'warning',
+  description: 'Contract contains some data processing terms but missing required GDPR provisions',
+  remediation: [,
+  'Add specific data protection clauses',
+  'Include data subject rights provisions',
+  'Define data retention periods'
+  ],
+  affectedSections: [2, 5, 8],
+}
       {
-        id: 'comp_1',
-        regulation: 'GDPR Article 28',
-        requirement: 'Data Processing Agreement requirements',
-        status: 'partial',
-        severity: 'warning',
-        description: 'Contract contains some data processing terms but missing required GDPR provisions',
-        remediation: [,
-          'Add specific data protection clauses',
-          'Include data subject rights provisions',
-          'Define data retention periods'
-        ],
-        affectedSections: [2, 5, 8]
-      },
-      {
-        id: 'comp_2',
-        regulation: 'UCC Article 2',
-        requirement: 'Sale of goods provisions',
-        status: 'compliant',
-        severity: 'info',
-        description: 'Contract properly addresses sale of goods requirements',
-        affectedSections: [3, 4]
-      }
-    ];
-  };
+  id: 'comp_2',
+  regulation: 'UCC Article 2',
+  requirement: 'Sale of goods provisions',
+  status: 'compliant',
+  severity: 'info',
+  description: 'Contract properly addresses sale of goods requirements',
+  affectedSections: [3, 4]];
+};
   const generateRecommendations = (;);
-    clauses: ContractClause[], 
+    clauses: ContractClause, 
     riskAssessment: RiskAssessment,
-    complianceChecks: ComplianceCheck[],
-  ): string[] => {
-    const recommendations: string[] = [];
-    // Risk-based recommendations
-    if (riskAssessment.overallRisk === 'high') {
-      recommendations.push('Consider comprehensive legal review due to high risk assessment');
-    }
-    // Clause-based recommendations
-    clauses.forEach(clause => {)
-      if (clause.suggestions) {
-        recommendations.push(...clause.suggestions);
-      }
-    });
+    complianceChecks: ComplianceCheck): string => {,
+  const recommendations: string = [];
+  // Risk-based recommendations
+  if (riskAssessment.overallRisk === 'high') {
+  recommendations.push('Consider comprehensive legal review due to high risk assessment');
+  // Clause-based recommendations
+  clauses.forEach(clause => {)
+  if (clause.suggestions) {
+  recommendations.push(...clause.suggestions);
+});
     // Compliance recommendations
     complianceChecks.forEach(check => {)
-      if (check.status === 'non_compliant' || check.status === 'partial') {
+  if (check.status === 'non_compliant' || check.status === 'partial') {
         if (check.remediation) {
           recommendations.push(...check.remediation);
-        }
-      }
     });
     return [...new Set(recommendations)]; // Remove duplicates
   };
-  const calculateConfidence = (clauses: ContractClause[], riskAssessment: RiskAssessment): number => {
+  const calculateConfidence = (clauses: ContractClause, riskAssessment: RiskAssessment): number => {
     // Simple confidence calculation - would be more sophisticated in real implementation
     let confidence = 85;
     if (clauses.length < 3) confidence -= 10;
@@ -227,77 +214,66 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
     return Math.max(60, Math.min(95, confidence));
   };
   const getRiskColor = (risk: string) => {
-    switch (risk) {
-    case 'low': return '#48bb78';
-    case 'medium': return '#ed8936';
-    case 'high': return '#f56565';
-    case 'critical': return '#e53e3e';
-    default: return '#718096';
-    }
-  };
+  switch (risk) {
+  case 'low': return '#48bb78';
+  case 'medium': return '#ed8936';
+  case 'high': return '#f56565';
+  case 'critical': return '#e53e3e';
+  default: return '#718096';
+};
   const getComplianceColor = (status: string) => {
-    switch (status) {
-    case 'compliant': return '#48bb78';
-    case 'partial': return '#ed8936';
-    case 'non_compliant': return '#f56565';
-    default: return '#718096';
-    }
-  };
+  switch (status) {
+  case 'compliant': return '#48bb78';
+  case 'partial': return '#ed8936';
+  case 'non_compliant': return '#f56565';
+  default: return '#718096';
+};
   if (isAnalyzing) {
-    return ();
+    return;
       <div className={`contract-analyzer analyzing ${className}`}>}
         <style>
           {`
             .contract-analyzer {
               background: white;
-              border-radius: 8px;
-              padding: 2rem;
+              border-radius: 8px;,
+  padding: 2rem;
               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
             .analyzing-container {
-              text-align: center;
-              padding: 3rem 2rem;
-            }
+              text-align: center;,
+  padding: 3rem 2rem;
             .analysis-spinner {
-              width: 60px;
-              height: 60px;
+              width: 60px;,
+  height: 60px;
               border: 4px solid #e2e8f0;
               border-top: 4px solid #4299e1;
-              border-radius: 50%;
-              animation: spin 1s linear infinite;
+              border-radius: 50%;,
+  animation: spin 1s linear infinite;
               margin: 0 auto 2rem;
-            }
             @keyframes spin {
               0% { transform: rotate(0deg); }
               100% { transform: rotate(360deg); }
-            }
             .progress-container {
-              max-width: 400px;
-              margin: 2rem auto;
-            }
+              max-width: 400px;,
+  margin: 2rem auto;
             .progress-bar {
-              width: 100%;
-              height: 10px;
+              width: 100%;,
+  height: 10px;
               background: #e2e8f0;
-              border-radius: 5px;
-              overflow: hidden;
-            }
+              border-radius: 5px;,
+  overflow: hidden;
             .progress-fill {
-              height: 100%;
-              background: linear-gradient(90deg, #4299e1, #3182ce);
-              border-radius: 5px;
-              transition: width 0.3s ease;
-            }
+              height: 100%;,
+  background: linear-gradient(90deg, #4299e1, #3182ce);
+              border-radius: 5px;,
+  transition: width 0.3s ease;
             .current-step {
-              font-size: 1.1rem;
-              color: #2d3748;
+              font-size: 1.1rem;,
+  color: #2d3748;
               margin-top: 1rem;
-            }
             .progress-percent {
-              font-size: 0.9rem;
-              color: #718096;
+              font-size: 0.9rem;,
+  color: #718096;
               margin-top: 0.5rem;
-            }
           `}
         </style>
         <div className="analyzing-container">
@@ -316,17 +292,15 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
         </div>
       </div>
     );
-  }
   if (!analysis) {
-    return ();
+    return;
       <div className={`contract-analyzer ${className}`}>}
         <div style={{ textAlign: 'center', padding: '2rem' }}>
           <p>No analysis available. Please upload a contract document.</p>
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`contract-analyzer ${className}`}>}
       <style>
         {`
@@ -335,181 +309,149 @@ export const ContractAnalyzer: React.FC<ContractAnalyzerProps> = ({)
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-          }
           .analyzer-header {
-            background: #f7fafc;
-            padding: 1.5rem;
+            background: #f7fafc;,
+  padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
-          }
           .analyzer-title {
             font-size: 1.5rem;
-            font-weight: 600;
-            color: #2d3748;
+            font-weight: 600;,
+  color: #2d3748;
             margin: 0 0 0.5rem 0;
-          }
           .analyzer-meta {
-            display: flex;
-            gap: 2rem;
-            font-size: 0.9rem;
-            color: #718096;
-          }
+            display: flex;,
+  gap: 2rem;
+            font-size: 0.9rem;,
+  color: #718096;
           .view-tabs {
-            display: flex;
-            background: #edf2f7;
+            display: flex;,
+  background: #edf2f7;
             border-bottom: 1px solid #e2e8f0;
-          }
           .view-tab {
-            padding: 1rem 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
+            padding: 1rem 1.5rem;,
+  background: none;
+            border: none;,
+  cursor: pointer;
             font-size: 0.9rem;
-            font-weight: 500;
-            color: #718096;
-            transition: all 0.2s;
-            flex: 1;
+            font-weight: 500;,
+  color: #718096;
+            transition: all 0.2s;,
+  flex: 1;
             text-align: center;
-          }
           .view-tab.active {
-            background: white;
-            color: #2d3748;
+            background: white;,
+  color: #2d3748;
             border-bottom: 2px solid #4299e1;
-          }
-          .view-tab:hover {
-            background: #f1f5f9;
+          .view-tab:hover {,
+  background: #f1f5f9;
             color: #2d3748;
-          }
           .analyzer-content {
             padding: 1.5rem;
-          }
           .overview-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;,
+  gap: 1.5rem;
             margin-bottom: 2rem;
-          }
           .overview-card {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-          }
+            background: #f7fafc;,
+  padding: 1.5rem;
+            border-radius: 6px;,
+  border: 1px solid #e2e8f0;
           .card-title {
             font-size: 1.1rem;
-            font-weight: 600;
-            color: #2d3748;
+            font-weight: 600;,
+  color: #2d3748;
             margin-bottom: 1rem;
-          }
           .risk-indicator {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: center;,
+  gap: 0.5rem;
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-          }
           .risk-dot {
-            width: 12px;
-            height: 12px;
+            width: 12px;,
+  height: 12px;
             border-radius: 50%;
-          }
           .confidence-score {
             font-size: 2rem;
-            font-weight: bold;
-            color: #4299e1;
-          }
+            font-weight: bold;,
+  color: #4299e1;
           .clause-list {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-          }
+            flex-direction: column;,
+  gap: 1rem;
           .clause-item {
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 1rem;,
+  border: 1px solid #e2e8f0;
+            border-radius: 6px;,
+  cursor: pointer;
             transition: all 0.2s;
-          }
           .clause-item:hover {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-color: #cbd5e0;
-          }
           .clause-item.selected {
-            border-color: #4299e1;
-            background: #ebf8ff;
-          }
+            border-color: #4299e1;,
+  background: #ebf8ff;
           .clause-header {
             display: flex;
             justify-content: between;
             align-items: center;
             margin-bottom: 0.5rem;
-          }
           .clause-title {
-            font-weight: 600;
-            color: #2d3748;
-          }
+            font-weight: 600;,
+  color: #2d3748;
           .clause-risk {
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: 500;
-            color: white;
+            font-weight: 500;,
+  color: white;
             margin-left: auto;
-          }
           .clause-content {
-            font-size: 0.9rem;
-            color: #4a5568;
+            font-size: 0.9rem;,
+  color: #4a5568;
             margin-bottom: 0.5rem;
-          }
           .clause-suggestions {
-            font-size: 0.8rem;
-            color: #718096;
-          }
+            font-size: 0.8rem;,
+  color: #718096;
           .compliance-list {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-          }
+            flex-direction: column;,
+  gap: 1rem;
           .compliance-item {
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
+            padding: 1rem;,
+  border: 1px solid #e2e8f0;
             border-radius: 6px;
-          }
           .compliance-header {
             display: flex;
             justify-content: between;
             align-items: center;
             margin-bottom: 0.5rem;
-          }
           .compliance-regulation {
-            font-weight: 600;
-            color: #2d3748;
-          }
+            font-weight: 600;,
+  color: #2d3748;
           .compliance-status {
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: 500;
-            color: white;
-          }
+            font-weight: 500;,
+  color: white;
           .recommendations-list {
-            list-style: none;
-            padding: 0;
+            list-style: none;,
+  padding: 0;
             margin: 0;
-          }
           .recommendation-item {
             padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            background: #f0fff4;
+            margin-bottom: 0.5rem;,
+  background: #f0fff4;
             border: 1px solid #c6f6d5;
             border-radius: 4px;
-            font-size: 0.9rem;
-            color: #2f855a;
-          }
-          .recommendation-item:before {
-            content: "💡 ";
+            font-size: 0.9rem;,
+  color: #2f855a;
+          .recommendation-item:before {,
+  content: "💡 ";
             margin-right: 0.5rem;
-          }
         `}
       </style>
       <div className="analyzer-header">

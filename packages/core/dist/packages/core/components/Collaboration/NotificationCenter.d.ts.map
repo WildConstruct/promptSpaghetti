@@ -1,1 +1,1 @@
-{"version":3,"file":"NotificationCenter.d.ts","sourceRoot":"","sources":["../../../../../components/Collaboration/NotificationCenter.tsx"],"names":[],"mappings":"AAAA,OAAO,KAA2C,MAAM,OAAO,CAAC;AAOhE,UAAU,uBAAuB;IAC/B,MAAM,EAAE,MAAM,CAAC;IACf,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB;AAED,QAAA,MAAM,kBAAkB,EAAE,KAAK,CAAC,EAAE,CAAC,uBAAuB,CAmNzD,CAAC;AAEF,eAAe,kBAAkB,CAAC"}
+{"version":3,"file":"NotificationCenter.d.ts","sourceRoot":"","sources":["../../../../../components/Collaboration/NotificationCenter.tsx"],"names":[],"mappings":"AAwMA,eAAe,kBAAkB,CAAC"}

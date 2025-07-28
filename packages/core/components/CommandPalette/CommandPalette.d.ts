@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 export interface CommandPaletteAction {
     id: string;
     title: string;
@@ -19,7 +20,8 @@ export interface CommandPaletteAction {
     requiresNodes?: boolean;
     disabled?: boolean;
     premium?: boolean;
-}
+
+
 export interface GenerationFlow {
     id: string;
     name: string;
@@ -30,7 +32,8 @@ export interface GenerationFlow {
     estimatedTime: string;
     complexity: 'simple' | 'moderate' | 'advanced';
     outputType: 'single_node' | 'node_chain' | 'complete_graph';
-}
+
+
 export interface GenerationStep {
     id: string;
     title: string;
@@ -38,7 +41,8 @@ export interface GenerationStep {
     type: 'input' | 'selection' | 'configuration' | 'execution' | 'review';
     required: boolean;
     fields?: GenerationField[];
-}
+
+
 export interface GenerationField {
     id: string;
     label: string;
@@ -47,6 +51,7 @@ export interface GenerationField {
     options?: Array<{
         value: string;
         label: string;
+
     }>;
     validation?: {
         required?: boolean;
@@ -55,7 +60,7 @@ export interface GenerationField {
         pattern?: RegExp;
     };
     defaultValue?: unknown;
-}
+
 export interface CommandPaletteProps {
     isOpen: boolean;
     onClose: () => void;
@@ -66,6 +71,7 @@ export interface CommandPaletteProps {
     onNodeCreate: (nodeType: string, position: {)
         x: number;
         y: number;
+
     }, data?: any) => void;
     onNodeDelete: (nodeIds: string[]) => void;
     onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
@@ -73,7 +79,7 @@ export interface CommandPaletteProps {
     theme?: 'light' | 'dark' | 'cinema';
     recentCommands?: string[];
     customActions?: CommandPaletteAction[];
-}
+
 /**
  * Professional command palette for graph editor with generation flow integration
  */

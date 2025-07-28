@@ -12,13 +12,9 @@ export interface SecurityAnalyticsDashboardProps {
     theme?: 'light' | 'dark' | 'cinema';
     refreshInterval?: number;
     executiveMode?: boolean;
-    allowedInsights?: ThreatCategory[];
+    allowedInsights?: ThreatCategory;
     onThreatDetected?: (threat: SecurityPattern) => void;
     onCriticalAlert?: (insight: SecurityInsight) => void;
 }
-/**
- * Comprehensive security analytics dashboard for executive and operational use
- */
 export declare const SecurityAnalyticsDashboard: React.FC<SecurityAnalyticsDashboardProps>;
-export default SecurityAnalyticsDashboard;
 //# sourceMappingURL=SecurityAnalyticsDashboard.d.ts.map

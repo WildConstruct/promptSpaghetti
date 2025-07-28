@@ -8,14 +8,11 @@
 import React from 'react';
 import { NodeSuggestion, GenerationOptions } from '../../types/NodeGenerationTypes';
 export interface SuggestionSelectorProps {
-    suggestions: NodeSuggestion[];
-    onGenerate: (selectedSuggestions: NodeSuggestion[], options: GenerationOptions) => void;
+    suggestions: NodeSuggestion;
+    onGenerate: (selectedSuggestions: NodeSuggestion, options: GenerationOptions) => void;
     onCancel: () => void;
     isGenerating?: boolean;
     theme?: 'light' | 'dark' | 'cinema';
 }
-/**
- * Component for selecting suggestions and configuring generation options
- */
 export declare const generationOptions: GenerationOptions, setGenerationOptions: React.Dispatch<React.SetStateAction<GenerationOptions>>;
 //# sourceMappingURL=SuggestionSelector.d.ts.map

@@ -15,6 +15,7 @@ import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingServi
 import { PolicyEffectivenessTrackingService } from './PolicyEffectivenessTrackingService';
 import { OperationContext } from '../../../packages/core/types/DataClassification';
 
+}
 export interface ComplianceViolation {
   violationId: string;
   userId: string;
@@ -63,7 +64,9 @@ export interface ComplianceViolation {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ViolationContext {
   requestId?: string;
   sessionId: string;
@@ -94,7 +97,9 @@ export interface ViolationContext {
   trustedNetwork: boolean;
   managedDevice: boolean;
 }
+}
 
+}
 export interface ViolationImpact {
   // Data Impact
   dataExposed: boolean;
@@ -120,7 +125,9 @@ export interface ViolationImpact {
   publicExposureRisk: PublicExposureRisk;
   mediaAttentionLikelihood: MediaAttentionLikelihood;
 }
+}
 
+}
 export interface RemediationAction {
   actionId: string;
   type: RemediationActionType;
@@ -156,7 +163,9 @@ export interface RemediationAction {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ComplianceMonitoringRule {
   ruleId: string;
   name: string;
@@ -198,7 +207,9 @@ export interface ComplianceMonitoringRule {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ComplianceDashboard {
   // Overview Metrics
   overallComplianceScore: number;
@@ -233,21 +244,26 @@ export interface ComplianceDashboard {
   // Generated Metadata
   generatedAt: Date;
   dataFreshness: Date;
+}
   coveragePeriod: { start: Date; end: Date };
 }
 
+}
 export interface ComplianceScore {
   score: number; // 0-100
   trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
   factors: ScoreFactor[];
   lastUpdated: Date;
 }
+}
 
+}
 export interface ScoreFactor {
   factor: string;
   impact: number; // -100 to 100
   description: string;
   recommendation?: string;
+}
 }
 
 // Enums and Supporting Types
@@ -356,138 +372,181 @@ export enum EvaluationFrequency {
 
 // Supporting Interfaces
 
+}
 export interface RiskFactor {
   factor: string;
   weight: number;
   description: string;
   mitigation?: string;
 }
+}
 
+}
 export interface GeoLocation {
   country: string;
   region: string;
   city: string;
+}
   coordinates?: { latitude: number; longitude: number };
 }
 
+}
 export interface ViolationAuditEntry {
   timestamp: Date;
   action: string;
   actor: string;
   details: Record<string, any>;
 }
+}
 
+}
 export interface RecurrencePattern {
   frequency: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'SPORADIC';
   lastOccurrence: Date;
   occurrenceCount: number;
   pattern: string;
 }
+}
 
+}
 export interface ConsentStatus {
   hasValidConsent: boolean;
   consentType: string;
   grantedAt?: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface LegalBasisType {
   basis: string;
   regulation: string;
   justification: string;
 }
+}
 
+}
 export interface FinancialImpact {
   estimatedCost: number;
   currency: string;
   costCategory: string;
 }
+}
 
+}
 export interface RegulatoryImplication {
   regulation: string;
   jurisdiction: string;
   potentialFine: number;
   reportingRequired: boolean;
 }
+}
 
+}
 export interface ReportingDeadline {
   regulation: string;
   deadline: Date;
   status: 'PENDING' | 'COMPLETED' | 'OVERDUE';
 }
+}
 
+}
 export interface PublicExposureRisk {
   level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   factors: string[];
 }
+}
 
+}
 export interface MediaAttentionLikelihood {
   likelihood: 'LOW' | 'MEDIUM' | 'HIGH';
   factors: string[];
 }
+}
 
+}
 export interface ActionEvidence {
   type: 'SCREENSHOT' | 'LOG_ENTRY' | 'DOCUMENT' | 'TIMESTAMP';
   data: string;
   timestamp: Date;
 }
+}
 
+}
 export interface TriggerCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'CONTAINS' | 'REGEX';
   value: Error;
   caseSensitive?: boolean;
 }
+}
 
+}
 export interface DetectionCriteria {
   rules: DetectionRule[];
   logic: 'AND' | 'OR';
 }
+}
 
+}
 export interface DetectionRule {
   field: string;
   condition: string;
   threshold?: number;
   timeWindow?: number; // minutes
 }
+}
 
+}
 export interface ComplianceThreshold {
   metric: string;
   warningThreshold: number;
   criticalThreshold: number;
   unit: string;
 }
+}
 
+}
 export interface UserScope {
   type: 'ALL' | 'DEPARTMENT' | 'ROLE' | 'USER_LIST';
   values: string[];
 }
+}
 
+}
 export interface NotificationTarget {
   type: 'EMAIL' | 'SMS' | 'SLACK' | 'WEBHOOK';
   target: string;
   urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
+}
 
+}
 export interface EscalationRule {
   triggerAfter: number; // minutes
   escalateTo: EscalationLevel;
   notificationTargets: NotificationTarget[];
 }
+}
 
+}
 export interface TrendData {
   timestamp: Date;
   value: number;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface ViolationTypeMetrics {
   violationType: ComplianceViolationType;
   count: number;
   severity: ViolationSeverity;
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
 }
+}
 
+}
 export interface UserRiskMetrics {
   userId: string;
   userEmail: string;
@@ -495,7 +554,9 @@ export interface UserRiskMetrics {
   violationCount: number;
   lastViolation?: Date;
 }
+}
 
+}
 export interface PolicyRiskMetrics {
   policyId: string;
   policyType: PolicyType;
@@ -503,7 +564,9 @@ export interface PolicyRiskMetrics {
   complianceRate: number;
   riskScore: number;
 }
+}
 
+}
 export interface RegulatoryComplianceStatus {
   regulation: string;
   jurisdiction: string;
@@ -511,7 +574,9 @@ export interface RegulatoryComplianceStatus {
   lastAssessment: Date;
   nextAssessment: Date;
 }
+}
 
+}
 export interface ComplianceDeadline {
   description: string;
   deadline: Date;
@@ -519,19 +584,24 @@ export interface ComplianceDeadline {
   status: 'UPCOMING' | 'DUE' | 'OVERDUE';
   daysRemaining: number;
 }
+}
 
+}
 export interface PredictedViolation {
   violationType: ComplianceViolationType;
   probability: number;
   predictedDate: Date;
   factors: string[];
 }
+}
 
+}
 export interface RiskFactorAnalysis {
   factor: string;
   impact: number;
   prevalence: number;
   recommendation: string;
+}
 }
 
 export enum ActionPriority {
@@ -594,6 +664,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
    * Initialize compliance monitoring system
    */
   private async initializeMonitoring(): Promise<void> {
+
     await this.loadMonitoringRules();
     this.startMonitoring();
     
@@ -628,6 +699,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
    * Detect compliance violations
    */
   async detectViolations(context: OperationContext): Promise<ComplianceViolation[]> {
+
     const violations: ComplianceViolation[] = [];
 
     try {
@@ -695,9 +767,10 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
       description: string;
       resolvedBy: string;
       evidence?: ActionEvidence[];
-    },
+  }
     context: OperationContext
   ): Promise<void> {
+
     const violation = this.activeViolations.get(violationId);
     if (!violation) {
       throw new Error(`Violation ${violationId} not found`);
@@ -769,6 +842,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
       severities?: ViolationSeverity[];
     }
   ): Promise<ComplianceDashboard> {
+
     try {
       const [
         complianceScores,
@@ -848,6 +922,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     rule: Omit<ComplianceMonitoringRule,
     'ruleId' | 'createdAt' | 'detectionCount' | 'falsePositiveRate'>
   ): Promise<string> {
+
     const ruleId = `rule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const completeRule: ComplianceMonitoringRule = {
@@ -882,6 +957,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   // Private helper methods
 
   private async loadMonitoringRules(): Promise<void> {
+
     // Load rules from database
     const rules = await this.db.query(`
       SELECT * FROM compliance_monitoring_rules 
@@ -896,6 +972,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async performComplianceCheck(): Promise<void> {
+
     const context: OperationContext = {
       timestamp: new Date(),
       requestOrigin: 'compliance_monitor',
@@ -918,6 +995,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async evaluateRule(rule: ComplianceMonitoringRule, context: OperationContext): Promise<void> {
+
     try {
       // Rule evaluation logic would go here
       // For now, we'll simulate the evaluation
@@ -940,6 +1018,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     rule: ComplianceMonitoringRule,
     context: OperationContext
   ): Promise<ComplianceViolation> {
+
     const violationId = `viol_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return {
@@ -963,7 +1042,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
         workingHours: true,
         trustedNetwork: true,
         managedDevice: true
-      },
+  }
       riskScore: 50,
       riskFactors: [],
       impact: {
@@ -978,7 +1057,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
         reportingDeadlines: [],
         publicExposureRisk: { level: 'LOW', factors: [] },
         mediaAttentionLikelihood: { likelihood: 'LOW', factors: [] }
-      },
+  }
       remediationRequired: true,
       remediationActions: [],
       status: ViolationStatus.DETECTED,
@@ -990,26 +1069,31 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async detectConsentViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
+
     // Simplified consent violation detection
     return [];
   }
 
   private async detectRetentionViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
+
     // Simplified retention violation detection
     return [];
   }
 
   private async detectAccessViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
+
     // Simplified access violation detection
     return [];
   }
 
   private async detectAuditViolations(_____context: OperationContext): Promise<ComplianceViolation[]> {
+
     // Simplified audit violation detection
     return [];
   }
 
   private async storeViolation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
+
     await this.db.query(`
       INSERT INTO compliance_violations (
         violation_id, user_id, user_email, policy_id, policy_version,
@@ -1041,6 +1125,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async updateViolation(violation: ComplianceViolation, _____context: OperationContext): Promise<void> {
+
     await this.db.query(`
       UPDATE compliance_violations 
       SET status = $1, resolved_at = $2, resolution_description = $3,
@@ -1060,11 +1145,13 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
     violation: ComplianceViolation,
     _____context: OperationContext
   ): Promise<void> {
+
     // Implement immediate remediation logic
     console.log(`Triggering immediate remediation for critical violation: ${violation.violationId}`);
   }
 
   private async storeMonitoringRule(rule: ComplianceMonitoringRule): Promise<void> {
+
     await this.db.query(`
       INSERT INTO compliance_monitoring_rules (
         rule_id, name, description, enabled, priority, category,
@@ -1093,6 +1180,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async calculateComplianceScores(filters?: any): Promise<unknown> {
+
     // Simplified compliance score calculation
     return {
       overall: 85,
@@ -1103,6 +1191,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async getViolationMetrics(filters?: any): Promise<unknown> {
+
     // Simplified violation metrics
     return {
       active: this.activeViolations.size,
@@ -1113,6 +1202,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async getRiskMetrics(filters?: any): Promise<unknown> {
+
     // Simplified risk metrics
     return {
       topViolationTypes: [],
@@ -1122,6 +1212,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async getPerformanceMetrics(filters?: any): Promise<unknown> {
+
     // Simplified performance metrics
     return {
       avgResolutionTime: 240, // 4 hours
@@ -1131,6 +1222,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async getRegulatoryStatus(filters?: any): Promise<unknown> {
+
     // Simplified regulatory status
     return {
       compliance: [],
@@ -1139,6 +1231,7 @@ export class PolicyComplianceMonitoringService extends EventEmitter {
   }
 
   private async getPredictiveAnalytics(filters?: any): Promise<unknown> {
+
     // Simplified predictive analytics
     return {
       predictions: [],

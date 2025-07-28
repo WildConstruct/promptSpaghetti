@@ -15,6 +15,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { RedisService } from '../auth/database/RedisService';
 import { requirePermission } from '../middleware/auth';
 
+}
 interface CreatePolicyBody {
   name: string;
   resourceType: 'jwt_token' | 'api_key' | 'session' | 'reset_token' | 'verification_code' | 'backup_code' | 'refresh_token';
@@ -27,7 +28,9 @@ interface CreatePolicyBody {
   renewalWindow: number;
   organizationId?: string;
 }
+}
 
+}
 interface CreateExpirationRuleBody {
   resourceId: string;
   resourceType: string;
@@ -35,33 +38,46 @@ interface CreateExpirationRuleBody {
   customTtl?: number;
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 interface ExpirationStatusParams {
   resourceType: string;
   resourceId: string;
 }
+}
 
+}
 interface RenewResourceBody {
   requestedTtl?: number;
   reason?: string;
 }
+}
 
+}
 interface RenewResourceParams {
   resourceType: string;
   resourceId: string;
 }
+}
 
+}
 interface RevokeResourceBody {
   reason?: string;
 }
+}
 
+}
 interface ExpirationStatsQuery {
   organizationId?: string;
 }
+}
 
+}
 interface UpcomingWarningsQuery {
   organizationId?: string;
   limit?: string;
+}
 }
 
 export async function expirationManagementRoutes(fastify: FastifyInstance) {
@@ -104,7 +120,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           resourceType: {
             type: 'string',
             enum: ['jwt_token', 'api_key', 'session', 'reset_token', 'verification_code', 'backup_code', 'refresh_token']
-          },
+  }
           defaultTtl: { type: 'number', minimum: 60 }, // At least 1 minute
           maxTtl: { type: 'number', minimum: 60 },
           minTtl: { type: 'number', minimum: 30 },
@@ -114,7 +130,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           renewalWindow: { type: 'number', minimum: 60 },
           organizationId: { type: 'string' }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -222,7 +238,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           resourceType: { type: 'string' },
           resourceId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -283,14 +299,14 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           resourceType: { type: 'string' },
           resourceId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
           requestedTtl: { type: 'number', minimum: 60 },
           reason: { type: 'string', maxLength: 500 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -369,7 +385,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           resourceType: { type: 'string' },
           resourceId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -426,7 +442,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
         properties: {
           organizationId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -489,7 +505,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           organizationId: { type: 'string' },
           limit: { type: 'string', pattern: '^[0-9]+$' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -601,7 +617,7 @@ export async function expirationManagementRoutes(fastify: FastifyInstance) {
           totalRules: stats.total,
           activeRules: stats.active,
           upcomingExpirations: stats.upcomingExpirations
-        },
+  }
         timestamp: new Date().toISOString()
       });
     } catch (error) {

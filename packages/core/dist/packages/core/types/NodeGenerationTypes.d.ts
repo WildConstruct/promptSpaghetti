@@ -10,16 +10,13 @@ import { Node, Edge, Position } from 'reactflow';
  */
 export interface NodeGenerationRequest {
     analysisResult: PromptAnalysisResult;
-    selectedSuggestions: NodeSuggestion[];
+    selectedSuggestions: NodeSuggestion;
     canvasPosition: Position;
     options: GenerationOptions;
 }
-/**
- * Result of prompt analysis that drives node generation
- */
 export interface PromptAnalysisResult {
     prompt: string;
-    suggestions: NodeSuggestion[];
+    suggestions: NodeSuggestion;
     confidence: number;
     analysisMetadata: {
         processingTimeMs: number;
@@ -28,9 +25,6 @@ export interface PromptAnalysisResult {
         estimatedNodes: number;
     };
 }
-/**
- * Individual node suggestion from analysis
- */
 export interface NodeSuggestion {
     id: string;
     nodeType: string;
@@ -39,16 +33,13 @@ export interface NodeSuggestion {
     confidence: number;
     suggestedPosition: Position;
     nodeData: Record<string, unknown>;
-    connections: SuggestedConnection[];
+    connections: SuggestedConnection;
     metadata: {
         category: 'content' | 'logic' | 'output' | 'variable';
         priority: 'high' | 'medium' | 'low';
         estimatedComplexity: number;
     };
 }
-/**
- * Suggested connection between nodes
- */
 export interface SuggestedConnection {
     fromNodeId: string;
     toNodeId: string;
@@ -56,9 +47,6 @@ export interface SuggestedConnection {
     confidence: number;
     label?: string;
 }
-/**
- * User customization options for generation
- */
 export interface GenerationOptions {
     layout: LayoutType;
     spacing: {
@@ -82,9 +70,6 @@ export interface GenerationOptions {
         enablePerformanceTracking: boolean;
     };
 }
-/**
- * Layout algorithms for node positioning
- */
 export type LayoutType = 'linear' | 'hierarchical' | 'radial' | 'force-directed' | 'grid';
 /**
  * Connection patterns for linking generated nodes
@@ -94,13 +79,10 @@ export type ConnectionPattern = 'sequential' | 'branching' | 'hub-and-spoke' | '
  * Complete generated graph result
  */
 export interface GeneratedGraph {
-    nodes: Node[];
-    edges: Edge[];
+    nodes: Node;
+    edges: Edge;
     metadata: GenerationMetadata;
 }
-/**
- * Metadata about the generation process
- */
 export interface GenerationMetadata {
     generationId: string;
     timestamp: Date;
@@ -114,8 +96,8 @@ export interface GenerationMetadata {
     options: GenerationOptions;
     validation: {
         isValid: boolean;
-        errors: ValidationError[];
-        warnings: ValidationWarning[];
+        errors: ValidationError;
+        warnings: ValidationWarning;
     };
     statistics: {
         averageNodeConfidence: number;
@@ -124,20 +106,14 @@ export interface GenerationMetadata {
         complexityScore: number;
     };
 }
-/**
- * Validation error during generation
- */
 export interface ValidationError {
     code: string;
     message: string;
     nodeId?: string;
     edgeId?: string;
     severity: 'error' | 'warning';
-    suggestions: string[];
+    suggestions: string;
 }
-/**
- * Validation warning during generation
- */
 export interface ValidationWarning {
     code: string;
     message: string;
@@ -146,9 +122,6 @@ export interface ValidationWarning {
     impact: 'low' | 'medium' | 'high';
     recommendation: string;
 }
-/**
- * Layout calculation result
- */
 export interface LayoutResult {
     positions: Map<string, Position>;
     bounds: {
@@ -160,11 +133,8 @@ export interface LayoutResult {
     efficiency: number;
     overlaps: number;
 }
-/**
- * Connection calculation result
- */
 export interface ConnectionResult {
-    edges: Edge[];
+    edges: Edge;
     patterns: {
         sequential: number;
         branching: number;
@@ -176,15 +146,12 @@ export interface ConnectionResult {
         duplicateConnections: number;
     };
 }
-/**
- * Node factory configuration
- */
 export interface NodeFactoryConfig {
     nodeType: string;
     defaultData: Record<string, unknown>;
     validation: {
-        requiredFields: string[];
-        optionalFields: string[];
+        requiredFields: string;
+        optionalFields: string;
         constraints: Record<string, unknown>;
     };
     rendering: {
@@ -196,9 +163,6 @@ export interface NodeFactoryConfig {
         colorScheme: string;
     };
 }
-/**
- * Generation progress tracking
- */
 export interface GenerationProgress {
     stage: 'analyzing' | 'layouting' | 'connecting' | 'validating' | 'finalizing';
     progress: number;
@@ -207,15 +171,12 @@ export interface GenerationProgress {
     nodesProcessed: number;
     totalNodes: number;
 }
-/**
- * Generation context for maintaining state
- */
 export interface GenerationContext {
     requestId: string;
     startTime: Date;
     canvas: {
-        existingNodes: Node[];
-        existingEdges: Edge[];
+        existingNodes: Node;
+        existingEdges: Edge;
         viewport: {
             x: number;
             y: number;
@@ -233,16 +194,13 @@ export interface GenerationContext {
         validationTimeMs: number;
     };
 }
-/**
- * Undo/Redo operation for generated content
- */
 export interface GenerationOperation {
     type: 'generate' | 'delete' | 'modify';
     operationId: string;
     timestamp: Date;
     data: {
-        nodesAffected: string[];
-        edgesAffected: string[];
+        nodesAffected: string;
+        edgesAffected: string;
         beforeState: Record<string, unknown>;
         afterState: Record<string, unknown>;
     };
@@ -252,9 +210,6 @@ export interface GenerationOperation {
         canRedo: boolean;
     };
 }
-/**
- * Export configuration for generated graphs
- */
 export interface ExportConfiguration {
     format: 'json' | 'yaml' | 'graphml' | 'dot' | 'svg';
     options: {
@@ -264,14 +219,11 @@ export interface ExportConfiguration {
         validateBeforeExport: boolean;
     };
     filters: {
-        nodeTypes: string[];
+        nodeTypes: string;
         excludeSystemNodes: boolean;
         includeHiddenEdges: boolean;
     };
 }
-/**
- * Performance metrics for monitoring
- */
 export interface PerformanceMetrics {
     generationStats: {
         totalGenerations: number;
@@ -290,24 +242,18 @@ export interface PerformanceMetrics {
         commonValidationErrors: Record<string, number>;
     };
 }
-/**
- * Security constraints for node generation
- */
 export interface SecurityConstraints {
     maxNodesPerRequest: number;
     maxPromptLength: number;
     maxGenerationTimeMs: number;
-    allowedNodeTypes: string[];
-    restrictedOperations: string[];
+    allowedNodeTypes: string;
+    restrictedOperations: string;
     validationRules: {
         requireInputValidation: boolean;
         sanitizeUserContent: boolean;
         enforceRateLimiting: boolean;
     };
 }
-/**
- * Default values and constants
- */
 export declare const ERROR_CODES: {
     readonly INVALID_INPUT: "INVALID_INPUT";
     readonly GENERATION_FAILED: "GENERATION_FAILED";

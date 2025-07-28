@@ -16,17 +16,17 @@ describe('ClassificationHandlingRulesService', () => {
   let service: ClassificationHandlingRulesService;
   let mockContext: OperationContext;
   beforeEach(() => {
-    service = new ClassificationHandlingRulesService();
-    mockContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session123',
-      purpose: 'data analysis',
-      environment: 'production',
-      timestamp: new Date(),
-      source: '192.168.1.100',
-      requestId: 'req123',
-    };
+  service = new ClassificationHandlingRulesService();
+  mockContext = {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session123',
+  purpose: 'data analysis',
+  environment: 'production',
+  timestamp: new Date(),
+  source: '192.168.1.100',
+  requestId: 'req123',
+};
   });
   describe('Default Handling Requirements', () => {
     it('should initialize handling requirements for all classification levels', () => {
@@ -93,10 +93,10 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.errors).toHaveLength(0);
     });
     it('should validate internal data handling in production environment', async () => {
-      const productionContext = {
-        ...mockContext,
-        environment: 'production',
-      };
+  const productionContext = {
+  ...mockContext,
+  environment: 'production',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
@@ -107,10 +107,10 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.errors).toHaveLength(0);
     });
     it('should detect violations for internal data in development environment', async () => {
-      const devContext = {
-        ...mockContext,
-        environment: 'development',
-      };
+  const devContext = {
+  ...mockContext,
+  environment: 'development',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
@@ -137,13 +137,12 @@ describe('ClassificationHandlingRulesService', () => {
           error.includes('encryption') || 
           error.includes('approved')
         )).toBe(true);
-      }
     });
     it('should validate restricted data handling with maximum security', async () => {
-      const isolatedContext = {
-        ...mockContext,
-        environment: 'isolated_production',
-      };
+  const isolatedContext = {
+  ...mockContext,
+  environment: 'isolated_production',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'RESTRICTED',
@@ -174,21 +173,21 @@ describe('ClassificationHandlingRulesService', () => {
       expect(confidentialRules.length).toBeGreaterThan(0);
     });
     it('should allow adding custom handling rules', () => {
-      const customRule: HandlingRule = {
-        id: 'custom-rule-1',
-        name: 'Custom Storage Rule',
-        description: 'Custom rule for special data handling',
-        classification: 'INTERNAL',
-        ruleType: 'STORAGE',
-        requirements: {,
-          customEncryption: true,
-          specialLocation: 'custom_datacenter',
-        },
-        mandatory: true,
+  const customRule: HandlingRule = {,
+  id: 'custom-rule-1',
+  name: 'Custom Storage Rule',
+  description: 'Custom rule for special data handling',
+  classification: 'INTERNAL',
+  ruleType: 'STORAGE',
+  requirements: {,
+  customEncryption: true,
+  specialLocation: 'custom_datacenter',
+},
+  mandatory: true,
         priority: 2,
         effectiveDate: new Date(),
-        complianceFramework: ['CUSTOM_FRAMEWORK'],
-      };
+        complianceFramework: ['CUSTOM_FRAMEWORK'];
+  };
       service.addHandlingRule(customRule);
       const internalRules = service.getHandlingRules('INTERNAL');
       const addedRule = internalRules.find(rule => rule.id === 'custom-rule-1');
@@ -196,26 +195,25 @@ describe('ClassificationHandlingRulesService', () => {
       expect(addedRule?.name).toBe('Custom Storage Rule');
     });
     it('should allow updating handling requirements', () => {
-      const originalReqs = service.getHandlingRequirements('INTERNAL');
-      expect(originalReqs).toBeDefined();
-      const updatedReqs: HandlingRequirements = {
-        ...originalReqs!,
-        storage: {,
-          ...originalReqs!.storage,
-          keyRotationDays: 45 // Change from default 90 days,
-        }
-      };
+  const originalReqs = service.getHandlingRequirements('INTERNAL');
+  expect(originalReqs).toBeDefined();
+  const updatedReqs: HandlingRequirements = {,
+  ...originalReqs!,
+  storage: {,
+  ...originalReqs!.storage,
+  keyRotationDays: 45 // Change from default 90 days,
+};
       service.updateHandlingRequirements('INTERNAL', updatedReqs);
       const newReqs = service.getHandlingRequirements('INTERNAL');
       expect(newReqs?.storage.keyRotationDays).toBe(45);
     });
   });
   describe('Violation Detection and Recording', () => {
-    it('should record violations when validation fails', async () => {
-      const devContext = {
-        ...mockContext,
-        environment: 'development',
-      };
+  it('should record violations when validation fails', async () => {
+  const devContext = {
+  ...mockContext,
+  environment: 'development',
+};
       await service.validateDataHandling('data123', 'CONFIDENTIAL', 'read', devContext);
       const violations = service.getViolations();
       const confidentialViolations = service.getViolations('CONFIDENTIAL');
@@ -227,10 +225,10 @@ describe('ClassificationHandlingRulesService', () => {
       expect(violation.status).toBe('OPEN');
     });
     it('should assign appropriate severity levels by classification', async () => {
-      const devContext = {
-        ...mockContext,
-        environment: 'development',
-      };
+  const devContext = {
+  ...mockContext,
+  environment: 'development',
+};
       // Generate violations for different classifications
       await service.validateDataHandling('data1', 'INTERNAL', 'read', devContext);
       await service.validateDataHandling('data2', 'CONFIDENTIAL', 'read', devContext);
@@ -240,19 +238,16 @@ describe('ClassificationHandlingRulesService', () => {
       const restrictedViolations = service.getViolations('RESTRICTED');
       if (internalViolations.length > 0) {
         expect(internalViolations[0].severity).toBe('MEDIUM');
-      }
       if (confidentialViolations.length > 0) {
         expect(confidentialViolations[0].severity).toBe('HIGH');
-      }
       if (restrictedViolations.length > 0) {
         expect(restrictedViolations[0].severity).toBe('CRITICAL');
-      }
     });
     it('should provide remediation steps for violations', async () => {
-      const devContext = {
-        ...mockContext,
-        environment: 'development',
-      };
+  const devContext = {
+  ...mockContext,
+  environment: 'development',
+};
       await service.validateDataHandling('data123', 'INTERNAL', 'read', devContext);
       const violations = service.getViolations('INTERNAL');
       if (violations.length > 0) {
@@ -260,7 +255,6 @@ describe('ClassificationHandlingRulesService', () => {
         expect(violation.remediation).toBeDefined();
         expect(Array.isArray(violation.remediation)).toBe(true);
         expect(violation.remediation.length).toBeGreaterThan(0);
-      }
     });
   });
   describe('Compliance Scoring', () => {
@@ -281,11 +275,11 @@ describe('ClassificationHandlingRulesService', () => {
     });
   });
   describe('Requirement Validation Components', () => {
-    it('should validate storage requirements appropriately', async () => {
-      const devContext = {
-        ...mockContext,
-        environment: 'development',
-      };
+  it('should validate storage requirements appropriately', async () => {
+  const devContext = {
+  ...mockContext,
+  environment: 'development',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
@@ -306,10 +300,10 @@ describe('ClassificationHandlingRulesService', () => {
       expect(result.warnings.length >= 0).toBe(true);
     });
     it('should validate processing requirements appropriately', async () => {
-      const unsafeContext = {
-        ...mockContext,
-        environment: 'staging',
-      };
+  const unsafeContext = {
+  ...mockContext,
+  environment: 'staging',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'RESTRICTED',
@@ -332,21 +326,21 @@ describe('ClassificationHandlingRulesService', () => {
     });
   });
   describe('Error Handling', () => {
-    it('should handle invalid classification levels gracefully', async () => {
-      const result = await service.validateDataHandling(;);
-        'data123',
-        'INVALID' as DataClassificationLevel,
-        'read',
-        mockContext
-      );
-      expect(result.valid).toBe(false);
-      expect(result.errors).toContain('No handling requirements found for classification: INVALID');
-    });
+  it('should handle invalid classification levels gracefully', async () => {
+  const result = await service.validateDataHandling(;);
+  'data123',
+  'INVALID' as DataClassificationLevel,
+  'read',
+  mockContext
+  );
+  expect(result.valid).toBe(false);
+  expect(result.errors).toContain('No handling requirements found for classification: INVALID');
+});
     it('should handle missing context gracefully', async () => {
-      const incompleteContext = {
-        ...mockContext,
-        environment: '',
-      };
+  const incompleteContext = {
+  ...mockContext,
+  environment: '',
+};
       const result = await service.validateDataHandling(;);
         'data123',
         'INTERNAL',
@@ -380,7 +374,7 @@ describe('ClassificationHandlingRulesService', () => {
       const mandatoryRules = allRules.filter(rule => rule.mandatory);
       expect(mandatoryRules.length).toBeGreaterThan(0);
       mandatoryRules.forEach(rule => {)
-        expect(rule.priority).toBeGreaterThan(0);
+  expect(rule.priority).toBeGreaterThan(0);
         expect(rule.effectiveDate).toBeInstanceOf(Date);
         expect(rule.complianceFramework.length).toBeGreaterThan(0);
       });

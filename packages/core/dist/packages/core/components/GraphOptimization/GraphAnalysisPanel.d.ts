@@ -4,8 +4,8 @@
 import React from 'react';
 import { Node, Edge } from 'reactflow';
 interface GraphAnalysisPanelProps {
-    nodes: Node[];
-    edges: Edge[];
+    nodes: Node;
+    edges: Edge;
     isOpen: boolean;
     onClose: () => void;
 }

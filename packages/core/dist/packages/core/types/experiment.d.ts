@@ -49,24 +49,24 @@ export interface Experiment {
     type: ExperimentType;
     hypothesis: string;
     description?: string;
-    variants: ExperimentVariant[];
+    variants: ExperimentVariant;
     trafficAllocation: TrafficAllocation;
-    metrics: ExperimentMetric[];
+    metrics: ExperimentMetric;
     status: ExperimentStatus;
     schedule: ExperimentSchedule;
-    tags: string[];
+    tags: string;
     createdBy: string;
     createdAt: Date;
     updatedAt: Date;
-    targetSegments?: ExperimentSegment[];
-    exclusionRules?: ExperimentExclusion[];
+    targetSegments?: ExperimentSegment;
+    exclusionRules?: ExperimentExclusion;
     factorialDesign?: FactorialDesign;
     rolloutStrategy?: RolloutStrategy;
 }
 export interface ExperimentSegment {
     id: string;
     name: string;
-    filters: SegmentFilter[];
+    filters: SegmentFilter;
     operator: 'AND' | 'OR';
 }
 export interface SegmentFilter {
@@ -76,16 +76,16 @@ export interface SegmentFilter {
 }
 export interface ExperimentExclusion {
     type: 'user' | 'session' | 'segment';
-    identifiers: string[];
+    identifiers: string;
     reason: string;
 }
 export interface FactorialDesign {
-    factors: Factor[];
-    designMatrix: DesignCell[];
+    factors: Factor;
+    designMatrix: DesignCell;
 }
 export interface Factor {
     name: string;
-    levels: string[];
+    levels: string;
 }
 export interface DesignCell {
     id: string;
@@ -94,7 +94,7 @@ export interface DesignCell {
 }
 export interface RolloutStrategy {
     type: 'immediate' | 'gradual';
-    stages?: RolloutStage[];
+    stages?: RolloutStage;
 }
 export interface RolloutStage {
     percentage: number;
@@ -135,14 +135,14 @@ export interface AssignmentResponse {
 export interface ExperimentResults {
     experimentId: string;
     calculatedAt: Date;
-    variants: VariantResults[];
+    variants: VariantResults;
     statistical: StatisticalResults;
-    segments: SegmentResults[];
-    insights: ExperimentInsight[];
+    segments: SegmentResults;
+    insights: ExperimentInsight;
 }
 export interface VariantResults {
     variantId: string;
-    metrics: MetricResult[];
+    metrics: MetricResult;
     sampleSize: number;
     conversionRate?: number;
     averageLatency?: number;
@@ -173,7 +173,7 @@ export interface StatisticalResults {
 }
 export interface SegmentResults {
     segment: ExperimentSegment;
-    variants: VariantResults[];
+    variants: VariantResults;
     sampleSize: number;
     significance: boolean;
 }
@@ -183,7 +183,7 @@ export interface ExperimentInsight {
     description: string;
     severity: 'low' | 'medium' | 'high';
     actionable: boolean;
-    recommendations?: string[];
+    recommendations?: string;
     data?: Record<string, unknown>;
 }
 export interface ExperimentTemplate {
@@ -193,9 +193,9 @@ export interface ExperimentTemplate {
     category: string;
     type: ExperimentType;
     variants: Partial<ExperimentVariant>[];
-    metrics: ExperimentMetric[];
+    metrics: ExperimentMetric;
     defaultAllocation: TrafficAllocation;
-    tags: string[];
+    tags: string;
     successRate: number;
     averageUplift: number;
     timesUsed: number;
@@ -207,11 +207,11 @@ export interface KnowledgeBaseEntry {
     experimentId: string;
     title: string;
     summary: string;
-    insights: string[];
-    learnings: string[];
-    recommendations: string[];
+    insights: string;
+    learnings: string;
+    recommendations: string;
     category: string;
-    tags: string[];
+    tags: string;
     impact: 'low' | 'medium' | 'high';
     confidence: number;
     createdAt: Date;
@@ -241,16 +241,20 @@ export interface AllocationServiceConfig {
     };
 }
 export declare class ExperimentError extends Error {
+    constructor();
+    message: string;
     code: string;
     experimentId?: string;
     details?: Record<string, unknown>;
-    constructor(message: string, code: string, experimentId?: string, details?: Record<string, unknown>);
+    super(message: any): any;
 }
 export declare class AllocationError extends Error {
+    constructor();
+    message: string;
     code: string;
     userId?: string;
     experimentId?: string;
-    constructor(message: string, code: string, userId?: string, experimentId?: string);
+    super(message: any): any;
 }
 export type ExperimentEventType = 'experiment_created' | 'experiment_started' | 'experiment_paused' | 'experiment_resumed' | 'experiment_completed' | 'variant_assigned' | 'winner_detected' | 'rollout_stage_completed';
 export interface ExperimentEvent {

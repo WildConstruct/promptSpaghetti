@@ -50,7 +50,7 @@ describe('SecurityRiskScoringEngine', () => {
         temporal_scoring_enabled: true,
         environmental_scoring_enabled: true,
         composite_scoring_enabled: true
-      },
+  }
       threat_prioritization: {
         priority_matrix_enabled: true,
         business_impact_weighting: true,
@@ -58,7 +58,7 @@ describe('SecurityRiskScoringEngine', () => {
         threat_intelligence_integration: true,
         dynamic_prioritization: true,
         contextual_prioritization: true
-      },
+  }
       risk_factors: {
         vulnerability_severity: true,
         asset_criticality: true,
@@ -67,7 +67,7 @@ describe('SecurityRiskScoringEngine', () => {
         business_impact: true,
         remediation_complexity: true,
         exposure_metrics: true
-      },
+  }
       scoring_models: {
         quantitative_models_enabled: true,
         qualitative_models_enabled: true,
@@ -75,7 +75,7 @@ describe('SecurityRiskScoringEngine', () => {
         industry_benchmarking: true,
         peer_comparison: true,
         historical_analysis: true
-      },
+  }
       automation_settings: {
         real_time_scoring: true,
         automated_prioritization: true,
@@ -83,7 +83,7 @@ describe('SecurityRiskScoringEngine', () => {
         escalation_automation: true,
         dashboard_integration: true,
         reporting_automation: true
-      },
+  }
       integration_settings: {
         threat_intelligence_feeds: true,
         vulnerability_scanners: true,
@@ -105,7 +105,7 @@ describe('SecurityRiskScoringEngine', () => {
         identification_method: 'automated',
         source_systems: ['vulnerability_scanner', 'penetration_test'],
         confidence_level: 0.95
-      },
+  }
       vulnerability_details: {
         cve_id: 'CVE-2024-12345',
         cvss_base_score: 9.8,
@@ -118,14 +118,14 @@ describe('SecurityRiskScoringEngine', () => {
           exploit_maturity: 'functional',
           public_exploits_available: true,
           weaponization_level: 'high'
-        },
+  }
         patch_information: {
           patch_available: true,
           patch_complexity: 'medium',
           estimated_patch_time_hours: 24,
           testing_requirements: 'full_regression'
         }
-      },
+  }
       asset_context: {
         affected_assets: [
           {
@@ -146,7 +146,7 @@ describe('SecurityRiskScoringEngine', () => {
           reputation_damage_level: 'high',
           regulatory_impact: 'significant'
         }
-      },
+  }
       threat_landscape: {
         active_campaigns: [
           {
@@ -381,7 +381,7 @@ describe('SecurityRiskScoringEngine', () => {
         time_range: {
           start_date: Date.now() - 86400000 * 7,
           end_date: Date.now()
-        },
+  }
         include_trends: true,
         include_recommendations: true
       });
@@ -561,7 +561,7 @@ describe('SecurityRiskScoringEngine', () => {
         engine.scoreSecurityRisk({
           ...sampleRiskData,
           risk_name: `Risk ${i + 1}`
-        })
+  }
       );
 
       const scoredRisks = await Promise.all(promises);

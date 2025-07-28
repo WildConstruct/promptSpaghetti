@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { VerificationThresholdService, VerificationContext, ThresholdConfig } from '../services/VerificationThresholdService';
 
+}
 interface AssessmentRequest {
   requestedAction?: string;
   deviceFingerprint?: string;
@@ -11,15 +12,19 @@ interface AssessmentRequest {
     country?: string;
     city?: string;
     timezone?: string;
+}
   };
 }
 
+}
 interface VerificationCompletionRequest {
   level: string;
   success: boolean;
   method?: string;
 }
+}
 
+}
 interface ThresholdConfigUpdateRequest {
   lowRisk?: number;
   mediumRisk?: number;
@@ -27,6 +32,7 @@ interface ThresholdConfigUpdateRequest {
   criticalRisk?: number;
   weights?: Partial<ThresholdConfig['weights']>;
   actionThresholds?: Partial<ThresholdConfig['actionThresholds']>;
+}
 }
 
 export async function verificationThresholdRoutes(
@@ -215,14 +221,14 @@ export async function verificationThresholdRoutes(
           verification_rate: Math.round(verificationRate * 100) / 100,
           avg_risk_score: statistics.avg_risk_score ? 
             Math.round(parseFloat(statistics.avg_risk_score as string) * 100) / 100 : 0
-        },
+  }
         summary: {
           totalAssessments,
           verificationsRequired,
           verificationRate: `${Math.round(verificationRate * 100)}%`,
           averageRiskScore: statistics.avg_risk_score ? 
             Math.round(parseFloat(statistics.avg_risk_score as string)) : 0
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -359,7 +365,7 @@ export async function verificationThresholdRoutes(
           limit,
           offset,
           hasMore: assessments.rows.length === limit
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -393,17 +399,17 @@ export async function verificationThresholdRoutes(
           configurationValid: configValid ? 'ok' : 'invalid_thresholds',
           databaseConnection: 'connected', // Assume connected if we got this far
           redisConnection: 'connected'
-        },
+  }
         configuration: {
           thresholds: {
             low: config.lowRisk,
             medium: config.mediumRisk,
             high: config.highRisk,
             critical: config.criticalRisk
-          },
+  }
           weightsConfigured: Object.keys(config.weights).length > 0,
           actionThresholdsCount: Object.keys(config.actionThresholds).length
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -434,22 +440,22 @@ export async function verificationThresholdRoutes(
           name: 'Device Trust',
           description: 'Evaluates device familiarity based on login history',
           weight: '25%'
-        },
+  }
         {
           name: 'Location Risk',
           description: 'Assesses geographic location against historical patterns',
           weight: '20%'
-        },
+  }
         {
           name: 'Behavior Anomalies',
           description: 'Detects unusual access patterns and timing',
           weight: '25%'
-        },
+  }
         {
           name: 'Time Factors',
           description: 'Evaluates off-hours and weekend access patterns',
           weight: '15%'
-        },
+  }
         {
           name: 'Security Events',
           description: 'Considers recent security incidents and failed attempts',
@@ -461,17 +467,17 @@ export async function verificationThresholdRoutes(
           level: 'none',
           description: 'No additional verification required (low risk)',
           threshold: '0-30'
-        },
+  }
         {
           level: 'email',
           description: 'Email verification required (medium risk)',
           threshold: '31-60'
-        },
+  }
         {
           level: 'totp',
           description: 'TOTP or hardware key required (high risk)',
           threshold: '61-80'
-        },
+  }
         {
           level: 'admin_approval',
           description: 'Manual admin approval required (critical risk)',
@@ -484,31 +490,31 @@ export async function verificationThresholdRoutes(
           method: 'POST',
           description: 'Assess verification requirement for current action',
           auth: 'required'
-        },
+  }
         {
           path: '/verification/complete',
           method: 'POST',
           description: 'Record completion of verification process',
           auth: 'required'
-        },
+  }
         {
           path: '/verification/config',
           method: 'GET/PATCH',
           description: 'Get/update threshold configuration',
           auth: 'admin required'
-        },
+  }
         {
           path: '/verification/statistics',
           method: 'GET',
           description: 'Get verification usage statistics',
           auth: 'security role required'
-        },
+  }
         {
           path: '/verification/history',
           method: 'GET',
           description: 'Get user verification history',
           auth: 'required'
-        },
+  }
         {
           path: '/verification/test',
           method: 'POST',

@@ -22,7 +22,7 @@ jest.mock('seedrandom', () => {
 });
 describe('Runtime Engine - Comprehensive Tests', () => {
   const createContext = (overrides?: Partial<ExecutionContext>): ExecutionContext => ({)
-    variables: {},
+  variables: {},
     seed: 'test-seed',
     ...overrides
   });
@@ -53,7 +53,6 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       for (let i = 0; i < 10; i++) {
         const ctx = createContext({ seed: `seed-${i}` });}
         results.add(node.run(ctx));
-      }
       // With different seeds, we should get at least 2 different results
       expect(results.size).toBeGreaterThanOrEqual(2);
     });
@@ -69,7 +68,6 @@ describe('Runtime Engine - Comprehensive Tests', () => {
         const ctx = createContext({ seed: `seed-${i}` });}
         const result = node.run(ctx);
         results[result as keyof typeof results]++;
-      }
       // A should appear significantly more often than B
       expect(results.A).toBeGreaterThan(results.B);
     });
@@ -107,7 +105,6 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       const results = new Set();
       for (let i = 0; i < 10; i++) {
         results.add(node.run(createContext({ seed: `seed-${i}` })));}
-      }
       expect(results.size).toBe(1);
       expect(results.has('B')).toBe(true);
     });
@@ -161,10 +158,10 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       expect(node.run()).toBe(multiline);
     });
     it('handles special characters', () => {
-      const special = 'Special: \t\n\r"\'\\';
-      const node = new OutputNode('o1', special);
-      expect(node.run()).toBe(special);
-    });
+  const special = 'Special: \t\n\r"\'\\';
+  const node = new OutputNode('o1', special);
+  expect(node.run()).toBe(special);
+});
     it('maintains node id correctly', () => {
       const node = new OutputNode('output-id', 'test');
       expect(node.id).toBe('output-id');
@@ -222,8 +219,8 @@ describe('Runtime Engine - Comprehensive Tests', () => {
         object: { nested: 'value' },
         array: [1, 2, 3],
         null: null,
-        undefined: undefined,
-      };
+        undefined: undefined;
+  };
       const ctx = createContext({ variables: { defaultText: 'Default' } });
       expect(new IncludeNode('inc1', 'number', lookup as any).run(ctx)).toBe('Default');
       expect(new IncludeNode('inc2', 'boolean', lookup as any).run(ctx)).toBe('Default');
@@ -233,10 +230,10 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       expect(new IncludeNode('inc6', 'undefined', lookup as any).run(ctx)).toBe('Default');
     });
     it('only returns string values from lookup', () => {
-      const lookup = {
-        valid: 'string value',
-        invalid: 123,
-      };
+  const lookup = {
+  valid: 'string value',
+  invalid: 123,
+};
       const node1 = new IncludeNode('inc1', 'valid', lookup as any);
       const node2 = new IncludeNode('inc2', 'invalid', lookup as any);
       const ctx = createContext();
@@ -366,14 +363,13 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       expect(node.run(ctx)).toBeUndefined();
     });
     it('validates variable names', () => {
-      const ctx = createContext({)
-        variables: {,
-          valid: 'value',
-          '__proto__': 'dangerous',
-          'constructor': 'dangerous',
-          'prototype': 'dangerous'
-        }
-      });
+  const ctx = createContext({)
+  variables: {,
+  valid: 'value',
+  '__proto__': 'dangerous',
+  'constructor': 'dangerous',
+  'prototype': 'dangerous',
+});
       expect(new GetVariableNode('get1', 'valid').run(ctx)).toBe('value');
       expect(new GetVariableNode('get2', '__proto__').run(ctx)).toBeUndefined();
       expect(new GetVariableNode('get3', 'constructor').run(ctx)).toBeUndefined();
@@ -389,15 +385,14 @@ describe('Runtime Engine - Comprehensive Tests', () => {
     });
     it('handles all variable types', () => {
       const ctx = createContext({)
-        variables: {,
-          str: 'string',
+  variables: {,
+  str: 'string',
           num: 123,
           bool: true,
           null: null,
           undef: undefined,
           arr: [1, 2, 3],
           obj: { nested: 'value' }
-        }
       });
       expect(new GetVariableNode('get1', 'str').run(ctx)).toBe('string');
       expect(new GetVariableNode('get2', 'num').run(ctx)).toBe(123);
@@ -413,40 +408,36 @@ describe('Runtime Engine - Comprehensive Tests', () => {
     });
   });
   describe('RuntimeNode base class', () => {
-    class TestNode extends RuntimeNode<string> {
-      constructor(id: string, private value: string) {
-        super(id);
-      }
-      run(ctx: ExecutionContext): string {
-        return this.value;
-      }
-    }
-    it('stores node id correctly', () => {
-      const node = new TestNode('test-id', 'value');
-      expect(node.id).toBe('test-id');
-    });
+  class TestNode extends RuntimeNode<string> {
+  constructor(id: string, private value: string) {,
+  super(id);
+  run(ctx: ExecutionContext): string {,
+  return this.value;
+  it('stores node id correctly', () => {
+  const node = new TestNode('test-id', 'value');
+  expect(node.id).toBe('test-id');
+});
     it('implements abstract run method', () => {
       const node = new TestNode('test-id', 'test-value');
       const ctx = createContext();
       expect(node.run(ctx)).toBe('test-value');
     });
     it('can be extended with async run method', async () => {
-      class AsyncTestNode extends RuntimeNode<string> {
-        async run(ctx: ExecutionContext): Promise<string> {
-          return Promise.resolve('async-value');
-        }
-      }
-      const node = new AsyncTestNode('async-id');
-      const ctx = createContext();
-      await expect(node.run(ctx)).resolves.toBe('async-value');
-    });
+  class AsyncTestNode extends RuntimeNode<string> {
+  async run(ctx: ExecutionContext): Promise<string> {,
+  return Promise.resolve('async-value');
+  const node = new AsyncTestNode('async-id');
+  const ctx = createContext();
+  await expect(node.run(ctx)).resolves.toBe('async-value');
+});
   });
   describe('Edge cases and error handling', () => {
     it('handles very large numbers of choices', () => {
       const choices = Array.from({ length: 1000 }, (_, i) => ({)
-        value: `Choice${i}`,}
-        weight: 1,
-      }));
+  value: `Choice${i}`}
+},
+  weight: 1;
+  }));
       const node = new WeightedChoiceNode('w1', choices);
       const ctx = createContext();
       const result = node.run(ctx);
@@ -458,17 +449,13 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       expect(node.run()).toBe(longString);
     });
     it('handles deeply nested objects in SetVariable', () => {
-      const deepObject = {
-        level1: {,
-          level2: {,
-            level3: {,
-              level4: {,
-                value: 'deep',
-              }
-            }
-          }
-        }
-      };
+  const deepObject = {
+  level1: {,
+  level2: {,
+  level3: {,
+  level4: {,
+  value: 'deep',
+};
       const node = new SetVariableNode('set1', 'deep', deepObject);
       const ctx = createContext();
       node.run(ctx);
@@ -505,34 +492,33 @@ describe('Runtime Engine - Comprehensive Tests', () => {
       expect(typeof result).toBe('string');
     });
     it('ConcatNode always returns string', () => {
-      const node = new ConcatNode('c1', ['a', 'b']);
-      const result: string = node.run();
-      expect(typeof result).toBe('string');
-    });
+  const node = new ConcatNode('c1', ['a', 'b']);
+  const result: string = node.run();
+  expect(typeof result).toBe('string');
+});
     it('OutputNode always returns string', () => {
-      const node = new OutputNode('o1', 'test');
-      const result: string = node.run();
-      expect(typeof result).toBe('string');
-    });
+  const node = new OutputNode('o1', 'test');
+  const result: string = node.run();
+  expect(typeof result).toBe('string');
+});
     it('IncludeNode always returns string', () => {
       const node = new IncludeNode('i1', 'key', { key: 'value' });
       const result: string = node.run(createContext());
       expect(typeof result).toBe('string');
     });
     it('SetVariableNode always returns void', () => {
-      const node = new SetVariableNode('s1', 'key', 'value');
-      const result: void = node.run(createContext());
-      expect(result).toBeUndefined();
-    });
+  const node = new SetVariableNode('s1', 'key', 'value');
+  const result: void = node.run(createContext());
+  expect(result).toBeUndefined();
+});
     it('GetVariableNode can return any type', () => {
       const ctx = createContext({)
-        variables: {,
-          str: 'string',
+  variables: {,
+  str: 'string',
           num: 123,
           bool: true,
           obj: { a: 1 },
           arr: [1, 2, 3]
-        }
       });
       expect(new GetVariableNode('g1', 'str').run(ctx)).toBe('string');
       expect(new GetVariableNode('g2', 'num').run(ctx)).toBe(123);

@@ -7,7 +7,7 @@ export interface AnthropicAgentConfig {
     retryTemperatureReduction: number;
     useXmlFormatting: boolean;
     stopSequences?: string[];
-}
+
 export interface ClaudeGenerationRequest {
     purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
@@ -18,7 +18,7 @@ export interface ClaudeGenerationRequest {
     style?: 'creative' | 'logical' | 'balanced';
     domain?: string;
     userContext?: string;
-}
+
 export interface ClaudeGenerationResult {
     success: boolean;
     graph?: string;
@@ -32,7 +32,7 @@ export interface ClaudeGenerationResult {
         tokenCount: number;
         generationTime: number;
     };
-}
+
 export declare class AnthropicGraphAgent {
     private config;
     private baseSystemPrompt;
@@ -61,7 +61,6 @@ export declare class AnthropicGraphAgent {
      * Generate mock Claude response with reasoning
      */
     private generateClaudeMockResponse;
-}
 /**
  * Default configuration for Anthropic agent
  */
@@ -69,8 +68,7 @@ export declare const defaultAnthropicConfig: AnthropicAgentConfig;
 /**
  * Utility function to create and use Anthropic agent
  */
-export declare function generateGraphWithClaude()
-  request: ClaudeGenerationRequest,
+export declare function generateGraphWithClaude(request: ClaudeGenerationRequest,)
   config?: Partial<AnthropicAgentConfig>
 ): Promise<ClaudeGenerationResult>;
 //# sourceMappingURL=anthropic-agent.d.ts.map

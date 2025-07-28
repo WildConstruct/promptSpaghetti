@@ -22,6 +22,7 @@ import {
   PlacementCampaign
 } from '../../../../packages/core/types/PlacementTypes';
 
+}
 export interface AnalyticsConfig {
   metricsCalculationInterval: number; // minutes
   insightGenerationInterval: number; // hours
@@ -29,7 +30,9 @@ export interface AnalyticsConfig {
   performanceBaselineWindow: number; // days
   retentionPeriod: number; // days
 }
+}
 
+}
 export interface PerformanceBaselineData {
   slotId: string;
   baselineMetrics: {
@@ -37,11 +40,13 @@ export interface PerformanceBaselineData {
     averageCTR: number;
     averageConversions: number;
     averageRevenue: number;
+}
   };
   calculatedAt: Date;
   sampleSize: number;
 }
 
+}
 export interface AnomalyDetectionResult {
   type: 'performance_drop' | 'unusual_spike' | 'trend_change';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -50,6 +55,7 @@ export interface AnomalyDetectionResult {
   detectedAt: Date;
   confidence: number;
   suggestions: string[];
+}
 }
 
 export class PlacementAnalyticsService {
@@ -85,6 +91,7 @@ export class PlacementAnalyticsService {
     slotId: string, 
     period: MetricsPeriod
   ): Promise<PlacementSlotMetrics> {
+
     console.log(`📊 Calculating slot metrics for ${slotId}`);
 
     const cacheKey = `slot-metrics-${slotId}-${period.startDate.getTime()}-${period.endDate.getTime()}`;
@@ -113,6 +120,7 @@ export class PlacementAnalyticsService {
     placementId: string,
     period: MetricsPeriod
   ): Promise<ContentPlacementMetrics> {
+
     console.log(`📊 Calculating placement metrics for ${placementId}`);
 
     const metrics = await this.computePlacementMetrics(placementId, period);
@@ -128,6 +136,7 @@ export class PlacementAnalyticsService {
     campaignId: string,
     period: MetricsPeriod
   ): Promise<CampaignMetrics> {
+
     console.log(`📊 Calculating campaign metrics for ${campaignId}`);
 
     const metrics = await this.computeCampaignMetrics(campaignId, period);
@@ -140,6 +149,7 @@ export class PlacementAnalyticsService {
    * Generate comprehensive placement analytics
    */
   async generateAnalytics(period: MetricsPeriod): Promise<PlacementAnalytics> {
+
     console.log('📈 Generating comprehensive placement analytics');
 
     const [
@@ -189,6 +199,7 @@ export class PlacementAnalyticsService {
    * Calculate performance baselines for slots
    */
   async calculatePerformanceBaselines(): Promise<void> {
+
     console.log('📊 Calculating performance baselines for all slots');
 
     const activeSlots = await this.getActiveSlotIds();
@@ -211,6 +222,7 @@ export class PlacementAnalyticsService {
    * Get performance baseline for a slot
    */
   async getPerformanceBaseline(slotId: string): Promise<PerformanceBaselineData | null> {
+
     // Check cache first
     if (this.baselineCache.has(slotId)) {
       return this.baselineCache.get(slotId);
@@ -246,6 +258,7 @@ export class PlacementAnalyticsService {
    * Detect performance anomalies
    */
   async detectAnomalies(slotId: string, currentMetrics: PlacementSlotMetrics): Promise<AnomalyDetectionResult[]> {
+
     const baseline = await this.getPerformanceBaseline(slotId);
     if (!baseline) return [];
 
@@ -307,6 +320,7 @@ export class PlacementAnalyticsService {
    * Generate performance insights
    */
   async generateInsights(period: MetricsPeriod): Promise<PlacementInsight[]> {
+
     console.log('💡 Generating placement insights');
 
     const insights: PlacementInsight[] = [];
@@ -331,6 +345,7 @@ export class PlacementAnalyticsService {
    * Generate optimization recommendations
    */
   async generateRecommendations(period: MetricsPeriod): Promise<PlacementRecommendation[]> {
+
     console.log('💡 Generating placement recommendations');
 
     const recommendations: PlacementRecommendation[] = [];
@@ -379,6 +394,7 @@ export class PlacementAnalyticsService {
    * Stream real-time updates (placeholder for WebSocket implementation)
    */
   async streamRealTimeUpdates(callback: (data: Record<string, unknown>) => void): Promise<void> {
+
     // This would implement WebSocket streaming of real-time metrics
     console.log('📡 Starting real-time metrics stream');
     
@@ -437,6 +453,7 @@ export class PlacementAnalyticsService {
   // =============================================================================
 
   private async computeSlotMetrics(slotId: string, period: MetricsPeriod): Promise<PlacementSlotMetrics> {
+
     // This would compute actual metrics from impression, click, and conversion data
     // For now, return placeholder data
     return {
@@ -461,6 +478,7 @@ export class PlacementAnalyticsService {
   }
 
   private async computePlacementMetrics(placementId: string, period: MetricsPeriod): Promise<ContentPlacementMetrics> {
+
     // Placeholder implementation
     return {
       placementId,
@@ -483,6 +501,7 @@ export class PlacementAnalyticsService {
   }
 
   private async computeCampaignMetrics(campaignId: string, period: MetricsPeriod): Promise<CampaignMetrics> {
+
     // Placeholder implementation
     return {
       campaignId,
@@ -502,6 +521,7 @@ export class PlacementAnalyticsService {
   }
 
   private async calculateSlotBaseline(slotId: string, _____period: MetricsPeriod): Promise<PerformanceBaselineData> {
+
     // Calculate historical averages
     return {
       slotId,
@@ -510,7 +530,7 @@ export class PlacementAnalyticsService {
         averageCTR: Math.random() * 3 + 2,
         averageConversions: Math.floor(Math.random() * 40) + 10,
         averageRevenue: Math.random() * 800 + 200
-      },
+  }
       calculatedAt: new Date(),
       sampleSize: 30
     };
@@ -557,10 +577,12 @@ export class PlacementAnalyticsService {
   private getSystemLoad(): number { return 65; }
 
   private async calculateAllSlotMetrics(): Promise<void> {
+
     console.log('🔄 Calculating metrics for all active slots');
   }
 
   private async calculateOverallPerformance(_____period: MetricsPeriod): Promise<unknown> {
+
     return {
       totalImpressions: 100000,
       totalClicks: 5000,

@@ -1,9 +1,3 @@
-/**
- * Epic 8.5 - Result Management Store
- *
- * Professional result persistence and management system for film industry workflows.
- * Handles result selection, saving, tagging, rating, and organization.
- */
 import { EnhancedPreviewResult } from '../components/PreviewModal/EnhancedPreviewModal';
 export interface SavedResult extends EnhancedPreviewResult {
     savedAt: Date;
@@ -34,8 +28,8 @@ export interface ResultCollection {
     description?: string;
     createdAt: Date;
     lastModified: Date;
-    resultIds: string[];
-    tags: string[];
+    resultIds: string;
+    tags: string;
     projectInfo?: {
         title?: string;
         director?: string;
@@ -46,18 +40,18 @@ export interface ResultCollection {
     };
 }
 export interface ResultFilter {
-    tags?: string[];
+    tags?: string;
     rating?: {
         min?: number;
         max?: number;
     };
-    contentType?: string[];
+    contentType?: string;
     dateRange?: {
         start?: Date;
         end?: Date;
     };
     collection?: string;
-    status?: string[];
+    status?: string;
     searchText?: string;
 }
 export interface ResultStats {
@@ -70,12 +64,7 @@ export interface ResultStats {
         count: number;
     }>;
     contentTypeDistribution: Record<string, number>;
-    recentActivity: Array<{
-        type: 'save' | 'rate' | 'tag' | 'export' | 'note';
-        timestamp: Date;
-        resultId: string;
-        details?: string;
-    }>;
+    recentActivity: Array<{}, type>;
 }
 interface ResultManagementState {
     savedResults: Record<string, SavedResult>;
@@ -95,38 +84,28 @@ interface ResultManagementState {
     clearSelection: () => void;
     toggleResultSelection: (id: string) => void;
     rateResult: (id: string, rating: number) => void;
-    tagResult: (id: string, tags: string[]) => void;
+    tagResult: (id: string, tags: string) => void;
     addNote: (id: string, note: string) => void;
     updateWorkflowStatus: (id: string, workflow: Partial<SavedResult['workflow']>) => void;
     createCollection: (name: string, description?: string) => string;
     updateCollection: (id: string, updates: Partial<ResultCollection>) => void;
     deleteCollection: (id: string) => void;
-    addToCollection: (resultIds: string[], collectionId: string) => void;
-    removeFromCollection: (resultIds: string[], collectionId: string) => void;
+    addToCollection: (resultIds: string, collectionId: string) => void;
+    removeFromCollection: (resultIds: string, collectionId: string) => void;
     setFilter: (filter: ResultFilter) => void;
     clearFilter: () => void;
     setSorting: (sortBy: ResultManagementState['sortBy'], order: 'asc' | 'desc') => void;
-    searchResults: (query: string) => SavedResult[];
-    bulkUpdateTags: (resultIds: string[], tags: string[]) => void;
-    bulkUpdateWorkflow: (resultIds: string[], workflow: Partial<SavedResult['workflow']>) => void;
-    bulkDelete: (resultIds: string[]) => void;
-    bulkExport: (resultIds: string[], format: string) => Promise<void>;
+    searchResults: (query: string) => SavedResult;
+    bulkUpdateTags: (resultIds: string, tags: string) => void;
+    bulkUpdateWorkflow: (resultIds: string, workflow: Partial<SavedResult['workflow']>) => void;
+    bulkDelete: (resultIds: string) => void;
+    bulkExport: (resultIds: string, format: string) => Promise<void>;
     refreshStats: () => void;
-    getFilteredResults: () => SavedResult[];
-    getResultsByCollection: (collectionId: string) => SavedResult[];
-    getRecentResults: (limit?: number) => SavedResult[];
-    getTopRatedResults: (limit?: number) => SavedResult[];
+    getFilteredResults: () => SavedResult;
+    getResultsByCollection: (collectionId: string) => SavedResult;
+    getRecentResults: (limit?: number) => SavedResult;
+    getTopRatedResults: (limit?: number) => SavedResult;
 }
-export declare const useResultManagementStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ResultManagementState>, "persist"> & {
-    persist: {
-        setOptions: (options: Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>) => void;
-        clearStorage: () => void;
-        rehydrate: () => Promise<void> | void;
-        hasHydrated: () => boolean;
-        onHydrate: (fn: (state: ResultManagementState) => void) => () => void;
-        onFinishHydration: (fn: (state: ResultManagementState) => void) => () => void;
-        getOptions: () => Partial<import("zustand/middleware").PersistOptions<ResultManagementState, ResultManagementState>>;
-    };
-}>;
+export declare const useResultManagementStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ResultManagementState>>;
 export {};
 //# sourceMappingURL=resultManagementStore.d.ts.map

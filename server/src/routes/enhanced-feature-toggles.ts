@@ -111,7 +111,7 @@ const ToggleOperationRequestSchema = z.object({
       )),
       urgencyThreshold: z.enum(['low', 'normal', 'high', 'emergency'])
     })).optional()
-  })
+  }
 });
 
 const ImpactPreviewRequestSchema = z.object({
@@ -207,7 +207,7 @@ export async function enhancedFeatureToggleRoutes(
             reason: result.reason,
             riskScore: result.riskAssessment?.riskScore
           }
-        },
+  }
         severity: 'info'
       });
 
@@ -226,7 +226,7 @@ export async function enhancedFeatureToggleRoutes(
         details: {
           error: error.message,
           stack: error.stack
-        },
+  }
         severity: 'error'
       });
 
@@ -275,7 +275,7 @@ export async function enhancedFeatureToggleRoutes(
           totalTime,
           averageTime: totalTime / toggleKeys.length,
           cacheHitRate: Object.values(results).filter(r => r.cacheHit).length / toggleKeys.length
-        },
+  }
         severity: 'info'
       });
 
@@ -367,7 +367,7 @@ export async function enhancedFeatureToggleRoutes(
           riskScore: z.number(),
           recommendation: z.any(),
           rollbackPlan: z.any().optional()
-        })
+  }
       }),
       response: {
         200: z.object({
@@ -617,10 +617,10 @@ export async function enhancedFeatureToggleRoutes(
               activeOperations: z.number(),
               rollbackPlansActive: z.number(),
               cacheSize: z.number()
-            })
+  }
           }),
           timestamp: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -643,7 +643,7 @@ export async function enhancedFeatureToggleRoutes(
           evaluationService: { status: 'unhealthy' as const, activeEvaluations: 0, cacheStatus: 'error', averageResponseTime: 0 },
           dependencyService: { status: 'unhealthy' as const, activeDependencies: 0, conflictCount: 0, healthScore: 0 },
           integrationService: { status: 'unhealthy' as const, activeOperations: 0, rollbackPlansActive: 0, cacheSize: 0 }
-        },
+  }
         timestamp: new Date().toISOString()
       };
     }
@@ -652,11 +652,13 @@ export async function enhancedFeatureToggleRoutes(
 
 // Helper functions (would be implemented with actual business logic)
 async function hasToggleManagementPermission(user: any, operationType: string): Promise<boolean> {
+
   // Implementation would check user roles and permissions
   return user.roles?.includes('admin') || user.roles?.includes('toggle_manager');
 }
 
 async function getToggleMetrics(toggleId: string, timeRange: string, options: any): Promise<any> {
+
   // Implementation would fetch metrics from metrics collection service
   return {
     toggleId,
@@ -673,6 +675,7 @@ async function getToggleMetrics(toggleId: string, timeRange: string, options: an
 }
 
 async function collectSystemHealth(): Promise<any> {
+
   // Implementation would collect health status from all enhanced services
   return {
     overallStatus: 'healthy' as const,
@@ -682,13 +685,13 @@ async function collectSystemHealth(): Promise<any> {
         activeEvaluations: 15,
         cacheStatus: 'optimal',
         averageResponseTime: 42
-      },
+  }
       dependencyService: {
         status: 'healthy' as const,
         activeDependencies: 127,
         conflictCount: 2,
         healthScore: 92
-      },
+  }
       integrationService: {
         status: 'healthy' as const,
         activeOperations: 8,

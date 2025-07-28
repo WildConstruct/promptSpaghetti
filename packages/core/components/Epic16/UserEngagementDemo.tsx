@@ -36,7 +36,6 @@ export interface UserEngagementDemoProps {
   enableInteractiveTutorials?: boolean;
   className?: string;
 }
-
 export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   userId = 'demo-user-001',
   showFullFeatures = true,
@@ -47,295 +46,278 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [userTutorialProgress, setUserTutorialProgress] = useState<{ [key: string]: TutorialProgress }>({});
   const [activeTab, setActiveTab] = useState('overview');
-  const [achievements, setAchievements] = useState<Milestone[]>([]);
+  const [achievements, setAchievements] = useState<Milestone>([]);
   // Mock tutorials data
-  const mockTutorials: Tutorial[] = [
+  const mockTutorials: Tutorial = [
     {
-      id: 'getting-started-basics',
-      title: 'Getting Started with Template Marketplace',
-      description: 'Learn the basics of browsing, discovering, and using templates from our marketplace.',
-      category: 'getting-started',
-      difficulty: 'beginner',
-      estimatedTime: 15,
-      prerequisites: [],
-      steps: [,
+  id: 'getting-started-basics',
+  title: 'Getting Started with Template Marketplace',
+  description: 'Learn the basics of browsing, discovering, and using templates from our marketplace.',
+  category: 'getting-started',
+  difficulty: 'beginner',
+  estimatedTime: 15,
+  prerequisites: [],
+  steps: [,
+  {
+  id: 'intro',
+  title: 'Welcome to the Marketplace',
+  description: 'Overview of the template marketplace features and benefits',
+  content: '<p>Welcome to our comprehensive template marketplace! Here you\'ll find thousands of professionally crafted templates for all your projects.</p>',
+  type: 'introduction',
+  duration: 120,
+}
         {
-          id: 'intro',
-          title: 'Welcome to the Marketplace',
-          description: 'Overview of the template marketplace features and benefits',
-          content: '<p>Welcome to our comprehensive template marketplace! Here you\'ll find thousands of professionally crafted templates for all your projects.</p>',
-          type: 'introduction',
-          duration: 120,
-        },
+  id: 'browsing',
+  title: 'Browsing Templates',
+  description: 'Learn how to search and filter templates effectively',
+  content: '<p>Use our powerful search and filtering tools to find exactly what you need. You can filter by category, difficulty, price, and popularity.</p>',
+  type: 'demonstration',
+  duration: 180,
+  highlightElements: ['.search-bar', '.filter-panel'],
+  actions: [,
+  {
+  id: 'search-action',
+  type: 'input',
+  selector: '.search-bar',
+  value: 'business proposal',
+  message: 'Try searching for "business proposal"',
+  completed: false,
+}
+            {
+  id: 'filter-action',
+  type: 'click',
+  selector: '.category-filter',
+  message: 'Select a category filter',
+  completed: false];
+  }
         {
-          id: 'browsing',
-          title: 'Browsing Templates',
-          description: 'Learn how to search and filter templates effectively',
-          content: '<p>Use our powerful search and filtering tools to find exactly what you need. You can filter by category, difficulty, price, and popularity.</p>',
-          type: 'demonstration',
-          duration: 180,
-          highlightElements: ['.search-bar', '.filter-panel'],
-          actions: [,
+  id: 'downloading',
+  title: 'Downloading Your First Template',
+  description: 'Learn how to preview and download templates',
+  content: '<p>Before downloading, use the preview feature to see if the template meets your needs. Then click download to add it to your library.</p>',
+  type: 'interaction',
+  duration: 240,
+  actions: [,
+  {
+  id: 'preview-action',
+  type: 'click',
+  selector: '.preview-button',
+  message: 'Click the preview button on any template',
+  completed: false,
+}
             {
-              id: 'search-action',
-              type: 'input',
-              selector: '.search-bar',
-              value: 'business proposal',
-              message: 'Try searching for "business proposal"',
-              completed: false,
-            },
-            {
-              id: 'filter-action',
-              type: 'click',
-              selector: '.category-filter',
-              message: 'Select a category filter',
-              completed: false,
-            }
-          ]
-        },
+  id: 'download-action',
+  type: 'click',
+  selector: '.download-button',
+  message: 'Download the template',
+  completed: false];
+  }
         {
-          id: 'downloading',
-          title: 'Downloading Your First Template',
-          description: 'Learn how to preview and download templates',
-          content: '<p>Before downloading, use the preview feature to see if the template meets your needs. Then click download to add it to your library.</p>',
-          type: 'interaction',
-          duration: 240,
-          actions: [,
-            {
-              id: 'preview-action',
-              type: 'click',
-              selector: '.preview-button',
-              message: 'Click the preview button on any template',
-              completed: false,
-            },
-            {
-              id: 'download-action',
-              type: 'click',
-              selector: '.download-button',
-              message: 'Download the template',
-              completed: false,
-            }
-          ]
-        },
-        {
-          id: 'completion',
-          title: 'Congratulations!',
-          description: 'You\'ve completed the getting started tutorial',
-          content: '<p>Great job! You now know how to browse and download templates. Next, try the template creation tutorial to learn how to build your own.</p>',
-          type: 'completion',
-        }
-      ],
-      completionRewards: {,
-        xp: 200,
-        badge: 'Marketplace Explorer',
-        certificate: 'Getting Started Certificate',
-      },
-      tags: ['beginner', 'basics', 'marketplace'],
+  id: 'completion',
+  title: 'Congratulations!',
+  description: 'You\'ve completed the getting started tutorial',
+  content: '<p>Great job! You now know how to browse and download templates. Next, try the template creation tutorial to learn how to build your own.</p>',
+  type: 'completion'],
+  completionRewards: {,
+  xp: 200,
+  badge: 'Marketplace Explorer',
+  certificate: 'Getting Started Certificate',
+},
+  tags: ['beginner', 'basics', 'marketplace'],
       rating: 4.8,
       completionCount: 1247,
       createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-07-01'),
-    },
+      updatedAt: new Date('2024-07-01');
+  }
     {
-      id: 'template-creation-advanced',
-      title: 'Advanced Template Creation',
-      description: 'Master the art of creating professional templates that users love.',
-      category: 'template-creation',
-      difficulty: 'advanced',
-      estimatedTime: 45,
-      prerequisites: ['getting-started-basics'],
-      steps: [,
+  id: 'template-creation-advanced',
+  title: 'Advanced Template Creation',
+  description: 'Master the art of creating professional templates that users love.',
+  category: 'template-creation',
+  difficulty: 'advanced',
+  estimatedTime: 45,
+  prerequisites: ['getting-started-basics'],
+  steps: [,
+  {
+  id: 'design-principles',
+  title: 'Design Principles',
+  description: 'Learn the fundamental principles of effective template design',
+  content: '<p>Great templates follow key design principles: clarity, consistency, flexibility, and user-friendliness.</p>',
+  type: 'introduction',
+  duration: 300,
+}
         {
-          id: 'design-principles',
-          title: 'Design Principles',
-          description: 'Learn the fundamental principles of effective template design',
-          content: '<p>Great templates follow key design principles: clarity, consistency, flexibility, and user-friendliness.</p>',
-          type: 'introduction',
-          duration: 300,
-        },
+  id: 'advanced-features',
+  title: 'Advanced Template Features',
+  description: 'Implement dynamic content, variables, and conditional logic',
+  content: '<p>Use variables and conditional logic to create templates that adapt to different use cases and data inputs.</p>',
+  type: 'demonstration',
+  duration: 600,
+  tips: [,
+  'Use descriptive variable names',
+  'Test with different data sets',
+  'Provide fallback content for empty variables'
+  ]
+}
         {
-          id: 'advanced-features',
-          title: 'Advanced Template Features',
-          description: 'Implement dynamic content, variables, and conditional logic',
-          content: '<p>Use variables and conditional logic to create templates that adapt to different use cases and data inputs.</p>',
-          type: 'demonstration',
-          duration: 600,
-          tips: [,
-            'Use descriptive variable names',
-            'Test with different data sets',
-            'Provide fallback content for empty variables'
-          ]
-        },
+  id: 'practice-exercise',
+  title: 'Build Your Template',
+  description: 'Create a professional template using advanced features',
+  content: '<p>Now it\'s your turn! Create a template incorporating the principles and features you\'ve learned.</p>',
+  type: 'practice',
+  duration: 1200,
+  requirements: [,
+  'Include at least 3 variables',
+  'Use conditional logic',
+  'Add proper documentation'
+  ]
+}
         {
-          id: 'practice-exercise',
-          title: 'Build Your Template',
-          description: 'Create a professional template using advanced features',
-          content: '<p>Now it\'s your turn! Create a template incorporating the principles and features you\'ve learned.</p>',
-          type: 'practice',
-          duration: 1200,
-          requirements: [,
-            'Include at least 3 variables',
-            'Use conditional logic',
-            'Add proper documentation'
-          ]
-        },
+  id: 'publishing',
+  title: 'Publishing to Marketplace',
+  description: 'Learn how to publish and promote your template',
+  content: '<p>Publishing your template makes it available to the community. Include good descriptions, tags, and examples.</p>',
+  type: 'demonstration',
+  duration: 400,
+}
         {
-          id: 'publishing',
-          title: 'Publishing to Marketplace',
-          description: 'Learn how to publish and promote your template',
-          content: '<p>Publishing your template makes it available to the community. Include good descriptions, tags, and examples.</p>',
-          type: 'demonstration',
-          duration: 400,
-        },
-        {
-          id: 'completion',
-          title: 'Template Master!',
-          description: 'You\'ve mastered advanced template creation',
-          content: '<p>Excellent work! You\'re now ready to create professional-grade templates that will help users worldwide.</p>',
-          type: 'completion',
-        }
-      ],
-      completionRewards: {,
-        xp: 750,
-        badge: 'Template Master',
-        certificate: 'Advanced Template Creation Certificate',
-      },
-      tags: ['advanced', 'creation', 'design', 'publishing'],
+  id: 'completion',
+  title: 'Template Master!',
+  description: 'You\'ve mastered advanced template creation',
+  content: '<p>Excellent work! You\'re now ready to create professional-grade templates that will help users worldwide.</p>',
+  type: 'completion'],
+  completionRewards: {,
+  xp: 750,
+  badge: 'Template Master',
+  certificate: 'Advanced Template Creation Certificate',
+},
+  tags: ['advanced', 'creation', 'design', 'publishing'],
       rating: 4.9,
       completionCount: 342,
       createdAt: new Date('2024-02-15'),
-      updatedAt: new Date('2024-07-10'),
-    },
+      updatedAt: new Date('2024-07-10');
+  }
     {
-      id: 'collaboration-workflows',
-      title: 'Team Collaboration Workflows',
-      description: 'Learn how to collaborate effectively with team members on template projects.',
-      category: 'collaboration',
-      difficulty: 'intermediate',
-      estimatedTime: 30,
-      prerequisites: ['getting-started-basics'],
-      steps: [,
+  id: 'collaboration-workflows',
+  title: 'Team Collaboration Workflows',
+  description: 'Learn how to collaborate effectively with team members on template projects.',
+  category: 'collaboration',
+  difficulty: 'intermediate',
+  estimatedTime: 30,
+  prerequisites: ['getting-started-basics'],
+  steps: [,
+  {
+  id: 'team-setup',
+  title: 'Setting Up Your Team',
+  description: 'Create teams and manage permissions',
+  content: '<p>Organize your team members and set appropriate permissions for different roles and responsibilities.</p>',
+  type: 'demonstration',
+  duration: 360,
+}
         {
-          id: 'team-setup',
-          title: 'Setting Up Your Team',
-          description: 'Create teams and manage permissions',
-          content: '<p>Organize your team members and set appropriate permissions for different roles and responsibilities.</p>',
-          type: 'demonstration',
-          duration: 360,
-        },
-        {
-          id: 'shared-libraries',
-          title: 'Shared Template Libraries',
-          description: 'Create and manage shared template collections',
-          content: '<p>Build shared libraries that your entire team can access and contribute to for consistent branding and messaging.</p>',
-          type: 'interaction',
-          duration: 480,
-          actions: [,
+  id: 'shared-libraries',
+  title: 'Shared Template Libraries',
+  description: 'Create and manage shared template collections',
+  content: '<p>Build shared libraries that your entire team can access and contribute to for consistent branding and messaging.</p>',
+  type: 'interaction',
+  duration: 480,
+  actions: [,
+  {
+  id: 'create-library',
+  type: 'click',
+  selector: '.create-library-button',
+  message: 'Create a new shared library',
+  completed: false,
+}
             {
-              id: 'create-library',
-              type: 'click',
-              selector: '.create-library-button',
-              message: 'Create a new shared library',
-              completed: false,
-            },
-            {
-              id: 'invite-members',
-              type: 'click',
-              selector: '.invite-button',
-              message: 'Invite team members to the library',
-              completed: false,
-            }
-          ]
-        },
+  id: 'invite-members',
+  type: 'click',
+  selector: '.invite-button',
+  message: 'Invite team members to the library',
+  completed: false];
+  }
         {
-          id: 'version-control',
-          title: 'Template Version Control',
-          description: 'Manage template versions and track changes',
-          content: '<p>Use version control features to track changes, maintain history, and collaborate safely on template updates.</p>',
-          type: 'demonstration',
-          duration: 420,
-        },
+  id: 'version-control',
+  title: 'Template Version Control',
+  description: 'Manage template versions and track changes',
+  content: '<p>Use version control features to track changes, maintain history, and collaborate safely on template updates.</p>',
+  type: 'demonstration',
+  duration: 420,
+}
         {
-          id: 'completion',
-          title: 'Collaboration Expert!',
-          description: 'You\'ve mastered team collaboration workflows',
-          content: '<p>Great job! You can now effectively collaborate with team members on template projects.</p>',
-          type: 'completion',
-        }
-      ],
-      completionRewards: {,
-        xp: 500,
-        badge: 'Collaboration Expert',
-        certificate: 'Team Collaboration Certificate',
-      },
-      tags: ['collaboration', 'teams', 'workflow', 'intermediate'],
+  id: 'completion',
+  title: 'Collaboration Expert!',
+  description: 'You\'ve mastered team collaboration workflows',
+  content: '<p>Great job! You can now effectively collaborate with team members on template projects.</p>',
+  type: 'completion'],
+  completionRewards: {,
+  xp: 500,
+  badge: 'Collaboration Expert',
+  certificate: 'Team Collaboration Certificate',
+},
+  tags: ['collaboration', 'teams', 'workflow', 'intermediate'],
       rating: 4.7,
       completionCount: 589,
       createdAt: new Date('2024-03-01'),
-      updatedAt: new Date('2024-07-05'),
-    }
-  ];
+      updatedAt: new Date('2024-07-05')];
   useEffect(() => {
-    // Initialize some mock tutorial progress
-    setUserTutorialProgress({)
-      'getting-started-basics': {
-        tutorialId: 'getting-started-basics',
-        currentStepIndex: 4,
-        completed: true,
-        startedAt: new Date('2024-07-01'),
-        completedAt: new Date('2024-07-01'),
-        timeSpent: 900,
-        stepsCompleted: ['intro', 'browsing', 'downloading', 'completion'],
-        score: 95,
-      },
+  // Initialize some mock tutorial progress
+  setUserTutorialProgress({)
+  'getting-started-basics': {,
+  tutorialId: 'getting-started-basics',
+  currentStepIndex: 4,
+  completed: true,
+  startedAt: new Date('2024-07-01'),
+  completedAt: new Date('2024-07-01'),
+  timeSpent: 900,
+  stepsCompleted: ['intro', 'browsing', 'downloading', 'completion'],
+  score: 95,
+}
       'collaboration-workflows': {
-        tutorialId: 'collaboration-workflows',
-        currentStepIndex: 2,
-        completed: false,
-        startedAt: new Date('2024-07-15'),
-        timeSpent: 620,
-        stepsCompleted: ['team-setup', 'shared-libraries']
-      }
-    });
+  tutorialId: 'collaboration-workflows',
+  currentStepIndex: 2,
+  completed: false,
+  startedAt: new Date('2024-07-15'),
+  timeSpent: 620,
+  stepsCompleted: ['team-setup', 'shared-libraries'],
+});
     // Mock achievements
     setAchievements([)
       {
-        id: 'first-tutorial',
-        title: 'Tutorial Beginner',
-        description: 'Complete your first tutorial',
-        category: 'learning',
-        target: 1,
-        current: 1,
-        completed: true,
-        completedAt: new Date('2024-07-01'),
-        xpReward: 100,
-        badgeReward: 'tutorial-beginner',
-        icon: '📚',
-        tier: 'bronze',
-        rarity: 'common',
-      },
+  id: 'first-tutorial',
+  title: 'Tutorial Beginner',
+  description: 'Complete your first tutorial',
+  category: 'learning',
+  target: 1,
+  current: 1,
+  completed: true,
+  completedAt: new Date('2024-07-01'),
+  xpReward: 100,
+  badgeReward: 'tutorial-beginner',
+  icon: '📚',
+  tier: 'bronze',
+  rarity: 'common',
+}
       {
-        id: 'marketplace-explorer',
-        title: 'Marketplace Explorer',
-        description: 'Download 10 templates from the marketplace',
-        category: 'usage',
-        target: 10,
-        current: 10,
-        completed: true,
-        completedAt: new Date('2024-07-10'),
-        xpReward: 250,
-        badgeReward: 'marketplace-explorer',
-        icon: '🗺️',
-        tier: 'silver',
-        rarity: 'uncommon',
-      }
-    ]);
-  }, []);
+  id: 'marketplace-explorer',
+  title: 'Marketplace Explorer',
+  description: 'Download 10 templates from the marketplace',
+  category: 'usage',
+  target: 10,
+  current: 10,
+  completed: true,
+  completedAt: new Date('2024-07-10'),
+  xpReward: 250,
+  badgeReward: 'marketplace-explorer',
+  icon: '🗺️',
+  tier: 'silver',
+  rarity: 'uncommon']);
+}, []);
   const handleTutorialComplete = (tutorial: Tutorial, progress: TutorialProgress) => {
-    setUserTutorialProgress(prev => ({)
-      ...prev,
-      [tutorial.id]: progress
-    }));
+  setUserTutorialProgress(prev => ({)
+  ...prev,
+  [tutorial.id]: progress,
+}));
     setIsTutorialOpen(false);
     // Simulate achievement unlock
     console.log(`Tutorial completed: ${tutorial.title} with score: ${progress.score}%`);}
@@ -353,19 +335,18 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
     }, 0);
   };
   const getRecommendedTutorials = () => {
-    // Simple recommendation logic: suggest tutorials based on completed ones
-    const completedTutorials = Object.keys(userTutorialProgress).filter(;);
-      id => userTutorialProgress[id].completed
-    );
-    return mockTutorials.filter(tutorial => {)
-      // Don't recommend completed tutorials
-      if (completedTutorials.includes(tutorial.id)) return false;
-      // Check if prerequisites are met
-      if (tutorial.prerequisites && tutorial.prerequisites.length > 0) {
-        return tutorial.prerequisites.every(prereq => completedTutorials.includes(prereq));
-      }
-      return true;
-    }).slice(0, 3);
+  // Simple recommendation logic: suggest tutorials based on completed ones,
+  const completedTutorials = Object.keys(userTutorialProgress).filter(;);
+  id => userTutorialProgress[id].completed
+  );
+  return mockTutorials.filter(tutorial => {)
+  // Don't recommend completed tutorials
+  if (completedTutorials.includes(tutorial.id)) return false;
+  // Check if prerequisites are met
+  if (tutorial.prerequisites && tutorial.prerequisites.length > 0) {
+  return tutorial.prerequisites.every(prereq => completedTutorials.includes(prereq));
+  return true;
+}).slice(0, 3);
   };
   const renderOverview = () => (;);
     <div className="space-y-6">
@@ -467,7 +448,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
                 const tutorial = mockTutorials.find(t => t.id === tutorialId);
                 if (!tutorial) return null;
                 const progressPercentage = (progress.currentStepIndex / tutorial.steps.length) * 100;
-                return ();
+                return;
                   <div key={tutorialId} className="flex items-center gap-3 p-4 border rounded-lg">
                     <div className="flex-1">
                       <h3 className="font-medium">{tutorial.title}</h3>
@@ -496,7 +477,7 @@ export const UserEngagementDemo: React.FC<UserEngagementDemoProps> = ({)
       </Card>
     </div>
   );
-  return ();
+  return;
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Learning & Progress Dashboard</h1>

@@ -22,10 +22,8 @@ interface ConnectionAnnotationsLayerProps {
   canEdit?: boolean;
   showTooltips?: boolean;
   visible?: boolean;
-  onSelectionChange?: (selectedAnnotations: string[]) => void;
-}
-
-export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps> = ({)
+  onSelectionChange?: (selectedAnnotations: string) => void;
+  export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps> = ({,)
   canEdit = true,
   showTooltips = true,
   visible = true,
@@ -47,28 +45,28 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
   const [isCreatingLabel, setIsCreatingLabel] = useState(false);
   const [pendingConnection, setPendingConnection] = useState<string | null>(null);
   const [contextMenu, setContextMenu] = useState<{
-    x: number;
-    y: number;
-    connectionId: string;
-  } | null>(null);
+  x: number;,
+  y: number;
+  connectionId: string;
+} | null>(null);
   const layerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   // Get connection path coordinates for label positioning
   const getConnectionPath = useCallback((connectionId: string) => {
-    const edge = edges.find(e => e.id === connectionId);
-    if (!edge) return null;
-    const sourceNode = reactFlowInstance.getNode(edge.source);
-    const targetNode = reactFlowInstance.getNode(edge.target);
-    if (!sourceNode || !targetNode) return null;
-    // Calculate connection path points
-    const sourceCenter = {
-      x: sourceNode.position.x + (sourceNode.width || 150) / 2,
-      y: sourceNode.position.y + (sourceNode.height || 40) / 2,
-    };
+  const edge = edges.find(e => e.id === connectionId);
+  if (!edge) return null;
+  const sourceNode = reactFlowInstance.getNode(edge.source);
+  const targetNode = reactFlowInstance.getNode(edge.target);
+  if (!sourceNode || !targetNode) return null;
+  // Calculate connection path points
+  const sourceCenter = {
+  x: sourceNode.position.x + (sourceNode.width || 150) / 2,
+  y: sourceNode.position.y + (sourceNode.height || 40) / 2,
+};
     const targetCenter = {
-      x: targetNode.position.x + (targetNode.width || 150) / 2,
-      y: targetNode.position.y + (targetNode.height || 40) / 2,
-    };
+  x: targetNode.position.x + (targetNode.width || 150) / 2,
+  y: targetNode.position.y + (targetNode.height || 40) / 2,
+};
     return {
       source: sourceCenter,
       target: targetCenter,
@@ -79,8 +77,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
   const calculateLabelPosition = useCallback((;);
     connectionId: string,
     positionType: ConnectionLabelPosition,
-    offset: number = 0.5,
-  ) => {
+    offset: number = 0.5) => {,
     const pathData = getConnectionPath(connectionId);
     if (!pathData) return { x: 0, y: 0 };
     const { source, target } = pathData;
@@ -98,7 +95,6 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
       case 'custom':
         t = Math.max(0, Math.min(1, offset));
         break;
-    }
     // Linear interpolation along path
     const x = source.x + (target.x - source.x) * t;
     const y = source.y + (target.y - source.y) * t;
@@ -114,9 +110,10 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
             'middle',
             0.5
           );
-          const newLabel: ConnectionLabelType = {
-            id: `label-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
-            connectionId: action.connectionId,
+          const newLabel: ConnectionLabelType = {,
+  id: `label-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+},
+  connectionId: action.connectionId,
             content: action.content,
             position,
             positionType: 'middle',
@@ -125,29 +122,25 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
             visible: true,
             author: 'Current User',
             timestamp: new Date().toISOString(),
-            lastModified: new Date().toISOString(),
-          };
+            lastModified: new Date().toISOString();
+  };
           addConnectionLabel(newLabel);
-        }
         break;
       case 'update':
         if (action.labelId && action.label) {
-          updateConnectionLabel(action.labelId, action.label);
-        }
-        break;
-      case 'delete':
-        if (action.labelId) {
-          removeConnectionLabel(action.labelId);
-        }
-        break;
-      case 'move':
-        if (action.labelId && action.position) {
-          updateConnectionLabel(action.labelId, {)
-            position: action.position,
-            positionType: 'custom',
-            lastModified: new Date().toISOString(),
-          });
-        }
+  updateConnectionLabel(action.labelId, action.label);
+  break;
+  case 'delete':,
+  if (action.labelId) {
+  removeConnectionLabel(action.labelId);
+  break;
+  case 'move':,
+  if (action.labelId && action.position) {
+  updateConnectionLabel(action.labelId, {)
+  position: action.position,
+  positionType: 'custom',
+  lastModified: new Date().toISOString(),
+});
         break;
       case 'startEdit':
         // Handle edit state if needed
@@ -155,7 +148,6 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
       case 'stopEdit':
         // Handle edit state if needed
         break;
-    }
   }, [
     addConnectionLabel,
     updateConnectionLabel,
@@ -165,26 +157,26 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
   ]);
   // Handle connection right-click for context menu
   const handleConnectionContextMenu = useCallback((e: React.MouseEvent, connectionId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const rect = layerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setContextMenu({)
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      connectionId
-    });
+  e.preventDefault();
+  e.stopPropagation();
+  const rect = layerRef.current?.getBoundingClientRect();
+  if (!rect) return;
+  setContextMenu({)
+  x: e.clientX - rect.left,
+  y: e.clientY - rect.top,
+  connectionId
+});
   }, []);
   // Handle context menu actions
   const handleContextMenuAction = useCallback((action: string, connectionId: string) => {
-    setContextMenu(null);
-    switch (action) {
-      case 'addLabel':
-        handleLabelAction({)
-          type: 'create',
-          connectionId,
-          content: 'New Label',
-        });
+  setContextMenu(null);
+  switch (action) {
+  case 'addLabel':,
+  handleLabelAction({)
+  type: 'create',
+  connectionId,
+  content: 'New Label',
+});
         break;
       case 'highlight':
         setHighlightedConnection(connectionId);
@@ -193,7 +185,6 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
       case 'editStyle':
         // Open style editor (could be implemented as modal)
         break;
-    }
   }, [handleLabelAction]);
   // Close context menu on outside click
   useEffect(() => {
@@ -201,28 +192,24 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
     if (contextMenu) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
-    }
   }, [contextMenu]);
   // Handle keyboard shortcuts
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!canEdit) return;
-      // Ctrl/Cmd + L: Add label to selected connection
-      if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
-        e.preventDefault();
-        if (highlightedConnection) {
-          handleLabelAction({)
-            type: 'create',
-            connectionId: highlightedConnection,
-            content: 'New Label',
-          });
-        }
-      }
+  const handleKeyDown = (e: KeyboardEvent) => {,
+  if (!canEdit) return;
+  // Ctrl/Cmd + L: Add label to selected connection,
+  if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+  e.preventDefault();
+  if (highlightedConnection) {
+  handleLabelAction({)
+  type: 'create',
+  connectionId: highlightedConnection,
+  content: 'New Label',
+});
       // Escape: Clear selection and context menu
       if (e.key === 'Escape') {
         setContextMenu(null);
         setSelectedAnnotations(new Set());
-      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -231,30 +218,29 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
   useEffect(() => {
     if (onSelectionChange) {
       onSelectionChange(Array.from(selectedAnnotations));
-    }
   }, [selectedAnnotations, onSelectionChange]);
   if (!visible) return null;
-  return ();
+  return;
     <div
       ref={layerRef}
       data-testid="connection-annotations-layer"
       style={{
-        position: 'absolute',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 50,
-      }}
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+  zIndex: 50,
+}}
     >
       {/* SVG overlay for connection visual enhancements */}
       <svg
         ref={svgRef}
         style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  pointerEvents: 'none',
+}}
       >
         <defs>
           {/* Gradient definitions for enhanced connections */}
@@ -268,23 +254,20 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
               @keyframes connection-flow {
                 0% { stroke-dashoffset: 0; }
                 100% { stroke-dashoffset: -20; }
-              }
               .connection-animated {
                 animation: connection-flow 2s linear infinite;
-              }
               .connection-highlighted {
                 filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
-              }
             `}
           </style>
         </defs>
         {/* Enhanced connection paths */}
         {edges.map(edge => {)
-          const pathData = getConnectionPath(edge.id);
+  const pathData = getConnectionPath(edge.id);
           const annotation = annotations.connectionAnnotations?.find(a => a.connectionId === edge.id);
           const isHighlighted = highlightedConnection === edge.id;
           if (!pathData || !annotation) return null;
-          return ();
+          return;
             <g key={`enhanced-${edge.id}`}>}
               {/* Enhanced connection line */}
               <path
@@ -296,7 +279,6 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
                   annotation.visualStyle === 'dashed' ? '8 4' :
                   annotation.visualStyle === 'dotted' ? '2 3' :
                   annotation.visualStyle === 'animated' ? '8 4' : 'none'
-                }
                 className={`
                   ${annotation.visualStyle === 'animated' ? 'connection-animated' : ''}
                   ${isHighlighted ? 'connection-highlighted' : ''}
@@ -311,6 +293,7 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
                   points="0,-4 8,0 0,4"
                   fill={annotation.color || '#6b7280'}
                   transform={`translate(${pathData.target.x - 8}, ${pathData.target.y}) rotate(${)}
+  }
                     Math.atan2()
                       pathData.target.y - pathData.source.y,
                       pathData.target.x - pathData.source.x
@@ -339,31 +322,31 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
         <div
           data-testid="connection-context-menu"
           style={{
-            position: 'absolute',
-            left: contextMenu.x,
-            top: contextMenu.y,
-            background: 'white',
-            border: '1px solid #e2e8f0',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            padding: '8px 0',
-            minWidth: '180px',
-            zIndex: 1000,
-            pointerEvents: 'all',
-          }}
+  position: 'absolute',
+  left: contextMenu.x,
+  top: contextMenu.y,
+  background: 'white',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+  padding: '8px 0',
+  minWidth: '180px',
+  zIndex: 1000,
+  pointerEvents: 'all',
+}}
         >
           <button
             onClick={() => handleContextMenuAction('addLabel', contextMenu.connectionId)}
             style={{
-              width: '100%',
-              padding: '8px 16px',
-              border: 'none',
-              background: 'none',
-              textAlign: 'left',
-              cursor: 'pointer',
-              fontSize: '14px',
-              color: '#374151',
-            }}
+  width: '100%',
+  padding: '8px 16px',
+  border: 'none',
+  background: 'none',
+  textAlign: 'left',
+  cursor: 'pointer',
+  fontSize: '14px',
+  color: '#374151',
+}}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#f3f4f6';
             }}
@@ -376,15 +359,15 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
           <button
             onClick={() => handleContextMenuAction('highlight', contextMenu.connectionId)}
             style={{
-              width: '100%',
-              padding: '8px 16px',
-              border: 'none',
-              background: 'none',
-              textAlign: 'left',
-              cursor: 'pointer',
-              fontSize: '14px',
-              color: '#374151',
-            }}
+  width: '100%',
+  padding: '8px 16px',
+  border: 'none',
+  background: 'none',
+  textAlign: 'left',
+  cursor: 'pointer',
+  fontSize: '14px',
+  color: '#374151',
+}}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#f3f4f6';
             }}
@@ -397,15 +380,15 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
           <button
             onClick={() => handleContextMenuAction('editStyle', contextMenu.connectionId)}
             style={{
-              width: '100%',
-              padding: '8px 16px',
-              border: 'none',
-              background: 'none',
-              textAlign: 'left',
-              cursor: 'pointer',
-              fontSize: '14px',
-              color: '#374151',
-            }}
+  width: '100%',
+  padding: '8px 16px',
+  border: 'none',
+  background: 'none',
+  textAlign: 'left',
+  cursor: 'pointer',
+  fontSize: '14px',
+  color: '#374151',
+}}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#f3f4f6';
             }}
@@ -421,19 +404,19 @@ export const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProp
       {(!annotations.connectionLabels || annotations.connectionLabels.length === 0) && canEdit && ()
         <div
           style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            background: 'rgba(255, 255, 255, 0.95)',
-            border: '2px dashed #d1d5db',
-            borderRadius: '12px',
-            padding: '24px',
-            textAlign: 'center',
-            maxWidth: '300px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-            pointerEvents: 'all',
-          }}
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  background: 'rgba(255, 255, 255, 0.95)',
+  border: '2px dashed #d1d5db',
+  borderRadius: '12px',
+  padding: '24px',
+  textAlign: 'center',
+  maxWidth: '300px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  pointerEvents: 'all',
+}}
         >
           <div style={{ fontSize: '24px', marginBottom: '8px' }}>🔗</div>
           <div style={{ fontWeight: 'bold', marginBottom: '4px', color: '#374151' }}>

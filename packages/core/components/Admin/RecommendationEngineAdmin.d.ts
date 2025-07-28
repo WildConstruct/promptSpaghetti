@@ -5,6 +5,7 @@
  * Part of Epic 17.5.2 - Featured Content Tools (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface RecommendationAlgorithm {
     id: string;
     name: string;
@@ -22,7 +23,7 @@ export interface RecommendationAlgorithm {
     };
     last_trained?: Date;
     training_status: 'idle' | 'training' | 'failed' | 'completed';
-}
+
 export interface FeaturedContentConfig {
     algorithm_weights: {,
         trending_boost: number;
@@ -48,7 +49,7 @@ export interface FeaturedContentConfig {
         variants: ABTestVariant[];
         traffic_allocation: number;
     };
-}
+
 export interface ABTestVariant {
     id: string;
     name: string;
@@ -60,7 +61,7 @@ export interface ABTestVariant {
         engagement_score: number;
         revenue_per_view: number;
     };
-}
+
 export interface RecommendationMetrics {
     overall_performance: {,
         total_recommendations_served: number;
@@ -93,10 +94,10 @@ export interface RecommendationMetrics {
         cache_utilization: number;
         model_accuracy: number;
     };
-}
+
 export interface RecommendationEngineAdminProps {
     className?: string;
-}
+
 export declare const RecommendationEngineAdmin: React.FC<RecommendationEngineAdminProps>;
 export default RecommendationEngineAdmin;
 //# sourceMappingURL=RecommendationEngineAdmin.d.ts.map

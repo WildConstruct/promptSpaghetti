@@ -16,10 +16,12 @@ export { ContentQualityAssessmentService, QUALITY_ASSESSMENT_CONFIG } from '../.
 export type ContentVersionControlMode = 'author' | 'editor' | 'reviewer' | 'admin';
 export type QualityAssessmentType = 'automated' | 'editorial' | 'community' | 'comprehensive';
 export type WorkflowStage = 'automated_analysis' | 'editorial_review' | 'specialist_review' | 'final_approval' | 'published';
+
 export interface CommunityComponentEvents {
     'version:created': {
         version: ContentVersion;
         contentId: string;
+
     };
     'version:published': {
         version: ContentVersion;
@@ -54,7 +56,7 @@ export interface CommunityComponentEvents {
         workflow: QualityAssessmentWorkflow;
         outcome: string;
     };
-}
+
 export declare     calculateOverallScore: (dimensions: Record<string, number>) => number;
     calculateGrade: (score: number) => "A+" | "A" | "B+" | "B" | "C+" | "C" | "D" | "F";
     validateWorkflowTransition: (),

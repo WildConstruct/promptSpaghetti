@@ -20,9 +20,7 @@ interface RegionGroupsManagerProps {
   selectedGroupId?: string | null;
   onGroupHover?: (groupId: string | null) => void;
   onGroupSelect?: (groupId: string | null) => void;
-}
-
-export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({)
+  export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({,)
   disabled = false,
   readonly = false,
   author = 'Anonymous',
@@ -38,7 +36,7 @@ export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({)
     const viewport = useViewport();
   const [hoveredGroupId, setHoveredGroupId] = useState<string | null>(null);
   // Handle region groups changes from the layer
-  const handleRegionGroupsChange = useCallback((groups: unknown[]) => {
+  const handleRegionGroupsChange = useCallback((groups: unknown) => {
     setRegionGroups(groups);
   }, [setRegionGroups]);
   // Handle group hover state
@@ -47,14 +45,13 @@ export const RegionGroupsManager: React.FC<RegionGroupsManagerProps> = ({)
     }, [onGroupSelect]);
   // Get canvas size and offset from ReactFlow
   const canvasOffset = {
-    x: viewport.x,
-    y: viewport.y,
-  };
+  x: viewport.x,
+  y: viewport.y,
+};
   // Don't render if disabled
   if (disabled) {
     return null;
-  }
-  return ();
+  return;
     <RegionGroupsLayer
       nodes={nodes}
       regionGroups={annotations.regionGroups}

@@ -18,6 +18,7 @@ import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 import { SearchAnalyticsService } from './SearchAnalyticsService';
 
+}
 interface PerformanceAlert {
   id: string;
   type: 'performance' | 'availability' | 'error_rate' | 'user_experience';
@@ -31,7 +32,9 @@ interface PerformanceAlert {
   resolved: boolean;
   actions: string[];
 }
+}
 
+}
 interface HealthCheck {
   service: string;
   status: 'healthy' | 'degraded' | 'unhealthy';
@@ -40,13 +43,16 @@ interface HealthCheck {
   timestamp: Date;
   details?: any;
 }
+}
 
+}
 interface PerformanceMetrics {
   searchLatency: {
     p50: number;
     p95: number;
     p99: number;
     avg: number;
+}
   };
   throughput: {
     requestsPerSecond: number;
@@ -74,6 +80,7 @@ interface PerformanceMetrics {
   };
 }
 
+}
 interface OptimizationRecommendation {
   category: 'index' | 'query' | 'cache' | 'infrastructure';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -83,6 +90,7 @@ interface OptimizationRecommendation {
   effort: string;
   actions: string[];
   estimatedImprovement: string;
+}
 }
 
 @Injectable()
@@ -139,6 +147,7 @@ export class SearchPerformanceMonitor {
    * Get current performance metrics
    */
   async getCurrentMetrics(): Promise<PerformanceMetrics> {
+
     try {
       const [
         latencyMetrics,
@@ -174,6 +183,7 @@ export class SearchPerformanceMonitor {
    * Get active performance alerts
    */
   async getActiveAlerts(): Promise<PerformanceAlert[]> {
+
     try {
       const query = `
         SELECT 
@@ -208,6 +218,7 @@ export class SearchPerformanceMonitor {
    * Get optimization recommendations
    */
   async getOptimizationRecommendations(): Promise<OptimizationRecommendation[]> {
+
     try {
       const metrics = await this.getCurrentMetrics();
       const recommendations: OptimizationRecommendation[] = [];
@@ -300,6 +311,7 @@ export class SearchPerformanceMonitor {
    * Perform comprehensive health checks
    */
   async performHealthChecks(): Promise<HealthCheck[]> {
+
     const healthChecks: HealthCheck[] = [];
 
     // Elasticsearch health check
@@ -387,6 +399,7 @@ export class SearchPerformanceMonitor {
    * Trigger alert
    */
   private async triggerAlert(alert: Omit<PerformanceAlert, 'id' | 'timestamp' | 'resolved'>): Promise<void> {
+
     try {
       // Store alert in database
       const query = `
@@ -430,6 +443,7 @@ export class SearchPerformanceMonitor {
   // Private helper methods
 
   private async getLatencyMetrics(): Promise<PerformanceMetrics['searchLatency']> {
+
     try {
       const result = await this.pool.query(`
         SELECT 
@@ -455,6 +469,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async getThroughputMetrics(): Promise<PerformanceMetrics['throughput']> {
+
     try {
       const result = await this.pool.query(`
         SELECT 
@@ -476,6 +491,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async getErrorMetrics(): Promise<PerformanceMetrics['errorRate']> {
+
     // This would track actual errors - for now return mock data
     return {
       rate: 0.02,
@@ -485,6 +501,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async getSuccessMetrics(): Promise<PerformanceMetrics['searchSuccess']> {
+
     try {
       const result = await this.pool.query(`
         SELECT 
@@ -506,6 +523,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async getUserExperienceMetrics(): Promise<PerformanceMetrics['userExperience']> {
+
     try {
       const ctrResult = await this.pool.query(`
         SELECT 
@@ -538,6 +556,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async getInfrastructureHealth(): Promise<PerformanceMetrics['infrastructure']> {
+
     try {
       // Get cache hit rate from Redis
       const cacheStats = await this.redis.info('stats');
@@ -561,6 +580,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async checkElasticsearchHealth(): Promise<{ status: 'healthy' | 'degraded' | 'unhealthy'; message: string; details?: any }> {
+
     // Mock implementation - would use actual Elasticsearch client
     return {
       status: 'healthy',
@@ -576,6 +596,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async checkPerformanceAlerts(): Promise<void> {
+
     const metrics = await this.getCurrentMetrics();
 
     // Check latency alerts
@@ -633,6 +654,7 @@ export class SearchPerformanceMonitor {
   }
 
   private async updateMetrics(): Promise<void> {
+
     try {
       const metrics = await this.getCurrentMetrics();
       

@@ -8,6 +8,7 @@
  * - A/B testing integration and multivariate conditions
  * - Security-hardened expression evaluation
  */
+
 export interface ToggleCondition {
     id: string;
     toggleId: string;
@@ -21,7 +22,7 @@ export interface ToggleCondition {
     metadata: ConditionMetadata;
     created: Date;
     lastModified: Date;
-}
+
 export declare enum ConditionType {
     USER_ATTRIBUTE = "user_attribute",// Based on user properties (id, email, role, etc.)
     USER_SEGMENT = "user_segment",// Based on predefined user segments
@@ -35,7 +36,7 @@ export declare enum ConditionType {
     DEVICE_TYPE = "device_type",// Device/platform-based
     TRAFFIC_SPLIT = "traffic_split",// Traffic splitting conditions
     FEATURE_FLAG = "feature_flag"
-}
+
 export interface ConditionParameters {
     userAttributes?: UserAttributeParams;
     userSegments?: string[];
@@ -56,7 +57,7 @@ export interface ConditionParameters {
     conflictingToggles?: string[];
     customVariables?: Record<string, any>;
     functions?: Record<string, Function>;
-}
+
 export interface UserAttributeParams {
     attributes: Array<{,
         key: string;
@@ -64,7 +65,7 @@ export interface UserAttributeParams {
         value: any;
     }>;
     logic: 'AND' | 'OR';
-}
+
 export declare enum ComparisonOperator {
     EQUALS = "equals",
     NOT_EQUALS = "not_equals",
@@ -79,19 +80,19 @@ export declare enum ComparisonOperator {
     MATCHES_REGEX = "matches_regex",
     IN_LIST = "in_list",
     NOT_IN_LIST = "not_in_list"
-}
+
 export interface ScheduleParams {
     daysOfWeek?: number[];
     hoursOfDay?: number[];
     recurring?: boolean;
     recurrencePattern?: 'daily' | 'weekly' | 'monthly';
-}
+
 export interface ExperimentParams {
     experimentId: string;
     variant: string;
     trafficAllocation: number;
     stickiness?: 'user' | 'session' | 'device';
-}
+
 export interface ConditionMetadata {
     category: string;
     tags: string[];
@@ -103,7 +104,7 @@ export interface ConditionMetadata {
     author: string;
     reviewedBy?: string;
     reviewedAt?: Date;
-}
+
 export interface EvaluationContext {
     user?: UserContext;
     request?: RequestContext;
@@ -112,7 +113,7 @@ export interface EvaluationContext {
     experiments?: Record<string, string>;
     timestamp?: Date;
     customData?: Record<string, any>;
-}
+
 export interface UserContext {
     id: string;
     email?: string;
@@ -121,7 +122,7 @@ export interface UserContext {
     attributes?: Record<string, any>;
     groups?: string[];
     permissions?: string[];
-}
+
 export interface RequestContext {
     ip?: string;
     userAgent?: string;
@@ -130,25 +131,25 @@ export interface RequestContext {
     city?: string;
     device?: DeviceInfo;
     session?: SessionInfo;
-}
+
 export interface DeviceInfo {
     type: 'mobile' | 'tablet' | 'desktop' | 'unknown';
     platform: string;
     browser?: string;
     version?: string;
-}
+
 export interface SessionInfo {
     id: string;
     startTime: Date;
     duration: number;
     pageViews: number;
-}
+
 export interface EnvironmentContext {
     environment: 'development' | 'staging' | 'production';
     region: string;
     timezone: string;
     version: string;
-}
+
 export interface ConditionEvaluationResult {
     conditionId: string;
     result: boolean;
@@ -160,7 +161,7 @@ export interface ConditionEvaluationResult {
         contextHash: string;
         intermediateValues?: Record<string, any>;
     };
-}
+
 export interface ToggleEvaluationResult {
     toggleId: string;
     enabled: boolean;
@@ -173,7 +174,7 @@ export interface ToggleEvaluationResult {
         totalExecutionTime: number;
         cacheHit: boolean;
     };
-}
+
 export interface ToggleConditionsConfig {
     evaluation: {,
         enableCaching: boolean;
@@ -200,7 +201,6 @@ export interface ToggleConditionsConfig {
         maxVariants: number;
         stickinessStrategy: 'user' | 'session' | 'device';
     };
-}
 /**
  * Toggle Conditions Service
  *
@@ -259,6 +259,6 @@ export declare class ToggleConditionsService {
     private clearToggleCache;
     private cleanupCache;
     private isCacheValid;
-}
+
 export default ToggleConditionsService;
 //# sourceMappingURL=ToggleConditionsService.d.ts.map

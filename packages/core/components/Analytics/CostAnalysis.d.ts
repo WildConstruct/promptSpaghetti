@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Cost analysis props
  */
+
 export interface CostAnalysisProps {
     analyticsClient: AnalyticsClient;
     timeRange: {,
@@ -11,7 +12,6 @@ export interface CostAnalysisProps {
     };
     userId?: number;
     organizationId?: number;
-}
 /**
  * Cost analysis component
  */

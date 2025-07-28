@@ -247,7 +247,7 @@ export class CorrectionsDAO {
         name LIKE ? OR 
         description LIKE ? OR 
         find_pattern LIKE ?
-      )
+
       ORDER BY priority ASC
     `);
     

@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { EventEmitter } from 'events';
 
+}
 export interface PasswordRotationPolicy {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export interface PasswordRotationPolicy {
     enforceRotation: boolean; // Force rotation at expiry
     preventReuse: number; // Number of previous passwords to remember
     requireReason?: boolean; // Require reason for manual rotation
+}
   };
   applicableRoles: string[];
   applicableUsers?: string[];
@@ -51,6 +53,7 @@ export interface PasswordRotationPolicy {
   createdBy: string;
 }
 
+}
 export interface PasswordRotationRecord {
   id: string;
   userId: string;
@@ -69,9 +72,11 @@ export interface PasswordRotationRecord {
     wasExpired: boolean;
     warningsIssued: number;
     complianceFlags: string[];
+}
   };
 }
 
+}
 export interface UserPasswordStatus {
   userId: string;
   currentPasswordHash: string;
@@ -88,10 +93,12 @@ export interface UserPasswordStatus {
     hash: string;
     setAt: Date;
     strength: number;
+}
   }>;
   complianceFlags: string[];
 }
 
+}
 export interface RotationNotification {
   id: string;
   userId: string;
@@ -102,6 +109,7 @@ export interface RotationNotification {
   escalationLevel: number;
   policyId: string;
   metadata: Record<string, any>;
+}
 }
 
 export class PasswordRotationService extends EventEmitter {
@@ -123,6 +131,7 @@ export class PasswordRotationService extends EventEmitter {
     policyData: Omit<PasswordRotationPolicy, 'id' | 'createdAt' | 'updatedAt'>,
     createdBy: string
   ): Promise<PasswordRotationPolicy> {
+
     const policy: PasswordRotationPolicy = {
       ...policyData,
       id: this.generatePolicyId(),
@@ -157,6 +166,7 @@ export class PasswordRotationService extends EventEmitter {
     updates: Partial<PasswordRotationPolicy>,
     updatedBy: string
   ): Promise<PasswordRotationPolicy> {
+
     const existingPolicy = this.policies.get(policyId);
     if (!existingPolicy) {
       throw new Error('Policy not found');
@@ -201,6 +211,7 @@ export class PasswordRotationService extends EventEmitter {
     actionRequired: boolean;
     allowedGraceLogins?: number;
   }> {
+
     const userStatus = await this.getUserPasswordStatus(userId);
     const applicablePolicies = await this.getApplicablePolicies(userId, userRoles);
 
@@ -296,6 +307,7 @@ export class PasswordRotationService extends EventEmitter {
     temporaryPassword?: string;
     expiresAt?: Date;
   }> {
+
     const userStatus = await this.getUserPasswordStatus(userId);
     const userRoles = await this.getUserRoles(userId);
     const applicablePolicies = await this.getApplicablePolicies(userId, userRoles);
@@ -418,6 +430,7 @@ export class PasswordRotationService extends EventEmitter {
     userId: string,
     complexity: 'basic' | 'standard' | 'high' = 'standard'
   ): Promise<{ password: string; strength: number; expiresAt: Date }> {
+
     const complexitySettings = {
       basic: { length: 12, includeSpecial: false, includeNumbers: true },
       standard: { length: 16, includeSpecial: true, includeNumbers: true },
@@ -455,7 +468,7 @@ export class PasswordRotationService extends EventEmitter {
         enforceRotation: true,
         preventReuse: 5,
         requireReason: false
-      },
+  }
       applicableRoles: ['user', 'editor'],
       notificationSettings: {
         warningNotifications: true,
@@ -467,19 +480,19 @@ export class PasswordRotationService extends EventEmitter {
           { daysBeforeExpiry: 3, notifyUser: true, notifyAdmin: true },
           { daysBeforeExpiry: 0, notifyUser: true, notifyAdmin: true }
         ]
-      },
+  }
       automationSettings: {
         autoGenerate: false,
         autoGenerateLength: 16,
         autoGenerateComplexity: 'standard',
         requireUserActivation: true,
         temporaryPasswordExpiry: 24
-      },
+  }
       complianceSettings: {
         auditRequired: true,
         retentionPeriod: 365,
         reportingEnabled: true
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -506,6 +519,7 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async checkExpiredPasswords(): Promise<void> {
+
     for (const [userId, status] of this.userStatuses) {
       if (status.expiresAt && status.expiresAt <= new Date()) {
         const userRoles = await this.getUserRoles(userId);
@@ -515,6 +529,7 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async sendDailyWarnings(): Promise<void> {
+
     const now = new Date();
     
     for (const [userId, status] of this.userStatuses) {
@@ -568,6 +583,7 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async validatePolicy(policy: PasswordRotationPolicy): Promise<void> {
+
     if (policy.rules.maxAge < 1 || policy.rules.maxAge > 365) {
       throw new Error('Password max age must be between 1 and 365 days');
     }
@@ -578,6 +594,7 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async getUserPasswordStatus(userId: string): Promise<UserPasswordStatus> {
+
     return this.userStatuses.get(userId) || this.createDefaultUserStatus(userId);
   }
 
@@ -600,15 +617,18 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async updateUserStatus(status: UserPasswordStatus): Promise<void> {
+
     this.userStatuses.set(status.userId, status);
   }
 
   private async getUserRoles(userId: string): Promise<string[]> {
+
     // Mock implementation - would integrate with actual user service
     return ['user'];
   }
 
   private async getApplicablePolicies(userId: string, userRoles: string[]): Promise<PasswordRotationPolicy[]> {
+
     const policies = [];
     
     for (const policy of this.policies.values()) {
@@ -636,6 +656,7 @@ export class PasswordRotationService extends EventEmitter {
     history: Array<{ hash: string }>,
     policy: PasswordRotationPolicy
   ): Promise<{ isValid: boolean; errors: string[]; strength: number }> {
+
     const errors: string[] = [];
     
     // Check against password history
@@ -654,6 +675,7 @@ export class PasswordRotationService extends EventEmitter {
   }
 
   private async calculatePasswordStrength(password: string): Promise<number> {
+
     // Mock implementation - would use actual password strength calculation
     return Math.min(100, password.length * 5);
   }
@@ -677,6 +699,7 @@ export class PasswordRotationService extends EventEmitter {
     policy: PasswordRotationPolicy,
     daysUntilExpiry: number
   ): Promise<void> {
+
     // Implementation would send actual notifications
     console.log(`Sending password expiry warning to user ${userId}: ${daysUntilExpiry} days remaining`);
   }
@@ -686,20 +709,24 @@ export class PasswordRotationService extends EventEmitter {
     policy: PasswordRotationPolicy,
     record: PasswordRotationRecord
   ): Promise<void> {
+
     // Implementation would send actual notifications
     console.log(`Sending password rotation notification to user ${userId}`);
   }
 
   private async applyPolicyToUsers(policy: PasswordRotationPolicy): Promise<void> {
+
     // Implementation would apply policy to matching users
     console.log(`Applying policy ${policy.name} to applicable users`);
   }
 
   private async logPolicyEvent(action: string, policyId: string, userId: string, metadata: any): Promise<void> {
+
     console.log(`Policy Event: ${action} for policy ${policyId} by ${userId}`, metadata);
   }
 
   private async logRotationEvent(action: string, userId: string, rotatedBy: string, metadata: any): Promise<void> {
+
     console.log(`Rotation Event: ${action} for user ${userId} by ${rotatedBy}`, metadata);
   }
 

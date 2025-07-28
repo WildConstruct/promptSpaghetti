@@ -5,6 +5,7 @@
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface PolicyAnalyticsMetrics {
     totalPolicies: number;
     activePolicies: number;
@@ -30,10 +31,10 @@ export interface PolicyAnalyticsMetrics {
         enforcements: number;
         preventions: number;
     }>;
-}
+
 export interface PolicyAnalyticsDashboardProps {
     className?: string;
-}
+
 export declare const PolicyAnalyticsDashboard: React.FC<PolicyAnalyticsDashboardProps>;
 export default PolicyAnalyticsDashboard;
 //# sourceMappingURL=PolicyAnalyticsDashboard.d.ts.map

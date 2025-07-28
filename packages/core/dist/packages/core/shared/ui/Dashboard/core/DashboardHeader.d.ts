@@ -18,7 +18,7 @@ export interface DashboardHeaderProps {
     onRefresh?: () => void;
     onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
     timeRange?: string;
-    timeRangeOptions?: TimeRangeOption[];
+    timeRangeOptions?: TimeRangeOption;
     onTimeRangeChange?: (timeRange: string) => void;
     showTimeRange?: boolean;
     className?: string;

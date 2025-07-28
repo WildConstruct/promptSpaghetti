@@ -25,7 +25,7 @@ export interface DocumentData {
     };
 }
 export interface DocumentReviewProps {
-    documents: DocumentData[];
+    documents: DocumentData;
     requestId: string;
     userId: string;
     documentType: string;

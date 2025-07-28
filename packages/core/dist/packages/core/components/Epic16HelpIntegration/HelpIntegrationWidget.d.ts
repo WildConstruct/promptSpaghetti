@@ -27,11 +27,11 @@ export interface HelpSession {
     sessionType: string;
     currentStep: number;
     totalSteps: number;
-    content: HelpContent[];
+    content: HelpContent;
     startTime: Date;
     userProgress: {
-        completedActions: string[];
-        skippedContent: string[];
+        completedActions: string;
+        skippedContent: string;
         ratings: Record<string, number>;
     };
     escalationLevel: number;
@@ -41,8 +41,7 @@ export interface TransitionContext {
     toSystem: 'graph-editor' | 'marketplace';
     reason: string;
     preserveHelp: boolean;
-    bridgeContent?: HelpContent[];
+    bridgeContent?: HelpContent;
 }
 export declare const HelpIntegrationWidget: React.FC<HelpIntegrationProps>;
-export default HelpIntegrationWidget;
 //# sourceMappingURL=HelpIntegrationWidget.d.ts.map

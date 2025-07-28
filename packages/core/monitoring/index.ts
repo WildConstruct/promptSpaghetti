@@ -58,10 +58,10 @@ export };
 export return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
 };
 
-export const createDefaultSecuritySystemHealth = ()
-  systemId: string,
-  systemType: SecuritySystemHealth['systemType'],
-): SecuritySystemHealth => ({)
+export const createDefaultSecuritySystemHealth = (()
+    systemId: string,
+    systemType: SecuritySystemHealth['systemType'],
+  ): SecuritySystemHealth => ({)
   systemId,
   systemType,
   status: 'healthy',
@@ -79,7 +79,7 @@ export const createDefaultSecuritySystemHealth = ()
   diskUsage: 60,
   networkLatency: 50,
   configurationVersion: '1.0.0',
-  lastConfigUpdate: Date.now() - 86400000, // 24 hours ago
+  lastConfigUpdate: Date.now() - 86400000, // 24 hours ago,
   pendingUpdates: 0,
 });
 
@@ -87,7 +87,7 @@ export const createDefaultSecuritySystemHealth = ()
 export systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }>
 ): void => {
   systems.forEach(system => {)
-    const healthStatus = createDefaultSecuritySystemHealth(system.id, system.type);
+  const healthStatus = createDefaultSecuritySystemHealth(system.id, system.type);
     monitor.registerSecuritySystem(healthStatus);
   });
 };
@@ -96,38 +96,35 @@ export systems: Array<{ id: string; type: SecuritySystemHealth['systemType'] }>
 export };
 
 // Monitoring system health check utility
-export epic17Health: 'healthy' | 'degraded' | 'unhealthy';
+export epic17Health: 'healthy' | 'degraded' | 'unhealthy';,
   securityHealth: 'healthy' | 'degraded' | 'unhealthy';
-  overallHealth: 'healthy' | 'degraded' | 'unhealthy';
-  recommendations: string[];
+  overallHealth: 'healthy' | 'degraded' | 'unhealthy';,
+  recommendations: string;
 } => {
   const dashboardData = integration.getIntegratedDashboardData();
   // Evaluate individual system health
   const epic1Health = dashboardData.performanceOverview.nodeExecutions.failed > ;
-    dashboardData.performanceOverview.nodeExecutions.total * 0.1 ? 'unhealthy' : 'healthy';
+  dashboardData.performanceOverview.nodeExecutions.total * 0.1 ? 'unhealthy' : 'healthy';
   const epic17Health = dashboardData.adminOverview.complianceScore < 80 ? 'unhealthy' : 'healthy';
-  const securityHealth = dashboardData.securityOverview.threatLevel > 7 ? 'unhealthy' : ;
-    dashboardData.securityOverview.threatLevel > 4 ? 'degraded' : 'healthy';
+  const securityHealth = dashboardData.securityOverview.threatLevel > 7 ? 'unhealthy' :,;
+  dashboardData.securityOverview.threatLevel > 4 ? 'degraded' : 'healthy';
   // Determine overall health
   const healthLevels = [epic1Health, epic17Health, securityHealth];
-  const overallHealth = healthLevels.includes('unhealthy') ? 'unhealthy' :;
-    healthLevels.includes('degraded') ? 'degraded' : 'healthy';
+  const overallHealth = healthLevels.includes('unhealthy') ? 'unhealthy' :,;
+  healthLevels.includes('degraded') ? 'degraded' : 'healthy';
   // Generate recommendations
-  const recommendations: string[] = [];
+  const recommendations: string = [];
   if (epic1Health !== 'healthy') {
-    recommendations.push('Review Epic 1 performance metrics and optimize slow nodes');
-  }
+  recommendations.push('Review Epic 1 performance metrics and optimize slow nodes');
   if (epic17Health !== 'healthy') {
-    recommendations.push('Address Epic 17 compliance issues and admin operation performance');
-  }
+  recommendations.push('Address Epic 17 compliance issues and admin operation performance');
   if (securityHealth !== 'healthy') {
-    recommendations.push('Investigate security threats and strengthen security posture');
-  }
+  recommendations.push('Investigate security threats and strengthen security posture');
   return {
-    epic1Health,
-    epic17Health,
-    securityHealth,
-    overallHealth,
-    recommendations
-  };
+  epic1Health,
+  epic17Health,
+  securityHealth,
+  overallHealth,
+  recommendations
+};
 };

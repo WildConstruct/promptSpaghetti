@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+
 export interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -13,7 +14,8 @@ export interface ModalProps {
     overlayClassName?: string;
     'aria-labelledby'?: string;
     'aria-describedby'?: string;
-}
+
+
 /**
  * Professional modal component with accessibility features
  * - Focus management and keyboard navigation

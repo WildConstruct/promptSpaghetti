@@ -18,6 +18,7 @@
 import { z } from 'zod';
 
 // Base User Attributes
+
 export interface UserAttributes {
   // Identity attributes
   userId: string;
@@ -25,14 +26,14 @@ export interface UserAttributes {
   organizationId?: string;
   parentOrganizationId?: string;
   // Account attributes
-  accountType: 'free' | 'trial' | 'paid' | 'enterprise' | 'beta';
+  accountType: 'free' | 'trial' | 'paid' | 'enterprise' | 'beta';,
   subscriptionTier: 'basic' | 'pro' | 'premium' | 'enterprise';
-  subscriptionStatus: 'active' | 'inactive' | 'cancelled' | 'expired' | 'pending';
-  accountAge: number; // days since registration
+  subscriptionStatus: 'active' | 'inactive' | 'cancelled' | 'expired' | 'pending';,
+  accountAge: number; // days since registration,
   // User profile attributes
-  userRole: 'admin' | 'user' | 'viewer' | 'editor' | 'owner';
-  permissions: string[];
-  tags: string[];
+  userRole: 'admin' | 'user' | 'viewer' | 'editor' | 'owner';,
+  permissions: string;
+  tags: string;,
   customAttributes: Record<string, any>;
   // Geographic attributes
   country?: string;
@@ -42,7 +43,7 @@ export interface UserAttributes {
   language?: string;
   locale?: string;
   // Device and technology attributes
-  platform: 'web' | 'mobile' | 'desktop' | 'api';
+  platform: 'web' | 'mobile' | 'desktop' | 'api';,
   deviceType: 'desktop' | 'mobile' | 'tablet';
   operatingSystem?: string;
   browser?: string;
@@ -51,111 +52,111 @@ export interface UserAttributes {
   registrationDate: Date;
   lastLoginDate?: Date;
   lastActiveDate?: Date;
-  totalLogins: number;
+  totalLogins: number;,
   sessionCount: number;
-  averageSessionDuration: number; // in minutes
+  averageSessionDuration: number; // in minutes,
   // Feature usage attributes
-  featureUsage: Record<string, {
-    count: number;
-    lastUsed: Date;
-    frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily';
-  }>;
+  featureUsage: Record<string, {,
+  count: number;,
+  lastUsed: Date;
+  frequency: 'never' | 'rare' | 'occasional' | 'frequent' | 'daily';
+}>;
   // Behavioral attributes
   clickThroughRates: Record<string, number>;
   conversionRates: Record<string, number>;
-  engagementScore: number; // 0-100
+  engagementScore: number; // 0-100,
   churnRisk: 'low' | 'medium' | 'high' | 'critical';
   // Business attributes
-  customerLifetimeValue: number;
+  customerLifetimeValue: number;,
   monthlyRecurringRevenue: number;
   totalSpent: number;
   paymentMethod?: string;
   billingCycle?: 'monthly' | 'yearly' | 'custom';
   // Experimental attributes
   experimentGroups: Record<string, string>; // experiment_id -> variant
-  abTestParticipation: string[]; // active A/B test IDs
-  betaFeatures: string[];
+  abTestParticipation: string; // active A/B test IDs,
+  betaFeatures: string;
   // Computed attributes (updated in real-time)
-  riskOfChurn: number; // 0-1 probability
+  riskOfChurn: number; // 0-1 probability,
   upsellProbability: number; // 0-1 probability
   supportTicketCount: number;
   lastSupportInteraction?: Date;
   npsScore?: number; // Net Promoter Score
   healthScore: number; // 0-100 account health
-}
 
 // Behavioral Events for Segment Triggers
+}
 export interface BehaviorEvent {
-  eventType: string;
+  eventType: string;,
   eventData: Record<string, any>;
   timestamp: Date;
   sessionId?: string;
-  userId: string;
+  userId: string;,
   properties: Record<string, any>;
   context: {,
-    page?: string;
-    feature?: string;
-    source?: string;
-    campaign?: string;
-    referrer?: string;
-  };
-}
+  page?: string;
+  feature?: string;
+  source?: string;
+  campaign?: string;
+  referrer?: string;
+};
 
 // Segment Condition Types
+}
 export interface SegmentCondition {
-  id: string;
+  id: string;,
   type: 'attribute' | 'behavior' | 'demographic' | 'geographic' | 'temporal' | 'cohort' | 'custom';
-  field: string;
+  field: string;,
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'greater_than' | 'less_than' | ,
-           'greater_equal' | 'less_equal' | 'contains' | 'not_contains' | 'starts_with' | 
-           'ends_with' | 'regex' | 'exists' | 'not_exists' | 'between' | 'not_between' |
-           'within_days' | 'not_within_days' | 'relative_to_now' | 'percentile' | 
-           'moving_average' | 'trend_up' | 'trend_down' | 'custom_function';
+  'greater_equal' | 'less_equal' | 'contains' | 'not_contains' | 'starts_with' |
+  'ends_with' | 'regex' | 'exists' | 'not_exists' | 'between' | 'not_between' |
+  'within_days' | 'not_within_days' | 'relative_to_now' | 'percentile' |
+  'moving_average' | 'trend_up' | 'trend_down' | 'custom_function';
   value: any;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
-  weight: number; // for weighted conditions
+  weight: number; // for weighted conditions,
   isEnabled: boolean;
   // Advanced condition properties
-  timeWindow?: {
-    value: number;
-    unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
-  };
+  timeWindow?: {,
+  value: number;,
+  unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
+};
   aggregation?: 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
   threshold?: number;
   comparison?: 'absolute' | 'relative' | 'percentile';
   // Metadata
   description?: string;
   lastEvaluated?: Date;
-  evaluationCount: number;
+  evaluationCount: number;,
   matchRate: number; // percentage of users matching this condition
-}
 
 // User Segment Definition
+}
 export interface UserSegment {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
   // Segment configuration
-  conditions: SegmentCondition[];
-  joinLogic: 'all' | 'any' | 'complex'; // how to combine conditions
-  complexLogicExpression?: string; // for complex boolean logic
+  conditions: SegmentCondition;,
+  joinLogic: 'all' | 'any' | 'complex'; // how to combine conditions,
+  complexLogicExpression?: string; // for complex boolean logic,
   // Segment metadata
-  isActive: boolean;
-  isDynamic: boolean; // true if segment updates in real-time
-  isPrivate: boolean; // true if segment is for internal use only
+  isActive: boolean;,
+  isDynamic: boolean; // true if segment updates in real-time,
+  isPrivate: boolean; // true if segment is for internal use only,
   // Visual and organizational
   color: string;
   icon?: string;
-  tags: string[];
+  tags: string;,
   category: 'behavioral' | 'demographic' | 'geographic' | 'engagement' | ,
-           'revenue' | 'lifecycle' | 'experimental' | 'custom';
+  'revenue' | 'lifecycle' | 'experimental' | 'custom';
   // Segment metrics
   userCount: number;
-  estimatedUserCount?: number; // for complex segments where real count is expensive
+  estimatedUserCount?: number; // for complex segments where real count is expensive,
   userCountHistory: Array<{,
-    date: Date;
-    count: number;
-  }>;
+  date: Date;,
+  count: number;
+}>;
   // Performance metrics
   conversionRate?: number;
   averageLifetimeValue?: number;
@@ -166,219 +167,216 @@ export interface UserSegment {
   lastEvaluated?: Date;
   nextEvaluation?: Date;
   // Access control
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;
-  lastModifiedBy: string;
+  lastModifiedBy: string;,
   lastModifiedAt: Date;
-  accessLevel: 'public' | 'team' | 'organization' | 'private';
-  allowedUsers: string[];
-  allowedRoles: string[];
+  accessLevel: 'public' | 'team' | 'organization' | 'private';,
+  allowedUsers: string;
+  allowedRoles: string;
   // Integration settings
-  syncToExternalSystems: boolean;
+  syncToExternalSystems: boolean;,
   externalSystemMappings: Record<string, {
-    systemId: string;
-    segmentId: string;
-    lastSync?: Date;
-    syncStatus: 'pending' | 'syncing' | 'synced' | 'failed';
-  }>;
+  systemId: string;,
+  segmentId: string;
+  lastSync?: Date;
+  syncStatus: 'pending' | 'syncing' | 'synced' | 'failed';
+}>;
   // Validation and quality
   validationRules: Array<{,
-    rule: string;
-    description: string;
-    isRequired: boolean;
-  }>;
+  rule: string;
+  description: string;,
+  isRequired: boolean;
+}>;
   qualityScore: number; // 0-100 based on data completeness, accuracy, etc.
   // Advanced features
   parentSegmentId?: string; // for hierarchical segments
-  childSegmentIds: string[];
-  dependencies: string[]; // other segments this one depends on
+  childSegmentIds: string;,
+  dependencies: string; // other segments this one depends on
   // A/B testing integration
   treatmentVariants?: Record<string, {
-    name: string;
-    allocation: number; // percentage 0-100
-    isControl: boolean;
-  }>;
+  name: string;,
+  allocation: number; // percentage 0-100,
+  isControl: boolean;
+}>;
   // Scheduling and lifecycle
   schedule?: {
-    startDate?: Date;
-    endDate?: Date;
-    activeDays: number[]; // 0-6 (Sunday-Saturday)
-    activeHours: {,
-      start: string; // "HH:MM"
-      end: string; // "HH:MM"
-      timezone: string;
-    };
+  startDate?: Date;
+  endDate?: Date;
+  activeDays: number; // 0-6 (Sunday-Saturday),
+  activeHours: {,
+  start: string; // "HH:MM",
+  end: string; // "HH:MM",
+  timezone: string;
+};
   };
   // Analytics and insights
   insights: Array<{,
-    type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
-    title: string;
-    description: string;
-    severity: 'low' | 'medium' | 'high';
-    actionable: boolean;
-    generatedAt: Date;
-  }>;
-}
+  type: 'trend' | 'anomaly' | 'opportunity' | 'risk';
+  title: string;,
+  description: string;
+  severity: 'low' | 'medium' | 'high';,
+  actionable: boolean;
+  generatedAt: Date;
+}>;
 
 // Cohort Analysis Model
+}
 export interface UserCohort {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
   // Cohort definition
-  cohortType: 'acquisition' | 'behavioral' | 'revenue' | 'feature_adoption' | 'custom';
+  cohortType: 'acquisition' | 'behavioral' | 'revenue' | 'feature_adoption' | 'custom';,
   timeGranularity: 'daily' | 'weekly' | 'monthly' | 'quarterly';
   // Cohort criteria
-  definitionEvent: BehaviorEvent;
+  definitionEvent: BehaviorEvent;,
   definitionTimeframe: {,
-    start: Date;
-    end: Date;
-  };
+  start: Date;,
+  end: Date;
+};
   // Analysis settings
-  analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
-  analysisWindow: {,
-    value: number;
-    unit: 'days' | 'weeks' | 'months';
-  };
+  analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';,
+  analysisWindow: {;
+  value: number;,
+  unit: 'days' | 'weeks' | 'months';
+};
   // Cohort data
   cohortData: Array<{,
-    cohortPeriod: string; // "2024-01", "Week 1", etc.
-    userCount: number;
-    periodData: Array<{,
-      period: number; // 0, 1, 2, ... representing time periods
-      value: number; // metric value for this period
-      userCount: number; // users still active in this period
-    }>;
+  cohortPeriod: string; // "2024-01", "Week 1", etc.,
+  userCount: number;,
+  periodData: Array<{,
+  period: number; // 0, 1, 2, ... representing time periods,
+  value: number; // metric value for this period,
+  userCount: number; // users still active in this period,
+}>;
   }>;
   // Metadata
-  createdAt: Date;
+  createdAt: Date;,
   lastCalculated: Date;
-  calculationStatus: 'pending' | 'calculating' | 'completed' | 'failed';
+  calculationStatus: 'pending' | 'calculating' | 'completed' | 'failed';,
   isActive: boolean;
-}
 
 // Segment Performance Analytics
+}
 export interface SegmentAnalytics {
-  segmentId: string;
+  segmentId: string;,
   timeRange: {,
-    start: Date;
-    end: Date;
-  };
+  start: Date;,
+  end: Date;
+};
   // User metrics
-  totalUsers: number;
+  totalUsers: number;,
   newUsers: number;
-  churnedUsers: number;
+  churnedUsers: number;,
   netGrowth: number;
   growthRate: number; // percentage
   // Engagement metrics
-  averageSessionsPerUser: number;
+  averageSessionsPerUser: number;,
   averageSessionDuration: number;
-  bounceRate: number;
+  bounceRate: number;,
   pageViewsPerSession: number;
   // Conversion metrics
   conversionEvents: Record<string, {
-    eventCount: number;
-    uniqueUsers: number;
-    conversionRate: number;
-  }>;
+  eventCount: number;,
+  uniqueUsers: number;
+  conversionRate: number;
+}>;
   // Revenue metrics
-  totalRevenue: number;
+  totalRevenue: number;,
   averageRevenuePerUser: number;
   customerLifetimeValue: number;
   // Geographic distribution
   geographicBreakdown: Record<string, {
-    userCount: number;
-    percentage: number;
-  }>;
+  userCount: number;,
+  percentage: number;
+}>;
   // Device and platform distribution
   platformBreakdown: Record<string, {
-    userCount: number;
-    percentage: number;
-  }>;
+  userCount: number;,
+  percentage: number;
+}>;
   // Temporal patterns
   activityHeatmap: Record<string, number>; // hour -> activity level
   weeklyPattern: Record<string, number>; // day -> activity level
   // Comparative analysis
   benchmarkComparison: {,
-    metric: string;
-    segmentValue: number;
-    benchmarkValue: number;
-    percentageDifference: number;
-    significance: 'higher' | 'lower' | 'similar';
-  }[];
-}
+  metric: string;
+  segmentValue: number;,
+  benchmarkValue: number;
+  percentageDifference: number;,
+  significance: 'higher' | 'lower' | 'similar';
+}[];
 
 // Segment Rules Engine
+}
 export interface SegmentRule {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
   // Rule configuration
-  triggerEvents: string[]; // events that trigger rule evaluation
-  conditions: SegmentCondition[];
-  actions: SegmentAction[];
+  triggerEvents: string; // events that trigger rule evaluation,
+  conditions: SegmentCondition;,
+  actions: SegmentAction;
   // Execution settings
   executionMode: 'immediate' | 'batch' | 'scheduled';
   batchSize?: number;
-  schedule?: string; // cron expression
+  schedule?: string; // cron expression,
   // Performance settings
-  maxExecutionsPerHour: number;
+  maxExecutionsPerHour: number;,
   timeoutMs: number;
   retryPolicy: {,
-    maxRetries: number;
-    backoffStrategy: 'linear' | 'exponential';
-    baseDelayMs: number;
-  };
+  maxRetries: number;,
+  backoffStrategy: 'linear' | 'exponential';
+  baseDelayMs: number;
+};
   // Metadata
-  isActive: boolean;
+  isActive: boolean;,
   priority: number; // higher numbers = higher priority
   createdAt: Date;
   lastExecuted?: Date;
-  executionCount: number;
+  executionCount: number;,
   successRate: number;
   averageExecutionTime: number;
 }
-
 export interface SegmentAction {
-  id: string;
+  id: string;,
   type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | ,
-        'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
+  'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
   parameters: Record<string, any>;
   // Conditional execution
-  conditions?: SegmentCondition[];
+  conditions?: SegmentCondition;
   // Error handling
   onError: 'ignore' | 'retry' | 'fail_rule';
   // Metadata
-  executionCount: number;
+  executionCount: number;,
   successCount: number;
   lastExecuted?: Date;
+  // Segment Export/Import Models
 }
-
-// Segment Export/Import Models
 export interface SegmentExport {
-  id: string;
+  id: string;,
   segmentId: string;
   format: 'csv' | 'json' | 'parquet' | 'sql';
   // Export configuration
-  includeFields: string[];
-  filters?: SegmentCondition[];
+  includeFields: string;
+  filters?: SegmentCondition;
   maxRecords?: number;
   // Export status
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number; // 0-100
+  status: 'pending' | 'processing' | 'completed' | 'failed';,
+  progress: number; // 0-100,
   // Results
   downloadUrl?: string;
   recordCount?: number;
   fileSize?: number;
   expiresAt?: Date;
   // Metadata
-  requestedBy: string;
+  requestedBy: string;,
   requestedAt: Date;
   completedAt?: Date;
   errorMessage?: string;
+  // Zod Schemas for Validation
 }
-
-// Zod Schemas for Validation
 export const UserAttributesSchema = z.object({)
   userId: z.string().min(1),
   email: z.string().email().optional(),
@@ -409,11 +407,11 @@ export const UserAttributesSchema = z.object({)
   totalLogins: z.number().nonnegative(),
   sessionCount: z.number().nonnegative(),
   averageSessionDuration: z.number().nonnegative(),
-  featureUsage: z.record(z.object({),
-    count: z.number().nonnegative(),
-    lastUsed: z.date(),
-    frequency: z.enum(['never', 'rare', 'occasional', 'frequent', 'daily'])
-  })),
+  featureUsage: z.record(z.object({,)
+  count: z.number().nonnegative(),
+  lastUsed: z.date(),
+  frequency: z.enum(['never', 'rare', 'occasional', 'frequent', 'daily']),
+})),
   clickThroughRates: z.record(z.number().min(0).max(1)),
   conversionRates: z.record(z.number().min(0).max(1)),
   engagementScore: z.number().min(0).max(100),
@@ -431,36 +429,36 @@ export const UserAttributesSchema = z.object({)
   supportTicketCount: z.number().nonnegative(),
   lastSupportInteraction: z.date().optional(),
   npsScore: z.number().min(-100).max(100).optional(),
-  healthScore: z.number().min(0).max(100),
-});
+  healthScore: z.number().min(0).max(100);
+  });
 
 export const SegmentConditionSchema = z.object({)
   id: z.string().min(1),
   type: z.enum(['attribute', 'behavior', 'demographic', 'geographic', 'temporal', 'cohort', 'custom']),
   field: z.string().min(1),
   operator: z.enum([),
-    'equals', 'not_equals', 'in', 'not_in', 'greater_than', 'less_than',
-    'greater_equal', 'less_equal', 'contains', 'not_contains', 'starts_with',
-    'ends_with', 'regex', 'exists', 'not_exists', 'between', 'not_between',
-    'within_days', 'not_within_days', 'relative_to_now', 'percentile',
-    'moving_average', 'trend_up', 'trend_down', 'custom_function'
+  'equals', 'not_equals', 'in', 'not_in', 'greater_than', 'less_than',
+  'greater_equal', 'less_equal', 'contains', 'not_contains', 'starts_with',
+  'ends_with', 'regex', 'exists', 'not_exists', 'between', 'not_between',
+  'within_days', 'not_within_days', 'relative_to_now', 'percentile',
+  'moving_average', 'trend_up', 'trend_down', 'custom_function'
   ]),
   value: z.any(),
   logicalOperator: z.enum(['AND', 'OR', 'NOT']).optional(),
   weight: z.number().positive().default(1),
   isEnabled: z.boolean().default(true),
-  timeWindow: z.object({),
-    value: z.number().positive(),
-    unit: z.enum(['minutes', 'hours', 'days', 'weeks', 'months'])
-  }).optional(),
+  timeWindow: z.object({,)
+  value: z.number().positive(),
+  unit: z.enum(['minutes', 'hours', 'days', 'weeks', 'months']),
+}).optional(),
   aggregation: z.enum(['sum', 'avg', 'count', 'min', 'max', 'distinct', 'percentile']).optional(),
   threshold: z.number().optional(),
   comparison: z.enum(['absolute', 'relative', 'percentile']).optional(),
   description: z.string().optional(),
   lastEvaluated: z.date().optional(),
   evaluationCount: z.number().nonnegative().default(0),
-  matchRate: z.number().min(0).max(100).default(0),
-});
+  matchRate: z.number().min(0).max(100).default(0);
+  });
 
 export const UserSegmentSchema = z.object({)
   id: z.string().min(1),
@@ -481,10 +479,10 @@ export const UserSegmentSchema = z.object({)
   ]),
   userCount: z.number().nonnegative(),
   estimatedUserCount: z.number().nonnegative().optional(),
-  userCountHistory: z.array(z.object({),
-    date: z.date(),
-    count: z.number().nonnegative(),
-  })),
+  userCountHistory: z.array(z.object({,)
+  date: z.date(),
+  count: z.number().nonnegative(),
+})),
   conversionRate: z.number().min(0).max(1).optional(),
   averageLifetimeValue: z.number().nonnegative().optional(),
   churnRate: z.number().min(0).max(1).optional(),
@@ -500,189 +498,170 @@ export const UserSegmentSchema = z.object({)
   allowedUsers: z.array(z.string()),
   allowedRoles: z.array(z.string()),
   syncToExternalSystems: z.boolean().default(false),
-  externalSystemMappings: z.record(z.object({),
-    systemId: z.string().min(1),
-    segmentId: z.string().min(1),
-    lastSync: z.date().optional(),
-    syncStatus: z.enum(['pending', 'syncing', 'synced', 'failed']).default('pending')
-  })),
-  validationRules: z.array(z.object({),
-    rule: z.string().min(1),
-    description: z.string(),
-    isRequired: z.boolean().default(false),
-  })),
+  externalSystemMappings: z.record(z.object({,)
+  systemId: z.string().min(1),
+  segmentId: z.string().min(1),
+  lastSync: z.date().optional(),
+  syncStatus: z.enum(['pending', 'syncing', 'synced', 'failed']).default('pending'),
+})),
+  validationRules: z.array(z.object({,)
+  rule: z.string().min(1),
+  description: z.string(),
+  isRequired: z.boolean().default(false),
+})),
   qualityScore: z.number().min(0).max(100).default(0),
   parentSegmentId: z.string().optional(),
   childSegmentIds: z.array(z.string()),
   dependencies: z.array(z.string()),
-  treatmentVariants: z.record(z.object({),
-    name: z.string().min(1),
-    allocation: z.number().min(0).max(100),
-    isControl: z.boolean().default(false),
-  })).optional(),
-  schedule: z.object({),
-    startDate: z.date().optional(),
-    endDate: z.date().optional(),
-    activeDays: z.array(z.number().min(0).max(6)),
-    activeHours: z.object({),
-      start: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
-      end: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
-      timezone: z.string(),
-    })
+  treatmentVariants: z.record(z.object({,)
+  name: z.string().min(1),
+  allocation: z.number().min(0).max(100),
+  isControl: z.boolean().default(false),
+})).optional(),
+  schedule: z.object({,)
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  activeDays: z.array(z.number().min(0).max(6)),
+  activeHours: z.object({,)
+  start: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
+  end: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
+  timezone: z.string(),
+}
   }).optional(),
-  insights: z.array(z.object({),
-    type: z.enum(['trend', 'anomaly', 'opportunity', 'risk']),
-    title: z.string().min(1),
-    description: z.string(),
-    severity: z.enum(['low', 'medium', 'high']),
-    actionable: z.boolean(),
-    generatedAt: z.date(),
-  }))
+  insights: z.array(z.object({,)
+  type: z.enum(['trend', 'anomaly', 'opportunity', 'risk']),
+  title: z.string().min(1),
+  description: z.string(),
+  severity: z.enum(['low', 'medium', 'high']),
+  actionable: z.boolean(),
+  generatedAt: z.date(),
+}))
 });
 
 // Utility Functions for Segment Management
 export class SegmentUtils {
   /**
-   * Evaluate if a user matches segment conditions
-   */
-  static evaluateUserForSegment()
-    userAttributes: UserAttributes,
-    segment: UserSegment,
-    behaviorHistory?: BehaviorEvent[]
-  ): {
-    matches: boolean;
-    matchingConditions: string[];
-    score: number;
-    const matchingConditions: string[] = [];
-    let totalWeight = 0;
-    let matchingWeight = 0;
-    for (const condition of segment.conditions.filter(c => c.isEnabled)) {
-      totalWeight += condition.weight;
-      const matches = this.evaluateCondition(userAttributes, condition, behaviorHistory);
-      if (matches) {
-        matchingConditions.push(condition.id);
-        matchingWeight += condition.weight;
-      }
-    }
-    const score = totalWeight > 0 ? (matchingWeight / totalWeight) * 100 : 0;
-    let segmentMatches: boolean;
-    switch (segment.joinLogic) {
-    case 'all':
-      segmentMatches = matchingConditions.length === segment.conditions.filter(c => c.isEnabled).length;
-      break;
-    case 'any':
-      segmentMatches = matchingConditions.length > 0;
-      break;
-    case 'complex':
-      segmentMatches = this.evaluateComplexLogic()
-        segment.complexLogicExpression || '',
-        segment.conditions,
-        matchingConditions
-      );
-      break;
-    default:
-      segmentMatches = false;
-    }
-    return {
-      matches: segmentMatches,
-      matchingConditions,
-      score
-    };
-  }
+  * Evaluate if a user matches segment conditions
+  */
+  static evaluateUserForSegment(userAttributes: UserAttributes,)
+  segment: UserSegment,
+  behaviorHistory?: BehaviorEvent): {,
+  matches: boolean;,
+  matchingConditions: string;
+  score: number;
+  const matchingConditions: string = [];
+  let totalWeight = 0;
+  let matchingWeight = 0;
+  for (const condition of segment.conditions.filter(c => c.isEnabled)) {
+  totalWeight += condition.weight;
+  const matches = this.evaluateCondition(userAttributes, condition, behaviorHistory);
+  if (matches) {
+  matchingConditions.push(condition.id);
+  matchingWeight += condition.weight;
+  const score = totalWeight > 0 ? (matchingWeight / totalWeight) * 100 : 0;
+  let segmentMatches: boolean;
+  switch (segment.joinLogic) {
+  case 'all':,
+  segmentMatches = matchingConditions.length === segment.conditions.filter(c => c.isEnabled).length;
+  break;
+  case 'any':,
+  segmentMatches = matchingConditions.length > 0;
+  break;
+  case 'complex':,
+  segmentMatches = this.evaluateComplexLogic()
+  segment.complexLogicExpression || '',
+  segment.conditions,
+  matchingConditions
+  );
+  break;
+  default:,
+  segmentMatches = false;
+  return {
+  matches: segmentMatches,
+  matchingConditions,
+  score
+};
   /**
    * Evaluate a single condition against user attributes
    */
-  private static evaluateCondition()
-    userAttributes: UserAttributes,
+  private static evaluateCondition(userAttributes: UserAttributes,)
     condition: SegmentCondition,
-    behaviorHistory?: BehaviorEvent[]
+    behaviorHistory?: BehaviorEvent
   ): boolean {
-    const fieldValue = this.getFieldValue(userAttributes, condition.field, behaviorHistory);
-    switch (condition.operator) {
-    case 'equals':
-      return fieldValue === condition.value;
-    case 'not_equals':
-      return fieldValue !== condition.value;
-    case 'in':
-      return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-    case 'not_in':
-      return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
-    case 'greater_than':
-      return typeof fieldValue === 'number' && fieldValue > condition.value;
-    case 'less_than':
-      return typeof fieldValue === 'number' && fieldValue < condition.value;
-    case 'greater_equal':
-      return typeof fieldValue === 'number' && fieldValue >= condition.value;
-    case 'less_equal':
-      return typeof fieldValue === 'number' && fieldValue <= condition.value;
-    case 'contains':
-      return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
-    case 'not_contains':
-      return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
-    case 'starts_with':
-      return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
-    case 'ends_with':
-      return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
-    case 'regex':
-      return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
-    case 'exists':
-      return fieldValue !== null && fieldValue !== undefined;
-    case 'not_exists':
-      return fieldValue === null || fieldValue === undefined;
-    default:
-      return false;
-    }
-  }
+  const fieldValue = this.getFieldValue(userAttributes, condition.field, behaviorHistory);
+  switch (condition.operator) {
+  case 'equals':,
+  return fieldValue === condition.value;
+  case 'not_equals':,
+  return fieldValue !== condition.value;
+  case 'in':,
+  return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+  case 'not_in':,
+  return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
+  case 'greater_than':,
+  return typeof fieldValue === 'number' && fieldValue > condition.value;
+  case 'less_than':,
+  return typeof fieldValue === 'number' && fieldValue < condition.value;
+  case 'greater_equal':,
+  return typeof fieldValue === 'number' && fieldValue >= condition.value;
+  case 'less_equal':,
+  return typeof fieldValue === 'number' && fieldValue <= condition.value;
+  case 'contains':,
+  return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
+  case 'not_contains':,
+  return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
+  case 'starts_with':,
+  return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
+  case 'ends_with':,
+  return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
+  case 'regex':,
+  return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
+  case 'exists':,
+  return fieldValue !== null && fieldValue !== undefined;
+  case 'not_exists':,
+  return fieldValue === null || fieldValue === undefined;
+  default:,
+  return false;
   /**
-   * Get field value from user attributes or behavior history
-   */
-  private static getFieldValue()
-    userAttributes: UserAttributes,
-    field: string,
-    behaviorHistory?: BehaviorEvent[]
-  ): any {
-    // Handle nested field access (e.g., "featureUsage.loginButton.count")
-    const fieldParts = field.split('.');
-    let value: any = userAttributes;
-    for (const part of fieldParts) {
-      if (value && typeof value === 'object') {
-        value = value[part];
-      } else {
-        return undefined;
-      }
-    }
-    return value;
-  }
+  * Get field value from user attributes or behavior history
+  */
+  private static getFieldValue(userAttributes: UserAttributes,)
+  field: string,
+  behaviorHistory?: BehaviorEvent): any {,
+  // Handle nested field access (e.g., "featureUsage.loginButton.count")
+  const fieldParts = field.split('.');
+  let value: any = userAttributes;
+  for (const part of fieldParts) {
+  if (value && typeof value === 'object') {
+  value = value[part];
+} else {
+  return undefined;
+  return value;
   /**
-   * Evaluate complex boolean logic expressions
-   */
-  private static evaluateComplexLogic()
-    expression: string,
-    conditions: SegmentCondition[],
-    matchingConditionIds: string[],
-  ): boolean {
-    // This is a simplified implementation
-    // In a real system, you'd use a proper expression parser
-    let result = expression;
-    for (const condition of conditions) {
-      const matches = matchingConditionIds.includes(condition.id);
-      result = result.replace(condition.id, matches.toString());
-    }
-    // Replace logical operators
-    result = result.replace(/AND/g, '&&');
-    result = result.replace(/OR/g, '||');
-    result = result.replace(/NOT/g, '!');
-    try {
-      return eval(result);
-    } catch (e) {
+  * Evaluate complex boolean logic expressions
+  */
+  private static evaluateComplexLogic(expression: string,)
+  conditions: SegmentCondition,
+  matchingConditionIds: string): boolean {,
+  // This is a simplified implementation
+  // In a real system, you'd use a proper expression parser
+  let result = expression;
+  for (const condition of conditions) {
+  const matches = matchingConditionIds.includes(condition.id);
+  result = result.replace(condition.id, matches.toString());
+  // Replace logical operators
+  result = result.replace(/AND/g, '&&');
+  result = result.replace(/OR/g, '||');
+  result = result.replace(/NOT/g, '!');
+  try {
+  return eval(result);
+} catch (e) {
       console.error('Failed to evaluate complex logic expression:', e);
       return false;
-    }
-  }
   /**
    * Generate segment insights
    */
-  static generateSegmentInsights()
+  static generateSegmentInsights(()
     segment: UserSegment,
     analytics: SegmentAnalytics,
   ): UserSegment['insights'] {
@@ -690,39 +669,36 @@ export class SegmentUtils {
     // Growth trend analysis
     if (analytics.growthRate > 20) {
       insights.push({)
-        type: 'trend',
+  type: 'trend',
         title: 'High Growth Rate',
-        description: `This segment is growing rapidly at ${analytics.growthRate.toFixed(1)}% rate`,}
-        severity: 'medium',
+        description: `This segment is growing rapidly at ${analytics.growthRate.toFixed(1)}% rate`}
+},
+  severity: 'medium',
         actionable: true,
-        generatedAt: new Date(),
-      });
-    }
+        generatedAt: new Date();
+  });
     // Churn risk analysis
     if (segment.churnRate && segment.churnRate > 0.15) {
       insights.push({)
-        type: 'risk',
+  type: 'risk',
         title: 'High Churn Risk',
-        description: `Churn rate of ${(segment.churnRate * 100).toFixed(1)}% is above healthy threshold`,}
-        severity: 'high',
+        description: `Churn rate of ${(segment.churnRate * 100).toFixed(1)}% is above healthy threshold`}
+},
+  severity: 'high',
         actionable: true,
-        generatedAt: new Date(),
-      });
-    }
+        generatedAt: new Date();
+  });
     // Revenue opportunity
     if (analytics.averageRevenuePerUser > analytics.customerLifetimeValue * 0.8) {
-      insights.push({)
-        type: 'opportunity',
-        title: 'Revenue Opportunity',
-        description: 'Users in this segment have high near-term revenue potential',
-        severity: 'medium',
-        actionable: true,
-        generatedAt: new Date(),
-      });
-    }
+  insights.push({)
+  type: 'opportunity',
+  title: 'Revenue Opportunity',
+  description: 'Users in this segment have high near-term revenue potential',
+  severity: 'medium',
+  actionable: true,
+  generatedAt: new Date(),
+});
     return insights;
-  }
-}
 
 export default {
   UserAttributesSchema,

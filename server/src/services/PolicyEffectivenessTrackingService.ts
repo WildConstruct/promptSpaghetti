@@ -15,6 +15,7 @@ import { PolicyAcceptanceTrackingService } from './PolicyAcceptanceTrackingServi
 import { UserPolicyInteractionService } from './UserPolicyInteractionService';
 import { OperationContext } from '../../../packages/core/types/DataClassification';
 
+}
 export interface PolicyEffectivenessMetrics {
   trackingId: string;
   policyId: string;
@@ -49,7 +50,9 @@ export interface PolicyEffectivenessMetrics {
   createdAt: Date;
   lastUpdated: Date;
 }
+}
 
+}
 export interface TrackingPeriod {
   startDate: Date;
   endDate: Date;
@@ -57,7 +60,9 @@ export interface TrackingPeriod {
   reportingSchedule: ReportingSchedule;
   benchmarkPeriod?: TrackingPeriod;
 }
+}
 
+}
 export interface AdoptionMetrics {
   // User Adoption
   totalUsers: number;
@@ -84,7 +89,9 @@ export interface AdoptionMetrics {
   adoptionTrend: TrendData[];
   seasonalPatterns: SeasonalPattern[];
 }
+}
 
+}
 export interface ComplianceMetrics {
   // Overall Compliance
   overallCompliance: number; // percentage
@@ -111,7 +118,9 @@ export interface ComplianceMetrics {
   regulatoryCompliance: RegulatoryCompliance[];
   complianceGaps: ComplianceGap[];
 }
+}
 
+}
 export interface UserBehaviorMetrics {
   // Engagement Patterns
   averageReadTime: number; // minutes
@@ -139,7 +148,9 @@ export interface UserBehaviorMetrics {
   userJourneyMetrics: UserJourneyMetrics;
   conversionFunnels: ConversionFunnel[];
 }
+}
 
+}
 export interface BusinessImpactMetrics {
   // Operational Impact
   operationalEfficiency: number;
@@ -170,7 +181,9 @@ export interface BusinessImpactMetrics {
   totalBenefit: number;
   roi: number;
 }
+}
 
+}
 export interface GoalAchievementMetrics {
   // Policy Objectives
   primaryObjectives: ObjectiveMetrics[];
@@ -188,7 +201,9 @@ export interface GoalAchievementMetrics {
   goalGaps: GoalGap[];
   improvementAreas: ImprovementArea[];
 }
+}
 
+}
 export interface EffectivenessScore {
   overallScore: number; // 0-100
   categoryScores: CategoryScore[];
@@ -213,7 +228,9 @@ export interface EffectivenessScore {
   scoreHistory: ScoreHistory[];
   scorePrediction: ScorePrediction;
 }
+}
 
+}
 export interface EffectivenessRecommendation {
   recommendationId: string;
   category: RecommendationCategory;
@@ -241,7 +258,9 @@ export interface EffectivenessRecommendation {
   evidence: RecommendationEvidence[];
   dataSupport: DataSupport[];
 }
+}
 
+}
 export interface TrackingMetadata {
   trackingMethod: TrackingMethod;
   dataSource: DataSource[];
@@ -263,16 +282,20 @@ export interface TrackingMetadata {
   previousVersion?: string;
   changeLog: string[];
 }
+}
 
 // Supporting interfaces and types
 
+}
 export interface AdoptionVelocity {
   dailyAdoption: number;
   weeklyAdoption: number;
   monthlyAdoption: number;
   accelerationRate: number;
 }
+}
 
+}
 export interface SegmentAdoption {
   segmentName: string;
   segmentSize: number;
@@ -280,7 +303,9 @@ export interface SegmentAdoption {
   adoptionRate: number;
   timeToAdopt: number;
 }
+}
 
+}
 export interface RegionAdoption {
   region: string;
   userCount: number;
@@ -288,7 +313,9 @@ export interface RegionAdoption {
   adoptionRate: number;
   complianceRequirements: string[];
 }
+}
 
+}
 export interface RoleAdoption {
   role: string;
   userCount: number;
@@ -296,14 +323,18 @@ export interface RoleAdoption {
   adoptionRate: number;
   riskLevel: string;
 }
+}
 
+}
 export interface TrendData {
   timestamp: Date;
   value: number;
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
   changeRate: number;
 }
+}
 
+}
 export interface SeasonalPattern {
   pattern: string;
   seasonStart: Date;
@@ -311,7 +342,9 @@ export interface SeasonalPattern {
   impact: number;
   confidence: number;
 }
+}
 
+}
 export interface FrameworkCompliance {
   framework: string;
   version: string;
@@ -319,7 +352,9 @@ export interface FrameworkCompliance {
   requirements: RequirementCompliance[];
   lastAssessment: Date;
 }
+}
 
+}
 export interface RequirementCompliance {
   requirementId: string;
   description: string;
@@ -327,7 +362,9 @@ export interface RequirementCompliance {
   evidence: string[];
   gaps: string[];
 }
+}
 
+}
 export interface ViolationTypeMetrics {
   violationType: string;
   count: number;
@@ -335,7 +372,9 @@ export interface ViolationTypeMetrics {
   impact: string;
   trend: TrendData[];
 }
+}
 
+}
 export interface IncidentSeverityMetrics {
   low: number;
   medium: number;
@@ -343,7 +382,9 @@ export interface IncidentSeverityMetrics {
   critical: number;
   averageSeverity: number;
 }
+}
 
+}
 export interface AuditFinding {
   findingId: string;
   category: string;
@@ -353,7 +394,9 @@ export interface AuditFinding {
   status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED';
   dueDate: Date;
 }
+}
 
+}
 export interface RegulatoryCompliance {
   regulation: string;
   jurisdiction: string;
@@ -362,7 +405,9 @@ export interface RegulatoryCompliance {
   lastReview: Date;
   nextReview: Date;
 }
+}
 
+}
 export interface ComplianceGap {
   gapId: string;
   description: string;
@@ -371,33 +416,43 @@ export interface ComplianceGap {
   timeline: string;
   owner: string;
 }
+}
 
+}
 export interface AttentionMetrics {
   focusScore: number;
   distractionEvents: number;
   comprehensionIndicators: string[];
   engagementLevel: number;
 }
+}
 
+}
 export interface SentimentAnalysis {
   overallSentiment: 'POSITIVE' | 'NEUTRAL' | 'NEGATIVE';
   sentimentScore: number;
   emotionalIndicators: EmotionalIndicator[];
   topicSentiment: TopicSentiment[];
 }
+}
 
+}
 export interface EmotionalIndicator {
   emotion: string;
   intensity: number;
   frequency: number;
 }
+}
 
+}
 export interface TopicSentiment {
   topic: string;
   sentiment: string;
   confidence: number;
 }
+}
 
+}
 export interface BehaviorChangeIndicator {
   behaviorType: string;
   beforeValue: number;
@@ -405,7 +460,9 @@ export interface BehaviorChangeIndicator {
   changePercentage: number;
   significance: number;
 }
+}
 
+}
 export interface DataProcessingChange {
   changeType: string;
   dataCategoryAffected: string;
@@ -413,7 +470,9 @@ export interface DataProcessingChange {
   qualityChange: number;
   complianceImpact: string;
 }
+}
 
+}
 export interface PrivacySettingChange {
   settingType: string;
   beforeSetting: string;
@@ -421,35 +480,45 @@ export interface PrivacySettingChange {
   userCount: number;
   impactAssessment: string;
 }
+}
 
+}
 export interface UserJourneyMetrics {
   averageJourneyTime: number;
   dropOffPoints: DropOffPoint[];
   conversionRate: number;
   satisfactionAtStages: Stagesatisfaction[];
 }
+}
 
+}
 export interface DropOffPoint {
   stage: string;
   dropOffRate: number;
   reason: string[];
   improvementSuggestions: string[];
 }
+}
 
+}
 export interface Stagesatisfaction {
   stage: string;
   satisfactionScore: number;
   feedbackCount: number;
   commonIssues: string[];
 }
+}
 
+}
 export interface ConversionFunnel {
   funnelName: string;
   stages: FunnelStage[];
   overallConversion: number;
   dropOffAnalysis: string[];
 }
+}
 
+}
 export interface FunnelStage {
   stageName: string;
   entryCount: number;
@@ -457,7 +526,9 @@ export interface FunnelStage {
   conversionRate: number;
   averageTime: number;
 }
+}
 
+}
 export interface ProcessImprovement {
   processName: string;
   improvementType: string;
@@ -465,7 +536,9 @@ export interface ProcessImprovement {
   quantifiableBenefit: string;
   implementationDate: Date;
 }
+}
 
+}
 export interface CostReduction {
   category: string;
   amount: number;
@@ -473,7 +546,9 @@ export interface CostReduction {
   timeframe: string;
   calculationMethod: string;
 }
+}
 
+}
 export interface TimeSaving {
   activity: string;
   timeSavedPerUser: number; // minutes
@@ -481,7 +556,9 @@ export interface TimeSaving {
   totalTimeSaved: number;
   monetaryValue: number;
 }
+}
 
+}
 export interface CompetitiveAdvantage {
   advantageType: string;
   description: string;
@@ -489,7 +566,9 @@ export interface CompetitiveAdvantage {
   competitorComparison: string;
   sustainabilityFactor: number;
 }
+}
 
+}
 export interface ObjectiveMetrics {
   objectiveId: string;
   description: string;
@@ -498,7 +577,9 @@ export interface ObjectiveMetrics {
   achievementRate: number;
   status: 'EXCEEDED' | 'MET' | 'IN_PROGRESS' | 'AT_RISK' | 'NOT_MET';
 }
+}
 
+}
 export interface TargetAchievement {
   targetId: string;
   targetDescription: string;
@@ -507,7 +588,9 @@ export interface TargetAchievement {
   variance: number;
   achievementDate?: Date;
 }
+}
 
+}
 export interface MilestoneProgress {
   milestoneId: string;
   description: string;
@@ -516,7 +599,9 @@ export interface MilestoneProgress {
   completionPercentage: number;
   status: 'COMPLETED' | 'ON_TRACK' | 'DELAYED' | 'AT_RISK';
 }
+}
 
+}
 export interface SuccessIndicator {
   indicatorName: string;
   currentValue: number;
@@ -525,7 +610,9 @@ export interface SuccessIndicator {
   status: 'GREEN' | 'YELLOW' | 'RED';
   trend: 'IMPROVING' | 'STABLE' | 'DECLINING';
 }
+}
 
+}
 export interface KPIMetrics {
   kpiName: string;
   value: number;
@@ -534,7 +621,9 @@ export interface KPIMetrics {
   frequency: string;
   lastUpdated: Date;
 }
+}
 
+}
 export interface GoalGap {
   gapId: string;
   goalArea: string;
@@ -544,7 +633,9 @@ export interface GoalGap {
   rootCause: string[];
   actionPlan: string;
 }
+}
 
+}
 export interface ImprovementArea {
   areaName: string;
   currentPerformance: number;
@@ -553,14 +644,18 @@ export interface ImprovementArea {
   priority: string;
   recommendations: string[];
 }
+}
 
+}
 export interface CategoryScore {
   category: string;
   score: number;
   weight: number;
   contributionToOverall: number;
 }
+}
 
+}
 export interface ScoringModel {
   modelName: string;
   version: string;
@@ -568,21 +663,27 @@ export interface ScoringModel {
   factors: ScoringFactor[];
   calibrationDate: Date;
 }
+}
 
+}
 export interface ScoringFactor {
   factorName: string;
   weight: number;
   calculation: string;
   dataSource: string;
 }
+}
 
+}
 export interface WeightingFactor {
   component: string;
   weight: number;
   rationale: string;
   adjustmentHistory: WeightAdjustment[];
 }
+}
 
+}
 export interface WeightAdjustment {
   adjustmentDate: Date;
   oldWeight: number;
@@ -590,14 +691,18 @@ export interface WeightAdjustment {
   reason: string;
   impact: number;
 }
+}
 
+}
 export interface ScoreHistory {
   date: Date;
   score: number;
   factors: Record<string, number>;
   events: string[];
 }
+}
 
+}
 export interface ScorePrediction {
   predictedScore: number;
   confidence: number;
@@ -605,7 +710,9 @@ export interface ScorePrediction {
   assumptions: string[];
   riskFactors: string[];
 }
+}
 
+}
 export interface ExpectedImpact {
   impactType: string;
   magnitude: number;
@@ -613,7 +720,9 @@ export interface ExpectedImpact {
   confidence: number;
   beneficiaries: string[];
 }
+}
 
+}
 export interface ImplementationEffort {
   effortLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH';
   estimatedHours: number;
@@ -621,7 +730,9 @@ export interface ImplementationEffort {
   skillsRequired: string[];
   complexity: number;
 }
+}
 
+}
 export interface RecommendationTimeline {
   plannedStart: Date;
   plannedCompletion: Date;
@@ -629,7 +740,9 @@ export interface RecommendationTimeline {
   dependencies: string[];
   criticalPath: string[];
 }
+}
 
+}
 export interface TimelineMilestone {
   milestoneId: string;
   description: string;
@@ -637,7 +750,9 @@ export interface TimelineMilestone {
   actualDate?: Date;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'DELAYED';
 }
+}
 
+}
 export interface ActionItem {
   actionId: string;
   description: string;
@@ -647,7 +762,9 @@ export interface ActionItem {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'BLOCKED';
   dependencies: string[];
 }
+}
 
+}
 export interface RecommendationEvidence {
   evidenceType: string;
   source: string;
@@ -656,7 +773,9 @@ export interface RecommendationEvidence {
   relevance: number;
   date: Date;
 }
+}
 
+}
 export interface DataSupport {
   dataPoint: string;
   value: number;
@@ -664,7 +783,9 @@ export interface DataSupport {
   significance: number;
   source: string;
 }
+}
 
+}
 export interface DataQuality {
   completeness: number;
   accuracy: number;
@@ -673,7 +794,9 @@ export interface DataQuality {
   validity: number;
   overallQuality: number;
 }
+}
 
+}
 export interface EnvironmentalFactor {
   factorType: string;
   description: string;
@@ -681,7 +804,9 @@ export interface EnvironmentalFactor {
   magnitude: number;
   controlLevel: 'CONTROLLED' | 'INFLUENCED' | 'EXTERNAL';
 }
+}
 
+}
 export interface ExternalInfluence {
   influenceType: string;
   description: string;
@@ -689,6 +814,7 @@ export interface ExternalInfluence {
   endDate?: Date;
   impact: number;
   compensationApplied: boolean;
+}
 }
 
 // Enums
@@ -805,6 +931,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     trackingPeriod: TrackingPeriod,
     context: OperationContext
   ): Promise<PolicyEffectivenessMetrics> {
+
     // Input validation
     if (!policyId || policyId.trim().length === 0) {
       throw new Error('Policy ID is required and cannot be empty');
@@ -865,7 +992,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
           policyVersion,
           policyType,
           trackingPeriod
-        },
+  }
         context,
         outcome: {
           success: true,
@@ -897,7 +1024,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
             error: errorMessage,
             policyId,
             policyVersion
-          },
+  }
           context,
           outcome: {
             success: false,
@@ -931,6 +1058,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     trackingId: string,
     context: OperationContext
   ): Promise<PolicyEffectivenessMetrics> {
+
     // Input validation
     if (!trackingId || trackingId.trim().length === 0) {
       throw new Error('Tracking ID is required and cannot be empty');
@@ -1018,6 +1146,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
    * Get effectiveness metrics for a policy
    */
   async getEffectivenessMetrics(trackingId: string): Promise<PolicyEffectivenessMetrics | null> {
+
     // Input validation
     if (!trackingId || trackingId.trim().length === 0) {
       throw new Error('Tracking ID is required and cannot be empty');
@@ -1058,6 +1187,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
     trackingId: string,
     reportType: 'SUMMARY' | 'DETAILED' | 'EXECUTIVE' = 'SUMMARY'
   ): Promise<EffectivenessReport> {
+
     const metrics = await this.getEffectivenessMetrics(trackingId);
     if (!metrics) {
       throw new Error('Tracking record not found');
@@ -1084,6 +1214,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   async compareEffectiveness(
     trackingIds: string[]
   ): Promise<EffectivenessComparison> {
+
     const comparisons: PolicyComparison[] = [];
 
     for (const trackingId of trackingIds) {
@@ -1111,25 +1242,28 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
       rankingBy: await this.generateRankings(comparisons),
       insights: await this.generateComparisonInsights(comparisons),
       recommendations: await this.generateComparisonRecommendations(comparisons),
-      generatedAt: new Date()
-    };
+      generatedAt: new Date(};
   }
 
   // Private helper methods
 
   private async generateTrackingId(): Promise<string> {
+
     return `PET-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateReportId(): Promise<string> {
+
     return `PER-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateComparisonId(): Promise<string> {
+
     return `PEC-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async initializeAdoptionMetrics(______policyId: string): Promise<AdoptionMetrics> {
+
     // Implementation would fetch current adoption data
     return {
       totalUsers: 0,
@@ -1146,7 +1280,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         weeklyAdoption: 0,
         monthlyAdoption: 0,
         accelerationRate: 0
-      },
+  }
       adoptionBySegment: [],
       adoptionByRegion: [],
       adoptionByRole: [],
@@ -1156,6 +1290,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async initializeComplianceMetrics(______policyId: string): Promise<ComplianceMetrics> {
+
     return {
       overallCompliance: 0,
       complianceByFramework: [],
@@ -1172,7 +1307,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         high: 0,
         critical: 0,
         averageSeverity: 0
-      },
+  }
       auditScore: 0,
       auditFindings: [],
       remediationRate: 0,
@@ -1182,6 +1317,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async initializeUserBehaviorMetrics(______policyId: string): Promise<UserBehaviorMetrics> {
+
     return {
       averageReadTime: 0,
       comprehensionRate: 0,
@@ -1194,7 +1330,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         distractionEvents: 0,
         comprehensionIndicators: [],
         engagementLevel: 0
-      },
+  }
       feedbackScore: 0,
       feedbackVolume: 0,
       satisfactionRating: 0,
@@ -1203,7 +1339,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         sentimentScore: 0,
         emotionalIndicators: [],
         topicSentiment: []
-      },
+  }
       behaviorChangeIndicators: [],
       dataProcessingChanges: [],
       privacySettingChanges: [],
@@ -1212,12 +1348,13 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         dropOffPoints: [],
         conversionRate: 0,
         satisfactionAtStages: []
-      },
+  }
       conversionFunnels: []
     };
   }
 
   private async initializeBusinessImpactMetrics(______policyId: string): Promise<BusinessImpactMetrics> {
+
     return {
       operationalEfficiency: 0,
       processImprovements: [],
@@ -1242,6 +1379,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async initializeGoalAchievementMetrics(______policyId: string): Promise<GoalAchievementMetrics> {
+
     return {
       primaryObjectives: [],
       secondaryObjectives: [],
@@ -1255,6 +1393,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async initializeEffectivenessScore(): Promise<EffectivenessScore> {
+
     return {
       overallScore: 0,
       categoryScores: [],
@@ -1268,8 +1407,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         version: '1.0',
         methodology: 'Weighted composite scoring',
         factors: [],
-        calibrationDate: new Date()
-      },
+        calibrationDate: new Date(},
       weightingFactors: [],
       industryBenchmark: 0,
       internalBenchmark: 0,
@@ -1286,6 +1424,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async initializeTrackingMetadata(): Promise<TrackingMetadata> {
+
     return {
       trackingMethod: TrackingMethod.AUTOMATED,
       dataSource: [DataSource.USER_INTERACTIONS, DataSource.SYSTEM_LOGS],
@@ -1298,7 +1437,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
         timeliness: 0,
         validity: 0,
         overallQuality: 0
-      },
+  }
       sampleSize: 0,
       statisticalSignificance: 0,
       environmentalFactors: [],
@@ -1310,27 +1449,33 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async updateAdoptionMetrics(metrics: PolicyEffectivenessMetrics): Promise<AdoptionMetrics> {
+
     // Implementation would query current data and update metrics
     return metrics.adoption;
   }
 
   private async updateComplianceMetrics(metrics: PolicyEffectivenessMetrics): Promise<ComplianceMetrics> {
+
     return metrics.compliance;
   }
 
   private async updateUserBehaviorMetrics(metrics: PolicyEffectivenessMetrics): Promise<UserBehaviorMetrics> {
+
     return metrics.userBehavior;
   }
 
   private async updateBusinessImpactMetrics(metrics: PolicyEffectivenessMetrics): Promise<BusinessImpactMetrics> {
+
     return metrics.businessImpact;
   }
 
   private async updateGoalAchievementMetrics(metrics: PolicyEffectivenessMetrics): Promise<GoalAchievementMetrics> {
+
     return metrics.goalAchievement;
   }
 
   private async calculateEffectivenessScore(metrics: PolicyEffectivenessMetrics): Promise<EffectivenessScore> {
+
     // Implementation would calculate weighted composite score
     const adoptionScore = metrics.adoption.adoptionRate;
     const complianceScore = metrics.compliance.overallCompliance;
@@ -1377,6 +1522,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async generateRecommendations(metrics: PolicyEffectivenessMetrics): Promise<EffectivenessRecommendation[]> {
+
     const recommendations: EffectivenessRecommendation[] = [];
 
     // Generate recommendations based on performance gaps
@@ -1393,21 +1539,21 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
           timeframe: '2 months',
           confidence: 0.8,
           beneficiaries: ['All Users']
-        },
+  }
         implementationEffort: {
           effortLevel: 'MEDIUM',
           estimatedHours: 40,
           requiredResources: ['Policy Writer', 'UX Designer'],
           skillsRequired: ['Technical Writing', 'User Experience Design'],
           complexity: 6
-        },
+  }
         timeline: {
           plannedStart: new Date(),
           plannedCompletion: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
           milestones: [],
           dependencies: [],
           criticalPath: []
-        },
+  }
         actionItems: [],
         prerequisites: [],
         successCriteria: ['Adoption rate > 80%', 'User feedback score > 4.0'],
@@ -1423,6 +1569,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async persistTrackingRecord(metrics: PolicyEffectivenessMetrics): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO policy_effectiveness_tracking (
@@ -1477,6 +1624,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   private async updateTrackingRecord(
     metrics: PolicyEffectivenessMetrics
   ): Promise<void> {
+
     try {
       const result = await this.db.query(`
         UPDATE policy_effectiveness_tracking 
@@ -1518,6 +1666,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
   }
 
   private async loadTrackingRecord(trackingId: string): Promise<PolicyEffectivenessMetrics | null> {
+
     try {
       const result = await this.db.query(
         'SELECT * FROM policy_effectiveness_tracking WHERE tracking_id = $1',
@@ -1643,6 +1792,7 @@ export class PolicyEffectivenessTrackingService extends EventEmitter {
 }
 
 // Additional interfaces for reporting and comparison
+}
 export interface EffectivenessReport {
   reportId: string;
   trackingId: string;
@@ -1654,7 +1804,9 @@ export interface EffectivenessReport {
   recommendations: EffectivenessRecommendation[];
   appendices?: Record<string, unknown>;
 }
+}
 
+}
 export interface EffectivenessComparison {
   comparisonId: string;
   policies: PolicyComparison[];
@@ -1663,7 +1815,9 @@ export interface EffectivenessComparison {
   recommendations: Array<Record<string, unknown>>;
   generatedAt: Date;
 }
+}
 
+}
 export interface PolicyComparison {
   trackingId: string;
   policyId: string;
@@ -1675,6 +1829,7 @@ export interface PolicyComparison {
     complianceScore: number;
     userSatisfaction: number;
     businessImpact: number;
+}
   };
 }
 

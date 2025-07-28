@@ -27,8 +27,7 @@ interface TemplateGalleryProps {
   showCreateButton?: boolean;
   allowCreation?: boolean;
   viewMode?: 'grid' | 'list';
-}
-const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
+  const TemplateGallery: React.FC<TemplateGalleryProps> = ({ ),
   workspaceId,
   onSelectTemplate,
   onCreateFromTemplate,
@@ -56,24 +55,22 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
     loadMore,
     refreshTemplates
   } = useTemplates({)
-    workspaceId,
-    searchTerm,
-    category: categoryFilter === 'all' ? undefined : categoryFilter,
-    difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter,
-    sortBy,
-    limit: viewMode === 'grid' ? 12 : 20,
-  });
+  workspaceId,
+  searchTerm,
+  category: categoryFilter === 'all' ? undefined : categoryFilter,
+  difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter,
+  sortBy,
+  limit: viewMode === 'grid' ? 12 : 20,
+});
   const handleTemplateSelect = useCallback((template: ProjectTemplate) => {
     if (onSelectTemplate) {
       onSelectTemplate(template);
     } else {
       setSelectedTemplate(template);
-    }
   }, [onSelectTemplate]);
   const handleCreateFromTemplate = useCallback((template: ProjectTemplate, customization: Record<string, any>) => {
     if (onCreateFromTemplate) {
       onCreateFromTemplate(template, customization);
-    }
     setSelectedTemplate(null);
   }, [onCreateFromTemplate]);
   const handleToggleFavorite = useCallback(async (templateId: string, isFavorited: boolean) => {
@@ -82,11 +79,9 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
         await unfavoriteTemplate(templateId);
       } else {
         await favoriteTemplate(templateId);
-      }
     } catch (err) {
-      console.error('Failed to toggle favorite:', err);
-    }
-  }, [favoriteTemplate, unfavoriteTemplate]);
+  console.error('Failed to toggle favorite:', err);
+}, [favoriteTemplate, unfavoriteTemplate]);
   const renderTemplateGrid = () => (;);
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {templates.map(template => ()
@@ -113,7 +108,7 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
       ))}
     </div>
   );
-  return ();
+  return;
     <div className={`bg-white rounded-lg border border-gray-200 ${className}`}>}
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
@@ -297,7 +292,6 @@ const TemplateGallery: React.FC<TemplateGalleryProps> = ({ )
               {searchTerm || categoryFilter !== 'all' || difficultyFilter !== 'all'
                 ? 'Try adjusting your filters or search terms'
                 : 'Get started by creating your first template'
-              }
             </p>
             {allowCreation && ()
               <button

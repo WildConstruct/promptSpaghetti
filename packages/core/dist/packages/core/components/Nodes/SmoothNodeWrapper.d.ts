@@ -15,8 +15,9 @@ export interface SmoothNodeWrapperProps extends NodeProps {
     onNodeClick?: (nodeId: string) => void;
     onNodeDoubleClick?: (nodeId: string) => void;
     onNodeDelete?: (nodeId: string) => void;
+    export const: any;
+    SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps>;
 }
-export declare const SmoothNodeWrapper: React.FC<SmoothNodeWrapperProps>;
 /**
  * Enhanced node creation animation component
  */

@@ -25,34 +25,34 @@ export interface FunnelAttributionAnalysisProps {
         end: number;
     };
     attributionConfig?: AttributionConfiguration;
-    channels?: MarketingChannel[];
-    segments?: UserSegment[];
-    cohorts?: ConversionCohort[];
+    channels?: MarketingChannel;
+    segments?: UserSegment;
+    cohorts?: ConversionCohort;
     comparisonMode?: AttributionComparisonMode;
     onInsightGenerated?: (insight: AttributionInsight) => void;
     onExport?: (data: AttributionAnalysisExportData) => void;
 }
 export interface AttributionConfiguration {
-    models: AttributionModel[];
+    models: AttributionModel;
     touchpointWindow: number;
     conversionWindow: number;
     crossDeviceTracking: boolean;
     excludeDirectTraffic: boolean;
     minimumEngagement: number;
-    customAttribution?: CustomAttributionRule[];
+    customAttribution?: CustomAttributionRule;
 }
 export type AttributionModel = 'first_touch' | 'last_touch' | 'linear' | 'time_decay' | 'position_based' | 'data_driven' | 'custom';
 export type AttributionComparisonMode = 'model_comparison' | 'channel_comparison' | 'temporal_analysis';
 export interface AttributionAnalysisData {
-    channelAttribution: ChannelAttributionData[];
-    journeyAnalysis: CustomerJourneyData[];
-    modelComparison: AttributionModelComparison[];
-    touchpointAnalysis: TouchpointAnalysisData[];
-    crossChannelInsights: CrossChannelInsight[];
-    budgetRecommendations: BudgetAllocationRecommendation[];
-    roiAnalysis: ChannelROIAnalysis[];
-    conversionPaths: ConversionPathData[];
-    attributionTrends: AttributionTrendData[];
+    channelAttribution: ChannelAttributionData;
+    journeyAnalysis: CustomerJourneyData;
+    modelComparison: AttributionModelComparison;
+    touchpointAnalysis: TouchpointAnalysisData;
+    crossChannelInsights: CrossChannelInsight;
+    budgetRecommendations: BudgetAllocationRecommendation;
+    roiAnalysis: ChannelROIAnalysis;
+    conversionPaths: ConversionPathData;
+    attributionTrends: AttributionTrendData;
 }
 export interface MarketingChannel {
     id: string;
@@ -119,8 +119,8 @@ export interface ConversionContribution {
 export interface JourneyRole {
     primaryRole: 'discovery' | 'consideration' | 'conversion' | 'retention';
     roleDistribution: Record<string, number>;
-    synergisticChannels: string[];
-    competingChannels: string[];
+    synergisticChannels: string;
+    competingChannels: string;
 }
 export interface ChannelEfficiency {
     costPerConversion: number;
@@ -137,11 +137,11 @@ export interface CustomerJourneyData {
     conversionTimestamp?: number;
     totalTouchpoints: number;
     journeyDuration: number;
-    touchpoints: JourneyTouchpoint[];
+    touchpoints: JourneyTouchpoint;
     conversionValue: number;
     journeyType: JourneyType;
     complexity: JourneyComplexity;
-    patterns: JourneyPattern[];
+    patterns: JourneyPattern;
 }
 export type JourneyType = 'converted' | 'abandoned' | 'ongoing';
 export type JourneyComplexity = 'simple' | 'moderate' | 'complex' | 'very_complex';
@@ -154,7 +154,7 @@ export interface JourneyTouchpoint {
     engagementScore: number;
     sessionDuration: number;
     pageViews: number;
-    events: TouchpointEvent[];
+    events: TouchpointEvent;
     attribution: TouchpointAttribution;
     position: TouchpointPosition;
 }
@@ -183,10 +183,10 @@ export interface AttributionModelComparison {
     modelB: AttributionModel;
     conversionDifference: number;
     revenueDifference: number;
-    channelRankingChanges: ChannelRankingChange[];
+    channelRankingChanges: ChannelRankingChange;
     correlationScore: number;
     modelAccuracy: ModelAccuracy;
-    recommendations: ModelRecommendation[];
+    recommendations: ModelRecommendation;
 }
 export interface ChannelRankingChange {
     channelId: string;
@@ -212,9 +212,9 @@ export interface ModelRecommendation {
 }
 export interface TouchpointAnalysisData {
     step: ConversionStep;
-    channelContributions: StepChannelContribution[];
+    channelContributions: StepChannelContribution;
     dropoffAnalysis: StepDropoffAnalysis;
-    optimizationOpportunities: StepOptimizationOpportunity[];
+    optimizationOpportunities: StepOptimizationOpportunity;
 }
 export interface StepChannelContribution {
     channelId: string;
@@ -226,21 +226,21 @@ export interface StepChannelContribution {
 }
 export interface StepDropoffAnalysis {
     totalDropoffs: number;
-    channelDropoffs: ChannelDropoffData[];
-    dropoffReasons: DropoffReason[];
-    recoveryOpportunities: RecoveryOpportunity[];
+    channelDropoffs: ChannelDropoffData;
+    dropoffReasons: DropoffReason;
+    recoveryOpportunities: RecoveryOpportunity;
 }
 export interface ChannelDropoffData {
     channelId: string;
     channelName: string;
     dropoffRate: number;
     dropoffCount: number;
-    reasons: string[];
+    reasons: string;
 }
 export interface DropoffReason {
     reason: string;
     frequency: number;
-    affectedChannels: string[];
+    affectedChannels: string;
     impact: 'high' | 'medium' | 'low';
 }
 export interface RecoveryOpportunity {
@@ -251,19 +251,19 @@ export interface RecoveryOpportunity {
 }
 export interface StepOptimizationOpportunity {
     opportunity: string;
-    affectedChannels: string[];
+    affectedChannels: string;
     potentialLift: number;
     implementation: string;
     priority: 'high' | 'medium' | 'low';
 }
 export interface CrossChannelInsight {
     insightType: CrossChannelInsightType;
-    channels: string[];
+    channels: string;
     description: string;
     impact: number;
     confidence: number;
     actionable: boolean;
-    recommendations: string[];
+    recommendations: string;
 }
 export type CrossChannelInsightType = 'synergy' | 'cannibalization' | 'sequence_optimization' | 'budget_reallocation' | 'creative_optimization' | 'timing_optimization';
 export interface BudgetAllocationRecommendation {
@@ -296,7 +296,7 @@ export interface ChannelROIAnalysis {
     marginalROI: number;
     saturationPoint: number;
     optimalSpend: number;
-    roiTrend: ROITrendData[];
+    roiTrend: ROITrendData;
 }
 export interface ROITrendData {
     period: string;
@@ -307,7 +307,7 @@ export interface ROITrendData {
 }
 export interface ConversionPathData {
     pathId: string;
-    path: string[];
+    path: string;
     frequency: number;
     conversionRate: number;
     averageValue: number;
@@ -318,16 +318,16 @@ export interface ConversionPathData {
     optimization: PathOptimization;
 }
 export interface PathOptimization {
-    bottlenecks: string[];
-    opportunities: string[];
-    alternativePaths: string[];
+    bottlenecks: string;
+    opportunities: string;
+    alternativePaths: string;
     expectedImprovement: number;
 }
 export interface AttributionTrendData {
     period: string;
-    channelTrends: ChannelTrendData[];
-    modelStability: ModelStabilityData[];
-    seasonalityFactors: SeasonalityFactor[];
+    channelTrends: ChannelTrendData;
+    modelStability: ModelStabilityData;
+    seasonalityFactors: SeasonalityFactor;
 }
 export interface ChannelTrendData {
     channelId: string;
@@ -347,7 +347,7 @@ export interface SeasonalityFactor {
     factor: string;
     impact: number;
     confidence: number;
-    affectedChannels: string[];
+    affectedChannels: string;
 }
 export interface AttributionInsight {
     type: AttributionInsightType;
@@ -355,9 +355,9 @@ export interface AttributionInsight {
     description: string;
     impact: 'high' | 'medium' | 'low';
     confidence: number;
-    affectedChannels: string[];
+    affectedChannels: string;
     actionable: boolean;
-    recommendations: InsightRecommendation[];
+    recommendations: InsightRecommendation;
     data: Record<string, any>;
 }
 export type AttributionInsightType = 'channel_performance' | 'attribution_shift' | 'journey_optimization' | 'budget_opportunity' | 'model_accuracy' | 'cross_channel_effect';
@@ -366,7 +366,7 @@ export interface InsightRecommendation {
     impact: number;
     effort: 'low' | 'medium' | 'high';
     timeline: string;
-    resources: string[];
+    resources: string;
 }
 export interface CustomAttributionRule {
     id: string;
@@ -378,15 +378,15 @@ export interface CustomAttributionRule {
     enabled: boolean;
 }
 export interface AttributionAnalysisExportData {
-    channelAttribution: ChannelAttributionData[];
-    journeyAnalysis: CustomerJourneyData[];
-    modelComparison: AttributionModelComparison[];
-    budgetRecommendations: BudgetAllocationRecommendation[];
-    roiAnalysis: ChannelROIAnalysis[];
-    conversionPaths: ConversionPathData[];
+    channelAttribution: ChannelAttributionData;
+    journeyAnalysis: CustomerJourneyData;
+    modelComparison: AttributionModelComparison;
+    budgetRecommendations: BudgetAllocationRecommendation;
+    roiAnalysis: ChannelROIAnalysis;
+    conversionPaths: ConversionPathData;
     exportTimestamp: number;
     configuration: AttributionConfiguration;
-    insights: AttributionInsight[];
+    insights: AttributionInsight;
 }
 export declare const error: string, setError: React.Dispatch<React.SetStateAction<string>>;
 //# sourceMappingURL=FunnelAttributionAnalysis.d.ts.map

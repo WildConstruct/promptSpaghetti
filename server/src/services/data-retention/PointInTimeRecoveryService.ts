@@ -42,6 +42,7 @@ export type RestoreScope =
 // Recovery Point Interfaces
 // =============================================================================
 
+}
 export interface RecoveryPoint {
   recovery_point_id: string;
   name: string;
@@ -90,7 +91,9 @@ export interface RecoveryPoint {
   last_restored_at?: Date;
   access_log: RecoveryPointAccess[];
 }
+}
 
+}
 export interface RecoveryPointAccess {
   access_id: string;
   accessed_at: Date;
@@ -101,7 +104,9 @@ export interface RecoveryPointAccess {
   result_status: 'success' | 'failed' | 'partial';
   details?: Record<string, any>;
 }
+}
 
+}
 export interface RecoveryConfiguration {
   config_id: string;
   name: string;
@@ -126,6 +131,7 @@ export interface RecoveryConfiguration {
     exclude_schemas: string[];
     include_system_data: boolean;
     include_audit_logs: boolean;
+}
   };
   
   // Storage configuration
@@ -171,8 +177,10 @@ export interface RecoveryConfiguration {
   updated_by: string;
 }
 
+}
 export interface RecoveryMetrics {
   config_id: string;
+}
   time_period: { start: Date; end: Date };
   
   // Creation metrics
@@ -243,6 +251,7 @@ export class PointInTimeRecoveryService {
       retentionOverride?: number;
     }
   ): Promise<string> {
+
     const config = await this.getRecoveryConfiguration(configId);
     if (!config) {
       throw new Error(`Recovery configuration not found: ${configId}`);
@@ -308,7 +317,7 @@ export class PointInTimeRecoveryService {
         config_id: configId,
         point_in_time: pointInTime,
         expires_at: expiresAt
-      },
+  }
       severity: 'info'
     });
 
@@ -324,6 +333,7 @@ export class PointInTimeRecoveryService {
    * Get recovery point by ID
    */
   async getRecoveryPoint(recoveryPointId: string): Promise<RecoveryPoint | null> {
+
     const result = await this.db.query(`
       SELECT * FROM recovery_points WHERE recovery_point_id = $1
     `, [recoveryPointId]);
@@ -346,6 +356,7 @@ export class PointInTimeRecoveryService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ points: RecoveryPoint[]; total: number }> {
+
     let whereClause = '';
     const params: unknown[] = [];
     const conditions: string[] = [];
@@ -464,6 +475,7 @@ export class PointInTimeRecoveryService {
     archivedCount: number;
     errors: string[];
   }> {
+
     const result = {
       deletedCount: 0,
       archivedCount: 0,
@@ -512,6 +524,7 @@ export class PointInTimeRecoveryService {
     config: Partial<RecoveryConfiguration>,
     createdBy: string
   ): Promise<string> {
+
     const configId = `rc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     const fullConfig: RecoveryConfiguration = {
@@ -535,40 +548,35 @@ export class PointInTimeRecoveryService {
         exclude_schemas: config.backup_scope?.exclude_schemas || [],
         include_system_data: config.backup_scope?.include_system_data ?? false,
         include_audit_logs: config.backup_scope?.include_audit_logs ?? true
-      },
-      
+  }
       storage_config: {
         provider: config.storage_config?.provider || 'local',
         location: config.storage_config?.location || '/data/backups',
         encryption_enabled: config.storage_config?.encryption_enabled ?? true,
         compression_enabled: config.storage_config?.compression_enabled ?? true,
         compression_level: config.storage_config?.compression_level || 6
-      },
-      
+  }
       validation_config: {
         immediate_validation: config.validation_config?.immediate_validation ?? true,
         periodic_validation_days: config.validation_config?.periodic_validation_days || 7,
         integrity_check_enabled: config.validation_config?.integrity_check_enabled ?? true,
         restore_test_enabled: config.validation_config?.restore_test_enabled ?? false,
         restore_test_frequency_days: config.validation_config?.restore_test_frequency_days || 30
-      },
-      
+  }
       compliance_config: {
         compliance_required: config.compliance_config?.compliance_required ?? false,
         compliance_frameworks: config.compliance_config?.compliance_frameworks || [],
         audit_trail_required: config.compliance_config?.audit_trail_required ?? true,
         legal_hold_support: config.compliance_config?.legal_hold_support ?? false,
         data_classification_aware: config.compliance_config?.data_classification_aware ?? false
-      },
-      
+  }
       performance_config: {
         parallel_threads: config.performance_config?.parallel_threads || 4,
         chunk_size_mb: config.performance_config?.chunk_size_mb || 100,
         network_throttle_mbps: config.performance_config?.network_throttle_mbps,
         cpu_limit_percent: config.performance_config?.cpu_limit_percent,
         memory_limit_mb: config.performance_config?.memory_limit_mb
-      },
-      
+  }
       is_active: config.is_active ?? true,
       created_at: new Date(),
       updated_at: new Date(),
@@ -587,7 +595,7 @@ export class PointInTimeRecoveryService {
         name,
         retention_days: fullConfig.retention_days,
         schedule_enabled: fullConfig.schedule_enabled
-      },
+  }
       severity: 'info'
     });
 
@@ -598,6 +606,7 @@ export class PointInTimeRecoveryService {
    * Get recovery configuration by ID
    */
   async getRecoveryConfiguration(configId: string): Promise<RecoveryConfiguration | null> {
+
     const result = await this.db.query(`
       SELECT * FROM recovery_configurations WHERE config_id = $1
     `, [configId]);
@@ -616,6 +625,7 @@ export class PointInTimeRecoveryService {
     configId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<RecoveryMetrics> {
+
     const metricsResult = await this.db.query(`
       SELECT 
         COUNT(*) as total_recovery_points,
@@ -673,6 +683,7 @@ export class PointInTimeRecoveryService {
   // =============================================================================
 
   private async storeRecoveryPoint(recoveryPoint: RecoveryPoint): Promise<void> {
+
     await this.db.query(`
       INSERT INTO recovery_points (
         recovery_point_id, name, description, type, status, created_at, expires_at,
@@ -684,7 +695,7 @@ export class PointInTimeRecoveryService {
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,
         $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28
-      )
+
     `, [
       recoveryPoint.recovery_point_id, recoveryPoint.name, recoveryPoint.description,
       recoveryPoint.type, recoveryPoint.status, recoveryPoint.created_at, recoveryPoint.expires_at,
@@ -701,6 +712,7 @@ export class PointInTimeRecoveryService {
   }
 
   private async storeRecoveryConfiguration(config: RecoveryConfiguration): Promise<void> {
+
     await this.db.query(`
       INSERT INTO recovery_configurations (
         config_id, name, description, schedule_enabled, schedule_cron, schedule_timezone,
@@ -709,7 +721,7 @@ export class PointInTimeRecoveryService {
         performance_config, is_active, created_at, updated_at, created_by, updated_by
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20
-      )
+
     `, [
       config.config_id, config.name, config.description, config.schedule_enabled,
       config.schedule_cron, config.schedule_timezone, config.retention_days,
@@ -787,6 +799,7 @@ export class PointInTimeRecoveryService {
     recoveryPoint: RecoveryPoint, 
     _____config: RecoveryConfiguration
   ): Promise<void> {
+
     // This would implement the actual backup logic
     // For now, simulate the process
     console.log(`Starting backup for recovery point: ${recoveryPoint.recovery_point_id}`);
@@ -815,6 +828,7 @@ export class PointInTimeRecoveryService {
   }
 
   private async markRecoveryPointFailed(recoveryPointId: string, error: string): Promise<void> {
+
     await this.db.query(`
       UPDATE recovery_points 
       SET status = 'failed', 
@@ -836,16 +850,19 @@ export class PointInTimeRecoveryService {
   }
 
   private async validateFileExists(_____location: string): Promise<boolean> {
+
     // Would implement actual file existence check
     return true; // Simulate success
   }
 
   private async validateChecksum(_____location: string, _____expectedChecksum: string): Promise<boolean> {
+
     // Would implement actual checksum validation
     return true; // Simulate success
   }
 
   private async validateBackupStructure(_____recoveryPoint: RecoveryPoint): Promise<boolean> {
+
     // Would implement actual backup structure validation
     return true; // Simulate success
   }
@@ -855,6 +872,7 @@ export class PointInTimeRecoveryService {
     status: 'valid' | 'invalid',
     details: unknown
   ): Promise<void> {
+
     await this.db.query(`
       UPDATE recovery_points 
       SET validation_status = $2,
@@ -865,11 +883,13 @@ export class PointInTimeRecoveryService {
   }
 
   private async shouldArchiveRecoveryPoint(_____recoveryPointId: string): Promise<boolean> {
+
     // Would implement archiving logic based on policies
     return false; // Default to deletion
   }
 
   private async archiveRecoveryPoint(recoveryPointId: string): Promise<void> {
+
     // Would implement archiving to long-term storage
     await this.db.query(`
       UPDATE recovery_points SET status = 'archived' WHERE recovery_point_id = $1
@@ -877,6 +897,7 @@ export class PointInTimeRecoveryService {
   }
 
   private async deleteRecoveryPoint(recoveryPointId: string): Promise<void> {
+
     // Would implement physical file deletion and database cleanup
     await this.db.query(`
       UPDATE recovery_points SET status = 'expired' WHERE recovery_point_id = $1

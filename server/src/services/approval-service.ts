@@ -13,6 +13,7 @@ import {
   RejectWorkflowSchema
 } from '../database/workflow-models';
 
+}
 export interface ApprovalCriteria {
   id: string;
   workspace_id: string;
@@ -24,7 +25,9 @@ export interface ApprovalCriteria {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface ApprovalRule {
   id: string;
   workspace_id: string;
@@ -55,7 +58,9 @@ export interface ApprovalRule {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface ApprovalRequest {
   id: string;
   workspace_id: string;
@@ -88,7 +93,9 @@ export interface ApprovalRequest {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface ReviewerAssignment {
   id: string;
   approval_request_id: string;
@@ -110,12 +117,14 @@ export interface ReviewerAssignment {
     passed: boolean;
     score: number;
     comment?: string;
+}
   }>;
   
   created_at: Date;
   updated_at: Date;
 }
 
+}
 export interface ApprovalNotification {
   id: string;
   approval_request_id: string;
@@ -127,6 +136,7 @@ export interface ApprovalNotification {
   read_at?: Date;
   action_taken?: string;
   created_at: Date;
+}
 }
 
 export class ApprovalService {
@@ -143,6 +153,7 @@ export class ApprovalService {
   // =============================================================================
 
   async createApprovalCriteria(data: Omit<ApprovalCriteria, 'id' | 'created_at' | 'updated_at'>): Promise<ApprovalCriteria> {
+
     const result = await this.db.query(`
       INSERT INTO approval_criteria (
         workspace_id, name, description, conditions, weight, is_required
@@ -161,6 +172,7 @@ export class ApprovalService {
   }
 
   async getApprovalCriteria(workspaceId: string): Promise<ApprovalCriteria[]> {
+
     const result = await this.db.query(`
       SELECT * FROM approval_criteria 
       WHERE workspace_id = $1 
@@ -174,6 +186,7 @@ export class ApprovalService {
   }
 
   async updateApprovalCriteria(id: string, updates: Partial<ApprovalCriteria>): Promise<ApprovalCriteria | null> {
+
     const setClause = Object.keys(updates)
       .map((key, index) => `${key} = $${index + 2}`)
       .join(', ');
@@ -193,6 +206,7 @@ export class ApprovalService {
   }
 
   async deleteApprovalCriteria(id: string): Promise<boolean> {
+
     const result = await this.db.query(
       'DELETE FROM approval_criteria WHERE id = $1',
       [id]
@@ -205,6 +219,7 @@ export class ApprovalService {
   // =============================================================================
 
   async createApprovalRule(data: Omit<ApprovalRule, 'id' | 'created_at' | 'updated_at'>): Promise<ApprovalRule> {
+
     const result = await this.db.query(`
       INSERT INTO approval_rules (
         workspace_id, transition_id, name, description,
@@ -242,6 +257,7 @@ export class ApprovalService {
   }
 
   async getApprovalRules(workspaceId: string, transitionId?: string): Promise<ApprovalRule[]> {
+
     let query = `
       SELECT * FROM approval_rules 
       WHERE workspace_id = $1
@@ -275,6 +291,7 @@ export class ApprovalService {
     resourceId: string,
     requesterId: string
   ): Promise<ReviewerAssignment[]> {
+
     const assignments: ReviewerAssignment[] = [];
 
     switch (rule.reviewer_assignment_type) {
@@ -338,6 +355,7 @@ export class ApprovalService {
     assignmentType: 'primary' | 'secondary' | 'escalated',
     reason?: string
   ): Promise<ReviewerAssignment> {
+
     const result = await this.db.query(`
       INSERT INTO reviewer_assignments (
         approval_request_id, reviewer_id, assignment_type, assignment_reason
@@ -352,6 +370,7 @@ export class ApprovalService {
   }
 
   private async getResourceOwners(resourceId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT DISTINCT created_by as owner
       FROM resources r
@@ -368,6 +387,7 @@ export class ApprovalService {
   }
 
   private async getRoleBasedReviewers(workspaceId: string, resourceId: string): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT DISTINCT aa.user_id
       FROM acl_assignments aa
@@ -383,6 +403,7 @@ export class ApprovalService {
   }
 
   private async getRoundRobinReviewers(workspaceId: string, count: number): Promise<string[]> {
+
     const result = await this.db.query(`
       SELECT DISTINCT aa.user_id, 
              COUNT(ra.id) as recent_assignments
@@ -418,6 +439,7 @@ export class ApprovalService {
       due_date?: Date;
     }
   ): Promise<ApprovalRequest> {
+
     return this.db.transaction(async (client) => {
       // Get applicable approval rules
       const rules = await this.getApprovalRules(workspaceId, transitionId);
@@ -477,6 +499,7 @@ export class ApprovalService {
       urgency?: string;
     } = {}
   ): Promise<ApprovalRequest[]> {
+
     let query = `
       SELECT ar.*, 
              COUNT(ra.id) as total_reviewers,
@@ -538,6 +561,7 @@ export class ApprovalService {
   }
 
   async getReviewerAssignments(approvalRequestId: string): Promise<ReviewerAssignment[]> {
+
     const result = await this.db.query(`
       SELECT ra.*, u.name as reviewer_name
       FROM reviewer_assignments ra
@@ -565,6 +589,7 @@ export class ApprovalService {
       criteria_evaluations?: Record<string, any>;
     }
   ): Promise<{ success: boolean; approved?: boolean; rejected?: boolean }> {
+
     return this.db.transaction(async (client) => {
       // Update reviewer assignment
       await client.query(`
@@ -637,6 +662,7 @@ export class ApprovalService {
   }
 
   private async executeApprovedTransition(request: ApprovalRequest): Promise<void> {
+
     // Execute the approved state transition
     await this.dao.transitionResourceState({
       resource_id: request.resource_id,
@@ -654,6 +680,7 @@ export class ApprovalService {
   // =============================================================================
 
   async processEscalations(): Promise<void> {
+
     const overdueRequests = await this.db.query(`
       SELECT ar.*, aru.escalation_after_hours, aru.escalation_reviewers
       FROM approval_requests ar
@@ -670,6 +697,7 @@ export class ApprovalService {
   }
 
   private async escalateApprovalRequest(request: unknown): Promise<void> {
+
     const escalationReviewers = JSON.parse(request.escalation_reviewers || '[]');
 
     // Add escalation reviewers
@@ -701,6 +729,7 @@ export class ApprovalService {
     request: ApprovalRequest,
     assignments: ReviewerAssignment[]
   ): Promise<void> {
+
     for (const assignment of assignments) {
       await this.db.query(`
         INSERT INTO approval_notifications (
@@ -719,6 +748,7 @@ export class ApprovalService {
     request: unknown,
     escalationReviewers: string[]
   ): Promise<void> {
+
     for (const reviewerId of escalationReviewers) {
       await this.db.query(`
         INSERT INTO approval_notifications (

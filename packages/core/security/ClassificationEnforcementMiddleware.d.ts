@@ -20,6 +20,7 @@ import {
 /**
  * Extended request with classification information
  */
+
 export interface ClassificationAwareRequest extends Request {
     classification?: {
         level: DataClassificationLevel;
@@ -32,10 +33,11 @@ export interface ClassificationAwareRequest extends Request {
         roles?: string[];
         authLevel?: string;
     };
-}
+
 /**
  * Middleware configuration
  */
+
 export interface ClassificationEnforcementMiddlewareConfig {
     /** Environment preset for the enforcer */
     environment: 'development' | 'staging' | 'production';
@@ -51,7 +53,8 @@ export interface ClassificationEnforcementMiddlewareConfig {
     detailedErrors?: boolean;
     /** Audit event handler */
     auditHandler?: (event: ClassificationAuditEvent) => Promise<void>;
-}
+
+
 /**
  * Create classification enforcement middleware
  */

@@ -29,10 +29,10 @@ import './HelpIntegrationWidget.css';
 
 export interface HelpIntegrationProps {
   // Current context
-  currentSystem: 'graph-editor' | 'marketplace';
+  currentSystem: 'graph-editor' | 'marketplace';,
   currentView: string;
   templateId?: string;
-  userId: string;
+  userId: string;,
   userRole: 'buyer' | 'seller' | 'admin';
   // Integration callbacks
   onTransitionToSystem?: (system: 'graph-editor' | 'marketplace') => void;
@@ -44,34 +44,30 @@ export interface HelpIntegrationProps {
   minimized?: boolean;
   hidden?: boolean;
 }
-
 export interface HelpSession {
-  id: string;
+  id: string;,
   sessionType: string;
-  currentStep: number;
+  currentStep: number;,
   totalSteps: number;
-  content: HelpContent[];
+  content: HelpContent;,
   startTime: Date;
   userProgress: {,
-    completedActions: string[];
-    skippedContent: string[];
-    ratings: Record<string, number>;
-  };
+  completedActions: string;,
+  skippedContent: string;
+  ratings: Record<string, number>;
+};
   escalationLevel: number;
 }
-
 export interface TransitionContext {
-  fromSystem: 'graph-editor' | 'marketplace';
+  fromSystem: 'graph-editor' | 'marketplace';,
   toSystem: 'graph-editor' | 'marketplace';
-  reason: string;
+  reason: string;,
   preserveHelp: boolean;
-  bridgeContent?: HelpContent[];
+  bridgeContent?: HelpContent;
+  // =============================================================================
+  // Help Integration Widget Component
+  // =============================================================================
 }
-
-// =============================================================================
-// Help Integration Widget Component
-// =============================================================================
-
 export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   currentSystem,
   currentView,
@@ -90,7 +86,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   const [isOpen, setIsOpen] = useState(false);
   const [minimized, setMinimized] = useState(initialMinimized);
   const [currentSession, setCurrentSession] = useState<HelpSession | null>(null);
-  const [helpContent, setHelpContent] = useState<HelpContent[]>([]);
+  const [helpContent, setHelpContent] = useState<HelpContent>([]);
   const [transitionContext, setTransitionContext] = useState<TransitionContext | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -109,14 +105,12 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   useEffect(() => {
     if (!hidden && (currentView || templateId)) {
       initializeHelpSession();
-    }
   }, [currentSystem, currentView, templateId, userId, userRole]);
   // Handle transitions between systems
   useEffect(() => {
     if (transitionContext && transitionContext.bridgeContent) {
       setHelpContent(prev => [...transitionContext.bridgeContent!, ...prev]);
       setTransitionContext(null);
-    }
   }, [transitionContext]);
   // =============================================================================
   // Core Help Integration Methods
@@ -129,100 +123,92 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
       const sessionType = determineSessionType(currentView, templateId, userRole);
       // Request contextual help from API
       const response = await fetch('/api/help-integration/contextual-help', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
-        },
-        body: JSON.stringify({),
-          userId,
-          sessionType,
-          context: {,
-            currentView,
-            templateId,
-            userRole,
-            systemContext: currentSystem,
-            marketplaceContext: currentSystem === 'marketplace' ? {,
-              currentView,
-              templateId,
-              userRole
-            } : undefined,
+  },
+  body: JSON.stringify({),
+  userId,
+  sessionType,
+  context: {,
+  currentView,
+  templateId,
+  userRole,
+  systemContext: currentSystem,
+  marketplaceContext: currentSystem === 'marketplace' ? {,
+  currentView,
+  templateId,
+  userRole
+} : undefined,
             graphContext: currentSystem === 'graph-editor' ? {,
-              isEditing: true,
-            } : undefined
-          }
-        })
+  isEditing: true,
+} : undefined
+  }
       });
       if (!response.ok) {
         throw new Error('Failed to load help content');
-      }
       const data = await response.json();
       if (data.success) {
         setHelpContent(data.content);
         setCurrentSession({)
-          id: data.sessionId,
+  id: data.sessionId,
           sessionType,
           currentStep: 0,
           totalSteps: data.content.length,
           content: data.content,
           startTime: new Date(),
           userProgress: {,
-            completedActions: [],
+  completedActions: [],
             skippedContent: [],
             ratings: {}
-          },
-          escalationLevel: 0,
-        });
+  },
+  escalationLevel: 0;
+  });
       } else {
         throw new Error(data.error || 'Failed to initialize help session');
-      }
     } catch (error) {
-      console.error('Failed to initialize help session:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load help');
-    } finally {
+  console.error('Failed to initialize help session:', error);
+  setError(error instanceof Error ? error.message : 'Failed to load help');
+} finally {
       setIsLoading(false);
-    }
   }, [currentView, templateId, userId, userRole, currentSystem]);
   const handleSystemTransition = useCallback(async (toSystem: 'graph-editor' | 'marketplace') => {
     if (!currentSession) return;
     try {
       const response = await fetch('/api/help-integration/system-transition', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
-        },
-        body: JSON.stringify({),
-          userId,
-          fromSystem: currentSystem,
-          toSystem,
-          preserveHelp: true,
-          currentSessionId: currentSession.id,
-          transitionData: {,
-            currentStep: currentSession.currentStep,
-            templateId,
-            currentView
-          }
-        })
+  },
+  body: JSON.stringify({),
+  userId,
+  fromSystem: currentSystem,
+  toSystem,
+  preserveHelp: true,
+  currentSessionId: currentSession.id,
+  transitionData: {,
+  currentStep: currentSession.currentStep,
+  templateId,
+  currentView
+}
       });
       if (response.ok) {
-        const data = await response.json();
-        if (data.bridgeContent) {
-          setTransitionContext({)
-            fromSystem: currentSystem,
-            toSystem,
-            reason: 'user-navigation',
-            preserveHelp: true,
-            bridgeContent: data.bridgeContent,
-          });
-        }
+  const data = await response.json();
+  if (data.bridgeContent) {
+  setTransitionContext({)
+  fromSystem: currentSystem,
+  toSystem,
+  reason: 'user-navigation',
+  preserveHelp: true,
+  bridgeContent: data.bridgeContent,
+});
         // Notify parent component of transition
         onTransitionToSystem?.(toSystem);
-      }
     } catch (error) {
-      console.error('Failed to handle system transition:', error);
-    }
-  }, [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem]);
+  console.error('Failed to handle system transition:', error);
+}, [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem]);
   const handleContentInteraction = useCallback(async (;);
     contentId: string, 
     interactionType: 'viewed' | 'completed' | 'skipped' | 'rated',
@@ -240,75 +226,68 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
             updatedSession.currentStep + 1, 
             updatedSession.totalSteps
           );
-        }
         break;
       case 'skipped':
         if (!updatedSession.userProgress.skippedContent.includes(contentId)) {
           updatedSession.userProgress.skippedContent.push(contentId);
-        }
         break;
       case 'rated':
         if (data?.rating) {
           updatedSession.userProgress.ratings[contentId] = data.rating;
-        }
         break;
-      }
       setCurrentSession(updatedSession);
       // Update session via API
       await fetch(`/api/help-integration/session/${currentSession.id}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
-        },
-        body: JSON.stringify({),
-          currentStep: updatedSession.currentStep,
+  },
+  body: JSON.stringify({,)
+  currentStep: updatedSession.currentStep,
           completedActions: updatedSession.userProgress.completedActions,
           skippedContent: updatedSession.userProgress.skippedContent,
           ...(data?.rating && { feedbackRating: data.rating })
-        })
+  }
       });
       // Notify parent component
       onSessionUpdate?.(updatedSession.userProgress);
     } catch (error) {
-      console.error('Failed to update content interaction:', error);
-    }
-  }, [currentSession, onSessionUpdate]);
+  console.error('Failed to update content interaction:', error);
+}, [currentSession, onSessionUpdate]);
   const handleSupportEscalation = useCallback(async () => {
     if (!currentSession || !escalationReason.trim() || !escalationDescription.trim()) {
       return;
-    }
     try {
       const response = await fetch('/api/help-integration/escalate-to-support', {)
-        method: 'POST',
+  method: 'POST',
         headers: {,
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${getAuthToken()}`}
-        },
-        body: JSON.stringify({),
-          sessionId: currentSession.id,
-          userId,
-          escalationReason,
-          userDescription: escalationDescription,
-          priority: 'medium',
-          additionalContext: {,
-            currentView,
-            templateId,
-            systemState: {,
-              currentSystem,
-              userRole,
-              sessionProgress: currentSession.userProgress,
-            }
-          }
-        })
+  },
+  body: JSON.stringify({,)
+  sessionId: currentSession.id,
+  userId,
+  escalationReason,
+  userDescription: escalationDescription,
+  priority: 'medium',
+  additionalContext: {,
+  currentView,
+  templateId,
+  systemState: {,
+  currentSystem,
+  userRole,
+  sessionProgress: currentSession.userProgress,
+}
       });
       if (response.ok) {
-        const data = await response.json();
-        // Update session with escalation info
-        setCurrentSession(prev => prev ? {)
-          ...prev,
-          escalationLevel: prev.escalationLevel + 1,
-        } : null);
+  const data = await response.json();
+  // Update session with escalation info
+  setCurrentSession(prev => prev ? {)
+  ...prev,
+  escalationLevel: prev.escalationLevel + 1,
+} : null);
         // Notify parent component
         onEscalateToSupport?.(escalationReason, escalationDescription);
         // Close escalation form
@@ -319,26 +298,23 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
         alert(`Support ticket created: ${data.ticketNumber}. Expected response: ${data.expectedResponse}`);}
       } else {
         throw new Error('Failed to escalate to support');
-      }
     } catch (error) {
-      console.error('Failed to escalate to support:', error);
-      alert('Failed to create support ticket. Please try again.');
-    }
-  }, [currentSession, userId, escalationReason, escalationDescription, currentView, templateId, currentSystem, userRole, onEscalateToSupport]);
+  console.error('Failed to escalate to support:', error);
+  alert('Failed to create support ticket. Please try again.');
+}, [currentSession, userId, escalationReason, escalationDescription, currentView, templateId, currentSystem, userRole, onEscalateToSupport]);
   // =============================================================================
   // UI Rendering Methods
   // =============================================================================
   const renderHelpContent = () => {
     if (isLoading) {
-      return ();
+      return;
         <div className="help-loading">
           <div className="help-spinner" />
           <p>Loading contextual help...</p>
         </div>
       );
-    }
     if (error) {
-      return ();
+      return;
         <div className="help-error">
           <AlertCircle size={24} />
           <p>{error}</p>
@@ -347,9 +323,8 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
           </button>
         </div>
       );
-    }
     if (helpContent.length === 0) {
-      return ();
+      return;
         <div className="help-empty">
           <HelpCircle size={24} />
           <p>No help content available for this context.</p>
@@ -358,8 +333,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
           </button>
         </div>
       );
-    }
-    return ();
+    return;
       <div className="help-content-list">
         {helpContent.map((content, index) => ()
           <HelpContentCard
@@ -383,7 +357,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   };
   const renderTransitionPrompt = () => {
     if (!transitionContext || currentSystem === 'graph-editor') return null;
-    return ();
+    return;
       <div className="help-transition-prompt">
         <div className="transition-header">
           <ArrowRight size={16} />
@@ -401,7 +375,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   };
   const renderEscalationForm = () => {
     if (!showEscalation) return null;
-    return ();
+    return;
       <div className="help-escalation-form">
         <div className="escalation-header">
           <MessageCircle size={20} />
@@ -461,7 +435,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   const renderProgressIndicator = () => {
     if (!currentSession || currentSession.totalSteps === 0) return null;
     const progress = (currentSession.currentStep / currentSession.totalSteps) * 100;
-    return ();
+    return;
       <div className="help-progress">
         <div className="progress-bar">
           <div 
@@ -479,7 +453,7 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
   // Main Render
   // =============================================================================
   if (hidden) return null;
-  return ();
+  return;
     <div 
       ref={widgetRef}
       className={`help-integration-widget ${theme} ${position} ${minimized ? 'minimized' : ''} ${isOpen ? 'open' : ''}`}
@@ -566,17 +540,16 @@ export const HelpIntegrationWidget: React.FC<HelpIntegrationProps> = ({)
 // Helper Components
 // =============================================================================
 interface HelpContentCardProps {
-  content: HelpContent;
+  content: HelpContent;,
   isActive: boolean;
-  isCompleted: boolean;
+  isCompleted: boolean;,
   stepNumber: number;
-  totalSteps: number;
+  totalSteps: number;,
   onView: () => void;
-  onComplete: () => void;
+  onComplete: () => void;,
   onSkip: () => void;
   onRate: (rating: number) => void;
-}
-const HelpContentCard: React.FC<HelpContentCardProps> = ({)
+  const HelpContentCard: React.FC<HelpContentCardProps> = ({,)
   content,
   isActive,
   isCompleted,
@@ -589,7 +562,7 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({)
 }) => {
   const [rating, setRating] = useState(0);
   const [_____showActions, _____setShowActions] = useState(false);
-  return ();
+  return;
     <div 
       className={`help-content-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}
       onClick={onView}
@@ -651,31 +624,22 @@ const HelpContentCard: React.FC<HelpContentCardProps> = ({)
 // =============================================================================
 // Utility Functions
 // =============================================================================
-function determineSessionType()
-  currentView: string, 
+function determineSessionType(currentView: string, )
   templateId?: string, 
-  userRole: string = 'buyer',
-): string {
+  userRole: string = 'buyer'): string {,
   if (currentView === 'home' || currentView === 'getting-started') {
     return 'onboarding';
-  }
   if (currentView === 'search' || currentView === 'marketplace') {
     return 'marketplace-navigation';
-  }
   if (currentView === 'template-detail' && templateId) {
     return 'purchase-assistance';
-  }
   if (userRole === 'seller' && currentView.includes('dashboard')) {
     return 'template-creation';
-  }
   if (currentView.includes('help') || currentView.includes('support')) {
     return 'troubleshooting';
-  }
   return 'feature-discovery';
-}
 function getAuthToken(): string {
   // Implementation would get JWT token from app state or localStorage
   return localStorage.getItem('authToken') || '';
-}
 
 export default HelpIntegrationWidget;

@@ -88,14 +88,14 @@ describe('ASTNodeTypeRegistry', () => {
 describe('ASTNodeWhitelistFilter', () => {
   let filter: ASTNodeWhitelistFilter;
   beforeEach(() => {
-    filter = new ASTNodeWhitelistFilter({)
-      strictMode: true,
-      allowRestrictedNodes: true,
-      logBlockedAttempts: false, // Disable logging for tests
-      context: 'test',
-      maxDepth: 10,
-      maxNodes: 50,
-    });
+  filter = new ASTNodeWhitelistFilter({)
+  strictMode: true,
+  allowRestrictedNodes: true,
+  logBlockedAttempts: false, // Disable logging for tests,
+  context: 'test',
+  maxDepth: 10,
+  maxNodes: 50,
+});
   });
   describe('Basic Node Filtering', () => {
     it('should allow safe node types', () => {
@@ -130,21 +130,21 @@ describe('ASTNodeWhitelistFilter', () => {
     });
   });
   describe('Context-Specific Filtering', () => {
-    it('should respect context restrictions', () => {
-      const contextFilter = new ASTNodeWhitelistFilter({)
-        context: 'restricted',
-        allowRestrictedNodes: false,
-      });
+  it('should respect context restrictions', () => {
+  const contextFilter = new ASTNodeWhitelistFilter({)
+  context: 'restricted',
+  allowRestrictedNodes: false,
+});
       const memberNode = acorn.parseExpressionAt('obj.prop', 0);
       const result = contextFilter.filterNode(memberNode);
       expect(result.allowed).toBe(false);
       expect(result.reason).toContain('not allowed in current configuration');
     });
     it('should apply custom overrides', () => {
-      const customFilter = new ASTNodeWhitelistFilter({)
-        additionalSafeTypes: ['TestNodeType'],
-        blockedSafeTypes: ['Identifier'],
-      });
+  const customFilter = new ASTNodeWhitelistFilter({)
+  additionalSafeTypes: ['TestNodeType'],
+  blockedSafeTypes: ['Identifier'],
+});
       // Test additional safe type
       const mockSafeNode = { type: 'TestNodeType' } as acorn.Node;
       const safeResult = customFilter.filterNode(mockSafeNode);
@@ -207,10 +207,10 @@ describe('ASTNodeWhitelistFilter', () => {
     });
   });
   describe('Audit Logging', () => {
-    it('should log blocked attempts when enabled', () => {
-      const loggingFilter = new ASTNodeWhitelistFilter({)
-        logBlockedAttempts: true,
-      });
+  it('should log blocked attempts when enabled', () => {
+  const loggingFilter = new ASTNodeWhitelistFilter({)
+  logBlockedAttempts: true,
+});
       const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
       loggingFilter.filterNode(dangerousNode);
       const events = loggingFilter.getAuditEvents();
@@ -219,21 +219,20 @@ describe('ASTNodeWhitelistFilter', () => {
       expect(events[0].safetyLevel).toBe(NodeSafetyLevel.DANGEROUS);
     });
     it('should manage audit event storage limits', () => {
-      const loggingFilter = new ASTNodeWhitelistFilter({)
-        logBlockedAttempts: true,
-      });
+  const loggingFilter = new ASTNodeWhitelistFilter({)
+  logBlockedAttempts: true,
+});
       // Generate many events
       for (let i = 0; i < 1005; i++) {
         const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
         loggingFilter.filterNode(dangerousNode);
-      }
       const events = loggingFilter.getAuditEvents();
       expect(events.length).toBeLessThanOrEqual(1000); // Should limit storage
     });
     it('should clear audit events', () => {
-      const loggingFilter = new ASTNodeWhitelistFilter({)
-        logBlockedAttempts: true,
-      });
+  const loggingFilter = new ASTNodeWhitelistFilter({)
+  logBlockedAttempts: true,
+});
       const dangerousNode = acorn.parseExpressionAt('function() {}', 0);
       loggingFilter.filterNode(dangerousNode);
       expect(loggingFilter.getAuditEvents().length).toBeGreaterThan(0);
@@ -309,8 +308,8 @@ describe('Factory Functions', () => {
 describe('Real-world Expression Testing', () => {
   let filter: ASTNodeWhitelistFilter;
   beforeEach(() => {
-    filter = createConditionalNodeFilter();
-  });
+  filter = createConditionalNodeFilter();
+});
   it('should allow safe conditional expressions', () => {
     const safeExpressions = [;
       'x > 5',
@@ -325,7 +324,6 @@ describe('Real-world Expression Testing', () => {
       const ast = acorn.parseExpressionAt(expr, 0);
       const result = filter.filterAST(ast);
       expect(result.allowed).toBe(true);
-    }
   });
   it('should block dangerous expressions', () => {
     const dangerousExpressions = [;
@@ -344,8 +342,6 @@ describe('Real-world Expression Testing', () => {
         expect(result.allowed).toBe(false);
       } catch (error) {
         // Some expressions may fail to parse, which is also acceptable
-      }
-    }
   });
   it('should handle complex nested expressions', () => {
     const complexExpr = '(user.age > 18 && user.verified === true) || (user.role === "admin" && permissions.includes("override"))';

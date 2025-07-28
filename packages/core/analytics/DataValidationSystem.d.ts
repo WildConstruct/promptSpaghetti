@@ -169,6 +169,7 @@ export declare const ValidationRuleSchema: z.ZodObject<{
     enabled?: boolean | undefined;
 }>;
 export type ValidationRule = z.infer<typeof ValidationRuleSchema>;
+
 export interface ValidationResult {
     ruleId: string;
     ruleName: string;
@@ -188,7 +189,7 @@ export interface ValidationResult {
         [key: string]: unknown;
     };
     timestamp: number;
-}
+
 export interface ConsistencyCheckResult {
     checkId: string;
     checkName: string;
@@ -205,7 +206,7 @@ export interface ConsistencyCheckResult {
     violations: ValidationResult[];
     recommendations: string[];
     timestamp: number;
-}
+
 export interface DataQualityMetrics {
     completeness: {,
         score: number;
@@ -244,7 +245,6 @@ export interface DataQualityMetrics {
         issueCount: number;
         recommendation: string;
     };
-}
 /**
  * Data Validation System
  *
@@ -410,6 +410,6 @@ export declare class DataValidationSystem {
         recentFailures: number;
         failureRate: number;
     };
-}
+
 export default DataValidationSystem;
 //# sourceMappingURL=DataValidationSystem.d.ts.map

@@ -4,4 +4,6 @@
  * TypeScript type definitions for the policy versioning system.
  * Part of Epic 17 - Backstage Admin Controls
  */
+ > ;
+changeTypeDistribution: Record;
 export {};

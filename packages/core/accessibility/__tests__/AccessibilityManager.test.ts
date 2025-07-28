@@ -18,16 +18,15 @@ describe('AccessibilityManager', () => {
   let manager: AccessibilityManager;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    const OriginalDate = Date;
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-    // Mock the Date constructor
-    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
-      if (value !== undefined) {
-        return new OriginalDate(value);
-      }
-      return mockDate;
-    });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  const OriginalDate = Date;
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+  // Mock the Date constructor
+  const mockDateConstructor = jest.fn<unknown, unknown>().mockImplementation((value?: unknown) => {,
+  if (value !== undefined) {
+  return new OriginalDate(value);
+  return mockDate;
+});
     global.Date = mockDateConstructor as any;
     global.Date.now = jest.fn(() => mockDate.getTime());
     manager = new AccessibilityManager();
@@ -36,15 +35,15 @@ describe('AccessibilityManager', () => {
     jest.restoreAllMocks();
   });
   describe('User Accessibility Profile Management', () => {
-    test('should create accessibility profile with default settings', async () => {
-      const profileData = {
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-        severityLevels: {,
-          [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MODERATE
-        },
-        assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
-        preferredFallbacks: [FallbackMethod.AUDIO_CAPTCHA],
-      };
+  test('should create accessibility profile with default settings', async () => {
+  const profileData = {
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
+  severityLevels: {,
+  [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.MODERATE,
+},
+  assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
+        preferredFallbacks: [FallbackMethod.AUDIO_CAPTCHA];
+  };
       const profile = await manager.createAccessibilityProfile('user123', profileData);
       expect(profile.userId).toBe('user123');
       expect(profile.needs).toContain(AccessibilityNeed.VISUAL_IMPAIRMENT);
@@ -54,23 +53,22 @@ describe('AccessibilityManager', () => {
       expect(profile.isActive).toBe(true);
     });
     test('should update existing accessibility profile', async () => {
-      // Create initial profile
-      await manager.createAccessibilityProfile('user123', {)
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-      });
+  // Create initial profile
+  await manager.createAccessibilityProfile('user123', {)
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
+});
       // Update profile
       const updatedProfile = await manager.createAccessibilityProfile('user123', {)
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT, AccessibilityNeed.HEARING_IMPAIRMENT],
-        customSettings: {,
-          fontSize: 20,
-          contrastRatio: 7.0,
-          timeoutMultiplier: 2.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: true,
-        }
-      });
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT, AccessibilityNeed.HEARING_IMPAIRMENT],
+  customSettings: {,
+  fontSize: 20,
+  contrastRatio: 7.0,
+  timeoutMultiplier: 2.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: true,
+});
       expect(updatedProfile.needs).toHaveLength(2);
       expect(updatedProfile.customSettings.fontSize).toBe(20);
       expect(updatedProfile.customSettings.contrastRatio).toBe(7.0);
@@ -83,45 +81,44 @@ describe('AccessibilityManager', () => {
         done();
       });
       manager.createAccessibilityProfile('user456', {)
-        needs: [AccessibilityNeed.MOTOR_IMPAIRMENT],
-      });
+  needs: [AccessibilityNeed.MOTOR_IMPAIRMENT],
+});
     });
   });
   describe('Accessibility Needs Analysis', () => {
-    test('should analyze context for screen reader users', async () => {
-      await manager.createAccessibilityProfile('user123', {)
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-        severityLevels: {,
-          [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.SEVERE
-        },
-        assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
-      });
-      const context: AccessibilityContext = {
-        userAgent: 'JAWS/2023',
+  test('should analyze context for screen reader users', async () => {
+  await manager.createAccessibilityProfile('user123', {)
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
+  severityLevels: {,
+  [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.SEVERE,
+},
+  assistiveTechnologies: [AssistiveTechnology.SCREEN_READER];
+  });
+      const context: AccessibilityContext = {,
+  userAgent: 'JAWS/2023',
         screenReaderDetected: true,
         assistiveTechDetected: [AssistiveTechnology.SCREEN_READER],
         deviceCapabilities: {,
-          hasCamera: false,
+  hasCamera: false,
           hasMicrophone: true,
           hasTouch: false,
           hasKeyboard: true,
           hasMouse: false,
           screenSize: { width: 1920, height: 1080 },
-          colorDepth: 24,
-        },
-        environmentalFactors: {,
-          isNoisy: false,
-          isLowLight: false,
-          isPublicSpace: false,
-          hasTimeConstraints: false,
-        },
-        sessionContext: {,
-          isEmergency: false,
-          attemptCount: 1,
-          timeRemaining: 300,
-          lastSuccessfulMethod: 'password',
-        }
-      };
+          colorDepth: 24;
+  },
+  environmentalFactors: {,
+  isNoisy: false,
+  isLowLight: false,
+  isPublicSpace: false,
+  hasTimeConstraints: false,
+},
+  sessionContext: {,
+  isEmergency: false,
+  attemptCount: 1,
+  timeRemaining: 300,
+  lastSuccessfulMethod: 'password',
+};
       const analysis = await manager.analyzeAccessibilityNeeds('user123', context);
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.AUDIO_CAPTCHA);
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.VOICE_AUTHENTICATION);
@@ -131,76 +128,73 @@ describe('AccessibilityManager', () => {
       expect(analysis.estimatedDifficulty).toBe('medium');
     });
     test('should analyze context for hearing impaired users', async () => {
-      await manager.createAccessibilityProfile('user456', {)
-        needs: [AccessibilityNeed.HEARING_IMPAIRMENT],
-        severityLevels: {,
-          [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.COMPLETE
-        }
-      });
-      const context: AccessibilityContext = {
-        userAgent: 'Mozilla/5.0',
+  await manager.createAccessibilityProfile('user456', {)
+  needs: [AccessibilityNeed.HEARING_IMPAIRMENT],
+  severityLevels: {,
+  [AccessibilityNeed.HEARING_IMPAIRMENT]: SeverityLevel.COMPLETE,
+});
+      const context: AccessibilityContext = {,
+  userAgent: 'Mozilla/5.0',
         screenReaderDetected: false,
         assistiveTechDetected: [],
         deviceCapabilities: {,
-          hasCamera: true,
+  hasCamera: true,
           hasMicrophone: false,
           hasTouch: true,
           hasKeyboard: true,
           hasMouse: true,
           screenSize: { width: 1280, height: 720 },
-          colorDepth: 24,
-        },
-        environmentalFactors: {,
-          isNoisy: true,
-          isLowLight: false,
-          isPublicSpace: true,
-          hasTimeConstraints: false,
-        },
-        sessionContext: {,
-          isEmergency: false,
-          attemptCount: 1,
-          timeRemaining: 300,
-          lastSuccessfulMethod: 'password',
-        }
-      };
+          colorDepth: 24;
+  },
+  environmentalFactors: {,
+  isNoisy: true,
+  isLowLight: false,
+  isPublicSpace: true,
+  hasTimeConstraints: false,
+},
+  sessionContext: {,
+  isEmergency: false,
+  attemptCount: 1,
+  timeRemaining: 300,
+  lastSuccessfulMethod: 'password',
+};
       const analysis = await manager.analyzeAccessibilityNeeds('user456', context);
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.LARGE_TEXT_DISPLAY);
       expect(analysis.requiredAdaptations).toContain(InterfaceAdaptation.CAPTIONS);
     });
     test('should analyze context for motor impaired users', async () => {
-      await manager.createAccessibilityProfile('user789', {)
-        needs: [AccessibilityNeed.MOTOR_IMPAIRMENT],
-        severityLevels: {,
-          [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.SEVERE
-        },
-        assistiveTechnologies: [AssistiveTechnology.VOICE_CONTROL],
-      });
-      const context: AccessibilityContext = {
-        userAgent: 'Dragon/16.0',
+  await manager.createAccessibilityProfile('user789', {)
+  needs: [AccessibilityNeed.MOTOR_IMPAIRMENT],
+  severityLevels: {,
+  [AccessibilityNeed.MOTOR_IMPAIRMENT]: SeverityLevel.SEVERE,
+},
+  assistiveTechnologies: [AssistiveTechnology.VOICE_CONTROL];
+  });
+      const context: AccessibilityContext = {,
+  userAgent: 'Dragon/16.0',
         screenReaderDetected: false,
         assistiveTechDetected: [AssistiveTechnology.VOICE_CONTROL],
         deviceCapabilities: {,
-          hasCamera: true,
+  hasCamera: true,
           hasMicrophone: true,
           hasTouch: false,
           hasKeyboard: false,
           hasMouse: false,
           screenSize: { width: 1024, height: 768 },
-          colorDepth: 16,
-        },
-        environmentalFactors: {,
-          isNoisy: false,
-          isLowLight: false,
-          isPublicSpace: false,
-          hasTimeConstraints: true,
-        },
-        sessionContext: {,
-          isEmergency: false,
-          attemptCount: 2,
-          timeRemaining: 180,
-          lastSuccessfulMethod: 'voice',
-        }
-      };
+          colorDepth: 16;
+  },
+  environmentalFactors: {,
+  isNoisy: false,
+  isLowLight: false,
+  isPublicSpace: false,
+  hasTimeConstraints: true,
+},
+  sessionContext: {,
+  isEmergency: false,
+  attemptCount: 2,
+  timeRemaining: 180,
+  lastSuccessfulMethod: 'voice',
+};
       const analysis = await manager.analyzeAccessibilityNeeds('user789', context);
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.VOICE_AUTHENTICATION);
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.ASSISTED_INPUT);
@@ -208,50 +202,49 @@ describe('AccessibilityManager', () => {
       expect(analysis.requiredAdaptations).toContain(InterfaceAdaptation.SIMPLIFIED_LAYOUT);
     });
     test('should handle emergency context with high difficulty', async () => {
-      const context: AccessibilityContext = {
-        userAgent: 'Mozilla/5.0',
+      const context: AccessibilityContext = {,
+  userAgent: 'Mozilla/5.0',
         screenReaderDetected: false,
         assistiveTechDetected: [],
         deviceCapabilities: {,
-          hasCamera: false,
+  hasCamera: false,
           hasMicrophone: false,
           hasTouch: false,
           hasKeyboard: false,
           hasMouse: false,
           screenSize: { width: 320, height: 568 },
-          colorDepth: 16,
-        },
-        environmentalFactors: {,
-          isNoisy: true,
-          isLowLight: true,
-          isPublicSpace: true,
-          hasTimeConstraints: true,
-        },
-        sessionContext: {,
-          isEmergency: true,
-          attemptCount: 5,
-          timeRemaining: 30,
-          lastSuccessfulMethod: 'none',
-        }
-      };
+          colorDepth: 16;
+  },
+  environmentalFactors: {,
+  isNoisy: true,
+  isLowLight: true,
+  isPublicSpace: true,
+  hasTimeConstraints: true,
+},
+  sessionContext: {,
+  isEmergency: true,
+  attemptCount: 5,
+  timeRemaining: 30,
+  lastSuccessfulMethod: 'none',
+};
       const analysis = await manager.analyzeAccessibilityNeeds('emergency-user', context);
       expect(analysis.estimatedDifficulty).toBe('critical');
       expect(analysis.recommendedFallbacks).toContain(FallbackMethod.SIMPLIFIED_INTERFACE);
     });
   });
   describe('Accessibility Compliance Validation', () => {
-    test('should validate compliant authentication flow', () => {
-      const authFlow = {
-        keyboardNavigable: true,
-        screenReaderSupport: true,
-        timeout: 600, // 10 minutes
-        contrastRatio: 7.0,
-        hasAudioContent: true,
-        hasTextAlternative: true,
-        hasAnimations: true,
-        respectsReducedMotion: true,
-        hasAudioFallback: true,
-      };
+  test('should validate compliant authentication flow', () => {
+  const authFlow = {
+  keyboardNavigable: true,
+  screenReaderSupport: true,
+  timeout: 600, // 10 minutes,
+  contrastRatio: 7.0,
+  hasAudioContent: true,
+  hasTextAlternative: true,
+  hasAnimations: true,
+  respectsReducedMotion: true,
+  hasAudioFallback: true,
+};
       const result = manager.validateAccessibilityCompliance(authFlow);
       expect(result.isAccessible).toBe(true);
       expect(result.score).toBeGreaterThan(95);
@@ -259,17 +252,17 @@ describe('AccessibilityManager', () => {
       expect(result.issues).toHaveLength(0);
     });
     test('should identify critical accessibility issues', () => {
-      const authFlow = {
-        keyboardNavigable: false,
-        screenReaderSupport: false,
-        timeout: 30, // Too short
-        contrastRatio: 2.0, // Too low
-        hasAudioContent: true,
-        hasTextAlternative: false,
-        hasAnimations: true,
-        respectsReducedMotion: false,
-        hasAudioFallback: false,
-      };
+  const authFlow = {
+  keyboardNavigable: false,
+  screenReaderSupport: false,
+  timeout: 30, // Too short,
+  contrastRatio: 2.0, // Too low,
+  hasAudioContent: true,
+  hasTextAlternative: false,
+  hasAnimations: true,
+  respectsReducedMotion: false,
+  hasAudioFallback: false,
+};
       const result = manager.validateAccessibilityCompliance(authFlow);
       expect(result.isAccessible).toBe(false);
       expect(result.score).toBeLessThan(70);
@@ -278,45 +271,45 @@ describe('AccessibilityManager', () => {
       expect(result.issues.filter(i => i.type === 'major')).toHaveLength(3);
     });
     test('should provide user-specific validation for visual impairment', () => {
-      const userProfile: UserAccessibilityProfile = {
-        userId: 'user123',
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-        severityLevels: {,
-          [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.COMPLETE
-        },
-        assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
+  const userProfile: UserAccessibilityProfile = {,
+  userId: 'user123',
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
+  severityLevels: {,
+  [AccessibilityNeed.VISUAL_IMPAIRMENT]: SeverityLevel.COMPLETE,
+},
+  assistiveTechnologies: [AssistiveTechnology.SCREEN_READER],
         preferredFallbacks: [FallbackMethod.AUDIO_CAPTCHA],
         interfaceAdaptations: [InterfaceAdaptation.AUDIO_DESCRIPTIONS],
         customSettings: {,
-          fontSize: 18,
-          contrastRatio: 7.0,
-          timeoutMultiplier: 2.0,
-          audioEnabled: true,
-          visualEnabled: false,
-          hapticEnabled: true,
-          animationsReduced: true,
-        },
-        verificationMethods: {,
-          primary: ['audio'],
-          fallback: ['phone'],
-          emergency: ['human_assistance'],
-        },
-        emergencyContacts: [],
+  fontSize: 18,
+  contrastRatio: 7.0,
+  timeoutMultiplier: 2.0,
+  audioEnabled: true,
+  visualEnabled: false,
+  hapticEnabled: true,
+  animationsReduced: true,
+},
+  verificationMethods: {,
+  primary: ['audio'],
+  fallback: ['phone'],
+  emergency: ['human_assistance'],
+},
+  emergencyContacts: [],
         documentation: {},
         lastUpdated: new Date(),
-        isActive: true,
-      };
+        isActive: true;
+  };
       const authFlow = {
-        keyboardNavigable: true,
-        screenReaderSupport: true,
-        timeout: 300,
-        contrastRatio: 4.5,
-        hasAudioContent: false,
-        hasTextAlternative: true,
-        hasAnimations: false,
-        respectsReducedMotion: true,
-        hasAudioFallback: false // Critical for this user,
-      };
+  keyboardNavigable: true,
+  screenReaderSupport: true,
+  timeout: 300,
+  contrastRatio: 4.5,
+  hasAudioContent: false,
+  hasTextAlternative: true,
+  hasAnimations: false,
+  respectsReducedMotion: true,
+  hasAudioFallback: false // Critical for this user,
+};
       const result = manager.validateAccessibilityCompliance(authFlow, userProfile);
       expect(result.issues.some(issue => )
         issue.type === 'critical' && 
@@ -338,15 +331,15 @@ describe('AccessibilityManager', () => {
       expect(bypassId).toMatch(/^[0-9a-f-]{36}$/);
     });
     test('should use emergency bypass successfully', async () => {
-      const bypassId = await manager.createEmergencyBypass(;);
-        'user123',
-        'Emergency access needed',
-        'admin456'
-      );
-      const result = manager.useEmergencyBypass(bypassId, {)
-        ipAddress: '192.168.1.100',
-        reason: 'assistive_tech_failure',
-      });
+  const bypassId = await manager.createEmergencyBypass(;);
+  'user123',
+  'Emergency access needed',
+  'admin456'
+  );
+  const result = manager.useEmergencyBypass(bypassId, {)
+  ipAddress: '192.168.1.100',
+  reason: 'assistive_tech_failure',
+});
       expect(result.allowed).toBe(true);
       expect(result.remainingUses).toBe(2); // 3 max - 1 used
     });
@@ -394,23 +387,22 @@ describe('AccessibilityManager', () => {
       });
       manager.createEmergencyBypass('user123', 'Test emergency', 'admin456')
         .then(bypassId => {)
-          manager.useEmergencyBypass(bypassId, { test: true });
+  manager.useEmergencyBypass(bypassId, { test: true });
         });
     });
   });
   describe('Interface Adaptation Recommendations', () => {
-    test('should recommend font size increase', async () => {
-      await manager.createAccessibilityProfile('user123', {)
-        customSettings: {,
-          fontSize: 24,
-          contrastRatio: 4.5,
-          timeoutMultiplier: 1.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: false,
-        }
-      });
+  test('should recommend font size increase', async () => {
+  await manager.createAccessibilityProfile('user123', {)
+  customSettings: {,
+  fontSize: 24,
+  contrastRatio: 4.5,
+  timeoutMultiplier: 1.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: false,
+});
       const recommendations = manager.getAdaptationRecommendations('user123', {});
       expect(recommendations.adaptations).toHaveLength(1);
       expect(recommendations.adaptations[0].type).toBe(InterfaceAdaptation.FONT_SIZE_INCREASE);
@@ -418,69 +410,65 @@ describe('AccessibilityManager', () => {
       expect(recommendations.adaptations[0].implementation.css).toHaveProperty('font-size', '24px');
     });
     test('should recommend contrast enhancement', async () => {
-      await manager.createAccessibilityProfile('user456', {)
-        customSettings: {,
-          fontSize: 16,
-          contrastRatio: 7.0,
-          timeoutMultiplier: 1.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: false,
-        }
-      });
+  await manager.createAccessibilityProfile('user456', {)
+  customSettings: {,
+  fontSize: 16,
+  contrastRatio: 7.0,
+  timeoutMultiplier: 1.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: false,
+});
       const recommendations = manager.getAdaptationRecommendations('user456', {});
       expect(recommendations.adaptations.some(a => )
         a.type === InterfaceAdaptation.CONTRAST_ENHANCEMENT
       )).toBe(true);
     });
     test('should recommend motion reduction', async () => {
-      await manager.createAccessibilityProfile('user789', {)
-        customSettings: {,
-          fontSize: 16,
-          contrastRatio: 4.5,
-          timeoutMultiplier: 1.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: true,
-        }
-      });
+  await manager.createAccessibilityProfile('user789', {)
+  customSettings: {,
+  fontSize: 16,
+  contrastRatio: 4.5,
+  timeoutMultiplier: 1.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: true,
+});
       const recommendations = manager.getAdaptationRecommendations('user789', {});
       expect(recommendations.adaptations.some(a => )
         a.type === InterfaceAdaptation.MOTION_REDUCTION
       )).toBe(true);
     });
     test('should recommend timeout extension', async () => {
-      await manager.createAccessibilityProfile('user101', {)
-        customSettings: {,
-          fontSize: 16,
-          contrastRatio: 4.5,
-          timeoutMultiplier: 3.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: false,
-        }
-      });
+  await manager.createAccessibilityProfile('user101', {)
+  customSettings: {,
+  fontSize: 16,
+  contrastRatio: 4.5,
+  timeoutMultiplier: 3.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: false,
+});
       const recommendations = manager.getAdaptationRecommendations('user101', {});
       expect(recommendations.adaptations.some(a => )
         a.type === InterfaceAdaptation.TIMEOUT_EXTENSION
       )).toBe(true);
     });
     test('should handle color blindness adaptations', async () => {
-      await manager.createAccessibilityProfile('user202', {)
-        customSettings: {,
-          fontSize: 16,
-          contrastRatio: 4.5,
-          timeoutMultiplier: 1.0,
-          audioEnabled: true,
-          visualEnabled: true,
-          hapticEnabled: true,
-          animationsReduced: false,
-          colorBlindnessType: 'protanopia',
-        }
-      });
+  await manager.createAccessibilityProfile('user202', {)
+  customSettings: {,
+  fontSize: 16,
+  contrastRatio: 4.5,
+  timeoutMultiplier: 1.0,
+  audioEnabled: true,
+  visualEnabled: true,
+  hapticEnabled: true,
+  animationsReduced: false,
+  colorBlindnessType: 'protanopia',
+});
       const recommendations = manager.getAdaptationRecommendations('user202', {});
       expect(recommendations.adaptations.some(a => )
         a.type === InterfaceAdaptation.COLOR_ADJUSTMENT
@@ -493,18 +481,18 @@ describe('AccessibilityManager', () => {
     });
   });
   describe('Accessibility Metrics and Statistics', () => {
-    test('should provide comprehensive accessibility metrics', async () => {
-      // Create test profiles
-      await manager.createAccessibilityProfile('user1', {)
-        needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
-      });
+  test('should provide comprehensive accessibility metrics', async () => {
+  // Create test profiles
+  await manager.createAccessibilityProfile('user1', {)
+  needs: [AccessibilityNeed.VISUAL_IMPAIRMENT],
+});
       await manager.createAccessibilityProfile('user2', {)
-        needs: [AccessibilityNeed.HEARING_IMPAIRMENT, AccessibilityNeed.MOTOR_IMPAIRMENT]
-      });
+  needs: [AccessibilityNeed.HEARING_IMPAIRMENT, AccessibilityNeed.MOTOR_IMPAIRMENT],
+});
       await manager.createAccessibilityProfile('user3', {)
-        needs: [AccessibilityNeed.COGNITIVE_IMPAIRMENT],
-        isActive: false,
-      });
+  needs: [AccessibilityNeed.COGNITIVE_IMPAIRMENT],
+  isActive: false,
+});
       // Create emergency bypasses
       await manager.createEmergencyBypass('user1', 'Test', 'admin1');
       await manager.createEmergencyBypass('user2', 'Test', 'admin2', -1); // Expired

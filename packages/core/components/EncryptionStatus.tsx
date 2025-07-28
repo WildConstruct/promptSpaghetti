@@ -23,6 +23,7 @@ export type EncryptionAlgorithm =
 /**
  * Encryption state interface
  */
+
 export interface EncryptionState {
   status: EncryptionStatusType;
   algorithm?: EncryptionAlgorithm;
@@ -31,81 +32,75 @@ export interface EncryptionState {
   lastDecrypted?: number;
   error?: string;
   dataSize?: number;
-  encryptionTime?: number; // milliseconds
+  encryptionTime?: number; // milliseconds,
   strength?: 'weak' | 'medium' | 'strong';
-}
-interface EncryptionStatusProps {
+  interface EncryptionStatusProps {
   encryptionState: EncryptionState;
   className?: string;
   showDetails?: boolean;
 }
-
 export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
   encryptionState,
   className = '',
   showDetails = false
 }) => {
-  const getStatusColor = (status: EncryptionStatusType): string => {
-    switch (status) {
-    case 'encrypted':
-      return 'text-green-500';
-    case 'encrypting':
-    case 'decrypting':
-      return 'text-yellow-500';
-    case 'not_encrypted':
-      return 'text-orange-500';
-    case 'error':
-      return 'text-red-500';
-    case 'unknown':
-    default:
-      return 'text-gray-500';
-    }
-  };
+  const getStatusColor = (status: EncryptionStatusType): string => {,
+  switch (status) {
+  case 'encrypted':,
+  return 'text-green-500';
+  case 'encrypting':,
+  case 'decrypting':,
+  return 'text-yellow-500';
+  case 'not_encrypted':,
+  return 'text-orange-500';
+  case 'error':,
+  return 'text-red-500';
+  case 'unknown':,
+  default:,
+  return 'text-gray-500';
+};
   const getStatusIcon = (status: EncryptionStatusType): string => {
-    switch (status) {
-    case 'encrypted':
-      return '🔒';
-    case 'encrypting':
-    case 'decrypting':
-      return '🔄';
-    case 'not_encrypted':
-      return '🔓';
-    case 'error':
-      return '⚠️';
-    case 'unknown':
-    default:
-      return '❓';
-    }
-  };
+  switch (status) {
+  case 'encrypted':,
+  return '🔒';
+  case 'encrypting':,
+  case 'decrypting':,
+  return '🔄';
+  case 'not_encrypted':,
+  return '🔓';
+  case 'error':,
+  return '⚠️';
+  case 'unknown':,
+  default:,
+  return '❓';
+};
   const getStatusText = (status: EncryptionStatusType): string => {
-    switch (status) {
-    case 'encrypted':
-      return 'Encrypted';
-    case 'encrypting':
-      return 'Encrypting...';
-    case 'decrypting':
-      return 'Decrypting...';
-    case 'not_encrypted':
-      return 'Not Encrypted';
-    case 'error':
-      return 'Encryption Error';
-    case 'unknown':
-    default:
-      return 'Unknown';
-    }
-  };
+  switch (status) {
+  case 'encrypted':,
+  return 'Encrypted';
+  case 'encrypting':,
+  return 'Encrypting...';
+  case 'decrypting':,
+  return 'Decrypting...';
+  case 'not_encrypted':,
+  return 'Not Encrypted';
+  case 'error':,
+  return 'Encryption Error';
+  case 'unknown':,
+  default:,
+  return 'Unknown';
+};
   const getStrengthColor = (strength?: string): string => {
-    switch (strength) {
-    case 'strong':
-      return 'text-green-600';
-    case 'medium':
-      return 'text-yellow-600';
-    case 'weak':
-      return 'text-red-600';
-    default:
-      return 'text-gray-600';
-    }
-  };
+  switch (strength) {
+  case 'strong':,
+  return 'text-green-600';
+  case 'medium':,
+  return 'text-yellow-600';
+  case 'weak':,
+  return 'text-red-600';
+  default:,
+  return 'text-gray-600';
+};
   const formatTime = (timestamp?: number): string => {
     if (!timestamp) return 'Never';
     const date = new Date(timestamp);
@@ -118,7 +113,7 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
     if (size < 1024 * 1024 * 1024) return `${(size / (1024 * 1024)).toFixed(1)} MB`;}
     return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
-  return ();
+  return;
     <div className={`flex items-center space-x-2 ${className}`}>}
       <span 
         className={`text-sm ${getStatusColor(encryptionState.status)}`}
@@ -174,27 +169,27 @@ export const EncryptionStatus: React.FC<EncryptionStatusProps> = ({)
 };
 
 // Compact version for status bars
-export const EncryptionStatusIcon: React.FC<{
+export const EncryptionStatusIcon: React.FC<{,
   encryptionState: EncryptionState;
   onClick?: () => void;
 }> = ({ encryptionState, onClick }) => {
   const statusColor = {
-    encrypted: '#10b981',     // green
-    encrypting: '#f59e0b',    // yellow
-    decrypting: '#f59e0b',    // yellow
-    not_encrypted: '#f97316', // orange
-    error: '#ef4444',         // red
-    unknown: '#6b7280'        // gray,
-  }[encryptionState.status];
+  encrypted: '#10b981',     // green,
+  encrypting: '#f59e0b',    // yellow,
+  decrypting: '#f59e0b',    // yellow,
+  not_encrypted: '#f97316', // orange,
+  error: '#ef4444',         // red,
+  unknown: '#6b7280'        // gray,
+}[encryptionState.status];
   const statusIcon = {
-    encrypted: '🔒',
-    encrypting: '🔄',
-    decrypting: '🔄',
-    not_encrypted: '🔓',
-    error: '⚠️',
-    unknown: '❓',
-  }[encryptionState.status];
-  return ();
+  encrypted: '🔒',
+  encrypting: '🔄',
+  decrypting: '🔄',
+  not_encrypted: '🔓',
+  error: '⚠️',
+  unknown: '❓',
+}[encryptionState.status];
+  return;
     <div 
       className="cursor-pointer flex items-center space-x-1" 
       onClick={onClick}
@@ -215,7 +210,7 @@ export const EncryptionStatusIcon: React.FC<{
 };
 
 // Encryption details modal/dropdown content
-export const EncryptionDetails: React.FC<{
+export const EncryptionDetails: React.FC<{,
   encryptionState: EncryptionState;
   onEncrypt?: () => void;
   onDecrypt?: () => void;
@@ -230,11 +225,11 @@ export const EncryptionDetails: React.FC<{
   const isProcessing = encryptionState.status === 'encrypting' || encryptionState.status === 'decrypting';
   const canEncrypt = encryptionState.status === 'not_encrypted' && !isProcessing;
   const canDecrypt = encryptionState.status === 'encrypted' && !isProcessing;
-  const formatTime = (timestamp?: number): string => {
-    if (!timestamp) return 'Never';
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  };
+  const formatTime = (timestamp?: number): string => {,
+  if (!timestamp) return 'Never';
+  const date = new Date(timestamp);
+  return date.toLocaleString();
+};
   const formatDataSize = (size?: number): string => {
     if (!size) return 'Unknown';
     if (size < 1024) return `${size} B`;}
@@ -243,22 +238,21 @@ export const EncryptionDetails: React.FC<{
     return `${(size / (1024 * 1024 * 1024)).toFixed(1)} GB`;}
   };
   const getStrengthDetails = (algorithm?: EncryptionAlgorithm): string => {
-    switch (algorithm) {
-    case 'AES-256-GCM':
-    case 'AES-256-CBC':
-    case 'ChaCha20-Poly1305':
-      return 'Strong encryption (256-bit)';
-    case 'AES-128-GCM':
-      return 'Medium encryption (128-bit)';
-    case 'RSA-2048':
-      return 'Medium encryption (RSA 2048-bit)';
-    case 'RSA-4096':
-      return 'Strong encryption (RSA 4096-bit)';
-    default:
-      return 'Unknown encryption strength';
-    }
-  };
-  return ();
+  switch (algorithm) {
+  case 'AES-256-GCM':,
+  case 'AES-256-CBC':,
+  case 'ChaCha20-Poly1305':,
+  return 'Strong encryption (256-bit)';
+  case 'AES-128-GCM':,
+  return 'Medium encryption (128-bit)';
+  case 'RSA-2048':,
+  return 'Medium encryption (RSA 2048-bit)';
+  case 'RSA-4096':,
+  return 'Strong encryption (RSA 4096-bit)';
+  default:,
+  return 'Unknown encryption strength';
+};
+  return;
     <div className="p-4 bg-white rounded-lg shadow-lg border w-80">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -269,11 +263,11 @@ export const EncryptionDetails: React.FC<{
           <div className="flex justify-between">
             <span className="text-gray-600">Status:</span>
             <span className={`font-medium ${
-              isEncrypted ? 'text-green-600' : 
-                encryptionState.status === 'error' ? 'text-red-600' : 
-                  encryptionState.status === 'not_encrypted' ? 'text-orange-600' :
-                    'text-gray-600'
-            }`}>
+  isEncrypted ? 'text-green-600' :,
+  encryptionState.status === 'error' ? 'text-red-600' :,
+  encryptionState.status === 'not_encrypted' ? 'text-orange-600' :,
+  'text-gray-600'
+}`}>
               {encryptionState.status.replace('_', ' ')}
             </span>
           </div>
@@ -289,10 +283,10 @@ export const EncryptionDetails: React.FC<{
             <div className="flex justify-between">
               <span className="text-gray-600">Strength:</span>
               <span className={`font-medium ${
-                encryptionState.strength === 'strong' ? 'text-green-600' :
-                  encryptionState.strength === 'medium' ? 'text-yellow-600' :
-                    'text-red-600'
-              }`}>
+  encryptionState.strength === 'strong' ? 'text-green-600' :,
+  encryptionState.strength === 'medium' ? 'text-yellow-600' :,
+  'text-red-600'
+}`}>
                 {encryptionState.strength}
               </span>
             </div>

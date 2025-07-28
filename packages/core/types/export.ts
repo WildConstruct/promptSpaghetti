@@ -50,8 +50,8 @@ export const ExportTemplateSchema = z.object({)
   is_system_template: z.boolean().default(false),
   // Usage statistics
   usage_count: z.number().int().min(0).default(0),
-  last_used_at: z.string().datetime().optional(),
-});
+  last_used_at: z.string().datetime().optional();
+  });
 
 export const CreateExportTemplateSchema = ExportTemplateSchema.omit({)
   id: true,
@@ -112,8 +112,8 @@ export const ExportJobSchema = z.object({)
   // Performance metrics
   processing_duration: z.number().int().min(0).optional(),
   memory_usage: z.number().int().min(0).optional(),
-  cpu_usage: z.number().min(0).max(100).optional(),
-});
+  cpu_usage: z.number().min(0).max(100).optional();
+  });
 
 export const CreateExportJobSchema = ExportJobSchema.omit({)
   id: true,
@@ -172,8 +172,8 @@ export const ExportScheduleSchema = z.object({)
   next_run_at: z.string().datetime().optional(),
   total_runs: z.number().int().min(0).default(0),
   successful_runs: z.number().int().min(0).default(0),
-  failed_runs: z.number().int().min(0).default(0),
-});
+  failed_runs: z.number().int().min(0).default(0);
+  });
 
 export const CreateExportScheduleSchema = ExportScheduleSchema.omit({)
   id: true,
@@ -204,10 +204,10 @@ export const ExportShareSchema = z.object({)
   password: z.string().optional(),
   description: z.string().optional(),
   // Access control
-  max_downloads: z.number().int().min(1).optional(), // null for unlimited
+  max_downloads: z.number().int().min(1).optional(), // null for unlimited,
   download_count: z.number().int().min(0).default(0),
   allowed_ips: z.array(z.string()).default([]),
-  // Share permissions  
+  // Share permissions
   allow_download: z.boolean().default(true),
   allow_preview: z.boolean().default(true),
   track_access: z.boolean().default(true),
@@ -293,8 +293,8 @@ export const ExportFormatDefinitionSchema = z.object({)
   is_enabled: z.boolean().default(true),
   is_system_format: z.boolean().default(true),
   created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-});
+  updated_at: z.string().datetime();
+  });
 
 export const CreateExportFormatDefinitionSchema = ExportFormatDefinitionSchema.omit({)
   id: true,
@@ -314,16 +314,16 @@ export const CommonExportOptionsSchema = z.object({)
   include_comments: z.boolean().default(false),
   include_attachments: z.boolean().default(false),
   // Filtering options
-  date_range: z.object({),
-    start: z.string().datetime().optional(),
-    end: z.string().datetime().optional(),
-  }).optional(),
+  date_range: z.object({,)
+  start: z.string().datetime().optional(),
+  end: z.string().datetime().optional(),
+}).optional(),
   user_filters: z.array(z.string().uuid()).optional(),
   // Output options
   compress_output: z.boolean().default(false),
   encrypt_output: z.boolean().default(false),
-  encryption_key: z.string().optional(),
-});
+  encryption_key: z.string().optional();
+  });
 
 export const JsonExportOptionsSchema = CommonExportOptionsSchema.extend({)
   pretty: z.boolean().default(true),
@@ -363,17 +363,17 @@ export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({)
   orientation: z.enum(['portrait', 'landscape']).default('portrait'),
   include_images: z.boolean().default(true),
   font_size: z.number().min(8).max(24).default(12),
-  margins: z.object({),
-    top: z.number().min(0).default(20),
-    right: z.number().min(0).default(20),
-    bottom: z.number().min(0).default(20),
-    left: z.number().min(0).default(20),
-  }).default({)
-    top: 20,
-    right: 20,
-    bottom: 20,
-    left: 20,
-  })
+  margins: z.object({,)
+  top: z.number().min(0).default(20),
+  right: z.number().min(0).default(20),
+  bottom: z.number().min(0).default(20),
+  left: z.number().min(0).default(20),
+}).default({)
+  top: 20,
+  right: 20,
+  bottom: 20,
+  left: 20,
+}
 });
 
 export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({)
@@ -446,14 +446,14 @@ export const ExportStatisticsSchema = z.object({)
   exports_by_type: z.record(ExportTypeSchema, z.number().int().min(0)),
   total_size: z.number().int().min(0),
   average_processing_time: z.number().min(0),
-  most_used_templates: z.array(z.object({),
-    template_id: z.string().uuid(),
-    template_name: z.string(),
-    usage_count: z.number().int().min(0),
-  })),
+  most_used_templates: z.array(z.object({,)
+  template_id: z.string().uuid(),
+  template_name: z.string(),
+  usage_count: z.number().int().min(0),
+})),
   success_rate: z.number().min(0).max(100),
-  last_export_at: z.string().datetime().optional(),
-});
+  last_export_at: z.string().datetime().optional();
+  });
 
 // TypeScript type exports
 export type ExportFormat = z.infer<typeof ExportFormatSchema>;
@@ -500,19 +500,19 @@ export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;
 
 // Helper types for API responses
 export type ExportTemplateWithStats = ExportTemplate & {
-  recent_jobs: ExportJob[];
+  recent_jobs: ExportJob;,
   avg_processing_time: number;
   success_rate: number;
 };
 
 export type ExportJobWithTemplate = ExportJob & {
-  template: ExportTemplate | null;
+  template: ExportTemplate | null;,
   share: ExportShare | null;
 };
 
 export type ExportScheduleWithStats = ExportSchedule & {
-  template: ExportTemplate;
-  recent_jobs: ExportJob[];
+  template: ExportTemplate;,
+  recent_jobs: ExportJob;
   next_scheduled_run: string;
 };
 
@@ -537,8 +537,6 @@ export function validateExportOptions(format: ExportFormat, options: any) {
     return VFXExportOptionsSchema.safeParse(options);
   default:
     return CommonExportOptionsSchema.safeParse(options);
-  }
-}
 
 // Constants
 export const MAX_EXPORT_FILE_SIZE = 100 * 1024 * 1024; // 100MB

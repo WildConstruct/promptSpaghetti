@@ -110,7 +110,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         quality_gated_refresh: true,
         error_recovery: true,
         performance_optimization: true
-      },
+  }
       refresh_scheduling: {
         global_interval: 300000, // 5 minutes
         source_specific_intervals: new Map([
@@ -123,9 +123,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           start_hour: 2,
           end_hour: 6,
           timezone: 'UTC'
-        },
+  }
         emergency_refresh_triggers: ['critical_threat_detected', 'system_compromise']
-      },
+  }
       data_collection: {
         concurrent_sources: 5,
         timeout_per_source: 30000,
@@ -135,9 +135,9 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           minimum_confidence: 0.75,
           freshness_requirement: 3600000, // 1 hour
           completeness_threshold: 0.8
-        },
+  }
         deduplication_enabled: true
-      },
+  }
       analysis_automation: {
         trigger_on_refresh: true,
         analysis_types: ['threat_detection', 'pattern_analysis', 'risk_assessment'],
@@ -145,7 +145,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         real_time_analysis_criteria: ['critical_severity', 'high_confidence'],
         quality_impact_analysis: true,
         trend_change_detection: true
-      },
+  }
       performance_monitoring: {
         track_refresh_performance: true,
         source_health_monitoring: true,
@@ -153,7 +153,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
         alert_on_degradation: true,
         performance_history_retention: 30,
         optimization_recommendations: true
-      },
+  }
       integration_settings: {
         workflow_orchestrator_integration: true,
         siem_refresh_synchronization: true,
@@ -200,7 +200,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           timestamp: expect.any(Number),
           configuration: config,
           refresh_automation_enabled: true
-        })
+  }
       );
     });
 
@@ -403,7 +403,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
           schedule_id: expect.any(String),
           interval: 3600000,
           next_execution: expect.any(Number)
-        })
+  }
       );
     });
 
@@ -635,7 +635,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
       const patternAnalysis = {
         patterns_discovered: { 
           new_patterns: ['malware_family_x', 'attack_vector_y'] 
-        },
+  }
         confidence: 0.95
       };
 
@@ -759,8 +759,8 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
             schedule_name: schedule.name,
             interval: schedule.interval,
             priority_level: 'medium'
-          })
-        )
+  }
+
       );
 
       expect(scheduleResults).toHaveLength(3);
@@ -882,7 +882,7 @@ describe('SecurityIntelligenceDataRefreshEngine', () => {
             minimum_confidence: 0.9,
             freshness_requirement: 1800000, // 30 minutes
             completeness_threshold: 0.95
-          },
+  }
           deduplication_enabled: false
         }
       };

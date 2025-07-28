@@ -120,7 +120,7 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           investigation: z.any(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -163,7 +163,7 @@ export async function auditTeamCollaborationRoutes(
           total: z.number(),
           limit: z.number(),
           offset: z.number()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -204,7 +204,7 @@ export async function auditTeamCollaborationRoutes(
         404: z.object({
           success: z.boolean(),
           error: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -247,7 +247,7 @@ export async function auditTeamCollaborationRoutes(
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -291,7 +291,7 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           task: z.any(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -332,7 +332,7 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           evidence: z.any(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -369,7 +369,7 @@ export async function auditTeamCollaborationRoutes(
         201: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -413,7 +413,7 @@ export async function auditTeamCollaborationRoutes(
           success: z.boolean(),
           metrics: z.any(),
           timeframe: z.string()
-        })
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {

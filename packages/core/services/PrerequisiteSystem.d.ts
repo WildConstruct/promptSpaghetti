@@ -134,7 +134,7 @@ export declare class PrerequisiteSecurity {
      * Validates user permissions for prerequisite operations
      */
     static validateUserPermissions(userId: string, action: string, resourceId?: string): boolean;
-}
+
 export declare class DependencyResolver {
     private prerequisites;
     private groups;
@@ -192,7 +192,7 @@ export declare class DependencyResolver {
         }>;
         totalEstimatedTime: number;
     };
-}
+
 export declare class PrerequisiteSystemService {
     private resolver;
     constructor();
@@ -226,7 +226,7 @@ export declare class PrerequisiteSystemService {
         learningPath: any;
         estimatedTime: number;
     }>;
-}
+
 export declare const schemas: {
     prerequisite: z.ZodObject<{,
         id: z.ZodString;

@@ -25,7 +25,7 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     enableCrossDeviceTracking: boolean;
     enableOfflineBuffering: boolean;
     maxOfflineEvents: number;
-    eventValidationRules: EventValidationRule[];
+    eventValidationRules: EventValidationRule;
     deduplicationWindow: number;
     enableDebugLogging: boolean;
     errorReportingEndpoint?: string;
@@ -58,7 +58,7 @@ export interface ConversionContext {
     userId: string;
     deviceId: string;
     timestamp: number;
-    touchpoints: TouchPoint[];
+    touchpoints: TouchPoint;
     privacyConsent: {
         tracking: boolean;
         analytics: boolean;
@@ -73,10 +73,6 @@ export interface ConversionContext {
         term?: string;
     };
 }
-/**
- * Enhanced Conversion Tracking SDK
- * Extends Epic 1 AnalyticsClient with advanced conversion tracking capabilities
- */
 export declare class ConversionTrackingSDK extends AnalyticsClient {
     private conversionConfig;
     private conversionArchitecture;
@@ -88,76 +84,10 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
     private isOnline;
     private recentEventHashes;
     private trackingMetrics;
-    constructor(config: ConversionTrackingConfig, conversionArchitecture: ConversionArchitectureManager, sessionManager: SessionTrackingManager);
-    private initializeTracking;
-    private setupEventListeners;
-    private initializeStreamingConnection;
-    private closeStreamingConnection;
-    /**
-     * Track conversion event with enhanced capabilities
-     */
-    trackConversionEvent(eventType: string, properties?: Record<string, any>, value?: number, touchpoints?: TouchPoint[]): Promise<boolean>;
-    /**
-     * Track funnel step progression
-     */
-    trackFunnelStep(funnelId: string, stepId: string, properties?: Record<string, any>): Promise<boolean>;
-    /**
-     * Track attribution touchpoint
-     */
-    trackTouchpoint(channel: string, source: string, medium: string, properties?: Record<string, any>): Promise<boolean>;
-    /**
-     * Update user consent preferences
-     */
-    updateConsentPreferences(consent: {
-        tracking?: boolean;
-        analytics?: boolean;
-        personalization?: boolean;
-        crossDevice?: boolean;
-    }): void;
-    /**
-     * Get current tracking metrics
-     */
-    getTrackingMetrics(): TrackingMetrics & {
-        queueSize: number;
-        offlineBufferSize: number;
-        streamingConnected: boolean;
-    };
-    /**
-     * Manually flush event queue
-     */
-    flushQueue(): Promise<void>;
-    private getCurrentContext;
-    private isTrackingAllowed;
-    private validateEvent;
-    private isDuplicateEvent;
-    private generateEventHash;
-    private queueEvent;
-    private addToOfflineBuffer;
-    private flushToStream;
-    private flushToAPI;
-    private processOfflineBuffer;
-    private startPeriodicFlush;
-    private setupDefaultValidationRules;
-    private loadOfflineEvents;
-    private saveOfflineEvents;
-    private clearEventData;
-    private generateEventId;
-    private generateTouchpointId;
-    private generateBatchId;
-    private getCurrentSessionId;
-    private getCurrentUserId;
-    private getDeviceId;
-    private getPrivacyConsent;
-    private getAttributionData;
-    private getStoredTouchpoints;
-    private getCategoryForEventType;
-    private getNestedProperty;
-    private debugLog;
-    private reportError;
-    /**
-     * Cleanup resources
-     */
-    destroy(): void;
+    constructor();
+    config: ConversionTrackingConfig;
+    conversionArchitecture: ConversionArchitectureManager;
+    sessionManager: SessionTrackingManager;
+    super(config: any): any;
 }
-export default ConversionTrackingSDK;
 //# sourceMappingURL=ConversionTrackingSDK.d.ts.map

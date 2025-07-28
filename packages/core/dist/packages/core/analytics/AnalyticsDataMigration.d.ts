@@ -8,40 +8,7 @@ import { z } from 'zod';
 import { UnifiedEventBus } from './UnifiedEventBus';
 import { AnalyticsAdapterManager } from './AnalyticsEventAdapters';
 import { EventRepository } from './EventPersistenceLayer';
-export declare const MigrationConfigSchema: z.ZodObject<{
-    batchSize: z.ZodDefault<z.ZodNumber>;
-    concurrency: z.ZodDefault<z.ZodNumber>;
-    retryAttempts: z.ZodDefault<z.ZodNumber>;
-    retryDelayMs: z.ZodDefault<z.ZodNumber>;
-    validationEnabled: z.ZodDefault<z.ZodBoolean>;
-    backupEnabled: z.ZodDefault<z.ZodBoolean>;
-    continueOnError: z.ZodDefault<z.ZodBoolean>;
-    dryRun: z.ZodDefault<z.ZodBoolean>;
-    preserveTimestamps: z.ZodDefault<z.ZodBoolean>;
-    includeMetadata: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    retryAttempts?: number;
-    includeMetadata?: boolean;
-    batchSize?: number;
-    concurrency?: number;
-    retryDelayMs?: number;
-    validationEnabled?: boolean;
-    backupEnabled?: boolean;
-    continueOnError?: boolean;
-    dryRun?: boolean;
-    preserveTimestamps?: boolean;
-}, {
-    retryAttempts?: number;
-    includeMetadata?: boolean;
-    batchSize?: number;
-    concurrency?: number;
-    retryDelayMs?: number;
-    validationEnabled?: boolean;
-    backupEnabled?: boolean;
-    continueOnError?: boolean;
-    dryRun?: boolean;
-    preserveTimestamps?: boolean;
-}>;
+export declare const MigrationConfigSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
 export type MigrationConfig = z.infer<typeof MigrationConfigSchema>;
 export declare enum MigrationStatus {
     PENDING = "pending",
@@ -49,29 +16,10 @@ export declare enum MigrationStatus {
     PAUSED = "paused",
     COMPLETED = "completed",
     FAILED = "failed",
-    CANCELLED = "cancelled"
-}
-export interface MigrationResult {
-    migrationId: string;
-    systemName: string;
-    status: MigrationStatus;
-    startTime: number;
-    endTime?: number;
-    duration?: number;
-    totalRecords: number;
-    processedRecords: number;
-    migratedRecords: number;
-    failedRecords: number;
-    skippedRecords: number;
-    validationErrors: ValidationError[];
-    performanceMetrics: {
-        recordsPerSecond: number;
-        averageBatchTime: number;
-        peakMemoryUsage: number;
-        totalDataSize: number;
-    };
-    backupLocation?: string;
-    rollbackAvailable: boolean;
+    CANCELLED = "cancelled",
+    export,
+    interface,
+    MigrationResult
 }
 export interface ValidationError {
     recordId?: string;
@@ -106,7 +54,7 @@ export interface DataTransformationRule {
         pattern?: string;
         min?: number;
         max?: number;
-        enum?: any[];
+        enum?: any;
     };
 }
 export interface MigrationProgress {
@@ -128,11 +76,6 @@ export interface MigrationProgress {
         bytesPerSecond: number;
     };
 }
-/**
- * Analytics Data Migration Service
- *
- * Orchestrates migration of analytics data from legacy systems to unified event bus
- */
 export declare class AnalyticsDataMigrationService {
     private eventBus;
     private adapterManager;
@@ -140,140 +83,9 @@ export declare class AnalyticsDataMigrationService {
     private activeMigrations;
     private transformationRules;
     private migrationResults;
-    constructor(eventBus: UnifiedEventBus, adapterManager: AnalyticsAdapterManager, eventRepository: EventRepository);
-    /**
-     * Initialize data transformation rules for each system
-     */
-    private initializeTransformationRules;
-    /**
-     * Start migration for a specific analytics system
-     */
-    startMigration(systemName: string, sourceData: any[], config?: Partial<MigrationConfig>): Promise<string>;
-    /**
-     * Perform the actual migration
-     */
-    private performMigration;
-    /**
-     * Process a batch of records
-     */
-    private processBatch;
-    /**
-     * Process individual record
-     */
-    private processRecord;
-    /**
-     * Transform record using transformation rules
-     */
-    private transformRecord;
-    /**
-     * Apply individual transformation rule
-     */
-    private applyTransformationRule;
-    /**
-     * Evaluate condition expression
-     */
-    private evaluateCondition;
-    /**
-     * Validate transformed event
-     */
-    private validateTransformedEvent;
-    /**
-     * Perform final validation
-     */
-    private performFinalValidation;
-    /**
-     * Create backup of source data
-     */
-    private createBackup;
-    /**
-     * Update migration status
-     */
-    private updateMigrationStatus;
-    /**
-     * Update current operation
-     */
-    private updateCurrentOperation;
-    /**
-     * Update migration progress
-     */
-    private updateProgress;
-    /**
-     * Get nested property value
-     */
-    private getNestedProperty;
-    /**
-     * Set nested property value
-     */
-    private setNestedProperty;
-    /**
-     * Calculate data size
-     */
-    private calculateDataSize;
-    /**
-     * Sleep utility
-     */
-    private sleep;
-    /**
-     * Public API Methods
-     */
-    /**
-     * Get migration progress
-     */
-    getMigrationProgress(migrationId: string): MigrationProgress | null;
-    /**
-     * Get migration result
-     */
-    getMigrationResult(migrationId: string): MigrationResult | null;
-    /**
-     * List all migrations
-     */
-    listMigrations(): {
-        active: MigrationProgress[];
-        completed: MigrationResult[];
-    };
-    /**
-     * Cancel migration
-     */
-    cancelMigration(migrationId: string): boolean;
-    /**
-     * Pause migration
-     */
-    pauseMigration(migrationId: string): boolean;
-    /**
-     * Resume migration
-     */
-    resumeMigration(migrationId: string): boolean;
-    /**
-     * Rollback migration
-     */
-    rollbackMigration(migrationId: string): Promise<boolean>;
-    /**
-     * Add transformation rule
-     */
-    addTransformationRule(systemName: string, rule: DataTransformationRule): void;
-    /**
-     * Get transformation rules for system
-     */
-    getTransformationRules(systemName: string): DataTransformationRule[];
-    /**
-     * Migrate all systems
-     */
-    migrateAllSystems(systemsData: {
-        [systemName: string]: any[];
-    }, config?: Partial<MigrationConfig>): Promise<{
-        [systemName: string]: string;
-    }>;
-    /**
-     * Get migration summary
-     */
-    getMigrationSummary(): {
-        totalMigrations: number;
-        activeMigrations: number;
-        completedMigrations: number;
-        failedMigrations: number;
-        totalRecordsMigrated: number;
-        totalValidationErrors: number;
-    };
+    constructor();
+    eventBus: UnifiedEventBus;
+    adapterManager: AnalyticsAdapterManager;
+    eventRepository: EventRepository;
 }
-export default AnalyticsDataMigrationService;
 //# sourceMappingURL=AnalyticsDataMigration.d.ts.map

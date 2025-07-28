@@ -474,7 +474,7 @@ describe('AppealProcessService', () => {
         expect(mockAuditService.logEvent).toHaveBeenCalledWith(
           expect.objectContaining({
             severity: testCase.expectedSeverity
-          })
+  }
         );
 
         // Reset mocks for next iteration
@@ -502,7 +502,7 @@ describe('AppealProcessService', () => {
           category: 'enforcement_action',
           priority: 'high',
           total_count: '2'
-        },
+  }
         {
           appeal_id: 'appeal-002',
           status: 'under_review',

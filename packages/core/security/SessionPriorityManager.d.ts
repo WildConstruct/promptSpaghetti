@@ -21,7 +21,7 @@ export declare enum SessionPriority {
     MEDIUM = "medium",// Regular user operations
     LOW = "low",// Background, non-critical operations
     MINIMAL = "minimal"
-}
+
 export declare enum EvictionPolicy {
     LRU = "lru",// Least Recently Used
     LFU = "lfu",// Least Frequently Used
@@ -29,14 +29,14 @@ export declare enum EvictionPolicy {
     HYBRID = "hybrid",// Combination of factors
     FIFO = "fifo",// First In, First Out
     ACTIVITY_BASED = "activity"
-}
+
 export declare enum ConflictResolution {
     REJECT_NEW = "reject_new",// Reject new session
     EVICT_OLDEST = "evict_oldest",// Remove oldest session
     EVICT_LOWEST_PRIORITY = "evict_lowest",// Remove lowest priority
     PROMPT_USER = "prompt_user",// Ask user to choose
     MERGE_SESSIONS = "merge_sessions"
-}
+
 export interface SessionPriorityConfig {
     maxSessionsPerUser: number;
     maxSessionsPerDevice: number;
@@ -54,7 +54,7 @@ export interface SessionPriorityConfig {
     };
     emergencyOverride: boolean;
     gracePeriodMinutes: number;
-}
+
 export interface PriorityFactors {
     userRole: 'admin' | 'moderator' | 'user' | 'guest';
     deviceTrustLevel: number;
@@ -64,7 +64,7 @@ export interface PriorityFactors {
     activityLevel: number;
     securityRequirement: number;
     businessCriticality: number;
-}
+
 export interface PrioritySessionData {
     sessionId: string;
     userId: string;
@@ -79,7 +79,7 @@ export interface PrioritySessionData {
     evictionProtection: boolean;
     emergencySession: boolean;
     gracePeriodEnd?: Date;
-}
+
 export interface EvictionDecision {
     sessionId: string;
     reason: string;
@@ -88,7 +88,7 @@ export interface EvictionDecision {
     alternativeSessions: string[];
     gracePeriodOffered: boolean;
     userNotificationRequired: boolean;
-}
+
 export interface SessionConflict {
     id: string;
     type: 'user_limit' | 'device_limit' | 'total_limit' | 'resource_contention';
@@ -104,7 +104,7 @@ export interface SessionConflict {
     severity: 'low' | 'medium' | 'high' | 'critical';
     autoResolvable: boolean;
     timeoutMinutes: number;
-}
+
 export interface PriorityMetrics {
     totalSessions: number;
     sessionsByPriority: Record<SessionPriority, number>;
@@ -118,7 +118,6 @@ export interface PriorityMetrics {
     }>;
     emergencyOverrides: number;
     gracePeriodUsage: number;
-}
 /**
  * Comprehensive session priority and eviction management service
  */
@@ -209,7 +208,7 @@ export declare class SessionPriorityManager extends EventEmitter {
      * Destroy the priority manager and clean up resources
      */
     destroy(): void;
-}
+
 export declare const sessionPriorityManager: SessionPriorityManager;
 export default SessionPriorityManager;
 //# sourceMappingURL=SessionPriorityManager.d.ts.map

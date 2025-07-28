@@ -1643,17 +1643,21 @@ export declare function bundleToGraph(bundle: GeneratorBundle): Graph;
  * Epic 8.5: Export Results for Film Industry
  * Professional export system with VFX-ready formats
  */
+}
 export interface ExportRequest {
     format: string;
     data: Record<string, unknown>;
     options: Record<string, unknown>;
     filename: string;
 }
+}
+}
 export interface ExportResult {
     type: 'text' | 'binary';
     data: Record<string, unknown>;
     mimeType: string;
     shouldDownload?: boolean;
+}
 }
 export declare function exportResults(request: ExportRequest): Promise<ExportResult>;
 //# sourceMappingURL=exporter.d.ts.map

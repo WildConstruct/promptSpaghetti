@@ -9,14 +9,14 @@ export interface InspectorPanelProps {
     minWidth?: number;
     maxWidth?: number;
 }
-export declare const InspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {
+export declare const InspectorPanel: {
     node: any;
     schema: any;
     onChange: any;
     onClose: any;
     onGlobalPreviewRequest: any;
-    initialWidth?: number;
-    minWidth?: number;
-    maxWidth?: number;
-}) => import("react/jsx-runtime").JSX.Element;
+    initialWidth: number;
+    minWidth: number;
+    maxWidth: number;
+};
 //# sourceMappingURL=InspectorPanel.d.ts.map

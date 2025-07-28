@@ -5,6 +5,7 @@ import { MetricsCollector, PerformanceAlert } from './MetricsCollector';
 /**
  * Optimization strategy configuration
  */
+}
 export interface OptimizationStrategy {
   name: string;
   description: string;
@@ -16,6 +17,7 @@ export interface OptimizationStrategy {
     latencyThreshold?: number;
     errorRateThreshold?: number;
     connectionCountThreshold?: number;
+}
   };
   actions: OptimizationAction[];
 }
@@ -23,16 +25,19 @@ export interface OptimizationStrategy {
 /**
  * Optimization action types
  */
+}
 export interface OptimizationAction {
   type: 'throttle' | 'batch' | 'cache' | 'compress' | 'prioritize' | 'scale' | 'cleanup';
   target: string;
   parameters: any;
   description: string;
 }
+}
 
 /**
  * Optimization result
  */
+}
 export interface OptimizationResult {
   strategyName: string;
   actionsExecuted: OptimizationAction[];
@@ -44,6 +49,7 @@ export interface OptimizationResult {
     memoryReduction?: number;
     latencyReduction?: number;
     errorRateReduction?: number;
+}
   };
   errors: string[];
 }
@@ -150,6 +156,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Force execute a specific optimization strategy
    */
   async executeStrategy(strategyName: string): Promise<OptimizationResult> {
+
     const strategy = this.strategies.get(strategyName);
     if (!strategy) {
       throw new Error(`Strategy not found: ${strategyName}`);
@@ -245,7 +252,7 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         latencyThreshold: 500,
         connectionCountThreshold: 10
-      },
+  }
       actions: [
         {
           type: 'batch',
@@ -265,7 +272,7 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         cpuThreshold: 70,
         latencyThreshold: 1000
-      },
+  }
       actions: [
         {
           type: 'cache',
@@ -286,7 +293,7 @@ export class PerformanceOptimizer extends EventEmitter {
         cpuThreshold: 85,
         memoryThreshold: 90,
         connectionCountThreshold: 100
-      },
+  }
       actions: [
         {
           type: 'throttle',
@@ -305,7 +312,7 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'low',
       triggerConditions: {
         latencyThreshold: 2000
-      },
+  }
       actions: [
         {
           type: 'compress',
@@ -325,7 +332,7 @@ export class PerformanceOptimizer extends EventEmitter {
       triggerConditions: {
         latencyThreshold: 1500,
         connectionCountThreshold: 20
-      },
+  }
       actions: [
         {
           type: 'prioritize',
@@ -337,7 +344,7 @@ export class PerformanceOptimizer extends EventEmitter {
               'presence_update': 2,
               'cursor_update': 3
             }
-          },
+  }
           description: 'Process critical messages first'
         }
       ]
@@ -351,7 +358,7 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'critical',
       triggerConditions: {
         memoryThreshold: 85
-      },
+  }
       actions: [
         {
           type: 'cleanup',
@@ -359,7 +366,7 @@ export class PerformanceOptimizer extends EventEmitter {
           parameters: { 
             cleanupTypes: ['old_sessions', 'expired_cache', 'disconnected_users'],
             forceGC: true
-          },
+  }
           description: 'Clean up memory and run garbage collection'
         }
       ]
@@ -373,14 +380,14 @@ export class PerformanceOptimizer extends EventEmitter {
       priority: 'high',
       triggerConditions: {
         latencyThreshold: 3000
-      },
+  }
       actions: [
         {
           type: 'batch',
           target: 'conflict_operations',
           parameters: { batchSize: 5, timeout: 200 },
           description: 'Batch conflict resolution operations'
-        },
+  }
         {
           type: 'prioritize',
           target: 'conflict_queue',
@@ -395,6 +402,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Evaluate current performance and apply optimizations
    */
   private async evaluateOptimizations(): Promise<void> {
+
     if (!this.isActive) {
       return;
     }
@@ -435,6 +443,7 @@ export class PerformanceOptimizer extends EventEmitter {
     metrics: any, 
     alerts: PerformanceAlert[]
   ): Promise<boolean> {
+
     const conditions = strategy.triggerConditions;
 
     // Check CPU threshold
@@ -496,6 +505,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Apply optimization strategy
    */
   private async applyOptimization(strategy: OptimizationStrategy): Promise<OptimizationResult> {
+
     const startTime = Date.now();
     const preOptimizationMetrics = this.metricsCollector.getCurrentMetrics();
     const actionsExecuted: OptimizationAction[] = [];
@@ -543,6 +553,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute individual optimization action
    */
   private async executeOptimizationAction(action: OptimizationAction): Promise<void> {
+
     switch (action.type) {
     case 'throttle':
       await this.executeThrottleAction(action);
@@ -574,6 +585,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute throttle optimization
    */
   private async executeThrottleAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'new_connections' && this.wsServer) {
       // Implement connection throttling
       console.log(`Throttling new connections: max ${action.parameters.maxPerSecond} per second`);
@@ -585,6 +597,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute batch optimization
    */
   private async executeBatchAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'websocket_messages') {
       console.log(`Enabling message batching: size ${action.parameters.batchSize}, interval ${action.parameters.batchInterval}ms`);
       // Message batching is handled in optimizeMessageBatching method
@@ -598,6 +611,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute cache optimization
    */
   private async executeCacheAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'graph_operations') {
       console.log(`Enabling response caching: TTL ${action.parameters.ttl}ms, max entries ${action.parameters.maxEntries}`);
       // Response caching is handled in getCachedResponse/setCachedResponse methods
@@ -608,6 +622,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute compress optimization
    */
   private async executeCompressAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'large_messages') {
       console.log(`Enabling message compression for messages > ${action.parameters.threshold} bytes`);
       // Would integrate with WebSocket message handling
@@ -618,6 +633,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute prioritize optimization
    */
   private async executePrioritizeAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'message_queue') {
       console.log('Enabling message prioritization');
       // Would integrate with message queue processing
@@ -631,6 +647,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute scale optimization
    */
   private async executeScaleAction(action: OptimizationAction): Promise<void> {
+
     console.log(`Scaling optimization for ${action.target}`);
     // Would trigger auto-scaling mechanisms
   }
@@ -639,6 +656,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Execute cleanup optimization
    */
   private async executeCleanupAction(action: OptimizationAction): Promise<void> {
+
     if (action.target === 'memory') {
       console.log('Executing memory cleanup');
       
@@ -749,7 +767,7 @@ export class PerformanceOptimizer extends EventEmitter {
           payload: {
             messages: typeMessages,
             count: typeMessages.length
-          },
+  }
           timestamp: Date.now()
         });
       } else {
@@ -776,6 +794,7 @@ export class PerformanceOptimizer extends EventEmitter {
    * Utility function to wait
    */
   private wait(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

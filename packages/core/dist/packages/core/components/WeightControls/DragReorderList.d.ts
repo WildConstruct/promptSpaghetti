@@ -1,7 +1,7 @@
 import React from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export interface DragReorderListProps {
-    options: WeightControlOption[];
+    options: WeightControlOption;
     onReorder: (fromIndex: number, toIndex: number) => void;
     onWeightChange?: (optionId: string, newWeight: number) => void;
     onTextChange?: (optionId: string, newText: string) => void;

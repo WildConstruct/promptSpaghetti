@@ -37,117 +37,111 @@ import {
 } from 'lucide-react';
 
 // Types for Node Annotations
+
 export interface NodeAnnotation {
-  id: string;
+  id: string;,
   nodeId: string;
-  type: 'performance' | 'creative' | 'technical' | 'review' | 'approval' | 'question' | 'reference';
+  type: 'performance' | 'creative' | 'technical' | 'review' | 'approval' | 'question' | 'reference';,
   content: string;
-  author: VFXUser;
+  author: VFXUser;,
   priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'open' | 'in_progress' | 'resolved' | 'approved' | 'rejected' | 'on_hold';
+  status: 'open' | 'in_progress' | 'resolved' | 'approved' | 'rejected' | 'on_hold';,
   timestamp: string;
-  lastModified: string;
-  attachments: NodeAnnotationAttachment[];
-  replies: NodeAnnotationReply[];
-  tags: string[];
-  visibility: 'public' | 'private' | 'team_only' | 'director_only';
-  linkedAnnotations: string[]; // IDs of related annotations
-  estimatedTime?: number; // For task-type annotations
+  lastModified: string;,
+  attachments: NodeAnnotationAttachment;
+  replies: NodeAnnotationReply;,
+  tags: string;
+  visibility: 'public' | 'private' | 'team_only' | 'director_only';,
+  linkedAnnotations: string; // IDs of related annotations,
+  estimatedTime?: number; // For task-type annotations,
   deadline?: string;
   assignee?: VFXUser;
 }
-
 export interface NodeAnnotationAttachment {
-  id: string;
+  id: string;,
   type: 'image' | 'video' | 'audio' | 'link' | 'file';
-  name: string;
+  name: string;,
   url: string;
   thumbnail?: string;
   size?: number;
-  duration?: number; // For audio/video
+  duration?: number; // For audio/video,
 }
-
 export interface NodeAnnotationReply {
-  id: string;
+  id: string;,
   content: string;
-  author: VFXUser;
+  author: VFXUser;,
   timestamp: string;
-  reactions: { [emoji: string]: VFXUser[] };
+  reactions: { [emoji: string]: VFXUser };
 }
-
 export interface VFXUser {
-  id: string;
+  id: string;,
   name: string;
   role: 'director' | 'vfx_supervisor' | 'artist' | 'producer' | 'pipeline_td' | 'coordinator';
   avatar?: string;
   email: string;
 }
-
 export interface NodeAnnotationSystemProps {
-  nodeId: string;
+  nodeId: string;,
   nodeName: string;
-  nodeType: string;
-  annotations: NodeAnnotation[];
-  currentUser: VFXUser;
+  nodeType: string;,
+  annotations: NodeAnnotation;
+  currentUser: VFXUser;,
   onAnnotationCreate: (annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'>) => void;
-  onAnnotationUpdate: (annotationId: string, updates: Partial<NodeAnnotation>) => void;
-  onAnnotationDelete: (annotationId: string) => void;
+  onAnnotationUpdate: (annotationId: string, updates: Partial<NodeAnnotation>) => void;,
+  onAnnotationDelete: (annotationId: string) => void;,
   onReplyCreate: (annotationId: string, reply: Omit<NodeAnnotationReply, 'id' | 'timestamp' | 'reactions'>) => void;
   className?: string;
   compact?: boolean;
-}
-
-// Annotation type configurations
-const ANNOTATION_TYPES = {
+  // Annotation type configurations
+  const ANNOTATION_TYPES = {
   performance: {,
-    icon: <Zap className="w-4 h-4" />,
-    color: '#f59e0b',
-    bgColor: 'bg-amber-50',
-    borderColor: 'border-amber-200',
-    label: 'Performance',
-  },
+  icon: <Zap className="w-4 h-4" />,
+  color: '#f59e0b',
+  bgColor: 'bg-amber-50',
+  borderColor: 'border-amber-200',
+  label: 'Performance',
+},
   creative: {,
-    icon: <Camera className="w-4 h-4" />,
-    color: '#8b5cf6',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-200',
-    label: 'Creative',
-  },
+  icon: <Camera className="w-4 h-4" />,
+  color: '#8b5cf6',
+  bgColor: 'bg-purple-50',
+  borderColor: 'border-purple-200',
+  label: 'Creative',
+},
   technical: {,
-    icon: <Settings className="w-4 h-4" />,
-    color: '#6b7280',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200',
-    label: 'Technical',
-  },
+  icon: <Settings className="w-4 h-4" />,
+  color: '#6b7280',
+  bgColor: 'bg-gray-50',
+  borderColor: 'border-gray-200',
+  label: 'Technical',
+},
   review: {,
-    icon: <Eye className="w-4 h-4" />,
-    color: '#3b82f6',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200',
-    label: 'Review',
-  },
+  icon: <Eye className="w-4 h-4" />,
+  color: '#3b82f6',
+  bgColor: 'bg-blue-50',
+  borderColor: 'border-blue-200',
+  label: 'Review',
+},
   approval: {,
-    icon: <CheckCircle className="w-4 h-4" />,
-    color: '#10b981',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200',
-    label: 'Approval',
-  },
+  icon: <CheckCircle className="w-4 h-4" />,
+  color: '#10b981',
+  bgColor: 'bg-green-50',
+  borderColor: 'border-green-200',
+  label: 'Approval',
+},
   question: {,
-    icon: <MessageCircle className="w-4 h-4" />,
-    color: '#06b6d4',
-    bgColor: 'bg-cyan-50',
-    borderColor: 'border-cyan-200',
-    label: 'Question',
-  },
+  icon: <MessageCircle className="w-4 h-4" />,
+  color: '#06b6d4',
+  bgColor: 'bg-cyan-50',
+  borderColor: 'border-cyan-200',
+  label: 'Question',
+},
   reference: {,
-    icon: <FileText className="w-4 h-4" />,
-    color: '#84cc16',
-    bgColor: 'bg-lime-50',
-    borderColor: 'border-lime-200',
-    label: 'Reference',
-  }
+  icon: <FileText className="w-4 h-4" />,
+  color: '#84cc16',
+  bgColor: 'bg-lime-50',
+  borderColor: 'border-lime-200',
+  label: 'Reference',
 };
 const STATUS_CONFIGS = {
   open: { icon: <MessageCircle className="w-3 h-3" />, color: '#6b7280', label: 'Open' },
@@ -163,7 +157,7 @@ const PRIORITY_CONFIGS = {
   high: { color: '#ef4444', bg: 'bg-red-100', label: 'High' },
   critical: { color: '#dc2626', bg: 'bg-red-200', label: 'Critical' }
 };
-
+}
 export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
   nodeId,
   nodeName,
@@ -187,19 +181,19 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
   const [showResolved, setShowResolved] = useState(false);
   // New annotation form state
   const [newAnnotation, setNewAnnotation] = useState({)
-    type: 'review' as NodeAnnotation['type'],
-    content: '',
-    priority: 'medium' as NodeAnnotation['priority'],
-    visibility: 'public' as NodeAnnotation['visibility'],
-    tags: [] as string[],
-    estimatedTime: undefined as number | undefined,
-    deadline: undefined as string | undefined,
-    assignee: undefined as VFXUser | undefined,
-  });
+  type: 'review' as NodeAnnotation['type'],
+  content: '',
+  priority: 'medium' as NodeAnnotation['priority'],
+  visibility: 'public' as NodeAnnotation['visibility'],
+  tags: [] as string,
+  estimatedTime: undefined as number | undefined,
+  deadline: undefined as string | undefined,
+  assignee: undefined as VFXUser | undefined,
+});
   // Filter and sort annotations
   const filteredAndSortedAnnotations = useMemo(() => {
     const filtered = annotations.filter(annotation => {)
-      if (!showResolved && ['resolved', 'approved', 'rejected'].includes(annotation.status)) return false;
+  if (!showResolved && ['resolved', 'approved', 'rejected'].includes(annotation.status)) return false;
       if (filterType !== 'all' && annotation.type !== filterType) return false;
       if (filterStatus !== 'all' && annotation.status !== filterStatus) return false;
       if (filterPriority !== 'all' && annotation.priority !== filterPriority) return false;
@@ -216,7 +210,6 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
       case 'timestamp':
       default:
         return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-      }
     });
     return filtered;
   }, [annotations, showResolved, filterType, filterStatus, filterPriority, sortBy]);
@@ -230,34 +223,34 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
     return { total, open, critical, myAnnotations, assigned };
   }, [annotations, currentUser.id]);
   const handleCreateAnnotation = useCallback(() => {
-    if (!newAnnotation.content.trim()) return;
-    const annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'> = {
-      nodeId,
-      type: newAnnotation.type,
-      content: newAnnotation.content.trim(),
-      author: currentUser,
-      priority: newAnnotation.priority,
-      status: 'open',
-      attachments: [],
-      tags: newAnnotation.tags,
-      visibility: newAnnotation.visibility,
-      linkedAnnotations: [],
-      estimatedTime: newAnnotation.estimatedTime,
-      deadline: newAnnotation.deadline,
-      assignee: newAnnotation.assignee,
-    };
+  if (!newAnnotation.content.trim()) return;
+  const annotation: Omit<NodeAnnotation, 'id' | 'timestamp' | 'lastModified' | 'replies'> = {,
+  nodeId,
+  type: newAnnotation.type,
+  content: newAnnotation.content.trim(),
+  author: currentUser,
+  priority: newAnnotation.priority,
+  status: 'open',
+  attachments: [],
+  tags: newAnnotation.tags,
+  visibility: newAnnotation.visibility,
+  linkedAnnotations: [],
+  estimatedTime: newAnnotation.estimatedTime,
+  deadline: newAnnotation.deadline,
+  assignee: newAnnotation.assignee,
+};
     onAnnotationCreate(annotation);
     // Reset form
     setNewAnnotation({)
-      type: 'review',
-      content: '',
-      priority: 'medium',
-      visibility: 'public',
-      tags: [],
-      estimatedTime: undefined,
-      deadline: undefined,
-      assignee: undefined,
-    });
+  type: 'review',
+  content: '',
+  priority: 'medium',
+  visibility: 'public',
+  tags: [],
+  estimatedTime: undefined,
+  deadline: undefined,
+  assignee: undefined,
+});
     setIsCreating(false);
   }, [newAnnotation, nodeId, currentUser, onAnnotationCreate]);
   const handleStatusChange = useCallback((annotationId: string, status: NodeAnnotation['status']) => {
@@ -271,20 +264,20 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
     annotation, 
     expanded = false 
   }) => {
-    const [showReplies, setShowReplies] = useState(false);
-    const [replyContent, setReplyContent] = useState('');
-    const typeConfig = ANNOTATION_TYPES[annotation.type];
-    const statusConfig = STATUS_CONFIGS[annotation.status];
-    const priorityConfig = PRIORITY_CONFIGS[annotation.priority];
-    const handleReplySubmit = () => {
-      if (!replyContent.trim()) return;
-      onReplyCreate(annotation.id, {)
-        content: replyContent.trim(),
-        author: currentUser,
-      });
+  const [showReplies, setShowReplies] = useState(false);
+  const [replyContent, setReplyContent] = useState('');
+  const typeConfig = ANNOTATION_TYPES[annotation.type];
+  const statusConfig = STATUS_CONFIGS[annotation.status];
+  const priorityConfig = PRIORITY_CONFIGS[annotation.priority];
+  const handleReplySubmit = () => {
+  if (!replyContent.trim()) return;
+  onReplyCreate(annotation.id, {)
+  content: replyContent.trim(),
+  author: currentUser,
+});
       setReplyContent('');
     };
-    return ();
+    return;
       <Card className={`annotation-card ${typeConfig.borderColor} ${expanded ? 'ring-2 ring-blue-200' : ''}`}>}
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
@@ -446,7 +439,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
   };
   if (compact) {
     // Compact view for inspector panels
-    return ();
+    return;
       <div className={`node-annotations-compact ${className}`}>}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -484,8 +477,7 @@ export const NodeAnnotationSystem: React.FC<NodeAnnotationSystemProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`node-annotation-system ${className}`}>}
       <Card>
         <CardHeader>

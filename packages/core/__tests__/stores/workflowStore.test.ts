@@ -102,48 +102,48 @@ const createMockStatistics = (overrides: Partial<WorkflowStatistics> = {}): Work
   active_locks: 2,
   scheduled_executions: 1,
   resources_by_state: {,
-    'state-1': 10,
-    'state-2': 5,
-    'state-3': 2
-  },
+  'state-1': 10,
+  'state-2': 5,
+  'state-3': 2,
+},
   approval_stats: {,
-    pending: 3,
-    approved: 15,
-    rejected: 2,
-    cancelled: 1,
-    avg_approval_time_hours: 24.5,
-  },
+  pending: 3,
+  approved: 15,
+  rejected: 2,
+  cancelled: 1,
+  avg_approval_time_hours: 24.5,
+},
   lock_stats: {,
-    total_active: 2,
-    by_type: {,
-      edit: 1,
-      state_change: 1,
-    },
-    avg_lock_duration_hours: 2.5,
+  total_active: 2,
+  by_type: {,
+  edit: 1,
+  state_change: 1,
+},
+  avg_lock_duration_hours: 2.5;
   },
   schedule_stats: {,
-    total_active: 1,
-    by_type: {,
-      cron: 1,
-    },
-    successful_executions: 45,
-    failed_executions: 2,
-  },
+  total_active: 1,
+  by_type: {,
+  cron: 1,
+},
+  successful_executions: 45,
+    failed_executions: 2;
+  }
   ...overrides
 });
 
 // Helper to mock successful API response
 const mockApiResponse = (data: any) => {
   mockFetch.mockResolvedValueOnce({)
-    ok: true,
-    json: async () => data,
-  } as Response);
+  ok: true,
+  json: async () => data,
+} as Response);
 };
 
 // Helper to mock API error response
 const mockApiError = (status: number = 500, statusText: string = 'Internal Server Error') => {
   mockFetch.mockResolvedValueOnce({)
-    ok: false,
+  ok: false,
     status,
     statusText,
     json: async () => ({ error: statusText })
@@ -151,18 +151,18 @@ const mockApiError = (status: number = 500, statusText: string = 'Internal Serve
 };
 describe('Workflow Store', () => {
   beforeEach(() => {
-    mockFetch.mockClear();
-    // Reset store state before each test
-    useWorkflowStore.setState({)
-      states: [],
-      transitions: [],
-      approvals: [],
-      locks: [],
-      history: [],
-      statistics: null,
-      loading: false,
-      error: null,
-    });
+  mockFetch.mockClear();
+  // Reset store state before each test
+  useWorkflowStore.setState({)
+  states: [],
+  transitions: [],
+  approvals: [],
+  locks: [],
+  history: [],
+  statistics: null,
+  loading: false,
+  error: null,
+});
   });
   describe('Initial State', () => {
     it('should have correct initial state', () => {
@@ -189,11 +189,11 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/states/workspace-1',
           expect.objectContaining({)
-            headers: expect.objectContaining({),
-              'Content-Type': 'application/json',
-              'x-user-id': 'current-user-id'
-            })
-          })
+  headers: expect.objectContaining({,)
+  'Content-Type': 'application/json',
+  'x-user-id': 'current-user-id',
+}
+  }
         );
         expect(result.current.states).toEqual(mockStates);
         expect(result.current.loading).toBe(false);
@@ -211,13 +211,13 @@ describe('Workflow Store', () => {
       });
     });
     describe('createState', () => {
-      it('should create state successfully', async () => {
-        const newStateData = {
-          workspace_id: 'workspace-1',
-          name: 'New State',
-          color: '#blue',
-          sort_order: 2,
-        };
+  it('should create state successfully', async () => {
+  const newStateData = {
+  workspace_id: 'workspace-1',
+  name: 'New State',
+  color: '#blue',
+  sort_order: 2,
+};
         const createdState = createMockState({ ...newStateData, id: 'state-new' });
         mockApiResponse(createdState);
         const { result } = renderHook(() => useWorkflowStore());
@@ -228,9 +228,9 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/states',
           expect.objectContaining({)
-            method: 'POST',
-            body: JSON.stringify(newStateData),
-          })
+  method: 'POST',
+  body: JSON.stringify(newStateData),
+}
         );
         expect(result.current.states).toContain(createdState);
         expect(result.current.loading).toBe(false);
@@ -274,9 +274,9 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/states/state-1',
           expect.objectContaining({)
-            method: 'PUT',
-            body: JSON.stringify(updates),
-          })
+  method: 'PUT',
+  body: JSON.stringify(updates),
+}
         );
         expect(result.current.states[0]).toEqual(updatedState);
       });
@@ -331,14 +331,14 @@ describe('Workflow Store', () => {
       });
     });
     describe('createTransition', () => {
-      it('should create transition successfully', async () => {
-        const transitionData = {
-          workspace_id: 'workspace-1',
-          from_state_id: 'state-1',
-          to_state_id: 'state-2',
-          name: 'New Transition',
-          requires_approval: false,
-        };
+  it('should create transition successfully', async () => {
+  const transitionData = {
+  workspace_id: 'workspace-1',
+  from_state_id: 'state-1',
+  to_state_id: 'state-2',
+  name: 'New Transition',
+  requires_approval: false,
+};
         const createdTransition = createMockTransition({ ...transitionData, id: 'transition-new' });
         mockApiResponse(createdTransition);
         const { result } = renderHook(() => useWorkflowStore());
@@ -364,14 +364,14 @@ describe('Workflow Store', () => {
     });
   });
   describe('State Transitions', () => {
-    describe('transitionResourceState', () => {
-      it('should transition resource state successfully', async () => {
-        const transitionResult: StateTransitionResult = {
-          success: true,
-          new_state_id: 'state-2',
-          approval_required: false,
-          workflow_history_id: 'history-1',
-        };
+  describe('transitionResourceState', () => {
+  it('should transition resource state successfully', async () => {
+  const transitionResult: StateTransitionResult = {,
+  success: true,
+  new_state_id: 'state-2',
+  approval_required: false,
+  workflow_history_id: 'history-1',
+};
         mockApiResponse(transitionResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
@@ -386,22 +386,22 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/resources/resource-1/transition',
           expect.objectContaining({)
-            method: 'POST',
-            body: JSON.stringify({),
-              to_state_id: 'state-2',
-              comment: 'Moving to review',
-              force: false,
-            })
-          })
+  method: 'POST',
+  body: JSON.stringify({,)
+  to_state_id: 'state-2',
+  comment: 'Moving to review',
+  force: false,
+}
+  }
         );
       });
       it('should handle transition requiring approval', async () => {
-        const transitionResult: StateTransitionResult = {
-          success: true,
-          approval_required: true,
-          approval_id: 'approval-1',
-          error: undefined,
-        };
+  const transitionResult: StateTransitionResult = {,
+  success: true,
+  approval_required: true,
+  approval_id: 'approval-1',
+  error: undefined,
+};
         mockApiResponse(transitionResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
@@ -436,11 +436,11 @@ describe('Workflow Store', () => {
     describe('approveWorkflow', () => {
       it('should approve workflow successfully', async () => {
         const approval = createMockApproval({ id: 'approval-1', status: 'pending' });
-        const transitionResult: StateTransitionResult = {
-          success: true,
-          new_state_id: 'state-2',
-          workflow_history_id: 'history-1',
-        };
+        const transitionResult: StateTransitionResult = {,
+  success: true,
+  new_state_id: 'state-2',
+  workflow_history_id: 'history-1',
+};
         useWorkflowStore.setState({ approvals: [approval] });
         mockApiResponse(transitionResult);
         const { result } = renderHook(() => useWorkflowStore());
@@ -451,9 +451,9 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/approvals/approval-1/approve',
           expect.objectContaining({)
-            method: 'POST',
+  method: 'POST',
             body: JSON.stringify({ comment: 'Looks good!' })
-          })
+  }
         );
         // Check that approval status was updated in local state
         const updatedApproval = result.current.approvals.find(a => a.id === 'approval-1');
@@ -498,14 +498,14 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/locks',
           expect.objectContaining({)
-            method: 'POST',
-            body: JSON.stringify({),
-              resource_id: 'resource-1',
-              lock_type: 'edit',
-              reason: 'Editing content',
-              duration: 3600,
-            })
-          })
+  method: 'POST',
+  body: JSON.stringify({,)
+  resource_id: 'resource-1',
+  lock_type: 'edit',
+  reason: 'Editing content',
+  duration: 3600,
+}
+  }
         );
         expect(result.current.locks).toContain(newLock);
       });
@@ -519,11 +519,11 @@ describe('Workflow Store', () => {
         expect(mockFetch).toHaveBeenCalledWith()
           'http://localhost:8000/api/workflow/locks',
           expect.objectContaining({)
-            body: JSON.stringify({),
-              resource_id: 'resource-1',
-              lock_type: 'edit',
-            })
-          })
+  body: JSON.stringify({,)
+  resource_id: 'resource-1',
+  lock_type: 'edit',
+}
+  }
         );
       });
     });
@@ -611,13 +611,13 @@ describe('Workflow Store', () => {
     });
   });
   describe('Utility Functions', () => {
-    describe('validateStateTransition', () => {
-      it('should return valid transition', async () => {
-        const validationResult = {
-          valid: true,
-          transition: createMockTransition(),
-          can_transition: true,
-        };
+  describe('validateStateTransition', () => {
+  it('should return valid transition', async () => {
+  const validationResult = {
+  valid: true,
+  transition: createMockTransition(),
+  can_transition: true,
+};
         mockApiResponse(validationResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {
@@ -685,12 +685,12 @@ describe('Workflow Store', () => {
       });
     });
     describe('performMaintenance', () => {
-      it('should perform maintenance successfully', async () => {
-        const maintenanceResult = {
-          expired_locks_released: 5,
-          expired_approvals_cancelled: 2,
-          maintenance_timestamp: new Date().toISOString(),
-        };
+  it('should perform maintenance successfully', async () => {
+  const maintenanceResult = {
+  expired_locks_released: 5,
+  expired_approvals_cancelled: 2,
+  maintenance_timestamp: new Date().toISOString(),
+};
         mockApiResponse(maintenanceResult);
         const { result } = renderHook(() => useWorkflowStore());
         await act(async () => {

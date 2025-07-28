@@ -7,9 +7,7 @@ export interface TextAreaEditorProps extends EditorFieldProps {
   minLength?: number;
   autoResize?: boolean;
   showWordCount?: boolean;
-}
-
-export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
+  export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({,)
   label,
   value,
   fieldKey,
@@ -36,7 +34,6 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
       const textarea = textareaRef.current;
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;}
-    }
   }, [localValue, autoResize]);
   const handleChange = (newValue: string) => {
     setLocalValue(newValue);
@@ -65,16 +62,16 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
     minHeight: autoResize ? `${rows * 1.5}em` : undefined}
   };
   const labelStyle = {
-    display: 'block',
-    fontWeight: 500,
-    marginBottom: 4,
-    color: '#e2e8f0',
-    fontSize: 12,
-    letterSpacing: '0.025em',
-  };
+  display: 'block',
+  fontWeight: 500,
+  marginBottom: 4,
+  color: '#e2e8f0',
+  fontSize: 12,
+  letterSpacing: '0.025em',
+};
   const wordCount = getWordCount(localValue);
   const charCount = localValue.length;
-  return ();
+  return;
     <div style={{ marginBottom: 16 }}>
       <label htmlFor={inputId} style={labelStyle}>
         {label}
@@ -99,22 +96,22 @@ export const TextAreaEditor: React.FC<TextAreaEditorProps> = ({)
         style={textareaStyle}
       />
       {error && ()
-        <div style={{ 
-          color: '#f56565', 
-          fontSize: 11, 
-          marginTop: 4,
-          fontWeight: 400,
-        }}>
+        <div style={{
+  color: '#f56565',
+  fontSize: 11,
+  marginTop: 4,
+  fontWeight: 400,
+}}>
           {error}
         </div>
       )}
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: 2,
-        fontSize: 10,
-        color: '#a0aec0',
-      }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginTop: 2,
+  fontSize: 10,
+  color: '#a0aec0',
+}}>
         {showWordCount && ()
           <span>
             {wordCount} word{wordCount !== 1 ? 's' : ''}

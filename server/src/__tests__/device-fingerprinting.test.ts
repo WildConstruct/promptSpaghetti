@@ -59,25 +59,25 @@ describe('DeviceFingerprintingService', () => {
         collectPlugins: true,
         collectWebRTC: false,
         collectHardware: true
-      },
+  }
       trustScoring: {
         newDevicePenalty: 10,
         consistencyBonus: 5,
         anomalyPenalty: 15,
         verificationBonus: 20,
         ageBonus: 10
-      },
+  }
       thresholds: {
         minimumTrustScore: 40,
         suspiciousActivityThreshold: 30,
         autoBlockThreshold: 20,
         fingerprintChangeThreshold: 90
-      },
+  }
       cache: {
         deviceProfileTtl: 3600,
         fingerprintTtl: 7200,
         trustScoreTtl: 1800
-      },
+  }
       privacy: {
         hashSensitiveData: true,
         excludeFields: ['webRTC'],
@@ -441,7 +441,7 @@ describe('DeviceFingerprintingService', () => {
           severity: 'medium',
           created_at: new Date(),
           resolved: false
-        },
+  }
         {
           event_type: 'suspicious_activity',
           severity: 'high',
@@ -973,7 +973,7 @@ describe('DeviceFingerprintingService', () => {
           severity: 'medium',
           description: 'Test description',
           additional: 'data'
-        },
+  }
         severity: 'warning'
       });
     });

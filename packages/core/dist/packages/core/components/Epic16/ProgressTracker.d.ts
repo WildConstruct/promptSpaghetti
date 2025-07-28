@@ -34,7 +34,7 @@ export interface EngagementMetrics {
     followersGained: number;
     collaborationsJoined: number;
     tutorialsCompleted: number;
-    skillsLearned: string[];
+    skillsLearned: string;
     certificationsEarned: number;
     learningPathsCompleted: number;
 }
@@ -63,5 +63,4 @@ export interface ProgressTrackerProps {
     className?: string;
 }
 export declare const ProgressTracker: React.FC<ProgressTrackerProps>;
-export default ProgressTracker;
 //# sourceMappingURL=ProgressTracker.d.ts.map

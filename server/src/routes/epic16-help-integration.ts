@@ -12,10 +12,12 @@ import { Epic16SupportEscalationService } from '../admin/Epic16SupportEscalation
 import { Epic16TicketIntegrationService } from '../../../packages/core/services/Epic16TicketIntegrationService';
 import { Database } from '../database/connection';
 
+}
 interface HelpIntegrationRouteOptions {
   database: Database;
   supportService: Epic16SupportEscalationService;
   ticketService: Epic16TicketIntegrationService;
+}
 }
 
 // Request/Response schemas for validation
@@ -27,7 +29,7 @@ const helpRequestSchema = {
     sessionType: {
       type: 'string',
       enum: ['onboarding', 'feature-discovery', 'troubleshooting', 'purchase-assistance', 'template-creation', 'marketplace-navigation']
-    },
+  }
     context: {
       type: 'object',
       required: ['currentView', 'userRole'],
@@ -170,7 +172,7 @@ export default async function epic16HelpIntegrationRoutes(
           level: 'beginner',
           estimatedTime: 300,
           contentType: 'interactive-guide'
-        },
+  }
         {
           id: 'template-search',
           title: 'Advanced Template Search',
@@ -271,7 +273,7 @@ export default async function epic16HelpIntegrationRoutes(
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -421,7 +423,7 @@ export default async function epic16HelpIntegrationRoutes(
         properties: {
           sessionId: { type: 'string' }
         }
-      },
+  }
       body: sessionUpdateSchema
     }
   }, async (request, reply) => {
@@ -536,17 +538,17 @@ export default async function epic16HelpIntegrationRoutes(
           successful: 1180,
           escalated: 45,
           abandoned: 25
-        },
+  }
         systemTransitions: {
           total: 890,
           withContinuousHelp: 650,
           successful: 860
-        },
+  }
         userSatisfaction: {
           averageRating: 4.2,
           totalRatings: 780,
           completionRate: 0.85
-        },
+  }
         supportEscalations: {
           total: 45,
           averageResolutionTime: '4.2 hours',

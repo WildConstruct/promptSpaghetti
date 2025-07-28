@@ -60,9 +60,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -120,9 +120,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -180,9 +180,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -239,7 +239,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           offset: { type: 'integer', minimum: 0, default: 0 },
           sortBy: { type: 'string', enum: ['created_at', 'effective_at', 'change_size', 'confidence_score'], default: 'created_at' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -290,7 +290,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         properties: {
           projectId: { type: 'string', format: 'uuid' },
           sessionId: { type: 'string' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -331,7 +331,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           sessionId: { type: 'string' }
-        },
+  }
         required: ['sessionId']
       }
     }
@@ -361,9 +361,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -382,7 +382,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
               autoAnonymizeAfterDays: { type: 'integer', minimum: 1, maximum: 365 }
             }
           }
-        },
+  }
         required: ['settings']
       }
     }
@@ -423,7 +423,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -458,7 +458,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -490,9 +490,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
           projectId: { type: 'string', format: 'uuid' },
           resourceType: { type: 'string', enum: ['node', 'edge', 'property', 'position', 'graph'] },
           resourceId: { type: 'string' }
-        },
+  }
         required: ['projectId', 'resourceType', 'resourceId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -543,9 +543,9 @@ export async function attributionRoutes(fastify: FastifyInstance) {
         properties: {
           projectId: { type: 'string', format: 'uuid' },
           authorId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId', 'authorId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -600,7 +600,7 @@ export async function attributionRoutes(fastify: FastifyInstance) {
             items: CreateAttributionRequestSchema.omit({ projectId: true }),
             maxItems: 100
           }
-        },
+  }
         required: ['projectId', 'attributions']
       }
     }

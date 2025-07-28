@@ -50,7 +50,7 @@ export declare enum MigrationStatus {
     COMPLETED = "completed",
     FAILED = "failed",
     CANCELLED = "cancelled"
-}
+
 export interface MigrationResult {
     migrationId: string;
     systemName: string;
@@ -72,7 +72,7 @@ export interface MigrationResult {
     };
     backupLocation?: string;
     rollbackAvailable: boolean;
-}
+
 export interface ValidationError {
     recordId?: string;
     field: string;
@@ -81,7 +81,7 @@ export interface ValidationError {
     errorType: 'missing_field' | 'invalid_type' | 'validation_failed' | 'transformation_error';
     message: string;
     severity: 'warning' | 'error' | 'critical';
-}
+
 export interface DataTransformationRule {
     id: string;
     sourceSystem: string;
@@ -108,7 +108,7 @@ export interface DataTransformationRule {
         max?: number;
         enum?: any[];
     };
-}
+
 export interface MigrationProgress {
     migrationId: string;
     systemName: string;
@@ -127,7 +127,6 @@ export interface MigrationProgress {
         recordsPerSecond: number;
         bytesPerSecond: number;
     };
-}
 /**
  * Analytics Data Migration Service
  *
@@ -274,6 +273,6 @@ export declare class AnalyticsDataMigrationService {
         totalRecordsMigrated: number;
         totalValidationErrors: number;
     };
-}
+
 export default AnalyticsDataMigrationService;
 //# sourceMappingURL=AnalyticsDataMigration.d.ts.map

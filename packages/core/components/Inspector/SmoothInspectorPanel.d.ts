@@ -6,6 +6,7 @@
  */
 import { ZodSchema } from 'zod';
 import '../../styles/smoothAnimations.css';
+
 export interface SmoothInspectorPanelProps {
     node: Error | null;
     schema: ZodSchema<unknown> | null;
@@ -15,7 +16,7 @@ export interface SmoothInspectorPanelProps {
     initialWidth?: number;
     minWidth?: number;
     maxWidth?: number;
-}
+
 export declare const SmoothInspectorPanel: ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth, minWidth, maxWidth }: {)
     node: any;
     schema: any;

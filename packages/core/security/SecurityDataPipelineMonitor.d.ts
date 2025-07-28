@@ -7,6 +7,7 @@
  * ensuring data quality, performance, and real-time processing capabilities.
  */
 import { EventEmitter } from 'events';
+
 export interface DataPipeline {
     id: string;
     name: string;
@@ -57,7 +58,7 @@ export interface DataPipeline {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface DataSource {
     id: string;
     name: string;
@@ -80,7 +81,7 @@ export interface DataSource {
             max: number;
         };
     };
-}
+
 export interface DataDestination {
     id: string;
     name: string;
@@ -99,7 +100,7 @@ export interface DataDestination {
         storage_usage_monitoring: boolean;
         availability_monitoring: boolean;
     };
-}
+
 export interface ProcessingStage {
     id: string;
     name: string;
@@ -130,7 +131,7 @@ export interface ProcessingStage {
         processing_time_tracking: boolean;
         output_validation: boolean;
     };
-}
+
 export interface TransformationRule {
     id: string;
     name: string;
@@ -140,7 +141,7 @@ export interface TransformationRule {
     transformation_logic: string;
     validation_criteria?: string;
     error_action: 'skip_record' | 'default_value' | 'fail_pipeline' | 'log_and_continue';
-}
+
 export interface ValidationRule {
     id: string;
     name: string;
@@ -149,7 +150,7 @@ export interface ValidationRule {
     validation_criteria: string;
     severity: 'warning' | 'error' | 'critical';
     action_on_failure: 'skip_record' | 'fail_pipeline' | 'quarantine' | 'log_and_continue';
-}
+
 export interface QualityThresholds {
     completeness_percent_min: number;
     accuracy_percent_min: number;
@@ -157,7 +158,7 @@ export interface QualityThresholds {
     freshness_minutes_max: number;
     duplicate_percent_max: number;
     error_rate_percent_max: number;
-}
+
 export interface RetryPolicy {
     max_attempts: number;
     initial_delay_ms: number;
@@ -165,7 +166,7 @@ export interface RetryPolicy {
     backoff_multiplier: number;
     retry_on_errors: string[];
     dead_letter_queue_enabled: boolean;
-}
+
 export interface ErrorHandlingStrategy {
     strategy: 'fail_fast' | 'continue_on_error' | 'circuit_breaker' | 'dead_letter_queue';
     error_threshold_percent: number;
@@ -175,14 +176,14 @@ export interface ErrorHandlingStrategy {
         escalation_enabled: boolean;
         escalation_delay_minutes: number;
     };
-}
+
 export interface PartitioningStrategy {
     strategy: 'time_based' | 'hash_based' | 'range_based' | 'custom';
     partition_field: string;
     partition_count?: number;
     time_interval?: 'hourly' | 'daily' | 'weekly' | 'monthly';
     custom_logic?: string;
-}
+
 export interface PipelineExecution {
     id: string;
     pipeline_id: string;
@@ -216,7 +217,7 @@ export interface PipelineExecution {
     error_summary?: ExecutionError[];
     warnings: string[];
     executed_by: string;
-}
+
 export interface StageExecution {
     stage_id: string;
     stage_name: string;
@@ -240,7 +241,7 @@ export interface StageExecution {
     status: 'completed' | 'failed' | 'skipped';
     errors: string[];
     warnings: string[];
-}
+
 export interface ExecutionError {
     error_type: string;
     error_message: string;
@@ -249,7 +250,7 @@ export interface ExecutionError {
     timestamp: number;
     severity: 'warning' | 'error' | 'critical';
     recovery_action?: string;
-}
+
 export interface PipelineAlert {
     id: string;
     pipeline_id: string;
@@ -279,7 +280,7 @@ export interface PipelineAlert {
     };
     automated_actions: string[];
     recommended_actions: string[];
-}
+
 export interface PipelineOptimizationRecommendation {
     id: string;
     pipeline_id: string;
@@ -314,7 +315,7 @@ export interface PipelineOptimizationRecommendation {
     reviewed_by?: string;
     reviewed_at?: number;
     review_notes?: string;
-}
+
 export interface DataLineageRecord {
     id: string;
     pipeline_id: string;
@@ -341,7 +342,7 @@ export interface DataLineageRecord {
     };
     dependent_records: string[];
     dependency_of_records: string[];
-}
+
 export declare class SecurityDataPipelineMonitor extends EventEmitter {
     private pipelines;
     private executions;
@@ -392,6 +393,6 @@ export declare class SecurityDataPipelineMonitor extends EventEmitter {
     private setNestedProperty;
     performMaintenance(): Promise<void>;
     shutdown(): Promise<void>;
-}
+
 export default SecurityDataPipelineMonitor;
 //# sourceMappingURL=SecurityDataPipelineMonitor.d.ts.map

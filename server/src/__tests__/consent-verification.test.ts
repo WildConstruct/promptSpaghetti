@@ -149,7 +149,7 @@ describe('ConsentBasedDataFilterService', () => {
         expect.objectContaining({
           eventType: 'CONSENT_FILTER_DECISION',
           userId: 'user-123'
-        })
+  }
       );
     });
   });
@@ -165,7 +165,7 @@ describe('ConsentBasedDataFilterService', () => {
             granted: true,
             grantedAt: new Date(),
             expiresAt: null
-          },
+  }
           {
             purpose: 'marketing',
             dataTypes: ['email', 'preferences'],
@@ -221,7 +221,7 @@ describe('ConsentBasedDataFilterService', () => {
                 purpose: 'service_delivery',
                 dataTypes: ['user_profile'],
                 granted: true
-              },
+  }
               {
                 purpose: 'analytics',
                 dataTypes: ['user_profile'],
@@ -291,8 +291,8 @@ describe('ConsentBasedDataFilterService', () => {
             dataType: 'personal_data',
             operation: 'read',
             purpose: 'service_delivery'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -306,7 +306,7 @@ describe('ConsentBasedDataFilterService', () => {
           ipAddress: '192.168.1.1',
           userAgent: 'test-agent',
           sessionId: 'session-123'
-        })
+  }
       );
     });
   });

@@ -21,10 +21,10 @@ export interface ContentFilteringRequest {
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
-        tags?: string[];
+        tags?: string;
         category?: string;
         skill_level?: SkillLevel;
-        target_audience?: string[];
+        target_audience?: string;
     };
     context: {
         user_id: string;
@@ -39,10 +39,10 @@ export interface ContentFilteringRequest {
         template_id?: string;
         tutorial_id?: string;
         learning_path_id?: string;
-        related_content_ids?: string[];
+        related_content_ids?: string;
     };
     filtering_config: {
-        categories_to_check: FilteringCategory[];
+        categories_to_check: FilteringCategory;
         strictness_level: 'permissive' | 'standard' | 'strict' | 'enterprise';
         auto_fix_enabled: boolean;
         learning_mode: boolean;
@@ -52,7 +52,7 @@ export interface ContentFilteringRequest {
 export interface MarketplaceContext {
     template_type?: string;
     pricing_tier?: 'free' | 'premium' | 'enterprise';
-    target_market?: string[];
+    target_market?: string;
     business_model?: string;
     competition_level?: 'low' | 'medium' | 'high';
     revenue_impact?: 'low' | 'medium' | 'high';
@@ -67,8 +67,8 @@ export interface CommunityContext {
 export interface LearningContext {
     skill_domain?: SkillDomain;
     target_skill_level?: SkillLevel;
-    learning_objectives?: string[];
-    prerequisite_content?: string[];
+    learning_objectives?: string;
+    prerequisite_content?: string;
     learning_path_position?: 'foundation' | 'core' | 'advanced' | 'specialization';
 }
 export interface ContentFilteringResult {
@@ -77,7 +77,7 @@ export interface ContentFilteringResult {
     overall_decision: FilteringAction;
     overall_confidence: number;
     processing_time_ms: number;
-    category_results: CategoryFilterResult[];
+    category_results: CategoryFilterResult;
     quality_assessment: {
         overall_score: number;
         content_completeness: number;
@@ -106,13 +106,13 @@ export interface ContentFilteringResult {
         engagement_prediction: number;
         retention_likelihood: number;
     };
-    issues_found: ContentIssue[];
-    improvement_suggestions: ImprovementSuggestion[];
-    auto_fix_suggestions: AutoFixSuggestion[];
+    issues_found: ContentIssue;
+    improvement_suggestions: ImprovementSuggestion;
+    auto_fix_suggestions: AutoFixSuggestion;
     requires_human_review: boolean;
     review_priority: 'low' | 'medium' | 'high' | 'urgent';
     recommended_reviewer_type: 'general' | 'domain_expert' | 'accessibility_expert' | 'legal_reviewer';
-    escalation_path?: string[];
+    escalation_path?: string;
     compliance_status: ComplianceStatus;
     safety_assessment: SafetyAssessment;
     timestamp: string;
@@ -125,9 +125,9 @@ export interface CategoryFilterResult {
     score: number;
     confidence: number;
     severity: FilteringSeverity;
-    specific_checks: SpecificCheckResult[];
-    category_recommendations: string[];
-    compliance_notes: string[];
+    specific_checks: SpecificCheckResult;
+    category_recommendations: string;
+    compliance_notes: string;
 }
 export interface SpecificCheckResult {
     check_name: string;
@@ -135,8 +135,8 @@ export interface SpecificCheckResult {
     status: 'passed' | 'warning' | 'failed';
     score?: number;
     details: string;
-    evidence?: string[];
-    fix_suggestions?: string[];
+    evidence?: string;
+    fix_suggestions?: string;
 }
 export interface ContentIssue {
     issue_id: string;
@@ -145,7 +145,7 @@ export interface ContentIssue {
     category: FilteringCategory;
     description: string;
     location?: string;
-    evidence: string[];
+    evidence: string;
     impact_assessment: {
         user_experience_impact: 'low' | 'medium' | 'high';
         business_impact: 'low' | 'medium' | 'high';
@@ -165,7 +165,7 @@ export interface ImprovementSuggestion {
     implementation: {
         difficulty: 'easy' | 'medium' | 'hard';
         estimated_time_minutes: number;
-        required_expertise: string[];
+        required_expertise: string;
         automated_assistance_available: boolean;
     };
     expected_impact: {
@@ -209,7 +209,7 @@ export interface ComplianceStatus {
         user_experience_standards: boolean;
         performance_requirements: boolean;
     };
-    violations_found: ComplianceViolation[];
+    violations_found: ComplianceViolation;
 }
 export interface ComplianceViolation {
     violation_type: string;
@@ -240,12 +240,12 @@ export interface SafetyAssessment {
         manipulation_risk: number;
         trust_erosion_risk: number;
     };
-    safety_recommendations: string[];
-    monitoring_requirements: string[];
+    safety_recommendations: string;
+    monitoring_requirements: string;
 }
 export interface MarketplaceContentFilteringService {
     filterContent(request: ContentFilteringRequest): Promise<ContentFilteringResult>;
-    batchFilterContent(requests: ContentFilteringRequest[]): Promise<ContentFilteringResult[]>;
+    batchFilterContent(requests: ContentFilteringRequest): Promise<ContentFilteringResult>;
     revalidateContent(contentId: string, reason: string): Promise<ContentFilteringResult>;
     filterContribution(contribution: ContributionSubmission): Promise<ContentFilteringResult>;
     filterTemplateSubmission(templateData: TemplateSubmissionData): Promise<ContentFilteringResult>;
@@ -253,11 +253,11 @@ export interface MarketplaceContentFilteringService {
     filterCommunityContent(communityData: CommunityContentData): Promise<ContentFilteringResult>;
     filterContentStream(contentStream: AsyncIterable<ContentFilteringRequest>): AsyncIterable<ContentFilteringResult>;
     validateContentUpdate(contentId: string, updateData: any): Promise<ContentFilteringResult>;
-    executeQualityGates(contentId: string, gateConfig: QualityGateConfiguration): Promise<QualityGateResult[]>;
+    executeQualityGates(contentId: string, gateConfig: QualityGateConfiguration): Promise<QualityGateResult>;
     getFilteringAnalytics(timeRange: string): Promise<FilteringAnalytics>;
-    getContentQualityTrends(contentType: MarketplaceContentType, timeRange: string): Promise<QualityTrend[]>;
-    identifyFilteringPatterns(): Promise<FilteringPattern[]>;
-    updateFilteringRules(rules: FilteringRule[]): Promise<void>;
+    getContentQualityTrends(contentType: MarketplaceContentType, timeRange: string): Promise<QualityTrend>;
+    identifyFilteringPatterns(): Promise<FilteringPattern>;
+    updateFilteringRules(rules: FilteringRule): Promise<void>;
     getFilteringConfiguration(): Promise<FilteringConfiguration>;
     calibrateFilteringThresholds(calibrationData: CalibrationData): Promise<ThresholdCalibration>;
 }
@@ -266,13 +266,13 @@ export interface TemplateSubmissionData {
     title: string;
     description: string;
     category: string;
-    tags: string[];
+    tags: string;
     price: number;
     content_preview: string;
     full_content: any;
-    target_audience: string[];
-    use_cases: string[];
-    technical_requirements: string[];
+    target_audience: string;
+    use_cases: string;
+    technical_requirements: string;
 }
 export interface TutorialContentData {
     tutorial_id: string;
@@ -280,10 +280,10 @@ export interface TutorialContentData {
     description: string;
     skill_domain: SkillDomain;
     skill_level: SkillLevel;
-    learning_objectives: string[];
+    learning_objectives: string;
     content_structure: any;
-    assessment_methods: string[];
-    prerequisites: string[];
+    assessment_methods: string;
+    prerequisites: string;
 }
 export interface CommunityContentData {
     content_id: string;
@@ -292,16 +292,16 @@ export interface CommunityContentData {
     body: string;
     community_id: string;
     author_reputation: number;
-    tags: string[];
-    related_topics: string[];
+    tags: string;
+    related_topics: string;
 }
 export interface QualityGateConfiguration {
     gate_name: string;
     quality_thresholds: Record<string, number>;
-    blocking_conditions: string[];
-    warning_conditions: string[];
+    blocking_conditions: string;
+    warning_conditions: string;
     auto_fix_enabled: boolean;
-    escalation_rules: EscalationRule[];
+    escalation_rules: EscalationRule;
 }
 export interface EscalationRule {
     condition: string;
@@ -341,23 +341,23 @@ export interface QualityTrend {
     date: string;
     average_quality_score: number;
     volume: number;
-    notable_patterns: string[];
+    notable_patterns: string;
 }
 export interface FilteringPattern {
     pattern_type: 'quality_degradation' | 'category_shift' | 'user_behavior' | 'seasonal_variation';
     pattern_description: string;
     confidence: number;
-    affected_content_types: MarketplaceContentType[];
-    recommended_actions: string[];
+    affected_content_types: MarketplaceContentType;
+    recommended_actions: string;
     monitoring_priority: 'low' | 'medium' | 'high';
 }
 export interface FilteringRule {
     rule_id: string;
     rule_name: string;
     category: FilteringCategory;
-    content_types: MarketplaceContentType[];
-    conditions: FilteringCondition[];
-    actions: FilteringRuleAction[];
+    content_types: MarketplaceContentType;
+    conditions: FilteringCondition;
+    actions: FilteringRuleAction;
     priority: number;
     enabled: boolean;
     learning_enabled: boolean;
@@ -413,16 +413,16 @@ export interface CategorySettings {
 }
 export interface ContentTypeSettings {
     quality_threshold: number;
-    required_categories: FilteringCategory[];
-    optional_categories: FilteringCategory[];
+    required_categories: FilteringCategory;
+    optional_categories: FilteringCategory;
     auto_approve_threshold: number;
     block_threshold: number;
 }
 export interface CalibrationData {
-    historical_decisions: HistoricalDecision[];
-    user_feedback: UserFeedback[];
-    business_metrics: BusinessMetric[];
-    quality_benchmarks: QualityBenchmark[];
+    historical_decisions: HistoricalDecision;
+    user_feedback: UserFeedback;
+    business_metrics: BusinessMetric;
+    quality_benchmarks: QualityBenchmark;
 }
 export interface HistoricalDecision {
     content_id: string;
@@ -455,7 +455,7 @@ export interface ThresholdCalibration {
     recommended_thresholds: Record<string, number>;
     confidence_intervals: Record<string, [number, number]>;
     expected_performance_improvement: number;
-    validation_results: ValidationResult[];
+    validation_results: ValidationResult;
     rollback_plan: RollbackPlan;
 }
 export interface ValidationResult {
@@ -466,50 +466,19 @@ export interface ValidationResult {
     user_satisfaction_impact: number;
 }
 export interface RollbackPlan {
-    rollback_trigger_conditions: string[];
-    rollback_procedure: string[];
+    rollback_trigger_conditions: string;
+    rollback_procedure: string;
     rollback_timeline_hours: number;
-    notification_requirements: string[];
+    notification_requirements: string;
 }
 export declare class MarketplaceContentFilteringServiceImpl implements MarketplaceContentFilteringService {
     private moderationService;
     private apiClient;
     private configuration;
     private filteringRules;
-    constructor(moderationService: AutomatedModerationService, apiClient: any, configuration?: Partial<FilteringConfiguration>);
-    filterContent(request: ContentFilteringRequest): Promise<ContentFilteringResult>;
-    batchFilterContent(requests: ContentFilteringRequest[]): Promise<ContentFilteringResult[]>;
-    revalidateContent(contentId: string, reason: string): Promise<ContentFilteringResult>;
-    filterContribution(contribution: ContributionSubmission): Promise<ContentFilteringResult>;
-    filterTemplateSubmission(templateData: TemplateSubmissionData): Promise<ContentFilteringResult>;
-    filterTutorialContent(tutorialData: TutorialContentData): Promise<ContentFilteringResult>;
-    filterCommunityContent(communityData: CommunityContentData): Promise<ContentFilteringResult>;
-    filterContentStream(contentStream: AsyncIterable<ContentFilteringRequest>): AsyncIterable<ContentFilteringResult>;
-    validateContentUpdate(contentId: string, updateData: any): Promise<ContentFilteringResult>;
-    executeQualityGates(contentId: string, gateConfig: QualityGateConfiguration): Promise<QualityGateResult[]>;
-    getFilteringAnalytics(timeRange: string): Promise<FilteringAnalytics>;
-    getContentQualityTrends(contentType: MarketplaceContentType, timeRange: string): Promise<QualityTrend[]>;
-    identifyFilteringPatterns(): Promise<FilteringPattern[]>;
-    updateFilteringRules(rules: FilteringRule[]): Promise<void>;
-    getFilteringConfiguration(): Promise<FilteringConfiguration>;
-    calibrateFilteringThresholds(calibrationData: CalibrationData): Promise<ThresholdCalibration>;
-    private prepareModerationRequest;
-    private mapContentType;
-    private runCategoryFiltering;
-    private runSingleCategoryFilter;
-    private performQualityAssessment;
-    private initializeDefaultConfiguration;
-    private initializeDefaultRules;
-    private analyzeMarketplaceFit;
-    private assessCommunityIntegration;
-    private evaluateLearningEffectiveness;
-    private identifyIssuesAndSuggestions;
-    private determineOverallDecision;
-    private assessCompliance;
-    private assessSafety;
-    private determineReviewRequirements;
-    private trackFilteringEvent;
-    private fetchContentData;
-    private logRevalidation;
+    constructor();
+    moderationService: AutomatedModerationService;
+    apiClient: any;
+    configuration?: Partial<FilteringConfiguration>;
 }
 //# sourceMappingURL=MarketplaceContentFilteringSystem.d.ts.map

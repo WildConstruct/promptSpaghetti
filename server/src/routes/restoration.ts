@@ -91,7 +91,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -156,7 +156,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -190,7 +190,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -255,7 +255,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -289,7 +289,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -362,7 +362,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -417,7 +417,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -451,7 +451,7 @@ export async function restorationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }

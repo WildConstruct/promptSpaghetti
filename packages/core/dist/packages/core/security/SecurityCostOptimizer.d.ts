@@ -44,12 +44,12 @@ export interface CostCenter {
             major_threshold: number;
             critical_threshold: number;
         };
-        cost_alerts: CostAlert[];
+        cost_alerts: CostAlert;
     };
     reporting: {
         automated_reports: boolean;
         report_frequency: 'daily' | 'weekly' | 'monthly';
-        report_recipients: string[];
+        report_recipients: string;
         include_recommendations: boolean;
         include_trending: boolean;
     };
@@ -87,16 +87,16 @@ export interface CostAlert {
     };
     notifications: {
         channels: ('email' | 'slack' | 'webhook' | 'sms')[];
-        recipients: string[];
+        recipients: string;
         escalation_enabled: boolean;
         escalation_delay_minutes: number;
-        escalation_recipients: string[];
+        escalation_recipients: string;
         suppress_duplicates_minutes: number;
     };
     actions: {
-        auto_actions: AutoCostAction[];
-        manual_actions: string[];
-        recommendation_actions: string[];
+        auto_actions: AutoCostAction;
+        manual_actions: string;
+        recommendation_actions: string;
     };
     enabled: boolean;
     created_at: number;
@@ -109,18 +109,18 @@ export interface AutoCostAction {
     type: 'scale_down' | 'shutdown' | 'migrate' | 'optimize' | 'notify' | 'throttle';
     description: string;
     parameters: {
-        target_resources?: string[];
+        target_resources?: string;
         scaling_factor?: number;
         delay_minutes?: number;
         confirmation_required?: boolean;
-        rollback_conditions?: string[];
+        rollback_conditions?: string;
         max_executions_per_day?: number;
     };
     safety: {
         require_approval: boolean;
         dry_run_mode: boolean;
         business_hours_only: boolean;
-        excluded_services: string[];
+        excluded_services: string;
         minimum_capacity_percentage: number;
     };
     execution: {
@@ -174,28 +174,13 @@ export interface CostMetrics {
         forecasted_monthly_cost: number;
         forecasted_yearly_cost: number;
     };
-    services: Array<{
-        service_name: string;
-        cost: number;
-        percentage: number;
-        utilization: number;
-        instances: number;
-        cost_per_instance: number;
-    }>;
-    user_costs?: Array<{
-        user_id: string;
-        cost: number;
-        requests: number;
-        cost_per_request: number;
-    }>;
-    project_costs?: Array<{
-        project_id: string;
-        cost: number;
-        resources: number;
-        cost_per_resource: number;
-    }>;
-    collected_at: number;
-    collection_method: 'automated' | 'manual';
+    services: Array<{}, service_name>;
+    string: any;
+    cost: number;
+    percentage: number;
+    utilization: number;
+    instances: number;
+    cost_per_instance: number;
 }
 export interface CostOptimizationRecommendation {
     id: string;
@@ -214,10 +199,10 @@ export interface CostOptimizationRecommendation {
     implementation: {
         complexity: 'low' | 'medium' | 'high';
         estimated_hours: number;
-        required_skills: string[];
-        prerequisites: string[];
-        implementation_steps: string[];
-        risks: string[];
+        required_skills: string;
+        prerequisites: string;
+        implementation_steps: string;
+        risks: string;
         rollback_plan: string;
     };
     impact: {
@@ -230,8 +215,8 @@ export interface CostOptimizationRecommendation {
     validation: {
         testing_required: boolean;
         pilot_recommended: boolean;
-        success_metrics: string[];
-        monitoring_required: string[];
+        success_metrics: string;
+        monitoring_required: string;
     };
     status: 'identified' | 'approved' | 'in_progress' | 'implemented' | 'rejected' | 'deferred';
     assigned_to?: string;
@@ -255,45 +240,12 @@ export interface CostBudget {
         rollover_unused: boolean;
     };
     allocation: {
-        services: Array<{
-            service_name: string;
-            allocated_amount: number;
-            allocated_percentage: number;
-            flexible: boolean;
-        }>;
-        categories: Array<{
-            category: 'compute' | 'storage' | 'network' | 'licensing' | 'personnel';
-            allocated_amount: number;
-            allocated_percentage: number;
-        }>;
-        contingency_percentage: number;
+        services: Array<{}, service_name>;
+        string: any;
+        allocated_amount: number;
+        allocated_percentage: number;
+        flexible: boolean;
     };
-    spending: {
-        total_spent: number;
-        remaining_budget: number;
-        utilization_percentage: number;
-        projected_spending: number;
-        projected_overage: number;
-        burn_rate: number;
-    };
-    controls: {
-        auto_approval_limit: number;
-        require_approval_above: number;
-        hard_limit_enabled: boolean;
-        hard_limit_amount: number;
-        alert_thresholds: number[];
-    };
-    variance: {
-        vs_planned_amount: number;
-        vs_planned_percentage: number;
-        vs_previous_period_amount: number;
-        vs_previous_period_percentage: number;
-        variance_reasons: string[];
-    };
-    created_by: string;
-    created_at: number;
-    last_updated: number;
-    active: boolean;
 }
 export interface CostReport {
     id: string;
@@ -311,50 +263,18 @@ export interface CostReport {
         cost_change_percentage: number;
         utilization_average: number;
         efficiency_score: number;
-        top_cost_drivers: string[];
-        key_insights: string[];
+        top_cost_drivers: string;
+        key_insights: string;
         critical_recommendations: number;
     };
     analysis: {
-        cost_breakdown: Array<{
-            category: string;
-            current_cost: number;
-            previous_cost: number;
-            change_amount: number;
-            change_percentage: number;
-        }>;
-        utilization_analysis: Array<{
-            service: string;
-            utilization: number;
-            cost: number;
-            efficiency_rating: 'excellent' | 'good' | 'fair' | 'poor';
-            optimization_potential: number;
-        }>;
-        trending_data: Array<{
-            metric: string;
-            current_value: number;
-            trend_direction: 'up' | 'down' | 'stable';
-            trend_percentage: number;
-            forecasted_value: number;
-        }>;
+        cost_breakdown: Array<{}, category>;
+        string: any;
+        current_cost: number;
+        previous_cost: number;
+        change_amount: number;
+        change_percentage: number;
     };
-    recommendations: {
-        immediate_actions: CostOptimizationRecommendation[];
-        short_term_opportunities: CostOptimizationRecommendation[];
-        long_term_strategies: CostOptimizationRecommendation[];
-        total_potential_savings: number;
-    };
-    budget_analysis?: {
-        budget_utilization: number;
-        variance_amount: number;
-        variance_percentage: number;
-        projected_year_end: number;
-        budget_health: 'on_track' | 'at_risk' | 'over_budget';
-    };
-    generated_by: string;
-    generated_at: number;
-    recipients?: string[];
-    status: 'draft' | 'published' | 'archived';
 }
 export interface CostEvent {
     id: string;
@@ -365,7 +285,7 @@ export interface CostEvent {
     title: string;
     description: string;
     cost_center_id: string;
-    affected_services: string[];
+    affected_services: string;
     cost_impact: {
         amount: number;
         percentage: number;
@@ -377,13 +297,13 @@ export interface CostEvent {
         actual_value?: number;
         anomaly_score?: number;
         trend_data?: Record<string, number>;
-        recommendations?: string[];
+        recommendations?: string;
     };
     response: {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
-        actions_taken: string[];
+        actions_taken: string;
         resolution_notes?: string;
         resolved_at?: number;
     };
@@ -391,7 +311,7 @@ export interface CostEvent {
         monitoring_required: boolean;
         review_date?: number;
         escalation_required: boolean;
-        related_events: string[];
+        related_events: string;
     };
 }
 export declare class SecurityCostOptimizer extends EventEmitter {
@@ -404,87 +324,9 @@ export declare class SecurityCostOptimizer extends EventEmitter {
     private events;
     private optimizationActions;
     private optimizationHistory;
-    private metricsCollectionInterval?;
-    private costMonitoringInterval?;
-    private optimizationInterval?;
-    private reportGenerationInterval?;
-    constructor();
-    createCostCenter(costCenter: Omit<CostCenter, 'id' | 'created_at' | 'last_updated'>): Promise<string>;
-    createCostAlert(alert: Omit<CostAlert, 'id' | 'created_at' | 'trigger_count'>): Promise<string>;
-    collectCostMetrics(costCenterId: string): Promise<string>;
-    private generateRealisticCost;
-    private calculateEfficiencyScore;
-    private generateServiceBreakdown;
-    private generateUserCostBreakdown;
-    private generateProjectCostBreakdown;
-    private evaluateCostAlerts;
-    private evaluateAlert;
-    private evaluateThresholdAlert;
-    private evaluateAnomalyAlert;
-    private evaluateTrendAlert;
-    private evaluateBudgetAlert;
-    private triggerCostAlert;
-    private mapAlertTypeToEventType;
-    private determineSeverity;
-    private generateAlertRecommendations;
-    private executeAutoAction;
-    private executeScaleDownAction;
-    private executeShutdownAction;
-    private executeOptimizeAction;
-    private executeThrottleAction;
-    private executeNotifyAction;
-    private isBusinessHours;
-    private generateOptimizationRecommendations;
-    private createResourceRightsizingRecommendation;
-    private createStorageOptimizationRecommendation;
-    private createReservedInstanceRecommendation;
-    private createLicensingOptimizationRecommendation;
-    generateCostReport(costCenterId: string, reportType: CostReport['report_type'], period: {
-        start: number;
-        end: number;
-    }): Promise<string>;
-    private generateReportInsights;
-    private generateCostBreakdownAnalysis;
-    private generateUtilizationAnalysis;
-    private rateEfficiency;
-    private calculateOptimizationPotential;
-    private generateTrendingAnalysis;
-    private sendCostNotifications;
-    private sendNotification;
-    private sendEscalationNotification;
-    private createCostNotificationMessage;
-    private sendCostReport;
-    private createReportSummaryMessage;
-    getCostStatus(): {
-        cost_centers: number;
-        active_alerts: number;
-        total_monthly_cost: number;
-        total_potential_savings: number;
-        efficiency_score: number;
-        recent_events: CostEvent[];
-        top_cost_drivers: Array<{
-            name: string;
-            cost: number;
-            percentage: number;
-        }>;
-    };
-    private createDefaultCostAlertsForCenter;
-    private initializeDefaultCostCenters;
-    private startCostMonitoring;
-    private startMetricsCollection;
-    private startOptimizationEngine;
-    private startReportGeneration;
-    private updateSystemMetrics;
-    private runOptimizationAnalysis;
-    private generateScheduledReports;
-    getCostCenters(): CostCenter[];
-    getCostAlerts(): CostAlert[];
-    getOptimizationRecommendations(): CostOptimizationRecommendation[];
-    getCostReports(): CostReport[];
-    getCostEvents(): CostEvent[];
-    exportConfiguration(): Promise<string>;
-    importConfiguration(configJson: string): Promise<void>;
-    shutdown(): void;
+    string: any;
+    executed_at: number;
+    savings_achieved: number;
+    success: boolean;
 }
-export default SecurityCostOptimizer;
 //# sourceMappingURL=SecurityCostOptimizer.d.ts.map

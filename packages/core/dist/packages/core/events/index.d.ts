@@ -16,124 +16,17 @@ export type { EventableStore, StateChangeEvent, ZustandEventConfig } from './ada
 export declare const EventSystemConfigs: {
     production: {
         middleware: any[];
-        eventBusOptions: {
-            maxHistorySize: number;
-            enableHistory: boolean;
-        };
     };
-    development: {
-        middleware: any[];
-        eventBusOptions: {
-            maxHistorySize: number;
-            enableHistory: boolean;
-        };
-    };
-    testing: {
-        middleware: any[];
-        eventBusOptions: {
-            maxHistorySize: number;
-            enableHistory: boolean;
-        };
-    };
-};
-/**
- * Initialize event system with environment-specific configuration
- */
-export declare const initializeEventSystem: (environment?: "production" | "development" | "testing") => import("./EventSystem").EventBus;
+    createPerformanceMiddleware({}: {}): any;
+    sampleRate: number;
+    slowEventThreshold: number;
+}, createLoggingMiddleware: any;
 /**
  * Event system health check utility
  */
 export declare const performEventSystemHealthCheck: () => {
     status: "healthy" | "degraded" | "unhealthy";
-    stats: {
-        subscriptions: number;
-        middleware: number;
-        historySize: number;
-        eventTypes: string[];
-    };
-    issues: string[];
+    stats: any;
+    issues: string;
 };
-/**
- * Event system metrics collection utility
- */
-export declare const collectEventSystemMetrics: () => {
-    metrics: {
-        avgEventsPerMinute: number;
-        topEventTypes: [string, number][];
-        eventsByCategory: Record<string, number>;
-        eventsByPriority: Record<string, number>;
-    };
-    subscriptions: number;
-    middleware: number;
-    historySize: number;
-    eventTypes: string[];
-};
-/**
- * Predefined event system setups for common use cases
- */
-export declare const EventSystemPresets: {
-    /**
-     * Minimal setup for simple applications
-     */
-    minimal: () => void;
-    /**
-     * Analytics-focused setup
-     */
-    analytics: () => void;
-    /**
-     * High-security setup
-     */
-    security: () => void;
-    /**
-     * High-performance setup
-     */
-    performance: () => void;
-};
-declare const _default: {
-    EventBus: any;
-    globalEventBus: import("./EventSystem").EventBus;
-    EventFactory: any;
-    initializeEventSystem: (environment?: "production" | "development" | "testing") => import("./EventSystem").EventBus;
-    EventSystemPresets: {
-        /**
-         * Minimal setup for simple applications
-         */
-        minimal: () => void;
-        /**
-         * Analytics-focused setup
-         */
-        analytics: () => void;
-        /**
-         * High-security setup
-         */
-        security: () => void;
-        /**
-         * High-performance setup
-         */
-        performance: () => void;
-    };
-    performEventSystemHealthCheck: () => {
-        status: "healthy" | "degraded" | "unhealthy";
-        stats: {
-            subscriptions: number;
-            middleware: number;
-            historySize: number;
-            eventTypes: string[];
-        };
-        issues: string[];
-    };
-    collectEventSystemMetrics: () => {
-        metrics: {
-            avgEventsPerMinute: number;
-            topEventTypes: [string, number][];
-            eventsByCategory: Record<string, number>;
-            eventsByPriority: Record<string, number>;
-        };
-        subscriptions: number;
-        middleware: number;
-        historySize: number;
-        eventTypes: string[];
-    };
-};
-export default _default;
 //# sourceMappingURL=index.d.ts.map

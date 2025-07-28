@@ -11,6 +11,7 @@ import crypto from 'crypto';
 import { FastifyRequest } from 'fastify';
 import { AuditService } from './AuditService';
 
+}
 export interface WebhookProvider {
   providerId: string;
   name: string;
@@ -25,7 +26,9 @@ export interface WebhookProvider {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface WebhookValidationResult {
   valid: boolean;
   providerId?: string;
@@ -38,7 +41,9 @@ export interface WebhookValidationResult {
   error?: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface WebhookRequest {
   providerId: string;
   signature: string;
@@ -47,7 +52,9 @@ export interface WebhookRequest {
   timestamp?: string;
   eventType?: string;
 }
+}
 
+}
 export interface WebhookEvent {
   eventId: string;
   providerId: string;
@@ -60,7 +67,9 @@ export interface WebhookEvent {
   lastAttempt?: Date;
   error?: string;
 }
+}
 
+}
 export interface WebhookConfig {
   providers: Record<string, WebhookProvider>;
   globalTimeout: number;
@@ -69,6 +78,7 @@ export interface WebhookConfig {
   enableReplayProtection: boolean;
   replayWindowSeconds: number;
   enableAuditLogging: boolean;
+}
 }
 
 export class WebhookAuthenticationService {
@@ -97,6 +107,7 @@ export class WebhookAuthenticationService {
    * Register a webhook provider with the authentication service
    */
   async registerProvider(provider: Omit<WebhookProvider, 'createdAt' | 'updatedAt'>): Promise<void> {
+
     const webhookProvider: WebhookProvider = {
       ...provider,
       createdAt: new Date(),
@@ -113,7 +124,7 @@ export class WebhookAuthenticationService {
           name: provider.name,
           endpoints: provider.endpoints,
           eventTypes: provider.eventTypes
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],
@@ -128,6 +139,7 @@ export class WebhookAuthenticationService {
    * Validate incoming webhook request with signature verification
    */
   async validateWebhook(request: WebhookRequest): Promise<WebhookValidationResult> {
+
     try {
       const provider = this.providers.get(request.providerId);
       
@@ -223,6 +235,7 @@ export class WebhookAuthenticationService {
     request: FastifyRequest,
     providerId: string
   ): Promise<WebhookValidationResult> {
+
     const provider = this.providers.get(providerId);
     if (!provider) {
       return { valid: false, error: `Unknown provider: ${providerId}` };
@@ -272,6 +285,7 @@ export class WebhookAuthenticationService {
    * Update provider configuration
    */
   async updateProvider(providerId: string, updates: Partial<WebhookProvider>): Promise<boolean> {
+
     const provider = this.providers.get(providerId);
     if (!provider) {
       return false;
@@ -291,7 +305,7 @@ export class WebhookAuthenticationService {
         details: {
           providerId,
           updates: Object.keys(updates)
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2'],
@@ -308,6 +322,7 @@ export class WebhookAuthenticationService {
    * Remove provider
    */
   async removeProvider(providerId: string): Promise<boolean> {
+
     const removed = this.providers.delete(providerId);
 
     if (removed && this.config.enableAuditLogging) {
@@ -330,6 +345,7 @@ export class WebhookAuthenticationService {
    * Test webhook provider configuration
    */
   async testProvider(providerId: string, testPayload: any): Promise<WebhookValidationResult> {
+
     const provider = this.providers.get(providerId);
     if (!provider) {
       return { valid: false, error: `Provider not found: ${providerId}` };
@@ -517,13 +533,14 @@ export class WebhookAuthenticationService {
   }
 
   private async logValidationEvent(eventType: string, providerId: string, details: any): Promise<void> {
+
     if (this.config.enableAuditLogging) {
       await this.auditService.logEvent({
         eventType,
         details: {
           providerId,
           ...details
-        },
+  }
         riskLevel: eventType.includes('FAILED') || eventType.includes('INVALID') ? 'HIGH' : 'LOW',
         compliance: {
           frameworks: ['SOC2'],

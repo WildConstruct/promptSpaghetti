@@ -321,7 +321,7 @@ describe('KeyManagementService', () => {
             is_active: true,
             expires_at: null
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] }); // log access
 
       // Mock decryption
@@ -672,7 +672,7 @@ describe('KeyManagementService', () => {
           key_length: 256,
           is_active: true,
           created_at: new Date()
-        },
+  }
         {
           key_id: 'key2',
           purpose: 'token_signing',
@@ -718,7 +718,7 @@ describe('KeyManagementService', () => {
       await expect(
         keyManagementService.generateMasterKey({
           purpose: 'data_encryption'
-        })
+  }
       ).rejects.toThrow('Failed to generate master key');
     });
 

@@ -4,6 +4,7 @@
  */
 import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, ValidationResult } from '../advanced';
 import { IOSpecBuilder } from '../io-system';
+
 export interface PythonTransformConfig {
     code: string;
     timeout?: number;
@@ -17,7 +18,7 @@ export interface PythonTransformConfig {
         fallbackBehavior?: 'error' | 'skip' | 'default';
         defaultOutput?: string;
     };
-}
+
 export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
     private pythonClient;
     private pythonConfig;
@@ -109,11 +110,10 @@ export declare class PythonTransformNode extends AdvancedRuntimeNode<string> {
     /**
      * Store execution metadata for statistics
      */
-    protected storeExecutionMetadata()
-      context: AdvancedExecutionContext,
+    protected storeExecutionMetadata(context: AdvancedExecutionContext,)
       success: boolean,
       executionTime: number,
       securityViolations: number,
     ): void;
-}
+
 //# sourceMappingURL=PythonTransform.d.ts.map

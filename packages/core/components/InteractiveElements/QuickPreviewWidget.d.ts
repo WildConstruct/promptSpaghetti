@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { QuickPreviewElement, Epic16InteractiveElementsService } from '../../services/Epic16InteractiveElementsService';
+
 interface QuickPreviewWidgetProps {
     element: QuickPreviewElement;
     interactiveService: Epic16InteractiveElementsService;
@@ -16,7 +17,8 @@ interface QuickPreviewWidgetProps {
     onDownload?: (templateId: string) => void;
     onShare?: (templateId: string, platform: string) => void;
     onPurchase?: (templateId: string) => void;
-}
+
+
 interface TemplatePreviewData {
     id: string;
     title: string;
@@ -45,7 +47,7 @@ interface TemplatePreviewData {
     isPurchased: boolean;
     isInWishlist: boolean;
     canDownload: boolean;
-}
+
 export declare const QuickPreviewWidget: React.FC<QuickPreviewWidgetProps>;
 export default QuickPreviewWidget;
 //# sourceMappingURL=QuickPreviewWidget.d.ts.map

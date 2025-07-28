@@ -3,19 +3,19 @@ describe('ReconnectionHandler', () => {
   let handler: ReconnectionHandler;
   let mockConnectionFactory: jest.Mock;
   beforeEach(() => {
-    handler = new ReconnectionHandler({)
-      maxAttempts: 3,
-      initialDelay: 100,
-      maxDelay: 1000,
-      backoffFactor: 2,
-      jitterFactor: 0.1,
-      resetTimeoutMs: 5000,
-      connectionTimeout: 1000,
-      enableJitter: false, // Disable for predictable tests
-      enableCircuitBreaker: true,
-      circuitBreakerThreshold: 2,
-      circuitBreakerResetTime: 100 // Reduced from 2000ms to 100ms for speed,
-    });
+  handler = new ReconnectionHandler({)
+  maxAttempts: 3,
+  initialDelay: 100,
+  maxDelay: 1000,
+  backoffFactor: 2,
+  jitterFactor: 0.1,
+  resetTimeoutMs: 5000,
+  connectionTimeout: 1000,
+  enableJitter: false, // Disable for predictable tests,
+  enableCircuitBreaker: true,
+  circuitBreakerThreshold: 2,
+  circuitBreakerResetTime: 100 // Reduced from 2000ms to 100ms for speed,
+});
     mockConnectionFactory = jest.fn();
     handler.setConnectionFactory(mockConnectionFactory);
   });
@@ -23,35 +23,34 @@ describe('ReconnectionHandler', () => {
     handler.cleanup();
   });
   describe('Basic Reconnection', () => {
-    test('should start reconnection process', async () => {
-      mockConnectionFactory.mockResolvedValue(true);
-      const stateChanges: any[] = [];
-      handler.on('state_changed', (event) => stateChanges.push(event));
-      await handler.startReconnection();
-      expect(stateChanges.some(change => )
-        change.newState === ReconnectionState.ATTEMPTING
-      )).toBe(true);
-      expect(mockConnectionFactory).toHaveBeenCalled();
-    });
+  test('should start reconnection process', async () => {
+  mockConnectionFactory.mockResolvedValue(true);
+  const stateChanges: any = [];
+  handler.on('state_changed', (event) => stateChanges.push(event));
+  await handler.startReconnection();
+  expect(stateChanges.some(change => )
+  change.newState === ReconnectionState.ATTEMPTING
+  )).toBe(true);
+  expect(mockConnectionFactory).toHaveBeenCalled();
+});
     test('should succeed on first attempt', async () => {
-      mockConnectionFactory.mockResolvedValue(true);
-      const successEvents: any[] = [];
-      handler.on('reconnection_success', (event) => successEvents.push(event));
-      await handler.startReconnection();
-      expect(successEvents).toHaveLength(1);
-      expect(handler.getState()).toBe(ReconnectionState.IDLE);
-    });
+  mockConnectionFactory.mockResolvedValue(true);
+  const successEvents: any = [];
+  handler.on('reconnection_success', (event) => successEvents.push(event));
+  await handler.startReconnection();
+  expect(successEvents).toHaveLength(1);
+  expect(handler.getState()).toBe(ReconnectionState.IDLE);
+});
     test('should retry on failure', async () => {
       let attempts = 0;
       mockConnectionFactory.mockImplementation(() => {
         attempts++;
         if (attempts < 3) {
           return Promise.resolve(false);
-        }
         return Promise.resolve(true);
       });
-      const successEvents: any[] = [];
-      const retryEvents: any[] = [];
+      const successEvents: any = [];
+      const retryEvents: any = [];
       const successPromise = new Promise<void>((resolve) => {
         handler.on('reconnection_success', (event) => {
           successEvents.push(event);
@@ -68,15 +67,15 @@ describe('ReconnectionHandler', () => {
       ]);
     });
     test('should fail after max attempts', async () => {
-      mockConnectionFactory.mockResolvedValue(false);
-      const failureEvents: any[] = [];
-      const failurePromise = new Promise<void>((resolve) => {
-        handler.on('reconnection_failed', (event) => {
-          failureEvents.push(event);
-          expect(failureEvents).toHaveLength(1);
-          expect(event.totalAttempts).toBe(3);
-          resolve();
-        });
+  mockConnectionFactory.mockResolvedValue(false);
+  const failureEvents: any = [];
+  const failurePromise = new Promise<void>((resolve) => {
+  handler.on('reconnection_failed', (event) => {
+  failureEvents.push(event);
+  expect(failureEvents).toHaveLength(1);
+  expect(event.totalAttempts).toBe(3);
+  resolve();
+});
       });
       handler.startReconnection();
       await Promise.race([)
@@ -86,16 +85,16 @@ describe('ReconnectionHandler', () => {
     });
   });
   describe('Exponential Backoff', () => {
-    test('should use exponential backoff delays', async () => {
-      mockConnectionFactory.mockResolvedValue(false);
-      const scheduledEvents: any[] = [];
-      handler.on('reconnection_scheduled', (event) => {
-        scheduledEvents.push(event);
-      });
+  test('should use exponential backoff delays', async () => {
+  mockConnectionFactory.mockResolvedValue(false);
+  const scheduledEvents: any = [];
+  handler.on('reconnection_scheduled', (event) => {
+  scheduledEvents.push(event);
+});
       handler.startReconnection();
       // Wait for reconnection to finish
       await new Promise(resolve => {)
-        handler.on('reconnection_exhausted', resolve);
+  handler.on('reconnection_exhausted', resolve);
         handler.on('reconnection_stopped', resolve);
       });
       // Check that we got at least 2 scheduled events
@@ -104,40 +103,39 @@ describe('ReconnectionHandler', () => {
       expect(scheduledEvents[1].delay).toBeGreaterThan(scheduledEvents[0].delay * 1.8);
     });
     test('should respect max delay', (done) => {
-      const handler = new ReconnectionHandler({)
-        maxAttempts: 5,
-        initialDelay: 100,
-        maxDelay: 500,
-        backoffFactor: 10,
-        enableJitter: false,
-      });
+  const handler = new ReconnectionHandler({)
+  maxAttempts: 5,
+  initialDelay: 100,
+  maxDelay: 500,
+  backoffFactor: 10,
+  enableJitter: false,
+});
       handler.setConnectionFactory(() => Promise.resolve(false));
-      const scheduledEvents: any[] = [];
+      const scheduledEvents: any = [];
       handler.on('reconnection_scheduled', (event) => {
         scheduledEvents.push(event);
         expect(event.delay).toBeLessThanOrEqual(500);
         if (scheduledEvents.length === 3) {
           handler.cleanup();
           done();
-        }
       });
       handler.startReconnection();
     });
   });
   describe('Connection Timeout', () => {
-    test.skip('should timeout slow connections', (done) => {
-      const handler = new ReconnectionHandler({)
-        maxAttempts: 1,
-        connectionTimeout: 500,
-      });
+  test.skip('should timeout slow connections', (done) => {
+  const handler = new ReconnectionHandler({)
+  maxAttempts: 1,
+  connectionTimeout: 500,
+});
       handler.setConnectionFactory(mockConnectionFactory);
       mockConnectionFactory.mockImplementation(() => 
         new Promise((resolve, reject) => {
           // Simulate timeout immediately for speed
           setTimeout(() => reject(new Error('Connection timeout')), 10);
-        })
+  }
       );
-      const failureEvents: any[] = [];
+      const failureEvents: any = [];
       handler.on('reconnection_attempt_failed', (event) => {
         failureEvents.push(event);
         expect(event.error.message).toContain('timeout');
@@ -146,23 +144,23 @@ describe('ReconnectionHandler', () => {
       handler.startReconnection();
     });
     test('should succeed within timeout', async () => {
-      mockConnectionFactory.mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve(true), 500)) // 0.5s delay
-      );
-      const successEvents: any[] = [];
-      handler.on('reconnection_success', (event) => successEvents.push(event));
-      await handler.startReconnection();
-      expect(successEvents).toHaveLength(1);
-    });
+  mockConnectionFactory.mockImplementation(() =>
+  new Promise(resolve => setTimeout(() => resolve(true), 500)) // 0.5s delay
+  );
+  const successEvents: any = [];
+  handler.on('reconnection_success', (event) => successEvents.push(event));
+  await handler.startReconnection();
+  expect(successEvents).toHaveLength(1);
+});
   });
   describe('Circuit Breaker', () => {
-    test('should trip circuit breaker after threshold', async () => {
-      mockConnectionFactory.mockResolvedValue(false);
-      const circuitBreakerEvents: any[] = [];
-      const circuitBreakerPromise = new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          reject(new Error('Circuit breaker event timeout after 5s'));
-        }, 5000);
+  test('should trip circuit breaker after threshold', async () => {
+  mockConnectionFactory.mockResolvedValue(false);
+  const circuitBreakerEvents: any = [];
+  const circuitBreakerPromise = new Promise<void>((resolve, reject) => {
+  const timeout = setTimeout(() => {
+  reject(new Error('Circuit breaker event timeout after 5s'));
+}, 5000);
         handler.on('circuit_breaker_tripped', (event) => {
           circuitBreakerEvents.push(event);
           expect(handler.isCircuitBreakerActive()).toBe(true);
@@ -180,18 +178,18 @@ describe('ReconnectionHandler', () => {
         handler.on('circuit_breaker_tripped', () => resolve());
         handler.startReconnection();
       });
-      const blockedEvents: any[] = [];
+      const blockedEvents: any = [];
       handler.on('reconnection_blocked', (event) => blockedEvents.push(event));
       await handler.startReconnection();
       expect(blockedEvents).toHaveLength(1);
       expect(blockedEvents[0].reason).toBe('circuit_breaker_open');
     });
     test('should reset circuit breaker automatically', async () => {
-      const handler = new ReconnectionHandler({)
-        maxAttempts: 3,
-        circuitBreakerThreshold: 1,
-        circuitBreakerResetTime: 100,
-      });
+  const handler = new ReconnectionHandler({)
+  maxAttempts: 3,
+  circuitBreakerThreshold: 1,
+  circuitBreakerResetTime: 100,
+});
       handler.setConnectionFactory(() => Promise.resolve(false));
       let tripCount = 0;
       handler.on('circuit_breaker_tripped', () => {
@@ -321,7 +319,7 @@ describe('ReconnectionHandler', () => {
       mockConnectionFactory.mockImplementation(() => 
         new Promise(resolve => setTimeout(() => resolve(false), 1000))
       );
-      const stoppedEvents: any[] = [];
+      const stoppedEvents: any = [];
       handler.on('reconnection_stopped', () => stoppedEvents.push({}));
       handler.startReconnection();
       // Stop after a short delay
@@ -345,7 +343,6 @@ describe('ReconnectionHandler', () => {
           expect(recentAttempts[0].success).toBe(false);
           expect(recentAttempts[0].error).toBeDefined();
           done();
-        }
       });
       handler.startReconnection();
     });

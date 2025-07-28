@@ -86,7 +86,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         automated_distribution: true,
         multi_language_support: true,
         personalization_enabled: true
-      },
+  }
       insight_types: {
         threat_insights: true,
         risk_insights: true,
@@ -96,7 +96,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         predictive_insights: true,
         behavioral_insights: true,
         contextual_insights: true
-      },
+  }
       analysis_algorithms: {
         natural_language_processing: true,
         machine_learning_analysis: true,
@@ -106,7 +106,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         anomaly_contextualization: true,
         causal_inference: true,
         impact_assessment: true
-      },
+  }
       data_sources: {
         security_events: true,
         threat_intelligence: true,
@@ -116,7 +116,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         performance_metrics: true,
         user_behavior_data: true,
         external_intelligence: true
-      },
+  }
       generation_triggers: {
         scheduled_intervals: ['hourly', 'daily', 'weekly'],
         event_driven_triggers: ['critical_alert', 'policy_violation', 'anomaly_detected'],
@@ -125,7 +125,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         anomaly_triggers: ['statistical_anomaly', 'behavioral_anomaly'],
         compliance_triggers: ['regulation_change', 'audit_finding'],
         escalation_triggers: ['incident_escalation', 'threat_escalation']
-      },
+  }
       distribution_channels: {
         dashboard_integration: true,
         email_reports: true,
@@ -135,7 +135,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         mobile_notifications: true,
         executive_briefings: true,
         automated_tickets: true
-      },
+  }
       personalization: {
         role_based_insights: true,
         department_specific: true,
@@ -502,7 +502,7 @@ describe('SecurityInsightsAutomationEngine', () => {
       jest.spyOn(engine as any, 'personalizationProfiles').mockValue({
         set: jest.fn<unknown[], unknown>().mockImplementation(() => {
           throw new Error('Profile storage failed');
-        })
+  }
       });
 
       await expect(engine.createPersonalizationProfile({ user_role: 'test' })).rejects.toThrow();
@@ -644,7 +644,7 @@ describe('SecurityInsightsAutomationEngine', () => {
         time_range: {
           start: Date.now() - 86400000 * 7,
           end: Date.now()
-        },
+  }
         include_analytics: true
       };
 

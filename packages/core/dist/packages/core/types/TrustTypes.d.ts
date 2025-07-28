@@ -24,7 +24,7 @@ export interface TrustFactor {
     score: number;
     impact: number;
     description: string;
-    evidence: string[];
+    evidence: string;
     category: TrustFactorCategory;
 }
 export type TrustFactorCategory = 'behavior' | 'quality' | 'security' | 'community' | 'performance' | 'compliance';
@@ -34,9 +34,9 @@ export interface UserTrustScore extends TrustScore {
     dimensions: UserTrustDimensions;
     creatorScore?: CreatorTrustScore;
     buyerScore?: BuyerTrustScore;
-    history: TrustScoreHistory[];
+    history: TrustScoreHistory;
     trends: TrustTrends;
-    riskFactors: RiskFactor[];
+    riskFactors: RiskFactor;
     verificationStatus: VerificationStatus;
     dataQuality: DataQualityScore;
     calculationMethod: string;
@@ -51,7 +51,7 @@ export interface UserTrustDimensions {
 export interface DimensionScore {
     score: number;
     weight: number;
-    factors: TrustFactor[];
+    factors: TrustFactor;
     trend: 'improving' | 'stable' | 'declining';
     lastUpdated: Date;
 }
@@ -65,8 +65,8 @@ export interface CreatorTrustScore {
     averageTemplateScore: number;
     customerRetentionRate: number;
     supportResponseTime: number;
-    badges: TrustBadge[];
-    certifications: Certification[];
+    badges: TrustBadge;
+    certifications: Certification;
 }
 export interface BuyerTrustScore {
     score: number;
@@ -87,8 +87,8 @@ export interface TemplateTrustScore extends TrustScore {
     safetyAssessment: TemplateSafetyAssessment;
     communityValidation: CommunityValidationMetrics;
     performanceMetrics: TemplatePerformanceMetrics;
-    trustIndicators: TemplateTrustIndicator[];
-    warnings: TrustWarning[];
+    trustIndicators: TemplateTrustIndicator;
+    warnings: TrustWarning;
 }
 export interface TemplateTrustDimensions {
     contentQuality: DimensionScore;
@@ -112,7 +112,7 @@ export interface TemplateSafetyAssessment {
     privacyScore: number;
     complianceScore: number;
     vulnerabilityCount: number;
-    safetyWarnings: SafetyWarning[];
+    safetyWarnings: SafetyWarning;
     lastSecurityScan: Date;
 }
 export interface CommunityValidationMetrics {
@@ -121,7 +121,7 @@ export interface CommunityValidationMetrics {
     ratingDistribution: RatingDistribution;
     communityTrust: number;
     reportedIssues: number;
-    communityFlags: CommunityFlag[];
+    communityFlags: CommunityFlag;
 }
 export interface TemplatePerformanceMetrics {
     executionSuccessRate: number;
@@ -139,7 +139,7 @@ export interface TransactionTrustScore extends TrustScore {
     factors: TransactionTrustFactors;
     riskAssessment: TransactionRiskAssessment;
     fraudScore: number;
-    fraudIndicators: FraudIndicator[];
+    fraudIndicators: FraudIndicator;
     transactionContext: TransactionContext;
 }
 export interface TransactionTrustFactors {
@@ -153,14 +153,14 @@ export interface TransactionTrustFactors {
 export interface TransactionRiskAssessment {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     riskScore: number;
-    riskFactors: RiskFactor[];
-    mitigationStrategies: string[];
-    recommendedActions: string[];
+    riskFactors: RiskFactor;
+    mitigationStrategies: string;
+    recommendedActions: string;
 }
 export interface TrustScoreHistory {
     date: Date;
     score: number;
-    factors: string[];
+    factors: string;
     reason: string;
     impact: number;
 }
@@ -176,11 +176,11 @@ export interface RiskFactor {
     probability: number;
     impact: number;
     description: string;
-    mitigation: string[];
+    mitigation: string;
 }
 export interface VerificationStatus {
     isVerified: boolean;
-    verificationType: VerificationType[];
+    verificationType: VerificationType;
     verificationDate?: Date;
     verificationExpiry?: Date;
     verificationProvider?: string;
@@ -198,7 +198,7 @@ export interface ContentQualityTrustMetrics {
     qualityConsistency: number;
     qualityTrend: 'improving' | 'stable' | 'declining';
     topPerformingTemplates: number;
-    qualityBadges: string[];
+    qualityBadges: string;
 }
 export interface ReputationMetrics {
     overallReputation: number;
@@ -217,8 +217,8 @@ export interface ComplianceMetrics {
     complianceScore: number;
     violationCount: number;
     lastViolationDate?: Date;
-    complianceHistory: ComplianceEvent[];
-    certificationStatus: CertificationStatus[];
+    complianceHistory: ComplianceEvent;
+    certificationStatus: CertificationStatus;
 }
 export interface PurchaseHistoryMetrics {
     totalPurchases: number;
@@ -247,7 +247,7 @@ export interface PaymentReliabilityMetrics {
     averagePaymentTime: number;
     chargebackRate: number;
     paymentMethodsUsed: number;
-    paymentHistory: PaymentEvent[];
+    paymentHistory: PaymentEvent;
 }
 export interface TrustBadge {
     badgeId: string;
@@ -256,7 +256,7 @@ export interface TrustBadge {
     level: 'bronze' | 'silver' | 'gold' | 'platinum';
     earnedDate: Date;
     expiryDate?: Date;
-    criteria: string[];
+    criteria: string;
 }
 export interface Certification {
     certificationId: string;
@@ -427,7 +427,7 @@ export interface CalculationConfig {
     historicalWindow: number;
     decayFactor: number;
     confidenceThreshold: number;
-    recalculationTriggers: string[];
+    recalculationTriggers: string;
 }
 export interface FraudDetectionConfig {
     enabled: boolean;
@@ -437,10 +437,10 @@ export interface FraudDetectionConfig {
     alertThreshold: number;
 }
 export interface UpdateFrequencyConfig {
-    realTime: string[];
-    hourly: string[];
-    daily: string[];
-    weekly: string[];
+    realTime: string;
+    hourly: string;
+    daily: string;
+    weekly: string;
 }
 export interface TrustScoreAnalytics {
     period: AnalyticsPeriod;
@@ -450,8 +450,8 @@ export interface TrustScoreAnalytics {
     templateTrustDistribution: TrustDistribution;
     trustTrends: TrustTrendAnalysis;
     riskAnalysis: RiskAnalysis;
-    insights: TrustInsight[];
-    recommendations: TrustRecommendation[];
+    insights: TrustInsight;
+    recommendations: TrustRecommendation;
 }
 export interface AnalyticsPeriod {
     startDate: Date;
@@ -478,8 +478,8 @@ export interface TrustTrendAnalysis {
     overallTrend: 'improving' | 'stable' | 'declining';
     trendVelocity: number;
     trustScoreVolatility: number;
-    seasonalPatterns: SeasonalPattern[];
-    trustMilestones: TrustMilestone[];
+    seasonalPatterns: SeasonalPattern;
+    trustMilestones: TrustMilestone;
 }
 export interface SeasonalPattern {
     period: string;
@@ -495,10 +495,10 @@ export interface TrustMilestone {
 }
 export interface RiskAnalysis {
     overallRiskLevel: 'low' | 'medium' | 'high' | 'critical';
-    riskFactors: RiskFactor[];
+    riskFactors: RiskFactor;
     fraudIncidents: number;
     suspiciousActivityCount: number;
-    riskTrends: RiskTrend[];
+    riskTrends: RiskTrend;
 }
 export interface RiskTrend {
     riskType: string;
@@ -515,7 +515,7 @@ export interface TrustInsight {
     impact: 'low' | 'medium' | 'high' | 'critical';
     confidence: number;
     actionable: boolean;
-    relatedMetrics: string[];
+    relatedMetrics: string;
     generatedAt: Date;
 }
 export interface TrustRecommendation {
@@ -528,9 +528,9 @@ export interface TrustRecommendation {
     implementation: {
         effort: 'low' | 'medium' | 'high';
         timeline: string;
-        resources: string[];
+        resources: string;
     };
-    success_metrics: string[];
+    success_metrics: string;
     generatedAt: Date;
 }
 //# sourceMappingURL=TrustTypes.d.ts.map

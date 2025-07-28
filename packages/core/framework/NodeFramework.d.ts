@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advanced';
 import { NodeValidationService, NodeValidationResult } from '../validation';
 import { IOPortDefinition } from '../runtime/io-system';
+
 export interface NodeDefinition {
     /** Unique node type identifier */
     type: string;
@@ -36,7 +37,7 @@ export interface NodeDefinition {
         experimental?: boolean;
         minEngineVersion?: string;
     };
-}
+
 export interface NodeLifecycleHooks {
     /** Called before node initialization */
     beforeInit?: (node: FrameworkNode) => Promise<void> | void;
@@ -52,7 +53,7 @@ export interface NodeLifecycleHooks {
     onValidate?: (node: FrameworkNode, result: NodeValidationResult) => Promise<void> | void;
     /** Called on node errors */
     onError?: (node: FrameworkNode, error: Error) => Promise<void> | void;
-}
+
 export interface NodeFrameworkConfig {
     /** Enable automatic validation of nodes */
     enableValidation: boolean;
@@ -68,7 +69,7 @@ export interface NodeFrameworkConfig {
     nodeCacheExpirationMs: number;
     /** Enable hot reloading of node definitions */
     enableHotReload: boolean;
-}
+
 export interface NodeMetrics {
     nodeId: string;
     nodeType: string;
@@ -81,7 +82,7 @@ export interface NodeMetrics {
     memoryUsage: number;
     cacheHits: number;
     cacheMisses: number;
-}
+
 export interface NodeFrameworkMetrics {
     totalNodes: number;
     activeNodes: number;
@@ -91,7 +92,6 @@ export interface NodeFrameworkMetrics {
     errorRate: number;
     memoryUsage: number;
     cacheEfficiency: number;
-}
 /**
  * Enhanced node base class with framework integration
  */
@@ -143,7 +143,6 @@ export declare abstract class FrameworkNode extends AdvancedRuntimeNode {
     private validateWithFramework;
     private updateExecutionMetrics;
     private handleError;
-}
 /**
  * Node Registry for managing node types and definitions
  */
@@ -198,7 +197,6 @@ export declare class NodeRegistry {
         experimental?: boolean;
     }): NodeDefinition[];
     private validateDefinition;
-}
 /**
  * Main Node Framework class
  */
@@ -257,16 +255,16 @@ export declare class NodeFramework extends EventEmitter {
      */
     shutdown(): Promise<void>;
     private updateMetrics;
-}
 /**
  * Extension interface for framework extensibility
  */
+
 export interface NodeFrameworkExtension {
     name: string;
     version: string;
     description: string;
     initialize(framework: NodeFramework): Promise<void> | void;
     shutdown(): Promise<void> | void;
-}
+
 export default NodeFramework;
 //# sourceMappingURL=NodeFramework.d.ts.map

@@ -20,6 +20,7 @@ import {
   FraudIndicator
 } from '../../../packages/core/types/TrustTypes';
 
+}
 export interface ViolationRule {
   ruleId: string;
   name: string;
@@ -31,6 +32,7 @@ export interface ViolationRule {
     trustScore?: {
       operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq';
       value: number;
+}
     };
     riskFactors?: {
       minimumCount: number;
@@ -59,6 +61,7 @@ export interface ViolationRule {
   updatedAt: Date;
 }
 
+}
 export interface ScanOptions {
   entityTypes?: ('user' | 'template' | 'transaction')[];
   entityIds?: string[];
@@ -68,10 +71,12 @@ export interface ScanOptions {
   timeRange?: {
     from: Date;
     to: Date;
+}
   };
   maxResults?: number;
 }
 
+}
 export interface ScanResult {
   totalScanned: number;
   violationsFound: number;
@@ -80,6 +85,7 @@ export interface ScanResult {
   violations: PolicyViolation[];
   scanDuration: number;
   timestamp: Date;
+}
 }
 
 export class ViolationDetectionEngine {
@@ -106,6 +112,7 @@ export class ViolationDetectionEngine {
    * Initialize detection engine and load active rules
    */
   async initialize(): Promise<void> {
+
     console.log('🔍 Initializing Violation Detection Engine');
     await this.loadActiveRules();
     console.log(`✅ Loaded ${this.activeRules.size} active violation rules`);
@@ -115,6 +122,7 @@ export class ViolationDetectionEngine {
    * Perform comprehensive violation scan
    */
   async scanForViolations(options: ScanOptions = {}): Promise<ScanResult> {
+
     const startTime = Date.now();
     console.log('🚨 Starting violation detection scan', options);
 
@@ -173,6 +181,7 @@ export class ViolationDetectionEngine {
     entityId: string,
     ruleIds?: string[]
   ): Promise<PolicyViolation[]> {
+
     console.log(`🔍 Scanning ${entityType} ${entityId} for violations`);
 
     const applicableRules = this.getApplicableRules({
@@ -201,6 +210,7 @@ export class ViolationDetectionEngine {
    * Scan users for policy violations
    */
   private async scanUserViolations(rules: ViolationRule[], options: ScanOptions): Promise<PolicyViolation[]> {
+
     const violations: PolicyViolation[] = [];
     const userRules = rules.filter(r => r.entityTypes.includes('user'));
     
@@ -233,6 +243,7 @@ export class ViolationDetectionEngine {
    * Scan templates for policy violations
    */
   private async scanTemplateViolations(rules: ViolationRule[], options: ScanOptions): Promise<PolicyViolation[]> {
+
     const violations: PolicyViolation[] = [];
     const templateRules = rules.filter(r => r.entityTypes.includes('template'));
     
@@ -265,6 +276,7 @@ export class ViolationDetectionEngine {
    * Scan transactions for policy violations
    */
   private async scanTransactionViolations(rules: ViolationRule[], options: ScanOptions): Promise<PolicyViolation[]> {
+
     const violations: PolicyViolation[] = [];
     const transactionRules = rules.filter(r => r.entityTypes.includes('transaction'));
     
@@ -305,6 +317,7 @@ export class ViolationDetectionEngine {
     userTrustScore: UserTrustScore,
     userId: string
   ): Promise<PolicyViolation | null> {
+
     const conditions = rule.conditions;
     let violation: PolicyViolation | null = null;
 
@@ -325,7 +338,7 @@ export class ViolationDetectionEngine {
           trustScore: userTrustScore.score,
           threshold: conditions.trustScore.value,
           operator: conditions.trustScore.operator
-        },
+  }
         detectedAt: new Date(),
         status: 'pending'
       };
@@ -349,7 +362,7 @@ export class ViolationDetectionEngine {
             riskFactorCount: matchingRisks.length,
             threshold: conditions.riskFactors.minimumCount,
             riskFactors: matchingRisks
-          },
+  }
           detectedAt: new Date(),
           status: 'pending'
         };
@@ -385,6 +398,7 @@ export class ViolationDetectionEngine {
     templateTrustScore: TemplateTrustScore,
     templateId: string
   ): Promise<PolicyViolation | null> {
+
     const conditions = rule.conditions;
     let violation: PolicyViolation | null = null;
 
@@ -405,7 +419,7 @@ export class ViolationDetectionEngine {
           trustScore: templateTrustScore.score,
           threshold: conditions.trustScore.value,
           operator: conditions.trustScore.operator
-        },
+  }
         detectedAt: new Date(),
         status: 'pending'
       };
@@ -440,6 +454,7 @@ export class ViolationDetectionEngine {
     transactionTrustScore: TransactionTrustScore,
     transactionId: string
   ): Promise<PolicyViolation | null> {
+
     const conditions = rule.conditions;
     let violation: PolicyViolation | null = null;
 
@@ -459,7 +474,7 @@ export class ViolationDetectionEngine {
             fraudScore: transactionTrustScore.fraudScore,
             fraudIndicators: transactionTrustScore.fraudIndicators,
             thresholds: conditions.fraudIndicators
-          },
+  }
           detectedAt: new Date(),
           status: 'pending'
         };
@@ -503,18 +518,21 @@ export class ViolationDetectionEngine {
   }
 
   private async evaluateUserBehaviorCondition(userId: string, condition: any): Promise<any | null> {
+
     // Placeholder for user behavior analysis
     // Would analyze recent user activity patterns, velocity, etc.
     return null;
   }
 
   private async evaluateContentQualityCondition(templateId: string, condition: any): Promise<any | null> {
+
     // Placeholder for content quality analysis
     // Would integrate with ContentQualityMetricsService
     return null;
   }
 
   private async evaluateTransactionCondition(transactionId: string, condition: any): Promise<any | null> {
+
     // Placeholder for transaction analysis
     // Would analyze transaction patterns, amounts, velocity, etc.
     return null;
@@ -525,6 +543,7 @@ export class ViolationDetectionEngine {
   // =============================================================================
 
   private async loadActiveRules(): Promise<void> {
+
     const result = await this.db.query(`
       SELECT rule_id, name, description, category, severity, entity_types, 
              conditions, is_active, created_at, updated_at
@@ -573,6 +592,7 @@ export class ViolationDetectionEngine {
   }
 
   private async getUserIdsToScan(options: ScanOptions): Promise<string[]> {
+
     if (options.entityIds) {
       return options.entityIds;
     }
@@ -588,6 +608,7 @@ export class ViolationDetectionEngine {
   }
 
   private async getTemplateIdsToScan(options: ScanOptions): Promise<string[]> {
+
     if (options.entityIds) {
       return options.entityIds;
     }
@@ -603,6 +624,7 @@ export class ViolationDetectionEngine {
   }
 
   private async getTransactionIdsToScan(options: ScanOptions): Promise<string[]> {
+
     if (options.entityIds) {
       return options.entityIds;
     }

@@ -25,7 +25,7 @@ export declare enum VerificationCodeType {
     DEVICE_VERIFICATION = "device_verification",
     LOGIN_CONFIRMATION = "login_confirmation",
     TRANSACTION_APPROVAL = "transaction_approval"
-}
+
 export declare enum CodeFormat {
     NUMERIC_4 = "numeric_4",// 1234
     NUMERIC_6 = "numeric_6",// 123456
@@ -33,21 +33,21 @@ export declare enum CodeFormat {
     ALPHANUMERIC_6 = "alpha_6",// A1B2C3
     ALPHANUMERIC_8 = "alpha_8",// A1B2C3D4
     UUID = "uuid"
-}
+
 export declare enum CodeStatus {
     ACTIVE = "active",
     USED = "used",
     EXPIRED = "expired",
     REVOKED = "revoked",
     RATE_LIMITED = "rate_limited"
-}
+
 export declare enum DeliveryChannel {
     EMAIL = "email",
     SMS = "sms",
     VOICE = "voice",
     PUSH = "push",
     IN_APP = "in_app"
-}
+
 export interface VerificationCodeConfig {
     defaultExpiration: number;
     maxExpiration: number;
@@ -67,7 +67,7 @@ export interface VerificationCodeConfig {
     enableSecurityLogging: boolean;
     antiEnumerationDelay: number;
     requireSecureDelivery: boolean;
-}
+
 export interface VerificationCode {
     id: string;
     userId: string;
@@ -102,7 +102,7 @@ export interface VerificationCode {
         suspiciousActivity: boolean;
         deviceMismatch: boolean;
     };
-}
+
 export interface CodeGenerationRequest {
     userId: string;
     type: VerificationCodeType;
@@ -113,7 +113,7 @@ export interface CodeGenerationRequest {
     expirationMinutes?: number;
     maxAttempts?: number;
     metadata?: Record<string, any>;
-}
+
 export interface CodeValidationRequest {
     userId: string;
     code: string;
@@ -121,7 +121,7 @@ export interface CodeValidationRequest {
     ipAddress: string;
     userAgent: string;
     deviceFingerprint?: string;
-}
+
 export interface ValidationResult {
     valid: boolean;
     codeData?: VerificationCode;
@@ -129,13 +129,13 @@ export interface ValidationResult {
     attemptsRemaining?: number;
     securityWarnings?: string[];
     riskScore?: number;
-}
+
 export interface RateLimitData {
     count: number;
     resetTime: number;
     lastRequest: Date;
     violations: number;
-}
+
 export declare enum SecurityEvent {
     CODE_GENERATED = "code_generated",
     CODE_VALIDATED = "code_validated",
@@ -147,7 +147,7 @@ export declare enum SecurityEvent {
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
     BRUTE_FORCE_DETECTED = "brute_force_detected",
     CODE_CLEANUP = "code_cleanup"
-}
+
 export interface CodeStatistics {
     totalCodes: number;
     activeCodes: number;
@@ -161,7 +161,6 @@ export interface CodeStatistics {
     securityViolations: number;
     rateLimitViolations: number;
     averageCodeLifetime: number;
-}
 /**
  * Comprehensive verification code management service
  */
@@ -234,6 +233,6 @@ export declare class VerificationCodeManager extends EventEmitter {
      * Destroy the verification code manager and clean up resources
      */
     destroy(): void;
-}
+
 export default VerificationCodeManager;
 //# sourceMappingURL=VerificationCodeManager.d.ts.map

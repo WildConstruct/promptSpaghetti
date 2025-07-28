@@ -41,7 +41,6 @@ export interface VFXVisualizationDemoProps {
   showControlPanel?: boolean;
   autoRotateScenes?: boolean;
 }
-
 export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
   className = '',
   title = 'Wild Construct VFX Pipeline Demo',
@@ -56,12 +55,11 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
   const [selectedVisualizationMode, setSelectedVisualizationMode] = useState<'full' | 'compact' | 'analysis'>('full');
   // Auto-rotation effect
   useEffect(() => {
-    if (!isAutoRotating) return;
-    const interval = setInterval(() => {
-      setCurrentSceneIndex((prevIndex) => 
-        prevIndex >= scenes.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 8000); // Rotate every 8 seconds
+  if (!isAutoRotating) return;
+  const interval = setInterval(() => {
+  setCurrentSceneIndex((prevIndex) =>
+  prevIndex >= scenes.length - 1 ? 0 : prevIndex + 1);
+}, 8000); // Rotate every 8 seconds
     return () => clearInterval(interval);
   }, [isAutoRotating, scenes.length]);
   const currentScene = scenes[currentSceneIndex];
@@ -69,7 +67,6 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
     const index = scenes.findIndex(scene => scene.id === sceneId);
     if (index !== -1) {
       setCurrentSceneIndex(index);
-    }
   };
   const addRandomScene = () => {
     const periods = [;
@@ -81,8 +78,10 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
     ];
     const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
     const newScene = generateRandomScene(;);
-      `generated-${Date.now()}`,}
-      `Generated ${randomPeriod.split(' ')[0]} Scene`,}
+      `generated-${Date.now()}`}
+}
+      `Generated ${randomPeriod.split(' ')[0]} Scene`}
+}
       randomPeriod
     );
     setScenes(prev => [...prev, newScene]);
@@ -94,7 +93,7 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
     setShowDebugInfo(false);
     setRealTimeUpdate(true);
   };
-  return ();
+  return;
     <div className={`vfx-visualization-demo ${className}`}>}
       <Card className="mb-6">
         <CardHeader>
@@ -300,11 +299,10 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
           realTimeUpdate={realTimeUpdate}
           showControls={selectedVisualizationMode !== 'compact'}
           onSceneUpdate={(updatedScene) => {
-            const updatedScenes = scenes.map(scene => ;);
-              scene.id === updatedScene.id ? updatedScene : scene
-            );
-            setScenes(updatedScenes);
-          }}
+  const updatedScenes = scenes.map(scene => ;);
+  scene.id === updatedScene.id ? updatedScene : scene);
+  setScenes(updatedScenes);
+}}
           className={selectedVisualizationMode === 'compact' ? 'compact-mode' : ''}
         />
       </div>
@@ -319,8 +317,8 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
                 <div
                   key={index}
                   className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300'
-                  }`}
+  index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300',
+}`}
                 />
               ))}
             </div>
@@ -329,29 +327,22 @@ export const VFXVisualizationDemo: React.FC<VFXVisualizationDemoProps> = ({)
       )}
       <style>{`
         .vfx-visualization-demo {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 1400px;,
+  margin: 0 auto;
           padding: 1rem;
-        }
         .compact-mode {
           transform: scale(0.85);
           transform-origin: top left;
-        }
         @media (max-width: 768px) {
           .vfx-visualization-demo {
             padding: 0.5rem;
-          }
           .compact-mode {
             transform: scale(0.9);
-          }
-        }
         .auto-rotate-indicator {
           animation: pulse 2s ease-in-out infinite;
-        }
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
-        }
       `}</style>
     </div>
   );

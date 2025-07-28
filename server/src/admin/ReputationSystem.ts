@@ -15,6 +15,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface UserReputation {
   userId: string;
   reputationId: string;
@@ -30,6 +31,7 @@ export interface UserReputation {
     templatePerformance: number; // 0-200
     verificationStatus: number; // 0-200
     platformContributions: number; // 0-200
+}
   };
   
   // Verification Status
@@ -102,6 +104,7 @@ export interface UserReputation {
   };
 }
 
+}
 export interface UserBadge {
   badgeId: string;
   badgeType: BadgeType;
@@ -119,7 +122,9 @@ export interface UserBadge {
   criteria: BadgeCriteria;
   rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 }
+}
 
+}
 export interface ReputationMetrics {
   // System Overview
   totalUsers: number;
@@ -129,6 +134,7 @@ export interface ReputationMetrics {
     medium: number;
     low: number;
     veryLow: number;
+}
   };
   
   // Verification Statistics
@@ -176,6 +182,7 @@ export interface ReputationMetrics {
   };
 }
 
+}
 export interface ReputationAlert {
   alertId: string;
   userId: string;
@@ -202,6 +209,7 @@ export interface ReputationAlert {
   assignedTo?: string;
   priority: number;
   escalated: boolean;
+}
 }
 
 // Supporting Types
@@ -237,16 +245,19 @@ export type ReputationAlertType =
   | 'negative_feedback_spike'
   | 'bot_behavior_detected';
 
+}
 export interface BadgeCriteria {
   requirements: Array<{
     metric: string;
     operator: 'gte' | 'lte' | 'eq' | 'gt' | 'lt';
     value: number;
     timeframe?: string;
+}
   }>;
   additionalConditions?: string[];
 }
 
+}
 export interface ReputationHistoryPoint {
   timestamp: Date;
   overallScore: number;
@@ -254,7 +265,9 @@ export interface ReputationHistoryPoint {
   changeReason: string;
   componentChanges: Record<string, number>;
 }
+}
 
+}
 export interface ReputationConfig {
   // Score Calculation Weights
   weights: {
@@ -263,6 +276,7 @@ export interface ReputationConfig {
     templatePerformance: number;
     verificationStatus: number;
     platformContributions: number;
+}
   };
   
   // Thresholds
@@ -331,6 +345,7 @@ export class ReputationSystem extends EventEmitter {
    * Initialize reputation system
    */
   public async initialize(): Promise<void> {
+
     console.log('🏆 Initializing User Reputation System...');
     
     // Initialize database schema
@@ -355,6 +370,7 @@ export class ReputationSystem extends EventEmitter {
    * Calculate or recalculate user reputation
    */
   public async calculateUserReputation(userId: string, forceRecalculation = false): Promise<UserReputation> {
+
     // Check if calculation is needed
     const existingReputation = this.reputationCache.get(userId);
     if (existingReputation && !forceRecalculation) {
@@ -426,7 +442,7 @@ export class ReputationSystem extends EventEmitter {
         level: reputationLevel,
         badges: badges.length,
         riskScore: riskAssessment.fraudRiskScore
-      },
+  }
       timestamp: new Date()
     } as any);
 
@@ -442,6 +458,7 @@ export class ReputationSystem extends EventEmitter {
     awardedBy?: string,
     customCriteria?: BadgeCriteria
   ): Promise<UserBadge> {
+
     const badgeDefinition = this.badgeDefinitions.get(badgeType);
     if (!badgeDefinition) {
       throw new Error(`Badge type ${badgeType} not found`);
@@ -499,7 +516,7 @@ export class ReputationSystem extends EventEmitter {
         badgeType,
         badgeName: badge.name,
         level: badge.level
-      },
+  }
       timestamp: new Date()
     } as any);
 
@@ -512,6 +529,7 @@ export class ReputationSystem extends EventEmitter {
    * Get user reputation
    */
   public async getUserReputation(userId: string): Promise<UserReputation> {
+
     // Check cache first
     const cachedReputation = this.reputationCache.get(userId);
     if (cachedReputation) {
@@ -533,6 +551,7 @@ export class ReputationSystem extends EventEmitter {
    * Get reputation metrics for admin dashboard
    */
   public async getReputationMetrics(): Promise<ReputationMetrics> {
+
     const totalUsers = await this.getTotalUsersCount();
     const reputationDistribution = await this.getReputationDistribution();
     const verificationStats = await this.getVerificationStats();
@@ -559,6 +578,7 @@ export class ReputationSystem extends EventEmitter {
     severity?: string[],
     alertType?: ReputationAlertType[]
   ): Promise<ReputationAlert[]> {
+
     let alerts = Array.from(this.activeAlerts.values());
 
     if (severity) {
@@ -583,6 +603,7 @@ export class ReputationSystem extends EventEmitter {
     verified: boolean,
     verifiedBy?: string
   ): Promise<void> {
+
     const reputation = await this.getUserReputation(userId);
     
     // Update verification status
@@ -603,7 +624,7 @@ export class ReputationSystem extends EventEmitter {
         verificationType,
         verified,
         newLevel: reputation.verification.verificationLevel
-      },
+  }
       timestamp: new Date()
     } as any);
 
@@ -619,6 +640,7 @@ export class ReputationSystem extends EventEmitter {
     flaggedBy: string,
     restrictionLevel: RestrictionLevel = 'none'
   ): Promise<void> {
+
     const reputation = await this.getUserReputation(userId);
     
     reputation.adminNotes = {
@@ -663,6 +685,7 @@ export class ReputationSystem extends EventEmitter {
    * Initialize database schema for reputation system
    */
   private async initializeReputationSchema(): Promise<void> {
+
     const schemas = [
       `CREATE TABLE IF NOT EXISTS user_reputations (
         user_id TEXT PRIMARY KEY,
@@ -736,6 +759,7 @@ export class ReputationSystem extends EventEmitter {
    * Load badge definitions
    */
   private async loadBadgeDefinitions(): Promise<void> {
+
     // Default badge definitions
     const defaultBadges: Array<{ badgeType: BadgeType; badge: Partial<UserBadge> }> = [
       {
@@ -750,7 +774,7 @@ export class ReputationSystem extends EventEmitter {
             ]
           }
         }
-      },
+  }
       {
         badgeType: 'verified_creator',
         badge: {
@@ -764,7 +788,7 @@ export class ReputationSystem extends EventEmitter {
             ]
           }
         }
-      },
+  }
       {
         badgeType: 'template_master',
         badge: {
@@ -778,7 +802,7 @@ export class ReputationSystem extends EventEmitter {
             ]
           }
         }
-      },
+  }
       {
         badgeType: 'review_expert',
         badge: {
@@ -792,7 +816,7 @@ export class ReputationSystem extends EventEmitter {
             ]
           }
         }
-      },
+  }
       {
         badgeType: 'trusted_buyer',
         badge: {
@@ -831,11 +855,13 @@ export class ReputationSystem extends EventEmitter {
   // badge checking, risk assessment, and other supporting methods.
 
   private async gatherUserData(userId: string): Promise<any> {
+
     // Gather all user data needed for reputation calculation
     return {};
   }
 
   private async calculateComponentScores(userData: any): Promise<any> {
+
     // Calculate individual component scores
     return {};
   }
@@ -856,16 +882,19 @@ export class ReputationSystem extends EventEmitter {
   }
 
   private async calculateRiskAssessment(userData: any, componentScores: any): Promise<any> {
+
     // Calculate fraud risk and trustworthiness
     return {};
   }
 
   private async checkEarnedBadges(userId: string, userData: any, componentScores: any): Promise<UserBadge[]> {
+
     // Check which badges user has earned
     return [];
   }
 
   private async getVerificationStatus(userId: string): Promise<UserReputation['verification']> {
+
     // Get user verification status
     return {
       identityVerified: false,
@@ -884,20 +913,24 @@ export class ReputationSystem extends EventEmitter {
   }
 
   private async getReputationHistory(userId: string): Promise<ReputationHistoryPoint[]> {
+
     // Get reputation history from database
     return [];
   }
 
   private async storeUserReputation(reputation: UserReputation): Promise<void> {
+
     // Store reputation in database
   }
 
   private async loadUserReputation(userId: string): Promise<UserReputation | null> {
+
     // Load reputation from database
     return null;
   }
 
   private async loadExistingReputations(): Promise<void> {
+
     // Load recent reputations into cache
   }
 
@@ -910,10 +943,12 @@ export class ReputationSystem extends EventEmitter {
   }
 
   private async checkReputationAlerts(reputation: UserReputation): Promise<void> {
+
     // Check for reputation-based alerts
   }
 
   private async storeReputationAlert(alert: ReputationAlert): Promise<void> {
+
     // Store alert in database
   }
 

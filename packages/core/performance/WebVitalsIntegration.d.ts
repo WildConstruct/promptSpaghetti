@@ -4,6 +4,7 @@
  */
 import { Metric } from 'web-vitals';
 import { EventEmitter } from 'events';
+
 export interface WebVitalsConfig {
     enabled: boolean;
     reportAllChanges: boolean;
@@ -33,7 +34,7 @@ export interface WebVitalsConfig {
     enableConsoleLogging: boolean;
     enableAnalytics: boolean;
     analyticsEndpoint?: string;
-}
+
 export interface EnhancedMetric extends Metric {
     rating: 'good' | 'needs-improvement' | 'poor';
     timestamp: number;
@@ -42,7 +43,7 @@ export interface EnhancedMetric extends Metric {
     connectionType?: string;
     deviceMemory?: number;
     effectiveType?: string;
-}
+
 export interface WebVitalsAnalytics {
     sessionId: string;
     timestamp: number;
@@ -86,7 +87,6 @@ export interface WebVitalsAnalytics {
         title: string;
         loadTime: number;
     };
-}
 /**
  * Enhanced Web Vitals Integration Manager
  * Provides standardized Web Vitals measurement with analytics and reporting
@@ -150,7 +150,7 @@ export declare class WebVitalsIntegration extends EventEmitter {
      * Update configuration
      */
     updateConfig(newConfig: Partial<WebVitalsConfig>): void;
-}
+
 export declare const webVitals: WebVitalsIntegration;
 export default WebVitalsIntegration;
 //# sourceMappingURL=WebVitalsIntegration.d.ts.map

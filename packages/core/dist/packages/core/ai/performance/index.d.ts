@@ -21,34 +21,10 @@ interface PerformanceMetrics {
     successRate?: number;
     totalCost?: number;
 }
-interface ResourceUsage {
-    memory: number;
-    cpu: number;
-    disk: number;
-    network: number;
-}
-export declare const analyzePerformanceMetrics: (metrics: PerformanceMetrics[]) => {
+export declare const analyzePerformanceMetrics: (metrics: PerformanceMetrics) => {
     averageResponseTime: number;
     successRateAverage: number;
     costTrend: "increasing" | "decreasing" | "stable";
-    recommendations: string[];
+    recommendations: string;
 };
-export declare const calculateResourceEfficiency: (usage: ResourceUsage, performance: PerformanceMetrics) => number;
-export interface OptimizationCategories {
-    categories: {
-        caching: {
-            score: number;
-            recommendations: string[];
-        };
-        performance: {
-            score: number;
-            recommendations: string[];
-        };
-        resources: {
-            score: number;
-            recommendations: string[];
-        };
-    };
-    priorityActions: string[];
-}
 //# sourceMappingURL=index.d.ts.map

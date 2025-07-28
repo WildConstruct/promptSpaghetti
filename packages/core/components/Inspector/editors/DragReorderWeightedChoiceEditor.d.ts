@@ -7,13 +7,15 @@
  * and three-tier progressive disclosure for filmmaker-friendly UI
  */
 import React from 'react';
+
 export interface WeightedChoiceData {
     choices?: Array<{
         text: string;
         weight: number;
+
     }>;
     [key: string]: unknown;
-}
+
 export interface DragReorderWeightedChoiceEditorProps {
     data: WeightedChoiceData;
     onChange: (data: Partial<WeightedChoiceData>) => void;
@@ -22,7 +24,8 @@ export interface DragReorderWeightedChoiceEditorProps {
     theme?: 'light' | 'dark' | 'cinema';
     showPreview?: boolean;
     showAnalytics?: boolean;
-}
+
+
 /**
  * Enhanced WeightedChoice editor with professional drag-to-reorder interface
  */

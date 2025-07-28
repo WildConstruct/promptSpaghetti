@@ -10,6 +10,7 @@
  * - Integration with graph store for persistence
  */
 import React from 'react';
+
 interface NodeLabelsManagerProps {
     disabled?: boolean;
     readonly?: boolean;
@@ -17,7 +18,7 @@ interface NodeLabelsManagerProps {
     selectedNodeId?: string | null;
     onNodeHover?: (nodeId: string | null) => void;
     onNodeFocus?: (nodeId: string | null) => void;
-}
+
 export declare const NodeLabelsManager: React.FC<NodeLabelsManagerProps>;
 export default NodeLabelsManager;
 //# sourceMappingURL=NodeLabelsManager.d.ts.map

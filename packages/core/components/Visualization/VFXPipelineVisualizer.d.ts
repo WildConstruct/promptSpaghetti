@@ -6,6 +6,7 @@
  * asset relationships, and creative workflow metrics.
  */
 import React from 'react';
+
 export interface VFXScene {
     id: string;
     name: string;
@@ -17,7 +18,7 @@ export interface VFXScene {
     assets: VFXAsset[];
     composition: SceneComposition;
     accuracy: HistoricalAccuracyMetrics;
-}
+
 export interface VFXCharacter {
     id: string;
     name: string;
@@ -31,7 +32,7 @@ export interface VFXCharacter {
         y: number;
         z: number;
     };
-}
+
 export interface VFXAsset {
     id: string;
     name: string;
@@ -41,13 +42,13 @@ export interface VFXAsset {
     accuracy: number;
     materials: MaterialProperty[];
     lod: number;
-}
+
 export interface MaterialProperty {
     name: string;
     type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
     value: number;
     historicallyAccurate: boolean;
-}
+
 export interface SceneComposition {
     cameraPosition: {,
         x: number;
@@ -57,14 +58,14 @@ export interface SceneComposition {
     focalLength: number;
     depth: number;
     layers: SceneLayer[];
-}
+
 export interface SceneLayer {
     id: string;
     name: string;
     type: 'foreground' | 'midground' | 'background';
     opacity: number;
     elements: string[];
-}
+
 export interface HistoricalAccuracyMetrics {
     overall: number;
     architecture: number;
@@ -74,14 +75,14 @@ export interface HistoricalAccuracyMetrics {
     timeline: number;
     expertValidated: boolean;
     violations: AccuracyViolation[];
-}
+
 export interface AccuracyViolation {
     type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     element: string;
     suggestion: string;
-}
+
 export interface VFXPipelineVisualizerProps {
     scene?: VFXScene;
     scenes?: VFXScene[];
@@ -89,7 +90,7 @@ export interface VFXPipelineVisualizerProps {
     showControls?: boolean;
     onSceneUpdate?: (scene: VFXScene) => void;
     className?: string;
-}
+
 export declare const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps>;
 export default VFXPipelineVisualizer;
 //# sourceMappingURL=VFXPipelineVisualizer.d.ts.map

@@ -12,6 +12,7 @@ import { EventEmitter } from 'events';
 import { AuditService } from '../auth/services/AuditService';
 import { PolicyAuthoringService } from './PolicyAuthoringService';
 
+}
 export interface PolicyNotification {
   notificationId: string;
   policyId: string;
@@ -35,7 +36,9 @@ export interface PolicyNotification {
   userInteractions: UserInteraction[];
   status: NotificationStatus;
 }
+}
 
+}
 export interface NotificationAudience {
   audienceId: string;
   targetType: AudienceTargetType;
@@ -47,7 +50,9 @@ export interface NotificationAudience {
   estimatedReach: number;
   actualReach?: number;
 }
+}
 
+}
 export interface NotificationTarget {
   targetId: string;
   type: 'USER' | 'GROUP' | 'ROLE' | 'DEPARTMENT' | 'JURISDICTION' | 'SERVICE' | 'ALL';
@@ -60,7 +65,9 @@ export interface NotificationTarget {
   language: string;
   lastNotified?: Date;
 }
+}
 
+}
 export interface ContactInfo {
   email?: string;
   phone?: string;
@@ -70,7 +77,9 @@ export interface ContactInfo {
   webhookUrl?: string;
   alternativeContacts: AlternativeContact[];
 }
+}
 
+}
 export interface AlternativeContact {
   type: 'EMAIL' | 'PHONE' | 'WEBHOOK';
   value: string;
@@ -78,7 +87,9 @@ export interface AlternativeContact {
   priority: number;
   purpose: 'PRIMARY' | 'BACKUP' | 'EMERGENCY';
 }
+}
 
+}
 export interface NotificationPreferences {
   enabled: boolean;
   channels: ChannelPreference[];
@@ -88,7 +99,9 @@ export interface NotificationPreferences {
   complianceOverrides: ComplianceOverride[];
   subscriptions: NotificationSubscription[];
 }
+}
 
+}
 export interface ChannelPreference {
   channel: string;
   enabled: boolean;
@@ -96,13 +109,17 @@ export interface ChannelPreference {
   conditions: ChannelCondition[];
   customSettings: Record<string, any>;
 }
+}
 
+}
 export interface ChannelCondition {
   conditionType: 'SEVERITY' | 'POLICY_TYPE' | 'TIME' | 'URGENCY' | 'COMPLIANCE';
   operator: 'EQUALS' | 'NOT_EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'IN' | 'NOT_IN';
   value: Error;
 }
+}
 
+}
 export interface FrequencyPreference {
   immediate: boolean;
   digest: DigestPreference;
@@ -111,7 +128,9 @@ export interface FrequencyPreference {
   maxNotificationsPerDay: number;
   maxNotificationsPerHour: number;
 }
+}
 
+}
 export interface DigestPreference {
   enabled: boolean;
   frequency: 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
@@ -121,7 +140,9 @@ export interface DigestPreference {
   includeDetails: boolean;
   groupByPolicy: boolean;
 }
+}
 
+}
 export interface RateLimitingPreference {
   enabled: boolean;
   maxPerMinute: number;
@@ -130,7 +151,9 @@ export interface RateLimitingPreference {
   burstAllowance: number;
   backoffStrategy: 'LINEAR' | 'EXPONENTIAL' | 'FIXED';
 }
+}
 
+}
 export interface QuietHours {
   enabled: boolean;
   startTime: string; // HH:MM format
@@ -140,7 +163,9 @@ export interface QuietHours {
   emergencyOverride: boolean;
   complianceOverride: boolean;
 }
+}
 
+}
 export interface ContentPreference {
   language: string;
   verbosity: 'MINIMAL' | 'STANDARD' | 'DETAILED' | 'COMPREHENSIVE';
@@ -150,7 +175,9 @@ export interface ContentPreference {
   includeActionItems: boolean;
   customizations: ContentCustomization[];
 }
+}
 
+}
 export interface ContentCustomization {
   customizationId: string;
   targetAudience: string;
@@ -158,7 +185,9 @@ export interface ContentCustomization {
   variables: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface ComplianceOverride {
   framework: string;
   requirement: string;
@@ -168,7 +197,9 @@ export interface ComplianceOverride {
   approvedBy: string;
   expiresAt?: Date;
 }
+}
 
+}
 export interface NotificationSubscription {
   subscriptionId: string;
   name: string;
@@ -181,14 +212,18 @@ export interface NotificationSubscription {
   createdAt: Date;
   lastUpdated: Date;
 }
+}
 
+}
 export interface SubscriptionFilter {
   filterType: 'POLICY_ID' | 'POLICY_TYPE' | 'JURISDICTION' | 'FRAMEWORK' | 'AUTHOR' | 'AUDIENCE';
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'STARTS_WITH' | 'IN' | 'NOT_IN';
   value: Error;
   caseSensitive: boolean;
 }
+}
 
+}
 export interface AudienceFilter {
   filterId: string;
   filterType: 'INCLUSION' | 'EXCLUSION';
@@ -196,21 +231,27 @@ export interface AudienceFilter {
   logic: 'AND' | 'OR';
   priority: number;
 }
+}
 
+}
 export interface FilterCriteria {
   field: string;
   operator: string;
   value: Error;
   dataType: 'STRING' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'ARRAY';
 }
+}
 
+}
 export interface AudienceSegmentation {
   enabled: boolean;
   segments: NotificationSegment[];
   strategy: 'PRIORITY_BASED' | 'ROLE_BASED' | 'GEOGRAPHIC' | 'IMPACT_BASED' | 'CUSTOM';
   deliveryOrder: SegmentDeliveryOrder[];
 }
+}
 
+}
 export interface NotificationSegment {
   segmentId: string;
   name: string;
@@ -222,13 +263,17 @@ export interface NotificationSegment {
   estimatedSize: number;
   actualSize?: number;
 }
+}
 
+}
 export interface SegmentCustomization {
   customizationType: 'CONTENT' | 'TIMING' | 'CHANNEL' | 'FREQUENCY';
   customization: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface SegmentDeliveryOrder {
   segmentId: string;
   order: number;
@@ -236,21 +281,27 @@ export interface SegmentDeliveryOrder {
   conditions: DeliveryCondition[];
   rollbackCriteria: RollbackCriteria[];
 }
+}
 
+}
 export interface DeliveryCondition {
   conditionType: 'SUCCESS_RATE' | 'DELIVERY_RATE' | 'ENGAGEMENT_RATE' | 'ERROR_RATE';
   threshold: number;
   operator: 'GREATER_THAN' | 'LESS_THAN' | 'EQUALS';
   action: 'CONTINUE' | 'PAUSE' | 'STOP' | 'ESCALATE';
 }
+}
 
+}
 export interface RollbackCriteria {
   criteriaType: 'HIGH_ERROR_RATE' | 'LOW_DELIVERY_RATE' | 'USER_COMPLAINTS' | 'SYSTEM_OVERLOAD';
   threshold: number;
   timeWindow: number; // minutes
   action: 'PAUSE' | 'STOP' | 'FALLBACK_CHANNEL' | 'ESCALATE';
 }
+}
 
+}
 export interface NotificationExclusion {
   exclusionId: string;
   type: 'USER' | 'GROUP' | 'ROLE' | 'JURISDICTION' | 'SERVICE';
@@ -261,7 +312,9 @@ export interface NotificationExclusion {
   createdBy: string;
   overridable: boolean;
 }
+}
 
+}
 export interface NotificationChannel {
   channelId: string;
   type: ChannelType;
@@ -276,7 +329,9 @@ export interface NotificationChannel {
   compliance: ChannelCompliance;
   status: ChannelStatus;
 }
+}
 
+}
 export interface ChannelConfiguration {
   endpoint?: string;
   credentials: Record<string, any>;
@@ -287,7 +342,9 @@ export interface ChannelConfiguration {
   authentication: AuthenticationConfiguration;
   customSettings: Record<string, any>;
 }
+}
 
+}
 export interface ChannelDeliverySettings {
   batchSize: number;
   batchDelay: number; // milliseconds
@@ -296,7 +353,9 @@ export interface ChannelDeliverySettings {
   priorityHandling: PriorityHandling;
   failureHandling: FailureHandling;
 }
+}
 
+}
 export interface TimeWindow {
   startTime: string;
   endTime: string;
@@ -304,7 +363,9 @@ export interface TimeWindow {
   daysOfWeek: string[];
   exceptions: TimeException[];
 }
+}
 
+}
 export interface TimeException {
   type: 'HOLIDAY' | 'MAINTENANCE' | 'BLACKOUT' | 'EMERGENCY';
   startTime: Date;
@@ -312,27 +373,35 @@ export interface TimeException {
   reason: string;
   override: boolean;
 }
+}
 
+}
 export interface PriorityHandling {
   enabled: boolean;
   queues: PriorityQueue[];
   escalationRules: EscalationRule[];
   overrideCapabilities: OverrideCapability[];
 }
+}
 
+}
 export interface PriorityQueue {
   priority: NotificationPriority;
   maxQueueSize: number;
   processingRate: number; // notifications per minute
   timeouts: QueueTimeout[];
 }
+}
 
+}
 export interface QueueTimeout {
   severity: NotificationSeverity;
   timeout: number; // minutes
   action: 'ESCALATE' | 'FALLBACK' | 'DROP' | 'RETRY';
 }
+}
 
+}
 export interface EscalationRule {
   trigger: EscalationTrigger;
   action: EscalationAction;
@@ -340,7 +409,9 @@ export interface EscalationRule {
   conditions: string[];
   recipients: string[];
 }
+}
 
+}
 export interface OverrideCapability {
   type: 'EMERGENCY' | 'COMPLIANCE' | 'EXECUTIVE' | 'SYSTEM';
   roles: string[];
@@ -348,14 +419,18 @@ export interface OverrideCapability {
   conditions: string[];
   auditRequired: boolean;
 }
+}
 
+}
 export interface FailureHandling {
   retryPolicy: RetryPolicy;
   fallbackChannels: FallbackChannel[];
   deadLetterQueue: DeadLetterQueueConfig;
   errorNotification: ErrorNotificationConfig;
 }
+}
 
+}
 export interface RetryPolicy {
   maxAttempts: number;
   initialDelay: number; // milliseconds
@@ -364,33 +439,43 @@ export interface RetryPolicy {
   retryableErrors: string[];
   nonRetryableErrors: string[];
 }
+}
 
+}
 export interface FallbackChannel {
   channelId: string;
   priority: number;
   conditions: FallbackCondition[];
   transformation: MessageTransformation;
 }
+}
 
+}
 export interface FallbackCondition {
   errorType: string;
   errorPattern?: string;
   consecutiveFailures?: number;
   timeWindow?: number; // minutes
 }
+}
 
+}
 export interface MessageTransformation {
   enabled: boolean;
   transformations: ContentTransformation[];
   validation: TransformationValidation;
 }
+}
 
+}
 export interface ContentTransformation {
   type: 'FORMAT_CHANGE' | 'CONTENT_REDUCTION' | 'MEDIUM_ADAPTATION' | 'LANGUAGE_CHANGE';
   configuration: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface TransformationValidation {
   validateLength: boolean;
   maxLength?: number;
@@ -398,7 +483,9 @@ export interface TransformationValidation {
   requiredFields: string[];
   customValidators: string[];
 }
+}
 
+}
 export interface DeadLetterQueueConfig {
   enabled: boolean;
   maxRetention: number; // days
@@ -406,7 +493,9 @@ export interface DeadLetterQueueConfig {
   escalationThreshold: number;
   escalationRecipients: string[];
 }
+}
 
+}
 export interface ErrorNotificationConfig {
   enabled: boolean;
   threshold: number;
@@ -415,7 +504,9 @@ export interface ErrorNotificationConfig {
   channels: string[];
   suppressDuplicates: boolean;
 }
+}
 
+}
 export interface NotificationTemplate {
   templateId: string;
   name: string;
@@ -432,7 +523,9 @@ export interface NotificationTemplate {
   compliance: TemplateCompliance;
   status: TemplateStatus;
 }
+}
 
+}
 export interface TemplateVariable {
   name: string;
   type: 'STRING' | 'NUMBER' | 'DATE' | 'BOOLEAN' | 'OBJECT' | 'ARRAY';
@@ -442,7 +535,9 @@ export interface TemplateVariable {
   description: string;
   examples: unknown[];
 }
+}
 
+}
 export interface VariableValidation {
   pattern?: string;
   minLength?: number;
@@ -452,7 +547,9 @@ export interface VariableValidation {
   allowedValues?: unknown[];
   customValidator?: string;
 }
+}
 
+}
 export interface TemplateLocalization {
   language: string;
   subject?: string;
@@ -463,13 +560,17 @@ export interface TemplateLocalization {
   translatedBy: string;
   reviewed: boolean;
 }
+}
 
+}
 export interface CulturalAdaptation {
   aspect: 'DATE_FORMAT' | 'TIME_FORMAT' | 'NUMBER_FORMAT' | 'CURRENCY' | 'ADDRESS' | 'PHONE' | 'TONE';
   configuration: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface TemplateStyling {
   theme: string;
   colors: Record<string, string>;
@@ -478,14 +579,18 @@ export interface TemplateStyling {
   branding: BrandingConfiguration;
   responsive: ResponsiveConfiguration;
 }
+}
 
+}
 export interface LayoutConfiguration {
   structure: string;
   sections: LayoutSection[];
   spacing: SpacingConfiguration;
   alignment: AlignmentConfiguration;
 }
+}
 
+}
 export interface LayoutSection {
   sectionId: string;
   type: 'HEADER' | 'BODY' | 'FOOTER' | 'SIDEBAR' | 'ACTIONS';
@@ -493,20 +598,26 @@ export interface LayoutSection {
   styling: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface SpacingConfiguration {
   margin: string;
   padding: string;
   lineHeight: string;
   sectionSpacing: string;
 }
+}
 
+}
 export interface AlignmentConfiguration {
   text: 'LEFT' | 'CENTER' | 'RIGHT' | 'JUSTIFY';
   content: 'LEFT' | 'CENTER' | 'RIGHT';
   actions: 'LEFT' | 'CENTER' | 'RIGHT';
 }
+}
 
+}
 export interface BrandingConfiguration {
   logo?: string;
   logoPosition: 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT' | 'INLINE';
@@ -515,7 +626,9 @@ export interface BrandingConfiguration {
   disclaimer?: string;
   footer?: string;
 }
+}
 
+}
 export interface ContactBranding {
   showEmail: boolean;
   showPhone: boolean;
@@ -523,39 +636,51 @@ export interface ContactBranding {
   showWebsite: boolean;
   customContact?: string;
 }
+}
 
+}
 export interface ResponsiveConfiguration {
   enabled: boolean;
   breakpoints: ResponsiveBreakpoint[];
   adaptations: ResponsiveAdaptation[];
 }
+}
 
+}
 export interface ResponsiveBreakpoint {
   name: string;
   minWidth: number;
   maxWidth?: number;
   adaptations: string[];
 }
+}
 
+}
 export interface ResponsiveAdaptation {
   breakpoint: string;
   changes: StyleChange[];
   contentChanges: ContentChange[];
 }
+}
 
+}
 export interface StyleChange {
   selector: string;
   properties: Record<string, string>;
   conditions: string[];
 }
+}
 
+}
 export interface ContentChange {
   element: string;
   modification: 'HIDE' | 'SHOW' | 'REPLACE' | 'TRANSFORM';
   newContent?: string;
   conditions: string[];
 }
+}
 
+}
 export interface TemplateValidation {
   validateSyntax: boolean;
   validateVariables: boolean;
@@ -564,14 +689,18 @@ export interface TemplateValidation {
   validateCompliance: boolean;
   customValidators: string[];
 }
+}
 
+}
 export interface TemplateCompliance {
   frameworks: string[];
   requirements: ComplianceRequirement[];
   restrictions: ComplianceRestriction[];
   approvals: ComplianceApproval[];
 }
+}
 
+}
 export interface ComplianceRequirement {
   framework: string;
   requirement: string;
@@ -579,14 +708,18 @@ export interface ComplianceRequirement {
   validation: string[];
   evidence: string[];
 }
+}
 
+}
 export interface ComplianceRestriction {
   type: 'CONTENT' | 'TIMING' | 'AUDIENCE' | 'CHANNEL';
   restriction: string;
   reason: string;
   exceptions: string[];
 }
+}
 
+}
 export interface ComplianceApproval {
   framework: string;
   approvedBy: string;
@@ -595,7 +728,9 @@ export interface ComplianceApproval {
   conditions: string[];
   reviewRequired: boolean;
 }
+}
 
+}
 export interface ChannelRateLimit {
   enabled: boolean;
   limits: RateLimit[];
@@ -603,14 +738,18 @@ export interface ChannelRateLimit {
   quotas: QuotaConfiguration[];
   enforcement: EnforcementConfiguration;
 }
+}
 
+}
 export interface RateLimit {
   period: 'SECOND' | 'MINUTE' | 'HOUR' | 'DAY' | 'MONTH';
   limit: number;
   scope: 'GLOBAL' | 'PER_USER' | 'PER_AUDIENCE' | 'PER_POLICY';
   priority: NotificationPriority;
 }
+}
 
+}
 export interface BurstConfiguration {
   enabled: boolean;
   maxBurstSize: number;
@@ -618,7 +757,9 @@ export interface BurstConfiguration {
   cooldownPeriod: number; // seconds
   priorityOverride: boolean;
 }
+}
 
+}
 export interface QuotaConfiguration {
   period: 'HOUR' | 'DAY' | 'WEEK' | 'MONTH';
   quota: number;
@@ -626,7 +767,9 @@ export interface QuotaConfiguration {
   overagePolicy: 'DENY' | 'QUEUE' | 'THROTTLE' | 'ESCALATE';
   warningThreshold: number; // percentage
 }
+}
 
+}
 export interface EnforcementConfiguration {
   strategy: 'DENY' | 'QUEUE' | 'THROTTLE' | 'PRIORITIZE';
   queueSize?: number;
@@ -634,14 +777,18 @@ export interface EnforcementConfiguration {
   priorityOverrides: string[];
   escalationPaths: string[];
 }
+}
 
+}
 export interface ChannelReliability {
   availability: AvailabilityMetrics;
   performance: PerformanceMetrics;
   errorRates: ErrorRateMetrics;
   monitoring: MonitoringConfiguration;
 }
+}
 
+}
 export interface AvailabilityMetrics {
   uptimePercentage: number;
   downtimeMinutes: number;
@@ -649,7 +796,9 @@ export interface AvailabilityMetrics {
   mttr: number; // Mean Time To Recovery in minutes
   mtbf: number; // Mean Time Between Failures in hours
 }
+}
 
+}
 export interface PerformanceMetrics {
   averageLatency: number; // milliseconds
   p95Latency: number;
@@ -657,14 +806,18 @@ export interface PerformanceMetrics {
   throughput: number; // notifications per minute
   successRate: number; // percentage
 }
+}
 
+}
 export interface ErrorRateMetrics {
   overallErrorRate: number; // percentage
   errorsByType: Record<string, number>;
   recentErrors: ErrorSummary[];
   recoveryTime: number; // average recovery time in minutes
 }
+}
 
+}
 export interface ErrorSummary {
   errorType: string;
   count: number;
@@ -672,14 +825,18 @@ export interface ErrorSummary {
   impact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   resolution?: string;
 }
+}
 
+}
 export interface MonitoringConfiguration {
   healthCheck: HealthCheckConfiguration;
   alerting: AlertingConfiguration;
   logging: LoggingConfiguration;
   metrics: MetricsConfiguration;
 }
+}
 
+}
 export interface HealthCheckConfiguration {
   enabled: boolean;
   interval: number; // seconds
@@ -689,7 +846,9 @@ export interface HealthCheckConfiguration {
   healthyThreshold: number;
   unhealthyThreshold: number;
 }
+}
 
+}
 export interface AlertingConfiguration {
   enabled: boolean;
   alerts: AlertRule[];
@@ -697,7 +856,9 @@ export interface AlertingConfiguration {
   escalation: AlertEscalation[];
   suppressionRules: SuppressionRule[];
 }
+}
 
+}
 export interface AlertRule {
   ruleId: string;
   name: string;
@@ -707,7 +868,9 @@ export interface AlertRule {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   enabled: boolean;
 }
+}
 
+}
 export interface AlertEscalation {
   level: number;
   delay: number; // minutes
@@ -715,7 +878,9 @@ export interface AlertEscalation {
   channels: string[];
   conditions: string[];
 }
+}
 
+}
 export interface SuppressionRule {
   ruleId: string;
   pattern: string;
@@ -723,7 +888,9 @@ export interface SuppressionRule {
   conditions: string[];
   exceptions: string[];
 }
+}
 
+}
 export interface LoggingConfiguration {
   enabled: boolean;
   level: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
@@ -731,34 +898,44 @@ export interface LoggingConfiguration {
   retention: number; // days
   sampling: SamplingConfiguration;
 }
+}
 
+}
 export interface LogDestination {
   type: 'FILE' | 'DATABASE' | 'EXTERNAL' | 'STREAM';
   configuration: Record<string, any>;
   filters: LogFilter[];
 }
+}
 
+}
 export interface LogFilter {
   field: string;
   operator: string;
   value: Error;
   action: 'INCLUDE' | 'EXCLUDE';
 }
+}
 
+}
 export interface SamplingConfiguration {
   enabled: boolean;
   rate: number; // percentage
   strategy: 'RANDOM' | 'SYSTEMATIC' | 'STRATIFIED';
   preserveErrors: boolean;
 }
+}
 
+}
 export interface MetricsConfiguration {
   enabled: boolean;
   metrics: MetricDefinition[];
   aggregation: AggregationConfiguration;
   export: MetricsExportConfiguration;
 }
+}
 
+}
 export interface MetricDefinition {
   name: string;
   type: 'COUNTER' | 'GAUGE' | 'HISTOGRAM' | 'SUMMARY';
@@ -766,92 +943,120 @@ export interface MetricDefinition {
   labels: string[];
   buckets?: number[];
 }
+}
 
+}
 export interface AggregationConfiguration {
   intervals: number[]; // seconds
   functions: string[];
   retention: number; // days
 }
+}
 
+}
 export interface MetricsExportConfiguration {
   enabled: boolean;
   format: 'PROMETHEUS' | 'STATSD' | 'CLOUDWATCH' | 'CUSTOM';
   endpoint?: string;
   interval: number; // seconds
 }
+}
 
+}
 export interface ChannelCost {
   costModel: CostModel;
   pricing: PricingConfiguration;
   budget: BudgetConfiguration;
   optimization: CostOptimization;
 }
+}
 
+}
 export interface CostModel {
   type: 'PER_MESSAGE' | 'PER_BATCH' | 'MONTHLY' | 'TIERED' | 'CUSTOM';
   baseCost: number;
   variableCosts: VariableCost[];
   discounts: CostDiscount[];
 }
+}
 
+}
 export interface VariableCost {
   factor: string;
   rate: number;
   threshold?: number;
   cap?: number;
 }
+}
 
+}
 export interface CostDiscount {
   type: 'VOLUME' | 'COMMITMENT' | 'PROMOTIONAL';
   threshold: number;
   discount: number; // percentage
   expiresAt?: Date;
 }
+}
 
+}
 export interface PricingConfiguration {
   currency: string;
   billing: BillingConfiguration;
   tracking: CostTrackingConfiguration;
   reporting: CostReportingConfiguration;
 }
+}
 
+}
 export interface BillingConfiguration {
   cycle: 'MONTHLY' | 'QUARTERLY' | 'ANNUALLY';
   aggregation: 'SUM' | 'AVERAGE' | 'MAX';
   rounding: 'ROUND' | 'CEIL' | 'FLOOR';
   minimumCharge?: number;
 }
+}
 
+}
 export interface CostTrackingConfiguration {
   granularity: 'MESSAGE' | 'BATCH' | 'HOUR' | 'DAY';
   attribution: AttributionConfiguration;
   allocation: AllocationConfiguration;
 }
+}
 
+}
 export interface AttributionConfiguration {
   dimensions: string[];
   rules: AttributionRule[];
   defaultAttribution: string;
 }
+}
 
+}
 export interface AttributionRule {
   condition: string;
   attribution: string;
   priority: number;
 }
+}
 
+}
 export interface AllocationConfiguration {
   method: 'DIRECT' | 'PROPORTIONAL' | 'EQUAL' | 'WEIGHTED';
   weights: Record<string, number>;
   rules: AllocationRule[];
 }
+}
 
+}
 export interface AllocationRule {
   condition: string;
   allocation: string;
   percentage: number;
 }
+}
 
+}
 export interface CostReportingConfiguration {
   enabled: boolean;
   frequency: 'DAILY' | 'WEEKLY' | 'MONTHLY';
@@ -859,14 +1064,18 @@ export interface CostReportingConfiguration {
   format: 'EMAIL' | 'DASHBOARD' | 'API' | 'FILE';
   details: string[];
 }
+}
 
+}
 export interface BudgetConfiguration {
   enabled: boolean;
   budgets: Budget[];
   alerts: BudgetAlert[];
   enforcement: BudgetEnforcement;
 }
+}
 
+}
 export interface Budget {
   budgetId: string;
   name: string;
@@ -875,46 +1084,60 @@ export interface Budget {
   scope: string;
   filters: BudgetFilter[];
 }
+}
 
+}
 export interface BudgetFilter {
   dimension: string;
   values: string[];
   operator: 'IN' | 'NOT_IN' | 'EQUALS' | 'NOT_EQUALS';
 }
+}
 
+}
 export interface BudgetAlert {
   threshold: number; // percentage
   recipients: string[];
   channels: string[];
   message: string;
 }
+}
 
+}
 export interface BudgetEnforcement {
   enabled: boolean;
   actions: EnforcementAction[];
   overrides: EnforcementOverride[];
 }
+}
 
+}
 export interface EnforcementAction {
   threshold: number; // percentage
   action: 'WARN' | 'THROTTLE' | 'STOP' | 'ESCALATE';
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface EnforcementOverride {
   type: 'EMERGENCY' | 'COMPLIANCE' | 'EXECUTIVE';
   roles: string[];
   duration: number; // hours
   auditRequired: boolean;
 }
+}
 
+}
 export interface CostOptimization {
   enabled: boolean;
   strategies: OptimizationStrategy[];
   monitoring: OptimizationMonitoring;
   recommendations: OptimizationRecommendation[];
 }
+}
 
+}
 export interface OptimizationStrategy {
   strategyId: string;
   name: string;
@@ -923,21 +1146,27 @@ export interface OptimizationStrategy {
   expectedSavings: number; // percentage
   enabled: boolean;
 }
+}
 
+}
 export interface OptimizationMonitoring {
   trackSavings: boolean;
   reportingFrequency: 'DAILY' | 'WEEKLY' | 'MONTHLY';
   kpis: string[];
   benchmarks: OptimizationBenchmark[];
 }
+}
 
+}
 export interface OptimizationBenchmark {
   metric: string;
   baseline: number;
   target: number;
   threshold: number;
 }
+}
 
+}
 export interface OptimizationRecommendation {
   recommendationId: string;
   type: string;
@@ -947,14 +1176,18 @@ export interface OptimizationRecommendation {
   savings: number; // percentage
   confidence: number; // percentage
 }
+}
 
+}
 export interface ChannelCompliance {
   frameworks: string[];
   certifications: ComplianceCertification[];
   requirements: ChannelComplianceRequirement[];
   auditing: ComplianceAuditing;
 }
+}
 
+}
 export interface ComplianceCertification {
   framework: string;
   certification: string;
@@ -964,7 +1197,9 @@ export interface ComplianceCertification {
   scope: string[];
   conditions: string[];
 }
+}
 
+}
 export interface ChannelComplianceRequirement {
   framework: string;
   requirement: string;
@@ -974,7 +1209,9 @@ export interface ChannelComplianceRequirement {
   lastValidated: Date;
   nextValidation: Date;
 }
+}
 
+}
 export interface ComplianceAuditing {
   enabled: boolean;
   frequency: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY';
@@ -982,14 +1219,18 @@ export interface ComplianceAuditing {
   auditors: string[];
   reporting: AuditReporting;
 }
+}
 
+}
 export interface AuditReporting {
   recipients: string[];
   format: 'EMAIL' | 'DASHBOARD' | 'FILE';
   schedule: string; // cron format
   retention: number; // days
 }
+}
 
+}
 export interface NotificationScheduling {
   immediate: boolean;
   scheduledTime?: Date;
@@ -999,7 +1240,9 @@ export interface NotificationScheduling {
   dependencies: SchedulingDependency[];
   optimization: SchedulingOptimization;
 }
+}
 
+}
 export interface RecurringSchedule {
   enabled: boolean;
   pattern: RecurrencePattern;
@@ -1008,7 +1251,9 @@ export interface RecurringSchedule {
   occurrences?: number;
   exceptions: ScheduleException[];
 }
+}
 
+}
 export interface RecurrencePattern {
   type: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY' | 'CUSTOM';
   interval: number;
@@ -1017,7 +1262,9 @@ export interface RecurrencePattern {
   monthsOfYear?: string[];
   customPattern?: string; // cron format
 }
+}
 
+}
 export interface ScheduleException {
   type: 'SKIP' | 'RESCHEDULE' | 'MODIFY';
   date: Date;
@@ -1025,14 +1272,18 @@ export interface ScheduleException {
   alternativeTime?: Date;
   modifications?: Record<string, any>;
 }
+}
 
+}
 export interface SchedulingCondition {
   conditionType: 'TIME_WINDOW' | 'SYSTEM_LOAD' | 'USER_AVAILABILITY' | 'BUSINESS_HOURS' | 'COMPLIANCE';
   parameters: Record<string, any>;
   priority: number;
   override: boolean;
 }
+}
 
+}
 export interface SchedulingDependency {
   dependencyType: 'NOTIFICATION' | 'POLICY_EVENT' | 'SYSTEM_EVENT' | 'USER_ACTION';
   identifier: string;
@@ -1040,26 +1291,34 @@ export interface SchedulingDependency {
   timeout: number; // minutes
   fallbackAction: 'PROCEED' | 'CANCEL' | 'RESCHEDULE';
 }
+}
 
+}
 export interface SchedulingOptimization {
   enabled: boolean;
   objectives: OptimizationObjective[];
   constraints: OptimizationConstraint[];
   algorithm: 'GREEDY' | 'GENETIC' | 'SIMULATED_ANNEALING' | 'CUSTOM';
 }
+}
 
+}
 export interface OptimizationObjective {
   type: 'MAXIMIZE_DELIVERY_RATE' | 'MINIMIZE_COST' | 'OPTIMIZE_ENGAGEMENT' | 'BALANCE_LOAD';
   weight: number;
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface OptimizationConstraint {
   type: 'TIME_WINDOW' | 'RESOURCE_LIMIT' | 'COMPLIANCE_REQUIREMENT' | 'USER_PREFERENCE';
   parameters: Record<string, any>;
   hard: boolean;
 }
+}
 
+}
 export interface NotificationPersonalization {
   enabled: boolean;
   personalizationRules: PersonalizationRule[];
@@ -1067,7 +1326,9 @@ export interface NotificationPersonalization {
   userContext: UserContext;
   contentAdaptation: ContentAdaptation;
 }
+}
 
+}
 export interface PersonalizationRule {
   ruleId: string;
   name: string;
@@ -1076,14 +1337,18 @@ export interface PersonalizationRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface PersonalizationAction {
   type: 'REPLACE_CONTENT' | 'ADD_CONTENT' | 'REMOVE_CONTENT' | 'MODIFY_STYLING' | 'CHANGE_CHANNEL';
   target: string;
   value: Error;
   conditions: string[];
 }
+}
 
+}
 export interface DynamicContent {
   contentId: string;
   type: 'TEXT' | 'IMAGE' | 'LINK' | 'BUTTON' | 'SECTION';
@@ -1091,7 +1356,9 @@ export interface DynamicContent {
   caching: ContentCaching;
   fallback: ContentFallback;
 }
+}
 
+}
 export interface ContentSource {
   sourceType: 'API' | 'DATABASE' | 'FILE' | 'COMPUTED' | 'USER_GENERATED';
   endpoint?: string;
@@ -1099,26 +1366,34 @@ export interface ContentSource {
   transformation: ContentTransformation[];
   validation: ContentValidation;
 }
+}
 
+}
 export interface ContentValidation {
   enabled: boolean;
   rules: ValidationRule[];
   sanitization: SanitizationRule[];
   approval: ContentApprovalWorkflow;
 }
+}
 
+}
 export interface ValidationRule {
   ruleType: 'LENGTH' | 'FORMAT' | 'CONTENT' | 'LINKS' | 'IMAGES' | 'COMPLIANCE';
   parameters: Record<string, any>;
   severity: 'ERROR' | 'WARNING' | 'INFO';
 }
+}
 
+}
 export interface SanitizationRule {
   ruleType: 'HTML_STRIP' | 'SCRIPT_REMOVE' | 'LINK_VALIDATE' | 'PROFANITY_FILTER' | 'PII_MASK';
   parameters: Record<string, any>;
   enabled: boolean;
 }
+}
 
+}
 export interface ContentApprovalWorkflow {
   required: boolean;
   approvers: string[];
@@ -1126,39 +1401,51 @@ export interface ContentApprovalWorkflow {
   escalationPath: string[];
   timeout: number; // hours
 }
+}
 
+}
 export interface AutoApprovalRule {
   condition: string;
   parameters: Record<string, any>;
   confidence: number; // percentage
 }
+}
 
+}
 export interface ContentCaching {
   enabled: boolean;
   ttl: number; // seconds
   strategy: 'LRU' | 'LFU' | 'TTL' | 'CUSTOM';
   invalidation: CacheInvalidation;
 }
+}
 
+}
 export interface CacheInvalidation {
   triggers: InvalidationTrigger[];
   strategy: 'IMMEDIATE' | 'LAZY' | 'SCHEDULED';
   cascading: boolean;
 }
+}
 
+}
 export interface InvalidationTrigger {
   triggerType: 'TIME' | 'EVENT' | 'CONDITION' | 'MANUAL';
   parameters: Record<string, any>;
   conditions: string[];
 }
+}
 
+}
 export interface ContentFallback {
   enabled: boolean;
   fallbackContent: unknown;
   conditions: FallbackCondition[];
   timeout: number; // milliseconds
 }
+}
 
+}
 export interface UserContext {
   userId: string;
   profile: UserProfile;
@@ -1168,7 +1455,9 @@ export interface UserContext {
   location: UserLocation;
   device: DeviceInfo;
 }
+}
 
+}
 export interface UserProfile {
   demographics: UserDemographics;
   roles: string[];
@@ -1177,7 +1466,9 @@ export interface UserProfile {
   attributes: Record<string, any>;
   preferences: UserPreferences;
 }
+}
 
+}
 export interface UserDemographics {
   age?: number;
   gender?: string;
@@ -1186,7 +1477,9 @@ export interface UserDemographics {
   timezone: string;
   culture: string;
 }
+}
 
+}
 export interface UserPreferences {
   language: string;
   timezone: string;
@@ -1195,7 +1488,9 @@ export interface UserPreferences {
   numberFormat: string;
   currency: string;
 }
+}
 
+}
 export interface NotificationHistory {
   totalReceived: number;
   totalOpened: number;
@@ -1204,7 +1499,9 @@ export interface NotificationHistory {
   recentNotifications: HistoryEntry[];
   engagementScore: number;
 }
+}
 
+}
 export interface HistoryEntry {
   notificationId: string;
   sentAt: Date;
@@ -1214,7 +1511,9 @@ export interface HistoryEntry {
   type: string;
   engagement: EngagementMetrics;
 }
+}
 
+}
 export interface EngagementMetrics {
   opened: boolean;
   openedAt?: Date;
@@ -1224,28 +1523,36 @@ export interface EngagementMetrics {
   timeToClick?: number; // seconds
   actionsTaken: string[];
 }
+}
 
+}
 export interface UserBehavior {
   engagementPatterns: EngagementPattern[];
   preferredTimes: TimePreference[];
   channelPreferences: ChannelEngagement[];
   contentPreferences: ContentEngagement[];
 }
+}
 
+}
 export interface EngagementPattern {
   pattern: string;
   frequency: number;
   lastOccurrence: Date;
   trend: 'INCREASING' | 'DECREASING' | 'STABLE';
 }
+}
 
+}
 export interface TimePreference {
   dayOfWeek: string;
   timeOfDay: string;
   engagementRate: number;
   sampleSize: number;
 }
+}
 
+}
 export interface ChannelEngagement {
   channel: string;
   engagementRate: number;
@@ -1253,14 +1560,18 @@ export interface ChannelEngagement {
   preference: number; // 1-10 scale
   lastUsed: Date;
 }
+}
 
+}
 export interface ContentEngagement {
   contentType: string;
   topic: string;
   engagementRate: number;
   preference: number; // 1-10 scale
 }
+}
 
+}
 export interface UserLocation {
   country: string;
   region: string;
@@ -1270,12 +1581,16 @@ export interface UserLocation {
   accuracy: number;
   lastUpdated: Date;
 }
+}
 
+}
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
+}
 
+}
 export interface DeviceInfo {
   deviceType: 'DESKTOP' | 'MOBILE' | 'TABLET' | 'WEARABLE' | 'IOT';
   platform: string;
@@ -1284,7 +1599,9 @@ export interface DeviceInfo {
   capabilities: DeviceCapabilities;
   lastSeen: Date;
 }
+}
 
+}
 export interface DeviceCapabilities {
   pushNotifications: boolean;
   richMedia: boolean;
@@ -1292,14 +1609,18 @@ export interface DeviceCapabilities {
   offline: boolean;
   biometrics: boolean;
 }
+}
 
+}
 export interface ContentAdaptation {
   enabled: boolean;
   adaptationRules: AdaptationRule[];
   contexts: AdaptationContext[];
   testing: AdaptationTesting;
 }
+}
 
+}
 export interface AdaptationRule {
   ruleId: string;
   trigger: string;
@@ -1307,48 +1628,62 @@ export interface AdaptationRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface AdaptationContext {
   contextType: 'DEVICE' | 'LOCATION' | 'TIME' | 'USER' | 'CONTENT' | 'SITUATION';
   parameters: Record<string, any>;
   adaptations: string[];
 }
+}
 
+}
 export interface AdaptationTesting {
   enabled: boolean;
   testingStrategies: TestingStrategy[];
   metrics: TestingMetric[];
   reporting: TestingReporting;
 }
+}
 
+}
 export interface TestingStrategy {
   strategyType: 'A_B_TEST' | 'MULTIVARIATE' | 'CANARY' | 'GRADUAL_ROLLOUT';
   parameters: Record<string, any>;
   duration: number; // days
   successCriteria: SuccessCriteria[];
 }
+}
 
+}
 export interface SuccessCriteria {
   metric: string;
   threshold: number;
   operator: 'GREATER_THAN' | 'LESS_THAN' | 'EQUALS';
   significance: number; // percentage
 }
+}
 
+}
 export interface TestingMetric {
   name: string;
   type: 'ENGAGEMENT' | 'DELIVERY' | 'CONVERSION' | 'SATISFACTION' | 'COST';
   calculation: string;
   targets: Record<string, number>;
 }
+}
 
+}
 export interface TestingReporting {
   frequency: 'REAL_TIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
   recipients: string[];
   format: 'DASHBOARD' | 'EMAIL' | 'API';
   details: string[];
 }
+}
 
+}
 export interface ComplianceNotificationData {
   frameworks: string[];
   requirements: ComplianceNotificationRequirement[];
@@ -1356,7 +1691,9 @@ export interface ComplianceNotificationData {
   approvals: ComplianceNotificationApproval[];
   restrictions: ComplianceNotificationRestriction[];
 }
+}
 
+}
 export interface ComplianceNotificationRequirement {
   framework: string;
   requirement: string;
@@ -1365,7 +1702,9 @@ export interface ComplianceNotificationRequirement {
   implementation: string;
   validation: string[];
 }
+}
 
+}
 export interface ComplianceEvidence {
   evidenceId: string;
   type: 'CONSENT_RECORD' | 'DELIVERY_RECEIPT' | 'AUDIT_LOG' | 'USER_ACTION' | 'SYSTEM_LOG';
@@ -1374,14 +1713,18 @@ export interface ComplianceEvidence {
   source: string;
   integrity: EvidenceIntegrity;
 }
+}
 
+}
 export interface EvidenceIntegrity {
   hash: string;
   signature?: string;
   witnesses: string[];
   tamperProof: boolean;
 }
+}
 
+}
 export interface ComplianceNotificationApproval {
   framework: string;
   approver: string;
@@ -1390,7 +1733,9 @@ export interface ComplianceNotificationApproval {
   conditions: string[];
   expiresAt?: Date;
 }
+}
 
+}
 export interface ComplianceNotificationRestriction {
   framework: string;
   restriction: string;
@@ -1398,7 +1743,9 @@ export interface ComplianceNotificationRestriction {
   alternatives: string[];
   exceptions: string[];
 }
+}
 
+}
 export interface NotificationMetadata {
   source: string;
   campaign?: string;
@@ -1411,7 +1758,9 @@ export interface NotificationMetadata {
   tracking: TrackingMetadata;
   business: BusinessMetadata;
 }
+}
 
+}
 export interface RetentionMetadata {
   retentionPeriod: number; // days
   retentionReason: string;
@@ -1419,7 +1768,9 @@ export interface RetentionMetadata {
   archiveAfter?: Date;
   legalHold: boolean;
 }
+}
 
+}
 export interface TrackingMetadata {
   trackDelivery: boolean;
   trackOpens: boolean;
@@ -1428,7 +1779,9 @@ export interface TrackingMetadata {
   trackingId?: string;
   analyticsId?: string;
 }
+}
 
+}
 export interface BusinessMetadata {
   costCenter: string;
   department: string;
@@ -1437,7 +1790,9 @@ export interface BusinessMetadata {
   owner: string;
   stakeholders: string[];
 }
+}
 
+}
 export interface DeliveryAttempt {
   attemptId: string;
   attemptNumber: number;
@@ -1449,7 +1804,9 @@ export interface DeliveryAttempt {
   error?: AttemptError;
   metrics: AttemptMetrics;
 }
+}
 
+}
 export interface AttemptResponse {
   statusCode?: number;
   headers?: Record<string, string>;
@@ -1457,7 +1814,9 @@ export interface AttemptResponse {
   externalId?: string;
   trackingInfo?: Record<string, any>;
 }
+}
 
+}
 export interface AttemptError {
   errorCode: string;
   errorMessage: string;
@@ -1465,14 +1824,18 @@ export interface AttemptError {
   retryable: boolean;
   category: ErrorCategory;
 }
+}
 
+}
 export interface AttemptMetrics {
   latency: number; // milliseconds
   retries: number;
   bandwidth?: number; // bytes
   cost?: number;
 }
+}
 
+}
 export interface UserInteraction {
   interactionId: string;
   userId: string;
@@ -1482,6 +1845,7 @@ export interface UserInteraction {
   data?: unknown;
   location?: UserLocation;
   device?: DeviceInfo;
+}
 }
 
 // Enums and Types
@@ -1642,12 +2006,14 @@ export type EscalationAction =
   | 'TRIGGER_WORKFLOW'
   | 'MANUAL_INTERVENTION';
 
+}
 export type AuthenticationConfiguration = {
   type: 'NONE' | 'BASIC' | 'BEARER' | 'API_KEY' | 'OAUTH' | 'CUSTOM';
   credentials: Record<string, any>;
   refreshMechanism?: RefreshMechanism;
 };
 
+}
 export type RefreshMechanism = {
   enabled: boolean;
   refreshInterval: number; // seconds
@@ -1655,6 +2021,7 @@ export type RefreshMechanism = {
   refreshMethod: 'AUTO' | 'MANUAL' | 'ON_DEMAND';
 };
 
+}
 export type EncryptionConfiguration = {
   enabled: boolean;
   algorithm: string;
@@ -1662,12 +2029,14 @@ export type EncryptionConfiguration = {
   certificatePinning?: boolean;
 };
 
+}
 export type KeyManagementConfiguration = {
   provider: 'INTERNAL' | 'AWS_KMS' | 'AZURE_KEY_VAULT' | 'GOOGLE_KMS' | 'CUSTOM';
   keyId: string;
   rotationPolicy: KeyRotationPolicy;
 };
 
+}
 export type KeyRotationPolicy = {
   enabled: boolean;
   rotationInterval: number; // days
@@ -1709,6 +2078,7 @@ export class PolicyNotificationService extends EventEmitter {
     notification: Omit<PolicyNotification,
     'notificationId' | 'createdAt' | 'deliveryStatus' | 'deliveryAttempts' | 'userInteractions' | 'status'>
   ): Promise<{ notificationId: string }> {
+
     const notificationId = await this.generateNotificationId();
 
     try {
@@ -1782,6 +2152,7 @@ export class PolicyNotificationService extends EventEmitter {
     deliveryMetrics: DeliveryMetrics;
     engagementMetrics: EngagementMetrics;
   }> {
+
     const notification = await this.getNotification(notificationId);
     const deliveryAttempts = this.deliveryTracking.get(notificationId) || [];
     
@@ -1802,6 +2173,7 @@ export class PolicyNotificationService extends EventEmitter {
     userId: string, 
     preferences: NotificationPreferences
   ): Promise<{ updated: boolean }> {
+
     try {
       // Validate preferences
       await this.validatePreferences(preferences);
@@ -1850,6 +2222,7 @@ export class PolicyNotificationService extends EventEmitter {
    * Process notification delivery queue
    */
   async processDeliveryQueue(): Promise<{ processed: number; failed: number }> {
+
     let processed = 0;
     let failed = 0;
 
@@ -1874,6 +2247,7 @@ export class PolicyNotificationService extends EventEmitter {
    * Get notification analytics and reporting
    */
   async getNotificationAnalytics(_____filters: NotificationAnalyticsFilters): Promise<NotificationAnalytics> {
+
     // Implementation would aggregate notification data for analytics
     return {
       summary: {
@@ -1882,7 +2256,7 @@ export class PolicyNotificationService extends EventEmitter {
         openRate: 35.2,
         clickRate: 8.7,
         unsubscribeRate: 0.3
-      },
+  }
       trends: [],
       channelPerformance: [],
       audienceInsights: [],
@@ -1898,6 +2272,7 @@ export class PolicyNotificationService extends EventEmitter {
   // Private helper methods
 
   private async validateNotification(notification: PolicyNotification): Promise<void> {
+
     if (!notification.policyId) {
       throw new Error('Policy ID is required');
     }
@@ -1920,6 +2295,7 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async processAudience(audience: NotificationAudience): Promise<NotificationAudience> {
+
     // Apply filters and segmentation
     const filteredTargets = await this.applyAudienceFilters(audience.targets, audience.filters);
     
@@ -1938,6 +2314,7 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async personalizeNotification(notification: PolicyNotification): Promise<PolicyNotification[]> {
+
     if (!notification.personalization.enabled) {
       return [notification];
     }
@@ -1970,6 +2347,7 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async queueNotifications(notifications: PolicyNotification[]): Promise<void> {
+
     for (const notification of notifications) {
       // Determine queue based on priority and scheduling
       const queueKey = this.getQueueKey(notification);
@@ -1983,6 +2361,7 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async deliverNotification(notification: PolicyNotification): Promise<void> {
+
     for (const channel of notification.channels) {
       const channelConfig = this.channels.get(channel.channelId);
       if (!channelConfig) continue;
@@ -2002,6 +2381,7 @@ export class PolicyNotificationService extends EventEmitter {
     channel: NotificationChannel,
     channelConfig: NotificationChannel
   ): Promise<DeliveryAttempt> {
+
     const attemptId = `ATT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const startTime = new Date();
 
@@ -2037,7 +2417,7 @@ export class PolicyNotificationService extends EventEmitter {
           errorMessage: error instanceof Error ? error.message : String(error),
           retryable: true,
           category: 'UNKNOWN'
-        },
+  }
         metrics: {
           latency: Date.now() - startTime.getTime(),
           retries: 0,
@@ -2052,6 +2432,7 @@ export class PolicyNotificationService extends EventEmitter {
     channel: NotificationChannel,
     _____channelConfig: NotificationChannel
   ): Promise<AttemptResponse> {
+
     // Mock implementation - would integrate with actual channel providers
     switch (channel.type) {
     case 'EMAIL':
@@ -2131,6 +2512,7 @@ export class PolicyNotificationService extends EventEmitter {
     targets: NotificationTarget[],
     _____filters: AudienceFilter[]
   ): Promise<NotificationTarget[]> {
+
     // Implementation would apply audience filters
     return targets;
   }
@@ -2139,6 +2521,7 @@ export class PolicyNotificationService extends EventEmitter {
     targets: NotificationTarget[],
     _____segmentation: AudienceSegmentation
   ): Promise<NotificationTarget[]> {
+
     // Implementation would apply audience segmentation
     return targets;
   }
@@ -2147,6 +2530,7 @@ export class PolicyNotificationService extends EventEmitter {
     targets: NotificationTarget[],
     _____exclusions: NotificationExclusion[]
   ): Promise<NotificationTarget[]> {
+
     // Implementation would apply exclusions
     return targets;
   }
@@ -2156,6 +2540,7 @@ export class PolicyNotificationService extends EventEmitter {
     _____target: NotificationTarget,
     _____personalization: NotificationPersonalization
   ): Promise<{ title: string; message: string; detailedMessage?: string }> {
+
     // Implementation would apply personalization rules
     return {
       title: notification.title,
@@ -2169,6 +2554,7 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async validatePreferences(_____preferences: NotificationPreferences): Promise<void> {
+
     // Implementation would validate user preferences
   }
 
@@ -2176,11 +2562,13 @@ export class PolicyNotificationService extends EventEmitter {
     userId: string,
     preferences: NotificationPreferences
   ): Promise<NotificationPreferences> {
+
     // Implementation would apply compliance overrides
     return preferences;
   }
 
   private async getNotification(_____notificationId: string): Promise<PolicyNotification> {
+
     // Implementation would fetch notification from storage
     throw new Error('Not implemented');
   }
@@ -2201,7 +2589,7 @@ export class PolicyNotificationService extends EventEmitter {
           backoffStrategy: 'EXPONENTIAL',
           retryableErrors: ['TIMEOUT', 'SERVER_ERROR'],
           nonRetryableErrors: ['AUTHENTICATION', 'INVALID_REQUEST']
-        },
+  }
         encryption: {
           enabled: true,
           algorithm: 'AES-256',
@@ -2215,13 +2603,13 @@ export class PolicyNotificationService extends EventEmitter {
               notifyBeforeRotation: true
             }
           }
-        },
+  }
         authentication: {
           type: 'API_KEY',
           credentials: {}
-        },
+  }
         customSettings: {}
-      },
+  }
       deliverySettings: {
         batchSize: 100,
         batchDelay: 1000,
@@ -2232,13 +2620,13 @@ export class PolicyNotificationService extends EventEmitter {
           timezone: 'UTC',
           daysOfWeek: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
           exceptions: []
-        },
+  }
         priorityHandling: {
           enabled: true,
           queues: [],
           escalationRules: [],
           overrideCapabilities: []
-        },
+  }
         failureHandling: {
           retryPolicy: {
             maxAttempts: 3,
@@ -2247,7 +2635,7 @@ export class PolicyNotificationService extends EventEmitter {
             backoffStrategy: 'EXPONENTIAL',
             retryableErrors: [],
             nonRetryableErrors: []
-          },
+  }
           fallbackChannels: [],
           deadLetterQueue: {
             enabled: true,
@@ -2255,7 +2643,7 @@ export class PolicyNotificationService extends EventEmitter {
             processingSchedule: '0 0 * * *',
             escalationThreshold: 100,
             escalationRecipients: []
-          },
+  }
           errorNotification: {
             enabled: true,
             threshold: 10,
@@ -2265,7 +2653,7 @@ export class PolicyNotificationService extends EventEmitter {
             suppressDuplicates: true
           }
         }
-      },
+  }
       templates: [],
       rateLimit: {
         enabled: true,
@@ -2276,34 +2664,34 @@ export class PolicyNotificationService extends EventEmitter {
           burstDuration: 0,
           cooldownPeriod: 0,
           priorityOverride: false
-        },
+  }
         quotas: [],
         enforcement: {
           strategy: 'THROTTLE',
           priorityOverrides: [],
           escalationPaths: []
         }
-      },
+  }
       reliability: {
         availability: {
           uptimePercentage: 99.9,
           downtimeMinutes: 0,
           mttr: 5,
           mtbf: 720
-        },
+  }
         performance: {
           averageLatency: 150,
           p95Latency: 300,
           p99Latency: 500,
           throughput: 1000,
           successRate: 99.5
-        },
+  }
         errorRates: {
           overallErrorRate: 0.5,
           errorsByType: {},
           recentErrors: [],
           recoveryTime: 2
-        },
+  }
         monitoring: {
           healthCheck: {
             enabled: true,
@@ -2311,14 +2699,14 @@ export class PolicyNotificationService extends EventEmitter {
             timeout: 10,
             healthyThreshold: 2,
             unhealthyThreshold: 3
-          },
+  }
           alerting: {
             enabled: true,
             alerts: [],
             channels: [],
             escalation: [],
             suppressionRules: []
-          },
+  }
           logging: {
             enabled: true,
             level: 'INFO',
@@ -2330,7 +2718,7 @@ export class PolicyNotificationService extends EventEmitter {
               strategy: 'RANDOM',
               preserveErrors: true
             }
-          },
+  }
           metrics: {
             enabled: true,
             metrics: [],
@@ -2338,7 +2726,7 @@ export class PolicyNotificationService extends EventEmitter {
               intervals: [60, 300, 3600],
               functions: ['avg', 'max', 'min', 'sum'],
               retention: 30
-            },
+  }
             export: {
               enabled: false,
               format: 'PROMETHEUS',
@@ -2346,34 +2734,34 @@ export class PolicyNotificationService extends EventEmitter {
             }
           }
         }
-      },
+  }
       cost: {
         costModel: {
           type: 'PER_MESSAGE',
           baseCost: 0.001,
           variableCosts: [],
           discounts: []
-        },
+  }
         pricing: {
           currency: 'USD',
           billing: {
             cycle: 'MONTHLY',
             aggregation: 'SUM',
             rounding: 'ROUND'
-          },
+  }
           tracking: {
             granularity: 'MESSAGE',
             attribution: {
               dimensions: [],
               rules: [],
               defaultAttribution: 'system'
-            },
+  }
             allocation: {
               method: 'DIRECT',
               weights: {},
               rules: []
             }
-          },
+  }
           reporting: {
             enabled: false,
             frequency: 'MONTHLY',
@@ -2381,7 +2769,7 @@ export class PolicyNotificationService extends EventEmitter {
             format: 'EMAIL',
             details: []
           }
-        },
+  }
         budget: {
           enabled: false,
           budgets: [],
@@ -2391,7 +2779,7 @@ export class PolicyNotificationService extends EventEmitter {
             actions: [],
             overrides: []
           }
-        },
+  }
         optimization: {
           enabled: false,
           strategies: [],
@@ -2400,10 +2788,10 @@ export class PolicyNotificationService extends EventEmitter {
             reportingFrequency: 'MONTHLY',
             kpis: [],
             benchmarks: []
-          },
+  }
           recommendations: []
         }
-      },
+  }
       compliance: {
         frameworks: [],
         certifications: [],
@@ -2420,7 +2808,7 @@ export class PolicyNotificationService extends EventEmitter {
             retention: 365
           }
         }
-      },
+  }
       status: 'ACTIVE'
     };
 
@@ -2456,7 +2844,7 @@ export class PolicyNotificationService extends EventEmitter {
           description: 'Name of the notification recipient',
           examples: ['John Doe'],
           validation: { minLength: 1, maxLength: 100 }
-        },
+  }
         {
           name: 'policy_title',
           type: 'STRING',
@@ -2464,7 +2852,7 @@ export class PolicyNotificationService extends EventEmitter {
           description: 'Title of the updated policy',
           examples: ['Privacy Policy'],
           validation: { minLength: 1, maxLength: 200 }
-        },
+  }
         {
           name: 'policy_version',
           type: 'STRING',
@@ -2472,7 +2860,7 @@ export class PolicyNotificationService extends EventEmitter {
           description: 'Version of the updated policy',
           examples: ['2.1.0'],
           validation: { pattern: '^\\d+\\.\\d+\\.\\d+$' }
-        },
+  }
         {
           name: 'policy_type',
           type: 'STRING',
@@ -2480,7 +2868,7 @@ export class PolicyNotificationService extends EventEmitter {
           description: 'Type of policy',
           examples: ['Privacy Policy', 'Terms of Service'],
           validation: { minLength: 1, maxLength: 100 }
-        },
+  }
         {
           name: 'effective_date',
           type: 'DATE',
@@ -2488,7 +2876,7 @@ export class PolicyNotificationService extends EventEmitter {
           description: 'Date when the policy becomes effective',
           examples: ['2024-01-01'],
           validation: {}
-        },
+  }
         {
           name: 'policy_summary',
           type: 'STRING',
@@ -2506,11 +2894,11 @@ export class PolicyNotificationService extends EventEmitter {
           secondary: '#6c757d',
           success: '#28a745',
           danger: '#dc3545'
-        },
+  }
         fonts: {
           body: 'Arial, sans-serif',
           heading: 'Arial, sans-serif'
-        },
+  }
         layout: {
           structure: 'single-column',
           sections: [],
@@ -2519,13 +2907,13 @@ export class PolicyNotificationService extends EventEmitter {
             padding: '15px',
             lineHeight: '1.5',
             sectionSpacing: '20px'
-          },
+  }
           alignment: {
             text: 'LEFT',
             content: 'CENTER',
             actions: 'CENTER'
           }
-        },
+  }
         branding: {
           companyName: 'Organization',
           logoPosition: 'TOP',
@@ -2535,13 +2923,13 @@ export class PolicyNotificationService extends EventEmitter {
             showAddress: false,
             showWebsite: true
           }
-        },
+  }
         responsive: {
           enabled: true,
           breakpoints: [],
           adaptations: []
         }
-      },
+  }
       validation: {
         validateSyntax: true,
         validateVariables: true,
@@ -2549,13 +2937,13 @@ export class PolicyNotificationService extends EventEmitter {
         validateImages: false,
         validateCompliance: true,
         customValidators: []
-      },
+  }
       compliance: {
         frameworks: ['GDPR', 'CCPA'],
         requirements: [],
         restrictions: [],
         approvals: []
-      },
+  }
       status: 'ACTIVE'
     };
 
@@ -2563,11 +2951,13 @@ export class PolicyNotificationService extends EventEmitter {
   }
 
   private async generateNotificationId(): Promise<string> {
+
     return `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
 
 // Supporting interfaces
+}
 export interface DeliveryMetrics {
   totalAttempts: number;
   delivered: number;
@@ -2577,7 +2967,9 @@ export interface DeliveryMetrics {
   averageLatency: number;
   totalCost: number;
 }
+}
 
+}
 export interface NotificationAnalytics {
   summary: NotificationSummary;
   trends: NotificationTrend[];
@@ -2585,7 +2977,9 @@ export interface NotificationAnalytics {
   audienceInsights: AudienceInsight[];
   costAnalysis: CostAnalysis;
 }
+}
 
+}
 export interface NotificationSummary {
   totalNotifications: number;
   deliveryRate: number;
@@ -2593,7 +2987,9 @@ export interface NotificationSummary {
   clickRate: number;
   unsubscribeRate: number;
 }
+}
 
+}
 export interface NotificationTrend {
   period: string;
   metric: string;
@@ -2601,7 +2997,9 @@ export interface NotificationTrend {
   change: number;
   direction: 'UP' | 'DOWN' | 'STABLE';
 }
+}
 
+}
 export interface ChannelPerformance {
   channel: string;
   deliveryRate: number;
@@ -2609,7 +3007,9 @@ export interface ChannelPerformance {
   cost: number;
   reliability: number;
 }
+}
 
+}
 export interface AudienceInsight {
   segment: string;
   size: number;
@@ -2617,14 +3017,18 @@ export interface AudienceInsight {
   preferences: string[];
   trends: string[];
 }
+}
 
+}
 export interface CostAnalysis {
   totalCost: number;
   costPerNotification: number;
   costByChannel: Map<string, number>;
   budgetUtilization: number;
 }
+}
 
+}
 export interface NotificationAnalyticsFilters {
   dateRange?: { start: Date; end: Date };
   policyTypes?: string[];

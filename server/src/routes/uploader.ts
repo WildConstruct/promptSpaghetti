@@ -158,7 +158,7 @@ export async function uploaderRoutes(
           storageBackend: uploadData.storageBackend,
           notifyOnComplete: true,
           notifyOnError: true
-        },
+  }
         {
           purpose: uploadData.purpose,
           description: uploadData.description,
@@ -190,7 +190,7 @@ export async function uploaderRoutes(
           totalChunks: Math.ceil(uploadRequest.size / uploadRequest.options.maxChunkSize),
           processingPipeline: uploadRequest.metadata.requiresProcessing ? 
             ['virus_scan', 'metadata_extraction'] : []
-        },
+  }
         message: 'Upload initiated successfully'
       });
 
@@ -285,10 +285,10 @@ export async function uploaderRoutes(
             totalChunks: progress.totalChunks,
             speed: progress.speed,
             estimatedTimeRemaining: progress.estimatedTimeRemaining
-          },
+  }
           uploadComplete: progress.status === 'completed',
           processingStarted: progress.status === 'processing'
-        },
+  }
         message: `Chunk ${chunkValidation.chunkNumber + 1}/${totalChunks} uploaded successfully`
       });
 
@@ -365,7 +365,7 @@ export async function uploaderRoutes(
           updatedAt: uploadRequest.updatedAt,
           completedAt: uploadRequest.completedAt,
           expiresAt: uploadRequest.expiresAt
-        },
+  }
         progress,
         metadata: uploadRequest.metadata
       };
@@ -629,7 +629,7 @@ export async function uploaderRoutes(
           successful: result.successful,
           failed: result.failed,
           results: result.results
-        },
+  }
         message: `Bulk operation completed: ${result.successful} successful, ${result.failed} failed`
       });
 
@@ -701,7 +701,7 @@ export async function uploaderRoutes(
           period: {
             start: startDate.toISOString(),
             end: endDate.toISOString()
-          },
+  }
           generatedAt: new Date().toISOString()
         }
       });
@@ -736,7 +736,7 @@ export async function uploaderRoutes(
             storageProviders: health.storageProviders,
             processingQueue: health.processingQueue,
             database: health.database
-          },
+  }
           metrics: {
             activeUploads: health.metrics.activeUploads,
             queuedJobs: health.metrics.queuedJobs,

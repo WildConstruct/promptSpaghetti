@@ -10,7 +10,7 @@ import { Template } from './TemplatePreviewModal';
 export interface ShareTrackingManagerProps {
     templateId: string;
     template?: Template;
-    shares?: ShareRecord[];
+    shares?: ShareRecord;
     onShareUpdate?: (share: ShareRecord) => void;
     onAnalyticsRefresh?: () => void;
     className?: string;
@@ -20,12 +20,12 @@ export interface ShareTrackingManagerProps {
 export interface ShareTrackingData {
     totalShares: number;
     platformBreakdown: Record<string, PlatformShareData>;
-    timeSeriesData: TimeSeriesPoint[];
+    timeSeriesData: TimeSeriesPoint;
     conversionFunnel: ConversionFunnelData;
     demographicInsights: DemographicAnalysis;
     performanceMetrics: AggregatedMetrics;
-    alerts: ShareAlert[];
-    recommendations: ShareRecommendation[];
+    alerts: ShareAlert;
+    recommendations: ShareRecommendation;
 }
 export interface PlatformShareData {
     platform: string;
@@ -122,16 +122,15 @@ export interface ShareTrackingFilters {
         start: Date;
         end: Date;
     };
-    platforms: string[];
-    shareTypes: string[];
+    platforms: string;
+    shareTypes: string;
     minEngagement: number;
-    regions: string[];
-    devices: string[];
+    regions: string;
+    devices: string;
 }
 export declare const ShareTrackingUtils: {
     calculateTrend: (current: number, previous: number) => TrendData;
-    aggregateShareData: (shares: ShareRecord[]) => ShareTrackingData;
-    formatMetric: (value: number, type: "currency" | "percentage" | "number") => string;
+    aggregateShareData: (shares: ShareRecord) => ShareTrackingData;
 };
 export declare const ShareTrackingManager: React.FC<ShareTrackingManagerProps>;
 export default ShareTrackingManager;

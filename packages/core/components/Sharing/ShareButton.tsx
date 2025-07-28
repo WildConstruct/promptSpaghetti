@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
 import { ShareModal } from './ShareModal';
 interface ShareButtonProps {
-  resourceId: string;
+  resourceId: string;,
   resourceType: ShareableResourceType;
   resourceTitle: string;
   resourceDescription?: string;
@@ -18,9 +18,7 @@ interface ShareButtonProps {
   size?: 'small' | 'medium' | 'large';
   disabled?: boolean;
   onShareCreated?: (shareResponse: Error) => void;
-}
-
-export const ShareButton: React.FC<ShareButtonProps> = ({)
+  export const ShareButton: React.FC<ShareButtonProps> = ({,)
   resourceId,
   resourceType,
   resourceTitle,
@@ -34,7 +32,6 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
   const handleOpenModal = () => {
     if (!disabled) {
       setIsModalOpen(true);
-    }
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -44,17 +41,17 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
     // Keep modal open to show share results
   };
   const getButtonStyles = () => {
-    const baseStyles = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
-      border: 'none',
-      borderRadius: '6px',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      fontWeight: '500',
-      transition: 'all 0.2s ease',
-      opacity: disabled ? 0.5 : 1,
-    };
+  const baseStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: disabled ? 'not-allowed' : 'pointer',
+  fontWeight: '500',
+  transition: 'all 0.2s ease',
+  opacity: disabled ? 0.5 : 1,
+};
     const sizeStyles = {
       small: { padding: '4px 8px', fontSize: '12px' },
       medium: { padding: '8px 12px', fontSize: '14px' },
@@ -62,28 +59,27 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
     };
     const variantStyles = {
       primary: {,
-        backgroundColor: '#3b82f6',
+  backgroundColor: '#3b82f6',
         color: 'white',
         ...(!disabled && {)
-          ':hover': { backgroundColor: '#2563eb' }
-        })
-      },
-      secondary: {,
-        backgroundColor: 'white',
+  ':hover': { backgroundColor: '#2563eb' }
+  }
+  },
+  secondary: {,
+  backgroundColor: 'white',
         color: '#374151',
         border: '1px solid #d1d5db',
         ...(!disabled && {)
-          ':hover': { backgroundColor: '#f9fafb' }
-        })
-      },
-      icon: {,
-        backgroundColor: 'transparent',
+  ':hover': { backgroundColor: '#f9fafb' }
+  }
+  },
+  icon: {,
+  backgroundColor: 'transparent',
         color: '#6b7280',
         padding: size === 'small' ? '4px' : '8px',
         ...(!disabled && {)
-          ':hover': { color: '#374151', backgroundColor: '#f3f4f6' }
-        })
-      }
+  ':hover': { color: '#374151', backgroundColor: '#f3f4f6' }
+  }
     };
     return {
       ...baseStyles,
@@ -92,12 +88,11 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
     };
   };
   const getIconSize = () => {
-    switch (size) {
-    case 'small': return '14px';
-    case 'large': return '20px';
-    default: return '16px';
-    }
-  };
+  switch (size) {
+  case 'small': return '14px';
+  case 'large': return '20px';
+  default: return '16px';
+};
   const ShareIcon = () => (;);
     <svg
       width={getIconSize()}
@@ -116,7 +111,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({)
       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
     </svg>
   );
-  return ();
+  return;
     <>
       <button
         onClick={handleOpenModal}

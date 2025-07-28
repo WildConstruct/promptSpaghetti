@@ -17,65 +17,50 @@ export enum TemplateStatus {
   ARCHIVED = 'archived',
   UNDER_REVIEW = 'under_review',
   REJECTED = 'rejected'
-}
-
-export enum PurchaseStatus {
+  export enum PurchaseStatus {
   PENDING = 'pending',
   COMPLETED = 'completed',
   FAILED = 'failed',
   REFUNDED = 'refunded',
   DISPUTED = 'disputed',
   CANCELLED = 'cancelled'
-}
-
-export enum RefundReason {
+  export enum RefundReason {
   NOT_AS_DESCRIBED = 'not_as_described',
   CLAUDE_INCOMPATIBLE = 'claude_incompat',
   CLAUDE_HALLUCINATION = 'claude_hallucination',
   TECHNICAL_ISSUE = 'technical_issue',
   DUPLICATE_PURCHASE = 'duplicate_purchase',
   OTHER = 'other'
-}
-
-export enum ContentType {
+  export enum ContentType {
   TEMPLATE = 'template',
   TUTORIAL = 'tutorial',
   CASE_STUDY = 'case_study',
   KNOWLEDGE_ARTICLE = 'knowledge_article',
   COMMUNITY_POST = 'community_post',
   DOCUMENTATION = 'documentation'
-}
-
-export enum UserRole {
+  export enum UserRole {
   BUYER = 'buyer',
   CREATOR = 'creator',
   ADMIN = 'admin',
   MODERATOR = 'moderator',
   REVIEWER = 'reviewer'
-}
-
-export enum ForumPostType {
+  export enum ForumPostType {
   DISCUSSION = 'discussion',
   QUESTION = 'question',
   ANNOUNCEMENT = 'announcement',
   TUTORIAL = 'tutorial',
   SHOWCASE = 'showcase',
   FEEDBACK = 'feedback'
-}
-
-export enum PostStatus {
+  export enum PostStatus {
   ACTIVE = 'active',
   HIDDEN = 'hidden',
   DELETED = 'deleted',
   PENDING_MODERATION = 'pending_moderation',
   LOCKED = 'locked'
-}
-
-// =============================================================================
-// User and Profile Models
-// =============================================================================
-
-export const UserProfileSchema = z.object({)
+  // =============================================================================
+  // User and Profile Models
+  // =============================================================================
+  export const UserProfileSchema = z.object({)
   id: z.string().uuid(),
   userId: z.string().uuid(),
   // Profile information
@@ -101,17 +86,17 @@ export const UserProfileSchema = z.object({)
   reputation: z.number().int().min(0).default(0),
   badges: z.array(z.string()).default([]),
   // Preferences
-  preferences: z.object({),
-    emailNotifications: z.boolean().default(true),
-    marketingEmails: z.boolean().default(false),
-    publicProfile: z.boolean().default(true),
-    showPurchases: z.boolean().default(false),
-  }).optional(),
+  preferences: z.object({,)
+  emailNotifications: z.boolean().default(true),
+  marketingEmails: z.boolean().default(false),
+  publicProfile: z.boolean().default(true),
+  showPurchases: z.boolean().default(false),
+}).optional(),
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  lastActive: z.date().optional(),
-});
+  lastActive: z.date().optional();
+  });
 
 export type UserProfile = z.infer<typeof UserProfileSchema>;
 
@@ -131,10 +116,10 @@ export const TemplateSchema = z.object({)
   category: z.string().min(1).max(50),
   subcategory: z.string().max(50).optional(),
   // Pricing
-  priceCents: z.number().int().min(0).max(100000), // $0 to $1000
+  priceCents: z.number().int().min(0).max(100000), // $0 to $1000,
   currency: z.string().length(3).default('USD'),
   // Technical details
-  claudeCompatibility: z.array(z.string()).min(1), // Supported Claude models
+  claudeCompatibility: z.array(z.string()).min(1), // Supported Claude models,
   isAiGenerated: z.boolean().default(false),
   complexity: z.enum(['beginner', 'intermediate', 'advanced']),
   estimatedTokens: z.number().int().min(0).optional(),
@@ -147,15 +132,15 @@ export const TemplateSchema = z.object({)
   featured: z.boolean().default(false),
   promoted: z.boolean().default(false),
   // Statistics
-  stats: z.object({),
-    views: z.number().int().min(0).default(0),
-    downloads: z.number().int().min(0).default(0),
-    purchases: z.number().int().min(0).default(0),
-    likes: z.number().int().min(0).default(0),
-    forks: z.number().int().min(0).default(0),
-    avgRating: z.number().min(0).max(5).optional(),
-    ratingCount: z.number().int().min(0).default(0),
-  }),
+  stats: z.object({,)
+  views: z.number().int().min(0).default(0),
+  downloads: z.number().int().min(0).default(0),
+  purchases: z.number().int().min(0).default(0),
+  likes: z.number().int().min(0).default(0),
+  forks: z.number().int().min(0).default(0),
+  avgRating: z.number().min(0).max(5).optional(),
+  ratingCount: z.number().int().min(0).default(0),
+}),
   // SEO and metadata
   seoKeywords: z.array(z.string()).max(10).default([]),
   metaDescription: z.string().max(160).optional(),
@@ -166,8 +151,8 @@ export const TemplateSchema = z.object({)
   createdAt: z.date(),
   updatedAt: z.date(),
   publishedAt: z.date().optional(),
-  featuredAt: z.date().optional(),
-});
+  featuredAt: z.date().optional();
+  });
 
 export type Template = z.infer<typeof TemplateSchema>;
 
@@ -175,29 +160,29 @@ export const TemplateVersionSchema = z.object({)
   id: z.string().uuid(),
   templateId: z.string().uuid(),
   // Version information
-  versionNumber: z.string().min(1).max(20), // e.g., "1.0.0", "2.1.3"
-  versionName: z.string().max(100).optional(), // Optional human-readable name
+  versionNumber: z.string().min(1).max(20), // e.g., "1.0.0", "2.1.3",
+  versionName: z.string().max(100).optional(), // Optional human-readable name,
   // Technical content
   claudeModel: z.string().min(1).max(50),
-  graphJson: z.string(), // Serialized graph structure
-  promptYaml: z.string().optional(), // Optional YAML configuration
+  graphJson: z.string(), // Serialized graph structure,
+  promptYaml: z.string().optional(), // Optional YAML configuration,
   // Documentation
   changelog: z.string().max(5000).optional(),
   documentation: z.string().max(10000).optional(),
-  examples: z.array(z.object({),
-    title: z.string().max(100),
-    input: z.string().max(1000),
-    expectedOutput: z.string().max(2000),
-  })).max(5).default([]),
+  examples: z.array(z.object({,)
+  title: z.string().max(100),
+  input: z.string().max(1000),
+  expectedOutput: z.string().max(2000),
+})).max(5).default([]),
   // Validation and quality
   hash: z.string().length(64), // SHA-256 hash
   tokenPerRunEstimate: z.number().int().min(0),
   safetyScore: z.number().min(0).max(1),
-  testResults: z.object({),
-    passed: z.number().int().min(0),
-    failed: z.number().int().min(0),
-    coverage: z.number().min(0).max(100).optional(),
-  }).optional(),
+  testResults: z.object({,)
+  passed: z.number().int().min(0),
+  failed: z.number().int().min(0),
+  coverage: z.number().min(0).max(100).optional(),
+}).optional(),
   // Performance metrics
   avgExecutionTime: z.number().min(0).optional(), // milliseconds
   successRate: z.number().min(0).max(100).optional(), // percentage
@@ -205,16 +190,16 @@ export const TemplateVersionSchema = z.object({)
   isPublic: z.boolean().default(true),
   releaseNotes: z.string().max(1000).optional(),
   // Assets
-  assets: z.array(z.object({),
-    name: z.string().max(255),
-    url: z.string().url(),
-    size: z.number().int().min(0),
-    type: z.string().max(50),
-  })).max(10).default([]),
+  assets: z.array(z.object({,)
+  name: z.string().max(255),
+  url: z.string().url(),
+  size: z.number().int().min(0),
+  type: z.string().max(50),
+})).max(10).default([]),
   // Timestamps
   createdAt: z.date(),
-  publishedAt: z.date().optional(),
-});
+  publishedAt: z.date().optional();
+  });
 
 export type TemplateVersion = z.infer<typeof TemplateVersionSchema>;
 
@@ -229,7 +214,7 @@ export const PurchaseSchema = z.object({)
   versionId: z.string().uuid(),
   // Payment information
   stripePaymentIntentId: z.string().optional(),
-  amount: z.number().int().min(0), // Amount in cents
+  amount: z.number().int().min(0), // Amount in cents,
   currency: z.string().length(3).default('USD'),
   // Status and lifecycle
   status: z.nativeEnum(PurchaseStatus),
@@ -270,13 +255,13 @@ export const ReviewSchema = z.object({)
   title: z.string().max(200).optional(),
   comment: z.string().max(2000),
   // Review categorization
-  aspects: z.object({),
-    easeOfUse: z.number().int().min(1).max(5).optional(),
-    documentation: z.number().int().min(1).max(5).optional(),
-    valueForMoney: z.number().int().min(1).max(5).optional(),
-    performance: z.number().int().min(1).max(5).optional(),
-    support: z.number().int().min(1).max(5).optional(),
-  }).optional(),
+  aspects: z.object({,)
+  easeOfUse: z.number().int().min(1).max(5).optional(),
+  documentation: z.number().int().min(1).max(5).optional(),
+  valueForMoney: z.number().int().min(1).max(5).optional(),
+  performance: z.number().int().min(1).max(5).optional(),
+  support: z.number().int().min(1).max(5).optional(),
+}).optional(),
   // AI analysis
   sentimentAi: z.enum(['positive', 'neutral', 'negative']).optional(),
   helpfulnessScore: z.number().min(0).max(1).optional(),
@@ -294,8 +279,8 @@ export const ReviewSchema = z.object({)
   moderatedAt: z.date().optional(),
   // Timestamps
   createdAt: z.date(),
-  updatedAt: z.date(),
-});
+  updatedAt: z.date();
+  });
 
 export type Review = z.infer<typeof ReviewSchema>;
 
@@ -310,7 +295,7 @@ export const ForumPostSchema = z.object({)
   type: z.nativeEnum(ForumPostType),
   title: z.string().min(1).max(300),
   content: z.string().min(1).max(50000),
-  contentHtml: z.string().optional(), // Rendered HTML
+  contentHtml: z.string().optional(), // Rendered HTML,
   // Categorization
   category: z.string().min(1).max(50),
   tags: z.array(z.string().min(1).max(30)).max(10),
@@ -338,13 +323,13 @@ export const ForumPostSchema = z.object({)
   relatedTemplateIds: z.array(z.string().uuid()).max(5).default([]),
   relatedPostIds: z.array(z.string().uuid()).max(3).default([]),
   // Attachments and media
-  attachments: z.array(z.object({),
-    id: z.string().uuid(),
-    name: z.string().max(255),
-    url: z.string().url(),
-    size: z.number().int().min(0),
-    mimeType: z.string().max(100),
-  })).max(5).default([]),
+  attachments: z.array(z.object({,)
+  id: z.string().uuid(),
+  name: z.string().max(255),
+  url: z.string().url(),
+  size: z.number().int().min(0),
+  mimeType: z.string().max(100),
+})).max(5).default([]),
   // Thread information
   parentId: z.string().uuid().optional(), // For replies
   threadId: z.string().uuid().optional(), // Top-level thread
@@ -354,8 +339,8 @@ export const ForumPostSchema = z.object({)
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  lastActivity: z.date(),
-});
+  lastActivity: z.date();
+  });
 
 export type ForumPost = z.infer<typeof ForumPostSchema>;
 
@@ -377,12 +362,12 @@ export const KnowledgeArticleSchema = z.object({)
   tags: z.array(z.string().min(1).max(30)).max(15),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
   // Content structure
-  tableOfContents: z.array(z.object({),
-    id: z.string(),
-    title: z.string().max(200),
-    level: z.number().int().min(1).max(6),
-    anchor: z.string().max(100),
-  })).optional(),
+  tableOfContents: z.array(z.object({,)
+  id: z.string(),
+  title: z.string().max(200),
+  level: z.number().int().min(1).max(6),
+  anchor: z.string().max(100),
+})).optional(),
   // SEO and metadata
   slug: z.string().min(1).max(200),
   metaDescription: z.string().max(160).optional(),
@@ -405,8 +390,8 @@ export const KnowledgeArticleSchema = z.object({)
   createdAt: z.date(),
   updatedAt: z.date(),
   publishedAt: z.date().optional(),
-  lastReviewed: z.date().optional(),
-});
+  lastReviewed: z.date().optional();
+  });
 
 export type KnowledgeArticle = z.infer<typeof KnowledgeArticleSchema>;
 
@@ -418,17 +403,17 @@ export const TutorialSchema = z.object({)
   description: z.string().min(1).max(2000),
   shortDescription: z.string().max(300).optional(),
   // Content structure
-  steps: z.array(z.object({),
-    id: z.string().uuid(),
-    title: z.string().max(200),
-    content: z.string().max(10000),
-    order: z.number().int().min(0),
-    estimatedDuration: z.number().int().min(0).optional(), // minutes
-    resources: z.array(z.object({),
-      name: z.string().max(255),
-      url: z.string().url(),
-      type: z.enum(['video', 'article', 'template', 'download', 'external'])
-    })).default([])
+  steps: z.array(z.object({,)
+  id: z.string().uuid(),
+  title: z.string().max(200),
+  content: z.string().max(10000),
+  order: z.number().int().min(0),
+  estimatedDuration: z.number().int().min(0).optional(), // minutes,
+  resources: z.array(z.object({,)
+  name: z.string().max(255),
+  url: z.string().url(),
+  type: z.enum(['video', 'article', 'template', 'download', 'external']),
+})).default([])
   })).min(1),
   // Tutorial metadata
   category: z.string().min(1).max(50),
@@ -440,11 +425,11 @@ export const TutorialSchema = z.object({)
   // Media and assets
   thumbnailUrl: z.string().url().optional(),
   videoUrl: z.string().url().optional(),
-  assets: z.array(z.object({),
-    name: z.string().max(255),
-    url: z.string().url(),
-    description: z.string().max(500).optional(),
-  })).default([]),
+  assets: z.array(z.object({,)
+  name: z.string().max(255),
+  url: z.string().url(),
+  description: z.string().max(500).optional(),
+})).default([]),
   // Interactive elements
   hasQuiz: z.boolean().default(false),
   hasExercises: z.boolean().default(false),
@@ -460,8 +445,8 @@ export const TutorialSchema = z.object({)
   // Timestamps
   createdAt: z.date(),
   updatedAt: z.date(),
-  publishedAt: z.date().optional(),
-});
+  publishedAt: z.date().optional();
+  });
 
 export type Tutorial = z.infer<typeof TutorialSchema>;
 
@@ -475,7 +460,7 @@ export const UserAnalyticsSchema = z.object({)
   date: z.date(),
   // Activity metrics
   sessionsCount: z.number().int().min(0).default(0),
-  totalDuration: z.number().int().min(0).default(0), // seconds
+  totalDuration: z.number().int().min(0).default(0), // seconds,
   pageViews: z.number().int().min(0).default(0),
   // Marketplace activity
   templatesViewed: z.number().int().min(0).default(0),
@@ -494,7 +479,7 @@ export const UserAnalyticsSchema = z.object({)
   // Creator activity (if applicable)
   templatesCreated: z.number().int().min(0).default(0),
   templatesUpdated: z.number().int().min(0).default(0),
-  salesGenerated: z.number().int().min(0).default(0), // in cents
+  salesGenerated: z.number().int().min(0).default(0), // in cents,
   reviewsReceived: z.number().int().min(0).default(0),
 });
 
@@ -508,8 +493,8 @@ export const ContentAnalyticsSchema = z.object({)
   // View metrics
   views: z.number().int().min(0).default(0),
   uniqueViews: z.number().int().min(0).default(0),
-  averageViewDuration: z.number().min(0).default(0), // seconds
-  bounceRate: z.number().min(0).max(100).default(0), // percentage
+  averageViewDuration: z.number().min(0).default(0), // seconds,
+  bounceRate: z.number().min(0).max(100).default(0), // percentage,
   // Engagement metrics
   likes: z.number().int().min(0).default(0),
   dislikes: z.number().int().min(0).default(0),
@@ -519,7 +504,7 @@ export const ContentAnalyticsSchema = z.object({)
   // Conversion metrics (for templates)
   previews: z.number().int().min(0).default(0),
   purchases: z.number().int().min(0).default(0),
-  conversionRate: z.number().min(0).max(100).default(0), // percentage
+  conversionRate: z.number().min(0).max(100).default(0), // percentage,
   // Geographic and demographic data
   topCountries: z.record(z.number().int().min(0)).optional(),
   topCities: z.record(z.number().int().min(0)).optional(),
@@ -544,12 +529,12 @@ export const SearchQuerySchema = z.object({)
   filters: z.record(z.any()).optional(),
   // Results and interaction
   resultsCount: z.number().int().min(0),
-  clickedResults: z.array(z.object({),
-    contentId: z.string().uuid(),
-    contentType: z.nativeEnum(ContentType),
-    position: z.number().int().min(0),
-    clickedAt: z.date(),
-  })).default([]),
+  clickedResults: z.array(z.object({,)
+  contentId: z.string().uuid(),
+  contentType: z.nativeEnum(ContentType),
+  position: z.number().int().min(0),
+  clickedAt: z.date(),
+})).default([]),
   // Search context
   sessionId: z.string().uuid().optional(),
   referrer: z.string().url().optional(),
@@ -558,8 +543,8 @@ export const SearchQuerySchema = z.object({)
   responseTime: z.number().min(0).optional(), // milliseconds
   source: z.enum(['web', 'mobile', 'api']).default('web'),
   // Timestamps
-  createdAt: z.date(),
-});
+  createdAt: z.date();
+  });
 
 export type SearchQuery = z.infer<typeof SearchQuerySchema>;
 
@@ -579,30 +564,30 @@ export const CollectionSchema = z.object({)
   isFeatured: z.boolean().default(false),
   allowCollaborators: z.boolean().default(false),
   // Content
-  items: z.array(z.object({),
-    contentId: z.string().uuid(),
-    contentType: z.nativeEnum(ContentType),
-    addedAt: z.date(),
-    order: z.number().int().min(0),
-    note: z.string().max(500).optional(),
-  })).default([]),
+  items: z.array(z.object({,)
+  contentId: z.string().uuid(),
+  contentType: z.nativeEnum(ContentType),
+  addedAt: z.date(),
+  order: z.number().int().min(0),
+  note: z.string().max(500).optional(),
+})).default([]),
   // Categorization
   category: z.string().max(50).optional(),
   tags: z.array(z.string().min(1).max(30)).max(10).default([]),
   // Collaboration
-  collaborators: z.array(z.object({),
-    userId: z.string().uuid(),
-    role: z.enum(['viewer', 'editor', 'admin']),
-    addedAt: z.date(),
-  })).default([]),
+  collaborators: z.array(z.object({,)
+  userId: z.string().uuid(),
+  role: z.enum(['viewer', 'editor', 'admin']),
+  addedAt: z.date(),
+})).default([]),
   // Engagement
   followers: z.number().int().min(0).default(0),
   likes: z.number().int().min(0).default(0),
   views: z.number().int().min(0).default(0),
   // Timestamps
   createdAt: z.date(),
-  updatedAt: z.date(),
-});
+  updatedAt: z.date();
+  });
 
 export type Collection = z.infer<typeof CollectionSchema>;
 
@@ -615,10 +600,10 @@ export const NotificationSchema = z.object({)
   userId: z.string().uuid(),
   // Notification content
   type: z.enum([),
-    'template_published', 'template_purchased', 'template_reviewed',
-    'post_replied', 'post_liked', 'comment_replied',
-    'follower_added', 'collection_shared',
-    'system_announcement', 'moderation_action'
+  'template_published', 'template_purchased', 'template_reviewed',
+  'post_replied', 'post_liked', 'comment_replied',
+  'follower_added', 'collection_shared',
+  'system_announcement', 'moderation_action'
   ]),
   title: z.string().min(1).max(200),
   message: z.string().min(1).max(1000),
@@ -646,18 +631,19 @@ export type Notification = z.infer<typeof NotificationSchema>;
 // =============================================================================
 
 // Main content data model types
+
 export type Epic16ContentModel = {
-  UserProfile: UserProfile;
+  UserProfile: UserProfile;,
   Template: Template;
-  TemplateVersion: TemplateVersion;
+  TemplateVersion: TemplateVersion;,
   Purchase: Purchase;
-  Review: Review;
+  Review: Review;,
   ForumPost: ForumPost;
-  KnowledgeArticle: KnowledgeArticle;
+  KnowledgeArticle: KnowledgeArticle;,
   Tutorial: Tutorial;
-  UserAnalytics: UserAnalytics;
+  UserAnalytics: UserAnalytics;,
   ContentAnalytics: ContentAnalytics;
-  SearchQuery: SearchQuery;
+  SearchQuery: SearchQuery;,
   Collection: Collection;
   Notification: Notification;
 };
@@ -680,27 +666,21 @@ export const Epic16ContentSchemas = {
 };
 
 // Utility functions for validation
-export function validateContentModel<T extends keyof Epic16ContentModel>()
-  type: T,
-  data: unknown,
-): Epic16ContentModel[T] {
+export function validateContentModel<T extends keyof Epic16ContentModel>(()
+    type: T,
+    data: unknown,
+  ): Epic16ContentModel[T] {
   return Epic16ContentSchemas[type].parse(data);
-}
-
-export function isValidContentModel<T extends keyof Epic16ContentModel>()
+  export function isValidContentModel<T extends keyof Epic16ContentModel>(()
   type: T,
-  data: unknown,
-): data is Epic16ContentModel[T] {
+  data: unknown): data is Epic16ContentModel[T] {,
   try {
-    Epic16ContentSchemas[type].parse(data);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-// Database relationship helpers
-export const Epic16Relationships = {
+  Epic16ContentSchemas[type].parse(data);
+  return true;
+} catch {
+  return false;
+  // Database relationship helpers
+  export const Epic16Relationships = {
   userToTemplates: 'one-to-many',
   templateToVersions: 'one-to-many',
   templateToPurchases: 'one-to-many',

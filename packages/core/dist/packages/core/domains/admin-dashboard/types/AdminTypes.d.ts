@@ -34,7 +34,7 @@ export interface WidgetDefinition {
     description?: string;
     component: React.ComponentType<WidgetProps>;
     config: WidgetConfig;
-    permissions?: string[];
+    permissions?: string;
     category: 'security' | 'analytics' | 'users' | 'system' | 'custom';
 }
 export interface WidgetConfig {
@@ -58,9 +58,9 @@ export interface DashboardLayout {
     id: string;
     name: string;
     description?: string;
-    widgets: DashboardWidgetInstance[];
+    widgets: DashboardWidgetInstance;
     config: AdminDashboardConfig;
-    permissions: string[];
+    permissions: string;
     createdBy: string;
     createdAt: Date;
     updatedAt: Date;
@@ -94,7 +94,7 @@ export interface AdminUser {
     email: string;
     name: string;
     role: UserRole;
-    permissions: Permission[];
+    permissions: Permission;
     status: 'active' | 'inactive' | 'suspended';
     lastLogin?: Date;
     createdAt: Date;
@@ -104,7 +104,7 @@ export interface UserRole {
     id: string;
     name: string;
     description: string;
-    permissions: Permission[];
+    permissions: Permission;
     isSystemRole: boolean;
 }
 export interface Permission {
@@ -145,7 +145,7 @@ export interface ApiKey {
     name: string;
     key: string;
     userId: string;
-    permissions: string[];
+    permissions: string;
     rateLimit: {
         requests: number;
         period: 'minute' | 'hour' | 'day';
@@ -163,7 +163,7 @@ export interface ApiEndpoint {
     path: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
     description: string;
-    permissions: string[];
+    permissions: string;
     rateLimit?: {
         requests: number;
         period: 'minute' | 'hour' | 'day';
@@ -200,13 +200,13 @@ export interface AdminDomainEvents {
     onLayoutChanged: (layout: DashboardLayout) => void;
     onUserUpdated: (user: AdminUser) => void;
     onSecurityAlert: (alert: SecurityAlert) => void;
-    onPermissionChanged: (userId: string, permissions: Permission[]) => void;
+    onPermissionChanged: (userId: string, permissions: Permission) => void;
     onApiKeyCreated: (apiKey: ApiKey) => void;
     onApiKeyRevoked: (apiKeyId: string) => void;
 }
 export interface AdminDashboardProps {
     userId: string;
-    permissions: Permission[];
+    permissions: Permission;
     config?: Partial<AdminDashboardConfig>;
     onConfigChange?: (config: AdminDashboardConfig) => void;
     onError?: (error: Error) => void;
@@ -227,12 +227,12 @@ export interface WidgetGridProps {
     className?: string;
 }
 export interface WidgetLibraryProps {
-    availableWidgets: WidgetDefinition[];
+    availableWidgets: WidgetDefinition;
     onWidgetAdd: (widgetType: string, position: {
         row: number;
         col: number;
     }) => void;
-    userPermissions: Permission[];
+    userPermissions: Permission;
     className?: string;
 }
 //# sourceMappingURL=AdminTypes.d.ts.map

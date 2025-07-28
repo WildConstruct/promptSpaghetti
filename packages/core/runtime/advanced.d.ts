@@ -1,9 +1,10 @@
 import { RuntimeNode, ExecutionContext } from './types';
+
 export interface ValidationResult {
     valid: boolean;
     errors: string[];
     warnings: string[];
-}
+
 export interface AdvancedNodeConfig {
     /** Whether this node uses deterministic (seeded) random behavior */
     deterministic: boolean;
@@ -16,7 +17,7 @@ export interface AdvancedNodeConfig {
         expectedExecutionTime?: 'fast' | 'medium' | 'slow';
         memoryUsage?: 'low' | 'medium' | 'high';
     };
-}
+
 export interface AdvancedNodeData {
     id: string;
     type: string;
@@ -27,10 +28,10 @@ export interface AdvancedNodeData {
         created: string;
         lastModified?: string;
     };
-}
 /**
  * Enhanced execution context for advanced nodes with state management and caching
  */
+
 export interface AdvancedExecutionContext extends ExecutionContext {
     /** State storage for stateful nodes (nodeId -> state) */
     nodeStates: Map<string, unknown>;
@@ -51,7 +52,6 @@ export interface AdvancedExecutionContext extends ExecutionContext {
     inputs?: Record<string, unknown>;
     /** Optional outputs storage */
     outputs?: Record<string, unknown>;
-}
 /**
  * Abstract base class for all advanced rule nodes in Epic 7
  * Extends the proven RuntimeNode architecture with enhanced capabilities
@@ -108,7 +108,6 @@ export declare abstract class AdvancedRuntimeNode<TOutput = unknown> extends Run
      * Advanced nodes should gracefully degrade when possible
      */
     isCompatibleWithBasicContext(): boolean;
-}
 /**
  * Concrete implementation of AdvancedExecutionContext for tests and direct instantiation
  */
@@ -128,7 +127,6 @@ export declare class AdvancedExecutionContextImpl implements AdvancedExecutionCo
     inputs?: Record<string, unknown>;
     outputs?: Record<string, unknown>;
     constructor(seed: string | number, variables?: Record<string, unknown>);
-}
 /**
  * Utility functions for working with advanced execution contexts
  */
@@ -154,7 +152,6 @@ export declare class AdvancedExecutionUtils {
         cacheHits: number;
         statefulness: number;
     };
-}
 /**
  * Standard validation helpers for advanced nodes
  */
@@ -164,7 +161,6 @@ export declare class ValidationHelpers {
     static validateRequired(value: unknown, fieldName: string): string[];
     static validateArray(value: unknown, fieldName: string, minLength?: number): string[];
     static validateNumericRange(value: unknown, fieldName: string, min?: number, max?: number): string[];
-}
 /**
  * Enhanced AdvancedRuntimeNode with I/O system integration
  */
@@ -179,18 +175,16 @@ export declare abstract class AdvancedRuntimeNodeWithIO<TOutput = unknown> exten
      * Base node configuration validation
      */
     protected validateNodeConfig(): ValidationResult;
-}
 /**
  * Standard node data serialization helpers
  */
 export declare class SerializationHelpers {
-    static createAdvancedNodeData()
-      id: string,
+    static createAdvancedNodeData(id: string,)
       type: string,
       config: AdvancedNodeConfig,
       data: Record<string,
       unknown>
     ): AdvancedNodeData;
     static validateSerializedData(data: AdvancedNodeData): ValidationResult;
-}
+
 //# sourceMappingURL=advanced.d.ts.map

@@ -5,6 +5,7 @@
  * Part of Epic 17.5.5 - Verification System
  */
 import React from 'react';
+
 export interface VerificationAnalyticsData {
     period: {,
         start: Date;
@@ -49,10 +50,10 @@ export interface VerificationAnalyticsData {
         reviewerProductivity: number;
         systemUptime: number;
     };
-}
+
 export interface VerificationAnalyticsProps {
     className?: string;
-}
+
 export declare const VerificationAnalytics: React.FC<VerificationAnalyticsProps>;
 export default VerificationAnalytics;
 //# sourceMappingURL=VerificationAnalytics.d.ts.map

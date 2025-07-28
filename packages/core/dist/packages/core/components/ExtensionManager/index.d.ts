@@ -34,37 +34,9 @@ export type InstallMethod = typeof ExtensionManagerConstants.INSTALL_METHODS[num
 export type ConfigTab = typeof ExtensionManagerConstants.CONFIG_TABS[number];
 export declare const ExtensionManagerUtils: {
     /**
-     * Get extension type icon
-     */
+    * Get extension type icon
+    */
     getExtensionIcon(type: string): string;
-    /**
-     * Get status icon for extension
-     */
-    getStatusIcon(status: ExtensionStatus): string;
-    /**
-     * Get human-readable status text
-     */
-    getStatusText(status: ExtensionStatus): string;
-    /**
-     * Format download count for display
-     */
-    formatDownloads(downloads: number): string;
-    /**
-     * Format file size for display
-     */
-    formatFileSize(bytes: number): string;
-    /**
-     * Validate extension name for development
-     */
-    validateExtensionName(name: string): boolean;
-    /**
-     * Get permission description
-     */
-    getPermissionDescription(permission: string): string;
-    /**
-     * Check if permission is dangerous
-     */
-    isDangerousPermission(permission: string): boolean;
 };
 export declare const DefaultExtensionManagerConfig: {
     defaultView: ViewMode;

@@ -288,7 +288,7 @@ describe('RevisionRequestService', () => {
           type: 'content_update',
           created_at: '2024-01-15T08:00:00Z',
           updated_at: '2024-01-15T09:00:00Z'
-        },
+  }
         {
           id: 'rev_2',
           title: 'Request 2',
@@ -783,7 +783,7 @@ describe('RevisionRequestService', () => {
             content: 'First comment',
             is_internal: false,
             created_at: '2024-01-15T13:00:00Z'
-          },
+  }
           {
             id: 'comment_2',
             content: 'Internal note',
@@ -891,7 +891,7 @@ describe('RevisionRequestService', () => {
             reviewer_name: 'Reviewer One',
             total_assigned: '15',
             total_completed: '12'
-          },
+  }
           {
             reviewer_id: 'reviewer_2',
             reviewer_name: 'Reviewer Two',

@@ -70,7 +70,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
           id: 'user123',
           roles: ['analyst'],
           permissions: ['evidence:read']
-        },
+  }
         get: jest.fn().mockReturnValue('Mozilla/5.0'),
         connection: { remoteAddress: '192.168.1.100' },
         headers: { 'user-agent': 'Mozilla/5.0' }
@@ -105,7 +105,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
               }),
               action: expect.objectContaining({
                 operation: EvidenceAccessAction.READ
-              })
+  }
             }),
             '123',
             EvidenceAccessAction.READ,
@@ -115,7 +115,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
               correlationId: expect.any(String),
               requestPath: '/api/evidence/123',
               requestMethod: 'GET'
-            })
+  }
           );
           done();
         }, 10);
@@ -254,7 +254,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
                 expectedOutcome,
                 expect.objectContaining({
                   responseStatus: status
-                })
+  }
               );
               
               callCount++;
@@ -307,7 +307,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
           id: 'user123',
           roles: ['analyst'],
           permissions: ['evidence:read']
-        },
+  }
         headers: { 'user-agent': 'Mozilla/5.0' },
         connection: { remoteAddress: '192.168.1.100' }
       } as any;
@@ -319,7 +319,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
             // Simulate onSend hook execution
             setTimeout(() => handler(mockRequest, mockReply, 'payload'), 10);
           }
-        })
+  }
       } as any;
     });
 
@@ -339,7 +339,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
             }),
             resource: expect.objectContaining({
               id: '123'
-            })
+  }
           }),
           '123',
           EvidenceAccessAction.READ,
@@ -348,7 +348,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
             responseStatus: 200,
             requestPath: '/api/evidence/123',
             requestMethod: 'GET'
-          })
+  }
         );
         done();
       }, 20);
@@ -374,7 +374,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
         {
           subject: { roles: ['analyst'] },
           environment: { sourceIP: '192.168.1.100' }
-        },
+  }
         { operationType: 'manual' }
       );
 
@@ -392,14 +392,14 @@ describe('EvidenceAccessAuditMiddleware', () => {
           }),
           environment: expect.objectContaining({
             sourceIP: '192.168.1.100'
-          })
+  }
         }),
         'evidence456',
         EvidenceAccessAction.READ,
         EvidenceAccessOutcome.SUCCESS,
         expect.objectContaining({
           operationType: 'manual'
-        })
+  }
       );
     });
 
@@ -410,7 +410,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
           action: EvidenceAccessAction.READ,
           outcome: EvidenceAccessOutcome.SUCCESS,
           metadata: { source: 'batch1' }
-        },
+  }
         {
           evidenceId: 'evidence2',
           action: EvidenceAccessAction.WRITE,
@@ -433,8 +433,8 @@ describe('EvidenceAccessAuditMiddleware', () => {
         expect.objectContaining({
           environment: expect.objectContaining({
             applicationContext: 'batch_processor'
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -543,7 +543,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
           methodName: 'readEvidence',
           className: 'TestService',
           resultType: 'object'
-        })
+  }
       );
     });
 
@@ -574,7 +574,7 @@ describe('EvidenceAccessAuditMiddleware', () => {
           methodName: 'deleteEvidence',
           error: 'Delete failed',
           outcome: EvidenceAccessOutcome.ERROR
-        })
+  }
       );
     });
 

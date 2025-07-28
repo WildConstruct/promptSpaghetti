@@ -12,13 +12,13 @@ export declare enum CompressionAlgorithm {
     BROTLI = "brotli",
     LZ4 = "lz4",
     NONE = "none"
-}
+
 export declare enum CompressionLevel {
     FASTEST = 1,
     FAST = 3,
     BALANCED = 6,
     BEST = 9
-}
+
 export declare enum DataType {
     TEXT = "text",
     JSON = "json",
@@ -29,7 +29,7 @@ export declare enum DataType {
     IMAGE = "image",
     VIDEO = "video",
     AUDIO = "audio"
-}
+
 export interface CompressionOptions {
     algorithm: CompressionAlgorithm;
     level: CompressionLevel;
@@ -37,7 +37,8 @@ export interface CompressionOptions {
     threshold?: number;
     chunkSize?: number;
     includeMetadata?: boolean;
-}
+
+
 export interface CompressionResult {
     success: boolean;
     originalSize: number;
@@ -49,7 +50,8 @@ export interface CompressionResult {
     data: Buffer;
     metadata?: CompressionMetadata;
     error?: string;
-}
+
+
 export interface CompressionMetadata {
     algorithm: CompressionAlgorithm;
     level: CompressionLevel;
@@ -58,7 +60,8 @@ export interface CompressionMetadata {
     dataType: DataType;
     checksum?: string;
     version: string;
-}
+
+
 export interface CompressionStats {
     totalCompressions: number;
     totalDecompressions: number;
@@ -68,7 +71,8 @@ export interface CompressionStats {
     totalDecompressionTime: number;
     averageCompressionRatio: number;
     algorithmStats: Map<CompressionAlgorithm, AlgorithmStats>;
-}
+
+
 export interface AlgorithmStats {
     algorithm: CompressionAlgorithm;
     usageCount: number;
@@ -76,12 +80,13 @@ export interface AlgorithmStats {
     totalProcessingTime: number;
     averageCompressionRatio: number;
     averageSpeed: number;
-}
+
+
 export interface StreamCompressionOptions extends CompressionOptions {
     bufferSize?: number;
     onProgress?: (bytesProcessed: number, totalBytes?: number) => void;
     onChunk?: (chunk: Buffer, isLast: boolean) => void;
-}
+
 export declare const CompressionOptionsSchema: z.ZodObject<{
     algorithm: z.ZodNativeEnum<typeof CompressionAlgorithm>;
     level: z.ZodNativeEnum<typeof CompressionLevel>;
@@ -186,7 +191,7 @@ export declare class CompressionService {
     private initializeStats;
     private updateCompressionStats;
     private updateDecompressionStats;
-}
+
 export declare const compressionService: CompressionService;
 export default CompressionService;
 //# sourceMappingURL=CompressionService.d.ts.map

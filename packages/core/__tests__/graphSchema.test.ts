@@ -67,7 +67,6 @@ describe('graphSchema validation', () => {
         node.code = 'output = input_data';
         break;
         // Concat, Output need no extra fields
-      }
       const out = GraphSchema.safeParse({ nodes: [node] });
       expect(out.success).toBe(true);
     });

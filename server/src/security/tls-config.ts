@@ -14,6 +14,7 @@ import crypto from 'crypto';
 // Types and Interfaces
 // ========================================
 
+}
 export interface TLSConfig {
   enabled: boolean;
   port: number;
@@ -22,6 +23,7 @@ export interface TLSConfig {
     key: string;
     ca?: string;
     passphrase?: string;
+}
   };
   options: {
     secureProtocol?: string;
@@ -48,6 +50,7 @@ export interface TLSConfig {
   };
 }
 
+}
 export interface CertificateInfo {
   subject: any;
   issuer: any;
@@ -60,13 +63,16 @@ export interface CertificateInfo {
   isValid: boolean;
   warnings: string[];
 }
+}
 
+}
 export interface TLSValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
   certificateInfo?: CertificateInfo;
   recommendations: string[];
+}
 }
 
 // ========================================
@@ -81,7 +87,7 @@ const DEFAULT_TLS_CONFIG: TLSConfig = {
     key: process.env.TLS_KEY_PATH || '/etc/ssl/private/server.key',
     ca: process.env.TLS_CA_PATH,
     passphrase: process.env.TLS_PASSPHRASE
-  },
+  }
   options: {
     // Use TLS 1.2 and 1.3 only
     minVersion: 'TLSv1.2',
@@ -100,13 +106,13 @@ const DEFAULT_TLS_CONFIG: TLSConfig = {
     ].join(':'),
     honorCipherOrder: true,
     secureProtocol: 'TLSv1_2_method'
-  },
+  }
   hsts: {
     enabled: true,
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
-  },
+  }
   ocsp: {
     enabled: true,
     stapling: true
@@ -452,6 +458,7 @@ export class TLSConfigManager {
     certificate?: any;
     error?: string;
   }> {
+
     return new Promise((resolve) => {
       const socket = tls.connect(port, hostname, {
         rejectUnauthorized: false // For testing purposes
@@ -501,7 +508,7 @@ export function createDevelopmentTLSConfig(): TLSConfig {
     certificates: {
       cert: path.join(__dirname, '../../../certs/localhost.crt'),
       key: path.join(__dirname, '../../../certs/localhost.key')
-    },
+  }
     hsts: {
       enabled: false, // Disabled for development
       maxAge: 0,
@@ -524,7 +531,7 @@ export function createProductionTLSConfig(): TLSConfig {
       maxAge: 63072000, // 2 years
       includeSubDomains: true,
       preload: true
-    },
+  }
     ocsp: {
       enabled: true,
       stapling: true
@@ -578,6 +585,7 @@ export function loadTLSConfigFromEnv(): TLSConfig {
 // Certificate Pinning System
 // ========================================
 
+}
 export interface CertificatePinConfig {
   enabled: boolean;
   pins: Record<string, CertificatePin[]>;
@@ -586,11 +594,13 @@ export interface CertificatePinConfig {
     enforceBackupPins: boolean;
     pinFailureAction: 'block' | 'warn' | 'log';
     pinUpdateCheckInterval: number; // hours
+}
   };
   allowedDomains: string[];
   pinnedDomains: string[];
 }
 
+}
 export interface CertificatePin {
   type: 'sha256' | 'sha1' | 'subject' | 'spki';
   value: string;
@@ -598,7 +608,9 @@ export interface CertificatePin {
   createdAt: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface PinValidationResult {
   valid: boolean;
   matchedPin?: CertificatePin;
@@ -606,6 +618,7 @@ export interface PinValidationResult {
   certificate: any;
   errors: string[];
   warnings: string[];
+}
 }
 
 // Default pinned certificates for major OAuth providers
@@ -617,7 +630,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Google OAuth2 Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    },
+  }
     {
       type: 'sha256', 
       value: 'FEzVOUp4dF3gI0ZVPRJhFbsd5E9tpuQdnee2qMBn/bU=',
@@ -642,7 +655,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'GitHub Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    },
+  }
     {
       type: 'sha256',
       value: 'k1Hdw5sdSn5kiqNcS7bFgKUEM1GSdWR6EaYCte7qK7Ig=',
@@ -667,7 +680,7 @@ const DEFAULT_CERTIFICATE_PINS: Record<string, CertificatePin[]> = {
       description: 'Microsoft Login Primary Pin',
       createdAt: new Date('2025-01-01'),
       expiresAt: new Date('2026-01-01')
-    },
+  }
     {
       type: 'sha256',
       value: 'Q4tiSEP1jqPOBdGl88Iuys8cdfyOd5VT5pJhpGtf2YY=',
@@ -695,7 +708,7 @@ const DEFAULT_PIN_CONFIG: CertificatePinConfig = {
     enforceBackupPins: true,
     pinFailureAction: 'block',
     pinUpdateCheckInterval: 24 // Check every 24 hours
-  },
+  }
   allowedDomains: ['*'], // Allow all domains by default
   pinnedDomains: Object.keys(DEFAULT_CERTIFICATE_PINS)
 };
@@ -764,6 +777,7 @@ export class CertificatePinningManager {
     hostname: string, 
     certificate: crypto.X509Certificate
   ): Promise<PinValidationResult> {
+
     const cacheKey = `${hostname}:${certificate.fingerprint}`;
     
     // Check cache first
@@ -791,6 +805,7 @@ export class CertificatePinningManager {
     hostname: string,
     certificate: crypto.X509Certificate
   ): Promise<PinValidationResult> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
     let matchedPin: CertificatePin | undefined;
@@ -881,6 +896,7 @@ export class CertificatePinningManager {
     certificate: crypto.X509Certificate,
     pin: CertificatePin
   ): Promise<boolean> {
+
     try {
       switch (pin.type) {
       case 'sha256':
@@ -1015,6 +1031,7 @@ export class CertificatePinningManager {
    * Test a pinned connection to a hostname
    */
   private async testPinnedConnection(hostname: string, port: number = 443): Promise<any> {
+
     return new Promise((resolve) => {
       const socket = tls.connect(port, hostname, {
         checkServerIdentity: (host: string, cert: any) => {

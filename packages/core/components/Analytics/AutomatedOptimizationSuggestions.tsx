@@ -29,8 +29,9 @@ import {
 } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Automated optimization interfaces
+
 export interface AutomatedOptimizationSuggestionsProps {
-  funnelDefinition: ConversionFunnelDefinition;
+  funnelDefinition: ConversionFunnelDefinition;,
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   optimizationConfig?: OptimizationConfiguration;
   userContext?: UserContext;
@@ -39,53 +40,48 @@ export interface AutomatedOptimizationSuggestionsProps {
   onAutomatedAction?: (action: AutomatedAction) => void;
   onExport?: (data: OptimizationSuggestionsExportData) => void;
 }
-
 export interface OptimizationConfiguration {
-  enabledSuggestionTypes: SuggestionType[];
+  enabledSuggestionTypes: SuggestionType;,
   automationSettings: AutomationSettings;
-  alertThresholds: AlertThreshold[];
-  learningModels: LearningModel[];
-  integrations: OptimizationIntegration[];
-  constraints: OptimizationConstraint[];
+  alertThresholds: AlertThreshold;,
+  learningModels: LearningModel;
+  integrations: OptimizationIntegration;,
+  constraints: OptimizationConstraint;
   performance: PerformanceSettings;
 }
-
 export interface AutomationSettings {
-  enableAutomatedImplementation: boolean;
+  enableAutomatedImplementation: boolean;,
   automationLevel: AutomationLevel;
-  riskTolerance: RiskTolerance;
+  riskTolerance: RiskTolerance;,
   approvalRequired: boolean;
-  rollbackEnabled: boolean;
+  rollbackEnabled: boolean;,
   testingRequired: boolean;
-  minimumConfidence: number;
+  minimumConfidence: number;,
   maximumImpact: number;
 }
-
 export type AutomationLevel = 'manual' | 'assisted' | 'semi_automated' | 'fully_automated';
 export type RiskTolerance = 'conservative' | 'moderate' | 'aggressive';
 
 export interface AlertThreshold {
-  metric: string;
+  metric: string;,
   condition: ThresholdCondition;
-  value: number;
+  value: number;,
   timeframe: number;
-  severity: AlertSeverity;
+  severity: AlertSeverity;,
   actionRequired: boolean;
 }
-
 export type ThresholdCondition = 'above' | 'below' | 'equals' | 'change_exceeds' | 'trend_reversal';
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
 
 export interface LearningModel {
-  modelId: string;
+  modelId: string;,
   modelType: ModelType;
-  enabled: boolean;
+  enabled: boolean;,
   confidence: number;
-  accuracy: number;
+  accuracy: number;,
   lastTraining: number;
-  dataRequirements: ModelDataRequirement[];
+  dataRequirements: ModelDataRequirement;
 }
-
 export type ModelType = 
   | 'conversion_prediction'
   | 'user_behavior_analysis'
@@ -95,21 +91,19 @@ export type ModelType =
   | 'a_b_test_analysis';
 
 export interface ModelDataRequirement {
-  dataType: string;
+  dataType: string;,
   minimumSampleSize: number;
-  freshness: number; // hours
-  quality: number; // 0-1
+  freshness: number; // hours,
+  quality: number; // 0-1,
 }
-
 export interface OptimizationIntegration {
-  integrationId: string;
+  integrationId: string;,
   name: string;
-  type: IntegrationType;
+  type: IntegrationType;,
   enabled: boolean;
-  configuration: IntegrationConfiguration;
-  capabilities: IntegrationCapability[];
+  configuration: IntegrationConfiguration;,
+  capabilities: IntegrationCapability;
 }
-
 export type IntegrationType = 
   | 'analytics_platform'
   | 'a_b_testing_tool'
@@ -125,22 +119,19 @@ export interface IntegrationConfiguration {
   credentials?: Record<string, string>;
   settings: Record<string, any>;
 }
-
 export interface IntegrationCapability {
-  capability: string;
+  capability: string;,
   supported: boolean;
   configuration: Record<string, any>;
 }
-
 export interface OptimizationConstraint {
-  constraintId: string;
+  constraintId: string;,
   type: ConstraintType;
-  description: string;
-  parameters: ConstraintParameter[];
-  enabled: boolean;
+  description: string;,
+  parameters: ConstraintParameter;
+  enabled: boolean;,
   priority: number;
 }
-
 export type ConstraintType = 
   | 'budget_limit'
   | 'time_restriction'
@@ -150,136 +141,121 @@ export type ConstraintType =
   | 'user_impact_limit';
 
 export interface ConstraintParameter {
-  parameter: string;
+  parameter: string;,
   value: Error;
   required: boolean;
 }
-
 export interface PerformanceSettings {
-  updateFrequency: number; // seconds
-  batchSize: number;
+  updateFrequency: number; // seconds,
+  batchSize: number;,
   maxConcurrentSuggestions: number;
-  suggestionLifetime: number; // hours
-  cacheDuration: number; // minutes
+  suggestionLifetime: number; // hours,
+  cacheDuration: number; // minutes,
 }
-
 export interface UserContext {
-  userId: string;
+  userId: string;,
   userRole: UserRole;
-  permissions: Permission[];
+  permissions: Permission;,
   preferences: UserPreferences;
   workflowState: WorkflowState;
 }
-
 export type UserRole = 'creator' | 'marketer' | 'analyst' | 'admin' | 'viewer';
 
 export interface Permission {
-  action: string;
+  action: string;,
   resource: string;
   allowed: boolean;
   conditions?: Record<string, any>;
 }
-
 export interface UserPreferences {
-  notificationSettings: NotificationSettings;
+  notificationSettings: NotificationSettings;,
   dashboardLayout: DashboardLayout;
-  automationSettings: UserAutomationSettings;
+  automationSettings: UserAutomationSettings;,
   displaySettings: DisplaySettings;
 }
-
 export interface NotificationSettings {
-  enablePushNotifications: boolean;
+  enablePushNotifications: boolean;,
   enableEmailAlerts: boolean;
-  frequency: NotificationFrequency;
-  severityFilter: AlertSeverity[];
+  frequency: NotificationFrequency;,
+  severityFilter: AlertSeverity;
 }
-
 export type NotificationFrequency = 'immediate' | 'hourly' | 'daily' | 'weekly';
 
 export interface DashboardLayout {
-  layout: 'grid' | 'list' | 'cards';
+  layout: 'grid' | 'list' | 'cards';,
   density: 'compact' | 'comfortable' | 'spacious';
-  sections: DashboardSection[];
+  sections: DashboardSection;
 }
-
 export interface DashboardSection {
-  sectionId: string;
+  sectionId: string;,
   title: string;
-  visible: boolean;
+  visible: boolean;,
   order: number;
   size: 'small' | 'medium' | 'large';
 }
-
 export interface UserAutomationSettings {
-  enableAutomatedSuggestions: boolean;
-  autoApprovalLimits: AutoApprovalLimit[];
-  reviewRequired: boolean;
+  enableAutomatedSuggestions: boolean;,
+  autoApprovalLimits: AutoApprovalLimit;
+  reviewRequired: boolean;,
   rollbackPermissions: boolean;
 }
-
 export interface AutoApprovalLimit {
-  action: string;
+  action: string;,
   maxImpact: number;
-  maxCost: number;
+  maxCost: number;,
   requiresConfirmation: boolean;
 }
-
 export interface DisplaySettings {
-  theme: 'light' | 'dark' | 'auto';
+  theme: 'light' | 'dark' | 'auto';,
   language: string;
-  timezone: string;
+  timezone: string;,
   dateFormat: string;
   numberFormat: string;
 }
-
 export interface WorkflowState {
-  currentStep: string;
-  completedSteps: string[];
-  pendingActions: PendingAction[];
-  activeExperiments: string[];
+  currentStep: string;,
+  completedSteps: string;
+  pendingActions: PendingAction;,
+  activeExperiments: string;
 }
-
 export interface PendingAction {
-  actionId: string;
+  actionId: string;,
   actionType: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: 'low' | 'medium' | 'high' | 'urgent';,
   dueDate: number;
-  dependencies: string[];
+  dependencies: string;
 }
-
 export interface OptimizationSuggestionsData {
-  activeSuggestions: OptimizationSuggestion[];
-  automatedActions: AutomatedAction[];
-  learningInsights: LearningInsight[];
+  activeSuggestions: OptimizationSuggestion;,
+  automatedActions: AutomatedAction;
+  learningInsights: LearningInsight;,
   performanceMetrics: SuggestionPerformanceMetrics;
-  systemHealth: AutomationSystemHealth;
-  experiments: ActiveExperiment[];
-  patterns: RecognizedPattern[];
-  predictions: OptimizationPrediction[];
+  systemHealth: AutomationSystemHealth;,
+  experiments: ActiveExperiment;
+  patterns: RecognizedPattern;,
+  predictions: OptimizationPrediction;
 }
-
 export interface OptimizationSuggestion {
-  suggestionId: string;
+  suggestionId: string;,
   type: SuggestionType;
-  title: string;
+  title: string;,
   description: string;
-  priority: SuggestionPriority;
+  priority: SuggestionPriority;,
   confidence: number;
-  impact: SuggestionImpact;
+  impact: SuggestionImpact;,
   effort: SuggestionEffort;
-  source: SuggestionSource;
+  source: SuggestionSource;,
   context: SuggestionContext;
-  recommendations: ActionRecommendation[];
-  constraints: ApplicableConstraint[];
-  timeline: SuggestionTimeline;
+  recommendations: ActionRecommendation;,
+  constraints: ApplicableConstraint;
+  timeline: SuggestionTimeline;,
   automation: AutomationOptions;
-  testing: TestingRequirements;
+  testing: TestingRequirements;,
   status: SuggestionStatus;
-  feedback: SuggestionFeedback;
+  feedback: SuggestionFeedback;,
   createdAt: number;
   expiresAt: number;
 }
-
 export type SuggestionType = 
   | 'conversion_optimization'
   | 'user_experience_improvement'
@@ -296,121 +272,107 @@ export type SuggestionPriority = 'low' | 'medium' | 'high' | 'urgent' | 'critica
 export type SuggestionStatus = 'generated' | 'reviewing' | 'approved' | 'implementing' | 'testing' | 'completed' | 'rejected' | 'expired';
 
 export interface SuggestionImpact {
-  expectedLift: number;
+  expectedLift: number;,
   confidenceInterval: { min: number; max: number };
-  affectedMetrics: AffectedMetric[];
+  affectedMetrics: AffectedMetric;,
   userImpact: UserImpact;
-  businessImpact: BusinessImpact;
+  businessImpact: BusinessImpact;,
   riskAssessment: RiskAssessment;
 }
-
 export interface AffectedMetric {
-  metric: string;
+  metric: string;,
   currentValue: number;
-  expectedValue: number;
+  expectedValue: number;,
   improvementPercentage: number;
   confidence: number;
 }
-
 export interface UserImpact {
-  affectedUsers: number;
-  userSegments: string[];
-  experienceChange: 'positive' | 'negative' | 'neutral';
-  adaptationTime: number; // days
+  affectedUsers: number;,
+  userSegments: string;
+  experienceChange: 'positive' | 'negative' | 'neutral';,
+  adaptationTime: number; // days,
 }
-
 export interface BusinessImpact {
-  revenueImpact: number;
+  revenueImpact: number;,
   costImpact: number;
-  resourceRequirements: ResourceRequirement[];
-  timeToValue: number; // days
-  strategicAlignment: number; // 0-1
+  resourceRequirements: ResourceRequirement;,
+  timeToValue: number; // days,
+  strategicAlignment: number; // 0-1,
 }
-
 export interface ResourceRequirement {
-  resource: string;
+  resource: string;,
   amount: number;
-  duration: number; // days
+  duration: number; // days,
   criticality: 'essential' | 'important' | 'optional';
 }
-
 export interface RiskAssessment {
-  overallRisk: RiskLevel;
-  riskFactors: RiskFactor[];
-  mitigationStrategies: MitigationStrategy[];
+  overallRisk: RiskLevel;,
+  riskFactors: RiskFactor;
+  mitigationStrategies: MitigationStrategy;,
   rollbackPlan: RollbackPlan;
 }
-
 export type RiskLevel = 'very_low' | 'low' | 'medium' | 'high' | 'very_high';
 
 export interface RiskFactor {
-  factor: string;
+  factor: string;,
   probability: number;
-  impact: number;
+  impact: number;,
   description: string;
   category: RiskCategory;
 }
-
 export type RiskCategory = 'technical' | 'business' | 'user_experience' | 'compliance' | 'security';
 
 export interface MitigationStrategy {
-  strategy: string;
+  strategy: string;,
   effectiveness: number;
-  cost: number;
+  cost: number;,
   implementation: string;
 }
-
 export interface RollbackPlan {
-  rollbackPossible: boolean;
-  rollbackTime: number; // minutes
-  rollbackSteps: string[];
+  rollbackPossible: boolean;,
+  rollbackTime: number; // minutes,
+  rollbackSteps: string;,
   dataLoss: boolean;
 }
-
 export interface SuggestionEffort {
-  estimatedHours: number;
-  skillsRequired: RequiredSkill[];
-  toolsRequired: RequiredTool[];
+  estimatedHours: number;,
+  skillsRequired: RequiredSkill;
+  toolsRequired: RequiredTool;,
   complexity: ComplexityLevel;
-  dependencies: SuggestionDependency[];
+  dependencies: SuggestionDependency;
 }
-
 export interface RequiredSkill {
-  skill: string;
+  skill: string;,
   level: SkillLevel;
   essential: boolean;
 }
-
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert';
 
 export interface RequiredTool {
   tool: string;
   version?: string;
-  cost: number;
+  cost: number;,
   availability: boolean;
 }
-
 export type ComplexityLevel = 'trivial' | 'simple' | 'moderate' | 'complex' | 'expert';
 
 export interface SuggestionDependency {
-  dependencyId: string;
+  dependencyId: string;,
   type: DependencyType;
-  description: string;
+  description: string;,
   blocking: boolean;
-  estimatedResolution: number; // days
+  estimatedResolution: number; // days,
 }
-
 export type DependencyType = 'technical' | 'approval' | 'resource' | 'external' | 'sequential';
 
 export interface SuggestionSource {
-  sourceType: SourceType;
+  sourceType: SourceType;,
   sourceName: string;
-  dataQuality: number;
+  dataQuality: number;,
   reliability: number;
-  freshness: number; // hours since last update
+  freshness: number; // hours since last update,
   methodology: string;
 }
-
 export type SourceType = 
   | 'machine_learning'
   | 'statistical_analysis'
@@ -422,68 +384,60 @@ export type SourceType =
   | 'historical_data';
 
 export interface SuggestionContext {
-  triggeringEvents: TriggeringEvent[];
-  environmentalFactors: EnvironmentalFactor[];
-  marketConditions: MarketCondition[];
-  seasonality: SeasonalityFactor[];
-  competitiveActivity: CompetitiveActivity[];
-  userBehaviorChanges: UserBehaviorChange[];
+  triggeringEvents: TriggeringEvent;,
+  environmentalFactors: EnvironmentalFactor;
+  marketConditions: MarketCondition;,
+  seasonality: SeasonalityFactor;
+  competitiveActivity: CompetitiveActivity;,
+  userBehaviorChanges: UserBehaviorChange;
 }
-
 export interface TriggeringEvent {
-  eventType: string;
+  eventType: string;,
   eventName: string;
-  timestamp: number;
+  timestamp: number;,
   severity: number;
   correlation: number;
 }
-
 export interface EnvironmentalFactor {
-  factor: string;
+  factor: string;,
   value: Error;
-  impact: 'positive' | 'negative' | 'neutral';
+  impact: 'positive' | 'negative' | 'neutral';,
   confidence: number;
 }
-
 export interface MarketCondition {
-  condition: string;
+  condition: string;,
   value: number;
-  trend: 'increasing' | 'decreasing' | 'stable';
+  trend: 'increasing' | 'decreasing' | 'stable';,
   volatility: number;
 }
-
 export interface SeasonalityFactor {
-  pattern: string;
+  pattern: string;,
   strength: number;
-  phase: number;
+  phase: number;,
   reliability: number;
 }
-
 export interface CompetitiveActivity {
-  competitor: string;
+  competitor: string;,
   activity: string;
-  impact: number;
+  impact: number;,
   response: string;
 }
-
 export interface UserBehaviorChange {
-  segment: string;
+  segment: string;,
   change: string;
-  magnitude: number;
+  magnitude: number;,
   timeframe: number;
 }
-
 export interface ActionRecommendation {
-  actionId: string;
+  actionId: string;,
   title: string;
-  description: string;
+  description: string;,
   actionType: ActionType;
-  priority: number;
+  priority: number;,
   implementation: ActionImplementation;
-  expectedOutcome: ActionOutcome;
+  expectedOutcome: ActionOutcome;,
   monitoring: ActionMonitoring;
 }
-
 export type ActionType = 
   | 'content_change'
   | 'design_modification'
@@ -495,276 +449,240 @@ export type ActionType =
   | 'integration_update';
 
 export interface ActionImplementation {
-  method: ImplementationMethod;
-  steps: ImplementationStep[];
-  automation: AutomationCapability;
-  validation: ValidationRequirement[];
+  method: ImplementationMethod;,
+  steps: ImplementationStep;
+  automation: AutomationCapability;,
+  validation: ValidationRequirement;
 }
-
 export type ImplementationMethod = 'manual' | 'semi_automated' | 'fully_automated' | 'api_call' | 'configuration';
 
 export interface ImplementationStep {
-  stepNumber: number;
+  stepNumber: number;,
   description: string;
-  estimatedTime: number; // minutes
-  skills: string[];
-  tools: string[];
+  estimatedTime: number; // minutes,
+  skills: string;,
+  tools: string;
   validation: string;
 }
-
 export interface AutomationCapability {
-  automatable: boolean;
+  automatable: boolean;,
   automationLevel: AutomationLevel;
-  requirements: AutomationRequirement[];
-  limitations: string[];
+  requirements: AutomationRequirement;,
+  limitations: string;
 }
-
 export interface AutomationRequirement {
-  requirement: string;
+  requirement: string;,
   type: 'technical' | 'approval' | 'configuration';
   satisfied: boolean;
 }
-
 export interface ValidationRequirement {
-  validation: string;
+  validation: string;,
   method: ValidationMethod;
-  criteria: ValidationCriteria;
+  criteria: ValidationCriteria;,
   automated: boolean;
 }
-
 export type ValidationMethod = 'testing' | 'review' | 'metrics' | 'user_feedback' | 'simulation';
 
 export interface ValidationCriteria {
-  metric: string;
+  metric: string;,
   threshold: number;
-  direction: 'increase' | 'decrease' | 'maintain';
+  direction: 'increase' | 'decrease' | 'maintain';,
   significance: number;
 }
-
 export interface ActionOutcome {
-  primaryMetric: string;
+  primaryMetric: string;,
   expectedChange: number;
-  timeToEffect: number; // hours
-  duration: number; // days
-  sideEffects: SideEffect[];
+  timeToEffect: number; // hours,
+  duration: number; // days,
+  sideEffects: SideEffect;
 }
-
 export interface SideEffect {
-  effect: string;
+  effect: string;,
   probability: number;
-  severity: 'low' | 'medium' | 'high';
+  severity: 'low' | 'medium' | 'high';,
   mitigation: string;
 }
-
 export interface ActionMonitoring {
-  metricsToTrack: MonitoringMetric[];
-  alertConditions: MonitoringAlert[];
-  reportingFrequency: number; // hours
+  metricsToTrack: MonitoringMetric;,
+  alertConditions: MonitoringAlert;
+  reportingFrequency: number; // hours,
   dashboardUpdates: boolean;
 }
-
 export interface MonitoringMetric {
-  metric: string;
+  metric: string;,
   baseline: number;
-  targetChange: number;
+  targetChange: number;,
   alertThreshold: number;
 }
-
 export interface MonitoringAlert {
-  condition: string;
+  condition: string;,
   threshold: number;
-  severity: AlertSeverity;
+  severity: AlertSeverity;,
   action: string;
 }
-
 export interface ApplicableConstraint {
-  constraintId: string;
+  constraintId: string;,
   constraint: string;
-  impact: string;
+  impact: string;,
   compliance: boolean;
   workaround?: string;
 }
-
 export interface SuggestionTimeline {
-  estimatedImplementation: number; // days
-  phases: TimelinePhase[];
-  milestones: TimelineMilestone[];
-  criticalPath: string[];
+  estimatedImplementation: number; // days,
+  phases: TimelinePhase;,
+  milestones: TimelineMilestone;
+  criticalPath: string;
 }
-
 export interface TimelinePhase {
-  phaseName: string;
+  phaseName: string;,
   description: string;
-  duration: number; // days
-  dependencies: string[];
-  deliverables: string[];
+  duration: number; // days,
+  dependencies: string;,
+  deliverables: string;
 }
-
 export interface TimelineMilestone {
-  milestoneName: string;
+  milestoneName: string;,
   targetDate: number;
-  criteria: string[];
-  dependencies: string[];
+  criteria: string;,
+  dependencies: string;
 }
-
 export interface AutomationOptions {
-  fullyAutomatable: boolean;
-  partialAutomation: PartialAutomation[];
-  userApprovalRequired: boolean;
+  fullyAutomatable: boolean;,
+  partialAutomation: PartialAutomation;
+  userApprovalRequired: boolean;,
   rollbackCapable: boolean;
   monitoringRequired: boolean;
 }
-
 export interface PartialAutomation {
-  component: string;
+  component: string;,
   automatable: boolean;
-  requirements: string[];
-  limitations: string[];
+  requirements: string;,
+  limitations: string;
 }
-
 export interface TestingRequirements {
-  testingRecommended: boolean;
+  testingRecommended: boolean;,
   testType: TestType;
-  testDesign: TestDesign;
-  testDuration: number; // days
+  testDesign: TestDesign;,
+  testDuration: number; // days,
   testCriteria: TestCriteria;
 }
-
 export type TestType = 'a_b_test' | 'multivariate_test' | 'split_test' | 'staged_rollout' | 'canary_release';
 
 export interface TestDesign {
-  variants: TestVariant[];
+  variants: TestVariant;,
   trafficAllocation: TrafficAllocation;
-  targetMetrics: string[];
+  targetMetrics: string;,
   minimumSampleSize: number;
   statisticalPower: number;
 }
-
 export interface TestVariant {
-  variantName: string;
+  variantName: string;,
   description: string;
-  implementation: VariantImplementation;
+  implementation: VariantImplementation;,
   expectedOutcome: number;
 }
-
 export interface VariantImplementation {
-  changes: VariantChange[];
+  changes: VariantChange;,
   configuration: Record<string, any>;
 }
-
 export interface VariantChange {
-  element: string;
+  element: string;,
   changeType: 'content' | 'design' | 'behavior' | 'configuration';
-  before: Error;
+  before: Error;,
   after: unknown;
 }
-
 export interface TrafficAllocation {
-  control: number; // percentage
-  variants: Record<string, number>; // variant name -> percentage
+  control: number; // percentage,
+  variants: Record<string, number>; // variant name -> percentage,
   rampUpStrategy: RampUpStrategy;
 }
-
 export interface RampUpStrategy {
-  enabled: boolean;
+  enabled: boolean;,
   initialPercentage: number;
-  finalPercentage: number;
+  finalPercentage: number;,
   incrementSize: number;
-  incrementFrequency: number; // hours
+  incrementFrequency: number; // hours,
 }
-
 export interface TestCriteria {
-  successMetrics: SuccessMetric[];
-  guardrailMetrics: GuardrailMetric[];
-  stopConditions: StopCondition[];
+  successMetrics: SuccessMetric;,
+  guardrailMetrics: GuardrailMetric;
+  stopConditions: StopCondition;
 }
-
 export interface SuccessMetric {
-  metric: string;
+  metric: string;,
   targetImprovement: number;
-  minimumDetectableEffect: number;
+  minimumDetectableEffect: number;,
   significance: number;
 }
-
 export interface GuardrailMetric {
-  metric: string;
+  metric: string;,
   maxAllowedChange: number;
-  direction: 'increase' | 'decrease';
+  direction: 'increase' | 'decrease';,
   severity: 'warning' | 'critical';
 }
-
 export interface StopCondition {
-  condition: string;
+  condition: string;,
   threshold: number;
   action: 'pause' | 'stop' | 'rollback';
 }
-
 export interface SuggestionFeedback {
-  userRating: number; // 1-5
-  userComments: string;
+  userRating: number; // 1-5,
+  userComments: string;,
   implementationFeedback: ImplementationFeedback;
-  outcomeTracking: OutcomeTracking;
-  lessonsLearned: string[];
+  outcomeTracking: OutcomeTracking;,
+  lessonsLearned: string;
 }
-
 export interface ImplementationFeedback {
-  difficultyRating: number; // 1-5
-  timeActual: number; // hours
-  resourcesActual: ResourceActual[];
-  challenges: Challenge[];
+  difficultyRating: number; // 1-5,
+  timeActual: number; // hours,
+  resourcesActual: ResourceActual;,
+  challenges: Challenge;
 }
-
 export interface ResourceActual {
-  resource: string;
+  resource: string;,
   amountUsed: number;
   effectiveness: number;
 }
-
 export interface Challenge {
-  challenge: string;
+  challenge: string;,
   severity: 'low' | 'medium' | 'high';
-  resolution: string;
-  timeToResolve: number; // hours
+  resolution: string;,
+  timeToResolve: number; // hours,
 }
-
 export interface OutcomeTracking {
-  actualResults: ActualResult[];
-  timeToEffect: number; // hours
-  duration: number; // days
-  sideEffectsObserved: ObservedSideEffect[];
+  actualResults: ActualResult;,
+  timeToEffect: number; // hours,
+  duration: number; // days,
+  sideEffectsObserved: ObservedSideEffect;
 }
-
 export interface ActualResult {
-  metric: string;
+  metric: string;,
   baseline: number;
-  actualValue: number;
+  actualValue: number;,
   improvementPercentage: number;
   statisticalSignificance: number;
 }
-
 export interface ObservedSideEffect {
-  effect: string;
+  effect: string;,
   severity: 'low' | 'medium' | 'high';
-  impact: string;
+  impact: string;,
   mitigation: string;
 }
-
 export interface AutomatedAction {
-  actionId: string;
+  actionId: string;,
   suggestionId: string;
-  actionType: AutomatedActionType;
+  actionType: AutomatedActionType;,
   title: string;
-  description: string;
+  description: string;,
   status: AutomatedActionStatus;
-  automation: ActionAutomation;
+  automation: ActionAutomation;,
   execution: ActionExecution;
-  monitoring: ActionMonitoringState;
+  monitoring: ActionMonitoringState;,
   rollback: RollbackState;
   createdAt: number;
   executedAt?: number;
   completedAt?: number;
 }
-
 export type AutomatedActionType = 
   | 'configuration_update'
   | 'content_modification'
@@ -785,79 +703,70 @@ export type AutomatedActionStatus =
   | 'paused';
 
 export interface ActionAutomation {
-  automationLevel: AutomationLevel;
+  automationLevel: AutomationLevel;,
   approvalRequired: boolean;
   approvedBy?: string;
   approvedAt?: number;
-  constraints: AutomationConstraint[];
+  constraints: AutomationConstraint;
 }
-
 export interface AutomationConstraint {
-  constraint: string;
+  constraint: string;,
   satisfied: boolean;
   checkTime: number;
 }
-
 export interface ActionExecution {
-  method: string;
+  method: string;,
   parameters: Record<string, any>;
-  retryCount: number;
+  retryCount: number;,
   maxRetries: number;
-  timeoutDuration: number; // minutes
-  executionLog: ExecutionLogEntry[];
+  timeoutDuration: number; // minutes,
+  executionLog: ExecutionLogEntry;
 }
-
 export interface ExecutionLogEntry {
-  timestamp: number;
+  timestamp: number;,
   level: 'info' | 'warning' | 'error';
   message: string;
   details?: Record<string, any>;
 }
-
 export interface ActionMonitoringState {
-  isMonitoring: boolean;
-  metricsTracked: TrackedMetric[];
-  alertsGenerated: GeneratedAlert[];
+  isMonitoring: boolean;,
+  metricsTracked: TrackedMetric;
+  alertsGenerated: GeneratedAlert;,
   lastCheck: number;
 }
-
 export interface TrackedMetric {
-  metric: string;
+  metric: string;,
   baseline: number;
-  currentValue: number;
+  currentValue: number;,
   trend: 'improving' | 'declining' | 'stable';
   alertThreshold: number;
 }
-
 export interface GeneratedAlert {
-  alertId: string;
+  alertId: string;,
   severity: AlertSeverity;
-  message: string;
+  message: string;,
   timestamp: number;
   resolved: boolean;
 }
-
 export interface RollbackState {
-  rollbackAvailable: boolean;
+  rollbackAvailable: boolean;,
   rollbackPrepared: boolean;
   rollbackReason?: string;
   rollbackExecutedAt?: number;
   rollbackSuccess?: boolean;
 }
-
 export interface LearningInsight {
-  insightId: string;
+  insightId: string;,
   type: InsightType;
-  title: string;
+  title: string;,
   description: string;
-  confidence: number;
+  confidence: number;,
   supportingData: SupportingData;
-  implications: InsightImplication[];
-  recommendations: InsightRecommendation[];
-  applicability: InsightApplicability;
+  implications: InsightImplication;,
+  recommendations: InsightRecommendation;
+  applicability: InsightApplicability;,
   createdAt: number;
 }
-
 export type InsightType = 
   | 'pattern_discovery'
   | 'anomaly_detection'
@@ -868,155 +777,137 @@ export type InsightType =
   | 'performance_insight';
 
 export interface SupportingData {
-  dataPoints: number;
+  dataPoints: number;,
   timeRange: { start: number; end: number };
-  dataQuality: number;
-  sources: string[];
+  dataQuality: number;,
+  sources: string;
   methodology: string;
 }
-
 export interface InsightImplication {
-  implication: string;
+  implication: string;,
   probability: number;
-  impact: 'low' | 'medium' | 'high';
-  timeframe: number; // days
+  impact: 'low' | 'medium' | 'high';,
+  timeframe: number; // days,
 }
-
 export interface InsightRecommendation {
-  recommendation: string;
+  recommendation: string;,
   priority: 'low' | 'medium' | 'high';
-  effort: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high';,
   expectedBenefit: string;
 }
-
 export interface InsightApplicability {
-  applicableScenarios: string[];
-  limitations: string[];
-  prerequisites: string[];
+  applicableScenarios: string;,
+  limitations: string;
+  prerequisites: string;,
   confidence: number;
 }
-
 export interface SuggestionPerformanceMetrics {
-  totalSuggestions: number;
+  totalSuggestions: number;,
   implementationRate: number;
-  successRate: number;
+  successRate: number;,
   averageImpact: number;
-  userSatisfaction: number;
+  userSatisfaction: number;,
   timeToValue: number;
-  costEffectiveness: number;
+  costEffectiveness: number;,
   accuracyMetrics: AccuracyMetrics;
   trend: PerformanceTrend;
 }
-
 export interface AccuracyMetrics {
-  predictionAccuracy: number;
+  predictionAccuracy: number;,
   falsePositiveRate: number;
-  falseNegativeRate: number;
+  falseNegativeRate: number;,
   precisionScore: number;
   recallScore: number;
 }
-
 export interface PerformanceTrend {
-  direction: 'improving' | 'declining' | 'stable';
+  direction: 'improving' | 'declining' | 'stable';,
   rate: number;
-  confidence: number;
-  factors: TrendFactor[];
+  confidence: number;,
+  factors: TrendFactor;
 }
-
 export interface TrendFactor {
-  factor: string;
+  factor: string;,
   contribution: number;
   direction: 'positive' | 'negative';
 }
-
 export interface AutomationSystemHealth {
-  overallStatus: 'healthy' | 'degraded' | 'critical';
-  components: SystemComponent[];
-  performance: SystemPerformance;
-  errors: SystemError[];
+  overallStatus: 'healthy' | 'degraded' | 'critical';,
+  components: SystemComponent;
+  performance: SystemPerformance;,
+  errors: SystemError;
   maintenance: MaintenanceInfo;
 }
-
 export interface SystemComponent {
-  componentName: string;
+  componentName: string;,
   status: 'operational' | 'degraded' | 'failed';
-  lastCheck: number;
-  uptime: number; // percentage
-  responseTime: number; // ms
+  lastCheck: number;,
+  uptime: number; // percentage,
+  responseTime: number; // ms,
 }
-
 export interface SystemPerformance {
-  throughput: number; // suggestions per hour
-  latency: number; // ms
-  errorRate: number; // percentage
+  throughput: number; // suggestions per hour,
+  latency: number; // ms,
+  errorRate: number; // percentage,
   resourceUtilization: ResourceUtilization;
 }
-
 export interface ResourceUtilization {
-  cpu: number; // percentage
-  memory: number; // percentage
-  storage: number; // percentage
-  network: number; // percentage
+  cpu: number; // percentage,
+  memory: number; // percentage,
+  storage: number; // percentage,
+  network: number; // percentage,
 }
-
 export interface SystemError {
-  errorId: string;
+  errorId: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;
+  message: string;,
   timestamp: number;
-  component: string;
+  component: string;,
   resolved: boolean;
 }
-
 export interface MaintenanceInfo {
-  lastMaintenance: number;
+  lastMaintenance: number;,
   nextMaintenance: number;
-  maintenanceType: 'routine' | 'emergency' | 'upgrade';
-  estimatedDowntime: number; // minutes
+  maintenanceType: 'routine' | 'emergency' | 'upgrade';,
+  estimatedDowntime: number; // minutes,
 }
-
 export interface ActiveExperiment {
-  experimentId: string;
+  experimentId: string;,
   name: string;
-  type: TestType;
+  type: TestType;,
   status: ExperimentStatus;
-  startDate: number;
+  startDate: number;,
   endDate: number;
-  trafficAllocation: number; // percentage
-  metrics: ExperimentMetric[];
-  results: ExperimentResult[];
+  trafficAllocation: number; // percentage,
+  metrics: ExperimentMetric;,
+  results: ExperimentResult;
 }
-
 export type ExperimentStatus = 'planning' | 'running' | 'paused' | 'completed' | 'terminated';
 
 export interface ExperimentMetric {
-  metric: string;
+  metric: string;,
   baseline: number;
-  target: number;
+  target: number;,
   current: number;
   significance: number;
 }
-
 export interface ExperimentResult {
-  variant: string;
+  variant: string;,
   users: number;
-  conversions: number;
+  conversions: number;,
   conversionRate: number;
-  improvement: number;
+  improvement: number;,
   significance: number;
 }
-
 export interface RecognizedPattern {
-  patternId: string;
+  patternId: string;,
   type: PatternType;
-  description: string;
+  description: string;,
   frequency: number;
-  reliability: number;
+  reliability: number;,
   context: PatternContext;
-  implications: PatternImplication[];
+  implications: PatternImplication;,
   actionability: PatternActionability;
 }
-
 export type PatternType = 
   | 'user_behavior'
   | 'performance_cycle'
@@ -1027,36 +918,32 @@ export type PatternType =
 
 export interface PatternContext {
   timeRange: { start: number; end: number };
-  conditions: string[];
-  segments: string[];
-  triggers: string[];
+  conditions: string;,
+  segments: string;
+  triggers: string;
 }
-
 export interface PatternImplication {
-  implication: string;
+  implication: string;,
   confidence: number;
   impact: 'positive' | 'negative' | 'neutral';
 }
-
 export interface PatternActionability {
-  actionable: boolean;
-  suggestedActions: string[];
-  constraints: string[];
+  actionable: boolean;,
+  suggestedActions: string;
+  constraints: string;,
   effort: 'low' | 'medium' | 'high';
 }
-
 export interface OptimizationPrediction {
-  predictionId: string;
+  predictionId: string;,
   type: PredictionType;
-  target: string;
+  target: string;,
   predictedValue: number;
   confidenceInterval: { min: number; max: number };
-  timeframe: number; // days
-  factors: PredictionFactor[];
-  scenarios: PredictionScenario[];
-  recommendations: PredictionRecommendation[];
+  timeframe: number; // days,
+  factors: PredictionFactor;
+  scenarios: PredictionScenario;,
+  recommendations: PredictionRecommendation;
 }
-
 export type PredictionType = 
   | 'conversion_rate'
   | 'revenue_impact'
@@ -1066,39 +953,34 @@ export type PredictionType =
   | 'experiment_outcome';
 
 export interface PredictionFactor {
-  factor: string;
+  factor: string;,
   weight: number;
-  direction: 'positive' | 'negative';
+  direction: 'positive' | 'negative';,
   confidence: number;
 }
-
 export interface PredictionScenario {
-  scenarioName: string;
+  scenarioName: string;,
   probability: number;
-  predictedOutcome: number;
-  conditions: string[];
+  predictedOutcome: number;,
+  conditions: string;
 }
-
 export interface PredictionRecommendation {
-  recommendation: string;
+  recommendation: string;,
   impact: number;
-  probability: number;
+  probability: number;,
   effort: 'low' | 'medium' | 'high';
 }
-
 export interface OptimizationSuggestionsExportData {
-  suggestions: OptimizationSuggestion[];
-  automatedActions: AutomatedAction[];
-  performanceMetrics: SuggestionPerformanceMetrics;
-  learningInsights: LearningInsight[];
-  patterns: RecognizedPattern[];
-  predictions: OptimizationPrediction[];
-  exportTimestamp: number;
+  suggestions: OptimizationSuggestion;,
+  automatedActions: AutomatedAction;
+  performanceMetrics: SuggestionPerformanceMetrics;,
+  learningInsights: LearningInsight;
+  patterns: RecognizedPattern;,
+  predictions: OptimizationPrediction;
+  exportTimestamp: number;,
   configuration: OptimizationConfiguration;
+  // Default configuration
 }
-
-// Default configuration
-
 export const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'suggestions' | 'actions' | 'experiments' | 'insights'>('suggestions');
   const [filterPriority, setFilterPriority] = useState<SuggestionPriority | 'all'>('all');
@@ -1111,8 +993,8 @@ export const [error, setError] = useState<string | null>(null);
     try {
       setLoading(true);
       setError(null);
-      const query: ConversionMetricQuery = {
-        funnelId: funnelDefinition.id,
+      const query: ConversionMetricQuery = {,
+  funnelId: funnelDefinition.id,
         timeRange: { start: Date.now() - 7 * 24 * 60 * 60 * 1000, end: Date.now() },
         segments: [],
         cohorts: [],
@@ -1133,24 +1015,20 @@ export const [error, setError] = useState<string | null>(null);
         setSuggestionsData(processedData);
         // Trigger callbacks for new suggestions
         processedData.activeSuggestions.forEach(suggestion => {)
-          if (suggestion.status === 'generated' && onSuggestionGenerated) {
+  if (suggestion.status === 'generated' && onSuggestionGenerated) {
             onSuggestionGenerated(suggestion);
-          }
         });
         // Trigger callbacks for automated actions
         processedData.automatedActions.forEach(action => {)
-          if (action.status === 'completed' && onAutomatedAction) {
+  if (action.status === 'completed' && onAutomatedAction) {
             onAutomatedAction(action);
-          }
         });
       } else {
         setError(result.error || 'Failed to load optimization suggestions');
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Unknown error occurred');
+} finally {
       setLoading(false);
-    }
   }, [funnelDefinition, analyticsInfrastructure, optimizationConfig, automationLevel, userContext, onSuggestionGenerated, onAutomatedAction]);
   // Process optimization data
   const processOptimizationData = async (;);
@@ -1158,20 +1036,20 @@ export const [error, setError] = useState<string | null>(null);
     config: OptimizationConfiguration,
     context?: UserContext
   ): Promise<OptimizationSuggestionsData> => {
-    // Simulate comprehensive optimization suggestions processing
-    return {
-      activeSuggestions: generateOptimizationSuggestions(config),
-      automatedActions: generateAutomatedActions(),
-      learningInsights: generateLearningInsights(),
-      performanceMetrics: generatePerformanceMetrics(),
-      systemHealth: generateSystemHealth(),
-      experiments: generateActiveExperiments(),
-      patterns: generateRecognizedPatterns(),
-      predictions: generateOptimizationPredictions(),
-    };
+  // Simulate comprehensive optimization suggestions processing
+  return {
+  activeSuggestions: generateOptimizationSuggestions(config),
+  automatedActions: generateAutomatedActions(),
+  learningInsights: generateLearningInsights(),
+  performanceMetrics: generatePerformanceMetrics(),
+  systemHealth: generateSystemHealth(),
+  experiments: generateActiveExperiments(),
+  patterns: generateRecognizedPatterns(),
+  predictions: generateOptimizationPredictions(),
+};
   };
   // Generate optimization suggestions
-  const generateOptimizationSuggestions = (config: OptimizationConfiguration): OptimizationSuggestion[] => {
+  const generateOptimizationSuggestions = (config: OptimizationConfiguration): OptimizationSuggestion => {
     return [
       {
         suggestionId: 'conv-opt-001',
@@ -1181,30 +1059,30 @@ export const [error, setError] = useState<string | null>(null);
         priority: 'high',
         confidence: 0.87,
         impact: {,
-          expectedLift: 0.12,
+  expectedLift: 0.12,
           confidenceInterval: { min: 0.08, max: 0.16 },
           affectedMetrics: [,
             { metric: 'conversion_rate', currentValue: 0.15, expectedValue: 0.168, improvementPercentage: 12, confidence: 0.85 },
             { metric: 'revenue', currentValue: 5000, expectedValue: 5600, improvementPercentage: 12, confidence: 0.82 }
           ],
           userImpact: {,
-            affectedUsers: 15000,
-            userSegments: ['mobile_users', 'new_visitors'],
-            experienceChange: 'positive',
-            adaptationTime: 0,
-          },
-          businessImpact: {,
-            revenueImpact: 600,
+  affectedUsers: 15000,
+  userSegments: ['mobile_users', 'new_visitors'],
+  experienceChange: 'positive',
+  adaptationTime: 0,
+},
+  businessImpact: {,
+  revenueImpact: 600,
             costImpact: 50,
             resourceRequirements: [,
               { resource: 'Designer', amount: 4, duration: 2, criticality: 'essential' },
               { resource: 'Developer', amount: 8, duration: 3, criticality: 'essential' }
             ],
             timeToValue: 14,
-            strategicAlignment: 0.9,
-          },
-          riskAssessment: {,
-            overallRisk: 'low',
+            strategicAlignment: 0.9;
+  },
+  riskAssessment: {,
+  overallRisk: 'low',
             riskFactors: [,
               { factor: 'User resistance to change', probability: 0.1, impact: 0.05, description: 'Some users may not like the new color', category: 'user_experience' }
             ],
@@ -1212,15 +1090,13 @@ export const [error, setError] = useState<string | null>(null);
               { strategy: 'Gradual rollout', effectiveness: 0.9, cost: 100, implementation: 'Start with 10% traffic and increase gradually' }
             ],
             rollbackPlan: {,
-              rollbackPossible: true,
-              rollbackTime: 5,
-              rollbackSteps: ['Revert button color change', 'Clear CDN cache', 'Verify rollback'],
-              dataLoss: false,
-            }
-          }
-        },
-        effort: {,
-          estimatedHours: 12,
+  rollbackPossible: true,
+  rollbackTime: 5,
+  rollbackSteps: ['Revert button color change', 'Clear CDN cache', 'Verify rollback'],
+  dataLoss: false,
+},
+  effort: {,
+  estimatedHours: 12,
           skillsRequired: [,
             { skill: 'UI Design', level: 'intermediate', essential: true },
             { skill: 'Frontend Development', level: 'intermediate', essential: true }
@@ -1233,17 +1109,17 @@ export const [error, setError] = useState<string | null>(null);
           dependencies: [,
             { dependencyId: 'design_approval', type: 'approval', description: 'Design team approval required', blocking: true, estimatedResolution: 2 }
           ]
-        },
-        source: {,
-          sourceType: 'machine_learning',
-          sourceName: 'Conversion Optimization ML Model',
-          dataQuality: 0.92,
-          reliability: 0.89,
-          freshness: 2,
-          methodology: 'Statistical analysis of historical A/B test data',
-        },
-        context: {,
-          triggeringEvents: [,
+  },
+  source: {,
+  sourceType: 'machine_learning',
+  sourceName: 'Conversion Optimization ML Model',
+  dataQuality: 0.92,
+  reliability: 0.89,
+  freshness: 2,
+  methodology: 'Statistical analysis of historical A/B test data',
+},
+  context: {,
+  triggeringEvents: [,
             { eventType: 'performance_alert', eventName: 'Conversion rate below target', timestamp: Date.now() - 60 * 60 * 1000, severity: 0.8, correlation: 0.95 }
           ],
           environmentalFactors: [,
@@ -1261,8 +1137,8 @@ export const [error, setError] = useState<string | null>(null);
           userBehaviorChanges: [,
             { segment: 'mobile_users', change: 'Increased sensitivity to visual cues', magnitude: 0.15, timeframe: 30 }
           ]
-        },
-        recommendations: [,
+  },
+  recommendations: [,
           {
             actionId: 'button_color_change',
             title: 'Change Checkout Button Color',
@@ -1270,36 +1146,36 @@ export const [error, setError] = useState<string | null>(null);
             actionType: 'design_modification',
             priority: 1,
             implementation: {,
-              method: 'semi_automated',
+  method: 'semi_automated',
               steps: [,
                 { stepNumber: 1, description: 'Create design mockup with green button', estimatedTime: 120, skills: ['UI Design'], tools: ['Figma'], validation: 'Design review approval' },
                 { stepNumber: 2, description: 'Update CSS color variables', estimatedTime: 30, skills: ['Frontend Development'], tools: ['Code Editor'], validation: 'Visual regression testing' },
                 { stepNumber: 3, description: 'Deploy to A/B testing platform', estimatedTime: 60, skills: ['Development', 'Testing'], tools: ['A/B Platform'], validation: 'Test functionality verification' }
               ],
               automation: {,
-                automatable: true,
+  automatable: true,
                 automationLevel: 'semi_automated',
                 requirements: [,
                   { requirement: 'Design approval', type: 'approval', satisfied: false },
                   { requirement: 'Testing framework setup', type: 'technical', satisfied: true }
                 ],
                 limitations: ['Requires manual design review', 'Visual approval needed']
-              },
-              validation: [,
+  },
+  validation: [,
                 { validation: 'Visual regression test', method: 'testing', criteria: { metric: 'visual_similarity', threshold: 0.95, direction: 'maintain', significance: 0.9 }, automated: true }
               ]
-            },
-            expectedOutcome: {,
-              primaryMetric: 'conversion_rate',
+  },
+  expectedOutcome: {,
+  primaryMetric: 'conversion_rate',
               expectedChange: 0.12,
               timeToEffect: 24,
               duration: 30,
               sideEffects: [,
                 { effect: 'Potential brand confusion', probability: 0.05, severity: 'low', mitigation: 'Monitor brand perception metrics' }
               ]
-            },
-            monitoring: {,
-              metricsToTrack: [,
+  },
+  monitoring: {,
+  metricsToTrack: [,
                 { metric: 'conversion_rate', baseline: 0.15, targetChange: 0.12, alertThreshold: 0.05 },
                 { metric: 'button_click_rate', baseline: 0.65, targetChange: 0.08, alertThreshold: 0.03 }
               ],
@@ -1307,15 +1183,12 @@ export const [error, setError] = useState<string | null>(null);
                 { condition: 'conversion_rate_drop', threshold: -0.05, severity: 'critical', action: 'rollback_immediately' }
               ],
               reportingFrequency: 24,
-              dashboardUpdates: true,
-            }
-          }
-        ],
+              dashboardUpdates: true],
         constraints: [,
           { constraintId: 'brand_guidelines', constraint: 'Must comply with brand color palette', impact: 'Green must be approved brand color', compliance: true, workaround: 'Use approved green shade' }
         ],
         timeline: {,
-          estimatedImplementation: 7,
+  estimatedImplementation: 7,
           phases: [,
             { phaseName: 'Design Phase', description: 'Create and approve design changes', duration: 3, dependencies: [], deliverables: ['Approved design mockup', 'Color specifications'] },
             { phaseName: 'Development Phase', description: 'Implement changes and setup testing', duration: 3, dependencies: ['Design Phase'], deliverables: ['Code changes', 'A/B test setup'] },
@@ -1325,37 +1198,37 @@ export const [error, setError] = useState<string | null>(null);
             { milestoneName: 'Design Approved', targetDate: Date.now() + 3 * 24 * 60 * 60 * 1000, criteria: ['Design team approval', 'Brand compliance check'], dependencies: [] }
           ],
           criticalPath: ['Design approval', 'Development', 'A/B test deployment']
-        },
-        automation: {,
-          fullyAutomatable: false,
+  },
+  automation: {,
+  fullyAutomatable: false,
           partialAutomation: [,
             { component: 'Code deployment', automatable: true, requirements: ['CI/CD pipeline'], limitations: [] },
             { component: 'A/B test setup', automatable: true, requirements: ['Testing platform API'], limitations: [] }
           ],
           userApprovalRequired: true,
           rollbackCapable: true,
-          monitoringRequired: true,
-        },
-        testing: {,
-          testingRecommended: true,
+          monitoringRequired: true;
+  },
+  testing: {,
+  testingRecommended: true,
           testType: 'a_b_test',
           testDesign: {,
-            variants: [,
+  variants: [,
               { variantName: 'Control', description: 'Current blue button', implementation: { changes: [], configuration: {} }, expectedOutcome: 0 },
               { variantName: 'Green Button', description: 'New green button design', implementation: { changes: [{ element: 'checkout_button', changeType: 'design', before: '#007bff', after: '#28a745' }], configuration: { color: '#28a745' } }, expectedOutcome: 0.12 }
             ],
             trafficAllocation: {,
-              control: 50,
+  control: 50,
               variants: { 'Green Button': 50 },
               rampUpStrategy: { enabled: true, initialPercentage: 10, finalPercentage: 50, incrementSize: 10, incrementFrequency: 24 }
-            },
-            targetMetrics: ['conversion_rate', 'revenue', 'button_click_rate'],
+  },
+  targetMetrics: ['conversion_rate', 'revenue', 'button_click_rate'],
             minimumSampleSize: 2000,
-            statisticalPower: 0.8,
-          },
-          testDuration: 14,
+            statisticalPower: 0.8;
+  },
+  testDuration: 14,
           testCriteria: {,
-            successMetrics: [,
+  successMetrics: [,
               { metric: 'conversion_rate', targetImprovement: 0.12, minimumDetectableEffect: 0.05, significance: 0.95 }
             ],
             guardrailMetrics: [,
@@ -1364,29 +1237,28 @@ export const [error, setError] = useState<string | null>(null);
             stopConditions: [,
               { condition: 'conversion_rate_drop_exceeds', threshold: -0.03, action: 'rollback' }
             ]
-          }
-        },
-        status: 'generated',
+  },
+  status: 'generated',
         feedback: {,
-          userRating: 0,
-          userComments: '',
-          implementationFeedback: {,
-            difficultyRating: 0,
-            timeActual: 0,
-            resourcesActual: [],
-            challenges: [],
-          },
-          outcomeTracking: {,
-            actualResults: [],
-            timeToEffect: 0,
-            duration: 0,
-            sideEffectsObserved: [],
-          },
-          lessonsLearned: [],
-        },
-        createdAt: Date.now(),
-        expiresAt: Date.now() + 72 * 60 * 60 * 1000,
-      },
+  userRating: 0,
+  userComments: '',
+  implementationFeedback: {,
+  difficultyRating: 0,
+  timeActual: 0,
+  resourcesActual: [],
+  challenges: [],
+},
+  outcomeTracking: {,
+  actualResults: [],
+  timeToEffect: 0,
+  duration: 0,
+  sideEffectsObserved: [],
+},
+  lessonsLearned: [];
+  },
+  createdAt: Date.now(),
+        expiresAt: Date.now() + 72 * 60 * 60 * 1000;
+  }
       {
         suggestionId: 'ux-imp-002',
         type: 'user_experience_improvement',
@@ -1395,28 +1267,28 @@ export const [error, setError] = useState<string | null>(null);
         priority: 'medium',
         confidence: 0.82,
         impact: {,
-          expectedLift: 0.18,
+  expectedLift: 0.18,
           confidenceInterval: { min: 0.12, max: 0.24 },
           affectedMetrics: [,
             { metric: 'registration_completion_rate', currentValue: 0.45, expectedValue: 0.531, improvementPercentage: 18, confidence: 0.8 }
           ],
           userImpact: {,
-            affectedUsers: 8000,
-            userSegments: ['new_visitors', 'mobile_users'],
-            experienceChange: 'positive',
-            adaptationTime: 0,
-          },
-          businessImpact: {,
-            revenueImpact: 800,
+  affectedUsers: 8000,
+  userSegments: ['new_visitors', 'mobile_users'],
+  experienceChange: 'positive',
+  adaptationTime: 0,
+},
+  businessImpact: {,
+  revenueImpact: 800,
             costImpact: 200,
             resourceRequirements: [,
               { resource: 'UX Designer', amount: 16, duration: 5, criticality: 'essential' }
             ],
             timeToValue: 10,
-            strategicAlignment: 0.85,
-          },
-          riskAssessment: {,
-            overallRisk: 'low',
+            strategicAlignment: 0.85;
+  },
+  riskAssessment: {,
+  overallRisk: 'low',
             riskFactors: [,
               { factor: 'Data collection reduction', probability: 0.3, impact: 0.1, description: 'Less user data collected initially', category: 'business' }
             ],
@@ -1424,15 +1296,13 @@ export const [error, setError] = useState<string | null>(null);
               { strategy: 'Progressive profiling', effectiveness: 0.8, cost: 300, implementation: 'Collect additional data post-registration' }
             ],
             rollbackPlan: {,
-              rollbackPossible: true,
-              rollbackTime: 10,
-              rollbackSteps: ['Restore original form', 'Update validation rules', 'Test form functionality'],
-              dataLoss: false,
-            }
-          }
-        },
-        effort: {,
-          estimatedHours: 24,
+  rollbackPossible: true,
+  rollbackTime: 10,
+  rollbackSteps: ['Restore original form', 'Update validation rules', 'Test form functionality'],
+  dataLoss: false,
+},
+  effort: {,
+  estimatedHours: 24,
           skillsRequired: [,
             { skill: 'UX Design', level: 'advanced', essential: true },
             { skill: 'Frontend Development', level: 'intermediate', essential: true }
@@ -1444,17 +1314,17 @@ export const [error, setError] = useState<string | null>(null);
           dependencies: [,
             { dependencyId: 'user_research', type: 'external', description: 'User research on essential fields', blocking: false, estimatedResolution: 5 }
           ]
-        },
-        source: {,
-          sourceType: 'user_feedback',
-          sourceName: 'User Experience Analysis',
-          dataQuality: 0.88,
-          reliability: 0.82,
-          freshness: 12,
-          methodology: 'Form analytics and user journey analysis',
-        },
-        context: {,
-          triggeringEvents: [,
+  },
+  source: {,
+  sourceType: 'user_feedback',
+  sourceName: 'User Experience Analysis',
+  dataQuality: 0.88,
+  reliability: 0.82,
+  freshness: 12,
+  methodology: 'Form analytics and user journey analysis',
+},
+  context: {,
+  triggeringEvents: [,
             { eventType: 'user_behavior', eventName: 'High form abandonment detected', timestamp: Date.now() - 24 * 60 * 60 * 1000, severity: 0.7, correlation: 0.9 }
           ],
           environmentalFactors: [,
@@ -1466,8 +1336,8 @@ export const [error, setError] = useState<string | null>(null);
           userBehaviorChanges: [,
             { segment: 'mobile_users', change: 'Preference for shorter forms', magnitude: 0.2, timeframe: 60 }
           ]
-        },
-        recommendations: [,
+  },
+  recommendations: [,
           {
             actionId: 'form_simplification',
             title: 'Reduce Form Fields',
@@ -1475,35 +1345,35 @@ export const [error, setError] = useState<string | null>(null);
             actionType: 'design_modification',
             priority: 1,
             implementation: {,
-              method: 'manual',
+  method: 'manual',
               steps: [,
                 { stepNumber: 1, description: 'Analyze current form completion data', estimatedTime: 240, skills: ['Data Analysis'], tools: ['Analytics Platform'], validation: 'Data validation' },
                 { stepNumber: 2, description: 'Design simplified form layout', estimatedTime: 480, skills: ['UX Design'], tools: ['Design Tool'], validation: 'Design review' },
                 { stepNumber: 3, description: 'Implement form changes', estimatedTime: 360, skills: ['Frontend Development'], tools: ['Code Editor'], validation: 'Functionality testing' }
               ],
               automation: {,
-                automatable: false,
+  automatable: false,
                 automationLevel: 'manual',
                 requirements: [,
                   { requirement: 'UX research completion', type: 'approval', satisfied: false }
                 ],
                 limitations: ['Requires human judgment on field importance', 'UX design cannot be automated']
-              },
-              validation: [,
+  },
+  validation: [,
                 { validation: 'User testing', method: 'user_feedback', criteria: { metric: 'completion_rate', threshold: 0.15, direction: 'increase', significance: 0.8 }, automated: false }
               ]
-            },
-            expectedOutcome: {,
-              primaryMetric: 'registration_completion_rate',
+  },
+  expectedOutcome: {,
+  primaryMetric: 'registration_completion_rate',
               expectedChange: 0.18,
               timeToEffect: 48,
               duration: 30,
               sideEffects: [,
                 { effect: 'Reduced initial user data', probability: 0.8, severity: 'medium', mitigation: 'Implement progressive profiling' }
               ]
-            },
-            monitoring: {,
-              metricsToTrack: [,
+  },
+  monitoring: {,
+  metricsToTrack: [,
                 { metric: 'form_completion_rate', baseline: 0.45, targetChange: 0.18, alertThreshold: 0.05 },
                 { metric: 'form_abandonment_rate', baseline: 0.55, targetChange: -0.18, alertThreshold: 0.05 }
               ],
@@ -1511,15 +1381,12 @@ export const [error, setError] = useState<string | null>(null);
                 { condition: 'completion_rate_no_improvement', threshold: 0.02, severity: 'warning', action: 'investigate_further' }
               ],
               reportingFrequency: 24,
-              dashboardUpdates: true,
-            }
-          }
-        ],
+              dashboardUpdates: true],
         constraints: [,
           { constraintId: 'legal_requirements', constraint: 'Must collect required legal information', impact: 'Cannot remove all fields', compliance: true, workaround: 'Make some fields optional or collect later' }
         ],
         timeline: {,
-          estimatedImplementation: 14,
+  estimatedImplementation: 14,
           phases: [,
             { phaseName: 'Research Phase', description: 'User research and data analysis', duration: 5, dependencies: [], deliverables: ['User research report', 'Field importance analysis'] },
             { phaseName: 'Design Phase', description: 'Form redesign and prototyping', duration: 5, dependencies: ['Research Phase'], deliverables: ['New form design', 'User flow diagram'] },
@@ -1529,36 +1396,36 @@ export const [error, setError] = useState<string | null>(null);
             { milestoneName: 'Research Complete', targetDate: Date.now() + 5 * 24 * 60 * 60 * 1000, criteria: ['Field analysis complete', 'User feedback collected'], dependencies: [] }
           ],
           criticalPath: ['User research', 'Form redesign', 'Implementation']
-        },
-        automation: {,
-          fullyAutomatable: false,
+  },
+  automation: {,
+  fullyAutomatable: false,
           partialAutomation: [,
             { component: 'Data analysis', automatable: true, requirements: ['Analytics API'], limitations: ['Requires human interpretation'] }
           ],
           userApprovalRequired: true,
           rollbackCapable: true,
-          monitoringRequired: true,
-        },
-        testing: {,
-          testingRecommended: true,
+          monitoringRequired: true;
+  },
+  testing: {,
+  testingRecommended: true,
           testType: 'a_b_test',
           testDesign: {,
-            variants: [,
+  variants: [,
               { variantName: 'Control', description: 'Current 8-field form', implementation: { changes: [], configuration: {} }, expectedOutcome: 0 },
               { variantName: 'Simplified', description: 'New 4-field form', implementation: { changes: [{ element: 'registration_form', changeType: 'content', before: '8_fields', after: '4_fields' }], configuration: { fields: 4 } }, expectedOutcome: 0.18 }
             ],
             trafficAllocation: {,
-              control: 50,
+  control: 50,
               variants: { 'Simplified': 50 },
               rampUpStrategy: { enabled: false, initialPercentage: 50, finalPercentage: 50, incrementSize: 0, incrementFrequency: 0 }
-            },
-            targetMetrics: ['registration_completion_rate', 'form_abandonment_rate'],
+  },
+  targetMetrics: ['registration_completion_rate', 'form_abandonment_rate'],
             minimumSampleSize: 1500,
-            statisticalPower: 0.8,
-          },
-          testDuration: 21,
+            statisticalPower: 0.8;
+  },
+  testDuration: 21,
           testCriteria: {,
-            successMetrics: [,
+  successMetrics: [,
               { metric: 'registration_completion_rate', targetImprovement: 0.18, minimumDetectableEffect: 0.08, significance: 0.95 }
             ],
             guardrailMetrics: [,
@@ -1567,23 +1434,20 @@ export const [error, setError] = useState<string | null>(null);
             stopConditions: [,
               { condition: 'data_quality_drop_exceeds', threshold: -0.15, action: 'pause' }
             ]
-          }
-        },
-        status: 'generated',
+  },
+  status: 'generated',
         feedback: {,
-          userRating: 0,
+  userRating: 0,
           userComments: '',
           implementationFeedback: { difficultyRating: 0, timeActual: 0, resourcesActual: [], challenges: [] },
           outcomeTracking: { actualResults: [], timeToEffect: 0, duration: 0, sideEffectsObserved: [] },
-          lessonsLearned: [],
-        },
-        createdAt: Date.now(),
-        expiresAt: Date.now() + 72 * 60 * 60 * 1000,
-      }
-    ];
+          lessonsLearned: [];
+  },
+  createdAt: Date.now(),
+        expiresAt: Date.now() + 72 * 60 * 60 * 1000];
   };
   // Generate automated actions
-  const generateAutomatedActions = (): AutomatedAction[] => {
+  const generateAutomatedActions = (): AutomatedAction => {
     return [
       {
         actionId: 'auto-alert-001',
@@ -1593,14 +1457,14 @@ export const [error, setError] = useState<string | null>(null);
         description: 'Automatically acknowledged conversion rate drop alert and created optimization suggestion',
         status: 'completed',
         automation: {,
-          automationLevel: 'fully_automated',
+  automationLevel: 'fully_automated',
           approvalRequired: false,
           constraints: [,
             { constraint: 'Alert severity below critical threshold', satisfied: true, checkTime: Date.now() }
           ]
-        },
-        execution: {,
-          method: 'webhook_call',
+  },
+  execution: {,
+  method: 'webhook_call',
           parameters: { alertId: 'alert-123', action: 'acknowledge', reason: 'Optimization suggestion generated' },
           retryCount: 0,
           maxRetries: 3,
@@ -1610,25 +1474,23 @@ export const [error, setError] = useState<string | null>(null);
             { timestamp: Date.now() - 30 * 1000, level: 'info', message: 'Webhook call successful' },
             { timestamp: Date.now(), level: 'info', message: 'Alert acknowledged successfully' }
           ]
-        },
-        monitoring: {,
-          isMonitoring: false,
-          metricsTracked: [],
-          alertsGenerated: [],
-          lastCheck: Date.now(),
-        },
-        rollback: {,
-          rollbackAvailable: false,
-          rollbackPrepared: false,
-        },
-        createdAt: Date.now() - 2 * 60 * 60 * 1000,
+  },
+  monitoring: {,
+  isMonitoring: false,
+  metricsTracked: [],
+  alertsGenerated: [],
+  lastCheck: Date.now(),
+},
+  rollback: {,
+  rollbackAvailable: false,
+  rollbackPrepared: false,
+},
+  createdAt: Date.now() - 2 * 60 * 60 * 1000,
         executedAt: Date.now() - 90 * 60 * 1000,
-        completedAt: Date.now() - 60 * 60 * 1000,
-      }
-    ];
+        completedAt: Date.now() - 60 * 60 * 1000];
   };
   // Generate learning insights
-  const generateLearningInsights = (): LearningInsight[] => {
+  const generateLearningInsights = (): LearningInsight => {
     return [
       {
         insightId: 'insight-pattern-001',
@@ -1637,13 +1499,13 @@ export const [error, setError] = useState<string | null>(null);
         description: 'Analysis shows mobile users have 23% higher conversion rates on simplified interfaces',
         confidence: 0.89,
         supportingData: {,
-          dataPoints: 15000,
+  dataPoints: 15000,
           timeRange: { start: Date.now() - 90 * 24 * 60 * 60 * 1000, end: Date.now() },
           dataQuality: 0.92,
           sources: ['user_analytics', 'conversion_tracking', 'device_detection'],
-          methodology: 'Comparative analysis across device types and interface complexity',
-        },
-        implications: [,
+          methodology: 'Comparative analysis across device types and interface complexity';
+  },
+  implications: [,
           { implication: 'Mobile-specific optimization should be prioritized', probability: 0.85, impact: 'high', timeframe: 30 },
           { implication: 'Desktop interfaces may benefit from different approach', probability: 0.7, impact: 'medium', timeframe: 60 }
         ],
@@ -1652,41 +1514,38 @@ export const [error, setError] = useState<string | null>(null);
           { recommendation: 'Create separate optimization strategies for mobile and desktop', priority: 'medium', effort: 'high', expectedBenefit: 'Device-specific performance improvements' }
         ],
         applicability: {,
-          applicableScenarios: ['Mobile optimization', 'Responsive design updates', 'UX improvements'],
-          limitations: ['May not apply to all industries', 'Results may vary by user demographics'],
-          prerequisites: ['Mobile traffic analysis', 'Device-specific tracking'],
-          confidence: 0.85,
-        },
-        createdAt: Date.now() - 24 * 60 * 60 * 1000,
-      }
-    ];
+  applicableScenarios: ['Mobile optimization', 'Responsive design updates', 'UX improvements'],
+  limitations: ['May not apply to all industries', 'Results may vary by user demographics'],
+  prerequisites: ['Mobile traffic analysis', 'Device-specific tracking'],
+  confidence: 0.85,
+},
+  createdAt: Date.now() - 24 * 60 * 60 * 1000];
   };
   // Generate performance metrics
   const generatePerformanceMetrics = (): SuggestionPerformanceMetrics => {
-    return {
-      totalSuggestions: 47,
-      implementationRate: 0.68,
-      successRate: 0.82,
-      averageImpact: 0.156,
-      userSatisfaction: 4.3,
-      timeToValue: 12.5,
-      costEffectiveness: 3.4,
-      accuracyMetrics: {,
-        predictionAccuracy: 0.84,
-        falsePositiveRate: 0.12,
-        falseNegativeRate: 0.08,
-        precisionScore: 0.88,
-        recallScore: 0.92,
-      },
-      trend: {,
-        direction: 'improving',
+  return {
+  totalSuggestions: 47,
+  implementationRate: 0.68,
+  successRate: 0.82,
+  averageImpact: 0.156,
+  userSatisfaction: 4.3,
+  timeToValue: 12.5,
+  costEffectiveness: 3.4,
+  accuracyMetrics: {,
+  predictionAccuracy: 0.84,
+  falsePositiveRate: 0.12,
+  falseNegativeRate: 0.08,
+  precisionScore: 0.88,
+  recallScore: 0.92,
+},
+  trend: {,
+  direction: 'improving',
         rate: 0.15,
         confidence: 0.87,
         factors: [,
           { factor: 'Model improvements', contribution: 0.4, direction: 'positive' },
           { factor: 'Data quality increases', contribution: 0.3, direction: 'positive' }
         ]
-      }
     };
   };
   // Generate system health
@@ -1699,22 +1558,21 @@ export const [error, setError] = useState<string | null>(null);
         { componentName: 'Data Pipeline', status: 'operational', lastCheck: Date.now(), uptime: 99.8, responseTime: 80 }
       ],
       performance: {,
-        throughput: 45,
+  throughput: 45,
         latency: 250,
         errorRate: 0.8,
         resourceUtilization: { cpu: 65, memory: 72, storage: 45, network: 23 }
-      },
-      errors: [],
+  },
+  errors: [],
       maintenance: {,
-        lastMaintenance: Date.now() - 7 * 24 * 60 * 60 * 1000,
-        nextMaintenance: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maintenanceType: 'routine',
-        estimatedDowntime: 30,
-      }
-    };
+  lastMaintenance: Date.now() - 7 * 24 * 60 * 60 * 1000,
+  nextMaintenance: Date.now() + 7 * 24 * 60 * 60 * 1000,
+  maintenanceType: 'routine',
+  estimatedDowntime: 30,
+};
   };
   // Generate active experiments
-  const generateActiveExperiments = (): ActiveExperiment[] => {
+  const generateActiveExperiments = (): ActiveExperiment => {
     return [
       {
         experimentId: 'exp-001',
@@ -1731,11 +1589,10 @@ export const [error, setError] = useState<string | null>(null);
           { variant: 'Control', users: 1250, conversions: 188, conversionRate: 0.15, improvement: 0, significance: 0 },
           { variant: 'Green Button', users: 1230, conversions: 199, conversionRate: 0.162, improvement: 0.08, significance: 0.78 }
         ]
-      }
     ];
   };
   // Generate recognized patterns
-  const generateRecognizedPatterns = (): RecognizedPattern[] => {
+  const generateRecognizedPatterns = (): RecognizedPattern => {
     return [
       {
         patternId: 'pattern-weekly-001',
@@ -1744,25 +1601,22 @@ export const [error, setError] = useState<string | null>(null);
         frequency: 7,
         reliability: 0.87,
         context: {,
-          timeRange: { start: Date.now() - 90 * 24 * 60 * 60 * 1000, end: Date.now() },
+  timeRange: { start: Date.now() - 90 * 24 * 60 * 60 * 1000, end: Date.now() },
           conditions: ['Normal traffic levels', 'No major campaigns'],
           segments: ['all_users'],
-          triggers: ['Day of week analysis'],
-        },
-        implications: [,
+          triggers: ['Day of week analysis'];
+  },
+  implications: [,
           { implication: 'Marketing campaigns should target Tuesday peak', confidence: 0.85, impact: 'positive' }
         ],
         actionability: {,
-          actionable: true,
-          suggestedActions: ['Schedule email campaigns for Monday evening', 'Increase ad spend on Tuesdays'],
-          constraints: ['Marketing calendar dependencies'],
-          effort: 'low',
-        }
-      }
-    ];
-  };
+  actionable: true,
+  suggestedActions: ['Schedule email campaigns for Monday evening', 'Increase ad spend on Tuesdays'],
+  constraints: ['Marketing calendar dependencies'],
+  effort: 'low'];
+};
   // Generate optimization predictions
-  const generateOptimizationPredictions = (): OptimizationPrediction[] => {
+  const generateOptimizationPredictions = (): OptimizationPrediction => {
     return [
       {
         predictionId: 'pred-conv-001',
@@ -1782,13 +1636,12 @@ export const [error, setError] = useState<string | null>(null);
         recommendations: [,
           { recommendation: 'Implement high-confidence suggestions first', impact: 0.12, probability: 0.85, effort: 'medium' }
         ]
-      }
     ];
   };
   // Handle suggestion approval
   const handleSuggestionApproval = useCallback((suggestionId: string, approved: boolean) => {
     setSuggestionsData(prev => {)
-      if (!prev) return prev;
+  if (!prev) return prev;
       return {
         ...prev,
         activeSuggestions: prev.activeSuggestions.map(suggestion =>),
@@ -1801,23 +1654,26 @@ export const [error, setError] = useState<string | null>(null);
   // Handle automated action execution
   const handleAutomatedExecution = useCallback((suggestionId: string) => {
     setSuggestionsData(prev => {)
-      if (!prev) return prev;
+  if (!prev) return prev;
       const suggestion = prev.activeSuggestions.find(s => s.suggestionId === suggestionId);
       if (!suggestion) return prev;
-      const newAction: AutomatedAction = {
-        actionId: `auto-${Date.now()}`,}
+      const newAction: AutomatedAction = {,
+  actionId: `auto-${Date.now()}`}
+}
         suggestionId,
         actionType: 'configuration_update',
-        title: `Automated implementation of ${suggestion.title}`,}
-        description: `Automatically implementing ${suggestion.title} based on user approval`,}
-        status: 'executing',
+        title: `Automated implementation of ${suggestion.title}`}
+},
+  description: `Automatically implementing ${suggestion.title} based on user approval`}
+},
+  status: 'executing',
         automation: {,
-          automationLevel: 'fully_automated',
-          approvalRequired: false,
-          constraints: [],
-        },
-        execution: {,
-          method: 'api_call',
+  automationLevel: 'fully_automated',
+  approvalRequired: false,
+  constraints: [],
+},
+  execution: {,
+  method: 'api_call',
           parameters: {},
           retryCount: 0,
           maxRetries: 3,
@@ -1825,25 +1681,25 @@ export const [error, setError] = useState<string | null>(null);
           executionLog: [,
             { timestamp: Date.now(), level: 'info', message: 'Automated execution started' }
           ]
-        },
-        monitoring: {,
-          isMonitoring: true,
-          metricsTracked: suggestion.impact.affectedMetrics.map(metric => ({),
-            metric: metric.metric,
-            baseline: metric.currentValue,
-            currentValue: metric.currentValue,
-            trend: 'stable',
-            alertThreshold: metric.currentValue * 0.05,
-          })),
+  },
+  monitoring: {,
+  isMonitoring: true,
+  metricsTracked: suggestion.impact.affectedMetrics.map(metric => ({,)
+  metric: metric.metric,
+  baseline: metric.currentValue,
+  currentValue: metric.currentValue,
+  trend: 'stable',
+  alertThreshold: metric.currentValue * 0.05,
+})),
           alertsGenerated: [],
-          lastCheck: Date.now(),
-        },
-        rollback: {,
-          rollbackAvailable: true,
-          rollbackPrepared: true,
-        },
-        createdAt: Date.now(),
-      };
+          lastCheck: Date.now();
+  },
+  rollback: {,
+  rollbackAvailable: true,
+  rollbackPrepared: true,
+},
+  createdAt: Date.now();
+  };
       return {
         ...prev,
         automatedActions: [newAction, ...prev.automatedActions],
@@ -1861,41 +1717,35 @@ export const [error, setError] = useState<string | null>(null);
       const wsUrl = `ws://localhost:8000/api/optimization-suggestions/stream/${funnelDefinition.id}`;}
       wsRef.current = new WebSocket(wsUrl);
       wsRef.current.onmessage = (event) => {
-        const update = JSON.parse(event.data);
-        if (update.type === 'suggestion') {
-          setSuggestionsData(prev => {)
-            if (!prev) return prev;
-            return {
-              ...prev,
-              activeSuggestions: [update.data, ...prev.activeSuggestions]
-            };
+  const update = JSON.parse(event.data);
+  if (update.type === 'suggestion') {
+  setSuggestionsData(prev => {)
+  if (!prev) return prev;
+  return {
+  ...prev,
+  activeSuggestions: [update.data, ...prev.activeSuggestions],
+};
           });
           if (onSuggestionGenerated) {
             onSuggestionGenerated(update.data);
-          }
         } else if (update.type === 'action') {
-          setSuggestionsData(prev => {)
-            if (!prev) return prev;
-            return {
-              ...prev,
-              automatedActions: [update.data, ...prev.automatedActions]
-            };
+  setSuggestionsData(prev => {)
+  if (!prev) return prev;
+  return {
+  ...prev,
+  automatedActions: [update.data, ...prev.automatedActions],
+};
           });
           if (onAutomatedAction) {
             onAutomatedAction(update.data);
-          }
-        }
       };
       // Polling fallback
       intervalRef.current = setInterval(loadSuggestionsData, optimizationConfig.performance.updateFrequency * 1000);
-    }
     return () => {
       if (wsRef.current) {
         wsRef.current.close();
-      }
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-      }
     };
   }, [realTimeEnabled, loadSuggestionsData, optimizationConfig.performance.updateFrequency, funnelDefinition.id, onSuggestionGenerated, onAutomatedAction]);
   // Initial data load
@@ -1906,36 +1756,35 @@ export const [error, setError] = useState<string | null>(null);
   const filteredSuggestions = useMemo(() => {
     if (!suggestionsData) return [];
     return suggestionsData.activeSuggestions.filter(suggestion => {)
-      if (filterPriority !== 'all' && suggestion.priority !== filterPriority) return false;
+  if (filterPriority !== 'all' && suggestion.priority !== filterPriority) return false;
       if (filterStatus !== 'all' && suggestion.status !== filterStatus) return false;
       return true;
     });
   }, [suggestionsData, filterPriority, filterStatus]);
   // Handle export
   const handleExport = useCallback(() => {
-    if (!suggestionsData || !onExport) return;
-    const exportData: OptimizationSuggestionsExportData = {
-      suggestions: suggestionsData.activeSuggestions,
-      automatedActions: suggestionsData.automatedActions,
-      performanceMetrics: suggestionsData.performanceMetrics,
-      learningInsights: suggestionsData.learningInsights,
-      patterns: suggestionsData.patterns,
-      predictions: suggestionsData.predictions,
-      exportTimestamp: Date.now(),
-      configuration: optimizationConfig,
-    };
+  if (!suggestionsData || !onExport) return;
+  const exportData: OptimizationSuggestionsExportData = {,
+  suggestions: suggestionsData.activeSuggestions,
+  automatedActions: suggestionsData.automatedActions,
+  performanceMetrics: suggestionsData.performanceMetrics,
+  learningInsights: suggestionsData.learningInsights,
+  patterns: suggestionsData.patterns,
+  predictions: suggestionsData.predictions,
+  exportTimestamp: Date.now(),
+  configuration: optimizationConfig,
+};
     onExport(exportData);
   }, [suggestionsData, optimizationConfig, onExport]);
   if (loading) {
-    return ();
+    return;
       <div className="automated-suggestions-loading">
         <div className="loading-spinner"></div>
         <p>Loading optimization suggestions...</p>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="automated-suggestions-error">
         <h3>Suggestions Error</h3>
         <p className="error-message">{error}</p>
@@ -1944,11 +1793,9 @@ export const [error, setError] = useState<string | null>(null);
         </button>
       </div>
     );
-  }
   if (!suggestionsData) {
     return <div className="automated-suggestions-error">No suggestions data available</div>;
-  }
-  return ();
+  return;
     <div className="automated-optimization-suggestions">
       <div className="suggestions-header">
         <div className="header-info">

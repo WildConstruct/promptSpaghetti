@@ -21,14 +21,14 @@ export declare enum NotificationChannel {
     ADMIN_CONSOLE = "admin_console",
     SLACK = "slack",
     TEAMS = "teams"
-}
+
 export declare enum NotificationPriority {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     URGENT = "urgent",
     CRITICAL = "critical"
-}
+
 export declare enum NotificationStatus {
     PENDING = "pending",
     QUEUED = "queued",
@@ -39,7 +39,7 @@ export declare enum NotificationStatus {
     FAILED = "failed",
     RETRYING = "retrying",
     EXPIRED = "expired"
-}
+
 export interface TemplateVariables {
     userName: string;
     userEmail: string;
@@ -56,7 +56,7 @@ export interface TemplateVariables {
     securityTips: string[];
     nextSteps: string[];
     estimatedResolution?: string;
-}
+
 export interface NotificationTemplate {
     id: string;
     type: NotificationType;
@@ -70,14 +70,14 @@ export interface NotificationTemplate {
     retryPolicy: RetryPolicy;
     expiryMinutes: number;
     metadata: Record<string, any>;
-}
+
 export interface RetryPolicy {
     maxAttempts: number;
     backoffMultiplier: number;
     baseDelaySeconds: number;
     maxDelaySeconds: number;
     retryOn: string[];
-}
+
 export interface UserNotificationPreferences {
     userId: string;
     channels: {,
@@ -98,7 +98,7 @@ export interface UserNotificationPreferences {
         digestFrequency: 'daily' | 'weekly';
     };
     metadata: Record<string, any>;
-}
+
 export interface NotificationRequest {
     id: string;
     type: NotificationType;
@@ -110,7 +110,7 @@ export interface NotificationRequest {
     scheduledAt?: Date;
     expiresAt?: Date;
     metadata: Record<string, any>;
-}
+
 export interface NotificationDelivery {
     id: string;
     requestId: string;
@@ -129,7 +129,7 @@ export interface NotificationDelivery {
     failureReason?: string;
     providerResponse?: any;
     metadata: Record<string, any>;
-}
+
 export interface AdminNotificationRule {
     id: string;
     trigger: {,
@@ -144,7 +144,6 @@ export interface AdminNotificationRule {
     template: string;
     priority: NotificationPriority;
     enabled: boolean;
-}
 /**
  * Comprehensive lockout notification service
  */
@@ -248,7 +247,7 @@ export declare class LockoutNotificationService extends EventEmitter {
     private initializeDefaultTemplates;
     private initializeAdminRules;
     private startDeliveryProcessor;
-}
+
 export declare const lockoutNotificationService: LockoutNotificationService;
 export default LockoutNotificationService;
 //# sourceMappingURL=LockoutNotificationService.d.ts.map

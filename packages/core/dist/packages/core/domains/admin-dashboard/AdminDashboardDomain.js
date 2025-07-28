@@ -1,10 +1,3 @@
-/**
- * Admin Dashboard Domain Interface
- * REFACTOR-005: Domain-Driven Architecture
- *
- * Main interface and export for the admin dashboard domain
- */
-// Event constants for cross-domain communication
 export const ADMIN_DOMAIN_EVENTS = {
     DASHBOARD_LOADED: 'admin:dashboard:loaded',
     LAYOUT_CHANGED: 'admin:layout:changed',
@@ -21,5 +14,5 @@ export const ADMIN_DOMAIN_EVENTS = {
     API_KEY_CREATED: 'admin:api:key:created',
     API_KEY_REVOKED: 'admin:api:key:revoked',
     SYSTEM_HEALTH_CHANGED: 'admin:system:health:changed',
-    CONFIG_UPDATED: 'admin:config:updated'
+    CONFIG_UPDATED: 'admin:config:updated',
 };

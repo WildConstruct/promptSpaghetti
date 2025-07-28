@@ -25,6 +25,7 @@ import {
 } from '../../../packages/core/utils/CompressionService';
 import { join, dirname, basename, extname } from 'path';
 
+}
 export interface FileCompressionOptions {
   algorithm?: CompressionAlgorithm;
   level?: CompressionLevel;
@@ -40,7 +41,9 @@ export interface FileCompressionOptions {
   maxFileSize?: number; // bytes
   minFileSize?: number; // bytes
 }
+}
 
+}
 export interface FileCompressionResult extends CompressionResult {
   inputPath: string;
   outputPath: string;
@@ -51,6 +54,7 @@ export interface FileCompressionResult extends CompressionResult {
   skipReason?: string;
 }
 
+}
 export interface BatchCompressionResult {
   totalFiles: number;
   processedFiles: number;
@@ -62,9 +66,11 @@ export interface BatchCompressionResult {
   totalProcessingTime: number;
   averageCompressionRatio: number;
   results: FileCompressionResult[];
+}
   errors: Array<{ file: string; error: string }>;
 }
 
+}
 export interface ArchiveOptions {
   algorithm?: CompressionAlgorithm;
   level?: CompressionLevel;
@@ -72,6 +78,7 @@ export interface ArchiveOptions {
   followSymlinks?: boolean;
   preservePermissions?: boolean;
   includeMetadata?: boolean;
+}
 }
 
 const DEFAULT_FILE_OPTIONS: FileCompressionOptions = {
@@ -100,6 +107,7 @@ export class FileCompressionUtils {
     outputPath?: string,
     options: FileCompressionOptions = {}
   ): Promise<FileCompressionResult> {
+
     const startTime = performance.now();
     const opts = { ...DEFAULT_FILE_OPTIONS, ...options };
     
@@ -227,6 +235,7 @@ export class FileCompressionUtils {
     inputPaths: string[],
     options: FileCompressionOptions = {}
   ): Promise<BatchCompressionResult> {
+
     const opts = { ...DEFAULT_FILE_OPTIONS, ...options };
     const results: FileCompressionResult[] = [];
     const errors: Array<{ file: string; error: string }> = [];
@@ -296,6 +305,7 @@ export class FileCompressionUtils {
     directoryPath: string,
     options: FileCompressionOptions = {}
   ): Promise<BatchCompressionResult> {
+
     const opts = { ...DEFAULT_FILE_OPTIONS, ...options, recursive: true };
     const files = await this.findFilesToCompress(directoryPath, opts);
     return await this.compressFiles(files, opts);
@@ -309,6 +319,7 @@ export class FileCompressionUtils {
     archivePath: string,
     options: ArchiveOptions = {}
   ): Promise<CompressionResult> {
+
     const opts = {
       algorithm: CompressionAlgorithm.GZIP,
       level: CompressionLevel.BALANCED,
@@ -381,6 +392,7 @@ export class FileCompressionUtils {
     processingTime: number;
     error?: string;
   }> {
+
     const startTime = performance.now();
     
     try {
@@ -440,6 +452,7 @@ export class FileCompressionUtils {
     inputSize: number,
     startTime: number
   ): Promise<FileCompressionResult> {
+
     const algorithm = options.algorithm!;
     const level = options.level!;
     
@@ -501,6 +514,7 @@ export class FileCompressionUtils {
     inputSize: number,
     startTime: number
   ): Promise<FileCompressionResult> {
+
     // Read file
     const inputData = await fs.readFile(inputPath);
     
@@ -546,6 +560,7 @@ export class FileCompressionUtils {
     directoryPath: string,
     options: FileCompressionOptions
   ): Promise<string[]> {
+
     const files: string[] = [];
     
     const processDirectory = async (dir: string) => {
@@ -736,6 +751,7 @@ export class FileCompressionUtils {
     files: Array<{ path: string; relativePath: string; data: Buffer }>,
     options: ArchiveOptions
   ): Promise<Buffer> {
+
     // Simple archive format - in practice, you'd use TAR or similar
     const archiveEntries = files.map(file => ({
       path: file.relativePath,

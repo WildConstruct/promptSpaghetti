@@ -6,6 +6,7 @@ import { performance } from 'perf_hooks';
 /**
  * Performance metrics collected during testing
  */
+}
 export interface PerformanceMetrics {
   // WebSocket performance
   connectionTime: number;
@@ -33,10 +34,12 @@ export interface PerformanceMetrics {
   testScenario: string;
   userCount: number;
 }
+}
 
 /**
  * Test scenario configuration
  */
+}
 export interface TestScenario {
   name: string;
   description: string;
@@ -46,6 +49,7 @@ export interface TestScenario {
   operationTypes: OperationType[];
   documentComplexity: DocumentComplexity;
   networkConditions?: NetworkConditions;
+}
 }
 
 /**
@@ -77,11 +81,13 @@ export enum DocumentComplexity {
 /**
  * Network conditions simulation
  */
+}
 export interface NetworkConditions {
   latency: number; // in milliseconds
   bandwidth: number; // in kbps
   packetLoss: number; // percentage (0-100)
   jitter: number; // in milliseconds
+}
 }
 
 /**
@@ -109,6 +115,7 @@ export class SimulatedUser extends EventEmitter {
    * Connect to WebSocket server
    */
   async connect(serverUrl: string): Promise<void> {
+
     return new Promise((resolve, reject) => {
       const connectStartTime = performance.now();
       
@@ -184,6 +191,7 @@ export class SimulatedUser extends EventEmitter {
    * Perform a random operation based on scenario configuration
    */
   private async performRandomOperation(): Promise<void> {
+
     const operationType = this.scenario.operationTypes[
       Math.floor(Math.random() * this.scenario.operationTypes.length)
     ];
@@ -262,6 +270,7 @@ export class SimulatedUser extends EventEmitter {
    * Create a new node
    */
   private async createNode(): Promise<void> {
+
     const nodeId = uuidv4();
     const nodeData = {
       id: nodeId,
@@ -269,7 +278,7 @@ export class SimulatedUser extends EventEmitter {
       position: {
         x: Math.random() * 800,
         y: Math.random() * 600
-      },
+  }
       data: {
         text: `Test node ${Date.now()}`
       }
@@ -290,6 +299,7 @@ export class SimulatedUser extends EventEmitter {
    * Delete a random node
    */
   private async deleteNode(): Promise<void> {
+
     const nodeId = `node_${Math.floor(Math.random() * 100)}`;
     
     await this.sendMessage('graph_update', {
@@ -306,6 +316,7 @@ export class SimulatedUser extends EventEmitter {
    * Update node properties
    */
   private async updateNodeProperties(): Promise<void> {
+
     const nodeId = `node_${Math.floor(Math.random() * 100)}`;
     
     await this.sendMessage('graph_update', {
@@ -315,7 +326,7 @@ export class SimulatedUser extends EventEmitter {
         nodeId,
         data: {
           text: `Updated text ${Date.now()}`
-        },
+  }
         timestamp: Date.now()
       }]
     });
@@ -325,6 +336,7 @@ export class SimulatedUser extends EventEmitter {
    * Move a node to a new position
    */
   private async moveNode(): Promise<void> {
+
     const nodeId = `node_${Math.floor(Math.random() * 100)}`;
     
     await this.sendMessage('graph_update', {
@@ -337,7 +349,7 @@ export class SimulatedUser extends EventEmitter {
             x: Math.random() * 800,
             y: Math.random() * 600
           }
-        },
+  }
         timestamp: Date.now()
       }]
     });
@@ -347,6 +359,7 @@ export class SimulatedUser extends EventEmitter {
    * Create a new edge
    */
   private async createEdge(): Promise<void> {
+
     const edgeId = uuidv4();
     const sourceNodeId = `node_${Math.floor(Math.random() * 100)}`;
     const targetNodeId = `node_${Math.floor(Math.random() * 100)}`;
@@ -360,7 +373,7 @@ export class SimulatedUser extends EventEmitter {
           id: edgeId,
           source: sourceNodeId,
           target: targetNodeId
-        },
+  }
         timestamp: Date.now()
       }]
     });
@@ -370,6 +383,7 @@ export class SimulatedUser extends EventEmitter {
    * Delete a random edge
    */
   private async deleteEdge(): Promise<void> {
+
     const edgeId = `edge_${Math.floor(Math.random() * 100)}`;
     
     await this.sendMessage('graph_update', {
@@ -386,6 +400,7 @@ export class SimulatedUser extends EventEmitter {
    * Update cursor position
    */
   private async updateCursor(): Promise<void> {
+
     await this.sendMessage('cursor_update', {
       x: Math.random() * 800,
       y: Math.random() * 600,
@@ -403,6 +418,7 @@ export class SimulatedUser extends EventEmitter {
    * Update selection
    */
   private async updateSelection(): Promise<void> {
+
     const nodeIds = Array.from(
       { length: Math.floor(Math.random() * 3) + 1 },
       () => `node_${Math.floor(Math.random() * 100)}`
@@ -424,6 +440,7 @@ export class SimulatedUser extends EventEmitter {
    * Simulate typing activity
    */
   private async simulateTyping(): Promise<void> {
+
     await this.sendMessage('activity_update', {
       currentTool: 'text',
       isTyping: true,
@@ -444,6 +461,7 @@ export class SimulatedUser extends EventEmitter {
    * Change current tool
    */
   private async changeTool(): Promise<void> {
+
     const tools = ['select', 'text', 'node', 'edge', 'delete'];
     const tool = tools[Math.floor(Math.random() * tools.length)];
     
@@ -458,6 +476,7 @@ export class SimulatedUser extends EventEmitter {
    * Send a message to the WebSocket server
    */
   private async sendMessage(type: string, payload: any): Promise<void> {
+
     if (!this.ws || !this.isConnected) {
       throw new Error('Not connected to server');
     }
@@ -656,6 +675,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Run a performance test scenario
    */
   async runScenario(scenario: TestScenario, serverUrl: string): Promise<PerformanceMetrics[]> {
+
     this.isRunning = true;
     this.users = [];
     this.aggregatedMetrics = [];
@@ -706,6 +726,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Run multiple scenarios in sequence
    */
   async runBenchmark(scenarios: TestScenario[], serverUrl: string): Promise<{ [scenarioName: string]: PerformanceMetrics[] }> {
+
     const results: { [scenarioName: string]: PerformanceMetrics[] } = {};
     
     for (const scenario of scenarios) {
@@ -800,7 +821,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
       OperationType.TYPING_ACTIVITY
     ],
     documentComplexity: DocumentComplexity.SIMPLE
-  },
+  }
   {
     name: 'medium_collaboration',
     description: 'Medium intensity collaboration',
@@ -816,7 +837,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
       OperationType.UPDATE_SELECTION
     ],
     documentComplexity: DocumentComplexity.MEDIUM
-  },
+  }
   {
     name: 'heavy_editing',
     description: 'Heavy collaborative editing with many operations',
@@ -825,7 +846,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
     operationRate: 2, // 2 operations per second per user
     operationTypes: Object.values(OperationType),
     documentComplexity: DocumentComplexity.COMPLEX
-  },
+  }
   {
     name: 'stress_test',
     description: 'Stress test with maximum users and operations',
@@ -834,7 +855,7 @@ export const TEST_SCENARIOS: TestScenario[] = [
     operationRate: 3, // 3 operations per second per user
     operationTypes: Object.values(OperationType),
     documentComplexity: DocumentComplexity.ENTERPRISE
-  },
+  }
   {
     name: 'conflict_heavy',
     description: 'Test with high conflict rate',

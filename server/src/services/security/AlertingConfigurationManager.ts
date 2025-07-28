@@ -25,12 +25,15 @@ import {
   ActionCondition
 } from './UnifiedSecurityAlertingFramework';
 
+}
 export interface ConfigurationValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
 }
+}
 
+}
 export interface ConfigurationTemplate {
   id: string;
   name: string;
@@ -46,9 +49,11 @@ export interface ConfigurationTemplate {
     createdAt: Date;
     updatedAt: Date;
     tags: string[];
+}
   };
 }
 
+}
 export interface ConfigurationChange {
   id: string;
   timestamp: Date;
@@ -60,7 +65,9 @@ export interface ConfigurationChange {
   newValue?: unknown;
   description: string;
 }
+}
 
+}
 export interface RuleTestResult {
   ruleId: string;
   testCase: Error;
@@ -69,10 +76,12 @@ export interface RuleTestResult {
     condition: AlertCondition;
     matched: boolean;
     value: Error;
+}
   }[];
   executionTime: number;
 }
 
+}
 export interface ConfigurationAudit {
   timestamp: Date;
   userId: string;
@@ -81,6 +90,7 @@ export interface ConfigurationAudit {
   changes: string[];
   ipAddress?: string;
   userAgent?: string;
+}
 }
 
 /**
@@ -118,6 +128,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     updates: Partial<AlertingConfiguration>,
     userId: string
   ): Promise<ConfigurationValidationResult> {
+
     const validation = this.validateConfiguration({ ...this.configuration, ...updates });
     
     if (!validation.valid) {
@@ -224,6 +235,7 @@ export class AlertingConfigurationManager extends EventEmitter {
    * Create alert rule
    */
   async createAlertRule(rule: Omit<AlertRule, 'id' | 'createdAt' | 'updatedAt' | 'triggerCount'>, userId: string): Promise<AlertRule> {
+
     const newRule: AlertRule = {
       ...rule,
       id: this.generateRuleId(),
@@ -267,6 +279,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     updates: Partial<AlertRule>,
     userId: string
   ): Promise<AlertRule> {
+
     const existingRule = this.alertRules.get(ruleId);
     if (!existingRule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
@@ -309,6 +322,7 @@ export class AlertingConfigurationManager extends EventEmitter {
    * Delete alert rule
    */
   async deleteAlertRule(ruleId: string, userId: string): Promise<void> {
+
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
@@ -338,6 +352,7 @@ export class AlertingConfigurationManager extends EventEmitter {
    * Enable/disable alert rule
    */
   async toggleAlertRule(ruleId: string, enabled: boolean, userId: string): Promise<AlertRule> {
+
     const rule = this.alertRules.get(ruleId);
     if (!rule) {
       throw new Error(`Alert rule not found: ${ruleId}`);
@@ -495,6 +510,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     channel: Omit<NotificationChannel, 'id'>,
     userId: string
   ): Promise<NotificationChannel> {
+
     const newChannel: NotificationChannel = {
       ...channel,
       id: this.generateChannelId()
@@ -529,6 +545,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     updates: Partial<NotificationChannel>,
     userId: string
   ): Promise<NotificationChannel> {
+
     const existingChannel = this.notificationChannels.get(channelId);
     if (!existingChannel) {
       throw new Error(`Notification channel not found: ${channelId}`);
@@ -654,6 +671,7 @@ export class AlertingConfigurationManager extends EventEmitter {
     userId: string,
     overrides: Partial<AlertingConfiguration> = {}
   ): Promise<ConfigurationValidationResult> {
+
     const template = this.configurationTemplates.get(templateId);
     if (!template) {
       throw new Error(`Template not found: ${templateId}`);
@@ -764,6 +782,7 @@ export class AlertingConfigurationManager extends EventEmitter {
       validateOnly?: boolean;
     } = {}
   ): Promise<ConfigurationValidationResult> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
     
@@ -876,7 +895,7 @@ export class AlertingConfigurationManager extends EventEmitter {
         highAlertThreshold: 10,
         correlationTimeWindow: 300000, // 5 minutes
         escalationTimeout: 3600000 // 1 hour
-      },
+  }
       rules: [],
       channels: [],
       escalationRules: [],

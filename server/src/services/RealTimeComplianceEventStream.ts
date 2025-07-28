@@ -16,6 +16,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
+}
 export interface EventStreamConfig {
   streamId: string;
   port?: number;
@@ -47,7 +48,9 @@ export interface EventStreamConfig {
   bufferSize: number;
   bufferRetention: number; // hours
 }
+}
 
+}
 export interface EventSubscription {
   subscriptionId: string;
   userId: string;
@@ -75,7 +78,9 @@ export interface EventSubscription {
   
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface SubscriptionChannel {
   type: 'websocket' | 'sse' | 'webhook' | 'redis';
   endpoint?: string;
@@ -89,14 +94,18 @@ export interface SubscriptionChannel {
   deliveryErrors: number;
   lastError?: string;
 }
+}
 
+}
 export interface EventFilter {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
   value: Error;
   caseSensitive?: boolean;
 }
+}
 
+}
 export interface StreamMetrics {
   activeSubscriptions: number;
   totalEventsStreamed: number;
@@ -108,7 +117,9 @@ export interface StreamMetrics {
   rateLimitHits: number;
   timestamp: Date;
 }
+}
 
+}
 export interface DeliveryReceipt {
   subscriptionId: string;
   eventId: string;
@@ -117,6 +128,7 @@ export interface DeliveryReceipt {
   deliveryLatency: number;
   success: boolean;
   error?: string;
+}
 }
 
 export class RealTimeComplianceEventStream extends EventEmitter {
@@ -163,6 +175,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Initialize the event stream service
    */
   public async initialize(): Promise<void> {
+
     if (this.isRunning) {
       throw new Error('Event stream is already running');
     }
@@ -198,6 +211,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Initialize WebSocket server
    */
   private async initializeWebSocketServer(): Promise<void> {
+
     const port = this.config.port || 8080;
     
     this.wsServer = new WebSocket.Server({
@@ -264,6 +278,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     clientId: string, 
     message: Error
   ): Promise<void> {
+
     switch (message.type) {
     case 'subscribe':
       await this.handleSubscribeMessage(ws, clientId, message);
@@ -290,6 +305,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     clientId: string, 
     message: Error
   ): Promise<void> {
+
     try {
       // Validate subscription request
       if (!message.userId) {
@@ -367,6 +383,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Handle unsubscribe message
    */
   private async handleUnsubscribeMessage(clientId: string, message: Error): Promise<void> {
+
     const subscriptionId = message.subscriptionId;
     const subscription = this.subscriptions.get(subscriptionId);
 
@@ -402,6 +419,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Handle filter update message
    */
   private async handleUpdateFiltersMessage(clientId: string, message: Error): Promise<void> {
+
     const subscriptionId = message.subscriptionId;
     const subscription = this.subscriptions.get(subscriptionId);
 
@@ -448,6 +466,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Stream event to subscribers
    */
   public async streamEvent(event: RealTimeEvent): Promise<void> {
+
     if (!this.isRunning) {
       return;
     }
@@ -505,6 +524,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Stream violation event to subscribers
    */
   public async streamViolation(violation: ComplianceViolationEvent): Promise<void> {
+
     if (!this.isRunning) {
       return;
     }
@@ -524,7 +544,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       payload: {
         operation: 'compliance_violation',
         violation: violation
-      },
+  }
       priority: violation.severity === 'critical' ? 'critical' : 'high',
       tags: ['compliance', 'violation', violation.severity],
       metadata: violation.metadata
@@ -634,6 +654,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     subscription: EventSubscription,
     channel: SubscriptionChannel
   ): Promise<DeliveryReceipt> {
+
     const startTime = Date.now();
     
     try {
@@ -694,6 +715,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     event: RealTimeEvent, 
     channel: SubscriptionChannel
   ): Promise<boolean> {
+
     if (!channel.connection || channel.connection.readyState !== WebSocket.OPEN) {
       channel.isConnected = false;
       return false;
@@ -721,6 +743,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     event: RealTimeEvent, 
     channel: SubscriptionChannel
   ): Promise<boolean> {
+
     // Implementation would make HTTP POST to webhook endpoint
     console.log(`Delivering event ${event.eventId} via webhook to ${channel.endpoint}`);
     return true;
@@ -733,6 +756,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
     event: RealTimeEvent, 
     channel: SubscriptionChannel
   ): Promise<boolean> {
+
     try {
       await this.redisService.publish(channel.endpoint || 'compliance_events', JSON.stringify(event));
       return true;
@@ -786,6 +810,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Send buffered events to new subscription
    */
   private async sendBufferedEvents(subscription: EventSubscription): Promise<void> {
+
     // Send buffered regular events
     for (const event of this.eventBuffer) {
       if (this.passesFilters(event, subscription.filters)) {
@@ -807,6 +832,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Remove subscription
    */
   private async removeSubscription(subscriptionId: string): Promise<void> {
+
     const subscription = this.subscriptions.get(subscriptionId);
     if (!subscription) {
       return;
@@ -840,6 +866,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Persist subscription to database
    */
   private async persistSubscription(subscription: EventSubscription): Promise<void> {
+
     try {
       await this.databaseService.execute(`
         INSERT OR REPLACE INTO event_subscriptions (
@@ -864,6 +891,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Load subscriptions from database
    */
   private async loadSubscriptions(): Promise<void> {
+
     try {
       const rows = await this.databaseService.query(
         'SELECT * FROM event_subscriptions WHERE created_at > ?',
@@ -906,6 +934,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Collect and report metrics
    */
   private async collectMetrics(): Promise<void> {
+
     this.metrics.timestamp = new Date();
     
     // Calculate events per second
@@ -939,6 +968,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Perform periodic cleanup
    */
   private async performCleanup(): Promise<void> {
+
     const now = new Date();
     const timeout = this.config.subscriptionTimeout * 60 * 1000;
 
@@ -980,8 +1010,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
       connectionErrors: 0,
       filterEvaluations: 0,
       rateLimitHits: 0,
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   /**
@@ -1007,6 +1036,7 @@ export class RealTimeComplianceEventStream extends EventEmitter {
    * Stop the event stream
    */
   public async stop(): Promise<void> {
+
     if (!this.isRunning) {
       return;
     }

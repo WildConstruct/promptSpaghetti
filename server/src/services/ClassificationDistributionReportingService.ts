@@ -20,6 +20,7 @@ import * as crypto from 'crypto';
 // Reporting Configuration and Interfaces
 // =============================================================================
 
+}
 export interface ClassificationReportingConfig {
   enabled: boolean;
   autoGenerateReports: boolean;
@@ -51,7 +52,9 @@ export interface ClassificationReportingConfig {
   maxConcurrentReports: number;
   reportTimeout: number; // milliseconds
 }
+}
 
+}
 export interface ClassificationDistributionReport {
   reportId: string;
   reportType: ReportType;
@@ -86,7 +89,9 @@ export interface ClassificationDistributionReport {
   // Metadata
   metadata: ReportMetadata;
 }
+}
 
+}
 export interface ReportParameters {
   // Scope filters
   tenantIds?: string[];
@@ -114,7 +119,9 @@ export interface ReportParameters {
   // Additional filters
   customFilters?: Record<string, any>;
 }
+}
 
+}
 export interface ClassificationSummary {
   // Overall statistics
   totalItems: number;
@@ -146,7 +153,9 @@ export interface ClassificationSummary {
   nonCompliantItems: number;
   complianceScore: number; // 0-1
 }
+}
 
+}
 export interface ClassificationDistribution {
   // Distribution category
   category: string;
@@ -169,6 +178,7 @@ export interface ClassificationDistribution {
     itemChange: number;
     sizeChange: number;
     percentageChange: number;
+}
   };
   
   // Risk analysis
@@ -178,6 +188,7 @@ export interface ClassificationDistribution {
   metadata: Record<string, any>;
 }
 
+}
 export interface ClassificationDistributionItem {
   classification: DataClassification;
   count: number;
@@ -204,7 +215,9 @@ export interface ClassificationDistributionItem {
   modifiedCount: number;
   deletedCount: number;
 }
+}
 
+}
 export interface ClassificationTrends {
   // Trend period
   periodStart: Date;
@@ -223,7 +236,9 @@ export interface ClassificationTrends {
   // Forecasting
   forecasts?: ClassificationForecast[];
 }
+}
 
+}
 export interface TrendDataPoint {
   timestamp: Date;
   classifications: ClassificationCount[];
@@ -246,7 +261,9 @@ export interface TrendDataPoint {
   reclassifiedItems: number;
   deletedItems: number;
 }
+}
 
+}
 export interface ComplianceAnalysis {
   // Overall compliance status
   overallStatus: ComplianceStatus;
@@ -267,7 +284,9 @@ export interface ComplianceAnalysis {
   // Trend analysis
   complianceTrends?: ComplianceTrend[];
 }
+}
 
+}
 export interface ClassificationAnomaly {
   anomalyId: string;
   detectedAt: Date;
@@ -288,6 +307,7 @@ export interface ClassificationAnomaly {
   timeWindow: {
     start: Date;
     end: Date;
+}
   };
   scope: AnomalyScope;
   
@@ -304,6 +324,7 @@ export interface ClassificationAnomaly {
   metadata: Record<string, any>;
 }
 
+}
 export interface ClassificationRecommendation {
   recommendationId: string;
   category: RecommendationCategory;
@@ -342,7 +363,9 @@ export interface ClassificationRecommendation {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface VisualizationData {
   // Chart configurations
   charts: ChartConfiguration[];
@@ -356,7 +379,9 @@ export interface VisualizationData {
   // Export options
   exportOptions: ExportConfiguration[];
 }
+}
 
+}
 export interface ChartConfiguration {
   chartId: string;
   chartType: ChartType;
@@ -383,37 +408,47 @@ export interface ChartConfiguration {
   // Metadata
   metadata: Record<string, any>;
 }
+}
 
 // =============================================================================
 // Supporting Interfaces
 // =============================================================================
 
+}
 export interface ClassificationCount {
   classification: DataClassification;
   count: number;
   size?: number;
 }
+}
 
+}
 export interface ClassificationPercentage {
   classification: DataClassification;
   percentage: number;
   sizePercentage?: number;
 }
+}
 
+}
 export interface ClassificationSource {
   source: 'AUTOMATIC' | 'MANUAL' | 'INHERITED' | 'POLICY' | 'MIGRATION';
   count: number;
   percentage: number;
   accuracy?: number;
 }
+}
 
+}
 export interface RiskDistribution {
   lowRisk: number;
   mediumRisk: number;
   highRisk: number;
   criticalRisk: number;
 }
+}
 
+}
 export interface TrendAnalysis {
   // Overall trend direction
   trendDirection: 'INCREASING' | 'DECREASING' | 'STABLE' | 'VOLATILE';
@@ -434,7 +469,9 @@ export interface TrendAnalysis {
   // Significant changes
   significantEvents: SignificantEvent[];
 }
+}
 
+}
 export interface SeasonalPattern {
   patternType: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
   confidence: number; // 0-1
@@ -442,18 +479,22 @@ export interface SeasonalPattern {
   phase: number;
   description: string;
 }
+}
 
+}
 export interface ClassificationForecast {
   forecastDate: Date;
   predictedDistribution: ClassificationCount[];
   confidenceInterval: {
     lower: ClassificationCount[];
     upper: ClassificationCount[];
+}
   };
   confidence: number; // 0-1
   model: string;
 }
 
+}
 export interface FrameworkComplianceAnalysis {
   frameworkId: string;
   frameworkName: string;
@@ -469,7 +510,9 @@ export interface FrameworkComplianceAnalysis {
   // Recommendations
   recommendations: string[];
 }
+}
 
+}
 export interface PolicyComplianceAnalysis {
   policyId: string;
   policyName: string;
@@ -481,7 +524,9 @@ export interface PolicyComplianceAnalysis {
   // Compliance by classification
   classificationCompliance: ClassificationCompliance[];
 }
+}
 
+}
 export interface ComplianceGap {
   gapId: string;
   requirement: string;
@@ -491,7 +536,9 @@ export interface ComplianceGap {
   remediationSteps: string[];
   estimatedEffort: string;
 }
+}
 
+}
 export interface ImpactAssessment {
   // Scope of impact
   affectedSystems: string[];
@@ -512,7 +559,9 @@ export interface ImpactAssessment {
   estimatedSavings?: number;
   roi?: number;
 }
+}
 
+}
 export interface ImplementationStep {
   stepNumber: number;
   description: string;
@@ -521,7 +570,9 @@ export interface ImplementationStep {
   risks: string[];
   successCriteria: string[];
 }
+}
 
+}
 export interface QuantifiedBenefit {
   benefitType: string;
   metric: string;
@@ -530,7 +581,9 @@ export interface QuantifiedBenefit {
   improvement: number;
   confidence: number; // 0-1
 }
+}
 
+}
 export interface SignificantEvent {
   timestamp: Date;
   eventType: string;
@@ -538,7 +591,9 @@ export interface SignificantEvent {
   impact: 'HIGH' | 'MEDIUM' | 'LOW';
   affectedClassifications: DataClassification[];
 }
+}
 
+}
 export interface RequirementCompliance {
   requirementId: string;
   requirementName: string;
@@ -547,7 +602,9 @@ export interface RequirementCompliance {
   evidence: string[];
   gaps: string[];
 }
+}
 
+}
 export interface PolicyViolation {
   violationId: string;
   violationType: string;
@@ -556,14 +613,18 @@ export interface PolicyViolation {
   affectedItems: number;
   detectedAt: Date;
 }
+}
 
+}
 export interface ClassificationCompliance {
   classification: DataClassification;
   complianceScore: number; // 0-1
   violationCount: number;
   recommendations: string[];
 }
+}
 
+}
 export interface ReportMetadata {
   version: string;
   generationTime: number; // milliseconds
@@ -588,6 +649,7 @@ export interface ReportMetadata {
   
   // Custom fields
   customMetadata: Record<string, any>;
+}
 }
 
 // =============================================================================
@@ -745,11 +807,13 @@ export type ViolationSeverity =
   | 'HIGH'
   | 'CRITICAL';
 
+}
 export type DataClassificationAccessMap = {
   [key in DataClassification]: string[]; // List of roles that can access this classification level
 };
 
 // Configuration interfaces
+}
 export interface AxisConfiguration {
   title: string;
   dataKey: string;
@@ -757,20 +821,26 @@ export interface AxisConfiguration {
   domain?: [number, number];
   tickFormat?: string;
 }
+}
 
+}
 export interface SeriesConfiguration {
   name: string;
   dataKey: string;
   color?: string;
   type?: 'line' | 'bar' | 'area';
 }
+}
 
+}
 export interface DrilldownConfiguration {
   enabled: boolean;
   levels: string[];
   dataSource: string;
 }
+}
 
+}
 export interface DashboardConfiguration {
   dashboardId: string;
   title: string;
@@ -779,13 +849,17 @@ export interface DashboardConfiguration {
   charts: string[]; // Chart IDs
   filters: string[]; // Filter IDs
 }
+}
 
+}
 export interface LayoutConfiguration {
   columns: number;
   rows: number;
   chartPositions: ChartPosition[];
 }
+}
 
+}
 export interface ChartPosition {
   chartId: string;
   x: number;
@@ -793,7 +867,9 @@ export interface ChartPosition {
   width: number;
   height: number;
 }
+}
 
+}
 export interface FilterConfiguration {
   filterId: string;
   title: string;
@@ -801,17 +877,22 @@ export interface FilterConfiguration {
   options?: FilterOption[];
   defaultValue?: unknown;
 }
+}
 
+}
 export interface FilterOption {
   label: string;
   value: Error;
 }
+}
 
+}
 export interface ExportConfiguration {
   format: ReportFormat;
   enabled: boolean;
   requiresAuth: boolean;
   maxRecords?: number;
+}
 }
 
 // =============================================================================
@@ -855,6 +936,7 @@ export class ClassificationDistributionReportingService {
     parameters: ReportParameters,
     requestedBy: string
   ): Promise<ClassificationDistributionReport> {
+
     const reportId = this.generateReportId();
     const startTime = Date.now();
     
@@ -958,6 +1040,7 @@ export class ClassificationDistributionReportingService {
     parameters: ReportParameters,
     requestedBy: string
   ): Promise<ClassificationDistributionReport> {
+
     const enhancedParameters = {
       ...parameters,
       includeTrends: true,
@@ -979,6 +1062,7 @@ export class ClassificationDistributionReportingService {
     requestedBy: string,
     frameworks?: string[]
   ): Promise<ClassificationDistributionReport> {
+
     const enhancedParameters = {
       ...parameters,
       includeCompliance: true,
@@ -1003,6 +1087,7 @@ export class ClassificationDistributionReportingService {
     format: ReportFormat,
     requestedBy: string
   ): Promise<{ exportId: string; downloadUrl: string; expiresAt: Date }> {
+
     const exportId = `EXP-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     try {
@@ -1068,7 +1153,7 @@ export class ClassificationDistributionReportingService {
           format,
           requestedBy,
           recordCount: report.summary.totalItems
-        },
+  }
         riskLevel: 'MEDIUM'
       });
 
@@ -1086,6 +1171,7 @@ export class ClassificationDistributionReportingService {
     reportId: string,
     requestedBy: string
   ): Promise<VisualizationData> {
+
     const report = await this.getReport(reportId);
     if (!report) {
       throw new Error(`Report not found: ${reportId}`);
@@ -1107,8 +1193,7 @@ export class ClassificationDistributionReportingService {
         interactive: true,
         exportable: true,
         metadata: {}
-      },
-      
+  }
       {
         chartId: 'size-distribution-bar',
         chartType: 'BAR',
@@ -1156,7 +1241,7 @@ export class ClassificationDistributionReportingService {
             { chartId: 'classification-distribution-pie', x: 0, y: 0, width: 1, height: 1 },
             { chartId: 'size-distribution-bar', x: 1, y: 0, width: 1, height: 1 }
           ]
-        },
+  }
         charts: ['classification-distribution-pie', 'size-distribution-bar'],
         filters: ['classification-filter', 'time-filter']
       }
@@ -1173,8 +1258,7 @@ export class ClassificationDistributionReportingService {
           { label: 'Confidential', value: 'CONFIDENTIAL' },
           { label: 'Restricted', value: 'RESTRICTED' }
         ]
-      },
-      
+  }
       {
         filterId: 'time-filter',
         title: 'Time Period',
@@ -1203,6 +1287,7 @@ export class ClassificationDistributionReportingService {
   // =============================================================================
 
   private async collectClassificationData(_____parameters: ReportParameters): Promise<any[]> {
+
     // Mock implementation - would query actual classification databases
     const mockData = [];
     
@@ -1365,6 +1450,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async generateTrends(rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationTrends | undefined> {
+
     // Mock trend generation
     const dataPoints: TrendDataPoint[] = [];
     const now = new Date();
@@ -1410,6 +1496,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async analyzeCompliance(rawData: unknown[], _____parameters: ReportParameters): Promise<ComplianceAnalysis | undefined> {
+
     const compliantItems = rawData.filter(item => item.complianceStatus === 'COMPLIANT').length;
     const totalItems = rawData.length;
     
@@ -1434,6 +1521,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async detectAnomalies(_____rawData: unknown[], _____parameters: ReportParameters): Promise<ClassificationAnomaly[]> {
+
     // Mock anomaly detection
     return [
       {
@@ -1449,8 +1537,7 @@ export class ClassificationDistributionReportingService {
         deviationScore: 2.5,
         timeWindow: {
           start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-          end: new Date()
-        },
+          end: new Date(},
         scope: 'GLOBAL',
         possibleCauses: ['New data ingestion', 'Policy change', 'Manual reclassification'],
         recommendedActions: ['Review classification policies', 'Investigate data sources'],
@@ -1466,6 +1553,7 @@ export class ClassificationDistributionReportingService {
     compliance?: ComplianceAnalysis,
     anomalies?: ClassificationAnomaly[]
   ): Promise<ClassificationRecommendation[]> {
+
     const recommendations: ClassificationRecommendation[] = [];
 
     // Accuracy improvement recommendation
@@ -1486,7 +1574,7 @@ export class ClassificationDistributionReportingService {
           complianceImprovement: 0.15,
           performanceImpact: 'NEUTRAL',
           operationalComplexity: 'MEDIUM'
-        },
+  }
         implementationSteps: [
           {
             stepNumber: 1,
@@ -1611,6 +1699,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async validateReportAccess(parameters: ReportParameters, requestedBy: string): Promise<void> {
+
     // Mock validation - would integrate with AccessControlFramework
     if (!requestedBy) {
       throw new Error('Authentication required');
@@ -1622,16 +1711,19 @@ export class ClassificationDistributionReportingService {
     requestedBy: string,
     format: ReportFormat
   ): Promise<void> {
+
     // Mock validation - would check permissions based on classification levels in report
     console.log(`Validating export access for ${requestedBy} to format ${format}`);
   }
 
   private async getViewerPermissions(_____requestedBy: string): Promise<string[]> {
+
     // Mock implementation - would fetch actual permissions
     return ['READ_REPORTS', 'EXPORT_BASIC'];
   }
 
   private async getReport(reportId: string): Promise<ClassificationDistributionReport | null> {
+
     // Mock implementation - would load from cache or database
     return Array.from(this.reportCache.values()).find(r => r.reportId === reportId) || null;
   }
@@ -1641,6 +1733,7 @@ export class ClassificationDistributionReportingService {
     requestedBy: string,
     source: 'GENERATED' | 'CACHE_HIT'
   ): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'CLASSIFICATION_REPORT_GENERATED',
       details: {
@@ -1650,7 +1743,7 @@ export class ClassificationDistributionReportingService {
         source,
         recordsAnalyzed: report.metadata.recordsAnalyzed,
         generationTime: report.metadata.generationTime
-      },
+  }
       riskLevel: 'LOW'
     });
   }
@@ -1670,11 +1763,13 @@ export class ClassificationDistributionReportingService {
   }
 
   private async convertToExcel(report: ClassificationDistributionReport): Promise<Buffer> {
+
     // Mock Excel generation - would use proper Excel library
     return Buffer.from(`Excel data for report ${report.reportId}`, 'utf-8');
   }
 
   private async convertToPDF(report: ClassificationDistributionReport): Promise<Buffer> {
+
     // Mock PDF generation - would use proper PDF library
     return Buffer.from(`PDF data for report ${report.reportId}`, 'utf-8');
   }
@@ -1726,6 +1821,7 @@ export class ClassificationDistributionReportingService {
   }
 
   private async storeExportData(exportId: string, data: string | Buffer, mimeType: string): Promise<string> {
+
     // Mock implementation - would store in file system or cloud storage
     const downloadUrl = `/api/reports/export/${exportId}`;
     
@@ -1757,7 +1853,7 @@ export class ClassificationDistributionReportingService {
         'INTERNAL': ['analyst', 'admin'],
         'CONFIDENTIAL': ['admin'],
         'RESTRICTED': ['admin']
-      },
+  }
       cacheEnabled: true,
       cacheTTL: 300,
       maxConcurrentReports: 5,

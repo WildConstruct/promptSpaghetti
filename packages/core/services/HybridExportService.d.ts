@@ -10,6 +10,7 @@
  */
 import { VFXExportFormat, VFXPromptVariant } from '../types/VFXExport.js';
 import { Node, Edge } from 'reactflow';
+
 export interface HybridExportFormat extends VFXExportFormat {
     hybridPrompting: {,
         mars: {,
@@ -28,7 +29,7 @@ export interface HybridExportFormat extends VFXExportFormat {
             iteration_tracking: IterationHistory[];
         };
     };
-}
+
 export interface MARSFrameworkTags {
     CAM: {,
         shot_type: 'ECU' | 'CU' | 'MS' | 'WS' | 'EWS' | 'OTS' | 'POV';
@@ -57,7 +58,7 @@ export interface MARSFrameworkTags {
         background_treatment: 'blur' | 'sharp' | 'silhouette' | 'bokeh';
         visual_hierarchy: 'foreground' | 'midground' | 'background';
     };
-}
+
 export interface MARSStructuredPrompt {
     raw_mars: string;
     parsed_structure: {,
@@ -72,14 +73,14 @@ export interface MARSStructuredPrompt {
         edge_conditions: string;
         composition_rules: string;
     };
-}
+
 export interface ZadaNaturalLanguageVariant {
     variant_id: string;
     style: 'screenplay' | 'storyboard' | 'shot_list' | 'director_note';
     content: string;
     accessibility_level: 'director' | 'cinematographer' | 'general_crew';
     human_readable_score: number;
-}
+
 export interface DirectorAccessiblePrompt {
     screenplay_style: string;
     shot_description: string;
@@ -90,7 +91,7 @@ export interface DirectorAccessiblePrompt {
         lighting_director: string;
         vfx_supervisor: string;
     };
-}
+
 export interface HollywoodSeedProtocol {
     master_seed: number;
     component_seeds: Record<string, number>;
@@ -101,7 +102,7 @@ export interface HollywoodSeedProtocol {
         node_version_map: Record<string, string>;
         schema_version: string;
     };
-}
+
 export interface IterationHistory {
     iteration_id: string;
     timestamp: string;
@@ -109,7 +110,7 @@ export interface IterationHistory {
     changes_from_previous: string[];
     director_notes?: string;
     approval_status: 'draft' | 'review' | 'approved' | 'final';
-}
+
 export declare class HybridPromptExportService {
     private vfxExporter;
     private marsExtractor;
@@ -136,7 +137,6 @@ export declare class HybridPromptExportService {
         targetAudience: 'director' | 'vfx_professional' | 'mixed_crew';
     }): Promise<HybridExportFormat>;
     private buildHybridExtensions;
-}
 declare class MARSFrameworkExtractor {
     extractMARSTags(prompt: string, variables: Record<string, string>): Promise<MARSFrameworkTags>;
     createStructuredPrompt(prompt: string): Promise<MARSStructuredPrompt>;
@@ -173,7 +173,6 @@ declare class MARSFrameworkExtractor {
     private mapToControlNetDepth;
     private mapToControlNetEdges;
     private mapToControlNetComposition;
-}
 declare class ZadaNaturalLanguageGenerator {
     generateNaturalLanguageVariants();
       prompt: string,
@@ -228,7 +227,6 @@ declare class ZadaNaturalLanguageGenerator {
     private inferDirectorialIntent;
     private extractActionDirection;
     private extractTechnicalRequirements;
-}
 declare class HollywoodSeedManager {
     generateHollywoodSeeds(graph: {)
         nodes: Node[];
@@ -238,7 +236,7 @@ declare class HollywoodSeedManager {
     private hashSeed;
     private generateChecksum;
     private extractNodeVersions;
-}
+
 export { HybridPromptExportService, MARSFrameworkExtractor, ZadaNaturalLanguageGenerator, HollywoodSeedManager };
 export default HybridPromptExportService;
 //# sourceMappingURL=HybridExportService.d.ts.map

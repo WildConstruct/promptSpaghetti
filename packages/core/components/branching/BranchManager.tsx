@@ -68,53 +68,49 @@ interface BranchManagerProps {
   onBranchCreate?: (branch: ProjectBranch) => void;
   onBranchUpdate?: (branch: ProjectBranch) => void;
   onBranchDelete?: (branchId: string) => void;
-}
-interface BranchNodeProps {
-  branch: ProjectBranch;
-  onEdit: (branch: ProjectBranch) => void;
-  onDelete: (branchId: string) => void;
-  onCreateChild: (parentId: string) => void;
-  onSelect: (branchId: string) => void;
+  interface BranchNodeProps {
+  branch: ProjectBranch;,
+  onEdit: (branch: ProjectBranch) => void;,
+  onDelete: (branchId: string) => void;,
+  onCreateChild: (parentId: string) => void;,
+  onSelect: (branchId: string) => void;,
   isSelected: boolean;
-}
-const BranchNode: React.FC<BranchNodeProps> = ({ )
-  branch, 
-  onEdit, 
-  onDelete, 
-  onCreateChild, 
+  const BranchNode: React.FC<BranchNodeProps> = ({ ),
+  branch,
+  onEdit,
+  onDelete,
+  onCreateChild,
   onSelect,
-  isSelected 
+  isSelected
 }) => {
-  const getBranchTypeColor = (type: BranchType) => {
-    switch (type) {
-    case 'main':
-      return 'purple';
-    case 'feature':
-      return 'blue';
-    case 'hotfix':
-      return 'red';
-    case 'release':
-      return 'green';
-    case 'experiment':
-      return 'orange';
-    default:
-      return 'default';
-    }
-  };
+  const getBranchTypeColor = (type: BranchType) => {,
+  switch (type) {
+  case 'main':,
+  return 'purple';
+  case 'feature':,
+  return 'blue';
+  case 'hotfix':,
+  return 'red';
+  case 'release':,
+  return 'green';
+  case 'experiment':,
+  return 'orange';
+  default:,
+  return 'default';
+};
   const getBranchStatusColor = (status: BranchStatus) => {
-    switch (status) {
-    case 'active':
-      return 'success';
-    case 'merged':
-      return 'processing';
-    case 'abandoned':
-      return 'error';
-    case 'archived':
-      return 'default';
-    default:
-      return 'default';
-    }
-  };
+  switch (status) {
+  case 'active':,
+  return 'success';
+  case 'merged':,
+  return 'processing';
+  case 'abandoned':,
+  return 'error';
+  case 'archived':,
+  return 'default';
+  default:,
+  return 'default';
+};
   const getProtectionIcon = (level: ProtectionLevel) => {
     switch (level) {
     case 'locked':
@@ -123,7 +119,6 @@ const BranchNode: React.FC<BranchNodeProps> = ({ )
       return <LockOutlined style={{ color: '#fa8c16' }} />;
     default:
       return <UnlockOutlined style={{ color: '#52c41a' }} />;
-    }
   };
   const formatLastActivity = (date: Date) => {
     const now = new Date();
@@ -158,16 +153,16 @@ const BranchNode: React.FC<BranchNodeProps> = ({ )
       </Menu.Item>
     </Menu>
   );
-  return ();
+  return;
     <div 
-      style={{ 
-        padding: '8px 12px', 
-        borderRadius: '6px',
-        backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
-        border: isSelected ? '1px solid #1890ff' : '1px solid transparent',
-        marginBottom: '4px',
-        cursor: 'pointer',
-      }}
+      style={{
+  padding: '8px 12px',
+  borderRadius: '6px',
+  backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
+  border: isSelected ? '1px solid #1890ff' : '1px solid transparent',
+  marginBottom: '4px',
+  cursor: 'pointer',
+}}
       onClick={() => onSelect(branch.id)}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -227,7 +222,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
   onBranchUpdate,
   onBranchDelete
 }) => {
-  const [hierarchy, setHierarchy] = useState<BranchHierarchy[]>([]);
+  const [hierarchy, setHierarchy] = useState<BranchHierarchy>([]);
   const [stats, setStats] = useState<BranchStatsResponse | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -257,23 +252,22 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
       setHierarchy(hierarchyData);
       setStats(statsData);
     } catch (error) {
-      console.error('Failed to load branch data:', error);
-    }
-  };
+  console.error('Failed to load branch data:', error);
+};
   const handleCreateBranch = async (values: unknown) => {
-    try {
-      const request: CreateBranchRequest = {
-        projectId,
-        name: values.name,
-        displayName: values.displayName,
-        description: values.description,
-        parentBranchId: parentBranchId || undefined,
-        branchType: values.branchType,
-        autoMergeEnabled: values.autoMergeEnabled || false,
-        requiresReview: values.requiresReview || false,
-        allowForcePush: values.allowForcePush || false,
-        deleteOnMerge: values.deleteOnMerge || false,
-      };
+  try {
+  const request: CreateBranchRequest = {,
+  projectId,
+  name: values.name,
+  displayName: values.displayName,
+  description: values.description,
+  parentBranchId: parentBranchId || undefined,
+  branchType: values.branchType,
+  autoMergeEnabled: values.autoMergeEnabled || false,
+  requiresReview: values.requiresReview || false,
+  allowForcePush: values.allowForcePush || false,
+  deleteOnMerge: values.deleteOnMerge || false,
+};
       const branch = await createBranch(request);
       setShowCreateModal(false);
       form.resetFields();
@@ -281,21 +275,20 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
       onBranchCreate?.(branch);
       loadBranchData();
     } catch (error) {
-      console.error('Failed to create branch:', error);
-    }
-  };
+  console.error('Failed to create branch:', error);
+};
   const handleUpdateBranch = async (values: unknown) => {
-    if (!editingBranch) return;
-    try {
-      const request: UpdateBranchRequest = {
-        displayName: values.displayName,
-        description: values.description,
-        protectionLevel: values.protectionLevel,
-        autoMergeEnabled: values.autoMergeEnabled,
-        requiresReview: values.requiresReview,
-        allowForcePush: values.allowForcePush,
-        deleteOnMerge: values.deleteOnMerge,
-      };
+  if (!editingBranch) return;
+  try {
+  const request: UpdateBranchRequest = {,
+  displayName: values.displayName,
+  description: values.description,
+  protectionLevel: values.protectionLevel,
+  autoMergeEnabled: values.autoMergeEnabled,
+  requiresReview: values.requiresReview,
+  allowForcePush: values.allowForcePush,
+  deleteOnMerge: values.deleteOnMerge,
+};
       const branch = await updateBranch(editingBranch.id, request);
       setShowEditModal(false);
       setEditingBranch(null);
@@ -303,34 +296,32 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
       onBranchUpdate?.(branch);
       loadBranchData();
     } catch (error) {
-      console.error('Failed to update branch:', error);
-    }
-  };
+  console.error('Failed to update branch:', error);
+};
   const handleDeleteBranch = async (branchId: string) => {
     try {
       await deleteBranch(branchId);
       onBranchDelete?.(branchId);
       loadBranchData();
     } catch (error) {
-      console.error('Failed to delete branch:', error);
-    }
-  };
+  console.error('Failed to delete branch:', error);
+};
   const handleBranchSelect = (branchId: string) => {
     const branch = findBranchById(branchId);
     setSelectedBranch(branch);
     onBranchSelect?.(branchId);
   };
   const handleEditBranch = (branch: ProjectBranch) => {
-    setEditingBranch(branch);
-    form.setFieldsValue({)
-      displayName: branch.displayName,
-      description: branch.description,
-      protectionLevel: branch.protectionLevel,
-      autoMergeEnabled: branch.autoMergeEnabled,
-      requiresReview: branch.requiresReview,
-      allowForcePush: branch.allowForcePush,
-      deleteOnMerge: branch.deleteOnMerge,
-    });
+  setEditingBranch(branch);
+  form.setFieldsValue({)
+  displayName: branch.displayName,
+  description: branch.description,
+  protectionLevel: branch.protectionLevel,
+  autoMergeEnabled: branch.autoMergeEnabled,
+  requiresReview: branch.requiresReview,
+  allowForcePush: branch.allowForcePush,
+  deleteOnMerge: branch.deleteOnMerge,
+});
     setShowEditModal(true);
   };
   const handleCreateChild = (parentId: string) => {
@@ -338,19 +329,17 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
     setShowCreateModal(true);
   };
   const findBranchById = (branchId: string): ProjectBranch | null => {
-    const searchInHierarchy = (nodes: BranchHierarchy[]): ProjectBranch | null => {
-      for (const node of nodes) {
-        if (node.branch.id === branchId) {
-          return node.branch;
-        }
-        const found = searchInHierarchy(node.children);
-        if (found) return found;
-      }
-      return null;
-    };
+  const searchInHierarchy = (nodes: BranchHierarchy): ProjectBranch | null => {,
+  for (const node of nodes) {
+  if (node.branch.id === branchId) {
+  return node.branch;
+  const found = searchInHierarchy(node.children);
+  if (found) return found;
+  return null;
+};
     return searchInHierarchy(hierarchy);
   };
-  const renderBranchHierarchy = (nodes: BranchHierarchy[]) => {
+  const renderBranchHierarchy = (nodes: BranchHierarchy) => {
     return nodes.map((node) => ()
       <div key={node.branch.id} style={{ marginLeft: `${node.depth * 20}px` }}>}
         <BranchNode
@@ -365,7 +354,7 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
       </div>
     ));
   };
-  return ();
+  return;
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
       <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0' }}>
@@ -463,12 +452,12 @@ export const BranchManager: React.FC<BranchManagerProps> = ({)
           layout="vertical"
           onFinish={handleCreateBranch}
           initialValues={{
-            branchType: 'feature',
-            autoMergeEnabled: false,
-            requiresReview: false,
-            allowForcePush: false,
-            deleteOnMerge: false,
-          }}
+  branchType: 'feature',
+  autoMergeEnabled: false,
+  requiresReview: false,
+  allowForcePush: false,
+  deleteOnMerge: false,
+}}
         >
           <Form.Item
             name="name"

@@ -9,6 +9,7 @@
 
 import { ConsentType, ConsentStatus } from './ConsentFeatureToggleService';
 
+}
 interface ConsentRecord {
   consentId: string;
   userId?: string;
@@ -24,12 +25,15 @@ interface ConsentRecord {
   userAgent: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 interface ConsentServiceConfig {
   cacheTimeout: number; // minutes
   strictMode: boolean;
   auditEnabled: boolean;
   defaultStatus: ConsentStatus;
+}
 }
 
 /**
@@ -115,6 +119,7 @@ export class ConsentServiceAdapter {
    * Get consent status for a specific consent type
    */
   async getConsent(consentType: ConsentType, userId?: string, sessionId?: string): Promise<ConsentStatus> {
+
     const consents = await this.getConsents(userId, sessionId);
     return consents[consentType] || this.config.defaultStatus;
   }
@@ -123,6 +128,7 @@ export class ConsentServiceAdapter {
    * Check if consent is granted for a specific type
    */
   async hasConsent(consentType: ConsentType, userId?: string, sessionId?: string): Promise<boolean> {
+
     const status = await this.getConsent(consentType, userId, sessionId);
     return status === ConsentStatus.GRANTED;
   }
@@ -136,6 +142,7 @@ export class ConsentServiceAdapter {
     userId?: string,
     sessionId?: string
   ): Promise<boolean> {
+
     const consents = await this.getConsents(userId, sessionId);
     
     if (logic === 'AND') {
@@ -149,6 +156,7 @@ export class ConsentServiceAdapter {
    * Clear consent cache for user/session
    */
   async clearCache(userId?: string, sessionId?: string): Promise<void> {
+
     if (userId || sessionId) {
       const cacheKey = this.generateCacheKey(userId, sessionId);
       this.cache.delete(cacheKey);
@@ -291,12 +299,14 @@ export class ConsentServiceAdapter {
 /**
  * Data access interface for consent records
  */
+}
 interface ConsentDAO {
   getConsentsByUserOrSession(userId?: string, sessionId?: string): Promise<ConsentRecord[]>;
   getConsentByType(consentType: ConsentType, userId?: string, sessionId?: string): Promise<ConsentRecord | null>;
   createConsent(record: Omit<ConsentRecord, 'consentId'>): Promise<ConsentRecord>;
   updateConsent(consentId: string, updates: Partial<ConsentRecord>): Promise<ConsentRecord>;
   deleteConsent(consentId: string): Promise<void>;
+}
 }
 
 /**

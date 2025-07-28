@@ -35,9 +35,10 @@ import { Template } from './TemplatePreviewModal';
 // ShareTrackingManager import removed
 
 // Social Platform Interfaces
+
 export interface SocialPlatformIntegrationProps {
   template: Template;
-  platforms?: SocialPlatform[];
+  platforms?: SocialPlatform;
   trackingEnabled?: boolean;
   onShareComplete?: (share: ShareRecord) => void;
   onAnalyticsUpdate?: (analytics: ShareAnalytics) => void;
@@ -45,121 +46,109 @@ export interface SocialPlatformIntegrationProps {
   showAnalytics?: boolean;
   customizations?: SocialCustomizations;
 }
-
 export interface SocialPlatform {
-  id: string;
+  id: string;,
   name: string;
-  displayName: string;
+  displayName: string;,
   icon: React.ComponentType<unknown>;
-  color: string;
+  color: string;,
   description: string;
-  enabled: boolean;
+  enabled: boolean;,
   requiresAuth: boolean;
-  config: PlatformConfig;
+  config: PlatformConfig;,
   features: PlatformFeatures;
-  limits: PlatformLimits;
+  limits: PlatformLimits;,
   analytics: PlatformAnalytics;
 }
-
 export interface PlatformConfig {
   apiEndpoint?: string;
   clientId?: string;
   redirectUri?: string;
-  scopes: string[];
+  scopes: string;,
   customFields: Record<string, any>;
   webhookUrl?: string;
   rateLimit: RateLimitConfig;
 }
-
 export interface RateLimitConfig {
-  requestsPerMinute: number;
+  requestsPerMinute: number;,
   requestsPerHour: number;
-  burstLimit: number;
+  burstLimit: number;,
   retryAfter: number;
 }
-
 export interface PlatformFeatures {
-  directPosting: boolean;
+  directPosting: boolean;,
   scheduledPosting: boolean;
-  mediaUpload: boolean;
+  mediaUpload: boolean;,
   hashtags: boolean;
-  mentions: boolean;
+  mentions: boolean;,
   geotagging: boolean;
-  crossPosting: boolean;
+  crossPosting: boolean;,
   analytics: boolean;
   engagement: boolean;
 }
-
 export interface PlatformLimits {
-  maxTextLength: number;
+  maxTextLength: number;,
   maxImages: number;
-  maxVideos: number;
+  maxVideos: number;,
   maxHashtags: number;
-  maxMentions: number;
+  maxMentions: number;,
   fileSize: number;
   videoLength: number;
 }
-
 export interface PlatformAnalytics {
-  impressions: number;
+  impressions: number;,
   engagements: number;
-  clicks: number;
+  clicks: number;,
   shares: number;
-  reach: number;
+  reach: number;,
   lastUpdated: Date;
 }
-
 export interface ShareRecord {
-  id: string;
+  id: string;,
   templateId: string;
-  platform: string;
+  platform: string;,
   shareType: ShareType;
-  content: ShareContent;
+  content: ShareContent;,
   timestamp: Date;
-  userId: string;
+  userId: string;,
   success: boolean;
-  analytics: ShareAnalytics;
+  analytics: ShareAnalytics;,
   metadata: ShareMetadata;
 }
-
 export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
 
 export interface ShareContent {
-  title: string;
+  title: string;,
   description: string;
   url: string;
   imageUrl?: string;
   videoUrl?: string;
-  hashtags: string[];
-  mentions: string[];
+  hashtags: string;,
+  mentions: string;
   customText?: string;
 }
-
 export interface ShareAnalytics {
-  views: number;
+  views: number;,
   clicks: number;
-  engagements: number;
+  engagements: number;,
   conversions: number;
-  revenue: number;
+  revenue: number;,
   demographics: DemographicData;
   performance: PerformanceMetrics;
 }
-
 export interface DemographicData {
   ageGroups: Record<string, number>;
   geoLocations: Record<string, number>;
   interests: Record<string, number>;
   devices: Record<string, number>;
 }
-
 export interface PerformanceMetrics {
-  clickThroughRate: number;
+  clickThroughRate: number;,
   conversionRate: number;
-  engagementRate: number;
+  engagementRate: number;,
   viralCoefficient: number;
   timeToConversion: number;
 }
-
 export interface ShareMetadata {
   userAgent?: string;
   referrer?: string;
@@ -169,18 +158,16 @@ export interface ShareMetadata {
   source?: string;
   medium?: string;
 }
-
 export interface SocialCustomizations {
-  autoHashtags: boolean;
+  autoHashtags: boolean;,
   customBranding: boolean;
-  trackingParameters: boolean;
+  trackingParameters: boolean;,
   crossPlatformSync: boolean;
-  schedulingEnabled: boolean;
+  schedulingEnabled: boolean;,
   analyticsIntegration: boolean;
-}
 
 // Predefined social platforms
-const SOCIAL_PLATFORMS: SocialPlatform[] = [
+const SOCIAL_PLATFORMS: SocialPlatform = [
   {
     id: 'twitter',
     name: 'twitter',
@@ -195,39 +182,38 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
     enabled: true,
     requiresAuth: true,
     config: {,
-      scopes: ['tweet.read', 'tweet.write', 'users.read'],
+  scopes: ['tweet.read', 'tweet.write', 'users.read'],
       customFields: { includeThread: false },
       rateLimit: { requestsPerMinute: 300, requestsPerHour: 1500, burstLimit: 100, retryAfter: 900 }
-    },
-    features: {,
-      directPosting: true,
-      scheduledPosting: true,
-      mediaUpload: true,
-      hashtags: true,
-      mentions: true,
-      geotagging: true,
-      crossPosting: false,
-      analytics: true,
-      engagement: true,
-    },
-    limits: {,
-      maxTextLength: 280,
-      maxImages: 4,
-      maxVideos: 1,
-      maxHashtags: 10,
-      maxMentions: 10,
-      fileSize: 5242880, // 5MB
-      videoLength: 140,
-    },
-    analytics: {,
-      impressions: 0,
-      engagements: 0,
-      clicks: 0,
-      shares: 0,
-      reach: 0,
-      lastUpdated: new Date(),
-    }
   },
+  features: {,
+  directPosting: true,
+  scheduledPosting: true,
+  mediaUpload: true,
+  hashtags: true,
+  mentions: true,
+  geotagging: true,
+  crossPosting: false,
+  analytics: true,
+  engagement: true,
+},
+  limits: {,
+  maxTextLength: 280,
+  maxImages: 4,
+  maxVideos: 1,
+  maxHashtags: 10,
+  maxMentions: 10,
+  fileSize: 5242880, // 5MB,
+  videoLength: 140,
+},
+  analytics: {,
+  impressions: 0,
+  engagements: 0,
+  clicks: 0,
+  shares: 0,
+  reach: 0,
+  lastUpdated: new Date(),
+}
   {
     id: 'linkedin',
     name: 'linkedin',
@@ -242,39 +228,38 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
     enabled: true,
     requiresAuth: true,
     config: {,
-      scopes: ['r_liteprofile', 'w_member_social'],
+  scopes: ['r_liteprofile', 'w_member_social'],
       customFields: { targetAudience: 'professional' },
       rateLimit: { requestsPerMinute: 100, requestsPerHour: 500, burstLimit: 50, retryAfter: 3600 }
-    },
-    features: {,
-      directPosting: true,
-      scheduledPosting: true,
-      mediaUpload: true,
-      hashtags: true,
-      mentions: true,
-      geotagging: false,
-      crossPosting: true,
-      analytics: true,
-      engagement: true,
-    },
-    limits: {,
-      maxTextLength: 3000,
-      maxImages: 9,
-      maxVideos: 1,
-      maxHashtags: 5,
-      maxMentions: 5,
-      fileSize: 104857600, // 100MB
-      videoLength: 600,
-    },
-    analytics: {,
-      impressions: 0,
-      engagements: 0,
-      clicks: 0,
-      shares: 0,
-      reach: 0,
-      lastUpdated: new Date(),
-    }
   },
+  features: {,
+  directPosting: true,
+  scheduledPosting: true,
+  mediaUpload: true,
+  hashtags: true,
+  mentions: true,
+  geotagging: false,
+  crossPosting: true,
+  analytics: true,
+  engagement: true,
+},
+  limits: {,
+  maxTextLength: 3000,
+  maxImages: 9,
+  maxVideos: 1,
+  maxHashtags: 5,
+  maxMentions: 5,
+  fileSize: 104857600, // 100MB,
+  videoLength: 600,
+},
+  analytics: {,
+  impressions: 0,
+  engagements: 0,
+  clicks: 0,
+  shares: 0,
+  reach: 0,
+  lastUpdated: new Date(),
+}
   {
     id: 'facebook',
     name: 'facebook',
@@ -289,39 +274,38 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
     enabled: true,
     requiresAuth: true,
     config: {,
-      scopes: ['pages_manage_posts', 'pages_read_engagement'],
+  scopes: ['pages_manage_posts', 'pages_read_engagement'],
       customFields: { pageId: '', autoSchedule: false },
       rateLimit: { requestsPerMinute: 200, requestsPerHour: 4800, burstLimit: 600, retryAfter: 300 }
-    },
-    features: {,
-      directPosting: true,
-      scheduledPosting: true,
-      mediaUpload: true,
-      hashtags: false,
-      mentions: true,
-      geotagging: true,
-      crossPosting: true,
-      analytics: true,
-      engagement: true,
-    },
-    limits: {,
-      maxTextLength: 63206,
-      maxImages: 10,
-      maxVideos: 1,
-      maxHashtags: 0,
-      maxMentions: 50,
-      fileSize: 104857600, // 100MB
-      videoLength: 240,
-    },
-    analytics: {,
-      impressions: 0,
-      engagements: 0,
-      clicks: 0,
-      shares: 0,
-      reach: 0,
-      lastUpdated: new Date(),
-    }
   },
+  features: {,
+  directPosting: true,
+  scheduledPosting: true,
+  mediaUpload: true,
+  hashtags: false,
+  mentions: true,
+  geotagging: true,
+  crossPosting: true,
+  analytics: true,
+  engagement: true,
+},
+  limits: {,
+  maxTextLength: 63206,
+  maxImages: 10,
+  maxVideos: 1,
+  maxHashtags: 0,
+  maxMentions: 50,
+  fileSize: 104857600, // 100MB,
+  videoLength: 240,
+},
+  analytics: {,
+  impressions: 0,
+  engagements: 0,
+  clicks: 0,
+  shares: 0,
+  reach: 0,
+  lastUpdated: new Date(),
+}
   {
     id: 'reddit',
     name: 'reddit',
@@ -336,39 +320,38 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
     enabled: true,
     requiresAuth: true,
     config: {,
-      scopes: ['identity', 'submit', 'read'],
+  scopes: ['identity', 'submit', 'read'],
       customFields: { subreddit: 'promptengineering', flairId: '' },
       rateLimit: { requestsPerMinute: 60, requestsPerHour: 600, burstLimit: 10, retryAfter: 600 }
-    },
-    features: {,
-      directPosting: true,
-      scheduledPosting: false,
-      mediaUpload: true,
-      hashtags: false,
-      mentions: false,
-      geotagging: false,
-      crossPosting: false,
-      analytics: true,
-      engagement: true,
-    },
-    limits: {,
-      maxTextLength: 40000,
-      maxImages: 1,
-      maxVideos: 1,
-      maxHashtags: 0,
-      maxMentions: 0,
-      fileSize: 20971520, // 20MB
-      videoLength: 900,
-    },
-    analytics: {,
-      impressions: 0,
-      engagements: 0,
-      clicks: 0,
-      shares: 0,
-      reach: 0,
-      lastUpdated: new Date(),
-    }
   },
+  features: {,
+  directPosting: true,
+  scheduledPosting: false,
+  mediaUpload: true,
+  hashtags: false,
+  mentions: false,
+  geotagging: false,
+  crossPosting: false,
+  analytics: true,
+  engagement: true,
+},
+  limits: {,
+  maxTextLength: 40000,
+  maxImages: 1,
+  maxVideos: 1,
+  maxHashtags: 0,
+  maxMentions: 0,
+  fileSize: 20971520, // 20MB,
+  videoLength: 900,
+},
+  analytics: {,
+  impressions: 0,
+  engagements: 0,
+  clicks: 0,
+  shares: 0,
+  reach: 0,
+  lastUpdated: new Date(),
+}
   {
     id: 'discord',
     name: 'discord',
@@ -383,76 +366,80 @@ const SOCIAL_PLATFORMS: SocialPlatform[] = [
     enabled: true,
     requiresAuth: true,
     config: {,
-      scopes: ['bot', 'messages.read'],
+  scopes: ['bot', 'messages.read'],
       customFields: { webhookUrl: '', channelId: '', guildId: '' },
       rateLimit: { requestsPerMinute: 50, requestsPerHour: 1000, burstLimit: 5, retryAfter: 1000 }
-    },
-    features: {,
-      directPosting: true,
-      scheduledPosting: false,
-      mediaUpload: true,
-      hashtags: false,
-      mentions: true,
-      geotagging: false,
-      crossPosting: false,
-      analytics: false,
-      engagement: true,
-    },
-    limits: {,
-      maxTextLength: 2000,
-      maxImages: 10,
-      maxVideos: 1,
-      maxHashtags: 0,
-      maxMentions: 100,
-      fileSize: 8388608, // 8MB
-      videoLength: 600,
-    },
-    analytics: {,
-      impressions: 0,
-      engagements: 0,
-      clicks: 0,
-      shares: 0,
-      reach: 0,
-      lastUpdated: new Date(),
-    }
-  }
-];
-
-// Share content generator
+  },
+  features: {,
+  directPosting: true,
+  scheduledPosting: false,
+  mediaUpload: true,
+  hashtags: false,
+  mentions: true,
+  geotagging: false,
+  crossPosting: false,
+  analytics: false,
+  engagement: true,
+},
+  limits: {,
+  maxTextLength: 2000,
+  maxImages: 10,
+  maxVideos: 1,
+  maxHashtags: 0,
+  maxMentions: 100,
+  fileSize: 8388608, // 8MB,
+  videoLength: 600,
+},
+  analytics: {,
+  impressions: 0,
+  engagements: 0,
+  clicks: 0,
+  shares: 0,
+  reach: 0,
+  lastUpdated: new Date()];
+  // Share content generator
+}
 export const ShareContentGenerator = {
   generateTitle: (template: Template, platform: string): string => {
     const baseTitle = template.title;
     const platformSpecific = {
-      twitter: `🚀 ${baseTitle}`,}
-      linkedin: `Professional Template: ${baseTitle}`,}
-      facebook: `Check out this amazing template: ${baseTitle}`,}
-      reddit: `[Template] ${baseTitle}`,}
-      discord: `**${baseTitle}** - New Template Alert!`}
+      twitter: `🚀 ${baseTitle}`}
+},
+  linkedin: `Professional Template: ${baseTitle}`}
+},
+  facebook: `Check out this amazing template: ${baseTitle}`}
+},
+  reddit: `[Template] ${baseTitle}`}
+},
+  discord: `**${baseTitle}** - New Template Alert!`}
     };
     return platformSpecific[platform as keyof typeof platformSpecific] || baseTitle;
   },
   generateDescription: (template: Template, platform: string): string => {
     const baseDesc = template.description;
     const platformSpecific = {
-      twitter: `${baseDesc.slice(0, 200)}... #PromptEngineering #AI`,}
-      linkedin: `${baseDesc}\n\n💡 Perfect for professionals looking to enhance their AI workflow.\n\n#AI #Productivity #Templates`,}
-      facebook: `${baseDesc}\n\nWant to streamline your AI interactions? This template is exactly what you need! 🎯`,}
-      reddit: `${baseDesc}\n\nThought this community might find this useful. What do you think?`,}
-      discord: `${baseDesc}\n\nAnyone tried something like this before? Would love to hear your thoughts! 💭`}
+      twitter: `${baseDesc.slice(0, 200)}... #PromptEngineering #AI`}
+},
+  linkedin: `${baseDesc}\n\n💡 Perfect for professionals looking to enhance their AI workflow.\n\n#AI #Productivity #Templates`}
+},
+  facebook: `${baseDesc}\n\nWant to streamline your AI interactions? This template is exactly what you need! 🎯`}
+},
+  reddit: `${baseDesc}\n\nThought this community might find this useful. What do you think?`}
+},
+  discord: `${baseDesc}\n\nAnyone tried something like this before? Would love to hear your thoughts! 💭`}
     };
     return platformSpecific[platform as keyof typeof platformSpecific] || baseDesc;
   },
-  generateHashtags: (template: Template, platform: string): string[] => {
-    const baseTags = template.tags || [];
-    const platformSpecific = {
-      twitter: [...baseTags, 'AI', 'Productivity', 'Templates', 'PromptEngineering'].slice(0, 10),
-      linkedin: [...baseTags, 'ArtificialIntelligence', 'Productivity', 'Innovation'].slice(0, 5),
-      facebook: [], // Facebook doesn't use hashtags effectively
-      reddit: [], // Reddit uses subreddits instead
-      discord: [] // Discord doesn't use hashtags,
-    };
+  generateHashtags: (template: Template, platform: string): string => {
+  const baseTags = template.tags || [];
+  const platformSpecific = {
+  twitter: [...baseTags, 'AI', 'Productivity', 'Templates', 'PromptEngineering'].slice(0, 10),
+  linkedin: [...baseTags, 'ArtificialIntelligence', 'Productivity', 'Innovation'].slice(0, 5),
+  facebook: [], // Facebook doesn't use hashtags effectively,
+  reddit: [], // Reddit uses subreddits instead,
+  discord: [] // Discord doesn't use hashtags,
+};
     return platformSpecific[platform as keyof typeof platformSpecific] || [];
-  }
 };
 
 // Main component
@@ -465,65 +452,63 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
   className = '',
   showAnalytics = true,
   customizations = {
-    autoHashtags: true,
-    customBranding: true,
-    trackingParameters: true,
-    crossPlatformSync: false,
-    schedulingEnabled: true,
-    analyticsIntegration: true,
-  }
+  autoHashtags: true,
+  customBranding: true,
+  trackingParameters: true,
+  crossPlatformSync: false,
+  schedulingEnabled: true,
+  analyticsIntegration: true,
 }) => {
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string>([]);
   const [shareContent, setShareContent] = useState<Record<string, ShareContent>>({});
   const [isSharing, setIsSharing] = useState<Record<string, boolean>>({});
   const [shareResults, setShareResults] = useState<Record<string, ShareRecord>>({});
   const [showCustomization, setShowCustomization] = useState(false);
   const [analytics, setAnalytics] = useState<ShareAnalytics>({)
-    views: 0,
+  views: 0,
     clicks: 0,
     engagements: 0,
     conversions: 0,
     revenue: 0,
     demographics: {,
-      ageGroups: {},
+  ageGroups: {},
       geoLocations: {},
       interests: {},
       devices: {}
-    },
-    performance: {,
-      clickThroughRate: 0,
-      conversionRate: 0,
-      engagementRate: 0,
-      viralCoefficient: 0,
-      timeToConversion: 0,
-    }
-  });
+  },
+  performance: {,
+  clickThroughRate: 0,
+  conversionRate: 0,
+  engagementRate: 0,
+  viralCoefficient: 0,
+  timeToConversion: 0,
+});
   // Initialize share content for all platforms
   useEffect(() => {
     const initialContent: Record<string, ShareContent> = {};
     platforms.forEach(platform => {)
-      initialContent[platform.id] = {
+  initialContent[platform.id] = {
         title: ShareContentGenerator.generateTitle(template, platform.id),
         description: ShareContentGenerator.generateDescription(template, platform.id),
-        url: `${window.location.origin}/templates/${template.id}`,}
-        imageUrl: template.thumbnailUrl,
+        url: `${window.location.origin}/templates/${template.id}`}
+},
+  imageUrl: template.thumbnailUrl,
         hashtags: ShareContentGenerator.generateHashtags(template, platform.id),
         mentions: [],
-        customText: '',
-      };
+        customText: '';
+  };
     });
     setShareContent(initialContent);
   }, [template, platforms]);
   const handlePlatformToggle = useCallback((platformId: string) => {
-    setSelectedPlatforms(prev => )
-      prev.includes(platformId) 
-        ? prev.filter(id => id !== platformId)
-        : [...prev, platformId]
-    );
-  }, []);
+  setSelectedPlatforms(prev => )
+  prev.includes(platformId)
+  ? prev.filter(id => id !== platformId)
+  : [...prev, platformId]);
+}, []);
   const handleContentChange = useCallback((platformId: string, updates: Partial<ShareContent>) => {
     setShareContent(prev => ({)
-      ...prev,
+  ...prev,
       [platformId]: { ...prev[platformId], ...updates }
     }));
   }, []);
@@ -532,56 +517,55 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
     const content = shareContent[platformId];
     if (!platform || !content) {
       throw new Error(`Platform ${platformId} not configured`);}
-    }
     // Simulate API call to social platform
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
     // Generate tracking parameters
     const trackingParams = trackingEnabled ? {
       utm_source: platformId,
       utm_medium: 'social',
-      utm_campaign: `template_${template.id}`,}
-      utm_content: 'share_button',
-    } : {};
-    const shareRecord: ShareRecord = {
-      id: `share_${Date.now()}_${platformId}`,}
-      templateId: template.id,
+      utm_campaign: `template_${template.id}`}
+},
+  utm_content: 'share_button';
+  } : {};
+    const shareRecord: ShareRecord = {,
+  id: `share_${Date.now()}_${platformId}`}
+},
+  templateId: template.id,
       platform: platformId,
       shareType: 'direct',
       content: {,
-        ...content,
-        url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
-      },
-      timestamp: new Date(),
+  ...content,
+  url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
+},
+  timestamp: new Date(),
       userId: 'current_user', // Would come from auth context
       success: Math.random() > 0.1, // 90% success rate simulation
       analytics: {,
-        views: Math.floor(Math.random() * 1000),
+  views: Math.floor(Math.random() * 1000),
         clicks: Math.floor(Math.random() * 100),
         engagements: Math.floor(Math.random() * 50),
         conversions: Math.floor(Math.random() * 10),
         revenue: Math.floor(Math.random() * 1000) / 100,
         demographics: {,
-          ageGroups: { '18-24': 30, '25-34': 45, '35-44': 25 },
+  ageGroups: { '18-24': 30, '25-34': 45, '35-44': 25 },
           geoLocations: { 'US': 60, 'EU': 25, 'Other': 15 },
           interests: { 'AI': 80, 'Tech': 70, 'Productivity': 60 },
           devices: { 'Desktop': 60, 'Mobile': 35, 'Tablet': 5 }
-        },
-        performance: {,
-          clickThroughRate: Math.random() * 10,
-          conversionRate: Math.random() * 5,
-          engagementRate: Math.random() * 15,
-          viralCoefficient: Math.random() * 2,
-          timeToConversion: Math.random() * 3600,
-        }
-      },
-      metadata: {,
-        userAgent: navigator.userAgent,
-        referrer: document.referrer,
-        deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',
-        source: 'template_page',
-        medium: 'social_share',
-      }
-    };
+  },
+  performance: {,
+  clickThroughRate: Math.random() * 10,
+  conversionRate: Math.random() * 5,
+  engagementRate: Math.random() * 15,
+  viralCoefficient: Math.random() * 2,
+  timeToConversion: Math.random() * 3600,
+},
+  metadata: {,
+  userAgent: navigator.userAgent,
+  referrer: document.referrer,
+  deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+  source: 'template_page',
+  medium: 'social_share',
+};
     return shareRecord;
   }, [platforms, shareContent, template.id, trackingEnabled]);
   const handleSingleShare = useCallback(async (platformId: string) => {
@@ -592,22 +576,20 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
       onShareComplete?.(shareRecord);
       // Update analytics
       if (customizations.analyticsIntegration) {
-        const updatedAnalytics = {
-          ...analytics,
-          views: analytics.views + shareRecord.analytics.views,
-          clicks: analytics.clicks + shareRecord.analytics.clicks,
-          engagements: analytics.engagements + shareRecord.analytics.engagements,
-          conversions: analytics.conversions + shareRecord.analytics.conversions,
-          revenue: analytics.revenue + shareRecord.analytics.revenue,
-        };
+  const updatedAnalytics = {
+  ...analytics,
+  views: analytics.views + shareRecord.analytics.views,
+  clicks: analytics.clicks + shareRecord.analytics.clicks,
+  engagements: analytics.engagements + shareRecord.analytics.engagements,
+  conversions: analytics.conversions + shareRecord.analytics.conversions,
+  revenue: analytics.revenue + shareRecord.analytics.revenue,
+};
         setAnalytics(updatedAnalytics);
         onAnalyticsUpdate?.(updatedAnalytics);
-      }
     } catch (error) {
       console.error(`Failed to share on ${platformId}:`, error);}
     } finally {
       setIsSharing(prev => ({ ...prev, [platformId]: false }));
-    }
   }, [performShare, onShareComplete, analytics, onAnalyticsUpdate, customizations.analyticsIntegration]);
   const handleBulkShare = useCallback(async () => {
     const sharePromises = selectedPlatforms.map(platformId => ;);
@@ -623,21 +605,20 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
       await navigator.clipboard.writeText(shareUrl);
       // Show success feedback
     } catch (err) {
-      console.error('Failed to copy link:', err);
-    }
-  }, [template.id, trackingEnabled]);
+  console.error('Failed to copy link:', err);
+}, [template.id, trackingEnabled]);
   const enabledPlatforms = useMemo(() => ;
     platforms.filter(platform => platform.enabled), 
   [platforms]
   );
   const totalAnalytics = useMemo(() => ({)
-    totalShares: Object.keys(shareResults).length,
-    successfulShares: Object.values(shareResults).filter(r => r.success).length,
-    totalReach: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.views, 0),
-    totalEngagements: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0),
-    averageCTR: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1)
-  }), [shareResults]);
-  return ();
+  totalShares: Object.keys(shareResults).length,
+  successfulShares: Object.values(shareResults).filter(r => r.success).length,
+  totalReach: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.views, 0),
+  totalEngagements: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0),
+  averageCTR: Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1),
+}), [shareResults]);
+  return;
     <div className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -715,18 +696,18 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {enabledPlatforms.map(platform => {)
-            const Icon = platform.icon;
+  const Icon = platform.icon;
             const isSelected = selectedPlatforms.includes(platform.id);
             const isSharing = isSharing[platform.id];
             const shareResult = shareResults[platform.id];
-            return ();
+            return;
               <div
                 key={platform.id}
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                  isSelected 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
+  isSelected
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
+}`}
                 onClick={() => handlePlatformToggle(platform.id)}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -812,10 +793,10 @@ export const SocialPlatformIntegration: React.FC<SocialPlatformIntegrationProps>
         <div className="border-t border-gray-200 p-4 bg-gray-50">
           <h4 className="font-medium text-gray-900 mb-4">Customize Share Content</h4>
           {selectedPlatforms.map(platformId => {)
-            const platform = platforms.find(p => p.id === platformId);
+  const platform = platforms.find(p => p.id === platformId);
             const content = shareContent[platformId];
             if (!platform || !content) return null;
-            return ();
+            return;
               <div key={platformId} className="mb-6 p-4 bg-white border border-gray-200 rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <platform.icon className="h-4 w-4" style={{ color: platform.color }} />

@@ -21,6 +21,7 @@ import { MetricsCollector, SystemMetrics, WebSocketMetrics, CollaborationMetrics
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface APIPerformanceMetrics {
   timestamp: number;
   endpoint: string;
@@ -39,7 +40,9 @@ export interface APIPerformanceMetrics {
   userAgent?: string;
   ipAddress?: string;
 }
+}
 
+}
 export interface DatabasePerformanceMetrics {
   timestamp: number;
   connectionPoolSize: number;
@@ -57,10 +60,12 @@ export interface DatabasePerformanceMetrics {
     writes: number;
     readLatency: number;
     writeLatency: number;
+}
   };
   replicationLag?: number;
 }
 
+}
 export interface BusinessPerformanceMetrics {
   timestamp: number;
   activeUsers: number;
@@ -70,12 +75,14 @@ export interface BusinessPerformanceMetrics {
     signups: number;
     activations: number;
     retentions: number;
+}
   };
   errorsByCategory: Record<string, number>;
   userSatisfactionScore: number;
   performanceImpactScore: number;
 }
 
+}
 export interface SecurityPerformanceMetrics {
   timestamp: number;
   authenticationLatency: number;
@@ -87,7 +94,9 @@ export interface SecurityPerformanceMetrics {
   certificateValidationTime: number;
   securityScanLatency: number;
 }
+}
 
+}
 export interface PerformanceBaseline {
   endpoint: string;
   metric: string;
@@ -96,7 +105,9 @@ export interface PerformanceBaseline {
   slaThreshold: number;
   businessCritical: boolean;
 }
+}
 
+}
 export interface PerformanceAnomaly {
   id: string;
   timestamp: number;
@@ -112,7 +123,9 @@ export interface PerformanceAnomaly {
   resolved: boolean;
   autoResolution?: string;
 }
+}
 
+}
 export interface PerformanceTrend {
   metric: string;
   component: string;
@@ -123,7 +136,9 @@ export interface PerformanceTrend {
   projectedImpact: string;
   recommendation: string;
 }
+}
 
+}
 export interface PerformanceReport {
   id: string;
   generatedAt: number;
@@ -131,6 +146,7 @@ export interface PerformanceReport {
     start: number;
     end: number;
     duration: number;
+}
   };
   summary: {
     overallHealth: number;
@@ -213,6 +229,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
    * Start comprehensive performance monitoring
    */
   async startMonitoring(): Promise<void> {
+
     if (this.isMonitoring) {
       return;
     }
@@ -248,6 +265,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
    * Stop performance monitoring
    */
   async stopMonitoring(): Promise<void> {
+
     if (!this.isMonitoring) {
       return;
     }
@@ -328,7 +346,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
         writes: 0,
         readLatency: 0,
         writeLatency: 0
-      },
+  }
       replicationLag: metrics.replicationLag
     };
 
@@ -352,7 +370,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
         signups: 0,
         activations: 0,
         retentions: 0
-      },
+  }
       errorsByCategory: metrics.errorsByCategory || {},
       userSatisfactionScore: metrics.userSatisfactionScore || 0,
       performanceImpactScore: metrics.performanceImpactScore || 0
@@ -397,6 +415,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
     topEndpoints: any[];
     systemHealth: any;
   }> {
+
     const summary = this.calculatePerformanceSummary(timeRange);
     const trends = this.getPerformanceTrends(timeRange);
     const alerts = this.metricsCollector.getActiveAlerts();
@@ -418,6 +437,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
    * Generate comprehensive performance report
    */
   async generatePerformanceReport(timeRange?: { start: number; end: number }): Promise<PerformanceReport> {
+
     const now = Date.now();
     const period = timeRange || {
       start: now - 24 * 60 * 60 * 1000, // 24 hours
@@ -430,7 +450,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
       period: {
         ...period,
         duration: period.end - period.start
-      },
+  }
       summary: this.calculatePerformanceSummary(period),
       metrics: {
         api: this.apiMetrics.filter(m => m.timestamp >= period.start && m.timestamp <= period.end),
@@ -440,7 +460,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
         system: this.metricsCollector.getMetricsWindow(period.start, period.end).systemMetrics,
         websocket: this.metricsCollector.getMetricsWindow(period.start, period.end).webSocketMetrics,
         collaboration: this.metricsCollector.getMetricsWindow(period.start, period.end).collaborationMetrics
-      },
+  }
       trends: this.getPerformanceTrends(period),
       anomalies: this.anomalies.filter(a => a.timestamp >= period.start && a.timestamp <= period.end),
       recommendations: this.generateOptimizationRecommendations(period),
@@ -583,6 +603,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   }
 
   private async performComprehensiveAnalysis(): Promise<void> {
+
     try {
       // Analyze recent metrics for anomalies
       const timeWindow = 5 * 60 * 1000; // 5 minutes
@@ -833,6 +854,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   }
 
   private async storePerformanceReport(report: PerformanceReport): Promise<void> {
+
     try {
       await this.dbService.query(
         'INSERT INTO performance_reports (id, data, created_at) VALUES ($1, $2, $3)',
@@ -844,6 +866,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   }
 
   private async storeAnomaly(anomaly: PerformanceAnomaly): Promise<void> {
+
     try {
       await this.dbService.query(
         'INSERT INTO performance_anomalies (id, data, created_at) VALUES ($1, $2, $3)',
@@ -855,6 +878,7 @@ export class ComprehensivePerformanceMetrics extends EventEmitter {
   }
 
   private async loadHistoricalData(): Promise<void> {
+
     try {
       // Load recent performance data from database
       const cutoffDate = new Date(Date.now() - this.config.retentionDays * 24 * 60 * 60 * 1000);

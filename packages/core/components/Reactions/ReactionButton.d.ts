@@ -6,6 +6,7 @@
  * and reviews. Provides quick emotional feedback with real-time updates.
  */
 import React from 'react';
+
 export interface ReactionType {
     id: string;
     emoji: string;
@@ -13,7 +14,7 @@ export interface ReactionType {
     category: 'positive' | 'neutral' | 'negative';
     weight: number;
     description: string;
-}
+
 export interface ReactionData {
     reactionId: string;
     contentId: string;
@@ -22,7 +23,7 @@ export interface ReactionData {
     reactionType: string;
     timestamp: Date;
     metadata?: Record<string, unknown>;
-}
+
 export interface ReactionSummary {
     contentId: string;
     totalReactions: number;
@@ -36,7 +37,7 @@ export interface ReactionSummary {
     }>;
     sentimentScore: number;
     engagementLevel: 'low' | 'medium' | 'high' | 'viral';
-}
+
 export interface ReactionButtonProps {
     contentId: string;
     contentType: 'template' | 'comment' | 'review' | 'project' | 'user';
@@ -50,7 +51,7 @@ export interface ReactionButtonProps {
     disabled?: boolean;
     maxReactions?: number;
     className?: string;
-}
+
 export declare const ReactionButton: React.FC<ReactionButtonProps>;
 export default ReactionButton;
 //# sourceMappingURL=ReactionButton.d.ts.map

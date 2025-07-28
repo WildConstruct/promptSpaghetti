@@ -4,21 +4,27 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { LocationDetectionService } from '../services/LocationDetectionService';
 
+}
 interface LocationDetectionRequest {
   ipAddress?: string;
 }
+}
 
+}
 interface AcknowledgeAlertRequest {
   acknowledgedBy: string;
   notes?: string;
 }
+}
 
+}
 interface LocationFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   acknowledged?: boolean;
   alertType?: string;
   limit?: number;
   offset?: number;
+}
 }
 
 export async function locationDetectionRoutes(
@@ -198,7 +204,7 @@ export async function locationDetectionRoutes(
           byType: alertsByType,
           bySeverity: alertsBySeverity,
           unacknowledged: alerts.filter(a => !a.acknowledged).length
-        },
+  }
         filters: { userId, severity, acknowledged, alertType, limit },
         timestamp: new Date().toISOString()
       };
@@ -288,12 +294,12 @@ export async function locationDetectionRoutes(
           location,
           risk,
           recentHistory: history
-        },
+  }
         metadata: {
           analyzedBy: (request.user as any)?.id,
           forceRefresh,
           analysisType: 'manual_admin_analysis'
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -360,7 +366,7 @@ export async function locationDetectionRoutes(
           total: alertIds.length,
           successful: successCount,
           failed: failureCount
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -412,7 +418,7 @@ export async function locationDetectionRoutes(
           totalMaliciousIPs: threatIntel.rows.length,
           averageConfidence: stats.rows.length > 0 ? 
             Math.round(stats.rows.reduce((sum, row) => sum + parseFloat(row.avg_confidence), 0) / stats.rows.length) : 0
-        },
+  }
         lastUpdated: new Date().toISOString()
       };
     } catch (error) {
@@ -454,18 +460,18 @@ export async function locationDetectionRoutes(
           database: dbHealthy ? 'ok' : 'failed',
           redis: redisHealthy ? 'ok' : 'failed',
           geolocationProvider: providerConfigured ? 'configured' : 'not_configured'
-        },
+  }
         configuration: {
           primaryProvider: config.providers.primary,
           fallbackProviders: config.providers.fallback?.length || 0,
           impossibleTravelEnabled: config.impossibleTravel.enabled,
           regionalRiskEnabled: config.regionalRisk.enabled,
           notificationsEnabled: config.notifications.enabled
-        },
+  }
         statistics: {
           cacheEnabled: config.cache.ipLocationTtl > 0,
           highRiskCountries: config.regionalRisk.highRiskCountries?.length || 0
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -504,27 +510,27 @@ export async function locationDetectionRoutes(
           type: 'new_country',
           description: 'First access from a new country',
           severity: 'medium'
-        },
+  }
         {
           type: 'new_city',
           description: 'First access from a new city',
           severity: 'low'
-        },
+  }
         {
           type: 'impossible_travel',
           description: 'Physically impossible travel speed detected',
           severity: 'high'
-        },
+  }
         {
           type: 'proxy_detected',
           description: 'Access via proxy, VPN, or Tor network',
           severity: 'medium-high'
-        },
+  }
         {
           type: 'malicious_ip',
           description: 'Access from known malicious IP address',
           severity: 'critical'
-        },
+  }
         {
           type: 'high_risk_region',
           description: 'Access from high-risk geographical region',
@@ -545,37 +551,37 @@ export async function locationDetectionRoutes(
           method: 'POST',
           description: 'Detect and analyze location for current request',
           auth: 'required'
-        },
+  }
         {
           path: '/location/history',
           method: 'GET',
           description: 'Get user location access history',
           auth: 'required'
-        },
+  }
         {
           path: '/location/alerts',
           method: 'GET',
           description: 'Get location-based security alerts',
           auth: 'required'
-        },
+  }
         {
           path: '/location/alerts/:id/acknowledge',
           method: 'POST',
           description: 'Acknowledge a location alert',
           auth: 'required'
-        },
+  }
         {
           path: '/location/admin/alerts',
           method: 'GET',
           description: 'Get all location alerts (admin view)',
           auth: 'admin required'
-        },
+  }
         {
           path: '/location/admin/statistics',
           method: 'GET',
           description: 'Get location detection statistics',
           auth: 'security role required'
-        },
+  }
         {
           path: '/location/admin/analyze',
           method: 'POST',

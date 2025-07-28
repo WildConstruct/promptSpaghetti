@@ -7,6 +7,7 @@
  * and provides flagging status tracking.
  */
 import { FlagSubmission, FlaggingStatus } from '../components/Flagging/FlaggingButton';
+
 export interface UserFlagReport {
     id: string;
     contentId: string;
@@ -24,7 +25,7 @@ export interface UserFlagReport {
     moderatorNote?: string;
     resolution?: FlagResolution;
     metadata: Record<string, unknown>;
-}
+
 export interface FlagResolution {
     action: 'approved' | 'removed' | 'edited' | 'warning_issued' | 'user_suspended' | 'no_action';
     reason: string;
@@ -32,7 +33,7 @@ export interface FlagResolution {
     appealDeadline?: Date;
     notificationSent: boolean;
     precedentCase?: string;
-}
+
 export interface ContentFlagSummary {
     contentId: string;
     contentType: string;
@@ -46,7 +47,7 @@ export interface ContentFlagSummary {
     autoFlagged: boolean;
     mlConfidence?: number;
     moderationPriority: 'low' | 'medium' | 'high' | 'urgent';
-}
+
 export interface FlaggingAnalytics {
     timeRange: {,
         start: Date;
@@ -78,7 +79,7 @@ export interface FlaggingAnalytics {
         accuracyRate: number;
         escalationRate: number;
     };
-}
+
 export interface FlaggingConfig {
     enableUserFlagging: boolean;
     maxFlagsPerUser24h: number;
@@ -94,7 +95,6 @@ export interface FlaggingConfig {
         combineScores: boolean;
         autoModerationThreshold: number;
     };
-}
 /**
  * User Flagging Service
  *
@@ -182,6 +182,6 @@ export declare class UserFlaggingService {
     private calculateModerationEfficiency;
     private notifyContentOwner;
     private notifyReporter;
-}
+
 export default UserFlaggingService;
 //# sourceMappingURL=UserFlaggingService.d.ts.map

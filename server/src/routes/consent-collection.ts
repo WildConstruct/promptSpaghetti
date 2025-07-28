@@ -295,7 +295,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
         extendedRetention: z.boolean(),
         customPeriod: z.number().optional(),
         automaticDeletion: z.boolean()
-      })
+  }
     })).optional(),
     notificationPreferences: z.array(z.object({
       notificationType: z.enum(['POLICY_UPDATE', 'CONSENT_EXPIRY', 'DATA_BREACH', 'RIGHTS_REQUEST', 'COMPLIANCE']),
@@ -308,7 +308,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
         endTime: z.string(),
         timezone: z.string(),
         exceptions: z.array(z.string())
-      })
+  }
     })).optional(),
     accessibilityPreferences: z.array(z.object({
       highContrast: z.boolean(),
@@ -319,7 +319,7 @@ const UpdateConsentPreferencesRequestSchema = z.object({
       audioDescription: z.boolean(),
       simplifiedInterface: z.boolean()
     })).optional()
-  })
+  }
 });
 
 const GenerateJustInTimePromptRequestSchema = z.object({
@@ -387,7 +387,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { sessionId, context, userPreferences } = request.body;
@@ -408,7 +408,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             stepsTaken: context.consentFlow.stepsTaken,
             completionRate: 0,
             totalTimeSpent: 0
-          },
+  }
           displayMethod: context.displayMethod,
           interactionHistory: []
         });
@@ -497,10 +497,10 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -573,10 +573,10 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -645,10 +645,10 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -728,10 +728,10 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -798,7 +798,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -806,7 +806,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const userId = request.user.userId;
@@ -872,7 +872,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           theme: { type: 'string', enum: ['light', 'dark', 'auto'], default: 'light' },
           mobile: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -890,7 +890,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { country = 'US', language = 'en', theme = 'light', mobile = false } = request.query;
@@ -913,7 +913,7 @@ export async function consentCollectionRoutes(fastify: FastifyInstance) {
             reject: { text: 'Reject All', style: 'secondary' },
             customize: { text: 'Manage Preferences', style: 'outline' },
             close: { text: '×', style: 'minimal' }
-          },
+  }
           content: {
             title: 'We value your privacy',
             description: 'We and our partners use technologies like cookies to store and access device information.',

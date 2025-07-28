@@ -19,10 +19,10 @@ export interface ThreatForecast {
     confidence: number;
     predictedIntensity: number;
     predictedProbability: number;
-    seasonalFactors: SeasonalFactor[];
-    trendComponents: TrendComponent[];
+    seasonalFactors: SeasonalFactor;
+    trendComponents: TrendComponent;
     riskMetrics: ForecastRiskMetrics;
-    recommendations: ForecastRecommendation[];
+    recommendations: ForecastRecommendation;
     modelMetadata: ForecastModelMetadata;
 }
 export declare enum ForecastType {
@@ -31,31 +31,20 @@ export declare enum ForecastType {
     LONG_TERM = "long_term",// 1-7 days
     SEASONAL = "seasonal",// Weekly/monthly patterns
     TREND_BASED = "trend_based",// Trend extrapolation
-    SCENARIO_BASED = "scenario_based"
-}
-export interface SeasonalFactor {
-    period: SeasonalPeriod;
-    amplitude: number;
-    phase: number;
-    strength: number;
-    nextPeak: Date;
-    historicalPattern: number[];
+    SCENARIO_BASED = "scenario_based",// Specific scenario modeling
+    export,
+    interface,
+    SeasonalFactor
 }
 export declare enum SeasonalPeriod {
     HOURLY = "hourly",
     DAILY = "daily",
     WEEKLY = "weekly",
     MONTHLY = "monthly",
-    QUARTERLY = "quarterly"
-}
-export interface TrendComponent {
-    trendType: TrendType;
-    direction: 'increasing' | 'decreasing' | 'stable';
-    magnitude: number;
-    acceleration: number;
-    durability: number;
-    confidence: number;
-    changePoints: ChangePoint[];
+    QUARTERLY = "quarterly",
+    export,
+    interface,
+    TrendComponent
 }
 export declare enum TrendType {
     LINEAR = "linear",
@@ -63,13 +52,10 @@ export declare enum TrendType {
     LOGARITHMIC = "logarithmic",
     POLYNOMIAL = "polynomial",
     CYCLICAL = "cyclical",
-    VOLATILE = "volatile"
-}
-export interface ChangePoint {
-    timestamp: Date;
-    magnitude: number;
-    type: 'level_shift' | 'trend_change' | 'variance_change';
-    confidence: number;
+    VOLATILE = "volatile",
+    export,
+    interface,
+    ChangePoint
 }
 export interface ForecastRiskMetrics {
     expectedValue: number;
@@ -77,7 +63,7 @@ export interface ForecastRiskMetrics {
     conditionalValueAtRisk: number;
     volatilityIndex: number;
     uncertaintyRange: [number, number];
-    scenarioRisks: ScenarioRisk[];
+    scenarioRisks: ScenarioRisk;
 }
 export interface ScenarioRisk {
     scenario: string;
@@ -92,7 +78,7 @@ export interface ForecastRecommendation {
     expectedBenefit: number;
     implementationCost: number;
     timeframe: string;
-    dependencies: string[];
+    dependencies: string;
 }
 export declare enum RecommendationType {
     PROACTIVE_DEFENSE = "proactive_defense",
@@ -101,17 +87,10 @@ export declare enum RecommendationType {
     POLICY_ADJUSTMENT = "policy_adjustment",
     MONITORING_ENHANCEMENT = "monitoring_enhancement",
     TRAINING_RECOMMENDATION = "training_recommendation",
-    INFRASTRUCTURE_CHANGE = "infrastructure_change"
-}
-export interface ForecastModelMetadata {
-    modelName: string;
-    modelVersion: string;
-    algorithm: ForecastAlgorithm;
-    trainingPeriod: [Date, Date];
-    accuracy: ModelAccuracyMetrics;
-    features: string[];
-    hyperparameters: Record<string, unknown>;
-    lastUpdated: Date;
+    INFRASTRUCTURE_CHANGE = "infrastructure_change",
+    export,
+    interface,
+    ForecastModelMetadata
 }
 export declare enum ForecastAlgorithm {
     ARIMA = "arima",
@@ -121,14 +100,10 @@ export declare enum ForecastAlgorithm {
     EXPONENTIAL_SMOOTHING = "exponential_smoothing",
     RANDOM_FOREST = "random_forest",
     GRADIENT_BOOSTING = "gradient_boosting",
-    ENSEMBLE = "ensemble"
-}
-export interface ModelAccuracyMetrics {
-    mape: number;
-    rmse: number;
-    mae: number;
-    r2Score: number;
-    directionalAccuracy: number;
+    ENSEMBLE = "ensemble",
+    export,
+    interface,
+    ModelAccuracyMetrics
 }
 export interface TimeSeriesData {
     timestamp: Date;
@@ -150,8 +125,8 @@ export interface ThreatScenario {
     scenarioId: string;
     name: string;
     description: string;
-    threatTypes: ThreatType[];
-    triggers: ScenarioTrigger[];
+    threatTypes: ThreatType;
+    triggers: ScenarioTrigger;
     expectedDuration: number;
     expectedIntensity: number;
     likelihood: number;
@@ -180,8 +155,8 @@ export declare class SecurityThreatForecasting extends EventEmitter {
     private forecastingInterval?;
     constructor(config?: Partial<ForecastingConfig>);
     /**
-     * Process security event for time series analysis
-     */
+    * Process security event for time series analysis
+    */
     processSecurityEvent(event: SecurityEvent): Promise<void>;
     /**
      * Process security anomaly for trend analysis
@@ -190,58 +165,6 @@ export declare class SecurityThreatForecasting extends EventEmitter {
     /**
      * Generate comprehensive threat forecast
      */
-    generateThreatForecast(threatType: ThreatType, timeHorizon?: number): Promise<ThreatForecast>;
-    /**
-     * Generate ensemble forecast using multiple models
-     */
-    private generateEnsembleForecast;
-    /**
-     * Run individual forecasting model
-     */
-    private runForecastingModel;
-    private runARIMAModel;
-    private runExponentialSmoothingModel;
-    private runSeasonalNaiveModel;
-    private runProphetModel;
-    private runLSTMModel;
-    private performSeasonalDecomposition;
-    private extractHourlyPattern;
-    private extractDailyPattern;
-    private extractWeeklyPattern;
-    private performTrendAnalysis;
-    private analyzeLinearTrend;
-    private analyzeExponentialTrend;
-    private detectChangePoints;
-    private calculateForecastRisk;
-    private generateForecastRecommendations;
-    private addToTimeSeries;
-    private shouldUpdateForecast;
-    private updateForecasts;
-    private updateAnomalyBasedForecasts;
-    private combineModelResults;
-    private mapSeverityToValue;
-    private determineForecastType;
-    private calculateMean;
-    private calculateStandardDeviation;
-    private calculateVariance;
-    private calculateMovingAverage;
-    private calculateLinearTrend;
-    private calculateAmplitude;
-    private calculatePhase;
-    private calculateSeasonalStrength;
-    private calculateNextPeak;
-    private getSeasonalPeriodSeconds;
-    private generateForecastId;
-    private initializeForecastingModels;
-    private initializeThreatScenarios;
-    private startRealTimeForecasting;
-    private performScheduledForecasting;
-    getActiveForecasts(): ThreatForecast[];
-    getForecastsByType(forecastType: ForecastType): ThreatForecast[];
-    getForecastsByThreatType(threatType: ThreatType): ThreatForecast[];
-    getTimeSeriesData(seriesKey: string): TimeSeriesData[];
-    updateConfiguration(newConfig: Partial<ForecastingConfig>): void;
-    destroy(): void;
+    generateThreatForecast(): any;
 }
-export default SecurityThreatForecasting;
 //# sourceMappingURL=SecurityThreatForecasting.d.ts.map

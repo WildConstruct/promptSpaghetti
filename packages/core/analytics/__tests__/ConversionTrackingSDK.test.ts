@@ -10,7 +10,7 @@ import { AnalyticsClient } from '../AnalyticsClient';
 global.WebSocket = jest.fn().mockImplementation(() => ({)
   send: jest.fn(),
   close: jest.fn(),
-  readyState: 1, // OPEN
+  readyState: 1, // OPEN,
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
 }));
@@ -18,40 +18,40 @@ global.WebSocket = jest.fn().mockImplementation(() => ({)
 // Mock navigator
 Object.defineProperty(global, 'navigator', {)
   value: {,
-    onLine: true,
-    userAgent: 'test-agent',
-    language: 'en-US',
-    doNotTrack: '0',
-  },
-  writable: true,
-});
+  onLine: true,
+  userAgent: 'test-agent',
+  language: 'en-US',
+  doNotTrack: '0',
+},
+  writable: true;
+  });
 
 // Mock document
 Object.defineProperty(global, 'document', {)
   value: {,
-    referrer: 'https://example.com',
-    hidden: false,
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-  },
-  configurable: true,
-});
+  referrer: 'https://example.com',
+  hidden: false,
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+},
+  configurable: true;
+  });
 
 // Mock window
 Object.defineProperty(global, 'window', {)
   value: {,
-    location: {,
-      href: 'https://test.com/page',
-      pathname: '/page',
-      search: '?utm_source=test&utm_medium=cpc',
-    },
-    innerWidth: 1920,
+  location: {,
+  href: 'https://test.com/page',
+  pathname: '/page',
+  search: '?utm_source=test&utm_medium=cpc',
+},
+  innerWidth: 1920,
     innerHeight: 1080,
     addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
+    removeEventListener: jest.fn();
   },
-  writable: true,
-});
+  writable: true;
+  });
 
 // Mock localStorage and sessionStorage
 const localStorageMock = {
@@ -80,11 +80,11 @@ describe('ConversionTrackingSDK', () => {
     // Create mock instances
     mockAnalyticsClient = {
       makeRequest: jest.fn().mockResolvedValue({ success: true }),
-      getSummary: jest.fn().mockResolvedValue({ success: true }),
-    } as any;
+      getSummary: jest.fn().mockResolvedValue({ success: true })
+} as any;
     mockConversionArchitecture = {
-      createEnhancedEvent: jest.fn().mockReturnValue({),
-        id: 'test-event-001',
+      createEnhancedEvent: jest.fn().mockReturnValue({,)
+  id: 'test-event-001',
         userId: 'user-123',
         sessionId: 'session-456',
         timestamp: Date.now(),
@@ -95,82 +95,81 @@ describe('ConversionTrackingSDK', () => {
         metadata: {},
         deviceFingerprint: 'test-fingerprint',
         attributionData: {,
-          touchpoints: [],
+  touchpoints: [],
           primaryAttribution: {,
-            name: 'direct',
+  name: 'direct',
             weight: 1.0,
             touchpoint: {} as any,
-            attribution_value: 0,
-          },
-          assistedAttribution: [],
-        },
-        privacyConsent: {,
-          tracking: true,
-          analytics: true,
-          personalization: true,
-          crossDevice: false,
-        },
-        realTimeProcessing: {,
-          streamId: 'stream-123',
-          batchId: 'batch-456',
-          processed: false,
-          latency: 0,
-        }
-      })
+            attribution_value: 0;
+  },
+  assistedAttribution: [];
+  },
+  privacyConsent: {,
+  tracking: true,
+  analytics: true,
+  personalization: true,
+  crossDevice: false,
+},
+  realTimeProcessing: {,
+  streamId: 'stream-123',
+  batchId: 'batch-456',
+  processed: false,
+  latency: 0,
+}
     } as any;
     mockSessionManager = {
-      trackConversionEvent: jest.fn(),
-      updateConsentPreferences: jest.fn(),
-      getCurrentSessionAnalytics: jest.fn().mockReturnValue({),
-        totalSessions: 1,
-        uniqueUsers: 1,
-      })
+  trackConversionEvent: jest.fn(),
+  updateConsentPreferences: jest.fn(),
+  getCurrentSessionAnalytics: jest.fn().mockReturnValue({,)
+  totalSessions: 1,
+  uniqueUsers: 1,
+}
     } as any;
     config = {
-      baseUrl: 'https://api.test.com',
-      enableRealTimeStreaming: true,
-      streamingEndpoint: '/api/conversion-events/stream',
-      batchSize: 10,
-      flushInterval: 1000,
-      respectDoNotTrack: true,
-      requireExplicitConsent: false,
-      enableCrossDeviceTracking: false,
-      enableOfflineBuffering: true,
-      maxOfflineEvents: 100,
-      eventValidationRules: [],
-      deduplicationWindow: 60000,
-      enableDebugLogging: false,
-    };
+  baseUrl: 'https://api.test.com',
+  enableRealTimeStreaming: true,
+  streamingEndpoint: '/api/conversion-events/stream',
+  batchSize: 10,
+  flushInterval: 1000,
+  respectDoNotTrack: true,
+  requireExplicitConsent: false,
+  enableCrossDeviceTracking: false,
+  enableOfflineBuffering: true,
+  maxOfflineEvents: 100,
+  eventValidationRules: [],
+  deduplicationWindow: 60000,
+  enableDebugLogging: false,
+};
     sdk = new ConversionTrackingSDK(config, mockConversionArchitecture, mockSessionManager);
   });
   afterEach(() => {
     sdk.destroy();
   });
   describe('Event Tracking', () => {
-    it('should track conversion events successfully', async () => {
-      const result = await sdk.trackConversionEvent('template_purchased', {)
-        templateId: 'tpl-001',
-        price: 25.00,
-      }, 25.00);
+  it('should track conversion events successfully', async () => {
+  const result = await sdk.trackConversionEvent('template_purchased', {)
+  templateId: 'tpl-001',
+  price: 25.00,
+}, 25.00);
       expect(result).toBe(true);
       expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'template_purchased',
-          value: 25.00,
-        }),
+  type: 'template_purchased',
+  value: 25.00,
+}),
         [],
         expect.objectContaining({)
-          tracking: true,
-          analytics: true,
-        })
+  tracking: true,
+  analytics: true,
+}
       );
       expect(mockSessionManager.trackConversionEvent).toHaveBeenCalledWith()
         'template_purchased',
         25.00,
         expect.objectContaining({)
-          templateId: 'tpl-001',
-          price: 25.00,
-        })
+  templateId: 'tpl-001',
+  price: 25.00,
+}
       );
     });
     it('should respect Do Not Track setting', async () => {
@@ -188,9 +187,7 @@ describe('ConversionTrackingSDK', () => {
           source: 'google',
           medium: 'organic',
           position: 1,
-          influence: 0.8,
-        }
-      ];
+          influence: 0.8];
       const result = await sdk.trackConversionEvent(;);
         'template_purchased',
         { templateId: 'tpl-001' },
@@ -205,61 +202,61 @@ describe('ConversionTrackingSDK', () => {
       );
     });
     it('should track funnel steps', async () => {
-      const result = await sdk.trackFunnelStep('marketplace-discovery', 'template-view', {)
-        templateId: 'tpl-001',
-        category: 'character-development',
-      });
+  const result = await sdk.trackFunnelStep('marketplace-discovery', 'template-view', {)
+  templateId: 'tpl-001',
+  category: 'character-development',
+});
       expect(result).toBe(true);
       expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'funnel_step_template-view',
-          properties: expect.objectContaining({),
-            funnelId: 'marketplace-discovery',
-            stepId: 'template-view',
-            templateId: 'tpl-001',
-          })
+  type: 'funnel_step_template-view',
+  properties: expect.objectContaining({,)
+  funnelId: 'marketplace-discovery',
+  stepId: 'template-view',
+  templateId: 'tpl-001',
+}
         }),
         expect.any(Array),
         expect.any(Object)
       );
     });
     it('should track attribution touchpoints', async () => {
-      const result = await sdk.trackTouchpoint('paid_search', 'google', 'cpc', {)
-        campaign: 'summer-sale',
-        value: 100,
-      });
+  const result = await sdk.trackTouchpoint('paid_search', 'google', 'cpc', {)
+  campaign: 'summer-sale',
+  value: 100,
+});
       expect(result).toBe(true);
       expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'touchpoint_tracked',
-          properties: expect.objectContaining({),
-            touchpoint: expect.objectContaining({),
-              channel: 'paid_search',
-              source: 'google',
-              medium: 'cpc',
-            }),
-            campaign: 'summer-sale',
-          })
+  type: 'touchpoint_tracked',
+  properties: expect.objectContaining({,)
+  touchpoint: expect.objectContaining({,)
+  channel: 'paid_search',
+  source: 'google',
+  medium: 'cpc',
+}),
+            campaign: 'summer-sale';
+  }
         }),
         expect.arrayContaining([)
           expect.objectContaining({)
-            channel: 'paid_search',
-            source: 'google',
-            medium: 'cpc',
-          })
+  channel: 'paid_search',
+  source: 'google',
+  medium: 'cpc',
+}
         ]),
         expect.any(Object)
       );
     });
   });
   describe('Privacy and Consent', () => {
-    it('should update consent preferences', () => {
-      const consent = {
-        tracking: false,
-        analytics: true,
-        personalization: false,
-        crossDevice: false,
-      };
+  it('should update consent preferences', () => {
+  const consent = {
+  tracking: false,
+  analytics: true,
+  personalization: false,
+  crossDevice: false,
+};
       sdk.updateConsentPreferences(consent);
       expect(mockSessionManager.updateConsentPreferences).toHaveBeenCalledWith(consent);
     });
@@ -271,14 +268,13 @@ describe('ConversionTrackingSDK', () => {
       );
       // Mock consent as not given
       localStorageMock.getItem.mockImplementation((key) => {
-        if (key === 'ps_consent') {
-          return JSON.stringify({)
-            tracking: false,
-            analytics: false,
-            personalization: false,
-            crossDevice: false,
-          });
-        }
+  if (key === 'ps_consent') {
+  return JSON.stringify({)
+  tracking: false,
+  analytics: false,
+  personalization: false,
+  crossDevice: false,
+});
         return null;
       });
       const result = await sdk.trackConversionEvent('template_viewed');
@@ -300,10 +296,8 @@ describe('ConversionTrackingSDK', () => {
             field: 'value',
             type: 'range',
             value: { min: 0, max: 1000 },
-            errorMessage: 'Value must be between 0 and 1000',
-          }
-        ]
-      };
+            errorMessage: 'Value must be between 0 and 1000'];
+  };
       sdk = new ConversionTrackingSDK()
         configWithValidation,
         mockConversionArchitecture,
@@ -356,11 +350,10 @@ describe('ConversionTrackingSDK', () => {
     });
   });
   describe('Real-time Streaming', () => {
-    it('should initialize WebSocket connection for streaming', () => {
-      expect(global.WebSocket).toHaveBeenCalledWith()
-        expect.stringContaining('ws://api.test.com/api/conversion-events/stream')
-      );
-    });
+  it('should initialize WebSocket connection for streaming', () => {
+  expect(global.WebSocket).toHaveBeenCalledWith()
+  expect.stringContaining('ws://api.test.com/api/conversion-events/stream'));
+});
     it('should send events via WebSocket when connected', async () => {
       const mockWs = (global.WebSocket as jest.Mock).mock.instances[0];
       mockWs.readyState = 1; // OPEN
@@ -379,9 +372,9 @@ describe('ConversionTrackingSDK', () => {
       expect(mockAnalyticsClient.makeRequest).toHaveBeenCalledWith()
         '/analytics/conversion-events/batch',
         expect.objectContaining({)
-          method: 'POST',
-          body: expect.any(String),
-        })
+  method: 'POST',
+  body: expect.any(String),
+}
       );
     });
   });
@@ -419,7 +412,6 @@ describe('ConversionTrackingSDK', () => {
       // Track enough events to trigger batch flush
       for (let i = 0; i < config.batchSize; i++) {
         await sdk.trackConversionEvent(`event_${i}`);}
-      }
       expect(flushSpy).toHaveBeenCalled();
     });
     it('should flush queue on page unload', () => {
@@ -440,14 +432,14 @@ describe('ConversionTrackingSDK', () => {
     });
   });
   describe('Context Building', () => {
-    it('should extract UTM parameters from URL', async () => {
-      await sdk.trackConversionEvent('test_event');
-      expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          properties: expect.objectContaining({),
-            source: 'test',
-            medium: 'cpc',
-          })
+  it('should extract UTM parameters from URL', async () => {
+  await sdk.trackConversionEvent('test_event');
+  expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  properties: expect.objectContaining({,)
+  source: 'test',
+  medium: 'cpc',
+}
         }),
         expect.any(Array),
         expect.any(Object)
@@ -466,11 +458,11 @@ describe('ConversionTrackingSDK', () => {
       await sdk.trackConversionEvent('test_event');
       expect(mockConversionArchitecture.createEnhancedEvent).toHaveBeenCalledWith()
         expect.objectContaining({)
-          userId: 'consistent-user-id',
-          sessionId: 'consistent-session-id',
-          properties: expect.objectContaining({),
-            deviceId: 'consistent-device-id',
-          })
+  userId: 'consistent-user-id',
+  sessionId: 'consistent-session-id',
+  properties: expect.objectContaining({,)
+  deviceId: 'consistent-device-id',
+}
         }),
         expect.any(Array),
         expect.any(Object)
@@ -487,10 +479,10 @@ describe('ConversionTrackingSDK', () => {
       expect(mockSessionManager.trackConversionEvent).not.toHaveBeenCalled();
     });
     it('should report errors to monitoring endpoint', async () => {
-      const configWithErrorReporting: ConversionTrackingConfig = {
-        ...config,
-        errorReportingEndpoint: '/api/errors',
-      };
+  const configWithErrorReporting: ConversionTrackingConfig = {,
+  ...config,
+  errorReportingEndpoint: '/api/errors',
+};
       sdk = new ConversionTrackingSDK()
         configWithErrorReporting,
         mockConversionArchitecture,
@@ -505,9 +497,9 @@ describe('ConversionTrackingSDK', () => {
       expect(global.fetch).toHaveBeenCalledWith()
         '/api/errors',
         expect.objectContaining({)
-          method: 'POST',
-          body: expect.stringContaining('Test error'),
-        })
+  method: 'POST',
+  body: expect.stringContaining('Test error'),
+}
       );
     });
   });

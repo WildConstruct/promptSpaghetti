@@ -24,6 +24,7 @@ import {
 } from '../../../../packages/core/types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
+}
 export interface HealthCheckFailureEvent {
   healthCheckId: string;
   healthCheckName: string;
@@ -34,7 +35,9 @@ export interface HealthCheckFailureEvent {
   severity: ActionSeverity;
   metadata: HealthCheckMetadata;
 }
+}
 
+}
 export interface HealthCheckMetadata {
   responseTime?: number;
   errorCode?: string;
@@ -43,7 +46,9 @@ export interface HealthCheckMetadata {
   affectedEndpoints?: string[];
   diagnosticData?: unknown;
 }
+}
 
+}
 export interface SystemAlert {
   alertId: string;
   alertType: 'system_error' | 'performance_degradation' | 'security_breach' | 'data_corruption' | 'configuration_error';
@@ -54,7 +59,9 @@ export interface SystemAlert {
   description: string;
   metadata: AlertMetadata;
 }
+}
 
+}
 export interface AlertMetadata {
   affectedServices?: string[];
   errorRate?: number;
@@ -64,7 +71,9 @@ export interface AlertMetadata {
   tags?: string[];
   correlationId?: string;
 }
+}
 
+}
 export interface MetricAlert {
   metricName: string;
   system: Epic17System;
@@ -76,7 +85,9 @@ export interface MetricAlert {
   timestamp: Date;
   metadata: MetricMetadata;
 }
+}
 
+}
 export interface MetricMetadata {
   aggregationType: 'average' | 'sum' | 'max' | 'min' | 'count';
   timeWindow: number; // minutes
@@ -84,7 +95,9 @@ export interface MetricMetadata {
   trend: 'increasing' | 'stable' | 'decreasing';
   previousValue?: number;
 }
+}
 
+}
 export interface IntegrationConfig {
   enabled: boolean;
   autoTriggerPlaybooks: boolean;
@@ -95,7 +108,9 @@ export interface IntegrationConfig {
   alertMapping: AlertMapping[];
   metricMapping: MetricMapping[];
 }
+}
 
+}
 export interface HealthCheckMapping {
   healthCheckId: string;
   playbookIds: string[];
@@ -104,7 +119,9 @@ export interface HealthCheckMapping {
   cooldownMinutes: number;
   autoExecute: boolean;
 }
+}
 
+}
 export interface AlertMapping {
   alertPattern: string;
   playbookIds: string[];
@@ -112,13 +129,16 @@ export interface AlertMapping {
   frequencyThreshold: number;
   autoExecute: boolean;
 }
+}
 
+}
 export interface MetricMapping {
   metricName: string;
   playbookIds: string[];
   thresholds: {
     warning: number;
     critical: number;
+}
   };
   operator: 'above' | 'below';
   autoExecute: boolean;
@@ -172,6 +192,7 @@ export class HealthCheckPlaybookIntegration {
    * Initialize the health check integration
    */
   private async initializeIntegration(): Promise<void> {
+
     if (!this.config.enabled) {
       console.log('🔌 Health Check Playbook Integration disabled');
       return;
@@ -206,6 +227,7 @@ export class HealthCheckPlaybookIntegration {
    * Handle health check failure event
    */
   async handleHealthCheckFailure(event: HealthCheckFailureEvent): Promise<void> {
+
     if (!this.config.enabled) return;
 
     console.log(`🚨 Health check failure: ${event.healthCheckName} (${event.system})`);
@@ -237,7 +259,7 @@ export class HealthCheckPlaybookIntegration {
           healthCheckId: event.healthCheckId,
           system: event.system,
           error: error.message
-        },
+  }
         severity: 'error'
       });
     }
@@ -247,6 +269,7 @@ export class HealthCheckPlaybookIntegration {
    * Handle system alert event
    */
   async handleSystemAlert(alert: SystemAlert): Promise<void> {
+
     if (!this.config.enabled) return;
 
     console.log(`🚨 System alert: ${alert.title} (${alert.source})`);
@@ -277,7 +300,7 @@ export class HealthCheckPlaybookIntegration {
           alertId: alert.alertId,
           alertType: alert.alertType,
           error: error.message
-        },
+  }
         severity: 'error'
       });
     }
@@ -287,6 +310,7 @@ export class HealthCheckPlaybookIntegration {
    * Handle metric threshold breach
    */
   async handleMetricAlert(metricAlert: MetricAlert): Promise<void> {
+
     if (!this.config.enabled) return;
 
     console.log(`📊 Metric alert: ${metricAlert.metricName} ${metricAlert.thresholdOperator} ${metricAlert.thresholdValue}`);
@@ -321,6 +345,7 @@ export class HealthCheckPlaybookIntegration {
     triggerEvent: HealthCheckFailureEvent | SystemAlert | MetricAlert,
     triggerType: string
   ): Promise<void> {
+
     for (const playbookId of playbookIds) {
       try {
         // Check cooldown
@@ -355,7 +380,7 @@ export class HealthCheckPlaybookIntegration {
             event: triggerEvent,
             triggeredBy: 'health_check_integration',
             timestamp: new Date()
-          },
+  }
           {
             manualTrigger: false,
             userId: 'health_check_system',
@@ -377,7 +402,7 @@ export class HealthCheckPlaybookIntegration {
             triggerEvent: this.sanitizeEventForLogging(triggerEvent),
             executionId: executionResult.executionId,
             status: executionResult.status
-          },
+  }
           severity: 'info'
         });
 
@@ -395,6 +420,7 @@ export class HealthCheckPlaybookIntegration {
    * Register all Epic 17 playbooks
    */
   private async registerPlaybooks(): Promise<void> {
+
     console.log('📚 Registering Epic 17 incident playbooks...');
 
     const playbooks = Epic17SpecificPlaybooks.getAllPlaybooks();
@@ -415,6 +441,7 @@ export class HealthCheckPlaybookIntegration {
    * Set up health check listeners
    */
   private async setupHealthCheckListeners(): Promise<void> {
+
     console.log('🏥 Setting up health check listeners...');
 
     // Set up listeners for each health check mapping
@@ -437,6 +464,7 @@ export class HealthCheckPlaybookIntegration {
    * Set up alert listeners
    */
   private async setupAlertListeners(): Promise<void> {
+
     console.log('🚨 Setting up alert listeners...');
 
     // Set up listeners for each alert mapping
@@ -459,6 +487,7 @@ export class HealthCheckPlaybookIntegration {
    * Set up metric listeners
    */
   private async setupMetricListeners(): Promise<void> {
+
     console.log('📊 Setting up metric listeners...');
 
     // Set up listeners for each metric mapping
@@ -490,7 +519,7 @@ export class HealthCheckPlaybookIntegration {
         consecutiveFailuresThreshold: 3,
         cooldownMinutes: 15,
         autoExecute: true
-      },
+  }
       {
         healthCheckId: 'admin-dashboard-health',
         playbookIds: ['epic17-admin-system-outage'],
@@ -498,7 +527,7 @@ export class HealthCheckPlaybookIntegration {
         consecutiveFailuresThreshold: 2,
         cooldownMinutes: 10,
         autoExecute: true
-      },
+  }
       {
         healthCheckId: 'content-management-health',
         playbookIds: ['epic17-content-security-incident'],
@@ -518,14 +547,14 @@ export class HealthCheckPlaybookIntegration {
         severityThreshold: 'high',
         frequencyThreshold: 5,
         autoExecute: true
-      },
+  }
       {
         alertPattern: 'admin.*unavailable',
         playbookIds: ['epic17-admin-system-outage'],
         severityThreshold: 'critical',
         frequencyThreshold: 1,
         autoExecute: true
-      },
+  }
       {
         alertPattern: 'fraud.*detected',
         playbookIds: ['epic17-marketplace-fraud'],
@@ -544,14 +573,14 @@ export class HealthCheckPlaybookIntegration {
         thresholds: { warning: 3000, critical: 5000 },
         operator: 'above',
         autoExecute: true
-      },
+  }
       {
         metricName: 'admin_api_availability',
         playbookIds: ['epic17-admin-system-outage'],
         thresholds: { warning: 95, critical: 90 },
         operator: 'below',
         autoExecute: true
-      },
+  }
       {
         metricName: 'system_error_rate',
         playbookIds: ['epic17-system-performance'],
@@ -616,6 +645,7 @@ export class HealthCheckPlaybookIntegration {
   }
 
   private async validateConfiguration(): Promise<void> {
+
     console.log('✅ Configuration validation completed');
   }
 
@@ -624,12 +654,14 @@ export class HealthCheckPlaybookIntegration {
     _____triggerEvent: unknown,
     _____triggerType: string
   ): Promise<void> {
+
     // Implementation for queueing playbook execution when at capacity
     console.log(`📋 Queued playbook execution: ${playbookId}`);
   }
 }
 
 // Supporting interfaces
+}
 interface HealthCheckEventListener {
   id: string;
   healthCheckId: string;
@@ -637,7 +669,9 @@ interface HealthCheckEventListener {
   enabled: boolean;
   lastTriggered: Date | null;
 }
+}
 
+}
 interface AlertEventListener {
   id: string;
   pattern: string;
@@ -645,11 +679,14 @@ interface AlertEventListener {
   enabled: boolean;
   lastTriggered: Date | null;
 }
+}
 
+}
 interface MetricEventListener {
   id: string;
   metricName: string;
   callback: (alert: MetricAlert) => Promise<void>;
   enabled: boolean;
   lastTriggered: Date | null;
+}
 }

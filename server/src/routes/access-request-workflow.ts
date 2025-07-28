@@ -150,7 +150,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'string', enum: ['read', 'WRITE', 'DELETE', 'EXPORT', 'ADMIN'] },
             minItems: 1
-          },
+  }
           businessJustification: { type: 'string', minLength: 20 },
           urgency: { type: 'string', enum: ['LOW', 'NORMAL', 'HIGH', 'EMERGENCY'], default: 'NORMAL' },
           requestedAccess: { type: 'string', enum: ['read', 'read_write', 'full_access', 'admin'] },
@@ -163,13 +163,13 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
               timezone: { type: 'string', default: 'UTC' },
               businessHoursOnly: { type: 'boolean', default: false }
             }
-          },
+  }
           requiredBy: { type: 'string', format: 'date-time' },
           expiresAt: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-        },
+  }
         required: ['resourceId', 'resourceType', 'resourceDescription', 'requestedOperations', 'businessJustification', 'requestedAccess', 'timeframe']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -226,18 +226,18 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           decision: { type: 'string', enum: ['APPROVED', 'REJECTED', 'APPROVED_WITH_CONDITIONS'] },
           comments: { type: 'string' },
           conditions: { type: 'array', items: { type: 'string' } }
-        },
+  }
         required: ['decision']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -367,9 +367,9 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -395,7 +395,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                 requiredBy: { type: 'string', format: 'date-time' },
                 expiresAt: { type: 'string', format: 'date-time' }
               }
-            },
+  }
             auditTrail: {
               type: 'array',
               items: {
@@ -438,7 +438,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           submittedAt: details.request.submittedAt.toISOString(),
           requiredBy: details.request.requiredBy?.toISOString(),
           expiresAt: details.request.expiresAt?.toISOString()
-        },
+  }
         auditTrail: details.auditTrail.map(entry => ({
           entryId: entry.entryId,
           timestamp: entry.timestamp.toISOString(),
@@ -476,16 +476,16 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10 }
-        },
+  }
         required: ['reason']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -549,7 +549,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'integer', minimum: 0, default: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -568,7 +568,7 @@ export async function accessRequestWorkflowRoutes(fastify: FastifyInstance) {
                   submittedAt: { type: 'string', format: 'date-time' }
                 }
               }
-            },
+  }
             pagination: {
               type: 'object',
               properties: {

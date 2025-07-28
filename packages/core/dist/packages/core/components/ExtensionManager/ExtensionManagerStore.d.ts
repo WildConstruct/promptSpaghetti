@@ -1,7 +1,3 @@
-/**
- * Extension Manager Store - Epic 8.4 Story 8.4.5
- * State management for extension manager UI
- */
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 export interface ExtensionStatus {
     enabled: boolean;
@@ -20,8 +16,8 @@ export interface ExtensionInstallation {
     configuration?: Record<string, any>;
 }
 export interface ExtensionManagerState {
-    installedExtensions: ExtensionManifest[];
-    availableExtensions: ExtensionManifest[];
+    installedExtensions: ExtensionManifest;
+    availableExtensions: ExtensionManifest;
     extensionStatuses: Map<string, ExtensionStatus>;
     extensionConfigurations: Map<string, Record<string, any>>;
     isLoading: boolean;
@@ -40,6 +36,5 @@ export interface ExtensionManagerState {
     clearError: () => void;
     setSelectedExtension: (extensionId: string | null) => void;
 }
-export declare const useExtensionManagerStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ExtensionManagerState>>;
 export type ExtensionManagerStore = ReturnType<typeof useExtensionManagerStore>;
 //# sourceMappingURL=ExtensionManagerStore.d.ts.map

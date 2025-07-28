@@ -14,7 +14,7 @@ export function demonstrateWeightedAdvanced() {
   console.log('=== WeightedAdvanced Node Demonstration ===\n');
   // Example 1: Basic weighted choices with linear distribution
   console.log('1. Linear Distribution (default):');
-  const choices: WeightedChoice[] = [
+  const choices: WeightedChoice = [
     { value: 'Common Item', weight: 50 },
     { value: 'Uncommon Item', weight: 30 },
     { value: 'Rare Item', weight: 15 },
@@ -37,30 +37,28 @@ export function demonstrateWeightedAdvanced() {
   // Example 4: Custom distribution configuration
   console.log('\n4. Custom Configuration (exponential factor=3, min weight=0.5):');
   const customNode = createWeightedAdvancedNode('loot-custom', choices, {)
-    type: 'exponential',
+  type: 'exponential',
     parameters: { factor: 3 },
     normalize: true,
-    minWeight: 0.5,
+    minWeight: 0.5;
   });
   const customResults = generateResults(customNode, 'Custom', 1000);
   console.log(customResults);
   // Example 5: Performance and determinism demonstration
   console.log('\n5. Performance & Determinism:');
   demonstratePerformanceAndDeterminism();
-}
 /**
  * Generate results and analyze distribution
  */
 function generateResults(node: WeightedAdvancedNode, distributionName: string, samples: number) {
-  const results: string[] = [];
+  const results: string = [];
   const startTime = performance.now();
   for (let i = 0; i < samples; i++) {
     const ctx = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
-      seed: i,
-    });
+  variables: {},
+      seed: i;
+  });
     results.push(node.run(ctx));
-  }
   const endTime = performance.now();
   const executionTime = endTime - startTime;
   // Count occurrences
@@ -71,24 +69,24 @@ function generateResults(node: WeightedAdvancedNode, distributionName: string, s
   // Calculate percentages
   const percentages = Object.entries(counts);
     .map(([item, count]) => ({)
-      item,
-      count,
-      percentage: ((count / samples) * 100).toFixed(1),
-    }))
+  item,
+  count,
+  percentage: ((count / samples) * 100).toFixed(1),
+}))
     .sort((a, b) => b.count - a.count);
   return {
     distribution: distributionName,
     samples,
-    executionTime: `${executionTime.toFixed(2)}ms`,}
-    results: percentages,
-    validation: node.validate(),
+    executionTime: `${executionTime.toFixed(2)}ms`}
+},
+  results: percentages,
+    validation: node.validate();
   };
-}
 /**
  * Demonstrate performance and deterministic behavior
  */
 function demonstratePerformanceAndDeterminism() {
-  const choices: WeightedChoice[] = [
+  const choices: WeightedChoice = [
     { value: 'Fast', weight: 3 },
     { value: 'Medium', weight: 2 },
     { value: 'Slow', weight: 1 }
@@ -97,14 +95,13 @@ function demonstratePerformanceAndDeterminism() {
   // Test determinism
   console.log('  Determinism Test (same seed should produce same result):');
   const seed = 42;
-  const results: string[] = [];
+  const results: string = [];
   for (let i = 0; i < 5; i++) {
     const ctx = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
+  variables: {},
       seed
     });
     results.push(node.run(ctx));
-  }
   console.log(`    Seed ${seed}: [${results.join(', ')}]`);}
   console.log(`    All same: ${results.every(r => r === results[0])}`);}
   // Test performance
@@ -112,11 +109,10 @@ function demonstratePerformanceAndDeterminism() {
   const startTime = performance.now();
   for (let i = 0; i < 1000; i++) {
     const ctx = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
-      seed: i,
-    });
+  variables: {},
+      seed: i;
+  });
     node.run(ctx);
-  }
   const endTime = performance.now();
   const avgTime = (endTime - startTime) / 1000;
   console.log(`    Average execution time: ${avgTime.toFixed(4)}ms per call`);}
@@ -127,9 +123,7 @@ function demonstratePerformanceAndDeterminism() {
   console.log(`    Valid: ${validation.valid}`);}
   console.log(`    Errors: ${validation.errors.length}`);}
   console.log(`    Warnings: ${validation.warnings.length}`);}
-}
 
 // Example usage if run directly
 if (require.main === module) {
   demonstrateWeightedAdvanced();
-}

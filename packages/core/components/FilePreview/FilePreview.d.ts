@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import { PSGFile } from '../../projectManager';
+
 interface FilePreviewProps {
     /** File data for preview */
     file: PSGFile;
@@ -20,7 +21,7 @@ interface FilePreviewProps {
     style?: React.CSSProperties;
     /** CSS class name */
     className?: string;
-}
+
 export declare const FilePreview: React.FC<FilePreviewProps>;
 declare const MemoizedFilePreview: React.NamedExoticComponent<FilePreviewProps>;
 export default MemoizedFilePreview;

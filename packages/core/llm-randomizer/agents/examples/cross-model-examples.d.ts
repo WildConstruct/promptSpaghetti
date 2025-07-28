@@ -9,7 +9,7 @@ export interface CrossModelTestResult {
         averageGenerationTime: number;
         consistencyScore: number;
     };
-}
+
 export declare class CrossModelTester {
     /**
      * Test all three models with the same request
@@ -27,7 +27,6 @@ export declare class CrossModelTester {
      * Calculate similarity between two graphs (basic implementation)
      */
     private calculateGraphSimilarity;
-}
 /**
  * Predefined test cases for cross-model comparison
  */

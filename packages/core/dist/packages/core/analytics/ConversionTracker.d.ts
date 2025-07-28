@@ -33,7 +33,7 @@ export interface ConversionFunnel {
     id: string;
     name: string;
     description: string;
-    steps: ConversionStep[];
+    steps: ConversionStep;
     timeWindow: number;
     category: ConversionCategory;
 }
@@ -84,69 +84,8 @@ export declare class ConversionTracker {
     /**
      * Track a conversion event
      */
-    trackEvent(type: ConversionEventType, properties?: Record<string, any>, value?: number): void;
-    /**
-     * Track director-specific creative workflow events
-     */
-    trackDirectorWorkflow(action: string, context?: Record<string, any>): void;
-    /**
-     * Track user engagement events
-     */
-    trackEngagement(engagementType: 'feature_usage' | 'help_interaction' | 'collaboration' | 'content_creation', details?: Record<string, any>): void;
-    /**
-     * Track business conversion events
-     */
-    trackBusinessEvent(eventType: 'trial_started' | 'subscription_upgraded' | 'payment_completed' | 'subscription_cancelled', value: number, metadata?: Record<string, any>): void;
-    /**
-     * Get conversion metrics for a specific funnel
-     */
-    getFunnelMetrics(funnelId: string, startTime: number, endTime: number): ConversionMetrics | null;
-    /**
-     * Get real-time conversion dashboard data
-     */
-    getDashboardData(): {
-        realTimeMetrics: {
-            activeUsers: number;
-            conversionsLast24h: number;
-            topConvertingFunnel: string;
-            averageSessionDuration: number;
-        };
-        funnelPerformance: {
-            [funnelId: string]: {
-                conversionRate: number;
-                trend: 'up' | 'down' | 'stable';
-                completions24h: number;
-            };
-        };
-        recentEvents: ConversionEvent[];
-    };
-    /**
-     * A/B testing integration
-     */
-    trackExperimentConversion(experimentId: string, variantId: string, eventType: ConversionEventType, properties?: Record<string, any>): void;
-    /**
-     * Add event listener for real-time tracking
-     */
-    addEventListener(eventType: ConversionEventType, callback: (event: ConversionEvent) => void): void;
-    /**
-     * Remove event listener
-     */
-    removeEventListener(eventType: ConversionEventType, callback: (event: ConversionEvent) => void): void;
-    private generateEventId;
-    private getCurrentUserId;
-    private getCurrentSessionId;
-    private getCategoryForEventType;
-    private getCampaignSource;
-    private getExperimentGroup;
-    private getSessionDuration;
-    private triggerEventListeners;
-    private checkFunnelProgress;
-    private analyzeFunnelProgression;
-    private calculateSegmentBreakdown;
-    private calculateSessionDurations;
-    private flushEvents;
-    private startEventFlushing;
+    trackEvent(type: ConversionEventType): any;
+    properties: Record<string, any>;
+    value?: number;
 }
-export declare const conversionTracker: ConversionTracker;
-export default conversionTracker;
 //# sourceMappingURL=ConversionTracker.d.ts.map

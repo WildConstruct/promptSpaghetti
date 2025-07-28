@@ -1,11 +1,12 @@
 import { EventEmitter } from 'events';
 import { WorkspaceId, ProjectId, UserId, ResourceId, NotificationType, Notification } from '../types/workspace';
 import { WorkspaceDAO } from '../dao/workspace-dao';
+
 export interface NotificationChannel {
     type: 'in_app' | 'email' | 'slack' | 'webhook';
     enabled: boolean;
     config: Record<string, unknown>;
-}
+
 export interface NotificationPreferences {
     userId: UserId;
     channels: NotificationChannel[];
@@ -15,12 +16,12 @@ export interface NotificationPreferences {
         frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
         time?: string;
     };
-}
+
 export interface NotificationFilter {
     type: 'workspace' | 'project' | 'activity_type' | 'user';
     value: string;
     action: 'include' | 'exclude';
-}
+
 export interface NotificationTemplate {
     type: NotificationType;
     channels: {,
@@ -30,7 +31,7 @@ export interface NotificationTemplate {
             metadata?: Record<string, unknown>;
         };
     };
-}
+
 export interface NotificationContext {
     workspaceId: WorkspaceId;
     projectId?: ProjectId;
@@ -38,7 +39,7 @@ export interface NotificationContext {
     actorUserId: UserId;
     targetUserIds: UserId[];
     data: Record<string, unknown>;
-}
+
 export interface NotificationDelivery {
     id: string;
     notificationId: string;
@@ -49,7 +50,7 @@ export interface NotificationDelivery {
     readAt?: Date;
     error?: string;
     retryCount: number;
-}
+
 export declare class WorkspaceNotificationSystem extends EventEmitter {
     private dao;
     private preferences;
@@ -89,5 +90,5 @@ export declare class WorkspaceNotificationSystem extends EventEmitter {
     getUnreadNotifications(userId: UserId): Promise<Notification[]>;
     private startDeliveryProcessor;
     shutdown(): Promise<void>;
-}
+
 //# sourceMappingURL=notification-system.d.ts.map

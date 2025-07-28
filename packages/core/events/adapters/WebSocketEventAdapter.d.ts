@@ -49,7 +49,7 @@ export declare class WebSocketEventAdapter {
      * Clean up adapter resources
      */
     cleanup(): void;
-}
+
 export declare const webSocketAdapter: WebSocketEventAdapter;
 export declare const webSocketUtils: {
     /**

@@ -13,6 +13,7 @@ import { AutomatedEnforcementService, EnforcementAction } from '../services/trus
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface ExecutionPlan {
   planId: string;
   actions: EnforcementAction[];
@@ -23,6 +24,7 @@ export interface ExecutionPlan {
     estimatedRevenueLoss: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     mitigationStrategies: string[];
+}
   };
   executionSteps: ExecutionStep[];
   rollbackPlan: RollbackStep[];
@@ -32,6 +34,7 @@ export interface ExecutionPlan {
   createdAt: Date;
 }
 
+}
 export interface ExecutionStep {
   stepId: string;
   order: number;
@@ -45,9 +48,11 @@ export interface ExecutionStep {
     trustScoreThreshold?: number;
     manualApprovalRequired?: boolean;
     notificationSent?: boolean;
+}
   };
 }
 
+}
 export interface RollbackStep {
   stepId: string;
   order: number;
@@ -57,7 +62,9 @@ export interface RollbackStep {
   condition: 'immediate' | 'scheduled' | 'conditional';
   scheduledAt?: Date;
 }
+}
 
+}
 export interface ExecutionResult {
   planId: string;
   status: 'completed' | 'partial' | 'failed';
@@ -69,7 +76,9 @@ export interface ExecutionResult {
   errors: string[];
   rollbackAvailable: boolean;
 }
+}
 
+}
 export interface StepResult {
   stepId: string;
   actionId: string;
@@ -78,7 +87,9 @@ export interface StepResult {
   error?: string;
   rollbackId?: string;
 }
+}
 
+}
 export interface AdminOverride {
   overrideId: string;
   actionId: string;
@@ -89,6 +100,7 @@ export interface AdminOverride {
   approvedBy?: string;
   createdAt: Date;
   appliedAt?: Date;
+}
 }
 
 export class EnforcementActionExecutor {
@@ -128,6 +140,7 @@ export class EnforcementActionExecutor {
       batchSize?: number;
     } = {}
   ): Promise<ExecutionPlan> {
+
     console.log(`📋 Creating execution plan for ${actions.length} actions`);
 
     const planId = this.generatePlanId();
@@ -167,7 +180,7 @@ export class EnforcementActionExecutor {
         actionCount: actions.length,
         riskLevel: impactAssessment.riskLevel,
         approvalRequired: plan.approvalRequired
-      },
+  }
       severity: 'info'
     });
 
@@ -178,6 +191,7 @@ export class EnforcementActionExecutor {
    * Assess impact of enforcement actions
    */
   private async assessImpact(actions: EnforcementAction[]): Promise<ExecutionPlan['impactAssessment']> {
+
     console.log('📊 Assessing impact of enforcement actions');
 
     const userActions = actions.filter(a => a.entityType === 'user');
@@ -215,6 +229,7 @@ export class EnforcementActionExecutor {
     actions: EnforcementAction[],
     impact: ExecutionPlan['impactAssessment']
   ): Promise<ExecutionStep[]> {
+
     const steps: ExecutionStep[] = [];
 
     // Sort actions by priority: critical first, then high, medium, low
@@ -246,6 +261,7 @@ export class EnforcementActionExecutor {
    * Create rollback plan for execution steps
    */
   private async createRollbackPlan(steps: ExecutionStep[]): Promise<RollbackStep[]> {
+
     const rollbackSteps: RollbackStep[] = [];
 
     // Create rollback steps in reverse order
@@ -274,6 +290,7 @@ export class EnforcementActionExecutor {
    * Execute enforcement plan
    */
   async executePlan(planId: string, executedBy: string): Promise<ExecutionResult> {
+
     console.log(`🚀 Executing enforcement plan: ${planId}`);
 
     const plan = this.executionQueue.get(planId);
@@ -349,7 +366,7 @@ export class EnforcementActionExecutor {
           successCount,
           failureCount,
           executionTime
-        },
+  }
         severity: result.status === 'completed' ? 'info' : 'warning'
       });
 
@@ -364,6 +381,7 @@ export class EnforcementActionExecutor {
    * Execute individual step
    */
   private async executeStep(step: ExecutionStep, executedBy: string): Promise<StepResult> {
+
     const startTime = Date.now();
     step.startedAt = new Date();
     step.status = 'executing';
@@ -437,6 +455,7 @@ export class EnforcementActionExecutor {
     adminUserId: string,
     overrideData?: any
   ): Promise<AdminOverride> {
+
     const override: AdminOverride = {
       overrideId: this.generateOverrideId(),
       actionId,
@@ -457,7 +476,7 @@ export class EnforcementActionExecutor {
         actionId,
         overrideType,
         reason
-      },
+  }
       severity: 'warning'
     });
 
@@ -468,6 +487,7 @@ export class EnforcementActionExecutor {
    * Apply admin override to step
    */
   private async applyOverride(step: ExecutionStep, override: AdminOverride): Promise<StepResult> {
+
     const startTime = Date.now();
     
     console.log(`🔧 Applying override ${override.overrideType} to step ${step.stepId}`);
@@ -521,6 +541,7 @@ export class EnforcementActionExecutor {
    * Execute rollback plan
    */
   async rollbackPlan(planId: string, rolledBackBy: string, reason: string): Promise<ExecutionResult> {
+
     console.log(`🔄 Rolling back enforcement plan: ${planId}`);
 
     const plan = this.executionQueue.get(planId);
@@ -577,7 +598,7 @@ export class EnforcementActionExecutor {
         status: result.status,
         successCount,
         failureCount
-      },
+  }
       severity: 'warning'
     });
 
@@ -589,11 +610,13 @@ export class EnforcementActionExecutor {
   // =============================================================================
 
   private async executeRollbackStep(step: RollbackStep): Promise<void> {
+
     // Implementation would depend on rollback type
     console.log(`🔄 Executing rollback step: ${step.rollbackType} for action ${step.actionId}`);
   }
 
   private async checkPreConditions(step: ExecutionStep): Promise<boolean> {
+
     if (!step.preConditions) return true;
 
     if (step.preConditions.manualApprovalRequired) {
@@ -617,6 +640,7 @@ export class EnforcementActionExecutor {
   }
 
   private async getActiveOverride(actionId: string): Promise<AdminOverride | null> {
+
     const result = await this.db.query(`
       SELECT * FROM admin_overrides 
       WHERE action_id = $1 AND applied_at IS NULL 
@@ -676,6 +700,7 @@ export class EnforcementActionExecutor {
   }
 
   private async estimateRevenueLoss(actions: EnforcementAction[]): Promise<number> {
+
     // Placeholder implementation
     // Would calculate estimated revenue impact based on action types and affected entities
     return 0;
@@ -717,6 +742,7 @@ export class EnforcementActionExecutor {
 
   // Storage methods
   private async storePlan(plan: ExecutionPlan): Promise<void> {
+
     await this.db.query(`
       INSERT INTO enforcement_execution_plans 
       (plan_id, actions, impact_assessment, execution_steps, rollback_plan, 
@@ -735,6 +761,7 @@ export class EnforcementActionExecutor {
   }
 
   private async storeExecutionResult(result: ExecutionResult): Promise<void> {
+
     await this.db.query(`
       UPDATE enforcement_execution_plans 
       SET execution_result = $2, executed_at = NOW()
@@ -743,6 +770,7 @@ export class EnforcementActionExecutor {
   }
 
   private async storeOverride(override: AdminOverride): Promise<void> {
+
     await this.db.query(`
       INSERT INTO admin_overrides 
       (override_id, action_id, override_type, reason, admin_user_id, override_data)

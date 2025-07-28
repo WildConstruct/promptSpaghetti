@@ -12,16 +12,16 @@ describe('WeightedAdvanced Node', () => {
   let node: WeightedAdvancedNode;
   let context: unknown;
   beforeEach(() => {
-    const choices: WeightedChoice[] = [
+    const choices: WeightedChoice = [
       { value: 'apple', weight: 3 },
       { value: 'banana', weight: 2 },
       { value: 'cherry', weight: 1 }
     ];
     node = new WeightedAdvancedNode('test-weighted', choices);
     context = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
-      seed: 12345,
-    });
+  variables: {},
+      seed: 12345;
+  });
   });
   describe('Basic Functionality', () => {
     test('should execute and return a choice', () => {
@@ -35,26 +35,25 @@ describe('WeightedAdvanced Node', () => {
       expect(result1).toBe(result2);
     });
     test('should produce different results with different seeds', () => {
-      const results1: string[] = [];
-      const results2: string[] = [];
+      const results1: string = [];
+      const results2: string = [];
       // Generate results with different seeds
       for (let i = 0; i < 10; i++) {
         const ctx1 = AdvancedExecutionUtils.enhanceContext({)
-          variables: {},
-          seed: 12345 + i,
-        });
+  variables: {},
+          seed: 12345 + i;
+  });
         const ctx2 = AdvancedExecutionUtils.enhanceContext({)
-          variables: {},
-          seed: 54321 + i,
-        });
+  variables: {},
+          seed: 54321 + i;
+  });
         results1.push(node.run(ctx1));
         results2.push(node.run(ctx2));
-      }
       // At least some results should be different
       expect(results1).not.toEqual(results2);
     });
     test('should handle single choice', () => {
-      const singleChoiceNode = new WeightedAdvancedNode('single', [;);
+      const singleChoiceNode = new WeightedAdvancedNode('single', [);
         { value: 'only', weight: 1 }
       ]);
       const result = singleChoiceNode.run(context);
@@ -67,7 +66,7 @@ describe('WeightedAdvanced Node', () => {
     });
   });
   describe('Distribution Algorithms', () => {
-    const testChoices: WeightedChoice[] = [
+    const testChoices: WeightedChoice = [
       { value: 'first', weight: 4 },
       { value: 'second', weight: 2 },
       { value: 'third', weight: 1 }
@@ -77,16 +76,16 @@ describe('WeightedAdvanced Node', () => {
       // Run multiple times to check distribution
       const results = Array.from({ length: 1000 }, (_, i) => {
         const ctx = AdvancedExecutionUtils.enhanceContext({)
-          variables: {},
-          seed: i,
-        });
+  variables: {},
+          seed: i;
+  });
         return linearNode.run(ctx);
       });
       const counts = {
-        first: results.filter(r => r === 'first').length,
-        second: results.filter(r => r === 'second').length,
-        third: results.filter(r => r === 'third').length,
-      };
+  first: results.filter(r => r === 'first').length,
+  second: results.filter(r => r === 'second').length,
+  third: results.filter(r => r === 'third').length,
+};
       // Should roughly follow 4:2:1 ratio
       expect(counts.first).toBeGreaterThan(counts.second);
       expect(counts.second).toBeGreaterThan(counts.third);
@@ -95,16 +94,16 @@ describe('WeightedAdvanced Node', () => {
       const expNode = new WeightedAdvancedNode('exp', testChoices, DistributionPresets.exponential);
       const results = Array.from({ length: 1000 }, (_, i) => {
         const ctx = AdvancedExecutionUtils.enhanceContext({)
-          variables: {},
-          seed: i,
-        });
+  variables: {},
+          seed: i;
+  });
         return expNode.run(ctx);
       });
       const counts = {
-        first: results.filter(r => r === 'first').length,
-        second: results.filter(r => r === 'second').length,
-        third: results.filter(r => r === 'third').length,
-      };
+  first: results.filter(r => r === 'first').length,
+  second: results.filter(r => r === 'second').length,
+  third: results.filter(r => r === 'third').length,
+};
       // Exponential should make higher weights even more dominant
       expect(counts.first).toBeGreaterThan(counts.second * 2);
     });
@@ -115,12 +114,12 @@ describe('WeightedAdvanced Node', () => {
       expect(['first', 'second', 'third']).toContain(result);
     });
     test('should handle custom distribution parameters', () => {
-      const customConfig: WeightDistributionConfig = {
-        type: 'exponential',
+      const customConfig: WeightDistributionConfig = {,
+  type: 'exponential',
         parameters: { factor: 3 },
         normalize: true,
-        minWeight: 0.1,
-      };
+        minWeight: 0.1;
+  };
       const customNode = new WeightedAdvancedNode('custom', testChoices, customConfig);
       const result = customNode.run(context);
       expect(['first', 'second', 'third']).toContain(result);
@@ -128,7 +127,7 @@ describe('WeightedAdvanced Node', () => {
   });
   describe('Weight Edge Cases', () => {
     test('should handle zero weights by falling back to uniform', () => {
-      const zeroWeightChoices: WeightedChoice[] = [
+      const zeroWeightChoices: WeightedChoice = [
         { value: 'a', weight: 0 },
         { value: 'b', weight: 0 },
         { value: 'c', weight: 0 }
@@ -138,7 +137,7 @@ describe('WeightedAdvanced Node', () => {
       expect(['a', 'b', 'c']).toContain(result);
     });
     test('should handle very small weights', () => {
-      const smallWeightChoices: WeightedChoice[] = [
+      const smallWeightChoices: WeightedChoice = [
         { value: 'tiny1', weight: 0.0001 },
         { value: 'tiny2', weight: 0.0002 }
       ];
@@ -147,12 +146,12 @@ describe('WeightedAdvanced Node', () => {
       expect(['tiny1', 'tiny2']).toContain(result);
     });
     test('should apply minimum weight threshold', () => {
-      const minWeightConfig: WeightDistributionConfig = {
-        type: 'linear',
-        minWeight: 1,
-        normalize: false,
-      };
-      const thresholdChoices: WeightedChoice[] = [
+  const minWeightConfig: WeightDistributionConfig = {,
+  type: 'linear',
+  minWeight: 1,
+  normalize: false,
+};
+      const thresholdChoices: WeightedChoice = [
         { value: 'low', weight: 0.1 },
         { value: 'high', weight: 5 }
       ];
@@ -174,7 +173,7 @@ describe('WeightedAdvanced Node', () => {
       expect(validation.warnings).toContain('No choices configured - node will depend on dynamic inputs');
     });
     test('should validate negative weights', () => {
-      const negativeChoices: WeightedChoice[] = [
+      const negativeChoices: WeightedChoice = [
         { value: 'good', weight: 1 },
         { value: 'bad', weight: -1 }
       ];
@@ -184,7 +183,7 @@ describe('WeightedAdvanced Node', () => {
       expect(validation.errors.some(e => e.includes('negative weight'))).toBe(true);
     });
     test('should validate empty values', () => {
-      const emptyValueChoices: WeightedChoice[] = [
+      const emptyValueChoices: WeightedChoice = [
         { value: '', weight: 1 },
         { value: 'valid', weight: 1 }
       ];
@@ -194,7 +193,7 @@ describe('WeightedAdvanced Node', () => {
       expect(validation.errors.some(e => e.includes('empty value'))).toBe(true);
     });
     test('should validate all zero weights', () => {
-      const zeroChoices: WeightedChoice[] = [
+      const zeroChoices: WeightedChoice = [
         { value: 'zero1', weight: 0 },
         { value: 'zero2', weight: 0 }
       ];
@@ -204,8 +203,8 @@ describe('WeightedAdvanced Node', () => {
       expect(validation.errors.some(e => e.includes('All weights are zero'))).toBe(true);
     });
     test('should validate distribution configuration', () => {
-      const invalidConfig: WeightDistributionConfig = {
-        type: 'exponential',
+      const invalidConfig: WeightDistributionConfig = {,
+  type: 'exponential',
         parameters: { factor: -1 }
       };
       const invalidNode = new WeightedAdvancedNode('invalid', [{ value: 'test', weight: 1 }], invalidConfig);
@@ -241,7 +240,6 @@ describe('WeightedAdvanced Node', () => {
       // Subsequent executions with same context should be cached
       for (let i = 0; i < 100; i++) {
         node.run(context);
-      }
       const endTime = Date.now();
       const executionTime = endTime - startTime;
       // Should complete quickly due to caching
@@ -249,9 +247,9 @@ describe('WeightedAdvanced Node', () => {
     });
     test('should track performance metrics', () => {
       const freshContext = AdvancedExecutionUtils.enhanceContext({)
-        variables: {},
-        seed: 12345,
-      });
+  variables: {},
+        seed: 12345;
+  });
       node.run(freshContext);
       const metricKey = 'test-weighted-weighted-selection_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
@@ -260,7 +258,7 @@ describe('WeightedAdvanced Node', () => {
   });
   describe('Factory Functions', () => {
     test('should create node via factory function', () => {
-      const choices: WeightedChoice[] = [{ value: 'factory', weight: 1 }];
+      const choices: WeightedChoice = [{ value: 'factory', weight: 1 }];
       const factoryNode = createWeightedAdvancedNode('factory-test', choices);
       expect(factoryNode).toBeInstanceOf(WeightedAdvancedNode);
       expect(factoryNode.id).toBe('factory-test');
@@ -274,9 +272,9 @@ describe('WeightedAdvanced Node', () => {
   describe('Integration with Advanced Features', () => {
     test('should work with advanced execution context', () => {
       const freshContext = AdvancedExecutionUtils.enhanceContext({)
-        variables: {},
-        seed: 12345,
-      });
+  variables: {},
+        seed: 12345;
+  });
       const result = node.run(freshContext);
       // Should populate execution metadata
       expect(freshContext.executionMeta.nodeExecutionOrder).toContain('test-weighted');
@@ -301,7 +299,7 @@ describe('Distribution Presets', () => {
   });
   test('should all have normalize enabled', () => {
     Object.values(DistributionPresets).forEach(preset => {)
-      expect(preset.normalize).toBe(true);
+  expect(preset.normalize).toBe(true);
     });
   });
 });

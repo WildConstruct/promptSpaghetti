@@ -3,6 +3,7 @@
 
 import { Pool, PoolClient } from 'pg';
 
+}
 export interface CommunityUser {
   id: string;
   display_name: string;
@@ -14,7 +15,9 @@ export interface CommunityUser {
   templates_count: number;
   total_revenue: number;
 }
+}
 
+}
 export interface CommunityPost {
   id: string;
   author: CommunityUser;
@@ -26,6 +29,7 @@ export interface CommunityPost {
     title: string;
     description: string;
     price_cents: number;
+}
   };
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   likes_count: number;
@@ -38,6 +42,7 @@ export interface CommunityPost {
   tags: string[];
 }
 
+}
 export interface CommunityDiscussion {
   id: string;
   title: string;
@@ -52,7 +57,9 @@ export interface CommunityDiscussion {
   is_solved: boolean;
   created_at: string;
 }
+}
 
+}
 export interface CommunityEvent {
   id: string;
   title: string;
@@ -66,7 +73,9 @@ export interface CommunityEvent {
   organizer: CommunityUser;
   tags: string[];
 }
+}
 
+}
 export interface CreatePostRequest {
   content: string;
   images?: string[];
@@ -74,14 +83,18 @@ export interface CreatePostRequest {
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   tags?: string[];
 }
+}
 
+}
 export interface CreateDiscussionRequest {
   title: string;
   content: string;
   category: string;
   tags?: string[];
 }
+}
 
+}
 export interface CreateEventRequest {
   title: string;
   description: string;
@@ -91,12 +104,14 @@ export interface CreateEventRequest {
   max_attendees?: number;
   tags?: string[];
 }
+}
 
 export class CommunityService {
   constructor(private db: Pool) {}
 
   // Post management
   async createPost(userId: string, postData: CreatePostRequest): Promise<CommunityPost> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -137,6 +152,7 @@ export class CommunityService {
     limit = 20,
     offset = 0
   ): Promise<CommunityPost[]> {
+
     let query = `
       SELECT 
         p.id, p.content, p.images, p.template_id, p.type, p.tags,
@@ -176,6 +192,7 @@ export class CommunityService {
   }
 
   async likePost(userId: string, postId: string): Promise<{ success: boolean; likes_count: number }> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -229,6 +246,7 @@ export class CommunityService {
 
   // Discussion management
   async createDiscussion(userId: string, discussionData: CreateDiscussionRequest): Promise<CommunityDiscussion> {
+
     const result = await this.db.query(`
       INSERT INTO community_discussions (
         author_id, title, content, category, tags
@@ -247,6 +265,7 @@ export class CommunityService {
   }
 
   async getDiscussions(category?: string, limit = 20, offset = 0): Promise<CommunityDiscussion[]> {
+
     let query = `
       SELECT 
         d.id, d.title, d.content, d.category, d.tags,
@@ -275,6 +294,7 @@ export class CommunityService {
 
   // Event management
   async createEvent(userId: string, eventData: CreateEventRequest): Promise<CommunityEvent> {
+
     const result = await this.db.query(`
       INSERT INTO community_events (
         organizer_id, title, description, type, start_date, end_date, max_attendees, tags
@@ -296,6 +316,7 @@ export class CommunityService {
   }
 
   async getUpcomingEvents(userId: string, limit = 20): Promise<CommunityEvent[]> {
+
     const query = `
       SELECT 
         e.id, e.title, e.description, e.type, e.start_date, e.end_date,
@@ -317,6 +338,7 @@ export class CommunityService {
   }
 
   async attendEvent(userId: string, eventId: string): Promise<{ success: boolean; attendees_count: number }> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -370,6 +392,7 @@ export class CommunityService {
 
   // User management
   async followUser(followerId: string, followingId: string): Promise<{ success: boolean }> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -421,6 +444,7 @@ export class CommunityService {
   }
 
   async getTopCreators(userId: string, limit = 10): Promise<CommunityUser[]> {
+
     const query = `
       SELECT 
         u.id, u.display_name, u.avatar_url, u.creator_tier, u.verification_status,
@@ -457,6 +481,7 @@ export class CommunityService {
 
   // Private helper methods
   private async getPostById(postId: string, userId?: string): Promise<CommunityPost> {
+
     const result = await this.db.query(`
       SELECT 
         p.id, p.content, p.images, p.template_id, p.type, p.tags,
@@ -480,6 +505,7 @@ export class CommunityService {
   }
 
   private async getDiscussionById(discussionId: string): Promise<CommunityDiscussion> {
+
     const result = await this.db.query(`
       SELECT 
         d.id, d.title, d.content, d.category, d.tags,
@@ -497,6 +523,7 @@ export class CommunityService {
   }
 
   private async getEventById(eventId: string, userId?: string): Promise<CommunityEvent> {
+
     const result = await this.db.query(`
       SELECT 
         e.id, e.title, e.description, e.type, e.start_date, e.end_date,
@@ -527,7 +554,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-      },
+  }
       content: row.content,
       images: row.images ? JSON.parse(row.images) : undefined,
       template_id: row.template_id,
@@ -564,7 +591,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-      },
+  }
       category: row.category,
       tags: row.tags ? JSON.parse(row.tags) : [],
       replies_count: row.replies_count,
@@ -597,7 +624,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-      },
+  }
       tags: row.tags ? JSON.parse(row.tags) : []
     };
   }

@@ -16,7 +16,7 @@ export interface VerificationQueueProps {
 export interface ReviewDecision {
     status: ValidationStatus;
     reviewNotes: string;
-    nextSteps: string[];
+    nextSteps: string;
     flagged: boolean;
     requiresSeniorReview: boolean;
     confidenceLevel: number;

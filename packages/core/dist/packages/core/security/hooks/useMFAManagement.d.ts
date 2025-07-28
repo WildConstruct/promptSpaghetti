@@ -1,17 +1,3 @@
-/**
- * MFA Management Hook
- *
- * Custom React hook for managing multi-factor authentication state and operations.
- * Provides a clean API for components to interact with MFA services and state.
- *
- * Features:
- * - MFA method management (enable/disable/configure)
- * - Backup codes generation and management
- * - Trusted device management
- * - Security event tracking
- * - Real-time status updates
- * - Error handling and loading states
- */
 export interface MFAMethod {
     id: string;
     type: 'totp' | 'sms' | 'email' | 'backup_codes';
@@ -81,10 +67,10 @@ export interface UseMFAManagementOptions {
     retryTimeoutMs?: number;
 }
 export interface UseMFAManagementReturn {
-    mfaMethods: MFAMethod[];
-    backupCodes: BackupCode[];
-    trustedDevices: TrustedDevice[];
-    securityEvents: SecurityEvent[];
+    mfaMethods: MFAMethod;
+    backupCodes: BackupCode;
+    trustedDevices: TrustedDevice;
+    securityEvents: SecurityEvent;
     settings: MFASettings;
     status: MFAStatus;
     loading: boolean;
@@ -103,7 +89,7 @@ export interface UseMFAManagementReturn {
     setupEmail: (email: string) => Promise<void>;
     removeMethod: (methodId: string) => Promise<void>;
     setPrimaryMethod: (methodId: string) => Promise<void>;
-    generateBackupCodes: () => Promise<BackupCode[]>;
+    generateBackupCodes: () => Promise<BackupCode>;
     downloadBackupCodes: () => void;
     markBackupCodeUsed: (codeId: string) => Promise<void>;
     addTrustedDevice: (device: Omit<TrustedDevice, 'id' | 'addedAt'>) => Promise<void>;
@@ -111,7 +97,7 @@ export interface UseMFAManagementReturn {
     refreshDeviceAccess: (deviceId: string) => Promise<void>;
     updateSettings: (newSettings: Partial<MFASettings>) => Promise<void>;
     resetSettings: () => Promise<void>;
-    getSecurityEvents: (limit?: number, offset?: number) => Promise<SecurityEvent[]>;
+    getSecurityEvents: (limit?: number, offset?: number) => Promise<SecurityEvent>;
     clearSecurityEvents: () => Promise<void>;
     validateMFACode: (code: string, methodType: string) => Promise<boolean>;
     testNotifications: () => Promise<void>;

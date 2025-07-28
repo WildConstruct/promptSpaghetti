@@ -53,6 +53,7 @@ export class DatabaseService {
   }
 
   async transaction<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
+
     const client = await this.pool.connect();
     
     try {
@@ -69,6 +70,7 @@ export class DatabaseService {
   }
 
   async healthCheck(): Promise<boolean> {
+
     try {
       const result = await this.query('SELECT 1 as health');
       return result.rows.length > 0 && result.rows[0].health === 1;
@@ -79,6 +81,7 @@ export class DatabaseService {
   }
 
   async initializeSchema(): Promise<void> {
+
     try {
       const fs = require('fs');
       const path = require('path');
@@ -100,6 +103,7 @@ export class DatabaseService {
   }
 
   async close(): Promise<void> {
+
     await this.pool.end();
   }
 
@@ -114,11 +118,13 @@ export class DatabaseService {
 
   // Get a client from the pool for manual transaction handling
   async getClient(): Promise<PoolClient> {
+
     return await this.pool.connect();
   }
 
   // User database operations for PasswordResetService
   async findUserByEmail(email: string): Promise<unknown | null> {
+
     const result = await this.query(
       'SELECT * FROM users WHERE email = $1 AND status = $2',
       [email.toLowerCase(), 'active']
@@ -127,6 +133,7 @@ export class DatabaseService {
   }
 
   async findUserById(id: string): Promise<unknown | null> {
+
     const result = await this.query(
       'SELECT * FROM users WHERE id = $1',
       [id]

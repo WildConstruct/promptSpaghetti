@@ -17,7 +17,7 @@ import {
 } from '../../community/ContentQualityAssessment';
 
 export interface QualityAssessmentDashboardProps {
-  contentId: string;
+  contentId: string;,
   versionId: string;
   userRole?: 'author' | 'editor' | 'reviewer' | 'admin';
   onQualityImproved?: (newScore: number) => void;
@@ -26,7 +26,6 @@ export interface QualityAssessmentDashboardProps {
   readOnly?: boolean;
   className?: string;
 }
-
 export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProps> = ({)
   contentId,
   versionId,
@@ -60,50 +59,44 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
       if (metricsResult.status === 'fulfilled') {
         setQualityMetrics(metricsResult.value);
       } else {
-        console.warn('Failed to load quality metrics:', metricsResult.reason);
-      }
-      if (workflowResult.status === 'fulfilled') {
-        setWorkflow(workflowResult.value);
-      } else {
-        console.warn('Failed to load workflow:', workflowResult.reason);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load quality data');
-    } finally {
+  console.warn('Failed to load quality metrics:', metricsResult.reason);
+  if (workflowResult.status === 'fulfilled') {
+  setWorkflow(workflowResult.value);
+} else {
+  console.warn('Failed to load workflow:', workflowResult.reason);
+} catch (err) {
+  setError(err instanceof Error ? err.message : 'Failed to load quality data');
+} finally {
       setLoading(false);
-    }
   };
   const handleRunAssessment = async (type: 'automated' | 'comprehensive') => {
-    setRunningAssessment(true);
-    setError(null);
-    try {
-      const newMetrics = await qualityService.runComprehensiveAssessment(contentId, versionId, {)
-        include_automated: true,
-        include_editorial: type === 'comprehensive',
-        include_community: type === 'comprehensive',
-      });
+  setRunningAssessment(true);
+  setError(null);
+  try {
+  const newMetrics = await qualityService.runComprehensiveAssessment(contentId, versionId, {)
+  include_automated: true,
+  include_editorial: type === 'comprehensive',
+  include_community: type === 'comprehensive',
+});
       setQualityMetrics(newMetrics);
       onQualityImproved?.(newMetrics.overallQualityScore);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to run assessment');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to run assessment');
+} finally {
       setRunningAssessment(false);
-    }
   };
   const handleAssignReview = async (;);
     reviewerId: string,
-    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review',
-  ) => {
-    try {
-      const updatedWorkflow = await qualityService.assignEditorialReview(contentId, versionId, reviewerId, {)
-        review_type: reviewType,
-      });
+    reviewType: 'quick_review' | 'comprehensive_review' | 'specialist_review') => {,
+  try {
+  const updatedWorkflow = await qualityService.assignEditorialReview(contentId, versionId, reviewerId, {)
+  review_type: reviewType,
+});
       setWorkflow(updatedWorkflow);
       onWorkflowUpdate?.(updatedWorkflow);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to assign review');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to assign review');
+};
   const handleApplyAutomatedFixes = async () => {
     try {
       const result = await qualityService.applyAutomatedFixes(;);
@@ -116,47 +109,45 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         // Reload quality data to show improvements
         await loadQualityData();
         onQualityImproved?.(qualityMetrics!.overallQualityScore + result.quality_improvement);
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to apply automated fixes');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to apply automated fixes');
+};
   const getGradeColor = (grade: string) => {
-    const colors = {
-      'A+': '#10b981',
-      'A': '#059669',
-      'B+': '#3b82f6',
-      'B': '#2563eb',
-      'C+': '#f59e0b',
-      'C': '#d97706',
-      'D': '#ef4444',
-      'F': '#dc2626'
-    };
+  const colors = {
+  'A+': '#10b981',
+  'A': '#059669',
+  'B+': '#3b82f6',
+  'B': '#2563eb',
+  'C+': '#f59e0b',
+  'C': '#d97706',
+  'D': '#ef4444',
+  'F': '#dc2626',
+};
     return colors[grade as keyof typeof colors] || '#6b7280';
   };
   const getStatusColor = (status: string) => {
-    const colors = {
-      excellent: '#10b981',
-      good: '#3b82f6',
-      acceptable: '#f59e0b',
-      needs_improvement: '#ef4444',
-      rejected: '#dc2626',
-    };
+  const colors = {
+  excellent: '#10b981',
+  good: '#3b82f6',
+  acceptable: '#f59e0b',
+  needs_improvement: '#ef4444',
+  rejected: '#dc2626',
+};
     return colors[status as keyof typeof colors] || '#6b7280';
   };
   const formatScore = (score: number) => {
     return Math.round(score);
   };
   const formatRecommendationPriority = (priority: string) => {
-    const priorities = {
-      high: '🔴 High',
-      medium: '🟡 Medium',
-      low: '🟢 Low',
-    };
+  const priorities = {
+  high: '🔴 High',
+  medium: '🟡 Medium',
+  low: '🟢 Low',
+};
     return priorities[priority as keyof typeof priorities] || priority;
   };
   if (loading) {
-    return ();
+    return;
       <div className={`quality-assessment-dashboard loading ${className}`}>}
         <div className="loading-content">
           <div className="loading-spinner"></div>
@@ -164,8 +155,7 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`quality-assessment-dashboard ${className}`}>}
       {/* Header */}
       <div className="dashboard-header">
@@ -687,426 +677,355 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
       </div>
       <style>{`
         .quality-assessment-dashboard {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          overflow: hidden;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  overflow: hidden;
         .quality-assessment-dashboard.loading {
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 400px;
-        }
         .loading-content {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 16px;
+          align-items: center;,
+  gap: 16px;
           text-align: center;
-        }
         .loading-spinner {
-          width: 40px;
-          height: 40px;
+          width: 40px;,
+  height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          padding: 20px;
-          border-bottom: 1px solid #e5e7eb;
-          background: #f9fafb;
-        }
+          align-items: flex-start;,
+  padding: 20px;
+          border-bottom: 1px solid #e5e7eb;,
+  background: #f9fafb;
         .header-info h3 {
           margin: 0 0 8px 0;
           font-size: 18px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .quality-summary {
           display: flex;
-          align-items: center;
-          gap: 12px;
-        }
+          align-items: center;,
+  gap: 12px;
         .quality-grade {
           font-size: 24px;
           font-weight: 700;
-        }
         .quality-score {
           font-size: 16px;
-          font-weight: 600;
-          color: #4b5563;
-        }
+          font-weight: 600;,
+  color: #4b5563;
         .quality-status {
           font-size: 14px;
           font-weight: 500;
           text-transform: capitalize;
-        }
         .header-actions {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .assessment-btn {
-          background: #3b82f6;
-          color: #ffffff;
-          border: none;
-          padding: 8px 16px;
+          background: #3b82f6;,
+  color: #ffffff;
+          border: none;,
+  padding: 8px 16px;
           border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
+          font-size: 14px;,
+  cursor: pointer;
           transition: background 0.2s ease;
-        }
-        .assessment-btn:hover:not(:disabled) {
-          background: #2563eb;
-        }
-        .assessment-btn:disabled {
-          opacity: 0.6;
+        .assessment-btn:hover:not(:disabled) {,
+  background: #2563eb;
+        .assessment-btn:disabled {,
+  opacity: 0.6;
           cursor: not-allowed;
-        }
         .assessment-btn.comprehensive {
           background: #059669;
-        }
-        .assessment-btn.comprehensive:hover:not(:disabled) {
-          background: #047857;
-        }
+        .assessment-btn.comprehensive:hover:not(:disabled) {,
+  background: #047857;
         .flag-issues-btn {
-          background: #ef4444;
-          color: #ffffff;
-          border: none;
-          padding: 8px 16px;
+          background: #ef4444;,
+  color: #ffffff;
+          border: none;,
+  padding: 8px 16px;
           border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-        }
+          font-size: 14px;,
+  cursor: pointer;
         .error-message {
-          background: #fef2f2;
-          color: #dc2626;
-          padding: 12px 16px;
-          margin: 0 20px 16px 20px;
-          border-radius: 6px;
-          border: 1px solid #fecaca;
+          background: #fef2f2;,
+  color: #dc2626;
+          padding: 12px 16px;,
+  margin: 0 20px 16px 20px;
+          border-radius: 6px;,
+  border: 1px solid #fecaca;
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .error-dismiss {
-          background: none;
-          border: none;
-          color: #dc2626;
-          cursor: pointer;
+          background: none;,
+  border: none;
+          color: #dc2626;,
+  cursor: pointer;
           margin-left: auto;
-        }
         .dashboard-tabs {
           display: flex;
-          border-bottom: 1px solid #e5e7eb;
-          background: #ffffff;
-        }
+          border-bottom: 1px solid #e5e7eb;,
+  background: #ffffff;
         .tab {
-          background: none;
-          border: none;
-          padding: 12px 20px;
-          cursor: pointer;
-          font-size: 14px;
-          color: #6b7280;
-          border-bottom: 2px solid transparent;
-          transition: all 0.2s ease;
-        }
-        .tab:hover {
-          color: #1f2937;
+          background: none;,
+  border: none;
+          padding: 12px 20px;,
+  cursor: pointer;
+          font-size: 14px;,
+  color: #6b7280;
+          border-bottom: 2px solid transparent;,
+  transition: all 0.2s ease;
+        .tab:hover {,
+  color: #1f2937;
           background: #f9fafb;
-        }
         .tab.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
-        }
         .tab-content {
           padding: 20px;
-        }
         .overview-content {
           display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
+          flex-direction: column;,
+  gap: 24px;
         .quality-visualization {
           display: grid;
-          grid-template-columns: 200px 1fr;
-          gap: 24px;
+          grid-template-columns: 200px 1fr;,
+  gap: 24px;
           align-items: center;
-        }
         .score-circle {
-          width: 160px;
-          height: 160px;
-          border-radius: 50%;
-          position: relative;
+          width: 160px;,
+  height: 160px;
+          border-radius: 50%;,
+  position: relative;
           padding: 8px;
-        }
         .score-fill {
-          width: 100%;
-          height: 100%;
-          border-radius: 50%;
-          display: flex;
+          width: 100%;,
+  height: 100%;
+          border-radius: 50%;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
         .score-inner {
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          background: #ffffff;
+          width: 120px;,
+  height: 120px;
+          border-radius: 50%;,
+  background: #ffffff;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-        }
         .score-number {
           font-size: 32px;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           line-height: 1;
-        }
         .score-label {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .publication-status h4 {
           margin: 0 0 8px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .recommendation {
           padding: 8px 16px;
           border-radius: 6px;
           font-weight: 600;
           text-transform: capitalize;
-          margin-bottom: 8px;
-          display: inline-block;
-        }
+          margin-bottom: 8px;,
+  display: inline-block;
         .recommendation.publish {
-          background: #dcfce7;
-          color: #166534;
-        }
+          background: #dcfce7;,
+  color: #166534;
         .recommendation.publish-with-edits {
-          background: #dbeafe;
-          color: #1e40af;
-        }
+          background: #dbeafe;,
+  color: #1e40af;
         .recommendation.major-revision {
-          background: #fef3c7;
-          color: #92400e;
-        }
+          background: #fef3c7;,
+  color: #92400e;
         .recommendation.reject {
-          background: #fecaca;
-          color: #991b1b;
-        }
+          background: #fecaca;,
+  color: #991b1b;
         .recommendation-explanation {
           margin: 0;
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           line-height: 1.5;
-        }
         .quality-dimensions h4 {
           margin: 0 0 16px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .dimensions-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 16px;
-        }
         .dimension-card {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
-        }
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 16px;
         .dimension-header {
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           margin-bottom: 12px;
-        }
         .dimension-icon {
           font-size: 18px;
-        }
         .dimension-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           flex: 1;
-        }
         .dimension-score {
-          font-weight: 700;
-          color: #3b82f6;
-        }
+          font-weight: 700;,
+  color: #3b82f6;
         .dimension-details {
           display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
+          flex-direction: column;,
+  gap: 4px;
         .detail-item {
           display: flex;
           justify-content: space-between;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .quick-actions h4 {
           margin: 0 0 16px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .action-cards {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           gap: 16px;
-        }
         .action-card {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .action-info h5 {
           margin: 0 0 4px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .action-info p {
           margin: 0;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .action-button {
-          background: #3b82f6;
-          color: #ffffff;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 6px;
-          cursor: pointer;
+          background: #3b82f6;,
+  color: #ffffff;
+          border: none;,
+  padding: 8px 16px;
+          border-radius: 6px;,
+  cursor: pointer;
           font-size: 14px;
-        }
         .detailed-analysis {
           display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
+          flex-direction: column;,
+  gap: 24px;
         .analysis-section h4 {
           margin: 0 0 16px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .analysis-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 16px;
-        }
         .analysis-card {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
-        }
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 16px;
         .analysis-card h5 {
           margin: 0 0 12px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .score-bar {
           background: #e5e7eb;
-          border-radius: 4px;
-          height: 8px;
+          border-radius: 4px;,
+  height: 8px;
           position: relative;
           margin-bottom: 8px;
-        }
         .score-bar .score-fill {
-          background: #3b82f6;
-          height: 100%;
-          border-radius: 4px;
-          transition: width 0.3s ease;
-        }
+          background: #3b82f6;,
+  height: 100%;
+          border-radius: 4px;,
+  transition: width 0.3s ease;
         .score-text {
-          position: absolute;
-          right: 8px;
+          position: absolute;,
+  right: 8px;
           top: -20px;
           font-size: 12px;
-          font-weight: 600;
-          color: #4b5563;
-        }
+          font-weight: 600;,
+  color: #4b5563;
         .analysis-details {
           display: flex;
-          flex-direction: column;
-          gap: 4px;
-          font-size: 12px;
-          color: #6b7280;
-        }
+          flex-direction: column;,
+  gap: 4px;
+          font-size: 12px;,
+  color: #6b7280;
         .issues-section h4,
         .flags-section h4 {
           margin: 0 0 16px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .issues-list,
         .flags-list {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+          flex-direction: column;,
+  gap: 12px;
         .issue-item,
         .flag-item {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 16px;
         .issue-item.severity-critical,
         .flag-item.severity-critical {
-          border-color: #dc2626;
-          background: #fef2f2;
-        }
+          border-color: #dc2626;,
+  background: #fef2f2;
         .issue-item.severity-high,
         .flag-item.severity-high {
-          border-color: #ef4444;
-          background: #fef2f2;
-        }
+          border-color: #ef4444;,
+  background: #fef2f2;
         .issue-item.severity-medium,
         .flag-item.severity-medium {
-          border-color: #f59e0b;
-          background: #fffbeb;
-        }
+          border-color: #f59e0b;,
+  background: #fffbeb;
         .issue-header,
         .flag-header {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           margin-bottom: 8px;
           align-items: center;
-        }
         .issue-type,
         .flag-type {
-          background: #374151;
-          color: #ffffff;
+          background: #374151;,
+  color: #ffffff;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
           text-transform: capitalize;
-        }
         .issue-severity,
         .flag-severity {
           padding: 2px 6px;
@@ -1114,302 +1033,244 @@ export const QualityAssessmentDashboard: React.FC<QualityAssessmentDashboardProp
           font-size: 11px;
           font-weight: 500;
           text-transform: uppercase;
-        }
         .severity-critical {
-          background: #fecaca;
-          color: #991b1b;
-        }
+          background: #fecaca;,
+  color: #991b1b;
         .severity-high {
-          background: #fed7d7;
-          color: #c53030;
-        }
+          background: #fed7d7;,
+  color: #c53030;
         .severity-medium {
-          background: #fef3c7;
-          color: #92400e;
-        }
+          background: #fef3c7;,
+  color: #92400e;
         .severity-low {
-          background: #d1fae5;
-          color: #065f46;
-        }
+          background: #d1fae5;,
+  color: #065f46;
         .auto-fixable,
         .auto-detected {
-          background: #dbeafe;
-          color: #1e40af;
+          background: #dbeafe;,
+  color: #1e40af;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
-        }
         .issue-description,
         .flag-description {
           margin-bottom: 8px;
-          font-size: 14px;
-          color: #4b5563;
-        }
+          font-size: 14px;,
+  color: #4b5563;
         .issue-suggestion,
         .issue-location,
         .flag-evidence {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           margin-bottom: 4px;
-        }
         .recommendations-content {
           max-height: 600px;
           overflow-y: auto;
-        }
         .empty-state {
-          text-align: center;
-          padding: 40px 20px;
+          text-align: center;,
+  padding: 40px 20px;
           color: #6b7280;
-        }
         .recommendations-list {
           display: flex;
-          flex-direction: column;
-          gap: 16px;
-        }
+          flex-direction: column;,
+  gap: 16px;
         .recommendation-card {
-          background: #ffffff;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          padding: 16px;
-        }
+          background: #ffffff;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  padding: 16px;
         .recommendation-card.priority-high {
-          border-color: #ef4444;
-          background: #fef2f2;
-        }
+          border-color: #ef4444;,
+  background: #fef2f2;
         .recommendation-card.priority-medium {
-          border-color: #f59e0b;
-          background: #fffbeb;
-        }
+          border-color: #f59e0b;,
+  background: #fffbeb;
         .recommendation-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 12px;
-        }
         .recommendation-info {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           align-items: center;
-        }
         .recommendation-type {
-          background: #374151;
-          color: #ffffff;
+          background: #374151;,
+  color: #ffffff;
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 11px;
           font-weight: 500;
           text-transform: capitalize;
-        }
         .recommendation-priority {
           font-size: 12px;
           font-weight: 500;
-        }
         .recommendation-effort {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .recommendation-content h5 {
           margin: 0 0 8px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .recommendation-text {
           margin-bottom: 8px;
-          font-size: 14px;
-          color: #4b5563;
+          font-size: 14px;,
+  color: #4b5563;
           line-height: 1.5;
-        }
         .expected-impact {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           margin-bottom: 12px;
-        }
         .implementation-steps h6,
         .recommendation-resources h6 {
           margin: 0 0 8px 0;
           font-size: 12px;
-          font-weight: 600;
-          color: #374151;
-        }
+          font-weight: 600;,
+  color: #374151;
         .implementation-steps ol {
           margin: 0;
           padding-left: 16px;
-          font-size: 12px;
-          color: #4b5563;
-        }
+          font-size: 12px;,
+  color: #4b5563;
         .resources-list {
           display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
+          flex-direction: column;,
+  gap: 4px;
         .resource-link {
-          font-size: 12px;
-          color: #3b82f6;
+          font-size: 12px;,
+  color: #3b82f6;
           text-decoration: none;
-        }
         .resource-link:hover {
           text-decoration: underline;
-        }
         .auto-fix-section {
-          background: #f0f9ff;
-          border: 1px solid #bae6fd;
-          border-radius: 6px;
-          padding: 12px;
+          background: #f0f9ff;,
+  border: 1px solid #bae6fd;
+          border-radius: 6px;,
+  padding: 12px;
           margin-top: 12px;
-        }
         .auto-fix-section p {
           margin: 0 0 8px 0;
-          font-size: 12px;
-          color: #0369a1;
-        }
+          font-size: 12px;,
+  color: #0369a1;
         .auto-fix-btn {
-          background: #0ea5e9;
-          color: #ffffff;
-          border: none;
-          padding: 6px 12px;
+          background: #0ea5e9;,
+  color: #ffffff;
+          border: none;,
+  padding: 6px 12px;
           border-radius: 4px;
-          font-size: 12px;
-          cursor: pointer;
-        }
+          font-size: 12px;,
+  cursor: pointer;
         .workflow-content {
           display: flex;
-          flex-direction: column;
-          gap: 24px;
-        }
+          flex-direction: column;,
+  gap: 24px;
         .workflow-status h4 {
           margin: 0 0 8px 0;
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           text-transform: capitalize;
-        }
         .workflow-stage {
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           text-transform: capitalize;
-        }
         .workflow-timeline h5 {
           margin: 0 0 16px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .timeline {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+          flex-direction: column;,
+  gap: 12px;
         .timeline-item {
-          display: flex;
-          gap: 12px;
-          padding: 12px;
-          background: #f9fafb;
+          display: flex;,
+  gap: 12px;
+          padding: 12px;,
+  background: #f9fafb;
           border-radius: 6px;
-        }
         .timeline-marker {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          background: #3b82f6;
+          width: 12px;,
+  height: 12px;
+          border-radius: 50%;,
+  background: #3b82f6;
           margin-top: 4px;
           flex-shrink: 0;
-        }
         .timeline-content {
           flex: 1;
-        }
         .step-type {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           text-transform: capitalize;
           margin-bottom: 2px;
-        }
         .step-user,
         .step-date,
         .step-duration {
-          font-size: 12px;
-          color: #6b7280;
-        }
+          font-size: 12px;,
+  color: #6b7280;
         .step-notes {
           margin-top: 4px;
-          font-size: 12px;
-          color: #4b5563;
+          font-size: 12px;,
+  color: #4b5563;
           font-style: italic;
-        }
         .workflow-actions h5 {
           margin: 0 0 12px 0;
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .action-buttons {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           flex-wrap: wrap;
-        }
         .workflow-btn {
           padding: 8px 16px;
           border-radius: 6px;
-          font-size: 14px;
-          cursor: pointer;
-          border: none;
-          transition: background 0.2s ease;
-        }
+          font-size: 14px;,
+  cursor: pointer;
+          border: none;,
+  transition: background 0.2s ease;
         .workflow-btn.assign {
-          background: #3b82f6;
-          color: #ffffff;
-        }
-        .workflow-btn.assign:hover {
-          background: #2563eb;
-        }
+          background: #3b82f6;,
+  color: #ffffff;
+        .workflow-btn.assign:hover {,
+  background: #2563eb;
         .workflow-btn.escalate {
-          background: #ef4444;
-          color: #ffffff;
-        }
-        .workflow-btn.escalate:hover {
-          background: #dc2626;
-        }
+          background: #ef4444;,
+  color: #ffffff;
+        .workflow-btn.escalate:hover {,
+  background: #dc2626;
         .review-interface {
-          text-align: center;
-          padding: 40px 20px;
+          text-align: center;,
+  padding: 40px 20px;
           color: #6b7280;
-        }
         @media (max-width: 768px) {
           .dashboard-header {
-            flex-direction: column;
-            gap: 16px;
+            flex-direction: column;,
+  gap: 16px;
             align-items: flex-start;
-          }
           .quality-summary {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-          }
+            align-items: flex-start;,
+  gap: 8px;
           .header-actions {
-            flex-direction: column;
-            width: 100%;
-          }
+            flex-direction: column;,
+  width: 100%;
           .quality-visualization {
             grid-template-columns: 1fr;
             text-align: center;
-          }
           .dimensions-grid {
             grid-template-columns: 1fr;
-          }
           .analysis-grid {
             grid-template-columns: 1fr;
-          }
           .action-cards {
             grid-template-columns: 1fr;
-          }
           .recommendation-header {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-          }
-        }
+            align-items: flex-start;,
+  gap: 8px;
       `}</style>
     </div>
   );

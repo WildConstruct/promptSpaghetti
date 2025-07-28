@@ -44,6 +44,7 @@ export enum PaymentAnalyticsEventType {
 }
 
 // Payment Performance Metrics
+}
 export interface PaymentProviderMetrics {
   provider: PaymentProvider;
   
@@ -72,6 +73,7 @@ export interface PaymentProviderMetrics {
     countryCode: string;
     successRate: number;
     averageProcessingTime: number;
+}
   }>;
   
   // Temporal Performance
@@ -83,6 +85,7 @@ export interface PaymentProviderMetrics {
 }
 
 // Payment Method Performance
+}
 export interface PaymentMethodMetrics {
   methodType: PaymentMethodType;
   provider: PaymentProvider;
@@ -98,6 +101,7 @@ export interface PaymentMethodMetrics {
     ageGroup: string;
     successRate: number;
     usage: number;
+}
   }>;
   
   // Device performance
@@ -109,6 +113,7 @@ export interface PaymentMethodMetrics {
 }
 
 // Payment Failure Analysis
+}
 export interface PaymentFailureAnalysis {
   failureCode: string;
   provider: PaymentProvider;
@@ -123,6 +128,7 @@ export interface PaymentFailureAnalysis {
   timePattern: Array<{
     hour: number;
     frequency: number;
+}
   }>;
   
   geographicPattern: Array<{
@@ -137,6 +143,7 @@ export interface PaymentFailureAnalysis {
 }
 
 // Payment Webhook Event
+}
 export interface PaymentWebhookEvent {
   id: string;
   provider: PaymentProvider;
@@ -146,6 +153,7 @@ export interface PaymentWebhookEvent {
   processedAt?: Date;
   processingStatus: 'pending' | 'processed' | 'failed' | 'ignored';
   errorMessage?: string;
+}
 }
 
 export class PaymentAnalyticsCollector extends EventEmitter {
@@ -196,6 +204,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       country?: string;
     }
   ): Promise<void> {
+
     const startTime = Date.now();
     
     try {
@@ -245,6 +254,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       sessionId: string;
     }
   ): Promise<void> {
+
     try {
       const event = {
         id: uuidv4(),
@@ -298,6 +308,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
       sessionId: string;
     }
   ): Promise<void> {
+
     try {
       const event = {
         id: uuidv4(),
@@ -350,6 +361,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     data: Record<string, unknown>,
     signature: string
   ): Promise<void> {
+
     const webhookEvent: PaymentWebhookEvent = {
       id: uuidv4(),
       provider,
@@ -392,6 +404,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     startDate: Date,
     endDate: Date
   ): Promise<PaymentProviderMetrics> {
+
     const cacheKey = `metrics_${provider}_${startDate.getTime()}_${endDate.getTime()}`;
     
     // Check cache
@@ -421,6 +434,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     startDate: Date,
     endDate: Date
   ): Promise<PaymentMethodMetrics> {
+
     const query = `
       SELECT 
         COUNT(*) as total_attempts,
@@ -468,6 +482,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     endDate: Date,
     limit: number = 20
   ): Promise<PaymentFailureAnalysis[]> {
+
     const query = `
       SELECT 
         pe.metadata->>'errorCode' as failure_code,
@@ -518,6 +533,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     startDate: Date,
     endDate: Date
   ): Promise<PaymentProviderMetrics> {
+
     const query = `
       SELECT 
         COUNT(CASE WHEN pe.type = 'payment_attempt' THEN 1 END) as total_attempts,
@@ -567,6 +583,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async updateProviderMetrics(provider: PaymentProvider, update: any): Promise<void> {
+
     // Implementation would update real-time metrics aggregation tables
     // This is a simplified version
     const timestamp = new Date();
@@ -631,6 +648,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     data: Record<string, unknown>,
     signature: string
   ): Promise<boolean> {
+
     // Implementation would verify webhook signature based on provider
     // This is a simplified version
     if (provider === PaymentProvider.STRIPE) {
@@ -646,6 +664,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async processWebhookEvent(webhookEvent: PaymentWebhookEvent): Promise<void> {
+
     // Process different types of webhook events
     switch (webhookEvent.eventType) {
       case 'payment_intent.succeeded':
@@ -664,21 +683,25 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async handlePaymentSuccess(webhookEvent: PaymentWebhookEvent): Promise<void> {
+
     // Extract payment data and create analytics event
         // Implementation would process successful payment webhook
   }
 
   private async handlePaymentFailure(webhookEvent: PaymentWebhookEvent): Promise<void> {
+
     // Extract failure data and create analytics event
         // Implementation would process failed payment webhook
   }
 
   private async handlePaymentDispute(webhookEvent: PaymentWebhookEvent): Promise<void> {
+
     // Extract dispute data and create analytics event
         // Implementation would process payment dispute webhook
   }
 
   private async storePaymentEvent(event: any): Promise<void> {
+
     const query = `
       INSERT INTO payment_events (
         id, type, timestamp, session_id, user_id, metadata, created_at
@@ -697,6 +720,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async storeWebhookEvent(webhookEvent: PaymentWebhookEvent): Promise<void> {
+
     const query = `
       INSERT INTO payment_webhook_events (
         id, provider, event_type, data, received_at, processed_at,
@@ -752,6 +776,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async getRetrySuccessRate(provider: PaymentProvider, startDate: Date, endDate: Date): Promise<number> {
+
     const query = `
       SELECT 
         COUNT(CASE WHEN pe1.type = 'payment_failure' THEN 1 END) as failed_attempts,
@@ -845,6 +870,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
   }
 
   private async calculatePreferenceRank(methodType: PaymentMethodType, provider: PaymentProvider): Promise<number> {
+
     const query = `
       SELECT 
         pe.metadata->>'methodType' as method_type,
@@ -870,6 +896,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     startDate: Date,
     endDate: Date
   ): Promise<number> {
+
     const query = `
       SELECT 
         COUNT(CASE WHEN pe.type = 'payment_attempt' THEN 1 END) as attempts,
@@ -950,6 +977,7 @@ export class PaymentAnalyticsCollector extends EventEmitter {
     errorCode: string,
     failureReason: string
   ): Promise<void> {
+
     const timestamp = new Date();
     const hourKey = timestamp.toISOString().slice(0, 13); // YYYY-MM-DDTHH
 

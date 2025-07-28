@@ -20,20 +20,20 @@ export declare enum FingerprintType {
     BASIC = "basic",
     ENHANCED = "enhanced",
     COMPREHENSIVE = "comprehensive"
-}
+
 export declare enum RiskLevel {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum DeviceType {
     DESKTOP = "desktop",
     MOBILE = "mobile",
     TABLET = "tablet",
     EMBEDDED = "embedded",
     UNKNOWN = "unknown"
-}
+
 export interface DeviceFingerprint {
     id: string;
     type: FingerprintType;
@@ -142,7 +142,7 @@ export interface DeviceFingerprint {
             webXR: boolean;
         };
     };
-}
+
 export interface LocationData {
     id: string;
     timestamp: Date;
@@ -188,7 +188,7 @@ export interface LocationData {
         population?: number;
         area?: number;
     };
-}
+
 export interface RiskAssessment {
     deviceId: string;
     overallRisk: RiskLevel;
@@ -202,7 +202,7 @@ export interface RiskAssessment {
     }>;
     recommendations: string[];
     timestamp: Date;
-}
+
 export interface FingerprintContext {
     ipAddress: string;
     userAgent: string;
@@ -227,7 +227,6 @@ export interface FingerprintContext {
         permissions?: any;
         network?: any;
     };
-}
 /**
  * Comprehensive device fingerprinting and location service
  */
@@ -301,7 +300,7 @@ export declare class DeviceFingerprintingService extends EventEmitter {
     private calculateAverageDistance;
     private startCleanupTimer;
     private cleanupOldData;
-}
+
 export declare const deviceFingerprintingService: DeviceFingerprintingService;
 export default DeviceFingerprintingService;
 //# sourceMappingURL=DeviceFingerprintingService.d.ts.map

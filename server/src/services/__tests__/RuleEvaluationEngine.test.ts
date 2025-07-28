@@ -123,7 +123,7 @@ describe('RuleEvaluationEngine', () => {
       tags: ['test', 'security'],
       owner: 'test-owner',
       reviewDate: new Date('2024-12-31')
-    },
+  }
     audit: {
       createdAt: new Date(),
       createdBy: 'test-user',
@@ -188,8 +188,8 @@ describe('RuleEvaluationEngine', () => {
             engineId: 'test-evaluation-engine',
             version: '1.0.0',
             environment: 'test'
-          })
-        })
+  }
+  }
       );
     });
   });
@@ -300,7 +300,7 @@ describe('RuleEvaluationEngine', () => {
           backoffStrategy: 'EXPONENTIAL',
           baseDelay: 100,
           maxDelay: 1000
-        },
+  }
         progressReporting: true,
         partialResults: true
       };
@@ -348,7 +348,7 @@ describe('RuleEvaluationEngine', () => {
           backoffStrategy: 'EXPONENTIAL',
           baseDelay: 50,
           maxDelay: 500
-        },
+  }
         progressReporting: false,
         partialResults: true
       };
@@ -444,7 +444,7 @@ describe('RuleEvaluationEngine', () => {
             ...mockEngineConfig.caching,
             ttl: 1 // 1 second TTL
           }
-        },
+  }
         mockAuditService
       );
 
@@ -469,7 +469,7 @@ describe('RuleEvaluationEngine', () => {
             ...mockEngineConfig.caching,
             maxCacheSize: 2 // Very small cache
           }
-        },
+  }
         mockAuditService
       );
 
@@ -528,7 +528,7 @@ describe('RuleEvaluationEngine', () => {
         expect.objectContaining({
           metric: 'evaluationTime',
           threshold: 'warning'
-        })
+  }
       );
     });
   });
@@ -629,8 +629,8 @@ describe('RuleEvaluationEngine', () => {
           compliance: expect.objectContaining({
             frameworks: ['SOC_2'],
             evidenceLevel: 'ENHANCED'
-          })
-        })
+  }
+  }
       );
     });
   });

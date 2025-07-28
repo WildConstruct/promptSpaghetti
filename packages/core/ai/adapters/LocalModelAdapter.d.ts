@@ -5,6 +5,7 @@
  * Adapter for locally hosted AI models (Ollama, local inference servers)
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface LocalModelConfig {
     endpoint: string;
     modelName: string;
@@ -13,7 +14,8 @@ export interface LocalModelConfig {
     warmupOnInit?: boolean;
     modelType?: 'ollama' | 'huggingface' | 'custom';
     authToken?: string;
-}
+
+
 export interface LocalRequestOptions {
     temperature?: number;
     max_tokens?: number;
@@ -25,17 +27,20 @@ export interface LocalRequestOptions {
     repeat_penalty?: number;
     context_length?: number;
     system_prompt?: string;
-}
+
+
 export interface OllamaMessage {
     role: 'system' | 'user' | 'assistant';
     content: string;
-}
+
+
 export interface LocalModelResponse {
     model: string;
     created_at: string;
     message?: {
         role: string;
         content: string;
+
     };
     response?: string;
     done: boolean;
@@ -46,7 +51,7 @@ export interface LocalModelResponse {
     prompt_eval_duration?: number;
     eval_count?: number;
     eval_duration?: number;
-}
+
 export declare class LocalModelAdapter extends BaseAIModel {
     private config;
     private modelInfo;
@@ -71,6 +76,6 @@ export declare class LocalModelAdapter extends BaseAIModel {
     private _updateCapabilitiesFromModelInfo;
     protected _performHealthCheck(): Promise<void>;
     private updateMetadata;
-}
+
 export default LocalModelAdapter;
 //# sourceMappingURL=LocalModelAdapter.d.ts.map

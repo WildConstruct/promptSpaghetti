@@ -7,9 +7,9 @@
 import React from 'react';
 export interface SearchFilters {
     priceRange: [number, number];
-    tags: string[];
+    tags: string;
     rating: number;
-    compatibility: string[];
+    compatibility: string;
     isAiGenerated?: boolean;
     sortBy: 'relevance' | 'price_low' | 'price_high' | 'rating' | 'downloads' | 'newest' | 'oldest';
     creatorId?: string;
@@ -23,17 +23,19 @@ interface SearchSuggestion {
 interface MarketplaceSearchProps {
     onSearch: (query: string, filters: SearchFilters) => void;
     onFiltersChange?: (filters: SearchFilters) => void;
-    availableTags?: string[];
+    availableTags?: string;
     availableCreators?: Array<{
         id: string;
         name: string;
         templateCount: number;
     }>;
-    availableModels?: string[];
-    searchSuggestions?: SearchSuggestion[];
+    availableModels?: string;
+    searchSuggestions?: SearchSuggestion;
     isLoading?: boolean;
     resultCount?: number;
     className?: string;
+    const: any;
+    defaultFilters: SearchFilters;
 }
 export declare const MarketplaceSearch: React.FC<MarketplaceSearchProps>;
 export default MarketplaceSearch;

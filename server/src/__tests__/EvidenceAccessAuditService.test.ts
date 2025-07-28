@@ -43,7 +43,7 @@ const createTestContext = (): AccessControlContext => ({
     riskScore: 0.3,
     complianceStatus: 'COMPLIANT' as any,
     metadata: {}
-  },
+  }
   resource: {
     id: 'evidence789',
     type: 'EVIDENCE' as any,
@@ -56,7 +56,7 @@ const createTestContext = (): AccessControlContext => ({
     complianceFrameworks: [],
     legalHold: false,
     metadata: {}
-  },
+  }
   action: {
     id: 'read-action',
     type: 'READ' as any,
@@ -70,7 +70,7 @@ const createTestContext = (): AccessControlContext => ({
     requiresMFA: false,
     requiresJustification: false,
     metadata: { intent: 'investigation' }
-  },
+  }
   environment: {
     timestamp: new Date(),
     timezone: 'UTC',
@@ -90,7 +90,7 @@ const createTestContext = (): AccessControlContext => ({
     knownThreats: [],
     complianceMode: false,
     metadata: {}
-  },
+  }
   requestId: 'req-123',
   timestamp: new Date(),
   sourceIP: '192.168.1.100',
@@ -209,7 +209,7 @@ describe('EvidenceAccessAuditService', () => {
         metadata: expect.objectContaining({
           riskLevel: expect.any(String),
           correlationId: result.correlationId
-        })
+  }
       });
 
       // Verify user access transparency update
@@ -266,7 +266,7 @@ describe('EvidenceAccessAuditService', () => {
           evidenceId: 'evidence789',
           userId: 'user123',
           riskLevel: result.risk.level
-        })
+  }
       );
 
       consoleSpy.mockRestore();
@@ -299,7 +299,7 @@ describe('EvidenceAccessAuditService', () => {
           'evidence789',
           EvidenceAccessAction.READ,
           EvidenceAccessOutcome.SUCCESS
-        )
+
       ).rejects.toThrow('Database error');
 
       // Should log the audit failure
@@ -307,7 +307,7 @@ describe('EvidenceAccessAuditService', () => {
         expect.objectContaining({
           action: 'audit_failure',
           outcome: 'error'
-        })
+  }
       );
     });
 
@@ -386,11 +386,11 @@ describe('EvidenceAccessAuditService', () => {
           userId: 'user123',
           roles: ['analyst'],
           permissions: ['evidence:read']
-        },
+  }
         action: {
           type: EvidenceAccessAction.READ,
           operation: 'read'
-        },
+  }
         outcome: EvidenceAccessOutcome.SUCCESS
       });
 
@@ -434,7 +434,7 @@ describe('EvidenceAccessAuditService', () => {
           outcome: EvidenceAccessOutcome.SUCCESS,
           risk: { level: 'LOW', score: 20 } as any,
           processingTime: 100
-        },
+  }
         {
           id: 'audit2',
           timestamp: new Date('2023-06-01T11:00:00Z'),
@@ -540,7 +540,7 @@ describe('EvidenceAccessAuditService', () => {
           timestamp: new Date('2023-06-01T10:00:00Z'),
           contentHash: 'content1',
           chainHash: 'chain1'
-        },
+  }
         {
           id: 'audit2', 
           timestamp: new Date('2023-06-01T11:00:00Z'),
@@ -581,7 +581,7 @@ describe('EvidenceAccessAuditService', () => {
           timestamp: new Date('2023-06-01T10:00:00Z'),
           contentHash: 'content1',
           chainHash: 'chain1'
-        },
+  }
         {
           id: 'audit2',
           timestamp: new Date('2023-06-01T11:00:00Z'),
@@ -652,7 +652,7 @@ describe('EvidenceAccessAuditService', () => {
           'evidence789',
           EvidenceAccessAction.READ,
           EvidenceAccessOutcome.SUCCESS
-        )
+
       );
 
       const results = await Promise.all(promises);
@@ -678,7 +678,7 @@ describe('EvidenceAccessAuditService', () => {
               level3: 'deep nested value'
             }
           }
-        },
+  }
         binaryData: Buffer.from('binary data').toString('base64')
       };
 
@@ -724,7 +724,7 @@ describe('EvidenceAccessAuditService', () => {
           `evidence${i}`,
           EvidenceAccessAction.READ,
           EvidenceAccessOutcome.SUCCESS
-        )
+
       );
 
       await Promise.all(promises);

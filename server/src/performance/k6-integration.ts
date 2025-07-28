@@ -17,6 +17,7 @@ import { PerformanceDashboard } from './PerformanceDashboard';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // k6 test result interfaces
+}
 interface K6Metric {
   name: string;
   type: string;
@@ -31,6 +32,7 @@ interface K6Metric {
     p99?: number;
     count?: number;
     rate?: number;
+}
   };
   thresholds?: {
     [key: string]: {
@@ -39,9 +41,11 @@ interface K6Metric {
   };
 }
 
+}
 interface K6TestResult {
   metrics: {
     [key: string]: K6Metric;
+}
   };
   root_group: {
     name: string;
@@ -62,6 +66,7 @@ interface K6TestResult {
 }
 
 // k6 test suite configuration
+}
 interface K6TestSuite {
   name: string;
   scenario: 'light' | 'moderate' | 'heavy' | 'stress';
@@ -70,8 +75,10 @@ interface K6TestSuite {
   thresholds: 'standard' | 'enterprise';
   maxDuration: string;
 }
+}
 
 // Performance regression detection
+}
 interface RegressionAnalysis {
   detected: boolean;
   regressions: Array<{
@@ -80,6 +87,7 @@ interface RegressionAnalysis {
     current: number;
     change: number;
     severity: 'minor' | 'major' | 'critical';
+}
   }>;
   improvements: Array<{
     metric: string;
@@ -114,6 +122,7 @@ export class K6PerformanceIntegration {
       enableDashboard?: boolean;
     } = {}
   ): Promise<LoadTestResult[]> {
+
     const {
       scenario = 'moderate',
       environment = 'local',
@@ -178,6 +187,7 @@ export class K6PerformanceIntegration {
     suite: K6TestSuite,
     outputDir: string
   ): Promise<LoadTestResult> {
+
     const testFile = join(this.k6TestsDir, `${testName}.js`);
     const resultFile = join(outputDir, `${testName}-results.json`);
     const csvFile = join(outputDir, `${testName}-results.csv`);
@@ -261,7 +271,7 @@ export class K6PerformanceIntegration {
         scenario: suite.scenario,
         environment: suite.environment,
         thresholds: suite.thresholds
-      },
+  }
       rawResults: k6Results
     };
 
@@ -323,6 +333,7 @@ export class K6PerformanceIntegration {
     outputDir: string,
     suite: K6TestSuite
   ): Promise<void> {
+
     console.log('\n📝 Generating comprehensive performance report...');
 
     // Generate HTML report
@@ -347,6 +358,7 @@ export class K6PerformanceIntegration {
     results: LoadTestResult[],
     suite: K6TestSuite
   ): Promise<RegressionAnalysis> {
+
     const analysis: RegressionAnalysis = {
       detected: false,
       regressions: [],
@@ -416,6 +428,7 @@ export class K6PerformanceIntegration {
    * Generate HTML report with charts and analysis
    */
   private async generateHTMLReport(results: LoadTestResult[], suite: K6TestSuite): Promise<string> {
+
     const timestamp = new Date().toISOString();
     
     return `
@@ -509,6 +522,7 @@ export class K6PerformanceIntegration {
    * Generate JSON summary for API consumption
    */
   private async generateJSONSummary(results: LoadTestResult[], suite: K6TestSuite): Promise<any> {
+
     return {
       timestamp: new Date().toISOString(),
       suite: suite.name,
@@ -529,11 +543,11 @@ export class K6PerformanceIntegration {
           target_p95: 1000,
           current_p95: this.extractMetricValue(results.find(r => r.testName === 'graph-execution-load'), 'response_time_p95'),
           status: this.extractMetricValue(results.find(r => r.testName === 'graph-execution-load'), 'response_time_p95') < 1000 ? 'passed' : 'failed'
-        },
+  }
         websocket: {
           target_connections: 1000,
           status: 'passed' // Would be calculated based on actual metrics
-        },
+  }
         auth: {
           target_login_time: 800,
           status: 'passed' // Would be calculated based on actual metrics
@@ -546,6 +560,7 @@ export class K6PerformanceIntegration {
    * Generate CSV report for data analysis
    */
   private async generateCSVReport(results: LoadTestResult[]): Promise<string> {
+
     const headers = ['Test Name', 'Success', 'Duration (ms)', 'Response Time P95', 'Error Rate', 'Throughput'];
     const rows = results.map(result => [
       result.testName,
@@ -569,7 +584,7 @@ export class K6PerformanceIntegration {
         tests: ['graph-execution-load', 'auth-load'],
         thresholds: 'standard' as const,
         maxDuration: '10m'
-      },
+  }
       smoke: {
         name: 'smoke',
         scenario: scenario as any,
@@ -577,7 +592,7 @@ export class K6PerformanceIntegration {
         tests: ['graph-execution-load'],
         thresholds: 'standard' as const,
         maxDuration: '5m'
-      },
+  }
       staging: {
         name: 'staging',
         scenario: scenario as any,
@@ -602,6 +617,7 @@ export class K6PerformanceIntegration {
   }
 
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -629,12 +645,14 @@ export class K6PerformanceIntegration {
   }
 
   private async loadPerformanceBaselines(suite: K6TestSuite): Promise<any> {
+
     // In real implementation, load from database or file system
     // For now, return null to indicate no baselines
     return null;
   }
 
   private async savePerformanceBaselines(results: LoadTestResult[], suite: K6TestSuite): Promise<void> {
+
     // In real implementation, save to database or file system
     console.log(`💾 Saving performance baselines for suite: ${suite.name}`);
   }

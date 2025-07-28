@@ -36,7 +36,7 @@ export declare enum VerificationStep {
     DEVICE_REGISTRATION = "device_registration",
     VERIFICATION_COMPLETE = "verification_complete",
     VERIFICATION_FAILED = "verification_failed"
-}
+
 export declare enum ChallengeType {
     EMAIL_CODE = "email_code",
     SMS_CODE = "sms_code",
@@ -46,7 +46,7 @@ export declare enum ChallengeType {
     MANUAL_REVIEW = "manual_review",
     PHONE_CALL = "phone_call",
     SECURITY_QUESTIONS = "security_questions"
-}
+
 export declare enum VerificationOutcome {
     APPROVED = "approved",
     REJECTED = "rejected",
@@ -54,7 +54,7 @@ export declare enum VerificationOutcome {
     REQUIRES_REVIEW = "requires_review",
     EXPIRED = "expired",
     ABANDONED = "abandoned"
-}
+
 export interface VerificationSession {
     id: string;
     userId: string;
@@ -88,7 +88,7 @@ export interface VerificationSession {
         locationInconsistent: boolean;
         timeZoneManipulation: boolean;
     };
-}
+
 export interface DeviceChallenge {
     id: string;
     type: ChallengeType;
@@ -110,7 +110,7 @@ export interface DeviceChallenge {
         metadata: Record<string, any>;
     };
     metadata: Record<string, any>;
-}
+
 export interface VerificationAttempt {
     id: string;
     timestamp: Date;
@@ -120,7 +120,7 @@ export interface VerificationAttempt {
     failureReason?: string;
     duration: number;
     metadata: Record<string, any>;
-}
+
 export interface VerificationConfig {
     sessionTimeoutMinutes: number;
     maxAttemptsPerChallenge: number;
@@ -139,7 +139,7 @@ export interface VerificationConfig {
     enableDeviceSpoofDetection: boolean;
     enableAutomaticApproval: boolean;
     requireDoubleVerification: boolean;
-}
+
 export interface DeviceVerificationRequestData {
     userId: string;
     fingerprintContext: FingerprintContext;
@@ -148,7 +148,6 @@ export interface DeviceVerificationRequestData {
     requestedTrustLevel: TrustLevel;
     deviceName?: string;
     metadata?: Record<string, any>;
-}
 /**
  * Device Verification Service
  */
@@ -225,6 +224,6 @@ export declare class DeviceVerificationService extends EventEmitter {
     private generateAttemptId;
     private startCleanupTimer;
     private performCleanup;
-}
+
 export default DeviceVerificationService;
 //# sourceMappingURL=DeviceVerificationService.d.ts.map

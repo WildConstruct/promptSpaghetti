@@ -63,7 +63,7 @@ describe('BehaviorAnalyticsService', () => {
         volumeAnomaly: 0.15,
         velocityAnomaly: 0.2,
         patternDeviation: 0.2
-      },
+  }
       autoBlockThreshold: 90,
       alertThreshold: 70,
       requireManualReview: true
@@ -119,7 +119,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'unusual_login_time',
           severity: expect.stringMatching(/medium|high/)
-        })
+  }
       );
       expect(result.riskScore).toBeGreaterThan(0);
     });
@@ -144,7 +144,7 @@ describe('BehaviorAnalyticsService', () => {
           type: 'suspicious_action_sequence',
           severity: 'high',
           description: expect.stringContaining('Suspicious action sequence detected')
-        })
+  }
       );
       expect(result.recommendation).toBeOneOf(['allow', 'monitor', 'challenge', 'block']);
     });
@@ -168,7 +168,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'volume_spike',
           severity: expect.stringMatching(/medium|high/)
-        })
+  }
       );
     });
 
@@ -191,7 +191,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'velocity_anomaly',
           description: expect.stringContaining('Rapid-fire actions')
-        })
+  }
       );
     });
 
@@ -214,7 +214,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'bot_like_behavior',
           severity: expect.stringMatching(/high|critical/)
-        })
+  }
       );
       expect(result.riskScore).toBeGreaterThan(70);
       expect(result.recommendation).toBeOneOf(['allow', 'monitor', 'challenge', 'block']);
@@ -488,7 +488,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'abnormal_session_duration',
           description: expect.stringContaining('Abnormal session duration')
-        })
+  }
       );
     });
 
@@ -511,7 +511,7 @@ describe('BehaviorAnalyticsService', () => {
         expect.objectContaining({
           type: 'resource_access_anomaly',
           description: expect.stringContaining('Excessive')
-        })
+  }
       );
     });
 
@@ -1052,7 +1052,7 @@ function createEstablishedProfile(): UserBehaviorProfile {
       navigationPaths: [],
       errorRate: 0.05,
       retryPatterns: []
-    },
+  }
     patterns: [],
     anomalies: [],
     riskScore: 10,

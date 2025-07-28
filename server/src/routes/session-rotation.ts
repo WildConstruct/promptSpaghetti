@@ -6,21 +6,27 @@ import { SessionRotationService, SessionRotationPolicy } from '../auth/services/
 import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
+}
 export interface SessionRotationPolicyRequest {
   Body: Partial<SessionRotationPolicy>;
 }
+}
 
+}
 export interface SessionRotationHistoryQuery {
   Querystring: {
     limit?: string;
     offset?: string;
+}
   };
 }
 
+}
 export interface SessionRotationStatsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
+}
   };
 }
 
@@ -28,6 +34,7 @@ export async function sessionRotationRoutes(
   server: FastifyInstance,
   sessionRotationService: SessionRotationService
 ): Promise<void> {
+
   // Get organization's session rotation policy
   server.get('/auth/session-rotation/policy', {
     preHandler: [requireAuth],
@@ -139,7 +146,7 @@ export async function sessionRotationRoutes(
           details: {
             organizationId,
             updates
-          },
+  }
           sessionId: request.sessionId,
           severity: 'info'
         });
@@ -287,7 +294,7 @@ export async function sessionRotationRoutes(
             targetUserId: userId,
             reason,
             result
-          },
+  }
           sessionId: request.sessionId,
           severity: 'warning'
         });

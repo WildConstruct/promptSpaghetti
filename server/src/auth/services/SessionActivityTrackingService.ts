@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
+}
 export interface SessionActivity {
   id: string;
   sessionId: string;
@@ -20,6 +21,7 @@ export interface SessionActivity {
     action: string;
     resource?: string;
     method?: string;
+}
   };
   
   context: {
@@ -70,6 +72,7 @@ export interface SessionActivity {
   };
 }
 
+}
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -84,6 +87,7 @@ export interface ActivityPattern {
       field: string;
       operator: 'equals' | 'contains' | 'gt' | 'lt' | 'in' | 'regex';
       value: any;
+}
     }>;
   };
   
@@ -106,6 +110,7 @@ export interface ActivityPattern {
   };
 }
 
+}
 export interface ActivitySummary {
   sessionId: string;
   userId: string;
@@ -113,6 +118,7 @@ export interface ActivitySummary {
     start: Date;
     end: Date;
     duration: number; // seconds
+}
   };
   
   statistics: {
@@ -162,6 +168,7 @@ export interface ActivitySummary {
   };
 }
 
+}
 export interface RealTimeActivityStream {
   sessionId: string;
   userId: string;
@@ -172,6 +179,7 @@ export interface RealTimeActivityStream {
     subscribers: number;
     bufferSize: number;
     latency: number; // milliseconds
+}
   };
   
   filters: {
@@ -242,6 +250,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     warnings?: string[];
     blocked?: boolean;
   }> {
+
     try {
       // Apply sampling
       if (this.config.samplingRate < 1 && Math.random() > this.config.samplingRate) {
@@ -331,6 +340,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     total: number;
     hasMore: boolean;
   }> {
+
     try {
       const query = this.buildActivityQuery(sessionId, options);
       
@@ -367,6 +377,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     sessionId: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<ActivitySummary> {
+
     try {
       // Check cache first
       const cacheKey = `${sessionId}-${timeRange?.start?.getTime()}-${timeRange?.end?.getTime()}`;
@@ -407,6 +418,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     streamId: string;
     stream: RealTimeActivityStream;
   }> {
+
     if (!this.config.realTimeEnabled) {
       throw new Error('Real-time streaming is disabled');
     }
@@ -421,11 +433,11 @@ export class SessionActivityTrackingService extends EventEmitter {
         subscribers: 1,
         bufferSize: 100,
         latency: 0
-      },
+  }
       filters: filters || {
         includePerformance: true,
         includeSecurity: true
-      },
+  }
       metrics: {
         activitiesPerMinute: 0,
         averageProcessingTime: 0,
@@ -460,7 +472,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       minRiskScore?: number;
       outcome?: 'success' | 'failure';
       resource?: string;
-    },
+  }
     options: {
       limit?: number;
       offset?: number;
@@ -575,7 +587,7 @@ export class SessionActivityTrackingService extends EventEmitter {
       sessionId?: string;
       userId?: string;
       dateRange: { start: Date; end: Date };
-    },
+  }
     format: 'json' | 'csv' | 'parquet' = 'json',
     options: {
       includeMetadata?: boolean;
@@ -588,6 +600,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     mimeType: string;
     recordCount: number;
   }> {
+
     try {
       // Get activities based on criteria
       const activities = await this.getActivitiesForExport(criteria);
@@ -655,6 +668,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async flushBuffer(): Promise<void> {
+
     const bufferSnapshot = new Map(this.activityBuffer);
     this.activityBuffer.clear();
     
@@ -673,6 +687,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async batchInsertActivities(activities: SessionActivity[]): Promise<void> {
+
     const values = activities.map(activity => [
       activity.id,
       activity.sessionId,
@@ -705,6 +720,7 @@ export class SessionActivityTrackingService extends EventEmitter {
     blocked: boolean;
     warnings: string[];
   }> {
+
     const warnings: string[] = [];
     let shouldBlock = false;
     
@@ -771,6 +787,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async streamActivity(activity: SessionActivity): Promise<void> {
+
     // Publish to Redis for real-time subscribers
     const channel = `activity:${activity.sessionId}`;
     await this.redis.publish(channel, JSON.stringify(activity));
@@ -784,6 +801,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async detectPatterns(activity: SessionActivity): Promise<ActivityPattern[]> {
+
     const matches: ActivityPattern[] = [];
     
     for (const pattern of this.patterns.values()) {
@@ -849,6 +867,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async handlePatternMatches(activity: SessionActivity, patterns: ActivityPattern[]): Promise<void> {
+
     for (const pattern of patterns) {
       switch (pattern.response.action) {
       case 'log':
@@ -879,6 +898,7 @@ export class SessionActivityTrackingService extends EventEmitter {
   }
 
   private async updateSessionMetrics(sessionId: string, activity: SessionActivity): Promise<void> {
+
     const metricsKey = `session:metrics:${sessionId}`;
     
     // Update counters
@@ -950,7 +970,7 @@ export class SessionActivityTrackingService extends EventEmitter {
         start,
         end,
         duration: (end.getTime() - start.getTime()) / 1000
-      },
+  }
       statistics: stats,
       breakdown,
       security,
@@ -1064,13 +1084,13 @@ export class SessionActivityTrackingService extends EventEmitter {
             { field: 'outcome.success', operator: 'equals', value: false },
             { field: 'activity.type', operator: 'equals', value: 'authentication' }
           ]
-        },
+  }
         detection: {
           enabled: true,
           sensitivity: 'high',
           cooldown: 600,
           detectionCount: 0
-        },
+  }
         response: {
           action: 'alert',
           severity: 'warning',
@@ -1080,7 +1100,7 @@ export class SessionActivityTrackingService extends EventEmitter {
             channels: ['email', 'slack']
           }
         }
-      },
+  }
       {
         name: 'Data Exfiltration',
         description: 'Detect unusual data export patterns',
@@ -1091,13 +1111,13 @@ export class SessionActivityTrackingService extends EventEmitter {
             { field: 'activity.type', operator: 'equals', value: 'data_export' },
             { field: 'performance.bytesTransferred', operator: 'gt', value: 1000000 }
           ]
-        },
+  }
         detection: {
           enabled: true,
           sensitivity: 'medium',
           cooldown: 3600,
           detectionCount: 0
-        },
+  }
         response: {
           action: 'block',
           severity: 'critical',

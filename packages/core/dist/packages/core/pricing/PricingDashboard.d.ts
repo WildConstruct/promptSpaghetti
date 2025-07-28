@@ -31,15 +31,10 @@ export interface DashboardMetrics {
     demandPredictionAccuracy: number;
     studioTierBreakdown: Record<string, number>;
     productionTypeDistribution: Record<string, number>;
-    seasonalTrends: Array<{
-        period: string;
-        revenue: number;
-        growth: number;
-    }>;
-    marketPosition: 'leader' | 'challenger' | 'follower';
-    competitiveAdvantage: number;
-    pricePositioning: 'premium' | 'competitive' | 'value';
-    updatedAt: number;
+    seasonalTrends: Array<{}, period>;
+    string: any;
+    revenue: number;
+    growth: number;
 }
 export interface PricingAlert {
     id: string;
@@ -62,14 +57,12 @@ export interface PricingInsight {
     description: string;
     confidence: number;
     impact: 'low' | 'medium' | 'high';
-    actionItems: string[];
-    dataPoints: Array<{
-        metric: string;
-        current: number;
-        previous: number;
-        change: number;
-    }>;
-    createdAt: number;
+    actionItems: string;
+    dataPoints: Array<{}, metric>;
+    string: any;
+    current: number;
+    previous: number;
+    change: number;
 }
 export interface RevenueProjection {
     period: '1_month' | '3_months' | '6_months' | '1_year';
@@ -78,16 +71,12 @@ export interface RevenueProjection {
         lower: number;
         upper: number;
     };
-    assumptions: string[];
-    keyFactors: Array<{
-        factor: string;
-        impact: number;
-        confidence: number;
-    }>;
+    assumptions: string;
+    keyFactors: Array<{}>;
+    factor: string;
+    impact: number;
+    confidence: number;
 }
-/**
- * Real-time pricing dashboard for monitoring and optimization
- */
 export declare class PricingDashboard extends EventEmitter {
     private optimizer;
     private config;
@@ -99,81 +88,5 @@ export declare class PricingDashboard extends EventEmitter {
     private demandHistory;
     private competitiveHistory;
     constructor(optimizer: PricingOptimizer, config?: Partial<DashboardConfig>);
-    /**
-     * Get current dashboard metrics
-     */
-    getMetrics(): DashboardMetrics;
-    /**
-     * Get active alerts
-     */
-    getAlerts(severity?: PricingAlert['severity']): PricingAlert[];
-    /**
-     * Get insights
-     */
-    getInsights(category?: PricingInsight['category']): PricingInsight[];
-    /**
-     * Acknowledge an alert
-     */
-    acknowledgeAlert(alertId: string): boolean;
-    /**
-     * Generate revenue projections
-     */
-    generateRevenueProjections(): Promise<Record<RevenueProjection['period'], RevenueProjection>>;
-    /**
-     * Get competitive analysis dashboard data
-     */
-    getCompetitiveAnalysisDashboard(): Promise<{
-        currentPosition: string;
-        competitiveAdvantage: number;
-        marketGaps: string[];
-        pricingRecommendations: string[];
-        threatLevel: 'low' | 'medium' | 'high';
-    }>;
-    /**
-     * Get film industry specific dashboard data
-     */
-    getFilmIndustryDashboard(): {
-        studioSegments: Array<{
-            segment: string;
-            revenue: number;
-            growth: number;
-        }>;
-        productionTrends: Array<{
-            type: string;
-            volume: number;
-            avgPrice: number;
-        }>;
-        seasonalPerformance: Array<{
-            season: string;
-            multiplier: number;
-            revenue: number;
-        }>;
-        contentTypeAnalysis: Array<{
-            type: string;
-            demand: number;
-            pricing: number;
-        }>;
-    };
-    /**
-     * Export dashboard data
-     */
-    exportDashboardData(format: 'json' | 'csv'): string;
-    /**
-     * Shutdown dashboard
-     */
-    shutdown(): void;
-    private initializeEmptyMetrics;
-    private setupRealTimeUpdates;
-    private startPeriodicRefresh;
-    private refreshMetrics;
-    private updateMetricsFromPricingEvent;
-    private updateOptimizationMetrics;
-    private calculateRevenueGrowthRate;
-    private addToRevenueHistory;
-    private generateInsights;
-    private checkAlerts;
-    private calculateRevenueProjection;
-    private getAllModels;
 }
-export default PricingDashboard;
 //# sourceMappingURL=PricingDashboard.d.ts.map

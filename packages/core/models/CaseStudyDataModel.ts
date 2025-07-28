@@ -63,7 +63,7 @@ export type MediaType =
 // ====================================
 
 export interface CaseStudyMedia {
-  id: string;
+  id: string;,
   type: MediaType;
   url: string;
   thumbnailUrl?: string;
@@ -72,231 +72,223 @@ export interface CaseStudyMedia {
   altText?: string;
   fileSize?: number;
   mimeType?: string;
-  dimensions?: {
-    width: number;
-    height: number;
-  };
+  dimensions?: {,
+  width: number;,
+  height: number;
+};
   duration?: number; // For video/audio in seconds
-  uploadedAt: string;
+  uploadedAt: string;,
   uploadedBy: string;
 }
-
 export interface MediaGallery {
-  featured: CaseStudyMedia[];
-  screenshots: CaseStudyMedia[];
-  videos: CaseStudyMedia[];
-  documents: CaseStudyMedia[];
-  charts: CaseStudyMedia[];
+  featured: CaseStudyMedia;,
+  screenshots: CaseStudyMedia;
+  videos: CaseStudyMedia;,
+  documents: CaseStudyMedia;
+  charts: CaseStudyMedia;
+  // ====================================
+  // Metrics and ROI Data
+  // ====================================
 }
-
-// ====================================
-// Metrics and ROI Data
-// ====================================
-
 export interface ROIMetrics {
   // Time savings
   timeSaved: {,
-    hours: number;
-    period: 'day' | 'week' | 'month' | 'project';
-    description: string;
-  };
+  hours: number;,
+  period: 'day' | 'week' | 'month' | 'project';
+  description: string;
+};
   // Cost savings
   costSavings: {,
-    amount: number;
-    currency: string;
-    period: 'day' | 'week' | 'month' | 'project';
-    calculation: string;
-  };
+  amount: number;
+  currency: string;,
+  period: 'day' | 'week' | 'month' | 'project';
+  calculation: string;
+};
   // Quality improvements
   qualityMetrics: {,
-    metric: string;
-    before: number | string;
-    after: number | string;
-    improvement: number; // Percentage
-    unit?: string;
-  }[];
+  metric: string;
+  before: number | string;,
+  after: number | string;
+  improvement: number; // Percentage,
+  unit?: string;
+}[];
   // Productivity metrics
   productivityGains: {,
-    metric: string;
-    value: number;
-    unit: string;
-    description: string;
-  }[];
+  metric: string;
+  value: number;,
+  unit: string;
+  description: string;
+}[];
   // Claude-specific metrics
   claudeMetrics?: {
-    tokensSaved: number;
-    costPerToken: number;
-    totalCostSavings: number;
-    responseQualityImprovement: number;
-    consistencyImprovement: number;
-  };
+  tokensSaved: number;,
+  costPerToken: number;
+  totalCostSavings: number;,
+  responseQualityImprovement: number;
+  consistencyImprovement: number;
+};
 }
-
 export interface PerformanceMetrics {
   // Usage statistics
-  templatesUsed: number;
-  implementationTime: number; // Hours
-  projectDuration: number; // Days
+  templatesUsed: number;,
+  implementationTime: number; // Hours,
+  projectDuration: number; // Days,
   teamSize: number;
   // Results achieved
-  outputQuality: number; // 1-10 scale
-  efficiency: number; // Percentage improvement
-  errorReduction: number; // Percentage
-  stakeholderSatisfaction: number; // 1-10 scale
+  outputQuality: number; // 1-10 scale,
+  efficiency: number; // Percentage improvement,
+  errorReduction: number; // Percentage,
+  stakeholderSatisfaction: number; // 1-10 scale,
   // Comparison metrics
   beforeAfter: {,
-    metric: string;
-    before: number | string;
-    after: number | string;
-    unit?: string;
-  }[];
-}
+  metric: string;,
+  before: number | string;
+  after: number | string;
+  unit?: string;
+}[];
 
 // ====================================
 // Template Integration
 // ====================================
-
+}
 export interface TemplateReference {
-  templateId: string;
+  templateId: string;,
   templateName: string;
-  templateVersion: string;
+  templateVersion: string;,
   templateCategory: string;
-  usageDescription: string;
-  customizations: string[];
-  resultsWithTemplate: string;
+  usageDescription: string;,
+  customizations: string;
+  resultsWithTemplate: string;,
   licenseType: string;
   purchaseDate?: string;
   cost?: number;
 }
-
 export interface TemplateImplementation {
-  originalTemplate: TemplateReference;
+  originalTemplate: TemplateReference;,
   customizations: {,
-    description: string;
-    reasonForChange: string;
-    impact: string;
-  }[];
+  description: string;,
+  reasonForChange: string;
+  impact: string;
+}[];
   results: {,
-    outputExamples: string[];
-    performanceMetrics: Record<string, number>;
-    userFeedback: string[];
-  };
-  lessonsLearned: string[];
-  recommendations: string[];
-}
+  outputExamples: string;
+  performanceMetrics: Record<string, number>;
+  userFeedback: string;
+};
+  lessonsLearned: string;,
+  recommendations: string;
 
 // ====================================
 // Core Case Study Model
 // ====================================
-
+}
 export interface CaseStudy {
   // Basic information
-  id: string;
+  id: string;,
   title: string;
   subtitle?: string;
-  description: string;
-  summary: string; // Short summary for cards/listings
+  description: string;,
+  summary: string; // Short summary for cards/listings,
   // Classification
-  type: CaseStudyType;
+  type: CaseStudyType;,
   status: CaseStudyStatus;
-  industry: IndustryCategory;
-  tags: string[];
+  industry: IndustryCategory;,
+  tags: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   // Content structure
   content: {,
-    challenge: string;         // Problem being solved
-    solution: string;          // How templates helped
-    implementation: string;    // How it was implemented
-    results: string;          // Outcomes achieved
-    learnings: string;        // Key takeaways
-    nextSteps?: string;       // Future plans
-  };
+  challenge: string;         // Problem being solved,
+  solution: string;          // How templates helped,
+  implementation: string;    // How it was implemented,
+  results: string;          // Outcomes achieved,
+  learnings: string;        // Key takeaways,
+  nextSteps?: string;       // Future plans,
+};
   // Rich media
   media: MediaGallery;
   featuredImage?: CaseStudyMedia;
   // Template integration
-  templatesUsed: TemplateReference[];
-  templateImplementations: TemplateImplementation[];
+  templatesUsed: TemplateReference;,
+  templateImplementations: TemplateImplementation;
   // Metrics and ROI
-  roiMetrics: ROIMetrics;
+  roiMetrics: ROIMetrics;,
   performanceMetrics: PerformanceMetrics;
   // Attribution and metadata
   author: {,
-    userId: string;
-    name: string;
-    title?: string;
-    company?: string;
-    profileUrl?: string;
-    avatar?: string;
-    verified: boolean;
-  };
+  userId: string;
+  name: string;
+  title?: string;
+  company?: string;
+  profileUrl?: string;
+  avatar?: string;
+  verified: boolean;
+};
   collaborators: {,
-    userId: string;
-    name: string;
-    role: string;
-    contribution: string;
-  }[];
+  userId: string;
+  name: string;,
+  role: string;
+  contribution: string;
+}[];
   // Engagement metrics
   engagement: {,
-    views: number;
-    likes: number;
-    shares: number;
-    bookmarks: number;
-    comments: number;
-    helpfulVotes: number;
-    followUps: number; // People who implemented similar solutions
-  };
+  views: number;
+  likes: number;,
+  shares: number;
+  bookmarks: number;,
+  comments: number;
+  helpfulVotes: number;,
+  followUps: number; // People who implemented similar solutions,
+};
   // Review and moderation
   moderation: {,
-    submittedAt: string;
-    submittedBy: string;
-    reviewedAt?: string;
-    reviewedBy?: string;
-    approvalNotes?: string;
-    rejectionReason?: string;
-    featuredAt?: string;
-    featuredBy?: string;
-  };
+  submittedAt: string;
+  submittedBy: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  approvalNotes?: string;
+  rejectionReason?: string;
+  featuredAt?: string;
+  featuredBy?: string;
+};
   // SEO and discovery
   seo: {,
-    slug: string;
-    metaTitle: string;
-    metaDescription: string;
-    keywords: string[];
-    canonicalUrl?: string;
-  };
+  slug: string;
+  metaTitle: string;,
+  metaDescription: string;
+  keywords: string;
+  canonicalUrl?: string;
+};
   // Timestamps
-  createdAt: string;
+  createdAt: string;,
   updatedAt: string;
   publishedAt?: string;
   archivedAt?: string;
   // Version control
-  version: string;
-  previousVersions: string[];
+  version: string;,
+  previousVersions: string;
   // Configuration
   config: {,
-    allowComments: boolean;
-    allowSharing: boolean;
-    showAuthor: boolean;
-    showMetrics: boolean;
-    requireEmailToView: boolean;
-    featured: boolean;
-    priority: number; // For ordering
-  };
-}
+  allowComments: boolean;
+  allowSharing: boolean;,
+  showAuthor: boolean;
+  showMetrics: boolean;,
+  requireEmailToView: boolean;
+  featured: boolean;,
+  priority: number; // For ordering,
+};
 
 // ====================================
 // Case Study Creation and Updates
 // ====================================
-
+}
 export interface CreateCaseStudyRequest {
   title: string;
   subtitle?: string;
-  description: string;
+  description: string;,
   type: CaseStudyType;
-  industry: IndustryCategory;
-  tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  industry: IndustryCategory;,
+  tags: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';,
   content: CaseStudy['content'];
   templatesUsed: Omit<TemplateReference, 'templateName' | 'templateCategory'>[];
   // Optional fields
@@ -305,36 +297,33 @@ export interface CreateCaseStudyRequest {
   collaborators?: CaseStudy['collaborators'];
   config?: Partial<CaseStudy['config']>;
 }
-
 export interface UpdateCaseStudyRequest {
   id: string;
   title?: string;
   subtitle?: string;
   description?: string;
-  tags?: string[];
+  tags?: string;
   content?: Partial<CaseStudy['content']>;
-  templatesUsed?: TemplateReference[];
-  templateImplementations?: TemplateImplementation[];
+  templatesUsed?: TemplateReference;
+  templateImplementations?: TemplateImplementation;
   roiMetrics?: Partial<ROIMetrics>;
   performanceMetrics?: Partial<PerformanceMetrics>;
   collaborators?: CaseStudy['collaborators'];
   config?: Partial<CaseStudy['config']>;
   updateReason: string;
+  // ====================================
+  // Case Study Queries and Filters
+  // ====================================
 }
-
-// ====================================
-// Case Study Queries and Filters
-// ====================================
-
 export interface CaseStudyFilter {
-  type?: CaseStudyType | CaseStudyType[];
-  industry?: IndustryCategory | IndustryCategory[];
-  tags?: string[];
+  type?: CaseStudyType | CaseStudyType;
+  industry?: IndustryCategory | IndustryCategory;
+  tags?: string;
   difficulty?: ('beginner' | 'intermediate' | 'advanced' | 'expert')[];
-  status?: CaseStudyStatus | CaseStudyStatus[];
+  status?: CaseStudyStatus | CaseStudyStatus;
   // Template filters
-  templateIds?: string[];
-  templateCategories?: string[];
+  templateIds?: string;
+  templateCategories?: string;
   // Metric filters
   minROI?: number;
   minTimeSaved?: number;
@@ -356,59 +345,55 @@ export interface CaseStudyFilter {
   // Featured content
   featuredOnly?: boolean;
 }
-
 export interface CaseStudySort {
   field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | ,
-         'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
+  'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
   direction: 'asc' | 'desc';
 }
-
 export interface CaseStudyQuery {
   filters?: CaseStudyFilter;
   sort?: CaseStudySort;
   pagination: {,
-    offset: number;
-    limit: number;
-  };
+  offset: number;,
+  limit: number;
+};
   include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
 }
-
 export interface CaseStudyQueryResponse {
-  caseStudies: CaseStudy[];
+  caseStudies: CaseStudy;,
   pagination: {,
-    total: number;
-    offset: number;
-    limit: number;
-    hasMore: boolean;
-  };
+  total: number;,
+  offset: number;
+  limit: number;,
+  hasMore: boolean;
+};
   aggregations: {,
-    totalCaseStudies: number;
+  totalCaseStudies: number;
     byType: Array<{ type: CaseStudyType; count: number }>;
     byIndustry: Array<{ industry: IndustryCategory; count: number }>;
     byDifficulty: Array<{ difficulty: string; count: number }>;
     featuredCount: number;
   };
-}
 
 // ====================================
 // Case Study Analytics
 // ====================================
-
+}
 export interface CaseStudyAnalytics {
   caseStudyId: string;
   // View analytics
-  totalViews: number;
+  totalViews: number;,
   uniqueViews: number;
-  averageTimeOnPage: number;
+  averageTimeOnPage: number;,
   bounceRate: number;
   // Engagement analytics
-  totalLikes: number;
+  totalLikes: number;,
   totalShares: number;
-  totalComments: number;
+  totalComments: number;,
   totalBookmarks: number;
   helpfulnessRating: number;
   // Template impact
-  templatesDiscovered: number;
+  templatesDiscovered: number;,
   templatePurchases: number;
   implementationAttempts: number;
   // Geographic data
@@ -423,13 +408,13 @@ export interface CaseStudyAnalytics {
   // User segments
   viewsByUserType: Array<{ userType: string; count: number }>;
   viewsByIndustry: Array<{ industry: string; count: number }>;
-}
 
 // ====================================
 // Zod Validation Schemas
 // ====================================
 
 // Media schema
+}
 export const CaseStudyMediaSchema = z.object({)
   id: z.string().uuid(),
   type: z.enum(['image', 'video', 'document', 'screenshot', 'chart', 'infographic', 'audio']),
@@ -440,48 +425,48 @@ export const CaseStudyMediaSchema = z.object({)
   altText: z.string().max(500).optional(),
   fileSize: z.number().int().min(0).optional(),
   mimeType: z.string().optional(),
-  dimensions: z.object({),
-    width: z.number().int().min(1),
-    height: z.number().int().min(1),
-  }).optional(),
+  dimensions: z.object({,)
+  width: z.number().int().min(1),
+  height: z.number().int().min(1),
+}).optional(),
   duration: z.number().min(0).optional(),
   uploadedAt: z.string().datetime(),
-  uploadedBy: z.string().uuid(),
-});
+  uploadedBy: z.string().uuid();
+  });
 
 // ROI metrics schema
 export const ROIMetricsSchema = z.object({)
-  timeSaved: z.object({),
-    hours: z.number().min(0),
-    period: z.enum(['day', 'week', 'month', 'project']),
-    description: z.string().min(1).max(500),
-  }),
-  costSavings: z.object({),
-    amount: z.number().min(0),
-    currency: z.string().length(3),
-    period: z.enum(['day', 'week', 'month', 'project']),
-    calculation: z.string().min(1).max(1000),
-  }),
-  qualityMetrics: z.array(z.object({),
-    metric: z.string().min(1).max(100),
-    before: z.union([z.number(), z.string()]),
-    after: z.union([z.number(), z.string()]),
-    improvement: z.number().min(-100).max(1000),
-    unit: z.string().max(50).optional(),
-  })),
-  productivityGains: z.array(z.object({),
-    metric: z.string().min(1).max(100),
-    value: z.number(),
-    unit: z.string().max(50),
-    description: z.string().min(1).max(500),
-  })),
-  claudeMetrics: z.object({),
-    tokensSaved: z.number().int().min(0),
-    costPerToken: z.number().min(0),
-    totalCostSavings: z.number().min(0),
-    responseQualityImprovement: z.number().min(0).max(100),
-    consistencyImprovement: z.number().min(0).max(100),
-  }).optional()
+  timeSaved: z.object({,)
+  hours: z.number().min(0),
+  period: z.enum(['day', 'week', 'month', 'project']),
+  description: z.string().min(1).max(500),
+}),
+  costSavings: z.object({,)
+  amount: z.number().min(0),
+  currency: z.string().length(3),
+  period: z.enum(['day', 'week', 'month', 'project']),
+  calculation: z.string().min(1).max(1000),
+}),
+  qualityMetrics: z.array(z.object({,)
+  metric: z.string().min(1).max(100),
+  before: z.union([z.number(), z.string()]),
+  after: z.union([z.number(), z.string()]),
+  improvement: z.number().min(-100).max(1000),
+  unit: z.string().max(50).optional(),
+})),
+  productivityGains: z.array(z.object({,)
+  metric: z.string().min(1).max(100),
+  value: z.number(),
+  unit: z.string().max(50),
+  description: z.string().min(1).max(500),
+})),
+  claudeMetrics: z.object({,)
+  tokensSaved: z.number().int().min(0),
+  costPerToken: z.number().min(0),
+  totalCostSavings: z.number().min(0),
+  responseQualityImprovement: z.number().min(0).max(100),
+  consistencyImprovement: z.number().min(0).max(100),
+}).optional()
 });
 
 // Template reference schema
@@ -510,111 +495,111 @@ export const CaseStudySchema = z.object({)
   industry: z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']),
   tags: z.array(z.string().min(1).max(50)).max(20),
   difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-  content: z.object({),
-    challenge: z.string().min(1).max(5000),
-    solution: z.string().min(1).max(5000),
-    implementation: z.string().min(1).max(5000),
-    results: z.string().min(1).max(5000),
-    learnings: z.string().min(1).max(5000),
-    nextSteps: z.string().max(2000).optional(),
-  }),
-  media: z.object({),
-    featured: z.array(CaseStudyMediaSchema),
-    screenshots: z.array(CaseStudyMediaSchema),
-    videos: z.array(CaseStudyMediaSchema),
-    documents: z.array(CaseStudyMediaSchema),
-    charts: z.array(CaseStudyMediaSchema),
-  }),
+  content: z.object({,)
+  challenge: z.string().min(1).max(5000),
+  solution: z.string().min(1).max(5000),
+  implementation: z.string().min(1).max(5000),
+  results: z.string().min(1).max(5000),
+  learnings: z.string().min(1).max(5000),
+  nextSteps: z.string().max(2000).optional(),
+}),
+  media: z.object({,)
+  featured: z.array(CaseStudyMediaSchema),
+  screenshots: z.array(CaseStudyMediaSchema),
+  videos: z.array(CaseStudyMediaSchema),
+  documents: z.array(CaseStudyMediaSchema),
+  charts: z.array(CaseStudyMediaSchema),
+}),
   featuredImage: CaseStudyMediaSchema.optional(),
   templatesUsed: z.array(TemplateReferenceSchema),
-  templateImplementations: z.array(z.object({),
-    originalTemplate: TemplateReferenceSchema,
-    customizations: z.array(z.object({),
-      description: z.string().min(1).max(1000),
-      reasonForChange: z.string().min(1).max(1000),
-      impact: z.string().min(1).max(1000),
-    })),
-    results: z.object({),
-      outputExamples: z.array(z.string().max(2000)),
-      performanceMetrics: z.record(z.number()),
-      userFeedback: z.array(z.string().max(1000)),
-    }),
+  templateImplementations: z.array(z.object({,)
+  originalTemplate: TemplateReferenceSchema,
+  customizations: z.array(z.object({,)
+  description: z.string().min(1).max(1000),
+  reasonForChange: z.string().min(1).max(1000),
+  impact: z.string().min(1).max(1000),
+})),
+    results: z.object({,)
+  outputExamples: z.array(z.string().max(2000)),
+  performanceMetrics: z.record(z.number()),
+  userFeedback: z.array(z.string().max(1000)),
+}),
     lessonsLearned: z.array(z.string().max(1000)),
-    recommendations: z.array(z.string().max(1000)),
+    recommendations: z.array(z.string().max(1000));
   })),
   roiMetrics: ROIMetricsSchema,
-  performanceMetrics: z.object({),
-    templatesUsed: z.number().int().min(0),
-    implementationTime: z.number().min(0),
-    projectDuration: z.number().min(0),
-    teamSize: z.number().int().min(1),
-    outputQuality: z.number().min(1).max(10),
-    efficiency: z.number().min(0),
-    errorReduction: z.number().min(0).max(100),
-    stakeholderSatisfaction: z.number().min(1).max(10),
-    beforeAfter: z.array(z.object({),
-      metric: z.string().min(1).max(100),
-      before: z.union([z.number(), z.string()]),
-      after: z.union([z.number(), z.string()]),
-      unit: z.string().max(50).optional(),
-    }))
+  performanceMetrics: z.object({,)
+  templatesUsed: z.number().int().min(0),
+  implementationTime: z.number().min(0),
+  projectDuration: z.number().min(0),
+  teamSize: z.number().int().min(1),
+  outputQuality: z.number().min(1).max(10),
+  efficiency: z.number().min(0),
+  errorReduction: z.number().min(0).max(100),
+  stakeholderSatisfaction: z.number().min(1).max(10),
+  beforeAfter: z.array(z.object({,)
+  metric: z.string().min(1).max(100),
+  before: z.union([z.number(), z.string()]),
+  after: z.union([z.number(), z.string()]),
+  unit: z.string().max(50).optional(),
+}))
   }),
-  author: z.object({),
-    userId: z.string().uuid(),
-    name: z.string().min(1).max(100),
-    title: z.string().max(100).optional(),
-    company: z.string().max(100).optional(),
-    profileUrl: z.string().url().optional(),
-    avatar: z.string().url().optional(),
-    verified: z.boolean(),
-  }),
-  collaborators: z.array(z.object({),
-    userId: z.string().uuid(),
-    name: z.string().min(1).max(100),
-    role: z.string().min(1).max(100),
-    contribution: z.string().min(1).max(500),
-  })),
-  engagement: z.object({),
-    views: z.number().int().min(0),
-    likes: z.number().int().min(0),
-    shares: z.number().int().min(0),
-    bookmarks: z.number().int().min(0),
-    comments: z.number().int().min(0),
-    helpfulVotes: z.number().int().min(0),
-    followUps: z.number().int().min(0),
-  }),
-  moderation: z.object({),
-    submittedAt: z.string().datetime(),
-    submittedBy: z.string().uuid(),
-    reviewedAt: z.string().datetime().optional(),
-    reviewedBy: z.string().uuid().optional(),
-    approvalNotes: z.string().max(1000).optional(),
-    rejectionReason: z.string().max(1000).optional(),
-    featuredAt: z.string().datetime().optional(),
-    featuredBy: z.string().uuid().optional(),
-  }),
-  seo: z.object({),
-    slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/),
-    metaTitle: z.string().min(1).max(60),
-    metaDescription: z.string().min(1).max(160),
-    keywords: z.array(z.string().min(1).max(50)).max(20),
-    canonicalUrl: z.string().url().optional(),
-  }),
+  author: z.object({,)
+  userId: z.string().uuid(),
+  name: z.string().min(1).max(100),
+  title: z.string().max(100).optional(),
+  company: z.string().max(100).optional(),
+  profileUrl: z.string().url().optional(),
+  avatar: z.string().url().optional(),
+  verified: z.boolean(),
+}),
+  collaborators: z.array(z.object({,)
+  userId: z.string().uuid(),
+  name: z.string().min(1).max(100),
+  role: z.string().min(1).max(100),
+  contribution: z.string().min(1).max(500),
+})),
+  engagement: z.object({,)
+  views: z.number().int().min(0),
+  likes: z.number().int().min(0),
+  shares: z.number().int().min(0),
+  bookmarks: z.number().int().min(0),
+  comments: z.number().int().min(0),
+  helpfulVotes: z.number().int().min(0),
+  followUps: z.number().int().min(0),
+}),
+  moderation: z.object({,)
+  submittedAt: z.string().datetime(),
+  submittedBy: z.string().uuid(),
+  reviewedAt: z.string().datetime().optional(),
+  reviewedBy: z.string().uuid().optional(),
+  approvalNotes: z.string().max(1000).optional(),
+  rejectionReason: z.string().max(1000).optional(),
+  featuredAt: z.string().datetime().optional(),
+  featuredBy: z.string().uuid().optional(),
+}),
+  seo: z.object({,)
+  slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/),
+  metaTitle: z.string().min(1).max(60),
+  metaDescription: z.string().min(1).max(160),
+  keywords: z.array(z.string().min(1).max(50)).max(20),
+  canonicalUrl: z.string().url().optional(),
+}),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   publishedAt: z.string().datetime().optional(),
   archivedAt: z.string().datetime().optional(),
   version: z.string().min(1).max(20),
   previousVersions: z.array(z.string()),
-  config: z.object({),
-    allowComments: z.boolean(),
-    allowSharing: z.boolean(),
-    showAuthor: z.boolean(),
-    showMetrics: z.boolean(),
-    requireEmailToView: z.boolean(),
-    featured: z.boolean(),
-    priority: z.number().int().min(0).max(100),
-  })
+  config: z.object({,)
+  allowComments: z.boolean(),
+  allowSharing: z.boolean(),
+  showAuthor: z.boolean(),
+  showMetrics: z.boolean(),
+  requireEmailToView: z.boolean(),
+  featured: z.boolean(),
+  priority: z.number().int().min(0).max(100),
+}
 });
 
 // Create case study request schema
@@ -631,24 +616,24 @@ export const CreateCaseStudyRequestSchema = z.object({)
   roiMetrics: ROIMetricsSchema.partial().optional(),
   performanceMetrics: CaseStudySchema.shape.performanceMetrics.partial().optional(),
   collaborators: z.array(CaseStudySchema.shape.collaborators.element).optional(),
-  config: CaseStudySchema.shape.config.partial().optional(),
-});
+  config: CaseStudySchema.shape.config.partial().optional();
+  });
 
 // Case study filter schema
 export const CaseStudyFilterSchema = z.object({)
   type: z.union([),
-    z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']),
-    z.array(z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']))
+  z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']),
+  z.array(z.enum(['template-success', 'user-story', 'roi-analysis', 'before-after', 'industry-showcase', 'community-highlight', 'innovation-case']))
   ]).optional(),
   industry: z.union([),
-    z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']),
-    z.array(z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']))
+  z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']),
+  z.array(z.enum(['film-production', 'advertising', 'gaming', 'publishing', 'education', 'healthcare', 'finance', 'technology', 'legal', 'consulting', 'e-commerce', 'non-profit', 'other']))
   ]).optional(),
   tags: z.array(z.string()).optional(),
   difficulty: z.array(z.enum(['beginner', 'intermediate', 'advanced', 'expert'])).optional(),
   status: z.union([),
-    z.enum(['draft', 'submitted', 'under-review', 'approved', 'featured', 'archived', 'rejected']),
-    z.array(z.enum(['draft', 'submitted', 'under-review', 'approved', 'featured', 'archived', 'rejected']))
+  z.enum(['draft', 'submitted', 'under-review', 'approved', 'featured', 'archived', 'rejected']),
+  z.array(z.enum(['draft', 'submitted', 'under-review', 'approved', 'featured', 'archived', 'rejected']))
   ]).optional(),
   templateIds: z.array(z.string().uuid()).optional(),
   templateCategories: z.array(z.string()).optional(),

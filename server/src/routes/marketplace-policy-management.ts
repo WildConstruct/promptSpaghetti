@@ -17,6 +17,7 @@ import {
 } from '../services/MarketplacePolicyEnforcementService';
 
 // Request interfaces
+}
 interface CreatePolicyRequest {
   policy_type: MarketplacePolicyType;
   title: string;
@@ -25,36 +26,46 @@ interface CreatePolicyRequest {
   metadata: Record<string, unknown>;
   enforcement: Record<string, unknown>;
 }
+}
 
+}
 interface UpdatePolicyRequest extends Partial<CreatePolicyRequest> {
   // Extends create request with optional fields
 }
 
+}
 interface PublishPolicyRequest extends PolicyPublishingRequest {
   // Extends base publishing request
 }
 
+}
 interface CreateVersionRequest extends PolicyVersionRequest {
   // Extends base version request
 }
 
+}
 interface DetectViolationsRequest {
   content_id: string;
   content_type: 'template' | 'listing' | 'user_profile' | 'comment';
   content_data: Record<string, unknown>;
   owner_id: string;
 }
+}
 
+}
 interface ReportViolationRequest extends ViolationReport {
   // Extends base violation report
 }
 
+}
 interface ExecuteActionRequest {
   action_id: string;
   confirmation: boolean;
   notes?: string;
 }
+}
 
+}
 interface CreateDetectionRuleRequest {
   policy_id: string;
   name: string;
@@ -64,8 +75,10 @@ interface CreateDetectionRuleRequest {
   enforcement_config: Record<string, unknown>;
   ai_model_config?: Record<string, unknown>;
 }
+}
 
 // Query interfaces
+}
 interface GetPoliciesQuery {
   policy_type?: MarketplacePolicyType;
   status?: PolicyStatus;
@@ -73,7 +86,9 @@ interface GetPoliciesQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface GetViolationsQuery {
   violator_id?: string;
   violation_type?: ViolationType;
@@ -83,6 +98,7 @@ interface GetViolationsQuery {
   offset?: number;
   date_from?: string;
   date_to?: string;
+}
 }
 
 export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance, pool: Pool) {
@@ -122,7 +138,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-          },
+  }
           notification_settings: {
             enabled: false,
             channels: [],
@@ -130,7 +146,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
             template_id: '',
             send_reminders: false
           }
-        },
+  }
         analytics: {
           views: 0,
           acknowledgments: 0,
@@ -627,7 +643,7 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           limit,
           offset,
           has_more: false
-        },
+  }
         filters_applied: {
           violator_id: targetViolatorId,
           violation_type,
@@ -697,12 +713,12 @@ export async function marketplacePolicyManagementRoutes(fastify: FastifyInstance
           database: 'connected',
           policy_publishing_service: 'operational',
           enforcement_service: 'operational'
-        },
+  }
         features: {
           policy_types: Object.values(MarketplacePolicyType),
           violation_types: Object.values(ViolationType),
           enforcement_actions: Object.values(EnforcementActionType)
-        },
+  }
         version: '1.0.0'
       };
     } catch (error) {

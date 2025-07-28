@@ -6,7 +6,7 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { DataClassificationLevel, AccessRequirements, OperationContext, ClassificationAuditEvent, ValidationResult } from '../types/DataClassification';
+import { DataClassificationLevel, AccessRequirements, OperationContext } from '../types/DataClassification';
 export interface AccessControlPolicy {
     id: string;
     name: string;
@@ -29,7 +29,7 @@ export interface AccessRequest {
 export interface AccessDecision {
     granted: boolean;
     reason: string;
-    conditions: AccessCondition[];
+    conditions: AccessCondition;
     expiresAt?: Date;
     auditRequired: boolean;
     monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME';
@@ -42,10 +42,10 @@ export interface AccessCondition {
 }
 export interface UserAccessProfile {
     userId: string;
-    roles: string[];
+    roles: string;
     clearanceLevel: DataClassificationLevel;
-    permissions: string[];
-    restrictions: AccessRestriction[];
+    permissions: string;
+    restrictions: AccessRestriction;
     mfaVerified: boolean;
     lastAuthenticationAt: Date;
     authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
@@ -63,77 +63,11 @@ export declare class ClassificationAccessControlService {
     private userProfiles;
     constructor();
     /**
-     * Initialize default access control policies for each classification level
-     */
+    * Initialize default access control policies for each classification level
+    */
     private initializeDefaultPolicies;
-    /**
-     * Evaluate access request and return access decision
-     */
-    evaluateAccess(request: AccessRequest): Promise<AccessDecision>;
-    /**
-     * Check if user has sufficient clearance for the classification level
-     */
-    private hasSufficientClearance;
-    /**
-     * Check if user has required authentication level
-     */
-    private hasRequiredAuthentication;
-    /**
-     * Generate access conditions based on policy requirements
-     */
-    private generateAccessConditions;
-    /**
-     * Check if request has pre-approval for workflow requirements
-     */
-    private hasPreapproval;
-    /**
-     * Calculate access expiration time based on requirements
-     */
-    private calculateExpirationTime;
-    /**
-     * Get monitoring level based on classification
-     */
-    private getMonitoringLevel;
-    /**
-     * Audit access attempt
-     */
-    private auditAccessAttempt;
-    /**
-     * Register user access profile
-     */
-    registerUserProfile(profile: UserAccessProfile): Promise<void>;
-    /**
-     * Update user clearance level
-     */
-    updateUserClearance(userId: string, clearanceLevel: DataClassificationLevel): Promise<ValidationResult>;
-    /**
-     * Get access policy for classification level
-     */
-    getAccessPolicy(classification: DataClassificationLevel): AccessControlPolicy | undefined;
-    /**
-     * Update access policy
-     */
-    updateAccessPolicy(classification: DataClassificationLevel, updates: Partial<AccessControlPolicy>): Promise<void>;
-    /**
-     * Get audit events for a user or data element
-     */
-    getAuditEvents(userId?: string, dataId?: string): ClassificationAuditEvent[];
-    /**
-     * Validate access conditions are met
-     */
-    validateAccessConditions(conditions: AccessCondition[], context: OperationContext): Promise<ValidationResult>;
-    /**
-     * Validate time restriction condition
-     */
-    private validateTimeRestriction;
-    /**
-     * Validate purpose restriction condition
-     */
-    private validatePurposeRestriction;
-    /**
-     * Increment policy version
-     */
-    private incrementVersion;
+    conditions: [];
+    auditRequired: true;
+    monitoringLevel: 'ENHANCED';
 }
-export default ClassificationAccessControlService;
 //# sourceMappingURL=ClassificationAccessControlService.d.ts.map

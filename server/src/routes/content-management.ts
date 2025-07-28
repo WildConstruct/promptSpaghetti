@@ -16,6 +16,7 @@ import {
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
@@ -25,6 +26,7 @@ interface AuthenticatedRequest extends FastifyRequest {
   };
 }
 
+}
 interface ContentQueryParams {
   type?: string;
   status?: string;
@@ -40,14 +42,19 @@ interface ContentQueryParams {
   limit?: string;
   offset?: string;
 }
+}
 
+}
 interface ContentIdParams {
   contentId: string;
 }
+}
 
+}
 interface BulkUpdateBody {
   contentIds: string[];
   status: string;
+}
 }
 
 export async function contentManagementRoutes(fastify: FastifyInstance) {
@@ -387,7 +394,7 @@ export async function contentManagementRoutes(fastify: FastifyInstance) {
         { 
           status: 'published',
           publishImmediately: true
-        },
+  }
         user.id,
         user.role
       );
@@ -498,7 +505,7 @@ export async function contentManagementRoutes(fastify: FastifyInstance) {
             featured,
             priority: featured ? 100 : 0
           }
-        },
+  }
         user.id,
         user.role
       );

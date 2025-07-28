@@ -26,6 +26,7 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
+}
 export interface RotationResponse<T = any> {
   success: boolean;
   data?: T;
@@ -38,6 +39,7 @@ export interface RotationResponse<T = any> {
   };
 }
 
+}
 export interface CreateRotationPolicyRequest {
   name: string;
   description: string;
@@ -54,6 +56,7 @@ export interface CreateRotationPolicyRequest {
     forbiddenPatterns?: string[];
     mustInclude?: string[];
     expirationDays?: number;
+}
   };
   notifications?: {
     enabled: boolean;
@@ -70,6 +73,7 @@ export interface CreateRotationPolicyRequest {
   };
 }
 
+}
 export interface RegisterCredentialRequest {
   name: string;
   description: string;
@@ -80,6 +84,7 @@ export interface RegisterCredentialRequest {
     environment: string[];
     services: string[];
     accessLevel: 'read' | 'write' | 'admin' | 'service';
+}
   };
   dependencies?: Array<{
     type: 'service' | 'database' | 'api';
@@ -89,13 +94,16 @@ export interface RegisterCredentialRequest {
   }>;
 }
 
+}
 export interface RotationRequest {
   credentialId: string;
   reason?: string;
   priority?: RotationPriority;
   executeImmediately?: boolean;
 }
+}
 
+}
 export interface BulkRotationRequest {
   credentialIds: string[];
   reason?: string;
@@ -104,13 +112,16 @@ export interface BulkRotationRequest {
     executeAt?: string; // ISO date
     staggered?: boolean;
     staggerDelay?: number; // milliseconds between rotations
+}
   };
 }
 
+}
 export interface RotationAnalyticsRequest {
   timeRange: {
     start: string;
     end: string;
+}
   };
   filters?: {
     type?: RotationType[];
@@ -121,12 +132,14 @@ export interface RotationAnalyticsRequest {
   groupBy?: 'type' | 'status' | 'day' | 'week';
 }
 
+}
 export interface EmergencyRotationRequest {
   credentialId: string;
   reason: string;
   compromisedAt?: string; // ISO date
   affectedServices?: string[];
   mitigationActions?: string[];
+}
 }
 
 // ==========================================
@@ -215,7 +228,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           forbiddenPatterns: ['password', '123456', 'admin'],
           mustInclude: [],
           ...request.body.requirements
-        },
+  }
         notifications: {
           enabled: request.body.notifications?.enabled || false,
           channels: request.body.notifications?.channels || [],
@@ -226,7 +239,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             { event: 'rotation_failed', advanceNotice: 0, enabled: true }
           ],
           escalationRules: []
-        },
+  }
         rollbackPolicy: {
           enabled: request.body.rollbackPolicy?.enabled || true,
           automaticRollback: request.body.rollbackPolicy?.automaticRollback || false,
@@ -316,7 +329,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           total: policies.length,
           offset,
           limit
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `list_policies_${Date.now()}`,
@@ -341,7 +354,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-        },
+  }
         required: ['policyId']
       }
     }
@@ -402,7 +415,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               services: { type: 'array', items: { type: 'string' } },
               accessLevel: { type: 'string', enum: ['read', 'write', 'admin', 'service'] }
             }
-          },
+  }
           dependencies: {
             type: 'array',
             items: {
@@ -516,7 +529,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           ...cred.currentVersion,
           value: '[HIDDEN]', // Never expose credential values
           salt: '[HIDDEN]'
-        },
+  }
         versions: cred.versions.map(v => ({
           ...v,
           value: '[HIDDEN]',
@@ -532,7 +545,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           offset,
           limit,
           dueForRotation: credentials.filter(c => c.nextRotationDue <= new Date()).length
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `list_credentials_${Date.now()}`,
@@ -599,7 +612,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           credentialId: request.body.credentialId,
           status: 'initiated',
           message: 'Rotation job created successfully'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -694,7 +707,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           errorCount: errors.length,
           errors,
           message: `Initiated ${jobIds.length} of ${request.body.credentialIds.length} rotations`
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -762,7 +775,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
           priority: RotationPriority.EMERGENCY,
           status: 'initiated',
           message: 'Emergency rotation initiated - processing with highest priority'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -839,7 +852,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             completed: jobs.filter(j => j.status === RotationStatus.COMPLETED).length,
             failed: jobs.filter(j => j.status === RotationStatus.FAILED).length
           }
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `list_jobs_${Date.now()}`,
@@ -863,7 +876,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         type: 'object',
         properties: {
           jobId: { type: 'string' }
-        },
+  }
         required: ['jobId']
       }
     }
@@ -919,7 +932,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           filters: {
             type: 'object',
             properties: {
@@ -927,7 +940,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
               status: { type: 'array', items: { type: 'string', enum: Object.values(RotationStatus) } },
               priority: { type: 'array', items: { type: 'string', enum: Object.values(RotationPriority) } }
             }
-          },
+  }
           includeDetails: { type: 'boolean', default: true },
           groupBy: { type: 'string', enum: ['type', 'status', 'day', 'week'], default: 'type' }
         }
@@ -983,12 +996,12 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
         recentRotations: {
           lastHour: jobs.filter(j => j.completedAt && j.completedAt > oneHourAgo).length,
           lastDay: jobs.filter(j => j.completedAt && j.completedAt > oneDayAgo).length
-        },
+  }
         jobStatus: {
           active: jobs.filter(j => j.status === RotationStatus.IN_PROGRESS).length,
           pending: jobs.filter(j => j.status === RotationStatus.PENDING).length,
           failed: jobs.filter(j => j.status === RotationStatus.FAILED && j.completedAt && j.completedAt > oneDayAgo).length
-        },
+  }
         averageRotationTime: jobs
           .filter(j => j.duration)
           .reduce((sum, j) => sum + j.duration!, 0) / Math.max(1, jobs.filter(j => j.duration).length),
@@ -1038,7 +1051,7 @@ export const rotationManagementAPI: FastifyPluginAsync = async (fastify: Fastify
             policyEngine: 'operational',
             jobScheduler: 'operational',
             credentialStore: 'operational'
-          },
+  }
           statistics: {
             managedCredentials: credentials.length,
             rotationPolicies: policies.length,

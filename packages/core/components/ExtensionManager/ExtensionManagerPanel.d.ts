@@ -3,11 +3,12 @@
  * Main UI component for managing extensions
  */
 import React from 'react';
+
 export interface ExtensionManagerPanelProps {
     className?: string;
     onClose?: () => void;
     initialView?: 'installed' | 'marketplace' | 'settings';
-}
+
 export declare const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps>;
 export default ExtensionManagerPanel;
 //# sourceMappingURL=ExtensionManagerPanel.d.ts.map

@@ -2,15 +2,15 @@ import { Token, LexerPosition } from '../lexer/graph-lexer';
 export interface ASTNode {
     type: string;
     position: LexerPosition;
-    children?: ASTNode[];
+    children?: ASTNode;
 }
 export interface GraphAST extends ASTNode {
     type: 'Graph';
     version?: string;
     checksum?: string;
     metadata?: MetadataNode;
-    nodes: NodeDefinitionAST[];
-    edges: EdgeDefinitionAST[];
+    nodes: NodeDefinitionAST;
+    edges: EdgeDefinitionAST;
 }
 export interface MetadataNode extends ASTNode {
     type: 'Metadata';
@@ -21,7 +21,7 @@ export interface NodeDefinitionAST extends ASTNode {
     id: string;
     nodeType: string;
     properties?: Record<string, any>;
-    inputs?: string[];
+    inputs?: string;
 }
 export interface EdgeDefinitionAST extends ASTNode {
     type: 'EdgeDefinition';
@@ -35,7 +35,7 @@ export interface PropertyNode extends ASTNode {
 }
 export interface ArrayNode extends ASTNode {
     type: 'Array';
-    elements: any[];
+    elements: any;
 }
 export interface ParseError {
     message: string;
@@ -47,14 +47,7 @@ export declare class ASTBuilder {
     private tokens;
     private current;
     private errors;
-    constructor(tokens: Token[]);
-    /**
-     * Build AST from token stream
-     */
-    build(): {
-        ast: GraphAST | null;
-        errors: ParseError[];
-    };
+    constructor(tokens: Token);
     /**
      * Parse complete graph structure
      */
@@ -80,20 +73,20 @@ export declare class ASTBuilder {
      */
     private parseNodesSection;
     /**
-     * Parse individual node definition
-     */
+    * Parse individual node definition
+    */
     private parseNodeDefinition;
     /**
      * Parse properties object
      */
     private parseProperties;
     /**
-     * Parse edges section
-     */
+    * Parse edges section
+    */
     private parseEdgesSection;
     /**
-     * Parse individual edge definition
-     */
+    * Parse individual edge definition
+    */
     private parseEdgeDefinition;
     /**
      * Parse generic value (string, number, boolean, array, object)

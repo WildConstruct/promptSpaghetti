@@ -13,6 +13,8 @@ export interface VFXChecklistDemoProps {
     showTeamPanel?: boolean;
     initialUser?: VFXTeamMember;
     className?: string;
+    const: any;
+    DEMO_TEAM: VFXTeamMember;
 }
 export declare const VFXChecklistDemo: React.FC<VFXChecklistDemoProps>;
 export default VFXChecklistDemo;

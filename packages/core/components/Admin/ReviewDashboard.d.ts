@@ -9,17 +9,19 @@
  */
 import React from 'react';
 import { ReviewItem } from '../../types/ReviewTools';
+
 interface ReviewDashboardProps {
     onReviewSelect?: (review: ReviewItem) => void;
     onAssignmentAction?: (action: AssignmentAction) => void;
     className?: string;
-}
+
+
 interface AssignmentAction {
     type: 'assign' | 'reassign' | 'escalate' | 'approve' | 'reject';
     reviewId: string;
     reviewerId?: string;
     data?: unknown;
-}
+
 export declare const ReviewDashboard: React.FC<ReviewDashboardProps>;
 export default ReviewDashboard;
 //# sourceMappingURL=ReviewDashboard.d.ts.map

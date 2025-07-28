@@ -13,67 +13,64 @@ import { usePreviewSync } from '../../../hooks/usePreviewSync';
 jest.mock('../../../stores/previewStateStore');
 jest.mock('../../../hooks/usePreviewSync');
 jest.mock('../../../graphStore', () => ({)
-  useGraphStore: () => ({),
-    getGraphData: jest.fn(() => ({ nodes: [], edges: [] }))
-  })
+  useGraphStore: () => ({,)
+  getGraphData: jest.fn(() => ({ nodes: [], edges: [] }))
+  }
 }));
 const mockUsePreviewStateStore = usePreviewStateStore as jest.MockedFunction<typeof usePreviewStateStore>;
 const mockUsePreviewSync = usePreviewSync as jest.MockedFunction<typeof usePreviewSync>;
 const mockPreviewResults = [;
   {
-    seed: 1234,
-    output: 'Test output 1',
-    executionTimeMs: 125,
-    locked: false,
-  },
+  seed: 1234,
+  output: 'Test output 1',
+  executionTimeMs: 125,
+  locked: false,
+}
   {
-    seed: 5678,
-    output: 'Test output 2',
-    executionTimeMs: 89,
-    locked: false,
-  },
+  seed: 5678,
+  output: 'Test output 2',
+  executionTimeMs: 89,
+  locked: false,
+}
   {
-    seed: 9012,
-    error: 'Test error',
-    executionTimeMs: 45,
-    locked: true,
-    lockedNote: 'Important result',
-  }
-];
-const mockStoreState = {
+  seed: 9012,
+  error: 'Test error',
+  executionTimeMs: 45,
+  locked: true,
+  lockedNote: 'Important result'];
+  const mockStoreState = {
   results: mockPreviewResults,
   isLoading: false,
   error: null,
   performanceStats: {,
-    totalTime: 1500,
-    averageTime: 86,
-  },
+  totalTime: 1500,
+  averageTime: 86,
+},
   lockedResults: [2],
   isRealTimeEnabled: true,
   autoRefreshEnabled: false,
-  lockResult: jest.fn<unknown[], unknown>(),
-  unlockResult: jest.fn<unknown[], unknown>(),
-  setAutoRefresh: jest.fn<unknown[], unknown>(),
-  resetState: jest.fn<unknown[], unknown>()
+  lockResult: jest.fn<unknown, unknown>(),
+  unlockResult: jest.fn<unknown, unknown>(),
+  setAutoRefresh: jest.fn<unknown, unknown>(),
+  resetState: jest.fn<unknown, unknown>()
 };
 const mockSyncState = {
   isEnabled: true,
   isSyncing: false,
   lastSyncTime: Date.now() - 30000,
   syncCount: 5,
-  enableSync: jest.fn<unknown[], unknown>(),
-  forceSyncNow: jest.fn<unknown[], unknown>(),
-  getChangeAnalysis: jest.fn(() => ({),
-    changeType: 'content',
-    significance: 0.6,
-    affectedNodes: ['node-1'],
-    affectedEdges: [],
-  })),
+  enableSync: jest.fn<unknown, unknown>(),
+  forceSyncNow: jest.fn<unknown, unknown>(),
+  getChangeAnalysis: jest.fn(() => ({,)
+  changeType: 'content',
+  significance: 0.6,
+  affectedNodes: ['node-1'],
+  affectedEdges: [],
+})),
   performanceMetrics: {,
-    avgSyncTime: 250,
-    successRate: 0.95,
-    cacheHitRate: 0.75,
-  }
+  avgSyncTime: 250,
+  successRate: 0.95,
+  cacheHitRate: 0.75,
 };
 describe('RealTimePreviewPanel Component', () => {
   beforeEach(() => {
@@ -92,7 +89,7 @@ describe('RealTimePreviewPanel Component', () => {
       expect(screen.queryByText('🔄 Real-Time Preview')).not.toBeInTheDocument();
     });
     test('displays close button when onClose provided', () => {
-      const mockOnClose = jest.fn<unknown[], unknown>();
+      const mockOnClose = jest.fn<unknown, unknown>();
       render(<RealTimePreviewPanel onClose={mockOnClose} />);
       const closeButton = screen.getByText('×');
       expect(closeButton).toBeInTheDocument();
@@ -200,18 +197,17 @@ describe('RealTimePreviewPanel Component', () => {
     });
   });
   describe('Result Interactions', () => {
-    test('handles result selection', async () => {
-      const user = userEvent.setup();
-      render(<RealTimePreviewPanel />);
-      const firstResult = screen.getByText('Seed 1234').closest('div')?.closest('div');
-      if (firstResult) {
-        await user.click(firstResult);
-        // Should highlight the selected result
-        expect(firstResult).toHaveStyle({)
-          background: '#f0f9ff',
-          borderColor: '#0ea5e9',
-        });
-      }
+  test('handles result selection', async () => {
+  const user = userEvent.setup();
+  render(<RealTimePreviewPanel />);
+  const firstResult = screen.getByText('Seed 1234').closest('div')?.closest('div');
+  if (firstResult) {
+  await user.click(firstResult);
+  // Should highlight the selected result
+  expect(firstResult).toHaveStyle({)
+  background: '#f0f9ff',
+  borderColor: '#0ea5e9',
+});
     });
     test('handles lock/unlock toggle', async () => {
       const user = userEvent.setup();
@@ -256,35 +252,35 @@ describe('RealTimePreviewPanel Component', () => {
     });
   });
   describe('Loading and Error States', () => {
-    test('shows loading state', () => {
-      const loadingState = {
-        ...mockStoreState,
-        isLoading: true,
-        results: [],
-      };
+  test('shows loading state', () => {
+  const loadingState = {
+  ...mockStoreState,
+  isLoading: true,
+  results: [],
+};
       mockUsePreviewStateStore.mockReturnValue(loadingState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('⏳')).toBeInTheDocument();
       expect(screen.getByText('Generating previews...')).toBeInTheDocument();
     });
     test('shows error state', () => {
-      const errorState = {
-        ...mockStoreState,
-        error: 'Test error message',
-        results: [],
-      };
+  const errorState = {
+  ...mockStoreState,
+  error: 'Test error message',
+  results: [],
+};
       mockUsePreviewStateStore.mockReturnValue(errorState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('Error:')).toBeInTheDocument();
       expect(screen.getByText('Test error message')).toBeInTheDocument();
     });
     test('shows empty state', () => {
-      const emptyState = {
-        ...mockStoreState,
-        results: [],
-        isLoading: false,
-        error: null,
-      };
+  const emptyState = {
+  ...mockStoreState,
+  results: [],
+  isLoading: false,
+  error: null,
+};
       mockUsePreviewStateStore.mockReturnValue(emptyState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('🎯')).toBeInTheDocument();
@@ -292,10 +288,10 @@ describe('RealTimePreviewPanel Component', () => {
       expect(screen.getByText(/Enable real-time sync/)).toBeInTheDocument();
     });
     test('disables refresh button when syncing', () => {
-      const syncingState = {
-        ...mockSyncState,
-        isSyncing: true,
-      };
+  const syncingState = {
+  ...mockSyncState,
+  isSyncing: true,
+};
       mockUsePreviewSync.mockReturnValue(syncingState as any as unknown);
       render(<RealTimePreviewPanel />);
       const refreshButton = screen.getByText('Syncing...');
@@ -305,15 +301,16 @@ describe('RealTimePreviewPanel Component', () => {
   describe('Result Limiting', () => {
     test('limits displayed results to maxResults', () => {
       const manyResults = Array.from({ length: 10 }, (_, i) => ({)
-        seed: 1000 + i,
-        output: `Output ${i}`,}
-        executionTimeMs: 100 + i,
-        locked: false,
-      }));
+  seed: 1000 + i,
+        output: `Output ${i}`}
+},
+  executionTimeMs: 100 + i,
+        locked: false;
+  }));
       const stateWithManyResults = {
-        ...mockStoreState,
-        results: manyResults,
-      };
+  ...mockStoreState,
+  results: manyResults,
+};
       mockUsePreviewStateStore.mockReturnValue(stateWithManyResults as any as unknown);
       render(<RealTimePreviewPanel maxResults={3} />);
       expect(screen.getByText('Seed 1000')).toBeInTheDocument();
@@ -324,31 +321,31 @@ describe('RealTimePreviewPanel Component', () => {
     });
   });
   describe('Sync Status Display', () => {
-    test('shows disabled status when sync disabled', () => {
-      const disabledSyncState = {
-        ...mockSyncState,
-        isEnabled: false,
-        syncCount: 0,
-      };
+  test('shows disabled status when sync disabled', () => {
+  const disabledSyncState = {
+  ...mockSyncState,
+  isEnabled: false,
+  syncCount: 0,
+};
       mockUsePreviewSync.mockReturnValue(disabledSyncState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('Disabled')).toBeInTheDocument();
     });
     test('shows syncing status during sync', () => {
-      const syncingState = {
-        ...mockSyncState,
-        isSyncing: true,
-      };
+  const syncingState = {
+  ...mockSyncState,
+  isSyncing: true,
+};
       mockUsePreviewSync.mockReturnValue(syncingState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('Syncing...')).toBeInTheDocument();
     });
     test('shows ready status when enabled but no syncs', () => {
-      const readyState = {
-        ...mockSyncState,
-        syncCount: 0,
-        isSyncing: false,
-      };
+  const readyState = {
+  ...mockSyncState,
+  syncCount: 0,
+  isSyncing: false,
+};
       mockUsePreviewSync.mockReturnValue(readyState as any as unknown);
       render(<RealTimePreviewPanel />);
       expect(screen.getByText('Ready')).toBeInTheDocument();
@@ -366,30 +363,29 @@ describe('RealTimePreviewPanel Component', () => {
       expect(screen.getByTitle('Unlock result')).toBeInTheDocument();
     });
     test('provides lock note tooltip for locked results', () => {
-      render(<RealTimePreviewPanel />);
-      expect(screen.getByTitle('Locked: Important result')).toBeInTheDocument();
-    });
+  render(<RealTimePreviewPanel />);
+  expect(screen.getByTitle('Locked: Important result')).toBeInTheDocument();
+});
   });
   describe('Event Handling', () => {
     test('handles close button click', async () => {
       const user = userEvent.setup();
-      const mockOnClose = jest.fn<unknown[], unknown>();
+      const mockOnClose = jest.fn<unknown, unknown>();
       render(<RealTimePreviewPanel onClose={mockOnClose} />);
       const closeButton = screen.getByText('×');
       await user.click(closeButton);
       expect(mockOnClose).toHaveBeenCalled();
     });
-    test('prevents event propagation on lock button clicks', async () => {  
-      const user = userEvent.setup();
-      render(<RealTimePreviewPanel />);
-      const lockButtons = screen.getAllByTitle('Lock result');
-      const resultContainer = lockButtons[0].closest('[style*="cursor: pointer"]');
-      let resultClicked = false;
-      if (resultContainer) {
-        resultContainer.addEventListener('click', () => {
-          resultClicked = true;
-        });
-      }
+    test('prevents event propagation on lock button clicks', async () => {
+  const user = userEvent.setup();
+  render(<RealTimePreviewPanel />);
+  const lockButtons = screen.getAllByTitle('Lock result');
+  const resultContainer = lockButtons[0].closest('[style*="cursor: pointer"]');
+  let resultClicked = false;
+  if (resultContainer) {
+  resultContainer.addEventListener('click', () => {
+  resultClicked = true;
+});
       await user.click(lockButtons[0]);
       // Lock dialog should open, but result should not be selected
       expect(screen.getByText('Lock Result')).toBeInTheDocument();

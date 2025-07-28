@@ -27,190 +27,178 @@ import {
 } from './ConversionDataModel';
 
 export interface CohortAnalysisResult {
-  cohortId: string;
+  cohortId: string;,
   analysisDate: number;
   // Core metrics
   metrics: {,
-    totalUsers: number;
-    activeUsers: number;
-    retentionRates: Map<number, number>; // day -> retention rate
-    conversionRates: Map<number, number>; // day -> conversion rate
-    churnRate: number;
-    averageLifetimeValue: number;
-    averageTimeToConvert: number;
-  };
+  totalUsers: number;,
+  activeUsers: number;
+  retentionRates: Map<number, number>; // day -> retention rate,
+  conversionRates: Map<number, number>; // day -> conversion rate,
+  churnRate: number;,
+  averageLifetimeValue: number;
+  averageTimeToConvert: number;
+};
   // Behavioral analysis
   behavior: {,
-    commonPathways: PathwayAnalysis[];
-    dropOffAnalysis: DropOffAnalysis;
-    engagementPatterns: EngagementPattern[];
-    valueSegmentation: ValueSegmentation;
-  };
+  commonPathways: PathwayAnalysis;
+  dropOffAnalysis: DropOffAnalysis;,
+  engagementPatterns: EngagementPattern;
+  valueSegmentation: ValueSegmentation;
+};
   // Comparative analysis
   comparison: {,
-    previousPeriod?: CohortComparison;
-    benchmarkCohorts?: CohortBenchmark[];
-    industryBenchmarks?: IndustryBenchmark;
-  };
+  previousPeriod?: CohortComparison;
+  benchmarkCohorts?: CohortBenchmark;
+  industryBenchmarks?: IndustryBenchmark;
+};
   // Predictive insights
   predictions: {,
-    projectedRetention: Map<number, number>; // future day -> predicted retention
-    churnRisk: Map<string, number>; // userId -> churn risk score
-    lifetimeValueForecast: Map<string, number>; // userId -> predicted LTV
-    optimalInterventionPoints: InterventionPoint[];
-  };
+  projectedRetention: Map<number, number>; // future day -> predicted retention,
+  churnRisk: Map<string, number>; // userId -> churn risk score,
+  lifetimeValueForecast: Map<string, number>; // userId -> predicted LTV,
+  optimalInterventionPoints: InterventionPoint;
+};
   // Quality metrics
   dataQuality: {,
-    completeness: number;
-    accuracy: number;
-    consistency: number;
-    confidence: number;
-  };
+  completeness: number;
+  accuracy: number;,
+  consistency: number;
+  confidence: number;
+};
 }
-
 export interface SegmentAnalysisResult {
-  segmentId: string;
+  segmentId: string;,
   analysisDate: number;
   // Segment composition
   composition: {,
-    currentSize: number;
-    growthRate: number;
-    demographicBreakdown: DemographicBreakdown;
-    behavioralProfile: BehavioralProfile;
-    valueDistribution: ValueDistribution;
-  };
+  currentSize: number;,
+  growthRate: number;
+  demographicBreakdown: DemographicBreakdown;,
+  behavioralProfile: BehavioralProfile;
+  valueDistribution: ValueDistribution;
+};
   // Performance metrics
   performance: {,
-    conversionMetrics: SegmentConversionMetrics;
-    engagementMetrics: SegmentEngagementMetrics;
-    revenueMetrics: SegmentRevenueMetrics;
-    retentionMetrics: SegmentRetentionMetrics;
-  };
+  conversionMetrics: SegmentConversionMetrics;
+  engagementMetrics: SegmentEngagementMetrics;,
+  revenueMetrics: SegmentRevenueMetrics;
+  retentionMetrics: SegmentRetentionMetrics;
+};
   // Funnel analysis
   funnelAnalysis: Map<string, FunnelSegmentMetrics>;
   // Segment lifecycle
   lifecycle: {,
-    acquisitionSources: Map<string, number>;
-    transitionPatterns: SegmentTransition[];
-    exitReasons: Map<string, number>;
-    averageLifetime: number;
-  };
+  acquisitionSources: Map<string, number>;
+  transitionPatterns: SegmentTransition;,
+  exitReasons: Map<string, number>;
+  averageLifetime: number;
+};
   // Recommendations
   recommendations: {,
-    optimization: SegmentOptimization[];
-    targeting: TargetingRecommendation[];
-    personalization: PersonalizationSuggestion[];
-    interventions: InterventionRecommendation[];
-  };
+  optimization: SegmentOptimization;
+  targeting: TargetingRecommendation;,
+  personalization: PersonalizationSuggestion;
+  interventions: InterventionRecommendation;
+};
 }
-
 export interface PathwayAnalysis {
-  pathway: string[];
+  pathway: string;,
   frequency: number;
-  conversionRate: number;
+  conversionRate: number;,
   averageTimeToComplete: number;
-  averageValue: number;
-  dropOffPoints: string[];
+  averageValue: number;,
+  dropOffPoints: string;
 }
-
 export interface DropOffAnalysis {
-  totalDropOffs: number;
+  totalDropOffs: number;,
   dropOffRate: number;
-  topDropOffPoints: DropOffPoint[];
-  recoveryOpportunities: RecoveryOpportunity[];
-  seasonalPatterns: SeasonalDropOff[];
+  topDropOffPoints: DropOffPoint;,
+  recoveryOpportunities: RecoveryOpportunity;
+  seasonalPatterns: SeasonalDropOff;
 }
-
 export interface RecoveryOpportunity {
-  dropOffPoint: string;
+  dropOffPoint: string;,
   potentialRecovery: number;
-  recommendedActions: string[];
+  recommendedActions: string;,
   estimatedImpact: number;
   implementationComplexity: 'low' | 'medium' | 'high';
 }
-
 export interface SeasonalDropOff {
-  period: string;
+  period: string;,
   dropOffMultiplier: number;
-  affectedSegments: string[];
+  affectedSegments: string;,
   confidence: number;
 }
-
 export interface EngagementPattern {
-  patternType: 'temporal' | 'behavioral' | 'contextual' | 'value-based';
+  patternType: 'temporal' | 'behavioral' | 'contextual' | 'value-based';,
   pattern: string;
-  frequency: number;
+  frequency: number;,
   cohortSize: number;
-  conversionImpact: number;
+  conversionImpact: number;,
   retentionImpact: number;
-  recommendations: string[];
+  recommendations: string;
 }
-
 export interface ValueSegmentation {
   segments: Array<{,
-    name: string;
+  name: string;
     range: { min: number; max: number };
-    size: number;
-    percentage: number;
-    characteristics: string[];
+    size: number;,
+  percentage: number;
+    characteristics: string;
   }>;
   distribution: {,
-    mean: number;
-    median: number;
-    standardDeviation: number;
-    percentiles: Map<number, number>;
-  };
+  mean: number;
+  median: number;,
+  standardDeviation: number;
+  percentiles: Map<number, number>;
+};
 }
-
 export interface CohortComparison {
-  cohortId: string;
+  cohortId: string;,
   comparisonPeriod: string;
   retentionDelta: Map<number, number>;
   conversionDelta: Map<number, number>;
-  valueDelta: number;
+  valueDelta: number;,
   significance: number;
-  insights: string[];
+  insights: string;
 }
-
 export interface CohortBenchmark {
-  benchmarkCohortId: string;
+  benchmarkCohortId: string;,
   benchmarkName: string;
   comparisonMetrics: {,
-    retentionComparison: Map<number, number>;
-    conversionComparison: Map<number, number>;
-    valueComparison: number;
-    engagementComparison: number;
-  };
-  relativePerformance: number; // -1 to 1 scale
-  insights: string[];
+  retentionComparison: Map<number, number>;
+  conversionComparison: Map<number, number>;
+  valueComparison: number;,
+  engagementComparison: number;
+};
+  relativePerformance: number; // -1 to 1 scale,
+  insights: string;
 }
-
 export interface IndustryBenchmark {
-  industry: string;
+  industry: string;,
   retentionBenchmarks: Map<number, number>;
   conversionBenchmarks: Map<number, number>;
   valueBenchmarks: {,
-    averageLTV: number;
-    averageOrderValue: number;
-    churnRate: number;
-  };
-  dataSource: string;
+  averageLTV: number;,
+  averageOrderValue: number;
+  churnRate: number;
+};
+  dataSource: string;,
   lastUpdated: number;
 }
-
 export interface InterventionPoint {
-  day: number;
+  day: number;,
   userCount: number;
-  riskScore: number;
-  recommendedActions: string[];
+  riskScore: number;,
+  recommendedActions: string;
   expectedImpact: {,
-    retentionImprovement: number;
-    revenueImpact: number;
-    costOfIntervention: number;
-    roi: number;
-  };
+  retentionImprovement: number;,
+  revenueImpact: number;
+  costOfIntervention: number;,
+  roi: number;
+};
 }
-
 export interface DemographicBreakdown {
   ageGroups: Map<string, number>;
   geoDistribution: Map<string, number>;
@@ -218,128 +206,117 @@ export interface DemographicBreakdown {
   acquisitionChannels: Map<string, number>;
   accountTypes: Map<string, number>;
 }
-
 export interface BehavioralProfile {
-  averageSessionsPerUser: number;
+  averageSessionsPerUser: number;,
   averageSessionDuration: number;
-  averagePageViews: number;
+  averagePageViews: number;,
   engagementScore: number;
-  activityPatterns: BehaviorPattern[];
-  preferredTimes: Map<string, number>; // hour -> frequency
+  activityPatterns: BehaviorPattern;,
+  preferredTimes: Map<string, number>; // hour -> frequency,
   contentPreferences: Map<string, number>;
 }
-
 export interface ValueDistribution {
-  totalValue: number;
+  totalValue: number;,
   averageValue: number;
-  medianValue: number;
+  medianValue: number;,
   valuePercentiles: Map<number, number>;
-  highValueThreshold: number;
+  highValueThreshold: number;,
   highValueUsers: number;
   valueGrowthRate: number;
 }
-
 export interface SegmentConversionMetrics {
-  overallConversionRate: number;
+  overallConversionRate: number;,
   conversionsByFunnel: Map<string, number>;
-  averageTimeToConvert: number;
+  averageTimeToConvert: number;,
   conversionValueDistribution: ValueDistribution;
-  topConversionPaths: PathwayAnalysis[];
+  topConversionPaths: PathwayAnalysis;
 }
-
 export interface SegmentEngagementMetrics {
-  averageEngagementScore: number;
+  averageEngagementScore: number;,
   sessionMetrics: {,
-    averageSessions: number;
-    averageDuration: number;
-    bounceRate: number;
-    returningUserRate: number;
-  };
+  averageSessions: number;,
+  averageDuration: number;
+  bounceRate: number;,
+  returningUserRate: number;
+};
   contentEngagement: Map<string, number>;
   featureUsage: Map<string, number>;
   socialEngagement: {,
-    shareRate: number;
-    likeRate: number;
-    commentRate: number;
-  };
+  shareRate: number;
+  likeRate: number;,
+  commentRate: number;
+};
 }
-
 export interface SegmentRevenueMetrics {
-  totalRevenue: number;
+  totalRevenue: number;,
   averageRevenuePerUser: number;
-  revenueGrowthRate: number;
+  revenueGrowthRate: number;,
   revenueDistribution: ValueDistribution;
   monthlyRecurringRevenue?: number;
-  customerLifetimeValue: number;
+  customerLifetimeValue: number;,
   paybackPeriod: number;
 }
-
 export interface SegmentRetentionMetrics {
-  retentionRates: Map<number, number>; // day -> retention rate
-  churnRate: number;
+  retentionRates: Map<number, number>; // day -> retention rate,
+  churnRate: number;,
   averageLifetime: number;
-  retentionCohorts: Map<string, number>; // cohort -> retention
-  seasonalRetention: Map<string, number>; // season -> retention
+  retentionCohorts: Map<string, number>; // cohort -> retention,
+  seasonalRetention: Map<string, number>; // season -> retention,
   retentionByChannel: Map<string, number>;
 }
-
 export interface SegmentTransition {
-  fromSegment: string;
+  fromSegment: string;,
   toSegment: string;
-  transitionRate: number;
+  transitionRate: number;,
   averageTimeToTransition: number;
-  triggerEvents: string[];
+  triggerEvents: string;,
   transitionValue: number;
 }
-
 export interface SegmentOptimization {
-  area: string;
+  area: string;,
   currentPerformance: number;
-  targetPerformance: number;
+  targetPerformance: number;,
   improvementPotential: number;
-  recommendedActions: string[];
+  recommendedActions: string;,
   estimatedImpact: {,
-    revenueImpact: number;
-    conversionImprovement: number;
-    retentionImprovement: number;
-  };
-  implementationEffort: 'low' | 'medium' | 'high';
+  revenueImpact: number;,
+  conversionImprovement: number;
+  retentionImprovement: number;
+};
+  implementationEffort: 'low' | 'medium' | 'high';,
   priority: 'high' | 'medium' | 'low';
 }
-
 export interface TargetingRecommendation {
-  channel: string;
-  targetingCriteria: string[];
-  expectedReach: number;
+  channel: string;,
+  targetingCriteria: string;
+  expectedReach: number;,
   expectedConversionRate: number;
-  estimatedCost: number;
+  estimatedCost: number;,
   estimatedRevenue: number;
-  roi: number;
+  roi: number;,
   confidence: number;
 }
-
 export interface PersonalizationSuggestion {
-  feature: string;
+  feature: string;,
   personalizationType: 'content' | 'ui' | 'messaging' | 'pricing' | 'timing';
-  targetSubsegment: string;
+  targetSubsegment: string;,
   expectedImpact: number;
-  implementationComplexity: 'low' | 'medium' | 'high';
-  dataRequirements: string[];
+  implementationComplexity: 'low' | 'medium' | 'high';,
+  dataRequirements: string;
 }
-
 export interface InterventionRecommendation {
-  triggerCondition: string;
+  triggerCondition: string;,
   interventionType: 'email' | 'push' | 'in_app' | 'discount' | 'support';
-  timing: string;
+  timing: string;,
   content: string;
-  expectedResponse: number;
+  expectedResponse: number;,
   cost: number;
   priority: 'high' | 'medium' | 'low';
+  /**
+  * Cohort and Segment Manager
+  * Manages the complete lifecycle of cohorts and segments
+  */
 }
-/**
- * Cohort and Segment Manager
- * Manages the complete lifecycle of cohorts and segments
- */
 export class CohortSegmentManager {
   private cohorts: Map<string, ConversionCohort> = new Map();
   private segments: Map<string, UserSegment> = new Map();
@@ -351,100 +328,96 @@ export class CohortSegmentManager {
    * Create a new cohort
    */
   public createCohort(definition: Partial<ConversionCohort>): ConversionCohort {
-    const cohort: ConversionCohort = {
-      id: definition.id || this.generateCohortId(),
+    const cohort: ConversionCohort = {,
+  id: definition.id || this.generateCohortId(),
       name: definition.name || 'Unnamed Cohort',
       description: definition.description || '',
       definition: {,
-        criteriaEvent: definition.definition?.criteriaEvent || 'user_signup',
+  criteriaEvent: definition.definition?.criteriaEvent || 'user_signup',
         criteriaConditions: definition.definition?.criteriaConditions || { operator: 'AND', conditions: [] },
         timeWindow: definition.definition?.timeWindow || 86400000, // 24 hours
         ...definition.definition
-      },
-      analysis: {,
-        retentionPeriods: [1, 7, 30, 60, 90],
-        analysisWindow: 90,
-        metricCalculations: [],
-        ...definition.analysis
-      },
-      state: {,
-        currentSize: 0,
-        creationDate: Date.now(),
-        lastAnalysisDate: 0,
-        status: 'active',
-        completionRate: 0,
-        ...definition.state
-      },
-      performance: {,
-        conversionRates: [],
-        retentionRates: [],
-        averageTimeToConvert: 0,
-        topDropOffPoints: [],
-        valueMetrics: {,
-          totalRevenue: 0,
-          averageOrderValue: 0,
-          lifetimeValue: 0,
-          revenuePerUser: 0,
-          costPerAcquisition: 0,
-          returnOnInvestment: 0,
-        },
+  },
+  analysis: {,
+  retentionPeriods: [1, 7, 30, 60, 90],
+  analysisWindow: 90,
+  metricCalculations: [],
+  ...definition.analysis
+},
+  state: {,
+  currentSize: 0,
+  creationDate: Date.now(),
+  lastAnalysisDate: 0,
+  status: 'active',
+  completionRate: 0,
+  ...definition.state
+},
+  performance: {,
+  conversionRates: [],
+  retentionRates: [],
+  averageTimeToConvert: 0,
+  topDropOffPoints: [],
+  valueMetrics: {,
+  totalRevenue: 0,
+  averageOrderValue: 0,
+  lifetimeValue: 0,
+  revenuePerUser: 0,
+  costPerAcquisition: 0,
+  returnOnInvestment: 0,
+}
         ...definition.performance
-      },
-      metadata: {,
-        businessContext: '',
-        hypothesis: '',
-        expectedOutcome: '',
-        tags: [],
-        owner: 'system',
-        ...definition.metadata
-      }
-    };
+  },
+  metadata: {,
+  businessContext: '',
+  hypothesis: '',
+  expectedOutcome: '',
+  tags: [],
+  owner: 'system',
+  ...definition.metadata
+};
     this.cohorts.set(cohort.id, cohort);
     return cohort;
-  }
   /**
    * Create a new segment
    */
   public createSegment(definition: Partial<UserSegment>): UserSegment {
-    const segment: UserSegment = {
-      id: definition.id || this.generateSegmentId(),
-      name: definition.name || 'Unnamed Segment',
-      description: definition.description || '',
-      definition: {,
-        rules: definition.definition?.rules || [],
-        operator: definition.definition?.operator || 'AND',
-        updateFrequency: definition.definition?.updateFrequency || 'daily',
-        isStatic: definition.definition?.isStatic || false,
-        ...definition.definition
-      },
-      state: {,
-        currentSize: 0,
-        lastUpdated: Date.now(),
-        growthRate: 0,
-        churnRate: 0,
-        status: 'active',
-        ...definition.state
-      },
-      performance: {,
-        averageConversionRate: 0,
-        averageTimeToConvert: 0,
-        averageLifetimeValue: 0,
-        engagementScore: 0,
-        retentionRate: 0,
-        behaviorPatterns: [],
-        ...definition.performance
-      },
-      funnelMetrics: new Map(),
+  const segment: UserSegment = {,
+  id: definition.id || this.generateSegmentId(),
+  name: definition.name || 'Unnamed Segment',
+  description: definition.description || '',
+  definition: {,
+  rules: definition.definition?.rules || [],
+  operator: definition.definition?.operator || 'AND',
+  updateFrequency: definition.definition?.updateFrequency || 'daily',
+  isStatic: definition.definition?.isStatic || false,
+  ...definition.definition
+},
+  state: {,
+  currentSize: 0,
+  lastUpdated: Date.now(),
+  growthRate: 0,
+  churnRate: 0,
+  status: 'active',
+  ...definition.state
+},
+  performance: {,
+  averageConversionRate: 0,
+  averageTimeToConvert: 0,
+  averageLifetimeValue: 0,
+  engagementScore: 0,
+  retentionRate: 0,
+  behaviorPatterns: [],
+  ...definition.performance
+},
+  funnelMetrics: new Map(),
       metadata: {,
-        businessValue: 'medium',
+  businessValue: 'medium',
         targetingPriority: 5,
         customAttributes: {},
         ...definition.metadata
-      }
     };
     this.segments.set(segment.id, segment);
     return segment;
-  }
   /**
    * Assign user to cohort
    */
@@ -457,14 +430,11 @@ export class CohortSegmentManager {
       if (!userCohorts) {
         userCohorts = new Set();
         this.userCohortMembership.set(userId, userCohorts);
-      }
       userCohorts.add(cohortId);
       // Update cohort size
       cohort.state.currentSize++;
       return true;
-    }
     return false;
-  }
   /**
    * Assign user to segment
    */
@@ -477,15 +447,12 @@ export class CohortSegmentManager {
       if (!userSegments) {
         userSegments = new Set();
         this.userSegmentMembership.set(userId, userSegments);
-      }
       userSegments.add(segmentId);
       // Update segment size
       segment.state.currentSize++;
       segment.state.lastUpdated = Date.now();
       return true;
-    }
     return false;
-  }
   /**
    * Process conversion event for cohort/segment analysis
    */
@@ -496,7 +463,6 @@ export class CohortSegmentManager {
     this.updateSegmentMetrics(event);
     // Check for new cohort/segment assignments
     this.evaluateNewAssignments(event);
-  }
   /**
    * Analyze cohort performance
    */
@@ -506,20 +472,16 @@ export class CohortSegmentManager {
       const cached = this.analysisCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
         return cached.result;
-      }
-    }
     const cohort = this.cohorts.get(cohortId);
     if (!cohort) {
       throw new Error(`Cohort not found: ${cohortId}`);}
-    }
     const result = await this.performCohortAnalysis(cohort, options);
     // Cache result
     this.analysisCache.set(cacheKey, {)
-      result,
-      timestamp: Date.now(),
-    });
+  result,
+  timestamp: Date.now(),
+});
     return result;
-  }
   /**
    * Analyze segment performance
    */
@@ -529,200 +491,173 @@ export class CohortSegmentManager {
       const cached = this.analysisCache.get(cacheKey);
       if (cached && Date.now() - cached.timestamp < this.CACHE_TTL) {
         return cached.result;
-      }
-    }
     const segment = this.segments.get(segmentId);
     if (!segment) {
       throw new Error(`Segment not found: ${segmentId}`);}
-    }
     const result = await this.performSegmentAnalysis(segment, options);
     // Cache result
     this.analysisCache.set(cacheKey, {)
-      result,
-      timestamp: Date.now(),
-    });
+  result,
+  timestamp: Date.now(),
+});
     return result;
-  }
   /**
    * Get user's cohort memberships
    */
-  public getUserCohorts(userId: string): string[] {
-    const cohorts = this.userCohortMembership.get(userId);
-    return cohorts ? Array.from(cohorts) : [];
-  }
+  public getUserCohorts(userId: string): string {
+  const cohorts = this.userCohortMembership.get(userId);
+  return cohorts ? Array.from(cohorts) : [];
   /**
-   * Get user's segment memberships
-   */
-  public getUserSegments(userId: string): string[] {
-    const segments = this.userSegmentMembership.get(userId);
-    return segments ? Array.from(segments) : [];
-  }
+  * Get user's segment memberships
+  */
+  public getUserSegments(userId: string): string {,
+  const segments = this.userSegmentMembership.get(userId);
+  return segments ? Array.from(segments) : [];
   /**
-   * Update segment definitions and reassign users
-   */
-  public updateSegmentDefinition(segmentId: string, newDefinition: Partial<UserSegment>): void {
-    const segment = this.segments.get(segmentId);
-    if (!segment) return;
-    // Update definition
-    Object.assign(segment, newDefinition);
-    segment.state.lastUpdated = Date.now();
-    // If it's a dynamic segment, reassign all users
-    if (!segment.definition.isStatic) {
-      this.reassignSegmentUsers(segmentId);
-    }
-  }
+  * Update segment definitions and reassign users
+  */
+  public updateSegmentDefinition(segmentId: string, newDefinition: Partial<UserSegment>): void {,
+  const segment = this.segments.get(segmentId);
+  if (!segment) return;
+  // Update definition
+  Object.assign(segment, newDefinition);
+  segment.state.lastUpdated = Date.now();
+  // If it's a dynamic segment, reassign all users
+  if (!segment.definition.isStatic) {
+  this.reassignSegmentUsers(segmentId);
   /**
-   * Archive old cohorts
-   */
-  public archiveCohort(cohortId: string): void {
-    const cohort = this.cohorts.get(cohortId);
-    if (cohort) {
-      cohort.state.status = 'archived';
-      // Remove user assignments
-      for (const [userId, cohorts] of this.userCohortMembership.entries()) {
-        cohorts.delete(cohortId);
-      }
-    }
-  }
+  * Archive old cohorts
+  */
+  public archiveCohort(cohortId: string): void {,
+  const cohort = this.cohorts.get(cohortId);
+  if (cohort) {
+  cohort.state.status = 'archived';
+  // Remove user assignments
+  for (const [userId, cohorts] of this.userCohortMembership.entries()) {
+  cohorts.delete(cohortId);
   /**
-   * Generate insights across all cohorts and segments
-   */
-  public generateCrossSegmentInsights(): CrossSegmentInsights {
-    const segments = Array.from(this.segments.values()).filter(s => s.state.status === 'active');
-    const cohorts = Array.from(this.cohorts.values()).filter(c => c.state.status === 'active');
-    return {
-      segmentOverlaps: this.calculateSegmentOverlaps(segments),
-      performanceComparisons: this.compareSegmentPerformance(segments),
-      cohortTrends: this.analyzeCohortTrends(cohorts),
-      opportunityAnalysis: this.identifyOptimizationOpportunities(segments),
-      recommendations: this.generateCrossSegmentRecommendations(segments, cohorts)
-    };
-  }
+  * Generate insights across all cohorts and segments
+  */
+  public generateCrossSegmentInsights(): CrossSegmentInsights {,
+  const segments = Array.from(this.segments.values()).filter(s => s.state.status === 'active');
+  const cohorts = Array.from(this.cohorts.values()).filter(c => c.state.status === 'active');
+  return {
+  segmentOverlaps: this.calculateSegmentOverlaps(segments),
+  performanceComparisons: this.compareSegmentPerformance(segments),
+  cohortTrends: this.analyzeCohortTrends(cohorts),
+  opportunityAnalysis: this.identifyOptimizationOpportunities(segments),
+  recommendations: this.generateCrossSegmentRecommendations(segments, cohorts),
+};
   // Private methods
   private async performCohortAnalysis(cohort: ConversionCohort, options: AnalysisOptions): Promise<CohortAnalysisResult> {
-    // Get cohort users
-    const cohortUsers = this.getCohortUsers(cohort.id);
-    // Calculate core metrics
-    const metrics = await this.calculateCohortMetrics(cohort, cohortUsers);
-    // Analyze behavior patterns
-    const behavior = await this.analyzeCohortBehavior(cohort, cohortUsers);
-    // Generate predictions
-    const predictions = await this.generateCohortPredictions(cohort, cohortUsers, metrics);
-    // Compare with benchmarks
-    const comparison = await this.generateCohortComparison(cohort, options);
-    return {
-      cohortId: cohort.id,
-      analysisDate: Date.now(),
-      metrics,
-      behavior,
-      comparison,
-      predictions,
-      dataQuality: this.assessDataQuality(cohortUsers),
-    };
-  }
+  // Get cohort users
+  const cohortUsers = this.getCohortUsers(cohort.id);
+  // Calculate core metrics
+  const metrics = await this.calculateCohortMetrics(cohort, cohortUsers);
+  // Analyze behavior patterns
+  const behavior = await this.analyzeCohortBehavior(cohort, cohortUsers);
+  // Generate predictions
+  const predictions = await this.generateCohortPredictions(cohort, cohortUsers, metrics);
+  // Compare with benchmarks
+  const comparison = await this.generateCohortComparison(cohort, options);
+  return {
+  cohortId: cohort.id,
+  analysisDate: Date.now(),
+  metrics,
+  behavior,
+  comparison,
+  predictions,
+  dataQuality: this.assessDataQuality(cohortUsers),
+};
   private async performSegmentAnalysis(segment: UserSegment, options: AnalysisOptions): Promise<SegmentAnalysisResult> {
-    // Get segment users
-    const segmentUsers = this.getSegmentUsers(segment.id);
-    // Analyze composition
-    const composition = await this.analyzeSegmentComposition(segment, segmentUsers);
-    // Calculate performance metrics
-    const performance = await this.calculateSegmentPerformance(segment, segmentUsers);
-    // Analyze funnel performance
-    const funnelAnalysis = await this.analyzeSegmentFunnelPerformance(segment, segmentUsers);
-    // Analyze lifecycle
-    const lifecycle = await this.analyzeSegmentLifecycle(segment, segmentUsers);
-    // Generate recommendations
-    const recommendations = await this.generateSegmentRecommendations(segment, performance, lifecycle);
-    return {
-      segmentId: segment.id,
-      analysisDate: Date.now(),
-      composition,
-      performance,
-      funnelAnalysis,
-      lifecycle,
-      recommendations
-    };
-  }
-  private getCohortUsers(cohortId: string): string[] {
-    const users: string[] = [];
-    for (const [userId, cohorts] of this.userCohortMembership.entries()) {
-      if (cohorts.has(cohortId)) {
-        users.push(userId);
-      }
-    }
-    return users;
-  }
-  private getSegmentUsers(segmentId: string): string[] {
-    const users: string[] = [];
-    for (const [userId, segments] of this.userSegmentMembership.entries()) {
-      if (segments.has(segmentId)) {
-        users.push(userId);
-      }
-    }
-    return users;
-  }
-  private async calculateCohortMetrics(cohort: ConversionCohort, users: string[]): Promise<CohortAnalysisResult['metrics']> {
-    // Simplified metrics calculation
-    return {
-      totalUsers: users.length,
-      activeUsers: Math.floor(users.length * 0.8), // 80% active assumption
-      retentionRates: new Map([),
-        [1, 0.85],
-        [7, 0.65],
-        [30, 0.45],
-        [60, 0.35],
-        [90, 0.30]
-      ]),
-      conversionRates: new Map([),
-        [1, 0.15],
-        [7, 0.25],
-        [30, 0.35],
-        [60, 0.40],
-        [90, 0.42]
-      ]),
-      churnRate: 0.25,
-      averageLifetimeValue: 250.0,
-      averageTimeToConvert: 432000000 // 5 days in milliseconds,
-    };
-  }
-  private async analyzeCohortBehavior(cohort: ConversionCohort, users: string[]): Promise<CohortAnalysisResult['behavior']> {
-    return {
-      commonPathways: [,
-        {
-          pathway: ['signup', 'onboarding', 'first_purchase'],
-          frequency: Math.floor(users.length * 0.6),
-          conversionRate: 0.65,
-          averageTimeToComplete: 345600000, // 4 days
-          averageValue: 25.0,
-          dropOffPoints: ['payment_page'],
-        }
-      ],
-      dropOffAnalysis: {,
-        totalDropOffs: Math.floor(users.length * 0.4),
-        dropOffRate: 0.4,
-        topDropOffPoints: [,
-          {
-            stepId: 'payment_page',
-            stepName: 'Payment Page',
-            dropOffRate: 0.25,
-            volume: Math.floor(users.length * 0.25),
-            averageTimeSpent: 120000, // 2 minutes
-            commonExitActions: ['page_close', 'back_button'],
-            recoveryOpportunities: ['email_reminder', 'discount_offer']
-          }
-        ],
-        recoveryOpportunities: [,
-          {
-            dropOffPoint: 'payment_page',
-            potentialRecovery: 0.15,
-            recommendedActions: ['Simplify checkout', 'Add trust signals'],
-            estimatedImpact: 0.08,
-            implementationComplexity: 'medium',
-          }
-        ],
-        seasonalPatterns: [],
-      },
-      engagementPatterns: [,
+  // Get segment users
+  const segmentUsers = this.getSegmentUsers(segment.id);
+  // Analyze composition
+  const composition = await this.analyzeSegmentComposition(segment, segmentUsers);
+  // Calculate performance metrics
+  const performance = await this.calculateSegmentPerformance(segment, segmentUsers);
+  // Analyze funnel performance
+  const funnelAnalysis = await this.analyzeSegmentFunnelPerformance(segment, segmentUsers);
+  // Analyze lifecycle
+  const lifecycle = await this.analyzeSegmentLifecycle(segment, segmentUsers);
+  // Generate recommendations
+  const recommendations = await this.generateSegmentRecommendations(segment, performance, lifecycle);
+  return {
+  segmentId: segment.id,
+  analysisDate: Date.now(),
+  composition,
+  performance,
+  funnelAnalysis,
+  lifecycle,
+  recommendations
+};
+  private getCohortUsers(cohortId: string): string {
+  const users: string = [];
+  for (const [userId, cohorts] of this.userCohortMembership.entries()) {
+  if (cohorts.has(cohortId)) {
+  users.push(userId);
+  return users;
+  private getSegmentUsers(segmentId: string): string {,
+  const users: string = [];
+  for (const [userId, segments] of this.userSegmentMembership.entries()) {
+  if (segments.has(segmentId)) {
+  users.push(userId);
+  return users;
+  private async calculateCohortMetrics(cohort: ConversionCohort, users: string): Promise<CohortAnalysisResult['metrics']> {,
+  // Simplified metrics calculation
+  return {
+  totalUsers: users.length,
+  activeUsers: Math.floor(users.length * 0.8), // 80% active assumption,
+  retentionRates: new Map([),
+  [1, 0.85],
+  [7, 0.65],
+  [30, 0.45],
+  [60, 0.35],
+  [90, 0.30]
+  ]),
+  conversionRates: new Map([),
+  [1, 0.15],
+  [7, 0.25],
+  [30, 0.35],
+  [60, 0.40],
+  [90, 0.42]
+  ]),
+  churnRate: 0.25,
+  averageLifetimeValue: 250.0,
+  averageTimeToConvert: 432000000 // 5 days in milliseconds,
+};
+  private async analyzeCohortBehavior(cohort: ConversionCohort, users: string): Promise<CohortAnalysisResult['behavior']> {
+  return {
+  commonPathways: [,
+  {
+  pathway: ['signup', 'onboarding', 'first_purchase'],
+  frequency: Math.floor(users.length * 0.6),
+  conversionRate: 0.65,
+  averageTimeToComplete: 345600000, // 4 days,
+  averageValue: 25.0,
+  dropOffPoints: ['payment_page']],
+  dropOffAnalysis: {,
+  totalDropOffs: Math.floor(users.length * 0.4),
+  dropOffRate: 0.4,
+  topDropOffPoints: [,
+  {
+  stepId: 'payment_page',
+  stepName: 'Payment Page',
+  dropOffRate: 0.25,
+  volume: Math.floor(users.length * 0.25),
+  averageTimeSpent: 120000, // 2 minutes,
+  commonExitActions: ['page_close', 'back_button'],
+  recoveryOpportunities: ['email_reminder', 'discount_offer']],
+  recoveryOpportunities: [,
+  {
+  dropOffPoint: 'payment_page',
+  potentialRecovery: 0.15,
+  recommendedActions: ['Simplify checkout', 'Add trust signals'],
+  estimatedImpact: 0.08,
+  implementationComplexity: 'medium'],
+  seasonalPatterns: [],
+},
+  engagementPatterns: [,
         {
           patternType: 'temporal',
           pattern: 'weekend_browsing',
@@ -731,463 +666,393 @@ export class CohortSegmentManager {
           conversionImpact: 0.12,
           retentionImpact: 0.18,
           recommendations: ['Weekend-specific offers', 'Extended support hours']
-        }
       ],
       valueSegmentation: {,
-        segments: [,
+  segments: [,
           {
             name: 'High Value',
             range: { min: 100, max: 1000 },
             size: Math.floor(users.length * 0.2),
             percentage: 20,
             characteristics: ['Premium features', 'Multiple purchases']
-          },
+  }
           {
             name: 'Medium Value',
             range: { min: 25, max: 100 },
             size: Math.floor(users.length * 0.6),
             percentage: 60,
             characteristics: ['Regular usage', 'Single purchase']
-          },
+  }
           {
             name: 'Low Value',
             range: { min: 0, max: 25 },
             size: Math.floor(users.length * 0.2),
             percentage: 20,
             characteristics: ['Limited usage', 'Free tier']
-          }
         ],
         distribution: {,
-          mean: 85.5,
-          median: 45.0,
-          standardDeviation: 67.3,
-          percentiles: new Map([),
-            [25, 15.0],
-            [50, 45.0],
-            [75, 125.0],
-            [90, 250.0],
-            [95, 400.0]
-          ])
-        }
-      }
-    };
-  }
-  private async generateCohortPredictions()
-    cohort: ConversionCohort, 
-    users: string[], 
-    metrics: CohortAnalysisResult['metrics'],
-  ): Promise<CohortAnalysisResult['predictions']> {
-    return {
-      projectedRetention: new Map([),
-        [120, 0.28],
-        [180, 0.25],
-        [365, 0.20]
-      ]),
-      churnRisk: new Map(),
-        users.slice(0, 10).map(userId => [userId, Math.random() * 0.5])
-      ),
-      lifetimeValueForecast: new Map(),
-        users.slice(0, 10).map(userId => [userId, 150 + Math.random() * 200])
-      ),
-      optimalInterventionPoints: [,
-        {
-          day: 7,
-          userCount: Math.floor(users.length * 0.3),
-          riskScore: 0.65,
-          recommendedActions: ['Welcome email series', 'Onboarding tutorial'],
-          expectedImpact: {,
-            retentionImprovement: 0.15,
-            revenueImpact: 1250.0,
-            costOfIntervention: 200.0,
-            roi: 5.25,
-          }
-        }
-      ]
-    };
-  }
+  mean: 85.5,
+  median: 45.0,
+  standardDeviation: 67.3,
+  percentiles: new Map([),
+  [25, 15.0],
+  [50, 45.0],
+  [75, 125.0],
+  [90, 250.0],
+  [95, 400.0]
+  ])
+};
+  private async generateCohortPredictions(cohort: ConversionCohort, )
+    users: string, 
+    metrics: CohortAnalysisResult['metrics']): Promise<CohortAnalysisResult['predictions']> {,
+  return {
+  projectedRetention: new Map([),
+  [120, 0.28],
+  [180, 0.25],
+  [365, 0.20]
+  ]),
+  churnRisk: new Map(),
+  users.slice(0, 10).map(userId => [userId, Math.random() * 0.5])
+  ),
+  lifetimeValueForecast: new Map(),
+  users.slice(0, 10).map(userId => [userId, 150 + Math.random() * 200])
+  ),
+  optimalInterventionPoints: [,
+  {
+  day: 7,
+  userCount: Math.floor(users.length * 0.3),
+  riskScore: 0.65,
+  recommendedActions: ['Welcome email series', 'Onboarding tutorial'],
+  expectedImpact: {,
+  retentionImprovement: 0.15,
+  revenueImpact: 1250.0,
+  costOfIntervention: 200.0,
+  roi: 5.25];
+  };
   private async generateCohortComparison(cohort: ConversionCohort, options: AnalysisOptions): Promise<CohortAnalysisResult['comparison']> {
-    return {
-      previousPeriod: {,
-        cohortId: 'previous_month',
-        comparisonPeriod: 'Previous Month',
-        retentionDelta: new Map([),
-          [7, 0.05],
-          [30, 0.08]
-        ]),
-        conversionDelta: new Map([),
-          [7, 0.03],
-          [30, 0.06]
-        ]),
-        valueDelta: 15.5,
-        significance: 0.85,
-        insights: ['Improved onboarding flow', 'Better product-market fit']
-      }
-    };
-  }
+  return {
+  previousPeriod: {,
+  cohortId: 'previous_month',
+  comparisonPeriod: 'Previous Month',
+  retentionDelta: new Map([),
+  [7, 0.05],
+  [30, 0.08]
+  ]),
+  conversionDelta: new Map([),
+  [7, 0.03],
+  [30, 0.06]
+  ]),
+  valueDelta: 15.5,
+  significance: 0.85,
+  insights: ['Improved onboarding flow', 'Better product-market fit'],
+};
   private evaluateCohortCriteria(userId: string, cohort: ConversionCohort): boolean {
-    // Simplified criteria evaluation
-    return true;
-  }
-  private evaluateSegmentCriteria(userId: string, segment: UserSegment): boolean {
-    // Simplified criteria evaluation
-    return true;
-  }
-  private updateCohortMetrics(event: FlexibleConversionEvent): void {
-    // Update metrics for cohorts the user belongs to
-    const userCohorts = this.getUserCohorts(event.userId);
-    for (const cohortId of userCohorts) {
-      const cohort = this.cohorts.get(cohortId);
-      if (cohort) {
-        // Update performance metrics based on event
-        this.updateCohortPerformanceMetrics(cohort, event);
-      }
-    }
-  }
-  private updateSegmentMetrics(event: FlexibleConversionEvent): void {
-    // Update metrics for segments the user belongs to
-    const userSegments = this.getUserSegments(event.userId);
-    for (const segmentId of userSegments) {
-      const segment = this.segments.get(segmentId);
-      if (segment) {
-        // Update performance metrics based on event
-        this.updateSegmentPerformanceMetrics(segment, event);
-      }
-    }
-  }
-  private updateCohortPerformanceMetrics(cohort: ConversionCohort, event: FlexibleConversionEvent): void {
-    // Update cohort metrics based on conversion event
-    if (event.type.includes('purchase') || event.type.includes('conversion')) {
-      cohort.performance.valueMetrics.totalRevenue += event.value || 0;
-    }
-  }
-  private updateSegmentPerformanceMetrics(segment: UserSegment, event: FlexibleConversionEvent): void {
-    // Update segment metrics based on conversion event
-    if (event.type.includes('purchase') || event.type.includes('conversion')) {
-      segment.performance.averageLifetimeValue += (event.value || 0) / segment.state.currentSize;
-    }
-  }
-  private evaluateNewAssignments(event: FlexibleConversionEvent): void {
-    // Check if event triggers new cohort assignments
-    for (const [cohortId, cohort] of this.cohorts.entries()) {
-      if (cohort.definition.criteriaEvent === event.type) {
-        this.assignUserToCohort(event.userId, cohortId);
-      }
-    }
-    // Check if event changes segment assignments
-    for (const [segmentId, segment] of this.segments.entries()) {
-      if (!segment.definition.isStatic) {
-        // Re-evaluate segment criteria for user
-        const currentlyAssigned = this.getUserSegments(event.userId).includes(segmentId);
-        const shouldBeAssigned = this.evaluateSegmentCriteria(event.userId, segment);
-        if (shouldBeAssigned && !currentlyAssigned) {
-          this.assignUserToSegment(event.userId, segmentId);
-        } else if (!shouldBeAssigned && currentlyAssigned) {
-          this.removeUserFromSegment(event.userId, segmentId);
-        }
-      }
-    }
-  }
-  private removeUserFromSegment(userId: string, segmentId: string): void {
-    const userSegments = this.userSegmentMembership.get(userId);
-    if (userSegments) {
-      userSegments.delete(segmentId);
-      const segment = this.segments.get(segmentId);
-      if (segment) {
-        segment.state.currentSize--;
-        segment.state.lastUpdated = Date.now();
-      }
-    }
-  }
-  private reassignSegmentUsers(segmentId: string): void {
-    const segment = this.segments.get(segmentId);
-    if (!segment) return;
-    // Remove all current assignments
-    for (const [userId, segments] of this.userSegmentMembership.entries()) {
-      segments.delete(segmentId);
-    }
-    // Reset segment size
-    segment.state.currentSize = 0;
-    // Re-evaluate all users (simplified - in production would batch this)
-    for (const userId of this.userSegmentMembership.keys()) {
-      if (this.evaluateSegmentCriteria(userId, segment)) {
-        this.assignUserToSegment(userId, segmentId);
-      }
-    }
-  }
-  private assessDataQuality(users: string[]): CohortAnalysisResult['dataQuality'] {
-    return {
-      completeness: 0.95,
-      accuracy: 0.92,
-      consistency: 0.88,
-      confidence: 0.90,
-    };
-  }
+  // Simplified criteria evaluation
+  return true;
+  private evaluateSegmentCriteria(userId: string, segment: UserSegment): boolean {,
+  // Simplified criteria evaluation
+  return true;
+  private updateCohortMetrics(event: FlexibleConversionEvent): void {,
+  // Update metrics for cohorts the user belongs to
+  const userCohorts = this.getUserCohorts(event.userId);
+  for (const cohortId of userCohorts) {
+  const cohort = this.cohorts.get(cohortId);
+  if (cohort) {
+  // Update performance metrics based on event
+  this.updateCohortPerformanceMetrics(cohort, event);
+  private updateSegmentMetrics(event: FlexibleConversionEvent): void {,
+  // Update metrics for segments the user belongs to
+  const userSegments = this.getUserSegments(event.userId);
+  for (const segmentId of userSegments) {
+  const segment = this.segments.get(segmentId);
+  if (segment) {
+  // Update performance metrics based on event
+  this.updateSegmentPerformanceMetrics(segment, event);
+  private updateCohortPerformanceMetrics(cohort: ConversionCohort, event: FlexibleConversionEvent): void {,
+  // Update cohort metrics based on conversion event
+  if (event.type.includes('purchase') || event.type.includes('conversion')) {
+  cohort.performance.valueMetrics.totalRevenue += event.value || 0;
+  private updateSegmentPerformanceMetrics(segment: UserSegment, event: FlexibleConversionEvent): void {,
+  // Update segment metrics based on conversion event
+  if (event.type.includes('purchase') || event.type.includes('conversion')) {
+  segment.performance.averageLifetimeValue += (event.value || 0) / segment.state.currentSize;
+  private evaluateNewAssignments(event: FlexibleConversionEvent): void {,
+  // Check if event triggers new cohort assignments
+  for (const [cohortId, cohort] of this.cohorts.entries()) {
+  if (cohort.definition.criteriaEvent === event.type) {
+  this.assignUserToCohort(event.userId, cohortId);
+  // Check if event changes segment assignments
+  for (const [segmentId, segment] of this.segments.entries()) {
+  if (!segment.definition.isStatic) {
+  // Re-evaluate segment criteria for user
+  const currentlyAssigned = this.getUserSegments(event.userId).includes(segmentId);
+  const shouldBeAssigned = this.evaluateSegmentCriteria(event.userId, segment);
+  if (shouldBeAssigned && !currentlyAssigned) {
+  this.assignUserToSegment(event.userId, segmentId);
+} else if (!shouldBeAssigned && currentlyAssigned) {
+  this.removeUserFromSegment(event.userId, segmentId);
+  private removeUserFromSegment(userId: string, segmentId: string): void {,
+  const userSegments = this.userSegmentMembership.get(userId);
+  if (userSegments) {
+  userSegments.delete(segmentId);
+  const segment = this.segments.get(segmentId);
+  if (segment) {
+  segment.state.currentSize--;
+  segment.state.lastUpdated = Date.now();
+  private reassignSegmentUsers(segmentId: string): void {,
+  const segment = this.segments.get(segmentId);
+  if (!segment) return;
+  // Remove all current assignments
+  for (const [userId, segments] of this.userSegmentMembership.entries()) {
+  segments.delete(segmentId);
+  // Reset segment size
+  segment.state.currentSize = 0;
+  // Re-evaluate all users (simplified - in production would batch this)
+  for (const userId of this.userSegmentMembership.keys()) {
+  if (this.evaluateSegmentCriteria(userId, segment)) {
+  this.assignUserToSegment(userId, segmentId);
+  private assessDataQuality(users: string): CohortAnalysisResult['dataQuality'] {,
+  return {
+  completeness: 0.95,
+  accuracy: 0.92,
+  consistency: 0.88,
+  confidence: 0.90,
+};
   // Additional helper methods would go here...
-  private async analyzeSegmentComposition(segment: UserSegment, users: string[]): Promise<SegmentAnalysisResult['composition']> {
-    // Simplified implementation
-    return {
-      currentSize: users.length,
-      growthRate: 0.15,
-      demographicBreakdown: {,
-        ageGroups: new Map([['25-34', 0.4], ['35-44', 0.35], ['18-24', 0.25]]),
-        geoDistribution: new Map([['US', 0.6], ['EU', 0.25], ['Other', 0.15]]),
-        deviceTypes: new Map([['desktop', 0.6], ['mobile', 0.35], ['tablet', 0.05]]),
-        acquisitionChannels: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
-        accountTypes: new Map([['free', 0.7], ['premium', 0.3]])
-      },
-      behavioralProfile: {,
-        averageSessionsPerUser: 8.5,
-        averageSessionDuration: 420000, // 7 minutes
-        averagePageViews: 12.3,
-        engagementScore: 0.75,
-        activityPatterns: [],
-        preferredTimes: new Map([['morning', 0.4], ['afternoon', 0.35], ['evening', 0.25]]),
-        contentPreferences: new Map([['tutorials', 0.6], ['templates', 0.8], ['examples', 0.45]])
-      },
-      valueDistribution: {,
-        totalValue: users.length * 45.0,
-        averageValue: 45.0,
-        medianValue: 25.0,
-        valuePercentiles: new Map([[50, 25.0], [75, 65.0], [90, 150.0]]),
-        highValueThreshold: 100.0,
-        highValueUsers: Math.floor(users.length * 0.15),
-        valueGrowthRate: 0.12,
-      }
-    };
-  }
-  private async calculateSegmentPerformance(segment: UserSegment, users: string[]): Promise<SegmentAnalysisResult['performance']> {
-    // Simplified implementation
-    return {
-      conversionMetrics: {,
-        overallConversionRate: 0.18,
-        conversionsByFunnel: new Map([['marketplace', 0.18], ['onboarding', 0.35]]),
-        averageTimeToConvert: 345600000, // 4 days
-        conversionValueDistribution: {,
-          totalValue: users.length * 25.0,
-          averageValue: 25.0,
-          medianValue: 20.0,
-          valuePercentiles: new Map([[50, 20.0], [75, 35.0], [90, 65.0]]),
-          highValueThreshold: 50.0,
-          highValueUsers: Math.floor(users.length * 0.2),
-          valueGrowthRate: 0.08,
-        },
-        topConversionPaths: [],
-      },
-      engagementMetrics: {,
-        averageEngagementScore: 0.72,
-        sessionMetrics: {,
-          averageSessions: 6.8,
-          averageDuration: 380000, // 6.3 minutes
-          bounceRate: 0.35,
-          returningUserRate: 0.65,
-        },
-        contentEngagement: new Map([['templates', 0.85], ['tutorials', 0.72]]),
+  private async analyzeSegmentComposition(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['composition']> {
+  // Simplified implementation
+  return {
+  currentSize: users.length,
+  growthRate: 0.15,
+  demographicBreakdown: {,
+  ageGroups: new Map([['25-34', 0.4], ['35-44', 0.35], ['18-24', 0.25]]),
+  geoDistribution: new Map([['US', 0.6], ['EU', 0.25], ['Other', 0.15]]),
+  deviceTypes: new Map([['desktop', 0.6], ['mobile', 0.35], ['tablet', 0.05]]),
+  acquisitionChannels: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
+  accountTypes: new Map([['free', 0.7], ['premium', 0.3]]),
+},
+  behavioralProfile: {,
+  averageSessionsPerUser: 8.5,
+  averageSessionDuration: 420000, // 7 minutes,
+  averagePageViews: 12.3,
+  engagementScore: 0.75,
+  activityPatterns: [],
+  preferredTimes: new Map([['morning', 0.4], ['afternoon', 0.35], ['evening', 0.25]]),
+  contentPreferences: new Map([['tutorials', 0.6], ['templates', 0.8], ['examples', 0.45]]),
+},
+  valueDistribution: {,
+  totalValue: users.length * 45.0,
+  averageValue: 45.0,
+  medianValue: 25.0,
+  valuePercentiles: new Map([[50, 25.0], [75, 65.0], [90, 150.0]]),
+  highValueThreshold: 100.0,
+  highValueUsers: Math.floor(users.length * 0.15),
+  valueGrowthRate: 0.12,
+};
+  private async calculateSegmentPerformance(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['performance']> {
+  // Simplified implementation
+  return {
+  conversionMetrics: {,
+  overallConversionRate: 0.18,
+  conversionsByFunnel: new Map([['marketplace', 0.18], ['onboarding', 0.35]]),
+  averageTimeToConvert: 345600000, // 4 days,
+  conversionValueDistribution: {,
+  totalValue: users.length * 25.0,
+  averageValue: 25.0,
+  medianValue: 20.0,
+  valuePercentiles: new Map([[50, 20.0], [75, 35.0], [90, 65.0]]),
+  highValueThreshold: 50.0,
+  highValueUsers: Math.floor(users.length * 0.2),
+  valueGrowthRate: 0.08,
+},
+  topConversionPaths: [];
+  },
+  engagementMetrics: {,
+  averageEngagementScore: 0.72,
+  sessionMetrics: {,
+  averageSessions: 6.8,
+  averageDuration: 380000, // 6.3 minutes,
+  bounceRate: 0.35,
+  returningUserRate: 0.65,
+},
+  contentEngagement: new Map([['templates', 0.85], ['tutorials', 0.72]]),
         featureUsage: new Map([['search', 0.9], ['preview', 0.68], ['download', 0.45]]),
         socialEngagement: {,
-          shareRate: 0.12,
-          likeRate: 0.28,
-          commentRate: 0.08,
-        }
-      },
-      revenueMetrics: {,
-        totalRevenue: users.length * 45.0,
-        averageRevenuePerUser: 45.0,
-        revenueGrowthRate: 0.15,
-        revenueDistribution: {,
-          totalValue: users.length * 45.0,
-          averageValue: 45.0,
-          medianValue: 25.0,
-          valuePercentiles: new Map([[50, 25.0], [75, 65.0], [90, 150.0]]),
-          highValueThreshold: 100.0,
-          highValueUsers: Math.floor(users.length * 0.15),
-          valueGrowthRate: 0.12,
-        },
-        customerLifetimeValue: 180.0,
-        paybackPeriod: 45 // days,
-      },
-      retentionMetrics: {,
-        retentionRates: new Map([[7, 0.78], [30, 0.56], [90, 0.42]]),
-        churnRate: 0.22,
-        averageLifetime: 365, // days
-        retentionCohorts: new Map([['Q1_2024', 0.68], ['Q2_2024', 0.72]]),
-        seasonalRetention: new Map([['spring', 0.65], ['summer', 0.58], ['fall', 0.72], ['winter', 0.69]]),
-        retentionByChannel: new Map([['organic', 0.68], ['paid', 0.54], ['referral', 0.78]])
-      }
-    };
-  }
-  private async analyzeSegmentFunnelPerformance(segment: UserSegment, users: string[]): Promise<Map<string, FunnelSegmentMetrics>> {
-    // Simplified implementation
-    return new Map([)
-      ['marketplace-discovery', {
-        funnelId: 'marketplace-discovery',
-        conversionRate: 0.18,
-        averageTimeToConvert: 345600000,
-        dropOffPoints: [],
-        completionRate: 0.18,
-        backtrackingRate: 0.12,
-        pathPreferences: [],
-      }]
+  shareRate: 0.12,
+  likeRate: 0.28,
+  commentRate: 0.08,
+},
+  revenueMetrics: {,
+  totalRevenue: users.length * 45.0,
+  averageRevenuePerUser: 45.0,
+  revenueGrowthRate: 0.15,
+  revenueDistribution: {,
+  totalValue: users.length * 45.0,
+  averageValue: 45.0,
+  medianValue: 25.0,
+  valuePercentiles: new Map([[50, 25.0], [75, 65.0], [90, 150.0]]),
+  highValueThreshold: 100.0,
+  highValueUsers: Math.floor(users.length * 0.15),
+  valueGrowthRate: 0.12,
+},
+  customerLifetimeValue: 180.0,
+        paybackPeriod: 45 // days;
+  },
+  retentionMetrics: {,
+  retentionRates: new Map([[7, 0.78], [30, 0.56], [90, 0.42]]),
+  churnRate: 0.22,
+  averageLifetime: 365, // days,
+  retentionCohorts: new Map([['Q1_2024', 0.68], ['Q2_2024', 0.72]]),
+  seasonalRetention: new Map([['spring', 0.65], ['summer', 0.58], ['fall', 0.72], ['winter', 0.69]]),
+  retentionByChannel: new Map([['organic', 0.68], ['paid', 0.54], ['referral', 0.78]]),
+};
+  private async analyzeSegmentFunnelPerformance(segment: UserSegment, users: string): Promise<Map<string, FunnelSegmentMetrics>> {
+  // Simplified implementation
+  return new Map([)
+  ['marketplace-discovery', {
+  funnelId: 'marketplace-discovery',
+  conversionRate: 0.18,
+  averageTimeToConvert: 345600000,
+  dropOffPoints: [],
+  completionRate: 0.18,
+  backtrackingRate: 0.12,
+  pathPreferences: [],
+}]
     ]);
-  }
-  private async analyzeSegmentLifecycle(segment: UserSegment, users: string[]): Promise<SegmentAnalysisResult['lifecycle']> {
-    // Simplified implementation
-    return {
-      acquisitionSources: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
-      transitionPatterns: [],
-      exitReasons: new Map([['churned', 0.6], ['upgraded', 0.3], ['downgraded', 0.1]]),
-      averageLifetime: 180 // days,
-    };
-  }
-  private async generateSegmentRecommendations()
-    segment: UserSegment, 
+  private async analyzeSegmentLifecycle(segment: UserSegment, users: string): Promise<SegmentAnalysisResult['lifecycle']> {
+  // Simplified implementation
+  return {
+  acquisitionSources: new Map([['organic', 0.4], ['paid', 0.35], ['referral', 0.25]]),
+  transitionPatterns: [],
+  exitReasons: new Map([['churned', 0.6], ['upgraded', 0.3], ['downgraded', 0.1]]),
+  averageLifetime: 180 // days,
+};
+  private async generateSegmentRecommendations(segment: UserSegment, )
     performance: SegmentAnalysisResult['performance'],
-    lifecycle: SegmentAnalysisResult['lifecycle'],
-  ): Promise<SegmentAnalysisResult['recommendations']> {
-    // Simplified implementation
-    return {
-      optimization: [,
-        {
-          area: 'conversion_rate',
-          currentPerformance: performance.conversionMetrics.overallConversionRate,
-          targetPerformance: 0.25,
-          improvementPotential: 0.07,
-          recommendedActions: ['Improve onboarding flow', 'Add social proof'],
-          estimatedImpact: {,
-            revenueImpact: 5000,
-            conversionImprovement: 0.07,
-            retentionImprovement: 0.05,
-          },
-          implementationEffort: 'medium',
-          priority: 'high',
-        }
-      ],
+    lifecycle: SegmentAnalysisResult['lifecycle']): Promise<SegmentAnalysisResult['recommendations']> {,
+  // Simplified implementation
+  return {
+  optimization: [,
+  {
+  area: 'conversion_rate',
+  currentPerformance: performance.conversionMetrics.overallConversionRate,
+  targetPerformance: 0.25,
+  improvementPotential: 0.07,
+  recommendedActions: ['Improve onboarding flow', 'Add social proof'],
+  estimatedImpact: {,
+  revenueImpact: 5000,
+  conversionImprovement: 0.07,
+  retentionImprovement: 0.05,
+},
+  implementationEffort: 'medium',
+          priority: 'high'],
       targeting: [,
         {
-          channel: 'facebook',
-          targetingCriteria: ['lookalike_audience', 'interest_filmmaking'],
-          expectedReach: 50000,
-          expectedConversionRate: 0.12,
-          estimatedCost: 2000,
-          estimatedRevenue: 3000,
-          roi: 1.5,
-          confidence: 0.8,
-        }
-      ],
-      personalization: [,
-        {
-          feature: 'homepage_content',
-          personalizationType: 'content',
-          targetSubsegment: 'high_value_users',
-          expectedImpact: 0.15,
-          implementationComplexity: 'medium',
-          dataRequirements: ['view_history', 'purchase_history']
-        }
-      ],
-      interventions: [,
-        {
-          triggerCondition: 'no_activity_7_days',
-          interventionType: 'email',
-          timing: 'day_8',
-          content: 'Personalized template recommendations',
-          expectedResponse: 0.25,
-          cost: 0.50,
-          priority: 'medium',
-        }
-      ]
-    };
-  }
-  private calculateSegmentOverlaps(segments: UserSegment[]): SegmentOverlap[] {
+  channel: 'facebook',
+  targetingCriteria: ['lookalike_audience', 'interest_filmmaking'],
+  expectedReach: 50000,
+  expectedConversionRate: 0.12,
+  estimatedCost: 2000,
+  estimatedRevenue: 3000,
+  roi: 1.5,
+  confidence: 0.8],
+  personalization: [,
+  {
+  feature: 'homepage_content',
+  personalizationType: 'content',
+  targetSubsegment: 'high_value_users',
+  expectedImpact: 0.15,
+  implementationComplexity: 'medium',
+  dataRequirements: ['view_history', 'purchase_history']],
+  interventions: [,
+  {
+  triggerCondition: 'no_activity_7_days',
+  interventionType: 'email',
+  timing: 'day_8',
+  content: 'Personalized template recommendations',
+  expectedResponse: 0.25,
+  cost: 0.50,
+  priority: 'medium'];
+  };
+  private calculateSegmentOverlaps(segments: UserSegment): SegmentOverlap {
     // Simplified implementation
     return [];
-  }
-  private compareSegmentPerformance(segments: UserSegment[]): PerformanceComparison[] {
+  private compareSegmentPerformance(segments: UserSegment): PerformanceComparison {
     // Simplified implementation
     return [];
-  }
-  private analyzeCohortTrends(cohorts: ConversionCohort[]): CohortTrend[] {
+  private analyzeCohortTrends(cohorts: ConversionCohort): CohortTrend {
     // Simplified implementation
     return [];
-  }
-  private identifyOptimizationOpportunities(segments: UserSegment[]): OptimizationOpportunity[] {
+  private identifyOptimizationOpportunities(segments: UserSegment): OptimizationOpportunity {
     // Simplified implementation
     return [];
-  }
-  private generateCrossSegmentRecommendations(segments: UserSegment[], cohorts: ConversionCohort[]): CrossSegmentRecommendation[] {
+  private generateCrossSegmentRecommendations(segments: UserSegment, cohorts: ConversionCohort): CrossSegmentRecommendation {
     // Simplified implementation
     return [];
-  }
   // Helper methods for ID generation
   private generateCohortId(): string {
     return `cohort_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;}
-  }
   private generateSegmentId(): string {
     return `segment_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;}
-  }
-}
 
 // Additional interfaces for cross-segment analysis
+
 export interface AnalysisOptions {
   useCache?: boolean;
   includePredictions?: boolean;
   includeComparisons?: boolean;
   timeRange?: { start: number; end: number };
-  customMetrics?: string[];
+  customMetrics?: string;
 }
-
 export interface CrossSegmentInsights {
-  segmentOverlaps: SegmentOverlap[];
-  performanceComparisons: PerformanceComparison[];
-  cohortTrends: CohortTrend[];
-  opportunityAnalysis: OptimizationOpportunity[];
-  recommendations: CrossSegmentRecommendation[];
+  segmentOverlaps: SegmentOverlap;,
+  performanceComparisons: PerformanceComparison;
+  cohortTrends: CohortTrend;,
+  opportunityAnalysis: OptimizationOpportunity;
+  recommendations: CrossSegmentRecommendation;
 }
-
 export interface SegmentOverlap {
-  segmentIds: string[];
+  segmentIds: string;,
   overlapSize: number;
-  overlapPercentage: number;
-  characteristics: string[];
+  overlapPercentage: number;,
+  characteristics: string;
   performance: {,
-    conversionRate: number;
-    retentionRate: number;
-    averageValue: number;
-  };
+  conversionRate: number;,
+  retentionRate: number;
+  averageValue: number;
+};
 }
-
 export interface PerformanceComparison {
-  segmentIds: string[];
+  segmentIds: string;,
   metrics: Record<string, number>;
-  significance: number;
-  insights: string[];
+  significance: number;,
+  insights: string;
 }
-
 export interface CohortTrend {
-  metric: string;
+  metric: string;,
   trend: 'improving' | 'declining' | 'stable';
-  magnitude: number;
+  magnitude: number;,
   confidence: number;
-  affectedCohorts: string[];
+  affectedCohorts: string;
 }
-
 export interface OptimizationOpportunity {
-  area: string;
-  segments: string[];
-  currentPerformance: number;
+  area: string;,
+  segments: string;
+  currentPerformance: number;,
   potentialImprovement: number;
-  estimatedImpact: number;
+  estimatedImpact: number;,
   implementationEffort: 'low' | 'medium' | 'high';
 }
-
 export interface CrossSegmentRecommendation {
-  type: 'consolidation' | 'split' | 'targeting' | 'optimization';
+  type: 'consolidation' | 'split' | 'targeting' | 'optimization';,
   description: string;
-  affectedSegments: string[];
+  affectedSegments: string;,
   expectedImpact: number;
   priority: 'high' | 'medium' | 'low';
+  /**
+  * Factory function to create CohortSegmentManager
+  */
 }
-/**
- * Factory function to create CohortSegmentManager
- */
 export const createCohortSegmentManager = (): CohortSegmentManager => {
   return new CohortSegmentManager();
 };

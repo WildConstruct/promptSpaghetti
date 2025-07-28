@@ -31,19 +31,19 @@ export interface UserSegment {
     id: string;
     name: string;
     description?: string;
-    conditions: TargetingCondition[];
+    conditions: TargetingCondition;
     userCount: number;
     isActive: boolean;
     createdAt: Date;
     lastUpdated: Date;
-    tags: string[];
+    tags: string;
     color: string;
 }
 export interface TargetingAudience {
     id: string;
     name: string;
-    segments: UserSegment[];
-    conditions: TargetingCondition[];
+    segments: UserSegment;
+    conditions: TargetingCondition;
     estimatedReach: number;
     conversionRate: number;
     isActive: boolean;
@@ -53,24 +53,13 @@ export interface TargetingPreview {
     totalUsers: number;
     matchedUsers: number;
     matchPercentage: number;
-    sampleUsers: Array<{
-        id: string;
-        email: string;
-        attributes: Record<string, any>;
-        matchReasons: string[];
-    }>;
-    demographics: {
-        age: Record<string, number>;
-        location: Record<string, number>;
-        userType: Record<string, number>;
-    };
+    sampleUsers: Array<{}, id>;
+    string: any;
+    email: string;
+    attributes: Record<string, any>;
+    matchReasons: string;
 }
 export declare const sortBy: "name" | "updated" | "reach", setSortBy: React.Dispatch<React.SetStateAction<"name" | "updated" | "reach">>;
 export declare const previewLoading: boolean, setPreviewLoading: React.Dispatch<React.SetStateAction<boolean>>;
-export declare const countries: {
-    code: string;
-    name: string;
-    userCount: number;
-}[];
 export { type TargetingCondition, type UserSegment, type TargetingAudience, type TargetingPreview };
 //# sourceMappingURL=TargetingUIComponents.d.ts.map

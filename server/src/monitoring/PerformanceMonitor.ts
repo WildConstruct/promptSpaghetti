@@ -17,6 +17,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface PerformanceMetric {
   metricId: string;
   metricType: MetricType;
@@ -40,7 +41,9 @@ export interface PerformanceMetric {
   tags: Record<string, string>;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface PerformanceContext {
   // System Context
   nodeVersion: string;
@@ -65,7 +68,9 @@ export interface PerformanceContext {
   availableMemory: number;
   loadAverage: number[];
 }
+}
 
+}
 export interface MetricStatistics {
   count: number;
   min: number;
@@ -78,18 +83,22 @@ export interface MetricStatistics {
     p90: number;
     p95: number;
     p99: number;
+}
   };
   standardDeviation: number;
   variance: number;
 }
 
+}
 export interface PerformanceThreshold {
   level: 'info' | 'warning' | 'critical' | 'emergency';
   operator: 'lt' | 'lte' | 'gt' | 'gte' | 'eq' | 'ne';
   value: number;
   description: string;
 }
+}
 
+}
 export interface PerformanceBenchmark {
   benchmarkId: string;
   name: string;
@@ -102,6 +111,7 @@ export interface PerformanceBenchmark {
     timestamp: Date;
     context: PerformanceContext;
     version: string;
+}
   };
   
   // Current Measurements
@@ -128,6 +138,7 @@ export interface PerformanceBenchmark {
   };
 }
 
+}
 export interface PerformanceAlert {
   alertId: string;
   metricId: string;
@@ -154,6 +165,7 @@ export interface PerformanceAlert {
   escalationLevel: number;
   notificationsSent: number;
   lastNotificationAt?: Date;
+}
 }
 
 export type MetricType = 
@@ -250,6 +262,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Initialize performance monitoring system
    */
   public async initialize(): Promise<void> {
+
     console.log('📊 Initializing Performance Monitor...');
     
     // Initialize default benchmarks
@@ -393,6 +406,7 @@ export class PerformanceMonitor extends EventEmitter {
     version: string = 'current',
     context: Partial<PerformanceContext> = {}
   ): Promise<void> {
+
     let benchmark = this.benchmarks.get(benchmarkId);
     
     if (!benchmark) {
@@ -407,13 +421,13 @@ export class PerformanceMonitor extends EventEmitter {
           timestamp: new Date(),
           context: this.enrichContext(context),
           version
-        },
+  }
         current: {
           value,
           timestamp: new Date(),
           context: this.enrichContext(context),
           version
-        },
+  }
         improvement: {
           absolute: 0,
           percentage: 0,
@@ -525,6 +539,7 @@ export class PerformanceMonitor extends EventEmitter {
     endDate: Date,
     categories: BenchmarkCategory[] = []
   ): Promise<PerformanceReport> {
+
     console.log(`📊 Generating performance report: ${startDate.toISOString()} to ${endDate.toISOString()}`);
     
     // Filter metrics by date range
@@ -566,8 +581,7 @@ export class PerformanceMonitor extends EventEmitter {
         alertsGenerated: Array.from(this.alerts.values()).filter(a => 
           a.triggeredAt >= startDate && a.triggeredAt <= endDate
         ).length
-      },
-      
+  }
       aggregateStats,
       trendAnalysis,
       benchmarkAnalysis: this.analyzeBenchmarks(relevantBenchmarks),
@@ -586,6 +600,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Initialize default performance benchmarks
    */
   private async initializeDefaultBenchmarks(): Promise<void> {
+
     const defaultBenchmarks: Array<{
       id: string;
       name: string;
@@ -600,15 +615,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'runtime_performance',
         description: 'Time to execute a standard test graph',
         target: { value: 1000, priority: 'high' } // 1 second
-      },
+  }
       {
         id: 'node_processing_time',
         name: 'Node Processing Time',
         category: 'runtime_performance', 
         description: 'Average time to process a single node',
         target: { value: 50, priority: 'medium' } // 50ms
-      },
-      
+  }
       // API Performance
       {
         id: 'api_response_time',
@@ -616,15 +630,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'api_performance',
         description: 'Average API endpoint response time',
         target: { value: 200, priority: 'high' } // 200ms
-      },
+  }
       {
         id: 'preview_generation_time',
         name: 'Preview Generation Time',
         category: 'api_performance',
         description: 'Time to generate graph preview',
         target: { value: 500, priority: 'medium' } // 500ms
-      },
-      
+  }
       // Database Performance
       {
         id: 'database_query_time',
@@ -632,8 +645,7 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'database_performance',
         description: 'Average database query execution time',
         target: { value: 100, priority: 'high' } // 100ms
-      },
-      
+  }
       // UI Performance
       {
         id: 'ui_render_time',
@@ -641,15 +653,14 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'ui_performance',
         description: 'Time to render component updates',
         target: { value: 16, priority: 'critical' } // 16ms for 60fps
-      },
+  }
       {
         id: 'graph_editor_load_time',
         name: 'Graph Editor Load Time',
         category: 'ui_performance',
         description: 'Time to load and render graph editor',
         target: { value: 2000, priority: 'high' } // 2 seconds
-      },
-      
+  }
       // Memory Usage
       {
         id: 'memory_usage_peak',
@@ -657,8 +668,7 @@ export class PerformanceMonitor extends EventEmitter {
         category: 'memory_usage',
         description: 'Peak memory usage during operation',
         target: { value: 512, priority: 'medium' } // 512MB
-      },
-      
+  }
       // Build Performance
       {
         id: 'build_time',
@@ -681,19 +691,19 @@ export class PerformanceMonitor extends EventEmitter {
             timestamp: new Date(),
             context: this.enrichContext({}),
             version: 'baseline'
-          },
+  }
           current: {
             value: 0,
             timestamp: new Date(),
             context: this.enrichContext({}),
             version: 'current'
-          },
+  }
           improvement: {
             absolute: 0,
             percentage: 0,
             trend: 'stable',
             significance: 'none'
-          },
+  }
           target: benchmarkDef.target ? {
             ...benchmarkDef.target,
             deadline: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000) // 90 days
@@ -781,6 +791,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Flush metrics buffer to persistent storage
    */
   private async flushMetricsBuffer(): Promise<void> {
+
     const metricsToFlush = [...this.metricsBuffer];
     this.metricsBuffer = [];
     
@@ -1017,14 +1028,14 @@ export class PerformanceMonitor extends EventEmitter {
       status,
       activeAlerts: activeAlertsCount,
       criticalAlerts: criticalAlertsCount,
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   /**
    * Persist metrics to database
    */
   private async persistMetrics(metrics: PerformanceMetric[]): Promise<void> {
+
     try {
       const query = `
         INSERT INTO performance_metrics (
@@ -1056,6 +1067,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Cache metrics in Redis
    */
   private async cacheMetrics(metrics: PerformanceMetric[]): Promise<void> {
+
     try {
       for (const metric of metrics) {
         const key = `performance:metric:${metric.name}:latest`;
@@ -1070,6 +1082,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Persist benchmark to storage
    */
   private async persistBenchmark(benchmark: PerformanceBenchmark): Promise<void> {
+
     try {
       const query = `
         INSERT OR REPLACE INTO performance_benchmarks (
@@ -1103,6 +1116,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Load historical performance data
    */
   private async loadHistoricalData(): Promise<void> {
+
     try {
       // Load benchmarks from database
       const benchmarks = await this.databaseService.query(`
@@ -1121,13 +1135,13 @@ export class PerformanceMonitor extends EventEmitter {
             timestamp: new Date(row.baseline_timestamp),
             version: row.baseline_version,
             context: this.enrichContext({})
-          },
+  }
           current: {
             value: row.current_value,
             timestamp: new Date(row.current_timestamp),
             version: row.current_version,
             context: this.enrichContext({})
-          },
+  }
           improvement: JSON.parse(row.improvement_data),
           target: row.target_data ? JSON.parse(row.target_data) : undefined
         };
@@ -1275,6 +1289,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Persist performance report
    */
   private async persistReport(report: PerformanceReport): Promise<void> {
+
     try {
       const query = `
         INSERT INTO performance_reports (
@@ -1296,7 +1311,7 @@ export class PerformanceMonitor extends EventEmitter {
           benchmarkAnalysis: report.benchmarkAnalysis,
           insights: report.insights,
           recommendations: report.recommendations
-        })
+  }
       ]);
     } catch (error) {
       console.error('Failed to persist performance report:', error);
@@ -1307,6 +1322,7 @@ export class PerformanceMonitor extends EventEmitter {
    * Stop performance monitoring
    */
   public async stop(): Promise<void> {
+
     console.log('⏹️ Stopping Performance Monitor...');
     
     this.isMonitoring = false;
@@ -1362,7 +1378,7 @@ export class PerformanceMonitor extends EventEmitter {
         p90: values[Math.floor(values.length * 0.9)],
         p95: values[Math.floor(values.length * 0.95)],
         p99: values[Math.floor(values.length * 0.99)]
-      },
+  }
       standardDeviation: this.calculateStandardDeviation(values),
       variance: this.calculateVariance(values)
     };
@@ -1389,11 +1405,13 @@ export class PerformanceMonitor extends EventEmitter {
 }
 
 // Supporting interfaces
+}
 export interface PerformanceMonitorConfig {
   // System Monitoring
   systemMonitoring: {
     enabled: boolean;
     interval: number; // milliseconds
+}
   };
   
   // Buffer Configuration
@@ -1414,12 +1432,14 @@ export interface PerformanceMonitorConfig {
   };
 }
 
+}
 export interface PerformanceDashboard {
   systemOverview: {
     totalMetrics: number;
     activeBenchmarks: number;
     activeAlerts: number;
     monitoringUptime: number;
+}
   };
   recentMetrics: Array<{
     name: string;
@@ -1442,6 +1462,7 @@ export interface PerformanceDashboard {
   timestamp: Date;
 }
 
+}
 export interface SystemHealth {
   score: number; // 0-100
   status: 'healthy' | 'warning' | 'degraded' | 'critical';
@@ -1449,13 +1470,16 @@ export interface SystemHealth {
   criticalAlerts: number;
   timestamp: Date;
 }
+}
 
+}
 export interface PerformanceReport {
   reportId: string;
   generatedAt: Date;
   period: {
     startDate: Date;
     endDate: Date;
+}
   };
   categories: BenchmarkCategory[];
   summary: {

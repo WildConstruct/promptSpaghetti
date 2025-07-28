@@ -32,7 +32,7 @@ describe('DataSensitivityLevels', () => {
     it('should have definitions for all sensitivity levels', () => {
       const levels = Object.values(DataSensitivityLevel);
       levels.forEach(level => {)
-        expect(DATA_SENSITIVITY_DEFINITIONS[level]).toBeDefined();
+  expect(DATA_SENSITIVITY_DEFINITIONS[level]).toBeDefined();
         expect(DATA_SENSITIVITY_DEFINITIONS[level].level).toBe(level);
       });
     });
@@ -44,7 +44,7 @@ describe('DataSensitivityLevels', () => {
     });
     it('should have appropriate examples for each level', () => {
       Object.values(DataSensitivityLevel).forEach(level => {)
-        const definition = DATA_SENSITIVITY_DEFINITIONS[level];
+  const definition = DATA_SENSITIVITY_DEFINITIONS[level];
         expect(definition.examples).toBeInstanceOf(Array);
         expect(definition.examples.length).toBeGreaterThan(0);
         expect(definition.examples.every(example => typeof example === 'string')).toBe(true);
@@ -129,13 +129,13 @@ describe('DataSensitivityLevels', () => {
   describe('DataSensitivityLevelSchema', () => {
     it('should validate valid sensitivity levels', () => {
       Object.values(DataSensitivityLevel).forEach(level => {)
-        expect(() => DataSensitivityLevelSchema.parse(level)).not.toThrow();
+  expect(() => DataSensitivityLevelSchema.parse(level)).not.toThrow();
       });
     });
     it('should reject invalid sensitivity levels', () => {
       const invalidLevels = ['invalid', 'unknown', '', null, undefined, 123];
       invalidLevels.forEach(level => {)
-        expect(() => DataSensitivityLevelSchema.parse(level)).toThrow();
+  expect(() => DataSensitivityLevelSchema.parse(level)).toThrow();
       });
     });
     it('should provide appropriate error messages', () => {
@@ -143,14 +143,13 @@ describe('DataSensitivityLevels', () => {
         DataSensitivityLevelSchema.parse('invalid');
       } catch (error: unknown) {
         expect(error.message).toContain('Invalid data sensitivity level');
-      }
     });
   });
   describe('DataSensitivityUtils', () => {
     describe('getHandlingRequirements', () => {
       it('should return correct handling requirements for each level', () => {
         Object.values(DataSensitivityLevel).forEach(level => {)
-          const requirements = DataSensitivityUtils.getHandlingRequirements(level);
+  const requirements = DataSensitivityUtils.getHandlingRequirements(level);
           expect(requirements).toBeDefined();
           expect(requirements.accessControl).toBeDefined();
           expect(requirements.encryption).toBeDefined();
@@ -269,9 +268,6 @@ describe('DataSensitivityLevels', () => {
               expect(comparison).toBeLessThan(0);
             } else {
               expect(comparison).toBe(0);
-            }
-          }
-        }
       });
     });
     describe('getHigherSensitivityLevel', () => {
@@ -293,7 +289,7 @@ describe('DataSensitivityLevels', () => {
     describe('generateSecurityMarkings', () => {
       it('should generate appropriate markings for each level', () => {
         Object.values(DataSensitivityLevel).forEach(level => {)
-          const markings = DataSensitivityUtils.generateSecurityMarkings(level);
+  const markings = DataSensitivityUtils.generateSecurityMarkings(level);
           expect(markings.label).toBeDefined();
           expect(markings.color).toBeDefined();
           expect(markings.displayFormat).toBeDefined();
@@ -311,76 +307,74 @@ describe('DataSensitivityLevels', () => {
       });
     });
     describe('validateClassification', () => {
-      const validClassification: DataElementClassification = {
-        elementId: 'test-element-1',
-        elementName: 'Test Email Field',
-        sensitivityLevel: DataSensitivityLevel.RESTRICTED,
-        classifiedAt: new Date(),
-        classifiedBy: 'automated',
-        confidence: 95,
-        rationale: ['Contains email address pattern'],
-        reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-        metadata: {,
-          dataCategory: 'pii',
-          sourceSystem: 'customer-db',
-          businessOwner: 'data-team',
-          technicalOwner: 'engineering-team',
-          complianceRequirements: ['GDPR'],
-        }
-      };
+  const validClassification: DataElementClassification = {,
+  elementId: 'test-element-1',
+  elementName: 'Test Email Field',
+  sensitivityLevel: DataSensitivityLevel.RESTRICTED,
+  classifiedAt: new Date(),
+  classifiedBy: 'automated',
+  confidence: 95,
+  rationale: ['Contains email address pattern'],
+  reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+  metadata: {,
+  dataCategory: 'pii',
+  sourceSystem: 'customer-db',
+  businessOwner: 'data-team',
+  technicalOwner: 'engineering-team',
+  complianceRequirements: ['GDPR'],
+};
       it('should validate a correct classification', () => {
         const result = DataSensitivityUtils.validateClassification(validClassification);
         expect(result.valid).toBe(true);
         expect(result.errors).toEqual([]);
       });
       it('should detect missing required fields', () => {
-        const invalidClassification = {
-          ...validClassification,
-          elementId: '',
-          elementName: '',
-        };
+  const invalidClassification = {
+  ...validClassification,
+  elementId: '',
+  elementName: '',
+};
         const result = DataSensitivityUtils.validateClassification(invalidClassification);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain('Element ID is required');
         expect(result.errors).toContain('Element name is required');
       });
       it('should validate confidence scores', () => {
-        const lowConfidence = {
-          ...validClassification,
-          confidence: 50,
-        };
+  const lowConfidence = {
+  ...validClassification,
+  confidence: 50,
+};
         const result = DataSensitivityUtils.validateClassification(lowConfidence);
         expect(result.valid).toBe(true);
         expect(result.warnings).toContain('Low confidence score - classification may need review');
       });
       it('should detect invalid confidence scores', () => {
-        const invalidConfidence = {
-          ...validClassification,
-          confidence: 150,
-        };
+  const invalidConfidence = {
+  ...validClassification,
+  confidence: 150,
+};
         const result = DataSensitivityUtils.validateClassification(invalidConfidence);
         expect(result.valid).toBe(false);
         expect(result.errors).toContain('Confidence score must be between 0 and 100');
       });
       it('should warn about missing metadata', () => {
-        const missingMetadata = {
-          ...validClassification,
-          metadata: {,
-            ...validClassification.metadata,
-            businessOwner: '',
-            technicalOwner: '',
-          }
-        };
+  const missingMetadata = {
+  ...validClassification,
+  metadata: {,
+  ...validClassification.metadata,
+  businessOwner: '',
+  technicalOwner: '',
+};
         const result = DataSensitivityUtils.validateClassification(missingMetadata);
         expect(result.valid).toBe(true);
         expect(result.warnings).toContain('Business owner should be specified');
         expect(result.warnings).toContain('Technical owner should be specified');
       });
       it('should warn about past review dates', () => {
-        const pastReview = {
-          ...validClassification,
-          reviewDate: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday,
-        };
+  const pastReview = {
+  ...validClassification,
+  reviewDate: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday,
+};
         const result = DataSensitivityUtils.validateClassification(pastReview);
         expect(result.valid).toBe(true);
         expect(result.warnings).toContain('Review date is in the past - classification should be reviewed');
@@ -395,7 +389,7 @@ describe('DataSensitivityLevels', () => {
         expect(decisionTree.questions.length).toBeGreaterThan(0);
         expect(decisionTree.actions).toBeDefined();
         decisionTree.questions.forEach(question => {)
-          expect(question.id).toBeDefined();
+  expect(question.id).toBeDefined();
           expect(question.question).toBeDefined();
           expect(question.yesAction).toBeDefined();
           expect(question.noAction).toBeDefined();
@@ -403,12 +397,12 @@ describe('DataSensitivityLevels', () => {
       });
       it('should have valid actions for all references', () => {
         const { decisionTree } = DATA_SENSITIVITY_GUIDELINES;
-        const validActions = new Set([;);
+        const validActions = new Set([);
           ...Object.keys(decisionTree.actions),
           'continue_assessment'
         ]);
         decisionTree.questions.forEach(question => {)
-          expect(validActions.has(question.yesAction)).toBe(true);
+  expect(validActions.has(question.yesAction)).toBe(true);
           expect(validActions.has(question.noAction)).toBe(true);
         });
       });
@@ -416,7 +410,7 @@ describe('DataSensitivityLevels', () => {
         const { decisionTree } = DATA_SENSITIVITY_GUIDELINES;
         const validLevels = Object.values(DataSensitivityLevel);
         Object.values(decisionTree.actions).forEach(level => {)
-          expect(validLevels).toContain(level);
+  expect(validLevels).toContain(level);
         });
       });
     });
@@ -426,7 +420,7 @@ describe('DataSensitivityLevels', () => {
         expect(automatedClassificationRules).toBeInstanceOf(Array);
         expect(automatedClassificationRules.length).toBeGreaterThan(0);
         automatedClassificationRules.forEach(rule => {)
-          expect(rule.pattern).toBeInstanceOf(RegExp);
+  expect(rule.pattern).toBeInstanceOf(RegExp);
           expect(rule.dataType).toBeDefined();
           expect(Object.values(DataSensitivityLevel)).toContain(rule.recommendedLevel);
           expect(rule.confidence).toBeGreaterThanOrEqual(0);
@@ -464,19 +458,19 @@ describe('DataSensitivityLevels', () => {
     });
   });
   describe('Integration tests', () => {
-    it('should handle complex classification scenarios', () => {
-      // Test scenario: Email field in customer database
-      const emailValidation = DataSensitivityUtils.validateSensitivityAssignment(;);
-        'email',
-        DataSensitivityLevel.RESTRICTED
-      );
-      expect(emailValidation.valid).toBe(true);
-      const requirements = DataSensitivityUtils.getHandlingRequirements(DataSensitivityLevel.RESTRICTED);
-      expect(requirements.encryption.atRest).toBe(true);
-      expect(requirements.accessControl.authentication).toBe('mfa');
-      const markings = DataSensitivityUtils.generateSecurityMarkings(DataSensitivityLevel.RESTRICTED);
-      expect(markings.label).toBe('RESTRICTED');
-    });
+  it('should handle complex classification scenarios', () => {
+  // Test scenario: Email field in customer database,
+  const emailValidation = DataSensitivityUtils.validateSensitivityAssignment(;);
+  'email',
+  DataSensitivityLevel.RESTRICTED
+  );
+  expect(emailValidation.valid).toBe(true);
+  const requirements = DataSensitivityUtils.getHandlingRequirements(DataSensitivityLevel.RESTRICTED);
+  expect(requirements.encryption.atRest).toBe(true);
+  expect(requirements.accessControl.authentication).toBe('mfa');
+  const markings = DataSensitivityUtils.generateSecurityMarkings(DataSensitivityLevel.RESTRICTED);
+  expect(markings.label).toBe('RESTRICTED');
+});
     it('should provide consistent classification recommendations', () => {
       // Test that automated rules and manual validation agree
       const emailRule = DATA_SENSITIVITY_GUIDELINES.automatedClassificationRules;
@@ -488,27 +482,26 @@ describe('DataSensitivityLevels', () => {
       expect(manualValidation.valid).toBe(true);
     });
     it('should handle edge cases gracefully', () => {
-      // Test empty or unusual inputs
-      expect(() => DataSensitivityUtils.getHandlingRequirements(DataSensitivityLevel.PUBLIC)).not.toThrow();
-      expect(() => DataSensitivityUtils.generateSecurityMarkings(DataSensitivityLevel.INTERNAL)).not.toThrow();
-      // Test validation with minimal data
-      const minimalClassification: DataElementClassification = {
-        elementId: 'test',
-        elementName: 'test',
-        sensitivityLevel: DataSensitivityLevel.PUBLIC,
-        classifiedAt: new Date(),
-        classifiedBy: 'test',
-        confidence: 80,
-        rationale: ['test'],
-        reviewDate: new Date(Date.now() + 1000),
-        metadata: {,
-          dataCategory: 'test',
-          sourceSystem: 'test',
-          businessOwner: 'test',
-          technicalOwner: 'test',
-          complianceRequirements: [],
-        }
-      };
+  // Test empty or unusual inputs
+  expect(() => DataSensitivityUtils.getHandlingRequirements(DataSensitivityLevel.PUBLIC)).not.toThrow();
+  expect(() => DataSensitivityUtils.generateSecurityMarkings(DataSensitivityLevel.INTERNAL)).not.toThrow();
+  // Test validation with minimal data
+  const minimalClassification: DataElementClassification = {,
+  elementId: 'test',
+  elementName: 'test',
+  sensitivityLevel: DataSensitivityLevel.PUBLIC,
+  classifiedAt: new Date(),
+  classifiedBy: 'test',
+  confidence: 80,
+  rationale: ['test'],
+  reviewDate: new Date(Date.now() + 1000),
+  metadata: {,
+  dataCategory: 'test',
+  sourceSystem: 'test',
+  businessOwner: 'test',
+  technicalOwner: 'test',
+  complianceRequirements: [],
+};
       const result = DataSensitivityUtils.validateClassification(minimalClassification);
       expect(result.valid).toBe(true);
     });

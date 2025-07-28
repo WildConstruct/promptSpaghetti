@@ -8,7 +8,7 @@ describe('createRNG', () => {
     // generate several numbers to ensure sequence matches
     for (let i = 0; i < 5; i++) {
       expect(rng1()).toBeCloseTo(rng2());
-    }
+
   });
 
   it('returns different sequences for different seeds', () => {

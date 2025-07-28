@@ -493,7 +493,7 @@ export async function adminToolsRoutes(
             timestamp: new Date(Date.now() - (i * 60 * 60 * 1000)).toISOString(),
             value: Math.floor(Math.random() * 1000)
           }))
-        },
+  }
         metadata: {
           timeframe,
           dataPoints: 24,
@@ -587,7 +587,7 @@ export async function adminToolsRoutes(
           securityAlerts: 'available',
           metricsCollection: 'available',
           dataExport: 'available'
-        },
+  }
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };

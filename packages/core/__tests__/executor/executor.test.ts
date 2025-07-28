@@ -1,6 +1,6 @@
 import { executeGraph } from '../../../../server/src/engine';
 import { Graph } from '../../graphSchema';
-const sampleGraph: Graph = {
+const sampleGraph: Graph = {,
   seed: 42,
   nodes: [,
     {
@@ -10,14 +10,12 @@ const sampleGraph: Graph = {
         { value: 'A', weight: 1 },
         { value: 'B', weight: 1 }
       ]
-    },
+  }
     {
-      id: 'out1',
-      type: 'Output',
-      inputs: ['wc1'],
-    }
-  ]
-};
+  id: 'out1',
+  type: 'Output',
+  inputs: ['wc1']];
+  };
 describe('executeGraph determinism', () => {
   it('returns identical output for same seed', async () => {
     const out1 = await executeGraph(sampleGraph);
@@ -38,8 +36,6 @@ describe('executeGraph determinism', () => {
       if ((await executeGraph(g1))[0] !== (await executeGraph(g2))[0]) {
         differs = true;
         break;
-      }
-    }
     expect(differs).toBeTruthy();
   });
 });

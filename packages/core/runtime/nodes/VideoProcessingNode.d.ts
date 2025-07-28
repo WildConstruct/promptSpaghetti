@@ -6,13 +6,14 @@
  */
 import { AdvancedRuntimeNode, AdvancedExecutionContext, NodeExecutionResult } from '../advanced';
 import { TypedInputs } from '../io-system';
+
 export interface VideoConfig {
     provider: 'runwayml' | 'stable-video' | 'pika-labs';
     apiKey?: string;
     endpoint?: string;
     model?: string;
     defaultParameters?: Record<string, any>;
-}
+
 export interface VideoMetadata {
     duration: number;
     format: string;
@@ -29,14 +30,14 @@ export interface VideoMetadata {
     cost: number;
     codec?: string;
     bitrate?: number;
-}
+
 export interface GeneratedVideo {
     url?: string;
     data?: ArrayBuffer;
     frames?: string[];
     format: string;
     metadata: VideoMetadata;
-}
+
 export declare class VideoGenerationNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapters;
@@ -46,7 +47,7 @@ export declare class VideoGenerationNode extends AdvancedRuntimeNode {
     private _initializeAdapter;
     private _getConfiguredProvider;
     private _buildGenerationOptions;
-}
+
 export declare class VideoToVideoNode extends AdvancedRuntimeNode {
     private modelFactory;
     private adapters;
@@ -55,7 +56,7 @@ export declare class VideoToVideoNode extends AdvancedRuntimeNode {
     private _initializeAdapter;
     private _getConfiguredProvider;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class VideoAnalysisNode extends AdvancedRuntimeNode {
     constructor(nodeId: string, config?: Record<string, any>);
     executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult>;
@@ -65,17 +66,17 @@ export declare class VideoAnalysisNode extends AdvancedRuntimeNode {
     private _guessCodec;
     private _estimateBitrate;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class VideoEnhancementNode extends AdvancedRuntimeNode {
     constructor(nodeId: string, config?: Record<string, any>);
     executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult>;
     private _enhanceVideo;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 export declare class VideoCompositionNode extends AdvancedRuntimeNode {
     constructor(nodeId: string, config?: Record<string, any>);
     executeAdvanced(inputs: TypedInputs, context: AdvancedExecutionContext): Promise<NodeExecutionResult>;
     private _composeVideos;
     validateInputs(inputs: Record<string, any>): Promise<string[]>;
-}
+
 //# sourceMappingURL=VideoProcessingNode.d.ts.map

@@ -1,26 +1,8 @@
-/**
- * User Lifecycle Stage Tracking and Progression Analysis - Story 30.2 Task 9
- *
- * Comprehensive system for tracking user lifecycle stages and analyzing progression
- * patterns to understand user journey evolution, predict lifecycle transitions,
- * and optimize stage-specific experiences and interventions.
- *
- * Features:
- * - Multi-stage lifecycle definition and tracking
- * - Automated stage transition detection and prediction
- * - Progression pathway analysis and optimization
- * - Stage-specific behavioral analysis and insights
- * - Lifecycle health scoring and risk assessment
- * - Personalized intervention recommendations
- * - Cohort lifecycle analysis and benchmarking
- * - Predictive lifecycle modeling and forecasting
- */
-import React from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 export interface UserLifecycleTrackingProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     lifecycleConfig: LifecycleConfiguration;
-    userLifecycleData: UserLifecycleData[];
+    userLifecycleData: UserLifecycleData;
     cohortAnalysisEnabled?: boolean;
     predictiveModelingEnabled?: boolean;
     onStageTransition?: (userId: string, transition: StageTransition) => void;
@@ -29,12 +11,12 @@ export interface UserLifecycleTrackingProps {
     onExport?: (data: LifecycleTrackingExportData) => void;
 }
 export interface LifecycleConfiguration {
-    stageDefinitions: LifecycleStage[];
-    transitionRules: TransitionRule[];
-    healthMetrics: LifecycleHealthMetric[];
-    interventionStrategies: InterventionStrategy[];
+    stageDefinitions: LifecycleStage;
+    transitionRules: TransitionRule;
+    healthMetrics: LifecycleHealthMetric;
+    interventionStrategies: InterventionStrategy;
     cohortSettings: CohortAnalysisSettings;
-    predictionModels: LifecyclePredictionModel[];
+    predictionModels: LifecyclePredictionModel;
     trackingSettings: LifecycleTrackingSettings;
 }
 export interface LifecycleStage {
@@ -44,12 +26,12 @@ export interface LifecycleStage {
     category: StageCategory;
     sequence: number;
     duration: StageDuration;
-    entryConditions: StageCondition[];
-    exitConditions: StageCondition[];
-    healthIndicators: HealthIndicator[];
-    typicalBehaviors: TypicalBehavior[];
-    riskFactors: RiskFactor[];
-    opportunities: StageOpportunity[];
+    entryConditions: StageCondition;
+    exitConditions: StageCondition;
+    healthIndicators: HealthIndicator;
+    typicalBehaviors: TypicalBehavior;
+    riskFactors: RiskFactor;
+    opportunities: StageOpportunity;
 }
 export type StageCategory = 'acquisition' | 'activation' | 'engagement' | 'retention' | 'growth' | 'advocacy' | 'dormancy' | 'churn';
 export interface StageDuration {
@@ -74,7 +56,7 @@ export interface HealthIndicator {
     name: string;
     type: IndicatorType;
     measurement: IndicatorMeasurement;
-    thresholds: IndicatorThreshold[];
+    thresholds: IndicatorThreshold;
     weight: number;
 }
 export type IndicatorType = 'engagement_frequency' | 'engagement_depth' | 'progression_rate' | 'satisfaction_score' | 'value_realization' | 'risk_score';
@@ -99,7 +81,7 @@ export interface TypicalBehavior {
     description: string;
     frequency: number;
     importance: number;
-    indicators: BehaviorIndicator[];
+    indicators: BehaviorIndicator;
 }
 export interface BehaviorIndicator {
     indicator: string;
@@ -114,7 +96,7 @@ export interface RiskFactor {
     severity: RiskSeverity;
     likelihood: number;
     impact: RiskImpact;
-    mitigation: MitigationStrategy[];
+    mitigation: MitigationStrategy;
 }
 export type RiskSeverity = 'low' | 'medium' | 'high' | 'critical';
 export interface RiskImpact {
@@ -138,7 +120,7 @@ export interface StageOpportunity {
     description: string;
     type: OpportunityType;
     potential: OpportunityPotential;
-    requirements: OpportunityRequirement[];
+    requirements: OpportunityRequirement;
 }
 export type OpportunityType = 'engagement_increase' | 'progression_acceleration' | 'value_realization' | 'experience_enhancement' | 'personalization' | 'cross_sell' | 'up_sell';
 export interface OpportunityPotential {
@@ -151,7 +133,7 @@ export interface OpportunityPotential {
 export interface OpportunityRequirement {
     requirement: string;
     complexity: ComplexityLevel;
-    resources: string[];
+    resources: string;
     timeline: string;
 }
 export type ComplexityLevel = 'simple' | 'moderate' | 'complex' | 'very_complex';
@@ -160,10 +142,10 @@ export interface TransitionRule {
     name: string;
     fromStage: string;
     toStage: string;
-    conditions: TransitionCondition[];
+    conditions: TransitionCondition;
     probability: TransitionProbability;
-    triggers: TransitionTrigger[];
-    blockers: TransitionBlocker[];
+    triggers: TransitionTrigger;
+    blockers: TransitionBlocker;
 }
 export interface TransitionCondition {
     conditionId: string;
@@ -181,7 +163,7 @@ export interface TemporalRequirement {
 }
 export interface TransitionProbability {
     baseRate: number;
-    factors: ProbabilityFactor[];
+    factors: ProbabilityFactor;
     timeDependent: boolean;
     probabilityFunction: ProbabilityFunction;
 }
@@ -202,7 +184,7 @@ export interface TransitionTrigger {
     triggerId: string;
     name: string;
     type: TriggerType;
-    conditions: TriggerCondition[];
+    conditions: TriggerCondition;
     effectiveness: number;
 }
 export type TriggerType = 'behavioral_milestone' | 'engagement_threshold' | 'time_based' | 'value_realization' | 'external_event' | 'intervention_response';
@@ -218,11 +200,11 @@ export interface TransitionBlocker {
     description: string;
     severity: BlockerSeverity;
     detection: BlockerDetection;
-    resolution: BlockerResolution[];
+    resolution: BlockerResolution;
 }
 export type BlockerSeverity = 'minor' | 'moderate' | 'major' | 'critical';
 export interface BlockerDetection {
-    indicators: string[];
+    indicators: string;
     threshold: number;
     timeWindow: number;
     confidence: number;
@@ -240,13 +222,13 @@ export interface LifecycleHealthMetric {
     description: string;
     category: HealthCategory;
     calculation: HealthCalculation;
-    benchmarks: HealthBenchmark[];
+    benchmarks: HealthBenchmark;
     trends: TrendAnalysis;
 }
 export type HealthCategory = 'progression_health' | 'engagement_health' | 'satisfaction_health' | 'value_health' | 'retention_health';
 export interface HealthCalculation {
     formula: string;
-    inputs: HealthInput[];
+    inputs: HealthInput;
     aggregation: AggregationMethod;
     normalization: NormalizationMethod;
     weighting: WeightingScheme;
@@ -279,14 +261,14 @@ export type BenchmarkType = 'industry' | 'company' | 'cohort' | 'historical' | '
 export interface BenchmarkContext {
     segment: string;
     timeframe: string;
-    conditions: string[];
+    conditions: string;
     sampleSize: number;
 }
 export interface TrendAnalysis {
     direction: TrendDirection;
     strength: number;
     consistency: number;
-    seasonality: SeasonalityPattern[];
+    seasonality: SeasonalityPattern;
     forecast: TrendForecast;
 }
 export type TrendDirection = 'improving' | 'declining' | 'stable' | 'volatile';
@@ -308,7 +290,7 @@ export interface ForecastPeriod {
         min: number;
         max: number;
     };
-    factors: ForecastFactor[];
+    factors: ForecastFactor;
 }
 export interface ForecastFactor {
     factor: string;
@@ -319,9 +301,9 @@ export interface InterventionStrategy {
     strategyId: string;
     name: string;
     description: string;
-    targetStages: string[];
-    targetConditions: InterventionCondition[];
-    interventions: Intervention[];
+    targetStages: string;
+    targetConditions: InterventionCondition;
+    interventions: Intervention;
     effectiveness: InterventionEffectiveness;
     implementation: InterventionImplementation;
 }
@@ -344,7 +326,7 @@ export interface Intervention {
 }
 export type InterventionType = 'educational' | 'motivational' | 'support' | 'incentive' | 'reminder' | 'guidance' | 'social_proof' | 'gamification';
 export interface InterventionDelivery {
-    channels: DeliveryChannel[];
+    channels: DeliveryChannel;
     frequency: DeliveryFrequency;
     duration: DeliveryDuration;
     fallback: FallbackStrategy;
@@ -353,7 +335,7 @@ export interface DeliveryChannel {
     channel: ChannelType;
     priority: number;
     effectiveness: number;
-    constraints: ChannelConstraint[];
+    constraints: ChannelConstraint;
 }
 export type ChannelType = 'email' | 'push_notification' | 'in_app' | 'sms' | 'web_notification' | 'phone_call' | 'chatbot' | 'human_outreach';
 export interface ChannelConstraint {
@@ -372,8 +354,8 @@ export interface FrequencySpec {
     maximum: number;
 }
 export interface EscalationSpec {
-    triggers: EscalationTrigger[];
-    changes: EscalationChange[];
+    triggers: EscalationTrigger;
+    changes: EscalationChange;
 }
 export interface EscalationTrigger {
     condition: string;
@@ -392,8 +374,8 @@ export interface DeliveryDuration {
 }
 export interface FallbackStrategy {
     enabled: boolean;
-    triggers: FallbackTrigger[];
-    alternatives: AlternativeIntervention[];
+    triggers: FallbackTrigger;
+    alternatives: AlternativeIntervention;
 }
 export interface FallbackTrigger {
     condition: string;
@@ -406,7 +388,7 @@ export interface AlternativeIntervention {
     effectiveness: number;
 }
 export interface InterventionContent {
-    templates: ContentTemplate[];
+    templates: ContentTemplate;
     personalization: ContentPersonalization;
     localization: ContentLocalization;
     dynamic: DynamicContent;
@@ -416,7 +398,7 @@ export interface ContentTemplate {
     name: string;
     type: ContentType;
     content: string;
-    variables: ContentVariable[];
+    variables: ContentVariable;
     effectiveness: number;
 }
 export type ContentType = 'text' | 'html' | 'rich_text' | 'interactive' | 'multimedia';
@@ -428,8 +410,8 @@ export interface ContentVariable {
 }
 export interface ContentPersonalization {
     enabled: boolean;
-    factors: PersonalizationFactor[];
-    rules: PersonalizationRule[];
+    factors: PersonalizationFactor;
+    rules: PersonalizationRule;
     testing: PersonalizationTesting;
 }
 export interface PersonalizationFactor {
@@ -450,18 +432,18 @@ export interface PersonalizationTesting {
     method: TestingMethod;
     variants: number;
     duration: number;
-    metrics: string[];
+    metrics: string;
 }
 export type TestingMethod = 'ab_test' | 'multivariate' | 'bandit' | 'personalized';
 export interface ContentLocalization {
     enabled: boolean;
-    languages: string[];
-    regions: string[];
+    languages: string;
+    regions: string;
     culturalAdaptation: boolean;
 }
 export interface DynamicContent {
     enabled: boolean;
-    sources: DynamicSource[];
+    sources: DynamicSource;
     updateFrequency: number;
     caching: CachingStrategy;
 }
@@ -478,27 +460,27 @@ export interface SourceParameters {
 export interface CachingStrategy {
     enabled: boolean;
     duration: number;
-    invalidation: InvalidationRule[];
+    invalidation: InvalidationRule;
 }
 export interface InvalidationRule {
     trigger: string;
     action: 'refresh' | 'clear' | 'validate';
 }
 export interface InterventionTiming {
-    triggers: TimingTrigger[];
+    triggers: TimingTrigger;
     optimal: OptimalTiming;
-    constraints: TimingConstraint[];
+    constraints: TimingConstraint;
 }
 export interface TimingTrigger {
     triggerId: string;
     type: TriggerType;
-    conditions: TriggerCondition[];
+    conditions: TriggerCondition;
     delay: number;
 }
 export interface OptimalTiming {
     enabled: boolean;
     algorithm: TimingAlgorithm;
-    factors: TimingFactor[];
+    factors: TimingFactor;
     learning: TimingLearning;
 }
 export type TimingAlgorithm = 'rule_based' | 'ml_optimized' | 'behavioral_prediction' | 'multi_armed_bandit';
@@ -511,7 +493,7 @@ export interface TimingLearning {
     enabled: boolean;
     feedbackLoop: boolean;
     adaptationRate: number;
-    performanceMetrics: string[];
+    performanceMetrics: string;
 }
 export interface TimingConstraint {
     constraint: string;
@@ -545,8 +527,8 @@ export interface AdaptivePersonalization {
 }
 export interface InterventionEffectiveness {
     overall: EffectivenessMetric;
-    byStage: StageEffectiveness[];
-    bySegment: SegmentEffectiveness[];
+    byStage: StageEffectiveness;
+    bySegment: SegmentEffectiveness;
     temporal: TemporalEffectiveness;
 }
 export interface EffectivenessMetric {
@@ -560,7 +542,7 @@ export interface StageEffectiveness {
     stageId: string;
     stageName: string;
     effectiveness: EffectivenessMetric;
-    specificImpacts: SpecificImpact[];
+    specificImpacts: SpecificImpact;
 }
 export interface SpecificImpact {
     aspect: string;
@@ -579,10 +561,10 @@ export interface TemporalEffectiveness {
     longTerm: EffectivenessMetric;
 }
 export interface InterventionImplementation {
-    requirements: ImplementationRequirement[];
-    resources: ImplementationResource[];
+    requirements: ImplementationRequirement;
+    resources: ImplementationResource;
     timeline: ImplementationTimeline;
-    risks: ImplementationRisk[];
+    risks: ImplementationRisk;
 }
 export interface ImplementationRequirement {
     requirement: string;
@@ -601,30 +583,30 @@ export interface ImplementationResource {
 }
 export type ResourceType = 'human' | 'technical' | 'financial' | 'external' | 'infrastructure';
 export interface ImplementationTimeline {
-    phases: ImplementationPhase[];
+    phases: ImplementationPhase;
     totalDuration: number;
-    criticalPath: CriticalPathItem[];
-    milestones: Milestone[];
+    criticalPath: CriticalPathItem;
+    milestones: Milestone;
 }
 export interface ImplementationPhase {
     phaseId: string;
     name: string;
     duration: number;
-    dependencies: string[];
-    deliverables: string[];
-    resources: string[];
+    dependencies: string;
+    deliverables: string;
+    resources: string;
 }
 export interface CriticalPathItem {
     item: string;
     duration: number;
-    dependencies: string[];
+    dependencies: string;
     buffer: number;
 }
 export interface Milestone {
     milestoneId: string;
     name: string;
     date: number;
-    criteria: string[];
+    criteria: string;
     importance: MilestoneImportance;
 }
 export type MilestoneImportance = 'minor' | 'major' | 'critical' | 'go_no_go';
@@ -633,7 +615,7 @@ export interface ImplementationRisk {
     description: string;
     probability: number;
     impact: RiskImpactLevel;
-    mitigation: RiskMitigation[];
+    mitigation: RiskMitigation;
 }
 export type RiskImpactLevel = 'low' | 'medium' | 'high' | 'critical';
 export interface RiskMitigation {
@@ -644,10 +626,10 @@ export interface RiskMitigation {
 }
 export interface CohortAnalysisSettings {
     enabled: boolean;
-    cohortDefinitions: CohortDefinition[];
-    analysisTypes: CohortAnalysisType[];
-    comparisonMetrics: CohortMetric[];
-    timeHorizons: TimeHorizon[];
+    cohortDefinitions: CohortDefinition;
+    analysisTypes: CohortAnalysisType;
+    comparisonMetrics: CohortMetric;
+    timeHorizons: TimeHorizon;
 }
 export interface CohortDefinition {
     cohortId: string;
@@ -658,10 +640,10 @@ export interface CohortDefinition {
     characteristics: CohortCharacteristics;
 }
 export interface CohortCriteria {
-    rules: CohortRule[];
+    rules: CohortRule;
     timeframe: CohortTimeframe;
-    inclusionConditions: InclusionCondition[];
-    exclusionConditions: ExclusionCondition[];
+    inclusionConditions: InclusionCondition;
+    exclusionConditions: ExclusionCondition;
 }
 export interface CohortRule {
     ruleId: string;
@@ -703,16 +685,16 @@ export interface DemographicProfile {
     [key: string]: unknown;
 }
 export interface BehaviorProfile {
-    primaryBehaviors: string[];
+    primaryBehaviors: string;
     engagementLevel: number;
     activityLevel: number;
-    preferences: string[];
+    preferences: string;
 }
 export interface LifecycleProfile {
     averageStageProgression: number;
     completionRate: number;
-    commonPathways: string[];
-    riskFactors: string[];
+    commonPathways: string;
+    riskFactors: string;
 }
 export interface PerformanceProfile {
     conversionRate: number;
@@ -726,11 +708,11 @@ export interface CohortMetric {
     name: string;
     description: string;
     calculation: MetricCalculation;
-    benchmarks: MetricBenchmark[];
+    benchmarks: MetricBenchmark;
 }
 export interface MetricCalculation {
     formula: string;
-    inputs: string[];
+    inputs: string;
     aggregation: AggregationMethod;
     timeWindow: number;
 }
@@ -743,11 +725,11 @@ export interface TimeHorizon {
     horizonId: string;
     name: string;
     duration: number;
-    checkpoints: TimeCheckpoint[];
+    checkpoints: TimeCheckpoint;
 }
 export interface TimeCheckpoint {
     day: number;
-    metrics: string[];
+    metrics: string;
     significance: CheckpointSignificance;
 }
 export type CheckpointSignificance = 'routine' | 'important' | 'critical' | 'milestone';
@@ -756,8 +738,8 @@ export interface LifecyclePredictionModel {
     name: string;
     description: string;
     type: PredictionModelType;
-    targets: PredictionTarget[];
-    features: ModelFeature[];
+    targets: PredictionTarget;
+    features: ModelFeature;
     performance: ModelPerformance;
     deployment: ModelDeployment;
 }
@@ -816,7 +798,7 @@ export interface PerformanceTrend {
 export interface DataDrift {
     detected: boolean;
     severity: DriftSeverity;
-    affectedFeatures: string[];
+    affectedFeatures: string;
     detectionDate: number;
 }
 export type DriftSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -824,7 +806,7 @@ export interface ModelDrift {
     detected: boolean;
     severity: DriftSeverity;
     impactedPredictions: number;
-    recommendedActions: string[];
+    recommendedActions: string;
 }
 export interface ModelDeployment {
     environment: DeploymentEnvironment;
@@ -845,8 +827,8 @@ export interface DeploymentConfiguration {
 export type ExplanabilityLevel = 'none' | 'basic' | 'detailed' | 'comprehensive';
 export interface ModelMonitoring {
     enabled: boolean;
-    metrics: MonitoringMetric[];
-    alerts: MonitoringAlert[];
+    metrics: MonitoringMetric;
+    alerts: MonitoringAlert;
     reporting: MonitoringReporting;
 }
 export interface MonitoringMetric {
@@ -860,44 +842,44 @@ export interface MonitoringAlert {
     alertId: string;
     condition: string;
     severity: AlertSeverity;
-    recipients: string[];
+    recipients: string;
     escalation: AlertEscalation;
 }
 export type AlertSeverity = 'info' | 'warning' | 'error' | 'critical';
 export interface AlertEscalation {
     enabled: boolean;
-    levels: EscalationLevel[];
-    timeouts: number[];
+    levels: EscalationLevel;
+    timeouts: number;
 }
 export interface EscalationLevel {
     level: number;
-    recipients: string[];
-    actions: string[];
+    recipients: string;
+    actions: string;
 }
 export interface MonitoringReporting {
     enabled: boolean;
     frequency: ReportingFrequency;
-    recipients: string[];
+    recipients: string;
     format: ReportFormat;
     content: ReportContent;
 }
 export type ReportingFrequency = 'daily' | 'weekly' | 'monthly' | 'on_demand';
 export type ReportFormat = 'email' | 'dashboard' | 'pdf' | 'json' | 'api';
 export interface ReportContent {
-    sections: ReportSection[];
-    visualizations: ReportVisualization[];
+    sections: ReportSection;
+    visualizations: ReportVisualization;
     insights: boolean;
     recommendations: boolean;
 }
 export interface ReportSection {
     section: string;
-    content: string[];
+    content: string;
     priority: SectionPriority;
 }
 export type SectionPriority = 'high' | 'medium' | 'low';
 export interface ReportVisualization {
     type: VisualizationType;
-    data: string[];
+    data: string;
     configuration: VisualizationConfiguration;
 }
 export type VisualizationType = 'line_chart' | 'bar_chart' | 'pie_chart' | 'heatmap' | 'scatter_plot' | 'histogram' | 'box_plot';
@@ -934,13 +916,13 @@ export interface DataRetentionSettings {
     aggregatedData: number;
     predictions: number;
     reports: number;
-    compliance: ComplianceRequirement[];
+    compliance: ComplianceRequirement;
 }
 export interface ComplianceRequirement {
     regulation: string;
     retention: number;
     anonymization: boolean;
-    deletionTriggers: string[];
+    deletionTriggers: string;
 }
 export interface PrivacySettings {
     consentRequired: boolean;
@@ -951,20 +933,20 @@ export interface PrivacySettings {
 export interface AnonymizationSettings {
     enabled: boolean;
     method: AnonymizationMethod;
-    fields: string[];
+    fields: string;
     preserveUtility: boolean;
 }
 export type AnonymizationMethod = 'hashing' | 'pseudonymization' | 'generalization' | 'suppression';
 export interface AccessControlSettings {
     roleBasedAccess: boolean;
-    dataClassification: DataClassification[];
+    dataClassification: DataClassification;
     auditLogging: boolean;
 }
 export interface DataClassification {
     classification: ClassificationLevel;
-    fields: string[];
-    accessRoles: string[];
-    restrictions: string[];
+    fields: string;
+    accessRoles: string;
+    restrictions: string;
 }
 export type ClassificationLevel = 'public' | 'internal' | 'confidential' | 'restricted';
 export interface PerformanceSettings {
@@ -979,7 +961,7 @@ export interface CachingConfiguration {
     invalidation: CacheInvalidation;
 }
 export interface CacheInvalidation {
-    triggers: InvalidationTrigger[];
+    triggers: InvalidationTrigger;
     strategy: InvalidationStrategy;
 }
 export interface InvalidationTrigger {
@@ -997,7 +979,7 @@ export interface OptimizationSettings {
 }
 export interface IndexingConfiguration {
     enabled: boolean;
-    fields: IndexedField[];
+    fields: IndexedField;
     strategy: IndexingStrategy;
 }
 export interface IndexedField {
@@ -1012,13 +994,13 @@ export interface CompressionSettings {
     enabled: boolean;
     algorithm: CompressionAlgorithm;
     level: CompressionLevel;
-    fields: string[];
+    fields: string;
 }
 export type CompressionAlgorithm = 'gzip' | 'lz4' | 'snappy' | 'zstd';
 export type CompressionLevel = 'low' | 'medium' | 'high' | 'maximum';
 export interface ScalingSettings {
     autoScaling: boolean;
-    triggers: ScalingTrigger[];
+    triggers: ScalingTrigger;
     limits: ScalingLimits;
     strategy: ScalingStrategy;
 }
@@ -1039,10 +1021,10 @@ export interface ScalingLimits {
 }
 export type ScalingStrategy = 'reactive' | 'predictive' | 'scheduled' | 'hybrid';
 export interface IntegrationSettings {
-    apis: ApiIntegration[];
-    webhooks: WebhookConfiguration[];
-    exports: ExportConfiguration[];
-    imports: ImportConfiguration[];
+    apis: ApiIntegration;
+    webhooks: WebhookConfiguration;
+    exports: ExportConfiguration;
+    imports: ImportConfiguration;
 }
 export interface ApiIntegration {
     apiId: string;
@@ -1076,14 +1058,14 @@ export interface RetryPolicy {
     enabled: boolean;
     maxRetries: number;
     backoffStrategy: BackoffStrategy;
-    retryableErrors: string[];
+    retryableErrors: string;
 }
 export type BackoffStrategy = 'fixed' | 'exponential' | 'linear' | 'random';
 export interface WebhookConfiguration {
     webhookId: string;
     name: string;
     url: string;
-    events: string[];
+    events: string;
     authentication: WebhookAuthentication;
     reliability: WebhookReliability;
 }
@@ -1108,8 +1090,8 @@ export type FailureStrategy = 'ignore' | 'retry' | 'queue' | 'alert';
 export interface FailureNotification {
     enabled: boolean;
     threshold: number;
-    recipients: string[];
-    channels: string[];
+    recipients: string;
+    channels: string;
 }
 export interface ExportConfiguration {
     exportId: string;
@@ -1140,9 +1122,9 @@ export interface DestinationCredentials {
     [key: string]: string;
 }
 export interface ExportContentSettings {
-    fields: string[];
-    filters: ExportFilter[];
-    aggregations: ExportAggregation[];
+    fields: string;
+    filters: ExportFilter;
+    aggregations: ExportAggregation;
     formatting: ExportFormatting;
 }
 export interface ExportFilter {
@@ -1153,7 +1135,7 @@ export interface ExportFilter {
 export interface ExportAggregation {
     field: string;
     method: AggregationMethod;
-    groupBy: string[];
+    groupBy: string;
 }
 export interface ExportFormatting {
     dateFormat: string;
@@ -1182,9 +1164,9 @@ export interface SourceAuthentication {
     credentials: AuthenticationCredentials;
 }
 export interface ImportMapping {
-    fieldMappings: FieldMapping[];
-    transformations: FieldTransformation[];
-    defaults: DefaultValue[];
+    fieldMappings: FieldMapping;
+    transformations: FieldTransformation;
+    defaults: DefaultValue;
 }
 export interface FieldMapping {
     sourceField: string;
@@ -1193,7 +1175,7 @@ export interface FieldMapping {
     validation: FieldValidation;
 }
 export interface FieldValidation {
-    rules: ValidationRule[];
+    rules: ValidationRule;
     errorHandling: ValidationErrorHandling;
 }
 export interface ValidationRule {
@@ -1229,7 +1211,7 @@ export interface DefaultValue {
 }
 export interface ImportValidation {
     enabled: boolean;
-    rules: ValidationRule[];
+    rules: ValidationRule;
     sampling: ValidationSampling;
     reporting: ValidationReporting;
 }
@@ -1241,7 +1223,7 @@ export interface ValidationSampling {
 export interface ValidationReporting {
     enabled: boolean;
     detailLevel: ReportDetailLevel;
-    recipients: string[];
+    recipients: string;
     format: ReportFormat;
 }
 export type ReportDetailLevel = 'summary' | 'detailed' | 'verbose';
@@ -1258,7 +1240,7 @@ export interface ErrorTolerance {
 }
 export interface RollbackConfiguration {
     enabled: boolean;
-    triggers: RollbackTrigger[];
+    triggers: RollbackTrigger;
     strategy: RollbackStrategy;
 }
 export interface RollbackTrigger {
@@ -1269,14 +1251,14 @@ export interface RollbackTrigger {
 export type RollbackStrategy = 'full' | 'partial' | 'checkpoint' | 'manual';
 export interface UserLifecycleData {
     userId: string;
-    lifecycleHistory: LifecycleStageRecord[];
+    lifecycleHistory: LifecycleStageRecord;
     currentStage: CurrentStageData;
     progressionAnalysis: ProgressionAnalysis;
     healthAssessment: LifecycleHealthAssessment;
     riskAssessment: LifecycleRiskAssessment;
-    interventionHistory: InterventionRecord[];
-    predictions: LifecyclePrediction[];
-    cohortMemberships: CohortMembership[];
+    interventionHistory: InterventionRecord;
+    predictions: LifecyclePrediction;
+    cohortMemberships: CohortMembership;
 }
 export interface LifecycleStageRecord {
     recordId: string;
@@ -1285,12 +1267,12 @@ export interface LifecycleStageRecord {
     entryDate: number;
     exitDate?: number;
     duration?: number;
-    entryTriggers: StageTrigger[];
-    exitTriggers: StageTrigger[];
+    entryTriggers: StageTrigger;
+    exitTriggers: StageTrigger;
     stageMetrics: StageMetrics;
-    behaviors: StageBehavior[];
-    interventions: StageIntervention[];
-    outcomes: StageOutcome[];
+    behaviors: StageBehavior;
+    interventions: StageIntervention;
+    outcomes: StageOutcome;
 }
 export interface StageTrigger {
     triggerId: string;
@@ -1301,8 +1283,8 @@ export interface StageTrigger {
     context: TriggerContext;
 }
 export interface TriggerContext {
-    events: ContextEvent[];
-    conditions: ContextCondition[];
+    events: ContextEvent;
+    conditions: ContextCondition;
     environment: EnvironmentContext;
 }
 export interface ContextEvent {
@@ -1332,7 +1314,7 @@ export interface StageMetrics {
     progressScore: number;
     riskScore: number;
     valueScore: number;
-    customMetrics: CustomMetric[];
+    customMetrics: CustomMetric;
 }
 export interface CustomMetric {
     metricId: string;
@@ -1363,10 +1345,10 @@ export interface SeasonalityInfo {
     phase: number;
 }
 export interface BehaviorContext {
-    triggers: string[];
-    inhibitors: string[];
-    facilitators: string[];
-    correlations: BehaviorCorrelation[];
+    triggers: string;
+    inhibitors: string;
+    facilitators: string;
+    correlations: BehaviorCorrelation;
 }
 export interface BehaviorCorrelation {
     behavior: string;
@@ -1379,20 +1361,20 @@ export interface StageIntervention {
     timestamp: number;
     response: InterventionResponse;
     effectiveness: InterventionEffectiveness;
-    followUp: InterventionFollowUp[];
+    followUp: InterventionFollowUp;
 }
 export interface InterventionResponse {
     responseType: ResponseType;
     responseTime: number;
     engagement: number;
     sentiment: ResponseSentiment;
-    actions: ResponseAction[];
+    actions: ResponseAction;
 }
 export type ResponseType = 'positive' | 'negative' | 'neutral' | 'mixed' | 'no_response';
 export interface ResponseSentiment {
     score: number;
     confidence: number;
-    aspects: SentimentAspect[];
+    aspects: SentimentAspect;
 }
 export interface SentimentAspect {
     aspect: string;
@@ -1428,7 +1410,7 @@ export type FollowUpType = 'check_in' | 'reminder' | 'escalation' | 'support' | 
 export interface FollowUpOutcome {
     success: boolean;
     feedback: string;
-    nextActions: string[];
+    nextActions: string;
     satisfaction: number;
 }
 export interface StageOutcome {
@@ -1436,7 +1418,7 @@ export interface StageOutcome {
     value: number;
     unit: string;
     timestamp: number;
-    attribution: OutcomeAttribution[];
+    attribution: OutcomeAttribution;
 }
 export type OutcomeType = 'conversion' | 'engagement_increase' | 'satisfaction_improvement' | 'value_realization' | 'progression_acceleration' | 'risk_reduction';
 export interface OutcomeAttribution {
@@ -1451,15 +1433,15 @@ export interface CurrentStageData {
     daysInStage: number;
     progress: StageProgress;
     health: StageHealth;
-    risks: StageRisk[];
-    opportunities: StageOpportunityAssessment[];
-    nextStagePredictiuons: NextStagePrediction[];
+    risks: StageRisk;
+    opportunities: StageOpportunityAssessment;
+    nextStagePredictiuons: NextStagePrediction;
 }
 export interface StageProgress {
     overall: number;
-    milestones: MilestoneProgress[];
+    milestones: MilestoneProgress;
     trajectory: ProgressTrajectory;
-    blockers: ProgressBlocker[];
+    blockers: ProgressBlocker;
 }
 export interface MilestoneProgress {
     milestoneId: string;
@@ -1483,7 +1465,7 @@ export interface TrajectoryForecast {
 export interface ForecastPoint {
     predictedProgress: number;
     confidence: number;
-    factors: ForecastingFactor[];
+    factors: ForecastingFactor;
 }
 export interface ForecastingFactor {
     factor: string;
@@ -1495,7 +1477,7 @@ export interface ProgressBlocker {
     name: string;
     severity: BlockerSeverity;
     impact: BlockerImpact;
-    resolutionStrategies: BlockerResolutionStrategy[];
+    resolutionStrategies: BlockerResolutionStrategy;
 }
 export interface BlockerImpact {
     progressDelay: number;
@@ -1507,20 +1489,20 @@ export interface BlockerResolutionStrategy {
     effectiveness: number;
     effort: EffortLevel;
     timeline: string;
-    resources: string[];
+    resources: string;
 }
 export interface StageHealth {
     overall: number;
-    dimensions: HealthDimension[];
-    trends: HealthTrend[];
-    alerts: HealthAlert[];
+    dimensions: HealthDimension;
+    trends: HealthTrend;
+    alerts: HealthAlert;
 }
 export interface HealthDimension {
     dimension: string;
     score: number;
     weight: number;
     trend: DimensionTrend;
-    contributors: HealthContributor[];
+    contributors: HealthContributor;
 }
 export interface DimensionTrend {
     direction: TrendDirection;
@@ -1547,7 +1529,7 @@ export interface HealthAlert {
     message: string;
     timestamp: number;
     actionRequired: boolean;
-    recommendedActions: string[];
+    recommendedActions: string;
 }
 export type AlertType = 'health_decline' | 'risk_increase' | 'milestone_delay' | 'anomaly_detected';
 export interface StageRisk {
@@ -1557,7 +1539,7 @@ export interface StageRisk {
     severity: RiskSeverity;
     probability: number;
     impact: StageRiskImpact;
-    indicators: RiskIndicator[];
+    indicators: RiskIndicator;
     mitigation: RiskMitigationPlan;
 }
 export type StageRiskType = 'churn_risk' | 'progression_stall' | 'satisfaction_decline' | 'engagement_drop' | 'value_erosion';
@@ -1581,15 +1563,15 @@ export interface IndicatorTrend {
     consistency: number;
 }
 export interface RiskMitigationPlan {
-    strategies: MitigationStrategy[];
+    strategies: MitigationStrategy;
     priority: MitigationPriority;
     timeline: MitigationTimeline;
-    resources: MitigationResource[];
+    resources: MitigationResource;
 }
 export interface MitigationPriority {
-    immediate: string[];
-    shortTerm: string[];
-    longTerm: string[];
+    immediate: string;
+    shortTerm: string;
+    longTerm: string;
 }
 export interface MitigationTimeline {
     immediate: number;
@@ -1609,12 +1591,12 @@ export interface StageOpportunityAssessment {
     potential: OpportunityPotentialAssessment;
     feasibility: OpportunityFeasibility;
     timeline: OpportunityTimeline;
-    requirements: OpportunityRequirementAssessment[];
+    requirements: OpportunityRequirementAssessment;
 }
 export interface OpportunityPotentialAssessment {
     score: number;
-    benefits: OpportunityBenefit[];
-    risks: OpportunityRisk[];
+    benefits: OpportunityBenefit;
+    risks: OpportunityRisk;
     confidence: number;
 }
 export interface OpportunityBenefit {
@@ -1655,8 +1637,8 @@ export interface NextStagePrediction {
     probability: number;
     estimatedTransitionTime: number;
     confidence: number;
-    requirements: TransitionRequirement[];
-    accelerators: TransitionAccelerator[];
+    requirements: TransitionRequirement;
+    accelerators: TransitionAccelerator;
 }
 export interface TransitionRequirement {
     requirement: string;
@@ -1677,7 +1659,7 @@ export interface AcceleratorImpact {
 }
 export interface ProgressionAnalysis {
     overallProgression: OverallProgression;
-    stageAnalysis: StageProgressionAnalysis[];
+    stageAnalysis: StageProgressionAnalysis;
     pathwayAnalysis: PathwayAnalysis;
     velocityAnalysis: VelocityAnalysis;
     benchmarkComparison: ProgressionBenchmark;
@@ -1698,13 +1680,13 @@ export interface OverallTrajectory {
 export interface ProgressionForecast {
     nextMilestone: MilestoneForecast;
     completion: CompletionForecast;
-    risks: ForecastRisk[];
+    risks: ForecastRisk;
 }
 export interface MilestoneForecast {
     milestone: string;
     estimatedDate: number;
     confidence: number;
-    requirements: ForecastRequirement[];
+    requirements: ForecastRequirement;
 }
 export interface ForecastRequirement {
     requirement: string;
@@ -1714,38 +1696,38 @@ export interface ForecastRequirement {
 export interface CompletionForecast {
     estimatedCompletionDate: number;
     confidence: number;
-    scenarios: CompletionScenario[];
+    scenarios: CompletionScenario;
 }
 export interface CompletionScenario {
     scenario: string;
     probability: number;
     duration: number;
-    conditions: string[];
+    conditions: string;
 }
 export interface ForecastRisk {
     risk: string;
     probability: number;
     impact: ForecastRiskImpact;
-    mitigation: string[];
+    mitigation: string;
 }
 export interface ForecastRiskImpact {
     delayDays: number;
     probabilityReduction: number;
-    alternativePaths: string[];
+    alternativePaths: string;
 }
 export interface StageProgressionAnalysis {
     stageId: string;
     stageName: string;
     performance: StagePerformance;
     comparison: StageComparison;
-    insights: StageInsight[];
+    insights: StageInsight;
 }
 export interface StagePerformance {
     duration: number;
     efficiency: number;
     satisfaction: number;
     valueRealized: number;
-    challengesFaced: StageChallengeRecord[];
+    challengesFaced: StageChallengeRecord;
 }
 export interface StageChallengeRecord {
     challenge: string;
@@ -1785,7 +1767,7 @@ export interface StageInsight {
     type: InsightType;
     impact: InsightImpact;
     actionable: boolean;
-    recommendations: string[];
+    recommendations: string;
 }
 export type InsightType = 'performance' | 'behavioral' | 'comparative' | 'predictive' | 'optimization';
 export interface InsightImpact {
@@ -1795,14 +1777,13 @@ export interface InsightImpact {
 }
 export type InsightScope = 'current_stage' | 'future_stages' | 'overall_journey' | 'experience';
 export type ImpactMagnitude = 'low' | 'medium' | 'high' | 'transformative';
-export declare const UserLifecycleTracking: React.FC<UserLifecycleTrackingProps>;
 export interface LifecycleTrackingExportData {
-    userLifecycleData: UserLifecycleData[];
-    stageTransitions: StageTransition[];
-    interventionEffectiveness: InterventionEffectivenessReport[];
-    cohortAnalysis: CohortAnalysisResult[];
-    predictions: LifecyclePredictionResult[];
-    insights: LifecycleInsight[];
+    userLifecycleData: UserLifecycleData;
+    stageTransitions: StageTransition;
+    interventionEffectiveness: InterventionEffectivenessReport;
+    cohortAnalysis: CohortAnalysisResult;
+    predictions: LifecyclePredictionResult;
+    insights: LifecycleInsight;
     metadata: LifecycleExportMetadata;
 }
 export interface StageTransition {
@@ -1811,7 +1792,7 @@ export interface StageTransition {
     toStage: string;
     transitionDate: number;
     duration: number;
-    triggers: string[];
+    triggers: string;
     success: boolean;
 }
 export interface InterventionEffectivenessReport {
@@ -1819,7 +1800,7 @@ export interface InterventionEffectivenessReport {
     name: string;
     effectiveness: number;
     participants: number;
-    outcomes: InterventionOutcome[];
+    outcomes: InterventionOutcome;
 }
 export interface InterventionOutcome {
     metric: string;
@@ -1831,7 +1812,7 @@ export interface CohortAnalysisResult {
     name: string;
     size: number;
     performance: CohortPerformanceMetrics;
-    insights: string[];
+    insights: string;
 }
 export interface CohortPerformanceMetrics {
     progressionRate: number;
@@ -1841,7 +1822,7 @@ export interface CohortPerformanceMetrics {
 }
 export interface LifecyclePredictionResult {
     userId: string;
-    predictions: PredictionResult[];
+    predictions: PredictionResult;
     confidence: number;
     timeHorizon: number;
 }
@@ -1849,7 +1830,7 @@ export interface PredictionResult {
     metric: string;
     predictedValue: number;
     confidence: number;
-    factors: string[];
+    factors: string;
 }
 export interface LifecycleInsight {
     insightId: string;
@@ -1863,21 +1844,14 @@ export interface LifecycleInsight {
         magnitude: string;
         confidence: number;
     };
-    recommendations: Array<{
-        recommendationId: string;
-        action: string;
-        rationale: string;
-        priority: string;
-        effort: string;
-        expectedOutcome: string;
-        successMetrics: string[];
-    }>;
-    data: {
-        charts: unknown[];
-        tables: unknown[];
-        statistics: unknown[];
-        comparisons: unknown[];
-    };
+    recommendations: Array<{}, recommendationId>;
+    string: any;
+    action: string;
+    rationale: string;
+    priority: string;
+    effort: string;
+    expectedOutcome: string;
+    successMetrics: string;
 }
 export interface LifecycleExportMetadata {
     exportTimestamp: number;
@@ -1890,16 +1864,16 @@ export interface LifecycleExportMetadata {
     configurationVersion: string;
 }
 export interface PathwayAnalysis {
-    primaryPath: string[];
-    alternativePaths: AlternativePath[];
+    primaryPath: string;
+    alternativePaths: AlternativePath;
     efficiency: number;
     uniqueness: number;
 }
 export interface AlternativePath {
-    path: string[];
+    path: string;
     frequency: number;
     efficiency: number;
-    outcomes: PathOutcome[];
+    outcomes: PathOutcome;
 }
 export interface PathOutcome {
     outcome: string;
@@ -1910,7 +1884,7 @@ export interface VelocityAnalysis {
     currentVelocity: number;
     averageVelocity: number;
     acceleration: number;
-    factors: VelocityFactor[];
+    factors: VelocityFactor;
 }
 export interface VelocityFactor {
     factor: string;
@@ -1924,10 +1898,10 @@ export interface ProgressionBenchmark {
 }
 export interface LifecycleHealthAssessment {
     overall: number;
-    dimensions: HealthDimension[];
-    trends: HealthTrend[];
-    alerts: HealthAlert[];
-    recommendations: HealthRecommendation[];
+    dimensions: HealthDimension;
+    trends: HealthTrend;
+    alerts: HealthAlert;
+    recommendations: HealthRecommendation;
 }
 export interface HealthRecommendation {
     recommendationId: string;
@@ -1938,9 +1912,9 @@ export interface HealthRecommendation {
 }
 export interface LifecycleRiskAssessment {
     overall: number;
-    risks: LifecycleRisk[];
-    mitigation: RiskMitigationStrategy[];
-    monitoring: RiskMonitoringPlan[];
+    risks: LifecycleRisk;
+    mitigation: RiskMitigationStrategy;
+    monitoring: RiskMonitoringPlan;
 }
 export interface LifecycleRisk {
     riskId: string;
@@ -1948,7 +1922,7 @@ export interface LifecycleRisk {
     probability: number;
     impact: number;
     category: string;
-    indicators: string[];
+    indicators: string;
 }
 export interface RiskMitigationStrategy {
     riskId: string;
@@ -1959,8 +1933,8 @@ export interface RiskMitigationStrategy {
 }
 export interface RiskMonitoringPlan {
     riskId: string;
-    monitors: RiskMonitor[];
-    alertThresholds: AlertThreshold[];
+    monitors: RiskMonitor;
+    alertThresholds: AlertThreshold;
     escalationProcedure: EscalationProcedure;
 }
 export interface RiskMonitor {
@@ -1975,14 +1949,14 @@ export interface AlertThreshold {
     response: string;
 }
 export interface EscalationProcedure {
-    levels: EscalationLevel[];
-    timeouts: number[];
-    notifications: NotificationSetting[];
+    levels: EscalationLevel;
+    timeouts: number;
+    notifications: NotificationSetting;
 }
 export interface NotificationSetting {
     level: string;
-    recipients: string[];
-    methods: string[];
+    recipients: string;
+    methods: string;
 }
 export interface LifecyclePrediction {
     predictionId: string;
@@ -1991,14 +1965,14 @@ export interface LifecyclePrediction {
     value: number;
     confidence: number;
     timeHorizon: number;
-    factors: PredictionFactor[];
-    alternatives: AlternativePrediction[];
+    factors: PredictionFactor;
+    alternatives: AlternativePrediction;
 }
 export interface AlternativePrediction {
     scenario: string;
     probability: number;
     value: number;
-    conditions: string[];
+    conditions: string;
 }
 export interface CohortMembership {
     cohortId: string;

@@ -5,19 +5,17 @@
 import React from 'react';
 
 export interface FilterOptions {
-  status: 'all' | 'enabled' | 'disabled';
+  status: 'all' | 'enabled' | 'disabled';,
   type: 'all' | 'node' | 'ui' | 'transform' | 'storage';
   sortBy: 'name' | 'version' | 'lastUpdated' | 'size';
 }
-
 export interface ExtensionSearchFilterProps {
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
+  searchQuery: string;,
+  onSearchChange: (query: string) => void;,
   filterOptions: FilterOptions;
-  onFilterChange: (options: FilterOptions) => void;
+  onFilterChange: (options: FilterOptions) => void;,
   viewMode: 'installed' | 'marketplace';
 }
-
 export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
   searchQuery,
   onSearchChange,
@@ -25,13 +23,13 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
   onFilterChange,
   viewMode
 }) => {
-  const handleFilterChange = (key: keyof FilterOptions, value: string) => {
-    onFilterChange({)
-      ...filterOptions,
-      [key]: value
-    });
+  const handleFilterChange = (key: keyof FilterOptions, value: string) => {,
+  onFilterChange({)
+  ...filterOptions,
+  [key]: value,
+});
   };
-  return ();
+  return;
     <div className="extension-search-filter">
       {/* Search Bar */}
       <div className="search-section">
@@ -209,12 +207,12 @@ export const ExtensionSearchFilter: React.FC<ExtensionSearchFilterProps> = ({)
             <button 
               className="clear-all-filters"
               onClick={() => {
-                onSearchChange('');
-                onFilterChange({)
-                  status: 'all',
-                  type: 'all',
-                  sortBy: 'name',
-                });
+  onSearchChange('');
+  onFilterChange({)
+  status: 'all',
+  type: 'all',
+  sortBy: 'name',
+});
               }}
             >
               Clear all filters

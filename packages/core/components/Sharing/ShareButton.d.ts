@@ -8,6 +8,7 @@
  */
 import React from 'react';
 import { ShareableResourceType } from '../../types/sharingTypes';
+
 interface ShareButtonProps {
     resourceId: string;
     resourceType: ShareableResourceType;
@@ -17,7 +18,7 @@ interface ShareButtonProps {
     size?: 'small' | 'medium' | 'large';
     disabled?: boolean;
     onShareCreated?: (shareResponse: Error) => void;
-}
+
 export declare const ShareButton: React.FC<ShareButtonProps>;
 export default ShareButton;
 //# sourceMappingURL=ShareButton.d.ts.map

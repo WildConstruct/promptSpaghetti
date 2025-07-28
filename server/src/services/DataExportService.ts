@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as csv from 'csv-writer';
 
+}
 export interface ExportRequest {
   requestId?: string;
   userId: string;
@@ -20,12 +21,14 @@ export interface ExportRequest {
   timeRange?: {
     startDate: Date;
     endDate: Date;
+}
   };
   includeMetadata?: boolean;
   anonymize?: boolean;
   encryptOutput?: boolean;
 }
 
+}
 export interface ExportFilters {
   classification?: string[];
   resourceIds?: string[];
@@ -33,7 +36,9 @@ export interface ExportFilters {
   userIds?: string[];
   customFilters?: Record<string, any>;
 }
+}
 
+}
 export interface ExportJob {
   jobId: string;
   requestId: string;
@@ -48,7 +53,9 @@ export interface ExportJob {
   errorMessage?: string;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ExportManifest {
   exportId: string;
   timestamp: Date;
@@ -62,6 +69,7 @@ export interface ExportManifest {
   retentionPolicy: string;
   anonymized: boolean;
   encrypted: boolean;
+}
 }
 
 export enum ExportType {
@@ -113,6 +121,7 @@ export class DataExportService {
    * Request data export
    */
   async requestExport(request: ExportRequest): Promise<{ jobId: string; estimatedTime: string }> {
+
     const requestId = await this.generateRequestId();
     const jobId = await this.generateJobId();
 
@@ -173,6 +182,7 @@ export class DataExportService {
    * Process export job
    */
   async processExportJob(jobId: string): Promise<void> {
+
     try {
       const job = await this.getExportJob(jobId);
       if (!job) {
@@ -242,6 +252,7 @@ export class DataExportService {
    * Get export job status
    */
   async getExportJobStatus(jobId: string, userId: string): Promise<ExportJob | null> {
+
     const result = await this.db.query(`
       SELECT * FROM export_jobs 
       WHERE job_id = $1 AND user_id = $2
@@ -258,6 +269,7 @@ export class DataExportService {
    * Get user's export history
    */
   async getUserExportHistory(userId: string, limit: number = 50, offset: number = 0): Promise<ExportJob[]> {
+
     const result = await this.db.query(`
       SELECT * FROM export_jobs 
       WHERE user_id = $1 
@@ -276,6 +288,7 @@ export class DataExportService {
     fileName: string;
     contentType: string;
   }> {
+
     const job = await this.getExportJobStatus(jobId, userId);
     if (!job) {
       throw new Error('Export job not found');
@@ -316,6 +329,7 @@ export class DataExportService {
    * Cancel export job
    */
   async cancelExportJob(jobId: string, userId: string): Promise<void> {
+
     const job = await this.getExportJobStatus(jobId, userId);
     if (!job) {
       throw new Error('Export job not found');
@@ -342,6 +356,7 @@ export class DataExportService {
    * Clean up old export files
    */
   async cleanupOldExports(retentionDays: number = 30): Promise<{ deletedFiles: number; freedSpace: number }> {
+
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - retentionDays);
 
@@ -394,6 +409,7 @@ export class DataExportService {
   // Private helper methods
 
   private async validateExportRequest(request: ExportRequest): Promise<void> {
+
     if (!request.userId) {
       throw new Error('User ID is required');
     }
@@ -419,6 +435,7 @@ export class DataExportService {
   }
 
   private async validateExportPermissions(request: ExportRequest): Promise<void> {
+
     // Check if user has permission to export each data category
     for (const category of request.dataCategories) {
       const accessCheck = await this.accessControl.checkAccess({
@@ -435,6 +452,7 @@ export class DataExportService {
   }
 
   private async extractData(request: ExportRequest, jobId: string): Promise<any[]> {
+
     let data: Record<string, unknown>[] = [];
 
     await this.updateJobStatus(jobId, ExportJobStatus.PROCESSING, 20);
@@ -467,6 +485,7 @@ export class DataExportService {
   }
 
   private async processData(data: Record<string, unknown>[], request: ExportRequest, jobId: string): Promise<any[]> {
+
     let processedData = [...data];
 
     // Apply filters
@@ -495,6 +514,7 @@ export class DataExportService {
     request: ExportRequest,
     jobId: string
   ): Promise<string> {
+
     const fileName = `export_${jobId}_${Date.now()}.${request.format.toLowerCase()}`;
     const filePath = path.join(this.exportDir, fileName);
 
@@ -527,6 +547,7 @@ export class DataExportService {
     request: ExportRequest,
     outputPath: string
   ): Promise<ExportManifest> {
+
     const stats = fs.statSync(outputPath);
     const checksum = await this.calculateChecksum(outputPath);
 
@@ -554,10 +575,12 @@ export class DataExportService {
   }
 
   private async generateRequestId(): Promise<string> {
+
     return `REQ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateJobId(): Promise<string> {
+
     return `JOB-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 

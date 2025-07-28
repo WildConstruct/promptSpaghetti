@@ -52,86 +52,80 @@ export type UserStatus = 'active' | 'inactive' | 'suspended' | 'locked' | 'pendi
 export type ProcessStatus = 'running' | 'idle' | 'busy' | 'error' | 'stopped';
 
 export interface SystemService {
-  id: string;
+  id: string;,
   name: string;
-  displayName: string;
+  displayName: string;,
   description: string;
-  status: ServiceStatus;
-  health: number; // 0-100
-  uptime: number; // milliseconds
-  lastRestart: Date;
+  status: ServiceStatus;,
+  health: number; // 0-100,
+  uptime: number; // milliseconds,
+  lastRestart: Date;,
   autoRestart: boolean;
-  dependencies: string[];
+  dependencies: string;
   port?: number;
   url?: string;
-  logs: ServiceLog[];
+  logs: ServiceLog;,
   metrics: ServiceMetrics;
 }
-
 export interface ServiceLog {
-  id: string;
+  id: string;,
   timestamp: Date;
-  level: 'info' | 'warn' | 'error' | 'debug';
+  level: 'info' | 'warn' | 'error' | 'debug';,
   message: string;
   service: string;
   details?: Record<string, any>;
 }
-
 export interface ServiceMetrics {
-  cpuUsage: number;
+  cpuUsage: number;,
   memoryUsage: number;
-  requestCount: number;
+  requestCount: number;,
   errorRate: number;
-  responseTime: number;
+  responseTime: number;,
   throughput: number;
 }
-
 export interface SystemOverview {
-  overallStatus: SystemStatus;
+  overallStatus: SystemStatus;,
   totalServices: number;
-  runningServices: number;
+  runningServices: number;,
   erroredServices: number;
-  systemLoad: number;
+  systemLoad: number;,
   memoryUsage: number;
-  diskUsage: number;
+  diskUsage: number;,
   networkLatency: number;
-  uptime: number;
+  uptime: number;,
   activeUsers: number;
   backgroundJobs: number;
 }
-
 export interface StatusControlsProps {
   className?: string;
   adminLevel?: 'admin' | 'super_admin' | 'system';
   onServiceAction?: (serviceId: string, action: string) => void;
   onSystemAction?: (action: string) => void;
-}
-const SERVICE_STATUS_CONFIG = {
-  running: { ,
-    color: 'text-green-600 bg-green-100', 
-    icon: CheckCircle, 
-    actions: ['stop', 'restart', 'pause'] 
-  },
-  stopped: { ,
-    color: 'text-gray-600 bg-gray-100', 
-    icon: StopCircle, 
-    actions: ['start'] ,
-  },
-  error: { ,
-    color: 'text-red-600 bg-red-100', 
-    icon: XCircle, 
-    actions: ['restart', 'stop'] 
-  },
-  starting: { ,
-    color: 'text-yellow-600 bg-yellow-100', 
-    icon: PlayCircle, 
-    actions: [] ,
-  },
-  stopping: { ,
-    color: 'text-orange-600 bg-orange-100', 
-    icon: PauseCircle, 
-    actions: [] ,
-  }
+  const SERVICE_STATUS_CONFIG = {
+  running: {,
+  color: 'text-green-600 bg-green-100',
+  icon: CheckCircle,
+  actions: ['stop', 'restart', 'pause'],
+},
+  stopped: {,
+  color: 'text-gray-600 bg-gray-100',
+  icon: StopCircle,
+  actions: ['start'],
+},
+  error: {,
+  color: 'text-red-600 bg-red-100',
+  icon: XCircle,
+  actions: ['restart', 'stop'],
+},
+  starting: {,
+  color: 'text-yellow-600 bg-yellow-100',
+  icon: PlayCircle,
+  actions: [],
+},
+  stopping: {,
+  color: 'text-orange-600 bg-orange-100',
+  icon: PauseCircle,
+  actions: [],
 };
 const SYSTEM_STATUS_CONFIG = {
   operational: { color: 'text-green-600 bg-green-100', icon: CheckCircle },
@@ -139,7 +133,7 @@ const SYSTEM_STATUS_CONFIG = {
   down: { color: 'text-red-600 bg-red-100', icon: XCircle },
   maintenance: { color: 'text-blue-600 bg-blue-100', icon: Settings }
 };
-
+}
 export const StatusControls: React.FC<StatusControlsProps> = ({)
   className = '',
   adminLevel = 'admin',
@@ -147,7 +141,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
   onSystemAction
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [services, setServices] = useState<SystemService[]>([]);
+  const [services, setServices] = useState<SystemService>([]);
   const [systemOverview, setSystemOverview] = useState<SystemOverview | null>(null);
   const [selectedService, setSelectedService] = useState<SystemService | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -163,166 +157,153 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
     };
   }, []);
   const loadSystemData = async () => {
-    try {
-      setIsLoading(true);
-      // Mock system overview
-      const overview: SystemOverview = {
-        overallStatus: 'operational',
-        totalServices: 8,
-        runningServices: 7,
-        erroredServices: 1,
-        systemLoad: 0.65,
-        memoryUsage: 0.72,
-        diskUsage: 0.45,
-        networkLatency: 23,
-        uptime: 7 * 24 * 60 * 60 * 1000, // 7 days
-        activeUsers: 142,
-        backgroundJobs: 3,
-      };
+  try {
+  setIsLoading(true);
+  // Mock system overview
+  const overview: SystemOverview = {,
+  overallStatus: 'operational',
+  totalServices: 8,
+  runningServices: 7,
+  erroredServices: 1,
+  systemLoad: 0.65,
+  memoryUsage: 0.72,
+  diskUsage: 0.45,
+  networkLatency: 23,
+  uptime: 7 * 24 * 60 * 60 * 1000, // 7 days,
+  activeUsers: 142,
+  backgroundJobs: 3,
+};
       setSystemOverview(overview);
       // Mock services
-      const mockServices: SystemService[] = [
+      const mockServices: SystemService = [
         {
-          id: 'web-server',
-          name: 'nginx',
-          displayName: 'Web Server',
-          description: 'Primary web server handling HTTP requests',
-          status: 'running',
-          health: 98,
-          uptime: 6 * 24 * 60 * 60 * 1000,
-          lastRestart: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
-          autoRestart: true,
-          dependencies: [],
-          port: 80,
-          url: 'http://localhost',
-          logs: [],
-          metrics: {,
-            cpuUsage: 5.2,
-            memoryUsage: 128,
-            requestCount: 1250,
-            errorRate: 0.02,
-            responseTime: 45,
-            throughput: 850,
-          }
-        },
+  id: 'web-server',
+  name: 'nginx',
+  displayName: 'Web Server',
+  description: 'Primary web server handling HTTP requests',
+  status: 'running',
+  health: 98,
+  uptime: 6 * 24 * 60 * 60 * 1000,
+  lastRestart: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+  autoRestart: true,
+  dependencies: [],
+  port: 80,
+  url: 'http://localhost',
+  logs: [],
+  metrics: {,
+  cpuUsage: 5.2,
+  memoryUsage: 128,
+  requestCount: 1250,
+  errorRate: 0.02,
+  responseTime: 45,
+  throughput: 850,
+}
         {
-          id: 'api-server',
-          name: 'fastify',
-          displayName: 'API Server',
-          description: 'Backend API server for application logic',
-          status: 'running',
-          health: 95,
-          uptime: 5 * 24 * 60 * 60 * 1000,
-          lastRestart: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-          autoRestart: true,
-          dependencies: ['database', 'redis'],
-          port: 8000,
-          url: 'http://localhost:8000',
-          logs: [],
-          metrics: {,
-            cpuUsage: 12.8,
-            memoryUsage: 256,
-            requestCount: 2840,
-            errorRate: 0.05,
-            responseTime: 125,
-            throughput: 420,
-          }
-        },
+  id: 'api-server',
+  name: 'fastify',
+  displayName: 'API Server',
+  description: 'Backend API server for application logic',
+  status: 'running',
+  health: 95,
+  uptime: 5 * 24 * 60 * 60 * 1000,
+  lastRestart: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+  autoRestart: true,
+  dependencies: ['database', 'redis'],
+  port: 8000,
+  url: 'http://localhost:8000',
+  logs: [],
+  metrics: {,
+  cpuUsage: 12.8,
+  memoryUsage: 256,
+  requestCount: 2840,
+  errorRate: 0.05,
+  responseTime: 125,
+  throughput: 420,
+}
         {
-          id: 'database',
-          name: 'postgresql',
-          displayName: 'PostgreSQL Database',
-          description: 'Primary database server',
-          status: 'running',
-          health: 92,
-          uptime: 7 * 24 * 60 * 60 * 1000,
-          lastRestart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-          autoRestart: true,
-          dependencies: [],
-          port: 5432,
-          logs: [],
-          metrics: {,
-            cpuUsage: 8.5,
-            memoryUsage: 512,
-            requestCount: 5600,
-            errorRate: 0.01,
-            responseTime: 15,
-            throughput: 1200,
-          }
-        },
+  id: 'database',
+  name: 'postgresql',
+  displayName: 'PostgreSQL Database',
+  description: 'Primary database server',
+  status: 'running',
+  health: 92,
+  uptime: 7 * 24 * 60 * 60 * 1000,
+  lastRestart: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+  autoRestart: true,
+  dependencies: [],
+  port: 5432,
+  logs: [],
+  metrics: {,
+  cpuUsage: 8.5,
+  memoryUsage: 512,
+  requestCount: 5600,
+  errorRate: 0.01,
+  responseTime: 15,
+  throughput: 1200,
+}
         {
-          id: 'redis',
-          name: 'redis',
-          displayName: 'Redis Cache',
-          description: 'In-memory cache and session store',
-          status: 'error',
-          health: 0,
-          uptime: 0,
-          lastRestart: new Date(Date.now() - 2 * 60 * 60 * 1000),
-          autoRestart: false,
-          dependencies: [],
-          port: 6379,
-          logs: [],
-          metrics: {,
-            cpuUsage: 0,
-            memoryUsage: 0,
-            requestCount: 0,
-            errorRate: 1,
-            responseTime: 0,
-            throughput: 0,
-          }
-        }
-      ];
-      setServices(mockServices);
-    } catch (error) {
-      console.error('Failed to load system data:', error);
-    } finally {
+  id: 'redis',
+  name: 'redis',
+  displayName: 'Redis Cache',
+  description: 'In-memory cache and session store',
+  status: 'error',
+  health: 0,
+  uptime: 0,
+  lastRestart: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  autoRestart: false,
+  dependencies: [],
+  port: 6379,
+  logs: [],
+  metrics: {,
+  cpuUsage: 0,
+  memoryUsage: 0,
+  requestCount: 0,
+  errorRate: 1,
+  responseTime: 0,
+  throughput: 0];
+  setServices(mockServices);
+} catch (error) {
+  console.error('Failed to load system data:', error);
+} finally {
       setIsLoading(false);
-    }
   };
   const handleServiceAction = async (serviceId: string, action: string) => {
-    try {
-      setServices(prev => prev.map(service => )
-        service.id === serviceId 
-          ? { 
-            ...service, 
-            status: action === 'start' ? 'starting' : ,
-              action === 'stop' ? 'stopping' : 
-                action === 'restart' ? 'starting' : 
-                  service.status 
-          }
-          : service
-      ));
-      // Simulate action delay
-      setTimeout(() => {
-        setServices(prev => prev.map(service => )
-          service.id === serviceId 
-            ? { 
-              ...service, 
-              status: action === 'stop' ? 'stopped' : 'running',
-              lastRestart: action === 'restart' ? new Date() : service.lastRestart,
-              uptime: action === 'restart' ? 0 : service.uptime,
-            }
-            : service
-        ));
-      }, 2000);
+  try {
+  setServices(prev => prev.map(service => )
+  service.id === serviceId
+  ? {
+  ...service,
+  status: action === 'start' ? 'starting' : ,
+  action === 'stop' ? 'stopping' :,
+  action === 'restart' ? 'starting' :,
+  service.status
+  : service));
+  // Simulate action delay
+  setTimeout(() => {
+  setServices(prev => prev.map(service => )
+  service.id === serviceId
+  ? {
+  ...service,
+  status: action === 'stop' ? 'stopped' : 'running',
+  lastRestart: action === 'restart' ? new Date() : service.lastRestart,
+  uptime: action === 'restart' ? 0 : service.uptime,
+  : service));
+}, 2000);
       onServiceAction?.(serviceId, action);
     } catch (error) {
       console.error(`Failed to ${action} service ${serviceId}:`, error);}
-    }
   };
   const handleSystemAction = async (action: string) => {
     try {
       onSystemAction?.(action);
     } catch (error) {
       console.error(`Failed to execute system action ${action}:`, error);}
-    }
   };
   const renderOverview = () => {
     if (!systemOverview) return <div>Loading overview...</div>;
     const statusConfig = SYSTEM_STATUS_CONFIG[systemOverview.overallStatus];
     const StatusIcon = statusConfig.icon;
-    return ();
+    return;
       <div className="overview-section">
         <div className="system-status-card">
           <Card>
@@ -581,7 +562,7 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       </Card>
     </div>
   );
-  return ();
+  return;
     <div className={`status-controls ${className}`}>}
       <div className="controls-header">
         <div className="header-info">
@@ -640,230 +621,182 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
       )}
       <style>{`
         .status-controls {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .controls-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .header-badges {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           align-items: center;
-        }
         .overview-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .system-status-card {
           margin-bottom: 1rem;
-        }
         .system-status-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .status-title {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .system-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .metric-item {
           display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-        }
+          align-items: flex-start;,
+  gap: 0.75rem;
         .metric-info {
           flex: 1;
-        }
         .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.25rem;
-        }
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .metric-status {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .metric-status.running {
           color: #059669;
-        }
         .metric-status.active {
           color: #3b82f6;
-        }
         .load-bar,
         .memory-bar {
-          height: 4px;
-          background: #e5e7eb;
-          border-radius: 2px;
-          overflow: hidden;
+          height: 4px;,
+  background: #e5e7eb;
+          border-radius: 2px;,
+  overflow: hidden;
           margin-top: 0.25rem;
-        }
         .load-fill {
-          height: 100%;
-          background: #059669;
+          height: 100%;,
+  background: #059669;
           transition: width 0.3s ease;
-        }
         .memory-fill {
-          height: 100%;
-          background: #8b5cf6;
+          height: 100%;,
+  background: #8b5cf6;
           transition: width 0.3s ease;
-        }
         .alerts-section {
           margin-top: 1rem;
-        }
         .alerts-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .alert-item {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
+          align-items: center;,
+  gap: 0.75rem;
           padding: 0.75rem;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
         .alert-item.error {
-          background: #fef2f2;
-          color: #991b1b;
+          background: #fef2f2;,
+  color: #991b1b;
           border: 1px solid #fecaca;
-        }
         .alert-item.warning {
-          background: #fffbeb;
-          color: #92400e;
+          background: #fffbeb;,
+  color: #92400e;
           border: 1px solid #fed7aa;
-        }
         .alert-item.info {
-          background: #eff6ff;
-          color: #1e40af;
+          background: #eff6ff;,
+  color: #1e40af;
           border: 1px solid #bfdbfe;
-        }
         .alert-item.success {
-          background: #f0fdf4;
-          color: #166534;
+          background: #f0fdf4;,
+  color: #166534;
           border: 1px solid #bbf7d0;
-        }
         .services-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .services-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .services-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .services-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .services-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
           gap: 1rem;
-        }
         .processes-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .processes-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .process-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 0.75rem;
+          justify-content: space-between;,
+  padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .process-info {
           flex: 1;
-        }
         .process-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .process-description {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .process-actions {
-          display: flex;
-          gap: 0.25rem;
-        }
+          display: flex;,
+  gap: 0.25rem;
         @media (max-width: 768px) {
           .controls-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .system-status-header {
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: column;,
+  gap: 1rem;
             align-items: stretch;
-          }
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
           .services-grid {
             grid-template-columns: 1fr;
-          }
           .process-item {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
-        }
+            align-items: stretch;,
+  gap: 0.75rem;
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );
@@ -871,26 +804,25 @@ export const StatusControls: React.FC<StatusControlsProps> = ({)
 
 // Service Card Component
 interface ServiceCardProps {
-  service: SystemService;
-  onAction: (serviceId: string, action: string) => void;
-  onSelect: (service: SystemService) => void;
+  service: SystemService;,
+  onAction: (serviceId: string, action: string) => void;,
+  onSelect: (service: SystemService) => void;,
   adminLevel: string;
-}
-const ServiceCard: React.FC<ServiceCardProps> = ({ )
-  service, 
-  onAction, 
-  onSelect, 
-  adminLevel 
+  const ServiceCard: React.FC<ServiceCardProps> = ({ ),
+  service,
+  onAction,
+  onSelect,
+  adminLevel
 }) => {
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-  const getHealthColor = (health: number) => {
-    if (health >= 90) return 'text-green-600';
-    if (health >= 70) return 'text-yellow-600';
-    if (health >= 50) return 'text-orange-600';
-    return 'text-red-600';
-  };
+  const getHealthColor = (health: number) => {,
+  if (health >= 90) return 'text-green-600';
+  if (health >= 70) return 'text-yellow-600';
+  if (health >= 50) return 'text-orange-600';
+  return 'text-red-600';
+};
   const formatUptime = (uptime: number) => {
     const days = Math.floor(uptime / (24 * 60 * 60 * 1000));
     const hours = Math.floor((uptime % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
@@ -898,7 +830,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ )
     if (hours > 0) return `${hours}h`;}
     return '< 1h';
   };
-  return ();
+  return;
     <Card className="service-card">
       <CardContent className="p-4">
         <div className="service-header">
@@ -968,52 +900,42 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ )
       <style>{`
         .service-card {
           transition: box-shadow 0.2s ease;
-        }
         .service-card:hover {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
         .service-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .service-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .service-description {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           line-height: 1.4;
-        }
         .service-metrics {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          flex-direction: column;,
+  gap: 0.5rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .metric-row {
           display: flex;
           justify-content: space-between;
           font-size: 0.875rem;
-        }
-        .metric-row span:first-child {
-          color: #6b7280;
-        }
-        .metric-row span:last-child {
-          color: #1f2937;
+        .metric-row span:first-child {,
+  color: #6b7280;
+        .metric-row span:last-child {,
+  color: #1f2937;
           font-weight: 500;
-        }
         .service-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           flex-wrap: wrap;
-        }
       `}</style>
     </Card>
   );
@@ -1021,12 +943,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ )
 
 // Service Detail Modal Component
 interface ServiceDetailModalProps {
-  service: SystemService;
+  service: SystemService;,
   onClose: () => void;
-  onAction: (serviceId: string, action: string) => void;
+  onAction: (serviceId: string, action: string) => void;,
   adminLevel: string;
-}
-const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({)
+  const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({,)
   service,
   onClose,
   onAction,
@@ -1035,7 +956,7 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({)
   const statusConfig = SERVICE_STATUS_CONFIG[service.status];
   const StatusIcon = statusConfig.icon;
   const canControl = adminLevel === 'super_admin' || adminLevel === 'admin';
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1138,97 +1059,80 @@ const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({)
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;
-          inset: 0;
+          position: fixed;,
+  inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 1000;
-        }
         .modal-content {
           background: white;
-          border-radius: 8px;
-          width: 90vw;
+          border-radius: 8px;,
+  width: 90vw;
           max-width: 700px;
-          max-height: 80vh;
-          overflow: auto;
-        }
+          max-height: 80vh;,
+  overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          padding: 1.5rem;
+          align-items: flex-start;,
+  padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
-        }
         .modal-title {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .modal-title h2 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .modal-body {
           padding: 1.5rem;
-        }
         .service-details-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
+          grid-template-columns: 1fr 1fr;,
+  gap: 1.5rem;
           margin-bottom: 1.5rem;
-        }
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
-        }
         .detail-item {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 0.75rem;
           font-size: 0.875rem;
-        }
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
-        }
         .detail-item span {
           color: #1f2937;
-        }
         .dependencies-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.75rem;
-        }
         .dependencies-list {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
+          justify-content: flex-end;,
+  gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
-        }
         @media (max-width: 768px) {
           .service-details-grid {
             grid-template-columns: 1fr;
-          }
           .modal-content {
             width: 95vw;
             max-height: 90vh;
-          }
-        }
       `}</style>
     </div>
   );

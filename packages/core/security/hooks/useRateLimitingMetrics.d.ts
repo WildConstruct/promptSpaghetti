@@ -14,13 +14,15 @@ import {
 } from '../RateLimitingPerformanceMetrics';
 import { RateLimitingService } from '../RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
+
 export interface UseRateLimitingMetricsOptions {
     autoRefresh?: boolean;
     refreshInterval?: number;
     timeRange?: string;
     enableAlerts?: boolean;
     retainHistoryHours?: number;
-}
+
+
 export interface MetricsHookReturn {
     currentMetrics: PerformanceMetrics | null;
     visualizationData: MetricsVisualizationData | null;
@@ -40,12 +42,13 @@ export interface MetricsHookReturn {
     stopMonitoring: () => void;
     error: string | null;
     clearError: () => void;
-}
+
+
 export interface MetricsServiceConfig {
     rateLimitingService: RateLimitingService;
     throttlingEngine?: AdaptiveThrottlingRulesEngine;
     options?: UseRateLimitingMetricsOptions;
-}
+
 export declare const useRateLimitingMetrics: ()
   { rateLimitingService,
   throttlingEngine,

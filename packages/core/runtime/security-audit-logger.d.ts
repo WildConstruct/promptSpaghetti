@@ -23,7 +23,6 @@ export declare enum SecuritySeverity {
     WARNING = "WARNING",// Potentially suspicious but allowed
     ERROR = "ERROR",// Blocked operations
     CRITICAL = "CRITICAL"
-}
 /**
  * Security event categories
  */
@@ -44,10 +43,10 @@ export declare enum SecurityEventCategory {
     VARIABLE_VALIDATION_FAILED = "VARIABLE_VALIDATION_FAILED",
     SECURITY_POLICY_VIOLATION = "SECURITY_POLICY_VIOLATION",
     AUDIT_LOG_OVERFLOW = "AUDIT_LOG_OVERFLOW"
-}
 /**
  * Security event context information
  */
+
 export interface SecurityEventContext {
     nodeId?: string;
     userId?: string;
@@ -64,10 +63,10 @@ export interface SecurityEventContext {
     additionalData?: Record<string, any>;
     strictMode?: boolean;
     error?: string;
-}
 /**
  * Security audit event
  */
+
 export interface SecurityAuditEvent {
     id: string;
     timestamp: number;
@@ -76,10 +75,10 @@ export interface SecurityAuditEvent {
     message: string;
     context: SecurityEventContext;
     blocked: boolean;
-}
 /**
  * Event aggregation statistics
  */
+
 export interface SecurityEventStats {
     totalEvents: number;
     eventsByCategory: Record<SecurityEventCategory, number>;
@@ -91,17 +90,16 @@ export interface SecurityEventStats {
         count: number;
     }>;
     recentCriticalEvents: SecurityAuditEvent[];
-}
 /**
  * Security audit logger configuration
  */
+
 export interface SecurityAuditConfig {
     maxEvents: number;
     enableConsoleLogging: boolean;
     enableStackTraces: boolean;
     eventRetentionMs: number;
     aggregationInterval: number;
-}
 /**
  * Main security audit logger class
  */
@@ -179,7 +177,6 @@ export declare class SecurityAuditLogger {
     private logToConsole;
     private enforceEventLimit;
     private startPeriodicCleanup;
-}
 /**
  * Global security audit logger instance
  */
@@ -187,8 +184,7 @@ export declare const securityAudit: SecurityAuditLogger;
 /**
  * Decorator for automatic security logging
  */
-export declare function auditSecurityEvent()
-  severity?: SecuritySeverity,
+export declare function auditSecurityEvent(severity?: SecuritySeverity,)
   category?: SecurityEventCategory
 ): MethodDecorator;
 export default SecurityAuditLogger;

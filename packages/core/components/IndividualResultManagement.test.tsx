@@ -9,59 +9,55 @@ import { PreviewModal } from '../PreviewModal';
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 
 // Mock fetch for testing
-global.fetch = jest.fn<unknown[], unknown>() as jest.MockedFunction<typeof fetch>;
-const mockResults: PreviewResultWithPath[] = [
+global.fetch = jest.fn<unknown, unknown>() as jest.MockedFunction<typeof fetch>;
+const mockResults: PreviewResultWithPath = [
   {
-    seed: 12345,
-    output: 'First result output',
-    executionTimeMs: 100,
-    usedNodeIds: ['node1', 'node2'],
-    usedEdgeIds: [],
-    executionPath: {,
-      id: 'exec_1',
-      seed: 12345,
-      startTime: Date.now() - 1000,
-      endTime: Date.now(),
-      totalExecutionTime: 100,
-      steps: [],
-      finalOutput: 'First result output',
-      nodeExecutionOrder: ['node1', 'node2'],
-      randomizationPoints: [],
-    }
-  },
+  seed: 12345,
+  output: 'First result output',
+  executionTimeMs: 100,
+  usedNodeIds: ['node1', 'node2'],
+  usedEdgeIds: [],
+  executionPath: {,
+  id: 'exec_1',
+  seed: 12345,
+  startTime: Date.now() - 1000,
+  endTime: Date.now(),
+  totalExecutionTime: 100,
+  steps: [],
+  finalOutput: 'First result output',
+  nodeExecutionOrder: ['node1', 'node2'],
+  randomizationPoints: [],
+}
   {
-    seed: 67890,
-    output: 'Second result output',
-    executionTimeMs: 150,
-    usedNodeIds: ['node1', 'node2'],
-    usedEdgeIds: [],
-    executionPath: {,
-      id: 'exec_2',
-      seed: 67890,
-      startTime: Date.now() - 1000,
-      endTime: Date.now(),
-      totalExecutionTime: 150,
-      steps: [],
-      finalOutput: 'Second result output',
-      nodeExecutionOrder: ['node1', 'node2'],
-      randomizationPoints: [],
-    }
-  },
+  seed: 67890,
+  output: 'Second result output',
+  executionTimeMs: 150,
+  usedNodeIds: ['node1', 'node2'],
+  usedEdgeIds: [],
+  executionPath: {,
+  id: 'exec_2',
+  seed: 67890,
+  startTime: Date.now() - 1000,
+  endTime: Date.now(),
+  totalExecutionTime: 150,
+  steps: [],
+  finalOutput: 'Second result output',
+  nodeExecutionOrder: ['node1', 'node2'],
+  randomizationPoints: [],
+}
   {
-    seed: 54321,
-    output: 'Third result output',
-    executionTimeMs: 120,
-    usedNodeIds: ['node1', 'node2'],
-    usedEdgeIds: [],
-  }
-];
-describe('Individual Result Management', () => {
+  seed: 54321,
+  output: 'Third result output',
+  executionTimeMs: 120,
+  usedNodeIds: ['node1', 'node2'],
+  usedEdgeIds: []];
+  describe('Individual Result Management', () => {
   beforeEach(() => {
-    (fetch as jest.MockedFunction<typeof fetch>).mockClear();
-  });
+  (fetch as jest.MockedFunction<typeof fetch>).mockClear();
+});
   describe('Result Action Controls', () => {
     it('should display regenerate buttons for each result', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -77,7 +73,7 @@ describe('Individual Result Management', () => {
       expect(regenerateButtons).toHaveLength(3);
     });
     it('should display lock/unlock buttons for each result', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -93,7 +89,7 @@ describe('Individual Result Management', () => {
       expect(lockButtons).toHaveLength(3);
     });
     it('should display export buttons for each result', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -109,7 +105,7 @@ describe('Individual Result Management', () => {
       expect(exportButtons).toHaveLength(3);
     });
     it('should call onResultAction when regenerate button is clicked', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -124,12 +120,12 @@ describe('Individual Result Management', () => {
       const regenerateButtons = screen.getAllByText('⟳');
       fireEvent.click(regenerateButtons[0]);
       expect(mockOnResultAction).toHaveBeenCalledWith({)
-        type: 'regenerate',
-        resultIndex: 0,
-      });
+  type: 'regenerate',
+  resultIndex: 0,
+});
     });
     it('should call onResultAction when lock button is clicked', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -144,12 +140,12 @@ describe('Individual Result Management', () => {
       const lockButtons = screen.getAllByText('🔓');
       fireEvent.click(lockButtons[0]);
       expect(mockOnResultAction).toHaveBeenCalledWith({)
-        type: 'lock',
-        resultIndex: 0,
-      });
+  type: 'lock',
+  resultIndex: 0,
+});
     });
     it('should call onResultAction when export button is clicked', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
+      const mockOnResultAction = jest.fn<unknown, unknown>();
       render();
         <PreviewModal
           open={true}
@@ -164,19 +160,19 @@ describe('Individual Result Management', () => {
       const exportButtons = screen.getAllByText('💾');
       fireEvent.click(exportButtons[0]);
       expect(mockOnResultAction).toHaveBeenCalledWith({)
-        type: 'export',
-        resultIndex: 0,
-      });
+  type: 'export',
+  resultIndex: 0,
+});
     });
   });
   describe('Result Locking', () => {
-    it('should display locked results with different styling', () => {
-      const lockedResults = [{
-        index: 0,
-        seed: 12345,
-        lockedAt: Date.now(),
-        note: 'Favorite result',
-      }];
+  it('should display locked results with different styling', () => {
+  const lockedResults = [{
+  index: 0,
+  seed: 12345,
+  lockedAt: Date.now(),
+  note: 'Favorite result',
+}];
       render();
         <PreviewModal
           open={true}
@@ -193,11 +189,11 @@ describe('Individual Result Management', () => {
       expect(screen.getByText('🔒 This result is locked and won\'t be affected by regeneration')).toBeInTheDocument();
     });
     it('should show unlock button for locked results', () => {
-      const lockedResults = [{
-        index: 0,
-        seed: 12345,
-        lockedAt: Date.now(),
-      }];
+  const lockedResults = [{
+  index: 0,
+  seed: 12345,
+  lockedAt: Date.now(),
+}];
       render();
         <PreviewModal
           open={true}
@@ -216,11 +212,11 @@ describe('Individual Result Management', () => {
       expect(lockButtons).toHaveLength(2);
     });
     it('should disable regenerate button for locked results', () => {
-      const lockedResults = [{
-        index: 0,
-        seed: 12345,
-        lockedAt: Date.now(),
-      }];
+  const lockedResults = [{
+  index: 0,
+  seed: 12345,
+  lockedAt: Date.now(),
+}];
       render();
         <PreviewModal
           open={true}
@@ -239,12 +235,12 @@ describe('Individual Result Management', () => {
       expect(regenerateButtons[2].closest('button')).not.toBeDisabled();
     });
     it('should call unlock action when unlock button is clicked', () => {
-      const mockOnResultAction = jest.fn<unknown[], unknown>();
-      const lockedResults = [{
-        index: 0,
-        seed: 12345,
-        lockedAt: Date.now(),
-      }];
+  const mockOnResultAction = jest.fn<unknown, unknown>();
+  const lockedResults = [{
+  index: 0,
+  seed: 12345,
+  lockedAt: Date.now(),
+}];
       render();
         <PreviewModal
           open={true}
@@ -260,9 +256,9 @@ describe('Individual Result Management', () => {
       const unlockButton = screen.getByText('🔒');
       fireEvent.click(unlockButton);
       expect(mockOnResultAction).toHaveBeenCalledWith({)
-        type: 'unlock',
-        resultIndex: 0,
-      });
+  type: 'unlock',
+  resultIndex: 0,
+});
     });
   });
   describe('Result Regeneration', () => {
@@ -415,9 +411,9 @@ describe('Individual Result Management', () => {
       expect(screen.getByText('3/3 selected')).toBeInTheDocument();
       // All buttons should now be in selected state or disabled
       checkButtons.forEach(button => {)
-        const buttonElement = button.closest('button');
-        expect(buttonElement).toHaveStyle('background: rgb(16, 185, 129)');
-      });
+  const buttonElement = button.closest('button');
+  expect(buttonElement).toHaveStyle('background: rgb(16, 185, 129)');
+});
     });
     it('should exit compare mode and clear selections when exit button is clicked', () => {
       render();
@@ -509,7 +505,7 @@ describe('Individual Result Management', () => {
       const lockButtons = screen.getAllByText('🔓');
       const exportButtons = screen.getAllByText('💾');
       [...regenerateButtons, ...lockButtons, ...exportButtons].forEach(button => {)
-        expect(button.closest('button')).toHaveAttribute('type', 'button');
+  expect(button.closest('button')).toHaveAttribute('type', 'button');
       });
     });
     it('should support keyboard navigation for action buttons', () => {
@@ -565,9 +561,7 @@ describe('Individual Result Management', () => {
           output: 'Test output',
           executionTimeMs: 100,
           usedNodeIds: ['node1'],
-          usedEdgeIds: [],
-        }
-      ];
+          usedEdgeIds: []];
       render();
         <PreviewModal
           open={true}

@@ -8,6 +8,7 @@ import { AuditService } from './AuditService';
 import { DatabaseService } from '../database/DatabaseService';
 import { CertificatePinningManager, loadPinConfigFromEnv } from '../../security/tls-config';
 
+}
 export interface OAuthProviderConfig {
   clientId: string;
   clientSecret: string;
@@ -22,9 +23,11 @@ export interface OAuthProviderConfig {
     name: string;
     picture?: string;
     verified?: string;
+}
   };
 }
 
+}
 export interface OAuthStateData {
   provider: OAuthProvider;
   returnUrl?: string;
@@ -32,6 +35,7 @@ export interface OAuthStateData {
   createdAt: Date;
   ipAddress?: string;
   userAgent?: string;
+}
 }
 
 export class OAuthService {
@@ -194,6 +198,7 @@ export class OAuthService {
     codeChallenge?: string,
     clientId?: string
   ): Promise<string> {
+
     const config = this.providerConfigs.get(provider);
     if (!config) {
       throw new Error(`OAuth provider not configured: ${provider}`);
@@ -219,7 +224,7 @@ export class OAuthService {
       ...(codeChallenge && { 
         code_challenge: codeChallenge,
         code_challenge_method: 'S256' 
-      })
+  }
     });
     
     const authUrl = `${config.authorizationUrl}?${params.toString()}`;
@@ -232,7 +237,7 @@ export class OAuthService {
         clientId: config.clientId,
         scopes: config.scopes,
         pkceUsed: !!codeChallenge
-      },
+  }
       severity: 'LOW'
     });
     
@@ -298,6 +303,7 @@ export class OAuthService {
     returnUrl?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<{ url: string; state: string }> {
+
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
@@ -331,7 +337,7 @@ export class OAuthService {
         provider,
         returnUrl,
         state
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -346,6 +352,7 @@ export class OAuthService {
     state: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<{ user: any; tokens: any; isNewUser: boolean }> {
+
     try {
       // Validate state parameter
       const stateData = await this.validateOAuthState(state);
@@ -377,7 +384,7 @@ export class OAuthService {
           provider,
           isNewUser,
           oauthId: userInfo.id
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -389,7 +396,7 @@ export class OAuthService {
           accessToken,
           refreshToken,
           expiresAt: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
-        },
+  }
         isNewUser
       };
     } catch (error) {
@@ -399,7 +406,7 @@ export class OAuthService {
         details: {
           provider,
           error: error.message
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -415,6 +422,7 @@ export class OAuthService {
     authCode: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       // Exchange code for tokens
       const oauthTokens = await this.exchangeCodeForTokens(provider, authCode);
@@ -438,7 +446,7 @@ export class OAuthService {
         details: {
           provider,
           oauthId: userInfo.id
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -450,7 +458,7 @@ export class OAuthService {
         details: {
           provider,
           error: error.message
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -465,6 +473,7 @@ export class OAuthService {
     provider: OAuthProvider,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       // Check if user has a password or other OAuth accounts
       const user = await this.userService.getUserById(userId);
@@ -502,7 +511,7 @@ export class OAuthService {
         details: {
           provider,
           error: error.message
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -513,6 +522,7 @@ export class OAuthService {
   }
 
   async getUserOAuthAccounts(userId: string): Promise<any[]> {
+
     const result = await this.dbService.query(`
       SELECT provider, oauth_id, email, name, picture, created_at, updated_at
       FROM oauth_accounts
@@ -524,6 +534,7 @@ export class OAuthService {
   }
 
   private async exchangeCodeForTokens(provider: OAuthProvider, code: string): Promise<OAuthTokenResponse> {
+
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
@@ -546,7 +557,7 @@ export class OAuthService {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
-      },
+  }
       body: params.toString()
     });
 
@@ -559,6 +570,7 @@ export class OAuthService {
   }
 
   private async getUserInfo(provider: OAuthProvider, accessToken: string): Promise<OAuthUserInfo> {
+
     const providerConfig = this.providerConfigs.get(provider);
     if (!providerConfig) {
       throw new Error(`Unsupported OAuth provider: ${provider}`);
@@ -594,6 +606,7 @@ export class OAuthService {
     userInfo: OAuthUserInfo,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<{ user: any; isNewUser: boolean }> {
+
     // First, check if this OAuth account already exists
     const existingOAuthAccount = await this.getOAuthAccountByProviderAndId(provider, userInfo.id);
     if (existingOAuthAccount) {
@@ -628,6 +641,7 @@ export class OAuthService {
     userInfo: OAuthUserInfo,
     tokens: OAuthTokenResponse
   ): Promise<void> {
+
     // Check if account is already linked
     const existing = await this.getOAuthAccountByProviderAndId(provider, userInfo.id);
     
@@ -670,6 +684,7 @@ export class OAuthService {
   }
 
   private async getOAuthAccountByProviderAndId(provider: OAuthProvider, oauthId: string): Promise<any> {
+
     const result = await this.dbService.query(`
       SELECT * FROM oauth_accounts 
       WHERE provider = $1 AND oauth_id = $2
@@ -683,6 +698,7 @@ export class OAuthService {
     returnUrl?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<string> {
+
     const crypto = require('crypto');
     const state = crypto.randomBytes(32).toString('hex');
     
@@ -709,6 +725,7 @@ export class OAuthService {
   }
 
   private async validateOAuthState(state: string): Promise<OAuthStateData> {
+
     const result = await this.dbService.query(`
       SELECT data FROM oauth_states 
       WHERE state = $1 AND expires_at > NOW()

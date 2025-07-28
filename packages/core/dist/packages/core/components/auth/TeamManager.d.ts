@@ -1,3 +1,2 @@
-import React from 'react';
-export declare const organizations: any[], setOrganizations: React.Dispatch<React.SetStateAction<any[]>>;
+export {};
 //# sourceMappingURL=TeamManager.d.ts.map

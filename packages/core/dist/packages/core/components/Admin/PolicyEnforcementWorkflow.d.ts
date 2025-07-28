@@ -23,9 +23,9 @@ export interface EnforcementWorkflow {
     policyName: string;
     trigger: {
         type: 'violation_detected' | 'manual_trigger' | 'scheduled_check';
-        conditions: string[];
+        conditions: string;
     };
-    steps: EnforcementStep[];
+    steps: EnforcementStep;
     status: 'active' | 'paused' | 'disabled';
     executionCount: number;
     lastExecuted?: Date;
@@ -37,7 +37,7 @@ export interface EnforcementStep {
     type: 'condition_check' | 'enforcement_action' | 'notification' | 'human_review' | 'data_collection';
     config: {
         action?: EnforcementAction;
-        approvers?: string[];
+        approvers?: string;
         timeout?: number;
         retryPolicy?: 'none' | 'linear' | 'exponential';
         notificationChannels?: ('email' | 'sms' | 'in_app' | 'webhook')[];

@@ -18,17 +18,15 @@ export interface MetricValue {
   suffix?: string;
   prefix?: string;
 }
-
 export interface MetricTrend {
-  value: number;
+  value: number;,
   direction: 'up' | 'down' | 'neutral';
   period?: string;
   isGoodTrend?: boolean;
 }
-
 export interface MetricCardProps {
   // Core content
-  title: string;
+  title: string;,
   value: MetricValue;
   description?: string;
   // Visual elements
@@ -42,11 +40,10 @@ export interface MetricCardProps {
   // Additional content
   helpText?: string;
   badge?: {
-    text: string;
-    variant?: 'default' | 'success' | 'warning' | 'error';
-  };
+  text: string;
+  variant?: 'default' | 'success' | 'warning' | 'error';
+};
   className?: string;
-}
 const formatValue = (;);
   value: number | string, 
   format?: string, 
@@ -57,13 +54,13 @@ const formatValue = (;);
   if (typeof value === 'string') return `${prefix}${value}${suffix}`;}
   let formattedValue: string;
   switch (format) {
-    case 'currency':
-      formattedValue = new Intl.NumberFormat('en-US', {)
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: precision,
-        maximumFractionDigits: precision,
-      }).format(value);
+  case 'currency':,
+  formattedValue = new Intl.NumberFormat('en-US', {)
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: precision,
+  maximumFractionDigits: precision,
+}).format(value);
       break;
     case 'percentage':
       formattedValue = `${value.toFixed(precision)}%`;}
@@ -75,7 +72,6 @@ const formatValue = (;);
       while (bytes >= 1024 && unitIndex < units.length - 1) {
         bytes /= 1024;
         unitIndex++;
-      }
       formattedValue = `${bytes.toFixed(precision)} ${units[unitIndex]}`;}
       break;
     case 'duration':
@@ -85,19 +81,17 @@ const formatValue = (;);
         formattedValue = `${(value / 60).toFixed(precision)}m`;}
       } else {
         formattedValue = `${(value / 3600).toFixed(precision)}h`;}
-      }
       break;
     case 'number':
     default:
       formattedValue = new Intl.NumberFormat('en-US', {)
-        minimumFractionDigits: precision,
-        maximumFractionDigits: precision,
-      }).format(value);
+  minimumFractionDigits: precision,
+  maximumFractionDigits: precision,
+}).format(value);
       break;
-  }
   return `${prefix}${formattedValue}${suffix}`;}
 };
-
+}
 export const MetricCard: React.FC<MetricCardProps> = ({)
   title,
   value,
@@ -113,29 +107,29 @@ export const MetricCard: React.FC<MetricCardProps> = ({)
   className = ''
 }) => {
   const formattedValue = formatValue(;);
-    value.current,
-    value.format,
-    value.precision,
-    value.prefix,
-    value.suffix
+  value.current,
+  value.format,
+  value.precision,
+  value.prefix,
+  value.suffix
   );
   const hasTarget = value.target !== undefined;
   const targetProgress = hasTarget && typeof value.current === 'number' ;
-    ? Math.min((value.current / value.target!) * 100, 100) 
-    : 0;
+  ? Math.min((value.current / value.target!) * 100, 100)
+  : 0;
   const sizeClasses = {
-    small: 'metric-card-small',
-    medium: 'metric-card-medium',
-    large: 'metric-card-large',
-  };
+  small: 'metric-card-small',
+  medium: 'metric-card-medium',
+  large: 'metric-card-large',
+};
   const variantClasses = {
-    default: 'metric-card-default',
-    success: 'metric-card-success',
-    warning: 'metric-card-warning',
-    error: 'metric-card-error',
-    info: 'metric-card-info',
-  };
-  return ();
+  default: 'metric-card-default',
+  success: 'metric-card-success',
+  warning: 'metric-card-warning',
+  error: 'metric-card-error',
+  info: 'metric-card-info',
+};
+  return;
     <div 
       className={`
         metric-card 

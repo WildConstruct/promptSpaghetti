@@ -3,6 +3,7 @@
  * Enhanced versioning system for templates with advanced import/export capabilities
  */
 import { ProjectTemplate, TemplateVariable, CustomizationPoint } from './ProjectTemplateManager';
+
 export interface TemplateVersion {
     id: string;
     template_id: string;
@@ -31,19 +32,19 @@ export interface TemplateVersion {
     rating: number;
     dependencies: TemplateDependency[];
     conflicts: TemplateConflict[];
-}
+
 export interface TemplateDependency {
     template_id: string;
     version_constraint: string;
     dependency_type: 'required' | 'optional' | 'peer';
     description?: string;
-}
+
 export interface TemplateConflict {
     template_id: string;
     conflict_type: 'api_version' | 'node_type' | 'variable_name' | 'resource';
     description: string;
     severity: 'warning' | 'error';
-}
+
 export interface TemplateImportOptions {
     format: 'json' | 'yaml' | 'zip' | 'git' | 'template_bundle';
     source: string | File | ArrayBuffer;
@@ -59,7 +60,7 @@ export interface TemplateImportOptions {
     validate_compatibility?: boolean;
     import_notes?: string;
     tags?: string[];
-}
+
 export interface TemplateExportOptions {
     format: 'json' | 'yaml' | 'zip' | 'template_bundle';
     include_version_history?: boolean;
@@ -79,7 +80,7 @@ export interface TemplateExportOptions {
         password?: string;
         algorithm?: string;
     };
-}
+
 export interface TemplateImportResult {
     success: boolean;
     imported_version: TemplateVersion;
@@ -94,7 +95,7 @@ export interface TemplateImportResult {
     migration_log?: string[];
     backup_version_id?: string;
     can_rollback: boolean;
-}
+
 export interface VersionComparisonResult {
     from_version: TemplateVersion;
     to_version: TemplateVersion;
@@ -108,7 +109,7 @@ export interface VersionComparisonResult {
     migration_required: boolean;
     migration_complexity: 'simple' | 'moderate' | 'complex';
     estimated_migration_time: number;
-}
+
 export interface TemplateDiff {
     metadata_changes: Array<{,
         field: string;
@@ -136,7 +137,7 @@ export interface TemplateDiff {
         edges_removed: number;
         edges_modified: number;
     };
-}
+
 export declare class TemplateVersionManager {
     private apiClient;
     private templateId;
@@ -238,7 +239,7 @@ export declare class TemplateVersionManager {
     private generateNextVersion;
     private getCurrentApiVersion;
     private calculateChecksum;
-}
+
 export interface TemplateBundle {
     format_version: string;
     created_at: string;
@@ -264,5 +265,5 @@ export interface TemplateBundle {
     };
     checksums: Record<string, string>;
     signature?: string;
-}
+
 //# sourceMappingURL=TemplateVersionManager.d.ts.map

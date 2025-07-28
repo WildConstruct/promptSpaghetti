@@ -96,6 +96,7 @@ type ModelMetadata = z.infer<typeof ModelMetadataSchema>;
 type ModelVersion = z.infer<typeof ModelVersionSchema>;
 type ModelLineage = z.infer<typeof ModelLineageSchema>;
 
+}
 interface ModelRegistrationRequest {
   name: string;
   description?: string;
@@ -109,7 +110,9 @@ interface ModelRegistrationRequest {
   configPath?: string;
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 interface ModelUpdateRequest {
   name?: string;
   description?: string;
@@ -118,7 +121,9 @@ interface ModelUpdateRequest {
   performanceMetrics?: ModelMetadata['performanceMetrics'];
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 interface ModelSearchOptions {
   query?: string;
   modelType?: string;
@@ -133,24 +138,30 @@ interface ModelSearchOptions {
   page: number;
   limit: number;
 }
+}
 
+}
 interface ModelComparisonRequest {
   modelIds: string[];
   metrics: string[];
   includeLineage?: boolean;
 }
+}
 
+}
 interface ModelComparisonResult {
   models: Array<{
     id: string;
     name: string;
     version: string;
     metrics: Record<string, number | undefined>;
+}
   }>;
   bestPerforming: Record<string, string>; // metric -> modelId
   recommendations: string[];
 }
 
+}
 interface ModelStatistics {
   totalModels: number;
   modelsByType: Record<string, number>;
@@ -158,6 +169,7 @@ interface ModelStatistics {
   modelsByStatus: Record<string, number>;
   averageAccuracy: number;
   averageInferenceTime: number;
+}
   popularTags: Array<{ tag: string; count: number }>;
   recentActivity: Array<{
     type: 'registration' | 'version_update' | 'status_change';
@@ -202,6 +214,7 @@ export class ModelRegistryService {
    * Register a new model in the registry
    */
   async registerModel(request: ModelRegistrationRequest): Promise<ModelMetadata> {
+
     try {
       const modelId = this.generateUUID();
       const now = new Date().toISOString();
@@ -267,6 +280,7 @@ export class ModelRegistryService {
    * Get model by ID
    */
   async getModel(id: string): Promise<ModelMetadata | null> {
+
     return this.models.get(id) || null;
   }
 
@@ -274,6 +288,7 @@ export class ModelRegistryService {
    * Update existing model
    */
   async updateModel(id: string, updates: ModelUpdateRequest): Promise<ModelMetadata> {
+
     try {
       const existingModel = this.models.get(id);
       if (!existingModel) {
@@ -312,6 +327,7 @@ export class ModelRegistryService {
     changes: ModelVersion['changes'], 
     parentVersionId?: string
   ): Promise<ModelVersion> {
+
     try {
       const model = this.models.get(modelId);
       if (!model) {
@@ -356,6 +372,7 @@ export class ModelRegistryService {
    * Get all versions for a model
    */
   async getModelVersions(modelId: string): Promise<ModelVersion[]> {
+
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error('Model not found');
@@ -368,6 +385,7 @@ export class ModelRegistryService {
    * Get specific model version
    */
   async getModelVersion(modelId: string, versionId: string): Promise<ModelVersion | null> {
+
     const versions = this.versions.get(modelId) || [];
     return versions.find(v => v.id === versionId) || null;
   }
@@ -381,6 +399,7 @@ export class ModelRegistryService {
     page: number;
     totalPages: number;
   }> {
+
     let filteredModels = Array.from(this.models.values());
 
     // Apply text search
@@ -480,6 +499,7 @@ export class ModelRegistryService {
    * Compare multiple models
    */
   async compareModels(request: ModelComparisonRequest): Promise<ModelComparisonResult> {
+
     try {
       const models = request.modelIds.map(id => this.models.get(id)).filter(Boolean) as ModelMetadata[];
       
@@ -539,6 +559,7 @@ export class ModelRegistryService {
    * Get model lineage
    */
   async getModelLineage(modelId: string): Promise<ModelLineage | null> {
+
     const model = this.models.get(modelId);
     if (!model) {
       return null;
@@ -551,6 +572,7 @@ export class ModelRegistryService {
    * Update model lineage
    */
   async updateModelLineage(modelId: string, lineage: Partial<ModelLineage>): Promise<ModelLineage> {
+
     try {
       const model = this.models.get(modelId);
       if (!model) {
@@ -582,6 +604,7 @@ export class ModelRegistryService {
    * Delete model and all associated data
    */
   async deleteModel(id: string): Promise<void> {
+
     const model = this.models.get(id);
     if (!model) {
       throw new Error('Model not found');
@@ -600,6 +623,7 @@ export class ModelRegistryService {
    * Get registry statistics
    */
   async getRegistryStatistics(): Promise<ModelStatistics> {
+
     const models = Array.from(this.models.values());
     
     const statistics: ModelStatistics = {
@@ -777,6 +801,7 @@ export class ModelRegistryService {
     model: ModelMetadata, 
     triggeredBy: 'model_upload' | 'model_update'
   ): Promise<void> {
+
     if (!this.evaluationTriggerService) {
       return; // No evaluation service configured
     }
@@ -885,11 +910,11 @@ export class ModelRegistryService {
           inferenceTime: 150,
           memoryUsage: 4096,
           throughput: 45
-        },
+  }
         artifactPath: 'https://storage.example.com/models/gpt4-support/model.bin',
         configPath: 'https://storage.example.com/models/gpt4-support/config.json',
         metadata: { domain: 'customer_service', language: 'en' }
-      },
+  }
       {
         id: this.generateUUID(),
         name: 'BERT Sentiment Classifier',
@@ -911,7 +936,7 @@ export class ModelRegistryService {
           inferenceTime: 45,
           memoryUsage: 512,
           throughput: 200
-        },
+  }
         artifactPath: 'https://storage.example.com/models/bert-sentiment/model.pth',
         configPath: 'https://storage.example.com/models/bert-sentiment/config.json',
         metadata: { domain: 'social_media', classes: ['positive', 'negative', 'neutral'] }

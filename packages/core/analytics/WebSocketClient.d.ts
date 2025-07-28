@@ -14,19 +14,22 @@ export declare enum WebSocketMessageType {
     HEARTBEAT = "heartbeat",
     SUBSCRIPTION = "subscription",
     UNSUBSCRIPTION = "unsubscription"
-}
+
 /**
  * WebSocket message structure
  */
+
 export interface WebSocketMessage {
     type: WebSocketMessageType;
     data: any;
     timestamp: number;
     id?: string;
-}
+
+
 /**
  * Subscription configuration
  */
+
 export interface SubscriptionConfig {
     topic: string;
     filters?: {
@@ -34,12 +37,14 @@ export interface SubscriptionConfig {
         organizationId?: number;
         eventTypes?: string[];
         minSeverity?: 'info' | 'warning' | 'critical';
+
     };
     throttle?: number;
-}
+
 /**
  * WebSocket client configuration
  */
+
 export interface WebSocketClientConfig {
     url: string;
     reconnectInterval: number;
@@ -50,7 +55,8 @@ export interface WebSocketClientConfig {
     apiKey?: string;
     userId?: number;
     organizationId?: number;
-}
+
+
 /**
  * WebSocket connection state
  */
@@ -60,7 +66,7 @@ export declare enum ConnectionState {
     CONNECTED = "connected",
     RECONNECTING = "reconnecting",
     FAILED = "failed"
-}
+
 /**
  * Real-time WebSocket client for analytics updates
  */
@@ -135,7 +141,7 @@ export declare class WebSocketClient extends EventEmitter {
      * Log message (if logging is enabled)
      */
     private log;
-}
+
 /**
  * Analytics WebSocket client with predefined subscriptions
  */
@@ -161,7 +167,7 @@ export declare class AnalyticsWebSocketClient extends WebSocketClient {
      * Setup analytics-specific event listeners
      */
     private setupAnalyticsListeners;
-}
+
 /**
  * Create analytics WebSocket client instance
  */

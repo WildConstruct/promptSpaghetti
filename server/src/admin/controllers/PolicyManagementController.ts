@@ -36,6 +36,7 @@ import { MarketplacePolicyEnforcementService } from '../../services/MarketplaceP
 import { AuditService } from '../../auth/services/AuditService';
 
 // Request/Response DTOs
+}
 export interface CreatePolicyRequest {
   policy_type: string;
   title: string;
@@ -46,7 +47,9 @@ export interface CreatePolicyRequest {
   effective_date?: Date;
   notification_channels?: string[];
 }
+}
 
+}
 export interface UpdatePolicyRequest {
   title?: string;
   description?: string;
@@ -55,12 +58,15 @@ export interface UpdatePolicyRequest {
   target_audience?: string[];
   effective_date?: Date;
 }
+}
 
+}
 export interface PublishPolicyRequest {
   publication_channels: string[];
   rollout_strategy: {
     type: 'immediate' | 'phased' | 'canary' | 'scheduled';
     parameters?: any;
+}
   };
   notification_settings: {
     notify_users: boolean;
@@ -69,6 +75,7 @@ export interface PublishPolicyRequest {
   };
 }
 
+}
 export interface CreateEnforcementRuleRequest {
   policy_id: string;
   violation_type: string;
@@ -79,14 +86,18 @@ export interface CreateEnforcementRuleRequest {
   automated_actions: any[];
   enabled: boolean;
 }
+}
 
+}
 export interface ViolationReviewRequest {
   action: 'uphold' | 'dismiss' | 'escalate';
   enforcement_actions?: string[];
   resolution_notes?: string;
   follow_up_required?: boolean;
 }
+}
 
+}
 export interface PolicyManagementDashboard {
   statistics: {
     total_policies: number;
@@ -95,6 +106,7 @@ export interface PolicyManagementDashboard {
     total_violations: number;
     open_violations: number;
     appeal_rate: number;
+}
   };
   recent_activities: any[];
   policy_compliance_scores: Record<string, number>;
@@ -121,6 +133,7 @@ export class PolicyManagementController {
   @ApiOperation({ summary: 'Get policy management dashboard data' })
   @RequirePermissions(['admin:policy:read'])
   async getDashboard(): Promise<PolicyManagementDashboard> {
+
     const [
       policies,
       violations,
@@ -131,7 +144,7 @@ export class PolicyManagementController {
       this.enforcementService.getEnforcementMetrics(
         new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         new Date()
-      )
+
     ]);
 
     return {
@@ -142,7 +155,7 @@ export class PolicyManagementController {
         total_violations: violations.total,
         open_violations: violations.open,
         appeal_rate: violations.appeal_rate || 0
-      },
+  }
       recent_activities: await this.getRecentActivities(),
       policy_compliance_scores: await this.calculateComplianceScores(),
       enforcement_metrics,

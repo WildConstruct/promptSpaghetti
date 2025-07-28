@@ -17,6 +17,7 @@ import * as crypto from 'crypto';
 // Support Escalation Types and Interfaces
 // =============================================================================
 
+}
 export interface SupportEscalationConfig {
   // General settings
   enabled: boolean;
@@ -32,6 +33,7 @@ export interface SupportEscalationConfig {
     businessHoursOnly: boolean;
     businessHours: BusinessHours;
     holidays: Date[];
+}
   };
   
   // Escalation rules
@@ -115,6 +117,7 @@ export enum NotificationChannel {
   PHONE = 'phone'
 }
 
+}
 export interface BusinessHours {
   monday: { start: string; end: string; enabled: boolean };
   tuesday: { start: string; end: string; enabled: boolean };
@@ -126,6 +129,7 @@ export interface BusinessHours {
   timezone: string;
 }
 
+}
 export interface RoutingStrategy {
   strategyId: string;
   strategyName: string;
@@ -134,14 +138,18 @@ export interface RoutingStrategy {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface RoutingCriteria {
   criteriaType: 'priority' | 'category' | 'skill' | 'workload' | 'availability' | 'experience';
   operator: 'equals' | 'greater_than' | 'less_than' | 'contains' | 'matches';
   value: string | number;
   weight: number; // 0-1 scale for scoring
 }
+}
 
+}
 export interface AlertThreshold {
   metricName: string;
   thresholdType: 'warning' | 'critical';
@@ -149,7 +157,9 @@ export interface AlertThreshold {
   comparisonOperator: 'greater_than' | 'less_than' | 'equals';
   enabled: boolean;
 }
+}
 
+}
 export interface EmailIntegrationConfig {
   enabled: boolean;
   smtpSettings: {
@@ -158,24 +168,30 @@ export interface EmailIntegrationConfig {
     secure: boolean;
     username: string;
     password: string;
+}
   };
   templates: Record<string, EmailTemplate>;
 }
 
+}
 export interface SlackIntegrationConfig {
   enabled: boolean;
   webhookUrl: string;
   channels: Record<TicketPriority, string>;
   mentionGroups: string[];
 }
+}
 
+}
 export interface WebhookIntegrationConfig {
   enabled: boolean;
   endpoints: WebhookEndpoint[];
   authentication: WebhookAuth;
   retryPolicy: RetryPolicy;
 }
+}
 
+}
 export interface TicketingSystemConfig {
   enabled: boolean;
   systemType: 'jira' | 'servicenow' | 'zendesk' | 'freshdesk' | 'custom';
@@ -183,7 +199,9 @@ export interface TicketingSystemConfig {
   authentication: any;
   fieldMapping: Record<string, string>;
 }
+}
 
+}
 export interface EmailTemplate {
   templateId: string;
   subject: string;
@@ -191,7 +209,9 @@ export interface EmailTemplate {
   textBody: string;
   variables: string[];
 }
+}
 
+}
 export interface WebhookEndpoint {
   endpointId: string;
   url: string;
@@ -199,18 +219,24 @@ export interface WebhookEndpoint {
   enabled: boolean;
   timeout: number;
 }
+}
 
+}
 export interface WebhookAuth {
   type: 'none' | 'basic' | 'bearer' | 'api_key';
   credentials: Record<string, string>;
 }
+}
 
+}
 export interface RetryPolicy {
   maxRetries: number;
   retryDelay: number; // milliseconds
   backoffMultiplier: number;
 }
+}
 
+}
 export interface SupportTicket {
   ticketId: string;
   ticketNumber: string; // Human-readable ticket number
@@ -266,7 +292,9 @@ export interface SupportTicket {
   satisfactionRating?: number;
   satisfactionFeedback?: string;
 }
+}
 
+}
 export interface EscalationEvent {
   escalationId: string;
   escalationType: EscalationType;
@@ -297,7 +325,9 @@ export interface EscalationEvent {
   resolvedAt?: Date;
   resolutionNotes?: string;
 }
+}
 
+}
 export interface EscalationNotification {
   notificationId: string;
   channel: NotificationChannel;
@@ -309,7 +339,9 @@ export interface EscalationNotification {
   acknowledgedAt?: Date;
   errorMessage?: string;
 }
+}
 
+}
 export interface SLASettings {
   responseTimeMinutes: number;
   resolutionTimeHours: number;
@@ -317,7 +349,9 @@ export interface SLASettings {
   startTime: Date;
   pausedTime: number; // Total paused time in minutes
 }
+}
 
+}
 export interface SLAStatus {
   responseTimeRemaining: number; // minutes
   resolutionTimeRemaining: number; // hours
@@ -328,7 +362,9 @@ export interface SLAStatus {
   warningsSent: number;
   lastWarningAt?: Date;
 }
+}
 
+}
 export interface TicketAttachment {
   attachmentId: string;
   fileName: string;
@@ -339,7 +375,9 @@ export interface TicketAttachment {
   filePath: string;
   checksum: string;
 }
+}
 
+}
 export interface TicketCommunication {
   communicationId: string;
   communicationType: 'comment' | 'email' | 'phone' | 'chat' | 'system';
@@ -368,14 +406,18 @@ export interface TicketCommunication {
   deliveredAt?: Date;
   errorMessage?: string;
 }
+}
 
+}
 export interface CommunicationRecipient {
   recipientType: 'to' | 'cc' | 'bcc';
   name: string;
   email?: string;
   userId?: string;
 }
+}
 
+}
 export interface EscalationRule {
   ruleId: string;
   ruleName: string;
@@ -408,7 +450,9 @@ export interface EscalationRule {
   usageCount: number;
   successRate: number;
 }
+}
 
+}
 export interface EscalationTrigger {
   triggerId: string;
   triggerType: 'time_based' | 'status_change' | 'priority_change' | 'sla_breach' | 'no_response' | 'custom';
@@ -416,7 +460,9 @@ export interface EscalationTrigger {
   parameters: Record<string, any>;
   enabled: boolean;
 }
+}
 
+}
 export interface EscalationAction {
   actionId: string;
   actionType: 'reassign' | 'notify' | 'change_priority' | 'add_comment' | 'webhook' | 'custom';
@@ -424,7 +470,9 @@ export interface EscalationAction {
   order: number;
   required: boolean;
 }
+}
 
+}
 export interface SupportAgent {
   agentId: string;
   userId: string;
@@ -454,7 +502,9 @@ export interface SupportAgent {
   notificationPreferences: NotificationPreferences;
   workingHours: BusinessHours;
 }
+}
 
+}
 export interface AgentAvailability {
   currentlyAvailable: boolean;
   nextAvailableAt?: Date;
@@ -462,7 +512,9 @@ export interface AgentAvailability {
   unavailableReason?: string;
   scheduledBreaks: ScheduledBreak[];
 }
+}
 
+}
 export interface ScheduledBreak {
   breakId: string;
   startTime: Date;
@@ -470,7 +522,9 @@ export interface ScheduledBreak {
   breakType: 'lunch' | 'meeting' | 'training' | 'personal' | 'other';
   description?: string;
 }
+}
 
+}
 export interface AgentPerformanceMetrics {
   totalTicketsHandled: number;
   averageResolutionTime: number; // hours
@@ -480,19 +534,23 @@ export interface AgentPerformanceMetrics {
   responseTime: {
     average: number;
     percentile95: number;
+}
   };
   workloadEfficiency: number; // percentage
 }
 
+}
 export interface NotificationPreferences {
   emailNotifications: boolean;
   slackNotifications: boolean;
   smsNotifications: boolean;
   inAppNotifications: boolean;
   digestFrequency: 'real_time' | 'hourly' | 'daily' | 'weekly';
+}
   quietHours: { start: string; end: string; enabled: boolean };
 }
 
+}
 export interface EscalationMetrics {
   totalEscalations: number;
   escalationsByType: Record<EscalationType, number>;
@@ -515,7 +573,9 @@ export interface EscalationMetrics {
   resolutionTrends: TrendData[];
   customerSatisfactionTrend: TrendData[];
 }
+}
 
+}
 export interface AgentMetric {
   agentId: string;
   agentName: string;
@@ -524,11 +584,14 @@ export interface AgentMetric {
   customerSatisfactionScore: number;
   escalationRate: number;
 }
+}
 
+}
 export interface TrendData {
   timestamp: Date;
   value: number;
   period: 'hour' | 'day' | 'week' | 'month';
+}
 }
 
 // =============================================================================
@@ -566,6 +629,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
    * Initialize the support escalation service
    */
   private async initializeService(): Promise<void> {
+
     try {
       // Load active tickets
       await this.loadActiveTickets();
@@ -611,6 +675,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       customFields?: Record<string, any>;
     }
   ): Promise<{ ticketId: string; ticket: SupportTicket }> {
+
     try {
       const ticketId = crypto.randomUUID();
       const ticketNumber = await this.generateTicketNumber();
@@ -647,8 +712,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
           responseBreached: false,
           resolutionBreached: false,
           warningsSent: 0
-        },
-        
+  }
         createdAt: new Date(),
         updatedAt: new Date(),
         
@@ -703,6 +767,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       addComment?: string;
     } = {}
   ): Promise<{ escalationId: string; escalation: EscalationEvent }> {
+
     try {
       const ticket = await this.getTicket(ticketId);
       if (!ticket) {
@@ -796,6 +861,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       routingStrategy?: string;
     } = {}
   ): Promise<{ assignedTo: string; routingScore: number; reason: string }> {
+
     try {
       const ticket = await this.getTicket(ticketId);
       if (!ticket) {
@@ -902,6 +968,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       resolutionCategory?: string;
     } = {}
   ): Promise<void> {
+
     try {
       const ticket = await this.getTicket(ticketId);
       if (!ticket) {
@@ -994,6 +1061,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       notifyParticipants?: boolean;
     } = {}
   ): Promise<string> {
+
     try {
       const ticket = await this.getTicket(ticketId);
       if (!ticket) {
@@ -1065,6 +1133,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
       agents?: string[];
     } = {}
   ): Promise<EscalationMetrics> {
+
     try {
       // This would typically query the database for metrics
       // For now, returning a basic structure
@@ -1078,14 +1147,14 @@ export class Epic16SupportEscalationService extends EventEmitter {
           [EscalationType.MANUAL]: 0,
           [EscalationType.SLA_BREACH]: 0,
           [EscalationType.CUSTOMER_REQUEST]: 0
-        },
+  }
         escalationsByPriority: {
           [TicketPriority.LOW]: 0,
           [TicketPriority.MEDIUM]: 0,
           [TicketPriority.HIGH]: 0,
           [TicketPriority.URGENT]: 0,
           [TicketPriority.CRITICAL]: 0
-        },
+  }
         averageEscalationTime: 0,
         escalationResolutionRate: 0,
         
@@ -1097,15 +1166,14 @@ export class Epic16SupportEscalationService extends EventEmitter {
           [TicketPriority.HIGH]: 0,
           [TicketPriority.URGENT]: 0,
           [TicketPriority.CRITICAL]: 0
-        },
+  }
         averageResolutionTime: {
           [TicketPriority.LOW]: 0,
           [TicketPriority.MEDIUM]: 0,
           [TicketPriority.HIGH]: 0,
           [TicketPriority.URGENT]: 0,
           [TicketPriority.CRITICAL]: 0
-        },
-        
+  }
         topPerformingAgents: [],
         agentWorkloadDistribution: {},
         
@@ -1129,14 +1197,17 @@ export class Epic16SupportEscalationService extends EventEmitter {
   // =============================================================================
 
   private async loadActiveTickets(): Promise<void> {
+
     // Implementation would load active tickets from database
   }
 
   private async loadEscalationRules(): Promise<void> {
+
     // Implementation would load escalation rules from database
   }
 
   private async loadSupportAgents(): Promise<void> {
+
     // Implementation would load support agents from database
   }
 
@@ -1155,6 +1226,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async processEscalationRules(): Promise<void> {
+
     try {
       for (const ticket of this.activeTickets.values()) {
         if (this.shouldEvaluateTicketForEscalation(ticket)) {
@@ -1167,6 +1239,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async processSLAMonitoring(): Promise<void> {
+
     try {
       for (const ticket of this.activeTickets.values()) {
         await this.updateTicketSLAStatus(ticket);
@@ -1192,6 +1265,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async evaluateTicketEscalationRules(ticket: SupportTicket): Promise<void> {
+
     for (const rule of this.escalationRules.values()) {
       if (this.isRuleApplicableToTicket(rule, ticket)) {
         const shouldEscalate = await this.evaluateEscalationRule(rule, ticket);
@@ -1224,16 +1298,19 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async evaluateEscalationRule(rule: EscalationRule, ticket: SupportTicket): Promise<boolean> {
+
     // Implementation would evaluate trigger conditions
     // This is a simplified version
     return false;
   }
 
   private async executeEscalationRule(rule: EscalationRule, ticket: SupportTicket): Promise<void> {
+
     // Implementation would execute escalation actions
   }
 
   private async generateTicketNumber(): Promise<string> {
+
     // Generate human-readable ticket number
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
@@ -1273,6 +1350,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
     ticket: SupportTicket,
     options: any
   ): Promise<{ agentId: string; team: string }> {
+
     // Implementation would determine best escalation target
     // For now, return a placeholder
     return {
@@ -1298,6 +1376,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
     ticket: SupportTicket,
     strategyId?: string
   ): Promise<{ agent: SupportAgent | null; score: number; reason: string }> {
+
     // Implementation would apply routing strategies to find best agent
     return {
       agent: null,
@@ -1313,6 +1392,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async updateTicketSLAStatus(ticket: SupportTicket): Promise<void> {
+
     const now = new Date();
     const elapsedMinutes = Math.floor((now.getTime() - ticket.createdAt.getTime()) / (60 * 1000));
     
@@ -1344,6 +1424,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async handleSLABreach(ticket: SupportTicket): Promise<void> {
+
     // Automatically escalate on SLA breach
     await this.escalateTicket(ticket.ticketId, EscalationType.SLA_BREACH, 'system', {
       reason: 'SLA breach detected',
@@ -1353,12 +1434,14 @@ export class Epic16SupportEscalationService extends EventEmitter {
   }
 
   private async getUserName(userId: string): Promise<string> {
+
     // Implementation would get user name from database
     return `User ${userId}`;
   }
 
   // Notification methods
   private async sendTicketCreatedNotifications(ticket: SupportTicket): Promise<void> {
+
     // Implementation would send various notifications
   }
 
@@ -1366,41 +1449,50 @@ export class Epic16SupportEscalationService extends EventEmitter {
     escalation: EscalationEvent,
     ticket: SupportTicket
   ): Promise<EscalationNotification[]> {
+
     // Implementation would send escalation notifications
     return [];
   }
 
   private async sendTicketAssignmentNotification(ticket: SupportTicket, agent: SupportAgent): Promise<void> {
+
     // Implementation would send assignment notification
   }
 
   private async sendStatusUpdateNotification(ticket: SupportTicket, recipientType: 'reporter' | 'agent'): Promise<void> {
+
     // Implementation would send status update notification
   }
 
   private async sendCommentNotifications(ticket: SupportTicket, communication: TicketCommunication): Promise<void> {
+
     // Implementation would send comment notifications
   }
 
   private async sendSLAWarningNotification(ticket: SupportTicket): Promise<void> {
+
     // Implementation would send SLA warning notification
   }
 
   // Database methods
   private async getTicket(ticketId: string): Promise<SupportTicket | null> {
+
     return this.activeTickets.get(ticketId) || null;
   }
 
   private async saveTicket(ticket: SupportTicket): Promise<void> {
+
     // Implementation would save ticket to database
     this.activeTickets.set(ticket.ticketId, ticket);
   }
 
   private async saveEscalation(escalation: EscalationEvent): Promise<void> {
+
     // Implementation would save escalation to database
   }
 
   private async saveSupportAgent(agent: SupportAgent): Promise<void> {
+
     // Implementation would save agent to database
     this.supportAgents.set(agent.agentId, agent);
   }
@@ -1409,6 +1501,7 @@ export class Epic16SupportEscalationService extends EventEmitter {
    * Cleanup service resources
    */
   async cleanup(): Promise<void> {
+
     if (this.escalationInterval) {
       clearInterval(this.escalationInterval);
     }

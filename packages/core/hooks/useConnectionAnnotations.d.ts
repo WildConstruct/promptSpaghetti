@@ -4,7 +4,6 @@ interface UseConnectionAnnotationsProps {
     edges: Edge[];
     onEdgesChange: (edges: Edge[]) => void;
     autoOptimizePositions?: boolean;
-}
 interface UseConnectionAnnotationsReturn {
     annotatedEdges: AnnotatedEdge[];
     selectedEdgeId: string | null;
@@ -25,7 +24,7 @@ interface UseConnectionAnnotationsReturn {
     getEdgeLabel: (edgeId: string) => string | undefined;
     hasLabel: (edgeId: string) => boolean;
     getVisibleLabelsCount: () => number;
-}
+
 export declare const useConnectionAnnotations: ()
   { edges,
   onEdgesChange,

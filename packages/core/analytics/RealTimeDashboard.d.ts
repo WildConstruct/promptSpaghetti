@@ -9,6 +9,7 @@ import { UnifiedEventBus } from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
 import { AnalyticsAuthorizationService, AuthContext } from './AnalyticsAuthorization';
 import './RealTimeDashboard.css';
+
 interface DashboardConfig {
     refreshInterval: number;
     maxEventsDisplay: number;
@@ -17,7 +18,7 @@ interface DashboardConfig {
     defaultTimeRange: number;
     widgetLayout: 'grid' | 'masonry' | 'flex';
     theme: 'light' | 'dark' | 'auto';
-}
+
 export declare enum WidgetType {
     EVENT_STREAM = "event_stream",
     METRICS_SUMMARY = "metrics_summary",
@@ -31,7 +32,7 @@ export declare enum WidgetType {
     COST_TRACKING = "cost_tracking",
     INTEGRATION_STATUS = "integration_status",
     SECURITY_EVENTS = "security_events"
-}
+
 interface RealTimeDashboardProps {
     eventBus: UnifiedEventBus;
     eventRepository: EventRepository;
@@ -39,7 +40,8 @@ interface RealTimeDashboardProps {
     authContext: AuthContext;
     config?: Partial<DashboardConfig>;
     onWidgetError?: (widgetId: string, error: Error) => void;
-}
+
+
 /**
  * Real-time Analytics Dashboard Component
  */

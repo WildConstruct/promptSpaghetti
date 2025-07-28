@@ -27,6 +27,7 @@ import {
 } from './types/SecurityTypes';
 
 // Domain service interfaces
+
 export interface IAuthenticationService {
   authenticate(credentials: any): Promise<{ user: User; session: UserSession; token: string }>;
   logout(sessionId: string): Promise<void>;
@@ -37,61 +38,56 @@ export interface IAuthenticationService {
   resetPassword(userId: string, newPassword: string): Promise<void>;
   forgotPassword(email: string): Promise<void>;
 }
-
 export interface IAuthorizationService {
   checkPermission(userId: string, resource: string, action: PermissionAction): Promise<boolean>;
-  checkPermissions(userId: string, permissions: AccessRequest[]): Promise<AccessResponse[]>;
+  checkPermissions(userId: string, permissions: AccessRequest): Promise<AccessResponse>;
   grantPermission(userId: string, permission: Permission): Promise<void>;
   revokePermission(userId: string, permissionId: string): Promise<void>;
-  getUserPermissions(userId: string): Promise<Permission[]>;
+  getUserPermissions(userId: string): Promise<Permission>;
   evaluatePolicy(userId: string, resource: string, action: PermissionAction, context: AccessContext): Promise<AccessResponse>;
   createRole(role: Omit<UserRole, 'id'>): Promise<UserRole>;
   assignRole(userId: string, roleId: string): Promise<void>;
   removeRole(userId: string, roleId: string): Promise<void>;
 }
-
 export interface IAuditService {
   logEvent(event: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog>;
-  getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog[]>;
+  getAuditLogs(filters?: AuditLogFilters): Promise<AuditLog>;
   getAuditLog(id: string): Promise<AuditLog>;
   generateAuditReport(criteria: AuditReportCriteria): Promise<AuditReport>;
-  searchAuditLogs(query: string, filters?: AuditLogFilters): Promise<AuditLog[]>;
+  searchAuditLogs(query: string, filters?: AuditLogFilters): Promise<AuditLog>;
   exportAuditLogs(filters?: AuditLogFilters, format?: 'csv' | 'json' | 'pdf'): Promise<string>;
+
   retentionCleanup(): Promise<{ deleted: number; retained: number }>;
 }
-
 export interface ISecurityMonitoringService {
-  getSecurityAlerts(filters?: SecurityAlertFilters): Promise<SecurityAlert[]>;
+  getSecurityAlerts(filters?: SecurityAlertFilters): Promise<SecurityAlert>;
   createAlert(alert: Omit<SecurityAlert, 'id' | 'timestamp'>): Promise<SecurityAlert>;
   resolveAlert(alertId: string, resolution: string): Promise<void>;
   acknowledgeAlert(alertId: string, userId: string): Promise<void>;
   getSecurityMetrics(period?: string): Promise<SecurityMetrics>;
-  performSecurityScan(scope: string[]): Promise<SecurityScanResult>;
+  performSecurityScan(scope: string): Promise<SecurityScanResult>;
   analyzeRisk(userId: string, context: AccessContext): Promise<RiskAssessment>;
-  detectAnomalies(userId: string, activities: any[]): Promise<AnomalyDetection[]>;
+  detectAnomalies(userId: string, activities: any): Promise<AnomalyDetection>;
 }
-
 export interface IPolicyManagementService {
-  getPolicies(type?: string): Promise<SecurityPolicy[]>;
+  getPolicies(type?: string): Promise<SecurityPolicy>;
   getPolicy(id: string): Promise<SecurityPolicy>;
   createPolicy(policy: Omit<SecurityPolicy, 'id'>): Promise<SecurityPolicy>;
   updatePolicy(id: string, updates: Partial<SecurityPolicy>): Promise<SecurityPolicy>;
   deletePolicy(id: string): Promise<void>;
   evaluatePolicy(policy: SecurityPolicy, context: any): Promise<PolicyEvaluationResult>;
   enforcePolicy(policyId: string, violation: PolicyViolation): Promise<EnforcementAction>;
-  validatePolicyRules(rules: PolicyRule[]): Promise<ValidationResult[]>;
+  validatePolicyRules(rules: PolicyRule): Promise<ValidationResult>;
 }
-
 export interface IDataClassificationService {
   classifyData(data: any, context?: any): Promise<DataClassification>;
-  getClassifications(): Promise<DataClassification[]>;
+  getClassifications(): Promise<DataClassification>;
   createClassification(classification: Omit<DataClassification, 'id'>): Promise<DataClassification>;
   updateClassification(id: string, updates: Partial<DataClassification>): Promise<DataClassification>;
   deleteClassification(id: string): Promise<void>;
   applyClassification(resourceId: string, classificationId: string): Promise<void>;
   validateDataHandling(data: any, operation: string): Promise<ValidationResult>;
 }
-
 export interface IEncryptionService {
   encrypt(data: string, context?: EncryptionContext): Promise<EncryptedData>;
   decrypt(encryptedData: EncryptedData): Promise<string>;
@@ -100,279 +96,259 @@ export interface IEncryptionService {
   hash(data: string, algorithm?: string): Promise<string>;
   verifyHash(data: string, hash: string): Promise<boolean>;
   generateSecureToken(length?: number): Promise<string>;
+  // Support types
 }
-
-// Support types
 export interface AuditLogFilters {
   userId?: string;
   resource?: string;
   action?: string;
+
   dateRange?: { start: Date; end: Date };
   outcome?: string;
   limit?: number;
   offset?: number;
 }
-
 export interface AuditReportCriteria {
   period: { start: Date; end: Date };
-  scope: string[];
+  scope: string;,
   includeDetails: boolean;
   format: 'summary' | 'detailed' | 'compliance';
 }
-
 export interface AuditReport {
-  id: string;
+  id: string;,
   criteria: AuditReportCriteria;
-  summary: ReportSummary;
-  findings: ReportFinding[];
-  recommendations: string[];
+  summary: ReportSummary;,
+  findings: ReportFinding;
+  recommendations: string;,
   generatedAt: Date;
   generatedBy: string;
 }
-
 export interface SecurityAlertFilters {
   type?: string;
   severity?: string;
   status?: string;
   userId?: string;
+
   dateRange?: { start: Date; end: Date };
 }
-
 export interface SecurityScanResult {
-  scanId: string;
+  scanId: string;,
   startedAt: Date;
-  completedAt: Date;
-  scope: string[];
-  findings: SecurityFinding[];
+  completedAt: Date;,
+  scope: string;
+  findings: SecurityFinding;,
   summary: ScanSummary;
 }
-
 export interface RiskAssessment {
-  userId: string;
+  userId: string;,
   riskScore: number;
-  factors: RiskFactor[];
-  recommendations: string[];
+  factors: RiskFactor;,
+  recommendations: string;
   validUntil: Date;
 }
-
 export interface AnomalyDetection {
-  type: string;
+  type: string;,
   description: string;
-  severity: string;
+  severity: string;,
   confidence: number;
-  evidence: any[];
+  evidence: any;,
   timestamp: Date;
 }
-
 export interface PolicyEvaluationResult {
-  policyId: string;
+  policyId: string;,
   allowed: boolean;
-  matchedRules: string[];
-  violations: PolicyViolation[];
-  recommendations: string[];
+  matchedRules: string;,
+  violations: PolicyViolation;
+  recommendations: string;
 }
-
 export interface PolicyViolation {
-  ruleId: string;
+  ruleId: string;,
   description: string;
-  severity: string;
+  severity: string;,
   evidence: any;
 }
-
 export interface EnforcementAction {
-  action: string;
+  action: string;,
   parameters: Record<string, any>;
-  executedAt: Date;
+  executedAt: Date;,
   result: string;
 }
-
 export interface ValidationResult {
-  valid: boolean;
-  errors: string[];
-  warnings: string[];
-  suggestions: string[];
+  valid: boolean;,
+  errors: string;
+  warnings: string;,
+  suggestions: string;
 }
-
 export interface EncryptionContext {
-  purpose: string;
+  purpose: string;,
   retention: number;
   classification: string;
 }
-
 export interface EncryptedData {
-  data: string;
+  data: string;,
   algorithm: string;
-  keyId: string;
+  keyId: string;,
   iv: string;
   timestamp: Date;
 }
-
 export interface KeyRotationResult {
-  rotatedKeys: number;
-  failedRotations: string[];
+  rotatedKeys: number;,
+  failedRotations: string;
   completedAt: Date;
 }
-
 export interface ReportSummary {
-  totalEvents: number;
+  totalEvents: number;,
   uniqueUsers: number;
-  criticalEvents: number;
+  criticalEvents: number;,
   policyViolations: number;
+
   timeRange: { start: Date; end: Date };
 }
-
 export interface ReportFinding {
-  type: string;
+  type: string;,
   severity: string;
-  description: string;
+  description: string;,
   count: number;
-  examples: AuditLog[];
+  examples: AuditLog;
 }
-
 export interface SecurityFinding {
-  type: string;
+  type: string;,
   severity: string;
-  resource: string;
+  resource: string;,
   description: string;
-  remediation: string;
+  remediation: string;,
   evidence: any;
 }
-
 export interface ScanSummary {
-  totalChecks: number;
+  totalChecks: number;,
   passed: number;
-  failed: number;
+  failed: number;,
   criticalFindings: number;
-  highFindings: number;
+  highFindings: number;,
   mediumFindings: number;
   lowFindings: number;
 }
-
 export interface RiskFactor {
-  type: string;
+  type: string;,
   description: string;
-  weight: number;
+  weight: number;,
   value: any;
+  // Main domain interface
 }
-
-// Main domain interface
 export interface ISecurityDomain {
   // React Components
   components: {,
-    SecurityDashboard: React.ComponentType<SecurityDashboardProps>;
-    AccessControl: React.ComponentType<AccessControlProps>;
-    AuditLogViewer: React.ComponentType<AuditLogViewerProps>;
-    // Specific security components
-    LoginForm: React.ComponentType<any>;
-    PermissionGate: React.ComponentType<any>;
-    SecurityAlerts: React.ComponentType<any>;
-    RoleManager: React.ComponentType<any>;
-    PolicyEditor: React.ComponentType<any>;
-  };
+  SecurityDashboard: React.ComponentType<SecurityDashboardProps>;,
+  AccessControl: React.ComponentType<AccessControlProps>;
+  AuditLogViewer: React.ComponentType<AuditLogViewerProps>;
+  // Specific security components
+  LoginForm: React.ComponentType<any>;,
+  PermissionGate: React.ComponentType<any>;
+  SecurityAlerts: React.ComponentType<any>;,
+  RoleManager: React.ComponentType<any>;
+  PolicyEditor: React.ComponentType<any>;
+};
   // React Hooks
   hooks: {,
-    useAuth: () => {,
-      user: User | null;
-      permissions: Permission[];
-      isAuthenticated: boolean;
-      login: (credentials: any) => Promise<void>;
-      logout: () => Promise<void>;
-      checkPermission: (resource: string, action: PermissionAction) => boolean;
-    };
+  useAuth: () => {,
+  user: User | null;,
+  permissions: Permission;
+  isAuthenticated: boolean;,
+  login: (credentials: any) => Promise<void>;,
+  logout: () => Promise<void>;
+  checkPermission: (resource: string, action: PermissionAction) => boolean;
+};
     usePermissions: () => {,
-      permissions: Permission[];
-      loading: boolean;
-      hasPermission: (resource: string, action: PermissionAction) => boolean;
-      hasRole: (roleName: string) => boolean;
-      refreshPermissions: () => Promise<void>;
-    };
+  permissions: Permission;
+  loading: boolean;,
+  hasPermission: (resource: string, action: PermissionAction) => boolean;,
+  hasRole: (roleName: string) => boolean;,
+  refreshPermissions: () => Promise<void>;
+};
     useAuditLogs: () => {,
-      logs: AuditLog[];
-      loading: boolean;
-      error: string | null;
-      fetchLogs: (filters?: AuditLogFilters) => Promise<void>;
-      exportLogs: (format: string) => Promise<void>;
-    };
+  logs: AuditLog;
+  loading: boolean;,
+  error: string | null;
+  fetchLogs: (filters?: AuditLogFilters) => Promise<void>;,
+  exportLogs: (format: string) => Promise<void>;
+};
     useSecurityAlerts: () => {,
-      alerts: SecurityAlert[];
-      unreadCount: number;
-      loading: boolean;
-      acknowledgeAlert: (alertId: string) => Promise<void>;
-      resolveAlert: (alertId: string, resolution: string) => Promise<void>;
-    };
+  alerts: SecurityAlert;
+  unreadCount: number;,
+  loading: boolean;
+  acknowledgeAlert: (alertId: string) => Promise<void>;,
+  resolveAlert: (alertId: string, resolution: string) => Promise<void>;
+};
     useSecurityMetrics: () => {,
-      metrics: SecurityMetrics | null;
-      loading: boolean;
-      refreshMetrics: () => Promise<void>;
-      getMetricsForPeriod: (period: string) => Promise<SecurityMetrics>;
-    };
+  metrics: SecurityMetrics | null;
+  loading: boolean;,
+  refreshMetrics: () => Promise<void>;
+  getMetricsForPeriod: (period: string) => Promise<SecurityMetrics>;
+};
   };
   // Domain Services
   services: {,
-    authentication: IAuthenticationService;
-    authorization: IAuthorizationService;
-    audit: IAuditService;
-    monitoring: ISecurityMonitoringService;
-    policyManagement: IPolicyManagementService;
-    dataClassification: IDataClassificationService;
-    encryption: IEncryptionService;
-  };
+  authentication: IAuthenticationService;
+  authorization: IAuthorizationService;,
+  audit: IAuditService;
+  monitoring: ISecurityMonitoringService;,
+  policyManagement: IPolicyManagementService;
+  dataClassification: IDataClassificationService;,
+  encryption: IEncryptionService;
+};
   // Event System
   events: SecurityDomainEvents & {,
-    subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;
-    emit: (event: keyof SecurityDomainEvents, ...args: any[]) => void;
-  };
+  subscribe: (event: keyof SecurityDomainEvents, callback: Function) => () => void;,
+  emit: (event: keyof SecurityDomainEvents, ...args: any) => void;
+};
   // Utilities
   utils: {,
-    validatePassword: (password: string) => ValidationResult;
-    generateSecurePassword: (length?: number) => string;
-    calculateRiskScore: (factors: RiskFactor[]) => number;
-    formatPermission: (permission: Permission) => string;
-    hashSensitiveData: (data: string) => Promise<string>;
-    maskSensitiveData: (data: string, type: string) => string;
-    validateCompliance: (data: any, framework: string) => ValidationResult;
-  };
-}
+  validatePassword: (password: string) => ValidationResult;,
+  generateSecurePassword: (length?: number) => string;
+  calculateRiskScore: (factors: RiskFactor) => number;,
+  formatPermission: (permission: Permission) => string;,
+  hashSensitiveData: (data: string) => Promise<string>;,
+  maskSensitiveData: (data: string, type: string) => string;,
+  validateCompliance: (data: any, framework: string) => ValidationResult;
+};
 
 // Domain factory function
+}
 export interface SecurityDomainFactory {
   create(config?: SecurityDomainConfig): ISecurityDomain;
 }
-
 export interface SecurityDomainConfig {
   encryption: {,
-    algorithm: string;
-    keySize: number;
-    keyRotationInterval: number;
-  };
+  algorithm: string;,
+  keySize: number;
+  keyRotationInterval: number;
+};
   authentication: {,
-    sessionTimeout: number;
-    maxFailedAttempts: number;
-    passwordPolicy: PasswordPolicy;
-  };
+  sessionTimeout: number;
+  maxFailedAttempts: number;,
+  passwordPolicy: PasswordPolicy;
+};
   audit: {,
-    retentionPeriod: number;
-    realTimeLogging: boolean;
-    includeRequestBodies: boolean;
-  };
+  retentionPeriod: number;
+  realTimeLogging: boolean;,
+  includeRequestBodies: boolean;
+};
   monitoring: {,
-    alertThresholds: Record<string, number>;
-    anomalyDetection: boolean;
-    riskScoringEnabled: boolean;
-  };
+  alertThresholds: Record<string, number>;
+  anomalyDetection: boolean;,
+  riskScoringEnabled: boolean;
+};
 }
-
 export interface PasswordPolicy {
-  minLength: number;
+  minLength: number;,
   requireUppercase: boolean;
-  requireLowercase: boolean;
+  requireLowercase: boolean;,
   requireNumbers: boolean;
-  requireSpecialChars: boolean;
+  requireSpecialChars: boolean;,
   prohibitCommonPasswords: boolean;
   historyCount: number;
+  // Event constants for cross-domain communication
 }
-
-// Event constants for cross-domain communication
 export const SECURITY_DOMAIN_EVENTS = {
   USER_AUTHENTICATED: 'security:user:authenticated',
   USER_LOGGED_OUT: 'security:user:logged_out',

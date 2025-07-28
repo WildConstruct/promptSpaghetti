@@ -176,7 +176,7 @@ const CreateCertificationRequestSchema = z.object({
       criteria: z.array(z.string()),
       responsible: z.string()
     }))
-  })
+  }
 });
 
 const UpdateCertificationStatusRequestSchema = z.object({
@@ -226,7 +226,7 @@ const ScheduleReportRequestSchema = z.object({
     scope: z.string(),
     options: z.record(z.any()).optional(),
     template: z.string().optional()
-  })
+  }
 });
 
 export async function complianceReportingRoutes(fastify: FastifyInstance) {
@@ -263,7 +263,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -271,7 +271,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const generatorId = request.user.userId;
@@ -325,7 +325,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -333,7 +333,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { framework } = request.query;
@@ -383,10 +383,10 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { framework, timeRange, customStartDate, customEndDate, granularity, metrics } = request.query;
@@ -444,7 +444,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -452,7 +452,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const managerId = request.user.userId;
@@ -516,7 +516,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -524,7 +524,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const updaterId = request.user.userId;
@@ -587,7 +587,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -595,7 +595,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const schedulerId = request.user.userId;
@@ -664,16 +664,16 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           reportId: { type: 'string' }
-        },
+  }
         required: ['reportId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           includeEvidence: { type: 'boolean', default: false },
           format: { type: 'string', enum: ['JSON', 'PDF', 'HTML'], default: 'JSON' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -683,10 +683,10 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { reportId } = request.params;
@@ -739,7 +739,7 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           sortBy: { type: 'string', enum: ['generatedAt', 'framework', 'reportType'], default: 'generatedAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -756,10 +756,10 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const filters = request.query;
@@ -806,10 +806,10 @@ export async function complianceReportingRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const frameworks = await complianceReportingService.getAvailableFrameworks();

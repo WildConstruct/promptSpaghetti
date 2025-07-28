@@ -71,5 +71,4 @@ export interface MarketplaceContextualHelpProps {
     onHelpEffectiveness?: (helpId: string, wasEffective: boolean) => void;
 }
 export declare const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>;
-export default MarketplaceContextualHelp;
 //# sourceMappingURL=MarketplaceContextualHelp.d.ts.map

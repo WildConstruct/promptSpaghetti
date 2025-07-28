@@ -35,6 +35,7 @@ export enum DataCategory {
   SYSTEM_DATA = 'SYSTEM_DATA'
 }
 
+}
 export interface DataRecord {
   id: string;
   entityType: string;
@@ -48,7 +49,9 @@ export interface DataRecord {
   complianceFlags: ComplianceFlag[];
   tags: string[];
 }
+}
 
+}
 export interface ComplianceFlag {
   framework: string; // GDPR, CCPA, HIPAA, etc.
   requirement: string;
@@ -56,7 +59,9 @@ export interface ComplianceFlag {
   lastChecked: Date;
   details: Record<string, any>;
 }
+}
 
+}
 export interface TransitionRule {
   id: string;
   name: string;
@@ -67,7 +72,9 @@ export interface TransitionRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface TransitionCondition {
   type: 'TIME_BASED' | 'EVENT_BASED' | 'POLICY_BASED' | 'DEPENDENCY_BASED';
   field: string;
@@ -75,13 +82,17 @@ export interface TransitionCondition {
   value: Error;
   evaluator?: (record: DataRecord) => boolean;
 }
+}
 
+}
 export interface TransitionAction {
   type: 'NOTIFY' | 'UPDATE_METADATA' | 'TRIGGER_WORKFLOW' | 'LOG_EVENT';
   parameters: Record<string, any>;
   async: boolean;
 }
+}
 
+}
 export interface BatchProcessingConfig {
   batchSize: number;
   concurrency: number;
@@ -90,7 +101,9 @@ export interface BatchProcessingConfig {
   timeoutMs: number;
   memoryLimit: number;
 }
+}
 
+}
 export interface ProcessingResult {
   processedCount: number;
   successCount: number;
@@ -99,13 +112,16 @@ export interface ProcessingResult {
   duration: number;
   throughput: number;
 }
+}
 
+}
 export interface ProcessingError {
   recordId: string;
   error: string;
   stage: string;
   timestamp: Date;
   retryable: boolean;
+}
 }
 
 /**
@@ -149,6 +165,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     toStage: LifecycleStage,
     limit?: number
   ): Promise<DataRecord[]> {
+
     const startTime = Date.now();
     
     try {
@@ -209,6 +226,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
    * Original had incomplete implementation - now provides comprehensive classification
    */
   async performAutomaticClassification(records: DataRecord[]): Promise<ProcessingResult> {
+
     const startTime = Date.now();
     const result: ProcessingResult = {
       processedCount: 0,
@@ -272,6 +290,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     record: DataRecord,
     frameworks: string[] = ['GDPR', 'CCPA']
   ): Promise<ComplianceFlag[]> {
+
     const startTime = Date.now();
     
     try {
@@ -320,6 +339,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     records: DataRecord[],
     operation: 'TRANSITION' | 'CLASSIFY' | 'COMPLIANCE_CHECK'
   ): Promise<ProcessingResult> {
+
     const startTime = Date.now();
     const result: ProcessingResult = {
       processedCount: 0,
@@ -399,6 +419,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
    * NEW: Automated lifecycle progression
    */
   async processLifecycleProgression(): Promise<ProcessingResult> {
+
     if (this.isProcessing) {
       this.logger.warn('Lifecycle progression already in progress');
       return {
@@ -498,6 +519,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     promises: Promise<T>[],
     concurrency: number
   ): Promise<T[]> {
+
     const results: T[] = [];
     
     for (let i = 0; i < promises.length; i += concurrency) {
@@ -538,6 +560,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     operation: string,
     batchIndex: number
   ): Promise<ProcessingResult> {
+
     const startTime = Date.now();
     const result: ProcessingResult = {
       processedCount: records.length,
@@ -592,10 +615,12 @@ export class RefactoredDataLifecycleService extends EventEmitter {
 
   // Classification and transition implementations
   private async processBatchClassification(records: DataRecord[]): Promise<ProcessingResult> {
+
     return this.processSingleBatch(records, 'CLASSIFY', 0);
   }
 
   private async classifyRecord(record: DataRecord): Promise<void> {
+
     // Implement smart classification based on content analysis
     const classification = await this.analyzeRecordContent(record);
     
@@ -619,6 +644,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     confidence: number;
     reason: string;
   }> {
+
     // Implement content analysis logic
     // This would use ML models or rule-based classification
     
@@ -663,6 +689,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     stage: LifecycleStage,
     limit?: number
   ): Promise<DataRecord[]> {
+
     // In a real implementation, this would query the database
     // For now, return cached records matching the stage
     const records = Array.from(this.recordCache.values())
@@ -675,6 +702,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     record: DataRecord,
     rules: TransitionRule[]
   ): Promise<boolean> {
+
     for (const rule of rules) {
       if (!rule.enabled) continue;
       
@@ -690,6 +718,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     record: DataRecord,
     conditions: TransitionCondition[]
   ): Promise<boolean> {
+
     for (const condition of conditions) {
       const result = await this.evaluateCondition(record, condition);
       if (!result) {
@@ -703,6 +732,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     record: DataRecord,
     condition: TransitionCondition
   ): Promise<boolean> {
+
     // Custom evaluator takes precedence
     if (condition.evaluator) {
       return condition.evaluator(record);
@@ -741,6 +771,7 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     record: DataRecord,
     framework: string
   ): Promise<ComplianceFlag> {
+
     // Implement framework-specific compliance checking
     const now = new Date();
     
@@ -880,11 +911,13 @@ export class RefactoredDataLifecycleService extends EventEmitter {
     records: DataRecord[],
     _____transition: { fromStage: LifecycleStage; toStage: LifecycleStage }
   ): Promise<ProcessingResult> {
+
     // Implement actual stage transition logic
     return this.processBatch(records, 'TRANSITION');
   }
 
   private async processRecordTransition(record: DataRecord): Promise<void> {
+
     // Implement individual record transition
     // This would update the database and trigger any necessary actions
     record.lastModified = new Date();

@@ -35,8 +35,8 @@ describe('OrganizationManager', () => {
       plan: 'free' as const,
       maxUsers: 10,
       createdAt: new Date('2023-01-01'),
-      updatedAt: new Date('2023-01-01'),
-    },
+      updatedAt: new Date('2023-01-01');
+  }
     {
       id: 'org-2',
       name: 'Pro Organization',
@@ -49,31 +49,28 @@ describe('OrganizationManager', () => {
       plan: 'pro' as const,
       maxUsers: 100,
       createdAt: new Date('2023-01-02'),
-      updatedAt: new Date('2023-01-02'),
-    }
-  ];
+      updatedAt: new Date('2023-01-02')];
   const mockStats = {
-    totalMembers: 15,
-    totalTeams: 8,
-    activeTeams: 8,
-    recentActivity: 3,
-    planLimits: {,
-      maxUsers: 10,
-      maxTeams: 5,
-      maxStorage: 1024,
-    },
-    usage: {,
-      users: 8,
-      teams: 5,
-      storage: 512,
-    }
-  };
+  totalMembers: 15,
+  totalTeams: 8,
+  activeTeams: 8,
+  recentActivity: 3,
+  planLimits: {,
+  maxUsers: 10,
+  maxTeams: 5,
+  maxStorage: 1024,
+},
+  usage: {,
+  users: 8,
+  teams: 5,
+  storage: 512,
+};
   const defaultProps = {
-    onCreateOrganization: jest.fn(),
-    onUpdateOrganization: jest.fn(),
-    onDeleteOrganization: jest.fn(),
-    onViewStats: jest.fn(),
-  };
+  onCreateOrganization: jest.fn(),
+  onUpdateOrganization: jest.fn(),
+  onDeleteOrganization: jest.fn(),
+  onViewStats: jest.fn(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -131,12 +128,12 @@ describe('OrganizationManager', () => {
     const submitButton = screen.getByText('Create Organization', { selector: 'button' });
     await user.click(submitButton);
     await waitFor(() => {
-      expect(mockCreate).toHaveBeenCalledWith({)
-        name: 'New Organization',
-        description: 'A new test organization',
-        website: 'https://neworg.com',
-        plan: 'free',
-      });
+  expect(mockCreate).toHaveBeenCalledWith({)
+  name: 'New Organization',
+  description: 'A new test organization',
+  website: 'https://neworg.com',
+  plan: 'free',
+});
     });
   });
   it('validates required fields in create form', async () => {
@@ -189,12 +186,12 @@ describe('OrganizationManager', () => {
     const submitButton = screen.getByText('Update Organization');
     await user.click(submitButton);
     await waitFor(() => {
-      expect(mockUpdate).toHaveBeenCalledWith('org-1', {)
-        name: 'Updated Organization',
-        description: 'A test organization',
-        website: 'https://test.com',
-        plan: 'free',
-      });
+  expect(mockUpdate).toHaveBeenCalledWith('org-1', {)
+  name: 'Updated Organization',
+  description: 'A test organization',
+  website: 'https://test.com',
+  plan: 'free',
+});
     });
   });
   it('shows confirmation dialog when delete button is clicked', async () => {

@@ -27,7 +27,7 @@ export function createQuickSecuritySetup() {
   console.log('=== Quick Security Setup Example ===');
   // Create a production-ready unified security system
   const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;);
-    SecurityProfile.PRODUCTION
+  SecurityProfile.PRODUCTION
   );
   console.log('Created unified security protection with:');
   console.log('- Rate limiting service');
@@ -35,41 +35,35 @@ export function createQuickSecuritySetup() {
   console.log('- Unified integration layer');
   console.log('- Security analytics (usage patterns & scaling)');
   return security;
-}
-
-// ========================================
-// Example 2: Custom Configuration
-// ========================================
-
-export function createCustomSecuritySetup() {
+  // ========================================
+  // Example 2: Custom Configuration,
+  // ========================================
+  export function createCustomSecuritySetup() {
   console.log('=== Custom Security Setup Example ===');
   // Define custom configuration
-  const customConfig: Partial<UnifiedSecurityConfig> = {
-    integration: {,
-      mode: IntegrationMode.HIERARCHICAL,
-      strategy: CoordinationStrategy.WEIGHTED_AVERAGE,
-      fallback: FallbackBehavior.USE_THROTTLING,
-      priorities: {,
-        rateLimiting: 75,
-        throttling: 85,
-      }
-    },
-    analytics: {,
-      enableUsagePatterns: true,
-      enableScalingAnalytics: true,
-      enableCrossSystemLearning: true,
-      enableAnalyticsInsights: true,
-    },
-    monitoring: {,
-      enableMetrics: true,
-      enableHealthChecks: true,
-      alertThresholds: {,
-        errorRate: 5,
-        responseTime: 1500,
-        systemHealth: 90,
-      }
-    }
-  };
+  const customConfig: Partial<UnifiedSecurityConfig> = {,
+  integration: {,
+  mode: IntegrationMode.HIERARCHICAL,
+  strategy: CoordinationStrategy.WEIGHTED_AVERAGE,
+  fallback: FallbackBehavior.USE_THROTTLING,
+  priorities: {,
+  rateLimiting: 75,
+  throttling: 85,
+},
+  analytics: {,
+  enableUsagePatterns: true,
+  enableScalingAnalytics: true,
+  enableCrossSystemLearning: true,
+  enableAnalyticsInsights: true,
+},
+  monitoring: {,
+  enableMetrics: true,
+  enableHealthChecks: true,
+  alertThresholds: {,
+  errorRate: 5,
+  responseTime: 1500,
+  systemHealth: 90,
+};
   // Create with custom configuration
   const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(;);
     SecurityProfile.PRODUCTION,
@@ -78,7 +72,6 @@ export function createCustomSecuritySetup() {
   console.log('Created custom security protection with hierarchical mode');
   console.log('and weighted average coordination strategy');
   return security;
-}
 
 // ========================================
 // Example 3: Handling Security Requests
@@ -87,17 +80,17 @@ export function createCustomSecuritySetup() {
 export async function handleSecurityRequest()
   integration: AdaptiveRateLimitingIntegration,
   requestData: {,
-    ip: string;
-    endpoint: string;
-    method: string;
+  ip: string;
+    endpoint: string;,
+  method: string;
     userId?: string;
     userAgent: string;
-  }
   console.log('=== Security Request Handling Example ===');
   // Create protection context
-  const context: UnifiedProtectionContext = {
-    requestId: `req-${Date.now()}`,}
-    endpoint: requestData.endpoint,
+  const context: UnifiedProtectionContext = {,
+  requestId: `req-${Date.now()}`}
+},
+  endpoint: requestData.endpoint,
     method: requestData.method,
     userId: requestData.userId,
     ip: requestData.ip,
@@ -109,43 +102,44 @@ export async function handleSecurityRequest()
     consecutiveFailures: 0,
     // Integration-specific context
     rateLimitingHistory: {,
-      recentAttempts: 0,
-      backoffLevel: 0,
-      threatAssessment: ThreatLevel.LOW,
-      adaptiveMultiplier: 1.0,
-    },
-    throttlingHistory: {,
-      recentThrottling: 0,
-      systemCondition: 'normal' as any,
-      activeRules: [],
-      effectivenessScore: 85,
-    },
-    integrationMetadata: {,
-      requestId: `req-${Date.now()}`,}
-      correlationId: `corr-${Date.now()}`,}
-      protectionLayers: ['rate_limiting', 'throttling', 'integration'],
-      decisionTrail: [],
-    },
-    analyticsInsights: [],
+  recentAttempts: 0,
+  backoffLevel: 0,
+  threatAssessment: ThreatLevel.LOW,
+  adaptiveMultiplier: 1.0,
+},
+  throttlingHistory: {,
+  recentThrottling: 0,
+  systemCondition: 'normal' as any,
+  activeRules: [],
+  effectivenessScore: 85,
+},
+  integrationMetadata: {,
+  requestId: `req-${Date.now()}`}
+},
+  correlationId: `corr-${Date.now()}`}
+},
+  protectionLayers: ['rate_limiting', 'throttling', 'integration'],
+      decisionTrail: [];
+  },
+  analyticsInsights: [],
     historicalPerformance: {,
-      requestVolume: [100, 120, 110, 105],
-      successRate: [98.5, 97.8, 98.1, 98.9],
-      averageLatency: [200, 220, 210, 195],
-      errorRates: [1.5, 2.2, 1.9, 1.1]
-    },
-    patternAnalysis: {,
-      currentPattern: 'normal',
-      patternConfidence: 85,
-      predictedNextPattern: 'normal',
-      patternTransitionProbability: 0.1,
-    },
-    scalingContext: {,
-      currentLoad: 45,
-      predictedLoad: 50,
-      scalingRecommendation: 'maintain',
-      capacityUtilization: 45,
-    }
-  };
+  requestVolume: [100, 120, 110, 105],
+  successRate: [98.5, 97.8, 98.1, 98.9],
+  averageLatency: [200, 220, 210, 195],
+  errorRates: [1.5, 2.2, 1.9, 1.1],
+},
+  patternAnalysis: {,
+  currentPattern: 'normal',
+  patternConfidence: 85,
+  predictedNextPattern: 'normal',
+  patternTransitionProbability: 0.1,
+},
+  scalingContext: {,
+  currentLoad: 45,
+  predictedLoad: 50,
+  scalingRecommendation: 'maintain',
+  capacityUtilization: 45,
+};
   try {
     // Apply unified protection
     const result = await integration.applyUnifiedProtection(context);
@@ -169,23 +163,17 @@ export async function handleSecurityRequest()
       case 'block':
         console.log('🚫 Request blocked');
         break;
-    }
     // Check recommendations
     if (result.recommendations.escalateToAdmin) {
-      console.log('⚠️ Recommendation: Escalate to admin');
-    }
-    if (result.recommendations.adjustRateLimits) {
-      console.log('🔧 Recommendation: Adjust rate limits');
-    }
-    if (result.recommendations.adjustThrottling) {
-      console.log('🔧 Recommendation: Adjust throttling rules');
-    }
-    return result;
-  } catch (error) {
+  console.log('⚠️ Recommendation: Escalate to admin');
+  if (result.recommendations.adjustRateLimits) {
+  console.log('🔧 Recommendation: Adjust rate limits');
+  if (result.recommendations.adjustThrottling) {
+  console.log('🔧 Recommendation: Adjust throttling rules');
+  return result;
+} catch (error) {
     console.error('❌ Error applying security protection:', error);
     throw error;
-  }
-}
 
 // ========================================
 // Example 4: Monitoring and Analytics
@@ -216,15 +204,11 @@ export function monitorSecurityHealth(integration: AdaptiveRateLimitingIntegrati
   // Set up health alerts
   if (stats.systemHealth.overallHealth < 80) {
     console.log('🚨 ALERT: System health below threshold!');
-  }
   if (stats.performance.falsePositiveRate > 10) {
     console.log('⚠️ WARNING: High false positive rate detected');
-  }
   if (stats.performance.systemAgreementRate < 70) {
     console.log('⚠️ WARNING: Low system agreement rate - consider configuration adjustment');
-  }
   return stats;
-}
 
 // ========================================
 // Example 5: Different Security Profiles
@@ -240,7 +224,7 @@ export function demonstrateSecurityProfiles() {
     SecurityProfile.HIGH_VOLUME
   ];
   profiles.forEach(profile => {)
-    console.log(`\n--- ${profile.toUpperCase()} Profile ---`);}
+  console.log(`\n--- ${profile.toUpperCase()} Profile ---`);}
     const security = UnifiedSecurityProtectionFactory.createUnifiedProtection(profile);
     const stats = security.integration.getIntegrationStatistics();
     console.log(`Integration Mode: ${stats.config.integrationMode}`);}
@@ -250,7 +234,6 @@ export function demonstrateSecurityProfiles() {
     console.log(`Throttling Priority: ${stats.config.throttlingPriority}`);}
     console.log(`Analytics Integration: ${stats.config.analyticsIntegration}`);}
   });
-}
 
 // ========================================
 // Example 6: Preset Configurations
@@ -268,17 +251,14 @@ export function demonstratePresetConfigurations() {
     } else {
       console.log('❌ Configuration has errors:');
       validation.errors.forEach(error => console.log(`  - ${error}`));}
-    }
     if (validation.warnings.length > 0) {
       console.log('⚠️ Configuration warnings:');
       validation.warnings.forEach(warning => console.log(`  - ${warning}`));}
-    }
     console.log(`Integration Mode: ${config.integration.mode}`);}
     console.log(`Coordination Strategy: ${config.integration.strategy}`);}
     console.log(`Rate Limiting Priority: ${config.integration.priorities.rateLimiting}`);}
     console.log(`Throttling Priority: ${config.integration.priorities.throttling}`);}
   });
-}
 
 // ========================================
 // Example 7: Event Handling
@@ -291,7 +271,6 @@ export function setupEventHandling(integration: AdaptiveRateLimitingIntegration)
     console.log(`🔒 Protection applied: ${data.result.action} (${data.decisionTime}ms)`);}
     if (data.result.action === 'block') {
       console.log(`🚫 Blocked request from ${data.context.ip} to ${data.context.endpoint}`);}
-    }
   });
   integration.on('protectionError', (data) => {
     console.error(`❌ Protection error: ${data.error}`);}
@@ -302,14 +281,12 @@ export function setupEventHandling(integration: AdaptiveRateLimitingIntegration)
     console.log(`📊 Rate limiting event: ${data.type}`);}
     if (data.type === 'exceeded') {
       console.log(`⚠️ Rate limit exceeded for ${data.data.identifier}`);}
-    }
   });
   // Listen for throttling events
   integration.on('throttlingEvent', (data) => {
     console.log(`🎛️ Throttling event: ${data.type}`);}
     if (data.type === 'applied') {
       console.log(`⏱️ Throttling applied: ${data.data.result.action}`);}
-    }
   });
   // Listen for learning updates
   integration.on('learningUpdated', (data) => {
@@ -320,7 +297,6 @@ export function setupEventHandling(integration: AdaptiveRateLimitingIntegration)
     console.log(`⚙️ Configuration updated at ${data.timestamp}`);}
   });
   console.log('Event handlers set up successfully');
-}
 
 // ========================================
 // Complete Integration Example
@@ -338,8 +314,7 @@ export async function completeIntegrationExample() {
       { ip: '192.168.1.100', endpoint: '/api/users', method: 'GET', userAgent: 'Mozilla/5.0...' },
       { ip: '192.168.1.100', endpoint: '/api/users', method: 'POST', userAgent: 'Mozilla/5.0...', userId: 'user123' },
       { ip: '10.0.0.50', endpoint: '/auth/login', method: 'POST', userAgent: 'curl/7.68.0' },
-      { ip: '203.0.113.1', endpoint: '/api/sensitive', method: 'GET', userAgent: 'Bot/1.0' },
-    ];
+      { ip: '203.0.113.1', endpoint: '/api/sensitive', method: 'GET', userAgent: 'Bot/1.0' }];
     console.log('\nProcessing test requests...');
     for (const request of testRequests) {
       console.log(`\n--- Processing request to ${request.endpoint} ---`);}
@@ -348,8 +323,6 @@ export async function completeIntegrationExample() {
       if (result.delay > 0) {
         console.log(`Simulating ${result.delay}ms delay...`);}
         await new Promise(resolve => setTimeout(resolve, Math.min(result.delay, 1000)));
-      }
-    }
     // 4. Monitor health
     console.log('\n--- Health Monitoring ---');
     monitorSecurityHealth(security.integration);
@@ -358,12 +331,9 @@ export async function completeIntegrationExample() {
     // 6. Show preset configurations
     demonstratePresetConfigurations();
   } catch (error) {
-    console.error('❌ Error in complete integration example:', error);
-  }
-}
-
-// Export everything for use in other examples
-export {
+  console.error('❌ Error in complete integration example:', error);
+  // Export everything for use in other examples
+  export {
   UnifiedSecurityProtectionFactory,
   SecurityProfile,
   IntegrationMode,
@@ -376,8 +346,7 @@ if (require.main === module) {
   completeIntegrationExample();
     .then(() => {
       console.log('\n✅ Complete integration example finished successfully');
-    })
+  }
     .catch((error) => {
-      console.error('\n❌ Complete integration example failed:', error);
-    });
-}
+  console.error('\n❌ Complete integration example failed:', error);
+});

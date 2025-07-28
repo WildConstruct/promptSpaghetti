@@ -103,14 +103,14 @@ export declare class ExtensionLifecycleManager {
     private createUIContext;
     private createAPIContext;
     private isValidVersion;
-}
+
 interface ExtensionStatistics {
     total: number;
     byState: Record<ExtensionLifecycleState, number>;
     byType: Record<string, number>;
     errors: number;
     healthy: number;
-}
+
 export declare const extensionLifecycleManager: ExtensionLifecycleManager;
 export {};
 //# sourceMappingURL=ExtensionLifecycleManager.d.ts.map

@@ -7,6 +7,7 @@
  * ensuring efficient resource utilization and cost-effective operations.
  */
 import { EventEmitter } from 'events';
+
 export interface CostCenter {
     id: string;
     name: string;
@@ -57,7 +58,7 @@ export interface CostCenter {
     created_at: number;
     last_updated: number;
     active: boolean;
-}
+
 export interface CostAlert {
     id: string;
     name: string;
@@ -102,7 +103,7 @@ export interface CostAlert {
     created_at: number;
     last_triggered?: number;
     trigger_count: number;
-}
+
 export interface AutoCostAction {
     id: string;
     name: string;
@@ -132,7 +133,7 @@ export interface AutoCostAction {
     };
     enabled: boolean;
     created_at: number;
-}
+
 export interface CostMetrics {
     id: string;
     cost_center_id: string;
@@ -196,7 +197,7 @@ export interface CostMetrics {
     }>;
     collected_at: number;
     collection_method: 'automated' | 'manual';
-}
+
 export interface CostOptimizationRecommendation {
     id: string;
     title: string;
@@ -240,7 +241,7 @@ export interface CostOptimizationRecommendation {
     actual_savings?: number;
     created_at: number;
     last_updated: number;
-}
+
 export interface CostBudget {
     id: string;
     name: string;
@@ -294,7 +295,7 @@ export interface CostBudget {
     created_at: number;
     last_updated: number;
     active: boolean;
-}
+
 export interface CostReport {
     id: string;
     title: string;
@@ -355,7 +356,7 @@ export interface CostReport {
     generated_at: number;
     recipients?: string[];
     status: 'draft' | 'published' | 'archived';
-}
+
 export interface CostEvent {
     id: string;
     type: 'threshold_exceeded' | 'anomaly_detected' | 'budget_alert' | 'optimization_applied' | 'cost_spike' | 'efficiency_improvement';
@@ -393,7 +394,7 @@ export interface CostEvent {
         escalation_required: boolean;
         related_events: string[];
     };
-}
+
 export declare class SecurityCostOptimizer extends EventEmitter {
     private costCenters;
     private costAlerts;
@@ -485,6 +486,6 @@ export declare class SecurityCostOptimizer extends EventEmitter {
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
     shutdown(): void;
-}
+
 export default SecurityCostOptimizer;
 //# sourceMappingURL=SecurityCostOptimizer.d.ts.map

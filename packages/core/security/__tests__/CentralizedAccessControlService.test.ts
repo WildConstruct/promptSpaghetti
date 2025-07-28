@@ -29,40 +29,40 @@ describe('CentralizedAccessControlService', () => {
   let mockDataClassifier: jest.Mocked<DataClassifier>;
   let testConfig: AccessControlConfig;
   let testInheritanceFramework: InheritanceFramework;
-  const createTestSubject = (overrides?: Partial<SubjectAttributes>): SubjectAttributes => ({)
-    userId: 'user-123',
-    roles: ['USER'],
-    clearanceLevel: 'INTERNAL' as DataClassificationLevel,
-    department: 'Engineering',
-    jobTitle: 'Software Engineer',
-    location: {,
-      country: 'US',
-      region: 'California',
-      city: 'San Francisco',
-      timezone: 'PST',
-      withinApprovedRegions: true,
-    },
-    device: {,
-      deviceId: 'device-123',
-      deviceType: 'LAPTOP',
-      operatingSystem: 'macOS',
-      browser: 'Chrome',
-      managed: true,
-      encrypted: true,
-      patchLevel: 'current',
-      riskScore: 10,
-      registered: true,
-      lastSeen: new Date(),
-    },
-    behaviorProfile: {,
-      normalAccessPatterns: [],
+  const createTestSubject = (overrides?: Partial<SubjectAttributes>): SubjectAttributes => ({,)
+  userId: 'user-123',
+  roles: ['USER'],
+  clearanceLevel: 'INTERNAL' as DataClassificationLevel,
+  department: 'Engineering',
+  jobTitle: 'Software Engineer',
+  location: {,
+  country: 'US',
+  region: 'California',
+  city: 'San Francisco',
+  timezone: 'PST',
+  withinApprovedRegions: true,
+},
+  device: {,
+  deviceId: 'device-123',
+  deviceType: 'LAPTOP',
+  operatingSystem: 'macOS',
+  browser: 'Chrome',
+  managed: true,
+  encrypted: true,
+  patchLevel: 'current',
+  riskScore: 10,
+  registered: true,
+  lastSeen: new Date(),
+},
+  behaviorProfile: {,
+  normalAccessPatterns: [],
       anomalyScore: 5,
       typicalHours: [9, 10, 11, 12, 13, 14, 15, 16, 17],
       typicalLocations: ['office'],
       accessFrequency: 'MEDIUM',
       dataAccessPatterns: {} as any
-    },
-    riskScore: 15,
+  },
+  riskScore: 15,
     certifications: [],
     lastActivity: new Date(),
     mfaVerified: true,
@@ -70,57 +70,57 @@ describe('CentralizedAccessControlService', () => {
     ...overrides
   });
   const createTestObject = (overrides?: Partial<ObjectAttributes>): ObjectAttributes => ({)
-    dataId: 'data-123',
-    classification: 'INTERNAL' as DataClassificationLevel,
-    dataOwner: 'owner-123',
-    createdAt: new Date(),
-    lastModified: new Date(),
-    retentionPeriod: 365,
-    complianceFrameworks: ['GDPR'],
-    tags: ['test'],
-    sensitivity: 'NORMAL',
-    businessValue: 'MEDIUM',
-    dataType: 'document',
-    sourceSystem: 'app',
-    encryptionStatus: 'ENCRYPTED',
-    ...overrides
-  });
+  dataId: 'data-123',
+  classification: 'INTERNAL' as DataClassificationLevel,
+  dataOwner: 'owner-123',
+  createdAt: new Date(),
+  lastModified: new Date(),
+  retentionPeriod: 365,
+  complianceFrameworks: ['GDPR'],
+  tags: ['test'],
+  sensitivity: 'NORMAL',
+  businessValue: 'MEDIUM',
+  dataType: 'document',
+  sourceSystem: 'app',
+  encryptionStatus: 'ENCRYPTED',
+  ...overrides
+});
   const createTestAction = (overrides?: Partial<ActionAttributes>): ActionAttributes => ({)
-    operation: 'READ' as any,
-    purpose: 'business_operation',
-    urgency: 'ROUTINE',
-    duration: 3600,
-    bulkOperation: false,
-    automated: false,
-    delegated: false,
-    riskLevel: 'LOW',
-    ...overrides
-  });
+  operation: 'READ' as any,
+  purpose: 'business_operation',
+  urgency: 'ROUTINE',
+  duration: 3600,
+  bulkOperation: false,
+  automated: false,
+  delegated: false,
+  riskLevel: 'LOW',
+  ...overrides
+});
   const createTestEnvironment = (overrides?: Partial<EnvironmentAttributes>): EnvironmentAttributes => ({)
-    timestamp: new Date(),
-    location: {,
-      country: 'US',
-      region: 'California',
-      city: 'San Francisco',
-      timezone: 'PST',
-      withinApprovedRegions: true,
-    },
-    network: {,
-      ipAddress: '192.168.1.100',
-      vpnConnection: false,
-      corporateNetwork: true,
-      securityLevel: 'SECURED',
-      bandwidth: '1Gbps',
-      connectionType: 'WIRED',
-    },
-    securityContext: {,
-      authenticationMethod: 'MFA',
-      sessionAge: 3600,
-      sessionRisk: 10,
-      recentSecurityEvents: [],
-      complianceStatus: 'COMPLIANT',
-    },
-    complianceMode: false,
+  timestamp: new Date(),
+  location: {,
+  country: 'US',
+  region: 'California',
+  city: 'San Francisco',
+  timezone: 'PST',
+  withinApprovedRegions: true,
+},
+  network: {,
+  ipAddress: '192.168.1.100',
+  vpnConnection: false,
+  corporateNetwork: true,
+  securityLevel: 'SECURED',
+  bandwidth: '1Gbps',
+  connectionType: 'WIRED',
+},
+  securityContext: {,
+  authenticationMethod: 'MFA',
+  sessionAge: 3600,
+  sessionRisk: 10,
+  recentSecurityEvents: [],
+  complianceStatus: 'COMPLIANT',
+},
+  complianceMode: false,
     auditMode: false,
     emergencyMode: false,
     ...overrides
@@ -131,33 +131,32 @@ describe('CentralizedAccessControlService', () => {
     action?: Partial<ActionAttributes>,
     environment?: Partial<EnvironmentAttributes>
   ): AccessRequest => ({)
-    requestId: 'req-123',
-    timestamp: new Date(),
-    subject: createTestSubject(subject),
-    object: createTestObject(object),
-    action: createTestAction(action),
-    environment: createTestEnvironment(environment),
-    context: {,
-      sessionId: 'session-123',
-      requestSource: 'web_app',
-      purpose: 'business_operation',
-    }
-  });
+  requestId: 'req-123',
+  timestamp: new Date(),
+  subject: createTestSubject(subject),
+  object: createTestObject(object),
+  action: createTestAction(action),
+  environment: createTestEnvironment(environment),
+  context: {,
+  sessionId: 'session-123',
+  requestSource: 'web_app',
+  purpose: 'business_operation',
+});
   beforeEach(() => {
-    jest.useFakeTimers();
-    // Create mock data classifier
-    mockDataClassifier = {
-      classify: jest.fn().mockReturnValue({),
-        level: ClassificationLevel.INTERNAL,
-        category: 'OPERATIONAL' as any,
-        confidence: 90,
-        matchedRules: [],
-        complianceRequirements: [],
-        encryptionRequired: false,
-        retentionPeriod: '1 year',
-        accessControls: [],
-        reasoning: [],
-      }),
+  jest.useFakeTimers();
+  // Create mock data classifier
+  mockDataClassifier = {
+  classify: jest.fn().mockReturnValue({,)
+  level: ClassificationLevel.INTERNAL,
+  category: 'OPERATIONAL' as any,
+  confidence: 90,
+  matchedRules: [],
+  complianceRequirements: [],
+  encryptionRequired: false,
+  retentionPeriod: '1 year',
+  accessControls: [],
+  reasoning: [],
+}),
       addRule: jest.fn(),
       removeRule: jest.fn(),
       updateRule: jest.fn(),
@@ -166,69 +165,67 @@ describe('CentralizedAccessControlService', () => {
       validateGraph: jest.fn(),
       on: jest.fn(),
       emit: jest.fn(),
-      removeAllListeners: jest.fn(),
-    } as any;
+      removeAllListeners: jest.fn();
+  } as any;
     testConfig = {
-      enableRBAC: true,
-      enableABAC: true,
-      enableDelegation: true,
-      enableInheritance: true,
-      cacheDecisions: true,
-      cacheTTL: 300000, // 5 minutes
-      auditAllDecisions: true,
-      realTimeMonitoring: true,
-      strictCompliance: true,
-      emergencyBypass: true,
-      performanceMode: 'BALANCED',
-    };
+  enableRBAC: true,
+  enableABAC: true,
+  enableDelegation: true,
+  enableInheritance: true,
+  cacheDecisions: true,
+  cacheTTL: 300000, // 5 minutes,
+  auditAllDecisions: true,
+  realTimeMonitoring: true,
+  strictCompliance: true,
+  emergencyBypass: true,
+  performanceMode: 'BALANCED',
+};
     testInheritanceFramework = {
-      hierarchyLevels: [{,
-        level: 1,
-        name: 'Standard Users',
-        description: 'Basic user access',
-        maxClassificationAccess: 'INTERNAL' as DataClassificationLevel,
-        roles: ['USER'],
-        automaticInheritance: true,
-        inheritanceScope: {,
-          permissions: 'ALL',
-          constraints: 'INHERIT',
-          approvals: 'INHERIT',
-          riskLevel: 'INHERIT',
-        },
-        constraints: [],
+  hierarchyLevels: [{,
+  level: 1,
+  name: 'Standard Users',
+  description: 'Basic user access',
+  maxClassificationAccess: 'INTERNAL' as DataClassificationLevel,
+  roles: ['USER'],
+  automaticInheritance: true,
+  inheritanceScope: {,
+  permissions: 'ALL',
+  constraints: 'INHERIT',
+  approvals: 'INHERIT',
+  riskLevel: 'INHERIT',
+},
+  constraints: [],
         parentLevels: [],
-        childLevels: [],
-      }],
+        childLevels: [];
+  }],
       inheritanceRules: [],
       prohibitedInheritance: [],
       escalationRules: [],
       inheritanceValidation: {,
-        validationRules: {,
-          preInheritanceChecks: [],
-          postInheritanceChecks: [],
-          continuousValidation: [],
-          periodicReviews: [],
-        },
-        conflictDetection: {,
-          conflictTypes: [],
-          detectionAlgorithms: [],
-          resolutionStrategies: [],
-          escalationPaths: [],
-        },
-        complianceChecks: {,
-          frameworks: [],
-          validationRules: [],
-          auditRequirements: [],
-          reportingRequirements: [],
-        },
-        riskAssessment: {,
-          riskFactors: [],
-          assessmentCriteria: [],
-          mitigationStrategies: [],
-          monitoringRequirements: [],
-        }
-      }
-    };
+  validationRules: {,
+  preInheritanceChecks: [],
+  postInheritanceChecks: [],
+  continuousValidation: [],
+  periodicReviews: [],
+},
+  conflictDetection: {,
+  conflictTypes: [],
+  detectionAlgorithms: [],
+  resolutionStrategies: [],
+  escalationPaths: [],
+},
+  complianceChecks: {,
+  frameworks: [],
+  validationRules: [],
+  auditRequirements: [],
+  reportingRequirements: [],
+},
+  riskAssessment: {,
+  riskFactors: [],
+  assessmentCriteria: [],
+  mitigationStrategies: [],
+  monitoringRequirements: [],
+};
     accessControlService = new CentralizedAccessControlService()
       testConfig,
       testInheritanceFramework,
@@ -302,7 +299,7 @@ describe('CentralizedAccessControlService', () => {
           roles: ['DATA_STEWARD'], 
           clearanceLevel: 'CONFIDENTIAL',
           location: { ...createTestSubject().location, withinApprovedRegions: false }
-        },
+  }
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
       );
@@ -320,9 +317,9 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.decision).toBe('PERMIT');
       expect(decision.obligations).toContainEqual()
         expect.objectContaining({)
-          type: 'MONITORING',
-          action: 'enhanced_monitoring',
-        })
+  type: 'MONITORING',
+  action: 'enhanced_monitoring',
+}
       );
     });
   });
@@ -339,14 +336,14 @@ describe('CentralizedAccessControlService', () => {
       expect(decision.reason).toBe('Emergency access granted');
       expect(decision.obligations).toContainEqual()
         expect.objectContaining({)
-          type: 'AUDIT',
-          action: 'schedule_emergency_review',
-        })
+  type: 'AUDIT',
+  action: 'schedule_emergency_review',
+}
       );
       expect(decision.monitoring).toContainEqual()
         expect.objectContaining({)
-          type: 'REALTIME',
-        })
+  type: 'REALTIME',
+}
       );
     });
     test('should emit security alert for emergency access', async () => {
@@ -361,20 +358,20 @@ describe('CentralizedAccessControlService', () => {
       await accessControlService.evaluateAccess(request);
       expect(alertHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'EMERGENCY_ACCESS',
-          severity: 'HIGH',
-        })
+  type: 'EMERGENCY_ACCESS',
+  severity: 'HIGH',
+}
       );
     });
   });
   describe('Compliance Checks', () => {
-    test('should enforce MFA requirement for confidential data', async () => {
-      const request = createTestRequest(;);
-        { 
-          roles: ['DATA_STEWARD'], 
-          clearanceLevel: 'CONFIDENTIAL',
-          mfaVerified: false,
-        },
+  test('should enforce MFA requirement for confidential data', async () => {
+  const request = createTestRequest(;);
+  {
+  roles: ['DATA_STEWARD'],
+  clearanceLevel: 'CONFIDENTIAL',
+  mfaVerified: false,
+}
         { classification: 'CONFIDENTIAL' },
         { operation: 'read' }
       );
@@ -388,7 +385,7 @@ describe('CentralizedAccessControlService', () => {
           roles: ['DATA_OWNER'], 
           clearanceLevel: 'RESTRICTED',
           device: { ...createTestSubject().device, managed: false }
-        },
+  }
         { classification: 'RESTRICTED' },
         { operation: 'read' }
       );
@@ -445,13 +442,13 @@ describe('CentralizedAccessControlService', () => {
       const auditLog = accessControlService.getAuditLog(1);
       expect(auditLog).toHaveLength(1);
       expect(auditLog[0]).toMatchObject({)
-        requestId: 'req-123',
-        userId: 'user-123',
-        resourceId: 'data-123',
-        operation: 'read',
-        decision: 'PERMIT',
-        classification: 'INTERNAL',
-      });
+  requestId: 'req-123',
+  userId: 'user-123',
+  resourceId: 'data-123',
+  operation: 'read',
+  decision: 'PERMIT',
+  classification: 'INTERNAL',
+});
     });
     test('should filter audit log by criteria', async () => {
       // Create multiple requests
@@ -472,15 +469,15 @@ describe('CentralizedAccessControlService', () => {
       expect(filteredLog[0].decision).toBe('DENY');
     });
     test('should emit audit log events', async () => {
-      const auditHandler = jest.fn();
-      accessControlService.on('auditLog', auditHandler);
-      const request = createTestRequest();
-      await accessControlService.evaluateAccess(request);
-      expect(auditHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          userId: 'user-123',
-          operation: 'read',
-        })
+  const auditHandler = jest.fn();
+  accessControlService.on('auditLog', auditHandler);
+  const request = createTestRequest();
+  await accessControlService.evaluateAccess(request);
+  expect(auditHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  userId: 'user-123',
+  operation: 'read',
+}
       );
     });
   });
@@ -545,9 +542,9 @@ describe('CentralizedAccessControlService', () => {
       await accessControlService.evaluateAccess(request);
       expect(monitoringHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          request,
+  request,
           decision: expect.objectContaining({ decision: 'PERMIT' })
-        })
+  }
       );
     });
   });
@@ -564,15 +561,14 @@ describe('CentralizedAccessControlService', () => {
         monitoringRequirements: [],
         violationActions: [],
         metadata: {,
-          createdBy: 'test',
-          createdAt: new Date(),
-          lastModified: new Date(),
-          reviewDue: new Date(),
-          tags: [],
-          complianceFrameworks: [],
-          riskAssessment: 'low',
-        }
-      };
+  createdBy: 'test',
+  createdAt: new Date(),
+  lastModified: new Date(),
+  reviewDue: new Date(),
+  tags: [],
+  complianceFrameworks: [],
+  riskAssessment: 'low',
+};
       const policyAddedHandler = jest.fn();
       accessControlService.on('policyAdded', policyAddedHandler);
       accessControlService.addPolicy(testPolicy);
@@ -632,11 +628,11 @@ describe('CentralizedAccessControlService', () => {
       for (let i = 0; i < 100; i++) {
         const request = createTestRequest(;);
           { roles: ['USER'], clearanceLevel: 'INTERNAL' },
-          { classification: 'INTERNAL', dataId: `data-${i}` },}
+          { classification: 'INTERNAL', dataId: `data-${i}` }
+}
           { operation: 'read' }
         );
         requests.push(accessControlService.evaluateAccess(request));
-      }
       const decisions = await Promise.all(requests);
       const endTime = Date.now();
       expect(decisions).toHaveLength(100);
@@ -656,16 +652,16 @@ describe('CentralizedAccessControlService', () => {
       );
       // Set up classifier to return INTERNAL level
       mockDataClassifier.classify.mockReturnValue({)
-        level: ClassificationLevel.INTERNAL,
-        category: 'OPERATIONAL' as any,
-        confidence: 90,
-        matchedRules: [],
-        complianceRequirements: [],
-        encryptionRequired: false,
-        retentionPeriod: '1 year',
-        accessControls: [],
-        reasoning: [],
-      });
+  level: ClassificationLevel.INTERNAL,
+  category: 'OPERATIONAL' as any,
+  confidence: 90,
+  matchedRules: [],
+  complianceRequirements: [],
+  encryptionRequired: false,
+  retentionPeriod: '1 year',
+  accessControls: [],
+  reasoning: [],
+});
       const decision = await accessControlService.evaluateAccess(request);
       expect(mockDataClassifier.classify).toHaveBeenCalled();
       expect(decision.decision).toBe('PERMIT');
@@ -679,21 +675,18 @@ expect.extend({)
     const pass = expectedValues.includes(received);
     if (pass) {
       return {
-        message: () => `expected ${received} not to be one of ${expectedValues.join(', ')}`,}
-        pass: true,
-      };
+        message: () => `expected ${received} not to be one of ${expectedValues.join(', ')}`}
+},
+  pass: true;
+  };
     } else {
       return {
-        message: () => `expected ${received} to be one of ${expectedValues.join(', ')}`,}
-        pass: false,
-      };
-    }
-  }
+        message: () => `expected ${received} to be one of ${expectedValues.join(', ')}`}
+},
+  pass: false;
+  };
 });
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toBeOneOf(expectedValues: any[]): R;
-    }
-  }
-}
+      toBeOneOf(expectedValues: any): R;

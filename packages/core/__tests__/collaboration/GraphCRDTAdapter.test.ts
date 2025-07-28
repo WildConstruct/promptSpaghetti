@@ -7,9 +7,9 @@ import { Graph, Node, Edge } from '../../graphSchema';
 
 // Mock the CRDT research package for testing
 jest.mock('../../../crdt-research/src/graph-sync', () => ({)
-  GraphSyncHandler: jest.fn().mockImplementation(() => ({),
-    getGraph: jest.fn().mockReturnValue({),
-      addNode: jest.fn(),
+  GraphSyncHandler: jest.fn().mockImplementation(() => ({,)
+  getGraph: jest.fn().mockReturnValue({;)
+  addNode: jest.fn(),
       updateNode: jest.fn(),
       deleteNode: jest.fn(),
       addEdge: jest.fn(),
@@ -27,7 +27,7 @@ jest.mock('../../../crdt-research/src/graph-sync', () => ({)
     createSnapshot: jest.fn().mockReturnValue(new Uint8Array()),
     getDocumentSize: jest.fn().mockReturnValue(0),
     getSyncState: jest.fn().mockReturnValue({ documentId: 'test', userId: 'user1', lastSync: Date.now(), pendingOps: 0 }),
-    destroy: jest.fn(),
+    destroy: jest.fn();
   }))
 }));
 describe('GraphCRDTAdapter', () => {
@@ -35,74 +35,74 @@ describe('GraphCRDTAdapter', () => {
   let mockOnGraphChange: jest.Mock;
   let mockOnUserPresence: jest.Mock;
   beforeEach(() => {
-    mockOnGraphChange = jest.fn();
-    mockOnUserPresence = jest.fn();
-    adapter = new GraphCRDTAdapter({)
-      documentId: 'test-doc',
-      userId: 'user1',
-      onGraphChange: mockOnGraphChange,
-      onUserPresence: mockOnUserPresence,
-    });
+  mockOnGraphChange = jest.fn();
+  mockOnUserPresence = jest.fn();
+  adapter = new GraphCRDTAdapter({)
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: mockOnGraphChange,
+  onUserPresence: mockOnUserPresence,
+});
   });
   afterEach(() => {
     adapter.destroy();
   });
   describe('Node Conversion', () => {
     test('should convert WeightedChoice node to CRDT format', () => {
-      const node: Node = {
-        id: 'node1',
+      const node: Node = {,
+  id: 'node1',
         type: 'WeightedChoice',
         choices: [,
           { value: 'Option A', weight: 0.5 },
           { value: 'Option B', weight: 0.5 }
         ],
-        inputs: [],
-      };
+        inputs: [];
+  };
       adapter.addNode(node, { x: 100, y: 200 });
       // Verify the adapter processes the node correctly
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
     test('should convert Output node to CRDT format', () => {
-      const node: Node = {
-        id: 'output1',
-        type: 'Output',
-        inputs: ['node1'],
-      };
+  const node: Node = {,
+  id: 'output1',
+  type: 'Output',
+  inputs: ['node1'],
+};
       adapter.addNode(node);
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
     test('should convert SetVariable node to CRDT format', () => {
-      const node: Node = {
-        id: 'var1',
-        type: 'SetVariable',
-        variableName: 'testVar',
-        value: 'testValue',
-        inputs: [],
-      };
+  const node: Node = {,
+  id: 'var1',
+  type: 'SetVariable',
+  variableName: 'testVar',
+  value: 'testValue',
+  inputs: [],
+};
       adapter.addNode(node);
       expect(adapter.getGraph().nodes).toHaveLength(0); // Mock returns empty
     });
   });
   describe('Edge Operations', () => {
-    test('should add edges between nodes', () => {
-      const sourceNode: Node = {
-        id: 'source',
-        type: 'WeightedChoice',
-        choices: [],
-        inputs: [],
-      };
-      const targetNode: Node = {
-        id: 'target',
-        type: 'Output',
-        inputs: [],
-      };
-      const edge: Edge = {
-        id: 'edge1',
-        source: 'source',
-        target: 'target',
-        sourceHandle: 'output',
-        targetHandle: 'input',
-      };
+  test('should add edges between nodes', () => {
+  const sourceNode: Node = {,
+  id: 'source',
+  type: 'WeightedChoice',
+  choices: [],
+  inputs: [],
+};
+      const targetNode: Node = {,
+  id: 'target',
+  type: 'Output',
+  inputs: [],
+};
+      const edge: Edge = {,
+  id: 'edge1',
+  source: 'source',
+  target: 'target',
+  sourceHandle: 'output',
+  targetHandle: 'input',
+};
       // Add nodes first
       adapter.addNode(sourceNode);
       adapter.addNode(targetNode);
@@ -117,33 +117,29 @@ describe('GraphCRDTAdapter', () => {
   });
   describe('Graph Import', () => {
     test('should import existing graph into CRDT', () => {
-      const existingGraph: Graph = {
-        nodes: [,
+      const existingGraph: Graph = {,
+  nodes: [,
           {
             id: 'node1',
             type: 'WeightedChoice',
             choices: [{ value: 'A', weight: 1 }],
-            inputs: [],
-          },
+            inputs: [];
+  }
           {
-            id: 'node2',
-            type: 'Output',
-            inputs: ['node1'],
-          }
-        ],
-        edges: [,
-          {
-            id: 'edge1',
-            source: 'node1',
-            target: 'node2',
-          }
-        ]
-      };
+  id: 'node2',
+  type: 'Output',
+  inputs: ['node1']],
+  edges: [,
+  {
+  id: 'edge1',
+  source: 'node1',
+  target: 'node2'];
+  };
       const adapterWithGraph = new GraphCRDTAdapter({)
-        documentId: 'test-doc',
-        userId: 'user1',
-        onGraphChange: mockOnGraphChange,
-      }, existingGraph);
+  documentId: 'test-doc',
+  userId: 'user1',
+  onGraphChange: mockOnGraphChange,
+}, existingGraph);
       expect(adapterWithGraph.getGraph()).toBeDefined();
       adapterWithGraph.destroy();
     });
@@ -177,8 +173,8 @@ describe('GraphCRDTAdapter', () => {
         cursor: { nodeId: 'node1', position: { x: 100, y: 100 } },
         selection: ['node1', 'node2'],
         name: 'Test User',
-        color: '#ff0000',
-      };
+        color: '#ff0000';
+  };
       adapter.setUserPresence(presence);
       // Verify presence was set (would be tested through mock calls)
       expect(adapter.getSyncState()).toBeDefined();
@@ -216,8 +212,9 @@ describe('GraphCRDTAdapter', () => {
         { type: 'Include', data: { name: 'test' } }
       ];
       nodeTypes.forEach(({ type, data }, index) => {
-        const node: Node = {
-          id: `node${index}`,}
+        const node: Node = {,
+  id: `node${index}`}
+}
           type,
           inputs: [],
           ...data
@@ -228,11 +225,11 @@ describe('GraphCRDTAdapter', () => {
       expect(adapter.getGraph()).toBeDefined();
     });
     test('should preserve node inputs', () => {
-      const node: Node = {
-        id: 'node1',
-        type: 'Concat',
-        inputs: ['input1', 'input2', 'input3']
-      };
+  const node: Node = {,
+  id: 'node1',
+  type: 'Concat',
+  inputs: ['input1', 'input2', 'input3'],
+};
       adapter.addNode(node);
       // Inputs should be preserved in metadata
       expect(adapter.getGraph()).toBeDefined();
@@ -246,11 +243,11 @@ describe('GraphCRDTAdapter', () => {
       expect(adapter.getGraph()).toBeDefined();
     });
     test('should handle invalid edges gracefully', () => {
-      const invalidEdge: Edge = {
-        id: 'invalid',
-        source: 'nonexistent1',
-        target: 'nonexistent2',
-      };
+  const invalidEdge: Edge = {,
+  id: 'invalid',
+  source: 'nonexistent1',
+  target: 'nonexistent2',
+};
       adapter.addEdge(invalidEdge);
       // Should not throw error
       expect(adapter.getGraph()).toBeDefined();

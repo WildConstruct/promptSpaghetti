@@ -3,10 +3,10 @@ import { ExtractedVariable } from '../../utils/templateParser';
 export interface TemplateEditorProps {
     value: string;
     onChange: (value: string) => void;
-    onVariablesChange?: (variables: string[], extractedVariables?: ExtractedVariable[]) => void;
+    onVariablesChange?: (variables: string, extractedVariables?: ExtractedVariable) => void;
     variableValues?: Record<string, string>;
     nodeType?: string;
-    existingVariables?: string[];
+    existingVariables?: string;
     placeholder?: string;
     disabled?: boolean;
     showPreview?: boolean;

@@ -23,12 +23,12 @@ export declare const STANDARD_DATA_RETRIEVAL_LIMITS: Record<DataClassificationLe
  * Operation-Specific Rate Limiting Modifiers
  */
 export declare const OPERATION_MODIFIERS: Record<DataOperation, OperationModifier>;
+
 export interface OperationModifier {
     requestMultiplier: number;
     volumeMultiplier: number;
     concurrencyMultiplier: number;
     riskMultiplier: number;
-}
 /**
  * Environment-Specific Configurations
  */
@@ -115,8 +115,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create configuration for specific environment
      */
-    static createConfiguration()
-      environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION',
+    static createConfiguration(environment: 'DEVELOPMENT' | 'STAGING' | 'PRODUCTION',)
       customizations?: Partial<DataRetrievalConfig>
     ): DataRetrievalConfig;
     /**
@@ -126,8 +125,7 @@ export declare class DataRetrievalConfigurationFactory {
     /**
      * Create role-based exemption
      */
-    static createRoleExemption()
-      exemptionId: string,
+    static createRoleExemption(exemptionId: string,)
       role: keyof typeof ROLE_EXEMPTION_TEMPLATES,
       userId?: string,
       approvedBy?: string,
@@ -141,11 +139,11 @@ export declare class DataRetrievalConfigurationFactory {
      * Optimize configuration for performance
      */
     static optimizeForPerformance(config: DataRetrievalConfig): DataRetrievalConfig;
-}
+
 export interface ValidationResult {
     isValid: boolean;
     errors: string[];
     warnings: string[];
-}
+
 export default DataRetrievalConfigurationFactory;
 //# sourceMappingURL=DataRetrievalConfiguration.d.ts.map

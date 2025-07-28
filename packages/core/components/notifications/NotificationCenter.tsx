@@ -6,15 +6,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NotificationManager } from './NotificationManager';
 
 export interface Notification {
-  id: string;
+  id: string;,
   user_id: string;
   workspace_id: string;
   event_id?: string;
-  notification_type: string;
+  notification_type: string;,
   title: string;
   message: string;
   action_url?: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: 'low' | 'normal' | 'high' | 'urgent';,
   delivery_channel: 'in_app' | 'email' | 'push';
   read_at?: string;
   delivered_at: string;
@@ -22,21 +22,19 @@ export interface Notification {
   icon?: string;
   color?: string;
   action_label?: string;
-}
-interface NotificationCenterProps {
-  notificationManager: NotificationManager;
+  interface NotificationCenterProps {
+  notificationManager: NotificationManager;,
   isOpen: boolean;
   onClose: () => void;
   className?: string;
 }
-
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   notificationManager,
   isOpen,
   onClose,
   className = ''
 }) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<'all' | 'unread' | 'mentions' | 'workspace'>('all');
@@ -45,7 +43,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   useEffect(() => {
     if (isOpen) {
       loadNotifications();
-    }
   }, [isOpen, filter, sortBy]);
   useEffect(() => {
     // Set up real-time notification updates
@@ -53,39 +50,35 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
       setNotifications(prev => [notification, ...prev]);
       if (!notification.read_at) {
         setUnreadCount(prev => prev + 1);
-      }
     });
     return unsubscribe;
   }, [notificationManager]);
   useEffect(() => {
-    // Close panel when clicking outside
-    const handleClickOutside = (event: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
+  // Close panel when clicking outside
+  const handleClickOutside = (event: MouseEvent) => {,
+  if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+  onClose();
+};
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-    }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose]);
   const loadNotifications = async () => {
-    try {
-      setLoading(true);
-      const result = await notificationManager.getNotifications({)
-        filter,
-        sort_by: sortBy,
-        limit: 50,
-      });
+  try {
+  setLoading(true);
+  const result = await notificationManager.getNotifications({)
+  filter,
+  sort_by: sortBy,
+  limit: 50,
+});
       setNotifications(result.notifications);
       setUnreadCount(result.unread_count);
     } catch (error) {
-      console.error('Failed to load notifications:', error);
-    } finally {
+  console.error('Failed to load notifications:', error);
+} finally {
       setLoading(false);
-    }
   };
   const markAsRead = async (notificationId: string) => {
     try {
@@ -98,9 +91,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
     } catch (error) {
-      console.error('Failed to mark notification as read:', error);
-    }
-  };
+  console.error('Failed to mark notification as read:', error);
+};
   const markAllAsRead = async () => {
     try {
       const unreadIds = notifications.filter(n => !n.read_at).map(n => n.id);
@@ -110,63 +102,57 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
       );
       setUnreadCount(0);
     } catch (error) {
-      console.error('Failed to mark all notifications as read:', error);
-    }
-  };
+  console.error('Failed to mark all notifications as read:', error);
+};
   const deleteNotification = async (notificationId: string) => {
     try {
       await notificationManager.deleteNotification(notificationId);
       setNotifications(prev => prev.filter(n => n.id !== notificationId));
     } catch (error) {
-      console.error('Failed to delete notification:', error);
-    }
-  };
+  console.error('Failed to delete notification:', error);
+};
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read_at) {
       markAsRead(notification.id);
-    }
     if (notification.action_url) {
       // Navigate to the action URL
       window.location.href = notification.action_url;
-    }
   };
   const getNotificationIcon = (notification: Notification): string => {
-    if (notification.icon) return notification.icon;
-    switch (notification.notification_type) {
-    case 'comment':
-      return '💬';
-    case 'mention':
-      return '@';
-    case 'collaboration':
-      return '👥';
-    case 'workspace':
-      return '🏢';
-    case 'template':
-      return '📋';
-    case 'approval':
-      return '✅';
-    case 'rejection':
-      return '❌';
-    case 'system':
-      return 'ℹ️';
-    default:
-      return '🔔';
-    }
-  };
+  if (notification.icon) return notification.icon;
+  switch (notification.notification_type) {
+  case 'comment':,
+  return '💬';
+  case 'mention':,
+  return '@';
+  case 'collaboration':,
+  return '👥';
+  case 'workspace':,
+  return '🏢';
+  case 'template':,
+  return '📋';
+  case 'approval':,
+  return '✅';
+  case 'rejection':,
+  return '❌';
+  case 'system':,
+  return 'ℹ️';
+  default:,
+  return '🔔';
+};
   const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-    case 'urgent':
-      return 'text-red-600 bg-red-100';
-    case 'high':
-      return 'text-orange-600 bg-orange-100';
-    case 'normal':
-      return 'text-blue-600 bg-blue-100';
-    case 'low':
-      return 'text-gray-600 bg-gray-100';
-    default:
-      return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (priority) {
+  case 'urgent':,
+  return 'text-red-600 bg-red-100';
+  case 'high':,
+  return 'text-orange-600 bg-orange-100';
+  case 'normal':,
+  return 'text-blue-600 bg-blue-100';
+  case 'low':,
+  return 'text-gray-600 bg-gray-100';
+  default:,
+  return 'text-gray-600 bg-gray-100';
+};
   const formatTimeAgo = (dateString: string): string => {
     const date = new Date(dateString);
     const now = new Date();
@@ -181,7 +167,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
     return date.toLocaleDateString();
   };
   if (!isOpen) return null;
-  return ();
+  return;
     <div className={`notification-center ${className}`}>}
       <div 
         ref={panelRef}
@@ -279,15 +265,14 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({)
   );
 };
 interface NotificationItemProps {
-  notification: Notification;
+  notification: Notification;,
   onClick: () => void;
-  onMarkAsRead: () => void;
+  onMarkAsRead: () => void;,
   onDelete: () => void;
-  getIcon: (notification: Notification) => string;
-  getPriorityColor: (priority: string) => string;
+  getIcon: (notification: Notification) => string;,
+  getPriorityColor: (priority: string) => string;,
   formatTimeAgo: (dateString: string) => string;
-}
-const NotificationItem: React.FC<NotificationItemProps> = ({)
+  const NotificationItem: React.FC<NotificationItemProps> = ({,)
   notification,
   onClick,
   onMarkAsRead,
@@ -297,11 +282,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({)
   formatTimeAgo
 }) => {
   const [showActions, setShowActions] = useState(false);
-  return ();
-    <div 
-      className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer relative ${
-        !notification.read_at ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-      }`}
+  return;
+  <div
+  className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer relative ${,}
+  !notification.read_at ? 'bg-blue-50 border-l-4 border-l-blue-500' : '',
+}`}
       onClick={onClick}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}

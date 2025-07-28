@@ -18,9 +18,11 @@ const revokeBulkSessionsSchema = z.object({
   reason: z.string().optional()
 });
 
+}
 interface SessionRouteContext {
   authService: AuthenticationService;
   sessionService: SessionService;
+}
 }
 
 export async function sessionRoutes(fastify: FastifyInstance, context: SessionRouteContext) {
@@ -47,7 +49,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                   current: { type: 'boolean' }
                 }
               }
-            },
+  }
             stats: {
               type: 'object',
               properties: {
@@ -270,7 +272,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
                 suspiciousLocations: { type: 'array', items: { type: 'string' } },
                 newDevices: { type: 'array' }
               }
-            },
+  }
             recommendations: {
               type: 'array',
               items: { type: 'string' }
@@ -341,7 +343,7 @@ export async function sessionRoutes(fastify: FastifyInstance, context: SessionRo
           limit: { type: 'number', default: 50 },
           offset: { type: 'number', default: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',

@@ -143,7 +143,7 @@ export async function timeoutManagementRoutes(
         properties: {
           operation: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -194,7 +194,7 @@ export async function timeoutManagementRoutes(
                 halfOpen: { type: 'number' },
                 closed: { type: 'number' }
               }
-            },
+  }
             timestamp: { type: 'string', format: 'date-time' }
           }
         }
@@ -343,7 +343,7 @@ export async function timeoutManagementRoutes(
           properties: {
             operation: { type: 'string' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -381,7 +381,7 @@ export async function timeoutManagementRoutes(
           properties: {
             active: { type: 'boolean' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -414,9 +414,9 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             alertId: { type: 'string' }
-          },
+  }
           required: ['alertId']
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -518,9 +518,9 @@ export async function timeoutManagementRoutes(
           type: 'object',
           properties: {
             type: { type: 'string', enum: ['email', 'slack', 'webhook'] }
-          },
+  }
           required: ['type']
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -552,7 +552,7 @@ export async function timeoutManagementRoutes(
           properties: {
             maxAge: { type: 'number', minimum: 3600000 } // Minimum 1 hour
           }
-        },
+  }
         response: {
           200: {
             type: 'object',

@@ -37,29 +37,25 @@ export interface CreatorAttributionDashboardProps {
   onCollaborationClick?: (templateId: string) => void;
   onSettingsClick?: () => void;
   className?: string;
-}
-interface DashboardStats {
-  totalTemplates: number;
+  interface DashboardStats {
+  totalTemplates: number;,
   totalRevenue: number;
-  pendingRevenue: number;
+  pendingRevenue: number;,
   collaborations: number;
-  activeClaims: number;
+  activeClaims: number;,
   verificationRate: number;
-}
-interface TemplatePerformance {
-  templateId: string;
+  interface TemplatePerformance {
+  templateId: string;,
   title: string;
-  views: number;
+  views: number;,
   purchases: number;
-  revenue: number;
+  revenue: number;,
   rating: number;
   trend: 'up' | 'down' | 'stable';
+  // =============================================================================
+  // Creator Attribution Dashboard Component
+  // =============================================================================
 }
-
-// =============================================================================
-// Creator Attribution Dashboard Component
-// =============================================================================
-
 export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps> = ({)
   userId,
   onTemplateClick,
@@ -70,7 +66,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   // State management
   const [dashboard, setDashboard] = useState<CreatorDashboardResponse | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [topPerformers, setTopPerformers] = useState<TemplatePerformance[]>([]);
+  const [topPerformers, setTopPerformers] = useState<TemplatePerformance>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'templates' | 'collaborations' | 'analytics'>('overview');
@@ -82,49 +78,46 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
       setLoading(true);
       setError(null);
       const response = await fetch(`/api/marketplace-attribution/creators/${userId}/dashboard`, {)}
-        headers: {,
+  },
+  headers: {,
           'Authorization': `Bearer ${getAuthToken()}`}
-        }
       });
       if (!response.ok) {
-        throw new Error('Failed to load creator dashboard');
-      }
-      const data = await response.json();
-      if (data.success) {
-        setDashboard(data);
-        // Calculate stats
-        const calculatedStats: DashboardStats = {
-          totalTemplates: data.templates.length,
-          totalRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.total, 0),
-          pendingRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.pending, 0),
-          collaborations: data.collaborations.length,
-          activeClaims: 0, // Would be calculated from claims data
-          verificationRate: data.profile.attributionReputation.accuracyScore,
-        };
+  throw new Error('Failed to load creator dashboard');
+  const data = await response.json();
+  if (data.success) {
+  setDashboard(data);
+  // Calculate stats
+  const calculatedStats: DashboardStats = {,
+  totalTemplates: data.templates.length,
+  totalRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.total, 0),
+  pendingRevenue: data.templates.reduce((sum: number, t: unknown) => sum + t.revenue.pending, 0),
+  collaborations: data.collaborations.length,
+  activeClaims: 0, // Would be calculated from claims data,
+  verificationRate: data.profile.attributionReputation.accuracyScore,
+};
         setStats(calculatedStats);
         // Calculate top performers
-        const performers: TemplatePerformance[] = data.templates
-          .map((template: Error) => ({)
-            templateId: template.templateId,
-            title: template.title,
-            views: template.performance.views,
-            purchases: template.performance.purchases,
-            revenue: template.revenue.total,
-            rating: template.performance.rating,
-            trend: template.performance.purchases > 10 ? 'up' : 'stable' as const,
-          }))
+        const performers: TemplatePerformance = data.templates
+          .map((template: Error) => ({,)
+  templateId: template.templateId,
+  title: template.title,
+  views: template.performance.views,
+  purchases: template.performance.purchases,
+  revenue: template.revenue.total,
+  rating: template.performance.rating,
+  trend: template.performance.purchases > 10 ? 'up' : 'stable' as const,
+}))
           .sort((a: TemplatePerformance, b: TemplatePerformance) => b.revenue - a.revenue)
           .slice(0, 5);
         setTopPerformers(performers);
       } else {
         throw new Error(data.error || 'Failed to load dashboard');
-      }
     } catch (error) {
-      console.error('Failed to fetch creator dashboard:', error);
-      setError(error instanceof Error ? error.message : 'Unknown error occurred');
-    } finally {
+  console.error('Failed to fetch creator dashboard:', error);
+  setError(error instanceof Error ? error.message : 'Unknown error occurred');
+} finally {
       setLoading(false);
-    }
   }, [userId]);
   useEffect(() => {
     fetchDashboard();
@@ -133,38 +126,39 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   // UI Rendering Methods
   // =============================================================================
   const renderStatsCards = () => {
-    if (!stats) return null;
-    const statCards = [;
-      {
-        icon: FileText,
-        label: 'Templates Created',
-        value: stats.totalTemplates.toString(),
-        subtext: 'Active templates',
-        color: 'blue',
-      },
+  if (!stats) return null;
+  const statCards = [;
+  {
+  icon: FileText,
+  label: 'Templates Created',
+  value: stats.totalTemplates.toString(),
+  subtext: 'Active templates',
+  color: 'blue',
+}
       {
         icon: DollarSign,
         label: 'Total Revenue',
-        value: `$${(stats.totalRevenue / 100).toFixed(2)}`,}
-        subtext: `$${(stats.pendingRevenue / 100).toFixed(2)} pending`,}
-        color: 'green',
-      },
+        value: `$${(stats.totalRevenue / 100).toFixed(2)}`}
+},
+  subtext: `$${(stats.pendingRevenue / 100).toFixed(2)} pending`}
+},
+  color: 'green';
+  }
       {
-        icon: Users,
-        label: 'Collaborations',
-        value: stats.collaborations.toString(),
-        subtext: 'Active partnerships',
-        color: 'purple',
-      },
+  icon: Users,
+  label: 'Collaborations',
+  value: stats.collaborations.toString(),
+  subtext: 'Active partnerships',
+  color: 'purple',
+}
       {
         icon: Award,
         label: 'Verification Rate',
-        value: `${stats.verificationRate.toFixed(1)}%`,}
-        subtext: 'Attribution accuracy',
-        color: 'orange',
-      }
-    ];
-    return ();
+        value: `${stats.verificationRate.toFixed(1)}%`}
+},
+  subtext: 'Attribution accuracy',
+        color: 'orange'];
+    return;
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((card, index) => ()
           <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
@@ -185,7 +179,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderTemplatesList = () => {
     if (!dashboard?.templates) return null;
-    return ();
+    return;
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Your Templates</h3>
@@ -247,10 +241,10 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                           <span
                             key={i}
                             className={`text-xs ${
-                              i < Math.floor(template.performance.rating)
-                                ? 'text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
+  i < Math.floor(template.performance.rating)
+  ? 'text-yellow-400'
+  : 'text-gray-300',
+}`}
                           >
                             ★
                           </span>
@@ -286,7 +280,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderCollaborationsList = () => {
     if (!dashboard?.collaborations) return null;
-    return ();
+    return;
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Active Collaborations</h3>
@@ -300,12 +294,12 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                   <div className="flex items-center">
                     <h4 className="text-sm font-medium text-gray-900">{collaboration.title}</h4>
                     <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                      collaboration.status === 'active' 
-                        ? 'bg-green-100 text-green-800'
-                        : collaboration.status === 'completed'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                    }`}>
+  collaboration.status === 'active'
+  ? 'bg-green-100 text-green-800'
+  : collaboration.status === 'completed',
+  ? 'bg-blue-100 text-blue-800'
+  : 'bg-yellow-100 text-yellow-800',
+}`}>
                       {collaboration.status}
                     </span>
                   </div>
@@ -341,7 +335,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderTopPerformers = () => {
     if (topPerformers.length === 0) return null;
-    return ();
+    return;
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Top Performing Templates</h3>
@@ -370,8 +364,8 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
                   </p>
                   <div className="flex items-center mt-1">
                     <TrendingUp className={`w-4 h-4 ${
-                      template.trend === 'up' ? 'text-green-500' : 'text-gray-400'
-                    }`} />
+  template.trend === 'up' ? 'text-green-500' : 'text-gray-400',
+}`} />
                     <span className="text-xs text-gray-500 ml-1">
                       {template.rating.toFixed(1)} ★
                     </span>
@@ -386,7 +380,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   };
   const renderProfile = () => {
     if (!dashboard?.profile) return null;
-    return ();
+    return;
       <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div>
@@ -449,7 +443,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
   // Main Render
   // =============================================================================
   if (loading) {
-    return ();
+    return;
       <div className={`creator-attribution-dashboard ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -457,9 +451,8 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
         </div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className={`creator-attribution-dashboard ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <div className="flex items-center">
@@ -476,8 +469,7 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`creator-attribution-dashboard ${className}`}>}
       {/* Header */}
       <div className="mb-8">
@@ -497,10 +489,10 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <tab.icon className="w-4 h-4 mr-2" />
               {tab.label}
@@ -539,6 +531,5 @@ export const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardPr
 function getAuthToken(): string {
   // Implementation would get JWT token from app state or localStorage
   return localStorage.getItem('authToken') || '';
-}
 
 export default CreatorAttributionDashboard;

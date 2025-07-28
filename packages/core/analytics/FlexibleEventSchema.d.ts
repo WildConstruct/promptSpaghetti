@@ -19,6 +19,7 @@ import {
   ValidationWarning,
   ConditionLogic
 } from './ConversionDataModel';
+
 export interface EventSchemaDefinition {
     id: string;
     name: string;
@@ -58,7 +59,7 @@ export interface EventSchemaDefinition {
         batchValidation: boolean;
         maxValidationTime: number;
     };
-}
+
 export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relationships'> {
     id: string;
     name: string;
@@ -88,7 +89,7 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
         qualityMetrics?: PropertyQualityMetrics;
         examples: PropertyExample[];
     };
-}
+
 export interface PropertyTransformationStep {
     id: string;
     name: string;
@@ -106,7 +107,7 @@ export interface PropertyTransformationStep {
         retries: number;
         cacheable: boolean;
     };
-}
+
 export interface ValidationRule {
     id: string;
     name: string;
@@ -128,7 +129,7 @@ export interface ValidationRule {
         action: 'block' | 'warn' | 'log';
         suggestedFix?: string;
     };
-}
+
 export interface PropertyRelationshipDefinition {
     id: string;
     type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
@@ -136,7 +137,7 @@ export interface PropertyRelationshipDefinition {
     relationship: RelationshipSpec;
     strength: number;
     bidirectional: boolean;
-}
+
 export interface RelationshipSpec {
     condition: ConditionLogic;
     transformation?: string;
@@ -146,7 +147,7 @@ export interface RelationshipSpec {
         businessReason: string;
         examples: string[];
     };
-}
+
 export interface GlobalConstraint {
     id: string;
     name: string;
@@ -154,7 +155,7 @@ export interface GlobalConstraint {
     constraint: ConditionLogic;
     severity: 'error' | 'warning';
     applicableEvents: string[];
-}
+
 export interface SchemaTransformation {
     id: string;
     name: string;
@@ -162,14 +163,14 @@ export interface SchemaTransformation {
     stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval';
     transformation: TransformationDefinition;
     conditions?: ConditionLogic;
-}
+
 export interface TransformationDefinition {
     type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
     config: Record<string, unknown>;
     inputFields: string[];
     outputFields: string[];
     preserveOriginal: boolean;
-}
+
 export interface CustomValidator {
     id: string;
     name: string;
@@ -186,30 +187,30 @@ export interface CustomValidator {
         memoryLimit: number;
     };
     tests: ValidatorTest[];
-}
+
 export interface ValidatorParameter {
     name: string;
     type: string;
     description: string;
     required: boolean;
     defaultValue?: unknown;
-}
+
 export interface ValidatorTest {
     name: string;
     input: unknown;
     expectedOutput: unknown;
     description: string;
-}
+
 export interface PropertyOverride {
     propertyId: string;
     changes: Partial<PropertySchemaDefinition>;
     reason: string;
-}
+
 export interface PropertyExtension {
     propertyId: string;
     newProperty: PropertySchemaDefinition;
     reason: string;
-}
+
 export interface PropertyQualityMetrics {
     completeness: number;
     accuracy: number;
@@ -217,13 +218,13 @@ export interface PropertyQualityMetrics {
     timeliness: number;
     validity: number;
     lastAssessed: number;
-}
+
 export interface PropertyExample {
     description: string;
     validExample: unknown;
     invalidExample?: unknown;
     explanation: string;
-}
+
 export interface SchemaValidationResult {
     isValid: boolean;
     overallScore: number;
@@ -244,7 +245,7 @@ export interface SchemaValidationResult {
         validatorVersion: string;
         processingPipeline: string[];
     };
-}
+
 export interface FieldValidationResult {
     fieldName: string;
     isValid: boolean;
@@ -258,7 +259,7 @@ export interface FieldValidationResult {
     cacheUsed: boolean;
     errors: ValidationError[];
     warnings: ValidationWarning[];
-}
+
 export interface RuleValidationResult {
     ruleId: string;
     ruleName: string;
@@ -267,7 +268,7 @@ export interface RuleValidationResult {
     executionTime: number;
     message?: string;
     details?: Record<string, unknown>;
-}
+
 export interface RelationshipValidationResult {
     relationshipId: string;
     relatedField: string;
@@ -275,7 +276,7 @@ export interface RelationshipValidationResult {
     isValid: boolean;
     confidence: number;
     message?: string;
-}
+
 export interface GlobalConstraintResult {
     constraintId: string;
     constraintName: string;
@@ -283,7 +284,7 @@ export interface GlobalConstraintResult {
     score: number;
     affectedFields: string[];
     message?: string;
-}
+
 export interface TransformationResult {
     transformationId: string;
     transformationName: string;
@@ -296,7 +297,6 @@ export interface TransformationResult {
         memoryUsed: number;
     };
     error?: string;
-}
 /**
  * Flexible Event Schema Manager
  * Manages schema definitions, validation, and transformations
@@ -384,14 +384,13 @@ export declare class FlexibleEventSchemaManager {
     private createMarketplaceEventSchema;
     private createConversionEventSchema;
     private createUserBehaviorSchema;
-}
+
 export interface ValidationOptions {
     useCache?: boolean;
     strictMode?: boolean;
     validateRelationships?: boolean;
     maxValidationTime?: number;
     customContext?: Record<string, unknown>;
-}
 /**
  * Factory function to create FlexibleEventSchemaManager
  */

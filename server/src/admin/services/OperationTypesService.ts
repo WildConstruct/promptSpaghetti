@@ -16,6 +16,7 @@
 import { Database } from '../database/DatabaseService';
 import { AuditService } from '../../auth/services/AuditService';
 
+}
 export interface OperationType {
   id: string;
   name: string;
@@ -56,7 +57,9 @@ export interface OperationType {
   createdBy: string;
   tags: string[];
 }
+}
 
+}
 export interface OperationParameter {
   name: string;
   displayName: string;
@@ -79,13 +82,17 @@ export interface OperationParameter {
   dependsOn?: string[];
   conditionallyRequired?: ConditionalRequirement[];
 }
+}
 
+}
 export interface OperationCapability {
   capability: string;
   description: string;
   limitations?: string[];
 }
+}
 
+}
 export interface ResourceRequirements {
   cpuIntensive: boolean;
   memoryIntensive: boolean;
@@ -96,7 +103,9 @@ export interface ResourceRequirements {
   estimatedMemoryUsage?: number; // MB
   estimatedDiskUsage?: number; // MB
 }
+}
 
+}
 export interface UIConfiguration {
   icon?: string;
   color?: string;
@@ -108,19 +117,25 @@ export interface UIConfiguration {
   grouping?: string;
   sortOrder: number;
 }
+}
 
+}
 export interface ParameterConstraint {
   type: 'min' | 'max' | 'length' | 'pattern' | 'enum' | 'custom';
   value: any;
   message: string;
 }
+}
 
+}
 export interface ValidationRule {
   rule: string;
   message: string;
   severity: 'error' | 'warning' | 'info';
 }
+}
 
+}
 export interface ParameterOption {
   value: any;
   label: string;
@@ -128,10 +143,13 @@ export interface ParameterOption {
   disabled?: boolean;
   group?: string;
 }
+}
 
+}
 export interface ConditionalRequirement {
   condition: string; // JavaScript expression
   message: string;
+}
 }
 
 export enum OperationCategory {
@@ -200,6 +218,7 @@ export enum TargetType {
   SYSTEM = 'system'
 }
 
+}
 export interface OperationExecution {
   id: string;
   operationTypeId: string;
@@ -234,7 +253,9 @@ export interface OperationExecution {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ExecutionProgress {
   percentage: number;
   currentStep: string;
@@ -243,7 +264,9 @@ export interface ExecutionProgress {
   estimatedTimeRemaining?: number;
   lastUpdateTime: Date;
 }
+}
 
+}
 export interface OperationResult {
   targetId: string;
   targetType: string;
@@ -252,14 +275,18 @@ export interface OperationResult {
   data?: any;
   timestamp: Date;
 }
+}
 
+}
 export interface OperationLog {
   level: 'debug' | 'info' | 'warn' | 'error';
   message: string;
   timestamp: Date;
   context?: Record<string, any>;
 }
+}
 
+}
 export interface OperationError {
   code: string;
   message: string;
@@ -268,7 +295,9 @@ export interface OperationError {
   timestamp: Date;
   recoverable: boolean;
 }
+}
 
+}
 export interface ResourceUsage {
   peakMemoryMB: number;
   avgCpuPercent: number;
@@ -277,6 +306,7 @@ export interface ResourceUsage {
   networkInMB: number;
   networkOutMB: number;
   databaseQueries: number;
+}
 }
 
 export enum ExecutionStatus {
@@ -307,6 +337,7 @@ export class OperationTypesService {
     category?: OperationCategory,
     includeDeprecated: boolean = false
   ): Promise<OperationType[]> {
+
     let query = 'SELECT * FROM operation_types WHERE 1=1';
     const values: any[] = [];
     let paramIndex = 1;
@@ -330,6 +361,7 @@ export class OperationTypesService {
    * Get operation type by ID
    */
   async getOperationType(id: string): Promise<OperationType | null> {
+
     const result = await this.db.query(
       'SELECT * FROM operation_types WHERE id = $1',
       [id]
@@ -345,6 +377,7 @@ export class OperationTypesService {
     operationType: Omit<OperationType, 'id' | 'createdAt' | 'updatedAt'>,
     createdBy: string
   ): Promise<OperationType> {
+
     // Validate operation type
     this.validateOperationType(operationType);
 
@@ -405,6 +438,7 @@ export class OperationTypesService {
     updates: Partial<Omit<OperationType, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>>,
     updatedBy: string
   ): Promise<OperationType> {
+
     const existing = await this.getOperationType(id);
     if (!existing) {
       throw new Error('Operation type not found');
@@ -457,6 +491,7 @@ export class OperationTypesService {
    * Delete operation type
    */
   async deleteOperationType(id: string, deletedBy: string): Promise<void> {
+
     const existing = await this.getOperationType(id);
     if (!existing) {
       throw new Error('Operation type not found');
@@ -492,6 +527,7 @@ export class OperationTypesService {
     errors: ValidationError[];
     warnings: ValidationError[];
   }> {
+
     const operationType = await this.getOperationType(operationTypeId);
     if (!operationType) {
       throw new Error('Operation type not found');
@@ -717,6 +753,7 @@ export class OperationTypesService {
     rule: ValidationRule, 
     allParameters: Record<string, any>
   ): Promise<{ isValid: boolean; message: string }> {
+
     try {
       // This would implement custom validation logic
       // For now, return valid
@@ -793,10 +830,12 @@ export class OperationTypesService {
   }
 }
 
+}
 export interface ValidationError {
   parameter: string;
   message: string;
   code: string;
+}
 }
 
 export default OperationTypesService;

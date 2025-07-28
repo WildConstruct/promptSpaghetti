@@ -176,7 +176,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           config: DashboardConfigSchema,
           query: DashboardQuerySchema.optional()
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -332,9 +332,9 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           widgetId: { type: 'string' }
-        },
+  }
         required: ['widgetId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -501,7 +501,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
               ...authorizedFilter, 
               categories: ['security'],
               types: ['SECURITY_EVENT', 'FRAUD_DETECTION']
-            },
+  }
             limit: 20,
             sortBy: 'timestamp',
             sortOrder: 'desc'
@@ -609,9 +609,9 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
           widgets: {
             type: 'array',
             items: WidgetConfigSchema
-          },
+  }
           config: DashboardConfigSchema
-        },
+  }
         required: ['layoutId', 'name', 'widgets']
       }
     }
@@ -713,7 +713,7 @@ export async function analyticsDashboardRoutes(fastify: FastifyInstance) {
             refreshInterval: 5000,
             maxEvents: 100,
             enableRealTime: true
-          },
+  }
           createdAt: Date.now() - 86400000,
           updatedAt: Date.now() - 86400000
         }

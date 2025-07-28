@@ -12,6 +12,7 @@
  * - Temporal data structures for trend analysis
  */
 import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
+
 export interface ConversionFunnelDefinition {
     id: string;
     name: string;
@@ -43,7 +44,7 @@ export interface ConversionFunnelDefinition {
         expectedConversionRate: number;
         benchmarkData?: BenchmarkData;
     };
-}
+
 export interface ConversionStep {
     id: string;
     name: string;
@@ -72,59 +73,60 @@ export interface ConversionStep {
         dependencies: string[];
         optimizationOpportunities: string[];
     };
-}
+
 export type StepType = 'entry_point' | 'engagement' | 'decision_point' | 'action' | 'validation' | 'conversion' | 'exit_point';
 export type FunnelCategory = 'acquisition' | 'activation' | 'engagement' | 'monetization' | 'retention' | 'referral';
+
 export interface EventCriteria {
     eventType: string;
     eventPattern?: string;
     propertyMatchers: PropertyMatcher[];
     valueConstraints?: ValueConstraint[];
     contextRequirements?: ContextRequirement[];
-}
+
 export interface PropertyMatcher {
     propertyPath: string;
     operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'matches' | 'exists' | 'in' | 'between';
     value: any;
     caseSensitive?: boolean;
     required?: boolean;
-}
+
 export interface ValueConstraint {
     field: 'value' | 'timestamp' | 'duration';
     min?: number;
     max?: number;
     exactValues?: number[];
     excludeValues?: number[];
-}
+
 export interface ContextRequirement {
     type: 'device' | 'location' | 'session' | 'user_attribute' | 'time_of_day' | 'referrer';
     condition: string;
     value: any;
-}
+
 export interface StepCondition {
     id: string;
     type: 'property' | 'time' | 'sequence' | 'count' | 'custom';
     description: string;
     logic: ConditionLogic;
     weight: number;
-}
+
 export interface ConditionLogic {
     operator: 'AND' | 'OR' | 'NOT';
     conditions: SimpleCondition[];
     customValidator?: string;
-}
+
 export interface SimpleCondition {
     field: string;
     operator: string;
     value: any;
     metadata?: Record<string, any>;
-}
+
 export interface TimeWindow {
     start: string;
     end: string;
     daysOfWeek: number[];
     timezone?: string;
-}
+
 export interface StepBranch {
     id: string;
     name: string;
@@ -135,7 +137,7 @@ export interface StepBranch {
         description: string;
         expectedFlow: number;
     };
-}
+
 export interface ConditionalPath {
     id: string;
     name: string;
@@ -144,7 +146,7 @@ export interface ConditionalPath {
     steps: string[];
     priority: number;
     isDefault: boolean;
-}
+
 export interface SuccessCriteria {
     primary: {,
         stepId: string;
@@ -161,7 +163,7 @@ export interface SuccessCriteria {
         method: 'weighted' | 'binary' | 'progressive' | 'custom';
         customFormula?: string;
     };
-}
+
 export interface SegmentationRule {
     id: string;
     name: string;
@@ -174,32 +176,32 @@ export interface SegmentationRule {
         businessValue: string;
         trackingPeriod: number;
     };
-}
+
 export interface BenchmarkData {
     industryAverageConversionRate: number;
     competitorData?: CompetitorBenchmark[];
     historicalData?: HistoricalBenchmark[];
     goalConversionRate: number;
     lastUpdated: number;
-}
+
 export interface CompetitorBenchmark {
     name: string;
     conversionRate: number;
     averageTimeToConvert: number;
     dropOffPoints: string[];
     strengths: string[];
-}
+
 export interface HistoricalBenchmark {
     period: string;
     conversionRate: number;
     volume: number;
     averageValue: number;
     topDropOffPoints: string[];
-}
 /**
  * Enhanced Conversion Event Schema
  * Extends the base conversion event with flexible property validation
  */
+
 export interface FlexibleConversionEvent extends EnhancedConversionEvent {
     flexibleProperties: {,
         [key: string]: FlexibleProperty;
@@ -249,7 +251,7 @@ export interface FlexibleConversionEvent extends EnhancedConversionEvent {
         deviceFingerprint: string;
         locationData?: LocationData;
     };
-}
+
 export interface FlexibleProperty {
     value: any;
     type: PropertyType;
@@ -260,8 +262,9 @@ export interface FlexibleProperty {
         lastUpdated: number;
         validationStatus: 'valid' | 'invalid' | 'pending';
     };
-}
+
 export type PropertyType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'enum' | 'json' | 'custom';
+
 export interface PropertySchema {
     type: PropertyType;
     required: boolean;
@@ -269,37 +272,37 @@ export interface PropertySchema {
     defaultValue?: any;
     transformations?: PropertyTransformation[];
     relationships?: PropertyRelationship[];
-}
+
 export interface PropertyConstraint {
     type: 'format' | 'range' | 'length' | 'pattern' | 'custom';
     value: any;
     errorMessage: string;
     severity: 'error' | 'warning' | 'info';
-}
+
 export interface PropertyTransformation {
     type: 'normalize' | 'encode' | 'hash' | 'encrypt' | 'custom';
     config: Record<string, any>;
     conditions?: ConditionLogic;
-}
+
 export interface PropertyRelationship {
     type: 'depends_on' | 'conflicts_with' | 'derives_from' | 'validates_against';
     targetProperty: string;
     relationship: string;
-}
+
 export interface ValidationError {
     propertyPath: string;
     constraint: string;
     message: string;
     severity: 'critical' | 'major' | 'minor';
     suggestedFix?: string;
-}
+
 export interface ValidationWarning {
     propertyPath: string;
     issue: string;
     message: string;
     impact: string;
     recommendation?: string;
-}
+
 export interface LocationData {
     country: string;
     region?: string;
@@ -311,10 +314,10 @@ export interface LocationData {
         accuracy: number;
     };
     ipHash: string;
-}
 /**
  * Cohort Tracking Structures
  */
+
 export interface ConversionCohort {
     id: string;
     name: string;
@@ -353,7 +356,7 @@ export interface ConversionCohort {
         tags: string[];
         owner: string;
     };
-}
+
 export interface UserSegment {
     id: string;
     name: string;
@@ -386,7 +389,7 @@ export interface UserSegment {
         marketingPersona?: string;
         customAttributes: Record<string, any>;
     };
-}
+
 export interface MetricCalculation {
     id: string;
     name: string;
@@ -394,12 +397,12 @@ export interface MetricCalculation {
     field: string;
     aggregationPeriod: 'hour' | 'day' | 'week' | 'month';
     customFormula?: string;
-}
+
 export interface TimeSeriesData {
     timestamp: number;
     value: number;
     metadata?: Record<string, any>;
-}
+
 export interface DropOffPoint {
     stepId: string;
     stepName: string;
@@ -408,7 +411,7 @@ export interface DropOffPoint {
     averageTimeSpent: number;
     commonExitActions: string[];
     recoveryOpportunities: string[];
-}
+
 export interface ValueMetrics {
     totalRevenue: number;
     averageOrderValue: number;
@@ -416,7 +419,7 @@ export interface ValueMetrics {
     revenuePerUser: number;
     costPerAcquisition: number;
     returnOnInvestment: number;
-}
+
 export interface BehaviorPattern {
     id: string;
     name: string;
@@ -428,7 +431,7 @@ export interface BehaviorPattern {
         preferredHours: number[];
         seasonality?: string;
     };
-}
+
 export interface FunnelSegmentMetrics {
     funnelId: string;
     conversionRate: number;
@@ -437,17 +440,17 @@ export interface FunnelSegmentMetrics {
     completionRate: number;
     backtrackingRate: number;
     pathPreferences: PathPreference[];
-}
+
 export interface PathPreference {
     pathId: string;
     pathName: string;
     usageRate: number;
     conversionRate: number;
     averageTime: number;
-}
 /**
  * Entity Relationship Structures
  */
+
 export interface UserEntity {
     id: string;
     profile: {,
@@ -492,7 +495,7 @@ export interface UserEntity {
         contentPreferences: ContentPreference[];
         notificationSettings: NotificationSettings;
     };
-}
+
 export interface TemplateEntity {
     id: string;
     metadata: {,
@@ -544,7 +547,7 @@ export interface TemplateEntity {
         refundRate: number;
         qualityScore: number;
     };
-}
+
 export interface ConversionSummary {
     funnelId: string;
     totalConversions: number;
@@ -552,34 +555,34 @@ export interface ConversionSummary {
     averageValue: number;
     lastConversionDate: number;
     preferredPath?: string;
-}
+
 export interface DevicePreference {
     deviceType: string;
     usagePercentage: number;
     conversionRate: number;
     lastUsed: number;
-}
+
 export interface ActivityPattern {
     type: 'temporal' | 'behavioral' | 'contextual';
     pattern: string;
     frequency: number;
     strength: number;
     impact: 'positive' | 'negative' | 'neutral';
-}
+
 export interface SegmentChange {
     date: number;
     fromSegment: string;
     toSegment: string;
     reason: string;
     triggerEvent?: string;
-}
+
 export interface CohortMembership {
     cohortId: string;
     joinDate: number;
     status: 'active' | 'graduated' | 'churned';
     daysActive: number;
     conversionAchieved: boolean;
-}
+
 export interface PrivacySettings {
     trackingConsent: boolean;
     analyticsConsent: boolean;
@@ -587,18 +590,18 @@ export interface PrivacySettings {
     crossDeviceConsent: boolean;
     dataRetentionPeriod: number;
     rightToErasure: boolean;
-}
+
 export interface CommunicationPreference {
     channel: 'email' | 'sms' | 'push' | 'in_app';
     frequency: 'immediate' | 'daily' | 'weekly' | 'monthly' | 'never';
     topics: string[];
-}
+
 export interface ContentPreference {
     category: string;
     interest: number;
     lastInteraction: number;
     conversionHistory: number;
-}
+
 export interface NotificationSettings {
     marketing: boolean;
     product: boolean;
@@ -609,7 +612,7 @@ export interface NotificationSettings {
         end: string;
         timezone: string;
     };
-}
+
 export interface TemplateFunnelMetrics {
     funnelId: string;
     views: number;
@@ -618,21 +621,21 @@ export interface TemplateFunnelMetrics {
     averageTimeToConvert: number;
     dropOffPoints: DropOffPoint[];
     topSegments: string[];
-}
+
 export interface PriceChange {
     date: number;
     oldPrice: number;
     newPrice: number;
     reason: string;
     impactOnConversions: number;
-}
+
 export interface TrendData {
     direction: 'up' | 'down' | 'stable';
     magnitude: number;
     confidence: number;
     timeframe: string;
     dataPoints: TimeSeriesData[];
-}
+
 export interface SeasonalityData {
     pattern: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
     peaks: Array<{,
@@ -640,7 +643,6 @@ export interface SeasonalityData {
         multiplier: number;
     }>;
     confidence: number;
-}
 /**
  * Data Relationship Manager
  * Manages complex relationships between users, templates, and conversion data
@@ -681,7 +683,6 @@ export declare class ConversionDataRelationshipManager {
     private calculateSessionDuration;
     private getSessionPageViews;
     private categorizeReferrer;
-}
 /**
  * Factory function to create ConversionDataRelationshipManager
  */

@@ -71,5 +71,5 @@ export declare class RandomizerSystem {
         historyImported: number;
         errors: string[];
     };
-}
+
 //# sourceMappingURL=index.d.ts.map

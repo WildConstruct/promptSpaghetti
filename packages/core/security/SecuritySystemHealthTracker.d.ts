@@ -7,6 +7,7 @@
  * ensuring high availability, performance monitoring, and proactive issue detection.
  */
 import { EventEmitter } from 'events';
+
 export interface SecuritySystemNode {
     id: string;
     name: string;
@@ -93,14 +94,14 @@ export interface SecuritySystemNode {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface SuccessCriteria {
     expected_status_code?: number;
     expected_response_time_ms?: number;
     expected_response_pattern?: string;
     minimum_success_rate?: number;
     custom_validation?: string;
-}
+
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -111,7 +112,7 @@ export interface MaintenanceWindow {
     timezone: string;
     recurring: boolean;
     exclude_from_sla: boolean;
-}
+
 export interface HealthCheckResult {
     id: string;
     system_id: string;
@@ -138,7 +139,7 @@ export interface HealthCheckResult {
         contribution_to_health_score: number;
         severity: 'info' | 'warning' | 'critical';
     };
-}
+
 export interface AvailabilityReport {
     system_id: string;
     reporting_period: {,
@@ -177,7 +178,7 @@ export interface AvailabilityReport {
         reliability_score: number;
         recommendation_priority: 'low' | 'medium' | 'high';
     };
-}
+
 export interface SystemAlert {
     id: string;
     system_id: string;
@@ -211,7 +212,7 @@ export interface SystemAlert {
         escalated: boolean;
         escalation_level: number;
     };
-}
+
 export interface HealthTrackerConfig {
     global_settings: {,
         default_check_interval_ms: number;
@@ -242,7 +243,7 @@ export interface HealthTrackerConfig {
         alert_history_days: number;
         performance_metrics_days: number;
     };
-}
+
 export interface EscalationRule {
     id: string;
     name: string;
@@ -260,7 +261,7 @@ export interface EscalationRule {
         automation_script?: string;
     };
     delay_minutes: number;
-}
+
 export declare class SecuritySystemHealthTracker extends EventEmitter {
     private systems;
     private healthCheckResults;
@@ -310,6 +311,6 @@ export declare class SecuritySystemHealthTracker extends EventEmitter {
     getConfiguration(): HealthTrackerConfig;
     performMaintenance(): Promise<void>;
     shutdown(): Promise<void>;
-}
+
 export default SecuritySystemHealthTracker;
 //# sourceMappingURL=SecuritySystemHealthTracker.d.ts.map

@@ -19,6 +19,7 @@ import { Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
 import { Redis } from 'ioredis';
 
+}
 export interface Category {
   id: string;
   name: string;
@@ -41,6 +42,7 @@ export interface Category {
     totalDownloads: number;
     averageRating: number;
     trendingScore: number;
+}
   };
   
   // Configuration
@@ -63,6 +65,7 @@ export interface Category {
   };
 }
 
+}
 export interface Tag {
   id: string;
   name: string;
@@ -84,13 +87,16 @@ export interface Tag {
   approved: boolean;
   suggestedBy?: 'ai' | 'user' | 'admin';
 }
+}
 
+}
 export interface ClassificationResult {
   primaryCategory: {
     id: string;
     name: string;
     confidence: number;
     reasoning: string;
+}
   };
   
   secondaryCategories: Array<{
@@ -116,17 +122,21 @@ export interface ClassificationResult {
   }>;
 }
 
+}
 export interface CategoryTree {
   categories: Category[];
   totalCount: number;
   maxDepth: number;
   lastUpdated: Date;
 }
+}
 
+}
 export interface CategoryAnalytics {
   category: Category;
   performance: {
     growth: {
+}
       templates: { current: number; previous: number; change: number };
       downloads: { current: number; previous: number; change: number };
       ratings: { current: number; previous: number; change: number };
@@ -175,6 +185,7 @@ export class CategorizationService {
    * Get complete category tree with statistics
    */
   async getCategoryTree(includeStats: boolean = true): Promise<CategoryTree> {
+
     try {
       const cacheKey = `tree:${includeStats ? 'with-stats' : 'basic'}`;
       const cached = await this.redis.get(cacheKey);
@@ -204,7 +215,7 @@ export class CategorizationService {
             ch.full_path || ' > ' || c.name as full_path
           FROM marketplace_categories c
           JOIN category_hierarchy ch ON c.parent_id = ch.id
-        )
+
         SELECT 
           ch.*,
           ${includeStats ? `
@@ -272,6 +283,7 @@ export class CategorizationService {
     content?: any,
     existingTags?: string[]
   ): Promise<ClassificationResult> {
+
     try {
       // Analyze content for classification
       const analysis = await this.analyzeContent(title, description, content);
@@ -297,7 +309,7 @@ export class CategorizationService {
           name: 'General',
           confidence: 0.5,
           reasoning: 'Default category assigned due to unclear content classification'
-        },
+  }
         secondaryCategories: categoryResults.slice(1, 4),
         suggestedTags: tagResults,
         complexity,
@@ -322,6 +334,7 @@ export class CategorizationService {
       description?: string;
     }
   ): Promise<Tag[]> {
+
     try {
       const results: Tag[] = [];
 
@@ -354,6 +367,7 @@ export class CategorizationService {
     categoryId: string,
     timeframe: '7d' | '30d' | '90d' = '30d'
   ): Promise<CategoryAnalytics> {
+
     try {
       const category = await this.getCategoryById(categoryId);
       if (!category) {
@@ -388,7 +402,7 @@ export class CategorizationService {
           topTemplates,
           userEngagement: engagementData,
           trends: trendsData
-        },
+  }
         recommendations
       };
     } catch (error) {
@@ -455,6 +469,7 @@ export class CategorizationService {
     wordCount: number;
     readability: number;
   }> {
+
     // Simplified content analysis - would integrate with NLP service
     const text = (title + ' ' + description).toLowerCase();
     const words = text.split(/\s+/).filter(word => word.length > 2);
@@ -633,14 +648,14 @@ export class CategorizationService {
         totalDownloads: parseInt(row.total_downloads) || 0,
         averageRating: parseFloat(row.average_rating) || 0,
         trendingScore: parseFloat(row.trending_score) || 0
-      },
+  }
       config: {
         featured: row.featured || false,
         visible: row.visible !== false,
         searchable: row.searchable !== false,
         autoClassification: row.auto_classification !== false,
         requireApproval: row.require_approval || false
-      },
+  }
       metadata: {
         createdAt: row.created_at,
         updatedAt: row.updated_at,
@@ -653,6 +668,7 @@ export class CategorizationService {
   }
 
   private async getCategoryById(categoryId: string): Promise<Category | null> {
+
     const query = `
       SELECT * FROM marketplace_categories WHERE id = $1
     `;
@@ -661,6 +677,7 @@ export class CategorizationService {
   }
 
   private async getTagByName(name: string): Promise<Tag | null> {
+
     const query = `
       SELECT * FROM marketplace_tags WHERE name = $1
     `;
@@ -669,6 +686,7 @@ export class CategorizationService {
   }
 
   private async createTag(name: string, context?: any): Promise<Tag> {
+
     const slug = this.slugify(name);
     const type = this.classifyTagType(name, context);
     
@@ -683,6 +701,7 @@ export class CategorizationService {
   }
 
   private async updateTagUsage(tagId: string): Promise<void> {
+
     await this.pool.query(`
       UPDATE marketplace_tags 
       SET usage_count = usage_count + 1 
@@ -746,6 +765,7 @@ export class CategorizationService {
   }
 
   private async getCategoryGrowthData(categoryId: string, interval: string): Promise<any> {
+
     // Simplified growth data
     return {
       templates: { current: 50, previous: 45, change: 11.1 },
@@ -755,11 +775,13 @@ export class CategorizationService {
   }
 
   private async getCategoryTopTemplates(categoryId: string, limit: number): Promise<any[]> {
+
     // Simplified top templates
     return [];
   }
 
   private async getCategoryEngagementData(categoryId: string, interval: string): Promise<any> {
+
     // Simplified engagement data
     return {
       viewsPerTemplate: 25.5,
@@ -769,11 +791,13 @@ export class CategorizationService {
   }
 
   private async getCategoryTrendsData(categoryId: string, interval: string): Promise<any[]> {
+
     // Simplified trends data
     return [];
   }
 
   private async generateCategoryRecommendations(category: Category, growth: any, engagement: any): Promise<any> {
+
     return {
       optimization: ['Improve category description', 'Add more featured templates'],
       content: ['Need more beginner-level templates', 'Consider adding video tutorials'],
@@ -782,6 +806,7 @@ export class CategorizationService {
   }
 
   private async generateOptimizationSuggestions(all: Category[], underutilized: Category[], oversaturated: Category[]): Promise<any[]> {
+
     return [];
   }
 
@@ -789,6 +814,7 @@ export class CategorizationService {
    * Cleanup resources
    */
   async destroy(): Promise<void> {
+
     try {
       await this.redis.quit();
       console.log('CategorizationService destroyed successfully');

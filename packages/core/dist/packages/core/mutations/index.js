@@ -15,11 +15,11 @@ export { OperationHistory } from './OperationHistory';
 import { GraphMutationEngine } from './GraphMutationEngine';
 export { CollaborativeSync, SimpleWebSocketService } from './CollaborativeSync';
 // Default Configuration
-export 
 // Utility Functions
 export const createOperationId = () => {
     return `op-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
+;
 export const calculateChecksum = (state) => {
     const stateString = JSON.stringify(state);
     let hash = 0;
@@ -27,8 +27,10 @@ export const calculateChecksum = (state) => {
         const char = stateString.charCodeAt(i);
         hash = ((hash << 5) - hash) + char;
         hash = hash & hash; // Convert to 32-bit integer
+        return hash.toString(16);
     }
-    return hash.toString(16);
+    ;
+    // Factory Functions for Common Operations
 };
 position: {
     x: number;
@@ -46,53 +48,42 @@ any => {
             position
         }
     };
-};
-// Validation Helpers
-// (Validation helper functions would be exported here)
-// Error Types for Better Error Handling
-export class MutationEngineError extends Error {
-    operation;
-    validationErrors;
-    constructor(message, operation, validationErrors) {
-        super(message);
-        this.operation = operation;
-        this.validationErrors = validationErrors;
-        this.name = 'MutationEngineError';
+    // Validation Helpers
+    // (Validation helper functions would be exported here)
+    // Error Types for Better Error Handling
+    export class MutationEngineError extends Error {
+        message;
+        operation;
+        validationErrors;
     }
-}
-export class ValidationError extends Error {
-    field;
-    nodeId;
-    edgeId;
-    constructor(message, field, nodeId, edgeId) {
-        super(message);
-        this.field = field;
-        this.nodeId = nodeId;
-        this.edgeId = edgeId;
-        this.name = 'ValidationError';
+    this.name = 'MutationEngineError';
+    export class ValidationError extends Error {
+        message;
+        field;
+        nodeId;
+        edgeId;
     }
-}
-export class ConflictError extends Error {
-    conflicts;
-    operation;
-    constructor(message, conflicts, operation) {
-        super(message);
-        this.conflicts = conflicts;
-        this.operation = operation;
-        this.name = 'ConflictError';
+    this.name = 'ValidationError';
+    export class ConflictError extends Error {
+        message;
+        conflicts;
+        operation;
     }
-}
-// Integration Helpers for Existing Codebase
-export const engine = new GraphMutationEngine(finalConfig);
-// Setup state synchronization
-engine.on('state_changed', (data) => {
-    // Update the store with the new state
-    if (store.setState) {
-        store.setState({
+    this.name = 'ConflictError';
+    // Integration Helpers for Existing Codebase
+    export const engine = new GraphMutationEngine(finalConfig);
+    // Setup state synchronization
+    engine.on('state_changed', (data) => {
+        // Update the store with the new state
+        if (store.setState) {
+            store.setState({});
             nodes: data.newState.nodes,
-            edges: data.newState.edges
-        });
-    }
-});
+                edges;
+            data.newState.edges,
+            ;
+        }
+    });
+};
+;
 return engine;
 ;

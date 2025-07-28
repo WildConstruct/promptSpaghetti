@@ -19,29 +19,27 @@ import {
 
 export interface PolicyManagementHookConfig {
   autoEvaluate?: boolean;
-  cacheTimeout?: number; // milliseconds
+  cacheTimeout?: number; // milliseconds,
   enableRealTimeUpdates?: boolean;
-  complianceFrameworks?: ComplianceFramework[];
+  complianceFrameworks?: ComplianceFramework;
 }
-
 export interface PolicyEvaluationOptions {
   userId?: string;
-  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
+  entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';,
   entityId: string;
   operation: {,
-    type: string;
-    parameters: Record<string, any>;
-    riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  };
+  type: string;,
+  parameters: Record<string, any>;
+  riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+};
   contentContext?: {
-    historicalPeriod?: string;
-    culturalContext?: string;
-    accuracyLevel?: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
-    expertReviewed?: boolean;
-  };
+  historicalPeriod?: string;
+  culturalContext?: string;
+  accuracyLevel?: 'STRICT' | 'MODERATE' | 'FLEXIBLE';
+  expertReviewed?: boolean;
+};
   additionalContext?: Record<string, any>;
 }
-
 export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => {
   const {
     autoEvaluate = false,
@@ -50,65 +48,60 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
     complianceFrameworks = []
   } = config;
   const [policyManager] = useState(() => new PolicyManagement());
-  const [policies, setPolicies] = useState<UnifiedPolicy[]>([]);
-  const [evaluationResults, setEvaluationResults] = useState<PolicyEvaluationResult[]>([]);
-  const [violations, setViolations] = useState<PolicyViolation[]>([]);
+  const [policies, setPolicies] = useState<UnifiedPolicy>([]);
+  const [evaluationResults, setEvaluationResults] = useState<PolicyEvaluationResult>([]);
+  const [violations, setViolations] = useState<PolicyViolation>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Load policies
   const loadPolicies = useCallback(async (filters?: {)
-    domain?: PolicyDomain;
-    type?: PolicyType;
-    status?: PolicyStatus;
-    enabled?: boolean;
-  }) => {
+  domain?: PolicyDomain;
+  type?: PolicyType;
+  status?: PolicyStatus;
+  enabled?: boolean;
+}) => {
     try {
       setIsLoading(true);
       const loadedPolicies = policyManager.getPolicies(filters);
       setPolicies(loadedPolicies);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load policies');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load policies');
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager]);
   // Create new policy
   const createPolicy = useCallback(async (;);
     policyData: Omit<UnifiedPolicy, 'id' | 'metadata'>,
-    createdBy: string,
-  ) => {
+    createdBy: string) => {,
     try {
       setIsLoading(true);
       const newPolicy = await policyManager.createPolicy(policyData, createdBy);
       await loadPolicies(); // Refresh policies
       return newPolicy;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create policy';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to create policy';
+  setError(errorMessage);
+  throw new Error(errorMessage);
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager, loadPolicies]);
   // Update existing policy
   const updatePolicy = useCallback(async (;);
     policyId: string,
     updates: Partial<UnifiedPolicy>,
-    updatedBy: string,
-  ) => {
+    updatedBy: string) => {,
     try {
       setIsLoading(true);
       const updatedPolicy = await policyManager.updatePolicy(policyId, updates, updatedBy);
       await loadPolicies(); // Refresh policies
       return updatedPolicy;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update policy';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to update policy';
+  setError(errorMessage);
+  throw new Error(errorMessage);
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager, loadPolicies]);
   // Delete policy
   const deletePolicy = useCallback(async (policyId: string, deletedBy: string) => {
@@ -117,97 +110,91 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
       await policyManager.deletePolicy(policyId, deletedBy);
       await loadPolicies(); // Refresh policies
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete policy';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to delete policy';
+  setError(errorMessage);
+  throw new Error(errorMessage);
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager, loadPolicies]);
   // Evaluate policies for a given context
   const evaluatePolicies = useCallback(async (;);
-    evaluationOptions: PolicyEvaluationOptions,
-  ): Promise<PolicyEvaluationResult[]> => {
+    evaluationOptions: PolicyEvaluationOptions): Promise<PolicyEvaluationResult> => {,
     try {
       setIsLoading(true);
       setError(null);
-      const context: PolicyEvaluationContext = {
-        requestId: `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
-        timestamp: new Date(),
+      const context: PolicyEvaluationContext = {,
+  requestId: `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+},
+  timestamp: new Date(),
         userId: evaluationOptions.userId,
         entityType: evaluationOptions.entityType,
         entityId: evaluationOptions.entityId,
         sessionData: {,
-          ipAddress: '127.0.0.1', // This would come from actual session
-          userAgent: navigator.userAgent,
-          geolocation: undefined,
-          authenticationMethod: 'session',
-        },
-        operation: {,
-          type: evaluationOptions.operation.type,
-          parameters: evaluationOptions.operation.parameters,
-          riskLevel: evaluationOptions.operation.riskLevel || 'MEDIUM',
-        },
-        contentContext: evaluationOptions.contentContext,
+  ipAddress: '127.0.0.1', // This would come from actual session,
+  userAgent: navigator.userAgent,
+  geolocation: undefined,
+  authenticationMethod: 'session',
+},
+  operation: {,
+  type: evaluationOptions.operation.type,
+  parameters: evaluationOptions.operation.parameters,
+  riskLevel: evaluationOptions.operation.riskLevel || 'MEDIUM',
+},
+  contentContext: evaluationOptions.contentContext,
         additionalContext: evaluationOptions.additionalContext || {}
       };
       const results = await policyManager.evaluatePolicies(context);
       setEvaluationResults(prev => [...results, ...prev].slice(0, 100)); // Keep last 100 results
       return results;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Policy evaluation failed';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Policy evaluation failed';
+  setError(errorMessage);
+  throw new Error(errorMessage);
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager]);
   // Quick policy check for specific scenarios
   const checkVFXHistoricalAccuracy = useCallback(async (;);
     templateId: string,
     historicalPeriod: string,
     culturalContext: string,
-    expertReviewed: boolean = false,
-  ): Promise<{ allowed: boolean; violations: string[]; reviewRequired: boolean }> => {
+    expertReviewed: boolean = false): Promise<{ allowed: boolean; violations: string; reviewRequired: boolean }> => {
     const results = await evaluatePolicies({)
-      entityType: 'TEMPLATE',
+  entityType: 'TEMPLATE',
       entityId: templateId,
       operation: {,
-        type: 'historical_accuracy_check',
+  type: 'historical_accuracy_check',
         parameters: { historicalPeriod, culturalContext }
-      },
-      contentContext: {,
-        historicalPeriod,
-        culturalContext,
-        accuracyLevel: 'STRICT',
-        expertReviewed
-      }
-    });
+  },
+  contentContext: {,
+  historicalPeriod,
+  culturalContext,
+  accuracyLevel: 'STRICT',
+  expertReviewed
+});
     const violations = results.filter(r => r.result === 'DENY' || r.result === 'RESTRICT');
     const reviewRequired = results.some(r => r.metadata.reviewRequired);
     return {
-      allowed: violations.length === 0,
-      violations: violations.map(v => v.policyName),
-      reviewRequired
-    };
+  allowed: violations.length === 0,
+  violations: violations.map(v => v.policyName),
+  reviewRequired
+};
   }, [evaluatePolicies]);
   // Check data protection compliance
   const checkDataProtectionCompliance = useCallback(async (;);
     userId: string,
     dataType: string,
     operation: string,
-    dataClassification: string,
-  ): Promise<{ compliant: boolean; frameworks: string[]; actions: string[] }> => {
+    dataClassification: string): Promise<{ compliant: boolean; frameworks: string; actions: string }> => {
     const results = await evaluatePolicies({)
-      userId,
+  userId,
       entityType: 'USER',
       entityId: userId,
       operation: {,
-        type: operation,
+  type: operation,
         parameters: { dataType, dataClassification },
-        riskLevel: 'MEDIUM',
-      }
-    });
+        riskLevel: 'MEDIUM';
+  });
     const nonCompliant = results.filter(r => r.result === 'DENY');
     const frameworks = results.flatMap(r => ;);
       r.complianceStatus.frameworks.map(f => f.framework)
@@ -216,10 +203,10 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
       r.triggeredActions.map(a => a.actionType)
     );
     return {
-      compliant: nonCompliant.length === 0,
-      frameworks,
-      actions
-    };
+  compliant: nonCompliant.length === 0,
+  frameworks,
+  actions
+};
   }, [evaluatePolicies]);
   // Generate compliance report
   const generateComplianceReport = useCallback(async (framework: ComplianceFramework) => {
@@ -228,53 +215,48 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
       const report = await policyManager.generateComplianceReport(framework);
       return report;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to generate compliance report';
-      setError(errorMessage);
-      throw new Error(errorMessage);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to generate compliance report';
+  setError(errorMessage);
+  throw new Error(errorMessage);
+} finally {
       setIsLoading(false);
-    }
   }, [policyManager]);
   // Get policy statistics
   const getPolicyStatistics = useCallback(() => {
-    const stats = {
-      totalPolicies: policies.length,
-      activePolicies: policies.filter(p => p.status === PolicyStatus.ACTIVE).length,
-      byDomain: policies.reduce((acc, policy) => {
-        acc[policy.domain] = (acc[policy.domain] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>),
+  const stats = {
+  totalPolicies: policies.length,
+  activePolicies: policies.filter(p => p.status === PolicyStatus.ACTIVE).length,
+  byDomain: policies.reduce((acc, policy) => {,
+  acc[policy.domain] = (acc[policy.domain] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>),
       byType: policies.reduce((acc, policy) => {
         acc[policy.type] = (acc[policy.type] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
       evaluationMetrics: {,
-        totalEvaluations: evaluationResults.length,
-        deniedRequests: evaluationResults.filter(r => r.result === 'DENY').length,
-        restrictedRequests: evaluationResults.filter(r => r.result === 'RESTRICT').length,
-        averageEvaluationTime: evaluationResults.length > 0 ? ,
-          evaluationResults.reduce((sum, r) => sum + r.performance.evaluationTimeMs, 0) / evaluationResults.length : 0
-      }
-    };
+  totalEvaluations: evaluationResults.length,
+  deniedRequests: evaluationResults.filter(r => r.result === 'DENY').length,
+  restrictedRequests: evaluationResults.filter(r => r.result === 'RESTRICT').length,
+  averageEvaluationTime: evaluationResults.length > 0 ? ,
+  evaluationResults.reduce((sum, r) => sum + r.performance.evaluationTimeMs, 0) / evaluationResults.length : 0,
+};
     return stats;
   }, [policies, evaluationResults]);
   // Get filtered policies
   const getFilteredPolicies = useCallback((filters: {)
-    domain?: PolicyDomain;
-    type?: PolicyType;
-    status?: PolicyStatus;
-    search?: string;
-  }) => {
+  domain?: PolicyDomain;
+  type?: PolicyType;
+  status?: PolicyStatus;
+  search?: string;
+}) => {
     let filtered = policies;
     if (filters.domain) {
       filtered = filtered.filter(p => p.domain === filters.domain);
-    }
     if (filters.type) {
       filtered = filtered.filter(p => p.type === filters.type);
-    }
     if (filters.status) {
       filtered = filtered.filter(p => p.status === filters.status);
-    }
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       filtered = filtered.filter(p => )
@@ -282,7 +264,6 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
         p.description.toLowerCase().includes(searchLower) ||
         p.metadata.tags.some(tag => tag.toLowerCase().includes(searchLower))
       );
-    }
     return filtered;
   }, [policies]);
   // Get recent evaluation results
@@ -293,38 +274,35 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
   }, [evaluationResults]);
   // Get policy violations
   const getPolicyViolations = useCallback((filters?: {)
-    severity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    resolved?: boolean;
-    entityType?: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
-    limit?: number;
-  }) => {
-    let filtered = violations;
-    if (filters?.severity) {
-      filtered = filtered.filter(v => v.violation.severity === filters.severity);
-    }
-    if (filters?.resolved !== undefined) {
-      filtered = filtered.filter(v => v.response.resolved === filters.resolved);
-    }
-    if (filters?.entityType) {
-      filtered = filtered.filter(v => v.context.entityType === filters.entityType);
-    }
-    const sorted = filtered.sort((a, b) => ;
-      b.metadata.detectedAt.getTime() - a.metadata.detectedAt.getTime()
-    );
-    return filters?.limit ? sorted.slice(0, filters.limit) : sorted;
-  }, [violations]);
+  severity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  resolved?: boolean;
+  entityType?: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
+  limit?: number;
+}) => {
+  let filtered = violations;
+  if (filters?.severity) {
+  filtered = filtered.filter(v => v.violation.severity === filters.severity);
+  if (filters?.resolved !== undefined) {
+  filtered = filtered.filter(v => v.response.resolved === filters.resolved);
+  if (filters?.entityType) {
+  filtered = filtered.filter(v => v.context.entityType === filters.entityType);
+  const sorted = filtered.sort((a, b) => ;
+  b.metadata.detectedAt.getTime() - a.metadata.detectedAt.getTime()
+  );
+  return filters?.limit ? sorted.slice(0, filters.limit) : sorted;
+}, [violations]);
   // Setup event listeners
   useEffect(() => {
-    if (!enableRealTimeUpdates) return;
-    const handlePolicyViolation = (violation: PolicyViolation) => {
-      setViolations(prev => [violation, ...prev].slice(0, 100)); // Keep last 100 violations
-    };
+  if (!enableRealTimeUpdates) return;
+  const handlePolicyViolation = (violation: PolicyViolation) => {,
+  setViolations(prev => [violation, ...prev].slice(0, 100)); // Keep last 100 violations
+};
     const handlePolicyCreated = ({ policy }: { policy: UnifiedPolicy }) => {
       setPolicies(prev => [policy, ...prev]);
     };
     const handlePolicyUpdated = ({ newPolicy }: { newPolicy: UnifiedPolicy }) => {
-      setPolicies(prev => prev.map(p => p.id === newPolicy.id ? newPolicy : p));
-    };
+  setPolicies(prev => prev.map(p => p.id === newPolicy.id ? newPolicy : p));
+};
     const handlePolicyDeleted = ({ policy }: { policy: UnifiedPolicy }) => {
       setPolicies(prev => prev.filter(p => p.id !== policy.id));
     };
@@ -366,49 +344,49 @@ export const usePolicyManagement = (config: PolicyManagementHookConfig = {}) => 
   [policies]
   );
   return {
-    // Core data
-    policies,
-    evaluationResults,
-    violations,
-    isLoading,
-    error,
-    // Policy management
-    loadPolicies,
-    createPolicy,
-    updatePolicy,
-    deletePolicy,
-    // Policy evaluation
-    evaluatePolicies,
-    checkVFXHistoricalAccuracy,
-    checkDataProtectionCompliance,
-    // Reporting and analytics
-    generateComplianceReport,
-    getPolicyStatistics,
-    // Filtering and querying
-    getFilteredPolicies,
-    getRecentEvaluations,
-    getPolicyViolations,
-    // Convenience getters
-    activePolicies,
-    vfxPolicies,
-    securityPolicies,
-    compliancePolicies,
-    // Metadata
-    domains,
-    types,
-    statuses,
-    frameworks,
-    // Quick access properties
-    policyCount: policies.length,
-    activePolicyCount: activePolicies.length,
-    violationCount: violations.length,
-    unresolvedViolationCount: violations.filter(v => !v.response.resolved).length,
-    // Helper functions
-    getPolicyById: (id: string) => policies.find(p => p.id === id),
-    isPolicyActive: (policyId: string) => {,
-      const policy = policies.find(p => p.id === policyId);
-      return policy?.status === PolicyStatus.ACTIVE;
-    },
+  // Core data
+  policies,
+  evaluationResults,
+  violations,
+  isLoading,
+  error,
+  // Policy management
+  loadPolicies,
+  createPolicy,
+  updatePolicy,
+  deletePolicy,
+  // Policy evaluation
+  evaluatePolicies,
+  checkVFXHistoricalAccuracy,
+  checkDataProtectionCompliance,
+  // Reporting and analytics
+  generateComplianceReport,
+  getPolicyStatistics,
+  // Filtering and querying
+  getFilteredPolicies,
+  getRecentEvaluations,
+  getPolicyViolations,
+  // Convenience getters
+  activePolicies,
+  vfxPolicies,
+  securityPolicies,
+  compliancePolicies,
+  // Metadata
+  domains,
+  types,
+  statuses,
+  frameworks,
+  // Quick access properties
+  policyCount: policies.length,
+  activePolicyCount: activePolicies.length,
+  violationCount: violations.length,
+  unresolvedViolationCount: violations.filter(v => !v.response.resolved).length,
+  // Helper functions
+  getPolicyById: (id: string) => policies.find(p => p.id === id),
+  isPolicyActive: (policyId: string) => {,
+  const policy = policies.find(p => p.id === policyId);
+  return policy?.status === PolicyStatus.ACTIVE;
+}
     // Direct access to policy manager for advanced use cases
     policyManager
   };

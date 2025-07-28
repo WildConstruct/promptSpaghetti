@@ -35,9 +35,11 @@ const AVAILABLE_SCOPES = [
   '*' // Full access (admin only)
 ];
 
+}
 interface ApiTokenRouteContext {
   authService: AuthenticationService;
   tokenService: TokenService;
+}
 }
 
 export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiTokenRouteContext) {
@@ -179,7 +181,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           name,
           scopes,
           expiresAt
-        },
+  }
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
         severity: 'info'
@@ -321,7 +323,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           tokenId,
           name: targetToken.name,
           scopes: targetToken.scopes
-        },
+  }
         ipAddress: request.ip,
         userAgent: request.headers['user-agent'],
         severity: 'info'
@@ -381,7 +383,7 @@ export async function apiTokenRoutes(fastify: FastifyInstance, context: ApiToken
           id: user.id,
           email: user.email,
           roles: user.roles
-        },
+  }
         expiresAt: new Date(payload.exp * 1000).toISOString()
       });
     } catch (error) {

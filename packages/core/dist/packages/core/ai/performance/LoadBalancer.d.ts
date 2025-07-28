@@ -63,39 +63,5 @@ export declare class LoadBalancer {
     private healthCheckTimer?;
     private isProcessingQueue;
     constructor(config: LoadBalancerConfig);
-    addModel(id: string, model: BaseAIModel, weight?: number): void;
-    removeModel(id: string): boolean;
-    executeRequest<T>(input: any, options?: any, priority?: 'low' | 'normal' | 'high'): Promise<LoadBalancingResult<T>>;
-    private processRequest;
-    private selectInstance;
-    private selectRoundRobin;
-    private selectLeastConnections;
-    private selectByResponseTime;
-    private selectByCost;
-    private selectAdaptive;
-    private calculateAdaptiveScore;
-    private getAdaptiveWeights;
-    private getHealthScore;
-    private isInstanceAvailable;
-    private executeWithTimeout;
-    private updateSuccessMetrics;
-    private updateFailureMetrics;
-    private updateHealthStatus;
-    private updateCircuitBreaker;
-    private startHealthChecking;
-    private performHealthChecks;
-    getInstanceMetrics(): Map<string, ModelInstance['metrics']>;
-    getOverallMetrics(): {
-        totalInstances: number;
-        healthyInstances: number;
-        totalRequests: number;
-        averageResponseTime: number;
-        overallErrorRate: number;
-        totalCost: number;
-    };
-    private generateRequestId;
-    private sleep;
-    destroy(): void;
 }
-export default LoadBalancer;
 //# sourceMappingURL=LoadBalancer.d.ts.map

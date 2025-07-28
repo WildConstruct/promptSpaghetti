@@ -13,12 +13,12 @@ export interface SecurityEvent {
     title: string;
     description: string;
     details: {
-        affected_systems: string[];
-        affected_users?: string[];
-        ip_addresses?: string[];
-        user_agents?: string[];
-        request_patterns?: any[];
-        data_accessed?: string[];
+        affected_systems: string;
+        affected_users?: string;
+        ip_addresses?: string;
+        user_agents?: string;
+        request_patterns?: any;
+        data_accessed?: string;
         geographic_location?: {
             country: string;
             region: string;
@@ -35,7 +35,7 @@ export interface SecurityEvent {
         confidence_score: number;
         auto_detected: boolean;
         false_positive_likelihood?: number;
-        related_events?: string[];
+        related_events?: string;
     };
     status: 'active' | 'investigating' | 'resolved' | 'dismissed' | 'escalated';
     assigned_to?: string;
@@ -54,29 +54,15 @@ export interface AlertRule {
     conditions: {
         event_types: SecurityEvent['type'][];
         severity_threshold: SecurityEvent['severity'];
-        source_systems: string[];
+        source_systems: string;
         frequency_threshold?: {
             count: number;
             time_window: number;
         };
         custom_conditions?: Array<{
             field: string;
-            operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex';
-            value: any;
-        }>;
+        }, operator>;
     };
-    actions: {
-        notifications: NotificationAction[];
-        escalation?: EscalationAction;
-        automation?: AutomationAction[];
-    };
-    suppression?: {
-        duplicate_window: number;
-        similar_event_threshold: number;
-    };
-    created_by: string;
-    created_at: number;
-    last_modified: number;
 }
 export interface NotificationAction {
     type: 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'teams' | 'discord';
@@ -90,7 +76,7 @@ export interface NotificationAction {
 }
 export interface EscalationAction {
     trigger_after: number;
-    escalate_to: string[];
+    escalate_to: string;
     escalation_message?: string;
     auto_assign?: boolean;
 }
@@ -166,96 +152,7 @@ export declare class CrossSystemAlertingSystem {
     private processingTimer?;
     private escalationTimers;
     constructor(config: AlertingConfig);
-    ingestSecurityEvent(event: SecurityEvent): Promise<void>;
-    processEventAgainstRules(event: SecurityEvent): Promise<void>;
-    createAlertRule(rule: Omit<AlertRule, 'id' | 'created_at' | 'last_modified'>): string;
-    updateAlertRule(ruleId: string, updates: Partial<AlertRule>): boolean;
-    deleteAlertRule(ruleId: string): boolean;
-    getAlertRule(ruleId: string): AlertRule | null;
-    getAllAlertRules(): AlertRule[];
-    getActiveAlerts(filters?: {
-        severity?: SecurityEvent['severity'];
-        type?: SecurityEvent['type'];
-        source?: string;
-        status?: SecurityEvent['status'];
-    }): SecurityEvent[];
-    acknowledgeAlert(alertId: string, userId: string): Promise<boolean>;
-    resolveAlert(alertId: string, resolution: SecurityEvent['resolution']): Promise<boolean>;
-    escalateAlert(alertId: string, escalatedBy: string): Promise<boolean>;
-    sendNotification(alert: SecurityEvent, action: NotificationAction): Promise<boolean>;
-    getAlertMetrics(timeRange?: {
-        start: number;
-        end: number;
-    }): AlertMetrics;
-    generateSecurityReport(timeRange: {
-        start: number;
-        end: number;
-    }): {
-        summary: {
-            total_events: number;
-            critical_alerts: number;
-            avg_response_time: number;
-            false_positive_rate: number;
-        };
-        trends: {
-            daily_alert_counts: Array<{
-                date: string;
-                count: number;
-            }>;
-            top_alert_sources: Array<{
-                source: string;
-                count: number;
-            }>;
-            response_time_trend: Array<{
-                date: string;
-                avg_response_time: number;
-            }>;
-        };
-        recommendations: string[];
-    };
-    private enrichEvent;
-    private findMatchingRules;
-    private doesEventMatchRule;
-    private evaluateCustomCondition;
-    private getNestedFieldValue;
-    private shouldSuppressAlert;
-    private calculateEventSimilarity;
     private setupEscalation;
     private executeAutomationActions;
-    private executeAutomationAction;
-    private revertAutomationAction;
-    private startProcessing;
-    private processNotificationQueue;
-    private getBatchedNotifications;
-    private isInQuietHours;
-    private formatNotificationMessage;
-    private renderTemplate;
-    private sendEmailNotification;
-    private sendSMSNotification;
-    private sendSlackNotification;
-    private sendWebhookNotification;
-    private sendPagerDutyNotification;
-    private sendTeamsNotification;
-    private sendDiscordNotification;
-    private sendEscalationNotifications;
-    private isRateLimited;
-    private initializeMetrics;
-    private updateMetrics;
-    private calculateMetricsForTimeRange;
-    private cleanupOldEvents;
-    private getRecentSimilarEvents;
-    private generateRuleId;
-    private generateAlertId;
-    private generateCorrelationId;
-    private calculateThreatLevel;
-    private calculateConfidenceScore;
-    private enrichWithGeolocation;
-    private generateDailyAlertCounts;
-    private getTopAlertSources;
-    private generateResponseTimeTrend;
-    private calculateFalsePositiveRate;
-    private generateRecommendations;
-    destroy(): void;
 }
-export default CrossSystemAlertingSystem;
 //# sourceMappingURL=AlertingSystem.d.ts.map

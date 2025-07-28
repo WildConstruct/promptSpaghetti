@@ -3,6 +3,7 @@
  * Tracks and analyzes compliance metrics against established baselines
  * for GDPR, SOC2, MPA, and internal security standards
  */
+
 export interface ComplianceBaseline {
     id: string;
     framework: 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL';
@@ -16,7 +17,7 @@ export interface ComplianceBaseline {
     baselineEstablishedAt: Date;
     lastUpdatedAt: Date;
     isActive: boolean;
-}
+
 export interface ComplianceMeasurement {
     id: string;
     baselineId: string;
@@ -27,7 +28,7 @@ export interface ComplianceMeasurement {
     measuredAt: Date;
     context?: Record<string, any>;
     notes?: string;
-}
+
 export interface BaselineTrend {
     baselineId: string;
     framework: string;
@@ -39,7 +40,7 @@ export interface BaselineTrend {
     consistencyScore: number;
     lastMeasurement: ComplianceMeasurement;
     recommendedActions: string[];
-}
+
 export interface BaselineDashboard {
     overallHealthScore: number;
     frameworkHealth: Record<string, {
@@ -67,7 +68,7 @@ export interface BaselineDashboard {
         triggeredAt: Date;
         acknowledged: boolean;
     }[];
-}
+
 export declare class ComplianceBaselineTracker {
     private baselines;
     private measurements;
@@ -130,6 +131,6 @@ export declare class ComplianceBaselineTracker {
     private identifyImprovementOpportunities;
     private createAlert;
     private getUnitSymbol;
-}
+
 export declare const complianceBaselineTracker: ComplianceBaselineTracker;
 //# sourceMappingURL=ComplianceBaselineTracker.d.ts.map

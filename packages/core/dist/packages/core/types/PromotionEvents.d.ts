@@ -5,7 +5,7 @@
  * Event-driven system interfaces for promotion notifications,
  * workflow automation, and real-time updates.
  */
-import { BasePromotion, PromotionType, PromotionStatus, PromotionPerformanceMetrics } from './PromotionInterfaces';
+import { PromotionPerformanceMetrics } from './PromotionInterfaces';
 export declare enum PromotionEventType {
     PROMOTION_CREATED = "promotion.created",
     PROMOTION_UPDATED = "promotion.updated",
@@ -44,116 +44,10 @@ export declare enum PromotionEventType {
     EXPIRATION_ALERT = "alert.expiration",
     EXTERNAL_PROMOTION_SYNC = "external.promotion_sync",
     WEBHOOK_RECEIVED = "webhook.received",
-    API_RATE_LIMIT_REACHED = "api.rate_limit_reached"
-}
-export declare enum EventPriority {
-    LOW = "low",
-    NORMAL = "normal",
-    HIGH = "high",
-    CRITICAL = "critical",
-    URGENT = "urgent"
-}
-export declare enum EventDeliveryMethod {
-    WEBHOOK = "webhook",
-    EMAIL = "email",
-    PUSH_NOTIFICATION = "push_notification",
-    SMS = "sms",
-    SLACK = "slack",
-    DISCORD = "discord",
-    INTERNAL_QUEUE = "internal_queue",
-    DATABASE = "database"
-}
-/**
- * Base event structure for all promotion-related events
- */
-export interface BasePromotionEvent {
-    readonly event_id: string;
-    readonly event_type: PromotionEventType;
-    readonly timestamp: Date;
-    readonly source: EventSource;
-    data: PromotionEventData;
-    context: EventContext;
-    priority: EventPriority;
-    category: EventCategory;
-    tags: string[];
-    delivery_attempts: number;
-    last_delivery_attempt?: Date;
-    successfully_delivered: boolean;
-    correlation_id?: string;
-    parent_event_id?: string;
-    causation_id?: string;
-    expires_at?: Date;
-    retention_policy?: RetentionPolicy;
-    metadata: Record<string, any>;
-    version: string;
-}
-export interface EventSource {
-    service: string;
-    component?: string;
-    user_id?: string;
-    admin_id?: string;
-    api_client_id?: string;
-    ip_address?: string;
-    user_agent?: string;
-}
-export interface EventContext {
-    request_id?: string;
-    session_id?: string;
-    trace_id?: string;
-    tenant_id?: string;
-    environment: 'development' | 'staging' | 'production';
-    region?: string;
-    user_id?: string;
-    user_role?: string;
-    user_permissions?: string[];
-    promotion_id?: string;
-    campaign_id?: string;
-    content_id?: string;
-    custom_attributes?: Record<string, any>;
-}
-export type PromotionEventData = PromotionLifecycleEventData | PromotionUsageEventData | PromotionPerformanceEventData | ContentPromotionEventData | CampaignEventData | UserInteractionEventData | SystemEventData | AlertEventData;
-export type EventCategory = 'lifecycle' | 'usage' | 'performance' | 'content' | 'campaign' | 'user_interaction' | 'system' | 'alert' | 'integration';
-export interface RetentionPolicy {
-    retention_days: number;
-    archive_after_days?: number;
-    delete_after_days?: number;
-    compression_enabled: boolean;
-}
-export interface PromotionLifecycleEventData {
-    promotion: BasePromotion;
-    previous_state?: Partial<BasePromotion>;
-    change_reason?: string;
-    triggered_by: 'user' | 'system' | 'schedule' | 'api';
-    template_id?: string;
-    cloned_from?: string;
-    fields_changed?: string[];
-    validation_results?: ValidationResult[];
-    previous_status?: PromotionStatus;
-    auto_generated?: boolean;
-}
-export interface PromotionUsageEventData {
-    promotion_id: string;
-    promotion_name: string;
-    promotion_type: PromotionType;
-    user_id?: string;
-    cart_id?: string;
-    order_id?: string;
-    transaction_id?: string;
-    promo_code_used?: string;
-    discount_amount_cents: number;
-    original_amount_cents: number;
-    final_amount_cents: number;
-    affected_items: Array<{
-        item_id: string;
-        discount_applied_cents: number;
-        final_price_cents: number;
-    }>;
-    user_usage_count: number;
-    total_promotion_usage: number;
-    application_method: 'automatic' | 'code' | 'manual' | 'rule_triggered';
-    success: boolean;
-    failure_reason?: string;
-    validation_errors?: string[];
+    API_RATE_LIMIT_REACHED = "api.rate_limit_reached",
+    export,
+    enum,
+    EventPriority
 }
 export interface PromotionPerformanceEventData {
     promotion_id: string;
@@ -168,7 +62,7 @@ export interface PromotionPerformanceEventData {
     vs_previous_period?: PerformanceComparison;
     vs_similar_promotions?: PerformanceComparison;
     vs_target?: PerformanceComparison;
-    alert_triggers?: string[];
+    alert_triggers?: string;
     recommendation_generated?: boolean;
 }
 export interface ContentPromotionEventData {
@@ -194,21 +88,18 @@ export interface CampaignEventData {
     campaign_name: string;
     campaign_type: string;
     campaign_status: string;
-    associated_promotions: string[];
+    associated_promotions: string;
     total_budget_cents?: number;
     spent_to_date_cents?: number;
     daily_budget_cents?: number;
     budget_utilization_percentage?: number;
-    channels_active?: string[];
-    channel_performance?: Array<{
-        channel: string;
-        spend_cents: number;
-        impressions: number;
-        clicks: number;
-        conversions: number;
-    }>;
-    launch_configuration?: Record<string, any>;
-    configuration_changes?: Record<string, any>;
+    channels_active?: string;
+    channel_performance?: Array<{}, channel>;
+    string: any;
+    spend_cents: number;
+    impressions: number;
+    clicks: number;
+    conversions: number;
 }
 export interface UserInteractionEventData {
     user_id: string;
@@ -224,9 +115,9 @@ export interface UserInteractionEventData {
     page_load_time_ms?: number;
     interaction_sequence?: number;
     was_eligible: boolean;
-    eligibility_reasons?: string[];
+    eligibility_reasons?: string;
     qualification_score?: number;
-    previous_interactions?: string[];
+    previous_interactions?: string;
     conversion_probability?: number;
     personalization_score?: number;
 }
@@ -261,13 +152,13 @@ export interface AlertEventData {
     threshold_value?: number;
     current_value?: number;
     threshold_type?: 'absolute' | 'percentage' | 'rate';
-    affected_promotions?: string[];
-    affected_users?: string[];
-    affected_campaigns?: string[];
-    recommended_actions?: AlertAction[];
-    auto_actions_taken?: AlertAction[];
-    alert_routing_rules?: string[];
-    notification_channels?: EventDeliveryMethod[];
+    affected_promotions?: string;
+    affected_users?: string;
+    affected_campaigns?: string;
+    recommended_actions?: AlertAction;
+    auto_actions_taken?: AlertAction;
+    alert_routing_rules?: string;
+    notification_channels?: EventDeliveryMethod;
     alert_status: 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed';
     acknowledged_by?: string;
     acknowledged_at?: Date;
@@ -296,23 +187,23 @@ export interface ValidationResult {
 }
 export interface IPromotionEventHandler {
     /**
-     * Handle a promotion event
-     */
+    * Handle a promotion event
+    */
     handleEvent(event: BasePromotionEvent): Promise<EventHandlingResult>;
     /**
-     * Get supported event types
-     */
-    getSupportedEventTypes(): PromotionEventType[];
+    * Get supported event types
+    */
+    getSupportedEventTypes(): PromotionEventType;
     /**
-     * Get handler configuration
-     */
+    * Get handler configuration
+    */
     getHandlerConfig(): EventHandlerConfig;
 }
 export interface EventHandlingResult {
     success: boolean;
     processing_time_ms: number;
-    actions_taken?: string[];
-    errors?: string[];
+    actions_taken?: string;
+    errors?: string;
     retry_recommended?: boolean;
     next_retry_delay_ms?: number;
 }
@@ -320,7 +211,7 @@ export interface EventHandlerConfig {
     handler_id: string;
     handler_name: string;
     description: string;
-    supported_events: PromotionEventType[];
+    supported_events: PromotionEventType;
     retry_policy: EventRetryPolicy;
     timeout_ms: number;
     batch_processing_enabled: boolean;
@@ -335,46 +226,46 @@ export interface EventRetryPolicy {
 }
 export interface IPromotionEventBus {
     /**
-     * Publish an event to the event bus
-     */
+    * Publish an event to the event bus
+    */
     publishEvent(event: BasePromotionEvent): Promise<PublishResult>;
     /**
-     * Publish multiple events in batch
-     */
-    publishBatch(events: BasePromotionEvent[]): Promise<BatchPublishResult>;
+    * Publish multiple events in batch
+    */
+    publishBatch(events: BasePromotionEvent): Promise<BatchPublishResult>;
     /**
-     * Subscribe to events
-     */
+    * Subscribe to events
+    */
     subscribe(subscription: PromotionEventSubscription): Promise<SubscriptionResult>;
     /**
-     * Unsubscribe from events
-     */
+    * Unsubscribe from events
+    */
     unsubscribe(subscriptionId: string): Promise<void>;
     /**
-     * Get event history
-     */
+    * Get event history
+    */
     getEventHistory(criteria: EventHistoryCriteria): Promise<EventHistoryResult>;
 }
 export interface PublishResult {
     success: boolean;
     event_id: string;
     publish_timestamp: Date;
-    delivery_promises: DeliveryPromise[];
+    delivery_promises: DeliveryPromise;
     error?: string;
 }
 export interface BatchPublishResult {
     total_events: number;
     successful_events: number;
     failed_events: number;
-    results: PublishResult[];
+    results: PublishResult;
     batch_id: string;
 }
 export interface PromotionEventSubscription {
     subscription_id: string;
     subscriber_id: string;
     subscriber_name: string;
-    event_types: PromotionEventType[];
-    filters: EventFilter[];
+    event_types: PromotionEventType;
+    filters: EventFilter;
     delivery_method: EventDeliveryMethod;
     delivery_config: EventDeliveryConfig;
     enabled: boolean;
@@ -399,14 +290,14 @@ export interface EventDeliveryConfig {
     webhook_url?: string;
     webhook_headers?: Record<string, string>;
     webhook_authentication?: WebhookAuth;
-    email_addresses?: string[];
+    email_addresses?: string;
     email_template?: string;
-    push_tokens?: string[];
+    push_tokens?: string;
     push_payload_template?: Record<string, any>;
     slack_webhook_url?: string;
     slack_channel?: string;
     slack_message_template?: string;
-    phone_numbers?: string[];
+    phone_numbers?: string;
     sms_template?: string;
     queue_name?: string;
     queue_partition_key?: string;
@@ -431,14 +322,14 @@ export interface DeliveryPromise {
 export interface EventHistoryCriteria {
     start_date?: Date;
     end_date?: Date;
-    event_types?: PromotionEventType[];
-    event_categories?: EventCategory[];
-    priorities?: EventPriority[];
-    promotion_ids?: string[];
-    user_ids?: string[];
-    campaign_ids?: string[];
-    correlation_ids?: string[];
-    source_services?: string[];
+    event_types?: PromotionEventType;
+    event_categories?: EventCategory;
+    priorities?: EventPriority;
+    promotion_ids?: string;
+    user_ids?: string;
+    campaign_ids?: string;
+    correlation_ids?: string;
+    source_services?: string;
     limit?: number;
     offset?: number;
     sort_by?: 'timestamp' | 'priority' | 'event_type';
@@ -448,44 +339,43 @@ export interface EventHistoryCriteria {
     include_metadata?: boolean;
 }
 export interface EventHistoryResult {
-    events: BasePromotionEvent[];
+    events: BasePromotionEvent;
     total_count: number;
     has_more: boolean;
-    aggregations: EventAggregation[];
+    aggregations: EventAggregation;
 }
 export interface EventAggregation {
     field: string;
-    buckets: Array<{
-        key: string;
-        count: number;
-    }>;
+    buckets: Array<{}, key>;
+    string: any;
+    count: number;
 }
 export interface IPromotionNotificationService {
     /**
-     * Send notification based on event
-     */
-    sendNotification(event: BasePromotionEvent, recipients: NotificationRecipient[]): Promise<NotificationResult>;
+    * Send notification based on event
+    */
+    sendNotification(event: BasePromotionEvent, recipients: NotificationRecipient): Promise<NotificationResult>;
     /**
-     * Send batch notifications
-     */
-    sendBatchNotifications(notifications: NotificationRequest[]): Promise<BatchNotificationResult>;
+    * Send batch notifications
+    */
+    sendBatchNotifications(notifications: NotificationRequest): Promise<BatchNotificationResult>;
     /**
-     * Get notification templates
-     */
-    getNotificationTemplates(eventType: PromotionEventType): Promise<NotificationTemplate[]>;
+    * Get notification templates
+    */
+    getNotificationTemplates(eventType: PromotionEventType): Promise<NotificationTemplate>;
     /**
-     * Create custom notification template
-     */
+    * Create custom notification template
+    */
     createNotificationTemplate(template: CreateNotificationTemplateRequest): Promise<NotificationTemplate>;
     /**
-     * Get notification history
-     */
+    * Get notification history
+    */
     getNotificationHistory(criteria: NotificationHistoryCriteria): Promise<NotificationHistoryResult>;
 }
 export interface NotificationRecipient {
     type: 'user' | 'admin' | 'role' | 'team' | 'external';
     identifier: string;
-    delivery_preferences: NotificationDeliveryPreference[];
+    delivery_preferences: NotificationDeliveryPreference;
     personalization_data?: Record<string, any>;
 }
 export interface NotificationDeliveryPreference {
@@ -500,7 +390,7 @@ export interface QuietHours {
     start_time: string;
     end_time: string;
     timezone: string;
-    days_of_week?: number[];
+    days_of_week?: number;
 }
 export interface FrequencyLimit {
     max_notifications_per_hour?: number;
@@ -509,7 +399,7 @@ export interface FrequencyLimit {
 }
 export interface NotificationRequest {
     event: BasePromotionEvent;
-    recipients: NotificationRecipient[];
+    recipients: NotificationRecipient;
     template_id?: string;
     custom_content?: NotificationContent;
     delivery_options?: NotificationDeliveryOptions;
@@ -518,8 +408,8 @@ export interface NotificationContent {
     subject: string;
     body: string;
     html_body?: string;
-    action_buttons?: ActionButton[];
-    attachments?: NotificationAttachment[];
+    action_buttons?: ActionButton;
+    attachments?: NotificationAttachment;
 }
 export interface ActionButton {
     text: string;
@@ -544,19 +434,18 @@ export interface NotificationDeliveryOptions {
 export interface NotificationResult {
     success: boolean;
     notification_id: string;
-    delivery_results: Array<{
-        recipient: NotificationRecipient;
-        method: EventDeliveryMethod;
-        success: boolean;
-        error?: string;
-        delivered_at?: Date;
-    }>;
+    delivery_results: Array<{}, recipient>;
+    NotificationRecipient: any;
+    method: EventDeliveryMethod;
+    success: boolean;
+    error?: string;
+    delivered_at?: Date;
 }
 export interface BatchNotificationResult {
     total_notifications: number;
     successful_notifications: number;
     failed_notifications: number;
-    results: NotificationResult[];
+    results: NotificationResult;
     batch_id: string;
 }
 export interface NotificationTemplate {
@@ -567,8 +456,8 @@ export interface NotificationTemplate {
     subject_template: string;
     body_template: string;
     html_template?: string;
-    supported_methods: EventDeliveryMethod[];
-    personalization_fields: string[];
+    supported_methods: EventDeliveryMethod;
+    personalization_fields: string;
     localization_supported: boolean;
     created_at: Date;
     created_by: string;
@@ -582,35 +471,32 @@ export interface CreateNotificationTemplateRequest {
     subject_template: string;
     body_template: string;
     html_template?: string;
-    supported_methods: EventDeliveryMethod[];
+    supported_methods: EventDeliveryMethod;
     created_by: string;
 }
 export interface NotificationHistoryCriteria {
     start_date?: Date;
     end_date?: Date;
     recipient_id?: string;
-    event_types?: PromotionEventType[];
-    delivery_methods?: EventDeliveryMethod[];
+    event_types?: PromotionEventType;
+    delivery_methods?: EventDeliveryMethod;
     success_status?: boolean;
     limit?: number;
     offset?: number;
 }
 export interface NotificationHistoryResult {
-    notifications: Array<{
-        notification_id: string;
-        event_id: string;
-        event_type: PromotionEventType;
-        recipient: NotificationRecipient;
-        delivery_method: EventDeliveryMethod;
-        success: boolean;
-        sent_at: Date;
-        delivered_at?: Date;
-        opened_at?: Date;
-        clicked_at?: Date;
-        error?: string;
-    }>;
-    total_count: number;
-    has_more: boolean;
+    notifications: Array<{}, notification_id>;
+    string: any;
+    event_id: string;
+    event_type: PromotionEventType;
+    recipient: NotificationRecipient;
+    delivery_method: EventDeliveryMethod;
+    success: boolean;
+    sent_at: Date;
+    delivered_at?: Date;
+    opened_at?: Date;
+    clicked_at?: Date;
+    error?: string;
 }
 export type { BasePromotionEvent, EventSource, EventContext, PromotionEventData, PromotionLifecycleEventData, PromotionUsageEventData, PromotionPerformanceEventData, ContentPromotionEventData, CampaignEventData, UserInteractionEventData, SystemEventData, AlertEventData, IPromotionEventHandler, IPromotionEventBus, IPromotionNotificationService, PromotionEventSubscription, NotificationRecipient, NotificationTemplate };
 export { PromotionEventType, EventPriority, EventDeliveryMethod };

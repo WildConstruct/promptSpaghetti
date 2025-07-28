@@ -10,6 +10,7 @@ export type EncryptionAlgorithm = 'AES-256-GCM' | 'AES-256-CBC' | 'AES-128-GCM' 
 /**
  * Encryption state interface
  */
+
 export interface EncryptionState {
     status: EncryptionStatusType;
     algorithm?: EncryptionAlgorithm;
@@ -20,12 +21,13 @@ export interface EncryptionState {
     dataSize?: number;
     encryptionTime?: number;
     strength?: 'weak' | 'medium' | 'strong';
-}
+
+
 interface EncryptionStatusProps {
     encryptionState: EncryptionState;
     className?: string;
     showDetails?: boolean;
-}
+
 export declare const EncryptionStatus: React.FC<EncryptionStatusProps>;
 export declare const EncryptionStatusIcon: React.FC<{
     encryptionState: EncryptionState;

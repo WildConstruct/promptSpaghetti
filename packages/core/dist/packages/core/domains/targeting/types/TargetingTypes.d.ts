@@ -8,8 +8,8 @@ export interface Audience {
     id: string;
     name: string;
     description: string;
-    segments: AudienceSegment[];
-    conditions: TargetingCondition[];
+    segments: AudienceSegment;
+    conditions: TargetingCondition;
     size: number;
     estimatedReach: number;
     status: AudienceStatus;
@@ -20,9 +20,9 @@ export interface AudienceSegment {
     id: string;
     name: string;
     description: string;
-    criteria: SegmentCriteria[];
+    criteria: SegmentCriteria;
     size: number;
-    overlap: SegmentOverlap[];
+    overlap: SegmentOverlap;
     performance: SegmentPerformance;
 }
 export interface SegmentCriteria {
@@ -52,13 +52,13 @@ export interface AudienceMetadata {
     createdBy: string;
     lastModifiedBy: string;
     version: number;
-    tags: string[];
+    tags: string;
 }
 export interface TargetingCondition {
     id: string;
     name: string;
     type: ConditionType;
-    rules: TargetingRule[];
+    rules: TargetingRule;
     logic: LogicOperator;
     priority: number;
     enabled: boolean;
@@ -78,7 +78,7 @@ export type RuleOperator = 'equals' | 'not_equals' | 'contains' | 'starts_with' 
 export type ValueType = 'string' | 'number' | 'boolean' | 'date' | 'list' | 'regex';
 export interface TargetingPreview {
     audienceId: string;
-    previewData: PreviewResult[];
+    previewData: PreviewResult;
     sampleSize: number;
     confidence: number;
     estimatedReach: number;
@@ -87,10 +87,10 @@ export interface TargetingPreview {
 export interface PreviewResult {
     userId: string;
     matched: boolean;
-    matchedSegments: string[];
-    matchedConditions: string[];
+    matchedSegments: string;
+    matchedConditions: string;
     score: number;
-    reasoning: MatchReasoning[];
+    reasoning: MatchReasoning;
 }
 export interface MatchReasoning {
     rule: string;
@@ -104,8 +104,8 @@ export interface TargetingAnalytics {
     period: AnalyticsPeriod;
     metrics: TargetingMetrics;
     performance: PerformanceData;
-    trends: TrendData[];
-    insights: AnalyticsInsight[];
+    trends: TrendData;
+    insights: AnalyticsInsight;
 }
 export interface AnalyticsPeriod {
     start: Date;
@@ -154,7 +154,7 @@ export interface AnalyticsInsight {
 export type InsightType = 'performance_anomaly' | 'segment_opportunity' | 'cost_optimization' | 'audience_fatigue' | 'timing_optimization' | 'demographic_shift';
 export type InsightImpact = 'low' | 'medium' | 'high' | 'critical';
 export interface TargetingDomainState {
-    audiences: Audience[];
+    audiences: Audience;
     selectedAudience: Audience | null;
     previewResults: TargetingPreview | null;
     analytics: TargetingAnalytics | null;
@@ -177,9 +177,9 @@ export interface AudienceBuilderProps {
     className?: string;
 }
 export interface ConditionEditorProps {
-    conditions: TargetingCondition[];
-    onChange: (conditions: TargetingCondition[]) => void;
-    availableAttributes: string[];
+    conditions: TargetingCondition;
+    onChange: (conditions: TargetingCondition) => void;
+    availableAttributes: string;
     className?: string;
 }
 export interface TargetingPreviewProps {

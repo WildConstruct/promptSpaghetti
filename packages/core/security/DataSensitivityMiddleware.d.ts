@@ -16,6 +16,7 @@ import { type EnhancedDataElement, type SecurityPolicyEnforcementResult } from '
 /**
  * Extended request interface with sensitivity information
  */
+
 export interface SensitivityAwareRequest extends Request {
     dataSensitivity?: {
         level: DataSensitivityLevel;
@@ -23,10 +24,11 @@ export interface SensitivityAwareRequest extends Request {
         policyEnforcement: SecurityPolicyEnforcementResult;
         complianceRequirements: string[];
     };
-}
+
 /**
  * Data sensitivity middleware configuration
  */
+
 export interface DataSensitivityMiddlewareConfig {
     /** Enable automatic data sensitivity detection */
     autoDetection: boolean;
@@ -46,10 +48,11 @@ export interface DataSensitivityMiddlewareConfig {
     customValidation?: (req: SensitivityAwareRequest) => Promise<{
         allowed: boolean;
         reasons: string[];
+
     }>;
     /** Compliance frameworks to validate against */
     complianceFrameworks: string[];
-}
+
 /**
  * Create data sensitivity middleware
  */

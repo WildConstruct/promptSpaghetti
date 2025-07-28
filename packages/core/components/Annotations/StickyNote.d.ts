@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { StickyNote as StickyNoteType, StickyNoteAction } from '../../types/CollaborationTypes';
+
 interface StickyNoteProps {
     note: StickyNoteType;
     onAction: (action: StickyNoteAction) => void;
@@ -16,7 +17,7 @@ interface StickyNoteProps {
     canDelete?: boolean;
     canMove?: boolean;
     canResize?: boolean;
-}
+
 export declare const StickyNote: React.FC<StickyNoteProps>;
 export {};
 //# sourceMappingURL=StickyNote.d.ts.map

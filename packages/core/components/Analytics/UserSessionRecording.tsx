@@ -28,8 +28,9 @@ import {
 } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // User session recording interfaces
+
 export interface UserSessionRecordingProps {
-  sessionConfig: SessionRecordingConfig;
+  sessionConfig: SessionRecordingConfig;,
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   privacySettings: SessionPrivacySettings;
   replayEnabled?: boolean;
@@ -38,17 +39,15 @@ export interface UserSessionRecordingProps {
   onPatternDetected?: (pattern: BehaviorPattern) => void;
   onExport?: (data: SessionRecordingExportData) => void;
 }
-
 export interface SessionRecordingConfig {
-  enabledFeatures: SessionFeature[];
+  enabledFeatures: SessionFeature;,
   recordingSettings: RecordingSettings;
-  analysisSettings: AnalysisSettings;
+  analysisSettings: AnalysisSettings;,
   storageSettings: StorageSettings;
-  replaySettings: ReplaySettings;
+  replaySettings: ReplaySettings;,
   privacySettings: SessionPrivacySettings;
   performanceSettings: PerformanceSettings;
 }
-
 export type SessionFeature = 
   | 'mouse_tracking'
   | 'click_recording'
@@ -62,39 +61,35 @@ export type SessionFeature =
   | 'error_tracking';
 
 export interface RecordingSettings {
-  maxSessionDuration: number; // milliseconds
-  samplingRate: number; // 0-1
-  captureInterval: number; // milliseconds
-  bufferSize: number;
+  maxSessionDuration: number; // milliseconds,
+  samplingRate: number; // 0-1,
+  captureInterval: number; // milliseconds,
+  bufferSize: number;,
   compressionEnabled: boolean;
-  maskSensitiveData: boolean;
+  maskSensitiveData: boolean;,
   captureThreshold: CaptureThreshold;
 }
-
 export interface CaptureThreshold {
-  minInteractionGap: number; // milliseconds
-  maxIdleTime: number; // milliseconds
-  minSessionLength: number; // milliseconds
-  qualityThreshold: number; // 0-1
+  minInteractionGap: number; // milliseconds,
+  maxIdleTime: number; // milliseconds,
+  minSessionLength: number; // milliseconds,
+  qualityThreshold: number; // 0-1,
 }
-
 export interface AnalysisSettings {
-  enableRealTimeAnalysis: boolean;
+  enableRealTimeAnalysis: boolean;,
   patternRecognition: PatternRecognitionSettings;
-  heatmapGeneration: HeatmapSettings;
+  heatmapGeneration: HeatmapSettings;,
   anomalyDetection: AnomalyDetectionSettings;
   performanceAnalysis: PerformanceAnalysisSettings;
 }
-
 export interface PatternRecognitionSettings {
-  enableMousePatterns: boolean;
+  enableMousePatterns: boolean;,
   enableNavigationPatterns: boolean;
-  enableInteractionPatterns: boolean;
+  enableInteractionPatterns: boolean;,
   enableTemporalPatterns: boolean;
-  confidenceThreshold: number;
-  patternCategories: PatternCategory[];
+  confidenceThreshold: number;,
+  patternCategories: PatternCategory;
 }
-
 export type PatternCategory = 
   | 'navigation'
   | 'engagement'
@@ -106,127 +101,114 @@ export type PatternCategory =
   | 'decision_making';
 
 export interface HeatmapSettings {
-  enableClickHeatmaps: boolean;
+  enableClickHeatmaps: boolean;,
   enableScrollHeatmaps: boolean;
-  enableHoverHeatmaps: boolean;
+  enableHoverHeatmaps: boolean;,
   enableAttentionHeatmaps: boolean;
-  resolution: HeatmapResolution;
-  aggregationPeriod: number; // hours
+  resolution: HeatmapResolution;,
+  aggregationPeriod: number; // hours,
 }
-
 export type HeatmapResolution = 'low' | 'medium' | 'high' | 'ultra';
 
 export interface AnomalyDetectionSettings {
-  enableBehaviorAnomalies: boolean;
+  enableBehaviorAnomalies: boolean;,
   enablePerformanceAnomalies: boolean;
-  enableNavigationAnomalies: boolean;
+  enableNavigationAnomalies: boolean;,
   sensitivityLevel: 'low' | 'medium' | 'high';
-  alertThresholds: AnomalyThreshold[];
+  alertThresholds: AnomalyThreshold;
 }
-
 export interface AnomalyThreshold {
-  metric: string;
+  metric: string;,
   threshold: number;
-  timeWindow: number; // minutes
+  timeWindow: number; // minutes,
   severity: 'low' | 'medium' | 'high' | 'critical';
 }
-
 export interface PerformanceAnalysisSettings {
-  trackPageLoadTimes: boolean;
+  trackPageLoadTimes: boolean;,
   trackInteractionLatency: boolean;
-  trackRenderPerformance: boolean;
+  trackRenderPerformance: boolean;,
   trackMemoryUsage: boolean;
-  performanceThresholds: PerformanceThreshold[];
+  performanceThresholds: PerformanceThreshold;
 }
-
 export interface PerformanceThreshold {
-  metric: 'load_time' | 'interaction_delay' | 'render_time' | 'memory_usage';
+  metric: 'load_time' | 'interaction_delay' | 'render_time' | 'memory_usage';,
   warningThreshold: number;
   criticalThreshold: number;
 }
-
 export interface StorageSettings {
-  retentionPeriod: number; // days
-  compressionLevel: 'none' | 'low' | 'medium' | 'high';
+  retentionPeriod: number; // days,
+  compressionLevel: 'none' | 'low' | 'medium' | 'high';,
   encryptionEnabled: boolean;
-  localStorageEnabled: boolean;
+  localStorageEnabled: boolean;,
   cloudStorageEnabled: boolean;
   storageQuota: StorageQuota;
 }
-
 export interface StorageQuota {
-  maxSessionSize: number; // MB
-  maxTotalSize: number; // MB
+  maxSessionSize: number; // MB,
+  maxTotalSize: number; // MB,
   cleanupPolicy: 'oldest_first' | 'largest_first' | 'least_accessed';
 }
-
 export interface ReplaySettings {
-  enableSessionReplay: boolean;
-  replaySpeed: number; // 0.5x to 4x
-  skipInactivity: boolean;
-  maxInactivitySkip: number; // seconds
-  replayQuality: 'low' | 'medium' | 'high';
+  enableSessionReplay: boolean;,
+  replaySpeed: number; // 0.5x to 4x,
+  skipInactivity: boolean;,
+  maxInactivitySkip: number; // seconds,
+  replayQuality: 'low' | 'medium' | 'high';,
   enableControls: boolean;
 }
-
 export interface SessionPrivacySettings {
-  consentRequired: boolean;
+  consentRequired: boolean;,
   maskPersonalData: boolean;
-  maskFormInputs: boolean;
+  maskFormInputs: boolean;,
   maskPasswords: boolean;
-  maskCreditCards: boolean;
-  excludedSelectors: string[];
-  dataRetentionDays: number;
+  maskCreditCards: boolean;,
+  excludedSelectors: string;
+  dataRetentionDays: number;,
   anonymizeUserData: boolean;
   gdprCompliant: boolean;
 }
-
 export interface PerformanceSettings {
-  maxCpuUsage: number; // percentage
-  maxMemoryUsage: number; // MB
-  throttleOnSlowDevice: boolean;
+  maxCpuUsage: number; // percentage,
+  maxMemoryUsage: number; // MB,
+  throttleOnSlowDevice: boolean;,
   batchProcessing: boolean;
   workerThreads: boolean;
+  // Session data structures
 }
-
-// Session data structures
 export interface UserSession {
   sessionId: string;
   userId?: string;
-  deviceId: string;
+  deviceId: string;,
   startTime: number;
   endTime?: number;
-  duration: number;
-  pageViews: SessionPageView[];
-  interactions: SessionInteraction[];
-  navigationFlow: NavigationEvent[];
-  performance: SessionPerformance;
+  duration: number;,
+  pageViews: SessionPageView;
+  interactions: SessionInteraction;,
+  navigationFlow: NavigationEvent;
+  performance: SessionPerformance;,
   metadata: SessionMetadata;
   analysis?: SessionAnalysis;
 }
-
 export interface SessionPageView {
-  pageId: string;
+  pageId: string;,
   url: string;
-  title: string;
+  title: string;,
   timestamp: number;
-  loadTime: number;
+  loadTime: number;,
   timeOnPage: number;
-  scrollDepth: number;
+  scrollDepth: number;,
   interactions: number;
   exitType: 'navigation' | 'close' | 'refresh' | 'timeout';
 }
-
 export interface SessionInteraction {
-  interactionId: string;
+  interactionId: string;,
   type: InteractionType;
-  element: InteractionElement;
+  element: InteractionElement;,
   timestamp: number;
   coordinates?: { x: number; y: number };
   value?: string;
   context: InteractionContext;
 }
-
 export type InteractionType = 
   | 'click'
   | 'double_click'
@@ -246,193 +228,174 @@ export interface InteractionElement {
   id?: string;
   className?: string;
   text?: string;
-  xpath: string;
+  xpath: string;,
   selector: string;
   attributes: Record<string, string>;
 }
-
 export interface InteractionContext {
-  pageUrl: string;
+  pageUrl: string;,
   viewportSize: { width: number; height: number };
   scrollPosition: { x: number; y: number };
-  timestamp: number;
+  timestamp: number;,
   userAgent: string;
 }
-
 export interface NavigationEvent {
-  eventId: string;
+  eventId: string;,
   type: NavigationType;
-  fromUrl: string;
+  fromUrl: string;,
   toUrl: string;
-  timestamp: number;
+  timestamp: number;,
   loadTime: number;
   method: 'link' | 'button' | 'form' | 'direct' | 'back' | 'forward';
 }
-
 export type NavigationType = 'page_load' | 'navigation' | 'redirect' | 'back' | 'forward' | 'refresh';
 
 export interface SessionPerformance {
-  totalLoadTime: number;
+  totalLoadTime: number;,
   averageResponseTime: number;
-  slowestPage: string;
+  slowestPage: string;,
   fastestPage: string;
-  memoryUsage: MemoryUsage;
-  networkRequests: NetworkRequest[];
-  errors: SessionError[];
+  memoryUsage: MemoryUsage;,
+  networkRequests: NetworkRequest;
+  errors: SessionError;
 }
-
 export interface MemoryUsage {
-  peak: number;
+  peak: number;,
   average: number;
-  finalUsage: number;
+  finalUsage: number;,
   gcEvents: number;
 }
-
 export interface NetworkRequest {
-  url: string;
+  url: string;,
   method: string;
-  status: number;
+  status: number;,
   duration: number;
-  size: number;
+  size: number;,
   timestamp: number;
 }
-
 export interface SessionError {
-  type: 'javascript' | 'network' | 'console' | 'crash';
+  type: 'javascript' | 'network' | 'console' | 'crash';,
   message: string;
   stack?: string;
-  timestamp: number;
+  timestamp: number;,
   url: string;
   line?: number;
   column?: number;
 }
-
 export interface SessionMetadata {
-  userAgent: string;
+  userAgent: string;,
   platform: string;
   screenResolution: { width: number; height: number };
   viewportSize: { width: number; height: number };
-  timezone: string;
+  timezone: string;,
   language: string;
   referrer?: string;
-  sessionSource: string;
+  sessionSource: string;,
   deviceType: 'desktop' | 'tablet' | 'mobile';
   browserVersion: string;
-}
 
 // Session analysis structures
+}
 export interface SessionAnalysis {
-  sessionId: string;
+  sessionId: string;,
   analysisTimestamp: number;
-  overallScore: SessionScore;
-  behaviorPatterns: BehaviorPattern[];
-  navigationAnalysis: NavigationAnalysis;
+  overallScore: SessionScore;,
+  behaviorPatterns: BehaviorPattern;
+  navigationAnalysis: NavigationAnalysis;,
   engagementMetrics: EngagementMetrics;
-  conversionIndicators: ConversionIndicator[];
-  anomalies: SessionAnomaly[];
-  recommendations: SessionRecommendation[];
+  conversionIndicators: ConversionIndicator;,
+  anomalies: SessionAnomaly;
+  recommendations: SessionRecommendation;,
   heatmapData: HeatmapData;
 }
-
 export interface SessionScore {
-  overall: number; // 0-100
-  engagement: number;
+  overall: number; // 0-100,
+  engagement: number;,
   navigation: number;
-  conversion: number;
+  conversion: number;,
   performance: number;
   quality: number;
 }
-
 export interface BehaviorPattern {
-  patternId: string;
+  patternId: string;,
   type: PatternCategory;
-  confidence: number; // 0-1
-  description: string;
+  confidence: number; // 0-1,
+  description: string;,
   frequency: number;
-  duration: number;
+  duration: number;,
   significance: 'low' | 'medium' | 'high';
-  examples: PatternExample[];
-  insights: string[];
+  examples: PatternExample;,
+  insights: string;
 }
-
 export interface PatternExample {
-  sessionId: string;
+  sessionId: string;,
   timestamp: number;
-  description: string;
+  description: string;,
   context: string;
 }
-
 export interface NavigationAnalysis {
-  totalPages: number;
+  totalPages: number;,
   uniquePages: number;
-  averageTimePerPage: number;
+  averageTimePerPage: number;,
   bounceRate: number;
-  exitPages: PageExit[];
-  navigationFlow: FlowPath[];
-  backtrackingRate: number;
+  exitPages: PageExit;,
+  navigationFlow: FlowPath;
+  backtrackingRate: number;,
   directNavigationRate: number;
 }
-
 export interface PageExit {
-  url: string;
+  url: string;,
   exitRate: number;
-  averageTimeOnPage: number;
+  averageTimeOnPage: number;,
   exitType: 'navigation' | 'close' | 'timeout';
 }
-
 export interface FlowPath {
-  fromPage: string;
+  fromPage: string;,
   toPage: string;
-  frequency: number;
+  frequency: number;,
   averageTime: number;
   conversionRate?: number;
 }
-
 export interface EngagementMetrics {
-  totalInteractions: number;
-  interactionRate: number; // interactions per minute
-  scrollDepthAverage: number;
-  activeTime: number; // time with interactions
-  passiveTime: number; // time without interactions
-  engagementScore: number; // 0-100
-  attentionSpan: number; // seconds
+  totalInteractions: number;,
+  interactionRate: number; // interactions per minute,
+  scrollDepthAverage: number;,
+  activeTime: number; // time with interactions,
+  passiveTime: number; // time without interactions,
+  engagementScore: number; // 0-100,
+  attentionSpan: number; // seconds,
   focusedTime: number;
 }
-
 export interface ConversionIndicator {
-  indicatorType: 'positive' | 'negative' | 'neutral';
-  strength: number; // 0-1
-  description: string;
-  relatedActions: string[];
+  indicatorType: 'positive' | 'negative' | 'neutral';,
+  strength: number; // 0-1,
+  description: string;,
+  relatedActions: string;
   timestamp: number;
 }
-
 export interface SessionAnomaly {
-  anomalyId: string;
+  anomalyId: string;,
   type: 'behavior' | 'performance' | 'navigation' | 'technical';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: 'low' | 'medium' | 'high' | 'critical';,
   description: string;
-  timestamp: number;
+  timestamp: number;,
   context: string;
   impact: AnomalyImpact;
 }
-
 export interface AnomalyImpact {
-  userExperience: 'positive' | 'negative' | 'neutral';
+  userExperience: 'positive' | 'negative' | 'neutral';,
   performance: 'improved' | 'degraded' | 'unchanged';
   conversion: 'helpful' | 'harmful' | 'neutral';
 }
-
 export interface SessionRecommendation {
-  recommendationId: string;
+  recommendationId: string;,
   type: RecommendationType;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'critical';,
   title: string;
-  description: string;
+  description: string;,
   implementation: ImplementationGuide;
   expectedImpact: ImpactEstimate;
 }
-
 export type RecommendationType = 
   | 'ui_improvement'
   | 'performance_optimization'
@@ -442,74 +405,73 @@ export type RecommendationType =
   | 'user_experience';
 
 export interface ImplementationGuide {
-  steps: string[];
+  steps: string;,
   complexity: 'low' | 'medium' | 'high';
-  estimatedEffort: string;
-  requiredSkills: string[];
+  estimatedEffort: string;,
+  requiredSkills: string;
 }
-
 export interface ImpactEstimate {
-  conversionImprovement: number; // percentage
-  engagementImprovement: number; // percentage
-  performanceImprovement: number; // percentage
-  confidenceLevel: number; // 0-1
+  conversionImprovement: number; // percentage,
+  engagementImprovement: number; // percentage,
+  performanceImprovement: number; // percentage,
+  confidenceLevel: number; // 0-1,
 }
-
 export interface HeatmapData {
-  clickHeatmap: HeatmapPoint[];
-  scrollHeatmap: ScrollHeatmapData[];
-  hoverHeatmap: HeatmapPoint[];
-  attentionHeatmap: AttentionHeatmapData[];
+  clickHeatmap: HeatmapPoint;,
+  scrollHeatmap: ScrollHeatmapData;
+  hoverHeatmap: HeatmapPoint;,
+  attentionHeatmap: AttentionHeatmapData;
 }
-
 export interface HeatmapPoint {
-  x: number;
+  x: number;,
   y: number;
-  intensity: number; // 0-1
+  intensity: number; // 0-1,
   count: number;
 }
-
 export interface ScrollHeatmapData {
-  depth: number; // 0-100 percentage
-  frequency: number;
+  depth: number; // 0-100 percentage,
+  frequency: number;,
   averageTime: number;
 }
-
 export interface AttentionHeatmapData {
-  element: string;
+  element: string;,
   selector: string;
-  attentionTime: number;
+  attentionTime: number;,
   viewCount: number;
   interactionRate: number;
+  // Export data structure
 }
-
-// Export data structure
 export interface SessionRecordingExportData {
-  sessions: UserSession[];
-  analysis: SessionAnalysis[];
-  patterns: BehaviorPattern[];
-  heatmaps: HeatmapData[];
-  recommendations: SessionRecommendation[];
-  metadata: {,
-    exportTimestamp: number;
-    totalSessions: number;
+  sessions: UserSession;,
+  analysis: SessionAnalysis;
+  patterns: BehaviorPattern;,
+  heatmaps: HeatmapData;
+  recommendations: SessionRecommendation;,
+  metadata: {;
+  exportTimestamp: number;,
+  totalSessions: number;
     dateRange: { start: number; end: number };
     analysisVersion: string;
   };
-}
 
 // Mock data generators
 const generateMockSession = (): UserSession => ({)
-  sessionId: `session_${Math.random().toString(36).substr(2, 9)}`,}
-  userId: Math.random() > 0.3 ? `user_${Math.random().toString(36).substr(2, 8)}` : undefined,}
-  deviceId: `device_${Math.random().toString(36).substr(2, 10)}`,}
+  sessionId: `session_${Math.random().toString(36).substr(2, 9)}`}
+},
+  userId: Math.random() > 0.3 ? `user_${Math.random().toString(36).substr(2, 8)}` : undefined}
+},
+  deviceId: `device_${Math.random().toString(36).substr(2, 10)}`}
+},
   startTime: Date.now() - Math.random() * 3600000,
   duration: Math.random() * 1800000 + 60000,
   pageViews: Array.from({ length: Math.floor(Math.random() * 8) + 1 }, () => ({)
-    pageId: `page_${Math.random().toString(36).substr(2, 8)}`,}
-    url: `/page/${Math.floor(Math.random() * 20) + 1}`,}
-    title: `Page ${Math.floor(Math.random() * 20) + 1}`,}
-    timestamp: Date.now() - Math.random() * 3600000,
+  pageId: `page_${Math.random().toString(36).substr(2, 8)}`}
+},
+  url: `/page/${Math.floor(Math.random() * 20) + 1}`}
+},
+  title: `Page ${Math.floor(Math.random() * 20) + 1}`}
+},
+  timestamp: Date.now() - Math.random() * 3600000,
     loadTime: Math.random() * 3000 + 500,
     timeOnPage: Math.random() * 300000 + 30000,
     scrollDepth: Math.random() * 100,
@@ -517,44 +479,52 @@ const generateMockSession = (): UserSession => ({)
     exitType: ['navigation', 'close', 'refresh', 'timeout'][Math.floor(Math.random() * 4)] as any
   })),
   interactions: Array.from({ length: Math.floor(Math.random() * 100) + 20 }, () => ({)
-    interactionId: `interaction_${Math.random().toString(36).substr(2, 8)}`,}
-    type: ['click', 'scroll', 'hover', 'keypress', 'form_input'][Math.floor(Math.random() * 5)] as InteractionType,
+  interactionId: `interaction_${Math.random().toString(36).substr(2, 8)}`}
+},
+  type: ['click', 'scroll', 'hover', 'keypress', 'form_input'][Math.floor(Math.random() * 5)] as InteractionType,
     element: {,
-      tagName: ['button', 'a', 'input', 'div', 'span'][Math.floor(Math.random() * 5)],
-      id: Math.random() > 0.5 ? `elem_${Math.random().toString(36).substr(2, 6)}` : undefined,}
-      className: `class-${Math.floor(Math.random() * 10)}`,}
-      text: `Element text ${Math.floor(Math.random() * 100)}`,}
-      xpath: `/html/body/div[${Math.floor(Math.random() * 5) + 1}]`,}
-      selector: `.class-${Math.floor(Math.random() * 10)}`,}
-      attributes: {}
-    },
-    timestamp: Date.now() - Math.random() * 3600000,
+  tagName: ['button', 'a', 'input', 'div', 'span'][Math.floor(Math.random() * 5)],
+      id: Math.random() > 0.5 ? `elem_${Math.random().toString(36).substr(2, 6)}` : undefined}
+},
+  className: `class-${Math.floor(Math.random() * 10)}`}
+},
+  text: `Element text ${Math.floor(Math.random() * 100)}`}
+},
+  xpath: `/html/body/div[${Math.floor(Math.random() * 5) + 1}]`}
+},
+  selector: `.class-${Math.floor(Math.random() * 10)}`}
+},
+  attributes: {}
+  },
+  timestamp: Date.now() - Math.random() * 3600000,
     coordinates: { x: Math.random() * 1920, y: Math.random() * 1080 },
     context: {,
-      pageUrl: `/page/${Math.floor(Math.random() * 20) + 1}`,}
-      viewportSize: { width: 1920, height: 1080 },
+  pageUrl: `/page/${Math.floor(Math.random() * 20) + 1}`}
+},
+  viewportSize: { width: 1920, height: 1080 },
       scrollPosition: { x: 0, y: Math.random() * 2000 },
       timestamp: Date.now(),
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'
-    }
   })),
   navigationFlow: [],
   performance: {,
-    totalLoadTime: Math.random() * 5000 + 1000,
+  totalLoadTime: Math.random() * 5000 + 1000,
     averageResponseTime: Math.random() * 1000 + 200,
-    slowestPage: `/page/${Math.floor(Math.random() * 20) + 1}`,}
-    fastestPage: `/page/${Math.floor(Math.random() * 20) + 1}`,}
-    memoryUsage: {,
-      peak: Math.random() * 100 + 50,
-      average: Math.random() * 80 + 40,
-      finalUsage: Math.random() * 90 + 45,
-      gcEvents: Math.floor(Math.random() * 10),
-    },
-    networkRequests: [],
-    errors: [],
+    slowestPage: `/page/${Math.floor(Math.random() * 20) + 1}`}
+},
+  fastestPage: `/page/${Math.floor(Math.random() * 20) + 1}`}
+},
+  memoryUsage: {,
+  peak: Math.random() * 100 + 50,
+  average: Math.random() * 80 + 40,
+  finalUsage: Math.random() * 90 + 45,
+  gcEvents: Math.floor(Math.random() * 10),
+},
+  networkRequests: [],
+    errors: [];
   },
   metadata: {,
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
+  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
     platform: 'MacIntel',
     screenResolution: { width: 2560, height: 1600 },
     viewportSize: { width: 1920, height: 1080 },
@@ -563,11 +533,11 @@ const generateMockSession = (): UserSession => ({)
     referrer: Math.random() > 0.5 ? 'https://google.com' : undefined,
     sessionSource: ['direct', 'organic', 'social', 'referral'][Math.floor(Math.random() * 4)],
     deviceType: ['desktop', 'tablet', 'mobile'][Math.floor(Math.random() * 3)] as any,
-    browserVersion: 'Chrome/120.0.0.0',
-  }
-});
+    browserVersion: 'Chrome/120.0.0.0';
+  });
 
 // Main component
+}
 export const UserSessionRecording: React.FC<UserSessionRecordingProps> = ({)
   sessionConfig,
   analyticsInfrastructure,
@@ -578,9 +548,9 @@ export const UserSessionRecording: React.FC<UserSessionRecordingProps> = ({)
   onPatternDetected,
   onExport
 }) => {
-  const [sessions, setSessions] = useState<UserSession[]>([]);
+  const [sessions, setSessions] = useState<UserSession>([]);
   const [currentSession, setCurrentSession] = useState<UserSession | null>(null);
-  const [analysis, setAnalysis] = useState<SessionAnalysis[]>([]);
+  const [analysis, setAnalysis] = useState<SessionAnalysis>([]);
   const [isRecording, setIsRecording] = useState(false);
   const [replaySession, setReplaySession] = useState<UserSession | null>(null);
   const [replayPosition, setReplayPosition] = useState(0);
@@ -610,39 +580,37 @@ export const UserSessionRecording: React.FC<UserSessionRecordingProps> = ({)
     setReplayPosition(0);
   }, []);
   const handleExport = useCallback(() => {
-    if (onExport) {
-      const exportData: SessionRecordingExportData = {
-        sessions,
-        analysis,
-        patterns: analysis.flatMap(a => a.behaviorPatterns),
-        heatmaps: analysis.map(a => a.heatmapData),
-        recommendations: analysis.flatMap(a => a.recommendations),
-        metadata: {,
-          exportTimestamp: Date.now(),
-          totalSessions: sessions.length,
-          dateRange: {,
-            start: Math.min(...sessions.map(s => s.startTime)),
-            end: Math.max(...sessions.map(s => s.startTime + s.duration)),
-          },
-          analysisVersion: '1.0.0',
-        }
-      };
+  if (onExport) {
+  const exportData: SessionRecordingExportData = {,
+  sessions,
+  analysis,
+  patterns: analysis.flatMap(a => a.behaviorPatterns),
+  heatmaps: analysis.map(a => a.heatmapData),
+  recommendations: analysis.flatMap(a => a.recommendations),
+  metadata: {,
+  exportTimestamp: Date.now(),
+  totalSessions: sessions.length,
+  dateRange: {,
+  start: Math.min(...sessions.map(s => s.startTime)),
+  end: Math.max(...sessions.map(s => s.startTime + s.duration)),
+},
+  analysisVersion: '1.0.0';
+  };
       onExport(exportData);
-    }
   }, [sessions, analysis, onExport]);
   const sessionStats = useMemo(() => {
-    const totalSessions = sessions.length;
-    const averageDuration = sessions.reduce((sum, s) => sum + s.duration, 0) / totalSessions / 1000 / 60;
-    const averagePageViews = sessions.reduce((sum, s) => sum + s.pageViews.length, 0) / totalSessions;
-    const averageInteractions = sessions.reduce((sum, s) => sum + s.interactions.length, 0) / totalSessions;
-    return {
-      totalSessions,
-      averageDuration: Math.round(averageDuration * 10) / 10,
-      averagePageViews: Math.round(averagePageViews * 10) / 10,
-      averageInteractions: Math.round(averageInteractions * 10) / 10,
-    };
+  const totalSessions = sessions.length;
+  const averageDuration = sessions.reduce((sum, s) => sum + s.duration, 0) / totalSessions / 1000 / 60;
+  const averagePageViews = sessions.reduce((sum, s) => sum + s.pageViews.length, 0) / totalSessions;
+  const averageInteractions = sessions.reduce((sum, s) => sum + s.interactions.length, 0) / totalSessions;
+  return {
+  totalSessions,
+  averageDuration: Math.round(averageDuration * 10) / 10,
+  averagePageViews: Math.round(averagePageViews * 10) / 10,
+  averageInteractions: Math.round(averageInteractions * 10) / 10,
+};
   }, [sessions]);
-  return ();
+  return;
     <div className="user-session-recording">
       <div className="session-header">
         <div className="header-section">

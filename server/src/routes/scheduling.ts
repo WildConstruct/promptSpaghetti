@@ -12,19 +12,25 @@ import {
 } from '../database/scheduling-models';
 
 // Request type definitions
+}
 interface CreateScheduleRequestBody {
   Body: CreateScheduleRequest;
 }
+}
 
+}
 interface UpdateScheduleRequestBody {
   Body: UpdateScheduleRequest;
+}
   Params: { id: string };
 }
 
+}
 interface GetScheduleRequest {
   Params: { id: string };
 }
 
+}
 interface QuerySchedulesRequest {
   Querystring: {
     toggleId?: string;
@@ -38,26 +44,32 @@ interface QuerySchedulesRequest {
     limit?: number;
     sortBy?: 'startTime' | 'createdAt' | 'priority' | 'status';
     sortOrder?: 'asc' | 'desc';
+}
   };
 }
 
+}
 interface DeleteScheduleRequest {
   Params: { id: string };
 }
 
+}
 interface GetExecutionsRequest {
   Params: { scheduleId: string };
   Querystring: { limit?: number };
 }
 
+}
 interface BulkActionRequest {
   Body: {
     scheduleIds: string[];
     action: 'cancel' | 'pause' | 'resume' | 'delete';
     reason?: string;
+}
   };
 }
 
+}
 interface ManualExecuteRequest {
   Params: { id: string };
   Body: { reason?: string };
@@ -95,7 +107,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
               maxOccurrences: { type: 'number', minimum: 1 },
               endDate: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           actionConfig: {
             type: 'object',
             properties: {
@@ -111,11 +123,11 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
                 }
               }
             }
-          },
+  }
           priority: { type: 'number', default: 0 },
           conflictResolution: { type: 'string', enum: ['skip', 'override', 'merge'], default: 'skip' }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -230,7 +242,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -316,7 +328,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { scheduleId: { type: 'string' } },
         required: ['scheduleId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -352,7 +364,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: { id: { type: 'string' } },
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -378,7 +390,7 @@ export async function schedulingRoutes(fastify: FastifyInstance) {
           id: request.params.id, 
           nextExecution: new Date(),
           reason: request.body.reason || 'Manual execution'
-        },
+  }
         userId
       );
 

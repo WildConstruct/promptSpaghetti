@@ -76,7 +76,7 @@ describe('PasswordBreachService', () => {
         headers: new Headers({
           'X-API-Version': '3',
           'Content-Length': '20'
-        })
+  }
       };
       
       mockFetch.mockResolvedValue(mockResponse as Response);
@@ -90,8 +90,8 @@ describe('PasswordBreachService', () => {
             'User-Agent': 'SecurePasswordChecker/1.0',
             'Add-Padding': 'true',
             'X-Request-ID': expect.any(String)
-          })
-        })
+  }
+  }
       );
     });
 
@@ -344,7 +344,7 @@ describe('PasswordBreachService', () => {
           eventType: 'PASSWORD_BREACH_CHECK',
           userId: 'user-123',
           riskLevel: 'LOW'
-        })
+  }
       );
     });
 
@@ -367,7 +367,7 @@ describe('PasswordBreachService', () => {
         expect.objectContaining({
           eventType: 'PASSWORD_BREACH_CHECK',
           riskLevel: 'HIGH'
-        })
+  }
       );
     });
 
@@ -380,7 +380,7 @@ describe('PasswordBreachService', () => {
         expect.objectContaining({
           eventType: 'PASSWORD_BREACH_CHECK_ERROR',
           userId: 'user-123'
-        })
+  }
       );
     });
 
@@ -607,7 +607,7 @@ describe('PasswordBreachService', () => {
       mockFetch.mockImplementation(() => 
         new Promise((_, reject) => 
           setTimeout(() => reject(new Error('Request timeout')), 100)
-        )
+
       );
 
       const result = await service.checkPasswordBreach('testpassword', undefined, { timeout: 50 });

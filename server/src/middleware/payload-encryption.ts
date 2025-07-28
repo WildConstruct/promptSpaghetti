@@ -9,6 +9,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface PayloadEncryptionConfig {
   enabled: boolean;
   algorithm: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';
@@ -21,7 +22,9 @@ export interface PayloadEncryptionConfig {
   enableMetrics: boolean;
   auditAllOperations: boolean;
 }
+}
 
+}
 export interface EncryptedPayload {
   data: string; // Base64 encoded encrypted data
   iv: string; // Base64 encoded initialization vector
@@ -31,7 +34,9 @@ export interface EncryptedPayload {
   timestamp: number;
   compressed?: boolean;
 }
+}
 
+}
 export interface PayloadEncryptionMetrics {
   totalEncryptions: number;
   totalDecryptions: number;
@@ -41,6 +46,7 @@ export interface PayloadEncryptionMetrics {
   averageDecryptionTime: number;
   keyRotations: number;
   compressionRatio: number;
+}
 }
 
 export class PayloadEncryptionService {
@@ -68,6 +74,7 @@ export class PayloadEncryptionService {
   }
 
   async initialize(): Promise<void> {
+
     if (!this.config.enabled) return;
 
     try {
@@ -81,6 +88,7 @@ export class PayloadEncryptionService {
   }
 
   async encryptPayload(data: unknown, endpoint?: string): Promise<EncryptedPayload> {
+
     const startTime = Date.now();
     
     try {
@@ -175,6 +183,7 @@ export class PayloadEncryptionService {
   }
 
   async decryptPayload(encryptedPayload: EncryptedPayload): Promise<any> {
+
     const startTime = Date.now();
     
     try {
@@ -246,6 +255,7 @@ export class PayloadEncryptionService {
   }
 
   async rotateEncryptionKey(): Promise<void> {
+
     try {
       if (!this.currentKeyId) {
         throw new Error('No current encryption key to rotate');
@@ -276,6 +286,7 @@ export class PayloadEncryptionService {
   }
 
   private async ensureEncryptionKey(): Promise<void> {
+
     try {
       // Try to get existing payload encryption key
       const existingKeys = await this.keyManagementService.listKeys({
@@ -501,7 +512,7 @@ export function responseEncryptionMiddleware(
                 reply.header('x-encryption-algorithm', encryptedPayload.algorithm);
                 reply.header('x-encryption-key-id', encryptedPayload.keyId);
                 originalSend(encryptedPayload);
-              })
+  }
               .catch(error => {
                 console.error('Response encryption failed:', error);
                 // Fall back to unencrypted response

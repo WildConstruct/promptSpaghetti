@@ -6,6 +6,7 @@
  * load balancing, skill-based routing, and assignment analytics.
  */
 
+}
 export interface ModerationCase {
   id: string;
   caseNumber: string;
@@ -78,7 +79,9 @@ export interface ModerationCase {
   completedAt?: Date;
   closedAt?: Date;
 }
+}
 
+}
 export interface ModeratorProfile {
   id: string;
   userId: string;
@@ -97,6 +100,7 @@ export interface ModeratorProfile {
   
   // Schedule
   timezone: string;
+}
   workingHours: Record<string, { start: string; end: string }>;
   
   // Performance
@@ -128,6 +132,7 @@ export interface ModeratorProfile {
   updatedAt: Date;
 }
 
+}
 export interface AssignmentRule {
   id: string;
   name: string;
@@ -160,7 +165,9 @@ export interface AssignmentRule {
   updatedAt: Date;
   lastUsed?: Date;
 }
+}
 
+}
 export interface AssignmentHistory {
   id: string;
   caseId: string;
@@ -180,7 +187,9 @@ export interface AssignmentHistory {
   metadata: Record<string, any>;
   createdAt: Date;
 }
+}
 
+}
 export interface AssignmentAnalytics {
   date: string;
   moderatorId?: string;
@@ -197,7 +206,9 @@ export interface AssignmentAnalytics {
   qualityScore?: number;
   assignmentMethods: Record<string, number>;
 }
+}
 
+}
 export interface CaseFilter {
   statuses?: string[];
   priorities?: string[];
@@ -206,9 +217,11 @@ export interface CaseFilter {
   requiredSkills?: string[];
   flags?: string[];
   overdue?: boolean;
+}
   dateRange?: { start?: Date; end?: Date };
 }
 
+}
 export interface AssignmentRequest {
   caseId: string;
   assignmentMethod?: string;
@@ -216,7 +229,9 @@ export interface AssignmentRequest {
   forceAssign?: boolean;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface AssignmentResult {
   success: boolean;
   assignedTo?: string;
@@ -227,6 +242,7 @@ export interface AssignmentResult {
   reason?: string;
   alternativeModerators?: string[];
   metadata: Record<string, any>;
+}
 }
 
 /**
@@ -258,6 +274,7 @@ export class Epic16CaseAssignmentService {
    * Case Management
    */
   async createCase(caseData: Omit<ModerationCase, 'id' | 'caseNumber' | 'createdAt' | 'updatedAt'>): Promise<ModerationCase> {
+
     const moderationCase: ModerationCase = {
       ...caseData,
       id: this.generateCaseId(),
@@ -271,6 +288,7 @@ export class Epic16CaseAssignmentService {
   }
 
   async updateCase(caseId: string, updates: Partial<ModerationCase>): Promise<ModerationCase | null> {
+
     const moderationCase = this.cases.get(caseId);
     if (!moderationCase) return null;
 
@@ -285,10 +303,12 @@ export class Epic16CaseAssignmentService {
   }
 
   async getCase(caseId: string): Promise<ModerationCase | null> {
+
     return this.cases.get(caseId) || null;
   }
 
   async getCases(filter?: CaseFilter): Promise<ModerationCase[]> {
+
     let cases = Array.from(this.cases.values());
 
     if (!filter) return cases.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -337,10 +357,12 @@ export class Epic16CaseAssignmentService {
   }
 
   async getUnassignedCases(): Promise<ModerationCase[]> {
+
     return this.getCases({ statuses: ['unassigned'] });
   }
 
   async getCasesByModerator(moderatorId: string): Promise<ModerationCase[]> {
+
     return this.getCases({ assignees: [moderatorId] });
   }
 
@@ -348,6 +370,7 @@ export class Epic16CaseAssignmentService {
    * Moderator Management
    */
   async createModeratorProfile(profileData: Omit<ModeratorProfile, 'id' | 'createdAt' | 'updatedAt'>): Promise<ModeratorProfile> {
+
     const profile: ModeratorProfile = {
       ...profileData,
       id: this.generateModeratorId(),
@@ -360,6 +383,7 @@ export class Epic16CaseAssignmentService {
   }
 
   async updateModeratorProfile(moderatorId: string, updates: Partial<ModeratorProfile>): Promise<ModeratorProfile | null> {
+
     const profile = this.moderators.get(moderatorId);
     if (!profile) return null;
 
@@ -374,10 +398,12 @@ export class Epic16CaseAssignmentService {
   }
 
   async getModeratorProfile(moderatorId: string): Promise<ModeratorProfile | null> {
+
     return this.moderators.get(moderatorId) || null;
   }
 
   async getAvailableModerators(): Promise<ModeratorProfile[]> {
+
     return Array.from(this.moderators.values())
       .filter(m => 
         m.isActive &&
@@ -385,7 +411,7 @@ export class Epic16CaseAssignmentService {
         m.availabilityStatus === 'available' &&
         m.currentCaseload < m.maxConcurrentCases &&
         (!m.vacationUntil || m.vacationUntil <= new Date())
-      )
+
       .sort((a, b) => {
         // Sort by availability, then by capacity, then by quality
         const aCapacity = a.maxConcurrentCases - a.currentCaseload;
@@ -399,6 +425,7 @@ export class Epic16CaseAssignmentService {
   }
 
   async updateModeratorAvailability(moderatorId: string, status: ModeratorProfile['availabilityStatus']): Promise<boolean> {
+
     const profile = this.moderators.get(moderatorId);
     if (!profile) return false;
 
@@ -414,6 +441,7 @@ export class Epic16CaseAssignmentService {
    * Assignment Algorithm
    */
   async assignCase(request: AssignmentRequest, assignedBy?: string): Promise<AssignmentResult> {
+
     const startTime = Date.now();
     const moderationCase = this.cases.get(request.caseId);
     if (!moderationCase) {
@@ -526,6 +554,7 @@ export class Epic16CaseAssignmentService {
     assignedBy?: string,
     metadata: Record<string, any> = {}
   ): Promise<AssignmentResult> {
+
     const previousAssignee = moderationCase.assignedTo;
     
     // Update case
@@ -601,7 +630,7 @@ export class Epic16CaseAssignmentService {
 
         // Check rule conditions
         return this.evaluateRuleConditions(rule.conditions, moderationCase);
-      })
+  }
       .sort((a, b) => b.priority - a.priority);
   }
 
@@ -628,6 +657,7 @@ export class Epic16CaseAssignmentService {
     assignedBy?: string,
     metadata: Record<string, any> = {}
   ): Promise<AssignmentResult> {
+
     let selectedModerator: ModeratorProfile | null = null;
 
     switch (rule.assignmentAlgorithm) {
@@ -807,6 +837,7 @@ export class Epic16CaseAssignmentService {
    * Bulk Assignment
    */
   async assignMultipleCases(caseIds: string[], assignmentMethod?: string): Promise<AssignmentResult[]> {
+
     const results: AssignmentResult[] = [];
     
     for (const caseId of caseIds) {
@@ -818,6 +849,7 @@ export class Epic16CaseAssignmentService {
   }
 
   async reassignCase(caseId: string, newModerator: string, reason?: string): Promise<AssignmentResult> {
+
     return await this.assignCase({
       caseId,
       preferredModerator: newModerator,
@@ -834,6 +866,7 @@ export class Epic16CaseAssignmentService {
     endDate: Date,
     moderatorId?: string
   ): Promise<AssignmentAnalytics[]> {
+
     const relevantHistory = this.history.filter(h => {
       const inDateRange = h.createdAt >= startDate && h.createdAt <= endDate;
       const matchesModerator = !moderatorId || h.assignedTo === moderatorId;
@@ -890,6 +923,7 @@ export class Epic16CaseAssignmentService {
    * Assignment Rules Management
    */
   async createAssignmentRule(ruleData: Omit<AssignmentRule, 'id' | 'usageCount' | 'createdAt' | 'updatedAt'>): Promise<AssignmentRule> {
+
     const rule: AssignmentRule = {
       ...ruleData,
       id: this.generateRuleId(),
@@ -903,11 +937,13 @@ export class Epic16CaseAssignmentService {
   }
 
   async getAssignmentRules(): Promise<AssignmentRule[]> {
+
     return Array.from(this.rules.values())
       .sort((a, b) => b.priority - a.priority);
   }
 
   async updateAssignmentRule(ruleId: string, updates: Partial<AssignmentRule>): Promise<AssignmentRule | null> {
+
     const rule = this.rules.get(ruleId);
     if (!rule) return null;
 

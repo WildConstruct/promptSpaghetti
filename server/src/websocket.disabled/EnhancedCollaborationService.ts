@@ -12,6 +12,7 @@ import { PresenceManager } from './PresenceManager';
 import { ConnectionManager } from './ConnectionManager';
 
 // Enhanced collaboration types
+}
 export interface CollaborationSession {
   sessionId: string;
   documentId: string;
@@ -28,7 +29,9 @@ export interface CollaborationSession {
   snapshots: SessionSnapshot[];
   analytics: SessionAnalytics;
 }
+}
 
+}
 export interface CollaborationParticipant {
   userId: string;
   userName: string;
@@ -41,7 +44,9 @@ export interface CollaborationParticipant {
   isOnline: boolean;
   contribution: ContributionMetrics;
 }
+}
 
+}
 export interface SessionSettings {
   enableRealTimeSync: boolean;
   enableConflictResolution: boolean;
@@ -55,7 +60,9 @@ export interface SessionSettings {
   allowAnonymousUsers: boolean;
   requireAuthentication: boolean;
 }
+}
 
+}
 export interface SessionPermissions {
   canEdit: boolean;
   canComment: boolean;
@@ -66,7 +73,9 @@ export interface SessionPermissions {
   canLockElements: boolean;
   canResolveConflicts: boolean;
 }
+}
 
+}
 export interface ParticipantPermissions extends SessionPermissions {
   canViewPresence: boolean;
   canAccessHistory: boolean;
@@ -74,6 +83,7 @@ export interface ParticipantPermissions extends SessionPermissions {
   canRestoreSnapshots: boolean;
 }
 
+}
 export interface DocumentLock {
   lockId: string;
   type: 'node' | 'edge' | 'document' | 'selection';
@@ -85,7 +95,9 @@ export interface DocumentLock {
   reason?: string;
   isAutoLock: boolean;
 }
+}
 
+}
 export interface SessionSnapshot {
   snapshotId: string;
   name: string;
@@ -97,7 +109,9 @@ export interface SessionSnapshot {
   participantCount: number;
   tags: string[];
 }
+}
 
+}
 export interface SessionAnalytics {
   totalEdits: number;
   totalConflicts: number;
@@ -109,10 +123,12 @@ export interface SessionAnalytics {
     nodeCount: number;
     edgeCount: number;
     complexity: number;
+}
   };
   performanceMetrics: PerformanceMetrics;
 }
 
+}
 export interface ContributionMetrics {
   editsCount: number;
   commentsCount: number;
@@ -123,7 +139,9 @@ export interface ContributionMetrics {
   elementsModified: number;
   elementsDeleted: number;
 }
+}
 
+}
 export interface PerformanceMetrics {
   averageLatency: number;
   syncThroughput: number;
@@ -131,7 +149,9 @@ export interface PerformanceMetrics {
   reconnections: number;
   messagingVolume: number;
 }
+}
 
+}
 export interface CollaborationEvent {
   eventId: string;
   sessionId: string;
@@ -140,6 +160,7 @@ export interface CollaborationEvent {
   timestamp: number;
   data: unknown;
   metadata?: unknown;
+}
 }
 
 export enum CollaborationEventType {
@@ -158,6 +179,7 @@ export enum CollaborationEventType {
   SESSION_ENDED = 'session_ended'
 }
 
+}
 export interface EnhancedCollaborationConfig {
   maxSessionsPerDocument: number;
   sessionTimeoutMs: number;
@@ -169,6 +191,7 @@ export interface EnhancedCollaborationConfig {
   enableAdvancedConflictResolution: boolean;
   enableSmartMerging: boolean;
   enableOperationalTransform: boolean;
+}
 }
 
 export class EnhancedCollaborationService extends EventEmitter {
@@ -831,7 +854,7 @@ export class EnhancedCollaborationService extends EventEmitter {
             type: conflict.type,
             description: conflict.description,
             requiresResolution: true
-          },
+  }
           sessionId: session.sessionId
         }
       });

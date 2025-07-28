@@ -54,21 +54,21 @@ export interface StorageAdapter {
     delete(key: string): Promise<void>;
     clear(): Promise<void>;
     size(): Promise<number>;
-    keys(): Promise<string[]>;
+    keys(): Promise<string>;
     supports(feature: string): boolean;
 }
 export interface PersistenceMetrics {
     totalWrites: number;
     totalReads: number;
-    writeLatency: number[];
-    readLatency: number[];
+    writeLatency: number;
+    readLatency: number;
     failureCount: number;
     retryCount: number;
     compressionRatio: number;
     storageUsage: Map<StorageBackend, number>;
     lastBackup: number;
     dataCorruption: number;
-    recoveryTime: number[];
+    recoveryTime: number;
 }
 export interface BackupMetadata {
     timestamp: number;
@@ -88,24 +88,6 @@ export declare class StatePersistenceManager extends EventEmitter {
     private debounceTimers;
     private snapshotIntervals;
     constructor();
-    configureDomainPersistence(): void;
-    persist(domain: string, data: any, options?: {
-        key?: string;
-        immediate?: boolean;
-        metadata?: Record<string, any>;
-    }): Promise<void>;
-    load(domain: string, key?: string): Promise<any>;
-    clear(domain: string, key?: string): Promise<void>;
-    private enqueuePersistenceTask;
-    private scheduleDebouncedTask;
-    private enqueueBatchTask;
-    private scheduleSnapshotTask;
-    private scheduleProcessing;
-    private processBatchQueue;
-    private groupTasksByDomain;
-    private executeBatch;
-    private executeTask;
-    private executeTaskWithAdapter;
     private initializeStorageAdapters;
     private getFallbackAdapter;
     private parseTimeString;
@@ -114,25 +96,5 @@ export declare class StatePersistenceManager extends EventEmitter {
     private encrypt;
     private decrypt;
     private appendData;
-    private validateData;
-    private getCurrentDomainState;
-    private createBackup;
-    private loadFromBackup;
-    private updateCompressionMetrics;
-    private generateChecksum;
-    private generateTaskId;
-    private setupCleanupRoutines;
-    private cleanupOldData;
-    private cleanupMetrics;
-    private handleShutdown;
-    getMetrics(): Readonly<PersistenceMetrics>;
-    getDomainRules(): Map<string, PersistenceRule>;
-    getStorageStatus(): Map<StorageBackend, boolean>;
-    getStorageUsage(): Promise<Map<StorageBackend, number>>;
-    flushDomain(domain: string): Promise<void>;
-    flushAll(): Promise<void>;
-    updateDomainRule(domain: string, rule: Partial<PersistenceRule>): void;
-    removeDomainRule(domain: string): void;
 }
-export declare const globalPersistenceManager: StatePersistenceManager;
 //# sourceMappingURL=StatePersistenceManager.d.ts.map

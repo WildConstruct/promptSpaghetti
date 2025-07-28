@@ -7,6 +7,7 @@
  * providing real-time infrastructure health monitoring, performance tracking, and automated alerting.
  */
 import { EventEmitter } from 'events';
+
 export interface InfrastructureComponent {
     id: string;
     name: string;
@@ -61,7 +62,7 @@ export interface InfrastructureComponent {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface HealthCheckConfig {
     id: string;
     name: string;
@@ -84,7 +85,7 @@ export interface HealthCheckConfig {
     };
     enabled: boolean;
     weight: number;
-}
+
 export interface CustomMetricConfig {
     id: string;
     name: string;
@@ -103,7 +104,7 @@ export interface CustomMetricConfig {
     };
     unit: string;
     enabled: boolean;
-}
+
 export interface AlertThreshold {
     id: string;
     name: string;
@@ -118,7 +119,7 @@ export interface AlertThreshold {
     severity: 'info' | 'warning' | 'critical';
     enabled: boolean;
     priority: number;
-}
+
 export interface NotificationChannel {
     id: string;
     name: string;
@@ -149,7 +150,7 @@ export interface NotificationChannel {
         cooldown_period_minutes: number;
     };
     enabled: boolean;
-}
+
 export interface EscalationPolicy {
     id: string;
     name: string;
@@ -173,13 +174,13 @@ export interface EscalationPolicy {
     };
     enabled: boolean;
     priority: number;
-}
+
 export interface EscalationAction {
     action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';
     parameters: Record<string, any>;
     timeout_minutes?: number;
     retry_attempts?: number;
-}
+
 export interface SuppressionRule {
     id: string;
     name: string;
@@ -204,7 +205,7 @@ export interface SuppressionRule {
     };
     enabled: boolean;
     priority: number;
-}
+
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -221,7 +222,7 @@ export interface MaintenanceWindow {
     alternative_monitoring: boolean;
     created_by: string;
     created_at: number;
-}
+
 export interface InfrastructureMetrics {
     component_id: string;
     timestamp: number;
@@ -258,7 +259,7 @@ export interface InfrastructureMetrics {
         index_hit_ratio: number;
     };
     custom_metrics: Record<string, number>;
-}
+
 export interface InfrastructureAlert {
     id: string;
     component_id: string;
@@ -305,7 +306,7 @@ export interface InfrastructureAlert {
         suppressed: boolean;
         suppression_reason?: string;
     };
-}
+
 export interface InfrastructureEvent {
     id: string;
     component_id: string;
@@ -333,7 +334,7 @@ export interface InfrastructureEvent {
         resolution_notes: string;
         lessons_learned?: string;
     };
-}
+
 export interface MonitoringReport {
     report_id: string;
     generated_at: number;
@@ -388,7 +389,7 @@ export interface MonitoringReport {
         capacity_planning: string[];
         optimization_opportunities: string[];
     };
-}
+
 export declare class SecurityInfrastructureMonitor extends EventEmitter {
     private components;
     private metrics;
@@ -471,6 +472,6 @@ export declare class SecurityInfrastructureMonitor extends EventEmitter {
     };
     performMaintenance(): Promise<void>;
     shutdown(): Promise<void>;
-}
+
 export default SecurityInfrastructureMonitor;
 //# sourceMappingURL=SecurityInfrastructureMonitor.d.ts.map

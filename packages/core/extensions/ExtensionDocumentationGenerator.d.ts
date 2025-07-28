@@ -3,6 +3,7 @@
  * Generates comprehensive documentation for extension points
  */
 import { ExtensionPointCategory, ExtensionPointPriority, ExtensionPointLifecycle } from './ExtensionPointRegistry';
+
 export interface DocumentationOptions {
     includeExamples?: boolean;
     includeConstraints?: boolean;
@@ -12,8 +13,9 @@ export interface DocumentationOptions {
         category?: ExtensionPointCategory;
         priority?: ExtensionPointPriority;
         lifecycle?: ExtensionPointLifecycle;
+
     };
-}
+
 export declare class ExtensionDocumentationGenerator {
     private static instance;
     private constructor();
@@ -62,6 +64,6 @@ export declare class ExtensionDocumentationGenerator {
      * Escape HTML characters
      */
     private escapeHtml;
-}
+
 export declare const extensionDocumentationGenerator: ExtensionDocumentationGenerator;
 //# sourceMappingURL=ExtensionDocumentationGenerator.d.ts.map

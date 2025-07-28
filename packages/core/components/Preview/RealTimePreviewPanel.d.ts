@@ -6,13 +6,14 @@
  * and intelligent caching for responsive graph preview updates.
  */
 import React from 'react';
+
 interface RealTimePreviewPanelProps {
     visible?: boolean;
     onClose?: () => void;
     className?: string;
     enablePerformanceMonitoring?: boolean;
     maxResults?: number;
-}
+
 export declare const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps>;
 export default RealTimePreviewPanel;
 //# sourceMappingURL=RealTimePreviewPanel.d.ts.map

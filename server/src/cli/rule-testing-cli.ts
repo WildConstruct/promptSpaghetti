@@ -27,12 +27,12 @@ const defaultConfig: TestEnvironmentConfig = {
     maxExecutionTime: 30000,
     maxRuleCount: 1000,
     maxConcurrency: 10
-  },
+  }
   data: {
     generateSyntheticData: true,
     datasetSize: 'medium',
     includeEdgeCases: true
-  },
+  }
   reporting: {
     enableRealTimeReporting: true,
     generateDetailedReports: true,

@@ -17,6 +17,7 @@ import { AuthConfig, Permission } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
+}
 export interface DirectPermission {
   id: string;
   userId: string;
@@ -34,7 +35,9 @@ export interface DirectPermission {
   scopeContext?: Record<string, any>;
   permanent: boolean;
 }
+}
 
+}
 export interface DirectPermissionGrant {
   userId: string;
   resource: string;
@@ -46,13 +49,17 @@ export interface DirectPermissionGrant {
   permanent?: boolean;
   reason: string;
 }
+}
 
+}
 export interface BulkPermissionGrant {
   userId: string;
   permissions: Omit<DirectPermissionGrant, 'userId'>[];
   reason: string;
 }
+}
 
+}
 export interface PermissionQuery {
   userId?: string;
   resource?: string;
@@ -62,6 +69,7 @@ export interface PermissionQuery {
   permanent?: boolean;
   grantedBy?: string;
   expiringWithinHours?: number;
+}
 }
 
 export class DirectPermissionService {
@@ -83,6 +91,7 @@ export class DirectPermissionService {
     grantedBy: string,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<DirectPermission> {
+
     const permissionId = require('crypto').randomUUID();
     const now = new Date();
 
@@ -126,7 +135,7 @@ export class DirectPermissionService {
           reason: grant.reason,
           expiresAt: grant.expiresAt?.toISOString(),
           conditions: grant.conditions
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -145,7 +154,7 @@ export class DirectPermissionService {
           permission: `${grant.resource}:${grant.action}`,
           reason: grant.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -164,6 +173,7 @@ export class DirectPermissionService {
     grantedBy: string,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<DirectPermission[]> {
+
     const now = new Date();
     const permissions: DirectPermission[] = [];
 
@@ -211,7 +221,7 @@ export class DirectPermissionService {
           permissions: bulkGrant.permissions.map(p => `${p.resource}:${p.action}`),
           reason: bulkGrant.reason,
           permanentGrants: bulkGrant.permissions.filter(p => p.permanent !== false).length
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -232,7 +242,7 @@ export class DirectPermissionService {
           permissionCount: bulkGrant.permissions.length,
           reason: bulkGrant.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -252,6 +262,7 @@ export class DirectPermissionService {
     reason: string,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<void> {
+
     const now = new Date();
 
     try {
@@ -279,7 +290,7 @@ export class DirectPermissionService {
           reason,
           permanent,
           revokedAt: now.toISOString()
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -295,7 +306,7 @@ export class DirectPermissionService {
         details: {
           reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -310,6 +321,7 @@ export class DirectPermissionService {
    * Get user's direct permissions
    */
   async getUserDirectPermissions(userId: string, activeOnly: boolean = true): Promise<DirectPermission[]> {
+
     let query = `
       SELECT * FROM user_direct_permissions 
       WHERE user_id = $1
@@ -335,6 +347,7 @@ export class DirectPermissionService {
     action: string,
     scopeContext?: Record<string, any>
   ): Promise<boolean> {
+
     let query = `
       SELECT id FROM user_direct_permissions 
       WHERE user_id = $1 AND resource = $2 AND action = $3 
@@ -361,6 +374,7 @@ export class DirectPermissionService {
     limit: number = 50,
     offset: number = 0
   ): Promise<{ permissions: DirectPermission[]; totalCount: number }> {
+
     let sqlQuery = 'SELECT * FROM user_direct_permissions WHERE 1=1';
     let countQuery = 'SELECT COUNT(*) FROM user_direct_permissions WHERE 1=1';
     const params: any[] = [];
@@ -443,6 +457,7 @@ export class DirectPermissionService {
    * Get permissions expiring soon
    */
   async getExpiringPermissions(withinHours: number = 24): Promise<DirectPermission[]> {
+
     const expirationThreshold = new Date(Date.now() + (withinHours * 60 * 60 * 1000));
 
     const result = await this.dbService.query(`
@@ -461,6 +476,7 @@ export class DirectPermissionService {
    * Clean up expired permissions
    */
   async cleanupExpiredPermissions(): Promise<number> {
+
     const result = await this.dbService.query(`
       UPDATE user_direct_permissions 
       SET status = 'expired' 
@@ -478,7 +494,7 @@ export class DirectPermissionService {
         details: {
           expiredCount,
           cleanupAt: new Date().toISOString()
-        },
+  }
         severity: 'info'
       });
     }

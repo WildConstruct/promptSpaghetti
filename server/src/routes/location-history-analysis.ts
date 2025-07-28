@@ -4,27 +4,35 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { LocationHistoryAnalysisService } from '../services/LocationHistoryAnalysisService';
 
+}
 interface AnalyzeLocationHistoryRequest {
   forceRefresh?: boolean;
 }
+}
 
+}
 interface LocationRiskAssessmentRequest {
   ipAddress: string;
   userAgent?: string;
   deviceFingerprint?: string;
 }
+}
 
+}
 interface DetectAnomaliesFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   anomalyType?: string;
   resolved?: boolean;
   limit?: number;
 }
+}
 
+}
 interface ResolveAnomalyRequest {
   resolution: string;
   falsePositive?: boolean;
   preventFutureAlerts?: boolean;
+}
 }
 
 export async function locationHistoryAnalysisRoutes(
@@ -58,7 +66,7 @@ export async function locationHistoryAnalysisRoutes(
           overallRiskScore: profile.riskMetrics.riskScore,
           mobilityScore: profile.riskMetrics.mobilityScore,
           predictabilityScore: profile.riskMetrics.predictabilityScore
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -89,7 +97,7 @@ export async function locationHistoryAnalysisRoutes(
           lastAnalyzed: profile.lastAnalyzed,
           profileVersion: profile.profileVersion,
           dataFreshness: Math.round((Date.now() - profile.lastAnalyzed.getTime()) / (1000 * 60)) // minutes
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -192,7 +200,7 @@ export async function locationHistoryAnalysisRoutes(
           high: anomalies.filter(a => a.severity === 'high').length,
           medium: anomalies.filter(a => a.severity === 'medium').length,
           low: anomalies.filter(a => a.severity === 'low').length
-        },
+  }
         byType: anomalies.reduce((acc, a) => {
           acc[a.anomalyType] = (acc[a.anomalyType] || 0) + 1;
           return acc;
@@ -248,7 +256,7 @@ export async function locationHistoryAnalysisRoutes(
           resolution,
           falsePositive,
           preventFutureAlerts
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -475,7 +483,7 @@ export async function locationHistoryAnalysisRoutes(
           failed: errors.length,
           results,
           errors
-        },
+  }
         executedBy: (request.user as any)?.id,
         timestamp: new Date().toISOString()
       };
@@ -501,12 +509,12 @@ export async function locationHistoryAnalysisRoutes(
           database: 'ok',
           statistics: 'ok',
           caching: 'ok'
-        },
+  }
         statistics: {
           profilesAnalyzedToday: stats.profiles || 0,
           clustersCreatedToday: stats.clusters || 0,
           anomaliesDetectedToday: stats.anomalies || 0
-        },
+  }
         features: [
           'Location clustering',
           'Travel pattern analysis',
@@ -556,37 +564,37 @@ export async function locationHistoryAnalysisRoutes(
           methods: ['GET', 'POST'],
           description: 'Analyze and retrieve user location profile',
           auth: 'required'
-        },
+  }
         {
           path: '/location/analysis/risk-assessment',
           method: 'POST',
           description: 'Assess risk for current location based on history',
           auth: 'required'
-        },
+  }
         {
           path: '/location/analysis/anomalies',
           method: 'GET',
           description: 'Detect and retrieve location anomalies',
           auth: 'required'
-        },
+  }
         {
           path: '/location/analysis/clusters',
           method: 'GET',
           description: 'Get user location clusters and insights',
           auth: 'required'
-        },
+  }
         {
           path: '/location/analysis/travel-patterns',
           method: 'GET',
           description: 'Get user travel patterns and analysis',
           auth: 'required'
-        },
+  }
         {
           path: '/location/analysis/admin/statistics',
           method: 'GET',
           description: 'Get system-wide analysis statistics',
           auth: 'admin/security role required'
-        },
+  }
         {
           path: '/location/analysis/admin/batch-analyze',
           method: 'POST',
@@ -599,7 +607,7 @@ export async function locationHistoryAnalysisRoutes(
         riskScoring: 'Multi-factor weighted risk assessment',
         anomalyDetection: 'Statistical and pattern-based anomaly detection',
         travelAnalysis: 'Physics-based travel time and speed validation'
-      },
+  }
       securityFeatures: [
         'Privacy-preserving location analysis',
         'Configurable sensitivity levels',

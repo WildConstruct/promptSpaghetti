@@ -14,15 +14,15 @@ jest.mock('seedrandom', () => {
 });
 describe('Runtime Node Implementation Tests', () => {
   // Create a proper ExecutionContext matching the interface
-  const mockCtx: ExecutionContext = { 
-    variables: {}, 
-    seed: '42',
+  const mockCtx: ExecutionContext = { ,
+  variables: {}, 
+    seed: '42';
   };
   describe('WeightedChoiceNode', () => {
     it('should return the first choice when random value is less than weight', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.2);
-      const node = new WeightedChoiceNode('node1', [;);
+      const node = new WeightedChoiceNode('node1', [);
         { weight: 0.3, value: 'first' },
         { weight: 0.7, value: 'second' }
       ]);
@@ -31,7 +31,7 @@ describe('Runtime Node Implementation Tests', () => {
     it('should return the second choice when random value is greater than first weight', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.4);
-      const node = new WeightedChoiceNode('node2', [;);
+      const node = new WeightedChoiceNode('node2', [);
         { weight: 0.3, value: 'first' },
         { weight: 0.7, value: 'second' }
       ]);
@@ -40,7 +40,7 @@ describe('Runtime Node Implementation Tests', () => {
     it('should handle edge case with zero weights', () => {
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.5);
-      const node = new WeightedChoiceNode('node3', [;);
+      const node = new WeightedChoiceNode('node3', [);
         { weight: 0, value: 'first' },
         { weight: 0, value: 'second' }
       ]);
@@ -51,7 +51,7 @@ describe('Runtime Node Implementation Tests', () => {
       // This tests the fallback case on line 36
       const seedrandom = require('seedrandom');
       seedrandom.mockReturnValue(() => 0.9);
-      const node = new WeightedChoiceNode('node4', [;);
+      const node = new WeightedChoiceNode('node4', [);
         { weight: 0.3, value: 'first' },
         { weight: 0.3, value: 'second' },
         { weight: 0.3, value: 'third' }
@@ -114,28 +114,28 @@ describe('Runtime Node Implementation Tests', () => {
       jest.unmock('../../seedUtils');
       const { seededRandom } = require('../../seedUtils');
       // First run with seed 42
-      const numericSeedCtx: ExecutionContext = {
-        variables: {},
-        seed: 42,
-      };
-      const node = new WeightedChoiceNode('weighted1', [;);
+      const numericSeedCtx: ExecutionContext = {,
+  variables: {},
+        seed: 42;
+  };
+      const node = new WeightedChoiceNode('weighted1', [);
         { weight: 0.5, value: 'A' },
         { weight: 0.5, value: 'B' }
       ]);
       const firstResult = node.run(numericSeedCtx);
       // Run again with same seed
-      const numericSeedCtx2: ExecutionContext = {
-        variables: {},
-        seed: 42,
-      };
+      const numericSeedCtx2: ExecutionContext = {,
+  variables: {},
+        seed: 42;
+  };
       const secondResult = node.run(numericSeedCtx2);
       // Should be deterministic
       expect(secondResult).toBe(firstResult);
       // Try with a different seed
-      const numericSeedCtx3: ExecutionContext = {
-        variables: {},
-        seed: 43,
-      };
+      const numericSeedCtx3: ExecutionContext = {,
+  variables: {},
+        seed: 43;
+  };
       // Reset and run with new seed
       const thirdResult = node.run(numericSeedCtx3);
       // Different seed should produce different result with high probability
@@ -144,20 +144,20 @@ describe('Runtime Node Implementation Tests', () => {
     });
     it('should produce deterministic results with string seeds', () => {
       // First run with string seed
-      const stringSeedCtx: ExecutionContext = {
-        variables: {},
-        seed: 'hello',
-      };
-      const node = new WeightedChoiceNode('weighted2', [;);
+      const stringSeedCtx: ExecutionContext = {,
+  variables: {},
+        seed: 'hello';
+  };
+      const node = new WeightedChoiceNode('weighted2', [);
         { weight: 0.5, value: 'A' },
         { weight: 0.5, value: 'B' }
       ]);
       const firstResult = node.run(stringSeedCtx);
       // Run again with same seed
-      const stringSeedCtx2: ExecutionContext = {
-        variables: {},
-        seed: 'hello',
-      };
+      const stringSeedCtx2: ExecutionContext = {,
+  variables: {},
+        seed: 'hello';
+  };
       const secondResult = node.run(stringSeedCtx2);
       // Should be deterministic
       expect(secondResult).toBe(firstResult);

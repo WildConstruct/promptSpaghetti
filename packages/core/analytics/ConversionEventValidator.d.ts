@@ -12,6 +12,7 @@
  * - Validation metrics and reporting
  */
 import { EnhancedConversionEvent } from './ConversionFunnelArchitecture';
+
 export interface ValidationRule {
     id: string;
     name: string;
@@ -21,14 +22,16 @@ export interface ValidationRule {
     validator: (event: EnhancedConversionEvent, context?: ValidationContext) => ValidationResult;
     enabled: boolean;
     weight: number;
-}
+
+
 export interface ValidationResult {
     isValid: boolean;
     score: number;
     errors: ValidationError[];
     warnings: ValidationWarning[];
     metadata: Record<string, any>;
-}
+
+
 export interface ValidationError {
     rule: string;
     field?: string;
@@ -36,14 +39,16 @@ export interface ValidationError {
     severity: 'critical' | 'major' | 'minor';
     code: string;
     suggestion?: string;
-}
+
+
 export interface ValidationWarning {
     rule: string;
     field?: string;
     message: string;
     code: string;
     impact: string;
-}
+
+
 export interface ValidationContext {
     userId: string;
     sessionId: string;
@@ -51,7 +56,8 @@ export interface ValidationContext {
     userProfile?: UserProfile;
     deviceProfile?: DeviceProfile;
     behaviorProfile?: BehaviorProfile;
-}
+
+
 export interface UserProfile {
     id: string;
     registrationDate: number;
@@ -61,7 +67,8 @@ export interface UserProfile {
     verificationStatus: 'verified' | 'pending' | 'suspicious';
     locationHistory: string[];
     deviceHistory: string[];
-}
+
+
 export interface DeviceProfile {
     fingerprint: string;
     firstSeen: number;
@@ -70,14 +77,16 @@ export interface DeviceProfile {
     userCount: number;
     riskIndicators: string[];
     characteristics: Record<string, any>;
-}
+
+
 export interface BehaviorProfile {
     sessionCount: number;
     averageSessionDuration: number;
     typicalEventSequence: string[];
     anomalyScore: number;
     patterns: BehaviorPattern[];
-}
+
+
 export interface BehaviorPattern {
     type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
     description: string;
@@ -85,7 +94,8 @@ export interface BehaviorPattern {
     baseline: number;
     current: number;
     deviation: number;
-}
+
+
 export interface DeduplicationConfig {
     enabled: boolean;
     timeWindow: number;
@@ -94,13 +104,15 @@ export interface DeduplicationConfig {
     fields: DeduplicationField[];
     exactMatchFields: string[];
     fuzzyMatchFields: string[];
-}
+
+
 export interface DeduplicationField {
     name: string;
     weight: number;
     transform?: (value: unknown) => string;
     matcher?: (val1: unknown, val2: unknown) => number;
-}
+
+
 export interface DeduplicationResult {
     isDuplicate: boolean;
     confidence: number;
@@ -108,7 +120,8 @@ export interface DeduplicationResult {
     matchType: 'exact' | 'fuzzy' | 'none';
     matchScore: number;
     matchedFields: string[];
-}
+
+
 export interface ValidationMetrics {
     totalValidated: number;
     passRate: number;
@@ -119,7 +132,8 @@ export interface ValidationMetrics {
     anomaliesDetected: number;
     processingTime: number;
     privacyViolations: number;
-}
+
+
 /**
  * Comprehensive Conversion Event Validator
  * Handles all aspects of event validation and deduplication
@@ -188,7 +202,7 @@ export declare class ConversionEventValidator {
      * Update deduplication configuration
      */
     updateDeduplicationConfig(config: Partial<DeduplicationConfig>): void;
-}
+
 /**
  * Factory function to create ConversionEventValidator
  */

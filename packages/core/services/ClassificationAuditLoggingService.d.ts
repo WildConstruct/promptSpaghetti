@@ -7,6 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import { DataClassificationLevel, OperationContext } from '../types/DataClassification';
+
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -24,8 +25,9 @@ export interface AuditLogEntry {
     complianceFlags: ComplianceFlag[];
     riskScore: number;
     correlationId?: string;
-}
+
 export type AuditAction = 'CLASSIFY_DATA' | 'DECLASSIFY_DATA' | 'RECLASSIFY_DATA' | 'ACCESS_DATA' | 'EXPORT_DATA' | 'SHARE_DATA' | 'DELETE_DATA' | 'BACKUP_DATA' | 'RESTORE_DATA' | 'POLICY_CHANGE' | 'PERMISSION_GRANT' | 'PERMISSION_REVOKE' | 'ENCRYPTION_APPLIED' | 'ENCRYPTION_REMOVED' | 'COMPLIANCE_CHECK' | 'VIOLATION_DETECTED' | 'REMEDIATION_APPLIED' | 'ALERT_TRIGGERED' | 'ALERT_RESOLVED';
+
 export interface AuditDetails {
     previousClassification?: DataClassificationLevel;
     newClassification?: DataClassificationLevel;
@@ -40,7 +42,7 @@ export interface AuditDetails {
     piiDetected: boolean;
     encryptionStatus: 'ENCRYPTED' | 'NOT_ENCRYPTED' | 'PARTIALLY_ENCRYPTED';
     customProperties?: Record<string, any>;
-}
+
 export interface AuditOutcome {
     success: boolean;
     errorCode?: string;
@@ -51,7 +53,7 @@ export interface AuditOutcome {
     complianceScore: number;
     violationsDetected: string[];
     remediationRequired: boolean;
-}
+
 export interface AuditMetadata {
     sourceIP: string;
     userAgent: string;
@@ -78,7 +80,7 @@ export interface AuditMetadata {
         role: string;
         accessLevel: string;
     };
-}
+
 export interface ComplianceFlag {
     framework: string;
     requirement: string;
@@ -86,7 +88,7 @@ export interface ComplianceFlag {
     evidence?: string;
     assessmentDate: Date;
     nextReviewDate?: Date;
-}
+
 export interface AuditQuery {
     startDate?: Date;
     endDate?: Date;
@@ -103,7 +105,7 @@ export interface AuditQuery {
     offset?: number;
     sortBy?: 'timestamp' | 'riskScore' | 'classification' | 'userId';
     sortOrder?: 'asc' | 'desc';
-}
+
 export interface AuditReport {
     id: string;
     name: string;
@@ -116,7 +118,7 @@ export interface AuditReport {
     format: 'JSON' | 'CSV' | 'PDF' | 'XML';
     retentionPeriod: number;
     expiresAt: Date;
-}
+
 export interface AuditSummary {
     totalEntries: number;
     uniqueUsers: number;
@@ -141,7 +143,7 @@ export interface AuditSummary {
         riskTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
         complianceTrend: 'IMPROVING' | 'DEGRADING' | 'STABLE';
     };
-}
+
 export interface AuditRetentionPolicy {
     classification: DataClassificationLevel;
     retentionDays: number;
@@ -150,7 +152,7 @@ export interface AuditRetentionPolicy {
     complianceRequirements: string[];
     encryptionRequired: boolean;
     backupRequired: boolean;
-}
+
 export declare class ClassificationAuditLoggingService {
     private auditLogs;
     private reports;
@@ -270,6 +272,6 @@ export declare class ClassificationAuditLoggingService {
      * Clear audit logs (for testing purposes)
      */
     clearAuditLogs(): void;
-}
+
 export default ClassificationAuditLoggingService;
 //# sourceMappingURL=ClassificationAuditLoggingService.d.ts.map

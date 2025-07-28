@@ -4,7 +4,7 @@
  *
  * Concrete implementation of BaseAIModel for OpenAI GPT models
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel, AIModelType, AIModelProvider } from '../BaseAIModel';
 export interface OpenAIConfig {
     apiKey: string;
     baseURL?: string;
@@ -19,20 +19,20 @@ export interface OpenAIRequestOptions {
     top_p?: number;
     frequency_penalty?: number;
     presence_penalty?: number;
-    stop?: string | string[];
+    stop?: string | string;
     stream?: boolean;
     seed?: number;
     response_format?: {
         type: 'text' | 'json_object';
     };
-    tools?: unknown[];
+    tools?: unknown;
     tool_choice?: string | object;
 }
 export interface ChatMessage {
     role: 'system' | 'user' | 'assistant' | 'tool';
     content: string;
     name?: string;
-    tool_calls?: unknown[];
+    tool_calls?: unknown;
     tool_call_id?: string;
 }
 export interface OpenAIResponse {
@@ -40,35 +40,28 @@ export interface OpenAIResponse {
     object: string;
     created: number;
     model: string;
-    choices: Array<{
-        index: number;
-        message?: ChatMessage;
-        text?: string;
-        finish_reason: string;
-    }>;
-    usage: {
-        prompt_tokens: number;
-        completion_tokens: number;
-        total_tokens: number;
-    };
+    choices: Array<{}, index>;
+    number: any;
+    message?: ChatMessage;
+    text?: string;
+    finish_reason: string;
 }
 export declare class OpenAIAdapter extends BaseAIModel {
     private config;
     private apiEndpoint;
     constructor(id: string, config: OpenAIConfig, modelName?: string);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: OpenAIRequestOptions): Promise<unknown>;
-    cleanup(): Promise<void>;
-    estimate(input: any, options?: OpenAIRequestOptions): Promise<CostEstimate>;
-    static getModelCostPerToken(modelName: string): number;
-    static getModelMaxTokens(modelName: string): number;
-    static getModelAverageLatency(modelName: string): number;
-    private _testConnection;
-    private _makeRequest;
-    private _convertToMessages;
-    private _extractContent;
-    private _estimateTokenCount;
-    protected _performHealthCheck(): Promise<void>;
+    provider: AIModelProvider.OPENAI;
+    type: AIModelType.TEXT;
+    costPerToken: OpenAIAdapter.getModelCostPerToken;
+    modelName: any;
+    averageLatency: OpenAIAdapter.getModelAverageLatency;
+    modelName: any;
+    maxConcurrency: 50;
+    rateLimit: {
+        requestsPerMinute: 3500;
+        tokensPerMinute: 90000;
+    };
+    tags: ['chat', 'completion', 'text-generation'];
+    lastUpdated: new () => Date;
 }
-export default OpenAIAdapter;
 //# sourceMappingURL=OpenAIAdapter.d.ts.map

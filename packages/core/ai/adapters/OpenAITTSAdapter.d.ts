@@ -5,13 +5,14 @@
  * Adapter for OpenAI's TTS models with voice selection and SSML support
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface OpenAITTSConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
     organization?: string;
-}
+
 export interface TTSRequestOptions {
     text: string;
     voice?: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
@@ -28,7 +29,7 @@ export interface TTSRequestOptions {
     pronunciation_dictionary?: Record<string, string>;
     chunk_length_s?: number;
     normalize_audio?: boolean;
-}
+
 export interface TTSGenerationResult {
     audio: {,
         data: ArrayBuffer | string;
@@ -51,7 +52,7 @@ export interface TTSGenerationResult {
         characters: number;
         cost: number;
     };
-}
+
 export interface VoiceInfo {
     id: string;
     name: string;
@@ -61,7 +62,7 @@ export interface VoiceInfo {
     age?: 'young' | 'middle' | 'old';
     style?: string[];
     preview_url?: string;
-}
+
 export declare class OpenAITTSAdapter extends BaseAIModel {
     private config;
     private availableVoices;
@@ -87,6 +88,6 @@ export declare class OpenAITTSAdapter extends BaseAIModel {
     private _getBitrate;
     private _calculateCost;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default OpenAITTSAdapter;
 //# sourceMappingURL=OpenAITTSAdapter.d.ts.map

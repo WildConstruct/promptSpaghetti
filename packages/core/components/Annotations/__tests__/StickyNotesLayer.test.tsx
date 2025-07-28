@@ -9,7 +9,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StickyNotesLayer } from '../StickyNotesLayer';
 import { StickyNote } from '../../../types/CollaborationTypes';
-const mockNotes: StickyNote[] = [
+const mockNotes: StickyNote = [
   {
     id: 'note-1',
     position: { x: 100, y: 100 },
@@ -18,8 +18,8 @@ const mockNotes: StickyNote[] = [
     size: { width: 200, height: 150 },
     author: 'Author 1',
     timestamp: '2024-01-01T12:00:00Z',
-    zIndex: 1,
-  },
+    zIndex: 1;
+  }
   {
     id: 'note-2',
     position: { x: 300, y: 200 },
@@ -28,18 +28,16 @@ const mockNotes: StickyNote[] = [
     size: { width: 180, height: 120 },
     author: 'Author 2',
     timestamp: '2024-01-01T13:00:00Z',
-    zIndex: 2,
-  }
-];
+    zIndex: 2];
 const defaultProps = {
   notes: mockNotes,
-  onNotesChange: jest.fn<unknown[], unknown>(),
+  onNotesChange: jest.fn<unknown, unknown>(),
   canvasSize: { width: 1000, height: 800 },
   canvasOffset: { x: 0, y: 0 },
   zoom: 1,
   author: 'Test Author',
-  readOnly: false,
-};
+  readOnly: false;
+  };
 describe('StickyNotesLayer Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -59,17 +57,17 @@ describe('StickyNotesLayer Component', () => {
       render(<StickyNotesLayer {...defaultProps} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        width: '1000px',
-        height: '800px',
-        transform: 'translate(0px, 0px) scale(1)'
-      });
+  width: '1000px',
+  height: '800px',
+  transform: 'translate(0px, 0px) scale(1)',
+});
     });
     test('respects zoom level in positioning', () => {
       render(<StickyNotesLayer {...defaultProps} zoom={0.5} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        transform: 'translate(0px, 0px) scale(0.5)'
-      });
+  transform: 'translate(0px, 0px) scale(0.5)',
+});
     });
   });
   describe('Note Creation', () => {
@@ -81,11 +79,11 @@ describe('StickyNotesLayer Component', () => {
       expect(defaultProps.onNotesChange).toHaveBeenCalledWith([)
         ...mockNotes,
         expect.objectContaining({)
-          position: { x: 400, y: 300 },
+  position: { x: 400, y: 300 },
           author: 'Test Author',
           color: 'yellow',
-          content: '',
-        })
+          content: '';
+  }
       ]);
     });
     test('does not create note on double-click when readOnly', async () => {
@@ -105,8 +103,8 @@ describe('StickyNotesLayer Component', () => {
       expect(defaultProps.onNotesChange).not.toHaveBeenCalledWith()
         expect.arrayContaining([)
           expect.objectContaining({)
-            content: '',
-          })
+  content: '',
+}
         ])
       );
     });
@@ -115,19 +113,18 @@ describe('StickyNotesLayer Component', () => {
       const propsWithOffset = {
         ...defaultProps,
         canvasOffset: { x: -100, y: -50 },
-        zoom: 0.8,
-      };
+        zoom: 0.8;
+  };
       render(<StickyNotesLayer {...propsWithOffset} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       await user.dblClick(layer, { clientX: 400, clientY: 300 });
       expect(defaultProps.onNotesChange).toHaveBeenCalledWith([)
         ...mockNotes,
         expect.objectContaining({)
-          position: { ,
-            x: (400 - (-100)) / 0.8,  // (clientX - offsetX) / zoom 
-            y: (300 - (-50)) / 0.8    // (clientY - offsetY) / zoom,
-          }
-        })
+  position: {,
+  x: (400 - (-100)) / 0.8,  // (clientX - offsetX) / zoom,
+  y: (300 - (-50)) / 0.8    // (clientY - offsetY) / zoom,
+}
       ]);
     });
   });
@@ -166,7 +163,7 @@ describe('StickyNotesLayer Component', () => {
   });
   describe('Note Management', () => {
     test('handles note updates correctly', () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       // Simulate note update action
       const updatedNotes = mockNotes.map(note =>;);
@@ -178,7 +175,7 @@ describe('StickyNotesLayer Component', () => {
     });
     test('handles note deletion', async () => {
       const user = userEvent.setup();
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       // Find and click delete button on first note
       const deleteButton = screen.getAllByTestId('delete-button')[0];
@@ -186,7 +183,7 @@ describe('StickyNotesLayer Component', () => {
       expect(onNotesChange).toHaveBeenCalledWith([mockNotes[1]]); // Only second note remains
     });
     test('handles note movement', async () => {
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       const firstNote = screen.getByText('First note').closest('[data-testid="sticky-note"]');
       // Start drag
@@ -220,7 +217,7 @@ describe('StickyNotesLayer Component', () => {
   describe('Keyboard Shortcuts', () => {
     test('deletes selected note on Delete key', async () => {
       const user = userEvent.setup();
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       // Select first note
       const firstNote = screen.getByText('First note').closest('[data-testid="sticky-note"]');
@@ -231,20 +228,20 @@ describe('StickyNotesLayer Component', () => {
     });
     test('creates new note on Ctrl+N', async () => {
       const user = userEvent.setup();
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       await user.keyboard('{Control>}n{/Control}');
       expect(onNotesChange).toHaveBeenCalledWith([)
         ...mockNotes,
         expect.objectContaining({)
-          content: '',
-          author: 'Test Author',
-        })
+  content: '',
+  author: 'Test Author',
+}
       ]);
     });
     test('ignores keyboard shortcuts in readOnly mode', async () => {
       const user = userEvent.setup();
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} readOnly={true} onNotesChange={onNotesChange} />);
       await user.keyboard('{Control>}n{/Control}');
       expect(onNotesChange).not.toHaveBeenCalled();
@@ -260,22 +257,22 @@ describe('StickyNotesLayer Component', () => {
       render(<StickyNotesLayer {...defaultProps} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        pointerEvents: 'none',
-      });
+  pointerEvents: 'none',
+});
       // Sticky notes themselves should have pointer events
       const notes = screen.getAllByTestId('sticky-note');
       notes.forEach(note => {)
-        expect(note).toHaveStyle({)
-          pointerEvents: 'all',
-        });
+  expect(note).toHaveStyle({)
+  pointerEvents: 'all',
+});
       });
     });
     test('handles z-index layering correctly', () => {
       render(<StickyNotesLayer {...defaultProps} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       expect(layer).toHaveStyle({)
-        zIndex: '1000' // Above graph elements,
-      });
+  zIndex: '1000' // Above graph elements,
+});
       const firstNote = screen.getByText('First note').closest('[data-testid="sticky-note"]');
       const secondNote = screen.getByText('Second note').closest('[data-testid="sticky-note"]');
       expect(firstNote).toHaveStyle({ zIndex: '1001' }); // mockNotes[0].zIndex + 1000
@@ -283,7 +280,7 @@ describe('StickyNotesLayer Component', () => {
     });
     test('does not capture mouse events intended for graph', async () => {
       const user = userEvent.setup();
-      const onNotesChange = jest.fn<unknown[], unknown>();
+      const onNotesChange = jest.fn<unknown, unknown>();
       render(<StickyNotesLayer {...defaultProps} onNotesChange={onNotesChange} />);
       const layer = screen.getByTestId('sticky-notes-layer');
       // Single click on empty area should not interfere with graph selection
@@ -295,15 +292,17 @@ describe('StickyNotesLayer Component', () => {
   describe('Performance', () => {
     test('handles large numbers of notes efficiently', () => {
       const manyNotes = Array.from({ length: 100 }, (_, i) => ({)
-        id: `note-${i}`,}
-        position: { x: (i % 10) * 220, y: Math.floor(i / 10) * 170 },
-        content: `Note ${i}`,}
-        color: ['yellow', 'blue', 'green', 'red'][i % 4] as any,
+  id: `note-${i}`}
+},
+  position: { x: (i % 10) * 220, y: Math.floor(i / 10) * 170 },
+        content: `Note ${i}`}
+},
+  color: ['yellow', 'blue', 'green', 'red'][i % 4] as any,
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: new Date().toISOString(),
-        zIndex: i,
-      }));
+        zIndex: i;
+  }));
       const startTime = performance.now();
       render(<StickyNotesLayer {...defaultProps} notes={manyNotes} />);
       const endTime = performance.now();
@@ -311,8 +310,8 @@ describe('StickyNotesLayer Component', () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
-      const TestWrapper = ({ notes }: { notes: StickyNote[] }) => {
+      const renderSpy = jest.fn<unknown, unknown>();
+      const TestWrapper = ({ notes }: { notes: StickyNote }) => {
         renderSpy();
         return <StickyNotesLayer {...defaultProps} notes={notes} />;
       };
@@ -330,8 +329,8 @@ describe('StickyNotesLayer Component', () => {
         size: { width: 200, height: 150 },
         author: 'Author 3',
         timestamp: '2024-01-01T14:00:00Z',
-        zIndex: 3,
-      }];
+        zIndex: 3;
+  }];
       rerender(<TestWrapper notes={updatedNotes} />);
       expect(renderSpy).toHaveBeenCalledTimes(3);
     });

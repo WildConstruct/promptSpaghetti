@@ -10,6 +10,7 @@ import { EnhancedSessionService } from './EnhancedSessionService';
 import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 
+}
 export interface ForcedLogoutRequest {
   id: string;
   targetUserId: string;
@@ -23,6 +24,7 @@ export interface ForcedLogoutRequest {
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     evidence?: string[];
+}
   };
   
   scope: {
@@ -69,6 +71,7 @@ export interface ForcedLogoutRequest {
   };
 }
 
+}
 export interface LogoutPolicy {
   id: string;
   name: string;
@@ -83,6 +86,7 @@ export interface LogoutPolicy {
       operator: 'equals' | 'contains' | 'greater' | 'less' | 'matches';
       value: any;
       weight: number;
+}
     }>;
     threshold: number; // Combined weight threshold for triggering
     cooldown: number; // seconds between automatic triggers
@@ -119,6 +123,7 @@ export interface LogoutPolicy {
   };
 }
 
+}
 export interface LogoutEvent {
   id: string;
   userId: string;
@@ -130,6 +135,7 @@ export interface LogoutEvent {
     source: string;
     requestId?: string;
     policyId?: string;
+}
   };
   
   execution: {
@@ -165,6 +171,7 @@ export interface LogoutEvent {
   };
 }
 
+}
 export interface LogoutStatistics {
   timeRange: { start: Date; end: Date };
   
@@ -265,6 +272,7 @@ export class ForcedLogoutService extends EventEmitter {
     estimatedSessions?: number;
     message: string;
   }> {
+
     try {
       // Validate target user exists and is not requesting themselves (unless allowed)
       if (targetUserId === requestedBy && logoutConfig.reason.type !== 'user_request') {
@@ -295,23 +303,23 @@ export class ForcedLogoutService extends EventEmitter {
           allSessions: true,
           includeDormantSessions: false,
           ...logoutConfig.scope
-        },
+  }
         execution: {
           immediate: logoutConfig.emergency || logoutConfig.reason.severity === 'critical',
           gracePeriod: this.config.defaultGracePeriod,
           notifyUser: true,
           preserveData: true,
           ...logoutConfig.execution
-        },
+  }
         authorization: {
           approved: false,
           requiresElevation: this.requiresElevation(logoutConfig.reason),
           emergencyOverride: logoutConfig.emergency || false
-        },
+  }
         status: {
           state: 'pending',
           attempts: 0
-        },
+  }
         impact: {
           estimatedSessions: sessionEstimate,
           successfulLogouts: 0,
@@ -381,6 +389,7 @@ export class ForcedLogoutService extends EventEmitter {
     message: string;
     executed?: boolean;
   }> {
+
     const request = this.logoutRequests.get(requestId);
     if (!request) {
       return {
@@ -429,7 +438,7 @@ export class ForcedLogoutService extends EventEmitter {
         targetUserId: request.targetUserId,
         reason: request.reason,
         scope: request.scope
-      },
+  }
       severity: 'warning'
     });
 
@@ -469,6 +478,7 @@ export class ForcedLogoutService extends EventEmitter {
     errors: string[];
     logoutEvents: LogoutEvent[];
   }> {
+
     const errors: string[] = [];
     const logoutEvents: LogoutEvent[] = [];
     let sessionsTerminated = 0;
@@ -514,14 +524,14 @@ export class ForcedLogoutService extends EventEmitter {
             trigger: {
               type: 'manual',
               source: executedBy
-            },
+  }
             execution: {
               method: 'forced',
               success: result.success,
               duration: Date.now() - startTime,
               error: result.success ? undefined : result.message,
               retries: 0
-            },
+  }
             session: {
               deviceId: session.deviceId,
               deviceType: session.metadata?.deviceType || 'unknown',
@@ -530,14 +540,14 @@ export class ForcedLogoutService extends EventEmitter {
               duration: Math.floor((Date.now() - session.createdAt.getTime()) / 1000),
               lastActivity: session.lastActivity,
               dataPreserved: options.preserveData || false
-            },
+  }
             outcome: {
               userNotified: false,
               reauthBlocked: options.blockReauth || false,
               blockDuration: options.blockDuration,
               followUpRequired: false,
               escalated: false
-            },
+  }
             metadata: {
               correlationId: this.generateCorrelationId(),
               tags: ['forced', 'immediate'],
@@ -584,7 +594,7 @@ export class ForcedLogoutService extends EventEmitter {
           preserveData: options.preserveData,
           blockReauth: options.blockReauth,
           blockDuration: options.blockDuration
-        },
+  }
         severity: 'warning'
       });
 
@@ -623,6 +633,7 @@ export class ForcedLogoutService extends EventEmitter {
     expiresAt?: Date;
     remainingTime?: number;
   }> {
+
     const blockExpiry = this.activeBlocks.get(userId);
     if (!blockExpiry) {
       return { blocked: false };
@@ -657,6 +668,7 @@ export class ForcedLogoutService extends EventEmitter {
     success: boolean;
     message: string;
   }> {
+
     try {
       const wasBlocked = this.activeBlocks.has(userId);
       
@@ -679,7 +691,7 @@ export class ForcedLogoutService extends EventEmitter {
           targetUserId: userId,
           reason,
           unblockedBy
-        },
+  }
         severity: 'info'
       });
 
@@ -715,6 +727,7 @@ export class ForcedLogoutService extends EventEmitter {
       successful?: boolean;
     }
   ): Promise<LogoutStatistics> {
+
     try {
       // Filter logout history
       let filteredEvents = this.logoutHistory.filter(event => 
@@ -745,7 +758,7 @@ export class ForcedLogoutService extends EventEmitter {
           voluntaryLogouts: filteredEvents.filter(e => e.trigger.type === 'manual').length,
           failedLogouts: filteredEvents.filter(e => !e.execution.success).length,
           averageExecutionTime: this.calculateAverageExecutionTime(filteredEvents)
-        },
+  }
         triggers: {
           byType: this.groupByProperty(filteredEvents, e => e.trigger.type),
           byReason: this.groupByMetadataTags(filteredEvents),
@@ -754,13 +767,13 @@ export class ForcedLogoutService extends EventEmitter {
             automated: filteredEvents.filter(e => e.trigger.type === 'automated').length,
             manual: filteredEvents.filter(e => e.trigger.type === 'manual').length
           }
-        },
+  }
         patterns: {
           peakLogoutHours: this.calculatePeakLogoutHours(filteredEvents),
           deviceTypeBreakdown: this.groupByProperty(filteredEvents, e => e.session.deviceType),
           locationBreakdown: this.groupByLocation(filteredEvents),
           frequentUsers: this.getFrequentUsers(filteredEvents)
-        },
+  }
         effectiveness: {
           successRate: filteredEvents.length > 0 
             ? Math.round((filteredEvents.filter(e => e.execution.success).length / filteredEvents.length) * 100)
@@ -782,6 +795,7 @@ export class ForcedLogoutService extends EventEmitter {
   // Private helper methods
 
   private async executeForcedLogout(requestId: string): Promise<boolean> {
+
     const request = this.logoutRequests.get(requestId);
     if (!request) {
       return false;
@@ -859,6 +873,7 @@ export class ForcedLogoutService extends EventEmitter {
     userId: string,
     scope?: Partial<ForcedLogoutRequest['scope']>
   ): Promise<number> {
+
     try {
       const sessions = await this.sessionService.getUserSessions(userId, {
         includeExpired: false,
@@ -899,12 +914,14 @@ export class ForcedLogoutService extends EventEmitter {
     userId: string,
     credentials: { password?: string; mfaCode?: string }
   ): Promise<boolean> {
+
     // Implementation would verify password and/or MFA
     // For now, return true if any credentials provided
     return !!(credentials.password || credentials.mfaCode);
   }
 
   private async preserveSessionData(sessionId: string, reason: string): Promise<void> {
+
     try {
       // Get session data
       const sessionData = await this.sessionService.getSessionDetails(sessionId);
@@ -935,11 +952,13 @@ export class ForcedLogoutService extends EventEmitter {
   }
 
   private async invalidateSessionCache(sessionId: string): Promise<void> {
+
     await this.redis.del(`session:${sessionId}`);
     await this.redis.del(`session_data:${sessionId}`);
   }
 
   private async blockUserReauth(userId: string, durationSeconds: number, reason: string): Promise<void> {
+
     const expiresAt = new Date(Date.now() + durationSeconds * 1000);
     
     this.activeBlocks.set(userId, expiresAt);
@@ -962,6 +981,7 @@ export class ForcedLogoutService extends EventEmitter {
     reason: string,
     sessionsAffected: number
   ): Promise<void> {
+
     try {
       await this.emailService.sendForcedLogoutNotification(userId, {
         reason,
@@ -988,6 +1008,7 @@ export class ForcedLogoutService extends EventEmitter {
   }
 
   private async loadActiveBlocks(): Promise<void> {
+
     try {
       const blockKeys = await this.redis.keys('logout_block:*');
       
@@ -1020,7 +1041,7 @@ export class ForcedLogoutService extends EventEmitter {
           ],
           threshold: 80,
           cooldown: 300
-        },
+  }
         scope: {},
         actions: {
           logoutType: 'immediate',
@@ -1029,7 +1050,7 @@ export class ForcedLogoutService extends EventEmitter {
           blockDuration: 3600,
           preserveData: true,
           escalationRequired: true
-        },
+  }
         exceptions: {
           adminBypass: false,
           emergencyAccess: true,
@@ -1045,6 +1066,7 @@ export class ForcedLogoutService extends EventEmitter {
   }
 
   private async logForcedLogoutRequest(request: ForcedLogoutRequest): Promise<void> {
+
     await this.auditService.logEvent({
       userId: request.requestedBy,
       action: 'forced_logout_requested',
@@ -1054,7 +1076,7 @@ export class ForcedLogoutService extends EventEmitter {
         reason: request.reason,
         scope: request.scope,
         execution: request.execution
-      },
+  }
       severity: request.reason.severity === 'critical' ? 'error' : 'warning'
     });
   }

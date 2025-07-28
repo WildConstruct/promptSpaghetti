@@ -6,6 +6,7 @@
  * regeneration, comparison, and detailed analysis capabilities.
  */
 import React from 'react';
+
 interface IndividualResultManagerProps {
     visible?: boolean;
     onClose?: () => void;
@@ -13,7 +14,7 @@ interface IndividualResultManagerProps {
     enableComparison?: boolean;
     enableAnalytics?: boolean;
     maxDisplayResults?: number;
-}
+
 export declare const IndividualResultManager: React.FC<IndividualResultManagerProps>;
 export default IndividualResultManager;
 //# sourceMappingURL=IndividualResultManager.d.ts.map

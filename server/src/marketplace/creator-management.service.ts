@@ -1,6 +1,7 @@
 // Epic 16 Story 16.2 - Creator Management Service
 import { Pool, PoolClient } from 'pg';
 
+}
 interface CreatorStats {
   total_templates: number;
   active_templates: number;
@@ -11,7 +12,9 @@ interface CreatorStats {
   total_views: number;
   conversion_rate: number;
 }
+}
 
+}
 interface CreatorProfile {
   id: string;
   user_id: string;
@@ -26,7 +29,9 @@ interface CreatorProfile {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 interface MonetizationSettings {
   creator_id: string;
   payout_threshold_cents: number;
@@ -44,12 +49,14 @@ interface MonetizationSettings {
     country: string;
     postal_code?: string;
     tax_exempt: boolean;
+}
   };
   auto_payout_enabled: boolean;
   created_at: Date;
   updated_at: Date;
 }
 
+}
 interface CreatorPayoutHistory {
   id: string;
   creator_id: string;
@@ -62,7 +69,9 @@ interface CreatorPayoutHistory {
   processed_at?: Date;
   created_at: Date;
 }
+}
 
+}
 interface CreatorTemplate {
   id: string;
   title: string;
@@ -77,16 +86,20 @@ interface CreatorTemplate {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 interface PerformanceMetrics {
   period_start: Date;
   period_end: Date;
+}
   revenue_trend: Array<{ date: string; revenue_cents: number; purchases: number }>;
   top_templates: CreatorTemplate[];
   category_performance: Array<{ category: string; revenue_cents: number; templates: number }>;
   geographic_sales: Array<{ country: string; revenue_cents: number; purchases: number }>;  
 }
 
+}
 interface CreatorTierRequirements {
   bronze: { min_revenue: 0; min_rating: 0; min_templates: 0; min_reviews: 0 };
   silver: { min_revenue: 50000; min_rating: 4.0; min_templates: 5; min_reviews: 25 };
@@ -105,6 +118,7 @@ export class CreatorManagementService {
   constructor(private db: Pool) {}
 
   async getCreatorStats(userId: string, startDate?: Date, endDate?: Date): Promise<CreatorStats> {
+
     const client = await this.db.connect();
     try {
       const dateFilter = startDate && endDate 
@@ -129,7 +143,7 @@ export class CreatorManagementService {
           LEFT JOIN marketplace_purchases p ON t.id = p.template_id
           LEFT JOIN template_reviews r ON t.id = r.template_id
           WHERE t.owner_id = $1 ${dateFilter}
-        )
+
         SELECT 
           *,
           CASE 
@@ -157,6 +171,7 @@ export class CreatorManagementService {
   }
 
   async getCreatorProfile(userId: string): Promise<CreatorProfile | null> {
+
     const client = await this.db.connect();
     try {
       const result = await client.query(`
@@ -187,6 +202,7 @@ export class CreatorManagementService {
   }
 
   async createCreatorProfile(userId: string, profileData: Partial<CreatorProfile>): Promise<CreatorProfile> {
+
     const client = await this.db.connect();
     try {
       const result = await client.query(`
@@ -219,6 +235,7 @@ export class CreatorManagementService {
   }
 
   async updateCreatorProfile(userId: string, updates: Partial<CreatorProfile>): Promise<CreatorProfile | null> {
+
     const client = await this.db.connect();
     try {
       const setClauses = [];
@@ -275,6 +292,7 @@ export class CreatorManagementService {
   }
 
   async getCreatorTemplates(userId: string): Promise<CreatorTemplate[]> {
+
     const client = await this.db.connect();
     try {
       const result = await client.query(`
@@ -316,6 +334,7 @@ export class CreatorManagementService {
   }
 
   async getMonetizationSettings(userId: string): Promise<MonetizationSettings | null> {
+
     const client = await this.db.connect();
     try {
       const result = await client.query(`
@@ -342,6 +361,7 @@ export class CreatorManagementService {
     userId: string,
     settings: Partial<MonetizationSettings>
   ): Promise<MonetizationSettings> {
+
     const client = await this.db.connect();
     try {
       // First get creator profile ID
@@ -396,6 +416,7 @@ export class CreatorManagementService {
   }
 
   async getPerformanceMetrics(userId: string, startDate: Date, endDate: Date): Promise<PerformanceMetrics> {
+
     const client = await this.db.connect();
     try {
       // Revenue trend over time
@@ -487,6 +508,7 @@ export class CreatorManagementService {
   }
 
   async calculateCreatorTier(userId: string): Promise<keyof CreatorTierRequirements> {
+
     const stats = await this.getCreatorStats(userId);
 
     const tiers: Array<keyof CreatorTierRequirements> = ['platinum', 'gold', 'silver', 'bronze'];
@@ -507,6 +529,7 @@ export class CreatorManagementService {
   }
 
   async updateCreatorTier(userId: string): Promise<void> {
+
     const newTier = await this.calculateCreatorTier(userId);
     
     const client = await this.db.connect();
@@ -522,6 +545,7 @@ export class CreatorManagementService {
   }
 
   async getPayoutHistory(userId: string, limit: number = 50): Promise<CreatorPayoutHistory[]> {
+
     const client = await this.db.connect();
     try {
       const result = await client.query(`
@@ -539,6 +563,7 @@ export class CreatorManagementService {
   }
 
   async initiatePayout(userId: string): Promise<CreatorPayoutHistory> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');

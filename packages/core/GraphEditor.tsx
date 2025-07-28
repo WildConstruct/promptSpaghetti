@@ -27,6 +27,14 @@ import { EncryptionState, EncryptionAlgorithm } from './components/EncryptionSta
 import { nodeSchemas } from './nodeSchemas';
 import { NodeMeta } from './Palette';
 import { TabbedPalette } from './palette/TabbedPalette';
+import {
+  WeightedChoiceIcon,
+  ConcatIcon,
+  OutputIcon,
+  IncludeIcon,
+  SetVariableIcon,
+  GetVariableIcon
+} from './icons';
 import { useGraphStore } from './graphStore';
 import { PreviewModal } from './PreviewModal';
 import { usePreviewSeeds } from './usePreviewSeeds';
@@ -76,13 +84,13 @@ import '../../client/src/professional-theme.css';
 const ANIMATION_CSS = `;
   @keyframes nodeCreatePulse {
   0% {
-  opacity: 0;,
+  opacity: 0;
   transform: scale(0.5);
   50% {
-  opacity: 1;,
+  opacity: 1;
   transform: scale(1.2);
   100% {
-  opacity: 0;,
+  opacity: 0;
   transform: scale(1);
   .animate-node-create-overlay {
   animation: nodeCreatePulse 0.6s ease-out;
@@ -99,19 +107,13 @@ const ANIMATION_CSS = `;
 
 // Inject styles safely on module load
 injectSafeStyles();
-import {
-  WeightedChoiceIcon,
-  ConcatIcon,
-  OutputIcon,
-  IncludeIcon,
-  SetVariableIcon,
-  GetVariableIcon
-} from './icons';
 interface GraphEditorProps {
-  initialNodes: Node;,
+  initialNodes: Node;
   initialEdges: Edge;
   validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
-  const NODE_TYPES: NodeMeta = [
+}
+
+const NODE_TYPES: NodeMeta[] = [
   // Content Building Blocks
   {
   id: 'Subject',
@@ -119,28 +121,28 @@ interface GraphEditorProps {
   icon: '👤',
   tooltip: 'Define characters, people, or entities in your content',
   category: 'content',
-}
+},
   {
   id: 'Connector',
   label: 'Link Words',
   icon: '🔗',
   tooltip: 'Connect different parts of your content naturally',
   category: 'content',
-}
+},
   {
   id: 'Attribute',
   label: 'Descriptors',
   icon: '🏷️',
   tooltip: 'Add qualities, colors, styles, or characteristics',
   category: 'content',
-}
+},
   {
   id: 'Action',
   label: 'Actions',
   icon: '⚡',
   tooltip: 'Verbs and activities that bring scenes to life',
   category: 'content',
-}
+},
   // Content Flow Tools
   {
   id: 'WeightedChoice',
@@ -148,42 +150,42 @@ interface GraphEditorProps {
   icon: WeightedChoiceIcon,
   tooltip: 'Choose randomly from multiple options with different likelihood',
   category: 'flow',
-}
+},
   {
   id: 'Concat',
   label: 'Combine',
   icon: ConcatIcon,
   tooltip: 'Join multiple text elements together seamlessly',
   category: 'flow',
-}
+},
   {
   id: 'Output',
   label: 'Result',
   icon: OutputIcon,
   tooltip: 'Final generated content ready for use',
   category: 'output',
-}
+},
   {
   id: 'Include',
   label: 'Reference',
   icon: IncludeIcon,
   tooltip: 'Include content from another template or package',
   category: 'flow',
-}
+},
   {
   id: 'SetVariable',
   label: 'Store Value',
   icon: SetVariableIcon,
   tooltip: 'Save a value to use later in your workflow',
   category: 'memory',
-}
+},
   {
   id: 'GetVariable',
   label: 'Retrieve Value',
   icon: GetVariableIcon,
   tooltip: 'Get a previously saved value from memory',
   category: 'memory',
-}
+},
   // Advanced Nodes
   {
   id: 'WeightedAdvanced',
@@ -191,14 +193,14 @@ interface GraphEditorProps {
   icon: '🎲',
   tooltip: 'Advanced random selection with custom distribution patterns',
   category: 'advanced',
-}
+},
   {
   id: 'Conditional',
   label: 'If/Then',
   icon: '🔀',
   tooltip: 'Choose different creative paths based on conditions',
   category: 'advanced',
-}
+},
   // Transform & Logic
   {
   id: 'Sequential',
@@ -206,20 +208,21 @@ interface GraphEditorProps {
   icon: '🔄',
   tooltip: 'Process content in a specific creative sequence',
   category: 'transform',
-}
+},
   {
   id: 'Markov',
   label: 'Chain Process',
   icon: '🕸️',
   tooltip: 'Generate content based on probability patterns and transitions',
   category: 'transform',
-}
+},
   {
   id: 'PythonTransform',
   label: 'Custom Script',
   icon: '🐍',
   tooltip: 'Apply custom processing logic to transform content',
-  category: 'process'];
+  category: 'process'
+}];
   // Inner component that has access to React Flow instance
   const GraphEditorInner: React.FC<GraphEditorProps> = ({
     initialNodes,
@@ -240,7 +243,7 @@ interface GraphEditorProps {
   const [isCreatingNode, setIsCreatingNode] = useState(false);
   const [nodeCreationAnimation, setNodeCreationAnimation] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({)
+  const { optimizer, metrics, isPerformanceGood } = useCanvasOptimization({
   maxVisibleNodes: 150,
   animationFrameThrottle: 16,
 });
@@ -261,7 +264,7 @@ interface GraphEditorProps {
   const [performanceMonitorVisible, setPerformanceMonitorVisible] = useState(false);
   const [graphAnalysisOpen, setGraphAnalysisOpen] = useState(false);
   const [optimizationMenuOpen, setOptimizationMenuOpen] = useState(false);
-  const [optimizationSettings, setOptimizationSettings] = useState<OptimizationSettings>({)
+  const [optimizationSettings, setOptimizationSettings] = useState<OptimizationSettings>({
   deadCodeElimination: true,
   constantPropagation: true,
   resultCaching: true,
@@ -281,7 +284,7 @@ interface GraphEditorProps {
     applyTemplate
   } = useGraphStore();
   // Demo encryption state - in a real implementation, this would be managed by a security service
-  const [encryptionState, setEncryptionState] = useState<EncryptionState>({)
+  const [encryptionState, setEncryptionState] = useState<EncryptionState>({
   status: 'not_encrypted',
   dataSize: 1024 * 512 // 512KB demo graph,
 });
@@ -299,22 +302,22 @@ interface GraphEditorProps {
   handleSave: handleUnsavedSave,
   handleDontSave: handleUnsavedDontSave,
   handleCancel: handleUnsavedCancel,
-} = useUnsavedChanges({)
+} = useUnsavedChanges({
   hasUnsavedChanges,
   projectName: currentProject?.name,
-  onSave: async () => {,
+  onSave: async () => {
   // Trigger save dialog and wait for result
   return new Promise((resolve) => {
   setSaveDialogOpen(true);
   // Note: This is a simplified implementation,
   // In practice, you'd need to wire this up with the actual save dialog result
   resolve(true);
-});
   });
+}
   // Highlighted nodes & edges from preview result hover
   const [highlightNodeIds, setHighlightNodeIds] = useState<Set<string>>(new Set());
   const [highlightEdgeIds, setHighlightEdgeIds] = useState<Set<string>>(new Set());
-  const { errors, styledEdges, styledNodes } = useValidation({)
+  const { errors, styledEdges, styledNodes } = useValidation({
   edges,
     nodes,
     highlightNodeIds,
@@ -453,7 +456,7 @@ interface GraphEditorProps {
           try {
             const content = await file.text();
             const { deserializeProject } = await import('./utils/projectSerialization');
-            const result = deserializeProject(content, {)
+            const result = deserializeProject(content, {
   skipValidation: false,
   autoMigrate: true,
   preserveIds: true,
@@ -487,7 +490,7 @@ interface GraphEditorProps {
   const nodeType = event.dataTransfer.getData('application/node-type');
   if (!nodeType || !(nodeType in nodeSchemas)) return;
   // Use React Flow's screenToFlowPosition for accurate positioning
-  const position = reactFlowInstance.screenToFlowPosition({)
+  const position = reactFlowInstance.screenToFlowPosition({
   x: event.clientX,
   y: event.clientY,
 });
@@ -498,7 +501,7 @@ interface GraphEditorProps {
       // Use Zod schema to get default params
       const schema = nodeSchemas[nodeType];
       const params = schema.parse({});
-      const newNode: Node = {,
+      const newNode: Node = {
   id: nodeId,
         type: 'default',
         position,
@@ -576,7 +579,7 @@ interface GraphEditorProps {
     setEncryptionState(prev => ({ ...prev, status: 'encrypting' }));
     // Simulate encryption process
     setTimeout(() => {
-  setEncryptionState(prev => ({)
+  setEncryptionState(prev => ({
   ...prev,
   status: 'encrypted',
   algorithm: 'AES-256-GCM',
@@ -593,7 +596,7 @@ interface GraphEditorProps {
     setEncryptionState(prev => ({ ...prev, status: 'decrypting' }));
     // Simulate decryption process
     setTimeout(() => {
-  setEncryptionState(prev => ({)
+  setEncryptionState(prev => ({
   ...prev,
   status: 'not_encrypted',
   algorithm: undefined,
@@ -607,7 +610,7 @@ interface GraphEditorProps {
     }, 1500);
   }, []);
   const handleChangeAlgorithm = useCallback((algorithm: string) => {
-  setEncryptionState(prev => ({)
+  setEncryptionState(prev => ({
   ...prev,
   algorithm: algorithm as EncryptionAlgorithm,
   strength: algorithm.includes('256') || algorithm.includes('4096') ? 'strong' :,
@@ -781,7 +784,7 @@ interface GraphEditorProps {
   const isOptimizationEnabled = Object.values(optimizationSettings).some(value => value);
   // Close optimization menu when clicking outside
   useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {,
+  const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
   if (!target.closest('[data-optimization-menu]') && !target.closest('[data-optimization-button]')) {
   setOptimizationMenuOpen(false);
@@ -792,7 +795,7 @@ interface GraphEditorProps {
   }, [optimizationMenuOpen]);
   // Keyboard shortcuts (Epic 7.3 + Story 6.1)
   useEffect(() => {
-  const handleKeyDown = (event: KeyboardEvent) => {,
+  const handleKeyDown = (event: KeyboardEvent) => {
   // Alt+S opens settings modal
   if (event.altKey && event.key === 's') {
   event.preventDefault();
@@ -914,12 +917,12 @@ interface GraphEditorProps {
               // Dynamic edge options based on performance
               defaultEdgeOptions={{
   type: viewport.zoom > 0.5 ? 'smoothstep' : 'straight',
-  style: {,
+  style: {
   stroke: isPerformanceGood ? '#ff7c00' : '#666',
   strokeWidth: isPerformanceGood ? 2.5 : 2,
   filter: isPerformanceGood ? 'drop-shadow(0 0 4px rgba(255, 124, 0, 0.2))' : 'none',
 },
-  markerEnd: {,
+  markerEnd: {
   type: 'arrow',
   color: isPerformanceGood ? '#ff7c00' : '#666',
   width: isPerformanceGood ? 16 : 12,
@@ -952,7 +955,7 @@ interface GraphEditorProps {
               )}
               <Controls 
                 style={{
-  button: {,
+  button: {
   backgroundColor: 'rgba(31, 41, 55, 0.9)',
   border: '1px solid rgba(55, 65, 81, 0.6)',
   color: '#e5e7eb',
@@ -969,7 +972,7 @@ interface GraphEditorProps {
               onEdgesChange={(newEdges) => setEdges(newEdges)}
               onNodesSelect={(selectedNodes) => {
   setNodes(prevNodes => )
-  prevNodes.map(node => ({)
+  prevNodes.map(node => ({
   ...node,
   selected: selectedNodes.some(s => s.id === node.id),
 }))
@@ -977,14 +980,14 @@ interface GraphEditorProps {
               }}
               onEdgesSelect={(selectedEdges) => {
   setEdges(prevEdges => )
-  prevEdges.map(edge => ({)
+  prevEdges.map(edge => ({
   ...edge,
   selected: selectedEdges.some(s => s.id === edge.id),
 }))
                 );
               }}
               onNodeCreate={(nodeType, position, data) => {
-                const newNode: Node = {,
+                const newNode: Node = {
   id: `${nodeType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
 },
   type: nodeType,
@@ -1115,7 +1118,7 @@ interface GraphEditorProps {
           color: var(--color-text-primary, #e5e7eb) !important;
           transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
           backdrop-filter: blur(8px) !important;
-        .react-flow__node:hover {,
+        .react-flow__node:hover {
   transform: translateY(-3px) scale(1.03) !important;
           box-shadow: var(--shadow-xl, 0 20px 25px rgba(0, 0, 0, 0.6)) !important;
           background: linear-gradient(),
@@ -1137,24 +1140,24 @@ interface GraphEditorProps {
         /* Professional Edge Styling */
         .react-flow__edge path {
           stroke: var(--color-ui-border-light, #525252) !important;
-          stroke-width: 2px !important;,
+          stroke-width: 2px !important;
   transition: all var(--transition-normal, 0.25s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        .react-flow__edge:hover path {,
+        .react-flow__edge:hover path {
   stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;,
+          stroke-width: 4px !important;
   filter: drop-shadow(0 0 12px rgba(255, 120, 0, 0.6)) !important;
         .react-flow__edge.selected path {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 3px !important;,
+          stroke-width: 3px !important;
   filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Handle Styling */
         .react-flow__handle {
           background: var(--color-bg-secondary, #383838) !important;
           border: 2px solid var(--color-ui-border, #4a4a4a) !important;
-          width: 12px !important;,
+          width: 12px !important;
   height: 12px !important;
           transition: all var(--transition-fast, 0.15s cubic-bezier(0.4, 0, 0.2, 1)) !important;
-        .react-flow__handle:hover {,
+        .react-flow__handle:hover {
   transform: scale(1.6) !important;
           box-shadow: 0 0 20px rgba(255, 120, 0, 0.8) !important;
           background: var(--color-accent-orange, #ff7800) !important;
@@ -1164,7 +1167,7 @@ interface GraphEditorProps {
         /* Professional Connection Line */
         .react-flow__connection-line {
           stroke: var(--color-accent-orange, #ff7800) !important;
-          stroke-width: 4px !important;,
+          stroke-width: 4px !important;
   filter: drop-shadow(0 0 8px rgba(255, 120, 0, 0.4)) !important;
         /* Professional Controls */
         .react-flow__controls button {
@@ -1179,7 +1182,7 @@ interface GraphEditorProps {
           backdrop-filter: blur(8px) !important;
           border-radius: 6px !important;
           box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.3)) !important;
-        .react-flow__controls button:hover {,
+        .react-flow__controls button:hover {
   background: linear-gradient(),
             145deg,
             var(--color-bg-quaternary)

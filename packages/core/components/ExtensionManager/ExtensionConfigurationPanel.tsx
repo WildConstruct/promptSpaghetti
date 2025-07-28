@@ -6,12 +6,11 @@ import React, { useState, useEffect } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
 export interface ExtensionConfigurationPanelProps {
-  extension: ExtensionManifest;
+  extension: ExtensionManifest;,
   onSave: (config: Record<string, any>) => void;
   onCancel: () => void;
-}
 interface ConfigField {
-  key: string;
+  key: string;,
   label: string;
   type: 'string' | 'number' | 'boolean' | 'select' | 'json' | 'array';
   description?: string;
@@ -20,7 +19,6 @@ interface ConfigField {
   required?: boolean;
   validation?: (value: Error) => string | null;
 }
-
 export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelProps> = ({)
   extension,
   onSave,
@@ -31,26 +29,25 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
   const [isDirty, setIsDirty] = useState(false);
   const [activeTab, setActiveTab] = useState<'general' | 'advanced' | 'security'>('general');
   // Mock configuration schema - in a real implementation, this would come from the extension
-  const configSchema: ConfigField[] = [
+  const configSchema: ConfigField = [
     {
-      key: 'enabled',
-      label: 'Enable Extension',
-      type: 'boolean',
-      description: 'Enable or disable this extension',
-      defaultValue: true,
-      required: true,
-    },
+  key: 'enabled',
+  label: 'Enable Extension',
+  type: 'boolean',
+  description: 'Enable or disable this extension',
+  defaultValue: true,
+  required: true,
+}
     {
-      key: 'maxConcurrency',
-      label: 'Max Concurrent Operations',
-      type: 'number',
-      description: 'Maximum number of concurrent operations allowed',
-      defaultValue: 5,
-      validation: (value) => {,
-        if (value < 1 || value > 20) return 'Must be between 1 and 20';
-        return null;
-      }
-    },
+  key: 'maxConcurrency',
+  label: 'Max Concurrent Operations',
+  type: 'number',
+  description: 'Maximum number of concurrent operations allowed',
+  defaultValue: 5,
+  validation: (value) => {,
+  if (value < 1 || value > 20) return 'Must be between 1 and 20';
+  return null;
+}
     {
       key: 'logLevel',
       label: 'Log Level',
@@ -63,70 +60,62 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
         { label: 'Warning', value: 'warning' },
         { label: 'Error', value: 'error' }
       ]
-    },
+  }
     {
       key: 'customSettings',
       label: 'Custom Settings',
       type: 'json',
       description: 'Custom JSON configuration for advanced users',
       defaultValue: '{}'
-    },
+  }
     {
-      key: 'allowedDomains',
-      label: 'Allowed Domains',
-      type: 'array',
-      description: 'List of domains this extension can access',
-      defaultValue: [],
-    },
+  key: 'allowedDomains',
+  label: 'Allowed Domains',
+  type: 'array',
+  description: 'List of domains this extension can access',
+  defaultValue: [],
+}
     {
-      key: 'cacheTimeout',
-      label: 'Cache Timeout (seconds)',
-      type: 'number',
-      description: 'How long to cache results',
-      defaultValue: 300,
-      validation: (value) => {,
-        if (value < 0) return 'Must be non-negative';
-        return null;
-      }
-    },
+  key: 'cacheTimeout',
+  label: 'Cache Timeout (seconds)',
+  type: 'number',
+  description: 'How long to cache results',
+  defaultValue: 300,
+  validation: (value) => {,
+  if (value < 0) return 'Must be non-negative';
+  return null;
+}
     {
       key: 'enableAnalytics',
       label: 'Enable Analytics',
       type: 'boolean',
       description: 'Allow anonymous usage analytics',
-      defaultValue: false,
-    }
-  ];
+      defaultValue: false];
   // Initialize config with defaults
   useEffect(() => {
     const initialConfig: Record<string, any> = {};
     configSchema.forEach(field => {)
-      initialConfig[field.key] = field.defaultValue;
+  initialConfig[field.key] = field.defaultValue;
     });
     setConfig(initialConfig);
   }, []);
   const validateField = (field: ConfigField, value: Error): string | null => {
-    if (field.required && (value === undefined || value === null || value === '')) {
-      return 'This field is required';
-    }
-    if (field.validation) {
-      return field.validation(value);
-    }
-    // Type-specific validation
-    switch (field.type) {
-    case 'number':
-      if (isNaN(Number(value))) {
-        return 'Must be a valid number';
-      }
-      break;
-    case 'json':
-      try {
-        JSON.parse(value);
-      } catch {
+  if (field.required && (value === undefined || value === null || value === '')) {
+  return 'This field is required';
+  if (field.validation) {
+  return field.validation(value);
+  // Type-specific validation
+  switch (field.type) {
+  case 'number':,
+  if (isNaN(Number(value))) {
+  return 'Must be a valid number';
+  break;
+  case 'json':,
+  try {
+  JSON.parse(value);
+} catch {
         return 'Must be valid JSON';
-      }
       break;
-    }
     return null;
   };
   const handleFieldChange = (fieldKey: string, value: Error) => {
@@ -142,28 +131,25 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
       newErrors[fieldKey] = error;
     } else {
       delete newErrors[fieldKey];
-    }
     setErrors(newErrors);
   };
   const handleSave = () => {
     // Validate all fields
     const newErrors: Record<string, string> = {};
     configSchema.forEach(field => {)
-      const error = validateField(field, config[field.key]);
+  const error = validateField(field, config[field.key]);
       if (error) {
         newErrors[field.key] = error;
-      }
     });
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
-    }
     onSave(config);
   };
   const handleReset = () => {
     const resetConfig: Record<string, any> = {};
     configSchema.forEach(field => {)
-      resetConfig[field.key] = field.defaultValue;
+  resetConfig[field.key] = field.defaultValue;
     });
     setConfig(resetConfig);
     setErrors({});
@@ -172,7 +158,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
   const renderField = (field: ConfigField) => {
     const value = config[field.key];
     const error = errors[field.key];
-    return ();
+    return;
       <div key={field.key} className={`config-field ${error ? 'error' : ''}`}>}
         <label className="field-label">
           {field.label}
@@ -262,7 +248,7 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
   const securityFields = configSchema.filter(f => ;);
     ['enableAnalytics'].includes(f.key)
   );
-  return ();
+  return;
     <div className="extension-config-panel-overlay">
       <div className="extension-config-panel">
         <div className="config-header">
@@ -369,22 +355,20 @@ export const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelPr
 
 // Array input component for handling array values
 interface ArrayInputProps {
-  value: string[];
-  onChange: (value: string[]) => void;
+  value: string;,
+  onChange: (value: string) => void;
   placeholder?: string;
-}
 const ArrayInput: React.FC<ArrayInputProps> = ({ value, onChange, placeholder }) => {
   const [newItem, setNewItem] = useState('');
   const addItem = () => {
     if (newItem.trim() && !value.includes(newItem.trim())) {
       onChange([...value, newItem.trim()]);
       setNewItem('');
-    }
   };
   const removeItem = (index: number) => {
     onChange(value.filter((_, i) => i !== index));
   };
-  return ();
+  return;
     <div className="array-input-container">
       <div className="array-items">
         {value.map((item, index) => ()

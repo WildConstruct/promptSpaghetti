@@ -18,10 +18,10 @@ const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphSt
 // Mock React Flow hooks
 jest.mock('reactflow', () => ({)
   ...jest.requireActual('reactflow'),
-  useReactFlow: () => ({),
-    getViewport: () => ({ x: 0, y: 0, zoom: 1 }),
-    setViewport: jest.fn<unknown[], unknown>(),
-    fitView: jest.fn<unknown[], unknown>()
+  useReactFlow: () => ({,)
+  getViewport: () => ({ x: 0, y: 0, zoom: 1 }),
+    setViewport: jest.fn<unknown, unknown>(),
+    fitView: jest.fn<unknown, unknown>()
   }),
   useViewport: () => ({ x: 0, y: 0, zoom: 1 }),
   ReactFlowProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
@@ -42,7 +42,7 @@ jest.mock('../../Annotations/StickyNotesLayer', () => ({)
       </button>
     </div>
 }));
-const mockNotes: StickyNote[] = [
+const mockNotes: StickyNote = [
   {
     id: 'note-1',
     position: { x: 100, y: 100 },
@@ -51,8 +51,8 @@ const mockNotes: StickyNote[] = [
     size: { width: 200, height: 150 },
     author: 'Test Author',
     timestamp: '2024-01-01T12:00:00Z',
-    zIndex: 1,
-  },
+    zIndex: 1;
+  }
   {
     id: 'note-2',
     position: { x: 300, y: 200 },
@@ -61,12 +61,10 @@ const mockNotes: StickyNote[] = [
     size: { width: 180, height: 120 },
     author: 'Another Author',
     timestamp: '2024-01-01T13:00:00Z',
-    zIndex: 2,
-  }
-];
+    zIndex: 2];
 const mockStoreState = {
   stickyNotes: mockNotes,
-  setStickyNotes: jest.fn<unknown[], unknown>()
+  setStickyNotes: jest.fn<unknown, unknown>(),
 };
 describe('StickyNotesManager Component', () => {
   beforeEach(() => {
@@ -137,10 +135,10 @@ describe('StickyNotesManager Component', () => {
       ]);
     });
     test('handles empty notes array', () => {
-      mockUseGraphStore.mockReturnValue({)
-        stickyNotes: [],
-        setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
-      } as any);
+  mockUseGraphStore.mockReturnValue({)
+  stickyNotes: [],
+  setStickyNotes: jest.fn<unknown, unknown>( as unknown as unknown),
+} as any);
       render();
         <ReactFlowProvider>
           <StickyNotesManager />
@@ -202,10 +200,10 @@ describe('StickyNotesManager Component', () => {
   });
   describe('Performance', () => {
     test('does not re-render when store state is unchanged', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestWrapper = () => {
         renderSpy();
-        return ();
+        return;
           <ReactFlowProvider>
             <StickyNotesManager />
           </ReactFlowProvider>
@@ -219,19 +217,21 @@ describe('StickyNotesManager Component', () => {
     });
     test('handles large numbers of notes efficiently', () => {
       const manyNotes = Array.from({ length: 1000 }, (_, i) => ({)
-        id: `note-${i}`,}
-        position: { x: i * 10, y: i * 10 },
-        content: `Note ${i}`,}
-        color: 'yellow' as const,
+  id: `note-${i}`}
+},
+  position: { x: i * 10, y: i * 10 },
+        content: `Note ${i}`}
+},
+  color: 'yellow' as const,
         size: { width: 200, height: 150 },
         author: 'Test Author',
         timestamp: new Date().toISOString(),
-        zIndex: i,
-      }));
+        zIndex: i;
+  }));
       mockUseGraphStore.mockReturnValue({)
-        stickyNotes: manyNotes,
-        setStickyNotes: jest.fn<unknown[], unknown>( as unknown as unknown)
-      } as any);
+  stickyNotes: manyNotes,
+  setStickyNotes: jest.fn<unknown, unknown>( as unknown as unknown),
+} as any);
       const startTime = performance.now();
       render();
         <ReactFlowProvider>

@@ -18,27 +18,26 @@ import {
 import { GRAPH_DOMAIN_EVENTS } from '../GraphEditorDomain';
 
 // Default configuration
-const DEFAULT_CONFIG: GraphEditorConfig = {
+const DEFAULT_CONFIG: GraphEditorConfig = {,
   autosave: {,
-    enabled: true,
-    intervalMs: 5000,
-  },
+  enabled: true,
+  intervalMs: 5000,
+},
   preview: {,
-    seeds: [1, 42, 100],
-    maxSeeds: 10,
-    autoRefresh: true,
-    debounceMs: 500,
-  },
+  seeds: [1, 42, 100],
+  maxSeeds: 10,
+  autoRefresh: true,
+  debounceMs: 500,
+},
   validation: {,
-    realTime: true,
-    debounceMs: 300,
-  },
+  realTime: true,
+  debounceMs: 300,
+},
   ui: {,
-    showMinimap: false,
-    showGrid: true,
-    snapToGrid: true,
-    gridSize: 20,
-  }
+  showMinimap: false,
+  showGrid: true,
+  snapToGrid: true,
+  gridSize: 20,
 };
 
 // Create empty graph helper
@@ -50,60 +49,59 @@ interface GraphEditorStore extends GraphEditorState {
   // Configuration
   config: GraphEditorConfig;
   // History for undo/redo
-  history: GraphOperation[];
+  history: GraphOperation;,
   historyIndex: number;
   maxHistorySize: number;
   // Actions
-  setGraph: (graph: Graph) => void;
+  setGraph: (graph: Graph) => void;,
   updateGraph: (updater: (graph: Graph) => Graph) => void;
   // Node operations
   addNode: (nodeType: string, position: { x: number; y: number }) => void;
-  removeNode: (nodeId: string) => void;
-  updateNode: (nodeId: string, updates: Partial<Node>) => void;
+  removeNode: (nodeId: string) => void;,
+  updateNode: (nodeId: string, updates: Partial<Node>) => void;,
   moveNode: (nodeId: string, position: { x: number; y: number }) => void;
   duplicateNode: (nodeId: string) => void;
   // Edge operations
-  addEdge: (sourceId: string, targetId: string) => void;
+  addEdge: (sourceId: string, targetId: string) => void;,
   removeEdge: (edgeId: string) => void;
   // Selection management
-  selectNodes: (nodeIds: string[], isMultiSelect?: boolean) => void;
-  clearSelection: () => void;
+  selectNodes: (nodeIds: string, isMultiSelect?: boolean) => void;
+  clearSelection: () => void;,
   toggleNodeSelection: (nodeId: string) => void;
   // Execution
-  setExecuting: (isExecuting: boolean) => void;
+  setExecuting: (isExecuting: boolean) => void;,
   setExecutionResults: (results: Record<string, any>) => void;
   clearExecutionResults: () => void;
   // Validation
-  setValidationErrors: (errors: ValidationError[]) => void;
+  setValidationErrors: (errors: ValidationError) => void;,
   clearValidationErrors: () => void;
   // Preview seeds
-  setPreviewSeeds: (seeds: number[]) => void;
+  setPreviewSeeds: (seeds: number) => void;,
   addPreviewSeed: () => void;
   removePreviewSeed: (index: number) => void;
   // State management
-  setDirty: (isDirty: boolean) => void;
+  setDirty: (isDirty: boolean) => void;,
   resetState: () => void;
   // Configuration
-  updateConfig: (config: Partial<GraphEditorConfig>) => void;
+  updateConfig: (config: Partial<GraphEditorConfig>) => void;,
   resetConfig: () => void;
   // History operations
-  addToHistory: (operation: GraphOperation) => void;
+  addToHistory: (operation: GraphOperation) => void;,
   undo: () => void;
-  redo: () => void;
+  redo: () => void;,
   canUndo: () => boolean;
-  canRedo: () => boolean;
+  canRedo: () => boolean;,
   clearHistory: () => void;
   // Utilities
-  getNodeById: (nodeId: string) => Node | undefined;
-  getSelectedNodes: () => Node[];
+  getNodeById: (nodeId: string) => Node | undefined;,
+  getSelectedNodes: () => Node;
   isNodeSelected: (nodeId: string) => boolean;
-}
 
 export const useGraphEditorStore = create<GraphEditorStore>()()
   devtools();
     subscribeWithSelector();
       immer((set, get) => ({)
-        // Initial state
+  // Initial state
         graph: createEmptyGraph(),
         selectedNodeIds: [],
         draggedNodeId: null,
@@ -133,8 +131,8 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         // Node operations
         addNode: (nodeType: string, position: { x: number; y: number }) => set((state) => {
           const nodeId = `${nodeType}-${Date.now()}`;}
-          const newNode: Node = {
-            id: nodeId,
+          const newNode: Node = {,
+  id: nodeId,
             type: nodeType,
             position,
             data: {}
@@ -144,10 +142,10 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'ADD_NODE',
+  type: 'ADD_NODE',
             payload: { node: newNode },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         removeNode: (nodeId: string) => set((state) => {,
           const nodeIndex = state.graph.nodes.findIndex(n => n.id === nodeId);
@@ -164,10 +162,10 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'REMOVE_NODE',
+  type: 'REMOVE_NODE',
             payload: { node: removedNode },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         updateNode: (nodeId: string, updates: Partial<Node>) => set((state) => {
           const node = state.graph.nodes.find(n => n.id === nodeId);
@@ -177,10 +175,10 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'UPDATE_NODE',
+  type: 'UPDATE_NODE',
             payload: { nodeId, oldData, newData: updates },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         moveNode: (nodeId: string, position: { x: number; y: number }) => set((state) => {
           const node = state.graph.nodes.find(n => n.id === nodeId);
@@ -190,23 +188,22 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'MOVE_NODE',
+  type: 'MOVE_NODE',
             payload: { nodeId, oldPosition, newPosition: position },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         duplicateNode: (nodeId: string) => set((state) => {,
           const node = state.graph.nodes.find(n => n.id === nodeId);
           if (!node) return;
           const newNodeId = `${node.type}-${Date.now()}`;}
           const duplicatedNode: Node = {
-            ...node,
-            id: newNodeId,
-            position: {,
-              x: node.position.x + 50,
-              y: node.position.y + 50,
-            }
-          };
+  ...node,
+  id: newNodeId,
+  position: {,
+  x: node.position.x + 50,
+  y: node.position.y + 50,
+};
           state.graph.nodes.push(duplicatedNode);
           state.selectedNodeIds = [newNodeId];
           state.isDirty = true;
@@ -215,18 +212,18 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         addEdge: (sourceId: string, targetId: string) => set((state) => {
           const edgeId = `${sourceId}-${targetId}`;}
           const newEdge = {
-            id: edgeId,
-            source: sourceId,
-            target: targetId,
-          };
+  id: edgeId,
+  source: sourceId,
+  target: targetId,
+};
           state.graph.edges.push(newEdge);
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'ADD_EDGE',
+  type: 'ADD_EDGE',
             payload: { edge: newEdge },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         removeEdge: (edgeId: string) => set((state) => {,
           const edgeIndex = state.graph.edges.findIndex(e => e.id === edgeId);
@@ -236,17 +233,17 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.isDirty = true;
           // Add to history
           state.history.push({)
-            type: 'REMOVE_EDGE',
+  type: 'REMOVE_EDGE',
             payload: { edge: removedEdge },
-            timestamp: Date.now(),
-          });
+            timestamp: Date.now();
+  });
         }),
         // Selection management
-        selectNodes: (nodeIds: string[], isMultiSelect = false) => set((state) => {
-          state.selectedNodeIds = isMultiSelect 
-            ? [...new Set([...state.selectedNodeIds, ...nodeIds])]
-            : nodeIds;
-        }),
+        selectNodes: (nodeIds: string, isMultiSelect = false) => set((state) => {
+  state.selectedNodeIds = isMultiSelect
+  ? [...new Set([...state.selectedNodeIds, ...nodeIds])]
+  : nodeIds;
+}),
         clearSelection: () => set((state) => {,
           state.selectedNodeIds = [];
         }),
@@ -256,7 +253,6 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
             state.selectedNodeIds = state.selectedNodeIds.filter(id => id !== nodeId);
           } else {
             state.selectedNodeIds.push(nodeId);
-          }
         }),
         // Execution
         setExecuting: (isExecuting: boolean) => set((state) => {,
@@ -269,26 +265,24 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           state.executionResults = {};
         }),
         // Validation
-        setValidationErrors: (errors: ValidationError[]) => set((state) => {,
+        setValidationErrors: (errors: ValidationError) => set((state) => {,
           state.validationErrors = errors;
         }),
         clearValidationErrors: () => set((state) => {,
           state.validationErrors = [];
         }),
         // Preview seeds
-        setPreviewSeeds: (seeds: number[]) => set((state) => {,
+        setPreviewSeeds: (seeds: number) => set((state) => {,
           state.previewSeeds = seeds;
         }),
         addPreviewSeed: () => set((state) => {,
           if (state.previewSeeds.length < state.config.preview.maxSeeds) {
             const newSeed = Math.floor(Math.random() * 10000);
             state.previewSeeds.push(newSeed);
-          }
         }),
         removePreviewSeed: (index: number) => set((state) => {,
           if (index >= 0 && index < state.previewSeeds.length) {
             state.previewSeeds.splice(index, 1);
-          }
         }),
         // State management
         setDirty: (isDirty: boolean) => set((state) => {,
@@ -318,7 +312,6 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           // Remove future history if we're not at the end
           if (state.historyIndex < state.history.length - 1) {
             state.history = state.history.slice(0, state.historyIndex + 1);
-          }
           // Add new operation
           state.history.push(operation);
           state.historyIndex = state.history.length - 1;
@@ -326,21 +319,18 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
           if (state.history.length > state.maxHistorySize) {
             state.history = state.history.slice(-state.maxHistorySize);
             state.historyIndex = state.history.length - 1;
-          }
         }),
         undo: () => set((state) => {,
           if (state.historyIndex >= 0) {
             // Implementation would reverse the operation
             state.historyIndex--;
             state.isDirty = true;
-          }
         }),
         redo: () => set((state) => {,
           if (state.historyIndex < state.history.length - 1) {
             state.historyIndex++;
             // Implementation would apply the operation
             state.isDirty = true;
-          }
         }),
         canUndo: () => get().historyIndex >= 0,
         canRedo: () => get().historyIndex < get().history.length - 1,
@@ -351,23 +341,19 @@ export const useGraphEditorStore = create<GraphEditorStore>()()
         // Utilities
         getNodeById: (nodeId: string) => {,
           return get().graph.nodes.find(n => n.id === nodeId);
-        },
-        getSelectedNodes: () => {,
+  },
+  getSelectedNodes: () => {,
           const state = get();
           return state.graph.nodes.filter(n => state.selectedNodeIds.includes(n.id));
-        },
-        isNodeSelected: (nodeId: string) => {,
+  },
+  isNodeSelected: (nodeId: string) => {,
           return get().selectedNodeIds.includes(nodeId);
-        }
       })),
       {
-        name: 'graph-editor-store',
-        version: 1,
-      }
-);
-
-// Selector hooks for performance
-export const useGraphEditorState = () => useGraphEditorStore((state) => ({)
+  name: 'graph-editor-store',
+  version: 1);
+  // Selector hooks for performance
+  export const useGraphEditorState = () => useGraphEditorStore((state) => ({)
   graph: state.graph,
   selectedNodeIds: state.selectedNodeIds,
   isExecuting: state.isExecuting,

@@ -19,68 +19,164 @@ export var PlacementArea;
     PlacementArea["HEADER"] = "header";
     PlacementArea["FOOTER"] = "footer";
     PlacementArea["MODAL"] = "modal";
+    PlacementArea[PlacementArea["export"] = void 0] = "export";
+    PlacementArea[PlacementArea["enum"] = void 0] = "enum";
+    PlacementArea[PlacementArea["PlacementPosition"] = void 0] = "PlacementPosition";
 })(PlacementArea || (PlacementArea = {}));
-export var PlacementPosition;
-(function (PlacementPosition) {
-    PlacementPosition["HERO_BANNER"] = "hero_banner";
-    PlacementPosition["TOP_CAROUSEL"] = "top_carousel";
-    PlacementPosition["SIDEBAR_TOP"] = "sidebar_top";
-    PlacementPosition["SIDEBAR_MIDDLE"] = "sidebar_middle";
-    PlacementPosition["SIDEBAR_BOTTOM"] = "sidebar_bottom";
-    PlacementPosition["CONTENT_TOP"] = "content_top";
-    PlacementPosition["CONTENT_MIDDLE"] = "content_middle";
-    PlacementPosition["CONTENT_BOTTOM"] = "content_bottom";
-    PlacementPosition["FLOATING"] = "floating";
-    PlacementPosition["INLINE"] = "inline";
-    PlacementPosition["OVERLAY"] = "overlay";
-})(PlacementPosition || (PlacementPosition = {}));
-export var ContentType;
-(function (ContentType) {
-    ContentType["TEMPLATE"] = "template";
-    ContentType["COLLECTION"] = "collection";
-    ContentType["CATEGORY"] = "category";
-    ContentType["PROMOTION"] = "promotion";
-    ContentType["BANNER"] = "banner";
-    ContentType["ANNOUNCEMENT"] = "announcement";
-    ContentType["CUSTOM"] = "custom";
-})(ContentType || (ContentType = {}));
-export var PlacementStatus;
-(function (PlacementStatus) {
-    PlacementStatus["DRAFT"] = "draft";
-    PlacementStatus["SCHEDULED"] = "scheduled";
-    PlacementStatus["ACTIVE"] = "active";
-    PlacementStatus["PAUSED"] = "paused";
-    PlacementStatus["EXPIRED"] = "expired";
-    PlacementStatus["ARCHIVED"] = "archived";
-})(PlacementStatus || (PlacementStatus = {}));
-export var PlacementApprovalStatus;
-(function (PlacementApprovalStatus) {
-    PlacementApprovalStatus["PENDING"] = "pending";
-    PlacementApprovalStatus["APPROVED"] = "approved";
-    PlacementApprovalStatus["REJECTED"] = "rejected";
-    PlacementApprovalStatus["NEEDS_REVIEW"] = "needs_review";
-})(PlacementApprovalStatus || (PlacementApprovalStatus = {}));
-export var ScheduleType;
-(function (ScheduleType) {
-    ScheduleType["ONE_TIME"] = "one_time";
-    ScheduleType["RECURRING"] = "recurring";
-    ScheduleType["CONDITIONAL"] = "conditional";
-    ScheduleType["EVENT_BASED"] = "event_based";
-})(ScheduleType || (ScheduleType = {}));
-export var CampaignObjective;
-(function (CampaignObjective) {
-    CampaignObjective["AWARENESS"] = "awareness";
-    CampaignObjective["ENGAGEMENT"] = "engagement";
-    CampaignObjective["CONVERSIONS"] = "conversions";
-    CampaignObjective["REVENUE"] = "revenue";
-    CampaignObjective["RETENTION"] = "retention";
-})(CampaignObjective || (CampaignObjective = {}));
-export var CampaignStatus;
-(function (CampaignStatus) {
-    CampaignStatus["DRAFT"] = "draft";
-    CampaignStatus["SCHEDULED"] = "scheduled";
-    CampaignStatus["RUNNING"] = "running";
-    CampaignStatus["PAUSED"] = "paused";
-    CampaignStatus["COMPLETED"] = "completed";
-    CampaignStatus["CANCELLED"] = "cancelled";
-})(CampaignStatus || (CampaignStatus = {}));
+{
+    HERO_BANNER = 'hero_banner',
+        TOP_CAROUSEL = 'top_carousel',
+        SIDEBAR_TOP = 'sidebar_top',
+        SIDEBAR_MIDDLE = 'sidebar_middle',
+        SIDEBAR_BOTTOM = 'sidebar_bottom',
+        CONTENT_TOP = 'content_top',
+        CONTENT_MIDDLE = 'content_middle',
+        CONTENT_BOTTOM = 'content_bottom',
+        FLOATING = 'floating',
+        INLINE = 'inline',
+        OVERLAY = 'overlay';
+    export let ContentType;
+    (function (ContentType) {
+        ContentType["TEMPLATE"] = "template";
+        ContentType["COLLECTION"] = "collection";
+        ContentType["CATEGORY"] = "category";
+        ContentType["PROMOTION"] = "promotion";
+        ContentType["BANNER"] = "banner";
+        ContentType["ANNOUNCEMENT"] = "announcement";
+        ContentType["CUSTOM"] = "custom";
+        ContentType[ContentType["export"] = void 0] = "export";
+        ContentType[ContentType["enum"] = void 0] = "enum";
+        ContentType[ContentType["PlacementStatus"] = void 0] = "PlacementStatus";
+    })(ContentType || (ContentType = {}));
+    {
+        DRAFT = 'draft',
+            SCHEDULED = 'scheduled',
+            ACTIVE = 'active',
+            PAUSED = 'paused',
+            EXPIRED = 'expired',
+            ARCHIVED = 'archived';
+        export let PlacementApprovalStatus;
+        (function (PlacementApprovalStatus) {
+            PlacementApprovalStatus["PENDING"] = "pending";
+            PlacementApprovalStatus["APPROVED"] = "approved";
+            PlacementApprovalStatus["REJECTED"] = "rejected";
+            PlacementApprovalStatus["NEEDS_REVIEW"] = "needs_review";
+            PlacementApprovalStatus[PlacementApprovalStatus["export"] = void 0] = "export";
+            PlacementApprovalStatus[PlacementApprovalStatus["interface"] = void 0] = "interface";
+            PlacementApprovalStatus[PlacementApprovalStatus["PlacementSchedule"] = void 0] = "PlacementSchedule";
+        })(PlacementApprovalStatus || (PlacementApprovalStatus = {}));
+        {
+            scheduleId: string;
+            placementId: string;
+            // Schedule Configuration
+            type: ScheduleType;
+            pattern: SchedulePattern;
+            // Timing
+            startDate: Date;
+            endDate ?  : Date;
+            timezone: string;
+            // Recurrence
+            recurrenceRules ?  : RecurrenceRules;
+            // Status
+            isActive: boolean;
+            nextExecution ?  : Date;
+            lastExecution ?  : Date;
+            executionCount: number;
+            // Metadata
+            createdAt: Date;
+            updatedAt: Date;
+            createdBy: string;
+        }
+        export let ScheduleType;
+        (function (ScheduleType) {
+            ScheduleType["ONE_TIME"] = "one_time";
+            ScheduleType["RECURRING"] = "recurring";
+            ScheduleType["CONDITIONAL"] = "conditional";
+            ScheduleType["EVENT_BASED"] = "event_based";
+            ScheduleType[ScheduleType["export"] = void 0] = "export";
+            ScheduleType[ScheduleType["interface"] = void 0] = "interface";
+            ScheduleType[ScheduleType["SchedulePattern"] = void 0] = "SchedulePattern";
+        })(ScheduleType || (ScheduleType = {}));
+        {
+            frequency ?  : 'daily' | 'weekly' | 'monthly' | 'yearly';
+            interval ?  : number;
+            specificTimes ?  : string; // ["09:00", "12:00", "18:00"],
+            specificDays ?  : number; // [1, 3, 5] for Mon, Wed, Fri,
+            specificDates ?  : Date;
+        }
+        export let CampaignObjective;
+        (function (CampaignObjective) {
+            CampaignObjective["AWARENESS"] = "awareness";
+            CampaignObjective["ENGAGEMENT"] = "engagement";
+            CampaignObjective["CONVERSIONS"] = "conversions";
+            CampaignObjective["REVENUE"] = "revenue";
+            CampaignObjective["RETENTION"] = "retention";
+            CampaignObjective[CampaignObjective["export"] = void 0] = "export";
+            CampaignObjective[CampaignObjective["interface"] = void 0] = "interface";
+            CampaignObjective[CampaignObjective["CampaignBudget"] = void 0] = "CampaignBudget";
+        })(CampaignObjective || (CampaignObjective = {}));
+        {
+            totalBudget ?  : number;
+            dailyBudget ?  : number;
+            currency: string;
+            spendingPace: 'even' | 'accelerated';
+        }
+        export let CampaignStatus;
+        (function (CampaignStatus) {
+            CampaignStatus["DRAFT"] = "draft";
+            CampaignStatus["SCHEDULED"] = "scheduled";
+            CampaignStatus["RUNNING"] = "running";
+            CampaignStatus["PAUSED"] = "paused";
+            CampaignStatus["COMPLETED"] = "completed";
+            CampaignStatus["CANCELLED"] = "cancelled";
+            CampaignStatus[CampaignStatus["export"] = void 0] = "export";
+            CampaignStatus[CampaignStatus["interface"] = void 0] = "interface";
+            CampaignStatus[CampaignStatus["PlacementSlotMetrics"] = void 0] = "PlacementSlotMetrics";
+        })(CampaignStatus || (CampaignStatus = {}));
+        {
+            slotId: string;
+            period: MetricsPeriod;
+            // Visibility Metrics
+            impressions: number;
+            uniqueViews: number;
+            viewDuration: number; // seconds,
+            viewabilityRate: number; // percentage,
+            // Engagement Metrics
+            clicks: number;
+            clickThroughRate: number;
+            interactionRate: number;
+            bounceRate: number;
+            // Performance Metrics
+            conversions: number;
+            conversionRate: number;
+            revenue: number;
+            revenuePerView: number;
+            // Quality Metrics
+            loadTime: number; // milliseconds,
+            errorRate: number;
+            // Comparative Metrics
+            performanceIndex: number; // vs baseline,
+            competitiveIndex ?  : number; // vs other slots,
+        }
+         > ;
+        // Budget Utilization
+        budgetSpent ?  : number;
+        budgetRemaining ?  : number;
+        paceToGoal ?  : number;
+    }
+     > ;
+    // Metadata
+    createdAt: Date;
+    completedAt ?  : Date;
+    initiatedBy: string;
+}
+ > ;
+// Context
+userId: string;
+userRole: string;
+ipAddress ?  : string;
+userAgent ?  : string;
+// Metadata
+timestamp: Date;
+reason ?  : string;
+additionalData ?  : Record;

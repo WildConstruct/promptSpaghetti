@@ -23,7 +23,7 @@ export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
         userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
         templateCategory?: string;
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
-        features?: string[];
+        features?: string;
     };
 }
 export interface MarketplaceHelpOverlayProps {

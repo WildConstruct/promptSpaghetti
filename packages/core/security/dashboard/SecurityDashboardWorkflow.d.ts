@@ -39,6 +39,7 @@ import React from 'react';
 import { DashboardType, SecurityRole } from './SecurityDashboardFramework';
 import { StateTransitionResult } from '../stores/workflowStore';
 import './SecurityDashboardWorkflow.css';
+
 export interface SecurityWorkflowEvent {
     id: string;
     type: SecurityEventType;
@@ -52,7 +53,7 @@ export interface SecurityWorkflowEvent {
     escalationLevel: number;
     complianceFrameworks: string[];
     automatedActions: SecurityAction[];
-}
+
 export declare enum SecurityEventType {
     THREAT_DETECTION = "threat_detection",
     AUTHENTICATION_FAILURE = "authentication_failure",
@@ -64,14 +65,14 @@ export declare enum SecurityEventType {
     COMPLIANCE_VIOLATION = "compliance_violation",
     SYSTEM_ANOMALY = "system_anomaly",
     INSIDER_THREAT = "insider_threat"
-}
+
 export declare enum SecuritySeverity {
     CRITICAL = "critical",
     HIGH = "high",
     MEDIUM = "medium",
     LOW = "low",
     INFO = "info"
-}
+
 export interface SecurityAction {
     type: SecurityActionType;
     target: string;
@@ -80,7 +81,7 @@ export interface SecurityAction {
     executedBy: string;
     status: 'pending' | 'executing' | 'completed' | 'failed';
     result?: string;
-}
+
 export declare enum SecurityActionType {
     BLOCK_IP = "block_ip",
     ISOLATE_HOST = "isolate_host",
@@ -90,7 +91,7 @@ export declare enum SecurityActionType {
     CREATE_TICKET = "create_ticket",
     ESCALATE_ALERT = "escalate_alert",
     COLLECT_EVIDENCE = "collect_evidence"
-}
+
 export interface SecurityWorkflowConfig {
     enableAutoTransitions: boolean;
     enableAutomatedActions: boolean;
@@ -98,7 +99,8 @@ export interface SecurityWorkflowConfig {
     escalationThresholds: Record<SecuritySeverity, number>;
     autoApprovalRules: AutoApprovalRule[];
     complianceRequirements: ComplianceRequirement[];
-}
+
+
 export interface AutoApprovalRule {
     id: string;
     name: string;
@@ -106,14 +108,16 @@ export interface AutoApprovalRule {
     maxSeverity: SecuritySeverity;
     approvedActions: SecurityActionType[];
     requiredRole?: SecurityRole;
-}
+
+
 export interface ComplianceRequirement {
     framework: string;
     alertTypes: SecurityEventType[];
     responseTimeMinutes: number;
     requiredDocumentation: string[];
     notificationRequired: boolean;
-}
+
+
 export interface SecurityDashboardWorkflowProps {
     workspaceId: string;
     userId: string;
@@ -122,7 +126,8 @@ export interface SecurityDashboardWorkflowProps {
     config?: Partial<SecurityWorkflowConfig>;
     onSecurityEvent?: (event: SecurityWorkflowEvent) => void;
     onWorkflowTransition?: (result: StateTransitionResult) => void;
-}
+
+
 /**
  * Main Security Dashboard Workflow Component
  */

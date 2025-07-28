@@ -7,6 +7,7 @@
  * Task: T-1752989144373-766 - Build plugin loader with version & dependency resolution
  */
 import { ExtensionManifest } from './ExtensionLifecycleManager';
+
 export interface SandboxOptions {
     timeout: number;
     memoryLimit: number;
@@ -17,14 +18,14 @@ export interface SandboxOptions {
     enableChildProcess: boolean;
     maxCallStack: number;
     contextName: string;
-}
+
 export interface ResourceUsage {
     memoryUsed: number;
     executionTime: number;
     apiCalls: number;
     fileOperations: number;
     networkRequests: number;
-}
+
 export interface SandboxContext {
     require: (id: string) => any;
     module: {,
@@ -41,7 +42,7 @@ export interface SandboxContext {
     setInterval: typeof setInterval;
     clearTimeout: typeof clearTimeout;
     clearInterval: typeof clearInterval;
-}
+
 export declare class PluginSandbox {
     private manifest;
     private pluginPath;
@@ -89,5 +90,5 @@ export declare class PluginSandbox {
     private trackAPICall;
     private trackFileOperation;
     private updateMemoryUsage;
-}
+
 //# sourceMappingURL=PluginSandbox.d.ts.map

@@ -35,7 +35,7 @@ export declare enum LearningMetricType {
     REAL_WORLD_APPLICATION = "real_world_application",
     USER_CONFIDENCE_GAIN = "user_confidence_gain",
     LEARNING_SATISFACTION = "learning_satisfaction"
-}
+
 export declare enum LearningAnalyticsSegment {
     BEGINNER_LEARNERS = "beginner_learners",
     INTERMEDIATE_LEARNERS = "intermediate_learners",
@@ -49,7 +49,7 @@ export declare enum LearningAnalyticsSegment {
     PASSIVE_CONSUMERS = "passive_consumers",
     COMMUNITY_LEADERS = "community_leaders",
     STRUGGLING_LEARNERS = "struggling_learners"
-}
+
 export declare enum ContentType {
     TUTORIAL = "tutorial",
     LEARNING_PATH = "learning_path",
@@ -57,7 +57,7 @@ export declare enum ContentType {
     COMMUNITY_CONTRIBUTION = "community_contribution",
     HELP_CONTENT = "help_content",
     ASSESSMENT = "assessment"
-}
+
 export interface LearningAnalyticsEvent extends AnalyticsEvent {
     learning_context: {,
         content_type: ContentType;
@@ -81,7 +81,7 @@ export interface LearningAnalyticsEvent extends AnalyticsEvent {
         help_requests?: number;
         satisfaction_score?: number;
     };
-}
+
 export interface TutorialAnalyticsEvent extends LearningAnalyticsEvent {
     tutorial_context: {,
         tutorial_id: string;
@@ -97,7 +97,7 @@ export interface TutorialAnalyticsEvent extends LearningAnalyticsEvent {
         confidence_improvement?: number;
         real_world_application_success?: boolean;
     };
-}
+
 export interface KnowledgeBaseAnalyticsEvent extends LearningAnalyticsEvent {
     knowledge_context: {,
         search_query?: string;
@@ -112,7 +112,7 @@ export interface KnowledgeBaseAnalyticsEvent extends LearningAnalyticsEvent {
         clarity_rating?: number;
         completeness_rating?: number;
     };
-}
+
 export interface CommunityAnalyticsEvent extends LearningAnalyticsEvent {
     contribution_context: {,
         contribution_type: string;
@@ -127,7 +127,7 @@ export interface CommunityAnalyticsEvent extends LearningAnalyticsEvent {
         expertise_demonstrated?: number;
         community_reputation_change?: number;
     };
-}
+
 export interface LearningEffectivenessMetrics {
     content_id: string;
     content_type: ContentType;
@@ -167,14 +167,14 @@ export interface LearningEffectivenessMetrics {
         performance_by_role: Record<string, PerformanceMetrics>;
         performance_by_learning_style: Record<string, PerformanceMetrics>;
     };
-}
+
 export interface PerformanceMetrics {
     completion_rate: number;
     average_time_minutes: number;
     satisfaction_score: number;
     skill_acquisition_rate: number;
     user_count: number;
-}
+
 export interface UserLearningAnalytics {
     user_id: string;
     analysis_period: string;
@@ -218,7 +218,7 @@ export interface UserLearningAnalytics {
         tutorial_completion_to_success_correlation: number;
         community_engagement_impact: number;
     };
-}
+
 export interface LearningSessionPattern {
     pattern_type: 'intensive' | 'distributed' | 'sporadic' | 'consistent';
     average_session_duration: number;
@@ -226,21 +226,21 @@ export interface LearningSessionPattern {
     peak_learning_hours: string[];
     interruption_frequency: number;
     multi_tasking_tendency: number;
-}
+
 export interface HelpSeekingBehavior {
     help_request_frequency: number;
     preferred_help_sources: string[];
     self_resolution_rate: number;
     community_help_participation: number;
     documentation_usage_rate: number;
-}
+
 export interface CollaborationEngagement {
     peer_interaction_frequency: number;
     mentoring_participation: number;
     knowledge_sharing_contributions: number;
     community_discussion_engagement: number;
     collaboration_success_rate: number;
-}
+
 export interface CommunityKnowledgeMetrics {
     community_id: string;
     analysis_period: string;
@@ -280,7 +280,7 @@ export interface CommunityKnowledgeMetrics {
         innovation_contribution_rate: number;
         knowledge_gap_closure_rate: number;
     };
-}
+
 export interface KnowledgeBaseUsageMetrics {
     knowledge_base_id: string;
     analysis_period: string;
@@ -318,7 +318,7 @@ export interface KnowledgeBaseUsageMetrics {
         cross_content_navigation: CrossContentNavigation[];
         learning_progression_tracking: LearningProgressionMetric[];
     };
-}
+
 export interface ContentGap {
     gap_type: 'missing_content' | 'insufficient_depth' | 'outdated_information' | 'accessibility_issue';
     topic_area: string;
@@ -326,7 +326,7 @@ export interface ContentGap {
     user_demand_score: number;
     business_impact: 'high' | 'medium' | 'low';
     suggested_content_type: ContentType;
-}
+
 export interface OutdatedContent {
     content_id: string;
     content_type: ContentType;
@@ -335,35 +335,35 @@ export interface OutdatedContent {
     user_reported_issues: string[];
     accuracy_decline_indicators: string[];
     update_priority: 'urgent' | 'high' | 'medium' | 'low';
-}
+
 export interface QueryRefinementPattern {
     initial_query: string;
     refined_query: string;
     refinement_type: 'spelling' | 'semantic' | 'scope' | 'specificity';
     success_improvement: number;
     frequency: number;
-}
+
 export interface UserPath {
     path_pattern: string[];
     frequency: number;
     success_rate: number;
     average_time_minutes: number;
     typical_outcomes: string[];
-}
+
 export interface CrossContentNavigation {
     from_content_type: ContentType;
     to_content_type: ContentType;
     navigation_frequency: number;
     success_correlation: number;
     typical_transition_triggers: string[];
-}
+
 export interface LearningProgressionMetric {
     progression_type: 'linear' | 'branching' | 'circular' | 'exploratory';
     skill_development_rate: number;
     content_effectiveness_score: number;
     user_satisfaction_progression: number;
     marketplace_outcome_correlation: number;
-}
+
 export interface LearningAnalyticsService {
     trackLearningEvent(event: LearningAnalyticsEvent): Promise<void>;
     trackTutorialEvent(event: TutorialAnalyticsEvent): Promise<void>;
@@ -393,7 +393,7 @@ export interface LearningAnalyticsService {
     exportLearningDataForAnalysis(query: LearningAnalyticsQuery): Promise<LearningDataExport>;
     integrateWithMarketplaceAnalytics(correlationQuery: AnalyticsCorrelationQuery): Promise<CrossPlatformInsights>;
     generateComprehensiveReport(reportConfig: LearningAnalyticsReportConfig): Promise<ComprehensiveAnalyticsReport>;
-}
+
 export interface LearningTrend {
     trend_type: 'skill_demand' | 'content_popularity' | 'learning_pattern' | 'community_growth';
     trend_description: string;
@@ -405,7 +405,7 @@ export interface LearningTrend {
     }>;
     contributing_factors: string[];
     projected_continuation: boolean;
-}
+
 export interface PerformanceAnomaly {
     anomaly_type: 'sudden_drop' | 'sudden_spike' | 'gradual_decline' | 'stagnation';
     content_id: string;
@@ -415,7 +415,7 @@ export interface PerformanceAnomaly {
     affected_metrics: string[];
     potential_causes: string[];
     recommended_actions: string[];
-}
+
 export interface PersonalizedInsight {
     insight_type: 'learning_opportunity' | 'skill_gap' | 'performance_improvement' | 'engagement_optimization';
     title: string;
@@ -424,7 +424,7 @@ export interface PersonalizedInsight {
     expected_impact: 'high' | 'medium' | 'low';
     effort_required: 'low' | 'medium' | 'high';
     timeline_estimate: string;
-}
+
 export interface LearningPathAnalytics {
     learning_path_id: string;
     analysis_period: string;
@@ -448,7 +448,7 @@ export interface LearningPathAnalytics {
         adaptation_effectiveness: number;
         user_preference_alignment: number;
     };
-}
+
 export interface SkillDevelopmentROI {
     user_id: string;
     analysis_period: string;
@@ -469,7 +469,7 @@ export interface SkillDevelopmentROI {
         marketplace_outcome_correlation: number;
         overall_roi_score: number;
     };
-}
+
 export interface CommunityHealthScore {
     community_id: string;
     overall_health_score: number;
@@ -487,7 +487,7 @@ export interface CommunityHealthScore {
         areas_of_concern: string[];
         recommended_interventions: string[];
     };
-}
+
 export interface KnowledgeTransferMetrics {
     analysis_period: string;
     transfer_volume: {,
@@ -507,7 +507,7 @@ export interface KnowledgeTransferMetrics {
         transfer_pathway_analysis: TransferPathway[];
         bottleneck_identification: KnowledgeBottleneck[];
     };
-}
+
 export interface KnowledgeHub {
     hub_id: string;
     hub_type: 'individual_expert' | 'content_cluster' | 'community_group';
@@ -515,7 +515,7 @@ export interface KnowledgeHub {
     knowledge_domains: SkillDomain[];
     transfer_reach: number;
     expertise_recognition: number;
-}
+
 export interface TransferPathway {
     pathway_id: string;
     source_type: 'tutorial' | 'community' | 'expert' | 'content';
@@ -523,14 +523,14 @@ export interface TransferPathway {
     transfer_efficiency: number;
     volume: number;
     success_rate: number;
-}
+
 export interface KnowledgeBottleneck {
     bottleneck_type: 'content_gap' | 'access_barrier' | 'quality_issue' | 'discovery_problem';
     impact_severity: 'high' | 'medium' | 'low';
     affected_domains: SkillDomain[];
     resolution_priority: number;
     suggested_solutions: string[];
-}
+
 export interface RealTimeLearningActivity {
     active_learners: number;
     tutorials_in_progress: number;
@@ -538,7 +538,7 @@ export interface RealTimeLearningActivity {
     community_interactions: number;
     skill_demonstrations: number;
     current_learning_velocity: number;
-}
+
 export interface RealTimeCommunityEngagement {
     active_contributors: number;
     contributions_in_review: number;
@@ -546,7 +546,7 @@ export interface RealTimeCommunityEngagement {
     knowledge_sharing_events: number;
     community_discussions: number;
     collaboration_sessions: number;
-}
+
 export interface RealTimeKnowledgeActivity {
     search_queries_per_minute: number;
     content_views_per_minute: number;
@@ -554,7 +554,7 @@ export interface RealTimeKnowledgeActivity {
     resolution_rate: number;
     user_satisfaction_realtime: number;
     content_effectiveness_realtime: number;
-}
+
 export interface LearningAnalyticsQuery extends AnalyticsQuery {
     learning_filters: {,
         skill_domains?: SkillDomain[];
@@ -572,14 +572,14 @@ export interface LearningAnalyticsQuery extends AnalyticsQuery {
             max: number;
         };
     };
-}
+
 export interface AnalyticsCorrelationQuery {
     primary_metrics: LearningMetricType[];
     marketplace_metrics: MetricType[];
     correlation_type: 'pearson' | 'spearman' | 'mutual_information';
     time_alignment: 'synchronous' | 'lagged' | 'causal';
     user_segment?: LearningAnalyticsSegment;
-}
+
 export interface CrossPlatformInsights {
     correlation_strength: number;
     significant_correlations: Array<{,
@@ -602,7 +602,7 @@ export interface CrossPlatformInsights {
         implementation_effort: 'low' | 'medium' | 'high';
         roi_estimate: string;
     }>;
-}
+
 export interface LearningDataExport {
     export_id: string;
     export_timestamp: Date;
@@ -618,7 +618,7 @@ export interface LearningDataExport {
     };
     download_url: string;
     expiration_date: Date;
-}
+
 export interface LearningAnalyticsReportConfig {
     report_type: 'executive_summary' | 'detailed_analysis' | 'performance_review' | 'trend_analysis';
     target_audience: 'executives' | 'educators' | 'product_team' | 'community_managers';
@@ -631,7 +631,7 @@ export interface LearningAnalyticsReportConfig {
         include_raw_data: boolean;
         privacy_level: 'high' | 'medium' | 'low';
     };
-}
+
 export interface ComprehensiveAnalyticsReport {
     report_id: string;
     generated_at: Date;
@@ -658,7 +658,7 @@ export interface ComprehensiveAnalyticsReport {
         limitations: string[];
         definitions: Record<string, string>;
     };
-}
+
 export declare const LearningAnalyticsEventSchema: z.ZodObject<{
     learning_context: z.ZodObject<{,
         content_type: z.ZodNativeEnum<typeof ContentType>;

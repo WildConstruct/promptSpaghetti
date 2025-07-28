@@ -14,6 +14,7 @@ import {
   DataType
 } from '../../../packages/core/utils/CompressionService';
 
+}
 export interface CompressionMiddlewareOptions {
   threshold?: number; // Minimum response size to compress (bytes)
   level?: CompressionLevel;
@@ -26,7 +27,9 @@ export interface CompressionMiddlewareOptions {
   cacheCompressed?: boolean;
   maxCacheSize?: number; // MB
 }
+}
 
+}
 export interface CompressionStats {
   totalRequests: number;
   compressedRequests: number;
@@ -37,6 +40,7 @@ export interface CompressionStats {
     requests: number;
     bytesSaved: number;
     averageCompressionRatio: number;
+}
   }>;
 }
 
@@ -119,6 +123,7 @@ export class CompressionMiddleware {
     originalSend: (payload: unknown) => FastifyReply,
     acceptEncoding: string
   ): Promise<FastifyReply> {
+
         this.stats.totalRequests++;
     
     try {
@@ -477,7 +482,7 @@ export async function compressionPlugin(
         ...stats,
         algorithmUsage: Object.fromEntries(stats.algorithmUsage),
         contentTypeStats: Object.fromEntries(stats.contentTypeStats)
-      },
+  }
       cache: cacheInfo,
       compressionRatio: stats.totalRequests > 0 ? 
         stats.compressedRequests / stats.totalRequests : 0,

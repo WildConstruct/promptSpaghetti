@@ -20,13 +20,13 @@ export interface CapacityPlan {
     requirements: {
         baseline_capacity: ResourceRequirements;
         peak_capacity: ResourceRequirements;
-        growth_projections: GrowthProjection[];
+        growth_projections: GrowthProjection;
         performance_targets: PerformanceTargets;
         availability_requirements: AvailabilityRequirements;
     };
     scaling: {
         auto_scaling_enabled: boolean;
-        scaling_policies: ScalingPolicy[];
+        scaling_policies: ScalingPolicy;
         scaling_cooldown: number;
         min_instances: number;
         max_instances: number;
@@ -34,7 +34,7 @@ export interface CapacityPlan {
             cpu_percentage: number;
             memory_percentage: number;
             network_percentage: number;
-            custom_metrics: CustomMetricTarget[];
+            custom_metrics: CustomMetricTarget;
         };
     };
     cost_optimization: {
@@ -43,7 +43,7 @@ export interface CapacityPlan {
             cost_per_hour_limit: number;
             currency: string;
         };
-        instance_types: InstanceTypeConfig[];
+        instance_types: InstanceTypeConfig;
         reserved_capacity: {
             percentage: number;
             commitment_period: 'monthly' | 'yearly' | 'multi_year';
@@ -63,11 +63,11 @@ export interface CapacityPlan {
         metrics_collection: {
             interval_seconds: number;
             retention_days: number;
-            custom_metrics: string[];
+            custom_metrics: string;
         };
         alerting: {
-            notification_channels: string[];
-            escalation_policy: string[];
+            notification_channels: string;
+            escalation_policy: string;
             alert_suppression_minutes: number;
         };
     };
@@ -93,8 +93,8 @@ export interface GrowthProjection {
     current_value: number;
     projected_growth_rate: number;
     confidence_level: number;
-    assumptions: string[];
-    seasonal_factors?: SeasonalFactor[];
+    assumptions: string;
+    seasonal_factors?: SeasonalFactor;
 }
 export interface SeasonalFactor {
     period: 'daily' | 'weekly' | 'monthly' | 'yearly';
@@ -133,14 +133,14 @@ export interface ScalingPolicy {
     type: 'reactive' | 'predictive' | 'scheduled';
     enabled: boolean;
     triggers: {
-        metric_based: MetricTrigger[];
-        time_based: TimeTrigger[];
-        event_based: EventTrigger[];
+        metric_based: MetricTrigger;
+        time_based: TimeTrigger;
+        event_based: EventTrigger;
     };
     actions: {
         scale_up: ScalingAction;
         scale_down: ScalingAction;
-        notification: NotificationAction[];
+        notification: NotificationAction;
     };
     constraints: {
         max_scale_up_percentage: number;
@@ -165,8 +165,8 @@ export interface TimeTrigger {
     cron_expression?: string;
     recurring_pattern?: {
         frequency: 'daily' | 'weekly' | 'monthly';
-        times: string[];
-        days_of_week?: string[];
+        times: string;
+        days_of_week?: string;
         timezone: string;
     };
     one_time_datetime?: number;
@@ -183,8 +183,8 @@ export interface ScalingAction {
     target_value?: number;
     adjustment_value?: number;
     adjustment_type: 'percentage' | 'absolute';
-    instance_types?: string[];
-    availability_zones?: string[];
+    instance_types?: string;
+    availability_zones?: string;
     termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized';
 }
 export interface NotificationAction {
@@ -207,7 +207,7 @@ export interface InstanceTypeConfig {
     storage_type: 'ebs' | 'instance_store';
     cost_per_hour: number;
     spot_availability: boolean;
-    use_cases: string[];
+    use_cases: string;
     priority: number;
 }
 export interface CapacityMetrics {
@@ -252,9 +252,9 @@ export interface CapacityMetrics {
     };
     health: {
         overall_health_score: number;
-        bottleneck_indicators: string[];
-        scaling_recommendations: string[];
-        cost_optimization_opportunities: string[];
+        bottleneck_indicators: string;
+        scaling_recommendations: string;
+        cost_optimization_opportunities: string;
     };
 }
 export interface ScalingEvent {
@@ -289,7 +289,7 @@ export interface ScalingEvent {
         scaling_successful: boolean;
         target_reached: boolean;
         performance_improved: boolean;
-        issues_encountered: string[];
+        issues_encountered: string;
         rollback_required: boolean;
     };
 }
@@ -305,26 +305,14 @@ export interface CapacityForecast {
         seasonal_adjustments: boolean;
         trend_adjustments: boolean;
     };
-    forecasts: Array<{
-        date: number;
-        predicted_load: number;
-        confidence_upper: number;
-        confidence_lower: number;
-        required_capacity: ResourceRequirements;
-        estimated_cost: number;
-        risk_factors: string[];
-    }>;
-    recommendations: {
-        immediate_actions: CapacityRecommendation[];
-        short_term_planning: CapacityRecommendation[];
-        long_term_strategy: CapacityRecommendation[];
-    };
-    accuracy: {
-        last_forecast_accuracy: number;
-        trend_accuracy: number;
-        peak_prediction_accuracy: number;
-        cost_prediction_accuracy: number;
-    };
+    forecasts: Array<{}, date>;
+    number: any;
+    predicted_load: number;
+    confidence_upper: number;
+    confidence_lower: number;
+    required_capacity: ResourceRequirements;
+    estimated_cost: number;
+    risk_factors: string;
 }
 export interface CapacityRecommendation {
     id: string;
@@ -337,8 +325,8 @@ export interface CapacityRecommendation {
         estimated_effort_hours: number;
         estimated_cost_impact: number;
         estimated_benefit: string;
-        prerequisites: string[];
-        risks: string[];
+        prerequisites: string;
+        risks: string;
         rollback_plan: string;
     };
     timeline: {
@@ -361,57 +349,22 @@ export declare class SecurityCapacityManager extends EventEmitter {
     private activeScaling;
     private cooldownPeriods;
     constructor();
-    createCapacityPlan(plan: Omit<CapacityPlan, 'id' | 'created_at' | 'last_updated' | 'last_reviewed' | 'next_review_date'>): Promise<string>;
     private createDefaultScalingPolicies;
-    createScalingPolicy(policy: Omit<ScalingPolicy, 'id' | 'created_at' | 'last_triggered' | 'trigger_count'>): Promise<string>;
-    collectCapacityMetrics(service: string): Promise<string>;
-    private calculateHealthScore;
-    private identifyBottlenecks;
-    private generateScalingRecommendations;
-    private identifyCostOptimizations;
-    private evaluateScalingPolicies;
-    private evaluatePolicy;
-    private evaluateMetricTrigger;
-    private compareMetricValue;
-    private evaluateTimeTrigger;
-    private executeScalingAction;
-    private performScaling;
-    private sendScalingNotification;
-    generateCapacityForecast(service: string, horizonDays?: number): Promise<string>;
-    private generateForecastData;
-    private identifyForecastRisks;
-    private generateCapacityRecommendations;
-    manualScale(service: string, targetCapacity: number, reason: string, scaledBy: string): Promise<string>;
-    getCapacityStatus(): {
-        services: Array<{
-            service: string;
-            current_capacity: number;
-            utilization: {
-                cpu: number;
-                memory: number;
-            };
-            health_score: number;
-            scaling_status: 'stable' | 'scaling_up' | 'scaling_down' | 'at_limits';
-            cost_efficiency: number;
-        }>;
-        overall_health: number;
-        total_monthly_cost: number;
-        scaling_events_last_24h: number;
-        recommendations_pending: number;
+    description: 'Scale up when CPU utilization is high';
+    type: 'reactive';
+    enabled: true;
+    triggers: {
+        metric_based: [
+            {},
+            metric_name: 'cpu_utilization',
+            comparison: 'greater_than',
+            threshold: plan.scaling.target_utilization.cpu_percentage,
+            duration_seconds: 300,
+            datapoints_to_alarm: 2,
+            evaluation_periods: 2
+        ];
     };
-    private calculateCostEfficiency;
-    private initializeDefaultPlans;
-    private startMetricsCollection;
-    private startCapacityMonitoring;
-    private startForecastGeneration;
-    private checkCapacityThresholds;
-    getCapacityPlans(): CapacityPlan[];
-    getScalingPolicies(): ScalingPolicy[];
-    getScalingEvents(): ScalingEvent[];
-    getForecasts(): CapacityForecast[];
-    getRecommendations(): CapacityRecommendation[];
-    exportConfiguration(): Promise<string>;
-    importConfiguration(configJson: string): Promise<void>;
+    time_based: [];
+    event_based: [];
 }
-export default SecurityCapacityManager;
 //# sourceMappingURL=SecurityCapacityManager.d.ts.map

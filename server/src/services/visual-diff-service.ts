@@ -15,10 +15,12 @@ import {
   GraphData
 } from '../database/comparison-models.js';
 
+}
 export interface VisualDiffServiceOptions {
   comparisonConfig?: Partial<ComparisonConfig>;
   enableCaching?: boolean;
   maxCacheSize?: number;
+}
 }
 
 export class VisualDiffService {
@@ -49,6 +51,7 @@ export class VisualDiffService {
    * Compare two graph versions with caching support
    */
   async compareVersions(request: CompareVersionsRequest, userId?: string): Promise<DetailedComparison> {
+
     const { source_version_id, target_version_id, comparison_type = 'structural', include_details = true } = request;
 
     try {
@@ -135,6 +138,7 @@ export class VisualDiffService {
    * Create a new visual diff session
    */
   async createDiffSession(request: CreateDiffSessionRequest, userId: string): Promise<VisualDiffSession> {
+
     try {
       // First ensure we have a comparison
       const comparison = await this.compareVersions({
@@ -176,6 +180,7 @@ export class VisualDiffService {
     session: VisualDiffSession;
     comparison: DetailedComparison;
   } | null> {
+
     try {
       const session = await this.comparisonDAO.getDiffSession(sessionId);
       if (!session || session.user_id !== userId) {
@@ -214,6 +219,7 @@ export class VisualDiffService {
     updates: UpdateDiffSessionRequest,
     userId: string
   ): Promise<VisualDiffSession | null> {
+
     try {
       // Verify session belongs to user
       const session = await this.comparisonDAO.getDiffSession(sessionId);
@@ -237,6 +243,7 @@ export class VisualDiffService {
    * Delete diff session
    */
   async deleteDiffSession(sessionId: string, userId: string): Promise<boolean> {
+
     try {
       // Verify session belongs to user
       const session = await this.comparisonDAO.getDiffSession(sessionId);
@@ -255,6 +262,7 @@ export class VisualDiffService {
    * Get user's active diff sessions
    */
   async getUserDiffSessions(userId: string): Promise<VisualDiffSession[]> {
+
     try {
       return await this.comparisonDAO.getUserDiffSessions(userId);
     } catch (error) {
@@ -275,6 +283,7 @@ export class VisualDiffService {
     page: number;
     total_pages: number;
   }> {
+
     try {
       // Get versions for this graph
       const versions = await this.versionDAO.getVersionHistory(graphId, { page: 1, limit: 1000 });
@@ -355,6 +364,7 @@ export class VisualDiffService {
     expired_sessions_removed: number;
     old_comparisons_removed: number;
   }> {
+
     try {
       const expiredSessions = await this.comparisonDAO.cleanupExpiredSessions();
 
@@ -408,6 +418,7 @@ export class VisualDiffService {
     comparison: GraphComparison,
     includeDetails: boolean
   ): Promise<DetailedComparison> {
+
     if (!includeDetails) {
       return {
         ...comparison,
@@ -460,7 +471,7 @@ export class VisualDiffService {
             node_match_count: nodeMatches.length,
             edge_match_count: edgeMatches.length,
             similarity_score: comparison.similarity_score
-          },
+  }
           confidence_distribution: confidenceDistribution
         }
       };

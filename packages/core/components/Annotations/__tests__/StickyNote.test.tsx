@@ -7,7 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { StickyNote } from '../StickyNote';
 import { StickyNote as StickyNoteType, StickyNoteAction } from '../../../types/CollaborationTypes';
-const mockNote: StickyNoteType = {
+const mockNote: StickyNoteType = {,
   id: 'test-note-1',
   position: { x: 100, y: 100 },
   content: 'Test sticky note content',
@@ -16,10 +16,10 @@ const mockNote: StickyNoteType = {
   author: 'Test Author',
   timestamp: '2024-01-01T12:00:00Z',
   isEditing: false,
-  zIndex: 1,
-};
-const mockOnAction = jest.fn<unknown[], unknown>();
-const mockOnContextMenu = jest.fn<unknown[], unknown>();
+  zIndex: 1;
+  };
+const mockOnAction = jest.fn<unknown, unknown>();
+const mockOnContextMenu = jest.fn<unknown, unknown>();
 describe('StickyNote Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,9 +35,9 @@ describe('StickyNote Component', () => {
       );
       expect(screen.getByText('Test sticky note content')).toBeInTheDocument();
       expect(screen.getByTestId('sticky-note')).toHaveStyle({)
-        backgroundColor: '#fef3c7',
-        border: '2px solid #f59e0b',
-      });
+  backgroundColor: '#fef3c7',
+  border: '2px solid #f59e0b',
+});
     });
     test('applies correct positioning and sizing', () => {
       render();
@@ -49,11 +49,11 @@ describe('StickyNote Component', () => {
       );
       const noteElement = screen.getByTestId('sticky-note');
       expect(noteElement).toHaveStyle({)
-        left: '100px',
-        top: '100px',
-        width: '200px',
-        height: '150px',
-      });
+  left: '100px',
+  top: '100px',
+  width: '200px',
+  height: '150px',
+});
     });
     test('shows selected state when selected prop is true', () => {
       render();
@@ -124,7 +124,7 @@ describe('StickyNote Component', () => {
       // End drag
       fireEvent.mouseUp(document);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'move',
+  type: 'move',
         noteId: mockNote.id,
         position: { x: 150, y: 150 }
       });
@@ -170,7 +170,7 @@ describe('StickyNote Component', () => {
       // End resize
       fireEvent.mouseUp(document);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'resize',
+  type: 'resize',
         noteId: mockNote.id,
         size: { width: 250, height: 200 }
       });
@@ -190,9 +190,9 @@ describe('StickyNote Component', () => {
       const noteElement = screen.getByTestId('sticky-note');
       await user.dblClick(noteElement);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'startEdit',
-        noteId: mockNote.id,
-      });
+  type: 'startEdit',
+  noteId: mockNote.id,
+});
     });
     test('prevents editing when canEdit is false', async () => {
       const user = userEvent.setup();
@@ -226,10 +226,10 @@ describe('StickyNote Component', () => {
       await user.type(textArea, 'Updated content');
       await user.tab(); // Blur the textarea
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'updateContent',
-        noteId: mockNote.id,
-        content: 'Updated content',
-      });
+  type: 'updateContent',
+  noteId: mockNote.id,
+  content: 'Updated content',
+});
     });
     test('saves content on Enter key during editing', async () => {
       const user = userEvent.setup();
@@ -246,10 +246,10 @@ describe('StickyNote Component', () => {
       await user.clear(textArea);
       await user.type(textArea, 'New content{enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'updateContent',
-        noteId: mockNote.id,
-        content: 'New content',
-      });
+  type: 'updateContent',
+  noteId: mockNote.id,
+  content: 'New content',
+});
     });
   });
   describe('Context Menu', () => {
@@ -264,16 +264,16 @@ describe('StickyNote Component', () => {
       const noteElement = screen.getByTestId('sticky-note');
       fireEvent.contextMenu(noteElement, { clientX: 150, clientY: 150 });
       expect(mockOnContextMenu).toHaveBeenCalledWith({)
-        x: 150,
-        y: 150,
-        noteId: mockNote.id,
-        canEdit: true,
-        canDelete: true,
-        onEdit: expect.any(Function),
-        onDelete: expect.any(Function),
-        onChangeColor: expect.any(Function),
-        onDuplicate: expect.any(Function),
-      });
+  x: 150,
+  y: 150,
+  noteId: mockNote.id,
+  canEdit: true,
+  canDelete: true,
+  onEdit: expect.any(Function),
+  onDelete: expect.any(Function),
+  onChangeColor: expect.any(Function),
+  onDuplicate: expect.any(Function),
+});
     });
   });
   describe('Delete Functionality', () => {
@@ -312,9 +312,9 @@ describe('StickyNote Component', () => {
       const deleteButton = screen.getByTestId('delete-button');
       await user.click(deleteButton);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'delete',
-        noteId: mockNote.id,
-      });
+  type: 'delete',
+  noteId: mockNote.id,
+});
     });
   });
   describe('Color Variants', () => {
@@ -335,7 +335,7 @@ describe('StickyNote Component', () => {
           />
         );
         expect(screen.getByTestId('sticky-note')).toHaveStyle({)
-          backgroundColor: expectedBg,
+  backgroundColor: expectedBg,
           border: `2px solid ${expectedBorder}`}
         });
       });
@@ -372,17 +372,17 @@ describe('StickyNote Component', () => {
       // Test Enter key for editing
       await user.keyboard('{Enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'startEdit',
-        noteId: mockNote.id,
-      });
+  type: 'startEdit',
+  noteId: mockNote.id,
+});
     });
   });
   describe('Performance', () => {
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestWrapper = ({ note }: { note: StickyNoteType }) => {
         renderSpy();
-        return ();
+        return;
           <StickyNote
             note={note}
             onAction={mockOnAction}

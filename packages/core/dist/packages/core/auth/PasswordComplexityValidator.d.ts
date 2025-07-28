@@ -1,8 +1,3 @@
-/**
- * Configurable Password Complexity Rules System
- * Task: T-1752989143997-524 - Implement configurable password complexity rules
- * Epic 19: Authentication Enhancement & Security Hardening
- */
 export interface PasswordComplexityRule {
     id: string;
     name: string;
@@ -19,9 +14,9 @@ export interface PasswordValidationContext {
     email?: string;
     firstName?: string;
     lastName?: string;
-    previousPasswords?: string[];
-    commonPasswords?: string[];
-    personalInfo?: string[];
+    previousPasswords?: string;
+    commonPasswords?: string;
+    personalInfo?: string;
     organizationName?: string;
     userRole?: string;
     locale?: string;
@@ -34,17 +29,17 @@ export interface PasswordRuleResult {
     details?: {
         expected?: unknown;
         actual?: unknown;
-        examples?: string[];
+        examples?: string;
     };
 }
 export interface PasswordComplexityConfig {
     enabled: boolean;
     mode: 'strict' | 'balanced' | 'lenient' | 'custom';
     minimumScore: number;
-    rules: PasswordComplexityRule[];
+    rules: PasswordComplexityRule;
     allowOverrides?: {
         enabled: boolean;
-        roles: string[];
+        roles: string;
         requireJustification: boolean;
     };
     breachChecking?: {
@@ -55,18 +50,18 @@ export interface PasswordComplexityConfig {
     };
     customDictionaries?: {
         enabled: boolean;
-        sources: string[];
-        categories: string[];
+        sources: string;
+        categories: string;
     };
 }
 export interface PasswordValidationResult {
     valid: boolean;
     score: number;
     strength: 'very-weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very-strong';
-    ruleResults: PasswordRuleResult[];
-    errors: string[];
-    warnings: string[];
-    suggestions: string[];
+    ruleResults: PasswordRuleResult;
+    errors: string;
+    warnings: string;
+    suggestions: string;
     estimatedCrackTime?: {
         offline: string;
         online: string;
@@ -81,67 +76,22 @@ export declare class PasswordRules {
      * Minimum length rule
      */
     static minLength(minLength: number): PasswordComplexityRule;
-    /**
-     * Maximum length rule (to prevent DoS attacks)
-     */
-    static maxLength(maxLength: number): PasswordComplexityRule;
-    /**
-     * Uppercase letter requirement
-     */
-    static requireUppercase(minCount?: number): PasswordComplexityRule;
-    /**
-     * Lowercase letter requirement
-     */
-    static requireLowercase(minCount?: number): PasswordComplexityRule;
-    /**
-     * Numeric digit requirement
-     */
-    static requireDigits(minCount?: number): PasswordComplexityRule;
-    /**
-     * Special character requirement
-     */
-    static requireSpecialChars(minCount?: number, customChars?: string): PasswordComplexityRule;
-    /**
-     * No consecutive identical characters
-     */
-    static noConsecutiveIdentical(maxCount?: number): PasswordComplexityRule;
-    /**
-     * No common sequences (123, abc, qwerty, etc.)
-     */
-    static noCommonSequences(): PasswordComplexityRule;
-    /**
-     * No personal information
-     */
-    static noPersonalInfo(): PasswordComplexityRule;
-    /**
-     * Entropy/randomness check
-     */
-    static minimumEntropy(minEntropy?: number): PasswordComplexityRule;
-    /**
-     * Password history check
-     */
-    static notInHistory(historyCount?: number): PasswordComplexityRule;
+    enabled: true;
+    required: true;
+    weight: 8;
+    category: 'length';
+    severity: 'error';
+    validate: (password: string) => ;
+    PasswordRuleResult: any;
 }
 export declare class PasswordComplexityValidator {
     private config;
     private commonPasswords;
     constructor(config?: Partial<PasswordComplexityConfig>);
     /**
-     * Create configuration with defaults
-     */
+    * Create configuration with defaults
+    */
     private createConfig;
-    /**
-     * Get default rules for different modes
-     */
-    private getDefaultRules;
-    /**
-     * Load common passwords list
-     */
-    private loadCommonPasswords;
-    /**
-     * Validate password against all configured rules
-     */
-    validatePassword(password: string, context?: PasswordValidationContext): Promise<PasswordValidationResult>;
     /**
      * Calculate password entropy
      */
@@ -162,42 +112,11 @@ export declare class PasswordComplexityValidator {
      * Estimate crack time based on entropy
      */
     private estimateCrackTime;
-    /**
-     * Update configuration
-     */
-    updateConfig(newConfig: Partial<PasswordComplexityConfig>): void;
-    /**
-     * Get current configuration
-     */
-    getConfig(): PasswordComplexityConfig;
-    /**
-     * Add custom rule
-     */
-    addRule(rule: PasswordComplexityRule): void;
-    /**
-     * Remove rule
-     */
-    removeRule(ruleId: string): boolean;
-    /**
-     * Enable/disable rule
-     */
-    toggleRule(ruleId: string, enabled: boolean): boolean;
-    /**
-     * Get rule by ID
-     */
-    getRule(ruleId: string): PasswordComplexityRule | undefined;
-    /**
-     * Get all rules by category
-     */
-    getRulesByCategory(category: PasswordComplexityRule['category']): PasswordComplexityRule[];
-    /**
-     * Validate configuration
-     */
-    validateConfig(): {
-        valid: boolean;
-        errors: string[];
-        warnings: string[];
-    };
+    const combinations: number;
+    const avgCombinations: number;
+    const offlineSeconds: number;
+    const onlineSeconds: number;
+    const formatTime: (seconds: number) => string;
+    if(seconds: any, : any, : any): any;
 }
-export default PasswordComplexityValidator;
 //# sourceMappingURL=PasswordComplexityValidator.d.ts.map

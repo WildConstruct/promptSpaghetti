@@ -1718,15 +1718,18 @@ export type VFXExportOptions = z.infer<typeof VFXExportOptionsSchema>;
 export type ExportResult = z.infer<typeof ExportResultSchema>;
 export type ExportProgress = z.infer<typeof ExportProgressSchema>;
 export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;
+
 export type ExportTemplateWithStats = ExportTemplate & {
     recent_jobs: ExportJob[];
     avg_processing_time: number;
     success_rate: number;
 };
+
 export type ExportJobWithTemplate = ExportJob & {
     template: ExportTemplate | null;
     share: ExportShare | null;
 };
+
 export type ExportScheduleWithStats = ExportSchedule & {
     template: ExportTemplate;
     recent_jobs: ExportJob[];

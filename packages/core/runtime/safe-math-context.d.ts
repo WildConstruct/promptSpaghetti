@@ -50,13 +50,15 @@ export declare function validateMathFunctionCall(functionName: string): boolean;
 /**
  * Security audit for Math function usage
  */
+
 export interface MathFunctionAudit {
     functionName: string;
     allowed: boolean;
     reason: string;
     timestamp: number;
     context?: string;
-}
+
+
 /**
  * Math function security auditor
  */
@@ -68,7 +70,7 @@ export declare class MathFunctionAuditor {
     static clearAuditLog(): void;
     static getBlockedAttempts(): MathFunctionAudit[];
     static getSummary(): Record<string, number>;
-}
+
 /**
  * Enhanced safe Math context with auditing
  */

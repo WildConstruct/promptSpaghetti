@@ -39,7 +39,7 @@ export async function verificationRoutes(
           requested_level: { 
             type: 'string', 
             enum: ['basic', 'intermediate', 'advanced', 'premium'] 
-          },
+  }
           information: {
             type: 'object',
             properties: {
@@ -58,7 +58,7 @@ export async function verificationRoutes(
                   address_line_1: { type: 'string' },
                   address_line_2: { type: 'string' }
                 }
-              },
+  }
               professional_info: {
                 type: 'object',
                 properties: {
@@ -70,7 +70,7 @@ export async function verificationRoutes(
                   website_url: { type: 'string', format: 'uri' },
                   portfolio_url: { type: 'string', format: 'uri' }
                 }
-              },
+  }
               business_info: {
                 type: 'object',
                 properties: {
@@ -90,15 +90,15 @@ export async function verificationRoutes(
                     }
                   }
                 }
-              },
+  }
               verification_purpose: { type: 'string', minLength: 10, maxLength: 1000 },
               additional_notes: { type: 'string', maxLength: 2000 }
-            },
+  }
             required: ['personal_info', 'verification_purpose']
           }
-        },
+  }
         required: ['requested_level', 'information']
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -163,7 +163,7 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           requestId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['requestId']
       }
     }
@@ -207,7 +207,7 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           requestId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['requestId']
       }
     }
@@ -258,13 +258,13 @@ export async function verificationRoutes(
           document_type: { 
             type: 'string', 
             enum: ['identity', 'business_license', 'tax_document', 'bank_statement', 'portfolio', 'credential', 'other']
-          },
+  }
           file_name: { type: 'string', minLength: 1, maxLength: 255 },
           file_size: { type: 'integer', minimum: 1, maximum: 52428800 }, // 50MB max
           file_type: { type: 'string', pattern: '^(image|application|text)/[\\w\\-\\.]+$' }
-        },
+  }
         required: ['verification_request_id', 'document_type', 'file_name', 'file_size', 'file_type']
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -281,7 +281,7 @@ export async function verificationRoutes(
                     file_name: { type: 'string' },
                     status: { type: 'string' }
                   }
-                },
+  }
                 upload_url: { type: 'string', format: 'uri' }
               }
             }
@@ -331,7 +331,7 @@ export async function verificationRoutes(
         type: 'object',
         properties: {
           documentId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['documentId']
       }
     }
@@ -549,19 +549,19 @@ export async function verificationRoutes(
           description: 'Email and basic information verification',
           requirements: ['Personal information', 'Email verification'],
           trust_score_threshold: 25
-        },
+  }
         {
           level: 'intermediate', 
           description: 'Professional credentials and portfolio verification',
           requirements: ['Basic verification', 'Professional information', 'Portfolio/credentials'],
           trust_score_threshold: 50
-        },
+  }
         {
           level: 'advanced',
           description: 'Business entity verification with documentation',
           requirements: ['Intermediate verification', 'Business documentation', 'Tax/registration documents'],
           trust_score_threshold: 75
-        },
+  }
         {
           level: 'premium',
           description: 'Premium verification with enhanced trust status',
@@ -588,7 +588,7 @@ export async function verificationRoutes(
           'GET /verification/health - Health check',
           'GET /verification/docs - This documentation'
         ]
-      },
+  }
       document_types: [
         'identity - Government-issued ID documents',
         'business_license - Business registration/license',

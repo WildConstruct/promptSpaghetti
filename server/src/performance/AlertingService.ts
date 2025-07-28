@@ -12,6 +12,7 @@ import EventEmitter from 'events';
 import nodemailer from 'nodemailer';
 import { WebhookClient } from '@slack/webhook';
 
+}
 export interface AlertConfig {
   id: string;
   name: string;
@@ -25,7 +26,9 @@ export interface AlertConfig {
   enabled: boolean;
   tags: string[];
 }
+}
 
+}
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook' | 'sms';
   config: {
@@ -33,9 +36,11 @@ export interface AlertChannel {
     slackWebhookUrl?: string;
     webhookUrl?: string;
     smsNumbers?: string[];
+}
   };
 }
 
+}
 export interface Alert {
   id: string;
   configId: string;
@@ -52,19 +57,24 @@ export interface Alert {
   escalatedTo?: string;
   context: Record<string, any>;
 }
+}
 
+}
 export interface EscalationPolicy {
   id: string;
   name: string;
   rules: EscalationRule[];
   enabled: boolean;
 }
+}
 
+}
 export interface EscalationRule {
   afterMinutes: number;
   severity: string[];
   channels: AlertChannel[];
   assignTo?: string;
+}
 }
 
 export class AlertingService extends EventEmitter {
@@ -129,6 +139,7 @@ export class AlertingService extends EventEmitter {
    * Check metric against all alert configurations
    */
   async checkMetric(metric: string, value: number | string, context: Record<string, any> = {}): Promise<void> {
+
     if (!this.enabled) return;
 
     for (const [configId, config] of this.alertConfigs) {
@@ -175,6 +186,7 @@ export class AlertingService extends EventEmitter {
    * Trigger an alert
    */
   private async triggerAlert(config: AlertConfig, value: number | string, context: Record<string, any>): Promise<void> {
+
     const alertKey = `${config.id}-${config.metric}`;
     
     // Check cooldown
@@ -225,6 +237,7 @@ export class AlertingService extends EventEmitter {
    * Resolve an alert if conditions are no longer met
    */
   private async maybeResolveAlert(configId: string): Promise<void> {
+
     const activeAlert = Array.from(this.activeAlerts.values()).find(
       alert => alert.configId === configId && !alert.resolved
     );
@@ -246,6 +259,7 @@ export class AlertingService extends EventEmitter {
    * Send alert notifications through configured channels
    */
   private async sendNotifications(config: AlertConfig, value: number | string, context: Record<string, any>): Promise<void> {
+
     const message = this.generateAlertMessage(config, value);
     
     for (const channel of config.channels) {
@@ -275,6 +289,7 @@ export class AlertingService extends EventEmitter {
    * Send email alert
    */
   private async sendEmailAlert(channel: AlertChannel, config: AlertConfig, message: string, context: Record<string, any>): Promise<void> {
+
     if (!this.emailTransporter || !channel.config.recipients) return;
 
     const mailOptions = {
@@ -291,6 +306,7 @@ export class AlertingService extends EventEmitter {
    * Send Slack alert
    */
   private async sendSlackAlert(channel: AlertChannel, config: AlertConfig, message: string, context: Record<string, any>): Promise<void> {
+
     if (!channel.config.slackWebhookUrl) return;
 
     const webhook = new WebhookClient(channel.config.slackWebhookUrl);
@@ -305,17 +321,17 @@ export class AlertingService extends EventEmitter {
           title: 'Severity',
           value: config.severity.toUpperCase(),
           short: true
-        },
+  }
         {
           title: 'Metric',
           value: config.metric,
           short: true
-        },
+  }
         {
           title: 'Threshold',
           value: config.threshold.toString(),
           short: true
-        },
+  }
         {
           title: 'Timestamp',
           value: new Date().toISOString(),
@@ -336,6 +352,7 @@ export class AlertingService extends EventEmitter {
    * Send webhook alert
    */
   private async sendWebhookAlert(channel: AlertChannel, config: AlertConfig, message: string, value: number | string, context: Record<string, any>): Promise<void> {
+
     if (!channel.config.webhookUrl) return;
 
     const payload = {
@@ -356,7 +373,7 @@ export class AlertingService extends EventEmitter {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      },
+  }
       body: JSON.stringify(payload)
     });
 
@@ -369,6 +386,7 @@ export class AlertingService extends EventEmitter {
    * Send SMS alert (placeholder - integrate with SMS service)
    */
   private async sendSMSAlert(channel: AlertChannel, config: AlertConfig, message: string): Promise<void> {
+
     // Integrate with SMS service like Twilio
     console.log(`SMS Alert would be sent to ${channel.config.smsNumbers}: ${message}`);
   }
@@ -377,6 +395,7 @@ export class AlertingService extends EventEmitter {
    * Send resolution notifications
    */
   private async sendResolutionNotifications(config: AlertConfig, alert: Alert): Promise<void> {
+
     const message = `RESOLVED: ${config.name} - The alert condition is no longer met.`;
     
     for (const channel of config.channels) {
@@ -476,6 +495,7 @@ export class AlertingService extends EventEmitter {
    * Process escalations for unresolved alerts
    */
   private async processEscalations(): Promise<void> {
+
     const now = new Date();
     
     for (const alert of this.activeAlerts.values()) {
@@ -508,6 +528,7 @@ export class AlertingService extends EventEmitter {
    * Escalate alert according to escalation rule
    */
   private async escalateAlert(alert: Alert, rule: EscalationRule): Promise<void> {
+
     const config = this.alertConfigs.get(alert.configId);
     if (!config) return;
     
@@ -605,6 +626,7 @@ export class AlertingService extends EventEmitter {
    * Test alert configuration
    */
   async testAlert(configId: string): Promise<boolean> {
+
     const config = this.alertConfigs.get(configId);
     if (!config) return false;
     

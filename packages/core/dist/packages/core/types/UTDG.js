@@ -5,7 +5,6 @@
  * Provides the foundational data structures for historically accurate
  * content generation and Wild Construct ecosystem integration.
  */
-// Predefined Historical Eras - exported below with other interfaces
 export const HISTORICAL_ERAS = {
     MEDIEVAL_EARLY: {
         name: 'Early Medieval',
@@ -34,5 +33,13 @@ export const HISTORICAL_ERAS = {
         region: ['Europe'],
         accuracy: 'high',
         description: 'Renaissance period of cultural and artistic rebirth'
-    }
-};
+    },
+    // Material and Content Variations
+    interface, Variation
+}, { id: string };
+type: 'color' | 'texture' | 'pattern' | 'quality' | 'condition';
+value: string;
+probability: number;
+era_specific ?  : boolean;
+region_specific ?  : string;
+social_class ?  : SocialClass;

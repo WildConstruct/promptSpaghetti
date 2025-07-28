@@ -20,24 +20,29 @@ import { DiagnosticService } from '../admin/DiagnosticService';
 // Global service instance
 let securityAnalyticsService: SecurityAnalyticsIntegrationService | null = null;
 
+}
 interface SecurityAnalyticsQuery {
   timeRange?: 'last_hour' | 'last_day' | 'last_week' | 'last_month';
   includeAlerts?: boolean;
   includeMetrics?: boolean;
   includeDiagnostics?: boolean;
 }
+}
 
+}
 interface SecurityAnalyticsResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
 }
+}
 
 /**
  * Initialize security analytics service
  */
 async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIntegrationService> {
+
   if (securityAnalyticsService) {
     return securityAnalyticsService;
   }
@@ -54,8 +59,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       performance_event_forwarding: true,
       batch_size: 50,
       flush_interval_ms: 10000
-    },
-    
+  }
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -63,8 +67,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 10
-    },
-    
+  }
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 1000,
@@ -72,8 +75,7 @@ async function initializeSecurityAnalyticsService(): Promise<SecurityAnalyticsIn
       cpu_threshold_percent: 80,
       alert_on_degradation: true,
       auto_optimization_enabled: false
-    },
-    
+  }
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.8,
@@ -114,7 +116,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
                 current_metrics: { type: 'object' },
                 monitoring_active: { type: 'boolean' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -131,7 +133,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           integration_status: integrationStatus,
           current_metrics: currentMetrics,
           monitoring_active: integrationStatus.monitoring_active
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -159,7 +161,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           timeRange: { 
             type: 'string', 
             enum: ['last_hour', 'last_day', 'last_week', 'last_month'] 
-          },
+  }
           includeAlerts: { type: 'boolean' },
           includeMetrics: { type: 'boolean' },
           includeDiagnostics: { type: 'boolean' }
@@ -238,7 +240,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           alert_id: alertId,
           acknowledged_by: acknowledgedBy,
           acknowledged_at: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -274,7 +276,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
           system_availability: metrics.system_availability_percent,
           active_threats: metrics.active_threats_detected,
           last_check: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -307,7 +309,7 @@ export default async function securityAnalyticsPerformanceRoutes(fastify: Fastif
         data: {
           optimization_started: true,
           started_at: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {

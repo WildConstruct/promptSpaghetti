@@ -24,6 +24,7 @@ import { SecurityInsightsAutomationEngine } from '../services/SecurityInsightsAu
 // Global data refresh engine instance
 let refreshEngine: SecurityIntelligenceDataRefreshEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -32,6 +33,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface CreateRefreshJobRequest {
   job_configuration: {
     job_name: string;
@@ -39,6 +41,7 @@ interface CreateRefreshJobRequest {
     target_sources?: string[];
     refresh_mode?: 'incremental' | 'full' | 'selective' | 'smart';
     priority_level?: 'low' | 'medium' | 'high' | 'critical';
+}
   };
   quality_requirements?: {
     minimum_confidence?: number;
@@ -59,6 +62,7 @@ interface CreateRefreshJobRequest {
   };
 }
 
+}
 interface SchedulePeriodicRefreshRequest {
   schedule_configuration: {
     schedule_name: string;
@@ -67,6 +71,7 @@ interface SchedulePeriodicRefreshRequest {
     refresh_mode?: 'incremental' | 'full' | 'selective' | 'smart';
     priority_level?: 'low' | 'medium' | 'high' | 'critical';
     enabled?: boolean;
+}
   };
   advanced_scheduling?: {
     time_zone?: string;
@@ -83,12 +88,14 @@ interface SchedulePeriodicRefreshRequest {
   };
 }
 
+}
 interface EmergencyRefreshRequest {
   emergency_configuration: {
     trigger_reason: string;
     urgency_level: 'high' | 'critical' | 'immediate';
     urgent_sources?: string[];
     scope?: 'targeted' | 'comprehensive' | 'full_system';
+}
   };
   response_parameters?: {
     immediate_analysis?: boolean;
@@ -104,6 +111,7 @@ interface EmergencyRefreshRequest {
   };
 }
 
+}
 interface UpdateRefreshConfigRequest {
   configuration_updates: {
     refresh_automation?: Partial<DataRefreshConfig['refresh_automation']>;
@@ -112,6 +120,7 @@ interface UpdateRefreshConfigRequest {
     analysis_automation?: Partial<DataRefreshConfig['analysis_automation']>;
     performance_monitoring?: Partial<DataRefreshConfig['performance_monitoring']>;
     integration_settings?: Partial<DataRefreshConfig['integration_settings']>;
+}
   };
   validation_settings?: {
     validate_before_apply?: boolean;
@@ -121,6 +130,7 @@ interface UpdateRefreshConfigRequest {
   };
 }
 
+}
 interface GetRefreshStatusRequest {
   status_filters?: {
     job_types?: ('scheduled' | 'triggered' | 'manual' | 'emergency')[];
@@ -129,6 +139,7 @@ interface GetRefreshStatusRequest {
     time_range?: {
       start: number;
       end: number;
+}
     };
   };
   include_details?: {
@@ -139,6 +150,7 @@ interface GetRefreshStatusRequest {
   };
 }
 
+}
 interface OptimizeRefreshPerformanceRequest {
   optimization_configuration: {
     optimization_scope: 'source_scheduling' | 'resource_allocation' | 'quality_enhancement' | 'comprehensive';
@@ -150,6 +162,7 @@ interface OptimizeRefreshPerformanceRequest {
       availability_windows?: {
         start_hour: number;
         end_hour: number;
+}
       }[];
     };
   };
@@ -185,7 +198,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               refresh_mode: { type: 'string', enum: ['incremental', 'full', 'selective', 'smart'] },
               priority_level: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
             }
-          },
+  }
           quality_requirements: {
             type: 'object',
             properties: {
@@ -193,7 +206,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               freshness_threshold: { type: 'number', minimum: 0 },
               completeness_check: { type: 'boolean' }
             }
-          },
+  }
           processing_options: {
             type: 'object',
             properties: {
@@ -202,7 +215,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               analysis_trigger: { type: 'boolean' },
               notification_on_completion: { type: 'boolean' }
             }
-          },
+  }
           execution_settings: {
             type: 'object',
             properties: {
@@ -213,7 +226,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -233,7 +246,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -303,7 +316,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
         properties: {
           jobId: { type: 'string', minLength: 1 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -324,7 +337,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -386,7 +399,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               priority_level: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
               enabled: { type: 'boolean' }
             }
-          },
+  }
           advanced_scheduling: {
             type: 'object',
             properties: {
@@ -396,7 +409,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               load_balancing: { type: 'boolean' },
               adaptive_intervals: { type: 'boolean' }
             }
-          },
+  }
           quality_controls: {
             type: 'object',
             properties: {
@@ -407,7 +420,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -426,7 +439,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -490,7 +503,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               urgent_sources: { type: 'array', items: { type: 'string' } },
               scope: { type: 'string', enum: ['targeted', 'comprehensive', 'full_system'] }
             }
-          },
+  }
           response_parameters: {
             type: 'object',
             properties: {
@@ -499,7 +512,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               escalation_level: { type: 'string' },
               incident_correlation: { type: 'boolean' }
             }
-          },
+  }
           automation_overrides: {
             type: 'object',
             properties: {
@@ -510,7 +523,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -529,7 +542,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -603,7 +616,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                 }
               }
             }
-          },
+  }
           include_details: {
             type: 'object',
             properties: {
@@ -614,7 +627,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -625,7 +638,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               properties: {
                 refresh_analytics: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -693,7 +706,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
               performance_monitoring: { type: 'object' },
               integration_settings: { type: 'object' }
             }
-          },
+  }
           validation_settings: {
             type: 'object',
             properties: {
@@ -704,7 +717,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -723,7 +736,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -744,7 +757,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
           total_changes: Object.keys(configuration_updates).length,
           validation_passed: validation_settings?.validate_before_apply !== false,
           rollback_available: validation_settings?.rollback_on_error !== false
-        },
+  }
         validation_results: {
           configuration_valid: true,
           compatibility_check: 'passed',
@@ -804,7 +817,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                 }
               }
             }
-          },
+  }
           optimization_parameters: {
             type: 'object',
             properties: {
@@ -815,7 +828,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -834,7 +847,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -855,7 +868,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
           quality_score_improvement: `${Math.floor(Math.random() * 15) + 5}%`,
           resource_efficiency_gain: `${Math.floor(Math.random() * 20) + 8}%`,
           success_rate_improvement: `${Math.floor(Math.random() * 12) + 3}%`
-        },
+  }
         recommended_changes: [
           'Adjust source polling intervals based on data velocity patterns',
           'Implement intelligent batching for high-volume sources',
@@ -884,6 +897,7 @@ export default async function securityIntelligenceDataRefreshRoutes(fastify: Fas
 
 // Initialize the refresh engine with dependencies
 async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> {
+
   if (refreshEngine) {
     return; // Already initialized
   }
@@ -900,7 +914,7 @@ async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> 
         quality_gated_refresh: true,
         error_recovery: true,
         performance_optimization: true
-      },
+  }
       refresh_scheduling: {
         global_interval: 300000, // 5 minutes
         source_specific_intervals: new Map(),
@@ -910,9 +924,9 @@ async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> 
           start_hour: 2,
           end_hour: 6,
           timezone: 'UTC'
-        },
+  }
         emergency_refresh_triggers: ['critical_threat_detected', 'system_compromise', 'data_breach']
-      },
+  }
       data_collection: {
         concurrent_sources: 10,
         timeout_per_source: 30000,
@@ -922,9 +936,9 @@ async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> 
           minimum_confidence: 0.7,
           freshness_requirement: 3600000, // 1 hour
           completeness_threshold: 0.8
-        },
+  }
         deduplication_enabled: true
-      },
+  }
       analysis_automation: {
         trigger_on_refresh: true,
         analysis_types: ['threat_detection', 'pattern_analysis', 'risk_assessment', 'correlation'],
@@ -932,7 +946,7 @@ async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> 
         real_time_analysis_criteria: ['critical_severity', 'high_confidence', 'immediate_threat'],
         quality_impact_analysis: true,
         trend_change_detection: true
-      },
+  }
       performance_monitoring: {
         track_refresh_performance: true,
         source_health_monitoring: true,
@@ -940,7 +954,7 @@ async function initializeRefreshEngine(fastify: FastifyInstance): Promise<void> 
         alert_on_degradation: true,
         performance_history_retention: 30, // days
         optimization_recommendations: true
-      },
+  }
       integration_settings: {
         workflow_orchestrator_integration: true,
         siem_refresh_synchronization: true,

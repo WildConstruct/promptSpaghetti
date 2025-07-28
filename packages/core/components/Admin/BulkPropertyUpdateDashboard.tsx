@@ -64,7 +64,6 @@ interface BulkPropertyUpdateDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-}
 const TARGET_TYPE_CONFIG = {
   user: { color: 'text-blue-600 bg-blue-100', icon: Users },
   content: { color: 'text-green-600 bg-green-100', icon: FileText },
@@ -110,8 +109,8 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState('operations');
-  const [operations, setOperations] = useState<BulkUpdateOperation[]>([]);
-  const [templates, setTemplates] = useState<BulkUpdateTemplate[]>([]);
+  const [operations, setOperations] = useState<BulkUpdateOperation>([]);
+  const [templates, setTemplates] = useState<BulkUpdateTemplate>([]);
   const [stats, setStats] = useState<BulkUpdateStats | null>(null);
   const [selectedOperation, setSelectedOperation] = useState<BulkUpdateOperation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -123,13 +122,13 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   // Create Operation Form
   const [isCreating, setIsCreating] = useState(false);
   const [newOperation, setNewOperation] = useState({)
-    name: '',
-    targetType: 'user' as TargetType,
-    targets: [] as BulkUpdateTarget[],
-    updates: [] as PropertyUpdate[],
-    dryRun: true,
-    backupBeforeUpdate: true,
-  });
+  name: '',
+  targetType: 'user' as TargetType,
+  targets: [] as BulkUpdateTarget,
+  updates: [] as PropertyUpdate,
+  dryRun: true,
+  backupBeforeUpdate: true,
+});
   // Load data
   useEffect(() => {
     loadData();
@@ -137,14 +136,14 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
     return () => clearInterval(interval);
   }, []);
   const loadData = async () => {
-    try {
-      setIsLoading(true);
-      // Build filter
-      const operationFilter: BulkUpdateFilter = {
-        searchQuery: searchQuery || undefined,
-        statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
-        targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined,
-      };
+  try {
+  setIsLoading(true);
+  // Build filter
+  const operationFilter: BulkUpdateFilter = {,
+  searchQuery: searchQuery || undefined,
+  statuses: statusFilter !== 'all' ? [statusFilter] : undefined,
+  targetTypes: targetTypeFilter !== 'all' ? [targetTypeFilter] : undefined,
+};
       // Load operations
       const operationsList = bulkPropertyUpdateService.getOperations(operationFilter);
       setOperations(operationsList);
@@ -155,71 +154,62 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       const statsData = bulkPropertyUpdateService.getBulkUpdateStats();
       setStats(statsData);
     } catch (error) {
-      console.error('Failed to load bulk update data:', error);
-    } finally {
+  console.error('Failed to load bulk update data:', error);
+} finally {
       setIsLoading(false);
-    }
   };
   const handleExecuteOperation = async (operationId: string) => {
     try {
       await bulkPropertyUpdateService.executeOperation(operationId);
       loadData();
     } catch (error) {
-      console.error('Failed to execute operation:', error);
-    }
-  };
+  console.error('Failed to execute operation:', error);
+};
   const handleRollbackOperation = async (operationId: string) => {
     try {
       await bulkPropertyUpdateService.rollbackOperation(operationId);
       loadData();
     } catch (error) {
-      console.error('Failed to rollback operation:', error);
-    }
-  };
+  console.error('Failed to rollback operation:', error);
+};
   const handleCreateOperation = async () => {
-    try {
-      const _____operation = await bulkPropertyUpdateService.createOperation(;);
-        newOperation.name,
-        newOperation.targets,
-        newOperation.updates,
-        {
-          execution: {,
-            dryRun: newOperation.dryRun,
-            backupBeforeUpdate: newOperation.backupBeforeUpdate,
-          }
-        },
+  try {
+  const _____operation = await bulkPropertyUpdateService.createOperation(;);
+  newOperation.name,
+  newOperation.targets,
+  newOperation.updates,
+  {
+  execution: {,
+  dryRun: newOperation.dryRun,
+  backupBeforeUpdate: newOperation.backupBeforeUpdate,
+}
         userId || 'admin'
       );
       setIsCreating(false);
       setNewOperation({)
-        name: '',
-        targetType: 'user',
-        targets: [],
-        updates: [],
-        dryRun: true,
-        backupBeforeUpdate: true,
-      });
+  name: '',
+  targetType: 'user',
+  targets: [],
+  updates: [],
+  dryRun: true,
+  backupBeforeUpdate: true,
+});
       loadData();
     } catch (error) {
-      console.error('Failed to create operation:', error);
-    }
-  };
+  console.error('Failed to create operation:', error);
+};
   const filteredOperations = useMemo(() => {
     return operations.filter(op => {)
-      if (searchQuery) {
+  if (searchQuery) {
         const query = searchQuery.toLowerCase();
         if (!op.name.toLowerCase().includes(query) &&
             !op.description?.toLowerCase().includes(query)) {
           return false;
-        }
-      }
       if (statusFilter !== 'all' && op.status !== statusFilter) {
         return false;
-      }
       if (targetTypeFilter !== 'all' && )
           !op.targets.some(target => target.type === targetTypeFilter)) {
         return false;
-      }
       return true;
     });
   }, [operations, searchQuery, statusFilter, targetTypeFilter]);
@@ -333,7 +323,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
   );
   const renderAnalytics = () => {
     if (!stats) return <div>Loading analytics...</div>;
-    return ();
+    return;
       <div className="analytics-section">
         <div className="analytics-grid">
           <Card>
@@ -401,7 +391,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
                 {Object.entries(stats.successRateByType).map(([type, typeStats]) => {
                   const config = TARGET_TYPE_CONFIG[type as TargetType];
                   const Icon = config.icon;
-                  return ();
+                  return;
                     <div key={type} className="chart-item">
                       <div className="chart-label">
                         <Icon className={`w-4 h-4 ${config.color.split(' ')[0]}`} />}
@@ -561,11 +551,11 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
               ))}
               <Button
                 onClick={() => {
-                  const updates = [...newOperation.updates, {
-                    property: '',
-                    operation: 'set' as UpdateOperationType,
-                    value: '',
-                  }];
+  const updates = [...newOperation.updates, {
+  property: '',
+  operation: 'set' as UpdateOperationType,
+  value: '',
+}];
                   setNewOperation(prev => ({ ...prev, updates }));
                 }}
                 variant="outline"
@@ -592,7 +582,7 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       </div>
     </div>
   );
-  return ();
+  return;
     <div className={`bulk-update-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -639,346 +629,277 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
       {isCreating && renderCreateOperation()}
       <style>{`
         .bulk-update-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .operations-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 1rem;,
+  background: #f9fafb;
           border-radius: 8px;
           margin-bottom: 1.5rem;
-        }
         .search-filters {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
+          align-items: center;,
+  gap: 0.75rem;
         .search-bar {
-          position: relative;
-          display: flex;
+          position: relative;,
+  display: flex;
           align-items: center;
-        }
         .search-bar .lucide {
-          position: absolute;
-          left: 0.75rem;
+          position: absolute;,
+  left: 0.75rem;
           z-index: 1;
-        }
         .search-input {
           padding-left: 2.25rem;
           min-width: 300px;
-        }
         .action-buttons {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .operations-list {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .templates-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .templates-header h3 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 1rem;
-        }
         .analytics-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .analytics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
-        }
         .metric-item {
           display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-        }
+          align-items: flex-start;,
+  gap: 0.75rem;
         .metric-info {
           flex: 1;
-        }
         .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-bottom: 0.25rem;
-        }
         .metric-value {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .metric-change {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .metric-change.positive {
           color: #059669;
-        }
         .charts-section {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .success-rate-chart {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .chart-item {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .chart-label {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           min-width: 120px;
           font-size: 0.875rem;
           font-weight: 500;
           text-transform: capitalize;
-        }
         .chart-bar {
-          flex: 1;
-          height: 8px;
+          flex: 1;,
+  height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .chart-fill {
-          height: 100%;
-          transition: width 0.3s ease;
-        }
+          height: 100%;,
+  transition: width 0.3s ease;
         .chart-value {
           min-width: 80px;
           text-align: right;
           font-weight: 600;
           font-size: 0.875rem;
-        }
         .chart-details {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: 0.75rem;,
+  color: #6b7280;
           margin-left: 0.25rem;
-        }
         .errors-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .error-item {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          padding: 0.75rem;
+          align-items: flex-start;,
+  padding: 0.75rem;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .error-type {
-          font-weight: 600;
-          color: #dc2626;
+          font-weight: 600;,
+  color: #dc2626;
           margin-bottom: 0.25rem;
-        }
         .error-message {
-          font-size: 0.875rem;
-          color: #374151;
-        }
+          font-size: 0.875rem;,
+  color: #374151;
         .error-stats {
           text-align: right;
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .error-count {
-          font-weight: 500;
-          color: #1f2937;
-        }
+          font-weight: 500;,
+  color: #1f2937;
         .create-operation-modal {
-          position: fixed;
-          inset: 0;
+          position: fixed;,
+  inset: 0;
           z-index: 1000;
-        }
         .modal-overlay {
-          position: absolute;
-          inset: 0;
+          position: absolute;,
+  inset: 0;
           background: rgba(0, 0, 0, 0.5);
-        }
         .modal-content {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+          position: absolute;,
+  top: 50%;
+          left: 50%;,
+  transform: translate(-50%, -50%);
           background: white;
-          border-radius: 8px;
-          width: 90vw;
+          border-radius: 8px;,
+  width: 90vw;
           max-width: 800px;
-          max-height: 80vh;
-          overflow: auto;
-        }
+          max-height: 80vh;,
+  overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 1.5rem;
+          align-items: center;,
+  padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
-        }
         .modal-header h2 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .modal-body {
           padding: 1.5rem;
-        }
         .form-section {
           margin-bottom: 1.5rem;
-        }
         .form-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 1rem;
-        }
         .form-group {
           margin-bottom: 1rem;
-        }
         .form-group label {
           display: block;
           font-size: 0.875rem;
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           margin-bottom: 0.5rem;
-        }
         .form-checkboxes {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .checkbox-item {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-size: 0.875rem;
-        }
         .updates-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .update-item {
-          padding: 0.75rem;
-          border: 1px solid #e5e7eb;
+          padding: 0.75rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .update-fields {
           display: grid;
-          grid-template-columns: 1fr 1fr 1fr auto;
-          gap: 0.5rem;
+          grid-template-columns: 1fr 1fr 1fr auto;,
+  gap: 0.5rem;
           align-items: center;
-        }
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
+          justify-content: flex-end;,
+  gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
-        }
         .empty-state {
-          text-align: center;
-          padding: 4rem 2rem;
+          text-align: center;,
+  padding: 4rem 2rem;
           color: #6b7280;
-        }
         .empty-state h3 {
           color: #1f2937;
-        }
         @media (max-width: 768px) {
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .operations-controls {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .search-filters {
             flex-direction: column;
             align-items: stretch;
-          }
           .search-input {
             min-width: auto;
-          }
           .charts-section {
             grid-template-columns: 1fr;
-          }
           .analytics-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
           .templates-grid {
             grid-template-columns: 1fr;
-          }
           .update-fields {
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-          }
+            grid-template-columns: 1fr;,
+  gap: 0.5rem;
           .chart-item {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.5rem;
-          }
+            align-items: stretch;,
+  gap: 0.5rem;
           .chart-label {
             min-width: auto;
-          }
           .chart-value {
             min-width: auto;
             text-align: left;
-          }
-        }
         @media (max-width: 480px) {
           .analytics-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );
@@ -986,18 +907,17 @@ export const BulkPropertyUpdateDashboard: React.FC<BulkPropertyUpdateDashboardPr
 
 // Operation Card Component (simplified for space)
 interface OperationCardProps {
-  operation: BulkUpdateOperation;
-  onSelect: (operation: BulkUpdateOperation) => void;
-  onExecute: (operationId: string) => void;
+  operation: BulkUpdateOperation;,
+  onSelect: (operation: BulkUpdateOperation) => void;,
+  onExecute: (operationId: string) => void;,
   onRollback: (operationId: string) => void;
   userRole?: string;
-}
-const OperationCard: React.FC<OperationCardProps> = ({ )
-  operation, 
-  onSelect, 
-  onExecute, 
-  onRollback, 
-  userRole 
+  const OperationCard: React.FC<OperationCardProps> = ({ ),
+  operation,
+  onSelect,
+  onExecute,
+  onRollback,
+  userRole
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
@@ -1006,7 +926,7 @@ const OperationCard: React.FC<OperationCardProps> = ({ )
     : 0;
   const canExecute = userRole === 'admin' && operation.status === 'validated';
   const canRollback = userRole === 'admin' && operation.status === 'completed' && operation.rollback.enabled;
-  return ();
+  return;
     <Card className="operation-card">
       <CardContent className="p-4">
         <div className="operation-header">
@@ -1056,45 +976,36 @@ const OperationCard: React.FC<OperationCardProps> = ({ )
       <style>{`
         .operation-card {
           transition: box-shadow 0.2s ease;
-        }
         .operation-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .operation-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .operation-description {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .operation-progress {
           margin-bottom: 1rem;
-        }
         .progress-bar {
-          height: 4px;
-          background: #e5e7eb;
-          border-radius: 2px;
-          overflow: hidden;
+          height: 4px;,
+  background: #e5e7eb;
+          border-radius: 2px;,
+  overflow: hidden;
           margin-bottom: 0.5rem;
-        }
         .progress-fill {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s ease;
-        }
         .progress-text {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .operation-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
       `}</style>
     </Card>
   );
@@ -1102,15 +1013,14 @@ const OperationCard: React.FC<OperationCardProps> = ({ )
 
 // Template Card Component (simplified)
 interface TemplateCardProps {
-  template: BulkUpdateTemplate;
-  onUse: (templateId: string) => void;
-  onEdit: (templateId: string) => void;
+  template: BulkUpdateTemplate;,
+  onUse: (templateId: string) => void;,
+  onEdit: (templateId: string) => void;,
   onDelete: (templateId: string) => void;
-}
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, onDelete }) => {
   const typeConfig = TARGET_TYPE_CONFIG[template.targetType];
   const TypeIcon = typeConfig.icon;
-  return ();
+  return;
     <Card className="template-card">
       <CardContent className="p-4">
         <div className="template-header">
@@ -1152,39 +1062,31 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 1rem;
-        }
         .template-name {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .template-description {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .template-stats {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .stat-item {
           font-size: 0.875rem;
-        }
         .stat-label {
           color: #6b7280;
-        }
         .stat-value {
           color: #1f2937;
           font-weight: 500;
           margin-left: 0.25rem;
-        }
         .template-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
       `}</style>
     </Card>
   );
@@ -1192,13 +1094,12 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onUse, onEdit, on
 
 // Operation Detail Modal (simplified)
 interface OperationDetailModalProps {
-  operation: BulkUpdateOperation;
+  operation: BulkUpdateOperation;,
   onClose: () => void;
-  onExecute: (operationId: string) => void;
+  onExecute: (operationId: string) => void;,
   onRollback: (operationId: string) => void;
   userRole?: string;
-}
-const OperationDetailModal: React.FC<OperationDetailModalProps> = ({)
+  const OperationDetailModal: React.FC<OperationDetailModalProps> = ({,)
   operation,
   onClose,
   onExecute,
@@ -1207,7 +1108,7 @@ const OperationDetailModal: React.FC<OperationDetailModalProps> = ({)
 }) => {
   const statusConfig = STATUS_CONFIG[operation.status];
   const StatusIcon = statusConfig.icon;
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
@@ -1294,116 +1195,93 @@ const OperationDetailModal: React.FC<OperationDetailModalProps> = ({)
       </div>
       <style>{`
         .modal-overlay {
-          position: fixed;
-          inset: 0;
+          position: fixed;,
+  inset: 0;
           background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 1000;
-        }
         .modal-content {
           background: white;
-          border-radius: 8px;
-          width: 90vw;
+          border-radius: 8px;,
+  width: 90vw;
           max-width: 700px;
-          max-height: 80vh;
-          overflow: auto;
-        }
+          max-height: 80vh;,
+  overflow: auto;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          padding: 1.5rem;
+          align-items: flex-start;,
+  padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
-        }
         .modal-title {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
+          align-items: center;,
+  gap: 1rem;
         .modal-title h2 {
           font-size: 1.25rem;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .modal-body {
           padding: 1.5rem;
-        }
         .operation-details {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .detail-section h3 {
           font-size: 1rem;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 1rem;
           border-bottom: 1px solid #e5e7eb;
           padding-bottom: 0.5rem;
-        }
         .detail-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .detail-item {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex-direction: column;,
+  gap: 0.25rem;
         .detail-item label {
           color: #6b7280;
           font-weight: 500;
           font-size: 0.875rem;
-        }
         .detail-item span {
           color: #1f2937;
           font-size: 0.875rem;
-        }
         .progress-stats {
-          display: flex;
-          gap: 1rem;
-        }
+          display: flex;,
+  gap: 1rem;
         .progress-stat {
           display: flex;
-          align-items: center;
-          gap: 0.25rem;
+          align-items: center;,
+  gap: 0.25rem;
           font-size: 0.875rem;
-        }
         .stat-label {
           color: #6b7280;
-        }
         .stat-value {
           font-weight: 600;
-        }
         .stat-value.success {
           color: #059669;
-        }
         .stat-value.error {
           color: #dc2626;
-        }
         .modal-footer {
           display: flex;
-          justify-content: flex-end;
-          gap: 0.5rem;
+          justify-content: flex-end;,
+  gap: 0.5rem;
           padding: 1.5rem;
           border-top: 1px solid #e5e7eb;
-        }
         @media (max-width: 768px) {
           .detail-grid {
             grid-template-columns: 1fr;
-          }
           .modal-content {
             width: 95vw;
             max-height: 90vh;
-          }
           .progress-stats {
             flex-direction: column;
             align-items: stretch;
-          }
-        }
       `}</style>
     </div>
   );

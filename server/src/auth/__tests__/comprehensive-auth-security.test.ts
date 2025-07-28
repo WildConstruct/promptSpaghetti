@@ -805,7 +805,7 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             userAgentMatch: false,
             notExpired: true,
             notConcurrentlyUsed: true
-          },
+  }
           suspiciousActivity: true
         } as unknown as unknown);
 
@@ -854,8 +854,8 @@ describe('Epic 19.5 - Comprehensive Authentication & Authorization Security Test
             securityChecks: expect.objectContaining({
               ipMatch: false,
               userAgentMatch: false
-            })
-          })
+  }
+  }
         });
       });
     });

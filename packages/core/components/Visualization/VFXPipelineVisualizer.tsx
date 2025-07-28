@@ -36,91 +36,83 @@ import {
 } from 'lucide-react';
 
 // VFX Pipeline Data Types
+
 export interface VFXScene {
-  id: string;
+  id: string;,
   name: string;
-  historicalPeriod: string;
+  historicalPeriod: string;,
   region: string;
-  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
+  timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';,
   weather: string;
-  characters: VFXCharacter[];
-  assets: VFXAsset[];
-  composition: SceneComposition;
+  characters: VFXCharacter;,
+  assets: VFXAsset;
+  composition: SceneComposition;,
   accuracy: HistoricalAccuracyMetrics;
 }
-
 export interface VFXCharacter {
-  id: string;
+  id: string;,
   name: string;
-  type: 'crowd' | 'hero' | 'background';
+  type: 'crowd' | 'hero' | 'background';,
   period: string;
-  culture: string;
+  culture: string;,
   accuracy: number;
-  clothing: string[];
+  clothing: string;,
   position: { x: number; y: number; z: number };
 }
-
 export interface VFXAsset {
-  id: string;
+  id: string;,
   name: string;
-  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';
+  type: 'building' | 'prop' | 'terrain' | 'vegetation' | 'texture';,
   period: string;
-  region: string;
+  region: string;,
   accuracy: number;
-  materials: MaterialProperty[];
+  materials: MaterialProperty;,
   lod: number;
 }
-
 export interface MaterialProperty {
-  name: string;
+  name: string;,
   type: 'diffuse' | 'roughness' | 'metallic' | 'normal' | 'displacement';
-  value: number;
+  value: number;,
   historicallyAccurate: boolean;
 }
-
 export interface SceneComposition {
   cameraPosition: { x: number; y: number; z: number };
-  focalLength: number;
+  focalLength: number;,
   depth: number;
-  layers: SceneLayer[];
+  layers: SceneLayer;
 }
-
 export interface SceneLayer {
-  id: string;
+  id: string;,
   name: string;
-  type: 'foreground' | 'midground' | 'background';
+  type: 'foreground' | 'midground' | 'background';,
   opacity: number;
-  elements: string[];
+  elements: string;
 }
-
 export interface HistoricalAccuracyMetrics {
-  overall: number;
+  overall: number;,
   architecture: number;
-  clothing: number;
+  clothing: number;,
   technology: number;
-  culture: number;
+  culture: number;,
   timeline: number;
-  expertValidated: boolean;
-  violations: AccuracyViolation[];
+  expertValidated: boolean;,
+  violations: AccuracyViolation;
 }
-
 export interface AccuracyViolation {
-  type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
+  type: 'anachronism' | 'cultural' | 'architectural' | 'technological';,
   severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;
+  description: string;,
   element: string;
   suggestion: string;
 }
-
 export interface VFXPipelineVisualizerProps {
   scene?: VFXScene;
-  scenes?: VFXScene[];
+  scenes?: VFXScene;
   realTimeUpdate?: boolean;
   showControls?: boolean;
   onSceneUpdate?: (scene: VFXScene) => void;
   className?: string;
 }
-
 export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   scene,
   scenes = [],
@@ -137,18 +129,18 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   const [isPlaying, setIsPlaying] = useState(false);
   // Enhanced 3D Scene Visualization
   const SceneVisualization3D: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-    const canvasWidth = 600;
-    const canvasHeight = 400;
-    // Calculate 3D positions for isometric projection
-    const project3DToIsometric = useCallback((x: number, y: number, z: number) => {
-      const isoX = (x - z) * Math.cos(Math.PI / 6);
-      const isoY = (x + z) * Math.sin(Math.PI / 6) - y;
-      return {
-        x: canvasWidth / 2 + isoX * 2,
-        y: canvasHeight / 2 + isoY * 2,
-      };
+  const canvasWidth = 600;
+  const canvasHeight = 400;
+  // Calculate 3D positions for isometric projection
+  const project3DToIsometric = useCallback((x: number, y: number, z: number) => {,
+  const isoX = (x - z) * Math.cos(Math.PI / 6);
+  const isoY = (x + z) * Math.sin(Math.PI / 6) - y;
+  return {
+  x: canvasWidth / 2 + isoX * 2,
+  y: canvasHeight / 2 + isoY * 2,
+};
     }, []);
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -201,7 +193,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                   );
                   const color = asset.accuracy > 90 ? '#10b981' :;
                     asset.accuracy > 70 ? '#f59e0b' : '#ef4444';
-                  return ();
+                  return;
                     <g key={asset.id} transform={`translate(${pos.x}, ${pos.y})`}>}
                       {/* Asset representation */}
                       {asset.type === 'building' && ()
@@ -251,7 +243,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                   );
                   const color = character.type === 'hero' ? '#3b82f6' :;
                     character.type === 'crowd' ? '#8b5cf6' : '#6b7280';
-                  return ();
+                  return;
                     <g key={character.id} transform={`translate(${pos.x}, ${pos.y})`}>}
                       {/* Character silhouette */}
                       <ellipse rx="6" ry="3" cy="20" fill={color} fillOpacity="0.3" />
@@ -332,15 +324,14 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       return 'text-red-600 bg-red-100';
     };
     const getSeverityColor = (severity: string) => {
-      switch (severity) {
-      case 'critical': return 'bg-red-100 text-red-800';
-      case 'high': return 'bg-orange-100 text-orange-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
-      }
-    };
-    return ();
+  switch (severity) {
+  case 'critical': return 'bg-red-100 text-red-800';
+  case 'high': return 'bg-orange-100 text-orange-800';
+  case 'medium': return 'bg-yellow-100 text-yellow-800';
+  case 'low': return 'bg-blue-100 text-blue-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
+    return;
       <div className="space-y-6">
         {/* Overall Accuracy Score */}
         <Card>
@@ -440,8 +431,8 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Material Properties Visualization
-  const MaterialPropertiesVisualizer: React.FC<{ assets: VFXAsset[] }> = ({ assets }) => {
-    return ();
+  const MaterialPropertiesVisualizer: React.FC<{ assets: VFXAsset }> = ({ assets }) => {
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -486,15 +477,15 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
   };
   // Real-time Performance Metrics Visualization
   const PerformanceMetricsVisualizer: React.FC<{ scene: VFXScene }> = ({ scene }) => {
-    const [metrics, _____setMetrics] = useState({)
-      renderTime: Math.random() * 120 + 80, // 80-200ms
-      memoryUsage: Math.random() * 40 + 20, // 20-60%
-      polyCount: scene.assets.length * 125000,
-      textureMemory: scene.assets.length * 25, // MB
-      frameRate: 24 + Math.random() * 16, // 24-40 FPS
-      loadingProgress: 100,
-    });
-    return ();
+  const [metrics, _____setMetrics] = useState({)
+  renderTime: Math.random() * 120 + 80, // 80-200ms,
+  memoryUsage: Math.random() * 40 + 20, // 20-60%,
+  polyCount: scene.assets.length * 125000,
+  textureMemory: scene.assets.length * 25, // MB,
+  frameRate: 24 + Math.random() * 16, // 24-40 FPS,
+  loadingProgress: 100,
+});
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -528,9 +519,9 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               <div className="w-full bg-orange-200 rounded-full h-2 mt-2">
                 <div 
                   className={`h-2 rounded-full transition-all duration-500 ${
-                    metrics.memoryUsage > 80 ? 'bg-red-600' : 
-                      metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600'
-                  }`}
+  metrics.memoryUsage > 80 ? 'bg-red-600' :,
+  metrics.memoryUsage > 60 ? 'bg-orange-600' : 'bg-green-600',
+}`}
                   style={{ width: `${metrics.memoryUsage}%` }}
                 />
               </div>
@@ -556,9 +547,9 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               </div>
               <div className="text-lg font-bold text-green-900">{metrics.frameRate.toFixed(1)} FPS</div>
               <div className={`text-xs mt-1 ${
-                metrics.frameRate >= 30 ? 'text-green-700' :
-                  metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700'
-              }`}>
+  metrics.frameRate >= 30 ? 'text-green-700' :,
+  metrics.frameRate >= 24 ? 'text-yellow-700' : 'text-red-700',
+}`}>
                 {metrics.frameRate >= 30 ? 'Excellent' : 
                   metrics.frameRate >= 24 ? 'Good' : 'Poor'}
               </div>
@@ -591,7 +582,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Character Crowd Visualization
-  const CrowdVisualization: React.FC<{ characters: VFXCharacter[] }> = ({ characters }) => {
+  const CrowdVisualization: React.FC<{ characters: VFXCharacter }> = ({ characters }) => {
     const crowdStats = useMemo(() => {
       const typeDistribution = characters.reduce((acc, char) => {
         acc[char.type] = (acc[char.type] || 0) + 1;
@@ -599,14 +590,14 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       }, {} as Record<string, number>);
       const avgAccuracy = characters.reduce((sum, char) => sum + char.accuracy, 0) / characters.length;
       return {
-        total: characters.length,
-        types: typeDistribution,
-        avgAccuracy,
-        cultures: [...new Set(characters.map(c => c.culture))],
-        periods: [...new Set(characters.map(c => c.period))],
-      };
+  total: characters.length,
+  types: typeDistribution,
+  avgAccuracy,
+  cultures: [...new Set(characters.map(c => c.culture))],
+  periods: [...new Set(characters.map(c => c.period))],
+};
     }, [characters]);
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -622,9 +613,9 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
               <div className="space-y-2">
                 {Object.entries(crowdStats.types).map(([type, count]) => {
                   const percentage = (count / crowdStats.total) * 100;
-                  const color = type === 'hero' ? 'bg-blue-500' : ;
+                  const color = type === 'hero' ? 'bg-blue-500' :;
                     type === 'crowd' ? 'bg-purple-500' : 'bg-gray-500';
-                  return ();
+                  return;
                     <div key={type} className="flex items-center gap-3">
                       <div className="w-16 text-sm text-gray-600 capitalize">{type}</div>
                       <div className="flex-1 bg-gray-200 rounded-full h-2">
@@ -688,16 +679,16 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Timeline Visualization for VFX workflow
-  const TimelineVisualization: React.FC<{ scenes: VFXScene[] }> = ({ scenes }) => {
-    const timelineItems = scenes.map((scene, index) => ({)
-      id: scene.id,
-      name: scene.name,
-      period: scene.historicalPeriod,
-      accuracy: scene.accuracy.overall,
-      status: scene.accuracy.expertValidated ? 'completed' : 'in-progress',
-      position: index,
-    }));
-    return ();
+  const TimelineVisualization: React.FC<{ scenes: VFXScene }> = ({ scenes }) => {
+  const timelineItems = scenes.map((scene, index) => ({)
+  id: scene.id,
+  name: scene.name,
+  period: scene.historicalPeriod,
+  accuracy: scene.accuracy.overall,
+  status: scene.accuracy.expertValidated ? 'completed' : 'in-progress',
+  position: index,
+}));
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -748,16 +739,16 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                 <div 
                   key={item.id} 
                   className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all ${
-                    selectedScene?.id === item.id ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 hover:bg-gray-100'
-                  }`}
+  selectedScene?.id === item.id ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 hover:bg-gray-100',
+}`}
                   onClick={() => {
                     const scene = scenes.find(s => s.id === item.id);
                     if (scene) setSelectedScene(scene);
                   }}
                 >
                   <div className={`w-4 h-4 rounded-full flex-shrink-0 ${
-                    item.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500'
-                  }`} />
+  item.status === 'completed' ? 'bg-green-500' : 'bg-yellow-500',
+}`} />
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{item.name}</h4>
                     <p className="text-sm text-gray-600">{item.period}</p>
@@ -777,26 +768,26 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   // Asset Relationship Graph Visualization
-  const AssetRelationshipGraph: React.FC<{ assets: VFXAsset[] }> = ({ assets }) => {
+  const AssetRelationshipGraph: React.FC<{ assets: VFXAsset }> = ({ assets }) => {
     const [selectedAsset, setSelectedAsset] = useState<string | null>(null);
     const assetCategories = useMemo(() => {
       return assets.reduce((acc, asset) => {
         if (!acc[asset.type]) acc[asset.type] = [];
         acc[asset.type].push(asset);
         return acc;
-      }, {} as Record<string, VFXAsset[]>);
+      }, {} as Record<string, VFXAsset>);
     }, [assets]);
     const getCategoryColor = (type: string) => {
-      const colors = {
-        building: '#3b82f6',
-        prop: '#10b981', 
-        terrain: '#f59e0b',
-        vegetation: '#22c55e',
-        texture: '#8b5cf6',
-      };
+  const colors = {
+  building: '#3b82f6',
+  prop: '#10b981',
+  terrain: '#f59e0b',
+  vegetation: '#22c55e',
+  texture: '#8b5cf6',
+};
       return colors[type as keyof typeof colors] || '#6b7280';
     };
-    return ();
+    return;
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -866,8 +857,8 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
                           <div 
                             key={idx}
                             className={`w-3 h-3 rounded-full border ${
-                              material.historicallyAccurate ? 'bg-green-500' : 'bg-orange-500'
-                            }`}
+  material.historicallyAccurate ? 'bg-green-500' : 'bg-orange-500',
+}`}
                             title={`${material.name}: ${material.historicallyAccurate ? 'Accurate' : 'Review needed'}`}
                           />
                         ))}
@@ -916,7 +907,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
     );
   };
   if (!selectedScene) {
-    return ();
+    return;
       <div className={`vfx-pipeline-visualizer ${className}`}>}
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
@@ -929,8 +920,7 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
         </Card>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`vfx-pipeline-visualizer ${className}`}>}
       <Tabs value={activeView} onValueChange={setActiveView}>
         <div className="mb-6">
@@ -973,34 +963,26 @@ export const VFXPipelineVisualizer: React.FC<VFXPipelineVisualizerProps> = ({)
       </Tabs>
       <style>{`
         .vfx-pipeline-visualizer {
-          max-width: 1200px;
-          margin: 0 auto;
-        }
+          max-width: 1200px;,
+  margin: 0 auto;
         .scene-visualization {
-          position: relative;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 12px;
-          overflow: hidden;
-        }
+          position: relative;,
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;,
+  overflow: hidden;
         .accuracy-indicator {
           animation: pulse-accuracy 2s ease-in-out infinite;
-        }
         @keyframes pulse-accuracy {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.7; }
-        }
         .timeline-item {
           transition: all 0.3s ease;
-        }
-        .timeline-item:hover {
-          transform: translateY(-2px);
+        .timeline-item:hover {,
+  transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
         @media (max-width: 768px) {
           .vfx-pipeline-visualizer {
             padding: 1rem;
-          }
-        }
       `}</style>
     </div>
   );

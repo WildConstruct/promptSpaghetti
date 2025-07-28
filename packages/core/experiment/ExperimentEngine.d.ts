@@ -10,13 +10,14 @@ import {
   ABTestingConfig,
   AllocationServiceConfig
 } from '../types/experiment';
+
 export interface ExperimentStorage {
     getExperiment(id: string): Promise<Experiment | null>;
     saveExperiment(experiment: Experiment): Promise<void>;
     getUserAssignment(userId: string, experimentId: string): Promise<UserAssignment | null>;
     saveUserAssignment(assignment: UserAssignment): Promise<void>;
     getActiveExperiments(organizationId?: string): Promise<Experiment[]>;
-}
+
 export interface ExperimentMetrics {
     recordAssignment(assignment: UserAssignment): Promise<void>;
     recordEvent();
@@ -26,7 +27,7 @@ export interface ExperimentMetrics {
       data: Record<string,
       unknown>
     ): Promise<void>;
-}
+
 export declare class ExperimentEngine {
     private config;
     private allocationConfig;
@@ -102,12 +103,10 @@ export declare class ExperimentEngine {
      * Get default assignment when user cannot be assigned
      */
     private getDefaultAssignment;
-}
 /**
  * Factory function to create experiment engine with default configuration
  */
-export declare function createExperimentEngine()
-  storage: ExperimentStorage,
+export declare function createExperimentEngine(storage: ExperimentStorage,)
   metrics: ExperimentMetrics,
   config?: Partial<ABTestingConfig>,
   allocationConfig?: Partial<AllocationServiceConfig>

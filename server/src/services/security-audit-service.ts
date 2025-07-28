@@ -4,6 +4,7 @@
 import { FastifyInstance } from 'fastify';
 import { auditSecurityHeaders, SecurityAuditResult } from '../middleware/security-headers';
 
+}
 export interface SecurityAuditConfig {
   enabled: boolean;
   intervalMinutes: number;
@@ -12,6 +13,7 @@ export interface SecurityAuditConfig {
     scoreThreshold: number;
     criticalIssues: number;
     highIssues: number;
+}
   };
   notifications: {
     enabled: boolean;
@@ -20,12 +22,14 @@ export interface SecurityAuditConfig {
   };
 }
 
+}
 export interface AuditRecord {
   id: string;
   timestamp: Date;
   endpoint: string;
   result: SecurityAuditResult;
   alerts: string[];
+}
 }
 
 export class SecurityAuditService {
@@ -68,6 +72,7 @@ export class SecurityAuditService {
 
   // Perform security audit on all configured endpoints
   private async performAudit(): Promise<void> {
+
     console.log('Performing security audit...');
 
     for (const endpoint of this.config.endpoints) {
@@ -81,6 +86,7 @@ export class SecurityAuditService {
 
   // Audit a specific endpoint
   private async auditEndpoint(endpoint: string): Promise<AuditRecord> {
+
     try {
       // Make request to endpoint to get headers
       const response = await this.makeAuditRequest(endpoint);
@@ -181,6 +187,7 @@ export class SecurityAuditService {
 
   // Send alerts via configured notification methods
   private async sendAlerts(record: AuditRecord): Promise<void> {
+
     if (!this.config.notifications.enabled || record.alerts.length === 0) {
       return;
     }
@@ -232,6 +239,7 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
 
   // Send webhook alert
   private async sendWebhookAlert(message: string, record: AuditRecord): Promise<void> {
+
     if (!this.config.notifications.webhookUrl) return;
 
     const payload = {
@@ -243,12 +251,12 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
             title: 'Endpoint',
             value: record.endpoint,
             short: true
-          },
+  }
           {
             title: 'Score',
             value: `${record.result.score}/${record.result.maxScore}`,
             short: true
-          },
+  }
           {
             title: 'Alerts',
             value: record.alerts.length.toString(),
@@ -262,13 +270,14 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      },
+  }
       body: JSON.stringify(payload)
     });
   }
 
   // Send email alerts (placeholder - would integrate with email service)
   private async sendEmailAlerts(message: string, _____record: AuditRecord): Promise<void> {
+
     // TODO: Integrate with email service (SendGrid, AWS SES, etc.)
     console.log('Email alerts would be sent to:', this.config.notifications.emailRecipients);
     console.log('Alert message:', message);
@@ -345,6 +354,7 @@ ${result.headers.filter(h => !h.present).map(h => `- ${h.name} (${h.severity}): 
 
   // Trigger manual audit
   async triggerManualAudit(endpoint?: string): Promise<AuditRecord[]> {
+
     const endpointsToAudit = endpoint ? [endpoint] : this.config.endpoints;
     const results: AuditRecord[] = [];
 
@@ -377,7 +387,7 @@ export const defaultAuditConfig: SecurityAuditConfig = {
     scoreThreshold: 70, // Alert if score below 70%
     criticalIssues: 0,  // Alert on any critical issues
     highIssues: 2       // Alert if more than 2 high issues
-  },
+  }
   notifications: {
     enabled: process.env.SECURITY_ALERTS_ENABLED === 'true',
     webhookUrl: process.env.SECURITY_WEBHOOK_URL,

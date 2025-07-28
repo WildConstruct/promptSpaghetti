@@ -205,7 +205,7 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
         type: z.enum(['classification', 'regression', 'text_generation', 'question_answering', 'sentiment_analysis', 'named_entity_recognition']).optional(),
         status: z.enum(['creating', 'ready', 'processing', 'error']).optional(),
         search: z.string().optional()
-      })
+  }
     }
   }, async (request: FastifyRequest<{
     Querystring: { page: number; limit: number; type?: string; status?: string; search?: string }
@@ -424,7 +424,7 @@ export async function trainingDataRoutes(fastify: FastifyInstance) {
             end: z.string().datetime().optional()
           }).optional()
         }).default({})
-      })
+  }
     }
   }, async (request: FastifyRequest<{
     Params: { id: string };

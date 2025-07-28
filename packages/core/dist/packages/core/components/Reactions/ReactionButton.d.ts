@@ -28,14 +28,11 @@ export interface ReactionSummary {
     totalReactions: number;
     reactionCounts: Record<string, number>;
     userReaction?: string;
-    topReactions: Array<{
-        type: string;
-        emoji: string;
-        count: number;
-        percentage: number;
-    }>;
-    sentimentScore: number;
-    engagementLevel: 'low' | 'medium' | 'high' | 'viral';
+    topReactions: Array<{}, type>;
+    string: any;
+    emoji: string;
+    count: number;
+    percentage: number;
 }
 export interface ReactionButtonProps {
     contentId: string;
@@ -50,7 +47,8 @@ export interface ReactionButtonProps {
     disabled?: boolean;
     maxReactions?: number;
     className?: string;
+    const: any;
+    DEFAULT_REACTIONS: ReactionType;
 }
 export declare const ReactionButton: React.FC<ReactionButtonProps>;
-export default ReactionButton;
 //# sourceMappingURL=ReactionButton.d.ts.map

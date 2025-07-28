@@ -22,19 +22,19 @@ export declare enum TokenType {
     ACCOUNT_RECOVERY = "account_recovery",
     TWO_FACTOR_SETUP = "two_factor_setup",
     DEVICE_VERIFICATION = "device_verification"
-}
+
 export declare enum TokenStatus {
     ACTIVE = "active",
     USED = "used",
     EXPIRED = "expired",
     REVOKED = "revoked",
     INVALID = "invalid"
-}
+
 export declare enum SecurityLevel {
     STANDARD = "standard",// Normal security
     ENHANCED = "enhanced",// Higher security requirements
     MAXIMUM = "maximum"
-}
+
 export interface TokenConfig {
     defaultExpiration: number;
     maxExpiration: number;
@@ -48,7 +48,7 @@ export interface TokenConfig {
     enableAuditLogging: boolean;
     requireEmailVerification: boolean;
     allowMultipleTokens: boolean;
-}
+
 export interface ResetToken {
     id: string;
     userId: string;
@@ -73,7 +73,7 @@ export interface ResetToken {
     usageCount: number;
     maxUsageCount: number;
     revocationReason?: string;
-}
+
 export interface TokenRequest {
     userId: string;
     email: string;
@@ -83,20 +83,20 @@ export interface TokenRequest {
     expirationMinutes?: number;
     securityLevel?: SecurityLevel;
     metadata?: Record<string, any>;
-}
+
 export interface TokenValidation {
     valid: boolean;
     token?: ResetToken;
     reason?: string;
     securityEvents?: string[];
     riskScore?: number;
-}
+
 export interface RateLimitData {
     count: number;
     resetTime: number;
     lastRequest: Date;
     violationCount: number;
-}
+
 export declare enum SecurityEvent {
     TOKEN_CREATED = "token_created",
     TOKEN_VALIDATED = "token_validated",
@@ -107,7 +107,7 @@ export declare enum SecurityEvent {
     RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
     SUSPICIOUS_ACTIVITY = "suspicious_activity",
     TOKEN_CLEANUP = "token_cleanup"
-}
+
 export interface AuditLogEntry {
     id: string;
     event: SecurityEvent;
@@ -119,7 +119,7 @@ export interface AuditLogEntry {
     details: Record<string, any>;
     riskScore: number;
     sessionId?: string;
-}
+
 export interface TokenStatistics {
     totalTokens: number;
     activeTokens: number;
@@ -137,7 +137,6 @@ export interface TokenStatistics {
         tokensRemoved: number;
         auditLogsRemoved: number;
     };
-}
 /**
  * Comprehensive password reset token management service
  */
@@ -208,7 +207,7 @@ export declare class PasswordResetTokenManager extends EventEmitter {
      * Destroy the token manager and clean up resources
      */
     destroy(): void;
-}
+
 export declare const passwordResetTokenManager: PasswordResetTokenManager;
 export default PasswordResetTokenManager;
 //# sourceMappingURL=PasswordResetTokenManager.d.ts.map

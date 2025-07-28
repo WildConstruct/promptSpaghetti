@@ -14,13 +14,13 @@ export declare enum SecurityEventType {
     ANOMALY_DETECTED = "anomaly_detected",
     RATE_LIMIT_EXCEEDED = "rate_limit_exceeded",
     SUSPICIOUS_ACTIVITY = "suspicious_activity"
-}
+
 export declare enum SecurityEventSeverity {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface SecurityEvent {
     id: string;
     timestamp: Date;
@@ -48,7 +48,7 @@ export interface SecurityEvent {
         component: string;
     };
     metadata: Record<string, any>;
-}
+
 export interface AlertConfig {
     enabled: boolean;
     severityThreshold: SecurityEventSeverity;
@@ -57,12 +57,12 @@ export interface AlertConfig {
         timeWindowMs: number;
     };
     channels: AlertChannel[];
-}
+
 export interface AlertChannel {
     type: 'webhook' | 'email' | 'slack' | 'console';
     config: Record<string, any>;
     enabled: boolean;
-}
+
 export interface SecurityMonitoringStats {
     totalEvents: number;
     eventsByType: Record<SecurityEventType, number>;
@@ -76,7 +76,6 @@ export interface SecurityMonitoringStats {
         start: Date;
         end: Date;
     };
-}
 /**
  * Real-time Security Event Monitor
  */
@@ -158,7 +157,7 @@ export declare class SecurityEventMonitor extends EventEmitter {
     private cleanupOldEvents;
     private getRiskScoreDistribution;
     private getTimelineData;
-}
+
 export declare     /**
      * Create monitoring middleware for API endpoints
      */

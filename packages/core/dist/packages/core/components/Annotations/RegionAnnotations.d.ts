@@ -21,8 +21,8 @@ export interface RegionAnnotation {
     priority: 'low' | 'medium' | 'high' | 'critical';
     status: 'active' | 'resolved' | 'archived';
     marsZone?: MARSZoneType;
-    nodeIds: string[];
-    tags: string[];
+    nodeIds: string;
+    tags: string;
     metadata: RegionMetadata;
 }
 export interface RegionArea {
@@ -70,7 +70,7 @@ export interface VFXUser {
 export interface RegionAnnotationSystemProps {
     width: number;
     height: number;
-    regions: RegionAnnotation[];
+    regions: RegionAnnotation;
     nodes?: Array<{
         id: string;
         x: number;
@@ -80,9 +80,9 @@ export interface RegionAnnotationSystemProps {
         type: string;
     }>;
     currentUser: VFXUser;
-    onRegionsChange: (regions: RegionAnnotation[]) => void;
+    onRegionsChange: (regions: RegionAnnotation) => void;
     onRegionSelect?: (regionId: string | null) => void;
-    onNodesInRegion?: (nodeIds: string[]) => void;
+    onNodesInRegion?: (nodeIds: string) => void;
     selectedRegion?: string | null;
     readonly?: boolean;
     showGrid?: boolean;

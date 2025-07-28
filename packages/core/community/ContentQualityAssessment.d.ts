@@ -5,6 +5,7 @@
  * Quality control and assessment system for community-contributed content.
  * Adapts the proven ContentQualityMetricsService for editorial content.
  */
+
 export interface CommunityContentQualityMetrics {
     contentId: string;
     versionId: string;
@@ -25,7 +26,7 @@ export interface CommunityContentQualityMetrics {
     assessment_version: string;
     confidence_level: number;
     flags: QualityFlag[];
-}
+
 export interface EditorialQualityMetrics {
     score: number;
     accuracy: {,
@@ -58,7 +59,7 @@ export interface EditorialQualityMetrics {
         creative_approach: number;
         plagiarism_risk: number;
     };
-}
+
 export interface TechnicalQualityMetrics {
     score: number;
     formatting: {,
@@ -91,7 +92,7 @@ export interface TechnicalQualityMetrics {
         security_considerations: number;
         performance_implications: number;
     };
-}
+
 export interface ContentEngagementMetrics {
     score: number;
     engagement_potential: {,
@@ -118,7 +119,7 @@ export interface ContentEngagementMetrics {
         tone_consistency: number;
         cultural_sensitivity: number;
     };
-}
+
 export interface CommunityValueMetrics {
     score: number;
     contribution_value: {,
@@ -145,7 +146,7 @@ export interface CommunityValueMetrics {
         skill_building_support: number;
         learning_path_contribution: number;
     };
-}
+
 export interface AutomatedContentAnalysis {
     language_analysis: {,
         grammar_score: number;
@@ -183,7 +184,7 @@ export interface AutomatedContentAnalysis {
         topic_relevance_score: number;
     };
     issues: AutomatedIssue[];
-}
+
 export interface AutomatedIssue {
     type: 'grammar' | 'spelling' | 'formatting' | 'accessibility' | 'seo' | 'structure' | 'plagiarism' | 'factual';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -195,7 +196,7 @@ export interface AutomatedIssue {
     description: string;
     suggestion?: string;
     auto_fixable: boolean;
-}
+
 export interface EditorialReview {
     reviewer_id: string;
     reviewer_name: string;
@@ -218,7 +219,7 @@ export interface EditorialReview {
     requires_legal_review: boolean;
     public_feedback: string;
     internal_notes: string;
-}
+
 export interface QualityRecommendation {
     id: string;
     type: 'critical' | 'improvement' | 'enhancement' | 'optimization';
@@ -236,7 +237,7 @@ export interface QualityRecommendation {
     }>;
     auto_fix_available: boolean;
     auto_fix_confidence?: number;
-}
+
 export interface QualityFlag {
     type: 'plagiarism' | 'factual_error' | 'policy_violation' | 'accessibility_issue' | 'quality_concern';
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -244,7 +245,7 @@ export interface QualityFlag {
     evidence?: string;
     requires_human_review: boolean;
     auto_detected: boolean;
-}
+
 export interface QualityAssessmentWorkflow {
     content_id: string;
     version_id: string;
@@ -264,7 +265,7 @@ export interface QualityAssessmentWorkflow {
         notify_reviewers: boolean;
         notify_community: boolean;
     };
-}
+
 export interface WorkflowStep {
     step_type: 'automated_check' | 'editorial_review' | 'author_revision' | 'approval' | 'rejection';
     completed_by: string;
@@ -272,7 +273,7 @@ export interface WorkflowStep {
     duration_hours: number;
     notes?: string;
     attachments?: string[];
-}
+
 export declare class ContentQualityAssessmentService {
     private apiClient;
     constructor(apiClient: any);
@@ -380,7 +381,7 @@ export declare class ContentQualityAssessmentService {
             how_to_avoid: string;
         }>;
     }>;
-}
+
 export declare const QUALITY_ASSESSMENT_CONFIG: {
     readonly GRADE_THRESHOLDS: {
         readonly 'A+': 95;

@@ -12,6 +12,7 @@ import {
   IdentityValidationData
 } from '../../../packages/core/auth/IdentityValidation';
 
+}
 interface SubmitVerificationRequestBody {
   userId: string;
   verificationType: IdentityValidationType;
@@ -21,12 +22,15 @@ interface SubmitVerificationRequestBody {
     userAgent?: string;
     sessionId?: string;
     requestSource?: 'profile_setup' | 'manual_request' | 'system_triggered';
+}
   };
 }
 
+}
 interface GetVerificationStatusParams {
   userId: string;
   requestId?: string;
+}
 }
 
 /**
@@ -73,7 +77,7 @@ export async function submitVerificationRequest(
         status: result.status,
         verificationType,
         submittedAt: new Date().toISOString()
-      },
+  }
       message: 'Verification request submitted successfully'
     });
     
@@ -245,7 +249,7 @@ export async function getVerificationTypes(
         estimatedTime: '5 minutes',
         requirements: ['Valid email address'],
         fields: ['email']
-      },
+  }
       {
         type: 'phone_verification',
         title: 'Phone Verification',
@@ -254,7 +258,7 @@ export async function getVerificationTypes(
         estimatedTime: '10 minutes',
         requirements: ['Valid phone number with country code'],
         fields: ['phoneNumber']
-      },
+  }
       {
         type: 'government_id',
         title: 'Government ID',
@@ -268,7 +272,7 @@ export async function getVerificationTypes(
         ],
         fields: ['governmentId'],
         acceptedDocuments: ['passport', 'drivers_license', 'national_id']
-      },
+  }
       {
         type: 'professional_credentials',
         title: 'Professional Credentials',
@@ -282,7 +286,7 @@ export async function getVerificationTypes(
         ],
         fields: ['professionalCredentials'],
         acceptedDocuments: ['degree', 'certificate', 'award', 'credit']
-      },
+  }
       {
         type: 'social_media_verification',
         title: 'Social Media Verification',

@@ -2,6 +2,7 @@
  * Compliance Historical Analysis Service
  * Provides historical trend analysis and reporting for compliance metrics
  */
+
 export interface HistoricalDataPoint {
     timestamp: Date;
     value: number;
@@ -11,7 +12,7 @@ export interface HistoricalDataPoint {
     framework: string;
     category: string;
     metric: string;
-}
+
 export interface ComplianceTrendReport {
     reportId: string;
     generatedAt: Date;
@@ -50,7 +51,7 @@ export interface ComplianceTrendReport {
         change: number;
         changeType: 'improvement' | 'degradation' | 'stable';
     };
-}
+
 export interface ComplianceForecasting {
     baselineId: string;
     forecastHorizon: number;
@@ -70,7 +71,7 @@ export interface ComplianceForecasting {
         impact: 'high' | 'medium' | 'low';
         likelihood: number;
     }[];
-}
+
 export interface ComplianceAuditTrail {
     auditId: string;
     auditPeriod: {,
@@ -90,7 +91,7 @@ export interface ComplianceAuditTrail {
     overallRating: 'excellent' | 'satisfactory' | 'needs_improvement' | 'non_compliant';
     certificationStatus?: 'certified' | 'conditionally_certified' | 'not_certified';
     nextAuditDue: Date;
-}
+
 export declare class ComplianceHistoricalAnalyzer {
     private historicalData;
     private trendReports;
@@ -143,6 +144,6 @@ export declare class ComplianceHistoricalAnalyzer {
     private identifyKeyEvents;
     private calculateForecastAccuracy;
     private findHistoricalKeyForBaseline;
-}
+
 export declare const complianceHistoricalAnalyzer: ComplianceHistoricalAnalyzer;
 //# sourceMappingURL=ComplianceHistoricalAnalyzer.d.ts.map

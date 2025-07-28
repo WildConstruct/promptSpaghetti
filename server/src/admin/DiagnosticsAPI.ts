@@ -19,6 +19,7 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
+}
 export interface ExecuteDiagnosticsRequest {
   suiteId?: string;
   diagnosticIds?: string[];
@@ -27,9 +28,11 @@ export interface ExecuteDiagnosticsRequest {
     timeout?: number;
     skipOnError?: boolean;
     generateReport?: boolean;
+}
   };
 }
 
+}
 export interface DiagnosticsResponse<T = any> {
   success: boolean;
   data?: T;
@@ -42,25 +45,31 @@ export interface DiagnosticsResponse<T = any> {
   };
 }
 
+}
 export interface HealthCheckQuery {
   includeDetails?: boolean;
   includeRecommendations?: boolean;
   includeTrends?: boolean;
   categories?: string;
 }
+}
 
+}
 export interface DiagnosticListQuery {
   category?: DiagnosticCategory;
   status?: 'enabled' | 'disabled' | 'all';
   limit?: number;
   offset?: number;
 }
+}
 
+}
 export interface HealthReportQuery {
   startDate?: string;
   endDate?: string;
   limit?: number;
   includeDetails?: boolean;
+}
 }
 
 // ==========================================
@@ -154,7 +163,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
         data: {
           execution,
           ...(healthReport && { healthReport })
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -663,7 +672,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           trendAnalysis: true,
           alerting: true,
           configurationManagement: true
-        },
+  }
         statistics: {
           availableDiagnostics: (await diagnosticService.listAvailableDiagnostics()).length,
           availableSuites: (await diagnosticService.listDiagnosticSuites()).length,

@@ -6,6 +6,7 @@
  * Migrated from react-beautiful-dnd to @dnd-kit for modern React 18+ support
  */
 import React from 'react';
+
 export interface WeightedOption {
     id: string;
     text: string;
@@ -13,7 +14,8 @@ export interface WeightedOption {
     locked?: boolean;
     color?: string;
     category?: string;
-}
+
+
 export interface DragReorderProps {
     options: WeightedOption[];
     onChange: (options: WeightedOption[]) => void;
@@ -36,7 +38,8 @@ export interface DragReorderProps {
     enableBulkOperations?: boolean;
     enablePresets?: boolean;
     showStatistics?: boolean;
-}
+
+
 export interface WeightStatistics {
     totalWeight: number;
     averageWeight: number;
@@ -46,7 +49,7 @@ export interface WeightStatistics {
     standardDeviation: number;
     entropyScore: number;
     weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
-}
+
 export declare const DragReorderWeightManager: React.FC<DragReorderProps>;
 export default DragReorderWeightManager;
 //# sourceMappingURL=DragReorderWeightManager.d.ts.map

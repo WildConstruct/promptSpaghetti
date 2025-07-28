@@ -25,8 +25,8 @@ export interface ValidationRule {
 export interface ValidationResult {
     isValid: boolean;
     score: number;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
     metadata: Record<string, any>;
 }
 export interface ValidationError {
@@ -47,7 +47,7 @@ export interface ValidationWarning {
 export interface ValidationContext {
     userId: string;
     sessionId: string;
-    recentEvents: EnhancedConversionEvent[];
+    recentEvents: EnhancedConversionEvent;
     userProfile?: UserProfile;
     deviceProfile?: DeviceProfile;
     behaviorProfile?: BehaviorProfile;
@@ -59,8 +59,8 @@ export interface UserProfile {
     averageValue: number;
     riskScore: number;
     verificationStatus: 'verified' | 'pending' | 'suspicious';
-    locationHistory: string[];
-    deviceHistory: string[];
+    locationHistory: string;
+    deviceHistory: string;
 }
 export interface DeviceProfile {
     fingerprint: string;
@@ -68,15 +68,15 @@ export interface DeviceProfile {
     lastSeen: number;
     eventCount: number;
     userCount: number;
-    riskIndicators: string[];
+    riskIndicators: string;
     characteristics: Record<string, any>;
 }
 export interface BehaviorProfile {
     sessionCount: number;
     averageSessionDuration: number;
-    typicalEventSequence: string[];
+    typicalEventSequence: string;
     anomalyScore: number;
-    patterns: BehaviorPattern[];
+    patterns: BehaviorPattern;
 }
 export interface BehaviorPattern {
     type: 'temporal' | 'sequential' | 'volumetric' | 'value-based';
@@ -91,9 +91,9 @@ export interface DeduplicationConfig {
     timeWindow: number;
     fuzzyMatching: boolean;
     similarityThreshold: number;
-    fields: DeduplicationField[];
-    exactMatchFields: string[];
-    fuzzyMatchFields: string[];
+    fields: DeduplicationField;
+    exactMatchFields: string;
+    fuzzyMatchFields: string;
 }
 export interface DeduplicationField {
     name: string;
@@ -107,7 +107,7 @@ export interface DeduplicationResult {
     matchedEvent?: EnhancedConversionEvent;
     matchType: 'exact' | 'fuzzy' | 'none';
     matchScore: number;
-    matchedFields: string[];
+    matchedFields: string;
 }
 export interface ValidationMetrics {
     totalValidated: number;
@@ -120,10 +120,6 @@ export interface ValidationMetrics {
     processingTime: number;
     privacyViolations: number;
 }
-/**
- * Comprehensive Conversion Event Validator
- * Handles all aspects of event validation and deduplication
- */
 export declare class ConversionEventValidator {
     private static readonly MAX_EVENT_AGE;
     private rules;
@@ -137,57 +133,14 @@ export declare class ConversionEventValidator {
     /**
      * Validate conversion event
      */
-    validateEvent(event: EnhancedConversionEvent, context?: Partial<ValidationContext>): Promise<ValidationResult>;
-    /**
-     * Check for duplicate events
-     */
-    checkDuplication(event: EnhancedConversionEvent): Promise<DeduplicationResult>;
-    /**
-     * Register validation rule
-     */
-    registerRule(rule: ValidationRule): void;
-    /**
-     * Remove validation rule
-     */
-    removeRule(ruleId: string): boolean;
-    /**
-     * Update user profile
-     */
-    updateUserProfile(userId: string, profile: Partial<UserProfile>): void;
-    private buildValidationContext;
-    private runValidationRules;
-    private aggregateValidationResults;
-    private compareEvents;
-    private getFieldWeight;
-    private getFieldValue;
-    private calculateFieldSimilarity;
-    private calculateObjectSimilarity;
-    private calculateStringSimilarity;
-    private levenshteinDistance;
-    private getRecentEvents;
-    private initializeDefaultRules;
-    private initializeDeduplicationFields;
-    private updateMetrics;
-    /**
-     * Store event for deduplication checking
-     */
-    storeEventForDeduplication(event: EnhancedConversionEvent): void;
-    /**
-     * Get validation metrics
-     */
-    getMetrics(): ValidationMetrics;
-    /**
-     * Reset metrics
-     */
-    resetMetrics(): void;
-    /**
-     * Get all validation rules
-     */
-    getRules(): ValidationRule[];
-    /**
-     * Update deduplication configuration
-     */
-    updateDeduplicationConfig(config: Partial<DeduplicationConfig>): void;
+    validateEvent(): any;
+    event: EnhancedConversionEvent;
+    context?: Partial<ValidationContext>;
+    Promise<ValidationResult>(): any;
+    warnings: [];
+    metadata: {
+        error: String;
+        (error: any): any;
+    };
 }
-export default ConversionEventValidator;
 //# sourceMappingURL=ConversionEventValidator.d.ts.map

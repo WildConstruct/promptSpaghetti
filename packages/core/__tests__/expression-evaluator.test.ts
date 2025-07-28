@@ -55,12 +55,12 @@ describe('SafeExpressionEvaluator', () => {
     });
   });
   describe('Function Calls', () => {
-    it('should allow safe function calls from context', () => {
-      const context = {
-        double: (x: number) => x * 2,
-        add: (a: number, b: number) => a + b,
-        len: (arr: unknown[]) => arr.length,
-      };
+  it('should allow safe function calls from context', () => {
+  const context = {
+  double: (x: number) => x * 2,
+  add: (a: number, b: number) => a + b,
+  len: (arr: unknown) => arr.length,
+};
       expect(SafeExpressionEvaluator.evaluate('double(5)', context)).toBe(10);
       expect(SafeExpressionEvaluator.evaluate('add(3, 4)', context)).toBe(7);
       // Array literals not supported - would need to pass array as variable
@@ -101,8 +101,8 @@ describe('SafeExpressionEvaluator', () => {
           { name: 'Bob', age: 30 },
           { name: 'Charlie', age: 35 }
         ],
-        minAge: 28,
-      };
+        minAge: 28;
+  };
       // Complex expression with nested operations
       const expr = 'users[1].age > minAge && users[1].name === "Bob"';
       expect(SafeExpressionEvaluator.evaluate(expr, context)).toBe(true);

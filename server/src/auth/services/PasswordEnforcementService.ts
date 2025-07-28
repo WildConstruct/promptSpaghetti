@@ -6,6 +6,7 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
+}
 export interface EnforcementRule {
   id: string;
   name: string;
@@ -21,6 +22,7 @@ export interface EnforcementRule {
     lastLoginDays?: number; // Days since last login
     breachDetected?: boolean;
     consecutiveFailures?: number;
+}
   };
   actions: {
     forceChange: boolean;
@@ -52,6 +54,7 @@ export interface EnforcementRule {
   createdBy: string;
 }
 
+}
 export interface EnforcementAction {
   id: string;
   userId: string;
@@ -73,9 +76,11 @@ export interface EnforcementAction {
     userNotified: boolean;
     adminNotified: boolean;
     attempts: number;
+}
   };
 }
 
+}
 export interface UserEnforcementStatus {
   userId: string;
   lastChecked: Date;
@@ -92,9 +97,11 @@ export interface UserEnforcementStatus {
     triggeredAt: Date;
     resolvedAt?: Date;
     status: string;
+}
   }>;
 }
 
+}
 export interface EnforcementContext {
   userId: string;
   userRoles: string[];
@@ -105,7 +112,9 @@ export interface EnforcementContext {
   timestamp: Date;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface EnforcementResult {
   allowed: boolean;
   blocked: boolean;
@@ -116,6 +125,7 @@ export interface EnforcementResult {
   gracePeriodRemaining?: number;
   activeEnforcements: string[];
   suggestedActions: string[];
+}
 }
 
 export class PasswordEnforcementService extends EventEmitter {
@@ -140,6 +150,7 @@ export class PasswordEnforcementService extends EventEmitter {
     ruleData: Omit<EnforcementRule, 'id' | 'createdAt' | 'updatedAt'>,
     createdBy: string
   ): Promise<EnforcementRule> {
+
     const rule: EnforcementRule = {
       ...ruleData,
       id: this.generateRuleId(),
@@ -165,6 +176,7 @@ export class PasswordEnforcementService extends EventEmitter {
    * Check enforcement rules for a user action
    */
   async checkEnforcement(context: EnforcementContext): Promise<EnforcementResult> {
+
     const { userId, action } = context;
     
     // Get current user status
@@ -230,6 +242,7 @@ export class PasswordEnforcementService extends EventEmitter {
       allowOverride?: boolean;
     } = {}
   ): Promise<EnforcementAction> {
+
     // Create a temporary enforcement rule
     const temporaryRule: EnforcementRule = {
       id: `temp-force-${Date.now()}`,
@@ -247,7 +260,7 @@ export class PasswordEnforcementService extends EventEmitter {
         notifyAdmin: true,
         logAudit: true,
         allowOverride: options.allowOverride || false
-      },
+  }
       enforcement: {
         blockLogin: options.lockAccount || false,
         blockApiAccess: options.lockAccount || false,
@@ -255,7 +268,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: `Password change required: ${reason}`
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: enforcedBy
@@ -299,6 +312,7 @@ export class PasswordEnforcementService extends EventEmitter {
     reason: string,
     requiresApproval: boolean = false
   ): Promise<{ success: boolean; message: string; requiresApproval?: boolean }> {
+
     const action = await this.getEnforcementAction(actionId);
     if (!action) {
       return { success: false, message: 'Enforcement action not found' };
@@ -355,6 +369,7 @@ export class PasswordEnforcementService extends EventEmitter {
     actionType: string,
     metadata: Record<string, any> = {}
   ): Promise<void> {
+
     const userEnforcements = this.activeEnforcements.get(userId) || [];
     
     for (const action of userEnforcements) {
@@ -382,6 +397,7 @@ export class PasswordEnforcementService extends EventEmitter {
    * Get enforcement status for a user
    */
   async getUserEnforcementStatus(userId: string): Promise<UserEnforcementStatus> {
+
     let status = this.userStatuses.get(userId);
     
     if (!status) {
@@ -461,7 +477,7 @@ export class PasswordEnforcementService extends EventEmitter {
       priority: 100,
       conditions: {
         passwordAge: 90 * 24 // 90 days in hours
-      },
+  }
       actions: {
         forceChange: true,
         gracePeriod: 24, // 24 hour grace period
@@ -472,7 +488,7 @@ export class PasswordEnforcementService extends EventEmitter {
         logAudit: true,
         allowOverride: true,
         overrideRequiresApproval: false
-      },
+  }
       enforcement: {
         blockLogin: false,
         blockApiAccess: false,
@@ -480,7 +496,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: 'Your password has expired and must be changed'
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -495,7 +511,7 @@ export class PasswordEnforcementService extends EventEmitter {
       priority: 200,
       conditions: {
         breachDetected: true
-      },
+  }
       actions: {
         forceChange: true,
         gracePeriod: 0,
@@ -505,7 +521,7 @@ export class PasswordEnforcementService extends EventEmitter {
         notifyAdmin: true,
         logAudit: true,
         allowOverride: false
-      },
+  }
       enforcement: {
         blockLogin: true,
         blockApiAccess: true,
@@ -513,7 +529,7 @@ export class PasswordEnforcementService extends EventEmitter {
         redirectToChange: true,
         showWarningMessage: true,
         customMessage: 'Security breach detected. Immediate password change required.'
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -524,6 +540,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async validateRule(rule: EnforcementRule): Promise<void> {
+
     if (rule.priority < 0 || rule.priority > 1000) {
       throw new Error('Rule priority must be between 0 and 1000');
     }
@@ -534,6 +551,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async getApplicableRules(context: EnforcementContext): Promise<EnforcementRule[]> {
+
     const rules = [];
     
     for (const rule of this.rules.values()) {
@@ -548,6 +566,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async ruleAppliesTo(rule: EnforcementRule, context: EnforcementContext): Promise<boolean> {
+
     const { conditions } = rule;
     const { userId, userRoles } = context;
 
@@ -574,6 +593,7 @@ export class PasswordEnforcementService extends EventEmitter {
     rule: EnforcementRule,
     context: EnforcementContext
   ): Promise<{ triggered: boolean; reason?: string }> {
+
     const { conditions } = rule;
     const { userId } = context;
 
@@ -616,6 +636,7 @@ export class PasswordEnforcementService extends EventEmitter {
     context: EnforcementContext,
     reason: string
   ): Promise<EnforcementAction> {
+
     const action: EnforcementAction = {
       id: this.generateActionId(),
       userId: context.userId,
@@ -663,6 +684,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async createDefaultUserStatus(userId: string): Promise<UserEnforcementStatus> {
+
     return {
       userId,
       lastChecked: new Date(),
@@ -677,6 +699,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async refreshUserStatus(userId: string): Promise<void> {
+
     const activeEnforcements = this.activeEnforcements.get(userId) || [];
     const pendingEnforcements = activeEnforcements.filter(e => e.status === 'pending');
     
@@ -786,15 +809,18 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async updateUserStatus(userId: string, result: EnforcementResult): Promise<void> {
+
     await this.refreshUserStatus(userId);
   }
 
   private async updateEnforcementAction(action: EnforcementAction): Promise<void> {
+
     // Implementation would persist to database
     console.log(`Updated enforcement action ${action.id}`);
   }
 
   private async getEnforcementAction(actionId: string): Promise<EnforcementAction | null> {
+
     for (const userEnforcements of this.activeEnforcements.values()) {
       const action = userEnforcements.find(a => a.id === actionId);
       if (action) return action;
@@ -803,19 +829,23 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async getUserRoles(userId: string): Promise<string[]> {
+
     // Mock implementation - would integrate with actual user service
     return ['user'];
   }
 
   private async sendUserNotification(userId: string, action: EnforcementAction): Promise<void> {
+
     console.log(`Sending enforcement notification to user ${userId}`);
   }
 
   private async sendApprovalRequest(action: EnforcementAction, requestedBy: string, reason: string): Promise<void> {
+
     console.log(`Sending approval request for enforcement action ${action.id}`);
   }
 
   private async checkEnforcementExpirations(): Promise<void> {
+
     // Check for expired grace periods and enforce actions
     const now = new Date();
     
@@ -833,6 +863,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async sendPeriodicNotifications(): Promise<void> {
+
     // Send reminder notifications for pending enforcements
     for (const [userId, enforcements] of this.activeEnforcements) {
       const pendingEnforcements = enforcements.filter(e => e.status === 'pending');
@@ -844,6 +875,7 @@ export class PasswordEnforcementService extends EventEmitter {
   }
 
   private async logEnforcementEvent(action: string, userId: string, performedBy: string, metadata: any): Promise<void> {
+
     console.log(`Enforcement Event: ${action} for user ${userId} by ${performedBy}`, metadata);
   }
 }

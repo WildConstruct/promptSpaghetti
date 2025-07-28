@@ -13,6 +13,7 @@ import { PointInTimeRecoveryService } from '../../services/data-retention/PointI
 import { RestoreFunctionalityService } from '../../services/data-retention/RestoreFunctionalityService';
 
 // Admin backup configuration types
+}
 export interface AdminBackupConfiguration {
   config_id: string;
   name: string;
@@ -26,6 +27,7 @@ export interface AdminBackupConfiguration {
     days_of_week?: number[];
     day_of_month?: number;
     timezone: string;
+}
   };
   
   data_scope: {
@@ -71,6 +73,7 @@ export interface AdminBackupConfiguration {
   next_run_at?: Date;
 }
 
+}
 export interface BackupExecution {
   execution_id: string;
   config_id: string;
@@ -91,6 +94,7 @@ export interface BackupExecution {
     total_steps: number;
     percentage: number;
     estimated_remaining_seconds?: number;
+}
   };
   
   error_details?: {
@@ -196,7 +200,7 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-          },
+  }
           required: ['id']
         }
       }
@@ -252,7 +256,7 @@ export class BackupController {
                 day_of_month: { type: 'integer', minimum: 1, maximum: 31 },
                 timezone: { type: 'string' }
               }
-            },
+  }
             data_scope: {
               type: 'object',
               properties: {
@@ -264,7 +268,7 @@ export class BackupController {
                 custom_tables: { type: 'array', items: { type: 'string' } },
                 exclude_tables: { type: 'array', items: { type: 'string' } }
               }
-            },
+  }
             retention_policy: {
               type: 'object',
               required: ['keep_hourly', 'keep_daily', 'keep_weekly', 'keep_monthly'],
@@ -276,7 +280,7 @@ export class BackupController {
                 compliance_hold_days: { type: 'integer', minimum: 1 },
                 archive_after_days: { type: 'integer', minimum: 1 }
               }
-            },
+  }
             storage: {
               type: 'object',
               required: ['provider', 'location', 'encryption_enabled', 'compression_enabled'],
@@ -287,7 +291,7 @@ export class BackupController {
                 compression_enabled: { type: 'boolean' },
                 storage_class: { type: 'string' }
               }
-            },
+  }
             notifications: {
               type: 'object',
               properties: {
@@ -359,7 +363,7 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-          },
+  }
           required: ['id']
         }
       }
@@ -430,7 +434,7 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-          },
+  }
           required: ['id']
         }
       }
@@ -489,7 +493,7 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-          },
+  }
           required: ['id']
         }
       }
@@ -625,6 +629,7 @@ export class BackupController {
   // Private helper methods
 
   private async validateBackupConfiguration(config: AdminBackupConfiguration): Promise<void> {
+
     // Validate schedule configuration
     if (config.schedule.frequency === 'weekly' && !config.schedule.days_of_week?.length) {
       throw new Error('Weekly backups must specify days of the week');
@@ -650,6 +655,7 @@ export class BackupController {
   }
 
   private async storeBackupConfiguration(config: AdminBackupConfiguration): Promise<void> {
+
     const query = `
       INSERT INTO backup_configurations (
         config_id, name, description, enabled, backup_type,
@@ -689,6 +695,7 @@ export class BackupController {
   }
 
   private async getBackupConfiguration(configId: string): Promise<AdminBackupConfiguration | null> {
+
     const query = 'SELECT * FROM backup_configurations WHERE config_id = $1';
     const result = await this.pool.query(query, [configId]);
     
@@ -723,17 +730,20 @@ export class BackupController {
   }
 
   private async scheduleNextBackup(config: AdminBackupConfiguration): Promise<void> {
+
     // Implementation would integrate with job scheduler (e.g., node-cron, Bull Queue)
     // For now, we'll just update the next_run_at timestamp
     console.log(`Scheduling next backup for config ${config.config_id} at ${config.next_run_at}`);
   }
 
   private async unscheduleBackup(configId: string): Promise<void> {
+
     // Implementation would remove from job scheduler
     console.log(`Unscheduling backup for config ${configId}`);
   }
 
   private async executeBackup(config: AdminBackupConfiguration, triggeredBy: string): Promise<BackupExecution> {
+
     const executionId = uuidv4();
     const now = new Date();
 
@@ -767,6 +777,7 @@ export class BackupController {
     execution: BackupExecution,
     triggeredBy: string
   ): Promise<void> {
+
     try {
       // Update status to running
       execution.status = 'running';
@@ -871,6 +882,7 @@ export class BackupController {
   }
 
   private async storeBackupExecution(execution: BackupExecution): Promise<void> {
+
     const query = `
       INSERT INTO backup_executions (
         execution_id, config_id, recovery_point_id, status, started_at,
@@ -908,6 +920,7 @@ export class BackupController {
   }
 
   private async getActiveExecutions(configId?: string): Promise<BackupExecution[]> {
+
     let query = `
       SELECT * FROM backup_executions 
       WHERE status IN ('pending', 'running')
@@ -927,6 +940,7 @@ export class BackupController {
   }
 
   private async getBackupMetrics(): Promise<any> {
+
     // Get configuration metrics
     const configsResult = await this.pool.query(`
       SELECT 
@@ -963,7 +977,7 @@ export class BackupController {
         average_duration_minutes: Math.round((parseInt(executionsResult.rows[0].avg_duration) || 0) / 60),
         last_24h_count: (parseInt(executionsResult.rows[0].successful_24h) || 0) + 
                         (parseInt(executionsResult.rows[0].failed_24h) || 0)
-      },
+  }
       health_status: {
         overall_status: 'healthy', // Could be calculated based on recent failures
         issues: [],
@@ -977,6 +991,7 @@ export class BackupController {
     execution: BackupExecution, 
     type: 'success' | 'failure'
   ): Promise<void> {
+
     // Implementation would send actual notifications via email/Slack
     console.log(`Sending ${type} notification for backup ${execution.execution_id}`);
   }

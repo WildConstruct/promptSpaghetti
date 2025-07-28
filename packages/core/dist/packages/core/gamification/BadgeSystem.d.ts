@@ -1,10 +1,3 @@
-/**
- * Badge System - E17-1753114397409-C91176
- *
- * Comprehensive badge and achievement system for Wild Construct creators
- * Gamifies the platform experience while highlighting professional accomplishments
- * and building trust through verified achievements.
- */
 export interface Badge {
     id: string;
     name: string;
@@ -13,11 +6,11 @@ export interface Badge {
     tier: BadgeTier;
     icon: string;
     criteria: BadgeCriteria;
-    requirements: string[];
+    requirements: string;
     unlockMessage: string;
     rarity: BadgeRarity;
     points: number;
-    prerequisites?: string[];
+    prerequisites?: string;
     isVisible: boolean;
     isActive: boolean;
     metadata: {
@@ -90,75 +83,5 @@ export declare class BadgeSystem {
     private eventListeners;
     constructor();
     private initializeDefaultBadges;
-    private initializeMockUserData;
-    /**
-     * Check and award badges for a user based on their current progress
-     */
-    checkAndAwardBadges(userId: string): BadgeUnlockEvent[];
-    private checkBadgeCriteria;
-    private checkVerificationCriteria;
-    private getStatisticValue;
-    private checkCompletionCriteria;
-    private awardBadge;
-    private calculateLevel;
-    private triggerBadgeUnlockEvent;
-    /**
-     * Get user's badge progress
-     */
-    getUserProgress(userId: string): UserBadgeProgress | null;
-    /**
-     * Get all available badges
-     */
-    getAllBadges(): Badge[];
-    /**
-     * Get badges by category
-     */
-    getBadgesByCategory(category: BadgeCategory): Badge[];
-    /**
-     * Get user's earned badges
-     */
-    getUserBadges(userId: string): UserBadge[];
-    /**
-     * Get badge by ID
-     */
-    getBadge(badgeId: string): Badge | null;
-    /**
-     * Get user's badge progress for a specific badge
-     */
-    getBadgeProgress(userId: string, badgeId: string): number;
-    /**
-     * Get leaderboard data
-     */
-    getLeaderboard(limit?: number): Array<{
-        userId: string;
-        totalPoints: number;
-        level: number;
-        badgeCount: number;
-        rank: number;
-    }>;
-    /**
-     * Update user statistics
-     */
-    updateUserStatistics(userId: string, updates: Partial<UserBadgeProgress['statistics']>): BadgeUnlockEvent[];
-    /**
-     * Add event listener for badge unlocks
-     */
-    onBadgeUnlock(listener: (event: BadgeUnlockEvent) => void): void;
-    /**
-     * Remove event listener
-     */
-    removeEventListener(listener: (event: BadgeUnlockEvent) => void): void;
-    /**
-     * Get badge statistics
-     */
-    getBadgeStatistics(): {
-        totalBadges: number;
-        totalUsers: number;
-        mostPopularBadge: string;
-        rarest: string;
-        averageBadgesPerUser: number;
-    };
 }
-export declare const badgeSystem: BadgeSystem;
-export default badgeSystem;
 //# sourceMappingURL=BadgeSystem.d.ts.map

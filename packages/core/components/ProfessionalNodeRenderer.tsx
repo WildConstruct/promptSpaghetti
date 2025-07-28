@@ -8,24 +8,23 @@ import {
   professionalBorderRadius
 } from '../styles/professional-design-system';
 interface ProfessionalNodeRendererProps {
-  id: string;
+  id: string;,
   data: Record<string, unknown>;
   selected?: boolean;
-  onSelect: (nodeId: string) => void;
-  getNodeMeta: (nodeType: string) => NodeMeta;
+  onSelect: (nodeId: string) => void;,
+  getNodeMeta: (nodeType: string) => NodeMeta;,
   getCategoryColor: (category: string) => string;
-}
-/**
- * Professional Node Renderer - Cinema 4D/Substance Designer inspired
- * 
- * Features:
- * - Professional gradients and shadows
- * - Cinema 4D signature orange accents
- * - Clean typography with proper hierarchy
- * - Subtle animations and hover states
- * - Industry-standard color coding
- */
-export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
+  /**
+  * Professional Node Renderer - Cinema 4D/Substance Designer inspired
+  *
+  * Features:,
+  * - Professional gradients and shadows
+  * - Cinema 4D signature orange accents
+  * - Clean typography with proper hierarchy
+  * - Subtle animations and hover states
+  * - Industry-standard color coding
+  */
+  export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
   id,
   data,
   selected = false,
@@ -43,19 +42,22 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
       .filter(([k]) => k !== 'label' && k !== 'variations' && k !== 'type')
       .slice(0, 3);
     // Professional node styling with gradients and shadows
-    const nodeStyle: React.CSSProperties = {
-      cursor: 'pointer',
+    const nodeStyle: React.CSSProperties = {,
+  cursor: 'pointer',
       // Professional gradient background inspired by Cinema 4D panels
       background: `linear-gradient(),
         135deg,
-        ${professionalColors.background.tertiary} 0%,}
-        ${professionalColors.background.secondary} 50%,}
+        ${professionalColors.background.tertiary} 0%}
+}
+        ${professionalColors.background.secondary} 50%}
+}
         ${professionalColors.background.tertiary} 100%}
       )`,
       border: selected ,
         ? `2px solid ${professionalColors.accent.orange}` }
-        : `1px solid ${professionalColors.ui.border}`,}
-      borderRadius: professionalBorderRadius.md,
+        : `1px solid ${professionalColors.ui.border}`}
+},
+  borderRadius: professionalBorderRadius.md,
       minWidth: 180, // Slightly larger for better professional appearance
       minHeight: 90,
       boxShadow: selected ,
@@ -75,75 +77,78 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
       backfaceVisibility: 'hidden',
       // Subtle inner shadow for depth
       '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 100%)',
-        borderRadius: 'inherit',
-        pointerEvents: 'none',
-      }
-    };
+  content: '""',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(0, 0, 0, 0.05) 100%)',
+  borderRadius: 'inherit',
+  pointerEvents: 'none',
+};
     const headerStyle: React.CSSProperties = {
       // Cinema 4D inspired header gradient
-      background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`,}
-      color: '#ffffff',
-      padding: `${professionalSpacing[2]} ${professionalSpacing[3]}`,}
-      fontSize: 'var(--font-size-xs)',
+      background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`}
+},
+  color: '#ffffff',
+      padding: `${professionalSpacing[2]} ${professionalSpacing[3]}`}
+},
+  fontSize: 'var(--font-size-xs)',
       fontWeight: 600,
       display: 'flex',
       alignItems: 'center',
       gap: professionalSpacing[2],
-      borderRadius: `${professionalBorderRadius.md} ${professionalBorderRadius.md} 0 0`,}
+      borderRadius: `${professionalBorderRadius.md} ${professionalBorderRadius.md} 0 0`}
+}
       // Subtle text shadow for better readability
       textShadow: '0 1px 2px rgba(0,0,0,0.3)',
       // Inner highlight for professional appearance
       boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)'
     };
-    const contentStyle: React.CSSProperties = {
-      padding: `${professionalSpacing[3]} ${professionalSpacing[3]}`,}
-      color: professionalColors.text.primary,
+    const contentStyle: React.CSSProperties = {,
+  padding: `${professionalSpacing[3]} ${professionalSpacing[3]}`}
+},
+  color: professionalColors.text.primary,
       minHeight: '50px',
       background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)'
     };
-    const titleStyle: React.CSSProperties = {
-      fontWeight: 600,
+    const titleStyle: React.CSSProperties = {,
+  fontWeight: 600,
       fontSize: 'var(--font-size-base)',
       marginBottom: properties.length > 0 ? professionalSpacing[2] : 0,
       color: professionalColors.text.primary,
       lineHeight: 1.3,
       // Subtle glow for selected state
       ...(selected && {)
-        textShadow: `0 0 8px ${professionalColors.accent.orange}40`}
-      })
+  textShadow: `0 0 8px ${professionalColors.accent.orange}40`}
+  }
     };
-    const propertiesStyle: React.CSSProperties = {
-      fontSize: 'var(--font-size-xs)',
-      color: professionalColors.text.secondary,
-      lineHeight: 1.4,
-      fontFamily: 'var(--font-mono)' // Use monospace for technical properties,
-    };
-    const handleBaseStyle: React.CSSProperties = {
-      width: 14, // Slightly larger for better interaction
+    const propertiesStyle: React.CSSProperties = {,
+  fontSize: 'var(--font-size-xs)',
+  color: professionalColors.text.secondary,
+  lineHeight: 1.4,
+  fontFamily: 'var(--font-mono)' // Use monospace for technical properties,
+};
+    const handleBaseStyle: React.CSSProperties = {,
+  width: 14, // Slightly larger for better interaction
       height: 14,
       borderRadius: '50%',
-      border: `2px solid ${professionalColors.background.secondary}`,}
-      cursor: 'crosshair',
+      border: `2px solid ${professionalColors.background.secondary}`}
+},
+  cursor: 'crosshair',
       zIndex: 10,
       transition: 'all 0.2s ease',
-      boxShadow: professionalShadows.elevation.sm,
-    };
+      boxShadow: professionalShadows.elevation.sm;
+  };
     const inputHandleStyle: React.CSSProperties = {
-      ...handleBaseStyle,
-      background: professionalColors.ui.border,
-      '&:hover': {
-        background: professionalColors.ui.borderHover,
-        transform: 'scale(1.1)',
-        boxShadow: professionalShadows.elevation.md,
-      }
-    };
+  ...handleBaseStyle,
+  background: professionalColors.ui.border,
+  '&:hover': {,
+  background: professionalColors.ui.borderHover,
+  transform: 'scale(1.1)',
+  boxShadow: professionalShadows.elevation.md,
+};
     const outputHandleStyle: React.CSSProperties = {
       ...handleBaseStyle,
       background: categoryColor,
@@ -151,24 +156,23 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
         background: categoryColor,
         transform: 'scale(1.1)',
         boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40`}
-      }
     };
     // Variation badge style
-    const variationBadgeStyle: React.CSSProperties = {
-      marginLeft: 'auto',
-      width: 20,
-      height: 20,
-      backgroundColor: 'rgba(255,255,255,0.25)',
-      borderRadius: '50%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 10,
-      fontWeight: 'bold',
-      boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-      transition: 'all 0.2s ease',
-    };
-    return ();
+    const variationBadgeStyle: React.CSSProperties = {,
+  marginLeft: 'auto',
+  width: 20,
+  height: 20,
+  backgroundColor: 'rgba(255,255,255,0.25)',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: 10,
+  fontWeight: 'bold',
+  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
+  transition: 'all 0.2s ease',
+};
+    return;
       <div
         role="button"
         data-testid={`node-${id}`}
@@ -181,7 +185,6 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onSelect(id);
-          }
         }}
         style={nodeStyle}
         onMouseEnter={(e) => {
@@ -191,7 +194,6 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
             e.currentTarget.style.boxShadow = professionalShadows.node.hover;
             // Subtle glow effect on hover
             e.currentTarget.style.filter = 'brightness(1.05)';
-          }
         }}
         onMouseLeave={(e) => {
           if (!selected) {
@@ -199,7 +201,6 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
             e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
             e.currentTarget.style.boxShadow = professionalShadows.node.default;
             e.currentTarget.style.filter = 'brightness(1)';
-          }
         }}
         aria-label={(() => {
           const label = data?.label ?? nodeMeta.label;
@@ -232,14 +233,14 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
           {properties.length > 0 && ()
             <div style={propertiesStyle}>
               {properties.map(([k, v], idx) => ()
-                <div key={k} style={{ 
-                  marginBottom: idx < properties.length - 1 ? '3px' : 0,
-                  opacity: 0.8,
-                }}>
-                  <span style={{ 
-                    color: professionalColors.text.tertiary, 
-                    fontWeight: 500 ,
-                  }}>{k}:</span>{' '}
+                <div key={k} style={{
+  marginBottom: idx < properties.length - 1 ? '3px' : 0,
+  opacity: 0.8,
+}}>
+                  <span style={{
+  color: professionalColors.text.tertiary,
+  fontWeight: 500,
+}}>{k}:</span>{' '}
                   <span style={{ color: professionalColors.text.secondary }}>
                     {String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v)}
                   </span>
@@ -269,17 +270,19 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
   } catch (error) {
     console.error('ProfessionalNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
-    return ();
+    return;
       <div
         style={{
           cursor: 'pointer',
           background: `linear-gradient(),
             135deg,
-            ${professionalColors.background.tertiary} 0%,}
+            ${professionalColors.background.tertiary} 0%}
+}
             ${professionalColors.background.secondary} 100%}
           )`,
-          border: `1px solid ${professionalColors.accent.red}`,}
-          borderRadius: professionalBorderRadius.md,
+          border: `1px solid ${professionalColors.accent.red}`}
+},
+  borderRadius: professionalBorderRadius.md,
           minWidth: 180,
           minHeight: 90,
           padding: professionalSpacing[3],
@@ -289,15 +292,15 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
           justifyContent: 'center',
           fontFamily: 'var(--font-primary)',
           boxShadow: professionalShadows.elevation.md,
-          textAlign: 'center',
-        }}
+          textAlign: 'center';
+  }}
       >
         <div>
-          <div style={{ 
-            fontSize: 'var(--font-size-lg)', 
-            marginBottom: professionalSpacing[2],
-            color: professionalColors.accent.red ,
-          }}>
+          <div style={{
+  fontSize: 'var(--font-size-lg)',
+  marginBottom: professionalSpacing[2],
+  color: professionalColors.accent.red,
+}}>
             ⚠️
           </div>
           <div style={{ fontSize: 'var(--font-size-sm)' }}>
@@ -306,7 +309,6 @@ export const ProfessionalNodeRenderer = memo<ProfessionalNodeRendererProps>(({)
         </div>
       </div>
     );
-  }
 });
 ProfessionalNodeRenderer.displayName = 'ProfessionalNodeRenderer';
 

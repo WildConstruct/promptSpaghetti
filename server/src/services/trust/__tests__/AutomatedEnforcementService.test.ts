@@ -161,7 +161,7 @@ describe('AutomatedEnforcementService', () => {
           impact: 20,
           description: 'Recent security breach',
           mitigation: ['Security review']
-        },
+  }
         {
           factor: 'suspicious_activity',
           severity: 'high',
@@ -349,7 +349,7 @@ describe('AutomatedEnforcementService', () => {
           confidence: 80,
           description: 'Transaction initiated through VPN',
           detectedDate: new Date()
-        },
+  }
         {
           indicator: 'suspicious_velocity',
           type: 'behavioral',
@@ -378,7 +378,7 @@ describe('AutomatedEnforcementService', () => {
           riskFactors: [],
           mitigationStrategies: [],
           recommendedActions: []
-        },
+  }
         fraudScore: 85, // Above threshold (80)
         fraudIndicators,
         transactionContext: {} as any
@@ -426,7 +426,7 @@ describe('AutomatedEnforcementService', () => {
           riskFactors: [],
           mitigationStrategies: [],
           recommendedActions: []
-        },
+  }
         fraudScore: 60, // Below fraud threshold but multiple indicators
         fraudIndicators, // 3 indicators (at threshold)
         transactionContext: {} as any
@@ -593,7 +593,7 @@ describe('AutomatedEnforcementService', () => {
         notificationSettings: {
           adminAlerts: false,
           userNotifications: false
-        },
+  }
         reviewSettings: {
           autoReviewEnabled: false,
           appealProcessEnabled: false,
@@ -662,14 +662,14 @@ describe('AutomatedEnforcementService', () => {
           enabled: true,
           triggers: {
             trustScoreThresholds: { suspend: 25, restrict: 40, flag: 60 }
-          },
+  }
           actions: {
             autoSuspension: true,
             autoRestriction: true,
             autoFlagging: true,
             requireManualReview: false,
             notifyAdmins: false
-          },
+  }
           exemptions: {
             highTrustUsers: false,
             verifiedUsers: false,
@@ -679,7 +679,7 @@ describe('AutomatedEnforcementService', () => {
         notificationSettings: {
           adminAlerts: false,
           userNotifications: false
-        },
+  }
         reviewSettings: {
           autoReviewEnabled: false,
           appealProcessEnabled: false,
@@ -736,7 +736,7 @@ describe('AutomatedEnforcementService', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           action: 'enforcement_action_failed'
-        })
+  }
       );
     });
 

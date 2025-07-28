@@ -1,5 +1,6 @@
 import React from 'react';
 import { Graph } from '../../../graphSchema';
+
 interface GraphPreviewProps {
     graph?: Graph;
     isGenerating?: boolean;
@@ -8,7 +9,8 @@ interface GraphPreviewProps {
     className?: string;
     showStats?: boolean;
     interactive?: boolean;
-}
+
+
 /**
  * Graph preview component with interactive visualization
  */

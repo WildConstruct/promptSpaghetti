@@ -17,6 +17,7 @@
 import React from 'react';
 import { ConversionFunnelDefinition, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface FunnelAnomalyDetectionProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -32,7 +33,7 @@ export interface FunnelAnomalyDetectionProps {
     onAnomalyDetected?: (anomaly: DetectedAnomaly) => void;
     onAlertTriggered?: (alert: AnomalyAlert) => void;
     onExport?: (data: AnomalyDetectionExportData) => void;
-}
+
 export interface AnomalyDetectionConfig {
     algorithms: AnomalyAlgorithm[];
     sensitivityLevel: 'low' | 'medium' | 'high' | 'adaptive';
@@ -43,7 +44,7 @@ export interface AnomalyDetectionConfig {
     segmentAnalysis: boolean;
     cohortAnalysis: boolean;
     customRules: CustomAnomalyRule[];
-}
+
 export interface AlertConfiguration {
     channels: AlertChannel[];
     escalationRules: EscalationRule[];
@@ -51,8 +52,9 @@ export interface AlertConfiguration {
     throttling: AlertThrottling;
     severity: AlertSeverityConfig;
     recipients: AlertRecipient[];
-}
+
 export type AnomalyAlgorithm = 'statistical_zscore' | 'statistical_iqr' | 'isolation_forest' | 'local_outlier_factor' | 'prophet_decomposition' | 'lstm_autoencoder' | 'seasonal_hybrid_esd' | 'changepoint_detection';
+
 export interface AnomalyDetectionData {
     currentAnomalies: DetectedAnomaly[];
     historicalAnomalies: DetectedAnomaly[];
@@ -63,7 +65,7 @@ export interface AnomalyDetectionData {
     alertHistory: AnomalyAlert[];
     systemHealth: SystemHealthMetrics;
     detectionPerformance: DetectionPerformanceMetrics;
-}
+
 export interface DetectedAnomaly {
     id: string;
     timestamp: number;
@@ -89,10 +91,11 @@ export interface DetectedAnomaly {
     acknowledgedAt?: number;
     resolvedAt?: number;
     falsePositive?: boolean;
-}
+
 export type AnomalyType = 'performance_drop' | 'performance_spike' | 'traffic_anomaly' | 'conversion_anomaly' | 'revenue_anomaly' | 'temporal_anomaly' | 'segment_anomaly' | 'cohort_anomaly' | 'technical_anomaly';
 export type AnomalySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type AnomalyStatus = 'new' | 'acknowledged' | 'investigating' | 'resolved' | 'false_positive';
+
 export interface AnomalyContext {
     timeOfDay: number;
     dayOfWeek: number;
@@ -101,47 +104,48 @@ export interface AnomalyContext {
     concurrentEvents: ConcurrentEvent[];
     marketConditions: MarketCondition[];
     systemMetrics: SystemMetric[];
-}
+
 export interface EnvironmentalFactor {
     factor: string;
     value: string | number;
     impact: 'positive' | 'negative' | 'neutral';
     confidence: number;
-}
+
 export interface ConcurrentEvent {
     eventType: string;
     eventName: string;
     timestamp: number;
     impact: string;
     correlation: number;
-}
+
 export interface MarketCondition {
     indicator: string;
     value: number;
     trend: 'increasing' | 'decreasing' | 'stable';
     volatility: number;
-}
+
 export interface SystemMetric {
     metric: string;
     value: number;
     threshold: number;
     status: 'normal' | 'warning' | 'critical';
-}
+
 export interface PotentialRootCause {
     category: RootCauseCategory;
     description: string;
     probability: number;
     evidence: Evidence[];
     investigationSteps: string[];
-}
+
 export type RootCauseCategory = 'technical' | 'user_behavior' | 'external_factors' | 'business_changes' | 'seasonal' | 'competitive' | 'system_performance';
+
 export interface Evidence {
     type: string;
     description: string;
     strength: 'weak' | 'moderate' | 'strong';
     timestamp: number;
     source: string;
-}
+
 export interface AnomalyImpact {
     revenueImpact: number;
     userImpact: number;
@@ -150,7 +154,7 @@ export interface AnomalyImpact {
     durationEstimate: number;
     recoveryEstimate: number;
     businessCritical: boolean;
-}
+
 export interface AnomalyRecommendation {
     action: string;
     priority: 'immediate' | 'high' | 'medium' | 'low';
@@ -159,7 +163,7 @@ export interface AnomalyRecommendation {
     timeline: string;
     owner: string;
     dependencies: string[];
-}
+
 export interface AnomalyTrend {
     period: string;
     anomalyCount: number;
@@ -168,7 +172,7 @@ export interface AnomalyTrend {
     falsePositiveRate: number;
     averageDetectionTime: number;
     averageResolutionTime: number;
-}
+
 export interface PredictedAnomaly {
     predictedTimestamp: number;
     type: AnomalyType;
@@ -177,20 +181,20 @@ export interface PredictedAnomaly {
     affectedMetric: string;
     preventiveActions: PreventiveAction[];
     monitoringPlan: MonitoringPlan;
-}
+
 export interface PreventiveAction {
     action: string;
     effectiveness: number;
     cost: number;
     timeline: string;
     dependencies: string[];
-}
+
 export interface MonitoringPlan {
     metrics: string[];
     frequency: number;
     alertThresholds: Record<string, number>;
     escalationPlan: string[];
-}
+
 export interface RootCauseAnalysis {
     anomalyId: string;
     analysisTimestamp: number;
@@ -200,13 +204,13 @@ export interface RootCauseAnalysis {
     timeline: CausalTimeline[];
     confidence: number;
     validationStatus: 'pending' | 'confirmed' | 'rejected';
-}
+
 export interface CausalTimeline {
     timestamp: number;
     event: string;
     impact: string;
     correlation: number;
-}
+
 export interface AnomalyImpactAssessment {
     anomalyId: string;
     assessmentTimestamp: number;
@@ -216,55 +220,55 @@ export interface AnomalyImpactAssessment {
     affectedUserSegments: AffectedSegment[];
     businessImplications: BusinessImplication[];
     recoveryProjection: RecoveryProjection;
-}
+
 export interface DirectImpact {
     revenueloss: number;
     userLoss: number;
     conversionLoss: number;
     engagementLoss: number;
-}
+
 export interface IndirectImpact {
     brandReputation: number;
     customerSatisfaction: number;
     futureImpact: number;
     competitiveDisadvantage: number;
-}
+
 export interface TotalImpact {
     monetaryValue: number;
     userValue: number;
     strategicValue: number;
     severity: AnomalySeverity;
-}
+
 export interface AffectedSegment {
     segmentId: string;
     segmentName: string;
     impactPercentage: number;
     recoveryTime: number;
-}
+
 export interface BusinessImplication {
     area: string;
     impact: string;
     severity: 'low' | 'medium' | 'high';
     mitigation: string;
-}
+
 export interface RecoveryProjection {
     estimatedRecoveryTime: number;
     recoveryStages: RecoveryStage[];
     successProbability: number;
     resourceRequirements: ResourceRequirement[];
-}
+
 export interface RecoveryStage {
     stage: string;
     duration: number;
     expectedImprovement: number;
     dependencies: string[];
-}
+
 export interface ResourceRequirement {
     resource: string;
     amount: number;
     duration: number;
     criticality: 'essential' | 'important' | 'nice_to_have';
-}
+
 export interface AnomalyAlert {
     id: string;
     anomalyId: string;
@@ -278,44 +282,45 @@ export interface AnomalyAlert {
     acknowledgedBy?: string;
     acknowledgedAt?: number;
     resolvedAt?: number;
-}
+
 export type AlertChannel = 'email' | 'sms' | 'slack' | 'webhook' | 'pagerduty' | 'dashboard';
 export type AlertStatus = 'sent' | 'delivered' | 'acknowledged' | 'escalated' | 'resolved';
+
 export interface EscalationRule {
     severity: AnomalySeverity;
     escalationDelay: number;
     escalationChain: string[];
     maxEscalations: number;
-}
+
 export interface SuppressionRule {
     anomalyType: AnomalyType;
     suppressionDuration: number;
     conditions: SuppressionCondition[];
-}
+
 export interface SuppressionCondition {
     metric: string;
     operator: 'gt' | 'lt' | 'eq' | 'between';
     value: number | [number, number];
-}
+
 export interface AlertThrottling {
     enabled: boolean;
     maxAlertsPerHour: number;
     maxAlertsPerDay: number;
     cooldownPeriod: number;
-}
+
 export interface AlertSeverityConfig {
     critical: AlertSeveritySettings;
     high: AlertSeveritySettings;
     medium: AlertSeveritySettings;
     low: AlertSeveritySettings;
     info: AlertSeveritySettings;
-}
+
 export interface AlertSeveritySettings {
     enabled: boolean;
     channels: AlertChannel[];
     immediateAlert: boolean;
     escalationEnabled: boolean;
-}
+
 export interface AlertRecipient {
     id: string;
     name: string;
@@ -325,19 +330,19 @@ export interface AlertRecipient {
     roles: string[];
     severity: AnomalySeverity[];
     availability: AvailabilitySchedule;
-}
+
 export interface AvailabilitySchedule {
     timezone: string;
     schedule: DaySchedule[];
     holidays: string[];
     onCall: boolean;
-}
+
 export interface DaySchedule {
     day: number;
     startTime: string;
     endTime: string;
     available: boolean;
-}
+
 export interface CustomAnomalyRule {
     id: string;
     name: string;
@@ -347,7 +352,7 @@ export interface CustomAnomalyRule {
     enabled: boolean;
     metrics: string[];
     thresholds: Record<string, number>;
-}
+
 export interface SystemHealthMetrics {
     detectionLatency: number;
     alertLatency: number;
@@ -356,7 +361,7 @@ export interface SystemHealthMetrics {
     falseNegativeRate: number;
     systemAvailability: number;
     dataQuality: number;
-}
+
 export interface DetectionPerformanceMetrics {
     algorithm: AnomalyAlgorithm;
     accuracy: number;
@@ -366,7 +371,7 @@ export interface DetectionPerformanceMetrics {
     avgDetectionTime: number;
     resourceUsage: number;
     confidence: number;
-}
+
 export interface AnomalyDetectionExportData {
     anomalies: DetectedAnomaly[];
     alerts: AnomalyAlert[];
@@ -375,6 +380,6 @@ export interface AnomalyDetectionExportData {
     performanceMetrics: DetectionPerformanceMetrics[];
     exportTimestamp: number;
     configuration: AnomalyDetectionConfig;
-}
+
 export declare const FunnelAnomalyDetection: React.FC<FunnelAnomalyDetectionProps>;
 //# sourceMappingURL=FunnelAnomalyDetection.d.ts.map

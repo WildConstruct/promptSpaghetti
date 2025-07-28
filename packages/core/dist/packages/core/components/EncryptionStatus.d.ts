@@ -27,15 +27,7 @@ interface EncryptionStatusProps {
     showDetails?: boolean;
 }
 export declare const EncryptionStatus: React.FC<EncryptionStatusProps>;
-export declare const EncryptionStatusIcon: React.FC<{
-    encryptionState: EncryptionState;
-    onClick?: () => void;
-}>;
-export declare const EncryptionDetails: React.FC<{
-    encryptionState: EncryptionState;
-    onEncrypt?: () => void;
-    onDecrypt?: () => void;
-    onChangeAlgorithm?: (algorithm: EncryptionAlgorithm) => void;
-}>;
+export declare const EncryptionStatusIcon: React.FC<{}, encryptionState>, EncryptionState: any;
+export declare const EncryptionDetails: React.FC<{}, encryptionState>, EncryptionState: any;
 export {};
 //# sourceMappingURL=EncryptionStatus.d.ts.map

@@ -5,7 +5,8 @@
  * Central service for converting prompt analysis results into React Flow nodes and edges
  * with comprehensive security hardening, performance optimization, and validation
  */
-import { NodeGenerationRequest, GeneratedGraph, PerformanceMetrics, SecurityConstraints } from '../types/NodeGenerationTypes';
+import { Position } from 'reactflow';
+import { NodeGenerationRequest, GeneratedGraph, LayoutType } from '../types/NodeGenerationTypes';
 /**
  * Main service class for node generation with security hardening
  */
@@ -25,43 +26,12 @@ export declare class NodeGenerator {
      * Calculate optimal layout for nodes using specified algorithm
      */
     private calculateLayout;
-    /**
-     * Create React Flow nodes from suggestions and positions
-     */
-    private createNodes;
-    /**
-     * Generate intelligent connections between nodes
-     */
-    private generateConnections;
-    /**
-     * Create workflow-based connections based on node types and logic
-     */
-    private createWorkflowConnections;
-    /**
-     * Create a React Flow edge with proper configuration
-     */
-    private createEdge;
-    /**
-     * Validate the generated graph for consistency and correctness
-     */
-    private validateGeneratedGraph;
-    private groupSuggestionsByCategory;
-    private calculateBounds;
-    private calculateLayoutEfficiency;
-    private calculateAverageConfidence;
-    private calculateConnectionDensity;
-    private calculateComplexityScore;
-    private generateId;
-    private updateMetrics;
-    private initializeMetrics;
-    private initializeSecurityConstraints;
-    /**
-     * Get current performance metrics
-     */
-    getPerformanceMetrics(): PerformanceMetrics;
-    /**
-     * Get security constraints
-     */
-    getSecurityConstraints(): SecurityConstraints;
+    layoutType: LayoutType;
+    startPosition: Position;
+    spacing: {
+        horizontal: number;
+        vertical: number;
+    };
+    LayoutResult: any;
 }
 //# sourceMappingURL=NodeGenerator.d.ts.map

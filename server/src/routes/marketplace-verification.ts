@@ -11,17 +11,22 @@ import {
 import { DocumentVerificationService } from '../services/DocumentVerificationService';
 
 // Request interfaces
+}
 interface SubmitVerificationRequest {
   verification_type: VerificationType;
   user_info?: any;
   business_info?: any;
   notes?: string;
 }
+}
 
+}
 interface UploadDocumentRequest {
   document_type: DocumentType;
 }
+}
 
+}
 interface VerificationQueueQuery {
   status?: VerificationStatus;
   type?: VerificationType;
@@ -30,7 +35,9 @@ interface VerificationQueueQuery {
   sort_by?: 'submitted_at' | 'priority' | 'type';
   sort_order?: 'asc' | 'desc';
 }
+}
 
+}
 interface ProcessDecisionRequest extends VerificationDecision {
   // Extends the base decision interface
 }
@@ -40,7 +47,7 @@ const upload = multer({
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB
     files: 5 // Max 5 files per upload
-  },
+  }
   fileFilter: (req, file, cb) => {
     const allowedMimes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp',
@@ -161,7 +168,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           buffer: file.buffer,
           mimetype: file.mimetype,
           size: file.size
-        },
+  }
         document_type
       );
 
@@ -188,7 +195,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
           validation_score: validation.validation_score,
           issues: validation.issues,
           recommendations: validation.recommendations
-        },
+  }
         analysis: {
           confidence_score: analysis.confidence_score,
           verification_status: analysis.verification_status,
@@ -360,7 +367,7 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
             statistics.avg_processing_time < 7 ? 'good' : 'needs_improvement',
           approval_trend: statistics.approval_rate > 80 ? 'high_approval' :
             statistics.approval_rate > 60 ? 'moderate_approval' : 'high_rejection'
-        },
+  }
         recommendations: this.generateRecommendations(statistics)
       };
 
@@ -435,13 +442,13 @@ export async function marketplaceVerificationRoutes(fastify: FastifyInstance, po
             verification_process: 'operational',
             document_verification: 'operational'
           }
-        },
+  }
         configuration: {
           max_file_size: '10MB',
           supported_formats: ['PDF', 'JPEG', 'PNG', 'WebP'],
           verification_types: Object.values(VerificationType),
           document_types: Object.values(DocumentType)
-        },
+  }
         timestamp: new Date().toISOString()
       };
 

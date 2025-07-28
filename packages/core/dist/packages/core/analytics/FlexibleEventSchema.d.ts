@@ -21,29 +21,29 @@ export interface EventSchemaDefinition {
         createdAt: number;
         updatedAt: number;
         createdBy: string;
-        tags: string[];
+        tags: string;
         isActive: boolean;
         deprecated?: boolean;
     };
     baseRequirements: {
-        requiredFields: string[];
-        optionalFields: string[];
-        forbiddenFields: string[];
+        requiredFields: string;
+        optionalFields: string;
+        forbiddenFields: string;
     };
     properties: Map<string, PropertySchemaDefinition>;
-    globalConstraints: GlobalConstraint[];
-    transformations: SchemaTransformation[];
+    globalConstraints: GlobalConstraint;
+    transformations: SchemaTransformation;
     validation: {
         strictMode: boolean;
         allowUnknownProperties: boolean;
         validatePropertyTypes: boolean;
         enforceConstraints: boolean;
-        customValidators: CustomValidator[];
+        customValidators: CustomValidator;
     };
     inheritance?: {
         parentSchema: string;
-        overrides: PropertyOverride[];
-        extensions: PropertyExtension[];
+        overrides: PropertyOverride;
+        extensions: PropertyExtension;
     };
     performance: {
         cacheValidationResults: boolean;
@@ -66,20 +66,20 @@ export interface PropertySchemaDefinition extends Omit<PropertySchema, 'relation
     validation: {
         enabled: boolean;
         level: 'strict' | 'lenient' | 'permissive';
-        customRules: ValidationRule[];
+        customRules: ValidationRule;
         performance: {
             timeout: number;
             priority: 'high' | 'medium' | 'low';
         };
     };
-    transformationPipeline: PropertyTransformationStep[];
-    relationships: PropertyRelationshipDefinition[];
+    transformationPipeline: PropertyTransformationStep;
+    relationships: PropertyRelationshipDefinition;
     metadata: {
         businessContext: string;
         dataSource: string;
         updateFrequency: string;
         qualityMetrics?: PropertyQualityMetrics;
-        examples: PropertyExample[];
+        examples: PropertyExample;
     };
 }
 export interface PropertyTransformationStep {
@@ -112,7 +112,7 @@ export interface ValidationRule {
     };
     execution: {
         priority: number;
-        dependencies: string[];
+        dependencies: string;
         asyncValidation: boolean;
         cacheResults: boolean;
     };
@@ -137,7 +137,7 @@ export interface RelationshipSpec {
     metadata: {
         description: string;
         businessReason: string;
-        examples: string[];
+        examples: string;
     };
 }
 export interface GlobalConstraint {
@@ -146,7 +146,7 @@ export interface GlobalConstraint {
     description: string;
     constraint: ConditionLogic;
     severity: 'error' | 'warning';
-    applicableEvents: string[];
+    applicableEvents: string;
 }
 export interface SchemaTransformation {
     id: string;
@@ -159,8 +159,8 @@ export interface SchemaTransformation {
 export interface TransformationDefinition {
     type: 'property_mapping' | 'data_enrichment' | 'format_conversion' | 'aggregation' | 'custom';
     config: Record<string, unknown>;
-    inputFields: string[];
-    outputFields: string[];
+    inputFields: string;
+    outputFields: string;
     preserveOriginal: boolean;
 }
 export interface CustomValidator {
@@ -169,16 +169,16 @@ export interface CustomValidator {
     description: string;
     validator: {
         functionBody: string;
-        parameters: ValidatorParameter[];
+        parameters: ValidatorParameter;
         returnType: 'boolean' | 'ValidationResult' | 'Promise<ValidationResult>';
     };
     execution: {
         timeout: number;
         sandboxed: boolean;
-        allowedAPIs: string[];
+        allowedAPIs: string;
         memoryLimit: number;
     };
-    tests: ValidatorTest[];
+    tests: ValidatorTest;
 }
 export interface ValidatorParameter {
     name: string;
@@ -221,36 +221,36 @@ export interface SchemaValidationResult {
     isValid: boolean;
     overallScore: number;
     fieldResults: Map<string, FieldValidationResult>;
-    globalConstraintResults: GlobalConstraintResult[];
-    transformationResults: TransformationResult[];
+    globalConstraintResults: GlobalConstraintResult;
+    transformationResults: TransformationResult;
     performance: {
         totalTime: number;
         validationTime: number;
         transformationTime: number;
         cacheHitRate: number;
     };
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
     metadata: {
         schemaVersion: string;
         validationTimestamp: number;
         validatorVersion: string;
-        processingPipeline: string[];
+        processingPipeline: string;
     };
 }
 export interface FieldValidationResult {
     fieldName: string;
     isValid: boolean;
     score: number;
-    ruleResults: RuleValidationResult[];
+    ruleResults: RuleValidationResult;
     originalValue: unknown;
     transformedValue: unknown;
     transformationApplied: boolean;
-    relationshipResults: RelationshipValidationResult[];
+    relationshipResults: RelationshipValidationResult;
     validationTime: number;
     cacheUsed: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
 }
 export interface RuleValidationResult {
     ruleId: string;
@@ -274,7 +274,7 @@ export interface GlobalConstraintResult {
     constraintName: string;
     satisfied: boolean;
     score: number;
-    affectedFields: string[];
+    affectedFields: string;
     message?: string;
 }
 export interface TransformationResult {
@@ -282,18 +282,14 @@ export interface TransformationResult {
     transformationName: string;
     executed: boolean;
     success: boolean;
-    inputFields: string[];
-    outputFields: string[];
+    inputFields: string;
+    outputFields: string;
     performance: {
         executionTime: number;
         memoryUsed: number;
     };
     error?: string;
 }
-/**
- * Flexible Event Schema Manager
- * Manages schema definitions, validation, and transformations
- */
 export declare class FlexibleEventSchemaManager {
     private schemas;
     private validationCache;
@@ -309,11 +305,17 @@ export declare class FlexibleEventSchemaManager {
     /**
      * Validate event against schema
      */
-    validateEvent(event: FlexibleConversionEvent, schemaId: string, options?: ValidationOptions): Promise<SchemaValidationResult>;
+    validateEvent(): any;
+    event: FlexibleConversionEvent;
+    schemaId: string;
+    options: ValidationOptions;
     /**
      * Transform event according to schema
      */
-    transformEvent(event: FlexibleConversionEvent, schemaId: string, stage?: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval'): Promise<FlexibleConversionEvent>;
+    transformEvent(): any;
+    event: FlexibleConversionEvent;
+    schemaId: string;
+    stage: 'pre_validation' | 'post_validation' | 'pre_storage' | 'post_retrieval';
     /**
      * Get schema by ID
      */
@@ -321,57 +323,14 @@ export declare class FlexibleEventSchemaManager {
     /**
      * List all available schemas
      */
-    listSchemas(): EventSchemaDefinition[];
+    listSchemas(): EventSchemaDefinition;
     /**
      * Update existing schema
      */
     updateSchema(schemaId: string, updates: Partial<EventSchemaDefinition>): void;
-    /**
-     * Create schema from template
-     */
-    createSchemaFromTemplate(templateName: string, schemaId: string, customizations?: Partial<EventSchemaDefinition>): EventSchemaDefinition;
-    private performValidation;
     private validateBaseRequirements;
-    private validateProperties;
-    private validateProperty;
-    private validatePropertyType;
-    private validatePropertyConstraints;
-    private validateCustomRules;
-    private validateGlobalConstraints;
-    private validateRelationships;
-    private getPropertyType;
-    private isTypeCompatible;
-    private validateConstraint;
-    private validateFormat;
-    private executeCustomConstraint;
-    private executeCustomRule;
-    private evaluateCondition;
-    private evaluateGlobalConstraint;
-    private validateRelationship;
-    private calculateOverallScore;
-    private generateConstraintFix;
-    private hasField;
-    private generateCacheKey;
-    private hashObject;
-    private cacheValidationResult;
-    private clearCacheForSchema;
-    private validateSchemaDefinition;
-    private getSchemaTemplate;
-    private shouldApplyTransformation;
-    private applyTransformation;
-    private transformProperty;
-    private applyTransformationStep;
-    private initializeDefaultSchemas;
-    private createMarketplaceEventSchema;
-    private createConversionEventSchema;
-    private createUserBehaviorSchema;
+    schema: EventSchemaDefinition;
+    result: SchemaValidationResult;
+    Promise(): any;
 }
-export interface ValidationOptions {
-    useCache?: boolean;
-    strictMode?: boolean;
-    validateRelationships?: boolean;
-    maxValidationTime?: number;
-    customContext?: Record<string, unknown>;
-}
-export default FlexibleEventSchemaManager;
 //# sourceMappingURL=FlexibleEventSchema.d.ts.map

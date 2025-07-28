@@ -7,9 +7,7 @@ import { NotificationManager, NotificationPreferences as PrefsType } from './Not
 interface NotificationPreferencesProps {
   notificationManager: NotificationManager;
   className?: string;
-}
-
-export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({)
+  export const NotificationPreferences: React.FC<NotificationPreferencesProps> = ({,)
   notificationManager,
   className = ''
 }) => {
@@ -28,15 +26,13 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       const prefs = await notificationManager.getPreferences();
       setPreferences(prefs);
     } catch (error) {
-      console.error('Failed to load preferences:', error);
-    } finally {
+  console.error('Failed to load preferences:', error);
+} finally {
       setLoading(false);
-    }
   };
   const checkBrowserPermission = () => {
     if ('Notification' in window) {
       setBrowserPermission(Notification.permission);
-    }
   };
   const requestBrowserPermission = async () => {
     const permission = await notificationManager.requestPermission();
@@ -64,10 +60,9 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       await notificationManager.updatePreferences(preferences);
       setHasChanges(false);
     } catch (error) {
-      console.error('Failed to save preferences:', error);
-    } finally {
+  console.error('Failed to save preferences:', error);
+} finally {
       setSaving(false);
-    }
   };
   const resetToDefaults = () => {
     // This would reset to default preferences
@@ -75,15 +70,14 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     setHasChanges(false);
   };
   if (loading || !preferences) {
-    return ();
+    return;
       <div className={`notification-preferences ${className}`}>}
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`notification-preferences ${className} max-w-4xl mx-auto`}>}
       {/* Header */}
       <div className="mb-8">
@@ -191,7 +185,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     Only notify for @mentions
                   </label>
                 </div>
-              }
             />
             {/* Collaboration */}
             <NotificationTypeSection
@@ -213,7 +206,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     Show presence updates
                   </label>
                 </div>
-              }
             />
             {/* Workspace */}
             <NotificationTypeSection
@@ -235,7 +227,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     Notify about member changes
                   </label>
                 </div>
-              }
             />
             {/* Approvals */}
             <NotificationTypeSection
@@ -265,7 +256,6 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
                     Only maintenance notifications
                   </label>
                 </div>
-              }
             />
           </div>
         </div>
@@ -384,16 +374,15 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   );
 };
 interface NotificationTypeSectionProps {
-  title: string;
+  title: string;,
   description: string;
-  icon: string;
+  icon: string;,
   preferences: {,
-    enabled: boolean;
-    channels: ('in_app' | 'email' | 'push')[];
-  };
+  enabled: boolean;,
+  channels: ('in_app' | 'email' | 'push')[];
+};
   onChange: (updates: unknown) => void;
   extraOptions?: React.ReactNode;
-}
 const NotificationTypeSection: React.FC<NotificationTypeSectionProps> = ({)
   title,
   description,
@@ -408,7 +397,7 @@ const NotificationTypeSection: React.FC<NotificationTypeSectionProps> = ({)
       : [...preferences.channels, channel];
     onChange({ channels: newChannels });
   };
-  return ();
+  return;
     <div className="border border-gray-100 rounded-lg p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-3">

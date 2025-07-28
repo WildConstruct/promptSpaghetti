@@ -12,6 +12,7 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 interface DirectorPreviewToolbarProps {
     nodes: Node[];
     edges: Edge[];
@@ -20,7 +21,7 @@ interface DirectorPreviewToolbarProps {
     onHighlightPath?: (nodeIds: string[], edgeIds: string[]) => void;
     className?: string;
     compactMode?: boolean;
-}
+
 export declare const DirectorPreviewToolbar: React.FC<DirectorPreviewToolbarProps>;
 export default DirectorPreviewToolbar;
 //# sourceMappingURL=DirectorPreviewToolbar.d.ts.map

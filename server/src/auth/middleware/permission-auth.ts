@@ -5,6 +5,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { RBACService } from '../services/RBACService';
 import { PermissionCheck, PermissionContext } from '../types';
 
+}
 export interface PermissionAuthOptions {
   resource: string;
   action: string;
@@ -12,6 +13,7 @@ export interface PermissionAuthOptions {
   requireAll?: boolean; // If multiple permissions, require all or any
   allowSuperAdmin?: boolean; // Allow super_admin to bypass checks
   extractContext?: (request: FastifyRequest) => PermissionContext | Promise<PermissionContext>;
+}
 }
 
 export function createPermissionAuthMiddleware(rbacService: RBACService) {
@@ -105,6 +107,7 @@ async function extractDefaultContext(
   request: FastifyRequest,
   userId: string
 ): Promise<PermissionContext> {
+
   const context: PermissionContext = { userId };
 
   // Extract from URL parameters
@@ -147,91 +150,86 @@ export const PermissionConfigs = {
     resource: 'graphs',
     action: 'read',
     allowSuperAdmin: true
-  },
+  }
   GRAPHS_WRITE: {
     resource: 'graphs',
     action: 'write',
     allowSuperAdmin: true
-  },
+  }
   GRAPHS_DELETE: {
     resource: 'graphs',
     action: 'delete',
     allowSuperAdmin: true
-  },
+  }
   GRAPHS_EXECUTE: {
     resource: 'graphs',
     action: 'execute',
     allowSuperAdmin: true
-  },
-
+  }
   // User permissions
   USERS_READ: {
     resource: 'users',
     action: 'read',
     allowSuperAdmin: true
-  },
+  }
   USERS_WRITE: {
     resource: 'users',
     action: 'write',
     allowSuperAdmin: true
-  },
+  }
   USERS_DELETE: {
     resource: 'users',
     action: 'delete',
     allowSuperAdmin: true
-  },
-
+  }
   // Organization permissions
   ORGANIZATIONS_READ: {
     resource: 'organizations',
     action: 'read',
     allowSuperAdmin: true
-  },
+  }
   ORGANIZATIONS_WRITE: {
     resource: 'organizations',
     action: 'write',
     allowSuperAdmin: true
-  },
+  }
   ORGANIZATIONS_DELETE: {
     resource: 'organizations',
     action: 'delete',
     allowSuperAdmin: true
-  },
-
+  }
   // Team permissions
   TEAMS_READ: {
     resource: 'teams',
     action: 'read',
     allowSuperAdmin: true
-  },
+  }
   TEAMS_WRITE: {
     resource: 'teams',
     action: 'write',
     allowSuperAdmin: true
-  },
+  }
   TEAMS_DELETE: {
     resource: 'teams',
     action: 'delete',
     allowSuperAdmin: true
-  },
-
+  }
   // Role permissions
   ROLES_READ: {
     resource: 'roles',
     action: 'read',
     allowSuperAdmin: true
-  },
+  }
   ROLES_WRITE: {
     resource: 'roles',
     action: 'write',
     allowSuperAdmin: true
-  },
+  }
   ROLES_DELETE: {
     resource: 'roles',
     action: 'delete',
     allowSuperAdmin: true
-  },
-
+  }
   // System administration
   SYSTEM_ADMIN: {
     resource: 'system',
@@ -285,8 +283,7 @@ export const ContextExtractors = {
     }
     
     return context;
-  },
-
+  }
   // Extract team context
   teamContext: async (request: FastifyRequest): Promise<PermissionContext> => {
     const user = (request.user as any);
@@ -297,8 +294,7 @@ export const ContextExtractors = {
       teamId: params.teamId,
       organizationId: params.organizationId
     };
-  },
-
+  }
   // Extract resource ownership context
   resourceOwnership: async (request: FastifyRequest): Promise<PermissionContext> => {
     const user = (request.user as any);
@@ -318,5 +314,6 @@ declare module 'fastify' {
     hasPermission: (userId: string, resource: string, action: string, context?: PermissionContext) => Promise<boolean>;
     getUserPermissions: (userId: string) => Promise<any[]>;
     getUserRoles: (userId: string) => Promise<any[]>;
+}
   }
 }

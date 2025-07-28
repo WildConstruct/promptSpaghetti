@@ -24,6 +24,7 @@ import { SystemDiagnostics, SystemHealthReport } from './SystemDiagnostics';
 import { HealthCheckFramework } from './HealthCheckFramework';
 import crypto from 'crypto';
 
+}
 export interface AdminDashboardData {
   systemHealth: {
     status: 'healthy' | 'warning' | 'critical';
@@ -32,6 +33,7 @@ export interface AdminDashboardData {
     activeUsers: number;
     totalRequests: number;
     errorRate: number;
+}
   };
   userMetrics: {
     totalUsers: number;
@@ -59,6 +61,7 @@ export interface AdminDashboardData {
   scheduledMaintenance: MaintenanceTask[];
 }
 
+}
 export interface SecurityAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -70,7 +73,9 @@ export interface SecurityAlert {
   resolvedAt?: Date;
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 export interface AdminActivity {
   id: string;
   adminId: string;
@@ -83,7 +88,9 @@ export interface AdminActivity {
   result: 'success' | 'failure' | 'partial';
   details?: Record<string, unknown>;
 }
+}
 
+}
 export interface MaintenanceTask {
   id: string;
   name: string;
@@ -96,7 +103,9 @@ export interface MaintenanceTask {
   createdBy: string;
   assignedTo?: string;
 }
+}
 
+}
 export interface UserManagementAction {
   userId: string;
   action: 'activate' | 'deactivate' | 'suspend' | 'delete' | 'verify' | 'reset_password' | 'force_logout';
@@ -104,7 +113,9 @@ export interface UserManagementAction {
   duration?: number; // For suspension duration in hours
   notifyUser?: boolean;
 }
+}
 
+}
 export interface SystemConfiguration {
   category: string;
   settings: Record<string, unknown>;
@@ -113,13 +124,16 @@ export interface SystemConfiguration {
   version: number;
   description?: string;
 }
+}
 
+}
 export interface BulkUserOperation {
   operation: 'activate' | 'deactivate' | 'suspend' | 'grant_role' | 'revoke_role' | 'send_notification';
   userIds: string[];
   parameters?: Record<string, unknown>;
   reason: string;
   scheduledAt?: Date;
+}
 }
 
 export class AdminToolsService {
@@ -153,6 +167,7 @@ export class AdminToolsService {
    * Get comprehensive admin dashboard data
    */
   async getDashboardData(adminId: string): Promise<AdminDashboardData> {
+
     try {
       // Run all data collection in parallel for better performance
       const [
@@ -198,7 +213,7 @@ export class AdminToolsService {
         resourceType: 'admin_dashboard',
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -299,7 +314,7 @@ export class AdminToolsService {
           successCount,
           failedCount,
           reason: operation.reason
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -316,7 +331,7 @@ export class AdminToolsService {
           operation: operation.operation,
           reason: operation.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -333,6 +348,7 @@ export class AdminToolsService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       switch (action.action) {
       case 'activate':
@@ -404,7 +420,7 @@ export class AdminToolsService {
           reason: action.reason,
           duration: action.duration,
           notifyUser: action.notifyUser
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -419,7 +435,7 @@ export class AdminToolsService {
         details: {
           reason: action.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -432,6 +448,7 @@ export class AdminToolsService {
    * Get system configuration
    */
   async getSystemConfiguration(category?: string): Promise<SystemConfiguration[]> {
+
     let query = 'SELECT * FROM system_configuration';
     const params: unknown[] = [];
 
@@ -456,6 +473,7 @@ export class AdminToolsService {
     description?: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     try {
       // Get current version
       const currentResult = await this.dbService.query(
@@ -488,7 +506,7 @@ export class AdminToolsService {
           version: newVersion,
           description,
           settingsKeys: Object.keys(settings)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
@@ -502,7 +520,7 @@ export class AdminToolsService {
         resourceId: category,
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -515,6 +533,7 @@ export class AdminToolsService {
    * Get comprehensive system health report
    */
   async getSystemHealthReport(adminId: string): Promise<SystemHealthReport> {
+
     try {
       const healthReport = await this.systemDiagnostics.generateHealthReport();
 
@@ -527,7 +546,7 @@ export class AdminToolsService {
           reportId: healthReport.reportId,
           healthScore: healthReport.healthScore,
           overallHealth: healthReport.overallHealth
-        },
+  }
         severity: 'info'
       });
 
@@ -540,7 +559,7 @@ export class AdminToolsService {
         resourceType: 'system_health',
         details: {
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         severity: 'error'
       });
       throw error;
@@ -555,6 +574,7 @@ export class AdminToolsService {
     adminId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<MaintenanceTask> {
+
     const taskId = crypto.randomUUID();
     const now = new Date();
 
@@ -597,7 +617,7 @@ export class AdminToolsService {
           priority: task.priority,
           scheduledAt: task.scheduledAt.toISOString(),
           assignedTo: task.assignedTo
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -613,7 +633,7 @@ export class AdminToolsService {
         details: {
           name: task.name,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -692,6 +712,7 @@ export class AdminToolsService {
   }
 
   private async getSecurityAlerts(): Promise<SecurityAlert[]> {
+
     const result = await this.dbService.query(`
       SELECT * FROM security_alerts 
       WHERE resolved = false 
@@ -703,6 +724,7 @@ export class AdminToolsService {
   }
 
   private async getRecentAdminActivities(_adminId: string): Promise<AdminActivity[]> {
+
     const result = await this.dbService.query(`
       SELECT 
         al.id, al.user_id, u.email, al.action, al.resource_type as target,
@@ -729,6 +751,7 @@ export class AdminToolsService {
   }
 
   private async getScheduledMaintenance(): Promise<MaintenanceTask[]> {
+
     const result = await this.dbService.query(`
       SELECT * FROM maintenance_tasks 
       WHERE status IN ('pending', 'in_progress')

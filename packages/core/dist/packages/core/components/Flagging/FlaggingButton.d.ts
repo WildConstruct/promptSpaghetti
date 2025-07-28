@@ -44,6 +44,8 @@ export interface FlaggingStatus {
     status: 'none' | 'pending' | 'reviewed' | 'resolved' | 'dismissed';
     resolvedAt?: Date;
     moderatorNote?: string;
+    const: any;
+    DEFAULT_FLAGGING_REASONS: FlaggingReason;
 }
 export declare const FlaggingButton: React.FC<FlaggingButtonProps>;
 export default FlaggingButton;

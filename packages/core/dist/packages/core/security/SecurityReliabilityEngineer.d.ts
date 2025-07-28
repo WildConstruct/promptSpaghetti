@@ -27,12 +27,12 @@ export interface ServiceLevelObjective {
         last_reset: number;
     };
     alerting: {
-        burn_rate_alerts: BurnRateAlert[];
+        burn_rate_alerts: BurnRateAlert;
         budget_exhaustion_threshold: number;
         multi_window_alerting: boolean;
-        escalation_policy: string[];
+        escalation_policy: string;
     };
-    performance_history: SLOPerformanceRecord[];
+    performance_history: SLOPerformanceRecord;
     created_by: string;
     created_at: number;
     last_updated: number;
@@ -45,7 +45,7 @@ export interface BurnRateAlert {
     long_window: number;
     burn_rate_threshold: number;
     severity: 'warning' | 'critical';
-    notification_channels: string[];
+    notification_channels: string;
 }
 export interface SLOPerformanceRecord {
     timestamp: number;
@@ -55,8 +55,8 @@ export interface SLOPerformanceRecord {
     target_performance: number;
     error_budget_consumed: number;
     error_budget_remaining: number;
-    incidents_affecting_slo: string[];
-    automated_actions_taken: string[];
+    incidents_affecting_slo: string;
+    automated_actions_taken: string;
 }
 export interface ReliabilityIncident {
     id: string;
@@ -76,20 +76,20 @@ export interface ReliabilityIncident {
         postmortem_completed_at?: number;
     };
     impact: {
-        affected_services: string[];
-        affected_slos: string[];
+        affected_services: string;
+        affected_slos: string;
         customer_impact: 'none' | 'minimal' | 'moderate' | 'significant' | 'severe';
         error_budget_impact: Record<string, number>;
         estimated_cost: number;
         users_affected: number;
     };
     response: {
-        responders: string[];
+        responders: string;
         incident_commander: string;
-        communication_channels: string[];
-        actions_taken: IncidentAction[];
-        lessons_learned: string[];
-        improvement_items: ImprovementItem[];
+        communication_channels: string;
+        actions_taken: IncidentAction;
+        lessons_learned: string;
+        improvement_items: ImprovementItem;
     };
     created_by: string;
     created_at: number;
@@ -153,34 +153,24 @@ export interface ReliabilityMetrics {
         connection_pool_utilization: number;
         queue_depth: number;
     };
-    dependencies: Array<{
-        service: string;
-        availability: number;
-        avg_response_time: number;
-        error_rate: number;
-        health_score: number;
-    }>;
-    collected_at: number;
-    collection_method: 'automated' | 'manual';
+    dependencies: Array<{}, service>;
+    string: any;
+    availability: number;
+    avg_response_time: number;
+    error_rate: number;
+    health_score: number;
 }
 export interface PostmortemTemplate {
     id: string;
     name: string;
     description: string;
-    incident_categories: string[];
-    sections: Array<{
-        title: string;
-        description: string;
-        required: boolean;
-        type: 'text' | 'timeline' | 'metrics' | 'action_items' | 'root_cause_analysis';
-        template_content?: string;
-    }>;
-    required_reviewers: string[];
-    approval_required: boolean;
-    auto_assign_follow_ups: boolean;
-    created_by: string;
-    created_at: number;
-    last_updated: number;
+    incident_categories: string;
+    sections: Array<{}, title>;
+    string: any;
+    description: string;
+    required: boolean;
+    type: 'text' | 'timeline' | 'metrics' | 'action_items' | 'root_cause_analysis';
+    template_content?: string;
 }
 export interface ReliabilityReport {
     id: string;
@@ -192,47 +182,20 @@ export interface ReliabilityReport {
     };
     summary: {
         overall_reliability_score: number;
-        key_achievements: string[];
+        key_achievements: string;
         major_incidents: number;
         error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
-        top_reliability_risks: string[];
+        top_reliability_risks: string;
     };
     metrics: {
-        slo_performance: Array<{
-            slo_id: string;
-            slo_name: string;
-            target: number;
-            actual: number;
-            status: 'met' | 'missed' | 'at_risk';
-            error_budget_remaining: number;
-        }>;
-        incident_statistics: {
-            total_incidents: number;
-            by_severity: Record<string, number>;
-            by_category: Record<string, number>;
-            avg_mttr: number;
-            avg_mttd: number;
-        };
-        service_health: Array<{
-            service: string;
-            availability: number;
-            performance_score: number;
-            capacity_utilization: number;
-            trend: 'improving' | 'stable' | 'degrading';
-        }>;
+        slo_performance: Array<{}, slo_id>;
+        string: any;
+        slo_name: string;
+        target: number;
+        actual: number;
+        status: 'met' | 'missed' | 'at_risk';
+        error_budget_remaining: number;
     };
-    recommendations: Array<{
-        priority: 'low' | 'medium' | 'high' | 'critical';
-        category: 'monitoring' | 'capacity' | 'automation' | 'process';
-        title: string;
-        description: string;
-        estimated_impact: string;
-        estimated_effort: string;
-    }>;
-    generated_by: string;
-    generated_at: number;
-    reviewed_by?: string[];
-    approved_at?: number;
 }
 export interface ReliabilityEvent {
     id: string;
@@ -243,11 +206,11 @@ export interface ReliabilityEvent {
     title: string;
     description: string;
     data: {
-        affected_services?: string[];
+        affected_services?: string;
         metrics?: Record<string, number>;
         thresholds?: Record<string, number>;
         projected_impact?: string;
-        recommended_actions?: string[];
+        recommended_actions?: string;
     };
     response: {
         acknowledged: boolean;
@@ -266,51 +229,5 @@ export declare class SecurityReliabilityEngineer extends EventEmitter {
     private reports;
     private events;
     constructor();
-    createSLO(slo: Omit<ServiceLevelObjective, 'id' | 'created_at' | 'last_updated' | 'error_budget' | 'performance_history'>): Promise<string>;
-    updateSLOPerformance(sloId: string, measurement: {
-        actual_performance: number;
-        measurement_window_start: number;
-        measurement_window_end: number;
-        incidents?: string[];
-    }): Promise<void>;
-    private calculateBurnRate;
-    private handleSLOViolation;
-    private checkErrorBudgetAlerts;
-    createIncident(incident: Omit<ReliabilityIncident, 'id' | 'created_at' | 'last_updated' | 'timeline' | 'response'>): Promise<string>;
-    updateIncidentStatus(incidentId: string, status: ReliabilityIncident['status'], updates: {
-        timeline_update?: Partial<ReliabilityIncident['timeline']>;
-        actions?: IncidentAction[];
-        lessons_learned?: string[];
-        improvement_items?: ImprovementItem[];
-    }): Promise<void>;
-    collectServiceMetrics(service: string): Promise<string>;
-    private calculateServiceHealthScore;
-    generateReliabilityReport(reportType: ReliabilityReport['report_type'], period: {
-        start: number;
-        end: number;
-    }): Promise<string>;
-    private calculateAverageMTTR;
-    private calculateAverageMTTD;
-    getSystemHealth(): {
-        overall_status: 'healthy' | 'degraded' | 'critical';
-        slo_compliance: number;
-        active_incidents: number;
-        error_budget_status: 'healthy' | 'at_risk' | 'exhausted';
-        services: Array<{
-            name: string;
-            status: 'healthy' | 'degraded' | 'unhealthy';
-            health_score: number;
-        }>;
-    };
-    private initializeDefaultSLOs;
-    private startMetricsCollection;
-    private startErrorBudgetMonitoring;
-    getSLOs(): ServiceLevelObjective[];
-    getIncidents(): ReliabilityIncident[];
-    getEvents(): ReliabilityEvent[];
-    getReports(): ReliabilityReport[];
-    exportConfiguration(): Promise<string>;
-    importConfiguration(configJson: string): Promise<void>;
 }
-export default SecurityReliabilityEngineer;
 //# sourceMappingURL=SecurityReliabilityEngineer.d.ts.map

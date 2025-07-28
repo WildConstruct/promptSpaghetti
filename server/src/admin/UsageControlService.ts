@@ -44,6 +44,7 @@ export enum UsageControlStatus {
   MONITORING_ONLY = 'monitoring_only'
 }
 
+}
 export interface UsageLimit {
   limitId: string;
   name: string;
@@ -57,7 +58,9 @@ export interface UsageLimit {
   configuration: LimitConfiguration;
   metadata: UsageLimitMetadata;
 }
+}
 
+}
 export interface UsageScope {
   global: boolean;
   userIds?: string[];
@@ -68,7 +71,9 @@ export interface UsageScope {
   apiKeys?: string[];
   customFilters?: Record<string, any>;
 }
+}
 
+}
 export interface LimitConfiguration {
   burstAllowance: number;
   gracePeriod: number; // milliseconds
@@ -79,14 +84,18 @@ export interface LimitConfiguration {
   exemptions: UsageExemption[];
   customRules: CustomUsageRule[];
 }
+}
 
+}
 export interface AlertThreshold {
   percentage: number; // of limit
   action: 'warn' | 'alert' | 'escalate';
   channels: string[];
   cooldown: number; // milliseconds
 }
+}
 
+}
 export interface UsageExemption {
   exemptionId: string;
   type: 'user' | 'role' | 'ip' | 'api_key' | 'operation';
@@ -95,7 +104,9 @@ export interface UsageExemption {
   validUntil?: Date;
   createdBy: string;
 }
+}
 
+}
 export interface CustomUsageRule {
   ruleId: string;
   name: string;
@@ -104,7 +115,9 @@ export interface CustomUsageRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface UsageLimitMetadata {
   createdBy: string;
   createdAt: Date;
@@ -114,7 +127,9 @@ export interface UsageLimitMetadata {
   documentation: string;
   auditTrail: string[];
 }
+}
 
+}
 export interface UsageRecord {
   recordId: string;
   timestamp: Date;
@@ -132,7 +147,9 @@ export interface UsageRecord {
   limitChecks: LimitCheck[];
   metadata: UsageRecordMetadata;
 }
+}
 
+}
 export interface LimitCheck {
   limitId: string;
   limitName: string;
@@ -143,7 +160,9 @@ export interface LimitCheck {
   applied: boolean;
   reason?: string;
 }
+}
 
+}
 export interface UsageRecordMetadata {
   requestId: string;
   sessionId?: string;
@@ -151,11 +170,14 @@ export interface UsageRecordMetadata {
   context: Record<string, any>;
   labels: Record<string, string>;
 }
+}
 
+}
 export interface UsageAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   totalRequests: number;
   totalBandwidth: number;
@@ -170,6 +192,7 @@ export interface UsageAnalytics {
   quotaUtilization: QuotaUtilization[];
 }
 
+}
 export interface EndpointUsage {
   endpoint: string;
   requestCount: number;
@@ -178,7 +201,9 @@ export interface EndpointUsage {
   errorRate: number;
   uniqueUsers: number;
 }
+}
 
+}
 export interface UserUsage {
   userId: string;
   requestCount: number;
@@ -188,7 +213,9 @@ export interface UserUsage {
   lastActivity: Date;
   quotaUtilization: number;
 }
+}
 
+}
 export interface LimitViolation {
   violationId: string;
   limitId: string;
@@ -202,7 +229,9 @@ export interface LimitViolation {
   resolved: boolean;
   resolution?: string;
 }
+}
 
+}
 export interface UsageTrends {
   requestTrend: TrendData;
   bandwidthTrend: TrendData;
@@ -210,7 +239,9 @@ export interface UsageTrends {
   errorTrend: TrendData;
   userActivityTrend: TrendData;
 }
+}
 
+}
 export interface TrendData {
   current: number;
   previous: number;
@@ -219,12 +250,16 @@ export interface TrendData {
   trend: 'increasing' | 'decreasing' | 'stable';
   dataPoints: DataPoint[];
 }
+}
 
+}
 export interface DataPoint {
   timestamp: Date;
   value: number;
 }
+}
 
+}
 export interface QuotaUtilization {
   limitId: string;
   limitName: string;
@@ -234,7 +269,9 @@ export interface QuotaUtilization {
   timeRemaining: number; // milliseconds until reset
   status: 'ok' | 'warning' | 'critical';
 }
+}
 
+}
 export interface UsageControlDecision {
   allowed: boolean;
   action: UsageControlAction;
@@ -245,7 +282,9 @@ export interface UsageControlDecision {
   quotaRemaining: Record<string, number>;
   warnings: string[];
 }
+}
 
+}
 export interface UsageSnapshot {
   timestamp: Date;
   activeUsers: number;
@@ -257,7 +296,9 @@ export interface UsageSnapshot {
   topResourceConsumers: ResourceConsumer[];
   systemLoad: SystemLoadMetrics;
 }
+}
 
+}
 export interface ResourceConsumer {
   identifier: string;
   type: 'user' | 'api_key' | 'ip';
@@ -266,13 +307,16 @@ export interface ResourceConsumer {
   connectionCount: number;
   quotaUsage: number;
 }
+}
 
+}
 export interface SystemLoadMetrics {
   cpuUsage: number;
   memoryUsage: number;
   networkUtilization: number;
   responseTimeP95: number;
   errorRate: number;
+}
 }
 
 // ==========================================
@@ -300,6 +344,7 @@ export class UsageControlService {
   // ==========================================
 
   async createUsageLimit(limit: Omit<UsageLimit, 'limitId' | 'metadata'>): Promise<string> {
+
     const limitId = `limit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const usageLimit: UsageLimit = {
@@ -342,6 +387,7 @@ export class UsageControlService {
   }
 
   async updateUsageLimit(limitId: string, updates: Partial<UsageLimit>): Promise<void> {
+
     const existingLimit = this.usageLimits.get(limitId);
     if (!existingLimit) {
       throw new Error(`Usage limit not found: ${limitId}`);
@@ -386,6 +432,7 @@ export class UsageControlService {
   }
 
   async deleteUsageLimit(limitId: string): Promise<void> {
+
     const limit = this.usageLimits.get(limitId);
     if (!limit) {
       throw new Error(`Usage limit not found: ${limitId}`);
@@ -428,6 +475,7 @@ export class UsageControlService {
     method: string,
     requestSize: number
   ): Promise<UsageControlDecision> {
+
     const startTime = performance.now();
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -532,6 +580,7 @@ export class UsageControlService {
   }
 
   async recordUsage(record: UsageRecord): Promise<void> {
+
     const key = this.getUsageKey(record.userId, record.apiKey, record.ipAddress);
     
     if (!this.usageRecords.has(key)) {
@@ -565,6 +614,7 @@ export class UsageControlService {
       operations?: string[];
     }
   ): Promise<UsageAnalytics> {
+
     const startTime = performance.now();
 
     try {
@@ -688,6 +738,7 @@ export class UsageControlService {
   }
 
   async getCurrentUsageSnapshot(): Promise<UsageSnapshot> {
+
     const now = new Date();
     
     return {
@@ -699,8 +750,7 @@ export class UsageControlService {
       activeLimits: this.usageLimits.size,
       violationsInLastHour: await this.getViolationsInLastHour(),
       topResourceConsumers: await this.getTopResourceConsumers(5),
-      systemLoad: await this.getSystemLoadMetrics()
-    };
+      systemLoad: await this.getSystemLoadMetrics(};
   }
 
   // ==========================================
@@ -764,6 +814,7 @@ export class UsageControlService {
     operation: string,
     requestSize: number
   ): Promise<LimitCheck> {
+
     const key = this.getUsageKey(userId, apiKey, ipAddress, limit.type);
     const now = Date.now();
     const windowStart = now - limit.period;
@@ -919,6 +970,7 @@ export class UsageControlService {
 
   // Additional helper methods would be implemented here...
   private async validateLimitConfiguration(limit: UsageLimit): Promise<void> {
+
     if (limit.threshold <= 0) {
       throw new Error('Threshold must be positive');
     }
@@ -969,22 +1021,27 @@ export class UsageControlService {
 
   // Placeholder methods for persistence and analysis
   private async persistUsageLimit(limit: UsageLimit): Promise<void> {
+
     console.log(`Persisting usage limit: ${limit.limitId}`);
   }
 
   private async removeUsageLimit(limitId: string): Promise<void> {
+
     console.log(`Removing usage limit: ${limitId}`);
   }
 
   private async persistUsageRecord(record: UsageRecord): Promise<void> {
+
     console.log(`Persisting usage record: ${record.recordId}`);
   }
 
   private async updateRateLimitCache(record: UsageRecord): Promise<void> {
+
     // Update rate limiting cache based on usage record
   }
 
   private async updateQuotaCache(record: UsageRecord): Promise<void> {
+
     // Update quota cache based on usage record
   }
 
@@ -1004,6 +1061,7 @@ export class UsageControlService {
     endpoint: string,
     requestId: string
   ): Promise<void> {
+
     const violations = limitChecks.filter(check => check.applied);
     
     for (const violation of violations) {
@@ -1016,6 +1074,7 @@ export class UsageControlService {
     timeRange: { start: Date; end: Date },
     filters?: any
   ): Promise<UsageRecord[]> {
+
     // Mock data for now - would query database in production
     return [];
   }
@@ -1024,6 +1083,7 @@ export class UsageControlService {
     timeRange: { start: Date; end: Date },
     filters?: any
   ): Promise<LimitViolation[]> {
+
     // Mock data for now - would query database in production
     return [];
   }
@@ -1032,6 +1092,7 @@ export class UsageControlService {
     timeRange: { start: Date; end: Date },
     records: UsageRecord[]
   ): Promise<UsageTrends> {
+
     // Mock trend analysis - would implement actual trend calculation
     return {
       requestTrend: {
@@ -1041,7 +1102,7 @@ export class UsageControlService {
         changePercentage: 5.26,
         trend: 'increasing',
         dataPoints: []
-      },
+  }
       bandwidthTrend: {
         current: 5242880, // 5MB
         previous: 4194304, // 4MB
@@ -1049,7 +1110,7 @@ export class UsageControlService {
         changePercentage: 25,
         trend: 'increasing',
         dataPoints: []
-      },
+  }
       responseTrend: {
         current: 250,
         previous: 275,
@@ -1057,7 +1118,7 @@ export class UsageControlService {
         changePercentage: -9.09,
         trend: 'decreasing',
         dataPoints: []
-      },
+  }
       errorTrend: {
         current: 2.5,
         previous: 3.2,
@@ -1065,7 +1126,7 @@ export class UsageControlService {
         changePercentage: -21.88,
         trend: 'decreasing',
         dataPoints: []
-      },
+  }
       userActivityTrend: {
         current: 150,
         previous: 140,
@@ -1078,6 +1139,7 @@ export class UsageControlService {
   }
 
   private async calculateQuotaUtilization(): Promise<QuotaUtilization[]> {
+
     const utilization: QuotaUtilization[] = [];
     
     this.usageLimits.forEach(limit => {
@@ -1123,6 +1185,7 @@ export class UsageControlService {
   }
 
   private async getRequestsPerMinute(): Promise<number> {
+
     const oneMinuteAgo = Date.now() - 60000;
     let count = 0;
     
@@ -1134,6 +1197,7 @@ export class UsageControlService {
   }
 
   private async getBandwidthPerSecond(): Promise<number> {
+
     const oneSecondAgo = Date.now() - 1000;
     let bandwidth = 0;
     
@@ -1147,11 +1211,13 @@ export class UsageControlService {
   }
 
   private async getViolationsInLastHour(): Promise<number> {
+
     // Mock data - would query actual violations
     return Math.floor(Math.random() * 10);
   }
 
   private async getTopResourceConsumers(limit: number): Promise<ResourceConsumer[]> {
+
     // Mock data - would analyze actual usage patterns
     const consumers: ResourceConsumer[] = [];
     
@@ -1170,6 +1236,7 @@ export class UsageControlService {
   }
 
   private async getSystemLoadMetrics(): Promise<SystemLoadMetrics> {
+
     const memUsage = process.memoryUsage();
     
     return {
@@ -1186,6 +1253,7 @@ export class UsageControlService {
   // ==========================================
 
   async getUsageLimits(filters?: { status?: UsageControlStatus; type?: UsageLimitType }): Promise<UsageLimit[]> {
+
     let limits = Array.from(this.usageLimits.values());
     
     if (filters?.status) {
@@ -1200,14 +1268,17 @@ export class UsageControlService {
   }
 
   async getUsageLimit(limitId: string): Promise<UsageLimit | null> {
+
     return this.usageLimits.get(limitId) || null;
   }
 
   async activateUsageLimit(limitId: string): Promise<void> {
+
     await this.updateUsageLimit(limitId, { status: UsageControlStatus.ACTIVE });
   }
 
   async deactivateUsageLimit(limitId: string): Promise<void> {
+
     await this.updateUsageLimit(limitId, { status: UsageControlStatus.INACTIVE });
   }
 
@@ -1215,6 +1286,7 @@ export class UsageControlService {
     userId?: string,
     timeRange?: { start: Date; end: Date }
   ): Promise<{ requestCount: number; bandwidth: number; quotaUtilization: number }> {
+
     // Mock implementation
     return {
       requestCount: Math.floor(Math.random() * 1000),
@@ -1228,15 +1300,19 @@ export class UsageControlService {
 // RATE LIMITING HELPER INTERFACES
 // ==========================================
 
+}
 interface RateLimitState {
   requests: number;
   bandwidth: number;
   windowStart: number;
   lastUpdated: number;
 }
+}
 
+}
 interface QuotaState {
   used: number;
   resetTime: number;
   lastUpdated: number;
+}
 }

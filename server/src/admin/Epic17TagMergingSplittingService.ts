@@ -17,6 +17,7 @@ import * as crypto from 'crypto';
 // Tag Merging and Splitting Types and Interfaces
 // =============================================================================
 
+}
 export interface TagMergingSplittingConfig {
   // General settings
   enabled: boolean;
@@ -30,6 +31,7 @@ export interface TagMergingSplittingConfig {
     preserveHistory: boolean;
     requireApproval: boolean;
     maxMergeDepth: number; // Prevent infinite merge chains
+}
   };
   
   // Splitting settings
@@ -103,6 +105,7 @@ export enum TagOperationStatus {
   ROLLED_BACK = 'rolled_back'
 }
 
+}
 export interface TagMergeOperation {
   operationId: string;
   operationType: TagOperationType.MERGE;
@@ -141,7 +144,9 @@ export interface TagMergeOperation {
   completedAt?: Date;
   executionTime?: number; // milliseconds
 }
+}
 
+}
 export interface TagSplitOperation {
   operationId: string;
   operationType: TagOperationType.SPLIT;
@@ -185,7 +190,9 @@ export interface TagSplitOperation {
   completedAt?: Date;
   executionTime?: number;
 }
+}
 
+}
 export interface SplitCriteria {
   criteriaType: 'pattern' | 'semantic' | 'usage' | 'metadata' | 'custom';
   
@@ -193,6 +200,7 @@ export interface SplitCriteria {
   patterns?: {
     delimiter?: string;
     regex?: string;
+}
     prefixSuffix?: { prefix?: string; suffix?: string; };
   };
   
@@ -231,6 +239,7 @@ export enum ResourceDistributionStrategy {
   MANUAL = 'manual'
 }
 
+}
 export interface TagImpactAnalysis {
   analysisId: string;
   analyzedAt: Date;
@@ -260,7 +269,9 @@ export interface TagImpactAnalysis {
   mitigationStrategies: string[];
   recommendedActions: string[];
 }
+}
 
+}
 export interface HierarchyChange {
   changeType: 'parent_change' | 'child_addition' | 'child_removal' | 'level_change';
   affectedTag: string;
@@ -268,18 +279,22 @@ export interface HierarchyChange {
   newState: any;
   impact: string;
 }
+}
 
+}
 export interface PerformanceImpact {
   estimatedExecutionTime: number; // milliseconds
   resourceConsumption: {
     cpu: number; // percentage
     memory: number; // MB
     storage: number; // MB
+}
   };
   systemLoad: 'low' | 'medium' | 'high';
   concurrencyConstraints: string[];
 }
 
+}
 export interface BusinessRuleViolation {
   ruleId: string;
   ruleName: string;
@@ -288,7 +303,9 @@ export interface BusinessRuleViolation {
   severity: 'low' | 'medium' | 'high' | 'critical';
   resolution: string;
 }
+}
 
+}
 export interface TagOperationError {
   errorId: string;
   errorType: 'validation' | 'execution' | 'rollback' | 'system';
@@ -299,7 +316,9 @@ export interface TagOperationError {
   timestamp: Date;
   stackTrace?: string;
 }
+}
 
+}
 export interface TagOperationWarning {
   warningId: string;
   warningType: 'performance' | 'data_loss' | 'conflict' | 'recommendation';
@@ -309,7 +328,9 @@ export interface TagOperationWarning {
   timestamp: Date;
   actionable: boolean;
 }
+}
 
+}
 export interface DuplicateTagGroup {
   groupId: string;
   primaryTag: string;
@@ -323,6 +344,7 @@ export interface DuplicateTagGroup {
     confidence: number;
     targetTag: string;
     reasoning: string;
+}
   };
   
   // Usage information
@@ -335,6 +357,7 @@ export interface DuplicateTagGroup {
   falsePositive: boolean;
 }
 
+}
 export interface TagRelationship {
   relationshipId: string;
   relationshipType: 'synonym' | 'parent_child' | 'related' | 'mutually_exclusive';
@@ -351,6 +374,7 @@ export interface TagRelationship {
   establishedBy: string;
   validatedAt?: Date;
   deprecated: boolean;
+}
 }
 
 // =============================================================================
@@ -381,8 +405,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
         requireApproval: true,
         maxMergeDepth: 5,
         ...config?.merging
-      },
-      
+  }
       splitting: {
         enabled: true,
         autoSplitThreshold: 0.90,
@@ -390,8 +413,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
         preserveOriginal: false,
         requireApproval: true,
         ...config?.splitting
-      },
-      
+  }
       duplicateDetection: {
         enabled: true,
         algorithms: ['levenshtein', 'soundex', 'semantic'],
@@ -399,40 +421,35 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
         ignoreCommonWords: true,
         customSimilarityRules: {},
         ...config?.duplicateDetection
-      },
-      
+  }
       relationshipManagement: {
         enabled: true,
         autoDetectHierarchies: true,
         maintainSynonyms: true,
         trackTagEvolution: true,
         ...config?.relationshipManagement
-      },
-      
+  }
       validation: {
         requireBusinessRules: true,
         validateResourceImpact: true,
         rollbackSupport: true,
         backupBeforeOperations: true,
         ...config?.validation
-      },
-      
+  }
       performance: {
         batchSize: 100,
         maxConcurrentOperations: 3,
         cacheResults: true,
         useParallelProcessing: true,
         ...config?.performance
-      },
-      
+  }
       notifications: {
         onMergeCompletion: true,
         onSplitCompletion: true,
         onDuplicateDetection: true,
         onConflictResolution: true,
         ...config?.notifications
-      },
-      
+  }
       ...config
     };
   }
@@ -456,6 +473,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
       bypassApproval?: boolean;
     }
   ): Promise<TagMergeOperation> {
+
     if (sourceTags.length === 0) {
       throw new Error('At least one source tag must be specified');
     }
@@ -521,6 +539,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
    * Execute a tag merge operation
    */
   private async executeMergeOperation(operation: TagMergeOperation): Promise<void> {
+
     const startTime = Date.now();
     operation.status = TagOperationStatus.EXECUTING;
     
@@ -614,6 +633,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
       bypassApproval?: boolean;
     }
   ): Promise<TagSplitOperation> {
+
     if (targetTags.length === 0) {
       throw new Error('At least one target tag must be specified');
     }
@@ -686,6 +706,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
    * Execute a tag split operation
    */
   private async executeSplitOperation(operation: TagSplitOperation): Promise<void> {
+
     const startTime = Date.now();
     operation.status = TagOperationStatus.EXECUTING;
     
@@ -774,6 +795,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
       includeCache?: boolean;
     } = {}
   ): Promise<DuplicateTagGroup[]> {
+
     const cacheKey = `duplicate_detection:${resourceType || 'all'}`;
     
     // Check cache if enabled
@@ -831,7 +853,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
                 confidence: maxSimilarity,
                 targetTag: tag1.usage_count >= tag2.usage_count ? tag1.tag : tag2.tag,
                 reasoning: `High similarity score (${maxSimilarity.toFixed(2)}) detected via ${Object.keys(similarities).find(k => similarities[k] === maxSimilarity)}`
-              },
+  }
               totalUsageCount: 0,
               resourceDistribution: {},
               detectedAt: new Date(),
@@ -887,6 +909,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
   // =============================================================================
 
   private async validateTagsExist(tags: string[]): Promise<void> {
+
     const existingTags = await this.dbService.query(
       'SELECT DISTINCT tag FROM resource_tags WHERE tag = ANY($1)',
       [tags]
@@ -901,6 +924,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
   }
 
   private async analyzeMergeImpact(sourceTags: string[], targetTag: string): Promise<TagImpactAnalysis> {
+
     const analysisId = crypto.randomUUID();
     
     // Get resources affected by source tags
@@ -935,10 +959,10 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
           cpu: Math.min(totalResourcesAffected * 0.1, 50),
           memory: Math.min(totalResourcesAffected * 0.01, 100),
           storage: 0
-        },
+  }
         systemLoad: totalResourcesAffected > 1000 ? 'high' : totalResourcesAffected > 100 ? 'medium' : 'low',
         concurrencyConstraints: []
-      },
+  }
       compatibilityIssues: [],
       rollbackComplexity: 'low',
       businessRuleViolations: [],
@@ -951,6 +975,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
   }
 
   private async analyzeSplitImpact(sourceTag: string, targetTags: string[]): Promise<TagImpactAnalysis> {
+
     // Similar to analyzeMergeImpact but for split operations
     return this.analyzeMergeImpact([sourceTag], targetTags[0]);
   }
@@ -960,6 +985,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
     targetTags: string[],
     criteria: SplitCriteria
   ): Promise<{ feasibilityScore: number; confidenceScore: number; }> {
+
     // Get resources with the source tag
     const resources = await this.getResourcesWithTags([sourceTag]);
     
@@ -981,6 +1007,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
     targetTags: string[],
     criteria: SplitCriteria
   ): Promise<{ feasibility: number; confidence: number; }> {
+
     // Simplified analysis - would implement sophisticated algorithms
     const evenDistribution = Math.floor(resources.length / targetTags.length);
     const remainder = resources.length % targetTags.length;
@@ -1012,6 +1039,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
   }
 
   private async calculateTagSimilarity(sourceTags: string[], targetTag: string): Promise<number> {
+
     let maxSimilarity = 0;
     
     for (const sourceTag of sourceTags) {
@@ -1154,6 +1182,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
 
   // Additional helper methods would be implemented here...
   private async getResourcesWithTags(tags: string[]): Promise<any[]> {
+
     const query = `
       SELECT DISTINCT resource_id, resource_type
       FROM resource_tags
@@ -1172,6 +1201,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
   }
 
   private async storeTagOperation(operation: TagMergeOperation | TagSplitOperation): Promise<void> {
+
     // Store operation in database - implementation depends on schema
     await this.dbService.query(
       `INSERT INTO epic17_tag_operations (
@@ -1190,38 +1220,47 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
 
   // Placeholder methods for missing implementations
   private async createApprovalRequest(operation: any): Promise<void> {
+
     // Implementation would create approval workflow
   }
 
   private async createOperationBackup(operation: any): Promise<void> {
+
     // Implementation would create backup of current state
   }
 
   private async processMergeBatch(operation: TagMergeOperation, batch: any[]): Promise<void> {
+
     // Implementation would process batch of resources for merge
   }
 
   private async processSplitBatch(operation: TagSplitOperation, batch: any[]): Promise<void> {
+
     // Implementation would process batch of resources for split
   }
 
   private async updateOperationProgress(operation: any): Promise<void> {
+
     // Implementation would update operation progress
   }
 
   private async updateTagRelationshipsAfterMerge(operation: TagMergeOperation): Promise<void> {
+
     // Implementation would update tag relationships after merge
   }
 
   private async updateTagRelationshipsAfterSplit(operation: TagSplitOperation): Promise<void> {
+
     // Implementation would update tag relationships after split
   }
 
   private async handleSourceTagCleanup(operation: TagMergeOperation): Promise<void> {
+
     // Implementation would handle cleanup of source tags
   }
 
   private async removeSourceTag(tag: string): Promise<void> {
+
     // Implementation would remove source tag
   }
 
@@ -1237,6 +1276,7 @@ export class Epic17TagMergingSplittingService extends EventEmitter {
    * Get comprehensive metrics for tag merging and splitting operations
    */
   public async getTagManagementMetrics(timeWindowDays: number = 7): Promise<any> {
+
     // Implementation would return comprehensive metrics
     return {};
   }

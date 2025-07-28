@@ -60,6 +60,7 @@ export type PolicyStatus = 'draft' | 'active' | 'suspended' | 'expired' | 'archi
 // Core Policy Interfaces
 // =============================================================================
 
+}
 export interface BackupPolicy {
   policy_id: string;
   name: string;
@@ -79,6 +80,7 @@ export interface BackupPolicy {
     business_units?: string[];
     inclusion_patterns?: string[];
     exclusion_patterns?: string[];
+}
   };
   
   // Backup schedule configuration
@@ -162,6 +164,7 @@ export interface BackupPolicy {
   approved_at?: Date;
 }
 
+}
 export interface PolicyRule {
   rule_id: string;
   policy_id: string;
@@ -175,6 +178,7 @@ export interface PolicyRule {
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not_in' | 'contains' | 'regex';
     value: Error;
     data_type: 'string' | 'number' | 'boolean' | 'date' | 'array';
+}
   };
   
   // Rule action
@@ -191,6 +195,7 @@ export interface PolicyRule {
   created_by: string;
 }
 
+}
 export interface PolicyExecution {
   execution_id: string;
   policy_id: string;
@@ -216,7 +221,9 @@ export interface PolicyExecution {
   
   executed_by: string;
 }
+}
 
+}
 export interface PolicyExecutionError {
   error_id: string;
   error_type: 'configuration' | 'resource' | 'permission' | 'storage' | 'network';
@@ -226,7 +233,9 @@ export interface PolicyExecutionError {
   suggested_action?: string;
   occurred_at: Date;
 }
+}
 
+}
 export interface PolicyExecutionWarning {
   warning_id: string;
   warning_type: 'performance' | 'capacity' | 'compliance' | 'quality';
@@ -235,9 +244,12 @@ export interface PolicyExecutionWarning {
   impact_level: 'low' | 'medium' | 'high';
   occurred_at: Date;
 }
+}
 
+}
 export interface PolicyAnalytics {
   policy_id: string;
+}
   analysis_period: { start: Date; end: Date };
   
   // Execution metrics
@@ -312,6 +324,7 @@ export class BackupPolicyModelService {
     policy: Omit<BackupPolicy, 'policy_id' | 'created_at' | 'updated_at' | 'version'>,
     createdBy: string
   ): Promise<string> {
+
     const policyId = `bp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     const newPolicy: BackupPolicy = {
@@ -339,7 +352,7 @@ export class BackupPolicyModelService {
         scope_type: policy.scope.scope_type,
         frequency: policy.schedule.frequency,
         priority: policy.priority
-      },
+  }
       severity: 'info'
     });
 
@@ -350,6 +363,7 @@ export class BackupPolicyModelService {
    * Get backup policy by ID
    */
   async getBackupPolicy(policyId: string): Promise<BackupPolicy | null> {
+
     const result = await this.db.query(`
       SELECT * FROM backup_policies WHERE policy_id = $1
     `, [policyId]);
@@ -373,6 +387,7 @@ export class BackupPolicyModelService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ policies: BackupPolicy[]; total: number }> {
+
     let whereClause = '';
     const params: unknown[] = [];
     const conditions: string[] = [];
@@ -428,6 +443,7 @@ export class BackupPolicyModelService {
     updates: Partial<BackupPolicy>,
     updatedBy: string
   ): Promise<void> {
+
     const existingPolicy = await this.getBackupPolicy(policyId);
     if (!existingPolicy) {
       throw new Error(`Backup policy not found: ${policyId}`);
@@ -458,7 +474,7 @@ export class BackupPolicyModelService {
         old_version: existingPolicy.version,
         new_version: updatedPolicy.version,
         changes: this.calculatePolicyChanges(existingPolicy, updatedPolicy)
-      },
+  }
       severity: 'info'
     });
   }
@@ -472,6 +488,7 @@ export class BackupPolicyModelService {
     executedBy: string,
     triggerDetails?: Record<string, any>
   ): Promise<string> {
+
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
@@ -511,7 +528,7 @@ export class BackupPolicyModelService {
         execution_id: executionId,
         trigger_type: triggerType,
         policy_name: policy.name
-      },
+  }
       severity: 'info'
     });
 
@@ -535,6 +552,7 @@ export class BackupPolicyModelService {
     rule: Omit<PolicyRule, 'rule_id' | 'policy_id' | 'created_at'>,
     createdBy: string
   ): Promise<string> {
+
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
@@ -561,7 +579,7 @@ export class BackupPolicyModelService {
         rule_id: ruleId,
         rule_type: rule.rule_type,
         rule_name: rule.name
-      },
+  }
       severity: 'info'
     });
 
@@ -572,6 +590,7 @@ export class BackupPolicyModelService {
    * Get policy rules
    */
   async getPolicyRules(policyId: string): Promise<PolicyRule[]> {
+
     const result = await this.db.query(`
       SELECT * FROM backup_policy_rules 
       WHERE policy_id = $1 AND is_active = true
@@ -592,6 +611,7 @@ export class BackupPolicyModelService {
     policyId: string,
     analysisPeriod: { start: Date; end: Date }
   ): Promise<PolicyAnalytics> {
+
     const policy = await this.getBackupPolicy(policyId);
     if (!policy) {
       throw new Error(`Backup policy not found: ${policyId}`);
@@ -637,8 +657,7 @@ export class BackupPolicyModelService {
         memory_percentage: 0,
         storage_percentage: 0,
         network_percentage: 0
-      },
-      
+  }
       sla_compliance_rate: 95, // Simulated
       retention_compliance_rate: 98, // Simulated
       audit_completeness_percentage: 100,
@@ -662,6 +681,7 @@ export class BackupPolicyModelService {
   // =============================================================================
 
   private async validatePolicyConfiguration(policy: BackupPolicy): Promise<void> {
+
     const errors: string[] = [];
 
     // Validate schedule configuration
@@ -691,6 +711,7 @@ export class BackupPolicyModelService {
   }
 
   private async storePolicyConfiguration(policy: BackupPolicy): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_policies (
         policy_id, name, description, policy_type, status, priority, scope,
@@ -719,6 +740,7 @@ export class BackupPolicyModelService {
   }
 
   private async storePolicyRule(rule: PolicyRule): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_policy_rules (
         rule_id, policy_id, name, description, rule_type, condition,
@@ -732,6 +754,7 @@ export class BackupPolicyModelService {
   }
 
   private async storePolicyExecution(execution: PolicyExecution): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_policy_executions (
         execution_id, policy_id, triggered_at, trigger_type, trigger_details,
@@ -820,6 +843,7 @@ export class BackupPolicyModelService {
   }
 
   private async performPolicyExecution(policy: BackupPolicy, execution: PolicyExecution): Promise<void> {
+
     try {
       // Update status to running
       await this.updateExecutionStatus(execution.execution_id, 'running');
@@ -864,6 +888,7 @@ export class BackupPolicyModelService {
   }
 
   private async updateExecutionStatus(executionId: string, status: string): Promise<void> {
+
     await this.db.query(`
       UPDATE backup_policy_executions 
       SET status = $2, started_at = CASE WHEN started_at IS NULL THEN NOW() ELSE started_at END
@@ -872,6 +897,7 @@ export class BackupPolicyModelService {
   }
 
   private async markPolicyExecutionFailed(executionId: string, _____errorMessage: string): Promise<void> {
+
     await this.db.query(`
       UPDATE backup_policy_executions 
       SET status = 'failed',
@@ -885,6 +911,7 @@ export class BackupPolicyModelService {
     policy: BackupPolicy, 
     metrics: unknown
   ): Promise<PolicyAnalytics['optimization_recommendations']> {
+
     const recommendations: PolicyAnalytics['optimization_recommendations'] = [];
     
     // Analyze success rate

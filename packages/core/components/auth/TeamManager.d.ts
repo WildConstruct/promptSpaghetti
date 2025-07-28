@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface Team {
     id: string;
     organizationId: string;
@@ -10,7 +11,8 @@ interface Team {
     updatedAt: Date;
     level?: number;
     path?: string[];
-}
+
+
 interface TeamManagerProps {
     organizationId: string;
     currentUser?: {
@@ -18,6 +20,7 @@ interface TeamManagerProps {
         name: string;
         email: string;
         role: string;
+
     };
     onTeamChange?: (team: Team) => void;
     onMembershipUpdated?: (membership: {)
@@ -26,7 +29,7 @@ interface TeamManagerProps {
         teamId: string;
         role: string;
     }) => void;
-}
+
 export declare const TeamManager: React.FC<TeamManagerProps>;
 export {};
 //# sourceMappingURL=TeamManager.d.ts.map

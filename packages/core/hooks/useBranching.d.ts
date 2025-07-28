@@ -19,6 +19,7 @@ import {
   BranchFilter,
   MergeRequestFilter
 } from '../types/branching';
+
 interface UseBranchingReturn {
     loading: boolean;
     error: string | null;
@@ -42,12 +43,13 @@ interface UseBranchingReturn {
     getBranchTimeline: (projectId: string, dateRange?: {)
         start: Date;
         end: Date;
+
     }) => Promise<BranchTimelineResponse>;
     getBranchHierarchy: (projectId: string) => Promise<BranchHierarchy[]>;
     compareBranches: (sourceBranchId: string, targetBranchId: string) => Promise<BranchComparisonResponse>;
     syncBranch: (request: SyncBranchRequest) => Promise<void>;
     clearError: () => void;
-}
+
 export declare const useBranching: () => UseBranchingReturn;
 export {};
 //# sourceMappingURL=useBranching.d.ts.map

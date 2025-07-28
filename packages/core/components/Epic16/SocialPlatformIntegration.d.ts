@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { Template } from './TemplatePreviewModal';
+
 export interface SocialPlatformIntegrationProps {
     template: Template;
     platforms?: SocialPlatform[];
@@ -16,7 +17,8 @@ export interface SocialPlatformIntegrationProps {
     className?: string;
     showAnalytics?: boolean;
     customizations?: SocialCustomizations;
-}
+
+
 export interface SocialPlatform {
     id: string;
     name: string;
@@ -30,7 +32,8 @@ export interface SocialPlatform {
     features: PlatformFeatures;
     limits: PlatformLimits;
     analytics: PlatformAnalytics;
-}
+
+
 export interface PlatformConfig {
     apiEndpoint?: string;
     clientId?: string;
@@ -39,13 +42,15 @@ export interface PlatformConfig {
     customFields: Record<string, any>;
     webhookUrl?: string;
     rateLimit: RateLimitConfig;
-}
+
+
 export interface RateLimitConfig {
     requestsPerMinute: number;
     requestsPerHour: number;
     burstLimit: number;
     retryAfter: number;
-}
+
+
 export interface PlatformFeatures {
     directPosting: boolean;
     scheduledPosting: boolean;
@@ -56,7 +61,8 @@ export interface PlatformFeatures {
     crossPosting: boolean;
     analytics: boolean;
     engagement: boolean;
-}
+
+
 export interface PlatformLimits {
     maxTextLength: number;
     maxImages: number;
@@ -65,7 +71,8 @@ export interface PlatformLimits {
     maxMentions: number;
     fileSize: number;
     videoLength: number;
-}
+
+
 export interface PlatformAnalytics {
     impressions: number;
     engagements: number;
@@ -73,7 +80,8 @@ export interface PlatformAnalytics {
     shares: number;
     reach: number;
     lastUpdated: Date;
-}
+
+
 export interface ShareRecord {
     id: string;
     templateId: string;
@@ -85,8 +93,9 @@ export interface ShareRecord {
     success: boolean;
     analytics: ShareAnalytics;
     metadata: ShareMetadata;
-}
+
 export type ShareType = 'direct' | 'link' | 'embed' | 'download' | 'preview';
+
 export interface ShareContent {
     title: string;
     description: string;
@@ -96,7 +105,8 @@ export interface ShareContent {
     hashtags: string[];
     mentions: string[];
     customText?: string;
-}
+
+
 export interface ShareAnalytics {
     views: number;
     clicks: number;
@@ -105,20 +115,23 @@ export interface ShareAnalytics {
     revenue: number;
     demographics: DemographicData;
     performance: PerformanceMetrics;
-}
+
+
 export interface DemographicData {
     ageGroups: Record<string, number>;
     geoLocations: Record<string, number>;
     interests: Record<string, number>;
     devices: Record<string, number>;
-}
+
+
 export interface PerformanceMetrics {
     clickThroughRate: number;
     conversionRate: number;
     engagementRate: number;
     viralCoefficient: number;
     timeToConversion: number;
-}
+
+
 export interface ShareMetadata {
     userAgent?: string;
     referrer?: string;
@@ -127,7 +140,8 @@ export interface ShareMetadata {
     campaignId?: string;
     source?: string;
     medium?: string;
-}
+
+
 export interface SocialCustomizations {
     autoHashtags: boolean;
     customBranding: boolean;
@@ -135,7 +149,7 @@ export interface SocialCustomizations {
     crossPlatformSync: boolean;
     schedulingEnabled: boolean;
     analyticsIntegration: boolean;
-}
+
 export declare const ShareContentGenerator: {
     generateTitle: (template: Template, platform: string) => string;
     generateDescription: (template: Template, platform: string) => string;

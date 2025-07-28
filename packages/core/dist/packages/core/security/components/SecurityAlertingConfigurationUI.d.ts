@@ -35,15 +35,15 @@ export interface SecurityAlertingConfigurationUIProps {
     onConfigChange: (config: SecurityAlertingConfig) => Promise<void>;
     onValidateConfig: (config: SecurityAlertingConfig) => Promise<ValidationResult>;
     userRole: 'admin' | 'security_admin' | 'security_analyst';
-    complianceFrameworks: ComplianceFramework[];
+    complianceFrameworks: ComplianceFramework;
     theme?: 'light' | 'dark' | 'cinema';
     readOnly?: boolean;
     allowAdvancedSettings?: boolean;
 }
 export interface ValidationResult {
     isValid: boolean;
-    errors: ConfigValidationError[];
-    warnings: ConfigValidationWarning[];
+    errors: ConfigValidationError;
+    warnings: ConfigValidationWarning;
     securityScore: number;
 }
 export interface ConfigValidationError {
@@ -56,9 +56,6 @@ export interface ConfigValidationWarning {
     message: string;
     impact: 'low' | 'medium' | 'high';
 }
-/**
- * Advanced security alerting configuration interface
- */
 export declare const SecurityAlertingConfigurationUI: React.FC<SecurityAlertingConfigurationUIProps>;
 export default SecurityAlertingConfigurationUI;
 //# sourceMappingURL=SecurityAlertingConfigurationUI.d.ts.map

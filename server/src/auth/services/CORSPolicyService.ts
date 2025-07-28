@@ -5,6 +5,7 @@
 
 import { Request } from 'express';
 
+}
 export interface CORSPolicy {
   id: string;
   name: string;
@@ -20,6 +21,7 @@ export interface CORSPolicy {
     inheritFromReferrer?: boolean;
     localhostAllowed?: boolean;
     subdomainWildcard?: boolean;
+}
   };
   
   // Method configuration  
@@ -78,6 +80,7 @@ export interface CORSPolicy {
   createdBy: string;
 }
 
+}
 export interface CORSAssessment {
   policyId: string;
   timestamp: Date;
@@ -87,6 +90,7 @@ export interface CORSAssessment {
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     recommendation: string;
+}
   }>;
   complianceScore: number; // 0-100
   recommendations: string[];
@@ -98,6 +102,7 @@ export interface CORSAssessment {
   }>;
 }
 
+}
 export interface CORSRequest {
   origin?: string;
   method: string;
@@ -109,7 +114,9 @@ export interface CORSRequest {
   requestedHeaders?: string[];
   requestedMethod?: string;
 }
+}
 
+}
 export interface CORSResponse {
   allowed: boolean;
   headers: Record<string, string>;
@@ -117,6 +124,7 @@ export interface CORSResponse {
   reason?: string;
   policyApplied?: string;
   securityWarnings?: string[];
+}
 }
 
 export class CORSPolicyService {
@@ -140,6 +148,7 @@ export class CORSPolicyService {
       environment?: string;
     } = {}
   ): Promise<CORSResponse> {
+
     // Get applicable policies
     const applicablePolicies = await this.getApplicablePolicies(request, context);
     
@@ -181,6 +190,7 @@ export class CORSPolicyService {
    * Assess security of a CORS policy
    */
   async assessCORSPolicy(policyId: string): Promise<CORSAssessment> {
+
     const policy = this.policies.get(policyId);
     if (!policy) {
       throw new Error('Policy not found');
@@ -389,6 +399,7 @@ export class CORSPolicyService {
    * Add a new CORS policy
    */
   async addPolicy(policy: Omit<CORSPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<CORSPolicy> {
+
     const newPolicy: CORSPolicy = {
       ...policy,
       id: this.generatePolicyId(),
@@ -415,6 +426,7 @@ export class CORSPolicyService {
     apiType: 'public' | 'private' | 'internal';
     sensitiveData: boolean;
   }): Promise<CORSPolicy> {
+
     const basePolicy: Omit<CORSPolicy, 'id' | 'createdAt' | 'updatedAt'> = {
       name: `Recommended Policy - ${useCase.environment}`,
       description: `Auto-generated CORS policy for ${useCase.environment} environment`,
@@ -424,13 +436,13 @@ export class CORSPolicyService {
         allowedOrigins: useCase.allowedDomains,
         localhostAllowed: useCase.environment === 'development',
         subdomainWildcard: false
-      },
+  }
       methods: {
         allowedMethods: useCase.apiType === 'public' 
           ? ['GET', 'POST', 'OPTIONS']
           : ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         optionsHandling: 'auto'
-      },
+  }
       headers: {
         allowedHeaders: [
           'Content-Type',
@@ -438,16 +450,16 @@ export class CORSPolicyService {
           ...(useCase.hasAuthentication ? ['Authorization'] : [])
         ],
         exposedHeaders: ['X-Total-Count']
-      },
+  }
       credentials: {
         allowCredentials: useCase.hasAuthentication,
         sameSitePolicy: useCase.environment === 'production' ? 'strict' : 'lax',
         secureOnly: useCase.environment === 'production'
-      },
+  }
       preflight: {
         maxAge: useCase.environment === 'production' ? 3600 : 300,
         allowPrivateNetwork: useCase.environment === 'development'
-      },
+  }
       security: {
         contentSecurityPolicy: useCase.sensitiveData 
           ? 'default-src \'self\'; script-src \'self\'; object-src \'none\';'
@@ -456,7 +468,7 @@ export class CORSPolicyService {
         contentTypeOptions: true,
         xssProtection: true,
         referrerPolicy: 'strict-origin-when-cross-origin'
-      },
+  }
       createdBy: 'system-recommendation'
     };
 
@@ -492,32 +504,32 @@ export class CORSPolicyService {
         allowedOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000'],
         localhostAllowed: true,
         subdomainWildcard: true
-      },
+  }
       methods: {
         allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
         optionsHandling: 'auto'
-      },
+  }
       headers: {
         allowedHeaders: ['*'],
         exposedHeaders: ['X-Total-Count', 'X-Request-ID']
-      },
+  }
       credentials: {
         allowCredentials: true,
         sameSitePolicy: 'lax',
         secureOnly: false
-      },
+  }
       preflight: {
         maxAge: 300,
         allowPrivateNetwork: true
-      },
+  }
       security: {
         frameOptions: 'SAMEORIGIN',
         contentTypeOptions: true,
         xssProtection: true
-      },
+  }
       conditions: {
         environment: ['development']
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -534,24 +546,24 @@ export class CORSPolicyService {
         allowedOrigins: ['https://app.promptscape.com'],
         localhostAllowed: false,
         subdomainWildcard: false
-      },
+  }
       methods: {
         allowedMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         optionsHandling: 'auto'
-      },
+  }
       headers: {
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'],
         exposedHeaders: ['X-Total-Count']
-      },
+  }
       credentials: {
         allowCredentials: true,
         sameSitePolicy: 'strict',
         secureOnly: true
-      },
+  }
       preflight: {
         maxAge: 3600,
         allowPrivateNetwork: false
-      },
+  }
       security: {
         contentSecurityPolicy: 'default-src \'self\'; script-src \'self\'; object-src \'none\';',
         frameOptions: 'DENY',
@@ -559,10 +571,10 @@ export class CORSPolicyService {
         xssProtection: true,
         referrerPolicy: 'strict-origin-when-cross-origin',
         permissionsPolicy: 'geolocation=(), microphone=(), camera=()'
-      },
+  }
       conditions: {
         environment: ['production']
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -573,6 +585,7 @@ export class CORSPolicyService {
   }
 
   private async getApplicablePolicies(request: CORSRequest, context: any): Promise<CORSPolicy[]> {
+
     const policies = [];
     
     for (const policy of this.policies.values()) {
@@ -587,6 +600,7 @@ export class CORSPolicyService {
   }
 
   private async policyApplies(policy: CORSPolicy, request: CORSRequest, context: any): Promise<boolean> {
+
     // Check environment condition
     if (policy.conditions?.environment && 
         !policy.conditions.environment.includes(context.environment)) {
@@ -614,6 +628,7 @@ export class CORSPolicyService {
     allowed: boolean;
     reason?: string;
   }> {
+
     // Check origin
     if (request.origin) {
       const originAllowed = this.isOriginAllowed(request.origin, policy.origins);
@@ -755,6 +770,7 @@ export class CORSPolicyService {
   }
 
   private async generateSecurityWarnings(request: CORSRequest, policy: CORSPolicy): Promise<string[]> {
+
     const warnings = [];
 
     if (policy.origins.allowedOrigins.includes('*') && policy.credentials.allowCredentials) {
@@ -818,6 +834,7 @@ export class CORSPolicyService {
   }
 
   private async validatePolicy(policy: CORSPolicy): Promise<void> {
+
     if (policy.origins.allowedOrigins.includes('*') && policy.credentials.allowCredentials) {
       console.warn('Warning: Wildcard origin with credentials enabled poses security risks');
     }

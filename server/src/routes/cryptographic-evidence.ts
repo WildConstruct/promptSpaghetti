@@ -21,6 +21,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
 // Request/Response schemas
+}
 interface SignEvidenceRequest {
   Body: {
     evidence_id: string;
@@ -31,9 +32,11 @@ interface SignEvidenceRequest {
     compliance_frameworks?: string[];
     metadata?: Record<string, any>;
     timestamp?: string;
+}
   };
 }
 
+}
 interface SignBatchRequest {
   Body: {
     evidence_items: {
@@ -44,22 +47,27 @@ interface SignBatchRequest {
       signing_purpose: string;
       compliance_frameworks?: string[];
       metadata?: Record<string, any>;
+}
     }[];
   };
 }
 
+}
 interface VerifySignatureRequest {
   Params: {
     signatureId: string;
+}
   };
   Body?: {
     evidence_data?: any;
   };
 }
 
+}
 interface CustodyTransferRequest {
   Params: {
     evidenceId: string;
+}
   };
   Body: {
     from_custodian: string;
@@ -494,12 +502,12 @@ export async function cryptographicEvidenceRoutes(fastify: FastifyInstance) {
             acc[sig.complianceContext.evidenceLevel] = (acc[sig.complianceContext.evidenceLevel] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-        },
+  }
         custody: {
           total_records: allCustodyRecords.length,
           total_events: allCustodyRecords.reduce((sum, record) => sum + record.custodyEvents.length, 0),
           integrity_maintained: allCustodyRecords.filter(r => r.integrityMaintained).length
-        },
+  }
         compliance: {
           frameworks_covered: [...new Set(allSignatures.flatMap(s => s.complianceContext.frameworks))],
           average_retention_period: allSignatures.length > 0 

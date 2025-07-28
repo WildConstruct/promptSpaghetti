@@ -109,12 +109,12 @@ describe('ConflictResolutionService', () => {
         expires_at: new Date(Date.now() + 3600000),
         client_id: 'client1',
         user_agent: 'test-browser'
-      },
+  }
       editing_state: {
         editing_mode: 'edit',
         is_active: true,
         has_unsaved_changes: false
-      },
+  }
       collaboration_metadata: {
         priority_level: 1,
         edit_permissions: [],
@@ -241,7 +241,7 @@ describe('ConflictResolutionService', () => {
           ResolutionStrategy.MANUAL_RESOLUTION,
           { resolved_content: 'test' },
           'user1'
-        )
+
       ).rejects.toThrow('User does not have permission to resolve conflicts');
     });
 
@@ -388,7 +388,7 @@ describe('ConflictResolutionService', () => {
           user_id: 'user1',
           session_info: { last_activity_at: new Date() },
           editing_state: { is_active: true }
-        },
+  }
         {
           id: 'session2',
           workspace_id: 'workspace1',
@@ -422,7 +422,7 @@ describe('ConflictResolutionService', () => {
           user_id: 'user1',
           session_info: { last_activity_at: new Date() },
           editing_state: { is_active: true }
-        },
+  }
         {
           id: 'session2',
           workspace_id: 'workspace1',

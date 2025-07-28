@@ -7,6 +7,7 @@
  * and automatic remediation of data corruption or tampering attempts.
  */
 import { EventEmitter } from 'events';
+
 export interface DataIntegrityCheck {
     id: string;
     name: string;
@@ -55,7 +56,7 @@ export interface DataIntegrityCheck {
     createdAt: number;
     lastUpdated: number;
     enabled: boolean;
-}
+
 export interface AutoRemediationAction {
     id: string;
     name: string;
@@ -82,7 +83,7 @@ export interface AutoRemediationAction {
         maxConcurrentExecutions: number;
         cooldownPeriod: number;
     };
-}
+
 export interface IntegrityCheckResult {
     checkId: string;
     executionId: string;
@@ -115,7 +116,7 @@ export interface IntegrityCheckResult {
         triggeredBy: 'schedule' | 'event' | 'manual';
         correlationId?: string;
     };
-}
+
 export interface IntegrityFinding {
     id: string;
     severity: 'info' | 'low' | 'medium' | 'high' | 'critical';
@@ -159,7 +160,7 @@ export interface IntegrityFinding {
     firstDetected: number;
     lastSeen: number;
     occurrenceCount: number;
-}
+
 export interface RemediationResult {
     actionId: string;
     actionName: string;
@@ -183,7 +184,7 @@ export interface RemediationResult {
         verificationPassed: boolean;
         residualIssues: number;
     };
-}
+
 export interface DataIntegrityMetrics {
     overallIntegrityScore: number;
     dataHealthTrend: 'improving' | 'stable' | 'degrading';
@@ -217,7 +218,7 @@ export interface DataIntegrityMetrics {
         start: number;
         end: number;
     };
-}
+
 export interface DataIntegrityConfig {
     enabled: boolean;
     defaultHashAlgorithm: 'sha256' | 'sha512';
@@ -282,7 +283,6 @@ export interface DataIntegrityConfig {
         immutableLogging: boolean;
         changeApprovalRequired: boolean;
     };
-}
 /**
  * Security Data Integrity Monitor
  */
@@ -453,6 +453,6 @@ export declare class SecurityDataIntegrityMonitor extends EventEmitter {
      * Shutdown the integrity monitor
      */
     shutdown(): void;
-}
+
 export default SecurityDataIntegrityMonitor;
 //# sourceMappingURL=SecurityDataIntegrityMonitor.d.ts.map

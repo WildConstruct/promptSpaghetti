@@ -5,11 +5,13 @@
  * Professional demo showcase for Wild Construct's $2.3B film industry integration
  */
 import React from 'react';
+
 export interface DragReorderDemoProps {
     theme?: 'light' | 'dark' | 'cinema';
     showCode?: boolean;
     interactive?: boolean;
-}
+
+
 /**
  * Interactive demo showcasing drag-to-reorder weight management capabilities
  */

@@ -9,21 +9,18 @@ import { z } from 'zod';
 const mockGraphStore = {
   selectedNodeId: 'test-node-id',
   nodes: [,
-    {
-      id: 'test-node-id',
-      type: 'WeightedChoice',
-      data: {,
-        label: 'Test Node',
-        value: 'test value',
-        variations: ['var1', 'var2']
-      }
-    }
-  ],
-  addVariation: jest.fn<unknown[], unknown>(),
-  removeVariation: jest.fn<unknown[], unknown>(),
-  updateVariation: jest.fn<unknown[], unknown>(),
-  reorderVariations: jest.fn<unknown[], unknown>(),
-  updateNode: jest.fn<unknown[], unknown>()
+  {
+  id: 'test-node-id',
+  type: 'WeightedChoice',
+  data: {,
+  label: 'Test Node',
+  value: 'test value',
+  variations: ['var1', 'var2']],
+  addVariation: jest.fn<unknown, unknown>(),
+  removeVariation: jest.fn<unknown, unknown>(),
+  updateVariation: jest.fn<unknown, unknown>(),
+  reorderVariations: jest.fn<unknown, unknown>(),
+  updateNode: jest.fn<unknown, unknown>(),
 };
 jest.mock('../graphStore', () => ({)
   useGraphStore: jest.fn(() => mockGraphStore),
@@ -37,40 +34,33 @@ class TestErrorBoundary extends React.Component<
   constructor(props: { children: React.ReactNode; onError?: (error: Error) => void }) {
     super(props);
     this.state = { hasError: false };
-  }
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
-  }
   componentDidCatch(error: Error) {
     this.props.onError?.(error);
-  }
   render() {
     if (this.state.hasError) {
       return <div data-testid="error-boundary">Error: {this.state.error?.message}</div>;
-    }
     return this.props.children;
-  }
-}
 describe('InspectorPanel - Comprehensive Testing', () => {
   const mockSchema = z.object({)
-    label: z.string().default('Test Node'),
-    value: z.string().default(''),
-    variations: z.array(z.string()).default([]),
-  });
+  label: z.string().default('Test Node'),
+  value: z.string().default(''),
+  variations: z.array(z.string()).default([]),
+});
   const mockNode = {
-    id: 'test-node',
-    type: 'TestNode',
-    data: {,
-      label: 'Test Node',
-      value: 'test value',
-      variations: ['var1', 'var2']
-    }
-  };
+  id: 'test-node',
+  type: 'TestNode',
+  data: {,
+  label: 'Test Node',
+  value: 'test value',
+  variations: ['var1', 'var2'],
+};
   const defaultProps = {
-    node: mockNode,
-    schema: mockSchema,
-    onChange: jest.fn<unknown[], unknown>()
-  };
+  node: mockNode,
+  schema: mockSchema,
+  onChange: jest.fn<unknown, unknown>(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
@@ -97,7 +87,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       expect(expandButton).toHaveAttribute('aria-label', 'Expand Inspector');
     });
     it('shows close button when onClose is provided', () => {
-      const onClose = jest.fn<unknown[], unknown>();
+      const onClose = jest.fn<unknown, unknown>();
       render(<InspectorPanel {...defaultProps} onClose={onClose} />);
       const closeButton = screen.getByTitle('Close Inspector');
       expect(closeButton).toBeInTheDocument();
@@ -124,11 +114,11 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       }).not.toThrow();
     });
     it('handles malformed node data gracefully', () => {
-      const malformedNode = {
-        id: 'test',
-        type: 'TestNode',
-        data: null,
-      } as any;
+  const malformedNode = {
+  id: 'test',
+  type: 'TestNode',
+  data: null,
+} as any;
       expect(() => {
         render(<InspectorPanel {...defaultProps} node={malformedNode} />);
       }).not.toThrow();
@@ -139,7 +129,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       }).not.toThrow();
     });
     it('handles onChange errors gracefully', async () => {
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       const errorOnChange = jest.fn(() => {
         throw new Error('onChange error');
       });
@@ -154,14 +144,13 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         await userEvent.type(input, 'test');
         // Should handle error gracefully
         expect(onError).toHaveBeenCalled();
-      }
     });
     it('handles store access errors gracefully', () => {
       const mockUseGraphStore = require('../graphStore').useGraphStore;
       mockUseGraphStore.mockImplementation(() => {
         throw new Error('Store access error');
       });
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel {...defaultProps} />
@@ -169,8 +158,8 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       );
       expect(onError).toHaveBeenCalledWith()
         expect.objectContaining({)
-          message: 'Store access error',
-        })
+  message: 'Store access error',
+}
       );
       // Restore mock
       mockUseGraphStore.mockImplementation(() => mockGraphStore);
@@ -178,7 +167,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
   });
   describe('Performance Concerns', () => {
     it('debounces rapid prop changes', async () => {
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render(<InspectorPanel {...defaultProps} onChange={onChange} />);
       const input = screen.queryByRole('textbox');
@@ -193,7 +182,6 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         });
         // Now onChange should be called
         expect(onChange).toHaveBeenCalled();
-      }
     });
     it('handles resize operations efficiently', async () => {
       const startTime = performance.now();
@@ -201,21 +189,19 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       // Simulate multiple resize operations
       for (let i = 0; i < 100; i++) {
         window.dispatchEvent(new Event('resize'));
-      }
       const endTime = performance.now();
       // Should handle resizes efficiently (< 100ms for 100 operations)
       expect(endTime - startTime).toBeLessThan(100);
     });
     it('memoizes complex computations', () => {
-      const complexSchema = z.object({)
-        complexField: z.string().transform((val) => {,
-          // Simulate expensive computation
-          let result = val;
-          for (let i = 0; i < 1000; i++) {
-            result = result + String(i);
-          }
-          return result;
-        })
+  const complexSchema = z.object({)
+  complexField: z.string().transform((val) => {,
+  // Simulate expensive computation
+  let result = val;
+  for (let i = 0; i < 1000; i++) {
+  result = result + String(i);
+  return result;
+}
       });
       const startTime = performance.now();
       const { rerender } = render()
@@ -241,7 +227,6 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         data: {,
           ...mockNode.data,
           variations: Array.from({ length: 1000 }, (_, i) => `Variation ${i}`)}
-        }
       };
       const startTime = performance.now();
       render(<InspectorPanel {...defaultProps} node={largeVariationNode} />);
@@ -257,7 +242,7 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       expect(panel).toHaveAttribute('aria-label', 'Node Inspector');
       const buttons = screen.getAllByRole('button');
       buttons.forEach(button => {)
-        expect(button).toHaveAttribute('aria-label');
+  expect(button).toHaveAttribute('aria-label');
       });
     });
     it('supports keyboard navigation', async () => {
@@ -272,16 +257,15 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         buttons[0].focus();
         await user.keyboard('{Enter}');
         // Should not crash
-      }
     });
     it('follows TypeScript strict mode requirements', () => {
-      // This test ensures all props are properly typed
-      const strictProps = {
-        node: mockNode as const,
-        schema: mockSchema,
-        onChange: jest.fn<unknown[], unknown>() as (data: unknown) => void,
-        onClose: jest.fn<unknown[], unknown>() as () => void
-      };
+  // This test ensures all props are properly typed
+  const strictProps = {
+  node: mockNode as const,
+  schema: mockSchema,
+  onChange: jest.fn<unknown, unknown>() as (data: unknown) => void,
+  onClose: jest.fn<unknown, unknown>() as () => void,
+};
       expect(() => {
         render(<InspectorPanel {...strictProps} />);
       }).not.toThrow();
@@ -313,7 +297,6 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         const width = parseInt(computedStyle.width);
         expect(width).toBeGreaterThan(200); // Minimum width
         expect(width).toBeLessThan(800); // Maximum width
-      }
     });
     it('persists resize preferences', () => {
       const { rerender } = render(<InspectorPanel {...defaultProps} />);
@@ -324,7 +307,6 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         fireEvent.mouseDown(resizeHandle, { clientX: 300 });
         fireEvent.mouseMove(document, { clientX: 400 });
         fireEvent.mouseUp(document);
-      }
       // Rerender - should maintain size
       rerender(<InspectorPanel {...defaultProps} />);
       // Size should be preserved (would need localStorage mock for full test)
@@ -340,14 +322,13 @@ describe('InspectorPanel - Comprehensive Testing', () => {
       if (addButton) {
         await user.click(addButton);
         expect(mockGraphStore.addVariation).toHaveBeenCalled();
-      }
     });
     it('handles store update failures gracefully', async () => {
       const user = userEvent.setup();
       mockGraphStore.addVariation.mockImplementation(() => {
         throw new Error('Store update failed');
       });
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <InspectorPanel {...defaultProps} />
@@ -358,7 +339,6 @@ describe('InspectorPanel - Comprehensive Testing', () => {
         await user.click(addButton);
         // Should handle store errors gracefully
         expect(onError).toHaveBeenCalled();
-      }
     });
   });
 });

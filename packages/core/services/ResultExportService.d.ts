@@ -7,6 +7,7 @@
  */
 import { PreviewResultWithPath } from '../types/ExecutionPath';
 import { ExportResult } from '../../../server/src/exporter';
+
 export interface ResultExportOptions {
     format: ExportFormat;
     includeMetadata: boolean;
@@ -31,15 +32,16 @@ export interface ResultExportOptions {
         creativityMetrics?: boolean;
         comparisonMatrix?: boolean;
     };
-}
+
 export type ExportFormat = 'plain-text' | 'json-simple' | 'json-complete' | 'csv-analysis' | 'fountain-script' | 'final-draft' | 'controlnet-json' | 'stable-diffusion' | 'professional-report' | 'creative-brief' | 'mars-framework' | 'zada-natural' | 'hybrid-prompting' | 'execution-timeline' | 'variance-report' | 'batch-summary';
+
 export interface IndividualExportData {
     result: PreviewResultWithPath;
     index: number;
     totalResults: number;
     exportedAt: string;
     sourceGraph?: any;
-}
+
 export interface BatchExportData {
     results: PreviewResultWithPath[];
     selectedIndices: number[];
@@ -52,7 +54,7 @@ export interface BatchExportData {
     };
     exportedAt: string;
     sourceGraph?: any;
-}
+
 export declare class ResultExportService {
     /**
      * Export a single preview result in the specified format
@@ -139,6 +141,6 @@ export declare class ResultExportService {
     private groupByExecutionTime;
     private groupByOutputLength;
     private groupByRandomizationCount;
-}
+
 export declare const resultExportService: ResultExportService;
 //# sourceMappingURL=ResultExportService.d.ts.map

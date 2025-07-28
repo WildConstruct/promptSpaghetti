@@ -15,6 +15,7 @@
 import { AnalyticsClient, AnalyticsClientConfig } from './AnalyticsClient';
 import { ConversionArchitectureManager, EnhancedConversionEvent, TouchPoint } from './ConversionFunnelArchitecture';
 import { SessionTrackingManager } from './SessionTrackingIntegration';
+
 export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     enableRealTimeStreaming: boolean;
     streamingEndpoint: string;
@@ -29,20 +30,20 @@ export interface ConversionTrackingConfig extends AnalyticsClientConfig {
     deduplicationWindow: number;
     enableDebugLogging: boolean;
     errorReportingEndpoint?: string;
-}
+
 export interface EventValidationRule {
     field: string;
     type: 'required' | 'pattern' | 'range' | 'custom';
     value?: unknown;
     validator?: (value: unknown) => boolean;
     errorMessage: string;
-}
+
 export interface QueuedEvent {
     event: EnhancedConversionEvent;
     timestamp: number;
     retryCount: number;
     queuedOffline: boolean;
-}
+
 export interface TrackingMetrics {
     eventsTracked: number;
     eventsQueued: number;
@@ -52,7 +53,7 @@ export interface TrackingMetrics {
     duplicatesFiltered: number;
     offlineEvents: number;
     privacyBlockedEvents: number;
-}
+
 export interface ConversionContext {
     sessionId: string;
     userId: string;
@@ -72,7 +73,6 @@ export interface ConversionContext {
         content?: string;
         term?: string;
     };
-}
 /**
  * Enhanced Conversion Tracking SDK
  * Extends Epic 1 AnalyticsClient with advanced conversion tracking capabilities
@@ -174,7 +174,6 @@ export declare class ConversionTrackingSDK extends AnalyticsClient {
      * Cleanup resources
      */
     destroy(): void;
-}
 /**
  * Factory function to create ConversionTrackingSDK instance
  */

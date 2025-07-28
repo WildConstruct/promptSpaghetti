@@ -16,13 +16,13 @@ export declare enum AuditEventType {
     AUTHORIZATION = "authorization",
     DATA_MODIFICATION = "data_modification",
     EXPORT_IMPORT = "export_import"
-}
+
 export declare enum AuditSeverity {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum ComplianceFramework {
     GDPR = "gdpr",
     CCPA = "ccpa",
@@ -30,14 +30,14 @@ export declare enum ComplianceFramework {
     ISO27001 = "iso27001",
     HIPAA = "hipaa",
     PCI_DSS = "pci_dss"
-}
+
 export declare enum AuditStatus {
     ACTIVE = "active",
     RESOLVED = "resolved",
     INVESTIGATING = "investigating",
     SUPPRESSED = "suppressed",
     ESCALATED = "escalated"
-}
+
 export declare const AuditEventSchema: z.ZodObject<{
     id: z.ZodString;
     timestamp: z.ZodDate;
@@ -399,7 +399,7 @@ export declare class AuditManagementSystem {
     private generateComplianceRecommendations;
     private deleteEvent;
     private archiveEvent;
-}
+
 export declare     description: string;
     status: AuditStatus;
     category: string;

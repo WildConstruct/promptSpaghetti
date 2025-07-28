@@ -119,7 +119,7 @@ describe('PerformanceTestSuite', () => {
           timestamp: Date.now(),
           testScenario: 'test_scenario',
           userCount: 5
-        },
+  }
         {
           connectionTime: 120,
           messageLatency: 60,
@@ -305,7 +305,7 @@ describe('PerformanceOptimizer', () => {
       priority: 'medium' as const,
       triggerConditions: {
         cpuThreshold: 80
-      },
+  }
       actions: [{
         type: 'throttle' as const,
         target: 'test_target',

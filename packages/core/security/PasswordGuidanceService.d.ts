@@ -17,7 +17,7 @@ export declare enum RiskLevel {
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum CompromiseType {
     DATA_BREACH = "data_breach",
     CREDENTIAL_STUFFING = "credential_stuffing",
@@ -27,14 +27,14 @@ export declare enum CompromiseType {
     INSIDER_THREAT = "insider_threat",
     WEAK_PASSWORD = "weak_password",
     REUSED_PASSWORD = "reused_password"
-}
+
 export declare enum ActionPriority {
     IMMEDIATE = "immediate",// Within 1 hour
     URGENT = "urgent",// Within 24 hours
     HIGH = "high",// Within 3 days
     MEDIUM = "medium",// Within 1 week
     LOW = "low"
-}
+
 export declare enum GuidanceCategory {
     IMMEDIATE_ACTIONS = "immediate_actions",
     ACCOUNT_SECURITY = "account_security",
@@ -43,7 +43,7 @@ export declare enum GuidanceCategory {
     MONITORING = "monitoring",
     PREVENTION = "prevention",
     RECOVERY = "recovery"
-}
+
 export interface CompromiseIndicator {
     type: CompromiseType;
     description: string;
@@ -52,7 +52,8 @@ export interface CompromiseIndicator {
     detectedAt: Date;
     evidence: string[];
     affectedAccounts: string[];
-}
+
+
 export interface SecurityRecommendation {
     id: string;
     title: string;
@@ -65,7 +66,8 @@ export interface SecurityRecommendation {
     benefits: string[];
     risks: string[];
     dependencies?: string[];
-}
+
+
 export interface ActionStep {
     stepNumber: number;
     title: string;
@@ -75,7 +77,8 @@ export interface ActionStep {
     helpResources: string[];
     timeEstimate: string;
     required: boolean;
-}
+
+
 export interface GuidanceSession {
     id: string;
     userId: string;
@@ -87,7 +90,8 @@ export interface GuidanceSession {
     lastUpdated: Date;
     expiresAt: Date;
     status: 'active' | 'completed' | 'expired';
-}
+
+
 export interface PasswordSecurityAssessment {
     strength: 'very_weak' | 'weak' | 'fair' | 'good' | 'strong' | 'very_strong';
     score: number;
@@ -97,7 +101,8 @@ export interface PasswordSecurityAssessment {
     breachDatabases: string[];
     reuseDetected: boolean;
     ageInDays: number;
-}
+
+
 export interface UserSecurityProfile {
     userId: string;
     riskScore: number;
@@ -106,7 +111,8 @@ export interface UserSecurityProfile {
     recentBreaches: CompromiseIndicator[];
     securityScore: number;
     recommendations: SecurityRecommendation[];
-}
+
+
 /**
  * Comprehensive password guidance and security recommendation service
  */
@@ -195,6 +201,6 @@ export declare class PasswordGuidanceService extends EventEmitter {
      * Get contextual security tips
      */
     private getSecurityTips;
-}
+
 export default PasswordGuidanceService;
 //# sourceMappingURL=PasswordGuidanceService.d.ts.map

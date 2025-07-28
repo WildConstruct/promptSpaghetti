@@ -6,6 +6,7 @@
  */
 import { AdvancedExecutionContext, AdvancedNodeConfig } from '../runtime/advanced';
 import { EventEmitter } from 'events';
+
 export interface ContextValidationResult {
     valid: boolean;
     errors: string[];
@@ -18,20 +19,20 @@ export interface ContextValidationResult {
         cacheEfficiency: number;
         memoryUsage: number;
     };
-}
+
 export interface ContextValidationRule {
     name: string;
     description: string;
     category: 'critical' | 'warning' | 'info';
     weight: number;
     validate: (context: AdvancedExecutionContext, config?: AdvancedNodeConfig) => ContextValidationRuleResult;
-}
+
 export interface ContextValidationRuleResult {
     passed: boolean;
     score: number;
     message?: string;
     details?: Record<string, any>;
-}
+
 export interface ContextValidationConfig {
     enableVariableValidation: boolean;
     enableStateValidation: boolean;
@@ -43,7 +44,6 @@ export interface ContextValidationConfig {
     maxCacheSize: number;
     warningThreshold: number;
     errorThreshold: number;
-}
 /**
  * Comprehensive context validation framework
  */
@@ -95,7 +95,6 @@ export declare class ContextValidationFramework extends EventEmitter {
     private addSecurityValidationRules;
     private updateContextHealth;
     private recordValidation;
-}
 /**
  * Context validation utilities
  */
@@ -123,6 +122,6 @@ export declare class ContextValidationUtils {
     private static estimateObjectMemory;
     private static estimateMapMemory;
     private static estimateValueMemory;
-}
+
 export default ContextValidationFramework;
 //# sourceMappingURL=ContextValidationFramework.d.ts.map

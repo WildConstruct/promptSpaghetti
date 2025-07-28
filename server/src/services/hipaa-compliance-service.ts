@@ -56,6 +56,7 @@ type ComplianceAssessment = z.infer<typeof ComplianceAssessmentSchema>;
 type DeidentificationOptions = z.infer<typeof DeidentificationOptionsSchema>;
 type DeidentificationResult = z.infer<typeof DeidentificationResultSchema>;
 
+}
 interface HIPAARule {
   id: string;
   name: string;
@@ -63,6 +64,7 @@ interface HIPAARule {
   category: 'administrative' | 'physical' | 'technical';
   severity: 'info' | 'warning' | 'error' | 'critical';
   checkFunction: (content: string, context?: Record<string, unknown>) => Promise<boolean>;
+}
 }
 
 export class HIPAAComplianceService {
@@ -87,6 +89,7 @@ export class HIPAAComplianceService {
     documentType: 'clinical_note' | 'patient_record' | 'research_data' | 'administrative_document',
     _____checkLevel: 'basic' | 'comprehensive' | 'audit' = 'comprehensive'
   ): Promise<ComplianceAssessment> {
+
     try {
       const findings = [];
       let totalScore = 100;
@@ -146,6 +149,7 @@ export class HIPAAComplianceService {
     content: string,
     options: DeidentificationOptions = {}
   ): Promise<DeidentificationResult> {
+
     const { method, preserveStructure, customRules } = { ...DeidentificationOptionsSchema.parse({}), ...options };
 
     try {
@@ -214,6 +218,7 @@ export class HIPAAComplianceService {
    * Validate that processing patient data is HIPAA-compliant
    */
   async validatePatientDataProcessing(patientData: Record<string, unknown>): Promise<void> {
+
     try {
       // Check for direct PHI in patient data structure
       const serializedData = JSON.stringify(patientData);
@@ -238,6 +243,7 @@ export class HIPAAComplianceService {
    * Validate that content processing is safe for HIPAA compliance
    */
   async validateSafeProcessing(content: string): Promise<void> {
+
     try {
       const assessment = await this.assessHIPAACompliance(content, 'clinical_note', 'basic');
       
@@ -287,6 +293,7 @@ export class HIPAAComplianceService {
   // Private helper methods
 
   private async detectPHIElements(content: string): Promise<PHIElement[]> {
+
     const phiElements: PHIElement[] = [];
 
     for (const [type, patterns] of this.phiPatterns.entries()) {
@@ -411,6 +418,7 @@ export class HIPAAComplianceService {
     phiElements: PHIElement[],
     preserveStructure: boolean
   ): Promise<{ content: string; removedElements: PHIElement[] }> {
+
     let deidentifiedContent = content;
     const removedElements: PHIElement[] = [];
 
@@ -440,6 +448,7 @@ export class HIPAAComplianceService {
     phiElements: PHIElement[],
     preserveStructure: boolean
   ): Promise<{ content: string; removedElements: PHIElement[] }> {
+
     // More conservative approach - remove more potential identifiers
     return this.applySafeHarborMethod(content, phiElements, preserveStructure);
   }
@@ -449,6 +458,7 @@ export class HIPAAComplianceService {
     phiElements: PHIElement[],
     _____preserveStructure: boolean
   ): Promise<{ content: string; removedElements: PHIElement[] }> {
+
     let deidentifiedContent = content;
     const removedElements: PHIElement[] = [];
 
@@ -473,6 +483,7 @@ export class HIPAAComplianceService {
     content: string,
     customRules: string[]
   ): Promise<{ content: string; warnings: string[] }> {
+
     let processedContent = content;
     const warnings: string[] = [];
 
@@ -503,6 +514,7 @@ export class HIPAAComplianceService {
   }
 
   private async validateMinimumNecessary(patientData: Record<string, unknown>): Promise<void> {
+
     // Check for potentially unnecessary data fields
     const unnecessaryFields = ['photo', 'full_address', 'full_ssn'];
     const presentUnnecessaryFields = unnecessaryFields.filter(field => field in patientData);
@@ -581,7 +593,8 @@ export class HIPAAComplianceService {
 
     // Email addresses
     this.phiPatterns.set('email', [
-      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g
+      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
+}\b/g
     ]);
 
     // Dates

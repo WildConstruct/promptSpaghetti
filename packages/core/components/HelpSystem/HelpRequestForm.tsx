@@ -15,25 +15,23 @@ import {
   RequestContext
 } from '../../services/Epic16HelpRequestService';
 interface HelpRequestFormProps {
-  helpService: Epic16HelpRequestService;
+  helpService: Epic16HelpRequestService;,
   userId: string;
-  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';
+  userType: 'guest' | 'user' | 'seller' | 'buyer' | 'admin';,
   userTier: 'free' | 'premium' | 'enterprise';
   context?: Partial<RequestContext>;
   onSubmitted?: (request: HelpRequest) => void;
   onCancel?: () => void;
-}
-interface FormData {
-  type: HelpRequestType;
+  interface FormData {
+  type: HelpRequestType;,
   category: HelpCategory;
-  subcategory: string;
+  subcategory: string;,
   priority: HelpPriority;
-  title: string;
+  title: string;,
   description: string;
-  tags: string[];
-  attachments: File[];
-}
-const categorySubcategories: Record<HelpCategory, string[]> = {
+  tags: string;,
+  attachments: File;
+  const categorySubcategories: Record<HelpCategory, string> = {,
   [HelpCategory.GETTING_STARTED]: ['account_setup', 'first_purchase', 'navigation', 'basic_features'],
   [HelpCategory.TEMPLATES]: ['submission', 'approval', 'licensing', 'customization', 'downloads'],
   [HelpCategory.MARKETPLACE]: ['selling', 'buying', 'payments', 'disputes', 'reviews'],
@@ -43,7 +41,7 @@ const categorySubcategories: Record<HelpCategory, string[]> = {
   [HelpCategory.COMMUNITY]: ['forums', 'moderation', 'guidelines', 'events'],
   [HelpCategory.PARTNERSHIPS]: ['affiliate', 'integration', 'business_development'],
   [HelpCategory.COMPLIANCE]: ['dmca', 'privacy', 'terms_of_service', 'licensing'],
-  [HelpCategory.GENERAL]: ['feedback', 'feature_request', 'other']
+  [HelpCategory.GENERAL]: ['feedback', 'feature_request', 'other'],
 };
 
 export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
@@ -57,24 +55,24 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
 }) => {
   // Form state
   const [formData, setFormData] = useState<FormData>({)
-    type: HelpRequestType.QUESTION,
-    category: HelpCategory.GENERAL,
-    subcategory: 'other',
-    priority: HelpPriority.MEDIUM,
-    title: '',
-    description: '',
-    tags: [],
-    attachments: [],
-  });
+  type: HelpRequestType.QUESTION,
+  category: HelpCategory.GENERAL,
+  subcategory: 'other',
+  priority: HelpPriority.MEDIUM,
+  title: '',
+  description: '',
+  tags: [],
+  attachments: [],
+});
   // UI state
   const [step, setStep] = useState<'category' | 'details' | 'suggestions' | 'review'>('category');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [suggestedArticles, setSuggestedArticles] = useState<KnowledgeBaseArticle[]>([]);
+  const [suggestedArticles, setSuggestedArticles] = useState<KnowledgeBaseArticle>([]);
   const [selectedArticle, setSelectedArticle] = useState<KnowledgeBaseArticle | null>(null);
   const [showArticlePreview, setShowArticlePreview] = useState(false);
   // Auto-suggestions and validation
-  const [titleSuggestions, setTitleSuggestions] = useState<string[]>([]);
+  const [titleSuggestions, setTitleSuggestions] = useState<string>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   // Get available subcategories for selected category
   const availableSubcategories = useMemo(() => {
@@ -84,60 +82,54 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   useEffect(() => {
     if (availableSubcategories.length > 0 && !availableSubcategories.includes(formData.subcategory)) {
       setFormData(prev => ({ ...prev, subcategory: availableSubcategories[0] }));
-    }
   }, [formData.category, availableSubcategories, formData.subcategory]);
   // Search for suggestions when title/description changes
   const searchSuggestions = useCallback(async (query: string) => {
-    if (query.length < 3) {
-      setSuggestedArticles([]);
-      return;
-    }
-    try {
-      const articles = await helpService.searchKnowledgeBase({)
-        query,
-        categories: [formData.category],
-        limit: 5,
-      });
+  if (query.length < 3) {
+  setSuggestedArticles([]);
+  return;
+  try {
+  const articles = await helpService.searchKnowledgeBase({)
+  query,
+  categories: [formData.category],
+  limit: 5,
+});
       setSuggestedArticles(articles);
     } catch (err) {
-      console.error('Failed to search suggestions:', err);
-    }
-  }, [helpService, formData.category]);
+  console.error('Failed to search suggestions:', err);
+}, [helpService, formData.category]);
   useEffect(() => {
     const searchQuery = `${formData.title} ${formData.description}`.trim();}
     if (searchQuery.length >= 3) {
       const timer = setTimeout(() => searchSuggestions(searchQuery), 500);
       return () => clearTimeout(timer);
-    }
   }, [formData.title, formData.description, searchSuggestions]);
   // Generate title suggestions based on category and type
   const generateTitleSuggestions = useCallback(() => {
-    const suggestions: Record<string, string[]> = {
-      [HelpRequestType.QUESTION]: [
-        'How do I...?',
-        'What is the best way to...?',
-        'Can you help me understand...?',
-        'I need help with...'
-      ],
-      [HelpRequestType.TECHNICAL_ISSUE]: [
-        'Unable to...',
-        'Error when trying to...',
-        'Feature not working...',
-        'Performance issue with...'
-      ],
-      [HelpRequestType.BUG_REPORT]: [
-        'Bug: Unable to...',
-        'Bug: Error in...',
-        'Bug: Unexpected behavior when...',
-        'Bug: Feature not functioning...'
-      ],
-      [HelpRequestType.FEATURE_REQUEST]: [
-        'Feature Request: Add ability to...',
-        'Enhancement: Improve...',
-        'Suggestion: New feature for...',
-        'Request: Better...'
-      ]
-    };
+  const suggestions: Record<string, string> = {,
+  [HelpRequestType.QUESTION]: [
+  'How do I...?',
+  'What is the best way to...?',
+  'Can you help me understand...?',
+  'I need help with...'
+  ],
+  [HelpRequestType.TECHNICAL_ISSUE]: [
+  'Unable to...',
+  'Error when trying to...',
+  'Feature not working...',
+  'Performance issue with...'
+  ],
+  [HelpRequestType.BUG_REPORT]: [
+  'Bug: Unable to...',
+  'Bug: Error in...',
+  'Bug: Unexpected behavior when...',
+  'Bug: Feature not functioning...'],
+  [HelpRequestType.FEATURE_REQUEST]: [
+  'Feature Request: Add ability to...',
+  'Enhancement: Improve...',
+  'Suggestion: New feature for...',
+  'Request: Better...'];
+  };
     setTitleSuggestions(suggestions[formData.type] || []);
   }, [formData.type]);
   useEffect(() => {
@@ -150,34 +142,32 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
       errors.title = 'Title is required';
     } else if (formData.title.length < 5) {
       errors.title = 'Title must be at least 5 characters';
-    }
     if (!formData.description.trim()) {
       errors.description = 'Description is required';
     } else if (formData.description.length < 20) {
       errors.description = 'Description must be at least 20 characters';
-    }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
   // Handle form submission
   const handleSubmit = async () => {
-    if (!validateForm()) {
-      setError('Please fix the validation errors before submitting.');
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const requestContext: RequestContext = {
-        userAgent: navigator.userAgent,
-        ipAddress: '0.0.0.0', // Would be filled by backend
-        location: {,
-          country: 'US', // Would be detected
-          region: 'CA',
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        },
-        sessionId: `session_${Date.now()}`,}
-        pageUrl: window.location.href,
+  if (!validateForm()) {
+  setError('Please fix the validation errors before submitting.');
+  return;
+  setLoading(true);
+  setError(null);
+  try {
+  const requestContext: RequestContext = {,
+  userAgent: navigator.userAgent,
+  ipAddress: '0.0.0.0', // Would be filled by backend,
+  location: {,
+  country: 'US', // Would be detected,
+  region: 'CA',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+},
+  sessionId: `session_${Date.now()}`}
+},
+  pageUrl: window.location.href,
         referrer: document.referrer,
         userJourney: [], // Would be tracked
         feature: context?.feature || 'help_form',
@@ -185,12 +175,13 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
         templateId: context?.templateId,
         marketplaceListingId: context?.marketplaceListingId,
         browserInfo: {,
-          name: 'Chrome', // Would be detected
-          version: '120.0',
-          platform: navigator.platform,
-        },
-        screenResolution: `${screen.width}x${screen.height}`,}
-        errorLogs: context?.errorLogs,
+  name: 'Chrome', // Would be detected,
+  version: '120.0',
+  platform: navigator.platform,
+},
+  screenResolution: `${screen.width}x${screen.height}`}
+},
+  errorLogs: context?.errorLogs,
         subscriptionPlan: userTier,
         accountAge: 30, // Would be calculated
         previousTickets: 0, // Would be queried
@@ -198,35 +189,34 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
         ...context
       };
       const helpRequest = await helpService.submitHelpRequest({)
-        type: formData.type,
-        category: formData.category,
-        subcategory: formData.subcategory,
-        priority: formData.priority,
-        title: formData.title,
-        description: formData.description,
-        context: requestContext,
-        userId,
-        userType,
-        userTier,
-        routingDecision: {,
-          strategy: 'support_agent',
-          confidence: 0.5,
-          reasoning: 'Initial submission',
-          estimatedResolutionTime: 240,
-        },
-        escalationLevel: 0,
+  type: formData.type,
+  category: formData.category,
+  subcategory: formData.subcategory,
+  priority: formData.priority,
+  title: formData.title,
+  description: formData.description,
+  context: requestContext,
+  userId,
+  userType,
+  userTier,
+  routingDecision: {,
+  strategy: 'support_agent',
+  confidence: 0.5,
+  reasoning: 'Initial submission',
+  estimatedResolutionTime: 240,
+},
+  escalationLevel: 0,
         suggestedArticles: [],
         responses: [],
         tags: formData.tags,
         attachments: [], // Would handle file uploads
-        relatedRequests: [],
-      });
+        relatedRequests: [];
+  });
       onSubmitted?.(helpRequest);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit help request');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to submit help request');
+} finally {
       setLoading(false);
-    }
   };
   // Handle article selection
   const handleArticleSelect = (article: KnowledgeBaseArticle) => {
@@ -237,38 +227,37 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
   const handleFileUpload = (files: FileList | null) => {
     if (!files) return;
     const newFiles = Array.from(files).filter(file => {)
-      // Validate file type and size
+  // Validate file type and size
       const allowedTypes = ['image/', 'text/', 'application/pdf'];
       const maxSize = 10 * 1024 * 1024; // 10MB;
       return allowedTypes.some(type => file.type.startsWith(type)) && file.size <= maxSize;
     });
     setFormData(prev => ({)
-      ...prev,
-      attachments: [...prev.attachments, ...newFiles]
-    }));
+  ...prev,
+  attachments: [...prev.attachments, ...newFiles],
+}));
   };
   // Remove attachment
   const removeAttachment = (index: number) => {
-    setFormData(prev => ({)
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index)
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  attachments: prev.attachments.filter((_, i) => i !== index),
+}));
   };
   // Add tag
   const addTag = (tag: string) => {
-    if (tag && !formData.tags.includes(tag)) {
-      setFormData(prev => ({)
-        ...prev,
-        tags: [...prev.tags, tag]
-      }));
-    }
+  if (tag && !formData.tags.includes(tag)) {
+  setFormData(prev => ({)
+  ...prev,
+  tags: [...prev.tags, tag],
+}));
   };
   // Remove tag
   const removeTag = (tag: string) => {
-    setFormData(prev => ({)
-      ...prev,
-      tags: prev.tags.filter(t => t !== tag),
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  tags: prev.tags.filter(t => t !== tag),
+}));
   };
   // Render category selection step
   const renderCategoryStep = () => (;);
@@ -280,10 +269,10 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
             <label
               key={type}
               className={`relative flex cursor-pointer rounded-lg border p-4 ${
-                formData.type === type
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-300 bg-white hover:bg-gray-50'
-              }`}
+  formData.type === type
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-300 bg-white hover:bg-gray-50',
+}`}
             >
               <input
                 type="radio"
@@ -366,8 +355,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Brief description of your issue or question"
           className={`w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 ${
-            validationErrors.title ? 'border-red-300' : 'border-gray-300'
-          }`}
+  validationErrors.title ? 'border-red-300' : 'border-gray-300',
+}`}
         />
         {validationErrors.title && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>
@@ -400,8 +389,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
           placeholder="Please provide detailed information about your issue, including steps to reproduce if applicable..."
           rows={6}
           className={`w-full px-3 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500 ${
-            validationErrors.description ? 'border-red-300' : 'border-gray-300'
-          }`}
+  validationErrors.description ? 'border-red-300' : 'border-gray-300',
+}`}
         />
         {validationErrors.description && ()
           <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
@@ -482,7 +471,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
               e.preventDefault();
               addTag(e.currentTarget.value.trim());
               e.currentTarget.value = '';
-            }
           }}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
         />
@@ -633,7 +621,7 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
       </div>
     </div>
   );
-  return ();
+  return;
     <div className="help-request-form max-w-2xl mx-auto">
       {/* Progress indicator */}
       <div className="mb-8">
@@ -641,12 +629,12 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
           {['category', 'details', 'suggestions', 'review'].map((stepName, index) => ()
             <React.Fragment key={stepName}>
               <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                step === stepName 
-                  ? 'bg-blue-600 border-blue-600 text-white' 
-                  : index < ['category', 'details', 'suggestions', 'review'].indexOf(step)
-                    ? 'bg-green-600 border-green-600 text-white'
-                    : 'border-gray-300 text-gray-500'
-              }`}>
+  step === stepName
+  ? 'bg-blue-600 border-blue-600 text-white'
+  : index < ['category', 'details', 'suggestions', 'review'].indexOf(step),
+  ? 'bg-green-600 border-green-600 text-white'
+  : 'border-gray-300 text-gray-500',
+}`}>
                 {index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? ()
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -657,8 +645,8 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
               </div>
               {index < 3 && ()
                 <div className={`flex-1 h-0.5 mx-2 ${
-                  index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? 'bg-green-600' : 'bg-gray-300'
-                }`} />
+  index < ['category', 'details', 'suggestions', 'review'].indexOf(step) ? 'bg-green-600' : 'bg-gray-300',
+}`} />
               )}
             </React.Fragment>
           ))}
@@ -703,7 +691,6 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
                 const currentIndex = steps.indexOf(step);
                 if (currentIndex > 0) {
                   setStep(steps[currentIndex - 1] as any);
-                }
               }}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
             >
@@ -736,12 +723,10 @@ export const HelpRequestForm: React.FC<HelpRequestFormProps> = ({)
               onClick={() => {
                 if (step === 'details' && !validateForm()) {
                   return;
-                }
                 const steps = ['category', 'details', 'suggestions', 'review'];
                 const currentIndex = steps.indexOf(step);
                 if (currentIndex < steps.length - 1) {
                   setStep(steps[currentIndex + 1] as any);
-                }
               }}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
             >

@@ -19,7 +19,7 @@ export declare enum RetryStrategy {
     LINEAR = "linear",
     FIXED = "fixed",
     CUSTOM = "custom"
-}
+
 export declare enum MFAOperation {
     TOTP_VERIFICATION = "totp_verification",
     SMS_SEND = "sms_send",
@@ -30,7 +30,7 @@ export declare enum MFAOperation {
     DEVICE_REGISTRATION = "device_registration",
     METHOD_SETUP = "method_setup",
     METHOD_DISABLE = "method_disable"
-}
+
 export declare enum FailureType {
     NETWORK_ERROR = "network_error",
     TIMEOUT = "timeout",
@@ -41,12 +41,12 @@ export declare enum FailureType {
     AUTHENTICATION_FAILED = "authentication_failed",
     VALIDATION_ERROR = "validation_error",
     UNKNOWN_ERROR = "unknown_error"
-}
+
 export declare enum CircuitBreakerStateEnum {
     CLOSED = "closed",
     OPEN = "open",
     HALF_OPEN = "half_open"
-}
+
 export interface RetryConfig {
     maxAttempts: number;
     strategy: RetryStrategy;
@@ -57,13 +57,13 @@ export interface RetryConfig {
     timeoutMs: number;
     retryableErrors: FailureType[];
     customDelayFunction?: (attempt: number, baseDelay: number) => number;
-}
+
 export interface CircuitBreakerConfig {
     failureThreshold: number;
     resetTimeoutMs: number;
     monitoringWindowMs: number;
     halfOpenMaxAttempts: number;
-}
+
 export interface MFARetryConfig {
     operationConfigs: {,
         [key in MFAOperation]: RetryConfig;
@@ -72,7 +72,7 @@ export interface MFARetryConfig {
     globalTimeoutMs: number;
     enableMetrics: boolean;
     enableLogging: boolean;
-}
+
 export interface OperationContext {
     operationId: string;
     operation: MFAOperation;
@@ -81,7 +81,7 @@ export interface OperationContext {
     startTime: Date;
     attempt: number;
     metadata: Record<string, any>;
-}
+
 export interface RetryAttempt {
     attempt: number;
     startTime: Date;
@@ -90,7 +90,7 @@ export interface RetryAttempt {
     error?: Error;
     success: boolean;
     timeoutReached: boolean;
-}
+
 export interface OperationResult<T = any> {
     success: boolean;
     data?: T;
@@ -99,7 +99,7 @@ export interface OperationResult<T = any> {
     totalDurationMs: number;
     circuitBreakerTriggered: boolean;
     rateLimited: boolean;
-}
+
 export interface RetryMetrics {
     totalOperations: number;
     successfulOperations: number;
@@ -119,7 +119,6 @@ export interface RetryMetrics {
     errorMetrics: {,
         [key in FailureType]: number;
     };
-}
 /**
  * MFA Retry Handler Service
  */
@@ -169,6 +168,6 @@ export declare class MFARetryHandler extends EventEmitter {
     private mergeConfig;
     private initializeMetrics;
     private initializeCircuitBreakers;
-}
+
 export default MFARetryHandler;
 //# sourceMappingURL=MFARetryHandler.d.ts.map

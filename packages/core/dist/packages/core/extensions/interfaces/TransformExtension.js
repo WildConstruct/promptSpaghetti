@@ -3,7 +3,7 @@
  * Defines interfaces for extending the data transformation system
  */
 import { z } from 'zod';
-// Transform Types
+import { ExtensionValidationResult } from './ExtensionInterfaces';
 export var TransformType;
 (function (TransformType) {
     TransformType["TEXT"] = "text";
@@ -15,8 +15,38 @@ export var TransformType;
     TransformType["BOOLEAN"] = "boolean";
     TransformType["DATE"] = "date";
     TransformType["CUSTOM"] = "custom";
+    // Transform Definition
+    TransformType[TransformType["export"] = void 0] = "export";
+    TransformType[TransformType["interface"] = void 0] = "interface";
+    TransformType[TransformType["TransformDefinition"] = void 0] = "TransformDefinition";
 })(TransformType || (TransformType = {}));
-// Transform Extension Helper Functions
+{
+    // Basic metadata
+    id: string;
+    name: string;
+    description: string;
+    version: string;
+    type: TransformType;
+    // Transform class
+    transformClass: new (id);
+    string, config;
+    any;
+    DataTransform;
+    // Schema definitions
+    inputSchema: z.ZodSchema;
+    outputSchema: z.ZodSchema;
+    configSchema: z.ZodSchema;
+    // UI configuration
+    ui: TransformUIConfiguration;
+    // Runtime configuration
+    runtime: TransformRuntimeConfiguration;
+    // Pipeline configuration
+    pipeline: TransformPipelineConfiguration;
+    // Metadata
+    metadata: TransformMetadata;
+    // Transform UI Configuration
+}
+ > ;
 export var TransformExtensionHelpers;
 (function (TransformExtensionHelpers) {
     function createTransformDefinition(config) {
@@ -50,85 +80,94 @@ export var TransformExtensionHelpers;
             pipeline: config.pipeline || {},
             metadata: config.metadata || {
                 author: 'Unknown',
-                license: 'MIT'
-            }
+                license: 'MIT',
+            },
+            function: validateTransformDefinition(definition, TransformDefinition), ExtensionValidationResult
         };
+        {
+            const errors = [];
+            const warnings = [];
+            // Basic validation
+            if (!definition.id)
+                errors.push('Transform ID is required');
+            if (!definition.name)
+                errors.push('Transform name is required');
+            if (!definition.transformClass)
+                errors.push('Transform class is required');
+            // Schema validation
+            if (!definition.inputSchema)
+                errors.push('Input schema is required');
+            if (!definition.outputSchema)
+                errors.push('Output schema is required');
+            return {
+                valid: errors.length === 0,
+                errors,
+                warnings
+            };
+            function createTransformRegistry() {
+                const registry = new Map();
+                const eventEmitter = new EventTarget();
+                return {
+                    register(definition) {
+                        registry.set(definition.id, definition);
+                        eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
+                    },
+                    unregister(transformId) {
+                        const definition = registry.get(transformId);
+                        if (definition) {
+                            registry.delete(transformId);
+                            eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
+                        }
+                        get(transformId, string);
+                        {
+                            return registry.get(transformId);
+                        }
+                        getAll();
+                        {
+                            return Array.from(registry.values());
+                        }
+                        getByType(type, TransformType);
+                        {
+                            return Array.from(registry.values()).filter(def => def.type === type);
+                        }
+                        getByCategory(category, string);
+                        {
+                            return Array.from(registry.values()).filter(def => def.ui.category === category);
+                        }
+                        search(query, string);
+                        {
+                            const lowercaseQuery = query.toLowerCase();
+                            return Array.from(registry.values()).filter(def => );
+                            def.name.toLowerCase().includes(lowercaseQuery) ||
+                                def.description.toLowerCase().includes(lowercaseQuery);
+                            ;
+                        }
+                        filter(predicate, (definition) => boolean);
+                        {
+                            return Array.from(registry.values()).filter(predicate);
+                        }
+                        getCompatible(inputType, string, outputType, string);
+                        {
+                            return Array.from(registry.values()).filter(def => { });
+                            const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
+                            const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
+                            return inputCompatible && outputCompatible;
+                        }
+                        ;
+                    },
+                    validate(definition) {
+                        return validateTransformDefinition(definition);
+                    },
+                    on(event, listener) {
+                        eventEmitter.addEventListener(event, listener);
+                    },
+                    off(event, listener) {
+                        eventEmitter.removeEventListener(event, listener);
+                    }
+                };
+            }
+            TransformExtensionHelpers.createTransformRegistry = createTransformRegistry;
+        }
     }
     TransformExtensionHelpers.createTransformDefinition = createTransformDefinition;
-    function validateTransformDefinition(definition) {
-        const errors = [];
-        const warnings = [];
-        // Basic validation
-        if (!definition.id)
-            errors.push('Transform ID is required');
-        if (!definition.name)
-            errors.push('Transform name is required');
-        if (!definition.transformClass)
-            errors.push('Transform class is required');
-        // Schema validation
-        if (!definition.inputSchema)
-            errors.push('Input schema is required');
-        if (!definition.outputSchema)
-            errors.push('Output schema is required');
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
-    }
-    TransformExtensionHelpers.validateTransformDefinition = validateTransformDefinition;
-    function createTransformRegistry() {
-        const registry = new Map();
-        const eventEmitter = new EventTarget();
-        return {
-            register(definition) {
-                registry.set(definition.id, definition);
-                eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-            },
-            unregister(transformId) {
-                const definition = registry.get(transformId);
-                if (definition) {
-                    registry.delete(transformId);
-                    eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
-                }
-            },
-            get(transformId) {
-                return registry.get(transformId);
-            },
-            getAll() {
-                return Array.from(registry.values());
-            },
-            getByType(type) {
-                return Array.from(registry.values()).filter(def => def.type === type);
-            },
-            getByCategory(category) {
-                return Array.from(registry.values()).filter(def => def.ui.category === category);
-            },
-            search(query) {
-                const lowercaseQuery = query.toLowerCase();
-                return Array.from(registry.values()).filter(def => def.name.toLowerCase().includes(lowercaseQuery) ||
-                    def.description.toLowerCase().includes(lowercaseQuery));
-            },
-            filter(predicate) {
-                return Array.from(registry.values()).filter(predicate);
-            },
-            getCompatible(inputType, outputType) {
-                return Array.from(registry.values()).filter(def => {
-                    const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
-                    const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
-                    return inputCompatible && outputCompatible;
-                });
-            },
-            validate(definition) {
-                return validateTransformDefinition(definition);
-            },
-            on(event, listener) {
-                eventEmitter.addEventListener(event, listener);
-            },
-            off(event, listener) {
-                eventEmitter.removeEventListener(event, listener);
-            }
-        };
-    }
-    TransformExtensionHelpers.createTransformRegistry = createTransformRegistry;
 })(TransformExtensionHelpers || (TransformExtensionHelpers = {}));

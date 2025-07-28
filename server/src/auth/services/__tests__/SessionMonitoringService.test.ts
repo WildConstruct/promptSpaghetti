@@ -84,7 +84,7 @@ describe('SessionMonitoringService', () => {
           user_agent: 'Mozilla/5.0',
           created_at: new Date(Date.now() - 3600000), // 1 hour ago
           last_accessed_at: new Date()
-        },
+  }
         {
           user_id: 'user-1',
           device_info: { platform: 'iOS' },
@@ -92,7 +92,7 @@ describe('SessionMonitoringService', () => {
           user_agent: 'Safari',
           created_at: new Date(Date.now() - 7200000), // 2 hours ago
           last_accessed_at: new Date()
-        },
+  }
         {
           user_id: 'user-2',
           device_info: { platform: 'Android' },
@@ -283,14 +283,14 @@ describe('SessionMonitoringService', () => {
             avg_duration: '3600.5',
             peak_concurrent: '4'
           }]
-        })
+  }
         // Mock login attempts
         .mockResolvedValueOnce({
           rows: [{
             failed_attempts: '7',
             successful_logins: '35'
           }]
-        })
+  }
         // Mock hourly patterns
         .mockResolvedValueOnce({
           rows: [
@@ -298,7 +298,7 @@ describe('SessionMonitoringService', () => {
             { hour: '14', count: '15' },
             { hour: '18', count: '8' }
           ]
-        })
+  }
         // Mock device stats
         .mockResolvedValueOnce({
           rows: [
@@ -306,7 +306,7 @@ describe('SessionMonitoringService', () => {
             { device: 'MacOS', count: '15' },
             { device: 'iOS', count: '7' }
           ]
-        })
+  }
         // Mock location stats
         .mockResolvedValueOnce({
           rows: [
@@ -327,14 +327,14 @@ describe('SessionMonitoringService', () => {
           peakConcurrentSessions: 4,
           failedAttempts: 7,
           successfulLogins: 35
-        },
+  }
         patterns: {
           mostActiveHours: expect.any(Array),
           commonDevices: expect.arrayContaining([
             { device: 'Windows', count: 20 }
           ]),
           commonLocations: expect.any(Array)
-        },
+  }
         anomalies: expect.any(Array)
       });
 
@@ -429,7 +429,7 @@ describe('SessionMonitoringService', () => {
           fromLocation: expect.any(Object),
           toLocation: expect.any(Object),
           distanceKm: expect.any(Number)
-        })
+  }
       });
     });
 
@@ -511,7 +511,7 @@ describe('SessionMonitoringService', () => {
           averageSessionDuration: 4000,
           suspiciousActivities: 1,
           concurrentSessionsPerUser: {}
-        },
+  }
         timestamp: new Date()
       };
 

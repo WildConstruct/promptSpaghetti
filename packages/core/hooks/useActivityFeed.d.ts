@@ -7,7 +7,6 @@ interface UseActivityFeedOptions {
     limit?: number;
     autoRefresh?: boolean;
     refreshInterval?: number;
-}
 interface ActivityStatsData {
     total_events: number;
     events_by_type: Record<string, number>;
@@ -19,9 +18,8 @@ interface ActivityStatsData {
         user_id: string;
         count: number;
     }>;
-}
-export declare function useActivityFeed()
-  workspaceId: string,
+
+export declare function useActivityFeed(workspaceId: string,)
   userId: string,
   filters?: ActivityEventFilter,
   options?: UseActivityFeedOptions

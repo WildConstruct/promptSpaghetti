@@ -14,25 +14,24 @@ import {
 } from '../types/attribution';
 interface UseAttributionReturn {
   // State
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
   // Actions
-  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
-  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
-  getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
+  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;,
+  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;,
+  getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;,
   getContributorStats: (projectId: string, dateRange?: { start: Date; end: Date }) => Promise<ContributorStatsResponse>;
-  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution[]>;
+  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;,
   startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;
-  endSession: (sessionId: string) => Promise<void>;
-  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
-  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
-  cleanupOldData: (projectId: string) => Promise<void>;
-  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution[]>;
-  getAuthorAttribution: (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }) => Promise<ChangeAttribution[]>;
-  recordBatchAttributions: (projectId: string, attributions: any[], batchId?: string) => Promise<ChangeAttribution[]>;
+  endSession: (sessionId: string) => Promise<void>;,
+  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;,
+  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;,
+  cleanupOldData: (projectId: string) => Promise<void>;,
+  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>;,
+  getAuthorAttribution: (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }) => Promise<ChangeAttribution>;
+  recordBatchAttributions: (projectId: string, attributions: any, batchId?: string) => Promise<ChangeAttribution>;
   // Utility
   clearError: () => void;
-}
 
 export const useAttribution = (): UseAttributionReturn => {
   const [loading, setLoading] = useState(false);
@@ -41,38 +40,34 @@ export const useAttribution = (): UseAttributionReturn => {
     url: string,
     options: RequestInit = {}
   ): Promise<T> => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await fetch(url, {)
-        ...options,
-        headers: {,
-          'Content-Type': 'application/json',
-          ...options.headers
-        }
-      });
+  try {
+  setLoading(true);
+  setError(null);
+  const response = await fetch(url, {)
+  ...options,
+  headers: {,
+  'Content-Type': 'application/json',
+  ...options.headers
+});
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);}
-      }
       const data = await response.json();
       if (!data.success) {
         throw new Error(data.error || 'Request failed');
-      }
       return data.data;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      setError(errorMessage);
-      throw err;
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+  setError(errorMessage);
+  throw err;
+} finally {
       setLoading(false);
-    }
   }, []);
   const recordAttribution = useCallback(async (request: CreateAttributionRequest): Promise<ChangeAttribution> => {
-    return apiCall<ChangeAttribution>('/api/attribution/record', {)
-      method: 'POST',
-      body: JSON.stringify(request),
-    });
+  return apiCall<ChangeAttribution>('/api/attribution/record', {)
+  method: 'POST',
+  body: JSON.stringify(request),
+});
   }, [apiCall]);
   const getAttributionStats = useCallback(async (request: AttributionStatsRequest): Promise<AttributionStatsResponse> => {
     const params = new URLSearchParams();
@@ -108,7 +103,7 @@ export const useAttribution = (): UseAttributionReturn => {
     if (dateRange?.end) params.append('endDate', dateRange.end.toISOString());
     return apiCall<ContributorStatsResponse>(`/api/attribution/contributors/${projectId}?${params.toString()}`);}
   }, [apiCall]);
-  const listAttributions = useCallback(async (filter: AttributionFilter): Promise<ChangeAttribution[]> => {
+  const listAttributions = useCallback(async (filter: AttributionFilter): Promise<ChangeAttribution> => {
     const params = new URLSearchParams();
     if (filter.projectId) params.append('projectId', filter.projectId);
     if (filter.resourceType) params.append('resourceType', filter.resourceType);
@@ -127,46 +122,48 @@ export const useAttribution = (): UseAttributionReturn => {
     if (filter.offset) params.append('offset', filter.offset.toString());
     if (filter.sortBy) params.append('sortBy', filter.sortBy);
     if (filter.sortOrder) params.append('sortOrder', filter.sortOrder);
-    return apiCall<ChangeAttribution[]>(`/api/attribution/list?${params.toString()}`);}
+    return apiCall<ChangeAttribution>(`/api/attribution/list?${params.toString()}`);}
   }, [apiCall]);
   const startSession = useCallback(async (projectId: string, sessionId?: string): Promise<AttributionSession> => {
     return apiCall<AttributionSession>('/api/attribution/session/start', {)
-      method: 'POST',
+  method: 'POST',
       body: JSON.stringify({ projectId, sessionId })
     });
   }, [apiCall]);
   const endSession = useCallback(async (sessionId: string): Promise<void> => {
     return apiCall<void>('/api/attribution/session/end', {)
-      method: 'POST',
+  method: 'POST',
       body: JSON.stringify({ sessionId })
     });
   }, [apiCall]);
   const updatePrivacySettings = useCallback(async (request: UpdatePrivacySettingsRequest): Promise<AttributionPrivacySettings> => {
     return apiCall<AttributionPrivacySettings>(`/api/attribution/privacy/${request.projectId}`, {)}
-      method: 'PUT',
-      body: JSON.stringify(request),
-    });
+  },
+  method: 'PUT',
+      body: JSON.stringify(request);
+  });
   }, [apiCall]);
   const getPrivacySettings = useCallback(async (projectId: string): Promise<AttributionPrivacySettings | null> => {
     return apiCall<AttributionPrivacySettings | null>(`/api/attribution/privacy/${projectId}`);}
   }, [apiCall]);
   const cleanupOldData = useCallback(async (projectId: string): Promise<void> => {
     return apiCall<void>(`/api/attribution/cleanup/${projectId}`, {)}
-      method: 'POST',
-    });
+  },
+  method: 'POST';
+  });
   }, [apiCall]);
-  const getResourceAttribution = useCallback(async (projectId: string, resourceType: string, resourceId: string): Promise<ChangeAttribution[]> => {
-    return apiCall<ChangeAttribution[]>(`/api/attribution/resource/${projectId}/${resourceType}/${resourceId}`);}
+  const getResourceAttribution = useCallback(async (projectId: string, resourceType: string, resourceId: string): Promise<ChangeAttribution> => {
+    return apiCall<ChangeAttribution>(`/api/attribution/resource/${projectId}/${resourceType}/${resourceId}`);}
   }, [apiCall]);
-  const getAuthorAttribution = useCallback(async (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }): Promise<ChangeAttribution[]> => {
+  const getAuthorAttribution = useCallback(async (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }): Promise<ChangeAttribution> => {
     const params = new URLSearchParams();
     if (dateRange?.start) params.append('dateFrom', dateRange.start.toISOString());
     if (dateRange?.end) params.append('dateTo', dateRange.end.toISOString());
-    return apiCall<ChangeAttribution[]>(`/api/attribution/author/${projectId}/${authorId}?${params.toString()}`);}
+    return apiCall<ChangeAttribution>(`/api/attribution/author/${projectId}/${authorId}?${params.toString()}`);}
   }, [apiCall]);
-  const recordBatchAttributions = useCallback(async (projectId: string, attributions: any[], batchId?: string): Promise<ChangeAttribution[]> => {
-    return apiCall<ChangeAttribution[]>('/api/attribution/batch', {)
-      method: 'POST',
+  const recordBatchAttributions = useCallback(async (projectId: string, attributions: any, batchId?: string): Promise<ChangeAttribution> => {
+    return apiCall<ChangeAttribution>('/api/attribution/batch', {)
+  method: 'POST',
       body: JSON.stringify({ projectId, attributions, batchId })
     });
   }, [apiCall]);

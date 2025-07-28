@@ -18,7 +18,6 @@ interface VerificationRequestsHook {
     refreshStatus: () => Promise<void>;
     uploadDocuments: (requestId: string, files: File[]) => Promise<void>;
     getVerificationTypes: () => Promise<VerificationType[]>;
-}
 interface VerificationSummary {
     totalRequests: number;
     approvedCount: number;
@@ -28,7 +27,6 @@ interface VerificationSummary {
     completedValidations: IdentityValidationType[];
     missingValidations: IdentityValidationType[];
     requests: VerificationRequest[];
-}
 interface VerificationRequest {
     requestId: string;
     type: IdentityValidationType;
@@ -40,7 +38,6 @@ interface VerificationRequest {
         sessionId: string;
         requestSource: string;
     };
-}
 interface TrustScore {
     overall: number;
     components: {,
@@ -52,7 +49,6 @@ interface TrustScore {
     tier: 'unverified' | 'basic' | 'verified' | 'professional' | 'expert';
     badges: string[];
     lastUpdated: number;
-}
 interface VerificationType {
     type: IdentityValidationType;
     title: string;
@@ -63,7 +59,7 @@ interface VerificationType {
     fields: string[];
     acceptedDocuments?: string[];
     supportedPlatforms?: string[];
-}
+
 export declare function useVerificationRequests(userId: string): VerificationRequestsHook;
 export default useVerificationRequests;
 //# sourceMappingURL=useVerificationRequests.d.ts.map

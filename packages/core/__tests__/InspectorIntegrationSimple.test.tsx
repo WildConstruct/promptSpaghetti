@@ -15,21 +15,21 @@ jest.mock('../graphStore', () => ({)
   useGraphStore: () => ({ nodes: [], edges: [] })
 }));
 jest.mock('../hooks/useRealTimePreview', () => ({)
-  useRealTimePreview: () => ({),
-    variants: [],
+  useRealTimePreview: () => ({,)
+  variants: [],
     isGenerating: false,
     performance: { averageExecutionTime: 0, totalGenerations: 0, successRate: 100 },
     error: null,
-    requestPreview: jest.fn<unknown[], unknown>(),
-    forcePreview: jest.fn<unknown[], unknown>(),
-    refreshVariant: jest.fn<unknown[], unknown>(),
-    clearVariants: jest.fn<unknown[], unknown>(),
-    getPerformanceInsights: () => [],
-  })
+    requestPreview: jest.fn<unknown, unknown>(),
+    forcePreview: jest.fn<unknown, unknown>(),
+    refreshVariant: jest.fn<unknown, unknown>(),
+    clearVariants: jest.fn<unknown, unknown>(),
+    getPerformanceInsights: () => [];
+  }
 }));
 jest.mock('../components/Inspector/WeightControlSlider', () => ({)
   WeightControlSlider: () => <div data-testid="weight-control-slider">Weight Control</div>,
-  useWeightControlIntegration: () => ({ handleOptionsChange: jest.fn<unknown[], unknown>() })
+  useWeightControlIntegration: () => ({ handleOptionsChange: jest.fn<unknown, unknown>() })
 }));
 describe('Inspector Integration - Basic Validation', () => {
   it('can import help system components', () => {
@@ -67,12 +67,12 @@ describe('Inspector Integration - Basic Validation', () => {
     const TestComponent = () => {
       const { useContextualHelp } = require('../components/Help/HelpIntegration');
       const { wrapWithHelp } = useContextualHelp({)
-        id: 'test-help',
-        title: 'Test Help',
-        description: 'Test description',
-        category: 'basic',
-        trigger: 'hover',
-      });
+  id: 'test-help',
+  title: 'Test Help',
+  description: 'Test description',
+  category: 'basic',
+  trigger: 'hover',
+});
       return wrapWithHelp(<div>Test Content</div>);
     };
     expect(() => {

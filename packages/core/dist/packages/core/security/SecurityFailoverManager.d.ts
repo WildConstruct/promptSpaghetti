@@ -53,8 +53,8 @@ export interface SecuritySystemNode {
         request_queue_size: number;
         processing_capacity: number;
     };
-    dependencies: string[];
-    dependents: string[];
+    dependencies: string;
+    dependents: string;
     cluster_group: string;
     created_at: number;
     last_updated: number;
@@ -102,11 +102,11 @@ export interface FailoverPolicy {
         data_synchronization: 'real_time' | 'eventual' | 'manual';
         session_handling: 'preserve' | 'reset' | 'migrate';
         rollback_enabled: boolean;
-        rollback_conditions: string[];
+        rollback_conditions: string;
     };
     notifications: {
-        immediate: string[];
-        escalation: string[];
+        immediate: string;
+        escalation: string;
         escalation_delay: number;
         channels: ('email' | 'sms' | 'slack' | 'webhook')[];
     };
@@ -114,7 +114,7 @@ export interface FailoverPolicy {
         require_approval: boolean;
         audit_all_actions: boolean;
         retention_period: number;
-        compliance_frameworks: string[];
+        compliance_frameworks: string;
     };
     created_by: string;
     created_at: number;
@@ -128,13 +128,13 @@ export interface FailoverEvent {
     target_node?: SecuritySystemNode;
     trigger_reason: string;
     trigger_conditions: Record<string, any>;
-    timeline: FailoverTimelineEntry[];
+    timeline: FailoverTimelineEntry;
     status: 'initiated' | 'in_progress' | 'completed' | 'failed' | 'rolled_back';
     start_time: number;
     end_time?: number;
     duration?: number;
     impact: {
-        affected_services: string[];
+        affected_services: string;
         downtime: number;
         data_loss: boolean;
         performance_impact: 'none' | 'minimal' | 'moderate' | 'significant';
@@ -152,9 +152,9 @@ export interface FailoverEvent {
     };
     analysis: {
         root_cause: string;
-        lessons_learned: string[];
-        improvement_actions: string[];
-        policy_adjustments: string[];
+        lessons_learned: string;
+        improvement_actions: string;
+        policy_adjustments: string;
     };
     created_by: string;
 }
@@ -173,7 +173,7 @@ export interface RedundancyGroup {
     name: string;
     description: string;
     type: 'active_active' | 'active_passive' | 'master_slave' | 'multi_master';
-    nodes: string[];
+    nodes: string;
     primary_node?: string;
     config: {
         min_healthy_nodes: number;
@@ -272,10 +272,10 @@ export interface FailoverConfig {
     };
     notifications: {
         enabled: boolean;
-        immediate_recipients: string[];
-        escalation_recipients: string[];
+        immediate_recipients: string;
+        escalation_recipients: string;
         escalation_delay: number;
-        notification_channels: string[];
+        notification_channels: string;
     };
     performance: {
         max_cpu_usage: number;
@@ -286,7 +286,7 @@ export interface FailoverConfig {
     };
     geographic: {
         multi_region_enabled: boolean;
-        preferred_regions: string[];
+        preferred_regions: string;
         cross_region_latency_threshold: number;
         region_failover_enabled: boolean;
     };
@@ -297,9 +297,6 @@ export interface FailoverConfig {
         compliance_mode: boolean;
     };
 }
-/**
- * Security Analytics System Failover Manager
- */
 export declare class SecurityFailoverManager extends EventEmitter {
     private config;
     private nodes;
@@ -319,105 +316,11 @@ export declare class SecurityFailoverManager extends EventEmitter {
      * Initialize the failover management system
      */
     private initialize;
-    /**
-     * Register a security system node
-     */
-    registerNode(node: Omit<SecuritySystemNode, 'created_at' | 'last_updated'>): Promise<string>;
-    /**
-     * Register a failover policy
-     */
-    registerFailoverPolicy(policy: Omit<FailoverPolicy, 'id' | 'created_at' | 'last_modified'>): Promise<string>;
-    /**
-     * Create a redundancy group
-     */
-    createRedundancyGroup(group: Omit<RedundancyGroup, 'id' | 'created_at' | 'last_updated'>): Promise<string>;
-    /**
-     * Trigger manual failover
-     */
-    triggerFailover(sourceNodeId: string, targetNodeId?: string, reason?: string, policyId?: string): Promise<string>;
-    /**
-     * Get current system status
-     */
-    getSystemStatus(): {
-        overall_health: 'healthy' | 'degraded' | 'critical';
-        total_nodes: number;
-        healthy_nodes: number;
-        degraded_nodes: number;
-        offline_nodes: number;
-        active_failovers: number;
-        redundancy_groups: number;
-        load_distribution: Record<string, number>;
-        recent_events: FailoverEvent[];
-    };
-    /**
-     * Get failover metrics
-     */
-    getFailoverMetrics(): FailoverMetrics;
-    /**
-     * Get node health status
-     */
-    getNodeHealth(nodeId: string): SecuritySystemNode['health'] | null;
-    /**
-     * Route request to best available node
-     */
-    routeRequest(request: {
-        type: 'query' | 'write' | 'analytics' | 'alert';
-        priority: 'low' | 'normal' | 'high' | 'critical';
-        size_estimate: number;
-        timeout: number;
-    }): Promise<string>;
-    private executeFailover;
-    private executeFailoverPhase;
     private prepareFailover;
     private performFailover;
     private verifyFailover;
     private completeFailover;
     private rollbackFailover;
     private selectFailoverTarget;
-    private selectBestCandidate;
-    private findBestFailoverPolicy;
-    private startHealthMonitoring;
-    private performAllHealthChecks;
-    private performHealthCheck;
-    private handleNodeFailure;
-    private handleNodeRecovery;
-    private shouldTriggerFailover;
-    private startLoadBalancing;
-    private updateLoadBalancingWeights;
-    private calculateNodeHealthScore;
-    private calculateNodePerformanceScore;
-    private calculateNodeCapacityScore;
-    private startMetricsCollection;
-    private updateMetrics;
-    private startNodeMonitoring;
-    private configureGroupLoadBalancing;
-    private startGroupMonitoring;
-    private checkGroupHealth;
-    private handleGroupFailure;
-    private scaleUpGroup;
-    private prepareTargetNode;
-    private synchronizeData;
-    private migrateSessions;
-    private verifyDataConsistency;
-    private verifyRecoveryPointObjective;
-    private updateRedundancyGroups;
-    private cleanupFailoverResources;
-    private generateFailoverAnalysis;
-    private updateFailoverMetrics;
-    private sendFailoverNotification;
-    private createFailoverNotificationMessage;
-    private setupClusterManagement;
-    private handleWorkerHealthCheck;
-    private loadDefaultPolicies;
-    private initializeMetrics;
-    private generatePolicyId;
-    private generateGroupId;
-    private generateEventId;
-    private generateTimelineId;
-    /**
-     * Shutdown the failover manager
-     */
-    shutdown(): void;
 }
-export default SecurityFailoverManager;
 //# sourceMappingURL=SecurityFailoverManager.d.ts.map

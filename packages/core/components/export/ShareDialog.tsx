@@ -18,36 +18,33 @@ import {
   FiGlobe
 } from 'react-icons/fi';
 interface ShareDialogProps {
-  exportJob: ExportJob;
+  exportJob: ExportJob;,
   onClose: () => void;
   onShareCreated: (share: ExportShare) => void;
   className?: string;
-}
-const ACCESS_LEVELS: Array<{
-  value: ShareAccessLevel;
+  const ACCESS_LEVELS: Array<{,
+  value: ShareAccessLevel;,
   label: string;
-  description: string;
+  description: string;,
   icon: React.ComponentType;
 }> = [
   {
-    value: 'public',
-    label: 'Public',
-    description: 'Anyone with the link can access',
-    icon: FiGlobe,
-  },
+  value: 'public',
+  label: 'Public',
+  description: 'Anyone with the link can access',
+  icon: FiGlobe,
+}
   {
-    value: 'password_protected',
-    label: 'Password Protected',
-    description: 'Requires password to access',
-    icon: FiLock,
-  },
+  value: 'password_protected',
+  label: 'Password Protected',
+  description: 'Requires password to access',
+  icon: FiLock,
+}
   {
     value: 'private',
     label: 'Private',
     description: 'Only you can access',
-    icon: FiEye,
-  }
-];
+    icon: FiEye];
 const EXPIRATION_OPTIONS = [;
   { value: null, label: 'Never expires' },
   { value: 1, label: '1 day' },
@@ -63,62 +60,58 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
   className = ''
 }) => {
   const [shareData, setShareData] = useState<Partial<CreateExportShare>>({)
-    export_job_id: exportJob.id,
-    access_level: 'public',
-    password: '',
-    max_downloads: null,
-    expires_in_days: null,
-    description: '',
-    allow_download: true,
-    allow_preview: true,
-    track_access: true,
-    notify_on_access: false,
-  });
+  export_job_id: exportJob.id,
+  access_level: 'public',
+  password: '',
+  max_downloads: null,
+  expires_in_days: null,
+  description: '',
+  allow_download: true,
+  allow_preview: true,
+  track_access: true,
+  notify_on_access: false,
+});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [createdShare, setCreatedShare] = useState<ExportShare | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      // Validate required fields
-      if (shareData.access_level === 'password_protected' && !shareData.password) {
-        throw new Error('Password is required for password-protected shares');
-      }
-      // Calculate expiration date if specified
-      let expires_at: string | undefined;
-      if (shareData.expires_in_days) {
-        const expireDate = new Date();
-        expireDate.setDate(expireDate.getDate() + shareData.expires_in_days);
-        expires_at = expireDate.toISOString();
-      }
-      const sharePayload: CreateExportShare = {
-        ...shareData,
-        expires_at,
-        export_job_id: exportJob.id,
-      } as CreateExportShare;
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+  try {
+  // Validate required fields
+  if (shareData.access_level === 'password_protected' && !shareData.password) {
+  throw new Error('Password is required for password-protected shares');
+  // Calculate expiration date if specified
+  let expires_at: string | undefined;
+  if (shareData.expires_in_days) {
+  const expireDate = new Date();
+  expireDate.setDate(expireDate.getDate() + shareData.expires_in_days);
+  expires_at = expireDate.toISOString();
+  const sharePayload: CreateExportShare = {,
+  ...shareData,
+  expires_at,
+  export_job_id: exportJob.id,
+} as CreateExportShare;
       const response = await fetch('/api/export/shares', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sharePayload),
-      });
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify(sharePayload);
+  });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to create share');
-      }
       const result = await response.json();
       const newShare = result.data;
       setCreatedShare(newShare);
       onShareCreated(newShare);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create share');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to create share');
+} finally {
       setLoading(false);
-    }
   };
   const handleCopyLink = async (shareUrl: string) => {
     try {
@@ -128,7 +121,6 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
     } catch (err) {
       setCopyFeedback('Failed to copy link');
       setTimeout(() => setCopyFeedback(null), 3000);
-    }
   };
   const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -140,7 +132,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
     return `${window.location.origin}/shared/${share.share_token}`;}
   };
   if (createdShare) {
-    return ();
+    return;
       <div className={`share-dialog success-state ${className}`}>}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
@@ -225,8 +217,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`share-dialog ${className}`}>}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
@@ -281,14 +272,14 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           <div className="grid grid-cols-1 gap-3">
             {ACCESS_LEVELS.map((level) => {
               const Icon = level.icon;
-              return ();
+              return;
                 <label
                   key={level.value}
                   className={`flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                    shareData.access_level === level.value
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                      : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                  }`}
+  shareData.access_level === level.value
+  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
+  : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800',
+}`}
                 >
                   <input
                     type="radio"
@@ -296,9 +287,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
                     value={level.value}
                     checked={shareData.access_level === level.value}
                     onChange={(e) => setShareData(prev => ({)
-                      ...prev,
-                      access_level: e.target.value as ShareAccessLevel,
-                    }))}
+  ...prev,
+  access_level: e.target.value as ShareAccessLevel,
+}))}
                     className="sr-only"
                   />
                   <Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -339,9 +330,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           <select
             value={shareData.expires_in_days || ''}
             onChange={(e) => setShareData(prev => ({)
-              ...prev,
-              expires_in_days: e.target.value ? parseInt(e.target.value) : null,
-            }))}
+  ...prev,
+  expires_in_days: e.target.value ? parseInt(e.target.value) : null,
+}))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             {EXPIRATION_OPTIONS.map((option) => ()
@@ -359,9 +350,9 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({)
           <select
             value={shareData.max_downloads || ''}
             onChange={(e) => setShareData(prev => ({)
-              ...prev,
-              max_downloads: e.target.value ? parseInt(e.target.value) : null,
-            }))}
+  ...prev,
+  max_downloads: e.target.value ? parseInt(e.target.value) : null,
+}))}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
             <option value="">Unlimited</option>

@@ -18,6 +18,7 @@ import {
 } from '../analytics/IntegrationAnalyticsService';
 
 // Request/Response Types
+}
 interface RecordIntegrationEventRequest {
   integrationId: string;
   integrationType: IntegrationType;
@@ -31,6 +32,7 @@ interface RecordIntegrationEventRequest {
     parameters?: Record<string, any>;
     headers?: Record<string, string>;
     payload?: any;
+}
   };
   responseTime: number;
   dataSize?: number;
@@ -55,6 +57,7 @@ interface RecordIntegrationEventRequest {
   metadata?: Record<string, any>;
 }
 
+}
 interface IntegrationAnalyticsQuery {
   integrationIds?: string;
   integrationTypes?: string;
@@ -67,7 +70,9 @@ interface IntegrationAnalyticsQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface IntegrationReportRequest {
   startDate: string;
   endDate: string;
@@ -81,11 +86,13 @@ interface IntegrationReportRequest {
     trends?: boolean;
     recommendations?: boolean;
     predictions?: boolean;
+}
   };
   format?: 'json' | 'pdf' | 'csv' | 'excel';
   emailRecipients?: string[];
 }
 
+}
 interface IntegrationHealthQuery {
   integrationIds?: string;
   status?: 'healthy' | 'degraded' | 'failing' | 'offline';
@@ -93,7 +100,9 @@ interface IntegrationHealthQuery {
   includeHistory?: boolean;
   timeRange?: string;
 }
+}
 
+}
 interface IntegrationMetricsQuery {
   integrationId: string;
   startDate?: string;
@@ -101,6 +110,7 @@ interface IntegrationMetricsQuery {
   metrics?: string; // comma-separated list
   granularity?: 'minute' | 'hour' | 'day' | 'week';
   aggregation?: 'avg' | 'sum' | 'min' | 'max' | 'count';
+}
 }
 
 /**
@@ -131,31 +141,31 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
           integrationId: { 
             type: 'string', 
             description: 'Unique identifier for the integration'
-          },
+  }
           integrationType: { 
             type: 'string', 
             enum: Object.values(IntegrationType),
             description: 'Type of integration'
-          },
+  }
           integrationName: { 
             type: 'string',
             description: 'Human-readable name of the integration'
-          },
+  }
           integrationVersion: { 
             type: 'string', 
             default: '1.0.0',
             description: 'Version of the integration'
-          },
+  }
           eventType: { 
             type: 'string', 
             enum: Object.values(IntegrationEventType),
             description: 'Type of event that occurred'
-          },
+  }
           operation: { 
             type: 'string', 
             enum: Object.values(IntegrationOperation),
             description: 'Operation being performed'
-          },
+  }
           operationDetails: {
             type: 'object',
             description: 'Details about the operation',
@@ -166,34 +176,34 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
               headers: { type: 'object' },
               payload: {}
             }
-          },
+  }
           responseTime: { 
             type: 'number', 
             minimum: 0,
             description: 'Response time in milliseconds'
-          },
+  }
           dataSize: { 
             type: 'number', 
             minimum: 0,
             description: 'Size of data transferred in bytes'
-          },
+  }
           success: { 
             type: 'boolean',
             description: 'Whether the operation was successful'
-          },
+  }
           errorCode: { 
             type: 'string',
             description: 'Error code if operation failed'
-          },
+  }
           errorMessage: { 
             type: 'string',
             description: 'Error message if operation failed'
-          },
+  }
           errorCategory: { 
             type: 'string', 
             enum: Object.values(ErrorCategory),
             description: 'Category of error if operation failed'
-          },
+  }
           costData: {
             type: 'object',
             description: 'Cost information for the operation',
@@ -203,9 +213,9 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
               totalCost: { type: 'number', minimum: 0 },
               currency: { type: 'string', default: 'USD' },
               billingUnit: { type: 'string', default: 'request' }
-            },
+  }
             required: ['totalCost']
-          },
+  }
           context: {
             type: 'object',
             description: 'Context information for the event',
@@ -216,13 +226,13 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
               environment: { type: 'string' },
               region: { type: 'string' }
             }
-          },
+  }
           metadata: {
             type: 'object',
             description: 'Additional metadata for the event'
           }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -299,24 +309,24 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
             enum: ['1h', '24h', '7d', '30d'],
             default: '24h',
             description: 'Time range for analytics data'
-          },
+  }
           includeErrorAnalysis: { 
             type: 'boolean', 
             default: true,
             description: 'Include detailed error analysis'
-          },
+  }
           includePerformanceAnalysis: { 
             type: 'boolean', 
             default: true,
             description: 'Include performance analysis'
-          },
+  }
           includeCostAnalysis: { 
             type: 'boolean', 
             default: true,
             description: 'Include cost analysis'
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -373,48 +383,48 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
           integrationIds: { 
             type: 'string',
             description: 'Comma-separated list of integration IDs'
-          },
+  }
           integrationTypes: { 
             type: 'string',
             description: 'Comma-separated list of integration types'
-          },
+  }
           startDate: { 
             type: 'string', 
             format: 'date-time',
             description: 'Start date for analytics data'
-          },
+  }
           endDate: { 
             type: 'string', 
             format: 'date-time',
             description: 'End date for analytics data'
-          },
+  }
           timeRange: { 
             type: 'string', 
             enum: ['1h', '24h', '7d', '30d', '90d'],
             description: 'Predefined time range'
-          },
+  }
           groupBy: { 
             type: 'string', 
             enum: ['integration', 'type', 'operation', 'hour', 'day'],
             default: 'integration',
             description: 'How to group the analytics data'
-          },
+  }
           includeErrors: { 
             type: 'boolean', 
             default: true,
             description: 'Include error analytics'
-          },
+  }
           includeCosts: { 
             type: 'boolean', 
             default: true,
             description: 'Include cost analytics'
-          },
+  }
           limit: { 
             type: 'number', 
             default: 100, 
             maximum: 1000,
             description: 'Maximum number of results'
-          },
+  }
           offset: { 
             type: 'number', 
             default: 0,
@@ -501,22 +511,22 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
           integrationIds: { 
             type: 'string',
             description: 'Comma-separated list of integration IDs'
-          },
+  }
           status: { 
             type: 'string',
             enum: ['healthy', 'degraded', 'failing', 'offline'],
             description: 'Filter by health status'
-          },
+  }
           includeMetrics: { 
             type: 'boolean', 
             default: true,
             description: 'Include detailed health metrics'
-          },
+  }
           includeHistory: { 
             type: 'boolean', 
             default: false,
             description: 'Include health history'
-          },
+  }
           timeRange: { 
             type: 'string',
             enum: ['1h', '24h', '7d'],
@@ -557,7 +567,7 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
             offline: healthData.filter(i => i.status === 'offline').length,
             averageHealthScore: healthData.reduce((sum, i) => sum + i.healthScore, 0) / healthData.length,
             averageUptime: healthData.reduce((sum, i) => sum + i.uptime, 0) / healthData.length
-          },
+  }
           includeMetrics: request.query.includeMetrics,
           includeHistory: request.query.includeHistory,
           timeRange: request.query.timeRange
@@ -585,7 +595,7 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
         properties: {
           integrationId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -593,22 +603,22 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
             type: 'string', 
             format: 'date-time',
             description: 'Start date for metrics'
-          },
+  }
           endDate: { 
             type: 'string', 
             format: 'date-time',
             description: 'End date for metrics'
-          },
+  }
           metrics: { 
             type: 'string',
             description: 'Comma-separated list of metrics to include'
-          },
+  }
           granularity: { 
             type: 'string',
             enum: ['minute', 'hour', 'day', 'week'],
             default: 'hour',
             description: 'Data granularity'
-          },
+  }
           aggregation: { 
             type: 'string',
             enum: ['avg', 'sum', 'min', 'max', 'count'],
@@ -648,27 +658,27 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
               current: Math.random() * 1000,
               trend: 'stable',
               dataPoints: [] // Would contain time series data
-            },
+  }
             throughput: {
               current: Math.random() * 100,
               trend: 'increasing',
               dataPoints: []
-            },
+  }
             errorRate: {
               current: Math.random() * 5,
               trend: 'decreasing',
               dataPoints: []
-            },
+  }
             availability: {
               current: 99.5 + Math.random() * 0.5,
               trend: 'stable',
               dataPoints: []
             }
-          },
+  }
           timeRange: {
             startDate: request.query.startDate || new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
             endDate: request.query.endDate || new Date().toISOString()
-          },
+  }
           granularity: request.query.granularity,
           aggregation: request.query.aggregation
         }
@@ -701,23 +711,23 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
             type: 'string', 
             format: 'date-time',
             description: 'Report start date'
-          },
+  }
           endDate: { 
             type: 'string', 
             format: 'date-time',
             description: 'Report end date'
-          },
+  }
           integrationIds: { 
             type: 'array',
             items: { type: 'string' },
             description: 'Specific integrations to include'
-          },
+  }
           reportType: { 
             type: 'string',
             enum: ['summary', 'detailed', 'executive'],
             default: 'detailed',
             description: 'Type of report to generate'
-          },
+  }
           includeAnalysis: {
             type: 'object',
             description: 'Analysis sections to include',
@@ -730,13 +740,13 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
               recommendations: { type: 'boolean', default: true },
               predictions: { type: 'boolean', default: false }
             }
-          },
+  }
           format: { 
             type: 'string',
             enum: ['json', 'pdf', 'csv', 'excel'],
             default: 'json',
             description: 'Report output format'
-          },
+  }
           emailRecipients: { 
             type: 'array',
             items: { type: 'string', format: 'email' },
@@ -782,7 +792,7 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
             downloadUrl: `/integration-analytics/reports/${report.reportId}/download?format=${request.body.format}`,
             format: request.body.format,
             generatedAt: report.generatedAt
-          },
+  }
           message: 'Integration analytics report generated successfully'
         };
       }
@@ -854,7 +864,7 @@ export async function integrationAnalyticsRoutes(fastify: FastifyInstance) {
           overallSuccessRate: dashboard.overview.overallSuccessRate,
           totalRequests: dashboard.overview.totalRequests,
           totalCost: dashboard.overview.totalCost
-        },
+  }
         features: [
           'Real-time integration event tracking',
           'Comprehensive performance monitoring',

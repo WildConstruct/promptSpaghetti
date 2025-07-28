@@ -1,7 +1,6 @@
-import React from 'react';
 import { HelpContent } from './ContextualHelpSystem';
 export interface HelpContextState {
-    helpContent: HelpContent[];
+    helpContent: HelpContent;
     onboardingEnabled: boolean;
     onboardingStep: number;
     onboardingComplete: boolean;
@@ -19,14 +18,5 @@ export interface HelpContextState {
     resetHelpSystem: () => void;
 }
 export declare const useHelpSystem: () => HelpContextState;
-export interface HelpProviderProps {
-    children: React.ReactNode;
-    customHelpContent?: HelpContent[];
-    enableOnboarding?: boolean;
-    enableHelpHints?: boolean;
-}
-export declare const HelpProvider: React.FC<HelpProviderProps>;
-export declare const registerHelpContent: (content: HelpContent | HelpContent[]) => void;
-export declare const onboardingSteps: any;
 export default HelpProvider;
 //# sourceMappingURL=HelpContentManager.d.ts.map

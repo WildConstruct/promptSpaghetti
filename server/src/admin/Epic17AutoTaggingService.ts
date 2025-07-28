@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 // Auto-Tagging Types and Interfaces
 // =============================================================================
 
+}
 export interface AutoTaggingConfig {
   // General settings
   enabled: boolean;
@@ -31,6 +32,7 @@ export interface AutoTaggingConfig {
     ruleEvaluationTimeout: number; // seconds
     priorityBasedProcessing: boolean;
     parallelProcessing: boolean;
+}
   };
   
   // Pattern detection
@@ -95,6 +97,7 @@ export enum TaggingRuleType {
   ML_BASED = 'ml_based'
 }
 
+}
 export interface AutoTaggingRule {
   ruleId: string;
   ruleName: string;
@@ -133,7 +136,9 @@ export interface AutoTaggingRule {
   testMode: boolean;
   validationRules: ValidationRule[];
 }
+}
 
+}
 export interface AutoTaggingCondition {
   conditionId: string;
   conditionType: 'property' | 'pattern' | 'usage' | 'relationship' | 'custom';
@@ -153,7 +158,9 @@ export interface AutoTaggingCondition {
   required: boolean;
   negated: boolean;
 }
+}
 
+}
 export interface TaggingAction {
   actionId: string;
   actionType: 'add_tag' | 'remove_tag' | 'replace_tag' | 'merge_tags' | 'conditional_tag';
@@ -173,7 +180,9 @@ export interface TaggingAction {
   validateTags: boolean;
   notifyOnApply: boolean;
 }
+}
 
+}
 export interface PatternAnalysisConfig {
   analysisType: 'naming' | 'usage' | 'relationship' | 'temporal';
   patternStrength: number;
@@ -181,7 +190,9 @@ export interface PatternAnalysisConfig {
   timeWindowHours: number;
   includeHistorical: boolean;
 }
+}
 
+}
 export interface MLTaggingConfig {
   modelType: 'classification' | 'clustering' | 'regression';
   features: string[];
@@ -189,14 +200,18 @@ export interface MLTaggingConfig {
   fallbackRules: string[];
   retrainingEnabled: boolean;
 }
+}
 
+}
 export interface ValidationRule {
   ruleId: string;
   validationType: 'format' | 'uniqueness' | 'business_logic' | 'dependency';
   expression: string;
   errorMessage: string;
 }
+}
 
+}
 export interface TaggingExecution {
   executionId: string;
   trigger: AutoTaggingTrigger;
@@ -225,7 +240,9 @@ export interface TaggingExecution {
   batchId?: string;
   parentExecutionId?: string;
 }
+}
 
+}
 export interface TaggingError {
   errorId: string;
   errorType: 'validation' | 'execution' | 'conflict' | 'system';
@@ -235,7 +252,9 @@ export interface TaggingError {
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: Date;
 }
+}
 
+}
 export interface TaggingWarning {
   warningId: string;
   warningType: 'conflict' | 'performance' | 'validation' | 'suggestion';
@@ -244,7 +263,9 @@ export interface TaggingWarning {
   ruleId?: string;
   timestamp: Date;
 }
+}
 
+}
 export interface ResourceTaggingResult {
   resourceId: string;
   resourceType: string;
@@ -255,13 +276,16 @@ export interface ResourceTaggingResult {
   conflicts: TaggingConflict[];
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface TaggingConflict {
   conflictType: 'duplicate' | 'contradictory' | 'validation' | 'permission';
   conflictingRules: string[];
   conflictingTags: string[];
   resolutionStrategy: string;
   resolved: boolean;
+}
 }
 
 // =============================================================================
@@ -293,48 +317,42 @@ export class Epic17AutoTaggingService extends EventEmitter {
         priorityBasedProcessing: true,
         parallelProcessing: true,
         ...config?.ruleProcessing
-      },
-      
+  }
       patternDetection: {
         enabled: true,
         minimumPatternStrength: 0.7,
         learningMode: true,
         historicalAnalysisDays: 30,
         ...config?.patternDetection
-      },
-      
+  }
       mlIntegration: {
         enabled: false,
         modelVersion: '1.0',
         confidenceThreshold: 0.8,
         fallbackToRules: true,
         ...config?.mlIntegration
-      },
-      
+  }
       tagManagement: {
         autoCleanup: true,
         tagExpiryDays: 365,
         conflictResolution: 'merge',
         tagValidation: true,
         ...config?.tagManagement
-      },
-      
+  }
       performance: {
         cacheEnabled: true,
         cacheTTL: 3600,
         batchSize: 100,
         maxConcurrentOperations: 5,
         ...config?.performance
-      },
-      
+  }
       notifications: {
         onTaggingCompletion: true,
         onRuleConflicts: true,
         onHighVolumeTagging: true,
         tagChangeNotifications: false,
         ...config?.notifications
-      },
-      
+  }
       ...config
     };
   }
@@ -356,6 +374,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
       maxResources?: number;
     } = {}
   ): Promise<TaggingExecution> {
+
     const executionId = crypto.randomUUID();
     const execution: TaggingExecution = {
       executionId,
@@ -469,6 +488,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
   public async createAutoTaggingRule(
     ruleData: Omit<AutoTaggingRule, 'ruleId' | 'createdAt' | 'executionCount' | 'successRate'>
   ): Promise<AutoTaggingRule> {
+
     const rule: AutoTaggingRule = {
       ...ruleData,
       ruleId: crypto.randomUUID(),
@@ -542,6 +562,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     suggestions: RuleSuggestion[];
     confidence: number;
   }> {
+
     const analysisStartTime = Date.now();
 
     // Analyze naming patterns
@@ -597,6 +618,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     performanceMetrics: any;
     errorMetrics: any;
   }> {
+
     const query = `
       SELECT 
         -- Execution metrics
@@ -643,6 +665,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     trigger: AutoTaggingTrigger,
     ruleIds?: string[]
   ): Promise<AutoTaggingRule[]> {
+
     let query = `
       SELECT * FROM epic17_auto_tagging_rules 
       WHERE enabled = true AND test_mode = false
@@ -690,6 +713,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     rules?: AutoTaggingRule[],
     maxResources?: number
   ): Promise<any[]> {
+
     // Get resource types from rules
     const resourceTypes = new Set<string>();
     if (rules) {
@@ -752,6 +776,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     tagsUpdated: number;
     conflictsResolved: number;
   }> {
+
     let tagsAdded = 0;
     let tagsRemoved = 0;
     let tagsUpdated = 0;
@@ -794,6 +819,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     conditions: AutoTaggingCondition[],
     resource: any
   ): Promise<boolean> {
+
     for (const condition of conditions) {
       const result = await this.evaluateCondition(condition, resource);
       
@@ -809,6 +835,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     condition: AutoTaggingCondition,
     resource: any
   ): Promise<boolean> {
+
     const fieldValue = this.getResourceFieldValue(resource, condition.field);
     
     switch (condition.operator) {
@@ -868,6 +895,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     tagsUpdated: number;
     conflictsResolved: number;
   }> {
+
     const result = {
       tagsAdded: 0,
       tagsRemoved: 0,
@@ -904,6 +932,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     tags: string[],
     metadata?: Record<string, any>
   ): Promise<number> {
+
     let addedCount = 0;
     
     for (const tag of tags) {
@@ -935,6 +964,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
   }
 
   private async removeTagsFromResource(resource: any, tags: string[]): Promise<number> {
+
     const result = await this.dbService.query(
       `DELETE FROM resource_tags 
        WHERE resource_id = $1 AND resource_type = $2 AND tag = ANY($3)`,
@@ -945,6 +975,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
   }
 
   private async validateRule(rule: AutoTaggingRule): Promise<void> {
+
     // Validate rule structure
     if (!rule.ruleName || rule.ruleName.trim().length === 0) {
       throw new Error('Rule name is required');
@@ -981,6 +1012,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     resourceType?: string,
     timeWindowDays: number = 30
   ): Promise<TaggingPattern[]> {
+
     // Implement naming pattern analysis
     // This would analyze resource names for common patterns
     return [];
@@ -990,6 +1022,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
     resourceType?: string,
     timeWindowDays: number = 30
   ): Promise<TaggingPattern[]> {
+
     // Implement usage pattern analysis
     // This would analyze usage metrics for pattern detection
     return [];
@@ -999,12 +1032,14 @@ export class Epic17AutoTaggingService extends EventEmitter {
     resourceType?: string,
     timeWindowDays: number = 30
   ): Promise<TaggingPattern[]> {
+
     // Implement relationship pattern analysis
     // This would analyze relationships between resources
     return [];
   }
 
   private async generateRuleSuggestions(patterns: TaggingPattern[]): Promise<RuleSuggestion[]> {
+
     // Generate rule suggestions based on detected patterns
     return [];
   }
@@ -1018,6 +1053,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
       conflictsResolved: number;
     }
   ): Promise<void> {
+
     await this.dbService.query(
       `UPDATE epic17_auto_tagging_rules 
        SET 
@@ -1030,6 +1066,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
   }
 
   private async getRuleMetrics(timeWindowDays: number): Promise<any> {
+
     const query = `
       SELECT 
         COUNT(*) as total_rules,
@@ -1044,16 +1081,19 @@ export class Epic17AutoTaggingService extends EventEmitter {
   }
 
   private async getTagMetrics(timeWindowDays: number): Promise<any> {
+
     // Implementation would analyze tag usage patterns
     return {};
   }
 
   private async getPerformanceMetrics(timeWindowDays: number): Promise<any> {
+
     // Implementation would analyze performance metrics
     return {};
   }
 
   private async getErrorMetrics(timeWindowDays: number): Promise<any> {
+
     // Implementation would analyze error patterns
     return {};
   }
@@ -1063,6 +1103,7 @@ export class Epic17AutoTaggingService extends EventEmitter {
 // Supporting Types and Interfaces
 // =============================================================================
 
+}
 export interface TaggingPattern {
   patternId: string;
   patternType: 'naming' | 'usage' | 'relationship' | 'temporal';
@@ -1072,7 +1113,9 @@ export interface TaggingPattern {
   resourceTypes: string[];
   suggestedTags: string[];
 }
+}
 
+}
 export interface RuleSuggestion {
   suggestionId: string;
   suggestedRuleName: string;
@@ -1084,6 +1127,7 @@ export interface RuleSuggestion {
     affectedResources: number;
     tagsToAdd: number;
     conflictsExpected: number;
+}
   };
   suggestedRule: Partial<AutoTaggingRule>;
 }

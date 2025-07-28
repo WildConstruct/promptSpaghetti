@@ -14,19 +14,19 @@ export interface SelectionRect {
     active: boolean;
 }
 export interface MultiSelectionManagerProps {
-    nodes: Node[];
-    edges: Edge[];
-    selectedNodes: Node[];
-    selectedEdges: Edge[];
-    onNodesSelect: (nodes: Node[]) => void;
-    onEdgesSelect: (edges: Edge[]) => void;
+    nodes: Node;
+    edges: Edge;
+    selectedNodes: Node;
+    selectedEdges: Edge;
+    onNodesSelect: (nodes: Node) => void;
+    onEdgesSelect: (edges: Edge) => void;
     onSelectionChange: (selection: {
-        nodes: Node[];
-        edges: Edge[];
+        nodes: Node;
+        edges: Edge;
     }) => void;
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;
 }
-export declare const MultiSelectionManager: React.FC<MultiSelectionManagerProps>, disabled: any, selectedNodes: any, selectedEdges: any, lastSelectedNode: any, nodes: any, onNodesSelect: any, onSelectionChange: any;
+export declare const MultiSelectionManager: React.FC<MultiSelectionManagerProps>;
 export default MultiSelectionManager;
 //# sourceMappingURL=MultiSelectionManager.d.ts.map

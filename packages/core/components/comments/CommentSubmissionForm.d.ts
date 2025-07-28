@@ -7,6 +7,7 @@
  * existing comment infrastructure.
  */
 import React from 'react';
+
 export interface CommentSubmissionData {
     content: string;
     contentType: 'text' | 'markdown' | 'rich';
@@ -18,7 +19,7 @@ export interface CommentSubmissionData {
     hashtags: string[];
     attachments: CommentAttachment[];
     metadata?: Record<string, unknown>;
-}
+
 export interface CommentAttachment {
     id: string;
     name: string;
@@ -27,7 +28,7 @@ export interface CommentAttachment {
     size?: number;
     preview?: string;
     metadata?: Record<string, unknown>;
-}
+
 export interface CommentSubmissionConfig {
     enableRichText: boolean;
     enableMarkdown: boolean;
@@ -49,7 +50,7 @@ export interface CommentSubmissionConfig {
         enableAutoModeration: boolean;
         flagSuspiciousContent: boolean;
     };
-}
+
 export interface CommentSubmissionFormProps {
     resourceId: string;
     resourceType: 'template' | 'project' | 'user' | 'marketplace_item';
@@ -64,7 +65,7 @@ export interface CommentSubmissionFormProps {
     className?: string;
     autoFocus?: boolean;
     disabled?: boolean;
-}
+
 export declare const CommentSubmissionForm: React.FC<CommentSubmissionFormProps>;
 export default CommentSubmissionForm;
 //# sourceMappingURL=CommentSubmissionForm.d.ts.map

@@ -61,12 +61,12 @@ export interface ActivityFilter {
     resource_id?: string;
 }
 export interface ActivityListResponse {
-    activities: ActivityEvent[];
+    activities: ActivityEvent;
     total: number;
     has_more: boolean;
     next_cursor?: string;
     stats?: ActivityStats;
-    actors?: ActivityActor[];
+    actors?: ActivityActor;
 }
 export interface ActivityEventCreateRequest {
     workspace_id?: string;
@@ -103,12 +103,12 @@ export interface UseActivityFeedOptions {
     limit?: number;
 }
 export interface UseActivityFeedReturn {
-    activities: ActivityEvent[];
+    activities: ActivityEvent;
     loading: boolean;
     error: Error | null;
     hasMore: boolean;
     stats: ActivityStats | null;
-    actors: ActivityActor[] | null;
+    actors: ActivityActor | null;
     realTimeConnection: ActivityRealTimeConnection | null;
     refreshActivities: () => Promise<void>;
     loadMore: () => Promise<void>;

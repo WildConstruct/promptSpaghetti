@@ -76,5 +76,5 @@ export declare class SharingService {
     private buildLinkedInShareUrl;
     private buildSlackShareUrl;
     private buildEmailShareUrl;
-}
+
 //# sourceMappingURL=SharingService.d.ts.map

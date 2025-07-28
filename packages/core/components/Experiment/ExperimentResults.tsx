@@ -55,23 +55,21 @@ import {
 } from '../../types/experiment';
 
 export interface ExperimentResultsProps {
-  experiment: Experiment;
+  experiment: Experiment;,
   results: ExperimentResultsType;
-  onRefresh: () => Promise<void>;
-  onExport: (format: 'csv' | 'json' | 'pdf') => Promise<void>;
+  onRefresh: () => Promise<void>;,
+  onExport: (format: 'csv' | 'json' | 'pdf') => Promise<void>;,
   onStopExperiment: () => Promise<void>;
   onImplementWinner: (variantId: string) => Promise<void>;
   className?: string;
-}
-interface ResultsState {
-  selectedSegment: string;
+  interface ResultsState {
+  selectedSegment: string;,
   selectedMetric: string;
-  timeRange: '1h' | '24h' | '7d' | '30d';
+  timeRange: '1h' | '24h' | '7d' | '30d';,
   refreshing: boolean;
   showDetails: boolean;
+  const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];
 }
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];
-
 export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
   experiment,
   results,
@@ -82,12 +80,12 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
   className = ''
 }) => {
   const [state, setState] = useState<ResultsState>({)
-    selectedSegment: 'all',
-    selectedMetric: 'primary',
-    timeRange: '7d',
-    refreshing: false,
-    showDetails: false,
-  });
+  selectedSegment: 'all',
+  selectedMetric: 'primary',
+  timeRange: '7d',
+  refreshing: false,
+  showDetails: false,
+});
   const primaryMetric = experiment.metrics.find(m => m.isPrimary);
   const controlVariant = results.variants[0]; // Assume first variant is control;
   const winningVariant = results.statistical.primaryMetric.winningVariant;
@@ -100,26 +98,25 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
       await onRefresh();
     } finally {
       setState(prev => ({ ...prev, refreshing: false }));
-    }
   }, [onRefresh]);
   /**
    * Get variant performance data for charts
    */
   const getVariantComparisonData = useCallback(() => {
-    if (!primaryMetric) return [];
-    return results.variants.map(variant => {)
-      const metricResult = variant.metrics.find(m => m.metricId === primaryMetric.id);
-      const controlMetricResult = controlVariant.metrics.find(m => m.metricId === primaryMetric.id);
-      const improvement = controlMetricResult && metricResult ;
-        ? ((metricResult.value - controlMetricResult.value) / controlMetricResult.value) * 100
-        : 0;
-      return {
-        variant: variant.variantId,
-        value: metricResult?.value || 0,
-        improvement: variant.variantId === controlVariant.variantId ? 0 : improvement,
-        sampleSize: variant.sampleSize,
-        confidenceInterval: metricResult?.confidenceInterval || [0, 0]
-      };
+  if (!primaryMetric) return [];
+  return results.variants.map(variant => {)
+  const metricResult = variant.metrics.find(m => m.metricId === primaryMetric.id);
+  const controlMetricResult = controlVariant.metrics.find(m => m.metricId === primaryMetric.id);
+  const improvement = controlMetricResult && metricResult ;
+  ? ((metricResult.value - controlMetricResult.value) / controlMetricResult.value) * 100
+  : 0;
+  return {
+  variant: variant.variantId,
+  value: metricResult?.value || 0,
+  improvement: variant.variantId === controlVariant.variantId ? 0 : improvement,
+  sampleSize: variant.sampleSize,
+  confidenceInterval: metricResult?.confidenceInterval || [0, 0],
+};
     });
   }, [results.variants, primaryMetric, controlVariant]);
   /**
@@ -137,14 +134,13 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
         day: date.toLocaleDateString('en-US', { weekday: 'short' })
       };
       results.variants.forEach(variant => {)
-        const metricResult = variant.metrics.find(m => m.metricId === primaryMetric?.id);
+  const metricResult = variant.metrics.find(m => m.metricId === primaryMetric?.id);
         // Add some realistic variance
         const baseValue = metricResult?.value || 0;
         const variance = 0.1 * baseValue * (Math.random() - 0.5);
         dayData[variant.variantId] = Math.max(0, baseValue + variance);
       });
       data.push(dayData);
-    }
     return data;
   }, [results.variants, primaryMetric]);
   /**
@@ -161,10 +157,9 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
       case 'latency':
         return `${value.toFixed(0)}ms`;}
       case 'cost':
-        return `$${value.toFixed(4)}`;}
-      default:
+        return `$${value.toFixed(4)}`;},}
+  default:
         return value.toFixed(2);
-    }
   }, []);
   /**
    * Get confidence interval display
@@ -173,7 +168,7 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
     const [lower, upper] = ci;
     return `[${formatMetricValue(lower, metricType)}, ${formatMetricValue(upper, metricType)}]`;}
   }, [formatMetricValue]);
-  return ();
+  return;
     <div className={`experiment-results ${className}`}>}
       {/* Header */}
       <div className="results-header">
@@ -247,9 +242,9 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
               {results.insights.slice(0, 3).map((insight, index) => ()
                 <div key={index} className="flex items-start space-x-3">
                   <div className={`w-2 h-2 rounded-full mt-2 ${
-                    insight.severity === 'high' ? 'bg-red-500' :
-                    insight.severity === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
-                  }`} />
+  insight.severity === 'high' ? 'bg-red-500' :,
+  insight.severity === 'medium' ? 'bg-yellow-500' : 'bg-blue-500',
+}`} />
                   <div>
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-gray-600">{insight.description}</div>
@@ -393,7 +388,7 @@ export const ExperimentResults: React.FC<ExperimentResultsProps> = ({)
                       const improvement = controlMetricResult && metricResult && variant.variantId !== controlVariant.variantId;
                         ? ((metricResult.value - controlMetricResult.value) / controlMetricResult.value) * 100
                         : null;
-                      return ();
+                      return;
                         <tr key={variant.variantId} className="border-b">
                           <td className="p-2">
                             <div className="flex items-center space-x-2">

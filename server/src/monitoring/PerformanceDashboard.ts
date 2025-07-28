@@ -16,6 +16,7 @@ import { PerformanceMonitor, PerformanceDashboard as DashboardData, PerformanceM
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
+}
 export interface DashboardConfig {
   enableWebSocket: boolean;
   websocketPort?: number;
@@ -23,7 +24,9 @@ export interface DashboardConfig {
   maxHistoryPoints: number;
   enableRealTimeAlerts: boolean;
 }
+}
 
+}
 export interface DashboardClient {
   clientId: string;
   websocket?: WebSocket;
@@ -32,17 +35,21 @@ export interface DashboardClient {
   lastActivity: Date;
   isActive: boolean;
 }
+}
 
+}
 export interface DashboardSubscription {
   type: 'metrics' | 'benchmarks' | 'alerts' | 'system_health';
   filters: {
     metricNames?: string[];
     categories?: string[];
     severities?: string[];
+}
   };
   realTime: boolean;
 }
 
+}
 export interface DashboardWidget {
   widgetId: string;
   type: WidgetType;
@@ -51,20 +58,25 @@ export interface DashboardWidget {
   data: any;
   lastUpdated: Date;
 }
+}
 
+}
 export interface WidgetConfig {
   timeRange: TimeRange;
   refreshInterval: number; // milliseconds
   visualization: VisualizationType;
   metrics: string[];
+}
   thresholds?: { warning: number; critical: number };
   chartOptions?: Record<string, any>;
 }
 
+}
 export interface TimeRange {
   type: 'realtime' | 'last_hour' | 'last_24h' | 'last_7d' | 'custom';
   customStart?: Date;
   customEnd?: Date;
+}
 }
 
 export type WidgetType = 
@@ -124,6 +136,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Initialize performance dashboard
    */
   public async initialize(): Promise<void> {
+
     console.log('📊 Initializing Performance Dashboard...');
     
     // Initialize WebSocket server if enabled
@@ -150,6 +163,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Initialize WebSocket server for real-time updates
    */
   private async initializeWebSocketServer(): Promise<void> {
+
     const port = this.config.websocketPort || 8081;
     
     this.wsServer = new WebSocket.Server({
@@ -332,6 +346,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Initialize default dashboard widgets
    */
   private async initializeDefaultWidgets(): Promise<void> {
+
     const defaultWidgets: Array<{
       id: string;
       type: WidgetType;
@@ -348,7 +363,7 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'gauge',
           metrics: ['system_health_score']
         }
-      },
+  }
       {
         id: 'api_response_times',
         type: 'metric_chart',
@@ -360,7 +375,7 @@ export class PerformanceDashboard extends EventEmitter {
           metrics: ['api_response_time'],
           thresholds: { warning: 200, critical: 1000 }
         }
-      },
+  }
       {
         id: 'memory_usage_trend',
         type: 'metric_chart',
@@ -371,7 +386,7 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'area_chart',
           metrics: ['system_memory_heap_used', 'system_memory_heap_total']
         }
-      },
+  }
       {
         id: 'performance_benchmarks',
         type: 'benchmark_summary',
@@ -382,7 +397,7 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'table',
           metrics: []
         }
-      },
+  }
       {
         id: 'active_alerts',
         type: 'alert_list',
@@ -393,7 +408,7 @@ export class PerformanceDashboard extends EventEmitter {
           visualization: 'table',
           metrics: []
         }
-      },
+  }
       {
         id: 'cpu_usage_gauge',
         type: 'metric_chart',
@@ -443,6 +458,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Update dashboard data
    */
   private async updateDashboardData(): Promise<void> {
+
     try {
       // Get latest dashboard data from performance monitor
       this.dashboardData = this.performanceMonitor.getPerformanceDashboard();
@@ -463,6 +479,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Update all widgets
    */
   private async updateAllWidgets(): Promise<void> {
+
     for (const [widgetId, widget] of this.widgets.entries()) {
       try {
         const widgetData = await this.generateWidgetData(widget);
@@ -478,6 +495,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Generate data for a specific widget
    */
   private async generateWidgetData(widget: DashboardWidget): Promise<any> {
+
     switch (widget.type) {
     case 'system_health':
       return this.generateSystemHealthData(widget);
@@ -522,6 +540,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Generate metric chart widget data
    */
   private async generateMetricChartData(widget: DashboardWidget): Promise<any> {
+
     const timeRange = this.getTimeRangeForWidget(widget);
     const chartData: any = {
       labels: [],
@@ -617,8 +636,7 @@ export class PerformanceDashboard extends EventEmitter {
         value: metric.latest,
         change: metric.average - metric.latest
       })),
-      overallTrend: this.calculateOverallTrend()
-    };
+      overallTrend: this.calculateOverallTrend(};
   }
 
   /**
@@ -1024,6 +1042,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Load historical performance data
    */
   private async loadHistoricalData(): Promise<void> {
+
     try {
       // Load recent metrics history from database
       const recentMetrics = await this.databaseService.query(`
@@ -1081,6 +1100,7 @@ export class PerformanceDashboard extends EventEmitter {
    * Stop performance dashboard
    */
   public async stop(): Promise<void> {
+
     console.log('⏹️ Stopping Performance Dashboard...');
     
     // Stop periodic updates

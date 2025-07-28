@@ -10,7 +10,7 @@
  * - Integration with existing authentication systems
  * - Audit logging and compliance reporting
  */
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { type EnforcementResult, type AccessDecision } from './ClassificationEnforcer';
 import { DataClassificationLevel, type OperationContext, type ClassificationAuditEvent } from '../types/DataClassification';
 /**
@@ -25,7 +25,7 @@ export interface ClassificationAwareRequest extends Request {
     };
     user?: {
         id: string;
-        roles?: string[];
+        roles?: string;
         authLevel?: string;
     };
 }
@@ -38,38 +38,25 @@ export interface ClassificationEnforcementMiddlewareConfig {
     /** Function to extract classification from request */
     classificationExtractor?: (req: Request) => Promise<DataClassificationLevel | null>;
     /** Function to extract current security controls */
-    controlsExtractor?: (req: Request) => string[];
+    controlsExtractor?: (req: Request) => string;
     /** Routes to exclude from enforcement */
-    excludedRoutes?: string[];
+    excludedRoutes?: string;
     /** Custom error handler */
     errorHandler?: (error: Error, req: Request, res: Response) => void;
     /** Enable detailed error responses (only in development) */
     detailedErrors?: boolean;
     /** Audit event handler */
     auditHandler?: (event: ClassificationAuditEvent) => Promise<void>;
+    /**
+    * Default configuration
+    */
+    const: any;
+    DEFAULT_CONFIG: ClassificationEnforcementMiddlewareConfig;
+    /**
+     * Operation mapping from HTTP methods
+     */
+    const: any;
+    HTTP_METHOD_TO_OPERATION: Record<string, OperationContext['operation']>;
 }
-/**
- * Create classification enforcement middleware
- */
-export declare function createClassificationEnforcementMiddleware(config?: Partial<ClassificationEnforcementMiddlewareConfig>): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => Promise<void>;
-/**
- * Create access control middleware for specific operations
- */
-export declare function createAccessControlMiddleware(operation: OperationContext['operation']): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => Promise<void>;
-/**
- * Create operation validation middleware
- */
-export declare function createOperationValidationMiddleware(): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => Promise<void>;
-/**
- * Route-specific enforcement configuration
- */
-export declare function enforceClassification(classification: DataClassificationLevel, options?: {
-    allowedOperations?: OperationContext['operation'][];
-    requiredControls?: string[];
-    customValidation?: (req: Request) => boolean;
-}): (req: ClassificationAwareRequest, res: Response, next: NextFunction) => void;
-/**
- * Export middleware factories
- */
-export { createClassificationEnforcementMiddleware as classificationEnforcement, createAccessControlMiddleware as accessControl, createOperationValidationMiddleware as operationValidation };
+export declare function createClassificationEnforcementMiddleware(config?: Partial<ClassificationEnforcementMiddlewareConfig>): any;
 //# sourceMappingURL=ClassificationEnforcementMiddleware.d.ts.map

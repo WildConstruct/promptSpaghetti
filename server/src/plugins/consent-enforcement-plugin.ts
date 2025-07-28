@@ -9,6 +9,7 @@ import { ConsentEnforcementMiddleware } from '../middleware/consent-enforcement'
 import { ConsentBasedDataFilterService } from '../services/ConsentBasedDataFilterService';
 import { ConsentCollectionService } from '../services/ConsentCollectionService';
 
+}
 interface ConsentEnforcementPluginOptions extends FastifyPluginOptions {
   enableStrict?: boolean;
   enableCookieEnforcement?: boolean;
@@ -20,6 +21,7 @@ async function consentEnforcementPlugin(
   fastify: FastifyInstance,
   options: ConsentEnforcementPluginOptions
 ): Promise<void> {
+
   const {
     enableStrict = true,
     enableCookieEnforcement = true,
@@ -139,7 +141,7 @@ async function consentEnforcementPlugin(
       // Utility method for checking consent
       const userConsents = await consentCollectionService.getUserConsent(userId);
       return userConsents?.consents?.[consentType]?.granted || false;
-    },
+  }
     propagateConsentChange: async (userId: string, consentType: string, granted: boolean) => {
       return consentMiddleware.propagateConsentChange(userId, consentType, granted);
     }
@@ -160,6 +162,7 @@ declare module 'fastify' {
       middleware: ConsentEnforcementMiddleware;
       checkConsent: (userId: string, consentType: string) => Promise<boolean>;
       propagateConsentChange: (userId: string, consentType: string, granted: boolean) => Promise<void>;
+}
     };
   }
 }

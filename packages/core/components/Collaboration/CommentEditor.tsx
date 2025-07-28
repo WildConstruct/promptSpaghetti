@@ -14,9 +14,10 @@ import {
   Edit3
 } from 'lucide-react';
 import { CommentMentions } from './CommentMentions';
+
 interface CommentEditorProps {
   initialContent?: string;
-  onSave: (content: string, mentions: string[]) => void;
+  onSave: (content: string, mentions: string) => void;,
   onCancel: () => void;
   placeholder?: string;
   submitLabel?: string;
@@ -26,10 +27,9 @@ interface CommentEditorProps {
   allowFormatting?: boolean;
   allowMentions?: boolean;
   allowAttachments?: boolean;
-}
 
 export const [isPreview, setIsPreview] = useState(false);
-  const [mentions, setMentions] = useState<string[]>([]);
+  const [mentions, setMentions] = useState<string>([]);
   const [showMentions, setShowMentions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -40,42 +40,41 @@ export const [isPreview, setIsPreview] = useState(false);
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(content.length, content.length);
-    }
+
   }, []);
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;}
-    }
+
   }, [content]);
   // Handle mention detection
   useEffect(() => {
-    if (!allowMentions) return;
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-    const handleTextChange = () => {
-      const value = textarea.value;
-      const cursorPos = textarea.selectionStart;
-      // Find @ symbol before cursor
-      const textBeforeCursor = value.substring(0, cursorPos);
-      const lastAtIndex = textBeforeCursor.lastIndexOf('@');
-      if (lastAtIndex !== -1) {
-        const textAfterAt = textBeforeCursor.substring(lastAtIndex + 1);
-        // Check if there's a space after @, if so, don't show mentions
-        if (textAfterAt.includes(' ')) {
-          setShowMentions(false);
-          return;
-        }
-        setMentionQuery(textAfterAt);
-        setShowMentions(true);
-        mentionPositionRef.current = {
-          start: lastAtIndex,
-          end: cursorPos,
-        };
+  if (!allowMentions) return;
+  const textarea = textareaRef.current;
+  if (!textarea) return;
+  const handleTextChange = () => {
+  const value = textarea.value;
+  const cursorPos = textarea.selectionStart;
+  // Find @ symbol before cursor
+  const textBeforeCursor = value.substring(0, cursorPos);
+  const lastAtIndex = textBeforeCursor.lastIndexOf('@');
+  if (lastAtIndex !== -1) {
+  const textAfterAt = textBeforeCursor.substring(lastAtIndex + 1);
+  // Check if there's a space after @, if so, don't show mentions
+  if (textAfterAt.includes(' ')) {
+  setShowMentions(false);
+  return;
+  setMentionQuery(textAfterAt);
+  setShowMentions(true);
+  mentionPositionRef.current = {
+  start: lastAtIndex,
+  end: cursorPos,
+};
       } else {
         setShowMentions(false);
-      }
+
     };
     textarea.addEventListener('input', handleTextChange);
     textarea.addEventListener('selectionchange', handleTextChange);
@@ -89,7 +88,7 @@ export const [isPreview, setIsPreview] = useState(false);
     if (newContent.length <= maxLength) {
       setContent(newContent);
       setCursorPosition(e.target.selectionStart);
-    }
+
   };
   const handleMentionSelect = (userId: string, userName: string) => {
     const { start, end } = mentionPositionRef.current;
@@ -105,7 +104,7 @@ export const [isPreview, setIsPreview] = useState(false);
         const newCursorPos = start + userName.length + 2;
         textareaRef.current.focus();
         textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
-      }
+
     }, 0);
   };
   const insertFormatting = (before: string, after: string = '') => {
@@ -132,19 +131,19 @@ export const [isPreview, setIsPreview] = useState(false);
     try {
       await onSave(content.trim(), mentions);
     } catch (err) {
-      console.error('Failed to save comment:', err);
-    } finally {
+  console.error('Failed to save comment:', err);
+} finally {
       setIsSubmitting(false);
-    }
+
   };
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSubmit();
-    }
+
     if (e.key === 'Escape') {
       onCancel();
-    }
+
   };
   const renderPreview = () => {
     // Simple markdown-like rendering for preview
@@ -154,14 +153,14 @@ export const [isPreview, setIsPreview] = useState(false);
       .replace(/`(.*?)`/g, '<code>$1</code>')
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
       .replace(/\n/g, '<br>');
-    return ();
+    return;
       <div 
         className="min-h-[100px] p-3 border border-gray-300 rounded-md prose prose-sm max-w-none"
         dangerouslySetInnerHTML={{ __html: previewContent || '<em>Nothing to preview</em>' }}
       />
     );
   };
-  return ();
+  return;
     <div className="relative">
       {/* Toolbar */}
       {allowFormatting && ()
@@ -218,7 +217,7 @@ export const [isPreview, setIsPreview] = useState(false);
                     if (textareaRef.current) {
                       textareaRef.current.focus();
                       textareaRef.current.setSelectionRange(cursorPos + 1, cursorPos + 1);
-                    }
+
                   }, 0);
                 }}
                 className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded transition-colors"
@@ -243,10 +242,10 @@ export const [isPreview, setIsPreview] = useState(false);
                 type="button"
                 onClick={() => setIsPreview(!isPreview)}
                 className={`p-1 rounded transition-colors ${
-                  isPreview 
-                    ? 'text-blue-600 bg-blue-100' 
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                }`}
+  isPreview
+  ? 'text-blue-600 bg-blue-100'
+  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200',
+}`}
                 title={isPreview ? 'Edit' : 'Preview'}
               >
                 {isPreview ? <Edit3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -267,8 +266,9 @@ export const [isPreview, setIsPreview] = useState(false);
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             className={`w-full min-h-[100px] p-3 border border-gray-300 ${
-              allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md'
-            } focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`}
+  allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md',
+},
+  focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`}
             style={{ maxHeight: '300px' }}
           />
         )}

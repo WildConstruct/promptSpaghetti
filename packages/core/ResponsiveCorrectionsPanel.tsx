@@ -3,14 +3,13 @@ import { useCorrectionsEnabled } from './correctionsStore';
 import { CorrectionsManagerPanel } from './CorrectionsManagerPanel';
 import { MobileCorrectionsPanel } from './components/MobileCorrectionsPanel';
 import { CorrectionsStatsDashboard } from './components/CorrectionsStatsDashboard';
-interface ResponsiveCorrectionsPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
 
-export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ )
-  isOpen, 
-  onClose 
+interface ResponsiveCorrectionsPanelProps {
+  isOpen: boolean;,
+  onClose: () => void;
+  export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProps> = ({ ),
+  isOpen,
+  onClose
 }) => {
   const isEnabled = useCorrectionsEnabled();
   const [isMobile, setIsMobile] = useState(false);
@@ -25,7 +24,7 @@ export const ResponsiveCorrectionsPanel: React.FC<ResponsiveCorrectionsPanelProp
   }, []);
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-  return ();
+  return;
     <>
       {isMobile ? ()
         <MobileCorrectionsPanel 

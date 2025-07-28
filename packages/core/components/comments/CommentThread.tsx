@@ -8,18 +8,16 @@ import { CommentItem } from './CommentItem';
 import { CommentForm } from './CommentForm';
 import { useCommentReplies } from '../../hooks/useCommentReplies';
 interface CommentThreadProps {
-  comment: Comment;
+  comment: Comment;,
   workspaceId: string;
-  userId: string;
-  onReply: (content: string) => Promise<void>;
+  userId: string;,
+  onReply: (content: string) => Promise<void>;,
   onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
-  onDelete: (commentId: string) => Promise<void>;
+  onDelete: (commentId: string) => Promise<void>;,
   onResolve: (commentId: string, resolved: boolean) => Promise<void>;
   compact?: boolean;
   isLast?: boolean;
-}
-
-export const CommentThread: React.FC<CommentThreadProps> = ({)
+  export const CommentThread: React.FC<CommentThreadProps> = ({,)
   comment,
   workspaceId,
   userId,
@@ -33,17 +31,17 @@ export const CommentThread: React.FC<CommentThreadProps> = ({)
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const {
-    replies,
-    loading: repliesLoading,
-    error: repliesError,
-    loadMore: loadMoreReplies,
-    hasMore: hasMoreReplies,
-    refresh: refreshReplies,
-  } = useCommentReplies({)
-    commentId: comment.id,
-    userId,
-    enabled: showReplies,
-  });
+  replies,
+  loading: repliesLoading,
+  error: repliesError,
+  loadMore: loadMoreReplies,
+  hasMore: hasMoreReplies,
+  refresh: refreshReplies,
+} = useCommentReplies({)
+  commentId: comment.id,
+  userId,
+  enabled: showReplies,
+});
   const handleReply = async (content: string) => {
     try {
       await onReply(content);
@@ -53,17 +51,15 @@ export const CommentThread: React.FC<CommentThreadProps> = ({)
         refreshReplies();
       } else {
         setShowReplies(true);
-      }
     } catch (error) {
-      console.error('Failed to reply to comment:', error);
-    }
-  };
+  console.error('Failed to reply to comment:', error);
+};
   const handleShowReplies = () => {
     setShowReplies(!showReplies);
   };
   const canShowReplies = comment.reply_count > 0 || showReplies;
   const isResolved = comment.metadata?.resolved;
-  return ();
+  return;
     <div 
       className={`comment-thread ${compact ? 'comment-thread--compact' : ''} ${isLast ? 'comment-thread--last' : ''} ${isResolved ? 'comment-thread--resolved' : ''}`}
     >

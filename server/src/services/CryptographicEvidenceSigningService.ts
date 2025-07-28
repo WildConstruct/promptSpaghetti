@@ -14,6 +14,7 @@ import { KeyManagementService, KeyUsageContext } from './KeyManagementService';
 import AuditEvidenceMapper from './AuditEvidenceMapper';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface EvidenceSigningRequest {
   evidenceId: string;
   evidenceType: string;
@@ -24,7 +25,9 @@ export interface EvidenceSigningRequest {
   complianceFrameworks?: string[];
   signingPurpose: SigningPurpose;
 }
+}
 
+}
 export interface EvidenceSignature {
   signatureId: string;
   evidenceId: string;
@@ -40,7 +43,9 @@ export interface EvidenceSignature {
   complianceContext: ComplianceContext;
   verificationMetadata: VerificationMetadata;
 }
+}
 
+}
 export interface ComplianceContext {
   frameworks: string[];
   requirements: string[];
@@ -49,7 +54,9 @@ export interface ComplianceContext {
   jurisdiction: string;
   classification: DataClassification;
 }
+}
 
+}
 export interface VerificationMetadata {
   created: Date;
   signerCertificate?: string;
@@ -59,14 +66,18 @@ export interface VerificationMetadata {
   authenticity: boolean;
   witnessSignatures?: WitnessSignature[];
 }
+}
 
+}
 export interface WitnessSignature {
   witnessId: string;
   signature: string;
   timestamp: Date;
   role: string;
 }
+}
 
+}
 export interface SignatureVerificationResult {
   valid: boolean;
   signatureId: string;
@@ -83,7 +94,9 @@ export interface SignatureVerificationResult {
   errors: string[];
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ComplianceValidationResult {
   frameworkCompliance: Record<string, boolean>;
   retentionCompliance: boolean;
@@ -91,7 +104,9 @@ export interface ComplianceValidationResult {
   regulatoryCompliance: boolean;
   recommendations: string[];
 }
+}
 
+}
 export interface EvidenceBatch {
   batchId: string;
   evidenceItems: EvidenceSigningRequest[];
@@ -99,14 +114,18 @@ export interface EvidenceBatch {
   merkleRoot?: string;
   timestamp: Date;
 }
+}
 
+}
 export interface ChainOfCustody {
   evidenceId: string;
   custodyEvents: CustodyEvent[];
   currentCustodian: string;
   integrityMaintained: boolean;
 }
+}
 
+}
 export interface CustodyEvent {
   eventId: string;
   timestamp: Date;
@@ -116,6 +135,7 @@ export interface CustodyEvent {
   signature: string;
   witness?: string;
   reason: string;
+}
 }
 
 // Enums
@@ -211,6 +231,7 @@ export class CryptographicEvidenceSigningService {
    * Sign individual evidence item with cryptographic signature
    */
   async signEvidence(request: EvidenceSigningRequest): Promise<EvidenceSignature> {
+
     try {
       // Validate signing request
       this.validateSigningRequest(request);
@@ -250,7 +271,7 @@ export class CryptographicEvidenceSigningService {
           retentionPeriod: this.calculateRetentionPeriod(request),
           jurisdiction: 'US',
           classification: this.classifyEvidence(request)
-        },
+  }
         verificationMetadata: {
           created: new Date(),
           signerCertificate: signature.certificate,
@@ -287,7 +308,7 @@ export class CryptographicEvidenceSigningService {
           algorithm: signature.algorithm,
           complianceFrameworks: request.complianceFrameworks,
           trailId
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: request.complianceFrameworks || ['ISO27001'],
@@ -306,7 +327,7 @@ export class CryptographicEvidenceSigningService {
           error: error.message,
           signingPurpose: request.signingPurpose,
           collectorId: request.collectorId
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['ISO27001'],
@@ -323,6 +344,7 @@ export class CryptographicEvidenceSigningService {
    * Sign batch of evidence items with batch signature and Merkle tree
    */
   async signEvidenceBatch(evidenceItems: EvidenceSigningRequest[]): Promise<EvidenceBatch> {
+
     try {
       const batchId = crypto.randomUUID();
       const signatures: EvidenceSignature[] = [];
@@ -379,7 +401,7 @@ export class CryptographicEvidenceSigningService {
           evidenceCount: evidenceItems.length,
           merkleRoot,
           batchSignature: batchSignatureResult.signature
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['ISO27001'],
@@ -399,6 +421,7 @@ export class CryptographicEvidenceSigningService {
    * Verify evidence signature and integrity
    */
   async verifyEvidenceSignature(signatureId: string, evidenceData?: any): Promise<SignatureVerificationResult> {
+
     try {
       const signature = this.signatures.get(signatureId);
       if (!signature) {
@@ -418,7 +441,7 @@ export class CryptographicEvidenceSigningService {
             auditTrailComplete: false,
             regulatoryCompliance: false,
             recommendations: ['Signature not found']
-          },
+  }
           warnings: [],
           errors: ['Signature record not found'],
           metadata: {}
@@ -478,7 +501,7 @@ export class CryptographicEvidenceSigningService {
           keyStatus,
           integrityCheck,
           authenticityCheck: signatureValid
-        },
+  }
         riskLevel: result.valid ? 'LOW' : 'HIGH',
         compliance: {
           frameworks: signature.complianceContext.frameworks,
@@ -506,7 +529,7 @@ export class CryptographicEvidenceSigningService {
           auditTrailComplete: false,
           regulatoryCompliance: false,
           recommendations: []
-        },
+  }
         warnings: [],
         errors: [`Verification failed: ${error.message}`],
         metadata: {}
@@ -539,6 +562,7 @@ export class CryptographicEvidenceSigningService {
     reason: string,
     witness?: string
   ): Promise<void> {
+
     const custody = this.chainOfCustody.get(evidenceId);
     if (!custody) {
       throw new Error(`Chain of custody not found for evidence: ${evidenceId}`);
@@ -567,7 +591,7 @@ export class CryptographicEvidenceSigningService {
         reason,
         witness,
         eventId: custodyEvent.eventId
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['ISO27001'],
@@ -628,6 +652,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async getSigningKey(request: EvidenceSigningRequest): Promise<unknown> {
+
     // Determine key requirements based on signing purpose and compliance needs
     const keyPurpose = this.mapSigningPurposeToKeyPurpose(request.signingPurpose);
     
@@ -683,6 +708,7 @@ export class CryptographicEvidenceSigningService {
     certificate?: string;
     certificateChain?: string[];
   }> {
+
     // Get key material for signing
     const keyMaterial = await this.keyManagementService.getKeyMaterial(
       signingKey.keyId,
@@ -726,6 +752,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async initializeChainOfCustody(evidenceId: string, initialCustodian: string): Promise<void> {
+
     const custody: ChainOfCustody = {
       evidenceId,
       custodyEvents: [{
@@ -745,6 +772,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async signCustodyEvent(evidenceId: string, from: string, to: string, reason: string): Promise<string> {
+
     const payload = `${evidenceId}:${from}:${to}:${reason}:${Date.now()}`;
     const hash = crypto.createHash('sha256');
     hash.update(payload);
@@ -752,6 +780,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async verifyKeyStatus(keyId: string): Promise<KeyValidationStatus> {
+
     try {
       const keyInfo = await this.keyManagementService.getKeyInfo(keyId);
       
@@ -770,6 +799,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async verifyCryptographicSignature(signature: EvidenceSignature, evidenceData?: any): Promise<boolean> {
+
     try {
       // Get public key for verification
       const keyMaterial = await this.keyManagementService.getKeyMaterial(
@@ -816,6 +846,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async verifyComplianceRequirements(signature: EvidenceSignature): Promise<ComplianceValidationResult> {
+
     const frameworkCompliance: Record<string, boolean> = {};
     
     // Check each framework's requirements
@@ -943,6 +974,7 @@ export class CryptographicEvidenceSigningService {
   }
 
   private async validateFrameworkCompliance(signature: EvidenceSignature, framework: string): Promise<boolean> {
+
     // Simplified compliance validation - could be expanded with specific framework rules
     switch (framework) {
     case 'ISO27001':

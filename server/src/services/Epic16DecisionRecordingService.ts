@@ -6,6 +6,7 @@
  * audit trails, appeal support, and analytics for content governance.
  */
 
+}
 export interface ModerationDecision {
   id: string;
   caseId: string;
@@ -62,7 +63,9 @@ export interface ModerationDecision {
   effectiveAt: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface DecisionAction {
   type: string;
   parameters: Record<string, any>;
@@ -71,7 +74,9 @@ export interface DecisionAction {
   completedAt?: Date;
   result?: Record<string, any>;
 }
+}
 
+}
 export interface DecisionTemplate {
   id: string;
   name: string;
@@ -103,7 +108,9 @@ export interface DecisionTemplate {
   updatedAt: Date;
   lastUsed?: Date;
 }
+}
 
+}
 export interface DecisionHistory {
   id: string;
   decisionId: string;
@@ -116,7 +123,9 @@ export interface DecisionHistory {
   metadata: Record<string, any>;
   createdAt: Date;
 }
+}
 
+}
 export interface DecisionAnalytics {
   date: string;
   moderatorId?: string;
@@ -144,18 +153,22 @@ export interface DecisionAnalytics {
   // Content breakdown
   contentTypeBreakdown: Record<string, number>;
 }
+}
 
+}
 export interface DecisionFilter {
   contentTypes?: string[];
   decisionTypes?: string[];
   decisionStatus?: string[];
   moderatorIds?: string[];
+}
   dateRange?: { start?: Date; end?: Date };
   caseIds?: string[];
   appealable?: boolean;
   confidenceRange?: { min?: number; max?: number };
 }
 
+}
 export interface CreateDecisionRequest {
   caseId: string;
   contentId: string;
@@ -176,7 +189,9 @@ export interface CreateDecisionRequest {
   effectiveAt?: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface UpdateDecisionRequest {
   decisionStatus?: string;
   detailedReasoning?: string;
@@ -188,6 +203,7 @@ export interface UpdateDecisionRequest {
   feedbackReceived?: string;
   metadata?: Record<string, any>;
   internalNotes?: string;
+}
 }
 
 /**
@@ -221,6 +237,7 @@ export class Epic16DecisionRecordingService {
     request: CreateDecisionRequest,
     moderatorId: string
   ): Promise<ModerationDecision> {
+
     const startTime = Date.now();
     
     const decision: ModerationDecision = {
@@ -267,6 +284,7 @@ export class Epic16DecisionRecordingService {
     updates: UpdateDecisionRequest,
     updatedBy: string
   ): Promise<ModerationDecision | null> {
+
     const decision = this.decisions.get(decisionId);
     if (!decision) return null;
 
@@ -284,10 +302,12 @@ export class Epic16DecisionRecordingService {
   }
 
   async getDecision(decisionId: string): Promise<ModerationDecision | null> {
+
     return this.decisions.get(decisionId) || null;
   }
 
   async getDecisions(filter?: DecisionFilter): Promise<ModerationDecision[]> {
+
     let decisions = Array.from(this.decisions.values());
 
     if (!filter) return decisions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -336,10 +356,12 @@ export class Epic16DecisionRecordingService {
   }
 
   async getDecisionsByCase(caseId: string): Promise<ModerationDecision[]> {
+
     return this.getDecisions({ caseIds: [caseId] });
   }
 
   async getDecisionsByContent(contentId: string, contentType: string): Promise<ModerationDecision[]> {
+
     return Array.from(this.decisions.values())
       .filter(d => d.contentId === contentId && d.contentType === contentType)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -352,6 +374,7 @@ export class Epic16DecisionRecordingService {
     templateData: Omit<DecisionTemplate, 'id' | 'usageCount' | 'createdAt' | 'updatedAt'>,
     _____createdBy: string
   ): Promise<DecisionTemplate> {
+
     const template: DecisionTemplate = {
       ...templateData,
       id: this.generateTemplateId(),
@@ -365,6 +388,7 @@ export class Epic16DecisionRecordingService {
   }
 
   async getDecisionTemplates(category?: string): Promise<DecisionTemplate[]> {
+
     let templates = Array.from(this.templates.values());
     
     if (category) {
@@ -408,6 +432,7 @@ export class Epic16DecisionRecordingService {
    * Decision History
    */
   async getDecisionHistory(decisionId: string): Promise<DecisionHistory[]> {
+
     return this.history.get(decisionId) || [];
   }
 
@@ -420,6 +445,7 @@ export class Epic16DecisionRecordingService {
     changeSource: DecisionHistory['changeSource'],
     changeReason?: string
   ): Promise<void> {
+
     const historyEntry: DecisionHistory = {
       id: this.generateHistoryId(),
       decisionId,
@@ -446,6 +472,7 @@ export class Epic16DecisionRecordingService {
     appealId: string,
     appealedBy: string
   ): Promise<boolean> {
+
     const decision = this.decisions.get(decisionId);
     if (!decision || !decision.isAppealable) return false;
 
@@ -470,6 +497,7 @@ export class Epic16DecisionRecordingService {
     resolvedBy: string,
     reason?: string
   ): Promise<boolean> {
+
     const decision = this.decisions.get(decisionId);
     if (!decision || decision.decisionStatus !== 'appealed') return false;
 
@@ -491,6 +519,7 @@ export class Epic16DecisionRecordingService {
     endDate: Date,
     moderatorId?: string
   ): Promise<DecisionAnalytics[]> {
+
     const decisions = await this.getDecisions({
       dateRange: { start: startDate, end: endDate },
       moderatorIds: moderatorId ? [moderatorId] : undefined
@@ -575,6 +604,7 @@ export class Epic16DecisionRecordingService {
   }
 
   async updateAnalytics(decision: ModerationDecision): Promise<void> {
+
     const dateKey = decision.createdAt.toISOString().split('T')[0];
     
     // Update aggregate analytics
@@ -625,6 +655,7 @@ export class Epic16DecisionRecordingService {
     query: string,
     filter?: DecisionFilter
   ): Promise<ModerationDecision[]> {
+
     const decisions = await this.getDecisions(filter);
     const queryLower = query.toLowerCase();
 
@@ -643,6 +674,7 @@ export class Epic16DecisionRecordingService {
     reason: string,
     limit: number = 10
   ): Promise<ModerationDecision[]> {
+
     const decisions = await this.getDecisions({
       contentTypes: [contentType],
       decisionTypes: [decisionType]
@@ -652,7 +684,7 @@ export class Epic16DecisionRecordingService {
       .filter(d => 
         d.primaryReason === reason || 
         d.secondaryReasons.includes(reason)
-      )
+
       .filter(d => d.decisionStatus === 'final' || d.decisionStatus === 'upheld')
       .sort((a, b) => (b.confidenceLevel - a.confidenceLevel) || (b.createdAt.getTime() - a.createdAt.getTime()))
       .slice(0, limit);
@@ -666,6 +698,7 @@ export class Epic16DecisionRecordingService {
     reason: string,
     flaggedBy: string
   ): Promise<boolean> {
+
     const decision = this.decisions.get(decisionId);
     if (!decision) return false;
 
@@ -681,6 +714,7 @@ export class Epic16DecisionRecordingService {
   }
 
   async getDecisionsForQualityReview(): Promise<ModerationDecision[]> {
+
     return Array.from(this.decisions.values())
       .filter(d => d.metadata.qualityReviewFlag)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());

@@ -3,6 +3,7 @@
  * Allows external providers to hook into and interact with editor state
  */
 import { Node, Edge } from 'reactflow';
+
 export interface EditorStateContext {
     nodes: Node[];
     edges: Edge[];
@@ -10,7 +11,8 @@ export interface EditorStateContext {
     isLoading: boolean;
     hasUnsavedChanges: boolean;
     validationErrors: any[];
-}
+
+
 export interface EditorActions {
     addNode: (node: Node) => void;
     updateNode: (nodeId: string, data: Record<string, unknown>) => void;
@@ -23,11 +25,12 @@ export interface EditorActions {
     loadGraph: (data: {),
         nodes: Node[];
         edges: Edge[];
+
     }) => void;
     exportGraph: (format?: string) => any;
     validateGraph: () => void;
     executeGraph: () => Promise<any>;
-}
+
 export interface ProviderHook {
     id: string;
     name: string;
@@ -55,7 +58,8 @@ export interface ProviderHook {
     onPostExecution?: (result: any, context: EditorStateContext) => void;
     onExecutionError?: (error: Error, context: EditorStateContext) => void;
     customActions?: Record<string, (context: EditorStateContext, ...args: any[]) => any>;
-}
+
+
 export interface ProviderRegistry {
     register: (hook: ProviderHook) => void;
     unregister: (hookId: string) => void;
@@ -63,7 +67,7 @@ export interface ProviderRegistry {
     getHook: (hookId: string) => ProviderHook | undefined;
     executeHooks: <T extends keyof ProviderHook>(hookName: T, ...args: any[]) => Promise<void>;
     executeCustomAction: (hookId: string, actionName: string, ...args: any[]) => any;
-}
+
 export declare const useEditorProviders: ()
   initialNodes: Node[],
   initialEdges: Edge[],

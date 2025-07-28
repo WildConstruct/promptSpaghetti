@@ -20,62 +20,58 @@ import {
   PencilIcon
 } from '@heroicons/react/24/outline';
 interface ApprovalRequest {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   rule_id: string;
-  transition_id: string;
+  transition_id: string;,
   requester_id: string;
   title: string;
   description?: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   business_justification?: string;
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';
+  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';,
   requested_at: Date;
   due_date?: Date;
   completed_at?: Date;
-  current_approvals: number;
+  current_approvals: number;,
   required_approvals: number;
   approval_percentage: number;
   escalated_at?: Date;
   escalation_reason?: string;
-}
-interface ReviewerAssignment {
-  id: string;
+  interface ReviewerAssignment {
+  id: string;,
   approval_request_id: string;
-  reviewer_id: string;
+  reviewer_id: string;,
   assignment_type: 'primary' | 'secondary' | 'escalated';
   assignment_reason?: string;
-  assigned_at: Date;
+  assigned_at: Date;,
   status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'abstained';
   reviewed_at?: Date;
   review_comment?: string;
   criteria_evaluations: Record<string, any>;
-}
-interface ApprovalDashboardProps {
-  workspaceId: string;
+  interface ApprovalDashboardProps {
+  workspaceId: string;,
   currentUserId: string;
   mode?: 'reviewer' | 'requester' | 'admin';
-}
-
-export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
+  export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({,)
   workspaceId,
   currentUserId,
   mode = 'reviewer'
 }) => {
-  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>([]);
-  const [reviewerAssignments, setReviewerAssignments] = useState<Record<string, ReviewerAssignment[]>>({});
+  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest>([]);
+  const [reviewerAssignments, setReviewerAssignments] = useState<Record<string, ReviewerAssignment>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [_____selectedRequest, setSelectedRequest] = useState<ApprovalRequest | null>(null);
   const [activeTab, setActiveTab] = useState<'pending' | 'completed' | 'all'>('pending');
   const [expandedRequests, setExpandedRequests] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState({)
-    status: '',
-    urgency: '',
-    overdue: false,
-    search: '',
-  });
+  status: '',
+  urgency: '',
+  overdue: false,
+  search: '',
+});
   const [sortBy, setSortBy] = useState<'requested_at' | 'due_date' | 'urgency' | 'approval_percentage'>('requested_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   // Load approval requests
@@ -90,35 +86,29 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
         queryParams.append('reviewer_id', currentUserId);
       } else if (mode === 'requester') {
         queryParams.append('requester_id', currentUserId);
-      }
       if (activeTab === 'pending') {
         queryParams.append('status', 'pending,in_review');
       } else if (activeTab === 'completed') {
         queryParams.append('status', 'approved,rejected,cancelled,expired');
-      }
       if (filters.status) queryParams.append('status', filters.status);
       if (filters.urgency) queryParams.append('urgency', filters.urgency);
       if (filters.overdue) queryParams.append('overdue', 'true');
       const response = await fetch(`/api/approval/requests/${workspaceId}?${queryParams}`);}
       if (!response.ok) {
         throw new Error('Failed to fetch approval requests');
-      }
       const requests = await response.json();
       setApprovalRequests(requests);
       // Load reviewer assignments for each request
-      const assignments: Record<string, ReviewerAssignment[]> = {};
+      const assignments: Record<string, ReviewerAssignment> = {};
       for (const request of requests) {
         const reviewersResponse = await fetch(`/api/approval/requests/${request.id}/reviewers`);}
         if (reviewersResponse.ok) {
           assignments[request.id] = await reviewersResponse.json();
-        }
-      }
       setReviewerAssignments(assignments);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to fetch approval requests');
-    } finally {
+  setError(error instanceof Error ? error.message : 'Failed to fetch approval requests');
+} finally {
       setLoading(false);
-    }
   };
   const handleReviewSubmission = async (;);
     requestId: string,
@@ -127,56 +117,52 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
   ) => {
     try {
       const response = await fetch(`/api/approval/requests/${requestId}/review`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json',
-          'x-user-id': currentUserId
-        },
-        body: JSON.stringify({),
+  'Content-Type': 'application/json',
+  'x-user-id': currentUserId,
+},
+  body: JSON.stringify({),
           decision,
           comment
-        })
+  }
       });
       if (!response.ok) {
         throw new Error('Failed to submit review');
-      }
       // Refresh the data
       await fetchApprovalRequests();
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to submit review');
-    }
-  };
+  setError(error instanceof Error ? error.message : 'Failed to submit review');
+};
   const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-    case 'critical': return 'bg-red-100 text-red-800';
-    case 'high': return 'bg-orange-100 text-orange-800';
-    case 'medium': return 'bg-yellow-100 text-yellow-800';
-    case 'low': return 'bg-green-100 text-green-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (urgency) {
+  case 'critical': return 'bg-red-100 text-red-800';
+  case 'high': return 'bg-orange-100 text-orange-800';
+  case 'medium': return 'bg-yellow-100 text-yellow-800';
+  case 'low': return 'bg-green-100 text-green-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'pending': return 'bg-yellow-100 text-yellow-800';
-    case 'in_review': return 'bg-blue-100 text-blue-800';
-    case 'approved': return 'bg-green-100 text-green-800';
-    case 'rejected': return 'bg-red-100 text-red-800';
-    case 'cancelled': return 'bg-gray-100 text-gray-800';
-    case 'expired': return 'bg-red-100 text-red-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case 'pending': return 'bg-yellow-100 text-yellow-800';
+  case 'in_review': return 'bg-blue-100 text-blue-800';
+  case 'approved': return 'bg-green-100 text-green-800';
+  case 'rejected': return 'bg-red-100 text-red-800';
+  case 'cancelled': return 'bg-gray-100 text-gray-800';
+  case 'expired': return 'bg-red-100 text-red-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getStatusIcon = (status: string) => {
-    switch (status) {
-    case 'pending': return <ClockIcon className="h-4 w-4" />;
-    case 'in_review': return <EyeIcon className="h-4 w-4" />;
-    case 'approved': return <CheckCircleIcon className="h-4 w-4" />;
-    case 'rejected': return <XCircleIcon className="h-4 w-4" />;
-    case 'cancelled': return <XCircleIcon className="h-4 w-4" />;
-    case 'expired': return <ExclamationTriangleIcon className="h-4 w-4" />;
-    default: return <ClockIcon className="h-4 w-4" />;
-    }
-  };
+  switch (status) {
+  case 'pending': return <ClockIcon className="h-4 w-4" />;
+  case 'in_review': return <EyeIcon className="h-4 w-4" />;
+  case 'approved': return <CheckCircleIcon className="h-4 w-4" />;
+  case 'rejected': return <XCircleIcon className="h-4 w-4" />;
+  case 'cancelled': return <XCircleIcon className="h-4 w-4" />;
+  case 'expired': return <ExclamationTriangleIcon className="h-4 w-4" />;
+  default: return <ClockIcon className="h-4 w-4" />;
+};
   const isOverdue = (request: ApprovalRequest) => {
     return request.due_date && new Date(request.due_date) < new Date() && 
            ['pending', 'in_review'].includes(request.status);
@@ -192,16 +178,14 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
       newExpanded.delete(requestId);
     } else {
       newExpanded.add(requestId);
-    }
     setExpandedRequests(newExpanded);
   };
   const filteredAndSortedRequests = approvalRequests;
     .filter(request => {)
-      if (filters.search && !request.title.toLowerCase().includes(filters.search.toLowerCase())) {
+  if (filters.search && !request.title.toLowerCase().includes(filters.search.toLowerCase())) {
         return false;
-      }
       return true;
-    })
+  }
     .sort((a, b) => {
       const multiplier = sortDirection === 'asc' ? 1 : -1;
       switch (sortBy) {
@@ -218,17 +202,15 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
         return (a.approval_percentage - b.approval_percentage) * multiplier;
       default:
         return 0;
-      }
     });
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -239,8 +221,7 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow">
       {/* Header */}
       <div className="border-b border-gray-200">
@@ -279,17 +260,17 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               {tab.label}
               <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
-                activeTab === tab.id
-                  ? 'bg-blue-100 text-blue-600'
-                  : 'bg-gray-100 text-gray-600'
-              }`}>
+  activeTab === tab.id
+  ? 'bg-blue-100 text-blue-600'
+  : 'bg-gray-100 text-gray-600',
+}`}>
                 {tab.count}
               </span>
             </button>
@@ -491,8 +472,8 @@ export const ApprovalDashboard: React.FC<ApprovalDashboardProps> = ({)
                               {assignment.status}
                             </span>
                             <span className={`px-2 py-1 rounded text-xs ${
-                              assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'
-                            }`}>
+  assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800',
+}`}>
                               {assignment.assignment_type}
                             </span>
                           </div>

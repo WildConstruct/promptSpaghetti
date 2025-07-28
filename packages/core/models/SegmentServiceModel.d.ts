@@ -5,6 +5,7 @@
  * providing business logic, validation, and orchestration for segment operations.
  */
 import { UserSegment, SegmentAnalytics, SegmentExport } from './UserSegmentModel';
+
 export interface SegmentServiceConfig {
     maxSegmentSize: number;
     evaluationBatchSize: number;
@@ -19,7 +20,7 @@ export interface SegmentServiceConfig {
     webhookEndpoints: string[];
     enableExternalSync: boolean;
     syncBatchSize: number;
-}
+
 export interface SegmentQuery {
     ids?: string[];
     names?: string[];
@@ -47,7 +48,7 @@ export interface SegmentQuery {
     includeAnalytics?: boolean;
     includeInsights?: boolean;
     includeUserSample?: boolean;
-}
+
 export interface SegmentOperationResult {
     success: boolean;
     segmentId?: string;
@@ -56,7 +57,7 @@ export interface SegmentOperationResult {
     warnings: string[];
     errors: string[];
     metadata?: Record<string, any>;
-}
+
 export interface SegmentBulkOperationResult {
     totalSegments: number;
     successfulOperations: number;
@@ -67,7 +68,7 @@ export interface SegmentBulkOperationResult {
         result: SegmentOperationResult;
     }>;
     executionTime: number;
-}
+
 export interface SegmentEvaluationResult {
     segmentId: string;
     evaluationId: string;
@@ -88,7 +89,7 @@ export interface SegmentEvaluationResult {
         description: string;
         recommendation?: string;
     }>;
-}
+
 export interface SegmentMembership {
     userId: string;
     segmentId: string;
@@ -101,7 +102,7 @@ export interface SegmentMembership {
     tags: string[];
     membershipDuration: number;
     isStale: boolean;
-}
+
 export interface SegmentPerformanceMetrics {
     segmentId: string;
     timeRange: {,
@@ -127,7 +128,7 @@ export interface SegmentPerformanceMetrics {
     conversionImpact: number;
     revenueImpact: number;
     engagementImpact: number;
-}
+
 export interface SegmentRecommendation {
     type: 'create_segment' | 'merge_segments' | 'split_segment' | 'optimize_conditions' | 'archive_segment';
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -148,7 +149,7 @@ export interface SegmentRecommendation {
     generatedAt: Date;
     generatedBy: 'system' | 'ml_model' | 'user_request';
     modelVersion?: string;
-}
+
 export interface SegmentExperiment {
     id: string;
     name: string;
@@ -188,7 +189,7 @@ export interface SegmentExperiment {
     createdBy: string;
     createdAt: Date;
     lastUpdated: Date;
-}
+
 export interface SegmentDataPipeline {
     id: string;
     name: string;
@@ -216,7 +217,7 @@ export interface SegmentDataPipeline {
         status: 'success' | 'partial' | 'failed';
         errorMessage?: string;
     }>;
-}
+
 export interface SegmentComplianceConfig {
     dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
     gdprCompliant: boolean;
@@ -238,7 +239,7 @@ export interface SegmentComplianceConfig {
     auditTrail: boolean;
     auditRetention: number;
     complianceReporting: boolean;
-}
+
 export interface SegmentValidationRule {
     id: string;
     name: string;
@@ -256,7 +257,7 @@ export interface SegmentValidationRule {
     lastExecuted?: Date;
     executionCount: number;
     violationCount: number;
-}
+
 export interface SegmentIntegration {
     id: string;
     name: string;
@@ -289,7 +290,7 @@ export interface SegmentIntegration {
         status: 'success' | 'partial' | 'failed';
         errorMessage?: string;
     }>;
-}
+
 export interface IUserSegmentService {
     createSegment(segment: Omit<UserSegment, 'id' | 'createdAt' | 'lastModifiedAt'>): Promise<UserSegment>;
     updateSegment(id: string, updates: Partial<UserSegment>): Promise<UserSegment>;
@@ -352,5 +353,5 @@ export interface IUserSegmentService {
         metrics: Record<string, number>;
         issues: string[];
     }>;
-}
+
 //# sourceMappingURL=SegmentServiceModel.d.ts.map

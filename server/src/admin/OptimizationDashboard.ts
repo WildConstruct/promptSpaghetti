@@ -15,6 +15,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface OptimizationDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -36,17 +37,21 @@ export interface OptimizationDashboardAPI {
   getOptimizationStatus(executionId: string): Promise<any>;
   cancelOptimization(executionId: string, userId: string): Promise<any>;
 }
+}
 
+}
 export interface RecommendationFilters {
   category?: string[];
   priority?: string[];
   status?: string[];
+}
   dateRange?: { start: Date; end: Date };
   search?: string;
   limit?: number;
   offset?: number;
 }
 
+}
 export interface PolicyFilters {
   category?: string[];
   enabled?: boolean;
@@ -55,7 +60,9 @@ export interface PolicyFilters {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 export interface OptimizationRequest {
   type: 'recommendation' | 'policy' | 'manual';
   id: string;
@@ -67,10 +74,12 @@ export interface OptimizationRequest {
       email?: boolean;
       slack?: boolean;
       webhook?: string;
+}
     };
   };
 }
 
+}
 export interface OptimizationResponse {
   success: boolean;
   executionId?: string;
@@ -79,6 +88,7 @@ export interface OptimizationResponse {
   risksIdentified?: string[];
   approvalRequired?: boolean;
   nextSteps?: string[];
+}
 }
 
 /**
@@ -152,6 +162,7 @@ export class OptimizationDashboard {
    * Get optimization dashboard data
    */
   private async handleGetDashboard(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const dashboardData = await this.optimizationService.getOptimizationDashboard();
       
@@ -172,6 +183,7 @@ export class OptimizationDashboard {
    * Get optimization recommendations with filtering
    */
   private async handleGetRecommendations(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       const filters: RecommendationFilters = {
@@ -215,6 +227,7 @@ export class OptimizationDashboard {
    * Apply optimization recommendation
    */
   private async handleApplyRecommendation(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { id } = request.params as { id: string };
       const body = request.body as any;
@@ -246,6 +259,7 @@ export class OptimizationDashboard {
    * Create optimization policy
    */
   private async handleCreatePolicy(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const policyData = request.body as any;
       const userId = this.extractUserId(request);
@@ -275,6 +289,7 @@ export class OptimizationDashboard {
    * Execute optimization (recommendation, policy, or manual)
    */
   private async handleExecuteOptimization(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const optimizationRequest = request.body as OptimizationRequest;
       const userId = this.extractUserId(request);
@@ -320,6 +335,7 @@ export class OptimizationDashboard {
    * Get system optimization analytics
    */
   private async handleGetAnalytics(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       const timeRange = {
@@ -346,6 +362,7 @@ export class OptimizationDashboard {
    * Get available quick actions
    */
   private async handleGetQuickActions(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const userId = this.extractUserId(request);
       const quickActions = await this.getAvailableQuickActions(userId);
@@ -366,6 +383,7 @@ export class OptimizationDashboard {
    * Get system health status
    */
   private async handleGetSystemHealth(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const healthStatus = await this.getSystemHealthStatus();
       
@@ -388,6 +406,7 @@ export class OptimizationDashboard {
    * Get filtered recommendations from database
    */
   private async getFilteredRecommendations(filters: RecommendationFilters): Promise<OptimizationRecommendation[]> {
+
     let query = 'SELECT * FROM optimization_recommendations WHERE 1=1';
     const params: any[] = [];
     
@@ -431,6 +450,7 @@ export class OptimizationDashboard {
     request: OptimizationRequest,
     userId: string
   ): Promise<OptimizationResponse> {
+
     try {
       const result = await this.optimizationService.applyOptimizationRecommendation(
         request.id,
@@ -462,6 +482,7 @@ export class OptimizationDashboard {
     request: OptimizationRequest,
     userId: string
   ): Promise<OptimizationResponse> {
+
     // Implementation would trigger policy-based optimization
     return {
       success: true,
@@ -478,6 +499,7 @@ export class OptimizationDashboard {
     request: OptimizationRequest,
     userId: string
   ): Promise<OptimizationResponse> {
+
     // Implementation would handle custom optimization scenarios
     return {
       success: true,
@@ -491,6 +513,7 @@ export class OptimizationDashboard {
    * Generate optimization analytics
    */
   private async generateOptimizationAnalytics(timeRange: { start: Date; end: Date }): Promise<any> {
+
     // Query optimization metrics from database
     const recommendations = await this.databaseService.query(`
       SELECT 
@@ -522,13 +545,13 @@ export class OptimizationDashboard {
         byPriority: this.groupByPriority(recommendations),
         byStatus: this.groupByStatus(recommendations),
         successRate: this.calculateAverageSuccessRate(recommendations)
-      },
+  }
       policies: {
         total: policies.length,
         enabled: policies.filter(p => p.enabled).length,
         autoApply: policies.filter(p => p.auto_apply).length,
         byCategory: this.groupByCategory(policies)
-      },
+  }
       performance: await this.getPerformanceMetrics(timeRange),
       trends: await this.getOptimizationTrends(timeRange)
     };
@@ -538,6 +561,7 @@ export class OptimizationDashboard {
    * Get available quick actions for user
    */
   private async getAvailableQuickActions(userId: string): Promise<any[]> {
+
     const permissions = await this.getUserPermissions(userId);
     
     const quickActions = [
@@ -549,7 +573,7 @@ export class OptimizationDashboard {
         icon: 'cache-clear',
         requiredPermission: 'clear_cache',
         estimatedTime: '2 minutes'
-      },
+  }
       {
         actionId: 'restart_services',
         title: 'Restart Critical Services',
@@ -558,7 +582,7 @@ export class OptimizationDashboard {
         icon: 'restart',
         requiredPermission: 'restart_services',
         estimatedTime: '5 minutes'
-      },
+  }
       {
         actionId: 'optimize_database',
         title: 'Optimize Database',
@@ -567,7 +591,7 @@ export class OptimizationDashboard {
         icon: 'database-optimize',
         requiredPermission: 'optimize_database',
         estimatedTime: '10 minutes'
-      },
+  }
       {
         actionId: 'update_performance_thresholds',
         title: 'Update Performance Thresholds',
@@ -586,6 +610,7 @@ export class OptimizationDashboard {
    * Get system health status
    */
   private async getSystemHealthStatus(): Promise<any> {
+
     // Get current system metrics
     const cpuUsage = await this.getCurrentCPUUsage();
     const memoryUsage = await this.getCurrentMemoryUsage();
@@ -605,29 +630,29 @@ export class OptimizationDashboard {
         score: healthScore,
         status: this.getHealthStatus(healthScore),
         lastChecked: new Date()
-      },
+  }
       components: {
         cpu: {
           usage: cpuUsage,
           status: this.getComponentStatus(cpuUsage, { warning: 70, critical: 90 }),
           trend: 'stable'
-        },
+  }
         memory: {
           usage: memoryUsage,
           status: this.getComponentStatus(memoryUsage, { warning: 75, critical: 90 }),
           trend: 'improving'
-        },
+  }
         disk: {
           usage: diskUsage,
           status: this.getComponentStatus(diskUsage, { warning: 80, critical: 95 }),
           trend: 'stable'
-        },
+  }
         network: {
           usage: networkUsage,
           status: this.getComponentStatus(networkUsage, { warning: 80, critical: 95 }),
           trend: 'stable'
         }
-      },
+  }
       recommendations: await this.getHealthRecommendations(healthScore)
     };
   }
@@ -640,6 +665,7 @@ export class OptimizationDashboard {
   }
 
   private async validateAdminPermissions(userId: string, action: string): Promise<void> {
+
     // Validate that user has required admin permissions
     const permissions = await this.getUserPermissions(userId);
     if (!permissions.includes(action) && !permissions.includes('admin_all')) {
@@ -678,6 +704,7 @@ export class OptimizationDashboard {
   }
 
   private async getUserPermissions(userId: string): Promise<string[]> {
+
     // Mock implementation - would integrate with actual auth system
     return ['apply_optimization', 'create_policy', 'execute_optimization', 'clear_cache', 'admin_all'];
   }

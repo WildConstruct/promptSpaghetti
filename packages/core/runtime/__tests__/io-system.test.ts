@@ -59,20 +59,20 @@ describe('Advanced I/O System', () => {
     });
   });
   describe('AdvancedIOHandler', () => {
-    let ioHandler: AdvancedIOHandler;
-    let spec: IOSpec;
-    beforeEach(() => {
-      spec = new IOSpecBuilder()
-        .addTextInput('title', 'Title', true)
-        .addNumberInput('count', 'Count', false, 1, 10, 5)
-        .addChoiceInput('mode', 'Mode', ['fast', 'slow'], false, 'fast')
-        .addTextOutput('result', 'Result')
-        .build();
-      ioHandler = new AdvancedIOHandler(spec);
-    });
+  let ioHandler: AdvancedIOHandler;
+  let spec: IOSpec;
+  beforeEach(() => {
+  spec = new IOSpecBuilder()
+  .addTextInput('title', 'Title', true)
+  .addNumberInput('count', 'Count', false, 1, 10, 5)
+  .addChoiceInput('mode', 'Mode', ['fast', 'slow'], false, 'fast')
+  .addTextOutput('result', 'Result')
+  .build();
+  ioHandler = new AdvancedIOHandler(spec);
+});
     describe('Input Validation', () => {
       it('should validate valid inputs', () => {
-        const inputs = new Map<string, any>([;);
+        const inputs = new Map<string, any>([);
           ['title', 'Test Title'],
           ['count', 3],
           ['mode', 'fast']
@@ -82,7 +82,7 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toHaveLength(0);
       });
       it('should detect missing required inputs', () => {
-        const inputs = new Map<string, any>([;);
+        const inputs = new Map<string, any>([);
           ['count', 3],
           ['mode', 'fast']
           // Missing required 'title'
@@ -92,18 +92,18 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toContain('Required input \'Title\' (title) is missing');
       });
       it('should validate input constraints', () => {
-        const inputs = new Map<string, any>([;);
-          ['title', 'Test Title'],
-          ['count', 15], // Exceeds max of 10
-          ['mode', 'invalid'] // Not in allowed values
-        ]);
-        const result = ioHandler.validateInputs(inputs);
-        expect(result.valid).toBe(false);
-        expect(result.errors).toContain('Value 15 is above maximum 10');
-        expect(result.errors).toContain('Value \'invalid\' is not in allowed values: fast, slow');
-      });
+  const inputs = new Map<string, any>([);
+  ['title', 'Test Title'],
+  ['count', 15], // Exceeds max of 10
+  ['mode', 'invalid'] // Not in allowed values
+  ]);
+  const result = ioHandler.validateInputs(inputs);
+  expect(result.valid).toBe(false);
+  expect(result.errors).toContain('Value 15 is above maximum 10');
+  expect(result.errors).toContain('Value \'invalid\' is not in allowed values: fast, slow');
+});
       it('should handle optional inputs with defaults', () => {
-        const inputs = new Map<string, any>([;);
+        const inputs = new Map<string, any>([);
           ['title', 'Test Title']
           // Missing optional 'count' and 'mode' - should use defaults
         ]);
@@ -113,7 +113,7 @@ describe('Advanced I/O System', () => {
     });
     describe('Input Resolution', () => {
       it('should resolve connected inputs', () => {
-        const connectedInputs = new Map<string, any>([;);
+        const connectedInputs = new Map<string, any>([);
           ['title', 'Connected Title'],
           ['count', 7],
           ['mode', 'slow']
@@ -128,7 +128,7 @@ describe('Advanced I/O System', () => {
         expect(resolved.metadata.get('mode')?.source).toBe('connection');
       });
       it('should use defaults for missing optional inputs', () => {
-        const connectedInputs = new Map<string, any>([;);
+        const connectedInputs = new Map<string, any>([);
           ['title', 'Title Only']
           // Missing count and mode
         ]);
@@ -142,24 +142,24 @@ describe('Advanced I/O System', () => {
         expect(resolved.metadata.get('mode')?.source).toBe('default');
       });
       it('should perform type coercion with warnings', () => {
-        const connectedInputs = new Map<string, any>([;);
-          ['title', 'Valid Title'],
-          ['count', '8'], // String instead of number
-          ['mode', 'fast']
-        ]);
-        const resolved = ioHandler.resolveInputs(connectedInputs, 'test-node');
-        expect(resolved.values.get('count')).toBe(8); // Coerced to number
-        const countMetadata = resolved.metadata.get('count');
-        expect(countMetadata?.typeCoercion).toEqual({)
-          from: 'string',
-          to: 'number',
-        });
+  const connectedInputs = new Map<string, any>([);
+  ['title', 'Valid Title'],
+  ['count', '8'], // String instead of number
+  ['mode', 'fast']
+  ]);
+  const resolved = ioHandler.resolveInputs(connectedInputs, 'test-node');
+  expect(resolved.values.get('count')).toBe(8); // Coerced to number
+  const countMetadata = resolved.metadata.get('count');
+  expect(countMetadata?.typeCoercion).toEqual({)
+  from: 'string',
+  to: 'number',
+});
         expect(countMetadata?.warnings).toContain('Type coerced from string to number');
       });
     });
     describe('Output Validation', () => {
       it('should validate valid outputs', () => {
-        const outputs = new Map<string, any>([;);
+        const outputs = new Map<string, any>([);
           ['result', 'Valid Result String']
         ]);
         const result = ioHandler.validateOutputs(outputs);
@@ -167,13 +167,13 @@ describe('Advanced I/O System', () => {
         expect(result.errors).toHaveLength(0);
       });
       it('should detect invalid output types', () => {
-        const outputs = new Map<string, any>([;);
-          ['result', 12345] // Number instead of string
-        ]);
-        const result = ioHandler.validateOutputs(outputs);
-        expect(result.valid).toBe(false);
-        expect(result.errors).toContain('Invalid type for Result: expected string, got number');
-      });
+  const outputs = new Map<string, any>([);
+  ['result', 12345] // Number instead of string
+  ]);
+  const result = ioHandler.validateOutputs(outputs);
+  expect(result.valid).toBe(false);
+  expect(result.errors).toContain('Invalid type for Result: expected string, got number');
+});
     });
     describe('Type Coercion', () => {
       it('should coerce strings to numbers', () => {
@@ -189,13 +189,13 @@ describe('Advanced I/O System', () => {
         expect(resolved.metadata.get('value')?.typeCoercion?.to).toBe('number');
       });
       it('should coerce values to string arrays', () => {
-        const arraySpec = new IOSpecBuilder();
-          .addInput({)
-            id: 'items',
-            label: 'Items',
-            dataType: 'stringArray',
-            required: true,
-          })
+  const arraySpec = new IOSpecBuilder();
+  .addInput({)
+  id: 'items',
+  label: 'Items',
+  dataType: 'stringArray',
+  required: true,
+}
           .addTextOutput('result', 'Result')
           .build();
         const handler = new AdvancedIOHandler(arraySpec);
@@ -204,13 +204,13 @@ describe('Advanced I/O System', () => {
         expect(resolved.values.get('items')).toEqual(['1', '2', '3']);
       });
       it('should handle boolean coercion', () => {
-        const boolSpec = new IOSpecBuilder();
-          .addInput({)
-            id: 'flag',
-            label: 'Flag',
-            dataType: 'boolean',
-            required: true,
-          })
+  const boolSpec = new IOSpecBuilder();
+  .addInput({)
+  id: 'flag',
+  label: 'Flag',
+  dataType: 'boolean',
+  required: true,
+}
           .addTextOutput('result', 'Result')
           .build();
         const handler = new AdvancedIOHandler(boolSpec);
@@ -230,12 +230,12 @@ describe('Advanced I/O System', () => {
       it('should validate string length constraints', () => {
         const constrainedSpec = new IOSpecBuilder();
           .addInput({)
-            id: 'text',
+  id: 'text',
             label: 'Text',
             dataType: 'string',
             required: true,
             constraints: { minLength: 3, maxLength: 10 }
-          })
+  }
           .addTextOutput('result', 'Result')
           .build();
         const handler = new AdvancedIOHandler(constrainedSpec);
@@ -257,12 +257,12 @@ describe('Advanced I/O System', () => {
       it('should validate pattern constraints', () => {
         const patternSpec = new IOSpecBuilder();
           .addInput({)
-            id: 'email',
+  id: 'email',
             label: 'Email',
             dataType: 'string',
             required: true,
             constraints: { pattern: '^[^@]+@[^@]+\\.[^@]+$' }
-          })
+  }
           .addTextOutput('result', 'Result')
           .build();
         const handler = new AdvancedIOHandler(patternSpec);
@@ -280,17 +280,16 @@ describe('Advanced I/O System', () => {
         const customValidator = (value: any) => {
           if (typeof value === 'string' && value.includes('bad')) {
             return { valid: false, errors: ['Value contains forbidden word'], warnings: [] };
-          }
           return { valid: true, errors: [], warnings: [] };
         };
         const customSpec = new IOSpecBuilder();
           .addInput({)
-            id: 'text',
+  id: 'text',
             label: 'Text',
             dataType: 'string',
             required: true,
             constraints: { customValidator }
-          })
+  }
           .addTextOutput('result', 'Result')
           .build();
         const handler = new AdvancedIOHandler(customSpec);
@@ -377,7 +376,7 @@ describe('Advanced I/O System', () => {
       handler = new AdvancedIOHandler(spec);
     });
     it('should validate all data types correctly', () => {
-      const validInputs = new Map<string, any>([;);
+      const validInputs = new Map<string, any>([);
         ['str', 'hello'],
         ['num', 42],
         ['bool', true],
@@ -392,7 +391,7 @@ describe('Advanced I/O System', () => {
       expect(result.errors).toHaveLength(0);
     });
     it('should detect invalid data types', () => {
-      const invalidInputs = new Map<string, any>([;);
+      const invalidInputs = new Map<string, any>([);
         ['str', 123], // Number instead of string
         ['num', 'not-a-number'], // String instead of number
         ['bool', 'not-a-boolean'], // String instead of boolean

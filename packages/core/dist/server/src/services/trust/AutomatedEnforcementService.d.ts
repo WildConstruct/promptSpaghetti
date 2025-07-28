@@ -44,27 +44,15 @@ export interface EnforcementPolicy {
             restrict: number;
             flag: number;
         };
-        riskFactorRules?: {
-            criticalRiskCount: number;
-            highRiskCount: number;
-            automaticSuspension: boolean;
-        };
-        fraudDetectionRules?: {
-            fraudScoreThreshold: number;
-            suspiciousIndicatorThreshold: number;
-        };
     };
-    actions: {
-        autoSuspension: boolean;
-        autoRestriction: boolean;
-        autoFlagging: boolean;
-        requireManualReview: boolean;
-        notifyAdmins: boolean;
+    riskFactorRules?: {
+        criticalRiskCount: number;
+        highRiskCount: number;
+        automaticSuspension: boolean;
     };
-    exemptions?: {
-        highTrustUsers: boolean;
-        verifiedUsers: boolean;
-        whitelistedEntities: string[];
+    fraudDetectionRules?: {
+        fraudScoreThreshold: number;
+        suspiciousIndicatorThreshold: number;
     };
 }
 export interface EnforcementConfig {
@@ -74,11 +62,6 @@ export interface EnforcementConfig {
         adminAlerts: boolean;
         userNotifications: boolean;
         webhookUrl?: string;
-    };
-    reviewSettings: {
-        autoReviewEnabled: boolean;
-        appealProcessEnabled: boolean;
-        adminOverrideRequired: boolean;
     };
 }
 export declare class AutomatedEnforcementService {

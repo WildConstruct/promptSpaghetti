@@ -405,7 +405,7 @@ export declare class ExtensionManifestParser {
     private satisfiesVersionRange;
     private compareVersions;
     private readFile;
-}
+
 export declare class ExtensionManifestValidator {
     private static instance;
     private parser;
@@ -424,7 +424,6 @@ export declare class ExtensionManifestValidator {
      */
     private validateSecurity;
     private isValidCSP;
-}
 interface ParseResult<T> {
     success: boolean;
     data?: T;
@@ -434,7 +433,6 @@ interface ParseResult<T> {
         message: string;
         code: string;
     }>;
-}
 interface ManifestTemplateOptions {
     id: string;
     name: string;
@@ -459,13 +457,12 @@ interface ManifestTemplateOptions {
     uiComponents?: Record<string, string>;
     transforms?: string[];
     storageProviders?: string[];
-}
 interface ValidationContext {
     systemVersion: string;
     platform: string;
     availableExtensions: Map<string, ExtensionManifest>;
     grantedPermissions: string[];
-}
+
 export declare const extensionManifestParser: ExtensionManifestParser;
 export declare const extensionManifestValidator: ExtensionManifestValidator;
 export {};

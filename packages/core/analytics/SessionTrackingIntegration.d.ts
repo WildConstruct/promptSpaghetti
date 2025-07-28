@@ -12,6 +12,7 @@
  */
 import { AnalyticsClient } from './AnalyticsClient';
 import { ConversionArchitectureManager } from './ConversionFunnelArchitecture';
+
 export interface EnhancedSession {
     sessionId: string;
     userId: string;
@@ -52,15 +53,16 @@ export interface EnhancedSession {
     deviceType: 'desktop' | 'mobile' | 'tablet';
     browser: string;
     os: string;
-}
+
 export interface SessionEvent {
     sessionId: string;
     timestamp: number;
     type: SessionEventType;
     page?: string;
     properties: Record<string, any>;
-}
+
 export type SessionEventType = 'session_start' | 'session_end' | 'page_view' | 'engagement' | 'conversion' | 'cross_device_link' | 'consent_update';
+
 export interface SessionAnalytics {
     totalSessions: number;
     uniqueUsers: number;
@@ -85,7 +87,6 @@ export interface SessionAnalytics {
         dropoffRate: number;
         recoverableUsers: number;
     }>;
-}
 /**
  * Enhanced Session Tracking Manager
  * Integrates with Epic 1 AnalyticsClient for comprehensive session management
@@ -154,7 +155,7 @@ export declare class SessionTrackingManager {
     private getCrossDeviceSessionId;
     private getHashedIP;
     private generateDeviceFingerprint;
-}
+
 export declare const createSessionTrackingManager: (analyticsClient: AnalyticsClient, conversionArchitecture: ConversionArchitectureManager) => SessionTrackingManager;
 export default SessionTrackingManager;
 //# sourceMappingURL=SessionTrackingIntegration.d.ts.map

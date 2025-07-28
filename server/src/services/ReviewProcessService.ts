@@ -26,6 +26,7 @@ import {
 // Review Process Configuration
 // =============================================================================
 
+}
 export interface ReviewProcessTemplate {
   id: string;
   name: string;
@@ -63,7 +64,9 @@ export interface ReviewProcessTemplate {
   created_by: string;
   active: boolean;
 }
+}
 
+}
 export interface ReviewStage {
   id: string;
   name: string;
@@ -91,24 +94,32 @@ export interface ReviewStage {
   onReject?: StageAction[];
   onEscalate?: StageAction[];
 }
+}
 
+}
 export interface StageAction {
   type: 'assign_reviewer' | 'send_notification' | 'update_metadata' | 'create_task' | 'call_webhook';
   config: Record<string, any>;
   condition?: string;
 }
+}
 
+}
 export interface EscalationThreshold {
   condition: string; // e.g., "time_elapsed > 24h" or "decision_confidence < 60"
   level: number;
   action: EscalationAction;
 }
+}
 
+}
 export interface EscalationAction {
   type: 'assign_senior_reviewer' | 'require_consensus' | 'notify_admin' | 'auto_approve' | 'auto_reject';
   config: Record<string, any>;
 }
+}
 
+}
 export interface EscalationRule {
   id: string;
   condition: string;
@@ -116,7 +127,9 @@ export interface EscalationRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface AutoApprovalRule {
   id: string;
   condition: string;
@@ -124,7 +137,9 @@ export interface AutoApprovalRule {
   max_value?: number; // For amount-based rules
   enabled: boolean;
 }
+}
 
+}
 export interface NotificationSettings {
   email: boolean;
   slack: boolean;
@@ -141,11 +156,13 @@ export interface NotificationSettings {
   admins: boolean;
   stakeholders: string[];
 }
+}
 
 // =============================================================================
 // Review Process State Management
 // =============================================================================
 
+}
 export interface ReviewProcess {
   id: string;
   reviewId: string;
@@ -176,6 +193,7 @@ export interface ReviewProcess {
   
   created_by: string;
 }
+}
 
 export type ReviewProcessStatus = 
   | 'pending'
@@ -188,6 +206,7 @@ export type ReviewProcessStatus =
   | 'expired'
   | 'cancelled';
 
+}
 export interface ReviewProcessResult {
   reviewId: string;
   processId: string;
@@ -209,6 +228,7 @@ export interface ReviewProcessResult {
   summary: string;
   recommendations: string[];
   completed_at: Date;
+}
 }
 
 // =============================================================================
@@ -233,6 +253,7 @@ export class ReviewProcessService {
   }
 
   async initialize(): Promise<void> {
+
     await this.loadProcessTemplates();
     await this.initializeDatabase();
     this.logger.log('ReviewProcessService initialized');
@@ -243,6 +264,7 @@ export class ReviewProcessService {
   // =============================================================================
 
   async createProcessTemplate(template: Omit<ReviewProcessTemplate, 'id' | 'created_at' | 'updated_at'>): Promise<string> {
+
     const templateId = `template_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const client = await this.db.connect();
@@ -287,10 +309,12 @@ export class ReviewProcessService {
   }
 
   async getProcessTemplate(templateId: string): Promise<ReviewProcessTemplate | null> {
+
     return this.processTemplates.get(templateId) || null;
   }
 
   async getProcessTemplateForReviewType(reviewType: ReviewType): Promise<ReviewProcessTemplate | null> {
+
     for (const template of this.processTemplates.values()) {
       if (template.reviewType === reviewType && template.active) {
         return template;
@@ -304,6 +328,7 @@ export class ReviewProcessService {
   // =============================================================================
 
   async startReviewProcess(reviewItem: ReviewItem): Promise<string> {
+
     const template = await this.getProcessTemplateForReviewType(reviewItem.reviewType);
     if (!template) {
       throw new Error(`No active process template found for review type: ${reviewItem.reviewType}`);
@@ -349,6 +374,7 @@ export class ReviewProcessService {
   }
 
   async processReviewDecision(reviewId: string, decision: ReviewDecision): Promise<void> {
+
     const reviewProcess = await this.getReviewProcess(reviewId);
     if (!reviewProcess) {
       throw new Error(`Review process not found for review: ${reviewId}`);
@@ -387,6 +413,7 @@ export class ReviewProcessService {
   }
 
   async escalateReview(reviewId: string, reason: string, escalatedBy: string): Promise<void> {
+
     const reviewProcess = await this.getReviewProcess(reviewId);
     if (!reviewProcess) {
       throw new Error(`Review process not found for review: ${reviewId}`);
@@ -425,6 +452,7 @@ export class ReviewProcessService {
   // =============================================================================
 
   private async executeStage(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<void> {
+
     this.logger.log(`Executing stage ${stage.name} for process ${reviewProcess.id}`);
     
     // Assign reviewers for this stage
@@ -456,6 +484,7 @@ export class ReviewProcessService {
     stage: ReviewStage, 
     template: ReviewProcessTemplate
   ): Promise<void> {
+
     // Mark stage as completed
     reviewProcess.completedStages.push(stage.id);
     reviewProcess.activeStages = reviewProcess.activeStages.filter(s => s !== stage.id);
@@ -500,6 +529,7 @@ export class ReviewProcessService {
     reviewProcess: ReviewProcess, 
     template: ReviewProcessTemplate
   ): Promise<void> {
+
     const finalDecision = await this.calculateFinalDecision(reviewProcess, template);
     
     reviewProcess.status = finalDecision === 'approve' ? 'approved' : 'rejected';
@@ -526,6 +556,7 @@ export class ReviewProcessService {
     reviewItem: ReviewItem, 
     template: ReviewProcessTemplate
   ): Promise<{ shouldAutoApprove: boolean; reason?: string; confidence?: number }> {
+
     if (!template.autoApprovalRules || template.autoApprovalRules.length === 0) {
       return { shouldAutoApprove: false };
     }
@@ -550,6 +581,7 @@ export class ReviewProcessService {
     reviewItem: ReviewItem, 
     approvalResult: { shouldAutoApprove: boolean; reason?: string; confidence?: number }
   ): Promise<string> {
+
     const processId = `auto_process_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     // Create a simplified process record
@@ -574,7 +606,7 @@ export class ReviewProcessService {
       processData: {
         auto_approval_reason: approvalResult.reason,
         auto_approval_confidence: approvalResult.confidence
-      },
+  }
       created_by: 'system'
     };
 
@@ -588,6 +620,7 @@ export class ReviewProcessService {
     reviewProcess: ReviewProcess, 
     stage: ReviewStage
   ): Promise<string[]> {
+
     // Use the ReviewerAssignmentService to assign reviewers based on stage requirements
     const assignments = await this.reviewerAssignmentService.assignReviewers({
       reviewItemId: reviewProcess.reviewId,
@@ -607,6 +640,7 @@ export class ReviewProcessService {
   }
 
   private async evaluateCondition(condition: string, context: unknown): Promise<boolean> {
+
     // Simple condition evaluation - in production, use a proper expression evaluator
     try {
       // This is a simplified implementation
@@ -638,6 +672,7 @@ export class ReviewProcessService {
   }
 
   private async isStageComplete(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<boolean> {
+
     const stageData = reviewProcess.stageData[stage.id];
     if (!stageData) return false;
 
@@ -658,6 +693,7 @@ export class ReviewProcessService {
   }
 
   private async getStageDecision(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<DecisionType> {
+
     const stageData = reviewProcess.stageData[stage.id];
     const decisions = stageData.decisions || [];
 
@@ -682,6 +718,7 @@ export class ReviewProcessService {
     reviewProcess: ReviewProcess, 
     template: ReviewProcessTemplate
   ): Promise<ReviewStage[]> {
+
     const currentStageIndex = template.stages.findIndex(s => s.id === reviewProcess.currentStage);
     if (currentStageIndex === -1 || currentStageIndex === template.stages.length - 1) {
       return [];
@@ -699,6 +736,7 @@ export class ReviewProcessService {
   }
 
   private async checkStageDependencies(reviewProcess: ReviewProcess, stage: ReviewStage): Promise<boolean> {
+
     if (!stage.dependencies || stage.dependencies.length === 0) {
       return true;
     }
@@ -717,6 +755,7 @@ export class ReviewProcessService {
   // =============================================================================
 
   private async loadProcessTemplates(): Promise<void> {
+
     const result = await this.db.query(`
       SELECT * FROM review_process_templates WHERE active = true
     `);
@@ -758,6 +797,7 @@ export class ReviewProcessService {
   }
 
   private async saveReviewProcess(reviewProcess: ReviewProcess): Promise<void> {
+
     await this.db.query(`
       INSERT INTO review_processes (
         id, review_id, template_id, current_stage, status,
@@ -786,6 +826,7 @@ export class ReviewProcessService {
   }
 
   private async getReviewProcess(reviewId: string): Promise<ReviewProcess | null> {
+
     const result = await this.db.query(
       'SELECT * FROM review_processes WHERE review_id = $1',
       [reviewId]
@@ -820,6 +861,7 @@ export class ReviewProcessService {
   }
 
   private async initializeDatabase(): Promise<void> {
+
     const client = await this.db.connect();
     try {
       // Create tables if they don't exist
@@ -890,50 +932,62 @@ export class ReviewProcessService {
 
   // Placeholder methods for unimplemented functionality
   private async executeAutoApproval(___reviewItem: ReviewItem, ___autoApprovalResult: unknown): Promise<string> {
+
     throw new Error('Method not implemented');
   }
 
   private async recordDecision(___reviewProcess: ReviewProcess, ___decision: ReviewDecision): Promise<void> {
+
     // Implementation needed
   }
 
   private async evaluateConsensusRequirement(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<void> {
+
     // Implementation needed
   }
 
   private async executeEscalationAction(___reviewProcess: ReviewProcess, ___action: EscalationAction): Promise<void> {
+
     // Implementation needed
   }
 
   private async logProcessEvent(___processId: string, ___eventType: string, ___data: Record<string, unknown>): Promise<void> {
+
     // Implementation needed
   }
 
   private async scheduleStageTimeout(___processId: string, ___stageId: string, ___timeoutMinutes: number): Promise<void> {
+
     // Implementation needed
   }
 
   private async executeStageAction(___reviewProcess: ReviewProcess, ___action: StageAction): Promise<void> {
+
     // Implementation needed
   }
 
   private async calculateFinalDecision(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<DecisionType> {
+
     return 'approve'; // Placeholder
   }
 
   private async isConsensusReached(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate): Promise<boolean> {
+
     return false; // Placeholder
   }
 
   private async generateProcessResult(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___finalDecision: DecisionType): Promise<ReviewProcessResult> {
+
     return {} as ReviewProcessResult; // Placeholder
   }
 
   private async saveProcessResult(___result: ReviewProcessResult): Promise<void> {
+
     // Implementation needed
   }
 
   private async sendProcessCompletionNotifications(___reviewProcess: ReviewProcess, ___template: ReviewProcessTemplate, ___result: ReviewProcessResult): Promise<void> {
+
     // Implementation needed
   }
 }

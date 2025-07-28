@@ -10,6 +10,7 @@ import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 import { logger } from '../../utils/logger';
 
+}
 export interface BreachNotification {
   id: string;
   userId: string;
@@ -24,7 +25,9 @@ export interface BreachNotification {
   notificationType: 'EMAIL' | 'IN_APP' | 'SMS' | 'PUSH';
   status: 'PENDING' | 'SENT' | 'DELIVERED' | 'FAILED' | 'ACKNOWLEDGED';
 }
+}
 
+}
 export interface BreachNotificationConfig {
   enableEmailNotifications: boolean;
   enableInAppNotifications: boolean;
@@ -36,7 +39,9 @@ export interface BreachNotificationConfig {
   includeGuidance: boolean;
   includeSecurityTips: boolean;
 }
+}
 
+}
 export interface NotificationTemplate {
   subject: string;
   htmlBody: string;
@@ -44,6 +49,7 @@ export interface NotificationTemplate {
   inAppMessage: string;
   smsMessage: string;
   pushMessage: string;
+}
 }
 
 export class BreachNotificationService {
@@ -95,6 +101,7 @@ export class BreachNotificationService {
     occurrenceCount: number,
     skipRateLimit: boolean = false
   ): Promise<BreachNotification> {
+
     const notificationId = this.generateNotificationId();
     const severity = this.calculateSeverity(occurrenceCount);
     
@@ -140,7 +147,7 @@ export class BreachNotificationService {
           occurrenceCount,
           severity,
           immediate: requiresImmediateNotification
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
@@ -161,7 +168,7 @@ export class BreachNotificationService {
           error: error.message,
           breachSource,
           occurrenceCount
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['GDPR', 'OWASP'],
@@ -178,6 +185,7 @@ export class BreachNotificationService {
    * Send immediate notification for high-severity breaches
    */
   private async sendImmediateNotification(notification: BreachNotification): Promise<void> {
+
     try {
       const template = this.getNotificationTemplate(notification);
       
@@ -208,6 +216,7 @@ export class BreachNotificationService {
    * Process pending notifications in batches
    */
   private async processPendingNotifications(): Promise<void> {
+
     if (this.pendingNotifications.size === 0) return;
 
     const currentTime = Date.now();
@@ -242,6 +251,7 @@ export class BreachNotificationService {
     userId: string, 
     notifications: BreachNotification[]
   ): Promise<void> {
+
     try {
       const template = this.getBatchNotificationTemplate(notifications);
       
@@ -375,6 +385,7 @@ If you have questions, please contact our security team.
    * Check notification rate limit for user
    */
   private async checkRateLimit(userId: string): Promise<boolean> {
+
     // This would typically check against persistent storage
     // For now, simplified implementation
     const today = new Date().toDateString();
@@ -532,6 +543,7 @@ ${this.getSecurityGuidanceText()}
     notification: BreachNotification, 
     template: NotificationTemplate
   ): Promise<void> {
+
     // Implementation would use the EmailService
     logger.log(`Sending breach notification email to user ${notification.userId}`);
   }
@@ -541,6 +553,7 @@ ${this.getSecurityGuidanceText()}
     notifications: BreachNotification[],
     template: NotificationTemplate
   ): Promise<void> {
+
     // Implementation would use the EmailService
     logger.log(`Sending batch breach notification email to user ${userId}`);
   }
@@ -549,6 +562,7 @@ ${this.getSecurityGuidanceText()}
     notification: BreachNotification,
     template: NotificationTemplate
   ): Promise<void> {
+
     // Implementation would create in-app notification
     logger.log(`Creating in-app breach notification for user ${notification.userId}`);
   }
@@ -580,6 +594,7 @@ ${this.getSecurityGuidanceText()}
    * Mark notification as acknowledged
    */
   public async acknowledgeNotification(notificationId: string, userId: string): Promise<boolean> {
+
     const notification = this.notifications.get(notificationId);
     
     if (!notification || notification.userId !== userId) {

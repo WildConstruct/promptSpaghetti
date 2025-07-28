@@ -150,7 +150,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           { feature: 'real-time-monitoring', enabled: true, configuration: {} },
           { feature: 'user-feedback', enabled: true, configuration: {} }
         ]
-      },
+  }
       {
         environmentId: 'canary-1',
         name: 'Canary Environment',
@@ -240,13 +240,13 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
                 impactLevel: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
                 userVisible: { type: 'boolean' },
                 requiresConsent: { type: 'boolean' }
-              },
+  }
               required: ['section', 'type', 'reasoning', 'impactLevel', 'userVisible', 'requiresConsent']
             }
           }
-        },
+  }
         required: ['policyId', 'baseVersion', 'title', 'description', 'changes']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -332,9 +332,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-        },
+  }
         required: ['previewId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -342,9 +342,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           targetUserGroups: { type: 'array', items: { type: 'string' } },
           autoRollbackEnabled: { type: 'boolean' },
           monitoringDuration: { type: 'number', minimum: 1, maximum: 168 }
-        },
+  }
         required: ['environmentId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -399,9 +399,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-        },
+  }
         required: ['previewId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -410,7 +410,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
             minItems: 1,
             items: { type: 'string', enum: ['SYNTAX', 'LEGAL', 'COMPLIANCE', 'ACCESSIBILITY', 'INTEGRATION'] }
           }
-        },
+  }
         required: ['validationTypes']
       }
     }
@@ -465,9 +465,9 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-        },
+  }
         required: ['previewId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -478,7 +478,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
             type: 'array',
             items: { type: 'string', enum: ['POSITIVE', 'NEGATIVE', 'NEUTRAL', 'SUGGESTION', 'BUG_REPORT', 'QUESTION'] }
           }
-        },
+  }
         required: ['feedbackType', 'rating', 'comments', 'categories']
       }
     }
@@ -527,7 +527,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
           baseVersion: { type: 'string', minLength: 1 },
           compareVersion: { type: 'string', minLength: 1 },
           policyId: { type: 'string', minLength: 1 }
-        },
+  }
         required: ['baseVersion', 'compareVersion', 'policyId']
       }
     }
@@ -571,7 +571,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-        },
+  }
         required: ['previewId']
       }
     }
@@ -603,15 +603,15 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           previewId: { type: 'string' }
-        },
+  }
         required: ['previewId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           effectiveDate: { type: 'string', format: 'date-time' },
           rolloutStrategy: { type: 'string' }
-        },
+  }
         required: ['effectiveDate']
       }
     }
@@ -656,14 +656,14 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           deploymentId: { type: 'string' }
-        },
+  }
         required: ['deploymentId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', minLength: 10, maxLength: 500 }
-        },
+  }
         required: ['reason']
       }
     }
@@ -706,7 +706,7 @@ export async function policyPreviewRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           deploymentId: { type: 'string' }
-        },
+  }
         required: ['deploymentId']
       }
     }

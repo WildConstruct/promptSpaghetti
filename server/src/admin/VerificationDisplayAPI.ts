@@ -14,6 +14,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { ReputationSystem } from './ReputationSystem';
 
+}
 export interface VerificationDisplayConfig {
   // Display Settings
   showTrustScores: boolean;
@@ -32,6 +33,7 @@ export interface VerificationDisplayConfig {
     unverifiedUsers: boolean;
     lowReputationUsers: boolean;
     flaggedUsers: boolean;
+}
   };
   
   // Thresholds
@@ -47,6 +49,7 @@ export interface VerificationDisplayConfig {
   version: number;
 }
 
+}
 export interface VerificationDisplayStats {
   configurationAge: number; // days since last update
   activeConfigurations: number;
@@ -54,6 +57,7 @@ export interface VerificationDisplayStats {
     usersAffected: number;
     displayRate: number;
     averageElementsShown: number;
+}
   };
   performanceMetrics: {
     renderTime: number;
@@ -117,6 +121,7 @@ export class VerificationDisplayAPI {
    * Get current verification display configuration
    */
   private async getConfiguration(request: any, reply: any): Promise<any> {
+
     try {
       const config = await this.loadConfiguration();
       
@@ -136,6 +141,7 @@ export class VerificationDisplayAPI {
    * Update verification display configuration
    */
   private async updateConfiguration(request: any, reply: any): Promise<any> {
+
     try {
       const configUpdate = request.body;
       const currentUser = request.user?.id || 'system';
@@ -196,6 +202,7 @@ export class VerificationDisplayAPI {
    * Reset configuration to default values
    */
   private async resetConfiguration(request: any, reply: any): Promise<any> {
+
     try {
       const currentUser = request.user?.id || 'system';
       
@@ -212,12 +219,12 @@ export class VerificationDisplayAPI {
           unverifiedUsers: true,
           lowReputationUsers: true,
           flaggedUsers: false
-        },
+  }
         displayThresholds: {
           minTrustScore: 0,
           minBadgeCount: 0,
           hideUnverified: false
-        },
+  }
         lastUpdated: new Date(),
         updatedBy: currentUser,
         version: 1
@@ -249,6 +256,7 @@ export class VerificationDisplayAPI {
    * Get configuration change history
    */
   private async getConfigurationHistory(request: any, reply: any): Promise<any> {
+
     try {
       const { limit = 20, offset = 0 } = request.query;
       
@@ -293,6 +301,7 @@ export class VerificationDisplayAPI {
    * Get specific configuration version
    */
   private async getConfigurationVersion(request: any, reply: any): Promise<any> {
+
     try {
       const { version } = request.params;
       
@@ -327,6 +336,7 @@ export class VerificationDisplayAPI {
    * Preview configuration with test data
    */
   private async previewConfiguration(request: any, reply: any): Promise<any> {
+
     try {
       const previewConfig = request.body;
       const { userIds = [] } = request.query;
@@ -351,7 +361,7 @@ export class VerificationDisplayAPI {
             flagged: reputation.flags.length > 0,
             displayData: this.calculateDisplayData(reputation, previewConfig)
           };
-        })
+  }
       );
 
       return reply.code(200).send({
@@ -374,6 +384,7 @@ export class VerificationDisplayAPI {
    * Get test users for preview
    */
   private async getTestUsers(request?: any, reply?: any): Promise<any> {
+
     try {
       // Get diverse set of users for testing display configurations
       const users = await this.reputationSystem.getReputationLeaderboard({ 
@@ -414,6 +425,7 @@ export class VerificationDisplayAPI {
    * Get display statistics and analytics
    */
   private async getDisplayStatistics(request: any, reply: any): Promise<any> {
+
     try {
       const stats = await this.calculateDisplayStatistics();
       
@@ -433,6 +445,7 @@ export class VerificationDisplayAPI {
    * Get performance metrics
    */
   private async getPerformanceMetrics(request: any, reply: any): Promise<any> {
+
     try {
       const metrics = await this.calculatePerformanceMetrics();
       
@@ -452,23 +465,24 @@ export class VerificationDisplayAPI {
    * Get configuration templates
    */
   private async getConfigurationTemplates(request: any, reply: any): Promise<any> {
+
     try {
       const templates = [
         {
           name: 'Minimal Display',
           description: 'Shows only essential trust indicators',
           config: this.getMinimalTemplate()
-        },
+  }
         {
           name: 'Professional Display',
           description: 'Balanced display suitable for business environments',
           config: this.getProfessionalTemplate()
-        },
+  }
         {
           name: 'Full Display',
           description: 'Shows all available trust and verification information',
           config: this.getFullTemplate()
-        },
+  }
         {
           name: 'Public Safe',
           description: 'Conservative settings that protect user privacy',
@@ -492,6 +506,7 @@ export class VerificationDisplayAPI {
    * Save custom configuration template
    */
   private async saveConfigurationTemplate(request: any, reply: any): Promise<any> {
+
     try {
       const { name, description, config } = request.body;
       const currentUser = request.user?.id || 'system';
@@ -521,6 +536,7 @@ export class VerificationDisplayAPI {
    * Load current configuration
    */
   private async loadConfiguration(): Promise<VerificationDisplayConfig> {
+
     const cacheKey = 'current_config';
     
     if (this.configCache.has(cacheKey)) {
@@ -556,6 +572,7 @@ export class VerificationDisplayAPI {
    * Save configuration to database
    */
   private async saveConfiguration(config: VerificationDisplayConfig): Promise<void> {
+
     const db = await this.databaseService.getDatabase();
     
     await db.run(`
@@ -568,6 +585,7 @@ export class VerificationDisplayAPI {
    * Validate configuration object
    */
   private async validateConfiguration(config: any): Promise<{ valid: boolean; errors?: string[] }> {
+
     const errors: string[] = [];
     
     // Validate required boolean fields
@@ -631,7 +649,7 @@ export class VerificationDisplayAPI {
         badgeCount: shouldDisplay && config.showBadgeCount,
         verificationLevel: shouldDisplay && config.showVerificationLevel,
         reputation: shouldDisplay && config.showReputation
-      },
+  }
       styling: {
         badgeStyle: config.badgeStyle,
         size: config.trustIndicatorSize,
@@ -678,6 +696,7 @@ export class VerificationDisplayAPI {
    * Calculate display statistics
    */
   private async calculateDisplayStatistics(): Promise<VerificationDisplayStats> {
+
     const config = await this.loadConfiguration();
     const metrics = await this.reputationSystem.getReputationMetrics();
     
@@ -688,7 +707,7 @@ export class VerificationDisplayAPI {
         usersAffected: metrics.totalUsers,
         displayRate: 0.85, // Estimated based on thresholds
         averageElementsShown: 3.2 // Estimated
-      },
+  }
       performanceMetrics: {
         renderTime: 45, // ms
         cacheHitRate: 0.92,
@@ -701,18 +720,19 @@ export class VerificationDisplayAPI {
    * Calculate performance metrics
    */
   private async calculatePerformanceMetrics(): Promise<any> {
+
     // Implementation would measure actual performance metrics
     return {
       apiResponseTime: {
         average: 120,
         p95: 250,
         p99: 500
-      },
+  }
       cachePerformance: {
         hitRate: 0.92,
         missRate: 0.08,
         evictionRate: 0.02
-      },
+  }
       renderMetrics: {
         averageRenderTime: 45,
         componentsRendered: 1500,
@@ -725,6 +745,7 @@ export class VerificationDisplayAPI {
    * Get users by IDs
    */
   private async getUsersById(userIds: string[]): Promise<any[]> {
+
     const users = await Promise.all(
       userIds.map(async (userId) => {
         const reputation = await this.reputationSystem.getUserReputation(userId);
@@ -737,7 +758,7 @@ export class VerificationDisplayAPI {
           badges: reputation.badges.filter(b => b.verified),
           flagged: reputation.flags.length > 0
         };
-      })
+  }
     );
     
     return users;
@@ -759,12 +780,12 @@ export class VerificationDisplayAPI {
         unverifiedUsers: true,
         lowReputationUsers: true,
         flaggedUsers: false
-      },
+  }
       displayThresholds: {
         minTrustScore: 0,
         minBadgeCount: 0,
         hideUnverified: false
-      },
+  }
       lastUpdated: new Date(),
       updatedBy: 'system',
       version: 1
@@ -821,7 +842,7 @@ export class VerificationDisplayAPI {
         unverifiedUsers: false,
         lowReputationUsers: false,
         flaggedUsers: false
-      },
+  }
       displayThresholds: {
         minTrustScore: 500,
         minBadgeCount: 2,

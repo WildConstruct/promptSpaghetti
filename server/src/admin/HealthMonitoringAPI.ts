@@ -19,6 +19,7 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
+}
 export interface HealthMonitoringResponse<T = any> {
   success: boolean;
   data?: T;
@@ -31,13 +32,16 @@ export interface HealthMonitoringResponse<T = any> {
   };
 }
 
+}
 export interface HealthCheckExecutionRequest {
   checkIds?: string[];
   suiteId?: string;
   includeDetails?: boolean;
   timeout?: number;
 }
+}
 
+}
 export interface ErrorCaptureRequest {
   error: string;
   stackTrace?: string;
@@ -49,22 +53,27 @@ export interface ErrorCaptureRequest {
     httpMethod?: string;
     httpStatus?: number;
     additionalData?: Record<string, any>;
+}
   };
   severity?: ErrorSeverity;
   tags?: string[];
 }
 
+}
 export interface HealthDashboardQuery {
   timeRange?: string;
   includeHistory?: boolean;
   groupBy?: string;
   refreshInterval?: number;
 }
+}
 
+}
 export interface ErrorReportQuery {
   timeRange: {
     start: string;
     end: string;
+}
   };
   severity?: ErrorSeverity[];
   category?: string[];
@@ -136,7 +145,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
         results = await Promise.all(
           request.body.checkIds.map(checkId => 
             healthCheckFramework.executeHealthCheck(checkId)
-          )
+
         );
       } else {
         reply.code(400).send({
@@ -176,7 +185,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
             degraded: results.filter(r => r.status === HealthStatus.DEGRADED).length,
             unhealthy: results.filter(r => r.status === HealthStatus.UNHEALTHY).length
           }
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -276,9 +285,9 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
         type: 'object',
         properties: {
           checkId: { type: 'string' }
-        },
+  }
         required: ['checkId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -301,7 +310,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
           checkId: request.params.checkId,
           history,
           totalRecords: history.length
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `history_${Date.now()}`,
@@ -343,7 +352,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
               httpStatus: { type: 'integer' },
               additionalData: { type: 'object' }
             }
-          },
+  }
           severity: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
           tags: { type: 'array', items: { type: 'string' } }
         }
@@ -375,7 +384,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
         data: {
           errorId,
           message: 'Error captured successfully'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `capture_${Date.now()}`,
@@ -405,7 +414,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
               start: { type: 'string', format: 'date-time' },
               end: { type: 'string', format: 'date-time' }
             }
-          },
+  }
           severity: { type: 'array', items: { type: 'string' } },
           category: { type: 'array', items: { type: 'string' } },
           searchText: { type: 'string' },
@@ -437,7 +446,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
           errors,
           totalCount: errors.length,
           filters: query
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `query_errors_${Date.now()}`,
@@ -514,9 +523,9 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
         type: 'object',
         properties: {
           groupId: { type: 'string' }
-        },
+  }
         required: ['groupId']
-      },
+  }
       body: {
         type: 'object',
         required: ['resolution'],
@@ -544,7 +553,7 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
           resolvedBy: request.user.userId,
           resolution: request.body.resolution,
           resolvedAt: new Date()
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `resolve_${Date.now()}`,
@@ -612,12 +621,12 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
           uptime: process.uptime(),
           memoryUsage: process.memoryUsage(),
           timestamp: new Date()
-        },
+  }
         alerts: {
           active: 0, // Would query active alerts
           critical: errorAnalytics.severityBreakdown.critical || 0,
           warnings: errorAnalytics.severityBreakdown.high || 0
-        },
+  }
         trends: {
           errorRate: errorAnalytics.trendAnalysis.errorRateTrend,
           healthScore: 95, // Would be calculated from health checks
@@ -664,14 +673,14 @@ export const healthMonitoringAPI: FastifyPluginAsync = async (fastify: FastifyIn
           errorTracking: 'operational',
           database: 'operational',
           apis: 'operational'
-        },
+  }
         features: {
           healthChecks: true,
           errorTracking: true,
           alerting: true,
           analytics: true,
           dashboards: true
-        },
+  }
         statistics: {
           registeredHealthChecks: (await healthCheckFramework.listHealthChecks()).length,
           healthCheckSuites: (await healthCheckFramework.listHealthCheckSuites()).length,

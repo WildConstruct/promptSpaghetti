@@ -56,5 +56,5 @@ export declare class ConflictResolver extends EventEmitter {
     private emitConflictResolved;
     private cleanupOldOperations;
     private generateId;
-}
+
 //# sourceMappingURL=ConflictResolver.d.ts.map

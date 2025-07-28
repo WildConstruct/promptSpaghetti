@@ -5,19 +5,19 @@ import { WeightControlSlider, WeightControlOption } from '../components/Inspecto
 
 // Mock the UI settings store
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({),
-    complexityLevel: 'advanced',
-    shouldShowTechnicalFields: () => true,
-  })
+  useUISettingsStore: () => ({,)
+  complexityLevel: 'advanced',
+  shouldShowTechnicalFields: () => true,
+}
 }));
 describe('WeightControlSlider', () => {
-  const mockOptions: WeightControlOption[] = [
+  const mockOptions: WeightControlOption = [
     { id: 'option1', text: 'First Choice', weight: 30 },
     { id: 'option2', text: 'Second Choice', weight: 50 },
     { id: 'option3', text: 'Third Choice', weight: 20 }
   ];
-  const mockOnOptionsChange = jest.fn<unknown[], unknown>();
-  const mockOnPreviewRequest = jest.fn<unknown[], unknown>();
+  const mockOnOptionsChange = jest.fn<unknown, unknown>();
+  const mockOnPreviewRequest = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -319,7 +319,7 @@ describe('WeightControlSlider', () => {
       );
       const sliders = screen.getAllByRole('slider');
       sliders.forEach(slider => {)
-        expect(slider).toBeDisabled();
+  expect(slider).toBeDisabled();
       });
       const equalButton = screen.getByText('⚖️ Equal');
       expect(equalButton).toBeDisabled();
@@ -334,8 +334,8 @@ describe('WeightControlSlider', () => {
       );
       const sliders = screen.getAllByRole('slider');
       sliders.forEach(slider => {)
-        expect(slider).toHaveStyle('opacity: 0.5');
-      });
+  expect(slider).toHaveStyle('opacity: 0.5');
+});
     });
   });
 });

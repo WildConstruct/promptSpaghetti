@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import { WeightSlider } from './WeightSlider';
 describe('WeightSlider', () => {
   test('renders with correct initial value', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { getByRole } = render()
       <WeightSlider 
         value={50} 
@@ -16,7 +16,7 @@ describe('WeightSlider', () => {
     expect(slider).toBeInTheDocument();
   });
   test('updates value when slider is moved', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { container } = render()
       <WeightSlider 
         value={25} 
@@ -31,14 +31,13 @@ describe('WeightSlider', () => {
       // Simulate click at 75% of the track width
       const rect = { left: 0, width: 100 };
       Object.defineProperty(sliderTrack, 'getBoundingClientRect', {)
-        value: () => rect,
-      });
+  value: () => rect,
+});
       fireEvent.mouseDown(sliderTrack, { clientX: 75 });
       expect(mockOnChange).toHaveBeenCalledWith(75);
-    }
   });
   test('respects min/max bounds', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { container } = render()
       <WeightSlider 
         value={5} 
@@ -51,15 +50,14 @@ describe('WeightSlider', () => {
     if (sliderTrack) {
       const rect = { left: 0, width: 100 };
       Object.defineProperty(sliderTrack, 'getBoundingClientRect', {)
-        value: () => rect,
-      });
+  value: () => rect,
+});
       // Click at 0% should result in min value (10)
       fireEvent.mouseDown(sliderTrack, { clientX: 0 });
       expect(mockOnChange).toHaveBeenCalledWith(10);
-    }
   });
   test('shows numeric input when showNumeric is true', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { container } = render()
       <WeightSlider 
         value={42} 
@@ -72,7 +70,7 @@ describe('WeightSlider', () => {
     expect(numericInput).toHaveValue(42);
   });
   test('handles keyboard navigation', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { container } = render()
       <WeightSlider 
         value={50} 
@@ -92,10 +90,9 @@ describe('WeightSlider', () => {
       expect(mockOnChange).toHaveBeenCalledWith(0);
       fireEvent.keyDown(handle, { key: 'End' });
       expect(mockOnChange).toHaveBeenCalledWith(100);
-    }
   });
   test('displays label when provided', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { getByText } = render()
       <WeightSlider 
         value={30} 
@@ -106,7 +103,7 @@ describe('WeightSlider', () => {
     expect(getByText('Test Weight')).toBeInTheDocument();
   });
   test('disables interaction when disabled prop is true', () => {
-    const mockOnChange = jest.fn<unknown[], unknown>();
+    const mockOnChange = jest.fn<unknown, unknown>();
     const { container } = render()
       <WeightSlider 
         value={30} 
@@ -118,6 +115,5 @@ describe('WeightSlider', () => {
     if (sliderTrack) {
       fireEvent.mouseDown(sliderTrack, { clientX: 50 });
       expect(mockOnChange).not.toHaveBeenCalled();
-    }
   });
 });

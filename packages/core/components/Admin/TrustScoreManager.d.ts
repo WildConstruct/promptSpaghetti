@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import type { TrustScore } from '../../types/TrustTypes';
+
 export interface UserTrustData {
     userId: string;
     userName: string;
@@ -22,7 +23,7 @@ export interface UserTrustData {
     lastActivity: Date;
     joinDate: Date;
     riskFlags: string[];
-}
+
 export interface TrustScoreAdjustment {
     userId: string;
     adjustmentType: 'manual_override' | 'penalty' | 'bonus' | 'reset';
@@ -31,10 +32,10 @@ export interface TrustScoreAdjustment {
     adminId: string;
     timestamp: Date;
     expiresAt?: Date;
-}
+
 export interface TrustScoreManagerProps {
     className?: string;
-}
+
 export declare const TrustScoreManager: React.FC<TrustScoreManagerProps>;
 export default TrustScoreManager;
 //# sourceMappingURL=TrustScoreManager.d.ts.map

@@ -23,57 +23,56 @@ describe('SecurityLogger', () => {
   let mockLockout: AccountLockout;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    const OriginalDate = Date;
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-    // Mock the Date constructor
-    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
-      if (value !== undefined) {
-        return new OriginalDate(value);
-      }
-      return mockDate;
-    });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  const OriginalDate = Date;
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+  // Mock the Date constructor
+  const mockDateConstructor = jest.fn<unknown, unknown>().mockImplementation((value?: unknown) => {,
+  if (value !== undefined) {
+  return new OriginalDate(value);
+  return mockDate;
+});
     global.Date = mockDateConstructor as any;
     global.Date.now = jest.fn(() => mockDate.getTime());
     logger = new SecurityLogger();
     mockLockout = {
-      id: 'LOCK-1234567890-ABCD1234',
-      userId: 'user123',
-      userEmail: 'test@example.com',
-      status: LockoutStatus.ACTIVE,
-      reason: LockoutReason.EXCESSIVE_FAILED_ATTEMPTS,
-      lockoutTime: mockDate,
-      expiryTime: new Date(mockDate.getTime() + 30 * 60 * 1000),
-      unlockTime: undefined,
-      failedAttempts: 5,
-      securityEvents: ['failed_login', 'suspicious_ip'],
-      metadata: {,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-        riskScore: 75,
-        threatLevel: 'medium',
-      },
-      adminActions: [],
+  id: 'LOCK-1234567890-ABCD1234',
+  userId: 'user123',
+  userEmail: 'test@example.com',
+  status: LockoutStatus.ACTIVE,
+  reason: LockoutReason.EXCESSIVE_FAILED_ATTEMPTS,
+  lockoutTime: mockDate,
+  expiryTime: new Date(mockDate.getTime() + 30 * 60 * 1000),
+  unlockTime: undefined,
+  failedAttempts: 5,
+  securityEvents: ['failed_login', 'suspicious_ip'],
+  metadata: {,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+  riskScore: 75,
+  threatLevel: 'medium',
+},
+  adminActions: [],
       notifications: [],
-      auditTrail: [],
-    };
+      auditTrail: [];
+  };
   });
   afterEach(() => {
     jest.restoreAllMocks();
   });
   describe('Account Lockout Logging', () => {
-    test('should log account lockout with proper structure', () => {
-      const context = {
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-        requestId: 'req-123',
-      };
+  test('should log account lockout with proper structure', () => {
+  const context = {
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+  requestId: 'req-123',
+};
       const logId = logger.logAccountLocked(mockLockout, context);
       expect(logId).toBeTruthy();
       expect(logId).toMatch(/^[0-9a-f-]{36}$/); // UUID format
-      const query: LogQuery = {
-        eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-      };
+      const query: LogQuery = {,
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+};
       const result = logger.queryLogs(query);
       expect(result.logs).toHaveLength(1);
       const logEntry = result.logs[0];
@@ -94,9 +93,9 @@ describe('SecurityLogger', () => {
       testCases.forEach(({ reason, expectedLevel }) => {
         const testLockout = { ...mockLockout, reason };
         const logId = logger.logAccountLocked(testLockout);
-        const query: LogQuery = {
-          eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-        };
+        const query: LogQuery = {,
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+};
         const result = logger.queryLogs(query);
         const logEntry = result.logs.find(log => ;);
           log.details.reason === reason
@@ -105,30 +104,30 @@ describe('SecurityLogger', () => {
       });
     });
     test('should include compliance frameworks based on lockout reason', () => {
-      const suspiciousLockout = {
-        ...mockLockout,
-        reason: LockoutReason.SUSPICIOUS_ACTIVITY,
-      };
+  const suspiciousLockout = {
+  ...mockLockout,
+  reason: LockoutReason.SUSPICIOUS_ACTIVITY,
+};
       logger.logAccountLocked(suspiciousLockout);
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-      });
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+});
       const logEntry = result.logs[0];
       expect(logEntry.compliance.frameworks).toContain(ComplianceFramework.GDPR);
       expect(logEntry.compliance.frameworks).toContain(ComplianceFramework.ISO_27001);
     });
   });
   describe('Account Unlock Logging', () => {
-    test('should log account unlock with admin details', () => {
-      const unlockedLockout = {
-        ...mockLockout,
-        status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
-      };
+  test('should log account unlock with admin details', () => {
+  const unlockedLockout = {
+  ...mockLockout,
+  status: LockoutStatus.UNLOCKED,
+  unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
+};
       const context = {
-        ipAddress: '10.0.0.1',
-        requestId: 'req-unlock-123',
-      };
+  ipAddress: '10.0.0.1',
+  requestId: 'req-unlock-123',
+};
       const logId = logger.logAccountUnlocked(;);
         unlockedLockout,
         UnlockMethod.ADMIN_OVERRIDE,
@@ -137,8 +136,8 @@ describe('SecurityLogger', () => {
       );
       expect(logId).toBeTruthy();
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.ACCOUNT_UNLOCKED],
-      });
+  eventTypes: [SecurityEventType.ACCOUNT_UNLOCKED],
+});
       const logEntry = result.logs[0];
       expect(logEntry.eventType).toBe(SecurityEventType.ACCOUNT_UNLOCKED);
       expect(logEntry.level).toBe(LogLevel.INFO);
@@ -147,18 +146,18 @@ describe('SecurityLogger', () => {
       expect(logEntry.details.method).toBe(UnlockMethod.ADMIN_OVERRIDE);
     });
     test('should log system unlock without admin details', () => {
-      const unlockedLockout = {
-        ...mockLockout,
-        status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 30 * 60 * 1000),
-      };
+  const unlockedLockout = {
+  ...mockLockout,
+  status: LockoutStatus.UNLOCKED,
+  unlockTime: new Date(mockDate.getTime() + 30 * 60 * 1000),
+};
       logger.logAccountUnlocked()
         unlockedLockout,
         UnlockMethod.AUTOMATIC_EXPIRY
       );
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.ACCOUNT_UNLOCKED],
-      });
+  eventTypes: [SecurityEventType.ACCOUNT_UNLOCKED],
+});
       const logEntry = result.logs[0];
       expect(logEntry.actor.type).toBe('system');
       expect(logEntry.actor.id).toBe('lockout-service');
@@ -175,8 +174,8 @@ describe('SecurityLogger', () => {
         { ipAddress: '192.168.1.100' }
       );
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.UNLOCK_ATTEMPT],
-      });
+  eventTypes: [SecurityEventType.UNLOCK_ATTEMPT],
+});
       const logEntry = result.logs[0];
       expect(logEntry.eventType).toBe(SecurityEventType.UNLOCK_ATTEMPT);
       expect(logEntry.level).toBe(LogLevel.INFO);
@@ -184,15 +183,15 @@ describe('SecurityLogger', () => {
       expect(logEntry.severity).toBe('low');
     });
     test('should log failed unlock attempt with warning level', () => {
-      logger.logUnlockAttempt()
-        'lockout-123',
-        'admin456',
-        'Insufficient permissions',
-        'failure'
-      );
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.UNLOCK_ATTEMPT],
-      });
+  logger.logUnlockAttempt()
+  'lockout-123',
+  'admin456',
+  'Insufficient permissions',
+  'failure'
+  );
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.UNLOCK_ATTEMPT],
+});
       const logEntry = result.logs[0];
       expect(logEntry.level).toBe(LogLevel.WARN);
       expect(logEntry.outcome).toBe('failure');
@@ -200,16 +199,16 @@ describe('SecurityLogger', () => {
     });
   });
   describe('Emergency Unlock Logging', () => {
-    test('should log emergency unlock with critical level', () => {
-      logger.logEmergencyUnlock()
-        'lockout-critical',
-        'emergency-admin',
-        'EMERGENCY-CODE-123456',
-        'Critical business impact - user locked out of essential systems'
-      );
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
-      });
+  test('should log emergency unlock with critical level', () => {
+  logger.logEmergencyUnlock()
+  'lockout-critical',
+  'emergency-admin',
+  'EMERGENCY-CODE-123456',
+  'Critical business impact - user locked out of essential systems'
+  );
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
+});
       const logEntry = result.logs[0];
       expect(logEntry.eventType).toBe(SecurityEventType.EMERGENCY_UNLOCK);
       expect(logEntry.level).toBe(LogLevel.CRITICAL);
@@ -218,15 +217,15 @@ describe('SecurityLogger', () => {
       expect(logEntry.details.fullEmergencyCodeHash).toBeTruthy();
     });
     test('should include multiple compliance frameworks for emergency unlock', () => {
-      logger.logEmergencyUnlock()
-        'lockout-emergency',
-        'super-admin',
-        'EMERGENCY-ABC123',
-        'System outage requiring immediate access'
-      );
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
-      });
+  logger.logEmergencyUnlock()
+  'lockout-emergency',
+  'super-admin',
+  'EMERGENCY-ABC123',
+  'System outage requiring immediate access'
+  );
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
+});
       const logEntry = result.logs[0];
       expect(logEntry.compliance.frameworks).toContain(ComplianceFramework.SOX);
       expect(logEntry.compliance.frameworks).toContain(ComplianceFramework.ISO_27001);
@@ -235,12 +234,12 @@ describe('SecurityLogger', () => {
     });
   });
   describe('Security Alert Logging', () => {
-    test('should log security alerts with appropriate severity', () => {
-      const details = {
-        source: 'intrusion_detection',
-        attackVector: 'brute_force',
-        indicators: ['multiple_failed_attempts', 'suspicious_ip']
-      };
+  test('should log security alerts with appropriate severity', () => {
+  const details = {
+  source: 'intrusion_detection',
+  attackVector: 'brute_force',
+  indicators: ['multiple_failed_attempts', 'suspicious_ip'],
+};
       logger.logSecurityAlert()
         'Multiple Failed Login Attempts Detected',
         'high',
@@ -248,8 +247,8 @@ describe('SecurityLogger', () => {
         { ipAddress: '203.0.113.1' }
       );
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.SECURITY_ALERT],
-      });
+  eventTypes: [SecurityEventType.SECURITY_ALERT],
+});
       const logEntry = result.logs[0];
       expect(logEntry.eventType).toBe(SecurityEventType.SECURITY_ALERT);
       expect(logEntry.level).toBe(LogLevel.ERROR);
@@ -265,14 +264,15 @@ describe('SecurityLogger', () => {
       ];
       severityMappings.forEach(({ severity, expectedLevel }, index) => {
         logger.logSecurityAlert()
-          `Test Alert ${index}`,}
+          `Test Alert ${index}`}
+}
           severity,
           { testIndex: index }
         );
       });
       const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.SECURITY_ALERT],
-      });
+  eventTypes: [SecurityEventType.SECURITY_ALERT],
+});
       severityMappings.forEach(({ expectedLevel }, index) => {
         const logEntry = result.logs.find(log => ;);
           log.details.testIndex === index
@@ -292,8 +292,8 @@ describe('SecurityLogger', () => {
         {
           before: { status: 'active' },
           after: { status: 'unlocked' },
-          fields: ['status'],
-        },
+          fields: ['status'];
+  }
         'User verification completed',
         { ipAddress: '10.0.0.5' }
       );
@@ -315,8 +315,8 @@ describe('SecurityLogger', () => {
         'cleanup-service',
         {
           before: { status: 'expired' },
-          fields: ['deleted'],
-        },
+          fields: ['deleted'];
+  }
         'Automatic cleanup of expired lockout'
       );
     });
@@ -329,9 +329,9 @@ describe('SecurityLogger', () => {
       logger.logSecurityAlert('Test Alert', 'medium', {});
     });
     test('should query logs by event type', () => {
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-      });
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+});
       expect(result.logs).toHaveLength(1);
       expect(result.logs[0].eventType).toBe(SecurityEventType.ACCOUNT_LOCKED);
       expect(result.total).toBe(1);
@@ -340,66 +340,64 @@ describe('SecurityLogger', () => {
       const startTime = new Date(mockDate.getTime() - 60 * 1000); // 1 minute before;
       const endTime = new Date(mockDate.getTime() + 60 * 1000);   // 1 minute after;
       const result = logger.queryLogs({)
-        startTime,
+  startTime,
         endTime
       });
       expect(result.logs.length).toBeGreaterThan(0);
       result.logs.forEach(log => {)
-        expect(log.timestamp.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
+  expect(log.timestamp.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
         expect(log.timestamp.getTime()).toBeLessThanOrEqual(endTime.getTime());
       });
     });
     test('should query logs by severity', () => {
-      const result = logger.queryLogs({)
-        severity: ['medium'],
-      });
+  const result = logger.queryLogs({)
+  severity: ['medium'],
+});
       expect(result.logs.length).toBeGreaterThan(0);
       result.logs.forEach(log => {)
-        expect(log.severity).toBe('medium');
+  expect(log.severity).toBe('medium');
       });
     });
     test('should query logs by actor', () => {
-      const result = logger.queryLogs({)
-        actors: ['admin123'],
-      });
+  const result = logger.queryLogs({)
+  actors: ['admin123'],
+});
       expect(result.logs).toHaveLength(1);
       expect(result.logs[0].actor.id).toBe('admin123');
     });
     test('should support pagination', () => {
-      const result = logger.queryLogs({)
-        limit: 2,
-        offset: 0,
-      });
+  const result = logger.queryLogs({)
+  limit: 2,
+  offset: 0,
+});
       expect(result.logs.length).toBeLessThanOrEqual(2);
       expect(result.hasMore).toBe(result.total > 2);
     });
     test('should support search functionality', () => {
-      const result = logger.queryLogs({)
-        search: 'admin123',
-      });
+  const result = logger.queryLogs({)
+  search: 'admin123',
+});
       expect(result.logs.length).toBeGreaterThan(0);
       result.logs.forEach(log => {)
-        const searchableText = `${log.message} ${log.actor.id} ${log.target?.id || ''}`.toLowerCase();}
+  const searchableText = `${log.message} ${log.actor.id} ${log.target?.id || ''}`.toLowerCase();}
         expect(searchableText).toContain('admin123');
       });
     });
     test('should sort logs correctly', () => {
-      const resultDesc = logger.queryLogs({)
-        sortBy: 'timestamp',
-        sortOrder: 'desc',
-      });
+  const resultDesc = logger.queryLogs({)
+  sortBy: 'timestamp',
+  sortOrder: 'desc',
+});
       for (let i = 1; i < resultDesc.logs.length; i++) {
-        expect(resultDesc.logs[i-1].timestamp.getTime())
-          .toBeGreaterThanOrEqual(resultDesc.logs[i].timestamp.getTime());
-      }
-      const resultAsc = logger.queryLogs({)
-        sortBy: 'timestamp',
-        sortOrder: 'asc',
-      });
+  expect(resultDesc.logs[i-1].timestamp.getTime())
+  .toBeGreaterThanOrEqual(resultDesc.logs[i].timestamp.getTime());
+  const resultAsc = logger.queryLogs({)
+  sortBy: 'timestamp',
+  sortOrder: 'asc',
+});
       for (let i = 1; i < resultAsc.logs.length; i++) {
         expect(resultAsc.logs[i-1].timestamp.getTime())
           .toBeLessThanOrEqual(resultAsc.logs[i].timestamp.getTime());
-      }
     });
   });
   describe('Security Metrics', () => {
@@ -495,26 +493,26 @@ describe('SecurityLogger', () => {
     });
   });
   describe('Data Protection and Security', () => {
-    test('should mask sensitive data appropriately', () => {
-      logger.logEmergencyUnlock()
-        'lockout-test',
-        'admin-test',
-        'EMERGENCY123456789',
-        'Test emergency unlock'
-      );
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
-      });
+  test('should mask sensitive data appropriately', () => {
+  logger.logEmergencyUnlock()
+  'lockout-test',
+  'admin-test',
+  'EMERGENCY123456789',
+  'Test emergency unlock'
+  );
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.EMERGENCY_UNLOCK],
+});
       const logEntry = result.logs[0];
       expect(logEntry.details.emergencyCode).toContain('*');
       expect(logEntry.details.emergencyCode).not.toBe('EMERGENCY123456789');
       expect(logEntry.details.fullEmergencyCodeHash).toBeTruthy();
     });
     test('should generate checksums for log integrity', () => {
-      logger.logAccountLocked(mockLockout);
-      const result = logger.queryLogs({)
-        eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-      });
+  logger.logAccountLocked(mockLockout);
+  const result = logger.queryLogs({)
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+});
       const logEntry = result.logs[0];
       expect(logEntry.metadata.checksum).toBeTruthy();
       expect(logEntry.metadata.checksum).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hex
@@ -529,8 +527,8 @@ describe('SecurityLogger', () => {
         const testLockout = { ...mockLockout, reason };
         logger.logAccountLocked(testLockout);
         const result = logger.queryLogs({)
-          eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
-        });
+  eventTypes: [SecurityEventType.ACCOUNT_LOCKED],
+});
         const logEntry = result.logs.find(log => ;);
           log.details.reason === reason
         );

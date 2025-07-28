@@ -59,6 +59,7 @@ export enum ErrorSource {
   ADMIN_OPERATION = 'admin_operation'
 }
 
+}
 export interface ErrorEvent {
   errorId: string;
   groupId: string;
@@ -75,7 +76,9 @@ export interface ErrorEvent {
   userImpact: UserImpact;
   resolution?: ErrorResolution;
 }
+}
 
+}
 export interface ErrorContext {
   userId?: string;
   sessionId?: string;
@@ -90,7 +93,9 @@ export interface ErrorContext {
   parameters?: Record<string, any>;
   additionalData?: Record<string, any>;
 }
+}
 
+}
 export interface ErrorMetadata {
   hostname: string;
   version: string;
@@ -103,7 +108,9 @@ export interface ErrorMetadata {
   tags: string[];
   customFields: Record<string, any>;
 }
+}
 
+}
 export interface UserImpact {
   impactLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
   affectedUsers: number;
@@ -112,7 +119,9 @@ export interface UserImpact {
   degradedFunctionality: string[];
   workaroundAvailable: boolean;
 }
+}
 
+}
 export interface ErrorResolution {
   resolvedBy: string;
   resolvedAt: Date;
@@ -122,7 +131,9 @@ export interface ErrorResolution {
   rootCause?: string;
   timeToResolve: number; // milliseconds
 }
+}
 
+}
 export interface ErrorGroup {
   groupId: string;
   title: string;
@@ -142,7 +153,9 @@ export interface ErrorGroup {
   relatedGroups: string[];
   suppressUntil?: Date;
 }
+}
 
+}
 export interface ErrorTrend {
   direction: 'increasing' | 'decreasing' | 'stable';
   changePercentage: number;
@@ -151,14 +164,18 @@ export interface ErrorTrend {
   peakOccurrences: Date[];
   quietPeriods: Date[];
 }
+}
 
+}
 export interface TrendDataPoint {
   timestamp: Date;
   count: number;
   uniqueUsers: number;
   severity: ErrorSeverity;
 }
+}
 
+}
 export interface ErrorAlert {
   alertId: string;
   groupId: string;
@@ -171,14 +188,18 @@ export interface ErrorAlert {
   channels: AlertChannelConfig[];
   suppressUntil?: Date;
 }
+}
 
+}
 export interface AlertThreshold {
   type: 'occurrence_count' | 'error_rate' | 'user_impact' | 'severity_level';
   value: number;
   timeWindow: number; // minutes
   comparison: 'greater_than' | 'less_than' | 'equals';
 }
+}
 
+}
 export interface AlertChannelConfig {
   type: 'email' | 'slack' | 'webhook' | 'sms' | 'pagerduty';
   target: string;
@@ -186,11 +207,14 @@ export interface AlertChannelConfig {
   enabled: boolean;
   cooldownMinutes: number;
 }
+}
 
+}
 export interface ErrorQuery {
   timeRange?: {
     start: Date;
     end: Date;
+}
   };
   severity?: ErrorSeverity[];
   category?: ErrorCategory[];
@@ -207,6 +231,7 @@ export interface ErrorQuery {
   sortOrder?: 'asc' | 'desc';
 }
 
+}
 export interface ErrorAnalytics {
   timeRange: string;
   totalErrors: number;
@@ -221,7 +246,9 @@ export interface ErrorAnalytics {
   trendAnalysis: ErrorTrendAnalysis;
   impactAnalysis: ImpactAnalysis;
 }
+}
 
+}
 export interface ErrorGroupSummary {
   groupId: string;
   title: string;
@@ -231,7 +258,9 @@ export interface ErrorGroupSummary {
   trend: 'up' | 'down' | 'stable';
   lastSeen: Date;
 }
+}
 
+}
 export interface ErrorTrendAnalysis {
   overallTrend: 'improving' | 'worsening' | 'stable';
   errorRateTrend: number; // percentage change
@@ -239,13 +268,16 @@ export interface ErrorTrendAnalysis {
   newErrorsRate: number; // errors per day
   recurringErrorsRate: number; // percentage
 }
+}
 
+}
 export interface ImpactAnalysis {
   highImpactErrors: number;
   businessCriticalErrors: number;
   userExperienceScore: number; // 0-100
   systemStabilityScore: number; // 0-100
   recommendedActions: string[];
+}
 }
 
 // ==========================================
@@ -272,6 +304,7 @@ export class ErrorTrackingService {
   // ==========================================
 
   async captureError(error: Error | string, context: Partial<ErrorContext> = {}): Promise<string> {
+
     const startTime = performance.now();
     const errorId = this.generateErrorId();
 
@@ -363,6 +396,7 @@ export class ErrorTrackingService {
     request: { url?: string; method?: string; headers?: Record<string, string> },
     context: Partial<ErrorContext> = {}
   ): Promise<string> {
+
     const enrichedContext: Partial<ErrorContext> = {
       ...context,
       httpStatus: statusCode,
@@ -380,6 +414,7 @@ export class ErrorTrackingService {
     error: Error | string,
     context: Partial<ErrorContext> = {}
   ): Promise<string> {
+
     const enrichedContext: Partial<ErrorContext> = {
       ...context,
       component: 'async_handler',
@@ -439,6 +474,7 @@ export class ErrorTrackingService {
     message: string,
     context: Partial<ErrorContext>
   ): Promise<string> {
+
     const groupId = this.generateGroupId();
     const now = new Date();
 
@@ -461,7 +497,7 @@ export class ErrorTrackingService {
         dataPoints: [],
         peakOccurrences: [],
         quietPeriods: []
-      },
+  }
       tags: this.generateTags(message, context),
       relatedGroups: [],
       suppressUntil: undefined
@@ -474,6 +510,7 @@ export class ErrorTrackingService {
   }
 
   private async updateErrorGroup(groupId: string, errorEvent: ErrorEvent): Promise<void> {
+
     const group = this.errorGroups.get(groupId);
     if (!group) return;
 
@@ -645,6 +682,7 @@ export class ErrorTrackingService {
   // ==========================================
 
   private async processAlerts(groupId: string, errorEvent: ErrorEvent): Promise<void> {
+
     const group = this.errorGroups.get(groupId);
     if (!group) return;
 
@@ -661,6 +699,7 @@ export class ErrorTrackingService {
   }
 
   private async evaluateAlertCondition(alert: ErrorAlert, group: ErrorGroup, errorEvent: ErrorEvent): Promise<boolean> {
+
     switch (alert.alertType) {
     case 'new_error':
       return group.occurrenceCount === 1;
@@ -699,6 +738,7 @@ export class ErrorTrackingService {
   }
 
   private async triggerAlert(alert: ErrorAlert, group: ErrorGroup, errorEvent: ErrorEvent): Promise<void> {
+
     alert.triggered = true;
     alert.triggeredAt = new Date();
 
@@ -743,6 +783,7 @@ export class ErrorTrackingService {
   // ==========================================
 
   async generateAnalytics(timeRange: { start: Date; end: Date }): Promise<ErrorAnalytics> {
+
     const events = Array.from(this.errorEvents.values())
       .filter(event => event.timestamp >= timeRange.start && event.timestamp <= timeRange.end);
 
@@ -895,6 +936,7 @@ export class ErrorTrackingService {
   }
 
   private async generateMetadata(context: Partial<ErrorContext>): Promise<ErrorMetadata> {
+
     const memoryUsage = process.memoryUsage();
     const cpuUsage = process.cpuUsage();
 
@@ -953,6 +995,7 @@ export class ErrorTrackingService {
   }
 
   private async updateUniqueUsersCount(group: ErrorGroup, userId: string): Promise<void> {
+
     // In production, would track unique users in database
     // For now, simplified implementation
     if (userId) {
@@ -1002,7 +1045,7 @@ export class ErrorTrackingService {
         value: 10,
         timeWindow: 60,
         comparison: 'greater_than'
-      },
+  }
       triggered: false,
       channels: [
         {
@@ -1021,11 +1064,13 @@ export class ErrorTrackingService {
   // ==========================================
 
   private async storeErrorEvent(errorEvent: ErrorEvent): Promise<void> {
+
     // In production, would store in database
     console.log(`Storing error event: ${errorEvent.errorId}`);
   }
 
   private async storeErrorGroup(errorGroup: ErrorGroup): Promise<void> {
+
     // In production, would store in database
     console.log(`Storing error group: ${errorGroup.groupId}`);
   }
@@ -1035,6 +1080,7 @@ export class ErrorTrackingService {
   // ==========================================
 
   private async sendAlert(channel: AlertChannelConfig, payload: any): Promise<void> {
+
     console.log(`Would send ${channel.type} alert to ${channel.target}:`, payload.groupTitle);
   }
 
@@ -1043,10 +1089,12 @@ export class ErrorTrackingService {
   // ==========================================
 
   async getErrorGroup(groupId: string): Promise<ErrorGroup | null> {
+
     return this.errorGroups.get(groupId) || null;
   }
 
   async queryErrors(query: ErrorQuery): Promise<ErrorEvent[]> {
+
     let events = Array.from(this.errorEvents.values());
 
     // Apply filters
@@ -1106,6 +1154,7 @@ export class ErrorTrackingService {
     resolution: string, 
     actionsTaken: string[] = []
   ): Promise<void> {
+
     const group = this.errorGroups.get(groupId);
     if (!group) throw new Error(`Error group not found: ${groupId}`);
 

@@ -16,43 +16,39 @@ import {
   ClassificationCondition
 } from '../../types/DataClassification';
 interface DataElement {
-  id: string;
+  id: string;,
   name: string;
   type: string;
   content?: string;
   metadata?: Record<string, any>;
   existingClassification?: DataClassification;
-}
-interface BulkClassificationToolsProps {
-  dataElements: DataElement[];
-  classificationRules?: ClassificationRule[];
-  onBulkClassification: (classifications: DataClassification[]) => void;
-  onValidationResults?: (results: ValidationResult[]) => void;
+  interface BulkClassificationToolsProps {
+  dataElements: DataElement;
+  classificationRules?: ClassificationRule;
+  onBulkClassification: (classifications: DataClassification) => void;
+  onValidationResults?: (results: ValidationResult) => void;
   context?: ClassificationContext;
-}
-interface ClassificationTemplate {
-  id: string;
+  interface ClassificationTemplate {
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   classification: DataClassificationLevel;
-  rationale: string;
+  rationale: string;,
   criteria: {,
-    dataTypes: string[];
-    namePatterns: string[];
-    contentPatterns: string[];
-  };
-}
+  dataTypes: string;,
+  namePatterns: string;
+  contentPatterns: string;
+};
 interface BulkOperationState {
-  selectedElements: Set<string>;
+  selectedElements: Set<string>;,
   operationType: 'manual' | 'template' | 'rules' | 'ai';
   selectedTemplate?: ClassificationTemplate;
   manualClassification?: DataClassificationLevel;
-  rationale: string;
+  rationale: string;,
   dataOwner: string;
-  processing: boolean;
+  processing: boolean;,
   results: Map<string, DataClassification | string>; // string for errors
-}
-const DEFAULT_TEMPLATES: ClassificationTemplate[] = [
+const DEFAULT_TEMPLATES: ClassificationTemplate = [
   {
     id: 'pii-template',
     name: 'Personal Information',
@@ -60,11 +56,11 @@ const DEFAULT_TEMPLATES: ClassificationTemplate[] = [
     classification: 'CONFIDENTIAL',
     rationale: 'Contains personal information requiring protection',
     criteria: {,
-      dataTypes: ['personal', 'customer', 'employee'],
+  dataTypes: ['personal', 'customer', 'employee'],
       namePatterns: ['*email*', '*phone*', '*ssn*', '*name*', '*address*'],
-      contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b']
-    }
-  },
+      contentPatterns: ['\\b\\d{3}-\\d{2}-\\d{4}\\b', '\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2
+}\\b']
+  }
   {
     id: 'financial-template',
     name: 'Financial Information',
@@ -72,38 +68,32 @@ const DEFAULT_TEMPLATES: ClassificationTemplate[] = [
     classification: 'RESTRICTED',
     rationale: 'Financial data requires highest protection level',
     criteria: {,
-      dataTypes: ['financial', 'payment', 'banking'],
+  dataTypes: ['financial', 'payment', 'banking'],
       namePatterns: ['*account*', '*card*', '*payment*', '*bank*', '*credit*'],
       contentPatterns: ['\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b']
-    }
-  },
-  {
-    id: 'public-template',
-    name: 'Public Information',
-    description: 'For publicly available information',
-    classification: 'PUBLIC',
-    rationale: 'Information intended for public consumption',
-    criteria: {,
-      dataTypes: ['public', 'marketing', 'documentation'],
-      namePatterns: ['*public*', '*marketing*', '*docs*', '*help*'],
-      contentPatterns: [],
-    }
-  },
-  {
-    id: 'internal-template',
-    name: 'Internal Business',
-    description: 'For internal business information',
-    classification: 'INTERNAL',
-    rationale: 'Internal business information for employee use',
-    criteria: {,
-      dataTypes: ['internal', 'business', 'operational'],
-      namePatterns: ['*internal*', '*business*', '*operational*', '*metrics*'],
-      contentPatterns: [],
-    }
   }
-];
-
-export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = ({)
+  {
+  id: 'public-template',
+  name: 'Public Information',
+  description: 'For publicly available information',
+  classification: 'PUBLIC',
+  rationale: 'Information intended for public consumption',
+  criteria: {,
+  dataTypes: ['public', 'marketing', 'documentation'],
+  namePatterns: ['*public*', '*marketing*', '*docs*', '*help*'],
+  contentPatterns: [],
+}
+  {
+  id: 'internal-template',
+  name: 'Internal Business',
+  description: 'For internal business information',
+  classification: 'INTERNAL',
+  rationale: 'Internal business information for employee use',
+  criteria: {,
+  dataTypes: ['internal', 'business', 'operational'],
+  namePatterns: ['*internal*', '*business*', '*operational*', '*metrics*'],
+  contentPatterns: []];
+  export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = ({,)
   dataElements,
   classificationRules = [],
   onBulkClassification,
@@ -111,14 +101,14 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
   context
 }) => {
   const [state, setState] = useState<BulkOperationState>({)
-    selectedElements: new Set(),
-    operationType: 'manual',
-    rationale: '',
-    dataOwner: context?.dataOwner || '',
-    processing: false,
-    results: new Map(),
-  });
-  const [templates] = useState<ClassificationTemplate[]>(DEFAULT_TEMPLATES);
+  selectedElements: new Set(),
+  operationType: 'manual',
+  rationale: '',
+  dataOwner: context?.dataOwner || '',
+  processing: false,
+  results: new Map(),
+});
+  const [templates] = useState<ClassificationTemplate>(DEFAULT_TEMPLATES);
   const [currentUser] = useState('current-user'); // TODO: Get from auth context
   const [showPreview, setShowPreview] = useState(false);
   // Filter and categorize data elements
@@ -129,43 +119,39 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
       if (!acc[el.type]) acc[el.type] = [];
       acc[el.type].push(el);
       return acc;
-    }, {} as Record<string, DataElement[]>);
+    }, {} as Record<string, DataElement>);
     return { unclassified, classified, byType };
   }, [dataElements]);
   // Auto-suggest classifications based on templates and rules
-  const getSuggestedClassifications = (elements: DataElement[]) => {
+  const getSuggestedClassifications = (elements: DataElement) => {
     const suggestions = new Map<string, { classification: DataClassificationLevel; confidence: number; reason: string }>();
     elements.forEach(element => {)
-      let bestMatch: { classification: DataClassificationLevel; confidence: number; reason: string } | null = null;
+  let bestMatch: { classification: DataClassificationLevel; confidence: number; reason: string } | null = null;
       // Check templates
       for (const template of templates) {
         let score = 0;
         // Check data type match
         if (template.criteria.dataTypes.includes(element.type.toLowerCase())) {
           score += 30;
-        }
         // Check name patterns
         const nameMatches = template.criteria.namePatterns.some(pattern => {)
-          const regex = new RegExp(pattern.replace('*', '.*'), 'i');
+  const regex = new RegExp(pattern.replace('*', '.*'), 'i');
           return regex.test(element.name);
         });
         if (nameMatches) score += 40;
         // Check content patterns
         if (element.content) {
           const contentMatches = template.criteria.contentPatterns.some(pattern => {)
-            const regex = new RegExp(pattern, 'i');
+  const regex = new RegExp(pattern, 'i');
             return regex.test(element.content!);
           });
           if (contentMatches) score += 30;
-        }
         if (score > 0 && (!bestMatch || score > bestMatch.confidence)) {
           bestMatch = {
             classification: template.classification,
             confidence: score,
             reason: `Matches template: ${template.name} (${score}% confidence)`}
           };
-        }
-      }
       // Check classification rules
       for (const rule of classificationRules) {
         let ruleScore = 0;
@@ -174,17 +160,13 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
           case 'FIELD_NAME':
             if (new RegExp(condition.pattern, 'i').test(element.name)) {
               ruleScore += condition.weight;
-            }
             break;
           case 'CONTENT_PATTERN':
             if (element.content && new RegExp(condition.pattern, 'i').test(element.content)) {
               ruleScore += condition.weight;
-            }
             break;
           default:
             break;
-          }
-        }
         const ruleConfidence = Math.min(100, ruleScore);
         if (ruleConfidence > (bestMatch?.confidence || 0)) {
           bestMatch = {
@@ -192,41 +174,37 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
             confidence: ruleConfidence,
             reason: `Matches rule: ${rule.name} (${ruleConfidence}% confidence)`}
           };
-        }
-      }
       if (bestMatch) {
         suggestions.set(element.id, bestMatch);
-      }
     });
     return suggestions;
   };
   const handleElementSelection = (elementId: string, selected: boolean) => {
     setState(prev => {)
-      const newSelected = new Set(prev.selectedElements);
+  const newSelected = new Set(prev.selectedElements);
       if (selected) {
         newSelected.add(elementId);
       } else {
         newSelected.delete(elementId);
-      }
       return { ...prev, selectedElements: newSelected };
     });
   };
-  const handleSelectAll = (elementIds: string[]) => {
-    setState(prev => ({)
-      ...prev,
-      selectedElements: new Set([...prev.selectedElements, ...elementIds])
-    }));
+  const handleSelectAll = (elementIds: string) => {
+  setState(prev => ({)
+  ...prev,
+  selectedElements: new Set([...prev.selectedElements, ...elementIds]),
+}));
   };
   const handleDeselectAll = () => {
     setState(prev => ({ ...prev, selectedElements: new Set() }));
   };
-  const generatePreview = (): DataClassification[] => {
+  const generatePreview = (): DataClassification => {
     const selectedElements = Array.from(state.selectedElements);
       .map(id => dataElements.find(el => el.id === id))
-      .filter(Boolean) as DataElement[];
+      .filter(Boolean) as DataElement;
     const suggestions = getSuggestedClassifications(selectedElements);
     return selectedElements.map(element => {)
-      let classification: DataClassificationLevel;
+  let classification: DataClassificationLevel;
       let rationale: string;
       switch (state.operationType) {
       case 'manual':
@@ -246,10 +224,10 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
       default:
         classification = 'INTERNAL';
         rationale = 'Default classification';
-      }
       return {
-        id: `class-${element.id}-${Date.now()}`,}
-        dataElement: element.id,
+        id: `class-${element.id}-${Date.now()}`}
+},
+  dataElement: element.id,
         classification,
         rationale,
         dataOwner: state.dataOwner,
@@ -258,38 +236,35 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
         reviewDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
         approvals: [],
         metadata: {,
-          businessJustification: `Bulk classification using ${state.operationType} method`,}
-          riskAssessment: 'Risk assessment pending individual review',
+  businessJustification: `Bulk classification using ${state.operationType} method`}
+},
+  riskAssessment: 'Risk assessment pending individual review',
           regulatoryRequirements: context?.regulatoryScope || [],
           dataLineage: [element.type],
-          relatedClassifications: [],
-        }
-      };
+          relatedClassifications: [];
+  };
     });
   };
   const handleApplyClassifications = async () => {
     setState(prev => ({ ...prev, processing: true }));
     try {
-      const classifications = generatePreview();
-      // Validate classifications
-      const validationResults: ValidationResult[] = classifications.map(classification => {)
-        const errors: string[] = [];
-        const warnings: string[] = [];
-        if (!classification.rationale || classification.rationale.length < 10) {
-          warnings.push('Rationale could be more detailed');
-        }
-        if (!classification.dataOwner) {
-          errors.push('Data owner is required');
-        }
-        if (classification.classification === 'RESTRICTED' && !classification.metadata.riskAssessment.includes('detailed')) {
-          warnings.push('Restricted data should have detailed risk assessment');
-        }
-        return {
-          valid: errors.length === 0,
-          errors,
-          warnings,
-          recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : [],
-        };
+  const classifications = generatePreview();
+  // Validate classifications
+  const validationResults: ValidationResult = classifications.map(classification => {,)
+  const errors: string = [];
+  const warnings: string = [];
+  if (!classification.rationale || classification.rationale.length < 10) {
+  warnings.push('Rationale could be more detailed');
+  if (!classification.dataOwner) {
+  errors.push('Data owner is required');
+  if (classification.classification === 'RESTRICTED' && !classification.metadata.riskAssessment.includes('detailed')) {
+  warnings.push('Restricted data should have detailed risk assessment');
+  return {
+  valid: errors.length === 0,
+  errors,
+  warnings,
+  recommendations: state.operationType === 'ai' ? ['Review AI-generated classifications manually'] : [],
+};
       });
       onValidationResults?.(validationResults);
       if (validationResults.every(result => result.valid)) {
@@ -298,20 +273,18 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
       } else {
         setState(prev => ({ ...prev, processing: false }));
         alert('Some classifications have validation errors. Please review and correct them.');
-      }
     } catch (error) {
       console.error('Error applying bulk classifications:', error);
       setState(prev => ({ ...prev, processing: false }));
       alert('Error applying classifications. Please try again.');
-    }
   };
   const suggestions = useMemo(() => {
     const selectedElements = Array.from(state.selectedElements);
       .map(id => dataElements.find(el => el.id === id))
-      .filter(Boolean) as DataElement[];
+      .filter(Boolean) as DataElement;
     return getSuggestedClassifications(selectedElements);
   }, [state.selectedElements, dataElements, templates, classificationRules]);
-  return ();
+  return;
     <div className="bulk-classification-tools bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Bulk Classification Tools</h3>
@@ -349,10 +322,10 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
               type="button"
               onClick={() => setState(prev => ({ ...prev, operationType: method.value as any }))}
               className={`p-3 text-left border-2 rounded-lg transition-colors ${
-                state.operationType === method.value
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
+  state.operationType === method.value
+  ? 'border-blue-500 bg-blue-50 text-blue-700'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
             >
               <div className="font-medium">{method.label}</div>
               <div className="text-xs text-gray-600 mt-1">{method.desc}</div>
@@ -401,10 +374,10 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                 type="button"
                 onClick={() => setState(prev => ({ ...prev, selectedTemplate: template }))}
                 className={`p-3 text-left border rounded-lg transition-colors ${
-                  state.selectedTemplate?.id === template.id
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+  state.selectedTemplate?.id === template.id
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
               >
                 <div className="flex justify-between items-center">
                   <div>
@@ -412,11 +385,11 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                     <div className="text-sm text-gray-600">{template.description}</div>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    template.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                      template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                        template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                  }`}>
+  template.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
+  template.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
+  template.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-red-100 text-red-800'
+}`}>
                     {template.classification}
                   </span>
                 </div>
@@ -466,14 +439,14 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
         </div>
         <div className="border border-gray-200 rounded-lg max-h-64 overflow-y-auto">
           {dataElements.map(element => {)
-            const isSelected = state.selectedElements.has(element.id);
+  const isSelected = state.selectedElements.has(element.id);
             const suggestion = suggestions.get(element.id);
-            return ();
+            return;
               <div
                 key={element.id}
                 className={`p-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 ${
-                  isSelected ? 'bg-blue-50' : ''
-                }`}
+  isSelected ? 'bg-blue-50' : '',
+}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -498,11 +471,11 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                   <div className="flex items-center space-x-2">
                     {element.existingClassification && ()
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        element.existingClassification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                          element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                            element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                      }`}>
+  element.existingClassification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
+  element.existingClassification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
+  element.existingClassification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-red-100 text-red-800'
+}`}>
                         {element.existingClassification.classification}
                       </span>
                     )}
@@ -552,11 +525,11 @@ export const BulkClassificationTools: React.FC<BulkClassificationToolsProps> = (
                     <div className="text-xs text-gray-600">{classification.rationale}</div>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    classification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :
-                      classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :
-                        classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                  }`}>
+  classification.classification === 'PUBLIC' ? 'bg-green-100 text-green-800' :,
+  classification.classification === 'INTERNAL' ? 'bg-blue-100 text-blue-800' :,
+  classification.classification === 'CONFIDENTIAL' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-red-100 text-red-800'
+}`}>
                     {classification.classification}
                   </span>
                 </div>

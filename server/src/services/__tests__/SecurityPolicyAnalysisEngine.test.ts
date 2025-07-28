@@ -45,14 +45,14 @@ describe('SecurityPolicyAnalysisEngine', () => {
         impact_simulation_enabled: true,
         compliance_checking_enabled: true,
         historical_analysis_enabled: true
-      },
+  }
       validation_framework: {
         enabled: true,
         automated_validation: true,
         validation_rules: ['no_wildcard_permissions', 'require_mfa_for_admin'],
         compliance_standards: ['SOX', 'PCI_DSS'],
         risk_assessment_enabled: true
-      },
+  }
       policy_categories: {
         access_control: true,
         authentication: true,
@@ -61,7 +61,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         network_security: true,
         compliance: true,
         incident_response: true
-      },
+  }
       impact_assessment: {
         user_impact_analysis: true,
         system_impact_analysis: true,
@@ -69,7 +69,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         security_impact_analysis: true,
         compliance_impact_analysis: true,
         cost_impact_analysis: true
-      },
+  }
       approval_workflow: {
         enabled: true,
         require_approval_for: ['high', 'critical'],
@@ -107,7 +107,7 @@ describe('SecurityPolicyAnalysisEngine', () => {
         status: 'draft',
         compliance_mappings: ['SOX', 'PCI_DSS'],
         risk_level: 'medium'
-      },
+  }
       enforcement: {
         enforcement_mode: 'enforcing',
         enforcement_scope: ['admin_panel', 'api_access'],

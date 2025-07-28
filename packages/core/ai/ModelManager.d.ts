@@ -6,20 +6,23 @@
  */
 import { BaseAIModel, AIRequest, AIResponse, HealthStatus, CostEstimate } from './BaseAIModel';
 import { ModelRegistration, FactoryConfig } from './AIModelFactory';
+
 export interface CacheConfig {
     maxSize: number;
     ttl: number;
     evictionPolicy: 'lru' | 'lfu' | 'ttl' | 'hybrid';
     enablePersistence?: boolean;
     persistencePath?: string;
-}
+
+
 export interface LoadBalancingConfig {
     strategy: 'round-robin' | 'least-connections' | 'response-time' | 'cost-aware' | 'capability-based';
     healthCheckInterval: number;
     maxConcurrentRequests: number;
     enableFailover: boolean;
     failoverThreshold: number;
-}
+
+
 export interface ModelPool {
     id: string;
     models: BaseAIModel[];
@@ -27,7 +30,8 @@ export interface ModelPool {
     healthMonitor: HealthMonitor;
     currentLoad: number;
     lastUsed: Date;
-}
+
+
 export interface ModelPerformanceMetrics {
     modelId: string;
     averageLatency: number;
@@ -37,13 +41,14 @@ export interface ModelPerformanceMetrics {
     totalRequests: number;
     costPerRequest: number;
     lastUpdated: Date;
-}
+
+
 export interface WarmupStrategy {
     enabled: boolean;
     concurrency: number;
     sampleRequests: unknown[];
     timeout: number;
-}
+
 export declare class ModelCache {
     private cache;
     private config;
@@ -63,7 +68,7 @@ export declare class ModelCache {
     private _startEvictionTimer;
     private _cleanupExpiredEntries;
     destroy(): void;
-}
+
 export declare class LoadBalancer {
     private strategy;
     private models;
@@ -80,7 +85,7 @@ export declare class LoadBalancer {
     private _selectByResponseTime;
     private _selectByCost;
     private _selectByCapability;
-}
+
 export declare class HealthMonitor {
     private healthChecks;
     private checkInterval;
@@ -93,7 +98,7 @@ export declare class HealthMonitor {
     getHealth(modelId: string): HealthStatus | null;
     getAllHealth(): Map<string, HealthStatus>;
     private _performHealthChecks;
-}
+
 export declare class ModelManager {
     private factory;
     private cache;
@@ -114,6 +119,6 @@ export declare class ModelManager {
     destroyPool(poolId: string): Promise<void>;
     destroy(): Promise<void>;
     private _warmupModels;
-}
+
 export default ModelManager;
 //# sourceMappingURL=ModelManager.d.ts.map

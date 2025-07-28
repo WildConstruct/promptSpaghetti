@@ -4,7 +4,7 @@
  *
  * Flexible adapter for custom AI model endpoints following REST conventions
  */
-import { BaseAIModel, ModelMetadata, ModelCapabilities, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel, ModelMetadata, ModelCapabilities } from '../BaseAIModel';
 export interface HTTPConfig {
     baseURL: string;
     apiKey?: string;
@@ -44,22 +44,15 @@ export declare class GenericHTTPAdapter extends BaseAIModel {
     private config;
     private requestMapping;
     private defaultEndpoint;
-    constructor(id: string, config: HTTPConfig, metadata: Partial<ModelMetadata>, capabilities: Partial<ModelCapabilities>, requestMapping: HTTPRequestMapping, defaultEndpoint?: string);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: HTTPRequestOptions): Promise<unknown>;
-    cleanup(): Promise<void>;
-    estimate(input: any, options?: HTTPRequestOptions): Promise<CostEstimate>;
-    updateRequestMapping(mapping: Partial<HTTPRequestMapping>): void;
-    updateHTTPConfig(config: Partial<HTTPConfig>): void;
-    private _testConnection;
-    private _makeRequest;
-    private _buildHeaders;
-    private _buildRequestPayload;
-    private _extractContent;
-    private _extractUsage;
-    private _setValueByPath;
-    private _getValueByPath;
-    protected _performHealthCheck(): Promise<void>;
+    constructor();
+    id: string;
+    config: HTTPConfig;
+    metadata: Partial<ModelMetadata>;
+    capabilities: Partial<ModelCapabilities>;
+    requestMapping: HTTPRequestMapping;
+    defaultEndpoint: string;
+    const fullMetadata: ModelMetadata;
+    const fullCapabilities: ModelCapabilities;
+    super(id: any, fullMetadata: any, fullCapabilities: any): any;
 }
-export default GenericHTTPAdapter;
 //# sourceMappingURL=GenericHTTPAdapter.d.ts.map

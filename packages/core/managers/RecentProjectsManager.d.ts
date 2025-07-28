@@ -3,6 +3,7 @@
  * Manages localStorage-based storage for up to 5 recent projects with metadata
  */
 import type { ProjectMetadata } from '../schemas/psgSchema';
+
 export interface RecentProjectEntry {
     id: string;
     name: string;
@@ -11,11 +12,12 @@ export interface RecentProjectEntry {
     thumbnail?: string;
     metadata: ProjectMetadata;
     fileSize?: number;
-}
+
+
 export interface RecentProjectsData {
     projects: RecentProjectEntry[];
     version: string;
-}
+
 export declare class RecentProjectsManager {
     private static readonly STORAGE_KEY;
     private static readonly MAX_RECENT_PROJECTS;
@@ -66,5 +68,5 @@ export declare class RecentProjectsManager {
     private static getDefaultThumbnail;
     private static formatDate;
     private static formatFileSize;
-}
+
 //# sourceMappingURL=RecentProjectsManager.d.ts.map

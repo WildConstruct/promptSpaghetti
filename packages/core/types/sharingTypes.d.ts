@@ -2522,6 +2522,7 @@ export declare export declare export declare declare const ShareableResourceType
 declare const ShareTargetSchema: z.ZodEnum<["public", "workspace", "organization", "private", "unlisted"]>;
 declare const ShareFormatSchema: z.ZodEnum<["link", "embed", "export", "clone"]>;
 declare const SocialPlatformSchema: z.ZodEnum<["twitter", "linkedin", "discord", "slack", "teams", "email", "github"]>;
+
 export interface ShareSystemConfig {
     enabledPlatforms: SocialPlatform[];
     defaultPermissions: SharePermission;
@@ -2539,6 +2540,6 @@ export interface ShareSystemConfig {
             height: number;
         };
     };
-}
+
 export { SharePermissionSchema, ShareConfigSchema, ShareLinkSchema, ShareAnalyticsEventSchema, ShareMetricsSchema, SocialIntegrationSchema, ShareCollectionSchema, CreateShareRequestSchema, ShareResponseSchema, ShareableResourceTypeSchema, ShareTargetSchema, ShareFormatSchema, SocialPlatformSchema };
 //# sourceMappingURL=sharingTypes.d.ts.map

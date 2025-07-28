@@ -1794,6 +1794,6 @@ export declare export declare export declare export interface SentimentSystemCon
         processingIntervalMs: number;
         retryAttempts: number;
     };
-}
+
 export { SentimentAnalysisSchema, SentimentAnalyticsSchema, SentimentAnalysisConfigSchema, AnalyzeSentimentRequestSchema, SentimentAnalysisResponseSchema };
 //# sourceMappingURL=SentimentAnalysisTypes.d.ts.map

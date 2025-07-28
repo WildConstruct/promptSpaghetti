@@ -4,118 +4,107 @@
 import { validateFormat } from '../../serialization/validator';
 
 export interface OpenAIAgentConfig {
-  apiKey: string;
+  apiKey: string;,
   model: string;
-  temperature: number;
+  temperature: number;,
   maxTokens: number;
   seed?: number;
-  useJsonMode: boolean;
+  useJsonMode: boolean;,
   maxRetries: number;
   retryTemperatureReduction: number;
 }
-
 export interface GraphGenerationRequest {
-  purpose: string;
+  purpose: string;,
   complexity: 'simple' | 'moderate' | 'complex';
-  nodeCount: number;
-  nodeTypes: string[];
-  specificRequirements?: string[];
-  focusAreas?: string[];
+  nodeCount: number;,
+  nodeTypes: string;
+  specificRequirements?: string;
+  focusAreas?: string;
   style?: 'creative' | 'logical' | 'balanced';
   domain?: string;
 }
-
 export interface GenerationResult {
   success: boolean;
   graph?: string;
-  errors?: string[];
-  warnings?: string[];
-  attempts: number;
+  errors?: string;
+  warnings?: string;
+  attempts: number;,
   metadata: {,
-    model: string;
-    temperature: number;
-    tokenCount: number;
-    generationTime: number;
-  };
+  model: string;,
+  temperature: number;
+  tokenCount: number;,
+  generationTime: number;
+};
 }
-
 export class OpenAIGraphAgent {
   private config: OpenAIAgentConfig;
   private baseSystemPrompt: string;
-  constructor(config: OpenAIAgentConfig) {
-    this.config = config;
-    this.baseSystemPrompt = this.buildSystemPrompt();
-  }
+  constructor(config: OpenAIAgentConfig) {,
+  this.config = config;
+  this.baseSystemPrompt = this.buildSystemPrompt();
   /**
-   * Generate a graph based on the request parameters
-   */
-  async generateGraph(request: GraphGenerationRequest): Promise<GenerationResult> {
-    const startTime = Date.now();
-    let attempts = 0;
-    let currentTemperature = this.config.temperature;
-    while (attempts < this.config.maxRetries) {
-      attempts++;
-      try {
-        const userPrompt = this.buildUserPrompt(request);
-        const response = await this.callOpenAI(userPrompt, currentTemperature);
-        if (response.success && response.content) {
-          // Extract graph content from response
-          const graphContent = this.extractGraphContent(response.content);
-          // Validate the generated graph
-          const validation = validateFormat(graphContent);
-          if (validation.isValid) {
-            return {
-              success: true,
-              graph: graphContent,
-              warnings: validation.warnings.map(w => w.message),
-              attempts,
-              metadata: {,
-                model: this.config.model,
-                temperature: currentTemperature,
-                tokenCount: response.tokenCount || 0,
-                generationTime: Date.now() - startTime,
-              }
-            };
+  * Generate a graph based on the request parameters
+  */
+  async generateGraph(request: GraphGenerationRequest): Promise<GenerationResult> {,
+  const startTime = Date.now();
+  let attempts = 0;
+  let currentTemperature = this.config.temperature;
+  while (attempts < this.config.maxRetries) {
+  attempts++;
+  try {
+  const userPrompt = this.buildUserPrompt(request);
+  const response = await this.callOpenAI(userPrompt, currentTemperature);
+  if (response.success && response.content) {
+  // Extract graph content from response
+  const graphContent = this.extractGraphContent(response.content);
+  // Validate the generated graph
+  const validation = validateFormat(graphContent);
+  if (validation.isValid) {
+  return {
+  success: true,
+  graph: graphContent,
+  warnings: validation.warnings.map(w => w.message),
+  attempts,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: response.tokenCount || 0,
+  generationTime: Date.now() - startTime,
+};
           } else {
             // Validation failed - try again with corrections
             console.log(`Attempt ${attempts} failed validation:`, validation.errors);}
             if (attempts === this.config.maxRetries) {
-              return {
-                success: false,
-                errors: validation.errors.map(e => e.message),
-                attempts,
-                metadata: {,
-                  model: this.config.model,
-                  temperature: currentTemperature,
-                  tokenCount: response.tokenCount || 0,
-                  generationTime: Date.now() - startTime,
-                }
-              };
-            }
+  return {
+  success: false,
+  errors: validation.errors.map(e => e.message),
+  attempts,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: response.tokenCount || 0,
+  generationTime: Date.now() - startTime,
+};
             // Reduce temperature for next attempt
             currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
-          }
         } else {
-          console.log(`Attempt ${attempts} failed:`, response.error);}
-        }
+          console.log(`Attempt ${attempts},)}
+  failed:`, response.error);}
       } catch (error) {
-        console.error(`Attempt ${attempts} error:`, error);}
-      }
+        console.error(`Attempt ${attempts},)}
+  error:`, error);}
       // Reduce temperature for retry
       currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
-    }
     return {
-      success: false,
-      errors: ['Maximum retry attempts exceeded'],
-      attempts,
-      metadata: {,
-        model: this.config.model,
-        temperature: currentTemperature,
-        tokenCount: 0,
-        generationTime: Date.now() - startTime,
-      }
-    };
-  }
+  success: false,
+  errors: ['Maximum retry attempts exceeded'],
+  attempts,
+  metadata: {,
+  model: this.config.model,
+  temperature: currentTemperature,
+  tokenCount: 0,
+  generationTime: Date.now() - startTime,
+};
   /**
    * Build the system prompt for OpenAI
    */
@@ -123,8 +112,8 @@ export class OpenAIGraphAgent {
     return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs in a specific YAML-like format.
 ## FORMAT SPECIFICATION
 Output must follow this exact format:
-\`\`\`
-version: 1.0.0,
+\`\`\`,
+  version: 1.0.0,
 metadata:
   name: "Graph Name",
   description: "Brief description",
@@ -148,10 +137,10 @@ source -> target
     type: WeightedChoice,
     props:
       choices:
-        - value: "Option A"
-          weight: 0.6,
-        - value: "Option B"
-          weight: 0.4,
+        - value: "Option A",
+  weight: 0.6,
+        - value: "Option B",
+  weight: 0.4,
   \`\`\`
 - **Concat**: Combines multiple inputs
   \`\`\`yaml
@@ -202,16 +191,15 @@ Before outputting, mentally check:
 - Required properties present
 - Proper YAML syntax
 Generate creative, functional graphs that solve real problems.`;
-  }
   /**
    * Build user prompt based on request
    */
   private buildUserPrompt(request: GraphGenerationRequest): string {
-    const complexityGuide = {
-      simple: '3-8 nodes, straightforward logic, single output path',
-      moderate: '8-20 nodes, some branching, multiple features',
-      complex: '20-50 nodes, advanced logic, sophisticated workflows'
-    };
+  const complexityGuide = {
+  simple: '3-8 nodes, straightforward logic, single output path',
+  moderate: '8-20 nodes, some branching, multiple features',
+  complex: '20-50 nodes, advanced logic, sophisticated workflows',
+};
     const nodeTypeGuide = request.nodeTypes.length > 0 ;
       ? `Focus on these node types: ${request.nodeTypes.join(', ')}`}
       : 'Use appropriate node types for the task';
@@ -221,24 +209,23 @@ Generate creative, functional graphs that solve real problems.`;
     const focus = request.focusAreas?.length;
       ? `\nFocus areas: ${request.focusAreas.join(', ')}`}
       : '';
-    return `Generate a ${request.complexity} Prompt Spaghetti graph for: ${request.purpose}
-Complexity: ${complexityGuide[request.complexity]}
+    return `Generate a ${request.complexity} Prompt Spaghetti graph for: ${request.purpose},}
+  Complexity: ${complexityGuide[request.complexity]}
 Target nodes: ~${request.nodeCount} nodes}
-${nodeTypeGuide}${requirements}${focus}
-Style: ${request.style || 'balanced'} approach}
+${nodeTypeGuide}${requirements}${focus},}
+  Style: ${request.style || 'balanced'} approach}
 ${request.domain ? `Domain: ${request.domain}` : ''}
 Create a complete, valid graph that follows the format specification exactly. Be creative but ensure functionality.
 OUTPUT THE COMPLETE GRAPH:`;
-  }
   /**
    * Call OpenAI API with error handling
    */
-  private async callOpenAI(userPrompt: string, temperature: number): Promise<{
-    success: boolean;
-    content?: string;
-    error?: string;
-    tokenCount?: number;
-  }> {
+  private async callOpenAI(userPrompt: string, temperature: number): Promise<{,
+  success: boolean;
+  content?: string;
+  error?: string;
+  tokenCount?: number;
+}> {
     try {
       // Mock OpenAI API call for now - replace with actual API call
       // const response = await openai.chat.completions.create({
@@ -255,17 +242,15 @@ OUTPUT THE COMPLETE GRAPH:`;
       // Mock response for development
       const mockResponse = this.generateMockResponse(userPrompt);
       return {
-        success: true,
-        content: mockResponse,
-        tokenCount: mockResponse.length / 4 // Rough token estimate,
-      };
+  success: true,
+  content: mockResponse,
+  tokenCount: mockResponse.length / 4 // Rough token estimate,
+};
     } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      };
-    }
-  }
+  return {
+  success: false,
+  error: error instanceof Error ? error.message : 'Unknown error',
+};
   /**
    * Extract graph content from response
    */
@@ -274,21 +259,18 @@ OUTPUT THE COMPLETE GRAPH:`;
     const codeBlockMatch = response.match(/```(?:yaml|yml)?\n?([\s\S]*?)\n?```/);
     if (codeBlockMatch) {
       return codeBlockMatch[1].trim();
-    }
     // Look for version: line to start of ---END---
     const graphMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
     if (graphMatch) {
       return graphMatch[0].trim();
-    }
     // Return as-is if no code blocks found
     return response.trim();
-  }
   /**
    * Generate mock response for development/testing
    */
   private generateMockResponse(userPrompt: string): string {
-    return `version: 1.0.0
-metadata:
+    return `version: 1.0.0,
+  metadata:
   name: "Sample Generated Graph",
   description: "Mock response for development",
   author: "llm-agent",
@@ -298,12 +280,12 @@ greeting_choice:
   type: WeightedChoice,
   props:
     choices:
-      - value: "Hello"
-        weight: 0.5,
-      - value: "Hi there"
-        weight: 0.3,
-      - value: "Greetings"
-        weight: 0.2,
+      - value: "Hello",
+  weight: 0.5,
+      - value: "Hi there",
+  weight: 0.3,
+      - value: "Greetings",
+  weight: 0.2,
 user_name:
   type: GetVariable,
   props:
@@ -319,27 +301,24 @@ greeting_choice -> greeting_text
 user_name -> greeting_text
 greeting_text -> final_output
 ---END---`;
-  }
-}
 /**
  * Default configuration for OpenAI agent
  */
-export const defaultOpenAIConfig: OpenAIAgentConfig = {
+export const defaultOpenAIConfig: OpenAIAgentConfig = {,
   apiKey: process.env.OPENAI_API_KEY || '',
   model: 'gpt-4',
   temperature: 0.7,
   maxTokens: 2000,
-  useJsonMode: false, // Set to true when using supported models
+  useJsonMode: false, // Set to true when using supported models,
   maxRetries: 3,
   retryTemperatureReduction: 0.2,
 };
 /**
  * Utility function to create and use OpenAI agent
  */
-export async function generateGraphWithOpenAI()
-  request: GraphGenerationRequest,
-  config: Partial<OpenAIAgentConfig> = {}
-): Promise<GenerationResult> {
+export async function generateGraphWithOpenAI(()
+    request: GraphGenerationRequest,
+    config: Partial<OpenAIAgentConfig> = {}
+  ): Promise<GenerationResult> {
   const agent = new OpenAIGraphAgent({ ...defaultOpenAIConfig, ...config });
   return agent.generateGraph(request);
-}

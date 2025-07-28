@@ -12,6 +12,7 @@ class MockDatabaseService {
   };
 
   async query(sql: string, params: any[] = []): Promise<{ rows: any[] }> {
+
     // Mock database operations for testing
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
@@ -77,10 +78,12 @@ class MockRedisService {
   private cache: Map<string, string> = new Map();
 
   async setex(key: string, expiry: number, value: string): Promise<void> {
+
     this.cache.set(key, value);
   }
 
   async get(key: string): Promise<string | null> {
+
     return this.cache.get(key) || null;
   }
 
@@ -512,7 +515,7 @@ describe('GeolocationService', () => {
           status: 'success',
           country: 'United States',
           countryCode: 'US'
-        })
+  }
       });
 
       // Valid IPv4

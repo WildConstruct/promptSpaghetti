@@ -14,7 +14,7 @@ export interface AnalyticsPerformanceProfile {
     analytics_type: 'threat_detection' | 'compliance_monitoring' | 'incident_response' | 'behavioral_analysis' | 'data_correlation' | 'real_time_streaming';
     configuration: {
         monitoring_scope: MonitoringScope;
-        performance_targets: PerformanceTarget[];
+        performance_targets: PerformanceTarget;
         sampling_rate: number;
         baseline_collection_period_hours: number;
         anomaly_detection_enabled: boolean;
@@ -26,7 +26,7 @@ export interface AnalyticsPerformanceProfile {
         disk_io_monitoring: boolean;
         network_monitoring: boolean;
         gpu_monitoring: boolean;
-        custom_resource_monitoring: CustomResourceConfig[];
+        custom_resource_monitoring: CustomResourceConfig;
     };
     performance_dimensions: {
         throughput_tracking: ThroughputConfig;
@@ -51,22 +51,22 @@ export interface AnalyticsPerformanceProfile {
     enabled: boolean;
 }
 export interface MonitoringScope {
-    components: string[];
-    operations: string[];
-    data_sources: string[];
-    geographic_regions: string[];
-    time_windows: TimeWindow[];
+    components: string;
+    operations: string;
+    data_sources: string;
+    geographic_regions: string;
+    time_windows: TimeWindow;
     exclusions: {
-        components: string[];
-        operations: string[];
-        time_periods: string[];
+        components: string;
+        operations: string;
+        time_periods: string;
     };
 }
 export interface TimeWindow {
     name: string;
     start_hour: number;
     end_hour: number;
-    days_of_week: number[];
+    days_of_week: number;
     timezone: string;
     performance_expectations: {
         expected_load_multiplier: number;
@@ -89,7 +89,7 @@ export interface PerformanceTarget {
     tolerance_percentage: number;
     business_impact: {
         impact_level: 'low' | 'medium' | 'high' | 'critical';
-        affected_processes: string[];
+        affected_processes: string;
         cost_per_violation: number;
         sla_requirement: boolean;
     };
@@ -153,7 +153,7 @@ export interface LatencyConfig {
     };
     percentile_tracking: {
         enabled: boolean;
-        percentiles: number[];
+        percentiles: number;
         window_size_minutes: number;
     };
 }
@@ -198,7 +198,7 @@ export interface AvailabilityConfig {
     };
     availability_requirements: {
         sla_level: number;
-        maintenance_windows: MaintenanceWindow[];
+        maintenance_windows: MaintenanceWindow;
         disaster_recovery_rto_minutes: number;
         disaster_recovery_rpo_minutes: number;
     };
@@ -230,7 +230,7 @@ export interface MaintenanceWindow {
     name: string;
     start_time: string;
     end_time: string;
-    days_of_week: number[];
+    days_of_week: number;
     timezone: string;
     impact_on_sla: boolean;
 }
@@ -315,16 +315,16 @@ export interface PerformanceAnomaly {
         trend_direction: 'increasing' | 'decreasing' | 'oscillating';
     };
     impact: {
-        affected_components: string[];
-        affected_operations: string[];
+        affected_components: string;
+        affected_operations: string;
         business_impact_level: 'low' | 'medium' | 'high' | 'critical';
         estimated_cost_impact: number;
         user_impact_description: string;
     };
     root_cause: {
-        suspected_causes: string[];
-        contributing_factors: string[];
-        correlation_analysis: CorrelationAnalysis[];
+        suspected_causes: string;
+        contributing_factors: string;
+        correlation_analysis: CorrelationAnalysis;
         confidence_score: number;
     };
     resolution: {
@@ -336,7 +336,7 @@ export interface PerformanceAnomaly {
         resolved_at?: number;
         resolution_method: string;
         resolution_notes?: string;
-        prevention_measures?: string[];
+        prevention_measures?: string;
     };
 }
 export interface CorrelationAnalysis {
@@ -364,16 +364,16 @@ export interface PerformanceOptimizationRecommendation {
         implementation_risk: 'low' | 'medium' | 'high';
     };
     implementation: {
-        required_changes: string[];
+        required_changes: string;
         configuration_parameters: Record<string, any>;
-        infrastructure_requirements: string[];
-        testing_recommendations: string[];
+        infrastructure_requirements: string;
+        testing_recommendations: string;
         rollback_strategy: string;
         estimated_implementation_hours: number;
     };
     success_criteria: {
         performance_metrics: Record<string, number>;
-        validation_methods: string[];
+        validation_methods: string;
         measurement_period_days: number;
         success_threshold_percent: number;
     };
@@ -403,7 +403,7 @@ export interface PerformanceBenchmark {
         resource_limits: Record<string, number>;
         quality_thresholds: Record<string, number>;
     };
-    executions: BenchmarkExecution[];
+    executions: BenchmarkExecution;
     created_by: string;
     created_at: number;
     last_executed: number;
@@ -441,11 +441,11 @@ export interface BenchmarkExecution {
     executed_by: string;
     execution_duration_minutes: number;
     results: {
-        performance_metrics: PerformanceMetrics[];
+        performance_metrics: PerformanceMetrics;
         summary_statistics: Record<string, number>;
         resource_utilization: Record<string, number>;
         quality_metrics: Record<string, number>;
-        bottlenecks_identified: string[];
+        bottlenecks_identified: string;
     };
     comparison: {
         performance_change_percent: Record<string, number>;
@@ -454,7 +454,7 @@ export interface BenchmarkExecution {
         overall_score_change: number;
     };
     status: 'completed' | 'failed' | 'partial' | 'cancelled';
-    issues_encountered: string[];
+    issues_encountered: string;
     notes: string;
 }
 export interface PerformanceReport {
@@ -469,8 +469,8 @@ export interface PerformanceReport {
     executive_summary: {
         overall_performance_score: number;
         performance_trend: 'improving' | 'stable' | 'degrading';
-        key_achievements: string[];
-        critical_issues: string[];
+        key_achievements: string;
+        critical_issues: string;
         recommendations_count: number;
     };
     performance_analysis: {
@@ -498,9 +498,9 @@ export interface PerformanceReport {
         benchmark_success_rate_percent: number;
     };
     recommendations: {
-        high_priority: PerformanceOptimizationRecommendation[];
-        medium_priority: PerformanceOptimizationRecommendation[];
-        low_priority: PerformanceOptimizationRecommendation[];
+        high_priority: PerformanceOptimizationRecommendation;
+        medium_priority: PerformanceOptimizationRecommendation;
+        low_priority: PerformanceOptimizationRecommendation;
     };
     cost_analysis: {
         current_operational_cost: number;
@@ -513,7 +513,7 @@ export interface ThroughputAnalysis {
     average_throughput: number;
     peak_throughput: number;
     throughput_trend: 'increasing' | 'stable' | 'decreasing';
-    bottlenecks_identified: string[];
+    bottlenecks_identified: string;
     capacity_utilization_percent: number;
     scalability_headroom_percent: number;
 }
@@ -533,15 +533,15 @@ export interface ResourceAnalysis {
     average_memory_utilization_percent: number;
     peak_resource_usage: Record<string, number>;
     resource_efficiency_score: number;
-    waste_identification: string[];
-    optimization_opportunities: string[];
+    waste_identification: string;
+    optimization_opportunities: string;
 }
 export interface AccuracyAnalysis {
     average_accuracy_percent: number;
     accuracy_trend: 'improving' | 'stable' | 'degrading';
     false_positive_rate_percent: number;
     false_negative_rate_percent: number;
-    accuracy_issues_identified: string[];
+    accuracy_issues_identified: string;
     model_performance_comparison: Array<{
         model: string;
         accuracy: number;
@@ -553,15 +553,15 @@ export interface AvailabilityAnalysis {
     downtime_incidents: number;
     average_recovery_time_minutes: number;
     sla_compliance_percentage: number;
-    availability_risks_identified: string[];
+    availability_risks_identified: string;
 }
 export interface ScalabilityAnalysis {
     current_scale_factor: number;
     maximum_tested_scale: number;
     scaling_efficiency_score: number;
-    scalability_bottlenecks: string[];
+    scalability_bottlenecks: string;
     auto_scaling_effectiveness: number;
-    capacity_planning_recommendations: string[];
+    capacity_planning_recommendations: string;
 }
 export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     private profiles;
@@ -574,84 +574,8 @@ export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     private baselines;
     constructor();
     private initializeGlobalMonitoring;
-    createPerformanceProfile(profile: Omit<AnalyticsPerformanceProfile, 'id' | 'created_at' | 'current_state'>): Promise<string>;
-    updatePerformanceProfile(profileId: string, updates: Partial<AnalyticsPerformanceProfile>): Promise<void>;
-    deletePerformanceProfile(profileId: string): Promise<void>;
-    private startProfileMonitoring;
-    private stopProfileMonitoring;
-    private collectPerformanceMetrics;
-    private collectSystemResourceMetrics;
-    private collectThroughputMetrics;
-    private collectLatencyMetrics;
-    private collectAccuracyMetrics;
-    private collectAvailabilityMetrics;
-    private collectScalabilityMetrics;
-    private collectCustomMetrics;
-    private collectCustomResourceValue;
-    private collectQualityIndicators;
-    private getAnalyticsTypeMultiplier;
-    private getComplexityMultiplier;
-    private getBaseAccuracy;
-    private updatePerformanceScores;
-    private calculateThroughputScore;
     private calculateLatencyScore;
     private calculateResourceEfficiencyScore;
     private calculateAccuracyScore;
-    private calculateAvailabilityScore;
-    private calculateTrendDirection;
-    private checkPerformanceTargets;
-    private extractMetricValue;
-    private checkTargetViolation;
-    private generatePerformanceAlert;
-    private startBaselineCollection;
-    private finalizeBaseline;
-    private calculateBaselineStatistics;
-    private getNestedValue;
-    private calculateStandardDeviation;
-    private performAnomalyDetection;
-    private detectAnomalies;
-    private checkForAnomalies;
-    private detectStatisticalAnomaly;
-    private generateAnomalyRecord;
-    private mapAnomalyType;
-    private assessBusinessImpact;
-    private estimateCostImpact;
-    private generateUserImpactDescription;
-    private generateSuspectedCauses;
-    private generateContributingFactors;
-    private performGlobalPerformanceAnalysis;
-    private generateOptimizationRecommendations;
-    private analyzeOptimizationOpportunities;
-    private generateGlobalOptimizationRecommendations;
-    getPerformanceProfile(profileId: string): AnalyticsPerformanceProfile | undefined;
-    getPerformanceProfiles(analyticsType?: AnalyticsPerformanceProfile['analytics_type']): AnalyticsPerformanceProfile[];
-    getPerformanceMetrics(profileId: string, hours?: number): PerformanceMetrics[];
-    getCurrentPerformanceState(profileId: string): AnalyticsPerformanceProfile['current_state'] | undefined;
-    getActiveAnomalies(profileId?: string, severity?: PerformanceAnomaly['severity']): PerformanceAnomaly[];
-    getOptimizationRecommendations(profileId: string, status?: PerformanceOptimizationRecommendation['status']): PerformanceOptimizationRecommendation[];
-    acknowledgeAnomaly(anomalyId: string, acknowledgedBy: string): Promise<void>;
-    resolveAnomaly(anomalyId: string, resolvedBy: string, resolutionMethod: string, notes?: string): Promise<void>;
-    generatePerformanceReport(profileId: string, hours?: number): Promise<PerformanceReport>;
-    private analyzeThroughputTrends;
-    private analyzeLatencyTrends;
-    private analyzeResourceTrends;
-    private analyzeAccuracyTrends;
-    private analyzeAvailabilityTrends;
-    private analyzeScalabilityTrends;
-    private identifyKeyAchievements;
-    private identifyCriticalIssues;
-    private calculateAverageResolutionTime;
-    private getMostFrequentAnomalyTypes;
-    getSystemStatus(): {
-        total_profiles: number;
-        active_profiles: number;
-        overall_performance_score: number;
-        active_anomalies: number;
-        pending_recommendations: number;
-    };
-    private performDataCleanup;
-    performMaintenance(): Promise<void>;
-    shutdown(): Promise<void>;
 }
-export default SecurityAnalyticsPerformanceMonitor;
 //# sourceMappingURL=SecurityAnalyticsPerformanceMonitor.d.ts.map

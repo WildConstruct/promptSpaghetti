@@ -13,6 +13,7 @@ import { AuditService } from '../auth/services/AuditService';
 // User Status Types
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
 
+}
 export interface UserStatusInfo {
   userId: string;
   email: string;
@@ -28,7 +29,9 @@ export interface UserStatusInfo {
   createdAt: string;
   roles: string[];
 }
+}
 
+}
 export interface StatusChangeRequest {
   userId: string;
   newStatus: UserStatus;
@@ -41,7 +44,9 @@ export interface StatusChangeRequest {
   ipAddress?: string;
   userAgent?: string;
 }
+}
 
+}
 export interface StatusChangeResult {
   success: boolean;
   userId: string;
@@ -52,7 +57,9 @@ export interface StatusChangeResult {
   auditLogId?: string;
   error?: string;
 }
+}
 
+}
 export interface StatusChangeAuditLog {
   id: string;
   userId: string;
@@ -67,7 +74,9 @@ export interface StatusChangeAuditLog {
   userAgent?: string;
   bulkOperationId?: string;
 }
+}
 
+}
 export interface StatusStatistics {
   totalUsers: number;
   byStatus: Record<UserStatus, number>;
@@ -75,6 +84,7 @@ export interface StatusStatistics {
     last24Hours: number;
     last7Days: number;
     last30Days: number;
+}
   };
   topChangeReasons: Array<{
     reason: string;
@@ -97,6 +107,7 @@ export class UserStatusService {
 
   // Get user status information
   async getUserStatus(userId: string): Promise<UserStatusInfo | null> {
+
     try {
       const query = `
         SELECT 
@@ -155,6 +166,7 @@ export class UserStatusService {
     users: UserStatusInfo[];
     totalCount: number;
   }> {
+
     try {
       let whereClause = '';
       const queryParams: any[] = [limit, offset];
@@ -229,6 +241,7 @@ export class UserStatusService {
 
   // Change user status
   async changeUserStatus(request: StatusChangeRequest): Promise<StatusChangeResult> {
+
     const client = await this.database.getClient();
     
     try {
@@ -306,7 +319,7 @@ export class UserStatusService {
           expiresAt: request.expiresAt,
           bulkOperation: request.bulkOperation,
           auditLogId
-        },
+  }
         ipAddress: request.ipAddress,
         userAgent: request.userAgent,
         severity: this.getStatusChangeSeverity(oldStatus, request.newStatus)
@@ -355,6 +368,7 @@ export class UserStatusService {
 
   // Bulk status change
   async bulkChangeUserStatus(requests: StatusChangeRequest[]): Promise<StatusChangeResult[]> {
+
     const results: StatusChangeResult[] = [];
     const bulkOperationId = `bulk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
@@ -389,7 +403,7 @@ export class UserStatusService {
           newStatus: r.newStatus,
           error: r.error
         }))
-      },
+  }
       severity: failureCount > 0 ? 'warning' : 'info'
     });
 
@@ -398,6 +412,7 @@ export class UserStatusService {
 
   // Get status change history for a user
   async getUserStatusHistory(userId: string, limit = 50): Promise<StatusChangeAuditLog[]> {
+
     try {
       const query = `
         SELECT 
@@ -443,6 +458,7 @@ export class UserStatusService {
 
   // Get status statistics
   async getStatusStatistics(): Promise<StatusStatistics> {
+
     try {
       const queries = {
         statusCounts: `
@@ -516,7 +532,7 @@ export class UserStatusService {
           last24Hours: parseInt(recentChanges.last24hours),
           last7Days: parseInt(recentChanges.last7days),
           last30Days: parseInt(recentChanges.last30days)
-        },
+  }
         topChangeReasons,
         automatedVsManual: {
           automated: parseInt(automation.automated),
@@ -531,6 +547,7 @@ export class UserStatusService {
 
   // Process expired status locks/suspensions
   async processExpiredStatuses(): Promise<{ processed: number; errors: number }> {
+
     const client = await this.database.getClient();
     let processed = 0;
     let errors = 0;
@@ -590,6 +607,7 @@ export class UserStatusService {
     newStatus: UserStatus, 
     changedByRole: string
   ): Promise<void> {
+
     // Super admins can make any status change
     if (changedByRole === 'super_admin') {
       return;
@@ -611,6 +629,7 @@ export class UserStatusService {
   }
 
   private async createStatusChangeAuditLog(log: Omit<StatusChangeAuditLog, 'id'>): Promise<string> {
+
     const query = `
       INSERT INTO user_status_audit_log (
         user_id, old_status, new_status, reason, changed_by, changed_by_role,
@@ -637,6 +656,7 @@ export class UserStatusService {
   }
 
   private async scheduleUserNotification(userId: string, notification: any): Promise<void> {
+
     // Implementation would integrate with notification service
     // For now, just log the notification intent
     console.log(`Scheduled notification for user ${userId}:`, notification);

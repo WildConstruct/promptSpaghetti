@@ -25,6 +25,7 @@ export enum DependencyType {
   CUSTOM = 'custom'
 }
 
+}
 export interface HealthCheckResult {
   status: HealthStatus;
   responseTimeMs: number;
@@ -33,7 +34,9 @@ export interface HealthCheckResult {
   timestamp: number;
   error?: string;
 }
+}
 
+}
 export interface DependencyHealthCheck {
   name: string;
   type: DependencyType;
@@ -43,11 +46,14 @@ export interface DependencyHealthCheck {
   criticalThresholdMs?: number; // Response time threshold for critical status
   degradedThresholdMs?: number; // Response time threshold for degraded status
 }
+}
 
+}
 export interface SystemHealthSummary {
   overall: HealthStatus;
   score: number; // 0-100, weighted health score
   timestamp: number;
+}
   dependencies: Record<string, HealthCheckResult & { weight: number; type: DependencyType }>;
   issues: string[];
   recommendations: string[];
@@ -59,6 +65,7 @@ export interface SystemHealthSummary {
   };
 }
 
+}
 export interface HealthMetrics {
   checksPerformed: number;
   averageHealthScore: number;
@@ -67,6 +74,7 @@ export interface HealthMetrics {
     name: string;
     averageResponseTime: number;
     type: DependencyType;
+}
   }>;
   recentDowntime: Array<{
     dependency: string;
@@ -103,8 +111,7 @@ class HealthMonitoringService extends EventEmitter {
         {} as Record<HealthStatus, number>
       ),
       totalHealthScore: 0,
-      responseTimeSums: new Map()
-    };
+      responseTimeSums: new Map(};
   }
 
   static getInstance(): HealthMonitoringService {
@@ -135,6 +142,7 @@ class HealthMonitoringService extends EventEmitter {
   }
 
   private async performHealthCheck(dependency: DependencyHealthCheck): Promise<HealthCheckResult> {
+
     const startTime = Date.now();
 
     try {
@@ -173,6 +181,7 @@ class HealthMonitoringService extends EventEmitter {
   }
 
   private createTimeoutPromise(timeoutMs: number, dependencyName: string): Promise<HealthCheckResult> {
+
     return new Promise((_, reject) => {
       setTimeout(() => {
         reject(new Error(`Health check for '${dependencyName}' timed out after ${timeoutMs}ms`));
@@ -267,6 +276,7 @@ class HealthMonitoringService extends EventEmitter {
   }
 
   public async checkHealth(): Promise<SystemHealthSummary> {
+
     const healthChecks = Array.from(this.dependencies.entries()).map(
       async ([name, dependency]) => {
         const result = await this.performHealthCheck(dependency);
@@ -487,4 +497,4 @@ class HealthMonitoringService extends EventEmitter {
 }
 
 // Export singleton instance
-export export default HealthMonitoringService;
+export default HealthMonitoringService;

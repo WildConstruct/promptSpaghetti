@@ -9,6 +9,7 @@ import { SecurityEventEnrichmentService } from '../services/SecurityEventEnrichm
 import { AuditService } from '../auth/services/AuditService';
 import { logger } from '../utils/logger';
 
+}
 interface SecurityDashboardQuery {
   timeRange?: string; // '1h', '24h', '7d', '30d'
   severity?: string; // 'low', 'medium', 'high', 'critical'
@@ -18,16 +19,21 @@ interface SecurityDashboardQuery {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface ThreatRuleRequest {
   rule: ThreatDetectionRule;
 }
+}
 
+}
 interface SecurityAlertQuery {
   status?: string; // 'active', 'resolved', 'dismissed'
   priority?: string; // 'low', 'medium', 'high', 'critical'
   limit?: number;
   offset?: number;
+}
 }
 
 export async function securityEventMonitoringRoutes(
@@ -86,7 +92,7 @@ export async function securityEventMonitoringRoutes(
             threatsDetected: stats.threatsDetected,
             activeAlerts: stats.activeAlerts,
             averageRiskScore: stats.averageRiskScore
-          },
+  }
           eventsByType: stats.eventsByType,
           eventsBySeverity: stats.eventsBySeverity,
           topUsers: stats.topUsers,
@@ -475,21 +481,25 @@ export async function securityEventMonitoringRoutes(
 // Helper functions (mock implementations - would connect to real data sources)
 
 async function getFilteredSecurityEvents(filters: SecurityDashboardQuery): Promise<any[]> {
+
   // Mock implementation - would query audit logs with filters
   return [];
 }
 
 async function getActiveThreats(): Promise<any[]> {
+
   // Mock implementation - would get current active threats
   return [];
 }
 
 async function getRecentAlerts(limit: number): Promise<any[]> {
+
   // Mock implementation - would get recent security alerts
   return [];
 }
 
 async function getRiskIndicators(timeRange: string): Promise<any> {
+
   // Mock implementation - would calculate risk indicators
   return {
     highRiskUsers: [],
@@ -500,6 +510,7 @@ async function getRiskIndicators(timeRange: string): Promise<any> {
 }
 
 async function getGeographicDistribution(timeRange: string): Promise<any> {
+
   // Mock implementation - would analyze geographic event distribution
   return {
     countries: [],
@@ -509,6 +520,7 @@ async function getGeographicDistribution(timeRange: string): Promise<any> {
 }
 
 async function calculateSecurityTrends(timeRange: string): Promise<any> {
+
   // Mock implementation - would calculate security trends
   return {
     eventsOverTime: [],
@@ -519,20 +531,24 @@ async function calculateSecurityTrends(timeRange: string): Promise<any> {
 }
 
 async function getThreatDetectionRules(): Promise<ThreatDetectionRule[]> {
+
   // Mock implementation - would get rules from database
   return [];
 }
 
 async function getSecurityAlerts(query: SecurityAlertQuery): Promise<any[]> {
+
   // Mock implementation - would get alerts from database
   return [];
 }
 
 async function updateAlertStatus(alertId: string, status: string, resolution?: string): Promise<void> {
+
   // Mock implementation - would update alert in database
 }
 
 async function getSecurityMetrics(timeRange: string, granularity: string): Promise<any> {
+
   // Mock implementation - would calculate detailed metrics
   return {
     eventCounts: {},
@@ -543,6 +559,7 @@ async function getSecurityMetrics(timeRange: string, granularity: string): Promi
 }
 
 async function generateSecurityReport(options: any): Promise<any> {
+
   // Mock implementation - would generate comprehensive security report
   return {
     summary: {},

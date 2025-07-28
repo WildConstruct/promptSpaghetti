@@ -46,9 +46,9 @@ export interface ModerationResult {
     decision: ModerationAction;
     confidence: number;
     severity: ModerationSeverity;
-    reasons: ModerationReason[];
+    reasons: ModerationReason;
     explanation: string;
-    policyResults: PolicyCheckResult[];
+    policyResults: PolicyCheckResult;
     policyViolations: number;
     overallComplianceScore: number;
     mlAnalysis?: {
@@ -61,22 +61,14 @@ export interface ModerationResult {
     trustAnalysis: {
         authorTrustScore: number;
         trustTrend: 'increasing' | 'stable' | 'decreasing';
-        riskFactors: string[];
+        riskFactors: string;
         historicalViolations: number;
     };
-    recommendedActions: Array<{
-        action: ModerationAction;
-        reason: string;
-        priority: number;
-        automated: boolean;
-    }>;
-    requiresHumanReview: boolean;
-    reviewPriority: 'low' | 'medium' | 'high' | 'urgent';
-    assignedReviewer?: string;
-    reviewDeadline?: string;
-    executionTimeMs: number;
-    timestamp: string;
-    version: string;
+    recommendedActions: Array<{}, action>;
+    ModerationAction: any;
+    reason: string;
+    priority: number;
+    automated: boolean;
 }
 export interface ModerationRule {
     id: string;
@@ -84,32 +76,24 @@ export interface ModerationRule {
     description: string;
     enabled: boolean;
     priority: number;
-    contentTypes: ContentType[];
+    contentTypes: ContentType;
     triggers: {
         policyViolation?: boolean;
         trustScoreBelow?: number;
         mlFlagThreshold?: number;
         communityReports?: number;
-        keywordMatches?: string[];
+        keywordMatches?: string;
     };
-    actions: Array<{
-        condition: string;
-        action: ModerationAction;
-        parameters?: Record<string, any>;
-    }>;
-    autoExecute: boolean;
-    requiresApproval: boolean;
-    escalationPath?: string[];
-    version: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
+    actions: Array<{}, condition>;
+    string: any;
+    action: ModerationAction;
+    parameters?: Record<string, any>;
 }
 export interface ModerationWorkflow {
     id: string;
     name: string;
-    contentTypes: ContentType[];
-    steps: ModerationWorkflowStep[];
+    contentTypes: ContentType;
+    steps: ModerationWorkflowStep;
     enabled: boolean;
 }
 export interface ModerationWorkflowStep {
@@ -117,7 +101,7 @@ export interface ModerationWorkflowStep {
     name: string;
     type: 'automated_check' | 'ml_analysis' | 'policy_check' | 'human_review' | 'action_execution';
     configuration: Record<string, any>;
-    conditions: string[];
+    conditions: string;
     timeoutMs?: number;
     retryCount?: number;
 }
@@ -125,22 +109,14 @@ export interface ModerationQueue {
     id: string;
     name: string;
     filters: {
-        contentTypes?: ContentType[];
-        severityLevels?: ModerationSeverity[];
+        contentTypes?: ContentType;
+        severityLevels?: ModerationSeverity;
         requiresReview?: boolean;
         assignedTo?: string;
     };
-    priorityRules: Array<{
-        condition: string;
-        priority: number;
-    }>;
-    autoAssignment: {
-        enabled: boolean;
-        rules: Array<{
-            condition: string;
-            assignTo: string;
-        }>;
-    };
+    priorityRules: Array<{}, condition>;
+    string: any;
+    priority: number;
 }
 export declare class AutomatedModerationService {
     private policyCheckersService;
@@ -149,38 +125,9 @@ export declare class AutomatedModerationService {
     private moderationRules;
     private moderationQueues;
     private cache;
-    constructor(policyCheckersService: PolicyCheckersService, trustScoreService: TrustScoreService, enforcementService: AutomatedEnforcementService);
-    moderateContent(request: ModerationRequest): Promise<ModerationResult>;
-    moderateBatch(requests: ModerationRequest[]): Promise<ModerationResult[]>;
-    private runPolicyChecks;
-    private runMLAnalysis;
-    private analyzeTrustFactors;
-    private applyModerationRules;
-    private executeActions;
-    private queueForReview;
-    getModerationStatistics(): Promise<{
-        totalModerated: number;
-        actionBreakdown: Record<ModerationAction, number>;
-        averageConfidence: number;
-        humanReviewRate: number;
-        topViolationReasons: Array<{
-            reason: ModerationReason;
-            count: number;
-        }>;
-        averageProcessingTime: number;
-    }>;
-    private shouldAutoExecute;
-    private calculateOverallScore;
-    private generateCacheKey;
-    private generateExplanation;
-    private findAppropriateQueue;
-    private simulateToxicityAnalysis;
-    private simulateSpamDetection;
-    private simulateSentimentAnalysis;
-    private simulateLanguageQuality;
-    private logModerationDecision;
-    private initializeDefaultRules;
-    private initializeDefaultQueues;
+    constructor();
+    policyCheckersService: PolicyCheckersService;
+    trustScoreService: TrustScoreService;
+    enforcementService: AutomatedEnforcementService;
 }
-export default AutomatedModerationService;
 //# sourceMappingURL=AutomatedModerationService.d.ts.map

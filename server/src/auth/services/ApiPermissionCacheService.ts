@@ -17,6 +17,7 @@ import { EventEmitter } from 'events';
 // Permission Cache Types
 // =============================================================================
 
+}
 export interface PermissionCacheConfig {
   // Cache backends
   redisEnabled: boolean;
@@ -46,14 +47,18 @@ export interface PermissionCacheConfig {
   metricsEnabled: boolean;
   statsCollectionInterval: number; // milliseconds
 }
+}
 
+}
 export interface CacheKey {
   type: 'permission' | 'role' | 'assignment' | 'decision' | 'user_permissions' | 'policy_result';
   identifier: string;
   namespace?: string;
   version?: number;
 }
+}
 
+}
 export interface CacheEntry<T> {
   key: string;
   value: T;
@@ -69,6 +74,7 @@ export interface CacheEntry<T> {
   };
 }
 
+}
 export interface CacheStats {
   // Hit/miss statistics
   totalHits: number;
@@ -86,6 +92,7 @@ export interface CacheStats {
     totalSize: number;
     maxSize: number;
     utilizationPercentage: number;
+}
   };
   
   // Redis usage
@@ -113,6 +120,7 @@ export interface CacheStats {
   };
 }
 
+}
 export interface UserPermissionsCacheEntry {
   userId: string;
   permissions: ApiPermission[];
@@ -121,12 +129,15 @@ export interface UserPermissionsCacheEntry {
   lastUpdated: Date;
   effectiveUntil: Date;
 }
+}
 
+}
 export interface DecisionCacheEntry {
   requestSignature: string;
   decision: ApiAccessDecision;
   contextHash: string;
   dependencies: string[]; // Cache keys this decision depends on
+}
 }
 
 // =============================================================================
@@ -177,6 +188,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Get value from cache with multi-tier lookup
    */
   async get<T>(cacheKey: CacheKey): Promise<T | null> {
+
     const startTime = Date.now();
     const key = this.buildCacheKey(cacheKey);
     
@@ -219,6 +231,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Set value in cache with multi-tier storage
    */
   async set<T>(cacheKey: CacheKey, value: T, ttl?: number): Promise<void> {
+
     const startTime = Date.now();
     const key = this.buildCacheKey(cacheKey);
     const effectiveTTL = ttl || this.getTTLForType(cacheKey.type);
@@ -249,6 +262,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Delete from all cache tiers
    */
   async delete(cacheKey: CacheKey): Promise<void> {
+
     const key = this.buildCacheKey(cacheKey);
     
     try {
@@ -282,6 +296,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     roles: ApiRole[],
     assignments: ApiPermissionAssignment[]
   ): Promise<void> {
+
     const cacheEntry: UserPermissionsCacheEntry = {
       userId,
       permissions,
@@ -320,6 +335,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Get cached user permissions
    */
   async getUserPermissions(userId: string): Promise<UserPermissionsCacheEntry | null> {
+
     return await this.get<UserPermissionsCacheEntry>({
       type: 'user_permissions',
       identifier: userId
@@ -334,6 +350,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     decision: ApiAccessDecision,
     dependencies: string[] = []
   ): Promise<void> {
+
     const requestSignature = this.generateRequestSignature(request);
     const contextHash = this.generateContextHash(request);
     
@@ -355,6 +372,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Get cached access control decision
    */
   async getAccessDecision(request: ApiAccessRequest): Promise<ApiAccessDecision | null> {
+
     const requestSignature = this.generateRequestSignature(request);
     const cachedEntry = await this.get<DecisionCacheEntry>({
       type: 'decision',
@@ -382,12 +400,13 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Batch cache permissions for performance
    */
   async batchCachePermissions(permissions: ApiPermission[]): Promise<void> {
+
     const promises = permissions.map(permission => 
       this.set(
         { type: 'permission', identifier: permission.permissionId },
         permission,
         this.config.permissionTTL
-      )
+
     );
     
     await Promise.all(promises);
@@ -397,6 +416,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Prefetch related permissions based on access patterns
    */
   async prefetchUserData(userId: string): Promise<void> {
+
     if (!this.config.prefetchEnabled) return;
     
     try {
@@ -420,6 +440,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Invalidate user-related caches
    */
   async invalidateUserCache(userId: string): Promise<void> {
+
     const keysToInvalidate = [
       { type: 'user_permissions' as const, identifier: userId }
       // Could expand to include decision caches that depend on this user
@@ -442,6 +463,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Invalidate permission-related caches
    */
   async invalidatePermissionCache(permissionId: string): Promise<void> {
+
     // Find all dependent caches
     const dependentKeys = await this.findDependentKeys('permission', permissionId);
     
@@ -461,25 +483,26 @@ export class ApiPermissionCacheService extends EventEmitter {
     changeType: 'permission_created' | 'permission_updated' | 'permission_deleted' | 'role_assigned' | 'role_revoked',
     affectedIds: string[]
   ): Promise<void> {
+
     const invalidationStrategies = {
       'permission_created': async (ids: string[]) => {
         // New permissions don't invalidate existing caches
-      },
+  }
       'permission_updated': async (ids: string[]) => {
         for (const id of ids) {
           await this.invalidatePermissionCache(id);
         }
-      },
+  }
       'permission_deleted': async (ids: string[]) => {
         for (const id of ids) {
           await this.invalidatePermissionCache(id);
         }
-      },
+  }
       'role_assigned': async (ids: string[]) => {
         for (const userId of ids) {
           await this.invalidateUserCache(userId);
         }
-      },
+  }
       'role_revoked': async (ids: string[]) => {
         for (const userId of ids) {
           await this.invalidateUserCache(userId);
@@ -505,6 +528,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Clear all caches
    */
   async clearAll(): Promise<void> {
+
     // Clear memory cache
     this.memoryCache.clear();
     
@@ -523,6 +547,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    * Optimize cache performance
    */
   async optimize(): Promise<void> {
+
     const startTime = Date.now();
     let optimizedCount = 0;
     
@@ -583,19 +608,19 @@ export class ApiPermissionCacheService extends EventEmitter {
         totalSize: 0,
         maxSize: this.config.maxMemorySize,
         utilizationPercentage: 0
-      },
+  }
       redisUsage: {
         connected: false,
         keyCount: 0,
         memoryUsed: 0,
         operationsPerSecond: 0
-      },
+  }
       efficiency: {
         frequentlyAccessed: [],
         rarelyAccessed: [],
         oversizedEntries: [],
         expiringSoon: []
-      },
+  }
       invalidations: {
         total: 0,
         byType: {},
@@ -641,6 +666,7 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async setInMemory<T>(key: string, value: T, ttl: number): Promise<void> {
+
     const size = this.estimateObjectSize(value);
     const expiry = new Date(Date.now() + ttl * 1000);
     
@@ -668,6 +694,7 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async getFromRedis<T>(key: string): Promise<T | null> {
+
     try {
       const result = await this.redisService.get(key);
       if (!result) return null;
@@ -682,6 +709,7 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async setInRedis<T>(key: string, value: T, ttl: number): Promise<void> {
+
     try {
       const serialized = this.config.compressionEnabled 
         ? this.compress(value) 
@@ -718,6 +746,7 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async findDependentKeys(type: string, identifier: string): Promise<CacheKey[]> {
+
     // This would typically involve querying metadata to find dependent cache entries
     // For now, return empty array - in production this would be more sophisticated
     return [];
@@ -811,6 +840,7 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async updateRedisUsage(): Promise<void> {
+
     if (!this.config.redisEnabled) return;
     
     try {
@@ -850,12 +880,14 @@ export class ApiPermissionCacheService extends EventEmitter {
   }
 
   private async preloadFrequentlyUsedData(): Promise<void> {
+
     // This would typically preload commonly accessed permissions and roles
     console.log('Preloading frequently used permission data...');
   }
 
   // Cleanup
   async shutdown(): Promise<void> {
+
     if (this.statsInterval) {
       clearInterval(this.statsInterval);
     }

@@ -5,6 +5,7 @@
  */
 import React from 'react';
 import { PSGFile } from '../../projectManager';
+
 interface HoverPreviewProps {
     /** File data to preview */
     file: PSGFile;
@@ -16,7 +17,7 @@ interface HoverPreviewProps {
     onClick?: (file: PSGFile) => void;
     /** Children to render as trigger */
     children: React.ReactNode;
-}
+
 export declare const HoverPreview: React.FC<HoverPreviewProps>;
 export default HoverPreview;
 //# sourceMappingURL=HoverPreview.d.ts.map

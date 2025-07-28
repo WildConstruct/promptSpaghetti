@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface Organization {
     id: string;
     name: string;
@@ -12,13 +13,15 @@ interface Organization {
     maxUsers: number;
     createdAt: Date;
     updatedAt: Date;
-}
+
+
 interface OrganizationManagerProps {
     currentUser?: {
         id: string;
         name: string;
         email: string;
         role: string;
+
     };
     onOrganizationChange?: (org: Organization) => void;
     onInvitationSent?: (invitation: {)
@@ -31,7 +34,7 @@ interface OrganizationManagerProps {
         userId: string;
         role: string;
     }) => void;
-}
+
 export declare const OrganizationManager: React.FC<OrganizationManagerProps>;
 export {};
 //# sourceMappingURL=OrganizationManager.d.ts.map

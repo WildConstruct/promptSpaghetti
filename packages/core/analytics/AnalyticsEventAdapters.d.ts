@@ -35,7 +35,7 @@ export declare abstract class BaseAnalyticsAdapter {
         enabled: boolean;
         systemName: string;
     };
-}
+
 /**
  * Main Analytics Adapter
  *
@@ -49,7 +49,7 @@ export declare class MainAnalyticsAdapter extends BaseAnalyticsAdapter {
     recordNodeExecution(execution: any): Promise<string | null>;
     recordTokenUsage(usage: any): Promise<string | null>;
     recordUserInteraction(interaction: any): Promise<string | null>;
-}
+
 /**
  * Integration Analytics Adapter
  *
@@ -59,7 +59,7 @@ export declare class IntegrationAnalyticsAdapter extends BaseAnalyticsAdapter {
     constructor(eventBus: UnifiedEventBus);
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     recordIntegrationEvent(event: any): Promise<string | null>;
-}
+
 /**
  * Behavior Analytics Adapter
  *
@@ -69,7 +69,7 @@ export declare class BehaviorAnalyticsAdapter extends BaseAnalyticsAdapter {
     constructor(eventBus: UnifiedEventBus);
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     recordBehaviorEvent(event: any): Promise<string | null>;
-}
+
 /**
  * Performance Monitoring Adapter
  *
@@ -80,7 +80,7 @@ export declare class PerformanceMonitoringAdapter extends BaseAnalyticsAdapter {
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     private getPerformanceSeverity;
     recordPerformanceMetric(metric: any): Promise<string | null>;
-}
+
 /**
  * Security Event Adapter
  *
@@ -91,7 +91,7 @@ export declare class SecurityEventAdapter extends BaseAnalyticsAdapter {
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     private getSecuritySeverity;
     recordSecurityEvent(event: any): Promise<string | null>;
-}
+
 /**
  * Revenue Analytics Adapter
  *
@@ -101,7 +101,7 @@ export declare class RevenueAnalyticsAdapter extends BaseAnalyticsAdapter {
     constructor(eventBus: UnifiedEventBus);
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     recordRevenueEvent(event: any): Promise<string | null>;
-}
+
 /**
  * Session Monitoring Adapter
  *
@@ -111,7 +111,7 @@ export declare class SessionMonitoringAdapter extends BaseAnalyticsAdapter {
     constructor(eventBus: UnifiedEventBus);
     protected transformEvent(legacyEvent: any): Partial<UnifiedAnalyticsEvent>;
     recordSessionEvent(event: any): Promise<string | null>;
-}
+
 /**
  * Analytics Adapter Manager
  *
@@ -165,6 +165,6 @@ export declare class AnalyticsAdapterManager {
      * Shutdown all adapters
      */
     shutdown(): Promise<void>;
-}
+
 export default AnalyticsAdapterManager;
 //# sourceMappingURL=AnalyticsEventAdapters.d.ts.map

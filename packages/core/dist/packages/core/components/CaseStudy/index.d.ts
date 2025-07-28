@@ -25,53 +25,53 @@ export declare const CASE_STUDY_DEFAULTS: {
     readonly showAuthor: true;
 };
 export declare const CASE_STUDY_FILTER_PRESETS: {
-    readonly featured: {
-        readonly featuredOnly: true;
-        readonly status: readonly ["featured"];
+    featured: {
+        featuredOnly: boolean;
+        status: "featured"[];
     };
-    readonly beginner: {
-        readonly difficulty: readonly ["beginner"];
+    beginner: {
+        difficulty: "beginner"[];
     };
-    readonly advanced: {
-        readonly difficulty: readonly ["advanced", "expert"];
+    advanced: {
+        difficulty: ("advanced" | "expert")[];
     };
-    readonly templateSuccess: {
-        readonly type: readonly ["template-success"];
+    templateSuccess: {
+        type: "template-success"[];
     };
-    readonly roiAnalysis: {
-        readonly type: readonly ["roi-analysis"];
+    roiAnalysis: {
+        type: "roi-analysis"[];
     };
-    readonly industryShowcase: {
-        readonly type: readonly ["industry-showcase"];
+    industryShowcase: {
+        type: "industry-showcase"[];
     };
-    readonly recentlyPublished: {
+    recentlyPublished: {
         readonly publishedAfter: string;
     };
-};
-export declare const CASE_STUDY_SORT_PRESETS: {
-    readonly newest: {
-        readonly field: "publishedAt";
-        readonly direction: "desc";
-    };
-    readonly oldest: {
-        readonly field: "publishedAt";
-        readonly direction: "asc";
-    };
-    readonly mostViewed: {
-        readonly field: "views";
-        readonly direction: "desc";
-    };
-    readonly mostLiked: {
-        readonly field: "likes";
-        readonly direction: "desc";
-    };
-    readonly mostHelpful: {
-        readonly field: "helpfulVotes";
-        readonly direction: "desc";
-    };
-    readonly alphabetical: {
-        readonly field: "title";
-        readonly direction: "asc";
+    const: {
+        readonly newest: {
+            readonly field: "publishedAt";
+            readonly direction: "desc";
+        };
+        readonly oldest: {
+            readonly field: "publishedAt";
+            readonly direction: "asc";
+        };
+        readonly mostViewed: {
+            readonly field: "views";
+            readonly direction: "desc";
+        };
+        readonly mostLiked: {
+            readonly field: "likes";
+            readonly direction: "desc";
+        };
+        readonly mostHelpful: {
+            readonly field: "helpfulVotes";
+            readonly direction: "desc";
+        };
+        readonly alphabetical: {
+            readonly field: "title";
+            readonly direction: "asc";
+        };
     };
 };
 //# sourceMappingURL=index.d.ts.map

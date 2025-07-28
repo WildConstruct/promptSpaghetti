@@ -4,7 +4,6 @@ interface UseAutosaveProps {
     edges: Edge[];
     intervalMs?: number;
     storageKey?: string;
-}
 interface UseAutosaveReturn {
     showRestorePrompt: boolean;
     restoreDraft: {,
@@ -16,7 +15,7 @@ interface UseAutosaveReturn {
         nodes: Node[];
         edges: Edge[];
     } | null) => void;
-}
+
 export declare const useAutosave: ({ nodes, edges, intervalMs, storageKey }: UseAutosaveProps) => UseAutosaveReturn;
 export {};
 //# sourceMappingURL=useAutosave.d.ts.map

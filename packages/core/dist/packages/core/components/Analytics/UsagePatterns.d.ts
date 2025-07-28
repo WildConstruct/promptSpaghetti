@@ -12,9 +12,5 @@ export interface UsagePatternsProps {
     userId?: number;
     organizationId?: number;
 }
-/**
- * Usage patterns component
- */
 export declare const UsagePatterns: React.FC<UsagePatternsProps>;
-export default UsagePatterns;
 //# sourceMappingURL=UsagePatterns.d.ts.map

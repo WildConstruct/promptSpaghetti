@@ -7,7 +7,7 @@ import { ConditionalBranch } from '../../../runtime/nodes/Conditional';
 
 export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
   nodeId: string;
-}
+
 /**
  * Epic 8.4 - Conditional Editor with Progressive Disclosure
  * 
@@ -22,12 +22,12 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
   const allowVariableAccess = (nodeData.allowVariableAccess as boolean) ?? true;
   const strictMode = (nodeData.strictMode as boolean) ?? false;
   // No manual collapse state needed - managed by ProgressiveDisclosureSection
-  const handleBranchesChange = (newBranches: ConditionalBranch[]) => {
+  const handleBranchesChange = (newBranches: ConditionalBranch) => {
     onChange({ branches: newBranches });
   };
   const handleAddBranch = () => {
-    const newBranch: ConditionalBranch = {
-      condition: '',
+    const newBranch: ConditionalBranch = {,
+  condition: '',
       output: '',
       label: `Branch ${branches.length + 1}`}
     };
@@ -54,7 +54,7 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
   const handleStrictModeChange = (value: unknown) => {
     onChange({ strictMode: Boolean(value) });
   };
-  return ();
+  return;
     <div className="conditional-editor">
       {/* BASIC LEVEL: Essential conditional settings */}
       <ProgressiveDisclosureSection
@@ -86,10 +86,10 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
             rows={2}
           />
           <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            marginTop: 4,
-          }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  marginTop: 4,
+}}>
             This will be used when none of your conditions match
           </div>
         </div>
@@ -104,110 +104,110 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
         fieldName="branches"
       >
         <div style={{ marginBottom: 12 }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: 8,
-          }}>
-            <label style={{ 
-              fontWeight: 500, 
-              color: '#e2e8f0',
-              fontSize: 12,
-            }}>
+          <div style={{
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 8,
+}}>
+            <label style={{
+  fontWeight: 500,
+  color: '#e2e8f0',
+  fontSize: 12,
+}}>
               Conditional Logic
             </label>
             <button
               onClick={handleAddBranch}
               style={{
-                padding: '4px 8px',
-                fontSize: 10,
-                background: '#4299e1',
-                border: 'none',
-                borderRadius: 2,
-                color: '#fff',
-                cursor: 'pointer',
-              }}
+  padding: '4px 8px',
+  fontSize: 10,
+  background: '#4299e1',
+  border: 'none',
+  borderRadius: 2,
+  color: '#fff',
+  cursor: 'pointer',
+}}
             >
               Add Branch
             </button>
           </div>
           {branches.length === 0 ? ()
             <div style={{
-              background: '#2d3748',
-              border: '1px solid #4a5568',
-              borderRadius: 4,
-              padding: 16,
-              textAlign: 'center',
-              color: '#a0aec0',
-              fontSize: 12,
-              fontStyle: 'italic',
-            }}>
+  background: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 16,
+  textAlign: 'center',
+  color: '#a0aec0',
+  fontSize: 12,
+  fontStyle: 'italic',
+}}>
               No conditional branches. Add a branch to start building logic.
             </div>
           ) : ()
             <div style={{
-              background: '#2d3748',
-              border: '1px solid #4a5568',
-              borderRadius: 4,
-              padding: 8,
-            }}>
+  background: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 8,
+}}>
               {branches.map((branch, index) => ()
                 <div
                   key={index}
                   style={{
-                    background: '#1a202c',
-                    border: '1px solid #4a5568',
-                    borderRadius: 4,
-                    padding: 12,
-                    marginBottom: index < branches.length - 1 ? 8 : 0,
-                  }}
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 12,
+  marginBottom: index < branches.length - 1 ? 8 : 0,
+}}
                 >
                   <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 8,
-                  }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 8,
+}}>
                     <input
                       type="text"
                       value={branch.label || `Branch ${index + 1}`}
                       onChange={(e) => handleUpdateBranch(index, 'label', e.target.value)}
                       style={{
-                        background: '#2d3748',
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        padding: '2px 6px',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        fontWeight: 500,
-                        flex: 1,
-                        marginRight: 8,
-                      }}
+  background: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 2,
+  padding: '2px 6px',
+  color: '#e2e8f0',
+  fontSize: 11,
+  fontWeight: 500,
+  flex: 1,
+  marginRight: 8,
+}}
                       placeholder={`Branch ${index + 1}`}
                     />
                     <button
                       onClick={() => handleRemoveBranch(index)}
                       style={{
-                        background: '#e53e3e',
-                        border: 'none',
-                        borderRadius: 2,
-                        color: '#fff',
-                        cursor: 'pointer',
-                        padding: '2px 6px',
-                        fontSize: 10,
-                      }}
+  background: '#e53e3e',
+  border: 'none',
+  borderRadius: 2,
+  color: '#fff',
+  cursor: 'pointer',
+  padding: '2px 6px',
+  fontSize: 10,
+}}
                     >
                       Remove
                     </button>
                   </div>
                   <div style={{ marginBottom: 8 }}>
                     <label style={{
-                      display: 'block',
-                      fontSize: 10,
-                      color: '#a0aec0',
-                      marginBottom: 4,
-                    }}>
+  display: 'block',
+  fontSize: 10,
+  color: '#a0aec0',
+  marginBottom: 4,
+}}>
                       Condition Expression
                     </label>
                     <input
@@ -215,25 +215,25 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                       value={branch.condition}
                       onChange={(e) => handleUpdateBranch(index, 'condition', e.target.value)}
                       style={{
-                        width: '100%',
-                        padding: 4,
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        background: '#2d3748',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        fontFamily: 'monospace',
-                      }}
+  width: '100%',
+  padding: 4,
+  border: '1px solid #4a5568',
+  borderRadius: 2,
+  background: '#2d3748',
+  color: '#e2e8f0',
+  fontSize: 11,
+  fontFamily: 'monospace',
+}}
                       placeholder="e.g., variable > 5, hasVariable('debug'), startsWith(text, 'hello')"
                     />
                   </div>
                   <div>
                     <label style={{
-                      display: 'block',
-                      fontSize: 10,
-                      color: '#a0aec0',
-                      marginBottom: 4,
-                    }}>
+  display: 'block',
+  fontSize: 10,
+  color: '#a0aec0',
+  marginBottom: 4,
+}}>
                       Output Value
                     </label>
                     <textarea
@@ -241,16 +241,16 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                       onChange={(e) => handleUpdateBranch(index, 'output', e.target.value)}
                       rows={2}
                       style={{
-                        width: '100%',
-                        padding: 4,
-                        border: '1px solid #4a5568',
-                        borderRadius: 2,
-                        background: '#2d3748',
-                        color: '#e2e8f0',
-                        fontSize: 11,
-                        resize: 'vertical',
-                        minHeight: 32,
-                      }}
+  width: '100%',
+  padding: 4,
+  border: '1px solid #4a5568',
+  borderRadius: 2,
+  background: '#2d3748',
+  color: '#e2e8f0',
+  fontSize: 11,
+  resize: 'vertical',
+  minHeight: 32,
+}}
                       placeholder="Output when condition is true..."
                     />
                   </div>
@@ -261,26 +261,26 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
         </div>
         {/* Expression Help */}
         <div style={{
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 4,
-          padding: 8,
-          marginTop: 12,
-        }}>
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 8,
+  marginTop: 12,
+}}>
           <div style={{
-            fontSize: 11,
-            fontWeight: 500,
-            color: '#e2e8f0',
-            marginBottom: 4,
-          }}>
+  fontSize: 11,
+  fontWeight: 500,
+  color: '#e2e8f0',
+  marginBottom: 4,
+}}>
             Available Expression Functions:
           </div>
           <div style={{
-            fontSize: 10,
-            color: '#a0aec0',
-            fontFamily: 'monospace',
-            lineHeight: 1.4,
-          }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  fontFamily: 'monospace',
+  lineHeight: 1.4,
+}}>
             • Variable access: variable, hasVariable('name'), getVariable('name', 'default')<br/>
             • Comparisons: ===, !==, {'>'}, {'<'}, {'>='}, {'<='}, &amp;&amp;, ||, !<br/>
             • Strings: startsWith(str, 'prefix'), includes(str, 'substring'), isEmpty(str)<br/>
@@ -302,21 +302,21 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
         {/* Technical Settings */}
         <div style={{ marginBottom: 16 }}>
           <div style={{
-            fontSize: 11,
-            fontWeight: 500,
-            color: '#e2e8f0',
-            marginBottom: 8,
-          }}>
+  fontSize: 11,
+  fontWeight: 500,
+  color: '#e2e8f0',
+  marginBottom: 8,
+}}>
             Expression Engine Settings:
           </div>
           <div style={{ marginBottom: 12 }}>
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: 12,
-              color: '#e2e8f0',
-              cursor: 'pointer',
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: 12,
+  color: '#e2e8f0',
+  cursor: 'pointer',
+}}>
               <input
                 type="checkbox"
                 checked={allowVariableAccess}
@@ -326,22 +326,22 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
               Allow Variable Access
             </label>
             <div style={{
-              fontSize: 10,
-              color: '#a0aec0',
-              marginTop: 2,
-              marginLeft: 20,
-            }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  marginTop: 2,
+  marginLeft: 20,
+}}>
               Enable access to execution context variables in expressions
             </div>
           </div>
           <div style={{ marginBottom: 12 }}>
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: 12,
-              color: '#e2e8f0',
-              cursor: 'pointer',
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  fontSize: 12,
+  color: '#e2e8f0',
+  cursor: 'pointer',
+}}>
               <input
                 type="checkbox"
                 checked={strictMode}
@@ -351,29 +351,29 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
               Strict Mode
             </label>
             <div style={{
-              fontSize: 10,
-              color: '#a0aec0',
-              marginTop: 2,
-              marginLeft: 20,
-            }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  marginTop: 2,
+  marginLeft: 20,
+}}>
               Throw errors on expression evaluation failures (otherwise treats as false)
             </div>
           </div>
         </div>
         {/* Debug Node Information */}
         <div style={{
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 4,
-          padding: 8,
-          marginBottom: 16,
-        }}>
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 8,
+  marginBottom: 16,
+}}>
           <div style={{
-            fontSize: 11,
-            fontWeight: 500,
-            color: '#e2e8f0',
-            marginBottom: 4,
-          }}>
+  fontSize: 11,
+  fontWeight: 500,
+  color: '#e2e8f0',
+  marginBottom: 4,
+}}>
             Node Configuration:
           </div>
           <div style={{ fontSize: 10, color: '#a0aec0', lineHeight: 1.4 }}>
@@ -385,13 +385,13 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
           </div>
         </div>
         <div style={{
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 4,
-          padding: 12,
-          fontSize: 12,
-          color: '#e2e8f0',
-        }}>
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  padding: 12,
+  fontSize: 12,
+  color: '#e2e8f0',
+}}>
           {branches.length === 0 ? ()
             <div style={{ color: '#a0aec0', fontStyle: 'italic' }}>
               Add conditional branches to see logic preview
@@ -402,22 +402,22 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                 Execution Logic:
               </div>
               {branches.map((branch, index) => ()
-                <div key={index} style={{ 
-                  marginBottom: 6,
-                  padding: '4px 8px',
-                  background: 'rgba(66, 153, 225, 0.1)',
-                  borderRadius: 2,
-                  borderLeft: '3px solid #4299e1',
-                }}>
+                <div key={index} style={{
+  marginBottom: 6,
+  padding: '4px 8px',
+  background: 'rgba(66, 153, 225, 0.1)',
+  borderRadius: 2,
+  borderLeft: '3px solid #4299e1',
+}}>
                   <div style={{ fontWeight: 500, marginBottom: 2 }}>
                     {index === 0 ? 'IF' : 'ELSE IF'} {branch.label || `Branch ${index + 1}`}:}
                   </div>
-                  <div style={{ 
-                    fontFamily: 'monospace', 
-                    fontSize: 10, 
-                    color: '#90cdf4',
-                    marginBottom: 2,
-                  }}>
+                  <div style={{
+  fontFamily: 'monospace',
+  fontSize: 10,
+  color: '#90cdf4',
+  marginBottom: 2,
+}}>
                     {branch.condition || 'No condition'}
                   </div>
                   <div style={{ fontSize: 10, color: '#a0aec0' }}>
@@ -426,13 +426,13 @@ export const defaultOutput = (nodeData.defaultOutput as string) || '';
                 </div>
               ))}
               {defaultOutput && ()
-                <div style={{ 
-                  marginTop: 8,
-                  padding: '4px 8px',
-                  background: 'rgba(237, 137, 54, 0.1)',
-                  borderRadius: 2,
-                  borderLeft: '3px solid #ed8936',
-                }}>
+                <div style={{
+  marginTop: 8,
+  padding: '4px 8px',
+  background: 'rgba(237, 137, 54, 0.1)',
+  borderRadius: 2,
+  borderLeft: '3px solid #ed8936',
+}}>
                   <div style={{ fontWeight: 500, marginBottom: 2 }}>
                     ELSE (Default):
                   </div>

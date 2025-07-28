@@ -4,6 +4,7 @@
  */
 import { Graph, Node, Edge } from '../graphSchema';
 import { GraphCRDTAdapter, CollaborativeGraphOptions } from './GraphCRDTAdapter';
+
 export interface UserPresence {
     userId: string;
     name: string;
@@ -17,7 +18,7 @@ export interface UserPresence {
     };
     selection?: string[];
     lastSeen: number;
-}
+
 export interface CollaborativeGraphState {
     graph: Graph;
     isCollaborative: boolean;
@@ -56,7 +57,7 @@ export interface CollaborativeGraphState {
     createSnapshot: () => Uint8Array | null;
     getMetrics: () => any;
     getSyncState: () => any;
-}
+
 export declare         <U>(selector: (state: CollaborativeGraphState) => U, listener: (selectedState: U, previousSelectedState: U) => void, options?: {
             equalityFn?: ((a: U, b: U) => boolean) | undefined;
             fireImmediately?: boolean;

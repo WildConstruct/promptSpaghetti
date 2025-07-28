@@ -8,6 +8,7 @@ import { DataSensitivityLevel } from '../../../packages/core/security/DataSensit
 import { DataClassificationService } from '../../../packages/core/security/DataClassificationHelpers';
 import { AccessControlManager } from './AccessControlManager';
 
+}
 export interface DataAccessRequest {
   userId: string;
   resourceId: string;
@@ -18,7 +19,9 @@ export interface DataAccessRequest {
   reason?: string;
   expiresAt?: Date;
 }
+}
 
+}
 export interface DataAccessResponse {
   allowed: boolean;
   reason: string;
@@ -29,7 +32,9 @@ export interface DataAccessResponse {
   restrictions?: AccessRestriction[];
   auditId: string;
 }
+}
 
+}
 export interface AccessGrant {
   id: string;
   userId: string;
@@ -44,11 +49,14 @@ export interface AccessGrant {
   active: boolean;
   restrictions?: AccessRestriction[];
 }
+}
 
+}
 export interface AccessRestriction {
   type: 'time' | 'location' | 'operation' | 'export' | 'share';
   value: string;
   description: string;
+}
 }
 
 export type DataOperation = 
@@ -69,6 +77,7 @@ export type AccessLevel =
   | 'ELEVATED' 
   | 'FULL_ACCESS';
 
+}
 export interface UserRole {
   id: string;
   name: string;
@@ -76,7 +85,9 @@ export interface UserRole {
   dataAccessLevels: Record<DataSensitivityLevel, DataOperation[]>;
   hierarchy: number; // 1=lowest, 10=highest
 }
+}
 
+}
 export interface AccessAuditEvent {
   id: string;
   userId: string;
@@ -91,6 +102,7 @@ export interface AccessAuditEvent {
   ipAddress?: string;
   userAgent?: string;
   riskScore?: number;
+}
 }
 
 export class DataAccessControlService {
@@ -122,6 +134,7 @@ export class DataAccessControlService {
    * Check if user has access to perform operation on resource
    */
   async checkAccess(request: DataAccessRequest): Promise<DataAccessResponse> {
+
     const auditId = await this.generateAuditId();
     
     try {
@@ -218,6 +231,7 @@ export class DataAccessControlService {
     message: string;
     expiresAt?: Date;
   }> {
+
     const requestId = await this.generateRequestId();
     
     try {
@@ -323,6 +337,7 @@ export class DataAccessControlService {
     limit: number = 100, 
     offset: number = 0
   ): Promise<AccessAuditEvent[]> {
+
     const result = await this.db.query(`
       SELECT 
         id, user_id, resource_id, operation, allowed, reason,
@@ -345,6 +360,7 @@ export class DataAccessControlService {
     revokedBy: string, 
     reason: string
   ): Promise<boolean> {
+
     try {
       const result = await this.db.query(`
         UPDATE access_grants 
@@ -404,6 +420,7 @@ export class DataAccessControlService {
    * Get active access grants for user
    */
   async getUserAccessGrants(userId: string): Promise<AccessGrant[]> {
+
     const result = await this.db.query(`
       SELECT 
         id, user_id, resource_id, resource_type, operations, 
@@ -424,6 +441,7 @@ export class DataAccessControlService {
     resourceId: string, 
     resourceType: string
   ): Promise<DataSensitivityLevel> {
+
     // Try cache first
     const cacheKey = `classification:${resourceType}:${resourceId}`;
     const cached = await this.redis.get(cacheKey);
@@ -466,6 +484,7 @@ export class DataAccessControlService {
   }
 
   private async getUserRoles(userId: string): Promise<UserRole[]> {
+
     const cacheKey = `${this.ROLE_CACHE_PREFIX}${userId}`;
     const cached = await this.redis.get(cacheKey);
     
@@ -544,6 +563,7 @@ export class DataAccessControlService {
     accessLevel: AccessLevel;
     riskScore?: number;
   }> {
+
     // Check basic permission match
     const hasRequiredPermissions = requiredPermissions.every(permission =>
       userPermissions.includes(permission)
@@ -582,6 +602,7 @@ export class DataAccessControlService {
     classification: DataSensitivityLevel,
     operation: DataOperation
   ): Promise<AccessRestriction[]> {
+
     const restrictions: AccessRestriction[] = [];
 
     // Time-based restrictions for sensitive data
@@ -619,6 +640,7 @@ export class DataAccessControlService {
     reason: string;
     classification?: DataSensitivityLevel;
   }> {
+
     // Check if resource exists and get classification
     let classification: DataSensitivityLevel;
     
@@ -657,6 +679,7 @@ export class DataAccessControlService {
     canAutoApprove: boolean;
     defaultExpiry?: Date;
   }> {
+
     // Auto-approve READ operations for PUBLIC and INTERNAL data
     const classification = await this.getResourceClassification(
       request.resourceId, 
@@ -677,6 +700,7 @@ export class DataAccessControlService {
   }
 
   private async createAccessGrant(grant: Omit<AccessGrant, 'id' | 'grantedAt' | 'active'>): Promise<AccessGrant> {
+
     const id = require('crypto').randomUUID();
     const grantedAt = new Date();
 
@@ -702,6 +726,7 @@ export class DataAccessControlService {
   }
 
   private async storePendingRequest(requestId: string, request: DataAccessRequest): Promise<void> {
+
     await this.db.query(`
       INSERT INTO access_requests (
         id, user_id, resource_id, resource_type, operation,
@@ -715,6 +740,7 @@ export class DataAccessControlService {
   }
 
   private async logAccessAttempt(event: AccessAuditEvent): Promise<void> {
+
     await this.db.query(`
       INSERT INTO data_access_audit (
         id, user_id, resource_id, operation, allowed, reason,
@@ -792,10 +818,12 @@ export class DataAccessControlService {
   }
 
   private async generateAuditId(): Promise<string> {
+
     return `audit_${Date.now()}_${require('crypto').randomBytes(8).toString('hex')}`;
   }
 
   private async generateRequestId(): Promise<string> {
+
     return `req_${Date.now()}_${require('crypto').randomBytes(8).toString('hex')}`;
   }
 
@@ -803,6 +831,7 @@ export class DataAccessControlService {
    * Initialize database schema
    */
   async initializeSchema(): Promise<void> {
+
     // Create data access audit table
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS data_access_audit (
@@ -819,7 +848,7 @@ export class DataAccessControlService {
         ip_address INET,
         user_agent TEXT,
         risk_score DECIMAL(5,2)
-      )
+
     `);
 
     // Create access grants table
@@ -840,7 +869,7 @@ export class DataAccessControlService {
         revoked_by VARCHAR(255),
         revoked_at TIMESTAMP,
         revoke_reason TEXT
-      )
+
     `);
 
     // Create access requests table
@@ -859,7 +888,7 @@ export class DataAccessControlService {
         approved_by VARCHAR(255),
         approved_at TIMESTAMP,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
 
     // Create resource classifications table
@@ -871,7 +900,7 @@ export class DataAccessControlService {
         classified_at TIMESTAMP NOT NULL DEFAULT NOW(),
         classified_by VARCHAR(255) DEFAULT 'system',
         PRIMARY KEY (resource_id, resource_type)
-      )
+
     `);
 
     // Create user access restrictions table
@@ -884,7 +913,7 @@ export class DataAccessControlService {
         description TEXT,
         active BOOLEAN NOT NULL DEFAULT true,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
 
     // Create indexes

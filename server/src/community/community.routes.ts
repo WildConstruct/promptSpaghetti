@@ -5,6 +5,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { Pool } from 'pg';
 import { CommunityService, CreatePostRequest, CreateDiscussionRequest, CreateEventRequest } from './community.service';
 
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
@@ -13,25 +14,33 @@ interface AuthenticatedRequest extends FastifyRequest {
   };
 }
 
+}
 interface PostsQuerystring {
   filter?: 'all' | 'following' | 'trending';
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface DiscussionsQuerystring {
   category?: string;
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface EventsQuerystring {
   limit?: number;
   upcoming?: boolean;
 }
+}
 
+}
 interface CreatorsQuerystring {
   limit?: number;
+}
 }
 
 export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
@@ -107,7 +116,7 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           postId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['postId']
       }
     }
@@ -258,7 +267,7 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           eventId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['eventId']
       }
     }
@@ -283,7 +292,7 @@ export async function communityRoutes(fastify: FastifyInstance, dbPool: Pool) {
         type: 'object',
         properties: {
           userId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['userId']
       }
     }

@@ -8,11 +8,12 @@
  */
 import React from 'react';
 import { ShareConfig, ShareLink, SocialPlatform } from '../../types/sharingTypes';
+
 interface SharePreviewProps {
     shareConfig: ShareConfig;
     shareLink: ShareLink;
     selectedPlatform?: SocialPlatform | 'embed' | 'opengraph';
-}
+
 export declare const SharePreview: React.FC<SharePreviewProps>;
 export default SharePreview;
 //# sourceMappingURL=SharePreview.d.ts.map

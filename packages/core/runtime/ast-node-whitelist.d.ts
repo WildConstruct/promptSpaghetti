@@ -6,33 +6,39 @@ export declare enum NodeSafetyLevel {
     SAFE = "SAFE",
     RESTRICTED = "RESTRICTED",
     DANGEROUS = "DANGEROUS"
-}
+
 /**
  * Interface for blocked node information
  */
+
 export interface BlockedNodeInfo {
     nodeType: string;
     safetyLevel: NodeSafetyLevel;
     reason: string;
     position?: acorn.Position;
-}
+
+
 /**
  * Filter result interface
  */
+
 export interface FilterResult {
     allowed: boolean;
     blockedNodes: BlockedNodeInfo[];
-}
+
+
 /**
  * AST node whitelist filter configuration
  */
+
 export interface ASTNodeWhitelistConfig {
     allowedNodeTypes: Set<string>;
     restrictedNodeTypes: Set<string>;
     dangerousNodeTypes: Set<string>;
     maxDepth?: number;
     maxNodes?: number;
-}
+
+
 /**
  * AST node whitelist filter for security validation
  */
@@ -73,7 +79,7 @@ export declare class ASTNodeWhitelistFilter {
      * Recursively validate child nodes
      */
     private validateChildNodes;
-}
+
 /**
  * Create a filter configuration specifically for Conditional nodes
  */

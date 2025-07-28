@@ -16,6 +16,7 @@
  * - Responsive help interfaces
  */
 import React, { ReactNode } from 'react';
+
 export interface HelpContentItem {
     id: string;
     title: string;
@@ -33,7 +34,7 @@ export interface HelpContentItem {
         helpful: number;
         unhelpful: number;
     };
-}
+
 export interface TourStep {
     id: string;
     title: string;
@@ -47,7 +48,7 @@ export interface TourStep {
     optional?: boolean;
     highlight?: boolean;
     delay?: number;
-}
+
 export interface HelpTour {
     id: string;
     name: string;
@@ -60,7 +61,7 @@ export interface HelpTour {
     prerequisites?: string[];
     estimatedDuration: number;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
-}
+
 export interface HelpContext {
     currentPage: string;
     userRole?: string;
@@ -73,7 +74,7 @@ export interface HelpContext {
         preferredHelpType: 'text' | 'video' | 'interactive';
         autoplayVideos: boolean;
     };
-}
+
 export interface HelpTooltipProps {
     content: string | ReactNode;
     title?: string;
@@ -88,8 +89,9 @@ export interface HelpTooltipProps {
     children: ReactNode;
     onShow?: () => void;
     onHide?: () => void;
-}
+
 export declare const HelpTooltip: React.FC<HelpTooltipProps>;
+
 export interface ContextualHelpPanelProps {
     title: string;
     content: HelpContentItem[];
@@ -102,8 +104,9 @@ export interface ContextualHelpPanelProps {
     className?: string;
     onContentSelect?: (content: HelpContentItem) => void;
     onFeedback?: (contentId: string, helpful: boolean) => void;
-}
+
 export declare const ContextualHelpPanel: React.FC<ContextualHelpPanelProps>;
+
 export interface GuidedTourProps {
     tour: HelpTour;
     isActive: boolean;
@@ -111,8 +114,9 @@ export interface GuidedTourProps {
     onSkip?: () => void;
     onStepChange?: (stepIndex: number) => void;
     className?: string;
-}
+
 export declare const GuidedTour: React.FC<GuidedTourProps>;
+
 export interface HelpHubProps {
     tours: HelpTour[];
     content: HelpContentItem[];
@@ -120,13 +124,14 @@ export interface HelpHubProps {
     onTourStart?: (tourId: string) => void;
     onContentView?: (contentId: string) => void;
     className?: string;
-}
+
 export declare const HelpHub: React.FC<HelpHubProps>;
+
 export interface QuickHelpProps {
     helpContent: HelpContentItem[];
     onHelpRequest?: () => void;
     className?: string;
-}
+
 export declare const QuickHelp: React.FC<QuickHelpProps>;
 declare const _default: {
     HelpTooltip: React.FC<HelpTooltipProps>;

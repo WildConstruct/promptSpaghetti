@@ -28,7 +28,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         201: z.object({
           review: z.any() // ReviewWithDetails type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -58,7 +58,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           review: z.any() // ReviewWithDetails type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -89,7 +89,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -117,7 +117,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           review: z.any() // ReviewWithDetails type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -156,7 +156,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           limit: z.number(),
           hasMore: z.boolean(),
           metrics: z.any() // ReviewMetrics type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -186,7 +186,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           metrics: z.any() // ReviewMetrics type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -212,7 +212,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -234,7 +234,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -265,7 +265,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         201: z.object({
           response: z.any() // CreatorResponse type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -303,7 +303,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           response: z.any() // CreatorResponse type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -349,7 +349,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -390,7 +390,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           moderation_queue: z.any() // ReviewModerationQueue type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -411,7 +411,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -461,7 +461,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           analytics: z.any() // ReviewAnalytics type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -532,10 +532,10 @@ export async function reviewRoutes(fastify: FastifyInstance) {
             three_star: metrics.three_star || 0,
             two_star: metrics.two_star || 0,
             one_star: metrics.one_star || 0
-          },
+  }
           verified_percentage: metrics.total_reviews > 0 ? 
             (metrics.verified_count / metrics.total_reviews) * 100 : 0
-        },
+  }
         trends: {},
         top_keywords: [],
         common_use_cases: [],
@@ -622,7 +622,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           hasMore: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -668,7 +668,7 @@ export async function reviewRoutes(fastify: FastifyInstance) {
             created_at: new Date(review.created_at),
             updated_at: new Date(review.updated_at)
           };
-        })
+  }
       );
       
       reply.send({

@@ -16,33 +16,32 @@ jest.mock('react-beautiful-dnd', () => ({)
   Droppable: ({ children }: unknown) => {
     const provided = {
       droppableProps: {},
-      innerRef: jest.fn<unknown[], unknown>(),
-      placeholder: <div data-testid="placeholder" />,
-    };
+      innerRef: jest.fn<unknown, unknown>(),
+      placeholder: <div data-testid="placeholder" />;
+  };
     const snapshot = { isDraggingOver: false };
     return <div data-testid="droppable">{children(provided, snapshot)}</div>;
   },
   Draggable: ({ children, draggableId }: unknown) => {
     const provided = {
-      innerRef: jest.fn<unknown[], unknown>(),
+      innerRef: jest.fn<unknown, unknown>(),
       draggableProps: { 'data-rbd-draggable-context-id': '1' },
       dragHandleProps: { 'data-testid': `drag-handle-${draggableId}` }
     };
     const snapshot = { isDragging: false };
     return <div data-testid={`draggable-${draggableId}`}>{children(provided, snapshot)}</div>;}
-  }
 }));
 describe('DragReorderWeightManager', () => {
-  const mockOptions: WeightedOption[] = [
+  const mockOptions: WeightedOption = [
     { id: '1', text: 'Option 1', weight: 10 },
     { id: '2', text: 'Option 2', weight: 20 },
     { id: '3', text: 'Option 3', weight: 30 },
     { id: '4', text: 'Option 4', weight: 5, locked: true }
   ];
   const defaultProps = {
-    options: mockOptions,
-    onChange: jest.fn<unknown[], unknown>()
-  };
+  options: mockOptions,
+  onChange: jest.fn<unknown, unknown>(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -56,7 +55,7 @@ describe('DragReorderWeightManager', () => {
     test('renders all options', () => {
       render(<DragReorderWeightManager {...defaultProps} />);
       mockOptions.forEach(option => {)
-        expect(screen.getByText(option.text)).toBeInTheDocument();
+  expect(screen.getByText(option.text)).toBeInTheDocument();
       });
     });
     test('displays weights and percentages by default', () => {
@@ -69,7 +68,7 @@ describe('DragReorderWeightManager', () => {
     test('shows drag handles for all items', () => {
       render(<DragReorderWeightManager {...defaultProps} />);
       mockOptions.forEach(option => {)
-        expect(screen.getByTestId(`drag-handle-${option.id}`)).toBeInTheDocument();}
+  expect(screen.getByTestId(`drag-handle-${option.id}`)).toBeInTheDocument();}
       });
     });
   });
@@ -123,7 +122,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('updates weight value on input change', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} allowWeightEditing={true} />);
       const weightElement = screen.getByText('10.0');
       await user.click(weightElement);
@@ -138,7 +137,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('respects min and max weight constraints', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render();
         <DragReorderWeightManager 
           {...defaultProps} 
@@ -172,7 +171,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('toggles lock state on click', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} allowLocking={true} />);
       const unlockButton = screen.getAllByText('🔓')[0];
       await user.click(unlockButton);
@@ -227,7 +226,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('applies equal weights operation', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} enableBulkOperations={true} />);
       const bulkButton = screen.getByText('Bulk Actions');
       await user.click(bulkButton);
@@ -245,7 +244,7 @@ describe('DragReorderWeightManager', () => {
     });
     test('applies normalize operation', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} enableBulkOperations={true} />);
       const bulkButton = screen.getByText('Bulk Actions');
       await user.click(bulkButton);
@@ -273,7 +272,7 @@ describe('DragReorderWeightManager', () => {
       render(<DragReorderWeightManager {...defaultProps} disabled={true} />);
       const dragHandles = screen.getAllByText('⋮⋮');
       dragHandles.forEach(handle => {)
-        expect(handle).toHaveStyle({ cursor: 'not-allowed' });
+  expect(handle).toHaveStyle({ cursor: 'not-allowed' });
       });
     });
     test('disables weight editing when disabled', async () => {
@@ -291,14 +290,14 @@ describe('DragReorderWeightManager', () => {
   });
   describe('Categories', () => {
     test('displays categories when options have them', () => {
-      const optionsWithCategories: WeightedOption[] = [
+      const optionsWithCategories: WeightedOption = [
         { id: '1', text: 'Option 1', weight: 10, category: 'Category A' },
         { id: '2', text: 'Option 2', weight: 20, category: 'Category B' }
       ];
       render();
         <DragReorderWeightManager 
           options={optionsWithCategories}
-          onChange={jest.fn<unknown[], unknown>()}
+          onChange={jest.fn<unknown, unknown>()}
           enableCategories={true}
         />
       );
@@ -308,7 +307,7 @@ describe('DragReorderWeightManager', () => {
   });
   describe('Empty State', () => {
     test('handles empty options array', () => {
-      render(<DragReorderWeightManager options={[]} onChange={jest.fn<unknown[], unknown>()} />);
+      render(<DragReorderWeightManager options={[]} onChange={jest.fn<unknown, unknown>()} />);
       expect(screen.getByText('Weight Management')).toBeInTheDocument();
       expect(screen.getByText('0 options')).toBeInTheDocument();
     });
@@ -328,26 +327,28 @@ describe('DragReorderWeightManager', () => {
   });
   describe('Drag and Drop', () => {
     test('calls onChange when drag operation completes', () => {
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} />);
       // This is a simplified test since we're mocking react-beautiful-dnd
       // In a real implementation, you'd simulate drag operations
       expect(screen.getByTestId('drag-drop-context')).toBeInTheDocument();
       expect(screen.getByTestId('droppable')).toBeInTheDocument();
       mockOptions.forEach(option => {)
-        expect(screen.getByTestId(`draggable-${option.id}`)).toBeInTheDocument();}
+  expect(screen.getByTestId(`draggable-${option.id}`)).toBeInTheDocument();}
       });
     });
   });
   describe('Performance', () => {
     test('handles large number of options efficiently', () => {
-      const manyOptions: WeightedOption[] = Array.from({ length: 100 }, (_, i) => ({)
-        id: `option-${i}`,}
-        text: `Option ${i + 1}`,}
-        weight: Math.random() * 100,
-      }));
+      const manyOptions: WeightedOption = Array.from({ length: 100 }, (_, i) => ({)
+  id: `option-${i}`}
+},
+  text: `Option ${i + 1}`}
+},
+  weight: Math.random() * 100;
+  }));
       const startTime = performance.now();
-      render(<DragReorderWeightManager options={manyOptions} onChange={jest.fn<unknown[], unknown>()} />);
+      render(<DragReorderWeightManager options={manyOptions} onChange={jest.fn<unknown, unknown>()} />);
       const endTime = performance.now();
       // Should render within reasonable time (less than 100ms)
       expect(endTime - startTime).toBeLessThan(100);
@@ -365,7 +366,7 @@ describe('DragReorderWeightManager', () => {
       render(<DragReorderWeightManager {...defaultProps} allowWeightEditing={true} />);
       const weightInputs = screen.getAllByText(/\d+\.0/);
       weightInputs.forEach(input => {)
-        expect(input).toBeInTheDocument();
+  expect(input).toBeInTheDocument();
       });
     });
     test('provides proper focus management', async () => {
@@ -380,7 +381,7 @@ describe('DragReorderWeightManager', () => {
   describe('Error Handling', () => {
     test('handles invalid weight values gracefully', async () => {
       const user = userEvent.setup();
-      const onChange = jest.fn<unknown[], unknown>();
+      const onChange = jest.fn<unknown, unknown>();
       render(<DragReorderWeightManager {...defaultProps} onChange={onChange} allowWeightEditing={true} />);
       const weightElement = screen.getByText('10.0');
       await user.click(weightElement);
@@ -391,11 +392,11 @@ describe('DragReorderWeightManager', () => {
       expect(input).toHaveValue(NaN);
     });
     test('handles missing option properties', () => {
-      const incompleteOptions: WeightedOption[] = [
+      const incompleteOptions: WeightedOption = [
         { id: '1', text: '', weight: 0 },
         { id: '2', text: 'Valid Option', weight: 10 }
       ];
-      render(<DragReorderWeightManager options={incompleteOptions} onChange={jest.fn<unknown[], unknown>()} />);
+      render(<DragReorderWeightManager options={incompleteOptions} onChange={jest.fn<unknown, unknown>()} />);
       expect(screen.getByText('Valid Option')).toBeInTheDocument();
     });
   });

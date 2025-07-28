@@ -33,7 +33,7 @@ export interface DrawingStyle {
     opacity: number;
     fillColor?: string;
     fillOpacity?: number;
-    dashPattern?: number[];
+    dashPattern?: number;
     lineCap: 'round' | 'square' | 'butt';
     lineJoin: 'round' | 'miter' | 'bevel';
     fontSize?: number;
@@ -49,11 +49,11 @@ export interface VFXUser {
 export interface DrawingCanvasProps {
     width: number;
     height: number;
-    annotations: DrawingAnnotation[];
+    annotations: DrawingAnnotation;
     currentUser: VFXUser;
     backgroundImageUrl?: string;
-    onAnnotationsChange: (annotations: DrawingAnnotation[]) => void;
-    onSave?: (annotations: DrawingAnnotation[]) => void;
+    onAnnotationsChange: (annotations: DrawingAnnotation) => void;
+    onSave?: (annotations: DrawingAnnotation) => void;
     readonly?: boolean;
     showGrid?: boolean;
     gridSize?: number;

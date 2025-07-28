@@ -35,7 +35,7 @@ export interface MarketplaceContext {
     creatorContext?: CreatorContext;
     adminContext?: AdminContext;
     environment: 'production' | 'staging' | 'development';
-    permissions: MarketplacePermission[];
+    permissions: MarketplacePermission;
 }
 export interface TemplateContext {
     templateId: string;
@@ -45,7 +45,7 @@ export interface TemplateContext {
     creatorName: string;
     publishDate: number;
     lastModified: number;
-    tags: string[];
+    tags: string;
     pricing: TemplatePricing;
     performance: TemplatePerformance;
 }
@@ -53,13 +53,13 @@ export interface TemplatePricing {
     priceType: 'free' | 'premium' | 'subscription';
     price?: number;
     subscriptionTier?: string;
-    discounts: TemplateDiscount[];
+    discounts: TemplateDiscount;
 }
 export interface TemplateDiscount {
     type: 'percentage' | 'fixed';
     value: number;
     validUntil: number;
-    conditions: string[];
+    conditions: string;
 }
 export interface TemplatePerformance {
     downloads: number;
@@ -78,8 +78,8 @@ export interface CreatorContext {
     totalRevenue: number;
     averageRating: number;
     joinDate: number;
-    specializations: string[];
-    achievements: CreatorAchievement[];
+    specializations: string;
+    achievements: CreatorAchievement;
 }
 export interface CreatorAchievement {
     achievementId: string;
@@ -91,20 +91,20 @@ export interface CreatorAchievement {
 export interface AdminContext {
     adminId: string;
     adminRole: 'super_admin' | 'marketplace_admin' | 'analytics_admin';
-    permissions: AdminPermission[];
-    managedCategories: string[];
+    permissions: AdminPermission;
+    managedCategories: string;
 }
 export type AdminPermission = 'view_all_analytics' | 'modify_funnels' | 'manage_creators' | 'export_data' | 'configure_integrations';
 export type MarketplacePermission = 'view_basic_analytics' | 'view_advanced_analytics' | 'receive_recommendations' | 'export_personal_data' | 'configure_alerts';
 export type IntegrationMode = 'embedded_widget' | 'full_dashboard' | 'recommendation_panel' | 'alert_center' | 'performance_overlay';
 export type UserRole = 'creator' | 'admin' | 'viewer' | 'manager';
 export interface WidgetConfiguration {
-    widgets: WidgetType[];
+    widgets: WidgetType;
     layout: WidgetLayout;
     refreshInterval: number;
     compactMode: boolean;
     theme: 'light' | 'dark' | 'auto';
-    customizations: WidgetCustomization[];
+    customizations: WidgetCustomization;
 }
 export type WidgetType = 'conversion_summary' | 'performance_chart' | 'optimization_recommendations' | 'anomaly_alerts' | 'attribution_insights' | 'predictive_forecast' | 'template_performance' | 'creator_dashboard';
 export interface WidgetLayout {
@@ -132,11 +132,11 @@ export interface WidgetCustomization {
 }
 export interface MarketplaceIntegrationData {
     funnelSummary: FunnelSummaryData;
-    templateInsights: TemplateInsightData[];
-    creatorOptimizations: CreatorOptimizationData[];
+    templateInsights: TemplateInsightData;
+    creatorOptimizations: CreatorOptimizationData;
     marketplaceMetrics: MarketplaceMetricData;
-    recommendedActions: RecommendedAction[];
-    performanceAlerts: PerformanceAlert[];
+    recommendedActions: RecommendedAction;
+    performanceAlerts: PerformanceAlert;
     integrationHealth: IntegrationHealthData;
 }
 export interface FunnelSummaryData {
@@ -144,8 +144,8 @@ export interface FunnelSummaryData {
     totalConversions: number;
     totalRevenue: number;
     averageOrderValue: number;
-    topPerformingSteps: StepPerformanceData[];
-    bottomleneckSteps: StepPerformanceData[];
+    topPerformingSteps: StepPerformanceData;
+    bottomleneckSteps: StepPerformanceData;
     trendDirection: 'improving' | 'declining' | 'stable';
     lastUpdated: number;
 }
@@ -163,8 +163,8 @@ export interface TemplateInsightData {
     templateName: string;
     creatorId: string;
     conversionMetrics: TemplateConversionMetrics;
-    performanceInsights: TemplatePerformanceInsight[];
-    optimizationOpportunities: TemplateOptimizationOpportunity[];
+    performanceInsights: TemplatePerformanceInsight;
+    optimizationOpportunities: TemplateOptimizationOpportunity;
     competitivePosition: TemplateCompetitivePosition;
 }
 export interface TemplateConversionMetrics {
@@ -182,7 +182,7 @@ export interface TemplatePerformanceInsight {
     impact: 'high' | 'medium' | 'low';
     confidence: number;
     actionable: boolean;
-    recommendations: TemplateRecommendation[];
+    recommendations: TemplateRecommendation;
 }
 export type TemplateInsightType = 'conversion_opportunity' | 'pricing_optimization' | 'content_improvement' | 'marketing_efficiency' | 'user_experience' | 'competitive_advantage';
 export interface TemplateRecommendation {
@@ -191,14 +191,14 @@ export interface TemplateRecommendation {
     effort: 'low' | 'medium' | 'high';
     priority: 'critical' | 'high' | 'medium' | 'low';
     timeline: string;
-    resources: string[];
+    resources: string;
 }
 export interface TemplateOptimizationOpportunity {
     opportunity: string;
     currentPerformance: number;
     potentialPerformance: number;
     improvementPercentage: number;
-    implementationSteps: OptimizationStep[];
+    implementationSteps: OptimizationStep;
     successProbability: number;
 }
 export interface OptimizationStep {
@@ -206,13 +206,13 @@ export interface OptimizationStep {
     description: string;
     effort: 'low' | 'medium' | 'high';
     timeline: number;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface TemplateCompetitivePosition {
     categoryRank: number;
     totalInCategory: number;
-    competitiveAdvantages: string[];
-    competitiveWeaknesses: string[];
+    competitiveAdvantages: string;
+    competitiveWeaknesses: string;
     marketShare: number;
     trendDirection: 'gaining' | 'losing' | 'stable';
 }
@@ -220,9 +220,9 @@ export interface CreatorOptimizationData {
     creatorId: string;
     creatorName: string;
     portfolioMetrics: CreatorPortfolioMetrics;
-    optimizationRecommendations: CreatorOptimizationRecommendation[];
-    performanceTrends: CreatorPerformanceTrend[];
-    growthOpportunities: CreatorGrowthOpportunity[];
+    optimizationRecommendations: CreatorOptimizationRecommendation;
+    performanceTrends: CreatorPerformanceTrend;
+    growthOpportunities: CreatorGrowthOpportunity;
 }
 export interface CreatorPortfolioMetrics {
     totalTemplates: number;
@@ -238,7 +238,7 @@ export interface CreatorOptimizationRecommendation {
     title: string;
     description: string;
     expectedImpact: CreatorImpactProjection;
-    actionItems: CreatorActionItem[];
+    actionItems: CreatorActionItem;
     priority: 'critical' | 'high' | 'medium' | 'low';
 }
 export type CreatorRecommendationType = 'template_optimization' | 'pricing_strategy' | 'portfolio_expansion' | 'marketing_improvement' | 'user_engagement' | 'quality_enhancement';
@@ -254,8 +254,8 @@ export interface CreatorActionItem {
     instructions: string;
     effort: 'low' | 'medium' | 'high';
     timeline: number;
-    tools: string[];
-    success_criteria: string[];
+    tools: string;
+    success_criteria: string;
 }
 export interface CreatorPerformanceTrend {
     metric: string;
@@ -263,7 +263,7 @@ export interface CreatorPerformanceTrend {
     trend: 'improving' | 'declining' | 'stable';
     changePercentage: number;
     projectedValue: number;
-    factors: TrendFactor[];
+    factors: TrendFactor;
 }
 export interface TrendFactor {
     factor: string;
@@ -276,7 +276,7 @@ export interface CreatorGrowthOpportunity {
     description: string;
     marketSize: number;
     competitionLevel: 'low' | 'medium' | 'high';
-    skillRequirements: string[];
+    skillRequirements: string;
     investmentRequired: number;
     expectedROI: number;
 }
@@ -284,7 +284,7 @@ export interface MarketplaceMetricData {
     totalConversions: number;
     totalRevenue: number;
     averageConversionRate: number;
-    topPerformingCategories: CategoryPerformance[];
+    topPerformingCategories: CategoryPerformance;
     userAcquisitionMetrics: UserAcquisitionMetrics;
     retentionMetrics: RetentionMetrics;
     healthScore: MarketplaceHealthScore;
@@ -300,8 +300,8 @@ export interface CategoryPerformance {
 export interface UserAcquisitionMetrics {
     newUsersLastPeriod: number;
     acquisitionCost: number;
-    acquisitionChannels: AcquisitionChannel[];
-    conversionByChannel: ChannelConversion[];
+    acquisitionChannels: AcquisitionChannel;
+    conversionByChannel: ChannelConversion;
 }
 export interface AcquisitionChannel {
     channel: string;
@@ -318,7 +318,7 @@ export interface ChannelConversion {
 }
 export interface RetentionMetrics {
     overallRetentionRate: number;
-    cohortRetention: CohortRetentionData[];
+    cohortRetention: CohortRetentionData;
     churnRate: number;
     reactivationRate: number;
 }
@@ -330,9 +330,9 @@ export interface CohortRetentionData {
 }
 export interface MarketplaceHealthScore {
     overallScore: number;
-    components: HealthScoreComponent[];
+    components: HealthScoreComponent;
     trend: 'improving' | 'declining' | 'stable';
-    criticalIssues: string[];
+    criticalIssues: string;
 }
 export interface HealthScoreComponent {
     component: string;
@@ -345,7 +345,7 @@ export interface RecommendedAction {
     type: ActionType;
     title: string;
     description: string;
-    targetAudience: UserRole[];
+    targetAudience: UserRole;
     priority: 'critical' | 'high' | 'medium' | 'low';
     expectedImpact: ActionImpact;
     implementation: ActionImplementation;
@@ -360,8 +360,8 @@ export interface ActionImpact {
     confidenceLevel: number;
 }
 export interface ActionImplementation {
-    steps: ImplementationStep[];
-    resources: string[];
+    steps: ImplementationStep;
+    resources: string;
     timeline: number;
     cost: number;
     riskLevel: 'low' | 'medium' | 'high';
@@ -371,14 +371,14 @@ export interface ImplementationStep {
     description: string;
     owner: string;
     duration: number;
-    dependencies: string[];
+    dependencies: string;
 }
 export interface ActionProgress {
     status: 'pending' | 'in_progress' | 'completed' | 'paused' | 'cancelled';
     completionPercentage: number;
     startDate?: number;
-    completedSteps: string[];
-    blockers: string[];
+    completedSteps: string;
+    blockers: string;
 }
 export interface PerformanceAlert {
     alertId: string;
@@ -386,7 +386,7 @@ export interface PerformanceAlert {
     severity: 'critical' | 'high' | 'medium' | 'low';
     title: string;
     description: string;
-    affectedEntities: AffectedEntity[];
+    affectedEntities: AffectedEntity;
     detectedAt: number;
     resolvedAt?: number;
     resolution: AlertResolution;
@@ -401,7 +401,7 @@ export interface AffectedEntity {
 export interface AlertResolution {
     status: 'open' | 'investigating' | 'resolved' | 'false_positive';
     assignedTo?: string;
-    resolutionSteps: ResolutionStep[];
+    resolutionSteps: ResolutionStep;
     resolutionTime?: number;
 }
 export interface ResolutionStep {
@@ -415,7 +415,7 @@ export interface IntegrationHealthData {
     lastSync: number;
     syncFrequency: number;
     dataQuality: number;
-    errors: IntegrationError[];
+    errors: IntegrationError;
     performance: IntegrationPerformance;
 }
 export interface IntegrationError {
@@ -447,10 +447,10 @@ export interface InsightInteraction {
 }
 export interface MarketplaceIntegrationExportData {
     funnelSummary: FunnelSummaryData;
-    templateInsights: TemplateInsightData[];
-    creatorOptimizations: CreatorOptimizationData[];
-    recommendedActions: RecommendedAction[];
-    performanceAlerts: PerformanceAlert[];
+    templateInsights: TemplateInsightData;
+    creatorOptimizations: CreatorOptimizationData;
+    recommendedActions: RecommendedAction;
+    performanceAlerts: PerformanceAlert;
     exportTimestamp: number;
     userContext: MarketplaceContext;
 }

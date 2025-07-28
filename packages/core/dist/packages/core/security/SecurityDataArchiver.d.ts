@@ -26,7 +26,7 @@ export interface DataPartitionConfig {
         };
         content_based?: {
             partition_field: string;
-            partition_values: string[];
+            partition_values: string;
             dynamic_partitioning: boolean;
         };
         hybrid?: {
@@ -45,8 +45,8 @@ export interface DataPartitionConfig {
         replication_factor: number;
     };
     indexing: {
-        primary_indices: string[];
-        secondary_indices: string[];
+        primary_indices: string;
+        secondary_indices: string;
         bloom_filters: boolean;
         index_compression: boolean;
         query_optimization: boolean;
@@ -61,11 +61,11 @@ export interface DataPartitionConfig {
     };
     compliance: {
         data_classification: 'public' | 'internal' | 'confidential' | 'restricted';
-        regulatory_requirements: string[];
+        regulatory_requirements: string;
         retention_legal_hold: boolean;
         audit_trail_required: boolean;
         immutable_storage: boolean;
-        geographic_restrictions: string[];
+        geographic_restrictions: string;
     };
     created_by: string;
     created_at: number;
@@ -76,26 +76,11 @@ export interface RetentionPolicy {
     id: string;
     name: string;
     description: string;
-    rules: Array<{
-        condition: string;
-        retention_days: number;
-        action: 'archive' | 'delete' | 'move_to_cold' | 'compress';
-        priority: number;
-    }>;
-    compliance_overrides: Array<{
-        regulation: string;
-        min_retention_days: number;
-        max_retention_days?: number;
-        special_handling: string[];
-    }>;
-    exceptions: Array<{
-        condition: string;
-        retention_extension_days: number;
-        reason: string;
-        approval_required: boolean;
-    }>;
-    created_at: number;
-    enabled: boolean;
+    rules: Array<{}, condition>;
+    string: any;
+    retention_days: number;
+    action: 'archive' | 'delete' | 'move_to_cold' | 'compress';
+    priority: number;
 }
 export interface StorageTier {
     tier_name: 'hot' | 'warm' | 'cold' | 'archive';
@@ -105,7 +90,7 @@ export interface StorageTier {
     retrieval_cost_per_gb: number;
     minimum_storage_duration_days: number;
     durability: number;
-    geographic_regions: string[];
+    geographic_regions: string;
 }
 export interface ArchivalJob {
     id: string;
@@ -123,8 +108,8 @@ export interface ArchivalJob {
     schedule: {
         type: 'manual' | 'scheduled' | 'event_triggered';
         cron_expression?: string;
-        trigger_events?: string[];
-        dependencies?: string[];
+        trigger_events?: string;
+        dependencies?: string;
     };
     processing: {
         validate_data_integrity: boolean;
@@ -138,7 +123,7 @@ export interface ArchivalJob {
         progress_reporting: boolean;
         error_threshold: number;
         alert_on_failure: boolean;
-        notification_recipients: string[];
+        notification_recipients: string;
         metrics_collection: boolean;
     };
     execution: {
@@ -179,44 +164,27 @@ export interface ArchivalExecution {
         network_utilization_mbps: number;
         storage_io_operations: number;
     };
-    errors: Array<{
-        timestamp: number;
-        error_type: string;
-        error_message: string;
-        record_id?: string;
-        retry_count: number;
-        resolution: string;
-    }>;
-    quality_checks: Array<{
-        check_name: string;
-        check_type: 'integrity' | 'completeness' | 'format' | 'compliance';
-        result: 'passed' | 'failed' | 'warning';
-        details: string;
-        timestamp: number;
-    }>;
-    results: {
-        output_locations: string[];
-        manifest_files: string[];
-        checksum_files: string[];
-        index_files: string[];
-        metadata_files: string[];
-    };
-    triggered_by: string;
-    created_at: number;
+    errors: Array<{}, timestamp>;
+    number: any;
+    error_type: string;
+    error_message: string;
+    record_id?: string;
+    retry_count: number;
+    resolution: string;
 }
 export interface DataRetrievalRequest {
     id: string;
     requester: string;
     request_type: 'search' | 'restore' | 'export' | 'compliance_audit';
     criteria: {
-        data_types: string[];
+        data_types: string;
         time_range: {
             start: number;
             end: number;
         };
         filters: Record<string, any>;
         search_query?: string;
-        partition_ids?: string[];
+        partition_ids?: string;
     };
     options: {
         output_format: 'json' | 'csv' | 'parquet' | 'avro' | 'native';
@@ -235,7 +203,7 @@ export interface DataRetrievalRequest {
     };
     approval: {
         required: boolean;
-        approvers: string[];
+        approvers: string;
         approved_by?: string;
         approved_at?: number;
         approval_notes?: string;
@@ -260,8 +228,8 @@ export interface DataRetrievalRequest {
     results?: {
         records_retrieved: number;
         data_volume_gb: number;
-        output_files: string[];
-        download_urls: string[];
+        output_files: string;
+        download_urls: string;
         expiry_date: number;
     };
     created_at: number;
@@ -328,12 +296,12 @@ export interface ArchivalEvent {
     data_impact: {
         records_affected: number;
         data_volume_gb: number;
-        partitions_affected: string[];
+        partitions_affected: string;
         estimated_recovery_time?: number;
     };
     context: {
         triggered_by: string;
-        related_events: string[];
+        related_events: string;
         system_state: Record<string, any>;
         performance_metrics: Record<string, number>;
     };
@@ -341,7 +309,7 @@ export interface ArchivalEvent {
         acknowledged: boolean;
         acknowledged_by?: string;
         acknowledged_at?: number;
-        actions_taken: string[];
+        actions_taken: string;
         resolution_notes?: string;
         resolved_at?: number;
     };
@@ -367,56 +335,5 @@ export declare class SecurityDataArchiver extends EventEmitter {
     private complianceCheckInterval?;
     private costOptimizationInterval?;
     constructor();
-    createPartitionConfig(config: Omit<DataPartitionConfig, 'id' | 'created_at' | 'last_updated'>): Promise<string>;
-    createRetentionPolicy(policy: Omit<RetentionPolicy, 'id' | 'created_at'>): Promise<string>;
-    createArchivalJob(job: Omit<ArchivalJob, 'id' | 'created_at' | 'last_updated' | 'execution'>): Promise<string>;
-    executeArchivalJob(jobId: string, triggeredBy?: string): Promise<string>;
-    private performArchivalExecution;
-    private executeArchivalPhase;
-    private discoverAndValidateData;
-    private processAndTransformData;
-    private archiveAndStoreData;
-    private verifyDataIntegrity;
-    private cleanupAndFinalize;
-    createRetrievalRequest(request: Omit<DataRetrievalRequest, 'id' | 'created_at' | 'last_updated' | 'execution' | 'cost_tracking'>): Promise<string>;
-    approveRetrievalRequest(requestId: string, approver: string, notes?: string): Promise<void>;
-    private queueRetrievalRequest;
-    private processRetrievalRequest;
-    collectPartitionMetrics(configId: string): Promise<string>;
-    private sendExecutionNotification;
-    private createExecutionNotificationMessage;
-    private sendApprovalRequest;
-    private createApprovalRequestMessage;
-    private sendRetrievalCompletionNotification;
-    getSystemStatus(): {
-        partition_configs: number;
-        active_jobs: number;
-        running_executions: number;
-        pending_retrievals: number;
-        total_archived_data_gb: number;
-        system_health_score: number;
-        recent_events: ArchivalEvent[];
-    };
-    private createDefaultArchivalJobs;
-    private scheduleJob;
-    private scheduleNextJobRun;
-    private parseNextCronExecution;
-    private initializeDefaultConfigurations;
-    private startMetricsCollection;
-    private startMaintenanceScheduler;
-    private startComplianceMonitoring;
-    private startCostOptimization;
-    private performSystemMaintenance;
-    private performComplianceChecks;
-    private performCostOptimization;
-    getPartitionConfigs(): DataPartitionConfig[];
-    getArchivalJobs(): ArchivalJob[];
-    getExecutions(): ArchivalExecution[];
-    getRetrievalRequests(): DataRetrievalRequest[];
-    getEvents(): ArchivalEvent[];
-    exportConfiguration(): Promise<string>;
-    importConfiguration(configJson: string): Promise<void>;
-    shutdown(): void;
 }
-export default SecurityDataArchiver;
 //# sourceMappingURL=SecurityDataArchiver.d.ts.map

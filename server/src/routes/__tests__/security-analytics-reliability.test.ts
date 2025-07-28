@@ -164,7 +164,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           componentName: 'security_analytics_service',
           action: 'reset'
@@ -188,7 +188,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           componentName: 'test_component'
           // Missing action
@@ -205,7 +205,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           componentName: 'test_component',
           action: 'invalid_action'
@@ -301,7 +301,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           planId: 'security_analytics_failure',
           testMode: true
@@ -325,7 +325,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           planId: 'security_analytics_failure',
           testMode: false
@@ -346,7 +346,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           planId: 'security_analytics_failure',
           testMode: false,
@@ -369,7 +369,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {}
       });
 
@@ -572,7 +572,7 @@ describe('Security Analytics Reliability API Routes', () => {
           headers: {
             authorization: authToken,
             'content-type': 'application/json'
-          },
+  }
           payload: {
             componentName: 'test_component',
             action: action
@@ -591,7 +591,7 @@ describe('Security Analytics Reliability API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-        },
+  }
         payload: {
           planId: 'valid_plan_id',
           testMode: true

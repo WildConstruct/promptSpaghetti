@@ -69,7 +69,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         incident_synchronization: true,
         threat_feed_integration: true,
         alert_forwarding: true
-      },
+  }
       supported_platforms: {
         splunk: true,
         qradar: true,
@@ -83,7 +83,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         phantom: true,
         demisto: true,
         custom_apis: true
-      },
+  }
       data_formats: {
         cef: true,
         leef: true,
@@ -94,7 +94,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         stix_taxii: true,
         misp: true,
         custom_formats: true
-      },
+  }
       export_capabilities: {
         intelligence_data: true,
         threat_indicators: true,
@@ -104,7 +104,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         compliance_reports: true,
         correlation_results: true,
         workflow_logs: true
-      },
+  }
       streaming_options: {
         real_time_events: true,
         batch_processing: true,
@@ -114,7 +114,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         compression_enabled: true,
         encryption_enabled: true,
         authentication_required: true
-      },
+  }
       quality_controls: {
         data_validation: true,
         format_verification: true,
@@ -222,7 +222,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           client_id: 'test_client',
           client_secret: 'test_secret',
           tenant_id: 'test_tenant'
-        },
+  }
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'json'
@@ -242,7 +242,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         authentication_config: { 
           username: 'elastic_user',
           password: 'elastic_pass'
-        },
+  }
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'json',
@@ -263,7 +263,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         authentication_config: { 
           cert_file: '/path/to/cert.pem',
           key_file: '/path/to/key.pem'
-        },
+  }
         protocol: 'https',
         ssl_enabled: true,
         data_format: 'stix_taxii'
@@ -488,7 +488,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           exclude_filters: [],
           severity_threshold: 'medium',
           confidence_threshold: 0.75
-        },
+  }
         batch_size: 1000,
         flush_interval: 30
       };
@@ -630,13 +630,13 @@ describe('SecuritySIEMIntegrationEngine', () => {
           target_field: '_time',
           data_type: 'date',
           required: true
-        },
+  }
         {
           source_field: 'severity',
           target_field: 'severity',
           data_type: 'string',
           required: true
-        },
+  }
         {
           source_field: 'source_ip',
           target_field: 'src_ip',
@@ -1036,7 +1036,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           protocol: 'https',
           ssl_enabled: true,
           data_format: 'json'
-        })
+  }
       ];
 
       const connections = await Promise.all(connectionPromises);
@@ -1071,7 +1071,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
         engine.exportThreatIntelligence(connection.connection_id, {
           data_types: ['threat_actors'],
           export_format: 'leef'
-        })
+  }
       ];
 
       const exports = await Promise.all(exportPromises);
@@ -1104,7 +1104,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           ssl_enabled: true,
           data_format: 'json',
           streaming_enabled: true
-        })
+  }
       ]);
 
       const streamingPromises = connections.map(connection =>
@@ -1112,7 +1112,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           data_types: ['indicators'],
           batch_size: 100,
           flush_interval: 10
-        })
+  }
       );
 
       const streams = await Promise.all(streamingPromises);
@@ -1137,7 +1137,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           incident_synchronization: false,
           threat_feed_integration: true,
           alert_forwarding: false
-        },
+  }
         supported_platforms: {
           splunk: true,
           qradar: false,
@@ -1151,7 +1151,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           phantom: true,
           demisto: false,
           custom_apis: true
-        },
+  }
         data_formats: {
           cef: true,
           leef: false,
@@ -1162,7 +1162,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           stix_taxii: true,
           misp: false,
           custom_formats: true
-        },
+  }
         export_capabilities: {
           intelligence_data: true,
           threat_indicators: true,
@@ -1172,7 +1172,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           compliance_reports: true,
           correlation_results: false,
           workflow_logs: true
-        },
+  }
         streaming_options: {
           real_time_events: false,
           batch_processing: true,
@@ -1182,7 +1182,7 @@ describe('SecuritySIEMIntegrationEngine', () => {
           compression_enabled: true,
           encryption_enabled: false,
           authentication_required: true
-        },
+  }
         quality_controls: {
           data_validation: true,
           format_verification: false,

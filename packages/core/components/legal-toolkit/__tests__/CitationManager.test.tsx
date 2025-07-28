@@ -13,35 +13,33 @@ import { CitationManager } from '../CitationManager';
 import { Citation } from '../types';
 
 // Mock data
-const mockCitations: Citation[] = [
+const mockCitations: Citation = [
   {
-    id: '1',
-    type: 'bluebook',
-    shortForm: 'Brown v. Board',
-    longForm: 'Brown v. Board of Education, 347 U.S. 483 (1954)',
-    court: 'U.S. Supreme Court',
-    date: '1954',
-    volume: '347',
-    reporter: 'U.S.',
-    page: '483',
-  },
+  id: '1',
+  type: 'bluebook',
+  shortForm: 'Brown v. Board',
+  longForm: 'Brown v. Board of Education, 347 U.S. 483 (1954)',
+  court: 'U.S. Supreme Court',
+  date: '1954',
+  volume: '347',
+  reporter: 'U.S.',
+  page: '483',
+}
   {
-    id: '2',
-    type: 'alwd',
-    shortForm: 'Miranda Rights',
-    longForm: 'Miranda v. Arizona, 384 U.S. 436 (1966)',
-    court: 'U.S. Supreme Court',
-    date: '1966',
-    url: 'https://example.com/miranda',
-  }
-];
-describe('CitationManager Component', () => {
-  const mockOnCitationAdd = jest.fn<unknown[], unknown>();
-  const mockOnCitationEdit = jest.fn<unknown[], unknown>();
-  const mockOnCitationDelete = jest.fn<unknown[], unknown>();
+  id: '2',
+  type: 'alwd',
+  shortForm: 'Miranda Rights',
+  longForm: 'Miranda v. Arizona, 384 U.S. 436 (1966)',
+  court: 'U.S. Supreme Court',
+  date: '1966',
+  url: 'https://example.com/miranda'];
+  describe('CitationManager Component', () => {
+  const mockOnCitationAdd = jest.fn<unknown, unknown>();
+  const mockOnCitationEdit = jest.fn<unknown, unknown>();
+  const mockOnCitationDelete = jest.fn<unknown, unknown>();
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  jest.clearAllMocks();
+});
   describe('Initial Rendering', () => {
     it('renders citation manager interface', () => {
       render();
@@ -181,12 +179,12 @@ describe('CitationManager Component', () => {
       await user.click(saveButton);
       expect(mockOnCitationAdd).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'bluebook',
-          shortForm: 'Roe v. Wade',
-          longForm: 'Roe v. Wade, 410 U.S. 113 (1973)',
-          court: 'U.S. Supreme Court',
-          date: '1973',
-        })
+  type: 'bluebook',
+  shortForm: 'Roe v. Wade',
+  longForm: 'Roe v. Wade, 410 U.S. 113 (1973)',
+  court: 'U.S. Supreme Court',
+  date: '1973',
+}
       );
     });
     it('validates required fields before submission', async () => {
@@ -265,8 +263,8 @@ describe('CitationManager Component', () => {
       const saveButton = screen.getByText(/Save Citation/i);
       await user.click(saveButton);
       expect(mockOnCitationEdit).toHaveBeenCalledWith('1', expect.objectContaining({)
-        shortForm: 'Brown v. Board (Updated)',
-      }));
+  shortForm: 'Brown v. Board (Updated)',
+}));
     });
     it('cancels edit without saving changes', async () => {
       const user = userEvent.setup();
@@ -360,10 +358,10 @@ describe('CitationManager Component', () => {
       expect(screen.getByText('Brown v. Board of Education, 347 U.S. 483 (1954)')).toBeInTheDocument();
     });
     it('displays pinpoint citations when available', () => {
-      const citationWithPinpoint: Citation[] = [{
-        ...mockCitations[0],
-        pinpoint: 'at 495',
-      }];
+  const citationWithPinpoint: Citation = [{,
+  ...mockCitations[0],
+  pinpoint: 'at 495',
+}];
       render();
         <CitationManager
           citations={citationWithPinpoint}
@@ -533,13 +531,13 @@ describe('CitationManager Component', () => {
     });
   });
   describe('Error Handling', () => {
-    it('handles invalid citation data gracefully', () => {
-      const invalidCitation: Citation = {
-        id: 'invalid',
-        type: 'bluebook',
-        shortForm: '',
-        longForm: '',
-      } as Citation;
+  it('handles invalid citation data gracefully', () => {
+  const invalidCitation: Citation = {,
+  id: 'invalid',
+  type: 'bluebook',
+  shortForm: '',
+  longForm: '',
+} as Citation;
       render();
         <CitationManager
           citations={[invalidCitation]}

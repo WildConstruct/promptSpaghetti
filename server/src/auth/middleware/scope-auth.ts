@@ -4,10 +4,12 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { TokenService } from '../services/TokenService';
 
+}
 export interface ScopeAuthOptions {
   requiredScopes: string[];
   requireAll?: boolean; // If true, user must have ALL scopes. If false, user must have AT LEAST ONE scope
   allowUser?: boolean; // If true, allow regular user tokens (not just API tokens)
+}
 }
 
 export function createScopeAuthMiddleware(tokenService: TokenService) {
@@ -101,47 +103,47 @@ export const ScopeConfigs = {
   GRAPHS_READ: {
     requiredScopes: ['graphs:read'],
     allowUser: true
-  },
+  }
   GRAPHS_WRITE: {
     requiredScopes: ['graphs:write'],
     allowUser: true
-  },
+  }
   GRAPHS_EXECUTE: {
     requiredScopes: ['graphs:execute'],
     allowUser: true
-  },
+  }
   GRAPHS_DELETE: {
     requiredScopes: ['graphs:delete'],
     allowUser: true
-  },
+  }
   USER_READ: {
     requiredScopes: ['user:read'],
     allowUser: true
-  },
+  }
   USER_WRITE: {
     requiredScopes: ['user:write'],
     allowUser: true
-  },
+  }
   ADMIN_USERS: {
     requiredScopes: ['admin:users'],
     allowUser: false
-  },
+  }
   ADMIN_SYSTEM: {
     requiredScopes: ['admin:system'],
     allowUser: false
-  },
+  }
   ORGANIZATIONS_READ: {
     requiredScopes: ['organizations:read'],
     allowUser: true
-  },
+  }
   ORGANIZATIONS_WRITE: {
     requiredScopes: ['organizations:write'],
     allowUser: true
-  },
+  }
   TEAMS_READ: {
     requiredScopes: ['teams:read'],
     allowUser: true
-  },
+  }
   TEAMS_WRITE: {
     requiredScopes: ['teams:write'],
     allowUser: true
@@ -163,5 +165,6 @@ export function createScopeAuthPlugin(tokenService: TokenService) {
 declare module 'fastify' {
   interface FastifyInstance {
     scopeAuth: ReturnType<typeof createScopeAuthMiddleware>;
+}
   }
 }

@@ -8,7 +8,7 @@
  * - Structured VFX data for pipeline integration
  * - Hollywood protocol reproducibility with complete seed tracking
  */
-import { VFXExportFormat, VFXPromptVariant } from '../types/VFXExport.js';
+import { VFXExportFormat } from '../types/VFXExport.js';
 import { Node, Edge } from 'reactflow';
 export interface HybridExportFormat extends VFXExportFormat {
     hybridPrompting: {
@@ -19,13 +19,13 @@ export interface HybridExportFormat extends VFXExportFormat {
         };
         zada: {
             approach: 'screenplay-style';
-            variants: ZadaNaturalLanguageVariant[];
+            variants: ZadaNaturalLanguageVariant;
             director_friendly: DirectorAccessiblePrompt;
         };
         hollywood: {
             protocol: 'reproducibility-v1';
             seeds: HollywoodSeedProtocol;
-            iteration_tracking: IterationHistory[];
+            iteration_tracking: IterationHistory;
         };
     };
 }
@@ -48,8 +48,8 @@ export interface MARSFrameworkTags {
         lighting: 'natural' | 'dramatic' | 'soft' | 'harsh' | 'practical' | 'motivated';
         color_grade: 'neutral' | 'warm' | 'cool' | 'desaturated' | 'cinematic';
         atmosphere: 'clear' | 'hazy' | 'smoky' | 'foggy' | 'dusty';
-        special_fx?: string[];
-        post_processing?: string[];
+        special_fx?: string;
+        post_processing?: string;
     };
     FOCAL: {
         primary_focus: string;
@@ -94,7 +94,7 @@ export interface DirectorAccessiblePrompt {
 export interface HollywoodSeedProtocol {
     master_seed: number;
     component_seeds: Record<string, number>;
-    iteration_seeds: number[];
+    iteration_seeds: number;
     reproducibility_checksum: string;
     version_compatibility: {
         generator_version: string;
@@ -106,7 +106,7 @@ export interface IterationHistory {
     iteration_id: string;
     timestamp: string;
     seed_used: number;
-    changes_from_previous: string[];
+    changes_from_previous: string;
     director_notes?: string;
     approval_status: 'draft' | 'review' | 'approved' | 'final';
 }
@@ -116,120 +116,13 @@ export declare class HybridPromptExportService {
     private zadaGenerator;
     private seedManager;
     constructor();
-    /**
-     * Export graph with hybrid prompting approach combining all methodologies
-     */
-    exportHybridPrompt(graph: {
-        nodes: Node[];
-        edges: Edge[];
-    }, executionResults: {
-        finalPrompt: string;
-        variables: Record<string, string>;
-        executionTime: number;
-        nodePerformance?: Record<string, number>;
-        variants?: VFXPromptVariant[];
-    }, options?: {
-        includeMARS: boolean;
-        includeZada: boolean;
-        includeHollywoodProtocol: boolean;
-        quality: 'production' | 'preview' | 'debug';
-        targetAudience: 'director' | 'vfx_professional' | 'mixed_crew';
-    }): Promise<HybridExportFormat>;
     private buildHybridExtensions;
+    graph: {
+        nodes: Node;
+        edges: Edge;
+    };
+    executionResults: any;
+    options: any;
+    const extensions: HybridExportFormat['hybridPrompting'];
 }
-declare class MARSFrameworkExtractor {
-    extractMARSTags(prompt: string, variables: Record<string, string>): Promise<MARSFrameworkTags>;
-    createStructuredPrompt(prompt: string): Promise<MARSStructuredPrompt>;
-    private extractCameraTags;
-    private extractSubjectTags;
-    private extractEffectsTags;
-    private extractFocalTags;
-    private filterCameraVariables;
-    private inferShotType;
-    private inferCameraAngle;
-    private inferCameraMovement;
-    private inferLensChoice;
-    private inferDepthOfField;
-    private extractPrimarySubject;
-    private extractSecondarySubjects;
-    private extractInteractions;
-    private extractEmotionalState;
-    private extractPhysicalBlocking;
-    private inferLightingStyle;
-    private inferColorGrading;
-    private inferAtmosphericConditions;
-    private extractSpecialEffects;
-    private extractPostProcessingEffects;
-    private identifyPrimaryFocus;
-    private identifySecondaryFocus;
-    private inferBackgroundTreatment;
-    private determineVisualHierarchy;
-    private convertToMARSFormat;
-    private extractCameraSection;
-    private extractSubjectSection;
-    private extractEffectsSection;
-    private extractFocalSection;
-    private mapToControlNetPose;
-    private mapToControlNetDepth;
-    private mapToControlNetEdges;
-    private mapToControlNetComposition;
-}
-declare class ZadaNaturalLanguageGenerator {
-    generateNaturalLanguageVariants(prompt: string, variables: Record<string, string>, targetAudience: 'director' | 'vfx_professional' | 'mixed_crew'): Promise<ZadaNaturalLanguageVariant[]>;
-    createDirectorAccessiblePrompt(prompt: string, variables: Record<string, string>): Promise<DirectorAccessiblePrompt>;
-    private convertToScreenplayStyle;
-    private convertToStoryboardStyle;
-    private convertToShotListStyle;
-    private convertToDirectorNotes;
-    private extractPrimarySubject;
-    private extractMainAction;
-    private extractSetting;
-    private formatScreenplayAction;
-    private createNaturalDescription;
-    private createCameraDescription;
-    private inferShotTypeNaturally;
-    private inferCameraMovementNaturally;
-    private describeComposition;
-    private describeSubjectNaturally;
-    private describeLightingNaturally;
-    private describeCameraNaturally;
-    private generateVisualNotes;
-    private generateShotNotes;
-    private createNaturalShotDescription;
-    private extractMoodDirection;
-    private generateReferenceNotes;
-    private generateCinematographerNotes;
-    private generateLightingDirectorNotes;
-    private generateVFXSupervisorNotes;
-    private extractCreativeIntent;
-    private generatePerformanceNotes;
-    private generateTechnicalConsiderations;
-    private determineVisualHierarchyNaturally;
-    private identifyPrimaryFocusNaturally;
-    private extractEmotionalStateNaturally;
-    private extractPhysicalBlockingNaturally;
-    private inferLightingStyleNaturally;
-    private inferCameraAngleNaturally;
-    private inferLensChoiceNaturally;
-    private extractKeyVisualElements;
-    private inferCinematicReferences;
-    private inferColorPalette;
-    private extractLightingConsiderations;
-    private extractSpecialEffectsNaturally;
-    private inferDirectorialIntent;
-    private extractActionDirection;
-    private extractTechnicalRequirements;
-}
-declare class HollywoodSeedManager {
-    generateHollywoodSeeds(graph: {
-        nodes: Node[];
-        edges: Edge[];
-    }): HollywoodSeedProtocol;
-    createIterationHistory(executionResults: any): IterationHistory[];
-    private hashSeed;
-    private generateChecksum;
-    private extractNodeVersions;
-}
-export { HybridPromptExportService, MARSFrameworkExtractor, ZadaNaturalLanguageGenerator, HollywoodSeedManager };
-export default HybridPromptExportService;
 //# sourceMappingURL=HybridExportService.d.ts.map

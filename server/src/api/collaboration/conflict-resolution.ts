@@ -17,15 +17,19 @@ import { COLLABORATIVE_PERMISSIONS } from '../../database/epic23-workspace-model
 // REQUEST/RESPONSE TYPES
 // =============================================================================
 
+}
 interface GetConflictsRequest {
   Params: {
     resourceId: string;
+}
   };
 }
 
+}
 interface ResolveConflictRequest {
   Params: {
     resourceId: string;
+}
   };
   Body: {
     strategy: ResolutionStrategy;
@@ -33,48 +37,61 @@ interface ResolveConflictRequest {
   };
 }
 
+}
 interface RollbackRequest {
   Params: {
     resourceId: string;
+}
   };
   Body: {
     rollback_id?: string;
   };
 }
 
+}
 interface CreateRollbackPointRequest {
   Params: {
     resourceId: string;
+}
   };
   Body: {
     label?: string;
   };
 }
 
+}
 interface ConflictAnalysisRequest {
   Params: {
     resourceId: string;
+}
   };
 }
 
+}
 interface StartMonitoringRequest {
   Params: {
     resourceId: string;
+}
   };
 }
 
+}
 interface StopMonitoringRequest {
   Params: {
     resourceId: string;
+}
   };
 }
 
+}
 interface GetStatisticsRequest {
   Params: {
     resourceId?: string;
+}
   };
 }
 
+}
 interface UpdateConfigRequest {
   Body: {
     default_strategy?: ResolutionStrategy;
@@ -84,6 +101,7 @@ interface UpdateConfigRequest {
     max_rollback_points?: number;
     notification_enabled?: boolean;
     conflict_threshold_seconds?: number;
+}
   };
 }
 
@@ -95,6 +113,7 @@ export async function conflictResolutionRoutes(
   fastify: FastifyInstance,
   workspaceDAO: Epic23WorkspaceDAO
 ): Promise<void> {
+
   const conflictService = new ConflictResolutionService(workspaceDAO);
 
   // =============================================================================
@@ -113,11 +132,11 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
         }
       }
-    },
+  }
     async (request: FastifyRequest<GetConflictsRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -170,11 +189,11 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
         }
       }
-    },
+  }
     async (request: FastifyRequest<StartMonitoringRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -226,11 +245,11 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
         }
       }
-    },
+  }
     async (request: FastifyRequest<StopMonitoringRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -271,22 +290,22 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
-        },
+  }
         body: {
           type: 'object',
           properties: {
             strategy: {
               type: 'string',
               enum: Object.values(ResolutionStrategy)
-            },
+  }
             user_resolution: { type: 'object' }
-          },
+  }
           required: ['strategy']
         }
       }
-    },
+  }
     async (request: FastifyRequest<ResolveConflictRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -345,11 +364,11 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
         }
       }
-    },
+  }
     async (request: FastifyRequest<ConflictAnalysisRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -390,9 +409,9 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -400,7 +419,7 @@ export async function conflictResolutionRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<RollbackRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -440,9 +459,9 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -450,7 +469,7 @@ export async function conflictResolutionRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateRollbackPointRequest>, reply: FastifyReply) => {
       try {
         const { resourceId } = request.params;
@@ -505,11 +524,11 @@ export async function conflictResolutionRoutes(
           type: 'object',
           properties: {
             resourceId: { type: 'string' }
-          },
+  }
           required: ['resourceId']
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { resourceId } = request.params;
@@ -583,7 +602,7 @@ export async function conflictResolutionRoutes(
             default_strategy: {
               type: 'string',
               enum: Object.values(ResolutionStrategy)
-            },
+  }
             auto_resolution_enabled: { type: 'boolean' },
             max_resolution_time_ms: { type: 'integer', minimum: 1000 },
             rollback_enabled: { type: 'boolean' },
@@ -593,7 +612,7 @@ export async function conflictResolutionRoutes(
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<UpdateConfigRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;

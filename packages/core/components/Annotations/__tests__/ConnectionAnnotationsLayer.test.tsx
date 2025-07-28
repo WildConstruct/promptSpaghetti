@@ -12,34 +12,32 @@ import { useGraphStore } from '../../../graphStore';
 // Mock React Flow
 jest.mock('reactflow', () => ({)
   ...jest.requireActual('reactflow'),
-  useReactFlow: () => ({),
-    getNode: jest.fn((id) => ({),
+  useReactFlow: () => ({,)
+  getNode: jest.fn((id) => ({),
       id,
       position: { x: 100, y: 100 },
       width: 150,
-      height: 40,
-    }))
+      height: 40;
+  }))
   }),
   useEdges: () => [,
     {
-      id: 'edge-1',
-      source: 'node-1',
-      target: 'node-2',
-    },
+  id: 'edge-1',
+  source: 'node-1',
+  target: 'node-2',
+}
     {
-      id: 'edge-2', 
-      source: 'node-2',
-      target: 'node-3',
-    }
-  ]
-}));
+  id: 'edge-2',
+  source: 'node-2',
+  target: 'node-3'];
+  }));
 
 // Mock graph store
 jest.mock('../../../graphStore');
 const mockUseGraphStore = useGraphStore as jest.MockedFunction<typeof useGraphStore>;
 const mockGraphStore = {
   annotations: {,
-    connectionLabels: [,
+  connectionLabels: [,
       {
         id: 'label-1',
         connectionId: 'edge-1',
@@ -51,59 +49,54 @@ const mockGraphStore = {
         visible: true,
         author: 'Test Author',
         timestamp: '2024-01-01T12:00:00Z',
-        lastModified: '2024-01-01T12:00:00Z',
-      }
-    ],
+        lastModified: '2024-01-01T12:00:00Z'],
     connectionAnnotations: [,
       {
-        id: 'annotation-1',
-        connectionId: 'edge-1',
-        labels: [],
-        visualStyle: 'solid',
-        color: '#3b82f6',
-        strokeWidth: 2,
-        opacity: 1,
-        showDirection: false,
-        showStartMarker: false,
-        showEndMarker: false,
-        isHighlighted: false,
-        author: 'Test Author',
-        timestamp: '2024-01-01T12:00:00Z',
-        lastModified: '2024-01-01T12:00:00Z',
-      }
-    ],
-    connectionAnnotationPreferences: {,
-      defaultLabelStyle: 'default',
-      defaultVisualStyle: 'solid',
-      defaultColor: '#6b7280',
-      defaultPosition: 'middle',
-      enableInlineEditing: true,
-      showTooltips: true,
-      autoPositioning: true,
-      snapToPath: true,
-      showDirectionArrows: false,
-      maxLabelLength: 100,
-      highlightOnHover: true,
-    }
-  },
+  id: 'annotation-1',
+  connectionId: 'edge-1',
+  labels: [],
+  visualStyle: 'solid',
+  color: '#3b82f6',
+  strokeWidth: 2,
+  opacity: 1,
+  showDirection: false,
+  showStartMarker: false,
+  showEndMarker: false,
+  isHighlighted: false,
+  author: 'Test Author',
+  timestamp: '2024-01-01T12:00:00Z',
+  lastModified: '2024-01-01T12:00:00Z'],
   connectionAnnotationPreferences: {,
-    defaultLabelStyle: 'default',
-    defaultVisualStyle: 'solid',
-    defaultColor: '#6b7280',
-    defaultPosition: 'middle',
-    enableInlineEditing: true,
-    showTooltips: true,
-    autoPositioning: true,
-    snapToPath: true,
-    showDirectionArrows: false,
-    maxLabelLength: 100,
-    highlightOnHover: true,
-  },
-  addConnectionLabel: jest.fn<unknown[], unknown>(),
-  updateConnectionLabel: jest.fn<unknown[], unknown>(),
-  removeConnectionLabel: jest.fn<unknown[], unknown>(),
-  addConnectionAnnotation: jest.fn<unknown[], unknown>(),
-  updateConnectionAnnotation: jest.fn<unknown[], unknown>()
+  defaultLabelStyle: 'default',
+  defaultVisualStyle: 'solid',
+  defaultColor: '#6b7280',
+  defaultPosition: 'middle',
+  enableInlineEditing: true,
+  showTooltips: true,
+  autoPositioning: true,
+  snapToPath: true,
+  showDirectionArrows: false,
+  maxLabelLength: 100,
+  highlightOnHover: true,
+},
+  connectionAnnotationPreferences: {,
+  defaultLabelStyle: 'default',
+  defaultVisualStyle: 'solid',
+  defaultColor: '#6b7280',
+  defaultPosition: 'middle',
+  enableInlineEditing: true,
+  showTooltips: true,
+  autoPositioning: true,
+  snapToPath: true,
+  showDirectionArrows: false,
+  maxLabelLength: 100,
+  highlightOnHover: true,
+},
+  addConnectionLabel: jest.fn<unknown, unknown>(),
+  updateConnectionLabel: jest.fn<unknown, unknown>(),
+  removeConnectionLabel: jest.fn<unknown, unknown>(),
+  addConnectionAnnotation: jest.fn<unknown, unknown>(),
+  updateConnectionAnnotation: jest.fn<unknown, unknown>()
 };
 
 // Test wrapper component
@@ -166,19 +159,18 @@ describe('ConnectionAnnotationsLayer Component', () => {
       const svg = screen.getByTestId('connection-annotations-layer').querySelector('svg');
       expect(svg).toBeInTheDocument();
       expect(svg).toHaveStyle({)
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-      });
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+});
     });
     test('shows instructions when no labels exist', () => {
-      const emptyStore = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionLabels: [],
-        }
-      };
+  const emptyStore = {
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionLabels: [],
+};
       mockUseGraphStore.mockReturnValue(emptyStore as any as unknown);
       render();
         <TestWrapper>
@@ -292,29 +284,26 @@ describe('ConnectionAnnotationsLayer Component', () => {
       // The component should render labels at calculated positions
       const label = screen.getByTestId('connection-label-label-1');
       expect(label).toHaveStyle({)
-        position: 'absolute',
-        left: '200px',
-        top: '150px',
-      });
+  position: 'absolute',
+  left: '200px',
+  top: '150px',
+});
     });
     test('handles different position types correctly', () => {
-      const storeWithDifferentPositions = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionLabels: [,
+  const storeWithDifferentPositions = {
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionLabels: [,
+  {
+  ...mockGraphStore.annotations.connectionLabels[0],
+  positionType: 'start',
+}
             {
-              ...mockGraphStore.annotations.connectionLabels[0],
-              positionType: 'start',
-            },
-            {
-              ...mockGraphStore.annotations.connectionLabels[0],
-              id: 'label-2',
-              positionType: 'end',
-            }
-          ]
-        }
-      };
+  ...mockGraphStore.annotations.connectionLabels[0],
+  id: 'label-2',
+  positionType: 'end'];
+  };
       mockUseGraphStore.mockReturnValue(storeWithDifferentPositions as any as unknown);
       render();
         <TestWrapper>
@@ -347,18 +336,15 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(defs).toBeInTheDocument();
     });
     test('shows direction arrows when configured', () => {
-      const storeWithArrows = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionAnnotations: [,
-            {
-              ...mockGraphStore.annotations.connectionAnnotations[0],
-              showDirection: true,
-            }
-          ]
-        }
-      };
+  const storeWithArrows = {
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionAnnotations: [,
+  {
+  ...mockGraphStore.annotations.connectionAnnotations[0],
+  showDirection: true];
+  };
       mockUseGraphStore.mockReturnValue(storeWithArrows as any as unknown);
       render();
         <TestWrapper>
@@ -464,7 +450,7 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(label).not.toHaveAttribute('title');
     });
     test('calls onSelectionChange when provided', () => {
-      const mockOnSelectionChange = jest.fn<unknown[], unknown>();
+      const mockOnSelectionChange = jest.fn<unknown, unknown>();
       render();
         <TestWrapper>
           <ConnectionAnnotationsLayer
@@ -481,19 +467,16 @@ describe('ConnectionAnnotationsLayer Component', () => {
     });
   });
   describe('Error Handling', () => {
-    test('handles missing connection data gracefully', () => {
-      const storeWithInvalidConnections = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionLabels: [,
-            {
-              ...mockGraphStore.annotations.connectionLabels[0],
-              connectionId: 'non-existent-edge',
-            }
-          ]
-        }
-      };
+  test('handles missing connection data gracefully', () => {
+  const storeWithInvalidConnections = {
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionLabels: [,
+  {
+  ...mockGraphStore.annotations.connectionLabels[0],
+  connectionId: 'non-existent-edge'];
+  };
       mockUseGraphStore.mockReturnValue(storeWithInvalidConnections as any as unknown);
       expect(() => {
         render();
@@ -508,14 +491,13 @@ describe('ConnectionAnnotationsLayer Component', () => {
       }).not.toThrow();
     });
     test('handles empty annotations gracefully', () => {
-      const emptyStore = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionLabels: [],
-          connectionAnnotations: [],
-        }
-      };
+  const emptyStore = {
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionLabels: [],
+  connectionAnnotations: [],
+};
       mockUseGraphStore.mockReturnValue(emptyStore as any as unknown);
       expect(() => {
         render();
@@ -531,10 +513,10 @@ describe('ConnectionAnnotationsLayer Component', () => {
       expect(screen.getByText('Connection Annotations')).toBeInTheDocument();
     });
     test('handles malformed store data', () => {
-      const malformedStore = {
-        ...mockGraphStore,
-        annotations: null,
-      };
+  const malformedStore = {
+  ...mockGraphStore,
+  annotations: null,
+};
       mockUseGraphStore.mockReturnValue(malformedStore as any as unknown);
       expect(() => {
         render();
@@ -551,10 +533,10 @@ describe('ConnectionAnnotationsLayer Component', () => {
   });
   describe('Performance', () => {
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestComponent = (props: unknown) => {
         renderSpy();
-        return ();
+        return;
           <TestWrapper>
             <ConnectionAnnotationsLayer {...props} />
           </TestWrapper>
@@ -589,25 +571,26 @@ describe('ConnectionAnnotationsLayer Component', () => {
     });
     test('handles large numbers of labels efficiently', () => {
       const manyLabels = Array.from({ length: 100 }, (_, i) => ({)
-        id: `label-${i}`,}
-        connectionId: 'edge-1',
-        content: `Label ${i}`,}
-        position: { x: 100 + i, y: 50 + i },
+  id: `label-${i}`}
+},
+  connectionId: 'edge-1',
+        content: `Label ${i}`}
+},
+  position: { x: 100 + i, y: 50 + i },
         positionType: 'middle' as const,
         positionOffset: 0.5,
         style: 'default' as const,
         visible: true,
         author: 'Test Author',
         timestamp: '2024-01-01T12:00:00Z',  
-        lastModified: '2024-01-01T12:00:00Z',
-      }));
+        lastModified: '2024-01-01T12:00:00Z';
+  }));
       const storeWithManyLabels = {
-        ...mockGraphStore,
-        annotations: {,
-          ...mockGraphStore.annotations,
-          connectionLabels: manyLabels,
-        }
-      };
+  ...mockGraphStore,
+  annotations: {,
+  ...mockGraphStore.annotations,
+  connectionLabels: manyLabels,
+};
       mockUseGraphStore.mockReturnValue(storeWithManyLabels as any as unknown);
       const startTime = performance.now();
       render();

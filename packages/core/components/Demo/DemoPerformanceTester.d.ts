@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 export interface PerformanceTestResult {
     nodeCount: number;
     edgeCount: number;
@@ -15,13 +16,14 @@ export interface PerformanceTestResult {
     testDuration: number;
     passedThreshold: boolean;
     recommendations: string[];
-}
+
+
 export interface DemoPerformanceTesterProps {
     onTestComplete?: (result: PerformanceTestResult) => void;
     onGraphGenerated?: (nodes: Node[], edges: Edge[]) => void;
     targetFPS?: number;
     maxRenderTime?: number;
-}
+
 export declare const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps>;
 export default DemoPerformanceTester;
 //# sourceMappingURL=DemoPerformanceTester.d.ts.map

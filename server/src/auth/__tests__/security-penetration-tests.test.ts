@@ -19,7 +19,7 @@ jest.mock('../config', () => ({
   buildAuthConfig: () => ({
     jwt: { secret: 'test-secret', expiresIn: '1h' },
     security: { maxLoginAttempts: 5, sessionTimeout: 30 * 60 * 1000 }
-  })
+  }
 }));
 
 describe('Epic 19.5 - Security Penetration Testing Suite', () => {
@@ -135,6 +135,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
         email: string;
         mfaEnabled: boolean;
         mfaSecret?: string;
+}
       }
 
       const users: User[] = [
@@ -194,16 +195,19 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
     interface Permission {
       resource: string;
       action: string;
+}
     }
 
     interface Role {
       name: string;
       permissions: Permission[];
+}
     }
 
     interface User {
       id: number;
       roles: string[];
+}
     }
 
     const roles: Role[] = [
@@ -486,6 +490,7 @@ describe('Epic 19.5 - Security Penetration Testing Suite', () => {
       createdAt: Date;
       lastActivity: Date;
       ipAddress: string;
+}
     }
 
     const sessions = new Map<string, Session>();

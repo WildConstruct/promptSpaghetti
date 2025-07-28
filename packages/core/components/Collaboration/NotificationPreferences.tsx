@@ -5,39 +5,36 @@ interface NotificationPreferencesProps {
   userId: string;
   workspaceId?: string;
   onClose: () => void;
-}
 const NOTIFICATION_TYPES: { type: NotificationType; label: string; description: string }[] = [
   {
-    type: 'comment',
-    label: 'Comments',
-    description: 'When someone comments on your work',
-  },
+  type: 'comment',
+  label: 'Comments',
+  description: 'When someone comments on your work',
+}
   {
-    type: 'mention',
-    label: 'Mentions',
-    description: 'When you are mentioned in comments or discussions',
-  },
+  type: 'mention',
+  label: 'Mentions',
+  description: 'When you are mentioned in comments or discussions',
+}
   {
-    type: 'approval',
-    label: 'Approvals',
-    description: 'When approval is requested or granted',
-  },
+  type: 'approval',
+  label: 'Approvals',
+  description: 'When approval is requested or granted',
+}
   {
-    type: 'workflow',
-    label: 'Workflow',
-    description: 'When workflow states change',
-  },
+  type: 'workflow',
+  label: 'Workflow',
+  description: 'When workflow states change',
+}
   {
-    type: 'collaboration',
-    label: 'Collaboration',
-    description: 'When others join or edit shared projects',
-  },
+  type: 'collaboration',
+  label: 'Collaboration',
+  description: 'When others join or edit shared projects',
+}
   {
     type: 'system',
     label: 'System',
-    description: 'System maintenance and important updates',
-  }
-];
+    description: 'System maintenance and important updates'];
 const DELIVERY_METHODS = [;
   { key: 'in_app', label: 'In-App', description: 'Show in notification center' },
   { key: 'email', label: 'Email', description: 'Send email notifications' },
@@ -50,19 +47,19 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
   onClose
 }) => {
   const [preferences, setPreferences] = useState<PreferencesType>({)
-    user_id: userId,
+  user_id: userId,
     workspace_id: workspaceId,
     email_enabled: true,
     push_enabled: true,
     in_app_enabled: true,
     type_preferences: {},
     quiet_hours: {,
-      enabled: false,
-      start: '22:00',
-      end: '08:00',
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    },
-    digest_frequency: 'immediate',
+  enabled: false,
+  start: '22:00',
+  end: '08:00',
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+},
+  digest_frequency: 'immediate';
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -77,71 +74,63 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
       if (response.ok) {
         const data = await response.json();
         setPreferences(data);
-      }
     } catch (err) {
-      setError('Failed to load preferences');
-      console.error('Failed to load notification preferences:', err);
-    } finally {
+  setError('Failed to load preferences');
+  console.error('Failed to load notification preferences:', err);
+} finally {
       setLoading(false);
-    }
   };
   const savePreferences = async () => {
-    try {
-      setSaving(true);
-      setError(null);
-      const response = await fetch('/api/notifications/preferences', {)
-        method: 'PUT',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(preferences),
-      });
+  try {
+  setSaving(true);
+  setError(null);
+  const response = await fetch('/api/notifications/preferences', {)
+  method: 'PUT',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify(preferences);
+  });
       if (!response.ok) {
         throw new Error('Failed to save preferences');
-      }
       onClose();
     } catch (err) {
-      setError('Failed to save preferences');
-      console.error('Failed to save notification preferences:', err);
-    } finally {
+  setError('Failed to save preferences');
+  console.error('Failed to save notification preferences:', err);
+} finally {
       setSaving(false);
-    }
   };
   const updateTypePreference = (type: NotificationType, delivery: string, enabled: boolean) => {
-    setPreferences(prev => ({)
-      ...prev,
-      type_preferences: {,
-        ...prev.type_preferences,
-        [type]: {
-          ...prev.type_preferences[type],
-          [delivery]: enabled
-        }
-      }
-    }));
+  setPreferences(prev => ({)
+  ...prev,
+  type_preferences: {,
+  ...prev.type_preferences,
+  [type]: {,
+  ...prev.type_preferences[type],
+  [delivery]: enabled,
+}));
   };
   const updateGlobalDelivery = (delivery: string, enabled: boolean) => {
     setPreferences(prev => ({)
-      ...prev,
+  ...prev,
       [`${delivery}_enabled`]: enabled}
     }));
   };
   const updateQuietHours = (field: string, value: Error) => {
-    setPreferences(prev => ({)
-      ...prev,
-      quiet_hours: {,
-        ...prev.quiet_hours,
-        [field]: value
-      }
-    }));
+  setPreferences(prev => ({)
+  ...prev,
+  quiet_hours: {,
+  ...prev.quiet_hours,
+  [field]: value,
+}));
   };
   if (loading) {
-    return ();
+    return;
       <div className="p-4 text-center">
         <div className="animate-pulse">Loading preferences...</div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="p-4 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

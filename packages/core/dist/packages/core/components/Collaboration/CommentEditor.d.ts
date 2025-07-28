@@ -1,3 +1,2 @@
-import React from 'react';
-export declare const isPreview: boolean, setIsPreview: React.Dispatch<React.SetStateAction<boolean>>;
+export {};
 //# sourceMappingURL=CommentEditor.d.ts.map

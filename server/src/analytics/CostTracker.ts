@@ -5,22 +5,27 @@ import { AnalyticsDAO, TokenUsage } from '../database/analytics-dao';
 /**
  * Provider pricing configuration
  */
+}
 export interface ProviderPricing {
   provider: string;
   models: Map<string, ModelPricing>;
   lastUpdated: number;
 }
+}
 
+}
 export interface ModelPricing {
   inputTokenPrice: number;    // Price per 1000 input tokens
   outputTokenPrice: number;   // Price per 1000 output tokens
   currency: 'USD' | 'EUR' | 'GBP';
   lastUpdated: number;
 }
+}
 
 /**
  * Cost calculation result
  */
+}
 export interface CostCalculation {
   provider: string;
   model: string;
@@ -33,10 +38,12 @@ export interface CostCalculation {
   currency: string;
   timestamp: number;
 }
+}
 
 /**
  * Budget configuration
  */
+}
 export interface BudgetConfig {
   id: string;
   name: string;
@@ -53,10 +60,12 @@ export interface BudgetConfig {
   createdAt: number;
   updatedAt: number;
 }
+}
 
 /**
  * Budget usage tracking
  */
+}
 export interface BudgetUsage {
   budgetId: string;
   period: string; // ISO date string for the period
@@ -66,10 +75,12 @@ export interface BudgetUsage {
   transactionCount: number;
   lastUpdated: number;
 }
+}
 
 /**
  * Cost alert
  */
+}
 export interface CostAlert {
   id: string;
   budgetId: string;
@@ -81,6 +92,7 @@ export interface CostAlert {
   severity: 'info' | 'warning' | 'critical';
   timestamp: number;
   acknowledged: boolean;
+}
 }
 
 /**
@@ -197,8 +209,7 @@ export class CostTracker extends EventEmitter {
       outputCost,
       totalCost,
       currency: modelPricing.currency,
-      timestamp: Date.now()
-    };
+      timestamp: Date.now(};
   }
 
   /**
@@ -536,7 +547,7 @@ export class CostTracker extends EventEmitter {
       confidenceInterval: {
         lower: forecastedTotalCost - margin,
         upper: forecastedTotalCost + margin
-      },
+  }
       basedOnDays: 30
     };
   }
@@ -620,7 +631,7 @@ export class CostTracker extends EventEmitter {
           'Test GPT-3.5-turbo on a sample of current GPT-4 tasks',
           'Implement automatic model selection based on complexity'
         ]
-      },
+  }
       {
         type: 'usage_optimization',
         priority: 'medium',
@@ -672,7 +683,7 @@ export class CostTracker extends EventEmitter {
       ),
       ...alerts.map(alert => 
         `Alert,${alert.alertType},${alert.currentUsage},USD,${alert.timestamp},${alert.acknowledged ? 'Acknowledged' : 'Active'}`
-      )
+
     ];
 
     return lines.join('\n');

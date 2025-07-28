@@ -6,7 +6,7 @@ export interface ExtensionPointDocumentation {
     name: string;
     description: string;
     interface: string;
-    examples: string[];
+    examples: string;
     version: string;
 }
 export declare class ExtensionPointDocumentationGenerator {
@@ -14,15 +14,6 @@ export declare class ExtensionPointDocumentationGenerator {
     /**
      * Generate documentation for all extension points
      */
-    generateDocumentation(): ExtensionPointDocumentation[];
-    /**
-     * Generate documentation for a specific extension point
-     */
-    generateForExtensionPoint(pointName: string): ExtensionPointDocumentation | null;
-    /**
-     * Export documentation in various formats
-     */
-    exportDocumentation(format?: 'markdown' | 'html' | 'json'): string;
+    generateDocumentation(): ExtensionPointDocumentation;
 }
-export default ExtensionPointDocumentationGenerator;
 //# sourceMappingURL=ExtensionPointDocumentationGenerator.d.ts.map

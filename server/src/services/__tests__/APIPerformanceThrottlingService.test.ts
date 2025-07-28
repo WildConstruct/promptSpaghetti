@@ -60,7 +60,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
     system_health_weight: 0.3,
     predictive_analytics_weight: 0.3,
     historical_data_window_minutes: 60
-  },
+  }
   performance_thresholds: {
     response_time_thresholds: {
       excellent_ms: 50,
@@ -68,19 +68,19 @@ const testConfig: APIPerformanceThrottlingConfig = {
       acceptable_ms: 200,
       poor_ms: 500,
       critical_ms: 1000
-    },
+  }
     throughput_thresholds: {
       optimal_rps: 1000,
       high_rps: 1500,
       overload_rps: 2000,
       critical_rps: 2500
-    },
+  }
     error_rate_thresholds: {
       normal_percent: 1.0,
       elevated_percent: 2.5,
       high_percent: 5.0,
       critical_percent: 10.0
-    },
+  }
     resource_utilization_thresholds: {
       cpu_warning_percent: 70,
       cpu_critical_percent: 85,
@@ -89,7 +89,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       disk_io_warning_percent: 80,
       network_io_warning_percent: 85
     }
-  },
+  }
   throttling_adjustments: {
     adjustment_algorithms: ['adaptive', 'ml_based', 'linear'],
     adjustment_granularity: 0.1,
@@ -97,7 +97,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
     min_adjustment_factor: 0.1,
     adjustment_cooldown_seconds: 60,
     rollback_on_degradation: true
-  },
+  }
   rate_limiting_strategies: {
     performance_tier_based: {
       enabled: true,
@@ -106,21 +106,21 @@ const testConfig: APIPerformanceThrottlingConfig = {
         premium_performance_threshold: 90,
         standard_performance_threshold: 70,
         degraded_performance_threshold: 50
-      },
+  }
       tier_multipliers: {
         premium_tier: 2.0,
         standard_tier: 1.0,
         degraded_tier: 0.5,
         critical_tier: 0.2
       }
-    },
+  }
     adaptive_burst_control: {
       enabled: true,
       burst_detection_window_seconds: 60,
       burst_threshold_multiplier: 1.5,
       burst_recovery_time_seconds: 300,
       progressive_burst_penalties: true
-    },
+  }
     circuit_breaker_integration: {
       enabled: true,
       failure_threshold: 5,
@@ -128,7 +128,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       half_open_max_calls: 10,
       performance_degradation_triggers: true
     }
-  },
+  }
   predictive_optimization: {
     enabled: true,
     prediction_confidence_threshold: 0.8,
@@ -141,7 +141,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       anomaly_detection_model: true,
       optimization_recommendation_model: true
     }
-  },
+  }
   multi_dimensional_throttling: {
     enabled: true,
     dimensions: {
@@ -151,7 +151,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       time_based: true,
       device_type_based: false,
       application_type_based: true
-    },
+  }
     dimension_weights: {
       endpoint_weight: 0.3,
       user_tier_weight: 0.25,
@@ -160,7 +160,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       device_weight: 0.05,
       application_weight: 0.1
     }
-  },
+  }
   health_management: {
     auto_recovery_enabled: true,
     health_check_interval_seconds: 30,
@@ -171,7 +171,7 @@ const testConfig: APIPerformanceThrottlingConfig = {
       error_rate_percentage: 0.5,
       throughput_minimum_rps: 500
     }
-  },
+  }
   integration: {
     performance_monitoring_integration: true,
     intelligent_throttling_integration: true,
@@ -300,28 +300,28 @@ describe('APIPerformanceThrottlingService', () => {
           p99_ms: 3000,
           max_ms: 5000,
           trend: 'degrading'
-        },
+  }
         throughput: {
           requests_per_second: 50,
           successful_requests_per_second: 30,
           failed_requests_per_second: 20,
           peak_rps: 100,
           trend: 'decreasing'
-        },
+  }
         error_rates: {
           total_error_rate: 15.0,
           client_error_rate: 8.0,
           server_error_rate: 7.0,
           timeout_error_rate: 3.0,
           trend: 'worsening'
-        },
+  }
         resource_utilization: {
           cpu_usage_percent: 95,
           memory_usage_percent: 90,
           disk_io_percent: 85,
           network_io_percent: 90,
           concurrent_connections: 500
-        },
+  }
         quality_metrics: {
           availability_percentage: 95.0,
           reliability_score: 30,
@@ -351,28 +351,28 @@ describe('APIPerformanceThrottlingService', () => {
           p99_ms: 60,
           max_ms: 100,
           trend: 'improving'
-        },
+  }
         throughput: {
           requests_per_second: 800,
           successful_requests_per_second: 795,
           failed_requests_per_second: 5,
           peak_rps: 900,
           trend: 'increasing'
-        },
+  }
         error_rates: {
           total_error_rate: 0.2,
           client_error_rate: 0.1,
           server_error_rate: 0.1,
           timeout_error_rate: 0.0,
           trend: 'improving'
-        },
+  }
         resource_utilization: {
           cpu_usage_percent: 45,
           memory_usage_percent: 50,
           disk_io_percent: 30,
           network_io_percent: 35,
           concurrent_connections: 200
-        },
+  }
         quality_metrics: {
           availability_percentage: 99.95,
           reliability_score: 95,

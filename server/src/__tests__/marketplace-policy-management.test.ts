@@ -61,7 +61,7 @@ describe('Marketplace Policy Management System', () => {
             templates: [],
             attachments: [],
             localization: []
-          },
+  }
           metadata: {
             target_audience: [UserRole.SELLER],
             jurisdictions: ['US'],
@@ -73,7 +73,7 @@ describe('Marketplace Policy Management System', () => {
             categories: ['marketplace'],
             priority: 'medium',
             risk_level: 'low'
-          },
+  }
           created_by: 'admin-123',
           updated_by: 'admin-123'
         };
@@ -127,7 +127,7 @@ describe('Marketplace Policy Management System', () => {
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-          },
+  }
           notification_settings: {
             enabled: true,
             channels: ['email'],
@@ -158,7 +158,7 @@ describe('Marketplace Policy Management System', () => {
             type: 'immediate' as const,
             start_date: new Date(),
             rollback_triggers: []
-          },
+  }
           notification_settings: {
             enabled: false,
             channels: [],
@@ -264,7 +264,7 @@ describe('Marketplace Policy Management System', () => {
             automatic_actions: [],
             escalation_rules: [],
             grace_period_hours: 24
-          },
+  }
           created_by: 'admin-123'
         };
 
@@ -544,7 +544,7 @@ describe('Marketplace Policy Management System', () => {
           categories: [],
           priority: 'medium',
           risk_level: 'low'
-        },
+  }
         publication: {
           publishing_status: 'pending',
           publication_channels: [],
@@ -552,14 +552,14 @@ describe('Marketplace Policy Management System', () => {
           notification_settings: {
             enabled: false, channels: [], audience: [], template_id: '', send_reminders: false
           }
-        },
+  }
         enforcement: { enabled: true, automatic_enforcement: false, violation_detection: {
           enabled: true, detection_rules: [], ai_assisted: true, confidence_threshold: 0.8, review_required: true
         }, enforcement_actions: [], grace_period_hours: 24, escalation_rules: [] },
         analytics: {
           views: 0, acknowledgments: 0, violations: 0, enforcement_actions: 0, 
           user_feedback: [], compliance_score: 0, last_updated: new Date()
-        },
+  }
         created_by: 'admin-123',
         updated_by: 'admin-123'
       };
@@ -592,7 +592,7 @@ describe('Marketplace Policy Management System', () => {
           automatic_actions: [],
           escalation_rules: [],
           grace_period_hours: 24
-        },
+  }
         created_by: 'admin-123'
       };
 

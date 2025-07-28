@@ -31,10 +31,8 @@ import {
 interface ExportManagerProps {
   projectId: string;
   className?: string;
-}
-type ActiveTab = 'templates' | 'jobs' | 'statistics' | 'shares' | 'wizard';
-
-export const ExportManager: React.FC<ExportManagerProps> = ({)
+  type ActiveTab = 'templates' | 'jobs' | 'statistics' | 'shares' | 'wizard';
+  export const ExportManager: React.FC<ExportManagerProps> = ({,)
   projectId,
   className = ''
 }) => {
@@ -66,19 +64,17 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
     const interval = setInterval(() => {
       if (jobs.some(job => job.status === 'pending' || job.status === 'processing')) {
         fetchJobs();
-      }
     }, 5000);
     setRefreshInterval(interval);
     return () => {
       if (refreshInterval) {
         clearInterval(refreshInterval);
-      }
     };
   }, [projectId]);
   const handleQuickExport = async (format: ExportFormat, type: ExportType) => {
     try {
-      const exportData: CreateExportJob = {
-        export_format: format,
+      const exportData: CreateExportJob = {,
+  export_format: format,
         export_type: type,
         export_scope: {},
         export_options: {},
@@ -87,9 +83,8 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
       await createExportJob(exportData);
       setActiveTab('jobs');
     } catch (error) {
-      console.error('Quick export failed:', error);
-    }
-  };
+  console.error('Quick export failed:', error);
+};
   const handleTemplateSelect = (template: ExportTemplate) => {
     setSelectedTemplate(template);
     setShowWizard(true);
@@ -107,7 +102,6 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
     if (job.status !== 'completed') {
       alert('Only completed exports can be shared');
       return;
-    }
     setShareDialogJob(job);
   };
   const handleShareDialogClose = () => {
@@ -128,7 +122,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
   const renderTabContent = () => {
     switch (activeTab) {
     case 'templates':
-      return ();
+      return;
         <ExportTemplateList
           templates={templates}
           onTemplateSelect={handleTemplateSelect}
@@ -138,7 +132,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'jobs':
-      return ();
+      return;
         <ExportJobList
           jobs={jobs}
           onCancel={cancelExportJob}
@@ -149,7 +143,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'statistics':
-      return ();
+      return;
         <ExportStatsDashboard
           statistics={statistics}
           loading={loading}
@@ -157,14 +151,13 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
         />
       );
     case 'shares':
-      return ();
+      return;
         <ShareManager
           projectId={projectId}
         />
       );
     default:
       return null;
-    }
   };
   const getActiveJobsCount = () => {
     return jobs.filter(job => job.status === 'pending' || job.status === 'processing').length;
@@ -174,7 +167,7 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
     return jobs.filter(job => new Date(job.started_at) > oneDayAgo).length;
   };
-  return ();
+  return;
     <div className={`export-manager ${className}`}>}
       {/* Header */}
       <div className="export-manager-header">
@@ -272,10 +265,10 @@ export const ExportManager: React.FC<ExportManagerProps> = ({)
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as ActiveTab)}
                 className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-                }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600 dark:text-blue-400',
+  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300',
+}`}
               >
                 <tab.icon className="w-4 h-4" />
                 <span>{tab.label}</span>

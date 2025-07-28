@@ -73,14 +73,14 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             message: { type: 'string' },
             providerId: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'object' }
           }
-        },
+  }
         403: {
           type: 'object',
           properties: {
@@ -150,7 +150,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
                   updatedAt: { type: 'string', format: 'date-time' }
                 }
               }
-            },
+  }
             count: { type: 'number' },
             statistics: { type: 'object' }
           }
@@ -201,16 +201,16 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-        },
+  }
         required: ['providerId']
-      },
+  }
       response: {
         200: {
           type: 'object',
           properties: {
             provider: { type: 'object' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -257,9 +257,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-        },
+  }
         required: ['providerId']
-      },
+  }
       body: UpdateProviderSchema,
       response: {
         200: {
@@ -268,7 +268,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -315,9 +315,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-        },
+  }
         required: ['providerId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -325,7 +325,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -368,9 +368,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-        },
+  }
         required: ['providerId']
-      },
+  }
       body: TestWebhookSchema,
       response: {
         200: {
@@ -380,7 +380,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             validation: { type: 'object' },
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -409,7 +409,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             providerId: validation.providerId,
             signature: validation.signature,
             computedSignature: validation.computedSignature
-          },
+  }
           message: 'Webhook provider test successful'
         });
       } else {
@@ -419,7 +419,7 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             valid: validation.valid,
             error: validation.error,
             providerId: validation.providerId
-          },
+  }
           error: validation.error || 'Webhook provider test failed'
         });
       }
@@ -442,9 +442,9 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           providerId: { type: 'string' }
-        },
+  }
         required: ['providerId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -453,14 +453,14 @@ export async function webhookAuthRoutes(fastify: FastifyInstance) {
             message: { type: 'string' },
             eventId: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
             error: { type: 'string' },
             details: { type: 'object' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {

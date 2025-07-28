@@ -8,13 +8,14 @@
  */
 import React from 'react';
 import { RateLimitingPerformanceMetrics } from '../RateLimitingPerformanceMetrics';
+
 interface RateLimitingMetricsDashboardProps {
     metricsService: RateLimitingPerformanceMetrics;
     className?: string;
     theme?: 'light' | 'dark';
     autoRefresh?: boolean;
     refreshInterval?: number;
-}
+
 export declare const RateLimitingMetricsDashboard: React.FC<RateLimitingMetricsDashboardProps>;
 export default RateLimitingMetricsDashboard;
 //# sourceMappingURL=RateLimitingMetricsDashboard.d.ts.map

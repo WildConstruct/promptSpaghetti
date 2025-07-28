@@ -10,5 +10,4 @@ export interface ExtensionConfigurationPanelProps {
     onCancel: () => void;
 }
 export declare const ExtensionConfigurationPanel: React.FC<ExtensionConfigurationPanelProps>;
-export default ExtensionConfigurationPanel;
 //# sourceMappingURL=ExtensionConfigurationPanel.d.ts.map

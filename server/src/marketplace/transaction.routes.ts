@@ -25,7 +25,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any().optional() // ShoppingCart type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -46,7 +46,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any() // ShoppingCart type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -75,7 +75,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           cart: z.any() // ShoppingCart type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -104,7 +104,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           success: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -130,7 +130,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           payment_intent: z.any() // PaymentIntent type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -159,7 +159,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           order: z.any() // Order type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -189,7 +189,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           payment_intent: z.any() // PaymentIntent type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -229,7 +229,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -281,7 +281,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           order: z.any() // Order type with items
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -338,7 +338,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -403,7 +403,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
         200: z.object({
           valid: z.boolean(),
           license: z.any().optional() // TemplateLicense type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -440,7 +440,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           transfer_request: z.any() // LicenseTransfer type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -514,7 +514,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           refund_request: z.any() // RefundRequest type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -550,7 +550,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           page: z.number(),
           limit: z.number(),
           has_more: z.boolean()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -607,7 +607,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       response: {
         200: z.object({
           analytics: z.any() // TransactionAnalytics type
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -662,7 +662,7 @@ export async function transactionRoutes(fastify: FastifyInstance) {
           refund_rate: 0, // Would calculate from refunds
           dispute_rate: 0, // Would calculate from disputes
           fraud_rate: 0 // Would calculate from fraud flags
-        },
+  }
         payment_methods: [], // Would aggregate by payment method
         geography: [], // Would aggregate by country
         trends: {

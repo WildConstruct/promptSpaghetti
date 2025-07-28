@@ -47,116 +47,105 @@ export interface VFXChecklistDemoProps {
   showTeamPanel?: boolean;
   initialUser?: VFXTeamMember;
   className?: string;
+  // Sample team members for demo
+  const DEMO_TEAM: VFXTeamMember = [
+  {
+  id: 'user-director',
+  name: 'Sarah Director',
+  role: 'director',
+  email: 'sarah.director@wildconstruct.com',
+  color: '#ff7c00',
+  avatar: '/avatars/director.jpg',
+  isOnline: true,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: true,
+  canApprove: true,
+  canAssign: true,
+  canViewReports: true,
 }
-
-// Sample team members for demo
-const DEMO_TEAM: VFXTeamMember[] = [
   {
-    id: 'user-director',
-    name: 'Sarah Director',
-    role: 'director',
-    email: 'sarah.director@wildconstruct.com',
-    color: '#ff7c00',
-    avatar: '/avatars/director.jpg',
-    isOnline: true,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: true,
-      canApprove: true,
-      canAssign: true,
-      canViewReports: true,
-    }
-  },
+  id: 'user-vfx-sup',
+  name: 'Mike VFX Supervisor',
+  role: 'vfx_supervisor',
+  email: 'mike.vfx@wildconstruct.com',
+  color: '#3b82f6',
+  avatar: '/avatars/vfx-supervisor.jpg',
+  isOnline: true,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: true,
+  canAssign: true,
+  canViewReports: true,
+}
   {
-    id: 'user-vfx-sup',
-    name: 'Mike VFX Supervisor',
-    role: 'vfx_supervisor',
-    email: 'mike.vfx@wildconstruct.com',
-    color: '#3b82f6',
-    avatar: '/avatars/vfx-supervisor.jpg',
-    isOnline: true,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: true,
-      canAssign: true,
-      canViewReports: true,
-    }
-  },
+  id: 'user-lead-artist',
+  name: 'Alex Lead Artist',
+  role: 'artist',
+  email: 'alex.lead@wildconstruct.com',
+  color: '#10b981',
+  avatar: '/avatars/lead-artist.jpg',
+  isOnline: false,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: false,
+  canAssign: false,
+  canViewReports: true,
+}
   {
-    id: 'user-lead-artist',
-    name: 'Alex Lead Artist',
-    role: 'artist',
-    email: 'alex.lead@wildconstruct.com',
-    color: '#10b981',
-    avatar: '/avatars/lead-artist.jpg',
-    isOnline: false,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: false,
-      canAssign: false,
-      canViewReports: true,
-    }
-  },
+  id: 'user-pipeline-td',
+  name: 'Jordan Pipeline TD',
+  role: 'pipeline_td',
+  email: 'jordan.pipeline@wildconstruct.com',
+  color: '#8b5cf6',
+  avatar: '/avatars/pipeline-td.jpg',
+  isOnline: true,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: false,
+  canAssign: false,
+  canViewReports: true,
+}
   {
-    id: 'user-pipeline-td',
-    name: 'Jordan Pipeline TD',
-    role: 'pipeline_td',
-    email: 'jordan.pipeline@wildconstruct.com',
-    color: '#8b5cf6',
-    avatar: '/avatars/pipeline-td.jpg',
-    isOnline: true,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: false,
-      canAssign: false,
-      canViewReports: true,
-    }
-  },
+  id: 'user-producer',
+  name: 'Emma Producer',
+  role: 'producer',
+  email: 'emma.producer@wildconstruct.com',
+  color: '#f59e0b',
+  avatar: '/avatars/producer.jpg',
+  isOnline: true,
+  permissions: {,
+  canCreate: true,
+  canEdit: false,
+  canDelete: false,
+  canApprove: true,
+  canAssign: true,
+  canViewReports: true,
+}
   {
-    id: 'user-producer',
-    name: 'Emma Producer',
-    role: 'producer',
-    email: 'emma.producer@wildconstruct.com',
-    color: '#f59e0b',
-    avatar: '/avatars/producer.jpg',
-    isOnline: true,
-    permissions: {,
-      canCreate: true,
-      canEdit: false,
-      canDelete: false,
-      canApprove: true,
-      canAssign: true,
-      canViewReports: true,
-    }
-  },
-  {
-    id: 'user-qa-lead',
-    name: 'Chris QA Lead',
-    role: 'qa_lead',
-    email: 'chris.qa@wildconstruct.com',
-    color: '#ef4444',
-    avatar: '/avatars/qa-lead.jpg',
-    isOnline: false,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: true,
-      canAssign: false,
-      canViewReports: true,
-    }
-  }
-];
-
-// Sample checklist data
-const createSampleChecklist = (): VFXChecklist => ({)
+  id: 'user-qa-lead',
+  name: 'Chris QA Lead',
+  role: 'qa_lead',
+  email: 'chris.qa@wildconstruct.com',
+  color: '#ef4444',
+  avatar: '/avatars/qa-lead.jpg',
+  isOnline: false,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: true,
+  canAssign: false,
+  canViewReports: true];
+  // Sample checklist data
+  const createSampleChecklist = (): VFXChecklist => ({,)
   id: 'checklist-medieval-scene',
   name: 'Medieval Courtyard - Hero Shot 042',
   description: 'Complete VFX checklist for the hero establishing shot of the medieval courtyard marketplace',
@@ -164,7 +153,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
   scene: 'Courtyard Market',
   shot: 'Shot_042',
   sequence: 'SEQ_01',
-  owner: DEMO_TEAM[0], // Director
+  owner: DEMO_TEAM[0], // Director,
   team: DEMO_TEAM,
   status: 'active',
   createdAt: '2025-07-15T09:00:00Z',
@@ -172,17 +161,17 @@ const createSampleChecklist = (): VFXChecklist => ({)
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['hero-shot', 'medieval', 'courtyard', 'crowd', 'establishing'],
   metadata: {,
-    totalItems: 12,
-    completedItems: 8,
-    overallProgress: 67,
-    estimatedTotalHours: 84,
-    actualTotalHours: 92,
-    criticalIssues: 1,
-    blockedItems: 0,
-    averageAccuracy: 91,
-    lastActivity: '2025-07-22T14:30:00Z',
-    collaborators: 6,
-  },
+  totalItems: 12,
+  completedItems: 8,
+  overallProgress: 67,
+  estimatedTotalHours: 84,
+  actualTotalHours: 92,
+  criticalIssues: 1,
+  blockedItems: 0,
+  averageAccuracy: 91,
+  lastActivity: '2025-07-22T14:30:00Z',
+  collaborators: 6,
+},
   items: [,
     {
       id: 'item-001',
@@ -216,9 +205,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           version: 'v03',
           accuracy: 98,
           complexity: 85,
-          dependencies: [],
-        }
-      ],
+          dependencies: []],
       tags: ['tracking', 'camera', 'matchmove', '3d-solve'],
       category: 'pre_production',
       vfxPhase: 'previs',
@@ -232,9 +219,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           result: 'Achieved 0.2px average error',
           checkedBy: DEMO_TEAM[1],
           checkedAt: '2025-07-20T16:30:00Z',
-          required: true,
-        }
-      ],
+          required: true],
       comments: [,
         {
           id: 'comment-001',
@@ -244,10 +229,9 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'approval',
           mentions: [],
           reactions: { '👍': [DEMO_TEAM[0], DEMO_TEAM[2]] }
-        }
       ],
-      history: [],
-    },
+      history: [];
+  }
     {
       id: 'item-002',
       title: 'Digital Matte Painting - Background Castle',
@@ -273,48 +257,42 @@ const createSampleChecklist = (): VFXChecklist => ({)
       ],
       attachments: [,
         {
-          id: 'att-001',
-          name: 'Castle_MattePaint_v04.exr',
-          type: 'image',
-          url: '/assets/matte_paint_v04.exr',
-          size: 52428800,
-          uploadedBy: DEMO_TEAM[2],
-          uploadedAt: '2025-07-22T11:15:00Z',
-        }
-      ],
-      assets: [,
-        {
-          id: 'asset-mp-001',
-          name: 'Castle_Background_MP_v04',
-          type: 'composite',
-          status: 'review',
-          version: 'v04',
-          accuracy: 94,
-          complexity: 78,
-          dependencies: ['Camera_Track_v03.ma'],
-        }
-      ],
-      tags: ['matte-painting', 'castle', 'background', 'architecture'],
-      category: 'asset_creation',
-      vfxPhase: 'asset_build',
-      qualityGates: [,
-        {
-          id: 'qg-002',
-          name: 'Historical Accuracy',
-          type: 'accuracy',
-          status: 'pending',
-          criteria: 'UTDG validation score >90%',
-          required: true,
-        },
+  id: 'att-001',
+  name: 'Castle_MattePaint_v04.exr',
+  type: 'image',
+  url: '/assets/matte_paint_v04.exr',
+  size: 52428800,
+  uploadedBy: DEMO_TEAM[2],
+  uploadedAt: '2025-07-22T11:15:00Z'],
+  assets: [,
+  {
+  id: 'asset-mp-001',
+  name: 'Castle_Background_MP_v04',
+  type: 'composite',
+  status: 'review',
+  version: 'v04',
+  accuracy: 94,
+  complexity: 78,
+  dependencies: ['Camera_Track_v03.ma']],
+  tags: ['matte-painting', 'castle', 'background', 'architecture'],
+  category: 'asset_creation',
+  vfxPhase: 'asset_build',
+  qualityGates: [,
+  {
+  id: 'qg-002',
+  name: 'Historical Accuracy',
+  type: 'accuracy',
+  status: 'pending',
+  criteria: 'UTDG validation score >90%',
+  required: true,
+}
         {
           id: 'qg-003',
           name: 'Artistic Approval',
           type: 'creative',
           status: 'pending',
           criteria: 'Director final approval',
-          required: true,
-        }
-      ],
+          required: true],
       comments: [,
         {
           id: 'comment-002',
@@ -324,7 +302,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'review',
           mentions: [DEMO_TEAM[2].id],
           reactions: {}
-        },
+  }
         {
           id: 'comment-003',
           content: 'Thanks for the feedback! I\'ll adjust the atmospheric layers to better integrate with the scene lighting. Should have the update ready by tomorrow.',
@@ -333,10 +311,9 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'comment',
           mentions: [],
           reactions: {}
-        }
       ],
-      history: [],
-    },
+      history: [];
+  }
     {
       id: 'item-003',
       title: 'Crowd Simulation - Medieval Citizens',
@@ -369,9 +346,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           status: 'draft',
           version: 'v02',
           complexity: 92,
-          dependencies: ['Camera_Track_v03.ma'],
-        }
-      ],
+          dependencies: ['Camera_Track_v03.ma']],
       tags: ['crowd', 'simulation', 'medieval', 'characters', 'animation'],
       category: 'fx',
       vfxPhase: 'fx',
@@ -382,9 +357,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'performance',
           status: 'pending',
           criteria: 'Render time <2min/frame',
-          required: true,
-        }
-      ],
+          required: true],
       comments: [,
         {
           id: 'comment-004',
@@ -394,10 +367,9 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'comment',
           mentions: [DEMO_TEAM[5].id],
           reactions: {}
-        }
       ],
-      history: [],
-    },
+      history: [];
+  }
     {
       id: 'item-004',
       title: 'Atmospheric Effects - Market Smoke & Dust',
@@ -425,8 +397,8 @@ const createSampleChecklist = (): VFXChecklist => ({)
       vfxPhase: 'fx',
       qualityGates: [],
       comments: [],
-      history: [],
-    },
+      history: [];
+  }
     {
       id: 'item-005',
       title: 'Historical Accuracy Review - Architecture',
@@ -460,9 +432,7 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'accuracy',
           status: 'pending',
           criteria: '>90% historical accuracy score',
-          required: true,
-        }
-      ],
+          required: true],
       comments: [,
         {
           id: 'comment-005',
@@ -472,13 +442,10 @@ const createSampleChecklist = (): VFXChecklist => ({)
           type: 'comment',
           mentions: [DEMO_TEAM[4].id],
           reactions: {}
-        }
       ],
-      history: [],
-    }
-  ]
-});
-
+      history: []];
+  });
+}
 export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   title = 'Wild Construct VFX Checklist System',
   showTemplates = true,
@@ -491,55 +458,55 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   const [currentUser, setCurrentUser] = useState<VFXTeamMember>(initialUser);
   const [activeTab, setActiveTab] = useState('checklist');
   const [checklist, setChecklist] = useState<VFXChecklist>(createSampleChecklist());
-  const [customTemplates, _____setCustomTemplates] = useState<VFXChecklistTemplate[]>([]);
+  const [customTemplates, _____setCustomTemplates] = useState<VFXChecklistTemplate>([]);
   // UI state
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [showCompactView, setShowCompactView] = useState(false);
   const [showStatistics, setShowStatistics] = useState(true);
   // Analytics data
   const analytics = useMemo(() => {
-    const items = checklist.items;
-    const totalItems = items.length;
-    const completedItems = items.filter(item => item.status === 'approved').length;
-    const inProgressItems = items.filter(item => item.status === 'in_progress').length;
-    const reviewItems = items.filter(item => item.status === 'review').length;
-    const blockedItems = items.filter(item => item.status === 'blocked').length;
-    const criticalItems = items.filter(item => item.priority === 'critical').length;
-    const overdue = items.filter(item => ;);
-      item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
-    ).length;
-    const totalEstimated = items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
-    const totalActual = items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
-    const efficiency = totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0;
-    const statusDistribution = {
-      pending: items.filter(item => item.status === 'pending').length,
-      in_progress: inProgressItems,
-      review: reviewItems,
-      approved: completedItems,
-      rejected: items.filter(item => item.status === 'rejected').length,
-      blocked: blockedItems,
-    };
+  const items = checklist.items;
+  const totalItems = items.length;
+  const completedItems = items.filter(item => item.status === 'approved').length;
+  const inProgressItems = items.filter(item => item.status === 'in_progress').length;
+  const reviewItems = items.filter(item => item.status === 'review').length;
+  const blockedItems = items.filter(item => item.status === 'blocked').length;
+  const criticalItems = items.filter(item => item.priority === 'critical').length;
+  const overdue = items.filter(item => ;);
+  item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
+  ).length;
+  const totalEstimated = items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0);
+  const totalActual = items.reduce((sum, item) => sum + (item.actualHours || 0), 0);
+  const efficiency = totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0;
+  const statusDistribution = {
+  pending: items.filter(item => item.status === 'pending').length,
+  in_progress: inProgressItems,
+  review: reviewItems,
+  approved: completedItems,
+  rejected: items.filter(item => item.status === 'rejected').length,
+  blocked: blockedItems,
+};
     const priorityDistribution = {
-      low: items.filter(item => item.priority === 'low').length,
-      medium: items.filter(item => item.priority === 'medium').length,
-      high: items.filter(item => item.priority === 'high').length,
-      critical: criticalItems,
-    };
+  low: items.filter(item => item.priority === 'low').length,
+  medium: items.filter(item => item.priority === 'medium').length,
+  high: items.filter(item => item.priority === 'high').length,
+  critical: criticalItems,
+};
     return {
-      totalItems,
-      completedItems,
-      inProgressItems,
-      reviewItems,
-      blockedItems,
-      criticalItems,
-      overdue,
-      totalEstimated,
-      totalActual,
-      efficiency,
-      completionRate: totalItems > 0 ? (completedItems / totalItems) * 100 : 0,
-      statusDistribution,
-      priorityDistribution
-    };
+  totalItems,
+  completedItems,
+  inProgressItems,
+  reviewItems,
+  blockedItems,
+  criticalItems,
+  overdue,
+  totalEstimated,
+  totalActual,
+  efficiency,
+  completionRate: totalItems > 0 ? (completedItems / totalItems) * 100 : 0,
+  statusDistribution,
+  priorityDistribution
+};
   }, [checklist.items]);
   // Event handlers
   const handleChecklistUpdate = useCallback((updatedChecklist: VFXChecklist) => {
@@ -548,25 +515,25 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
   const handleItemCreate = useCallback((item: Omit<VFXChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'history'>) => {
     const newItem: VFXChecklistItem = {
       ...item,
-      id: `item-${Date.now()}`,}
-      createdAt: new Date().toISOString(),
+      id: `item-${Date.now()}`}
+},
+  createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      history: [],
-    };
+      history: [];
+  };
     setChecklist(prev => ({)
-      ...prev,
-      items: [...prev.items, newItem],
-      updatedAt: new Date().toISOString(),
-      metadata: {,
-        ...prev.metadata,
-        totalItems: prev.items.length + 1,
-        lastActivity: new Date().toISOString(),
-      }
-    }));
+  ...prev,
+  items: [...prev.items, newItem],
+  updatedAt: new Date().toISOString(),
+  metadata: {,
+  ...prev.metadata,
+  totalItems: prev.items.length + 1,
+  lastActivity: new Date().toISOString(),
+}));
   }, []);
   const handleItemUpdate = useCallback((itemId: string, updates: Partial<VFXChecklistItem>) => {
     setChecklist(prev => ({)
-      ...prev,
+  ...prev,
       items: prev.items.map(item => ),
         item.id === itemId 
           ? { ...item, ...updates, updatedAt: new Date().toISOString() }
@@ -574,49 +541,50 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       ),
       updatedAt: new Date().toISOString(),
       metadata: {,
-        ...prev.metadata,
-        completedItems: prev.items.filter(item => ),
-          item.id === itemId ? updates.status === 'approved' : item.status === 'approved'
-        ).length,
-        lastActivity: new Date().toISOString(),
-      }
-    }));
+  ...prev.metadata,
+  completedItems: prev.items.filter(item => ),
+  item.id === itemId ? updates.status === 'approved' : item.status === 'approved').length,
+  lastActivity: new Date().toISOString(),
+}));
   }, []);
   const handleItemDelete = useCallback((itemId: string) => {
-    setChecklist(prev => ({)
-      ...prev,
-      items: prev.items.filter(item => item.id !== itemId),
-      updatedAt: new Date().toISOString(),
-      metadata: {,
-        ...prev.metadata,
-        totalItems: prev.items.length - 1,
-        lastActivity: new Date().toISOString(),
-      }
-    }));
+  setChecklist(prev => ({)
+  ...prev,
+  items: prev.items.filter(item => item.id !== itemId),
+  updatedAt: new Date().toISOString(),
+  metadata: {,
+  ...prev.metadata,
+  totalItems: prev.items.length - 1,
+  lastActivity: new Date().toISOString(),
+}));
   }, []);
   const handleCommentCreate = useCallback((itemId: string, comment: Omit<VFXChecklistComment, 'id' | 'timestamp'>) => {
     const newComment: VFXChecklistComment = {
       ...comment,
-      id: `comment-${Date.now()}`,}
-      timestamp: new Date().toISOString(),
-    };
+      id: `comment-${Date.now()}`}
+},
+  timestamp: new Date().toISOString();
+  };
     setChecklist(prev => ({)
-      ...prev,
+  ...prev,
       items: prev.items.map(item =>),
         item.id === itemId
           ? { ...item, comments: [...item.comments, newComment] }
           : item
       ),
-      updatedAt: new Date().toISOString(),
-    }));
+      updatedAt: new Date().toISOString();
+  }));
   }, []);
   const handleTemplateSelect = useCallback((template: VFXChecklistTemplate) => {
     // Create new checklist from template
-    const newChecklist: VFXChecklist = {
-      id: `checklist-${Date.now()}`,}
-      name: `${template.name} - New Project`,}
-      description: `Checklist created from template: ${template.name}`,}
-      project: 'New Project',
+    const newChecklist: VFXChecklist = {,
+  id: `checklist-${Date.now()}`}
+},
+  name: `${template.name} - New Project`}
+},
+  description: `Checklist created from template: ${template.name}`}
+},
+  project: 'New Project',
       owner: currentUser,
       team: DEMO_TEAM,
       status: 'draft',
@@ -624,30 +592,31 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
       updatedAt: new Date().toISOString(),
       tags: [],
       metadata: {,
-        totalItems: template.items.length,
-        completedItems: 0,
-        overallProgress: 0,
-        estimatedTotalHours: template.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0),
-        actualTotalHours: 0,
-        criticalIssues: 0,
-        blockedItems: 0,
-        averageAccuracy: 0,
-        lastActivity: new Date().toISOString(),
-        collaborators: DEMO_TEAM.length,
-      },
-      items: template.items.map((templateItem, index) => ({)
-        ...templateItem,
-        id: `item-${Date.now()}-${index}`,}
-        author: currentUser,
+  totalItems: template.items.length,
+  completedItems: 0,
+  overallProgress: 0,
+  estimatedTotalHours: template.items.reduce((sum, item) => sum + (item.estimatedHours || 0), 0),
+  actualTotalHours: 0,
+  criticalIssues: 0,
+  blockedItems: 0,
+  averageAccuracy: 0,
+  lastActivity: new Date().toISOString(),
+  collaborators: DEMO_TEAM.length,
+},
+  items: template.items.map((templateItem, index) => ({)
+  ...templateItem,
+        id: `item-${Date.now()}-${index}`}
+},
+  author: currentUser,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        history: [],
-      }))
+        history: [];
+  }))
     };
     setChecklist(newChecklist);
     setActiveTab('checklist');
   }, [currentUser]);
-  return ();
+  return;
     <div className={`vfx-checklist-demo ${className}`}>}
       <Card>
         <CardHeader>
@@ -880,7 +849,7 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                           const color = priority === 'critical' ? 'bg-red-500' :;
                             priority === 'high' ? 'bg-orange-500' :
                               priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500';
-                          return ();
+                          return;
                             <div key={priority} className="flex items-center justify-between">
                               <span className="text-sm capitalize">{priority}</span>
                               <div className="flex items-center gap-2">
@@ -909,9 +878,9 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
                     <CardContent>
                       <div className="space-y-3">
                         {DEMO_TEAM.slice(0, 4).map(member => {)
-                          const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
+  const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                           const completed = userItems.filter(item => item.status === 'approved').length;
-                          return ();
+                          return;
                             <div key={member.id} className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <div 
@@ -933,13 +902,13 @@ export const VFXChecklistDemo: React.FC<VFXChecklistDemoProps> = ({)
               <TabsContent value="team" className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {DEMO_TEAM.map(member => {)
-                    const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
+  const userItems = checklist.items.filter(item => item.assignee?.id === member.id);
                     const completed = userItems.filter(item => item.status === 'approved').length;
                     const inProgress = userItems.filter(item => item.status === 'in_progress').length;
                     const overdue = userItems.filter(item => ;);
                       item.dueDate && new Date(item.dueDate) < new Date() && item.status !== 'approved'
                     ).length;
-                    return ();
+                    return;
                       <Card key={member.id} className={member.id === currentUser.id ? 'border-blue-300 bg-blue-50' : ''}>
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between mb-3">

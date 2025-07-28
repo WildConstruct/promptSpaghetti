@@ -26,6 +26,7 @@
  */
 import React from 'react';
 import { DashboardTheme } from './SecurityDashboardFramework';
+
 export interface SecurityAlert {
     id: string;
     severity: 'critical' | 'high' | 'medium' | 'low';
@@ -39,7 +40,7 @@ export interface SecurityAlert {
     affectedAssets: string[];
     indicators: string[];
     responseActions: ResponseAction[];
-}
+
 export interface ResponseAction {
     id: string;
     type: 'isolate' | 'block' | 'quarantine' | 'investigate' | 'escalate';
@@ -48,7 +49,7 @@ export interface ResponseAction {
     status: 'pending' | 'in_progress' | 'completed' | 'failed';
     performer?: string;
     timestamp?: Date;
-}
+
 export interface SystemStatus {
     component: string;
     status: 'operational' | 'degraded' | 'outage' | 'maintenance';
@@ -56,7 +57,7 @@ export interface SystemStatus {
     responseTime?: number;
     uptime: number;
     criticalIssues: number;
-}
+
 export interface ThreatIntelligence {
     feed: string;
     lastUpdate: Date;
@@ -64,7 +65,7 @@ export interface ThreatIntelligence {
     activeThreats: number;
     confidence: 'high' | 'medium' | 'low';
     categories: string[];
-}
+
 export interface OperationalMetrics {
     alerts: {,
         total: number;
@@ -92,7 +93,7 @@ export interface OperationalMetrics {
         workload: 'low' | 'normal' | 'high' | 'critical';
         avgCaseload: number;
     };
-}
+
 export interface OperationalSecurityDashboardProps {
     alerts: SecurityAlert[];
     metrics: OperationalMetrics;
@@ -104,7 +105,6 @@ export interface OperationalSecurityDashboardProps {
     enableRealTimeUpdates?: boolean;
     onAlertAction?: (alertId: string, action: string) => void;
     onSystemIssue?: (component: string, issue: string) => void;
-}
 /**
  * Operational Security Dashboard Component
  */

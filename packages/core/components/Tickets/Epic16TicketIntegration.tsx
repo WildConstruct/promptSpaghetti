@@ -13,13 +13,11 @@ import {
 import TicketManagementDashboard from './TicketManagementDashboard';
 import TicketDetailsView from './TicketDetailsView';
 interface Epic16TicketIntegrationProps {
-  userId: string;
+  userId: string;,
   userRole: 'user' | 'agent' | 'admin';
   config?: Partial<TicketIntegrationConfig>;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
-}
-
-export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = ({)
+  export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = ({,)
   userId,
   userRole,
   config,
@@ -33,53 +31,61 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
   const [selectedTicket, setSelectedTicket] = useState<MarketplaceTicket | null>(null);
   const [view, setView] = useState<'dashboard' | 'details' | 'settings'>('dashboard');
   const [notifications, setNotifications] = useState<Array<{
-    id: string;
-    type: 'success' | 'error' | 'info' | 'warning';
-    message: string;
-    timestamp: Date;
-  }>>([]);
+  id: string;,
+  type: 'success' | 'error' | 'info' | 'warning';
+  message: string;,
+  timestamp: Date;
+}>>([]);
   // Set up event listeners for service events
   useEffect(() => {
     const handleTicketCreated = (data: { ticket: MarketplaceTicket }) => {
       setNotifications(prev => [...prev, {)
-        id: `created-${data.ticket.id}`,}
-        type: 'success',
-        message: `Ticket ${data.ticket.id} has been created`,}
-        timestamp: new Date(),
-      }]);
+  id: `created-${data.ticket.id}`}
+},
+  type: 'success',
+        message: `Ticket ${data.ticket.id} has been created`}
+},
+  timestamp: new Date();
+  }]);
     };
-    const handleTicketStatusChanged = (data: { )
-      ticket: MarketplaceTicket; 
-      oldStatus: string; 
-      newStatus: string; 
+    const handleTicketStatusChanged = (data: { ),
+  ticket: MarketplaceTicket; 
+      oldStatus: string; ,
+  newStatus: string; 
     }) => {
       setNotifications(prev => [...prev, {)
-        id: `status-${data.ticket.id}-${Date.now()}`,}
-        type: 'info',
-        message: `Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`,}
-        timestamp: new Date(),
-      }]);
+  id: `status-${data.ticket.id}-${Date.now()}`}
+},
+  type: 'info',
+        message: `Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`}
+},
+  timestamp: new Date();
+  }]);
     };
-    const handleTicketEscalated = (data: { )
-      ticket: MarketplaceTicket; 
+    const handleTicketEscalated = (data: { ),
+  ticket: MarketplaceTicket; 
       reason: string; 
     }) => {
       setNotifications(prev => [...prev, {)
-        id: `escalated-${data.ticket.id}`,}
-        type: 'warning',
-        message: `Ticket ${data.ticket.id} has been escalated: ${data.reason}`,}
-        timestamp: new Date(),
-      }]);
+  id: `escalated-${data.ticket.id}`}
+},
+  type: 'warning',
+        message: `Ticket ${data.ticket.id} has been escalated: ${data.reason}`}
+},
+  timestamp: new Date();
+  }]);
     };
-    const handleCommentAdded = (data: { )
-      ticket: MarketplaceTicket; 
+    const handleCommentAdded = (data: { ),
+  ticket: MarketplaceTicket; 
     }) => {
       setNotifications(prev => [...prev, {)
-        id: `comment-${data.ticket.id}-${Date.now()}`,}
-        type: 'info',
-        message: `New comment added to ticket ${data.ticket.id}`,}
-        timestamp: new Date(),
-      }]);
+  id: `comment-${data.ticket.id}-${Date.now()}`}
+},
+  type: 'info',
+        message: `New comment added to ticket ${data.ticket.id}`}
+},
+  timestamp: new Date();
+  }]);
     };
     // Subscribe to events
     ticketService.on('ticket_created', handleTicketCreated);
@@ -115,9 +121,8 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
     setView(newView);
     if (newView === 'dashboard') {
       setSelectedTicket(null);
-    }
   };
-  return ();
+  return;
     <div className="epic16-ticket-integration h-full flex flex-col relative">
       {/* Navigation Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -126,10 +131,10 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
             <button
               onClick={() => handleViewChange('dashboard')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                view === 'dashboard'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
+  view === 'dashboard'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
             >
               Dashboard
             </button>
@@ -137,10 +142,10 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
               <button
                 onClick={() => handleViewChange('details')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  view === 'details'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  view === 'details'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 Ticket Details
               </button>
@@ -149,10 +154,10 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
               <button
                 onClick={() => handleViewChange('settings')}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                  view === 'settings'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  view === 'settings'
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 Settings
               </button>
@@ -207,110 +212,108 @@ export const Epic16TicketIntegration: React.FC<Epic16TicketIntegrationProps> = (
 interface IntegrationSettingsProps {
   ticketService: Epic16TicketIntegrationService;
   onConfigChange?: (config: TicketIntegrationConfig) => void;
-}
-const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({)
+  const IntegrationSettings: React.FC<IntegrationSettingsProps> = ({,)
   ticketService,
   onConfigChange
 }) => {
-  return ();
-    <div className="p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Integration Settings</h2>
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Epic 16 Configuration</h3>
-        <div className="space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-blue-700">
-                  Epic 16 ticket integration is now active. This system provides comprehensive
-                  marketplace and community support ticket management with:
-                </p>
-                <ul className="mt-2 text-sm text-blue-700 list-disc list-inside space-y-1">
-                  <li>12 marketplace ticket types with specialized workflows</li>
-                  <li>SLA tracking and automated escalation</li>
-                  <li>External system integrations (GitHub, Jira, Slack, Discord)</li>
-                  <li>Advanced comment system with visibility controls</li>
-                  <li>Real-time metrics and analytics</li>
-                  <li>Attachment management with security scanning</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Service Status</h4>
-              <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                <div className="flex items-center">
-                  <svg className="h-4 w-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm font-medium text-green-800">Active</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Integrations</h4>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
-                <div className="flex items-center">
-                  <svg className="h-4 w-4 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm font-medium text-yellow-800">Configuration Required</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">Features Overview</h4>
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-              <div className="grid grid-cols-3 gap-4 text-sm">
-                <div>
-                  <div className="font-medium text-gray-900">Ticket Types</div>
-                  <div className="text-gray-600 mt-1">Template Submission, Billing Disputes, Community Support, Technical Issues</div>
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900">Workflow Automation</div>
-                  <div className="text-gray-600 mt-1">Auto-assignment, SLA tracking, Escalation rules</div>
-                </div>
-                <div>
-                  <div className="font-medium text-gray-900">External Systems</div>
-                  <div className="text-gray-600 mt-1">GitHub, Jira, Zendesk, Slack, Discord integrations</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  return;
+  <div className="p-6">
+  <h2 className="text-2xl font-bold text-gray-900 mb-6">Integration Settings</h2>
+  <div className="bg-white border border-gray-200 rounded-lg p-6">
+  <h3 className="text-lg font-medium text-gray-900 mb-4">Epic 16 Configuration</h3>
+  <div className="space-y-4">
+  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+  <div className="flex">
+  <div className="flex-shrink-0">
+  <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+  </svg>
+  </div>
+  <div className="ml-3">
+  <p className="text-sm text-blue-700">
+  Epic 16 ticket integration is now active. This system provides comprehensive
+  marketplace and community support ticket management with:,
+  </p>
+  <ul className="mt-2 text-sm text-blue-700 list-disc list-inside space-y-1">
+  <li>12 marketplace ticket types with specialized workflows</li>
+  <li>SLA tracking and automated escalation</li>
+  <li>External system integrations (GitHub, Jira, Slack, Discord)</li>
+  <li>Advanced comment system with visibility controls</li>
+  <li>Real-time metrics and analytics</li>
+  <li>Attachment management with security scanning</li>
+  </ul>
+  </div>
+  </div>
+  </div>
+  <div className="grid grid-cols-2 gap-6">
+  <div>
+  <h4 className="text-sm font-medium text-gray-900 mb-2">Service Status</h4>
+  <div className="bg-green-50 border border-green-200 rounded-md p-3">
+  <div className="flex items-center">
+  <svg className="h-4 w-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+  </svg>
+  <span className="text-sm font-medium text-green-800">Active</span>
+  </div>
+  </div>
+  </div>
+  <div>
+  <h4 className="text-sm font-medium text-gray-900 mb-2">Integrations</h4>
+  <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+  <div className="flex items-center">
+  <svg className="h-4 w-4 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+  </svg>
+  <span className="text-sm font-medium text-yellow-800">Configuration Required</span>
+  </div>
+  </div>
+  </div>
+  </div>
+  <div>
+  <h4 className="text-sm font-medium text-gray-900 mb-2">Features Overview</h4>
+  <div className="bg-gray-50 border border-gray-200 rounded-md p-4">
+  <div className="grid grid-cols-3 gap-4 text-sm">
+  <div>
+  <div className="font-medium text-gray-900">Ticket Types</div>
+  <div className="text-gray-600 mt-1">Template Submission, Billing Disputes, Community Support, Technical Issues</div>
+  </div>
+  <div>
+  <div className="font-medium text-gray-900">Workflow Automation</div>
+  <div className="text-gray-600 mt-1">Auto-assignment, SLA tracking, Escalation rules</div>
+  </div>
+  <div>
+  <div className="font-medium text-gray-900">External Systems</div>
+  <div className="text-gray-600 mt-1">GitHub, Jira, Zendesk, Slack, Discord integrations</div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
   );
 };
 
 // Notification System Component
 interface NotificationSystemProps {
   notifications: Array<{,
-    id: string;
-    type: 'success' | 'error' | 'info' | 'warning';
-    message: string;
-    timestamp: Date;
-  }>;
-}
+  id: string;,
+  type: 'success' | 'error' | 'info' | 'warning';
+  message: string;,
+  timestamp: Date;
+}>;
 const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }) => {
   if (notifications.length === 0) return null;
-  return ();
-    <div className="fixed top-4 right-4 z-50 space-y-2">
-      {notifications.slice(-3).map((notification) => {
-        const colors = {
-          success: 'bg-green-50 border-green-200 text-green-700',
-          error: 'bg-red-50 border-red-200 text-red-700',
-          info: 'bg-blue-50 border-blue-200 text-blue-700',
-          warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
-        };
-        return ();
+  return;
+  <div className="fixed top-4 right-4 z-50 space-y-2">
+  {notifications.slice(-3).map((notification) => {
+  const colors = {
+  success: 'bg-green-50 border-green-200 text-green-700',
+  error: 'bg-red-50 border-red-200 text-red-700',
+  info: 'bg-blue-50 border-blue-200 text-blue-700',
+  warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+};
+        return;
           <div
             key={notification.id}
             className={`max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`}
@@ -355,7 +358,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({ notifications }
 // Help System Component
 const HelpSystem: React.FC = () => {
   const [showHelp, setShowHelp] = useState(false);
-  return ();
+  return;
     <>
       <button
         onClick={() => setShowHelp(true)}

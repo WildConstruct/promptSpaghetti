@@ -19,6 +19,7 @@ import { SOXComplianceReportModule } from './frameworks/SOXComplianceReportModul
 import cron from 'node-cron';
 import { EventEmitter } from 'events';
 
+}
 export interface ReportSchedule {
   id: string;
   name: string;
@@ -36,7 +37,9 @@ export interface ReportSchedule {
   nextExecution?: Date;
   executionHistory: ScheduleExecution[];
 }
+}
 
+}
 export interface ScheduleConfiguration {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually' | 'custom';
   cronExpression?: string;
@@ -51,7 +54,9 @@ export interface ScheduleConfiguration {
   holidays?: HolidayRule[];
   businessDaysOnly?: boolean;
 }
+}
 
+}
 export interface ReportRecipient {
   id: string;
   name: string;
@@ -62,11 +67,13 @@ export interface ReportRecipient {
     securityLevel: 'standard' | 'encrypted' | 'secure_portal';
     language: string;
     customizations?: RecipientCustomization[];
+}
   };
   approvalRequired?: boolean;
   backupContacts?: BackupContact[];
 }
 
+}
 export interface DeliveryOptions {
   methods: DeliveryMethod[];
   encryption: EncryptionOptions;
@@ -77,14 +84,18 @@ export interface DeliveryOptions {
   deliveryConfirmation: boolean;
   retryPolicy: RetryPolicy;
 }
+}
 
+}
 export interface DeliveryMethod {
   type: 'email' | 'secure_portal' | 'sftp' | 'api' | 'webhook';
   configuration: DeliveryConfiguration;
   priority: number;
   fallbackMethod?: string;
 }
+}
 
+}
 export interface ScheduleExecution {
   id: string;
   scheduleId: string;
@@ -97,7 +108,9 @@ export interface ScheduleExecution {
   errors?: ExecutionError[];
   metadata: ExecutionMetadata;
 }
+}
 
+}
 export interface GeneratedReport {
   reportId: string;
   format: string;
@@ -107,7 +120,9 @@ export interface GeneratedReport {
   checksum: string;
   encryptionKey?: string;
 }
+}
 
+}
 export interface DeliveryResult {
   recipientId: string;
   method: string;
@@ -117,6 +132,7 @@ export interface DeliveryResult {
   attempts: number;
   errorMessage?: string;
   trackingId?: string;
+}
 }
 
 export class ComplianceReportScheduler extends EventEmitter {
@@ -145,6 +161,7 @@ export class ComplianceReportScheduler extends EventEmitter {
    * Create a new compliance report schedule
    */
   async createSchedule(schedule: Omit<ReportSchedule, 'id' | 'createdAt' | 'executionHistory'>): Promise<string> {
+
     const scheduleId = crypto.randomUUID();
     
     const newSchedule: ReportSchedule = {
@@ -177,6 +194,7 @@ export class ComplianceReportScheduler extends EventEmitter {
    * Update existing schedule
    */
   async updateSchedule(scheduleId: string, updates: Partial<ReportSchedule>): Promise<void> {
+
     const existingSchedule = this.schedules.get(scheduleId);
     if (!existingSchedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
@@ -211,6 +229,7 @@ export class ComplianceReportScheduler extends EventEmitter {
    * Delete schedule
    */
   async deleteSchedule(scheduleId: string): Promise<void> {
+
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
@@ -231,6 +250,7 @@ export class ComplianceReportScheduler extends EventEmitter {
    * Execute schedule manually
    */
   async executeSchedule(scheduleId: string, overridePeriod?: ReportingPeriod): Promise<string> {
+
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) {
       throw new Error(`Schedule ${scheduleId} not found`);
@@ -336,6 +356,7 @@ export class ComplianceReportScheduler extends EventEmitter {
    * Cancel pending execution
    */
   async cancelExecution(executionId: string): Promise<void> {
+
     const executionIndex = this.executionQueue.findIndex(e => e.id === executionId);
     if (executionIndex === -1) {
       throw new Error(`Execution ${executionId} not found in queue`);
@@ -358,6 +379,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   // Private methods for schedule management
 
   private async activateSchedule(scheduleId: string): Promise<void> {
+
     const schedule = this.schedules.get(scheduleId);
     if (!schedule) return;
 
@@ -376,6 +398,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async deactivateSchedule(scheduleId: string): Promise<void> {
+
     const job = this.cronJobs.get(scheduleId);
     if (job) {
       job.destroy();
@@ -486,6 +509,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async validateSchedule(schedule: ReportSchedule): Promise<void> {
+
     // Validate cron expression if provided
     if (schedule.schedule.cronExpression) {
       if (!cron.validate(schedule.schedule.cronExpression)) {
@@ -532,6 +556,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async processExecution(execution: ScheduleExecution): Promise<void> {
+
     const startTime = Date.now();
     execution.status = 'running';
 
@@ -591,6 +616,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async generateReport(schedule: ReportSchedule, period: ReportingPeriod): Promise<unknown> {
+
     switch (schedule.framework) {
     case ComplianceFramework.GDPR:
       return this.gdprModule.generateGDPRReport(schedule.reportType, period);
@@ -606,6 +632,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async exportReports(report: unknown, schedule: ReportSchedule): Promise<GeneratedReport[]> {
+
     const formats = new Set<string>();
     
     // Collect all required formats
@@ -641,6 +668,7 @@ export class ComplianceReportScheduler extends EventEmitter {
   }
 
   private async deliverReports(reports: GeneratedReport[], schedule: ReportSchedule): Promise<DeliveryResult[]> {
+
     const deliveryResults: DeliveryResult[] = [];
 
     for (const recipient of schedule.recipients) {
@@ -659,6 +687,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     method: DeliveryMethod,
     _____schedule: ReportSchedule
   ): Promise<DeliveryResult> {
+
     const _____startTime = Date.now();
 
     try {
@@ -753,6 +782,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     recipient: ReportRecipient,
     _____config: DeliveryConfiguration
   ): Promise<void> {
+
     console.log(`📧 Delivering reports via email to ${recipient.email}`);
   }
 
@@ -761,6 +791,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     recipient: ReportRecipient,
     _____config: DeliveryConfiguration
   ): Promise<void> {
+
     console.log(`🔒 Delivering reports via secure portal to ${recipient.name}`);
   }
 
@@ -769,6 +800,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     recipient: ReportRecipient,
     _____config: DeliveryConfiguration
   ): Promise<void> {
+
     console.log(`📁 Delivering reports via SFTP to ${recipient.name}`);
   }
 
@@ -777,6 +809,7 @@ export class ComplianceReportScheduler extends EventEmitter {
     recipient: ReportRecipient,
     _____config: DeliveryConfiguration
   ): Promise<void> {
+
     console.log(`🔌 Delivering reports via API to ${recipient.name}`);
   }
 
@@ -785,78 +818,102 @@ export class ComplianceReportScheduler extends EventEmitter {
     recipient: ReportRecipient,
     _____config: DeliveryConfiguration
   ): Promise<void> {
+
     console.log(`🪝 Delivering reports via webhook to ${recipient.name}`);
   }
 }
 
 // Supporting interfaces and types
+}
 interface ScheduleRetentionPolicy {
   keepExecutionHistory: number; // days
   archiveReports: boolean;
   archiveAfterDays: number;
   deleteAfterDays: number;
 }
+}
 
+}
 interface HolidayRule {
   name: string;
   date: Date;
   recurring: boolean;
   skipIfWeekend: boolean;
 }
+}
 
+}
 interface RecipientCustomization {
   section: string;
   include: boolean;
   format?: string;
 }
+}
 
+}
 interface BackupContact {
   name: string;
   email: string;
   role: string;
 }
+}
 
+}
 interface EncryptionOptions {
   enabled: boolean;
   algorithm?: string;
   keySize?: number;
   certificatePath?: string;
 }
+}
 
+}
 interface WatermarkOptions {
   text: string;
   position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
   opacity: number;
 }
+}
 
+}
 interface AccessRestriction {
   type: 'ip_whitelist' | 'user_authentication' | 'time_limited' | 'download_limit';
   configuration: unknown;
 }
+}
 
+}
 interface ExpirationPolicy {
   expiresAfterDays: number;
   warningDays: number;
   autoDelete: boolean;
 }
+}
 
+}
 interface RetryPolicy {
   maxAttempts: number;
   retryIntervalMs: number;
   backoffMultiplier: number;
 }
+}
 
+}
 interface DeliveryConfiguration {
   [key: string]: unknown;
 }
+}
 
+}
 interface ExecutionError {
   type: string;
   message: string;
   timestamp: Date;
   context: unknown;
 }
+}
 
+}
 interface ExecutionMetadata {
   triggeredBy: 'schedule' | 'manual' | 'api';
   requestedBy: string;
@@ -864,7 +921,9 @@ interface ExecutionMetadata {
   priority: 'low' | 'medium' | 'high';
   cancelledAt?: Date;
 }
+}
 
+}
 interface ScheduleStatus {
   scheduleId: string;
   isActive: boolean;
@@ -875,15 +934,18 @@ interface ScheduleStatus {
     duration: number;
     reportsGenerated: number;
     deliverySuccessRate: number;
+}
   };
   executionCount: number;
   successRate: number;
   averageExecutionTime: number;
 }
 
+}
 interface ScheduleFilter {
   framework?: ComplianceFramework;
   reportType?: ComplianceReportType;
   isActive?: boolean;
   createdBy?: string;
+}
 }

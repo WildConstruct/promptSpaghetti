@@ -1,3 +1,2 @@
-import React from 'react';
-export declare const AuthenticationSuite: React.FC;
+export {};
 //# sourceMappingURL=AuthenticationSuite.d.ts.map

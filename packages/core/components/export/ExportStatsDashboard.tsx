@@ -3,9 +3,8 @@ import React from 'react';
 export interface ExportStatsDashboardProps {
   className?: string;
 }
-
 export const ExportStatsDashboard: React.FC<ExportStatsDashboardProps> = ({ className = '' }) => {
-  return ();
+  return;
     <div className={`export-stats-dashboard ${className}`}>}
       <h3>Export Statistics</h3>
       <div className="stats-grid">

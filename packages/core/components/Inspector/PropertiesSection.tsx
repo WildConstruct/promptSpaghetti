@@ -3,19 +3,18 @@ import { ZodSchema } from 'zod';
 import { NodeEditorRouter } from './NodeEditorRouter';
 
 export interface PropertiesSectionProps {
-  node: Error;
+  node: Error;,
   schema: ZodSchema<unknown>;
   onChange: (partial: Record<string, unknown>) => void;
   onGlobalPreviewRequest?: () => void;
 }
-
 export const PropertiesSection: React.FC<PropertiesSectionProps> = ({)
   node,
   schema,
   onChange,
   onGlobalPreviewRequest
 }) => {
-  return ();
+  return;
     <div style={{ height: '100%' }}>
       <NodeEditorRouter 
         node={node}

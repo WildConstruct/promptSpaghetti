@@ -47,33 +47,30 @@ interface ContributorVisualizationProps {
   projectId: string;
   visible?: boolean;
   onClose?: () => void;
-}
 interface ContributorCardProps {
-  contributor: ContributorStatsResponse['contributors'][0];
+  contributor: ContributorStatsResponse['contributors'][0];,
   projectId: string;
   onViewDetails: (contributorId: string) => void;
-}
 const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____projectId, onViewDetails }) => {
-  const getContributorInitials = (name?: string) => {
-    if (!name) return '?';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
-  };
+  const getContributorInitials = (name?: string) => {,
+  if (!name) return '?';
+  return name.split(' ').map(n => n[0]).join('').toUpperCase();
+};
   const getContributorColor = (authorType: string) => {
-    switch (authorType) {
-    case 'user':
-      return '#1890ff';
-    case 'anonymous':
-      return '#d9d9d9';
-    case 'guest':
-      return '#faad14';
-    case 'system':
-      return '#52c41a';
-    case 'api':
-      return '#722ed1';
-    default:
-      return '#8c8c8c';
-    }
-  };
+  switch (authorType) {
+  case 'user':,
+  return '#1890ff';
+  case 'anonymous':,
+  return '#d9d9d9';
+  case 'guest':,
+  return '#faad14';
+  case 'system':,
+  return '#52c41a';
+  case 'api':,
+  return '#722ed1';
+  default:,
+  return '#8c8c8c';
+};
   const formatDuration = (start: Date, end: Date) => {
     const duration = end.getTime() - start.getTime();
     const days = Math.floor(duration / (1000 * 60 * 60 * 24));
@@ -86,7 +83,7 @@ const ContributorCard: React.FC<ContributorCardProps> = ({ contributor, _____pro
   const topExpertise = contributor.expertise;
     .sort((a, b) => b.changes - a.changes)
     .slice(0, 3);
-  return ();
+  return;
     <Card
       size="small"
       hoverable
@@ -164,7 +161,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
   onClose
 }) => {
   const [contributors, setContributors] = useState<ContributorStatsResponse | null>(null);
-  const [recentAttributions, setRecentAttributions] = useState<ChangeAttribution[]>([]);
+  const [recentAttributions, setRecentAttributions] = useState<ChangeAttribution>([]);
   const [activeTab, setActiveTab] = useState('overview');
   const [dateRange, setDateRange] = useState<[Date, Date] | null>(null);
   const [selectedContributor, setSelectedContributor] = useState<string | null>(null);
@@ -179,43 +176,39 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
     if (visible) {
       loadContributors();
       loadRecentAttributions();
-    }
   }, [visible, projectId, dateRange]);
   const loadContributors = async () => {
-    try {
-      const stats = await getContributorStats(projectId, dateRange ? {)
-        start: dateRange[0],
-        end: dateRange[1],
-      } : undefined);
+  try {
+  const stats = await getContributorStats(projectId, dateRange ? {)
+  start: dateRange[0],
+  end: dateRange[1],
+} : undefined);
       setContributors(stats);
     } catch (error) {
-      console.error('Failed to load contributors:', error);
-    }
-  };
+  console.error('Failed to load contributors:', error);
+};
   const loadRecentAttributions = async () => {
-    try {
-      const attributions = await listAttributions({)
-        projectId,
-        dateFrom: dateRange?.[0],
-        dateTo: dateRange?.[1],
-        limit: 50,
-        offset: 0,
-        sortBy: 'created_at',
-        sortOrder: 'desc',
-      });
+  try {
+  const attributions = await listAttributions({)
+  projectId,
+  dateFrom: dateRange?.[0],
+  dateTo: dateRange?.[1],
+  limit: 50,
+  offset: 0,
+  sortBy: 'created_at',
+  sortOrder: 'desc',
+});
       setRecentAttributions(attributions);
     } catch (error) {
-      console.error('Failed to load recent attributions:', error);
-    }
-  };
+  console.error('Failed to load recent attributions:', error);
+};
   const handleViewDetails = (contributorId: string) => {
     setSelectedContributor(contributorId);
     setActiveTab('details');
   };
   const filteredContributors = contributors?.contributors.filter(contributor => {)
-    if (!showAnonymous && contributor.authorType === 'anonymous') {
+  if (!showAnonymous && contributor.authorType === 'anonymous') {
       return false;
-    }
     return true;
   }) || [];
   const getChangeTypeIcon = (changeType: ChangeType) => {
@@ -228,20 +221,18 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
       return <EditOutlined style={{ color: '#ff4d4f' }} />;
     default:
       return <EditOutlined />;
-    }
   };
   const getChangeTypeColor = (changeType: ChangeType) => {
-    switch (changeType) {
-    case 'create':
-      return 'success';
-    case 'update':
-      return 'processing';
-    case 'delete':
-      return 'error';
-    default:
-      return 'default';
-    }
-  };
+  switch (changeType) {
+  case 'create':,
+  return 'success';
+  case 'update':,
+  return 'processing';
+  case 'delete':,
+  return 'error';
+  default:,
+  return 'default';
+};
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -254,7 +245,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
     return date.toLocaleDateString();
   };
   if (!visible) return null;
-  return ();
+  return;
     <div style={{ padding: '16px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <Title level={4}>Change Attribution</Title>
@@ -344,7 +335,7 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
                 <Timeline
                   style={{ maxHeight: '400px', overflowY: 'auto' }}
                   items={recentAttributions.slice(0, 20).map((attribution) => ({)
-                    dot: getChangeTypeIcon(attribution.changeType),
+  dot: getChangeTypeIcon(attribution.changeType),
                     children: (),
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -402,12 +393,12 @@ export const ContributorVisualization: React.FC<ContributorVisualizationProps> =
 };
 
 // Placeholder components for detailed views
-const ContributorDetails: React.FC<{
+const ContributorDetails: React.FC<{,
   projectId: string;
-  contributorId: string;
+  contributorId: string;,
   onBack: () => void;
 }> = ({ projectId, contributorId, onBack }) => {
-  return ();
+  return;
     <div>
       <Button onClick={onBack} style={{ marginBottom: '16px' }}>
         ← Back to Overview
@@ -419,11 +410,11 @@ const ContributorDetails: React.FC<{
     </div>
   );
 };
-const ContributorAnalytics: React.FC<{
+const ContributorAnalytics: React.FC<{,
   contributors: ContributorStatsResponse | null;
   projectId: string;
 }> = ({ contributors, projectId }) => {
-  return ();
+  return;
     <div>
       <Row gutter={16}>
         <Col span={12}>

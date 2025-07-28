@@ -13,17 +13,21 @@
 
 import { Graph, Node } from '../../../../packages/core/graphSchema';
 
+}
 export interface ParallelExecutionOptions {
   maxConcurrency?: number;
   enableMemoization?: boolean;
   timeoutMs?: number;
 }
+}
 
+}
 export interface ExecutionResult {
   outputs: string[];
   executionTimeMs: number;
   parallelizationRatio: number; // Ratio of parallel vs sequential execution
   cacheHitRate: number;
+}
 }
 
 /**
@@ -122,6 +126,7 @@ export async function executeGraphInParallel(
   dfsExecutor: (nodeId: string) => Promise<string>,
   options: ParallelExecutionOptions = {}
 ): Promise<ExecutionResult> {
+
   const startTime = Date.now();
   const {
     maxConcurrency = 4,
@@ -166,7 +171,7 @@ export async function executeGraphInParallel(
         memoizedExecutor(nodeId),
         new Promise<string>((_, reject) => 
           setTimeout(() => reject(new Error(`Execution timeout for node ${nodeId}`)), timeoutMs)
-        )
+
       ])
     );
     
@@ -210,6 +215,7 @@ export async function executeGraphSequential(
   graph: Graph,
   dfsExecutor: (nodeId: string) => Promise<string>
 ): Promise<ExecutionResult> {
+
   const startTime = Date.now();
   const outputs: string[] = [];
   
@@ -238,6 +244,7 @@ export async function executeGraphAdaptive(
   dfsExecutor: (nodeId: string) => Promise<string>,
   options: ParallelExecutionOptions = {}
 ): Promise<ExecutionResult> {
+
   const outputNodes = graph.nodes.filter(n => n.type === 'Output');
   
   // Use sequential execution for simple graphs to avoid overhead
@@ -257,11 +264,13 @@ export async function executeGraphAdaptive(
 /**
  * Performance monitoring utilities
  */
+}
 export interface ParallelExecutionMetrics {
   averageParallelizationRatio: number;
   averageCacheHitRate: number;
   averageExecutionTime: number;
   totalExecutions: number;
+}
 }
 
 class ExecutionMetricsCollector {

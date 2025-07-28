@@ -26,7 +26,7 @@ export interface StreamEvent {
 }
 export interface StreamPartition {
     id: number;
-    events: StreamEvent[];
+    events: StreamEvent;
     offset: number;
     lastProcessed: number;
     consumerCount: number;
@@ -35,7 +35,7 @@ export interface StreamPartition {
 export interface StreamConsumer {
     id: string;
     groupId: string;
-    assignedPartitions: number[];
+    assignedPartitions: number;
     lastHeartbeat: number;
     processedOffset: Map<number, number>;
     isActive: boolean;
@@ -45,20 +45,10 @@ export interface StreamMetrics {
     totalEvents: number;
     eventsPerSecond: number;
     averageLatency: number;
-    partitionMetrics: Map<number, {
-        events: number;
-        lag: number;
-        throughput: number;
-    }>;
-    consumerMetrics: Map<string, {
-        processedEvents: number;
-        errorCount: number;
-        avgProcessingTime: number;
-    }>;
-    deadLetterQueue: {
-        size: number;
-        oldestEvent: number;
-    };
+    partitionMetrics: Map<number, {}, events>;
+    number: any;
+    lag: number;
+    throughput: number;
 }
 export interface ProcessingResult {
     success: boolean;
@@ -85,26 +75,6 @@ export declare class ConversionStreamProcessor extends EventEmitter {
     private metrics;
     constructor(config: FunnelStreamConfig);
     /**
-     * Initialize stream partitions
-     */
-    private initializePartitions;
-    /**
-     * Start background monitoring and maintenance tasks
-     */
-    private startBackgroundTasks;
-    /**
-     * Publish conversion event to stream
-     */
-    publishEvent(event: EnhancedConversionEvent, headers?: Record<string, string>): Promise<boolean>;
-    /**
-     * Register event processor
-     */
-    registerProcessor(name: string, processor: EventProcessor): void;
-    /**
-     * Register stream consumer
-     */
-    registerConsumer(consumerId: string, groupId: string, partitions?: number[]): StreamConsumer;
-    /**
      * Start stream processing
      */
     start(): void;
@@ -113,24 +83,24 @@ export declare class ConversionStreamProcessor extends EventEmitter {
      */
     stop(): void;
     /**
-     * Process all partitions
-     */
+    * Process all partitions
+    */
     private processAllPartitions;
     /**
-     * Process single partition
-     */
+    * Process single partition
+    */
     private processPartition;
     /**
-     * Process individual event
-     */
+    * Process individual event
+    */
     private processEvent;
     /**
      * Retry event processing
      */
     private retryEvent;
     /**
-     * Send event to dead letter queue
-     */
+    * Send event to dead letter queue
+    */
     private sendToDeadLetterQueue;
     /**
      * Select partition for event
@@ -162,11 +132,15 @@ export declare class ConversionStreamProcessor extends EventEmitter {
     /**
      * Get dead letter queue events
      */
-    getDeadLetterQueue(): StreamEvent[];
+    getDeadLetterQueue(): StreamEvent;
     /**
      * Reprocess dead letter queue event
      */
     reprocessDeadLetterEvent(eventId: string): Promise<boolean>;
+    /**
+     * Factory function to create ConversionStreamProcessor
+     */
+    export: any;
 }
 export default ConversionStreamProcessor;
 //# sourceMappingURL=ConversionStreamProcessor.d.ts.map

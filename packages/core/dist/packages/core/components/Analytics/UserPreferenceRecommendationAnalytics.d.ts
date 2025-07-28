@@ -16,23 +16,23 @@ export interface UserPreferenceRecommendationAnalyticsProps {
 }
 export interface PreferenceAnalyticsConfig {
     trackingEnabled: boolean;
-    preferenceCategories: PreferenceCategory[];
-    learningAlgorithms: PreferenceLearningAlgorithm[];
+    preferenceCategories: PreferenceCategory;
+    learningAlgorithms: PreferenceLearningAlgorithm;
     updateFrequency: number;
 }
 export interface RecommendationAnalyticsConfig {
-    algorithms: RecommendationAlgorithm[];
-    evaluationMetrics: RecommendationMetric[];
+    algorithms: RecommendationAlgorithm;
+    evaluationMetrics: RecommendationMetric;
     abTestingEnabled: boolean;
     personalizationLevel: PersonalizationLevel;
 }
 export type PersonalizationLevel = 'basic' | 'intermediate' | 'advanced' | 'deep';
 export interface UserPreferenceData {
     userId: string;
-    preferences: UserPreference[];
-    implicit: ImplicitPreference[];
-    explicit: ExplicitPreference[];
-    learningHistory: PreferenceLearningRecord[];
+    preferences: UserPreference;
+    implicit: ImplicitPreference;
+    explicit: ExplicitPreference;
+    learningHistory: PreferenceLearningRecord;
     confidence: PreferenceConfidence;
 }
 export interface UserPreference {
@@ -47,16 +47,16 @@ export interface UserPreference {
 export type PreferenceSource = 'explicit' | 'implicit' | 'inferred' | 'collaborative';
 export interface RecommendationPerformanceData {
     algorithmId: string;
-    metrics: RecommendationPerformanceMetric[];
-    abTestResults: ABTestResult[];
-    userFeedback: UserFeedback[];
+    metrics: RecommendationPerformanceMetric;
+    abTestResults: ABTestResult;
+    userFeedback: UserFeedback;
     businessImpact: BusinessImpact;
 }
 export declare const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecommendationAnalyticsProps>;
 export interface PreferenceCategory {
     categoryId: string;
     name: string;
-    subcategories: string[];
+    subcategories: string;
     dataType: 'string' | 'number' | 'array' | 'boolean';
 }
 export interface PreferenceLearningAlgorithm {
@@ -81,7 +81,7 @@ export interface ImplicitPreference {
     category: string;
     inferredValue: Error;
     confidence: number;
-    evidence: string[];
+    evidence: string;
 }
 export interface ExplicitPreference {
     category: string;
@@ -91,7 +91,7 @@ export interface ExplicitPreference {
 }
 export interface PreferenceLearningRecord {
     timestamp: number;
-    changes: PreferenceChange[];
+    changes: PreferenceChange;
     trigger: string;
     confidence: number;
 }
@@ -136,18 +136,18 @@ export interface PreferenceInsight {
     message: string;
     confidence: number;
     affectedUsers: number;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface RecommendationOptimization {
     optimizationId: string;
     type: string;
     algorithm: string;
     improvement: number;
-    implementation: string[];
+    implementation: string;
 }
 export interface PreferenceRecommendationExportData {
-    userPreferences: UserPreferenceData[];
-    recommendationPerformance: RecommendationPerformanceData[];
+    userPreferences: UserPreferenceData;
+    recommendationPerformance: RecommendationPerformanceData;
     analysisTimestamp: number;
     metadata: {
         totalUsers: number;

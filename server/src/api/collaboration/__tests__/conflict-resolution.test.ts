@@ -202,7 +202,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {}
       });
 
@@ -227,7 +227,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {}
       });
 
@@ -259,7 +259,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           strategy: ResolutionStrategy.LAST_WRITER_WINS
         }
@@ -279,7 +279,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify({ id: 'user1' })
-        },
+  }
         payload: {
           // Missing required strategy
         }
@@ -295,7 +295,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify({ id: 'user1' })
-        },
+  }
         payload: {
           strategy: 'INVALID_STRATEGY'
         }
@@ -318,7 +318,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           strategy: ResolutionStrategy.MANUAL_RESOLUTION,
           user_resolution: {
@@ -354,7 +354,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           strategy: ResolutionStrategy.MANUAL_RESOLUTION
         }
@@ -378,7 +378,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           rollback_id: 'rollback123'
         }
@@ -406,7 +406,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           label: 'Manual checkpoint'
         }
@@ -519,7 +519,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           default_strategy: ResolutionStrategy.MANUAL_RESOLUTION,
           auto_resolution_enabled: false,
@@ -542,7 +542,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           default_strategy: 'INVALID_STRATEGY',
           max_resolution_time_ms: -1000 // Invalid negative value
@@ -559,7 +559,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           max_rollback_points: 100, // Exceeds maximum of 50
           conflict_threshold_seconds: 0 // Below minimum of 1
@@ -584,7 +584,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {}
       });
 
@@ -610,7 +610,7 @@ describe('Conflict Resolution API', () => {
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser),
           'content-type': 'application/json'
-        },
+  }
         payload: '{ invalid json }'
       });
 
@@ -624,7 +624,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {} // Missing strategy
       });
 
@@ -690,7 +690,7 @@ describe('Conflict Resolution API', () => {
         headers: { 
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser)
-        },
+  }
         payload: {
           strategy: ResolutionStrategy.MANUAL_RESOLUTION
         }
@@ -723,7 +723,7 @@ describe('Conflict Resolution API', () => {
               authorization: 'Bearer valid-token',
               'x-user': JSON.stringify(mockUser)
             }
-          })
+  }
         );
       }
 
@@ -753,7 +753,7 @@ describe('Conflict Resolution API', () => {
           authorization: 'Bearer valid-token',
           'x-user': JSON.stringify(mockUser),
           'content-type': 'application/json'
-        },
+  }
         payload: {
           strategy: ResolutionStrategy.MANUAL_RESOLUTION,
           user_resolution: largeResolution

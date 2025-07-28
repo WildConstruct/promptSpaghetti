@@ -6,10 +6,12 @@
 import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 
 // Interface for Conditional node branches
+}
 interface ConditionalBranch {
   condition: string;
   output: string;
   label?: string;
+}
 }
 
 import {
@@ -150,6 +152,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
   outputs: string[];
   executionPath?: ExecutionPath;
 }> {
+
   const graphId = graph.id || uuidv4();
   const executionId = uuidv4();
   const currentSessionId = sessionId || uuidv4();
@@ -201,7 +204,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       ? AdvancedExecutionUtils.enhanceContext({ 
         variables: {}, 
         seed: graph.seed ?? Date.now() 
-      })
+  }
       : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
 
     const nodeMap = new Map<string, Node>();
@@ -210,6 +213,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     const memo = new Map<string, any>();
 
     async function dfs(nodeId: string, depth: number = 0): Promise<any> {
+
       // SECURITY FIX: Prevent stack overflow with depth protection
       if (depth > 1000) {
         throw new Error(`Maximum execution depth exceeded (${depth}). Possible infinite recursion in graph at node ${nodeId}`);
@@ -415,6 +419,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
  * Legacy wrapper for backward compatibility - returns just the output strings
  */
 export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
+
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
 }

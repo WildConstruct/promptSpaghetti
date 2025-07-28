@@ -182,7 +182,7 @@ const PreviewResponseSchema = z.object({
       message: z.string(),
       nodeId: z.string().optional(),
       severity: z.enum(['error', 'warning']).optional()
-    })
+  }
   ).optional()
 });
 
@@ -427,11 +427,11 @@ function createAuthConfig() {
       password: process.env.DB_PASSWORD || 'dev',
       ssl: false,
       poolSize: 10
-    },
+  }
     redis: { 
       host: process.env.REDIS_HOST || 'localhost', 
       port: parseInt(process.env.REDIS_PORT || '6379') 
-    },
+  }
     security: {
       passwordMinLength: 8,
       passwordRequireUppercase: true,
@@ -444,7 +444,7 @@ function createAuthConfig() {
       emailVerificationTokenExpiry: 1440,
       sessionTokenExpiry: 60,
       refreshTokenExpiry: 7
-    },
+  }
     oauth: {
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -454,7 +454,7 @@ function createAuthConfig() {
         authorizationUrl: 'https://accounts.google.com/oauth/authorize',
         tokenUrl: 'https://oauth2.googleapis.com/token',
         userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
-      },
+  }
       github: {
         clientId: process.env.GITHUB_CLIENT_ID || '',
         clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
@@ -463,7 +463,7 @@ function createAuthConfig() {
         authorizationUrl: 'https://github.com/login/oauth/authorize',
         tokenUrl: 'https://github.com/login/oauth/access_token',
         userInfoUrl: 'https://api.github.com/user'
-      },
+  }
       microsoft: {
         clientId: process.env.MICROSOFT_CLIENT_ID || '',
         clientSecret: process.env.MICROSOFT_CLIENT_SECRET || '',
@@ -494,7 +494,7 @@ try {
       email: process.env.SECURITY_ALERT_EMAILS?.split(',') || [],
       webhook: process.env.SECURITY_WEBHOOK_URL,
       slack: process.env.SECURITY_SLACK_WEBHOOK
-    },
+  }
     responseConfig: {
       autoBlock: process.env.ANOMALY_AUTO_BLOCK === 'true',
       autoDisable: process.env.ANOMALY_AUTO_DISABLE === 'true',
@@ -561,31 +561,31 @@ try {
         ipstack: process.env.IPSTACK_API_KEY || '',
         maxmind: process.env.MAXMIND_LICENSE_KEY || ''
       }
-    },
+  }
     riskThresholds: {
       newCountry: parseInt(process.env.LOCATION_NEW_COUNTRY_RISK || '50'),
       newCity: parseInt(process.env.LOCATION_NEW_CITY_RISK || '25'),
       impossibleTravel: parseInt(process.env.LOCATION_IMPOSSIBLE_TRAVEL_RISK || '80'),
       proxyDetection: parseInt(process.env.LOCATION_PROXY_RISK || '60'),
       maliciousIP: parseInt(process.env.LOCATION_MALICIOUS_IP_RISK || '90')
-    },
+  }
     impossibleTravel: {
       enabled: process.env.IMPOSSIBLE_TRAVEL_ENABLED !== 'false',
       maxSpeedKmh: parseInt(process.env.IMPOSSIBLE_TRAVEL_MAX_SPEED || '1000'), // Commercial aircraft speed
       minimumTimeMinutes: parseInt(process.env.IMPOSSIBLE_TRAVEL_MIN_TIME || '10'),
       alertThresholdKm: parseInt(process.env.IMPOSSIBLE_TRAVEL_THRESHOLD || '100')
-    },
+  }
     cache: {
       ipLocationTtl: parseInt(process.env.LOCATION_IP_CACHE_TTL || '3600'), // 1 hour
       userLocationTtl: parseInt(process.env.LOCATION_USER_CACHE_TTL || '1800'), // 30 minutes
       riskScoreTtl: parseInt(process.env.LOCATION_RISK_CACHE_TTL || '900') // 15 minutes
-    },
+  }
     regionalRisk: {
       enabled: process.env.REGIONAL_RISK_ENABLED !== 'false',
       highRiskCountries: process.env.HIGH_RISK_COUNTRIES?.split(',') || ['XX', 'YY'], // Fictional codes for demo
       highRiskRegions: process.env.HIGH_RISK_REGIONS?.split(',') || [],
       riskWeights: {}
-    },
+  }
     notifications: {
       enabled: process.env.LOCATION_NOTIFICATIONS_ENABLED !== 'false',
       alertOnNewCountry: process.env.LOCATION_ALERT_NEW_COUNTRY !== 'false',
@@ -623,25 +623,25 @@ try {
       maxDistanceKm: parseInt(process.env.LOCATION_MAX_CLUSTER_DISTANCE || '5'),
       minTimeForHomeDetection: parseInt(process.env.LOCATION_MIN_HOME_DETECTION_DAYS || '7'),
       confidenceThreshold: parseFloat(process.env.LOCATION_CONFIDENCE_THRESHOLD || '0.6')
-    },
+  }
     travelAnalysis: {
       enabled: process.env.TRAVEL_ANALYSIS_ENABLED !== 'false',
       maxReasonableSpeedKmh: parseInt(process.env.TRAVEL_MAX_SPEED || '1000'),
       minTravelDistanceKm: parseInt(process.env.TRAVEL_MIN_DISTANCE || '10'),
       anomalyDetectionSensitivity: (process.env.TRAVEL_ANOMALY_SENSITIVITY as any) || 'medium'
-    },
+  }
     riskScoring: {
       noveltyWeight: parseFloat(process.env.RISK_NOVELTY_WEIGHT || '0.3'),
       frequencyWeight: parseFloat(process.env.RISK_FREQUENCY_WEIGHT || '0.2'),
       geopoliticalWeight: parseFloat(process.env.RISK_GEOPOLITICAL_WEIGHT || '0.2'),
       temporalWeight: parseFloat(process.env.RISK_TEMPORAL_WEIGHT || '0.3')
-    },
+  }
     anomalyDetection: {
       enabled: process.env.LOCATION_ANOMALY_DETECTION_ENABLED !== 'false',
       sensitivityLevel: parseFloat(process.env.LOCATION_ANOMALY_SENSITIVITY || '0.7'),
       falsePositiveThreshold: parseFloat(process.env.LOCATION_FALSE_POSITIVE_THRESHOLD || '0.2'),
       autoResolveAfterDays: parseInt(process.env.LOCATION_AUTO_RESOLVE_DAYS || '30')
-    },
+  }
     cache: {
       profileCacheTtl: parseInt(process.env.LOCATION_PROFILE_CACHE_TTL || '3600'), // 1 hour
       analysisCacheTtl: parseInt(process.env.LOCATION_ANALYSIS_CACHE_TTL || '1800'), // 30 minutes
@@ -680,25 +680,25 @@ try {
       collectPlugins: process.env.DEVICE_COLLECT_PLUGINS !== 'false',
       collectWebRTC: process.env.DEVICE_COLLECT_WEBRTC === 'true', // Disabled by default for privacy
       collectHardware: process.env.DEVICE_COLLECT_HARDWARE !== 'false'
-    },
+  }
     trustScoring: {
       newDevicePenalty: parseInt(process.env.DEVICE_NEW_PENALTY || '10'),
       consistencyBonus: parseInt(process.env.DEVICE_CONSISTENCY_BONUS || '5'),
       anomalyPenalty: parseInt(process.env.DEVICE_ANOMALY_PENALTY || '15'),
       verificationBonus: parseInt(process.env.DEVICE_VERIFICATION_BONUS || '20'),
       ageBonus: parseInt(process.env.DEVICE_AGE_BONUS || '10')
-    },
+  }
     thresholds: {
       minimumTrustScore: parseInt(process.env.DEVICE_MIN_TRUST_SCORE || '40'),
       suspiciousActivityThreshold: parseInt(process.env.DEVICE_SUSPICIOUS_THRESHOLD || '30'),
       autoBlockThreshold: parseInt(process.env.DEVICE_AUTO_BLOCK_THRESHOLD || '20'),
       fingerprintChangeThreshold: parseInt(process.env.DEVICE_FINGERPRINT_CHANGE_THRESHOLD || '90')
-    },
+  }
     cache: {
       deviceProfileTtl: parseInt(process.env.DEVICE_PROFILE_TTL || '3600'), // 1 hour
       fingerprintTtl: parseInt(process.env.DEVICE_FINGERPRINT_TTL || '7200'), // 2 hours
       trustScoreTtl: parseInt(process.env.DEVICE_TRUST_SCORE_TTL || '1800') // 30 minutes
-    },
+  }
     privacy: {
       hashSensitiveData: process.env.DEVICE_HASH_SENSITIVE !== 'false',
       excludeFields: process.env.DEVICE_EXCLUDE_FIELDS?.split(',') || ['webRTC'],
@@ -744,7 +744,7 @@ try {
       volumeAnomaly: parseFloat(process.env.BEHAVIOR_VOLUME_WEIGHT || '0.15'),
       velocityAnomaly: parseFloat(process.env.BEHAVIOR_VELOCITY_WEIGHT || '0.2'),
       patternDeviation: parseFloat(process.env.BEHAVIOR_PATTERN_WEIGHT || '0.2')
-    },
+  }
     autoBlockThreshold: parseInt(process.env.BEHAVIOR_AUTO_BLOCK_THRESHOLD || '90'),
     alertThreshold: parseInt(process.env.BEHAVIOR_ALERT_THRESHOLD || '70'),
     requireManualReview: process.env.BEHAVIOR_REQUIRE_MANUAL_REVIEW !== 'false'
@@ -934,7 +934,7 @@ server.get('/health', async (request, reply) => {
       connections: wsMetrics.totalConnections,
       activeDocuments: wsMetrics.activeDocuments,
       uptime: wsMetrics.uptime
-    },
+  }
     timestamp: new Date().toISOString()
   };
 });
@@ -1554,7 +1554,7 @@ server.post<{
         runs: { type: 'integer', minimum: 1, maximum: 50, default: 5 },
         seedStart: { type: 'integer', minimum: 1, default: 1 }
       }
-    },
+  }
     response: {
       200: {
         type: 'object',
@@ -1568,12 +1568,12 @@ server.post<{
                 output: { type: 'string' }
               }
             }
-          },
+  }
           error: { type: 'string' }
         }
       }
     }
-  },
+  }
   handler: async (request, reply) => {
     // Feature flag check
     if (!ENABLE_PREVIEW_API) {
@@ -1655,7 +1655,7 @@ server.post<{
           }
         }
       }
-    },
+  }
     response: {
       200: {
         type: 'object',
@@ -1665,7 +1665,7 @@ server.post<{
         }
       }
     }
-  },
+  }
   handler: async (request, reply) => {
     try {
       const { graph, options } = request.body;

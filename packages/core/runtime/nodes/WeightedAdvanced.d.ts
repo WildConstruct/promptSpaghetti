@@ -6,13 +6,14 @@ export type WeightDistributionType = 'linear' | 'exponential' | 'gaussian' | 'cu
 /**
  * A weighted choice with value and weight
  */
+
 export interface WeightedChoice {
     value: string;
     weight: number;
-}
 /**
  * Configuration for weight distribution algorithms
  */
+
 export interface WeightDistributionConfig {
     type: WeightDistributionType;
     /** Parameters for distribution (e.g., exponential factor, gaussian mean/std) */
@@ -21,7 +22,6 @@ export interface WeightDistributionConfig {
     normalize?: boolean;
     /** Minimum weight threshold */
     minWeight?: number;
-}
 /**
  * Advanced weighted choice node with support for complex weight distributions
  * Extends basic WeightedChoice with:
@@ -75,12 +75,10 @@ export declare class WeightedAdvancedNode extends AdvancedRuntimeNode<string> {
      * Perform weighted selection from distributed weights using seeded random
      */
     private selectFromDistribution;
-}
 /**
  * Factory function for creating WeightedAdvanced nodes
  */
-export declare function createWeightedAdvancedNode()
-  id: string,
+export declare function createWeightedAdvancedNode(id: string,)
   choices: WeightedChoice[],
   distributionConfig?: WeightDistributionConfig
 ): WeightedAdvancedNode;

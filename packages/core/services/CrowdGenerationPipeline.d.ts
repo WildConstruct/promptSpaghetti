@@ -4,6 +4,7 @@
  */
 import { HistoricalQuery, HistoricalItem, Era, ValidationResult } from '../types/UTDG';
 import { VFXPipelineMetadata } from '../types/VFXExport';
+
 export interface CrowdGenerationRequest {
     scene: {,
         era: Era;
@@ -29,7 +30,7 @@ export interface CrowdGenerationRequest {
         includeMetadata: boolean;
         vfxPipeline: VFXPipelineMetadata;
     };
-}
+
 export interface CrowdDemographics {
     socialClasses: {,
         peasant: number;
@@ -50,25 +51,25 @@ export interface CrowdDemographics {
         female: number;
         nonBinary?: number;
     };
-}
+
 export interface CrowdActivity {
     primary: string;
     secondary: string[];
     mood: 'festive' | 'solemn' | 'busy' | 'tense' | 'peaceful';
     interactions: InteractionType[];
-}
+
 export interface InteractionType {
     type: 'trading' | 'conversation' | 'ceremony' | 'performance' | 'labor';
     participants: string[];
     frequency: 'rare' | 'occasional' | 'common';
-}
+
 export interface CrowdGenerationResult {
     individuals: CrowdIndividual[];
     groups: CrowdGroup[];
     interactions: CrowdInteraction[];
     validation: ValidationResult;
     metadata: CrowdMetadata;
-}
+
 export interface CrowdIndividual {
     id: string;
     demographics: {,
@@ -95,7 +96,7 @@ export interface CrowdIndividual {
         facing: number;
     };
     historicalAccuracy: number;
-}
+
 export interface CrowdGroup {
     id: string;
     type: 'family' | 'guild' | 'religious' | 'merchant' | 'nobility';
@@ -103,7 +104,7 @@ export interface CrowdGroup {
     activity: string;
     formation: 'circle' | 'line' | 'cluster' | 'processional';
     relationship: string;
-}
+
 export interface CrowdInteraction {
     id: string;
     type: InteractionType['type'];
@@ -111,7 +112,7 @@ export interface CrowdInteraction {
     duration: number;
     intensity: 'subtle' | 'moderate' | 'prominent';
     historicalContext: string;
-}
+
 export interface CrowdMetadata {
     generation: {,
         timestamp: string;
@@ -130,7 +131,6 @@ export interface CrowdMetadata {
         polyCount: number;
         textureSize: number;
     };
-}
 /**
  * Main pipeline class for crowd generation
  */
@@ -193,28 +193,22 @@ export declare class CrowdGenerationPipeline {
     private estimateMemoryUsage;
     private getValidOccupations;
     private getBehaviorPatterns;
-}
 declare class CrowdGenerationError extends Error {
     cause?: Error | undefined;
     constructor(message: string, cause?: Error | undefined);
-}
 declare class HistoricalDataService {
     query(query: HistoricalQuery): Promise<any>;
     getSocialStructure(era: Era, region: string): Promise<any>;
     getCulturalRules(era: Era, region: string): Promise<any>;
-}
 declare class ConstraintValidator {
     validateIndividual(individual: any, era: Era, constraints: any): Promise<any>;
     validateGroup(group: any, individuals: any[], era: Era, constraints: any): Promise<any>;
     validateInteraction(interaction: any, individuals: any[], era: Era, constraints: any): Promise<any>;
-}
 declare class HistoricalClothingGenerator {
     generateClothing(demographics: any, occupation: string, scene: any, context: any): Promise<any>;
-}
 declare class CrowdBehaviorEngine {
     generateBehavior(demographics: any, occupation: string, activity: any, context: any): any;
-}
 declare class VFXExporter {
-}
+
 export { CrowdGenerationPipeline, CrowdGenerationError };
 //# sourceMappingURL=CrowdGenerationPipeline.d.ts.map

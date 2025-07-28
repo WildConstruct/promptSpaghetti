@@ -8,7 +8,7 @@ import React from 'react';
 import { ChartType } from './WeightDistributionChart';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export interface WeightVisualizationPanelProps {
-    options: WeightControlOption[];
+    options: WeightControlOption;
     title?: string;
     defaultChartType?: ChartType;
     showChartControls?: boolean;

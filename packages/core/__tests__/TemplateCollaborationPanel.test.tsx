@@ -9,15 +9,15 @@ import '@testing-library/jest-dom';
 
 // Mock useExport hook
 const mockUseExport = {
-  getTemplateCollaborators: jest.fn<unknown[], unknown>(),
-  getTemplateActivity: jest.fn<unknown[], unknown>(),
-  getTemplateAnalytics: jest.fn<unknown[], unknown>(),
-  inviteCollaborator: jest.fn<unknown[], unknown>(),
-  updateCollaboratorRole: jest.fn<unknown[], unknown>(),
-  removeCollaborator: jest.fn<unknown[], unknown>(),
-  updateShareSettings: jest.fn<unknown[], unknown>(),
-  generateShareLink: jest.fn<unknown[], unknown>(),
-  forkTemplate: jest.fn<unknown[], unknown>()
+  getTemplateCollaborators: jest.fn<unknown, unknown>(),
+  getTemplateActivity: jest.fn<unknown, unknown>(),
+  getTemplateAnalytics: jest.fn<unknown, unknown>(),
+  inviteCollaborator: jest.fn<unknown, unknown>(),
+  updateCollaboratorRole: jest.fn<unknown, unknown>(),
+  removeCollaborator: jest.fn<unknown, unknown>(),
+  updateShareSettings: jest.fn<unknown, unknown>(),
+  generateShareLink: jest.fn<unknown, unknown>(),
+  forkTemplate: jest.fn<unknown, unknown>(),
 };
 jest.mock('../hooks/useExport', () => ({)
   useExport: () => mockUseExport,
@@ -36,35 +36,33 @@ const mockTemplate = {
   format_options: {},
   created_at: '2024-01-01T00:00:00Z',
   updated_at: '2024-01-01T00:00:00Z',
-  created_by: 'user-1',
-};
+  created_by: 'user-1';
+  };
 const mockCollaborators = [;
   {
-    id: 'user-1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatar: 'https://example.com/avatar1.jpg',
-    role: 'owner' as const,
-    joinedAt: '2024-01-01T00:00:00Z',
-    lastActive: '2024-01-15T00:00:00Z',
-  },
+  id: 'user-1',
+  name: 'John Doe',
+  email: 'john@example.com',
+  avatar: 'https://example.com/avatar1.jpg',
+  role: 'owner' as const,
+  joinedAt: '2024-01-01T00:00:00Z',
+  lastActive: '2024-01-15T00:00:00Z',
+}
   {
-    id: 'user-2',
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'editor' as const,
-    joinedAt: '2024-01-05T00:00:00Z',
-    lastActive: '2024-01-14T00:00:00Z',
-  },
+  id: 'user-2',
+  name: 'Jane Smith',
+  email: 'jane@example.com',
+  role: 'editor' as const,
+  joinedAt: '2024-01-05T00:00:00Z',
+  lastActive: '2024-01-14T00:00:00Z',
+}
   {
     id: 'user-3',
     name: 'Bob Wilson',
     email: 'bob@example.com',
     role: 'viewer' as const,
     joinedAt: '2024-01-10T00:00:00Z',
-    lastActive: '2024-01-12T00:00:00Z',
-  }
-];
+    lastActive: '2024-01-12T00:00:00Z'];
 const mockActivities = [;
   {
     id: 'activity-1',
@@ -74,7 +72,7 @@ const mockActivities = [;
     timestamp: '2024-01-15T10:00:00Z',
     details: 'updated template parameters',
     metadata: { changes: ['format_options'] }
-  },
+  }
   {
     id: 'activity-2',
     userId: 'user-1',
@@ -83,7 +81,6 @@ const mockActivities = [;
     timestamp: '2024-01-14T09:00:00Z',
     details: 'shared template publicly',
     metadata: { visibility: 'public' }
-  }
 ];
 const mockAnalytics = {
   totalUses: 1250,
@@ -105,7 +102,7 @@ const mockAnalytics = {
 const defaultProps = {
   template: mockTemplate,
   visible: true,
-  onClose: jest.fn<unknown[], unknown>(),
+  onClose: jest.fn<unknown, unknown>(),
   projectId: 'test-project',
 };
 describe('TemplateCollaborationPanel', () => {
@@ -146,8 +143,8 @@ describe('TemplateCollaborationPanel', () => {
       mockUseExport.getTemplateCollaborators.mockRejectedValue(new Error('Network error'));
       render(<TemplateCollaborationPanel {...defaultProps} />);
       await waitFor(() => {
-        expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: Network error/)).toBeInTheDocument();
+});
     });
   });
   describe('Navigation Tabs', () => {
@@ -187,14 +184,14 @@ describe('TemplateCollaborationPanel', () => {
       });
     });
     it('handles collaborator invitation', async () => {
-      const newCollaborator = {
-        id: 'user-4',
-        name: 'New User',
-        email: 'new@example.com',
-        role: 'viewer' as const,
-        joinedAt: '2024-01-16T00:00:00Z',
-        lastActive: '2024-01-16T00:00:00Z',
-      };
+  const newCollaborator = {
+  id: 'user-4',
+  name: 'New User',
+  email: 'new@example.com',
+  role: 'viewer' as const,
+  joinedAt: '2024-01-16T00:00:00Z',
+  lastActive: '2024-01-16T00:00:00Z',
+};
       mockUseExport.inviteCollaborator.mockResolvedValue(newCollaborator as unknown);
       render(<TemplateCollaborationPanel {...defaultProps} />);
       await waitFor(() => {
@@ -205,10 +202,10 @@ describe('TemplateCollaborationPanel', () => {
       const inviteButton = screen.getByText(/Invite/);
       await userEvent.click(inviteButton);
       await waitFor(() => {
-        expect(mockUseExport.inviteCollaborator).toHaveBeenCalledWith('template-1', {)
-          email: 'new@example.com',
-          role: 'viewer',
-        });
+  expect(mockUseExport.inviteCollaborator).toHaveBeenCalledWith('template-1', {)
+  email: 'new@example.com',
+  role: 'viewer',
+});
       });
     });
     it('displays list of current collaborators', async () => {
@@ -370,12 +367,12 @@ describe('TemplateCollaborationPanel', () => {
       const publicToggle = screen.getByRole('checkbox', { name: /Make Template Public/ });
       await userEvent.click(publicToggle);
       await waitFor(() => {
-        expect(mockUseExport.updateShareSettings).toHaveBeenCalledWith('template-1', {)
-          isPublic: true,
-          allowForks: true,
-          allowComments: true,
-          requireApproval: false,
-        });
+  expect(mockUseExport.updateShareSettings).toHaveBeenCalledWith('template-1', {)
+  isPublic: true,
+  allowForks: true,
+  allowComments: true,
+  requireApproval: false,
+});
       });
     });
     it('shows additional settings when public', async () => {
@@ -453,8 +450,8 @@ describe('TemplateCollaborationPanel', () => {
       mockUseExport.getTemplateCollaborators.mockRejectedValue(new Error('API Error'));
       render(<TemplateCollaborationPanel {...defaultProps} />);
       await waitFor(() => {
-        expect(screen.getByText(/Error: API Error/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: API Error/)).toBeInTheDocument();
+});
     });
     it('handles invitation errors', async () => {
       mockUseExport.inviteCollaborator.mockRejectedValue(new Error('Invitation failed'));
@@ -467,8 +464,8 @@ describe('TemplateCollaborationPanel', () => {
       const inviteButton = screen.getByText(/Invite/);
       await userEvent.click(inviteButton);
       await waitFor(() => {
-        expect(screen.getByText(/Error: Invitation failed/)).toBeInTheDocument();
-      });
+  expect(screen.getByText(/Error: Invitation failed/)).toBeInTheDocument();
+});
     });
   });
   describe('Loading States', () => {

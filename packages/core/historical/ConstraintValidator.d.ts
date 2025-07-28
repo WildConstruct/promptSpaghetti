@@ -81,6 +81,6 @@ export declare class ConstraintValidator {
      * Get default historical constraints
      */
     private getDefaultConstraints;
-}
+
 export default ConstraintValidator;
 //# sourceMappingURL=ConstraintValidator.d.ts.map

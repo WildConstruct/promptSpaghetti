@@ -1,13 +1,11 @@
 import React from 'react';
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'destructive';
-}
-
-export const Alert: React.FC<AlertProps> = ({ )
-  children, 
-  className, 
+  export const Alert: React.FC<AlertProps> = ({ ),
+  children,
+  className,
   variant = 'default',
-  ...props 
+  ...props
 }) => ()
   <div className={`alert alert-${variant} ${className || ''}`} {...props}>}
     {children}

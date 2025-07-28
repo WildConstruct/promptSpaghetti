@@ -55,6 +55,7 @@ export class ScheduledComplianceScannerRegistry {
     redisService: RedisService;
     analyticsCollector: AnalyticsCollector;
   }): Promise<void> {
+
     if (this.isInitialized) {
       throw new Error('ScheduledComplianceScannerRegistry is already initialized');
     }
@@ -88,17 +89,18 @@ export class ScheduledComplianceScannerRegistry {
    * Create default scheduled scanners with predefined configurations
    */
   private async createDefaultScanners(): Promise<void> {
+
     const defaultConfigurations = [
       {
         scannerId: 'production-compliance-scanner',
         environment: 'production' as const,
         description: 'Production compliance monitoring with comprehensive scanning'
-      },
+  }
       {
         scannerId: 'staging-compliance-scanner',
         environment: 'staging' as const,
         description: 'Staging environment compliance validation'
-      },
+  }
       {
         scannerId: 'audit-preparation-scanner',
         environment: 'production' as const,
@@ -130,6 +132,7 @@ export class ScheduledComplianceScannerRegistry {
     scannerId: string,
     scanner: ScheduledComplianceScanner
   ): Promise<void> {
+
     if (!this.isInitialized) {
       throw new Error('Registry must be initialized before registering scanners');
     }
@@ -169,6 +172,7 @@ export class ScheduledComplianceScannerRegistry {
    * Start all registered scanners
    */
   public async startAllScanners(): Promise<void> {
+
     if (!this.isInitialized) {
       throw new Error('Registry must be initialized before starting scanners');
     }
@@ -213,6 +217,7 @@ export class ScheduledComplianceScannerRegistry {
    * Stop all registered scanners
    */
   public async stopAllScanners(): Promise<void> {
+
     const stopPromises = Array.from(this.scanners.values()).map(async (scanner) => {
       try {
         await scanner.stopScheduledScanning();
@@ -244,6 +249,7 @@ export class ScheduledComplianceScannerRegistry {
    * Remove a scanner from the registry
    */
   public async unregisterScanner(scannerId: string): Promise<boolean> {
+
     const scanner = this.scanners.get(scannerId);
     if (!scanner) {
       return false;
@@ -294,7 +300,7 @@ export class ScheduledComplianceScannerRegistry {
           lastExecution: status.lastExecution,
           nextExecution: status.nextExecution
         };
-      })
+  }
     );
 
     return {
@@ -347,6 +353,7 @@ export class ScheduledComplianceScannerRegistry {
    * Cleanup registry resources
    */
   public async cleanup(): Promise<void> {
+
     await this.stopAllScanners();
     this.scanners.clear();
     this.isInitialized = false;

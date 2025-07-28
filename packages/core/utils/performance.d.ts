@@ -1,13 +1,15 @@
 /**
  * Performance measurement utilities for tracking execution metrics
  */
+
 export interface ExecutionMetrics {
     duration: number;
     startTime: number;
     endTime: number;
     memory?: number;
     metadata?: Record<string, any>;
-}
+
+
 /**
  * Measures execution time of a function
  */
@@ -24,7 +26,7 @@ export declare class PerformanceTimer {
     constructor();
     stop(): ExecutionMetrics;
     reset(): void;
-}
+
 /**
  * Track performance metrics for multiple operations
  */
@@ -34,6 +36,6 @@ export declare class PerformanceTracker {
     getMetrics(operation: string): ExecutionMetrics[];
     getAverageMetrics(operation: string): ExecutionMetrics | null;
     clear(operation?: string): void;
-}
+
 export declare const globalPerformanceTracker: PerformanceTracker;
 //# sourceMappingURL=performance.d.ts.map

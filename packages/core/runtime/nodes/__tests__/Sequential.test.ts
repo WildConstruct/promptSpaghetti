@@ -17,9 +17,9 @@ describe('Sequential Node', () => {
   let context: AdvancedExecutionContext;
   beforeEach(() => {
     context = AdvancedExecutionUtils.enhanceContext({)
-      variables: {},
-      seed: 12345,
-    });
+  variables: {},
+      seed: 12345;
+  });
   });
   describe('Basic Functionality', () => {
     test('should create Sequential node with default linear pattern', () => {
@@ -99,13 +99,12 @@ describe('Sequential Node', () => {
       const pattern = new RandomPattern({ allowRepeats: true });
       const sequence = ['red', 'green', 'blue'];
       const node = new SequentialNode('random', sequence, pattern);
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 10; i++) {
         results.push(node.run(context));
-      }
       // All results should be from the sequence
       results.forEach(result => {)
-        expect(sequence).toContain(result);
+  expect(sequence).toContain(result);
       });
       // With randomness and 10 iterations, we should see some variation
       const uniqueResults = new Set(results);
@@ -115,14 +114,13 @@ describe('Sequential Node', () => {
       const pattern = new RandomPattern({ allowRepeats: false });
       const sequence = ['x', 'y', 'z'];
       const node = new SequentialNode('no-repeats', sequence, pattern);
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 3; i++) {
         results.push(node.run(context));
-      }
       // Should get all items without repeats
       expect(new Set(results).size).toBe(3);
       sequence.forEach(item => {)
-        expect(results).toContain(item);
+  expect(results).toContain(item);
       });
     });
     test('should be deterministic with same seed', () => {
@@ -132,12 +130,11 @@ describe('Sequential Node', () => {
       const node2 = new SequentialNode('random2', sequence, pattern);
       const ctx1 = AdvancedExecutionUtils.enhanceContext({ variables: {}, seed: 777 });
       const ctx2 = AdvancedExecutionUtils.enhanceContext({ variables: {}, seed: 777 });
-      const results1: string[] = [];
-      const results2: string[] = [];
+      const results1: string = [];
+      const results2: string = [];
       for (let i = 0; i < 5; i++) {
         results1.push(node1.run(ctx1));
         results2.push(node2.run(ctx2));
-      }
       expect(results1).toEqual(results2);
     });
   });
@@ -147,10 +144,9 @@ describe('Sequential Node', () => {
       const pattern = new WeightedPattern({ weights });
       const sequence = ['frequent', 'rare1', 'rare2'];
       const node = new SequentialNode('weighted', sequence, pattern);
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 20; i++) {
         results.push(node.run(context));
-      }
       // Should heavily favor 'frequent'
       const frequentCount = results.filter(r => r === 'frequent').length;
       const rareCount = results.filter(r => r !== 'frequent').length;
@@ -161,10 +157,9 @@ describe('Sequential Node', () => {
       const pattern = new WeightedPattern({ weights });
       const sequence = ['equal1', 'equal2', 'equal3'];
       const node = new SequentialNode('equal-weights', sequence, pattern);
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 15; i++) {
         results.push(node.run(context));
-      }
       // Should see all items
       const uniqueResults = new Set(results);
       expect(uniqueResults.size).toBe(3);
@@ -183,13 +178,12 @@ describe('Sequential Node', () => {
       const pattern = new WeightedPattern({ weights });
       const sequence = ['never1', 'always', 'never2'];
       const node = new SequentialNode('zero-weights', sequence, pattern);
-      const results: string[] = [];
+      const results: string = [];
       for (let i = 0; i < 10; i++) {
         results.push(node.run(context));
-      }
       // Should only return 'always'
       results.forEach(result => {)
-        expect(result).toBe('always');
+  expect(result).toBe('always');
       });
     });
     test('should handle all zero weights gracefully', () => {
@@ -315,9 +309,9 @@ describe('Sequential Node', () => {
       const sequence = ['perf1', 'perf2'];
       const node = new SequentialNode('perf-test', sequence);
       const freshContext = AdvancedExecutionUtils.enhanceContext({)
-        variables: {},
-        seed: 12345,
-      });
+  variables: {},
+        seed: 12345;
+  });
       node.run(freshContext);
       const metricKey = 'perf-test-sequential-processing_duration_ms';
       expect(freshContext.executionMeta.performanceMetrics.has(metricKey)).toBe(true);
@@ -329,7 +323,6 @@ describe('Sequential Node', () => {
       const start = Date.now();
       for (let i = 0; i < 100; i++) {
         node.run(context);
-      }
       const duration = Date.now() - start;
       // Should complete 100 iterations on 1000-item sequence quickly
       expect(duration).toBeLessThan(1000); // Less than 1 second
@@ -370,16 +363,15 @@ describe('Sequential Node', () => {
       expect(uniformPreset.type).toBe('weighted');
     });
     test('should work with preset patterns', () => {
-      const sequence = ['test1', 'test2', 'test3'];
-      const shufflePattern = SequentialPresets.shuffle();
-      const node = new SequentialNode('preset-shuffle', sequence, shufflePattern);
-      const results: string[] = [];
-      for (let i = 0; i < 6; i++) {
-        results.push(node.run(context));
-      }
-      // Should get all items at least once in first 3 iterations
-      const firstThree = results.slice(0, 3);
-      expect(new Set(firstThree).size).toBe(3);
-    });
+  const sequence = ['test1', 'test2', 'test3'];
+  const shufflePattern = SequentialPresets.shuffle();
+  const node = new SequentialNode('preset-shuffle', sequence, shufflePattern);
+  const results: string = [];
+  for (let i = 0; i < 6; i++) {
+  results.push(node.run(context));
+  // Should get all items at least once in first 3 iterations
+  const firstThree = results.slice(0, 3);
+  expect(new Set(firstThree).size).toBe(3);
+});
   });
 });

@@ -20,52 +20,50 @@ describe('ClassificationAuditLoggingService', () => {
   let service: ClassificationAuditLoggingService;
   let mockContext: OperationContext;
   beforeEach(() => {
-    service = new ClassificationAuditLoggingService();
-    mockContext = {
-      operation: 'read',
-      userId: 'user123',
-      sessionId: 'session123',
-      purpose: 'data analysis',
-      environment: 'production',
-      timestamp: new Date(),
-      source: '192.168.1.100',
-      requestId: 'req123',
-    };
+  service = new ClassificationAuditLoggingService();
+  mockContext = {
+  operation: 'read',
+  userId: 'user123',
+  sessionId: 'session123',
+  purpose: 'data analysis',
+  environment: 'production',
+  timestamp: new Date(),
+  source: '192.168.1.100',
+  requestId: 'req123',
+};
   });
   describe('Audit Logging', () => {
-    it('should log audit events with all required fields', async () => {
-      const entryId = await service.logAuditEvent(;);
-        'ACCESS_DATA',
-        'CONFIDENTIAL',
-        'data123',
-        {
-          accessMethod: 'API',
-          toolUsed: 'Dashboard',
-          businessJustification: 'Analysis required',
-          piiDetected: true,
-        },
+  it('should log audit events with all required fields', async () => {
+  const entryId = await service.logAuditEvent(;);
+  'ACCESS_DATA',
+  'CONFIDENTIAL',
+  'data123',
+  {
+  accessMethod: 'API',
+  toolUsed: 'Dashboard',
+  businessJustification: 'Analysis required',
+  piiDetected: true,
+}
         mockContext,
         {
-          success: true,
-          executionTimeMs: 150,
-          complianceScore: 95,
-        },
+  success: true,
+  executionTimeMs: 150,
+  complianceScore: 95,
+}
         {
-          sourceIP: '192.168.1.100',
-          userAgent: 'Mozilla/5.0',
-        }
-      );
-      expect(entryId).toBeDefined();
-      expect(entryId).toMatch(/^audit-/);
-      const entry = service.getAuditEntry(entryId);
-      expect(entry).toBeDefined();
-      expect(entry?.action).toBe('ACCESS_DATA');
-      expect(entry?.classification).toBe('CONFIDENTIAL');
-      expect(entry?.dataId).toBe('data123');
-      expect(entry?.details.piiDetected).toBe(true);
-      expect(entry?.outcome.success).toBe(true);
-      expect(entry?.riskScore).toBeGreaterThan(0);
-    });
+  sourceIP: '192.168.1.100',
+  userAgent: 'Mozilla/5.0');
+  expect(entryId).toBeDefined();
+  expect(entryId).toMatch(/^audit-/);
+  const entry = service.getAuditEntry(entryId);
+  expect(entry).toBeDefined();
+  expect(entry?.action).toBe('ACCESS_DATA');
+  expect(entry?.classification).toBe('CONFIDENTIAL');
+  expect(entry?.dataId).toBe('data123');
+  expect(entry?.details.piiDetected).toBe(true);
+  expect(entry?.outcome.success).toBe(true);
+  expect(entry?.riskScore).toBeGreaterThan(0);
+});
     it('should generate appropriate compliance flags', async () => {
       const entryId = await service.logAuditEvent(;);
         'EXPORT_DATA',
@@ -115,12 +113,12 @@ describe('ClassificationAuditLoggingService', () => {
         await service.logAuditEvent()
           'ACCESS_DATA',
           'CONFIDENTIAL',
-          `data${i}`,}
+          `data${i}`}
+}
           { accessMethod: 'API' },
           userContext,
           { success: true }
         );
-      }
       // Now create the 12th entry which should detect the violation
       const lastEntryId = await service.logAuditEvent(;);
         'ACCESS_DATA',
@@ -137,10 +135,10 @@ describe('ClassificationAuditLoggingService', () => {
       expect(lastEntry?.outcome.remediationRequired).toBe(true);
     });
     it('should handle real-time audit log notifications', async () => {
-      const receivedEntries: AuditLogEntry[] = [];
-      service.onAuditLog((entry) => {
-        receivedEntries.push(entry);
-      });
+  const receivedEntries: AuditLogEntry = [];
+  service.onAuditLog((entry) => {
+  receivedEntries.push(entry);
+});
       await service.logAuditEvent()
         'CLASSIFY_DATA',
         'INTERNAL',
@@ -172,7 +170,6 @@ describe('ClassificationAuditLoggingService', () => {
           context,
           { success: true }
         );
-      }
     });
     it('should filter audit logs by user', () => {
       const query: AuditQuery = { userId: 'user1' };
@@ -193,12 +190,12 @@ describe('ClassificationAuditLoggingService', () => {
       expect(results[0].action).toBe('ACCESS_DATA');
     });
     it('should filter audit logs by date range', () => {
-      const now = new Date();
-      const twoHoursAgo = new Date(now.getTime() - 7200000);
-      const query: AuditQuery = { 
-        startDate: twoHoursAgo,
-        endDate: now,
-      };
+  const now = new Date();
+  const twoHoursAgo = new Date(now.getTime() - 7200000);
+  const query: AuditQuery = {,
+  startDate: twoHoursAgo,
+  endDate: now,
+};
       const results = service.queryAuditLogs(query);
       expect(results.length).toBeGreaterThan(0);
       expect(results.every(entry => )
@@ -206,28 +203,27 @@ describe('ClassificationAuditLoggingService', () => {
       )).toBe(true);
     });
     it('should filter audit logs by risk score range', () => {
-      const query: AuditQuery = { 
-        riskScoreMin: 50,
-        riskScoreMax: 90,
-      };
+  const query: AuditQuery = {,
+  riskScoreMin: 50,
+  riskScoreMax: 90,
+};
       const results = service.queryAuditLogs(query);
       expect(results.every(entry => )
         entry.riskScore >= 50 && entry.riskScore <= 90
       )).toBe(true);
     });
     it('should sort and paginate results', () => {
-      const query: AuditQuery = { 
-        sortBy: 'riskScore',
-        sortOrder: 'desc',
-        limit: 2,
-        offset: 0,
-      };
+  const query: AuditQuery = {,
+  sortBy: 'riskScore',
+  sortOrder: 'desc',
+  limit: 2,
+  offset: 0,
+};
       const results = service.queryAuditLogs(query);
       expect(results.length).toBeLessThanOrEqual(2);
       // Check sorting
       for (let i = 1; i < results.length; i++) {
         expect(results[i].riskScore).toBeLessThanOrEqual(results[i-1].riskScore);
-      }
     });
     it('should filter by compliance framework', () => {
       const query: AuditQuery = { complianceFramework: 'GDPR' };
@@ -255,7 +251,6 @@ describe('ClassificationAuditLoggingService', () => {
           mockContext,
           { success: data.success }
         );
-      }
     });
     it('should generate comprehensive audit reports', async () => {
       const reportId = await service.generateAuditReport(;);
@@ -306,7 +301,6 @@ describe('ClassificationAuditLoggingService', () => {
         const lines = csvExport.split('\n');
         expect(lines[0]).toContain('timestamp,userId,action,classification');
         expect(lines.length).toBeGreaterThan(1); // Header + data rows
-      }
       // Test JSON export
       const jsonReportId = await service.generateAuditReport(;);
         'JSON Export Test',
@@ -321,7 +315,6 @@ describe('ClassificationAuditLoggingService', () => {
         const parsed = JSON.parse(jsonExport);
         expect(parsed.name).toBe('JSON Export Test');
         expect(parsed.entries).toBeDefined();
-      }
     });
     it('should handle non-existent report exports', () => {
       const result = service.exportAuditReport('non-existent-report-id');
@@ -329,15 +322,15 @@ describe('ClassificationAuditLoggingService', () => {
     });
   });
   describe('Retention Policies', () => {
-    it('should have default retention policies for all classifications', () => {
-      const classifications: DataClassificationLevel[] = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
-      classifications.forEach(classification => {)
-        const policy = service.getRetentionPolicy(classification);
-        expect(policy).toBeDefined();
-        expect(policy?.classification).toBe(classification);
-        expect(policy?.retentionDays).toBeGreaterThan(0);
-        expect(policy?.archiveAfterDays).toBeGreaterThan(0);
-      });
+  it('should have default retention policies for all classifications', () => {
+  const classifications: DataClassificationLevel = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'];
+  classifications.forEach(classification => {)
+  const policy = service.getRetentionPolicy(classification);
+  expect(policy).toBeDefined();
+  expect(policy?.classification).toBe(classification);
+  expect(policy?.retentionDays).toBeGreaterThan(0);
+  expect(policy?.archiveAfterDays).toBeGreaterThan(0);
+});
     });
     it('should have progressively longer retention for higher classifications', () => {
       const publicPolicy = service.getRetentionPolicy('PUBLIC');
@@ -346,13 +339,13 @@ describe('ClassificationAuditLoggingService', () => {
       expect(restrictedPolicy?.permanentDeletionAfterDays).toBeGreaterThan(publicPolicy?.permanentDeletionAfterDays || 0);
     });
     it('should allow updating retention policies', () => {
-      const originalPolicy = service.getRetentionPolicy('INTERNAL');
-      expect(originalPolicy).toBeDefined();
-      const updatedPolicy: AuditRetentionPolicy = {
-        ...originalPolicy!,
-        retentionDays: 1000,
-        encryptionRequired: true,
-      };
+  const originalPolicy = service.getRetentionPolicy('INTERNAL');
+  expect(originalPolicy).toBeDefined();
+  const updatedPolicy: AuditRetentionPolicy = {,
+  ...originalPolicy!,
+  retentionDays: 1000,
+  encryptionRequired: true,
+};
       service.updateRetentionPolicy('INTERNAL', updatedPolicy);
       const newPolicy = service.getRetentionPolicy('INTERNAL');
       expect(newPolicy?.retentionDays).toBe(1000);
@@ -368,15 +361,15 @@ describe('ClassificationAuditLoggingService', () => {
     });
   });
   describe('Compliance Tracking', () => {
-    it('should generate GDPR compliance flags for relevant actions', async () => {
-      const entryId = await service.logAuditEvent(;);
-        'EXPORT_DATA',
-        'CONFIDENTIAL',
-        'personal_data_001',
-        { 
-          accessMethod: 'API',
-          piiDetected: true ,
-        },
+  it('should generate GDPR compliance flags for relevant actions', async () => {
+  const entryId = await service.logAuditEvent(;);
+  'EXPORT_DATA',
+  'CONFIDENTIAL',
+  'personal_data_001',
+  {
+  accessMethod: 'API',
+  piiDetected: true,
+}
         mockContext,
         { success: true }
       );
@@ -387,14 +380,14 @@ describe('ClassificationAuditLoggingService', () => {
       expect(gdprFlag?.status).toBe('COMPLIANT');
     });
     it('should track compliance status across multiple frameworks', async () => {
-      const entryId = await service.logAuditEvent(;);
-        'ACCESS_DATA',
-        'RESTRICTED',
-        'healthcare_data_001',
-        { 
-          accessMethod: 'API',
-          businessJustification: 'Medical research',
-        },
+  const entryId = await service.logAuditEvent(;);
+  'ACCESS_DATA',
+  'RESTRICTED',
+  'healthcare_data_001',
+  {
+  accessMethod: 'API',
+  businessJustification: 'Medical research',
+}
         mockContext,
         { success: true }
       );
@@ -438,7 +431,6 @@ describe('ClassificationAuditLoggingService', () => {
           mockContext,
           { success: true }
         );
-      }
     });
     it('should provide accurate audit statistics', () => {
       const stats = service.getAuditStatistics();
@@ -472,19 +464,19 @@ describe('ClassificationAuditLoggingService', () => {
       expect(report).toBeUndefined();
     });
     it('should handle empty query results', () => {
-      const query: AuditQuery = { 
-        userId: 'non-existent-user',
-        startDate: new Date('2020-01-01'),
-        endDate: new Date('2020-01-02'),
-      };
+  const query: AuditQuery = {,
+  userId: 'non-existent-user',
+  startDate: new Date('2020-01-01'),
+  endDate: new Date('2020-01-02'),
+};
       const results = service.queryAuditLogs(query);
       expect(results).toHaveLength(0);
     });
     it('should validate query parameters', () => {
-      const query: AuditQuery = { 
-        limit: -1,  // Invalid limit
-        offset: -5  // Invalid offset,
-      };
+  const query: AuditQuery = {,
+  limit: -1,  // Invalid limit,
+  offset: -5  // Invalid offset,
+};
       const results = service.queryAuditLogs(query);
       // Should handle gracefully without throwing
       expect(Array.isArray(results)).toBe(true);
@@ -509,7 +501,6 @@ describe('ClassificationAuditLoggingService', () => {
         );
         const entry = service.getAuditEntry(entryId);
         expect(entry?.resourceType).toBe(testCase.expectedType);
-      }
     });
   });
   describe('Data Management', () => {
@@ -529,10 +520,10 @@ describe('ClassificationAuditLoggingService', () => {
       expect(statsAfterClear.totalEntries).toBe(0);
     });
     it('should handle archive notifications', async () => {
-      const archivedEntries: AuditLogEntry[][] = [];
-      service.onArchive((entries) => {
-        archivedEntries.push(entries);
-      });
+  const archivedEntries: AuditLogEntry = [];
+  service.onArchive((entries) => {
+  archivedEntries.push(entries);
+});
       // In a real scenario, this would be triggered by the retention cleanup
       // For testing, we can manually trigger it or test the handler registration
       expect(archivedEntries).toHaveLength(0); // No archives yet

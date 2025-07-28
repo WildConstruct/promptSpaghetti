@@ -4,6 +4,7 @@
  *
  * Comprehensive performance monitoring with real-time metrics, alerts, and analytics
  */
+
 export interface PerformanceMetrics {
     totalRequests: number;
     successfulRequests: number;
@@ -26,7 +27,7 @@ export interface PerformanceMetrics {
     timestamp: number;
     windowStart: number;
     windowEnd: number;
-}
+
 export interface PerformanceAlert {
     id: string;
     type: 'warning' | 'error' | 'critical';
@@ -37,14 +38,14 @@ export interface PerformanceAlert {
     timestamp: number;
     resolved: boolean;
     resolvedAt?: number;
-}
+
 export interface PerformanceThreshold {
     metric: keyof PerformanceMetrics;
     warningThreshold: number;
     errorThreshold: number;
     criticalThreshold: number;
     operator: 'greater_than' | 'less_than' | 'equals';
-}
+
 export interface MonitoringConfig {
     enabled: boolean;
     collectionInterval: number;
@@ -65,7 +66,7 @@ export interface MonitoringConfig {
         path?: string;
         maxSize?: number;
     };
-}
+
 export interface ModelPerformanceData {
     modelId: string;
     modelType: string;
@@ -74,7 +75,7 @@ export interface ModelPerformanceData {
     alerts: PerformanceAlert[];
     lastUpdated: number;
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
-}
+
 export interface PerformanceReport {
     summary: {,
         totalModels: number;
@@ -111,7 +112,7 @@ export interface PerformanceReport {
     activeAlerts: PerformanceAlert[];
     recommendations: string[];
     generatedAt: number;
-}
+
 export declare class PerformanceMonitor {
     private config;
     private models;
@@ -166,6 +167,6 @@ export declare class PerformanceMonitor {
     private convertToCSV;
     private convertToPrometheus;
     destroy(): void;
-}
+
 export default PerformanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map

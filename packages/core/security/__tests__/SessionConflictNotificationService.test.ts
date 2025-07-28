@@ -24,11 +24,11 @@ import {
 describe('SessionConflictNotificationService', () => {
   let service: SessionConflictNotificationService;
   beforeEach(() => {
-    service = new SessionConflictNotificationService({)
-      batchingEnabled: false, // Disable batching for tests
-      retryAttempts: 1,
-      retryDelay: 100,
-    });
+  service = new SessionConflictNotificationService({)
+  batchingEnabled: false, // Disable batching for tests,
+  retryAttempts: 1,
+  retryDelay: 100,
+});
   });
   afterEach(() => {
     service.destroy();
@@ -40,13 +40,13 @@ describe('SessionConflictNotificationService', () => {
       defaultService.destroy();
     });
     test('should initialize with custom configuration', () => {
-      const customConfig: Partial<NotificationConfig> = {
-        channels: [NotificationChannel.EMAIL, NotificationChannel.SMS],
-        priority: NotificationPriority.HIGH,
-        retryAttempts: 5,
-        batchingEnabled: true,
-        rateLimitCount: 20,
-      };
+  const customConfig: Partial<NotificationConfig> = {,
+  channels: [NotificationChannel.EMAIL, NotificationChannel.SMS],
+  priority: NotificationPriority.HIGH,
+  retryAttempts: 5,
+  batchingEnabled: true,
+  rateLimitCount: 20,
+};
       const customService = new SessionConflictNotificationService(customConfig);
       expect(customService).toBeDefined();
       customService.destroy();
@@ -65,18 +65,17 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.WEBHOOK]: { enabled: false },
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
-        },
-        conflictResolution: {,
-          autoResolve: false,
-          preferredResolution: ConflictResolution.PROMPT_USER,
-          requireConfirmation: true,
-          timeoutMinutes: 10,
-        },
-        securityAlerts: {,
-          enabledTypes: [NotificationType.SESSION_CONFLICT, NotificationType.SESSION_EVICTED],
-          minimumPriority: NotificationPriority.NORMAL,
-        }
-      };
+  },
+  conflictResolution: {,
+  autoResolve: false,
+  preferredResolution: ConflictResolution.PROMPT_USER,
+  requireConfirmation: true,
+  timeoutMinutes: 10,
+},
+  securityAlerts: {,
+  enabledTypes: [NotificationType.SESSION_CONFLICT, NotificationType.SESSION_EVICTED],
+  minimumPriority: NotificationPriority.NORMAL,
+};
       service.setUserPreferences(preferences);
       const retrievedPreferences = service.getUserPreferences(userId);
       expect(retrievedPreferences.userId).toBe(userId);
@@ -89,8 +88,8 @@ describe('SessionConflictNotificationService', () => {
         expect(data.userId).toBe('user-event');
         done();
       });
-      const preferences: UserNotificationPreferences = {
-        userId: 'user-event',
+      const preferences: UserNotificationPreferences = {,
+  userId: 'user-event',
         channels: {,
           [NotificationChannel.EMAIL]: { enabled: true },
           [NotificationChannel.SMS]: { enabled: false },
@@ -99,18 +98,17 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.WEBHOOK]: { enabled: false },
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
-        },
-        conflictResolution: {,
-          autoResolve: true,
-          preferredResolution: ConflictResolution.EVICT_OLDEST,
-          requireConfirmation: false,
-          timeoutMinutes: 5,
-        },
-        securityAlerts: {,
-          enabledTypes: [NotificationType.SESSION_CONFLICT],
-          minimumPriority: NotificationPriority.LOW,
-        }
-      };
+  },
+  conflictResolution: {,
+  autoResolve: true,
+  preferredResolution: ConflictResolution.EVICT_OLDEST,
+  requireConfirmation: false,
+  timeoutMinutes: 5,
+},
+  securityAlerts: {,
+  enabledTypes: [NotificationType.SESSION_CONFLICT],
+  minimumPriority: NotificationPriority.LOW,
+};
       service.setUserPreferences(preferences);
     });
     test('should return default preferences for unknown user', () => {
@@ -123,22 +121,22 @@ describe('SessionConflictNotificationService', () => {
   });
   describe('Conflict Notifications', () => {
     test('should send conflict notification to multiple users', async () => {
-      const conflict: SessionConflict = {
-        id: 'conflict-123',
+      const conflict: SessionConflict = {,
+  id: 'conflict-123',
         type: 'user_limit',
         affectedSessions: ['session-1', 'session-2'],
         newSessionRequest: {,
-          userId: 'user-new',
+  userId: 'user-new',
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.EVICT_OLDEST, ConflictResolution.PROMPT_USER],
+  },
+  resolutionOptions: [ConflictResolution.EVICT_OLDEST, ConflictResolution.PROMPT_USER],
         recommendedResolution: ConflictResolution.EVICT_OLDEST,
         severity: 'high',
         autoResolvable: false,
-        timeoutMinutes: 5,
-      };
+        timeoutMinutes: 5;
+  };
       const affectedUsers = ['user-1', 'user-2'];
       const result = await service.sendConflictNotification(conflict, affectedUsers);
       expect(result.sent).toContain('user-1');
@@ -146,29 +144,29 @@ describe('SessionConflictNotificationService', () => {
       expect(result.failed).toHaveLength(0);
     });
     test('should handle notification delivery failures', async () => {
-      // Create a service that simulates failures
-      const failingService = new SessionConflictNotificationService({)
-        batchingEnabled: false,
-      });
+  // Create a service that simulates failures
+  const failingService = new SessionConflictNotificationService({)
+  batchingEnabled: false,
+});
       // Override the sendNotification method to always fail
       const originalSendNotification = (failingService as any).sendNotification;
       (failingService as any).sendNotification = jest.fn().mockResolvedValue(false);
-      const conflict: SessionConflict = {
-        id: 'conflict-fail',
+      const conflict: SessionConflict = {,
+  id: 'conflict-fail',
         type: 'device_limit',
         affectedSessions: ['session-1'],
         newSessionRequest: {,
-          userId: 'user-test',
+  userId: 'user-test',
           deviceId: 'device-test',
           priority: SessionPriority.MEDIUM,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.REJECT_NEW],
+  },
+  resolutionOptions: [ConflictResolution.REJECT_NEW],
         recommendedResolution: ConflictResolution.REJECT_NEW,
         severity: 'medium',
         autoResolvable: true,
-        timeoutMinutes: 3,
-      };
+        timeoutMinutes: 3;
+  };
       const result = await failingService.sendConflictNotification(conflict, ['user-fail']);
       expect(result.failed).toContain('user-fail');
       expect(result.sent).toHaveLength(0);
@@ -271,21 +269,20 @@ describe('SessionConflictNotificationService', () => {
           [NotificationChannel.WEBHOOK]: { enabled: false },
           [NotificationChannel.SLACK]: { enabled: false },
           [NotificationChannel.TEAMS]: { enabled: false }
-        },
-        conflictResolution: {,
-          autoResolve: true,
-          preferredResolution: ConflictResolution.EVICT_OLDEST,
-          requireConfirmation: false,
-          timeoutMinutes: 5,
-        },
-        securityAlerts: {,
-          enabledTypes: [NotificationType.SESSION_CONFLICT],
-          minimumPriority: NotificationPriority.NORMAL,
-        }
-      };
+  },
+  conflictResolution: {,
+  autoResolve: true,
+  preferredResolution: ConflictResolution.EVICT_OLDEST,
+  requireConfirmation: false,
+  timeoutMinutes: 5,
+},
+  securityAlerts: {,
+  enabledTypes: [NotificationType.SESSION_CONFLICT],
+  minimumPriority: NotificationPriority.NORMAL,
+};
       service.setUserPreferences(preferences);
-      const conflict: SessionConflict = {
-        id: 'conflict-auto',
+      const conflict: SessionConflict = {,
+  id: 'conflict-auto',
         type: 'user_limit',
         affectedSessions: ['session-1'],
         newSessionRequest: {,
@@ -293,13 +290,13 @@ describe('SessionConflictNotificationService', () => {
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.EVICT_OLDEST],
+  },
+  resolutionOptions: [ConflictResolution.EVICT_OLDEST],
         recommendedResolution: ConflictResolution.EVICT_OLDEST,
         severity: 'medium',
         autoResolvable: true,
-        timeoutMinutes: 5,
-      };
+        timeoutMinutes: 5;
+  };
       const response = await service.promptUserChoice(conflict, userId, 2);
       expect(response).not.toBeNull();
       expect(response?.conflictId).toBe('conflict-auto');
@@ -307,55 +304,55 @@ describe('SessionConflictNotificationService', () => {
       expect(response?.confirmed).toBe(true);
     });
     test('should handle manual user choice with timeout', async () => {
-      const conflict: SessionConflict = {
-        id: 'conflict-manual',
+      const conflict: SessionConflict = {,
+  id: 'conflict-manual',
         type: 'device_limit',
         affectedSessions: ['session-1'],
         newSessionRequest: {,
-          userId: 'user-manual',
+  userId: 'user-manual',
           deviceId: 'device-1',
           priority: SessionPriority.MEDIUM,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.PROMPT_USER],
+  },
+  resolutionOptions: [ConflictResolution.PROMPT_USER],
         recommendedResolution: ConflictResolution.PROMPT_USER,
         severity: 'low',
         autoResolvable: false,
-        timeoutMinutes: 5,
-      };
+        timeoutMinutes: 5;
+  };
       // Test timeout scenario (should return null after timeout)
       const responsePromise = service.promptUserChoice(conflict, 'user-manual', 0.01); // 0.01 minutes = 0.6 seconds;
       const response = await responsePromise;
       expect(response).toBeNull();
     });
     test('should handle user response to conflict prompt', async () => {
-      const conflict: SessionConflict = {
-        id: 'conflict-response',
+      const conflict: SessionConflict = {,
+  id: 'conflict-response',
         type: 'total_limit',
         affectedSessions: ['session-1', 'session-2'],
         newSessionRequest: {,
-          userId: 'user-response',
+  userId: 'user-response',
           deviceId: 'device-1',
           priority: SessionPriority.HIGH,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.EVICT_OLDEST, ConflictResolution.PROMPT_USER],
+  },
+  resolutionOptions: [ConflictResolution.EVICT_OLDEST, ConflictResolution.PROMPT_USER],
         recommendedResolution: ConflictResolution.PROMPT_USER,
         severity: 'high',
         autoResolvable: false,
-        timeoutMinutes: 5,
-      };
+        timeoutMinutes: 5;
+  };
       // Start the prompt
       const responsePromise = service.promptUserChoice(conflict, 'user-response', 1);
       // Simulate user response
       setTimeout(() => {
-        const userResponse: ConflictResolutionResponse = {
-          conflictId: 'conflict-response',
-          userId: 'user-response',
-          resolution: ConflictResolution.EVICT_OLDEST,
-          confirmed: true,
-          timestamp: new Date(),
-        };
+  const userResponse: ConflictResolutionResponse = {,
+  conflictId: 'conflict-response',
+  userId: 'user-response',
+  resolution: ConflictResolution.EVICT_OLDEST,
+  confirmed: true,
+  timestamp: new Date(),
+};
         service.handleConflictResponse(userResponse);
       }, 100);
       const response = await responsePromise;
@@ -380,8 +377,8 @@ describe('SessionConflictNotificationService', () => {
     test('should mark notification as read', () => {
       const notificationId = 'notification-123';
       // Create a mock notification
-      const mockNotification: NotificationMessage = {
-        id: notificationId,
+      const mockNotification: NotificationMessage = {,
+  id: notificationId,
         type: NotificationType.SESSION_CONFLICT,
         priority: NotificationPriority.NORMAL,
         userId: 'user-read',
@@ -393,12 +390,11 @@ describe('SessionConflictNotificationService', () => {
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
         deliveryStatus: {,
-          [NotificationChannel.EMAIL]: {
-            status: DeliveryStatus.SENT,
-            attempts: 1,
-          }
-        },
-        metadata: {}
+  [NotificationChannel.EMAIL]: {,
+  status: DeliveryStatus.SENT,
+  attempts: 1,
+},
+  metadata: {}
       };
       // Add notification to service (using private method access for testing)
       (service as any).notifications.set(notificationId, mockNotification);
@@ -413,8 +409,8 @@ describe('SessionConflictNotificationService', () => {
       const actionId = 'resolve_evict_oldest';
       const userId = 'user-action';
       // Create mock notification with actions
-      const mockNotification: NotificationMessage = {
-        id: notificationId,
+      const mockNotification: NotificationMessage = {,
+  id: notificationId,
         type: NotificationType.SESSION_CONFLICT,
         priority: NotificationPriority.HIGH,
         userId,
@@ -428,19 +424,17 @@ describe('SessionConflictNotificationService', () => {
             type: 'primary',
             action: 'resolve_conflict',
             data: { resolution: ConflictResolution.EVICT_OLDEST }
-          }
         ],
         data: {},
         channels: [NotificationChannel.IN_APP],
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
         deliveryStatus: {,
-          [NotificationChannel.IN_APP]: {
-            status: DeliveryStatus.SENT,
-            attempts: 1,
-          }
-        },
-        metadata: { conflictId: 'conflict-123' }
+  [NotificationChannel.IN_APP]: {,
+  status: DeliveryStatus.SENT,
+  attempts: 1,
+},
+  metadata: { conflictId: 'conflict-123' }
       };
       (service as any).notifications.set(notificationId, mockNotification);
       let actionClicked = false;
@@ -455,39 +449,33 @@ describe('SessionConflictNotificationService', () => {
     });
   });
   describe('Statistics and Analytics', () => {
-    test('should provide comprehensive notification statistics', () => {
-      // Create mock notifications with different statuses
-      const notifications = [;
+  test('should provide comprehensive notification statistics', () => {
+  // Create mock notifications with different statuses
+  const notifications = [;
+  {
+  id: 'notif-1',
+  type: NotificationType.SESSION_CONFLICT,
+  channels: [NotificationChannel.EMAIL],
+  createdAt: new Date(),
+  expiresAt: new Date(Date.now() + 60000),
+  deliveryStatus: {,
+  [NotificationChannel.EMAIL]: {,
+  status: DeliveryStatus.DELIVERED,
+  deliveredAt: new Date(),
+}
         {
-          id: 'notif-1',
-          type: NotificationType.SESSION_CONFLICT,
-          channels: [NotificationChannel.EMAIL],
-          createdAt: new Date(),
-          expiresAt: new Date(Date.now() + 60000),
-          deliveryStatus: {,
-            [NotificationChannel.EMAIL]: {
-              status: DeliveryStatus.DELIVERED,
-              deliveredAt: new Date(),
-            }
-          }
-        },
-        {
-          id: 'notif-2',
-          type: NotificationType.SESSION_EVICTED,
-          channels: [NotificationChannel.SMS],
-          createdAt: new Date(),
-          expiresAt: new Date(Date.now() + 60000),
-          deliveryStatus: {,
-            [NotificationChannel.SMS]: {
-              status: DeliveryStatus.FAILED,
-            }
-          }
-        }
-      ];
-      // Add notifications to service
-      notifications.forEach(notification => {)
-        (service as any).notifications.set(notification.id, notification);
-      });
+  id: 'notif-2',
+  type: NotificationType.SESSION_EVICTED,
+  channels: [NotificationChannel.SMS],
+  createdAt: new Date(),
+  expiresAt: new Date(Date.now() + 60000),
+  deliveryStatus: {,
+  [NotificationChannel.SMS]: {,
+  status: DeliveryStatus.FAILED];
+  // Add notifications to service
+  notifications.forEach(notification => {)
+  (service as any).notifications.set(notification.id, notification);
+});
       const stats = service.getStatistics();
       expect(stats.totalSent).toBe(2);
       expect(stats.deliveryRate).toBe(50); // 1 out of 2 delivered
@@ -504,27 +492,27 @@ describe('SessionConflictNotificationService', () => {
     });
   });
   describe('Rate Limiting', () => {
-    test('should apply rate limiting to prevent spam', async () => {
-      const rateLimitedService = new SessionConflictNotificationService({)
-        rateLimitCount: 2,
-        rateLimitWindow: 1000 // 1 second,
-      });
-      const conflict: SessionConflict = {
-        id: 'conflict-rate-limit',
+  test('should apply rate limiting to prevent spam', async () => {
+  const rateLimitedService = new SessionConflictNotificationService({)
+  rateLimitCount: 2,
+  rateLimitWindow: 1000 // 1 second,
+});
+      const conflict: SessionConflict = {,
+  id: 'conflict-rate-limit',
         type: 'user_limit',
         affectedSessions: ['session-1'],
         newSessionRequest: {,
-          userId: 'user-rate-limit',
+  userId: 'user-rate-limit',
           deviceId: 'device-1',
           priority: SessionPriority.MEDIUM,
           factors: {} as PriorityFactors
-        },
-        resolutionOptions: [ConflictResolution.EVICT_OLDEST],
+  },
+  resolutionOptions: [ConflictResolution.EVICT_OLDEST],
         recommendedResolution: ConflictResolution.EVICT_OLDEST,
         severity: 'medium',
         autoResolvable: true,
-        timeoutMinutes: 5,
-      };
+        timeoutMinutes: 5;
+  };
       // Send notifications up to the limit
       const result1 = await rateLimitedService.sendConflictNotification(conflict, ['user-rate-limit']);
       const result2 = await rateLimitedService.sendConflictNotification(conflict, ['user-rate-limit']);
@@ -544,13 +532,13 @@ describe('SessionConflictNotificationService', () => {
         expect(response.resolution).toBe(ConflictResolution.EVICT_OLDEST);
         done();
       });
-      const response: ConflictResolutionResponse = {
-        conflictId: 'conflict-resolved',
-        userId: 'user-resolved',
-        resolution: ConflictResolution.EVICT_OLDEST,
-        confirmed: true,
-        timestamp: new Date(),
-      };
+      const response: ConflictResolutionResponse = {,
+  conflictId: 'conflict-resolved',
+  userId: 'user-resolved',
+  resolution: ConflictResolution.EVICT_OLDEST,
+  confirmed: true,
+  timestamp: new Date(),
+};
       service.handleConflictResponse(response);
     });
     test('should emit notification read event', (done) => {
@@ -561,8 +549,8 @@ describe('SessionConflictNotificationService', () => {
         done();
       });
       // Create and add mock notification
-      const mockNotification: NotificationMessage = {
-        id: 'notification-read',
+      const mockNotification: NotificationMessage = {,
+  id: 'notification-read',
         type: NotificationType.SESSION_CONFLICT,
         priority: NotificationPriority.NORMAL,
         userId: 'user-read',
@@ -574,12 +562,11 @@ describe('SessionConflictNotificationService', () => {
         createdAt: new Date(),
         expiresAt: new Date(Date.now() + 60000),
         deliveryStatus: {,
-          [NotificationChannel.EMAIL]: {
-            status: DeliveryStatus.SENT,
-            attempts: 1,
-          }
-        },
-        metadata: {}
+  [NotificationChannel.EMAIL]: {,
+  status: DeliveryStatus.SENT,
+  attempts: 1,
+},
+  metadata: {}
       };
       (service as any).notifications.set('notification-read', mockNotification);
       service.markAsRead('notification-read', NotificationChannel.EMAIL);
@@ -588,8 +575,8 @@ describe('SessionConflictNotificationService', () => {
   describe('Cleanup and Destruction', () => {
     test('should clean up expired notifications', () => {
       // Create expired notification
-      const expiredNotification: NotificationMessage = {
-        id: 'expired-notification',
+      const expiredNotification: NotificationMessage = {,
+  id: 'expired-notification',
         type: NotificationType.SESSION_CONFLICT,
         priority: NotificationPriority.NORMAL,
         userId: 'user-expired',
@@ -627,21 +614,21 @@ describe('SessionConflictNotificationService', () => {
     });
   });
   describe('Batch Processing', () => {
-    test('should handle batch processing when enabled', () => {
-      const batchService = new SessionConflictNotificationService({)
-        batchingEnabled: true,
-        batchSize: 2,
-        batchDelay: 100,
-      });
+  test('should handle batch processing when enabled', () => {
+  const batchService = new SessionConflictNotificationService({)
+  batchingEnabled: true,
+  batchSize: 2,
+  batchDelay: 100,
+});
       expect(batchService).toBeDefined();
       batchService.destroy();
     });
     test('should emit batch processed event', (done) => {
-      const batchService = new SessionConflictNotificationService({)
-        batchingEnabled: true,
-        batchSize: 1,
-        batchDelay: 50,
-      });
+  const batchService = new SessionConflictNotificationService({)
+  batchingEnabled: true,
+  batchSize: 1,
+  batchDelay: 50,
+});
       batchService.on('batchProcessed', (data) => {
         expect(data.batchKey).toBeDefined();
         expect(data.count).toBeGreaterThan(0);
@@ -649,8 +636,8 @@ describe('SessionConflictNotificationService', () => {
         done();
       });
       // Add notification to trigger batch processing
-      const mockNotification: NotificationMessage = {
-        id: 'batch-test',
+      const mockNotification: NotificationMessage = {,
+  id: 'batch-test',
         type: NotificationType.SESSION_CONFLICT,
         priority: NotificationPriority.NORMAL,
         userId: 'user-batch',

@@ -16,6 +16,7 @@ export class AuditService implements IAuditService {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async logEvent(event: Omit<AuditLog, 'id' | 'createdAt'>): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO audit_logs (
@@ -56,6 +57,7 @@ export class AuditService implements IAuditService {
 
   // Enhanced security event logging for password reset and other security actions
   async logSecurityEvent(event: SecurityEvent): Promise<void> {
+
     return this.logEvent({
       userId: event.userId || undefined,
       action: event.type,
@@ -65,7 +67,7 @@ export class AuditService implements IAuditService {
         success: event.success,
         email: event.email,
         ...event.metadata
-      },
+  }
       ipAddress: event.ipAddress,
       userAgent: event.userAgent,
       severity: event.success ? 'info' : 'warning'
@@ -82,6 +84,7 @@ export class AuditService implements IAuditService {
     severity?: string;
     resourceType?: string;
   }): Promise<AuditLog[]> {
+
     const conditions: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -220,6 +223,7 @@ export class AuditService implements IAuditService {
     endDate: Date;
     format?: 'json' | 'csv';
   }): Promise<string> {
+
     const logs = await this.getAuditLogs({
       startDate: filters.startDate,
       endDate: filters.endDate,
@@ -234,6 +238,7 @@ export class AuditService implements IAuditService {
   }
 
   async cleanupOldLogs(retentionDays: number = 365): Promise<number> {
+
     try {
       const result = await this.db.query(`
         DELETE FROM audit_logs 
@@ -249,7 +254,7 @@ export class AuditService implements IAuditService {
             deletedCount, 
             retentionDays,
             cleanupDate: new Date().toISOString()
-          },
+  }
           severity: 'info'
         });
       }
@@ -262,6 +267,7 @@ export class AuditService implements IAuditService {
   }
 
   private async sendAlert(event: Omit<AuditLog, 'id' | 'createdAt'>): Promise<void> {
+
     // In production, this would integrate with alerting systems like:
     // - PagerDuty
     // - Slack webhooks
@@ -340,6 +346,7 @@ export class AuditService implements IAuditService {
     sessionId?: string;
     severity?: 'info' | 'warning' | 'error' | 'critical';
   }): Promise<void> {
+
     return this.logEvent({
       userId: params.userId,
       action: params.action,

@@ -6,16 +6,15 @@
  */
 
 export interface Policy {
-  id: string;
+  id: string;,
   policyKey: string;
   name: string;
   description?: string;
-  category: PolicyCategory;
+  category: PolicyCategory;,
   createdBy: string;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export type PolicyCategory = 
   | 'general'
   | 'content'
@@ -28,14 +27,14 @@ export type PolicyCategory =
   | 'intellectual_property';
 
 export interface PolicyVersion {
-  id: string;
+  id: string;,
   policyId: string;
-  version: string;
+  version: string;,
   majorVersion: number;
-  minorVersion: number;
+  minorVersion: number;,
   patchVersion: number;
   // Content
-  title: string;
+  title: string;,
   content: PolicyContent;
   contentType: ContentType;
   // Status and workflow
@@ -53,15 +52,14 @@ export interface PolicyVersion {
   reviewedBy?: string;
   publishedBy?: string;
   // Compliance and metadata
-  complianceFrameworks: ComplianceFramework[];
-  tags: string[];
-  severityLevel: SeverityLevel;
+  complianceFrameworks: ComplianceFramework;,
+  tags: string;
+  severityLevel: SeverityLevel;,
   metadata: Record<string, any>;
   // Timestamps
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export type PolicyStatus = 
   | 'draft'
   | 'review'
@@ -103,45 +101,41 @@ export type ComplianceFramework =
   | 'data_protection';
 
 export interface PolicyContent {
-  sections: PolicySection[];
+  sections: PolicySection;
   summary?: string;
   lastModified?: Date;
   wordCount?: number;
-  [key: string]: any; // Allow additional content properties
+  [key: string]: any; // Allow additional content properties,
 }
-
 export interface PolicySection {
   id?: string;
-  title: string;
+  title: string;,
   content: string;
   order?: number;
-  subsections?: PolicySection[];
+  subsections?: PolicySection;
   metadata?: Record<string, any>;
 }
-
 export interface PolicyVersionChange {
-  id: string;
+  id: string;,
   versionId: string;
-  changeType: string;
+  changeType: string;,
   fieldPath: string;
   oldValue?: any;
   newValue?: any;
   changeReason?: string;
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;
 }
-
 export interface PolicyApproval {
-  id: string;
+  id: string;,
   versionId: string;
-  approverId: string;
+  approverId: string;,
   approvalStatus: ApprovalStatus;
   approvalType: string;
   comments?: string;
   approvedAt?: Date;
   createdAt: Date;
 }
-
 export type ApprovalStatus = 
   | 'pending'
   | 'approved'
@@ -149,16 +143,15 @@ export type ApprovalStatus =
   | 'withdrawn';
 
 export interface PolicyComplianceMapping {
-  id: string;
+  id: string;,
   versionId: string;
-  complianceFramework: ComplianceFramework;
+  complianceFramework: ComplianceFramework;,
   requirementId: string;
   requirementDescription?: string;
   complianceLevel: ComplianceLevel;
   notes?: string;
   createdAt: Date;
 }
-
 export type ComplianceLevel = 
   | 'full'
   | 'partial'
@@ -167,65 +160,59 @@ export type ComplianceLevel =
 // Request and Response Types
 
 export interface CreatePolicyRequest {
-  policyKey: string;
+  policyKey: string;,
   name: string;
   description?: string;
   category: PolicyCategory;
 }
-
 export interface CreatePolicyVersionRequest {
-  title: string;
+  title: string;,
   content: PolicyContent;
   contentType?: ContentType;
   changeType?: ChangeType;
   changeSummary?: string;
-  complianceFrameworks?: ComplianceFramework[];
-  tags?: string[];
+  complianceFrameworks?: ComplianceFramework;
+  tags?: string;
   severityLevel?: SeverityLevel;
   effectiveDate?: Date;
   expirationDate?: Date;
   metadata?: Record<string, any>;
 }
-
 export interface UpdatePolicyVersionRequest {
   title?: string;
   content?: PolicyContent;
   contentType?: ContentType;
   changeSummary?: string;
-  complianceFrameworks?: ComplianceFramework[];
-  tags?: string[];
+  complianceFrameworks?: ComplianceFramework;
+  tags?: string;
   severityLevel?: SeverityLevel;
   effectiveDate?: Date;
   expirationDate?: Date;
   metadata?: Record<string, any>;
 }
-
 export interface PublishPolicyVersionRequest {
   effectiveDate?: Date;
   publishingNotes?: string;
 }
-
 export interface PolicyVersionComparison {
-  fromVersion: PolicyVersion;
+  fromVersion: PolicyVersion;,
   toVersion: PolicyVersion;
-  changes: PolicyVersionDiff[];
+  changes: PolicyVersionDiff;,
   summary: {,
-    addedSections: number;
-    removedSections: number;
-    modifiedSections: number;
-    totalChanges: number;
-  };
+  addedSections: number;,
+  removedSections: number;
+  modifiedSections: number;,
+  totalChanges: number;
+};
 }
-
 export interface PolicyVersionDiff {
-  type: DiffType;
+  type: DiffType;,
   path: string;
   description: string;
   oldValue?: any;
   newValue?: any;
   impact: DiffImpact;
 }
-
 export type DiffType = 
   | 'added'
   | 'removed'
@@ -239,21 +226,20 @@ export type DiffImpact =
   | 'breaking';
 
 export interface PolicyVersionListResponse {
-  versions: PolicyVersion[];
+  versions: PolicyVersion;,
   pagination: {,
-    page: number;
-    pageSize: number;
-    total: number;
-    totalPages: number;
-  };
+  page: number;,
+  pageSize: number;
+  total: number;,
+  totalPages: number;
+};
   policy: Policy;
 }
-
 export interface PolicyVersionSearchQuery {
   policyId?: string;
-  status?: PolicyStatus[];
-  complianceFrameworks?: ComplianceFramework[];
-  tags?: string[];
+  status?: PolicyStatus;
+  complianceFrameworks?: ComplianceFramework;
+  tags?: string;
   createdBy?: string;
   createdAfter?: Date;
   createdBefore?: Date;
@@ -265,7 +251,6 @@ export interface PolicyVersionSearchQuery {
   sortBy?: PolicyVersionSortField;
   sortOrder?: 'asc' | 'desc';
 }
-
 export type PolicyVersionSortField = 
   | 'version'
   | 'title'
@@ -278,38 +263,35 @@ export type PolicyVersionSortField =
   | 'patchVersion';
 
 export interface PolicyVersionAnalytics {
-  policyId: string;
+  policyId: string;,
   totalVersions: number;
-  publishedVersions: number;
+  publishedVersions: number;,
   draftVersions: number;
-  averageTimeToPublish: number; // in hours
-  mostActiveContributor: string;
+  averageTimeToPublish: number; // in hours,
+  mostActiveContributor: string;,
   complianceFrameworkUsage: Record<ComplianceFramework, number>;
   versionsByMonth: Array<{,
-    month: string;
-    count: number;
-  }>;
+  month: string;,
+  count: number;
+}>;
   changeTypeDistribution: Record<ChangeType, number>;
-}
 
 // Workflow Types
-
-export interface PolicyWorkflowState {
-  currentStatus: PolicyStatus;
-  allowedTransitions: PolicyStatus[];
-  requiredApprovals: number;
-  currentApprovals: number;
-  pendingReviewers: string[];
-  blockers: WorkflowBlocker[];
 }
-
+export interface PolicyWorkflowState {
+  currentStatus: PolicyStatus;,
+  allowedTransitions: PolicyStatus;
+  requiredApprovals: number;,
+  currentApprovals: number;
+  pendingReviewers: string;,
+  blockers: WorkflowBlocker;
+}
 export interface WorkflowBlocker {
-  type: BlockerType;
+  type: BlockerType;,
   description: string;
   resolvable: boolean;
   resolveAction?: string;
 }
-
 export type BlockerType = 
   | 'missing_approval'
   | 'compliance_check_failed'
@@ -320,15 +302,14 @@ export type BlockerType =
 // Event Types
 
 export interface PolicyVersionEvent {
-  id: string;
+  id: string;,
   type: PolicyEventType;
-  versionId: string;
+  versionId: string;,
   policyId: string;
-  userId: string;
+  userId: string;,
   data: Record<string, any>;
   timestamp: Date;
 }
-
 export type PolicyEventType = 
   | 'version_created'
   | 'version_updated'
@@ -344,41 +325,36 @@ export type PolicyEventType =
 // Validation Types
 
 export interface PolicyVersionValidation {
-  isValid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationWarning[];
-  complianceStatus: ComplianceValidation[];
+  isValid: boolean;,
+  errors: ValidationError;
+  warnings: ValidationWarning;,
+  complianceStatus: ComplianceValidation;
 }
-
 export interface ValidationError {
-  field: string;
+  field: string;,
   message: string;
-  code: string;
+  code: string;,
   severity: 'error' | 'warning';
 }
-
 export interface ValidationWarning {
-  field: string;
+  field: string;,
   message: string;
   code: string;
   suggestion?: string;
 }
-
 export interface ComplianceValidation {
-  framework: ComplianceFramework;
+  framework: ComplianceFramework;,
   status: 'compliant' | 'non_compliant' | 'unknown';
-  checkedRequirements: string[];
-  missingRequirements: string[];
+  checkedRequirements: string;,
+  missingRequirements: string;
   notes?: string;
+  // Export Configuration
 }
-
-// Export Configuration
-
 export interface PolicyVersionConfig {
-  maxVersionsPerPolicy: number;
-  defaultComplianceFrameworks: ComplianceFramework[];
+  maxVersionsPerPolicy: number;,
+  defaultComplianceFrameworks: ComplianceFramework;
   requiredApprovals: Record<SeverityLevel, number>;
-  autoArchiveAfterDays: number;
+  autoArchiveAfterDays: number;,
   enableAutomaticVersioning: boolean;
   versionNumberingStrategy: 'semantic' | 'sequential' | 'timestamp';
 }

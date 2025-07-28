@@ -19,36 +19,11 @@ export interface VerificationAnalyticsData {
         averageProcessingTime: number;
         approvalRate: number;
     };
-    requestsByType: Array<{
-        type: string;
-        count: number;
-        approvalRate: number;
-        averageProcessingTime: number;
-    }>;
-    processingTrends: Array<{
-        date: Date;
-        requests: number;
-        approved: number;
-        rejected: number;
-        averageTime: number;
-    }>;
-    trustScoreDistribution: Array<{
-        range: string;
-        count: number;
-        percentage: number;
-    }>;
-    riskAnalysis: {
-        highRiskUsers: number;
-        flaggedDocuments: number;
-        fraudAttempts: number;
-        suspendedAccounts: number;
-    };
-    performanceMetrics: {
-        slaCompliance: number;
-        qualityScore: number;
-        reviewerProductivity: number;
-        systemUptime: number;
-    };
+    requestsByType: Array<{}, type>;
+    string: any;
+    count: number;
+    approvalRate: number;
+    averageProcessingTime: number;
 }
 export interface VerificationAnalyticsProps {
     className?: string;

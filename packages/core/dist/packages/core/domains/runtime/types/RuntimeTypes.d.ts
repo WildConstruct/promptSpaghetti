@@ -7,10 +7,10 @@
 export * from '../../../runtime';
 export * from '../../../runtime/advanced';
 export interface RuntimeDomainState {
-    executionQueue: ExecutionTask[];
+    executionQueue: ExecutionTask;
     activeExecutions: Map<string, ExecutionInstance>;
     nodeRegistry: Map<string, NodeDefinition>;
-    executionHistory: ExecutionRecord[];
+    executionHistory: ExecutionRecord;
     performanceMetrics: RuntimeMetrics;
     config: RuntimeConfig;
     error: string | null;
@@ -20,7 +20,7 @@ export interface ExecutionTask {
     id: string;
     graphId: string;
     graph: Graph;
-    seeds: number[];
+    seeds: number;
     priority: ExecutionPriority;
     context: ExecutionContext;
     options: ExecutionOptions;
@@ -39,8 +39,8 @@ export interface ExecutionInstance {
     currentNode: string | null;
     processedNodes: Set<string>;
     results: Map<string, any>;
-    errors: ExecutionError[];
-    warnings: ExecutionWarning[];
+    errors: ExecutionError;
+    warnings: ExecutionWarning;
     startTime: number;
     metrics: ExecutionMetrics;
     cancellationToken: AbortController;
@@ -90,8 +90,8 @@ export interface ExecutionRecord {
     seed: number;
     result: any;
     metrics: ExecutionMetrics;
-    errors: ExecutionError[];
-    warnings: ExecutionWarning[];
+    errors: ExecutionError;
+    warnings: ExecutionWarning;
     executedAt: Date;
     duration: number;
     success: boolean;
@@ -136,9 +136,9 @@ export interface NodeDefinition {
     category: NodeCategory;
     version: string;
     description: string;
-    inputs: IOSpecification[];
-    outputs: IOSpecification[];
-    properties: PropertySpecification[];
+    inputs: IOSpecification;
+    outputs: IOSpecification;
+    properties: PropertySpecification;
     implementation: NodeImplementation;
     validation: ValidationSpecification;
     performance: PerformanceSpecification;
@@ -152,7 +152,7 @@ export interface IOSpecification {
     description: string;
     required: boolean;
     defaultValue?: any;
-    validation?: ValidationRule[];
+    validation?: ValidationRule;
     metadata?: Record<string, any>;
 }
 export type IOType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
@@ -162,8 +162,8 @@ export interface PropertySpecification {
     description: string;
     required: boolean;
     defaultValue?: any;
-    options?: PropertyOption[];
-    validation?: ValidationRule[];
+    options?: PropertyOption;
+    validation?: ValidationRule;
     ui?: UISpecification;
 }
 export type PropertyType = 'string' | 'number' | 'boolean' | 'select' | 'multiselect' | 'textarea' | 'code';
@@ -192,16 +192,16 @@ export interface ConditionalSpec {
 }
 export interface NodeImplementation {
     execute: (inputs: any, context: ExecutionContext, node: Node) => Promise<any>;
-    validate?: (inputs: any, properties: any) => ValidationResult[];
+    validate?: (inputs: any, properties: any) => ValidationResult;
     initialize?: (properties: any) => Promise<void>;
     dispose?: () => Promise<void>;
-    getOutputSchema?: (inputs: any, properties: any) => IOSpecification[];
+    getOutputSchema?: (inputs: any, properties: any) => IOSpecification;
 }
 export interface ValidationSpecification {
-    inputValidation: ValidationRule[];
-    outputValidation: ValidationRule[];
-    propertyValidation: ValidationRule[];
-    crossValidation?: CrossValidationRule[];
+    inputValidation: ValidationRule;
+    outputValidation: ValidationRule;
+    propertyValidation: ValidationRule;
+    crossValidation?: CrossValidationRule;
 }
 export interface ValidationRule {
     type: ValidationType;
@@ -212,14 +212,14 @@ export interface ValidationRule {
 export type ValidationType = 'required' | 'type' | 'range' | 'length' | 'pattern' | 'enum' | 'custom' | 'dependency' | 'format' | 'unique';
 export interface CrossValidationRule {
     name: string;
-    inputs: string[];
-    validator: (values: any[]) => ValidationResult;
+    inputs: string;
+    validator: (values: any) => ValidationResult;
     message: string;
 }
 export interface ValidationResult {
     valid: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
 }
 export interface ValidationError {
     field: string;
@@ -245,18 +245,18 @@ export interface SecuritySpecification {
     accessesExternalResources: boolean;
     processesPersonalData: boolean;
     generatesAuditLogs: boolean;
-    requiredPermissions: string[];
-    dataClassification: string[];
+    requiredPermissions: string;
+    dataClassification: string;
 }
 export interface NodeMetadata {
     author: string;
     version: string;
     createdAt: Date;
     updatedAt: Date;
-    tags: string[];
+    tags: string;
     documentation: string;
-    examples: NodeExample[];
-    changelog: ChangelogEntry[];
+    examples: NodeExample;
+    changelog: ChangelogEntry;
 }
 export interface NodeExample {
     name: string;
@@ -268,7 +268,7 @@ export interface NodeExample {
 export interface ChangelogEntry {
     version: string;
     date: Date;
-    changes: string[];
+    changes: string;
     breaking: boolean;
 }
 export interface RuntimeConfig {
@@ -336,7 +336,7 @@ export interface PerformanceThresholds {
 export interface AlertingConfig {
     enabled: boolean;
     webhookUrl?: string;
-    emailAlerts?: string[];
+    emailAlerts?: string;
     slackChannel?: string;
     thresholds: AlertThresholds;
 }
@@ -351,7 +351,7 @@ export interface RuntimeDomainEvents {
     onExecutionCompleted: (result: ExecutionRecord) => void;
     onExecutionFailed: (task: ExecutionTask, error: ExecutionError) => void;
     onNodeExecuted: (nodeId: string, result: any, metrics: NodeMetrics) => void;
-    onValidationError: (nodeId: string, errors: ValidationError[]) => void;
+    onValidationError: (nodeId: string, errors: ValidationError) => void;
     onPerformanceThresholdExceeded: (metric: string, value: number, threshold: number) => void;
     onMemoryThresholdExceeded: (usage: number, limit: number) => void;
     onQueueOverflow: (queueSize: number, maxSize: number) => void;
@@ -374,7 +374,7 @@ export interface ExecutionQueueProps {
     className?: string;
 }
 export interface NodeRegistryProps {
-    categories?: NodeCategory[];
+    categories?: NodeCategory;
     searchable?: boolean;
     onNodeSelect?: (nodeDefinition: NodeDefinition) => void;
     className?: string;

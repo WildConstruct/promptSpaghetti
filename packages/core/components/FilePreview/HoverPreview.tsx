@@ -17,9 +17,7 @@ interface HoverPreviewProps {
   onClick?: (file: PSGFile) => void;
   /** Children to render as trigger */
   children: React.ReactNode;
-}
-
-export const HoverPreview: React.FC<HoverPreviewProps> = ({)
+  export const HoverPreview: React.FC<HoverPreviewProps> = ({,)
   file,
   targetElement,
   delay = 300,
@@ -48,19 +46,15 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
     if (x + previewWidth > viewportWidth - gap) {
       // Position to the left instead
       x = rect.left - previewWidth - gap;
-    }
     // Ensure we don't go off the left edge
     if (x < gap) {
       x = gap;
-    }
     // Check vertical positioning
     if (y + previewHeight > viewportHeight - gap) {
       y = viewportHeight - previewHeight - gap;
-    }
     // Ensure we don't go above the top
     if (y < gap) {
       y = gap;
-    }
     return { x, y };
   }, []);
   // Handle mouse enter
@@ -69,7 +63,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
-    }
     // Set show timeout
     showTimeoutRef.current = setTimeout(() => {
       const element = targetElement || triggerRef.current;
@@ -77,7 +70,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
         const pos = calculatePosition(element);
         setPosition(pos);
         setIsVisible(true);
-      }
     }, delay);
   }, [calculatePosition, delay, targetElement]);
   // Handle mouse leave
@@ -86,7 +78,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
     if (showTimeoutRef.current) {
       clearTimeout(showTimeoutRef.current);
       showTimeoutRef.current = null;
-    }
     // Set hide timeout with small delay to allow moving to preview
     hideTimeoutRef.current = setTimeout(() => {
       setIsVisible(false);
@@ -110,7 +101,6 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
     if (hideTimeoutRef.current) {
       clearTimeout(hideTimeoutRef.current);
       hideTimeoutRef.current = null;
-    }
   }, []);
   // Handle preview mouse leave
   const handlePreviewMouseLeave = useCallback(() => {
@@ -121,13 +111,11 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
     return () => {
       if (showTimeoutRef.current) {
         clearTimeout(showTimeoutRef.current);
-      }
       if (hideTimeoutRef.current) {
         clearTimeout(hideTimeoutRef.current);
-      }
     };
   }, []);
-  return ();
+  return;
     <>
       {/* Trigger Element */}
       <div
@@ -147,16 +135,18 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
           className="absolute"
           style={{
             position: 'fixed',
-            left: `${position.x}px`,}
-            top: `${position.y}px`,}
-            zIndex: 10000,
+            left: `${position.x}px`}
+},
+  top: `${position.y}px`}
+},
+  zIndex: 10000,
             backgroundColor: 'white',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
             borderRadius: '8px',
             border: '1px solid #e5e5e5',
             maxWidth: '350px',
-            animation: 'fadeIn 0.15s ease-out',
-          }}
+            animation: 'fadeIn 0.15s ease-out';
+  }}
           onMouseEnter={handlePreviewMouseEnter}
           onMouseLeave={handlePreviewMouseLeave}
           onClick={handlePreviewClick}
@@ -174,14 +164,11 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
       <style>{`
         @keyframes fadeIn {
           from {
-            opacity: 0;
-            transform: translateY(-4px);
-          }
+            opacity: 0;,
+  transform: translateY(-4px);
           to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+            opacity: 1;,
+  transform: translateY(0);
       `}</style>
     </>
   );
@@ -189,7 +176,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({)
 
 // Memoized component for performance
 const MemoizedHoverPreview = React.memo(HoverPreview, (prevProps, nextProps) => {
-  return ();
+  return;
     prevProps.file.id === nextProps.file.id &&
     prevProps.file.lastModified.getTime() === nextProps.file.lastModified.getTime() &&
     prevProps.delay === nextProps.delay &&

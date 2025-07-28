@@ -2,7 +2,7 @@ export interface LexerPosition {
     line: number;
     column: number;
     offset: number;
-}
+
 export declare enum TokenType {
     VERSION = "VERSION",
     CHECKSUM = "CHECKSUM",
@@ -24,18 +24,19 @@ export declare enum TokenType {
     EDGE_ARROW = "EDGE_ARROW",
     EOF = "EOF",
     ERROR = "ERROR"
-}
+
 export interface Token {
     type: TokenType;
     value: string;
     position: LexerPosition;
     raw?: string;
-}
+
+
 export interface LexerError {
     message: string;
     position: LexerPosition;
     suggestion?: string;
-}
+
 export declare class GraphLexer {
     private input;
     private position;
@@ -110,5 +111,5 @@ export declare class GraphLexer {
     private isLineTerminator;
     private isAtLineStart;
     private isAfterIndent;
-}
+
 //# sourceMappingURL=graph-lexer.d.ts.map

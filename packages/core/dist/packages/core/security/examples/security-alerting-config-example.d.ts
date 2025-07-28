@@ -19,15 +19,9 @@
  * @since 2024-01-22
  */
 import React from 'react';
-interface SecurityConfigurationPageProps {
-    userRole: 'admin' | 'security_admin' | 'security_analyst';
-    userId: string;
-    organizationId: string;
-    theme?: 'light' | 'dark' | 'cinema';
-}
 /**
- * Complete security configuration page with state management and persistence
- */
+* Complete security configuration page with state management and persistence
+*/
 export declare const SecurityConfigurationPage: React.FC<SecurityConfigurationPageProps>;
 /**
  * Simplified example for basic usage

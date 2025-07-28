@@ -38,7 +38,7 @@ describe('DataPermissionHierarchy', () => {
         'GUEST'
       ];
       expectedLevels.forEach(level => {)
-        expect(STANDARD_PERMISSION_LEVELS).toHaveProperty(level);
+  expect(STANDARD_PERMISSION_LEVELS).toHaveProperty(level);
       });
     });
     it('should have correct level hierarchy (lower numbers = higher privileges)', () => {
@@ -74,21 +74,21 @@ describe('DataPermissionHierarchy', () => {
     });
   });
   describe('OPERATION_PERMISSION_MATRIX', () => {
-    it('should define permissions for all operations and classification levels', () => {
-      expect(OPERATION_PERMISSION_MATRIX).toBeDefined();
-      const operations: DataOperation[] = [
-        'read', 'WRITE', 'UPDATE', 'DELETE', 'EXPORT', 'SHARE',
-        'CLASSIFY', 'DECLASSIFY', 'AUDIT', 'APPROVE'
-      ];
-      const classifications: DataClassificationLevel[] = [
-        'PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'
-      ];
-      operations.forEach(operation => {)
-        expect(OPERATION_PERMISSION_MATRIX).toHaveProperty(operation);
-        classifications.forEach(classification => {)
-          expect(OPERATION_PERMISSION_MATRIX[operation]).toHaveProperty(classification);
-          expect(Array.isArray(OPERATION_PERMISSION_MATRIX[operation][classification])).toBe(true);
-        });
+  it('should define permissions for all operations and classification levels', () => {
+  expect(OPERATION_PERMISSION_MATRIX).toBeDefined();
+  const operations: DataOperation = [
+  'read', 'WRITE', 'UPDATE', 'DELETE', 'EXPORT', 'SHARE',
+  'CLASSIFY', 'DECLASSIFY', 'AUDIT', 'APPROVE'
+  ];
+  const classifications: DataClassificationLevel = [
+  'PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'
+  ];
+  operations.forEach(operation => {)
+  expect(OPERATION_PERMISSION_MATRIX).toHaveProperty(operation);
+  classifications.forEach(classification => {)
+  expect(OPERATION_PERMISSION_MATRIX[operation]).toHaveProperty(classification);
+  expect(Array.isArray(OPERATION_PERMISSION_MATRIX[operation][classification])).toBe(true);
+});
       });
     });
     it('should have more restrictive permissions for higher classification levels', () => {
@@ -133,7 +133,7 @@ describe('DataPermissionHierarchy', () => {
         'AUDIT_INTERVENTION'
       ];
       expectedPaths.forEach(path => {)
-        expect(STANDARD_ESCALATION_PATHS).toHaveProperty(path);
+  expect(STANDARD_ESCALATION_PATHS).toHaveProperty(path);
       });
     });
     it('should have appropriate escalation steps', () => {
@@ -168,65 +168,63 @@ describe('DataPermissionHierarchy', () => {
     });
   });
   describe('Permission Level Validation', () => {
-    it('should validate permission level structure', () => {
-      const testLevel: PermissionLevel = {
-        id: 'test-level',
-        name: 'Test Level',
-        level: 5,
-        description: 'Test permission level',
-        classificationAccess: ['PUBLIC', 'INTERNAL'],
-        operationPermissions: [],
-        timeRestrictions: [],
-        contextRequirements: [],
-        automaticInheritance: true,
-        requiresExplicitGrant: false,
-        maxDelegationLevel: 2,
-        auditLevel: 'STANDARD',
-        metadata: {,
-          createdBy: 'test',
-          createdAt: new Date(),
-          lastModified: new Date(),
-          version: '1.0',
-          compliance: {,
-            frameworks: ['ISO27001'],
-            requirements: [],
-            lastAudit: new Date(),
-            nextReview: new Date(),
-            certifications: [],
-          },
-          riskAssessment: {,
-            overallRisk: 'MEDIUM',
-            riskFactors: [],
-            mitigations: [],
-            lastAssessment: new Date(),
-            assessedBy: 'test',
-          },
-          usageStatistics: {,
-            totalGrants: 0,
-            activeUsers: 0,
-            violationCount: 0,
-            averageSessionDuration: 0,
-            peakUsageHours: [],
-          }
-        }
-      };
+  it('should validate permission level structure', () => {
+  const testLevel: PermissionLevel = {,
+  id: 'test-level',
+  name: 'Test Level',
+  level: 5,
+  description: 'Test permission level',
+  classificationAccess: ['PUBLIC', 'INTERNAL'],
+  operationPermissions: [],
+  timeRestrictions: [],
+  contextRequirements: [],
+  automaticInheritance: true,
+  requiresExplicitGrant: false,
+  maxDelegationLevel: 2,
+  auditLevel: 'STANDARD',
+  metadata: {,
+  createdBy: 'test',
+  createdAt: new Date(),
+  lastModified: new Date(),
+  version: '1.0',
+  compliance: {,
+  frameworks: ['ISO27001'],
+  requirements: [],
+  lastAudit: new Date(),
+  nextReview: new Date(),
+  certifications: [],
+},
+  riskAssessment: {,
+  overallRisk: 'MEDIUM',
+  riskFactors: [],
+  mitigations: [],
+  lastAssessment: new Date(),
+  assessedBy: 'test',
+},
+  usageStatistics: {,
+  totalGrants: 0,
+  activeUsers: 0,
+  violationCount: 0,
+  averageSessionDuration: 0,
+  peakUsageHours: [],
+};
       expect(testLevel.id).toBe('test-level');
       expect(testLevel.level).toBe(5);
       expect(testLevel.classificationAccess).toContain('PUBLIC');
       expect(testLevel.auditLevel).toBe('STANDARD');
     });
     it('should validate operation permission structure', () => {
-      const testPermission: OperationPermission = {
-        operation: 'read',
-        allowed: true,
-        conditions: [],
-        requirements: [],
-        riskLevel: 'LOW',
-        approvalRequired: false,
-        delegatable: true,
-        timeLimit: 8,
-        usageLimit: 100,
-      };
+  const testPermission: OperationPermission = {,
+  operation: 'read',
+  allowed: true,
+  conditions: [],
+  requirements: [],
+  riskLevel: 'LOW',
+  approvalRequired: false,
+  delegatable: true,
+  timeLimit: 8,
+  usageLimit: 100,
+};
       expect(testPermission.operation).toBe('read');
       expect(testPermission.allowed).toBe(true);
       expect(testPermission.riskLevel).toBe('LOW');
@@ -234,97 +232,97 @@ describe('DataPermissionHierarchy', () => {
     });
   });
   describe('Time Restrictions', () => {
-    it('should validate time restriction structure', () => {
-      const timeRestriction: TimeRestriction = {
-        type: 'BUSINESS_HOURS',
-        configuration: {,
-          startTime: '09:00',
-          endTime: '17:00',
-          daysOfWeek: [1, 2, 3, 4, 5],
-          timezone: 'UTC',
-          excludeHolidays: true,
-        },
-        exceptions: [],
-        emergencyOverride: true,
-      };
+  it('should validate time restriction structure', () => {
+  const timeRestriction: TimeRestriction = {,
+  type: 'BUSINESS_HOURS',
+  configuration: {,
+  startTime: '09:00',
+  endTime: '17:00',
+  daysOfWeek: [1, 2, 3, 4, 5],
+  timezone: 'UTC',
+  excludeHolidays: true,
+},
+  exceptions: [],
+        emergencyOverride: true;
+  };
       expect(timeRestriction.type).toBe('BUSINESS_HOURS');
       expect(timeRestriction.configuration.startTime).toBe('09:00');
       expect(timeRestriction.configuration.daysOfWeek).toEqual([1, 2, 3, 4, 5]);
       expect(timeRestriction.emergencyOverride).toBe(true);
     });
     it('should handle maintenance windows', () => {
-      const timeRestriction: TimeRestriction = {
-        type: 'MAINTENANCE_WINDOWS',
-        configuration: {,
-          timezone: 'UTC',
-          maintenanceWindows: [{,
-            start: new Date('2024-01-01T02:00:00Z'),
-            end: new Date('2024-01-01T04:00:00Z'),
-            description: 'Scheduled maintenance',
-            impactLevel: 'HIGH',
-            allowedOperations: ['read', 'AUDIT']
-          }]
-        },
-        exceptions: [],
-        emergencyOverride: false,
-      };
+  const timeRestriction: TimeRestriction = {,
+  type: 'MAINTENANCE_WINDOWS',
+  configuration: {,
+  timezone: 'UTC',
+  maintenanceWindows: [{,
+  start: new Date('2024-01-01T02:00:00Z'),
+  end: new Date('2024-01-01T04:00:00Z'),
+  description: 'Scheduled maintenance',
+  impactLevel: 'HIGH',
+  allowedOperations: ['read', 'AUDIT'],
+}]
+  },
+  exceptions: [],
+        emergencyOverride: false;
+  };
       expect(timeRestriction.configuration.maintenanceWindows).toHaveLength(1);
       expect(timeRestriction.configuration.maintenanceWindows![0].impactLevel).toBe('HIGH');
       expect(timeRestriction.configuration.maintenanceWindows![0].allowedOperations).toContain('read');
     });
   });
   describe('Escalation Paths', () => {
-    it('should validate escalation path structure', () => {
-      const escalationPath: EscalationPath = {
-        id: 'test-escalation',
-        name: 'Test Escalation',
-        description: 'Test escalation path',
-        triggerConditions: [{,
-          type: 'PERMISSION_DENIED',
-          conditions: [],
-          priority: 'HIGH',
-          automatic: true,
-        }],
+  it('should validate escalation path structure', () => {
+  const escalationPath: EscalationPath = {,
+  id: 'test-escalation',
+  name: 'Test Escalation',
+  description: 'Test escalation path',
+  triggerConditions: [{,
+  type: 'PERMISSION_DENIED',
+  conditions: [],
+  priority: 'HIGH',
+  automatic: true,
+}],
         steps: [{,
-          id: 'step-1',
+  id: 'step-1',
           order: 1,
           name: 'Manager Approval',
           description: 'Requires manager approval',
           approvers: [{,
-            type: 'ROLE',
+  type: 'ROLE',
             specification: { role: 'MANAGER' },
             weight: 1,
-            required: true,
-          }],
+            required: true;
+  }],
           requiredApprovals: 1,
           timeout: 24,
           actions: [],
-          conditions: [],
-        }],
+          conditions: [];
+  }],
         timeouts: [],
-        fallbackActions: [],
-      };
+        fallbackActions: [];
+  };
       expect(escalationPath.id).toBe('test-escalation');
       expect(escalationPath.steps).toHaveLength(1);
       expect(escalationPath.steps[0].approvers[0].type).toBe('ROLE');
     });
   });
   describe('Delegation Rules', () => {
-    it('should validate delegation rule structure', () => {
-      const delegationRule: DelegationRule = {
-        id: 'test-delegation',
-        name: 'Test Delegation',
-        description: 'Test delegation rule',
-        fromLevel: 'DATA_OWNER',
-        toLevel: 'lower',
-        permissions: ['read', 'WRITE'],
-        conditions: [],
-        restrictions: [],
-        timeLimit: 24,
-        usageLimit: 10,
-        revocable: true,
-        auditRequired: true,
-      };
+  it('should validate delegation rule structure', () => {
+  const delegationRule: DelegationRule = {,
+  id: 'test-delegation',
+  name: 'Test Delegation',
+  description: 'Test delegation rule',
+  fromLevel: 'DATA_OWNER',
+  toLevel: 'lower',
+  permissions: ['read', 'WRITE'],
+  conditions: [],
+  restrictions: [],
+  timeLimit: 24,
+  usageLimit: 10,
+  revocable: true,
+  auditRequired: true,
+};
       expect(delegationRule.fromLevel).toBe('DATA_OWNER');
       expect(delegationRule.permissions).toContain('read');
       expect(delegationRule.timeLimit).toBe(24);
@@ -332,27 +330,27 @@ describe('DataPermissionHierarchy', () => {
     });
   });
   describe('Emergency Overrides', () => {
-    it('should validate emergency override structure', () => {
-      const emergencyOverride: EmergencyOverride = {
-        id: 'system-emergency',
-        name: 'System Emergency',
-        description: 'Emergency override for system failures',
-        triggerConditions: [{,
-          type: 'SYSTEM_FAILURE',
-          conditions: [],
-          severity: 'CRITICAL',
-          autoTrigger: false,
-        }],
+  it('should validate emergency override structure', () => {
+  const emergencyOverride: EmergencyOverride = {,
+  id: 'system-emergency',
+  name: 'System Emergency',
+  description: 'Emergency override for system failures',
+  triggerConditions: [{,
+  type: 'SYSTEM_FAILURE',
+  conditions: [],
+  severity: 'CRITICAL',
+  autoTrigger: false,
+}],
         grantedPermissions: ['read', 'WRITE', 'AUDIT'],
         timeLimit: 4,
         approvalRequired: true,
         auditLevel: 'REALTIME',
         postEmergencyActions: [{,
-          type: 'REVIEW',
-          delay: 1,
-          required: true,
-          assignee: 'security-team',
-        }]
+  type: 'REVIEW',
+  delay: 1,
+  required: true,
+  assignee: 'security-team',
+}]
       };
       expect(emergencyOverride.timeLimit).toBe(4);
       expect(emergencyOverride.auditLevel).toBe('REALTIME');
@@ -362,13 +360,14 @@ describe('DataPermissionHierarchy', () => {
   });
   describe('Hierarchy Integration', () => {
     it('should create a complete permission hierarchy', () => {
-      const hierarchy: PermissionHierarchy = {
-        levels: Object.entries(STANDARD_PERMISSION_LEVELS).map(([key, config]) => ({)
-          id: key.toLowerCase(),
+      const hierarchy: PermissionHierarchy = {,
+  levels: Object.entries(STANDARD_PERMISSION_LEVELS).map(([key, config]) => ({)
+  id: key.toLowerCase(),
           name: config.name,
           level: config.level,
-          description: `${config.name} permission level`,}
-          classificationAccess: config.classificationAccess,
+          description: `${config.name} permission level`}
+},
+  classificationAccess: config.classificationAccess,
           operationPermissions: [],
           timeRestrictions: [],
           contextRequirements: [],
@@ -377,56 +376,56 @@ describe('DataPermissionHierarchy', () => {
           maxDelegationLevel: config.maxDelegationLevel,
           auditLevel: config.auditLevel,
           metadata: {,
-            createdBy: 'system',
-            createdAt: new Date(),
-            lastModified: new Date(),
-            version: '1.0',
-            compliance: {,
-              frameworks: ['ISO27001'],
-              requirements: [],
-              lastAudit: new Date(),
-              nextReview: new Date(),
-              certifications: [],
-            },
-            riskAssessment: {,
-              overallRisk: 'MEDIUM',
-              riskFactors: [],
-              mitigations: [],
-              lastAssessment: new Date(),
-              assessedBy: 'system',
-            },
-            usageStatistics: {,
-              totalGrants: 0,
-              activeUsers: 0,
-              violationCount: 0,
-              averageSessionDuration: 0,
-              peakUsageHours: [],
-            }
-          }
-        })),
+  createdBy: 'system',
+  createdAt: new Date(),
+  lastModified: new Date(),
+  version: '1.0',
+  compliance: {,
+  frameworks: ['ISO27001'],
+  requirements: [],
+  lastAudit: new Date(),
+  nextReview: new Date(),
+  certifications: [],
+},
+  riskAssessment: {,
+  overallRisk: 'MEDIUM',
+  riskFactors: [],
+  mitigations: [],
+  lastAssessment: new Date(),
+  assessedBy: 'system',
+},
+  usageStatistics: {,
+  totalGrants: 0,
+  activeUsers: 0,
+  violationCount: 0,
+  averageSessionDuration: 0,
+  peakUsageHours: [],
+})),
         inheritanceRules: [],
         escalationPaths: Object.entries(STANDARD_ESCALATION_PATHS).map(([key, config]) => ({)
-          id: key.toLowerCase(),
+  id: key.toLowerCase(),
           name: config.name,
-          description: `Standard escalation path for ${config.name}`,}
-          triggerConditions: [],
+          description: `Standard escalation path for ${config.name}`}
+},
+  triggerConditions: [],
           steps: config.steps.map((step, index) => ({)
-            id: `step-${index}`,}
-            order: index,
+  id: `step-${index}`}
+},
+  order: index,
             name: step.name,
             description: step.name,
             approvers: [],
             requiredApprovals: 1,
             timeout: step.timeout,
             actions: [],
-            conditions: [],
-          })),
+            conditions: [];
+  })),
           timeouts: [],
-          fallbackActions: [],
-        })),
+          fallbackActions: [];
+  })),
         delegationRules: [],
-        emergencyOverrides: [],
-      };
+        emergencyOverrides: [];
+  };
       expect(hierarchy.levels).toHaveLength(11);
       expect(hierarchy.escalationPaths).toHaveLength(5);
       expect(hierarchy.levels.every(level => level.id && level.name && typeof level.level === 'number')).toBe(true);

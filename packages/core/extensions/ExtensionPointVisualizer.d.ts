@@ -3,6 +3,7 @@
  * Creates visual representations of extension points and their relationships
  */
 import { ExtensionPointCategory } from './ExtensionPointRegistry';
+
 export interface VisualizationOptions {
     format?: 'mermaid' | 'graphviz' | 'json';
     includeInternal?: boolean;
@@ -10,7 +11,8 @@ export interface VisualizationOptions {
     showDependencies?: boolean;
     showInterfaces?: boolean;
     theme?: 'light' | 'dark';
-}
+
+
 export interface ExtensionPointNode {
     id: string;
     name: string;
@@ -20,18 +22,20 @@ export interface ExtensionPointNode {
     interfaces: string[];
     dependencies: string[];
     location: string;
-}
+
+
 export interface ExtensionPointEdge {
     source: string;
     target: string;
     type: 'dependency' | 'interface' | 'inheritance';
     label?: string;
-}
+
+
 export interface ExtensionPointGraph {
     nodes: ExtensionPointNode[];
     edges: ExtensionPointEdge[];
     categories: Record<ExtensionPointCategory, ExtensionPointNode[]>;
-}
+
 export declare class ExtensionPointVisualizer {
     private static instance;
     private constructor();
@@ -76,6 +80,6 @@ export declare class ExtensionPointVisualizer {
      * Sanitize ID for use in diagrams
      */
     private sanitizeId;
-}
+
 export declare const extensionPointVisualizer: ExtensionPointVisualizer;
 //# sourceMappingURL=ExtensionPointVisualizer.d.ts.map

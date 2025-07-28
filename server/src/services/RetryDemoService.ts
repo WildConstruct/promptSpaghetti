@@ -18,7 +18,7 @@ export class RetryDemoService {
     onAttempt: (attempt, error) => {
       console.log(`Database operation attempt ${attempt} failed: ${error.message}`);
     }
-  })
+  }
   async performDatabaseOperation(): Promise<{ success: boolean; data: Record<string, unknown> }> {
     // Simulate a database operation that might fail
     const shouldFail = Math.random() < 0.3;
@@ -37,8 +37,9 @@ export class RetryDemoService {
     maxAttempts: 4,
     baseDelay: 1000,
     maxDelay: 8000
-  })
+  }
   async callExternalAPI(___url: string): Promise<unknown> {
+
     // Simulate HTTP call that might fail with server errors
     const shouldFail = Math.random() < 0.4;
     
@@ -55,10 +56,11 @@ export class RetryDemoService {
    * Example 3: Manual retry with custom logic
    */
   async processLogAnalysisWithRetry(sessionId: string): Promise<void> {
+
     const result = await RetryUtils.executeWithResult(
       async () => {
         return this.performLogAnalysis(sessionId);
-      },
+  }
       {
         maxAttempts: 3,
         baseDelay: 2000,
@@ -69,7 +71,7 @@ export class RetryDemoService {
         ],
         onAttempt: (attempt, error) => {
           console.warn(`Log analysis attempt ${attempt} failed for session ${sessionId}: ${error.message}`);
-        },
+  }
         onSuccess: (attempt, result) => {
           console.log(`Log analysis succeeded on attempt ${attempt} for session ${sessionId}`);
         }
@@ -88,6 +90,7 @@ export class RetryDemoService {
    * Example 4: File operation with retry
    */
   async exportLogsToFile(logData: unknown[], filename: string): Promise<string> {
+
     return RetryPatterns.fileOperation(async () => {
       // Simulate file operation that might fail due to file system issues
       const shouldFail = Math.random() < 0.2;
@@ -108,10 +111,11 @@ export class RetryDemoService {
    * Example 5: Circuit breaker pattern with retry
    */
   async sendCriticalAlert(alertData: unknown): Promise<void> {
+
     return RetryUtils.executeWithCircuitBreaker(
       async () => {
         return this.sendNotificationToExternalService(alertData);
-      },
+  }
       'critical-alert-service',
       {
         maxAttempts: 3,
@@ -128,6 +132,7 @@ export class RetryDemoService {
    * Example 6: Combining retry with transaction rollback
    */
   async performComplexDatabaseTransaction(): Promise<void> {
+
     const transaction = await this.beginTransaction();
     
     try {
@@ -156,6 +161,7 @@ export class RetryDemoService {
    * Example 7: Graceful degradation with retry
    */
   async getLogAnalytics(startDate: Date, endDate: Date): Promise<unknown> {
+
     try {
       // Try primary analytics service first
       return await RetryPatterns.apiCall(
@@ -184,6 +190,7 @@ export class RetryDemoService {
    * Example 8: Batch processing with retry and progress tracking
    */
   async processBatchLogs(logs: unknown[], batchSize: number = 100): Promise<void> {
+
     const batches = this.chunkArray(logs, batchSize);
     let processed = 0;
     const failed = [];
@@ -193,7 +200,7 @@ export class RetryDemoService {
         await RetryUtils.execute(
           async () => {
             await this.processBatch(batch);
-          },
+  }
           {
             maxAttempts: 2,
             baseDelay: 1000,
@@ -224,6 +231,7 @@ export class RetryDemoService {
   // ==========================================
 
   private async performLogAnalysis(sessionId: string): Promise<void> {
+
     const shouldFail = Math.random() < 0.3;
     if (shouldFail) {
       throw new Error('Log analysis processing error');
@@ -232,6 +240,7 @@ export class RetryDemoService {
   }
 
   private async sendNotificationToExternalService(___alertData: unknown): Promise<void> {
+
     const shouldFail = Math.random() < 0.4;
     if (shouldFail) {
       const error = new Error('External notification service unavailable') as any;
@@ -242,6 +251,7 @@ export class RetryDemoService {
   }
 
   private async beginTransaction(): Promise<unknown> {
+
     return {
       commit: async () => console.log('Transaction committed'),
       rollback: async () => console.log('Transaction rolled back')
@@ -249,6 +259,7 @@ export class RetryDemoService {
   }
 
   private async insertLogEntry(___transaction: unknown): Promise<void> {
+
     // Simulate database insert that might fail
     if (Math.random() < 0.1) {
       throw new Error('Database deadlock detected');
@@ -256,6 +267,7 @@ export class RetryDemoService {
   }
 
   private async updateLogMetrics(___transaction: unknown): Promise<void> {
+
     // Simulate metrics update that might fail
     if (Math.random() < 0.1) {
       throw new Error('Lock timeout exceeded');
@@ -263,6 +275,7 @@ export class RetryDemoService {
   }
 
   private async createLogAlert(___transaction: unknown): Promise<void> {
+
     // Simulate alert creation that might fail
     if (Math.random() < 0.1) {
       throw new Error('Connection lost during alert creation');
@@ -270,6 +283,7 @@ export class RetryDemoService {
   }
 
   private async getPrimaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
+
     if (Math.random() < 0.5) {
       throw new Error('Primary analytics service timeout');
     }
@@ -277,6 +291,7 @@ export class RetryDemoService {
   }
 
   private async getSecondaryAnalytics(___startDate: Date, ___endDate: Date): Promise<unknown> {
+
     if (Math.random() < 0.3) {
       throw new Error('Secondary analytics service overloaded');
     }
@@ -288,6 +303,7 @@ export class RetryDemoService {
   }
 
   private async processBatch(___logs: unknown[]): Promise<void> {
+
     // Simulate batch processing that might fail
     if (Math.random() < 0.2) {
       throw new Error('Batch processing failed due to resource constraints');
@@ -310,6 +326,7 @@ export class RetryDemoService {
  * Example usage and testing
  */
 export async function demonstrateRetryMechanisms(): Promise<void> {
+
   const demoService = new RetryDemoService();
 
   console.log('\n=== Retry Mechanism Demonstration ===\n');

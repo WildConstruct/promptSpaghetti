@@ -4,6 +4,7 @@
  *
  * Intelligent caching system with multiple eviction policies and performance optimization
  */
+
 export interface CacheConfig {
     maxSize: number;
     maxMemoryMB: number;
@@ -16,7 +17,7 @@ export interface CacheConfig {
         enabled: boolean;
         reportingInterval: number;
     };
-}
+
 export interface CacheItem<T = any> {
     key: string;
     value: T;
@@ -33,7 +34,7 @@ export interface CacheItem<T = any> {
         responseTime: number;
         cost: number;
     };
-}
+
 export interface CacheMetrics {
     hitRate: number;
     missRate: number;
@@ -45,25 +46,25 @@ export interface CacheMetrics {
     cacheSize: number;
     compressionRatio: number;
     costSavings: number;
-}
+
 export interface EvictionStrategy {
     name: string;
     shouldEvict(item: CacheItem, config: CacheConfig): boolean;
     selectItemsForEviction(items: CacheItem[], count: number): CacheItem[];
     calculatePriority(item: CacheItem): number;
-}
+
 export declare class LRUEvictionStrategy implements EvictionStrategy {
     name: string;
     shouldEvict(item: CacheItem, config: CacheConfig): boolean;
     selectItemsForEviction(items: CacheItem[], count: number): CacheItem[];
     calculatePriority(item: CacheItem): number;
-}
+
 export declare class LFUEvictionStrategy implements EvictionStrategy {
     name: string;
     shouldEvict(item: CacheItem, config: CacheConfig): boolean;
     selectItemsForEviction(items: CacheItem[], count: number): CacheItem[];
     calculatePriority(item: CacheItem): number;
-}
+
 export declare class AdaptiveEvictionStrategy implements EvictionStrategy {
     name: string;
     private performanceHistory;
@@ -74,7 +75,7 @@ export declare class AdaptiveEvictionStrategy implements EvictionStrategy {
     private calculateAgeThreshold;
     private calculateEvictionScore;
     recordPerformance(key: string, responseTime: number, success: boolean): void;
-}
+
 export declare class AdvancedCacheManager {
     private cache;
     private config;
@@ -129,6 +130,6 @@ export declare class AdvancedCacheManager {
     private reportMetrics;
     private initializeCompression;
     destroy(): void;
-}
+
 export default AdvancedCacheManager;
 //# sourceMappingURL=AdvancedCacheManager.d.ts.map

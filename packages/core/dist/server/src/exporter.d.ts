@@ -83,27 +83,27 @@ export declare const ControlNetParametersSchema: z.ZodObject<{
             frame: z.ZodNumber;
             parameters: z.ZodRecord<z.ZodString, z.ZodUnknown>;
         }, "strip", z.ZodTypeAny, {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }, {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
         frameCount?: number;
         fps?: number;
         interpolationMethod?: "linear" | "cubic" | "bezier";
         keyframes?: {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }[];
     }, {
         frameCount?: number;
         fps?: number;
         interpolationMethod?: "linear" | "cubic" | "bezier";
         keyframes?: {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }[];
     }>>;
     cameraParameters: z.ZodOptional<z.ZodObject<{
@@ -170,8 +170,8 @@ export declare const ControlNetParametersSchema: z.ZodObject<{
         fps?: number;
         interpolationMethod?: "linear" | "cubic" | "bezier";
         keyframes?: {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }[];
     };
     cameraParameters?: {
@@ -216,8 +216,8 @@ export declare const ControlNetParametersSchema: z.ZodObject<{
         fps?: number;
         interpolationMethod?: "linear" | "cubic" | "bezier";
         keyframes?: {
-            parameters?: Record<string, unknown>;
             frame?: number;
+            parameters?: Record<string, unknown>;
         }[];
     };
     cameraParameters?: {
@@ -299,15 +299,15 @@ export declare const SceneDataSchema: z.ZodObject<{
             y?: number;
             z?: number;
         };
-        angle?: {
-            pitch?: number;
-            yaw?: number;
-            roll?: number;
-        };
         movement?: {
             type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
             speed?: "medium" | "fast" | "slow";
             smoothness?: number;
+        };
+        angle?: {
+            pitch?: number;
+            yaw?: number;
+            roll?: number;
         };
         distance?: number;
         lens?: {
@@ -321,15 +321,15 @@ export declare const SceneDataSchema: z.ZodObject<{
             y?: number;
             z?: number;
         };
-        angle?: {
-            pitch?: number;
-            yaw?: number;
-            roll?: number;
-        };
         movement?: {
             type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
             speed?: "medium" | "fast" | "slow";
             smoothness?: number;
+        };
+        angle?: {
+            pitch?: number;
+            yaw?: number;
+            roll?: number;
         };
         distance?: number;
         lens?: {
@@ -404,15 +404,15 @@ export declare const SceneDataSchema: z.ZodObject<{
         windSpeed: z.ZodDefault<z.ZodNumber>;
         props: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
+        props?: string[];
         location?: "interior" | "exterior" | "studio" | "practical";
         atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-        props?: string[];
         temperature?: number;
         windSpeed?: number;
     }, {
+        props?: string[];
         location?: "interior" | "exterior" | "studio" | "practical";
         atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-        props?: string[];
         temperature?: number;
         windSpeed?: number;
     }>>;
@@ -424,41 +424,34 @@ export declare const SceneDataSchema: z.ZodObject<{
             warmth: z.ZodDefault<z.ZodNumber>;
         }, "strip", z.ZodTypeAny, {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         }, {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         }>>;
         effects: z.ZodDefault<z.ZodArray<z.ZodEnum<["bloom", "vignette", "film-grain", "lens-flare", "depth-of-field"]>, "many">>;
     }, "strip", z.ZodTypeAny, {
         colorGrading?: {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         };
         effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
     }, {
         colorGrading?: {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         };
         effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
     }>>;
 }, "strip", z.ZodTypeAny, {
-    environment?: {
-        location?: "interior" | "exterior" | "studio" | "practical";
-        atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-        props?: string[];
-        temperature?: number;
-        windSpeed?: number;
-    };
     lighting?: {
         mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -480,15 +473,15 @@ export declare const SceneDataSchema: z.ZodObject<{
             y?: number;
             z?: number;
         };
-        angle?: {
-            pitch?: number;
-            yaw?: number;
-            roll?: number;
-        };
         movement?: {
             type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
             speed?: "medium" | "fast" | "slow";
             smoothness?: number;
+        };
+        angle?: {
+            pitch?: number;
+            yaw?: number;
+            roll?: number;
         };
         distance?: number;
         lens?: {
@@ -497,23 +490,23 @@ export declare const SceneDataSchema: z.ZodObject<{
             focusDistance?: number;
         };
     };
+    environment?: {
+        props?: string[];
+        location?: "interior" | "exterior" | "studio" | "practical";
+        atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+        temperature?: number;
+        windSpeed?: number;
+    };
     postProcessing?: {
         colorGrading?: {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         };
         effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
     };
 }, {
-    environment?: {
-        location?: "interior" | "exterior" | "studio" | "practical";
-        atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-        props?: string[];
-        temperature?: number;
-        windSpeed?: number;
-    };
     lighting?: {
         mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
         weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -535,15 +528,15 @@ export declare const SceneDataSchema: z.ZodObject<{
             y?: number;
             z?: number;
         };
-        angle?: {
-            pitch?: number;
-            yaw?: number;
-            roll?: number;
-        };
         movement?: {
             type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
             speed?: "medium" | "fast" | "slow";
             smoothness?: number;
+        };
+        angle?: {
+            pitch?: number;
+            yaw?: number;
+            roll?: number;
         };
         distance?: number;
         lens?: {
@@ -552,11 +545,18 @@ export declare const SceneDataSchema: z.ZodObject<{
             focusDistance?: number;
         };
     };
+    environment?: {
+        props?: string[];
+        location?: "interior" | "exterior" | "studio" | "practical";
+        atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+        temperature?: number;
+        windSpeed?: number;
+    };
     postProcessing?: {
         colorGrading?: {
             style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-            saturation?: number;
             contrast?: number;
+            saturation?: number;
             warmth?: number;
         };
         effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
@@ -790,27 +790,27 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 frame: z.ZodNumber;
                 parameters: z.ZodRecord<z.ZodString, z.ZodUnknown>;
             }, "strip", z.ZodTypeAny, {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }, {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }>, "many">>;
         }, "strip", z.ZodTypeAny, {
             frameCount?: number;
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         }, {
             frameCount?: number;
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         }>>;
         cameraParameters: z.ZodOptional<z.ZodObject<{
@@ -877,8 +877,8 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         };
         cameraParameters?: {
@@ -923,8 +923,8 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         };
         cameraParameters?: {
@@ -1002,15 +1002,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1024,15 +1024,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1107,15 +1107,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             windSpeed: z.ZodDefault<z.ZodNumber>;
             props: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
+            props?: string[];
             location?: "interior" | "exterior" | "studio" | "practical";
             atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
             temperature?: number;
             windSpeed?: number;
         }, {
+            props?: string[];
             location?: "interior" | "exterior" | "studio" | "practical";
             atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
             temperature?: number;
             windSpeed?: number;
         }>>;
@@ -1127,41 +1127,34 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 warmth: z.ZodDefault<z.ZodNumber>;
             }, "strip", z.ZodTypeAny, {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             }, {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             }>>;
             effects: z.ZodDefault<z.ZodArray<z.ZodEnum<["bloom", "vignette", "film-grain", "lens-flare", "depth-of-field"]>, "many">>;
         }, "strip", z.ZodTypeAny, {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
         }, {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
         }>>;
     }, "strip", z.ZodTypeAny, {
-        environment?: {
-            location?: "interior" | "exterior" | "studio" | "practical";
-            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
-            temperature?: number;
-            windSpeed?: number;
-        };
         lighting?: {
             mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -1183,15 +1176,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1200,23 +1193,23 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 focusDistance?: number;
             };
         };
+        environment?: {
+            props?: string[];
+            location?: "interior" | "exterior" | "studio" | "practical";
+            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+            temperature?: number;
+            windSpeed?: number;
+        };
         postProcessing?: {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
         };
     }, {
-        environment?: {
-            location?: "interior" | "exterior" | "studio" | "practical";
-            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
-            temperature?: number;
-            windSpeed?: number;
-        };
         lighting?: {
             mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -1238,15 +1231,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1255,11 +1248,18 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 focusDistance?: number;
             };
         };
+        environment?: {
+            props?: string[];
+            location?: "interior" | "exterior" | "studio" | "practical";
+            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+            temperature?: number;
+            windSpeed?: number;
+        };
         postProcessing?: {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
@@ -1340,8 +1340,8 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         };
         cameraParameters?: {
@@ -1359,13 +1359,6 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         };
     };
     sceneData?: {
-        environment?: {
-            location?: "interior" | "exterior" | "studio" | "practical";
-            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
-            temperature?: number;
-            windSpeed?: number;
-        };
         lighting?: {
             mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -1387,15 +1380,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1404,11 +1397,18 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 focusDistance?: number;
             };
         };
+        environment?: {
+            props?: string[];
+            location?: "interior" | "exterior" | "studio" | "practical";
+            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+            temperature?: number;
+            windSpeed?: number;
+        };
         postProcessing?: {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
@@ -1489,8 +1489,8 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
             fps?: number;
             interpolationMethod?: "linear" | "cubic" | "bezier";
             keyframes?: {
-                parameters?: Record<string, unknown>;
                 frame?: number;
+                parameters?: Record<string, unknown>;
             }[];
         };
         cameraParameters?: {
@@ -1508,13 +1508,6 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
         };
     };
     sceneData?: {
-        environment?: {
-            location?: "interior" | "exterior" | "studio" | "practical";
-            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
-            props?: string[];
-            temperature?: number;
-            windSpeed?: number;
-        };
         lighting?: {
             mood?: "cinematic" | "bright" | "dramatic" | "soft" | "harsh" | "moody" | "ethereal";
             weather?: "clear" | "cloudy" | "overcast" | "foggy" | "rainy" | "stormy" | "snowy";
@@ -1536,15 +1529,15 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 y?: number;
                 z?: number;
             };
-            angle?: {
-                pitch?: number;
-                yaw?: number;
-                roll?: number;
-            };
             movement?: {
                 type?: "static" | "pan" | "tilt" | "dolly" | "crane" | "handheld";
                 speed?: "medium" | "fast" | "slow";
                 smoothness?: number;
+            };
+            angle?: {
+                pitch?: number;
+                yaw?: number;
+                roll?: number;
             };
             distance?: number;
             lens?: {
@@ -1553,11 +1546,18 @@ export declare const GeneratorBundleSchema: z.ZodObject<{
                 focusDistance?: number;
             };
         };
+        environment?: {
+            props?: string[];
+            location?: "interior" | "exterior" | "studio" | "practical";
+            atmosphere?: "clear" | "hazy" | "dusty" | "smoky" | "misty";
+            temperature?: number;
+            windSpeed?: number;
+        };
         postProcessing?: {
             colorGrading?: {
                 style?: "modern" | "cinematic" | "dramatic" | "natural" | "vintage";
-                saturation?: number;
                 contrast?: number;
+                saturation?: number;
                 warmth?: number;
             };
             effects?: ("bloom" | "vignette" | "film-grain" | "lens-flare" | "depth-of-field")[];
@@ -1639,10 +1639,6 @@ export declare function validateGeneratorBundle(bundle: Record<string, unknown>)
  * @returns Graph compatible with the editor
  */
 export declare function bundleToGraph(bundle: GeneratorBundle): Graph;
-/**
- * Epic 8.5: Export Results for Film Industry
- * Professional export system with VFX-ready formats
- */
 export interface ExportRequest {
     format: string;
     data: Record<string, unknown>;

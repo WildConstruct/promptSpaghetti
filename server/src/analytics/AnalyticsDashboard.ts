@@ -8,6 +8,7 @@ import { CostTracker, BudgetConfig, CostAlert } from './CostTracker';
 /**
  * Analytics dashboard configuration
  */
+}
 export interface AnalyticsDashboardConfig {
   refreshInterval: number;
   historyWindow: number;
@@ -16,10 +17,12 @@ export interface AnalyticsDashboardConfig {
   heatMapEnabled: boolean;
   exportFormats: string[];
 }
+}
 
 /**
  * Analytics dashboard data structure
  */
+}
 export interface AnalyticsDashboardData extends DashboardData {
   analytics: {
     summary: AnalyticsSummary;
@@ -52,18 +55,22 @@ export interface AnalyticsDashboardData extends DashboardData {
 /**
  * Heat map data point
  */
+}
 export interface HeatMapPoint {
   x: number;
   y: number;
   intensity: number;
   interactions: number;
 }
+}
 
 /**
  * Usage pattern data
  */
+}
 export interface UsagePattern {
   type: 'hourly' | 'daily' | 'weekly';
+}
   data: Array<{ period: string; value: number }>;
   trend: 'increasing' | 'decreasing' | 'stable';
   changePercent: number;
@@ -297,7 +304,7 @@ export class AnalyticsDashboard extends EventEmitter {
         hourly: this.analyticsDAO.getTimeSeriesData('cost', 'hour', { 
           startTime: endTime - (24 * 60 * 60 * 1000), 
           endTime 
-        })
+  }
       }
     };
   }
@@ -417,19 +424,19 @@ export class AnalyticsDashboard extends EventEmitter {
           successful: Math.round(summary.totalGraphExecutions * summary.successRate / 100),
           failed: Math.round(summary.totalGraphExecutions * (100 - summary.successRate) / 100),
           averageTime: summary.averageExecutionTime
-        },
+  }
         usage: {
           totalUsers: summary.uniqueUsers,
           activeSessions: summary.uniqueSessions,
           popularNodes: summary.topNodeTypes.slice(0, 5),
           topGraphs: [] // Would need to track graph IDs
-        },
+  }
         costs: {
           totalSpent: costAnalysis?.summary?.totalCost || 0,
           dailyAverage: (costAnalysis?.summary?.totalCost || 0) / 30,
           topProviders: costAnalysis?.summary?.providerUsage || [],
           budgetAlerts: costAnalysis?.alerts || []
-        },
+  }
         patterns: {
           hourlyUsage: patterns.data.map(d => ({
             hour: new Date(d.period).getHours(),

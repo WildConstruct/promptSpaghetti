@@ -4,21 +4,18 @@ import React from 'react';
 import { Clock, User, X } from 'lucide-react';
 import { LockQueue } from '../types/locking';
 interface LockQueueVisualizationProps {
-  queue: LockQueue[];
+  queue: LockQueue;,
   onRemoveFromQueue: (queueId: string) => void;
-}
-
-export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
+  export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({,)
   queue,
   onRemoveFromQueue
 }) => {
   const groupedQueue = queue.reduce((acc, item) => {
     if (!acc[item.resource_id]) {
       acc[item.resource_id] = [];
-    }
     acc[item.resource_id].push(item);
     return acc;
-  }, {} as Record<string, LockQueue[]>);
+  }, {} as Record<string, LockQueue>);
   const formatWaitTime = (minutes: number) => {
     if (minutes < 60) return `${minutes}m`;}
     const hours = Math.floor(minutes / 60);
@@ -26,25 +23,23 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
     return `${hours}h ${remainingMinutes}m`;}
   };
   const getPriorityColor = (priority: number) => {
-    switch (priority) {
-    case 1: return 'bg-red-100 text-red-800 border-red-200';
-    case 2: return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 3: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 4: return 'bg-blue-100 text-blue-800 border-blue-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+  switch (priority) {
+  case 1: return 'bg-red-100 text-red-800 border-red-200';
+  case 2: return 'bg-orange-100 text-orange-800 border-orange-200';
+  case 3: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  case 4: return 'bg-blue-100 text-blue-800 border-blue-200';
+  default: return 'bg-gray-100 text-gray-800 border-gray-200';
+};
   const getPriorityLabel = (priority: number) => {
-    switch (priority) {
-    case 1: return 'Critical';
-    case 2: return 'High';
-    case 3: return 'Medium';
-    case 4: return 'Low';
-    default: return 'Normal';
-    }
-  };
+  switch (priority) {
+  case 1: return 'Critical';
+  case 2: return 'High';
+  case 3: return 'Medium';
+  case 4: return 'Low';
+  default: return 'Normal';
+};
   if (queue.length === 0) {
-    return ();
+    return;
       <div className="text-center py-8">
         <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">No Queue Items</h3>
@@ -53,8 +48,7 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
         </p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-6">
       {Object.entries(groupedQueue).map(([resourceId, items]) => ()
         <div key={resourceId} className="bg-white border border-gray-200 rounded-lg p-4">
@@ -107,7 +101,6 @@ export const LockQueueVisualization: React.FC<LockQueueVisualizationProps> = ({)
                           {item.estimated_wait_time 
                             ? formatWaitTime(item.estimated_wait_time)
                             : 'Unknown'
-                          }
                         </span>
                       </div>
                       <div className="text-xs text-gray-400">

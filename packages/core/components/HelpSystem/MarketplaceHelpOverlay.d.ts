@@ -16,6 +16,7 @@ import React from 'react';
 import { HelpContent, HelpContentType } from '../ContextualHelp/ContextualHelpSystem';
 import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 export type MarketplaceHelpContentType = 'marketplace-discovery' | 'template-browsing' | 'purchase-flow' | 'template-preview' | 'rating-system' | 'creator-onboarding' | 'community-features' | 'profile-management' | 'monetization' | 'marketplace-navigation';
+
 export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
     type: HelpContentType | MarketplaceHelpContentType;
     marketplaceContext: {,
@@ -25,7 +26,7 @@ export interface MarketplaceHelpContent extends Omit<HelpContent, 'type'> {
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
         features?: string[];
     };
-}
+
 export interface MarketplaceHelpOverlayProps {
     currentPage?: 'marketplace' | 'template-details' | 'creator-dashboard' | 'community' | 'profile';
     userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
@@ -53,7 +54,7 @@ export interface MarketplaceHelpOverlayProps {
         comment: string;
         context: string;
     }) => void;
-}
+
 export declare const MarketplaceHelpOverlay: React.FC<MarketplaceHelpOverlayProps>;
 export default MarketplaceHelpOverlay;
 //# sourceMappingURL=MarketplaceHelpOverlay.d.ts.map

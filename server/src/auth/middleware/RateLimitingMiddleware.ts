@@ -6,6 +6,7 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
+}
 export interface RateLimitRule {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface RateLimitRule {
     routes?: string[];
     methods?: string[];
     userAgents?: string[];
+}
   };
   
   // Limits
@@ -63,6 +65,7 @@ export interface RateLimitRule {
   createdBy: string;
 }
 
+}
 export interface RateLimitAttempt {
   id: string;
   identifier: string; // IP or user ID
@@ -77,7 +80,9 @@ export interface RateLimitAttempt {
   blocked: boolean;
   banExpires?: Date;
 }
+}
 
+}
 export interface RateLimitStatus {
   identifier: string;
   currentWindow: {
@@ -86,6 +91,7 @@ export interface RateLimitStatus {
     limit: number;
     remaining: number;
     resetTime: Date;
+}
   };
   totalRequests: number;
   blockedRequests: number;
@@ -95,6 +101,7 @@ export interface RateLimitStatus {
   appliedRules: string[];
 }
 
+}
 export interface AdaptiveConfig {
   enabled: boolean;
   baselineRequests: number;
@@ -103,6 +110,7 @@ export interface AdaptiveConfig {
   maxLimit: number;
   learningPeriod: number; // hours
   adjustmentInterval: number; // minutes
+}
 }
 
 export class RateLimitingMiddleware {
@@ -254,6 +262,7 @@ export class RateLimitingMiddleware {
    * Add a new rate limiting rule
    */
   async addRule(rule: Omit<RateLimitRule, 'id' | 'createdAt' | 'updatedAt'>): Promise<RateLimitRule> {
+
     const newRule: RateLimitRule = {
       ...rule,
       id: this.generateRuleId(),
@@ -277,6 +286,7 @@ export class RateLimitingMiddleware {
    * Get rate limit status for an identifier
    */
   async getStatus(identifier: string): Promise<RateLimitStatus | null> {
+
     return this.statuses.get(identifier) || null;
   }
 
@@ -361,16 +371,16 @@ export class RateLimitingMiddleware {
       priority: 100,
       targets: {
         routes: ['/api/*']
-      },
+  }
       limits: {
         requests: 100,
         windowMs: 15 * 60 * 1000, // 15 minutes
         windowType: 'sliding'
-      },
+  }
       actions: {
         blockRequest: true,
         logAttempt: true
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -385,12 +395,12 @@ export class RateLimitingMiddleware {
       priority: 200,
       targets: {
         routes: ['/api/auth/login', '/api/auth/register', '/api/auth/reset-password']
-      },
+  }
       limits: {
         requests: 5,
         windowMs: 15 * 60 * 1000, // 15 minutes
         windowType: 'fixed'
-      },
+  }
       actions: {
         blockRequest: true,
         delayRequest: 1000, // 1 second delay
@@ -404,7 +414,7 @@ export class RateLimitingMiddleware {
             'X-Security-Alert': 'true'
           }
         }
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -419,20 +429,20 @@ export class RateLimitingMiddleware {
       priority: 300,
       targets: {
         routes: ['/api/admin/*', '/api/export/*', '/api/billing/*']
-      },
+  }
       limits: {
         requests: 10,
         windowMs: 60 * 60 * 1000, // 1 hour
         windowType: 'token_bucket',
         burst: 3,
         refillRate: 0.1 // 1 token every 10 seconds
-      },
+  }
       actions: {
         blockRequest: true,
         requireMFA: true,
         logAttempt: true,
         notifyAdmin: true
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -457,6 +467,7 @@ export class RateLimitingMiddleware {
   }
 
   private async getApplicableRules(req: Request, identifier: string): Promise<RateLimitRule[]> {
+
     const applicableRules: RateLimitRule[] = [];
 
     for (const rule of this.rules.values()) {
@@ -471,6 +482,7 @@ export class RateLimitingMiddleware {
   }
 
   private async ruleApplies(rule: RateLimitRule, req: Request, identifier: string): Promise<boolean> {
+
     const { targets, conditions } = rule;
 
     // Check route targeting
@@ -544,6 +556,7 @@ export class RateLimitingMiddleware {
     identifier: string, 
     req: Request
   ): Promise<{ allowed: boolean; status: RateLimitStatus }> {
+
     const now = new Date();
     let status = this.statuses.get(identifier);
 
@@ -688,7 +701,7 @@ export class RateLimitingMiddleware {
         limit: rule.limits.requests,
         remaining: rule.limits.requests,
         resetTime: new Date(now.getTime() + rule.limits.windowMs)
-      },
+  }
       totalRequests: 0,
       blockedRequests: 0,
       lastRequest: now,
@@ -710,6 +723,7 @@ export class RateLimitingMiddleware {
   }
 
   private async recordAttempt(attempt: RateLimitAttempt): Promise<void> {
+
     let attempts = this.attempts.get(attempt.identifier) || [];
     attempts.push(attempt);
     
@@ -739,6 +753,7 @@ export class RateLimitingMiddleware {
   }
 
   private async delay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -803,6 +818,7 @@ export class RateLimitingMiddleware {
   }
 
   private async validateRule(rule: RateLimitRule): Promise<void> {
+
     if (rule.limits.requests <= 0) {
       throw new Error('Request limit must be positive');
     }
@@ -830,6 +846,7 @@ export class RateLimitingMiddleware {
   }
 
   private async logRateLimitEvent(action: string, target: string, performedBy: string, metadata: any): Promise<void> {
+
     console.log(`Rate Limit Event: ${action} for ${target} by ${performedBy}`, metadata);
   }
 }

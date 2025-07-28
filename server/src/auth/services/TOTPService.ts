@@ -8,6 +8,7 @@ import { authenticator } from 'otplib';
 import QRCode from 'qrcode';
 import base32 from 'base32';
 
+}
 export interface TOTPConfiguration {
   id: string;
   userId: string;
@@ -24,7 +25,9 @@ export interface TOTPConfiguration {
   enabled: boolean;
   backupCodes: string[];
 }
+}
 
+}
 export interface TOTPValidationResult {
   valid: boolean;
   timeRemaining: number; // Seconds until code expires
@@ -32,7 +35,9 @@ export interface TOTPValidationResult {
   drift: number; // Time drift in periods
   message: string;
 }
+}
 
+}
 export interface TOTPEnrollmentData {
   configurationId: string;
   secret: string;
@@ -44,13 +49,16 @@ export interface TOTPEnrollmentData {
   accountName: string;
   expiresAt: Date;
 }
+}
 
+}
 export interface TOTPGenerationOptions {
   algorithm?: 'SHA1' | 'SHA256' | 'SHA512';
   digits?: number;
   period?: number;
   issuer?: string;
   window?: number; // Clock skew tolerance in periods
+}
 }
 
 export class TOTPService {
@@ -86,6 +94,7 @@ export class TOTPService {
     accountName: string,
     options: Partial<TOTPGenerationOptions> = {}
   ): Promise<TOTPEnrollmentData> {
+
     const config = { ...this.defaultOptions, ...options };
     
     // Generate cryptographically secure secret (160 bits / 32 bytes for SHA1)
@@ -155,6 +164,7 @@ export class TOTPService {
     code: string,
     sourceIP: string = '127.0.0.1'
   ): Promise<{ success: boolean; message: string; configuration?: TOTPConfiguration }> {
+
     // Get temporary configuration
     const tempConfig = await this.getTempConfiguration(configurationId);
     if (!tempConfig) {
@@ -214,6 +224,7 @@ export class TOTPService {
     code: string,
     options: Partial<TOTPGenerationOptions> = {}
   ): Promise<TOTPValidationResult> {
+
     const config = { ...this.defaultOptions, ...options };
     
     // Validate code format
@@ -293,6 +304,7 @@ export class TOTPService {
     code: string,
     sourceIP: string = '127.0.0.1'
   ): Promise<{ success: boolean; message: string; remainingAttempts?: number }> {
+
     // Get user's TOTP configurations
     const configurations = await this.getUserConfigurations(userId);
     const activeConfigs = configurations.filter(c => c.enabled);
@@ -361,6 +373,7 @@ export class TOTPService {
    * Generate QR code for authenticator app
    */
   private async generateQRCode(uri: string): Promise<string> {
+
     try {
       return await QRCode.toDataURL(uri, {
         type: 'image/png',
@@ -368,7 +381,7 @@ export class TOTPService {
         color: {
           dark: '#000000',
           light: '#FFFFFF'
-        },
+  }
         errorCorrectionLevel: 'H',
         width: 256
       });
@@ -425,6 +438,7 @@ export class TOTPService {
    * Generate backup codes
    */
   private async generateBackupCodes(): Promise<string[]> {
+
     if (this.recoveryCodeService) {
       // Use the recovery code service if available
       return Array.from({ length: 10 }, () => this.generateBackupCode());
@@ -451,6 +465,7 @@ export class TOTPService {
   // Database interaction methods
   
   private async storeTempConfiguration(config: TOTPConfiguration): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO temp_totp_configurations (
@@ -474,6 +489,7 @@ export class TOTPService {
   }
 
   private async getTempConfiguration(configId: string): Promise<TOTPConfiguration | null> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM temp_totp_configurations 
@@ -506,6 +522,7 @@ export class TOTPService {
   }
 
   private async removeTempConfiguration(configId: string): Promise<void> {
+
     try {
       await this.db.query(`
         DELETE FROM temp_totp_configurations WHERE id = $1
@@ -516,6 +533,7 @@ export class TOTPService {
   }
 
   private async storeConfiguration(config: TOTPConfiguration): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO user_totp_secrets (
@@ -541,6 +559,7 @@ export class TOTPService {
   }
 
   private async updateConfiguration(config: TOTPConfiguration): Promise<void> {
+
     try {
       await this.db.query(`
         UPDATE user_totp_secrets SET
@@ -553,6 +572,7 @@ export class TOTPService {
   }
 
   private async getUserConfigurations(userId: string): Promise<TOTPConfiguration[]> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM user_totp_secrets WHERE user_id = $1
@@ -581,6 +601,7 @@ export class TOTPService {
   }
 
   private async wasCodeRecentlyUsed(configId: string, code: string): Promise<boolean> {
+
     try {
       // Check if this exact code was used recently
       const codeHash = crypto.createHash('sha256').update(code).digest('hex');
@@ -597,6 +618,7 @@ export class TOTPService {
   }
 
   private async storeUsedCode(configId: string, code: string, usedAt: Date): Promise<void> {
+
     try {
       const codeHash = crypto.createHash('sha256').update(code).digest('hex');
       await this.db.query(`
@@ -619,6 +641,7 @@ export class TOTPService {
     sourceIP?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
+
     try {
       // Log to TOTP events table
       await this.db.query(`
@@ -637,7 +660,7 @@ export class TOTPService {
         details: {
           configurationId: event.configurationId,
           ...event.metadata
-        },
+  }
         ipAddress: event.sourceIP,
         severity: event.action.includes('failed') ? 'warning' : 'info'
       });
@@ -652,6 +675,7 @@ export class TOTPService {
    * Get current TOTP code for testing/debugging (admin only)
    */
   async getCurrentCode(secret: string, options: Partial<TOTPGenerationOptions> = {}): Promise<string> {
+
     const config = { ...this.defaultOptions, ...options };
     
     const originalOptions = { ...authenticator.options };
@@ -681,6 +705,7 @@ export class TOTPService {
    * Disable TOTP configuration
    */
   async disableConfiguration(userId: string, reason: string): Promise<void> {
+
     try {
       await this.db.query(`
         UPDATE user_totp_secrets SET is_enabled = false WHERE user_id = $1
@@ -706,6 +731,7 @@ export class TOTPService {
    * Regenerate backup codes for a user
    */
   async regenerateBackupCodes(userId: string): Promise<string[]> {
+
     try {
       const backupCodes = await this.generateBackupCodes();
       
@@ -736,6 +762,7 @@ export class TOTPService {
     code: string,
     sourceIP: string = '127.0.0.1'
   ): Promise<{ success: boolean; message: string; remainingCodes?: number }> {
+
     try {
       const result = await this.db.query(`
         SELECT backup_codes, used_backup_codes FROM user_totp_secrets 
@@ -794,6 +821,7 @@ export class TOTPService {
     ipAddress: string,
     attemptType: 'enrollment' | 'authentication'
   ): Promise<{ allowed: boolean; remainingAttempts?: number; resetTime?: Date }> {
+
     try {
       const maxAttempts = attemptType === 'enrollment' ? 5 : 10;
       const windowMinutes = attemptType === 'enrollment' ? 10 : 5;
@@ -873,6 +901,7 @@ export class TOTPService {
     failedAttemptsToday: number;
     averageBackupCodesRemaining: number;
   }> {
+
     try {
       const stats = await this.db.query(`
         SELECT 

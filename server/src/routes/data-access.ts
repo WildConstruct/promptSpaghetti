@@ -153,9 +153,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           resourceId: { type: 'string' }
-        },
+  }
         required: ['resourceId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -164,9 +164,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
             type: 'string', 
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
           }
-        },
+  }
         required: ['resourceType', 'operation']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -187,7 +187,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                   description: { type: 'string' }
                 }
               }
-            },
+  }
             auditId: { type: 'string' }
           }
         }
@@ -238,7 +238,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           operation: { 
             type: 'string',
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
-          },
+  }
           reason: { type: 'string', minLength: 10 },
           expiresAt: { type: 'string', format: 'date-time' },
           context: {
@@ -251,9 +251,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
               requestedBy: { type: 'string' }
             }
           }
-        },
+  }
         required: ['resourceId', 'resourceType', 'operation', 'reason']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -314,9 +314,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-        },
+  }
         required: ['userId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -325,12 +325,12 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           operation: { 
             type: 'string',
             enum: ['read', 'write', 'delete', 'export', 'share', 'modify', 'create', 'list', 'search']
-          },
+  }
           allowed: { type: 'boolean' },
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -352,7 +352,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                   riskScore: { type: 'number' }
                 }
               }
-            },
+  }
             pagination: {
               type: 'object',
               properties: {
@@ -449,9 +449,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         properties: {
           grantId: { type: 'string' },
           reason: { type: 'string', minLength: 5 }
-        },
+  }
         required: ['grantId', 'reason']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -512,9 +512,9 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-        },
+  }
         required: ['userId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -589,7 +589,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
           period: { type: 'string', enum: ['day', 'week', 'month'], default: 'week' },
           classification: { type: 'string', enum: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -607,7 +607,7 @@ export async function dataAccessRoutes(fastify: FastifyInstance) {
                   count: { type: 'integer' }
                 }
               }
-            },
+  }
             classificationBreakdown: {
               type: 'object',
               properties: {

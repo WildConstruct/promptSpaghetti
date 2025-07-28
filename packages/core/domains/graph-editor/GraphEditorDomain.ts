@@ -19,13 +19,13 @@ import {
 } from './types/GraphTypes';
 
 // Domain service interfaces
+
 export interface IGraphValidationService {
-  validateGraph(graph: Graph): Promise<ValidationError[]>;
-  validateNode(node: Node): ValidationError[];
-  validateConnection(sourceId: string, targetId: string, graph: Graph): ValidationError[];
+  validateGraph(graph: Graph): Promise<ValidationError>;
+  validateNode(node: Node): ValidationError;
+  validateConnection(sourceId: string, targetId: string, graph: Graph): ValidationError;
   isValidGraph(graph: Graph): boolean;
 }
-
 export interface IGraphOperationsService {
   addNode(graph: Graph, nodeType: string, position: { x: number; y: number }): Graph;
   removeNode(graph: Graph, nodeId: string): Graph;
@@ -37,15 +37,13 @@ export interface IGraphOperationsService {
   importGraph(graphData: any): Graph;
   exportGraph(graph: Graph): any;
 }
-
 export interface IGraphExecutionService {
-  executeGraph(graph: Graph, seeds: number[]): Promise<Record<string, any>>;
+  executeGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
   executeNode(node: Node, context: any): Promise<any>;
-  previewGraph(graph: Graph, seeds: number[]): Promise<Record<string, any>>;
+  previewGraph(graph: Graph, seeds: number): Promise<Record<string, any>>;
   cancelExecution(): void;
   getExecutionStatus(): 'idle' | 'running' | 'completed' | 'error';
 }
-
 export interface IGraphStateService {
   getState(): GraphEditorState;
   setState(state: Partial<GraphEditorState>): void;
@@ -56,90 +54,88 @@ export interface IGraphStateService {
   canRedo(): boolean;
   saveState(): void;
   loadState(): void;
+  // Main domain interface
 }
-
-// Main domain interface
 export interface IGraphEditorDomain {
   // React Components
   components: {,
-    GraphEditor: React.ComponentType<GraphEditorProps>;
-    NodePalette: React.ComponentType<NodePaletteProps>;
-    Inspector: React.ComponentType<InspectorProps>;
-    Canvas: React.ComponentType<CanvasProps>;
-  };
+  GraphEditor: React.ComponentType<GraphEditorProps>;,
+  NodePalette: React.ComponentType<NodePaletteProps>;
+  Inspector: React.ComponentType<InspectorProps>;,
+  Canvas: React.ComponentType<CanvasProps>;
+};
   // React Hooks
   hooks: {,
-    useGraphState: () => GraphEditorState;
-    useNodeSelection: () => {,
-      selectedNodeIds: string[];
-      selectNodes: (nodeIds: string[], isMultiSelect?: boolean) => void;
-      clearSelection: () => void;
-      isSelected: (nodeId: string) => boolean;
-    };
+  useGraphState: () => GraphEditorState;
+  useNodeSelection: () => {,
+  selectedNodeIds: string;,
+  selectNodes: (nodeIds: string, isMultiSelect?: boolean) => void;
+  clearSelection: () => void;,
+  isSelected: (nodeId: string) => boolean;
+};
     useGraphValidation: () => {,
-      errors: ValidationError[];
-      validateGraph: (graph: Graph) => Promise<ValidationError[]>;
-      isValid: boolean;
-    };
+  errors: ValidationError;
+  validateGraph: (graph: Graph) => Promise<ValidationError>;,
+  isValid: boolean;
+};
     usePreviewSeeds: () => {,
-      seeds: number[];
-      results: Record<string, any>;
-      isExecuting: boolean;
-      executePreview: (graph: Graph) => Promise<void>;
-      addSeed: () => void;
-      removeSeed: (index: number) => void;
-    };
+  seeds: number;
+  results: Record<string, any>;
+  isExecuting: boolean;,
+  executePreview: (graph: Graph) => Promise<void>;,
+  addSeed: () => void;
+  removeSeed: (index: number) => void;
+};
     useGraphOperations: () => {,
-      addNode: (nodeType: string, position: { x: number; y: number }) => void;
-      removeNode: (nodeId: string) => void;
-      updateNode: (nodeId: string, updates: Partial<Node>) => void;
-      addEdge: (sourceId: string, targetId: string) => void;
-      removeEdge: (edgeId: string) => void;
-      moveNode: (nodeId: string, position: { x: number; y: number }) => void;
+  addNode: (nodeType: string, position: { x: number; y: number }) => void;
+      removeNode: (nodeId: string) => void;,
+  updateNode: (nodeId: string, updates: Partial<Node>) => void;,
+  addEdge: (sourceId: string, targetId: string) => void;,
+  removeEdge: (edgeId: string) => void;,
+  moveNode: (nodeId: string, position: { x: number; y: number }) => void;
     };
     useAutosave: () => {,
-      isEnabled: boolean;
-      isDirty: boolean;
-      lastSaved: Date | null;
-      save: () => Promise<void>;
-      toggleAutosave: () => void;
-    };
+  isEnabled: boolean;
+  isDirty: boolean;,
+  lastSaved: Date | null;
+  save: () => Promise<void>;,
+  toggleAutosave: () => void;
+};
   };
   // Domain Services
   services: {,
-    validation: IGraphValidationService;
-    operations: IGraphOperationsService;
-    execution: IGraphExecutionService;
-    state: IGraphStateService;
-  };
+  validation: IGraphValidationService;
+  operations: IGraphOperationsService;,
+  execution: IGraphExecutionService;
+  state: IGraphStateService;
+};
   // Event System
   events: GraphDomainEvents & {,
-    subscribe: (event: keyof GraphDomainEvents, callback: Function) => () => void;
-    emit: (event: keyof GraphDomainEvents, ...args: any[]) => void;
-  };
+  subscribe: (event: keyof GraphDomainEvents, callback: Function) => () => void;,
+  emit: (event: keyof GraphDomainEvents, ...args: any) => void;
+};
   // Configuration
   config: {,
-    getConfig: () => GraphEditorConfig;
-    updateConfig: (config: Partial<GraphEditorConfig>) => void;
-    resetConfig: () => void;
-  };
+  getConfig: () => GraphEditorConfig;
+  updateConfig: (config: Partial<GraphEditorConfig>) => void;,
+  resetConfig: () => void;
+};
   // Utilities
   utils: {,
-    createEmptyGraph: () => Graph;
-    cloneGraph: (graph: Graph) => Graph;
-    getNodeById: (graph: Graph, nodeId: string) => Node | undefined;
-    getConnectedNodes: (graph: Graph, nodeId: string) => Node[];
-    findNodeByType: (graph: Graph, nodeType: string) => Node[];
-    calculateGraphBounds: (graph: Graph) => { width: number; height: number };
+  createEmptyGraph: () => Graph;
+    cloneGraph: (graph: Graph) => Graph;,
+  getNodeById: (graph: Graph, nodeId: string) => Node | undefined;,
+  getConnectedNodes: (graph: Graph, nodeId: string) => Node;,
+  findNodeByType: (graph: Graph, nodeType: string) => Node;,
+  calculateGraphBounds: (graph: Graph) => { width: number; height: number };
   };
-}
 
 // Domain factory function
+}
 export interface GraphEditorDomainFactory {
   create(config?: Partial<GraphEditorConfig>): IGraphEditorDomain;
+  // Event constants for cross-domain communication
 }
-
-// Event constants for cross-domain communication
 export const GRAPH_DOMAIN_EVENTS = {
   GRAPH_MODIFIED: 'graph:modified',
   NODE_SELECTED: 'graph:node:selected',

@@ -14,9 +14,9 @@ export interface RecommendationEffectivenessTrackingProps {
     onExport?: (data: EffectivenessTrackingExportData) => void;
 }
 export interface EffectivenessTrackingConfig {
-    algorithms: TrackedAlgorithm[];
-    metrics: EffectivenessMetric[];
-    benchmarks: PerformanceBenchmark[];
+    algorithms: TrackedAlgorithm;
+    metrics: EffectivenessMetric;
+    benchmarks: PerformanceBenchmark;
     reporting: ReportingConfig;
     alerting: AlertingConfig;
 }
@@ -25,10 +25,10 @@ export interface RecommendationSystemMetrics {
     algorithmName: string;
     version: string;
     timestamp: number;
-    metrics: MetricValue[];
-    contextualMetrics: ContextualMetric[];
+    metrics: MetricValue;
+    contextualMetrics: ContextualMetric;
     businessImpact: BusinessImpactMetrics;
-    userSegmentPerformance: SegmentPerformance[];
+    userSegmentPerformance: SegmentPerformance;
 }
 export interface MetricValue {
     metricId: string;
@@ -41,7 +41,7 @@ export interface MetricValue {
 }
 export interface ContextualMetric {
     context: RecommendationContext;
-    metrics: MetricValue[];
+    metrics: MetricValue;
     sampleSize: number;
     significance: number;
 }
@@ -81,13 +81,13 @@ export interface PerformanceBenchmark {
 }
 export interface ReportingConfig {
     frequency: 'hourly' | 'daily' | 'weekly';
-    recipients: string[];
+    recipients: string;
     includeInsights: boolean;
 }
 export interface AlertingConfig {
     enabled: boolean;
-    thresholds: AlertThreshold[];
-    channels: string[];
+    thresholds: AlertThreshold;
+    channels: string;
 }
 export interface AlertThreshold {
     metricId: string;
@@ -102,7 +102,7 @@ export interface TrendData {
 }
 export interface SegmentPerformance {
     segment: string;
-    metrics: MetricValue[];
+    metrics: MetricValue;
     sampleSize: number;
 }
 export interface EffectivenessAlert {
@@ -111,7 +111,7 @@ export interface EffectivenessAlert {
     type: string;
     severity: 'low' | 'medium' | 'high';
     message: string;
-    metrics: string[];
+    metrics: string;
     threshold: number;
     actualValue: number;
     timestamp: number;
@@ -121,13 +121,13 @@ export interface PerformanceInsight {
     insightId: string;
     type: string;
     message: string;
-    algorithms: string[];
+    algorithms: string;
     impact: 'low' | 'medium' | 'high';
     confidence: number;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface EffectivenessTrackingExportData {
-    algorithmMetrics: RecommendationSystemMetrics[];
+    algorithmMetrics: RecommendationSystemMetrics;
     timeRange: {
         start: number;
         end: number;

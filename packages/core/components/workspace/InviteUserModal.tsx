@@ -4,11 +4,10 @@
  */
 import React, { useState } from 'react';
 interface InviteUserModalProps {
-  workspaceId: string;
+  workspaceId: string;,
   workspaceName: string;
   onSubmit: (data: { userId: string; role: string }) => void;
   onCancel: () => void;
-}
 const ROLES = [;
   { value: 'admin', label: 'Admin', description: 'Full workspace access and management' },
   { value: 'editor', label: 'Editor', description: 'Can create and edit projects and resources' },
@@ -23,9 +22,9 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({)
   onCancel
 }) => {
   const [formData, setFormData] = useState({)
-    userId: '',
-    role: 'editor',
-  });
+  userId: '',
+  role: 'editor',
+});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const validateForm = () => {
@@ -34,39 +33,34 @@ export const InviteUserModal: React.FC<InviteUserModalProps> = ({)
       newErrors.userId = 'User ID or email is required';
     } else if (formData.userId.length < 3) {
       newErrors.userId = 'User ID must be at least 3 characters';
-    }
     if (!formData.role) {
       newErrors.role = 'Role selection is required';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await onSubmit({)
-        userId: formData.userId.trim(),
-        role: formData.role,
-      });
+  e.preventDefault();
+  if (!validateForm()) {
+  return;
+  setIsSubmitting(true);
+  try {
+  await onSubmit({)
+  userId: formData.userId.trim(),
+  role: formData.role,
+});
     } catch (error) {
-      console.error('Failed to invite user:', error);
-    } finally {
+  console.error('Failed to invite user:', error);
+} finally {
       setIsSubmitting(false);
-    }
   };
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
-    }
   };
   const selectedRole = ROLES.find(role => role.value === formData.role);
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">

@@ -2,6 +2,7 @@ export type ComparisonType = 'structural' | 'semantic' | 'visual';
 export type MatchType = 'exact' | 'similar' | 'added' | 'removed' | 'modified';
 export type ViewMode = 'side-by-side' | 'overlay' | 'unified';
 export type HighlightMode = 'changes' | 'additions' | 'deletions' | 'all';
+
 export interface GraphData {
     id: string;
     nodes: Array<{,
@@ -22,7 +23,7 @@ export interface GraphData {
         [key: string]: unknown;
     }>;
     metadata?: Record<string, unknown>;
-}
+
 export interface ChangeSummary {
     total_changes: number;
     nodes_added: number;
@@ -32,7 +33,7 @@ export interface ChangeSummary {
     edges_removed: number;
     edges_modified: number;
     properties_changed: number;
-}
+
 export interface NodeChange {
     id: string;
     type: string;
@@ -47,7 +48,7 @@ export interface NodeChange {
     }>;
     position_changed: boolean;
     visual_changes: Record<string, unknown>;
-}
+
 export interface EdgeChange {
     id: string;
     source: string;
@@ -62,7 +63,7 @@ export interface EdgeChange {
         change_type: 'added' | 'removed' | 'modified';
     }>;
     connection_changed: boolean;
-}
+
 export interface NodeMatchResult {
     id: string;
     comparison_id: string;
@@ -75,7 +76,7 @@ export interface NodeMatchResult {
     position_changed: boolean;
     visual_changes: Record<string, unknown>;
     created_at: Date;
-}
+
 export interface EdgeMatchResult {
     id: string;
     comparison_id: string;
@@ -89,7 +90,7 @@ export interface EdgeMatchResult {
     confidence_score: number;
     property_changes: Record<string, unknown>;
     created_at: Date;
-}
+
 export interface GraphComparison {
     id: string;
     source_version_id: string;
@@ -109,7 +110,7 @@ export interface GraphComparison {
     comparison_duration_ms?: number;
     created_by?: string;
     created_at: Date;
-}
+
 export interface DetailedComparison extends GraphComparison {
     source_data: GraphData;
     target_data: GraphData;
@@ -120,7 +121,7 @@ export interface DetailedComparison extends GraphComparison {
         performance_metrics: Record<string, number>;
         confidence_distribution: Record<string, number>;
     };
-}
+
 export interface VisualDiffSession {
     id: string;
     user_id: string;
@@ -136,20 +137,20 @@ export interface VisualDiffSession {
     last_accessed: Date;
     expires_at: Date;
     created_at: Date;
-}
+
 export interface CompareVersionsRequest {
     source_version_id: string;
     target_version_id: string;
     comparison_type?: ComparisonType;
     include_details?: boolean;
-}
+
 export interface CreateDiffSessionRequest {
     graph_id: string;
     source_version_id: string;
     target_version_id: string;
     view_mode?: ViewMode;
     highlight_mode?: HighlightMode;
-}
+
 export interface UpdateDiffSessionRequest {
     view_mode?: ViewMode;
     highlight_mode?: HighlightMode;
@@ -158,7 +159,7 @@ export interface UpdateDiffSessionRequest {
     show_unchanged?: boolean;
     show_metadata?: boolean;
     filter_options?: Record<string, unknown>;
-}
+
 export interface ComparisonConfig {
     node_similarity_threshold: number;
     edge_similarity_threshold: number;
@@ -168,7 +169,7 @@ export interface ComparisonConfig {
     max_comparison_time_ms: number;
     enable_caching: boolean;
     cache_ttl_hours: number;
-}
+
 export interface ComparisonStatistics {
     total_comparisons: number;
     avg_similarity: number;
@@ -179,18 +180,18 @@ export interface ComparisonStatistics {
         medium: number;
         low: number;
     };
-}
+
 export interface PaginationOptions {
     page?: number;
     limit?: number;
-}
+
 export interface PaginatedResult<T> {
     data: T[];
     total: number;
     page: number;
     limit: number;
     total_pages: number;
-}
+
 export interface ComparisonFilter {
     graph_id?: string;
     source_version_id?: string;
@@ -201,21 +202,21 @@ export interface ComparisonFilter {
     created_after?: Date;
     created_before?: Date;
     created_by?: string;
-}
+
 export interface ApiResponse<T> {
     success: boolean;
     data?: T;
     error?: string;
     message?: string;
     metadata?: Record<string, unknown>;
-}
+
 export interface BatchComparisonRequest {
     comparisons: Array<{,
         source_version_id: string;
         target_version_id: string;
         comparison_type?: ComparisonType;
     }>;
-}
+
 export interface BatchComparisonResult {
     successful: Array<{,
         similarity_score: number;
@@ -230,29 +231,29 @@ export interface BatchComparisonResult {
     total_requested: number;
     successful_count: number;
     failed_count: number;
-}
+
 export declare class ComparisonError extends Error {
     code: string;
     details?: Record<string, unknown> | undefined;
     constructor(message: string, code: string, details?: Record<string, unknown> | undefined);
-}
+
 export declare class DiffSessionError extends Error {
     code: string;
     sessionId?: string | undefined;
     constructor(message: string, code: string, sessionId?: string | undefined);
-}
+
 export interface ComparisonEvent {
     type: 'comparison_started' | 'comparison_completed' | 'comparison_failed';
     comparison_id: string;
     user_id: string;
     timestamp: Date;
     data?: Record<string, unknown>;
-}
+
 export interface DiffSessionEvent {
     type: 'session_created' | 'session_updated' | 'session_expired';
     session_id: string;
     user_id: string;
     timestamp: Date;
     data?: Record<string, unknown>;
-}
+
 //# sourceMappingURL=comparison.d.ts.map

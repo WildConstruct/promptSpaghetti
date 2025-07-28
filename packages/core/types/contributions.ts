@@ -67,14 +67,14 @@ export const BaseContributionSchema = z.object({)
   category: z.string().optional(),
   // Content
   content: z.record(z.unknown()).default({}),
-  assets: z.array(z.object({),
-    id: z.string(),
-    type: z.enum(['image', 'video', 'document', 'code', 'graph']),
-    url: z.string().url(),
-    filename: z.string(),
-    size: z.number().positive(),
-    mimeType: z.string(),
-  })).default([]),
+  assets: z.array(z.object({,)
+  id: z.string(),
+  type: z.enum(['image', 'video', 'document', 'code', 'graph']),
+  url: z.string().url(),
+  filename: z.string(),
+  size: z.number().positive(),
+  mimeType: z.string(),
+})).default([]),
   // Workflow Status
   status: ContributionStatusSchema,
   submittedAt: z.date(),
@@ -84,15 +84,15 @@ export const BaseContributionSchema = z.object({)
   qualityScore: z.number().min(0).max(100).default(0),
   qualityRating: ContributionQualityRatingSchema.optional(),
   moderatorNotes: z.string().optional(),
-  revisionRequests: z.array(z.object({),
-    id: z.string(),
-    moderatorId: z.string(),
-    moderatorName: z.string(),
-    reason: z.string(),
-    details: z.string(),
-    requestedAt: z.date(),
-    resolvedAt: z.date().optional(),
-  })).default([]),
+  revisionRequests: z.array(z.object({,)
+  id: z.string(),
+  moderatorId: z.string(),
+  moderatorName: z.string(),
+  reason: z.string(),
+  details: z.string(),
+  requestedAt: z.date(),
+  resolvedAt: z.date().optional(),
+})).default([]),
   // Metrics
   views: z.number().int().default(0),
   downloads: z.number().int().default(0),
@@ -101,15 +101,15 @@ export const BaseContributionSchema = z.object({)
   shares: z.number().int().default(0),
   // Metadata
   version: z.string().default('1.0.0'),
-  versionHistory: z.array(z.object({),
-    version: z.string(),
-    changes: z.string(),
-    changedAt: z.date(),
-    changedBy: z.string(),
-  })).default([]),
+  versionHistory: z.array(z.object({,)
+  version: z.string(),
+  changes: z.string(),
+  changedAt: z.date(),
+  changedBy: z.string(),
+})).default([]),
   createdAt: z.date(),
-  updatedAt: z.date(),
-});
+  updatedAt: z.date();
+  });
 
 // =============================================================================
 // Template Contribution Schema
@@ -117,32 +117,32 @@ export const BaseContributionSchema = z.object({)
 
 export const TemplateContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('template'),
-  content: z.object({),
-    graphJson: z.record(z.unknown()),
-    promptYaml: z.string().optional(),
-    claudeModel: z.string().default('claude-3-sonnet'),
-    tokenEstimate: z.number().int().default(0),
-    safetyScore: z.number().min(0).max(1).default(1.0),
-    testCases: z.array(z.object({),
-      input: z.string(),
-      expectedOutput: z.string(),
-      actualOutput: z.string().optional(),
-      passed: z.boolean().optional(),
-    })).default([]),
-    pricing: z.object({),
-      type: z.enum(['free', 'paid']),
-      priceInCents: z.number().int().min(0).optional(),
-      currency: z.string().length(3).default('USD'),
-    })
+  content: z.object({,)
+  graphJson: z.record(z.unknown()),
+  promptYaml: z.string().optional(),
+  claudeModel: z.string().default('claude-3-sonnet'),
+  tokenEstimate: z.number().int().default(0),
+  safetyScore: z.number().min(0).max(1).default(1.0),
+  testCases: z.array(z.object({,)
+  input: z.string(),
+  expectedOutput: z.string(),
+  actualOutput: z.string().optional(),
+  passed: z.boolean().optional(),
+})).default([]),
+    pricing: z.object({,)
+  type: z.enum(['free', 'paid']),
+  priceInCents: z.number().int().min(0).optional(),
+  currency: z.string().length(3).default('USD'),
+}
   }),
-  marketplace: z.object({),
-    isListed: z.boolean().default(false),
-    listedAt: z.date().optional(),
-    salesCount: z.number().int().default(0),
-    revenue: z.number().default(0),
-    avgRating: z.number().min(0).max(5).default(0),
-    reviewCount: z.number().int().default(0),
-  }).optional()
+  marketplace: z.object({,)
+  isListed: z.boolean().default(false),
+  listedAt: z.date().optional(),
+  salesCount: z.number().int().default(0),
+  revenue: z.number().default(0),
+  avgRating: z.number().min(0).max(5).default(0),
+  reviewCount: z.number().int().default(0),
+}).optional()
 });
 
 // =============================================================================
@@ -151,37 +151,37 @@ export const TemplateContributionSchema = BaseContributionSchema.extend({)
 
 export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('knowledge_article'),
-  content: z.object({),
-    articleType: z.enum(['guide', 'tutorial', 'reference', 'faq', 'troubleshooting']),
-    difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-    estimatedReadTime: z.number().int().positive(),
-    prerequisites: z.array(z.string()).default([]),
-    learningObjectives: z.array(z.string()).default([]),
-    // Content Structure
-    sections: z.array(z.object({),
-      id: z.string(),
-      title: z.string(),
-      content: z.string(),
-      order: z.number().int(),
-      type: z.enum(['text', 'code', 'image', 'video', 'interactive'])
-    })),
+  content: z.object({,)
+  articleType: z.enum(['guide', 'tutorial', 'reference', 'faq', 'troubleshooting']),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
+  estimatedReadTime: z.number().int().positive(),
+  prerequisites: z.array(z.string()).default([]),
+  learningObjectives: z.array(z.string()).default([]),
+  // Content Structure
+  sections: z.array(z.object({,)
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  order: z.number().int(),
+  type: z.enum(['text', 'code', 'image', 'video', 'interactive']),
+})),
     // Interactive Elements
-    codeExamples: z.array(z.object({),
-      id: z.string(),
-      language: z.string(),
-      code: z.string(),
-      description: z.string(),
-      runnable: z.boolean().default(false),
-    })).default([]),
+    codeExamples: z.array(z.object({,)
+  id: z.string(),
+  language: z.string(),
+  code: z.string(),
+  description: z.string(),
+  runnable: z.boolean().default(false),
+})).default([]),
     // SEO and Discovery
     keywords: z.array(z.string()).default([]),
     relatedArticles: z.array(z.string()).default([]),
-    externalLinks: z.array(z.object({),
-      title: z.string(),
-      url: z.string().url(),
-      description: z.string().optional(),
-    })).default([])
-  })
+    externalLinks: z.array(z.object({,)
+  title: z.string(),
+  url: z.string().url(),
+  description: z.string().optional(),
+})).default([])
+  }
 });
 
 // =============================================================================
@@ -190,37 +190,37 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
 
 export const TutorialContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('tutorial'),
-  content: z.object({),
-    tutorialType: z.enum(['step_by_step', 'video', 'interactive', 'workshop']),
-    difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-    estimatedDuration: z.number().int().positive(), // minutes
-    prerequisites: z.array(z.string()).default([]),
-    tools: z.array(z.string()).default([]),
-    // Tutorial Structure
-    steps: z.array(z.object({),
-      id: z.string(),
-      title: z.string(),
-      description: z.string(),
-      content: z.string(),
-      order: z.number().int(),
-      estimatedTime: z.number().int(),
-      assets: z.array(z.string()).default([]),
-      checkpoints: z.array(z.object({),
-        description: z.string(),
-        validation: z.string().optional(),
-      })).default([])
+  content: z.object({,)
+  tutorialType: z.enum(['step_by_step', 'video', 'interactive', 'workshop']),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
+  estimatedDuration: z.number().int().positive(), // minutes,
+  prerequisites: z.array(z.string()).default([]),
+  tools: z.array(z.string()).default([]),
+  // Tutorial Structure
+  steps: z.array(z.object({,)
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  content: z.string(),
+  order: z.number().int(),
+  estimatedTime: z.number().int(),
+  assets: z.array(z.string()).default([]),
+  checkpoints: z.array(z.object({,)
+  description: z.string(),
+  validation: z.string().optional(),
+})).default([])
     })),
     // Expected Outcomes
     deliverables: z.array(z.string()).default([]),
     skillsLearned: z.array(z.string()).default([]),
     // Support Materials
-    downloadableResources: z.array(z.object({),
-      name: z.string(),
-      type: z.string(),
-      url: z.string().url(),
-      description: z.string().optional(),
-    })).default([])
-  })
+    downloadableResources: z.array(z.object({,)
+  name: z.string(),
+  type: z.string(),
+  url: z.string().url(),
+  description: z.string().optional(),
+})).default([])
+  }
 });
 
 // =============================================================================
@@ -229,54 +229,54 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({)
 
 export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('case_study'),
-  content: z.object({),
-    caseStudyType: z.enum(['success_story', 'implementation', 'roi_analysis', 'comparison', 'innovation']),
-    industry: z.string(),
-    useCase: z.string(),
-    companySize: z.enum(['startup', 'small', 'medium', 'large', 'enterprise']).optional(),
-    // Story Structure
-    challenge: z.object({),
-      description: z.string(),
-      painPoints: z.array(z.string()).default([]),
-      constraints: z.array(z.string()).default([]),
-    }),
-    solution: z.object({),
-      description: z.string(),
-      approach: z.string(),
-      templatesUsed: z.array(z.string()).default([]),
-      implementation: z.string(),
-      timeline: z.string().optional(),
-    }),
-    results: z.object({),
-      outcomes: z.array(z.string()).default([]),
-      metrics: z.array(z.object({),
-        name: z.string(),
-        before: z.string(),
-        after: z.string(),
-        improvement: z.string().optional(),
-      })).default([]),
-      roi: z.object({),
-        costSavings: z.number().optional(),
-        timeReduction: z.string().optional(),
-        qualityImprovement: z.string().optional(),
-        description: z.string().optional(),
-      }).optional()
+  content: z.object({,)
+  caseStudyType: z.enum(['success_story', 'implementation', 'roi_analysis', 'comparison', 'innovation']),
+  industry: z.string(),
+  useCase: z.string(),
+  companySize: z.enum(['startup', 'small', 'medium', 'large', 'enterprise']).optional(),
+  // Story Structure
+  challenge: z.object({,)
+  description: z.string(),
+  painPoints: z.array(z.string()).default([]),
+  constraints: z.array(z.string()).default([]),
+}),
+    solution: z.object({,)
+  description: z.string(),
+  approach: z.string(),
+  templatesUsed: z.array(z.string()).default([]),
+  implementation: z.string(),
+  timeline: z.string().optional(),
+}),
+    results: z.object({,)
+  outcomes: z.array(z.string()).default([]),
+  metrics: z.array(z.object({,)
+  name: z.string(),
+  before: z.string(),
+  after: z.string(),
+  improvement: z.string().optional(),
+})).default([]),
+      roi: z.object({,)
+  costSavings: z.number().optional(),
+  timeReduction: z.string().optional(),
+  qualityImprovement: z.string().optional(),
+  description: z.string().optional(),
+}).optional()
     }),
     // Supporting Materials
-    testimonials: z.array(z.object({),
-      author: z.string(),
-      role: z.string(),
-      company: z.string().optional(),
-      quote: z.string(),
-      avatar: z.string().url().optional(),
-    })).default([]),
-    mediaGallery: z.array(z.object({),
-      type: z.enum(['before_after', 'screenshot', 'video', 'diagram']),
-      url: z.string().url(),
-      caption: z.string(),
-      order: z.number().int(),
-    })).default([])
-  })
+    testimonials: z.array(z.object({,)
+  author: z.string(),
+  role: z.string(),
+  company: z.string().optional(),
+  quote: z.string(),
+  avatar: z.string().url().optional(),
+})).default([]),
+    mediaGallery: z.array(z.object({,)
+  type: z.enum(['before_after', 'screenshot', 'video', 'diagram']),
+  url: z.string().url(),
+  caption: z.string(),
+  order: z.number().int(),
+})).default([])
+  }
 });
 
 // =============================================================================
@@ -285,44 +285,44 @@ export const CaseStudyContributionSchema = BaseContributionSchema.extend({)
 
 export const PatternLibraryContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('pattern_library'),
-  content: z.object({),
-    patternType: z.enum(['prompt_pattern', 'graph_pattern', 'workflow_pattern', 'integration_pattern']),
-    domain: z.string(),
-    complexity: z.enum(['simple', 'moderate', 'complex', 'advanced']),
-    // Pattern Definition
-    pattern: z.object({),
-      name: z.string(),
-      intent: z.string(),
-      motivation: z.string(),
-      applicability: z.string(),
-      structure: z.string(),
-      participants: z.array(z.string()).default([]),
-      collaborations: z.string().optional(),
-      consequences: z.string(),
-      implementation: z.string(),
-      sampleCode: z.string().optional(),
-      knownUses: z.array(z.string()).default([]),
-    }),
+  content: z.object({,)
+  patternType: z.enum(['prompt_pattern', 'graph_pattern', 'workflow_pattern', 'integration_pattern']),
+  domain: z.string(),
+  complexity: z.enum(['simple', 'moderate', 'complex', 'advanced']),
+  // Pattern Definition
+  pattern: z.object({,)
+  name: z.string(),
+  intent: z.string(),
+  motivation: z.string(),
+  applicability: z.string(),
+  structure: z.string(),
+  participants: z.array(z.string()).default([]),
+  collaborations: z.string().optional(),
+  consequences: z.string(),
+  implementation: z.string(),
+  sampleCode: z.string().optional(),
+  knownUses: z.array(z.string()).default([]),
+}),
     // Examples and Variations
-    examples: z.array(z.object({),
-      title: z.string(),
-      description: z.string(),
-      code: z.string(),
-      explanation: z.string(),
-    })).default([]),
-    variations: z.array(z.object({),
-      name: z.string(),
-      description: z.string(),
-      whenToUse: z.string(),
-      tradeoffs: z.string(),
-    })).default([]),
+    examples: z.array(z.object({,)
+  title: z.string(),
+  description: z.string(),
+  code: z.string(),
+  explanation: z.string(),
+})).default([]),
+    variations: z.array(z.object({,)
+  name: z.string(),
+  description: z.string(),
+  whenToUse: z.string(),
+  tradeoffs: z.string(),
+})).default([]),
     // Related Patterns
-    relatedPatterns: z.array(z.object({),
-      patternId: z.string(),
-      relationship: z.enum(['uses', 'used_by', 'similar_to', 'alternative_to']),
-      description: z.string(),
-    })).default([])
-  })
+    relatedPatterns: z.array(z.object({,)
+  patternId: z.string(),
+  relationship: z.enum(['uses', 'used_by', 'similar_to', 'alternative_to']),
+  description: z.string(),
+})).default([])
+  }
 });
 
 // =============================================================================
@@ -331,29 +331,29 @@ export const PatternLibraryContributionSchema = BaseContributionSchema.extend({)
 
 export const CommunityPostContributionSchema = BaseContributionSchema.extend({)
   type: z.literal('community_post'),
-  content: z.object({),
-    postType: z.enum(['discussion', 'question', 'announcement', 'showcase', 'feedback']),
-    forum: z.string(),
-    isSticky: z.boolean().default(false),
-    isPinned: z.boolean().default(false),
-    // Discussion Structure
-    body: z.string(),
-    replies: z.array(z.object({),
-      id: z.string(),
-      authorId: z.string(),
-      authorName: z.string(),
-      content: z.string(),
-      createdAt: z.date(),
-      updatedAt: z.date().optional(),
-      votes: z.number().int().default(0),
-      isAcceptedAnswer: z.boolean().default(false),
-    })).default([]),
+  content: z.object({,)
+  postType: z.enum(['discussion', 'question', 'announcement', 'showcase', 'feedback']),
+  forum: z.string(),
+  isSticky: z.boolean().default(false),
+  isPinned: z.boolean().default(false),
+  // Discussion Structure
+  body: z.string(),
+  replies: z.array(z.object({,)
+  id: z.string(),
+  authorId: z.string(),
+  authorName: z.string(),
+  content: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date().optional(),
+  votes: z.number().int().default(0),
+  isAcceptedAnswer: z.boolean().default(false),
+})).default([]),
     // Engagement
     votes: z.number().int().default(0),
     bookmarks: z.number().int().default(0),
     isResolved: z.boolean().default(false),
-    acceptedAnswerId: z.string().optional(),
-  })
+    acceptedAnswerId: z.string().optional();
+  }
 });
 
 // =============================================================================
@@ -384,10 +384,10 @@ export const ContributionReviewRequestSchema = z.object({)
   action: z.enum(['approve', 'request_revision', 'reject']),
   qualityRating: ContributionQualityRatingSchema.optional(),
   moderatorNotes: z.string().optional(),
-  revisionRequests: z.array(z.object({),
-    reason: z.string(),
-    details: z.string(),
-  })).optional()
+  revisionRequests: z.array(z.object({,)
+  reason: z.string(),
+  details: z.string(),
+})).optional()
 });
 
 export const ContributionFilterSchema = z.object({)
@@ -420,11 +420,11 @@ export const ContributorProfileSchema = z.object({)
   skills: z.array(z.string()).default([]),
   location: z.string().optional(),
   website: z.string().url().optional(),
-  social: z.object({),
-    twitter: z.string().optional(),
-    linkedin: z.string().optional(),
-    github: z.string().optional(),
-  }).optional(),
+  social: z.object({,)
+  twitter: z.string().optional(),
+  linkedin: z.string().optional(),
+  github: z.string().optional(),
+}).optional(),
   // Contribution Stats
   level: ContributorLevelSchema,
   totalContributions: z.number().int().default(0),
@@ -433,30 +433,30 @@ export const ContributorProfileSchema = z.object({)
   totalLikes: z.number().int().default(0),
   averageQualityScore: z.number().min(0).max(100).default(0),
   // Recognition
-  badges: z.array(z.object({),
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    iconUrl: z.string().url(),
-    earnedAt: z.date(),
-  })).default([]),
-  achievements: z.array(z.object({),
-    id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    progress: z.number().min(0).max(100),
-    completedAt: z.date().optional(),
-  })).default([]),
+  badges: z.array(z.object({,)
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  iconUrl: z.string().url(),
+  earnedAt: z.date(),
+})).default([]),
+  achievements: z.array(z.object({,)
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  progress: z.number().min(0).max(100),
+  completedAt: z.date().optional(),
+})).default([]),
   // Preferences
-  notificationPreferences: z.object({),
-    emailOnComment: z.boolean().default(true),
-    emailOnLike: z.boolean().default(false),
-    emailOnFeature: z.boolean().default(true),
-    weeklyDigest: z.boolean().default(true),
-  }).default({}),
+  notificationPreferences: z.object({,)
+  emailOnComment: z.boolean().default(true),
+  emailOnLike: z.boolean().default(false),
+  emailOnFeature: z.boolean().default(true),
+  weeklyDigest: z.boolean().default(true),
+}).default({}),
   createdAt: z.date(),
-  updatedAt: z.date(),
-});
+  updatedAt: z.date();
+  });
 
 // =============================================================================
 // Type Exports
@@ -510,7 +510,6 @@ export const validateContribution = (contribution: unknown): Contribution => {
     return CommunityPostContributionSchema.parse(contribution);
   default:
     throw new Error(`Unknown contribution type: ${base.type}`);}
-  }
 };
 
 export const validateCreateContributionRequest = (request: unknown): CreateContributionRequest => {

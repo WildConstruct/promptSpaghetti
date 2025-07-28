@@ -126,55 +126,7 @@ export interface ProfessionalBorderRadius {
     '2xl': string;
     full: string;
 }
-export declare const professionalColors: ProfessionalColorPalette;
-export declare const professionalTypography: ProfessionalTypography;
-export declare const professionalShadows: ProfessionalShadows;
-export declare const professionalSpacing: ProfessionalSpacing;
-export declare const professionalBorderRadius: ProfessionalBorderRadius;
-export interface ProfessionalDesignSystem {
-    colors: ProfessionalColorPalette;
-    typography: ProfessionalTypography;
-    shadows: ProfessionalShadows;
-    spacing: ProfessionalSpacing;
-    borderRadius: ProfessionalBorderRadius;
-}
+export declare const professionalColors: ProfessionalColorPalette, ProfessionalColorPalette: any;
 export declare const professionalDesignSystem: ProfessionalDesignSystem;
-export declare const generateCSSCustomProperties: (colors?: ProfessionalColorPalette, shadows?: ProfessionalShadows, spacing?: ProfessionalSpacing, borderRadius?: ProfessionalBorderRadius) => {
-    '--bg-primary': string;
-    '--bg-secondary': string;
-    '--bg-tertiary': string;
-    '--bg-elevated': string;
-    '--bg-hover': string;
-    '--text-primary': string;
-    '--text-secondary': string;
-    '--text-tertiary': string;
-    '--text-accent': string;
-    '--accent-orange': string;
-    '--accent-blue': string;
-    '--accent-cyan': string;
-    '--accent-purple': string;
-    '--accent-green': string;
-    '--accent-red': string;
-    '--border': string;
-    '--border-hover': string;
-    '--border-active': string;
-    '--focus': string;
-    '--selection': string;
-    '--shadow-sm': string;
-    '--shadow-md': string;
-    '--shadow-lg': string;
-    '--shadow-xl': string;
-    '--shadow-node': string;
-    '--shadow-node-hover': string;
-    '--shadow-node-selected': string;
-    '--space-1': string;
-    '--space-2': string;
-    '--space-3': string;
-    '--space-4': string;
-    '--space-6': string;
-    '--space-8': string;
-    '--radius-sm': string;
-    '--radius-md': string;
-    '--radius-lg': string;
-};
+export declare const generateCSSCustomProperties: any;
 //# sourceMappingURL=professional-design-system.d.ts.map

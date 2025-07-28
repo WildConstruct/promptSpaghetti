@@ -20,7 +20,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -51,7 +51,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         conditions: z.record(z.any()).default({}),
         weight: z.number().int().min(1).default(1),
         is_required: z.boolean().default(false)
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -83,7 +83,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         conditions: z.record(z.any()).optional(),
         weight: z.number().int().min(1).optional(),
         is_required: z.boolean().optional()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -107,7 +107,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         id: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -192,7 +192,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
         escalation_reviewers: z.array(z.string()).default([]),
         auto_approval_enabled: z.boolean().default(false),
         auto_approval_conditions: z.record(z.any()).default({})
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -275,7 +275,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -309,7 +309,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         id: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -346,7 +346,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -385,7 +385,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -476,7 +476,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -507,7 +507,7 @@ export async function approvalRoutes(fastify: FastifyInstance) {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {

@@ -77,7 +77,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           q: { type: 'string', minLength: 1 },
           limit: { type: 'integer', minimum: 1, maximum: 20, default: 10 }
-        },
+  }
         required: ['q']
       }
     }
@@ -155,7 +155,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -187,9 +187,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -230,7 +230,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -261,9 +261,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         required: ['graph_json'],
@@ -302,7 +302,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -409,7 +409,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -432,9 +432,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -466,9 +466,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -523,7 +523,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -585,9 +585,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -657,9 +657,9 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -875,7 +875,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
         properties: {
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' }
-        },
+  }
         required: ['start_date', 'end_date']
       }
     }
@@ -949,7 +949,7 @@ export async function marketplaceRoutes(fastify: FastifyInstance, dbPool: Pool) 
           start_date: { type: 'string', format: 'date' },
           end_date: { type: 'string', format: 'date' },
           user_id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['start_date', 'end_date']
       }
     }

@@ -6,18 +6,20 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 export interface GraphState {
     nodes: Node[];
     edges: Edge[];
     timestamp: number;
     description: string;
     id: string;
-}
+
+
 export interface UndoRedoManagerProps {
     onStateChange: (state: GraphState) => void;
     maxHistorySize?: number;
     theme?: 'light' | 'dark' | 'cinema';
-}
+
 export declare class UndoRedoSystem {
     private history;
     private currentIndex;
@@ -35,7 +37,7 @@ export declare class UndoRedoSystem {
     subscribe(callback: (canUndo: boolean, canRedo: boolean, current: GraphState | null) => void): () => void;
     private notifyListeners;
     clear(): void;
-}
+
 export declare const UndoRedoManager: React.FC<UndoRedoManagerProps>;
 export default UndoRedoManager;
 //# sourceMappingURL=UndoRedoManager.d.ts.map

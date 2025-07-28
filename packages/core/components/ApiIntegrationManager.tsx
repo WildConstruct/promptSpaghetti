@@ -19,42 +19,38 @@ import {
 } from '@heroicons/react/24/outline';
 // import { useWorkflowStore } from '../stores/workflowStore';
 interface ApiKey {
-  id: string;
+  id: string;,
   name: string;
-  key: string;
-  permissions: string[];
+  key: string;,
+  permissions: string;
   created_at: Date;
   last_used?: Date;
-  usage_count: number;
+  usage_count: number;,
   rate_limit: number;
   expires_at?: Date;
   is_active: boolean;
-}
-interface Webhook {
-  id: string;
+  interface Webhook {
+  id: string;,
   name: string;
-  url: string;
-  events: string[];
-  secret: string;
+  url: string;,
+  events: string;
+  secret: string;,
   created_at: Date;
   last_triggered?: Date;
-  success_count: number;
+  success_count: number;,
   failure_count: number;
   is_active: boolean;
-}
-interface ApiIntegrationManagerProps {
+  interface ApiIntegrationManagerProps {
   workspaceId: string;
   onClose?: () => void;
-}
-type TabType = 'api_keys' | 'webhooks' | 'usage' | 'documentation';
-
-export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
+  type TabType = 'api_keys' | 'webhooks' | 'usage' | 'documentation';
+  export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({,)
   workspaceId,
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('api_keys');
-  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
-  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
+  const [apiKeys, setApiKeys] = useState<ApiKey>([]);
+  const [webhooks, setWebhooks] = useState<Webhook>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showCreateApiKey, setShowCreateApiKey] = useState(false);
@@ -67,114 +63,108 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     loadWebhooks();
   }, [workspaceId]);
   const loadApiKeys = async () => {
-    setLoading(true);
-    try {
-      // Mock API call - replace with actual API
-      const mockApiKeys: ApiKey[] = [
+  setLoading(true);
+  try {
+  // Mock API call - replace with actual API
+  const mockApiKeys: ApiKey = [
+  {
+  id: '1',
+  name: 'Production API Key',
+  key: 'pk_live_abcd1234efgh5678',
+  permissions: ['read', 'write', 'admin'],
+  created_at: new Date('2024-01-15'),
+  last_used: new Date('2024-01-20'),
+  usage_count: 1250,
+  rate_limit: 1000,
+  is_active: true,
+}
         {
-          id: '1',
-          name: 'Production API Key',
-          key: 'pk_live_abcd1234efgh5678',
-          permissions: ['read', 'write', 'admin'],
-          created_at: new Date('2024-01-15'),
-          last_used: new Date('2024-01-20'),
-          usage_count: 1250,
-          rate_limit: 1000,
-          is_active: true,
-        },
-        {
-          id: '2',
-          name: 'Development API Key',
-          key: 'pk_test_wxyz9876stuv5432',
-          permissions: ['read', 'write'],
-          created_at: new Date('2024-01-10'),
-          last_used: new Date('2024-01-19'),
-          usage_count: 45,
-          rate_limit: 100,
-          expires_at: new Date('2024-12-31'),
-          is_active: true,
-        }
-      ];
-      setApiKeys(mockApiKeys);
-    } catch (error) {
+  id: '2',
+  name: 'Development API Key',
+  key: 'pk_test_wxyz9876stuv5432',
+  permissions: ['read', 'write'],
+  created_at: new Date('2024-01-10'),
+  last_used: new Date('2024-01-19'),
+  usage_count: 45,
+  rate_limit: 100,
+  expires_at: new Date('2024-12-31'),
+  is_active: true];
+  setApiKeys(mockApiKeys);
+} catch (error) {
       setError('Failed to load API keys');
     } finally {
       setLoading(false);
-    }
   };
   const loadWebhooks = async () => {
-    try {
-      // Mock API call - replace with actual API
-      const mockWebhooks: Webhook[] = [
+  try {
+  // Mock API call - replace with actual API
+  const mockWebhooks: Webhook = [
+  {
+  id: '1',
+  name: 'Slack Notifications',
+  url: 'https://hooks.slack.com/services/...',
+  events: ['approval_requested', 'state_changed', 'workflow_completed'],
+  secret: 'whsec_abcd1234',
+  created_at: new Date('2024-01-12'),
+  last_triggered: new Date('2024-01-20'),
+  success_count: 89,
+  failure_count: 2,
+  is_active: true,
+}
         {
-          id: '1',
-          name: 'Slack Notifications',
-          url: 'https://hooks.slack.com/services/...',
-          events: ['approval_requested', 'state_changed', 'workflow_completed'],
-          secret: 'whsec_abcd1234',
-          created_at: new Date('2024-01-12'),
-          last_triggered: new Date('2024-01-20'),
-          success_count: 89,
-          failure_count: 2,
-          is_active: true,
-        },
-        {
-          id: '2',
-          name: 'External System Integration',
-          url: 'https://api.example.com/webhook',
-          events: ['approval_completed', 'resource_locked'],
-          secret: 'whsec_wxyz5678',
-          created_at: new Date('2024-01-15'),
-          last_triggered: new Date('2024-01-19'),
-          success_count: 156,
-          failure_count: 8,
-          is_active: false,
-        }
-      ];
-      setWebhooks(mockWebhooks);
-    } catch (error) {
+  id: '2',
+  name: 'External System Integration',
+  url: 'https://api.example.com/webhook',
+  events: ['approval_completed', 'resource_locked'],
+  secret: 'whsec_wxyz5678',
+  created_at: new Date('2024-01-15'),
+  last_triggered: new Date('2024-01-19'),
+  success_count: 156,
+  failure_count: 8,
+  is_active: false];
+  setWebhooks(mockWebhooks);
+} catch (error) {
       setError('Failed to load webhooks');
-    }
   };
   const handleCreateApiKey = async (keyData: Partial<ApiKey>) => {
     try {
       // Mock API call - replace with actual API
-      const newKey: ApiKey = {
-        id: Date.now().toString(),
+      const newKey: ApiKey = {,
+  id: Date.now().toString(),
         name: keyData.name || 'New API Key',
-        key: `pk_${Date.now().toString(36)}`,}
-        permissions: keyData.permissions || ['read'],
+        key: `pk_${Date.now().toString(36)}`}
+},
+  permissions: keyData.permissions || ['read'],
         created_at: new Date(),
         usage_count: 0,
         rate_limit: keyData.rate_limit || 1000,
         expires_at: keyData.expires_at,
-        is_active: true,
-      };
+        is_active: true;
+  };
       setApiKeys(prev => [...prev, newKey]);
       setShowCreateApiKey(false);
     } catch (error) {
       setError('Failed to create API key');
-    }
   };
   const handleCreateWebhook = async (webhookData: Partial<Webhook>) => {
     try {
       // Mock API call - replace with actual API
-      const newWebhook: Webhook = {
-        id: Date.now().toString(),
+      const newWebhook: Webhook = {,
+  id: Date.now().toString(),
         name: webhookData.name || 'New Webhook',
         url: webhookData.url || '',
         events: webhookData.events || [],
-        secret: `whsec_${Date.now().toString(36)}`,}
-        created_at: new Date(),
+        secret: `whsec_${Date.now().toString(36)}`}
+},
+  created_at: new Date(),
         success_count: 0,
         failure_count: 0,
-        is_active: true,
-      };
+        is_active: true;
+  };
       setWebhooks(prev => [...prev, newWebhook]);
       setShowCreateWebhook(false);
     } catch (error) {
       setError('Failed to create webhook');
-    }
   };
   const handleDeleteApiKey = async (keyId: string) => {
     try {
@@ -183,7 +173,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
       setShowDeleteConfirm(null);
     } catch (error) {
       setError('Failed to delete API key');
-    }
   };
   const handleDeleteWebhook = async (webhookId: string) => {
     try {
@@ -192,16 +181,14 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
       setShowDeleteConfirm(null);
     } catch (error) {
       setError('Failed to delete webhook');
-    }
   };
   const toggleKeyVisibility = (keyId: string) => {
     setVisibleKeys(prev => {)
-      const newSet = new Set(prev);
+  const newSet = new Set(prev);
       if (newSet.has(keyId)) {
         newSet.delete(keyId);
       } else {
         newSet.add(keyId);
-      }
       return newSet;
     });
   };
@@ -214,15 +201,15 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     return key.slice(0, 8) + '••••••••' + key.slice(-4);
   };
   const getStatusColor = (isActive: boolean) => {
-    return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
-  };
+  return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+};
   const _____getStatusIcon = (isActive: boolean) => {
-    return isActive ? ()
-      <CheckCircleIcon className="h-4 w-4 text-green-600" />
-    ) : ()
-      <XCircleIcon className="h-4 w-4 text-gray-600" />
-    );
-  };
+  return isActive ? ()
+  <CheckCircleIcon className="h-4 w-4 text-green-600" />
+  ) : (),
+  <XCircleIcon className="h-4 w-4 text-gray-600" />
+  );
+};
   const totalApiUsage = useMemo(() => {
     return apiKeys.reduce((sum, key) => sum + key.usage_count, 0);
   }, [apiKeys]);
@@ -230,10 +217,10 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     return webhooks.reduce((sum, webhook) => sum + webhook.success_count + webhook.failure_count, 0);
   }, [webhooks]);
   const webhookSuccessRate = useMemo(() => {
-    const total = totalWebhookCalls;
-    const successful = webhooks.reduce((sum, webhook) => sum + webhook.success_count, 0);
-    return total > 0 ? (successful / total * 100).toFixed(1) : '0';
-  }, [webhooks, totalWebhookCalls]);
+  const total = totalWebhookCalls;
+  const successful = webhooks.reduce((sum, webhook) => sum + webhook.success_count, 0);
+  return total > 0 ? (successful / total * 100).toFixed(1) : '0';
+}, [webhooks, totalWebhookCalls]);
   const availableEvents = [;
     'approval_requested',
     'approval_completed',
@@ -477,10 +464,10 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/transition
               {JSON.stringify({)
-                resource_id: 'resource_uuid',
-                to_state_id: 'state_uuid',
-                comment: 'Transition comment',
-              }, null, 2)}
+  resource_id: 'resource_uuid',
+  to_state_id: 'state_uuid',
+  comment: 'Transition comment',
+}, null, 2)}
             </code>
           </div>
           <div>
@@ -488,10 +475,10 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
             <code className="block bg-gray-100 p-3 rounded text-sm mt-2">
               POST /api/workflow/approvals
               {JSON.stringify({)
-                resource_id: 'resource_uuid',
-                transition_id: 'transition_uuid',
-                requester_id: 'user_id',
-              }, null, 2)}
+  resource_id: 'resource_uuid',
+  transition_id: 'transition_uuid',
+  requester_id: 'user_id',
+}, null, 2)}
             </code>
           </div>
         </div>
@@ -503,16 +490,15 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
         </p>
         <code className="block bg-gray-100 p-3 rounded text-sm">
           {JSON.stringify({)
-            event: 'state_changed',
-            timestamp: '2024-01-20T10:30:00Z',
-            workspace_id: 'workspace_uuid',
-            resource_id: 'resource_uuid',
-            data: {,
-              previous_state: 'draft',
-              new_state: 'approved',
-              actor_id: 'user_id',
-            }
-          }, null, 2)}
+  event: 'state_changed',
+  timestamp: '2024-01-20T10:30:00Z',
+  workspace_id: 'workspace_uuid',
+  resource_id: 'resource_uuid',
+  data: {,
+  previous_state: 'draft',
+  new_state: 'approved',
+  actor_id: 'user_id',
+}, null, 2)}
         </code>
       </div>
     </div>
@@ -523,7 +509,7 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
     { id: 'usage', label: 'Usage', icon: ChartBarIcon },
     { id: 'documentation', label: 'Documentation', icon: GlobeAltIcon }
   ];
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
@@ -555,10 +541,10 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
               key={tab.id}
               onClick={() => setActiveTab(tab.id as TabType)}
               className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
@@ -614,7 +600,6 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
               handleDeleteApiKey(showDeleteConfirm);
             } else {
               handleDeleteWebhook(showDeleteConfirm);
-            }
           }}
           itemType={apiKeys.some(key => key.id === showDeleteConfirm) ? 'API Key' : 'Webhook'}
         />
@@ -624,24 +609,24 @@ export const ApiIntegrationManager: React.FC<ApiIntegrationManagerProps> = ({)
 };
 
 // Sub-components for modals
-const CreateApiKeyModal: React.FC<{
+const CreateApiKeyModal: React.FC<{,
   onClose: () => void;
   onSubmit: (data: Partial<ApiKey>) => void;
 }> = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({)
-    name: '',
-    permissions: ['read'],
-    rate_limit: 1000,
-    expires_at: '',
-  });
+  name: '',
+  permissions: ['read'],
+  rate_limit: 1000,
+  expires_at: '',
+});
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({)
-      ...formData,
-      expires_at: formData.expires_at ? new Date(formData.expires_at) : undefined,
-    });
+  e.preventDefault();
+  onSubmit({)
+  ...formData,
+  expires_at: formData.expires_at ? new Date(formData.expires_at) : undefined,
+});
   };
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create API Key</h3>
@@ -669,17 +654,16 @@ const CreateApiKeyModal: React.FC<{
                     type="checkbox"
                     checked={formData.permissions.includes(permission)}
                     onChange={(e) => {
-                      if (e.target.checked) {
-                        setFormData(prev => ({)
-                          ...prev,
-                          permissions: [...prev.permissions, permission]
-                        }));
+  if (e.target.checked) {
+  setFormData(prev => ({)
+  ...prev,
+  permissions: [...prev.permissions, permission],
+}));
                       } else {
-                        setFormData(prev => ({)
-                          ...prev,
-                          permissions: prev.permissions.filter(p => p !== permission),
-                        }));
-                      }
+  setFormData(prev => ({)
+  ...prev,
+  permissions: prev.permissions.filter(p => p !== permission),
+}));
                     }}
                     className="mr-2"
                   />
@@ -732,21 +716,21 @@ const CreateApiKeyModal: React.FC<{
     </div>
   );
 };
-const CreateWebhookModal: React.FC<{
+const CreateWebhookModal: React.FC<{,
   onClose: () => void;
-  onSubmit: (data: Partial<Webhook>) => void;
-  availableEvents: string[];
+  onSubmit: (data: Partial<Webhook>) => void;,
+  availableEvents: string;
 }> = ({ onClose, onSubmit, availableEvents }) => {
   const [formData, setFormData] = useState({)
-    name: '',
-    url: '',
-    events: [] as string[],
-  });
+  name: '',
+  url: '',
+  events: [] as string,
+});
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
   };
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Create Webhook</h3>
@@ -786,17 +770,16 @@ const CreateWebhookModal: React.FC<{
                     type="checkbox"
                     checked={formData.events.includes(event)}
                     onChange={(e) => {
-                      if (e.target.checked) {
-                        setFormData(prev => ({)
-                          ...prev,
-                          events: [...prev.events, event]
-                        }));
+  if (e.target.checked) {
+  setFormData(prev => ({)
+  ...prev,
+  events: [...prev.events, event],
+}));
                       } else {
-                        setFormData(prev => ({)
-                          ...prev,
-                          events: prev.events.filter(e => e !== event),
-                        }));
-                      }
+  setFormData(prev => ({)
+  ...prev,
+  events: prev.events.filter(e => e !== event),
+}));
                     }}
                     className="mr-2"
                   />
@@ -825,12 +808,12 @@ const CreateWebhookModal: React.FC<{
     </div>
   );
 };
-const DeleteConfirmationModal: React.FC<{
+const DeleteConfirmationModal: React.FC<{,
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => void;,
   itemType: string;
 }> = ({ onClose, onConfirm, itemType }) => {
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">Delete {itemType}</h3>

@@ -5,6 +5,7 @@
  * Provides configurable retry logic with exponential backoff, jitter, and
  * comprehensive error handling for robust system operations.
  */
+}
 export interface RetryOptions {
     maxAttempts?: number;
     baseDelay?: number;
@@ -16,6 +17,8 @@ export interface RetryOptions {
     onSuccess?: <T>(attempt: number, result: T) => void;
     onFailure?: (attempts: number, finalError: Error) => void;
 }
+}
+}
 export interface RetryResult<T> {
     success: boolean;
     result?: T;
@@ -24,6 +27,7 @@ export interface RetryResult<T> {
     totalTime: number;
     retryHistory: RetryAttempt[];
 }
+}
 export interface RetryAttempt {
     attempt: number;
     startTime: number;
@@ -31,6 +35,7 @@ export interface RetryAttempt {
     success: boolean;
     error?: Error;
     delay?: number;
+}
 }
 export declare class RetryError extends Error {
     readonly attempts: number;

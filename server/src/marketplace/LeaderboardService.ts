@@ -14,6 +14,7 @@ import { BadgeSystem } from '../../../packages/core/gamification/BadgeSystem';
 // Leaderboard Types and Interfaces
 // =============================================================================
 
+}
 export interface LeaderboardEntry {
   id: string;
   name: string;
@@ -23,7 +24,9 @@ export interface LeaderboardEntry {
   metadata: Record<string, any>;
   lastUpdated: Date;
 }
+}
 
+}
 export interface TemplateLeaderboardEntry extends LeaderboardEntry {
   templateId: string;
   title: string;
@@ -37,6 +40,7 @@ export interface TemplateLeaderboardEntry extends LeaderboardEntry {
   createdAt: Date;
 }
 
+}
 export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   creatorId: string;
   displayName: string;
@@ -49,6 +53,7 @@ export interface CreatorLeaderboardEntry extends LeaderboardEntry {
   joinedAt: Date;
 }
 
+}
 export interface CategoryLeaderboardEntry extends LeaderboardEntry {
   categoryId: string;
   categoryName: string;
@@ -64,6 +69,7 @@ export interface CategoryLeaderboardEntry extends LeaderboardEntry {
   };
 }
 
+}
 export interface UserEngagementEntry extends LeaderboardEntry {
   userId: string;
   userName: string;
@@ -76,6 +82,7 @@ export interface UserEngagementEntry extends LeaderboardEntry {
   achievements: string[];
 }
 
+}
 export interface LeaderboardQuery {
   type: 'templates' | 'creators' | 'categories' | 'engagement';
   metric: string;
@@ -85,7 +92,9 @@ export interface LeaderboardQuery {
   offset: number;
   includeHistory?: boolean;
 }
+}
 
+}
 export interface LeaderboardResponse {
   success: boolean;
   leaderboard: LeaderboardEntry[];
@@ -97,6 +106,7 @@ export interface LeaderboardResponse {
     topScore: number;
     totalParticipants: number;
     updateFrequency: string;
+}
   };
 }
 
@@ -131,6 +141,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
     limit: number = 50,
     offset: number = 0
   ): Promise<TemplateLeaderboardEntry[]> {
+
     try {
       const cacheKey = `templates_${metric}_${timeframe}_${categoryId || 'all'}_${limit}_${offset}`;
       
@@ -207,7 +218,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           ${whereClause}
           ORDER BY ${orderBy}
           LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
-        )
+
         SELECT * FROM ranked_templates
       `;
 
@@ -224,7 +235,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           metric,
           timeframe,
           category: row.category_name
-        },
+  }
         lastUpdated: new Date(),
         templateId: row.template_id,
         title: row.title,
@@ -258,6 +269,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
     limit: number = 50,
     offset: number = 0
   ): Promise<CreatorLeaderboardEntry[]> {
+
     try {
       const cacheKey = `creators_${metric}_${timeframe}_${limit}_${offset}`;
       
@@ -343,7 +355,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           GROUP BY u.id, u.name, u.created_at
           ORDER BY ${orderBy}
           LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
-        )
+
         SELECT * FROM ranked_creators
       `;
 
@@ -364,7 +376,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             metadata: {
               metric,
               timeframe
-            },
+  }
             lastUpdated: new Date(),
             creatorId: row.creator_id,
             displayName: row.display_name,
@@ -376,7 +388,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             verificationBadges: badgeInfo.badges?.filter((b: any) => b.category === 'verification').map((b: any) => b.name) || [],
             joinedAt: new Date(row.joined_at)
           };
-        })
+  }
       );
 
       this.setCache(cacheKey, leaderboard);
@@ -397,6 +409,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
     limit: number = 20,
     offset: number = 0
   ): Promise<CategoryLeaderboardEntry[]> {
+
     try {
       const cacheKey = `categories_${metric}_${timeframe}_${limit}_${offset}`;
       
@@ -477,7 +490,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
           WHERE cs.template_count > 0
           ORDER BY ${orderBy}
           LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}
-        )
+
         SELECT * FROM ranked_categories
       `;
 
@@ -493,7 +506,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
         metadata: {
           metric,
           timeframe
-        },
+  }
         lastUpdated: new Date(),
         categoryId: row.category_id,
         categoryName: row.category_name,
@@ -526,6 +539,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
     limit: number = 50,
     offset: number = 0
   ): Promise<UserEngagementEntry[]> {
+
     try {
       const cacheKey = `engagement_${metric}_${limit}_${offset}`;
       
@@ -569,7 +583,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             change: 0,
             metadata: {
               metric
-            },
+  }
             lastUpdated: new Date(),
             userId: entry.userId,
             userName: entry.userName,
@@ -581,7 +595,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
             templatesCreated: parseInt(engagementData.templates_created) || 0,
             achievements: entry.recentBadges || []
           };
-        })
+  }
       );
 
       this.setCache(cacheKey, leaderboard);
@@ -597,6 +611,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
   // =============================================================================
 
   async queryLeaderboard(query: LeaderboardQuery): Promise<LeaderboardResponse> {
+
     try {
       let leaderboard: LeaderboardEntry[];
 
@@ -773,6 +788,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
   }
 
   private async refreshCaches(): Promise<void> {
+
     // Clear expired caches
     const now = Date.now();
     for (const [key, expiry] of this.cacheExpiry.entries()) {
@@ -794,6 +810,7 @@ export class MarketplaceLeaderboardService extends EventEmitter {
   // =============================================================================
 
   async clearCache(): Promise<void> {
+
     this.leaderboardCache.clear();
     this.cacheExpiry.clear();
   }

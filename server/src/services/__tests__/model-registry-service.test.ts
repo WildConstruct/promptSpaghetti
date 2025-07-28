@@ -25,7 +25,7 @@ describe('ModelRegistryService', () => {
         accuracy: 0.95,
         inferenceTime: 100,
         memoryUsage: 1024
-      },
+  }
       metadata: { test: true }
     };
 
@@ -184,7 +184,7 @@ describe('ModelRegistryService', () => {
         {
           type: 'hyperparameters' as const,
           description: 'Updated learning rate to 0.001'
-        },
+  }
         {
           type: 'training_data' as const,
           description: 'Added 10k new training samples'

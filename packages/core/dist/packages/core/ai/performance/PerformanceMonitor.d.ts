@@ -51,11 +51,11 @@ export interface MonitoringConfig {
     retentionPeriod: number;
     alerting: {
         enabled: boolean;
-        email?: string[];
+        email?: string;
         webhook?: string;
         slackChannel?: string;
     };
-    thresholds: PerformanceThreshold[];
+    thresholds: PerformanceThreshold;
     sampling: {
         enabled: boolean;
         rate: number;
@@ -71,7 +71,7 @@ export interface ModelPerformanceData {
     modelType: string;
     provider: string;
     metrics: PerformanceMetrics;
-    alerts: PerformanceAlert[];
+    alerts: PerformanceAlert;
     lastUpdated: number;
     healthStatus: 'healthy' | 'degraded' | 'unhealthy' | 'offline';
 }
@@ -108,8 +108,8 @@ export interface PerformanceReport {
         metric: string;
         value: number;
     }>;
-    activeAlerts: PerformanceAlert[];
-    recommendations: string[];
+    activeAlerts: PerformanceAlert;
+    recommendations: string;
     generatedAt: number;
 }
 export declare class PerformanceMonitor {
@@ -120,29 +120,6 @@ export declare class PerformanceMonitor {
     private collectionTimer?;
     private isRunning;
     constructor(config: MonitoringConfig);
-    start(): void;
-    stop(): void;
-    registerModel(modelId: string, modelType: string, provider: string): void;
-    unregisterModel(modelId: string): void;
-    recordRequest(modelId: string, responseTime: number, success: boolean, tokensUsed: {
-        input: number;
-        output: number;
-    }, cost: number): void;
-    recordResourceUsage(modelId: string, resourceMetrics: {
-        memoryUsage?: number;
-        cpuUsage?: number;
-        networkLatency?: number;
-        diskIOUsage?: number;
-    }): void;
-    getModelMetrics(modelId: string): ModelPerformanceData | null;
-    getAllModelsMetrics(): ModelPerformanceData[];
-    getActiveAlerts(): PerformanceAlert[];
-    getAlertsForModel(modelId: string): PerformanceAlert[];
-    generateReport(timeRange?: {
-        start: number;
-        end: number;
-    }): PerformanceReport;
-    exportMetrics(format: 'json' | 'csv' | 'prometheus'): string;
     private initializeDefaultThresholds;
     private createEmptyMetrics;
     private updateHealthStatus;
@@ -155,17 +132,8 @@ export declare class PerformanceMonitor {
     private determineAlertType;
     private getRelevantThreshold;
     private generateAlertMessage;
-    private formatMetricValue;
-    private generateTrends;
-    private getTopPerformers;
-    private getBottomPerformers;
-    private generateRecommendations;
-    private sendAlert;
-    private sendAlertResolution;
-    private cleanupOldData;
-    private convertToCSV;
-    private convertToPrometheus;
-    destroy(): void;
+    metric: string;
+    value: number;
+    type: PerformanceAlert['type'];
 }
-export default PerformanceMonitor;
 //# sourceMappingURL=PerformanceMonitor.d.ts.map

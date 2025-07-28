@@ -32,9 +32,11 @@ const oauthUnlinkSchema = z.object({
   provider: z.enum(['google', 'github', 'microsoft'])
 });
 
+}
 interface OAuthRouteContext {
   authService: AuthenticationService;
   oauthService: OAuthService;
+}
 }
 
 export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteContext) {
@@ -92,7 +94,7 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         properties: {
           provider: { type: 'string', enum: ['google', 'github', 'microsoft'] }
         }
-      },
+  }
       querystring: oauthCallbackSchema,
       response: {
         200: {
@@ -360,13 +362,13 @@ export async function oauthRoutes(fastify: FastifyInstance, context: OAuthRouteC
         displayName: 'Google',
         icon: 'google',
         color: '#4285f4'
-      },
+  }
       {
         name: 'github',
         displayName: 'GitHub',
         icon: 'github',
         color: '#333333'
-      },
+  }
       {
         name: 'microsoft',
         displayName: 'Microsoft',

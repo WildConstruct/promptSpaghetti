@@ -11,34 +11,31 @@ import {
 } from '../utils/templateParser';
 
 export interface TemplatePreviewVariant {
-  id: string;
+  id: string;,
   seed: number;
-  result: string;
+  result: string;,
   timestamp: number;
-  executionTime: number;
+  executionTime: number;,
   substitutions: Record<string, string>;
-  variablesUsed: string[];
+  variablesUsed: string;,
   hasErrors: boolean;
   errorMessage?: string;
 }
-
 export interface TemplatePreviewPerformance {
-  averageExecutionTime: number;
+  averageExecutionTime: number;,
   totalGenerations: number;
-  successRate: number;
+  successRate: number;,
   lastUpdate: number;
   templatesProcessed: number;
 }
-
 export interface TemplatePreviewConfig {
-  maxVariants: number;
+  maxVariants: number;,
   debounceMs: number;
-  enablePerformanceTracking: boolean;
+  enablePerformanceTracking: boolean;,
   autoRefresh: boolean;
-  showVariableSubstitution: boolean;
+  showVariableSubstitution: boolean;,
   errorOnUndefinedVariables: boolean;
-}
-const DEFAULT_CONFIG: TemplatePreviewConfig = {
+  const DEFAULT_CONFIG: TemplatePreviewConfig = {,
   maxVariants: 5,
   debounceMs: 300,
   enablePerformanceTracking: true,
@@ -46,7 +43,7 @@ const DEFAULT_CONFIG: TemplatePreviewConfig = {
   showVariableSubstitution: true,
   errorOnUndefinedVariables: false,
 };
-
+}
 export const useTemplatePreview = ()
   template: string,
   variableValues: Record<string, string> = {},
@@ -54,15 +51,15 @@ export const useTemplatePreview = ()
 ) => {
   const config = { ...DEFAULT_CONFIG, ...customConfig };
   // Core state
-  const [variants, setVariants] = useState<TemplatePreviewVariant[]>([]);
+  const [variants, setVariants] = useState<TemplatePreviewVariant>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [performance, setPerformance] = useState<TemplatePreviewPerformance>({)
-    averageExecutionTime: 0,
-    totalGenerations: 0,
-    successRate: 100,
-    lastUpdate: Date.now(),
-    templatesProcessed: 0,
-  });
+  averageExecutionTime: 0,
+  totalGenerations: 0,
+  successRate: 100,
+  lastUpdate: Date.now(),
+  templatesProcessed: 0,
+});
   const [error, setError] = useState<string | null>(null);
   // Template parsing results
   const parseResult = useMemo(() => parseTemplate(template), [template]);
@@ -75,7 +72,7 @@ export const useTemplatePreview = ()
   const abortControllerRef = useRef<AbortController | null>(null);
   const generationCounterRef = useRef(0);
   // Generate sample values for undefined variables
-  const generateSampleValues = useCallback((variables: ExtractedVariable[]): Record<string, string> => {
+  const generateSampleValues = useCallback((variables: ExtractedVariable): Record<string, string> => {
     const samples: Record<string, string> = {};
     for (const variable of variables) {
       if (!variableValues[variable.name]) {
@@ -86,9 +83,6 @@ export const useTemplatePreview = ()
           // Use contextual defaults based on node type and template
           const contextualDefault = getContextualDefaults(variable.name, template, undefined);
           samples[variable.name] = contextualDefault;
-        }
-      }
-    }
     return samples;
   }, [variableValues, template]);
   // Generate intelligent sample values based on variable names
@@ -100,11 +94,9 @@ export const useTemplatePreview = ()
   const generatePreviews = useCallback(async (forceGeneration: boolean = false): Promise<void> => {
     if (!template.trim() || (!forceGeneration && isGenerating)) {
       return;
-    }
     // Cancel any existing generation
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
-    }
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
     setIsGenerating(true);
@@ -115,7 +107,6 @@ export const useTemplatePreview = ()
       // Check for template errors first
       if (!parseResult.isValid) {
         throw new Error(`Template error: ${parseResult.errors.map(e => e.message).join(', ')}`);}
-      }
       // Generate sample values for missing variables
       const sampleValues = generateSampleValues(extractedVariables);
       const allValues = { ...sampleValues, ...variableValues };
@@ -126,8 +117,6 @@ export const useTemplatePreview = ()
           .filter(name => !allValues[name]);
         if (missingVars.length > 0) {
           throw new Error(`Undefined variables: ${missingVars.join(', ')}`);}
-        }
-      }
       // Generate multiple variants with different seeds
       const newVariants = await Promise.all(;);
         Array.from({ length: config.maxVariants }, async (_, index) => {
@@ -139,9 +128,6 @@ export const useTemplatePreview = ()
               if (!variableValues[variable.name]) {
                 // Generate slight variations for different seeds
                 variantValues[variable.name] = generateSmartSample(variable.name);
-              }
-            }
-          }
           // Substitute variables in template
           const result = substituteVariables(template, variantValues);
           // Simulate generation delay for realism
@@ -149,42 +135,41 @@ export const useTemplatePreview = ()
           // Check if generation was aborted
           if (abortController.signal.aborted) {
             throw new Error('Generation aborted');
-          }
           return {
-            id: `template_variant_${generationId}_${index}`,}
+            id: `template_variant_${generationId}_${index}`}
+}
             seed,
             result,
             timestamp: Date.now(),
             executionTime: performance.now() - startTime,
             substitutions: variantValues,
             variablesUsed: extractedVariables.map(v => v.name),
-            hasErrors: false,
-          };
-        })
+            hasErrors: false;
+  };
+  }
       );
       // Update variants if this is still the current generation
       if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-        setVariants(newVariants);
-        // Update performance metrics
-        if (config.enablePerformanceTracking) {
-          const executionTime = performance.now() - startTime;
-          setPerformance(prev => ({)
-            averageExecutionTime: (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1),
-            totalGenerations: prev.totalGenerations + 1,
-            successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)),
-            lastUpdate: Date.now(),
-            templatesProcessed: prev.templatesProcessed + 1,
-          }));
-        }
-      }
+  setVariants(newVariants);
+  // Update performance metrics
+  if (config.enablePerformanceTracking) {
+  const executionTime = performance.now() - startTime;
+  setPerformance(prev => ({)
+  averageExecutionTime: (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1),
+  totalGenerations: prev.totalGenerations + 1,
+  successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)),
+  lastUpdate: Date.now(),
+  templatesProcessed: prev.templatesProcessed + 1,
+}));
     } catch (err) {
       if (!abortController.signal.aborted) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         setError(errorMessage);
         // Create error variant
-        const errorVariant: TemplatePreviewVariant = {
-          id: `error_${generationId}`,}
-          seed: 0,
+        const errorVariant: TemplatePreviewVariant = {,
+  id: `error_${generationId}`}
+},
+  seed: 0,
           result: '',
           timestamp: Date.now(),
           executionTime: performance.now() - startTime,
@@ -196,19 +181,15 @@ export const useTemplatePreview = ()
         setVariants([errorVariant]);
         // Update performance metrics for failed generation
         if (config.enablePerformanceTracking) {
-          setPerformance(prev => ({)
-            ...prev,
-            successRate: (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1),
-            totalGenerations: prev.totalGenerations + 1,
-            lastUpdate: Date.now(),
-          }));
-        }
-      }
+  setPerformance(prev => ({)
+  ...prev,
+  successRate: (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1),
+  totalGenerations: prev.totalGenerations + 1,
+  lastUpdate: Date.now(),
+}));
     } finally {
       if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
         setIsGenerating(false);
-      }
-    }
   }, [template, variableValues, extractedVariables, parseResult, config, isGenerating, generateSampleValues]);
   // Debounced preview update
   const requestPreview = useCallback(() => {
@@ -216,7 +197,6 @@ export const useTemplatePreview = ()
     // Clear existing debounce timeout
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
-    }
     // Set new debounced timeout
     debounceTimeoutRef.current = setTimeout(() => {
       generatePreviews();
@@ -228,7 +208,6 @@ export const useTemplatePreview = ()
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
       debounceTimeoutRef.current = null;
-    }
     generatePreviews(true);
   }, [generatePreviews]);
   // Refresh single variant with new seed
@@ -240,18 +219,16 @@ export const useTemplatePreview = ()
     const allValues = { ...sampleValues, ...variableValues };
     // Generate new variation
     for (const variable of extractedVariables) {
-      if (!variableValues[variable.name]) {
-        allValues[variable.name] = generateSmartSample(variable.name);
-      }
-    }
-    const result = substituteVariables(template, allValues);
-    const updatedVariant: TemplatePreviewVariant = {
-      ...variant,
-      seed: newSeed,
-      result,
-      timestamp: Date.now(),
-      substitutions: allValues,
-    };
+  if (!variableValues[variable.name]) {
+  allValues[variable.name] = generateSmartSample(variable.name);
+  const result = substituteVariables(template, allValues);
+  const updatedVariant: TemplatePreviewVariant = {,
+  ...variant,
+  seed: newSeed,
+  result,
+  timestamp: Date.now(),
+  substitutions: allValues,
+};
     setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
   }, [variants, extractedVariables, variableValues, template, generateSampleValues]);
   // Clear all variants
@@ -264,8 +241,10 @@ export const useTemplatePreview = ()
     return {
       isPerformanceGood: performance.averageExecutionTime < 200,
       insights: [,
-        `Processed ${performance.templatesProcessed} templates`,}
-        `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`,}
+        `Processed ${performance.templatesProcessed} templates`}
+}
+        `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`}
+}
         `Success rate: ${Math.round(performance.successRate)}%`}
       ]
     };
@@ -276,32 +255,29 @@ export const useTemplatePreview = ()
       requestPreview();
     } else {
       clearVariants();
-    }
     // Cleanup on unmount
     return () => {
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
-      }
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
-      }
     };
   }, [template, variableValues, requestPreview, clearVariants]);
   return {
-    // Core state
-    variants,
-    isGenerating,
-    error,
-    performance,
-    // Template info
-    extractedVariables: extractedVariables.map(v => v.name),
-    hasTemplateErrors: !parseResult.isValid,
-    templateErrors: parseResult.errors,
-    // Actions
-    requestPreview,
-    forcePreview,
-    refreshVariant,
-    clearVariants,
-    getPerformanceInsights
-  };
+  // Core state
+  variants,
+  isGenerating,
+  error,
+  performance,
+  // Template info
+  extractedVariables: extractedVariables.map(v => v.name),
+  hasTemplateErrors: !parseResult.isValid,
+  templateErrors: parseResult.errors,
+  // Actions
+  requestPreview,
+  forcePreview,
+  refreshVariant,
+  clearVariants,
+  getPerformanceInsights
+};
 };

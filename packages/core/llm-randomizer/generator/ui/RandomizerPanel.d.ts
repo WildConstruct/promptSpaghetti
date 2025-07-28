@@ -1,11 +1,13 @@
 import React from 'react';
 import { RandomizerParameters } from '../parameters/parameter-schema';
+
 interface RandomizerPanelProps {
     onGraphGenerated?: (graph: any) => void;
     onError?: (error: Error) => void;
     className?: string;
     initialParameters?: Partial<RandomizerParameters>;
-}
+
+
 /**
  * Main randomizer panel component
  */

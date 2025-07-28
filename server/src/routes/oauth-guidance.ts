@@ -39,7 +39,7 @@ const SecurityAssessmentRequestSchema = z.object({
     dataFlowAnalysis: z.boolean().default(false),
     threatModeling: z.boolean().default(false),
     penetrationTesting: z.boolean().default(false)
-  })
+  }
 });
 
 const UpdateConfigurationRequestSchema = z.object({
@@ -58,7 +58,7 @@ const UpdateConfigurationRequestSchema = z.object({
       mtlsRequired: z.boolean().optional(),
       dpopRequired: z.boolean().optional()
     }).optional()
-  })
+  }
 });
 
 const GenerateGuidanceRequestSchema = z.object({
@@ -124,7 +124,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -133,7 +133,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { clientType, useCase, dataClassifications, complianceRequirements } = request.body;
@@ -200,10 +200,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { configId } = request.body;
@@ -269,7 +269,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -278,7 +278,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions for security assessments' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { clientId, assessmentType, scope } = request.body;
@@ -346,10 +346,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { configId, guidanceType, includeCodeExamples, includeSecurityConsiderations, includeComplianceNotes } = request.body;
@@ -393,9 +393,9 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-        },
+  }
         required: ['configId']
-      },
+  }
       body: UpdateConfigurationRequestSchema.shape.updates,
       response: {
         200: {
@@ -413,7 +413,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -422,7 +422,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions for configuration updates' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;
@@ -484,10 +484,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { clientType, status, environment, page, limit } = request.query;
@@ -546,9 +546,9 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-        },
+  }
         required: ['configId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -558,10 +558,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;
@@ -578,7 +578,7 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
               pkceRequired: true,
               mtlsRequired: false,
               dpopRequired: true
-            },
+  }
             complianceSettings: {
               gdprCompliance: { enabled: true },
               ccpaCompliance: { enabled: true }
@@ -623,10 +623,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { clientId, assessmentType, dateRange, page, limit } = request.query;
@@ -682,9 +682,9 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           assessmentId: { type: 'string' }
-        },
+  }
         required: ['assessmentId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -694,10 +694,10 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { assessmentId } = request.params;
@@ -746,19 +746,19 @@ export async function oauthGuidanceRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           configId: { type: 'string' }
-        },
+  }
         required: ['configId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['PDF', 'HTML', 'MARKDOWN'], default: 'PDF' }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { configId } = request.params;

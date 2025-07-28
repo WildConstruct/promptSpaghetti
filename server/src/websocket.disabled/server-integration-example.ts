@@ -25,6 +25,7 @@ export class EnhancedWebSocketServer {
    * Start the enhanced WebSocket server
    */
   async start(server?: any): Promise<void> {
+
     await this.wsServer.start(server);
     console.log('Enhanced WebSocket server started with collaboration features');
   }
@@ -33,6 +34,7 @@ export class EnhancedWebSocketServer {
    * Stop the enhanced WebSocket server
    */
   async stop(): Promise<void> {
+
     this.collaborationIntegration.cleanup();
     await this.wsServer.stop();
     console.log('Enhanced WebSocket server stopped');

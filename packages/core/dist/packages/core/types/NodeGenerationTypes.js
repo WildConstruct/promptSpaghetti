@@ -1,16 +1,3 @@
-/**
- * Node Generation Types
- * Epic 36.3: Node Generation and Canvas Integration
- *
- * Comprehensive type definitions for the automated node generation system
- */
-/**
- * Default values and constants
- */
-export 
-/**
- * Error codes for validation and generation
- */
 export const ERROR_CODES = {
     INVALID_INPUT: 'INVALID_INPUT',
     GENERATION_FAILED: 'GENERATION_FAILED',

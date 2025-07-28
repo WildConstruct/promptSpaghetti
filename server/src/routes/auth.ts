@@ -64,7 +64,7 @@ export async function authRoutes(fastify: FastifyInstance) {
     geoLocation: {
       country: request.headers['cf-ipcountry'] as string, // Cloudflare header
       timezone: request.headers['cf-timezone'] as string
-    },
+  }
     fingerprint: (request.headers['x-fingerprint'] || '') as string
   });
 
@@ -377,7 +377,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             newDevices: z.number(),
             returningDevices: z.number(),
             suspiciousDevices: z.number()
-          })
+  }
         }),
         401: z.object({ message: z.string() }),
         403: z.object({ message: z.string() })
@@ -411,7 +411,7 @@ export async function authRoutes(fastify: FastifyInstance) {
             id: z.string(),
             email: z.string(),
             roles: z.array(z.string())
-          })
+  }
         }),
         401: z.object({ message: z.string() })
       }
@@ -572,8 +572,8 @@ export async function authRoutes(fastify: FastifyInstance) {
             database: z.string(),
             redis: z.string(),
             authentication: z.string()
-          })
-        })
+  }
+  }
       }
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {

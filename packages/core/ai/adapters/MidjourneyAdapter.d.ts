@@ -5,6 +5,7 @@
  * Adapter for Midjourney image generation via unofficial API
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface MidjourneyConfig {
     apiKey?: string;
     serverUrl: string;
@@ -12,7 +13,7 @@ export interface MidjourneyConfig {
     maxRetries?: number;
     pollInterval?: number;
     maxPollAttempts?: number;
-}
+
 export interface MidjourneyRequestOptions {
     version?: 'v5' | 'v5.1' | 'v5.2' | 'v6';
     aspectRatio?: '1:1' | '2:3' | '3:2' | '4:5' | '5:4' | '9:16' | '16:9';
@@ -26,7 +27,7 @@ export interface MidjourneyRequestOptions {
     tile?: boolean;
     weird?: number;
     stop?: number;
-}
+
 export interface MidjourneyJobStatus {
     id: string;
     status: 'pending' | 'running' | 'completed' | 'failed';
@@ -47,7 +48,7 @@ export interface MidjourneyJobStatus {
         quality: number;
         seed?: number;
     };
-}
+
 export interface MidjourneyResponse {
     success: boolean;
     jobId: string;
@@ -62,7 +63,7 @@ export interface MidjourneyResponse {
         seed?: number;
     };
     error?: string;
-}
+
 export interface MidjourneyGenerationResult {
     jobId: string;
     status: 'completed' | 'failed';
@@ -87,7 +88,7 @@ export interface MidjourneyGenerationResult {
         credits: number;
         estimatedCost: number;
     };
-}
+
 export declare class MidjourneyAdapter extends BaseAIModel {
     private config;
     private promptTemplater;
@@ -111,6 +112,6 @@ export declare class MidjourneyAdapter extends BaseAIModel {
     private _processJobResult;
     private _extractPrompt;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default MidjourneyAdapter;
 //# sourceMappingURL=MidjourneyAdapter.d.ts.map

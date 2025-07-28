@@ -3,14 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
 interface LockRequestDialogProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onRequest: (resourceId: string, lockType: string, reason?: string) => void;
   resourceId?: string | null;
   userId: string;
-}
-
-export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
+  export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({,)
   isOpen,
   onClose,
   onRequest,
@@ -26,38 +24,35 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
   useEffect(() => {
     if (resourceId) {
       setSelectedResource(resourceId);
-    }
   }, [resourceId]);
   const lockTypes = [;
     {
-      value: 'edit',
-      label: 'Edit Lock',
-      description: 'Prevents others from editing this resource',
-      icon: Lock,
-      color: 'text-blue-500',
-    },
+  value: 'edit',
+  label: 'Edit Lock',
+  description: 'Prevents others from editing this resource',
+  icon: Lock,
+  color: 'text-blue-500',
+}
     {
-      value: 'state_change',
-      label: 'State Change Lock',
-      description: 'Prevents workflow state changes',
-      icon: Clock,
-      color: 'text-orange-500',
-    },
+  value: 'state_change',
+  label: 'State Change Lock',
+  description: 'Prevents workflow state changes',
+  icon: Clock,
+  color: 'text-orange-500',
+}
     {
-      value: 'delete',
-      label: 'Delete Lock',
-      description: 'Prevents resource deletion',
-      icon: AlertTriangle,
-      color: 'text-red-500',
-    },
+  value: 'delete',
+  label: 'Delete Lock',
+  description: 'Prevents resource deletion',
+  icon: AlertTriangle,
+  color: 'text-red-500',
+}
     {
       value: 'admin',
       label: 'Admin Lock',
       description: 'Administrative lock with full restrictions',
       icon: AlertTriangle,
-      color: 'text-purple-500',
-    }
-  ];
+      color: 'text-purple-500'];
   const durationOptions = [;
     { value: 15, label: '15 minutes' },
     { value: 30, label: '30 minutes' },
@@ -74,17 +69,14 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
     try {
       if (!selectedResource) {
         throw new Error('Please select a resource');
-      }
       if (!reason.trim()) {
         throw new Error('Please provide a reason for the lock');
-      }
       await onRequest(selectedResource, lockType, reason);
       onClose();
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to request lock');
-    } finally {
+  setError(error instanceof Error ? error.message : 'Failed to request lock');
+} finally {
       setIsSubmitting(false);
-    }
   };
   const handleCancel = () => {
     setSelectedResource('');
@@ -95,7 +87,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
     onClose();
   };
   if (!isOpen) return null;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
@@ -147,7 +139,7 @@ export const LockRequestDialog: React.FC<LockRequestDialogProps> = ({)
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {lockTypes.map((type) => {
                 const Icon = type.icon;
-                return ();
+                return;
                   <div key={type.value}>
                     <label className="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                       <input

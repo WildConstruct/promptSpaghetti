@@ -494,7 +494,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
               defaultValue: '{{var2}}',
               description: 'First variable',
               required: true
-            },
+  }
             {
               id: '2',
               name: 'var2',
@@ -595,7 +595,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
           average_rating: 0,
           download_count: 0,
           favorite_count: 0
-        })
+  }
         .mockRejectedValueOnce(new Error('Template name already exists'));
 
       // Act
@@ -627,7 +627,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
         graph_data: {
           nodes: [{ id: '1', type: 'test', data: { label: 'Original' } }],
           edges: []
-        },
+  }
         variables: [],
         customization_points: [{
           id: '1',
@@ -700,7 +700,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
               config: {
                 params: Object.fromEntries(
                   Array.from({ length: 100 }, (_, k) => [`param${k}`, `value${i}-${k}`])
-                )
+
               }
             }
           }
@@ -774,7 +774,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
         graph_data: { 
           nodes: [{ id: `node-${i}`, type: 'test', data: { label: `Node ${i}` } }], 
           edges: [] 
-        },
+  }
         variables: [],
         customization_points: []
       }));
@@ -802,7 +802,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
       const results = await Promise.allSettled(
         templateRequests.map((request, i) => 
           templateService.createTemplate(request, 123 + i)
-        )
+
       );
       const endTime = Date.now();
 
@@ -966,7 +966,7 @@ describe('Template Edge Cases and Error Handling Tests', () => {
           edges: [
             { id: 'edge1', source: 'node1', target: 'nonExistentNode', type: 'default' }
           ]
-        },
+  }
         variables: [],
         customization_points: []
       };

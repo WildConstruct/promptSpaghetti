@@ -22,6 +22,7 @@ import {
   ConditionOperand
 } from './ComplianceRuleEngine';
 
+}
 export interface RuleEvaluationEngineConfig {
   engineId: string;
   version: string;
@@ -32,7 +33,9 @@ export interface RuleEvaluationEngineConfig {
   security: EvaluationSecurityConfig;
   monitoring: EvaluationMonitoringConfig;
 }
+}
 
+}
 export interface EvaluationPerformanceConfig {
   maxConcurrentEvaluations: number;
   evaluationTimeout: number; // milliseconds
@@ -42,7 +45,9 @@ export interface EvaluationPerformanceConfig {
   enableProfiling: boolean;
   performanceMetrics: boolean;
 }
+}
 
+}
 export interface EvaluationCachingConfig {
   enabled: boolean;
   ttl: number; // seconds
@@ -52,7 +57,9 @@ export interface EvaluationCachingConfig {
   distributedCache: boolean;
   cacheKeyPrefix: string;
 }
+}
 
+}
 export interface EvaluationOptimizationConfig {
   enableParallelExecution: boolean;
   enableLazyEvaluation: boolean;
@@ -62,7 +69,9 @@ export interface EvaluationOptimizationConfig {
   enableBatchProcessing: boolean;
   enableVectorization: boolean;
 }
+}
 
+}
 export interface EvaluationSecurityConfig {
   sandboxMode: boolean;
   maxExecutionTime: number;
@@ -71,7 +80,9 @@ export interface EvaluationSecurityConfig {
   encryptResults: boolean;
   auditAllEvaluations: boolean;
 }
+}
 
+}
 export interface EvaluationMonitoringConfig {
   enableRealTimeMetrics: boolean;
   enableAlerting: boolean;
@@ -79,14 +90,18 @@ export interface EvaluationMonitoringConfig {
   healthCheckInterval: number;
   metricRetentionDays: number;
 }
+}
 
+}
 export interface PerformanceThreshold {
   metric: string;
   warning: number;
   critical: number;
   unit: string;
 }
+}
 
+}
 export interface EvaluationRequest {
   requestId: string;
   rules: ComplianceRule[];
@@ -94,7 +109,9 @@ export interface EvaluationRequest {
   options: EvaluationOptions;
   metadata: EvaluationRequestMetadata;
 }
+}
 
+}
 export interface EvaluationOptions {
   frameworks?: ComplianceFramework[];
   categories?: RuleCategory[];
@@ -105,7 +122,9 @@ export interface EvaluationOptions {
   includePerformanceMetrics?: boolean;
   cacheResults?: boolean;
 }
+}
 
+}
 export interface EvaluationRequestMetadata {
   requestedBy: string;
   requestedAt: Date;
@@ -113,7 +132,9 @@ export interface EvaluationRequestMetadata {
   tags: string[];
   correlationId?: string;
 }
+}
 
+}
 export interface EvaluationBatch {
   batchId: string;
   requests: EvaluationRequest[];
@@ -121,21 +142,27 @@ export interface EvaluationBatch {
   status: BatchStatus;
   results: BatchEvaluationResult;
 }
+}
 
+}
 export interface BatchEvaluationOptions {
   parallelism: number;
   retryPolicy: BatchRetryPolicy;
   progressReporting: boolean;
   partialResults: boolean;
 }
+}
 
+}
 export interface BatchRetryPolicy {
   maxRetries: number;
   backoffStrategy: 'FIXED' | 'EXPONENTIAL' | 'LINEAR';
   baseDelay: number;
   maxDelay: number;
 }
+}
 
+}
 export interface BatchEvaluationResult {
   batchId: string;
   totalRequests: number;
@@ -147,7 +174,9 @@ export interface BatchEvaluationResult {
   startedAt: Date;
   completedAt?: Date;
 }
+}
 
+}
 export interface BatchPerformanceMetrics {
   totalDuration: number;
   averageRuleEvaluationTime: number;
@@ -156,21 +185,27 @@ export interface BatchPerformanceMetrics {
   cpuUsage: CPUUsageMetrics;
   cacheHitRate: number;
 }
+}
 
+}
 export interface MemoryUsageMetrics {
   peak: number;
   average: number;
   current: number;
   unit: 'bytes' | 'kb' | 'mb' | 'gb';
 }
+}
 
+}
 export interface CPUUsageMetrics {
   peak: number;
   average: number;
   current: number;
   unit: 'percentage';
 }
+}
 
+}
 export interface EvaluationError {
   errorId: string;
   type: ErrorType;
@@ -181,7 +216,9 @@ export interface EvaluationError {
   recoverable: boolean;
   timestamp: Date;
 }
+}
 
+}
 export interface ErrorContext {
   ruleId?: string;
   conditionId?: string;
@@ -189,7 +226,9 @@ export interface ErrorContext {
   stackTrace?: string;
   additionalInfo?: Record<string, unknown>;
 }
+}
 
+}
 export interface ConditionEvaluator {
   evaluatorId: string;
   conditionType: string;
@@ -197,7 +236,9 @@ export interface ConditionEvaluator {
   validate(condition: RuleCondition): ValidationResult;
   optimize(condition: RuleCondition): OptimizedCondition;
 }
+}
 
+}
 export interface ConditionEvaluationResult {
   conditionId: string;
   result: boolean;
@@ -206,7 +247,9 @@ export interface ConditionEvaluationResult {
   performance: ConditionPerformanceMetrics;
   evidence?: ConditionEvidence[];
 }
+}
 
+}
 export interface ConditionResultMetadata {
   evaluatedAt: Date;
   evaluatorId: string;
@@ -214,7 +257,9 @@ export interface ConditionResultMetadata {
   shortCircuited: boolean;
   operandResults: OperandResult[];
 }
+}
 
+}
 export interface OperandResult {
   operandId: string;
   value: unknown;
@@ -222,14 +267,18 @@ export interface OperandResult {
   source: string;
   transformations: string[];
 }
+}
 
+}
 export interface ConditionPerformanceMetrics {
   evaluationTime: number;
   memoryUsed: number;
   operandFetchTime: number;
   transformationTime: number;
 }
+}
 
+}
 export interface ConditionEvidence {
   evidenceId: string;
   type: string;
@@ -238,30 +287,38 @@ export interface ConditionEvidence {
   timestamp: Date;
   relevance: number;
 }
+}
 
+}
 export interface ValidationResult {
   valid: boolean;
   errors: string[];
   warnings: string[];
   suggestions: string[];
 }
+}
 
+}
 export interface OptimizedCondition extends RuleCondition {
   optimizations: ConditionOptimization[];
   estimatedImprovement: number;
 }
 
+}
 export interface ConditionOptimization {
   type: OptimizationType;
   description: string;
   impact: OptimizationImpact;
   applied: boolean;
 }
+}
 
+}
 export interface OptimizationImpact {
   performance: number; // percentage improvement
   accuracy: number; // accuracy retention percentage
   complexity: ComplexityChange;
+}
 }
 
 // Enums
@@ -374,6 +431,7 @@ export class RuleEvaluationEngine extends EventEmitter {
     context: RuleEvaluationContext,
     options: EvaluationOptions = {}
   ): Promise<RuleEvaluationResult> {
+
     if (this.isShuttingDown) {
       throw new Error('Engine is shutting down or stopped');
     }
@@ -389,7 +447,7 @@ export class RuleEvaluationEngine extends EventEmitter {
           ruleId: rule.ruleId,
           framework: rule.framework,
           contextId: context.contextId
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: [rule.framework],
@@ -452,7 +510,7 @@ export class RuleEvaluationEngine extends EventEmitter {
           duration: Date.now() - startTime,
           memoryUsage: process.memoryUsage().heapUsed,
           cpuUsage: this.getCurrentCPUUsage()
-        },
+  }
         errors: [],
         warnings: [],
         actions: [], // Would be populated by action execution
@@ -478,7 +536,7 @@ export class RuleEvaluationEngine extends EventEmitter {
           ruleId: rule.ruleId,
           result: result.outcome.result,
           duration: result.performance.duration
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: [rule.framework],
@@ -499,7 +557,7 @@ export class RuleEvaluationEngine extends EventEmitter {
           ruleId: rule.ruleId,
           error: error instanceof Error ? error.message : 'Unknown error',
           duration: Date.now() - startTime
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: [rule.framework],
@@ -520,6 +578,7 @@ export class RuleEvaluationEngine extends EventEmitter {
     context: RuleEvaluationContext,
     options: EvaluationOptions & BatchEvaluationOptions = {}
   ): Promise<RuleEvaluationResult[]> {
+
     const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const startTime = Date.now();
 
@@ -547,10 +606,10 @@ export class RuleEvaluationEngine extends EventEmitter {
             backoffStrategy: 'EXPONENTIAL',
             baseDelay: 100,
             maxDelay: 5000
-          },
+  }
           progressReporting: options.progressReporting || false,
           partialResults: options.partialResults || true
-        },
+  }
         status: BatchStatus.RUNNING,
         results: {
           batchId,
@@ -566,7 +625,7 @@ export class RuleEvaluationEngine extends EventEmitter {
             memoryUsage: { peak: 0, average: 0, current: 0, unit: 'bytes' },
             cpuUsage: { peak: 0, average: 0, current: 0, unit: 'percentage' },
             cacheHitRate: 0
-          },
+  }
           startedAt: new Date()
         }
       };
@@ -599,7 +658,7 @@ export class RuleEvaluationEngine extends EventEmitter {
                 ruleId: rule.ruleId,
                 batchId,
                 chunkIndex
-              },
+  }
               severity: ErrorSeverity.MEDIUM,
               recoverable: true,
               timestamp: new Date()
@@ -706,6 +765,7 @@ export class RuleEvaluationEngine extends EventEmitter {
    * Get health status
    */
   public async getHealthStatus(): Promise<HealthStatus> {
+
     return {
       status: 'HEALTHY',
       timestamp: new Date(),
@@ -713,7 +773,7 @@ export class RuleEvaluationEngine extends EventEmitter {
         caching: this.config.caching.enabled ? 'HEALTHY' : 'DISABLED',
         evaluators: this.conditionEvaluators.size > 0 ? 'HEALTHY' : 'ERROR',
         performance: this.performanceMetrics.averageEvaluationTime < 1000 ? 'HEALTHY' : 'WARNING'
-      },
+  }
       metrics: this.performanceMetrics
     };
   }
@@ -722,6 +782,7 @@ export class RuleEvaluationEngine extends EventEmitter {
    * Shutdown engine
    */
   public async shutdown(): Promise<void> {
+
     this.isShuttingDown = true;
     this.evaluationCache.clear();
     this.conditionEvaluators.clear();
@@ -887,6 +948,7 @@ export class RuleEvaluationEngine extends EventEmitter {
   }
 
   private async isRuleApplicable(rule: ComplianceRule, _context: RuleEvaluationContext): Promise<boolean> {
+
     // Simplified applicability check - in production, this would evaluate scope conditions
     return rule.status === 'ACTIVE';
   }
@@ -921,6 +983,7 @@ export class RuleEvaluationEngine extends EventEmitter {
     context: RuleEvaluationContext,
     _____options: EvaluationOptions
   ): Promise<ConditionEvaluationResult[]> {
+
     const results: ConditionEvaluationResult[] = [];
 
     for (const condition of conditions) {
@@ -992,7 +1055,7 @@ export class RuleEvaluationEngine extends EventEmitter {
         recommendations: [],
         nextActions: [],
         escalation: {}
-      },
+  }
       confidence: 0,
       evidence: [],
       performance: { duration: 0, memoryUsage: 0, cpuUsage: 0 },
@@ -1084,6 +1147,7 @@ export class RuleEvaluationEngine extends EventEmitter {
 }
 
 // Supporting interfaces
+}
 interface CacheEntry {
   result: RuleEvaluationResult;
   createdAt: number;
@@ -1091,7 +1155,9 @@ interface CacheEntry {
   accessCount: number;
   lastAccessed: number;
 }
+}
 
+}
 interface PerformanceMetrics {
   totalEvaluations: number;
   averageEvaluationTime: number;
@@ -1101,7 +1167,9 @@ interface PerformanceMetrics {
   currentMemoryUsage?: number;
   currentCPUUsage?: number;
 }
+}
 
+}
 interface CacheStats {
   enabled: boolean;
   strategy: CacheStrategy;
@@ -1112,7 +1180,9 @@ interface CacheStats {
   hitRate: number;
   evictionCount: number;
 }
+}
 
+}
 interface HealthStatus {
   status: 'HEALTHY' | 'DEGRADED' | 'UNHEALTHY';
   timestamp: Date;
@@ -1120,10 +1190,12 @@ interface HealthStatus {
     caching: string;
     evaluators: string;
     performance: string;
+}
   };
   metrics: PerformanceMetrics;
 }
 
+}
 interface EngineStatus {
   engineId: string;
   version: string;
@@ -1135,6 +1207,7 @@ interface EngineStatus {
   performanceMetrics: PerformanceMetrics;
   config: RuleEvaluationEngineConfig;
 }
+}
 
 // Default condition evaluator implementations
 class DataFieldEvaluator implements ConditionEvaluator {
@@ -1142,6 +1215,7 @@ class DataFieldEvaluator implements ConditionEvaluator {
   conditionType = 'DATA_FIELD';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     // Implementation for data field evaluation
     return {
       conditionId: condition.conditionId,
@@ -1153,7 +1227,7 @@ class DataFieldEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 10,
         memoryUsed: 1024,
@@ -1181,6 +1255,7 @@ class ContextPropertyEvaluator implements ConditionEvaluator {
   conditionType = 'CONTEXT_PROPERTY';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1191,7 +1266,7 @@ class ContextPropertyEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 5,
         memoryUsed: 512,
@@ -1219,6 +1294,7 @@ class TimeBasedEvaluator implements ConditionEvaluator {
   conditionType = 'TIME_BASED';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1229,7 +1305,7 @@ class TimeBasedEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 2,
         memoryUsed: 256,
@@ -1257,6 +1333,7 @@ class ThresholdEvaluator implements ConditionEvaluator {
   conditionType = 'THRESHOLD';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1267,7 +1344,7 @@ class ThresholdEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 15,
         memoryUsed: 2048,
@@ -1295,6 +1372,7 @@ class PatternEvaluator implements ConditionEvaluator {
   conditionType = 'PATTERN';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1305,7 +1383,7 @@ class PatternEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 25,
         memoryUsed: 4096,
@@ -1333,6 +1411,7 @@ class ExpressionEvaluator implements ConditionEvaluator {
   conditionType = 'EXPRESSION';
 
   async evaluate(condition: RuleCondition, _____context: RuleEvaluationContext): Promise<ConditionEvaluationResult> {
+
     return {
       conditionId: condition.conditionId,
       result: true,
@@ -1343,7 +1422,7 @@ class ExpressionEvaluator implements ConditionEvaluator {
         cached: false,
         shortCircuited: false,
         operandResults: []
-      },
+  }
       performance: {
         evaluationTime: 50,
         memoryUsed: 8192,

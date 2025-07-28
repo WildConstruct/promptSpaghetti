@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { DeviceFingerprintingService } from '../services/DeviceFingerprintingService';
 
+}
 interface FingerprintRequest {
   components: {
     userAgent: string;
@@ -25,6 +26,7 @@ interface FingerprintRequest {
     webRTC?: {
       localIP?: string;
       publicIP?: string;
+}
     };
   };
   metadata?: {
@@ -36,17 +38,23 @@ interface FingerprintRequest {
   };
 }
 
+}
 interface VerifyDeviceRequest {
   fingerprint: string;
   expectedFingerprint?: string;
 }
+}
 
+}
 interface TrustDeviceRequest {
   reason?: string;
 }
+}
 
+}
 interface BlockDeviceRequest {
   reason: string;
+}
 }
 
 export async function deviceFingerprintingRoutes(
@@ -84,7 +92,7 @@ export async function deviceFingerprintingRoutes(
           verificationStatus: trustProfile.verificationStatus,
           requiresVerification: trustProfile.verificationStatus === 'unverified',
           isNewDevice: trustProfile.firstSeen === trustProfile.lastSeen
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -174,7 +182,7 @@ export async function deviceFingerprintingRoutes(
           seenCount: history.device.seen_count,
           trustScore: history.device.trust_score,
           isBlocked: history.device.is_blocked
-        },
+  }
         users: history.users.map(u => ({
           userId: u.user_id,
           email: u.email,
@@ -284,7 +292,7 @@ export async function deviceFingerprintingRoutes(
             userAgent: d.components?.userAgent,
             platform: d.components?.platform,
             screenResolution: d.components?.screenResolution
-          },
+  }
           firstSeen: d.first_seen,
           lastSeen: d.last_seen,
           accessCount: d.access_count,
@@ -382,7 +390,7 @@ export async function deviceFingerprintingRoutes(
           newDeviceGrowth: statistics.devices.new_devices,
           unresolvedSecurityEvents: statistics.securityEvents.unresolved_events,
           averageTrustScore: Math.round(statistics.devices.avg_trust_score || 50)
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -512,7 +520,7 @@ export async function deviceFingerprintingRoutes(
           totalDevices: stats.devices.total_devices,
           newDevicesToday: stats.devices.new_devices,
           averageTrustScore: Math.round(stats.devices.avg_trust_score || 50)
-        },
+  }
         features: [
           'Device fingerprint generation',
           'Trust scoring',
@@ -570,43 +578,43 @@ export async function deviceFingerprintingRoutes(
           method: 'POST',
           description: 'Generate device fingerprint and record access',
           auth: 'optional'
-        },
+  }
         {
           path: '/device/verify',
           method: 'POST',
           description: 'Verify device fingerprint and check trust',
           auth: 'required'
-        },
+  }
         {
           path: '/device/:fingerprint/history',
           method: 'GET',
           description: 'Get device history and associations',
           auth: 'required'
-        },
+  }
         {
           path: '/device/:fingerprint/trust',
           method: 'POST',
           description: 'Mark device as trusted',
           auth: 'required'
-        },
+  }
         {
           path: '/device/my-devices',
           method: 'GET',
           description: 'Get user\'s associated devices',
           auth: 'required'
-        },
+  }
         {
           path: '/device/:fingerprint/block',
           method: 'POST',
           description: 'Block device (admin only)',
           auth: 'admin required'
-        },
+  }
         {
           path: '/device/admin/statistics',
           method: 'GET',
           description: 'Get device statistics',
           auth: 'admin/security role required'
-        },
+  }
         {
           path: '/device/admin/search',
           method: 'GET',
@@ -630,7 +638,7 @@ export async function deviceFingerprintingRoutes(
           trusted: '60-80',
           verified: '80-100'
         }
-      },
+  }
       securityEvents: [
         'new_device - First time device seen',
         'fingerprint_change - Significant fingerprint change',

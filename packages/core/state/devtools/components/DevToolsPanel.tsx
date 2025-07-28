@@ -17,7 +17,7 @@ import { StateInspectorPanel } from './StateInspectorPanel';
 import { DependencyGraphPanel } from './DependencyGraphPanel';
 
 export interface DevToolsPanelProps {
-  devTools: StateDevTools;
+  devTools: StateDevTools;,
   timeTravel: TimeTravel;
   performanceProfiler: PerformanceProfiler;
   isOpen?: boolean;
@@ -26,16 +26,14 @@ export interface DevToolsPanelProps {
   position?: 'bottom' | 'right' | 'floating';
   theme?: 'light' | 'dark' | 'auto';
 }
-
 export interface DevToolsState {
-  activeTab: string;
+  activeTab: string;,
   isRecording: boolean;
-  timeTravelState: TimeTravelState | null;
-  performanceAlerts: PerformanceAlert[];
-  selectedDomain: string;
+  timeTravelState: TimeTravelState | null;,
+  performanceAlerts: PerformanceAlert;
+  selectedDomain: string;,
   dependencyGraph: DependencyGraph | null;
   performanceReport: PerformanceReport | null;
-}
 const TABS = [;
   { id: 'inspector', label: 'State Inspector', icon: '🔍' },
   { id: 'timetravel', label: 'Time Travel', icon: '⏰' },
@@ -43,7 +41,7 @@ const TABS = [;
   { id: 'dependencies', label: 'Dependencies', icon: '🔗' },
   { id: 'settings', label: 'Settings', icon: '⚙️' }
 ];
-
+}
 export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
   devTools,
   timeTravel,
@@ -55,22 +53,22 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
   theme = 'auto'
 }) => {
   const [state, setState] = useState<DevToolsState>({)
-    activeTab: defaultTab,
-    isRecording: false,
-    timeTravelState: null,
-    performanceAlerts: [],
-    selectedDomain: 'all',
-    dependencyGraph: null,
-    performanceReport: null,
-  });
+  activeTab: defaultTab,
+  isRecording: false,
+  timeTravelState: null,
+  performanceAlerts: [],
+  selectedDomain: 'all',
+  dependencyGraph: null,
+  performanceReport: null,
+});
   // Update state from DevTools
   const updateDevToolsState = useCallback(() => {
-    setState(prevState => ({)
-      ...prevState,
-      timeTravelState: timeTravel.getTimeTravelState(),
-      performanceAlerts: performanceProfiler.getAlerts(),
-      isRecording: timeTravel.getTimeTravelState()?.isReplaying || false,
-    }));
+  setState(prevState => ({)
+  ...prevState,
+  timeTravelState: timeTravel.getTimeTravelState(),
+  performanceAlerts: performanceProfiler.getAlerts(),
+  isRecording: timeTravel.getTimeTravelState()?.isReplaying || false,
+}));
   }, [timeTravel, performanceProfiler]);
   // Setup event listeners
   useEffect(() => {
@@ -89,37 +87,33 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
   }, [devTools, timeTravel, performanceProfiler, updateDevToolsState]);
   // Generate dependency graph
   const generateDependencyGraph = useCallback(async () => {
-    try {
-      const graph = devTools.visualizeStateDependencies({)
-        domains: state.selectedDomain === 'all' ? undefined : [state.selectedDomain],
-        includeComponents: true,
-        includeSelectors: true,
-        layout: 'hierarchical',
-      });
+  try {
+  const graph = devTools.visualizeStateDependencies({)
+  domains: state.selectedDomain === 'all' ? undefined : [state.selectedDomain],
+  includeComponents: true,
+  includeSelectors: true,
+  layout: 'hierarchical',
+});
       setState(prev => ({ ...prev, dependencyGraph: graph }));
     } catch (error) {
-      console.error('Failed to generate dependency graph:', error);
-    }
-  }, [devTools, state.selectedDomain]);
+  console.error('Failed to generate dependency graph:', error);
+}, [devTools, state.selectedDomain]);
   // Generate performance report
   const generatePerformanceReport = useCallback(async () => {
     try {
       const report = devTools.detectStateBottlenecks();
       setState(prev => ({ ...prev, performanceReport: report }));
     } catch (error) {
-      console.error('Failed to generate performance report:', error);
-    }
-  }, [devTools]);
+  console.error('Failed to generate performance report:', error);
+}, [devTools]);
   // Tab handlers
   const handleTabChange = (tabId: string) => {
     setState(prev => ({ ...prev, activeTab: tabId }));
     // Load data for specific tabs
     if (tabId === 'dependencies' && !state.dependencyGraph) {
       generateDependencyGraph();
-    }
     if (tabId === 'performance' && !state.performanceReport) {
       generatePerformanceReport();
-    }
   };
   const handleRecordingToggle = () => {
     if (state.isRecording) {
@@ -128,7 +122,6 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
     } else {
       devTools.startRecording();
       timeTravel.startRecording();
-    }
     setState(prev => ({ ...prev, isRecording: !prev.isRecording }));
   };
   const handleClearHistory = () => {
@@ -141,9 +134,8 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
   };
   if (!isOpen) {
     return null;
-  }
   const panelClasses = `devtools-panel devtools-panel--${position} devtools-panel--${theme}`;}
-  return ();
+  return;
     <div className={panelClasses}>
       <div className="devtools-header">
         <div className="devtools-title">
@@ -233,8 +225,8 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
       </div>
       <style jsx>{`
         .devtools-panel {
-          position: fixed;
-          background: var(--devtools-bg, #1e1e1e);
+          position: fixed;,
+  background: var(--devtools-bg, #1e1e1e);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -244,124 +236,105 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
           border-radius: 8px;
           min-width: 300px;
           max-width: 90vw;
-          max-height: 90vh;
-          display: flex;
+          max-height: 90vh;,
+  display: flex;
           flex-direction: column;
-        }
         .devtools-panel--bottom {
-          bottom: 20px;
-          left: 20px;
-          right: 20px;
-          height: 400px;
-        }
+          bottom: 20px;,
+  left: 20px;
+          right: 20px;,
+  height: 400px;
         .devtools-panel--right {
-          top: 20px;
-          right: 20px;
-          bottom: 20px;
-          width: 400px;
-        }
+          top: 20px;,
+  right: 20px;
+          bottom: 20px;,
+  width: 400px;
         .devtools-panel--floating {
-          top: 50%;
-          left: 50%;
+          top: 50%;,
+  left: 50%;
           transform: translate(-50%, -50%);
-          width: 800px;
-          height: 600px;
-        }
+          width: 800px;,
+  height: 600px;
         .devtools-panel--light {
           --devtools-bg: #ffffff;
           --devtools-border: #e0e0e0;
           --devtools-text: #333333;
-        }
         .devtools-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 8px 12px;
+          justify-content: space-between;,
+  padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-header-bg, #2d2d2d);
-        }
         .devtools-title {
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .devtools-title h3 {
           margin: 0;
           font-size: 14px;
           font-weight: 500;
-        }
         .devtools-controls {
-          display: flex;
-          gap: 4px;
-        }
+          display: flex;,
+  gap: 4px;
         .devtools-btn {
-          background: transparent;
-          border: 1px solid var(--devtools-border, #333);
+          background: transparent;,
+  border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 12px;
-          transition: background 0.2s;
-        }
-        .devtools-btn:hover {
-          background: var(--devtools-hover, #404040);
-        }
+          border-radius: 4px;,
+  cursor: pointer;
+          font-size: 12px;,
+  transition: background 0.2s;
+        .devtools-btn:hover {,
+  background: var(--devtools-hover, #404040);
         .devtools-btn.recording {
           background: #e74c3c;
-          border-color: #e74c3c;
-          animation: pulse 1s infinite;
-        }
+          border-color: #e74c3c;,
+  animation: pulse 1s infinite;
         @keyframes pulse {
           0% { opacity: 1; }
           50% { opacity: 0.7; }
           100% { opacity: 1; }
-        }
         .devtools-tabs {
           display: flex;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-tabs-bg, #252525);
-        }
         .devtools-tab {
-          background: transparent;
-          border: none;
+          background: transparent;,
+  border: none;
           color: var(--devtools-text, #aaa);
-          padding: 8px 12px;
-          cursor: pointer;
+          padding: 8px 12px;,
+  cursor: pointer;
           display: flex;
-          align-items: center;
-          gap: 6px;
+          align-items: center;,
+  gap: 6px;
           font-size: 12px;
-          border-bottom: 2px solid transparent;
-          transition: all 0.2s;
+          border-bottom: 2px solid transparent;,
+  transition: all 0.2s;
           position: relative;
-        }
-        .devtools-tab:hover {
-          background: var(--devtools-hover, #404040);
+        .devtools-tab:hover {,
+  background: var(--devtools-hover, #404040);
           color: var(--devtools-text, #fff);
-        }
         .devtools-tab.active {
           color: var(--devtools-active, #61dafb);
           border-bottom-color: var(--devtools-active, #61dafb);
           background: var(--devtools-active-bg, #2a2a2a);
-        }
         .devtools-badge {
-          background: #e74c3c;
-          color: white;
-          font-size: 10px;
-          padding: 2px 6px;
+          background: #e74c3c;,
+  color: white;
+          font-size: 10px;,
+  padding: 2px 6px;
           border-radius: 10px;
-          min-width: 16px;
-          height: 16px;
+          min-width: 16px;,
+  height: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
-        }
         .devtools-content {
-          flex: 1;
-          overflow: auto;
+          flex: 1;,
+  overflow: auto;
           padding: 0;
-        }
       `}</style>
     </div>
   );
@@ -369,45 +342,42 @@ export const DevToolsPanel: React.FC<DevToolsPanelProps> = ({)
 
 // DevTools Settings Panel Component
 interface DevToolsSettingsPanelProps {
-  devTools: StateDevTools;
+  devTools: StateDevTools;,
   timeTravel: TimeTravel;
   performanceProfiler: PerformanceProfiler;
-}
-const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({)
+  const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({,)
   devTools,
   timeTravel,
   performanceProfiler
 }) => {
   const [settings, setSettings] = useState({)
-    maxHistorySize: 1000,
-    sampleRate: 100,
-    enableAlerts: true,
-    alertThresholds: {,
-      updateLatency: 100,
-      memoryUsage: 100 * 1024 * 1024,
-      renderTime: 16,
-    }
-  });
+  maxHistorySize: 1000,
+  sampleRate: 100,
+  enableAlerts: true,
+  alertThresholds: {,
+  updateLatency: 100,
+  memoryUsage: 100 * 1024 * 1024,
+  renderTime: 16,
+});
   const handleSettingChange = (key: string, value: any) => {
-    setSettings(prev => ({)
-      ...prev,
-      [key]: value
-    }));
+  setSettings(prev => ({)
+  ...prev,
+  [key]: value,
+}));
   };
   const handleThresholdChange = (metric: string, value: number) => {
-    setSettings(prev => ({)
-      ...prev,
-      alertThresholds: {,
-        ...prev.alertThresholds,
-        [metric]: value
-      }
-    }));
+  setSettings(prev => ({)
+  ...prev,
+  alertThresholds: {,
+  ...prev.alertThresholds,
+  [metric]: value,
+}));
   };
   const exportSession = () => {
-    const sessionData = devTools.exportSession();
-    const blob = new Blob([JSON.stringify(sessionData, null, 2)], {
-      type: 'application/json',
-    });
+  const sessionData = devTools.exportSession();
+  const blob = new Blob([JSON.stringify(sessionData, null, 2)], {
+  type: 'application/json',
+});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -415,7 +385,7 @@ const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({)
     a.click();
     URL.revokeObjectURL(url);
   };
-  return ();
+  return;
     <div className="devtools-settings">
       <h4>Configuration</h4>
       <div className="setting-group">
@@ -485,44 +455,36 @@ const DevToolsSettingsPanel: React.FC<DevToolsSettingsPanelProps> = ({)
       <style jsx>{`
         .devtools-settings {
           padding: 16px;
-        }
         .devtools-settings h4 {
-          margin: 16px 0 8px 0;
-          color: var(--devtools-text, #fff);
+          margin: 16px 0 8px 0;,
+  color: var(--devtools-text, #fff);
           font-size: 14px;
           border-bottom: 1px solid var(--devtools-border, #333);
           padding-bottom: 4px;
-        }
         .setting-group {
           margin-bottom: 12px;
-        }
         .setting-group label {
           display: block;
           margin-bottom: 4px;
-          font-size: 12px;
-          color: var(--devtools-text, #ccc);
-        }
+          font-size: 12px;,
+  color: var(--devtools-text, #ccc);
         .setting-group input[type="number"] {
-          width: 100%;
-          padding: 4px 8px;
+          width: 100%;,
+  padding: 4px 8px;
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           border-radius: 4px;
           font-size: 12px;
-        }
         .setting-group input[type="checkbox"] {
           margin-right: 8px;
-        }
         .setting-actions {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           flex-wrap: wrap;
-        }
         .setting-actions .devtools-btn {
           flex: 1;
           min-width: 120px;
-        }
       `}</style>
     </div>
   );

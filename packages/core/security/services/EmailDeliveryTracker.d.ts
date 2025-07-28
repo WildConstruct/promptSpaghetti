@@ -28,7 +28,7 @@ export declare enum DeliveryStatus {
     SPAM = "spam",
     FAILED = "failed",
     UNSUBSCRIBED = "unsubscribed"
-}
+
 export declare enum EmailType {
     ACCOUNT_VERIFICATION = "account_verification",
     PASSWORD_RESET = "password_reset",
@@ -37,7 +37,7 @@ export declare enum EmailType {
     SECURITY_ALERT = "security_alert",
     DEVICE_VERIFICATION = "device_verification",
     BACKUP_CODE_DELIVERY = "backup_code_delivery"
-}
+
 export declare enum EmailProvider {
     SENDGRID = "sendgrid",
     AWS_SES = "aws_ses",
@@ -45,12 +45,12 @@ export declare enum EmailProvider {
     POSTMARK = "postmark",
     SMTP = "smtp",
     CUSTOM = "custom"
-}
+
 export declare enum BounceType {
     HARD = "hard",
     SOFT = "soft",
     UNDETERMINED = "undetermined"
-}
+
 export declare enum BounceSubType {
     GENERAL = "general",
     NO_EMAIL = "no_email",
@@ -59,7 +59,7 @@ export declare enum BounceSubType {
     MESSAGE_TOO_LARGE = "message_too_large",
     CONTENT_REJECTED = "content_rejected",
     ATTACHMENT_REJECTED = "attachment_rejected"
-}
+
 export interface EmailMetadata {
     userId: string;
     sessionId?: string;
@@ -78,7 +78,7 @@ export interface EmailMetadata {
         subscriptionTracking?: boolean;
         ganalytics?: boolean;
     };
-}
+
 export interface EmailDeliveryRecord {
     id: string;
     messageId: string;
@@ -110,7 +110,7 @@ export interface EmailDeliveryRecord {
         unsubscribes: EmailUnsubscribeEvent[];
     };
     providerData: Record<string, any>;
-}
+
 export interface EmailDeliveryAttempt {
     attemptNumber: number;
     timestamp: Date;
@@ -118,14 +118,14 @@ export interface EmailDeliveryAttempt {
     providerResponse?: string;
     error?: string;
     retryAfter?: Date;
-}
+
 export interface EmailOpenEvent {
     timestamp: Date;
     ipAddress: string;
     userAgent: string;
     location?: string;
     deviceType?: string;
-}
+
 export interface EmailClickEvent {
     timestamp: Date;
     ipAddress: string;
@@ -134,13 +134,13 @@ export interface EmailClickEvent {
     linkId?: string;
     location?: string;
     deviceType?: string;
-}
+
 export interface EmailUnsubscribeEvent {
     timestamp: Date;
     ipAddress: string;
     userAgent: string;
     reason?: string;
-}
+
 export interface DeliveryStatistics {
     totalEmails: number;
     sentEmails: number;
@@ -178,7 +178,7 @@ export interface DeliveryStatistics {
         count: number;
         deliveryRate: number;
     }>;
-}
+
 export interface EmailDeliveryConfig {
     defaultProvider: EmailProvider;
     retryAttempts: number;
@@ -195,7 +195,7 @@ export interface EmailDeliveryConfig {
             customSettings?: Record<string, any>;
         };
     };
-}
+
 export interface EmailSendRequest {
     type: EmailType;
     recipient: string;
@@ -210,7 +210,6 @@ export interface EmailSendRequest {
     provider?: EmailProvider;
     sendAt?: Date;
     priority?: 'low' | 'normal' | 'high' | 'urgent';
-}
 /**
  * Email Delivery Tracker Service
  */
@@ -275,6 +274,6 @@ export declare class EmailDeliveryTracker extends EventEmitter {
     private delay;
     private mergeConfig;
     private initializeStatistics;
-}
+
 export default EmailDeliveryTracker;
 //# sourceMappingURL=EmailDeliveryTracker.d.ts.map

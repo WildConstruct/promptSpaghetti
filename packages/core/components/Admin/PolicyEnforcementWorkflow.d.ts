@@ -5,6 +5,7 @@
  * Part of Epic 17.5.4 - Policy Enforcement (Backstage Admin Controls)
  */
 import React from 'react';
+
 export interface EnforcementAction {
     id: string;
     type: 'suspend_user' | 'restrict_access' | 'hide_template' | 'block_transaction' | 'send_warning' | 'require_verification';
@@ -14,7 +15,7 @@ export interface EnforcementAction {
     automated: boolean;
     requiresApproval: boolean;
     reversible: boolean;
-}
+
 export interface EnforcementWorkflow {
     workflowId: string;
     name: string;
@@ -30,7 +31,7 @@ export interface EnforcementWorkflow {
     executionCount: number;
     lastExecuted?: Date;
     successRate: number;
-}
+
 export interface EnforcementStep {
     stepId: string;
     name: string;
@@ -44,7 +45,7 @@ export interface EnforcementStep {
     };
     order: number;
     enabled: boolean;
-}
+
 export interface WorkflowExecution {
     executionId: string;
     workflowId: string;
@@ -57,10 +58,10 @@ export interface WorkflowExecution {
     entityType: 'user' | 'template' | 'transaction';
     entityId: string;
     context: Record<string, any>;
-}
+
 export interface PolicyEnforcementWorkflowProps {
     className?: string;
-}
+
 export declare const PolicyEnforcementWorkflow: React.FC<PolicyEnforcementWorkflowProps>;
 export default PolicyEnforcementWorkflow;
 //# sourceMappingURL=PolicyEnforcementWorkflow.d.ts.map

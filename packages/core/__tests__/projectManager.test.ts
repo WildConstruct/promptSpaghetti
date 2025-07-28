@@ -7,20 +7,19 @@ import { createDefaultSettings } from '../schemas/psgSchema';
 import { Node, Edge } from 'reactflow';
 
 // Create mocks
-const mockCreateElement = jest.fn<unknown[], unknown>();
-const mockAppendChild = jest.fn<unknown[], unknown>();
-const mockRemoveChild = jest.fn<unknown[], unknown>();
+const mockCreateElement = jest.fn<unknown, unknown>();
+const mockAppendChild = jest.fn<unknown, unknown>();
+const mockRemoveChild = jest.fn<unknown, unknown>();
 const mockCreateObjectURL = jest.fn(() => 'mock-url');
-const mockRevokeObjectURL = jest.fn<unknown[], unknown>();
+const mockRevokeObjectURL = jest.fn<unknown, unknown>();
 const mockBlob = jest.fn(() => ({}));
 
 // Mock DOM methods
 global.document = {
   createElement: mockCreateElement,
   body: {,
-    appendChild: mockAppendChild,
-    removeChild: mockRemoveChild,
-  }
+  appendChild: mockAppendChild,
+  removeChild: mockRemoveChild,
 } as any;
 global.URL = {
   createObjectURL: mockCreateObjectURL,
@@ -28,7 +27,7 @@ global.URL = {
 } as any;
 global.Blob = mockBlob as any;
 describe('ProjectManager', () => {
-  let mockGraphData: { nodes: Node[]; edges: Edge[] };
+  let mockGraphData: { nodes: Node; edges: Edge };
   let mockSaveOptions: SaveProjectOptions;
   let mockSettings: unknown;
   beforeEach(() => {
@@ -40,27 +39,27 @@ describe('ProjectManager', () => {
     mockBlob.mockClear();
     mockGraphData = {
       nodes: [{,
-        id: 'node1',
+  id: 'node1',
         type: 'Output',
         position: { x: 0, y: 0 },
         data: { label: 'Test Node' }
       }],
-      edges: [],
-    };
+      edges: [];
+  };
     mockSaveOptions = {
-      name: 'Test Project',
-      description: 'A test project',
-      author: 'Test Author',
-      tags: ['test'],
-      fileName: 'test-project.psg',
-    };
+  name: 'Test Project',
+  description: 'A test project',
+  author: 'Test Author',
+  tags: ['test'],
+  fileName: 'test-project.psg',
+};
     mockSettings = createDefaultSettings();
   });
   describe('sanitizeFileName', () => {
-    test('removes invalid characters', () => {
-      const result = ProjectManager.sanitizeFileName('test<>:"/\\|?*file');
-      expect(result).toBe('test_file.psg');
-    });
+  test('removes invalid characters', () => {
+  const result = ProjectManager.sanitizeFileName('test<>:"/\\|?*file');
+  expect(result).toBe('test_file.psg');
+});
     test('replaces spaces with underscores', () => {
       const result = ProjectManager.sanitizeFileName('test file name');
       expect(result).toBe('test_file_name.psg');
@@ -94,10 +93,10 @@ describe('ProjectManager', () => {
       expect(result.error).toBeUndefined();
     });
     test('handles project with no description', async () => {
-      const optionsWithoutDescription = {
-        ...mockSaveOptions,
-        description: undefined,
-      };
+  const optionsWithoutDescription = {
+  ...mockSaveOptions,
+  description: undefined,
+};
       const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithoutDescription,
@@ -106,10 +105,10 @@ describe('ProjectManager', () => {
       expect(result.success).toBe(true);
     });
     test('creates default fileName when not provided', async () => {
-      const optionsWithoutFileName = {
-        ...mockSaveOptions,
-        fileName: undefined,
-      };
+  const optionsWithoutFileName = {
+  ...mockSaveOptions,
+  fileName: undefined,
+};
       const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithoutFileName,
@@ -119,10 +118,10 @@ describe('ProjectManager', () => {
       expect(result.fileName).toBe('Test_Project.psg');
     });
     test('sanitizes fileName', async () => {
-      const optionsWithInvalidFileName = {
-        ...mockSaveOptions,
-        fileName: 'test<>file?.psg',
-      };
+  const optionsWithInvalidFileName = {
+  ...mockSaveOptions,
+  fileName: 'test<>file?.psg',
+};
       const result = await ProjectManager.saveProjectToDevice(;);
         mockGraphData,
         optionsWithInvalidFileName,

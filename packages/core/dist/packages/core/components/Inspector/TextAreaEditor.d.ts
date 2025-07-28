@@ -6,6 +6,7 @@ export interface TextAreaEditorProps extends EditorFieldProps {
     minLength?: number;
     autoResize?: boolean;
     showWordCount?: boolean;
+    export const: any;
+    TextAreaEditor: React.FC<TextAreaEditorProps>;
 }
-export declare const TextAreaEditor: React.FC<TextAreaEditorProps>;
 //# sourceMappingURL=TextAreaEditor.d.ts.map

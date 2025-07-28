@@ -1,10 +1,3 @@
-/**
- * Security Domain Interface
- * REFACTOR-005: Domain-Driven Architecture
- *
- * Main interface and export for the security domain
- */
-// Event constants for cross-domain communication
 export const SECURITY_DOMAIN_EVENTS = {
     USER_AUTHENTICATED: 'security:user:authenticated',
     USER_LOGGED_OUT: 'security:user:logged_out',
@@ -19,5 +12,5 @@ export const SECURITY_DOMAIN_EVENTS = {
     RISK_SCORE_UPDATED: 'security:risk:score:updated',
     SESSION_EXPIRED: 'security:session:expired',
     MFA_REQUIRED: 'security:mfa:required',
-    ENCRYPTION_KEY_ROTATED: 'security:encryption:key:rotated'
+    ENCRYPTION_KEY_ROTATED: 'security:encryption:key:rotated',
 };

@@ -6,12 +6,13 @@
  * visual enhancements, and integration with React Flow edge system.
  */
 import React from 'react';
+
 interface ConnectionAnnotationsLayerProps {
     canEdit?: boolean;
     showTooltips?: boolean;
     visible?: boolean;
     onSelectionChange?: (selectedAnnotations: string[]) => void;
-}
+
 export declare const ConnectionAnnotationsLayer: React.FC<ConnectionAnnotationsLayerProps>;
 export default ConnectionAnnotationsLayer;
 //# sourceMappingURL=ConnectionAnnotationsLayer.d.ts.map

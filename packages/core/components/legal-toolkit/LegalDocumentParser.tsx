@@ -26,14 +26,12 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
     if (file.size > maxFileSize) {
       setError(`File size exceeds maximum of ${Math.round(maxFileSize / (1024 * 1024))}MB`);}
       return;
-    }
     // Validate file type
     const supportedExtensions = ['.pdf', '.docx', '.doc', '.txt', '.rtf'];
     const extension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
     if (!supportedExtensions.includes(extension)) {
       setError(`Unsupported file type. Please use: ${supportedExtensions.join(', ')}`);}
       return;
-    }
     setError(null);
     setIsProcessing(true);
     setUploadProgress(0);
@@ -42,10 +40,9 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
       // Simulate file upload progress
       const uploadInterval = setInterval(() => {
         setUploadProgress(prev => {)
-          if (prev >= 90) {
+  if (prev >= 90) {
             clearInterval(uploadInterval);
             return 90;
-          }
           return prev + 10;
         });
       }, 200);
@@ -60,28 +57,28 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
       setProcessingStatus('Extracting legal references...');
       await new Promise(resolve => setTimeout(resolve, 1500));
       // Create parsed document
-      const parsedDocument: LegalDocument = {
-        id: `doc_${Date.now()}`,}
-        title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
+      const parsedDocument: LegalDocument = {,
+  id: `doc_${Date.now()}`}
+},
+  title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
         type: detectDocumentType(content, file.name),
         content,
         metadata,
         status: 'draft',
         createdAt: new Date(),
         updatedAt: new Date(),
-        version: '1.0',
-      };
+        version: '1.0';
+  };
       setProcessingStatus('Document parsed successfully!');
       await new Promise(resolve => setTimeout(resolve, 500));
       onDocumentParsed(parsedDocument);
     } catch (error) {
-      console.error('Document parsing error:', error);
-      setError(error instanceof Error ? error.message : 'Failed to parse document');
-    } finally {
+  console.error('Document parsing error:', error);
+  setError(error instanceof Error ? error.message : 'Failed to parse document');
+} finally {
       setIsProcessing(false);
       setUploadProgress(0);
       setProcessingStatus('');
-    }
   }, [maxFileSize, onDocumentParsed]);
   const readFileContent = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -92,16 +89,16 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
     });
   };
   const extractDocumentMetadata = async (content: string, filename: string): Promise<LegalDocumentMetadata> => {
-    // In real implementation, this would use AI services to extract metadata
-    // For now, return mock metadata
-    return {
-      jurisdiction: detectJurisdiction(content),
-      practiceArea: detectPracticeArea(content),
-      parties: extractParties(content),
-      tags: extractTags(content, filename),
-      references: [], // Would be extracted by AI
-      confidentialityLevel: 'confidential',
-    };
+  // In real implementation, this would use AI services to extract metadata
+  // For now, return mock metadata
+  return {
+  jurisdiction: detectJurisdiction(content),
+  practiceArea: detectPracticeArea(content),
+  parties: extractParties(content),
+  tags: extractTags(content, filename),
+  references: [], // Would be extracted by AI,
+  confidentialityLevel: 'confidential',
+};
   };
   const detectDocumentType = (content: string, filename: string): LegalDocument['type'] => {
     const lowerContent = content.toLowerCase();
@@ -120,33 +117,33 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
     if (lowerContent.includes('federal') || lowerContent.includes('united states')) return 'Federal';
     return 'Unknown';
   };
-  const detectPracticeArea = (content: string): string[] => {
-    const areas: string[] = [];
-    const lowerContent = content.toLowerCase();
-    if (lowerContent.includes('employment') || lowerContent.includes('employee')) areas.push('Employment');
-    if (lowerContent.includes('intellectual property') || lowerContent.includes('copyright') || lowerContent.includes('patent')) areas.push('IP');
-    if (lowerContent.includes('privacy') || lowerContent.includes('gdpr') || lowerContent.includes('data')) areas.push('Privacy');
-    if (lowerContent.includes('real estate') || lowerContent.includes('property')) areas.push('Real Estate');
-    if (lowerContent.includes('corporate') || lowerContent.includes('business')) areas.push('Corporate');
-    return areas.length > 0 ? areas : ['General'];
-  };
-  const extractParties = (content: string): string[] => {
-    // Simple regex to find potential party names (this would be more sophisticated in real implementation)
-    const partyPattern = /\b([A-Z][a-zA-Z\s&,.]+ (?:Inc|LLC|Corp|Corporation|Company|Ltd|Limited)\.?)\b/g;
-    const matches = content.match(partyPattern);
-    return matches ? [...new Set(matches.slice(0, 5))] : []; // Limit to 5 unique parties
-  };
-  const extractTags = (content: string, filename: string): string[] => {
-    const tags: string[] = [];
-    const lowerContent = content.toLowerCase();
-    if (lowerContent.includes('confidential')) tags.push('confidential');
-    if (lowerContent.includes('termination')) tags.push('termination');
-    if (lowerContent.includes('liability')) tags.push('liability');
-    if (lowerContent.includes('indemnify')) tags.push('indemnification');
-    if (lowerContent.includes('dispute')) tags.push('dispute-resolution');
-    if (filename.includes('draft')) tags.push('draft');
-    return tags;
-  };
+  const detectPracticeArea = (content: string): string => {
+  const areas: string = [];
+  const lowerContent = content.toLowerCase();
+  if (lowerContent.includes('employment') || lowerContent.includes('employee')) areas.push('Employment');
+  if (lowerContent.includes('intellectual property') || lowerContent.includes('copyright') || lowerContent.includes('patent')) areas.push('IP');
+  if (lowerContent.includes('privacy') || lowerContent.includes('gdpr') || lowerContent.includes('data')) areas.push('Privacy');
+  if (lowerContent.includes('real estate') || lowerContent.includes('property')) areas.push('Real Estate');
+  if (lowerContent.includes('corporate') || lowerContent.includes('business')) areas.push('Corporate');
+  return areas.length > 0 ? areas : ['General'];
+};
+  const extractParties = (content: string): string => {
+  // Simple regex to find potential party names (this would be more sophisticated in real implementation)
+  const partyPattern = /\b([A-Z][a-zA-Z\s&,.]+ (?:Inc|LLC|Corp|Corporation|Company|Ltd|Limited)\.?)\b/g;
+  const matches = content.match(partyPattern);
+  return matches ? [...new Set(matches.slice(0, 5))] : []; // Limit to 5 unique parties,
+};
+  const extractTags = (content: string, filename: string): string => {
+  const tags: string = [];
+  const lowerContent = content.toLowerCase();
+  if (lowerContent.includes('confidential')) tags.push('confidential');
+  if (lowerContent.includes('termination')) tags.push('termination');
+  if (lowerContent.includes('liability')) tags.push('liability');
+  if (lowerContent.includes('indemnify')) tags.push('indemnification');
+  if (lowerContent.includes('dispute')) tags.push('dispute-resolution');
+  if (filename.includes('draft')) tags.push('draft');
+  return tags;
+};
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -174,135 +171,114 @@ export const LegalDocumentParser: React.FC<LegalDocumentParserProps> = ({)
   const openFileDialog = () => {
     fileInputRef.current?.click();
   };
-  return ();
+  return;
     <div className={`legal-document-parser ${className}`}>}
       <style>
         {`
           .legal-document-parser {
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 600px;,
+  margin: 0 auto;
             padding: 20px;
-          }
           .upload-area {
             border: 2px dashed #cbd5e0;
-            border-radius: 8px;
-            padding: 40px 20px;
-            text-align: center;
-            background: #f7fafc;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            border-radius: 8px;,
+  padding: 40px 20px;
+            text-align: center;,
+  background: #f7fafc;
+            transition: all 0.2s ease;,
+  cursor: pointer;
             position: relative;
-          }
           .upload-area.drag-active {
-            border-color: #4299e1;
-            background: #ebf8ff;
-          }
+            border-color: #4299e1;,
+  background: #ebf8ff;
           .upload-area:hover {
-            border-color: #4299e1;
-            background: #f0fff4;
-          }
+            border-color: #4299e1;,
+  background: #f0fff4;
           .upload-area.processing {
-            pointer-events: none;
-            opacity: 0.8;
-          }
+            pointer-events: none;,
+  opacity: 0.8;
           .upload-icon {
             font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #718096;
-          }
+            margin-bottom: 1rem;,
+  color: #718096;
           .upload-text {
-            font-size: 1.1rem;
-            color: #2d3748;
+            font-size: 1.1rem;,
+  color: #2d3748;
             margin-bottom: 0.5rem;
-          }
           .upload-subtext {
-            font-size: 0.9rem;
-            color: #718096;
-          }
+            font-size: 0.9rem;,
+  color: #718096;
           .file-input {
             display: none;
-          }
           .processing-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(247, 250, 252, 0.9);
+            position: absolute;,
+  top: 0;
+            left: 0;,
+  right: 0;
+            bottom: 0;,
+  background: rgba(247, 250, 252, 0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             border-radius: 6px;
-          }
           .progress-container {
-            width: 200px;
-            margin: 1rem 0;
-          }
+            width: 200px;,
+  margin: 1rem 0;
           .progress-bar {
-            width: 100%;
-            height: 8px;
+            width: 100%;,
+  height: 8px;
             background: #e2e8f0;
-            border-radius: 4px;
-            overflow: hidden;
-          }
+            border-radius: 4px;,
+  overflow: hidden;
           .progress-fill {
-            height: 100%;
-            background: #4299e1;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-          }
+            height: 100%;,
+  background: #4299e1;
+            border-radius: 4px;,
+  transition: width 0.3s ease;
           .processing-status {
-            font-size: 0.9rem;
-            color: #4a5568;
+            font-size: 0.9rem;,
+  color: #4a5568;
             margin-top: 0.5rem;
-          }
           .supported-types {
-            margin-top: 1rem;
-            padding: 1rem;
+            margin-top: 1rem;,
+  padding: 1rem;
             background: #edf2f7;
             border-radius: 6px;
-          }
           .supported-types h4 {
             margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
-            color: #2d3748;
+            font-size: 0.9rem;,
+  color: #2d3748;
             font-weight: 600;
-          }
           .types-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 0.5rem;
-          }
           .type-tag {
-            background: #fff;
-            padding: 0.25rem 0.5rem;
+            background: #fff;,
+  padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
-            color: #4a5568;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-          }
+            font-size: 0.8rem;,
+  color: #4a5568;
+            text-align: center;,
+  border: 1px solid #e2e8f0;
           .error-message {
-            background: #fed7d7;
-            color: #c53030;
+            background: #fed7d7;,
+  color: #c53030;
             padding: 0.75rem;
             border-radius: 4px;
             margin-top: 1rem;
             font-size: 0.9rem;
-          }
           .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #e2e8f0;
+            display: inline-block;,
+  width: 20px;
+            height: 20px;,
+  border: 3px solid #e2e8f0;
             border-radius: 50%;
-            border-top-color: #4299e1;
-            animation: spin 1s ease-in-out infinite;
-          }
+            border-top-color: #4299e1;,
+  animation: spin 1s ease-in-out infinite;
           @keyframes spin {
             to { transform: rotate(360deg); }
-          }
         `}
       </style>
       <div 

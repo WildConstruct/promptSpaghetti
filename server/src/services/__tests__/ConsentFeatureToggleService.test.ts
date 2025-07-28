@@ -361,7 +361,7 @@ describe('ConsentFeatureToggleService', () => {
           requiredConsents: [ConsentType.ANALYTICS],
           requiredConsentLogic: 'AND',
           fallbackBehavior: 'disable'
-        },
+  }
         {
           featureKey: 'marketing_feature',
           requiredConsents: [ConsentType.MARKETING],
@@ -465,7 +465,7 @@ describe('ConsentFeatureToggleService', () => {
         getConsents: jest.fn().mockResolvedValue({
           [ConsentType.ANALYTICS]: ConsentStatus.GRANTED,
           [ConsentType.MARKETING]: ConsentStatus.DENIED
-        })
+  }
       };
 
       service.setConsentService(mockConsentService);

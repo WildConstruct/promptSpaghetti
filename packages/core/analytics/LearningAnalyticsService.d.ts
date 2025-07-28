@@ -126,5 +126,5 @@ export declare class LearningAnalyticsServiceImpl implements LearningAnalyticsSe
     private generateDetailedSections;
     private generateReportAppendices;
     private storeReport;
-}
+
 //# sourceMappingURL=LearningAnalyticsService.d.ts.map

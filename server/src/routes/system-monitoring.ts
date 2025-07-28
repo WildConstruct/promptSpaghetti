@@ -10,16 +10,21 @@ import { healthMonitoringService } from '../services/HealthMonitoringService';
 import { operationalMetricsService } from '../services/OperationalMetricsService';
 import { ErrorFactory } from '../types/errors';
 
+}
 interface SystemStatusQuery {
   detailed?: boolean;
   include?: string; // comma-separated: 'metrics,health,circuits,retries,alerts'
 }
+}
 
+}
 interface MetricsQuery {
   minutes?: number;
   limit?: number;
 }
+}
 
+}
 interface AlertRuleBody {
   name: string;
   condition: string; // JavaScript expression
@@ -27,6 +32,7 @@ interface AlertRuleBody {
   description: string;
   enabled?: boolean;
   cooldownMs?: number;
+}
 }
 
 export async function systemMonitoringRoutes(fastify: FastifyInstance) {
@@ -43,7 +49,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Querystring: SystemStatusQuery }>, reply: FastifyReply) => {
       const { detailed = false, include } = request.query;
       const includeItems = include ? include.split(',') : ['health'];
@@ -196,14 +202,14 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             type: 'object',
             properties: { name: { type: 'string' } },
             required: ['name']
-          },
+  }
           body: {
             type: 'object',
             properties: { action: { type: 'string', enum: ['open', 'close', 'half-open'] } },
             required: ['action']
           }
         }
-      },
+  }
       async (request, reply) => {
         const { name } = request.params;
         const { action } = request.body;
@@ -249,7 +255,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Querystring: MetricsQuery }>, reply: FastifyReply) => {
       const { minutes, limit } = request.query;
 
@@ -299,7 +305,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       async (request, reply) => {
         const { errorType = 'internal', delay = 0 } = request.body;
 
@@ -336,7 +342,7 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       async (request, reply) => {
         const { count = 10, intervalMs = 100 } = request.body;
 
@@ -381,11 +387,11 @@ export async function systemMonitoringRoutes(fastify: FastifyInstance) {
         heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024), // MB
         external: Math.round(memoryUsage.external / 1024 / 1024), // MB
         rss: Math.round(memoryUsage.rss / 1024 / 1024) // MB
-      },
+  }
       cpu: {
         user: cpuUsage.user / 1000, // ms
         system: cpuUsage.system / 1000 // ms
-      },
+  }
       nodejs: {
         version: process.version,
         platform: process.platform,

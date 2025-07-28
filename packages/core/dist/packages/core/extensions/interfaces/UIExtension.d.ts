@@ -6,12 +6,12 @@ import React from 'react';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 export interface UIExtension extends BaseExtension {
     readonly extensionType: 'ui';
-    getComponentDefinitions(): UIComponentDefinition[];
+    getComponentDefinitions(): UIComponentDefinition;
     createComponentInstance(componentId: string, props: any): React.ComponentType<any>;
-    getThemeContributions(): ThemeContribution[];
-    getCommandContributions(): CommandContribution[];
-    getMenuContributions(): MenuContribution[];
-    getKeybindingContributions(): KeybindingContribution[];
+    getThemeContributions(): ThemeContribution;
+    getCommandContributions(): CommandContribution;
+    getMenuContributions(): MenuContribution;
+    getKeybindingContributions(): KeybindingContribution;
     onUIInitialized?(context: ExtensionContext): void;
     onUIDestroyed?(context: ExtensionContext): void;
     onThemeChanged?(theme: Theme): void;
@@ -36,13 +36,10 @@ export declare enum UIComponentCategory {
     MENU = "menu",
     WIDGET = "widget",
     OVERLAY = "overlay",
-    CUSTOM = "custom"
-}
-export interface UIComponentUIConfiguration {
-    layout?: UIComponentLayout;
-    styling?: UIComponentStyling;
-    responsive?: UIComponentResponsive;
-    accessibility?: UIComponentAccessibility;
+    CUSTOM = "custom",
+    export,
+    interface,
+    UIComponentUIConfiguration
 }
 export interface UIComponentLayout {
     position?: 'fixed' | 'absolute' | 'relative' | 'sticky';
@@ -104,26 +101,26 @@ export interface UIComponentStateConfiguration {
     reducer?: (state: any, action: any) => any;
 }
 export interface UIComponentEventConfiguration {
-    preventDefault?: string[];
-    stopPropagation?: string[];
-    capture?: string[];
-    passive?: string[];
+    preventDefault?: string;
+    stopPropagation?: string;
+    capture?: string;
+    passive?: string;
 }
 export interface UIComponentMetadata {
     author: string;
     license: string;
     repository?: string;
     documentation?: string;
-    examples?: UIComponentExample[];
-    screenshots?: string[];
+    examples?: UIComponentExample;
+    screenshots?: string;
     compatibility?: {
         minVersion: string;
         maxVersion?: string;
-        browsers?: string[];
-        devices?: string[];
+        browsers?: string;
+        devices?: string;
     };
-    tags?: string[];
-    keywords?: string[];
+    tags?: string;
+    keywords?: string;
 }
 export interface UIComponentExample {
     name: string;
@@ -249,15 +246,15 @@ export interface CommandContribution {
     handler: CommandHandler;
     enablement?: CommandEnablement;
     keybinding?: string;
-    context?: string[];
+    context?: string;
 }
 export interface CommandHandler {
-    (context: ExtensionContext, ...args: any[]): Promise<any> | any;
+    (context: ExtensionContext, ...args: any): Promise<any> | any;
 }
 export interface CommandEnablement {
     when?: string;
-    contexts?: string[];
-    permissions?: string[];
+    contexts?: string;
+    permissions?: string;
 }
 export interface MenuContribution {
     id: string;
@@ -266,7 +263,7 @@ export interface MenuContribution {
     order?: number;
     type: 'item' | 'submenu' | 'separator';
     command?: string;
-    submenu?: MenuContribution[];
+    submenu?: MenuContribution;
     when?: string;
     menu: MenuTarget;
 }
@@ -277,17 +274,10 @@ export declare enum MenuTarget {
     PALETTE = "palette",
     INSPECTOR = "inspector",
     GRAPH = "graph",
-    CUSTOM = "custom"
-}
-export interface KeybindingContribution {
-    id: string;
-    key: string;
-    command: string;
-    when?: string;
-    args?: any[];
-    mac?: string;
-    win?: string;
-    linux?: string;
+    CUSTOM = "custom",
+    export,
+    interface,
+    KeybindingContribution
 }
 export interface Theme {
     id: string;
@@ -305,29 +295,29 @@ export interface UIContextManager {
     registerComponent(definition: UIComponentDefinition): void;
     unregisterComponent(componentId: string): void;
     getComponent(componentId: string): UIComponentDefinition | undefined;
-    getAllComponents(): UIComponentDefinition[];
+    getAllComponents(): UIComponentDefinition;
     registerTheme(theme: ThemeContribution): void;
     unregisterTheme(themeId: string): void;
     getTheme(themeId: string): ThemeContribution | undefined;
-    getAllThemes(): ThemeContribution[];
+    getAllThemes(): ThemeContribution;
     setActiveTheme(themeId: string): void;
     getActiveTheme(): ThemeContribution | undefined;
     registerCommand(command: CommandContribution): void;
     unregisterCommand(commandId: string): void;
-    executeCommand(commandId: string, ...args: any[]): Promise<any>;
+    executeCommand(commandId: string, ...args: any): Promise<any>;
     getCommand(commandId: string): CommandContribution | undefined;
-    getAllCommands(): CommandContribution[];
+    getAllCommands(): CommandContribution;
     registerMenu(menu: MenuContribution): void;
     unregisterMenu(menuId: string): void;
     getMenu(menuId: string): MenuContribution | undefined;
-    getMenusByTarget(target: MenuTarget): MenuContribution[];
+    getMenusByTarget(target: MenuTarget): MenuContribution;
     registerKeybinding(keybinding: KeybindingContribution): void;
     unregisterKeybinding(keybindingId: string): void;
     getKeybinding(keybindingId: string): KeybindingContribution | undefined;
-    getAllKeybindings(): KeybindingContribution[];
-    on(event: string, listener: (...args: any[]) => void): void;
-    off(event: string, listener: (...args: any[]) => void): void;
-    emit(event: string, ...args: any[]): void;
+    getAllKeybindings(): KeybindingContribution;
+    on(event: string, listener: (...args: any) => void): void;
+    off(event: string, listener: (...args: any) => void): void;
+    emit(event: string, ...args: any): void;
 }
 export interface UIComponentFactory {
     create(componentId: string, props: any): React.ComponentType<any>;
@@ -337,8 +327,5 @@ export interface UIComponentFactory {
 }
 export declare namespace UIExtensionHelpers {
     function createTheme(partial: Partial<ThemeContribution>): ThemeContribution;
-    function createCommand(partial: Partial<CommandContribution>): CommandContribution;
-    function createMenu(partial: Partial<MenuContribution>): MenuContribution;
-    function validateUIComponent(definition: UIComponentDefinition): ExtensionValidationResult;
 }
 //# sourceMappingURL=UIExtension.d.ts.map

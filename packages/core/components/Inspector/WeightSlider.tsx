@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 interface WeightSliderProps {
-  value: number;
+  value: number;,
   onChange: (value: number) => void;
   min?: number;
   max?: number;
@@ -9,13 +9,12 @@ interface WeightSliderProps {
   showNumeric?: boolean;
   label?: string;
   className?: string;
-}
-/**
- * Professional visual weight slider component for Epic 8
- * Meets Cinema 4D/Substance Designer quality standards
- * Replaces numerical inputs for filmmaker-friendly interface
- */
-export const WeightSlider: React.FC<WeightSliderProps> = ({)
+  /**
+  * Professional visual weight slider component for Epic 8
+  * Meets Cinema 4D/Substance Designer quality standards
+  * Replaces numerical inputs for filmmaker-friendly interface
+  */
+  export const WeightSlider: React.FC<WeightSliderProps> = ({,)
   value,
   onChange,
   min = 0,
@@ -33,24 +32,24 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
   // Normalize value to 0-1 range for UI positioning
   const normalizedValue = (value - min) / (max - min);
   const percentage = normalizedValue * 100;
-  const updateValue = useCallback((clientX: number) => {
-    if (!trackRef.current || disabled) return;
-    const rect = trackRef.current.getBoundingClientRect();
-    const position = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const newValue = min + position * (max - min);
-    // Round to step precision
-    const steppedValue = Math.round(newValue / step) * step;
-    const clampedValue = Math.max(min, Math.min(max, steppedValue));
-    onChange(clampedValue);
-  }, [min, max, step, disabled, onChange]);
+  const updateValue = useCallback((clientX: number) => {,
+  if (!trackRef.current || disabled) return;
+  const rect = trackRef.current.getBoundingClientRect();
+  const position = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+  const newValue = min + position * (max - min);
+  // Round to step precision
+  const steppedValue = Math.round(newValue / step) * step;
+  const clampedValue = Math.max(min, Math.min(max, steppedValue));
+  onChange(clampedValue);
+}, [min, max, step, disabled, onChange]);
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (disabled) return;
-    setIsDragging(true);
-    setShowTooltip(true);
-    updateValue(e.clientX);
-    const handleMouseMove = (e: MouseEvent) => {
-      updateValue(e.clientX);
-    };
+  if (disabled) return;
+  setIsDragging(true);
+  setShowTooltip(true);
+  updateValue(e.clientX);
+  const handleMouseMove = (e: MouseEvent) => {,
+  updateValue(e.clientX);
+};
     const handleMouseUp = () => {
       setIsDragging(false);
       setShowTooltip(false);
@@ -73,24 +72,22 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
     } else if (e.key === 'End') {
       onChange(max);
       return;
-    }
     if (delta !== 0) {
       e.preventDefault();
       const newValue = Math.max(min, Math.min(max, value + delta));
       onChange(newValue);
-    }
   }, [disabled, step, value, min, max, onChange]);
-  return ();
+  return;
     <div className={`weight-slider ${className}`} style={{ marginBottom: 8 }}>}
       {label && ()
         <label 
-          style={{ 
-            display: 'block',
-            fontSize: 12,
-            color: '#a0aec0',
-            marginBottom: 4,
-            fontWeight: 500,
-          }}
+          style={{
+  display: 'block',
+  fontSize: 12,
+  color: '#a0aec0',
+  marginBottom: 4,
+  fontWeight: 500,
+}}
         >
           {label}
         </label>
@@ -99,11 +96,11 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
         ref={sliderRef}
         className="slider-container"
         style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          gap: showNumeric ? 8 : 0,
-        }}
+  position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
+  gap: showNumeric ? 8 : 0,
+}}
       >
         {/* Main slider track */}
         <div
@@ -113,16 +110,16 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => !isDragging && setShowTooltip(false)}
           style={{
-            position: 'relative',
-            height: 6,
-            backgroundColor: '#2d3748',
-            borderRadius: 3,
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            flex: 1,
-            border: '1px solid #4a5568',
-            background: 'linear-gradient(90deg, #2d3748 0%, #4a5568 100%)',
-            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
-          }}
+  position: 'relative',
+  height: 6,
+  backgroundColor: '#2d3748',
+  borderRadius: 3,
+  cursor: disabled ? 'not-allowed' : 'pointer',
+  flex: 1,
+  border: '1px solid #4a5568',
+  background: 'linear-gradient(90deg, #2d3748 0%, #4a5568 100%)',
+  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)',
+}}
         >
           {/* Fill track */}
           <div
@@ -132,8 +129,9 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
               left: 0,
               top: 0,
               height: '100%',
-              width: `${percentage}%`,}
-              backgroundColor: disabled ? '#4a5568' : '#3182ce',
+              width: `${percentage}%`}
+},
+  backgroundColor: disabled ? '#4a5568' : '#3182ce',
               borderRadius: 3,
               background: disabled ,
                 ? '#4a5568' 
@@ -149,8 +147,9 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
             onKeyDown={handleKeyDown}
             style={{
               position: 'absolute',
-              left: `${percentage}%`,}
-              top: '50%',
+              left: `${percentage}%`}
+},
+  top: '50%',
               transform: 'translate(-50%, -50%)',
               width: 16,
               height: 16,
@@ -165,8 +164,8 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
                   : '0 2px 4px rgba(0,0,0,0.2)',
               transition: isDragging ? 'none' : 'all 0.1s ease',
               outline: 'none',
-              scale: isDragging ? 1.1 : 1,
-            }}
+              scale: isDragging ? 1.1 : 1;
+  }}
             onFocus={() => setShowTooltip(true)}
             onBlur={() => setShowTooltip(false)}
           />
@@ -176,8 +175,9 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
               className="slider-tooltip"
               style={{
                 position: 'absolute',
-                left: `${percentage}%`,}
-                bottom: '24px',
+                left: `${percentage}%`}
+},
+  bottom: '24px',
                 transform: 'translateX(-50%)',
                 backgroundColor: '#1a202c',
                 color: '#e2e8f0',
@@ -189,22 +189,22 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 whiteSpace: 'nowrap',
                 zIndex: 10,
-                pointerEvents: 'none',
-              }}
+                pointerEvents: 'none';
+  }}
             >
               {value.toFixed(step < 1 ? 1 : 0)}
               <div
                 style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: 0,
-                  borderLeft: '4px solid transparent',
-                  borderRight: '4px solid transparent',
-                  borderTop: '4px solid #1a202c',
-                }}
+  position: 'absolute',
+  top: '100%',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: 0,
+  height: 0,
+  borderLeft: '4px solid transparent',
+  borderRight: '4px solid transparent',
+  borderTop: '4px solid #1a202c',
+}}
               />
             </div>
           )}
@@ -221,16 +221,16 @@ export const WeightSlider: React.FC<WeightSliderProps> = ({)
             }}
             disabled={disabled}
             style={{
-              width: 60,
-              padding: '4px 6px',
-              backgroundColor: '#2d3748',
-              border: '1px solid #4a5568',
-              borderRadius: 4,
-              color: '#e2e8f0',
-              fontSize: 12,
-              textAlign: 'center',
-              outline: 'none',
-            }}
+  width: 60,
+  padding: '4px 6px',
+  backgroundColor: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 12,
+  textAlign: 'center',
+  outline: 'none',
+}}
             min={min}
             max={max}
             step={step}

@@ -3,12 +3,14 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
 
+}
 export interface SecurityHeadersConfig {
   contentSecurityPolicy?: {
     enabled: boolean;
     directives: Record<string, string[]>;
     reportOnly?: boolean;
     reportUri?: string;
+}
   };
   frameOptions?: {
     enabled: boolean;
@@ -65,26 +67,26 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
       'form-action': ['\'self\''],
       'base-uri': ['\'self\''],
       'manifest-src': ['\'self\'']
-    },
+  }
     reportOnly: false
-  },
+  }
   frameOptions: {
     enabled: true,
     directive: 'DENY'
-  },
+  }
   contentTypeOptions: {
     enabled: true
-  },
+  }
   referrerPolicy: {
     enabled: true,
     directive: 'strict-origin-when-cross-origin'
-  },
+  }
   strictTransportSecurity: {
     enabled: true, // Will be conditionally applied based on environment and HTTPS
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
-  },
+  }
   permissionsPolicy: {
     enabled: true,
     directives: {
@@ -96,15 +98,15 @@ export const defaultSecurityConfig: SecurityHeadersConfig = {
       'fullscreen': ['\'self\''],
       'picture-in-picture': ['\'self\'']
     }
-  },
+  }
   crossOriginEmbedderPolicy: {
     enabled: false, // Can cause issues with third-party resources
     directive: 'unsafe-none'
-  },
+  }
   crossOriginOpenerPolicy: {
     enabled: true,
     directive: 'same-origin-allow-popups'
-  },
+  }
   crossOriginResourcePolicy: {
     enabled: true,
     directive: 'same-origin'
@@ -126,7 +128,7 @@ function buildPermissionsPolicyHeader(directives: Record<string, string[]>): str
         return `${feature}=()`;
       }
       return `${feature}=(${allowlist.join(' ')})`;
-    })
+  }
     .join(', ');
 }
 
@@ -136,35 +138,35 @@ function mergeWithDefaults(config: SecurityHeadersConfig): SecurityHeadersConfig
     contentSecurityPolicy: {
       ...defaultSecurityConfig.contentSecurityPolicy,
       ...config.contentSecurityPolicy
-    },
+  }
     frameOptions: {
       ...defaultSecurityConfig.frameOptions,
       ...config.frameOptions
-    },
+  }
     contentTypeOptions: {
       ...defaultSecurityConfig.contentTypeOptions,
       ...config.contentTypeOptions
-    },
+  }
     referrerPolicy: {
       ...defaultSecurityConfig.referrerPolicy,
       ...config.referrerPolicy
-    },
+  }
     strictTransportSecurity: {
       ...defaultSecurityConfig.strictTransportSecurity,
       ...config.strictTransportSecurity
-    },
+  }
     permissionsPolicy: {
       ...defaultSecurityConfig.permissionsPolicy,
       ...config.permissionsPolicy
-    },
+  }
     crossOriginEmbedderPolicy: {
       ...defaultSecurityConfig.crossOriginEmbedderPolicy,
       ...config.crossOriginEmbedderPolicy
-    },
+  }
     crossOriginOpenerPolicy: {
       ...defaultSecurityConfig.crossOriginOpenerPolicy,
       ...config.crossOriginOpenerPolicy
-    },
+  }
     crossOriginResourcePolicy: {
       ...defaultSecurityConfig.crossOriginResourcePolicy,
       ...config.crossOriginResourcePolicy
@@ -253,6 +255,7 @@ export function securityHeadersMiddleware(config?: SecurityHeadersConfig) {
 }
 
 // Security headers audit function
+}
 export interface SecurityAuditResult {
   passed: boolean;
   score: number;
@@ -263,6 +266,7 @@ export interface SecurityAuditResult {
     value?: string;
     recommendation?: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
+}
   }[];
   summary: {
     critical: number;
@@ -280,37 +284,37 @@ export function auditSecurityHeaders(responseHeaders: Record<string, string>): S
       severity: 'high' as const,
       score: 15,
       recommendation: 'Implement CSP to prevent XSS attacks'
-    },
+  }
     {
       name: 'X-Frame-Options',
       severity: 'medium' as const,
       score: 10,
       recommendation: 'Prevent clickjacking attacks'
-    },
+  }
     {
       name: 'X-Content-Type-Options',
       severity: 'medium' as const,
       score: 8,
       recommendation: 'Prevent MIME type sniffing'
-    },
+  }
     {
       name: 'Referrer-Policy',
       severity: 'low' as const,
       score: 5,
       recommendation: 'Control referrer information disclosure'
-    },
+  }
     {
       name: 'Strict-Transport-Security',
       severity: 'high' as const,
       score: 12,
       recommendation: 'Enforce HTTPS connections (production only)'
-    },
+  }
     {
       name: 'Permissions-Policy',
       severity: 'medium' as const,
       score: 8,
       recommendation: 'Control browser feature access'
-    },
+  }
     {
       name: 'Cross-Origin-Opener-Policy',
       severity: 'low' as const,

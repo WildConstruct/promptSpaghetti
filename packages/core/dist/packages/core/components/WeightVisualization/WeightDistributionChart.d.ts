@@ -8,7 +8,7 @@ import React from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 export type ChartType = 'pie' | 'bar' | 'donut';
 export interface WeightDistributionChartProps {
-    options: WeightControlOption[];
+    options: WeightControlOption;
     type?: ChartType;
     width?: number;
     height?: number;

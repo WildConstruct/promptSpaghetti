@@ -37,25 +37,22 @@ export interface VerificationDashboardProps {
   className?: string;
   onRequestSelect?: (request: IdentityValidationRequest) => void;
 }
-
 export interface AdminVerificationMetrics {
-  totalRequests: number;
+  totalRequests: number;,
   pendingRequests: number;
-  approvedToday: number;
+  approvedToday: number;,
   rejectedToday: number;
-  averageProcessingTime: number; // hours
-  queueBacklog: number;
+  averageProcessingTime: number; // hours,
+  queueBacklog: number;,
   priorityRequests: number;
 }
-
 export interface VerificationQueueItem extends IdentityValidationRequest {
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  timeInQueue: number; // hours
+  priority: 'low' | 'medium' | 'high' | 'urgent';,
+  timeInQueue: number; // hours,
   assignedReviewer?: string;
-  complexity: 'simple' | 'moderate' | 'complex';
+  complexity: 'simple' | 'moderate' | 'complex';,
   flagged: boolean;
-}
-const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
+  const VerificationDashboard: React.FC<VerificationDashboardProps> = ({,)
   className = '',
   onRequestSelect
 }) => {
@@ -66,16 +63,16 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
   const [isLoading, setIsLoading] = useState(false);
   // Mock admin metrics - in real implementation, this would come from an admin service
   const [metrics, setMetrics] = useState<AdminVerificationMetrics>({)
-    totalRequests: 1247,
-    pendingRequests: 23,
-    approvedToday: 18,
-    rejectedToday: 3,
-    averageProcessingTime: 4.2,
-    queueBacklog: 23,
-    priorityRequests: 8,
-  });
+  totalRequests: 1247,
+  pendingRequests: 23,
+  approvedToday: 18,
+  rejectedToday: 3,
+  averageProcessingTime: 4.2,
+  queueBacklog: 23,
+  priorityRequests: 8,
+});
   // Mock queue data - in real implementation, this would come from admin service
-  const [verificationQueue, setVerificationQueue] = useState<VerificationQueueItem[]>([)
+  const [verificationQueue, setVerificationQueue] = useState<VerificationQueueItem>([)
     {
       userId: 'user-1',
       requestId: 'val_1738457234_abc123',
@@ -87,8 +84,8 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       priority: 'high',
       timeInQueue: 2.5,
       complexity: 'moderate',
-      flagged: false,
-    },
+      flagged: false;
+  }
     {
       userId: 'user-2',
       requestId: 'val_1738457235_def456',
@@ -101,9 +98,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       timeInQueue: 6.2,
       assignedReviewer: 'admin-jane',
       complexity: 'complex',
-      flagged: true,
-    }
-  ]);
+      flagged: true]);
   const handleRefresh = async () => {
     setIsLoading(true);
     // Simulate API call delay
@@ -121,25 +116,23 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
     );
   };
   const getStatusColor = (status: ValidationStatus) => {
-    switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'in_review': return 'text-blue-600 bg-blue-100';
-      case 'requires_update': return 'text-orange-600 bg-orange-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'approved': return 'text-green-600 bg-green-100';
+  case 'rejected': return 'text-red-600 bg-red-100';
+  case 'pending': return 'text-yellow-600 bg-yellow-100';
+  case 'in_review': return 'text-blue-600 bg-blue-100';
+  case 'requires_update': return 'text-orange-600 bg-orange-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'urgent': return 'text-red-600 bg-red-100';
-      case 'high': return 'text-orange-600 bg-orange-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (priority) {
+  case 'urgent': return 'text-red-600 bg-red-100';
+  case 'high': return 'text-orange-600 bg-orange-100';
+  case 'medium': return 'text-yellow-600 bg-yellow-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const filteredQueue = verificationQueue.filter(item => {)
-    const matchesSearch = searchTerm === '' || ;
+  const matchesSearch = searchTerm === '' || ;
       item.userId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.requestId.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.data.fullName?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -376,7 +369,7 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       )}
     </div>
   );
-  return ();
+  return;
     <div className={`verification-dashboard ${className}`}>}
       <div className="dashboard-header">
         <div className="header-info">
@@ -431,284 +424,225 @@ const VerificationDashboard: React.FC<VerificationDashboardProps> = ({)
       </Tabs>
       <style>{`
         .verification-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .dashboard-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .header-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .overview-section {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .metrics-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 1rem;
-        }
         .metric-card .card-content {
           padding: 1.5rem;
-        }
         .metric-header {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-bottom: 0.75rem;
-        }
         .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .metric-change {
           display: flex;
-          align-items: center;
-          gap: 0.25rem;
+          align-items: center;,
+  gap: 0.25rem;
           font-size: 0.75rem;
           font-weight: 500;
-        }
         .metric-change.positive {
           color: #059669;
-        }
         .metric-change.negative {
           color: #dc2626;
-        }
         .metric-change.neutral {
           color: #6b7280;
-        }
         .performance-cards {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .performance-metrics {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .performance-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem 0;
+          align-items: center;,
+  padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
-        }
         .performance-item:last-child {
           border-bottom: none;
-        }
         .performance-value {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .performance-value.priority {
           color: #dc2626;
-        }
         .alerts-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .alert-item {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           padding: 0.75rem;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
         .alert-item.warning {
-          background: #fef3c7;
-          color: #92400e;
-        }
+          background: #fef3c7;,
+  color: #92400e;
         .alert-item.info {
-          background: #dbeafe;
-          color: #1e40af;
-        }
+          background: #dbeafe;,
+  color: #1e40af;
         .alert-item.success {
-          background: #d1fae5;
-          color: #065f46;
-        }
+          background: #d1fae5;,
+  color: #065f46;
         .queue-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .queue-controls {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 1rem;
+          padding: 1rem;,
+  background: #f9fafb;
           border-radius: 8px;
-        }
         .search-bar {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           flex: 1;
-          max-width: 400px;
-          position: relative;
-        }
+          max-width: 400px;,
+  position: relative;
         .search-bar .lucide {
-          position: absolute;
-          left: 0.75rem;
+          position: absolute;,
+  left: 0.75rem;
           z-index: 1;
-        }
         .search-input {
-          flex: 1;
-          padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+          flex: 1;,
+  padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .search-input:focus {
-          outline: none;
+        .search-input:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .filters {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .filter-select {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
-          background: white;
-        }
+          font-size: 0.875rem;,
+  background: white;
         .queue-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .queue-item .card-content {
           padding: 1rem;
-        }
         .queue-item-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .item-info {
           flex: 1;
-        }
         .item-title {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-bottom: 0.5rem;
-        }
         .user-name {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .item-details {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          display: flex;,
+  gap: 1rem;
+          font-size: 0.75rem;,
+  color: #6b7280;
         .item-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           align-items: center;
-        }
         .review-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .approve-btn {
           background: #059669;
           border-color: #059669;
-        }
-        .approve-btn:hover {
-          background: #047857;
+        .approve-btn:hover {,
+  background: #047857;
           border-color: #047857;
-        }
         .reject-btn {
           color: #dc2626;
           border-color: #dc2626;
-        }
-        .reject-btn:hover {
-          background: #dc2626;
+        .reject-btn:hover {,
+  background: #dc2626;
           color: white;
-        }
         .assigned-reviewer {
           margin-top: 0.75rem;
           padding-top: 0.75rem;
           border-top: 1px solid #e5e7eb;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .empty-state {
-          text-align: center;
-          padding: 4rem;
+          text-align: center;,
+  padding: 4rem;
           color: #6b7280;
-        }
         @media (max-width: 768px) {
           .dashboard-header {
             flex-direction: column;
             align-items: stretch;
-          }
           .queue-controls {
             flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
-          }
+            align-items: stretch;,
+  gap: 0.75rem;
           .search-bar {
             max-width: none;
-          }
           .filters {
             flex-wrap: wrap;
-          }
           .queue-item-header {
-            flex-direction: column;
-            gap: 0.75rem;
-          }
+            flex-direction: column;,
+  gap: 0.75rem;
           .performance-cards {
             grid-template-columns: 1fr;
-          }
           .metrics-grid {
             grid-template-columns: repeat(2, 1fr);
-          }
-        }
         @media (max-width: 480px) {
           .metrics-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );

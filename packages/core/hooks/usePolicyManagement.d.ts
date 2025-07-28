@@ -14,12 +14,13 @@ import {
   PolicyViolation,
   ComplianceFramework
 } from '../services/PolicyManagement';
+
 export interface PolicyManagementHookConfig {
     autoEvaluate?: boolean;
     cacheTimeout?: number;
     enableRealTimeUpdates?: boolean;
     complianceFrameworks?: ComplianceFramework[];
-}
+
 export interface PolicyEvaluationOptions {
     userId?: string;
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
@@ -36,7 +37,7 @@ export interface PolicyEvaluationOptions {
         expertReviewed?: boolean;
     };
     additionalContext?: Record<string, any>;
-}
+
 export declare const usePolicyManagement: (config?: PolicyManagementHookConfig) => {
     policies: UnifiedPolicy[];
     evaluationResults: PolicyEvaluationResult[];

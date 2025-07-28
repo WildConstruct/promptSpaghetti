@@ -10,6 +10,7 @@
 
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface ConsentRecord {
   consentId: string;
   userId: string;
@@ -33,7 +34,9 @@ export interface ConsentRecord {
   auditTrail: ConsentAuditEntry[];
   metadata: ConsentMetadata;
 }
+}
 
+}
 export interface ConsentPurpose {
   purposeId: string;
   category: ConsentCategory;
@@ -49,7 +52,9 @@ export interface ConsentPurpose {
   profiling: boolean;
   specialCategoryData: boolean;
 }
+}
 
+}
 export interface DataProcessingDetails {
   collectsPersonalData: boolean;
   collectsSensitiveData: boolean;
@@ -61,7 +66,9 @@ export interface DataProcessingDetails {
   dataRetention: RetentionPolicy;
   securityMeasures: string[];
 }
+}
 
+}
 export interface RetentionPolicy {
   retentionPeriod: number; // days
   retentionBasis: string;
@@ -69,7 +76,9 @@ export interface RetentionPolicy {
   archivalProcedures: string[];
   exceptionCriteria: string[];
 }
+}
 
+}
 export interface ConsentContext {
   contextId: string;
   sessionId: string;
@@ -83,7 +92,9 @@ export interface ConsentContext {
   displayMethod: ConsentDisplayMethod;
   interactionHistory: ConsentInteraction[];
 }
+}
 
+}
 export interface GeolocationData {
   country: string;
   region: string;
@@ -93,7 +104,9 @@ export interface GeolocationData {
   accuracy?: number;
   source: 'IP' | 'GPS' | 'USER_PROVIDED';
 }
+}
 
+}
 export interface ConsentFlow {
   flowId: string;
   flowType: ConsentFlowType;
@@ -103,7 +116,9 @@ export interface ConsentFlow {
   abandonmentPoint?: string;
   totalTimeSpent: number; // milliseconds
 }
+}
 
+}
 export interface ConsentFlowStep {
   stepId: string;
   stepType: string;
@@ -112,7 +127,9 @@ export interface ConsentFlowStep {
   userAction: string;
   stepData: Record<string, any>;
 }
+}
 
+}
 export interface ConsentInteraction {
   interactionId: string;
   timestamp: Date;
@@ -122,7 +139,9 @@ export interface ConsentInteraction {
   details: Record<string, any>;
   result: InteractionResult;
 }
+}
 
+}
 export interface DataCategory {
   categoryId: string;
   name: string;
@@ -134,7 +153,9 @@ export interface DataCategory {
   specialHandling: boolean;
   encryptionRequired: boolean;
 }
+}
 
+}
 export interface ProcessingActivity {
   activityId: string;
   name: string;
@@ -148,7 +169,9 @@ export interface ProcessingActivity {
   automatedProcessing: boolean;
   profilingInvolved: boolean;
 }
+}
 
+}
 export interface ProcessingRecipient {
   recipientId: string;
   name: string;
@@ -158,7 +181,9 @@ export interface ProcessingRecipient {
   contractualSafeguards: string[];
   adequacyDecision: boolean;
 }
+}
 
+}
 export interface InternationalTransfer {
   transferId: string;
   destinationCountry: string;
@@ -168,7 +193,9 @@ export interface InternationalTransfer {
   purpose: string;
   dataCategories: string[];
 }
+}
 
+}
 export interface TransferSafeguard {
   safeguardType: string;
   description: string;
@@ -176,7 +203,9 @@ export interface TransferSafeguard {
   effectiveDate: Date;
   expiryDate?: Date;
 }
+}
 
+}
 export interface ThirdPartyConsent {
   thirdPartyId: string;
   thirdPartyName: string;
@@ -190,7 +219,9 @@ export interface ThirdPartyConsent {
   privacyPolicyUrl: string;
   contactInfo: ThirdPartyContact;
 }
+}
 
+}
 export interface ThirdPartyContact {
   dpoEmail?: string;
   privacyEmail?: string;
@@ -198,7 +229,9 @@ export interface ThirdPartyContact {
   address?: string;
   phone?: string;
 }
+}
 
+}
 export interface UserConsentPreferences {
   preferenceId: string;
   communicationPreferences: CommunicationPreference[];
@@ -209,7 +242,9 @@ export interface UserConsentPreferences {
   notificationPreferences: NotificationPreference[];
   accessibilityPreferences: AccessibilityPreference[];
 }
+}
 
+}
 export interface CommunicationPreference {
   channel: CommunicationChannel;
   enabled: boolean;
@@ -218,7 +253,9 @@ export interface CommunicationPreference {
   timePreferences: TimePreference[];
   languagePreference: string;
 }
+}
 
+}
 export interface PrivacySetting {
   settingType: PrivacySettingType;
   value: boolean | string | number;
@@ -226,7 +263,9 @@ export interface PrivacySetting {
   effectiveDate: Date;
   userModifiable: boolean;
 }
+}
 
+}
 export interface CookiePreference {
   category: CookieCategory;
   enabled: boolean;
@@ -234,7 +273,9 @@ export interface CookiePreference {
   expiryPreference: number; // days
   sameSitePreference: 'Strict' | 'Lax' | 'None';
 }
+}
 
+}
 export interface SpecificCookieConsent {
   cookieName: string;
   vendor: string;
@@ -243,7 +284,9 @@ export interface SpecificCookieConsent {
   essential: boolean;
   duration: number;
 }
+}
 
+}
 export interface MarketingPreference {
   channel: MarketingChannel;
   enabled: boolean;
@@ -252,7 +295,9 @@ export interface MarketingPreference {
   personalization: boolean;
   thirdPartySharing: boolean;
 }
+}
 
+}
 export interface DataProcessingPreference {
   processingType: DataProcessingType;
   enabled: boolean;
@@ -261,14 +306,18 @@ export interface DataProcessingPreference {
   sharing: SharingPreference;
   retention: RetentionPreference;
 }
+}
 
+}
 export interface AutomationPreference {
   automatedDecisions: boolean;
   profiling: boolean;
   aiProcessing: boolean;
   humanReview: boolean;
 }
+}
 
+}
 export interface SharingPreference {
   internalSharing: boolean;
   thirdPartySharing: boolean;
@@ -276,7 +325,9 @@ export interface SharingPreference {
   partnerSharing: boolean;
   researchSharing: boolean;
 }
+}
 
+}
 export interface RetentionPreference {
   minimumRetention: boolean;
   standardRetention: boolean;
@@ -284,7 +335,9 @@ export interface RetentionPreference {
   customPeriod?: number;
   automaticDeletion: boolean;
 }
+}
 
+}
 export interface NotificationPreference {
   notificationType: NotificationType;
   enabled: boolean;
@@ -292,7 +345,9 @@ export interface NotificationPreference {
   deliveryMethods: DeliveryMethod[];
   quietHours: QuietHours;
 }
+}
 
+}
 export interface QuietHours {
   enabled: boolean;
   startTime: string;
@@ -300,7 +355,9 @@ export interface QuietHours {
   timezone: string;
   exceptions: string[];
 }
+}
 
+}
 export interface AccessibilityPreference {
   highContrast: boolean;
   largeText: boolean;
@@ -310,14 +367,18 @@ export interface AccessibilityPreference {
   audioDescription: boolean;
   simplifiedInterface: boolean;
 }
+}
 
+}
 export interface TimePreference {
   timezone: string;
   preferredTime: string;
   daysOfWeek: number[];
   frequency: 'IMMEDIATE' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
 }
+}
 
+}
 export interface ComplianceFlag {
   flagId: string;
   framework: ComplianceFramework;
@@ -328,7 +389,9 @@ export interface ComplianceFlag {
   nextReview: Date;
   riskLevel: RiskLevel;
 }
+}
 
+}
 export interface ConsentAuditEntry {
   entryId: string;
   timestamp: Date;
@@ -340,7 +403,9 @@ export interface ConsentAuditEntry {
   evidence: AuditEvidence[];
   compliance: AuditCompliance;
 }
+}
 
+}
 export interface ConsentActor {
   actorId: string;
   actorType: 'USER' | 'SYSTEM' | 'ADMIN' | 'AUTOMATED';
@@ -348,7 +413,9 @@ export interface ConsentActor {
   permissions: string[];
   sessionInfo: SessionInfo;
 }
+}
 
+}
 export interface SessionInfo {
   sessionId: string;
   ipAddress: string;
@@ -356,7 +423,9 @@ export interface SessionInfo {
   authenticationType: string;
   securityLevel: string;
 }
+}
 
+}
 export interface AuditEvidence {
   evidenceType: EvidenceType;
   description: string;
@@ -364,7 +433,9 @@ export interface AuditEvidence {
   signature?: string;
   timestamp: Date;
 }
+}
 
+}
 export interface AuditCompliance {
   frameworks: string[];
   requirements: string[];
@@ -372,14 +443,18 @@ export interface AuditCompliance {
   classificationLevel: string;
   integrity: IntegrityCheck;
 }
+}
 
+}
 export interface IntegrityCheck {
   checksum: string;
   algorithm: string;
   verified: boolean;
   verifiedAt: Date;
 }
+}
 
+}
 export interface ConsentMetadata {
   version: string;
   source: ConsentSource;
@@ -389,7 +464,9 @@ export interface ConsentMetadata {
   flags: string[];
   experiments: ExperimentInfo[];
 }
+}
 
+}
 export interface MigrationInfo {
   migrationId: string;
   fromVersion: string;
@@ -397,7 +474,9 @@ export interface MigrationInfo {
   migratedAt: Date;
   migrationRules: string[];
 }
+}
 
+}
 export interface ExperimentInfo {
   experimentId: string;
   experimentName: string;
@@ -405,7 +484,9 @@ export interface ExperimentInfo {
   startDate: Date;
   endDate?: Date;
 }
+}
 
+}
 export interface RetentionRequirement {
   requirementId: string;
   framework: string;
@@ -413,6 +494,7 @@ export interface RetentionRequirement {
   maximumPeriod?: number;
   triggers: string[];
   exceptions: string[];
+}
 }
 
 // Enums and Types
@@ -459,6 +541,7 @@ export class ConsentCollectionService {
     sessionId: string,
     context: Partial<ConsentContext>
   ): Promise<{ collectionId: string; requiredConsents: ConsentPurpose[]; bannerConfig: BannerConfiguration }> {
+
     const collectionId = `COLLECT-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     await this.auditService.logEvent({
@@ -468,7 +551,7 @@ export class ConsentCollectionService {
         collectionId,
         context,
         timestamp: new Date()
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['GDPR', 'CCPA'],
@@ -493,6 +576,7 @@ export class ConsentCollectionService {
     userId: string,
     consentData: ConsentCollectionRequest
   ): Promise<{ consentId: string; status: ConsentStatus; expiresAt?: Date }> {
+
     const consentId = `CONSENT-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     // Create comprehensive consent record
@@ -531,7 +615,7 @@ export class ConsentCollectionService {
             authenticationType: 'session',
             securityLevel: 'standard'
           }
-        },
+  }
         newState: consentData,
         reason: 'User granted consent',
         evidence: [{
@@ -571,7 +655,7 @@ export class ConsentCollectionService {
         purpose: consentData.purpose.name,
         method: consentData.method,
         granularity: consentData.granularity
-      },
+  }
       riskLevel: 'MEDIUM',
       compliance: {
         frameworks: ['GDPR', 'CCPA'],
@@ -598,6 +682,7 @@ export class ConsentCollectionService {
     consentId: string,
     preferences: Partial<UserConsentPreferences>
   ): Promise<{ updated: boolean; effectiveDate: Date }> {
+
     await this.auditService.logEvent({
       eventType: 'CONSENT_PREFERENCES_UPDATED',
       userId,
@@ -605,7 +690,7 @@ export class ConsentCollectionService {
         consentId,
         updatedPreferences: Object.keys(preferences),
         timestamp: new Date()
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['GDPR'],
@@ -627,6 +712,7 @@ export class ConsentCollectionService {
     preferences: UserConsentPreferences;
     complianceStatus: ComplianceStatus;
   }> {
+
     // Mock implementation - would fetch from database
     const activeConsents: ConsentRecord[] = [
       {
@@ -656,14 +742,14 @@ export class ConsentCollectionService {
               deletionTriggers: ['consent_withdrawal', 'data_minimization'],
               archivalProcedures: ['anonymization'],
               exceptionCriteria: []
-            },
+  }
             securityMeasures: ['encryption', 'access_controls', 'audit_logging']
-          },
+  }
           retentionPeriod: 365,
           automatedDecisionMaking: false,
           profiling: false,
           specialCategoryData: false
-        },
+  }
         status: 'ACTIVE',
         granularity: 'CATEGORY',
         grantedAt: new Date(),
@@ -735,14 +821,14 @@ export class ConsentCollectionService {
           profiling: false,
           aiProcessing: false,
           humanReview: true
-        },
+  }
         sharing: {
           internalSharing: true,
           thirdPartySharing: false,
           internationalTransfers: false,
           partnerSharing: false,
           researchSharing: false
-        },
+  }
         retention: {
           minimumRetention: true,
           standardRetention: false,
@@ -789,6 +875,7 @@ export class ConsentCollectionService {
     feature: string,
     context: ConsentContext
   ): Promise<{ promptId: string; promptConfig: JustInTimePromptConfig; required: boolean }> {
+
     const promptId = `JIT-${Date.now()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     
     const promptConfig: JustInTimePromptConfig = {
@@ -819,14 +906,14 @@ export class ConsentCollectionService {
             deletionTriggers: ['feature_disabled', 'consent_withdrawal'],
             archivalProcedures: [],
             exceptionCriteria: []
-          },
+  }
           securityMeasures: ['encryption', 'access_controls']
-        },
+  }
         retentionPeriod: 365,
         automatedDecisionMaking: false,
         profiling: false,
         specialCategoryData: false
-      },
+  }
       displayType: 'MODAL',
       urgency: 'MEDIUM',
       deferrable: true,
@@ -848,7 +935,7 @@ export class ConsentCollectionService {
           pageUrl: context.pageUrl,
           sessionId: context.sessionId
         }
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['GDPR'],
@@ -867,6 +954,7 @@ export class ConsentCollectionService {
     userId: string,
     framework: ComplianceFramework
   ): Promise<{ compliant: boolean; issues: ComplianceIssue[]; recommendations: string[] }> {
+
     const issues: ComplianceIssue[] = [];
     const recommendations: string[] = [];
 
@@ -893,7 +981,7 @@ export class ConsentCollectionService {
         compliant,
         issueCount: issues.length,
         recommendationCount: recommendations.length
-      },
+  }
       riskLevel: compliant ? 'LOW' : 'HIGH',
       compliance: {
         frameworks: [framework],
@@ -909,6 +997,7 @@ export class ConsentCollectionService {
    * Private helper methods
    */
   private async getRequiredConsents(country?: string): Promise<ConsentPurpose[]> {
+
     // Mock implementation - would determine based on jurisdiction and features
     return [
       {
@@ -934,9 +1023,9 @@ export class ConsentCollectionService {
             deletionTriggers: ['account_deletion'],
             archivalProcedures: [],
             exceptionCriteria: ['legal_hold']
-          },
+  }
           securityMeasures: ['encryption', 'access_controls', 'monitoring']
-        },
+  }
         retentionPeriod: 30,
         automatedDecisionMaking: false,
         profiling: false,
@@ -946,6 +1035,7 @@ export class ConsentCollectionService {
   }
 
   private async getBannerConfiguration(country?: string): Promise<BannerConfiguration> {
+
     return {
       type: 'GDPR_COMPLIANT',
       position: 'BOTTOM',
@@ -962,6 +1052,7 @@ export class ConsentCollectionService {
   }
 
   private async generateComplianceFlags(_____consentData: ConsentCollectionRequest): Promise<ComplianceFlag[]> {
+
     return [
       {
         flagId: 'GDPR_ARTICLE_7',
@@ -978,6 +1069,7 @@ export class ConsentCollectionService {
 }
 
 // Additional interfaces for service functionality
+}
 export interface ConsentCollectionRequest {
   consentType: ConsentType;
   purpose: ConsentPurpose;
@@ -994,7 +1086,9 @@ export interface ConsentCollectionRequest {
   tags?: string[];
   experiments?: ExperimentInfo[];
 }
+}
 
+}
 export interface BannerConfiguration {
   type: 'GDPR_COMPLIANT' | 'CCPA_COMPLIANT' | 'SIMPLE' | 'ADVANCED';
   position: 'TOP' | 'BOTTOM' | 'OVERLAY' | 'MODAL';
@@ -1008,7 +1102,9 @@ export interface BannerConfiguration {
   showOnce: boolean;
   respectDoNotTrack: boolean;
 }
+}
 
+}
 export interface JustInTimePromptConfig {
   promptId: string;
   feature: string;
@@ -1023,9 +1119,11 @@ export interface JustInTimePromptConfig {
     allowGranular: boolean;
     rememberChoice: boolean;
     explainConsequences: boolean;
+}
   };
 }
 
+}
 export interface ComplianceIssue {
   issueId: string;
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -1035,4 +1133,5 @@ export interface ComplianceIssue {
   requirement: string;
   remediation: string;
   deadline?: Date;
+}
 }

@@ -121,6 +121,7 @@ export class PerformanceSystem {
    * Run comprehensive performance assessment
    */
   async runPerformanceAssessment(serverUrl: string): Promise<any> {
+
     console.log('Starting comprehensive performance assessment');
     
     // Run predefined test scenarios
@@ -135,7 +136,7 @@ export class PerformanceSystem {
         passedTests: results.filter(r => r.summary.successRate >= 95).length,
         averageLatency: results.reduce((acc, r) => acc + r.summary.averageLatency, 0) / results.length,
         overallThroughput: results.reduce((acc, r) => acc + r.summary.throughput, 0)
-      },
+  }
       recommendations: this.optimizer.getRecommendations(),
       results
     };

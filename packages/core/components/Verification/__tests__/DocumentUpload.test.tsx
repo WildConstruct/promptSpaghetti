@@ -14,17 +14,16 @@ global.File = class MockFile {
     this.size = properties.size || parts.join('').length;
     this.type = properties.type || 'text/plain';
     this.lastModified = Date.now();
-  }
 } as any;
 
 // Mock FileReader
 global.FileReader = class MockFileReader {
-  readAsDataURL = jest.fn<unknown[], unknown>();
+  readAsDataURL = jest.fn<unknown, unknown>();
   result = 'data:image/png;base64,test';
   onload = null;
   onerror = null;
 } as any;
-const mockOnFilesChange = jest.fn<unknown[], unknown>();
+const mockOnFilesChange = jest.fn<unknown, unknown>();
 const defaultProps = {
   onFilesChange: mockOnFilesChange,
 };
@@ -91,8 +90,8 @@ describe('DocumentUpload', () => {
       const largeContent = 'x'.repeat(2 * 1024 * 1024); // 2MB content;
       const largeFile = new File([largeContent], 'large.pdf', { )
         type: 'application/pdf',
-        size: 2 * 1024 * 1024,
-      });
+        size: 2 * 1024 * 1024;
+  });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [largeFile]);
       await waitFor(() => {
@@ -140,7 +139,7 @@ describe('DocumentUpload', () => {
       render(<DocumentUpload {...defaultProps} />);
       const uploadArea = screen.getByText('Upload your documents here').closest('div');
       fireEvent.dragEnter(uploadArea, {)
-        dataTransfer: { files: [] }
+  dataTransfer: { files: [] }
       });
       expect(uploadArea).toHaveClass('drag-active');
     });
@@ -159,7 +158,7 @@ describe('DocumentUpload', () => {
       const file = new File(['content'], 'dropped.pdf', { type: 'application/pdf' });
       const uploadArea = screen.getByText('Upload your documents here').closest('div');
       fireEvent.drop(uploadArea, {)
-        dataTransfer: { files: [file] }
+  dataTransfer: { files: [file] }
       });
       await waitFor(() => {
         expect(mockOnFilesChange).toHaveBeenCalledWith([file]);
@@ -170,7 +169,7 @@ describe('DocumentUpload', () => {
       const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
       const uploadArea = screen.getByText('Upload your documents here').closest('div');
       fireEvent.drop(uploadArea, {)
-        dataTransfer: { files: [file] }
+  dataTransfer: { files: [file] }
       });
       expect(mockOnFilesChange).not.toHaveBeenCalled();
     });
@@ -181,8 +180,8 @@ describe('DocumentUpload', () => {
       render(<DocumentUpload {...defaultProps} />);
       const file = new File(['content'], 'test-document.pdf', { )
         type: 'application/pdf',
-        size: 1024 ,
-      });
+        size: 1024 ;
+  });
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, [file]);
       await waitFor(() => {
@@ -214,9 +213,7 @@ describe('DocumentUpload', () => {
           size: 2048,
           type: 'application/pdf',
           url: 'https://example.com/file1',
-          uploadedAt: new Date('2023-01-01'),
-        }
-      ];
+          uploadedAt: new Date('2023-01-01')];
       render(<DocumentUpload {...defaultProps} existingFiles={existingFiles} />);
       expect(screen.getByText('Previously Uploaded (1)')).toBeInTheDocument();
       expect(screen.getByText('existing.pdf')).toBeInTheDocument();
@@ -244,14 +241,14 @@ describe('DocumentUpload', () => {
       const user = userEvent.setup();
       render(<DocumentUpload {...defaultProps} />);
       const files = [;
-        new File(['x'.repeat(1024)], 'small.txt', { 
-          type: 'image/jpeg',
-          size: 1024 ,
-        }),
-        new File(['x'.repeat(1024 * 1024)], 'medium.txt', { 
-          type: 'image/jpeg',
-          size: 1024 * 1024 ,
-        })
+        new File(['x'.repeat(1024)], 'small.txt', {
+  type: 'image/jpeg',
+  size: 1024,
+}),
+        new File(['x'.repeat(1024 * 1024)], 'medium.txt', {
+  type: 'image/jpeg',
+  size: 1024 * 1024,
+}
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);
@@ -267,10 +264,10 @@ describe('DocumentUpload', () => {
       render(<DocumentUpload {...defaultProps} />);
       const files = [;
         new File(['content'], 'invalid.txt', { type: 'text/plain' }), // Invalid type
-        new File(['x'.repeat(20 * 1024 * 1024)], 'large.pdf', { 
-          type: 'application/pdf',
-          size: 20 * 1024 * 1024 ,
-        }) // Too large
+        new File(['x'.repeat(20 * 1024 * 1024)], 'large.pdf', {
+  type: 'application/pdf',
+  size: 20 * 1024 * 1024,
+}) // Too large
       ];
       const input = screen.getByRole('button').querySelector('input[type="file"]');
       await user.upload(input, files);

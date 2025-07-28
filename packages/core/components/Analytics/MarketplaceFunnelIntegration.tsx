@@ -33,8 +33,9 @@ import { FunnelAttributionAnalysis } from './FunnelAttributionAnalysis';
 import { FunnelPredictiveModeling } from './FunnelPredictiveModeling';
 
 // Marketplace integration interfaces
+
 export interface MarketplaceFunnelIntegrationProps {
-  funnelDefinition: ConversionFunnelDefinition;
+  funnelDefinition: ConversionFunnelDefinition;,
   analyticsInfrastructure: ConversionAnalyticsInfrastructure;
   marketplaceContext: MarketplaceContext;
   integrationMode?: IntegrationMode;
@@ -44,81 +45,72 @@ export interface MarketplaceFunnelIntegrationProps {
   onInsightInteraction?: (insight: InsightInteraction) => void;
   onExport?: (data: MarketplaceIntegrationExportData) => void;
 }
-
 export interface MarketplaceContext {
-  marketplaceId: string;
+  marketplaceId: string;,
   marketplaceName: string;
   templateContext?: TemplateContext;
   creatorContext?: CreatorContext;
   adminContext?: AdminContext;
-  environment: 'production' | 'staging' | 'development';
-  permissions: MarketplacePermission[];
+  environment: 'production' | 'staging' | 'development';,
+  permissions: MarketplacePermission;
 }
-
 export interface TemplateContext {
-  templateId: string;
+  templateId: string;,
   templateName: string;
-  templateCategory: string;
+  templateCategory: string;,
   creatorId: string;
-  creatorName: string;
+  creatorName: string;,
   publishDate: number;
-  lastModified: number;
-  tags: string[];
-  pricing: TemplatePricing;
+  lastModified: number;,
+  tags: string;
+  pricing: TemplatePricing;,
   performance: TemplatePerformance;
 }
-
 export interface TemplatePricing {
   priceType: 'free' | 'premium' | 'subscription';
   price?: number;
   subscriptionTier?: string;
-  discounts: TemplateDiscount[];
+  discounts: TemplateDiscount;
 }
-
 export interface TemplateDiscount {
-  type: 'percentage' | 'fixed';
+  type: 'percentage' | 'fixed';,
   value: number;
-  validUntil: number;
-  conditions: string[];
+  validUntil: number;,
+  conditions: string;
 }
-
 export interface TemplatePerformance {
-  downloads: number;
+  downloads: number;,
   views: number;
-  conversionRate: number;
+  conversionRate: number;,
   revenue: number;
-  rating: number;
+  rating: number;,
   reviews: number;
   lastUpdated: number;
 }
-
 export interface CreatorContext {
-  creatorId: string;
+  creatorId: string;,
   creatorName: string;
-  creatorTier: 'bronze' | 'silver' | 'gold' | 'platinum';
+  creatorTier: 'bronze' | 'silver' | 'gold' | 'platinum';,
   totalTemplates: number;
-  totalRevenue: number;
+  totalRevenue: number;,
   averageRating: number;
-  joinDate: number;
-  specializations: string[];
-  achievements: CreatorAchievement[];
+  joinDate: number;,
+  specializations: string;
+  achievements: CreatorAchievement;
 }
-
 export interface CreatorAchievement {
-  achievementId: string;
+  achievementId: string;,
   name: string;
-  description: string;
+  description: string;,
   earnedDate: number;
   badge: string;
 }
-
 export interface AdminContext {
-  adminId: string;
+  adminId: string;,
   adminRole: 'super_admin' | 'marketplace_admin' | 'analytics_admin';
-  permissions: AdminPermission[];
-  managedCategories: string[];
+  permissions: AdminPermission;,
+  managedCategories: string;
 }
-
 export type AdminPermission = 
   | 'view_all_analytics'
   | 'modify_funnels'
@@ -143,14 +135,13 @@ export type IntegrationMode =
 export type UserRole = 'creator' | 'admin' | 'viewer' | 'manager';
 
 export interface WidgetConfiguration {
-  widgets: WidgetType[];
+  widgets: WidgetType;,
   layout: WidgetLayout;
-  refreshInterval: number;
+  refreshInterval: number;,
   compactMode: boolean;
-  theme: 'light' | 'dark' | 'auto';
-  customizations: WidgetCustomization[];
+  theme: 'light' | 'dark' | 'auto';,
+  customizations: WidgetCustomization;
 }
-
 export type WidgetType = 
   | 'conversion_summary'
   | 'performance_chart'
@@ -162,91 +153,82 @@ export type WidgetType =
   | 'creator_dashboard';
 
 export interface WidgetLayout {
-  columns: number;
+  columns: number;,
   rows: number;
-  responsive: boolean;
+  responsive: boolean;,
   spacing: number;
   widgetSizes: Record<WidgetType, WidgetSize>;
 }
-
 export interface WidgetSize {
-  width: number;
+  width: number;,
   height: number;
   minWidth?: number;
   minHeight?: number;
   resizable: boolean;
 }
-
 export interface WidgetCustomization {
   widgetType: WidgetType;
   title?: string;
-  showHeader: boolean;
+  showHeader: boolean;,
   showFilters: boolean;
   defaultFilters: Record<string, any>;
   colorScheme?: string;
   displayMode: 'compact' | 'standard' | 'detailed';
 }
-
 export interface MarketplaceIntegrationData {
-  funnelSummary: FunnelSummaryData;
-  templateInsights: TemplateInsightData[];
-  creatorOptimizations: CreatorOptimizationData[];
+  funnelSummary: FunnelSummaryData;,
+  templateInsights: TemplateInsightData;
+  creatorOptimizations: CreatorOptimizationData;,
   marketplaceMetrics: MarketplaceMetricData;
-  recommendedActions: RecommendedAction[];
-  performanceAlerts: PerformanceAlert[];
+  recommendedActions: RecommendedAction;,
+  performanceAlerts: PerformanceAlert;
   integrationHealth: IntegrationHealthData;
 }
-
 export interface FunnelSummaryData {
-  overallConversionRate: number;
+  overallConversionRate: number;,
   totalConversions: number;
-  totalRevenue: number;
+  totalRevenue: number;,
   averageOrderValue: number;
-  topPerformingSteps: StepPerformanceData[];
-  bottomleneckSteps: StepPerformanceData[];
-  trendDirection: 'improving' | 'declining' | 'stable';
+  topPerformingSteps: StepPerformanceData;,
+  bottomleneckSteps: StepPerformanceData;
+  trendDirection: 'improving' | 'declining' | 'stable';,
   lastUpdated: number;
 }
-
 export interface StepPerformanceData {
-  stepId: string;
+  stepId: string;,
   stepName: string;
-  conversionRate: number;
+  conversionRate: number;,
   dropOffRate: number;
-  averageTimeSpent: number;
+  averageTimeSpent: number;,
   performanceRank: number;
   optimizationPotential: number;
 }
-
 export interface TemplateInsightData {
-  templateId: string;
+  templateId: string;,
   templateName: string;
-  creatorId: string;
+  creatorId: string;,
   conversionMetrics: TemplateConversionMetrics;
-  performanceInsights: TemplatePerformanceInsight[];
-  optimizationOpportunities: TemplateOptimizationOpportunity[];
+  performanceInsights: TemplatePerformanceInsight;,
+  optimizationOpportunities: TemplateOptimizationOpportunity;
   competitivePosition: TemplateCompetitivePosition;
 }
-
 export interface TemplateConversionMetrics {
-  viewToDownloadRate: number;
+  viewToDownloadRate: number;,
   downloadToUseRate: number;
-  useToSubscribeRate: number;
+  useToSubscribeRate: number;,
   overallConversionRate: number;
-  revenuePerView: number;
+  revenuePerView: number;,
   userRetentionRate: number;
 }
-
 export interface TemplatePerformanceInsight {
-  insightType: TemplateInsightType;
+  insightType: TemplateInsightType;,
   title: string;
-  description: string;
+  description: string;,
   impact: 'high' | 'medium' | 'low';
-  confidence: number;
+  confidence: number;,
   actionable: boolean;
-  recommendations: TemplateRecommendation[];
+  recommendations: TemplateRecommendation;
 }
-
 export type TemplateInsightType = 
   | 'conversion_opportunity'
   | 'pricing_optimization'
@@ -256,68 +238,61 @@ export type TemplateInsightType =
   | 'competitive_advantage';
 
 export interface TemplateRecommendation {
-  action: string;
+  action: string;,
   expectedImpact: number;
-  effort: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high';,
   priority: 'critical' | 'high' | 'medium' | 'low';
-  timeline: string;
-  resources: string[];
+  timeline: string;,
+  resources: string;
 }
-
 export interface TemplateOptimizationOpportunity {
-  opportunity: string;
+  opportunity: string;,
   currentPerformance: number;
-  potentialPerformance: number;
+  potentialPerformance: number;,
   improvementPercentage: number;
-  implementationSteps: OptimizationStep[];
+  implementationSteps: OptimizationStep;,
   successProbability: number;
 }
-
 export interface OptimizationStep {
-  step: string;
+  step: string;,
   description: string;
-  effort: 'low' | 'medium' | 'high';
-  timeline: number; // Days
-  dependencies: string[];
+  effort: 'low' | 'medium' | 'high';,
+  timeline: number; // Days,
+  dependencies: string;
 }
-
 export interface TemplateCompetitivePosition {
-  categoryRank: number;
+  categoryRank: number;,
   totalInCategory: number;
-  competitiveAdvantages: string[];
-  competitiveWeaknesses: string[];
-  marketShare: number;
+  competitiveAdvantages: string;,
+  competitiveWeaknesses: string;
+  marketShare: number;,
   trendDirection: 'gaining' | 'losing' | 'stable';
 }
-
 export interface CreatorOptimizationData {
-  creatorId: string;
+  creatorId: string;,
   creatorName: string;
-  portfolioMetrics: CreatorPortfolioMetrics;
-  optimizationRecommendations: CreatorOptimizationRecommendation[];
-  performanceTrends: CreatorPerformanceTrend[];
-  growthOpportunities: CreatorGrowthOpportunity[];
+  portfolioMetrics: CreatorPortfolioMetrics;,
+  optimizationRecommendations: CreatorOptimizationRecommendation;
+  performanceTrends: CreatorPerformanceTrend;,
+  growthOpportunities: CreatorGrowthOpportunity;
 }
-
 export interface CreatorPortfolioMetrics {
-  totalTemplates: number;
+  totalTemplates: number;,
   totalRevenue: number;
-  averageConversionRate: number;
+  averageConversionRate: number;,
   averageRating: number;
-  topPerformingCategory: string;
+  topPerformingCategory: string;,
   portfolioDiversification: number;
   marketPenetration: number;
 }
-
 export interface CreatorOptimizationRecommendation {
-  recommendationType: CreatorRecommendationType;
+  recommendationType: CreatorRecommendationType;,
   title: string;
-  description: string;
+  description: string;,
   expectedImpact: CreatorImpactProjection;
-  actionItems: CreatorActionItem[];
+  actionItems: CreatorActionItem;,
   priority: 'critical' | 'high' | 'medium' | 'low';
 }
-
 export type CreatorRecommendationType = 
   | 'template_optimization'
   | 'pricing_strategy'
@@ -327,129 +302,114 @@ export type CreatorRecommendationType =
   | 'quality_enhancement';
 
 export interface CreatorImpactProjection {
-  revenueIncrease: number;
+  revenueIncrease: number;,
   conversionImprovement: number;
-  userEngagementBoost: number;
+  userEngagementBoost: number;,
   timeToImpact: number;
   confidenceLevel: number;
 }
-
 export interface CreatorActionItem {
-  action: string;
+  action: string;,
   instructions: string;
-  effort: 'low' | 'medium' | 'high';
-  timeline: number; // Days
-  tools: string[];
-  success_criteria: string[];
+  effort: 'low' | 'medium' | 'high';,
+  timeline: number; // Days,
+  tools: string;,
+  success_criteria: string;
 }
-
 export interface CreatorPerformanceTrend {
-  metric: string;
+  metric: string;,
   currentValue: number;
-  trend: 'improving' | 'declining' | 'stable';
+  trend: 'improving' | 'declining' | 'stable';,
   changePercentage: number;
-  projectedValue: number;
-  factors: TrendFactor[];
+  projectedValue: number;,
+  factors: TrendFactor;
 }
-
 export interface TrendFactor {
-  factor: string;
+  factor: string;,
   impact: number;
-  controllable: boolean;
+  controllable: boolean;,
   recommendation: string;
 }
-
 export interface CreatorGrowthOpportunity {
-  opportunity: string;
+  opportunity: string;,
   description: string;
-  marketSize: number;
+  marketSize: number;,
   competitionLevel: 'low' | 'medium' | 'high';
-  skillRequirements: string[];
+  skillRequirements: string;,
   investmentRequired: number;
   expectedROI: number;
 }
-
 export interface MarketplaceMetricData {
-  totalConversions: number;
+  totalConversions: number;,
   totalRevenue: number;
-  averageConversionRate: number;
-  topPerformingCategories: CategoryPerformance[];
-  userAcquisitionMetrics: UserAcquisitionMetrics;
+  averageConversionRate: number;,
+  topPerformingCategories: CategoryPerformance;
+  userAcquisitionMetrics: UserAcquisitionMetrics;,
   retentionMetrics: RetentionMetrics;
   healthScore: MarketplaceHealthScore;
 }
-
 export interface CategoryPerformance {
-  category: string;
+  category: string;,
   conversionRate: number;
-  revenue: number;
+  revenue: number;,
   templateCount: number;
-  averageRating: number;
+  averageRating: number;,
   growthRate: number;
 }
-
 export interface UserAcquisitionMetrics {
-  newUsersLastPeriod: number;
+  newUsersLastPeriod: number;,
   acquisitionCost: number;
-  acquisitionChannels: AcquisitionChannel[];
-  conversionByChannel: ChannelConversion[];
+  acquisitionChannels: AcquisitionChannel;,
+  conversionByChannel: ChannelConversion;
 }
-
 export interface AcquisitionChannel {
-  channel: string;
+  channel: string;,
   users: number;
-  cost: number;
+  cost: number;,
   conversionRate: number;
   quality: number;
 }
-
 export interface ChannelConversion {
-  channel: string;
+  channel: string;,
   conversionRate: number;
-  averageValue: number;
+  averageValue: number;,
   retentionRate: number;
 }
-
 export interface RetentionMetrics {
-  overallRetentionRate: number;
-  cohortRetention: CohortRetentionData[];
-  churnRate: number;
+  overallRetentionRate: number;,
+  cohortRetention: CohortRetentionData;
+  churnRate: number;,
   reactivationRate: number;
 }
-
 export interface CohortRetentionData {
-  cohort: string;
+  cohort: string;,
   retentionRate: number;
-  averageLifetime: number;
+  averageLifetime: number;,
   totalValue: number;
 }
-
 export interface MarketplaceHealthScore {
-  overallScore: number;
-  components: HealthScoreComponent[];
-  trend: 'improving' | 'declining' | 'stable';
-  criticalIssues: string[];
+  overallScore: number;,
+  components: HealthScoreComponent;
+  trend: 'improving' | 'declining' | 'stable';,
+  criticalIssues: string;
 }
-
 export interface HealthScoreComponent {
-  component: string;
+  component: string;,
   score: number;
-  weight: number;
+  weight: number;,
   status: 'excellent' | 'good' | 'fair' | 'poor';
 }
-
 export interface RecommendedAction {
-  actionId: string;
+  actionId: string;,
   type: ActionType;
-  title: string;
+  title: string;,
   description: string;
-  targetAudience: UserRole[];
+  targetAudience: UserRole;,
   priority: 'critical' | 'high' | 'medium' | 'low';
-  expectedImpact: ActionImpact;
+  expectedImpact: ActionImpact;,
   implementation: ActionImplementation;
   progress: ActionProgress;
 }
-
 export type ActionType = 
   | 'optimization'
   | 'alert_response'
@@ -458,49 +418,44 @@ export type ActionType =
   | 'growth_initiative';
 
 export interface ActionImpact {
-  revenueImpact: number;
+  revenueImpact: number;,
   conversionImpact: number;
-  userImpact: number;
+  userImpact: number;,
   timeToImpact: number;
   confidenceLevel: number;
 }
-
 export interface ActionImplementation {
-  steps: ImplementationStep[];
-  resources: string[];
-  timeline: number;
+  steps: ImplementationStep;,
+  resources: string;
+  timeline: number;,
   cost: number;
   riskLevel: 'low' | 'medium' | 'high';
 }
-
 export interface ImplementationStep {
-  step: string;
+  step: string;,
   description: string;
-  owner: string;
+  owner: string;,
   duration: number;
-  dependencies: string[];
+  dependencies: string;
 }
-
 export interface ActionProgress {
-  status: 'pending' | 'in_progress' | 'completed' | 'paused' | 'cancelled';
+  status: 'pending' | 'in_progress' | 'completed' | 'paused' | 'cancelled';,
   completionPercentage: number;
   startDate?: number;
-  completedSteps: string[];
-  blockers: string[];
+  completedSteps: string;,
+  blockers: string;
 }
-
 export interface PerformanceAlert {
-  alertId: string;
+  alertId: string;,
   type: AlertType;
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: 'critical' | 'high' | 'medium' | 'low';,
   title: string;
-  description: string;
-  affectedEntities: AffectedEntity[];
+  description: string;,
+  affectedEntities: AffectedEntity;
   detectedAt: number;
   resolvedAt?: number;
   resolution: AlertResolution;
 }
-
 export type AlertType = 
   | 'conversion_drop'
   | 'revenue_anomaly'
@@ -510,78 +465,68 @@ export type AlertType =
   | 'market_opportunity';
 
 export interface AffectedEntity {
-  entityType: 'template' | 'creator' | 'category' | 'marketplace';
+  entityType: 'template' | 'creator' | 'category' | 'marketplace';,
   entityId: string;
-  entityName: string;
+  entityName: string;,
   impactLevel: number;
 }
-
 export interface AlertResolution {
   status: 'open' | 'investigating' | 'resolved' | 'false_positive';
   assignedTo?: string;
-  resolutionSteps: ResolutionStep[];
+  resolutionSteps: ResolutionStep;
   resolutionTime?: number;
 }
-
 export interface ResolutionStep {
   step: string;
   completedAt?: number;
   completedBy?: string;
   notes?: string;
 }
-
 export interface IntegrationHealthData {
-  connectionStatus: 'connected' | 'degraded' | 'disconnected';
+  connectionStatus: 'connected' | 'degraded' | 'disconnected';,
   lastSync: number;
-  syncFrequency: number;
+  syncFrequency: number;,
   dataQuality: number;
-  errors: IntegrationError[];
+  errors: IntegrationError;,
   performance: IntegrationPerformance;
 }
-
 export interface IntegrationError {
-  errorId: string;
+  errorId: string;,
   errorType: string;
-  message: string;
+  message: string;,
   timestamp: number;
-  resolved: boolean;
+  resolved: boolean;,
   impact: 'low' | 'medium' | 'high';
 }
-
 export interface IntegrationPerformance {
-  averageResponseTime: number;
+  averageResponseTime: number;,
   throughput: number;
-  errorRate: number;
+  errorRate: number;,
   availability: number;
 }
-
 export interface OptimizationAction {
-  actionType: 'implement_recommendation' | 'dismiss_alert' | 'export_data' | 'configure_widget';
+  actionType: 'implement_recommendation' | 'dismiss_alert' | 'export_data' | 'configure_widget';,
   details: Record<string, any>;
-  userId: string;
+  userId: string;,
   timestamp: number;
 }
-
 export interface InsightInteraction {
-  interactionType: 'view' | 'click' | 'share' | 'bookmark';
+  interactionType: 'view' | 'click' | 'share' | 'bookmark';,
   insightId: string;
-  userId: string;
+  userId: string;,
   timestamp: number;
   context: Record<string, any>;
 }
-
 export interface MarketplaceIntegrationExportData {
-  funnelSummary: FunnelSummaryData;
-  templateInsights: TemplateInsightData[];
-  creatorOptimizations: CreatorOptimizationData[];
-  recommendedActions: RecommendedAction[];
-  performanceAlerts: PerformanceAlert[];
+  funnelSummary: FunnelSummaryData;,
+  templateInsights: TemplateInsightData;
+  creatorOptimizations: CreatorOptimizationData;,
+  recommendedActions: RecommendedAction;
+  performanceAlerts: PerformanceAlert;,
   exportTimestamp: number;
   userContext: MarketplaceContext;
+  // Default widget configuration
 }
-
-// Default widget configuration
-
 export const [error, setError] = useState<string | null>(null);
   const [activeWidget, setActiveWidget] = useState<WidgetType>(widgetConfig.widgets[0]);
   const [refreshing, setRefreshing] = useState(false);
@@ -591,8 +536,8 @@ export const [error, setError] = useState<string | null>(null);
     try {
       setLoading(true);
       setError(null);
-      const query: ConversionMetricQuery = {
-        funnelId: funnelDefinition.id,
+      const query: ConversionMetricQuery = {,
+  funnelId: funnelDefinition.id,
         timeRange: { start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() },
         segments: [],
         cohorts: [],
@@ -609,14 +554,12 @@ export const [error, setError] = useState<string | null>(null);
           operator: 'eq',
           value: marketplaceContext.templateContext.templateId }
         );
-      }
       if (marketplaceContext.creatorContext) {
         query.filters?.push()
           { field: 'creator_id',
           operator: 'eq',
           value: marketplaceContext.creatorContext.creatorId }
         );
-      }
       const result = await analyticsInfrastructure.executeQuery(query);
       if (result.success && result.data) {
         const processedData = await processIntegrationData(;);
@@ -627,518 +570,461 @@ export const [error, setError] = useState<string | null>(null);
         setIntegrationData(processedData);
       } else {
         setError(result.error || 'Failed to load marketplace integration data');
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Unknown error occurred');
+} finally {
       setLoading(false);
-    }
   }, [funnelDefinition, analyticsInfrastructure, marketplaceContext, userRole]);
   // Process integration data
   const processIntegrationData = async (;);
     rawData: unknown,
     context: MarketplaceContext,
-    role: UserRole,
-  ): Promise<MarketplaceIntegrationData> => {
-    // Simulate comprehensive marketplace integration processing
-    return {
-      funnelSummary: generateFunnelSummary(),
-      templateInsights: context.templateContext ? generateTemplateInsights(context.templateContext) : [],
-      creatorOptimizations: context.creatorContext ? generateCreatorOptimizations(context.creatorContext) : [],
-      marketplaceMetrics: generateMarketplaceMetrics(),
-      recommendedActions: generateRecommendedActions(role),
-      performanceAlerts: generatePerformanceAlerts(),
-      integrationHealth: generateIntegrationHealth(),
-    };
+    role: UserRole): Promise<MarketplaceIntegrationData> => {,
+  // Simulate comprehensive marketplace integration processing
+  return {
+  funnelSummary: generateFunnelSummary(),
+  templateInsights: context.templateContext ? generateTemplateInsights(context.templateContext) : [],
+  creatorOptimizations: context.creatorContext ? generateCreatorOptimizations(context.creatorContext) : [],
+  marketplaceMetrics: generateMarketplaceMetrics(),
+  recommendedActions: generateRecommendedActions(role),
+  performanceAlerts: generatePerformanceAlerts(),
+  integrationHealth: generateIntegrationHealth(),
+};
   };
   // Generate funnel summary
   const generateFunnelSummary = (): FunnelSummaryData => {
-    return {
-      overallConversionRate: 0.145,
-      totalConversions: 2847,
-      totalRevenue: 156780,
-      averageOrderValue: 55.12,
-      topPerformingSteps: [,
+  return {
+  overallConversionRate: 0.145,
+  totalConversions: 2847,
+  totalRevenue: 156780,
+  averageOrderValue: 55.12,
+  topPerformingSteps: [,
+  {
+  stepId: 'checkout',
+  stepName: 'Checkout Process',
+  conversionRate: 0.89,
+  dropOffRate: 0.11,
+  averageTimeSpent: 120,
+  performanceRank: 1,
+  optimizationPotential: 0.05,
+}
         {
-          stepId: 'checkout',
-          stepName: 'Checkout Process',
-          conversionRate: 0.89,
-          dropOffRate: 0.11,
-          averageTimeSpent: 120,
-          performanceRank: 1,
-          optimizationPotential: 0.05,
-        },
-        {
-          stepId: 'template_preview',
-          stepName: 'Template Preview',
-          conversionRate: 0.76,
-          dropOffRate: 0.24,
-          averageTimeSpent: 180,
-          performanceRank: 2,
-          optimizationPotential: 0.12,
-        }
-      ],
-      bottomleneckSteps: [,
-        {
-          stepId: 'registration',
-          stepName: 'User Registration',
-          conversionRate: 0.34,
-          dropOffRate: 0.66,
-          averageTimeSpent: 240,
-          performanceRank: 1,
-          optimizationPotential: 0.35,
-        }
-      ],
-      trendDirection: 'improving',
-      lastUpdated: Date.now(),
-    };
+  stepId: 'template_preview',
+  stepName: 'Template Preview',
+  conversionRate: 0.76,
+  dropOffRate: 0.24,
+  averageTimeSpent: 180,
+  performanceRank: 2,
+  optimizationPotential: 0.12],
+  bottomleneckSteps: [,
+  {
+  stepId: 'registration',
+  stepName: 'User Registration',
+  conversionRate: 0.34,
+  dropOffRate: 0.66,
+  averageTimeSpent: 240,
+  performanceRank: 1,
+  optimizationPotential: 0.35],
+  trendDirection: 'improving',
+  lastUpdated: Date.now(),
+};
   };
   // Generate template insights
-  const generateTemplateInsights = (templateContext: TemplateContext): TemplateInsightData[] => {
-    return [
-      {
-        templateId: templateContext.templateId,
-        templateName: templateContext.templateName,
-        creatorId: templateContext.creatorId,
-        conversionMetrics: {,
-          viewToDownloadRate: 0.18,
-          downloadToUseRate: 0.67,
-          useToSubscribeRate: 0.23,
-          overallConversionRate: 0.028,
-          revenuePerView: 1.24,
-          userRetentionRate: 0.45,
-        },
-        performanceInsights: [,
+  const generateTemplateInsights = (templateContext: TemplateContext): TemplateInsightData => {
+  return [
+  {
+  templateId: templateContext.templateId,
+  templateName: templateContext.templateName,
+  creatorId: templateContext.creatorId,
+  conversionMetrics: {,
+  viewToDownloadRate: 0.18,
+  downloadToUseRate: 0.67,
+  useToSubscribeRate: 0.23,
+  overallConversionRate: 0.028,
+  revenuePerView: 1.24,
+  userRetentionRate: 0.45,
+},
+  performanceInsights: [,
           {
-            insightType: 'conversion_opportunity',
-            title: 'High Drop-off at Download Stage',
-            description: 'Users are viewing but not downloading at expected rates',
-            impact: 'high',
-            confidence: 0.87,
-            actionable: true,
-            recommendations: [,
-              {
-                action: 'Improve preview quality and add more sample content',
-                expectedImpact: 0.25,
-                effort: 'medium',
-                priority: 'high',
-                timeline: '2 weeks',
-                resources: ['Content Team', 'Design Team']
-              }
-            ]
-          },
+  insightType: 'conversion_opportunity',
+  title: 'High Drop-off at Download Stage',
+  description: 'Users are viewing but not downloading at expected rates',
+  impact: 'high',
+  confidence: 0.87,
+  actionable: true,
+  recommendations: [,
+  {
+  action: 'Improve preview quality and add more sample content',
+  expectedImpact: 0.25,
+  effort: 'medium',
+  priority: 'high',
+  timeline: '2 weeks',
+  resources: ['Content Team', 'Design Team']]
+}
           {
-            insightType: 'pricing_optimization',
-            title: 'Price Point Analysis',
-            description: 'Current pricing may be above market average for category',
-            impact: 'medium',
-            confidence: 0.73,
-            actionable: true,
-            recommendations: [,
+  insightType: 'pricing_optimization',
+  title: 'Price Point Analysis',
+  description: 'Current pricing may be above market average for category',
+  impact: 'medium',
+  confidence: 0.73,
+  actionable: true,
+  recommendations: [,
+  {
+  action: 'Consider A/B testing lower price points',
+  expectedImpact: 0.15,
+  effort: 'low',
+  priority: 'medium',
+  timeline: '1 week',
+  resources: ['Marketing Team']],
+  ],
+  optimizationOpportunities: [,
+  {
+  opportunity: 'Improve template preview experience',
+  currentPerformance: 0.18,
+  potentialPerformance: 0.27,
+  improvementPercentage: 50,
+  implementationSteps: [,
+  {
+  step: 'Add interactive preview',
+  description: 'Implement live preview functionality',
+  effort: 'high',
+  timeline: 14,
+  dependencies: ['UI Framework Update'],
+}
               {
-                action: 'Consider A/B testing lower price points',
-                expectedImpact: 0.15,
-                effort: 'low',
-                priority: 'medium',
-                timeline: '1 week',
-                resources: ['Marketing Team'],
-              }
-            ]
-          }
-        ],
-        optimizationOpportunities: [,
-          {
-            opportunity: 'Improve template preview experience',
-            currentPerformance: 0.18,
-            potentialPerformance: 0.27,
-            improvementPercentage: 50,
-            implementationSteps: [,
-              {
-                step: 'Add interactive preview',
-                description: 'Implement live preview functionality',
-                effort: 'high',
-                timeline: 14,
-                dependencies: ['UI Framework Update'],
-              },
-              {
-                step: 'Enhance preview content',
-                description: 'Add more sample data and use cases',
-                effort: 'medium',
-                timeline: 7,
-                dependencies: [],
-              }
-            ],
-            successProbability: 0.78,
-          }
-        ],
-        competitivePosition: {,
-          categoryRank: 15,
-          totalInCategory: 156,
-          competitiveAdvantages: ['Unique design style', 'High quality assets'],
-          competitiveWeaknesses: ['Limited customization options', 'Higher price point'],
-          marketShare: 0.034,
-          trendDirection: 'gaining',
-        }
-      }
-    ];
-  };
+  step: 'Enhance preview content',
+  description: 'Add more sample data and use cases',
+  effort: 'medium',
+  timeline: 7,
+  dependencies: []],
+  successProbability: 0.78],
+  competitivePosition: {,
+  categoryRank: 15,
+  totalInCategory: 156,
+  competitiveAdvantages: ['Unique design style', 'High quality assets'],
+  competitiveWeaknesses: ['Limited customization options', 'Higher price point'],
+  marketShare: 0.034,
+  trendDirection: 'gaining'];
+};
   // Generate creator optimizations
-  const generateCreatorOptimizations = (creatorContext: CreatorContext): CreatorOptimizationData[] => {
-    return [
-      {
-        creatorId: creatorContext.creatorId,
-        creatorName: creatorContext.creatorName,
-        portfolioMetrics: {,
-          totalTemplates: creatorContext.totalTemplates,
-          totalRevenue: creatorContext.totalRevenue,
-          averageConversionRate: 0.156,
-          averageRating: creatorContext.averageRating,
-          topPerformingCategory: 'Web Design',
-          portfolioDiversification: 0.67,
-          marketPenetration: 0.023,
-        },
-        optimizationRecommendations: [,
+  const generateCreatorOptimizations = (creatorContext: CreatorContext): CreatorOptimizationData => {
+  return [
+  {
+  creatorId: creatorContext.creatorId,
+  creatorName: creatorContext.creatorName,
+  portfolioMetrics: {,
+  totalTemplates: creatorContext.totalTemplates,
+  totalRevenue: creatorContext.totalRevenue,
+  averageConversionRate: 0.156,
+  averageRating: creatorContext.averageRating,
+  topPerformingCategory: 'Web Design',
+  portfolioDiversification: 0.67,
+  marketPenetration: 0.023,
+},
+  optimizationRecommendations: [,
           {
-            recommendationType: 'template_optimization',
-            title: 'Optimize Underperforming Templates',
-            description: 'Focus on improving conversion rates for templates with high views but low downloads',
-            expectedImpact: {,
-              revenueIncrease: 2340,
-              conversionImprovement: 0.045,
-              userEngagementBoost: 0.23,
-              timeToImpact: 21,
-              confidenceLevel: 0.82,
-            },
-            actionItems: [,
+  recommendationType: 'template_optimization',
+  title: 'Optimize Underperforming Templates',
+  description: 'Focus on improving conversion rates for templates with high views but low downloads',
+  expectedImpact: {,
+  revenueIncrease: 2340,
+  conversionImprovement: 0.045,
+  userEngagementBoost: 0.23,
+  timeToImpact: 21,
+  confidenceLevel: 0.82,
+},
+  actionItems: [,
               {
-                action: 'Update template previews',
-                instructions: 'Create high-quality preview images showing template in use',
-                effort: 'medium',
-                timeline: 7,
-                tools: ['Design Software', 'Preview Generator'],
-                success_criteria: ['Preview click-through rate increases by 25%', 'Download rate improves by 15%']
-              },
+  action: 'Update template previews',
+  instructions: 'Create high-quality preview images showing template in use',
+  effort: 'medium',
+  timeline: 7,
+  tools: ['Design Software', 'Preview Generator'],
+  success_criteria: ['Preview click-through rate increases by 25%', 'Download rate improves by 15%'],
+}
               {
-                action: 'Enhance template descriptions',
-                instructions: 'Rewrite descriptions focusing on benefits and use cases',
-                effort: 'low',
-                timeline: 3,
-                tools: ['Content Management System'],
-                success_criteria: ['Time spent on template page increases', 'Conversion rate improves']
-              }
-            ],
-            priority: 'high',
-          },
+  action: 'Enhance template descriptions',
+  instructions: 'Rewrite descriptions focusing on benefits and use cases',
+  effort: 'low',
+  timeline: 3,
+  tools: ['Content Management System'],
+  success_criteria: ['Time spent on template page increases', 'Conversion rate improves']],
+  priority: 'high',
+}
           {
-            recommendationType: 'portfolio_expansion',
-            title: 'Expand into Growing Categories',
-            description: 'Mobile app design templates show high demand and growth potential',
-            expectedImpact: {,
-              revenueIncrease: 4560,
-              conversionImprovement: 0.0,
-              userEngagementBoost: 0.15,
-              timeToImpact: 45,
-              confidenceLevel: 0.71,
-            },
-            actionItems: [,
+  recommendationType: 'portfolio_expansion',
+  title: 'Expand into Growing Categories',
+  description: 'Mobile app design templates show high demand and growth potential',
+  expectedImpact: {,
+  revenueIncrease: 4560,
+  conversionImprovement: 0.0,
+  userEngagementBoost: 0.15,
+  timeToImpact: 45,
+  confidenceLevel: 0.71,
+},
+  actionItems: [,
               {
-                action: 'Research mobile design trends',
-                instructions: 'Analyze top-performing mobile templates and identify opportunities',
-                effort: 'low',
-                timeline: 5,
-                tools: ['Analytics Dashboard', 'Market Research Tools'],
-                success_criteria: ['Identify 3-5 high-opportunity mobile template types'],
-              },
+  action: 'Research mobile design trends',
+  instructions: 'Analyze top-performing mobile templates and identify opportunities',
+  effort: 'low',
+  timeline: 5,
+  tools: ['Analytics Dashboard', 'Market Research Tools'],
+  success_criteria: ['Identify 3-5 high-opportunity mobile template types'],
+}
               {
-                action: 'Create mobile template prototypes',
-                instructions: 'Develop initial mobile app templates based on research',
-                effort: 'high',
-                timeline: 30,
-                tools: ['Design Software', 'Mobile Design Tools'],
-                success_criteria: ['Launch 3 mobile templates', 'Achieve 4+ star average rating']
-              }
-            ],
-            priority: 'medium',
-          }
-        ],
-        performanceTrends: [,
-          {
-            metric: 'monthly_revenue',
-            currentValue: 3450,
-            trend: 'improving',
-            changePercentage: 12.3,
-            projectedValue: 3890,
-            factors: [,
+  action: 'Create mobile template prototypes',
+  instructions: 'Develop initial mobile app templates based on research',
+  effort: 'high',
+  timeline: 30,
+  tools: ['Design Software', 'Mobile Design Tools'],
+  success_criteria: ['Launch 3 mobile templates', 'Achieve 4+ star average rating']],
+  priority: 'medium'],
+  performanceTrends: [,
+  {
+  metric: 'monthly_revenue',
+  currentValue: 3450,
+  trend: 'improving',
+  changePercentage: 12.3,
+  projectedValue: 3890,
+  factors: [,
+  {
+  factor: 'seasonal_demand_increase',
+  impact: 0.15,
+  controllable: false,
+  recommendation: 'Capitalize on seasonal trends with themed templates',
+}
               {
-                factor: 'seasonal_demand_increase',
-                impact: 0.15,
-                controllable: false,
-                recommendation: 'Capitalize on seasonal trends with themed templates',
-              },
-              {
-                factor: 'improved_template_quality',
-                impact: 0.08,
-                controllable: true,
-                recommendation: 'Continue focusing on high-quality designs',
-              }
-            ]
-          }
-        ],
-        growthOpportunities: [,
-          {
-            opportunity: 'Premium Template Tier',
-            description: 'Launch premium templates with advanced features and customization',
-            marketSize: 45000,
-            competitionLevel: 'medium',
-            skillRequirements: ['Advanced Design Skills', 'Interactive Elements'],
-            investmentRequired: 2500,
-            expectedROI: 3.4,
-          }
-        ]
-      }
-    ];
-  };
+  factor: 'improved_template_quality',
+  impact: 0.08,
+  controllable: true,
+  recommendation: 'Continue focusing on high-quality designs'],
+  ],
+  growthOpportunities: [,
+  {
+  opportunity: 'Premium Template Tier',
+  description: 'Launch premium templates with advanced features and customization',
+  marketSize: 45000,
+  competitionLevel: 'medium',
+  skillRequirements: ['Advanced Design Skills', 'Interactive Elements'],
+  investmentRequired: 2500,
+  expectedROI: 3.4],
+  ];
+};
   // Generate marketplace metrics
   const generateMarketplaceMetrics = (): MarketplaceMetricData => {
-    return {
-      totalConversions: 15678,
-      totalRevenue: 892450,
-      averageConversionRate: 0.167,
-      topPerformingCategories: [,
+  return {
+  totalConversions: 15678,
+  totalRevenue: 892450,
+  averageConversionRate: 0.167,
+  topPerformingCategories: [,
+  {
+  category: 'Web Design',
+  conversionRate: 0.189,
+  revenue: 234560,
+  templateCount: 1234,
+  averageRating: 4.3,
+  growthRate: 0.156,
+}
         {
-          category: 'Web Design',
-          conversionRate: 0.189,
-          revenue: 234560,
-          templateCount: 1234,
-          averageRating: 4.3,
-          growthRate: 0.156,
-        },
-        {
-          category: 'Mobile Design',
-          conversionRate: 0.201,
-          revenue: 187390,
-          templateCount: 856,
-          averageRating: 4.5,
-          growthRate: 0.234,
-        }
-      ],
-      userAcquisitionMetrics: {,
-        newUsersLastPeriod: 3456,
-        acquisitionCost: 23.45,
-        acquisitionChannels: [,
+  category: 'Mobile Design',
+  conversionRate: 0.201,
+  revenue: 187390,
+  templateCount: 856,
+  averageRating: 4.5,
+  growthRate: 0.234],
+  userAcquisitionMetrics: {,
+  newUsersLastPeriod: 3456,
+  acquisitionCost: 23.45,
+  acquisitionChannels: [,
+  {
+  channel: 'Organic Search',
+  users: 1456,
+  cost: 0,
+  conversionRate: 0.23,
+  quality: 0.89,
+}
           {
-            channel: 'Organic Search',
-            users: 1456,
-            cost: 0,
-            conversionRate: 0.23,
-            quality: 0.89,
-          },
+  channel: 'Social Media',
+  users: 1123,
+  cost: 15678,
+  conversionRate: 0.18,
+  quality: 0.76],
+  conversionByChannel: [,
+  {
+  channel: 'Organic Search',
+  conversionRate: 0.23,
+  averageValue: 67.89,
+  retentionRate: 0.78];
+  },
+  retentionMetrics: {,
+  overallRetentionRate: 0.67,
+  cohortRetention: [,
+  {
+  cohort: 'Q1 2024',
+  retentionRate: 0.72,
+  averageLifetime: 456,
+  totalValue: 23450],
+  churnRate: 0.08,
+  reactivationRate: 0.15,
+},
+  healthScore: {,
+  overallScore: 87,
+  components: [,
+  {
+  component: 'Conversion Performance',
+  score: 89,
+  weight: 0.3,
+  status: 'good',
+}
           {
-            channel: 'Social Media',
-            users: 1123,
-            cost: 15678,
-            conversionRate: 0.18,
-            quality: 0.76,
-          }
-        ],
-        conversionByChannel: [,
+  component: 'User Satisfaction',
+  score: 91,
+  weight: 0.25,
+  status: 'excellent',
+}
           {
-            channel: 'Organic Search',
-            conversionRate: 0.23,
-            averageValue: 67.89,
-            retentionRate: 0.78,
-          }
-        ]
-      },
-      retentionMetrics: {,
-        overallRetentionRate: 0.67,
-        cohortRetention: [,
+  component: 'Revenue Growth',
+  score: 84,
+  weight: 0.25,
+  status: 'good',
+}
           {
-            cohort: 'Q1 2024',
-            retentionRate: 0.72,
-            averageLifetime: 456,
-            totalValue: 23450,
-          }
-        ],
-        churnRate: 0.08,
-        reactivationRate: 0.15,
-      },
-      healthScore: {,
-        overallScore: 87,
-        components: [,
-          {
-            component: 'Conversion Performance',
-            score: 89,
-            weight: 0.3,
-            status: 'good',
-          },
-          {
-            component: 'User Satisfaction',
-            score: 91,
-            weight: 0.25,
-            status: 'excellent',
-          },
-          {
-            component: 'Revenue Growth',
-            score: 84,
-            weight: 0.25,
-            status: 'good',
-          },
-          {
-            component: 'Technical Performance',
-            score: 78,
-            weight: 0.2,
-            status: 'fair',
-          }
-        ],
-        trend: 'improving',
-        criticalIssues: [],
-      }
-    };
+  component: 'Technical Performance',
+  score: 78,
+  weight: 0.2,
+  status: 'fair'],
+  trend: 'improving',
+  criticalIssues: [],
+};
   };
   // Generate recommended actions
-  const generateRecommendedActions = (role: UserRole): RecommendedAction[] => {
-    return [
+  const generateRecommendedActions = (role: UserRole): RecommendedAction => {
+  return [
+  {
+  actionId: 'optimize-registration-flow',
+  type: 'optimization',
+  title: 'Optimize User Registration Flow',
+  description: 'Registration has the highest drop-off rate and represents the biggest optimization opportunity',
+  targetAudience: ['admin', 'manager'],
+  priority: 'critical',
+  expectedImpact: {,
+  revenueImpact: 23450,
+  conversionImpact: 0.15,
+  userImpact: 1234,
+  timeToImpact: 14,
+  confidenceLevel: 0.89,
+},
+  implementation: {,
+  steps: [,
+  {
+  step: 'Analyze registration drop-off points',
+  description: 'Use heatmaps and user session recordings to identify friction points',
+  owner: 'UX Team',
+  duration: 3,
+  dependencies: [],
+}
+            {
+  step: 'Simplify registration form',
+  description: 'Reduce form fields and implement progressive registration',
+  owner: 'Development Team',
+  duration: 7,
+  dependencies: ['Analysis completion'],
+}
+            {
+  step: 'A/B test new registration flow',
+  description: 'Test optimized flow against current version',
+  owner: 'Product Team',
+  duration: 14,
+  dependencies: ['New flow implementation']],
+  resources: ['UX Designer', 'Frontend Developer', 'Product Analyst'],
+  timeline: 21,
+  cost: 8500,
+  riskLevel: 'low',
+},
+  progress: {,
+  status: 'pending',
+  completionPercentage: 0,
+  completedSteps: [],
+  blockers: [],
+}
       {
-        actionId: 'optimize-registration-flow',
-        type: 'optimization',
-        title: 'Optimize User Registration Flow',
-        description: 'Registration has the highest drop-off rate and represents the biggest optimization opportunity',
-        targetAudience: ['admin', 'manager'],
-        priority: 'critical',
-        expectedImpact: {,
-          revenueImpact: 23450,
-          conversionImpact: 0.15,
-          userImpact: 1234,
-          timeToImpact: 14,
-          confidenceLevel: 0.89,
-        },
-        implementation: {,
-          steps: [,
-            {
-              step: 'Analyze registration drop-off points',
-              description: 'Use heatmaps and user session recordings to identify friction points',
-              owner: 'UX Team',
-              duration: 3,
-              dependencies: [],
-            },
-            {
-              step: 'Simplify registration form',
-              description: 'Reduce form fields and implement progressive registration',
-              owner: 'Development Team',
-              duration: 7,
-              dependencies: ['Analysis completion'],
-            },
-            {
-              step: 'A/B test new registration flow',
-              description: 'Test optimized flow against current version',
-              owner: 'Product Team',
-              duration: 14,
-              dependencies: ['New flow implementation'],
-            }
-          ],
-          resources: ['UX Designer', 'Frontend Developer', 'Product Analyst'],
-          timeline: 21,
-          cost: 8500,
-          riskLevel: 'low',
-        },
-        progress: {,
-          status: 'pending',
-          completionPercentage: 0,
-          completedSteps: [],
-          blockers: [],
-        }
-      },
-      {
-        actionId: 'template-preview-enhancement',
-        type: 'optimization',
-        title: 'Enhance Template Preview Experience',
-        description: 'Improve template previews to increase download conversion rates',
-        targetAudience: ['creator', 'admin'],
-        priority: 'high',
-        expectedImpact: {,
-          revenueImpact: 15670,
-          conversionImpact: 0.08,
-          userImpact: 2340,
-          timeToImpact: 10,
-          confidenceLevel: 0.76,
-        },
-        implementation: {,
-          steps: [,
-            {
-              step: 'Implement interactive previews',
-              description: 'Add ability to customize and interact with template previews',
-              owner: 'Frontend Team',
-              duration: 14,
-              dependencies: [],
-            }
-          ],
-          resources: ['Frontend Developer', 'UI Designer'],
-          timeline: 14,
-          cost: 5600,
-          riskLevel: 'medium',
-        },
-        progress: {,
-          status: 'pending',
-          completionPercentage: 0,
-          completedSteps: [],
-          blockers: [],
-        }
-      }
-    ];
-  };
+  actionId: 'template-preview-enhancement',
+  type: 'optimization',
+  title: 'Enhance Template Preview Experience',
+  description: 'Improve template previews to increase download conversion rates',
+  targetAudience: ['creator', 'admin'],
+  priority: 'high',
+  expectedImpact: {,
+  revenueImpact: 15670,
+  conversionImpact: 0.08,
+  userImpact: 2340,
+  timeToImpact: 10,
+  confidenceLevel: 0.76,
+},
+  implementation: {,
+  steps: [,
+  {
+  step: 'Implement interactive previews',
+  description: 'Add ability to customize and interact with template previews',
+  owner: 'Frontend Team',
+  duration: 14,
+  dependencies: []],
+  resources: ['Frontend Developer', 'UI Designer'],
+  timeline: 14,
+  cost: 5600,
+  riskLevel: 'medium',
+},
+  progress: {,
+  status: 'pending',
+  completionPercentage: 0,
+  completedSteps: [],
+  blockers: []];
+};
   // Generate performance alerts
-  const generatePerformanceAlerts = (): PerformanceAlert[] => {
-    return [
-      {
-        alertId: 'conv-drop-001',
-        type: 'conversion_drop',
-        severity: 'high',
-        title: 'Conversion Rate Drop Detected',
-        description: 'Mobile template category showing 15% decrease in conversion rate over last 7 days',
-        affectedEntities: [,
-          {
-            entityType: 'category',
-            entityId: 'mobile-templates',
-            entityName: 'Mobile Templates',
-            impactLevel: 0.15,
-          }
-        ],
-        detectedAt: Date.now() - 2 * 60 * 60 * 1000,
-        resolution: {,
-          status: 'investigating',
-          assignedTo: 'analytics-team',
-          resolutionSteps: [,
+  const generatePerformanceAlerts = (): PerformanceAlert => {
+  return [
+  {
+  alertId: 'conv-drop-001',
+  type: 'conversion_drop',
+  severity: 'high',
+  title: 'Conversion Rate Drop Detected',
+  description: 'Mobile template category showing 15% decrease in conversion rate over last 7 days',
+  affectedEntities: [,
+  {
+  entityType: 'category',
+  entityId: 'mobile-templates',
+  entityName: 'Mobile Templates',
+  impactLevel: 0.15],
+  detectedAt: Date.now() - 2 * 60 * 60 * 1000,
+  resolution: {,
+  status: 'investigating',
+  assignedTo: 'analytics-team',
+  resolutionSteps: [,
+  {
+  step: 'Analyze traffic sources',
+  completedAt: Date.now() - 60 * 60 * 1000,
+  completedBy: 'analyst-1',
+  notes: 'No significant changes in traffic patterns',
+}
             {
-              step: 'Analyze traffic sources',
-              completedAt: Date.now() - 60 * 60 * 1000,
-              completedBy: 'analyst-1',
-              notes: 'No significant changes in traffic patterns',
-            },
-            {
-              step: 'Review recent template additions',
-              notes: 'In progress',
-            }
-          ]
-        }
-      }
-    ];
-  };
+  step: 'Review recent template additions',
+  notes: 'In progress'],
+  ];
+};
   // Generate integration health
   const generateIntegrationHealth = (): IntegrationHealthData => {
-    return {
-      connectionStatus: 'connected',
-      lastSync: Date.now() - 5 * 60 * 1000,
-      syncFrequency: 300000, // 5 minutes
-      dataQuality: 0.96,
-      errors: [],
-      performance: {,
-        averageResponseTime: 145,
-        throughput: 2340,
-        errorRate: 0.003,
-        availability: 0.999,
-      }
-    };
+  return {
+  connectionStatus: 'connected',
+  lastSync: Date.now() - 5 * 60 * 1000,
+  syncFrequency: 300000, // 5 minutes,
+  dataQuality: 0.96,
+  errors: [],
+  performance: {,
+  averageResponseTime: 145,
+  throughput: 2340,
+  errorRate: 0.003,
+  availability: 0.999,
+};
   };
   // Handle refresh
   const handleRefresh = useCallback(() => {
@@ -1147,43 +1033,39 @@ export const [error, setError] = useState<string | null>(null);
   }, [loadIntegrationData]);
   // Handle optimization action
   const handleOptimizationAction = useCallback((actionType: string, details: Record<string, any>) => {
-    const action: OptimizationAction = {
-      actionType: actionType as any,
-      details,
-      userId: marketplaceContext.creatorContext?.creatorId || marketplaceContext.adminContext?.adminId || 'anonymous',
-      timestamp: Date.now(),
-    };
+  const action: OptimizationAction = {,
+  actionType: actionType as any,
+  details,
+  userId: marketplaceContext.creatorContext?.creatorId || marketplaceContext.adminContext?.adminId || 'anonymous',
+  timestamp: Date.now(),
+};
     if (onOptimizationAction) {
       onOptimizationAction(action);
-    }
   }, [marketplaceContext, onOptimizationAction]);
   // Handle insight interaction
   const handleInsightInteraction = useCallback(;);
-    (interactionType: string,)
-    insightId: string,
+    (interactionType: string);
+  insightId: string,
     context: Record<string,
     any> = {}
   ) => {
-    const interaction: InsightInteraction = {
-      interactionType: interactionType as any,
-      insightId,
-      userId: marketplaceContext.creatorContext?.creatorId || marketplaceContext.adminContext?.adminId || 'anonymous',
-      timestamp: Date.now(),
-      context
-    };
+  const interaction: InsightInteraction = {,
+  interactionType: interactionType as any,
+  insightId,
+  userId: marketplaceContext.creatorContext?.creatorId || marketplaceContext.adminContext?.adminId || 'anonymous',
+  timestamp: Date.now(),
+  context
+};
     if (onInsightInteraction) {
       onInsightInteraction(interaction);
-    }
   }, [marketplaceContext, onInsightInteraction]);
   // Setup auto-refresh
   useEffect(() => {
     if (widgetConfig.refreshInterval > 0) {
       intervalRef.current = setInterval(handleRefresh, widgetConfig.refreshInterval);
-    }
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-      }
     };
   }, [widgetConfig.refreshInterval, handleRefresh]);
   // Initial data load
@@ -1192,28 +1074,27 @@ export const [error, setError] = useState<string | null>(null);
   }, [loadIntegrationData]);
   // Handle export
   const handleExport = useCallback(() => {
-    if (!integrationData || !onExport) return;
-    const exportData: MarketplaceIntegrationExportData = {
-      funnelSummary: integrationData.funnelSummary,
-      templateInsights: integrationData.templateInsights,
-      creatorOptimizations: integrationData.creatorOptimizations,
-      recommendedActions: integrationData.recommendedActions,
-      performanceAlerts: integrationData.performanceAlerts,
-      exportTimestamp: Date.now(),
-      userContext: marketplaceContext,
-    };
+  if (!integrationData || !onExport) return;
+  const exportData: MarketplaceIntegrationExportData = {,
+  funnelSummary: integrationData.funnelSummary,
+  templateInsights: integrationData.templateInsights,
+  creatorOptimizations: integrationData.creatorOptimizations,
+  recommendedActions: integrationData.recommendedActions,
+  performanceAlerts: integrationData.performanceAlerts,
+  exportTimestamp: Date.now(),
+  userContext: marketplaceContext,
+};
     onExport(exportData);
   }, [integrationData, marketplaceContext, onExport]);
   if (loading) {
-    return ();
+    return;
       <div className="marketplace-integration-loading">
         <div className="loading-spinner"></div>
         <p>Loading marketplace integration...</p>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="marketplace-integration-error">
         <h3>Integration Error</h3>
         <p className="error-message">{error}</p>
@@ -1222,14 +1103,12 @@ export const [error, setError] = useState<string | null>(null);
         </button>
       </div>
     );
-  }
   if (!integrationData) {
     return <div className="marketplace-integration-error">No data available</div>;
-  }
   // Render based on integration mode
   switch (integrationMode) {
     case 'embedded_widget':
-      return ();
+      return;
         <div className="marketplace-funnel-integration embedded">
           <div className="integration-header">
             <h3>Funnel Analytics</h3>
@@ -1332,7 +1211,7 @@ export const [error, setError] = useState<string | null>(null);
         </div>
       );
     case 'full_dashboard':
-      return ();
+      return;
         <div className="marketplace-funnel-integration full-dashboard">
           {/* Full dashboard implementation */}
           <div className="dashboard-header">
@@ -1360,52 +1239,51 @@ export const [error, setError] = useState<string | null>(null);
                 analyticsInfrastructure={analyticsInfrastructure}
                 timeRange={{ start: Date.now() - 30 * 24 * 60 * 60 * 1000, end: Date.now() }}
                 currentPerformance={{
-                  overallConversionRate: integrationData.funnelSummary.overallConversionRate,
-                  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({),
-                    stepId: step.stepId,
-                    stepName: step.stepName,
-                    conversionRate: step.conversionRate,
-                    dropOffRate: step.dropOffRate,
-                    averageTimeSpent: step.averageTimeSpent,
-                    errorRate: 0.02,
-                    userSatisfactionScore: 0.85,
-                    completionQuality: 0.92,
-                  })),
+  overallConversionRate: integrationData.funnelSummary.overallConversionRate,
+  stepPerformance: integrationData.funnelSummary.topPerformingSteps.map(step => ({,)
+  stepId: step.stepId,
+  stepName: step.stepName,
+  conversionRate: step.conversionRate,
+  dropOffRate: step.dropOffRate,
+  averageTimeSpent: step.averageTimeSpent,
+  errorRate: 0.02,
+  userSatisfactionScore: 0.85,
+  completionQuality: 0.92,
+})),
                   revenueMetrics: {,
-                    revenuePerVisitor: integrationData.funnelSummary.totalRevenue / integrationData.funnelSummary.totalConversions,
-                    revenuePerConversion: integrationData.funnelSummary.averageOrderValue,
-                    lifetimeValue: 450,
-                    paybackPeriod: 90,
-                    marginPerConversion: 35,
-                  },
-                  userExperienceMetrics: {,
-                    overallSatisfactionScore: 0.87,
-                    easeOfUseScore: 0.82,
-                    clarityScore: 0.89,
-                    trustScore: 0.91,
-                    mobileExperienceScore: 0.78,
-                    accessibilityScore: 0.85,
-                  },
-                  technicalMetrics: {,
-                    averageLoadTime: 1.2,
-                    errorRate: 0.008,
-                    availabilityScore: 0.999,
-                    performanceScore: 0.94,
-                    securityScore: 0.96,
-                    compatibilityScore: 0.88,
-                  },
-                  timestamp: Date.now(),
-                }}
+  revenuePerVisitor: integrationData.funnelSummary.totalRevenue / integrationData.funnelSummary.totalConversions,
+  revenuePerConversion: integrationData.funnelSummary.averageOrderValue,
+  lifetimeValue: 450,
+  paybackPeriod: 90,
+  marginPerConversion: 35,
+},
+  userExperienceMetrics: {,
+  overallSatisfactionScore: 0.87,
+  easeOfUseScore: 0.82,
+  clarityScore: 0.89,
+  trustScore: 0.91,
+  mobileExperienceScore: 0.78,
+  accessibilityScore: 0.85,
+},
+  technicalMetrics: {,
+  averageLoadTime: 1.2,
+  errorRate: 0.008,
+  availabilityScore: 0.999,
+  performanceScore: 0.94,
+  securityScore: 0.96,
+  compatibilityScore: 0.88,
+},
+  timestamp: Date.now();
+  }}
               />
             </div>
           </div>
         </div>
       );
     default:
-      return ();
+      return;
         <div className="marketplace-funnel-integration">
           <p>Integration mode '{integrationMode}' not implemented yet.</p>
         </div>
       );
-  }
 };

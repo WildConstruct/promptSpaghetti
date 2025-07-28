@@ -24,69 +24,69 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
   singularForm: z.string().default('action'),
   pluralForm: z.string().default('actions'),
 }),
-  WeightedChoice: baseNodeSchema.extend({,)
-  type: z.literal('WeightedChoice').default('WeightedChoice'),
-  choices: z.array(z.object({,)
-  text: z.string(),
-  weight: z.number().min(0).default(1),
+  WeightedChoice: baseNodeSchema.extend({
+    type: z.literal('WeightedChoice').default('WeightedChoice'),
+    choices: z.array(z.object({
+      text: z.string(),
+      weight: z.number().min(0).default(1),
 })).default([{ text: 'choice', weight: 1 }])
   }),
-  Concat: baseNodeSchema.extend({,)
+  Concat: baseNodeSchema.extend({
   type: z.literal('Concat').default('Concat'),
   separator: z.string().default(' '),
   inputs: z.array(z.string()).default([]),
 }),
-  Output: baseNodeSchema.extend({,)
+  Output: baseNodeSchema.extend({
   type: z.literal('Output').default('Output'),
   outputName: z.string().default('output'),
 }),
-  Include: baseNodeSchema.extend({,)
+  Include: baseNodeSchema.extend({
   type: z.literal('Include').default('Include'),
   graphPath: z.string().default(''),
 }),
-  SetVariable: baseNodeSchema.extend({,)
+  SetVariable: baseNodeSchema.extend({
   type: z.literal('SetVariable').default('SetVariable'),
   variableName: z.string().default('variable'),
   value: z.string().default(''),
 }),
-  GetVariable: baseNodeSchema.extend({,)
+  GetVariable: baseNodeSchema.extend({
   type: z.literal('GetVariable').default('GetVariable'),
   variableName: z.string().default('variable'),
   fallback: z.string().default(''),
 }),
   // Epic 7 Advanced Node Types
-  WeightedAdvanced: baseNodeSchema.extend({,)
+  WeightedAdvanced: baseNodeSchema.extend({
   type: z.literal('WeightedAdvanced').default('WeightedAdvanced'),
-  choices: z.array(z.object({,)
+  choices: z.array(z.object({
   text: z.string(),
   weight: z.number().min(0).default(1),
   metadata: z.record(z.any()).optional(),
 })).default([{ text: 'advanced choice', weight: 1 }]),
     distribution: z.enum(['uniform', 'exponential', 'gaussian', 'custom']).default('uniform'),
-    parameters: z.record(z.any()).optional();
+    parameters: z.record(z.any()).optional()
   }),
-  Conditional: baseNodeSchema.extend({,)
+  Conditional: baseNodeSchema.extend({
   type: z.literal('Conditional').default('Conditional'),
   condition: z.string().default('true'),
   trueOutput: z.string().default('true result'),
   falseOutput: z.string().default('false result'),
   variables: z.record(z.any()).optional(),
 }),
-  Sequential: baseNodeSchema.extend({,)
+  Sequential: baseNodeSchema.extend({
   type: z.literal('Sequential').default('Sequential'),
   items: z.array(z.string()).default(['item1', 'item2']),
   pattern: z.enum(['linear', 'cyclical', 'random', 'weighted']).default('linear'),
   currentIndex: z.number().default(0),
   history: z.array(z.number()).optional(),
 }),
-  Markov: baseNodeSchema.extend({,)
+  Markov: baseNodeSchema.extend({
   type: z.literal('Markov').default('Markov'),
     states: z.array(z.string()).default(['state1', 'state2']),
     transitions: z.record(z.record(z.number())).default({}),
     currentState: z.string().default(''),
     maxIterations: z.number().default(100),
-    terminationConditions: z.array(z.string()).optional();
-  }
+    terminationConditions: z.array(z.string()).optional()
+  })
 };
 
 export default nodeSchemas;

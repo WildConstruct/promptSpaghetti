@@ -27,7 +27,7 @@ const SecurityMetricsSchema = {
     vulnerabilityTrend: { 
       type: 'array', 
       items: { type: 'number' }
-    },
+  }
     meanTimeToFix: { type: 'number' },
     vulnerabilityDensity: { type: 'number' },
     packageSecurity: {
@@ -38,7 +38,7 @@ const SecurityMetricsSchema = {
         vulnerable: { type: 'number' },
         riskScore: { type: 'number' }
       }
-    },
+  }
     codeSecurityScore: { type: 'number' },
     infrastructureScore: { type: 'number' },
     complianceScore: { type: 'number' },
@@ -79,9 +79,9 @@ const SecurityScanRequestSchema = {
     scanType: { 
       type: 'string', 
       enum: ['dependency', 'static', 'dynamic', 'infrastructure', 'compliance', 'comprehensive'] 
-    },
+  }
     options: { type: 'object' }
-  },
+  }
   required: ['scanType']
 };
 
@@ -91,7 +91,7 @@ const VulnerabilityUpdateSchema = {
     status: { type: 'string', enum: ['open', 'acknowledged', 'fixed', 'false_positive', 'risk_accepted'] },
     assignee: { type: 'string' },
     dueDate: { type: 'string', format: 'date-time' }
-  },
+  }
   required: ['status']
 };
 
@@ -129,17 +129,17 @@ export async function securityRoutes(fastify: FastifyInstance) {
         snyk: {
           enabled: !!process.env.SNYK_API_KEY,
           apiKey: process.env.SNYK_API_KEY
-        },
+  }
         sonarqube: {
           enabled: !!process.env.SONARQUBE_URL,
           serverUrl: process.env.SONARQUBE_URL,
           token: process.env.SONARQUBE_TOKEN
-        },
+  }
         owaspZap: {
           enabled: !!process.env.OWASP_ZAP_API_KEY,
           apiKey: process.env.OWASP_ZAP_API_KEY
         }
-      },
+  }
       notifications: {
         email: process.env.SECURITY_ALERT_EMAILS ? process.env.SECURITY_ALERT_EMAILS.split(',') : [],
         webhook: process.env.SECURITY_WEBHOOK_URL,
@@ -248,7 +248,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
             message: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -316,7 +316,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 100 },
           scanType: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -398,7 +398,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           scanId: { type: 'string' }
-        },
+  }
         required: ['scanId']
       }
     }
@@ -457,7 +457,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           type: { type: 'string', enum: ['dependency', 'code', 'infrastructure', 'configuration'] },
           limit: { type: 'number', minimum: 1, maximum: 1000 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -520,9 +520,9 @@ export async function securityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: VulnerabilityUpdateSchema,
       response: {
         200: {
@@ -531,7 +531,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -600,7 +600,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           status: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -678,7 +678,7 @@ export async function securityRoutes(fastify: FastifyInstance) {
           framework: { type: 'string', enum: ['OWASP', 'PCI-DSS', 'SOC2', 'GDPR', 'HIPAA', 'ISO27001'] },
           status: { type: 'string', enum: ['compliant', 'non_compliant', 'partial', 'not_applicable'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',

@@ -78,7 +78,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             { weight: 0.5, value: 'B' }
           ]
         }
-      },
+  }
       {
         id: 'node2',
         type: 'Output',
@@ -138,17 +138,17 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
             id: 'weighted',
             type: 'WeightedChoice',
             data: { choices: [{ weight: 1, value: 'choice' }] }
-          },
+  }
           {
             id: 'concat',
             type: 'Concat',
             data: { inputs: ['a', 'b', 'c'] }
-          },
+  }
           {
             id: 'output',
             type: 'Output',
             data: { value: 'output-value' }
-          },
+  }
           {
             id: 'include',
             type: 'Include',
@@ -156,12 +156,12 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
               template: 'tmpl1',
               templates: { tmpl1: 'Template Content' }
             }
-          },
+  }
           {
             id: 'setvar',
             type: 'SetVariable',
             data: { key: 'myVar', value: 'myValue' }
-          },
+  }
           {
             id: 'getvar',
             type: 'GetVariable',
@@ -185,7 +185,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
               choices: [{ weight: 1, value: 'advanced' }],
               distribution: 'exponential'
             }
-          },
+  }
           {
             id: 'conditional',
             type: 'Conditional',
@@ -194,7 +194,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
               trueValue: 'yes',
               falseValue: 'no'
             }
-          },
+  }
           {
             id: 'sequential',
             type: 'Sequential',
@@ -202,7 +202,7 @@ describe('Server Engine - Comprehensive Coverage (85% target)', () => {
               items: ['first', 'second', 'third'],
               mode: 'linear'
             }
-          },
+  }
           {
             id: 'markov',
             type: 'Markov',

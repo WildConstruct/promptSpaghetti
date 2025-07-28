@@ -8,21 +8,35 @@ export class ASTBuilder {
     errors = [];
     constructor(tokens) {
         this.tokens = tokens;
-    }
-    /**
-     * Build AST from token stream
-     */
-    build() {
-        this.current = 0;
-        this.errors = [];
-        try {
-            const ast = this.parseGraph();
-            return { ast, errors: this.errors };
+        /**
+         * Build AST from token stream
+         */
+        build();
+        {
+            ast: GraphAST | null;
+            errors: ParseError;
         }
-        catch (error) {
-            this.addError(error instanceof Error ? error.message : 'Unknown parsing error', 'error');
-            return { ast: null, errors: this.errors };
+        {
+            this.current = 0;
+            this.errors = [];
+            try {
+                const ast = this.parseGraph();
+                return { ast, errors: this.errors };
+            }
+            catch (error) {
+                this.addError(error instanceof Error ? error.message : 'Unknown parsing error', 'error');
+                return { ast: null, errors: this.errors };
+                /**
+                 * Parse complete graph structure
+                 */
+            }
+            /**
+             * Parse complete graph structure
+             */
         }
+        /**
+         * Parse complete graph structure
+         */
     }
     /**
      * Parse complete graph structure
@@ -33,7 +47,7 @@ export class ASTBuilder {
             type: 'Graph',
             position: start.position,
             nodes: [],
-            edges: []
+            edges: [],
         };
         // Parse header section
         this.parseHeader(graph);
@@ -48,10 +62,16 @@ export class ASTBuilder {
             }
             else {
                 this.addError(`Unexpected token: ${token.value}`, 'error');
-                this.advance();
             }
+            this.advance();
+            return graph;
+            /**
+             * Parse header section (version, checksum, metadata)
+             */
         }
-        return graph;
+        /**
+         * Parse header section (version, checksum, metadata)
+         */
     }
     /**
      * Parse header section (version, checksum, metadata)
@@ -59,26 +79,38 @@ export class ASTBuilder {
     parseHeader(graph) {
         while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
             const token = this.currentToken();
-            if (token.type === TokenType.VERSION ||
-                (token.type === TokenType.KEY && token.value === 'version')) {
+            if (token.type === TokenType.VERSION || )
+                (token.type === TokenType.KEY && token.value === 'version');
+            {
                 graph.version = this.parseHeaderValue();
             }
-            else if (token.type === TokenType.CHECKSUM ||
-                (token.type === TokenType.KEY && token.value === 'checksum')) {
+            if (token.type === TokenType.CHECKSUM || )
+                (token.type === TokenType.KEY && token.value === 'checksum');
+            {
                 graph.checksum = this.parseHeaderValue();
             }
-            else if (token.type === TokenType.METADATA ||
-                (token.type === TokenType.KEY && token.value === 'metadata')) {
+            if (token.type === TokenType.METADATA || )
+                (token.type === TokenType.KEY && token.value === 'metadata');
+            {
                 graph.metadata = this.parseMetadata();
             }
-            else if (token.type === TokenType.NEWLINE) {
+            if (token.type === TokenType.NEWLINE) {
                 this.advance();
             }
             else {
-                this.advance(); // Skip unexpected tokens in header
+                this.advance();
+                /**
+                 * Parse header key-value pair
+                 */
             }
+            /**
+             * Parse header key-value pair
+             */
         }
-    }
+        /**
+         * Parse header key-value pair
+         */
+    } // Skip unexpected tokens in header
     /**
      * Parse header key-value pair
      */
@@ -86,12 +118,19 @@ export class ASTBuilder {
         this.advance(); // Skip key
         this.expect(TokenType.COLON, 'Expected colon after header key');
         const valueToken = this.advance();
-        if (valueToken.type === TokenType.STRING || valueToken.type === TokenType.VALUE ||
-            valueToken.type === TokenType.NUMBER) {
+        if (valueToken.type === TokenType.STRING || valueToken.type === TokenType.VALUE || )
+            valueToken.type === TokenType.NUMBER;
+        {
             return valueToken.value;
+            this.addError('Expected value after colon', 'error');
+            return '';
+            /**
+             * Parse metadata section
+             */
         }
-        this.addError('Expected value after colon', 'error');
-        return '';
+        /**
+         * Parse metadata section
+         */
     }
     /**
      * Parse metadata section
@@ -121,13 +160,28 @@ export class ASTBuilder {
                 }
                 else {
                     this.advance(); // Skip unexpected tokens
+                    if (this.currentToken().type === TokenType.DEDENT) {
+                        this.advance();
+                        return metadata;
+                        /**
+                         * Parse section (NODES or EDGES)
+                         */
+                    }
+                    /**
+                     * Parse section (NODES or EDGES)
+                     */
                 }
+                /**
+                 * Parse section (NODES or EDGES)
+                 */
             }
-            if (this.currentToken().type === TokenType.DEDENT) {
-                this.advance();
-            }
+            /**
+             * Parse section (NODES or EDGES)
+             */
         }
-        return metadata;
+        /**
+         * Parse section (NODES or EDGES)
+         */
     }
     /**
      * Parse section (NODES or EDGES)
@@ -148,6 +202,9 @@ export class ASTBuilder {
             default:
                 this.addError(`Unknown section: ${sectionName}`, 'error', 'Use NODES, EDGES, or END');
         }
+        /**
+         * Parse nodes section
+         */
     }
     /**
      * Parse nodes section
@@ -157,66 +214,96 @@ export class ASTBuilder {
             if (this.currentToken().type === TokenType.NEWLINE) {
                 this.advance();
                 continue;
+                const node = this.parseNodeDefinition();
+                if (node) {
+                    graph.nodes.push(node);
+                    /**
+                    * Parse individual node definition
+                    */
+                }
+                /**
+                * Parse individual node definition
+                */
             }
-            const node = this.parseNodeDefinition();
-            if (node) {
-                graph.nodes.push(node);
-            }
+            /**
+            * Parse individual node definition
+            */
         }
+        /**
+        * Parse individual node definition
+        */
     }
     /**
-     * Parse individual node definition
-     */
+    * Parse individual node definition
+    */
     parseNodeDefinition() {
         const token = this.currentToken();
         if (token.type !== TokenType.KEY) {
             this.addError('Expected node ID', 'error');
             this.synchronize();
             return null;
-        }
-        const nodeId = this.advance().value;
-        this.expect(TokenType.COLON, 'Expected colon after node ID');
-        const node = {
-            type: 'NodeDefinition',
-            id: nodeId,
-            nodeType: '',
-            position: token.position
-        };
-        // Parse node properties
-        if (this.currentToken().type === TokenType.INDENT) {
-            this.advance(); // Skip indent
-            while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT &&
-                this.currentToken().type !== TokenType.KEY) {
-                if (this.currentToken().type === TokenType.KEY) {
-                    const key = this.advance().value;
-                    this.expect(TokenType.COLON, 'Expected colon after property key');
-                    switch (key) {
-                        case 'type':
-                            node.nodeType = this.parseValue();
-                            break;
-                        case 'props':
-                            node.properties = this.parseProperties();
-                            break;
-                        case 'inputs':
-                            node.inputs = this.parseArray();
-                            break;
-                        default:
-                            this.addError(`Unknown node property: ${key}`, 'warning', 'Use type, props, or inputs');
-                            this.parseValue(); // Skip unknown property
+            const nodeId = this.advance().value;
+            this.expect(TokenType.COLON, 'Expected colon after node ID');
+            const node = {
+                type: 'NodeDefinition',
+                id: nodeId,
+                nodeType: '',
+                position: token.position,
+            };
+            // Parse node properties
+            if (this.currentToken().type === TokenType.INDENT) {
+                this.advance(); // Skip indent
+                while (!this.isAtEnd() && this.currentToken().type !== TokenType.DEDENT &&
+                    this.currentToken().type !== TokenType.KEY) {
+                    if (this.currentToken().type === TokenType.KEY) {
+                        const key = this.advance().value;
+                        this.expect(TokenType.COLON, 'Expected colon after property key');
+                        switch (key) {
+                            case 'type':
+                                node.nodeType = this.parseValue();
+                                break;
+                            case 'props':
+                                node.properties = this.parseProperties();
+                                break;
+                            case 'inputs':
+                                node.inputs = this.parseArray();
+                                break;
+                            default:
+                                this.addError(`Unknown node property: ${key}`, 'warning', 'Use type, props, or inputs');
+                        }
+                        this.parseValue(); // Skip unknown property
                     }
+                    else if (this.currentToken().type === TokenType.NEWLINE) {
+                        this.advance();
+                    }
+                    else {
+                        this.advance(); // Skip unexpected tokens
+                        if (this.currentToken().type === TokenType.DEDENT) {
+                            this.advance();
+                            return node;
+                            /**
+                             * Parse properties object
+                             */
+                        }
+                        /**
+                         * Parse properties object
+                         */
+                    }
+                    /**
+                     * Parse properties object
+                     */
                 }
-                else if (this.currentToken().type === TokenType.NEWLINE) {
-                    this.advance();
-                }
-                else {
-                    this.advance(); // Skip unexpected tokens
-                }
+                /**
+                 * Parse properties object
+                 */
             }
-            if (this.currentToken().type === TokenType.DEDENT) {
-                this.advance();
-            }
+            /**
+             * Parse properties object
+             */
         }
-        return node;
+        /**
+         * Parse properties object
+         */
     }
     /**
      * Parse properties object
@@ -236,57 +323,96 @@ export class ASTBuilder {
                 }
                 else {
                     this.advance(); // Skip unexpected tokens
+                    if (this.currentToken().type === TokenType.DEDENT) {
+                        this.advance();
+                        return properties;
+                        /**
+                        * Parse edges section
+                        */
+                    }
+                    /**
+                    * Parse edges section
+                    */
                 }
+                /**
+                * Parse edges section
+                */
             }
-            if (this.currentToken().type === TokenType.DEDENT) {
-                this.advance();
-            }
+            /**
+            * Parse edges section
+            */
         }
-        return properties;
+        /**
+        * Parse edges section
+        */
     }
     /**
-     * Parse edges section
-     */
+    * Parse edges section
+    */
     parseEdgesSection(graph) {
         while (!this.isAtEnd() && this.currentToken().type !== TokenType.SECTION_DELIMITER) {
             if (this.currentToken().type === TokenType.NEWLINE) {
                 this.advance();
                 continue;
+                const edge = this.parseEdgeDefinition();
+                if (edge) {
+                    graph.edges.push(edge);
+                    /**
+                    * Parse individual edge definition
+                    */
+                }
+                /**
+                * Parse individual edge definition
+                */
             }
-            const edge = this.parseEdgeDefinition();
-            if (edge) {
-                graph.edges.push(edge);
-            }
+            /**
+            * Parse individual edge definition
+            */
         }
+        /**
+        * Parse individual edge definition
+        */
     }
     /**
-     * Parse individual edge definition
-     */
+    * Parse individual edge definition
+    */
     parseEdgeDefinition() {
         const start = this.currentToken();
         if (start.type !== TokenType.KEY && start.type !== TokenType.VALUE) {
             this.addError('Expected source node ID', 'error');
             this.synchronize();
             return null;
+            const source = this.advance().value;
+            if (this.currentToken().type !== TokenType.EDGE_ARROW) {
+                this.addError('Expected -> after source node', 'error', 'Use -> to connect nodes');
+                return null;
+                this.advance(); // Skip arrow
+                const targetToken = this.currentToken();
+                if (targetToken.type !== TokenType.KEY && targetToken.type !== TokenType.VALUE) {
+                    this.addError('Expected target node ID after ->', 'error');
+                    return null;
+                    const target = this.advance().value;
+                    return {
+                        type: 'EdgeDefinition',
+                        source,
+                        target,
+                        position: start.position,
+                    };
+                    /**
+                     * Parse generic value (string, number, boolean, array, object)
+                     */
+                }
+                /**
+                 * Parse generic value (string, number, boolean, array, object)
+                 */
+            }
+            /**
+             * Parse generic value (string, number, boolean, array, object)
+             */
         }
-        const source = this.advance().value;
-        if (this.currentToken().type !== TokenType.EDGE_ARROW) {
-            this.addError('Expected -> after source node', 'error', 'Use -> to connect nodes');
-            return null;
-        }
-        this.advance(); // Skip arrow
-        const targetToken = this.currentToken();
-        if (targetToken.type !== TokenType.KEY && targetToken.type !== TokenType.VALUE) {
-            this.addError('Expected target node ID after ->', 'error');
-            return null;
-        }
-        const target = this.advance().value;
-        return {
-            type: 'EdgeDefinition',
-            source,
-            target,
-            position: start.position
-        };
+        /**
+         * Parse generic value (string, number, boolean, array, object)
+         */
     }
     /**
      * Parse generic value (string, number, boolean, array, object)
@@ -313,9 +439,12 @@ export class ASTBuilder {
                 return this.parseObject();
             default:
                 this.addError(`Unexpected token in value: ${token.value}`, 'error');
-                this.advance();
-                return null;
         }
+        this.advance();
+        return null;
+        /**
+         * Parse array [item1, item2, ...]
+         */
     }
     /**
      * Parse array [item1, item2, ...]
@@ -327,15 +456,27 @@ export class ASTBuilder {
             if (this.currentToken().type === TokenType.NEWLINE) {
                 this.advance();
                 continue;
+                elements.push(this.parseValue());
+                // Skip commas if present
+                if (this.currentToken().type === TokenType.VALUE && this.currentToken().value === ',') {
+                    this.advance();
+                    this.expect(TokenType.ARRAY_END, 'Expected ]');
+                    return elements;
+                    /**
+                     * Parse object (nested properties)
+                     */
+                }
+                /**
+                 * Parse object (nested properties)
+                 */
             }
-            elements.push(this.parseValue());
-            // Skip commas if present
-            if (this.currentToken().type === TokenType.VALUE && this.currentToken().value === ',') {
-                this.advance();
-            }
+            /**
+             * Parse object (nested properties)
+             */
         }
-        this.expect(TokenType.ARRAY_END, 'Expected ]');
-        return elements;
+        /**
+         * Parse object (nested properties)
+         */
     }
     /**
      * Parse object (nested properties)
@@ -354,12 +495,24 @@ export class ASTBuilder {
             }
             else {
                 this.advance(); // Skip unexpected tokens
+                if (this.currentToken().type === TokenType.DEDENT) {
+                    this.advance();
+                    return obj;
+                    /**
+                     * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
+                     */
+                }
+                /**
+                 * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
+                 */
             }
+            /**
+             * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
+             */
         }
-        if (this.currentToken().type === TokenType.DEDENT) {
-            this.advance();
-        }
-        return obj;
+        /**
+         * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
+         */
     }
     /**
      * Extract section name from delimiter (e.g., "---NODES---" -> "NODES")
@@ -367,6 +520,9 @@ export class ASTBuilder {
     extractSectionName(delimiter) {
         const match = delimiter.match(/---(\w+)---/);
         return match ? match[1] : '';
+        /**
+         * Helper methods
+         */
     }
     /**
      * Helper methods
@@ -378,8 +534,8 @@ export class ASTBuilder {
                 value: '',
                 position: { line: 1, column: 1, offset: 0 }
             };
+            return this.tokens[this.current];
         }
-        return this.tokens[this.current];
     }
     advance() {
         if (!this.isAtEnd())
@@ -393,9 +549,9 @@ export class ASTBuilder {
         if (this.currentToken().type === type) {
             this.advance();
             return true;
+            this.addError(message, 'error');
+            return false;
         }
-        this.addError(message, 'error');
-        return false;
     }
     synchronize() {
         // Skip to next synchronization point (newline or section delimiter)
@@ -403,16 +559,17 @@ export class ASTBuilder {
             if (this.currentToken().type === TokenType.NEWLINE ||
                 this.currentToken().type === TokenType.SECTION_DELIMITER) {
                 break;
+                this.advance();
             }
-            this.advance();
         }
     }
     addError(message, severity, suggestion) {
-        this.errors.push({
-            message,
-            position: this.currentToken().position,
+        this.errors.push({});
+        message,
+            position;
+        this.currentToken().position,
             severity,
-            suggestion
-        });
+            suggestion;
     }
+    ;
 }

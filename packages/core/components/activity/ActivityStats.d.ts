@@ -14,12 +14,11 @@ interface ActivityStatsData {
         user_id: string;
         count: number;
     }>;
-}
 interface ActivityStatsProps {
     stats: ActivityStatsData;
     workspaceId: string;
     className?: string;
-}
+
 export declare const ActivityStats: React.FC<ActivityStatsProps>;
 export default ActivityStats;
 //# sourceMappingURL=ActivityStats.d.ts.map

@@ -18,6 +18,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 
+}
 export interface TemporaryRoleAssignment {
   id: string;
   userId: string;
@@ -34,7 +35,9 @@ export interface TemporaryRoleAssignment {
   autoRevoke: boolean;
   notificationSent: boolean;
 }
+}
 
+}
 export interface DirectPermissionGrant {
   id: string;
   userId: string;
@@ -54,7 +57,9 @@ export interface DirectPermissionGrant {
   autoRevoke: boolean;
   notificationSent: boolean;
 }
+}
 
+}
 export interface TemporaryPermissionRequest {
   userId: string;
   roleId?: string;
@@ -63,6 +68,7 @@ export interface TemporaryPermissionRequest {
     action: string;
     scope: 'global' | 'organization' | 'team' | 'own';
     conditions?: Record<string, any>;
+}
   }[];
   reason: string;
   duration: number; // Duration in hours
@@ -72,6 +78,7 @@ export interface TemporaryPermissionRequest {
   scopeContext?: Record<string, any>;
 }
 
+}
 export interface EmergencyAccessGrant {
   id: string;
   userId: string;
@@ -87,7 +94,9 @@ export interface EmergencyAccessGrant {
   reviewedBy?: string;
   reviewedAt?: Date;
 }
+}
 
+}
 export interface PermissionEscalation {
   id: string;
   userId: string;
@@ -101,6 +110,7 @@ export interface PermissionEscalation {
   originalExpiresAt?: Date;
   autoDowngrade: boolean;
   notificationsSent: string[];
+}
 }
 
 export class TemporaryPermissionsService {
@@ -134,6 +144,7 @@ export class TemporaryPermissionsService {
     request: TemporaryPermissionRequest,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<TemporaryRoleAssignment> {
+
     if (!request.roleId) {
       throw new Error('Role ID is required for temporary role assignment');
     }
@@ -194,7 +205,7 @@ export class TemporaryPermissionsService {
           reason: request.reason,
           expiresAt: expiresAt.toISOString(),
           emergencyAccess: request.emergencyAccess || false
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -225,7 +236,7 @@ export class TemporaryPermissionsService {
           roleId: request.roleId,
           reason: request.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -242,6 +253,7 @@ export class TemporaryPermissionsService {
     request: TemporaryPermissionRequest,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<DirectPermissionGrant[]> {
+
     if (!request.directPermissions || request.directPermissions.length === 0) {
       throw new Error('Direct permissions are required for direct permission grant');
     }
@@ -311,7 +323,7 @@ export class TemporaryPermissionsService {
           reason: request.reason,
           expiresAt: expiresAt.toISOString(),
           emergencyAccess: request.emergencyAccess || false
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -332,7 +344,7 @@ export class TemporaryPermissionsService {
           permissions: request.directPermissions?.map(p => `${p.resource}:${p.action}`),
           reason: request.reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -359,6 +371,7 @@ export class TemporaryPermissionsService {
     } = {},
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<EmergencyAccessGrant> {
+
     const duration = options.duration || 4; // Default 4 hours for emergency access
     const severity = options.severity || 'high';
     const reviewRequired = options.reviewRequired !== false; // Default to true
@@ -402,7 +415,7 @@ export class TemporaryPermissionsService {
           incidentId: options.incidentId,
           reviewRequired,
           expiresAt: expiresAt.toISOString()
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -433,7 +446,7 @@ export class TemporaryPermissionsService {
           permissions,
           reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -453,6 +466,7 @@ export class TemporaryPermissionsService {
     reason: string,
     context: { ipAddress?: string; userAgent?: string; sessionId?: string } = {}
   ): Promise<void> {
+
     const now = new Date();
 
     try {
@@ -484,7 +498,7 @@ export class TemporaryPermissionsService {
             roleId,
             reason,
             revokedAt: now.toISOString()
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
@@ -514,7 +528,7 @@ export class TemporaryPermissionsService {
             permission: `${resource}:${action}`,
             reason,
             revokedAt: now.toISOString()
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
@@ -544,7 +558,7 @@ export class TemporaryPermissionsService {
             permissions: JSON.parse(permissions),
             reason,
             revokedAt: now.toISOString()
-          },
+  }
           ipAddress: context.ipAddress,
           userAgent: context.userAgent,
           sessionId: context.sessionId,
@@ -564,7 +578,7 @@ export class TemporaryPermissionsService {
         details: {
           reason,
           error: error instanceof Error ? error.message : String(error)
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: context.sessionId,
@@ -583,6 +597,7 @@ export class TemporaryPermissionsService {
     directGrants: DirectPermissionGrant[];
     emergencyAccess: EmergencyAccessGrant[];
   }> {
+
     const [roleResults, permResults, emergencyResults] = await Promise.all([
       this.dbService.query(`
         SELECT * FROM temporary_role_assignments 
@@ -631,6 +646,7 @@ export class TemporaryPermissionsService {
    * Clean up expired permissions
    */
   private async cleanupExpiredPermissions(): Promise<void> {
+
     const now = new Date();
 
     try {
@@ -667,7 +683,7 @@ export class TemporaryPermissionsService {
             expiredDirectGrants: expiredPerms.rows.length,
             expiredEmergencyAccess: expiredEmergency.rows.length,
             cleanupAt: now.toISOString()
-          },
+  }
           severity: 'info'
         });
       }
@@ -680,7 +696,7 @@ export class TemporaryPermissionsService {
         details: {
           error: error instanceof Error ? error.message : String(error),
           cleanupAt: now.toISOString()
-        },
+  }
         severity: 'error'
       });
     }

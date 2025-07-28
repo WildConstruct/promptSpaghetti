@@ -25,6 +25,7 @@ export class FeatureToggleService {
     key: string, 
     context: ToggleEvaluationContext = {}
   ): Promise<ToggleEvaluationResult> {
+
     try {
       // Get toggle definition
       const toggle = await this.dao.getToggleByKey(key, context.orgId);
@@ -107,6 +108,7 @@ export class FeatureToggleService {
 
   // Generate toggle snapshot for distribution
   async generateSnapshot(orgId?: string): Promise<unknown> {
+
     const { toggles } = await this.dao.listToggles({ 
       orgId, 
       enabled: true,
@@ -142,6 +144,7 @@ export class FeatureToggleService {
 
   // Toggle management operations
   async createToggle(request: CreateToggleRequest, createdBy?: string): Promise<FeatureToggle> {
+
     // Validate toggle configuration
     this.validateToggleValue(request.type, request.value);
     
@@ -154,6 +157,7 @@ export class FeatureToggleService {
   }
 
   async updateToggle(request: UpdateToggleRequest, updatedBy?: string): Promise<FeatureToggle> {
+
     if (request.value && request.type) {
       this.validateToggleValue(request.type, request.value);
     }
@@ -167,6 +171,7 @@ export class FeatureToggleService {
   }
 
   async emergencyOverride(request: EmergencyOverrideRequest, actorId: string): Promise<void> {
+
     await this.dao.createEmergencyOverride(request, actorId);
     
     // Clear all caches for this toggle
@@ -180,6 +185,7 @@ export class FeatureToggleService {
     scopes: unknown[],
     context: ToggleEvaluationContext
   ): Promise<ToggleEvaluationResult> {
+
     // Check if any scoping rules apply
     for (const scope of scopes) {
       const ruleResult = this.evaluateRule(scope.rule, context);
@@ -353,8 +359,7 @@ export class FeatureToggleService {
       metadata: { 
         startTime: value.startTime,
         endTime: value.endTime,
-        currentTime: now.toISOString()
-      }
+        currentTime: now.toISOString(}
     };
   }
 
@@ -545,6 +550,7 @@ export class FeatureToggleService {
   }
 
   private async invalidateCaches(toggleId: string): Promise<void> {
+
     await this.dao.clearCacheForToggle(toggleId);
   }
 

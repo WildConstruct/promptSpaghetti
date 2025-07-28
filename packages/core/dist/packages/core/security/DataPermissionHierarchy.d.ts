@@ -10,21 +10,21 @@ import { DataClassificationLevel } from '../types/DataClassification';
 import { DataOperation } from './DataClassificationAccessControl';
 import { AccessRequirement } from './DataClassificationAccessControl';
 export interface PermissionHierarchy {
-    levels: PermissionLevel[];
-    inheritanceRules: PermissionInheritanceRule[];
-    escalationPaths: EscalationPath[];
-    delegationRules: DelegationRule[];
-    emergencyOverrides: EmergencyOverride[];
+    levels: PermissionLevel;
+    inheritanceRules: PermissionInheritanceRule;
+    escalationPaths: EscalationPath;
+    delegationRules: DelegationRule;
+    emergencyOverrides: EmergencyOverride;
 }
 export interface PermissionLevel {
     id: string;
     name: string;
     level: number;
     description: string;
-    classificationAccess: DataClassificationLevel[];
-    operationPermissions: OperationPermission[];
-    timeRestrictions: TimeRestriction[];
-    contextRequirements: ContextRequirement[];
+    classificationAccess: DataClassificationLevel;
+    operationPermissions: OperationPermission;
+    timeRestrictions: TimeRestriction;
+    contextRequirements: ContextRequirement;
     automaticInheritance: boolean;
     requiresExplicitGrant: boolean;
     maxDelegationLevel: number;
@@ -34,8 +34,8 @@ export interface PermissionLevel {
 export interface OperationPermission {
     operation: DataOperation;
     allowed: boolean;
-    conditions: PermissionCondition[];
-    requirements: AccessRequirement[];
+    conditions: PermissionCondition;
+    requirements: AccessRequirement;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     approvalRequired: boolean;
     delegatable: boolean;
@@ -52,23 +52,23 @@ export interface PermissionCondition {
 export interface TimeRestriction {
     type: 'BUSINESS_HOURS' | 'SPECIFIC_TIMES' | 'BLACKOUT_PERIODS' | 'MAINTENANCE_WINDOWS';
     configuration: TimeConfiguration;
-    exceptions: TimeException[];
+    exceptions: TimeException;
     emergencyOverride: boolean;
 }
 export interface TimeConfiguration {
     startTime?: string;
     endTime?: string;
-    daysOfWeek?: number[];
+    daysOfWeek?: number;
     timezone: string;
     excludeHolidays?: boolean;
-    maintenanceWindows?: MaintenanceWindow[];
+    maintenanceWindows?: MaintenanceWindow;
 }
 export interface MaintenanceWindow {
     start: Date;
     end: Date;
     description: string;
     impactLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    allowedOperations: DataOperation[];
+    allowedOperations: DataOperation;
 }
 export interface TimeException {
     id: string;
@@ -77,7 +77,7 @@ export interface TimeException {
     grantedAt: Date;
     validFrom: Date;
     validUntil: Date;
-    operations: DataOperation[];
+    operations: DataOperation;
     approvalRequired: boolean;
 }
 export interface ContextRequirement {
@@ -89,7 +89,7 @@ export interface ContextRequirement {
 export interface ContextSpecification {
     attribute: string;
     expectedValue: any;
-    validation: ValidationRule[];
+    validation: ValidationRule;
     tolerance?: number;
 }
 export interface ValidationRule {
@@ -107,16 +107,16 @@ export interface PermissionLevelMetadata {
     usageStatistics: UsageStatistics;
 }
 export interface ComplianceInfo {
-    frameworks: string[];
-    requirements: string[];
+    frameworks: string;
+    requirements: string;
     lastAudit: Date;
     nextReview: Date;
-    certifications: string[];
+    certifications: string;
 }
 export interface RiskAssessment {
     overallRisk: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    riskFactors: RiskFactor[];
-    mitigations: Mitigation[];
+    riskFactors: RiskFactor;
+    mitigations: Mitigation;
     lastAssessment: Date;
     assessedBy: string;
 }
@@ -140,15 +140,15 @@ export interface UsageStatistics {
     violationCount: number;
     lastViolation?: Date;
     averageSessionDuration: number;
-    peakUsageHours: number[];
+    peakUsageHours: number;
 }
 export interface PermissionInheritanceRule {
     id: string;
     parentLevel: string;
     childLevel: string;
-    inheritedPermissions: string[];
-    conditions: InheritanceCondition[];
-    restrictions: InheritanceRestriction[];
+    inheritedPermissions: string;
+    conditions: InheritanceCondition;
+    restrictions: InheritanceRestriction;
     automatic: boolean;
     requiresApproval: boolean;
 }
@@ -167,13 +167,13 @@ export interface InheritanceRestriction {
 }
 export interface RestrictionSpecification {
     parameters: Record<string, any>;
-    validation: ValidationRule[];
-    monitoring: MonitoringRequirement[];
+    validation: ValidationRule;
+    monitoring: MonitoringRequirement;
 }
 export interface MonitoringRequirement {
     type: 'USAGE' | 'VIOLATIONS' | 'PERFORMANCE' | 'COMPLIANCE';
     frequency: 'REALTIME' | 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
-    thresholds: MonitoringThreshold[];
+    thresholds: MonitoringThreshold;
     alerting: AlertingConfiguration;
 }
 export interface MonitoringThreshold {
@@ -184,19 +184,19 @@ export interface MonitoringThreshold {
 }
 export interface AlertingConfiguration {
     enabled: boolean;
-    channels: string[];
+    channels: string;
     escalation: EscalationConfiguration;
-    suppressionRules: SuppressionRule[];
+    suppressionRules: SuppressionRule;
 }
 export interface EscalationConfiguration {
-    levels: EscalationLevel[];
-    timeouts: number[];
+    levels: EscalationLevel;
+    timeouts: number;
     autoEscalate: boolean;
 }
 export interface EscalationLevel {
     name: string;
-    recipients: string[];
-    actions: string[];
+    recipients: string;
+    actions: string;
     timeout: number;
 }
 export interface SuppressionRule {
@@ -208,14 +208,14 @@ export interface EscalationPath {
     id: string;
     name: string;
     description: string;
-    triggerConditions: EscalationTrigger[];
-    steps: EscalationStep[];
-    timeouts: EscalationTimeout[];
-    fallbackActions: FallbackAction[];
+    triggerConditions: EscalationTrigger;
+    steps: EscalationStep;
+    timeouts: EscalationTimeout;
+    fallbackActions: FallbackAction;
 }
 export interface EscalationTrigger {
     type: 'PERMISSION_DENIED' | 'VIOLATION_DETECTED' | 'THRESHOLD_EXCEEDED' | 'MANUAL_REQUEST';
-    conditions: TriggerCondition[];
+    conditions: TriggerCondition;
     priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     automatic: boolean;
 }
@@ -230,11 +230,11 @@ export interface EscalationStep {
     order: number;
     name: string;
     description: string;
-    approvers: ApproverSpecification[];
+    approvers: ApproverSpecification;
     requiredApprovals: number;
     timeout: number;
-    actions: StepAction[];
-    conditions: StepCondition[];
+    actions: StepAction;
+    conditions: StepCondition;
 }
 export interface ApproverSpecification {
     type: 'USER' | 'ROLE' | 'GROUP' | 'DYNAMIC';
@@ -250,7 +250,7 @@ export interface StepAction {
 }
 export interface ActionConfiguration {
     parameters: Record<string, any>;
-    validation: ValidationRule[];
+    validation: ValidationRule;
     timeout?: number;
     retries?: number;
 }
@@ -278,9 +278,9 @@ export interface DelegationRule {
     description: string;
     fromLevel: string;
     toLevel: string;
-    permissions: string[];
-    conditions: DelegationCondition[];
-    restrictions: DelegationRestriction[];
+    permissions: string;
+    conditions: DelegationCondition;
+    restrictions: DelegationRestriction;
     timeLimit: number;
     usageLimit: number;
     revocable: boolean;
@@ -290,7 +290,7 @@ export interface DelegationCondition {
     type: 'TEMPORAL' | 'CONTEXTUAL' | 'APPROVAL' | 'JUSTIFICATION';
     specification: Record<string, any>;
     required: boolean;
-    validation: ValidationRule[];
+    validation: ValidationRule;
 }
 export interface DelegationRestriction {
     type: 'SCOPE' | 'TIME' | 'USAGE' | 'CONTEXT' | 'MONITORING';
@@ -302,16 +302,16 @@ export interface EmergencyOverride {
     id: string;
     name: string;
     description: string;
-    triggerConditions: EmergencyTrigger[];
-    grantedPermissions: string[];
+    triggerConditions: EmergencyTrigger;
+    grantedPermissions: string;
     timeLimit: number;
     approvalRequired: boolean;
     auditLevel: 'ENHANCED' | 'COMPREHENSIVE' | 'REALTIME';
-    postEmergencyActions: PostEmergencyAction[];
+    postEmergencyActions: PostEmergencyAction;
 }
 export interface EmergencyTrigger {
     type: 'SYSTEM_FAILURE' | 'SECURITY_INCIDENT' | 'BUSINESS_CRITICAL' | 'REGULATORY_DEADLINE' | 'MANUAL';
-    conditions: TriggerCondition[];
+    conditions: TriggerCondition;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     autoTrigger: boolean;
 }

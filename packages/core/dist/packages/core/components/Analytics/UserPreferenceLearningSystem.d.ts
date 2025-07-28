@@ -15,15 +15,15 @@ export interface UserPreferenceLearningSystemProps {
     onExport?: (data: PreferenceLearningExportData) => void;
 }
 export interface PreferenceLearningConfig {
-    algorithms: LearningAlgorithm[];
+    algorithms: LearningAlgorithm;
     dataCollection: DataCollectionSettings;
     realTimeUpdates: boolean;
     privacySettings: PrivacySettings;
     modelValidation: ValidationSettings;
 }
 export interface PreferenceModelingConfig {
-    modelTypes: ModelType[];
-    features: ModelFeature[];
+    modelTypes: ModelType;
+    features: ModelFeature;
     training: TrainingSettings;
     deployment: ModelDeploymentSettings;
     monitoring: ModelMonitoringSettings;
@@ -31,22 +31,22 @@ export interface PreferenceModelingConfig {
 export interface UserPreferenceProfile {
     userId: string;
     preferenceVector: PreferenceVector;
-    learningHistory: LearningEvent[];
-    modelPredictions: ModelPrediction[];
+    learningHistory: LearningEvent;
+    modelPredictions: ModelPrediction;
     confidenceMetrics: ConfidenceMetrics;
     lastUpdated: number;
 }
 export interface PreferenceVector {
-    dimensions: PreferenceDimension[];
-    embeddings: number[];
-    weights: number[];
-    uncertainty: number[];
+    dimensions: PreferenceDimension;
+    embeddings: number;
+    weights: number;
+    uncertainty: number;
 }
 export interface PreferenceDimension {
     dimension: string;
     value: number;
     confidence: number;
-    evidence: Evidence[];
+    evidence: Evidence;
     temporal: TemporalPattern;
 }
 export interface LearningEvent {
@@ -64,7 +64,7 @@ export interface PreferenceModel {
     type: ModelType;
     architecture: ModelArchitecture;
     performance: ModelPerformance;
-    features: ModelFeature[];
+    features: ModelFeature;
     training: TrainingMetadata;
 }
 export type ModelType = 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'hybrid' | 'reinforcement_learning';
@@ -76,7 +76,7 @@ export interface LearningAlgorithm {
     parameters: Record<string, any>;
 }
 export interface DataCollectionSettings {
-    sources: string[];
+    sources: string;
     frequency: number;
     batchSize: number;
     qualityThreshold: number;
@@ -90,7 +90,7 @@ export interface PrivacySettings {
 export interface ValidationSettings {
     crossValidation: boolean;
     testSplit: number;
-    validationMetrics: string[];
+    validationMetrics: string;
     minimumAccuracy: number;
 }
 export interface ModelFeature {
@@ -112,7 +112,7 @@ export interface ModelDeploymentSettings {
     monitoringEnabled: boolean;
 }
 export interface ModelMonitoringSettings {
-    metrics: string[];
+    metrics: string;
     alertThresholds: Record<string, number>;
     reportingFrequency: number;
 }
@@ -125,7 +125,7 @@ export interface Evidence {
 export interface TemporalPattern {
     trend: 'increasing' | 'decreasing' | 'stable';
     seasonality: boolean;
-    changePoints: number[];
+    changePoints: number;
 }
 export interface LearningImpact {
     magnitude: number;
@@ -172,11 +172,11 @@ export interface LearningInsight {
     message: string;
     confidence: number;
     impact: 'low' | 'medium' | 'high';
-    recommendations: string[];
+    recommendations: string;
 }
 export interface PreferenceLearningExportData {
-    userProfiles: UserPreferenceProfile[];
-    models: PreferenceModel[];
+    userProfiles: UserPreferenceProfile;
+    models: PreferenceModel;
     learningMetrics: {
         totalUsers: number;
         averageConfidence: number;

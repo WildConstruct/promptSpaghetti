@@ -15,9 +15,9 @@ describe('Sequential Node Engine Integration', () => {
           pattern: {
             type: 'linear',
             config: {}
-          },
+  }
           inputs: []
-        },
+  }
         {
           id: 'output1', 
           type: 'Output',
@@ -41,9 +41,9 @@ describe('Sequential Node Engine Integration', () => {
           pattern: {
             type: 'cyclical',
             config: {}
-          },
+  }
           inputs: []
-        },
+  }
         {
           id: 'output1',
           type: 'Output', 
@@ -69,9 +69,9 @@ describe('Sequential Node Engine Integration', () => {
             config: {
               weights: [10, 1]
             }
-          },
+  }
           inputs: []
-        },
+  }
         {
           id: 'output1',
           type: 'Output',
@@ -93,7 +93,7 @@ describe('Sequential Node Engine Integration', () => {
           id: 'seq1',
           type: 'Sequential',
           inputs: []
-        },
+  }
         {
           id: 'output1',
           type: 'Output',
@@ -116,19 +116,19 @@ describe('Sequential Node Engine Integration', () => {
           sequence: ['first1', 'first2'],
           pattern: { type: 'linear', config: {} },
           inputs: []
-        },
+  }
         {
           id: 'seq2', 
           type: 'Sequential',
           sequence: ['second1', 'second2'],
           pattern: { type: 'linear', config: {} },
           inputs: []
-        },
+  }
         {
           id: 'output1',
           type: 'Output',
           inputs: ['seq1']
-        },
+  }
         {
           id: 'output2',
           type: 'Output', 

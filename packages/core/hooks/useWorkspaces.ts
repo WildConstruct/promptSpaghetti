@@ -8,11 +8,10 @@ const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 interface UseWorkspacesOptions {
   autoRefresh?: boolean;
   refreshInterval?: number;
-}
 
 export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}) {
   const { autoRefresh = false, refreshInterval = 30000 } = options;
-  const [workspaces, setWorkspaces] = useState<WorkspaceWithMembership[]>([]);
+  const [workspaces, setWorkspaces] = useState<WorkspaceWithMembership>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // Fetch workspaces from API
@@ -21,38 +20,36 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
       setLoading(true);
       setError(null);
       const response = await fetch(`${API_BASE}/workspaces`, {)}
-        headers: {,
-          'Content-Type': 'application/json',
-          'X-User-Id': userId // Mock auth header
-        }
-      });
+  },
+  headers: {,
+  'Content-Type': 'application/json',
+  'X-User-Id': userId // Mock auth header,
+});
       if (!response.ok) {
         throw new Error(`Failed to fetch workspaces: ${response.statusText}`);}
-      }
       const data = await response.json();
       setWorkspaces(data.data || []);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
-      console.error('Failed to fetch workspaces:', err);
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  setError(errorMessage);
+  console.error('Failed to fetch workspaces:', err);
+} finally {
       setLoading(false);
-    }
   }, [userId]);
   // Create new workspace
   const createWorkspace = useCallback(async (data: CreateWorkspace): Promise<WorkspaceWithMembership> => {
     const response = await fetch(`${API_BASE}/workspaces`, {)}
-      method: 'POST',
+  },
+  method: 'POST',
       headers: {,
-        'Content-Type': 'application/json',
-        'X-User-Id': userId
-      },
-      body: JSON.stringify(data),
-    });
+  'Content-Type': 'application/json',
+  'X-User-Id': userId,
+},
+  body: JSON.stringify(data);
+  });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Failed to create workspace: ${response.statusText}`);}
-    }
     const newWorkspace = await response.json();
     // Add to local state
     setWorkspaces(prev => [newWorkspace, ...prev]);
@@ -61,20 +58,19 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
   // Update existing workspace
   const updateWorkspace = useCallback(async (;);
     workspaceId: string,
-    data: UpdateWorkspace,
-  ): Promise<WorkspaceWithMembership> => {
+    data: UpdateWorkspace): Promise<WorkspaceWithMembership> => {,
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
-      method: 'PUT',
+  },
+  method: 'PUT',
       headers: {,
-        'Content-Type': 'application/json',
-        'X-User-Id': userId
-      },
-      body: JSON.stringify(data),
-    });
+  'Content-Type': 'application/json',
+  'X-User-Id': userId,
+},
+  body: JSON.stringify(data);
+  });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Failed to update workspace: ${response.statusText}`);}
-    }
     const updatedWorkspace = await response.json();
     // Update local state
     setWorkspaces(prev =>)
@@ -85,15 +81,14 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
   // Archive workspace
   const archiveWorkspace = useCallback(async (workspaceId: string): Promise<void> => {
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {)}
-      method: 'DELETE',
+  },
+  method: 'DELETE',
       headers: {,
-        'X-User-Id': userId
-      }
-    });
+  'X-User-Id': userId,
+});
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Failed to archive workspace: ${response.statusText}`);}
-    }
     // Remove from local state
     setWorkspaces(prev => prev.filter(ws => ws.id !== workspaceId));
   }, [userId]);
@@ -101,23 +96,22 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
   const inviteUser = useCallback(async (;);
     workspaceId: string,
     userIdToInvite: string,
-    role: string,
-  ): Promise<void> => {
+    role: string): Promise<void> => {,
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/invite`, {)}
-      method: 'POST',
+  },
+  method: 'POST',
       headers: {,
-        'Content-Type': 'application/json',
-        'X-User-Id': userId
-      },
-      body: JSON.stringify({),
-        user_id: userIdToInvite,
-        role
-      })
+  'Content-Type': 'application/json',
+  'X-User-Id': userId,
+},
+  body: JSON.stringify({,)
+  user_id: userIdToInvite,
+  role
+}
     });
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || `Failed to invite user: ${response.statusText}`);}
-    }
   }, [userId]);
   // Refresh workspaces
   const refreshWorkspaces = useCallback(() => {
@@ -143,4 +137,3 @@ export function useWorkspaces(userId: string, options: UseWorkspacesOptions = {}
     inviteUser,
     refreshWorkspaces
   };
-}

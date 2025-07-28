@@ -15,11 +15,12 @@ declare class BrowserEventEmitter {
     private events;
     on(event: string, listener: Function): void;
     emit(event: string, ...args: any[]): void;
-}
+
 import { DataClassificationLevel, type OperationContext } from '../types/DataClassification';
 /**
  * Audit log entry structure
  */
+
 export interface AuditLogEntry {
     id: string;
     timestamp: Date;
@@ -54,7 +55,8 @@ export interface AuditLogEntry {
     complianceFlags?: string[];
     retentionPolicy?: string;
     metadata?: Record<string, any>;
-}
+
+
 /**
  * Types of operations that can be audited
  */
@@ -76,10 +78,11 @@ export declare enum AuditOperation {
     AUTHORIZATION = "AUTHORIZATION",
     ENCRYPTION = "ENCRYPTION",
     DECRYPTION = "DECRYPTION"
-}
+
 /**
  * Audit logger configuration
  */
+
 export interface AuditLoggerConfig {
     storageBackend?: AuditStorageBackend;
     bufferSize?: number;
@@ -96,19 +99,23 @@ export interface AuditLoggerConfig {
     compressionEnabled?: boolean;
     alertOnAnomaly?: boolean;
     alertThresholds?: AlertThresholds;
-}
+
+
 /**
  * Storage backend interface
  */
+
 export interface AuditStorageBackend {
     write(entry: AuditLogEntry): Promise<void>;
     query(criteria: AuditQueryCriteria): Promise<AuditLogEntry[]>;
     delete(id: string): Promise<void>;
     rotate(): Promise<void>;
-}
+
+
 /**
  * Query criteria for retrieving audit logs
  */
+
 export interface AuditQueryCriteria {
     startDate?: Date;
     endDate?: Date;
@@ -120,16 +127,19 @@ export interface AuditQueryCriteria {
     success?: boolean;
     limit?: number;
     offset?: number;
-}
+
+
 /**
  * Alert threshold configuration
  */
+
 export interface AlertThresholds {
     failedAccessAttempts?: number;
     sensitiveDataAccess?: number;
     highRiskOperations?: number;
     timeWindow?: number;
-}
+
+
 /**
  * Audit log levels
  */
@@ -138,7 +148,7 @@ export declare enum AuditLogLevel {
     STANDARD = "STANDARD",// Standard compliance logging
     DETAILED = "DETAILED",// Detailed operational logging
     VERBOSE = "VERBOSE"
-}
+
 /**
  * Main audit logger implementation
  */
@@ -221,17 +231,19 @@ export declare class AuditLogger extends BrowserEventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 /**
  * Audit statistics structure
  */
+
 export interface AuditStatistics {
     totalOperations: number;
     operationCounts: Record<string, number>;
     failureRate: number;
     sensitiveAccessCount: number;
     averageResponseTime: number;
-}
+
+
 /**
  * Simple in-memory storage backend for testing
  */
@@ -241,7 +253,7 @@ export declare class InMemoryStorageBackend implements AuditStorageBackend {
     query(criteria: AuditQueryCriteria): Promise<AuditLogEntry[]>;
     delete(id: string): Promise<void>;
     rotate(): Promise<void>;
-}
+
 /**
  * Factory function to create audit logger
  */

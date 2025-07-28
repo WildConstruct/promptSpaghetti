@@ -8,6 +8,7 @@ import { ConsentBasedDataFilterService } from '../services/ConsentBasedDataFilte
 import { ConsentCollectionService } from '../services/ConsentCollectionService';
 import { logger } from '../utils/logger';
 
+}
 export interface ConsentContext {
   userId: string;
   sessionId: string;
@@ -18,7 +19,9 @@ export interface ConsentContext {
   processingPurpose: string; // Purpose of data processing
   thirdPartySharing?: boolean; // Whether data will be shared with third parties
 }
+}
 
+}
 export interface ConsentEnforcementRule {
   id: string;
   name: string;
@@ -31,7 +34,9 @@ export interface ConsentEnforcementRule {
   exemptions: string[]; // User roles or conditions exempt from this rule
   enabled: boolean;
 }
+}
 
+}
 export interface ConsentViolation {
   id: string;
   timestamp: Date;
@@ -43,6 +48,7 @@ export interface ConsentViolation {
   missingConsents: string[];
   action: 'blocked' | 'allowed_with_warning' | 'audit_logged';
   reason: string;
+}
 }
 
 export class ConsentEnforcementMiddleware {
@@ -124,6 +130,7 @@ export class ConsentEnforcementMiddleware {
    * Extract consent context from request
    */
   private async extractConsentContext(request: FastifyRequest): Promise<ConsentContext | null> {
+
     // Extract user information from JWT token or session
     const userId = (request as any).user?.id || (request as any).userId;
     const sessionId = (request as any).sessionId || (request.headers as any)['x-session-id'];
@@ -180,6 +187,7 @@ export class ConsentEnforcementMiddleware {
     rule: ConsentEnforcementRule,
     request: FastifyRequest
   ): Promise<ConsentViolation | null> {
+
     try {
       // Get user's current consent status
       const userConsents = await this.collectionService.getUserConsent(context.userId);
@@ -257,6 +265,7 @@ export class ConsentEnforcementMiddleware {
    * Validate consent at database level before processing
    */
   private async validateDatabaseConsent(userId: string, operation: string, dataCategories: string[]): Promise<boolean> {
+
     try {
       // Check if user has database-level consent records
       const dbConsents = await this.getDatabaseConsentRecord(userId);
@@ -290,6 +299,7 @@ export class ConsentEnforcementMiddleware {
    * Get database consent record for user
    */
   private async getDatabaseConsentRecord(userId: string): Promise<any> {
+
     // This would query the database for consent records
     // Implementation would depend on your database structure
     try {
@@ -402,6 +412,7 @@ export class ConsentEnforcementMiddleware {
     request: FastifyRequest,
     reply: FastifyReply
   ): Promise<void> {
+
     // Log all violations
     logger.log(
       `Consent violation: User ${violation.userId} attempted ${violation.method} ${violation.path} ` +
@@ -428,6 +439,7 @@ export class ConsentEnforcementMiddleware {
    * Block request due to consent violation
    */
   private async blockRequest(violation: ConsentViolation, reply: FastifyReply): Promise<void> {
+
     reply.code(403).send({
       error: 'Consent Required',
       message: 'This operation requires additional consent',
@@ -441,6 +453,7 @@ export class ConsentEnforcementMiddleware {
    * Allow request but add warning headers
    */
   private async allowWithWarning(violation: ConsentViolation, reply: FastifyReply): Promise<void> {
+
     reply.header('X-Consent-Warning', 'true');
     reply.header('X-Missing-Consents', violation.missingConsents.join(','));
     reply.header('X-Violation-Id', violation.id);
@@ -452,6 +465,7 @@ export class ConsentEnforcementMiddleware {
    * Log violation for audit purposes
    */
   private async auditLog(violation: ConsentViolation): Promise<void> {
+
     // Here you would typically log to your audit system
     logger.log(`AUDIT: Consent violation logged - ${violation.id}`);
   }
@@ -553,6 +567,7 @@ export class ConsentEnforcementMiddleware {
    * Cross-service consent propagation
    */
   public async propagateConsentChange(userId: string, consentType: string, granted: boolean): Promise<void> {
+
     try {
       logger.log(`Propagating consent change: User ${userId}, Type ${consentType}, Granted: ${granted}`);
       
@@ -577,6 +592,7 @@ export class ConsentEnforcementMiddleware {
    * Update consent cache
    */
   private async updateConsentCache(userId: string, consentType: string, granted: boolean): Promise<void> {
+
     // Implementation would update Redis cache or similar
     // For now, log the action
     logger.log(`Cache update: User ${userId}, ${consentType} = ${granted}`);
@@ -586,6 +602,7 @@ export class ConsentEnforcementMiddleware {
    * Notify other services of consent changes
    */
   private async notifyServicesOfConsentChange(userId: string, consentType: string, granted: boolean): Promise<void> {
+
     const services = this.getServicesRequiringConsentNotification(consentType);
     
     for (const service of services) {
@@ -621,6 +638,7 @@ export class ConsentEnforcementMiddleware {
     consentType: string,
     granted: boolean
   ): Promise<void> {
+
     // Implementation would send HTTP request, message queue, or similar
     logger.log(`Notifying ${service}: User ${userId}, ${consentType} = ${granted}`);
   }
@@ -633,6 +651,7 @@ export class ConsentEnforcementMiddleware {
     consentType: string,
     granted: boolean
   ): Promise<void> {
+
     // Implementation would update user-specific rules if needed
     logger.log(`Updated enforcement rules for user ${userId}, ${consentType} = ${granted}`);
   }

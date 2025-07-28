@@ -13,9 +13,9 @@ export interface ModerationState {
     type: ModerationStateType;
     category: ModerationCategory;
     severity: ModerationSeverity;
-    autoActions: AutoModerationAction[];
+    autoActions: AutoModerationAction;
     permissions: StatePermissions;
-    transitions: StateTransition[];
+    transitions: StateTransition;
     metadata: ModerationStateMetadata;
     createdAt: Date;
     updatedAt: Date;
@@ -30,17 +30,17 @@ export interface ModerationItem {
     author: UserInfo;
     reporter?: UserInfo;
     currentState: string;
-    stateHistory: StateHistoryEntry[];
+    stateHistory: StateHistoryEntry;
     category: ModerationCategory;
     severity: ModerationSeverity;
     priority: ModerationPriority;
-    flags: ModerationFlag[];
+    flags: ModerationFlag;
     assignedTo?: string;
-    reviewers: ReviewerAssignment[];
+    reviewers: ReviewerAssignment;
     escalationLevel: number;
     autoProcessing: AutoProcessingStatus;
     aiAnalysis?: AIAnalysisResult;
-    complianceChecks: ComplianceCheck[];
+    complianceChecks: ComplianceCheck;
     legalReview?: LegalReviewStatus;
     processingMetrics: ProcessingMetrics;
     createdAt: Date;
@@ -63,11 +63,11 @@ export interface StateHistoryEntry {
 export interface StateTransition {
     id: string;
     name: string;
-    fromStates: string[];
+    fromStates: string;
     toState: string;
     type: TransitionType;
-    conditions: TransitionCondition[];
-    actions: TransitionAction[];
+    conditions: TransitionCondition;
+    actions: TransitionAction;
     permissions: TransitionPermissions;
     validation: ValidationRules;
     automation: AutomationRules;
@@ -89,9 +89,9 @@ export interface AutoModerationAction {
     id: string;
     name: string;
     type: AutoActionType;
-    triggers: AutoActionTrigger[];
-    conditions: AutoActionCondition[];
-    actions: ModerationAction[];
+    triggers: AutoActionTrigger;
+    conditions: AutoActionCondition;
+    actions: ModerationAction;
     confidence: {
         min: number;
         max: number;
@@ -110,23 +110,10 @@ export interface ModerationAction {
 }
 export interface AIAnalysisResult {
     confidence: number;
-    categories: Array<{
-        category: string;
-        confidence: number;
-        evidence: string[];
-    }>;
-    recommendations: Array<{
-        action: string;
-        confidence: number;
-        reasoning: string;
-    }>;
-    riskAssessment: {
-        level: 'low' | 'medium' | 'high' | 'critical';
-        factors: string[];
-        score: number;
-    };
-    processedAt: Date;
-    modelVersion: string;
+    categories: Array<{}, category>;
+    string: any;
+    confidence: number;
+    evidence: string;
 }
 export interface ComplianceCheck {
     id: string;
@@ -174,18 +161,11 @@ export interface ContentSnapshot {
     originalContent: string;
     currentContent: string;
     metadata: Record<string, any>;
-    attachments: Array<{
-        type: string;
-        url: string;
-        size: number;
-        checksum: string;
-    }>;
-    contextData: {
-        parentContent?: string;
-        threadContext?: string[];
-        locationData?: Record<string, any>;
-    };
-    capturedAt: Date;
+    attachments: Array<{}, type>;
+    string: any;
+    url: string;
+    size: number;
+    checksum: string;
 }
 export interface ModerationFlag {
     id: string;
@@ -193,7 +173,7 @@ export interface ModerationFlag {
     source: 'user_report' | 'auto_detection' | 'manual_review' | 'ai_analysis';
     confidence: number;
     description: string;
-    evidence: FlagEvidence[];
+    evidence: FlagEvidence;
     reportedBy?: string;
     reportedAt: Date;
 }
@@ -208,7 +188,7 @@ export interface ReviewerAssignment {
     assignedAt: Date;
     dueDate?: Date;
     status: 'assigned' | 'in_progress' | 'completed' | 'skipped';
-    expertise: string[];
+    expertise: string;
     workload: number;
 }
 export interface AutoProcessingStatus {
@@ -218,7 +198,7 @@ export interface AutoProcessingStatus {
     lastProcessed?: Date;
     nextProcessing?: Date;
     attempts: number;
-    errors: ProcessingError[];
+    errors: ProcessingError;
 }
 export interface ProcessingError {
     timestamp: Date;
@@ -233,16 +213,16 @@ export interface LegalReviewStatus {
     assignedLawyer?: string;
     priority: 'routine' | 'urgent' | 'emergency';
     deadline?: Date;
-    notes?: string[];
+    notes?: string;
     completedAt?: Date;
 }
 export interface StatePermissions {
-    canView: string[];
-    canEdit: string[];
-    canTransition: string[];
-    canAssign: string[];
-    canEscalate: string[];
-    restrictions: PermissionRestriction[];
+    canView: string;
+    canEdit: string;
+    canTransition: string;
+    canAssign: string;
+    canEscalate: string;
+    restrictions: PermissionRestriction;
 }
 export interface PermissionRestriction {
     type: 'time_based' | 'condition_based' | 'approval_required';
@@ -250,11 +230,11 @@ export interface PermissionRestriction {
     description: string;
 }
 export interface TransitionPermissions {
-    requiredRoles: string[];
-    requiredPermissions: string[];
+    requiredRoles: string;
+    requiredPermissions: string;
     approvalRequired?: boolean;
-    approvers?: string[];
-    conditions: PermissionCondition[];
+    approvers?: string;
+    conditions: PermissionCondition;
 }
 export interface PermissionCondition {
     type: 'user_level' | 'content_sensitivity' | 'escalation_level' | 'time_constraint';
@@ -262,9 +242,9 @@ export interface PermissionCondition {
     description: string;
 }
 export interface ValidationRules {
-    required?: string[];
-    constraints?: ValidationConstraint[];
-    customValidators?: CustomValidator[];
+    required?: string;
+    constraints?: ValidationConstraint;
+    customValidators?: CustomValidator;
 }
 export interface ValidationConstraint {
     field: string;
@@ -279,10 +259,10 @@ export interface CustomValidator {
     message: string;
 }
 export interface AutomationRules {
-    triggers: AutomationTrigger[];
-    conditions: AutomationCondition[];
-    actions: AutomationAction[];
-    delays?: number[];
+    triggers: AutomationTrigger;
+    conditions: AutomationCondition;
+    actions: AutomationAction;
+    delays?: number;
     retries?: number;
 }
 export interface AutomationTrigger {
@@ -320,23 +300,23 @@ export interface ActionLimits {
 }
 export interface ModerationStateMetadata {
     description: string;
-    guidelines: string[];
-    examples: string[];
+    guidelines: string;
+    examples: string;
     slaTarget?: number;
     escalationTimeout?: number;
     autoArchiveAfter?: number;
-    tags: string[];
+    tags: string;
     version: string;
     isTemplate: boolean;
     templateParameters?: Record<string, any>;
 }
 export interface ComplianceDetails {
     regulation: string;
-    requirements: string[];
-    evidence: ComplianceEvidence[];
+    requirements: string;
+    evidence: ComplianceEvidence;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    mitigationActions: string[];
-    documentation: DocumentationReference[];
+    mitigationActions: string;
+    documentation: DocumentationReference;
 }
 export interface ComplianceEvidence {
     type: 'document' | 'log_entry' | 'user_action' | 'system_record';
@@ -387,15 +367,15 @@ export interface ModerationStats {
     };
 }
 export interface ModerationFilter {
-    states?: string[];
-    categories?: ModerationCategory[];
-    severities?: ModerationSeverity[];
-    priorities?: ModerationPriority[];
-    assignees?: string[];
-    reporters?: string[];
-    authors?: string[];
-    contentTypes?: ContentType[];
-    flags?: string[];
+    states?: string;
+    categories?: ModerationCategory;
+    severities?: ModerationSeverity;
+    priorities?: ModerationPriority;
+    assignees?: string;
+    reporters?: string;
+    authors?: string;
+    contentTypes?: ContentType;
+    flags?: string;
     dateRange?: {
         start?: Date;
         end?: Date;
@@ -404,15 +384,9 @@ export interface ModerationFilter {
     hasAIAnalysis?: boolean;
     requiresLegalReview?: boolean;
     isOverdue?: boolean;
-    escalationLevel?: number[];
+    escalationLevel?: number;
     autoProcessed?: boolean;
 }
-/**
- * Moderation States Service
- *
- * Comprehensive state management system for content moderation with
- * advanced workflows, automation, and compliance tracking.
- */
 export declare class ModerationStatesService {
     private static instance;
     private states;
@@ -423,62 +397,5 @@ export declare class ModerationStatesService {
     private processor;
     private constructor();
     static getInstance(): ModerationStatesService;
-    /**
-     * State Management
-     */
-    createState(stateData: Omit<ModerationState, 'id' | 'createdAt' | 'updatedAt'>, createdBy: string): Promise<ModerationState>;
-    updateState(stateId: string, updates: Partial<ModerationState>, updatedBy: string): Promise<ModerationState | null>;
-    getStates(filter?: {
-        type?: ModerationStateType;
-        active?: boolean;
-    }): ModerationState[];
-    /**
-     * Item Management
-     */
-    createModerationItem(itemData: Omit<ModerationItem, 'id' | 'createdAt' | 'updatedAt' | 'stateHistory' | 'processingMetrics'>, createdBy: string): Promise<ModerationItem>;
-    transitionItem(itemId: string, toStateId: string, reason: string, triggeredBy: string, metadata?: Record<string, any>): Promise<boolean>;
-    assignReviewer(itemId: string, reviewerId: string, assignedBy: string, dueDate?: Date): Promise<boolean>;
-    escalateItem(itemId: string, reason: string, escalatedBy: string): Promise<boolean>;
-    /**
-     * Automation Processing
-     */
-    private processAutomation;
-    /**
-     * Data Retrieval
-     */
-    getModerationItems(filter?: ModerationFilter): ModerationItem[];
-    getModerationStats(): ModerationStats;
-    /**
-     * Event Handling
-     */
-    subscribe(listenerId: string, callback: (event: ModerationEvent) => void): void;
-    unsubscribe(listenerId: string): void;
-    private initializeDefaultStates;
-    private initializeDefaultTransitions;
-    private startAutomationProcessor;
-    private processScheduledAutomation;
-    private getInitialState;
-    private findValidTransition;
-    private validateTransition;
-    private executeTransitionActions;
-    private getApplicableAutoActions;
-    private matchesAutoActionTriggers;
-    private shouldExecuteAutoAction;
-    private executeAutoAction;
-    private findEscalatedState;
-    private notifyListeners;
-    private generateStateId;
-    private generateItemId;
-    private generateHistoryId;
 }
-export interface ModerationEvent {
-    type: string;
-    data: any;
-    timestamp: Date;
-}
-export declare const moderationStatesService: ModerationStatesService;
-export declare const createModerationItem: (itemData: Omit<ModerationItem, "id" | "createdAt" | "updatedAt" | "stateHistory" | "processingMetrics">, createdBy: string) => Promise<ModerationItem>;
-export declare const transitionItem: (itemId: string, toStateId: string, reason: string, triggeredBy: string) => Promise<boolean>;
-export declare const getModerationItems: (filter?: ModerationFilter) => ModerationItem[];
-export declare const getModerationStats: () => ModerationStats;
 //# sourceMappingURL=ModerationStatesService.d.ts.map

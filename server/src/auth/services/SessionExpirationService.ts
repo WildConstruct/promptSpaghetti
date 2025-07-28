@@ -6,6 +6,7 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
+}
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export interface ExpirationPolicy {
     warningPeriod: number; // seconds - warning before expiration
     gracePeriod: number; // seconds - grace period after expiration
     slidingWindow: boolean; // extend on activity
+}
   };
   
   applicability: {
@@ -55,6 +57,7 @@ export interface ExpirationPolicy {
   };
 }
 
+}
 export interface SessionExpiration {
   sessionId: string;
   userId: string;
@@ -67,6 +70,7 @@ export interface SessionExpiration {
     warningAt?: Date;
     expiredAt?: Date;
     cleanupAt?: Date;
+}
   };
   
   status: 'active' | 'warning' | 'expiring' | 'expired' | 'grace' | 'cleaned';
@@ -103,6 +107,7 @@ export interface SessionExpiration {
   }>;
 }
 
+}
 export interface ExpirationEvent {
   id: string;
   sessionId: string;
@@ -111,6 +116,7 @@ export interface ExpirationEvent {
   timestamp: Date;
   details: Record<string, any>;
   triggeredBy: string;
+}
 }
 
 export class SessionExpirationService extends EventEmitter {
@@ -135,6 +141,7 @@ export class SessionExpirationService extends EventEmitter {
     policyData: Omit<ExpirationPolicy, 'id'>,
     createdBy: string
   ): Promise<ExpirationPolicy> {
+
     const policy: ExpirationPolicy = {
       ...policyData,
       id: this.generatePolicyId()
@@ -167,6 +174,7 @@ export class SessionExpirationService extends EventEmitter {
       userRoles?: string[];
     }
   ): Promise<SessionExpiration> {
+
     // Find applicable policy
     const policy = await this.findApplicablePolicy(context);
     if (!policy) {
@@ -188,21 +196,21 @@ export class SessionExpirationService extends EventEmitter {
         lastActivity: now,
         willExpireAt,
         warningAt
-      },
+  }
       status: 'active',
       counters: {
         extensionCount: 0,
         warningsSent: 0,
         activityCount: 0,
         idleTime: 0
-      },
+  }
       metadata: {
         sessionType: context.sessionType,
         trustLevel: context.trustLevel,
         deviceId: context.deviceId,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
-      },
+  }
       extensions: [],
       notifications: []
     };
@@ -240,6 +248,7 @@ export class SessionExpirationService extends EventEmitter {
     requiresAction?: string[];
     extended?: boolean;
   }> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
       return {
@@ -326,6 +335,7 @@ export class SessionExpirationService extends EventEmitter {
     remainingExtensions?: number;
     message: string;
   }> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
       return {
@@ -416,6 +426,7 @@ export class SessionExpirationService extends EventEmitter {
     sessionId: string,
     reason: string
   ): Promise<void> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) return;
 
@@ -474,6 +485,7 @@ export class SessionExpirationService extends EventEmitter {
       policy: string;
     };
   }> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) {
       return { exists: false };
@@ -519,13 +531,14 @@ export class SessionExpirationService extends EventEmitter {
       sessionTypes?: string[];
       olderThan?: Date;
       idleFor?: number; // seconds
-    },
+  }
     expiredBy: string,
     reason: string
   ): Promise<{
     expiredCount: number;
     sessionIds: string[];
   }> {
+
     const sessionsToExpire = [];
     const now = new Date();
 
@@ -588,31 +601,31 @@ export class SessionExpirationService extends EventEmitter {
           warningPeriod: 300, // 5 minutes
           gracePeriod: 60, // 1 minute
           slidingWindow: true
-        },
+  }
         applicability: {
           sessionTypes: ['web', 'mobile'],
           trustLevels: ['trusted', 'verified']
-        },
+  }
         behavior: {
           autoExtend: true,
           maxExtensions: 3,
           extensionDuration: 1800, // 30 minutes
           requireReauth: false,
           preserveData: true
-        },
+  }
         notifications: {
           warningEnabled: true,
           expirationEnabled: true,
           methods: ['websocket', 'ui'],
           templates: {}
-        },
+  }
         cleanup: {
           immediateCleanup: false,
           retentionPeriod: 3600, // 1 hour
           archiveData: true,
           anonymizeData: false
         }
-      },
+  }
       {
         name: 'High Security Session',
         description: 'Strict expiration for high-security operations',
@@ -624,24 +637,24 @@ export class SessionExpirationService extends EventEmitter {
           warningPeriod: 120, // 2 minutes
           gracePeriod: 0, // No grace period
           slidingWindow: false
-        },
+  }
         applicability: {
           sessionTypes: ['admin', 'api'],
           trustLevels: ['verified']
-        },
+  }
         behavior: {
           autoExtend: false,
           maxExtensions: 0,
           extensionDuration: 0,
           requireReauth: true,
           preserveData: false
-        },
+  }
         notifications: {
           warningEnabled: true,
           expirationEnabled: true,
           methods: ['email', 'websocket', 'ui'],
           templates: {}
-        },
+  }
         cleanup: {
           immediateCleanup: true,
           retentionPeriod: 0,
@@ -657,6 +670,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async findApplicablePolicy(context: any): Promise<ExpirationPolicy | null> {
+
     const applicablePolicies = [];
 
     for (const policy of this.policies.values()) {
@@ -770,6 +784,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async triggerWarning(sessionId: string): Promise<void> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration || expiration.status !== 'active') return;
 
@@ -784,6 +799,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async checkIdleTimeout(sessionId: string): Promise<void> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) return;
 
@@ -798,6 +814,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async finalizeExpiration(sessionId: string): Promise<void> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) return;
 
@@ -825,6 +842,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async cleanupSession(sessionId: string): Promise<void> {
+
     const expiration = this.sessionExpirations.get(sessionId);
     if (!expiration) return;
 
@@ -857,6 +875,7 @@ export class SessionExpirationService extends EventEmitter {
     expiration: SessionExpiration,
     type: 'warning' | 'grace_period' | 'expired'
   ): Promise<void> {
+
     const policy = this.policies.get(expiration.policyId);
     if (!policy) return;
 
@@ -887,6 +906,7 @@ export class SessionExpirationService extends EventEmitter {
     expiration: SessionExpiration,
     type: string
   ): Promise<void> {
+
     // Implementation would integrate with actual notification services
     console.log(`Sending ${type} notification via ${method} for session ${expiration.sessionId}`);
     
@@ -902,6 +922,7 @@ export class SessionExpirationService extends EventEmitter {
     expiration: SessionExpiration,
     anonymize: boolean
   ): Promise<void> {
+
     const archiveData = { ...expiration };
     
     if (anonymize) {
@@ -936,6 +957,7 @@ export class SessionExpirationService extends EventEmitter {
   }
 
   private async validatePolicy(policy: ExpirationPolicy): Promise<void> {
+
     if (policy.timing.absoluteTimeout <= 0) {
       throw new Error('Absolute timeout must be positive');
     }
@@ -959,6 +981,7 @@ export class SessionExpirationService extends EventEmitter {
     triggeredBy: string,
     details: Record<string, any>
   ): Promise<void> {
+
     const event: ExpirationEvent = {
       id: `EVT-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
       sessionId,

@@ -40,7 +40,7 @@ describe('AnomalyDetectionService', () => {
       patterns: [],
       notification: {
         email: ['security@test.com']
-      },
+  }
       responseConfig: {
         autoBlock: true,
         autoDisable: false,
@@ -125,7 +125,7 @@ describe('AnomalyDetectionService', () => {
             events: ['login_failed'],
             aggregateType: 'count',
             comparisonOperator: '>='
-          },
+  }
           actions: [{
             type: 'block_ip',
             config: { duration: 3600 }
@@ -150,7 +150,7 @@ describe('AnomalyDetectionService', () => {
             last_event: new Date(),
             event_details: [{ action: 'login_failed' }]
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] }) // check for recent similar anomaly
         .mockResolvedValueOnce({ rows: [{ id: 'anomaly-123' }] }); // create anomaly event
 
@@ -187,7 +187,7 @@ describe('AnomalyDetectionService', () => {
             last_event: new Date(),
             event_details: [{ action: 'login_failed' }]
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [{ id: 'existing-anomaly' }] }); // similar recent anomaly
 
       await (anomalyService as any).performAnomalyCheck();
@@ -456,7 +456,7 @@ describe('AnomalyDetectionService', () => {
         affectedEntities: expect.objectContaining({
           ipAddress: '192.168.1.100',
           userId: 'user123'
-        })
+  }
       });
     });
 

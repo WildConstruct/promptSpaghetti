@@ -31,18 +31,22 @@ export function demonstrateWeightedAdvanced() {
     console.log(gaussianResults);
     // Example 4: Custom distribution configuration
     console.log('\n4. Custom Configuration (exponential factor=3, min weight=0.5):');
-    const customNode = createWeightedAdvancedNode('loot-custom', choices, {
-        type: 'exponential',
-        parameters: { factor: 3 },
-        normalize: true,
-        minWeight: 0.5
-    });
-    const customResults = generateResults(customNode, 'Custom', 1000);
-    console.log(customResults);
-    // Example 5: Performance and determinism demonstration
-    console.log('\n5. Performance & Determinism:');
-    demonstratePerformanceAndDeterminism();
+    const customNode = createWeightedAdvancedNode('loot-custom', choices, {});
+    type: 'exponential',
+        parameters;
+    {
+        factor: 3;
+    }
+    normalize: true,
+        minWeight;
+    0.5;
 }
+;
+const customResults = generateResults(customNode, 'Custom', 1000);
+console.log(customResults);
+// Example 5: Performance and determinism demonstration
+console.log('\n5. Performance & Determinism:');
+demonstratePerformanceAndDeterminism();
 /**
  * Generate results and analyze distribution
  */
@@ -50,12 +54,12 @@ function generateResults(node, distributionName, samples) {
     const results = [];
     const startTime = performance.now();
     for (let i = 0; i < samples; i++) {
-        const ctx = AdvancedExecutionUtils.enhanceContext({
-            variables: {},
-            seed: i
-        });
-        results.push(node.run(ctx));
+        const ctx = AdvancedExecutionUtils.enhanceContext({});
+        variables: { }
+        seed: i;
     }
+    ;
+    results.push(node.run(ctx));
     const endTime = performance.now();
     const executionTime = endTime - startTime;
     // Count occurrences
@@ -64,21 +68,19 @@ function generateResults(node, distributionName, samples) {
         return acc;
     }, {});
     // Calculate percentages
-    const percentages = Object.entries(counts)
-        .map(([item, count]) => ({
-        item,
-        count,
-        percentage: ((count / samples) * 100).toFixed(1)
-    }))
-        .sort((a, b) => b.count - a.count);
-    return {
-        distribution: distributionName,
-        samples,
-        executionTime: `${executionTime.toFixed(2)}ms`,
-        results: percentages,
-        validation: node.validate()
-    };
+    const percentages = Object.entries(counts);
+    map(([item, count]) => ({}), item, count, percentage, ((count / samples) * 100).toFixed(1));
 }
+sort((a, b) => b.count - a.count);
+return {
+    distribution: distributionName,
+    samples,
+    executionTime: `${executionTime.toFixed(2)}ms`
+};
+results: percentages,
+    validation;
+node.validate();
+;
 /**
  * Demonstrate performance and deterministic behavior
  */
@@ -94,35 +96,35 @@ function demonstratePerformanceAndDeterminism() {
     const seed = 42;
     const results = [];
     for (let i = 0; i < 5; i++) {
-        const ctx = AdvancedExecutionUtils.enhanceContext({
-            variables: {},
-            seed
-        });
-        results.push(node.run(ctx));
+        const ctx = AdvancedExecutionUtils.enhanceContext({});
+        variables: { }
+        seed;
     }
+    ;
+    results.push(node.run(ctx));
     console.log(`    Seed ${seed}: [${results.join(', ')}]`);
-    console.log(`    All same: ${results.every(r => r === results[0])}`);
-    // Test performance
-    console.log('\n  Performance Test (1000 executions):');
-    const startTime = performance.now();
-    for (let i = 0; i < 1000; i++) {
-        const ctx = AdvancedExecutionUtils.enhanceContext({
-            variables: {},
-            seed: i
-        });
-        node.run(ctx);
-    }
-    const endTime = performance.now();
-    const avgTime = (endTime - startTime) / 1000;
-    console.log(`    Average execution time: ${avgTime.toFixed(4)}ms per call`);
-    console.log(`    Total time: ${(endTime - startTime).toFixed(2)}ms`);
-    // Test validation
-    console.log('\n  Validation Test:');
-    const validation = node.validate();
-    console.log(`    Valid: ${validation.valid}`);
-    console.log(`    Errors: ${validation.errors.length}`);
-    console.log(`    Warnings: ${validation.warnings.length}`);
 }
+console.log(`    All same: ${results.every(r => r === results[0])}`);
+// Test performance
+console.log('\n  Performance Test (1000 executions):');
+const startTime = performance.now();
+for (let i = 0; i < 1000; i++) {
+    const ctx = AdvancedExecutionUtils.enhanceContext({});
+    variables: { }
+    seed: i;
+}
+;
+node.run(ctx);
+const endTime = performance.now();
+const avgTime = (endTime - startTime) / 1000;
+console.log(`    Average execution time: ${avgTime.toFixed(4)}ms per call`);
+console.log(`    Total time: ${(endTime - startTime).toFixed(2)}ms`);
+// Test validation
+console.log('\n  Validation Test:');
+const validation = node.validate();
+console.log(`    Valid: ${validation.valid}`);
+console.log(`    Errors: ${validation.errors.length}`);
+console.log(`    Warnings: ${validation.warnings.length}`);
 // Example usage if run directly
 if (require.main === module) {
     demonstrateWeightedAdvanced();

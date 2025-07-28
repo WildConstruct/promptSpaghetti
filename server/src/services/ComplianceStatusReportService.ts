@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { RegulatoryReportingService, ComplianceRegulation } from './RegulatoryReportingService';
 
+}
 export interface ComplianceStatusReport {
   reportId: string;
   title: string;
@@ -25,12 +26,15 @@ export interface ComplianceStatusReport {
   attachments: ReportAttachment[];
   metadata: ComplianceReportMetadata;
 }
+}
 
+}
 export interface ReportPeriod {
   startDate: Date;
   endDate: Date;
   description: string;
   frequency: ReportFrequency;
+}
 }
 
 export enum ReportFrequency {
@@ -50,6 +54,7 @@ export enum ComplianceStatus {
   UNDER_REVIEW = 'UNDER_REVIEW'
 }
 
+}
 export interface ExecutiveSummary {
   keyFindings: string[];
   criticalIssues: string[];
@@ -59,6 +64,7 @@ export interface ExecutiveSummary {
   timelineForCompliance: string;
   regulatoryChanges: RegulatoryChange[];
 }
+}
 
 export enum RiskLevel {
   LOW = 'LOW',
@@ -67,17 +73,21 @@ export enum RiskLevel {
   CRITICAL = 'CRITICAL'
 }
 
+}
 export interface BudgetImpact {
   estimatedCost: number;
   currency: string;
   breakdown: CostBreakdown[];
 }
+}
 
+}
 export interface CostBreakdown {
   category: string;
   amount: number;
   description: string;
   urgency: Priority;
+}
 }
 
 export enum Priority {
@@ -87,6 +97,7 @@ export enum Priority {
   CRITICAL = 'CRITICAL'
 }
 
+}
 export interface RegulatoryChange {
   changeId: string;
   title: string;
@@ -94,6 +105,7 @@ export interface RegulatoryChange {
   effectiveDate: Date;
   impact: ImpactLevel;
   actionRequired: boolean;
+}
 }
 
 export enum ImpactLevel {
@@ -103,6 +115,7 @@ export enum ImpactLevel {
   MAJOR = 'MAJOR'
 }
 
+}
 export interface ComplianceArea {
   areaId: string;
   name: string;
@@ -116,7 +129,9 @@ export interface ComplianceArea {
   controls: ControlAssessment[];
   gaps: ComplianceGap[];
 }
+}
 
+}
 export interface ComplianceRequirement {
   requirementId: string;
   title: string;
@@ -128,6 +143,7 @@ export interface ComplianceRequirement {
   lastVerified: Date;
   verifiedBy: string;
 }
+}
 
 export enum RequirementStatus {
   COMPLIANT = 'COMPLIANT',
@@ -137,6 +153,7 @@ export enum RequirementStatus {
   PENDING_VERIFICATION = 'PENDING_VERIFICATION'
 }
 
+}
 export interface Evidence {
   evidenceId: string;
   type: EvidenceType;
@@ -144,6 +161,7 @@ export interface Evidence {
   location: string;
   collectedAt: Date;
   validUntil?: Date;
+}
 }
 
 export enum EvidenceType {
@@ -156,6 +174,7 @@ export enum EvidenceType {
   PROCEDURE = 'PROCEDURE'
 }
 
+}
 export interface ControlAssessment {
   controlId: string;
   name: string;
@@ -166,6 +185,7 @@ export interface ControlAssessment {
   lastTested: Date;
   nextTest: Date;
   owner: string;
+}
 }
 
 export enum ControlType {
@@ -184,6 +204,7 @@ export enum ControlEffectiveness {
   NOT_TESTED = 'NOT_TESTED'
 }
 
+}
 export interface TestResult {
   testId: string;
   testDate: Date;
@@ -193,6 +214,7 @@ export interface TestResult {
   findings: string[];
   recommendations: string[];
 }
+}
 
 export enum TestOutcome {
   PASS = 'PASS',
@@ -201,6 +223,7 @@ export enum TestOutcome {
   INCONCLUSIVE = 'INCONCLUSIVE'
 }
 
+}
 export interface ComplianceGap {
   gapId: string;
   requirement: string;
@@ -211,6 +234,7 @@ export interface ComplianceGap {
   remediation: RemediationPlan;
   riskRating: number;
 }
+}
 
 export enum GapSeverity {
   LOW = 'LOW',
@@ -219,6 +243,7 @@ export enum GapSeverity {
   CRITICAL = 'CRITICAL'
 }
 
+}
 export interface RemediationPlan {
   planId: string;
   description: string;
@@ -227,6 +252,7 @@ export interface RemediationPlan {
   status: RemediationStatus;
   progress: number;
   resources: ResourceRequirement[];
+}
 }
 
 export enum RemediationStatus {
@@ -237,11 +263,13 @@ export enum RemediationStatus {
   ON_HOLD = 'ON_HOLD'
 }
 
+}
 export interface ResourceRequirement {
   type: ResourceType;
   quantity: number;
   cost: number;
   description: string;
+}
 }
 
 export enum ResourceType {
@@ -253,6 +281,7 @@ export enum ResourceType {
   HARDWARE = 'HARDWARE'
 }
 
+}
 export interface ViolationSummary {
   totalViolations: number;
   activeViolations: number;
@@ -262,12 +291,15 @@ export interface ViolationSummary {
   averageResolutionTime: number;
   trends: ViolationTrend[];
 }
+}
 
+}
 export interface ViolationCategory {
   category: string;
   count: number;
   percentage: number;
   trend: TrendDirection;
+}
 }
 
 export enum TrendDirection {
@@ -276,18 +308,23 @@ export enum TrendDirection {
   WORSENING = 'WORSENING'
 }
 
+}
 export interface ViolationBySeverity {
   severity: GapSeverity;
   count: number;
   percentage: number;
 }
+}
 
+}
 export interface ViolationTrend {
   period: string;
   count: number;
   severity: GapSeverity;
 }
+}
 
+}
 export interface RemediationSummary {
   totalPlans: number;
   completedPlans: number;
@@ -298,14 +335,18 @@ export interface RemediationSummary {
   projectedCompletion: Date;
   resourceUtilization: ResourceUtilization[];
 }
+}
 
+}
 export interface ResourceUtilization {
   resource: ResourceType;
   allocated: number;
   utilized: number;
   efficiency: number;
 }
+}
 
+}
 export interface ComplianceTrend {
   metric: string;
   period: string;
@@ -314,7 +355,9 @@ export interface ComplianceTrend {
   changePercentage: number;
   trend: TrendDirection;
 }
+}
 
+}
 export interface Recommendation {
   recommendationId: string;
   title: string;
@@ -326,6 +369,7 @@ export interface Recommendation {
   timeline: string;
   benefits: string[];
   risks: string[];
+}
 }
 
 export enum RecommendationCategory {
@@ -344,6 +388,7 @@ export enum EffortLevel {
   VERY_HIGH = 'VERY_HIGH'
 }
 
+}
 export interface NextAction {
   actionId: string;
   description: string;
@@ -353,7 +398,9 @@ export interface NextAction {
   dependencies: string[];
   successCriteria: string[];
 }
+}
 
+}
 export interface ReportAttachment {
   attachmentId: string;
   name: string;
@@ -362,6 +409,7 @@ export interface ReportAttachment {
   location: string;
   size: number;
   createdAt: Date;
+}
 }
 
 export enum AttachmentType {
@@ -372,6 +420,7 @@ export enum AttachmentType {
   REMEDIATION_PLANS = 'REMEDIATION_PLANS'
 }
 
+}
 export interface ComplianceReportMetadata {
   version: string;
   template: string;
@@ -381,6 +430,7 @@ export interface ComplianceReportMetadata {
   approvers: string[];
   retention: number;
   confidentiality: ConfidentialityLevel;
+}
 }
 
 export enum ConfidentialityLevel {
@@ -411,6 +461,7 @@ export class ComplianceStatusReportService {
     generatedBy: string,
     includeAttachments: boolean = true
   ): Promise<ComplianceStatusReport> {
+
     const reportId = `compliance_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const [
@@ -479,6 +530,7 @@ export class ComplianceStatusReportService {
     regulation: ComplianceRegulation,
     period: ReportPeriod
   ): Promise<ComplianceStatus> {
+
     const query = `
       SELECT 
         COUNT(*) as total,
@@ -504,6 +556,7 @@ export class ComplianceStatusReportService {
     regulation: ComplianceRegulation,
     period: ReportPeriod
   ): Promise<ComplianceArea[]> {
+
     const areas: ComplianceArea[] = [];
 
     // Get compliance areas based on regulation
@@ -539,6 +592,7 @@ export class ComplianceStatusReportService {
     regulation: ComplianceRegulation,
     period: ReportPeriod
   ): Promise<ViolationSummary> {
+
     const query = `
       SELECT 
         COUNT(*) as total_violations,
@@ -572,6 +626,7 @@ export class ComplianceStatusReportService {
     regulation: ComplianceRegulation,
     period: ReportPeriod
   ): Promise<RemediationSummary> {
+
     const query = `
       SELECT 
         COUNT(*) as total_plans,
@@ -607,6 +662,7 @@ export class ComplianceStatusReportService {
     regulation: ComplianceRegulation,
     period: ReportPeriod
   ): Promise<ComplianceTrend[]> {
+
     // Implementation would calculate trends for key compliance metrics
     return [
       {
@@ -616,7 +672,7 @@ export class ComplianceStatusReportService {
         previousValue: 82,
         changePercentage: 3.7,
         trend: TrendDirection.IMPROVING
-      },
+  }
       {
         metric: 'Active Violations',
         period: period.description,
@@ -639,6 +695,7 @@ export class ComplianceStatusReportService {
     areas: ComplianceArea[],
     violations: ViolationSummary
   ): Promise<ExecutiveSummary> {
+
     const criticalGaps = areas.flatMap(area => 
       area.gaps.filter(gap => gap.severity === GapSeverity.CRITICAL)
     );
@@ -722,6 +779,7 @@ export class ComplianceStatusReportService {
     _____regulation: ComplianceRegulation,
     _____period: ReportPeriod
   ): Promise<ReportAttachment[]> {
+
     // Implementation would generate actual attachments
     return [
       {
@@ -732,7 +790,7 @@ export class ComplianceStatusReportService {
         location: `/reports/${reportId}/evidence.zip`,
         size: 1024000,
         createdAt: new Date()
-      },
+  }
       {
         attachmentId: `att_${Date.now()}_2`,
         name: 'Detailed Findings',
@@ -763,16 +821,19 @@ export class ComplianceStatusReportService {
   }
 
   private async getRequirementsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceRequirement[]> {
+
     // Implementation would fetch actual requirements
     return [];
   }
 
   private async getControlsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ControlAssessment[]> {
+
     // Implementation would fetch actual controls
     return [];
   }
 
   private async getGapsForArea(_____areaName: string, _____period: ReportPeriod): Promise<ComplianceGap[]> {
+
     // Implementation would fetch actual gaps
     return [];
   }
@@ -796,26 +857,31 @@ export class ComplianceStatusReportService {
   }
 
   private async getViolationsByCategory(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationCategory[]> {
+
     // Implementation would fetch actual violation categories
     return [];
   }
 
   private async getViolationsBySeverity(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationBySeverity[]> {
+
     // Implementation would fetch actual violation severities
     return [];
   }
 
   private async getViolationTrends(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ViolationTrend[]> {
+
     // Implementation would fetch actual violation trends
     return [];
   }
 
   private async getResourceUtilization(_____regulation: ComplianceRegulation, _____period: ReportPeriod): Promise<ResourceUtilization[]> {
+
     // Implementation would fetch actual resource utilization
     return [];
   }
 
   private async calculateProjectedCompletion(_____regulation: ComplianceRegulation): Promise<Date> {
+
     // Implementation would calculate actual projected completion
     const projected = new Date();
     projected.setMonth(projected.getMonth() + 6);
@@ -830,6 +896,7 @@ export class ComplianceStatusReportService {
   }
 
   private async calculateBudgetImpact(_____areas: ComplianceArea[]): Promise<BudgetImpact> {
+
     // Implementation would calculate actual budget impact
     return {
       estimatedCost: 150000,
@@ -840,7 +907,7 @@ export class ComplianceStatusReportService {
           amount: 75000,
           description: 'System improvements for compliance',
           urgency: Priority.HIGH
-        },
+  }
         {
           category: 'Training',
           amount: 25000,
@@ -863,11 +930,13 @@ export class ComplianceStatusReportService {
   }
 
   private async getRecentRegulatoryChanges(_____regulation: ComplianceRegulation): Promise<RegulatoryChange[]> {
+
     // Implementation would fetch actual regulatory changes
     return [];
   }
 
   private async saveComplianceReport(report: ComplianceStatusReport): Promise<void> {
+
     const query = `
       INSERT INTO compliance_status_reports (
         report_id, title, regulation, report_period, generated_at,
@@ -889,6 +958,7 @@ export class ComplianceStatusReportService {
   }
 
   private async logReportGeneration(report: ComplianceStatusReport): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'COMPLIANCE_REPORT_GENERATED',
       userId: report.generatedBy,
@@ -897,7 +967,7 @@ export class ComplianceStatusReportService {
         regulation: report.regulation,
         overallStatus: report.overallStatus,
         overallScore: report.overallScore
-      },
+  }
       timestamp: report.generatedAt
     });
   }

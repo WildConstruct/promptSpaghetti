@@ -12,6 +12,7 @@
  * - Creator performance metrics
  * - A/B testing for marketplace features
  */
+
 export interface MarketplaceEvent {
     id: string;
     userId: string;
@@ -29,9 +30,10 @@ export interface MarketplaceEvent {
         location?: string;
         deviceType: 'desktop' | 'mobile' | 'tablet';
     };
-}
+
 export type MarketplaceEventType = 'marketplace_visited' | 'category_browsed' | 'search_performed' | 'filter_applied' | 'template_viewed' | 'template_previewed' | 'template_favorited' | 'template_shared' | 'creator_followed' | 'review_submitted' | 'rating_given' | 'template_purchased' | 'template_downloaded' | 'subscription_started' | 'premium_accessed' | 'template_uploaded' | 'template_updated' | 'creator_profile_viewed' | 'earnings_withdrawn' | 'recommendation_shown' | 'recommendation_clicked' | 'promotion_viewed' | 'discount_applied';
 export type MarketplaceCategory = 'discovery' | 'engagement' | 'monetization' | 'creator_economy' | 'recommendation';
+
 export interface TemplateMetrics {
     templateId: string;
     name: string;
@@ -67,7 +69,7 @@ export interface TemplateMetrics {
         revenueGrowth: number;
         ratingTrend: 'improving' | 'stable' | 'declining';
     };
-}
+
 export interface CreatorMetrics {
     creatorId: string;
     name: string;
@@ -94,7 +96,7 @@ export interface CreatorMetrics {
         followerGrowth: number;
         templatePerformance: 'improving' | 'stable' | 'declining';
     };
-}
+
 export interface MarketplaceDashboardData {
     overview: {,
         totalRevenue: number;
@@ -134,7 +136,7 @@ export interface MarketplaceDashboardData {
             count: number;
         }>;
     };
-}
+
 export declare class MarketplaceMetrics {
     private events;
     private templateMetrics;
@@ -209,7 +211,7 @@ export declare class MarketplaceMetrics {
     private getCurrentSessionId;
     private getCategoryForEventType;
     private getDeviceType;
-}
+
 export declare const marketplaceMetrics: MarketplaceMetrics;
 export default marketplaceMetrics;
 //# sourceMappingURL=MarketplaceMetrics.d.ts.map

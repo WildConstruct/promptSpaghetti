@@ -23,48 +23,44 @@ import { AdaptiveThrottlingRulesEngine } from '../AdaptiveThrottlingRules';
 
 export interface UseRateLimitingMetricsOptions {
   autoRefresh?: boolean;
-  refreshInterval?: number; // seconds
+  refreshInterval?: number; // seconds,
   timeRange?: string;
   enableAlerts?: boolean;
   retainHistoryHours?: number;
 }
-
 export interface MetricsHookReturn {
   // Data
-  currentMetrics: PerformanceMetrics | null;
+  currentMetrics: PerformanceMetrics | null;,
   visualizationData: MetricsVisualizationData | null;
-  activeAlerts: AlertCondition[];
-  widgets: DashboardWidget[];
+  activeAlerts: AlertCondition;,
+  widgets: DashboardWidget;
   // Status
-  isLoading: boolean;
+  isLoading: boolean;,
   isConnected: boolean;
-  lastUpdate: Date | null;
+  lastUpdate: Date | null;,
   systemStatus: 'healthy' | 'warning' | 'critical';
   // Actions
-  refreshMetrics: () => Promise<void>;
-  exportMetrics: (format: 'json' | 'csv') => string;
-  acknowledgeAlert: (alertId: string) => void;
-  addWidget: (widget: DashboardWidget) => void;
-  removeWidget: (widgetId: string) => void;
+  refreshMetrics: () => Promise<void>;,
+  exportMetrics: (format: 'json' | 'csv') => string;,
+  acknowledgeAlert: (alertId: string) => void;,
+  addWidget: (widget: DashboardWidget) => void;,
+  removeWidget: (widgetId: string) => void;,
   updateTimeRange: (range: string) => void;
   // Control
-  startMonitoring: () => void;
+  startMonitoring: () => void;,
   stopMonitoring: () => void;
   // Error handling
-  error: string | null;
+  error: string | null;,
   clearError: () => void;
 }
-
 export interface MetricsServiceConfig {
   rateLimitingService: RateLimitingService;
   throttlingEngine?: AdaptiveThrottlingRulesEngine;
   options?: UseRateLimitingMetricsOptions;
+  // ========================================
+  // Custom Hook Implementation
+  // ========================================
 }
-
-// ========================================
-// Custom Hook Implementation
-// ========================================
-
 export const useRateLimitingMetrics = ({)
   rateLimitingService,
   throttlingEngine,
@@ -85,8 +81,8 @@ export const useRateLimitingMetrics = ({)
   // State management
   const [currentMetrics, setCurrentMetrics] = useState<PerformanceMetrics | null>(null);
   const [visualizationData, setVisualizationData] = useState<MetricsVisualizationData | null>(null);
-  const [activeAlerts, setActiveAlerts] = useState<AlertCondition[]>([]);
-  const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
+  const [activeAlerts, setActiveAlerts] = useState<AlertCondition>([]);
+  const [widgets, setWidgets] = useState<DashboardWidget>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -96,45 +92,39 @@ export const useRateLimitingMetrics = ({)
   // Metrics Service Initialization
   // ========================================
   const initializeMetricsService = useCallback(() => {
-    try {
-      if (metricsServiceRef.current) {
-        metricsServiceRef.current.destroy();
-      }
-      metricsServiceRef.current = new RateLimitingPerformanceMetrics()
-        rateLimitingService,
-        throttlingEngine,
-        {
-          enableRealTimeMetrics: autoRefresh,
-          metricsRetentionPeriod: retainHistoryHours,
-          visualizationOptions: {,
-            enableCharts: true,
-            enableHeatmaps: true,
-            enableTimeseries: true,
-            enableGeospatialMaps: true,
-            refreshInterval
-          },
-          alerting: {,
-            enableAlerts,
-            alertThresholds: {,
-              highResponseTime: 200,
-              lowThroughput: 100,
-              highErrorRate: 10,
-              highBlockRate: 25,
-            }
-          }
-        }
-      );
-      setIsConnected(true);
-      setWidgets(metricsServiceRef.current.getWidgets());
-      setError(null);
-      return metricsServiceRef.current;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to initialize metrics service';
-      setError(errorMessage);
-      setIsConnected(false);
-      return null;
-    }
-  }, [rateLimitingService, throttlingEngine, autoRefresh, refreshInterval, enableAlerts, retainHistoryHours]);
+  try {
+  if (metricsServiceRef.current) {
+  metricsServiceRef.current.destroy();
+  metricsServiceRef.current = new RateLimitingPerformanceMetrics()
+  rateLimitingService,
+  throttlingEngine,
+  {
+  enableRealTimeMetrics: autoRefresh,
+  metricsRetentionPeriod: retainHistoryHours,
+  visualizationOptions: {,
+  enableCharts: true,
+  enableHeatmaps: true,
+  enableTimeseries: true,
+  enableGeospatialMaps: true,
+  refreshInterval
+},
+  alerting: {,
+  enableAlerts,
+  alertThresholds: {,
+  highResponseTime: 200,
+  lowThroughput: 100,
+  highErrorRate: 10,
+  highBlockRate: 25);
+  setIsConnected(true);
+  setWidgets(metricsServiceRef.current.getWidgets());
+  setError(null);
+  return metricsServiceRef.current;
+} catch (err) {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to initialize metrics service';
+  setError(errorMessage);
+  setIsConnected(false);
+  return null;
+}, [rateLimitingService, throttlingEngine, autoRefresh, refreshInterval, enableAlerts, retainHistoryHours]);
   // ========================================
   // Data Loading Functions
   // ========================================
@@ -148,23 +138,18 @@ export const useRateLimitingMetrics = ({)
       if (mountedRef.current) {
         setCurrentMetrics(systemStatus.metrics);
         setActiveAlerts(systemStatus.alerts);
-      }
       // Get visualization data
       const vizData = metricsServiceRef.current.getVisualizationData(selectedTimeRange);
       if (mountedRef.current) {
         setVisualizationData(vizData);
         setLastUpdate(new Date());
-      }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load metrics data';
-      if (mountedRef.current) {
-        setError(errorMessage);
-      }
-    } finally {
+  const errorMessage = err instanceof Error ? err.message : 'Failed to load metrics data';
+  if (mountedRef.current) {
+  setError(errorMessage);
+} finally {
       if (mountedRef.current) {
         setIsLoading(false);
-      }
-    }
   }, [selectedTimeRange]);
   const refreshMetrics = useCallback(async () => {
     await loadMetricsData();
@@ -181,23 +166,18 @@ export const useRateLimitingMetrics = ({)
     if (autoRefresh && refreshInterval > 0) {
       if (refreshTimerRef.current) {
         clearInterval(refreshTimerRef.current);
-      }
       refreshTimerRef.current = setInterval(() => {
         if (mountedRef.current) {
           loadMetricsData();
-        }
       }, refreshInterval * 1000);
-    }
     setIsConnected(true);
   }, [loadMetricsData, autoRefresh, refreshInterval]);
   const stopMonitoring = useCallback(() => {
     if (refreshTimerRef.current) {
       clearInterval(refreshTimerRef.current);
       refreshTimerRef.current = null;
-    }
     if (metricsServiceRef.current) {
       metricsServiceRef.current.stopMetricsCollection();
-    }
     setIsConnected(false);
   }, []);
   // ========================================
@@ -207,35 +187,29 @@ export const useRateLimitingMetrics = ({)
     const handleMetricsUpdate = () => {
       if (mountedRef.current) {
         loadMetricsData();
-      }
     };
     const handleAlertCreated = (alert: AlertCondition) => {
       if (mountedRef.current) {
         setActiveAlerts(prev => [...prev, alert]);
-      }
     };
     const handleAlertAcknowledged = (data: { alertId: string }) => {
       if (mountedRef.current) {
         setActiveAlerts(prev => prev.filter(alert => alert.alertId !== data.alertId));
-      }
     };
     const handleWidgetAdded = () => {
       if (mountedRef.current && metricsServiceRef.current) {
         setWidgets(metricsServiceRef.current.getWidgets());
-      }
     };
     const handleWidgetRemoved = () => {
       if (mountedRef.current && metricsServiceRef.current) {
         setWidgets(metricsServiceRef.current.getWidgets());
-      }
     };
     const handleError = (errorData: { error: any }) => {
-      if (mountedRef.current) {
-        const errorMessage = errorData.error instanceof Error ? ;
-          errorData.error.message : 'Metrics collection error';
-        setError(errorMessage);
-      }
-    };
+  if (mountedRef.current) {
+  const errorMessage = errorData.error instanceof Error ? ;
+  errorData.error.message : 'Metrics collection error';
+  setError(errorMessage);
+};
     // Attach event listeners
     service.on('metricsUpdated', handleMetricsUpdate);
     service.on('alertCreated', handleAlertCreated);
@@ -260,13 +234,11 @@ export const useRateLimitingMetrics = ({)
     if (metricsServiceRef.current) {
       metricsServiceRef.current.addWidget(widget);
       setWidgets(metricsServiceRef.current.getWidgets());
-    }
   }, []);
   const removeWidget = useCallback((widgetId: string) => {
     if (metricsServiceRef.current) {
       metricsServiceRef.current.removeWidget(widgetId);
       setWidgets(metricsServiceRef.current.getWidgets());
-    }
   }, []);
   // ========================================
   // Alert Management
@@ -275,7 +247,6 @@ export const useRateLimitingMetrics = ({)
     if (metricsServiceRef.current) {
       metricsServiceRef.current.acknowledgeAlert(alertId);
       setActiveAlerts(prev => prev.filter(alert => alert.alertId !== alertId));
-    }
   }, []);
   // ========================================
   // Data Export
@@ -283,7 +254,6 @@ export const useRateLimitingMetrics = ({)
   const exportMetrics = useCallback((format: 'json' | 'csv'): string => {
     if (!metricsServiceRef.current) {
       throw new Error('Metrics service not initialized');
-    }
     return metricsServiceRef.current.exportMetrics(format);
   }, []);
   // ========================================
@@ -320,13 +290,11 @@ export const useRateLimitingMetrics = ({)
         cleanup();
         stopMonitoring();
       };
-    }
   }, [initializeMetricsService, setupEventListeners, startMonitoring, stopMonitoring]);
   // Handle time range changes
   useEffect(() => {
     if (isConnected) {
       loadMetricsData();
-    }
   }, [selectedTimeRange, loadMetricsData, isConnected]);
   // Cleanup on unmount
   useEffect(() => {
@@ -335,10 +303,8 @@ export const useRateLimitingMetrics = ({)
       mountedRef.current = false;
       if (refreshTimerRef.current) {
         clearInterval(refreshTimerRef.current);
-      }
       if (metricsServiceRef.current) {
         metricsServiceRef.current.destroy();
-      }
     };
   }, []);
   // ========================================
@@ -379,43 +345,40 @@ export function useRateLimitingMetricsWidget(widgetId: string, metricsHook: unkn
   const [widgetData, setWidgetData] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
-    const widget = (metricsHook as any).widgets.find(w => w.widgetId === widgetId);
-    if (!widget) {
-      setWidgetData(null);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(true);
-    // Simulate async data loading
-    const loadWidgetData = () => {
-      try {
-        let data = null;
-        switch (widget.dataSource) {
-          case 'timeseries':
-            data = metricsHook.visualizationData?.timeSeriesData;
-            break;
-          case 'heatmap':
-            data = metricsHook.visualizationData?.heatmapData;
-            break;
-          case 'geospatial':
-            data = metricsHook.visualizationData?.geospatialData;
-            break;
-          case 'distribution':
-            data = metricsHook.visualizationData?.distributionData;
-            break;
-          case 'current':
-            data = metricsHook.currentMetrics;
-            break;
-          default:
-            data = null;
-        }
-        setWidgetData(data);
-      } catch (error) {
-        console.error('Error loading widget data:', error);
-        setWidgetData(null);
-      } finally {
+  const widget = (metricsHook as any).widgets.find(w => w.widgetId === widgetId);
+  if (!widget) {
+  setWidgetData(null);
+  setIsLoading(false);
+  return;
+  setIsLoading(true);
+  // Simulate async data loading
+  const loadWidgetData = () => {
+  try {
+  let data = null;
+  switch (widget.dataSource) {
+  case 'timeseries':,
+  data = metricsHook.visualizationData?.timeSeriesData;
+  break;
+  case 'heatmap':,
+  data = metricsHook.visualizationData?.heatmapData;
+  break;
+  case 'geospatial':,
+  data = metricsHook.visualizationData?.geospatialData;
+  break;
+  case 'distribution':,
+  data = metricsHook.visualizationData?.distributionData;
+  break;
+  case 'current':,
+  data = metricsHook.currentMetrics;
+  break;
+  default:,
+  data = null;
+  setWidgetData(data);
+} catch (error) {
+  console.error('Error loading widget data:', error);
+  setWidgetData(null);
+} finally {
         setIsLoading(false);
-      }
     };
     loadWidgetData();
   }, [metricsHook.visualizationData, metricsHook.currentMetrics, widgetId, metricsHook.widgets]);

@@ -4,6 +4,7 @@
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { RateLimitConfig, RateLimitScope } from './RateLimiter';
+
 export interface DynamicRateLimitRule {
     id: string;
     name: string;
@@ -24,7 +25,7 @@ export interface DynamicRateLimitRule {
     schedule?: RateLimitSchedule;
     alertThreshold?: number;
     logViolations?: boolean;
-}
+
 export interface RateLimitCondition {
     type: 'ip' | 'user' | 'endpoint' | 'method' | 'header' | 'query' | 'body' | 'time' | 'geo' | 'custom';
     operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'regex' | 'in' | 'range' | 'exists';
@@ -33,7 +34,7 @@ export interface RateLimitCondition {
     values?: any[];
     caseSensitive?: boolean;
     negate?: boolean;
-}
+
 export interface RateLimitAction {
     type: 'block' | 'delay' | 'throttle' | 'captcha' | 'redirect' | 'custom';
     statusCode?: number;
@@ -41,18 +42,18 @@ export interface RateLimitAction {
     redirectUrl?: string;
     customHandler?: string;
     parameters?: Record<string, any>;
-}
+
 export interface RateLimitSchedule {
     timezone: string;
     rules: ScheduleRule[];
-}
+
 export interface ScheduleRule {
     days: number[];
     startTime: string;
     endTime: string;
     windowMs?: number;
     maxRequests?: number;
-}
+
 export interface RateLimitProfile {
     id: string;
     name: string;
@@ -66,13 +67,13 @@ export interface RateLimitProfile {
         author: string;
         tags: string[];
     };
-}
+
 export interface ConfigurationContext {
     environment: 'development' | 'staging' | 'production';
     region?: string;
     organizationId?: string;
     features?: string[];
-}
+
 export declare class ConditionEvaluator {
     /**
      * Evaluate if a condition matches the given context
@@ -91,7 +92,7 @@ export declare class ConditionEvaluator {
     private static evaluateStringValue;
     private static getNestedValue;
     private static isIPInRange;
-}
+
 export declare class RateLimitConfigurationManager {
     private profiles;
     private activeProfile;
@@ -153,7 +154,7 @@ export declare class RateLimitConfigurationManager {
     private isRuleScheduleActive;
     private getKeyGenerator;
     private createActionHandler;
-}
+
 export declare class RateLimitConfigurationPresets {
     /**
      * Create a basic web application profile
@@ -163,6 +164,6 @@ export declare class RateLimitConfigurationPresets {
      * Create an API-focused profile
      */
     static createAPIProfile(): RateLimitProfile;
-}
+
 export default RateLimitConfigurationManager;
 //# sourceMappingURL=RateLimitConfigurationManager.d.ts.map

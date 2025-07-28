@@ -7,16 +7,15 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
 export interface ExtensionListViewProps {
-  extensions: ExtensionManifest[];
+  extensions: ExtensionManifest;,
   selectedExtension: ExtensionManifest | null;
-  getExtensionStatus: (extensionId: string) => ExtensionStatus;
-  onExtensionSelect: (extension: ExtensionManifest) => void;
-  onToggleExtension: (extensionId: string) => void;
-  onUninstallExtension: (extensionId: string) => void;
-  onUpdateExtension: (extensionId: string) => void;
+  getExtensionStatus: (extensionId: string) => ExtensionStatus;,
+  onExtensionSelect: (extension: ExtensionManifest) => void;,
+  onToggleExtension: (extensionId: string) => void;,
+  onUninstallExtension: (extensionId: string) => void;,
+  onUpdateExtension: (extensionId: string) => void;,
   onConfigureExtension: (extension: ExtensionManifest) => void;
 }
-
 export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
   extensions,
   selectedExtension,
@@ -27,15 +26,14 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
   onUpdateExtension,
   onConfigureExtension
 }) => {
-  const getExtensionIcon = (type: string): string => {
-    switch (type) {
-    case 'node': return '🔧';
-    case 'ui': return '🎨';
-    case 'transform': return '⚡';
-    case 'storage': return '💾';
-    default: return '📦';
-    }
-  };
+  const getExtensionIcon = (type: string): string => {,
+  switch (type) {
+  case 'node': return '🔧';
+  case 'ui': return '🎨';
+  case 'transform': return '⚡';
+  case 'storage': return '💾';
+  default: return '📦';
+};
   const getStatusIcon = (status: ExtensionStatus): string => {
     if (status.hasErrors) return '❌';
     if (!status.loaded) return '⏸️';
@@ -49,15 +47,14 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
     return 'Disabled';
   };
   if (extensions.length === 0) {
-    return ();
+    return;
       <div className="extension-list-empty">
         <div className="empty-icon">📦</div>
         <h3>No Extensions Found</h3>
         <p>No extensions match your current search and filter criteria.</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="extension-list-view">
       <div className="extension-list-header">
         <span className="header-icon">Type</span>
@@ -70,7 +67,7 @@ export const ExtensionListView: React.FC<ExtensionListViewProps> = ({)
         {extensions.map((extension) => {
           const status = getExtensionStatus(extension.id);
           const isSelected = selectedExtension?.id === extension.id;
-          return ();
+          return;
             <div
               key={extension.id}
               className={`extension-list-item ${isSelected ? 'selected' : ''}`}

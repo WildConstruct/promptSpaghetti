@@ -8,6 +8,162 @@
  * Epic: 17 - Backstage Admin Controls
  */
 import { TimeRange } from './analytics.types';
+;
+problemSolving: {
+    resolutionRate: number; // % of problems solved
+    timeToResolution: number; // average time to solve
+    complexityHandling: number; // ability to handle complex scenarios
+}
+;
+valueDelivery: {
+    userValueScore: number; // perceived value by users
+    businessImpact: number; // business value delivered
+    efficiencyGains: number; // time/cost savings
+}
+;
+;
+clarity: {
+    instructionClarity: number; // clarity of usage instructions
+    outputClarity: number; // clarity of generated output
+    documentationQuality: number; // quality of supporting docs
+}
+;
+accessibility: {
+    deviceCompatibility: number; // works across devices
+    browserCompatibility: number; // works across browsers
+    languageSupport: number; // multilingual support quality
+    disabilityAccessibility: number; // accessibility compliance
+}
+;
+userExperience: {
+    interfaceQuality: number; // UI/UX quality
+    responseTime: number; // system responsiveness
+    visualDesign: number; // aesthetic and functional design
+}
+;
+;
+interaction: {
+    likeRate: number; // % of users who like
+    shareRate: number; // % of users who share
+    commentRate: number; // % of users who comment
+    recommendationRate: number; // % who recommend to others
+}
+;
+virality: {
+    viralCoefficient: number; // users acquired per user
+    growthRate: number; // rate of organic growth
+    wordOfMouthScore: number; // WOM effectiveness
+}
+;
+community: {
+    discussionVolume: number; // amount of community discussion
+    supportQuality: number; // quality of peer support
+    contributionRate: number; // user contribution to improvements
+}
+;
+;
+performance: {
+    responseTime: number; // average response time
+    throughput: number; // requests handled per second
+    resourceEfficiency: number; // resource usage efficiency
+    scalability: number; // performance under load
+}
+;
+robustness: {
+    edgeCaseHandling: number; // handles edge cases well
+    errorHandling: number; // graceful error handling
+    inputValidation: number; // validates inputs properly
+    faultTolerance: number; // continues working despite issues
+}
+;
+security: {
+    vulnerabilityScore: number; // security vulnerability assessment
+    dataProtection: number; // protects user data
+    accessControl: number; // proper access controls
+    complianceScore: number; // regulatory compliance
+}
+;
+;
+codeQuality: {
+    codeStructure: number; // code organization quality
+    documentation: number; // code documentation quality
+    testCoverage: number; // test coverage percentage
+    technicalDebt: number; // technical debt assessment
+}
+;
+evolution: {
+    adaptability: number; // adapts to changing requirements
+    extensibility: number; // easy to extend functionality
+    backwardsCompatibility: number; // maintains compatibility
+    migrationSupport: number; // supports migration to new versions
+}
+;
+support: {
+    issueResolution: number; // speed of issue resolution
+    userSupport: number; // quality of user support
+    documentationMaintenance: number; // keeps docs up to date
+    communitySupport: number; // community maintenance involvement
+}
+;
+;
+satisfaction: {
+    npsScore: number; // Net Promoter Score
+    customerSatisfaction: number; // overall satisfaction
+    repeatUsage: number; // repeat usage rate
+    loyaltyScore: number; // user loyalty score
+}
+;
+business: {
+    revenueGeneration: number; // revenue generating capacity
+    costEffectiveness: number; // cost vs benefit ratio
+    roi: number; // return on investment
+    marketValue: number; // market value assessment
+}
+;
+strategic: {
+    differentiationScore: number; // unique value proposition
+    competitiveAdvantage: number; // competitive advantage
+    strategicAlignment: number; // aligns with business strategy
+    futureViability: number; // long-term viability
+}
+;
+;
+events: QualityEvent[];
+;
+implementation: {
+    effort: 'low' | 'medium' | 'high';
+    complexity: 'simple' | 'moderate' | 'complex';
+    resources: string[];
+    timeline: string;
+    prerequisites: string[];
+}
+;
+roi: {
+    investmentRequired: number;
+    expectedReturn: number;
+    paybackPeriod: string;
+    riskLevel: 'low' | 'medium' | 'high';
+}
+;
+evidence: {
+    dataPoints: string[];
+    benchmarkComparison: string;
+    userFeedback: string[];
+    analyticsInsights: string[];
+}
+;
+;
+thresholds: {
+    excellent: number; // 90+
+    good: number; // 80+
+    fair: number; // 70+
+    poor: number; // 60+
+    critical: number; // <60
+}
+;
+benchmarkSources: string[];
+updateFrequency: string;
+minimumDataPoints: number;
 export class ContentQualityMetricsService {
     db;
     analyticsService;
@@ -440,3 +596,20 @@ export class ContentQualityMetricsService {
         return Math.min(100, (metrics.metrics.views / 100) * 10 + 50);
     }
 }
+dimensionTrends: {
+    [key, string];
+    number[];
+}
+;
+milestones: QualityEvent[];
+projectedScore: number;
+categoryTrends: {
+    [key, string];
+    number[];
+}
+;
+qualityFactorTrends: {
+    [key, string];
+    number[];
+}
+;

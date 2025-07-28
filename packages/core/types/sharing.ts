@@ -9,328 +9,297 @@ export type SharePermission = 'view' | 'comment' | 'edit' | 'admin';
 export type ShareStatus = 'active' | 'expired' | 'revoked' | 'pending';
 
 // User information for sharing
+
 export interface UserInfo {
-  id: string;
+  id: string;,
   email: string;
   name: string;
   avatar?: string;
+  // Collaborator with permissions
 }
-
-// Collaborator with permissions
 export interface Collaborator extends UserInfo {
-  role: SharePermission;
+  role: SharePermission;,
   addedAt: Date;
-  permissions: string[];
+  permissions: string;,
   invitedBy: string;
   acceptedAt?: Date;
-}
-
-// Sharing configuration
-export interface SharingConfig {
-  accessLevel: ShareAccessLevel;
+  // Sharing configuration
+  export interface SharingConfig {
+  accessLevel: ShareAccessLevel;,
   permissions: SharePermission;
-  collaborators: Collaborator[];
+  collaborators: Collaborator;,
   shareUrl: string;
   shareToken: string;
   expiresAt?: Date;
-  passwordProtected: boolean;
+  passwordProtected: boolean;,
   allowDownload: boolean;
-  allowCopy: boolean;
+  allowCopy: boolean;,
   trackAnalytics: boolean;
   notifyOnAccess: boolean;
+  // Share security settings
 }
-
-// Share security settings
 export interface ShareSecurityConfig {
-  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
+  dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';,
   encryptionRequired: boolean;
-  auditingEnabled: boolean;
+  auditingEnabled: boolean;,
   retentionPolicy: {,
-    maxShareDuration: number; // days
-    autoExpire: boolean;
-    dataRetentionDays: number;
-  };
+  maxShareDuration: number; // days,
+  autoExpire: boolean;,
+  dataRetentionDays: number;
+};
   accessControls: {,
-    ipWhitelist: string[];
-    geoRestrictions: string[];
-    requireAuthentication: boolean;
-    maxConcurrentUsers?: number;
-    sessionTimeout?: number; // minutes
-  };
-}
+  ipWhitelist: string;
+  geoRestrictions: string;,
+  requireAuthentication: boolean;
+  maxConcurrentUsers?: number;
+  sessionTimeout?: number; // minutes,
+};
 
 // Core shared content interface
+}
 export interface SharedContent {
-  id: string;
+  id: string;,
   type: 'graph' | 'template' | 'bundle' | 'dataset';
   title: string;
   description?: string;
-  content: any; // The actual shared content
-  metadata: SharedContentMetadata;
+  content: any; // The actual shared content,
+  metadata: SharedContentMetadata;,
   sharing: SharingConfig;
-  security: ShareSecurityConfig;
+  security: ShareSecurityConfig;,
   analytics: ShareAnalytics;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
   status: ShareStatus;
+  // Metadata for shared content
 }
-
-// Metadata for shared content
 export interface SharedContentMetadata {
-  exportId: string;
+  exportId: string;,
   version: string;
-  author: UserInfo;
-  tags: string[];
+  author: UserInfo;,
+  tags: string;
   category?: string;
   language?: string;
-  contentSize: number; // bytes
-  checksumMd5: string;
+  contentSize: number; // bytes,
+  checksumMd5: string;,
   versionControl: VersionControl;
   annotations: ContentAnnotations;
+  // Version control for shared content
 }
-
-// Version control for shared content
 export interface VersionControl {
-  currentVersion: string;
-  versions: ContentVersion[];
+  currentVersion: string;,
+  versions: ContentVersion;
   isLatest: boolean;
-  changesFromPrevious?: string[];
-  mergeConflicts?: MergeConflict[];
+  changesFromPrevious?: string;
+  mergeConflicts?: MergeConflict;
 }
-
 export interface ContentVersion {
-  version: string;
+  version: string;,
   timestamp: Date;
-  author: UserInfo;
-  changes: string[];
-  size: number;
+  author: UserInfo;,
+  changes: string;
+  size: number;,
   checksum: string;
 }
-
 export interface MergeConflict {
-  path: string;
+  path: string;,
   type: 'content' | 'metadata' | 'permissions';
-  conflictingVersions: string[];
+  conflictingVersions: string;
   resolution?: 'auto' | 'manual';
+  // Content annotations
 }
-
-// Content annotations
 export interface ContentAnnotations {
-  connectionLabels: ConnectionLabel[];
-  stickyNotes: StickyNote[];
-  regions: AnnotationRegion[];
-  comments: ShareComment[];
+  connectionLabels: ConnectionLabel;,
+  stickyNotes: StickyNote;
+  regions: AnnotationRegion;,
+  comments: ShareComment;
 }
-
 export interface ConnectionLabel {
-  id: string;
+  id: string;,
   sourceNodeId: string;
-  targetNodeId: string;
+  targetNodeId: string;,
   label: string;
   color?: string;
-  author: UserInfo;
+  author: UserInfo;,
   createdAt: Date;
 }
-
 export interface StickyNote {
-  id: string;
+  id: string;,
   x: number;
-  y: number;
+  y: number;,
   width: number;
-  height: number;
+  height: number;,
   content: string;
-  color: string;
+  color: string;,
   author: UserInfo;
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
 }
-
 export interface AnnotationRegion {
-  id: string;
+  id: string;,
   x: number;
-  y: number;
+  y: number;,
   width: number;
-  height: number;
+  height: number;,
   title: string;
   description?: string;
-  color: string;
+  color: string;,
   author: UserInfo;
   createdAt: Date;
 }
-
 export interface ShareComment {
-  id: string;
+  id: string;,
   content: string;
-  author: UserInfo;
+  author: UserInfo;,
   createdAt: Date;
   updatedAt?: Date;
   parentId?: string; // For threaded comments
+
   position?: { x: number; y: number }; // For positioned comments
   resolved: boolean;
   resolvedBy?: UserInfo;
   resolvedAt?: Date;
-}
 
 // Analytics and tracking
+}
 export interface ShareAnalytics {
-  views: ShareView[];
-  downloads: ShareDownload[];
-  collaborations: CollaborationEvent[];
+  views: ShareView;,
+  downloads: ShareDownload;
+  collaborations: CollaborationEvent;,
   totalViews: number;
-  uniqueViewers: number;
-  averageViewDuration: number; // seconds
-  peakConcurrentUsers: number;
-  geographicDistribution: GeographicStats[];
-  deviceStats: DeviceStats[];
+  uniqueViewers: number;,
+  averageViewDuration: number; // seconds,
+  peakConcurrentUsers: number;,
+  geographicDistribution: GeographicStats;
+  deviceStats: DeviceStats;,
   conversionMetrics: ConversionMetrics;
 }
-
 export interface ShareView {
-  id: string;
+  id: string;,
   viewerInfo: ViewerInfo;
-  timestamp: Date;
-  duration: number; // seconds
-  ipAddress: string;
+  timestamp: Date;,
+  duration: number; // seconds,
+  ipAddress: string;,
   userAgent: string;
   referrer?: string;
   geolocation?: GeoLocation;
 }
-
 export interface ShareDownload {
-  id: string;
+  id: string;,
   downloadedBy: ViewerInfo;
-  timestamp: Date;
+  timestamp: Date;,
   format: string;
-  size: number;
+  size: number;,
   ipAddress: string;
   success: boolean;
   errorReason?: string;
 }
-
 export interface CollaborationEvent {
-  id: string;
+  id: string;,
   type: 'comment' | 'edit' | 'annotation' | 'permission_change';
-  user: UserInfo;
+  user: UserInfo;,
   timestamp: Date;
-  details: any;
+  details: any;,
   impact: 'minor' | 'major' | 'breaking';
 }
-
 export interface ViewerInfo {
-  id?: string; // null for anonymous viewers
+  id?: string; // null for anonymous viewers,
   email?: string;
   name?: string;
-  isAuthenticated: boolean;
+  isAuthenticated: boolean;,
   sessionId: string;
 }
-
 export interface GeoLocation {
-  country: string;
+  country: string;,
   region: string;
-  city: string;
+  city: string;,
   coordinates: { lat: number; lng: number };
 }
-
 export interface GeographicStats {
-  country: string;
+  country: string;,
   views: number;
   uniqueViewers: number;
 }
-
 export interface DeviceStats {
-  deviceType: 'desktop' | 'tablet' | 'mobile';
+  deviceType: 'desktop' | 'tablet' | 'mobile';,
   operatingSystem: string;
-  browser: string;
+  browser: string;,
   views: number;
 }
-
 export interface ConversionMetrics {
-  viewToDownload: number; // percentage
-  viewToCollaboration: number; // percentage
-  viewToSignup: number; // percentage (for anonymous viewers)
-  averageTimeToAction: number; // seconds
+  viewToDownload: number; // percentage,
+  viewToCollaboration: number; // percentage,
+  viewToSignup: number; // percentage (for anonymous viewers),
+  averageTimeToAction: number; // seconds,
+  // API request/response types
 }
-
-// API request/response types
 export interface CreateShareRequest {
-  contentId: string;
+  contentId: string;,
   contentType: SharedContent['type'];
   title: string;
   description?: string;
   sharing: Partial<SharingConfig>;
   security?: Partial<ShareSecurityConfig>;
-  collaborators?: string[]; // user IDs to invite
+  collaborators?: string; // user IDs to invite,
 }
-
 export interface CreateShareResponse {
-  success: boolean;
+  success: boolean;,
   shareId: string;
-  shareUrl: string;
+  shareUrl: string;,
   shareToken: string;
   expiresAt?: Date;
   error?: string;
 }
-
 export interface UpdateShareRequest {
   title?: string;
   description?: string;
   sharing?: Partial<SharingConfig>;
   security?: Partial<ShareSecurityConfig>;
 }
-
 export interface ShareAccessRequest {
   shareToken: string;
   password?: string;
-  userAgent: string;
+  userAgent: string;,
   ipAddress: string;
 }
-
 export interface ShareAccessResponse {
   success: boolean;
   content?: SharedContent;
-  permissions: SharePermission[];
+  permissions: SharePermission;,
   requiresPassword: boolean;
   error?: string;
-  analytics?: {
-    viewCount: number;
-    lastAccessed: Date;
-  };
+  analytics?: {,
+  viewCount: number;,
+  lastAccessed: Date;
+};
 }
-
 export interface SharePermissionRequest {
-  shareId: string;
+  shareId: string;,
   userId: string;
   permission: SharePermission;
   message?: string;
 }
-
 export interface ShareAnalyticsRequest {
   shareId: string;
-  timeRange?: {
-    start: Date;
-    end: Date;
-  };
+  timeRange?: {,
+  start: Date;,
+  end: Date;
+};
   metrics?: ('views' | 'downloads' | 'collaborations')[];
 }
-
 export interface ShareAnalyticsResponse {
-  success: boolean;
+  success: boolean;,
   analytics: ShareAnalytics;
   error?: string;
+  // Error types
 }
-
-// Error types
 export class ShareError extends Error {
   constructor();
-    message: string,
-    public code: ShareErrorCode,
-    public details?: any
-    super(message);
-    this.name = 'ShareError';
-  }
-}
-
-export enum ShareErrorCode {
+  message: string,
+  public code: ShareErrorCode,
+  public details?: any,
+  super(message);
+  this.name = 'ShareError';
+  export enum ShareErrorCode {
   SHARE_NOT_FOUND = 'SHARE_NOT_FOUND',
   SHARE_EXPIRED = 'SHARE_EXPIRED',
   SHARE_REVOKED = 'SHARE_REVOKED',
@@ -340,32 +309,28 @@ export enum ShareErrorCode {
   INVALID_SHARE_TOKEN = 'INVALID_SHARE_TOKEN',
   RATE_LIMITED = 'RATE_LIMITED',
   SECURITY_VIOLATION = 'SECURITY_VIOLATION'
-}
-
-// Configuration types
-export interface SharingSystemConfig {
-  maxShareDuration: number; // days
-  defaultAccessLevel: ShareAccessLevel;
+  // Configuration types
+  export interface SharingSystemConfig {
+  maxShareDuration: number; // days,
+  defaultAccessLevel: ShareAccessLevel;,
   allowAnonymousSharing: boolean;
-  requireEmailVerification: boolean;
+  requireEmailVerification: boolean;,
   maxCollaborators: number;
-  allowPasswordProtection: boolean;
+  allowPasswordProtection: boolean;,
   trackAnalyticsByDefault: boolean;
-  defaultRetentionDays: number;
-  maxFileSizeForSharing: number; // bytes
-  supportedFormats: string[];
+  defaultRetentionDays: number;,
+  maxFileSizeForSharing: number; // bytes,
+  supportedFormats: string;,
   encryptionRequired: boolean;
+  // Event types for real-time updates
 }
-
-// Event types for real-time updates
 export interface ShareEvent {
-  type: ShareEventType;
+  type: ShareEventType;,
   shareId: string;
   timestamp: Date;
   user?: UserInfo;
   data: any;
 }
-
 export enum ShareEventType {
   SHARE_CREATED = 'share_created',
   SHARE_ACCESSED = 'share_accessed',
@@ -378,4 +343,3 @@ export enum ShareEventType {
   COMMENT_ADDED = 'comment_added',
   CONTENT_UPDATED = 'content_updated',
   ANNOTATION_ADDED = 'annotation_added'
-}

@@ -5,16 +5,19 @@ import { WebSocketServer } from '../websocket/WebSocketServer';
 /**
  * Dashboard configuration
  */
+}
 export interface DashboardConfig {
   refreshInterval: number; // milliseconds
   historyWindow: number;   // milliseconds
   alertThreshold: number;  // number of alerts before critical status
   autoRefresh: boolean;
 }
+}
 
 /**
  * Real-time dashboard data
  */
+}
 export interface DashboardData {
   timestamp: number;
   health: {
@@ -22,6 +25,7 @@ export interface DashboardData {
     system: number;
     webSocket: number;
     collaboration: number;
+}
   };
   metrics: {
     current: {
@@ -167,13 +171,13 @@ export class PerformanceDashboard extends EventEmitter {
         start: startTime,
         end: endTime,
         duration: endTime - startTime
-      },
+  }
       summary: {
         totalMetrics: window.systemMetrics.length + window.webSocketMetrics.length + window.collaborationMetrics.length,
         averageHealth: this.calculateAverageHealth(window),
         alertCount: aggregated.alerts.length,
         criticalAlerts: aggregated.alerts.filter((a: PerformanceAlert) => a.severity === 'critical').length
-      },
+  }
       metrics: aggregated,
       trends: this.calculateTrends(window),
       insights: this.generateInsights(aggregated, window)
@@ -585,7 +589,7 @@ export class PerformanceDashboard extends EventEmitter {
       metrics: {
         current: currentMetrics,
         trends
-      },
+  }
       alerts: {
         active: activeAlerts,
         recent: recentAlerts,
@@ -594,7 +598,7 @@ export class PerformanceDashboard extends EventEmitter {
           critical: activeAlerts.filter(a => a.severity === 'critical').length,
           warning: activeAlerts.filter(a => a.severity === 'warning').length
         }
-      },
+  }
       connections: connectionInfo,
       recommendations
     };

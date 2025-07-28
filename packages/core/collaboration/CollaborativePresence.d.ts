@@ -16,7 +16,6 @@ interface CollaborativePresenceProps {
     }>;
     remoteSelections: Map<string, UserPresence[]>;
     className?: string;
-}
 /**
  * Main collaborative presence overlay component
  */
@@ -26,7 +25,6 @@ interface CollaborationStatusProps {
     connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
     connectedUserCount: number;
     className?: string;
-}
 /**
  * Connection status indicator component
  */
@@ -36,7 +34,6 @@ interface UserAvatarsProps {
     localUserId?: string;
     maxVisible?: number;
     className?: string;
-}
 /**
  * Connected users avatar list
  */

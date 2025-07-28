@@ -13,6 +13,7 @@ import {
   DeletionMethod
 } from '../types/audit';
 
+}
 export interface AuditContext {
   userId?: string;
   sessionId?: string;
@@ -21,7 +22,9 @@ export interface AuditContext {
   correlationId?: string;
   systemComponent?: string;
 }
+}
 
+}
 export interface DataDeletionAuditOptions {
   affectedUserId?: string;
   targetDataType: string;
@@ -33,6 +36,7 @@ export interface DataDeletionAuditOptions {
   complianceFramework?: string;
   isSubjectRequest?: boolean;
   legalBasis?: string;
+}
 }
 
 export class AuditLogger {
@@ -55,7 +59,7 @@ export class AuditLogger {
       errorMessage?: string;
     }
   ): Promise<string> {
-    
+
     const auditRecord: Partial<DataRetentionAuditRecord> = {
       operationId: crypto.randomUUID(),
       correlationId: context.correlationId,
@@ -118,7 +122,7 @@ export class AuditLogger {
         environment: process.env.NODE_ENV || 'unknown',
         version: process.env.APP_VERSION || 'unknown',
         service: 'data-retention-service'
-      },
+  }
       userAgent: context.userAgent,
       ipAddress: context.ipAddress,
       metadata: {
@@ -146,7 +150,7 @@ export class AuditLogger {
       dueDate?: Date;
     }
   ): Promise<string> {
-    
+
     const auditRecord: Partial<DataSubjectRightsAuditRecord> = {
       requestId: crypto.randomUUID(),
       dataSubjectId,
@@ -211,7 +215,7 @@ export class AuditLogger {
       remediationRequired?: boolean;
     }
   ): Promise<string> {
-    
+
     const auditRecord: Partial<ComplianceMonitoringAuditRecord> = {
       monitoringEventId: crypto.randomUUID(),
       complianceFramework,
@@ -283,6 +287,7 @@ export class AuditLogger {
       complianceVerified?: boolean;
     }
   ): Promise<void> {
+
     await this.auditService.updateDataRetentionOperation(auditId, {
       operationStatus,
       recordsProcessed: results.recordsProcessed,

@@ -7,6 +7,7 @@
  * bulk operations, and real-time processing.
  */
 import { CommentableResourceType } from '../types/TrendingCommentsTypes';
+
 export interface CommentModerationRequest {
     commentId: string;
     action: CommentModerationAction;
@@ -15,14 +16,14 @@ export interface CommentModerationRequest {
     metadata?: Record<string, unknown>;
     notifyAuthor?: boolean;
     scheduledFor?: Date;
-}
+
 export interface CommentModerationAction {
     type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
     severity?: 'low' | 'medium' | 'high' | 'critical';
     duration?: number;
     appealable?: boolean;
     escalateTo?: string;
-}
+
 export interface CommentModerationResult {
     commentId: string;
     action: CommentModerationAction;
@@ -35,7 +36,7 @@ export interface CommentModerationResult {
     notificationSent: boolean;
     workflowId?: string;
     error?: string;
-}
+
 export interface CommentModerationFilters {
     resourceId?: string;
     resourceType?: CommentableResourceType;
@@ -66,7 +67,7 @@ export interface CommentModerationFilters {
     sortOrder?: 'asc' | 'desc';
     limit?: number;
     offset?: number;
-}
+
 export interface CommentModerationQueue {
     queueId: string;
     name: string;
@@ -78,14 +79,14 @@ export interface CommentModerationQueue {
     slaMinutes: number;
     enableAutoModeration: boolean;
     escalationRules: EscalationRule[];
-}
+
 export interface EscalationRule {
     condition: 'timeout' | 'toxicity_threshold' | 'report_count' | 'quality_threshold' | 'custom';
     threshold: number;
     action: 'escalate' | 'auto_reject' | 'require_supervisor' | 'flag_urgent';
     escalateTo?: string;
     notifyStakeholders: string[];
-}
+
 export interface CommentModerationStats {
     totalComments: number;
     pendingReview: number;
@@ -118,7 +119,7 @@ export interface CommentModerationStats {
         toxicityChange24h: number;
         qualityChange24h: number;
     };
-}
+
 export interface BulkModerationRequest {
     commentIds: string[];
     action: CommentModerationAction;
@@ -127,7 +128,7 @@ export interface BulkModerationRequest {
     batchSize?: number;
     parallel?: boolean;
     validateBeforeAction?: boolean;
-}
+
 export interface BulkModerationResult {
     batchId: string;
     totalItems: number;
@@ -140,7 +141,6 @@ export interface BulkModerationResult {
     }>;
     processingTimeMs: number;
     summary: Record<string, number>;
-}
 /**
  * Comment Moderation Service
  *
@@ -227,6 +227,6 @@ export declare class CommentModerationService {
     private validateQueueConfig;
     private setupAutoAssignment;
     private makeAutoModerationDecision;
-}
+
 export default CommentModerationService;
 //# sourceMappingURL=CommentModerationService.d.ts.map

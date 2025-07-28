@@ -16,6 +16,7 @@ import {
 // Global data model engine instance
 let dataModelEngine: SecurityIntelligenceDataModelEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -24,6 +25,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface InitializeDataModelRequest {
   pipeline_configuration: {
     stream_processing: {
@@ -35,6 +37,7 @@ interface InitializeDataModelRequest {
           consumer_groups: string[];
           batch_size?: number;
           max_poll_interval?: number;
+}
         };
         processing_parallelism?: number;
         checkpoint_interval?: number;
@@ -88,6 +91,7 @@ interface InitializeDataModelRequest {
   };
 }
 
+}
 interface IngestSecurityDataRequest {
   data_ingestion: {
     data_source: string;
@@ -95,6 +99,7 @@ interface IngestSecurityDataRequest {
     raw_data: any;
     batch_size?: number;
     processing_priority?: 'low' | 'medium' | 'high' | 'critical';
+}
   };
   processing_options?: {
     validation_level?: 'basic' | 'standard' | 'comprehensive';
@@ -113,6 +118,7 @@ interface IngestSecurityDataRequest {
   };
 }
 
+}
 interface ProcessStreamingDataRequest {
   stream_configuration: {
     stream_name: string;
@@ -120,6 +126,7 @@ interface ProcessStreamingDataRequest {
     processing_mode: 'real_time' | 'micro_batch' | 'batch';
     buffer_size?: number;
     flush_interval_seconds?: number;
+}
   };
   processing_options?: {
     correlation_window_minutes?: number;
@@ -136,6 +143,7 @@ interface ProcessStreamingDataRequest {
   };
 }
 
+}
 interface ExecuteBatchProcessingRequest {
   batch_configuration: {
     job_type: 'etl' | 'ml_training' | 'analytics_aggregation';
@@ -145,6 +153,7 @@ interface ExecuteBatchProcessingRequest {
     processing_window?: {
       start_date: string;
       end_date: string;
+}
     };
   };
   job_parameters?: {
@@ -170,6 +179,7 @@ interface ExecuteBatchProcessingRequest {
   };
 }
 
+}
 interface OptimizeDataModelRequest {
   optimization_scope: {
     target_areas: ('storage' | 'queries' | 'indexes' | 'caching' | 'partitioning')[];
@@ -180,6 +190,7 @@ interface OptimizeDataModelRequest {
       maintenance_window?: {
         start_hour: number;
         end_hour: number;
+}
       };
     };
   };
@@ -223,7 +234,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   real_time_ingestion: { type: 'object' },
                   stream_analytics: { type: 'object' }
                 }
-              },
+  }
               batch_processing: {
                 type: 'object',
                 required: ['enabled'],
@@ -233,7 +244,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   ml_training: { type: 'object' },
                   analytics_aggregation: { type: 'object' }
                 }
-              },
+  }
               data_quality: {
                 type: 'object',
                 required: ['validation_stages', 'quality_dimensions', 'remediation_policies', 'quality_monitoring'],
@@ -243,7 +254,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   remediation_policies: { type: 'array' },
                   quality_monitoring: { type: 'object' }
                 }
-              },
+  }
               performance_optimization: {
                 type: 'object',
                 required: ['caching_strategy', 'partitioning_strategy', 'indexing_strategy', 'compression_config'],
@@ -255,7 +266,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                 }
               }
             }
-          },
+  }
           initialization_options: {
             type: 'object',
             properties: {
@@ -266,7 +277,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -287,7 +298,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -353,7 +364,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
               batch_size: { type: 'number', minimum: 1, maximum: 10000 },
               processing_priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] }
             }
-          },
+  }
           processing_options: {
             type: 'object',
             properties: {
@@ -371,7 +382,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                 }
               }
             }
-          },
+  }
           output_configuration: {
             type: 'object',
             properties: {
@@ -382,7 +393,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -403,7 +414,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -480,7 +491,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
               buffer_size: { type: 'number', minimum: 100, maximum: 100000 },
               flush_interval_seconds: { type: 'number', minimum: 1, maximum: 3600 }
             }
-          },
+  }
           processing_options: {
             type: 'object',
             properties: {
@@ -490,7 +501,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
               real_time_alerts: { type: 'boolean' },
               quality_checks: { type: 'boolean' }
             }
-          },
+  }
           output_settings: {
             type: 'object',
             properties: {
@@ -501,7 +512,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -523,7 +534,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -604,7 +615,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                 }
               }
             }
-          },
+  }
           job_parameters: {
             type: 'object',
             properties: {
@@ -617,7 +628,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                     threshold: { type: 'number' }
                   }
                 }
-              },
+  }
               performance_targets: {
                 type: 'array',
                 items: {
@@ -627,7 +638,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                     target_value: { type: 'number' }
                   }
                 }
-              },
+  }
               resource_limits: {
                 type: 'object',
                 properties: {
@@ -637,7 +648,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                 }
               }
             }
-          },
+  }
           execution_options: {
             type: 'object',
             properties: {
@@ -648,7 +659,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -670,7 +681,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -755,7 +766,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -802,7 +813,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
               target_areas: { 
                 type: 'array', 
                 items: { type: 'string', enum: ['storage', 'queries', 'indexes', 'caching', 'partitioning'] }
-              },
+  }
               optimization_level: { type: 'string', enum: ['basic', 'standard', 'comprehensive'] },
               constraints: {
                 type: 'object',
@@ -819,7 +830,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                 }
               }
             }
-          },
+  }
           optimization_parameters: {
             type: 'object',
             properties: {
@@ -828,7 +839,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
               query_latency_target: { type: 'number' },
               throughput_improvement_target: { type: 'number' }
             }
-          },
+  }
           validation_settings: {
             type: 'object',
             properties: {
@@ -839,7 +850,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -860,7 +871,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -883,17 +894,17 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
             before_avg_response_time_ms: 1200,
             after_avg_response_time_ms: 800,
             improvement_percentage: Math.floor(((1200 - 800) / 1200) * 100)
-          },
+  }
           storage_efficiency: {
             before_storage_gb: 500,
             after_storage_gb: 380,
             reduction_percentage: Math.floor(((500 - 380) / 500) * 100)
-          },
+  }
           throughput: {
             before_records_per_second: 1000,
             after_records_per_second: 1500,
             improvement_percentage: Math.floor(((1500 - 1000) / 1000) * 100)
-          },
+  }
           resource_utilization: {
             before_cpu_percentage: 75,
             after_cpu_percentage: 60,
@@ -921,6 +932,7 @@ export default async function securityIntelligenceDataModelRoutes(fastify: Fasti
 
 // Initialize the data model engine with default configuration
 async function initializeDataModelEngine(fastify: FastifyInstance): Promise<void> {
+
   if (dataModelEngine) {
     return; // Already initialized
   }

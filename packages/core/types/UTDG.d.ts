@@ -5,6 +5,7 @@
  * Provides the foundational data structures for historically accurate
  * content generation and Wild Construct ecosystem integration.
  */
+
 export interface Era {
     name: string;
     period: {,
@@ -15,7 +16,7 @@ export interface Era {
     accuracy: 'high' | 'medium' | 'low';
     description?: string;
     culturalContext?: string[];
-}
+
 export declare export interface UTDGNode {
     id: string;
     type: 'material' | 'texture' | 'pattern' | 'style' | 'garment' | 'accessory' | 'tool' | 'decoration';
@@ -48,7 +49,7 @@ export declare export interface UTDGNode {
         last_updated: string;
         confidence: number;
     };
-}
+
 export interface HistoricalConstraint {
     id: string;
     rule: string;
@@ -59,31 +60,31 @@ export interface HistoricalConstraint {
     message: string;
     description?: string;
     historical_basis?: string;
-}
+
 export interface ConstraintValidationResult {
     valid: boolean;
     violations: ConstraintViolation[];
     warnings: ConstraintWarning[];
     suggestions: ConstraintSuggestion[];
-}
+
 export interface ConstraintViolation {
     constraint_id: string;
     node_ids: string[];
     message: string;
     severity: 'critical' | 'major' | 'minor';
-}
+
 export interface ConstraintWarning {
     constraint_id: string;
     node_ids: string[];
     message: string;
     historical_context?: string;
-}
+
 export interface ConstraintSuggestion {
     constraint_id: string;
     node_ids: string[];
     message: string;
     suggested_alternatives?: string[];
-}
+
 export interface DataSource {
     id: string;
     name: string;
@@ -108,17 +109,18 @@ export interface DataSource {
         accuracy_level: 'high' | 'medium' | 'low';
         last_validated: string;
     };
-}
+
 export interface AuthConfig {
     type: 'api_key' | 'oauth' | 'basic' | 'bearer';
     credentials: Record<string, string>;
-}
+
 export interface DataTransform {
     type: 'map_fields' | 'filter' | 'validate' | 'enrich';
     config: Record<string, any>;
     description: string;
-}
+
 export type UTDGNodeType = UTDGNode['type'];
+
 export interface HistoricalQuery {
     era: string | string[];
     region?: string | string[];
@@ -130,7 +132,7 @@ export interface HistoricalQuery {
     sort_by?: 'relevance' | 'authenticity' | 'date';
     include_variations?: boolean;
     min_authenticity?: number;
-}
+
 export interface HistoricalQueryResult {
     nodes: UTDGNode[];
     total_count: number;
@@ -139,7 +141,7 @@ export interface HistoricalQueryResult {
         cache_hit: boolean;
         sources_used: string[];
     };
-}
+
 export interface MedievalClothing extends UTDGNode {
     type: 'garment';
     medieval_specific: {,
@@ -150,7 +152,7 @@ export interface MedievalClothing extends UTDGNode {
         seasonal_use: 'summer' | 'winter' | 'all_season';
         ceremonial_context?: 'court' | 'religious' | 'wedding' | 'funeral' | 'feast';
     };
-}
+
 export interface UTDGGraph {
     nodes: UTDGNode[];
     constraints: HistoricalConstraint[];
@@ -162,7 +164,7 @@ export interface UTDGGraph {
         accuracy_level: 'high' | 'medium' | 'low';
         source_attribution: string[];
     };
-}
+
 export interface ContentGenerationConfig {
     era: Era;
     region?: string;
@@ -176,7 +178,7 @@ export interface ContentGenerationConfig {
     required_elements?: string[];
     forbidden_elements?: string[];
     prefer_common_items?: boolean;
-}
+
 export interface GeneratedContent {
     nodes: UTDGNode[];
     constraints_applied: HistoricalConstraint[];
@@ -187,7 +189,7 @@ export interface GeneratedContent {
         creativity_score: number;
         historical_basis: string[];
     };
-}
+
 export interface VFXExportData {
     scene_description: string;
     historical_context: Era;
@@ -199,54 +201,54 @@ export interface VFXExportData {
     crowd_control_data?: CrowdControlData;
     backdrop_data?: BackdropData;
     meteor_data?: MeteorData;
-}
+
 export interface MaterialDescription {
     name: string;
     properties: Record<string, any>;
     historical_basis: string;
     authenticity_level: number;
-}
+
 export interface TextureDescription {
     name: string;
     pattern: string;
     color_palette: string[];
     historical_source: string;
-}
+
 export interface CrowdControlData {
     character_types: string[];
     clothing_combinations: string[][];
     social_stratification: Record<SocialClass, number>;
-}
+
 export interface BackdropData {
     architectural_style: string;
     materials: string[];
     atmospheric_conditions: string[];
-}
+
 export interface MeteorData {
     weather_patterns: string[];
     seasonal_conditions: string[];
     time_of_day_preferences: string[];
-}
+
 export interface DataQualityMetrics {
     completeness: number;
     consistency: number;
     historical_accuracy: number;
     source_reliability: number;
     freshness: number;
-}
+
 export interface ValidationReport {
     overall_score: number;
     metrics: DataQualityMetrics;
     issues: ValidationIssue[];
     recommendations: string[];
     last_validated: string;
-}
+
 export interface ValidationIssue {
     type: 'missing_data' | 'inconsistency' | 'historical_error' | 'source_issue';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     affected_nodes: string[];
     suggested_fix?: string;
-}
+
 export type { UTDGNode, Era, HistoricalConstraint, DataSource, HistoricalQuery, HistoricalQueryResult, MedievalClothing, UTDGGraph, ContentGenerationConfig, GeneratedContent, VFXExportData, ValidationReport, ConstraintValidationResult };
 //# sourceMappingURL=UTDG.d.ts.map

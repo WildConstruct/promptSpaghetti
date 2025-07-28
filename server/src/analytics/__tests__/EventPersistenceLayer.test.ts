@@ -59,7 +59,7 @@ class MockDatabase {
           return { changes: 1 };
         }
         return { changes: 0 };
-      },
+  }
       get: (...params: any[]) => {
         if (sql.includes('SELECT COUNT')) {
           return { count: this.tables[tableName]?.length || 0 };
@@ -81,7 +81,7 @@ class MockDatabase {
           return { size: 1000 }; // Mock size
         }
         return null;
-      },
+  }
       all: (...params: any[]) => {
         const events = this.tables[tableName] || [];
         if (sql.includes('GROUP BY type')) {
@@ -230,7 +230,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.SECURITY,
           severity: EventSeverity.CRITICAL,
           source: 'component-c'
-        })
+  }
       ];
 
       await repository.saveBatch(events);
@@ -290,7 +290,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.PERFORMANCE,
           severity: EventSeverity.WARNING,
           userId: 'user-456'
-        })
+  }
       ];
 
       await repository.saveBatch(events);
@@ -413,7 +413,7 @@ describe('DatabaseEventRepository', () => {
           category: EventCategory.USER,
           severity: EventSeverity.INFO,
           source: 'component-a'
-        })
+  }
       ];
 
       await repository.saveBatch(events);
@@ -477,7 +477,7 @@ describe('DatabaseEventRepository', () => {
         createTestEvent({ 
           id: 'recent-event-1',
           timestamp: Date.now() - (1 * 24 * 60 * 60 * 1000) // 1 day ago
-        })
+  }
       ];
 
       await repository.saveBatch(oldEvents);
@@ -602,7 +602,7 @@ describe('InMemoryEventRepository', () => {
           id: 'filter-2',
           type: AnalyticsEventType.PERFORMANCE_METRIC,
           userId: 'user-456'
-        })
+  }
       ];
 
       await repository.saveBatch(events);
@@ -624,7 +624,7 @@ describe('InMemoryEventRepository', () => {
         createTestEvent({ 
           type: AnalyticsEventType.PERFORMANCE_METRIC,
           category: EventCategory.PERFORMANCE
-        })
+  }
       ];
 
       await repository.saveBatch(events);

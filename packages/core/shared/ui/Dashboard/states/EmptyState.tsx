@@ -13,36 +13,34 @@ export interface EmptyStateProps {
   title?: string;
   description?: string;
   action?: {
-    label: string;
-    onClick: () => void;
-    variant?: 'primary' | 'secondary';
-  };
+  label: string;,
+  onClick: () => void;
+  variant?: 'primary' | 'secondary';
+};
   variant?: 'default' | 'search' | 'filter' | 'create';
   className?: string;
-}
 const VARIANT_CONFIGS = {
   default: {,
-    icon: Database,
-    title: 'No data available',
-    description: 'There is no data to display at this time.',
-  },
+  icon: Database,
+  title: 'No data available',
+  description: 'There is no data to display at this time.',
+},
   search: {,
-    icon: Search,
-    title: 'No search results',
-    description: 'Try adjusting your search terms or filters.',
-  },
+  icon: Search,
+  title: 'No search results',
+  description: 'Try adjusting your search terms or filters.',
+},
   filter: {,
-    icon: Filter,
-    title: 'No matching results',
-    description: 'No items match your current filter criteria.',
-  },
+  icon: Filter,
+  title: 'No matching results',
+  description: 'No items match your current filter criteria.',
+},
   create: {,
-    icon: Plus,
-    title: 'Get started',
-    description: 'Create your first item to see it here.',
-  }
+  icon: Plus,
+  title: 'Get started',
+  description: 'Create your first item to see it here.',
 };
-
+}
 export const EmptyState: React.FC<EmptyStateProps> = ({)
   icon,
   title,
@@ -55,7 +53,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({)
   const Icon = icon || config.icon;
   const displayTitle = title || config.title;
   const displayDescription = description || config.description;
-  return ();
+  return;
     <div className={`empty-state ${variant} ${className}`}>}
       <div className="empty-content">
         <div className="empty-icon-container">

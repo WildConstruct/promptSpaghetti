@@ -61,6 +61,7 @@ import {
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
 import { format, subDays } from 'date-fns';
 
+}
 interface ApiKey {
   keyId: string;
   keyPrefix: string;
@@ -75,6 +76,7 @@ interface ApiKey {
     requestsPerMinute: number;
     requestsPerHour: number;
     requestsPerDay: number;
+}
   };
   userName: string;
   userEmail: string;
@@ -87,6 +89,7 @@ interface ApiKey {
   };
 }
 
+}
 interface SecurityAlert {
   id: string;
   type: 'rate_limit' | 'error_spike' | 'unusual_activity' | 'security_threat';
@@ -96,7 +99,9 @@ interface SecurityAlert {
   keyId?: string;
   resolved: boolean;
 }
+}
 
+}
 interface UsageMetrics {
   [keyId: string]: {
     keyId: string;
@@ -110,6 +115,7 @@ interface UsageMetrics {
       endpoint: string;
       calls: number;
       errorRate: number;
+}
     }>;
   };
 }

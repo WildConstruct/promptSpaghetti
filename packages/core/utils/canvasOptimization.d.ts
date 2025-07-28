@@ -6,13 +6,15 @@
  */
 import React from 'react';
 import { Edge, Node, Viewport } from 'reactflow';
+
 export interface PerformanceConfig {
     maxVisibleNodes: number;
     cullingThreshold: number;
     animationFrameThrottle: number;
     renderDebounce: number;
     memoryCleanupInterval: number;
-}
+
+
 export interface CanvasMetrics {
     fps: number;
     renderTime: number;
@@ -20,7 +22,7 @@ export interface CanvasMetrics {
     visibleNodes: number;
     memoryUsage: number;
     lastUpdateTime: number;
-}
+
 export declare class CanvasOptimizer {
     private config;
     private metrics;
@@ -120,7 +122,7 @@ export declare class CanvasOptimizer {
      * Cleanup resources
      */
     cleanup(): void;
-}
+
 /**
  * Hook for using canvas optimization
  */
@@ -133,9 +135,10 @@ export declare function useCanvasOptimization(config?: Partial<PerformanceConfig
 /**
  * Performance monitoring component
  */
+
 export interface PerformanceMonitorProps {
     optimizer: CanvasOptimizer;
     visible?: boolean;
-}
+
 export declare const PerformanceMonitor: React.FC<PerformanceMonitorProps>;
 //# sourceMappingURL=canvasOptimization.d.ts.map

@@ -17,27 +17,27 @@ export declare enum BreachSeverity {
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export declare enum BreachType {
     CONFIDENTIALITY = "confidentiality",
     INTEGRITY = "integrity",
     AVAILABILITY = "availability",
     COMBINED = "combined"
-}
+
 export declare enum BreachCategory {
     CYBER_ATTACK = "cyber_attack",
     HUMAN_ERROR = "human_error",
     SYSTEM_FAILURE = "system_failure",
     PHYSICAL_BREACH = "physical_breach",
     THIRD_PARTY = "third_party"
-}
+
 export declare enum NotificationType {
     INTERNAL_ALERT = "internal_alert",
     REGULATORY_FILING = "regulatory_filing",
     CUSTOMER_NOTIFICATION = "customer_notification",
     PUBLIC_DISCLOSURE = "public_disclosure",
     LAW_ENFORCEMENT = "law_enforcement"
-}
+
 export declare enum DataSubjectCategory {
     EMPLOYEES = "employees",
     CUSTOMERS = "customers",
@@ -45,7 +45,7 @@ export declare enum DataSubjectCategory {
     PARTNERS = "partners",
     MINORS = "minors",
     VULNERABLE_GROUPS = "vulnerable_groups"
-}
+
 export interface BreachIncident {
     id: string;
     title: string;
@@ -74,7 +74,7 @@ export interface BreachIncident {
     riskAssessment: RiskAssessment;
     complianceRequirements: ComplianceRequirement[];
     metadata: Record<string, any>;
-}
+
 export declare enum IncidentStatus {
     DETECTED = "detected",
     INVESTIGATING = "investigating",
@@ -83,7 +83,7 @@ export declare enum IncidentStatus {
     RECOVERING = "recovering",
     LESSONS_LEARNED = "lessons_learned",
     CLOSED = "closed"
-}
+
 export interface NotificationRecord {
     id: string;
     type: NotificationType;
@@ -95,7 +95,7 @@ export interface NotificationRecord {
     content: string;
     status: 'pending' | 'sent' | 'delivered' | 'failed' | 'acknowledged';
     metadata: Record<string, any>;
-}
+
 export interface EvidenceRecord {
     id: string;
     type: 'log' | 'screenshot' | 'document' | 'forensic' | 'witness';
@@ -105,20 +105,20 @@ export interface EvidenceRecord {
     collectedBy: string;
     description: string;
     chainOfCustody: ChainOfCustodyEntry[];
-}
+
 export interface ChainOfCustodyEntry {
     timestamp: Date;
     action: 'collected' | 'transferred' | 'analyzed' | 'stored';
     person: string;
     location: string;
     notes?: string;
-}
+
 export interface TimelineEvent {
     timestamp: Date;
     event: string;
     actor: string;
     details: Record<string, any>;
-}
+
 export interface RiskAssessment {
     likelihood: 'low' | 'medium' | 'high';
     impact: 'low' | 'medium' | 'high';
@@ -126,14 +126,14 @@ export interface RiskAssessment {
     factors: string[];
     recommendations: string[];
     residualRisk: string;
-}
+
 export interface ComplianceRequirement {
     framework: 'GDPR' | 'NIST' | 'HIPAA' | 'PCI_DSS' | 'SOX';
     requirement: string;
     deadline: Date;
     status: 'pending' | 'in_progress' | 'completed' | 'overdue';
     evidence?: string[];
-}
+
 export interface BreachNotificationConfig {
     detection: {,
         enabled: boolean;
@@ -179,7 +179,6 @@ export interface BreachNotificationConfig {
         auditLogging: boolean;
         retentionPeriod: string;
     };
-}
 /**
  * Automated breach notification and incident response service
  */
@@ -271,7 +270,7 @@ export declare class BreachNotificationService extends EventEmitter {
     private generateRegulatoryReport;
     private initiateContainment;
     private startEvidenceCollection;
-}
+
 export declare const breachNotificationService: BreachNotificationService;
 export default BreachNotificationService;
 //# sourceMappingURL=BreachNotificationService.d.ts.map

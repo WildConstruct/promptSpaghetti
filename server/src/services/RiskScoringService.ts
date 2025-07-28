@@ -1,6 +1,7 @@
 // Risk Scoring Algorithm for Login Anomaly Detection
 // Calculates risk scores based on multiple behavioral and contextual factors
 
+}
 export interface LoginAttempt {
   userId?: string;
   ipAddress: string;
@@ -9,6 +10,7 @@ export interface LoginAttempt {
     country: string;
     region: string;
     city: string;
+}
     coordinates?: { lat: number; lng: number };
   };
   timestamp: Date;
@@ -18,12 +20,14 @@ export interface LoginAttempt {
   twoFactorUsed?: boolean;
 }
 
+}
 export interface UserProfile {
   userId: string;
   typicalLocations: Array<{
     country: string;
     region: string;
     frequency: number;
+}
   }>;
   typicalDevices: Array<{
     fingerprint: string;
@@ -40,6 +44,7 @@ export interface UserProfile {
   riskLevel: 'low' | 'medium' | 'high';
 }
 
+}
 export interface RiskFactors {
   // Location-based factors
   newLocation: number;          // 0-1: 0 = known location, 1 = completely new
@@ -61,7 +66,9 @@ export interface RiskFactors {
   accountRiskLevel: number;     // 0-1: user's baseline risk level
   mfaBypass: number;           // 0-1: attempts to bypass MFA
 }
+}
 
+}
 export interface RiskScore {
   overallScore: number;         // 0-100: final calculated risk score
   confidence: number;           // 0-1: confidence in the score
@@ -70,7 +77,9 @@ export interface RiskScore {
   severity: 'low' | 'medium' | 'high' | 'critical';
   explanation: string;
 }
+}
 
+}
 export interface RiskScoringConfig {
   // Weight configuration for different risk factors
   weights: {
@@ -78,6 +87,7 @@ export interface RiskScoringConfig {
     behavioral: number;         // Weight for behavioral factors
     patterns: number;           // Weight for pattern-based factors
     contextual: number;         // Weight for contextual factors
+}
   };
   
   // Threshold configuration
@@ -112,22 +122,22 @@ export class RiskScoringService {
         behavioral: 0.25,
         patterns: 0.3,
         contextual: 0.15
-      },
+  }
       thresholds: {
         low: 25,
         medium: 60,
         high: 85,
         critical: 100
-      },
+  }
       timeWindows: {
         bruteForceWindow: 15,
         velocityWindow: 60,
         frequencyWindow: 24
-      },
+  }
       limits: {
         maxReasonableDistance: 500, // 500 KM
         maxReasonableVelocity: 1000 // 1000 KM/h (accounting for flights)
-      },
+  }
       ...config
     };
   }
@@ -140,6 +150,7 @@ export class RiskScoringService {
     userProfile: UserProfile,
     recentAttempts: LoginAttempt[]
   ): Promise<RiskScore> {
+
     // Calculate individual risk factors
     const factors = await this.calculateRiskFactors(loginAttempt, userProfile, recentAttempts);
     
@@ -173,6 +184,7 @@ export class RiskScoringService {
     userProfile: UserProfile,
     recentAttempts: LoginAttempt[]
   ): Promise<RiskFactors> {
+
     return {
       // Location-based factors
       newLocation: this.calculateLocationRisk(loginAttempt, userProfile),
@@ -249,6 +261,7 @@ export class RiskScoringService {
   }
 
   private async detectVpnTor(ipAddress: string): Promise<number> {
+
     // In a real implementation, this would check against VPN/Tor databases
     // For now, return a placeholder value
     
@@ -390,6 +403,7 @@ export class RiskScoringService {
   }
 
   private async checkThreatIntelligence(ipAddress: string): Promise<number> {
+
     // In a real implementation, this would check against threat intelligence feeds
     // For now, return a placeholder value
     

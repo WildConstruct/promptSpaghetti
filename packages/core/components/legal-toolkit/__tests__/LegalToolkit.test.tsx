@@ -93,28 +93,28 @@ jest.mock('../TerminologyValidator', () => ({)
 }));
 
 // Mock data
-const mockDocument: LegalDocument = {
+const mockDocument: LegalDocument = {,
   id: 'doc-123',
   title: 'Test Contract',
   type: 'contract',
   content: 'This is a test contract content for legal analysis.',
   metadata: {,
-    jurisdiction: 'US-CA',
-    practiceArea: ['contract law', 'commercial law'],
-    parties: ['Party A', 'Party B'],
-    references: [],
-    tags: ['commercial', 'b2b'],
-    confidentialityLevel: 'confidential',
-  },
+  jurisdiction: 'US-CA',
+  practiceArea: ['contract law', 'commercial law'],
+  parties: ['Party A', 'Party B'],
+  references: [],
+  tags: ['commercial', 'b2b'],
+  confidentialityLevel: 'confidential',
+},
   status: 'draft',
   createdAt: new Date('2024-01-01'),
   updatedAt: new Date('2024-01-02'),
-  version: '1.0',
-};
-const mockAnalysis: ContractAnalysis = {
+  version: '1.0';
+  };
+const mockAnalysis: ContractAnalysis = {,
   documentId: 'doc-123',
   clauses: [{,
-    id: 'clause-1',
+  id: 'clause-1',
     type: 'termination',
     title: 'Termination Clause',
     content: 'Either party may terminate...',
@@ -124,32 +124,32 @@ const mockAnalysis: ContractAnalysis = {
     position: { start: 0, end: 100 }
   }],
   riskAssessment: {,
-    overallRisk: 'medium',
-    riskFactors: [{,
-      type: 'termination',
-      description: 'Termination clause risks',
-      impact: 'medium',
-      likelihood: 'low',
-      mitigation: ['Review termination terms'],
-    }],
+  overallRisk: 'medium',
+  riskFactors: [{,
+  type: 'termination',
+  description: 'Termination clause risks',
+  impact: 'medium',
+  likelihood: 'low',
+  mitigation: ['Review termination terms'],
+}],
     mitigation: ['Review all clauses'],
-    score: 65,
+    score: 65;
   },
   complianceChecks: [],
   recommendations: ['Review termination clause'],
   confidence: 85,
-  processingTime: 1500,
-};
-const mockComplianceResults: ComplianceCheck[] = [{
+  processingTime: 1500;
+  };
+const mockComplianceResults: ComplianceCheck = [{,
   id: 'comp-1',
   regulation: 'GDPR',
   requirement: 'Data Protection',
   status: 'compliant',
   severity: 'info',
   description: 'Document complies with GDPR data protection requirements',
-  affectedSections: [1, 2]
+  affectedSections: [1, 2],
 }];
-const mockCitation: Citation = {
+const mockCitation: Citation = {,
   id: '1',
   type: 'bluebook',
   shortForm: 'Test Citation',
@@ -157,22 +157,22 @@ const mockCitation: Citation = {
   court: 'Supreme Court',
   date: '2023',
 };
-const mockTerminologyResults: TermValidationResult[] = [{
+const mockTerminologyResults: TermValidationResult = [{,
   term: 'consideration',
   position: { start: 10, end: 22 },
   isValid: true,
   suggestions: [{,
-    term: 'consideration',
-    definition: 'Something of value exchanged in a contract',
-    context: 'contract law',
-    jurisdiction: 'US',
-    source: 'Black\'s Law Dictionary',
-  }],
+  term: 'consideration',
+  definition: 'Something of value exchanged in a contract',
+  context: 'contract law',
+  jurisdiction: 'US',
+  source: 'Black\'s Law Dictionary',
+}],
   confidence: 90,
-  context: 'contract formation',
-}];
+  context: 'contract formation';
+  }];
 describe('LegalToolkit Component', () => {
-  const mockOnWorkflowComplete = jest.fn<unknown[], unknown>();
+  const mockOnWorkflowComplete = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -513,13 +513,13 @@ describe('LegalToolkit Component', () => {
         return user.click(exportBtn);
       });
       await waitFor(() => {
-        expect(mockOnWorkflowComplete).toHaveBeenCalledWith({)
-          document: mockDocument,
-          analysis: mockAnalysis,
-          complianceResults: undefined,
-          citations: [mockCitation],
-          terminologyResults: mockTerminologyResults,
-        });
+  expect(mockOnWorkflowComplete).toHaveBeenCalledWith({)
+  document: mockDocument,
+  analysis: mockAnalysis,
+  complianceResults: undefined,
+  citations: [mockCitation],
+  terminologyResults: mockTerminologyResults,
+});
       });
     });
     it('enables export button only when workflow is complete', async () => {
@@ -547,17 +547,17 @@ describe('LegalToolkit Component', () => {
     });
   });
   describe('Progress Calculation', () => {
-    it('calculates progress correctly based on completed steps', async () => {
-      const user = userEvent.setup();
-      render(<LegalToolkit />);
-      // Start with 0%
-      expect(screen.getByText('0%')).toBeInTheDocument();
-      // Upload document: 20%
-      const parseBtn = screen.getByTestId('parse-document-btn');
-      await user.click(parseBtn);
-      await waitFor(() => {
-        expect(screen.getByText('20%')).toBeInTheDocument();
-      });
+  it('calculates progress correctly based on completed steps', async () => {
+  const user = userEvent.setup();
+  render(<LegalToolkit />);
+  // Start with 0%
+  expect(screen.getByText('0%')).toBeInTheDocument();
+  // Upload document: 20%,
+  const parseBtn = screen.getByTestId('parse-document-btn');
+  await user.click(parseBtn);
+  await waitFor(() => {
+  expect(screen.getByText('20%')).toBeInTheDocument();
+});
       // Complete analysis: 40%
       const analysisBtn = screen.getByTestId('complete-analysis-btn');
       await user.click(analysisBtn);
@@ -608,13 +608,13 @@ describe('LegalToolkit Component', () => {
     });
   });
   describe('Responsive Design', () => {
-    it('renders correctly on mobile viewports', () => {
-      // Mock mobile viewport
-      Object.defineProperty(window, 'innerWidth', {)
-        writable: true,
-        configurable: true,
-        value: 500,
-      });
+  it('renders correctly on mobile viewports', () => {
+  // Mock mobile viewport
+  Object.defineProperty(window, 'innerWidth', {)
+  writable: true,
+  configurable: true,
+  value: 500,
+});
       render(<LegalToolkit />);
       expect(screen.getByText('Legal & Regulatory Toolkit')).toBeInTheDocument();
       expect(screen.getByText('Upload Document')).toBeInTheDocument();

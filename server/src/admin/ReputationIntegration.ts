@@ -20,6 +20,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface ReputationIntegrationConfig {
   enabled: boolean;
   enableRealtimeCalculation: boolean;
@@ -44,6 +45,7 @@ export interface ReputationIntegrationConfig {
     suddenDropThreshold: number;
     fraudRiskThreshold: number;
     disputeRateThreshold: number;
+}
   };
   
   // Badge Settings
@@ -96,6 +98,7 @@ export class ReputationIntegration {
    * Initialize reputation system integration
    */
   public async initialize(): Promise<void> {
+
     if (!this.config.enabled) {
       console.log('⏭️  Reputation system disabled in configuration');
       return;
@@ -219,6 +222,7 @@ export class ReputationIntegration {
    * Handle marketplace transaction event
    */
   private async handleMarketplaceTransaction(request: any, reply: any): Promise<any> {
+
     try {
       const { userId, transactionType, templateId, amount, status } = request.body;
       
@@ -257,6 +261,7 @@ export class ReputationIntegration {
    * Handle review submitted event
    */
   private async handleReviewSubmitted(request: any, reply: any): Promise<any> {
+
     try {
       const { reviewerId, templateId, templateCreatorId, rating, reviewQuality, verified } = request.body;
       
@@ -301,6 +306,7 @@ export class ReputationIntegration {
    * Handle payment completed event
    */
   private async handlePaymentCompleted(request: any, reply: any): Promise<any> {
+
     try {
       const { buyerId, sellerId, amount, paymentMethod, processingTime } = request.body;
       
@@ -332,6 +338,7 @@ export class ReputationIntegration {
    * Handle dispute created event
    */
   private async handleDisputeCreated(request: any, reply: any): Promise<any> {
+
     try {
       const { disputeId, buyerId, sellerId, reason, amount } = request.body;
       
@@ -367,6 +374,7 @@ export class ReputationIntegration {
    * Get public reputation data (limited info for display)
    */
   private async handleGetPublicReputation(request: any, reply: any): Promise<any> {
+
     try {
       const { userId } = request.params;
       
@@ -404,6 +412,7 @@ export class ReputationIntegration {
    * Get public badges for user
    */
   private async handleGetPublicBadges(request: any, reply: any): Promise<any> {
+
     try {
       const { userId } = request.params;
       
@@ -438,6 +447,7 @@ export class ReputationIntegration {
    * Get reputation integration status
    */
   public async getIntegrationStatus(): Promise<any> {
+
     const metrics = await this.reputationSystem.getReputationMetrics();
     
     return {
@@ -454,22 +464,21 @@ export class ReputationIntegration {
           reviewIntegration: this.config.integrateWithReviews ? 'active' : 'disabled',
           paymentIntegration: this.config.integrateWithPayments ? 'active' : 'disabled',
           fraudDetection: this.config.enableFraudDetection ? 'active' : 'disabled'
-        },
+  }
         lastUpdate: new Date()
-      },
+  }
       metrics: {
         totalUsers: metrics.totalUsers,
         averageTrustScore: metrics.trustTrends.averageTrustScore,
         verificationRate: metrics.verificationStats.verificationRate,
         highRiskUsers: metrics.riskAnalysis.highRiskUsers,
         fraudPrevented: metrics.riskAnalysis.fraudPrevented
-      },
+  }
       processing: {
         recalculationInterval: this.config.recalculationInterval,
         batchSize: this.config.batchSize,
         queueSize: await this.getRecalculationQueueSize(),
-        processingRate: await this.getProcessingRate()
-      },
+        processingRate: await this.getProcessingRate(},
       configuration: {
         realtimeCalculation: this.config.enableRealtimeCalculation,
         automatedBadges: this.config.enableAutomatedBadges,
@@ -483,6 +492,7 @@ export class ReputationIntegration {
    * Shutdown reputation integration
    */
   public async shutdown(): Promise<void> {
+
     console.log('⏹️  Shutting down Reputation System Integration...');
     
     // Stop periodic processing
@@ -508,6 +518,7 @@ export class ReputationIntegration {
    * Initialize reputation system
    */
   private async initializeReputationSystem(): Promise<void> {
+
     console.log('🏆 Initializing Reputation System...');
     
     this.reputationSystem = new ReputationSystem(
@@ -531,6 +542,7 @@ export class ReputationIntegration {
    * Initialize dashboard API
    */
   private async initializeDashboardAPI(): Promise<void> {
+
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Admin dashboard disabled in configuration');
       return;
@@ -553,6 +565,7 @@ export class ReputationIntegration {
    * Initialize verification display API
    */
   private async initializeVerificationDisplayAPI(): Promise<void> {
+
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Verification display API disabled (admin dashboard disabled)');
       return;
@@ -573,6 +586,7 @@ export class ReputationIntegration {
    * Initialize enforcement tools API
    */
   private async initializeEnforcementToolsAPI(): Promise<void> {
+
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Enforcement tools API disabled (admin dashboard disabled)');
       return;
@@ -601,6 +615,7 @@ export class ReputationIntegration {
    * Initialize refund processing API
    */
   private async initializeRefundProcessingAPI(): Promise<void> {
+
     if (!this.config.enableAdminDashboard) {
       console.log('⏭️  Refund processing API disabled (admin dashboard disabled)');
       return;
@@ -630,6 +645,7 @@ export class ReputationIntegration {
    * Setup marketplace integration
    */
   private async setupMarketplaceIntegration(): Promise<void> {
+
     console.log('🛒 Setting up marketplace integration...');
     
     // This would integrate with the existing marketplace system
@@ -642,6 +658,7 @@ export class ReputationIntegration {
    * Setup review system integration
    */
   private async setupReviewIntegration(): Promise<void> {
+
     console.log('⭐ Setting up review system integration...');
     
     // This would integrate with the existing review system
@@ -654,6 +671,7 @@ export class ReputationIntegration {
    * Setup payment integration
    */
   private async setupPaymentIntegration(): Promise<void> {
+
     console.log('💳 Setting up payment integration...');
     
     // This would integrate with the payment system
@@ -666,6 +684,7 @@ export class ReputationIntegration {
    * Setup real-time processing
    */
   private async setupRealtimeProcessing(): Promise<void> {
+
     console.log('⚡ Setting up real-time processing...');
     
     // Setup batch processing for reputation calculations
@@ -680,6 +699,7 @@ export class ReputationIntegration {
    * Setup automated badge awards
    */
   private async setupAutomatedBadges(): Promise<void> {
+
     console.log('🏅 Setting up automated badge awards...');
     
     // Setup periodic badge evaluation
@@ -694,6 +714,7 @@ export class ReputationIntegration {
    * Setup fraud detection
    */
   private async setupFraudDetection(): Promise<void> {
+
     console.log('🔍 Setting up fraud detection...');
     
     // Setup anomaly detection and fraud pattern monitoring
@@ -706,6 +727,7 @@ export class ReputationIntegration {
    * Setup integration monitoring
    */
   private async setupIntegrationMonitoring(): Promise<void> {
+
     console.log('📈 Setting up integration monitoring...');
     
     // Monitor integration health and performance
@@ -736,43 +758,52 @@ export class ReputationIntegration {
   // Helper methods for processing different events
 
   private async processTransactionImpact(userId: string, transaction: any): Promise<void> {
+
     // Process the impact of marketplace transactions on reputation
     // This would update transaction metrics and queue recalculation
   }
 
   private async processReviewImpact(userId: string, review: any): Promise<void> {
+
     // Process the impact of reviews on reputation
     // This would update review metrics and quality scores
   }
 
   private async processPaymentSuccess(buyerId: string, sellerId: string, payment: any): Promise<void> {
+
     // Process successful payment completion
     // This would update transaction reliability metrics
   }
 
   private async processDisputeImpact(buyerId: string, sellerId: string, dispute: any): Promise<void> {
+
     // Process dispute impact on reputation
     // This would update dispute rates and reliability scores
   }
 
   private async checkDisputeRateAlerts(userId: string): Promise<void> {
+
     // Check if user's dispute rate exceeds thresholds and create alerts
   }
 
   private async queueReputationRecalculation(userId: string, reason: string): Promise<void> {
+
     // Queue user for reputation recalculation
     // This would use Redis or database queue for batch processing
   }
 
   private async processBatchReputationCalculations(): Promise<void> {
+
     // Process queued reputation calculations in batches
   }
 
   private async evaluateAutomaticBadgeAwards(): Promise<void> {
+
     // Evaluate users for automatic badge awards
   }
 
   private async checkIntegrationHealth(): Promise<void> {
+
     // Monitor integration health and performance
   }
 
@@ -818,6 +849,7 @@ export async function createReputationIntegration(
     auditService: AuditService;
   }
 ): Promise<ReputationIntegration> {
+
   const integration = new ReputationIntegration(config, dependencies);
   await integration.initialize();
   return integration;

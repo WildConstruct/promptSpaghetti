@@ -7,6 +7,7 @@
 import React from 'react';
 import { Template } from './TemplatePreviewModal';
 import { EmbedCustomization, PreviewSize } from './EmbeddedTemplatePreview';
+
 export interface EmbedCustomizationInterfaceProps {
     template: Template;
     initialCustomization?: EmbedCustomization;
@@ -17,7 +18,7 @@ export interface EmbedCustomizationInterfaceProps {
     onExport: (customization: EmbedCustomization, format: 'iframe' | 'javascript' | 'react') => string;
     className?: string;
     presets?: EmbedPreset[];
-}
+
 export interface EmbedPreset {
     id: string;
     name: string;
@@ -26,7 +27,7 @@ export interface EmbedPreset {
     category: 'social' | 'blog' | 'portfolio' | 'ecommerce' | 'documentation' | 'custom';
     customization: EmbedCustomization;
     popular: boolean;
-}
+
 export interface EmbedWidget {
     id: string;
     type: 'header' | 'preview' | 'metadata' | 'actions' | 'stats' | 'comments' | 'author' | 'footer';
@@ -45,14 +46,14 @@ export interface EmbedWidget {
     };
     visible: boolean;
     config: Record<string, any>;
-}
+
 export interface CustomFont {
     family: string;
     category: 'serif' | 'sans-serif' | 'monospace' | 'display' | 'handwriting';
     weights: number[];
     url?: string;
     provider: 'google' | 'adobe' | 'custom';
-}
+
 export interface CustomTheme {
     id: string;
     name: string;
@@ -89,7 +90,7 @@ export interface CustomTheme {
         medium: string;
         large: string;
     };
-}
+
 export declare const PresetSelector: React.FC<{
     presets: EmbedPreset[];
     selectedPreset?: string;

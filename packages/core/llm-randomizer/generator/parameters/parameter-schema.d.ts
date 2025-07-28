@@ -257,7 +257,6 @@ export declare class ParameterValidator {
      * Suggest focus areas based on domain
      */
     private static suggestFocusAreas;
-}
 /**
  * Default parameter presets
  */

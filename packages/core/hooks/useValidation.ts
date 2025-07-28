@@ -2,32 +2,29 @@ import { useState, useCallback, useEffect } from 'react';
 import { Edge, Node } from 'reactflow';
 import { ValidationError, validateConnection } from '../validation';
 interface UseValidationReturn {
-  errors: ValidationError[];
-  styledEdges: Edge[];
-  styledNodes: Node[];
-  runValidation: (edges: Edge[], nodes: Node[]) => void;
-}
-interface UseValidationProps {
-  edges: Edge[];
-  nodes: Node[];
+  errors: ValidationError;,
+  styledEdges: Edge;
+  styledNodes: Node;,
+  runValidation: (edges: Edge, nodes: Node) => void;
+  interface UseValidationProps {
+  edges: Edge;,
+  nodes: Node;
   highlightNodeIds?: Set<string>;
   highlightEdgeIds?: Set<string>;
-  validateConnection?: (edges: Edge[], nodes: Node[]) => ValidationError[];
-}
-
-export const useValidation = ({)
+  validateConnection?: (edges: Edge, nodes: Node) => ValidationError;
+  export const useValidation = ({)
   edges,
   nodes,
   highlightNodeIds = new Set(),
   highlightEdgeIds = new Set(),
   validateConnection: customValidateConnection = validateConnection,
 }: UseValidationProps): UseValidationReturn => {
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<ValidationError>([]);
   const runValidation = useCallback(;);
-    (edgesToValidate: Edge[], nodesToValidate: Node[]) => {
-      const errs = customValidateConnection(edgesToValidate, nodesToValidate);
-      setErrors(errs);
-    },
+  (edgesToValidate: Edge, nodesToValidate: Node) => {,
+  const errs = customValidateConnection(edgesToValidate, nodesToValidate);
+  setErrors(errs);
+}
     [customValidateConnection]
   );
   // Apply highlight styles to nodes

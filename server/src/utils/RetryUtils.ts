@@ -6,6 +6,7 @@
  * comprehensive error handling for robust system operations.
  */
 
+}
 export interface RetryOptions {
   maxAttempts?: number;
   baseDelay?: number;
@@ -17,7 +18,9 @@ export interface RetryOptions {
   onSuccess?: <T>(attempt: number, result: T) => void;
   onFailure?: (attempts: number, finalError: Error) => void;
 }
+}
 
+}
 export interface RetryResult<T> {
   success: boolean;
   result?: T;
@@ -27,6 +30,7 @@ export interface RetryResult<T> {
   retryHistory: RetryAttempt[];
 }
 
+}
 export interface RetryAttempt {
   attempt: number;
   startTime: number;
@@ -34,6 +38,7 @@ export interface RetryAttempt {
   success: boolean;
   error?: Error;
   delay?: number;
+}
 }
 
 export class RetryError extends Error {
@@ -68,6 +73,7 @@ export class RetryUtils {
     operation: () => Promise<T>,
     options: RetryOptions = {}
   ): Promise<T> {
+
     const config = { ...this.DEFAULT_OPTIONS, ...options };
     const retryHistory: RetryAttempt[] = [];
     const startTime = Date.now();
@@ -191,6 +197,7 @@ export class RetryUtils {
     operation: () => Promise<T>,
     options: Partial<RetryOptions> = {}
   ): Promise<T> {
+
     const dbOptions: RetryOptions = {
       maxAttempts: 3,
       baseDelay: 500,
@@ -219,6 +226,7 @@ export class RetryUtils {
     operation: () => Promise<T>,
     options: Partial<RetryOptions> = {}
   ): Promise<T> {
+
     const httpOptions: RetryOptions = {
       maxAttempts: 3,
       baseDelay: 1000,
@@ -248,6 +256,7 @@ export class RetryUtils {
     circuitBreakerKey: string,
     options: RetryOptions = {}
   ): Promise<T> {
+
     const circuitState = this.getCircuitState(circuitBreakerKey);
     
     if (circuitState.isOpen()) {
@@ -260,7 +269,7 @@ export class RetryUtils {
         onFailure: (attempts, error) => {
           circuitState.recordFailure();
           options.onFailure?.(attempts, error);
-        },
+  }
         onSuccess: (attempt, result) => {
           circuitState.recordSuccess();
           options.onSuccess?.(attempt, result);
@@ -327,6 +336,7 @@ export class RetryUtils {
    * Sleep for specified milliseconds
    */
   private static sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -457,6 +467,7 @@ export class RetryPatterns {
    * Retry pattern for file operations
    */
   static async fileOperation<T>(operation: () => Promise<T>): Promise<T> {
+
     return RetryUtils.execute(operation, {
       maxAttempts: 3,
       baseDelay: 100,
@@ -476,6 +487,7 @@ export class RetryPatterns {
    * Retry pattern for external API calls
    */
   static async apiCall<T>(operation: () => Promise<T>, serviceName?: string): Promise<T> {
+
     return RetryUtils.execute(operation, {
       maxAttempts: 4,
       baseDelay: 1000,
@@ -493,6 +505,7 @@ export class RetryPatterns {
    * Retry pattern for log analysis operations
    */
   static async logAnalysis<T>(operation: () => Promise<T>): Promise<T> {
+
     return RetryUtils.execute(operation, {
       maxAttempts: 3,
       baseDelay: 2000,

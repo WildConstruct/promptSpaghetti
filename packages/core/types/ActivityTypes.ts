@@ -25,49 +25,47 @@ export type ActivityEventType =
 export interface ActivityEvent {
   id: string;
   workspace_id?: string;
-  project_id?: string;  
+  project_id?: string;
   resource_id?: string;
   actor_id: string;
   actor_name?: string;
-  type: ActivityEventType;
+  type: ActivityEventType;,
   description: string;
   details?: string | Record<string, any>;
-  metadata?: {
-    project_name?: string;
-    resource_name?: string;
-    resource_type?: string;
-    old_value?: any;
-    new_value?: any;
-    [key: string]: any;
-  };
+  metadata?: {,
+  project_name?: string;
+  resource_name?: string;
+  resource_type?: string;
+  old_value?: any;
+  new_value?: any;
+  [key: string]: any;
+};
   resource_url?: string;
   aggregation_key?: string;
   created_at: string;
 }
-
 export interface ActivityStats {
-  total: number;
+  total: number;,
   by_type: Record<ActivityEventType, number>;
+
   by_actor: Record<string, { name: string; count: number }>;
   recent_activity: {,
-    today: number;
-    this_week: number;
-    this_month: number;
-  };
+  today: number;
+  this_week: number;,
+  this_month: number;
+};
   trends: {,
-    daily: Array<{ date: string; count: number }>;
+  daily: Array<{ date: string; count: number }>;
     hourly: Array<{ hour: number; count: number }>;
   };
 }
-
 export interface ActivityActor {
-  id: string;
+  id: string;,
   name: string;
   avatar_url?: string;
-  activity_count: number;
+  activity_count: number;,
   last_activity: string;
 }
-
 export interface ActivityFilter {
   search?: string;
   type?: ActivityEventType;
@@ -77,44 +75,39 @@ export interface ActivityFilter {
   project_id?: string;
   resource_id?: string;
 }
-
 export interface ActivityListResponse {
-  activities: ActivityEvent[];
+  activities: ActivityEvent;,
   total: number;
   has_more: boolean;
   next_cursor?: string;
   stats?: ActivityStats;
-  actors?: ActivityActor[];
+  actors?: ActivityActor;
 }
-
 export interface ActivityEventCreateRequest {
   workspace_id?: string;
   project_id?: string;
   resource_id?: string;
-  actor_id: string;
+  actor_id: string;,
   type: ActivityEventType;
   description: string;
   details?: string | Record<string, any>;
   metadata?: Record<string, any>;
   resource_url?: string;
   aggregation_key?: string;
+  // Real-time activity connection types
 }
-
-// Real-time activity connection types
 export interface ActivityRealTimeConnection {
   status: 'connected' | 'connecting' | 'disconnected' | 'error';
   lastConnected?: Date;
   reconnectAttempts: number;
   error?: string;
 }
-
 export interface ActivityRealTimeEvent {
-  type: 'activity_created' | 'activity_updated' | 'activity_deleted';
+  type: 'activity_created' | 'activity_updated' | 'activity_deleted';,
   activity: ActivityEvent;
   timestamp: string;
+  // Hook return types
 }
-
-// Hook return types
 export interface UseActivityFeedOptions {
   workspaceId?: string;
   projectId?: string;
@@ -126,17 +119,16 @@ export interface UseActivityFeedOptions {
   realTime?: boolean;
   limit?: number;
 }
-
 export interface UseActivityFeedReturn {
-  activities: ActivityEvent[];
+  activities: ActivityEvent;,
   loading: boolean;
-  error: Error | null;
+  error: Error | null;,
   hasMore: boolean;
-  stats: ActivityStats | null;
-  actors: ActivityActor[] | null;
+  stats: ActivityStats | null;,
+  actors: ActivityActor | null;
   realTimeConnection: ActivityRealTimeConnection | null;
   // Actions
-  refreshActivities: () => Promise<void>;
+  refreshActivities: () => Promise<void>;,
   loadMore: () => Promise<void>;
   createActivity: (activity: ActivityEventCreateRequest) => Promise<void>;
 }

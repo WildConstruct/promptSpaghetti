@@ -29,6 +29,7 @@ import {
 // Service Types
 // =============================================================================
 
+}
 export interface AttributionServiceConfig {
   database: Database;
   enableRealTimeUpdates?: boolean;
@@ -36,7 +37,9 @@ export interface AttributionServiceConfig {
   autoVerificationThreshold?: number;
   revenueHoldDays?: number;
 }
+}
 
+}
 export interface TemplateAttributionCreateResult {
   success: boolean;
   attributionId?: string;
@@ -44,7 +47,9 @@ export interface TemplateAttributionCreateResult {
   warnings?: string[];
   errors?: string[];
 }
+}
 
+}
 export interface AttributionClaimResult {
   success: boolean;
   claimId?: string;
@@ -52,7 +57,9 @@ export interface AttributionClaimResult {
   requiresEvidence?: boolean;
   errors?: string[];
 }
+}
 
+}
 export interface RevenueDistributionResult {
   success: boolean;
   distributionId?: string;
@@ -61,6 +68,7 @@ export interface RevenueDistributionResult {
   holdAmount: number;
   immediateRelease: number;
   errors?: string[];
+}
 }
 
 // =============================================================================
@@ -94,6 +102,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   // =============================================================================
 
   async createTemplateAttribution(request: CreateTemplateAttributionRequest): Promise<TemplateAttributionCreateResult> {
+
     try {
       // Validate request
       const validatedRequest = validateCreateTemplateAttributionRequest(request);
@@ -191,6 +200,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   async getTemplateAttribution(templateId: string): Promise<TemplateAttribution | null> {
+
     try {
       const query = `
         SELECT 
@@ -206,7 +216,7 @@ export class MarketplaceAttributionService extends EventEmitter {
                 'contributionDescription', tc.contribution_description,
                 'joinedAt', tc.joined_at,
                 'verifiedAt', tc.verified_at
-              )
+
             END
           ) FILTER (WHERE tc.id IS NOT NULL) as collaborators,
           json_build_object(
@@ -260,6 +270,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   async getTemplateAttributionResponse(templateId: string): Promise<TemplateAttributionResponse | null> {
+
     try {
       const attribution = await this.getTemplateAttribution(templateId);
       if (!attribution) {
@@ -294,6 +305,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     buyerId: string,
     templateVersion: string
   ): Promise<RevenueDistributionResult> {
+
     try {
       // Check if revenue attribution already exists
       const existingQuery = 'SELECT id FROM revenue_attributions WHERE purchase_id = $1';
@@ -386,6 +398,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     claimantId: string,
     request: CreateAttributionClaimRequest
   ): Promise<AttributionClaimResult> {
+
     try {
       const validatedRequest = validateCreateAttributionClaimRequest(request);
 
@@ -474,6 +487,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   // =============================================================================
 
   async getCreatorDashboard(userId: string): Promise<CreatorDashboardResponse | null> {
+
     try {
       // Get creator profile
       const profile = await this.getCreatorProfile(userId);
@@ -516,7 +530,7 @@ export class MarketplaceAttributionService extends EventEmitter {
           total: parseInt(row.total_revenue) || 0,
           pending: parseInt(row.pending_revenue) || 0,
           released: parseInt(row.released_revenue) || 0
-        },
+  }
         performance: {
           views: parseInt(row.total_views) || 0,
           purchases: parseInt(row.total_purchases) || 0,
@@ -571,6 +585,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   async getCreatorProfile(userId: string): Promise<CreatorAttributionProfile | null> {
+
     try {
       const query = 'SELECT * FROM creator_attribution_profiles WHERE user_id = $1';
       const result = await this.database.query(query, [userId]);
@@ -615,6 +630,7 @@ export class MarketplaceAttributionService extends EventEmitter {
     request: CreateTemplateAttributionRequest,
     primaryCreatorShare: number
   ): Promise<string> {
+
     const user = await this.getUserInfo(request.primaryCreatorId);
     
     const insertQuery = `
@@ -650,6 +666,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async addCollaborators(attributionId: string, collaborators: unknown[]): Promise<void> {
+
     for (const collaborator of collaborators) {
       const user = await this.getUserInfo(collaborator.userId);
       
@@ -673,6 +690,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async createDerivationRecord(templateId: string, derivedFrom: unknown): Promise<void> {
+
     const insertQuery = `
       INSERT INTO template_derivations (
         derived_template_id, original_template_id, original_creator_id,
@@ -695,6 +713,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async updateCreatorProfile(userId: string): Promise<void> {
+
     const user = await this.getUserInfo(userId);
     
     const upsertQuery = `
@@ -710,6 +729,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async getUserInfo(userId: string): Promise<{ name: string; email: string }> {
+
     const query = 'SELECT name, email FROM users WHERE id = $1';
     const result = await this.database.query(query, [userId]);
     
@@ -724,11 +744,13 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async getRelatedTemplates(_____templateId: string): Promise<any[]> {
+
     // Implementation would return related templates (derivatives, similar, etc.)
     return [];
   }
 
   private async getTemplateRevenueStatistics(templateId: string): Promise<unknown> {
+
     const query = `
       SELECT 
         COALESCE(SUM(ra.total_revenue_cents), 0) as total_revenue,
@@ -762,6 +784,7 @@ export class MarketplaceAttributionService extends EventEmitter {
   }
 
   private async flushAnalytics(): Promise<void> {
+
     if (this.analyticsBuffer.length === 0) return;
 
     try {

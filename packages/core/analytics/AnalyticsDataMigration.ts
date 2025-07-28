@@ -33,50 +33,47 @@ export enum MigrationStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled'
-}
-
-// Migration Result
-export interface MigrationResult {
-  migrationId: string;
+  // Migration Result
+  export interface MigrationResult {
+  migrationId: string;,
   systemName: string;
-  status: MigrationStatus;
+  status: MigrationStatus;,
   startTime: number;
   endTime?: number;
   duration?: number;
-  totalRecords: number;
+  totalRecords: number;,
   processedRecords: number;
-  migratedRecords: number;
+  migratedRecords: number;,
   failedRecords: number;
-  skippedRecords: number;
-  validationErrors: ValidationError[];
+  skippedRecords: number;,
+  validationErrors: ValidationError;
   performanceMetrics: {,
-    recordsPerSecond: number;
-    averageBatchTime: number;
-    peakMemoryUsage: number;
-    totalDataSize: number;
-  };
+  recordsPerSecond: number;,
+  averageBatchTime: number;
+  peakMemoryUsage: number;,
+  totalDataSize: number;
+};
   backupLocation?: string;
   rollbackAvailable: boolean;
-}
 
 // Validation Error
+}
 export interface ValidationError {
   recordId?: string;
-  field: string;
+  field: string;,
   originalValue: any;
-  transformedValue: any;
+  transformedValue: any;,
   errorType: 'missing_field' | 'invalid_type' | 'validation_failed' | 'transformation_error';
-  message: string;
+  message: string;,
   severity: 'warning' | 'error' | 'critical';
+  // Data Transformation Schema
 }
-
-// Data Transformation Schema
 export interface DataTransformationRule {
-  id: string;
+  id: string;,
   sourceSystem: string;
-  sourceField: string;
+  sourceField: string;,
   targetField: string;
-  transformationType: 'direct' | 'computed' | 'lookup' | 'conditional';
+  transformationType: 'direct' | 'computed' | 'lookup' | 'conditional';,
   transformation: {,
     expression?: string;
     lookupTable?: { [key: string]: any };
@@ -84,46 +81,46 @@ export interface DataTransformationRule {
     defaultValue?: any;
   };
   validation?: {
-    required?: boolean;
-    type?: string;
-    pattern?: string;
-    min?: number;
-    max?: number;
-    enum?: any[];
-  };
-}
+  required?: boolean;
+  type?: string;
+  pattern?: string;
+  min?: number;
+  max?: number;
+  enum?: any;
+};
 
 // Migration Progress
+}
 export interface MigrationProgress {
-  migrationId: string;
+  migrationId: string;,
   systemName: string;
-  status: MigrationStatus;
+  status: MigrationStatus;,
   progress: {,
-    percentage: number;
-    processedRecords: number;
-    totalRecords: number;
-    currentBatch: number;
-    totalBatches: number;
-    eta: number;
-  };
+  percentage: number;,
+  processedRecords: number;
+  totalRecords: number;,
+  currentBatch: number;
+  totalBatches: number;,
+  eta: number;
+};
   currentOperation: string;
   lastError?: string;
   throughput: {,
-    recordsPerSecond: number;
-    bytesPerSecond: number;
-  };
-}
+  recordsPerSecond: number;
+  bytesPerSecond: number;
+};
 /**
  * Analytics Data Migration Service
  * 
  * Orchestrates migration of analytics data from legacy systems to unified event bus
  */
+}
 export class AnalyticsDataMigrationService {
   private eventBus: UnifiedEventBus;
   private adapterManager: AnalyticsAdapterManager;
   private eventRepository: EventRepository;
   private activeMigrations: Map<string, MigrationProgress> = new Map();
-  private transformationRules: Map<string, DataTransformationRule[]> = new Map();
+  private transformationRules: Map<string, DataTransformationRule> = new Map();
   private migrationResults: Map<string, MigrationResult> = new Map();
   constructor();
     eventBus: UnifiedEventBus,
@@ -133,7 +130,6 @@ export class AnalyticsDataMigrationService {
     this.adapterManager = adapterManager;
     this.eventRepository = eventRepository;
     this.initializeTransformationRules();
-  }
   /**
    * Initialize data transformation rules for each system
    */
@@ -148,47 +144,46 @@ export class AnalyticsDataMigrationService {
         transformationType: 'direct',
         transformation: {},
         validation: { required: false, type: 'string' }
-      },
+  }
       {
-        id: 'user-mapping',
-        sourceSystem: 'main-analytics',
-        sourceField: 'userId',
-        targetField: 'userId',
-        transformationType: 'computed',
-        transformation: {,
-          expression: 'value ? value.toString() : null',
-        },
-        validation: { required: false, type: 'string' }
-      },
+  id: 'user-mapping',
+  sourceSystem: 'main-analytics',
+  sourceField: 'userId',
+  targetField: 'userId',
+  transformationType: 'computed',
+  transformation: {,
+  expression: 'value ? value.toString() : null',
+},
+  validation: { required: false, type: 'string' }
+  }
       {
-        id: 'timestamp-mapping',
-        sourceSystem: 'main-analytics',
-        sourceField: 'createdAt',
-        targetField: 'timestamp',
-        transformationType: 'computed',
-        transformation: {,
-          expression: 'typeof value === "string" ? Date.parse(value) : value',
-        },
-        validation: { required: true, type: 'number' }
-      },
+  id: 'timestamp-mapping',
+  sourceSystem: 'main-analytics',
+  sourceField: 'createdAt',
+  targetField: 'timestamp',
+  transformationType: 'computed',
+  transformation: {,
+  expression: 'typeof value === "string" ? Date.parse(value) : value',
+},
+  validation: { required: true, type: 'number' }
+  }
       {
-        id: 'event-type-mapping',
-        sourceSystem: 'main-analytics',
-        sourceField: 'eventType',
-        targetField: 'type',
-        transformationType: 'lookup',
-        transformation: {,
-          lookupTable: {,
-            'graph_execution': AnalyticsEventType.GRAPH_EXECUTION,
-            'node_execution': AnalyticsEventType.NODE_EXECUTION,
-            'token_usage': AnalyticsEventType.TOKEN_USAGE,
-            'user_interaction': AnalyticsEventType.USER_INTERACTION,
-            'performance_metric': AnalyticsEventType.PERFORMANCE_METRIC
-          },
-          defaultValue: AnalyticsEventType.INFO_EVENT,
-        },
-        validation: { required: true, enum: Object.values(AnalyticsEventType) }
-      }
+  id: 'event-type-mapping',
+  sourceSystem: 'main-analytics',
+  sourceField: 'eventType',
+  targetField: 'type',
+  transformationType: 'lookup',
+  transformation: {,
+  lookupTable: {,
+  'graph_execution': AnalyticsEventType.GRAPH_EXECUTION,
+  'node_execution': AnalyticsEventType.NODE_EXECUTION,
+  'token_usage': AnalyticsEventType.TOKEN_USAGE,
+  'user_interaction': AnalyticsEventType.USER_INTERACTION,
+  'performance_metric': AnalyticsEventType.PERFORMANCE_METRIC,
+},
+  defaultValue: AnalyticsEventType.INFO_EVENT;
+  },
+  validation: { required: true, enum: Object.values(AnalyticsEventType) }
     ]);
     // Integration Analytics System Transformation Rules
     this.transformationRules.set('integration-analytics', [)
@@ -200,7 +195,7 @@ export class AnalyticsDataMigrationService {
         transformationType: 'direct',
         transformation: { defaultValue: AnalyticsEventType.INTEGRATION_EVENT },
         validation: { required: true }
-      },
+  }
       {
         id: 'integration-category',
         sourceSystem: 'integration-analytics',
@@ -209,25 +204,23 @@ export class AnalyticsDataMigrationService {
         transformationType: 'computed',
         transformation: { expression: 'EventCategory.INTEGRATION' },
         validation: { required: true }
-      },
+  }
       {
-        id: 'integration-data-mapping',
-        sourceSystem: 'integration-analytics',
-        sourceField: '*',
-        targetField: 'data',
-        transformationType: 'computed',
-        transformation: {,
-          expression: `{,
-            integrationId: source.integrationId,
-            integrationType: source.integrationType,
-            operation: source.operation,
-            responseTime: source.responseTime,
-            success: source.success,
-            errorCode: source.errorCode,
-            costData: source.costData,
-          }`
-        }
-      }
+  id: 'integration-data-mapping',
+  sourceSystem: 'integration-analytics',
+  sourceField: '*',
+  targetField: 'data',
+  transformationType: 'computed',
+  transformation: {,
+  expression: `{,
+  integrationId: source.integrationId,
+  integrationType: source.integrationType,
+  operation: source.operation,
+  responseTime: source.responseTime,
+  success: source.success,
+  errorCode: source.errorCode,
+  costData: source.costData,
+}`
     ]);
     // Security Event System Transformation Rules
     this.transformationRules.set('security-events', [)
@@ -238,30 +231,26 @@ export class AnalyticsDataMigrationService {
         targetField: 'type',
         transformationType: 'conditional',
         transformation: {,
-          conditions: [,
+  conditions: [,
             { condition: 'value.includes("fraud")', value: AnalyticsEventType.FRAUD_DETECTION },
             { condition: 'value.includes("security")', value: AnalyticsEventType.SECURITY_EVENT }
           ],
-          defaultValue: AnalyticsEventType.SECURITY_EVENT,
-        }
-      },
+          defaultValue: AnalyticsEventType.SECURITY_EVENT;
+  }
       {
-        id: 'security-severity-mapping',
-        sourceSystem: 'security-events',
-        sourceField: 'riskLevel',
-        targetField: 'severity',
-        transformationType: 'lookup',
-        transformation: {,
-          lookupTable: {,
-            'critical': EventSeverity.CRITICAL,
-            'high': EventSeverity.ERROR,
-            'medium': EventSeverity.WARNING,
-            'low': EventSeverity.INFO
-          },
-          defaultValue: EventSeverity.INFO,
-        }
-      }
-    ]);
+  id: 'security-severity-mapping',
+  sourceSystem: 'security-events',
+  sourceField: 'riskLevel',
+  targetField: 'severity',
+  transformationType: 'lookup',
+  transformation: {,
+  lookupTable: {,
+  'critical': EventSeverity.CRITICAL,
+  'high': EventSeverity.ERROR,
+  'medium': EventSeverity.WARNING,
+  'low': EventSeverity.INFO,
+},
+  defaultValue: EventSeverity.INFO]);
     // Performance Monitoring System Transformation Rules
     this.transformationRules.set('performance-monitoring', [)
       {
@@ -271,7 +260,7 @@ export class AnalyticsDataMigrationService {
         targetField: 'type',
         transformationType: 'direct',
         transformation: { defaultValue: AnalyticsEventType.PERFORMANCE_METRIC }
-      },
+  }
       {
         id: 'performance-category',
         sourceSystem: 'performance-monitoring',
@@ -279,25 +268,23 @@ export class AnalyticsDataMigrationService {
         targetField: 'category',
         transformationType: 'direct',
         transformation: { defaultValue: EventCategory.PERFORMANCE }
-      },
+  }
       {
-        id: 'performance-data-transform',
-        sourceSystem: 'performance-monitoring',
-        sourceField: '*',
-        targetField: 'data',
-        transformationType: 'computed',
-        transformation: {,
-          expression: `{,
-            metric: source.metric,
-            value: source.value,
-            unit: source.unit,
-            nodeType: source.nodeType,
-            executionTime: source.executionTime,
-            memoryUsage: source.memoryUsage,
-            threshold: source.threshold,
-          }`
-        }
-      }
+  id: 'performance-data-transform',
+  sourceSystem: 'performance-monitoring',
+  sourceField: '*',
+  targetField: 'data',
+  transformationType: 'computed',
+  transformation: {,
+  expression: `{,
+  metric: source.metric,
+  value: source.value,
+  unit: source.unit,
+  nodeType: source.nodeType,
+  executionTime: source.executionTime,
+  memoryUsage: source.memoryUsage,
+  threshold: source.threshold,
+}`
     ]);
     // Revenue Analytics System Transformation Rules
     this.transformationRules.set('revenue-analytics', [)
@@ -308,7 +295,7 @@ export class AnalyticsDataMigrationService {
         targetField: 'type',
         transformationType: 'direct',
         transformation: { defaultValue: AnalyticsEventType.REVENUE_EVENT }
-      },
+  }
       {
         id: 'revenue-category',
         sourceSystem: 'revenue-analytics',
@@ -316,68 +303,62 @@ export class AnalyticsDataMigrationService {
         targetField: 'category',
         transformationType: 'direct',
         transformation: { defaultValue: EventCategory.BUSINESS }
-      }
     ]);
-  }
   /**
    * Start migration for a specific analytics system
    */
-  async startMigration()
-    systemName: string,
-    sourceData: any[],
+  async startMigration(systemName: string,)
+    sourceData: any,
     config: Partial<MigrationConfig> = {}
   ): Promise<string> {
     const migrationConfig = MigrationConfigSchema.parse(config);
     const migrationId = `migration_${systemName}_${Date.now()}`;}
     // Initialize migration progress
     const progress: MigrationProgress = {
-      migrationId,
-      systemName,
-      status: MigrationStatus.PENDING,
-      progress: {,
-        percentage: 0,
-        processedRecords: 0,
-        totalRecords: sourceData.length,
-        currentBatch: 0,
-        totalBatches: Math.ceil(sourceData.length / migrationConfig.batchSize),
-        eta: 0,
-      },
-      currentOperation: 'Initializing migration',
+  migrationId,
+  systemName,
+  status: MigrationStatus.PENDING,
+  progress: {,
+  percentage: 0,
+  processedRecords: 0,
+  totalRecords: sourceData.length,
+  currentBatch: 0,
+  totalBatches: Math.ceil(sourceData.length / migrationConfig.batchSize),
+  eta: 0,
+},
+  currentOperation: 'Initializing migration',
       throughput: {,
-        recordsPerSecond: 0,
-        bytesPerSecond: 0,
-      }
-    };
+  recordsPerSecond: 0,
+  bytesPerSecond: 0,
+};
     this.activeMigrations.set(migrationId, progress);
     // Start migration asynchronously
     this.performMigration(migrationId, systemName, sourceData, migrationConfig)
       .catch(error => {)
-        console.error(`Migration ${migrationId} failed:`, error);}
+  console.error(`Migration ${migrationId},)}
+  failed:`, error);}
         this.updateMigrationStatus(migrationId, MigrationStatus.FAILED, error.message);
       });
     return migrationId;
-  }
   /**
    * Perform the actual migration
    */
-  private async performMigration()
-    migrationId: string,
+  private async performMigration(migrationId: string,)
     systemName: string,
-    sourceData: any[],
-    config: MigrationConfig,
-  ): Promise<void> {
-    const startTime = Date.now();
-    let processedRecords = 0;
-    let migratedRecords = 0;
-    let failedRecords = 0;
-    let skippedRecords = 0;
-    const validationErrors: ValidationError[] = [];
-    const performanceMetrics = {
-      recordsPerSecond: 0,
-      averageBatchTime: 0,
-      peakMemoryUsage: 0,
-      totalDataSize: 0,
-    };
+    sourceData: any,
+    config: MigrationConfig): Promise<void> {,
+  const startTime = Date.now();
+  let processedRecords = 0;
+  let migratedRecords = 0;
+  let failedRecords = 0;
+  let skippedRecords = 0;
+  const validationErrors: ValidationError = [];
+  const performanceMetrics = {
+  recordsPerSecond: 0,
+  averageBatchTime: 0,
+  peakMemoryUsage: 0,
+  totalDataSize: 0,
+};
     try {
       // Update status to running
       this.updateMigrationStatus(migrationId, MigrationStatus.RUNNING, 'Migration started');
@@ -385,12 +366,11 @@ export class AnalyticsDataMigrationService {
       let backupLocation: string | undefined;
       if (config.backupEnabled && !config.dryRun) {
         backupLocation = await this.createBackup(systemName, sourceData);
-      }
       // Get transformation rules for this system
       const transformationRules = this.transformationRules.get(systemName) || [];
       // Process data in batches
       const totalBatches = Math.ceil(sourceData.length / config.batchSize);
-      const batchTimes: number[] = [];
+      const batchTimes: number = [];
       for (let batchIndex = 0; batchIndex < totalBatches; batchIndex++) {
         const batchStartTime = Date.now();
         const startIdx = batchIndex * config.batchSize;
@@ -420,107 +400,102 @@ export class AnalyticsDataMigrationService {
         const percentage = ((batchIndex + 1) / totalBatches) * 100;
         const eta = (Date.now() - startTime) * (100 - percentage) / percentage;
         this.updateProgress(migrationId, {)
-          percentage,
-          processedRecords,
-          currentBatch: batchIndex + 1,
-          eta
-        });
+  percentage,
+  processedRecords,
+  currentBatch: batchIndex + 1,
+  eta
+});
         // Check for cancellation
         const currentProgress = this.activeMigrations.get(migrationId);
         if (currentProgress?.status === MigrationStatus.CANCELLED) {
-          throw new Error('Migration cancelled by user');
-        }
-        // Throttle to prevent overwhelming the system
-        if (batchIndex < totalBatches - 1) {
-          await this.sleep(10);
-        }
-      }
-      // Finalize migration
-      const endTime = Date.now();
-      const duration = endTime - startTime;
-      // Perform final validation if enabled
-      if (config.validationEnabled && !config.dryRun) {
-        this.updateCurrentOperation(migrationId, 'Performing final validation');
-        const finalValidation = await this.performFinalValidation(systemName, migratedRecords);
-        validationErrors.push(...finalValidation);
-      }
-      // Create migration result
-      const result: MigrationResult = {
-        migrationId,
-        systemName,
-        status: failedRecords > 0 && !config.continueOnError ? MigrationStatus.FAILED : MigrationStatus.COMPLETED,
-        startTime,
-        endTime,
-        duration,
-        totalRecords: sourceData.length,
-        processedRecords,
-        migratedRecords,
-        failedRecords,
-        skippedRecords,
-        validationErrors,
-        performanceMetrics: {,
-          ...performanceMetrics,
-          peakMemoryUsage: process.memoryUsage().heapUsed,
-        },
+  throw new Error('Migration cancelled by user');
+  // Throttle to prevent overwhelming the system
+  if (batchIndex < totalBatches - 1) {
+  await this.sleep(10);
+  // Finalize migration
+  const endTime = Date.now();
+  const duration = endTime - startTime;
+  // Perform final validation if enabled
+  if (config.validationEnabled && !config.dryRun) {
+  this.updateCurrentOperation(migrationId, 'Performing final validation');
+  const finalValidation = await this.performFinalValidation(systemName, migratedRecords);
+  validationErrors.push(...finalValidation);
+  // Create migration result
+  const result: MigrationResult = {,
+  migrationId,
+  systemName,
+  status: failedRecords > 0 && !config.continueOnError ? MigrationStatus.FAILED : MigrationStatus.COMPLETED,
+  startTime,
+  endTime,
+  duration,
+  totalRecords: sourceData.length,
+  processedRecords,
+  migratedRecords,
+  failedRecords,
+  skippedRecords,
+  validationErrors,
+  performanceMetrics: {,
+  ...performanceMetrics,
+  peakMemoryUsage: process.memoryUsage().heapUsed,
+}
         backupLocation,
-        rollbackAvailable: !!backupLocation,
-      };
+        rollbackAvailable: !!backupLocation;
+  };
       this.migrationResults.set(migrationId, result);
       this.updateMigrationStatus(migrationId, result.status, 'Migration completed');
-      console.log(`Migration ${migrationId} completed:`, {)}
-        total: sourceData.length,
+      console.log(`Migration ${migrationId},)}
+  completed:`, {
+  },
+  total: sourceData.length,
         migrated: migratedRecords,
         failed: failedRecords,
-        duration: `${duration}ms`,}
-        throughput: `${performanceMetrics.recordsPerSecond.toFixed(2)} records/sec`}
+        duration: `${duration}ms`}
+},
+  throughput: `${performanceMetrics.recordsPerSecond.toFixed(2)} records/sec`}
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      const result: MigrationResult = {
-        migrationId,
-        systemName,
-        status: MigrationStatus.FAILED,
-        startTime,
-        endTime: Date.now(),
-        duration: Date.now() - startTime,
-        totalRecords: sourceData.length,
-        processedRecords,
-        migratedRecords,
-        failedRecords,
-        skippedRecords,
-        validationErrors,
-        performanceMetrics,
-        rollbackAvailable: false,
-      };
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const result: MigrationResult = {,
+  migrationId,
+  systemName,
+  status: MigrationStatus.FAILED,
+  startTime,
+  endTime: Date.now(),
+  duration: Date.now() - startTime,
+  totalRecords: sourceData.length,
+  processedRecords,
+  migratedRecords,
+  failedRecords,
+  skippedRecords,
+  validationErrors,
+  performanceMetrics,
+  rollbackAvailable: false,
+};
       this.migrationResults.set(migrationId, result);
       this.updateMigrationStatus(migrationId, MigrationStatus.FAILED, errorMessage);
       throw error;
     } finally {
-      this.activeMigrations.delete(migrationId);
-    }
-  }
+  this.activeMigrations.delete(migrationId);
   /**
-   * Process a batch of records
-   */
-  private async processBatch()
-    batch: any[],
-    systemName: string,
-    transformationRules: DataTransformationRule[],
-    config: MigrationConfig,
-  ): Promise<{
-    processed: number;
-    migrated: number;
-    failed: number;
-    skipped: number;
-    validationErrors: ValidationError[];
-  }> {
-    const results = {
-      processed: 0,
-      migrated: 0,
-      failed: 0,
-      skipped: 0,
-      validationErrors: [] as ValidationError[],
-    };
+  * Process a batch of records
+  */
+  private async processBatch(batch: any,)
+  systemName: string,
+  transformationRules: DataTransformationRule,
+  config: MigrationConfig): Promise<{,
+  processed: number;,
+  migrated: number;
+  failed: number;,
+  skipped: number;
+  validationErrors: ValidationError;
+}> {
+  const results = {
+  processed: 0,
+  migrated: 0,
+  failed: 0,
+  skipped: 0,
+  validationErrors: [] as ValidationError,
+};
     // Process records with concurrency control
     const semaphore = new Array(config.concurrency).fill(null);
     const promises = batch.map(async (record, index) => {
@@ -538,61 +513,53 @@ export class AnalyticsDataMigrationService {
           results.skipped++;
         } else {
           results.failed++;
-        }
         if (recordResult.validationErrors) {
           results.validationErrors.push(...recordResult.validationErrors);
-        }
       } catch (error) {
         results.processed++;
         results.failed++;
         results.validationErrors.push({)
-          recordId: record.id || `batch_${index}`,}
-          field: 'record',
+  recordId: record.id || `batch_${index}`}
+},
+  field: 'record',
           originalValue: record,
           transformedValue: null,
           errorType: 'transformation_error',
           message: error instanceof Error ? error.message : String(error),
-          severity: 'error',
-        });
+          severity: 'error';
+  });
         if (!config.continueOnError) {
           throw error;
-        }
       } finally {
         semaphore[slotIndex] = null;
-      }
     });
     await Promise.all(promises);
     return results;
-  }
   /**
    * Process individual record
    */
-  private async processRecord()
-    record: any,
+  private async processRecord(record: any,)
     systemName: string,
-    transformationRules: DataTransformationRule[],
-    config: MigrationConfig,
-  ): Promise<{
-    success: boolean;
-    skipped: boolean;
-    validationErrors?: ValidationError[];
-  }> {
-    try {
-      // Transform record using transformation rules
-      const transformedEvent = await this.transformRecord(record, transformationRules);
-      // Validate transformed event
-      const validationResult = await this.validateTransformedEvent(transformedEvent, record);
-      if (!validationResult.valid) {
-        return {
-          success: false,
-          skipped: false,
-          validationErrors: validationResult.errors,
-        };
-      }
+    transformationRules: DataTransformationRule,
+    config: MigrationConfig): Promise<{;
+  success: boolean;,
+  skipped: boolean;
+  validationErrors?: ValidationError;
+}> {
+  try {
+  // Transform record using transformation rules
+  const transformedEvent = await this.transformRecord(record, transformationRules);
+  // Validate transformed event
+  const validationResult = await this.validateTransformedEvent(transformedEvent, record);
+  if (!validationResult.valid) {
+  return {
+  success: false,
+  skipped: false,
+  validationErrors: validationResult.errors,
+};
       // Skip dry run publishing
       if (config.dryRun) {
         return { success: true, skipped: true };
-      }
       // Publish to unified event bus
       const adapter = this.adapterManager.getAdapter(systemName);
       if (adapter) {
@@ -601,49 +568,46 @@ export class AnalyticsDataMigrationService {
         // Fallback to direct event bus publishing
         const { id, timestamp, ...eventWithoutIdAndTimestamp } = transformedEvent;
         await this.eventBus.publishEvent({)
-          source: systemName,
-          category: EventCategory.SYSTEM,
-          severity: EventSeverity.INFO,
-          type: AnalyticsEventType.INFO_EVENT,
-          version: '1.0',
-          environment: 'production',
-          tags: ['migration', systemName],
-          data: transformedEvent.data || record,
-          metadata: {,
-            ...transformedEvent.metadata,
-            migrated: true,
-            originalSystem: systemName,
-            migrationTime: Date.now(),
-          },
+  source: systemName,
+  category: EventCategory.SYSTEM,
+  severity: EventSeverity.INFO,
+  type: AnalyticsEventType.INFO_EVENT,
+  version: '1.0',
+  environment: 'production',
+  tags: ['migration', systemName],
+  data: transformedEvent.data || record,
+  metadata: {,
+  ...transformedEvent.metadata,
+  migrated: true,
+  originalSystem: systemName,
+  migrationTime: Date.now(),
+}
           ...eventWithoutIdAndTimestamp
         });
-      }
       return { success: true, skipped: false };
     } catch (error) {
-      return {
-        success: false,
-        skipped: false,
-        validationErrors: [{,
-          recordId: record.id || 'unknown',
-          field: 'record',
-          originalValue: record,
-          transformedValue: null,
-          errorType: 'transformation_error',
-          message: error instanceof Error ? error.message : String(error),
-          severity: 'error',
-        }]
+  return {
+  success: false,
+  skipped: false,
+  validationErrors: [{,
+  recordId: record.id || 'unknown',
+  field: 'record',
+  originalValue: record,
+  transformedValue: null,
+  errorType: 'transformation_error',
+  message: error instanceof Error ? error.message : String(error),
+  severity: 'error',
+}]
       };
-    }
-  }
   /**
    * Transform record using transformation rules
    */
-  private async transformRecord()
+  private async transformRecord(()
     record: any,
-    transformationRules: DataTransformationRule[],
+    transformationRules: DataTransformationRule,
   ): Promise<Partial<any>> {
-    const transformed: any = {
-      data: {},
+    const transformed: any = {,
+  data: {},
       metadata: {}
     };
     for (const rule of transformationRules) {
@@ -651,23 +615,17 @@ export class AnalyticsDataMigrationService {
         const value = await this.applyTransformationRule(record, rule);
         if (value !== undefined) {
           this.setNestedProperty(transformed, rule.targetField, value);
-        }
       } catch (error) {
         if (rule.validation?.required) {
           throw new Error(`Required field transformation failed: ${rule.targetField}`);}
-        }
         // Use default value if available
         if (rule.transformation.defaultValue !== undefined) {
           this.setNestedProperty(transformed, rule.targetField, rule.transformation.defaultValue);
-        }
-      }
-    }
     return transformed;
-  }
   /**
    * Apply individual transformation rule
    */
-  private async applyTransformationRule()
+  private async applyTransformationRule(()
     record: any,
     rule: DataTransformationRule,
   ): Promise<any> {
@@ -687,32 +645,23 @@ export class AnalyticsDataMigrationService {
             return func(EventCategory, EventSeverity, AnalyticsEventType);
           } catch (error) {
             throw new Error(`Expression evaluation failed: ${expression}`);}
-          }
-        }
         return sourceValue;
       case 'lookup':
         if (rule.transformation.lookupTable && sourceValue) {
-          return rule.transformation.lookupTable[sourceValue] || rule.transformation.defaultValue;
-        }
-        return rule.transformation.defaultValue;
-      case 'conditional':
-        if (rule.transformation.conditions) {
-          for (const condition of rule.transformation.conditions) {
-            try {
-              const conditionResult = this.evaluateCondition(condition.condition, sourceValue, record);
-              if (conditionResult) {
-                return condition.value;
-              }
-            } catch (error) {
+  return rule.transformation.lookupTable[sourceValue] || rule.transformation.defaultValue;
+  return rule.transformation.defaultValue;
+  case 'conditional':,
+  if (rule.transformation.conditions) {
+  for (const condition of rule.transformation.conditions) {
+  try {
+  const conditionResult = this.evaluateCondition(condition.condition, sourceValue, record);
+  if (conditionResult) {
+  return condition.value;
+} catch (error) {
               // Continue to next condition
-            }
-          }
-        }
         return rule.transformation.defaultValue;
       default:
         return sourceValue;
-    }
-  }
   /**
    * Evaluate condition expression
    */
@@ -725,89 +674,82 @@ export class AnalyticsDataMigrationService {
       return !!func();
     } catch (error) {
       return false;
-    }
-  }
   /**
    * Validate transformed event
    */
-  private async validateTransformedEvent()
+  private async validateTransformedEvent(()
     transformedEvent: any,
     originalRecord: any,
-  ): Promise<{ valid: boolean; errors: ValidationError[] }> {
-    const errors: ValidationError[] = [];
-    // Basic validation
-    if (!transformedEvent.type) {
-      errors.push({)
-        field: 'type',
-        originalValue: originalRecord,
-        transformedValue: transformedEvent.type,
-        errorType: 'missing_field',
-        message: 'Event type is required',
-        severity: 'error',
-      });
-    }
+  ): Promise<{ valid: boolean; errors: ValidationError }> {
+  const errors: ValidationError = [];
+  // Basic validation
+  if (!transformedEvent.type) {
+  errors.push({)
+  field: 'type',
+  originalValue: originalRecord,
+  transformedValue: transformedEvent.type,
+  errorType: 'missing_field',
+  message: 'Event type is required',
+  severity: 'error',
+});
     if (!transformedEvent.source) {
-      errors.push({)
-        field: 'source',
-        originalValue: originalRecord,
-        transformedValue: transformedEvent.source,
-        errorType: 'missing_field',
-        message: 'Event source is required',
-        severity: 'error',
-      });
-    }
+  errors.push({)
+  field: 'source',
+  originalValue: originalRecord,
+  transformedValue: transformedEvent.source,
+  errorType: 'missing_field',
+  message: 'Event source is required',
+  severity: 'error',
+});
     // Additional validation can be added here
     return {
-      valid: errors.filter(e => e.severity === 'error').length === 0,
-      errors
-    };
-  }
+  valid: errors.filter(e => e.severity === 'error').length === 0,
+  errors
+};
   /**
    * Perform final validation
    */
-  private async performFinalValidation()
+  private async performFinalValidation(()
     systemName: string,
     expectedCount: number,
-  ): Promise<ValidationError[]> {
-    const errors: ValidationError[] = [];
-    try {
-      // Count migrated records
-      const actualCount = await this.eventRepository.count({)
-        sources: [systemName],
-        startTime: Date.now() - (24 * 60 * 60 * 1000) // Last 24 hours,
-      });
+  ): Promise<ValidationError> {
+  const errors: ValidationError = [];
+  try {
+  // Count migrated records
+  const actualCount = await this.eventRepository.count({)
+  sources: [systemName],
+  startTime: Date.now() - (24 * 60 * 60 * 1000) // Last 24 hours,
+});
       if (actualCount < expectedCount) {
         errors.push({)
-          field: 'record_count',
+  field: 'record_count',
           originalValue: expectedCount,
           transformedValue: actualCount,
           errorType: 'validation_failed',
-          message: `Record count mismatch: expected ${expectedCount}, found ${actualCount}`,}
-          severity: 'error',
-        });
-      }
+          message: `Record count mismatch: expected ${expectedCount}, found ${actualCount}`}
+},
+  severity: 'error';
+  });
     } catch (error) {
       errors.push({)
-        field: 'final_validation',
+  field: 'final_validation',
         originalValue: null,
         transformedValue: null,
         errorType: 'validation_failed',
-        message: `Final validation failed: ${error instanceof Error ? error.message : String(error)}`,}
-        severity: 'error',
-      });
-    }
+        message: `Final validation failed: ${error instanceof Error ? error.message : String(error)}`}
+},
+  severity: 'error';
+  });
     return errors;
-  }
   /**
    * Create backup of source data
    */
-  private async createBackup(systemName: string, data: any[]): Promise<string> {
+  private async createBackup(systemName: string, data: any): Promise<string> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupLocation = `/tmp/analytics_backup_${systemName}_${timestamp}.json`;}
     // In production, this would write to a proper backup location
     console.log(`Creating backup for ${systemName} at ${backupLocation}`);}
     return backupLocation;
-  }
   /**
    * Update migration status
    */
@@ -817,9 +759,6 @@ export class AnalyticsDataMigrationService {
       progress.status = status;
       if (message) {
         progress.lastError = status === MigrationStatus.FAILED ? message : undefined;
-      }
-    }
-  }
   /**
    * Update current operation
    */
@@ -827,8 +766,6 @@ export class AnalyticsDataMigrationService {
     const progress = this.activeMigrations.get(migrationId);
     if (progress) {
       progress.currentOperation = operation;
-    }
-  }
   /**
    * Update migration progress
    */
@@ -836,15 +773,12 @@ export class AnalyticsDataMigrationService {
     const progress = this.activeMigrations.get(migrationId);
     if (progress) {
       Object.assign(progress.progress, progressUpdate);
-    }
-  }
   /**
    * Get nested property value
    */
   private getNestedProperty(obj: any, path: string): any {
     if (path === '*') return obj;
     return path.split('.').reduce((current, key) => current?.[key], obj);
-  }
   /**
    * Set nested property value
    */
@@ -856,19 +790,16 @@ export class AnalyticsDataMigrationService {
       return current[key];
     }, obj);
     target[lastKey] = value;
-  }
   /**
    * Calculate data size
    */
-  private calculateDataSize(data: any[]): number {
+  private calculateDataSize(data: any): number {
     return JSON.stringify(data).length;
-  }
   /**
    * Sleep utility
    */
   private sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
   /**
    * Public API Methods
    */
@@ -877,22 +808,19 @@ export class AnalyticsDataMigrationService {
    */
   getMigrationProgress(migrationId: string): MigrationProgress | null {
     return this.activeMigrations.get(migrationId) || null;
-  }
   /**
    * Get migration result
    */
   getMigrationResult(migrationId: string): MigrationResult | null {
     return this.migrationResults.get(migrationId) || null;
-  }
   /**
    * List all migrations
    */
-  listMigrations(): { active: MigrationProgress[]; completed: MigrationResult[] } {
-    return {
-      active: Array.from(this.activeMigrations.values()),
-      completed: Array.from(this.migrationResults.values()),
-    };
-  }
+  listMigrations(): { active: MigrationProgress; completed: MigrationResult } {
+  return {
+  active: Array.from(this.activeMigrations.values()),
+  completed: Array.from(this.migrationResults.values()),
+};
   /**
    * Cancel migration
    */
@@ -901,9 +829,7 @@ export class AnalyticsDataMigrationService {
     if (progress && progress.status === MigrationStatus.RUNNING) {
       progress.status = MigrationStatus.CANCELLED;
       return true;
-    }
     return false;
-  }
   /**
    * Pause migration
    */
@@ -912,9 +838,7 @@ export class AnalyticsDataMigrationService {
     if (progress && progress.status === MigrationStatus.RUNNING) {
       progress.status = MigrationStatus.PAUSED;
       return true;
-    }
     return false;
-  }
   /**
    * Resume migration
    */
@@ -923,9 +847,7 @@ export class AnalyticsDataMigrationService {
     if (progress && progress.status === MigrationStatus.PAUSED) {
       progress.status = MigrationStatus.RUNNING;
       return true;
-    }
     return false;
-  }
   /**
    * Rollback migration
    */
@@ -933,26 +855,22 @@ export class AnalyticsDataMigrationService {
     const result = this.migrationResults.get(migrationId);
     if (!result || !result.rollbackAvailable) {
       return false;
-    }
     try {
       // In production, this would restore from backup and remove migrated events
       console.log(`Rolling back migration ${migrationId} from backup ${result.backupLocation}`);}
       // Remove migrated events from unified system
       const migratedEvents = await this.eventRepository.findMany({)
-        filter: {,
-          sources: [result.systemName],
-          startTime: result.startTime,
-          endTime: result.endTime,
-        }
-      });
+  filter: {,
+  sources: [result.systemName],
+  startTime: result.startTime,
+  endTime: result.endTime,
+});
       const eventIds = migratedEvents.map(event => event.id);
       await this.eventRepository.deleteBatch(eventIds);
       return true;
     } catch (error) {
       console.error(`Rollback failed for migration ${migrationId}:`, error);}
       return false;
-    }
-  }
   /**
    * Add transformation rule
    */
@@ -960,18 +878,16 @@ export class AnalyticsDataMigrationService {
     const rules = this.transformationRules.get(systemName) || [];
     rules.push(rule);
     this.transformationRules.set(systemName, rules);
-  }
   /**
    * Get transformation rules for system
    */
-  getTransformationRules(systemName: string): DataTransformationRule[] {
+  getTransformationRules(systemName: string): DataTransformationRule {
     return this.transformationRules.get(systemName) || [];
-  }
   /**
    * Migrate all systems
    */
-  async migrateAllSystems()
-    systemsData: { [systemName: string]: any[] },
+  async migrateAllSystems(()
+    systemsData: { [systemName: string]: any },
     config: Partial<MigrationConfig> = {}
   ): Promise<{ [systemName: string]: string }> {
     const migrationIds: { [systemName: string]: string } = {};
@@ -981,30 +897,25 @@ export class AnalyticsDataMigrationService {
         migrationIds[systemName] = migrationId;
       } catch (error) {
         console.error(`Failed to start migration for ${systemName}:`, error);}
-      }
-    }
     return migrationIds;
-  }
   /**
    * Get migration summary
    */
   getMigrationSummary(): {
-    totalMigrations: number;
-    activeMigrations: number;
-    completedMigrations: number;
-    failedMigrations: number;
-    totalRecordsMigrated: number;
-    totalValidationErrors: number;
-    const results = Array.from(this.migrationResults.values());
-    return {
-      totalMigrations: results.length + this.activeMigrations.size,
-      activeMigrations: this.activeMigrations.size,
-      completedMigrations: results.filter(r => r.status === MigrationStatus.COMPLETED).length,
-      failedMigrations: results.filter(r => r.status === MigrationStatus.FAILED).length,
-      totalRecordsMigrated: results.reduce((sum, r) => sum + r.migratedRecords, 0),
-      totalValidationErrors: results.reduce((sum, r) => sum + r.validationErrors.length, 0)
-    };
-  }
-}
+  totalMigrations: number;,
+  activeMigrations: number;
+  completedMigrations: number;,
+  failedMigrations: number;
+  totalRecordsMigrated: number;,
+  totalValidationErrors: number;
+  const results = Array.from(this.migrationResults.values());
+  return {
+  totalMigrations: results.length + this.activeMigrations.size,
+  activeMigrations: this.activeMigrations.size,
+  completedMigrations: results.filter(r => r.status === MigrationStatus.COMPLETED).length,
+  failedMigrations: results.filter(r => r.status === MigrationStatus.FAILED).length,
+  totalRecordsMigrated: results.reduce((sum, r) => sum + r.migratedRecords, 0),
+  totalValidationErrors: results.reduce((sum, r) => sum + r.validationErrors.length, 0),
+};
 
 export default AnalyticsDataMigrationService;

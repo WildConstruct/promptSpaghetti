@@ -23,7 +23,7 @@ export interface BasePolicyEvent {
     version: string;
     processed: boolean;
     processedAt?: Date;
-    processingErrors?: EventProcessingError[];
+    processingErrors?: EventProcessingError;
     retryCount: number;
     maxRetries: number;
     nextRetryAt?: Date;
@@ -34,7 +34,7 @@ export interface PolicyEventData {
     resourceType: 'policy' | 'assignment' | 'evaluation' | 'template' | 'workflow';
     resourceId: string;
     resourceVersion?: string;
-    changes?: PolicyEventChange[];
+    changes?: PolicyEventChange;
     previousState?: any;
     currentState?: any;
     context?: EvaluationContext;
@@ -53,12 +53,8 @@ export interface EventProcessingError {
     details?: any;
     retryable: boolean;
 }
-/**
- * Policy lifecycle event
- */
 export interface PolicyLifecycleEvent extends BasePolicyEvent {
-    eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | 'policy.activated' | 'policy.deactivated' | 'policy.deprecated' | 'policy.archived';
-    data: PolicyLifecycleEventData;
+    eventType: 'policy.created' | 'policy.updated' | 'policy.deleted' | ;
 }
 export interface PolicyLifecycleEventData extends PolicyEventData {
     resourceType: 'policy';
@@ -68,22 +64,21 @@ export interface PolicyLifecycleEventData extends PolicyEventData {
     replacementPolicyId?: string;
 }
 /**
- * Assignment event
- */
+* Assignment event
+*/
 export interface PolicyAssignmentEvent extends BasePolicyEvent {
-    eventType: 'assignment.created' | 'assignment.updated' | 'assignment.deleted' | 'assignment.activated' | 'assignment.deactivated' | 'assignment.conflict.detected' | 'assignment.conflict.resolved';
-    data: PolicyAssignmentEventData;
+    eventType: 'assignment.created' | 'assignment.updated' | 'assignment.deleted' | ;
 }
 export interface PolicyAssignmentEventData extends PolicyEventData {
     resourceType: 'assignment';
     assignment: PolicyAssignment;
     previousAssignment?: PolicyAssignment;
-    conflicts?: AssignmentConflict[];
+    conflicts?: AssignmentConflict;
     resolution?: ConflictResolution;
 }
 export interface AssignmentConflict {
     conflictType: 'priority' | 'contradiction' | 'circular_dependency';
-    conflictingAssignments: string[];
+    conflictingAssignments: string;
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
 }
@@ -91,15 +86,11 @@ export interface ConflictResolution {
     strategy: string;
     resolvedBy: string;
     resolvedAt: Date;
-    resultingAssignments: string[];
+    resultingAssignments: string;
     notes?: string;
 }
-/**
- * Evaluation event
- */
 export interface PolicyEvaluationEvent extends BasePolicyEvent {
-    eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' | 'evaluation.cached' | 'evaluation.cache.expired';
-    data: PolicyEvaluationEventData;
+    eventType: 'evaluation.requested' | 'evaluation.completed' | 'evaluation.failed' | ;
 }
 export interface PolicyEvaluationEventData extends PolicyEventData {
     resourceType: 'evaluation';
@@ -121,45 +112,40 @@ export interface CacheInfo {
     cacheExpiration?: Date;
     cacheSize?: number;
 }
-/**
- * Compliance event
- */
 export interface ComplianceEvent extends BasePolicyEvent {
-    eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' | 'compliance.audit.started' | 'compliance.audit.completed' | 'compliance.report.generated';
-    data: ComplianceEventData;
+    eventType: 'compliance.violation.detected' | 'compliance.violation.resolved' | ;
 }
 export interface ComplianceEventData extends PolicyEventData {
     framework: ComplianceFramework;
     violationType?: string;
     violationSeverity?: 'low' | 'medium' | 'high' | 'critical';
-    affectedPolicies: string[];
+    affectedPolicies: string;
     remediationRequired?: boolean;
     auditId?: string;
     reportId?: string;
 }
 /**
- * Security event
- */
+* Security event
+*/
 export interface SecurityEvent extends BasePolicyEvent {
-    eventType: 'security.policy.breached' | 'security.unauthorized.access' | 'security.suspicious.activity' | 'security.threat.detected';
-    data: SecurityEventData;
+    eventType: 'security.policy.breached' | 'security.unauthorized.access' | ;
 }
 export interface SecurityEventData extends PolicyEventData {
     threatLevel: 'low' | 'medium' | 'high' | 'critical';
     threatType: string;
     sourceIp?: string;
     userAgent?: string;
-    affectedResources: string[];
-    mitigationActions?: string[];
+    affectedResources: string;
+    mitigationActions?: string;
     investigationRequired: boolean;
 }
 /**
- * Event handler interface
- */
+* Event handler interface
+*/
 export interface IPolicyEventHandler {
     readonly handlerId: string;
     readonly name: string;
-    readonly eventTypes: PolicyEventType[];
+    readonly eventTypes: PolicyEventType;
     readonly priority: number;
     canHandle(event: BasePolicyEvent): boolean;
     handle(event: BasePolicyEvent): Promise<EventHandlerResult>;
@@ -169,19 +155,16 @@ export interface EventHandlerResult {
     success: boolean;
     executionTime: number;
     processedData?: any;
-    generatedEvents?: BasePolicyEvent[];
-    errors?: EventProcessingError[];
+    generatedEvents?: BasePolicyEvent;
+    errors?: EventProcessingError;
     metadata?: Record<string, any>;
 }
-/**
- * Event subscription interface
- */
 export interface PolicyEventSubscription {
     subscriptionId: string;
     subscriberId: string;
     subscriberName: string;
-    eventTypes: PolicyEventType[];
-    filters: EventFilter[];
+    eventTypes: PolicyEventType;
+    filters: EventFilter;
     deliveryMethod: DeliveryMethod;
     deliveryConfig: DeliveryConfiguration;
     batchSize: number;
@@ -205,11 +188,11 @@ export interface DeliveryConfiguration {
     webhookTimeout?: number;
     queueName?: string;
     queuePriority?: number;
-    emailAddresses?: string[];
+    emailAddresses?: string;
     emailTemplate?: string;
-    phoneNumbers?: string[];
+    phoneNumbers?: string;
     smsTemplate?: string;
-    pushTokens?: string[];
+    pushTokens?: string;
     pushTemplate?: string;
     databaseTable?: string;
     databaseFields?: Record<string, string>;
@@ -219,7 +202,7 @@ export interface RetryPolicy {
     backoffMultiplier: number;
     initialDelay: number;
     maxDelay: number;
-    retryConditions: RetryCondition[];
+    retryConditions: RetryCondition;
 }
 export interface RetryCondition {
     errorType: string;
@@ -233,12 +216,9 @@ export interface DeliveryStats {
     averageDeliveryTime: number;
     lastError?: EventProcessingError;
 }
-/**
- * Event publisher interface
- */
 export interface IPolicyEventPublisher {
     publish(event: BasePolicyEvent): Promise<PublishResult>;
-    publishBatch(events: BasePolicyEvent[]): Promise<BatchPublishResult>;
+    publishBatch(events: BasePolicyEvent): Promise<BatchPublishResult>;
     scheduleEvent(event: BasePolicyEvent, scheduledTime: Date): Promise<ScheduledEventResult>;
     cancelScheduledEvent(eventId: string): Promise<void>;
     validateEvent(event: BasePolicyEvent): Promise<EventValidationResult>;
@@ -248,13 +228,13 @@ export interface PublishResult {
     eventId: string;
     publishedAt: Date;
     deliveryCount: number;
-    errors?: PublishError[];
+    errors?: PublishError;
 }
 export interface BatchPublishResult {
     totalEvents: number;
     successfulEvents: number;
     failedEvents: number;
-    results: PublishResult[];
+    results: PublishResult;
 }
 export interface ScheduledEventResult {
     scheduleId: string;
@@ -269,8 +249,8 @@ export interface PublishError {
 }
 export interface EventValidationResult {
     valid: boolean;
-    errors: EventValidationError[];
-    warnings: EventValidationWarning[];
+    errors: EventValidationError;
+    warnings: EventValidationWarning;
 }
 export interface EventValidationError {
     field: string;
@@ -282,25 +262,22 @@ export interface EventValidationWarning {
     message: string;
     code: string;
 }
-/**
- * Event bus interface
- */
 export interface IPolicyEventBus {
     emit(event: BasePolicyEvent): Promise<void>;
-    emitBatch(events: BasePolicyEvent[]): Promise<void>;
+    emitBatch(events: BasePolicyEvent): Promise<void>;
     subscribe(subscription: PolicyEventSubscription): Promise<string>;
     unsubscribe(subscriptionId: string): Promise<void>;
     updateSubscription(subscriptionId: string, updates: Partial<PolicyEventSubscription>): Promise<void>;
-    getSubscriptions(subscriberId?: string): Promise<PolicyEventSubscription[]>;
+    getSubscriptions(subscriberId?: string): Promise<PolicyEventSubscription>;
     getEventHistory(criteria: EventHistoryCriteria): Promise<EventHistoryResult>;
     replayEvents(criteria: EventReplayCriteria): Promise<EventReplayResult>;
     getStats(): Promise<EventBusStats>;
     health(): Promise<EventBusHealth>;
 }
 export interface EventHistoryCriteria {
-    eventTypes?: PolicyEventType[];
-    resourceTypes?: string[];
-    resourceIds?: string[];
+    eventTypes?: PolicyEventType;
+    resourceTypes?: string;
+    resourceIds?: string;
     startDate?: Date;
     endDate?: Date;
     userId?: string;
@@ -309,14 +286,14 @@ export interface EventHistoryCriteria {
     offset?: number;
 }
 export interface EventHistoryResult {
-    events: BasePolicyEvent[];
+    events: BasePolicyEvent;
     totalCount: number;
     hasMore: boolean;
 }
 export interface EventReplayCriteria {
-    eventIds?: string[];
+    eventIds?: string;
     criteria?: EventHistoryCriteria;
-    subscriptionIds?: string[];
+    subscriptionIds?: string;
     dryRun?: boolean;
 }
 export interface EventReplayResult {
@@ -326,7 +303,7 @@ export interface EventReplayResult {
     failedEvents: number;
     startedAt: Date;
     completedAt?: Date;
-    errors?: EventProcessingError[];
+    errors?: EventProcessingError;
 }
 export interface EventBusStats {
     eventsPublished: number;
@@ -338,7 +315,7 @@ export interface EventBusStats {
 }
 export interface EventBusHealth {
     status: 'healthy' | 'degraded' | 'critical';
-    components: ComponentStatus[];
+    components: ComponentStatus;
     lastCheck: Date;
 }
 export interface ComponentStatus {
@@ -347,9 +324,6 @@ export interface ComponentStatus {
     message?: string;
     lastCheck: Date;
 }
-/**
- * Notification interface
- */
 export interface PolicyNotification {
     notificationId: string;
     type: NotificationType;
@@ -359,12 +333,12 @@ export interface PolicyNotification {
     details?: string;
     actionUrl?: string;
     actionLabel?: string;
-    recipients: NotificationRecipient[];
+    recipients: NotificationRecipient;
     category: NotificationCategory;
-    tags: string[];
+    tags: string;
     sourceEvent?: BasePolicyEvent;
     sourceSystem: string;
-    channels: NotificationChannel[];
+    channels: NotificationChannel;
     deliverySettings: NotificationDeliverySettings;
     status: NotificationStatus;
     createdAt: Date;
@@ -386,27 +360,27 @@ export interface NotificationRecipient {
 export interface ContactInfo {
     email?: string;
     phone?: string;
-    pushTokens?: string[];
+    pushTokens?: string;
     slackUserId?: string;
     teamsUserId?: string;
 }
 export interface NotificationPreferences {
-    channels: NotificationChannel[];
+    channels: NotificationChannel;
     quietHours?: QuietHours;
     frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
-    categories: NotificationCategory[];
+    categories: NotificationCategory;
 }
 export interface QuietHours {
     enabled: boolean;
     startTime: string;
     endTime: string;
     timezone: string;
-    days: number[];
+    days: number;
 }
 export type NotificationCategory = 'policy_changes' | 'compliance_alerts' | 'security_incidents' | 'system_maintenance' | 'performance_issues' | 'workflow_updates' | 'audit_reports' | 'assignment_changes';
 export type NotificationChannel = 'email' | 'sms' | 'push' | 'in_app' | 'slack' | 'teams' | 'webhook';
 export interface NotificationDeliverySettings {
-    channels: NotificationChannelSettings[];
+    channels: NotificationChannelSettings;
     retryPolicy: NotificationRetryPolicy;
     batchingEnabled: boolean;
     maxBatchSize?: number;
@@ -421,7 +395,7 @@ export interface NotificationRetryPolicy {
     maxRetries: number;
     retryDelay: number;
     backoffMultiplier: number;
-    retryChannels: NotificationChannel[];
+    retryChannels: NotificationChannel;
 }
 export type NotificationStatus = 'pending' | 'scheduled' | 'sent' | 'delivered' | 'read' | 'failed' | 'cancelled' | 'expired';
 /**
@@ -434,12 +408,12 @@ export interface IPolicyNotificationService {
     getNotifications(criteria: NotificationSearchCriteria): Promise<NotificationSearchResult>;
     deleteNotification(id: string): Promise<void>;
     sendNotification(id: string, options?: SendOptions): Promise<NotificationDeliveryResult>;
-    sendBulkNotifications(ids: string[], options?: SendOptions): Promise<BulkNotificationResult>;
+    sendBulkNotifications(ids: string, options?: SendOptions): Promise<BulkNotificationResult>;
     scheduleNotification(id: string, scheduledTime: Date): Promise<void>;
     cancelScheduledNotification(id: string): Promise<void>;
     createTemplate(template: NotificationTemplate): Promise<NotificationTemplate>;
     updateTemplate(id: string, updates: Partial<NotificationTemplate>): Promise<NotificationTemplate>;
-    getTemplates(category?: NotificationCategory): Promise<NotificationTemplate[]>;
+    getTemplates(category?: NotificationCategory): Promise<NotificationTemplate>;
     updatePreferences(userId: string, preferences: NotificationPreferences): Promise<void>;
     getPreferences(userId: string): Promise<NotificationPreferences>;
     getDeliveryStats(criteria: DeliveryStatsCriteria): Promise<NotificationDeliveryStats>;
@@ -452,19 +426,19 @@ export interface UpdateNotificationRequest {
     notification: Partial<PolicyNotification>;
 }
 export interface NotificationSearchCriteria {
-    recipientIds?: string[];
-    types?: NotificationType[];
-    categories?: NotificationCategory[];
-    statuses?: NotificationStatus[];
-    priorities?: NotificationPriority[];
+    recipientIds?: string;
+    types?: NotificationType;
+    categories?: NotificationCategory;
+    statuses?: NotificationStatus;
+    priorities?: NotificationPriority;
     createdAfter?: Date;
     createdBefore?: Date;
-    tags?: string[];
+    tags?: string;
     limit?: number;
     offset?: number;
 }
 export interface NotificationSearchResult {
-    notifications: PolicyNotification[];
+    notifications: PolicyNotification;
     totalCount: number;
     hasMore: boolean;
 }
@@ -477,8 +451,8 @@ export interface SendOptions {
 export interface NotificationDeliveryResult {
     notificationId: string;
     success: boolean;
-    deliveredChannels: NotificationChannel[];
-    failedChannels: NotificationChannelFailure[];
+    deliveredChannels: NotificationChannel;
+    failedChannels: NotificationChannelFailure;
     deliveryTime: number;
 }
 export interface NotificationChannelFailure {
@@ -490,7 +464,7 @@ export interface BulkNotificationResult {
     totalNotifications: number;
     successfulDeliveries: number;
     failedDeliveries: number;
-    results: NotificationDeliveryResult[];
+    results: NotificationDeliveryResult;
 }
 export interface NotificationTemplate {
     templateId: string;
@@ -500,8 +474,8 @@ export interface NotificationTemplate {
     titleTemplate: string;
     messageTemplate: string;
     detailsTemplate?: string;
-    channelTemplates: ChannelTemplate[];
-    variables: TemplateVariable[];
+    channelTemplates: ChannelTemplate;
+    variables: TemplateVariable;
     defaultValues?: Record<string, any>;
     createdAt: Date;
     updatedAt: Date;
@@ -524,17 +498,17 @@ export interface TemplateVariable {
 export interface DeliveryStatsCriteria {
     startDate: Date;
     endDate: Date;
-    channels?: NotificationChannel[];
-    categories?: NotificationCategory[];
-    recipientIds?: string[];
+    channels?: NotificationChannel;
+    categories?: NotificationCategory;
+    recipientIds?: string;
 }
 export interface NotificationDeliveryStats {
     totalNotifications: number;
     deliveredNotifications: number;
     failedNotifications: number;
     deliveryRate: number;
-    channelStats: ChannelDeliveryStats[];
-    categoryStats: CategoryDeliveryStats[];
+    channelStats: ChannelDeliveryStats;
+    categoryStats: CategoryDeliveryStats;
     averageDeliveryTime: number;
     p95DeliveryTime: number;
 }
@@ -556,8 +530,8 @@ export interface CategoryDeliveryStats {
 export interface EngagementMetricsCriteria {
     startDate: Date;
     endDate: Date;
-    categories?: NotificationCategory[];
-    recipientIds?: string[];
+    categories?: NotificationCategory;
+    recipientIds?: string;
 }
 export interface NotificationEngagementMetrics {
     totalNotifications: number;
@@ -565,7 +539,7 @@ export interface NotificationEngagementMetrics {
     clickedNotifications: number;
     openRate: number;
     clickRate: number;
-    categoryEngagement: CategoryEngagementMetrics[];
+    categoryEngagement: CategoryEngagementMetrics;
     averageTimeToOpen: number;
     averageTimeToClick: number;
 }

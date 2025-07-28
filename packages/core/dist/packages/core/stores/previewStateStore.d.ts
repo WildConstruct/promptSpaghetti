@@ -1,16 +1,9 @@
-/**
- * Preview State Store
- * Epic 8.5: Story 8.5 - Real-Time Multi-Seed Preview - Task 2
- *
- * Centralized state management for real-time preview functionality with
- * synchronization, caching, and performance optimizations.
- */
 export interface PreviewResult {
     seed: number;
     output?: string;
     error?: string;
-    usedNodeIds?: string[];
-    usedEdgeIds?: string[];
+    usedNodeIds?: string;
+    usedEdgeIds?: string;
     executionTimeMs?: number;
     executionPath?: Array<{
         nodeId: string;
@@ -18,31 +11,16 @@ export interface PreviewResult {
     }>;
     weightChoices?: Array<{
         nodeId: string;
-        selectedOption: unknown;
-        availableOptions: unknown[];
-        weights?: number[];
-        selectionProbability?: number;
-    }>;
-    locked?: boolean;
-    lockedAt?: number;
-    lockedNote?: string;
-    debugInfo?: {
-        nodeExecutionOrder: string[];
-        randomChoices: Array<{
-            nodeId: string;
-            choice: unknown;
-        }>;
-        performanceBreakdown: Record<string, number>;
-        memoryUsage?: {
-            used: number;
-            total: number;
-        };
-    };
+    }, selectedOption>;
+    unknown: any;
+    availableOptions: unknown;
+    weights?: number;
+    selectionProbability?: number;
 }
 export interface PreviewCache {
     graphHash: string;
     timestamp: number;
-    results: PreviewResult[];
+    results: PreviewResult;
     performanceStats: {
         totalTime: number;
         averageTime: number;
@@ -59,7 +37,7 @@ export interface PreviewPerformanceMetrics {
 export interface PreviewStateStore {
     isLoading: boolean;
     error: string | null;
-    results: PreviewResult[];
+    results: PreviewResult;
     aggregateError: string | null;
     performanceStats: {
         totalTime: number;
@@ -72,17 +50,17 @@ export interface PreviewStateStore {
     cache: Map<string, PreviewCache>;
     maxCacheSize: number;
     cacheExpirationMs: number;
-    lockedResults: number[];
-    regeneratingResults: number[];
+    lockedResults: number;
+    regeneratingResults: number;
     performanceMetrics: PreviewPerformanceMetrics;
-    performanceHistory: PreviewPerformanceMetrics[];
+    performanceHistory: PreviewPerformanceMetrics;
     maxHistoryLength: number;
     autoRefreshEnabled: boolean;
     autoRefreshInterval: number;
     autoRefreshThreshold: number;
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
-    setResults: (results: PreviewResult[]) => void;
+    setResults: (results: PreviewResult) => void;
     setAggregateError: (error: string | null) => void;
     setPerformanceStats: (stats: {
         totalTime: number;
@@ -92,10 +70,14 @@ export interface PreviewStateStore {
     enableRealTimeSync: (enabled: boolean) => void;
     setSyncInterval: (interval: number) => void;
     getCachedResults: (graphHash: string) => PreviewCache | null;
-    setCachedResults: (graphHash: string, results: PreviewResult[], stats: {
+    setCachedResults: () => ;
+    graphHash: string;
+    results: PreviewResult;
+    stats: {
         totalTime: number;
         averageTime: number;
-    }) => void;
+    };
+    void: any;
     clearCache: () => void;
     pruneCacheByAge: () => void;
     pruneCacheBySize: () => void;
@@ -106,8 +88,8 @@ export interface PreviewStateStore {
     addPerformanceSnapshot: () => void;
     getPerformanceInsights: () => {
         trend: 'improving' | 'degrading' | 'stable';
-        bottlenecks: string[];
-        recommendations: string[];
+        bottlenecks: string;
+        recommendations: string;
     };
     setAutoRefresh: (enabled: boolean, interval?: number) => void;
     shouldAutoRefresh: (changeSignificance?: number) => boolean;
@@ -115,5 +97,4 @@ export interface PreviewStateStore {
     getStateSnapshot: () => any;
     restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
 }
-export declare const usePreviewPerformance: () => any;
 //# sourceMappingURL=previewStateStore.d.ts.map

@@ -17,6 +17,7 @@ import { promisify } from 'util';
 // Evidence Versioning Interfaces
 // =============================================================================
 
+}
 export interface EvidenceVersionConfig {
   enabled: boolean;
   immutableHistory: boolean;
@@ -26,6 +27,7 @@ export interface EvidenceVersionConfig {
     enabled: boolean;
     algorithm: 'sha256' | 'sha512' | 'blake2b';
     chainValidation: boolean;
+}
   };
   retention: {
     enabled: boolean;
@@ -40,6 +42,7 @@ export interface EvidenceVersionConfig {
   };
 }
 
+}
 export interface EvidenceVersion {
   id: string;
   evidenceId: string;
@@ -85,7 +88,9 @@ export interface EvidenceVersion {
   compressionType?: 'gzip' | 'brotli' | 'lz4';
   archivalStatus: 'active' | 'compressed' | 'archived' | 'deleted';
 }
+}
 
+}
 export interface EvidenceVersionDiff {
   fromVersion: number;
   toVersion: number;
@@ -95,6 +100,7 @@ export interface EvidenceVersionDiff {
       added: string[];
       removed: string[];
       modified: string[];
+}
     };
     metadata?: {
       added: Record<string, any>;
@@ -114,6 +120,7 @@ export interface EvidenceVersionDiff {
   };
 }
 
+}
 export interface EvidenceVersionChain {
   evidenceId: string;
   versions: EvidenceVersion[];
@@ -123,6 +130,7 @@ export interface EvidenceVersionChain {
     brokenLinks: number[];
     hashMismatches: number[];
     lastVerified: Date;
+}
   };
   statistics: {
     totalVersions: number;
@@ -133,6 +141,7 @@ export interface EvidenceVersionChain {
   };
 }
 
+}
 export interface EvidenceVersionBranch {
   name: string;
   baseVersion: number;
@@ -142,7 +151,9 @@ export interface EvidenceVersionBranch {
   createdAt: Date;
   status: 'active' | 'merged' | 'abandoned';
 }
+}
 
+}
 export interface VersionConflict {
   evidenceId: string;
   conflictType: 'concurrent_modification' | 'classification_mismatch' | 'integrity_failure';
@@ -152,13 +163,16 @@ export interface VersionConflict {
   resolutionSuggestions: string[];
   timestamp: Date;
 }
+}
 
+}
 export interface VersionMergeResult {
   success: boolean;
   mergedVersion?: EvidenceVersion;
   conflicts: VersionConflict[];
   warnings: string[];
   changes: EvidenceVersionDiff;
+}
 }
 
 export type VersionChangeType = 
@@ -214,6 +228,7 @@ export class EvidenceVersioningService {
       complianceFrameworks?: string[];
     }
   ): Promise<EvidenceVersion> {
+
     try {
       // Auto-classify if not provided
       let classification = options?.classification;
@@ -309,7 +324,7 @@ export class EvidenceVersioningService {
       metadata?: Record<string, any>;
       classification?: DataClassification;
       filename?: string;
-    },
+  }
     modifiedBy: string,
     changeReason: string,
     options?: {
@@ -318,6 +333,7 @@ export class EvidenceVersioningService {
       forceVersion?: number;
     }
   ): Promise<EvidenceVersion> {
+
     try {
       // Get latest version
       const currentVersion = await this.getLatestVersion(evidenceId, options?.branchName);
@@ -436,6 +452,7 @@ export class EvidenceVersioningService {
    * Get specific version of evidence
    */
   async getVersion(evidenceId: string, version: number): Promise<EvidenceVersion | null> {
+
     try {
       const result = await this.databaseService.query(`
         SELECT * FROM evidence_versions 
@@ -464,6 +481,7 @@ export class EvidenceVersioningService {
    * Get latest version of evidence
    */
   async getLatestVersion(evidenceId: string, branchName?: string): Promise<EvidenceVersion | null> {
+
     try {
       const query = branchName 
         ? 'SELECT * FROM evidence_versions WHERE evidence_id = ? AND (branch_name = ? OR branch_name IS NULL) ORDER BY version DESC LIMIT 1'
@@ -498,6 +516,7 @@ export class EvidenceVersioningService {
     limit?: number;
     offset?: number;
   }): Promise<EvidenceVersion[]> {
+
     try {
       let query = 'SELECT * FROM evidence_versions WHERE evidence_id = ?';
       const params = [evidenceId];
@@ -545,6 +564,7 @@ export class EvidenceVersioningService {
    * Generate diff between two versions
    */
   async generateDiff(evidenceId: string, fromVersion: number, toVersion: number): Promise<EvidenceVersionDiff> {
+
     try {
       const [from, to] = await Promise.all([
         this.getVersion(evidenceId, fromVersion),
@@ -571,6 +591,7 @@ export class EvidenceVersioningService {
     brokenLinks: number[];
     hashMismatches: number[];
   }> {
+
     try {
       const versions = await this.getVersionHistory(evidenceId, { 
         includeBranches: false, 
@@ -636,6 +657,7 @@ export class EvidenceVersioningService {
     description: string,
     createdBy: string
   ): Promise<EvidenceVersionBranch> {
+
     try {
       // Verify base version exists
       const baseVersionData = await this.getVersion(evidenceId, baseVersion);
@@ -687,6 +709,7 @@ export class EvidenceVersioningService {
     rolledBackBy: string,
     reason: string
   ): Promise<EvidenceVersion> {
+
     try {
       const targetVersionData = await this.getVersion(evidenceId, targetVersion);
       if (!targetVersionData) {
@@ -701,7 +724,7 @@ export class EvidenceVersioningService {
           metadata: targetVersionData.metadata,
           classification: targetVersionData.classification,
           filename: targetVersionData.filename
-        },
+  }
         rolledBackBy,
         `Rollback to version ${targetVersion}: ${reason}`
       );
@@ -722,6 +745,7 @@ export class EvidenceVersioningService {
   // =============================================================================
 
   private async storeVersion(version: EvidenceVersion): Promise<void> {
+
     await this.databaseService.query(`
       INSERT INTO evidence_versions (
         id, evidence_id, version, parent_version, branch_name,
@@ -744,6 +768,7 @@ export class EvidenceVersioningService {
   }
 
   private async storeBranch(evidenceId: string, branch: EvidenceVersionBranch): Promise<void> {
+
     await this.databaseService.query(`
       INSERT INTO evidence_version_branches (
         evidence_id, name, base_version, head_version, description, created_by, created_at, status
@@ -755,6 +780,7 @@ export class EvidenceVersioningService {
   }
 
   private async getBranch(evidenceId: string, branchName: string): Promise<EvidenceVersionBranch | null> {
+
     const result = await this.databaseService.query(`
       SELECT * FROM evidence_version_branches WHERE evidence_id = ? AND name = ?
     `, [evidenceId, branchName]);
@@ -829,6 +855,7 @@ export class EvidenceVersioningService {
   }
 
   private async encryptContent(content: string): Promise<string> {
+
     // Simplified encryption - in production, use proper encryption service
     const key = crypto.randomBytes(32);
     const iv = crypto.randomBytes(16);
@@ -849,6 +876,7 @@ export class EvidenceVersioningService {
   }
 
   private async decryptContent(encryptedContent: string): Promise<string> {
+
     try {
       const data = JSON.parse(encryptedContent);
       const key = Buffer.from(data.key, 'base64');
@@ -869,6 +897,7 @@ export class EvidenceVersioningService {
   }
 
   private async signContent(content: string, signedBy: string): Promise<string> {
+
     const hash = crypto.createHash('sha256').update(content + signedBy).digest('hex');
     return `signature_${hash.substr(0, 16)}`;
   }
@@ -978,6 +1007,7 @@ export class EvidenceVersioningService {
   }
 
   private async updateVersionMetadata(versionId: string, updates: Partial<EvidenceVersion>): Promise<void> {
+
     const updateFields: string[] = [];
     const updateValues: unknown[] = [];
     
@@ -1004,13 +1034,13 @@ export class EvidenceVersioningService {
         enabled: true,
         algorithm: 'sha256',
         chainValidation: true
-      },
+  }
       retention: {
         enabled: true,
         retentionPeriodDays: 2555, // 7 years
         archivalEnabled: true,
         compressionAfterDays: 365
-      },
+  }
       synchronization: {
         enabled: false,
         conflictResolution: 'last_writer_wins',
@@ -1027,6 +1057,7 @@ export class EvidenceVersioningService {
   }
 
   private async initializeDatabase(): Promise<void> {
+
     // Create evidence_versions table
     await this.databaseService.query(`
       CREATE TABLE IF NOT EXISTS evidence_versions (
@@ -1062,7 +1093,7 @@ export class EvidenceVersioningService {
         compression_type VARCHAR(50),
         archival_status VARCHAR(50) DEFAULT 'active',
         UNIQUE(evidence_id, version, branch_name)
-      )
+
     `);
 
     // Create evidence_version_branches table
@@ -1078,7 +1109,7 @@ export class EvidenceVersioningService {
         created_at TIMESTAMP NOT NULL,
         status VARCHAR(50) DEFAULT 'active',
         UNIQUE(evidence_id, name)
-      )
+
     `);
 
     // Create indexes

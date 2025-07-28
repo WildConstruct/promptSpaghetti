@@ -1,31 +1,31 @@
 export interface BaseNodeData {
     id: string;
     label: string;
-    variations?: string[];
+    variations?: string;
     category?: string;
     description?: string;
-    tags?: string[];
+    tags?: string;
     includeMetadata?: boolean;
-    transformations?: string[];
-    contextHints?: string[];
+    transformations?: string;
+    contextHints?: string;
 }
 export interface SubjectNodeData extends BaseNodeData {
     type: 'Subject';
     grammaticalNumber?: 'singular' | 'plural' | 'both';
     grammaticalPerson?: 'first' | 'second' | 'third';
     allowPronouns?: boolean;
-    pronouns?: string[];
+    pronouns?: string;
     baseForm?: string;
 }
 export interface ConnectorNodeData extends BaseNodeData {
     type: 'Connector';
-    connectors: string[];
+    connectors: string;
     grammarType?: 'coordinating' | 'subordinating' | 'correlative';
     position?: 'before' | 'after' | 'between';
 }
 export interface AttributeNodeData extends BaseNodeData {
     type: 'Attribute';
-    attributes: string[];
+    attributes: string;
     targetNoun?: string;
     adjectiveType?: 'descriptive' | 'quantitative' | 'demonstrative';
     position?: 'before' | 'after';
@@ -37,12 +37,12 @@ export interface ActionNodeData extends BaseNodeData {
     mood?: 'indicative' | 'imperative' | 'subjunctive';
     requiresObject?: boolean;
     intensity?: 'low' | 'medium' | 'high';
-    adverbVariations?: string[];
+    adverbVariations?: string;
 }
 export interface WeightedChoiceNodeData extends BaseNodeData {
     type: 'WeightedChoice';
-    choices: string[];
-    weights: number[];
+    choices: string;
+    weights: number;
 }
 export interface ConcatNodeData extends BaseNodeData {
     type: 'Concat';
@@ -88,50 +88,4 @@ export type NodeType = NodeData['type'];
 export type RuntimeNodeType = 'WeightedChoice' | 'Concat' | 'Output' | 'Include' | 'SetVariable' | 'GetVariable';
 export type UINodeType = 'Subject' | 'Connector' | 'Attribute' | 'Action';
 export declare function isRuntimeNodeType(type: string): type is RuntimeNodeType;
-export declare function isUINodeType(type: string): type is UINodeType;
-export declare function createBaseNodeData(id: string, label: string): BaseNodeData;
-export declare function createWeightedChoiceNodeData(id: string, label?: string): WeightedChoiceNodeData;
-export declare function createConcatNodeData(id: string, label?: string): ConcatNodeData;
-export declare function createOutputNodeData(id: string, label?: string): OutputNodeData;
-export declare function createIncludeNodeData(id: string, label?: string): IncludeNodeData;
-export declare function createSetVariableNodeData(id: string, label?: string): SetVariableNodeData;
-export declare function createGetVariableNodeData(id: string, label?: string): GetVariableNodeData;
-export declare function createSubjectNodeData(id: string, label?: string): SubjectNodeData;
-export declare function createActionNodeData(id: string, label?: string): ActionNodeData;
-export declare function createNodeData(type: NodeType, id: string, label?: string): NodeData;
-export interface RuntimeNodeData {
-    id: string;
-    type: RuntimeNodeType;
-    inputs?: string[];
-    [key: string]: any;
-}
-export declare function serializeForRuntime(nodeData: NodeData): RuntimeNodeData | null;
-export declare function deserializeFromRuntime(runtimeData: RuntimeNodeData): NodeData | null;
-export declare function validateNodeData(nodeData: Partial<NodeData>): string[];
-export interface NodeOperations {
-    addVariation: (nodeId: string, variation: string) => void;
-    removeVariation: (nodeId: string, variationIndex: number) => void;
-    updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void;
-    reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
-    updateNodeData: (nodeId: string, updates: Partial<NodeData>) => void;
-    duplicateNode: (nodeId: string) => void;
-    deleteNode: (nodeId: string) => void;
-}
-export interface VariationConfig {
-    id: string;
-    text: string;
-    weight?: number;
-    enabled?: boolean;
-    tags?: string[];
-    metadata?: Record<string, any>;
-}
-export interface NodeTemplate {
-    id: string;
-    name: string;
-    description: string;
-    nodeType: NodeType;
-    defaultData: Partial<NodeData>;
-    category: string;
-    tags: string[];
-}
 //# sourceMappingURL=NodeTypes.d.ts.map

@@ -56,7 +56,7 @@ describe('OAuth Security Enhancements', () => {
           authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
           tokenUrl: 'https://oauth2.googleapis.com/token',
           userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
-        },
+  }
         github: {
           clientId: 'github-client-id',
           clientSecret: 'github-client-secret',
@@ -65,7 +65,7 @@ describe('OAuth Security Enhancements', () => {
           authorizationUrl: 'https://github.com/login/oauth/authorize',
           tokenUrl: 'https://github.com/login/oauth/access_token',
           userInfoUrl: 'https://api.github.com/user'
-        },
+  }
         microsoft: {
           clientId: 'microsoft-client-id',
           clientSecret: 'microsoft-client-secret',
@@ -203,7 +203,7 @@ describe('OAuth Security Enhancements', () => {
         expect.objectContaining({
           eventType: 'OAUTH_INVALID_REDIRECT_URI',
           severity: 'MEDIUM'
-        })
+  }
       );
     });
   });
@@ -299,7 +299,7 @@ describe('OAuth Security Enhancements', () => {
           clientId: mockConfig.oauth.google.clientId,
           scopes: mockConfig.oauth.google.scopes,
           pkceUsed: true
-        },
+  }
         severity: 'LOW'
       });
     });
@@ -366,7 +366,7 @@ describe('OAuth Security Enhancements', () => {
             pkceUsed: true
           }),
           severity: 'LOW'
-        })
+  }
       );
     });
 
@@ -383,7 +383,7 @@ describe('OAuth Security Enhancements', () => {
         expect.objectContaining({
           eventType: 'OAUTH_HTTP_REDIRECT_BLOCKED',
           severity: 'MEDIUM'
-        })
+  }
       );
       
       process.env.NODE_ENV = originalEnv;
@@ -425,8 +425,8 @@ describe('OAuth Security Enhancements', () => {
           eventType: 'OAUTH_AUTHORIZATION_URL_GENERATED',
           details: expect.objectContaining({
             pkceUsed: true
-          })
-        })
+  }
+  }
       );
     });
   });

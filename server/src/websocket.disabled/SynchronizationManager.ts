@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 // Document state and synchronization types
+}
 export interface DocumentState {
   documentId: string;
   version: number;
@@ -11,7 +12,9 @@ export interface DocumentState {
   edges: Map<string, any>;
   metadata: any;
 }
+}
 
+}
 export interface StateUpdate {
   id: string;
   documentId: string;
@@ -21,7 +24,9 @@ export interface StateUpdate {
   operations: StateOperation[];
   checksum: string;
 }
+}
 
+}
 export interface StateOperation {
   id: string;
   type: 'create' | 'update' | 'delete';
@@ -31,7 +36,9 @@ export interface StateOperation {
   oldData?: any;
   timestamp: number;
 }
+}
 
+}
 export interface StateDelta {
   fromVersion: number;
   toVersion: number;
@@ -39,7 +46,9 @@ export interface StateDelta {
   timestamp: number;
   checksum: string;
 }
+}
 
+}
 export interface SyncRequest {
   documentId: string;
   clientVersion: number;
@@ -47,7 +56,9 @@ export interface SyncRequest {
   fullSync: boolean;
   checksum?: string;
 }
+}
 
+}
 export interface SyncResponse {
   documentId: string;
   currentVersion: number;
@@ -59,7 +70,9 @@ export interface SyncResponse {
   conflicts?: string[]; // Conflict IDs
   checksum: string;
 }
+}
 
+}
 export interface SyncManagerConfig {
   maxVersionHistory: number;
   deltaCompressionThreshold: number;
@@ -68,6 +81,7 @@ export interface SyncManagerConfig {
   autoMerge: boolean;
   syncInterval: number; // ms
   maxSyncBatchSize: number;
+}
 }
 
 export class SynchronizationManager extends EventEmitter {
@@ -240,7 +254,7 @@ export class SynchronizationManager extends EventEmitter {
       nodes?: { [id: string]: any };
       edges?: { [id: string]: any };
       metadata?: any;
-    },
+  }
     userId: string
   ): StateOperation[] {
     const operations: StateOperation[] = [];

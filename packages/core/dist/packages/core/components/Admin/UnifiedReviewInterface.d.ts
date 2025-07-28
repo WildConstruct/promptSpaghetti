@@ -28,31 +28,31 @@ export interface ReviewItem {
     template_data?: {
         template_id: string;
         version: number;
-        categories: string[];
-        tags: string[];
+        categories: string;
+        tags: string;
         price_cents: number;
         graph_json: unknown;
-        validation_results: ValidationResult[];
-        previous_reviews?: ReviewFeedback[];
+        validation_results: ValidationResult;
+        previous_reviews?: ReviewFeedback;
     };
     verification_data?: {
         request_type: 'identity' | 'business' | 'creator';
-        documents: DocumentData[];
-        verification_criteria: VerificationCriterion[];
+        documents: DocumentData;
+        verification_criteria: VerificationCriterion;
         previous_attempts?: number;
     };
     violation_data?: {
         policy_id: string;
         violation_type: string;
         severity: 'low' | 'medium' | 'high' | 'critical';
-        evidence: Evidence[];
+        evidence: Evidence;
         automated_detection: boolean;
-        affected_content?: string[];
+        affected_content?: string;
     };
     appeal_data?: {
         original_decision_id: string;
         appeal_reason: string;
-        supporting_evidence: Evidence[];
+        supporting_evidence: Evidence;
         original_reviewer: string;
         appeal_deadline: Date;
     };
@@ -64,13 +64,13 @@ export interface ValidationResult {
     message: string;
     field?: string;
     auto_fixable: boolean;
-    suggestions?: string[];
+    suggestions?: string;
 }
 export interface ReviewFeedback {
     category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
     rating: number;
     comments: string;
-    suggestions: string[];
+    suggestions: string;
     is_blocking: boolean;
 }
 export interface DocumentData {
@@ -110,13 +110,13 @@ export interface Evidence {
 export interface ReviewDecision {
     decision: 'approved' | 'rejected' | 'changes_requested';
     overall_score: number;
-    feedback: ReviewFeedback[];
+    feedback: ReviewFeedback;
     public_comments: string;
     private_notes: string;
     follow_up_required: boolean;
     follow_up_date?: Date;
     conditional_approval?: {
-        conditions: string[];
+        conditions: string;
         deadline: Date;
     };
 }
@@ -125,9 +125,9 @@ export interface UnifiedReviewInterfaceProps {
     onDecision: (decision: ReviewDecision) => void;
     onSaveDraft: (decision: Partial<ReviewDecision>) => void;
     onBack: () => void;
-    reviewerPermissions: string[];
+    reviewerPermissions: string;
     className?: string;
+    const: any;
+    UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps>;
 }
-declare const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps>;
-export default UnifiedReviewInterface;
 //# sourceMappingURL=UnifiedReviewInterface.d.ts.map

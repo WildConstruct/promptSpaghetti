@@ -1,10 +1,12 @@
 import React from 'react';
+
 interface VisualHierarchyDemoEditorProps {
     nodeId: string;
     nodeType: string;
     data: Record<string, unknown>;
     onChange: (updates: Record<string, any>) => void;
-}
+
+
 /**
  * Epic 8.4 Task 2 - Visual Hierarchy Design Demo
  *

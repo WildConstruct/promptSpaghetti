@@ -36,6 +36,7 @@ export class Epic17PerformanceMonitoringService {
    * Initialize Epic 17 Performance Monitoring Service
    */
   public async initialize(): Promise<void> {
+
     if (this.isInitialized) {
       console.log('⚠️ Epic 17 Performance Monitoring Service already initialized');
       return;
@@ -86,7 +87,7 @@ export class Epic17PerformanceMonitoringService {
             baseConfig: baseConfig,
             epic17Config: epic17Config
           }
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -119,6 +120,7 @@ export class Epic17PerformanceMonitoringService {
    * Shutdown the performance monitoring service
    */
   public async shutdown(): Promise<void> {
+
     if (!this.isInitialized || !this.performanceMonitor) {
       return;
     }
@@ -137,7 +139,7 @@ export class Epic17PerformanceMonitoringService {
         userId: 'system',
         details: {
           timestamp: new Date()
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2'],
@@ -164,14 +166,14 @@ export class Epic17PerformanceMonitoringService {
       systemMonitoring: {
         enabled: true,
         interval: 30000 // 30 seconds
-      },
+  }
       bufferFlushInterval: 10000, // 10 seconds
       maxBufferSize: 1000,
       defaultTags: {
         service: 'epic17-admin-controls',
         environment: process.env.NODE_ENV || 'development',
         version: process.env.BUILD_VERSION || '1.0.0'
-      },
+  }
       startTime: new Date(),
       alerting: {
         enabled: true,
@@ -189,20 +191,20 @@ export class Epic17PerformanceMonitoringService {
       adminMonitoring: {
         enabled: true,
         interval: 15000 // 15 seconds for more frequent admin monitoring
-      },
+  }
       integrationMonitoring: {
         enabled: true,
         interval: 60000 // 1 minute for integration health checks
-      },
+  }
       complianceMonitoring: {
         enabled: true,
         interval: 300000 // 5 minutes for compliance checks
-      },
+  }
       defaultTags: {
         epic: 'epic17',
         component: 'backstage-admin-controls',
         monitoring_level: 'comprehensive'
-      },
+  }
       alerting: {
         enabled: true,
         webhookUrl: process.env.EPIC17_ALERT_WEBHOOK_URL,

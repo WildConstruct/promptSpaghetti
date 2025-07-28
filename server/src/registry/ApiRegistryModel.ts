@@ -63,6 +63,7 @@ export enum HttpMethod {
 // API Registry Interfaces
 // =============================================================================
 
+}
 export interface ApiEndpoint {
   // Identification
   endpointId: string;
@@ -124,7 +125,9 @@ export interface ApiEndpoint {
   consumers: string[];
   relatedEndpoints: string[];
 }
+}
 
+}
 export interface ApiService {
   // Identification
   serviceId: string;
@@ -179,7 +182,9 @@ export interface ApiService {
   categories: string[];
   complianceLabels: string[];
 }
+}
 
+}
 export interface AuthenticationSpec {
   type: ApiSecurityLevel;
   location?: 'header' | 'query' | 'cookie';
@@ -192,7 +197,9 @@ export interface AuthenticationSpec {
   audience?: string;
   scopes?: Record<string, string>;
 }
+}
 
+}
 export interface OAuthFlow {
   type: 'implicit' | 'authorizationCode' | 'clientCredentials' | 'password';
   authorizationUrl?: string;
@@ -200,7 +207,9 @@ export interface OAuthFlow {
   refreshUrl?: string;
   scopes: Record<string, string>;
 }
+}
 
+}
 export interface RateLimitSpec {
   enabled: boolean;
   global?: RateLimit;
@@ -210,21 +219,26 @@ export interface RateLimitSpec {
   customLimits?: Array<{
     condition: string;
     limit: RateLimit;
+}
   }>;
 }
 
+}
 export interface RateLimit {
   requests: number;
   window: string; // e.g., '1m', '1h', '1d'
   burst?: number;
 }
+}
 
+}
 export interface DocumentationSpec {
   summary: string;
   description: string;
   externalDocs?: {
     description: string;
     url: string;
+}
   };
   changelog?: string;
   migrationGuide?: string;
@@ -235,6 +249,7 @@ export interface DocumentationSpec {
   }>;
 }
 
+}
 export interface ExampleSpec {
   name: string;
   description: string;
@@ -242,6 +257,7 @@ export interface ExampleSpec {
     headers?: Record<string, string>;
     query?: Record<string, unknown>;
     body?: unknown;
+}
   };
   response?: {
     status: number;
@@ -251,6 +267,7 @@ export interface ExampleSpec {
   curl?: string;
 }
 
+}
 export interface JsonSchema {
   type: string;
   properties?: Record<string, JsonSchema>;
@@ -262,7 +279,9 @@ export interface JsonSchema {
   enum?: unknown[];
   example?: unknown;
 }
+}
 
+}
 export interface EndpointMetrics {
   requestCount: number;
   errorCount: number;
@@ -275,7 +294,9 @@ export interface EndpointMetrics {
   errorRate: number;
   uptimePercentage: number;
 }
+}
 
+}
 export interface ServiceMetrics {
   totalEndpoints: number;
   activeEndpoints: number;
@@ -287,7 +308,9 @@ export interface ServiceMetrics {
   diskUsage?: number;
   networkUsage?: number;
 }
+}
 
+}
 export interface HealthStatus {
   status: 'healthy' | 'degraded' | 'unhealthy' | 'unknown';
   lastCheck: Date;
@@ -296,7 +319,9 @@ export interface HealthStatus {
   issues: HealthIssue[];
   dependencies: DependencyHealth[];
 }
+}
 
+}
 export interface HealthIssue {
   severity: 'low' | 'medium' | 'high' | 'critical';
   type: string;
@@ -305,14 +330,18 @@ export interface HealthIssue {
   lastSeen: Date;
   count: number;
 }
+}
 
+}
 export interface DependencyHealth {
   name: string;
   status: 'healthy' | 'degraded' | 'unhealthy';
   responseTime?: number;
   lastCheck: Date;
 }
+}
 
+}
 export interface CompatibilityInfo {
   backwardCompatible: boolean;
   forwardCompatible: boolean;
@@ -320,7 +349,9 @@ export interface CompatibilityInfo {
   deprecatedFeatures: string[];
   migrationRequired: boolean;
 }
+}
 
+}
 export interface DeploymentInfo {
   environment: string;
   cluster?: string;
@@ -329,12 +360,14 @@ export interface DeploymentInfo {
   resources?: {
     cpu: string;
     memory: string;
+}
   };
   lastDeployment: Date;
   deploymentStrategy: string;
   rollbackStrategy?: string;
 }
 
+}
 export interface ServiceDependency {
   serviceId: string;
   name: string;
@@ -342,11 +375,13 @@ export interface ServiceDependency {
   criticality: 'low' | 'medium' | 'high' | 'critical';
   healthImpact: boolean;
 }
+}
 
 // =============================================================================
 // Registry Operations
 // =============================================================================
 
+}
 export interface ApiRegistryFilters {
   serviceIds?: string[];
   statuses?: ApiStatus[];
@@ -364,7 +399,9 @@ export interface ApiRegistryFilters {
   sortBy?: 'name' | 'createdAt' | 'updatedAt' | 'popularity' | 'responseTime';
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface ApiRegistrySearchResult {
   endpoints: ApiEndpoint[];
   services: ApiService[];
@@ -372,7 +409,9 @@ export interface ApiRegistrySearchResult {
   hasMore: boolean;
   filters: ApiRegistryFilters;
 }
+}
 
+}
 export interface ApiDiscoveryResult {
   endpoint: ApiEndpoint;
   service: ApiService;
@@ -381,7 +420,9 @@ export interface ApiDiscoveryResult {
   documentation: DocumentationLink[];
   examples: ExampleSpec[];
 }
+}
 
+}
 export interface ApiRecommendation {
   type: 'alternative' | 'complement' | 'upgrade' | 'migration';
   endpointId: string;
@@ -389,19 +430,24 @@ export interface ApiRecommendation {
   reason: string;
   confidence: number;
 }
+}
 
+}
 export interface DocumentationLink {
   title: string;
   url: string;
   type: 'guide' | 'reference' | 'tutorial' | 'example' | 'changelog';
 }
+}
 
+}
 export interface RegistryEvent {
   eventId: string;
   eventType: RegistryEventType;
   timestamp: Date;
   entityType: 'endpoint' | 'service';
   entityId: string;
+}
   changes?: Record<string, { old: unknown; new: unknown }>;
   userId?: string;
   metadata: Record<string, unknown>;
@@ -424,10 +470,12 @@ export enum RegistryEventType {
 // Registry Analytics
 // =============================================================================
 
+}
 export interface RegistryAnalytics {
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   
   // Usage Analytics
@@ -471,6 +519,7 @@ export interface RegistryAnalytics {
   };
 }
 
+}
 export interface ComplianceViolation {
   endpointId: string;
   violationType: string;
@@ -478,11 +527,13 @@ export interface ComplianceViolation {
   description: string;
   remediation: string;
 }
+}
 
 // =============================================================================
 // Registry Configuration
 // =============================================================================
 
+}
 export interface RegistryConfiguration {
   // Discovery Settings
   discovery: {
@@ -490,6 +541,7 @@ export interface RegistryConfiguration {
     scanInterval: number;
     scanPaths: string[];
     excludePaths: string[];
+}
   };
   
   // Validation Settings

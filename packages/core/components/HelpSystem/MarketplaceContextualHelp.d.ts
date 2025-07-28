@@ -17,6 +17,7 @@ import React from 'react';
 import { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 import { MarketplaceHelpContent } from './MarketplaceHelpOverlay';
 export type ContextualTriggerType = 'hover' | 'click' | 'focus' | 'scroll' | 'idle' | 'error' | 'success' | 'first-time' | 'struggle-detected' | 'feature-discovery';
+
 export interface UserBehaviorContext {
     currentPage: string;
     previousPage?: string;
@@ -38,7 +39,7 @@ export interface UserBehaviorContext {
     taskCompletionRate: number;
     featureDiscoveryCount: number;
     returnUserBehavior: boolean;
-}
+
 export interface ContextualHelpRule {
     id: string;
     name: string;
@@ -54,7 +55,7 @@ export interface ContextualHelpRule {
     priority: number;
     cooldownMinutes?: number;
     maxTriggers?: number;
-}
+
 export interface MarketplaceContextualHelpProps {
     userId?: string;
     userRole?: 'buyer' | 'creator' | 'community-member' | 'new-user';
@@ -69,7 +70,7 @@ export interface MarketplaceContextualHelpProps {
     onContextualHelpTriggered?: (rule: ContextualHelpRule, context: unknown) => void;
     onUserStruggleDetected?: (struggleType: string, severity: number) => void;
     onHelpEffectiveness?: (helpId: string, wasEffective: boolean) => void;
-}
+
 export declare const MarketplaceContextualHelp: React.FC<MarketplaceContextualHelpProps>;
 export default MarketplaceContextualHelp;
 //# sourceMappingURL=MarketplaceContextualHelp.d.ts.map

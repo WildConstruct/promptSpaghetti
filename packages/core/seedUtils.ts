@@ -9,4 +9,3 @@ import seedrandom from 'seedrandom';
  */
 export function createRNG(seed: string | number) {
   return seedrandom(String(seed));
-}

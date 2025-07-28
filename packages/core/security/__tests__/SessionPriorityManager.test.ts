@@ -15,29 +15,29 @@ import {
 describe('SessionPriorityManager', () => {
   let manager: SessionPriorityManager;
   beforeEach(() => {
-    manager = new SessionPriorityManager({)
-      maxSessionsPerUser: 2,
-      maxSessionsPerDevice: 1,
-      maxTotalSessions: 5,
-      evictionPolicy: EvictionPolicy.PRIORITY_BASED,
-      conflictResolution: ConflictResolution.EVICT_LOWEST_PRIORITY,
-    });
+  manager = new SessionPriorityManager({)
+  maxSessionsPerUser: 2,
+  maxSessionsPerDevice: 1,
+  maxTotalSessions: 5,
+  evictionPolicy: EvictionPolicy.PRIORITY_BASED,
+  conflictResolution: ConflictResolution.EVICT_LOWEST_PRIORITY,
+});
   });
   afterEach(() => {
     manager.destroy();
   });
   describe('Session Registration', () => {
-    test('should register session successfully', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 80,
-        locationFamiliarity: 90,
-        timeOfDayScore: 75,
-        sessionDuration: 0,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+  test('should register session successfully', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 80,
+  locationFamiliarity: 90,
+  timeOfDayScore: 75,
+  sessionDuration: 0,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       const result = manager.registerSession(;);
         'session-1',
         'user-1',
@@ -50,26 +50,26 @@ describe('SessionPriorityManager', () => {
       expect(result.evicted).toBeUndefined();
     });
     test('should calculate priority score correctly', () => {
-      const adminFactors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 5,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
-      const guestFactors: PriorityFactors = {
-        userRole: 'guest',
-        deviceTrustLevel: 30,
-        locationFamiliarity: 20,
-        timeOfDayScore: 40,
-        sessionDuration: 120,
-        activityLevel: 10,
-        securityRequirement: 25,
-        businessCriticality: 20,
-      };
+  const adminFactors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 5,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
+      const guestFactors: PriorityFactors = {,
+  userRole: 'guest',
+  deviceTrustLevel: 30,
+  locationFamiliarity: 20,
+  timeOfDayScore: 40,
+  sessionDuration: 120,
+  activityLevel: 10,
+  securityRequirement: 25,
+  businessCriticality: 20,
+};
       manager.registerSession('admin-session', 'admin', 'device-1', SessionPriority.HIGH, adminFactors);
       manager.registerSession('guest-session', 'guest', 'device-2', SessionPriority.LOW, guestFactors);
       const ranking = manager.getSessionRanking();
@@ -84,31 +84,31 @@ describe('SessionPriorityManager', () => {
         expect(data.conflicts).toBe(0);
         done();
       });
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+      const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       manager.registerSession('event-session', 'user', 'device', SessionPriority.HIGH, factors);
     });
   });
   describe('Conflict Detection and Resolution', () => {
-    test('should detect user session limit conflicts', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  test('should detect user session limit conflicts', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       // Register maximum sessions for user
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.MEDIUM, factors);
       manager.registerSession('session-2', 'user-1', 'device-2', SessionPriority.MEDIUM, factors);
@@ -119,16 +119,16 @@ describe('SessionPriorityManager', () => {
       expect(conflicts[0].affectedSessions).toHaveLength(2);
     });
     test('should detect device session limit conflicts', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       // Register session on device
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.MEDIUM, factors);
       // Try to register another session on same device (should detect conflict)
@@ -137,46 +137,45 @@ describe('SessionPriorityManager', () => {
       expect(conflicts[0].type).toBe('device_limit');
     });
     test('should detect total session limit conflicts', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       // Fill up to maximum total sessions
       for (let i = 1; i <= 5; i++) {
         manager.registerSession(`session-${i}`, `user-${i}`, `device-${i}`, SessionPriority.MEDIUM, factors);}
-      }
       // Try to register one more (should detect conflict)
       const conflicts = manager.detectConflicts('user-6', 'device-6', SessionPriority.MEDIUM);
       expect(conflicts).toHaveLength(1);
       expect(conflicts[0].type).toBe('total_limit');
     });
     test('should auto-resolve conflicts by evicting lowest priority', () => {
-      const lowFactors: PriorityFactors = {
-        userRole: 'guest',
-        deviceTrustLevel: 30,
-        locationFamiliarity: 20,
-        timeOfDayScore: 40,
-        sessionDuration: 60,
-        activityLevel: 10,
-        securityRequirement: 25,
-        businessCriticality: 20,
-      };
-      const highFactors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 5,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
+  const lowFactors: PriorityFactors = {,
+  userRole: 'guest',
+  deviceTrustLevel: 30,
+  locationFamiliarity: 20,
+  timeOfDayScore: 40,
+  sessionDuration: 60,
+  activityLevel: 10,
+  securityRequirement: 25,
+  businessCriticality: 20,
+};
+      const highFactors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 5,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
       // Register maximum sessions with low priority
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.LOW, lowFactors);
       manager.registerSession('session-2', 'user-1', 'device-2', SessionPriority.LOW, lowFactors);
@@ -188,17 +187,17 @@ describe('SessionPriorityManager', () => {
     });
   });
   describe('Session Activity Updates', () => {
-    test('should update session activity and recalculate score', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  test('should update session activity and recalculate score', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.MEDIUM, factors);
       const originalRanking = manager.getSessionRanking();
       const originalScore = originalRanking[0].score;
@@ -215,37 +214,37 @@ describe('SessionPriorityManager', () => {
         expect(data.session.factors.activityLevel).toBe(85);
         done();
       });
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+      const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       manager.registerSession('activity-session', 'user', 'device', SessionPriority.MEDIUM, factors);
       manager.updateSessionActivity('activity-session', 85);
     });
   });
   describe('Eviction Policies', () => {
-    test('should apply LRU eviction policy', () => {
-      const testManager = new SessionPriorityManager({)
-        maxSessionsPerUser: 1,
-        evictionPolicy: EvictionPolicy.LRU,
-        conflictResolution: ConflictResolution.EVICT_OLDEST,
-      });
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  test('should apply LRU eviction policy', () => {
+  const testManager = new SessionPriorityManager({)
+  maxSessionsPerUser: 1,
+  evictionPolicy: EvictionPolicy.LRU,
+  conflictResolution: ConflictResolution.EVICT_OLDEST,
+});
+      const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       // Register first session
       testManager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.MEDIUM, factors);
       // Update activity to make it recently used
@@ -257,22 +256,22 @@ describe('SessionPriorityManager', () => {
       testManager.destroy();
     });
     test('should apply priority-based eviction policy', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 0,
-        activityLevel: 50,
-        securityRequirement: 60,
-        businessCriticality: 55,
-      };
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 0,
+  activityLevel: 50,
+  securityRequirement: 60,
+  businessCriticality: 55,
+};
       const lowFactors: PriorityFactors = {
-        ...factors,
-        userRole: 'guest',
-        deviceTrustLevel: 30,
-        activityLevel: 20,
-      };
+  ...factors,
+  userRole: 'guest',
+  deviceTrustLevel: 30,
+  activityLevel: 20,
+};
       // Register low priority session
       manager.registerSession('low-session', 'user-1', 'device-1', SessionPriority.LOW, lowFactors);
       manager.registerSession('medium-session', 'user-1', 'device-2', SessionPriority.MEDIUM, factors);
@@ -283,21 +282,20 @@ describe('SessionPriorityManager', () => {
     });
   });
   describe('Emergency Sessions', () => {
-    test('should create emergency session and evict others', () => {
-      const factors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 0,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
+  test('should create emergency session and evict others', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 0,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
       // Fill up sessions
       for (let i = 1; i <= 5; i++) {
         manager.registerSession(`session-${i}`, `user-${i}`, `device-${i}`, SessionPriority.MEDIUM, factors);}
-      }
       // Create emergency session
       const result = manager.createEmergencySession('emergency', 'admin', 'admin-device', factors);
       expect(result.created).toBe(true);
@@ -316,51 +314,51 @@ describe('SessionPriorityManager', () => {
         expect(data.evicted).toBeDefined();
         done();
       });
-      const factors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 0,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
+      const factors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 0,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
       manager.createEmergencySession('emergency-event', 'admin', 'device', factors);
     });
   });
   describe('Session Ranking', () => {
-    test('should rank sessions by priority and score', () => {
-      const highFactors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 5,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
-      const mediumFactors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
-      const lowFactors: PriorityFactors = {
-        userRole: 'guest',
-        deviceTrustLevel: 40,
-        locationFamiliarity: 30,
-        timeOfDayScore: 45,
-        sessionDuration: 90,
-        activityLevel: 20,
-        securityRequirement: 30,
-        businessCriticality: 25,
-      };
+  test('should rank sessions by priority and score', () => {
+  const highFactors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 5,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
+      const mediumFactors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
+      const lowFactors: PriorityFactors = {,
+  userRole: 'guest',
+  deviceTrustLevel: 40,
+  locationFamiliarity: 30,
+  timeOfDayScore: 45,
+  sessionDuration: 90,
+  activityLevel: 20,
+  securityRequirement: 30,
+  businessCriticality: 25,
+};
       manager.registerSession('high-session', 'admin', 'device-1', SessionPriority.HIGH, highFactors);
       manager.registerSession('medium-session', 'user', 'device-2', SessionPriority.MEDIUM, mediumFactors);
       manager.registerSession('low-session', 'guest', 'device-3', SessionPriority.LOW, lowFactors);
@@ -373,17 +371,17 @@ describe('SessionPriorityManager', () => {
     });
   });
   describe('Metrics and Statistics', () => {
-    test('should provide comprehensive metrics', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+  test('should provide comprehensive metrics', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       // Register sessions with different priorities
       manager.registerSession('critical', 'admin', 'device-1', SessionPriority.CRITICAL, { ...factors, userRole: 'admin' });
       manager.registerSession('high', 'user-1', 'device-2', SessionPriority.HIGH, factors);
@@ -399,16 +397,16 @@ describe('SessionPriorityManager', () => {
       expect(metrics.averageSessionScore).toBeGreaterThan(0);
     });
     test('should track eviction history in metrics', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       // Fill sessions to trigger eviction
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.LOW, factors);
       manager.registerSession('session-2', 'user-1', 'device-2', SessionPriority.LOW, factors);
@@ -419,17 +417,17 @@ describe('SessionPriorityManager', () => {
     });
   });
   describe('User Session Management', () => {
-    test('should get sessions for specific user', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+  test('should get sessions for specific user', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       manager.registerSession('session-1', 'user-1', 'device-1', SessionPriority.MEDIUM, factors);
       manager.registerSession('session-2', 'user-1', 'device-2', SessionPriority.HIGH, factors);
       manager.registerSession('session-3', 'user-2', 'device-3', SessionPriority.MEDIUM, factors);
@@ -454,23 +452,23 @@ describe('SessionPriorityManager', () => {
         done();
       });
       manager.updateConfig({)
-        maxSessionsPerUser: 5,
-        evictionPolicy: EvictionPolicy.LRU,
-      });
+  maxSessionsPerUser: 5,
+  evictionPolicy: EvictionPolicy.LRU,
+});
     });
   });
   describe('Grace Periods and Eviction Protection', () => {
-    test('should respect eviction protection', () => {
-      const factors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 0,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
+  test('should respect eviction protection', () => {
+  const factors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 0,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
       // Register protected session
       manager.registerSession('protected', 'admin', 'device-1', SessionPriority.CRITICAL, factors);
       // Try to evict protected session
@@ -478,16 +476,16 @@ describe('SessionPriorityManager', () => {
       expect(success).toBe(false);
     });
     test('should offer grace period when specified', () => {
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+  const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       manager.registerSession('grace-session', 'user', 'device', SessionPriority.MEDIUM, factors);
       // Evict with grace period
       const success = manager.evictSession('grace-session', 'test_eviction', 5);
@@ -503,16 +501,16 @@ describe('SessionPriorityManager', () => {
         expect(data.minutes).toBe(3);
         done();
       });
-      const factors: PriorityFactors = {
-        userRole: 'user',
-        deviceTrustLevel: 70,
-        locationFamiliarity: 80,
-        timeOfDayScore: 60,
-        sessionDuration: 30,
-        activityLevel: 60,
-        securityRequirement: 70,
-        businessCriticality: 65,
-      };
+      const factors: PriorityFactors = {,
+  userRole: 'user',
+  deviceTrustLevel: 70,
+  locationFamiliarity: 80,
+  timeOfDayScore: 60,
+  sessionDuration: 30,
+  activityLevel: 60,
+  securityRequirement: 70,
+  businessCriticality: 65,
+};
       manager.registerSession('grace-event-session', 'user', 'device', SessionPriority.MEDIUM, factors);
       manager.evictSession('grace-event-session', 'test', 3);
     });
@@ -527,10 +525,10 @@ describe('SessionPriorityManager', () => {
       });
       // Manually trigger maintenance by emitting the event
       manager.emit('maintenanceCompleted', {)
-        expiredGracePeriods: 0,
-        cleanedConflicts: 0,
-        evictionHistorySize: 0,
-      });
+  expiredGracePeriods: 0,
+  cleanedConflicts: 0,
+  evictionHistorySize: 0,
+});
     });
     test('should destroy manager and clean up resources', (done) => {
       manager.on('destroyed', () => {
@@ -551,19 +549,19 @@ describe('SessionPriorityManager', () => {
       expect(conflicts).toHaveLength(0);
     });
     test('should handle emergency session creation when disabled', () => {
-      const noEmergencyManager = new SessionPriorityManager({)
-        emergencyOverride: false,
-      });
-      const factors: PriorityFactors = {
-        userRole: 'admin',
-        deviceTrustLevel: 95,
-        locationFamiliarity: 100,
-        timeOfDayScore: 85,
-        sessionDuration: 0,
-        activityLevel: 80,
-        securityRequirement: 90,
-        businessCriticality: 95,
-      };
+  const noEmergencyManager = new SessionPriorityManager({)
+  emergencyOverride: false,
+});
+      const factors: PriorityFactors = {,
+  userRole: 'admin',
+  deviceTrustLevel: 95,
+  locationFamiliarity: 100,
+  timeOfDayScore: 85,
+  sessionDuration: 0,
+  activityLevel: 80,
+  securityRequirement: 90,
+  businessCriticality: 95,
+};
       const result = noEmergencyManager.createEmergencySession('emergency', 'admin', 'device', factors);
       expect(result.created).toBe(false);
       noEmergencyManager.destroy();

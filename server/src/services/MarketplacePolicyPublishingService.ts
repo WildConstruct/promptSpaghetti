@@ -42,6 +42,7 @@ export enum NotificationChannel {
 }
 
 // Core interfaces
+}
 export interface MarketplacePolicy {
   id: string;
   policy_type: MarketplacePolicyType;
@@ -59,7 +60,9 @@ export interface MarketplacePolicy {
   created_by: string;
   updated_by: string;
 }
+}
 
+}
 export interface PolicyContent {
   sections: PolicySection[];
   variables: PolicyVariable[];
@@ -67,7 +70,9 @@ export interface PolicyContent {
   attachments: PolicyAttachment[];
   localization: LocalizationConfig[];
 }
+}
 
+}
 export interface PolicySection {
   id: string;
   title: string;
@@ -78,7 +83,9 @@ export interface PolicySection {
   conditions: DisplayCondition[];
   subsections: PolicySection[];
 }
+}
 
+}
 export interface PolicyVariable {
   name: string;
   type: 'text' | 'number' | 'date' | 'boolean' | 'list';
@@ -88,20 +95,26 @@ export interface PolicyVariable {
   scope: 'global' | 'section' | 'conditional';
   validation_rules: ValidationRule[];
 }
+}
 
+}
 export interface ValidationRule {
   type: 'required' | 'min_length' | 'max_length' | 'pattern' | 'range';
   value: Error;
   error_message: string;
 }
+}
 
+}
 export interface TemplateReference {
   template_id: string;
   name: string;
   version: string;
   variables: Record<string, any>;
 }
+}
 
+}
 export interface PolicyAttachment {
   id: string;
   name: string;
@@ -111,7 +124,9 @@ export interface PolicyAttachment {
   mime_type?: string;
   description?: string;
 }
+}
 
+}
 export interface LocalizationConfig {
   locale: string;
   content: Partial<PolicyContent>;
@@ -119,14 +134,18 @@ export interface LocalizationConfig {
   translator?: string;
   reviewed_by?: string;
 }
+}
 
+}
 export interface DisplayCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than';
   value: Error;
   logical_operator?: 'and' | 'or';
 }
+}
 
+}
 export interface PolicyMetadata {
   target_audience: UserRole[];
   jurisdictions: string[];
@@ -140,7 +159,9 @@ export interface PolicyMetadata {
   priority: 'low' | 'medium' | 'high' | 'critical';
   risk_level: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
+}
 export interface PublicationInfo {
   publishing_status: PublishingStatus;
   published_at?: Date;
@@ -150,7 +171,9 @@ export interface PublicationInfo {
   notification_settings: NotificationSettings;
   announcement?: PolicyAnnouncement;
 }
+}
 
+}
 export interface PublicationChannel {
   channel: string;
   status: 'pending' | 'published' | 'failed';
@@ -158,7 +181,9 @@ export interface PublicationChannel {
   error_message?: string;
   audience_filter?: AudienceFilter;
 }
+}
 
+}
 export interface RolloutStrategy {
   type: 'immediate' | 'phased' | 'scheduled' | 'canary';
   start_date: Date;
@@ -166,7 +191,9 @@ export interface RolloutStrategy {
   canary_percentage?: number;
   rollback_triggers: RollbackTrigger[];
 }
+}
 
+}
 export interface RolloutPhase {
   phase_id: string;
   name: string;
@@ -176,20 +203,26 @@ export interface RolloutPhase {
   audience: UserRole[];
   success_criteria: SuccessCriteria[];
 }
+}
 
+}
 export interface RollbackTrigger {
   metric: string;
   threshold: number;
   operator: 'greater_than' | 'less_than';
   action: 'pause' | 'rollback' | 'alert';
 }
+}
 
+}
 export interface SuccessCriteria {
   metric: string;
   target: number;
   required: boolean;
 }
+}
 
+}
 export interface NotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
@@ -199,13 +232,17 @@ export interface NotificationSettings {
   send_reminders: boolean;
   reminder_schedule?: ReminderSchedule[];
 }
+}
 
+}
 export interface ReminderSchedule {
   days_before: number;
   channels: NotificationChannel[];
   template_id: string;
 }
+}
 
+}
 export interface PolicyAnnouncement {
   title: string;
   summary: string;
@@ -213,7 +250,9 @@ export interface PolicyAnnouncement {
   call_to_action?: string;
   banner_config?: BannerConfig;
 }
+}
 
+}
 export interface BannerConfig {
   enabled: boolean;
   style: 'info' | 'warning' | 'success' | 'error';
@@ -221,7 +260,9 @@ export interface BannerConfig {
   dismissible: boolean;
   expiry_date?: Date;
 }
+}
 
+}
 export interface AudienceFilter {
   user_roles: UserRole[];
   user_segments: string[];
@@ -229,7 +270,9 @@ export interface AudienceFilter {
   account_types: string[];
   exclude_users?: string[];
 }
+}
 
+}
 export interface EnforcementConfig {
   enabled: boolean;
   automatic_enforcement: boolean;
@@ -238,7 +281,9 @@ export interface EnforcementConfig {
   grace_period_hours: number;
   escalation_rules: EscalationRule[];
 }
+}
 
+}
 export interface ViolationDetectionConfig {
   enabled: boolean;
   detection_rules: DetectionRule[];
@@ -246,7 +291,9 @@ export interface ViolationDetectionConfig {
   confidence_threshold: number;
   review_required: boolean;
 }
+}
 
+}
 export interface DetectionRule {
   rule_id: string;
   name: string;
@@ -255,14 +302,18 @@ export interface DetectionRule {
   severity: 'low' | 'medium' | 'high' | 'critical';
   enabled: boolean;
 }
+}
 
+}
 export interface RuleCondition {
   field: string;
   operator: string;
   value: Error;
   logical_operator?: 'and' | 'or';
 }
+}
 
+}
 export interface EnforcementAction {
   action_id: string;
   name: string;
@@ -272,25 +323,33 @@ export interface EnforcementAction {
   conditions: ActionCondition[];
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface ActionCondition {
   violation_count: number;
   severity: string;
   time_window_hours: number;
 }
+}
 
+}
 export interface EscalationRule {
   trigger: EscalationTrigger;
   action: string;
   notify_roles: string[];
   delay_hours: number;
 }
+}
 
+}
 export interface EscalationTrigger {
   type: 'violation_count' | 'severity' | 'time_elapsed' | 'appeal_filed';
   threshold: number;
 }
+}
 
+}
 export interface PolicyAnalytics {
   views: number;
   acknowledgments: number;
@@ -300,13 +359,16 @@ export interface PolicyAnalytics {
   compliance_score: number;
   last_updated: Date;
 }
+}
 
+}
 export interface UserFeedback {
   user_id: string;
   rating: number;
   comment?: string;
   category: string;
   timestamp: Date;
+}
 }
 
 export enum UserRole {
@@ -319,6 +381,7 @@ export enum UserRole {
   ALL = 'all'
 }
 
+}
 export interface PolicyPublishingRequest {
   policy_id: string;
   publication_channels: string[];
@@ -327,7 +390,9 @@ export interface PolicyPublishingRequest {
   announcement?: PolicyAnnouncement;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface PolicyVersionRequest {
   policy_id: string;
   version_increment: 'major' | 'minor' | 'patch';
@@ -336,7 +401,9 @@ export interface PolicyVersionRequest {
   effective_date: Date;
   requires_acknowledgment: boolean;
 }
+}
 
+}
 export interface PolicyChange {
   section: string;
   type: 'addition' | 'modification' | 'deletion';
@@ -345,12 +412,14 @@ export interface PolicyChange {
   new_content?: string;
   impact_level: 'low' | 'medium' | 'high' | 'critical';
 }
+}
 
 export class MarketplacePolicyPublishingService {
   constructor(private pool: Pool) {}
 
   // Initialize schema
   async initializeSchema(): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -476,6 +545,7 @@ export class MarketplacePolicyPublishingService {
     policyData: Omit<MarketplacePolicy, 'id' | 'created_at' | 'updated_at'>,
     authorId: string
   ): Promise<MarketplacePolicy> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -531,6 +601,7 @@ export class MarketplacePolicyPublishingService {
     updates: Partial<MarketplacePolicy>,
     authorId: string
   ): Promise<MarketplacePolicy> {
+
     const client = await this.pool.connect();
     try {
       const policy = await this.getPolicyById(policyId);
@@ -582,6 +653,7 @@ export class MarketplacePolicyPublishingService {
     changelog: string,
     authorId: string
   ): Promise<string> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -609,6 +681,7 @@ export class MarketplacePolicyPublishingService {
     publishingRequest: PolicyPublishingRequest,
     publisherId: string
   ): Promise<{ publication_id: string; status: string }> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -685,6 +758,7 @@ export class MarketplacePolicyPublishingService {
 
   // Get policy by ID
   async getPolicyById(policyId: string): Promise<MarketplacePolicy | null> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -707,6 +781,7 @@ export class MarketplacePolicyPublishingService {
     policyType: MarketplacePolicyType,
     status?: PolicyStatus
   ): Promise<MarketplacePolicy[]> {
+
     const client = await this.pool.connect();
     try {
       let query = 'SELECT * FROM marketplace_policies WHERE policy_type = $1';
@@ -731,6 +806,7 @@ export class MarketplacePolicyPublishingService {
     userId: string,
     userRole: UserRole
   ): Promise<MarketplacePolicy[]> {
+
     const client = await this.pool.connect();
     try {
       const result = await client.query(
@@ -756,6 +832,7 @@ export class MarketplacePolicyPublishingService {
     userAgent?: string,
     metadata?: Record<string, any>
   ): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       // Get current version
@@ -806,6 +883,7 @@ export class MarketplacePolicyPublishingService {
 
   // Get policy analytics
   async getPolicyAnalytics(policyId: string): Promise<PolicyAnalytics> {
+
     const client = await this.pool.connect();
     try {
       // Get basic analytics from policy
@@ -851,6 +929,7 @@ export class MarketplacePolicyPublishingService {
     policy: MarketplacePolicy,
     request: PolicyPublishingRequest
   ): Promise<void> {
+
     const strategy = request.rollout_strategy;
 
     switch (strategy.type) {
@@ -870,21 +949,25 @@ export class MarketplacePolicyPublishingService {
   }
 
   private async publishToAllChannels(policy: MarketplacePolicy, channels: string[]): Promise<void> {
+
     // Implementation would publish to actual channels (email, dashboard, API, etc.)
     console.log(`Publishing policy ${policy.id} to channels: ${channels.join(', ')}`);
   }
 
   private async executePhasedRollout(policy: MarketplacePolicy, ___strategy: RolloutStrategy): Promise<void> {
+
     // Implementation would execute phased rollout based on phases configuration
     console.log(`Starting phased rollout for policy ${policy.id}`);
   }
 
   private async executeCanaryRollout(policy: MarketplacePolicy, strategy: RolloutStrategy): Promise<void> {
+
     // Implementation would execute canary rollout to percentage of users
     console.log(`Starting canary rollout for policy ${policy.id} at ${strategy.canary_percentage}%`);
   }
 
   private async schedulePublication(policy: MarketplacePolicy, startDate: Date): Promise<void> {
+
     // Implementation would schedule publication for future date
     console.log(`Scheduling publication for policy ${policy.id} at ${startDate}`);
   }
@@ -893,6 +976,7 @@ export class MarketplacePolicyPublishingService {
     policy: MarketplacePolicy,
     settings: NotificationSettings
   ): Promise<void> {
+
     // Implementation would send notifications via configured channels
     console.log(`Sending notifications for policy ${policy.id} via ${settings.channels.join(', ')}`);
   }
@@ -901,6 +985,7 @@ export class MarketplacePolicyPublishingService {
     policy: MarketplacePolicy,
     announcement: PolicyAnnouncement
   ): Promise<void> {
+
     // Implementation would create announcement banner in marketplace UI
     console.log(`Creating announcement banner for policy ${policy.id}: ${announcement.title}`);
   }
@@ -937,6 +1022,7 @@ export class MarketplacePolicyPublishingService {
   }
 
   private async auditLog(client: PoolClient, entry: { action: string; user_id: string; details: unknown }): Promise<void> {
+
     await client.query(
       `INSERT INTO audit_logs (action, user_id, details, ip_address, user_agent, created_at)
        VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)`,

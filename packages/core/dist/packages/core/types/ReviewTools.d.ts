@@ -24,18 +24,18 @@ export interface ReviewItem {
     assignedTo?: string;
     assignedAt?: Date;
     assignedBy?: string;
-    reviewCriteria: ReviewCriteria[];
-    decisions: ReviewDecision[];
-    notes: ReviewNote[];
-    evidence: ReviewEvidence[];
+    reviewCriteria: ReviewCriteria;
+    decisions: ReviewDecision;
+    notes: ReviewNote;
+    evidence: ReviewEvidence;
     createdAt: Date;
     updatedAt: Date;
     dueDate?: Date;
     completedAt?: Date;
     parentReviewId?: string;
-    childReviewIds: string[];
-    relatedReviewIds: string[];
-    dependencies: ReviewDependency[];
+    childReviewIds: string;
+    relatedReviewIds: string;
+    dependencies: ReviewDependency;
     requiresConsensus: boolean;
     minReviewers?: number;
     escalationThreshold?: number;
@@ -51,7 +51,7 @@ export interface ReviewMetadata {
     riskLevel: ActionSeverity;
     confidenceScore?: number;
     automatedRecommendation?: string;
-    tags: string[];
+    tags: string;
     flagged: boolean;
     flagReason?: string;
     estimatedReviewTime: number;
@@ -66,7 +66,7 @@ export interface ReviewCriteria {
     weight: number;
     required: boolean;
     type: CriteriaType;
-    validOptions?: CriteriaOption[];
+    validOptions?: CriteriaOption;
     condition?: string;
 }
 export type CriteriaCategory = 'quality' | 'safety' | 'compliance' | 'business_rules' | 'technical' | 'legal' | 'policy';
@@ -83,8 +83,8 @@ export interface ReviewDecision {
     decision: DecisionType;
     confidence: number;
     reasoning: string;
-    criteriaEvaluations: CriteriaEvaluation[];
-    recommendedActions: string[];
+    criteriaEvaluations: CriteriaEvaluation;
+    recommendedActions: string;
     timestamp: Date;
     overridden?: boolean;
     overriddenBy?: string;
@@ -96,7 +96,7 @@ export interface CriteriaEvaluation {
     score: number;
     passed: boolean;
     notes?: string;
-    evidence?: string[];
+    evidence?: string;
 }
 export interface ReviewNote {
     noteId: string;
@@ -105,7 +105,7 @@ export interface ReviewNote {
     content: string;
     timestamp: Date;
     visibility: NoteVisibility;
-    attachments?: string[];
+    attachments?: string;
     replyTo?: string;
 }
 export type NoteType = 'observation' | 'question' | 'concern' | 'recommendation' | 'clarification';
@@ -119,7 +119,7 @@ export interface ReviewEvidence {
     confidence: number;
     verifiedBy?: string;
     verifiedAt?: Date;
-    attachments?: string[];
+    attachments?: string;
 }
 export type EvidenceType = 'automated_scan' | 'manual_verification' | 'external_check' | 'historical_data' | 'user_submission' | 'system_log' | 'audit_trail';
 export interface ReviewDependency {
@@ -144,7 +144,7 @@ export interface ReviewAssignment {
     acceptedAt?: Date;
     startedAt?: Date;
     completedAt?: Date;
-    worklog: WorklogEntry[];
+    worklog: WorklogEntry;
 }
 export type AssignmentStatus = 'pending_acceptance' | 'accepted' | 'in_progress' | 'paused' | 'completed' | 'reassigned' | 'expired';
 export interface WorklogEntry {
@@ -161,8 +161,8 @@ export interface ReviewerProfile {
     name: string;
     email: string;
     role: ReviewerRole;
-    specializations: ReviewSpecialization[];
-    permissions: ReviewPermission[];
+    specializations: ReviewSpecialization;
+    permissions: ReviewPermission;
     performance: ReviewerPerformance;
     workload: ReviewerWorkload;
     availability: ReviewerAvailability;
@@ -179,7 +179,7 @@ export type SpecializationArea = 'content_safety' | 'fraud_detection' | 'legal_c
 export type ExpertiseLevel = 'basic' | 'intermediate' | 'advanced' | 'expert';
 export interface ReviewPermission {
     permission: PermissionType;
-    scope: PermissionScope[];
+    scope: PermissionScope;
     grantedAt: Date;
     grantedBy: string;
     expiresAt?: Date;
@@ -209,7 +209,7 @@ export interface ReviewerWorkload {
 }
 export interface ReviewerAvailability {
     status: AvailabilityStatus;
-    workingHours: TimeSlot[];
+    workingHours: TimeSlot;
     timeZone: string;
     unavailableUntil?: Date;
     unavailableReason?: string;
@@ -223,7 +223,7 @@ export interface TimeSlot {
     endTime: string;
 }
 export interface ReviewerPreferences {
-    preferredReviewTypes: ReviewType[];
+    preferredReviewTypes: ReviewType;
     maxReviewComplexity: ReviewComplexity;
     notificationSettings: NotificationSettings;
     autoAcceptAssignments: boolean;
@@ -249,9 +249,9 @@ export interface ReviewWorkflow {
     reviewType: ReviewType;
     version: string;
     enabled: boolean;
-    steps: WorkflowStep[];
-    conditions: WorkflowCondition[];
-    escalationRules: EscalationRule[];
+    steps: WorkflowStep;
+    conditions: WorkflowCondition;
+    escalationRules: EscalationRule;
     config: WorkflowConfig;
     metadata: WorkflowMetadata;
 }
@@ -263,16 +263,16 @@ export interface WorkflowStep {
     order: number;
     required: boolean;
     config: StepConfig;
-    enterConditions: string[];
-    exitConditions: string[];
-    assignmentRules: AssignmentRule[];
+    enterConditions: string;
+    exitConditions: string;
+    assignmentRules: AssignmentRule;
     timeLimit?: number;
     escalationTime?: number;
 }
 export type StepType = 'initial_review' | 'specialist_review' | 'consensus_review' | 'approval_review' | 'quality_check' | 'compliance_check' | 'final_decision' | 'notification' | 'automated_action';
 export interface StepConfig {
-    requiredCriteria: string[];
-    optionalCriteria: string[];
+    requiredCriteria: string;
+    optionalCriteria: string;
     minScore?: number;
     consensusThreshold?: number;
     autoAdvance: boolean;
@@ -291,8 +291,8 @@ export interface EscalationRule {
     ruleId: string;
     name: string;
     description: string;
-    triggers: EscalationTrigger[];
-    actions: EscalationAction[];
+    triggers: EscalationTrigger;
+    actions: EscalationAction;
     delay: number;
     enabled: boolean;
 }
@@ -316,7 +316,7 @@ export interface WorkflowConfig {
     qualityGate: number;
     timeoutBehavior: TimeoutBehavior;
     retryPolicy: RetryPolicy;
-    notificationSchedule: NotificationSchedule[];
+    notificationSchedule: NotificationSchedule;
 }
 export type TimeoutBehavior = 'escalate' | 'auto_approve' | 'auto_reject' | 'reassign' | 'extend';
 export interface RetryPolicy {
@@ -327,7 +327,7 @@ export interface RetryPolicy {
 export interface NotificationSchedule {
     recipient: NotificationRecipient;
     timing: NotificationTiming;
-    method: NotificationMethod[];
+    method: NotificationMethod;
     template: string;
 }
 export type NotificationRecipient = 'reviewer' | 'manager' | 'submitter' | 'admin' | 'stakeholder';
@@ -354,8 +354,8 @@ export interface AssignmentRule {
     ruleId: string;
     name: string;
     type: AssignmentType;
-    conditions: AssignmentCondition[];
-    weightings: AssignmentWeighting[];
+    conditions: AssignmentCondition;
+    weightings: AssignmentWeighting;
     fallbackStrategy: FallbackStrategy;
     enabled: boolean;
 }
@@ -382,8 +382,8 @@ export interface ReviewAnalytics {
     workflowMetrics: ReviewWorkflowMetrics;
     reviewerMetrics: ReviewerMetrics;
     trends: ReviewTrends;
-    insights: ReviewInsight[];
-    recommendations: ReviewRecommendation[];
+    insights: ReviewInsight;
+    recommendations: ReviewRecommendation;
 }
 export interface AnalyticsPeriod {
     startDate: Date;
@@ -402,10 +402,10 @@ export interface ReviewOverallMetrics {
     throughput: number;
 }
 export interface ReviewPerformanceMetrics {
-    byType: TypePerformanceMetrics[];
-    byPriority: PriorityPerformanceMetrics[];
-    byComplexity: ComplexityPerformanceMetrics[];
-    bottlenecks: PerformanceBottleneck[];
+    byType: TypePerformanceMetrics;
+    byPriority: PriorityPerformanceMetrics;
+    byComplexity: ComplexityPerformanceMetrics;
+    bottlenecks: PerformanceBottleneck;
 }
 export interface TypePerformanceMetrics {
     reviewType: ReviewType;
@@ -444,7 +444,7 @@ export interface ReviewQualityMetrics {
     falseNegativeRate: number;
     appealRate: number;
     appealSuccessRate: number;
-    qualityTrends: QualityTrend[];
+    qualityTrends: QualityTrend;
 }
 export interface QualityTrend {
     date: Date;
@@ -453,8 +453,8 @@ export interface QualityTrend {
     volume: number;
 }
 export interface ReviewWorkflowMetrics {
-    byWorkflow: WorkflowMetrics[];
-    stepPerformance: StepPerformance[];
+    byWorkflow: WorkflowMetrics;
+    stepPerformance: StepPerformance;
     escalationAnalysis: EscalationAnalysis;
 }
 export interface WorkflowMetrics {
@@ -477,7 +477,7 @@ export interface StepPerformance {
 export interface EscalationAnalysis {
     totalEscalations: number;
     escalationRate: number;
-    byTrigger: EscalationByTrigger[];
+    byTrigger: EscalationByTrigger;
     resolutionTime: number;
     preventableEscalations: number;
 }
@@ -489,9 +489,9 @@ export interface EscalationByTrigger {
 }
 export interface ReviewerMetrics {
     activeReviewers: number;
-    reviewerPerformance: ReviewerPerformanceMetrics[];
-    workloadDistribution: WorkloadDistribution[];
-    trainingNeeds: TrainingNeed[];
+    reviewerPerformance: ReviewerPerformanceMetrics;
+    workloadDistribution: WorkloadDistribution;
+    trainingNeeds: TrainingNeed;
 }
 export interface ReviewerPerformanceMetrics {
     reviewerId: string;
@@ -500,7 +500,7 @@ export interface ReviewerPerformanceMetrics {
     averageTime: number;
     qualityScore: number;
     throughput: number;
-    specializations: string[];
+    specializations: string;
     trend: 'improving' | 'stable' | 'declining';
 }
 export interface WorkloadDistribution {
@@ -515,20 +515,20 @@ export interface TrainingNeed {
     area: SpecializationArea;
     priority: 'low' | 'medium' | 'high';
     reason: string;
-    suggestedTraining: string[];
+    suggestedTraining: string;
 }
 export interface ReviewTrends {
     volumeTrend: 'increasing' | 'stable' | 'decreasing';
     qualityTrend: 'improving' | 'stable' | 'declining';
     efficiencyTrend: 'improving' | 'stable' | 'declining';
-    dailyVolumes: number[];
-    dailyQualityScores: number[];
-    dailyCompletionTimes: number[];
-    seasonalPatterns: SeasonalPattern[];
+    dailyVolumes: number;
+    dailyQualityScores: number;
+    dailyCompletionTimes: number;
+    seasonalPatterns: SeasonalPattern;
 }
 export interface SeasonalPattern {
     period: 'hourly' | 'daily' | 'weekly' | 'monthly';
-    pattern: number[];
+    pattern: number;
     confidence: number;
     description: string;
 }
@@ -552,16 +552,16 @@ export interface ReviewRecommendation {
     description: string;
     expectedImpact: string;
     implementation: ImplementationGuide;
-    successMetrics: string[];
+    successMetrics: string;
     generatedAt: Date;
 }
 export type RecommendationCategory = 'workflow_optimization' | 'reviewer_training' | 'capacity_planning' | 'quality_improvement' | 'automation_opportunity' | 'process_standardization';
 export interface ImplementationGuide {
     effort: 'low' | 'medium' | 'high';
     timeline: string;
-    resources: string[];
-    prerequisites: string[];
-    risks: string[];
+    resources: string;
+    prerequisites: string;
+    risks: string;
 }
 export interface ReviewSystemConfig {
     enabled: boolean;

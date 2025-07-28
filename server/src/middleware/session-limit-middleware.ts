@@ -10,6 +10,7 @@ import { SessionLimitManager, SessionEnforcementAction } from '../services/Sessi
 import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface SessionLimitMiddlewareOptions {
   enableSessionLimits: boolean;
   skipPaths: string[];
@@ -18,9 +19,11 @@ export interface SessionLimitMiddlewareOptions {
   notificationWebhooks: {
     onViolation?: string;
     onEnforcement?: string;
+}
   };
 }
 
+}
 export interface RequestSessionContext {
   userId?: string;
   sessionId?: string;
@@ -31,6 +34,7 @@ export interface RequestSessionContext {
   ipAddress?: string;
   country?: string;
   userAgent?: string;
+}
 }
 
 export class SessionLimitMiddleware {
@@ -55,6 +59,7 @@ export class SessionLimitMiddleware {
    * Main middleware function for session limit enforcement
    */
   async enforce(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+
     try {
       // Skip if session limits are disabled
       if (!this.options.enableSessionLimits) {
@@ -135,6 +140,7 @@ export class SessionLimitMiddleware {
     sessionData: Record<string, unknown>,
     metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string; action?: SessionEnforcementAction }> {
+
     try {
       if (!this.options.enableSessionLimits) {
         return { allowed: true };
@@ -158,7 +164,7 @@ export class SessionLimitMiddleware {
             connectionId,
             reason: limitCheck.reason,
             conflictingSessions: limitCheck.conflictingSessions
-          },
+  }
           ipAddress: metadata.ipAddress,
           userAgent: metadata.userAgent,
           severity: 'warning'
@@ -195,6 +201,7 @@ export class SessionLimitMiddleware {
     userId: string,
     metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string }> {
+
     try {
       if (!this.options.enableSessionLimits) {
         return { allowed: true };
@@ -211,7 +218,7 @@ export class SessionLimitMiddleware {
             tokenId,
             reason: apiLimitCheck.reason,
             metadata
-          },
+  }
           ipAddress: metadata.ipAddress,
           severity: 'warning'
         });
@@ -243,6 +250,7 @@ export class SessionLimitMiddleware {
     userId: string,
     activityType: string
   ): Promise<void> {
+
     try {
       // Update session activity
       await this.sessionService.updateSessionActivity(sessionId);
@@ -272,6 +280,7 @@ export class SessionLimitMiddleware {
     reason: string,
     gracePeriodMinutes: number = 5
   ): Promise<void> {
+
     try {
       // Notify user of impending termination
       await this.notifyUserSessionTermination(userId, sessionId, reason, gracePeriodMinutes);
@@ -288,7 +297,7 @@ export class SessionLimitMiddleware {
               sessionId,
               reason,
               gracePeriodMinutes
-            },
+  }
             sessionId,
             severity: 'info'
           });
@@ -350,6 +359,7 @@ export class SessionLimitMiddleware {
     request: FastifyRequest,
     reply: FastifyReply
   ): Promise<void> {
+
     // Send webhook notification if configured
     if (this.options.notificationWebhooks.onViolation) {
       await this.sendWebhookNotification(
@@ -419,6 +429,7 @@ export class SessionLimitMiddleware {
     sessionContext: RequestSessionContext,
     request: FastifyRequest
   ): Promise<void> {
+
     // Additional logging and monitoring for session creation
     await this.auditService.logEvent({
       userId: sessionContext.userId!,
@@ -428,7 +439,7 @@ export class SessionLimitMiddleware {
         deviceFingerprint: sessionContext.deviceFingerprint,
         country: sessionContext.country,
         userAgent: sessionContext.userAgent
-      },
+  }
       ipAddress: sessionContext.ipAddress,
       userAgent: sessionContext.userAgent,
       severity: 'info'
@@ -440,6 +451,7 @@ export class SessionLimitMiddleware {
     tokenId: string,
     metadata: Record<string, unknown>
   ): Promise<{ allowed: boolean; reason?: string }> {
+
     // Implementation for API token specific limits
     // This would check rate limits, concurrent API sessions, etc.
     
@@ -452,6 +464,7 @@ export class SessionLimitMiddleware {
     userId: string,
     activityType: string
   ): Promise<void> {
+
     // Check for patterns that might indicate account compromise
     // This is a simplified implementation
     
@@ -471,7 +484,7 @@ export class SessionLimitMiddleware {
           activityType,
           requestCount: rapidRequests.length,
           timeWindow: '5 minutes'
-        },
+  }
         sessionId,
         severity: 'warning'
       });
@@ -483,6 +496,7 @@ export class SessionLimitMiddleware {
     userId: string,
     reason: string
   ): Promise<void> {
+
     await this.sessionService.revokeSession(sessionId, reason);
     
     // Notify user
@@ -495,6 +509,7 @@ export class SessionLimitMiddleware {
     reason: string,
     gracePeriodMinutes: number
   ): Promise<void> {
+
     // Implementation would depend on notification system
     // This could send email, push notification, or WebSocket message
     
@@ -508,7 +523,7 @@ export class SessionLimitMiddleware {
         sessionId,
         reason,
         gracePeriodMinutes
-      },
+  }
       sessionId,
       severity: 'info'
     });
@@ -518,6 +533,7 @@ export class SessionLimitMiddleware {
     sessionContext: RequestSessionContext,
     request: FastifyRequest
   ): Promise<void> {
+
     await this.auditService.logEvent({
       userId: sessionContext.userId!,
       action: 'session_limit_admin_bypass',
@@ -525,7 +541,7 @@ export class SessionLimitMiddleware {
         path: request.url,
         method: request.method,
         ipAddress: sessionContext.ipAddress
-      },
+  }
       ipAddress: sessionContext.ipAddress,
       userAgent: sessionContext.userAgent,
       severity: 'info'
@@ -533,6 +549,7 @@ export class SessionLimitMiddleware {
   }
   
   private async logMiddlewareError(error: unknown, request: FastifyRequest): Promise<void> {
+
     console.error('Session limit middleware error:', error);
     
     // Log to audit system
@@ -542,7 +559,7 @@ export class SessionLimitMiddleware {
         error: error.message,
         path: request.url,
         method: request.method
-      },
+  }
       severity: 'error'
     });
   }
@@ -573,6 +590,7 @@ export class SessionLimitMiddleware {
     eventType: string,
     data: Record<string, unknown>
   ): Promise<void> {
+
     try {
       // Implementation for webhook notifications
       // This would make an HTTP POST to the webhook URL

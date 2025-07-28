@@ -22,7 +22,7 @@ interface StickyNotesLayerProps {
     zoom: number;
     author?: string;
     readOnly?: boolean;
-}
+
 export declare const StickyNotesLayer: React.FC<StickyNotesLayerProps>;
 export {};
 //# sourceMappingURL=StickyNotesLayer.d.ts.map

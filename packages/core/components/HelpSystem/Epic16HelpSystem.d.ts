@@ -11,6 +11,7 @@
  * - Help analytics and effectiveness measurement
  */
 import React from 'react';
+
 export interface Epic16HelpSystemProps {
     nodes?: unknown[];
     edges?: unknown[];
@@ -24,6 +25,7 @@ export interface Epic16HelpSystemProps {
             category: string;
             type: string;
             isPremium: boolean;
+
         };
         cartItems?: number;
         purchaseStage?: 'browsing' | 'preview' | 'cart' | 'checkout' | 'download';
@@ -38,7 +40,7 @@ export interface Epic16HelpSystemProps {
     showGuidedTours?: boolean;
     helpComplexity?: 'beginner' | 'advanced';
     onHelpAnalytics?: (event: string, data: Record<string, any>) => void;
-}
+
 export declare const Epic16HelpSystem: React.FC<Epic16HelpSystemProps>;
 export default Epic16HelpSystem;
 //# sourceMappingURL=Epic16HelpSystem.d.ts.map

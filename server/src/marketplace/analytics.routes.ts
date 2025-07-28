@@ -26,7 +26,7 @@ const MetricsQueryParams = DashboardQueryParams;
 const InsightsQueryParams = z.object({
   template_ids: z.string().optional().transform(val => 
     val ? val.split(',').filter(Boolean) : undefined
-  )
+
 });
 
 const ExportRequest = z.object({
@@ -45,7 +45,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
         200: z.object({
           success: z.boolean(),
           event_id: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -74,7 +74,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
         200: z.object({
           success: z.boolean(),
           events_tracked: z.number()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -206,7 +206,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       params: z.object({
         creatorId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -228,7 +228,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       params: z.object({
         reportId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -303,7 +303,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       params: z.object({
         reportId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -358,7 +358,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
     schema: {
       params: z.object({
         insightId: z.string().uuid()
-      })
+  }
     }
   }, async (request, reply) => {
     try {
@@ -429,7 +429,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -456,7 +456,7 @@ const analyticsRoutes: FastifyPluginAsync = async (fastify) => {
         200: z.object({
           success: z.boolean(),
           message: z.string()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -495,7 +495,7 @@ function convertToCSV(data: any[]): string {
         }
         return String(value);
       }).join(',')
-    )
+
   ].join('\n');
 
   return csvContent;

@@ -154,7 +154,7 @@ export interface ProjectWithStats extends Project {
     last_activity?: Date;
 }
 export interface CommentWithReplies extends Comment {
-    replies?: CommentWithReplies[];
+    replies?: CommentWithReplies;
     author_name?: string;
     author_avatar?: string;
 }
@@ -171,7 +171,7 @@ export interface PaginationMeta {
     has_prev: boolean;
 }
 export interface PaginatedResponse<T> {
-    data: T[];
+    data: T;
     pagination: PaginationMeta;
 }
 export interface WorkspaceFilter {
@@ -186,7 +186,7 @@ export interface ProjectFilter {
 export interface ActivityEventFilter {
     project_id?: string;
     actor_id?: string;
-    event_types?: string[];
+    event_types?: string;
     from_date?: Date;
     to_date?: Date;
 }
@@ -220,5 +220,4 @@ export declare const PERMISSIONS: {
     readonly EXPORT_DATA: number;
 };
 export declare function hasPermission(userPermissions: number, requiredPermission: number): boolean;
-export declare function getRoleName(permissions: number): string;
 //# sourceMappingURL=workspace.d.ts.map

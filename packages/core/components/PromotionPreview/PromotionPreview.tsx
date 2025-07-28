@@ -47,66 +47,63 @@ const { _Option } = Select;
 
 // Types for promotion preview
 interface PromotionSlot {
-  id: string;
+  id: string;,
   name: string;
-  type: string;
+  type: string;,
   location: string;
   dimensions: { width: number; height: number };
-  traffic_allocation: number;
+  traffic_allocation: number;,
   priority: number;
-}
 interface PromotionPreviewData {
   schedule: {,
-    id: string;
-    title: string;
-    promotion_type: string;
-    slot: PromotionSlot;
-    start_date: Date;
-    end_date: Date;
-    status: string;
-  };
+  id: string;,
+  title: string;
+  promotion_type: string;,
+  slot: PromotionSlot;
+  start_date: Date;,
+  end_date: Date;
+  status: string;
+};
   content: Array<{,
-    id: string;
-    title: string;
-    category: string;
-    thumbnail: string;
-    rating: number;
-    downloads: number;
-    performance_score: number;
-  }>;
+  id: string;
+  title: string;,
+  category: string;
+  thumbnail: string;,
+  rating: number;
+  downloads: number;,
+  performance_score: number;
+}>;
   rotation_config: {,
-    pattern: string;
-    duration_per_content?: number;
-    click_threshold?: number;
-    performance_threshold?: number;
-  };
+  pattern: string;
+  duration_per_content?: number;
+  click_threshold?: number;
+  performance_threshold?: number;
+};
   predicted_performance: {,
-    estimated_impressions: number;
-    estimated_ctr: number;
-    estimated_conversions: number;
-    estimated_revenue: number;
-    confidence_level: number;
-  };
+  estimated_impressions: number;
+  estimated_ctr: number;,
+  estimated_conversions: number;
+  estimated_revenue: number;,
+  confidence_level: number;
+};
   ab_test_config?: {
-    test_name: string;
-    variants: Array<{,
-      id: string;
-      name: string;
-      traffic_split: number;
-      content_ids: string[];
-    }>;
+  test_name: string;,
+  variants: Array<{,
+  id: string;,
+  name: string;
+  traffic_split: number;,
+  content_ids: string;
+}>;
   };
-}
 interface PerformancePrediction {
-  metric: string;
+  metric: string;,
   predicted_value: number;
   confidence_range: [number, number];
   factors: Array<{,
-    name: string;
-    impact: number;
-    description: string;
-  }>;
-}
+  name: string;,
+  impact: number;
+  description: string;
+}>;
 
 export interface PromotionPreviewProps {
   promotionData?: PromotionPreviewData;
@@ -116,7 +113,6 @@ export interface PromotionPreviewProps {
   isLive?: boolean;
   className?: string;
 }
-
 export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   promotionData,
   onUpdateRotation,
@@ -134,30 +130,29 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   const [isRotating, setIsRotating] = useState(false);
   // Template preview integration
   const {
-    generateVariants,
-    performance: previewPerformance,
-    isGenerating
-  } = useTemplatePreview({)
-    enablePerformanceTracking: true,
-    maxVariants: 5,
-    autoRefresh: true,
-  });
+  generateVariants,
+  performance: previewPerformance,
+  isGenerating
+} = useTemplatePreview({)
+  enablePerformanceTracking: true,
+  maxVariants: 5,
+  autoRefresh: true,
+});
   // Auto-rotation logic
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isRotating && previewMode === 'rotation' && promotionData?.content) {
-      interval = setInterval(() => {
-        setCurrentContentIndex(prevIndex => )
-          (prevIndex + 1) % promotionData.content.length
-        );
-      }, rotationSpeed * 1000);
-    }
+  let interval: NodeJS.Timeout;
+  if (isRotating && previewMode === 'rotation' && promotionData?.content) {
+  interval = setInterval(() => {
+  setCurrentContentIndex(prevIndex => )
+  (prevIndex + 1) % promotionData.content.length
+  );
+}, rotationSpeed * 1000);
     return () => {
       if (interval) clearInterval(interval);
     };
   }, [isRotating, previewMode, rotationSpeed, promotionData?.content?.length]);
   // Performance predictions
-  const performancePredictions = useMemo<PerformancePrediction[]>(() => {
+  const performancePredictions = useMemo<PerformancePrediction>(() => {
     if (!promotionData) return [];
     return [
       {
@@ -173,7 +168,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           { name: 'Time of Day', impact: 0.20, description: 'Peak hours boost impressions' },
           { name: 'Historical Performance', impact: 0.20, description: 'Similar campaigns averaged 15K impressions' }
         ]
-      },
+  }
       {
         metric: 'Click-Through Rate',
         predicted_value: promotionData.predicted_performance.estimated_ctr,
@@ -186,7 +181,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           { name: 'Visual Appeal', impact: 0.30, description: 'High-quality thumbnails drive clicks' },
           { name: 'Promotional Timing', impact: 0.30, description: 'Weekend promotions see higher engagement' }
         ]
-      },
+  }
       {
         metric: 'Conversions',
         predicted_value: promotionData.predicted_performance.estimated_conversions,
@@ -200,7 +195,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
           { name: 'Content Quality Score', impact: 0.25, description: 'High-quality content converts at 2.3x rate' },
           { name: 'Seasonal Demand', impact: 0.15, description: 'Current season favors this content type' }
         ]
-      }
     ];
   }, [promotionData]);
   // Render slot preview
@@ -208,7 +202,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
     if (!promotionData) return null;
     const { slot } = promotionData.schedule;
     const currentContent = promotionData.content[currentContentIndex] || promotionData.content[0];
-    return ();
+    return;
       <div className="slot-preview">
         <div className="slot-header">
           <Title level={4}>
@@ -225,17 +219,17 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
         <div 
           className="slot-mockup"
           style={{
-            width: Math.min(slot.dimensions.width, 800),
-            height: Math.min(slot.dimensions.height, 400),
-            border: '2px dashed #d9d9d9',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            background: '#fafafa',
-            margin: '20px 0',
-          }}
+  width: Math.min(slot.dimensions.width, 800),
+  height: Math.min(slot.dimensions.height, 400),
+  border: '2px dashed #d9d9d9',
+  borderRadius: '8px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'relative',
+  background: '#fafafa',
+  margin: '20px 0',
+}}
         >
           {previewMode === 'rotation' ? ()
             <Carousel 
@@ -368,9 +362,9 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
               title="Confidence Level"
               value={promotionData.predicted_performance.confidence_level}
               suffix="%"
-              valueStyle={{ 
-                color: promotionData.predicted_performance.confidence_level > 80 ? '#3f8600' : '#cf1322' ,
-              }}
+              valueStyle={{
+  color: promotionData.predicted_performance.confidence_level > 80 ? '#3f8600' : '#cf1322',
+}}
             />
           </Col>
         </Row>
@@ -379,7 +373,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   };
   // Render performance predictions
   const renderPerformancePredictions = () => {
-    return ();
+    return;
       <div className="performance-predictions">
         {performancePredictions.map((prediction, index) => ()
           <Card key={prediction.metric} className="prediction-card">
@@ -445,34 +439,34 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">{start.toLocaleString()}</Text>
           </div>
-      },
+  }
       {
-        color: progress > 25 ? 'green' : 'gray',
-        children: (),
-          <div>
-            <Text strong>First Quarter</Text>
-            <br />
-            <Text type="secondary">25% duration milestone</Text>
-          </div>
-      },
+  color: progress > 25 ? 'green' : 'gray',
+  children: (),
+  <div>
+  <Text strong>First Quarter</Text>
+  <br />
+  <Text type="secondary">25% duration milestone</Text>
+  </div>
+}
       {
-        color: progress > 50 ? 'green' : 'gray',
-        children: (),
-          <div>
-            <Text strong>Midpoint Review</Text>
-            <br />
-            <Text type="secondary">Performance optimization checkpoint</Text>
-          </div>
-      },
+  color: progress > 50 ? 'green' : 'gray',
+  children: (),
+  <div>
+  <Text strong>Midpoint Review</Text>
+  <br />
+  <Text type="secondary">Performance optimization checkpoint</Text>
+  </div>
+}
       {
-        color: progress > 75 ? 'green' : 'gray',
-        children: (),
-          <div>
-            <Text strong>Final Quarter</Text>
-            <br />
-            <Text type="secondary">Prepare transition to next campaign</Text>
-          </div>
-      },
+  color: progress > 75 ? 'green' : 'gray',
+  children: (),
+  <div>
+  <Text strong>Final Quarter</Text>
+  <br />
+  <Text type="secondary">Prepare transition to next campaign</Text>
+  </div>
+}
       {
         color: progress >= 100 ? 'green' : 'gray',
         children: (),
@@ -481,9 +475,8 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
             <br />
             <Text type="secondary">{end.toLocaleString()}</Text>
           </div>
-      }
     ];
-    return ();
+    return;
       <div className="schedule-timeline">
         <Row gutter={[16, 16]} style={{ marginBottom: '20px' }}>
           <Col span={12}>
@@ -516,7 +509,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
   const renderABTestPreview = () => {
     if (!promotionData?.ab_test_config) return null;
     const { ab_test_config } = promotionData;
-    return ();
+    return;
       <div className="ab-test-preview">
         <Alert
           message="A/B Test Configuration"
@@ -536,7 +529,6 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
                       {variant.traffic_split}% traffic
                     </Tag>
                   </Space>
-                }
                 className={selectedVariant === variant.id ? 'selected-variant' : ''}
                 onClick={() => setSelectedVariant(variant.id)}
                 style={{ cursor: 'pointer' }}
@@ -546,7 +538,7 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
                 </Text>
                 <div className="variant-content">
                   {variant.content_ids.slice(0, 3).map(contentId => {)
-                    const content = promotionData.content.find(c => c.id === contentId);
+  const content = promotionData.content.find(c => c.id === contentId);
                     return content ? ()
                       <div key={contentId} className="variant-content-item">
                         <img 
@@ -578,13 +570,12 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
     );
   };
   if (!promotionData) {
-    return ();
+    return;
       <div className="promotion-preview-empty">
         <Text type="secondary">No promotion data available for preview</Text>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`promotion-preview ${className}`}>}
       <div className="preview-header">
         <Title level={3}>
@@ -619,96 +610,75 @@ export const PromotionPreview: React.FC<PromotionPreviewProps> = ({)
       <style>{`
         .promotion-preview {
           background: #fff;
-          border-radius: 8px;
-          padding: 24px;
-        }
+          border-radius: 8px;,
+  padding: 24px;
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 24px;
-        }
         .slot-preview {
           position: relative;
-        }
         .slot-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 16px;
-        }
         .slot-mockup {
-          position: relative;
-          margin: 20px 0;
-        }
+          position: relative;,
+  margin: 20px 0;
         .preview-controls {
-          position: absolute;
-          bottom: -40px;
-          left: 50%;
-          transform: translateX(-50%);
+          position: absolute;,
+  bottom: -40px;
+          left: 50%;,
+  transform: translateX(-50%);
           background: rgba(255, 255, 255, 0.9);
           padding: 8px 12px;
           border-radius: 6px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .content-preview-card {
           display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 16px;
-          background: #fff;
+          align-items: center;,
+  gap: 16px;
+          padding: 16px;,
+  background: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
         .content-thumbnail img {
           border-radius: 6px;
-        }
         .content-info {
           flex: 1;
-        }
         .content-metrics {
           margin-top: 8px;
-        }
         .prediction-card {
           margin-bottom: 16px;
-        }
         .confidence-range {
           text-align: center;
-        }
         .impact-factors .factor-item {
           margin-bottom: 8px;
-        }
         .schedule-timeline {
           padding: 20px 0;
-        }
         .ab-test-preview .variant-content {
           margin-top: 16px;
-        }
         .variant-content-item {
           display: flex;
           align-items: center;
           margin-bottom: 8px;
-        }
         .selected-variant {
           border-color: #1890ff;
           box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-        }
         .promotion-preview-empty {
-          text-align: center;
-          padding: 60px 20px;
+          text-align: center;,
+  padding: 60px 20px;
           background: #fafafa;
           border-radius: 8px;
-        }
         @media (max-width: 768px) {
           .slot-mockup {
-            width: 100% !important;
-            height: 300px !important;
-          }
+            width: 100% !important;,
+  height: 300px !important;
           .content-preview-card {
             flex-direction: column;
             text-align: center;
-          }
-        }
       `}</style>
     </div>
   );

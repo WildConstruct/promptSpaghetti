@@ -17,28 +17,25 @@ import {
 } from '@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 interface WorkflowHistoryEntry {
-  id: string;
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   action_type: string;
   previous_state_id?: string;
   new_state_id?: string;
-  actor_id: string;
+  actor_id: string;,
   action_timestamp: Date;
   approval_id?: string;
   transition_id?: string;
   comment?: string;
   metadata: Record<string, any>;
-}
-interface WorkflowHistoryVisualizationProps {
+  interface WorkflowHistoryVisualizationProps {
   workspaceId: string;
   resourceId?: string;
   maxEntries?: number;
   showFilters?: boolean;
   compact?: boolean;
-}
-
-export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualizationProps> = ({)
+  export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualizationProps> = ({,)
   workspaceId,
   resourceId,
   maxEntries = 20,
@@ -54,12 +51,12 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
     fetchHistory
   } = useWorkflowStore();
   const [filters, setFilters] = useState({)
-    resource_id: resourceId || '',
-    actor_id: '',
-    action_type: '',
-    date_from: '',
-    date_to: '',
-  });
+  resource_id: resourceId || '',
+  actor_id: '',
+  action_type: '',
+  date_from: '',
+  date_to: '',
+});
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   // Load data on mount
   useEffect(() => {
@@ -67,33 +64,32 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
     fetchHistory(workspaceId, { ...filters, limit: maxEntries });
   }, [workspaceId, fetchStates, fetchHistory, filters, maxEntries]);
   const getStateName = (stateId?: string) => {
-    if (!stateId) return 'Unknown';
-    const state = states.find(s => s.id === stateId);
-    return state ? state.name : 'Unknown';
-  };
+  if (!stateId) return 'Unknown';
+  const state = states.find(s => s.id === stateId);
+  return state ? state.name : 'Unknown';
+};
   const getStateColor = (stateId?: string) => {
-    if (!stateId) return '#6B7280';
-    const state = states.find(s => s.id === stateId);
-    return state ? state.color : '#6B7280';
-  };
+  if (!stateId) return '#6B7280';
+  const state = states.find(s => s.id === stateId);
+  return state ? state.color : '#6B7280';
+};
   const getActionIcon = (actionType: string) => {
-    switch (actionType) {
-    case 'state_changed':
-      return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
-    case 'approval_requested':
-      return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-    case 'approved':
-      return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-    case 'rejected':
-      return <XCircleIcon className="h-4 w-4 text-red-500" />;
-    case 'lock_acquired':
-      return <LockClosedIcon className="h-4 w-4 text-orange-500" />;
-    case 'lock_released':
-      return <LockOpenIcon className="h-4 w-4 text-orange-500" />;
-    default:
-      return <DocumentTextIcon className="h-4 w-4 text-gray-500" />;
-    }
-  };
+  switch (actionType) {
+  case 'state_changed':,
+  return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
+  case 'approval_requested':,
+  return <ClockIcon className="h-4 w-4 text-yellow-500" />;
+  case 'approved':,
+  return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+  case 'rejected':,
+  return <XCircleIcon className="h-4 w-4 text-red-500" />;
+  case 'lock_acquired':,
+  return <LockClosedIcon className="h-4 w-4 text-orange-500" />;
+  case 'lock_released':,
+  return <LockOpenIcon className="h-4 w-4 text-orange-500" />;
+  default:,
+  return <DocumentTextIcon className="h-4 w-4 text-gray-500" />;
+};
   const getActionDescription = (entry: WorkflowHistoryEntry) => {
     switch (entry.action_type) {
     case 'state_changed':
@@ -107,10 +103,9 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
     case 'lock_acquired':
       return `Acquired ${entry.metadata.lock_type || 'edit'} lock`;}
     case 'lock_released':
-      return `Released ${entry.metadata.lock_type || 'edit'} lock`;}
-    default:
+      return `Released ${entry.metadata.lock_type || 'edit'} lock`;},}
+  default:
       return `Performed ${entry.action_type}`;}
-    }
   };
   const formatTimestamp = (timestamp: Date) => {
     const date = new Date(timestamp);
@@ -124,29 +119,27 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
       return `${Math.floor(diffInHours / 24)}d ago`;}
     } else {
       return date.toLocaleDateString();
-    }
   };
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
   const clearFilters = () => {
-    setFilters({)
-      resource_id: resourceId || '',
-      actor_id: '',
-      action_type: '',
-      date_from: '',
-      date_to: '',
-    });
+  setFilters({)
+  resource_id: resourceId || '',
+  actor_id: '',
+  action_type: '',
+  date_from: '',
+  date_to: '',
+});
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -157,8 +150,7 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -268,9 +260,10 @@ export const WorkflowHistoryVisualization: React.FC<WorkflowHistoryVisualization
                       <span 
                         className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                         style={{ 
-                          backgroundColor: `${getStateColor(entry.new_state_id)}20`,}
-                          color: getStateColor(entry.new_state_id),
-                        }}
+                          backgroundColor: `${getStateColor(entry.new_state_id)}20`}
+},
+  color: getStateColor(entry.new_state_id);
+  }}
                       >
                         {getStateName(entry.new_state_id)}
                       </span>

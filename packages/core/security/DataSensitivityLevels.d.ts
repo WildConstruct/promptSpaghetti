@@ -45,10 +45,10 @@ export declare enum DataSensitivityLevel {
      * - Example: Personal data (PII), authentication credentials, trade secrets
      */
     RESTRICTED = "restricted"
-}
 /**
  * Data handling requirements for each sensitivity level
  */
+
 export interface DataHandlingRequirements {
     /** Minimum access control requirements */
     accessControl: {,
@@ -92,7 +92,6 @@ export interface DataHandlingRequirements {
         crossBorderRestrictions: boolean;
         retentionAlignment: boolean;
     };
-}
 /**
  * Comprehensive data sensitivity level definitions with handling requirements
  */
@@ -117,6 +116,7 @@ declare const DATA_SENSITIVITY_DEFINITIONS: Record<DataSensitivityLevel, {
 /**
  * Data element sensitivity classification
  */
+
 export interface DataElementClassification {
     /** Unique identifier for the data element */
     elementId: string;
@@ -142,7 +142,6 @@ export interface DataElementClassification {
         technicalOwner: string;
         complianceRequirements: string[];
     };
-}
 /**
  * Data Sensitivity Level Utilities
  */
@@ -174,8 +173,7 @@ declare class DataSensitivityUtils {
     /**
      * Validate if a sensitivity level assignment is appropriate for the data type
      */
-    static validateSensitivityAssignment()
-      dataType: string,
+    static validateSensitivityAssignment(dataType: string,)
       proposedLevel: DataSensitivityLevel,
       context?: Record<string,
       any>
@@ -210,7 +208,6 @@ declare class DataSensitivityUtils {
         errors: string[];
         warnings: string[];
     };
-}
 /**
  * Data sensitivity level assignment recommendations
  */

@@ -16,14 +16,13 @@ describe('DevTools Integration', () => {
     const recordSpy = jest.spyOn(globalStateDevTools, 'recordStateChange');
     // Perform a state change
     await container.executeOperation({)
-      type: 'ADD_NODE',
+  type: 'ADD_NODE',
       node: {,
-        id: 'test-node',
+  id: 'test-node',
         type: 'test',
         position: { x: 100, y: 100 },
         data: { label: 'Test Node' },
         metadata: { created: Date.now(), updated: Date.now(), version: 1 }
-      }
     });
     // Verify DevTools recorded the change
     expect(recordSpy).toHaveBeenCalled();
@@ -32,40 +31,37 @@ describe('DevTools Integration', () => {
     expect(history[0].metadata.domain).toBe('graph-editor');
   });
   it('should record state changes in DevTools for AdminStateContainer', async () => {
-    const container = new AdminStateContainer();
-    const recordSpy = jest.spyOn(globalStateDevTools, 'recordStateChange');
-    // Perform a state change
-    await container.addUser({)
-      id: 'test-user',
-      username: 'testuser',
-      email: 'test@example.com',
-      role: 'user',
-      status: 'active',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      profile: {,
-        firstName: 'Test',
-        lastName: 'User',
-        preferences: {,
-          theme: 'light',
-          language: 'en',
-          timezone: 'UTC',
-          notifications: {,
-            email: true,
-            push: false,
-            desktop: true,
-          }
-        }
-      },
-      permissions: [],
+  const container = new AdminStateContainer();
+  const recordSpy = jest.spyOn(globalStateDevTools, 'recordStateChange');
+  // Perform a state change
+  await container.addUser({)
+  id: 'test-user',
+  username: 'testuser',
+  email: 'test@example.com',
+  role: 'user',
+  status: 'active',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  profile: {,
+  firstName: 'Test',
+  lastName: 'User',
+  preferences: {,
+  theme: 'light',
+  language: 'en',
+  timezone: 'UTC',
+  notifications: {,
+  email: true,
+  push: false,
+  desktop: true,
+},
+  permissions: [],
       activity: {,
-        loginCount: 0,
-        lastActions: [],
-        sessionsActive: 0,
-        ipAddresses: [],
-        devices: [],
-      }
-    });
+  loginCount: 0,
+  lastActions: [],
+  sessionsActive: 0,
+  ipAddresses: [],
+  devices: [],
+});
     // Verify DevTools recorded the change
     expect(recordSpy).toHaveBeenCalled();
     const history = globalStateDevTools.getStateHistory();
@@ -76,24 +72,22 @@ describe('DevTools Integration', () => {
     const container = new GraphStateContainer();
     // Record multiple state changes
     await container.executeOperation({)
-      type: 'ADD_NODE',
+  type: 'ADD_NODE',
       node: {,
-        id: 'node1',
+  id: 'node1',
         type: 'test',
         position: { x: 100, y: 100 },
         data: { label: 'Node 1' },
         metadata: { created: Date.now(), updated: Date.now(), version: 1 }
-      }
     });
     await container.executeOperation({)
-      type: 'ADD_NODE',
+  type: 'ADD_NODE',
       node: {,
-        id: 'node2',
+  id: 'node2',
         type: 'test',
         position: { x: 200, y: 200 },
         data: { label: 'Node 2' },
         metadata: { created: Date.now(), updated: Date.now(), version: 1 }
-      }
     });
     const history = globalStateDevTools.getStateHistory();
     expect(history.length).toBe(2);
@@ -108,14 +102,13 @@ describe('DevTools Integration', () => {
     const container = new GraphStateContainer();
     // Perform operations that should be tracked
     await container.executeOperation({)
-      type: 'ADD_NODE',
+  type: 'ADD_NODE',
       node: {,
-        id: 'perf-test-node',
+  id: 'perf-test-node',
         type: 'test',
         position: { x: 100, y: 100 },
         data: { label: 'Performance Test' },
         metadata: { created: Date.now(), updated: Date.now(), version: 1 }
-      }
     });
     const report = globalStateDevTools.detectStateBottlenecks();
     expect(report).toHaveProperty('summary');
@@ -133,12 +126,12 @@ describe('DevTools Integration', () => {
     expect(validation.performance).toHaveProperty('validationTime');
   });
   it('should support dependency visualization', () => {
-    const graph = globalStateDevTools.visualizeStateDependencies({)
-      domains: ['graph-editor', 'admin-dashboard'],
-      includeComponents: true,
-      includeSelectors: true,
-      layout: 'hierarchical',
-    });
+  const graph = globalStateDevTools.visualizeStateDependencies({)
+  domains: ['graph-editor', 'admin-dashboard'],
+  includeComponents: true,
+  includeSelectors: true,
+  layout: 'hierarchical',
+});
     expect(graph).toHaveProperty('nodes');
     expect(graph).toHaveProperty('edges');
     expect(graph).toHaveProperty('metadata');

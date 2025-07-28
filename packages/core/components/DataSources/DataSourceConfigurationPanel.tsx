@@ -4,90 +4,87 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { DataSource, DataTransform } from '../../external-data/DataSourceManager';
 
 export interface DataSourceConfigurationPanelProps {
-  visible: boolean;
+  visible: boolean;,
   onClose: () => void;
-  onSave: (dataSources: DataSource[]) => void;
-  initialDataSources?: DataSource[];
-}
-interface DataSourceFormData {
-  id: string;
+  onSave: (dataSources: DataSource) => void;
+  initialDataSources?: DataSource;
+  interface DataSourceFormData {
+  id: string;,
   name: string;
-  type: DataSource['type'];
+  type: DataSource['type'];,
   enabled: boolean;
   endpoint?: string;
   authentication: {,
-    type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';
-    credentials: Record<string, string>;
-    headers: Record<string, string>;
-  };
+  type: 'none' | 'api_key' | 'oauth' | 'basic' | 'bearer';,
+  credentials: Record<string, string>;
+  headers: Record<string, string>;
+};
   caching: {,
-    enabled: boolean;
-    ttl: number;
-    strategy: 'memory' | 'disk' | 'hybrid';
-    maxSize: number;
-  };
-  transforms: DataTransform[];
+  enabled: boolean;
+  ttl: number;,
+  strategy: 'memory' | 'disk' | 'hybrid';
+  maxSize: number;
+};
+  transforms: DataTransform;
   rateLimit?: {
-    requests: number;
-    window: number;
-    burst?: number;
-  };
+  requests: number;,
+  window: number;
+  burst?: number;
+};
   reliability: {,
-    timeout: number;
-    retries: number;
-    backoff: 'linear' | 'exponential';
-    healthCheck?: string;
-  };
+  timeout: number;
+  retries: number;,
+  backoff: 'linear' | 'exponential';
+  healthCheck?: string;
+};
   metadata: {,
-    description: string;
-    category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';
-    tags: string[];
-    version: string;
-  };
-}
-const defaultDataSourceForm: DataSourceFormData = {
+  description: string;
+  category: 'historical' | 'cultural' | 'artistic' | 'academic' | 'commercial';,
+  tags: string;
+  version: string;
+};
+const defaultDataSourceForm: DataSourceFormData = {,
   id: '',
   name: '',
   type: 'api',
   enabled: true,
   endpoint: '',
   authentication: {,
-    type: 'none',
+  type: 'none',
     credentials: {},
     headers: {}
   },
   caching: {,
-    enabled: true,
-    ttl: 3600,
-    strategy: 'hybrid',
-    maxSize: 50,
-  },
+  enabled: true,
+  ttl: 3600,
+  strategy: 'hybrid',
+  maxSize: 50,
+},
   transforms: [],
   rateLimit: {,
-    requests: 100,
-    window: 60,
-    burst: 10,
-  },
+  requests: 100,
+  window: 60,
+  burst: 10,
+},
   reliability: {,
-    timeout: 10000,
-    retries: 3,
-    backoff: 'exponential',
-  },
+  timeout: 10000,
+  retries: 3,
+  backoff: 'exponential',
+},
   metadata: {,
-    description: '',
-    category: 'historical',
-    tags: [],
-    version: '1.0',
-  }
+  description: '',
+  category: 'historical',
+  tags: [],
+  version: '1.0',
 };
-
+}
 export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanelProps> = ({)
   visible,
   onClose,
   onSave,
   initialDataSources = []
 }) => {
-  const [dataSources, setDataSources] = useState<DataSource[]>(initialDataSources);
+  const [dataSources, setDataSources] = useState<DataSource>(initialDataSources);
   const [selectedSourceId, setSelectedSourceId] = useState<string | null>(null);
   const [editingSource, setEditingSource] = useState<DataSourceFormData | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -95,7 +92,6 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   useEffect(() => {
     if (initialDataSources.length > 0) {
       setDataSources(initialDataSources);
-    }
   }, [initialDataSources]);
   const handleNewSource = useCallback(() => {
     const newId = `custom-source-${Date.now()}`;}
@@ -104,31 +100,29 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
   }, []);
   const handleEditSource = useCallback((source: DataSource) => {
     setEditingSource({)
-      ...source,
+  ...source,
       authentication: {,
-        type: source.authentication?.type || 'none',
+  type: source.authentication?.type || 'none',
         credentials: source.authentication?.credentials || {},
         headers: source.authentication?.headers || {}
-      }
     });
     setShowForm(true);
   }, []);
   const handleSaveSource = useCallback(() => {
-    if (!editingSource) return;
-    const updatedSources = dataSources.some(ds => ds.id === editingSource.id);
-      ? dataSources.map(ds => ds.id === editingSource.id ? editingSource : ds)
-      : [...dataSources, editingSource];
-    setDataSources(updatedSources);
-    setEditingSource(null);
-    setShowForm(false);
-    onSave(updatedSources);
-  }, [editingSource, dataSources, onSave]);
+  if (!editingSource) return;
+  const updatedSources = dataSources.some(ds => ds.id === editingSource.id);
+  ? dataSources.map(ds => ds.id === editingSource.id ? editingSource : ds),
+  : [...dataSources, editingSource];
+  setDataSources(updatedSources);
+  setEditingSource(null);
+  setShowForm(false);
+  onSave(updatedSources);
+}, [editingSource, dataSources, onSave]);
   const handleDeleteSource = useCallback((sourceId: string) => {
     const updatedSources = dataSources.filter(ds => ds.id !== sourceId);
     setDataSources(updatedSources);
     if (selectedSourceId === sourceId) {
       setSelectedSourceId(null);
-    }
     onSave(updatedSources);
   }, [dataSources, selectedSourceId, onSave]);
   const handleToggleSource = useCallback((sourceId: string) => {
@@ -143,76 +137,74 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
     setEditingSource({ ...editingSource, ...updates });
   }, [editingSource]);
   const addTag = useCallback((tag: string) => {
-    if (!editingSource || editingSource.metadata.tags.includes(tag)) return;
-    updateEditingSource({)
-      metadata: {,
-        ...editingSource.metadata,
-        tags: [...editingSource.metadata.tags, tag]
-      }
-    });
+  if (!editingSource || editingSource.metadata.tags.includes(tag)) return;
+  updateEditingSource({)
+  metadata: {,
+  ...editingSource.metadata,
+  tags: [...editingSource.metadata.tags, tag],
+});
   }, [editingSource, updateEditingSource]);
   const removeTag = useCallback((tag: string) => {
-    if (!editingSource) return;
-    updateEditingSource({)
-      metadata: {,
-        ...editingSource.metadata,
-        tags: editingSource.metadata.tags.filter(t => t !== tag),
-      }
-    });
+  if (!editingSource) return;
+  updateEditingSource({)
+  metadata: {,
+  ...editingSource.metadata,
+  tags: editingSource.metadata.tags.filter(t => t !== tag),
+});
   }, [editingSource, updateEditingSource]);
   if (!visible) return null;
-  return ();
+  return;
     <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0, 0, 0, 0.7)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2000,
-    }}>
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0, 0, 0, 0.7)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 2000,
+}}>
       <div style={{
-        background: '#2d3748',
-        border: '1px solid #4a5568',
-        borderRadius: 8,
-        width: '90vw',
-        maxWidth: 1200,
-        maxHeight: '90vh',
-        display: 'flex',
-        overflow: 'hidden',
-      }}>
+  background: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 8,
+  width: '90vw',
+  maxWidth: 1200,
+  maxHeight: '90vh',
+  display: 'flex',
+  overflow: 'hidden',
+}}>
         {/* Sidebar - Data Sources List */}
         <div style={{
-          width: 320,
-          background: '#1a202c',
-          borderRight: '1px solid #4a5568',
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
+  width: 320,
+  background: '#1a202c',
+  borderRight: '1px solid #4a5568',
+  display: 'flex',
+  flexDirection: 'column',
+}}>
           <div style={{
-            padding: 16,
-            borderBottom: '1px solid #4a5568',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+  padding: 16,
+  borderBottom: '1px solid #4a5568',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}}>
             <h3 style={{ color: '#e2e8f0', margin: 0, fontSize: 16 }}>
               Data Sources
             </h3>
             <button
               onClick={handleNewSource}
               style={{
-                padding: '6px 12px',
-                background: '#4299e1',
-                border: 'none',
-                borderRadius: 4,
-                color: 'white',
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
+  padding: '6px 12px',
+  background: '#4299e1',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 12,
+  cursor: 'pointer',
+}}
             >
               + Add New
             </button>
@@ -225,68 +217,69 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                   padding: 12,
                   marginBottom: 8,
                   background: selectedSourceId === source.id ? '#2d3748' : 'transparent',
-                  border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`,}
-                  borderRadius: 6,
-                  cursor: 'pointer',
-                }}
+                  border: `1px solid ${selectedSourceId === source.id ? '#4299e1' : '#4a5568'}`}
+},
+  borderRadius: 6,
+                  cursor: 'pointer';
+  }}
                 onClick={() => setSelectedSourceId(source.id)}
               >
                 <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginBottom: 8,
-                }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  marginBottom: 8,
+}}>
                   <div>
                     <div style={{
-                      color: '#e2e8f0',
-                      fontSize: 14,
-                      fontWeight: 500,
-                      marginBottom: 4,
-                    }}>
+  color: '#e2e8f0',
+  fontSize: 14,
+  fontWeight: 500,
+  marginBottom: 4,
+}}>
                       {source.name}
                     </div>
                     <div style={{
-                      color: '#a0aec0',
-                      fontSize: 12,
-                      marginBottom: 4,
-                    }}>
+  color: '#a0aec0',
+  fontSize: 12,
+  marginBottom: 4,
+}}>
                       {source.type.toUpperCase()}
                     </div>
                   </div>
                   <div style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: '50%',
-                    background: source.enabled ? '#48bb78' : '#f56565',
-                  }} />
+  width: 12,
+  height: 12,
+  borderRadius: '50%',
+  background: source.enabled ? '#48bb78' : '#f56565',
+}} />
                 </div>
                 <div style={{
-                  color: '#a0aec0',
-                  fontSize: 11,
-                  marginBottom: 8,
-                  maxHeight: 36,
-                  overflow: 'hidden',
-                  lineHeight: 1.3,
-                }}>
+  color: '#a0aec0',
+  fontSize: 11,
+  marginBottom: 8,
+  maxHeight: 36,
+  overflow: 'hidden',
+  lineHeight: 1.3,
+}}>
                   {source.metadata.description}
                 </div>
                 <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: 4,
-                  marginBottom: 8,
-                }}>
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 4,
+  marginBottom: 8,
+}}>
                   {source.metadata.tags.slice(0, 3).map(tag => ()
                     <span
                       key={tag}
                       style={{
-                        background: '#4a5568',
-                        color: '#e2e8f0',
-                        padding: '2px 6px',
-                        borderRadius: 3,
-                        fontSize: 10,
-                      }}
+  background: '#4a5568',
+  color: '#e2e8f0',
+  padding: '2px 6px',
+  borderRadius: 3,
+  fontSize: 10,
+}}
                     >
                       {tag}
                     </span>
@@ -304,14 +297,14 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       handleToggleSource(source.id);
                     }}
                     style={{
-                      padding: '2px 8px',
-                      background: source.enabled ? '#f56565' : '#48bb78',
-                      border: 'none',
-                      borderRadius: 3,
-                      color: 'white',
-                      fontSize: 10,
-                      cursor: 'pointer',
-                    }}
+  padding: '2px 8px',
+  background: source.enabled ? '#f56565' : '#48bb78',
+  border: 'none',
+  borderRadius: 3,
+  color: 'white',
+  fontSize: 10,
+  cursor: 'pointer',
+}}
                   >
                     {source.enabled ? 'Disable' : 'Enable'}
                   </button>
@@ -321,14 +314,14 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       handleEditSource(source);
                     }}
                     style={{
-                      padding: '2px 8px',
-                      background: '#9f7aea',
-                      border: 'none',
-                      borderRadius: 3,
-                      color: 'white',
-                      fontSize: 10,
-                      cursor: 'pointer',
-                    }}
+  padding: '2px 8px',
+  background: '#9f7aea',
+  border: 'none',
+  borderRadius: 3,
+  color: 'white',
+  fontSize: 10,
+  cursor: 'pointer',
+}}
                   >
                     Edit
                   </button>
@@ -338,14 +331,14 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
                       handleDeleteSource(source.id);
                     }}
                     style={{
-                      padding: '2px 8px',
-                      background: '#e53e3e',
-                      border: 'none',
-                      borderRadius: 3,
-                      color: 'white',
-                      fontSize: 10,
-                      cursor: 'pointer',
-                    }}
+  padding: '2px 8px',
+  background: '#e53e3e',
+  border: 'none',
+  borderRadius: 3,
+  color: 'white',
+  fontSize: 10,
+  cursor: 'pointer',
+}}
                   >
                     Delete
                   </button>
@@ -358,26 +351,26 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {/* Header */}
           <div style={{
-            padding: 16,
-            borderBottom: '1px solid #4a5568',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+  padding: 16,
+  borderBottom: '1px solid #4a5568',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}}>
             <h2 style={{ color: '#e2e8f0', margin: 0, fontSize: 20 }}>
               External Data Sources Configuration
             </h2>
             <button
               onClick={onClose}
               style={{
-                padding: '8px 16px',
-                background: '#4a5568',
-                border: 'none',
-                borderRadius: 4,
-                color: 'white',
-                fontSize: 14,
-                cursor: 'pointer',
-              }}
+  padding: '8px 16px',
+  background: '#4a5568',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 14,
+  cursor: 'pointer',
+}}
             >
               Close
             </button>
@@ -403,13 +396,13 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
               />
             ) : ()
               <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-                color: '#a0aec0',
-                fontSize: 16,
-              }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+  color: '#a0aec0',
+  fontSize: 16,
+}}>
                 Select a data source to view details or click "Add New" to create one
               </div>
             )}
@@ -421,12 +414,12 @@ export const DataSourceConfigurationPanel: React.FC<DataSourceConfigurationPanel
 };
 
 // Data Source Form Component
-const DataSourceForm: React.FC<{
+const DataSourceForm: React.FC<{,
   source: DataSourceFormData;
-  onUpdate: (updates: Partial<DataSourceFormData>) => void;
+  onUpdate: (updates: Partial<DataSourceFormData>) => void;,
   onSave: () => void;
-  onCancel: () => void;
-  onAddTag: (tag: string) => void;
+  onCancel: () => void;,
+  onAddTag: (tag: string) => void;,
   onRemoveTag: (tag: string) => void;
 }> = ({ source, onUpdate, onSave, onCancel, onAddTag, onRemoveTag }) => {
   const [newTag, setNewTag] = useState('');
@@ -434,9 +427,8 @@ const DataSourceForm: React.FC<{
     if (newTag.trim()) {
       onAddTag(newTag.trim());
       setNewTag('');
-    }
   }, [newTag, onAddTag]);
-  return ();
+  return;
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         {/* Basic Information */}
@@ -454,14 +446,14 @@ const DataSourceForm: React.FC<{
                 value={source.name}
                 onChange={(e) => onUpdate({ name: e.target.value })}
                 style={{
-                  width: '100%',
-                  padding: 8,
-                  background: '#1a202c',
-                  border: '1px solid #4a5568',
-                  borderRadius: 4,
-                  color: '#e2e8f0',
-                  fontSize: 14,
-                }}
+  width: '100%',
+  padding: 8,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 14,
+}}
                 placeholder="Enter source name"
               />
             </div>
@@ -473,14 +465,14 @@ const DataSourceForm: React.FC<{
                 value={source.type}
                 onChange={(e) => onUpdate({ type: e.target.value as DataSource['type'] })}
                 style={{
-                  width: '100%',
-                  padding: 8,
-                  background: '#1a202c',
-                  border: '1px solid #4a5568',
-                  borderRadius: 4,
-                  color: '#e2e8f0',
-                  fontSize: 14,
-                }}
+  width: '100%',
+  padding: 8,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 14,
+}}
               >
                 <option value="api">API</option>
                 <option value="database">Database</option>
@@ -496,19 +488,19 @@ const DataSourceForm: React.FC<{
             <textarea
               value={source.metadata.description}
               onChange={(e) => onUpdate({)
-                metadata: { ...source.metadata, description: e.target.value }
+  metadata: { ...source.metadata, description: e.target.value }
               })}
               rows={3}
               style={{
-                width: '100%',
-                padding: 8,
-                background: '#1a202c',
-                border: '1px solid #4a5568',
-                borderRadius: 4,
-                color: '#e2e8f0',
-                fontSize: 14,
-                resize: 'vertical',
-              }}
+  width: '100%',
+  padding: 8,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 14,
+  resize: 'vertical',
+}}
               placeholder="Describe this data source..."
             />
           </div>
@@ -522,14 +514,14 @@ const DataSourceForm: React.FC<{
                 value={source.endpoint || ''}
                 onChange={(e) => onUpdate({ endpoint: e.target.value })}
                 style={{
-                  width: '100%',
-                  padding: 8,
-                  background: '#1a202c',
-                  border: '1px solid #4a5568',
-                  borderRadius: 4,
-                  color: '#e2e8f0',
-                  fontSize: 14,
-                }}
+  width: '100%',
+  padding: 8,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 14,
+}}
                 placeholder="https://api.example.com/v1"
               />
             </div>
@@ -545,27 +537,27 @@ const DataSourceForm: React.FC<{
               <span
                 key={tag}
                 style={{
-                  background: '#4a5568',
-                  color: '#e2e8f0',
-                  padding: '4px 8px',
-                  borderRadius: 4,
-                  fontSize: 12,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 4,
-                }}
+  background: '#4a5568',
+  color: '#e2e8f0',
+  padding: '4px 8px',
+  borderRadius: 4,
+  fontSize: 12,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+}}
               >
                 {tag}
                 <button
                   onClick={() => onRemoveTag(tag)}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#f56565',
-                    cursor: 'pointer',
-                    fontSize: 12,
-                    padding: 0,
-                  }}
+  background: 'none',
+  border: 'none',
+  color: '#f56565',
+  cursor: 'pointer',
+  fontSize: 12,
+  padding: 0,
+}}
                 >
                   ×
                 </button>
@@ -580,65 +572,65 @@ const DataSourceForm: React.FC<{
               onKeyDown={(e) => e.key === 'Enter' && handleTagAdd()}
               placeholder="Add tag..."
               style={{
-                flex: 1,
-                padding: 6,
-                background: '#1a202c',
-                border: '1px solid #4a5568',
-                borderRadius: 4,
-                color: '#e2e8f0',
-                fontSize: 12,
-              }}
+  flex: 1,
+  padding: 6,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 4,
+  color: '#e2e8f0',
+  fontSize: 12,
+}}
             />
             <button
               onClick={handleTagAdd}
               disabled={!newTag.trim()}
               style={{
-                padding: '6px 12px',
-                background: newTag.trim() ? '#4299e1' : '#4a5568',
-                border: 'none',
-                borderRadius: 4,
-                color: 'white',
-                fontSize: 12,
-                cursor: newTag.trim() ? 'pointer' : 'not-allowed',
-              }}
+  padding: '6px 12px',
+  background: newTag.trim() ? '#4299e1' : '#4a5568',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 12,
+  cursor: newTag.trim() ? 'pointer' : 'not-allowed',
+}}
             >
               Add
             </button>
           </div>
         </div>
         {/* Save/Cancel Buttons */}
-        <div style={{ 
-          display: 'flex', 
-          gap: 12, 
-          paddingTop: 16, 
-          borderTop: '1px solid #4a5568' ,
-        }}>
+        <div style={{
+  display: 'flex',
+  gap: 12,
+  paddingTop: 16,
+  borderTop: '1px solid #4a5568',
+}}>
           <button
             onClick={onSave}
             disabled={!source.name.trim()}
             style={{
-              padding: '10px 20px',
-              background: source.name.trim() ? '#48bb78' : '#4a5568',
-              border: 'none',
-              borderRadius: 4,
-              color: 'white',
-              fontSize: 14,
-              cursor: source.name.trim() ? 'pointer' : 'not-allowed',
-            }}
+  padding: '10px 20px',
+  background: source.name.trim() ? '#48bb78' : '#4a5568',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 14,
+  cursor: source.name.trim() ? 'pointer' : 'not-allowed',
+}}
           >
             Save Data Source
           </button>
           <button
             onClick={onCancel}
             style={{
-              padding: '10px 20px',
-              background: '#4a5568',
-              border: 'none',
-              borderRadius: 4,
-              color: 'white',
-              fontSize: 14,
-              cursor: 'pointer',
-            }}
+  padding: '10px 20px',
+  background: '#4a5568',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 14,
+  cursor: 'pointer',
+}}
           >
             Cancel
           </button>
@@ -649,19 +641,19 @@ const DataSourceForm: React.FC<{
 };
 
 // Data Source Details Component
-const DataSourceDetails: React.FC<{
+const DataSourceDetails: React.FC<{,
   source: DataSource;
   onEdit: () => void;
 }> = ({ source, onEdit }) => {
-  return ();
+  return;
     <div style={{ height: '100%', overflowY: 'auto', padding: 24 }}>
       <div style={{ maxWidth: 800 }}>
         <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          marginBottom: 24,
-        }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  marginBottom: 24,
+}}>
           <div>
             <h3 style={{ color: '#e2e8f0', fontSize: 20, margin: '0 0 8px 0' }}>
               {source.name}
@@ -676,14 +668,14 @@ const DataSourceDetails: React.FC<{
           <button
             onClick={onEdit}
             style={{
-              padding: '8px 16px',
-              background: '#4299e1',
-              border: 'none',
-              borderRadius: 4,
-              color: 'white',
-              fontSize: 14,
-              cursor: 'pointer',
-            }}
+  padding: '8px 16px',
+  background: '#4299e1',
+  border: 'none',
+  borderRadius: 4,
+  color: 'white',
+  fontSize: 14,
+  cursor: 'pointer',
+}}
           >
             Edit
           </button>
@@ -743,12 +735,12 @@ const DataSourceDetails: React.FC<{
               <span
                 key={tag}
                 style={{
-                  background: '#4a5568',
-                  color: '#e2e8f0',
-                  padding: '4px 8px',
-                  borderRadius: 4,
-                  fontSize: 12,
-                }}
+  background: '#4a5568',
+  color: '#e2e8f0',
+  padding: '4px 8px',
+  borderRadius: 4,
+  fontSize: 12,
+}}
               >
                 {tag}
               </span>

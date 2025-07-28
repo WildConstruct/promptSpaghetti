@@ -56,41 +56,35 @@ interface UsageQuotaDashboardProps {
   onViolationResolve?: (violationId: string, resolution: string) => Promise<void>;
   onQuotaOverride?: (quotaId: string, userId: string, overrideAmount: number, duration: number) => Promise<void>;
   className?: string;
-}
-interface DashboardState {
-  quotas: UsageQuota[];
-  violations: QuotaViolation[];
-  analytics: UsageAnalytics[];
-  templates: QuotaTemplate[];
-  operations: QuotaAdminOperation[];
+  interface DashboardState {
+  quotas: UsageQuota;,
+  violations: QuotaViolation;
+  analytics: UsageAnalytics;,
+  templates: QuotaTemplate;
+  operations: QuotaAdminOperation;,
   systemMetrics: SystemQuotaMetrics;
-}
-interface SystemQuotaMetrics {
-  totalQuotas: number;
+  interface SystemQuotaMetrics {
+  totalQuotas: number;,
   activeQuotas: number;
-  totalViolations: number;
+  totalViolations: number;,
   activeViolations: number;
-  utilizationRate: number;
-  topViolatedQuotas: QuotaViolationSummary[];
-  recentActivity: QuotaActivityItem[];
-}
-interface QuotaViolationSummary {
-  quotaId: string;
+  utilizationRate: number;,
+  topViolatedQuotas: QuotaViolationSummary;
+  recentActivity: QuotaActivityItem;
+  interface QuotaViolationSummary {
+  quotaId: string;,
   quotaName: string;
-  violationCount: number;
+  violationCount: number;,
   lastViolation: Date;
   severity: ActionSeverity;
-}
-interface QuotaActivityItem {
-  timestamp: Date;
+  interface QuotaActivityItem {
+  timestamp: Date;,
   type: 'quota_created' | 'violation_occurred' | 'quota_updated' | 'violation_resolved';
   description: string;
   userId?: string;
   quotaId?: string;
   severity: ActionSeverity;
-}
-
-export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
+  export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({,)
   onQuotaCreate,
   onQuotaUpdate,
   onQuotaDelete,
@@ -104,14 +98,14 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [_____filters, _____setFilters] = useState({)
-    quotaType: [] as QuotaType[],
-    status: [] as ('active' | 'disabled')[],
-    severity: [] as ActionSeverity[],
-    timeRange: '24h' as '1h' | '24h' | '7d' | '30d',
-  });
+  quotaType: [] as QuotaType,
+  status: [] as ('active' | 'disabled')[],
+  severity: [] as ActionSeverity,
+  timeRange: '24h' as '1h' | '24h' | '7d' | '30d',
+});
   // Selected items for bulk operations
-  const [selectedQuotas, setSelectedQuotas] = useState<string[]>([]);
-  const [selectedViolations, setSelectedViolations] = useState<string[]>([]);
+  const [selectedQuotas, setSelectedQuotas] = useState<string>([]);
+  const [selectedViolations, setSelectedViolations] = useState<string>([]);
   // Modal states
   const [_____showCreateQuotaModal, setShowCreateQuotaModal] = useState(false);
   const [_____showTemplateModal, _____setShowTemplateModal] = useState(false);
@@ -121,8 +115,8 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
     try {
       setLoading(true);
       // Simulate API calls - would be replaced with actual service calls
-      const mockDashboardState: DashboardState = {
-        quotas: [,
+      const mockDashboardState: DashboardState = {,
+  quotas: [,
           {
             quotaId: 'quota-api-requests',
             quotaName: 'API Requests - Free Tier',
@@ -142,33 +136,32 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
             updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
             createdBy: 'admin-user-1',
             configuration: {,
-              warningThresholds: [75, 90, 95],
-              emergencyMultiplier: 1.5,
-              integrateWithRateLimit: true,
-              integrateWithFraudDetection: true,
-              integrateWithBilling: false,
-              trackingEnabled: true,
-              analyticsEnabled: true,
-              alertsEnabled: true,
-              cachingEnabled: true,
-              batchProcessing: false,
-              asyncEnforcement: false,
-            },
-            metadata: {,
-              description: 'Daily API request limit for free tier users',
-              category: 'resource_management',
-              businessJustification: 'Prevent abuse and manage infrastructure costs',
-              technicalConstraints: ['Rate limiting integration required'],
-              relatedQuotas: [],
-              averageUsage: 750,
-              peakUsage: 980,
-              violationRate: 5.2,
-              lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
-              impactOnRevenue: 'low',
-              userSatisfactionImpact: 'medium',
-              operationalCost: 'low',
-            }
-          },
+  warningThresholds: [75, 90, 95],
+  emergencyMultiplier: 1.5,
+  integrateWithRateLimit: true,
+  integrateWithFraudDetection: true,
+  integrateWithBilling: false,
+  trackingEnabled: true,
+  analyticsEnabled: true,
+  alertsEnabled: true,
+  cachingEnabled: true,
+  batchProcessing: false,
+  asyncEnforcement: false,
+},
+  metadata: {,
+  description: 'Daily API request limit for free tier users',
+  category: 'resource_management',
+  businessJustification: 'Prevent abuse and manage infrastructure costs',
+  technicalConstraints: ['Rate limiting integration required'],
+  relatedQuotas: [],
+  averageUsage: 750,
+  peakUsage: 980,
+  violationRate: 5.2,
+  lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  impactOnRevenue: 'low',
+  userSatisfactionImpact: 'medium',
+  operationalCost: 'low',
+}
           {
             quotaId: 'quota-graph-executions',
             quotaName: 'Graph Executions - Pro Tier',
@@ -188,62 +181,57 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
             updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
             createdBy: 'admin-user-2',
             configuration: {,
-              warningThresholds: [80, 90, 95],
-              emergencyMultiplier: 2.0,
-              integrateWithRateLimit: false,
-              integrateWithFraudDetection: true,
-              integrateWithBilling: true,
-              trackingEnabled: true,
-              analyticsEnabled: true,
-              alertsEnabled: true,
-              cachingEnabled: true,
-              batchProcessing: true,
-              asyncEnforcement: true,
-            },
-            metadata: {,
-              description: 'Daily graph execution limit for pro tier users',
-              category: 'business_logic',
-              businessJustification: 'Tier-based service differentiation',
-              technicalConstraints: ['Execution engine integration'],
-              relatedQuotas: ['quota-api-requests'],
-              averageUsage: 320,
-              peakUsage: 475,
-              violationRate: 2.1,
-              impactOnRevenue: 'medium',
-              userSatisfactionImpact: 'high',
-              operationalCost: 'medium',
-            }
-          }
-        ],
-        violations: [,
-          {
-            violationId: 'violation-001',
-            quotaId: 'quota-api-requests',
-            userId: 'user-12345',
-            violationTimestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-            exceededBy: 150,
-            quotaLimit: 1000,
-            actualUsage: 1150,
-            severity: 'medium',
-            impactAssessment: {,
-              businessImpact: 'low',
-              technicalImpact: 'low',
-              userImpact: 'medium',
-              securityRisk: 'low',
-              complianceRisk: 'none',
-            },
-            enforcementAction: 'hard_block',
+  warningThresholds: [80, 90, 95],
+  emergencyMultiplier: 2.0,
+  integrateWithRateLimit: false,
+  integrateWithFraudDetection: true,
+  integrateWithBilling: true,
+  trackingEnabled: true,
+  analyticsEnabled: true,
+  alertsEnabled: true,
+  cachingEnabled: true,
+  batchProcessing: true,
+  asyncEnforcement: true,
+},
+  metadata: {,
+  description: 'Daily graph execution limit for pro tier users',
+  category: 'business_logic',
+  businessJustification: 'Tier-based service differentiation',
+  technicalConstraints: ['Execution engine integration'],
+  relatedQuotas: ['quota-api-requests'],
+  averageUsage: 320,
+  peakUsage: 475,
+  violationRate: 2.1,
+  impactOnRevenue: 'medium',
+  userSatisfactionImpact: 'high',
+  operationalCost: 'medium'],
+  violations: [,
+  {
+  violationId: 'violation-001',
+  quotaId: 'quota-api-requests',
+  userId: 'user-12345',
+  violationTimestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  exceededBy: 150,
+  quotaLimit: 1000,
+  actualUsage: 1150,
+  severity: 'medium',
+  impactAssessment: {,
+  businessImpact: 'low',
+  technicalImpact: 'low',
+  userImpact: 'medium',
+  securityRisk: 'low',
+  complianceRisk: 'none',
+},
+  enforcementAction: 'hard_block',
             enforcementDetails: {,
-              actionTaken: 'hard_block',
+  actionTaken: 'hard_block',
               timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
               reason: 'API request quota exceeded',
               automaticAction: true,
               additionalData: {}
-            },
-            status: 'active',
-            appealSubmitted: false,
-          }
-        ],
+  },
+  status: 'active',
+            appealSubmitted: false],
         analytics: [,
           {
             period: { type: 'day', value: 7, timezone: 'UTC' },
@@ -261,21 +249,18 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
             seasonalPatterns: [],
             topUsers: [],
             usageDistribution: {,
-              percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
+  percentiles: { 50: 500, 75: 750, 90: 900, 95: 950, 99: 990 },
               buckets: [],
-              outliers: [],
-            },
-            averageResponseTime: 120,
+              outliers: [];
+  },
+  averageResponseTime: 120,
             systemLoad: 68,
             resourceUtilization: {,
-              cpu: 45,
+  cpu: 45,
               memory: 62,
               disk: 34,
               network: 23,
-              database: 78,
-            }
-          }
-        ],
+              database: 78],
         templates: [,
           {
             templateId: 'template-free-tier',
@@ -291,16 +276,12 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
                 limitUnit: 'requests',
                 enforcementAction: 'hard_block',
                 variableFields: ['limitValue'],
-                conditionalRules: [],
-              }
-            ],
+                conditionalRules: []],
             createdBy: 'system',
             createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
             usageCount: 847,
             validationRules: [],
-            enabled: true,
-          }
-        ],
+            enabled: true],
         operations: [,
           {
             operationId: 'op-001',
@@ -314,46 +295,38 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
             requiresApproval: false,
             status: 'completed',
             result: {,
-              success: true,
+  success: true,
               affectedRecords: 1,
               warnings: [],
               details: {}
-            }
-          }
         ],
         systemMetrics: {,
-          totalQuotas: 15,
-          activeQuotas: 13,
-          totalViolations: 45,
-          activeViolations: 8,
-          utilizationRate: 68.5,
-          topViolatedQuotas: [,
-            {
-              quotaId: 'quota-api-requests',
-              quotaName: 'API Requests - Free Tier',
-              violationCount: 23,
-              lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
-              severity: 'medium',
-            }
-          ],
-          recentActivity: [,
-            {
-              timestamp: new Date(Date.now() - 15 * 60 * 1000),
-              type: 'violation_occurred',
-              description: 'API request quota exceeded by user-12345',
-              userId: 'user-12345',
-              quotaId: 'quota-api-requests',
-              severity: 'medium',
-            }
-          ]
-        }
-      };
+  totalQuotas: 15,
+  activeQuotas: 13,
+  totalViolations: 45,
+  activeViolations: 8,
+  utilizationRate: 68.5,
+  topViolatedQuotas: [,
+  {
+  quotaId: 'quota-api-requests',
+  quotaName: 'API Requests - Free Tier',
+  violationCount: 23,
+  lastViolation: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  severity: 'medium'],
+  recentActivity: [,
+  {
+  timestamp: new Date(Date.now() - 15 * 60 * 1000),
+  type: 'violation_occurred',
+  description: 'API request quota exceeded by user-12345',
+  userId: 'user-12345',
+  quotaId: 'quota-api-requests',
+  severity: 'medium'];
+  };
       setDashboardState(mockDashboardState);
     } catch (error) {
-      console.error('Failed to load quota dashboard data:', error);
-    } finally {
+  console.error('Failed to load quota dashboard data:', error);
+} finally {
       setLoading(false);
-    }
   }, []);
   const refreshDashboard = useCallback(async () => {
     setRefreshing(true);
@@ -371,19 +344,17 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
     if (onQuotaCreate) {
       await onQuotaCreate(quota);
       await refreshDashboard();
-    }
   };
   const handleQuotaUpdate = async (quotaId: string, updates: Partial<UsageQuota>) => {
     if (onQuotaUpdate) {
       await onQuotaUpdate(quotaId, updates);
       await refreshDashboard();
-    }
   };
   const handleQuotaToggle = async (quotaId: string, enabled: boolean) => {
     await handleQuotaUpdate(quotaId, { enabled });
   };
   if (loading) {
-    return ();
+    return;
       <div className={`usage-quota-dashboard loading ${className}`}>}
         <div className="loading-spinner">
           <RefreshCw className="animate-spin" size={24} />
@@ -391,9 +362,8 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
         </div>
       </div>
     );
-  }
   if (!dashboardState) {
-    return ();
+    return;
       <div className={`usage-quota-dashboard error ${className}`}>}
         <div className="error-message">
           <AlertCircle size={24} />
@@ -402,8 +372,7 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`usage-quota-dashboard ${className}`}>}
       {/* Dashboard Header */}
       <div className="dashboard-header">
@@ -543,13 +512,13 @@ export const UsageQuotaDashboard: React.FC<UsageQuotaDashboardProps> = ({)
 };
 
 // Overview Tab Component
-const OverviewTab: React.FC<{
+const OverviewTab: React.FC<{,
   systemMetrics: SystemQuotaMetrics;
-  quotas: UsageQuota[];
-  violations: QuotaViolation[];
+  quotas: UsageQuota;,
+  violations: QuotaViolation;
   analytics: UsageAnalytics;
 }> = ({ systemMetrics, quotas, violations, analytics }) => {
-  return ();
+  return;
     <div className="overview-tab">
       {/* System Health Cards */}
       <div className="metrics-overview">

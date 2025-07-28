@@ -16,10 +16,10 @@ describe('RateLimitingService', () => {
   let service: RateLimitingService;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-    service = new RateLimitingService();
-  });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  service = new RateLimitingService();
+});
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -38,7 +38,6 @@ describe('RateLimitingService', () => {
       // Record 10 failed attempts (exceeds login limit)
       for (let i = 0; i < 10; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.BLOCKED);
       expect(result.remainingRequests).toBe(0);
@@ -51,7 +50,6 @@ describe('RateLimitingService', () => {
       // Exhaust login attempts
       for (let i = 0; i < 10; i++) {
         service.recordAttempt(identifier, loginEndpoint, false);
-      }
       const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
       const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
       expect(loginResult.result).toBe(RateLimitResult.BLOCKED);
@@ -93,7 +91,6 @@ describe('RateLimitingService', () => {
       for (let i = 0; i < 20; i++) {
         service.recordAttempt(identifier, endpoint, false);
         await service.checkRateLimit(identifier, endpoint);
-      }
       const delay = service.getBackoffDelay(identifier, endpoint);
       expect(delay).toBeLessThanOrEqual(3600); // Max delay is 1 hour for login
     });
@@ -105,7 +102,6 @@ describe('RateLimitingService', () => {
       // Record many rapid failures
       for (let i = 0; i < 15; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect([ThreatLevel.MEDIUM, ThreatLevel.HIGH, ThreatLevel.CRITICAL]).toContain(result.threatLevel);
       expect(result.adaptiveMultiplier).toBeLessThan(1.0);
@@ -117,7 +113,6 @@ describe('RateLimitingService', () => {
       // Create high threat context for second user
       for (let i = 0; i < 10; i++) {
         service.recordAttempt(highThreatUser, endpoint, false);
-      }
       const lowThreatResult = await service.checkRateLimit(lowThreatUser, endpoint);
       const highThreatResult = await service.checkRateLimit(highThreatUser, endpoint);
       expect(lowThreatResult.adaptiveMultiplier).toBeGreaterThan(highThreatResult.adaptiveMultiplier);
@@ -129,8 +124,6 @@ describe('RateLimitingService', () => {
       for (const endpoint of endpoints) {
         for (let i = 0; i < 5; i++) {
           service.recordAttempt(identifier, endpoint, false);
-        }
-      }
       const result = await service.checkRateLimit(identifier, '/auth/login');
       expect([ThreatLevel.MEDIUM, ThreatLevel.HIGH, ThreatLevel.CRITICAL]).toContain(result.threatLevel);
     });
@@ -144,7 +137,6 @@ describe('RateLimitingService', () => {
       // Try to exceed limits
       for (let i = 0; i < 20; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.ALLOWED);
     });
@@ -165,49 +157,46 @@ describe('RateLimitingService', () => {
     });
   });
   describe('Endpoint-Specific Configurations', () => {
-    test('should apply stricter limits to MFA endpoints', async () => {
-      const identifier = 'mfa-test@example.com';
-      const loginEndpoint = '/auth/login';
-      const mfaEndpoint = '/auth/mfa/verify';
-      // MFA should have stricter limits than login
-      // Login allows 10 per minute, MFA allows 5 per minute
-      // Test login limit - use successful attempts to avoid threat level increase
-      for (let i = 0; i < 8; i++) {
-        // Advance time by 2 seconds between attempts to avoid per-second limit (2/sec)
-        // Use successful attempts to keep threat level LOW (threat detection reduces limits)
-        mockDate = new Date(mockDate.getTime() + 2000);
-        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-        service.recordAttempt(identifier, loginEndpoint, true);
-      }
-      const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
-      // Reset time for MFA test
-      mockDate = new Date('2025-01-15T10:00:00Z');
-      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-      // Test MFA limit - use successful attempts to avoid threat level increase  
-      for (let i = 0; i < 4; i++) {
-        // Advance time by 2 seconds between attempts to avoid per-second limit (1/sec for MFA)
-        // Use successful attempts to keep threat level LOW (threat detection reduces limits)
-        mockDate = new Date(mockDate.getTime() + 2000);
-        jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-        service.recordAttempt(identifier, mfaEndpoint, true);
-      }
-      const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
-      expect(loginResult.result).toBe(RateLimitResult.ALLOWED);
-      expect(mfaResult.result).toBe(RateLimitResult.ALLOWED);
-      // One more MFA attempt should block (5 + 1 = 6 > limit of 5)
-      mockDate = new Date(mockDate.getTime() + 2000);
-      jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-      service.recordAttempt(identifier, mfaEndpoint, true);
-      const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
-      expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
-    });
+  test('should apply stricter limits to MFA endpoints', async () => {
+  const identifier = 'mfa-test@example.com';
+  const loginEndpoint = '/auth/login';
+  const mfaEndpoint = '/auth/mfa/verify';
+  // MFA should have stricter limits than login
+  // Login allows 10 per minute, MFA allows 5 per minute
+  // Test login limit - use successful attempts to avoid threat level increase
+  for (let i = 0; i < 8; i++) {
+  // Advance time by 2 seconds between attempts to avoid per-second limit (2/sec)
+  // Use successful attempts to keep threat level LOW (threat detection reduces limits)
+  mockDate = new Date(mockDate.getTime() + 2000);
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  service.recordAttempt(identifier, loginEndpoint, true);
+  const loginResult = await service.checkRateLimit(identifier, loginEndpoint);
+  // Reset time for MFA test
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  // Test MFA limit - use successful attempts to avoid threat level increase
+  for (let i = 0; i < 4; i++) {
+  // Advance time by 2 seconds between attempts to avoid per-second limit (1/sec for MFA)
+  // Use successful attempts to keep threat level LOW (threat detection reduces limits)
+  mockDate = new Date(mockDate.getTime() + 2000);
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  service.recordAttempt(identifier, mfaEndpoint, true);
+  const mfaResult = await service.checkRateLimit(identifier, mfaEndpoint);
+  expect(loginResult.result).toBe(RateLimitResult.ALLOWED);
+  expect(mfaResult.result).toBe(RateLimitResult.ALLOWED);
+  // One more MFA attempt should block (5 + 1 = 6 > limit of 5)
+  mockDate = new Date(mockDate.getTime() + 2000);
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  service.recordAttempt(identifier, mfaEndpoint, true);
+  const mfaBlockedResult = await service.checkRateLimit(identifier, mfaEndpoint);
+  expect(mfaBlockedResult.result).toBe(RateLimitResult.BLOCKED);
+});
     test('should apply very strict limits to password reset', async () => {
       const identifier = 'reset-test@example.com';
       const endpoint = '/auth/password/reset';
       // Password reset allows only 3 per minute
       for (let i = 0; i < 3; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.BLOCKED);
     });
@@ -217,7 +206,6 @@ describe('RateLimitingService', () => {
       // Registration allows only 2 per minute
       for (let i = 0; i < 2; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.BLOCKED);
     });
@@ -229,7 +217,6 @@ describe('RateLimitingService', () => {
       // Create blocked state
       for (let i = 0; i < 10; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       let result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.BLOCKED);
       // Reset limits
@@ -244,14 +231,11 @@ describe('RateLimitingService', () => {
       for (const endpoint of endpoints) {
         for (let i = 0; i < 10; i++) {
           service.recordAttempt(identifier, endpoint, false);
-        }
-      }
       // Reset all
       service.resetLimits(identifier);
       for (const endpoint of endpoints) {
         const result = await service.checkRateLimit(identifier, endpoint);
         expect(result.result).toBe(RateLimitResult.ALLOWED);
-      }
     });
     test('should provide accurate statistics', async () => {
       const identifier = 'stats-test@example.com';
@@ -260,7 +244,6 @@ describe('RateLimitingService', () => {
       for (let i = 0; i < 5; i++) {
         service.recordAttempt(identifier, endpoint, true);
         service.recordAttempt(identifier, endpoint, false);
-      }
       const stats = service.getStatistics();
       expect(stats.totalAttempts).toBe(10);
       expect(stats.blockedAttempts).toBe(5);
@@ -282,7 +265,6 @@ describe('RateLimitingService', () => {
         mockDate = new Date(mockDate.getTime() + 2000);
         jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
         service.recordAttempt(identifier, endpoint, true);
-      }
       const result = await service.checkRateLimit(identifier, endpoint);
       expect(result.result).toBe(RateLimitResult.WARNING);
     });
@@ -312,7 +294,6 @@ describe('RateLimitingService', () => {
       // Exceed limits
       for (let i = 0; i < 10; i++) {
         service.recordAttempt(identifier, endpoint, false);
-      }
       await service.checkRateLimit(identifier, endpoint);
       expect(eventEmitted).toBe(true);
     });
@@ -348,7 +329,7 @@ describe('RateLimitingService', () => {
       // All should complete without errors
       expect(results).toHaveLength(5);
       results.forEach(result => {)
-        expect([)
+  expect([)
           RateLimitResult.ALLOWED, 
           RateLimitResult.WARNING, 
           RateLimitResult.BLOCKED

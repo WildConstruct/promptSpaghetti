@@ -4,13 +4,15 @@
  * Collects real performance measurements to establish baselines for the system
  */
 import { TestEnvironment } from './PerformanceBaselines';
+
 interface SystemInfo {
     nodeVersion: string;
     platform: string;
     arch: string;
     memory: NodeJS.MemoryUsage;
     cpuUsage: NodeJS.CpuUsage;
-}
+
+
 /**
  * Collects baseline performance measurements from the actual system
  */
@@ -75,7 +77,7 @@ export declare class BaselineMeasurementCollector {
      * Get system information
      */
     getSystemInfo(): SystemInfo;
-}
+
 export declare function collectSystemBaselines(environment?: TestEnvironment, iterations?: number): Promise<{
     report: any;
     collection: any;

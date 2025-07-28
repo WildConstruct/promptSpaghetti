@@ -17,11 +17,11 @@ export const TemperatureSettingsSchema = z.object({)
   enabled: z.boolean().default(false),
   value: z.number().min(0.1).max(2.0).default(1.0),
   showIndicator: z.boolean().default(true),
-  presets: z.array(z.object({),
-    name: z.string(),
-    value: z.number(),
-    description: z.string(),
-  })).default([)
+  presets: z.array(z.object({,)
+  name: z.string(),
+  value: z.number(),
+  description: z.string(),
+})).default([)
     { name: 'Conservative', value: 0.3, description: 'More predictable results' },
     { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
     { name: 'Creative', value: 1.7, description: 'More varied results' }
@@ -33,7 +33,7 @@ export const TemperatureSettingsSchema = z.object({)
 export const RunCountSettingsSchema = z.object({)
   value: z.number().int().min(1).max(50).default(5),
   showPerformanceWarning: z.boolean().default(true),
-  presets: z.array(z.number().int()).default([1, 3, 5, 10, 20])
+  presets: z.array(z.number().int()).default([1, 3, 5, 10, 20]),
 });
 /**
  * Batch execution configuration
@@ -43,8 +43,8 @@ export const BatchSettingsSchema = z.object({)
   outputFormat: z.enum(['individual', 'combined', 'csv', 'json']).default('individual'),
   namingPattern: z.string().default('result-{seed}-{timestamp}'),
   includeMetadata: z.boolean().default(true),
-  autoDownload: z.boolean().default(false),
-});
+  autoDownload: z.boolean().default(false);
+  });
 /**
  * Performance and debugging settings
  */
@@ -104,10 +104,10 @@ export const SettingItemSchema = z.object({)
   type: z.enum(['boolean', 'number', 'string', 'select', 'slider', 'multiselect']),
   validation: z.unknown().optional(),
   defaultValue: z.unknown(),
-  options: z.array(z.unknown()).optional(), // For select/multiselect
-  min: z.number().optional(), // For number/slider
-  max: z.number().optional(), // For number/slider
-  step: z.number().optional(), // For number/slider
+  options: z.array(z.unknown()).optional(), // For select/multiselect,
+  min: z.number().optional(), // For number/slider,
+  max: z.number().optional(), // For number/slider,
+  step: z.number().optional(), // For number/slider,
   placeholder: z.string().optional(),
   helpText: z.string().optional(),
   disabled: z.boolean().default(false),
@@ -127,29 +127,30 @@ export type SettingItem = z.infer<typeof SettingItemSchema>;
 /**
  * Settings change event
  */
+
 export interface SettingsChangeEvent {
-  key: string;
+  key: string;,
   value: any;
-  previousValue: any;
+  previousValue: any;,
   timestamp: Date;
   source: 'user' | 'system' | 'import';
+  /**
+  * Settings validation result
+  */
 }
-/**
- * Settings validation result
- */
 export interface SettingsValidationResult {
-  valid: boolean;
-  errors: string[];
-  warnings: string[];
+  valid: boolean;,
+  errors: string;
+  warnings: string;
+  /**
+  * Settings export/import format
+  */
 }
-/**
- * Settings export/import format
- */
 export interface SettingsExport {
-  settings: AdvancedSettings;
+  settings: AdvancedSettings;,
   metadata: {,
-    exportedAt: string;
-    version: string;
-    appVersion: string;
-  };
+  exportedAt: string;,
+  version: string;
+  appVersion: string;
+};
 }

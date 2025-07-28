@@ -11,69 +11,64 @@ import {
 import { ValidationHelpers } from '../runtime/advanced';
 describe('Runtime IO System - Comprehensive Tests', () => {
   describe('AdvancedIOHandler', () => {
-    const createTestSpec = (): IOSpec => ({)
-      inputs: [,
-        {
-          id: 'text',
-          label: 'Text Input',
-          dataType: 'string',
-          required: true,
-          defaultValue: 'default',
-        },
+  const createTestSpec = (): IOSpec => ({,)
+  inputs: [,
+  {
+  id: 'text',
+  label: 'Text Input',
+  dataType: 'string',
+  required: true,
+  defaultValue: 'default',
+}
         {
           id: 'number',
           label: 'Number Input',
           dataType: 'number',
           required: false,
           constraints: { min: 0, max: 100 }
-        },
+  }
         {
-          id: 'optional',
-          label: 'Optional Input',
-          dataType: 'string',
-          required: false,
-        }
-      ],
-      outputs: [,
-        {
-          id: 'result',
-          label: 'Result',
-          dataType: 'string',
-          required: true,
-        }
-      ]
-    });
+  id: 'optional',
+  label: 'Optional Input',
+  dataType: 'string',
+  required: false],
+  outputs: [,
+  {
+  id: 'result',
+  label: 'Result',
+  dataType: 'string',
+  required: true];
+  });
     it('validates inputs correctly', () => {
-      const spec = createTestSpec();
-      const handler = new AdvancedIOHandler(spec);
-      // Valid inputs
-      const validInputs = new Map([;);
-        ['text', 'hello'],
-        ['number', 50]
-      ]);
-      const validResult = handler.validateInputs(validInputs);
-      expect(validResult.valid).toBe(true);
-      expect(validResult.errors).toEqual([]);
-      // Missing required input without default
-      const missingRequired = new Map([['number', 50]]);
-      const missingResult = handler.validateInputs(missingRequired);
-      expect(missingResult.valid).toBe(true); // Has default value
-      // Invalid type
-      const invalidType = new Map([;);
-        ['text', 'hello'],
-        ['number', 'not-a-number']
-      ]);
-      const invalidResult = handler.validateInputs(invalidType);
-      expect(invalidResult.valid).toBe(false);
-      expect(invalidResult.errors).toContain()
-        'Invalid type for Number Input: expected number, got string'
-      );
-    });
+  const spec = createTestSpec();
+  const handler = new AdvancedIOHandler(spec);
+  // Valid inputs
+  const validInputs = new Map([);
+  ['text', 'hello'],
+  ['number', 50]
+  ]);
+  const validResult = handler.validateInputs(validInputs);
+  expect(validResult.valid).toBe(true);
+  expect(validResult.errors).toEqual([]);
+  // Missing required input without default
+  const missingRequired = new Map([['number', 50]]);
+  const missingResult = handler.validateInputs(missingRequired);
+  expect(missingResult.valid).toBe(true); // Has default value
+  // Invalid type
+  const invalidType = new Map([);
+  ['text', 'hello'],
+  ['number', 'not-a-number']
+  ]);
+  const invalidResult = handler.validateInputs(invalidType);
+  expect(invalidResult.valid).toBe(false);
+  expect(invalidResult.errors).toContain()
+  'Invalid type for Number Input: expected number, got string');
+});
     it('validates numeric constraints', () => {
       const spec = createTestSpec();
       const handler = new AdvancedIOHandler(spec);
       // Value below minimum
-      const belowMin = new Map([;);
+      const belowMin = new Map([);
         ['text', 'hello'],
         ['number', -5]
       ]);
@@ -81,7 +76,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(belowResult.valid).toBe(false);
       expect(belowResult.errors).toContain('Value -5 is below minimum 0');
       // Value above maximum
-      const aboveMax = new Map([;);
+      const aboveMax = new Map([);
         ['text', 'hello'],
         ['number', 150]
       ]);
@@ -104,45 +99,42 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(resolved.values.has('optional')).toBe(false);
     });
     it('performs type coercion', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'num',
-            label: 'Number',
-            dataType: 'number',
-            required: true,
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'num',
+  label: 'Number',
+  dataType: 'number',
+  required: true],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // String to number coercion
       const stringInput = new Map([['num', '123']]);
       const resolved = handler.resolveInputs(stringInput, 'test-node');
       expect(resolved.values.get('num')).toBe(123);
       expect(resolved.metadata.get('num')?.typeCoercion).toEqual({)
-        from: 'string',
-        to: 'number',
-      });
+  from: 'string',
+  to: 'number',
+});
       expect(resolved.metadata.get('num')?.warnings).toContain()
         'Type coerced from string to number'
       );
     });
     it('validates outputs', () => {
-      const spec = createTestSpec();
-      const handler = new AdvancedIOHandler(spec);
-      // Valid output
-      const validOutputs = new Map([['result', 'success']]);
-      const validResult = handler.validateOutputs(validOutputs);
-      expect(validResult.valid).toBe(true);
-      // Invalid type
-      const invalidOutputs = new Map([['result', 123]]);
-      const invalidResult = handler.validateOutputs(invalidOutputs);
-      expect(invalidResult.valid).toBe(false);
-      expect(invalidResult.errors).toContain()
-        'Invalid type for Result: expected string, got number'
-      );
-    });
+  const spec = createTestSpec();
+  const handler = new AdvancedIOHandler(spec);
+  // Valid output
+  const validOutputs = new Map([['result', 'success']]);
+  const validResult = handler.validateOutputs(validOutputs);
+  expect(validResult.valid).toBe(true);
+  // Invalid type
+  const invalidOutputs = new Map([['result', 123]]);
+  const invalidResult = handler.validateOutputs(invalidOutputs);
+  expect(invalidResult.valid).toBe(false);
+  expect(invalidResult.errors).toContain()
+  'Invalid type for Result: expected string, got number');
+});
     it('returns input and output specifications', () => {
       const spec = createTestSpec();
       const handler = new AdvancedIOHandler(spec);
@@ -154,8 +146,8 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(outputs[0].id).toBe('result');
     });
     it('validates all data types', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'string', label: 'String', dataType: 'string', required: true },
           { id: 'number', label: 'Number', dataType: 'number', required: true },
           { id: 'boolean', label: 'Boolean', dataType: 'boolean', required: true },
@@ -167,11 +159,11 @@ describe('Runtime IO System - Comprehensive Tests', () => {
           { id: 'choice', label: 'Choice', dataType: 'choice', required: true },
           { id: 'conditional', label: 'Conditional', dataType: 'conditional', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       // Valid inputs
-      const validInputs = new Map([;);
+      const validInputs = new Map([);
         ['string', 'hello'],
         ['number', 42],
         ['boolean', true],
@@ -186,7 +178,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const result = handler.validateInputs(validInputs);
       expect(result.valid).toBe(true);
       // Invalid types
-      const invalidInputs = new Map([;);
+      const invalidInputs = new Map([);
         ['string', 123],
         ['number', 'not-a-number'],
         ['boolean', 'true'],
@@ -203,22 +195,19 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(invalidResult.errors.length).toBeGreaterThan(0);
     });
     it('validates string constraints', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'pattern',
-            label: 'Pattern',
-            dataType: 'string',
-            required: true,
-            constraints: {,
-              pattern: '^[A-Z]+$',
-              minLength: 2,
-              maxLength: 5,
-            }
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'pattern',
+  label: 'Pattern',
+  dataType: 'string',
+  required: true,
+  constraints: {,
+  pattern: '^[A-Z]+$',
+  minLength: 2,
+  maxLength: 5],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // Valid
       const valid = new Map([['pattern', 'ABC']]);
@@ -242,21 +231,18 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       );
     });
     it('validates array constraints', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'list',
-            label: 'List',
-            dataType: 'array',
-            required: true,
-            constraints: {,
-              minLength: 2,
-              maxLength: 4,
-            }
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'list',
+  label: 'List',
+  dataType: 'array',
+  required: true,
+  constraints: {,
+  minLength: 2,
+  maxLength: 4],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // Valid
       const valid = new Map([['list', [1, 2, 3]]]);
@@ -273,20 +259,17 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(manyResult.errors).toContain('Length 5 is above maximum 4');
     });
     it('validates allowed values', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'enum',
-            label: 'Enum',
-            dataType: 'choice',
-            required: true,
-            constraints: {,
-              allowedValues: ['option1', 'option2', 'option3']
-            }
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'enum',
+  label: 'Enum',
+  dataType: 'choice',
+  required: true,
+  constraints: {,
+  allowedValues: ['option1', 'option2', 'option3']],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // Valid
       const valid = new Map([['enum', 'option2']]);
@@ -300,28 +283,24 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       );
     });
     it('uses custom validators', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'custom',
-            label: 'Custom',
-            dataType: 'string',
-            required: true,
-            constraints: {,
-              customValidator: (value) => {,
-                if (value === 'forbidden') {
-                  return ValidationHelpers.createInvalidResult()
-                    ['Value \'forbidden\' is not allowed'],
-                    ['Consider using a different value']
-                  );
-                }
-                return ValidationHelpers.createValidResult();
-              }
-            }
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'custom',
+  label: 'Custom',
+  dataType: 'string',
+  required: true,
+  constraints: {,
+  customValidator: (value) => {,
+  if (value === 'forbidden') {
+  return ValidationHelpers.createInvalidResult()
+  ['Value \'forbidden\' is not allowed'],
+  ['Consider using a different value']
+  );
+  return ValidationHelpers.createValidResult();
+  ],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // Valid
       const valid = new Map([['custom', 'allowed']]);
@@ -334,17 +313,15 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(result.warnings).toContain('Consider using a different value');
     });
     it('handles coercion failures', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'num',
-            label: 'Number',
-            dataType: 'number',
-            required: true,
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'num',
+  label: 'Number',
+  dataType: 'number',
+  required: true],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       // Invalid number string
       const invalidNumber = new Map([['num', 'not-a-number']]);
@@ -355,18 +332,16 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       );
     });
     it('handles multiple connections when supported', () => {
-      const spec: IOSpec = {
-        inputs: [,
-          {
-            id: 'multi',
-            label: 'Multiple',
-            dataType: 'array',
-            required: true,
-            multiple: true,
-          }
-        ],
-        outputs: [],
-      };
+  const spec: IOSpec = {,
+  inputs: [,
+  {
+  id: 'multi',
+  label: 'Multiple',
+  dataType: 'array',
+  required: true,
+  multiple: true],
+  outputs: [],
+};
       const handler = new AdvancedIOHandler(spec);
       const inputs = new Map([['multi', ['value1', 'value2', 'value3']]]);
       const resolved = handler.resolveInputs(inputs, 'test-node');
@@ -415,23 +390,20 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(multi.inputs[2].id).toBe('input2');
     });
     it('adds custom inputs', () => {
-      const spec = new IOSpecBuilder();
-        .addInput({)
-          id: 'custom',
-          label: 'Custom Input',
-          dataType: 'object',
-          required: true,
-          constraints: {,
-            customValidator: (value) => {,
-              if (!value.hasOwnProperty('required')) {
-                return ValidationHelpers.createInvalidResult([)
-                  'Object must have \'required\' property'
-                ]);
-              }
-              return ValidationHelpers.createValidResult();
-            }
-          }
-        })
+  const spec = new IOSpecBuilder();
+  .addInput({)
+  id: 'custom',
+  label: 'Custom Input',
+  dataType: 'object',
+  required: true,
+  constraints: {,
+  customValidator: (value) => {,
+  if (!value.hasOwnProperty('required')) {
+  return ValidationHelpers.createInvalidResult([)
+  'Object must have \'required\' property'
+  ]);
+  return ValidationHelpers.createValidResult();
+}
         .build();
       expect(spec.inputs).toHaveLength(1);
       expect(spec.inputs[0].dataType).toBe('object');
@@ -439,7 +411,7 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   });
   describe('TypedInputs', () => {
     const createResolvedInputs = (): ResolvedInputs => ({)
-      values: new Map([),
+  values: new Map([),
         ['str', 'hello'],
         ['num', 42],
         ['bool', true],
@@ -454,8 +426,8 @@ describe('Runtime IO System - Comprehensive Tests', () => {
         ['bool', {
           source: 'connection',
           typeCoercion: { from: 'string', to: 'boolean' },
-          warnings: ['Type coerced from string to boolean'],
-        }]
+          warnings: ['Type coerced from string to boolean'];
+  }]
       ])
     });
     it('gets typed values correctly', () => {
@@ -490,23 +462,23 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(inputs.getBoolean('null')).toBe(false);
     });
     it('converts array elements to strings', () => {
-      const resolved: ResolvedInputs = {
-        values: new Map([['mixed', [1, 'two', true, null]]]),
-        metadata: new Map(),
-      };
+  const resolved: ResolvedInputs = {,
+  values: new Map([['mixed', [1, 'two', true, null]]]),
+  metadata: new Map(),
+};
       const inputs = new TypedInputs(resolved);
       expect(inputs.getStringArray('mixed')).toEqual(['1', 'two', 'true', 'null']);
     });
     it('retrieves metadata', () => {
-      const resolved = createResolvedInputs();
-      const inputs = new TypedInputs(resolved);
-      const strMeta = inputs.getMetadata('str');
-      expect(strMeta?.source).toBe('connection');
-      const boolMeta = inputs.getMetadata('bool');
-      expect(boolMeta?.typeCoercion).toEqual({)
-        from: 'string',
-        to: 'boolean',
-      });
+  const resolved = createResolvedInputs();
+  const inputs = new TypedInputs(resolved);
+  const strMeta = inputs.getMetadata('str');
+  expect(strMeta?.source).toBe('connection');
+  const boolMeta = inputs.getMetadata('bool');
+  expect(boolMeta?.typeCoercion).toEqual({)
+  from: 'string',
+  to: 'boolean',
+});
       expect(inputs.getMetadata('missing')).toBeUndefined();
     });
     it('checks for warnings', () => {
@@ -522,12 +494,12 @@ describe('Runtime IO System - Comprehensive Tests', () => {
   });
   describe('Type coercion edge cases', () => {
     it('coerces boolean strings correctly', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'bool', label: 'Boolean', dataType: 'boolean', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       // "true" string
       const trueString = new Map([['bool', 'true']]);
@@ -547,17 +519,17 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(otherResolved.values.get('bool')).toBe(false);
     });
     it('coerces to arrays correctly', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'arr', label: 'Array', dataType: 'array', required: true },
           { id: 'strArr', label: 'String Array', dataType: 'stringArray', required: true },
           { id: 'numArr', label: 'Number Array', dataType: 'numberArray', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       // Single value to array
-      const singleValues = new Map([;);
+      const singleValues = new Map([);
         ['arr', 'single'],
         ['strArr', 123],
         ['numArr', '456']
@@ -568,12 +540,12 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(resolved.values.get('numArr')).toEqual([456]);
     });
     it('handles invalid number array coercion', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'numArr', label: 'Number Array', dataType: 'numberArray', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       const invalidNumbers = new Map([['numArr', ['1', '2', 'not-a-number']]]);
       const resolved = handler.resolveInputs(invalidNumbers, 'test');
@@ -590,7 +562,6 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       // Add many inputs
       for (let i = 0; i < 100; i++) {
         builder.addTextInput(`input${i}`, `Input ${i}`, false, `default${i}`);}
-      }
       const spec = builder.build();
       const handler = new AdvancedIOHandler(spec);
       expect(spec.inputs).toHaveLength(100);
@@ -598,40 +569,35 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       const inputs = new Map();
       for (let i = 0; i < 100; i++) {
         inputs.set(`input${i}`, `value${i}`);}
-      }
       const result = handler.validateInputs(inputs);
       expect(result.valid).toBe(true);
     });
     it('handles deeply nested objects', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'deep', label: 'Deep Object', dataType: 'object', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       const deepObject = {
-        level1: {,
-          level2: {,
-            level3: {,
-              level4: {,
-                value: 'deep',
-              }
-            }
-          }
-        }
-      };
+  level1: {,
+  level2: {,
+  level3: {,
+  level4: {,
+  value: 'deep',
+};
       const inputs = new Map([['deep', deepObject]]);
       const result = handler.validateInputs(inputs);
       expect(result.valid).toBe(true);
     });
     it('handles circular references gracefully', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           { id: 'circular', label: 'Circular', dataType: 'object', required: true }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       const circular: any = { a: 1 };
       circular.self = circular;
@@ -640,18 +606,17 @@ describe('Runtime IO System - Comprehensive Tests', () => {
       expect(result.valid).toBe(true); // Should handle without crashing
     });
     it('validates empty constraints', () => {
-      const spec: IOSpec = {
-        inputs: [,
+      const spec: IOSpec = {,
+  inputs: [,
           {
             id: 'unconstrained',
             label: 'Unconstrained',
             dataType: 'string',
             required: true,
             constraints: {}
-          }
         ],
-        outputs: [],
-      };
+        outputs: [];
+  };
       const handler = new AdvancedIOHandler(spec);
       const inputs = new Map([['unconstrained', 'any value']]);
       const result = handler.validateInputs(inputs);

@@ -5,6 +5,7 @@
  * focusing on creative workflow optimization and director-specific metrics
  */
 import React from 'react';
+
 export interface DirectorAnalyticsViewProps {
     conversionData: unknown;
     performanceData: unknown;
@@ -14,7 +15,7 @@ export interface DirectorAnalyticsViewProps {
     };
     userId?: number;
     loading: boolean;
-}
+
 export declare const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps>;
 export default DirectorAnalyticsView;
 //# sourceMappingURL=DirectorAnalyticsView.d.ts.map

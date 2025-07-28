@@ -16,6 +16,7 @@ import { EventEmitter } from 'events';
 // API Access Control Types
 // =============================================================================
 
+}
 export interface ApiAccessRequest {
   requestId: string;
   userId: string;
@@ -36,6 +37,7 @@ export interface ApiAccessRequest {
     current: number;
     limit: number;
     period: string;
+}
   };
   
   // Security context
@@ -56,6 +58,7 @@ export interface ApiAccessRequest {
   customAttributes?: Record<string, any>;
 }
 
+}
 export interface ApiAccessDecision {
   requestId: string;
   allowed: boolean;
@@ -73,6 +76,7 @@ export interface ApiAccessDecision {
     remainingRequests: number;
     resetTime: Date;
     bucketName: string;
+}
   };
   
   // Usage control decisions
@@ -103,6 +107,7 @@ export interface ApiAccessDecision {
   complianceFlags: string[];
 }
 
+}
 export interface ApiAccessPolicy {
   policyId: string;
   name: string;
@@ -118,6 +123,7 @@ export interface ApiAccessPolicy {
     resources?: string[];
     userGroups?: string[];
     organizations?: string[];
+}
   };
   
   // Policy conditions
@@ -136,6 +142,7 @@ export interface ApiAccessPolicy {
   };
 }
 
+}
 export interface ApiPolicyCondition {
   type: 'user' | 'role' | 'permission' | 'time' | 'location' | 'rate_limit' | 'usage_quota' | 'risk_score' | 'device' | 'custom';
   field: string;
@@ -143,12 +150,16 @@ export interface ApiPolicyCondition {
   value: any;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
 }
+}
 
+}
 export interface ApiPolicyAction {
   type: 'allow' | 'deny' | 'rate_limit' | 'usage_control' | 'require_mfa' | 'require_approval' | 'log' | 'alert' | 'transform' | 'redirect';
   parameters: Record<string, any>;
 }
+}
 
+}
 export interface ApiAccessEngineConfig {
   // Core settings
   enabled: boolean;
@@ -184,6 +195,7 @@ export interface ApiAccessEngineConfig {
   permissionServiceEnabled: boolean;
   rbacIntegrationEnabled: boolean;
   externalPolicyProvidersEnabled: boolean;
+}
 }
 
 // =============================================================================
@@ -234,6 +246,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Main access control decision method
    */
   async checkAccess(request: ApiAccessRequest): Promise<ApiAccessDecision> {
+
     const startTime = Date.now();
     
     if (!this.config.enabled) {
@@ -281,6 +294,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Core access evaluation pipeline
    */
   private async evaluateAccessRequest(request: ApiAccessRequest, startTime: number): Promise<ApiAccessDecision> {
+
     const decisionBuilder = new AccessDecisionBuilder(request.requestId, startTime);
     
     // 1. Permission-based access control
@@ -341,6 +355,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Evaluate permissions using the permission assignment service
    */
   private async evaluatePermissions(request: ApiAccessRequest): Promise<PermissionCheckResult> {
+
     const permissionCheck: PermissionCheck = {
       userId: request.userId,
       type: this.mapEndpointToPermissionType(request.endpoint),
@@ -366,6 +381,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Evaluate all applicable policies
    */
   private async evaluatePolicies(request: ApiAccessRequest): Promise<PolicyEvaluationResult[]> {
+
     const applicablePolicies = this.findApplicablePolicies(request);
     const results: PolicyEvaluationResult[] = [];
     
@@ -389,6 +405,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Evaluate rate limits
    */
   private async evaluateRateLimit(request: ApiAccessRequest): Promise<RateLimitResult> {
+
     const bucketName = request.rateLimitBucket || `${request.userId}:${request.endpoint}`;
     const bucket = this.rateLimitBuckets.get(bucketName) || { count: 0, resetTime: new Date(Date.now() + 60000) };
     
@@ -417,6 +434,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Evaluate usage quotas
    */
   private async evaluateUsageControl(request: ApiAccessRequest): Promise<UsageControlResult> {
+
     if (!request.usageQuota) {
       return { allowed: true, remainingQuota: -1, quotaPeriod: 'none', quotaResetTime: new Date() };
     }
@@ -435,6 +453,7 @@ export class ApiAccessControlEngine extends EventEmitter {
    * Evaluate risk score
    */
   private async evaluateRiskScore(request: ApiAccessRequest): Promise<RiskAssessmentResult> {
+
     let score = 0;
     const factors: string[] = [];
     const recommendations: string[] = [];
@@ -495,7 +514,7 @@ export class ApiAccessControlEngine extends EventEmitter {
         actions: [
           { type: 'allow', parameters: {} }
         ]
-      },
+  }
       {
         name: 'Block High Risk IPs',
         description: 'Block access from known high-risk IP addresses',
@@ -596,6 +615,7 @@ export class ApiAccessControlEngine extends EventEmitter {
   }
 
   private async evaluatePolicy(policy: ApiAccessPolicy, request: ApiAccessRequest): Promise<PolicyEvaluationResult> {
+
     const conditionsMet = await this.evaluateConditions(policy.conditions, request);
     let decision: 'allow' | 'deny' | 'conditional' = 'conditional';
     
@@ -620,6 +640,7 @@ export class ApiAccessControlEngine extends EventEmitter {
   }
 
   private async evaluateConditions(conditions: ApiPolicyCondition[], request: ApiAccessRequest): Promise<boolean> {
+
     if (!conditions || conditions.length === 0) return true;
     
     // Simple condition evaluation - in production this would be more sophisticated
@@ -632,6 +653,7 @@ export class ApiAccessControlEngine extends EventEmitter {
   }
 
   private async evaluateCondition(condition: ApiPolicyCondition, request: ApiAccessRequest): Promise<boolean> {
+
     // Placeholder condition evaluation - would be expanded for each condition type
     switch (condition.type) {
     case 'user':
@@ -744,6 +766,7 @@ export class ApiAccessControlEngine extends EventEmitter {
   }
 
   private async auditAccessDecision(request: ApiAccessRequest, decision: ApiAccessDecision): Promise<void> {
+
     await this.auditService.logAction({
       userId: request.userId,
       action: decision.allowed ? 'api_access_granted' : 'api_access_denied',
@@ -774,6 +797,7 @@ export class ApiAccessControlEngine extends EventEmitter {
 
   // Public management methods
   async addPolicy(policy: Omit<ApiAccessPolicy, 'policyId' | 'metadata'>): Promise<string> {
+
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fullPolicy: ApiAccessPolicy = {
       ...policy,
@@ -792,10 +816,12 @@ export class ApiAccessControlEngine extends EventEmitter {
   }
 
   async removePolicy(policyId: string): Promise<boolean> {
+
     return this.policies.delete(policyId);
   }
 
   async clearCache(): Promise<void> {
+
     this.decisionCache.clear();
   }
 
@@ -873,6 +899,7 @@ class AccessDecisionBuilder {
   }
 }
 
+}
 interface PolicyEvaluationResult {
   policyId: string;
   policyName: string;
@@ -880,25 +907,32 @@ interface PolicyEvaluationResult {
   conditionsMet: boolean;
   reason: string;
 }
+}
 
+}
 interface RateLimitResult {
   allowed: boolean;
   remainingRequests: number;
   resetTime: Date;
   bucketName: string;
 }
+}
 
+}
 interface UsageControlResult {
   allowed: boolean;
   remainingQuota: number;
   quotaPeriod: string;
   quotaResetTime: Date;
 }
+}
 
+}
 interface RiskAssessmentResult {
   score: number;
   factors: string[];
   recommendations: string[];
+}
 }
 
 export default ApiAccessControlEngine;

@@ -185,7 +185,7 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           workflowType: { 
             type: 'string',
             enum: ['COMPLIANCE_AUDIT', 'SECURITY_ASSESSMENT', 'DATA_PRIVACY_REVIEW', 'ACCESS_REVIEW', 'INCIDENT_INVESTIGATION', 'PENETRATION_TEST', 'RISK_ASSESSMENT', 'VENDOR_AUDIT']
-          },
+  }
           triggerConditions: {
             type: 'array',
             items: {
@@ -196,10 +196,10 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                 frequency: { type: 'string' },
                 threshold: { type: 'number' },
                 enabled: { type: 'boolean', default: true }
-              },
+  }
               required: ['conditionType', 'parameters']
             }
-          },
+  }
           steps: {
             type: 'array',
             minItems: 1,
@@ -214,18 +214,18 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
                 estimatedDuration: { type: 'number', minimum: 1 },
                 dependencies: { type: 'array', items: { type: 'string' }, default: [] },
                 approvalRequired: { type: 'boolean', default: false }
-              },
+  }
               required: ['stepId', 'name', 'description', 'stepType', 'assigneeRole', 'estimatedDuration']
             }
-          },
+  }
           assignees: { type: 'array', items: { type: 'string' }, minItems: 1 },
           priority: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'], default: 'MEDIUM' },
           scheduledDate: { type: 'string', format: 'date-time' },
           dueDate: { type: 'string', format: 'date-time' },
           metadata: { type: 'object', default: {} }
-        },
+  }
         required: ['name', 'description', 'workflowType', 'triggerConditions', 'steps', 'assignees']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -282,9 +282,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           workflowId: { type: 'string' }
-        },
+  }
         required: ['workflowId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -338,9 +338,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        },
+  }
         required: ['executionId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -349,9 +349,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           description: { type: 'string', minLength: 10 },
           filePath: { type: 'string' },
           dataPoints: { type: 'object', default: {} }
-        },
+  }
         required: ['stepId', 'type', 'description']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -412,18 +412,18 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        },
+  }
         required: ['executionId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           stepId: { type: 'string' },
           findings: { type: 'array', items: { type: 'string' }, default: [] },
           nextSteps: { type: 'array', items: { type: 'string' }, default: [] }
-        },
+  }
         required: ['stepId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -483,16 +483,16 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        },
+  }
         required: ['executionId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           reportType: { type: 'string', enum: ['EXECUTIVE_SUMMARY', 'DETAILED_FINDINGS', 'COMPLIANCE_REPORT', 'REMEDIATION_PLAN'] }
-        },
+  }
         required: ['reportType']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -554,7 +554,7 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
           priority: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] },
           status: { type: 'string', enum: ['DRAFT', 'ACTIVE', 'SCHEDULED', 'SUSPENDED', 'COMPLETED', 'ARCHIVED'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -631,9 +631,9 @@ export async function auditWorkflowRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           executionId: { type: 'string' }
-        },
+  }
         required: ['executionId']
-      },
+  }
       response: {
         200: {
           type: 'object',

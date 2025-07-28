@@ -7,7 +7,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { WeightDistributionChart } from '../WeightDistributionChart';
 import { WeightControlOption } from '../../Inspector/WeightControlSlider';
-const mockOptions: WeightControlOption[] = [
+const mockOptions: WeightControlOption = [
   { id: '1', text: 'Option A', weight: 3 },
   { id: '2', text: 'Option B', weight: 2 },
   { id: '3', text: 'Option C', weight: 1 },
@@ -43,7 +43,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('handles hover interactions', () => {
-    const mockOnHover = jest.fn<unknown[], unknown>();
+    const mockOnHover = jest.fn<unknown, unknown>();
     render();
       <WeightDistributionChart 
         options={mockOptions} 
@@ -54,7 +54,7 @@ describe('WeightDistributionChart', () => {
     expect(mockOnHover).not.toHaveBeenCalled();
   });
   it('handles click interactions', () => {
-    const mockOnClick = jest.fn<unknown[], unknown>();
+    const mockOnClick = jest.fn<unknown, unknown>();
     render();
       <WeightDistributionChart 
         options={mockOptions} 
@@ -92,7 +92,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toHaveAttribute('height', '300');
   });
   it('calculates correct percentages', () => {
-    const options: WeightControlOption[] = [
+    const options: WeightControlOption = [
       { id: '1', text: 'Option A', weight: 2 },
       { id: '2', text: 'Option B', weight: 2 }
     ];
@@ -102,7 +102,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('handles zero weights gracefully', () => {
-    const options: WeightControlOption[] = [
+    const options: WeightControlOption = [
       { id: '1', text: 'Option A', weight: 0 },
       { id: '2', text: 'Option B', weight: 1 }
     ];
@@ -111,7 +111,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('handles single option', () => {
-    const options: WeightControlOption[] = [
+    const options: WeightControlOption = [
       { id: '1', text: 'Only Option', weight: 1 }
     ];
     render(<WeightDistributionChart options={options} />);
@@ -119,7 +119,7 @@ describe('WeightDistributionChart', () => {
     expect(svg).toBeInTheDocument();
   });
   it('truncates long option names in labels', () => {
-    const options: WeightControlOption[] = [
+    const options: WeightControlOption = [
       { id: '1', text: 'Very Long Option Name That Should Be Truncated', weight: 1 }
     ];
     render(<WeightDistributionChart options={options} showLabels={true} />);

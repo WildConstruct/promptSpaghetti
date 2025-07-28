@@ -1,11 +1,12 @@
 import { EventEmitter } from 'events';
+
 export interface DocumentState {
     version: number;
     checksum: string;
     lastModified: number;
     operations: DocumentOperation[];
     metadata: Record<string, any>;
-}
+
 export interface DocumentOperation {
     id: string;
     type: 'create' | 'update' | 'delete' | 'move';
@@ -17,7 +18,7 @@ export interface DocumentOperation {
     userId: string;
     version: number;
     dependencies?: string[];
-}
+
 export interface SyncDelta {
     operations: DocumentOperation[];
     fromVersion: number;
@@ -28,7 +29,7 @@ export interface SyncDelta {
         estimatedSize: number;
         compression?: string;
     };
-}
+
 export interface ConflictInfo {
     id: string;
     type: 'concurrent_edit' | 'version_mismatch' | 'dependency_missing' | 'data_corruption';
@@ -38,13 +39,13 @@ export interface ConflictInfo {
     resolutionOptions: ConflictResolution[];
     autoResolvable: boolean;
     severity: 'low' | 'medium' | 'high' | 'critical';
-}
+
 export interface ConflictResolution {
     strategy: 'mine' | 'theirs' | 'merge' | 'manual';
     description: string;
     result?: any;
     confidence: number;
-}
+
 export interface SyncProgress {
     phase: 'detecting' | 'downloading' | 'applying' | 'validating' | 'completed' | 'failed';
     totalOperations: number;
@@ -54,7 +55,7 @@ export interface SyncProgress {
     bytesTransferred?: number;
     bytesTotal?: number;
     errors: Error[];
-}
+
 export interface RecoveryConfig {
     maxDeltaSize: number;
     maxOperationsPerBatch: number;
@@ -67,7 +68,7 @@ export interface RecoveryConfig {
     enableDependencyTracking: boolean;
     validateIntegrity: boolean;
     backupBeforeRecovery: boolean;
-}
+
 export interface RecoveryStats {
     totalRecoveries: number;
     successfulRecoveries: number;
@@ -77,7 +78,7 @@ export interface RecoveryStats {
     conflictsResolved: number;
     dataCorruptions: number;
     lastRecoveryTime: number | null;
-}
+
 export declare class SynchronizationRecovery extends EventEmitter {
     private config;
     private stats;
@@ -190,5 +191,5 @@ export declare class SynchronizationRecovery extends EventEmitter {
      * Utility function to chunk array
      */
     private chunkArray;
-}
+
 //# sourceMappingURL=SynchronizationRecovery.d.ts.map

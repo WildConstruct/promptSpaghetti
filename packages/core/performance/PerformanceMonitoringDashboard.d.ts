@@ -4,6 +4,7 @@
  */
 import { EventEmitter } from 'events';
 import { PerformanceSnapshot, BudgetCheckResult } from './PerformanceBudget';
+
 export interface DashboardConfig {
     updateInterval: number;
     historyLimit: number;
@@ -17,7 +18,7 @@ export interface DashboardConfig {
         interval: number;
         recipients: string[];
     };
-}
+
 export interface DashboardData {
     timestamp: number;
     status: 'healthy' | 'warning' | 'critical';
@@ -32,7 +33,7 @@ export interface DashboardData {
         apiLatency: number[];
     };
     alerts: DashboardAlert[];
-}
+
 export interface DashboardAlert {
     id: string;
     type: 'budget-violation' | 'performance-degradation' | 'system-health' | 'optimization-suggestion';
@@ -43,14 +44,14 @@ export interface DashboardAlert {
     acknowledged: boolean;
     autoResolvable: boolean;
     actions: AlertAction[];
-}
+
 export interface AlertAction {
     id: string;
     label: string;
     type: 'optimize' | 'ignore' | 'investigate' | 'escalate';
     description: string;
     automated: boolean;
-}
+
 export interface OptimizationSuggestion {
     id: string;
     category: 'bundle' | 'runtime' | 'api' | 'memory' | 'network' | 'build';
@@ -68,7 +69,6 @@ export interface OptimizationSuggestion {
         codeExample?: string;
     };
     metrics: string[];
-}
 /**
  * Performance Monitoring Dashboard
  * Centralized performance monitoring and optimization management
@@ -134,6 +134,6 @@ export declare class PerformanceMonitoringDashboard extends EventEmitter {
      * Update performance budget
      */
     updateBudget(newConfig: any): void;
-}
+
 export default PerformanceMonitoringDashboard;
 //# sourceMappingURL=PerformanceMonitoringDashboard.d.ts.map

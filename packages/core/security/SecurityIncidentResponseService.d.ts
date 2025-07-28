@@ -9,6 +9,7 @@
 import { EventEmitter } from 'events';
 import { SecurityEvent, CrossSystemAlertingSystem } from './AlertingSystem';
 import { SecurityAnalyticsMonitor } from '../monitoring/SecurityAnalyticsMonitor';
+
 export interface SecurityIncident {
     id: string;
     title: string;
@@ -41,7 +42,7 @@ export interface SecurityIncident {
     lessonsLearned?: string[];
     improvementActions?: string[];
     postIncidentReviewCompleted: boolean;
-}
+
 export interface IncidentTimelineEntry {
     id: string;
     timestamp: number;
@@ -50,7 +51,7 @@ export interface IncidentTimelineEntry {
     description: string;
     details?: any;
     automated: boolean;
-}
+
 export interface IncidentAction {
     id: string;
     type: 'containment' | 'eradication' | 'recovery' | 'investigation' | 'communication' | 'documentation';
@@ -64,7 +65,7 @@ export interface IncidentAction {
     completedAt?: number;
     result?: string;
     dependencies?: string[];
-}
+
 export interface Evidence {
     id: string;
     type: 'log_file' | 'screenshot' | 'network_capture' | 'system_state' | 'forensic_image' | 'document' | 'artifact';
@@ -80,7 +81,7 @@ export interface Evidence {
         action: 'collected' | 'analyzed' | 'transferred' | 'archived';
         notes?: string;
     }>;
-}
+
 export interface Communication {
     id: string;
     type: 'internal' | 'external' | 'regulatory' | 'customer' | 'media' | 'law_enforcement';
@@ -94,7 +95,7 @@ export interface Communication {
         recipient: string;
         acknowledgedAt: number;
     }>;
-}
+
 export interface IncidentResponseProcedure {
     id: string;
     name: string;
@@ -121,7 +122,7 @@ export interface IncidentResponseProcedure {
     version: string;
     approved: boolean;
     approvedBy?: string;
-}
+
 export interface IncidentResponsePhase {
     id: string;
     name: string;
@@ -137,7 +138,7 @@ export interface IncidentResponsePhase {
     };
     dependencies?: string[];
     triggers?: string[];
-}
+
 export interface ResponseStep {
     id: string;
     title: string;
@@ -154,7 +155,7 @@ export interface ResponseStep {
     rollbackInstructions?: string;
     estimatedDuration: number;
     dependencies?: string[];
-}
+
 export interface AutomatedResponseAction {
     id: string;
     name: string;
@@ -172,7 +173,7 @@ export interface AutomatedResponseAction {
     safetyChecks: string[];
     approvalRequired: boolean;
     testMode: boolean;
-}
+
 export interface CommunicationTemplate {
     id: string;
     name: string;
@@ -190,7 +191,7 @@ export interface CommunicationTemplate {
     timing: 'immediate' | 'hourly' | 'daily' | 'milestone' | 'resolution';
     frequency?: 'once' | 'repeating';
     conditions?: string[];
-}
+
 export interface TroubleshootingWorkflow {
     id: string;
     name: string;
@@ -207,7 +208,7 @@ export interface TroubleshootingWorkflow {
     lastUpdated: number;
     successRate: number;
     averageResolutionTime: number;
-}
+
 export interface DiagnosticStep {
     id: string;
     title: string;
@@ -226,7 +227,7 @@ export interface DiagnosticStep {
     successIndicators: string[];
     failureIndicators: string[];
     timeoutSeconds: number;
-}
+
 export interface DecisionNode {
     id: string;
     question: string;
@@ -241,7 +242,7 @@ export interface DecisionNode {
     helpText?: string;
     examples?: string[];
     automationSupport?: boolean;
-}
+
 export interface Solution {
     id: string;
     title: string;
@@ -264,7 +265,7 @@ export interface Solution {
     successRate: number;
     averageTimeToResolve: number;
     lastUsed?: number;
-}
+
 export interface IncidentResponseConfig {
     responseTeams: {,
         primary: string[];
@@ -309,7 +310,6 @@ export interface IncidentResponseConfig {
         reportingChannels: string[];
         retentionPeriod: number;
     };
-}
 /**
  * Security Incident Response Service
  */
@@ -467,6 +467,6 @@ export declare class SecurityIncidentResponseService extends EventEmitter {
      * Shutdown the incident response service
      */
     shutdown(): void;
-}
+
 export default SecurityIncidentResponseService;
 //# sourceMappingURL=SecurityIncidentResponseService.d.ts.map

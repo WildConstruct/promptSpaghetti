@@ -100,7 +100,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         feature_store_enabled: true,
         model_versioning: true,
         a_b_testing: true
-      },
+  }
       threat_detection: {
         enabled: true,
         anomaly_detection: true,
@@ -110,7 +110,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         malware_classification: true,
         network_intrusion_detection: true,
         user_risk_scoring: true
-      },
+  }
       model_management: {
         max_models: 100,
         model_retention_days: 90,
@@ -120,7 +120,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         cross_validation_folds: 5,
         early_stopping: true,
         hyperparameter_tuning: true
-      },
+  }
       feature_engineering: {
         enabled: true,
         auto_feature_generation: true,
@@ -130,7 +130,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         graph_features: true,
         nlp_features: true,
         statistical_features: true
-      },
+  }
       performance_monitoring: {
         enabled: true,
         model_drift_detection: true,
@@ -139,7 +139,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         resource_monitoring: true,
         fairness_monitoring: true,
         explainability_tracking: true
-      },
+  }
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
@@ -173,7 +173,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         expect.objectContaining({
           timestamp: expect.any(Number),
           config: expect.any(Object)
-        })
+  }
       );
 
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith(
@@ -223,14 +223,14 @@ describe('MLSecurityAnalyticsFramework', () => {
         hyperparameters: {
           n_estimators: 100,
           max_depth: 10
-        },
+  }
         deployment_config: {
           environment: 'production',
           replicas: 3,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: true
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -252,7 +252,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           model_name: modelData.name,
           model_type: modelData.type,
           algorithm: modelData.algorithm
-        })
+  }
       );
     });
 
@@ -272,7 +272,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -308,7 +308,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -334,7 +334,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -368,7 +368,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -402,7 +402,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '1',
           memory_limit: '2Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'test_data',
           training_date: Date.now(),
@@ -444,14 +444,14 @@ describe('MLSecurityAnalyticsFramework', () => {
         hyperparameters: {
           n_estimators: 100,
           max_depth: 10
-        },
+  }
         deployment_config: {
           environment: 'test',
           replicas: 1,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -488,7 +488,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           model_id: modelId,
           job_id: jobId,
           config: trainingConfig
-        })
+  }
       );
     });
 
@@ -544,14 +544,14 @@ describe('MLSecurityAnalyticsFramework', () => {
         ],
         hyperparameters: {
           n_estimators: 100
-        },
+  }
         deployment_config: {
           environment: 'test',
           replicas: 1,
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -573,7 +573,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           request_count: 150,
           source_ip: '192.168.1.100',
           event_type: 'api_access'
-        },
+  }
         request_id: 'test_request_1',
         timestamp: Date.now()
       };
@@ -595,7 +595,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           input_data: { request_count: 100 },
           request_id: 'batch_1',
           timestamp: Date.now()
-        },
+  }
         {
           model_id: modelId,
           input_data: { request_count: 200 },
@@ -663,7 +663,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           timestamp: Date.now() - 60000,
           user_id: 'user123',
           metadata: {}
-        },
+  }
         {
           id: 'event_2',
           event_type: SecurityEventType.LOGIN_FAILURE,
@@ -672,7 +672,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           timestamp: Date.now() - 30000,
           user_id: 'user123',
           metadata: {}
-        },
+  }
         {
           id: 'event_3',
           event_type: SecurityEventType.LOGIN_SUCCESS,
@@ -730,7 +730,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -807,7 +807,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: true
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -832,7 +832,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         expect.objectContaining({
           model_id: modelId,
           deployment_config: expect.any(Object)
-        })
+  }
       );
     });
 
@@ -887,7 +887,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -929,7 +929,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -948,14 +948,14 @@ describe('MLSecurityAnalyticsFramework', () => {
         expect.objectContaining({
           model_id: modelId,
           epic1_integration: true
-        })
+  }
       );
 
       expect(mockAnalyticsDAO.insertEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           event_type: 'ml_model_lifecycle',
           action: 'model_created'
-        })
+  }
       );
     });
 
@@ -997,7 +997,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1020,7 +1020,7 @@ describe('MLSecurityAnalyticsFramework', () => {
         expect.objectContaining({
           model_id: modelId,
           request_id: request.request_id
-        })
+  }
       );
     });
   });
@@ -1046,7 +1046,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1076,7 +1076,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),
@@ -1155,7 +1155,7 @@ describe('MLSecurityAnalyticsFramework', () => {
           cpu_limit: '2',
           memory_limit: '4Gi',
           auto_scaling: false
-        },
+  }
         metadata: {
           data_source: 'security_events',
           training_date: Date.now(),

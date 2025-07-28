@@ -23,7 +23,7 @@ describe('Security Headers Middleware', () => {
     protocol: 'https',
     headers: {
       'user-agent': 'Test Browser'
-    },
+  }
     body: {},
     ...overrides
   } as FastifyRequest);
@@ -162,7 +162,7 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directives: {
             'default-src': ['\'self\'']
-          },
+  }
           reportOnly: true
         }
       };
@@ -185,7 +185,7 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directives: {
             'default-src': ['\'self\'']
-          },
+  }
           reportUri: '/csp-violation'
         }
       };
@@ -475,7 +475,7 @@ describe('Security Headers Middleware', () => {
           directives: {
             'default-src': ['\'self\'']
           }
-        },
+  }
         frameOptions: {
           enabled: false,
           directive: 'DENY'
@@ -617,7 +617,7 @@ describe('Security Headers Middleware', () => {
           documentUri: 'https://example.com/page',
           violatedDirective: 'script-src',
           blockedUri: 'https://malicious.com/script.js'
-        })
+  }
       );
       
       expect(reply.code).toHaveBeenCalledWith(204);
@@ -656,10 +656,10 @@ describe('Security Headers Middleware', () => {
             'line-number': 0,
             'column-number': 0
           }
-        },
+  }
         headers: {
           'user-agent': 'Mozilla/5.0 Test Browser'
-        },
+  }
         ip: '192.168.1.100'
       });
       const reply = createMockReply();
@@ -671,7 +671,7 @@ describe('Security Headers Middleware', () => {
           userAgent: 'Mozilla/5.0 Test Browser',
           ip: '192.168.1.100',
           timestamp: expect.any(String)
-        })
+  }
       );
 
       consoleSpy.mockRestore();

@@ -48,6 +48,7 @@ const updateMergeRequestSchema = z.object({
   conflictResolutions: z.array(conflictResolutionSchema).optional()
 });
 
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user?: {
     id: string;
@@ -329,7 +330,7 @@ export async function registerAccountMergingRoutes(
             sessionHandling: 'transfer_all',
             preserveAuditTrail: true
           }
-        },
+  }
         {
           id: 'minimal',
           name: 'Minimal Merge',
@@ -342,7 +343,7 @@ export async function registerAccountMergingRoutes(
             sessionHandling: 'invalidate_secondary',
             preserveAuditTrail: true
           }
-        },
+  }
         {
           id: 'replace',
           name: 'Replace Primary',
@@ -477,6 +478,7 @@ export async function registerAccountMergingRoutes(
  * Validate that a user has permission to access/merge a specific account
  */
 async function validateAccountAccess(userId: string, accountId: string): Promise<boolean> {
+
   // Users can merge their own accounts
   if (userId === accountId) {
     return true;

@@ -5,6 +5,7 @@
  * consistent design patterns for thumbnail, metadata, pricing, and actions.
  */
 import React from 'react';
+
 export interface MarketplaceTemplate {
     id: string;
     title: string;
@@ -27,7 +28,6 @@ export interface MarketplaceTemplate {
     };
     createdAt: Date;
     updatedAt: Date;
-}
 interface MarketplaceCardProps {
     template: MarketplaceTemplate;
     variant?: 'grid' | 'list' | 'featured';
@@ -37,7 +37,7 @@ interface MarketplaceCardProps {
     onLike?: (template: MarketplaceTemplate) => void;
     onShare?: (template: MarketplaceTemplate) => void;
     className?: string;
-}
+
 export declare const MarketplaceCard: React.FC<MarketplaceCardProps>;
 export default MarketplaceCard;
 //# sourceMappingURL=MarketplaceCard.d.ts.map

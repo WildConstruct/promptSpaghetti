@@ -7,6 +7,6 @@ export interface TextFieldEditorProps extends EditorFieldProps {
     maxLength?: number;
     minLength?: number;
     pattern?: string;
-}
+
 export declare const TextFieldEditor: React.FC<TextFieldEditorProps>;
 //# sourceMappingURL=TextFieldEditor.d.ts.map

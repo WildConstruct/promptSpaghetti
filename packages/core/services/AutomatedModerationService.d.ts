@@ -13,6 +13,7 @@ export type ModerationAction = 'approve' | 'reject' | 'flag_review' | 'auto_fix'
 export type ModerationReason = 'policy_violation' | 'quality_issues' | 'safety_concerns' | 'spam_detected' | 'inappropriate_content' | 'copyright_violation' | 'trust_score_low' | 'automated_flag' | 'community_reports';
 export type ContentType = 'template' | 'prompt' | 'comment' | 'review' | 'user_profile' | 'marketplace_listing' | 'tutorial_content';
 export type ModerationSeverity = 'low' | 'medium' | 'high' | 'critical';
+
 export interface ModerationRequest {
     id: string;
     contentId: string;
@@ -39,7 +40,7 @@ export interface ModerationRequest {
     };
     priority?: 'normal' | 'high' | 'urgent';
     skipCache?: boolean;
-}
+
 export interface ModerationResult {
     id: string;
     requestId: string;
@@ -77,7 +78,7 @@ export interface ModerationResult {
     executionTimeMs: number;
     timestamp: string;
     version: string;
-}
+
 export interface ModerationRule {
     id: string;
     name: string;
@@ -104,14 +105,14 @@ export interface ModerationRule {
     createdAt: string;
     updatedAt: string;
     createdBy: string;
-}
+
 export interface ModerationWorkflow {
     id: string;
     name: string;
     contentTypes: ContentType[];
     steps: ModerationWorkflowStep[];
     enabled: boolean;
-}
+
 export interface ModerationWorkflowStep {
     id: string;
     name: string;
@@ -120,7 +121,7 @@ export interface ModerationWorkflowStep {
     conditions: string[];
     timeoutMs?: number;
     retryCount?: number;
-}
+
 export interface ModerationQueue {
     id: string;
     name: string;
@@ -141,7 +142,7 @@ export interface ModerationQueue {
             assignTo: string;
         }>;
     };
-}
+
 export declare class AutomatedModerationService {
     private policyCheckersService;
     private trustScoreService;
@@ -181,6 +182,6 @@ export declare class AutomatedModerationService {
     private logModerationDecision;
     private initializeDefaultRules;
     private initializeDefaultQueues;
-}
+
 export default AutomatedModerationService;
 //# sourceMappingURL=AutomatedModerationService.d.ts.map

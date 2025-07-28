@@ -25,9 +25,7 @@ interface CitationFormData {
   pinpoint?: string;
   title?: string;
   author?: string;
-}
-
-export const CitationManager: React.FC<CitationManagerProps> = ({)
+  export const CitationManager: React.FC<CitationManagerProps> = ({,)
   citations,
   onCitationAdd,
   onCitationEdit,
@@ -38,35 +36,34 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCitation, setEditingCitation] = useState<Citation | null>(null);
   const [formData, setFormData] = useState<CitationFormData>({)
-    type: citationStyle,
-    volume: '',
-    reporter: '',
-    page: '',
-    court: '',
-    date: '',
-    url: '',
-    pinpoint: '',
-    title: '',
-    author: '',
-  });
+  type: citationStyle,
+  volume: '',
+  reporter: '',
+  page: '',
+  court: '',
+  date: '',
+  url: '',
+  pinpoint: '',
+  title: '',
+  author: '',
+});
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'title' | 'type'>('date');
   const [filterType, setFilterType] = useState<string>('all');
   useEffect(() => {
-    if (editingCitation) {
-      setFormData({)
-        type: editingCitation.type,
-        volume: editingCitation.volume || '',
-        reporter: editingCitation.reporter || '',
-        page: editingCitation.page || '',
-        court: editingCitation.court || '',
-        date: editingCitation.date || '',
-        url: editingCitation.url || '',
-        pinpoint: editingCitation.pinpoint || '',
-        title: extractTitleFromCitation(editingCitation),
-        author: extractAuthorFromCitation(editingCitation),
-      });
-    }
+  if (editingCitation) {
+  setFormData({)
+  type: editingCitation.type,
+  volume: editingCitation.volume || '',
+  reporter: editingCitation.reporter || '',
+  page: editingCitation.page || '',
+  court: editingCitation.court || '',
+  date: editingCitation.date || '',
+  url: editingCitation.url || '',
+  pinpoint: editingCitation.pinpoint || '',
+  title: extractTitleFromCitation(editingCitation),
+  author: extractAuthorFromCitation(editingCitation),
+});
   }, [editingCitation]);
   const extractTitleFromCitation = (citation: Citation): string => {
     // Extract title from longForm - simplified extraction
@@ -78,25 +75,23 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
     if (citation.longForm.includes('v.')) {
       const parts = citation.longForm.split('v.');
       return parts[0]?.trim() || '';
-    }
     return '';
   };
   const generateCitation = (data: CitationFormData): { shortForm: string; longForm: string } => {
-    switch (data.type) {
-    case 'bluebook':
-      return generateBluebookCitation(data);
-    case 'alwd':
-      return generateALWDCitation(data);
-    case 'chicago':
-      return generateChicagoCitation(data);
-    case 'mla':
-      return generateMLACitation(data);
-    case 'apa':
-      return generateAPACitation(data);
-    default:
-      return generateBluebookCitation(data);
-    }
-  };
+  switch (data.type) {
+  case 'bluebook':,
+  return generateBluebookCitation(data);
+  case 'alwd':,
+  return generateALWDCitation(data);
+  case 'chicago':,
+  return generateChicagoCitation(data);
+  case 'mla':,
+  return generateMLACitation(data);
+  case 'apa':,
+  return generateAPACitation(data);
+  default:,
+  return generateBluebookCitation(data);
+};
   const generateBluebookCitation = (data: CitationFormData) => {
     let longForm = '';
     let shortForm = '';
@@ -105,19 +100,15 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       longForm = `${data.title}, ${data.volume} ${data.reporter} ${data.page}`;}
       if (data.court && data.date) {
         longForm += ` (${data.court} ${data.date})`;}
-      }
       shortForm = `${data.volume} ${data.reporter} ${data.page}`;}
       if (data.pinpoint) {
         shortForm += `, ${data.pinpoint}`;}
-      }
     } else if (data.title) {
       // Basic citation
       longForm = data.title;
       if (data.date) {
         longForm += ` (${data.date})`;}
-      }
       shortForm = data.title;
-    }
     return { longForm, shortForm };
   };
   const generateALWDCitation = (data: CitationFormData) => {
@@ -128,9 +119,7 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       longForm = `${data.title}, ${data.volume} ${data.reporter} ${data.page}`;}
       if (data.court && data.date) {
         longForm += ` (${data.court} ${data.date})`;}
-      }
       shortForm = `${data.volume} ${data.reporter} ${data.page}`;}
-    }
     return { longForm, shortForm };
   };
   const generateChicagoCitation = (data: CitationFormData) => {
@@ -142,13 +131,9 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
         longForm += ` ${data.volume} ${data.reporter}`;}
         if (data.page) {
           longForm += ` ${data.page}`;}
-        }
-      }
       if (data.date) {
         longForm += ` (${data.date})`;}
-      }
       shortForm = data.title;
-    }
     return { longForm, shortForm };
   };
   const generateMLACitation = (data: CitationFormData) => {
@@ -158,15 +143,12 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       longForm = `${data.author}. "${data.title}."`;}
       if (data.reporter) {
         longForm += ` ${data.reporter}`;}
-      }
       if (data.date) {
         longForm += `, ${data.date}`;}
-      }
       shortForm = data.author;
     } else if (data.title) {
       longForm = `"${data.title}."`;}
       shortForm = data.title;
-    }
     return { longForm, shortForm };
   };
   const generateAPACitation = (data: CitationFormData) => {
@@ -179,16 +161,15 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       } else {
         longForm = `${data.title} (${data.date}).`;}
         shortForm = data.title;
-      }
-    }
     return { longForm, shortForm };
   };
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { longForm, shortForm } = generateCitation(formData);
-    const citation: Citation = {
-      id: editingCitation?.id || `citation_${Date.now()}`,}
-      type: formData.type,
+    const citation: Citation = {,
+  id: editingCitation?.id || `citation_${Date.now()}`}
+},
+  type: formData.type,
       longForm,
       shortForm,
       volume: formData.volume || undefined,
@@ -197,29 +178,28 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
       court: formData.court || undefined,
       date: formData.date || undefined,
       url: formData.url || undefined,
-      pinpoint: formData.pinpoint || undefined,
-    };
+      pinpoint: formData.pinpoint || undefined;
+  };
     if (editingCitation) {
       onCitationEdit(editingCitation.id, citation);
       setEditingCitation(null);
     } else {
       onCitationAdd(citation);
-    }
     resetForm();
   };
   const resetForm = () => {
-    setFormData({)
-      type: citationStyle,
-      volume: '',
-      reporter: '',
-      page: '',
-      court: '',
-      date: '',
-      url: '',
-      pinpoint: '',
-      title: '',
-      author: '',
-    });
+  setFormData({)
+  type: citationStyle,
+  volume: '',
+  reporter: '',
+  page: '',
+  court: '',
+  date: '',
+  url: '',
+  pinpoint: '',
+  title: '',
+  author: '',
+});
     setShowAddForm(false);
   };
   const handleEdit = (citation: Citation) => {
@@ -229,38 +209,34 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
   const handleDelete = (citationId: string) => {
     if (window.confirm('Are you sure you want to delete this citation?')) {
       onCitationDelete(citationId);
-    }
   };
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       // You could add a toast notification here
     } catch (err) {
-      console.error('Failed to copy citation:', err);
-    }
-  };
+  console.error('Failed to copy citation:', err);
+};
   const filteredAndSortedCitations = citations;
     .filter(citation => {)
-      if (filterType !== 'all' && citation.type !== filterType) return false;
+  if (filterType !== 'all' && citation.type !== filterType) return false;
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return citation.longForm.toLowerCase().includes(query) ||
                citation.shortForm.toLowerCase().includes(query);
-      }
       return true;
-    })
+  }
     .sort((a, b) => {
-      switch (sortBy) {
-      case 'title':
-        return a.longForm.localeCompare(b.longForm);
-      case 'type':
-        return a.type.localeCompare(b.type);
-      case 'date':
-      default:
-        return (b.date || '').localeCompare(a.date || '');
-      }
-    });
-  return ();
+  switch (sortBy) {
+  case 'title':,
+  return a.longForm.localeCompare(b.longForm);
+  case 'type':,
+  return a.type.localeCompare(b.type);
+  case 'date':,
+  default:,
+  return (b.date || '').localeCompare(a.date || '');
+});
+  return;
     <div className={`citation-manager ${className}`}>}
       <style>
         {`
@@ -269,217 +245,180 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-          }
           .manager-header {
-            background: #f7fafc;
-            padding: 1.5rem;
+            background: #f7fafc;,
+  padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
-          }
           .manager-title {
             font-size: 1.5rem;
-            font-weight: 600;
-            color: #2d3748;
+            font-weight: 600;,
+  color: #2d3748;
             margin: 0 0 1rem 0;
-          }
           .header-controls {
-            display: flex;
-            gap: 1rem;
+            display: flex;,
+  gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
-          }
           .add-citation-btn {
-            background: #4299e1;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.2s;
-          }
-          .add-citation-btn:hover {
-            background: #3182ce;
-          }
+            background: #4299e1;,
+  color: white;
+            border: none;,
+  padding: 0.5rem 1rem;
+            border-radius: 6px;,
+  cursor: pointer;
+            font-weight: 500;,
+  transition: background 0.2s;
+          .add-citation-btn:hover {,
+  background: #3182ce;
           .search-input {
-            padding: 0.5rem;
-            border: 1px solid #cbd5e0;
+            padding: 0.5rem;,
+  border: 1px solid #cbd5e0;
             border-radius: 6px;
             font-size: 0.9rem;
             min-width: 200px;
-          }
           .filter-select {
-            padding: 0.5rem;
-            border: 1px solid #cbd5e0;
+            padding: 0.5rem;,
+  border: 1px solid #cbd5e0;
             border-radius: 6px;
             font-size: 0.9rem;
-          }
           .citation-form {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-          }
+            background: #f7fafc;,
+  padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;,
+  display: grid;
+            grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
           .form-title {
             grid-column: 1 / -1;
             font-size: 1.2rem;
-            font-weight: 600;
-            color: #2d3748;
+            font-weight: 600;,
+  color: #2d3748;
             margin: 0 0 1rem 0;
-          }
           .form-group {
             display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-          }
+            flex-direction: column;,
+  gap: 0.25rem;
           .form-group.full-width {
             grid-column: 1 / -1;
-          }
           .form-label {
             font-size: 0.9rem;
-            font-weight: 500;
-            color: #4a5568;
-          }
+            font-weight: 500;,
+  color: #4a5568;
           .form-input {
-            padding: 0.5rem;
-            border: 1px solid #cbd5e0;
+            padding: 0.5rem;,
+  border: 1px solid #cbd5e0;
             border-radius: 4px;
             font-size: 0.9rem;
-          }
           .form-actions {
-            grid-column: 1 / -1;
-            display: flex;
+            grid-column: 1 / -1;,
+  display: flex;
             gap: 1rem;
             justify-content: flex-end;
             margin-top: 1rem;
-          }
           .form-button {
             padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.2s;
+            border-radius: 6px;,
+  cursor: pointer;
+            font-weight: 500;,
+  transition: background 0.2s;
             border: none;
-          }
           .form-button.primary {
-            background: #4299e1;
-            color: white;
-          }
-          .form-button.primary:hover {
-            background: #3182ce;
-          }
+            background: #4299e1;,
+  color: white;
+          .form-button.primary:hover {,
+  background: #3182ce;
           .form-button.secondary {
-            background: #e2e8f0;
-            color: #2d3748;
-          }
-          .form-button.secondary:hover {
-            background: #cbd5e0;
-          }
+            background: #e2e8f0;,
+  color: #2d3748;
+          .form-button.secondary:hover {,
+  background: #cbd5e0;
           .citations-list {
             padding: 1.5rem;
-          }
           .citations-stats {
-            display: flex;
-            gap: 2rem;
+            display: flex;,
+  gap: 2rem;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-            color: #718096;
-          }
+            font-size: 0.9rem;,
+  color: #718096;
           .citation-item {
-            padding: 1.5rem;
-            border: 1px solid #e2e8f0;
+            padding: 1.5rem;,
+  border: 1px solid #e2e8f0;
             border-radius: 6px;
-            margin-bottom: 1rem;
-            transition: all 0.2s;
-          }
+            margin-bottom: 1rem;,
+  transition: all 0.2s;
           .citation-item:hover {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-color: #cbd5e0;
-          }
           .citation-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 0.75rem;
-          }
           .citation-type {
-            background: #4299e1;
-            color: white;
+            background: #4299e1;,
+  color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: 500;
             text-transform: uppercase;
-          }
           .citation-actions {
-            display: flex;
-            gap: 0.5rem;
-          }
+            display: flex;,
+  gap: 0.5rem;
           .citation-action-btn {
-            background: none;
-            border: 1px solid #cbd5e0;
+            background: none;,
+  border: 1px solid #cbd5e0;
             padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            color: #4a5568;
+            border-radius: 4px;,
+  cursor: pointer;
+            font-size: 0.8rem;,
+  color: #4a5568;
             transition: all 0.2s;
-          }
-          .citation-action-btn:hover {
-            background: #f7fafc;
+          .citation-action-btn:hover {,
+  background: #f7fafc;
             border-color: #a0aec0;
-          }
           .citation-long-form {
-            font-size: 1rem;
-            color: #2d3748;
+            font-size: 1rem;,
+  color: #2d3748;
             margin-bottom: 0.5rem;
             line-height: 1.5;
             font-weight: 500;
-          }
           .citation-short-form {
-            font-size: 0.9rem;
-            color: #718096;
+            font-size: 0.9rem;,
+  color: #718096;
             font-style: italic;
-          }
           .citation-metadata {
-            display: flex;
-            gap: 1rem;
+            display: flex;,
+  gap: 1rem;
             margin-top: 0.75rem;
-            font-size: 0.8rem;
-            color: #a0aec0;
-          }
+            font-size: 0.8rem;,
+  color: #a0aec0;
           .no-citations {
-            text-align: center;
-            padding: 3rem 2rem;
+            text-align: center;,
+  padding: 3rem 2rem;
             color: #718096;
-          }
           .no-citations-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-          }
           .preview-section {
-            background: #f0fff4;
-            border: 1px solid #c6f6d5;
-            border-radius: 4px;
-            padding: 1rem;
+            background: #f0fff4;,
+  border: 1px solid #c6f6d5;
+            border-radius: 4px;,
+  padding: 1rem;
             grid-column: 1 / -1;
             margin-top: 1rem;
-          }
           .preview-title {
             font-size: 0.9rem;
-            font-weight: 600;
-            color: #2f855a;
+            font-weight: 600;,
+  color: #2f855a;
             margin-bottom: 0.5rem;
-          }
           .preview-citation {
-            font-size: 0.9rem;
-            color: #2d3748;
+            font-size: 0.9rem;,
+  color: #2d3748;
             font-family: 'Times New Roman', serif;
             line-height: 1.5;
-          }
         `}
       </style>
       <div className="manager-header">
@@ -707,7 +646,6 @@ export const CitationManager: React.FC<CitationManagerProps> = ({)
               {searchQuery || filterType !== 'all' 
                 ? 'No citations match your current search or filter criteria.'
                 : 'No citations yet. Click "Add Citation" to get started.'
-              }
             </div>
           </div>
         )}

@@ -86,7 +86,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           hasResults: !!results,
           hasError: !!error,
           metadata
-        },
+  }
         riskLevel: status === 'failed' ? 'MEDIUM' : 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -115,7 +115,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           error: error.message,
           jobId: request.body?.jobId,
           status: request.body?.status
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -177,7 +177,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
           evaluationSuite: job.evaluationSuite,
           priority: job.priority,
           triggeredBy: 'api_endpoint'
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -207,7 +207,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         details: {
           error: error.message,
           modelId: request.body?.modelId
-        },
+  }
         riskLevel: 'HIGH',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],
@@ -315,7 +315,7 @@ export default async function modelEvaluationWebhooks(fastify: FastifyInstance) 
         details: {
           jobId,
           cancelledBy: 'api_endpoint'
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['AI_GOVERNANCE'],

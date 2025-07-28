@@ -5,6 +5,7 @@
  * This design system provides professional-grade colors, typography,
  * shadows, and layout tokens for VFX industry standards.
  */
+
 export interface ProfessionalColorPalette {
     background: {,
         primary: string;
@@ -45,7 +46,7 @@ export interface ProfessionalColorPalette {
         selection: string;
         hover: string;
     };
-}
+
 export interface ProfessionalTypography {
     fontFamilies: {,
         primary: string;
@@ -77,7 +78,7 @@ export interface ProfessionalTypography {
         normal: string;
         wide: string;
     };
-}
+
 export interface ProfessionalShadows {
     elevation: {,
         none: string;
@@ -99,7 +100,7 @@ export interface ProfessionalShadows {
         strong: string;
         accent: string;
     };
-}
+
 export interface ProfessionalSpacing {
     px: string;
     0.5: string;
@@ -116,7 +117,7 @@ export interface ProfessionalSpacing {
     20: string;
     24: string;
     32: string;
-}
+
 export interface ProfessionalBorderRadius {
     none: string;
     sm: string;
@@ -125,19 +126,20 @@ export interface ProfessionalBorderRadius {
     xl: string;
     '2xl': string;
     full: string;
-}
+
 export declare const professionalColors: ProfessionalColorPalette;
 export declare const professionalTypography: ProfessionalTypography;
 export declare const professionalShadows: ProfessionalShadows;
 export declare const professionalSpacing: ProfessionalSpacing;
 export declare const professionalBorderRadius: ProfessionalBorderRadius;
+
 export interface ProfessionalDesignSystem {
     colors: ProfessionalColorPalette;
     typography: ProfessionalTypography;
     shadows: ProfessionalShadows;
     spacing: ProfessionalSpacing;
     borderRadius: ProfessionalBorderRadius;
-}
+
 export declare const professionalDesignSystem: ProfessionalDesignSystem;
 export declare const generateCSSCustomProperties: (colors?: ProfessionalColorPalette, shadows?: ProfessionalShadows, spacing?: ProfessionalSpacing, borderRadius?: ProfessionalBorderRadius) => {
     '--bg-primary': string;

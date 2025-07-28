@@ -50,7 +50,7 @@ describe('RiskScoringService', () => {
         region: 'CA',
         city: 'San Francisco',
         coordinates: { lat: 37.7749, lng: -122.4194 }
-      },
+  }
       timestamp: new Date('2024-01-15T09:00:00Z'), // Monday 9 AM
       success: true,
       sessionId: 'session123',
@@ -152,7 +152,7 @@ describe('RiskScoringService', () => {
           region: 'CA',
           city: 'Los Angeles',
           coordinates: { lat: 34.0522, lng: -118.2437 }
-        },
+  }
         timestamp: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago
       };
 
@@ -366,7 +366,7 @@ describe('RiskScoringService', () => {
           behavioral: 0.2,
           patterns: 0.2,
           contextual: 0.1
-        },
+  }
         thresholds: {
           low: 20,
           medium: 50,
@@ -397,7 +397,7 @@ describe('RiskScoringService', () => {
           region: 'Beijing',
           city: 'Beijing',
           coordinates: { lat: 39.9042, lng: 116.4074 }
-        },
+  }
         deviceFingerprint: 'suspicious_device',
         twoFactorUsed: false,
         timestamp: new Date('2024-01-15T03:00:00Z') // 3 AM
@@ -432,7 +432,7 @@ describe('RiskScoringService', () => {
           region: 'Moscow',
           city: 'Moscow',
           coordinates: { lat: 55.7558, lng: 37.6176 }
-        },
+  }
         twoFactorUsed: false
       };
 

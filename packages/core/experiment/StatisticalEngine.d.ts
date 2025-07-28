@@ -3,6 +3,7 @@
  * Statistical Analysis Engine for experiment results
  */
 import { ExperimentResults, VariantResults, ExperimentMetric } from '../types/experiment';
+
 export interface StatisticalTestResult {
     pValue: number;
     testStatistic: number;
@@ -11,19 +12,21 @@ export interface StatisticalTestResult {
     confidenceInterval: [number, number];
     significant: boolean;
     practicallySignificant: boolean;
-}
+
+
 export interface BayesianResult {
     posteriorProbability: number;
     credibleInterval: [number, number];
     probabilityToBeatControl: number;
     expectedLoss: number;
-}
+
+
 export interface SampleSizeCalculation {
     requiredSampleSize: number;
     estimatedDuration: number;
     powerAchieved: number;
     minimumDetectableEffect: number;
-}
+
 export declare class StatisticalEngine {
     private confidenceLevel;
     private minimumPracticalEffect;
@@ -96,5 +99,5 @@ export declare class StatisticalEngine {
     private gammaRandom;
     private normalRandom;
     private betaCredibleInterval;
-}
+
 //# sourceMappingURL=StatisticalEngine.d.ts.map

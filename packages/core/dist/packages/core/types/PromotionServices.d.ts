@@ -11,15 +11,15 @@ export interface IPromotionService {
     getPromotion(promotionId: string): Promise<PromotionServiceResponse<BasePromotion>>;
     updatePromotion(promotionId: string, updates: UpdatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     deletePromotion(promotionId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
-    createPromotions(promotions: CreatePromotionRequest[]): Promise<PromotionServiceResponse<BasePromotion[]>>;
+    createPromotions(promotions: CreatePromotionRequest): Promise<PromotionServiceResponse<BasePromotion>>;
     updatePromotions(updates: Array<{
         id: string;
         data: UpdatePromotionRequest;
-    }>): Promise<PromotionServiceResponse<BasePromotion[]>>;
-    deletePromotions(promotionIds: string[], deletedBy: string): Promise<PromotionServiceResponse<BulkOperationResult>>;
+    }>): Promise<PromotionServiceResponse<BasePromotion>>;
+    deletePromotions(promotionIds: string, deletedBy: string): Promise<PromotionServiceResponse<BulkOperationResult>>;
     searchPromotions(criteria: PromotionSearchCriteria): Promise<PromotionServiceResponse<PromotionSearchResult>>;
-    getActivePromotions(filters?: ActivePromotionFilters): Promise<PromotionServiceResponse<BasePromotion[]>>;
-    getPromotionsByType<T extends BasePromotion>(type: PromotionType): Promise<PromotionServiceResponse<T[]>>;
+    getActivePromotions(filters?: ActivePromotionFilters): Promise<PromotionServiceResponse<BasePromotion>>;
+    getPromotionsByType<T extends BasePromotion>(type: PromotionType): Promise<PromotionServiceResponse<T>>;
     activatePromotion(promotionId: string, activatedBy: string): Promise<PromotionServiceResponse<BasePromotion>>;
     pausePromotion(promotionId: string, pausedBy: string, reason?: string): Promise<PromotionServiceResponse<BasePromotion>>;
     cancelPromotion(promotionId: string, cancelledBy: string, reason: string): Promise<PromotionServiceResponse<BasePromotion>>;
@@ -28,12 +28,12 @@ export interface IPromotionService {
 }
 export interface IPromotionEligibilityService {
     checkEligibility(request: EligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
-    checkMultipleEligibility(request: MultipleEligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
-    checkUserPromotionEligibility(userId: string, filters?: EligibilityFilters): Promise<PromotionServiceResponse<PromotionEligibilityCheck[]>>;
+    checkMultipleEligibility(request: MultipleEligibilityCheckRequest): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
+    checkUserPromotionEligibility(userId: string, filters?: EligibilityFilters): Promise<PromotionServiceResponse<PromotionEligibilityCheck>>;
     applyPromotion(request: ApplyPromotionRequest): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
     removePromotion(request: RemovePromotionRequest): Promise<PromotionServiceResponse<PromotionApplicationResult>>;
     findApplicablePromotions(context: PromotionContext): Promise<PromotionServiceResponse<ApplicablePromotionsResult>>;
-    getRecommendedPromotions(userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromotionRecommendation[]>>;
+    getRecommendedPromotions(userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromotionRecommendation>>;
     evaluateCartPromotions(cartId: string, userId: string): Promise<PromotionServiceResponse<CartPromotionEvaluation>>;
     applyBestPromotions(cartId: string, userId: string): Promise<PromotionServiceResponse<CartPromotionApplication>>;
     validatePromoCode(promoCode: string, userId: string, context?: PromotionContext): Promise<PromotionServiceResponse<PromoCodeValidation>>;
@@ -41,15 +41,15 @@ export interface IPromotionEligibilityService {
 }
 export interface IContentPromotionService {
     createContentPromotion(promotionData: CreateContentPromotionRequest): Promise<PromotionServiceResponse<ContentPromotion>>;
-    updateContentSelection(promotionId: string, contentIds: string[]): Promise<PromotionServiceResponse<ContentPromotion>>;
+    updateContentSelection(promotionId: string, contentIds: string): Promise<PromotionServiceResponse<ContentPromotion>>;
     refreshContentSelection(promotionId: string): Promise<PromotionServiceResponse<ContentPromotion>>;
-    getPromotedContent(location: string, userId?: string, limit?: number): Promise<PromotionServiceResponse<PromotedContent[]>>;
-    getContentByPromotionSlot(slotId: string): Promise<PromotionServiceResponse<PromotedContent[]>>;
+    getPromotedContent(location: string, userId?: string, limit?: number): Promise<PromotionServiceResponse<PromotedContent>>;
+    getContentByPromotionSlot(slotId: string): Promise<PromotionServiceResponse<PromotedContent>>;
     trackContentView(contentId: string, promotionId: string, userId?: string): Promise<PromotionServiceResponse<void>>;
     trackContentClick(contentId: string, promotionId: string, userId?: string): Promise<PromotionServiceResponse<void>>;
     trackContentConversion(contentId: string, promotionId: string, userId: string, conversionData: ConversionData): Promise<PromotionServiceResponse<void>>;
     getContentPromotionAnalytics(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<ContentPromotionAnalytics>>;
-    getContentPerformanceReport(contentIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<ContentPerformanceReport>>;
+    getContentPerformanceReport(contentIds: string, dateRange?: DateRange): Promise<PromotionServiceResponse<ContentPerformanceReport>>;
     createContentABTest(testConfig: ContentABTestConfig): Promise<PromotionServiceResponse<ContentABTest>>;
     getABTestResults(testId: string): Promise<PromotionServiceResponse<ABTestResults>>;
 }
@@ -70,18 +70,18 @@ export interface ICampaignService {
 }
 export interface IPromotionAnalyticsService {
     getPromotionPerformance(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
-    getMultiplePromotionPerformance(promotionIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport[]>>;
-    comparePromotions(promotionIds: string[], metrics: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionComparisonReport>>;
+    getMultiplePromotionPerformance(promotionIds: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionPerformanceReport>>;
+    comparePromotions(promotionIds: string, metrics: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionComparisonReport>>;
     benchmarkPromotion(promotionId: string, benchmarkType: BenchmarkType): Promise<PromotionServiceResponse<PromotionBenchmarkReport>>;
     getPromotionRevenue(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<RevenueAnalyticsReport>>;
-    getRevenueImpact(promotionIds: string[], dateRange?: DateRange): Promise<PromotionServiceResponse<RevenueImpactReport>>;
+    getRevenueImpact(promotionIds: string, dateRange?: DateRange): Promise<PromotionServiceResponse<RevenueImpactReport>>;
     calculateROI(promotionId: string): Promise<PromotionServiceResponse<ROICalculation>>;
     getPromotionUserMetrics(promotionId: string, dateRange?: DateRange): Promise<PromotionServiceResponse<PromotionUserMetrics>>;
-    getUserPromotionHistory(userId: string, limit?: number): Promise<PromotionServiceResponse<UserPromotionHistory[]>>;
+    getUserPromotionHistory(userId: string, limit?: number): Promise<PromotionServiceResponse<UserPromotionHistory>>;
     getPromotionTrends(dateRange: DateRange, groupBy: TrendGrouping): Promise<PromotionServiceResponse<PromotionTrendReport>>;
     getSeasonalAnalysis(promotionType?: PromotionType, years?: number): Promise<PromotionServiceResponse<SeasonalAnalysisReport>>;
     predictPromotionPerformance(promotionData: PredictionRequest): Promise<PromotionServiceResponse<PerformancePrediction>>;
-    getOptimizationRecommendations(promotionId: string): Promise<PromotionServiceResponse<OptimizationRecommendation[]>>;
+    getOptimizationRecommendations(promotionId: string): Promise<PromotionServiceResponse<OptimizationRecommendation>>;
     getRealtimePromotionStats(promotionId: string): Promise<PromotionServiceResponse<RealtimePromotionStats>>;
     subscribeToPromotionUpdates(promotionId: string, callback: PromotionUpdateCallback): Promise<PromotionServiceResponse<SubscriptionHandle>>;
 }
@@ -90,7 +90,7 @@ export interface IPromotionRulesService {
     getRule(ruleId: string): Promise<PromotionServiceResponse<PromotionRule>>;
     updateRule(ruleId: string, updates: UpdateRuleRequest): Promise<PromotionServiceResponse<PromotionRule>>;
     deleteRule(ruleId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
-    evaluateRules(context: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleEvaluationResult[]>>;
+    evaluateRules(context: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleEvaluationResult>>;
     executeRule(ruleId: string, context: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleExecutionResult>>;
     testRule(ruleData: PromotionRule, testContext: RuleEvaluationContext): Promise<PromotionServiceResponse<RuleTestResult>>;
     validateRuleLogic(ruleData: PromotionRule): Promise<PromotionServiceResponse<RuleValidationResult>>;
@@ -102,9 +102,9 @@ export interface IPromotionTemplateService {
     getTemplate(templateId: string): Promise<PromotionServiceResponse<PromotionTemplate>>;
     updateTemplate(templateId: string, updates: UpdateTemplateRequest): Promise<PromotionServiceResponse<PromotionTemplate>>;
     deleteTemplate(templateId: string, deletedBy: string): Promise<PromotionServiceResponse<void>>;
-    getTemplates(filters?: TemplateFilters): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
-    getPopularTemplates(limit?: number): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
-    getRecommendedTemplates(context: TemplateRecommendationContext): Promise<PromotionServiceResponse<PromotionTemplate[]>>;
+    getTemplates(filters?: TemplateFilters): Promise<PromotionServiceResponse<PromotionTemplate>>;
+    getPopularTemplates(limit?: number): Promise<PromotionServiceResponse<PromotionTemplate>>;
+    getRecommendedTemplates(context: TemplateRecommendationContext): Promise<PromotionServiceResponse<PromotionTemplate>>;
     createPromotionFromTemplate(templateId: string, customizations: TemplateCustomization): Promise<PromotionServiceResponse<BasePromotion>>;
     cloneTemplate(templateId: string, newName: string, customizations?: TemplateCustomization): Promise<PromotionServiceResponse<PromotionTemplate>>;
     getTemplateUsageStats(templateId: string): Promise<PromotionServiceResponse<TemplateUsageStats>>;
@@ -121,12 +121,12 @@ export interface CreatePromotionRequest {
     content_config?: any;
     bundle_config?: any;
     campaign_config?: any;
-    targeting_rules: any[];
+    targeting_rules: any;
     application_type: string;
     promo_code?: string;
     usage_limit?: number;
     metadata?: Record<string, any>;
-    tags?: string[];
+    tags?: string;
     created_by: string;
 }
 export interface UpdatePromotionRequest {
@@ -137,24 +137,24 @@ export interface UpdatePromotionRequest {
     start_date?: Date;
     end_date?: Date;
     usage_limit?: number;
-    targeting_rules?: any[];
+    targeting_rules?: any;
     metadata?: Record<string, any>;
-    tags?: string[];
+    tags?: string;
     updated_by: string;
 }
 export interface EligibilityCheckRequest {
     promotion_id: string;
     user_id: string;
     cart_id?: string;
-    item_ids?: string[];
+    item_ids?: string;
     promo_code?: string;
     context?: PromotionContext;
 }
 export interface MultipleEligibilityCheckRequest {
-    promotion_ids: string[];
+    promotion_ids: string;
     user_id: string;
     cart_id?: string;
-    item_ids?: string[];
+    item_ids?: string;
     context?: PromotionContext;
 }
 export interface ApplyPromotionRequest {
@@ -186,16 +186,16 @@ export interface PromotionContext {
     custom_attributes?: Record<string, any>;
 }
 export interface ActivePromotionFilters {
-    type?: PromotionType[];
+    type?: PromotionType;
     applicable_to_user?: string;
     location?: string;
     limit?: number;
 }
 export interface PromotionValidationResult {
     valid: boolean;
-    errors: ValidationError[];
-    warnings: ValidationWarning[];
-    suggestions: string[];
+    errors: ValidationError;
+    warnings: ValidationWarning;
+    suggestions: string;
 }
 export interface ValidationError {
     field: string;
@@ -210,28 +210,25 @@ export interface ValidationWarning {
 }
 export interface PromotionConflictCheck {
     has_conflicts: boolean;
-    conflicts: Array<{
-        conflicting_promotion_id: string;
-        conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
-        description: string;
-        severity: 'blocking' | 'warning';
-    }>;
-    recommendations: string[];
+    conflicts: Array<{}, conflicting_promotion_id>;
+    string: any;
+    conflict_type: 'time_overlap' | 'mutual_exclusion' | 'resource_conflict';
+    description: string;
+    severity: 'blocking' | 'warning';
 }
 export interface BulkOperationResult {
     total_processed: number;
     successful: number;
     failed: number;
-    results: Array<{
-        id: string;
-        success: boolean;
-        error?: string;
-    }>;
+    results: Array<{}, id>;
+    string: any;
+    success: boolean;
+    error?: string;
 }
 export interface ApplicablePromotionsResult {
-    applicable_promotions: PromotionEligibilityCheck[];
-    auto_applied: string[];
-    suggested: PromotionRecommendation[];
+    applicable_promotions: PromotionEligibilityCheck;
+    auto_applied: string;
+    suggested: PromotionRecommendation;
     total_potential_savings_cents: number;
 }
 export interface PromotionRecommendation {
@@ -246,20 +243,20 @@ export interface PromotionRecommendation {
 }
 export interface CartPromotionEvaluation {
     cart_id: string;
-    current_promotions: string[];
-    applicable_promotions: PromotionEligibilityCheck[];
+    current_promotions: string;
+    applicable_promotions: PromotionEligibilityCheck;
     potential_savings_cents: number;
-    optimization_suggestions: PromotionOptimizationSuggestion[];
+    optimization_suggestions: PromotionOptimizationSuggestion;
 }
 export interface PromotionOptimizationSuggestion {
     type: 'add_item' | 'increase_quantity' | 'apply_code' | 'stack_promotion';
     description: string;
     additional_savings_cents: number;
-    required_actions: string[];
+    required_actions: string;
 }
 export interface CartPromotionApplication {
     cart_id: string;
-    applied_promotions: PromotionApplicationResult[];
+    applied_promotions: PromotionApplicationResult;
     total_savings_cents: number;
     final_cart_total_cents: number;
     optimization_performed: boolean;
@@ -282,20 +279,11 @@ export interface PromotionPerformanceReport {
     promotion_name: string;
     date_range: DateRange;
     metrics: PromotionPerformanceMetrics;
-    time_series: Array<{
-        date: string;
-        usage_count: number;
-        revenue_cents: number;
-        conversion_rate: number;
-    }>;
-    user_segments: Array<{
-        segment_name: string;
-        usage_count: number;
-        conversion_rate: number;
-        average_order_value_cents: number;
-    }>;
-    insights: PerformanceInsight[];
-    recommendations: OptimizationRecommendation[];
+    time_series: Array<{}, date>;
+    string: any;
+    usage_count: number;
+    revenue_cents: number;
+    conversion_rate: number;
 }
 export interface PerformanceInsight {
     type: 'positive' | 'negative' | 'neutral';
@@ -312,7 +300,7 @@ export interface OptimizationRecommendation {
     expected_impact: string;
     effort_level: 'low' | 'medium' | 'high';
     priority_score: number;
-    implementation_steps: string[];
+    implementation_steps: string;
 }
 export interface DateRange {
     start_date: Date;
@@ -334,16 +322,10 @@ export interface RevenueAnalyticsReport {
     roi_percentage: number;
     payback_period_days?: number;
     break_even_usage_count: number;
-    revenue_by_segment: Array<{
-        segment: string;
-        revenue_cents: number;
-        percentage: number;
-    }>;
-    daily_revenue: Array<{
-        date: string;
-        revenue_cents: number;
-        usage_count: number;
-    }>;
+    revenue_by_segment: Array<{}, segment>;
+    string: any;
+    revenue_cents: number;
+    percentage: number;
 }
 export interface UserPromotionHistory {
     promotion_id: string;

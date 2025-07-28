@@ -11,28 +11,28 @@ import { Download, FileText, Table, Image, Settings } from 'lucide-react';
  * Export configuration interface
  */
 interface ExportConfig {
-  format: 'json' | 'csv' | 'html' | 'pdf';
+  format: 'json' | 'csv' | 'html' | 'pdf';,
   includeHeatMap: boolean;
-  includeCostAnalysis: boolean;
+  includeCostAnalysis: boolean;,
   includePatterns: boolean;
-  includeRecommendations: boolean;
+  includeRecommendations: boolean;,
   dateRange: {,
-    startTime: number;
-    endTime: number;
-  };
+  startTime: number;,
+  endTime: number;
+};
   customName?: string;
-}
 /**
  * Export options props
  */
+
 export interface ExportOptionsProps {
-  analyticsClient: AnalyticsClient;
+  analyticsClient: AnalyticsClient;,
   timeRange: { startTime: number; endTime: number };
   className?: string;
-}
 /**
  * Export options component
  */
+}
 export const ExportOptions: React.FC<ExportOptionsProps> = ({)
   analyticsClient,
   timeRange,
@@ -42,35 +42,34 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
   const [isExporting, setIsExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
   const [exportConfig, setExportConfig] = useState<ExportConfig>({)
-    format: 'json',
-    includeHeatMap: false,
-    includeCostAnalysis: true,
-    includePatterns: true,
-    includeRecommendations: true,
-    dateRange: timeRange,
-    customName: '',
-  });
+  format: 'json',
+  includeHeatMap: false,
+  includeCostAnalysis: true,
+  includePatterns: true,
+  includeRecommendations: true,
+  dateRange: timeRange,
+  customName: '',
+});
   /**
    * Handle export configuration change
    */
   const handleConfigChange = useCallback((key: keyof ExportConfig, value: Error) => {
-    setExportConfig(prev => ({)
-      ...prev,
-      [key]: value
-    }));
+  setExportConfig(prev => ({)
+  ...prev,
+  [key]: value,
+}));
   }, []);
   /**
    * Handle date range change
    */
   const handleDateRangeChange = useCallback((field: 'startTime' | 'endTime', value: string) => {
-    const timestamp = new Date(value).getTime();
-    setExportConfig(prev => ({)
-      ...prev,
-      dateRange: {,
-        ...prev.dateRange,
-        [field]: timestamp
-      }
-    }));
+  const timestamp = new Date(value).getTime();
+  setExportConfig(prev => ({)
+  ...prev,
+  dateRange: {,
+  ...prev.dateRange,
+  [field]: timestamp,
+}));
   }, []);
   /**
    * Generate filename
@@ -84,25 +83,25 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
    * Handle export
    */
   const handleExport = useCallback(async () => {
-    try {
-      setIsExporting(true);
-      setExportError(null);
-      const reportConfig = {
-        startTime: exportConfig.dateRange.startTime,
-        endTime: exportConfig.dateRange.endTime,
-        format: exportConfig.format,
-        includeHeatMap: exportConfig.includeHeatMap,
-        includeCostAnalysis: exportConfig.includeCostAnalysis,
-        includePatterns: exportConfig.includePatterns,
-      };
+  try {
+  setIsExporting(true);
+  setExportError(null);
+  const reportConfig = {
+  startTime: exportConfig.dateRange.startTime,
+  endTime: exportConfig.dateRange.endTime,
+  format: exportConfig.format,
+  includeHeatMap: exportConfig.includeHeatMap,
+  includeCostAnalysis: exportConfig.includeCostAnalysis,
+  includePatterns: exportConfig.includePatterns,
+};
       const reportData = await analyticsClient.generateReport(reportConfig);
       // Create blob and download
       const blob = new Blob([reportData], {)
-        type: exportConfig.format === 'json' ? 'application/json' :,
-          exportConfig.format === 'csv' ? 'text/csv' :
-            exportConfig.format === 'html' ? 'text/html' :
-              'application/pdf'
-      });
+  type: exportConfig.format === 'json' ? 'application/json' :,
+  exportConfig.format === 'csv' ? 'text/csv' :,
+  exportConfig.format === 'html' ? 'text/html' :,
+  'application/pdf'
+});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -113,22 +112,21 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
       URL.revokeObjectURL(url);
       setIsDialogOpen(false);
     } catch (error) {
-      console.error('Export failed:', error);
-      setExportError(error instanceof Error ? error.message : 'Export failed');
-    } finally {
+  console.error('Export failed:', error);
+  setExportError(error instanceof Error ? error.message : 'Export failed');
+} finally {
       setIsExporting(false);
-    }
   }, [analyticsClient, exportConfig, generateFilename]);
   /**
    * Handle quick export
    */
   const handleQuickExport = useCallback(async (format: 'json' | 'csv') => {
-    try {
-      setIsExporting(true);
-      const data = await analyticsClient.exportData(timeRange, format);
-      const blob = new Blob([data], {)
-        type: format === 'json' ? 'application/json' : 'text/csv',
-      });
+  try {
+  setIsExporting(true);
+  const data = await analyticsClient.exportData(timeRange, format);
+  const blob = new Blob([data], {)
+  type: format === 'json' ? 'application/json' : 'text/csv',
+});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -138,10 +136,9 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Quick export failed:', error);
-    } finally {
+  console.error('Quick export failed:', error);
+} finally {
       setIsExporting(false);
-    }
   }, [analyticsClient, timeRange]);
   /**
    * Format date for input
@@ -153,37 +150,35 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
    * Get format icon
    */
   const getFormatIcon = (format: string) => {
-    switch (format) {
-    case 'json':
-      return <FileText className="w-4 h-4" />;
-    case 'csv':
-      return <Table className="w-4 h-4" />;
-    case 'html':
-      return <Image className="w-4 h-4" />;
-    case 'pdf':
-      return <FileText className="w-4 h-4" />;
-    default:
-      return <FileText className="w-4 h-4" />;
-    }
-  };
+  switch (format) {
+  case 'json':,
+  return <FileText className="w-4 h-4" />;
+  case 'csv':,
+  return <Table className="w-4 h-4" />;
+  case 'html':,
+  return <Image className="w-4 h-4" />;
+  case 'pdf':,
+  return <FileText className="w-4 h-4" />;
+  default:,
+  return <FileText className="w-4 h-4" />;
+};
   /**
    * Get format description
    */
   const getFormatDescription = (format: string) => {
-    switch (format) {
-    case 'json':
-      return 'Raw data in JSON format for programmatic access';
-    case 'csv':
-      return 'Tabular data for spreadsheet applications';
-    case 'html':
-      return 'Interactive dashboard for viewing and sharing';
-    case 'pdf':
-      return 'Professional report format for presentations';
-    default:
-      return '';
-    }
-  };
-  return ();
+  switch (format) {
+  case 'json':,
+  return 'Raw data in JSON format for programmatic access';
+  case 'csv':,
+  return 'Tabular data for spreadsheet applications';
+  case 'html':,
+  return 'Interactive dashboard for viewing and sharing';
+  case 'pdf':,
+  return 'Professional report format for presentations';
+  default:,
+  return '';
+};
+  return;
     <div className={`export-options ${className}`}>}
       <div className="flex items-center gap-2">
         {/* Quick Export Buttons */}
@@ -232,10 +227,10 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
                     <div
                       key={format}
                       className={`p-3 border rounded-lg cursor-pointer transition-all ${
-                        exportConfig.format === format
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
+  exportConfig.format === format
+  ? 'border-blue-500 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
                       onClick={() => handleConfigChange('format', format)}
                     >
                       <div className="flex items-center gap-2 mb-1">
@@ -373,26 +368,20 @@ export const ExportOptions: React.FC<ExportOptionsProps> = ({)
 const styles = `;
   .export-options {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+    align-items: center;,
+  gap: 0.5rem;
   .export-options button {
     transition: all 0.2s ease-in-out;
-  }
-  .export-options button:hover {
-    transform: translateY(-1px);
-  }
-  .export-options button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-  }
+  .export-options button:hover {,
+  transform: translateY(-1px);
+  .export-options button:disabled {,
+  opacity: 0.6;
+    cursor: not-allowed;,
+  transform: none;
   @media (max-width: 768px) {
     .export-options {
       flex-direction: column;
       align-items: stretch;
-    }
-  }
 `;
 
 // Inject styles
@@ -400,6 +389,5 @@ if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;
   document.head.appendChild(styleSheet);
-}
 
 export default ExportOptions;

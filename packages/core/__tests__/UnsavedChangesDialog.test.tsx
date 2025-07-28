@@ -7,11 +7,11 @@ import { describe, test, expect, jest } from '@jest/globals';
 import { UnsavedChangesDialog } from '../components/Dialogs/UnsavedChangesDialog';
 describe('UnsavedChangesDialog', () => {
   const defaultProps = {
-    isOpen: true,
-    onSave: jest.fn<unknown[], unknown>(),
-    onDontSave: jest.fn<unknown[], unknown>(),
-    onCancel: jest.fn<unknown[], unknown>()
-  };
+  isOpen: true,
+  onSave: jest.fn<unknown, unknown>(),
+  onDontSave: jest.fn<unknown, unknown>(),
+  onCancel: jest.fn<unknown, unknown>(),
+};
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -56,7 +56,7 @@ describe('UnsavedChangesDialog', () => {
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
   test('calls onSave when Save button is clicked', () => {
-    const onSave = jest.fn<unknown[], unknown>();
+    const onSave = jest.fn<unknown, unknown>();
     render();
       <UnsavedChangesDialog
         {...defaultProps}
@@ -67,7 +67,7 @@ describe('UnsavedChangesDialog', () => {
     expect(onSave).toHaveBeenCalledTimes(1);
   });
   test('calls onDontSave when Don\'t Save button is clicked', () => {
-    const onDontSave = jest.fn<unknown[], unknown>();
+    const onDontSave = jest.fn<unknown, unknown>();
     render();
       <UnsavedChangesDialog
         {...defaultProps}
@@ -78,7 +78,7 @@ describe('UnsavedChangesDialog', () => {
     expect(onDontSave).toHaveBeenCalledTimes(1);
   });
   test('calls onCancel when Cancel button is clicked', () => {
-    const onCancel = jest.fn<unknown[], unknown>();
+    const onCancel = jest.fn<unknown, unknown>();
     render();
       <UnsavedChangesDialog
         {...defaultProps}
@@ -89,7 +89,7 @@ describe('UnsavedChangesDialog', () => {
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
   test('calls onCancel when overlay is clicked', () => {
-    const onCancel = jest.fn<unknown[], unknown>();
+    const onCancel = jest.fn<unknown, unknown>();
     const { container } = render()
       <UnsavedChangesDialog
         {...defaultProps}
@@ -103,7 +103,7 @@ describe('UnsavedChangesDialog', () => {
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
   test('does not call onCancel when dialog content is clicked', () => {
-    const onCancel = jest.fn<unknown[], unknown>();
+    const onCancel = jest.fn<unknown, unknown>();
     render();
       <UnsavedChangesDialog
         {...defaultProps}
@@ -116,7 +116,6 @@ describe('UnsavedChangesDialog', () => {
     if (dialogContent) {
       fireEvent.click(dialogContent);
       expect(onCancel).not.toHaveBeenCalled();
-    }
   });
   test('has correct ARIA attributes and accessibility', () => {
     render(<UnsavedChangesDialog {...defaultProps} />);
@@ -154,19 +153,19 @@ describe('UnsavedChangesDialog', () => {
     // Check that the overlay covers the full screen
     const overlay = container.firstChild as HTMLElement;
     expect(overlay).toHaveStyle({)
-      position: 'fixed',
-      top: '0px',
-      left: '0px',
-      right: '0px',
-      bottom: '0px',
-      zIndex: '10000',
-    });
+  position: 'fixed',
+  top: '0px',
+  left: '0px',
+  right: '0px',
+  bottom: '0px',
+  zIndex: '10000',
+});
     // Check that the dialog is centered
     expect(overlay).toHaveStyle({)
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    });
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
   });
   test('handles multiple project names correctly', () => {
     const { rerender } = render()

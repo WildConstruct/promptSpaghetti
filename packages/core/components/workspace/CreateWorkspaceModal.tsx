@@ -6,16 +6,15 @@ import React, { useState } from 'react';
 interface CreateWorkspaceModalProps {
   onSubmit: (data: { name: string; description?: string }) => void;
   onCancel: () => void;
-}
 
 export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({)
   onSubmit,
   onCancel
 }) => {
   const [formData, setFormData] = useState({)
-    name: '',
-    description: '',
-  });
+  name: '',
+  description: '',
+});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const validateForm = () => {
@@ -26,39 +25,34 @@ export const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({)
       newErrors.name = 'Workspace name must be at least 3 characters';
     } else if (formData.name.length > 50) {
       newErrors.name = 'Workspace name must be less than 50 characters';
-    }
     if (formData.description && formData.description.length > 200) {
       newErrors.description = 'Description must be less than 200 characters';
-    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await onSubmit({)
-        name: formData.name.trim(),
-        description: formData.description.trim() || undefined,
-      });
+  e.preventDefault();
+  if (!validateForm()) {
+  return;
+  setIsSubmitting(true);
+  try {
+  await onSubmit({)
+  name: formData.name.trim(),
+  description: formData.description.trim() || undefined,
+});
     } catch (error) {
-      // Handle error (could set form-level error state)
-      console.error('Failed to create workspace:', error);
-    } finally {
+  // Handle error (could set form-level error state)
+  console.error('Failed to create workspace:', error);
+} finally {
       setIsSubmitting(false);
-    }
   };
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
-    }
   };
-  return ();
+  return;
     <div className="modal-overlay">
       <div className="modal modal--medium">
         <div className="modal__header">

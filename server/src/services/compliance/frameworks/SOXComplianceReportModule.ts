@@ -15,6 +15,7 @@ import {
   ComplianceReportType 
 } from '../StandardComplianceReportingService';
 
+}
 export interface SOXComplianceReport extends StandardComplianceReport {
   soxSpecific: {
     managementAssertion: ManagementAssertionReport;
@@ -32,6 +33,7 @@ export interface SOXComplianceReport extends StandardComplianceReport {
   };
 }
 
+}
 export interface ManagementAssertionReport {
   assertionDate: Date;
   reportingPeriod: ReportingPeriod;
@@ -40,6 +42,7 @@ export interface ManagementAssertionReport {
     signedDate: Date;
     assertionStatement: string;
     qualifications: string[];
+}
   };
   cfoAssertion: {
     signedBy: string;
@@ -65,6 +68,7 @@ export interface ManagementAssertionReport {
   };
 }
 
+}
 export interface InternalControlsReport {
   frameworkUsed: 'COSO_2013' | 'COSO_1992' | 'OTHER';
   controlEnvironment: {
@@ -74,6 +78,7 @@ export interface InternalControlsReport {
     organizationalStructure: ControlAssessment;
     competenceCommitment: ControlAssessment;
     humanResourcePolicies: ControlAssessment;
+}
   };
   riskAssessment: {
     objectiveSetting: ControlAssessment;
@@ -99,6 +104,7 @@ export interface InternalControlsReport {
   };
 }
 
+}
 export interface FinancialReportingControlsReport {
   revenueControls: ProcessControlReport;
   procurementControls: ProcessControlReport;
@@ -111,7 +117,9 @@ export interface FinancialReportingControlsReport {
   managementReviewControls: ProcessControlReport;
   disclosureControls: ProcessControlReport;
 }
+}
 
+}
 export interface ProcessControlReport {
   processName: string;
   controlObjectives: ControlObjective[];
@@ -122,13 +130,16 @@ export interface ProcessControlReport {
   lastTested: Date;
   nextTestingDue: Date;
 }
+}
 
+}
 export interface ITGeneralControlsReport {
   accessControls: {
     userAccessManagement: ITControlAssessment;
     privilegedAccessManagement: ITControlAssessment;
     passwordManagement: ITControlAssessment;
     networkSecurity: ITControlAssessment;
+}
   };
   changeManagement: {
     systemChangeControls: ITControlAssessment;
@@ -150,6 +161,7 @@ export interface ITGeneralControlsReport {
   };
 }
 
+}
 export interface ApplicationControlsReport {
   systemName: string;
   systemDescription: string;
@@ -159,6 +171,7 @@ export interface ApplicationControlsReport {
     processingControls: ApplicationControl[];
     outputControls: ApplicationControl[];
     interfaceControls: ApplicationControl[];
+}
   };
   dataIntegrity: {
     dataValidation: ControlAssessment;
@@ -175,11 +188,13 @@ export interface ApplicationControlsReport {
   testingResults: ApplicationTestingResult[];
 }
 
+}
 export interface EntityLevelControlsReport {
   corporateGovernance: {
     boardComposition: EntityControlAssessment;
     committeesEffectiveness: EntityControlAssessment;
     managementOversight: EntityControlAssessment;
+}
   };
   codeOfConduct: {
     policyExistence: EntityControlAssessment;
@@ -199,12 +214,14 @@ export interface EntityLevelControlsReport {
   };
 }
 
+}
 export interface DisclosureControlsReport {
   disclosureCommittee: {
     committeeMembership: string[];
     meetingFrequency: string;
     responsibilites: string[];
     effectiveness: 'effective' | 'ineffective';
+}
   };
   disclosureProcess: {
     informationGathering: ControlAssessment;
@@ -226,12 +243,14 @@ export interface DisclosureControlsReport {
   };
 }
 
+}
 export interface ChangeManagementReport {
   changeApprovalProcess: {
     changeRequestProcess: ControlAssessment;
     approvalAuthority: ControlAssessment;
     riskAssessment: ControlAssessment;
     businessJustification: ControlAssessment;
+}
   };
   testingRequirements: {
     testPlanDevelopment: ControlAssessment;
@@ -253,12 +272,14 @@ export interface ChangeManagementReport {
   };
 }
 
+}
 export interface AccessControlsReport {
   userAccountManagement: {
     accountProvisioning: ControlAssessment;
     accountModification: ControlAssessment;
     accountDeprovisioning: ControlAssessment;
     periodicReview: ControlAssessment;
+}
   };
   privilegedAccessManagement: {
     privilegedAccountInventory: ControlAssessment;
@@ -280,12 +301,14 @@ export interface AccessControlsReport {
   };
 }
 
+}
 export interface AuditEvidenceReport {
   documentationStandards: {
     controlDocumentation: DocumentationAssessment;
     testingDocumentation: DocumentationAssessment;
     evidenceRetention: DocumentationAssessment;
     accessibilityRequirements: DocumentationAssessment;
+}
   };
   testingEvidence: {
     testPlanEvidence: EvidenceAssessment;
@@ -306,6 +329,7 @@ export interface AuditEvidenceReport {
   };
 }
 
+}
 export interface DeficiencyReport {
   materialWeaknesses: MaterialWeaknessDetail[];
   significantDeficiencies: SignificantDeficiencyDetail[];
@@ -315,6 +339,7 @@ export interface DeficiencyReport {
     remedatedDeficiencies: number;
     outstandingDeficiencies: number;
     averageRemediationTime: number;
+}
   };
   rootCauseAnalysis: {
     processDeficiencies: number;
@@ -324,6 +349,7 @@ export interface DeficiencyReport {
   };
 }
 
+}
 export interface RemediationReport {
   remediationPlans: RemediationPlan[];
   remediationProgress: {
@@ -331,6 +357,7 @@ export interface RemediationReport {
     planDelayed: number;
     planCompleted: number;
     overallProgressPercentage: number;
+}
   };
   resourceAllocation: {
     budgetAllocated: number;
@@ -355,6 +382,7 @@ export class SOXComplianceReportModule {
     period: ReportingPeriod,
     _____includeDetails: boolean = true
   ): Promise<SOXComplianceReport> {
+
     console.log(`🏛️ Generating SOX compliance report for period ${period.startDate} to ${period.endDate}`);
 
     const [
@@ -418,6 +446,7 @@ export class SOXComplianceReportModule {
    * Generate management assertion report for SOX 302/404
    */
   private async generateManagementAssertionReport(period: ReportingPeriod): Promise<ManagementAssertionReport> {
+
     const assertionData = await this.getManagementAssertionData(period);
     
     return {
@@ -428,24 +457,24 @@ export class SOXComplianceReportModule {
         signedDate: assertionData.ceo.signedDate,
         assertionStatement: this.generateCEOAssertionStatement(),
         qualifications: assertionData.ceo.qualifications || []
-      },
+  }
       cfoAssertion: {
         signedBy: assertionData.cfo.name,
         signedDate: assertionData.cfo.signedDate,
         assertionStatement: this.generateCFOAssertionStatement(),
         qualifications: assertionData.cfo.qualifications || []
-      },
+  }
       internalControlEffectiveness: {
         overallAssessment: assertionData.effectiveness.overall,
         materialWeaknesses: await this.getMaterialWeaknesses(period),
         significantDeficiencies: await this.getSignificantDeficiencies(period),
         compensatingControls: await this.getCompensatingControls(period)
-      },
+  }
       changesSinceLastReport: {
         designChanges: await this.getDesignChanges(period),
         operatingChanges: await this.getOperatingChanges(period),
         impactAssessment: assertionData.changes.impactAssessment
-      },
+  }
       subsequentEvents: {
         events: await this.getSubsequentEvents(period),
         impactOnControls: assertionData.subsequentEvents.impact,
@@ -458,6 +487,7 @@ export class SOXComplianceReportModule {
    * Generate COSO internal controls assessment
    */
   private async generateInternalControlsReport(period: ReportingPeriod): Promise<InternalControlsReport> {
+
     const _____cosoAssessment = await this.getCOSOAssessment(period);
     
     return {
@@ -469,24 +499,24 @@ export class SOXComplianceReportModule {
         organizationalStructure: await this.assessControlComponent('org_structure'),
         competenceCommitment: await this.assessControlComponent('competence'),
         humanResourcePolicies: await this.assessControlComponent('hr_policies')
-      },
+  }
       riskAssessment: {
         objectiveSetting: await this.assessControlComponent('objectives'),
         riskIdentification: await this.assessControlComponent('risk_id'),
         riskAnalysis: await this.assessControlComponent('risk_analysis'),
         fraudRiskAssessment: await this.assessControlComponent('fraud_risk'),
         changeManagement: await this.assessControlComponent('change_mgmt')
-      },
+  }
       controlActivities: {
         controlActivitiesSelection: await this.assessControlComponent('control_selection'),
         policyDevelopment: await this.assessControlComponent('policy_dev'),
         technologyControls: await this.assessControlComponent('tech_controls')
-      },
+  }
       informationCommunication: {
         informationQuality: await this.assessControlComponent('info_quality'),
         internalCommunication: await this.assessControlComponent('internal_comm'),
         externalCommunication: await this.assessControlComponent('external_comm')
-      },
+  }
       monitoring: {
         ongoingMonitoring: await this.assessControlComponent('ongoing_monitoring'),
         separateEvaluations: await this.assessControlComponent('separate_eval'),
@@ -499,6 +529,7 @@ export class SOXComplianceReportModule {
    * Generate financial reporting controls assessment
    */
   private async generateFinancialReportingControlsReport(period: ReportingPeriod): Promise<FinancialReportingControlsReport> {
+
     const _____processControls = await this.getFinancialProcessControls(period);
     
     return {
@@ -519,25 +550,26 @@ export class SOXComplianceReportModule {
    * Generate IT general controls assessment
    */
   private async generateITGeneralControlsReport(_____period: ReportingPeriod): Promise<ITGeneralControlsReport> {
+
     return {
       accessControls: {
         userAccessManagement: await this.assessITControl('user_access_mgmt'),
         privilegedAccessManagement: await this.assessITControl('privileged_access'),
         passwordManagement: await this.assessITControl('password_mgmt'),
         networkSecurity: await this.assessITControl('network_security')
-      },
+  }
       changeManagement: {
         systemChangeControls: await this.assessITControl('system_changes'),
         emergencyChangeControls: await this.assessITControl('emergency_changes'),
         sourceCodeManagement: await this.assessITControl('source_code'),
         testingProcedures: await this.assessITControl('testing_procedures')
-      },
+  }
       operationsManagement: {
         jobScheduling: await this.assessITControl('job_scheduling'),
         backupRecovery: await this.assessITControl('backup_recovery'),
         incidentManagement: await this.assessITControl('incident_mgmt'),
         systemMonitoring: await this.assessITControl('system_monitoring')
-      },
+  }
       dataSecurityPrivacy: {
         dataClassification: await this.assessITControl('data_classification'),
         encryption: await this.assessITControl('encryption'),
@@ -549,24 +581,25 @@ export class SOXComplianceReportModule {
 
   // Helper methods for data gathering and assessment
   private async getManagementAssertionData(_____period: ReportingPeriod): Promise<unknown> {
+
     // Implementation would query management assertion database
     return {
       ceo: {
         name: 'John Smith',
         signedDate: new Date(),
         qualifications: []
-      },
+  }
       cfo: {
         name: 'Jane Doe',
         signedDate: new Date(),
         qualifications: []
-      },
+  }
       effectiveness: {
         overall: 'effective'
-      },
+  }
       changes: {
         impactAssessment: 'No material changes to internal controls'
-      },
+  }
       subsequentEvents: {
         impact: 'No material impact on internal controls',
         disclosureRequired: false
@@ -595,6 +628,7 @@ export class SOXComplianceReportModule {
   }
 
   private async assessControlComponent(component: string): Promise<ControlAssessment> {
+
     // Implementation would assess specific COSO control component
     return {
       componentName: component,
@@ -608,6 +642,7 @@ export class SOXComplianceReportModule {
   }
 
   private async assessProcessControls(process: string, _____period: ReportingPeriod): Promise<ProcessControlReport> {
+
     // Implementation would assess specific financial process controls
     return {
       processName: process,
@@ -622,6 +657,7 @@ export class SOXComplianceReportModule {
   }
 
   private async assessITControl(controlType: string): Promise<ITControlAssessment> {
+
     // Implementation would assess specific IT control
     return {
       controlType,
@@ -660,6 +696,7 @@ export class SOXComplianceReportModule {
 }
 
 // Supporting interfaces for SOX-specific reporting
+}
 interface ControlAssessment {
   componentName: string;
   designEffectiveness: 'effective' | 'ineffective' | 'needs_improvement';
@@ -669,7 +706,9 @@ interface ControlAssessment {
   lastTested: Date;
   testedBy: string;
 }
+}
 
+}
 interface ITControlAssessment {
   controlType: string;
   designAdequacy: 'adequate' | 'inadequate' | 'needs_improvement';
@@ -679,13 +718,17 @@ interface ITControlAssessment {
   deficiencies: string[];
   compensatingControls: string[];
 }
+}
 
+}
 interface ControlObjective {
   objective: string;
   description: string;
   financialStatementAssertion: string;
 }
+}
 
+}
 interface KeyControl {
   controlId: string;
   description: string;
@@ -693,7 +736,9 @@ interface KeyControl {
   performer: string;
   reviewer: string;
 }
+}
 
+}
 interface TestingResult {
   testDate: Date;
   testProcedure: string;
@@ -701,7 +746,9 @@ interface TestingResult {
   exceptionsNoted: number;
   conclusion: 'effective' | 'ineffective' | 'needs_improvement';
 }
+}
 
+}
 interface Deficiency {
   deficiencyType: 'control_deficiency' | 'significant_deficiency' | 'material_weakness';
   description: string;
@@ -709,7 +756,9 @@ interface Deficiency {
   impact: string;
   remediationPlan: string;
 }
+}
 
+}
 interface ApplicationControl {
   controlType: string;
   description: string;
@@ -717,21 +766,27 @@ interface ApplicationControl {
   frequency: string;
   effectiveness: 'effective' | 'ineffective';
 }
+}
 
+}
 interface ApplicationTestingResult {
   testDate: Date;
   controlTested: string;
   testResult: 'pass' | 'fail' | 'exception';
   deficienciesNoted: string[];
 }
+}
 
+}
 interface EntityControlAssessment {
   controlArea: string;
   assessment: 'strong' | 'adequate' | 'weak';
   evidence: string[];
   deficiencies: string[];
 }
+}
 
+}
 interface QuarterlyDisclosureAssessment {
   quarter: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   filingDate: Date;
@@ -739,7 +794,9 @@ interface QuarterlyDisclosureAssessment {
   materialChanges: string[];
   deficienciesIdentified: string[];
 }
+}
 
+}
 interface AccessReviewResult {
   reviewType: string;
   completionDate: Date;
@@ -748,21 +805,27 @@ interface AccessReviewResult {
   accessRemoved: number;
   effectivenessRating: 'effective' | 'ineffective';
 }
+}
 
+}
 interface DocumentationAssessment {
   documentationType: string;
   adequacy: 'adequate' | 'inadequate' | 'needs_improvement';
   completeness: number; // percentage
   accessibility: 'good' | 'fair' | 'poor';
 }
+}
 
+}
 interface EvidenceAssessment {
   evidenceType: string;
   availability: 'available' | 'partial' | 'missing';
   quality: 'high' | 'medium' | 'low';
   retention: 'compliant' | 'non_compliant';
 }
+}
 
+}
 interface MaterialWeaknessDetail {
   weaknessId: string;
   description: string;
@@ -770,7 +833,9 @@ interface MaterialWeaknessDetail {
   remediationStatus: 'open' | 'in_progress' | 'closed';
   targetRemediationDate: Date;
 }
+}
 
+}
 interface SignificantDeficiencyDetail {
   deficiencyId: string;
   description: string;
@@ -778,14 +843,18 @@ interface SignificantDeficiencyDetail {
   remediationStatus: 'open' | 'in_progress' | 'closed';
   targetRemediationDate: Date;
 }
+}
 
+}
 interface ControlDeficiencyDetail {
   deficiencyId: string;
   description: string;
   controlArea: string;
   remediationStatus: 'open' | 'in_progress' | 'closed';
 }
+}
 
+}
 interface RemediationPlan {
   planId: string;
   deficiencyAddressed: string;
@@ -794,6 +863,7 @@ interface RemediationPlan {
   targetCompletionDate: Date;
   status: 'not_started' | 'in_progress' | 'completed' | 'delayed';
   progressPercentage: number;
+}
 }
 
 // Additional supporting types

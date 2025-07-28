@@ -12,6 +12,7 @@ import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
 // File system types
+}
 export interface TreeNode {
   id: string;
   name: string;
@@ -32,6 +33,7 @@ export interface TreeNode {
     author?: string;
     version?: string;
     thumbnail?: string;
+}
   };
   permissions?: {
     read: boolean;
@@ -41,18 +43,22 @@ export interface TreeNode {
   };
 }
 
+}
 export interface FileOperationResponse {
   success: boolean;
   message?: string;
   data?: unknown;
   error?: string;
 }
+}
 
+}
 export interface FileStats {
   totalFiles: number;
   totalFolders: number;
   totalSize: number;
   recentFiles: TreeNode[];
+}
 }
 
 // Docker volume paths (configurable via environment)
@@ -90,6 +96,7 @@ function toFsPath(apiPath: string): string {
  * Get file metadata from file system
  */
 async function getFileMetadata(fsPath: string, apiPath: string): Promise<TreeNode | null> {
+
   try {
     const stats = await fs.stat(fsPath);
     const name = path.basename(fsPath);
@@ -161,6 +168,7 @@ async function getFileMetadata(fsPath: string, apiPath: string): Promise<TreeNod
  * Build directory tree recursively
  */
 async function buildDirectoryTree(fsPath: string, apiPath: string, depth = 0): Promise<TreeNode[]> {
+
   const maxDepth = 10; // Prevent infinite recursion
   if (depth > maxDepth) return [];
 

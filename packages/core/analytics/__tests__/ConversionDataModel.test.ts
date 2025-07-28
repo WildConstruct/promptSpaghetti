@@ -7,58 +7,57 @@ describe('ConversionDataRelationshipManager', () => {
   let manager: ConversionDataRelationshipManager;
   let mockBaseEvent: EnhancedConversionEvent;
   beforeEach(() => {
-    manager = new ConversionDataRelationshipManager();
-    mockBaseEvent = {
-      id: 'test-event-001',
-      userId: 'user-123',
-      sessionId: 'session-456',
-      timestamp: Date.now(),
-      type: 'template_purchased',
-      category: 'revenue',
-      value: 25.00,
-      properties: { ,
-        templateId: 'tpl-character-dev-001',
-        funnelId: 'marketplace-discovery',
-        stepId: 'template-purchase',
-        stepOrder: 4,
-      },
-      metadata: {,
-        userAgent: 'test-agent',
-        referrer: 'https://example.com',
-      },
-      deviceFingerprint: 'test-fingerprint',
+  manager = new ConversionDataRelationshipManager();
+  mockBaseEvent = {
+  id: 'test-event-001',
+  userId: 'user-123',
+  sessionId: 'session-456',
+  timestamp: Date.now(),
+  type: 'template_purchased',
+  category: 'revenue',
+  value: 25.00,
+  properties: {,
+  templateId: 'tpl-character-dev-001',
+  funnelId: 'marketplace-discovery',
+  stepId: 'template-purchase',
+  stepOrder: 4,
+},
+  metadata: {,
+  userAgent: 'test-agent',
+  referrer: 'https://example.com',
+},
+  deviceFingerprint: 'test-fingerprint',
       crossDeviceUserId: undefined,
       attributionData: {,
-        touchpoints: [],
-        primaryAttribution: {,
-          name: 'first_touch',
-          weight: 1.0,
-          touchpoint: {,
-            id: 'tp-001',
-            timestamp: Date.now(),
-            channel: 'direct',
-            source: 'direct',
-            medium: 'none',
-            position: 1,
-            influence: 1.0,
-          },
-          attribution_value: 0,
-        },
-        assistedAttribution: [],
-      },
-      privacyConsent: {,
-        tracking: true,
-        analytics: true,
-        personalization: true,
-        crossDevice: false,
-      },
-      realTimeProcessing: {,
-        streamId: 'stream-123',
-        batchId: 'batch-456',
-        processed: false,
-        latency: 0,
-      }
-    };
+  touchpoints: [],
+  primaryAttribution: {,
+  name: 'first_touch',
+  weight: 1.0,
+  touchpoint: {,
+  id: 'tp-001',
+  timestamp: Date.now(),
+  channel: 'direct',
+  source: 'direct',
+  medium: 'none',
+  position: 1,
+  influence: 1.0,
+},
+  attribution_value: 0;
+  },
+  assistedAttribution: [];
+  },
+  privacyConsent: {,
+  tracking: true,
+  analytics: true,
+  personalization: true,
+  crossDevice: false,
+},
+  realTimeProcessing: {,
+  streamId: 'stream-123',
+  batchId: 'batch-456',
+  processed: false,
+  latency: 0,
+};
   });
   describe('Event Enrichment', () => {
     it('should enrich conversion event with full entity relationships', async () => {
@@ -103,13 +102,12 @@ describe('ConversionDataRelationshipManager', () => {
       expect(typeof enrichedEvent.sessionContext.referrerCategory).toBe('string');
     });
     it('should handle events without template context', async () => {
-      const eventWithoutTemplate = {
-        ...mockBaseEvent,
-        properties: {,
-          funnelId: 'user-onboarding',
-          stepId: 'profile-setup',
-        }
-      };
+  const eventWithoutTemplate = {
+  ...mockBaseEvent,
+  properties: {,
+  funnelId: 'user-onboarding',
+  stepId: 'profile-setup',
+};
       const enrichedEvent = await manager.enrichConversionEvent(eventWithoutTemplate);
       expect(enrichedEvent.templateContext).toBeUndefined();
       expect(enrichedEvent.userContext).toBeDefined();
@@ -141,16 +139,14 @@ describe('ConversionDataRelationshipManager', () => {
         { referrer: 'https://example.com/page', expected: 'referral' }
       ];
       for (const testCase of testCases) {
-        const eventWithReferrer = {
-          ...mockBaseEvent,
-          metadata: {,
-            ...mockBaseEvent.metadata,
-            referrer: testCase.referrer,
-          }
-        };
+  const eventWithReferrer = {
+  ...mockBaseEvent,
+  metadata: {,
+  ...mockBaseEvent.metadata,
+  referrer: testCase.referrer,
+};
         const enrichedEvent = await manager.enrichConversionEvent(eventWithReferrer);
         expect(enrichedEvent.sessionContext.referrerCategory).toBe(testCase.expected);
-      }
     });
   });
   describe('User Entity Management', () => {
@@ -162,24 +158,24 @@ describe('ConversionDataRelationshipManager', () => {
       expect(enrichedEvent.userContext.engagementScore).toBe(0.5);
     });
     it('should update user profile information', () => {
-      const userId = 'user-456';
-      manager.updateUserProfile(userId, {)
-        id: userId,
-        registrationDate: Date.now() - 604800000, // 1 week ago
-        totalEvents: 50,
-        averageValue: 75,
-        riskScore: 0.3,
-        verificationStatus: 'verified',
-        locationHistory: ['US'],
-        deviceHistory: ['device-1', 'device-2']
-      });
+  const userId = 'user-456';
+  manager.updateUserProfile(userId, {)
+  id: userId,
+  registrationDate: Date.now() - 604800000, // 1 week ago,
+  totalEvents: 50,
+  averageValue: 75,
+  riskScore: 0.3,
+  verificationStatus: 'verified',
+  locationHistory: ['US'],
+  deviceHistory: ['device-1', 'device-2'],
+});
       // Create event for updated user
       const eventForUpdatedUser = {
         ...mockBaseEvent,
         userId
       };
       return manager.enrichConversionEvent(eventForUpdatedUser).then(enrichedEvent => {)
-        expect(enrichedEvent.userContext.riskScore).toBe(0.3);
+  expect(enrichedEvent.userContext.riskScore).toBe(0.3);
         expect(enrichedEvent.userContext.lifetimeValue).toBeGreaterThan(0);
       });
     });
@@ -215,12 +211,11 @@ describe('ConversionDataRelationshipManager', () => {
       expect(enrichedEvent.funnelContext.timeInFunnel).toBeGreaterThan(0);
     });
     it('should handle missing funnel properties gracefully', async () => {
-      const eventWithoutFunnel = {
-        ...mockBaseEvent,
-        properties: {,
-          templateId: 'tpl-001',
-        }
-      };
+  const eventWithoutFunnel = {
+  ...mockBaseEvent,
+  properties: {,
+  templateId: 'tpl-001',
+};
       const enrichedEvent = await manager.enrichConversionEvent(eventWithoutFunnel);
       expect(enrichedEvent.funnelContext.funnelId).toBe('unknown');
       expect(enrichedEvent.funnelContext.stepId).toBe('unknown');
@@ -237,10 +232,10 @@ describe('ConversionDataRelationshipManager', () => {
       expect(enrichedEvent.sessionContext.deviceFingerprint).toBe('test-fingerprint');
     });
     it('should handle missing device fingerprint', async () => {
-      const eventWithoutFingerprint = {
-        ...mockBaseEvent,
-        deviceFingerprint: undefined,
-      };
+  const eventWithoutFingerprint = {
+  ...mockBaseEvent,
+  deviceFingerprint: undefined,
+};
       const enrichedEvent = await manager.enrichConversionEvent(eventWithoutFingerprint);
       expect(enrichedEvent.sessionContext.deviceFingerprint).toBe('');
     });
@@ -277,7 +272,6 @@ describe('ConversionDataRelationshipManager', () => {
         expect(typeof property.metadata.lastUpdated).toBe('number');
         expect(property.metadata.lastUpdated).toBeLessThanOrEqual(Date.now());
         expect(['valid', 'invalid', 'pending']).toContain(property.metadata.validationStatus);
-      }
     });
     it('should assign correct confidence scores by source', async () => {
       const enrichedEvent = await manager.enrichConversionEvent(mockBaseEvent);
@@ -311,40 +305,39 @@ describe('ConversionDataRelationshipManager', () => {
         category: 'engagement',
         properties: {},
         metadata: {,
-          userAgent: 'test',
-          referrer: '',
-        },
-        attributionData: {,
-          touchpoints: [],
-          primaryAttribution: {,
-            name: 'direct',
-            weight: 1.0,
-            touchpoint: {,
-              id: 'direct',
-              timestamp: Date.now(),
-              channel: 'direct',
-              source: 'direct',
-              medium: 'none',
-              position: 1,
-              influence: 1.0,
-            },
-            attribution_value: 0,
-          },
-          assistedAttribution: [],
-        },
-        privacyConsent: {,
-          tracking: true,
-          analytics: true,
-          personalization: false,
-          crossDevice: false,
-        },
-        realTimeProcessing: {,
-          streamId: 'stream',
-          batchId: 'batch',
-          processed: false,
-          latency: 0,
-        }
-      } as EnhancedConversionEvent;
+  userAgent: 'test',
+  referrer: '',
+},
+  attributionData: {,
+  touchpoints: [],
+  primaryAttribution: {,
+  name: 'direct',
+  weight: 1.0,
+  touchpoint: {,
+  id: 'direct',
+  timestamp: Date.now(),
+  channel: 'direct',
+  source: 'direct',
+  medium: 'none',
+  position: 1,
+  influence: 1.0,
+},
+  attribution_value: 0;
+  },
+  assistedAttribution: [];
+  },
+  privacyConsent: {,
+  tracking: true,
+  analytics: true,
+  personalization: false,
+  crossDevice: false,
+},
+  realTimeProcessing: {,
+  streamId: 'stream',
+  batchId: 'batch',
+  processed: false,
+  latency: 0,
+} as EnhancedConversionEvent;
       const enrichedEvent = await manager.enrichConversionEvent(minimalEvent);
       expect(enrichedEvent).toBeDefined();
       expect(enrichedEvent.schemaVersion).toBe('1.0.0');
@@ -354,12 +347,12 @@ describe('ConversionDataRelationshipManager', () => {
     });
   });
   describe('Error Handling', () => {
-    it('should handle missing required fields gracefully', async () => {
-      const incompleteEvent = {
-        ...mockBaseEvent,
-        userId: '', // Empty user ID
-        sessionId: '' // Empty session ID,
-      };
+  it('should handle missing required fields gracefully', async () => {
+  const incompleteEvent = {
+  ...mockBaseEvent,
+  userId: '', // Empty user ID,
+  sessionId: '' // Empty session ID,
+};
       const enrichedEvent = await manager.enrichConversionEvent(incompleteEvent);
       // Should still enrich what it can
       expect(enrichedEvent).toBeDefined();
@@ -367,14 +360,13 @@ describe('ConversionDataRelationshipManager', () => {
       expect(enrichedEvent.validation).toBeDefined();
     });
     it('should handle null/undefined property values', async () => {
-      const eventWithNulls = {
-        ...mockBaseEvent,
-        value: null,
-        properties: {,
-          templateId: undefined,
-          funnelId: null,
-        }
-      } as any;
+  const eventWithNulls = {
+  ...mockBaseEvent,
+  value: null,
+  properties: {,
+  templateId: undefined,
+  funnelId: null,
+} as any;
       const enrichedEvent = await manager.enrichConversionEvent(eventWithNulls);
       expect(enrichedEvent).toBeDefined();
       expect(enrichedEvent.flexibleProperties).toBeDefined();
@@ -391,9 +383,10 @@ describe('ConversionDataRelationshipManager', () => {
     });
     it('should handle multiple concurrent enrichments', async () => {
       const events = Array.from({ length: 10 }, (_, i) => ({)
-        ...mockBaseEvent,
-        id: `concurrent-event-${i}`,}
-        userId: `user-${i}`}
+  ...mockBaseEvent,
+        id: `concurrent-event-${i}`}
+},
+  userId: `user-${i}`}
       }));
       const startTime = Date.now();
       const enrichedEvents = await Promise.all(;);

@@ -6,13 +6,15 @@
  */
 import React from 'react';
 import { Node, Edge } from 'reactflow';
+
 export interface SelectionRect {
     startX: number;
     startY: number;
     currentX: number;
     currentY: number;
     active: boolean;
-}
+
+
 export interface MultiSelectionManagerProps {
     nodes: Node[];
     edges: Edge[];
@@ -23,10 +25,11 @@ export interface MultiSelectionManagerProps {
     onSelectionChange: (selection: {),
         nodes: Node[];
         edges: Edge[];
+
     }) => void;
     theme?: 'light' | 'dark' | 'cinema';
     disabled?: boolean;
-}
+
 export declare const MultiSelectionManager: React.FC<MultiSelectionManagerProps>;
 export default MultiSelectionManager;
 //# sourceMappingURL=MultiSelectionManager.d.ts.map

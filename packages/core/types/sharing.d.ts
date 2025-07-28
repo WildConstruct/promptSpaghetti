@@ -5,19 +5,20 @@
 export type ShareAccessLevel = 'public' | 'restricted' | 'private';
 export type SharePermission = 'view' | 'comment' | 'edit' | 'admin';
 export type ShareStatus = 'active' | 'expired' | 'revoked' | 'pending';
+
 export interface UserInfo {
     id: string;
     email: string;
     name: string;
     avatar?: string;
-}
+
 export interface Collaborator extends UserInfo {
     role: SharePermission;
     addedAt: Date;
     permissions: string[];
     invitedBy: string;
     acceptedAt?: Date;
-}
+
 export interface SharingConfig {
     accessLevel: ShareAccessLevel;
     permissions: SharePermission;
@@ -30,7 +31,7 @@ export interface SharingConfig {
     allowCopy: boolean;
     trackAnalytics: boolean;
     notifyOnAccess: boolean;
-}
+
 export interface ShareSecurityConfig {
     dataClassification: 'public' | 'internal' | 'confidential' | 'restricted';
     encryptionRequired: boolean;
@@ -47,7 +48,7 @@ export interface ShareSecurityConfig {
         maxConcurrentUsers?: number;
         sessionTimeout?: number;
     };
-}
+
 export interface SharedContent {
     id: string;
     type: 'graph' | 'template' | 'bundle' | 'dataset';
@@ -61,7 +62,7 @@ export interface SharedContent {
     createdAt: Date;
     updatedAt: Date;
     status: ShareStatus;
-}
+
 export interface SharedContentMetadata {
     exportId: string;
     version: string;
@@ -73,14 +74,14 @@ export interface SharedContentMetadata {
     checksumMd5: string;
     versionControl: VersionControl;
     annotations: ContentAnnotations;
-}
+
 export interface VersionControl {
     currentVersion: string;
     versions: ContentVersion[];
     isLatest: boolean;
     changesFromPrevious?: string[];
     mergeConflicts?: MergeConflict[];
-}
+
 export interface ContentVersion {
     version: string;
     timestamp: Date;
@@ -88,19 +89,19 @@ export interface ContentVersion {
     changes: string[];
     size: number;
     checksum: string;
-}
+
 export interface MergeConflict {
     path: string;
     type: 'content' | 'metadata' | 'permissions';
     conflictingVersions: string[];
     resolution?: 'auto' | 'manual';
-}
+
 export interface ContentAnnotations {
     connectionLabels: ConnectionLabel[];
     stickyNotes: StickyNote[];
     regions: AnnotationRegion[];
     comments: ShareComment[];
-}
+
 export interface ConnectionLabel {
     id: string;
     sourceNodeId: string;
@@ -109,7 +110,7 @@ export interface ConnectionLabel {
     color?: string;
     author: UserInfo;
     createdAt: Date;
-}
+
 export interface StickyNote {
     id: string;
     x: number;
@@ -121,7 +122,7 @@ export interface StickyNote {
     author: UserInfo;
     createdAt: Date;
     updatedAt: Date;
-}
+
 export interface AnnotationRegion {
     id: string;
     x: number;
@@ -133,7 +134,7 @@ export interface AnnotationRegion {
     color: string;
     author: UserInfo;
     createdAt: Date;
-}
+
 export interface ShareComment {
     id: string;
     content: string;
@@ -148,7 +149,7 @@ export interface ShareComment {
     resolved: boolean;
     resolvedBy?: UserInfo;
     resolvedAt?: Date;
-}
+
 export interface ShareAnalytics {
     views: ShareView[];
     downloads: ShareDownload[];
@@ -160,7 +161,7 @@ export interface ShareAnalytics {
     geographicDistribution: GeographicStats[];
     deviceStats: DeviceStats[];
     conversionMetrics: ConversionMetrics;
-}
+
 export interface ShareView {
     id: string;
     viewerInfo: ViewerInfo;
@@ -170,7 +171,7 @@ export interface ShareView {
     userAgent: string;
     referrer?: string;
     geolocation?: GeoLocation;
-}
+
 export interface ShareDownload {
     id: string;
     downloadedBy: ViewerInfo;
@@ -180,7 +181,7 @@ export interface ShareDownload {
     ipAddress: string;
     success: boolean;
     errorReason?: string;
-}
+
 export interface CollaborationEvent {
     id: string;
     type: 'comment' | 'edit' | 'annotation' | 'permission_change';
@@ -188,14 +189,14 @@ export interface CollaborationEvent {
     timestamp: Date;
     details: any;
     impact: 'minor' | 'major' | 'breaking';
-}
+
 export interface ViewerInfo {
     id?: string;
     email?: string;
     name?: string;
     isAuthenticated: boolean;
     sessionId: string;
-}
+
 export interface GeoLocation {
     country: string;
     region: string;
@@ -204,24 +205,24 @@ export interface GeoLocation {
         lat: number;
         lng: number;
     };
-}
+
 export interface GeographicStats {
     country: string;
     views: number;
     uniqueViewers: number;
-}
+
 export interface DeviceStats {
     deviceType: 'desktop' | 'tablet' | 'mobile';
     operatingSystem: string;
     browser: string;
     views: number;
-}
+
 export interface ConversionMetrics {
     viewToDownload: number;
     viewToCollaboration: number;
     viewToSignup: number;
     averageTimeToAction: number;
-}
+
 export interface CreateShareRequest {
     contentId: string;
     contentType: SharedContent['type'];
@@ -230,7 +231,7 @@ export interface CreateShareRequest {
     sharing: Partial<SharingConfig>;
     security?: Partial<ShareSecurityConfig>;
     collaborators?: string[];
-}
+
 export interface CreateShareResponse {
     success: boolean;
     shareId: string;
@@ -238,19 +239,19 @@ export interface CreateShareResponse {
     shareToken: string;
     expiresAt?: Date;
     error?: string;
-}
+
 export interface UpdateShareRequest {
     title?: string;
     description?: string;
     sharing?: Partial<SharingConfig>;
     security?: Partial<ShareSecurityConfig>;
-}
+
 export interface ShareAccessRequest {
     shareToken: string;
     password?: string;
     userAgent: string;
     ipAddress: string;
-}
+
 export interface ShareAccessResponse {
     success: boolean;
     content?: SharedContent;
@@ -261,13 +262,13 @@ export interface ShareAccessResponse {
         viewCount: number;
         lastAccessed: Date;
     };
-}
+
 export interface SharePermissionRequest {
     shareId: string;
     userId: string;
     permission: SharePermission;
     message?: string;
-}
+
 export interface ShareAnalyticsRequest {
     shareId: string;
     timeRange?: {
@@ -275,17 +276,17 @@ export interface ShareAnalyticsRequest {
         end: Date;
     };
     metrics?: ('views' | 'downloads' | 'collaborations')[];
-}
+
 export interface ShareAnalyticsResponse {
     success: boolean;
     analytics: ShareAnalytics;
     error?: string;
-}
+
 export declare class ShareError extends Error {
     code: ShareErrorCode;
     details?: any | undefined;
     constructor(message: string, code: ShareErrorCode, details?: any | undefined);
-}
+
 export declare enum ShareErrorCode {
     SHARE_NOT_FOUND = "SHARE_NOT_FOUND",
     SHARE_EXPIRED = "SHARE_EXPIRED",
@@ -296,7 +297,7 @@ export declare enum ShareErrorCode {
     INVALID_SHARE_TOKEN = "INVALID_SHARE_TOKEN",
     RATE_LIMITED = "RATE_LIMITED",
     SECURITY_VIOLATION = "SECURITY_VIOLATION"
-}
+
 export interface SharingSystemConfig {
     maxShareDuration: number;
     defaultAccessLevel: ShareAccessLevel;
@@ -309,14 +310,14 @@ export interface SharingSystemConfig {
     maxFileSizeForSharing: number;
     supportedFormats: string[];
     encryptionRequired: boolean;
-}
+
 export interface ShareEvent {
     type: ShareEventType;
     shareId: string;
     timestamp: Date;
     user?: UserInfo;
     data: any;
-}
+
 export declare enum ShareEventType {
     SHARE_CREATED = "share_created",
     SHARE_ACCESSED = "share_accessed",
@@ -329,5 +330,5 @@ export declare enum ShareEventType {
     COMMENT_ADDED = "comment_added",
     CONTENT_UPDATED = "content_updated",
     ANNOTATION_ADDED = "annotation_added"
-}
+
 //# sourceMappingURL=sharing.d.ts.map

@@ -11,6 +11,7 @@ import {
   MARSRegionTemplate,
   ZadaPromptPattern
 } from '../../services/AdvancedPromptingCollaborationService';
+
 interface AdvancedPromptingCollaborationPanelProps {
     collaborationService: AdvancedPromptingCollaborationService;
     currentUser: FilmIndustryUser;
@@ -18,7 +19,8 @@ interface AdvancedPromptingCollaborationPanelProps {
     onZadaPatternCreate?: (pattern: ZadaPromptPattern) => void;
     onVFXExport?: (exportData: unknown) => void;
     className?: string;
-}
+
+
 declare const AdvancedPromptingCollaborationPanel: React.FC<AdvancedPromptingCollaborationPanelProps>;
 export default AdvancedPromptingCollaborationPanel;
 //# sourceMappingURL=AdvancedPromptingCollaborationPanel.d.ts.map

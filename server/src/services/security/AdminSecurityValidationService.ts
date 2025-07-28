@@ -20,6 +20,7 @@ import validator from 'validator';
 // Security Validation Types
 // =============================================================================
 
+}
 export interface SecurityValidationContext {
   userId: string;
   sessionId: string;
@@ -32,7 +33,9 @@ export interface SecurityValidationContext {
   requestData?: unknown;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface AdminOperation {
   type: AdminOperationType;
   category: AdminOperationCategory;
@@ -41,6 +44,7 @@ export interface AdminOperation {
   requiresMFA?: boolean;
   privilegeLevel: PrivilegeLevel;
   auditLevel: AuditLevel;
+}
 }
 
 export type AdminOperationType = 
@@ -68,6 +72,7 @@ export type SecuritySeverity = 'low' | 'medium' | 'high' | 'critical' | 'emergen
 export type PrivilegeLevel = 'standard' | 'elevated' | 'admin' | 'super_admin' | 'system';
 export type AuditLevel = 'basic' | 'detailed' | 'comprehensive' | 'forensic';
 
+}
 export interface SecurityValidationResult {
   isValid: boolean;
   securityLevel: SecuritySeverity;
@@ -80,7 +85,9 @@ export interface SecurityValidationResult {
   auditingRequired: boolean;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface SecurityViolation {
   violationType: ViolationType;
   severity: SecuritySeverity;
@@ -90,6 +97,7 @@ export interface SecurityViolation {
   detectionTime: Date;
   remediation: RemediationAction[];
   evidence: Record<string, any>;
+}
 }
 
 export type ViolationType = 
@@ -104,18 +112,22 @@ export type ViolationType =
   | 'authentication_bypass'
   | 'audit_tampering';
 
+}
 export interface SecurityWarning {
   warningType: string;
   message: string;
   severity: SecuritySeverity;
   recommendations: string[];
 }
+}
 
+}
 export interface RemediationAction {
   action: string;
   priority: number;
   automated: boolean;
   description: string;
+}
 }
 
 export type AuthMethod = 'mfa_totp' | 'mfa_sms' | 'hardware_key' | 'biometric' | 'admin_approval';
@@ -124,6 +136,7 @@ export type AuthMethod = 'mfa_totp' | 'mfa_sms' | 'hardware_key' | 'biometric' |
 // Security Policy Configurations
 // =============================================================================
 
+}
 export interface AdminSecurityPolicy {
   id: string;
   name: string;
@@ -139,14 +152,18 @@ export interface AdminSecurityPolicy {
   auditRequirements: AuditRequirement[];
   enabled: boolean;
 }
+}
 
+}
 export interface TimeRestriction {
   startTime: string; // HH:mm
   endTime: string;   // HH:mm
   days: number[];    // 0-6 (Sunday-Saturday)
   timezone: string;
 }
+}
 
+}
 export interface ValidationRule {
   field: string;
   type: 'string' | 'number' | 'email' | 'url' | 'json' | 'custom';
@@ -158,9 +175,11 @@ export interface ValidationRule {
   sanitization: SanitizationType[];
   customValidator?: string;
 }
+}
 
 export type SanitizationType = 'html_escape' | 'sql_escape' | 'json_escape' | 'trim' | 'lowercase' | 'uppercase';
 
+}
 export interface RateLimit {
   operation: string;
   maxRequests: number;
@@ -168,13 +187,16 @@ export interface RateLimit {
   penalty: 'warn' | 'block' | 'delay';
   penaltyDuration: number; // minutes
 }
+}
 
+}
 export interface AuditRequirement {
   level: AuditLevel;
   retention: number; // days
   fields: string[];
   realTimeAlerts: boolean;
   complianceFlags: string[];
+}
 }
 
 // =============================================================================
@@ -204,6 +226,7 @@ export class AdminSecurityValidationService {
   }
 
   async initialize(): Promise<void> {
+
     await this.loadSecurityPolicies();
     await this.initializeRateLimiting();
     await this.setupPatternDetection();
@@ -215,6 +238,7 @@ export class AdminSecurityValidationService {
   // =============================================================================
 
   async validateAdminOperation(context: SecurityValidationContext): Promise<SecurityValidationResult> {
+
     this.logger.debug(`Validating admin operation: ${context.operation.type}`, {
       userId: context.userId,
       operation: context.operation.type,
@@ -529,12 +553,12 @@ export class AdminSecurityValidationService {
             is_admin: user.is_admin,
             is_super_admin: user.is_super_admin
           }
-        },
+  }
         resource: {
           type: context.resourceType,
           id: context.resourceId || '',
           attributes: {}
-        },
+  }
         environment: {
           ip_address: context.ipAddress,
           user_agent: context.userAgent,
@@ -843,6 +867,7 @@ export class AdminSecurityValidationService {
   // =============================================================================
 
   private async loadSecurityPolicies(): Promise<void> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM admin_security_policies WHERE enabled = true
@@ -867,6 +892,7 @@ export class AdminSecurityValidationService {
   }
 
   private async getSecurityPolicy(operationType: AdminOperationType): Promise<AdminSecurityPolicy | null> {
+
     return this.securityPolicies.get(operationType) || null;
   }
 
@@ -895,6 +921,7 @@ export class AdminSecurityValidationService {
   }
 
   private async validateFieldValue(value: Error, rule: ValidationRule): Promise<string | null> {
+
     const stringValue = value.toString();
 
     // Type validation
@@ -944,7 +971,8 @@ export class AdminSecurityValidationService {
       sql: /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|UNION|ALTER)\b|--|\/\*|\*\/|'|;)/i,
       xss: /(<script|javascript:|on\w+\s*=|<iframe|<object|<embed)/i,
       nosql: /(\$where|\$regex|\$ne|\$gt|\$lt)/i,
-      command: /(&&|\|\||;|`|\$\(|\${)/,
+      command: /(&&|\|\||;|`|\$\(|\${
+  /,
       ldap: /(\*|\(|\)|&|\|)/
     };
 
@@ -990,6 +1018,7 @@ export class AdminSecurityValidationService {
     context: SecurityValidationContext, 
     result: SecurityValidationResult
   ): Promise<boolean> {
+
     // Check if operation explicitly requires MFA
     if (context.operation.requiresMFA) {
       return true;
@@ -1012,6 +1041,7 @@ export class AdminSecurityValidationService {
   }
 
   private async getRequiredAuthMethods(context: SecurityValidationContext): Promise<AuthMethod[]> {
+
     const methods: AuthMethod[] = [];
     
     // Base MFA for high-privilege operations
@@ -1036,6 +1066,7 @@ export class AdminSecurityValidationService {
     context: SecurityValidationContext, 
     result: SecurityValidationResult
   ): Promise<void> {
+
     try {
       await this.db.query(`
         INSERT INTO security_events (
@@ -1066,6 +1097,7 @@ export class AdminSecurityValidationService {
 
   // Placeholder methods for full implementation
   private async initializeRateLimiting(): Promise<void> {
+
     // Initialize rate limiting cache cleanup
     setInterval(() => {
       const now = Date.now();
@@ -1088,6 +1120,7 @@ export class AdminSecurityValidationService {
   }
 
   private async setupPatternDetection(): Promise<void> {
+
     // Initialize suspicious pattern detection
     // This would include behavioral analysis, anomaly detection, etc.
   }
@@ -1115,16 +1148,20 @@ export class AdminSecurityValidationService {
 // Supporting Interfaces
 // =============================================================================
 
+}
 interface RateLimitState {
   requests: number[];
   blocked: boolean;
   blockedUntil: number;
 }
+}
 
+}
 interface SuspiciousActivity {
   userId: string;
   patterns: string[];
   severity: SecuritySeverity;
   detectedAt: Date;
   count: number;
+}
 }

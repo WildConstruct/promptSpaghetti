@@ -218,14 +218,14 @@ router.get('/:categoryId',
           searchable: row.searchable,
           autoClassification: row.auto_classification,
           requireApproval: row.require_approval
-        },
+  }
         stats: {
           templateCount: parseInt(row.template_count) || 0,
           activeCount: parseInt(row.active_count) || 0,
           totalDownloads: parseInt(row.total_downloads) || 0,
           averageRating: parseFloat(row.average_rating) || 0,
           trendingScore: parseFloat(row.trending_score) || 0
-        },
+  }
         metadata: {
           createdAt: row.created_at,
           updatedAt: row.updated_at,
@@ -234,7 +234,7 @@ router.get('/:categoryId',
           sortOrder: row.sort_order,
           keywords: row.keywords || [],
           aliases: row.aliases || []
-        },
+  }
         children: childrenResult.rows,
         recentTemplates: templatesResult.rows
       };
@@ -550,7 +550,7 @@ router.get('/tags',
         categorizationService['pool'].query(
           'SELECT COUNT(*) FROM marketplace_tags WHERE approved = $1',
           [approved === 'true']
-        )
+
       ]);
 
       const tags = tagsResult.rows.map(row => ({

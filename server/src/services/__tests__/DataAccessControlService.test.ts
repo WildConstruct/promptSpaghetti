@@ -91,7 +91,7 @@ describe('DataAccessControlService', () => {
           operation: 'READ',
           classification: 'CONFIDENTIAL',
           riskScore: expect.any(Number)
-        })
+  }
       });
     });
 
@@ -104,14 +104,14 @@ describe('DataAccessControlService', () => {
             owner_id: 'owner-789',
             metadata: '{"tags":["sensitive"]}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["basic_user"]',
             permissions: '["READ_PUBLIC","READ_INTERNAL"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(validRequest);
@@ -129,7 +129,7 @@ describe('DataAccessControlService', () => {
         metadata: expect.objectContaining({
           reason: expect.stringContaining('Insufficient permissions'),
           requiredPermission: 'READ_CONFIDENTIAL'
-        })
+  }
       });
     });
 
@@ -159,14 +159,14 @@ describe('DataAccessControlService', () => {
             owner_id: 'owner-789',
             metadata: '{"restrictions":{"timeWindows":[{"start":"09:00","end":"17:00","days":["MON","TUE","WED","THU","FRI"]}]}}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_admin"]',
             permissions: '["READ_RESTRICTED","WRITE_RESTRICTED"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(restrictedRequest);
@@ -198,14 +198,14 @@ describe('DataAccessControlService', () => {
             owner_id: 'owner-789',
             metadata: '{}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_viewer"]',
             permissions: '["READ_CONFIDENTIAL"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(suspiciousRequest);
@@ -218,8 +218,8 @@ describe('DataAccessControlService', () => {
             riskFactors: expect.arrayContaining([
               expect.stringContaining('Suspicious user agent')
             ])
-          })
-        })
+  }
+  }
       );
     });
 
@@ -265,14 +265,14 @@ describe('DataAccessControlService', () => {
             owner_id: mockUser.id, // User is the owner
             metadata: '{}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_owner","employee"]',
             permissions: '["WRITE_INTERNAL","READ_INTERNAL"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ request_id: 'req-auto-123' }] 
         }); // store request
@@ -301,14 +301,14 @@ describe('DataAccessControlService', () => {
             owner_id: 'different-owner',
             metadata: '{"sensitive": true}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["data_viewer"]',
             permissions: '["READ_RESTRICTED"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ request_id: 'req-manual-456' }] 
         });
@@ -345,7 +345,7 @@ describe('DataAccessControlService', () => {
           access_level: 'GRANTED',
           timestamp: new Date(),
           risk_score: 25
-        },
+  }
         {
           id: 'audit-2',
           user_id: mockUser.id,
@@ -565,14 +565,14 @@ describe('DataAccessControlService', () => {
             owner_id: 'owner-123',
             metadata: '{}'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ 
           rows: [{ 
             user_id: mockUser.id,
             roles: '["employee"]',
             permissions: '["READ_PUBLIC"]'
           }] 
-        })
+  }
         .mockResolvedValueOnce({ rowCount: 1 });
 
       const result = await dataAccessService.checkAccess(requestWithoutContext);

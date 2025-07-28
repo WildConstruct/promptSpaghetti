@@ -23,7 +23,7 @@ export interface ContentSafetyRequest {
         description?: string;
         body?: string;
         metadata?: Record<string, any>;
-        attachments?: ContentAttachment[];
+        attachments?: ContentAttachment;
     };
     submission_context: {
         submitter_id: string;
@@ -50,7 +50,7 @@ export interface ContentSafetyRequest {
     business_context: {
         revenue_impact: 'none' | 'low' | 'medium' | 'high';
         brand_sensitivity: 'low' | 'medium' | 'high';
-        regulatory_requirements: string[];
+        regulatory_requirements: string;
         stakeholder_visibility: 'internal' | 'public' | 'regulatory';
     };
 }
@@ -73,8 +73,8 @@ export interface AttachmentScanResult {
     };
     metadata_analysis: {
         personal_data_detected: boolean;
-        sensitive_information: string[];
-        compliance_issues: string[];
+        sensitive_information: string;
+        compliance_issues: string;
     };
 }
 export interface ContentSafetyResult {
@@ -84,18 +84,18 @@ export interface ContentSafetyResult {
     overall_decision: SafetyDecision;
     overall_risk: SafetyRisk;
     confidence_score: number;
-    stage_results: SafetyStageResult[];
+    stage_results: SafetyStageResult;
     filtering_result?: ContentFilteringResult;
     moderation_result?: EnhancedModerationResult;
     safety_assessment: SafetyAssessment;
     risk_analysis: RiskAnalysis;
-    required_actions: RequiredAction[];
-    monitoring_requirements: MonitoringRequirement[];
+    required_actions: RequiredAction;
+    monitoring_requirements: MonitoringRequirement;
     appeal_eligibility: AppealEligibility;
-    escalation_recommendations: EscalationRecommendation[];
-    integration_updates: IntegrationUpdate[];
+    escalation_recommendations: EscalationRecommendation;
+    integration_updates: IntegrationUpdate;
     compliance_status: ComplianceStatus;
-    audit_trail: AuditEntry[];
+    audit_trail: AuditEntry;
     processing_metrics: ProcessingMetrics;
     timestamp: string;
     expires_at?: string;
@@ -107,9 +107,9 @@ export interface SafetyStageResult {
     decision: SafetyDecision;
     confidence: number;
     processing_time_ms: number;
-    findings: SafetyFinding[];
-    recommendations: string[];
-    next_stage_suggestions: ContentSafetyStage[];
+    findings: SafetyFinding;
+    recommendations: string;
+    next_stage_suggestions: ContentSafetyStage;
     reviewer_info?: {
         reviewer_id: string;
         reviewer_type: 'automated' | 'human' | 'community';
@@ -122,10 +122,10 @@ export interface SafetyFinding {
     severity: SafetyRisk;
     category: string;
     description: string;
-    evidence: string[];
+    evidence: string;
     location?: string;
     resolution_required: boolean;
-    resolution_suggestions: string[];
+    resolution_suggestions: string;
     auto_fixable: boolean;
     business_impact: BusinessImpactAssessment;
 }
@@ -166,13 +166,13 @@ export interface SafetyAssessment {
     };
 }
 export interface RiskAnalysis {
-    immediate_risks: RiskFactor[];
-    short_term_risks: RiskFactor[];
-    long_term_risks: RiskFactor[];
-    risk_mitigation: RiskMitigation[];
-    monitoring_recommendations: RiskMonitoring[];
+    immediate_risks: RiskFactor;
+    short_term_risks: RiskFactor;
+    long_term_risks: RiskFactor;
+    risk_mitigation: RiskMitigation;
+    monitoring_recommendations: RiskMonitoring;
     risk_trend: 'increasing' | 'stable' | 'decreasing';
-    risk_correlation: RiskCorrelation[];
+    risk_correlation: RiskCorrelation;
 }
 export interface RiskFactor {
     risk_type: string;
@@ -180,8 +180,8 @@ export interface RiskFactor {
     probability: number;
     potential_impact: string;
     time_horizon: 'immediate' | 'short_term' | 'long_term';
-    contributing_factors: string[];
-    indicators: string[];
+    contributing_factors: string;
+    indicators: string;
     thresholds: Record<string, number>;
 }
 export interface RiskMitigation {
@@ -196,8 +196,8 @@ export interface RiskMonitoring {
     monitoring_type: string;
     monitoring_frequency: string;
     alert_thresholds: Record<string, number>;
-    escalation_triggers: string[];
-    automated_responses: string[];
+    escalation_triggers: string;
+    automated_responses: string;
 }
 export interface RiskCorrelation {
     primary_risk: string;
@@ -212,9 +212,9 @@ export interface RequiredAction {
     urgency: ModerationPriority;
     responsible_party: string;
     due_date: string;
-    dependencies: string[];
-    success_criteria: string[];
-    completion_validation: string[];
+    dependencies: string;
+    success_criteria: string;
+    completion_validation: string;
     automation_possible: boolean;
     user_involvement_required: boolean;
 }
@@ -222,10 +222,10 @@ export interface MonitoringRequirement {
     monitoring_id: string;
     monitoring_scope: 'content' | 'user' | 'system' | 'business';
     monitoring_duration: string;
-    metrics_to_track: string[];
-    alert_conditions: AlertCondition[];
-    reporting_requirements: ReportingRequirement[];
-    integration_points: string[];
+    metrics_to_track: string;
+    alert_conditions: AlertCondition;
+    reporting_requirements: ReportingRequirement;
+    integration_points: string;
     automation_level: 'manual' | 'semi_automated' | 'fully_automated';
 }
 export interface AlertCondition {
@@ -233,13 +233,13 @@ export interface AlertCondition {
     condition_expression: string;
     alert_threshold: number;
     alert_priority: ModerationPriority;
-    notification_recipients: string[];
-    escalation_rules: string[];
+    notification_recipients: string;
+    escalation_rules: string;
 }
 export interface ReportingRequirement {
     report_type: string;
     report_frequency: string;
-    report_recipients: string[];
+    report_recipients: string;
     report_format: 'dashboard' | 'email' | 'api' | 'file';
     automated_generation: boolean;
 }
@@ -247,9 +247,9 @@ export interface AppealEligibility {
     appeal_allowed: boolean;
     appeal_deadline: string;
     appeal_process: string;
-    required_evidence: string[];
+    required_evidence: string;
     appeal_success_probability: number;
-    alternative_remedies: string[];
+    alternative_remedies: string;
 }
 export interface EscalationRecommendation {
     escalation_type: 'technical' | 'legal' | 'business' | 'regulatory';
@@ -264,7 +264,7 @@ export interface IntegrationUpdate {
     update_type: 'status_change' | 'metadata_update' | 'workflow_transition' | 'notification';
     update_data: Record<string, any>;
     update_timestamp: string;
-    affected_systems: string[];
+    affected_systems: string;
 }
 export interface ComplianceStatus {
     overall_compliant: boolean;
@@ -272,9 +272,9 @@ export interface ComplianceStatus {
     policy_compliance: Record<string, boolean>;
     regulatory_compliance: Record<string, boolean>;
     platform_compliance: Record<string, boolean>;
-    violations_found: ComplianceViolation[];
-    remediation_required: ComplianceRemediation[];
-    certification_status: CertificationStatus[];
+    violations_found: ComplianceViolation;
+    remediation_required: ComplianceRemediation;
+    certification_status: CertificationStatus;
 }
 export interface ComplianceViolation {
     violation_id: string;
@@ -288,7 +288,7 @@ export interface ComplianceViolation {
 export interface ComplianceRemediation {
     remediation_id: string;
     remediation_type: string;
-    remediation_actions: string[];
+    remediation_actions: string;
     timeline: string;
     responsible_party: string;
     validation_required: boolean;
@@ -297,7 +297,7 @@ export interface CertificationStatus {
     certification_name: string;
     certification_status: 'valid' | 'expired' | 'pending' | 'revoked';
     expiry_date?: string;
-    renewal_requirements: string[];
+    renewal_requirements: string;
 }
 export interface AuditEntry {
     entry_id: string;
@@ -311,7 +311,7 @@ export interface ProcessingMetrics {
     total_processing_time_ms: number;
     stage_breakdown: Record<ContentSafetyStage, number>;
     resource_utilization: ResourceUtilization;
-    performance_indicators: PerformanceIndicator[];
+    performance_indicators: PerformanceIndicator;
 }
 export interface ResourceUtilization {
     cpu_time_ms: number;
@@ -337,7 +337,7 @@ export interface BusinessImpactAssessment {
 }
 export interface ContentSafetyService {
     processContentSafety(request: ContentSafetyRequest): Promise<ContentSafetyResult>;
-    batchProcessSafety(requests: ContentSafetyRequest[]): Promise<ContentSafetyResult[]>;
+    batchProcessSafety(requests: ContentSafetyRequest): Promise<ContentSafetyResult>;
     runIntakeStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
     runFilteringStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
     runModerationStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
@@ -353,7 +353,7 @@ export interface ContentSafetyService {
     getSafetyAnalytics(timeRange: string): Promise<SafetyAnalytics>;
     getPredictiveRiskAnalysis(): Promise<PredictiveRiskAnalysis>;
     getComplianceReport(timeRange: string): Promise<ComplianceReport>;
-    updateSafetyPolicies(policies: SafetyPolicy[]): Promise<void>;
+    updateSafetyPolicies(policies: SafetyPolicy): Promise<void>;
     calibrateSafetyThresholds(calibrationData: SafetyCalibrationData): Promise<SafetyCalibrationResult>;
     getSafetySystemHealth(): Promise<SafetySystemHealth>;
     optimizeSafetyPipeline(): Promise<SafetyOptimizationResult>;
@@ -401,43 +401,12 @@ export declare class ContentSafetyServiceImpl implements ContentSafetyService {
     private tutorialService;
     private analyticsService;
     private apiClient;
-    constructor(filteringService: MarketplaceContentFilteringService, moderationService: EnhancedModerationService, contributionService: ContributionManagementService, tutorialService: MarketplaceTutorialSystemService, analyticsService: LearningAnalyticsServiceImpl, apiClient: any);
-    processContentSafety(request: ContentSafetyRequest): Promise<ContentSafetyResult>;
-    batchProcessSafety(requests: ContentSafetyRequest[]): Promise<ContentSafetyResult[]>;
-    runIntakeStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
-    runFilteringStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
-    runModerationStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
-    runQualityGatesStage(request: ContentSafetyRequest): Promise<SafetyStageResult>;
-    processContributionSafety(contribution: ContributionSubmission): Promise<ContentSafetyResult>;
-    processTemplateSafety(templateData: any): Promise<ContentSafetyResult>;
-    processTutorialSafety(tutorialData: any): Promise<ContentSafetyResult>;
-    processCommunityContentSafety(communityData: any): Promise<ContentSafetyResult>;
-    monitorContentSafety(contentId: string): Promise<SafetyMonitoringResult>;
-    flagContentForReview(contentId: string, reason: string, urgency: ModerationPriority): Promise<void>;
-    processAppeal(appealRequest: AppealRequest): Promise<AppealResult>;
-    escalateContent(contentId: string, escalationReason: string): Promise<EscalationResult>;
-    getSafetyAnalytics(timeRange: string): Promise<SafetyAnalytics>;
-    getPredictiveRiskAnalysis(): Promise<PredictiveRiskAnalysis>;
-    getComplianceReport(timeRange: string): Promise<ComplianceReport>;
-    updateSafetyPolicies(policies: SafetyPolicy[]): Promise<void>;
-    calibrateSafetyThresholds(calibrationData: SafetyCalibrationData): Promise<SafetyCalibrationResult>;
-    getSafetySystemHealth(): Promise<SafetySystemHealth>;
-    optimizeSafetyPipeline(): Promise<SafetyOptimizationResult>;
-    private exceedsSizeLimits;
-    private hasValidStructure;
-    private createEarlyExitResult;
-    private makeFinalSafetyDecision;
-    private generateComprehensiveResult;
-    private createErrorResult;
-    private trackSafetyEvent;
-    private executeIntegrationUpdates;
-    private determineFilteringCategories;
-    private mapPriorityToFilteringPriority;
-    private convertFilteringIssuesToFindings;
-    private mapFilteringActionToSafetyDecision;
-    private inferModerationContext;
-    private determineWorkflowType;
-    private convertModerationResultToFindings;
-    private mapModerationActionToSafetyDecision;
+    constructor();
+    filteringService: MarketplaceContentFilteringService;
+    moderationService: EnhancedModerationService;
+    contributionService: ContributionManagementService;
+    tutorialService: MarketplaceTutorialSystemService;
+    analyticsService: LearningAnalyticsServiceImpl;
+    apiClient: any;
 }
 //# sourceMappingURL=ContentSafetyIntegration.d.ts.map

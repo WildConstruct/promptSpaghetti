@@ -21,6 +21,7 @@ import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 // Security Scanning Types
 // =============================================================================
 
+}
 export interface SecurityScanConfig {
   enabledScanTypes: {
     dependency: boolean;
@@ -28,6 +29,7 @@ export interface SecurityScanConfig {
     dynamic: boolean;
     infrastructure: boolean;
     compliance: boolean;
+}
   };
   scanSchedule: {
     dependency: string; // cron expression
@@ -64,6 +66,7 @@ export interface SecurityScanConfig {
   };
 }
 
+}
 export interface SecurityVulnerability {
   id: string;
   type: 'dependency' | 'code' | 'infrastructure' | 'configuration';
@@ -87,7 +90,9 @@ export interface SecurityVulnerability {
   dueDate?: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface SecurityScanResult {
   scanId: string;
   scanType: 'dependency' | 'static' | 'dynamic' | 'infrastructure' | 'compliance' | 'comprehensive';
@@ -104,6 +109,7 @@ export interface SecurityScanResult {
     newVulnerabilities: number;
     fixedVulnerabilities: number;
     riskScore: number; // 0-100
+}
   };
   vulnerabilities: SecurityVulnerability[];
   metrics: {
@@ -118,6 +124,7 @@ export interface SecurityScanResult {
   logs: string[];
 }
 
+}
 export interface SecurityRecommendation {
   id: string;
   category: 'dependency' | 'code' | 'infrastructure' | 'process';
@@ -131,12 +138,14 @@ export interface SecurityRecommendation {
     type: 'update' | 'replace' | 'configure' | 'remove';
     automated: boolean;
     commands?: string[];
+}
   }>;
   relatedVulnerabilities: string[];
   createdAt: Date;
   status: 'open' | 'in_progress' | 'completed' | 'dismissed';
 }
 
+}
 export interface ComplianceResult {
   framework: 'OWASP' | 'PCI-DSS' | 'SOC2' | 'GDPR' | 'HIPAA' | 'ISO27001';
   category: string;
@@ -148,7 +157,9 @@ export interface ComplianceResult {
   evidence?: string;
   lastAssessed: Date;
 }
+}
 
+}
 export interface SecurityMetrics {
   timestamp: Date;
   overallRiskScore: number;
@@ -160,6 +171,7 @@ export interface SecurityMetrics {
     outdated: number;
     vulnerable: number;
     riskScore: number;
+}
   };
   codeSecurityScore: number;
   infrastructureScore: number;
@@ -178,31 +190,31 @@ export const DEFAULT_SECURITY_SCAN_CONFIG: SecurityScanConfig = {
     dynamic: false, // Requires running application
     infrastructure: true,
     compliance: true
-  },
+  }
   scanSchedule: {
     dependency: '0 2 * * *', // Daily at 2 AM
     static: '0 3 * * *', // Daily at 3 AM
     dynamic: '0 4 * * 0', // Weekly on Sunday at 4 AM
     infrastructure: '0 5 * * 0', // Weekly on Sunday at 5 AM
     compliance: '0 6 * * 0' // Weekly on Sunday at 6 AM
-  },
+  }
   thresholds: {
     critical: 0, // No critical vulnerabilities allowed
     high: 5,
     medium: 20,
     low: 50
-  },
+  }
   integrations: {
     snyk: {
       enabled: false // Enable when API key is available
-    },
+  }
     sonarqube: {
       enabled: false // Enable when server is configured
-    },
+  }
     owaspZap: {
       enabled: false // Enable for dynamic scanning
     }
-  },
+  }
   notifications: {
     email: [],
     webhook: undefined,
@@ -237,6 +249,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   async start(): Promise<void> {
+
     console.log('🔐 Starting Security Scanning Service...');
     
     try {
@@ -263,6 +276,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   async stop(): Promise<void> {
+
     console.log('🔐 Stopping Security Scanning Service...');
     
     // Clear scheduled jobs
@@ -283,6 +297,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async initializeDatabase(): Promise<void> {
+
     if (!this.databaseService) return;
 
     const queries = [
@@ -391,6 +406,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   async queueScan(scanType: string, options: any = {}): Promise<string> {
+
     const scanId = `scan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     this.scanQueue.push({ type: scanType, options: { ...options, scanId } });
@@ -404,6 +420,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async processScanQueue(): Promise<void> {
+
     if (this.isScanning || this.scanQueue.length === 0) return;
     
     this.isScanning = true;
@@ -430,6 +447,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   async executeScan(scanType: string, options: any = {}): Promise<SecurityScanResult> {
+
     const scanId = options.scanId || `scan_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const startTime = Date.now();
     
@@ -498,7 +516,7 @@ export class SecurityScanningService extends EventEmitter {
           newVulnerabilities: 0,
           fixedVulnerabilities: 0,
           riskScore: 0
-        },
+  }
         vulnerabilities: [],
         metrics: { filesScanned: 0, linesOfCode: 0, packages: 0, endpoints: 0 },
         recommendations: [],
@@ -519,6 +537,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeDependencyScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -605,7 +624,7 @@ export class SecurityScanningService extends EventEmitter {
         linesOfCode: 0,
         packages: await this.countPackages(),
         endpoints: 0
-      },
+  }
       recommendations,
       compliance: [],
       logs
@@ -613,6 +632,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async runNpmAudit(): Promise<unknown> {
+
     try {
       const result = execSync('npm audit --audit-level=low --json', { 
         encoding: 'utf8',
@@ -635,6 +655,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async checkOutdatedPackages(): Promise<string[]> {
+
     try {
       const result = execSync('npm outdated --json', { 
         encoding: 'utf8',
@@ -658,12 +679,14 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async runSnykScan(): Promise<{ vulnerabilities: SecurityVulnerability[], recommendations: SecurityRecommendation[] }> {
+
     // Placeholder for Snyk integration
     // In production, this would call the Snyk API
     return { vulnerabilities: [], recommendations: [] };
   }
 
   private async countPackages(): Promise<number> {
+
     try {
       const packageJsonPath = path.join(process.cwd(), 'package.json');
       const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
@@ -680,6 +703,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeStaticScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -729,7 +753,7 @@ export class SecurityScanningService extends EventEmitter {
         linesOfCode: await this.countLinesOfCode(),
         packages: 0,
         endpoints: 0
-      },
+  }
       recommendations,
       compliance: [],
       logs
@@ -737,6 +761,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async runESLintSecurity(): Promise<{ vulnerabilities: SecurityVulnerability[] }> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     
     try {
@@ -814,6 +839,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async scanDangerousPatterns(): Promise<{ vulnerabilities: SecurityVulnerability[], recommendations: SecurityRecommendation[] }> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     
@@ -869,13 +895,17 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async scanHardcodedSecrets(): Promise<{ vulnerabilities: SecurityVulnerability[] }> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     
     // Patterns for common secrets
     const secretPatterns = [
-      { pattern: /(?:password|pwd|pass)\s*[:=]\s*['"][^'"]{8,}['"]/, type: 'password' },
-      { pattern: /(?:api[_-]?key|apikey)\s*[:=]\s*['"][^'"]{16,}['"]/, type: 'api_key' },
-      { pattern: /(?:secret|token)\s*[:=]\s*['"][^'"]{16,}['"]/, type: 'secret' },
+      { pattern: /(?:password|pwd|pass)\s*[:=]\s*['"][^'"]{8
+}['"]/, type: 'password' },
+      { pattern: /(?:api[_-]?key|apikey)\s*[:=]\s*['"][^'"]{16
+}['"]/, type: 'api_key' },
+      { pattern: /(?:secret|token)\s*[:=]\s*['"][^'"]{16
+}['"]/, type: 'secret' },
       { pattern: /sk_live_[a-zA-Z0-9]{24}/, type: 'stripe_key' },
       { pattern: /ghp_[a-zA-Z0-9]{36}/, type: 'github_token' },
       { pattern: /xox[baprs]-[a-zA-Z0-9-]+/, type: 'slack_token' }
@@ -928,12 +958,14 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async runSonarQubeScan(): Promise<{ vulnerabilities: SecurityVulnerability[], recommendations: SecurityRecommendation[] }> {
+
     // Placeholder for SonarQube integration
     // In production, this would call the SonarQube API
     return { vulnerabilities: [], recommendations: [] };
   }
 
   private async getSourceFiles(): Promise<string[]> {
+
     const files: string[] = [];
     const extensions = ['.ts', '.tsx', '.js', '.jsx'];
     
@@ -963,11 +995,13 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async countSourceFiles(): Promise<number> {
+
     const files = await this.getSourceFiles();
     return files.length;
   }
 
   private async countLinesOfCode(): Promise<number> {
+
     const files = await this.getSourceFiles();
     let totalLines = 0;
     
@@ -988,6 +1022,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeDynamicScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const logs: string[] = [];
@@ -1023,6 +1058,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeInfrastructureScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const compliance: ComplianceResult[] = [];
@@ -1070,6 +1106,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async scanDockerfile(): Promise<{ vulnerabilities: SecurityVulnerability[], recommendations: SecurityRecommendation[] }> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     
@@ -1126,6 +1163,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async scanEnvironmentConfig(): Promise<{ vulnerabilities: SecurityVulnerability[], recommendations: SecurityRecommendation[] }> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     
@@ -1163,6 +1201,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async scanTLSConfig(): Promise<{ compliance: ComplianceResult[] }> {
+
     const compliance: ComplianceResult[] = [];
     
     // Check for HTTPS enforcement
@@ -1185,6 +1224,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeComplianceScan(scanId: string, ___options: unknown): Promise<SecurityScanResult> {
+
     const vulnerabilities: SecurityVulnerability[] = [];
     const recommendations: SecurityRecommendation[] = [];
     const compliance: ComplianceResult[] = [];
@@ -1228,6 +1268,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async checkOWASPCompliance(): Promise<ComplianceResult[]> {
+
     const compliance: ComplianceResult[] = [];
     
     // Check for common OWASP Top 10 controls
@@ -1237,55 +1278,55 @@ export class SecurityScanningService extends EventEmitter {
         requirement: 'Implement proper access controls',
         status: 'compliant' as const,
         finding: 'Role-based access control system detected'
-      },
+  }
       {
         category: 'A02:2021 – Cryptographic Failures',
         requirement: 'Use strong cryptography',
         status: 'partial' as const,
         finding: 'Encryption services detected, need to verify implementation'
-      },
+  }
       {
         category: 'A03:2021 – Injection',
         requirement: 'Prevent injection attacks',
         status: 'compliant' as const,
         finding: 'Input validation and sanitization detected'
-      },
+  }
       {
         category: 'A04:2021 – Insecure Design',
         requirement: 'Implement secure design principles',
         status: 'compliant' as const,
         finding: 'Security architecture review shows good design principles'
-      },
+  }
       {
         category: 'A05:2021 – Security Misconfiguration',
         requirement: 'Secure configuration management',
         status: 'partial' as const,
         finding: 'Need to verify all security configurations'
-      },
+  }
       {
         category: 'A06:2021 – Vulnerable Components',
         requirement: 'Keep components up to date',
         status: 'partial' as const,
         finding: 'Dependency scanning in place, continuous monitoring needed'
-      },
+  }
       {
         category: 'A07:2021 – Identity and Authentication',
         requirement: 'Strong authentication',
         status: 'compliant' as const,
         finding: 'Multi-factor authentication and session management implemented'
-      },
+  }
       {
         category: 'A08:2021 – Software and Data Integrity',
         requirement: 'Verify software integrity',
         status: 'partial' as const,
         finding: 'Need to implement additional integrity checks'
-      },
+  }
       {
         category: 'A09:2021 – Security Logging and Monitoring',
         requirement: 'Comprehensive logging',
         status: 'compliant' as const,
         finding: 'Security audit logging system detected'
-      },
+  }
       {
         category: 'A10:2021 – Server-Side Request Forgery',
         requirement: 'SSRF prevention',
@@ -1311,6 +1352,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async checkGDPRCompliance(): Promise<ComplianceResult[]> {
+
     const compliance: ComplianceResult[] = [];
     
     // Basic GDPR checks
@@ -1319,12 +1361,12 @@ export class SecurityScanningService extends EventEmitter {
         requirement: 'Data minimization principle',
         status: 'not_applicable' as const,
         finding: 'Review required for data collection practices'
-      },
+  }
       {
         requirement: 'Right to erasure implementation',
         status: 'not_applicable' as const,
         finding: 'User data deletion capabilities need verification'
-      },
+  }
       {
         requirement: 'Data protection by design',
         status: 'partial' as const,
@@ -1349,6 +1391,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async checkSecurityHeaders(): Promise<ComplianceResult[]> {
+
     const compliance: ComplianceResult[] = [];
     
     // Security headers that should be implemented
@@ -1380,6 +1423,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   private async executeComprehensiveScan(scanId: string, options: unknown): Promise<SecurityScanResult> {
+
     const logs: string[] = [];
     logs.push('Starting comprehensive security scan...');
     
@@ -1471,6 +1515,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async fileExists(filePath: string): Promise<boolean> {
+
     try {
       await fs.access(filePath);
       return true;
@@ -1480,6 +1525,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async storeScanResult(result: SecurityScanResult): Promise<void> {
+
     try {
       // Store in memory
       this.scanHistory.push(result);
@@ -1555,6 +1601,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async checkThresholdsAndAlert(result: SecurityScanResult): Promise<void> {
+
     const { thresholds } = this.config;
     const { summary } = result;
     
@@ -1590,6 +1637,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   private async sendAlert(message: string, ___result: SecurityScanResult): Promise<void> {
+
     // In production, this would send actual notifications
     console.warn(`🚨 Security Alert: ${message}`);
     
@@ -1605,6 +1653,7 @@ export class SecurityScanningService extends EventEmitter {
   // =============================================================================
 
   async getCurrentMetrics(): Promise<SecurityMetrics | null> {
+
     if (this.scanHistory.length === 0) {
       return null;
     }
@@ -1624,7 +1673,7 @@ export class SecurityScanningService extends EventEmitter {
         outdated: 0, // Would get from dependency scan
         vulnerable: latestScan.vulnerabilities.filter(v => v.type === 'dependency').length,
         riskScore: Math.min(100, latestScan.vulnerabilities.filter(v => v.type === 'dependency').length * 10)
-      },
+  }
       codeSecurityScore: Math.max(0, 100 - (latestScan.vulnerabilities.filter(v => v.type === 'code').length * 5)),
       infrastructureScore: Math.max(0, 100 - (latestScan.vulnerabilities.filter(v => v.type === 'infrastructure').length * 10)),
       complianceScore: latestScan.compliance.length > 0 ? 
@@ -1634,10 +1683,12 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   async getScanHistory(limit = 10): Promise<SecurityScanResult[]> {
+
     return this.scanHistory.slice(-limit).reverse();
   }
 
   async getVulnerabilities(status?: string): Promise<SecurityVulnerability[]> {
+
     if (this.scanHistory.length === 0) {
       return [];
     }
@@ -1652,6 +1703,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   async updateVulnerabilityStatus(vulnerabilityId: string, status: string, assignee?: string): Promise<void> {
+
     // Update in memory
     this.scanHistory.forEach(scan => {
       const vuln = scan.vulnerabilities.find(v => v.id === vulnerabilityId);
@@ -1673,6 +1725,7 @@ export class SecurityScanningService extends EventEmitter {
   }
 
   async getRecommendations(status?: string): Promise<SecurityRecommendation[]> {
+
     if (this.scanHistory.length === 0) {
       return [];
     }

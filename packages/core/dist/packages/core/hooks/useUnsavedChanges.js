@@ -17,10 +17,11 @@ export function useUnsavedChanges(hasUnsavedChanges) {
                 event.returnValue = message; // For Chrome
                 return message; // For other browsers
             }
-        };
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, [hasUnsavedChanges]);
+            ;
+            window.addEventListener('beforeunload', handleBeforeUnload);
+            return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+        }, [hasUnsavedChanges];
+    });
     // Function to show confirmation dialog before navigation
     const confirmNavigation = useCallback((action, callback) => {
         if (hasUnsavedChanges) {
@@ -32,7 +33,8 @@ export function useUnsavedChanges(hasUnsavedChanges) {
             // No unsaved changes, proceed immediately
             callback();
         }
-    }, [hasUnsavedChanges]);
+        [hasUnsavedChanges];
+    });
     // Handle save and continue
     const handleSave = useCallback(async () => {
         if (onSave) {
@@ -48,29 +50,33 @@ export function useUnsavedChanges(hasUnsavedChanges) {
                     // Save failed, keep dialog open
                     console.warn('Save operation failed');
                 }
+                try { }
+                catch (error) {
+                    console.error('Error during save operation:', error);
+                    // Keep dialog open on error
+                }
+                {
+                    // No save handler provided, just proceed
+                    if (pendingCallback) {
+                        pendingCallback();
+                        setPendingCallback(null);
+                        setShowUnsavedDialog(false);
+                    }
+                    [onSave, pendingCallback];
+                }
             }
-            catch (error) {
-                console.error('Error during save operation:', error);
-                // Keep dialog open on error
-            }
+            finally { }
         }
-        else {
-            // No save handler provided, just proceed
-            if (pendingCallback) {
-                pendingCallback();
-                setPendingCallback(null);
-            }
-            setShowUnsavedDialog(false);
-        }
-    }, [onSave, pendingCallback]);
+    });
     // Handle don't save and continue
     const handleDontSave = useCallback(() => {
         if (pendingCallback) {
             pendingCallback();
             setPendingCallback(null);
+            setShowUnsavedDialog(false);
         }
-        setShowUnsavedDialog(false);
-    }, [pendingCallback]);
+        [pendingCallback];
+    });
     // Handle cancel (stay on current page)
     const handleCancel = useCallback(() => {
         setPendingCallback(null);

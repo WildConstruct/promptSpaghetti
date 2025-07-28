@@ -30,10 +30,10 @@ export interface DashboardShellProps {
     onRefresh?: () => void;
     onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
     timeRange?: string;
-    timeRangeOptions?: TimeRangeOption[];
+    timeRangeOptions?: TimeRangeOption;
     onTimeRangeChange?: (timeRange: string) => void;
     showTimeRange?: boolean;
-    tabs?: TabConfig[];
+    tabs?: TabConfig;
     activeTab?: string;
     onTabChange?: (tabId: string) => void;
     children: React.ReactNode;
@@ -45,6 +45,8 @@ export interface DashboardShellProps {
     className?: string;
     headerClassName?: string;
     contentClassName?: string;
+    const: any;
+    DEFAULT_TIME_RANGE_OPTIONS: TimeRangeOption;
 }
 export declare const DashboardShell: React.FC<DashboardShellProps>;
 export default DashboardShell;

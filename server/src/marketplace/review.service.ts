@@ -37,6 +37,7 @@ export class ReviewService {
     userId: string,
     reviewData: ReviewSubmission
   ): Promise<ReviewWithDetails> {
+
     const validated = CreateReviewSchema.parse(reviewData);
     
     // Verify user has purchased the template
@@ -93,7 +94,7 @@ export class ReviewService {
       helpfulness_votes: {
         helpful: 0,
         not_helpful: 0
-      },
+  }
       flags: [],
       flag_count: 0
     };
@@ -130,6 +131,7 @@ export class ReviewService {
     userId: string,
     updateData: Partial<ReviewSubmission>
   ): Promise<ReviewWithDetails> {
+
     const validated = UpdateReviewSchema.parse(updateData);
 
     // Verify review ownership
@@ -212,6 +214,7 @@ export class ReviewService {
   }
 
   async deleteReview(reviewId: string, userId: string): Promise<void> {
+
     // Verify review ownership
     const review = await this.getReviewById(reviewId);
     if (!review || review.buyer_id !== userId) {
@@ -244,6 +247,7 @@ export class ReviewService {
     hasMore: boolean;
     metrics: ReviewMetrics;
   }> {
+
     const offset = (pagination.page - 1) * pagination.limit;
     
     // Build WHERE clause
@@ -345,6 +349,7 @@ export class ReviewService {
   }
 
   async getReviewById(reviewId: string): Promise<ReviewWithDetails | null> {
+
     const result = await this.db.query(
       'SELECT * FROM template_reviews WHERE id = ?',
       [reviewId]
@@ -364,6 +369,7 @@ export class ReviewService {
     userId: string,
     vote: ReviewHelpfulness
   ): Promise<void> {
+
     // Check if user has already voted
     const existingVote = await this.db.query(
       'SELECT * FROM review_helpfulness_votes WHERE review_id = ? AND user_id = ?',
@@ -395,6 +401,7 @@ export class ReviewService {
     flagType: string,
     reason?: string
   ): Promise<void> {
+
     // Check if user has already flagged this review
     const existingFlag = await this.db.query(
       'SELECT id FROM review_flags WHERE review_id = ? AND flagger_id = ?',
@@ -430,6 +437,7 @@ export class ReviewService {
     creatorId: string,
     response: string
   ): Promise<CreatorResponse> {
+
     // Verify creator owns the template
     const review = await this.getReviewById(reviewId);
     if (!review) {
@@ -478,6 +486,7 @@ export class ReviewService {
   // =============================================
 
   async approveReview(reviewId: string, moderatorId: string): Promise<void> {
+
     await this.db.query(
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.APPROVED, `Approved by ${moderatorId}`, reviewId]
@@ -485,6 +494,7 @@ export class ReviewService {
   }
 
   async rejectReview(reviewId: string, moderatorId: string, reason: string): Promise<void> {
+
     await this.db.query(
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.REJECTED, reason, reviewId]
@@ -492,6 +502,7 @@ export class ReviewService {
   }
 
   async hideReview(reviewId: string, reason: string): Promise<void> {
+
     await this.db.query(
       'UPDATE template_reviews SET status = ?, moderation_reason = ?, updated_at = datetime("now") WHERE id = ?',
       [ReviewStatus.HIDDEN, reason, reviewId]
@@ -499,6 +510,7 @@ export class ReviewService {
   }
 
   async getModerationQueue(): Promise<ReviewModerationQueue> {
+
     const pendingReviews = await this.db.query(
       'SELECT * FROM template_reviews WHERE status = ? ORDER BY created_at ASC',
       [ReviewStatus.PENDING]
@@ -545,6 +557,7 @@ export class ReviewService {
   // =============================================
 
   async getTemplateMetrics(templateId: string): Promise<ReviewMetrics> {
+
     const metrics = await this.db.query(
       `SELECT 
          COUNT(*) as total_reviews,
@@ -573,7 +586,7 @@ export class ReviewService {
         three_star: result.three_star || 0,
         two_star: result.two_star || 0,
         one_star: result.one_star || 0
-      },
+  }
       verified_percentage: total > 0 ? (result.verified_count / total) * 100 : 0,
       response_rate: 0, // Would calculate from creator responses
       helpfulness_score: parseFloat(result.helpfulness_score) || 0
@@ -585,6 +598,7 @@ export class ReviewService {
   // =============================================
 
   private async enhanceReview(review: any): Promise<ReviewWithDetails> {
+
     // Get buyer info
     const buyerInfo = await this.db.query(
       'SELECT id, name, avatar_url FROM users WHERE id = ?',
@@ -630,7 +644,7 @@ export class ReviewService {
       helpfulness_votes: {
         helpful: helpfulnessVotes[0]?.helpful || 0,
         not_helpful: helpfulnessVotes[0]?.not_helpful || 0
-      },
+  }
       flags: flags.map(f => f.flag_type),
       flag_count: flags.length,
       creator_response: creatorResponse[0] ? {
@@ -642,6 +656,7 @@ export class ReviewService {
   }
 
   private async updateTemplateRatingStats(templateId: string): Promise<void> {
+
     const metrics = await this.getTemplateMetrics(templateId);
     
     await this.db.query(
@@ -651,6 +666,7 @@ export class ReviewService {
   }
 
   private async updateReviewHelpfulnessStats(reviewId: string): Promise<void> {
+
     const stats = await this.db.query(
       `SELECT 
          COUNT(CASE WHEN vote = 'helpful' THEN 1 END) as helpful,
@@ -667,6 +683,7 @@ export class ReviewService {
   }
 
   private async updateReviewFlagStats(reviewId: string): Promise<void> {
+
     const flagCount = await this.getReviewFlagCount(reviewId);
     
     await this.db.query(
@@ -676,6 +693,7 @@ export class ReviewService {
   }
 
   private async getReviewFlagCount(reviewId: string): Promise<number> {
+
     const result = await this.db.query(
       'SELECT COUNT(*) as count FROM review_flags WHERE review_id = ? AND status = ?',
       [reviewId, 'pending']
@@ -684,6 +702,7 @@ export class ReviewService {
   }
 
   private async analyzeSentiment(text: string): Promise<SentimentScore> {
+
     // Simple sentiment analysis - in production, use a proper NLP service
     const positiveWords = ['great', 'excellent', 'amazing', 'wonderful', 'fantastic', 'perfect', 'love', 'best'];
     const negativeWords = ['terrible', 'awful', 'horrible', 'worst', 'hate', 'bad', 'disappointing'];

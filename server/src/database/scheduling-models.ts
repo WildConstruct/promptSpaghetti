@@ -41,6 +41,7 @@ export enum ExecutionStatus {
 }
 
 // Core schedule model
+}
 export interface FeatureToggleSchedule {
   id: string;
   toggleId: string;
@@ -64,6 +65,7 @@ export interface FeatureToggleSchedule {
     cronExpression?: string; // For custom recurrence
     maxOccurrences?: number;
     endDate?: Date;
+}
   };
   
   // Action configuration
@@ -102,6 +104,7 @@ export interface FeatureToggleSchedule {
 }
 
 // Schedule execution log
+}
 export interface ScheduleExecution {
   id: string;
   scheduleId: string;
@@ -116,6 +119,7 @@ export interface ScheduleExecution {
     originalTime: Date;
     actualTime: Date;
     delay?: number; // in milliseconds
+}
   };
   
   // Results
@@ -139,6 +143,7 @@ export interface ScheduleExecution {
 }
 
 // Schedule conflict detection
+}
 export interface ScheduleConflict {
   id: string;
   toggleId: string;
@@ -156,10 +161,12 @@ export interface ScheduleConflict {
   suggestedResolution?: {
     action: 'reschedule' | 'modify_priority' | 'cancel_one' | 'merge';
     details: Record<string, any>;
+}
   };
 }
 
 // Schedule notification configuration
+}
 export interface ScheduleNotification {
   id: string;
   scheduleId: string;
@@ -176,6 +183,7 @@ export interface ScheduleNotification {
     onRetry?: boolean;
     afterFailureCount?: number;
     beforeExecution?: number; // minutes before
+}
   };
   
   // Message template
@@ -191,6 +199,7 @@ export interface ScheduleNotification {
 }
 
 // Timezone management
+}
 export interface TimezoneSettings {
   id: string;
   orgId?: string;
@@ -208,8 +217,10 @@ export interface TimezoneSettings {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
 // Schedule template for common patterns
+}
 export interface ScheduleTemplate {
   id: string;
   name: string;
@@ -223,6 +234,7 @@ export interface ScheduleTemplate {
     recurrence?: Partial<FeatureToggleSchedule['recurrence']>;
     actionConfig: Partial<FeatureToggleSchedule['actionConfig']>;
     defaultDuration?: number; // in minutes
+}
   };
   
   // Usage tracking
@@ -239,6 +251,7 @@ export interface ScheduleTemplate {
 }
 
 // Bulk schedule operations
+}
 export interface BulkScheduleOperation {
   id: string;
   operationType: 'create' | 'update' | 'cancel' | 'reschedule';
@@ -259,6 +272,7 @@ export interface BulkScheduleOperation {
     scheduleId: string;
     success: boolean;
     error?: string;
+}
   }>;
   
   createdBy: string;
@@ -267,6 +281,7 @@ export interface BulkScheduleOperation {
 }
 
 // Request/response types for API
+}
 export interface CreateScheduleRequest {
   toggleId: string;
   name: string;
@@ -285,14 +300,17 @@ export interface CreateScheduleRequest {
     recipients: string[];
     channels: string[];
     conditions: Record<string, any>;
+}
   }>;
 }
 
+}
 export interface UpdateScheduleRequest extends Partial<CreateScheduleRequest> {
   id: string;
   reason?: string;
 }
 
+}
 export interface ScheduleQuery {
   toggleId?: string;
   status?: ScheduleStatus;
@@ -306,8 +324,10 @@ export interface ScheduleQuery {
   sortBy?: 'startTime' | 'createdAt' | 'priority' | 'status';
   sortOrder?: 'asc' | 'desc';
 }
+}
 
 // Schedule analytics
+}
 export interface ScheduleAnalytics {
   totalSchedules: number;
   activeSchedules: number;
@@ -334,6 +354,7 @@ export interface ScheduleAnalytics {
   mostUsedActions: Array<{
     action: ScheduleAction;
     count: number;
+}
   }>;
   
   timeDistribution: Array<{

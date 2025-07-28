@@ -63,7 +63,7 @@ export interface SecurityAlertingConfig {
     threatIntelligenceUpdate: number;
     escalationThresholds: EscalationThresholds;
     machinelearningEnabled: boolean;
-    correlationRules: CorrelationRule[];
+    correlationRules: CorrelationRule;
     responseAutomation: ResponseAutomation;
 }
 export interface EscalationThresholds {
@@ -92,11 +92,11 @@ export interface AlertMetrics {
 }
 export interface TrendAnalysis {
     alertVolumeGrowth: number;
-    topThreats: ThreatSummary[];
-    topTargets: TargetSummary[];
-    timePatterns: TimePattern[];
-    geographicDistribution: GeographicPattern[];
-    userBehaviorTrends: UserBehaviorTrend[];
+    topThreats: ThreatSummary;
+    topTargets: TargetSummary;
+    timePatterns: TimePattern;
+    geographicDistribution: GeographicPattern;
+    userBehaviorTrends: UserBehaviorTrend;
     systemPerformanceImpact: PerformanceImpact;
 }
 export interface ThreatSummary {
@@ -106,7 +106,7 @@ export interface ThreatSummary {
     trend: 'INCREASING' | 'DECREASING' | 'STABLE';
     firstSeen: Date;
     lastSeen: Date;
-    affectedSystems: string[];
+    affectedSystems: string;
     mitigationStatus: 'NONE' | 'PARTIAL' | 'COMPLETE';
 }
 export interface TargetSummary {
@@ -116,7 +116,7 @@ export interface TargetSummary {
     riskScore: number;
     classification: DataClassificationLevel;
     lastAlert: Date;
-    threatTypes: string[];
+    threatTypes: string;
     protectionLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'MAXIMUM';
 }
 export interface TimePattern {
@@ -124,14 +124,14 @@ export interface TimePattern {
     dayOfWeek: number;
     alertCount: number;
     avgSeverity: number;
-    commonThreats: string[];
+    commonThreats: string;
     anomalyScore: number;
 }
 export interface GeographicPattern {
     country: string;
     region: string;
     alertCount: number;
-    threatTypes: string[];
+    threatTypes: string;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     isKnownThreatRegion: boolean;
 }
@@ -140,9 +140,9 @@ export interface UserBehaviorTrend {
     normalBehaviorScore: number;
     currentBehaviorScore: number;
     anomalySeverity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    behaviorChanges: BehaviorChange[];
-    riskFactors: RiskFactor[];
-    recommendedActions: string[];
+    behaviorChanges: BehaviorChange;
+    riskFactors: RiskFactor;
+    recommendedActions: string;
 }
 export interface BehaviorChange {
     aspect: 'ACCESS_PATTERN' | 'TIME_PATTERN' | 'LOCATION' | 'OPERATION_TYPE' | 'DATA_ACCESS';
@@ -150,14 +150,14 @@ export interface BehaviorChange {
     currentValue: any;
     changeSignificance: number;
     changeDate: Date;
-    contextualFactors: string[];
+    contextualFactors: string;
 }
 export interface RiskFactor {
     factor: string;
     weight: number;
     contribution: number;
-    evidence: string[];
-    mitigationSuggestions: string[];
+    evidence: string;
+    mitigationSuggestions: string;
 }
 export interface PerformanceImpact {
     systemLatency: number;
@@ -171,10 +171,10 @@ export interface CorrelationRule {
     id: string;
     name: string;
     description: string;
-    conditions: CorrelationCondition[];
+    conditions: CorrelationCondition;
     timeWindow: number;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    responseActions: ResponseAction[];
+    responseActions: ResponseAction;
     enabled: boolean;
     priority: number;
 }
@@ -188,7 +188,7 @@ export interface CorrelationCondition {
 export interface ResponseAction {
     type: 'ALERT' | 'BLOCK' | 'QUARANTINE' | 'ESCALATE' | 'INVESTIGATE' | 'AUTOFIX';
     parameters: Record<string, any>;
-    conditions: ResponseCondition[];
+    conditions: ResponseCondition;
     automation: AutomationLevel;
     approval: ApprovalRequirement;
 }
@@ -205,7 +205,7 @@ export interface AutomationLevel {
 }
 export interface ApprovalRequirement {
     required: boolean;
-    approvers: string[];
+    approvers: string;
     timeout: number;
     fallbackAction: string;
 }
@@ -215,11 +215,11 @@ export interface ResponseAutomation {
     maxAutomaticActions: number;
     cooldownPeriod: number;
     approvalBypass: ApprovalBypass;
-    responseTemplates: ResponseTemplate[];
+    responseTemplates: ResponseTemplate;
 }
 export interface ApprovalBypass {
-    emergencyConditions: string[];
-    bypassApprovers: string[];
+    emergencyConditions: string;
+    bypassApprovers: string;
     auditRequired: boolean;
     timeLimit: number;
 }
@@ -227,8 +227,8 @@ export interface ResponseTemplate {
     id: string;
     name: string;
     description: string;
-    triggerConditions: string[];
-    actions: ResponseAction[];
+    triggerConditions: string;
+    actions: ResponseAction;
     effectiveness: number;
     lastUsed: Date;
     successRate: number;
@@ -237,7 +237,7 @@ export interface AlertPattern {
     patternId: string;
     patternType: 'TEMPORAL' | 'BEHAVIORAL' | 'VOLUMETRIC' | 'GEOGRAPHIC' | 'CONTEXTUAL';
     description: string;
-    alerts: SecurityAlert[];
+    alerts: SecurityAlert;
     confidence: number;
     riskScore: number;
     firstDetected: Date;
@@ -251,37 +251,37 @@ export interface PatternPrediction {
     confidence: number;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     impactAssessment: ImpactAssessment;
-    preventionRecommendations: string[];
+    preventionRecommendations: string;
 }
 export interface ImpactAssessment {
-    affectedSystems: string[];
-    dataAtRisk: DataRiskAssessment[];
+    affectedSystems: string;
+    dataAtRisk: DataRiskAssessment;
     businessImpact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     financialImpact: number;
     reputationalImpact: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    complianceImpact: ComplianceImpact[];
+    complianceImpact: ComplianceImpact;
 }
 export interface DataRiskAssessment {
     dataId: string;
     classification: DataClassificationLevel;
     exposureRisk: number;
     sensitivityScore: number;
-    complianceRequirements: string[];
+    complianceRequirements: string;
     protectionLevel: string;
 }
 export interface ComplianceImpact {
     framework: string;
     violationType: string;
     severity: string;
-    potentialPenalties: string[];
+    potentialPenalties: string;
     reportingRequired: boolean;
-    timelineRequirements: string[];
+    timelineRequirements: string;
 }
 export interface MitigationRecommendation {
-    immediate: ImmediateAction[];
-    shortTerm: ShortTermAction[];
-    longTerm: LongTermAction[];
-    preventive: PreventiveAction[];
+    immediate: ImmediateAction;
+    shortTerm: ShortTermAction;
+    longTerm: LongTermAction;
+    preventive: PreventiveAction;
     priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     estimatedCost: number;
     estimatedEffectiveness: number;
@@ -292,15 +292,15 @@ export interface ImmediateAction {
     automatable: boolean;
     riskReduction: number;
     effort: 'LOW' | 'MEDIUM' | 'HIGH';
-    dependencies: string[];
+    dependencies: string;
 }
 export interface ShortTermAction {
     action: string;
     description: string;
     timeline: string;
-    resources: string[];
+    resources: string;
     expectedOutcome: string;
-    successMetrics: string[];
+    successMetrics: string;
 }
 export interface LongTermAction {
     action: string;
@@ -313,17 +313,17 @@ export interface LongTermAction {
 export interface PreventiveAction {
     action: string;
     description: string;
-    preventionScope: string[];
+    preventionScope: string;
     implementation: string;
     maintenanceRequired: boolean;
     effectiveness: number;
 }
 export interface ThreatIntelligence {
-    threatFeeds: ThreatFeed[];
-    indicators: ThreatIndicator[];
-    campaigns: ThreatCampaign[];
-    attribution: ThreatAttribution[];
-    predictions: ThreatPrediction[];
+    threatFeeds: ThreatFeed;
+    indicators: ThreatIndicator;
+    campaigns: ThreatCampaign;
+    attribution: ThreatAttribution;
+    predictions: ThreatPrediction;
     contextualData: ContextualThreatData;
 }
 export interface ThreatFeed {
@@ -334,7 +334,7 @@ export interface ThreatFeed {
     lastUpdate: Date;
     indicators: number;
     relevanceScore: number;
-    coverage: string[];
+    coverage: string;
 }
 export interface ThreatIndicator {
     indicatorId: string;
@@ -343,7 +343,7 @@ export interface ThreatIndicator {
     confidence: number;
     firstSeen: Date;
     lastSeen: Date;
-    sources: string[];
+    sources: string;
     context: ThreatContext;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
@@ -351,8 +351,8 @@ export interface ThreatContext {
     campaign: string;
     malwareFamily: string;
     attackVector: string;
-    targetProfile: string[];
-    geolocation: string[];
+    targetProfile: string;
+    geolocation: string;
     additionalMetadata: Record<string, any>;
 }
 export interface ThreatCampaign {
@@ -364,33 +364,33 @@ export interface ThreatCampaign {
     lastSeen: Date;
     active: boolean;
     confidence: number;
-    indicators: string[];
-    techniques: string[];
-    targets: string[];
+    indicators: string;
+    techniques: string;
+    targets: string;
     attribution: AttributionData;
 }
 export interface AttributionData {
     actor: string;
     confidence: number;
-    evidence: string[];
+    evidence: string;
     geolocation: string;
-    motivation: string[];
+    motivation: string;
     capability: 'LOW' | 'MEDIUM' | 'HIGH' | 'ADVANCED';
-    resources: string[];
+    resources: string;
 }
 export interface ThreatAttribution {
     actorId: string;
     actorName: string;
-    aliases: string[];
+    aliases: string;
     confidence: number;
     firstSeen: Date;
     lastActivity: Date;
-    capabilities: string[];
-    techniques: string[];
-    targets: string[];
-    motivation: string[];
-    geolocation: string[];
-    associatedCampaigns: string[];
+    capabilities: string;
+    techniques: string;
+    targets: string;
+    motivation: string;
+    geolocation: string;
+    associatedCampaigns: string;
 }
 export interface ThreatPrediction {
     predictionId: string;
@@ -398,39 +398,39 @@ export interface ThreatPrediction {
     likelihood: number;
     timeframe: string;
     confidence: number;
-    basedOn: string[];
-    indicators: string[];
-    recommendations: string[];
+    basedOn: string;
+    indicators: string;
+    recommendations: string;
     impactAssessment: PredictedImpact;
 }
 export interface PredictedImpact {
-    scope: string[];
+    scope: string;
     severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-    affectedAssets: string[];
+    affectedAssets: string;
     businessImpact: string;
     preventionCost: number;
     mitigationCost: number;
 }
 export interface ContextualThreatData {
-    industryThrends: IndustryThrend[];
-    geopoliticalFactors: GeopoliticalFactor[];
-    vulnerabilityCorrelations: VulnerabilityCorrelation[];
-    seasonalPatterns: SeasonalPattern[];
-    emergingThreats: EmergingThreat[];
+    industryThrends: IndustryThrend;
+    geopoliticalFactors: GeopoliticalFactor;
+    vulnerabilityCorrelations: VulnerabilityCorrelation;
+    seasonalPatterns: SeasonalPattern;
+    emergingThreats: EmergingThreat;
 }
 export interface IndustryThrend {
     industry: string;
-    threatTypes: string[];
+    threatTypes: string;
     frequency: number;
     impact: string;
-    trends: string[];
-    predictions: string[];
+    trends: string;
+    predictions: string;
 }
 export interface GeopoliticalFactor {
     region: string;
     factor: string;
     impact: string;
-    threatTypes: string[];
+    threatTypes: string;
     riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timeline: string;
 }
@@ -438,17 +438,17 @@ export interface VulnerabilityCorrelation {
     vulnerabilityId: string;
     cve: string;
     exploitProbability: number;
-    threatActors: string[];
-    campaigns: string[];
+    threatActors: string;
+    campaigns: string;
     mitigationStatus: string;
 }
 export interface SeasonalPattern {
     pattern: string;
     timeframe: string;
-    threatTypes: string[];
+    threatTypes: string;
     frequency: number;
-    preparation: string[];
-    indicators: string[];
+    preparation: string;
+    indicators: string;
 }
 export interface EmergingThreat {
     threatId: string;
@@ -456,9 +456,9 @@ export interface EmergingThreat {
     maturity: 'EMERGING' | 'DEVELOPING' | 'MATURE';
     confidence: number;
     firstSeen: Date;
-    techniques: string[];
-    indicators: string[];
-    countermeasures: string[];
+    techniques: string;
+    indicators: string;
+    countermeasures: string;
 }
 export interface MLModel {
     modelId: string;
@@ -472,7 +472,7 @@ export interface MLModel {
     f1Score: number;
     lastRetrained: Date;
     trainingData: TrainingDataInfo;
-    features: ModelFeature[];
+    features: ModelFeature;
     hyperparameters: Record<string, any>;
     status: 'TRAINING' | 'ACTIVE' | 'DEPRECATED' | 'FAILED';
 }
@@ -482,7 +482,7 @@ export interface TrainingDataInfo {
         start: Date;
         end: Date;
     };
-    sources: string[];
+    sources: string;
     quality: number;
     bias: BiasMetrics;
     distribution: DataDistribution;
@@ -492,7 +492,7 @@ export interface BiasMetrics {
     demographicBias: Record<string, number>;
     temporalBias: number;
     systemBias: number;
-    mitigationApplied: string[];
+    mitigationApplied: string;
 }
 export interface DataDistribution {
     classes: Record<string, number>;
@@ -517,9 +517,6 @@ export interface ModelFeature {
     transformation: string;
     source: string;
 }
-/**
- * Main Security Alerting Analytics Service
- */
 export declare class SecurityAlertingAnalytics extends EventEmitter {
     private config;
     private alerts;
@@ -531,100 +528,18 @@ export declare class SecurityAlertingAnalytics extends EventEmitter {
     private responseTemplates;
     constructor(config: SecurityAlertingConfig);
     /**
-     * Process incoming security alert
-     */
+    * Process incoming security alert
+    */
     processAlert(alert: SecurityAlert): Promise<void>;
     /**
      * Get comprehensive analytics dashboard
      */
     getAnalyticsDashboard(): {
         metrics: AlertMetrics;
-        activePatterns: AlertPattern[];
-        threatSummary: ThreatSummary[];
-        recommendations: MitigationRecommendation[];
+        activePatterns: AlertPattern;
+        threatSummary: ThreatSummary;
+        recommendations: MitigationRecommendation;
         performance: PerformanceImpact;
     };
-    /**
-     * Get real-time threat intelligence
-     */
-    getThreatIntelligence(): ThreatIntelligence;
-    /**
-     * Get alert patterns
-     */
-    getAlertPatterns(limit?: number, patternType?: AlertPattern['patternType']): AlertPattern[];
-    /**
-     * Perform correlation analysis
-     */
-    performCorrelationAnalysis(timeWindow?: number): Promise<AlertPattern[]>;
-    /**
-     * Generate threat assessment report
-     */
-    generateThreatAssessment(): {
-        overallRiskScore: number;
-        topThreats: ThreatSummary[];
-        riskByClassification: Record<DataClassificationLevel, number>;
-        recommendations: string[];
-        trends: TrendAnalysis;
-        compliance: ComplianceImpact[];
-    };
-    /**
-     * Update ML models with new data
-     */
-    updateMLModels(): Promise<void>;
-    /**
-     * Get performance metrics
-     */
-    getMetrics(): AlertMetrics;
-    /**
-     * Add correlation rule
-     */
-    addCorrelationRule(rule: CorrelationRule): void;
-    /**
-     * Remove correlation rule
-     */
-    removeCorrelationRule(ruleId: string): boolean;
-    private performRealTimeAnalysis;
-    private analyzePatterns;
-    private correlateThreatIntelligence;
-    private triggerAutomatedResponse;
-    private initializeMetrics;
-    private initializeThreatIntelligence;
-    private loadCorrelationRules;
-    private loadResponseTemplates;
-    private initializeMLModels;
-    private startPeriodicTasks;
-    private updateMetrics;
-    private getAlertAnalysis;
-    private getActivePatterns;
-    private getTopThreats;
-    private getRecommendations;
-    private getPerformanceMetrics;
-    private getRecentAlerts;
-    private findMatchingAlerts;
-    private createCorrelatedPattern;
-    private calculateOverallRiskScore;
-    private calculateRiskByClassification;
-    private generateRecommendations;
-    private analyzeTrends;
-    private assessComplianceImpact;
-    private retrainModel;
-    private calculateAlertRiskScore;
-    private classifyThreatType;
-    private calculateUrgency;
-    private findRelatedAlerts;
-    private findMatchingPatterns;
-    private createNewPattern;
-    private updatePatternMetrics;
-    private matchesIndicator;
-    private findApplicableResponseTemplates;
-    private executeResponseTemplate;
-    private updateThreatIntelligence;
-    private cleanupOldAlerts;
-    private createDefaultMLModels;
-    /**
-     * Cleanup resources and stop service
-     */
-    destroy(): void;
 }
-export default SecurityAlertingAnalytics;
 //# sourceMappingURL=SecurityAlertingAnalytics.d.ts.map

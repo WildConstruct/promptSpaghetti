@@ -30,35 +30,29 @@ export const RATE_LIMIT_RULES: Record<string, RateLimitRule> = {
     window: 60, // 1 minute
     max: 5, // 5 attempts per minute
     skipSuccessfulRequests: true
-  },
-  
+  }
   register: {
     window: 60, // 1 minute
     max: 3 // 3 registrations per minute
-  },
-  
+  }
   passwordReset: {
     window: 300, // 5 minutes
     max: 3 // 3 password reset requests per 5 minutes
-  },
-  
+  }
   emailVerification: {
     window: 300, // 5 minutes
     max: 5 // 5 email verification attempts per 5 minutes
-  },
-  
+  }
   // API endpoints
   apiGeneral: {
     window: 60, // 1 minute
     max: 100 // 100 requests per minute
-  },
-  
+  }
   // Sensitive operations
   passwordChange: {
     window: 300, // 5 minutes
     max: 3 // 3 password changes per 5 minutes
-  },
-  
+  }
   // OAuth endpoints
   oauth: {
     window: 60, // 1 minute
@@ -73,15 +67,13 @@ export const OAUTH_PROVIDERS: Record<string, Partial<OAuthProviderConfig>> = {
     tokenUrl: 'https://oauth2.googleapis.com/token',
     userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
     scopes: ['openid', 'email', 'profile']
-  },
-  
+  }
   github: {
     authorizationUrl: 'https://github.com/login/oauth/authorize',
     tokenUrl: 'https://github.com/login/oauth/access_token',
     userInfoUrl: 'https://api.github.com/user',
     scopes: ['user:email']
-  },
-  
+  }
   microsoft: {
     authorizationUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
     tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
@@ -110,16 +102,14 @@ export function buildAuthConfig(): AuthConfig {
       password: process.env.DB_PASSWORD || '',
       ssl: process.env.DB_SSL === 'true',
       poolSize: parseInt(process.env.DB_POOL_SIZE || '10')
-    },
-    
+  }
     redis: {
       host: process.env.REDIS_HOST || 'localhost',
       port: parseInt(process.env.REDIS_PORT || '6379'),
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB || '0'),
       keyPrefix: process.env.REDIS_KEY_PREFIX || 'auth:'
-    },
-    
+  }
     security: {
       ...DEFAULT_SECURITY_CONFIG,
       // Allow environment overrides
@@ -128,8 +118,7 @@ export function buildAuthConfig(): AuthConfig {
       accountLockoutDuration: parseInt(process.env.ACCOUNT_LOCKOUT_DURATION || '30'),
       sessionTokenExpiry: parseInt(process.env.SESSION_TOKEN_EXPIRY || '15'),
       refreshTokenExpiry: parseInt(process.env.REFRESH_TOKEN_EXPIRY || '7')
-    },
-    
+  }
     oauth: buildOAuthProviders(),
     
     emailService: process.env.EMAIL_API_KEY ? {
@@ -202,19 +191,19 @@ export const EMAIL_TEMPLATES = {
   emailVerification: {
     subject: 'Verify your email address',
     template: 'email-verification'
-  },
+  }
   passwordReset: {
     subject: 'Reset your password',
     template: 'password-reset'
-  },
+  }
   passwordChanged: {
     subject: 'Your password has been changed',
     template: 'password-changed'
-  },
+  }
   loginAlert: {
     subject: 'New login to your account',
     template: 'login-alert'
-  },
+  }
   accountLocked: {
     subject: 'Your account has been locked',
     template: 'account-locked'

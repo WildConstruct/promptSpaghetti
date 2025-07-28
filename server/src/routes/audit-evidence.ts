@@ -10,11 +10,13 @@ import AuditEvidenceMapper from '../services/AuditEvidenceMapper.js';
 import { getMergedConfig } from '../config/evidence-mapping-config.js';
 
 // Request/Response schemas
+}
 interface EvidenceMappingRequest {
   Params: {
     frameworkId?: string;
     requirementId?: string;
     evidenceTypeId?: string;
+}
   };
   Querystring: {
     framework?: string;
@@ -32,6 +34,7 @@ interface EvidenceMappingRequest {
   };
 }
 
+}
 interface EvidenceCollectionRequest {
   Body: {
     evidence_type_id: string;
@@ -39,6 +42,7 @@ interface EvidenceCollectionRequest {
     evidence_location: string;
     integrity_hash: string;
     signature: string;
+}
   };
 }
 
@@ -393,7 +397,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
         frameworks: {
           total: report.frameworks.length,
           enabled: report.frameworks.length // All loaded frameworks are considered enabled
-        },
+  }
         evidence_types: {
           total: report.evidence_types.length,
           by_category: report.evidence_types.reduce((acc, type) => {
@@ -404,7 +408,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[type.sensitivity] = (acc[type.sensitivity] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-        },
+  }
         audit_requirements: {
           total: report.audit_requirements.length,
           by_framework: report.audit_requirements.reduce((acc, req) => {
@@ -415,7 +419,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[req.criticality] = (acc[req.criticality] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-        },
+  }
         evidence_mappings: {
           total: report.evidence_mappings.length,
           by_type: report.evidence_mappings.reduce((acc, mapping) => {
@@ -426,7 +430,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
             acc[mapping.coverage_level] = (acc[mapping.coverage_level] || 0) + 1;
             return acc;
           }, {} as Record<string, number>)
-        },
+  }
         coverage_summary: report.coverage_analysis
       };
 
@@ -470,7 +474,7 @@ export async function auditEvidenceRoutes(fastify: FastifyInstance) {
           audit_requirements_loaded: report.audit_requirements.length,
           evidence_mappings_loaded: report.evidence_mappings.length,
           total_evidence_gaps: totalGaps
-        },
+  }
         checks: {
           frameworks_available: report.frameworks.length > 0,
           evidence_types_available: report.evidence_types.length > 0,

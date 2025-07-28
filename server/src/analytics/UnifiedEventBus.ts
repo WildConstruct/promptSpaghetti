@@ -110,6 +110,7 @@ export const EventFilterSchema = z.object({
 export type EventFilter = z.infer<typeof EventFilterSchema>;
 
 // Subscriber Interface
+}
 export interface EventSubscriber {
   id: string;
   name: string;
@@ -120,10 +121,12 @@ export interface EventSubscriber {
   retryConfig?: {
     maxRetries: number;
     backoffMs: number;
+}
   };
 }
 
 // Event Bus Configuration
+}
 export interface EventBusConfig {
   maxEventHistory: number;
   enablePersistence: boolean;
@@ -132,8 +135,10 @@ export interface EventBusConfig {
   deadLetterQueue: boolean;
   metricsEnabled: boolean;
 }
+}
 
 // Event Bus Metrics
+}
 export interface EventBusMetrics {
   eventsPublished: number;
   eventsProcessed: number;
@@ -142,6 +147,7 @@ export interface EventBusMetrics {
   averageProcessingTime: number;
   queueDepth: number;
   lastEventTime: number;
+}
 }
 
 /**
@@ -190,6 +196,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Publish an analytics event to the unified bus
    */
   async publishEvent(eventData: Omit<UnifiedAnalyticsEvent, 'id' | 'timestamp'>): Promise<string> {
+
     try {
       // Create unified event with ID and timestamp
       const event: UnifiedAnalyticsEvent = {
@@ -275,7 +282,7 @@ export class UnifiedEventBus extends EventEmitter {
       filter,
       handler: (event) => {
         stream.emit('event', event);
-      },
+  }
       priority: 1000 // High priority for streams
     });
 
@@ -339,6 +346,7 @@ export class UnifiedEventBus extends EventEmitter {
     events: Record<string, unknown>[], 
     transformer: (legacyEvent: Record<string, unknown>) => Partial<UnifiedAnalyticsEvent>
   ): Promise<{ migrated: number; failed: number; errors: string[] }> {
+
     const results = { migrated: 0, failed: 0, errors: [] as string[] };
 
     for (const legacyEvent of events) {
@@ -355,7 +363,7 @@ export class UnifiedEventBus extends EventEmitter {
             migrated: true,
             originalSystem: systemName,
             migrationTime: Date.now()
-          },
+  }
           ...transformedEvent
         });
         results.migrated++;
@@ -373,6 +381,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Process event queue in batches
    */
   private async processEventQueue(): Promise<void> {
+
     if (this.processingQueue || this.eventQueue.length === 0) {
       return;
     }
@@ -406,6 +415,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Process individual event through subscribers
    */
   private async processEvent(event: UnifiedAnalyticsEvent): Promise<void> {
+
     // Add to history
     if (this.config.enablePersistence) {
       this.eventHistory.push(event);
@@ -446,6 +456,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Process event through individual subscriber
    */
   private async processSubscriber(event: UnifiedAnalyticsEvent, subscriber: EventSubscriber): Promise<void> {
+
     const result = subscriber.handler(event);
     if (result instanceof Promise) {
       await result;
@@ -460,6 +471,7 @@ export class UnifiedEventBus extends EventEmitter {
     subscriber: EventSubscriber, 
     originalError: Error
   ): Promise<void> {
+
     if (!subscriber.retryConfig) return;
 
     for (let attempt = 1; attempt <= subscriber.retryConfig.maxRetries; attempt++) {
@@ -520,6 +532,7 @@ export class UnifiedEventBus extends EventEmitter {
    * Cleanup and shutdown
    */
   async shutdown(): Promise<void> {
+
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
     }
@@ -554,6 +567,7 @@ export class EventBusFactory {
   }
 
   static async shutdown(): Promise<void> {
+
     if (this.instance) {
       await this.instance.shutdown();
       this.instance = null;

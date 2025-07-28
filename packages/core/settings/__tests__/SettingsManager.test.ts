@@ -5,10 +5,10 @@ import { AdvancedSettings, SettingsChangeEvent } from '../types';
 
 // Mock localStorage
 const localStorageMock = {
-  getItem: jest.fn<unknown[], unknown>(),
-  setItem: jest.fn<unknown[], unknown>(),
-  removeItem: jest.fn<unknown[], unknown>(),
-  clear: jest.fn<unknown[], unknown>(),
+  getItem: jest.fn<unknown, unknown>(),
+  setItem: jest.fn<unknown, unknown>(),
+  removeItem: jest.fn<unknown, unknown>(),
+  clear: jest.fn<unknown, unknown>(),
 };
 
 // Setup mocks
@@ -23,14 +23,14 @@ jest.useFakeTimers();
 describe('SettingsManager', () => {
   let settingsManager: SettingsManager;
   beforeEach(() => {
-    // Clear all mocks
-    jest.clearAllMocks();
-    localStorageMock.getItem.mockReturnValue(null as unknown);
-    // Reset singleton instance
-    (SettingsManager as any).instance = undefined;
-    // Create fresh instance
-    settingsManager = SettingsManager.getInstance();
-  });
+  // Clear all mocks
+  jest.clearAllMocks();
+  localStorageMock.getItem.mockReturnValue(null as unknown);
+  // Reset singleton instance
+  (SettingsManager as any).instance = undefined;
+  // Create fresh instance
+  settingsManager = SettingsManager.getInstance();
+});
   afterEach(() => {
     jest.clearAllTimers();
   });
@@ -68,12 +68,12 @@ describe('SettingsManager', () => {
     });
   });
   describe('Settings Updates', () => {
-    test('should update individual settings', () => {
-      const result = settingsManager.updateSetting('runCount', { )
-        value: 10, 
-        showPerformanceWarning: false, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  test('should update individual settings', () => {
+  const result = settingsManager.updateSetting('runCount', { )
+  value: 10,
+  showPerformanceWarning: false,
+  presets: [1, 3, 5, 10, 20],
+});
       expect(result.valid).toBe(true);
       expect(settingsManager.getSetting('runCount').value).toBe(10);
     });
@@ -91,48 +91,48 @@ describe('SettingsManager', () => {
     });
     test('should validate settings updates', () => {
       const invalidUpdates = {
-        runCount: { value: -1 } // Invalid: negative value
-      };
+        runCount: { value: -1 } // Invalid: negative value;
+  };
       const result = settingsManager.updateSettings(invalidUpdates as any);
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
     test('should update lastModified timestamp', () => {
-      const beforeUpdate = settingsManager.getSettings().lastModified;
-      // Wait a bit to ensure timestamp difference
-      setTimeout(() => {
-        settingsManager.updateSetting('runCount', { )
-          value: 8, 
-          showPerformanceWarning: true, 
-          presets: [1, 3, 5, 10, 20] 
-        });
+  const beforeUpdate = settingsManager.getSettings().lastModified;
+  // Wait a bit to ensure timestamp difference
+  setTimeout(() => {
+  settingsManager.updateSetting('runCount', { )
+  value: 8,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
         const afterUpdate = settingsManager.getSettings().lastModified;
         expect(afterUpdate).not.toBe(beforeUpdate);
       }, 10);
       jest.advanceTimersByTime(10);
     });
     test('should reject invalid setting keys', () => {
-      const result = settingsManager.updateSettings({ )
-        invalidKey: 'invalid' ,
-      } as any);
+  const result = settingsManager.updateSettings({ )
+  invalidKey: 'invalid',
+} as any);
       expect(result.valid).toBe(false);
     });
   });
   describe('Change Listeners', () => {
-    test('should notify listeners on changes', () => {
-      const listener = jest.fn<unknown[], unknown>();
-      const unsubscribe = settingsManager.addChangeListener(listener);
-      settingsManager.updateSetting('runCount', { )
-        value: 7, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  test('should notify listeners on changes', () => {
+  const listener = jest.fn<unknown, unknown>();
+  const unsubscribe = settingsManager.addChangeListener(listener);
+  settingsManager.updateSetting('runCount', { )
+  value: 7,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       expect(listener).toHaveBeenCalledWith()
         expect.objectContaining({)
-          key: 'runCount',
+  key: 'runCount',
           value: expect.objectContaining({ value: 7 }),
-          source: 'user',
-        })
+          source: 'user';
+  }
       );
       unsubscribe();
       settingsManager.updateSetting('runCount', { )
@@ -143,15 +143,15 @@ describe('SettingsManager', () => {
       expect(listener).toHaveBeenCalledTimes(1);
     });
     test('should handle multiple listeners', () => {
-      const listener1 = jest.fn<unknown[], unknown>();
-      const listener2 = jest.fn<unknown[], unknown>();
-      settingsManager.addChangeListener(listener1);
-      settingsManager.addChangeListener(listener2);
-      settingsManager.updateSetting('runCount', { )
-        value: 6, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  const listener1 = jest.fn<unknown, unknown>();
+  const listener2 = jest.fn<unknown, unknown>();
+  settingsManager.addChangeListener(listener1);
+  settingsManager.addChangeListener(listener2);
+  settingsManager.updateSetting('runCount', { )
+  value: 6,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       expect(listener1).toHaveBeenCalled();
       expect(listener2).toHaveBeenCalled();
     });
@@ -159,7 +159,7 @@ describe('SettingsManager', () => {
       const errorListener = jest.fn(() => {
         throw new Error('Listener error');
       });
-      const normalListener = jest.fn<unknown[], unknown>();
+      const normalListener = jest.fn<unknown, unknown>();
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
       settingsManager.addChangeListener(errorListener);
       settingsManager.addChangeListener(normalListener);
@@ -173,29 +173,29 @@ describe('SettingsManager', () => {
       consoleSpy.mockRestore();
     });
     test('should clear all listeners', () => {
-      const listener1 = jest.fn<unknown[], unknown>();
-      const listener2 = jest.fn<unknown[], unknown>();
-      settingsManager.addChangeListener(listener1);
-      settingsManager.addChangeListener(listener2);
-      settingsManager.clearListeners();
-      settingsManager.updateSetting('runCount', { )
-        value: 3, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  const listener1 = jest.fn<unknown, unknown>();
+  const listener2 = jest.fn<unknown, unknown>();
+  settingsManager.addChangeListener(listener1);
+  settingsManager.addChangeListener(listener2);
+  settingsManager.clearListeners();
+  settingsManager.updateSetting('runCount', { )
+  value: 3,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       expect(listener1).not.toHaveBeenCalled();
       expect(listener2).not.toHaveBeenCalled();
     });
   });
   describe('Settings Reset', () => {
-    test('should reset to default settings', () => {
-      // Modify some settings first
-      settingsManager.updateSetting('seed', { )
-        enabled: true, 
-        value: 12345, 
-        history: [], 
-        autoGenerate: false ,
-      });
+  test('should reset to default settings', () => {
+  // Modify some settings first
+  settingsManager.updateSetting('seed', { )
+  enabled: true,
+  value: 12345,
+  history: [],
+  autoGenerate: false,
+});
       settingsManager.updateSetting('runCount', { )
         value: 10, 
         showPerformanceWarning: false, 
@@ -207,7 +207,7 @@ describe('SettingsManager', () => {
       expect(settingsManager.getSetting('runCount').value).toBe(5);
     });
     test('should notify listeners on reset', () => {
-      const listener = jest.fn<unknown[], unknown>();
+      const listener = jest.fn<unknown, unknown>();
       settingsManager.addChangeListener(listener);
       settingsManager.resetSettings();
       // Should receive multiple notifications for each setting being reset
@@ -215,12 +215,12 @@ describe('SettingsManager', () => {
     });
   });
   describe('Persistence', () => {
-    test('should save to localStorage on changes', () => {
-      settingsManager.updateSetting('runCount', { )
-        value: 8, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  test('should save to localStorage on changes', () => {
+  settingsManager.updateSetting('runCount', { )
+  value: 8,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       // Advance timers to trigger debounced save
       jest.advanceTimersByTime(1000);
       expect(localStorageMock.setItem).toHaveBeenCalledWith()
@@ -231,17 +231,17 @@ describe('SettingsManager', () => {
     test('should load from localStorage on initialization', () => {
       const savedSettings = {
         settings: {,
-          seed: { enabled: true, value: 54321, history: [], autoGenerate: false },
+  seed: { enabled: true, value: 54321, history: [], autoGenerate: false },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 15, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
           batch: { batchSize: 8, outputFormat: 'json', namingPattern: 'test-{seed}', includeMetadata: true, autoDownload: false },
           performance: { showExecutionTimes: true, enableCaching: true, showMemoryUsage: false, logExecutionSteps: false },
           ui: { theme: 'dark', showTooltips: true, enableKeyboardShortcuts: true, reduceAnimations: false, highContrast: false },
-          version: '1.0.0',
-        },
-        timestamp: new Date().toISOString(),
-        version: '1.0.0',
-      };
+          version: '1.0.0';
+  },
+  timestamp: new Date().toISOString(),
+        version: '1.0.0';
+  };
       localStorageMock.getItem.mockReturnValue(JSON.stringify(savedSettings as unknown));
       // Reset singleton and create new instance
       (SettingsManager as any).instance = undefined;
@@ -262,11 +262,11 @@ describe('SettingsManager', () => {
       consoleSpy.mockRestore();
     });
     test('should debounce save operations', () => {
-      settingsManager.updateSetting('runCount', { )
-        value: 6, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  settingsManager.updateSetting('runCount', { )
+  value: 6,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       settingsManager.updateSetting('runCount', { )
         value: 7, 
         showPerformanceWarning: true, 
@@ -284,17 +284,16 @@ describe('SettingsManager', () => {
       expect(localStorageMock.setItem).toHaveBeenCalledTimes(1);
     });
     test('should save immediately on beforeunload', () => {
-      settingsManager.updateSetting('runCount', { )
-        value: 9, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  settingsManager.updateSetting('runCount', { )
+  value: 9,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       // Simulate beforeunload event
       const beforeUnloadHandler = addEventListenerSpy.mock.calls;
         .find(call => call[0] === 'beforeunload')?.[1];
       if (beforeUnloadHandler) {
         beforeUnloadHandler();
-      }
       expect(localStorageMock.setItem).toHaveBeenCalled();
     });
   });
@@ -309,20 +308,19 @@ describe('SettingsManager', () => {
     test('should import valid settings', () => {
       const importData = {
         settings: {,
-          seed: { enabled: true, value: 99999, history: [], autoGenerate: false },
+  seed: { enabled: true, value: 99999, history: [], autoGenerate: false },
           temperature: { enabled: true, value: 1.8, showIndicator: true, presets: [] },
           runCount: { value: 25, showPerformanceWarning: false, presets: [1, 3, 5, 10, 20] },
           batch: { batchSize: 10, outputFormat: 'csv', namingPattern: 'import-{seed}', includeMetadata: false, autoDownload: true },
           performance: { showExecutionTimes: false, enableCaching: false, showMemoryUsage: true, logExecutionSteps: true },
           ui: { theme: 'light', showTooltips: false, enableKeyboardShortcuts: false, reduceAnimations: true, highContrast: true },
-          version: '1.0.0',
-        },
-        metadata: {,
-          exportedAt: new Date().toISOString(),
-          version: '1.0.0',
-          appVersion: '1.0.0',
-        }
-      };
+          version: '1.0.0';
+  },
+  metadata: {,
+  exportedAt: new Date().toISOString(),
+  version: '1.0.0',
+  appVersion: '1.0.0',
+};
       const result = settingsManager.importSettings(importData);
       expect(result.valid).toBe(true);
       expect(settingsManager.getSetting('seed').enabled).toBe(true);
@@ -332,9 +330,9 @@ describe('SettingsManager', () => {
     test('should reject invalid import data', () => {
       const invalidData = {
         settings: {,
-          runCount: { value: -5 } // Invalid
-        },
-        metadata: {}
+  runCount: { value: -5 } // Invalid
+  },
+  metadata: {}
       };
       const result = settingsManager.importSettings(invalidData as any);
       expect(result.valid).toBe(false);
@@ -343,20 +341,19 @@ describe('SettingsManager', () => {
     test('should handle version mismatches', () => {
       const oldVersionData = {
         settings: {,
-          seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
+  seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 5, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
           batch: { batchSize: 5, outputFormat: 'individual', namingPattern: 'result-{seed}-{timestamp}', includeMetadata: true, autoDownload: false },
           performance: { showExecutionTimes: false, enableCaching: true, showMemoryUsage: false, logExecutionSteps: false },
           ui: { theme: 'auto', showTooltips: true, enableKeyboardShortcuts: true, reduceAnimations: false, highContrast: false },
-          version: '1.0.0',
-        },
-        metadata: {,
-          exportedAt: new Date().toISOString(),
-          version: '0.9.0', // Old version
-          appVersion: '0.9.0',
-        }
-      };
+          version: '1.0.0';
+  },
+  metadata: {,
+  exportedAt: new Date().toISOString(),
+  version: '0.9.0', // Old version,
+  appVersion: '0.9.0',
+};
       const result = settingsManager.importSettings(oldVersionData);
       expect(result.valid).toBe(true);
       expect(result.warnings.length).toBeGreaterThan(0);
@@ -369,19 +366,19 @@ describe('SettingsManager', () => {
     });
   });
   describe('Utility Methods', () => {
-    test('should get executor settings', () => {
-      settingsManager.updateSetting('seed', { )
-        enabled: true, 
-        value: 12345, 
-        history: [], 
-        autoGenerate: false ,
-      });
+  test('should get executor settings', () => {
+  settingsManager.updateSetting('seed', { )
+  enabled: true,
+  value: 12345,
+  history: [],
+  autoGenerate: false,
+});
       settingsManager.updateSetting('temperature', { )
         enabled: true, 
         value: 1.2, 
         showIndicator: true, 
-        presets: [] ,
-      });
+        presets: [] ;
+  });
       const executorSettings = settingsManager.getExecutorSettings();
       expect(executorSettings.seed).toBe(12345);
       expect(executorSettings.temperature).toBe(1.2);
@@ -390,13 +387,13 @@ describe('SettingsManager', () => {
       expect(executorSettings.enableCaching).toBe(true);
     });
     test('should get UI settings', () => {
-      settingsManager.updateSetting('ui', { )
-        theme: 'dark', 
-        showTooltips: false, 
-        enableKeyboardShortcuts: false, 
-        reduceAnimations: true, 
-        highContrast: true ,
-      });
+  settingsManager.updateSetting('ui', { )
+  theme: 'dark',
+  showTooltips: false,
+  enableKeyboardShortcuts: false,
+  reduceAnimations: true,
+  highContrast: true,
+});
       const uiSettings = settingsManager.getUISettings();
       expect(uiSettings.theme).toBe('dark');
       expect(uiSettings.showTooltips).toBe(false);
@@ -404,22 +401,22 @@ describe('SettingsManager', () => {
       expect(uiSettings.highContrast).toBe(true);
     });
     test('should check performance monitoring status', () => {
-      expect(settingsManager.isPerformanceMonitoringEnabled()).toBe(false);
-      settingsManager.updateSetting('performance', { )
-        showExecutionTimes: true, 
-        enableCaching: true, 
-        showMemoryUsage: false, 
-        logExecutionSteps: false ,
-      });
+  expect(settingsManager.isPerformanceMonitoringEnabled()).toBe(false);
+  settingsManager.updateSetting('performance', { )
+  showExecutionTimes: true,
+  enableCaching: true,
+  showMemoryUsage: false,
+  logExecutionSteps: false,
+});
       expect(settingsManager.isPerformanceMonitoringEnabled()).toBe(true);
     });
     test('should get performance configuration', () => {
-      settingsManager.updateSetting('performance', { )
-        showExecutionTimes: true, 
-        enableCaching: false, 
-        showMemoryUsage: true, 
-        logExecutionSteps: true ,
-      });
+  settingsManager.updateSetting('performance', { )
+  showExecutionTimes: true,
+  enableCaching: false,
+  showMemoryUsage: true,
+  logExecutionSteps: true,
+});
       const perfConfig = settingsManager.getPerformanceConfig();
       expect(perfConfig.monitoring).toBe(true);
       expect(perfConfig.executionTimes).toBe(true);
@@ -438,7 +435,6 @@ describe('SettingsManager', () => {
       // Add 15 seeds
       for (let i = 1; i <= 15; i++) {
         settingsManager.addSeedToHistory(i);
-      }
       const seedSettings = settingsManager.getSetting('seed');
       expect(seedSettings.history.length).toBe(10);
       expect(seedSettings.history[0]).toBe(15); // Most recent first
@@ -461,13 +457,13 @@ describe('SettingsManager', () => {
     });
   });
   describe('Auto-save Control', () => {
-    test('should enable/disable auto-save', () => {
-      settingsManager.setAutoSave(false);
-      settingsManager.updateSetting('runCount', { )
-        value: 12, 
-        showPerformanceWarning: true, 
-        presets: [1, 3, 5, 10, 20] 
-      });
+  test('should enable/disable auto-save', () => {
+  settingsManager.setAutoSave(false);
+  settingsManager.updateSetting('runCount', { )
+  value: 12,
+  showPerformanceWarning: true,
+  presets: [1, 3, 5, 10, 20],
+});
       jest.advanceTimersByTime(1000);
       // Should not auto-save when disabled
       expect(localStorageMock.setItem).not.toHaveBeenCalled();
@@ -486,20 +482,19 @@ describe('SettingsManager', () => {
       settingsManager.setAutoSave(false);
       const importData = {
         settings: {,
-          seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
+  seed: { enabled: false, value: undefined, history: [], autoGenerate: true },
           temperature: { enabled: false, value: 1.0, showIndicator: true, presets: [] },
           runCount: { value: 20, showPerformanceWarning: true, presets: [1, 3, 5, 10, 20] },
           batch: { batchSize: 5, outputFormat: 'individual', namingPattern: 'result-{seed}-{timestamp}', includeMetadata: true, autoDownload: false },
           performance: { showExecutionTimes: false, enableCaching: true, showMemoryUsage: false, logExecutionSteps: false },
           ui: { theme: 'auto', showTooltips: true, enableKeyboardShortcuts: true, reduceAnimations: false, highContrast: false },
-          version: '1.0.0',
-        },
-        metadata: {,
-          exportedAt: new Date().toISOString(),
-          version: '1.0.0',
-          appVersion: '1.0.0',
-        }
-      };
+          version: '1.0.0';
+  },
+  metadata: {,
+  exportedAt: new Date().toISOString(),
+  version: '1.0.0',
+  appVersion: '1.0.0',
+};
       const result = settingsManager.importSettings(importData);
       expect(result.valid).toBe(true);
       expect(settingsManager.getSetting('runCount').value).toBe(20);

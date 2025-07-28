@@ -22,6 +22,7 @@ export class AnalyticsService {
 
   // Event Tracking
   async trackEvent(eventData: AnalyticsEventInput): Promise<AnalyticsEvent> {
+
     const validatedData = AnalyticsEventSchema.parse(eventData);
     
     const [event] = await this.db.query(
@@ -42,6 +43,7 @@ export class AnalyticsService {
   }
 
   async batchTrackEvents(events: AnalyticsEventInput[]): Promise<AnalyticsEvent[]> {
+
     const validatedEvents = events.map(event => AnalyticsEventSchema.parse(event));
     
     const values = validatedEvents.map((event, index) => {
@@ -70,6 +72,7 @@ export class AnalyticsService {
 
   // Query Analytics Data
   async queryAnalytics(queryInput: AnalyticsQueryInput): Promise<any[]> {
+
     const query = AnalyticsQuerySchema.parse(queryInput);
     
     const { sql, params } = this.buildAnalyticsQuery(query);
@@ -85,6 +88,7 @@ export class AnalyticsService {
     startDate?: Date,
     endDate?: Date
   ): Promise<TemplateMetrics> {
+
     const { start, end } = this.getTimeRangeDates(timeRange, startDate, endDate);
 
     // Get basic metrics
@@ -131,7 +135,7 @@ export class AnalyticsService {
         error_count: parseInt(metricsRow.error_count) || 0,
         success_rate: parseFloat(metricsRow.success_rate) || 1.0,
         conversion_rate: this.calculateConversionRate(metricsRow)
-      },
+  }
       demographics,
       trends
     };
@@ -144,6 +148,7 @@ export class AnalyticsService {
     startDate?: Date,
     endDate?: Date
   ): Promise<CreatorDashboard> {
+
     const { start, end } = this.getTimeRangeDates(timeRange, startDate, endDate);
 
     // Get creator templates
@@ -186,6 +191,7 @@ export class AnalyticsService {
     creatorId: string,
     reportData: CustomReportInput
   ): Promise<CustomReport> {
+
     const validatedData = CustomReportSchema.parse(reportData);
 
     const [report] = await this.db.query(
@@ -207,6 +213,7 @@ export class AnalyticsService {
   }
 
   async getCustomReports(creatorId: string): Promise<CustomReport[]> {
+
     const reports = await this.db.query(
       'SELECT * FROM custom_reports WHERE creator_id = $1 ORDER BY created_at DESC',
       [creatorId]
@@ -216,6 +223,7 @@ export class AnalyticsService {
   }
 
   async generateReport(reportId: string): Promise<any> {
+
     const [report] = await this.db.query(
       'SELECT * FROM custom_reports WHERE id = $1',
       [reportId]
@@ -241,6 +249,7 @@ export class AnalyticsService {
     creatorId: string,
     templateIds?: string[]
   ): Promise<AnalyticsInsight[]> {
+
     const insights: AnalyticsInsight[] = [];
 
     // Trend insights
@@ -382,6 +391,7 @@ export class AnalyticsService {
     start: Date,
     end: Date
   ): Promise<any> {
+
     // Implementation for demographics data
     const [countriesData, devicesData] = await Promise.all([
       this.db.query(
@@ -401,7 +411,7 @@ export class AnalyticsService {
          GROUP BY metadata->>'device_type'
          ORDER BY count DESC`,
         [templateId, start, end]
-      )
+
     ]);
 
     const totalEvents = countriesData.reduce((sum, row) => sum + parseInt(row.count), 0);
@@ -426,6 +436,7 @@ export class AnalyticsService {
     start: Date,
     end: Date
   ): Promise<any> {
+
     const dailyMetrics = await this.db.query(
       `SELECT 
          DATE(timestamp) as date,
@@ -485,7 +496,7 @@ export class AnalyticsService {
           downloads: 0,
           revenue: 0
         }
-      },
+  }
       performance_summary: {
         views_trend: 0,
         downloads_trend: 0,
@@ -493,14 +504,14 @@ export class AnalyticsService {
         rating_trend: 0,
         market_share: 0,
         ranking_position: 0
-      },
+  }
       traffic_metrics: {
         unique_visitors: 0,
         returning_visitors: 0,
         bounce_rate: 0,
         average_session_duration: 0,
         top_referrers: []
-      },
+  }
       financial_metrics: {
         gross_revenue: 0,
         net_revenue: 0,
@@ -512,6 +523,7 @@ export class AnalyticsService {
   }
 
   private async getCreatorOverview(templateIds: string[], start: Date, end: Date): Promise<any> {
+
     // Implementation placeholder
     return {
       total_templates: templateIds.length,
@@ -531,6 +543,7 @@ export class AnalyticsService {
   }
 
   private async getCreatorPerformance(templateIds: string[], start: Date, end: Date): Promise<any> {
+
     // Implementation placeholder
     return {
       views_trend: 0,
@@ -543,6 +556,7 @@ export class AnalyticsService {
   }
 
   private async getCreatorTraffic(templateIds: string[], start: Date, end: Date): Promise<any> {
+
     // Implementation placeholder
     return {
       unique_visitors: 0,
@@ -554,6 +568,7 @@ export class AnalyticsService {
   }
 
   private async getCreatorFinancials(templateIds: string[], start: Date, end: Date): Promise<any> {
+
     // Implementation placeholder
     return {
       gross_revenue: 0,
@@ -565,16 +580,19 @@ export class AnalyticsService {
   }
 
   private async generateTrendInsights(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
+
     // Implementation placeholder
     return [];
   }
 
   private async detectAnomalies(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
+
     // Implementation placeholder
     return [];
   }
 
   private async findOpportunities(creatorId: string, templateIds?: string[]): Promise<AnalyticsInsight[]> {
+
     // Implementation placeholder
     return [];
   }

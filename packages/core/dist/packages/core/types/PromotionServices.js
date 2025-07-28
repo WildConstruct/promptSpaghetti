@@ -1,8 +1,22 @@
-/**
- * Promotion Service Interfaces - Epic 17 Implementation
- * Task: E17-1753114397317-A8CDBE - Design promotion interfaces
- *
- * Service contracts and API interfaces for promotion management operations
- * including CRUD, eligibility checking, application, and analytics.
- */
+ > ;
+recommendations: string;
+ > ;
+ > ;
+// Segmentation analysis
+user_segments: Array < {
+    segment_name: string,
+    usage_count: number,
+    conversion_rate: number,
+    average_order_value_cents: number
+} > ;
+// Performance insights
+insights: PerformanceInsight;
+recommendations: OptimizationRecommendation;
+ > ;
+// Trends
+daily_revenue: Array < {
+    date: string,
+    revenue_cents: number,
+    usage_count: number
+} > ;
 export {};

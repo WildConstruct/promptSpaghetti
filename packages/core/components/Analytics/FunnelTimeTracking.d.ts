@@ -17,6 +17,7 @@
 import React from 'react';
 import { ConversionFunnelDefinition, UserSegment, ConversionCohort } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
+
 export interface FunnelTimeTrackingProps {
     funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
@@ -32,8 +33,9 @@ export interface FunnelTimeTrackingProps {
     realTimeUpdates?: boolean;
     onAnomalyDetected?: (anomaly: PerformanceAnomaly) => void;
     onExport?: (data: TimeTrackingExportData) => void;
-}
+
 export type TimeGranularity = 'hour' | 'day' | 'week' | 'month' | 'quarter';
+
 export interface TimeTrackingData {
     performanceTimeline: PerformanceTimelineData[];
     trendAnalysis: TrendAnalysis[];
@@ -43,7 +45,7 @@ export interface TimeTrackingData {
     conversionVelocity: ConversionVelocityData[];
     comparativePeriods: ComparativePeriodAnalysis[];
     realTimeMetrics: RealTimeMetrics;
-}
+
 export interface PerformanceTimelineData {
     timestamp: number;
     period: string;
@@ -51,7 +53,7 @@ export interface PerformanceTimelineData {
     overallMetrics: TimelineMetrics;
     stepMetrics: StepTimelineMetrics[];
     environmentalFactors: EnvironmentalFactor[];
-}
+
 export interface TimelineMetrics {
     totalEntries: number;
     totalConversions: number;
@@ -62,7 +64,7 @@ export interface TimelineMetrics {
     revenuePerConversion: number;
     dropOffCount: number;
     dropOffRate: number;
-}
+
 export interface StepTimelineMetrics {
     stepId: string;
     stepName: string;
@@ -73,13 +75,13 @@ export interface StepTimelineMetrics {
     dropOffs: number;
     dropOffRate: number;
     revenue: number;
-}
+
 export interface EnvironmentalFactor {
     factor: string;
     value: number | string;
     impact: 'positive' | 'negative' | 'neutral';
     confidence: number;
-}
+
 export interface TrendAnalysis {
     stepId?: string;
     stepName?: string;
@@ -91,8 +93,9 @@ export interface TrendAnalysis {
     confidence: number;
     forecast: ForecastData[];
     insights: TrendInsight[];
-}
+
 export type TrendDirection = 'increasing' | 'decreasing' | 'stable' | 'volatile';
+
 export interface ForecastData {
     timestamp: number;
     predictedValue: number;
@@ -101,7 +104,7 @@ export interface ForecastData {
         upper: number;
     };
     factors: string[];
-}
+
 export interface TrendInsight {
     type: 'opportunity' | 'risk' | 'pattern' | 'recommendation';
     title: string;
@@ -110,7 +113,7 @@ export interface TrendInsight {
     urgency: 'high' | 'medium' | 'low';
     actionable: boolean;
     recommendedActions: string[];
-}
+
 export interface SeasonalPattern {
     pattern: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
     description: string;
@@ -120,21 +123,21 @@ export interface SeasonalPattern {
     businessImpact: number;
     reliability: number;
     recommendations: SeasonalRecommendation[];
-}
+
 export interface SeasonalPeak {
     period: string;
     value: number;
     consistency: number;
     duration: number;
     contributingFactors: string[];
-}
+
 export interface SeasonalTrough {
     period: string;
     value: number;
     consistency: number;
     duration: number;
     contributingFactors: string[];
-}
+
 export interface SeasonalRecommendation {
     type: 'marketing' | 'operations' | 'product' | 'support';
     title: string;
@@ -142,7 +145,7 @@ export interface SeasonalRecommendation {
     timing: string;
     expectedImpact: number;
     implementation: string[];
-}
+
 export interface PerformanceAnomaly {
     id: string;
     timestamp: number;
@@ -159,14 +162,14 @@ export interface PerformanceAnomaly {
     businessImpact: number;
     autoResolved: boolean;
     investigationStatus: 'pending' | 'investigating' | 'resolved' | 'false_positive';
-}
+
 export interface PossibleCause {
     category: 'technical' | 'external' | 'product' | 'marketing' | 'seasonal';
     description: string;
     likelihood: number;
     evidence: string[];
     investigationSteps: string[];
-}
+
 export interface StepTimeAnalysis {
     stepId: string;
     stepName: string;
@@ -175,7 +178,7 @@ export interface StepTimeAnalysis {
     timeToConvert: TimeDistribution;
     abandonmentTiming: AbandonmentTiming;
     temporalPatterns: StepTemporalPattern[];
-}
+
 export interface TimeDistribution {
     mean: number;
     median: number;
@@ -185,21 +188,21 @@ export interface TimeDistribution {
     p95: number;
     standardDeviation: number;
     skewness: number;
-}
+
 export interface AbandonmentTiming {
     earlyAbandonment: number;
     midAbandonment: number;
     lateAbandonment: number;
     averageTimeBeforeAbandonment: number;
     peakAbandonmentTime: number;
-}
+
 export interface StepTemporalPattern {
     pattern: string;
     frequency: number;
     impact: number;
     timeframe: string;
     description: string;
-}
+
 export interface ConversionVelocityData {
     timestamp: number;
     period: string;
@@ -208,7 +211,7 @@ export interface ConversionVelocityData {
     velocityTrend: 'accelerating' | 'decelerating' | 'stable';
     stepVelocities: StepVelocityData[];
     bottleneckAnalysis: BottleneckAnalysis[];
-}
+
 export interface StepVelocityData {
     stepId: string;
     stepName: string;
@@ -216,7 +219,7 @@ export interface StepVelocityData {
     throughput: number;
     efficiency: number;
     bottleneckSeverity: 'none' | 'minor' | 'moderate' | 'severe';
-}
+
 export interface BottleneckAnalysis {
     stepId: string;
     stepName: string;
@@ -224,14 +227,14 @@ export interface BottleneckAnalysis {
     severity: number;
     impact: number;
     solutions: BottleneckSolution[];
-}
+
 export interface BottleneckSolution {
     title: string;
     description: string;
     effort: 'low' | 'medium' | 'high';
     expectedImprovement: number;
     implementationTime: number;
-}
+
 export interface ComparativePeriodAnalysis {
     baselinePeriod: {,
         start: number;
@@ -247,7 +250,7 @@ export interface ComparativePeriodAnalysis {
     stepComparisons: StepPeriodComparison[];
     significantChanges: SignificantChange[];
     insights: PeriodInsight[];
-}
+
 export interface PeriodComparison {
     metric: string;
     baselineValue: number;
@@ -257,12 +260,12 @@ export interface PeriodComparison {
     significance: number;
     confidence: number;
     direction: 'improvement' | 'decline' | 'no_change';
-}
+
 export interface StepPeriodComparison {
     stepId: string;
     stepName: string;
     comparisons: PeriodComparison[];
-}
+
 export interface SignificantChange {
     stepId?: string;
     stepName?: string;
@@ -272,7 +275,7 @@ export interface SignificantChange {
     significance: number;
     businessImpact: number;
     possibleReasons: string[];
-}
+
 export interface PeriodInsight {
     type: 'performance' | 'trend' | 'anomaly' | 'opportunity';
     title: string;
@@ -280,7 +283,7 @@ export interface PeriodInsight {
     evidence: string[];
     recommendations: string[];
     priority: 'high' | 'medium' | 'low';
-}
+
 export interface RealTimeMetrics {
     currentConversionRate: number;
     currentVelocity: number;
@@ -290,7 +293,7 @@ export interface RealTimeMetrics {
     currentBottlenecks: string[];
     alertsActive: number;
     lastUpdated: number;
-}
+
 export interface TimeTrackingExportData {
     timeRange: {,
         start: number;
@@ -314,7 +317,6 @@ export interface TimeTrackingExportData {
         dataQuality: number;
         analysisDepth: 'basic' | 'standard' | 'comprehensive';
     };
-}
 /**
  * Main Funnel Time Tracking Component
  */

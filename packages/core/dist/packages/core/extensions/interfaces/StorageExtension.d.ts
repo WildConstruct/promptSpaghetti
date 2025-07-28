@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 export interface StorageExtension extends BaseExtension {
     readonly extensionType: 'storage';
-    getStorageProviders(): StorageProviderDefinition[];
+    getStorageProviders(): StorageProviderDefinition;
     createStorageProvider(providerId: string, config: any): StorageProvider;
     validateStorageConfig(providerId: string, config: any): ExtensionValidationResult;
     getStorageSchema(providerId: string): z.ZodSchema<any>;
@@ -30,14 +30,14 @@ export interface StorageProvider {
     delete(key: string): Promise<void>;
     exists(key: string): Promise<boolean>;
     clear(): Promise<void>;
-    getMany<T>(keys: string[]): Promise<Array<T | undefined>>;
+    getMany<T>(keys: string): Promise<Array<T | undefined>>;
     setMany<T>(entries: Array<{
         key: string;
         value: T;
         options?: StorageSetOptions;
     }>): Promise<void>;
-    deleteMany(keys: string[]): Promise<void>;
-    keys(pattern?: string): Promise<string[]>;
+    deleteMany(keys: string): Promise<void>;
+    keys(pattern?: string): Promise<string>;
     count(pattern?: string): Promise<number>;
     increment(key: string, amount?: number): Promise<number>;
     decrement(key: string, amount?: number): Promise<number>;
@@ -47,11 +47,11 @@ export interface StorageProvider {
     createCollection?(name: string, schema?: any): Promise<StorageCollection>;
     getCollection?(name: string): Promise<StorageCollection | undefined>;
     deleteCollection?(name: string): Promise<void>;
-    listCollections?(): Promise<string[]>;
+    listCollections?(): Promise<string>;
     supportsTransactions(): boolean;
     beginTransaction?(): Promise<StorageTransaction>;
     supportsQueries(): boolean;
-    query?<T>(query: StorageQuery): Promise<T[]>;
+    query?<T>(query: StorageQuery): Promise<T>;
     supportsStreaming(): boolean;
     stream?<T>(pattern?: string): AsyncIterableIterator<{
         key: string;
@@ -78,13 +78,10 @@ export declare enum StorageType {
     GRAPH = "graph",
     TIME_SERIES = "time_series",
     SEARCH = "search",
-    CUSTOM = "custom"
-}
-export interface StorageSetOptions {
-    ttl?: number;
-    compress?: boolean;
-    encrypt?: boolean;
-    metadata?: Record<string, any>;
+    CUSTOM = "custom",
+    export,
+    interface,
+    StorageSetOptions
 }
 export interface StorageProviderDefinition {
     id: string;
@@ -137,7 +134,7 @@ export interface StorageFieldConfiguration {
     masked?: boolean;
     multiline?: boolean;
     fileFilter?: string;
-    urlProtocols?: string[];
+    urlProtocols?: string;
 }
 export interface StorageEditorValidation {
     validateOnChange?: boolean;
@@ -147,7 +144,7 @@ export interface StorageEditorValidation {
 }
 export interface StorageWizardConfiguration {
     enabled?: boolean;
-    steps?: StorageWizardStep[];
+    steps?: StorageWizardStep;
     skipCondition?: (config: any) => boolean;
 }
 export interface StorageWizardStep {
@@ -155,15 +152,15 @@ export interface StorageWizardStep {
     title: string;
     description?: string;
     component?: React.ComponentType<any>;
-    fields?: string[];
+    fields?: string;
     validation?: (config: any) => ExtensionValidationResult;
     canSkip?: boolean;
 }
 export interface StorageDashboardConfiguration {
     enabled?: boolean;
     refreshInterval?: number;
-    metrics?: string[];
-    charts?: StorageDashboardChart[];
+    metrics?: string;
+    charts?: StorageDashboardChart;
 }
 export interface StorageDashboardChart {
     id: string;
@@ -238,30 +235,30 @@ export interface StorageSecurityConfiguration {
     };
     accessControl?: {
         enabled?: boolean;
-        users?: StorageUser[];
-        roles?: StorageRole[];
+        users?: StorageUser;
+        roles?: StorageRole;
     };
     audit?: {
         enabled?: boolean;
-        events?: string[];
+        events?: string;
         destination?: string;
     };
     masking?: {
         enabled?: boolean;
-        patterns?: string[];
+        patterns?: string;
         maskingChar?: string;
     };
 }
 export interface StorageUser {
     id: string;
     name: string;
-    roles: string[];
-    permissions: string[];
+    roles: string;
+    permissions: string;
 }
 export interface StorageRole {
     id: string;
     name: string;
-    permissions: string[];
+    permissions: string;
 }
 export interface StorageBackupConfiguration {
     enabled?: boolean;
@@ -274,9 +271,9 @@ export interface StorageBackupConfiguration {
 }
 export interface StorageMonitoringConfiguration {
     enabled?: boolean;
-    metrics?: string[];
-    alerts?: StorageAlert[];
-    healthChecks?: StorageHealthCheck[];
+    metrics?: string;
+    alerts?: StorageAlert;
+    healthChecks?: StorageHealthCheck;
 }
 export interface StorageAlert {
     id: string;
@@ -323,7 +320,7 @@ export interface StorageProviderMetadata {
     license: string;
     repository?: string;
     documentation?: string;
-    examples?: StorageExample[];
+    examples?: StorageExample;
     performance?: {
         throughput: 'low' | 'medium' | 'high';
         latency: 'low' | 'medium' | 'high';
@@ -332,18 +329,18 @@ export interface StorageProviderMetadata {
     compatibility?: {
         minVersion: string;
         maxVersion?: string;
-        platforms?: string[];
-        dependencies?: string[];
+        platforms?: string;
+        dependencies?: string;
     };
-    categories?: string[];
-    tags?: string[];
-    keywords?: string[];
+    categories?: string;
+    tags?: string;
+    keywords?: string;
 }
 export interface StorageExample {
     name: string;
     description: string;
     config: any;
-    operations: StorageOperation[];
+    operations: StorageOperation;
 }
 export interface StorageOperation {
     operation: string;
@@ -358,16 +355,16 @@ export interface StorageCollection {
     update<T>(id: string, document: Partial<T>): Promise<void>;
     upsert<T>(id: string, document: T): Promise<void>;
     find<T>(id: string): Promise<T | undefined>;
-    findMany<T>(query: any): Promise<T[]>;
+    findMany<T>(query: any): Promise<T>;
     delete(id: string): Promise<void>;
     deleteMany(query: any): Promise<number>;
     count(query?: any): Promise<number>;
     exists(id: string): Promise<boolean>;
     clear(): Promise<void>;
-    createIndex(fields: string[], options?: any): Promise<void>;
+    createIndex(fields: string, options?: any): Promise<void>;
     deleteIndex(name: string): Promise<void>;
-    listIndexes(): Promise<string[]>;
-    aggregate<T>(pipeline: any[]): Promise<T[]>;
+    listIndexes(): Promise<string>;
+    aggregate<T>(pipeline: any): Promise<T>;
     stream<T>(query?: any): AsyncIterableIterator<T>;
 }
 export interface StorageTransaction {
@@ -390,17 +387,17 @@ export interface StorageQuery {
         field: string;
         direction: 'asc' | 'desc';
     }>;
-    select?: string[];
-    groupBy?: string[];
+    select?: string;
+    groupBy?: string;
     having?: StorageQueryCondition;
-    joins?: StorageQueryJoin[];
+    joins?: StorageQueryJoin;
 }
 export interface StorageQueryCondition {
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'like' | 'regex';
     value: any;
-    and?: StorageQueryCondition[];
-    or?: StorageQueryCondition[];
+    and?: StorageQueryCondition;
+    or?: StorageQueryCondition;
     not?: StorageQueryCondition;
 }
 export interface StorageQueryJoin {
@@ -483,7 +480,7 @@ export interface StorageMigrationResult {
     migratedKeys: number;
     failedKeys: number;
     duration: number;
-    errors: Error[];
+    errors: Error;
 }
 export interface StorageMigrationProgress {
     status: 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';

@@ -4,6 +4,7 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface PolicyUpdateRequest {
   requestId: string;
   policyId: string;
@@ -25,7 +26,9 @@ export interface PolicyUpdateRequest {
   submittedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface PolicyChange {
   changeId: string;
   changeType: ChangeType;
@@ -37,7 +40,9 @@ export interface PolicyChange {
   affectedUsers: string[];
   breakingChange: boolean;
 }
+}
 
+}
 export interface ImpactAssessment {
   userImpact: UserImpact;
   systemImpact: SystemImpact;
@@ -46,7 +51,9 @@ export interface ImpactAssessment {
   mitigationStrategies: string[];
   rollbackPlan: string;
 }
+}
 
+}
 export interface UserImpact {
   affectedUserCount: number;
   userSegments: string[];
@@ -55,7 +62,9 @@ export interface UserImpact {
   trainingRequired: boolean;
   communicationPlan: string;
 }
+}
 
+}
 export interface SystemImpact {
   affectedSystems: string[];
   configurationChanges: string[];
@@ -64,7 +73,9 @@ export interface SystemImpact {
   performanceImpact: PerformanceImpact;
   securityImplications: string[];
 }
+}
 
+}
 export interface ComplianceImpact {
   regulatoryFrameworks: string[];
   complianceRequirements: string[];
@@ -72,7 +83,9 @@ export interface ComplianceImpact {
   reportingChanges: string[];
   certificationImpacts: string[];
 }
+}
 
+}
 export interface RiskAssessment {
   riskLevel: RiskLevel;
   identifiedRisks: Risk[];
@@ -80,7 +93,9 @@ export interface RiskAssessment {
   residualRisk: RiskLevel;
   acceptanceCriteria: string[];
 }
+}
 
+}
 export interface Risk {
   riskId: string;
   description: string;
@@ -90,7 +105,9 @@ export interface Risk {
   severity: RiskSeverity;
   mitigation: string;
 }
+}
 
+}
 export interface PerformanceImpact {
   expectedLoadIncrease: number;
   storageRequirements: number;
@@ -98,7 +115,9 @@ export interface PerformanceImpact {
   networkImpact: string;
   scalabilityConsiderations: string[];
 }
+}
 
+}
 export interface ReviewRequirement {
   reviewType: ReviewType;
   reviewerRole: string;
@@ -107,7 +126,9 @@ export interface ReviewRequirement {
   dependencies: string[];
   deadline: Date;
 }
+}
 
+}
 export interface ApprovalWorkflow {
   workflowId: string;
   stages: ApprovalStage[];
@@ -115,7 +136,9 @@ export interface ApprovalWorkflow {
   escalationRules: EscalationRule[];
   timeoutSettings: TimeoutSettings;
 }
+}
 
+}
 export interface ApprovalStage {
   stageId: string;
   stageName: string;
@@ -128,7 +151,9 @@ export interface ApprovalStage {
   completedAt?: Date;
   conditions: string[];
 }
+}
 
+}
 export interface Approver {
   approverId: string;
   approverRole: string;
@@ -138,21 +163,27 @@ export interface Approver {
   decidedAt?: Date;
   qualifications: string[];
 }
+}
 
+}
 export interface EscalationRule {
   condition: EscalationCondition;
   action: EscalationAction;
   escalateTo: string[];
   delayHours: number;
 }
+}
 
+}
 export interface TimeoutSettings {
   stageTimeoutHours: number;
   workflowTimeoutDays: number;
   reminderIntervalHours: number;
   autoEscalate: boolean;
 }
+}
 
+}
 export interface PolicyVersion {
   versionId: string;
   policyId: string;
@@ -170,7 +201,9 @@ export interface PolicyVersion {
   previousVersion?: string;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface PolicyDeployment {
   deploymentId: string;
   policyVersionId: string;
@@ -184,7 +217,9 @@ export interface PolicyDeployment {
   rollbackVersion?: string;
   validationResults: ValidationResult[];
 }
+}
 
+}
 export interface ValidationResult {
   validationType: ValidationType;
   status: ValidationStatus;
@@ -193,14 +228,18 @@ export interface ValidationResult {
   validatedAt: Date;
   validatorId: string;
 }
+}
 
+}
 export interface DeploymentSchedule {
   phases: DeploymentPhase[];
   rollbackTriggers: string[];
   successCriteria: string[];
   monitoringPeriod: number; // hours
 }
+}
 
+}
 export interface DeploymentPhase {
   phaseId: string;
   phaseName: string;
@@ -210,7 +249,9 @@ export interface DeploymentPhase {
   rollbackThreshold: number;
   validationChecks: string[];
 }
+}
 
+}
 export interface RolloutStrategy {
   strategyType: RolloutType;
   parameters: Record<string, any>;
@@ -218,26 +259,33 @@ export interface RolloutStrategy {
   blueGreenConfig?: BlueGreenConfig;
   featureFlagConfig?: FeatureFlagConfig;
 }
+}
 
+}
 export interface BlueGreenConfig {
   environmentA: string;
   environmentB: string;
   switchoverCriteria: string[];
   rollbackTime: number; // minutes
 }
+}
 
+}
 export interface FeatureFlagConfig {
   flagName: string;
   defaultValue: boolean;
   rolloutRules: RolloutRule[];
   killSwitchEnabled: boolean;
 }
+}
 
+}
 export interface RolloutRule {
   ruleId: string;
   condition: string;
   percentage: number;
   userSegments: string[];
+}
 }
 
 export enum PolicyType {
@@ -430,6 +478,7 @@ export class PolicyUpdateWorkflowService {
     request: Omit<PolicyUpdateRequest,
     'requestId' | 'submittedAt' | 'status'>
   ): Promise<{ requestId: string }> {
+
     const requestId = await this.generateRequestId();
 
     try {
@@ -523,6 +572,7 @@ export class PolicyUpdateWorkflowService {
     decision: ApprovalDecision,
     comments?: string
   ): Promise<{ workflowComplete: boolean; approved: boolean }> {
+
     try {
       const request = await this.getPolicyUpdateRequest(requestId);
       if (!request) {
@@ -594,6 +644,7 @@ export class PolicyUpdateWorkflowService {
     requestId: string,
     deploymentConfig: Omit<PolicyDeployment, 'deploymentId' | 'status' | 'startedAt'>
   ): Promise<{ deploymentId: string }> {
+
     const deploymentId = await this.generateDeploymentId();
 
     try {
@@ -673,6 +724,7 @@ export class PolicyUpdateWorkflowService {
    * Get pending approvals for a user
    */
   async getPendingApprovals(approverId: string): Promise<PolicyUpdateRequest[]> {
+
     const result = await this.db.query(`
       SELECT * FROM policy_update_requests 
       WHERE status = $1 
@@ -687,6 +739,7 @@ export class PolicyUpdateWorkflowService {
    * Get policy update history
    */
   async getPolicyUpdateHistory(policyId: string): Promise<PolicyUpdateRequest[]> {
+
     const result = await this.db.query(`
       SELECT * FROM policy_update_requests 
       WHERE policy_id = $1 
@@ -699,6 +752,7 @@ export class PolicyUpdateWorkflowService {
   // Private helper methods
 
   private async validateUpdateRequest(request: unknown): Promise<void> {
+
     if (!request.policyId) {
       throw new Error('Policy ID is required');
     }
@@ -720,6 +774,7 @@ export class PolicyUpdateWorkflowService {
     assessment: ImpactAssessment,
     changes: PolicyChange[]
   ): Promise<ImpactAssessment> {
+
     // Analyze changes to enhance impact assessment
     const breakingChanges = changes.filter(c => c.breakingChange);
     const affectedUserCount = Math.max(...changes.map(c => c.affectedUsers.length));
@@ -730,7 +785,7 @@ export class PolicyUpdateWorkflowService {
         ...assessment.userImpact,
         affectedUserCount: Math.max(assessment.userImpact.affectedUserCount, affectedUserCount),
         requiresReacceptance: breakingChanges.length > 0 || assessment.userImpact.requiresReacceptance
-      },
+  }
       riskAssessment: {
         ...assessment.riskAssessment,
         riskLevel: breakingChanges.length > 0 ? RiskLevel.HIGH : assessment.riskAssessment.riskLevel
@@ -743,6 +798,7 @@ export class PolicyUpdateWorkflowService {
     priority: UpdatePriority,
     impactAssessment: ImpactAssessment
   ): Promise<ApprovalWorkflow> {
+
     const stages: ApprovalStage[] = [];
 
     // Always require legal review for policy changes
@@ -816,12 +872,14 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async startApprovalWorkflow(requestId: string, workflow: ApprovalWorkflow): Promise<void> {
+
     if (workflow.stages.length > 0) {
       await this.startApprovalStage(requestId, workflow.stages[0]);
     }
   }
 
   private async startApprovalStage(requestId: string, stage: ApprovalStage): Promise<void> {
+
     stage.status = StageStatus.IN_PROGRESS;
     stage.startedAt = new Date();
 
@@ -843,6 +901,7 @@ export class PolicyUpdateWorkflowService {
     decision: ApprovalDecision,
     comments?: string
   ): Promise<ApprovalWorkflow> {
+
     const currentStage = workflow.stages[workflow.currentStageIndex];
     const approver = currentStage.approvers.find(a => a.approverId === approverId);
 
@@ -861,6 +920,7 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async checkStageCompletion(stage: ApprovalStage): Promise<boolean> {
+
     const approvals = stage.approvers.filter(a => a.status === ApprovalStatus.APPROVED);
     const rejections = stage.approvers.filter(a => a.status === ApprovalStatus.REJECTED);
 
@@ -880,6 +940,7 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async rejectPolicyUpdate(requestId: string, reason: string): Promise<void> {
+
     await this.db.query(`
       UPDATE policy_update_requests 
       SET status = $1, rejection_reason = $2, rejected_at = NOW()
@@ -888,6 +949,7 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async approvePolicyUpdate(requestId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE policy_update_requests 
       SET status = $1, approved_at = NOW()
@@ -896,6 +958,7 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async createPolicyVersion(request: PolicyUpdateRequest): Promise<PolicyVersion> {
+
     const versionId = await this.generateVersionId();
     const version = request.proposedVersion;
     const contentHash = await this.calculateContentHash(request.description);
@@ -939,12 +1002,14 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async validateDeploymentConfig(config: unknown): Promise<void> {
+
     if (!config.targetEnvironments || config.targetEnvironments.length === 0) {
       throw new Error('At least one target environment must be specified');
     }
   }
 
   private async executeDeployment(deployment: PolicyDeployment): Promise<void> {
+
     // Implementation for executing the deployment
     // This would handle the actual rollout strategy
     await this.db.query(`
@@ -955,6 +1020,7 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async notifyApprover(_____requestId: string, _____approver: Approver): Promise<void> {
+
     // Implementation for sending notifications to approvers
   }
 
@@ -965,23 +1031,28 @@ export class PolicyUpdateWorkflowService {
   }
 
   private async calculateContentHash(content: string): Promise<string> {
+
     // Simple hash for demo - in production would use proper cryptographic hash
     return Buffer.from(content).toString('base64').slice(0, 32);
   }
 
   private async generateRequestId(): Promise<string> {
+
     return `PUR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateVersionId(): Promise<string> {
+
     return `PV-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async generateDeploymentId(): Promise<string> {
+
     return `PD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private async getPolicyUpdateRequest(requestId: string): Promise<PolicyUpdateRequest | null> {
+
     const result = await this.db.query(`
       SELECT * FROM policy_update_requests WHERE request_id = $1
     `, [requestId]);

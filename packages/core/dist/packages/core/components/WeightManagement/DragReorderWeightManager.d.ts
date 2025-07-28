@@ -15,8 +15,8 @@ export interface WeightedOption {
     category?: string;
 }
 export interface DragReorderProps {
-    options: WeightedOption[];
-    onChange: (options: WeightedOption[]) => void;
+    options: WeightedOption;
+    onChange: (options: WeightedOption) => void;
     disabled?: boolean;
     showWeights?: boolean;
     showPercentages?: boolean;
@@ -47,6 +47,5 @@ export interface WeightStatistics {
     entropyScore: number;
     weightDistribution: 'uniform' | 'skewed' | 'bimodal' | 'concentrated';
 }
-export declare const DragReorderWeightManager: React.FC<DragReorderProps>;
 export default DragReorderWeightManager;
 //# sourceMappingURL=DragReorderWeightManager.d.ts.map

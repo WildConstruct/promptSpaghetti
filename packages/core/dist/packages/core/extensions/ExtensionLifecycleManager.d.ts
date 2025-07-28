@@ -14,7 +14,7 @@ export declare class ExtensionLifecycleManager {
     /**
      * Static helper to get active extensions
      */
-    static getActiveExtensions(): BaseExtension[];
+    static getActiveExtensions(): BaseExtension;
     /**
      * Initialize the lifecycle manager
      */
@@ -24,13 +24,10 @@ export declare class ExtensionLifecycleManager {
      */
     registerExtension(extension: BaseExtension): Promise<void>;
     /**
-     * Unregister an extension
-     */
-    unregisterExtension(extensionId: string): Promise<void>;
-    /**
      * Initialize an extension
      */
     initializeExtension(extensionId: string): Promise<void>;
+    error: any;
     /**
      * Activate an extension
      */
@@ -39,6 +36,7 @@ export declare class ExtensionLifecycleManager {
      * Deactivate an extension
      */
     deactivateExtension(extensionId: string): Promise<void>;
+    error: any;
     /**
      * Dispose an extension
      */
@@ -48,24 +46,24 @@ export declare class ExtensionLifecycleManager {
      */
     getExtension(extensionId: string): BaseExtension | undefined;
     /**
-     * Get all extensions
-     */
-    getAllExtensions(): BaseExtension[];
+    * Get all extensions
+    */
+    getAllExtensions(): BaseExtension;
     /**
-     * Get extensions by state
-     */
-    getExtensionsByState(state: ExtensionLifecycleState): BaseExtension[];
+    * Get extensions by state
+    */
+    getExtensionsByState(state: ExtensionLifecycleState): BaseExtension;
     /**
-     * Get extension state
-     */
+    * Get extension state
+    */
     getExtensionState(extensionId: string): ExtensionLifecycleState;
     /**
-     * Get extension context
-     */
+    * Get extension context
+    */
     getExtensionContext(extensionId: string): ExtensionContext | undefined;
     /**
-     * Get extension health status
-     */
+    * Get extension health status
+    */
     getExtensionHealth(extensionId: string): ExtensionHealthStatus;
     /**
      * Check extension health
@@ -75,37 +73,7 @@ export declare class ExtensionLifecycleManager {
      * Get extension statistics
      */
     getExtensionStatistics(): ExtensionStatistics;
-    /**
-     * Event handling
-     */
-    on(event: string, listener: (data: any) => void): void;
-    off(event: string, listener: (data: any) => void): void;
-    private emit;
-    /**
-     * Private helper methods
-     */
-    private getExtensionEntry;
-    private setState;
-    private addError;
-    private validateExtension;
-    private validateDependencies;
-    private validatePermissions;
-    private createExtensionContext;
-    private createLogger;
-    private createStorage;
-    private createEventEmitter;
-    private createRuntime;
-    private createUIContext;
-    private createAPIContext;
-    private isValidVersion;
+    Array: any;
+    from(this: any, extensions: any, values: any): any;
 }
-interface ExtensionStatistics {
-    total: number;
-    byState: Record<ExtensionLifecycleState, number>;
-    byType: Record<string, number>;
-    errors: number;
-    healthy: number;
-}
-export declare const extensionLifecycleManager: ExtensionLifecycleManager;
-export {};
 //# sourceMappingURL=ExtensionLifecycleManager.d.ts.map

@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 /**
  * Analytics API response wrapper
  */
+
 export interface AnalyticsResponse<T = unknown> {
     success: boolean;
     data?: T;
@@ -16,10 +17,11 @@ export interface AnalyticsResponse<T = unknown> {
         totalDataPoints?: number;
         [key: string]: any;
     };
-}
+
 /**
  * Analytics query parameters
  */
+
 export interface AnalyticsQuery {
     startTime?: number;
     endTime?: number;
@@ -27,18 +29,22 @@ export interface AnalyticsQuery {
     organizationId?: number;
     limit?: number;
     offset?: number;
-}
+
+
 /**
  * Time range parameters
  */
+
 export interface TimeRange {
     startTime: number;
     endTime: number;
     granularity?: 'hour' | 'day';
-}
+
+
 /**
  * Budget configuration
  */
+
 export interface BudgetConfig {
     name: string;
     description?: string;
@@ -48,10 +54,12 @@ export interface BudgetConfig {
     alertThresholds?: number[];
     userId?: number;
     organizationId?: number;
-}
+
+
 /**
  * Report configuration
  */
+
 export interface ReportConfig {
     startTime: number;
     endTime: number;
@@ -59,10 +67,12 @@ export interface ReportConfig {
     includeHeatMap?: boolean;
     includeCostAnalysis?: boolean;
     includePatterns?: boolean;
-}
+
+
 /**
  * Analytics client configuration
  */
+
 export interface AnalyticsClientConfig {
     baseUrl: string;
     apiKey?: string;
@@ -71,7 +81,8 @@ export interface AnalyticsClientConfig {
     retryDelay?: number;
     enableCaching?: boolean;
     cacheTimeout?: number;
-}
+
+
 /**
  * Analytics API client
  */
@@ -171,7 +182,7 @@ export declare class AnalyticsClient extends EventEmitter {
      * Setup periodic cache cleanup
      */
     private setupCacheCleanup;
-}
+
 /**
  * Default analytics client instance
  */

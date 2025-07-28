@@ -7,12 +7,13 @@
  */
 import React from 'react';
 import { CreateContributionRequest } from '../../types/contributions';
+
 export interface ContributionSubmissionFormProps {
     onSubmit: (data: CreateContributionRequest) => void;
     onCancel: () => void;
     initialData?: Partial<CreateContributionRequest>;
     className?: string;
-}
+
 export declare const ContributionSubmissionForm: React.FC<ContributionSubmissionFormProps>;
 export default ContributionSubmissionForm;
 //# sourceMappingURL=ContributionSubmissionForm.d.ts.map

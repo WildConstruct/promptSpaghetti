@@ -11,8 +11,10 @@ import { ToggleStateService, ToggleStateQuery, BulkStateOperation } from '../ser
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 import { ToggleEvaluationContext, ToggleType, ClaudeImpact } from '../database/feature-toggle-models';
 
+}
 interface ToggleStateRouteOptions {
   dao: FeatureToggleDAO;
+}
 }
 
 // Request schemas for validation
@@ -23,16 +25,16 @@ const stateQuerySchema = {
       type: 'array', 
       items: { type: 'string' },
       maxItems: 100
-    },
+  }
     types: {
       type: 'array',
       items: { type: 'string', enum: Object.values(ToggleType) }
-    },
+  }
     enabled: { type: 'boolean' },
     claudeImpact: {
       type: 'array',
       items: { type: 'string', enum: Object.values(ClaudeImpact) }
-    },
+  }
     orgId: { type: 'string' },
     tags: { type: 'array', items: { type: 'string' } },
     lastModified: { 
@@ -41,7 +43,7 @@ const stateQuerySchema = {
         since: { type: 'string', format: 'date-time' },
         until: { type: 'string', format: 'date-time' }
       }
-    },
+  }
     includeMetadata: { type: 'boolean', default: false },
     includeAudit: { type: 'boolean', default: false }
   }
@@ -54,7 +56,7 @@ const bulkStateOperationSchema = {
     operation: {
       type: 'string',
       enum: ['enable', 'disable', 'toggle', 'update_values']
-    },
+  }
     toggles: {
       type: 'array',
       items: {
@@ -70,10 +72,10 @@ const bulkStateOperationSchema = {
             }
           }
         ]
-      },
+  }
       minItems: 1,
       maxItems: 50
-    },
+  }
     reason: { type: 'string', maxLength: 500 },
     dryRun: { type: 'boolean', default: false },
     rollbackOnError: { type: 'boolean', default: true }
@@ -87,15 +89,15 @@ const stateWatchSchema = {
       type: 'array',
       items: { type: 'string' },
       maxItems: 20
-    },
+  }
     events: {
       type: 'array',
       items: {
         type: 'string',
         enum: ['state_changed', 'value_updated', 'enabled', 'disabled', 'created', 'archived']
-      },
+  }
       default: ['state_changed', 'value_updated']
-    },
+  }
     filters: stateQuerySchema
   }
 };
@@ -139,21 +141,21 @@ export default async function toggleStateRoutes(
             type: 'string',
             enum: ['full', 'minimal', 'keys_only', 'summary'],
             default: 'full'
-          },
+  }
           sort: {
             type: 'string',
             enum: ['name', 'key', 'created_at', 'updated_at', 'usage_count'],
             default: 'name'
-          },
+  }
           order: {
             type: 'string',
             enum: ['asc', 'desc'],
             default: 'asc'
-          },
+  }
           limit: { type: 'number', minimum: 1, maximum: 500, default: 100 },
           offset: { type: 'number', minimum: 0, default: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -234,16 +236,16 @@ export default async function toggleStateRoutes(
             items: {
               type: 'string',
               enum: ['type', 'enabled', 'claudeImpact', 'created_by', 'updated_by']
-            },
+  }
             default: ['type', 'enabled']
-          },
+  }
           timeRange: {
             type: 'string',
             enum: ['1h', '24h', '7d', '30d', 'all'],
             default: '24h'
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -308,7 +310,7 @@ export default async function toggleStateRoutes(
               type: 'string',
               enum: ['created', 'updated', 'activated', 'deactivated', 'archived', 'override']
             }
-          },
+  }
           limit: { type: 'number', minimum: 1, maximum: 200, default: 50 },
           includeDiff: { type: 'boolean', default: true }
         }
@@ -361,7 +363,7 @@ export default async function toggleStateRoutes(
                 failed: { type: 'array' },
                 rollbacks: { type: 'array' }
               }
-            },
+  }
             summary: {
               type: 'object',
               properties: {
@@ -421,7 +423,7 @@ export default async function toggleStateRoutes(
               keys: { type: 'array', items: { type: 'string' } },
               filters: stateQuerySchema
             }
-          },
+  }
           target: {
             type: 'object',
             required: ['orgId'],
@@ -431,7 +433,7 @@ export default async function toggleStateRoutes(
               keyMapping: { type: 'object' },
               overwriteExisting: { type: 'boolean', default: false }
             }
-          },
+  }
           options: {
             type: 'object',
             properties: {
@@ -556,7 +558,7 @@ export default async function toggleStateRoutes(
               timestamp: { type: 'string', format: 'date-time' },
               filters: stateQuerySchema
             }
-          },
+  }
           right: {
             type: 'object',
             properties: {
@@ -564,7 +566,7 @@ export default async function toggleStateRoutes(
               timestamp: { type: 'string', format: 'date-time' },
               filters: stateQuerySchema
             }
-          },
+  }
           options: {
             type: 'object',
             properties: {
@@ -662,7 +664,7 @@ export default async function toggleStateRoutes(
             items: {
               type: 'string',
               enum: ['dependencies', 'conflicts', 'claude_impact', 'performance', 'consistency']
-            },
+  }
             default: ['dependencies', 'conflicts', 'claude_impact']
           }
         }

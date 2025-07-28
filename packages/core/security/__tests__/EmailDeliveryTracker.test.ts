@@ -16,32 +16,31 @@ import {
 describe('EmailDeliveryTracker', () => {
   let tracker: EmailDeliveryTracker;
   beforeEach(() => {
-    jest.useFakeTimers();
-    tracker = new EmailDeliveryTracker({)
-      defaultProvider: EmailProvider.SENDGRID,
-      trackingEnabled: true,
-      enableAnalytics: true,
-    });
+  jest.useFakeTimers();
+  tracker = new EmailDeliveryTracker({)
+  defaultProvider: EmailProvider.SENDGRID,
+  trackingEnabled: true,
+  enableAnalytics: true,
+});
   });
   afterEach(() => {
     jest.useRealTimers();
     tracker.removeAllListeners();
   });
   describe('Email Sending and Basic Tracking', () => {
-    test('should send email and create delivery record', async () => {
-      const request: EmailSendRequest = {
-        type: EmailType.ACCOUNT_VERIFICATION,
-        recipient: 'test@example.com',
-        subject: 'Verify your account',
-        content: {,
-          html: '<p>Please verify your account</p>',
-          text: 'Please verify your account',
-        },
-        metadata: {,
-          userId: 'user-123',
-          sessionId: 'session-456',
-        }
-      };
+  test('should send email and create delivery record', async () => {
+  const request: EmailSendRequest = {,
+  type: EmailType.ACCOUNT_VERIFICATION,
+  recipient: 'test@example.com',
+  subject: 'Verify your account',
+  content: {,
+  html: '<p>Please verify your account</p>',
+  text: 'Please verify your account',
+},
+  metadata: {,
+  userId: 'user-123',
+  sessionId: 'session-456',
+};
       const emailId = await tracker.sendEmail(request);
       expect(emailId).toBeDefined();
       expect(typeof emailId).toBe('string');
@@ -54,25 +53,24 @@ describe('EmailDeliveryTracker', () => {
       expect(record?.status).toBe(DeliveryStatus.QUEUED);
     });
     test('should handle email sending failure', async () => {
-      // Mock a failing email service
-      const failingTracker = new EmailDeliveryTracker({)
-        defaultProvider: EmailProvider.SMTP,
-      });
+  // Mock a failing email service
+  const failingTracker = new EmailDeliveryTracker({)
+  defaultProvider: EmailProvider.SMTP,
+});
       // Override the sendEmailViaProvider method to simulate failure
-      (failingTracker as any).sendEmailViaProvider = jest.fn<unknown[], unknown>().mockRejectedValue()
+      (failingTracker as any).sendEmailViaProvider = jest.fn<unknown, unknown>().mockRejectedValue()
         new Error('SMTP connection failed')
       );
-      const request: EmailSendRequest = {
-        type: EmailType.PASSWORD_RESET,
-        recipient: 'fail@example.com',
-        subject: 'Reset your password',
-        content: {,
-          text: 'Reset link here',
-        },
-        metadata: {,
-          userId: 'user-fail',
-        }
-      };
+      const request: EmailSendRequest = {,
+  type: EmailType.PASSWORD_RESET,
+  recipient: 'fail@example.com',
+  subject: 'Reset your password',
+  content: {,
+  text: 'Reset link here',
+},
+  metadata: {,
+  userId: 'user-fail',
+};
       const emailId = await failingTracker.sendEmail(request);
       const record = failingTracker.getDeliveryRecord(emailId);
       expect(record?.status).toBe(DeliveryStatus.FAILED);
@@ -81,21 +79,20 @@ describe('EmailDeliveryTracker', () => {
       failingTracker.removeAllListeners();
     });
     test('should progress through delivery statuses', async () => {
-      const statusChanges: DeliveryStatus[] = [];
-      tracker.on('statusChanged', (data) => {
-        statusChanges.push(data.newStatus);
-      });
-      const request: EmailSendRequest = {
-        type: EmailType.MFA_CODE,
-        recipient: 'mfa@example.com',
-        subject: 'Your MFA code',
-        content: {,
-          text: 'Your code is: 123456',
-        },
-        metadata: {,
-          userId: 'user-mfa',
-        }
-      };
+  const statusChanges: DeliveryStatus = [];
+  tracker.on('statusChanged', (data) => {
+  statusChanges.push(data.newStatus);
+});
+      const request: EmailSendRequest = {,
+  type: EmailType.MFA_CODE,
+  recipient: 'mfa@example.com',
+  subject: 'Your MFA code',
+  content: {,
+  text: 'Your code is: 123456',
+},
+  metadata: {,
+  userId: 'user-mfa',
+};
       const emailId = await tracker.sendEmail(request);
       // Fast forward timers to simulate delivery progression
       jest.advanceTimersByTime(500); // Sending delay
@@ -146,7 +143,7 @@ describe('EmailDeliveryTracker', () => {
       });
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.SENT,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
@@ -156,16 +153,16 @@ describe('EmailDeliveryTracker', () => {
       const mockEmailId = 'test-email-bounce';
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.SENT,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       const bounceInfo = {
-        type: BounceType.HARD,
-        subType: BounceSubType.NO_EMAIL,
-        reason: 'Email address does not exist',
-        diagnosticCode: '550 5.1.1 User unknown',
-      };
+  type: BounceType.HARD,
+  subType: BounceSubType.NO_EMAIL,
+  reason: 'Email address does not exist',
+  diagnosticCode: '550 5.1.1 User unknown',
+};
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, { bounceInfo });
       const record = tracker.getDeliveryRecord(mockEmailId);
       expect(record?.status).toBe(DeliveryStatus.BOUNCED);
@@ -178,17 +175,17 @@ describe('EmailDeliveryTracker', () => {
       const mockEmailId = 'test-email-open';
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.DELIVERED,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       const openEvent = {
-        timestamp: new Date(),
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0',
-        location: 'San Francisco, CA',
-        deviceType: 'desktop',
-      };
+  timestamp: new Date(),
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0',
+  location: 'San Francisco, CA',
+  deviceType: 'desktop',
+};
       tracker.addTrackingEvent(mockEmailId, 'open', openEvent);
       const record = tracker.getDeliveryRecord(mockEmailId);
       expect(record?.tracking.opens).toHaveLength(1);
@@ -199,17 +196,17 @@ describe('EmailDeliveryTracker', () => {
       const mockEmailId = 'test-email-click';
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.OPENED,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       const clickEvent = {
-        timestamp: new Date(),
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0',
-        url: 'https://example.com/verify',
-        linkId: 'verify-link',
-      };
+  timestamp: new Date(),
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0',
+  url: 'https://example.com/verify',
+  linkId: 'verify-link',
+};
       tracker.addTrackingEvent(mockEmailId, 'click', clickEvent);
       const record = tracker.getDeliveryRecord(mockEmailId);
       expect(record?.tracking.clicks).toHaveLength(1);
@@ -220,16 +217,16 @@ describe('EmailDeliveryTracker', () => {
       const mockEmailId = 'test-email-unsub';
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.DELIVERED,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       const unsubEvent = {
-        timestamp: new Date(),
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0',
-        reason: 'Too many emails',
-      };
+  timestamp: new Date(),
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0',
+  reason: 'Too many emails',
+};
       tracker.addTrackingEvent(mockEmailId, 'unsubscribe', unsubEvent);
       const record = tracker.getDeliveryRecord(mockEmailId);
       expect(record?.tracking.unsubscribes).toHaveLength(1);
@@ -246,28 +243,28 @@ describe('EmailDeliveryTracker', () => {
       });
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.DELIVERED,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       tracker.addTrackingEvent(mockEmailId, 'open', {)
-        timestamp: new Date(),
-        ipAddress: '192.168.1.100',
-        userAgent: 'Mozilla/5.0',
-      });
+  timestamp: new Date(),
+  ipAddress: '192.168.1.100',
+  userAgent: 'Mozilla/5.0',
+});
     });
   });
   describe('Webhook Handling', () => {
-    test('should handle webhook payload', async () => {
-      const mockPayload = {
-        messageId: 'msg-webhook-123',
-        status: DeliveryStatus.DELIVERED,
-        timestamp: Date.now(),
-      };
+  test('should handle webhook payload', async () => {
+  const mockPayload = {
+  messageId: 'msg-webhook-123',
+  status: DeliveryStatus.DELIVERED,
+  timestamp: Date.now(),
+};
       // Create mock record with matching message ID
       const mockEmailId = 'webhook-email-id';
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         messageId: 'msg-webhook-123',
         status: DeliveryStatus.SENT,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
@@ -277,15 +274,15 @@ describe('EmailDeliveryTracker', () => {
       expect(record?.status).toBe(DeliveryStatus.DELIVERED);
     });
     test('should handle webhook errors', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
-      tracker.on('webhookError', errorHandler);
-      const invalidPayload = null;
-      await tracker.handleWebhook(EmailProvider.MAILGUN, invalidPayload);
-      expect(errorHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          provider: EmailProvider.MAILGUN,
-          error: expect.any(String),
-        })
+  const errorHandler = jest.fn<unknown, unknown>();
+  tracker.on('webhookError', errorHandler);
+  const invalidPayload = null;
+  await tracker.handleWebhook(EmailProvider.MAILGUN, invalidPayload);
+  expect(errorHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  provider: EmailProvider.MAILGUN,
+  error: expect.any(String),
+}
       );
     });
   });
@@ -299,8 +296,8 @@ describe('EmailDeliveryTracker', () => {
       expect(stats.statisticsByProvider).toHaveProperty(EmailProvider.SENDGRID);
     });
     test('should update statistics when emails are processed', async () => {
-      const request: EmailSendRequest = {
-        type: EmailType.DEVICE_VERIFICATION,
+      const request: EmailSendRequest = {,
+  type: EmailType.DEVICE_VERIFICATION,
         recipient: 'device@example.com',
         subject: 'Device verification',
         content: { text: 'Verify your device' },
@@ -331,20 +328,22 @@ describe('EmailDeliveryTracker', () => {
       // Send multiple emails for the user
       for (let i = 0; i < 3; i++) {
         await tracker.sendEmail({)
-          type: EmailType.LOGIN_NOTIFICATION,
-          recipient: `test${i}@example.com`,}
-          subject: `Notification ${i}`,}
-          content: { text: `Message ${i}` },}
-          metadata: { userId }
+  type: EmailType.LOGIN_NOTIFICATION,
+          recipient: `test${i}@example.com`}
+},
+  subject: `Notification ${i}`}
+},
+  content: { text: `Message ${i}` }
+},
+  metadata: { userId }
         });
-      }
       const userRecords = tracker.getUserDeliveryRecords(userId);
       expect(userRecords).toHaveLength(3);
       expect(userRecords.every(record => record.metadata.userId === userId)).toBe(true);
     });
     test('should get email status by ID', async () => {
-      const request: EmailSendRequest = {
-        type: EmailType.BACKUP_CODE_DELIVERY,
+      const request: EmailSendRequest = {,
+  type: EmailType.BACKUP_CODE_DELIVERY,
         recipient: 'backup@example.com',
         subject: 'Your backup codes',
         content: { text: 'Backup codes attached' },
@@ -377,17 +376,16 @@ describe('EmailDeliveryTracker', () => {
         createdAt: new Date(),
         metadata: { userId: 'user-retry' },
         attempts: [{,
-          attemptNumber: 1,
-          timestamp: new Date(),
-          status: DeliveryStatus.FAILED,
-          error: 'Network timeout',
-        }],
+  attemptNumber: 1,
+  timestamp: new Date(),
+  status: DeliveryStatus.FAILED,
+  error: 'Network timeout',
+}],
         tracking: { opens: [], clicks: [], unsubscribes: [] },
         providerData: {,
-          htmlContent: '<p>Reset your password</p>',
-          textContent: 'Reset your password',
-        }
-      };
+  htmlContent: '<p>Reset your password</p>',
+  textContent: 'Reset your password',
+};
       (tracker as any).deliveryRecords.set(mockEmailId, failedRecord);
       const retrySuccess = await tracker.retryDelivery(mockEmailId);
       expect(retrySuccess).toBe(true);
@@ -396,9 +394,9 @@ describe('EmailDeliveryTracker', () => {
       expect(record?.attempts.length).toBeGreaterThan(1);
     });
     test('should not retry if max attempts reached', async () => {
-      const tracker = new EmailDeliveryTracker({)
-        retryAttempts: 2,
-      });
+  const tracker = new EmailDeliveryTracker({)
+  retryAttempts: 2,
+});
       const mockEmailId = 'max-retry-email-id';
       // Create a failed email record with max attempts
       const failedRecord = {
@@ -415,13 +413,13 @@ describe('EmailDeliveryTracker', () => {
       tracker.removeAllListeners();
     });
     test('should not retry non-failed emails', async () => {
-      const mockEmailId = 'delivered-email-id';
-      // Create a delivered email record
-      const deliveredRecord = {
-        id: mockEmailId,
-        status: DeliveryStatus.DELIVERED,
-        attempts: [],
-      };
+  const mockEmailId = 'delivered-email-id';
+  // Create a delivered email record
+  const deliveredRecord = {
+  id: mockEmailId,
+  status: DeliveryStatus.DELIVERED,
+  attempts: [],
+};
       (tracker as any).deliveryRecords.set(mockEmailId, deliveredRecord);
       const retrySuccess = await tracker.retryDelivery(mockEmailId);
       expect(retrySuccess).toBe(false);
@@ -437,17 +435,16 @@ describe('EmailDeliveryTracker', () => {
       });
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.SENT,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, {)
-        bounceInfo: {,
-          type: BounceType.HARD,
-          subType: BounceSubType.NO_EMAIL,
-          reason: 'Invalid email address',
-        }
-      });
+  bounceInfo: {,
+  type: BounceType.HARD,
+  subType: BounceSubType.NO_EMAIL,
+  reason: 'Invalid email address',
+});
     });
     test('should emit hard bounce events for suppression', (done) => {
       const mockEmailId = 'hard-bounce-email-id';
@@ -458,18 +455,17 @@ describe('EmailDeliveryTracker', () => {
       });
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         recipient: 'invalid@example.com',
         status: DeliveryStatus.SENT,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
       tracker.updateStatus(mockEmailId, DeliveryStatus.BOUNCED, {)
-        bounceInfo: {,
-          type: BounceType.HARD,
-          subType: BounceSubType.NO_EMAIL,
-          reason: 'Invalid email address',
-        }
-      });
+  bounceInfo: {,
+  type: BounceType.HARD,
+  subType: BounceSubType.NO_EMAIL,
+  reason: 'Invalid email address',
+});
     });
     test('should emit spam report events', (done) => {
       const mockEmailId = 'spam-email-id';
@@ -479,7 +475,7 @@ describe('EmailDeliveryTracker', () => {
       });
       // Create mock record
       (tracker as any).deliveryRecords.set(mockEmailId, {)
-        id: mockEmailId,
+  id: mockEmailId,
         status: DeliveryStatus.DELIVERED,
         tracking: { opens: [], clicks: [], unsubscribes: [] }
       });
@@ -487,44 +483,42 @@ describe('EmailDeliveryTracker', () => {
     });
   });
   describe('Configuration Management', () => {
-    test('should update configuration', () => {
-      const configHandler = jest.fn<unknown[], unknown>();
-      tracker.on('configUpdated', configHandler);
-      tracker.updateConfig({)
-        retryAttempts: 5,
-        trackingEnabled: false,
-      });
+  test('should update configuration', () => {
+  const configHandler = jest.fn<unknown, unknown>();
+  tracker.on('configUpdated', configHandler);
+  tracker.updateConfig({)
+  retryAttempts: 5,
+  trackingEnabled: false,
+});
       expect(configHandler).toHaveBeenCalledWith()
         expect.objectContaining({)
-          config: expect.objectContaining({),
-            retryAttempts: 5,
-            trackingEnabled: false,
-          })
-        })
+  config: expect.objectContaining({,)
+  retryAttempts: 5,
+  trackingEnabled: false,
+}
+  }
       );
     });
     test('should use custom provider configuration', () => {
-      const customTracker = new EmailDeliveryTracker({)
-        defaultProvider: EmailProvider.AWS_SES,
-        providerConfigs: {,
-          [EmailProvider.AWS_SES]: {
-            apiKey: 'aws-key-123',
-            endpoint: 'https://email.us-east-1.amazonaws.com',
-          }
-        }
-      });
+  const customTracker = new EmailDeliveryTracker({)
+  defaultProvider: EmailProvider.AWS_SES,
+  providerConfigs: {,
+  [EmailProvider.AWS_SES]: {,
+  apiKey: 'aws-key-123',
+  endpoint: 'https://email.us-east-1.amazonaws.com',
+});
       expect(customTracker).toBeDefined();
       customTracker.removeAllListeners();
     });
   });
   describe('Edge Cases', () => {
-    test('should handle tracking events for non-existent emails', () => {
-      // Should not throw error
-      tracker.addTrackingEvent('non-existent-id', 'open', {)
-        timestamp: new Date(),
-        ipAddress: '192.168.1.1',
-        userAgent: 'Test',
-      });
+  test('should handle tracking events for non-existent emails', () => {
+  // Should not throw error
+  tracker.addTrackingEvent('non-existent-id', 'open', {)
+  timestamp: new Date(),
+  ipAddress: '192.168.1.1',
+  userAgent: 'Test',
+});
       // Should not crash or throw
       expect(true).toBe(true);
     });
@@ -535,7 +529,7 @@ describe('EmailDeliveryTracker', () => {
       expect(true).toBe(true);
     });
     test('should handle empty webhook payload', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
+      const errorHandler = jest.fn<unknown, unknown>();
       tracker.on('webhookError', errorHandler);
       await tracker.handleWebhook(EmailProvider.POSTMARK, {});
       // Should handle gracefully without crashing

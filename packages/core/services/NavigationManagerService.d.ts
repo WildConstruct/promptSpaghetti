@@ -5,6 +5,7 @@
  * navigation behavior across Epic 17 admin controls.
  */
 import { EventEmitter } from 'events';
+
 export interface NavigationPreferences {
     userId: string;
     expandedSections: string[];
@@ -19,7 +20,7 @@ export interface NavigationPreferences {
     searchHistory: string[];
     lastSection: string;
     customSections: CustomNavigationSection[];
-}
+
 export interface NavigationHistoryItem {
     id: string;
     label: string;
@@ -29,7 +30,7 @@ export interface NavigationHistoryItem {
     category: string;
     accessCount: number;
     lastAccessed: Date;
-}
+
 export interface CustomNavigationSection {
     id: string;
     label: string;
@@ -42,7 +43,7 @@ export interface CustomNavigationSection {
     category: string;
     createdBy: string;
     created: Date;
-}
+
 export interface NavigationAnalytics {
     userId: string;
     sessionId: string;
@@ -52,34 +53,34 @@ export interface NavigationAnalytics {
     searchQueries: SearchQueryEvent[];
     errorEvents: NavigationErrorEvent[];
     performanceMetrics: NavigationPerformanceMetric[];
-}
+
 export interface NavigationPathEvent {
     path: string;
     section: string;
     timestamp: Date;
     duration: number;
     source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search';
-}
+
 export interface SearchQueryEvent {
     query: string;
     timestamp: Date;
     resultsCount: number;
     selectedResult?: string;
     source: 'header' | 'sidebar' | 'modal';
-}
+
 export interface NavigationErrorEvent {
     path: string;
     error: string;
     timestamp: Date;
     userAgent: string;
     resolved: boolean;
-}
+
 export interface NavigationPerformanceMetric {
     action: string;
     duration: number;
     timestamp: Date;
     metadata: Record<string, any>;
-}
+
 export interface NavigationSearchOptions {
     query: string;
     categories?: string[];
@@ -88,7 +89,7 @@ export interface NavigationSearchOptions {
     fuzzyMatch?: boolean;
     includeDescriptions?: boolean;
     userId?: string;
-}
+
 export interface NavigationSearchResult {
     item: {,
         id: string;
@@ -101,7 +102,6 @@ export interface NavigationSearchResult {
     score: number;
     matchType: 'exact' | 'partial' | 'fuzzy' | 'description';
     highlightedText: string;
-}
 /**
  * Navigation Manager Service
  *
@@ -178,6 +178,6 @@ export declare class NavigationManagerService extends EventEmitter {
     private initializeSearchIndex;
     private highlightMatch;
     private generateSessionId;
-}
+
 export default NavigationManagerService;
 //# sourceMappingURL=NavigationManagerService.d.ts.map

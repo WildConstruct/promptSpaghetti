@@ -17,7 +17,8 @@ const createMockResult = (;);
   usedNodeIds: ['node1', 'node2'],
   usedEdgeIds: ['edge1'],
   executionPath: executionPath || {,
-    id: `exec_${seed}`,}
+  id: `exec_${seed}`}
+}
     seed,
     startTime: Date.now() - 1000,
     endTime: Date.now(),
@@ -30,22 +31,21 @@ const createMockResult = (;);
         timestamp: Date.now() - 800,
         executionTimeMs: 50,
         inputs: [],
-        output: `choice_${seed}`,}
-        randomChoice: {,
-          choiceType: 'weighted',
-          availableOptions: [`choice_${seed}`, 'other_choice'],}
-          selectedOption: `choice_${seed}`,}
-          selectionReason: 'Weight-based selection',
+        output: `choice_${seed}`}
+},
+  randomChoice: {,
+  choiceType: 'weighted',
+          availableOptions: [`choice_${seed}`, 'other_choice']}
+},
+  selectedOption: `choice_${seed}`}
+},
+  selectionReason: 'Weight-based selection',
           probability: 0.7,
-          weight: 3,
-        }
-      }
-    ],
+          weight: 3],
     finalOutput: output,
     nodeExecutionOrder: ['node1', 'node2'],
-    randomizationPoints: [],
-  }
-});
+    randomizationPoints: [];
+  });
 describe('VarianceAnalysisService', () => {
   describe('analyzeVariance', () => {
     it('should return minimal variance for single result', () => {
@@ -98,14 +98,14 @@ describe('VarianceAnalysisService', () => {
     it('should detect execution path diversity', () => {
       const results = [;
         createMockResult(1, 'Path A result', 100, {)
-          steps: [{ nodeId: 'node1', nodeType: 'WeightedChoice' }, { nodeId: 'node2', nodeType: 'Output' }]
+  steps: [{ nodeId: 'node1', nodeType: 'WeightedChoice' }, { nodeId: 'node2', nodeType: 'Output' }]
         }),
         createMockResult(2, 'Path B result', 120, {)
-          steps: [{ nodeId: 'node1', nodeType: 'Conditional' }, { nodeId: 'node3', nodeType: 'Output' }]
+  steps: [{ nodeId: 'node1', nodeType: 'Conditional' }, { nodeId: 'node3', nodeType: 'Output' }]
         }),
         createMockResult(3, 'Path C result', 90, {)
-          steps: [{ nodeId: 'node4', nodeType: 'Sequential' }, { nodeId: 'node5', nodeType: 'Output' }]
-        })
+  steps: [{ nodeId: 'node4', nodeType: 'Sequential' }, { nodeId: 'node5', nodeType: 'Output' }]
+  }
       ];
       const analysis = varianceService.analyzeVariance(results);
       expect(analysis.diversityMetrics.executionPathDiversity).toBeGreaterThan(0.5);
@@ -148,12 +148,11 @@ describe('VarianceAnalysisService', () => {
     it('should categorize metrics correctly', () => {
       const results = [;
         createMockResult(1, 'a'),
-        createMockResult(2, 'b'),
-      ];
+        createMockResult(2, 'b')];
       const analysis = varianceService.analyzeVariance(results);
       const indicators = varianceService.createDiversityIndicators(analysis);
       indicators.forEach(indicator => {)
-        expect(indicator.value).toBeGreaterThanOrEqual(0);
+  expect(indicator.value).toBeGreaterThanOrEqual(0);
         expect(indicator.value).toBeLessThanOrEqual(1);
         expect(['low', 'medium', 'high']).toContain(indicator.level);
         expect(indicator.description).toBeTruthy();
@@ -202,7 +201,6 @@ describe('VarianceAnalysisService', () => {
       const analysis = varianceService.analyzeVariance(results);
       if (analysis.overallVariance === 'high') {
         expect(analysis.suggestions.some(s => s.type === 'optimize')).toBe(true);
-      }
     });
     it('should provide actionable suggestions', () => {
       const results = [;
@@ -211,7 +209,7 @@ describe('VarianceAnalysisService', () => {
       ];
       const analysis = varianceService.analyzeVariance(results);
       analysis.suggestions.forEach(suggestion => {)
-        expect(['increase', 'decrease', 'optimize']).toContain(suggestion.type);
+  expect(['increase', 'decrease', 'optimize']).toContain(suggestion.type);
         expect(['weights', 'structure', 'content', 'execution']).toContain(suggestion.category);
         expect(['low', 'medium', 'high']).toContain(suggestion.impact);
         expect(typeof suggestion.actionable).toBe('boolean');
@@ -241,7 +239,7 @@ describe('VarianceAnalysisService', () => {
         { seed: 1, output: 'Result 1', executionTimeMs: 100, usedNodeIds: [], usedEdgeIds: [] },
         { seed: 2, output: 'Result 2', executionTimeMs: 110, usedNodeIds: [], usedEdgeIds: [] },
         { seed: 3, output: 'Result 3', executionTimeMs: 90, usedNodeIds: [], usedEdgeIds: [] }
-      ] as PreviewResultWithPath[];
+      ] as PreviewResultWithPath;
       const analysis = varianceService.analyzeVariance(results);
       expect(analysis.diversityMetrics.executionPathDiversity).toBe(0);
       expect(analysis.overallVariance).toMatch(/^(low|medium|high)$/);

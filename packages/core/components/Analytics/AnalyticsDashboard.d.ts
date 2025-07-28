@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Analytics dashboard props
  */
+
 export interface AnalyticsDashboardProps {
     analyticsClient: AnalyticsClient;
     userId?: number;
@@ -10,7 +11,8 @@ export interface AnalyticsDashboardProps {
     className?: string;
     autoRefresh?: boolean;
     refreshInterval?: number;
-}
+
+
 /**
  * Main analytics dashboard component
  */

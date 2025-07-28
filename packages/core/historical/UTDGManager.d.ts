@@ -87,6 +87,6 @@ export declare class UTDGManager {
     private generateAccuracyNotes;
     private generateLightingNotes;
     private generateAtmosphericNotes;
-}
+
 export default UTDGManager;
 //# sourceMappingURL=UTDGManager.d.ts.map

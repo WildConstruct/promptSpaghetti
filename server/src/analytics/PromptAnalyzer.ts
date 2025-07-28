@@ -9,6 +9,7 @@ import TokenInfluenceAnalyzer, { TokenInfluenceResult, TokenInfluence } from './
 import { AnalyticsCollector } from './AnalyticsCollector';
 import { logger } from '../utils/logger';
 
+}
 export interface PromptAnalysisResult {
   prompt: string;
   analysis: {
@@ -16,6 +17,7 @@ export interface PromptAnalysisResult {
     structure: StructuralAnalysis;
     quality: QualityMetrics;
     optimization: OptimizationRecommendations;
+}
   };
   summary: {
     overallScore: number;
@@ -30,6 +32,7 @@ export interface PromptAnalysisResult {
   };
 }
 
+}
 export interface StructuralAnalysis {
   tokenCount: number;
   sentenceCount: number;
@@ -39,7 +42,9 @@ export interface StructuralAnalysis {
   keyPhrases: KeyPhrase[];
   semanticClusters: SemanticCluster[];
 }
+}
 
+}
 export interface QualityMetrics {
   clarity: number;          // 0-1, how clear and specific the prompt is
   completeness: number;     // 0-1, how complete the instructions are
@@ -48,21 +53,27 @@ export interface QualityMetrics {
   actionability: number;    // 0-1, how actionable the instructions are
   overallQuality: number;   // 0-1, weighted combination
 }
+}
 
+}
 export interface OptimizationRecommendations {
   suggestions: Suggestion[];
   alternativeVersions: AlternativeVersion[];
   tokenOptimizations: TokenOptimization[];
   structuralImprovements: StructuralImprovement[];
 }
+}
 
+}
 export interface KeyPhrase {
   phrase: string;
   importance: number;
   category: 'instruction' | 'context' | 'constraint' | 'example';
   positions: number[];
 }
+}
 
+}
 export interface SemanticCluster {
   id: string;
   tokens: string[];
@@ -70,7 +81,9 @@ export interface SemanticCluster {
   coherence: number;
   importance: number;
 }
+}
 
+}
 export interface Suggestion {
   type: 'add' | 'remove' | 'modify' | 'reorder';
   priority: 'high' | 'medium' | 'low';
@@ -79,14 +92,18 @@ export interface Suggestion {
   expectedImprovement: number;
   targetTokens?: number[];
 }
+}
 
+}
 export interface AlternativeVersion {
   version: string;
   changes: string[];
   expectedScore: number;
   confidenceLevel: number;
 }
+}
 
+}
 export interface TokenOptimization {
   position: number;
   currentToken: string;
@@ -94,12 +111,15 @@ export interface TokenOptimization {
   improvement: number;
   reasoning: string;
 }
+}
 
+}
 export interface StructuralImprovement {
   issue: string;
   severity: 'critical' | 'major' | 'minor';
   solution: string;
   impact: number;
+}
 }
 
 class PromptAnalyzer {
@@ -131,6 +151,7 @@ class PromptAnalyzer {
       analysisDepth?: 'basic' | 'detailed' | 'comprehensive';
     } = {}
   ): Promise<PromptAnalysisResult> {
+
     const startTime = Date.now();
     const opts = {
       includeInfluence: options.includeInfluence ?? true,
@@ -186,7 +207,7 @@ class PromptAnalyzer {
           structure,
           quality,
           optimization
-        },
+  }
         summary,
         timestamp: startTime,
         metadata: {
@@ -219,6 +240,7 @@ class PromptAnalyzer {
    * Analyze prompt structure and composition
    */
   private async analyzeStructure(prompt: string): Promise<StructuralAnalysis> {
+
     const tokens = prompt.split(/\s+/).filter(token => token.length > 0);
     const sentences = prompt.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
     
@@ -256,6 +278,7 @@ class PromptAnalyzer {
    * Analyze prompt quality metrics
    */
   private async analyzeQuality(prompt: string): Promise<QualityMetrics> {
+
     const clarity = this.assessClarity(prompt);
     const completeness = this.assessCompleteness(prompt);
     const consistency = this.assessConsistency(prompt);
@@ -353,7 +376,8 @@ class PromptAnalyzer {
     // Positive specificity indicators
     const specificWords = ['exactly', 'precisely', 'specifically', 'particular', 'detailed'];
     const quantifiers = prompt.match(/\b\d+\b/g) || [];
-    const technicalTerms = prompt.match(/[A-Z]{2,}/g) || []; // Acronyms
+    const technicalTerms = prompt.match(/[A-Z]{2
+}/g) || []; // Acronyms
     
     score += Math.min(0.2, specificWords.filter(word => 
       prompt.toLowerCase().includes(word)).length * 0.05);
@@ -519,6 +543,7 @@ class PromptAnalyzer {
     structure: StructuralAnalysis,
     quality: QualityMetrics
   ): Promise<OptimizationRecommendations> {
+
     const suggestions: Suggestion[] = [];
     const tokenOptimizations: TokenOptimization[] = [];
     const structuralImprovements: StructuralImprovement[] = [];

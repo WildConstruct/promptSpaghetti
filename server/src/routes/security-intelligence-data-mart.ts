@@ -17,6 +17,7 @@ import {
 // Global data mart instance
 let dataMart: SecurityIntelligenceDataMart | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -25,6 +26,7 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface InitializeDataMartRequest {
   configuration: {
     architecture: Partial<SecurityDataMartConfig['architecture']>;
@@ -33,6 +35,7 @@ interface InitializeDataMartRequest {
     data_quality: Partial<SecurityDataMartConfig['data_quality']>;
     access_control: Partial<SecurityDataMartConfig['access_control']>;
     analytics_capabilities: Partial<SecurityDataMartConfig['analytics_capabilities']>;
+}
   };
   deployment_options?: {
     validate_configuration?: boolean;
@@ -43,6 +46,7 @@ interface InitializeDataMartRequest {
   };
 }
 
+}
 interface CreateSchemaRequest {
   schema_options: {
     create_dimensions: boolean;
@@ -50,6 +54,7 @@ interface CreateSchemaRequest {
     create_views: boolean;
     apply_partitioning: boolean;
     create_indexes: boolean;
+}
   };
   performance_settings?: {
     enable_compression?: boolean;
@@ -65,6 +70,7 @@ interface CreateSchemaRequest {
   };
 }
 
+}
 interface SetupPipelinesRequest {
   pipeline_configuration: {
     real_time_pipelines: {
@@ -72,6 +78,7 @@ interface SetupPipelinesRequest {
       source_types: ('security_events' | 'threat_intelligence' | 'vulnerability_data')[];
       processing_mode: 'streaming' | 'micro_batch';
       quality_checks: boolean;
+}
     };
     batch_pipelines: {
       enabled: boolean;
@@ -97,12 +104,14 @@ interface SetupPipelinesRequest {
   };
 }
 
+}
 interface GenerateAnalyticsRequest {
   analytics_scope: {
     analysis_types: ('threat_landscape' | 'risk_trending' | 'incident_patterns' | 'asset_criticality' | 'compliance_status')[];
     time_range?: {
       start_date: string;
       end_date: string;
+}
     };
     organizational_scope?: string[];
     geographic_scope?: string[];
@@ -122,6 +131,7 @@ interface GenerateAnalyticsRequest {
   };
 }
 
+}
 interface OptimizePerformanceRequest {
   optimization_scope: {
     target_areas: ('indexes' | 'queries' | 'storage' | 'processing' | 'comprehensive')[];
@@ -130,6 +140,7 @@ interface OptimizePerformanceRequest {
       maintenance_window_hours?: number[];
       resource_usage_limit?: number;
       availability_requirement?: number;
+}
     };
   };
   optimization_settings?: {
@@ -146,6 +157,7 @@ interface OptimizePerformanceRequest {
   };
 }
 
+}
 interface GetDataQualityRequest {
   quality_scope: {
     data_sources?: string[];
@@ -153,6 +165,7 @@ interface GetDataQualityRequest {
     time_range?: {
       start_date: string;
       end_date: string;
+}
     };
   };
   analysis_options?: {
@@ -168,6 +181,7 @@ interface GetDataQualityRequest {
   };
 }
 
+}
 interface ManageRetentionRequest {
   retention_configuration: {
     data_types: ('raw_events' | 'aggregated_metrics' | 'audit_logs' | 'compliance_data')[];
@@ -176,6 +190,7 @@ interface ManageRetentionRequest {
       retention_period_days: number;
       archive_before_delete: boolean;
       compliance_requirements?: string[];
+}
     }[];
   };
   execution_options?: {
@@ -215,7 +230,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               access_control: { type: 'object' },
               analytics_capabilities: { type: 'object' }
             }
-          },
+  }
           deployment_options: {
             type: 'object',
             properties: {
@@ -227,7 +242,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -247,7 +262,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -322,7 +337,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               apply_partitioning: { type: 'boolean' },
               create_indexes: { type: 'boolean' }
             }
-          },
+  }
           performance_settings: {
             type: 'object',
             properties: {
@@ -331,7 +346,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               batch_size: { type: 'number', minimum: 100, maximum: 10000 },
               timeout_minutes: { type: 'number', minimum: 5, maximum: 180 }
             }
-          },
+  }
           validation_settings: {
             type: 'object',
             properties: {
@@ -342,7 +357,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -363,7 +378,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -452,7 +467,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   processing_mode: { type: 'string', enum: ['streaming', 'micro_batch'] },
                   quality_checks: { type: 'boolean' }
                 }
-              },
+  }
               batch_pipelines: {
                 type: 'object',
                 required: ['enabled'],
@@ -462,7 +477,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   data_types: { type: 'array', items: { type: 'string' } },
                   parallel_processing: { type: 'boolean' }
                 }
-              },
+  }
               data_quality_pipelines: {
                 type: 'object',
                 required: ['enabled'],
@@ -474,7 +489,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                 }
               }
             }
-          },
+  }
           advanced_settings: {
             type: 'object',
             properties: {
@@ -491,7 +506,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -511,7 +526,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -577,12 +592,12 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   start_date: { type: 'string', format: 'date' },
                   end_date: { type: 'string', format: 'date' }
                 }
-              },
+  }
               organizational_scope: { type: 'array', items: { type: 'string' } },
               geographic_scope: { type: 'array', items: { type: 'string' } },
               asset_scope: { type: 'array', items: { type: 'string' } }
             }
-          },
+  }
           output_configuration: {
             type: 'object',
             properties: {
@@ -592,7 +607,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               detail_level: { type: 'string', enum: ['summary', 'detailed', 'comprehensive'] },
               export_to_file: { type: 'boolean' }
             }
-          },
+  }
           caching_options: {
             type: 'object',
             properties: {
@@ -602,7 +617,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -613,7 +628,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               properties: {
                 analytics_results: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -692,7 +707,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                 }
               }
             }
-          },
+  }
           optimization_settings: {
             type: 'object',
             properties: {
@@ -701,7 +716,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               testing_before_apply: { type: 'boolean' },
               gradual_deployment: { type: 'boolean' }
             }
-          },
+  }
           monitoring_configuration: {
             type: 'object',
             properties: {
@@ -712,7 +727,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -731,7 +746,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -754,17 +769,17 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             before_ms: 2500,
             after_ms: 1800,
             improvement_percentage: 28
-          },
+  }
           throughput: {
             before_qps: 150,
             after_qps: 210,
             improvement_percentage: 40
-          },
+  }
           resource_utilization: {
             before_percentage: 75,
             after_percentage: 58,
             improvement_percentage: 23
-          },
+  }
           storage_efficiency: {
             before_gb: 500,
             after_gb: 380,
@@ -812,7 +827,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                 }
               }
             }
-          },
+  }
           analysis_options: {
             type: 'object',
             properties: {
@@ -821,7 +836,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               include_source_breakdown: { type: 'boolean' },
               detail_level: { type: 'string', enum: ['summary', 'detailed'] }
             }
-          },
+  }
           reporting_preferences: {
             type: 'object',
             properties: {
@@ -831,7 +846,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -842,7 +857,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               properties: {
                 quality_analysis: { type: 'object' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -867,7 +882,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
           scope: quality_scope,
           analysis_duration_ms: Math.floor(Math.random() * 5000) + 1000,
           data_points_analyzed: Math.floor(Math.random() * 1000000) + 500000
-        },
+  }
         recommendations: analysis_options?.include_recommendations ? [
           'Implement automated data validation for source_3',
           'Increase monitoring frequency for completeness metrics',
@@ -928,7 +943,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                 }
               }
             }
-          },
+  }
           execution_options: {
             type: 'object',
             properties: {
@@ -937,7 +952,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
               backup_before_deletion: { type: 'boolean' },
               notify_stakeholders: { type: 'boolean' }
             }
-          },
+  }
           advanced_settings: {
             type: 'object',
             properties: {
@@ -947,7 +962,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -969,7 +984,7 @@ export default async function securityIntelligenceDataMartRoutes(fastify: Fastif
                   }
                 }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -1032,14 +1047,14 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         threat_intelligence_days: 730,
         incident_data_years: 7,
         audit_logs_years: 10
-      },
+  }
       performance_optimization: {
         enable_partitioning: true,
         enable_indexing_strategy: true,
         enable_materialized_views: true,
         enable_compression: true,
         enable_parallel_processing: true
-      },
+  }
       scalability_settings: {
         max_concurrent_connections: 100,
         batch_processing_size: 1000,
@@ -1047,7 +1062,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         memory_allocation_mb: 4096,
         storage_growth_threshold_gb: 1000
       }
-    },
+  }
     data_sources: {
       real_time_feeds: {
         security_events: true,
@@ -1056,14 +1071,14 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         network_telemetry: true,
         endpoint_data: true,
         application_logs: true
-      },
+  }
       batch_imports: {
         external_threat_feeds: true,
         vulnerability_databases: true,
         compliance_reports: true,
         historical_data: true,
         third_party_integrations: true
-      },
+  }
       api_integrations: {
         siem_platforms: ['splunk', 'qradar', 'sentinel'],
         threat_intelligence_providers: ['virustotal', 'otx', 'misp'],
@@ -1071,7 +1086,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         compliance_tools: ['rsa_archer', 'metricstream'],
         external_databases: ['nvd', 'cve', 'cwe']
       }
-    },
+  }
     data_modeling: {
       dimensional_design: {
         time_dimensions: ['hour', 'day', 'week', 'month', 'quarter', 'year'],
@@ -1080,7 +1095,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         threat_actor_dimensions: true,
         asset_dimensions: true,
         technique_dimensions: true
-      },
+  }
       fact_tables: {
         security_events: true,
         threat_incidents: true,
@@ -1088,7 +1103,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         compliance_measurements: true,
         performance_metrics: true,
         risk_scores: true
-      },
+  }
       analytical_models: {
         threat_landscape: true,
         risk_trending: true,
@@ -1097,7 +1112,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         threat_actor_profiling: true,
         campaign_tracking: true
       }
-    },
+  }
     data_quality: {
       validation_rules: {
         schema_enforcement: true,
@@ -1106,7 +1121,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         data_freshness_checks: true,
         completeness_validation: true,
         accuracy_verification: true
-      },
+  }
       quality_metrics: {
         track_completeness: true,
         track_accuracy: true,
@@ -1114,7 +1129,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         track_timeliness: true,
         track_validity: true,
         track_uniqueness: true
-      },
+  }
       remediation_policies: {
         automatic_correction: true,
         quarantine_invalid_data: true,
@@ -1122,7 +1137,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
         retry_failed_validations: true,
         escalate_quality_issues: true
       }
-    },
+  }
     access_control: {
       rbac_integration: true,
       classification_levels: ['public', 'internal', 'confidential', 'restricted'],
@@ -1132,7 +1147,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
       audit_all_access: true,
       encryption_at_rest: true,
       encryption_in_transit: true
-    },
+  }
     analytics_capabilities: {
       real_time_analytics: true,
       batch_analytics: true,
@@ -1151,6 +1166,7 @@ function mergeWithDefaultConfig(userConfig: any): SecurityDataMartConfig {
 
 // Initialize the data mart with default configuration
 async function initializeDataMart(fastify: FastifyInstance): Promise<void> {
+
   if (dataMart) {
     return; // Already initialized
   }

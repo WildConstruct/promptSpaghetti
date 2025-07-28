@@ -3,6 +3,7 @@
  * Task: T-1752989143997-824 - Design email templates for verification codes
  * Epic 19: Authentication Enhancement & Security Hardening
  */
+
 export interface EmailTemplate {
     subject: string;
     htmlTemplate: string;
@@ -10,7 +11,8 @@ export interface EmailTemplate {
     variables: string[];
     description: string;
     category: 'verification' | 'enrollment' | 'security' | 'notification';
-}
+
+
 export interface TemplateVariables {
     displayName: string;
     emailAddress: string;
@@ -23,13 +25,14 @@ export interface TemplateVariables {
     supportEmail?: string;
     locale?: string;
     timezone?: string;
-}
+
+
 export interface TemplateRenderOptions {
     minify?: boolean;
     stripComments?: boolean;
     inlineCSS?: boolean;
     validateVariables?: boolean;
-}
+
 export declare class EmailTemplateManager {
     private templates;
     private templateDirectory;
@@ -106,7 +109,7 @@ export declare class EmailTemplateManager {
     private createMFAMethodAddedTextTemplate;
     private createMFAMethodRemovedTemplate;
     private createMFAMethodRemovedTextTemplate;
-}
+
 export declare class TemplateTestUtils {
     /**
      * Generate test data for template previews
@@ -121,6 +124,6 @@ export declare class TemplateTestUtils {
         errors: string[];
         warnings: string[];
     }[];
-}
+
 export default EmailTemplateManager;
 //# sourceMappingURL=EmailTemplateManager.d.ts.map

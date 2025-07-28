@@ -11,6 +11,7 @@ export type CaseStudyType = 'template-success' | 'user-story' | 'roi-analysis' |
 export type CaseStudyStatus = 'draft' | 'submitted' | 'under-review' | 'approved' | 'featured' | 'archived' | 'rejected';
 export type IndustryCategory = 'film-production' | 'advertising' | 'gaming' | 'publishing' | 'education' | 'healthcare' | 'finance' | 'technology' | 'legal' | 'consulting' | 'e-commerce' | 'non-profit' | 'other';
 export type MediaType = 'image' | 'video' | 'document' | 'screenshot' | 'chart' | 'infographic' | 'audio';
+
 export interface CaseStudyMedia {
     id: string;
     type: MediaType;
@@ -28,14 +29,14 @@ export interface CaseStudyMedia {
     duration?: number;
     uploadedAt: string;
     uploadedBy: string;
-}
+
 export interface MediaGallery {
     featured: CaseStudyMedia[];
     screenshots: CaseStudyMedia[];
     videos: CaseStudyMedia[];
     documents: CaseStudyMedia[];
     charts: CaseStudyMedia[];
-}
+
 export interface ROIMetrics {
     timeSaved: {,
         hours: number;
@@ -68,7 +69,7 @@ export interface ROIMetrics {
         responseQualityImprovement: number;
         consistencyImprovement: number;
     };
-}
+
 export interface PerformanceMetrics {
     templatesUsed: number;
     implementationTime: number;
@@ -84,7 +85,7 @@ export interface PerformanceMetrics {
         after: number | string;
         unit?: string;
     }[];
-}
+
 export interface TemplateReference {
     templateId: string;
     templateName: string;
@@ -96,7 +97,7 @@ export interface TemplateReference {
     licenseType: string;
     purchaseDate?: string;
     cost?: number;
-}
+
 export interface TemplateImplementation {
     originalTemplate: TemplateReference;
     customizations: {,
@@ -111,7 +112,7 @@ export interface TemplateImplementation {
     };
     lessonsLearned: string[];
     recommendations: string[];
-}
+
 export interface CaseStudy {
     id: string;
     title: string;
@@ -193,7 +194,7 @@ export interface CaseStudy {
         featured: boolean;
         priority: number;
     };
-}
+
 export interface CreateCaseStudyRequest {
     title: string;
     subtitle?: string;
@@ -208,7 +209,7 @@ export interface CreateCaseStudyRequest {
     performanceMetrics?: Partial<PerformanceMetrics>;
     collaborators?: CaseStudy['collaborators'];
     config?: Partial<CaseStudy['config']>;
-}
+
 export interface UpdateCaseStudyRequest {
     id: string;
     title?: string;
@@ -223,7 +224,7 @@ export interface UpdateCaseStudyRequest {
     collaborators?: CaseStudy['collaborators'];
     config?: Partial<CaseStudy['config']>;
     updateReason: string;
-}
+
 export interface CaseStudyFilter {
     type?: CaseStudyType | CaseStudyType[];
     industry?: IndustryCategory | IndustryCategory[];
@@ -246,11 +247,11 @@ export interface CaseStudyFilter {
     verifiedAuthorsOnly?: boolean;
     search?: string;
     featuredOnly?: boolean;
-}
+
 export interface CaseStudySort {
     field: 'createdAt' | 'publishedAt' | 'updatedAt' | 'views' | 'likes' | 'helpfulVotes' | 'roiValue' | 'timeSaved' | 'title' | 'priority';
     direction: 'asc' | 'desc';
-}
+
 export interface CaseStudyQuery {
     filters?: CaseStudyFilter;
     sort?: CaseStudySort;
@@ -259,7 +260,7 @@ export interface CaseStudyQuery {
         limit: number;
     };
     include?: ('media' | 'templates' | 'metrics' | 'author' | 'engagement')[];
-}
+
 export interface CaseStudyQueryResponse {
     caseStudies: CaseStudy[];
     pagination: {,
@@ -284,7 +285,7 @@ export interface CaseStudyQueryResponse {
         }>;
         featuredCount: number;
     };
-}
+
 export interface CaseStudyAnalytics {
     caseStudyId: string;
     totalViews: number;
@@ -331,7 +332,7 @@ export interface CaseStudyAnalytics {
         industry: string;
         count: number;
     }>;
-}
+
 export declare const CaseStudyMediaSchema: z.ZodObject<{
     id: z.ZodString;
     type: z.ZodEnum<["image", "video", "document", "screenshot", "chart", "infographic", "audio"]>;

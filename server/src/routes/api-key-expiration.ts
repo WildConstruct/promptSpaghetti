@@ -15,6 +15,7 @@ import {
 } from '../auth/services/APIKeyExpirationService';
 
 // Request/Response Types
+}
 interface RegisterKeyRequest {
   keyId: string;
   userId: string;
@@ -31,7 +32,9 @@ interface RegisterKeyRequest {
   tags?: string[];
   metadata?: Record<string, any>;
 }
+}
 
+}
 interface RecordUsageRequest {
   endpoint: string;
   method: string;
@@ -42,17 +45,23 @@ interface RecordUsageRequest {
   ipAddress?: string;
   userAgent?: string;
 }
+}
 
+}
 interface RenewKeyRequest {
   renewalDuration: number;
   reason: string;
   autoApprove?: boolean;
 }
+}
 
+}
 interface RevokeKeyRequest {
   reason: string;
 }
+}
 
+}
 interface ExpirationReportQuery {
   startDate: string;
   endDate: string;
@@ -61,7 +70,9 @@ interface ExpirationReportQuery {
   statuses?: string;
   userIds?: string;
 }
+}
 
+}
 interface GetKeysQuery {
   status?: APIKeyStatus;
   keyType?: APIKeyType;
@@ -69,6 +80,7 @@ interface GetKeysQuery {
   expiringWithinDays?: number;
   page?: number;
   limit?: number;
+}
 }
 
 /**
@@ -96,7 +108,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         properties: {
           keyId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['userId', 'keyType', 'expirationPolicy', 'environment', 'scopes'],
@@ -165,7 +177,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         properties: {
           keyId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['endpoint', 'method', 'responseTime', 'statusCode', 'requestSize', 'responseSize'],
@@ -210,7 +222,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           remainingUsage: usageResult.remainingUsage,
           timeToExpiry: usageResult.timeToExpiry,
           warnings: usageResult.warnings
-        },
+  }
         message: usageResult.usageAllowed ? 'Usage recorded successfully' : 'API key usage limit exceeded'
       };
     } catch (error) {
@@ -275,7 +287,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         properties: {
           keyId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['renewalDuration', 'reason'],
@@ -330,7 +342,7 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
         properties: {
           keyId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['reason'],
@@ -660,14 +672,14 @@ export async function apiKeyExpirationRoutes(fastify: FastifyInstance) {
           keysExpiringIn30Days: expiringIn30Days.length,
           activeAlerts: activeAlerts.filter(a => !a.resolved).length,
           criticalAlerts: activeAlerts.filter(a => a.severity === 'critical' && !a.resolved).length
-        },
+  }
         recentlyExpiring: expiringIn7Days.slice(0, 5), // Top 5 most urgent
         alerts: activeAlerts.filter(a => !a.resolved).slice(0, 10), // Top 10 unresolved alerts
         trends: {
           weeklyKeyCreation: weeklyReport.summary.totalKeys - weeklyReport.summary.activeKeys,
           weeklyKeyExpiration: weeklyReport.summary.expiredKeys,
           weeklyKeyRevocation: weeklyReport.summary.revokedKeys
-        },
+  }
         recommendations: weeklyReport.recommendations.slice(0, 3) // Top 3 recommendations
       };
 

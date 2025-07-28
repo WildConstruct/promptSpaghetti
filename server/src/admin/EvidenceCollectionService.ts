@@ -186,6 +186,7 @@ export type EvidenceRecord = z.infer<typeof EvidenceRecordSchema>;
 // Evidence Collection Configuration
 // =============================================================================
 
+}
 export interface EvidenceCollectionConfig {
   enableRealtimeCollection: boolean;
   batchSize: number;
@@ -218,11 +219,13 @@ export interface EvidenceCollectionConfig {
   highVolumeThreshold: number;
   failureRateThreshold: number;
 }
+}
 
 // =============================================================================
 // Evidence Collection Rules Engine
 // =============================================================================
 
+}
 export interface CollectionRule {
   id: string;
   name: string;
@@ -234,25 +237,32 @@ export interface CollectionRule {
   enabled: boolean;
   complianceFrameworks: ComplianceFramework[];
 }
+}
 
+}
 export interface CollectionTrigger {
   event: string;
   source: string;
   filters: Record<string, any>;
 }
+}
 
+}
 export interface CollectionCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex';
   value: any;
   required: boolean;
 }
+}
 
+}
 export interface CollectionAction {
   type: 'collect' | 'verify' | 'alert' | 'archive' | 'purge';
   parameters: Record<string, any>;
   retryAttempts: number;
   timeoutMs: number;
+}
 }
 
 // =============================================================================
@@ -302,6 +312,7 @@ export class EvidenceCollectionService extends EventEmitter {
       immediateVerification: boolean;
     }> = {}
   ): Promise<EvidenceRecord> {
+
     const startTime = Date.now();
 
     try {
@@ -376,6 +387,7 @@ export class EvidenceCollectionService extends EventEmitter {
     currency: string,
     paymentData: Record<string, any>
   ): Promise<EvidenceRecord> {
+
     return this.collectEvidence(
       EvidenceType.TRANSACTION,
       'marketplace-api',
@@ -389,7 +401,7 @@ export class EvidenceCollectionService extends EventEmitter {
           timestamp: new Date().toISOString(),
           ...paymentData
         }
-      },
+  }
       {
         userId: buyerId,
         transactionId,
@@ -410,6 +422,7 @@ export class EvidenceCollectionService extends EventEmitter {
     context: Record<string, any>,
     sessionId?: string
   ): Promise<EvidenceRecord> {
+
     return this.collectEvidence(
       EvidenceType.USER_ACTION,
       'user-activity-tracker',
@@ -419,7 +432,7 @@ export class EvidenceCollectionService extends EventEmitter {
         timestamp: new Date().toISOString(),
         userAgent: context.userAgent,
         ipAddress: context.ipAddress
-      },
+  }
       {
         userId,
         sessionId,
@@ -438,6 +451,7 @@ export class EvidenceCollectionService extends EventEmitter {
     result: Record<string, any>,
     context: Record<string, any> = {}
   ): Promise<EvidenceRecord> {
+
     return this.collectEvidence(
       EvidenceType.COMPLIANCE,
       'compliance-monitor',
@@ -447,7 +461,7 @@ export class EvidenceCollectionService extends EventEmitter {
         result,
         context,
         timestamp: new Date().toISOString()
-      },
+  }
       {
         severity: 'high',
         sensitivity: 'confidential',
@@ -464,6 +478,7 @@ export class EvidenceCollectionService extends EventEmitter {
   // =========================================================================
 
   async verifyEvidence(evidenceId: string): Promise<boolean> {
+
     try {
       const evidence = await this.getEvidence(evidenceId);
       if (!evidence) {
@@ -511,6 +526,7 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async verifyDataIntegrity(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
+
     const dataString = JSON.stringify(evidence.data);
     const computedHash = crypto.createHash('sha256').update(dataString).digest('hex');
     
@@ -522,6 +538,7 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async verifyChainIntegrity(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
+
     if (!evidence.metadata.chainHash) {
       return { result: 'passed', message: 'No chain hash to verify' };
     }
@@ -535,6 +552,7 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async verifyComplianceRequirements(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
+
     // Verify compliance framework requirements
     const frameworks = evidence.metadata.complianceFrameworks;
     const issues: string[] = [];
@@ -567,6 +585,7 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async verifyRetentionPolicy(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
+
     const policy = evidence.metadata.retentionPolicy;
     const collectedAt = evidence.metadata.collectedAt;
     const now = new Date();
@@ -625,6 +644,7 @@ export class EvidenceCollectionService extends EventEmitter {
     total: number;
     hasMore: boolean;
   }> {
+
     // Implementation would query the evidence storage system
     // This is a placeholder for the database query logic
     
@@ -658,6 +678,7 @@ export class EvidenceCollectionService extends EventEmitter {
     evidenceIds: string[];
     downloadUrl?: string;
   }> {
+
     const reportId = crypto.randomUUID();
     
     // Implementation would generate compliance report
@@ -672,7 +693,7 @@ export class EvidenceCollectionService extends EventEmitter {
         verifiedEvidence: 0,
         complianceRate: 100,
         criticalIssues: 0
-      },
+  }
       evidenceIds: []
     };
   }
@@ -738,8 +759,7 @@ export class EvidenceCollectionService extends EventEmitter {
     return {
       status,
       services,
-      metrics: this.getPerformanceMetrics()
-    };
+      metrics: this.getPerformanceMetrics(};
   }
 
   // =========================================================================
@@ -752,6 +772,7 @@ export class EvidenceCollectionService extends EventEmitter {
     data: Record<string, any>,
     options: any
   ): Promise<EvidenceMetadata> {
+
     const id = crypto.randomUUID();
     const dataString = JSON.stringify(data);
     const hash = crypto.createHash('sha256').update(dataString).digest('hex');
@@ -791,6 +812,7 @@ export class EvidenceCollectionService extends EventEmitter {
     data: Record<string, any>,
     options: any
   ): Promise<EvidenceData> {
+
     return {
       content: data,
       attachments: [],
@@ -888,24 +910,29 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async storeEvidence(record: EvidenceRecord): Promise<void> {
+
     // Implementation would store evidence in database/storage service
     // This is a placeholder
   }
 
   private async updateEvidenceChain(record: EvidenceRecord): Promise<void> {
+
     this.evidenceChain.set(record.metadata.id, record.metadata.hash);
   }
 
   private async getEvidence(evidenceId: string): Promise<EvidenceRecord | null> {
+
     // Implementation would retrieve evidence from storage
     return null;
   }
 
   private async updateEvidenceVerification(evidenceId: string, verification: any): Promise<void> {
+
     // Implementation would update evidence verification in storage
   }
 
   private async updateEvidenceStatus(evidenceId: string, status: EvidenceStatus): Promise<void> {
+
     // Implementation would update evidence status in storage
   }
 
@@ -962,6 +989,7 @@ export class EvidenceCollectionService extends EventEmitter {
   }
 
   private async processEvidenceQueue(): Promise<void> {
+
     if (this.isProcessing) return;
     
     this.isProcessing = true;

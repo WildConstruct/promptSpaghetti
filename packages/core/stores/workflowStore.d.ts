@@ -11,7 +11,7 @@ export interface WorkflowState {
     sort_order: number;
     created_at: Date;
     updated_at: Date;
-}
+
 export interface WorkflowTransition {
     id: string;
     workspace_id: string;
@@ -23,7 +23,7 @@ export interface WorkflowTransition {
     required_permissions: bigint;
     conditions: Record<string, unknown>;
     created_at: Date;
-}
+
 export interface WorkflowApproval {
     id: string;
     workspace_id: string;
@@ -40,7 +40,7 @@ export interface WorkflowApproval {
     approval_comment?: string;
     created_at: Date;
     updated_at: Date;
-}
+
 export interface WorkflowLock {
     id: string;
     workspace_id: string;
@@ -52,7 +52,7 @@ export interface WorkflowLock {
     expires_at?: Date;
     auto_release: boolean;
     metadata: Record<string, unknown>;
-}
+
 export interface WorkflowHistoryEntry {
     id: string;
     workspace_id: string;
@@ -66,7 +66,7 @@ export interface WorkflowHistoryEntry {
     transition_id?: string;
     comment?: string;
     metadata: Record<string, unknown>;
-}
+
 export interface WorkflowStatistics {
     total_states: number;
     total_transitions: number;
@@ -92,7 +92,7 @@ export interface WorkflowStatistics {
         successful_executions: number;
         failed_executions: number;
     };
-}
+
 export interface StateTransitionResult {
     success: boolean;
     new_state_id?: string;
@@ -100,7 +100,6 @@ export interface StateTransitionResult {
     approval_id?: string;
     error?: string;
     workflow_history_id?: string;
-}
 interface WorkflowStore {
     states: WorkflowState[];
     transitions: WorkflowTransition[];
@@ -148,7 +147,7 @@ interface WorkflowStore {
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
     clearError: () => void;
-}
+
 export declare }>;
 export {};
 //# sourceMappingURL=workflowStore.d.ts.map

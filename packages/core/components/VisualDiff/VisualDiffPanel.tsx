@@ -25,14 +25,13 @@ export interface VisualDiffPanelProps {
   initialTargetVersionId?: string;
   onClose?: () => void;
   className?: string;
-}
-const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
-  graphId, 
-  sourceVersionId, 
-  initialSourceVersionId, 
-  initialTargetVersionId, 
-  onClose, 
-  className = '' 
+  const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ ),
+  graphId,
+  sourceVersionId,
+  initialSourceVersionId,
+  initialTargetVersionId,
+  onClose,
+  className = ''
 }) => {
   const [targetVersionId, setTargetVersionId] = useState<string>(initialTargetVersionId || '');
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side');
@@ -42,36 +41,34 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
   const [zoomLevel, setZoomLevel] = useState(1.0);
   // Hooks
   const { versions, loading: versionsLoading } = useGraphVersions(graphId);
-  const { 
-    session, 
-    comparison, 
-    loading: sessionLoading, 
-    error: sessionError,
-    createSession,
-    updateSession 
-  } = useDiffSession();
+  const {
+  session,
+  comparison,
+  loading: sessionLoading,
+  error: sessionError,
+  createSession,
+  updateSession
+} = useDiffSession();
   // Effects
   useEffect(() => {
-    if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
-      createSession({)
-        graph_id: graphId,
-        source_version_id: sourceVersionId,
-        target_version_id: targetVersionId,
-        view_mode: viewMode,
-        highlight_mode: highlightMode,
-      });
-    }
+  if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
+  createSession({)
+  graph_id: graphId,
+  source_version_id: sourceVersionId,
+  target_version_id: targetVersionId,
+  view_mode: viewMode,
+  highlight_mode: highlightMode,
+});
   }, [sourceVersionId, targetVersionId, graphId]);
   useEffect(() => {
-    if (session) {
-      updateSession(session.id, {)
-        view_mode: viewMode,
-        highlight_mode: highlightMode,
-        show_unchanged: showUnchanged,
-        show_metadata: showMetadata,
-        zoom_level: zoomLevel,
-      });
-    }
+  if (session) {
+  updateSession(session.id, {)
+  view_mode: viewMode,
+  highlight_mode: highlightMode,
+  show_unchanged: showUnchanged,
+  show_metadata: showMetadata,
+  zoom_level: zoomLevel,
+});
   }, [viewMode, highlightMode, showUnchanged, showMetadata, zoomLevel, session?.id]);
   // Handlers
   const handleVersionChange = useCallback((source: string, target: string) => {
@@ -97,13 +94,12 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
     return { sourceNodes, sourceEdges, targetNodes, targetEdges };
   }, [comparison, highlightMode, showUnchanged]);
   const prepareNodes = useCallback((;);
-    nodes: unknown[],
-    nodeMatches: unknown[],
-    side: 'source' | 'target',
-  ): Node[] => {
+    nodes: unknown,
+    nodeMatches: unknown,
+    side: 'source' | 'target'): Node => {,
     if (!comparison) return [];
     return nodes.map(node => {)
-      const match = nodeMatches.find(m => ;);
+  const match = nodeMatches.find(m => ;);
         side === 'source' ? m.source_node_id === node.id : m.target_node_id === node.id
       );
       let diffState = 'unchanged';
@@ -124,12 +120,9 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
         case 'exact':
           diffState = 'unchanged';
           break;
-        }
-      }
       // Filter based on highlight mode and show unchanged setting
       if (!showUnchanged && diffState === 'unchanged') {
         return null;
-      }
       if (highlightMode !== 'all') {
         switch (highlightMode) {
         case 'changes':
@@ -141,94 +134,86 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
         case 'deletions':
           if (diffState !== 'removed') return null;
           break;
-        }
-      }
       return {
         id: node.id,
         type: 'diffNode',
         position: node.position || { x: 0, y: 0 },
         data: {,
-          ...node.data,
-          originalNode: node,
-          diffState,
-          changeDetails,
-          showMetadata,
-          side
-        },
-        style: getDiffNodeStyle(diffState, highlightMode)
+  ...node.data,
+  originalNode: node,
+  diffState,
+  changeDetails,
+  showMetadata,
+  side
+},
+  style: getDiffNodeStyle(diffState, highlightMode)
       };
-    }).filter(Boolean) as Node[];
+    }).filter(Boolean) as Node;
   }, [comparison, highlightMode, showUnchanged, showMetadata]);
   const prepareEdges = useCallback((;);
-    edges: unknown[],
-    edgeMatches: unknown[],
-    side: 'source' | 'target',
-  ): Edge[] => {
+    edges: unknown,
+    edgeMatches: unknown,
+    side: 'source' | 'target'): Edge => {,
     if (!comparison) return [];
     return edges.map(edge => {)
-      const match = edgeMatches.find(m => ;);
+  const match = edgeMatches.find(m => ;);
         side === 'source' ? m.source_edge_id === edge.id : m.target_edge_id === edge.id
       );
       let diffState = 'unchanged';
       let changeDetails = {};
       if (match) {
-        switch (match.match_type) {
-        case 'added':
-          diffState = 'added';
-          break;
-        case 'removed':
-          diffState = 'removed';
-          break;
-        case 'modified':
-        case 'similar':
-          diffState = 'modified';
-          changeDetails = match.property_changes;
-          break;
-        case 'exact':
-          diffState = 'unchanged';
-          break;
-        }
-      }
-      // Filter based on highlight mode and show unchanged setting
-      if (!showUnchanged && diffState === 'unchanged') {
-        return null;
-      }
-      if (highlightMode !== 'all') {
-        switch (highlightMode) {
-        case 'changes':
-          if (diffState === 'unchanged') return null;
-          break;
-        case 'additions':
-          if (diffState !== 'added') return null;
-          break;
-        case 'deletions':
-          if (diffState !== 'removed') return null;
-          break;
-        }
-      }
-      return {
-        id: edge.id,
-        source: edge.source,
-        target: edge.target,
-        type: 'diffEdge',
-        data: {,
-          ...edge.data,
-          originalEdge: edge,
-          diffState,
-          changeDetails,
-          side
-        },
-        style: getDiffEdgeStyle(diffState, highlightMode)
+  switch (match.match_type) {
+  case 'added':,
+  diffState = 'added';
+  break;
+  case 'removed':,
+  diffState = 'removed';
+  break;
+  case 'modified':,
+  case 'similar':,
+  diffState = 'modified';
+  changeDetails = match.property_changes;
+  break;
+  case 'exact':,
+  diffState = 'unchanged';
+  break;
+  // Filter based on highlight mode and show unchanged setting
+  if (!showUnchanged && diffState === 'unchanged') {
+  return null;
+  if (highlightMode !== 'all') {
+  switch (highlightMode) {
+  case 'changes':,
+  if (diffState === 'unchanged') return null;
+  break;
+  case 'additions':,
+  if (diffState !== 'added') return null;
+  break;
+  case 'deletions':,
+  if (diffState !== 'removed') return null;
+  break;
+  return {
+  id: edge.id,
+  source: edge.source,
+  target: edge.target,
+  type: 'diffEdge',
+  data: {,
+  ...edge.data,
+  originalEdge: edge,
+  diffState,
+  changeDetails,
+  side
+},
+  style: getDiffEdgeStyle(diffState, highlightMode)
       };
-    }).filter(Boolean) as Edge[];
+    }).filter(Boolean) as Edge;
   }, [comparison, highlightMode, showUnchanged]);
   // Get node styling based on diff state
   const getDiffNodeStyle = (diffState: string, __highlightMode: HighlightMode) => {
-    const baseStyle = {
-      border: '2px solid',
-      borderRadius: '6px',
-      transition: 'all 0.2s ease',
-    };
+  const baseStyle = {
+  border: '2px solid',
+  borderRadius: '6px',
+  transition: 'all 0.2s ease',
+};
     switch (diffState) {
     case 'added':
       return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
@@ -238,14 +223,13 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
       return { ...baseStyle, borderColor: '#f59e0b', backgroundColor: '#fffbeb' };
     default:
       return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
-    }
   };
   // Get edge styling based on diff state
   const getDiffEdgeStyle = (diffState: string, __highlightMode: HighlightMode) => {
-    const baseStyle = {
-      strokeWidth: 2,
-      transition: 'all 0.2s ease',
-    };
+  const baseStyle = {
+  strokeWidth: 2,
+  transition: 'all 0.2s ease',
+};
     switch (diffState) {
     case 'added':
       return { ...baseStyle, stroke: '#10b981' };
@@ -255,11 +239,10 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
       return { ...baseStyle, stroke: '#f59e0b' };
     default:
       return { ...baseStyle, stroke: '#6b7280' };
-    }
   };
   // Render loading state
   if (versionsLoading || sessionLoading) {
-    return ();
+    return;
       <div className={`visual-diff-panel ${className}`}>}
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
@@ -267,10 +250,9 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
         </div>
       </div>
     );
-  }
   // Render error state
   if (sessionError) {
-    return ();
+    return;
       <div className={`visual-diff-panel ${className}`}>}
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
@@ -287,17 +269,16 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
         </div>
       </div>
     );
-  }
   const { sourceNodes, sourceEdges, targetNodes, targetEdges } = prepareVisualizationData();
   // Custom node types
   const nodeTypes = {
-    diffNode: DiffNodeRenderer,
-  };
+  diffNode: DiffNodeRenderer,
+};
   // Custom edge types
   const edgeTypes = {
-    diffEdge: DiffEdgeRenderer,
-  };
-  return ();
+  diffEdge: DiffEdgeRenderer,
+};
+  return;
     <div className={`visual-diff-panel ${className}`}>}
       {/* Header */}
       <div className="border-b border-gray-200 bg-white px-4 py-3">
@@ -454,5 +435,5 @@ const VisualDiffPanel: React.FC<VisualDiffPanelProps> = ({ )
     </div>
   );
 };
-
+}
 export default VisualDiffPanel;

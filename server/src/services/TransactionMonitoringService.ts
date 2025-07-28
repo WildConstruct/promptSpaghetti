@@ -11,6 +11,7 @@ import {
 } from '../marketplace/transaction.types.js';
 import { DatabaseService } from '../database/database.service.js';
 
+}
 export interface TransactionSearchFilters {
   userId?: string;
   status?: string;
@@ -20,6 +21,7 @@ export interface TransactionSearchFilters {
   maxAmount?: number;
   startDate?: Date;
   endDate?: Date;
+}
   riskScore?: { min?: number; max?: number };
   hasFlags?: boolean;
   page?: number;
@@ -28,6 +30,7 @@ export interface TransactionSearchFilters {
   sortOrder?: 'asc' | 'desc';
 }
 
+}
 export interface TransactionDetails extends Transaction {
   order?: Order;
   payment_intent?: PaymentIntent;
@@ -38,6 +41,7 @@ export interface TransactionDetails extends Transaction {
   related_transactions?: Transaction[];
 }
 
+}
 export interface TransactionSummary {
   totalTransactions: number;
   totalVolume: number;
@@ -50,6 +54,7 @@ export interface TransactionSummary {
     provider: PaymentProvider;
     count: number;
     volume: number;
+}
   }>;
   recentTrends: Array<{
     date: string;
@@ -58,6 +63,7 @@ export interface TransactionSummary {
   }>;
 }
 
+}
 export interface AnomalyDetectionResult {
   transactionId: string;
   anomalyType: 'unusual_amount' | 'velocity_spike' | 'location_anomaly' | 'pattern_deviation';
@@ -67,7 +73,9 @@ export interface AnomalyDetectionResult {
   confidence: number;
   detectedAt: Date;
 }
+}
 
+}
 export interface TransactionAlert {
   id: string;
   transactionId: string;
@@ -79,6 +87,7 @@ export interface TransactionAlert {
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
   createdAt: Date;
+}
 }
 
 export class TransactionMonitoringService {
@@ -101,6 +110,7 @@ export class TransactionMonitoringService {
     limit: number;
     hasMore: boolean;
   }> {
+
     const page = filters.page || 1;
     const limit = Math.min(filters.limit || 50, 100);
     const offset = (page - 1) * limit;
@@ -208,7 +218,7 @@ export class TransactionMonitoringService {
     const enrichedTransactions = await Promise.all(
       transactions.map(async (transaction) => {
         return await this.enrichTransactionDetails(transaction);
-      })
+  }
     );
 
     return {
@@ -221,6 +231,7 @@ export class TransactionMonitoringService {
   }
 
   async getTransactionDetails(transactionId: string): Promise<TransactionDetails | null> {
+
     const result = await this.db.query(`
       SELECT 
         t.*,
@@ -246,6 +257,7 @@ export class TransactionMonitoringService {
   }
 
   private async enrichTransactionDetails(transaction: unknown): Promise<TransactionDetails> {
+
     // Parse JSON fields
     transaction.fraud_flags = JSON.parse(transaction.fraud_flags || '[]');
     transaction.metadata = JSON.parse(transaction.metadata || '{}');
@@ -306,6 +318,7 @@ export class TransactionMonitoringService {
     endDate: Date,
     filters?: Partial<TransactionSearchFilters>
   ): Promise<TransactionSummary> {
+
     const conditions = ['created_at >= ?', 'created_at <= ?'];
     const params = [startDate.toISOString(), endDate.toISOString()];
 
@@ -395,6 +408,7 @@ export class TransactionMonitoringService {
     adminUserId: string, 
     reason?: string
   ): Promise<void> {
+
     const transaction = await this.getTransactionDetails(transactionId);
     if (!transaction) {
       throw new Error('Transaction not found');
@@ -428,6 +442,7 @@ export class TransactionMonitoringService {
     adminUserId: string, 
     note: string
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO transaction_notes (
         transaction_id, admin_user_id, note, created_at
@@ -436,6 +451,7 @@ export class TransactionMonitoringService {
   }
 
   async getTransactionNotes(transactionId: string): Promise<any[]> {
+
     return await this.db.query(`
       SELECT 
         tn.*,
@@ -458,6 +474,7 @@ export class TransactionMonitoringService {
     riskFactors: string[];
     recommendations: string[];
   }> {
+
     const transaction = await this.getTransactionDetails(transactionId);
     if (!transaction) {
       throw new Error('Transaction not found');
@@ -543,6 +560,7 @@ export class TransactionMonitoringService {
     flagType: string,
     reason: string
   ): Promise<void> {
+
     await this.db.query(`
       INSERT INTO transaction_flags (
         transaction_id, admin_user_id, flag_type, reason, status, created_at
@@ -558,6 +576,7 @@ export class TransactionMonitoringService {
   }
 
   async getTransactionFlags(transactionId: string): Promise<any[]> {
+
     return await this.db.query(`
       SELECT 
         tf.*,
@@ -579,6 +598,7 @@ export class TransactionMonitoringService {
     filters: TransactionSearchFilters,
     format: 'csv' | 'json' = 'csv'
   ): Promise<string> {
+
     const { transactions } = await this.searchTransactions({
       ...filters,
       limit: 10000 // Max export limit
@@ -614,6 +634,7 @@ export class TransactionMonitoringService {
     endDate: Date,
     reportType: 'summary' | 'detailed' | 'fraud_analysis'
   ): Promise<unknown> {
+
     const summary = await this.getTransactionSummary(startDate, endDate);
 
     switch (reportType) {

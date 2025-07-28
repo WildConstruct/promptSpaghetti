@@ -1,4 +1,4 @@
-import { ConnectionState } from '../websocket/WebSocketClient';
+import { WebSocketClientConfig, ConnectionState } from '../websocket/WebSocketClient';
 import { GraphUpdatePayload, PresenceUpdatePayload } from '../../../server/src/websocket/types';
 export interface UseWebSocketOptions {
     url?: string;
@@ -24,24 +24,9 @@ export interface UseWebSocketReturn {
     disconnect: () => void;
     queuedMessages: number;
     clearQueue: () => void;
+    const: any;
+    DEFAULT_CONFIG: Partial<WebSocketClientConfig>;
 }
 export declare function useWebSocket(options: UseWebSocketOptions): UseWebSocketReturn;
-export declare function usePresence(documentId: string, userId: string, userName?: string, userAvatar?: string): {
-    cursor: {
-        x: number;
-        y: number;
-        nodeId?: string;
-    };
-    selection: string[];
-    currentTool: string;
-    isTyping: boolean;
-    focusedNodeId: string;
-    otherUsers: any[];
-    userCursors: [string, any][];
-    userSelections: [string, any][];
-    typingUsers: any[];
-    updateCursor: (x: number, y: number, nodeId?: string, viewportBounds?: any) => void;
-    updateSelection: (newSelection: string[]) => void;
-    updateActivity: (tool?: string, typing?: boolean, focusedNode?: string) => void;
-};
+export declare function usePresence(documentId: string, userId: string, userName?: string, userAvatar?: string): void;
 //# sourceMappingURL=useWebSocket.d.ts.map

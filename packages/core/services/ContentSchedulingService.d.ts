@@ -7,6 +7,7 @@
  * Task: E17-1753114396947-96EB34 - Design content scheduling
  * Epic: 17 - Backstage Admin Controls
  */
+
 export interface ContentItem {
     id: string;
     title: string;
@@ -20,7 +21,7 @@ export interface ContentItem {
     updatedAt: Date;
     createdBy: string;
     lastModifiedBy?: string;
-}
+
 export interface ContentData {
     body?: string;
     description?: string;
@@ -30,7 +31,7 @@ export interface ContentData {
     documents?: MediaAsset[];
     fields?: Record<string, any>;
     customData?: Record<string, any>;
-}
+
 export interface MediaAsset {
     id: string;
     filename: string;
@@ -44,7 +45,7 @@ export interface MediaAsset {
     duration?: number;
     alt?: string;
     caption?: string;
-}
+
 export interface ContentMetadata {
     seoTitle?: string;
     seoDescription?: string;
@@ -67,14 +68,14 @@ export interface ContentMetadata {
         priority: 'low' | 'medium' | 'high' | 'urgent';
         notes?: WorkflowNote[];
     };
-}
+
 export interface WorkflowNote {
     id: string;
     author: string;
     message: string;
     type: 'comment' | 'review' | 'approval' | 'rejection';
     timestamp: Date;
-}
+
 export interface ContentScheduling {
     publishAt?: Date;
     unpublishAt?: Date;
@@ -86,7 +87,7 @@ export interface ContentScheduling {
     conditions?: ScheduleCondition[];
     prerequisites?: string[];
     blocks?: string[];
-}
+
 export interface RecurrencePattern {
     type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
     interval: number;
@@ -96,7 +97,7 @@ export interface RecurrencePattern {
     endDate?: Date;
     occurrences?: number;
     customPattern?: string;
-}
+
 export interface PromotionSchedule {
     id: string;
     type: 'homepage' | 'category' | 'search' | 'social' | 'email';
@@ -110,12 +111,12 @@ export interface PromotionSchedule {
         behavioral?: Record<string, any>;
         geographic?: string[];
     };
-}
+
 export interface ScheduleCondition {
     type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
     parameters: Record<string, any>;
     description: string;
-}
+
 export interface ContentPerformance {
     views: number;
     engagement: number;
@@ -136,9 +137,10 @@ export interface ContentPerformance {
         traffic: number;
         performance: ContentPerformance;
     }>;
-}
+
 export type ContentType = 'article' | 'blog_post' | 'page' | 'product' | 'event' | 'announcement' | 'promotion' | 'newsletter' | 'social_post' | 'video' | 'podcast' | 'gallery' | 'document';
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'unpublished' | 'archived' | 'deleted' | 'error';
+
 export interface ContentFilter {
     types?: ContentType[];
     statuses?: ContentStatus[];
@@ -158,7 +160,7 @@ export interface ContentFilter {
     };
     language?: string;
     workflowStage?: string[];
-}
+
 export interface ScheduleBatch {
     id: string;
     name: string;
@@ -177,11 +179,11 @@ export interface ScheduleBatch {
     createdBy: string;
     executedAt?: Date;
     completedAt?: Date;
-}
+
 export interface BatchOperation {
     type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
     parameters?: Record<string, any>;
-}
+
 export interface BatchSchedule {
     executeAt?: Date;
     timezone: string;
@@ -190,12 +192,12 @@ export interface BatchSchedule {
         interval: number;
         randomization?: boolean;
     };
-}
+
 export interface BatchError {
     contentId: string;
     error: string;
     timestamp: Date;
-}
+
 export interface SchedulingStats {
     totalContent: number;
     scheduledContent: number;
@@ -225,7 +227,6 @@ export interface SchedulingStats {
             averageEngagement: number;
         }>;
     };
-}
 /**
  * Content Scheduling Service
  */
@@ -274,12 +275,12 @@ export declare class ContentSchedulingService {
     private generateContentId;
     private generateBatchId;
     private sleep;
-}
+
 export interface SchedulingEvent {
     type: string;
     data: any;
     timestamp: Date;
-}
+
 export declare const contentSchedulingService: ContentSchedulingService;
 export declare const createContent: (contentData: Omit<ContentItem, "id" | "createdAt" | "updatedAt" | "performance">, createdBy: string) => Promise<ContentItem>;
 export declare const scheduleContent: (contentId: string, scheduling: ContentScheduling, scheduledBy: string) => Promise<boolean>;

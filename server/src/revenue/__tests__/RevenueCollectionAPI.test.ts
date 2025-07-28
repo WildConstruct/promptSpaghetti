@@ -89,7 +89,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-        },
+  }
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -139,8 +139,8 @@ describe('RevenueCollectionService', () => {
           revenue_data: expect.objectContaining({
             amount_cents: 9700,
             revenue_type: 'purchase'
-          })
-        })
+  }
+  }
       );
 
       // Verify database operations
@@ -203,7 +203,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-        },
+  }
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -369,7 +369,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-        },
+  }
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),
@@ -435,7 +435,7 @@ describe('RevenueCollectionService', () => {
           state: 'CA',
           postal_code: '94105',
           country: 'US'
-        },
+  }
         fulfillment_status: 'fulfilled',
         metadata: {},
         created_at: new Date(),

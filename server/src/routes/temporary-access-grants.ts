@@ -24,6 +24,7 @@ import { DataAccessControlService } from '../services/DataAccessControlService';
 import { AccessRequestWorkflowService } from '../services/AccessRequestWorkflowService';
 
 // Request/Response Type Definitions
+}
 interface CreateGrantRequest {
   Body: {
     granteeId: string;
@@ -40,6 +41,7 @@ interface CreateGrantRequest {
         window: number;
         burstAllowed?: boolean;
         burstLimit?: number;
+}
       }>;
     }>;
     accessScope: {
@@ -114,9 +116,11 @@ interface CreateGrantRequest {
   };
 }
 
+}
 interface ActivateGrantRequest {
   Params: {
     grantId: string;
+}
   };
   Headers: {
     'x-user-id': string;
@@ -125,9 +129,11 @@ interface ActivateGrantRequest {
   };
 }
 
+}
 interface ValidateAccessRequest {
   Params: {
     grantId: string;
+}
   };
   Body: {
     operation: DataOperation;
@@ -140,9 +146,11 @@ interface ValidateAccessRequest {
   };
 }
 
+}
 interface RevokeGrantRequest {
   Params: {
     grantId: string;
+}
   };
   Body: {
     reason: string;
@@ -157,9 +165,11 @@ interface RevokeGrantRequest {
   };
 }
 
+}
 interface ExtendGrantRequest {
   Params: {
     grantId: string;
+}
   };
   Body: {
     extensionDuration: number; // hours
@@ -174,6 +184,7 @@ interface ExtendGrantRequest {
   };
 }
 
+}
 interface SearchGrantsRequest {
   Querystring: {
     granteeId?: string;
@@ -191,6 +202,7 @@ interface SearchGrantsRequest {
     activeOnly?: string;
     limit?: string;
     offset?: string;
+}
   };
   Headers: {
     'x-user-id': string;
@@ -199,11 +211,13 @@ interface SearchGrantsRequest {
   };
 }
 
+}
 interface GetAnalyticsRequest {
   Querystring: {
     startDate?: string;
     endDate?: string;
     timeframe?: 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+}
   };
   Headers: {
     'x-user-id': string;
@@ -252,7 +266,7 @@ function convertToGrantCreationRequest(body: CreateGrantRequest['Body']): GrantC
       exclusions: body.accessScope.exclusions || [],
       inheritanceLevel: body.accessScope.inheritanceLevel || 'NONE',
       cascadingPermissions: body.accessScope.cascadingPermissions || false
-    },
+  }
     timeWindow: {
       startTime: body.timeWindow.startTime ? new Date(body.timeWindow.startTime) : undefined,
       endTime: new Date(body.timeWindow.endTime),
@@ -263,7 +277,7 @@ function convertToGrantCreationRequest(body: CreateGrantRequest['Body']): GrantC
       extendable: body.timeWindow.extendable,
       maxExtensions: body.timeWindow.maxExtensions,
       extensionDuration: body.timeWindow.extensionDuration
-    },
+  }
     conditions: body.conditions?.map(c => ({
       type: c.type,
       specification: c.specification,
@@ -339,7 +353,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['granteeId', 'permissions', 'accessScope', 'timeWindow', 'businessJustification', 'technicalJustification', 'urgency'],
@@ -360,7 +374,7 @@ export async function temporaryAccessGrantRoutes(
                 rateLimits: { type: 'array' }
               }
             }
-          },
+  }
           accessScope: {
             type: 'object',
             required: ['type', 'targets'],
@@ -371,7 +385,7 @@ export async function temporaryAccessGrantRoutes(
               inheritanceLevel: { type: 'string' },
               cascadingPermissions: { type: 'boolean' }
             }
-          },
+  }
           timeWindow: {
             type: 'object',
             required: ['endTime', 'timezone', 'maxSessionDuration', 'maxConcurrentSessions', 'sessionIdleTimeout', 'extendable', 'maxExtensions', 'extensionDuration'],
@@ -386,12 +400,12 @@ export async function temporaryAccessGrantRoutes(
               maxExtensions: { type: 'number' },
               extensionDuration: { type: 'number' }
             }
-          },
+  }
           businessJustification: { type: 'string' },
           technicalJustification: { type: 'string' },
           urgency: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL', 'EMERGENCY'] }
         }
-      },
+  }
       response: {
         201: {
           type: 'object',
@@ -400,7 +414,7 @@ export async function temporaryAccessGrantRoutes(
             grant: { type: 'object' },
             message: { type: 'string' }
           }
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -409,7 +423,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<CreateGrantRequest>, reply: FastifyReply) => {
       try {
         const granterId = request.headers['x-user-id'];
@@ -447,7 +461,7 @@ export async function temporaryAccessGrantRoutes(
         properties: {
           grantId: { type: 'string' }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -456,7 +470,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -465,7 +479,7 @@ export async function temporaryAccessGrantRoutes(
             message: { type: 'string' },
             activatedAt: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -473,7 +487,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<ActivateGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -508,7 +522,7 @@ export async function temporaryAccessGrantRoutes(
         properties: {
           grantId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['operation', 'resourceId'],
@@ -516,7 +530,7 @@ export async function temporaryAccessGrantRoutes(
           operation: { type: 'string' },
           resourceId: { type: 'string' }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -525,7 +539,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -538,7 +552,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<ValidateAccessRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -570,7 +584,7 @@ export async function temporaryAccessGrantRoutes(
         properties: {
           grantId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['reason', 'immediate'],
@@ -580,7 +594,7 @@ export async function temporaryAccessGrantRoutes(
           notifyGrantee: { type: 'boolean' },
           auditRequired: { type: 'boolean' }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -589,7 +603,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -600,7 +614,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<RevokeGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -641,7 +655,7 @@ export async function temporaryAccessGrantRoutes(
         properties: {
           grantId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['extensionDuration', 'justification', 'urgency'],
@@ -651,7 +665,7 @@ export async function temporaryAccessGrantRoutes(
           urgency: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] },
           approverRequired: { type: 'boolean' }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -660,7 +674,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -672,7 +686,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<ExtendGrantRequest>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -714,14 +728,14 @@ export async function temporaryAccessGrantRoutes(
         properties: {
           grantId: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
           properties: {
             grant: { type: 'object' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -729,7 +743,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<{ Params: { grantId: string } }>, reply: FastifyReply) => {
       try {
         const { grantId } = request.params;
@@ -771,7 +785,7 @@ export async function temporaryAccessGrantRoutes(
           limit: { type: 'string' },
           offset: { type: 'string' }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -780,7 +794,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -792,7 +806,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<SearchGrantsRequest>, reply: FastifyReply) => {
       try {
         const filters = parseSearchFilters(request.query);
@@ -828,7 +842,7 @@ export async function temporaryAccessGrantRoutes(
           endDate: { type: 'string' },
           timeframe: { type: 'string', enum: ['DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'] }
         }
-      },
+  }
       headers: {
         type: 'object',
         required: ['x-user-id'],
@@ -837,7 +851,7 @@ export async function temporaryAccessGrantRoutes(
           'x-session-id': { type: 'string' },
           'user-agent': { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -847,7 +861,7 @@ export async function temporaryAccessGrantRoutes(
           }
         }
       }
-    },
+  }
     handler: async (request: FastifyRequest<GetAnalyticsRequest>, reply: FastifyReply) => {
       try {
         let timeframe: { start: Date; end: Date } | undefined;

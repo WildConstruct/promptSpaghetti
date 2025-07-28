@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { DataClassification, ClassificationContext, ValidationResult } from '../../types/DataClassification';
+
 interface ClassificationTaggingUIProps {
     dataElement: unknown;
     dataId: string;
@@ -16,7 +17,7 @@ interface ClassificationTaggingUIProps {
     onValidationChange?: (validation: ValidationResult) => void;
     readonly?: boolean;
     showHandlingRequirements?: boolean;
-}
+
 export declare const ClassificationTaggingUI: React.FC<ClassificationTaggingUIProps>;
 export default ClassificationTaggingUI;
 //# sourceMappingURL=ClassificationTaggingUI.d.ts.map

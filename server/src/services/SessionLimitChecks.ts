@@ -9,6 +9,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { SessionLimitConfig } from './SessionLimitManager';
 
+}
 export interface LimitCheckResult {
   allowed: boolean;
   reason?: string;
@@ -16,6 +17,7 @@ export interface LimitCheckResult {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   type?: string;
   details?: Record<string, any>;
+}
 }
 
 export class SessionLimitChecks {
@@ -34,6 +36,7 @@ export class SessionLimitChecks {
     userId: string, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     try {
       const result = await this.dbService.query(`
         SELECT id, created_at FROM user_sessions
@@ -75,6 +78,7 @@ export class SessionLimitChecks {
     ipAddress: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!ipAddress) {
       return { allowed: true };
     }
@@ -121,6 +125,7 @@ export class SessionLimitChecks {
     organizationId: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!organizationId) {
       return { allowed: true };
     }
@@ -170,6 +175,7 @@ export class SessionLimitChecks {
     deviceFingerprint: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!deviceFingerprint || !config.enableDeviceLimits) {
       return { allowed: true };
     }
@@ -216,6 +222,7 @@ export class SessionLimitChecks {
     country: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!country) {
       return { allowed: true };
     }
@@ -256,6 +263,7 @@ export class SessionLimitChecks {
     country: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!config.enableGeographicLimits || !country) {
       return { allowed: true };
     }
@@ -299,6 +307,7 @@ export class SessionLimitChecks {
     isAdmin: boolean = false, 
     ___isPremium: boolean = false
   ): Promise<LimitCheckResult> {
+
     if (!config.enableBusinessHoursLimits) {
       return { allowed: true };
     }
@@ -340,6 +349,7 @@ export class SessionLimitChecks {
     deviceFingerprint: string | undefined, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!config.enableDeviceLimits || !deviceFingerprint) {
       return { allowed: true };
     }
@@ -397,6 +407,7 @@ export class SessionLimitChecks {
     sessionData: unknown, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!config.enableSuspiciousActivityDetection) {
       return { allowed: true };
     }
@@ -446,6 +457,7 @@ export class SessionLimitChecks {
     userId: string, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     const result = await this.dbService.query(`
       SELECT COUNT(*) as session_count
       FROM user_sessions
@@ -479,6 +491,7 @@ export class SessionLimitChecks {
     sessionData: unknown, 
     config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!sessionData.country) {
       return { allowed: true };
     }
@@ -531,6 +544,7 @@ export class SessionLimitChecks {
     sessionData: unknown, 
     ___config: SessionLimitConfig
   ): Promise<LimitCheckResult> {
+
     if (!sessionData.userAgent && !sessionData.deviceFingerprint) {
       return { allowed: true };
     }
@@ -575,6 +589,7 @@ export class SessionLimitChecks {
     userId: string, 
     ___sessionData: unknown
   ): Promise<LimitCheckResult> {
+
     // Get user's typical session timing patterns
     const result = await this.dbService.query(`
       SELECT EXTRACT(HOUR FROM created_at) as hour, COUNT(*) as count
@@ -635,6 +650,7 @@ export class SessionLimitChecks {
   }
   
   private async getCountryFromIP(___ipAddress: string): Promise<string> {
+
     // In production, this would use a GeoIP service
     // For now, return a placeholder
     return 'US';

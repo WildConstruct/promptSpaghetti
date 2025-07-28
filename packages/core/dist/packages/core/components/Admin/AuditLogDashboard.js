@@ -1,4 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /**
  * Audit Log Dashboard - Epic 17.1.6
  *
@@ -50,7 +50,12 @@ const TIME_PRESETS = [
     { value: 'last_quarter', label: 'Last Quarter' },
     { value: 'last_year', label: 'Last Year' }
 ];
-export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
+export const AuditLogDashboard = ({
+    className = '',
+    userId,
+    userRole
+});
+{
     const [activeTab, setActiveTab] = useState('logs');
     const [searchResults, setSearchResults] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -83,7 +88,8 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
             }, 500); // Debounce search
             return () => clearTimeout(timeoutId);
         }
-    }, [currentFilter, searchQuery]);
+        [currentFilter, searchQuery];
+    });
     const loadInitialData = useCallback(async () => {
         try {
             setLoading(true);
@@ -99,7 +105,8 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
         finally {
             setLoading(false);
         }
-    }, []);
+        [];
+    });
     const performSearch = async () => {
         try {
             setLoading(true);
@@ -110,7 +117,7 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
                     query: searchQuery,
                     fields: ['description', 'action', 'actor_email', 'resource_name'],
                     operator: 'OR',
-                    highlight: true
+                    highlight: true,
                 } : undefined,
                 output: {
                     page: 1,
@@ -118,228 +125,405 @@ export const AuditLogDashboard = ({ className = '', userId, userRole }) => {
                     sortBy: 'timestamp',
                     sortOrder: 'desc',
                     includeMetadata: true,
-                    includeContext: true
-                }
-            };
-            // This would call the AuditFilteringService
-            const mockResults = {
-                events: generateMockEvents(20),
-                pagination: {
-                    page: 1,
-                    limit: 50,
-                    total: 150,
-                    totalPages: 3
+                    includeContext: true,
                 },
-                summary: {
-                    totalEvents: 150,
-                    eventsByCategory: {
-                        authentication: 45,
-                        authorization: 32,
-                        data_modification: 28,
-                        security: 15,
-                        system_configuration: 20,
-                        compliance: 6,
-                        performance: 3,
-                        error: 1
+                // This would call the AuditFilteringService
+                const: mockResults, FilteredSearchResponse = {
+                    events: generateMockEvents(20),
+                    pagination: {
+                        page: 1,
+                        limit: 50,
+                        total: 150,
+                        totalPages: 3,
                     },
-                    eventsBySeverity: {
-                        low: 85,
-                        medium: 45,
-                        high: 15,
-                        critical: 5
-                    },
-                    uniqueActors: 12,
-                    timeRange: {
-                        start: new Date(Date.now() - 24 * 60 * 60 * 1000),
-                        end: new Date()
-                    }
-                },
-                performance: {
-                    queryTime: 234,
-                    totalRecords: 1250,
-                    filteredRecords: 150,
-                    cacheHit: false
-                },
-                filterSummary: {
-                    appliedFilters: Object.keys(filter).filter(key => filter[key] !== undefined),
-                    filterCount: Object.keys(filter).length,
-                    resultReduction: 88
-                }
-            };
-            setSearchResults(mockResults);
-        }
-        catch (err) {
-            setError('Search failed');
-            console.error('Search error:', err);
+                    summary: {
+                        totalEvents: 150,
+                        eventsByCategory: {
+                            authentication: 45,
+                            authorization: 32,
+                            data_modification: 28,
+                            security: 15,
+                            system_configuration: 20,
+                            compliance: 6,
+                            performance: 3,
+                            error: 1,
+                        },
+                        eventsBySeverity: {
+                            low: 85,
+                            medium: 45,
+                            high: 15,
+                            critical: 5,
+                        },
+                        uniqueActors: 12,
+                        timeRange: {
+                            start: new Date(Date.now() - 24 * 60 * 60 * 1000),
+                            end: new Date(),
+                        },
+                        performance: {
+                            queryTime: 234,
+                            totalRecords: 1250,
+                            filteredRecords: 150,
+                            cacheHit: false,
+                        },
+                        filterSummary: {
+                            appliedFilters: Object.keys(filter).filter(key => ),
+                            filter, [key]:  !== undefined } } } };
         }
         finally {
-            setLoading(false);
         }
     };
-    const generateMockEvents = (count) => {
-        const events = [];
-        const eventTypes = Object.values(AuditEventType);
-        const categories = Object.values(AuditCategory);
-        const severities = Object.values(AuditSeverity);
-        const outcomes = ['success', 'failure', 'partial'];
-        for (let i = 0; i < count; i++) {
-            events.push({
-                id: `audit_${Date.now()}_${i}`,
-                eventType: eventTypes[Math.floor(Math.random() * eventTypes.length)],
-                category: categories[Math.floor(Math.random() * categories.length)],
-                severity: severities[Math.floor(Math.random() * severities.length)],
-                actorId: `user_${Math.floor(Math.random() * 10)}`,
-                actorType: 'user',
-                actorEmail: `user${Math.floor(Math.random() * 10)}@example.com`,
-                actorRole: 'admin',
-                resourceType: 'feature_toggle',
-                resourceId: `toggle_${Math.floor(Math.random() * 100)}`,
-                resourceName: `Feature ${Math.floor(Math.random() * 100)}`,
-                action: 'update',
-                description: `User performed ${eventTypes[Math.floor(Math.random() * eventTypes.length)]} action`,
-                outcome: outcomes[Math.floor(Math.random() * outcomes.length)],
-                beforeValue: { enabled: false },
-                afterValue: { enabled: true },
-                changedFields: ['enabled'],
-                sessionId: `session_${Math.floor(Math.random() * 20)}`,
-                ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`,
-                userAgent: 'Mozilla/5.0 (compatible)',
-                metadata: {
-                    source: 'admin_panel',
-                    version: '1.0.0'
-                },
-                tags: [],
-                complianceStandards: [ComplianceStandard.SOC2],
-                timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
-                duration: Math.floor(Math.random() * 1000)
-            });
-        }
-        return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-    };
-    const applyTimeFilter = (preset) => {
-        setCurrentFilter(prev => ({
-            ...prev,
-            timeRange: { preset }
-        }));
-    };
-    const applySeverityFilter = (severities) => {
-        setCurrentFilter(prev => ({
-            ...prev,
-            severities: severities.length > 0 ? severities : undefined
-        }));
-    };
-    const applyCategoryFilter = (categories) => {
-        setCurrentFilter(prev => ({
-            ...prev,
-            categories: categories.length > 0 ? categories : undefined
-        }));
-    };
-    const clearFilters = () => {
-        setCurrentFilter({});
-        setSearchQuery('');
-    };
-    const exportResults = async (format) => {
-        try {
-            // This would call the AuditFilteringService export functionality
-            console.log(`Exporting ${searchResults?.events.length} events as ${format}`);
-        }
-        catch (err) {
-            setError('Export failed');
-        }
-    };
-    const saveCurrentFilter = async () => {
-        if (!filterName.trim())
-            return;
-        try {
-            // This would call the AuditFilteringService saveFilter method
-            const savedFilter = {
-                id: `filter_${Date.now()}`,
-                name: filterName,
-                filter: currentFilter,
-                createdBy: userId || 'unknown',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                isPublic: false,
-                tags: [],
-                usageCount: 0
-            };
-            setSavedFilters(prev => [savedFilter, ...prev]);
-            setShowSaveFilterDialog(false);
-            setFilterName('');
-        }
-        catch (err) {
-            setError('Failed to save filter');
-        }
-    };
-    const toggleEventExpansion = (eventId) => {
-        setExpandedEvents(prev => prev.includes(eventId)
-            ? prev.filter(id => id !== eventId)
-            : [...prev, eventId]);
-    };
-    const toggleEventSelection = (eventId) => {
-        setSelectedEvents(prev => prev.includes(eventId)
-            ? prev.filter(id => id !== eventId)
-            : [...prev, eventId]);
-    };
-    const formatTimestamp = (timestamp) => {
-        return new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short'
-        }).format(timestamp);
-    };
-    const renderEventCard = (event) => {
-        const SeverityIcon = SEVERITY_CONFIG[event.severity].icon;
-        const CategoryIcon = CATEGORY_CONFIG[event.category].icon;
-        const OutcomeIcon = OUTCOME_CONFIG[event.outcome].icon;
-        const isExpanded = expandedEvents.includes(event.id);
-        const isSelected = selectedEvents.includes(event.id);
-        return (_jsx(Card, { className: `mb-4 ${isSelected ? 'ring-2 ring-blue-500' : ''}`, children: _jsxs(CardContent, { className: "p-4", children: [_jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex items-start space-x-3 flex-1", children: [_jsx("input", { type: "checkbox", checked: isSelected, onChange: () => toggleEventSelection(event.id), className: "mt-1" }), _jsxs("div", { className: "flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-2", children: [_jsxs(Badge, { className: SEVERITY_CONFIG[event.severity].color, children: [_jsx(SeverityIcon, { className: "w-3 h-3 mr-1" }), SEVERITY_CONFIG[event.severity].label] }), _jsxs(Badge, { className: CATEGORY_CONFIG[event.category].color, children: [_jsx(CategoryIcon, { className: "w-3 h-3 mr-1" }), event.category.replace('_', ' ')] }), _jsxs(Badge, { className: OUTCOME_CONFIG[event.outcome].color, children: [_jsx(OutcomeIcon, { className: "w-3 h-3 mr-1" }), event.outcome] })] }), _jsx("h4", { className: "font-semibold text-sm text-gray-900 mb-1", children: event.description }), _jsxs("div", { className: "flex items-center space-x-4 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(User, { className: "w-3 h-3 mr-1" }), event.actorEmail] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), formatTimestamp(event.timestamp)] }), event.resourceName && (_jsxs("span", { className: "flex items-center", children: [_jsx(Target, { className: "w-3 h-3 mr-1" }), event.resourceName] }))] })] })] }), _jsxs("div", { className: "flex items-center space-x-2", children: [event.duration && (_jsxs(Badge, { variant: "outline", className: "text-xs", children: [event.duration, "ms"] })), _jsx(Button, { variant: "ghost", size: "sm", onClick: () => toggleEventExpansion(event.id), children: isExpanded ? (_jsx(ChevronUp, { className: "w-4 h-4" })) : (_jsx(ChevronDown, { className: "w-4 h-4" })) })] })] }), isExpanded && (_jsxs("div", { className: "mt-4 pt-4 border-t border-gray-200", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 text-sm", children: [_jsxs("div", { children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Event Details" }), _jsxs("div", { className: "space-y-1", children: [_jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Event Type:" }), " ", event.eventType] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Action:" }), " ", event.action] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Resource Type:" }), " ", event.resourceType] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Resource ID:" }), " ", event.resourceId] })] })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Context" }), _jsxs("div", { className: "space-y-1", children: [_jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Session ID:" }), " ", event.sessionId] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "IP Address:" }), " ", event.ipAddress] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "User Agent:" }), _jsx("span", { className: "text-xs ml-1", children: event.userAgent })] })] })] })] }), (event.beforeValue || event.afterValue) && (_jsxs("div", { className: "mt-4", children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Changes" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [event.beforeValue && (_jsxs("div", { children: [_jsx("div", { className: "text-xs text-gray-500 mb-1", children: "Before" }), _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.beforeValue, null, 2) })] })), event.afterValue && (_jsxs("div", { children: [_jsx("div", { className: "text-xs text-gray-500 mb-1", children: "After" }), _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.afterValue, null, 2) })] }))] })] })), event.metadata && Object.keys(event.metadata).length > 0 && (_jsxs("div", { className: "mt-4", children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Metadata" }), _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.metadata, null, 2) })] }))] }))] }) }, event.id));
-    };
-    const renderFilterBar = () => (_jsx(Card, { className: "mb-6", children: _jsxs(CardContent, { className: "p-4", children: [_jsxs("div", { className: "flex flex-wrap items-center gap-4 mb-4", children: [_jsxs("div", { className: "flex-1 min-w-0 relative", children: [_jsxs("div", { className: "relative", children: [_jsx(Search, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" }), _jsx(Input, { type: "text", placeholder: "Search audit logs...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), onFocus: () => setShowSuggestions(true), onBlur: () => setTimeout(() => setShowSuggestions(false), 200), className: "pl-10" })] }), showSuggestions && searchSuggestions.length > 0 && (_jsx("div", { className: "absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-10 mt-1", children: searchSuggestions.map((suggestion, index) => (_jsx("button", { onClick: () => {
-                                            setSearchQuery(suggestion);
-                                            setShowSuggestions(false);
-                                        }, className: "w-full text-left px-3 py-2 hover:bg-gray-50 text-sm", children: suggestion }, index))) }))] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs(Select, { value: currentFilter.timeRange?.preset || '', onValueChange: (value) => applyTimeFilter(value), children: [_jsx("option", { value: "", children: "All Time" }), TIME_PRESETS.map(preset => (_jsx("option", { value: preset.value, children: preset.label }, preset.value)))] }), _jsxs(Button, { variant: "outline", size: "sm", onClick: () => setShowAdvancedFilters(!showAdvancedFilters), children: [_jsx(Filter, { className: "w-4 h-4 mr-2" }), "Advanced"] }), _jsx(Button, { variant: "outline", size: "sm", onClick: clearFilters, disabled: Object.keys(currentFilter).length === 0 && !searchQuery, children: "Clear" }), _jsxs(Button, { variant: "outline", size: "sm", onClick: performSearch, disabled: loading, children: [_jsx(RefreshCw, { className: `w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}` }), "Refresh"] })] })] }), showAdvancedFilters && (_jsxs("div", { className: "border-t pt-4 space-y-4", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Severity" }), _jsx("div", { className: "space-y-2", children: Object.entries(SEVERITY_CONFIG).map(([severity, config]) => (_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: currentFilter.severities?.includes(severity) || false, onChange: (e) => {
-                                                            const severities = currentFilter.severities || [];
-                                                            if (e.target.checked) {
-                                                                applySeverityFilter([...severities, severity]);
-                                                            }
-                                                            else {
-                                                                applySeverityFilter(severities.filter(s => s !== severity));
-                                                            }
-                                                        }, className: "rounded border-gray-300 mr-2" }), _jsx("span", { className: "text-sm", children: config.label })] }, severity))) })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Category" }), _jsx("div", { className: "space-y-2", children: Object.entries(CATEGORY_CONFIG).map(([category, config]) => (_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: currentFilter.categories?.includes(category) || false, onChange: (e) => {
-                                                            const categories = currentFilter.categories || [];
-                                                            if (e.target.checked) {
-                                                                applyCategoryFilter([...categories, category]);
-                                                            }
-                                                            else {
-                                                                applyCategoryFilter(categories.filter(c => c !== category));
-                                                            }
-                                                        }, className: "rounded border-gray-300 mr-2" }), _jsx("span", { className: "text-sm", children: category.replace('_', ' ') })] }, category))) })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Outcome" }), _jsx("div", { className: "space-y-2", children: Object.entries(OUTCOME_CONFIG).map(([outcome, config]) => (_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: currentFilter.outcomes?.includes(outcome) || false, onChange: (e) => {
-                                                            const outcomes = currentFilter.outcomes || [];
-                                                            if (e.target.checked) {
-                                                                setCurrentFilter(prev => ({
-                                                                    ...prev,
-                                                                    outcomes: [...outcomes, outcome]
-                                                                }));
-                                                            }
-                                                            else {
-                                                                setCurrentFilter(prev => ({
-                                                                    ...prev,
-                                                                    outcomes: outcomes.filter(o => o !== outcome)
-                                                                }));
-                                                            }
-                                                        }, className: "rounded border-gray-300 mr-2" }), _jsx("span", { className: "text-sm", children: outcome })] }, outcome))) })] })] }), _jsx("div", { className: "flex justify-end space-x-2", children: _jsxs(Button, { variant: "outline", size: "sm", onClick: () => setShowSaveFilterDialog(true), disabled: Object.keys(currentFilter).length === 0, children: [_jsx(Save, { className: "w-4 h-4 mr-2" }), "Save Filter"] }) })] }))] }) }));
-    const renderSummaryStats = () => {
-        if (!searchResults)
-            return null;
-        return (_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-4 mb-6", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Total Events" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.totalEvents.toLocaleString() })] }), _jsx(BarChart3, { className: "h-8 w-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Unique Users" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.uniqueActors })] }), _jsx(User, { className: "h-8 w-8 text-green-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Security Events" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.eventsByCategory.security || 0 })] }), _jsx(Shield, { className: "h-8 w-8 text-red-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Query Time" }), _jsxs("p", { className: "text-2xl font-bold text-gray-900", children: [searchResults.performance?.queryTime || 0, "ms"] })] }), _jsx(Zap, { className: "h-8 w-8 text-yellow-600" })] }) }) })] }));
-    };
-    const renderActionBar = () => (_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("div", { className: "flex items-center space-x-2", children: selectedEvents.length > 0 && (_jsxs(_Fragment, { children: [_jsxs("span", { className: "text-sm text-gray-600", children: [selectedEvents.length, " event", selectedEvents.length !== 1 ? 's' : '', " selected"] }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => setSelectedEvents([]), children: "Clear Selection" })] })) }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs(Button, { variant: "outline", size: "sm", onClick: () => exportResults('csv'), disabled: !searchResults?.events.length, children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export CSV"] }), _jsxs(Button, { variant: "outline", size: "sm", onClick: () => exportResults('json'), disabled: !searchResults?.events.length, children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export JSON"] })] })] }));
-    return (_jsxs("div", { className: `audit-log-dashboard ${className}`, children: [_jsxs("div", { className: "mb-6", children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900 mb-2", children: "Audit Logs" }), _jsx("p", { className: "text-gray-600", children: "Comprehensive audit trail with advanced filtering and search capabilities" })] }), error && (_jsx("div", { className: "mb-6 p-4 bg-red-50 border border-red-200 rounded-md", children: _jsxs("div", { className: "flex items-center", children: [_jsx(XCircle, { className: "h-5 w-5 text-red-600 mr-2" }), _jsx("span", { className: "text-red-800", children: error })] }) })), _jsxs(Tabs, { value: activeTab, onValueChange: setActiveTab, children: [_jsxs(TabsList, { className: "mb-6", children: [_jsx(TabsTrigger, { value: "logs", children: "Audit Logs" }), _jsx(TabsTrigger, { value: "analytics", children: "Analytics" }), _jsx(TabsTrigger, { value: "compliance", children: "Compliance" }), _jsx(TabsTrigger, { value: "settings", children: "Settings" })] }), _jsxs(TabsContent, { value: "logs", children: [renderFilterBar(), renderSummaryStats(), renderActionBar(), loading ? (_jsxs("div", { className: "flex items-center justify-center py-12", children: [_jsx(RefreshCw, { className: "w-6 h-6 animate-spin mr-2" }), _jsx("span", { children: "Loading audit events..." })] })) : searchResults?.events.length > 0 ? (_jsxs("div", { children: [searchResults.events.map(renderEventCard), searchResults.pagination.totalPages > 1 && (_jsxs("div", { className: "flex items-center justify-center mt-6 space-x-2", children: [_jsx(Button, { variant: "outline", size: "sm", disabled: searchResults.pagination.page === 1, children: "Previous" }), _jsxs("span", { className: "text-sm text-gray-600", children: ["Page ", searchResults.pagination.page, " of ", searchResults.pagination.totalPages] }), _jsx(Button, { variant: "outline", size: "sm", disabled: searchResults.pagination.page === searchResults.pagination.totalPages, children: "Next" })] }))] })) : (_jsxs("div", { className: "text-center py-12", children: [_jsx(FileText, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No audit events found" }), _jsx("p", { className: "text-gray-600", children: "Try adjusting your filters or search terms to find relevant events." })] }))] }), _jsx(TabsContent, { value: "analytics", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(BarChart3, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Analytics Dashboard" }), _jsx("p", { className: "text-gray-600", children: "Advanced analytics and reporting features coming soon." })] }) }), _jsx(TabsContent, { value: "compliance", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(Shield, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Compliance Reports" }), _jsx("p", { className: "text-gray-600", children: "Generate compliance reports for various standards." })] }) }), _jsx(TabsContent, { value: "settings", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(Settings, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Audit Settings" }), _jsx("p", { className: "text-gray-600", children: "Configure audit logging and retention policies." })] }) })] }), showSaveFilterDialog && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg p-6 w-full max-w-md", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Save Filter" }), _jsxs("div", { className: "mb-4", children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Filter Name" }), _jsx(Input, { type: "text", value: filterName, onChange: (e) => setFilterName(e.target.value), placeholder: "Enter filter name...", className: "w-full" })] }), _jsxs("div", { className: "flex justify-end space-x-2", children: [_jsx(Button, { variant: "outline", onClick: () => setShowSaveFilterDialog(false), children: "Cancel" }), _jsx(Button, { onClick: saveCurrentFilter, disabled: !filterName.trim(), children: "Save Filter" })] })] }) }))] }));
+    filterCount: Object.keys(filter).length,
+        resultReduction;
+    88,
+    ;
+}
+;
+setSearchResults(mockResults);
+try { }
+catch (err) {
+    setError('Search failed');
+    console.error('Search error:', err);
+}
+finally {
+    setLoading(false);
+}
+;
+const generateMockEvents = (count) => {
+    const events = [];
+    const eventTypes = Object.values(AuditEventType);
+    const categories = Object.values(AuditCategory);
+    const severities = Object.values(AuditSeverity);
+    const outcomes = ['success', 'failure', 'partial'];
+    for (let i = 0; i < count; i++) {
+        events.push({});
+        id: `audit_${Date.now()}_${i}`;
+    }
+}, eventType;
+(Math.random() * eventTypes.length);
+category: categories[Math.floor(Math.random() * categories.length)],
+    severity;
+severities[Math.floor(Math.random() * severities.length)],
+    actorId;
+`user_${Math.floor(Math.random() * 10)}`;
+actorType: 'user',
+    actorEmail;
+`user${Math.floor(Math.random() * 10)}@example.com`;
+actorRole: 'admin',
+    resourceType;
+'feature_toggle',
+    resourceId;
+`toggle_${Math.floor(Math.random() * 100)}`;
+resourceName: `Feature ${Math.floor(Math.random() * 100)}`;
+action: 'update',
+    description;
+`User performed ${eventTypes[Math.floor(Math.random() * eventTypes.length)]} action`;
+outcome: outcomes[Math.floor(Math.random() * outcomes.length)],
+    beforeValue;
+{
+    enabled: false;
+}
+afterValue: {
+    enabled: true;
+}
+changedFields: ['enabled'],
+    sessionId;
+`session_${Math.floor(Math.random() * 20)}`;
+ipAddress: `192.168.1.${Math.floor(Math.random() * 254)}`;
+userAgent: 'Mozilla/5.0 (compatible)',
+    metadata;
+{
+    source: 'admin_panel',
+        version;
+    '1.0.0',
+    ;
+}
+tags: [],
+    complianceStandards;
+[ComplianceStandard.SOC2],
+    timestamp;
+new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
+    duration;
+Math.floor(Math.random() * 1000);
+;
+return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+;
+const applyTimeFilter = (preset) => {
+    setCurrentFilter(prev => ({}), ...prev, timeRange, { preset });
 };
+;
+const applySeverityFilter = (severities) => {
+    setCurrentFilter(prev => ({}), ...prev, severities, severities.length > 0 ? severities : undefined);
+};
+;
+const applyCategoryFilter = (categories) => {
+    setCurrentFilter(prev => ({}), ...prev, categories, categories.length > 0 ? categories : undefined);
+};
+;
+const clearFilters = () => {
+    setCurrentFilter({});
+    setSearchQuery('');
+};
+const exportResults = async (format) => {
+    try {
+        // This would call the AuditFilteringService export functionality
+        console.log(`Exporting ${searchResults?.events.length} events as ${format}`);
+    }
+    finally {
+    }
+};
+try { }
+catch (err) {
+    setError('Export failed');
+}
+;
+const saveCurrentFilter = async () => {
+    if (!filterName.trim())
+        return;
+    try {
+        // This would call the AuditFilteringService saveFilter method
+        const savedFilter = {
+            id: `filter_${Date.now()}` };
+    }
+    finally { }
+    name: filterName,
+        filter;
+    currentFilter,
+        createdBy;
+    userId || 'unknown',
+        createdAt;
+    new Date(),
+        updatedAt;
+    new Date(),
+        isPublic;
+    false,
+        tags;
+    [],
+        usageCount;
+    0;
+};
+setSavedFilters(prev => [savedFilter, ...prev]);
+setShowSaveFilterDialog(false);
+setFilterName('');
+try { }
+catch (err) {
+    setError('Failed to save filter');
+}
+;
+const toggleEventExpansion = (eventId) => {
+    setExpandedEvents(prev => );
+    prev.includes(eventId)
+        ? prev.filter(id => id !== eventId)
+        : [...prev, eventId];
+    ;
+};
+const toggleEventSelection = (eventId) => {
+    setSelectedEvents(prev => );
+    prev.includes(eventId)
+        ? prev.filter(id => id !== eventId)
+        : [...prev, eventId];
+    ;
+};
+const formatTimestamp = (timestamp) => {
+    return new Intl.DateTimeFormat('en-US', {});
+    year: 'numeric',
+        month;
+    'short',
+        day;
+    'numeric',
+        hour;
+    '2-digit',
+        minute;
+    '2-digit',
+        second;
+    '2-digit',
+        timeZoneName;
+    'short',
+    ;
+}, format;
+(timestamp);
+;
+const renderEventCard = (event) => {
+    const SeverityIcon = SEVERITY_CONFIG[event.severity].icon;
+    const CategoryIcon = CATEGORY_CONFIG[event.category].icon;
+    const OutcomeIcon = OUTCOME_CONFIG[event.outcome].icon;
+    const isExpanded = expandedEvents.includes(event.id);
+    const isSelected = selectedEvents.includes(event.id);
+    return;
+    _jsxs(Card, { className: `mb-4 ${isSelected ? 'ring-2 ring-blue-500' : ''}`, children: ["}", _jsxs(CardContent, { className: "p-4", children: [_jsx("div", { className: "flex items-start justify-between", children: _jsxs("div", { className: "flex items-start space-x-3 flex-1", children: [_jsx("input", { type: "checkbox", checked: isSelected, onChange: () => toggleEventSelection(event.id), className: "mt-1" }), _jsxs("div", { className: "flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-2", children: [_jsxs(Badge, { className: SEVERITY_CONFIG[event.severity].color, children: [_jsx(SeverityIcon, { className: "w-3 h-3 mr-1" }), SEVERITY_CONFIG[event.severity].label] }), _jsxs(Badge, { className: CATEGORY_CONFIG[event.category].color, children: [_jsx(CategoryIcon, { className: "w-3 h-3 mr-1" }), event.category.replace('_', ' ')] }), _jsxs(Badge, { className: OUTCOME_CONFIG[event.outcome].color, children: [_jsx(OutcomeIcon, { className: "w-3 h-3 mr-1" }), event.outcome] })] }), _jsx("h4", { className: "font-semibold text-sm text-gray-900 mb-1", children: event.description }), _jsxs("div", { className: "flex items-center space-x-4 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(User, { className: "w-3 h-3 mr-1" }), event.actorEmail] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), formatTimestamp(event.timestamp)] }), event.resourceName && ()
+                                                    < span, " className=\"flex items-center\">", _jsx(Target, { className: "w-3 h-3 mr-1" }), event.resourceName] }), ")}"] })] }) }), _jsxs("div", { className: "flex items-center space-x-2", children: [event.duration && ()
+                                < Badge, " variant=\"outline\" className=\"text-xs\">", event.duration, "ms"] }), ")}", _jsxs(Button, { variant: "ghost", size: "sm", onClick: () => toggleEventExpansion(event.id), children: [isExpanded ? ()
+                                < ChevronUp : , " className=\"w-4 h-4\" /> ) : ()", _jsx(ChevronDown, { className: "w-4 h-4" }), ")}"] })] })] }, event.id);
+    {
+        isExpanded && ()
+            < div;
+        className = "mt-4 pt-4 border-t border-gray-200" >
+            _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 text-sm", children: [_jsxs("div", { children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Event Details" }), _jsxs("div", { className: "space-y-1", children: [_jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Event Type:" }), " ", event.eventType] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Action:" }), " ", event.action] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Resource Type:" }), " ", event.resourceType] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Resource ID:" }), " ", event.resourceId] })] })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Context" }), _jsxs("div", { className: "space-y-1", children: [_jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "Session ID:" }), " ", event.sessionId] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "IP Address:" }), " ", event.ipAddress] }), _jsxs("div", { children: [_jsx("span", { className: "text-gray-500", children: "User Agent:" }), _jsx("span", { className: "text-xs ml-1", children: event.userAgent })] })] })] })] });
+        {
+            (event.beforeValue || event.afterValue) && ()
+                < div;
+            className = "mt-4" >
+                (_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Changes" })
+                    ,
+                        _jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: event.beforeValue && ()
+                                < div >
+                                (_jsx("div", { className: "text-xs text-gray-500 mb-1", children: "Before" })
+                                    ,
+                                        _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.beforeValue, null, 2) })) }));
+        }
+    }
+};
+{
+    event.afterValue && ()
+        < div >
+        (_jsx("div", { className: "text-xs text-gray-500 mb-1", children: "After" })
+            ,
+                _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.afterValue, null, 2) }));
+    div >
+    ;
+}
+div >
+;
+div >
+;
+{
+    event.metadata && Object.keys(event.metadata).length > 0 && ()
+        < div;
+    className = "mt-4" >
+        (_jsx("h5", { className: "font-medium text-gray-900 mb-2", children: "Metadata" })
+            ,
+                _jsx("pre", { className: "text-xs bg-gray-50 p-2 rounded overflow-auto", children: JSON.stringify(event.metadata, null, 2) }));
+    div >
+    ;
+}
+div >
+;
+CardContent >
+;
+Card >
+;
+;
+;
+const renderFilterBar = () => ();
+;
+_jsxs(Card, { className: "mb-6", children: [_jsxs(CardContent, { className: "p-4", children: [_jsxs("div", { className: "flex flex-wrap items-center gap-4 mb-4", children: [_jsxs("div", { className: "flex-1 min-w-0 relative", children: [_jsxs("div", { className: "relative", children: [_jsx(Search, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" }), _jsx(Input, { type: "text", placeholder: "Search audit logs...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), onFocus: () => setShowSuggestions(true), onBlur: () => setTimeout(() => setShowSuggestions(false), 200), className: "pl-10" })] }), showSuggestions && searchSuggestions.length > 0 && ()
+                                    < div, " className=\"absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-10 mt-1\">", searchSuggestions.map((suggestion, index) => ()
+                                    < button, key = { index }, onClick = {}()), " => ", setSearchQuery(suggestion), "; setShowSuggestions(false); }} className=\"w-full text-left px-3 py-2 hover:bg-gray-50 text-sm\" >", suggestion] }), "))}"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs(Select, { value: currentFilter.timeRange?.preset || '', onValueChange: (value) => applyTimeFilter(value), children: [_jsx("option", { value: "", children: "All Time" }), TIME_PRESETS.map(preset => ()
+                            < option, key = { preset, : .value }, value = { preset, : .value } >
+                            { preset, : .label })] }), "))}"] }), _jsxs(Button, { variant: "outline", size: "sm", onClick: () => setShowAdvancedFilters(!showAdvancedFilters), children: [_jsx(Filter, { className: "w-4 h-4 mr-2" }), "Advanced"] }), _jsx(Button, { variant: "outline", size: "sm", onClick: clearFilters, disabled: Object.keys(currentFilter).length === 0 && !searchQuery, children: "Clear" }), _jsxs(Button, { variant: "outline", size: "sm", onClick: performSearch, disabled: loading, children: [_jsx(RefreshCw, { className: `w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}` }), "} Refresh"] })] });
+div >
+    { /* Advanced Filters */};
+{
+    showAdvancedFilters && ()
+        < div;
+    className = "border-t pt-4 space-y-4" >
+        _jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Severity" }), _jsx("div", { className: "space-y-2", children: Object.entries(SEVERITY_CONFIG).map(([severity, config]) => ()
+                            < label, key = { severity }, className = "flex items-center" >
+                            (_jsx("input", { type: "checkbox", checked: currentFilter.severities?.includes(severity) || false, onChange: (e) => {
+                                    const severities = currentFilter.severities || [];
+                                    if (e.target.checked) {
+                                        applySeverityFilter([...severities, severity]);
+                                    }
+                                    else {
+                                        applySeverityFilter(severities.filter(s => s !== severity));
+                                    }
+                                }, className: "rounded border-gray-300 mr-2" })
+                                ,
+                                    _jsx("span", { className: "text-sm", children: config.label }))) }), "))}"] }) });
+    { /* Category Filter */ }
+    _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Category" }), _jsx("div", { className: "space-y-2", children: Object.entries(CATEGORY_CONFIG).map(([category, config]) => ()
+                    < label, key = { category }, className = "flex items-center" >
+                    (_jsx("input", { type: "checkbox", checked: currentFilter.categories?.includes(category) || false, onChange: (e) => {
+                            const categories = currentFilter.categories || [];
+                            if (e.target.checked) {
+                                applyCategoryFilter([...categories, category]);
+                            }
+                            else {
+                                applyCategoryFilter(categories.filter(c => c !== category));
+                            }
+                        }, className: "rounded border-gray-300 mr-2" })
+                        ,
+                            _jsx("span", { className: "text-sm", children: category.replace('_', ' ') }))) }), "))}"] });
+    div >
+        { /* Outcome Filter */}
+        < div >
+        (_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Outcome" })
+            ,
+                _jsxs("div", { className: "space-y-2", children: [Object.entries(OUTCOME_CONFIG).map(([outcome, config]) => ()
+                            < label, key = { outcome }, className = "flex items-center" >
+                            _jsx("input", { type: "checkbox", checked: currentFilter.outcomes?.includes(outcome) || false, onChange: (e) => {
+                                    const outcomes = currentFilter.outcomes || [];
+                                    if (e.target.checked) {
+                                        setCurrentFilter(prev => ({}), ...prev, outcomes);
+                                    }
+                                } })), ": [...outcomes, outcome as any], })); } else ", setCurrentFilter(prev => ({}), ...prev, outcomes), ": outcomes.filter(o => o !== outcome), })); }} className=\"rounded border-gray-300 mr-2\" />", _jsx("span", { className: "text-sm", children: outcome })] }));
+}
+div >
+;
+div >
+;
+div >
+    _jsx("div", { className: "flex justify-end space-x-2", children: _jsxs(Button, { variant: "outline", size: "sm", onClick: () => setShowSaveFilterDialog(true), disabled: Object.keys(currentFilter).length === 0, children: [_jsx(Save, { className: "w-4 h-4 mr-2" }), "Save Filter"] }) });
+div >
+;
+CardContent >
+;
+Card >
+;
+;
+const renderSummaryStats = () => {
+    if (!searchResults)
+        return null;
+    return;
+    _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-4 mb-6", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Total Events" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.totalEvents.toLocaleString() })] }), _jsx(BarChart3, { className: "h-8 w-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Unique Users" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.uniqueActors })] }), _jsx(User, { className: "h-8 w-8 text-green-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Security Events" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: searchResults.summary.eventsByCategory.security || 0 })] }), _jsx(Shield, { className: "h-8 w-8 text-red-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Query Time" }), _jsxs("p", { className: "text-2xl font-bold text-gray-900", children: [searchResults.performance?.queryTime || 0, "ms"] })] }), _jsx(Zap, { className: "h-8 w-8 text-yellow-600" })] }) }) })] });
+};
+;
+;
+const renderActionBar = () => ();
+;
+_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("div", { className: "flex items-center space-x-2", children: selectedEvents.length > 0 && ()
+                <  >
+                (_jsxs("span", { className: "text-sm text-gray-600", children: [selectedEvents.length, " event", selectedEvents.length !== 1 ? 's' : '', " selected"] })
+                    ,
+                        _jsx(Button, { variant: "outline", size: "sm", onClick: () => setSelectedEvents([]), children: "Clear Selection" })) }), ")}"] })
+    ,
+        _jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs(Button, { variant: "outline", size: "sm", onClick: () => exportResults('csv'), disabled: !searchResults?.events.length, children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export CSV"] }), _jsxs(Button, { variant: "outline", size: "sm", onClick: () => exportResults('json'), disabled: !searchResults?.events.length, children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export JSON"] })] });
+div >
+;
+;
+return;
+_jsxs("div", { className: `audit-log-dashboard ${className}`, children: ["}", _jsxs("div", { className: "mb-6", children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900 mb-2", children: "Audit Logs" }), _jsx("p", { className: "text-gray-600", children: "Comprehensive audit trail with advanced filtering and search capabilities" })] }), error && ()
+            < div, " className=\"mb-6 p-4 bg-red-50 border border-red-200 rounded-md\">", _jsxs("div", { className: "flex items-center", children: [_jsx(XCircle, { className: "h-5 w-5 text-red-600 mr-2" }), _jsx("span", { className: "text-red-800", children: error })] })] });
+_jsxs(Tabs, { value: activeTab, onValueChange: setActiveTab, children: [_jsxs(TabsList, { className: "mb-6", children: [_jsx(TabsTrigger, { value: "logs", children: "Audit Logs" }), _jsx(TabsTrigger, { value: "analytics", children: "Analytics" }), _jsx(TabsTrigger, { value: "compliance", children: "Compliance" }), _jsx(TabsTrigger, { value: "settings", children: "Settings" })] }), _jsxs(TabsContent, { value: "logs", children: [renderFilterBar(), renderSummaryStats(), renderActionBar(), loading ? ()
+                    < div : , " className=\"flex items-center justify-center py-12\">", _jsx(RefreshCw, { className: "w-6 h-6 animate-spin mr-2" }), _jsx("span", { children: "Loading audit events..." })] }), ") : searchResults?.events.length > 0 ? ()", _jsxs("div", { children: [searchResults.events.map(renderEventCard), searchResults.pagination.totalPages > 1 && ()
+                    < div, " className=\"flex items-center justify-center mt-6 space-x-2\">", _jsx(Button, { variant: "outline", size: "sm", disabled: searchResults.pagination.page === 1, children: "Previous" }), _jsxs("span", { className: "text-sm text-gray-600", children: ["Page ", searchResults.pagination.page, " of ", searchResults.pagination.totalPages] }), _jsx(Button, { variant: "outline", size: "sm", disabled: searchResults.pagination.page === searchResults.pagination.totalPages, children: "Next" })] }), ")}"] });
+()
+    < div;
+className = "text-center py-12" >
+    (_jsx(FileText, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" })
+        ,
+            _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No audit events found" })
+                ,
+                    _jsx("p", { className: "text-gray-600", children: "Try adjusting your filters or search terms to find relevant events." }));
+div >
+;
+TabsContent >
+    (_jsx(TabsContent, { value: "analytics", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(BarChart3, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Analytics Dashboard" }), _jsx("p", { className: "text-gray-600", children: "Advanced analytics and reporting features coming soon." })] }) })
+        ,
+            _jsx(TabsContent, { value: "compliance", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(Shield, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Compliance Reports" }), _jsx("p", { className: "text-gray-600", children: "Generate compliance reports for various standards." })] }) })
+                ,
+                    _jsx(TabsContent, { value: "settings", children: _jsxs("div", { className: "text-center py-12", children: [_jsx(Settings, { className: "w-12 h-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "Audit Settings" }), _jsx("p", { className: "text-gray-600", children: "Configure audit logging and retention policies." })] }) }));
+Tabs >
+    { /* Save Filter Dialog */};
+{
+    showSaveFilterDialog && ()
+        < div;
+    className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" >
+        _jsxs("div", { className: "bg-white rounded-lg p-6 w-full max-w-md", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Save Filter" }), _jsxs("div", { className: "mb-4", children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Filter Name" }), _jsx(Input, { type: "text", value: filterName, onChange: (e) => setFilterName(e.target.value), placeholder: "Enter filter name...", className: "w-full" })] }), _jsxs("div", { className: "flex justify-end space-x-2", children: [_jsx(Button, { variant: "outline", onClick: () => setShowSaveFilterDialog(false), children: "Cancel" }), _jsx(Button, { onClick: saveCurrentFilter, disabled: !filterName.trim(), children: "Save Filter" })] })] });
+    div >
+    ;
+}
+div >
+;
+;
+;
 export default AuditLogDashboard;

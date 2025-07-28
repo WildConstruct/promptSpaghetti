@@ -79,8 +79,6 @@ export interface AccessSchedule {
         start: string;
         end: string;
     };
-    timezone: string;
-    exceptions: ScheduleException[];
 }
 export interface ScheduleException {
     date: string;
@@ -120,13 +118,6 @@ export interface PolicyEvaluationContext {
         timestamp: Date;
         sessionId: string;
     };
-    requestedData: {
-        type: string;
-        classification: DataClassificationLevel;
-        sensitivityLevel: DataSensitivityLevel;
-        operations: DataOperation[];
-    };
-    riskScore?: number;
 }
 export interface PolicyEvaluationResult {
     allowed: boolean;
@@ -165,20 +156,6 @@ export interface ComplianceReport {
     period: {
         start: Date;
         end: Date;
-    };
-    summary: {
-        totalPolicies: number;
-        activePolicies: number;
-        violations: number;
-        warnings: number;
-    };
-    findings: ComplianceFinding[];
-    recommendations: ComplianceRecommendation[];
-    attestation: {
-        attested: boolean;
-        attestedBy?: string;
-        attestationDate?: Date;
-        comments?: string;
     };
 }
 export interface ComplianceFinding {

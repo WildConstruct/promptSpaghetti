@@ -31,62 +31,59 @@ import { uiColors } from '../../styles/professional-design-system';
 const uiColors = {
   ...uiColors,
   accent: {,
-    ...uiColors.accent,
-    primary: uiColors.accent.orange,
-    secondary: uiColors.accent.blue,
-  },
+  ...uiColors.accent,
+  primary: uiColors.accent.orange,
+  secondary: uiColors.accent.blue,
+},
   ui: {,
-    ...uiColors.ui,
-    selected: '#353535',
-    disabled: '#6b7280',
-  },
+  ...uiColors.ui,
+  selected: '#353535',
+  disabled: '#6b7280',
+},
   text: {,
-    ...uiColors.text,
-    disabled: '#6b7280',
-  }
+  ...uiColors.text,
+  disabled: '#6b7280',
 };
 
 export interface SettingsModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
   onSettingsChange?: (settings: AdvancedSettings) => void;
+  /**
+  * Settings group configuration for UI organization
+  */
+  const SETTINGS_GROUPS = [;
+  {
+  id: 'execution',
+  name: 'Execution Settings',
+  description: 'Control how graphs are executed and randomized',
+  icon: FiPlayCircle,
+  sections: ['seed', 'temperature', 'runCount'],
 }
-/**
- * Settings group configuration for UI organization
- */
-const SETTINGS_GROUPS = [;
   {
-    id: 'execution',
-    name: 'Execution Settings',
-    description: 'Control how graphs are executed and randomized',
-    icon: FiPlayCircle,
-    sections: ['seed', 'temperature', 'runCount']
-  },
+  id: 'batch',
+  name: 'Batch Processing',
+  description: 'Configure batch execution and output options',
+  icon: FiPackage,
+  sections: ['batch'],
+}
   {
-    id: 'batch',
-    name: 'Batch Processing',
-    description: 'Configure batch execution and output options',
-    icon: FiPackage,
-    sections: ['batch'],
-  },
+  id: 'performance',
+  name: 'Performance & Debug',
+  description: 'Performance monitoring and debugging tools',
+  icon: FiMonitor,
+  sections: ['performance'],
+}
   {
-    id: 'performance',
-    name: 'Performance & Debug',
-    description: 'Performance monitoring and debugging tools',
-    icon: FiMonitor,
-    sections: ['performance'],
-  },
-  {
-    id: 'interface',
-    name: 'Interface & Accessibility',
-    description: 'UI preferences and accessibility options',
-    icon: FiEye,
-    sections: ['ui'],
-  }
-];
-/**
- * Advanced Settings Modal Component
- */
+  id: 'interface',
+  name: 'Interface & Accessibility',
+  description: 'UI preferences and accessibility options',
+  icon: FiEye,
+  sections: ['ui']];
+  /**
+  * Advanced Settings Modal Component
+  */
+}
 export const SettingsModal: React.FC<SettingsModalProps> = ({)
   isOpen,
   onClose,
@@ -99,24 +96,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   // Listen for settings changes
   useEffect(() => {
-    const unsubscribe = settingsManager.addChangeListener((event: SettingsChangeEvent) => {
-      setSettings(settingsManager.getSettings());
-      onSettingsChange?.(settingsManager.getSettings());
-      if (event.source === 'user') {
-        setHasUnsavedChanges(true);
-        setSaveStatus('idle');
-      }
-    });
+  const unsubscribe = settingsManager.addChangeListener((event: SettingsChangeEvent) => {,
+  setSettings(settingsManager.getSettings());
+  onSettingsChange?.(settingsManager.getSettings());
+  if (event.source === 'user') {
+  setHasUnsavedChanges(true);
+  setSaveStatus('idle');
+});
     return unsubscribe;
   }, [settingsManager, onSettingsChange]);
   // Handle settings update
   const handleSettingsUpdate = useCallback((updates: Partial<AdvancedSettings>) => {
-    const result = settingsManager.updateSettings(updates, 'user');
-    if (!result.valid) {
-      console.error('Settings validation failed:', result.errors);
-      setSaveStatus('error');
-    }
-  }, [settingsManager]);
+  const result = settingsManager.updateSettings(updates, 'user');
+  if (!result.valid) {
+  console.error('Settings validation failed:', result.errors);
+  setSaveStatus('error');
+}, [settingsManager]);
   // Save settings manually
   const handleSave = useCallback(() => {
     setSaveStatus('saving');
@@ -127,7 +122,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
       setTimeout(() => setSaveStatus('idle'), 2000);
     } else {
       setSaveStatus('error');
-    }
   }, [settingsManager]);
   // Reset to defaults
   const handleReset = useCallback(() => {
@@ -135,14 +129,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
       settingsManager.resetSettings();
       setHasUnsavedChanges(false);
       setSaveStatus('idle');
-    }
   }, [settingsManager]);
   // Export settings
   const handleExport = useCallback(() => {
-    const exportData = settingsManager.exportSettings();
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-      type: 'application/json' ,
-    });
+  const exportData = settingsManager.exportSettings();
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+  type: 'application/json',
+});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -169,33 +162,28 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               alert('Settings imported successfully!');
             } else {
               alert(`Import failed: ${result.errors.join(', ')}`);}
-            }
           } catch (error) {
             alert('Invalid settings file format');
-          }
         };
         reader.readAsText(file);
-      }
     };
     input.click();
   }, [settingsManager]);
   // Handle keyboard shortcuts
   useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey) {
-        switch (event.key) {
-          case 's':
-            event.preventDefault();
-            handleSave();
-            break;
-          case 'r':
-            event.preventDefault();
-            handleReset();
-            break;
-        }
-      }
-    };
+  if (!isOpen) return;
+  const handleKeyDown = (event: KeyboardEvent) => {,
+  if (event.ctrlKey || event.metaKey) {
+  switch (event.key) {
+  case 's':,
+  event.preventDefault();
+  handleSave();
+  break;
+  case 'r':,
+  event.preventDefault();
+  handleReset();
+  break;
+};
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleSave, handleReset]);
@@ -203,42 +191,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
   const renderSettingsSection = (sectionId: string) => {
     switch (sectionId) {
       case 'seed':
-        return ();
+        return;
           <SeedControls
             settings={settings.seed}
             onChange={(seedSettings) => handleSettingsUpdate({ seed: seedSettings })}
           />
         );
       case 'temperature':
-        return ();
+        return;
           <TemperatureControls
             settings={settings.temperature}
             onChange={(tempSettings) => handleSettingsUpdate({ temperature: tempSettings })}
           />
         );
       case 'runCount':
-        return ();
+        return;
           <RunCountControls
             settings={settings.runCount}
             onChange={(runSettings) => handleSettingsUpdate({ runCount: runSettings })}
           />
         );
       case 'batch':
-        return ();
+        return;
           <BatchControls
             settings={settings.batch}
             onChange={(batchSettings) => handleSettingsUpdate({ batch: batchSettings })}
           />
         );
       case 'performance':
-        return ();
+        return;
           <PerformanceControls
             settings={settings.performance}
             onChange={(perfSettings) => handleSettingsUpdate({ performance: perfSettings })}
           />
         );
       case 'ui':
-        return ();
+        return;
           <UIControls
             settings={settings.ui}
             onChange={(uiSettings) => handleSettingsUpdate({ ui: uiSettings })}
@@ -246,9 +234,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
         );
       default:
         return null;
-    }
   };
-  return ();
+  return;
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -263,17 +250,18 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
         {/* Settings Navigation */}
         <div style={{
           width: '240px',
-          borderRight: `1px solid ${uiColors.ui.border}`,}
-          paddingRight: '24px',
-        }}>
+          borderRight: `1px solid ${uiColors.ui.border}`}
+},
+  paddingRight: '24px';
+  }}>
           <div style={{
-            marginBottom: '16px',
-            fontSize: '14px',
-            fontWeight: 500,
-            color: uiColors.text.secondary,
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-          }}>
+  marginBottom: '16px',
+  fontSize: '14px',
+  fontWeight: 500,
+  color: uiColors.text.secondary,
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+}}>
             Settings Groups
           </div>
           {SETTINGS_GROUPS.map((group) => ()
@@ -297,17 +285,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none',
-              }}
+                outline: 'none';
+  }}
               onMouseEnter={(e) => {
                 if (activeGroup !== group.id) {
                   e.currentTarget.style.backgroundColor = uiColors.ui.hover;
-                }
               }}
               onMouseLeave={(e) => {
                 if (activeGroup !== group.id) {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                }
               }}
             >
               <group.icon 
@@ -315,24 +301,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
                 color={activeGroup === group.id 
                   ? uiColors.accent.primary 
                   : uiColors.text.secondary
-                } 
               />
               <div>
                 <div style={{
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: activeGroup === group.id ,
-                    ? uiColors.accent.primary 
-                    : uiColors.text.primary,
-                  marginBottom: '2px',
-                }}>
+  fontSize: '14px',
+  fontWeight: 500,
+  color: activeGroup === group.id ,
+  ? uiColors.accent.primary
+  : uiColors.text.primary,
+  marginBottom: '2px',
+}}>
                   {group.name}
                 </div>
                 <div style={{
-                  fontSize: '12px',
-                  color: uiColors.text.secondary,
-                  lineHeight: 1.3,
-                }}>
+  fontSize: '12px',
+  color: uiColors.text.secondary,
+  lineHeight: 1.3,
+}}>
                   {group.description}
                 </div>
               </div>
@@ -367,8 +352,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               gap: '6px',
               padding: '8px 12px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,}
-              borderRadius: '6px',
+              border: `1px solid ${uiColors.ui.border}`}
+},
+  borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '13px',
               cursor: 'pointer',
@@ -387,8 +373,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               gap: '6px',
               padding: '8px 12px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,}
-              borderRadius: '6px',
+              border: `1px solid ${uiColors.ui.border}`}
+},
+  borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '13px',
               cursor: 'pointer',
@@ -402,23 +389,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
           {/* Save Status */}
           {saveStatus !== 'idle' && ()
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 10px',
-              borderRadius: '4px',
-              fontSize: '12px',
-              backgroundColor: saveStatus === 'saved' ,
-                ? '#10b981' + '20' 
-                : saveStatus === 'error' 
-                ? '#ef4444' + '20'
-                : uiColors.ui.hover,
-              color: saveStatus === 'saved',
-                ? '#10b981'
-                : saveStatus === 'error'
-                ? '#ef4444'
-                : uiColors.text.secondary
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  padding: '6px 10px',
+  borderRadius: '4px',
+  fontSize: '12px',
+  backgroundColor: saveStatus === 'saved' ,
+  ? '#10b981' + '20'
+  : saveStatus === 'error',
+  ? '#ef4444' + '20'
+  : uiColors.ui.hover,
+  color: saveStatus === 'saved',
+  ? '#10b981'
+  : saveStatus === 'error',
+  ? '#ef4444'
+  : uiColors.text.secondary,
+}}>
               {saveStatus === 'saving' && 'Saving...'}
               {saveStatus === 'saved' && ()
                 <>
@@ -445,8 +432,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
               gap: '6px',
               padding: '8px 16px',
               backgroundColor: 'transparent',
-              border: `1px solid ${uiColors.ui.border}`,}
-              borderRadius: '6px',
+              border: `1px solid ${uiColors.ui.border}`}
+},
+  borderRadius: '6px',
               color: uiColors.text.secondary,
               fontSize: '14px',
               cursor: 'pointer',
@@ -461,23 +449,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({)
             onClick={handleSave}
             disabled={!hasUnsavedChanges}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 16px',
-              backgroundColor: hasUnsavedChanges ,
-                ? uiColors.accent.primary
-                : uiColors.ui.disabled,
-              border: 'none',
-              borderRadius: '6px',
-              color: hasUnsavedChanges ,
-                ? 'white'
-                : uiColors.text.disabled,
-              fontSize: '14px',
-              fontWeight: 500,
-              cursor: hasUnsavedChanges ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-            }}
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  padding: '8px 16px',
+  backgroundColor: hasUnsavedChanges ,
+  ? uiColors.accent.primary
+  : uiColors.ui.disabled,
+  border: 'none',
+  borderRadius: '6px',
+  color: hasUnsavedChanges ,
+  ? 'white'
+  : uiColors.text.disabled,
+  fontSize: '14px',
+  fontWeight: 500,
+  cursor: hasUnsavedChanges ? 'pointer' : 'not-allowed',
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+}}
             title="Save settings (Ctrl+S)"
           >
             <FiSave size={14} />

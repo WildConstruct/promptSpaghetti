@@ -24,7 +24,7 @@ jest.mock('../config', () => ({
       rateLimitWindow: 60 * 1000,
       maxRequestsPerWindow: 100
     }
-  })
+  }
 }));
 
 describe('Epic 19.5 - Unauthenticated Attack Scenarios', () => {

@@ -14,22 +14,10 @@ export interface PolicyAnalyticsMetrics {
     enforcementActions: number;
     actionSuccessRate: number;
     avgResponseTime: number;
-    topViolatedCategories: Array<{
-        category: string;
-        count: number;
-        percentage: number;
-    }>;
-    enforcementEffectiveness: Array<{
-        actionType: string;
-        successRate: number;
-        count: number;
-    }>;
-    timeSeriesData: Array<{
-        date: string;
-        violations: number;
-        enforcements: number;
-        preventions: number;
-    }>;
+    topViolatedCategories: Array<{}, category>;
+    string: any;
+    count: number;
+    percentage: number;
 }
 export interface PolicyAnalyticsDashboardProps {
     className?: string;

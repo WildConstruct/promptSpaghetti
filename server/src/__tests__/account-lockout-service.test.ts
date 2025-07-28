@@ -186,13 +186,13 @@ describe('AccountLockoutService', () => {
             failed_login_attempts: 2,
             lockout_count: 0
           }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [{
             lockout_count: 0,
             user_id: 'user-123'
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] }); // Update query
 
       mockRedis.incr.mockResolvedValueOnce(3);
@@ -224,13 +224,13 @@ describe('AccountLockoutService', () => {
             failed_login_attempts: 2,
             lockout_count: 2 // This would be the 3rd lockout
           }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [{
             lockout_count: 2,
             user_id: 'user-123'
           }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] });
 
       mockRedis.incr.mockResolvedValueOnce(3);
@@ -344,7 +344,7 @@ describe('AccountLockoutService', () => {
       mockDb.query
         .mockResolvedValueOnce({
           rows: [{ user_id: 'user-123', lockout_count: 1 }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] });
 
       await lockoutService.unlockAccount('test@example.com', 'admin', 'admin-123');
@@ -360,7 +360,7 @@ describe('AccountLockoutService', () => {
       mockDb.query
         .mockResolvedValueOnce({
           rows: [{ user_id: 'user-123', lockout_count: 1 }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] });
 
@@ -389,23 +389,23 @@ describe('AccountLockoutService', () => {
       mockDb.query
         .mockResolvedValueOnce({
           rows: [{ total_lockouts: '10', avg_duration_minutes: '30' }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [{ active_lockouts: '2' }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [
             { reason: 'invalid_password', count: '5' },
             { reason: 'account_not_found', count: '3' }
           ]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [
             { level: 1, count: '7' },
             { level: 2, count: '2' },
             { level: 3, count: '1' }
           ]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [
             { method: 'time', count: '8' },
@@ -434,10 +434,10 @@ describe('AccountLockoutService', () => {
             failed_login_attempts: 2,
             lockout_count: 0
           }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [{ lockout_count: 0, user_id: 'user-123' }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] });
 
@@ -455,7 +455,7 @@ describe('AccountLockoutService', () => {
         expect.objectContaining({
           lockCount: 1,
           duration: 15
-        })
+  }
       );
     });
 
@@ -470,10 +470,10 @@ describe('AccountLockoutService', () => {
             failed_login_attempts: 2,
             lockout_count: 2 // This will be 3rd lockout
           }]
-        })
+  }
         .mockResolvedValueOnce({
           rows: [{ lockout_count: 2, user_id: 'user-123' }]
-        })
+  }
         .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ rows: [] });
 
@@ -491,7 +491,7 @@ describe('AccountLockoutService', () => {
         expect.objectContaining({
           userEmail: 'test@example.com',
           lockCount: 3
-        })
+  }
       );
     });
   });
@@ -522,7 +522,7 @@ describe('AccountLockoutService', () => {
           success: false,
           ipAddress: '127.0.0.1',
           timestamp: new Date()
-        })
+  }
       ).rejects.toThrow('Redis error');
     });
   });

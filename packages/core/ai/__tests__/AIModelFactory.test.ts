@@ -17,10 +17,10 @@ describe('AIModelFactory', () => {
   let factory: AIModelFactory;
   let mockFetch: jest.MockedFunction<typeof fetch>;
   beforeEach(() => {
-    factory = new AIModelFactory();
-    mockFetch = fetch as jest.MockedFunction<typeof fetch>;
-    mockFetch.mockClear();
-  });
+  factory = new AIModelFactory();
+  mockFetch = fetch as jest.MockedFunction<typeof fetch>;
+  mockFetch.mockClear();
+});
   afterEach(() => {
     factory.destroyAllModels();
   });
@@ -33,12 +33,12 @@ describe('AIModelFactory', () => {
       expect(config.logLevel).toBe('info');
     });
     test('should create factory with custom configuration', () => {
-      const customConfig: FactoryConfig = {
-        defaultTimeout: 60000,
-        defaultRetries: 5,
-        enableLogging: false,
-        logLevel: 'error',
-      };
+  const customConfig: FactoryConfig = {,
+  defaultTimeout: 60000,
+  defaultRetries: 5,
+  enableLogging: false,
+  logLevel: 'error',
+};
       const customFactory = new AIModelFactory(customConfig);
       const config = customFactory.getFactoryConfig();
       expect(config.defaultTimeout).toBe(60000);
@@ -100,35 +100,34 @@ describe('AIModelFactory', () => {
         const urlString = url.toString();
         if (urlString.includes('/models')) {
           return Promise.resolve({)
-            ok: true,
+  ok: true,
             json: () => Promise.resolve({ data: [{ id: 'gpt-3.5-turbo' }] })
           } as Response);
-        }
         return Promise.resolve({)
-          ok: true,
-          json: () => Promise.resolve({),
-            id: 'chatcmpl-test',
+  ok: true,
+          json: () => Promise.resolve({,)
+  id: 'chatcmpl-test',
             object: 'chat.completion',
             created: Date.now(),
             model: 'gpt-3.5-turbo',
             choices: [{,
-              index: 0,
+  index: 0,
               message: { role: 'assistant', content: 'Hello!' },
-              finish_reason: 'stop',
-            }],
+              finish_reason: 'stop';
+  }],
             usage: { prompt_tokens: 5, completion_tokens: 1, total_tokens: 6 }
-          })
+  }
         } as Response);
       });
     });
     test('should create OpenAI model successfully', async () => {
-      const config: ModelConfiguration = {
-        id: 'test-openai',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        modelName: 'gpt-3.5-turbo',
-        apiKey: 'test-key',
-      };
+  const config: ModelConfiguration = {,
+  id: 'test-openai',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  modelName: 'gpt-3.5-turbo',
+  apiKey: 'test-key',
+};
       const model = await factory.createModel(config);
       expect(model).toBeInstanceOf(OpenAIAdapter);
       expect(model.id).toBe('test-openai');
@@ -136,12 +135,12 @@ describe('AIModelFactory', () => {
       expect(model.status).toBe(AIModelStatus.READY);
     });
     test('should fail to create OpenAI model without API key', async () => {
-      const config: ModelConfiguration = {
-        id: 'test-openai-no-key',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        modelName: 'gpt-3.5-turbo',
-      };
+  const config: ModelConfiguration = {,
+  id: 'test-openai-no-key',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  modelName: 'gpt-3.5-turbo',
+};
       await expect(factory.createModel(config)).rejects.toThrow('OpenAI API key is required');
     });
   });
@@ -150,27 +149,27 @@ describe('AIModelFactory', () => {
       // Mock successful Anthropic API response
       mockFetch.mockImplementation(() => 
         Promise.resolve({)
-          ok: true,
-          json: () => Promise.resolve({),
-            id: 'msg_test',
+  ok: true,
+          json: () => Promise.resolve({,)
+  id: 'msg_test',
             type: 'message',
             role: 'assistant',
             content: [{ type: 'text', text: 'Hello!' }],
             model: 'claude-3-sonnet-20240229',
             stop_reason: 'end_turn',
             usage: { input_tokens: 5, output_tokens: 1 }
-          })
+  }
         } as Response)
       );
     });
     test('should create Anthropic model successfully', async () => {
-      const config: ModelConfiguration = {
-        id: 'test-anthropic',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.ANTHROPIC,
-        modelName: 'claude-3-sonnet-20240229',
-        apiKey: 'test-key',
-      };
+  const config: ModelConfiguration = {,
+  id: 'test-anthropic',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.ANTHROPIC,
+  modelName: 'claude-3-sonnet-20240229',
+  apiKey: 'test-key',
+};
       const model = await factory.createModel(config);
       expect(model).toBeInstanceOf(AnthropicAdapter);
       expect(model.id).toBe('test-anthropic');
@@ -185,39 +184,37 @@ describe('AIModelFactory', () => {
         const urlString = url.toString();
         if (urlString.includes('/api/tags')) {
           return Promise.resolve({)
-            ok: true,
+  ok: true,
             json: () => Promise.resolve({ models: [{ name: 'llama2' }] })
           } as Response);
-        }
         if (urlString.includes('/api/show')) {
           return Promise.resolve({)
-            ok: true,
-            json: () => Promise.resolve({),
-              modelfile: 'FROM llama2',
+  ok: true,
+            json: () => Promise.resolve({,)
+  modelfile: 'FROM llama2',
               parameters: { num_ctx: 4096 },
               details: { family: 'llama' }
-            })
+  }
           } as Response);
-        }
         return Promise.resolve({)
-          ok: true,
-          json: () => Promise.resolve({),
-            model: 'llama2',
+  ok: true,
+          json: () => Promise.resolve({,)
+  model: 'llama2',
             created_at: new Date().toISOString(),
             message: { role: 'assistant', content: 'Hello!' },
-            done: true,
-          })
+            done: true;
+  }
         } as Response);
       });
     });
     test('should create local model successfully', async () => {
-      const config: ModelConfiguration = {
-        id: 'test-local',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.LOCAL,
-        modelName: 'llama2',
-        endpoint: 'http://localhost:11434',
-      };
+  const config: ModelConfiguration = {,
+  id: 'test-local',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.LOCAL,
+  modelName: 'llama2',
+  endpoint: 'http://localhost:11434',
+};
       const model = await factory.createModel(config);
       expect(model).toBeInstanceOf(LocalModelAdapter);
       expect(model.id).toBe('test-local');
@@ -230,38 +227,37 @@ describe('AIModelFactory', () => {
       // Mock successful custom API response
       mockFetch.mockImplementation(() => 
         Promise.resolve({)
-          ok: true,
-          json: () => Promise.resolve({),
-            output: 'Generated text response',
+  ok: true,
+          json: () => Promise.resolve({,)
+  output: 'Generated text response',
             usage: { tokens: 10 },
-            status: 'success',
-          })
+            status: 'success';
+  }
         } as Response)
       );
     });
     test('should create custom HTTP model successfully', async () => {
-      const registration: ModelRegistration = {
-        id: 'test-custom',
-        provider: AIModelProvider.CUSTOM,
-        modelName: 'custom-model',
-        config: {,
-          baseURL: 'https://api.example.com',
-          apiKey: 'test-key',
-        },
-        requestMapping: {,
-          inputPath: 'prompt',
-          outputPath: 'output',
-          usagePath: 'usage',
-        }
-      };
+  const registration: ModelRegistration = {,
+  id: 'test-custom',
+  provider: AIModelProvider.CUSTOM,
+  modelName: 'custom-model',
+  config: {,
+  baseURL: 'https://api.example.com',
+  apiKey: 'test-key',
+},
+  requestMapping: {,
+  inputPath: 'prompt',
+  outputPath: 'output',
+  usagePath: 'usage',
+};
       factory.registerModel(registration);
-      const config: ModelConfiguration = {
-        id: 'test-custom',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.CUSTOM,
-        endpoint: 'https://api.example.com',
-        apiKey: 'test-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'test-custom',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.CUSTOM,
+  endpoint: 'https://api.example.com',
+  apiKey: 'test-key',
+};
       const model = await factory.createModel(config);
       expect(model).toBeInstanceOf(GenericHTTPAdapter);
       expect(model.id).toBe('test-custom');
@@ -270,8 +266,8 @@ describe('AIModelFactory', () => {
   });
   describe('Model Registration and Management', () => {
     test('should register and retrieve model', () => {
-      const registration: ModelRegistration = {
-        id: 'registered-model',
+      const registration: ModelRegistration = {,
+  id: 'registered-model',
         provider: AIModelProvider.CUSTOM,
         modelName: 'test-model',
         config: { baseURL: 'https://api.test.com' }
@@ -282,8 +278,8 @@ describe('AIModelFactory', () => {
       expect(registrations[0].id).toBe('registered-model');
     });
     test('should unregister model', () => {
-      const registration: ModelRegistration = {
-        id: 'temp-model',
+      const registration: ModelRegistration = {,
+  id: 'temp-model',
         provider: AIModelProvider.CUSTOM,
         modelName: 'temp',
         config: {}
@@ -296,15 +292,15 @@ describe('AIModelFactory', () => {
     test('should get model by ID', async () => {
       // Mock for model creation
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
-      const config: ModelConfiguration = {
-        id: 'cached-model',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'cached-model',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       const model1 = await factory.createModel(config);
       const model2 = await factory.getModel('cached-model');
       expect(model1).toBe(model2); // Should return same instance
@@ -317,38 +313,36 @@ describe('AIModelFactory', () => {
   describe('Batch Operations', () => {
     beforeEach(() => {
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
     });
     test('should create multiple models', async () => {
-      const configs: ModelConfiguration[] = [
+  const configs: ModelConfiguration = [
+  {
+  id: 'batch-1',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'key1',
+}
         {
-          id: 'batch-1',
-          type: AIModelType.TEXT,
-          provider: AIModelProvider.OPENAI,
-          apiKey: 'key1',
-        },
-        {
-          id: 'batch-2',
-          type: AIModelType.TEXT,
-          provider: AIModelProvider.OPENAI,
-          apiKey: 'key2',
-        }
-      ];
-      const models = await factory.createModels(configs);
-      expect(models).toHaveLength(2);
-      expect(models[0].id).toBe('batch-1');
-      expect(models[1].id).toBe('batch-2');
-    });
+  id: 'batch-2',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'key2'];
+  const models = await factory.createModels(configs);
+  expect(models).toHaveLength(2);
+  expect(models[0].id).toBe('batch-1');
+  expect(models[1].id).toBe('batch-2');
+});
     test('should test all models', async () => {
-      // Create test models first
-      const config: ModelConfiguration = {
-        id: 'test-health',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+  // Create test models first
+  const config: ModelConfiguration = {,
+  id: 'test-health',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       await factory.createModel(config);
       const results = await factory.testAllModels();
       expect(results['test-health']).toBe(true);
@@ -358,15 +352,15 @@ describe('AIModelFactory', () => {
     test('should provide factory statistics', async () => {
       // Mock for model creation
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
-      const config: ModelConfiguration = {
-        id: 'stats-model',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'stats-model',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       await factory.createModel(config);
       const stats = factory.getStatistics();
       expect(stats.totalModels).toBe(1);
@@ -376,15 +370,15 @@ describe('AIModelFactory', () => {
     test('should get model metadata', async () => {
       // Mock for model creation
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
-      const config: ModelConfiguration = {
-        id: 'metadata-model',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'metadata-model',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       await factory.createModel(config);
       const metadata = factory.getModelMetadata('metadata-model');
       expect(metadata).toBeDefined();
@@ -392,53 +386,53 @@ describe('AIModelFactory', () => {
     });
   });
   describe('Error Handling', () => {
-    test('should handle unsupported provider', async () => {
-      const config: ModelConfiguration = {
-        id: 'unsupported',
-        type: AIModelType.TEXT,
-        provider: 'unknown' as AIModelProvider,
-        apiKey: 'test-key',
-      };
+  test('should handle unsupported provider', async () => {
+  const config: ModelConfiguration = {,
+  id: 'unsupported',
+  type: AIModelType.TEXT,
+  provider: 'unknown' as AIModelProvider,
+  apiKey: 'test-key',
+};
       await expect(factory.createModel(config)).rejects.toThrow('Unsupported provider: unknown');
     });
     test('should handle network errors during model creation', async () => {
-      mockFetch.mockRejectedValue(new Error('Network error'));
-      const config: ModelConfiguration = {
-        id: 'network-error',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+  mockFetch.mockRejectedValue(new Error('Network error'));
+  const config: ModelConfiguration = {,
+  id: 'network-error',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       await expect(factory.createModel(config)).rejects.toThrow();
     });
     test('should handle API errors during model creation', async () => {
       mockFetch.mockResolvedValue({)
-        ok: false,
+  ok: false,
         status: 401,
         statusText: 'Unauthorized',
         json: () => Promise.resolve({ error: 'Invalid API key' })
       } as Response);
-      const config: ModelConfiguration = {
-        id: 'api-error',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'invalid-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'api-error',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'invalid-key',
+};
       await expect(factory.createModel(config)).rejects.toThrow();
     });
   });
   describe('Model Lifecycle', () => {
     test('should destroy individual model', async () => {
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
-      const config: ModelConfiguration = {
-        id: 'destroy-test',
-        type: AIModelType.TEXT,
-        provider: AIModelProvider.OPENAI,
-        apiKey: 'test-key',
-      };
+      const config: ModelConfiguration = {,
+  id: 'destroy-test',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'test-key',
+};
       await factory.createModel(config);
       expect(factory.getStatistics().totalModels).toBe(1);
       await factory.destroyModel('destroy-test');
@@ -446,27 +440,25 @@ describe('AIModelFactory', () => {
     });
     test('should destroy all models', async () => {
       mockFetch.mockResolvedValue({)
-        ok: true,
+  ok: true,
         json: () => Promise.resolve({ data: [] })
       } as Response);
-      const configs: ModelConfiguration[] = [
+      const configs: ModelConfiguration = [
         {
-          id: 'destroy-all-1',
-          type: AIModelType.TEXT,
-          provider: AIModelProvider.OPENAI,
-          apiKey: 'key1',
-        },
+  id: 'destroy-all-1',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'key1',
+}
         {
-          id: 'destroy-all-2',
-          type: AIModelType.TEXT,
-          provider: AIModelProvider.OPENAI,
-          apiKey: 'key2',
-        }
-      ];
-      await factory.createModels(configs);
-      expect(factory.getStatistics().totalModels).toBe(2);
-      await factory.destroyAllModels();
-      expect(factory.getStatistics().totalModels).toBe(0);
-    });
+  id: 'destroy-all-2',
+  type: AIModelType.TEXT,
+  provider: AIModelProvider.OPENAI,
+  apiKey: 'key2'];
+  await factory.createModels(configs);
+  expect(factory.getStatistics().totalModels).toBe(2);
+  await factory.destroyAllModels();
+  expect(factory.getStatistics().totalModels).toBe(0);
+});
   });
 });

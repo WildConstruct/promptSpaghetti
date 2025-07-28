@@ -39,7 +39,7 @@ describe('AccessHistoryLogger', () => {
       country: 'US',
       region: 'CA',
       city: 'San Francisco'
-    },
+  }
     deviceInfo: {
       deviceType: 'desktop',
       browserName: 'Chrome',
@@ -47,7 +47,7 @@ describe('AccessHistoryLogger', () => {
       osName: 'Windows',
       osVersion: '10',
       fingerprint: 'fp_12345'
-    },
+  }
     requestId: 'req-789',
     endpoint: '/api/users',
     method: 'GET',
@@ -132,7 +132,7 @@ describe('AccessHistoryLogger', () => {
           resourceId: 'doc-123',
           userId: 'user-456',
           operation: 'read'
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
@@ -142,7 +142,7 @@ describe('AccessHistoryLogger', () => {
           resourceType: 'document',
           resourceId: 'doc-123',
           outcome: AccessResult.SUCCESS
-        })
+  }
       );
     });
 
@@ -160,9 +160,9 @@ describe('AccessHistoryLogger', () => {
               sessionId: 'session-123',
               userId: 'user-456',
               ipAddress: '192.168.1.100'
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
 
@@ -195,8 +195,8 @@ describe('AccessHistoryLogger', () => {
           details: expect.objectContaining({
             riskLevel: expect.stringMatching(/high|critical/),
             riskFactors: expect.arrayContaining(['HIGH_RISK_COUNTRY', 'VPN_DETECTED'])
-          })
-        })
+  }
+  }
       );
     });
 
@@ -210,8 +210,8 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['OFF_HOURS_ACCESS'])
-          })
-        })
+  }
+  }
       );
     });
 
@@ -229,8 +229,8 @@ describe('AccessHistoryLogger', () => {
           outcome: AccessResult.FAILURE,
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['ACCESS_FAILURE'])
-          })
-        })
+  }
+  }
       );
     });
 
@@ -245,7 +245,7 @@ describe('AccessHistoryLogger', () => {
           eventType: AccessEventType.RESOURCE_READ,
           resourceType: 'document',
           resourceId: 'doc-123'
-        })
+  }
       );
     });
 
@@ -269,7 +269,7 @@ describe('AccessHistoryLogger', () => {
       expect(alertListener).toHaveBeenCalledWith(
         expect.objectContaining({
           riskLevel: expect.stringMatching(/high|critical/)
-        })
+  }
       );
     });
 
@@ -296,7 +296,7 @@ describe('AccessHistoryLogger', () => {
           resourceType: 'authentication',
           resourceId: 'auth_system',
           operation: AccessEventType.LOGIN_SUCCESS
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
@@ -305,8 +305,8 @@ describe('AccessHistoryLogger', () => {
           outcome: AccessResult.SUCCESS,
           details: expect.objectContaining({
             operation: AccessEventType.LOGIN_SUCCESS
-          })
-        })
+  }
+  }
       );
     });
 
@@ -327,9 +327,9 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               reason: 'Invalid credentials',
               attempts: 3
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
 
@@ -373,7 +373,7 @@ describe('AccessHistoryLogger', () => {
           resourceType: 'user_profile',
           resourceId: 'profile-123',
           operation: 'read'
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
@@ -384,9 +384,9 @@ describe('AccessHistoryLogger', () => {
             permissions: ['profile:read'],
             metadata: expect.objectContaining({
               dataSize: 1024
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
 
@@ -426,9 +426,9 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               auditRequired: expect.any(Boolean),
               sensitiveOperation: expect.any(Boolean)
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
   });
@@ -451,7 +451,7 @@ describe('AccessHistoryLogger', () => {
           resourceType: 'api',
           resourceId: '/api/users/123',
           operation: 'GET'
-        })
+  }
       );
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
@@ -461,9 +461,9 @@ describe('AccessHistoryLogger', () => {
               statusCode: 200,
               responseTime: 150,
               responseSize: 2048
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
 
@@ -502,9 +502,9 @@ describe('AccessHistoryLogger', () => {
             metadata: expect.objectContaining({
               auditRequired: expect.any(Boolean),
               sensitiveOperation: expect.any(Boolean)
-            })
-          })
-        })
+  }
+  }
+  }
       );
     });
   });
@@ -585,7 +585,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-        },
+  }
         {
           eventType: AccessEventType.RESOURCE_WRITE,
           resourceType: 'document',
@@ -594,7 +594,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['write'],
           context: { ...mockContext, userId: 'user-789' },
           result: AccessResult.SUCCESS
-        },
+  }
         {
           eventType: AccessEventType.API_ACCESS,
           resourceType: 'api',
@@ -672,7 +672,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-        },
+  }
         {
           eventType: AccessEventType.RESOURCE_WRITE,
           resourceType: 'document',
@@ -733,7 +733,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: mockContext,
           result: AccessResult.SUCCESS
-        },
+  }
         {
           eventType: AccessEventType.RESOURCE_READ,
           resourceType: 'document',
@@ -742,7 +742,7 @@ describe('AccessHistoryLogger', () => {
           permissions: ['read'],
           context: { ...mockContext, userId: 'user-789' },
           result: AccessResult.SUCCESS
-        },
+  }
         {
           eventType: AccessEventType.LOGIN_FAILURE,
           resourceType: 'authentication',
@@ -845,8 +845,8 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['VPN_DETECTED'])
-          })
-        })
+  }
+  }
       );
     });
 
@@ -887,8 +887,8 @@ describe('AccessHistoryLogger', () => {
         expect.objectContaining({
           details: expect.objectContaining({
             riskFactors: expect.arrayContaining(['PERMISSION_ESCALATION'])
-          })
-        })
+  }
+  }
       );
     });
   });

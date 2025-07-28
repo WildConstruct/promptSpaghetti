@@ -12,6 +12,7 @@
  * - Progressive learning path management
  */
 import { HelpContent } from './ContextualHelpSystem';
+
 export interface UserProfile {
     id: string;
     level: 'beginner' | 'intermediate' | 'advanced' | 'professional';
@@ -31,7 +32,7 @@ export interface UserProfile {
         advancedFeaturesUsed: string[];
     };
     lastActivity: Date;
-}
+
 export interface LearningPath {
     id: string;
     name: string;
@@ -42,7 +43,7 @@ export interface LearningPath {
         requiredProgress?: Record<string, number>;
         unlockConditions?: string[];
     }[];
-}
+
 export declare class HelpContentManager {
     private userProfile;
     private helpContent;
@@ -68,7 +69,7 @@ export declare class HelpContentManager {
     updateUserPreferences(preferences: Partial<UserProfile['preferences']>): void;
     onLevelUp?: (newLevel: string) => void;
     onProgressMilestone?: (milestone: string) => void;
-}
+
 export declare const helpContentManager: HelpContentManager;
 export default helpContentManager;
 //# sourceMappingURL=HelpContentManager.d.ts.map

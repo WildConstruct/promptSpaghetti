@@ -19,6 +19,7 @@ import { AccessControlFramework, AccessControlContext } from '../services/securi
 import { performance } from 'perf_hooks';
 import crypto from 'crypto';
 
+}
 interface AuditableRequest extends Request {
   evidenceId?: string;
   evidenceAction?: EvidenceAccessAction;
@@ -32,6 +33,7 @@ interface AuditableRequest extends Request {
   startTime?: number;
 }
 
+}
 interface FastifyAuditableRequest extends FastifyRequest {
   evidenceId?: string;
   evidenceAction?: EvidenceAccessAction;
@@ -181,6 +183,7 @@ export class EvidenceAccessAuditMiddleware {
     context: Partial<AccessControlContext> = {},
     metadata: Record<string, any> = {}
   ): Promise<void> {
+
     const accessContext: AccessControlContext = {
       subject: {
         id: userId,
@@ -189,18 +192,18 @@ export class EvidenceAccessAuditMiddleware {
         roles: metadata.roles || [],
         permissions: metadata.permissions || [],
         ...context.subject
-      },
+  }
       resource: {
         id: evidenceId,
         type: 'evidence',
         attributes: metadata.resourceAttributes || {},
         ...context.resource
-      },
+  }
       action: {
         operation: action,
         intent: metadata.intent || 'programmatic',
         ...context.action
-      },
+  }
       environment: {
         timestamp: new Date(),
         sourceIP: metadata.sourceIP || 'internal',
@@ -232,6 +235,7 @@ export class EvidenceAccessAuditMiddleware {
     }>,
     sharedContext: Partial<AccessControlContext> = {}
   ): Promise<void> {
+
     const batchCorrelationId = crypto.randomUUID();
     
     await Promise.all(
@@ -241,17 +245,17 @@ export class EvidenceAccessAuditMiddleware {
             id: userId,
             type: 'user',
             ...sharedContext.subject
-          },
+  }
           resource: {
             id: access.evidenceId,
             type: 'evidence',
             ...sharedContext.resource
-          },
+  }
           action: {
             operation: access.action,
             intent: 'batch_operation',
             ...sharedContext.action
-          },
+  }
           environment: {
             timestamp: new Date(),
             applicationContext: 'batch_processor',
@@ -271,7 +275,7 @@ export class EvidenceAccessAuditMiddleware {
             batchSize: evidenceAccesses.length
           }
         );
-      })
+  }
     );
   }
 
@@ -381,6 +385,7 @@ export class EvidenceAccessAuditMiddleware {
   }
 
   private async createAccessControlContext(req: AuditableRequest): Promise<AccessControlContext> {
+
     return {
       subject: {
         id: req.user?.id || 'anonymous',
@@ -388,16 +393,16 @@ export class EvidenceAccessAuditMiddleware {
         sessionId: req.user?.sessionId,
         roles: req.user?.roles || [],
         permissions: req.user?.permissions || []
-      },
+  }
       resource: {
         id: req.evidenceId || 'unknown',
         type: 'evidence',
         attributes: {}
-      },
+  }
       action: {
         operation: req.evidenceAction || EvidenceAccessAction.READ,
         intent: 'user_request'
-      },
+  }
       environment: {
         timestamp: new Date(),
         sourceIP: this.getClientIP(req),
@@ -411,6 +416,7 @@ export class EvidenceAccessAuditMiddleware {
   }
 
   private async createAccessControlContextFastify(req: FastifyAuditableRequest): Promise<AccessControlContext> {
+
     return {
       subject: {
         id: req.user?.id || 'anonymous',
@@ -418,16 +424,16 @@ export class EvidenceAccessAuditMiddleware {
         sessionId: req.user?.sessionId,
         roles: req.user?.roles || [],
         permissions: req.user?.permissions || []
-      },
+  }
       resource: {
         id: req.evidenceId || 'unknown',
         type: 'evidence',
         attributes: {}
-      },
+  }
       action: {
         operation: req.evidenceAction || EvidenceAccessAction.READ,
         intent: 'user_request'
-      },
+  }
       environment: {
         timestamp: new Date(),
         sourceIP: this.getClientIPFastify(req),

@@ -4,7 +4,7 @@
  *
  * Adapter for ElevenLabs AI voice synthesis with custom voice training and cloning
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel } from '../BaseAIModel';
 export interface ElevenLabsConfig {
     apiKey: string;
     baseURL?: string;
@@ -61,71 +61,12 @@ export interface ElevenLabsGenerationResult {
 export interface ElevenLabsVoice {
     voice_id: string;
     name: string;
-    samples?: Array<{
-        sample_id: string;
-        file_name: string;
-        mime_type: string;
-        size_bytes: number;
-        hash: string;
-    }>;
-    category: 'premade' | 'cloned' | 'generated' | 'professional';
-    fine_tuning: {
-        is_allowed_to_fine_tune: boolean;
-        finetuning_requested: boolean;
-        finetuning_state: string;
-        verification_attempts: Array<{
-            text: string;
-            date_unix: number;
-            accepted: boolean;
-            similarity: number;
-            levenshtein_distance: number;
-            recording: {
-                recording_id: string;
-                mime_type: string;
-                size_bytes: number;
-                upload_date_unix: number;
-            };
-        }>;
-        verification_failures: string[];
-        verification_attempts_count: number;
-        slice_ids: string[];
-        manual_verification: {
-            extra_text: string;
-            request_time_unix: number;
-            files: Array<{
-                file_id: string;
-                file_name: string;
-                mime_type: string;
-                size_bytes: number;
-                upload_date_unix: number;
-            }>;
-        };
-    };
-    labels: Record<string, string>;
-    description: string;
-    preview_url: string;
-    available_for_tiers: string[];
-    settings?: {
-        stability: number;
-        similarity_boost: number;
-        style?: number;
-        use_speaker_boost?: boolean;
-    };
-    sharing?: {
-        status: string;
-        history_item_sample_id?: string;
-        original_voice_id?: string;
-        public_owner_id?: string;
-        liked_by_count: number;
-        cloned_by_count: number;
-        name: string;
-        description: string;
-        labels: Record<string, string>;
-        review_status: string;
-        review_message?: string;
-        enabled_in_library: boolean;
-    };
-    high_quality_base_model_ids: string[];
+    samples?: Array<{}, sample_id>;
+    string: any;
+    file_name: string;
+    mime_type: string;
+    size_bytes: number;
+    hash: string;
 }
 export interface ElevenLabsModel {
     model_id: string;
@@ -141,10 +82,9 @@ export interface ElevenLabsModel {
     requires_alpha_access: boolean;
     max_characters_request_free_user: number;
     max_characters_request_subscribed_user: number;
-    languages: Array<{
-        language_id: string;
-        name: string;
-    }>;
+    languages: Array<{}, language_id>;
+    string: any;
+    name: string;
 }
 export declare class ElevenLabsAdapter extends BaseAIModel {
     private config;
@@ -152,41 +92,5 @@ export declare class ElevenLabsAdapter extends BaseAIModel {
     private availableModels;
     private quotaInfo;
     constructor(id: string, config: ElevenLabsConfig);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: ElevenLabsRequestOptions): Promise<ElevenLabsGenerationResult>;
-    cleanup(): Promise<void>;
-    estimate(input: any, options?: ElevenLabsRequestOptions): Promise<CostEstimate>;
-    getAvailableVoices(): Promise<ElevenLabsVoice[]>;
-    getAvailableModels(): Promise<ElevenLabsModel[]>;
-    getQuotaInfo(): Promise<any>;
-    createCustomVoice(name: string, audioFiles: File[], description?: string, labels?: Record<string, string>): Promise<ElevenLabsVoice>;
-    cloneVoice(name: string, audioSample: File, description?: string): Promise<ElevenLabsVoice>;
-    deleteVoice(voiceId: string): Promise<void>;
-    getVoiceSettings(voiceId: string): Promise<any>;
-    updateVoiceSettings(voiceId: string, settings: any): Promise<void>;
-    generateWithStream(text: string, voiceId: string, options?: Partial<ElevenLabsRequestOptions>): Promise<ReadableStream>;
-    static getDefaultVoiceSettings(): {
-        stability: number;
-        similarity_boost: number;
-        style: number;
-        use_speaker_boost: boolean;
-    };
-    static optimizeVoiceSettings(voiceCategory: string): any;
-    private _testConnection;
-    private _loadAvailableVoices;
-    private _loadAvailableModels;
-    private _loadQuotaInfo;
-    private _checkQuota;
-    private _extractText;
-    private _processOptions;
-    private _generateSpeech;
-    private _getVoiceInfo;
-    private _makeRequest;
-    private _estimateAudioDuration;
-    private _getSampleRate;
-    private _getBitDepth;
-    private _calculateCost;
-    protected _performHealthCheck(): Promise<void>;
 }
-export default ElevenLabsAdapter;
 //# sourceMappingURL=ElevenLabsAdapter.d.ts.map

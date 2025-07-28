@@ -49,11 +49,10 @@ import {
 } from 'lucide-react';
 
 export interface PolicyManagementDashboardProps {
-  userId: string;
+  userId: string;,
   userRole: string;
   className?: string;
 }
-
 export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps> = ({)
   userId,
   userRole,
@@ -79,9 +78,9 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     statuses,
     frameworks
   } = usePolicyManagement({)
-    autoEvaluate: true,
-    enableRealTimeUpdates: true,
-  });
+  autoEvaluate: true,
+  enableRealTimeUpdates: true,
+});
   const [activeTab, setActiveTab] = useState('overview');
   const [__selectedPolicy, setSelectedPolicy] = useState<UnifiedPolicy | null>(null);
   const [__isCreatingPolicy, setIsCreatingPolicy] = useState(false);
@@ -91,11 +90,11 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
   const [statusFilter, setStatusFilter] = useState<PolicyStatus | 'ALL'>('ALL');
   const statistics = useMemo(() => getPolicyStatistics(), [getPolicyStatistics]);
   const filteredPolicies = useMemo(() => {
-    return getFilteredPolicies({)
-      domain: domainFilter !== 'ALL' ? domainFilter : undefined,
-      status: statusFilter !== 'ALL' ? statusFilter : undefined,
-      search: searchTerm,
-    });
+  return getFilteredPolicies({)
+  domain: domainFilter !== 'ALL' ? domainFilter : undefined,
+  status: statusFilter !== 'ALL' ? statusFilter : undefined,
+  search: searchTerm,
+});
   }, [getFilteredPolicies, domainFilter, statusFilter, searchTerm]);
   const recentEvaluations = useMemo(() => getRecentEvaluations(10), [getRecentEvaluations]);
   const recentViolations = useMemo(() => ;
@@ -103,55 +102,49 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     [getPolicyViolations]
   );
   const getDomainIcon = (domain: PolicyDomain) => {
-    const iconMap = {
-      [PolicyDomain.SECURITY]: Shield,
-      [PolicyDomain.CONTENT]: FileText,
-      [PolicyDomain.QUALITY]: CheckCircle,
-      [PolicyDomain.COMPLIANCE]: Settings,
-      [PolicyDomain.VFX_PIPELINE]: Activity,
-      [PolicyDomain.DATA_PROTECTION]: Lock,
-      [PolicyDomain.ACCESS_CONTROL]: Users,
-      [PolicyDomain.MARKETPLACE]: Globe
-    };
+  const iconMap = {
+  [PolicyDomain.SECURITY]: Shield,
+  [PolicyDomain.CONTENT]: FileText,
+  [PolicyDomain.QUALITY]: CheckCircle,
+  [PolicyDomain.COMPLIANCE]: Settings,
+  [PolicyDomain.VFX_PIPELINE]: Activity,
+  [PolicyDomain.DATA_PROTECTION]: Lock,
+  [PolicyDomain.ACCESS_CONTROL]: Users,
+  [PolicyDomain.MARKETPLACE]: Globe,
+};
     return iconMap[domain] || Settings;
   };
   const getStatusColor = (status: PolicyStatus) => {
-    switch (status) {
-      case PolicyStatus.ACTIVE: return 'bg-green-100 text-green-800';
-      case PolicyStatus.INACTIVE: return 'bg-gray-100 text-gray-800';
-      case PolicyStatus.PENDING: return 'bg-yellow-100 text-yellow-800';
-      case PolicyStatus.DEPRECATED: return 'bg-red-100 text-red-800';
-      case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (status) {
+  case PolicyStatus.ACTIVE: return 'bg-green-100 text-green-800';
+  case PolicyStatus.INACTIVE: return 'bg-gray-100 text-gray-800';
+  case PolicyStatus.PENDING: return 'bg-yellow-100 text-yellow-800';
+  case PolicyStatus.DEPRECATED: return 'bg-red-100 text-red-800';
+  case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';,
+  default: return 'bg-gray-100 text-gray-800';
+};
   const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'CRITICAL': return 'text-red-600';
-      case 'HIGH': return 'text-orange-600';
-      case 'MEDIUM': return 'text-yellow-600';
-      case 'LOW': return 'text-green-600';
-      default: return 'text-gray-600';
-    }
-  };
+  switch (severity) {
+  case 'CRITICAL': return 'text-red-600';
+  case 'HIGH': return 'text-orange-600';
+  case 'MEDIUM': return 'text-yellow-600';
+  case 'LOW': return 'text-green-600';
+  default: return 'text-gray-600';
+};
       } catch (err) {
-      console.error('Failed to create policy:', err);
-    }
-  };
+  console.error('Failed to create policy:', err);
+};
         setSelectedPolicy(null);
     } catch (err) {
-      console.error('Failed to update policy:', err);
-    }
-  };
+  console.error('Failed to update policy:', err);
+};
   const handleDeletePolicy = async (policyId: string) => {
     if (confirm('Are you sure you want to delete this policy?')) {
       try {
         await deletePolicy(policyId, userId);
       } catch (err) {
-        console.error('Failed to delete policy:', err);
-      }
-    }
-  };
+  console.error('Failed to delete policy:', err);
+};
   const renderOverview = () => (;);
     <div className="policy-overview space-y-6">
       {/* Statistics Cards */}
@@ -216,7 +209,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             <div className="space-y-3">
               {Object.entries(statistics.byDomain).map(([domain, count]) => {
                 const Icon = getDomainIcon(domain as PolicyDomain);
-                return ();
+                return;
                   <div key={domain} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Icon className="w-4 h-4 text-gray-600" />
@@ -304,7 +297,7 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredPolicies.map((policy) => {
           const Icon = getDomainIcon(policy.domain);
-          return ();
+          return;
             <Card key={policy.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -403,7 +396,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
             {searchTerm || domainFilter !== 'ALL' || statusFilter !== 'ALL'
               ? 'Try adjusting your filters'
               : 'Create your first policy to get started'
-            }
           </p>
           {(!searchTerm && domainFilter === 'ALL' && statusFilter === 'ALL') && ()
             <Button onClick={() => setIsCreatingPolicy(true)}>
@@ -436,7 +428,6 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
                         evaluation.result === 'DENY' ? 'bg-red-100 text-red-800' :
                         evaluation.result === 'RESTRICT' ? 'bg-yellow-100 text-yellow-800' :
                         'bg-blue-100 text-blue-800'
-                      }
                     >
                       {evaluation.result}
                     </Badge>
@@ -492,15 +483,14 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
     </div>
   );
   if (error) {
-    return ();
+    return;
       <div className="p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
         <p className="text-red-800 text-lg mb-2">Policy Management Error</p>
         <p className="text-red-600 text-sm">{error}</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`policy-management-dashboard ${className}`}>}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Policy Management</h1>
@@ -550,34 +540,26 @@ export const PolicyManagementDashboard: React.FC<PolicyManagementDashboardProps>
       )}
       <style>{`
         .policy-management-dashboard {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 1400px;,
+  margin: 0 auto;
           padding: 1rem;
-        }
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
+          -webkit-box-orient: vertical;,
+  overflow: hidden;
         .policy-overview .grid {
           gap: 1rem;
-        }
         .policy-list .policy-card {
           transition: all 0.2s ease;
-        }
-        .policy-list .policy-card:hover {
-          transform: translateY(-2px);
+        .policy-list .policy-card:hover {,
+  transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
         @media (max-width: 768px) {
           .policy-management-dashboard {
             padding: 0.5rem;
-          }
           .grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );

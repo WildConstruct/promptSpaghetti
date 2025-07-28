@@ -12,10 +12,9 @@ import {
 
 describe('RateLimitingService - Basic Tests', () => {
   let service: RateLimitingService;
-
   beforeEach(() => {
-    service = new RateLimitingService();
-  });
+  service = new RateLimitingService();
+});
 
   test('should create service instance', () => {
     expect(service).toBeInstanceOf(RateLimitingService);
@@ -36,7 +35,6 @@ describe('RateLimitingService - Basic Tests', () => {
     // Record many failed attempts
     for (let i = 0; i < 15; i++) {
       service.recordAttempt(identifier, endpoint, false);
-    }
 
     const result = await service.checkRateLimit(identifier, endpoint);
     expect(result.result).toBe(RateLimitResult.BLOCKED);
@@ -51,7 +49,6 @@ describe('RateLimitingService - Basic Tests', () => {
     // Try to exceed limits
     for (let i = 0; i < 20; i++) {
       service.recordAttempt(identifier, endpoint, false);
-    }
 
     const result = await service.checkRateLimit(identifier, endpoint);
     expect(result.result).toBe(RateLimitResult.ALLOWED);
@@ -86,7 +83,6 @@ describe('RateLimitingService - Basic Tests', () => {
     // Create blocked state
     for (let i = 0; i < 15; i++) {
       service.recordAttempt(identifier, endpoint, false);
-    }
 
     let result = await service.checkRateLimit(identifier, endpoint);
     expect(result.result).toBe(RateLimitResult.BLOCKED);

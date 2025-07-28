@@ -9,6 +9,7 @@ import { EventEmitter } from 'events';
 import { TimeoutManager, TimeoutMetrics } from './TimeoutManager';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 
+}
 export interface AlertConfig {
   timeoutThreshold: number;
   circuitBreakerThreshold: number;
@@ -18,14 +19,18 @@ export interface AlertConfig {
   enableSlackAlerts: boolean;
   enableWebhookAlerts: boolean;
 }
+}
 
+}
 export interface AlertChannel {
   type: 'email' | 'slack' | 'webhook';
   config: {
     [key: string]: unknown;
+}
   };
 }
 
+}
 export interface TimeoutAlert {
   id: string;
   type: 'timeout' | 'circuit_breaker' | 'error_rate';
@@ -37,7 +42,9 @@ export interface TimeoutAlert {
   resolved: boolean;
   resolvedAt?: Date;
 }
+}
 
+}
 export interface PerformanceMetrics {
   operation: string;
   totalRequests: number;
@@ -48,6 +55,7 @@ export interface PerformanceMetrics {
   timeoutRate: number;
   circuitBreakerTrips: number;
   lastUpdated: Date;
+}
 }
 
 export class TimeoutMonitoringService extends EventEmitter {
@@ -105,6 +113,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Handle timeout events
    */
   private async handleTimeoutEvent(event: unknown): Promise<void> {
+
     const { metricKey, executionTime, totalTimeouts } = event;
     
     // Record performance metrics
@@ -137,6 +146,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Handle circuit breaker events
    */
   private async handleCircuitBreakerEvent(event: unknown): Promise<void> {
+
     const { metricKey, failureCount } = event;
     
     // Track analytics
@@ -163,6 +173,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Handle fallback events
    */
   private async handleFallbackEvent(event: unknown): Promise<void> {
+
     const { operationType, operationSubtype, fallbackSuccess } = event;
     
     // Track analytics
@@ -197,6 +208,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Create alert
    */
   private async createAlert(alertData: Omit<TimeoutAlert, 'id' | 'timestamp' | 'resolved'>): Promise<void> {
+
     const alertKey = `${alertData.type}_${alertData.operation}`;
     
     // Check cooldown
@@ -235,6 +247,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Send alert through configured channels
    */
   private async sendAlert(alert: TimeoutAlert): Promise<void> {
+
     const promises = this.alertChannels.map(async (channel) => {
       try {
         switch (channel.type) {
@@ -260,6 +273,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Send email alert
    */
   private async sendEmailAlert(alert: TimeoutAlert, _____config: unknown): Promise<void> {
+
     // Implementation would depend on email service
     console.log(`Email alert: ${alert.message}`);
   }
@@ -268,6 +282,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Send Slack alert
    */
   private async sendSlackAlert(alert: TimeoutAlert, config: unknown): Promise<void> {
+
     const webhook = config.webhookUrl;
     if (!webhook) return;
 
@@ -296,6 +311,7 @@ export class TimeoutMonitoringService extends EventEmitter {
    * Send webhook alert
    */
   private async sendWebhookAlert(alert: TimeoutAlert, config: unknown): Promise<void> {
+
     const webhook = config.url;
     if (!webhook) return;
 
@@ -403,8 +419,7 @@ export class TimeoutMonitoringService extends EventEmitter {
       p99ResponseTime: sortedHistory[p99Index] || 0,
       timeoutRate: timeoutMetrics.timeouts / Math.max(timeoutMetrics.totalOperations, 1),
       circuitBreakerTrips: timeoutMetrics.circuitBreakerTrips,
-      lastUpdated: new Date()
-    };
+      lastUpdated: new Date(};
   }
 
   /**
@@ -474,12 +489,11 @@ export class TimeoutMonitoringService extends EventEmitter {
         totalTimeouts,
         activeCircuitBreakers,
         activeAlerts: activeAlerts.length
-      },
+  }
       performanceMetrics: this.getAllPerformanceMetrics(),
       recentAlerts,
       circuitBreakerStates: Object.fromEntries(circuitBreakerStates),
-      healthStatus: this.timeoutManager.getHealthStatus()
-    };
+      healthStatus: this.timeoutManager.getHealthStatus(};
   }
 
   /**

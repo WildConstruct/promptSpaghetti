@@ -47,7 +47,7 @@ describe('AuditFindingTrackingService', () => {
       estimatedEffort: 10,
       resources: [],
       approvalRequired: false
-    },
+  }
     riskScore: 75,
     businessImpact: 'high',
     regulatoryImplications: [],
@@ -138,7 +138,7 @@ describe('AuditFindingTrackingService', () => {
           operation: 'create',
           resourceType: 'audit_finding',
           automatedDecision: false
-        })
+  }
       );
     });
 
@@ -238,7 +238,7 @@ describe('AuditFindingTrackingService', () => {
           oldStatus: FindingTrackingStatus.NEW,
           newStatus: FindingTrackingStatus.IN_PROGRESS,
           reason: 'Starting remediation'
-        })
+  }
       }));
     });
 
@@ -288,7 +288,7 @@ describe('AuditFindingTrackingService', () => {
           responseTime: 0,
           resolution: '',
           resolvedBy: ''
-        })
+  }
       }));
     });
 
@@ -307,7 +307,7 @@ describe('AuditFindingTrackingService', () => {
           escalationType: 'sla_breach',
           escalationLevel: 2,
           recipients: ['manager@company.com', 'director@company.com']
-        })
+  }
       }));
     });
 
@@ -336,7 +336,7 @@ describe('AuditFindingTrackingService', () => {
           dependencies: [],
           deliverables: ['assessment-report.pdf'],
           progress: 100
-        },
+  }
         {
           milestoneId: 'milestone-2', 
           name: 'Remediation Implementation',
@@ -381,7 +381,7 @@ describe('AuditFindingTrackingService', () => {
         userId: 'qa-engineer',
         metadata: expect.objectContaining({
           currentPhase: 'validation'
-        })
+  }
       }));
     });
 

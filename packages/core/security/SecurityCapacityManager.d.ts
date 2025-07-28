@@ -7,6 +7,7 @@
  * ensuring optimal performance and cost efficiency under varying loads.
  */
 import { EventEmitter } from 'events';
+
 export interface CapacityPlan {
     id: string;
     name: string;
@@ -77,7 +78,7 @@ export interface CapacityPlan {
     last_reviewed: number;
     next_review_date: number;
     enabled: boolean;
-}
+
 export interface ResourceRequirements {
     cpu_cores: number;
     memory_gb: number;
@@ -86,7 +87,7 @@ export interface ResourceRequirements {
     iops_required: number;
     gpu_units?: number;
     custom_resources?: Record<string, number>;
-}
+
 export interface GrowthProjection {
     period: 'monthly' | 'quarterly' | 'yearly';
     metric: 'transactions' | 'users' | 'data_volume' | 'requests' | 'events';
@@ -95,14 +96,14 @@ export interface GrowthProjection {
     confidence_level: number;
     assumptions: string[];
     seasonal_factors?: SeasonalFactor[];
-}
+
 export interface SeasonalFactor {
     period: 'daily' | 'weekly' | 'monthly' | 'yearly';
     pattern: 'cyclical' | 'trending' | 'spike';
     multiplier: number;
     duration_hours?: number;
     description: string;
-}
+
 export interface PerformanceTargets {
     response_time_p95_ms: number;
     response_time_p99_ms: number;
@@ -110,7 +111,7 @@ export interface PerformanceTargets {
     error_rate_percentage: number;
     availability_percentage: number;
     data_processing_latency_ms: number;
-}
+
 export interface AvailabilityRequirements {
     target_availability: number;
     downtime_budget_minutes_monthly: number;
@@ -125,7 +126,7 @@ export interface AvailabilityRequirements {
         rpo_minutes: number;
         geographic_redundancy: boolean;
     };
-}
+
 export interface ScalingPolicy {
     id: string;
     name: string;
@@ -151,7 +152,7 @@ export interface ScalingPolicy {
     created_at: number;
     last_triggered: number;
     trigger_count: number;
-}
+
 export interface MetricTrigger {
     metric_name: string;
     comparison: 'greater_than' | 'less_than' | 'greater_than_or_equal' | 'less_than_or_equal';
@@ -159,7 +160,7 @@ export interface MetricTrigger {
     duration_seconds: number;
     datapoints_to_alarm: number;
     evaluation_periods: number;
-}
+
 export interface TimeTrigger {
     schedule_type: 'cron' | 'recurring' | 'one_time';
     cron_expression?: string;
@@ -171,13 +172,13 @@ export interface TimeTrigger {
     };
     one_time_datetime?: number;
     target_capacity: number;
-}
+
 export interface EventTrigger {
     event_type: 'security_incident' | 'high_alert_volume' | 'system_failure' | 'maintenance_mode';
     event_source: string;
     conditions: Record<string, any>;
     scaling_factor: number;
-}
+
 export interface ScalingAction {
     action_type: 'instance_count' | 'resource_adjustment' | 'load_balancer_weight';
     target_value?: number;
@@ -186,19 +187,19 @@ export interface ScalingAction {
     instance_types?: string[];
     availability_zones?: string[];
     termination_policy?: 'oldest_first' | 'newest_first' | 'least_utilized';
-}
+
 export interface NotificationAction {
     channel: 'email' | 'slack' | 'webhook' | 'sms';
     target: string;
     message_template: string;
     severity: 'info' | 'warning' | 'error';
-}
+
 export interface CustomMetricTarget {
     metric_name: string;
     target_value: number;
     comparison: 'less_than' | 'greater_than';
     weight: number;
-}
+
 export interface InstanceTypeConfig {
     instance_type: string;
     cpu_cores: number;
@@ -209,7 +210,7 @@ export interface InstanceTypeConfig {
     spot_availability: boolean;
     use_cases: string[];
     priority: number;
-}
+
 export interface CapacityMetrics {
     id: string;
     service: string;
@@ -256,7 +257,7 @@ export interface CapacityMetrics {
         scaling_recommendations: string[];
         cost_optimization_opportunities: string[];
     };
-}
+
 export interface ScalingEvent {
     id: string;
     timestamp: number;
@@ -292,7 +293,7 @@ export interface ScalingEvent {
         issues_encountered: string[];
         rollback_required: boolean;
     };
-}
+
 export interface CapacityForecast {
     id: string;
     service: string;
@@ -325,7 +326,7 @@ export interface CapacityForecast {
         peak_prediction_accuracy: number;
         cost_prediction_accuracy: number;
     };
-}
+
 export interface CapacityRecommendation {
     id: string;
     priority: 'low' | 'medium' | 'high' | 'critical';
@@ -349,7 +350,7 @@ export interface CapacityRecommendation {
     status: 'pending' | 'approved' | 'in_progress' | 'completed' | 'rejected';
     created_at: number;
     last_updated: number;
-}
+
 export declare class SecurityCapacityManager extends EventEmitter {
     private capacityPlans;
     private scalingPolicies;
@@ -412,6 +413,6 @@ export declare class SecurityCapacityManager extends EventEmitter {
     getRecommendations(): CapacityRecommendation[];
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
-}
+
 export default SecurityCapacityManager;
 //# sourceMappingURL=SecurityCapacityManager.d.ts.map

@@ -18,6 +18,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { ConnectionManager } from '../websocket/ConnectionManager';
 
 // Configuration Interfaces
+}
 export interface SessionLimitConfig {
   // Concurrent session limits
   maxConcurrentSessionsPerUser: number;
@@ -70,9 +71,11 @@ export interface SessionLimitConfig {
     highConcurrentSessions: number;
     suspiciousActivity: number;
     geographicAnomalies: number;
+}
   };
 }
 
+}
 export interface UserLimitOverride {
   userId: string;
   overrides: Partial<SessionLimitConfig>;
@@ -81,13 +84,16 @@ export interface UserLimitOverride {
   createdBy: string;
   createdAt: Date;
 }
+}
 
+}
 export interface OrganizationLimitConfig extends Partial<SessionLimitConfig> {
   organizationId: string;
   tier: 'free' | 'premium' | 'enterprise';
   customLimits?: Partial<SessionLimitConfig>;
 }
 
+}
 export interface SessionLimitViolation {
   id: string;
   type: 'concurrent_user' | 'concurrent_ip' | 'concurrent_org' | 'concurrent_device' | 
@@ -101,7 +107,9 @@ export interface SessionLimitViolation {
   resolvedAt?: Date;
   createdAt: Date;
 }
+}
 
+}
 export interface SessionLimitMetrics {
   timestamp: Date;
   activeSessionsTotal: number;
@@ -111,6 +119,7 @@ export interface SessionLimitMetrics {
     organization: Record<string, number>;
     device: Record<string, number>;
     country: Record<string, number>;
+}
   };
   violations: {
     total: number;
@@ -125,6 +134,7 @@ export interface SessionLimitMetrics {
   };
 }
 
+}
 export interface SessionEnforcementAction {
   action: 'terminate' | 'warn' | 'extend_grace' | 'upgrade_required';
   sessionId: string;
@@ -132,6 +142,7 @@ export interface SessionEnforcementAction {
   gracePeriodMinutes?: number;
   notifyUser: boolean;
   details: Record<string, any>;
+}
 }
 
 export class SessionLimitManager extends EventEmitter {
@@ -223,6 +234,7 @@ export class SessionLimitManager extends EventEmitter {
    * Initialize the SessionLimitManager
    */
   async initialize(): Promise<void> {
+
     try {
       // Create database tables if they don't exist
       await this.createTables();
@@ -271,6 +283,7 @@ export class SessionLimitManager extends EventEmitter {
     action?: SessionEnforcementAction;
     gracePeriodMinutes?: number;
   }> {
+
     const startTime = Date.now();
     
     try {
@@ -347,6 +360,7 @@ export class SessionLimitManager extends EventEmitter {
     sessionId: string,
     action: SessionEnforcementAction
   ): Promise<void> {
+
     try {
       switch (action.action) {
       case 'terminate':
@@ -379,7 +393,7 @@ export class SessionLimitManager extends EventEmitter {
           sessionId,
           reason: action.reason,
           details: action.details
-        },
+  }
         sessionId,
         severity: 'info'
       });
@@ -405,6 +419,7 @@ export class SessionLimitManager extends EventEmitter {
     scope: 'global' | 'organization' | 'user' = 'global',
     targetId?: string
   ): Promise<void> {
+
     try {
       const now = new Date();
       
@@ -483,7 +498,7 @@ export class SessionLimitManager extends EventEmitter {
           scope,
           targetId,
           changes: config
-        },
+  }
         severity: 'info'
       });
       
@@ -504,6 +519,7 @@ export class SessionLimitManager extends EventEmitter {
    * Get session limit metrics and analytics
    */
   async getMetrics(timeRange?: { start: Date; end: Date }): Promise<SessionLimitMetrics> {
+
     try {
       const range = timeRange || {
         start: new Date(Date.now() - 24 * 60 * 60 * 1000), // Last 24 hours
@@ -601,6 +617,7 @@ export class SessionLimitManager extends EventEmitter {
     severity?: string;
     limit?: number;
   }): Promise<SessionLimitViolation[]> {
+
     try {
       let query = `
         SELECT * FROM session_limit_violations 
@@ -659,6 +676,7 @@ export class SessionLimitManager extends EventEmitter {
     resolvedBy: string,
     resolution: string
   ): Promise<void> {
+
     try {
       const now = new Date();
       
@@ -674,7 +692,7 @@ export class SessionLimitManager extends EventEmitter {
         details: {
           violationId,
           resolution
-        },
+  }
         severity: 'info'
       });
       
@@ -694,6 +712,7 @@ export class SessionLimitManager extends EventEmitter {
    * Cleanup and shutdown
    */
   async shutdown(): Promise<void> {
+
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
     }
@@ -713,6 +732,7 @@ export class SessionLimitManager extends EventEmitter {
   // Private helper methods implementation continues...
   
   private async createTables(): Promise<void> {
+
     // Create configuration table
     await this.dbService.query(`
       CREATE TABLE IF NOT EXISTS session_limit_configs (
@@ -723,7 +743,7 @@ export class SessionLimitManager extends EventEmitter {
         updated_by VARCHAR(255) NOT NULL,
         updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
         UNIQUE(scope, target_id)
-      )
+
     `);
     
     // Create user overrides table
@@ -735,7 +755,7 @@ export class SessionLimitManager extends EventEmitter {
         reason TEXT NOT NULL,
         created_by VARCHAR(255) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
     
     // Create violations table
@@ -752,7 +772,7 @@ export class SessionLimitManager extends EventEmitter {
         resolved_by VARCHAR(255),
         resolution TEXT,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
-      )
+
     `);
     
     // Create indexes
@@ -778,6 +798,7 @@ export class SessionLimitManager extends EventEmitter {
   }
   
   private async loadConfigurations(): Promise<void> {
+
     // Load global configuration
     const globalConfigResult = await this.dbService.query(`
       SELECT config FROM session_limit_configs 
@@ -834,13 +855,13 @@ export class SessionLimitManager extends EventEmitter {
         organization: {},
         device: {},
         country: {}
-      },
+  }
       violations: {
         total: 0,
         byType: {},
         resolved: 0,
         pending: 0
-      },
+  }
       performance: {
         averageCheckTime: 0,
         cacheHitRate: 0,

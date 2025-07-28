@@ -2,6 +2,7 @@
  * Epic 9.3.2 - Graph Diff Engine
  * Advanced graph comparison and difference calculation with visual diff support
  */
+
 export interface GraphNode {
     id: string;
     type: string;
@@ -11,7 +12,7 @@ export interface GraphNode {
     };
     data: Record<string, unknown>;
     style?: unknown;
-}
+
 export interface GraphEdge {
     id: string;
     source: string;
@@ -19,12 +20,12 @@ export interface GraphEdge {
     type?: string;
     data?: unknown;
     style?: unknown;
-}
+
 export interface GraphData {
     nodes: GraphNode[];
     edges: GraphEdge[];
     metadata?: unknown;
-}
+
 export interface DiffChange {
     type: 'added' | 'removed' | 'modified' | 'moved';
     element_type: 'node' | 'edge' | 'property';
@@ -44,7 +45,7 @@ export interface DiffChange {
         distance: number;
     };
     significance: number;
-}
+
 export interface GraphDiff {
     id: string;
     from_snapshot_id: string;
@@ -87,7 +88,7 @@ export interface GraphDiff {
         }>;
     };
     created_at: string;
-}
+
 export declare class GraphDiffEngine {
     private options;
     private static readonly POSITION_THRESHOLD;
@@ -118,5 +119,5 @@ export declare class GraphDiffEngine {
     }): DiffChange[];
     static getChangesByElement(diff: GraphDiff, elementId: string): DiffChange[];
     static getSignificantChanges(diff: GraphDiff, threshold?: number): DiffChange[];
-}
+
 //# sourceMappingURL=GraphDiffEngine.d.ts.map

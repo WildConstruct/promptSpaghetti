@@ -15,17 +15,17 @@ export interface CommunityContent {
         markdown: string;
         html?: string;
         summary: string;
-        tableOfContents?: ContentSection[];
+        tableOfContents?: ContentSection;
         metadata: ContentMetadata;
     };
-    media: ContentMediaAttachment[];
+    media: ContentMediaAttachment;
     category: string;
-    tags: string[];
+    tags: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     seo: {
         metaTitle: string;
         metaDescription: string;
-        keywords: string[];
+        keywords: string;
         canonicalUrl?: string;
     };
     editorial: {
@@ -41,16 +41,16 @@ export interface ContentSection {
     title: string;
     level: number;
     anchor: string;
-    children?: ContentSection[];
+    children?: ContentSection;
 }
 export interface ContentMetadata {
     readingTime: number;
     wordCount: number;
     lastSignificantUpdate: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-    prerequisites: string[];
-    learningObjectives: string[];
-    relatedContent: string[];
+    prerequisites: string;
+    learningObjectives: string;
+    relatedContent: string;
 }
 export interface ContentMediaAttachment {
     id: string;
@@ -81,12 +81,12 @@ export interface ContentVersion {
     changelog?: string;
     release_notes?: string;
     editorial_notes?: string;
-    review_feedback?: ReviewFeedback[];
+    review_feedback?: ReviewFeedback;
     approval_status: 'pending' | 'approved' | 'rejected' | 'needs_revision';
     parent_version_id?: string;
     branch_name: string;
     commit_hash: string;
-    contributors: ContentContributor[];
+    contributors: ContentContributor;
     revision_type: 'major' | 'minor' | 'patch' | 'editorial';
     change_summary: string;
     created_by: string;
@@ -147,27 +147,21 @@ export interface ContentQualityScore {
 }
 export interface PlagiarismResult {
     overall_similarity: number;
-    sources_found: Array<{
-        url: string;
-        similarity: number;
-        matched_text: string;
-        context: string;
-    }>;
-    confidence_level: number;
-    check_date: string;
+    sources_found: Array<{}, url>;
+    string: any;
+    similarity: number;
+    matched_text: string;
+    context: string;
 }
 export interface FactCheckResult {
     overall_accuracy: number;
     claims_checked: number;
     claims_verified: number;
-    disputed_claims: Array<{
-        claim: string;
-        status: 'verified' | 'disputed' | 'false' | 'unverifiable';
-        sources: string[];
-        explanation: string;
-    }>;
-    check_date: string;
-    checker_id?: string;
+    disputed_claims: Array<{}, claim>;
+    string: any;
+    status: 'verified' | 'disputed' | 'false' | 'unverifiable';
+    sources: string;
+    explanation: string;
 }
 export interface ContentImportOptions {
     format: 'markdown' | 'html' | 'docx' | 'pdf' | 'notion' | 'confluence';
@@ -195,7 +189,7 @@ export interface ContentExportOptions {
     include_reviews?: boolean;
     version_id?: string;
     version_range?: string;
-    include_branches?: string[];
+    include_branches?: string;
     bundle_media?: boolean;
     bundle_related_content?: boolean;
     compress?: boolean;
@@ -208,141 +202,19 @@ export interface ContentExportOptions {
     };
 }
 export interface ContentVersionDiff {
-    content_changes: Array<{
-        section: string;
-        change_type: 'added' | 'removed' | 'modified';
-        old_content?: string;
-        new_content?: string;
-        line_number?: number;
-    }>;
-    metadata_changes: Array<{
-        field: string;
-        old_value: unknown;
-        new_value: unknown;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
-    media_changes: Array<{
-        media_id: string;
-        change_type: 'added' | 'removed' | 'modified';
-        old_media?: ContentMediaAttachment;
-        new_media?: ContentMediaAttachment;
-    }>;
-    structure_changes: {
-        sections_added: number;
-        sections_removed: number;
-        sections_reordered: number;
-        toc_changes: boolean;
-    };
-    editorial_changes: {
-        status_change?: {
-            from: string;
-            to: string;
-        };
-        reviewer_change?: {
-            from?: string;
-            to?: string;
-        };
-        feedback_added: number;
-        feedback_resolved: number;
-    };
+    content_changes: Array<{}, section>;
+    string: any;
+    change_type: 'added' | 'removed' | 'modified';
+    old_content?: string;
+    new_content?: string;
+    line_number?: number;
 }
 export declare class ContentVersionManager {
-    private contentId;
-    private userId;
     private versions;
     private apiClient;
-    constructor(apiClient: unknown, contentId: string, userId: string);
-    createVersion(content: CommunityContent, options?: {
-        version_number?: string;
-        version_tag?: string;
-        title?: string;
-        description?: string;
-        changelog?: string;
-        branch_name?: string;
-        revision_type?: 'major' | 'minor' | 'patch' | 'editorial';
-        change_summary?: string;
-        target_status?: 'draft' | 'review';
-    }): Promise<ContentVersion>;
-    submitForReview(versionId: string, options?: {
-        reviewer_id?: string;
-        review_notes?: string;
-        priority?: 'low' | 'normal' | 'high' | 'urgent';
-    }): Promise<ContentVersion>;
-    publishVersion(versionId: string, options?: {
-        release_notes?: string;
-        visibility?: 'private' | 'team' | 'community' | 'public';
-        publish_date?: string;
-        notify_subscribers?: boolean;
-    }): Promise<ContentVersion>;
-    addReviewFeedback(versionId: string, feedback: Omit<ReviewFeedback, 'id' | 'reviewer_id' | 'reviewer_name' | 'review_date'>): Promise<ReviewFeedback>;
-    resolveFeedback(versionId: string, feedbackId: string, resolution: string): Promise<void>;
-    getReviewHistory(versionId: string): Promise<ReviewFeedback[]>;
-    addContributor(versionId: string, contributor: Omit<ContentContributor, 'contribution_date'>): Promise<void>;
-    getCollaborationHistory(contentId?: string): Promise<Array<{
-        version_id: string;
-        version_number: string;
-        contributors: ContentContributor[];
-        created_at: string;
-        change_summary: string;
-    }>>;
-    importContent(options: ContentImportOptions): Promise<{
-        success: boolean;
-        imported_version: ContentVersion;
-        warnings: string[];
-        errors: string[];
-        quality_score?: ContentQualityScore;
-    }>;
-    exportContent(versionId: string, options: ContentExportOptions): Promise<{
-        download_url?: string;
-        file_data?: ArrayBuffer;
-        filename: string;
-        size: number;
-        format: string;
-    }>;
-    compareVersions(fromVersionId: string, toVersionId: string): Promise<{
-        from_version: ContentVersion;
-        to_version: ContentVersion;
-        diff: ContentVersionDiff;
-        similarity_score: number;
-        change_magnitude: 'trivial' | 'minor' | 'moderate' | 'major' | 'complete_rewrite';
-    }>;
-    getVersionHistory(options?: {
-        include_drafts?: boolean;
-        branch_name?: string;
-        limit?: number;
-        offset?: number;
-        contributor_id?: string;
-    }): Promise<{
-        versions: ContentVersion[];
-        total: number;
-    }>;
-    runQualityAssessment(versionId: string, options?: {
-        include_plagiarism_check?: boolean;
-        include_fact_check?: boolean;
-        include_grammar_check?: boolean;
-        include_seo_analysis?: boolean;
-    }): Promise<ContentQualityScore>;
-    private generateNextVersion;
-    private calculateQualityMetrics;
-}
-export interface ContentBundle {
-    format_version: string;
-    created_at: string;
-    created_by: string;
-    content: ContentVersion;
-    related_content: ContentVersion[];
-    media_assets: ContentMediaAttachment[];
-    documentation: {
-        readme: string;
-        changelog: string;
-        usage_guide?: string;
-        examples?: Array<{
-            name: string;
-            description: string;
-            preview: string;
-        }>;
-    };
-    checksums: Record<string, string>;
-    signature?: string;
+    constructor();
+    apiClient: unknown;
+    private contentId;
+    private userId;
 }
 //# sourceMappingURL=ContentVersionManager.d.ts.map

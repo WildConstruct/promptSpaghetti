@@ -12,12 +12,12 @@ export interface MarketplaceTemplate {
     thumbnailUrl?: string;
     price: number;
     currency: string;
-    tags: string[];
+    tags: string;
     rating: number;
     reviewCount: number;
     creatorName: string;
     creatorAvatar?: string;
-    compatibility: string[];
+    compatibility: string;
     isAiGenerated: boolean;
     status: 'draft' | 'listed' | 'blocked' | 'archived';
     stats: {

@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
+}
 export interface ExpirationRule {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export interface ExpirationRule {
     excludeUsers?: string[];
     departments?: string[];
     accessLevels?: string[];
+}
   };
   expirationPolicy: {
     maxAge: number; // Days
@@ -77,6 +79,7 @@ export interface ExpirationRule {
   approvedAt?: Date;
 }
 
+}
 export interface UserExpirationStatus {
   userId: string;
   currentPasswordSetAt: Date;
@@ -101,10 +104,12 @@ export interface UserExpirationStatus {
       ip: string;
       location: string;
       timestamp: Date;
+}
     }>;
   };
 }
 
+}
 export interface ExpirationEvent {
   id: string;
   userId: string;
@@ -118,6 +123,7 @@ export interface ExpirationEvent {
     approvedBy?: string;
     reason?: string;
     automaticAction?: boolean;
+}
   };
   notificationsSent: Array<{
     recipient: string;
@@ -132,6 +138,7 @@ export interface ExpirationEvent {
   };
 }
 
+}
 export interface ExtensionRequest {
   id: string;
   userId: string;
@@ -151,6 +158,7 @@ export interface ExtensionRequest {
     businessJustification: string;
     alternativesConsidered: string[];
     riskAssessment: string;
+}
   };
 }
 
@@ -173,6 +181,7 @@ export class PasswordExpirationService extends EventEmitter {
     ruleData: Omit<ExpirationRule, 'id' | 'createdAt' | 'updatedAt'>,
     createdBy: string
   ): Promise<ExpirationRule> {
+
     const rule: ExpirationRule = {
       ...ruleData,
       id: this.generateRuleId(),
@@ -205,6 +214,7 @@ export class PasswordExpirationService extends EventEmitter {
    * Get expiration status for a user
    */
   async getUserExpirationStatus(userId: string): Promise<UserExpirationStatus> {
+
     let status = this.userStatuses.get(userId);
     
     if (!status) {
@@ -241,6 +251,7 @@ export class PasswordExpirationService extends EventEmitter {
       date: Date;
     };
   }> {
+
     const status = await this.getUserExpirationStatus(userId);
     const applicableRules = await this.getApplicableRules(userId, userRoles);
 
@@ -338,6 +349,7 @@ export class PasswordExpirationService extends EventEmitter {
     businessJustification: string,
     urgency: 'low' | 'medium' | 'high' | 'critical' = 'medium'
   ): Promise<ExtensionRequest> {
+
     const status = await this.getUserExpirationStatus(userId);
     const applicableRules = await this.getApplicableRules(userId, []);
     
@@ -410,6 +422,7 @@ export class PasswordExpirationService extends EventEmitter {
     approvedBy: string,
     comments?: string
   ): Promise<ExtensionRequest> {
+
     const request = this.extensionRequests.get(requestId);
     if (!request) {
       throw new Error('Extension request not found');
@@ -507,7 +520,7 @@ export class PasswordExpirationService extends EventEmitter {
       applicability: {
         userRoles: ['user', 'editor'],
         excludeUsers: []
-      },
+  }
       expirationPolicy: {
         maxAge: 90,
         warningThresholds: [30, 14, 7, 3, 1],
@@ -517,7 +530,7 @@ export class PasswordExpirationService extends EventEmitter {
         extensionDuration: 30,
         requireApprovalForExtension: false,
         emergencyOverride: true
-      },
+  }
       strengthRequirements: {
         minStrength: 60,
         enforceComplexity: true,
@@ -525,7 +538,7 @@ export class PasswordExpirationService extends EventEmitter {
         minUniqueChars: 8,
         requireSpecialChars: true,
         preventCommonPatterns: true
-      },
+  }
       notifications: {
         warningNotifications: true,
         expiryNotifications: true,
@@ -537,13 +550,13 @@ export class PasswordExpirationService extends EventEmitter {
             recipients: ['user'],
             notificationMethod: ['email', 'dashboard'],
             template: 'password_warning_30days'
-          },
+  }
           {
             daysBeforeExpiry: 7,
             recipients: ['user', 'manager'],
             notificationMethod: ['email', 'sms', 'dashboard'],
             template: 'password_warning_7days'
-          },
+  }
           {
             daysBeforeExpiry: 1,
             recipients: ['user', 'manager', 'admin'],
@@ -551,7 +564,7 @@ export class PasswordExpirationService extends EventEmitter {
             template: 'password_warning_1day'
           }
         ]
-      },
+  }
       compliance: {
         auditRequired: true,
         documentationRequired: false,
@@ -559,14 +572,14 @@ export class PasswordExpirationService extends EventEmitter {
         retentionPeriod: 365,
         reportingFrequency: 'monthly',
         complianceStandards: ['ISO27001']
-      },
+  }
       schedule: {
         effectiveDate: new Date(),
         timeZone: 'UTC',
         businessHoursOnly: false,
         excludedDates: [],
         maintenanceWindows: []
-      },
+  }
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -576,6 +589,7 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async calculateUserStatus(userId: string): Promise<UserExpirationStatus> {
+
     // Mock implementation - would integrate with actual password history service
     const passwordSetAt = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000); // 45 days ago
     const applicableRules = await this.getApplicableRules(userId, ['user']);
@@ -644,6 +658,7 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async getApplicableRules(userId: string, userRoles: string[]): Promise<ExpirationRule[]> {
+
     const rules = [];
     
     for (const rule of this.rules.values()) {
@@ -679,12 +694,14 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async checkExpirations(): Promise<void> {
+
     for (const userId of this.userStatuses.keys()) {
       await this.calculateUserStatus(userId);
     }
   }
 
   private async sendScheduledNotifications(): Promise<void> {
+
     // Implementation would send scheduled expiration notifications
     console.log('Checking for scheduled expiration notifications');
   }
@@ -701,17 +718,20 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async validateRule(rule: ExpirationRule): Promise<void> {
+
     if (rule.expirationPolicy.maxAge < 1 || rule.expirationPolicy.maxAge > 365) {
       throw new Error('Password max age must be between 1 and 365 days');
     }
   }
 
   private async recalculateAffectedUsers(rule: ExpirationRule): Promise<void> {
+
     // Implementation would recalculate status for users affected by the new rule
     console.log(`Recalculating status for users affected by rule ${rule.name}`);
   }
 
   private async requestRuleApproval(rule: ExpirationRule, requestedBy: string): Promise<void> {
+
     console.log(`Requesting approval for rule ${rule.name} by ${requestedBy}`);
   }
 
@@ -726,10 +746,12 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async sendApprovalRequest(request: ExtensionRequest): Promise<void> {
+
     console.log(`Sending approval request for extension ${request.id}`);
   }
 
   private async applyExtension(request: ExtensionRequest): Promise<void> {
+
     const status = this.userStatuses.get(request.userId);
     if (status) {
       status.expiresAt = new Date(status.expiresAt.getTime() + request.requestedDays * 24 * 60 * 60 * 1000);
@@ -821,6 +843,7 @@ export class PasswordExpirationService extends EventEmitter {
   }
 
   private async logExpirationEvent(target: string, performedBy: string, eventType: string, metadata: any): Promise<void> {
+
     console.log(`Expiration Event: ${eventType} for ${target} by ${performedBy}`, metadata);
   }
 }

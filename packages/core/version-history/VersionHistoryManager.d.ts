@@ -2,6 +2,7 @@
  * Epic 9.3.1 - Version History Manager
  * Manages version snapshots, branching, and change tracking for projects
  */
+
 export interface VersionSnapshot {
     id: string;
     project_id: string;
@@ -25,7 +26,7 @@ export interface VersionSnapshot {
     complexity_score?: number;
     workflow_state: string;
     approval_status?: string;
-}
+
 export interface VersionDiff {
     id: string;
     from_snapshot_id: string;
@@ -42,7 +43,7 @@ export interface VersionDiff {
     };
     similarity_score: number;
     created_at: string;
-}
+
 export interface Branch {
     id: string;
     project_id: string;
@@ -59,7 +60,7 @@ export interface Branch {
     updated_at: string;
     visibility: 'private' | 'workspace' | 'public';
     total_commits: number;
-}
+
 export interface ChangeEvent {
     id: string;
     project_id: string;
@@ -79,7 +80,7 @@ export interface ChangeEvent {
     change_magnitude: number;
     workflow_state?: string;
     approval_required: boolean;
-}
+
 export interface VersionAnnotation {
     id: string;
     snapshot_id: string;
@@ -100,7 +101,7 @@ export interface VersionAnnotation {
     resolved_by?: string;
     resolved_at?: string;
     resolution_note?: string;
-}
+
 export interface VersionHistoryFilter {
     branch_name?: string;
     author_id?: string;
@@ -110,7 +111,7 @@ export interface VersionHistoryFilter {
     limit?: number;
     offset?: number;
     include_annotations?: boolean;
-}
+
 export interface SnapshotCreationOptions {
     title?: string;
     description?: string;
@@ -120,7 +121,7 @@ export interface SnapshotCreationOptions {
     version_tag?: string;
     workflow_state?: string;
     approval_status?: string;
-}
+
 export declare class VersionHistoryManager {
     private apiClient;
     private projectId;
@@ -216,5 +217,5 @@ export declare class VersionHistoryManager {
         deleted_snapshots: number;
         deleted_diffs: number;
     }>;
-}
+
 //# sourceMappingURL=VersionHistoryManager.d.ts.map

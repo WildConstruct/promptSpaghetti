@@ -38,6 +38,7 @@ import {
   EvidenceSource
 } from '../../../../packages/core/types/EnforcementTypes';
 
+}
 export interface EnforcementServiceConfig {
   enabled: boolean;
   autoExecutionEnabled: boolean;
@@ -49,6 +50,7 @@ export interface EnforcementServiceConfig {
     userNotifications: boolean;
     webhookUrl?: string;
     emailEnabled: boolean;
+}
   };
   thresholds: {
     autoSuspensionScore: number;
@@ -91,18 +93,18 @@ export class EnforcementActionService {
         adminAlerts: true,
         userNotifications: true,
         emailEnabled: false
-      },
+  }
       thresholds: {
         autoSuspensionScore: 25,
         escalationThreshold: 80,
         appealWindowHours: 72
-      },
+  }
       retentionDays: {
         actions: 365,
         reports: 180,
         appeals: 730,
         audit: 2555 // 7 years
-      },
+  }
       ...config
     };
   }
@@ -118,6 +120,7 @@ export class EnforcementActionService {
     actionData: Partial<EnforcementAction>,
     triggeredBy: string = 'manual'
   ): Promise<EnforcementAction> {
+
     console.log(`🛡️ Creating enforcement action: ${actionData.actionType} on ${actionData.targetType} ${actionData.targetId}`);
 
     // Validate required fields
@@ -180,7 +183,7 @@ export class EnforcementActionService {
         targetType: action.targetType,
         targetId: action.targetId,
         severity: action.severity
-      },
+  }
       severity: action.severity === 'critical' ? 'error' : 'warning'
     });
 
@@ -191,6 +194,7 @@ export class EnforcementActionService {
    * Execute an enforcement action
    */
   async executeEnforcementAction(actionId: string): Promise<boolean> {
+
     console.log(`⚡ Executing enforcement action: ${actionId}`);
 
     const action = await this.getEnforcementAction(actionId);
@@ -249,6 +253,7 @@ export class EnforcementActionService {
    * Get enforcement action by ID
    */
   async getEnforcementAction(actionId: string): Promise<EnforcementAction | null> {
+
     const result = await this.db.query(`
       SELECT * FROM enforcement_actions 
       WHERE action_id = $1
@@ -276,6 +281,7 @@ export class EnforcementActionService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ actions: EnforcementAction[]; total: number }> {
+
     const { limit = 50, offset = 0 } = filters;
     
     // Build dynamic query
@@ -353,6 +359,7 @@ export class EnforcementActionService {
     status: ActionStatus,
     client?: any
   ): Promise<void> {
+
     const db = client || this.db;
     
     await db.query(`
@@ -390,6 +397,7 @@ export class EnforcementActionService {
       confidence: number;
     };
   }): Promise<ViolationReport> {
+
     console.log(`📝 Creating violation report for ${reportData.targetType} ${reportData.targetId}`);
 
     const reportId = this.generateReportId();
@@ -412,7 +420,7 @@ export class EnforcementActionService {
         previousReports: 0,
         reportAccuracyRate: 85,
         isVerified: true
-      },
+  }
       reportedAt: now,
       detectionMethod: reportData.detectionMethod ? {
         method: reportData.detectionMethod.method,
@@ -422,7 +430,7 @@ export class EnforcementActionService {
       } : {
         method: 'manual_report',
         confidence: 70
-      },
+  }
       evidence: reportData.evidence || [],
       relatedReports: [],
       status: 'submitted',
@@ -447,6 +455,7 @@ export class EnforcementActionService {
    * Process a violation report
    */
   async processViolationReport(reportId: string): Promise<EnforcementAction[]> {
+
     console.log(`🔍 Processing violation report: ${reportId}`);
 
     const report = await this.getViolationReport(reportId);
@@ -474,7 +483,7 @@ export class EnforcementActionService {
             description: `Violation report: ${report.reportId}`,
             data: { reportId: report.reportId, violationType: report.violationType },
             confidence: report.confidence
-          },
+  }
           ...report.evidence
         ]
       }, 'violation_processor');
@@ -501,6 +510,7 @@ export class EnforcementActionService {
    * Get violation report by ID
    */
   async getViolationReport(reportId: string): Promise<ViolationReport | null> {
+
     const result = await this.db.query(`
       SELECT * FROM violation_reports 
       WHERE report_id = $1
@@ -538,6 +548,7 @@ export class EnforcementActionService {
       justification: string;
     };
   }): Promise<EnforcementAppeal> {
+
     console.log(`📋 Processing appeal for enforcement action: ${appealData.enforcementActionId}`);
 
     const action = await this.getEnforcementAction(appealData.enforcementActionId);
@@ -590,7 +601,7 @@ export class EnforcementActionService {
         appealId: appeal.appealId,
         actionId: appealData.enforcementActionId,
         reason: appealData.appealReason.category
-      },
+  }
       severity: 'info'
     });
 
@@ -609,6 +620,7 @@ export class EnforcementActionService {
       modifiedActions?: Partial<EnforcementAction>[];
     }
   ): Promise<EnforcementAppeal> {
+
     console.log(`⚖️ Processing appeal decision: ${appealId} - ${decision.outcome}`);
 
     const appeal = await this.getAppeal(appealId);
@@ -654,6 +666,7 @@ export class EnforcementActionService {
    * Get appeal by ID
    */
   async getAppeal(appealId: string): Promise<EnforcementAppeal | null> {
+
     const result = await this.db.query(`
       SELECT * FROM enforcement_appeals 
       WHERE appeal_id = $1
@@ -677,6 +690,7 @@ export class EnforcementActionService {
     startDate: Date;
     endDate: Date;
   }): Promise<EnforcementAnalytics> {
+
     console.log(`📊 Generating enforcement analytics for ${timeRange.startDate.toISOString()} to ${timeRange.endDate.toISOString()}`);
 
     // Get overall metrics
@@ -702,7 +716,7 @@ export class EnforcementActionService {
         startDate: timeRange.startDate,
         endDate: timeRange.endDate,
         timeRange: 'custom'
-      },
+  }
       generatedAt: new Date(),
       overallMetrics,
       actionBreakdown,
@@ -726,6 +740,7 @@ export class EnforcementActionService {
     action: EnforcementAction,
     client: unknown
   ): Promise<{ success: boolean; error?: string }> {
+
     try {
       switch (action.actionType) {
       case 'warning':
@@ -751,6 +766,7 @@ export class EnforcementActionService {
   }
 
   private async executeWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Record warning in user's record
     await client.query(`
       INSERT INTO user_warnings (user_id, warning_type, reason, issued_by, issued_at, expires_at)
@@ -768,6 +784,7 @@ export class EnforcementActionService {
   }
 
   private async executeContentFlag(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Flag content for review
     await client.query(`
       INSERT INTO content_flags (content_type, content_id, flag_type, reason, flagged_by, flagged_at)
@@ -785,6 +802,7 @@ export class EnforcementActionService {
   }
 
   private async executeContentRemoval(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Remove or hide content
     if (action.targetType === 'template') {
       await client.query(`
@@ -801,6 +819,7 @@ export class EnforcementActionService {
   }
 
   private async executeAccountWarning(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Issue account-level warning
     await client.query(`
       INSERT INTO account_warnings (user_id, warning_level, reason, issued_by, issued_at, acknowledged)
@@ -817,6 +836,7 @@ export class EnforcementActionService {
   }
 
   private async executeAccountRestriction(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Apply account restrictions
     await client.query(`
       INSERT INTO user_restrictions (user_id, restriction_type, reason, expires_at, created_by)
@@ -829,6 +849,7 @@ export class EnforcementActionService {
   }
 
   private async executeAccountSuspension(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Suspend user account
     await client.query(`
       UPDATE user_verification_status 
@@ -860,6 +881,7 @@ export class EnforcementActionService {
   }
 
   private async executeTransactionBlock(action: EnforcementAction, client: unknown): Promise<{ success: boolean }> {
+
     // Block transaction
     await client.query(`
       UPDATE transactions 
@@ -952,6 +974,7 @@ export class EnforcementActionService {
   }
 
   private async captureTargetSnapshot(targetType: TargetType, targetId: string): Promise<unknown> {
+
     // Capture snapshot of target entity at time of report
     try {
       switch (targetType) {
@@ -995,6 +1018,7 @@ export class EnforcementActionService {
 
   // Database storage methods
   private async storeEnforcementAction(action: EnforcementAction): Promise<void> {
+
     await this.db.query(`
       INSERT INTO enforcement_actions (
         action_id, action_type, severity, status, target_type, target_id, target_details,
@@ -1005,7 +1029,7 @@ export class EnforcementActionService {
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19,
         $20, $21, $22, $23, $24, $25, $26, $27
-      )
+
     `, [
       action.actionId, action.actionType, action.severity, action.status, action.targetType,
       action.targetId, JSON.stringify(action.targetDetails), action.reason, action.description,
@@ -1018,6 +1042,7 @@ export class EnforcementActionService {
   }
 
   private async storeViolationReport(report: ViolationReport): Promise<void> {
+
     await this.db.query(`
       INSERT INTO violation_reports (
         report_id, report_type, target_type, target_id, target_snapshot, violation_type,
@@ -1025,7 +1050,7 @@ export class EnforcementActionService {
         evidence, related_reports, status, priority, tags
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17
-      )
+
     `, [
       report.reportId, report.reportType, report.targetType, report.targetId,
       JSON.stringify(report.targetSnapshot), report.violationType, report.description,
@@ -1037,6 +1062,7 @@ export class EnforcementActionService {
   }
 
   private async storeAppeal(appeal: EnforcementAppeal): Promise<void> {
+
     await this.db.query(`
       INSERT INTO enforcement_appeals (
         appeal_id, enforcement_action_id, appellant_id, appellant_type, appeal_reason,
@@ -1044,7 +1070,7 @@ export class EnforcementActionService {
         priority, public_visibility, legal_implications
       ) VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
-      )
+
     `, [
       appeal.appealId, appeal.enforcementActionId, appeal.appellantId, appeal.appellantType,
       JSON.stringify(appeal.appealReason), appeal.description, JSON.stringify(appeal.evidence),
@@ -1153,6 +1179,7 @@ export class EnforcementActionService {
 
   // Analytics calculation methods (simplified implementations)
   private async calculateOverallMetrics(_____timeRange: Error): Promise<unknown> {
+
     // Implementation would query database for metrics
     return {
       totalActions: 0,
@@ -1169,14 +1196,17 @@ export class EnforcementActionService {
   }
 
   private async calculateActionBreakdown(_____timeRange: Error): Promise<unknown> {
+
     return { byType: [], bySeverity: [], byStatus: [], byExecutionType: [] };
   }
 
   private async calculateViolationBreakdown(_____timeRange: Error): Promise<unknown> {
+
     return { byCategory: [], bySource: [], byConfidence: [] };
   }
 
   private async calculateEffectivenessMetrics(_____timeRange: Error): Promise<unknown> {
+
     return {
       deterrentEffect: 0,
       recidivismRate: 0,
@@ -1190,6 +1220,7 @@ export class EnforcementActionService {
   }
 
   private async calculateEnforcementTrends(_____timeRange: Error): Promise<unknown> {
+
     return {
       violationTrend: 'stable',
       actionTrend: 'stable',
@@ -1204,6 +1235,7 @@ export class EnforcementActionService {
   }
 
   private async calculateAppealMetrics(_____timeRange: Error): Promise<unknown> {
+
     return {
       totalAppeals: 0,
       appealRate: 0,
@@ -1218,6 +1250,7 @@ export class EnforcementActionService {
   }
 
   private async generateInsights(_____overallMetrics: unknown, _____trends: unknown): Promise<any[]> {
+
     return [];
   }
 
@@ -1225,6 +1258,7 @@ export class EnforcementActionService {
     _____effectivenessMetrics: unknown,
     _____appealMetrics: unknown
   ): Promise<any[]> {
+
     return [];
   }
 
@@ -1235,6 +1269,7 @@ export class EnforcementActionService {
     unknown>,
     client: unknown
   ): Promise<void> {
+
     await client.query(`
       INSERT INTO enforcement_action_executions (action_id, executed_at, result, details)
       VALUES ($1, NOW(), $2, $3)
@@ -1242,11 +1277,13 @@ export class EnforcementActionService {
   }
 
   private async sendActionNotification(action: EnforcementAction): Promise<void> {
+
     // Implementation would send notification to affected user
     console.log(`📬 Sending notification for action: ${action.actionId} to ${action.targetId}`);
   }
 
   private async updateReportStatus(reportId: string, status: ReportStatus): Promise<void> {
+
     await this.db.query(`
       UPDATE violation_reports 
       SET status = $1, updated_at = NOW()
@@ -1255,6 +1292,7 @@ export class EnforcementActionService {
   }
 
   private async resolveViolationReport(reportId: string, resolution: unknown): Promise<void> {
+
     await this.db.query(`
       UPDATE violation_reports 
       SET status = 'resolved', resolution = $1, updated_at = NOW()
@@ -1263,6 +1301,7 @@ export class EnforcementActionService {
   }
 
   private async updateAppeal(appealId: string, updates: unknown): Promise<void> {
+
     const setClause = Object.keys(updates).map((key, index) => `${key} = $${index + 2}`).join(', ');
     const values = [appealId, ...Object.values(updates)];
     
@@ -1274,6 +1313,7 @@ export class EnforcementActionService {
   }
 
   private async reverseEnforcementAction(actionId: string, reversedBy: string, reason: string): Promise<void> {
+
     await this.db.query(`
       UPDATE enforcement_actions 
       SET status = 'reversed', 
@@ -1284,6 +1324,7 @@ export class EnforcementActionService {
   }
 
   private async modifyEnforcementAction(actionId: string, modifications: Partial<EnforcementAction>): Promise<void> {
+
     // Implementation would apply modifications to the action
     console.log(`🔧 Modifying enforcement action: ${actionId}`, modifications);
   }

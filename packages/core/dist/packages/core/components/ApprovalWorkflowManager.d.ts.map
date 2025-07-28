@@ -1,1 +1,1 @@
-{"version":3,"file":"ApprovalWorkflowManager.d.ts","sourceRoot":"","sources":["../../../../components/ApprovalWorkflowManager.tsx"],"names":[],"mappings":"AAGA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAoDnD,UAAU,4BAA4B;IACpC,WAAW,EAAE,MAAM,CAAC;IACpB,aAAa,EAAE,MAAM,CAAC;IACtB,QAAQ,EAAE,OAAO,GAAG,SAAS,GAAG,UAAU,GAAG,MAAM,CAAC;CACrD;AAED,eAAO,MAAM,uBAAuB,EAAE,KAAK,CAAC,EAAE,CAAC,4BAA4B,CAod1E,CAAC"}
+{"version":3,"file":"ApprovalWorkflowManager.d.ts","sourceRoot":"","sources":["../../../../components/ApprovalWorkflowManager.tsx"],"names":[],"mappings":""}

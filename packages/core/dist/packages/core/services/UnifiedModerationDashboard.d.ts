@@ -1,11 +1,3 @@
-/**
- * Epic 16 Unified Moderation Dashboard Service
- * Task: E16-1753114247011-98783E - Implement moderation tools
- *
- * Central orchestrator that unifies all existing moderation services into
- * a single, comprehensive dashboard interface. Integrates automated moderation,
- * workflow management, queue processing, and analytics.
- */
 export interface UnifiedDashboardConfig {
     enableRealTimeUpdates: boolean;
     autoRefreshInterval: number;
@@ -39,7 +31,7 @@ export interface DashboardOverview {
         moderatorEfficiency: number;
         slaCompliance: number;
     };
-    alerts: ModerationAlert[];
+    alerts: ModerationAlert;
     trends: {
         volumeTrend: 'increasing' | 'decreasing' | 'stable';
         violationTrend: 'increasing' | 'decreasing' | 'stable';
@@ -63,7 +55,7 @@ export interface ModerationWorkload {
     utilization: number;
     averageResolutionTime: number;
     accuracy: number;
-    specializations: string[];
+    specializations: string;
     performanceRating: number;
     availabilityWindow: {
         start: string;
@@ -72,21 +64,21 @@ export interface ModerationWorkload {
     };
 }
 export interface AdvancedSearchQuery {
-    contentTypes?: string[];
-    statuses?: string[];
-    priorities?: string[];
+    contentTypes?: string;
+    statuses?: string;
+    priorities?: string;
     dateRange?: {
         start: Date;
         end: Date;
     };
-    moderators?: string[];
-    policies?: string[];
+    moderators?: string;
+    policies?: string;
     confidence?: {
         min: number;
         max: number;
     };
-    keywords?: string[];
-    riskLevel?: string[];
+    keywords?: string;
+    riskLevel?: string;
     sortBy?: 'date' | 'priority' | 'confidence' | 'risk';
     sortOrder?: 'asc' | 'desc';
     limit?: number;
@@ -94,7 +86,7 @@ export interface AdvancedSearchQuery {
 }
 export interface BulkModerationAction {
     actionType: 'approve' | 'reject' | 'flag' | 'escalate' | 'assign' | 'prioritize';
-    itemIds: string[];
+    itemIds: string;
     reason?: string;
     assignTo?: string;
     metadata?: Record<string, unknown>;
@@ -127,16 +119,10 @@ export interface DashboardMetrics {
         estimatedBacklog: number;
         resourceNeeds: {
             additionalModerators: number;
-            peakHours: string[];
+            peakHours: string;
         };
     };
 }
-/**
- * Unified Moderation Dashboard Service
- *
- * Central orchestrator that brings together all moderation services
- * into a single, comprehensive management interface.
- */
 export declare class UnifiedModerationDashboard {
     private config;
     private workflowService;
@@ -152,79 +138,7 @@ export declare class UnifiedModerationDashboard {
      * Initialize all integrated services
      */
     private initializeServices;
-    /**
-     * Get comprehensive dashboard overview
-     */
-    getDashboardOverview(moderatorId?: string): Promise<DashboardOverview>;
-    /**
-     * Advanced search across all moderation systems
-     */
-    advancedSearch(query: AdvancedSearchQuery, moderatorId: string): Promise<{
-        items: any[];
-        totalCount: number;
-        aggregations: Record<string, any>;
-        suggestions: string[];
-    }>;
-    /**
-     * Execute bulk moderation actions
-     */
-    executeBulkActions(actions: BulkModerationAction[], moderatorId: string): Promise<{
-        successful: number;
-        failed: number;
-        errors: Array<{
-            itemId: string;
-            error: string;
-        }>;
-        summary: Record<string, number>;
-    }>;
-    /**
-     * Get moderator workload and performance analytics
-     */
-    getModeratorWorkloads(): Promise<ModerationWorkload[]>;
-    /**
-     * Intelligent workload distribution
-     */
-    distributeWorkload(items: string[], distribution: 'urgent' | 'balanced' | 'expertise'): Promise<{
-        assignments: Array<{
-            moderatorId: string;
-            itemIds: string[];
-        }>;
-        unassigned: string[];
-        reasoning: string[];
-    }>;
-    /**
-     * Get comprehensive dashboard metrics
-     */
-    getDashboardMetrics(timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<DashboardMetrics>;
-    /**
-     * Setup real-time updates
-     */
-    private setupRealTimeUpdates;
-    private getPerformanceMetrics;
-    private getActiveAlerts;
-    private calculateTrends;
-    private checkAndGenerateAlerts;
-    private addAlert;
-    private trackMetric;
-    private searchAnalyticsData;
-    private mergeSearchResults;
-    private applySorting;
-    private applyPagination;
-    private generateSearchAggregations;
-    private generateSearchSuggestions;
-    private executeSingleBulkAction;
-    private calculateModeratorWorkload;
-    private distributeUrgent;
-    private distributeBalanced;
-    private distributeByExpertise;
-    private getItemType;
-    private refreshRealTimeData;
-    private getRealTimeMetrics;
-    private getHistoricalMetrics;
-    private generatePredictions;
+    console: any;
+    log(: any, this: any, config: any, enableRealTimeUpdates?: any, : any, : any): any;
 }
-export default UnifiedModerationDashboard;
 //# sourceMappingURL=UnifiedModerationDashboard.d.ts.map

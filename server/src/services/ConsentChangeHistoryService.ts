@@ -27,6 +27,7 @@ import * as crypto from 'crypto';
 // Consent Change History Interfaces
 // =============================================================================
 
+}
 export interface ConsentChangeHistoryConfig {
   enabled: boolean;
   immutableHistory: boolean;
@@ -39,6 +40,7 @@ export interface ConsentChangeHistoryConfig {
     alertOnModification: boolean;
     alertOnExpiry: boolean;
     alertOnCompliance: boolean;
+}
   };
   integrityChecking: {
     enabled: boolean;
@@ -54,6 +56,7 @@ export interface ConsentChangeHistoryConfig {
   };
 }
 
+}
 export interface ConsentChangeEvent {
   changeId: string;
   consentId: string;
@@ -86,7 +89,9 @@ export interface ConsentChangeEvent {
   tags: string[];
   flags: string[];
 }
+}
 
+}
 export interface ConsentChangeState {
   status: ConsentStatus;
   consentType: ConsentType;
@@ -98,7 +103,9 @@ export interface ConsentChangeState {
   thirdPartySharing: string[];
   customAttributes: Record<string, any>;
 }
+}
 
+}
 export interface ConsentChangeSummary {
   totalChanges: number;
   significantChanges: number;
@@ -108,7 +115,9 @@ export interface ConsentChangeSummary {
   requiresNotification: boolean;
   requiresReauthorization: boolean;
 }
+}
 
+}
 export interface ConsentFieldChange {
   fieldPath: string;
   fieldName: string;
@@ -118,7 +127,9 @@ export interface ConsentFieldChange {
   impactLevel: ConsentImpactLevel;
   reason?: string;
 }
+}
 
+}
 export interface ConsentChangeContext {
   sessionId: string;
   ipAddress: string;
@@ -127,6 +138,7 @@ export interface ConsentChangeContext {
     country: string;
     region: string;
     city: string;
+}
   };
   deviceInfo?: {
     deviceType: string;
@@ -146,6 +158,7 @@ export interface ConsentChangeContext {
   };
 }
 
+}
 export interface ConsentLegalBasisChange {
   previousBasis: string;
   newBasis: string;
@@ -154,7 +167,9 @@ export interface ConsentLegalBasisChange {
   complianceFrameworks: string[];
   jurisdictionImpact: JurisdictionImpact[];
 }
+}
 
+}
 export interface JurisdictionImpact {
   jurisdiction: string;
   impactLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
@@ -162,7 +177,9 @@ export interface JurisdictionImpact {
   complianceActions: string[];
   deadline?: Date;
 }
+}
 
+}
 export interface ConsentComplianceImpact {
   gdprImpact: GDPRComplianceImpact;
   ccpaImpact: CCPAComplianceImpact;
@@ -171,7 +188,9 @@ export interface ConsentComplianceImpact {
   requiredActions: ComplianceAction[];
   deadlines: ComplianceDeadline[];
 }
+}
 
+}
 export interface GDPRComplianceDetails {
   article7Compliance: {
     consentFreely: boolean;
@@ -179,6 +198,7 @@ export interface GDPRComplianceDetails {
     consentInformed: boolean;
     consentUnambiguous: boolean;
     withdrawalEasyAsGiving: boolean;
+}
   };
   article13_14Compliance: {
     transparencyProvided: boolean;
@@ -200,6 +220,7 @@ export interface GDPRComplianceDetails {
   };
 }
 
+}
 export interface GDPRComplianceImpact {
   articlesAffected: string[];
   rightsImpacted: string[];
@@ -208,7 +229,9 @@ export interface GDPRComplianceImpact {
   authorityNotificationRequired: boolean;
   dataSubjectNotificationRequired: boolean;
 }
+}
 
+}
 export interface CCPAComplianceImpact {
   categoriesAffected: string[];
   rightsImpacted: string[];
@@ -216,7 +239,9 @@ export interface CCPAComplianceImpact {
   saleOfDataImpact: boolean;
   disclosureRequired: boolean;
 }
+}
 
+}
 export interface ComplianceFrameworkImpact {
   framework: string;
   impactLevel: ConsentImpactLevel;
@@ -224,7 +249,9 @@ export interface ComplianceFrameworkImpact {
   requiredActions: string[];
   timeline: string;
 }
+}
 
+}
 export interface ComplianceAction {
   actionType: string;
   description: string;
@@ -233,14 +260,18 @@ export interface ComplianceAction {
   assignedTo?: string;
   status: 'pending' | 'in_progress' | 'completed' | 'overdue';
 }
+}
 
+}
 export interface ComplianceDeadline {
   requirement: string;
   deadline: Date;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   consequence: string;
 }
+}
 
+}
 export interface ConsentChangeMetadata {
   version: string;
   schemaVersion: string;
@@ -251,11 +282,13 @@ export interface ConsentChangeMetadata {
     fromVersion: string;
     migrationRules: string[];
     migrationDate: Date;
+}
   };
   customFields: Record<string, any>;
   systemGeneratedFields: Record<string, any>;
 }
 
+}
 export interface ConsentHistoryReport {
   reportId: string;
   userId: string;
@@ -263,6 +296,7 @@ export interface ConsentHistoryReport {
   reportPeriod: {
     startDate: Date;
     endDate: Date;
+}
   };
   summary: ConsentHistorySummary;
   timeline: ConsentTimelineEvent[];
@@ -271,6 +305,7 @@ export interface ConsentHistoryReport {
   exportFormats: string[];
 }
 
+}
 export interface ConsentHistorySummary {
   totalConsents: number;
   activeConsents: number;
@@ -281,7 +316,9 @@ export interface ConsentHistorySummary {
   complianceScore: number;
   riskLevel: ConsentRiskLevel;
 }
+}
 
+}
 export interface ConsentTimelineEvent {
   timestamp: Date;
   eventType: ConsentEventType;
@@ -290,7 +327,9 @@ export interface ConsentTimelineEvent {
   complianceImpact: string[];
   userNotified: boolean;
 }
+}
 
+}
 export interface ConsentComplianceReport {
   overallStatus: 'compliant' | 'non_compliant' | 'under_review';
   frameworkCompliance: FrameworkComplianceStatus[];
@@ -298,7 +337,9 @@ export interface ConsentComplianceReport {
   riskAssessment: ConsentRiskAssessment;
   auditTrailIntegrity: AuditIntegrityReport;
 }
+}
 
+}
 export interface FrameworkComplianceStatus {
   framework: string;
   status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';
@@ -306,7 +347,9 @@ export interface FrameworkComplianceStatus {
   issues: string[];
   actions: string[];
 }
+}
 
+}
 export interface ComplianceIssue {
   issueId: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -316,14 +359,18 @@ export interface ComplianceIssue {
   recommendation: string;
   deadline?: Date;
 }
+}
 
+}
 export interface ConsentRiskAssessment {
   overallRisk: ConsentRiskLevel;
   riskFactors: ConsentRiskFactor[];
   mitigationActions: string[];
   riskTrend: 'improving' | 'stable' | 'deteriorating';
 }
+}
 
+}
 export interface ConsentRiskFactor {
   factor: string;
   impact: ConsentImpactLevel;
@@ -331,7 +378,9 @@ export interface ConsentRiskFactor {
   description: string;
   mitigation: string;
 }
+}
 
+}
 export interface AuditIntegrityReport {
   overallIntegrity: 'intact' | 'compromised' | 'unknown';
   checksPerformed: string[];
@@ -339,7 +388,9 @@ export interface AuditIntegrityReport {
   integrityScore: number; // 0-100
   lastVerification: Date;
 }
+}
 
+}
 export interface ConsentRecommendation {
   recommendationId: string;
   category: string;
@@ -348,6 +399,7 @@ export interface ConsentRecommendation {
   benefits: string[];
   implementation: string;
   timeline: string;
+}
 }
 
 // Type definitions
@@ -416,6 +468,7 @@ export class ConsentChangeHistoryService {
     changeReason: string,
     changeMethod: ConsentChangeMethod = 'user_action'
   ): Promise<ConsentChangeEvent> {
+
     try {
       const changeEvent: ConsentChangeEvent = {
         changeId: this.generateChangeId(),
@@ -448,7 +501,7 @@ export class ConsentChangeHistoryService {
             processingNode: process.env.NODE_ID || 'unknown',
             apiVersion: '1.0'
           }
-        },
+  }
         tags: this.generateChangeTags(changeType, previousState, newState),
         flags: this.generateChangeFlags(changeType, previousState, newState)
       };
@@ -487,7 +540,7 @@ export class ConsentChangeHistoryService {
           changeType: changeType,
           impactLevel: changeEvent.changeSummary.impactLevel,
           consentId
-        },
+  }
         riskLevel: this.mapImpactToRiskLevel(changeEvent.changeSummary.impactLevel),
         compliance: {
           frameworks: changeEvent.complianceImpact.gdprImpact.articlesAffected.length > 0 ? ['GDPR'] : [],
@@ -517,6 +570,7 @@ export class ConsentChangeHistoryService {
       offset?: number;
     }
   ): Promise<ConsentChangeEvent[]> {
+
     try {
       let query = `
         SELECT * FROM consent_change_history 
@@ -587,6 +641,7 @@ export class ConsentChangeHistoryService {
       format?: 'json' | 'pdf' | 'xml';
     }
   ): Promise<ConsentHistoryReport> {
+
     try {
       const reportId = `CHR-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       const startDate = options?.startDate || new Date(Date.now() - 365 * 24 * 60 * 60 * 1000); // 1 year ago
@@ -635,7 +690,7 @@ export class ConsentChangeHistoryService {
           period: { startDate, endDate },
           changeCount: allChanges.length,
           includeCompliance: options?.includeCompliance || false
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['GDPR'],
@@ -655,6 +710,7 @@ export class ConsentChangeHistoryService {
    * Validate consent history integrity
    */
   async validateHistoryIntegrity(consentId: string): Promise<AuditIntegrityReport> {
+
     try {
       const changes = await this.getConsentHistory(consentId, { includeEvidence: true });
       
@@ -724,6 +780,7 @@ export class ConsentChangeHistoryService {
       includeEvidence?: boolean;
     }
   ): Promise<{ exportId: string; downloadUrl: string; expiresAt: Date }> {
+
     const exportId = `EXP-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
     
     try {
@@ -782,7 +839,7 @@ export class ConsentChangeHistoryService {
           format,
           recordCount: report.timeline.length,
           period: report.reportPeriod
-        },
+  }
         riskLevel: 'MEDIUM', // Higher risk due to data export
         compliance: {
           frameworks: ['GDPR'],
@@ -1005,20 +1062,20 @@ export class ConsentChangeHistoryService {
         consentInformed: true,
         consentUnambiguous: true,
         withdrawalEasyAsGiving: changeType === 'withdrawal' ? true : false
-      },
+  }
       article13_14Compliance: {
         transparencyProvided: true,
         purposesExplained: true,
         rightsExplained: true,
         contactInfoProvided: true
-      },
+  }
       rightsExercised: {
         rightOfAccess: false,
         rightOfRectification: false,
         rightOfErasure: changeType === 'withdrawal',
         rightOfPortability: false,
         rightToObjection: changeType === 'withdrawal'
-      },
+  }
       specialCategoryData: {
         involved: false,
         explicitConsent: false,
@@ -1046,12 +1103,14 @@ export class ConsentChangeHistoryService {
   }
 
   private async generateDigitalSignature(changeEvent: ConsentChangeEvent): Promise<string> {
+
     // Simplified digital signature - in production, use proper PKI
     const data = `${changeEvent.changeId}:${changeEvent.integrityHash}:${changeEvent.timestamp.toISOString()}`;
     return crypto.createHash('sha256').update(data).digest('hex');
   }
 
   private async verifyDigitalSignature(changeEvent: ConsentChangeEvent): Promise<boolean> {
+
     if (!changeEvent.digitalSignature) return false;
     
     const expectedSignature = await this.generateDigitalSignature(changeEvent);
@@ -1099,6 +1158,7 @@ export class ConsentChangeHistoryService {
   }
 
   private async createEvidenceVersion(changeEvent: ConsentChangeEvent): Promise<EvidenceVersion> {
+
     const evidenceContent = JSON.stringify(changeEvent, null, 2);
     
     return await this.evidenceVersioningService.createEvidence(
@@ -1109,7 +1169,7 @@ export class ConsentChangeHistoryService {
         userId: changeEvent.userId,
         changeType: changeEvent.changeType,
         timestamp: changeEvent.timestamp.toISOString()
-      },
+  }
       'system',
       {
         classification: 'confidential',
@@ -1122,6 +1182,7 @@ export class ConsentChangeHistoryService {
   }
 
   private async storeChangeEvent(changeEvent: ConsentChangeEvent): Promise<void> {
+
     await this.databaseService.query(`
       INSERT INTO consent_change_history (
         change_id, consent_id, user_id, change_type, timestamp,
@@ -1155,11 +1216,13 @@ export class ConsentChangeHistoryService {
   }
 
   private async sendChangeNotifications(changeEvent: ConsentChangeEvent): Promise<void> {
+
     // Implementation would send notifications to user, compliance team, etc.
     console.log(`Sending notifications for change ${changeEvent.changeId}`);
   }
 
   private async updateComplianceTracking(changeEvent: ConsentChangeEvent): Promise<void> {
+
     // Implementation would update compliance tracking systems
     console.log(`Updating compliance tracking for change ${changeEvent.changeId}`);
   }
@@ -1204,6 +1267,7 @@ export class ConsentChangeHistoryService {
     startDate: Date, 
     endDate: Date
   ): Promise<ConsentChangeEvent[]> {
+
     const result = await this.databaseService.query(`
       SELECT * FROM consent_change_history 
       WHERE user_id = ? AND timestamp BETWEEN ? AND ?
@@ -1241,7 +1305,7 @@ export class ConsentChangeHistoryService {
         changeId: change.changeId,
         consentId: change.consentId,
         impactLevel: change.changeSummary.impactLevel
-      },
+  }
       complianceImpact: change.complianceImpact.gdprImpact.articlesAffected,
       userNotified: change.changeSummary.requiresNotification
     }));
@@ -1280,6 +1344,7 @@ export class ConsentChangeHistoryService {
     userId: string, 
     changes: ConsentChangeEvent[]
   ): Promise<ConsentComplianceReport> {
+
     const issues = this.identifyComplianceIssues(changes);
     const riskAssessment = this.performRiskAssessment(changes);
     const integrityReport = await this.checkAuditIntegrity(changes);
@@ -1348,6 +1413,7 @@ export class ConsentChangeHistoryService {
   }
 
   private async checkAuditIntegrity(changes: ConsentChangeEvent[]): Promise<AuditIntegrityReport> {
+
     let integrityIssues = 0;
     const totalChanges = changes.length;
 
@@ -1366,14 +1432,14 @@ export class ConsentChangeHistoryService {
       checksPerformed: ['hash_verification', 'timestamp_sequence'],
       issuesFound: integrityIssues > 0 ? [`${integrityIssues} hash mismatches found`] : [],
       integrityScore,
-      lastVerification: new Date()
-    };
+      lastVerification: new Date(};
   }
 
   private async generateRecommendations(
     userId: string,
     changes: ConsentChangeEvent[]
   ): Promise<ConsentRecommendation[]> {
+
     const recommendations: ConsentRecommendation[] = [];
 
     // Check for frequent changes
@@ -1419,6 +1485,7 @@ export class ConsentChangeHistoryService {
   }
 
   private async storeHistoryReport(report: ConsentHistoryReport): Promise<void> {
+
     await this.databaseService.query(`
       INSERT INTO consent_history_reports (
         report_id, user_id, generated_at, report_period_start, report_period_end,
@@ -1465,11 +1532,13 @@ export class ConsentChangeHistoryService {
   }
 
   private async convertToPDF(report: ConsentHistoryReport): Promise<string> {
+
     // Mock PDF conversion - would use PDF generation library
     return `PDF Content for report ${report.reportId}`;
   }
 
   private async storeExportData(exportId: string, data: string, mimeType: string): Promise<string> {
+
     // Mock implementation - would store in file system or cloud storage
     const downloadUrl = `/api/consent/export/${exportId}`;
     
@@ -1493,13 +1562,13 @@ export class ConsentChangeHistoryService {
         alertOnModification: true,
         alertOnExpiry: true,
         alertOnCompliance: true
-      },
+  }
       integrityChecking: {
         enabled: true,
         hashAlgorithm: 'sha256',
         digitalSignatures: true,
         chainValidation: true
-      },
+  }
       reportGeneration: {
         enabled: true,
         automaticReports: false,
@@ -1516,6 +1585,7 @@ export class ConsentChangeHistoryService {
   }
 
   private async initializeDatabase(): Promise<void> {
+
     // Create consent change history table
     await this.databaseService.query(`
       CREATE TABLE IF NOT EXISTS consent_change_history (
@@ -1540,7 +1610,7 @@ export class ConsentChangeHistoryService {
         tags TEXT DEFAULT '[]',
         flags TEXT DEFAULT '[]',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+
     `);
 
     // Create consent history reports table
@@ -1556,7 +1626,7 @@ export class ConsentChangeHistoryService {
         compliance TEXT NOT NULL,
         recommendations TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+
     `);
 
     // Create indexes

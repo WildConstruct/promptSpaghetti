@@ -23,7 +23,7 @@ export interface QueryPerformanceProfile {
         index_utilization_score: number;
     };
     performance_metrics: {
-        execution_times_ms: number[];
+        execution_times_ms: number;
         avg_execution_time_ms: number;
         p50_execution_time_ms: number;
         p95_execution_time_ms: number;
@@ -37,8 +37,8 @@ export interface QueryPerformanceProfile {
         optimization_applied: boolean;
         optimization_type: 'none' | 'index_hints' | 'query_rewrite' | 'parallel_execution' | 'result_caching' | 'materialized_view';
         optimization_score: number;
-        suggested_indices: string[];
-        query_rewrite_suggestions: string[];
+        suggested_indices: string;
+        query_rewrite_suggestions: string;
         execution_plan_optimized: boolean;
     };
     caching: {
@@ -47,13 +47,13 @@ export interface QueryPerformanceProfile {
         cache_ttl_seconds: number;
         cache_hit_rate: number;
         cache_size_mb: number;
-        invalidation_triggers: string[];
+        invalidation_triggers: string;
     };
     usage_patterns: {
         frequency_per_hour: number;
-        peak_usage_times: number[];
-        user_groups: string[];
-        seasonal_patterns: SeasonalUsagePattern[];
+        peak_usage_times: number;
+        user_groups: string;
+        seasonal_patterns: SeasonalUsagePattern;
         concurrent_execution_count: number;
     };
     created_at: number;
@@ -76,13 +76,10 @@ export interface CacheStrategy {
 }
 export interface SeasonalUsagePattern {
     pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
-    peak_periods: Array<{
-        start_time: string;
-        end_time: string;
-        multiplier: number;
-    }>;
-    trend_direction: 'increasing' | 'stable' | 'decreasing';
-    confidence_score: number;
+    peak_periods: Array<{}, start_time>;
+    string: any;
+    end_time: string;
+    multiplier: number;
 }
 export interface QueryOptimizationRule {
     id: string;
@@ -108,7 +105,7 @@ export interface QueryOptimizationRule {
         applications_count: number;
         success_rate: number;
         avg_improvement_percent: number;
-        failure_reasons: string[];
+        failure_reasons: string;
     };
     enabled: boolean;
     priority: number;
@@ -140,11 +137,11 @@ export interface QueryExecution {
         rows_returned: number;
     };
     optimization: {
-        optimizations_applied: string[];
+        optimizations_applied: string;
         optimization_time_ms: number;
         execution_plan: ExecutionPlan;
-        index_usage: IndexUsage[];
-        cache_interactions: CacheInteraction[];
+        index_usage: IndexUsage;
+        cache_interactions: CacheInteraction;
     };
     quality: {
         result_accuracy: number;
@@ -158,14 +155,14 @@ export interface QueryExecution {
         error_message: string;
         stack_trace?: string;
     };
-    warnings: string[];
+    warnings: string;
 }
 export interface ExecutionPlan {
     plan_id: string;
     plan_type: 'sequential' | 'parallel' | 'distributed' | 'cached';
     estimated_cost: number;
     estimated_rows: number;
-    steps: ExecutionStep[];
+    steps: ExecutionStep;
     parallelization_factor: number;
     resource_requirements: {
         cpu_cores: number;
@@ -183,8 +180,8 @@ export interface ExecutionStep {
     actual_cost?: number;
     actual_rows?: number;
     execution_time_ms?: number;
-    optimization_suggestions: string[];
-    alternative_approaches: string[];
+    optimization_suggestions: string;
+    alternative_approaches: string;
 }
 export interface IndexUsage {
     index_name: string;
@@ -220,8 +217,8 @@ export interface PerformanceAlert {
         impact_assessment: 'low' | 'medium' | 'high' | 'critical';
     };
     recommendations: {
-        immediate_actions: string[];
-        long_term_improvements: string[];
+        immediate_actions: string;
+        long_term_improvements: string;
         estimated_impact: string;
         implementation_effort: 'low' | 'medium' | 'high';
     };
@@ -287,31 +284,12 @@ export interface OptimizationReport {
         cache_hit_improvement_percent: number;
         resource_utilization_reduction_percent: number;
     };
-    optimization_opportunities: Array<{
-        opportunity_type: string;
-        estimated_impact: string;
-        affected_queries: number;
-        implementation_effort: string;
-        priority_score: number;
-    }>;
-    trends: {
-        query_volume_trend: 'increasing' | 'stable' | 'decreasing';
-        performance_trend: 'improving' | 'stable' | 'degrading';
-        cache_efficiency_trend: 'improving' | 'stable' | 'degrading';
-        resource_usage_trend: 'increasing' | 'stable' | 'decreasing';
-    };
-    recommendations: {
-        high_priority: string[];
-        medium_priority: string[];
-        low_priority: string[];
-        infrastructure_changes: string[];
-        configuration_changes: Record<string, any>;
-    };
-    metrics_comparison: {
-        before_optimization: PerformanceMetrics;
-        after_optimization: PerformanceMetrics;
-        improvement_details: Record<string, number>;
-    };
+    optimization_opportunities: Array<{}, opportunity_type>;
+    string: any;
+    estimated_impact: string;
+    affected_queries: number;
+    implementation_effort: string;
+    priority_score: number;
 }
 export interface PerformanceMetrics {
     avg_response_time_ms: number;
@@ -334,68 +312,5 @@ export declare class SecurityQueryPerformanceOptimizer extends EventEmitter {
     private optimizationHistory;
     constructor();
     private initializeDefaultRules;
-    private initializeDefaultCacheConfigurations;
-    private startPerformanceMonitoring;
-    profileQuery(queryText: string, queryType: QueryPerformanceProfile['query_type'], executedBy: string): Promise<string>;
-    executeQuery(profileId: string, executionContext: Partial<QueryExecution['context']>, executedBy: string): Promise<string>;
-    private calculateComplexityScore;
-    private estimateDataVolume;
-    private extractTimeRange;
-    private countJoins;
-    private countSubqueries;
-    private countAggregations;
-    private calculateFilterComplexity;
-    private isCacheable;
-    private determineCacheStrategy;
-    private calculateCacheTTL;
-    private determineInvalidationTriggers;
-    private applyOptimizations;
-    private isRuleApplicable;
-    private applyOptimizationRule;
-    private applyIndexOptimization;
-    private applyQueryRewrite;
-    private applyParallelExecution;
-    private applyResultCaching;
-    private applyMaterializedView;
-    private generateIndexSuggestions;
-    private generateRewriteSuggestions;
-    private checkCache;
-    private storeInCache;
-    private performQueryExecution;
-    private generateExecutionPlan;
-    private generateIndexUsage;
-    private updateProfileMetrics;
-    private collectPerformanceMetrics;
-    private analyzeOptimizationOpportunities;
-    private checkPerformanceAlerts;
-    private generateOptimizationAlert;
-    private generateImmediateRecommendations;
-    private generateLongTermRecommendations;
-    private estimateOptimizationImpact;
-    private estimateImplementationEffort;
-    getQueryProfile(profileId: string): QueryPerformanceProfile | undefined;
-    getQueryProfiles(queryType?: QueryPerformanceProfile['query_type']): QueryPerformanceProfile[];
-    getExecutionHistory(profileId: string, limit?: number): QueryExecution[];
-    getPerformanceAlerts(profileId?: string, severity?: PerformanceAlert['severity']): PerformanceAlert[];
-    getCurrentPerformanceMetrics(): PerformanceMetrics | null;
-    getPerformanceHistory(hours?: number): Array<{
-        timestamp: number;
-        metrics: PerformanceMetrics;
-    }>;
-    generateOptimizationReport(periodHours?: number): Promise<OptimizationReport>;
-    private generateOptimizationOpportunities;
-    private analyzeTrend;
-    acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void>;
-    resolveAlert(alertId: string, resolvedBy: string, notes?: string, effectivenessRating?: number): Promise<void>;
-    getSystemStatus(): {
-        total_profiles: number;
-        active_optimizations: number;
-        avg_performance_score: number;
-        cache_efficiency: number;
-        alert_count: number;
-    };
-    performMaintenance(): Promise<void>;
-    shutdown(): Promise<void>;
 }
-export default SecurityQueryPerformanceOptimizer;
 //# sourceMappingURL=SecurityQueryPerformanceOptimizer.d.ts.map

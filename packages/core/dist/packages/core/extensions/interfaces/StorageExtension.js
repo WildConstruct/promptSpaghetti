@@ -3,7 +3,6 @@
  * Defines interfaces for extending the storage and persistence system
  */
 import { z } from 'zod';
-// Storage Types
 export var StorageType;
 (function (StorageType) {
     StorageType["MEMORY"] = "memory";
@@ -17,8 +16,18 @@ export var StorageType;
     StorageType["TIME_SERIES"] = "time_series";
     StorageType["SEARCH"] = "search";
     StorageType["CUSTOM"] = "custom";
+    // Storage Set Options
+    StorageType[StorageType["export"] = void 0] = "export";
+    StorageType[StorageType["interface"] = void 0] = "interface";
+    StorageType[StorageType["StorageSetOptions"] = void 0] = "StorageSetOptions";
 })(StorageType || (StorageType = {}));
-// Storage Extension Helper Functions
+{
+    ttl ?  : number;
+    compress ?  : boolean;
+    encrypt ?  : boolean;
+    metadata ?  : Record;
+    // Storage Provider Definition
+}
 export var StorageExtensionHelpers;
 (function (StorageExtensionHelpers) {
     function createStorageProvider(config) {
@@ -86,11 +95,11 @@ export var StorageExtensionHelpers;
                 queries: false,
                 streaming: false,
                 backup: false,
-                restore: false
+                restore: false,
             },
             metadata: config.metadata || {
                 author: 'Unknown',
-                license: 'MIT'
+                license: 'MIT',
             }
         };
     }

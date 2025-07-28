@@ -7,127 +7,118 @@
 import { EventEmitter } from 'events';
 
 // Navigation state interfaces
-export interface NavigationPreferences {
-  userId: string;
-  expandedSections: string[];
-  pinnedItems: string[];
-  favoriteItems: string[];
-  recentItems: NavigationHistoryItem[];
-  layout: 'sidebar' | 'top' | 'mobile';
-  theme: 'light' | 'dark' | 'auto';
-  compactMode: boolean;
-  showDescriptions: boolean;
-  enableAnimations: boolean;
-  searchHistory: string[];
-  lastSection: string;
-  customSections: CustomNavigationSection[];
-}
 
+export interface NavigationPreferences {
+  userId: string;,
+  expandedSections: string;
+  pinnedItems: string;,
+  favoriteItems: string;
+  recentItems: NavigationHistoryItem;,
+  layout: 'sidebar' | 'top' | 'mobile';
+  theme: 'light' | 'dark' | 'auto';,
+  compactMode: boolean;
+  showDescriptions: boolean;,
+  enableAnimations: boolean;
+  searchHistory: string;,
+  lastSection: string;
+  customSections: CustomNavigationSection;
+}
 export interface NavigationHistoryItem {
-  id: string;
+  id: string;,
   label: string;
-  path: string;
+  path: string;,
   icon: string;
-  timestamp: Date;
+  timestamp: Date;,
   category: string;
-  accessCount: number;
+  accessCount: number;,
   lastAccessed: Date;
 }
-
 export interface CustomNavigationSection {
-  id: string;
+  id: string;,
   label: string;
-  description: string;
+  description: string;,
   path: string;
-  icon: string;
-  permissions: string[];
-  active: boolean;
+  icon: string;,
+  permissions: string;
+  active: boolean;,
   order: number;
-  category: string;
+  category: string;,
   createdBy: string;
   created: Date;
 }
-
 export interface NavigationAnalytics {
-  userId: string;
+  userId: string;,
   sessionId: string;
-  pathHistory: NavigationPathEvent[];
-  timeSpent: Map<string, number>; // section -> milliseconds
-  clickCounts: Map<string, number>; // item -> count
-  searchQueries: SearchQueryEvent[];
-  errorEvents: NavigationErrorEvent[];
-  performanceMetrics: NavigationPerformanceMetric[];
+  pathHistory: NavigationPathEvent;,
+  timeSpent: Map<string, number>; // section -> milliseconds,
+  clickCounts: Map<string, number>; // item -> count,
+  searchQueries: SearchQueryEvent;,
+  errorEvents: NavigationErrorEvent;
+  performanceMetrics: NavigationPerformanceMetric;
 }
-
 export interface NavigationPathEvent {
-  path: string;
+  path: string;,
   section: string;
-  timestamp: Date;
-  duration: number; // milliseconds
+  timestamp: Date;,
+  duration: number; // milliseconds,
   source: 'click' | 'keyboard' | 'bookmark' | 'direct' | 'search';
 }
-
 export interface SearchQueryEvent {
-  query: string;
+  query: string;,
   timestamp: Date;
   resultsCount: number;
   selectedResult?: string;
   source: 'header' | 'sidebar' | 'modal';
 }
-
 export interface NavigationErrorEvent {
-  path: string;
+  path: string;,
   error: string;
-  timestamp: Date;
+  timestamp: Date;,
   userAgent: string;
   resolved: boolean;
 }
-
 export interface NavigationPerformanceMetric {
-  action: string;
-  duration: number; // milliseconds
-  timestamp: Date;
+  action: string;,
+  duration: number; // milliseconds,
+  timestamp: Date;,
   metadata: Record<string, any>;
 }
-
 export interface NavigationSearchOptions {
   query: string;
-  categories?: string[];
-  permissions?: string[];
+  categories?: string;
+  permissions?: string;
   limit?: number;
   fuzzyMatch?: boolean;
   includeDescriptions?: boolean;
   userId?: string;
 }
-
 export interface NavigationSearchResult {
   item: {,
-    id: string;
-    label: string;
-    description: string;
-    path: string;
-    icon: string;
-    category: string;
-  };
-  score: number;
+  id: string;,
+  label: string;
+  description: string;,
+  path: string;
+  icon: string;,
+  category: string;
+};
+  score: number;,
   matchType: 'exact' | 'partial' | 'fuzzy' | 'description';
   highlightedText: string;
-}
 /**
  * Navigation Manager Service
  * 
  * Manages navigation state, preferences, analytics, and provides
  * intelligent navigation features for Epic 17.
  */
+}
 export class NavigationManagerService extends EventEmitter {
   private preferences: Map<string, NavigationPreferences> = new Map();
   private analytics: Map<string, NavigationAnalytics> = new Map();
   private navigationCache: Map<string, any> = new Map();
-  private searchIndex: Map<string, NavigationSearchResult[]> = new Map();
+  private searchIndex: Map<string, NavigationSearchResult> = new Map();
   constructor() {
     super();
     this.initializeSearchIndex();
-  }
   /**
    * Get user navigation preferences
    */
@@ -136,14 +127,12 @@ export class NavigationManagerService extends EventEmitter {
     if (!prefs) {
       prefs = await this.createDefaultPreferences(userId);
       this.preferences.set(userId, prefs);
-    }
     return prefs;
-  }
   /**
    * Update user navigation preferences
    */
-  async updateUserPreferences()
-    userId: string, 
+  async updateUserPreferences(()
+    userId: string,
     updates: Partial<NavigationPreferences>,
   ): Promise<NavigationPreferences> {
     const currentPrefs = await this.getUserPreferences(userId);
@@ -153,32 +142,29 @@ export class NavigationManagerService extends EventEmitter {
     // Persist to storage (in real implementation)
     await this.persistPreferences(userId, updatedPrefs);
     return updatedPrefs;
-  }
   /**
    * Add item to recent navigation
    */
   async addToRecent(userId: string, item: NavigationHistoryItem): Promise<void> {
-    const prefs = await this.getUserPreferences(userId);
-    // Remove existing entry if present
-    const existingIndex = prefs.recentItems.findIndex(r => r.id === item.id);
-    if (existingIndex > -1) {
-      prefs.recentItems[existingIndex] = {
-        ...prefs.recentItems[existingIndex],
-        accessCount: prefs.recentItems[existingIndex].accessCount + 1,
-        lastAccessed: new Date(),
-      };
+  const prefs = await this.getUserPreferences(userId);
+  // Remove existing entry if present
+  const existingIndex = prefs.recentItems.findIndex(r => r.id === item.id);
+  if (existingIndex > -1) {
+  prefs.recentItems[existingIndex] = {
+  ...prefs.recentItems[existingIndex],
+  accessCount: prefs.recentItems[existingIndex].accessCount + 1,
+  lastAccessed: new Date(),
+};
     } else {
-      // Add new item at the beginning
-      prefs.recentItems.unshift({)
-        ...item,
-        accessCount: 1,
-        lastAccessed: new Date(),
-      });
-    }
+  // Add new item at the beginning
+  prefs.recentItems.unshift({)
+  ...item,
+  accessCount: 1,
+  lastAccessed: new Date(),
+});
     // Keep only last 20 items
     prefs.recentItems = prefs.recentItems.slice(0, 20);
     await this.updateUserPreferences(userId, prefs);
-  }
   /**
    * Toggle favorite status of navigation item
    */
@@ -189,11 +175,9 @@ export class NavigationManagerService extends EventEmitter {
       prefs.favoriteItems = prefs.favoriteItems.filter(id => id !== itemId);
     } else {
       prefs.favoriteItems.push(itemId);
-    }
     await this.updateUserPreferences(userId, prefs);
     this.emit('favorite_toggled', { userId, itemId, isFavorite: !isFavorite });
     return !isFavorite;
-  }
   /**
    * Toggle pinned status of navigation item
    */
@@ -204,11 +188,9 @@ export class NavigationManagerService extends EventEmitter {
       prefs.pinnedItems = prefs.pinnedItems.filter(id => id !== itemId);
     } else {
       prefs.pinnedItems.push(itemId);
-    }
     await this.updateUserPreferences(userId, prefs);
     this.emit('pin_toggled', { userId, itemId, isPinned: !isPinned });
     return !isPinned;
-  }
   /**
    * Toggle section expansion
    */
@@ -219,105 +201,93 @@ export class NavigationManagerService extends EventEmitter {
       prefs.expandedSections = prefs.expandedSections.filter(id => id !== sectionId);
     } else {
       prefs.expandedSections.push(sectionId);
-    }
     await this.updateUserPreferences(userId, prefs);
     this.emit('section_toggled', { userId, sectionId, isExpanded: !isExpanded });
     return !isExpanded;
-  }
   /**
    * Search navigation items
    */
-  async searchNavigation(options: NavigationSearchOptions): Promise<NavigationSearchResult[]> {
+  async searchNavigation(options: NavigationSearchOptions): Promise<NavigationSearchResult> {
     const { query, categories, limit = 10, fuzzyMatch = true } = options;
     if (!query || query.trim().length === 0) {
-      return [];
-    }
-    // Get cached results if available
-    const cacheKey = JSON.stringify(options);
-    const cached = this.searchIndex.get(cacheKey);
-    if (cached) {
-      return cached.slice(0, limit);
-    }
-    const results: NavigationSearchResult[] = [];
-    const searchTerm = query.toLowerCase().trim();
-    // Mock search data - in real implementation would search actual navigation items
-    const mockItems = [;
+  return [];
+  // Get cached results if available
+  const cacheKey = JSON.stringify(options);
+  const cached = this.searchIndex.get(cacheKey);
+  if (cached) {
+  return cached.slice(0, limit);
+  const results: NavigationSearchResult = [];
+  const searchTerm = query.toLowerCase().trim();
+  // Mock search data - in real implementation would search actual navigation items
+  const mockItems = [;
+  {
+  id: 'feature-toggles',
+  label: 'Feature Toggles',
+  description: 'Manage feature flags and rollouts',
+  path: '/admin/features/toggles',
+  icon: 'ToggleLeft',
+  category: 'feature_management',
+}
       {
-        id: 'feature-toggles',
-        label: 'Feature Toggles',
-        description: 'Manage feature flags and rollouts',
-        path: '/admin/features/toggles',
-        icon: 'ToggleLeft',
-        category: 'feature_management',
-      },
+  id: 'user-accounts',
+  label: 'User Accounts',
+  description: 'Manage user accounts and profiles',
+  path: '/admin/users/accounts',
+  icon: 'Users',
+  category: 'user_management',
+}
       {
-        id: 'user-accounts',
-        label: 'User Accounts',
-        description: 'Manage user accounts and profiles',
-        path: '/admin/users/accounts',
-        icon: 'Users',
-        category: 'user_management',
-      },
-      {
-        id: 'permissions',
-        label: 'Permissions',
-        description: 'Role-based access control',
-        path: '/admin/users/permissions',
-        icon: 'Shield',
-        category: 'user_management',
-      }
-    ];
-    for (const item of mockItems) {
-      const labelMatch = item.label.toLowerCase().includes(searchTerm);
-      const descMatch = item.description.toLowerCase().includes(searchTerm);
-      if (labelMatch || descMatch) {
-        let score = 0;
-        let matchType: NavigationSearchResult['matchType'] = 'fuzzy';
-        if (item.label.toLowerCase() === searchTerm) {
-          score = 1.0;
-          matchType = 'exact';
-        } else if (labelMatch) {
+  id: 'permissions',
+  label: 'Permissions',
+  description: 'Role-based access control',
+  path: '/admin/users/permissions',
+  icon: 'Shield',
+  category: 'user_management'];
+  for (const item of mockItems) {
+  const labelMatch = item.label.toLowerCase().includes(searchTerm);
+  const descMatch = item.description.toLowerCase().includes(searchTerm);
+  if (labelMatch || descMatch) {
+  let score = 0;
+  let matchType: NavigationSearchResult['matchType'] = 'fuzzy';
+  if (item.label.toLowerCase() === searchTerm) {
+  score = 1.0;
+  matchType = 'exact';
+} else if (labelMatch) {
           score = 0.8;
           matchType = 'partial';
         } else if (descMatch) {
-          score = 0.6;
-          matchType = 'description';
-        }
-        // Apply category filter
-        if (!categories || categories.includes(item.category)) {
-          results.push({)
-            item,
-            score,
-            matchType,
-            highlightedText: this.highlightMatch(item.label, searchTerm)
-          });
-        }
-      }
-    }
+  score = 0.6;
+  matchType = 'description';
+  // Apply category filter
+  if (!categories || categories.includes(item.category)) {
+  results.push({)
+  item,
+  score,
+  matchType,
+  highlightedText: this.highlightMatch(item.label, searchTerm),
+});
     // Sort by score
     results.sort((a, b) => b.score - a.score);
     // Cache results
     this.searchIndex.set(cacheKey, results);
     return results.slice(0, limit);
-  }
   /**
    * Record navigation analytics
    */
   async recordNavigation(userId: string, event: NavigationPathEvent): Promise<void> {
-    let analytics = this.analytics.get(userId);
-    if (!analytics) {
-      analytics = {
-        userId,
-        sessionId: this.generateSessionId(),
-        pathHistory: [],
-        timeSpent: new Map(),
-        clickCounts: new Map(),
-        searchQueries: [],
-        errorEvents: [],
-        performanceMetrics: [],
-      };
+  let analytics = this.analytics.get(userId);
+  if (!analytics) {
+  analytics = {
+  userId,
+  sessionId: this.generateSessionId(),
+  pathHistory: [],
+  timeSpent: new Map(),
+  clickCounts: new Map(),
+  searchQueries: [],
+  errorEvents: [],
+  performanceMetrics: [],
+};
       this.analytics.set(userId, analytics);
-    }
     // Add to path history
     analytics.pathHistory.push(event);
     // Update time spent
@@ -329,153 +299,138 @@ export class NavigationManagerService extends EventEmitter {
     // Keep last 1000 events
     if (analytics.pathHistory.length > 1000) {
       analytics.pathHistory = analytics.pathHistory.slice(-1000);
-    }
     this.emit('navigation_recorded', { userId, event });
-  }
   /**
    * Record search query
    */
   async recordSearch(userId: string, event: SearchQueryEvent): Promise<void> {
-    let analytics = this.analytics.get(userId);
-    if (!analytics) {
-      analytics = {
-        userId,
-        sessionId: this.generateSessionId(),
-        pathHistory: [],
-        timeSpent: new Map(),
-        clickCounts: new Map(),
-        searchQueries: [],
-        errorEvents: [],
-        performanceMetrics: [],
-      };
+  let analytics = this.analytics.get(userId);
+  if (!analytics) {
+  analytics = {
+  userId,
+  sessionId: this.generateSessionId(),
+  pathHistory: [],
+  timeSpent: new Map(),
+  clickCounts: new Map(),
+  searchQueries: [],
+  errorEvents: [],
+  performanceMetrics: [],
+};
       this.analytics.set(userId, analytics);
-    }
     analytics.searchQueries.push(event);
     // Update user preferences with search history
     const prefs = await this.getUserPreferences(userId);
     prefs.searchHistory.unshift(event.query);
     prefs.searchHistory = prefs.searchHistory.slice(0, 50); // Keep last 50 searches
     await this.updateUserPreferences(userId, prefs);
-  }
   /**
    * Get navigation recommendations for user
    */
-  async getRecommendations(userId: string): Promise<NavigationHistoryItem[]> {
-    const analytics = this.analytics.get(userId);
-    const prefs = await this.getUserPreferences(userId);
-    if (!analytics) {
-      return [];
-    }
-    const recommendations: NavigationHistoryItem[] = [];
-    // Get frequently accessed items
-    const clickCounts = Array.from(analytics.clickCounts.entries());
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 5);
-    for (const [path, count] of clickCounts) {
-      const recentItem = prefs.recentItems.find(item => item.path === path);
-      if (recentItem && count > 2) { // Only recommend frequently used items
-        recommendations.push({)
-          ...recentItem,
-          accessCount: count,
-        });
-      }
-    }
+  async getRecommendations(userId: string): Promise<NavigationHistoryItem> {
+  const analytics = this.analytics.get(userId);
+  const prefs = await this.getUserPreferences(userId);
+  if (!analytics) {
+  return [];
+  const recommendations: NavigationHistoryItem = [];
+  // Get frequently accessed items
+  const clickCounts = Array.from(analytics.clickCounts.entries());
+  .sort(([ a], [ b]) => b - a)
+  .slice(0, 5);
+  for (const [path, count] of clickCounts) {
+  const recentItem = prefs.recentItems.find(item => item.path === path);
+  if (recentItem && count > 2) { // Only recommend frequently used items
+  recommendations.push({)
+  ...recentItem,
+  accessCount: count,
+});
     return recommendations.slice(0, 5);
-  }
   /**
    * Get navigation analytics summary
    */
-  async getAnalyticsSummary(userId: string): Promise<{
-    totalNavigations: number;
-    averageSessionTime: number;
-    mostVisitedSections: string[];
-    searchQueriesCount: number;
-    lastActivity: Date | null;
-  }> {
-    const analytics = this.analytics.get(userId);
-    if (!analytics) {
-      return {
-        totalNavigations: 0,
-        averageSessionTime: 0,
-        mostVisitedSections: [],
-        searchQueriesCount: 0,
-        lastActivity: null,
-      };
-    }
+  async getAnalyticsSummary(userId: string): Promise<{,
+  totalNavigations: number;
+  averageSessionTime: number;,
+  mostVisitedSections: string;
+  searchQueriesCount: number;,
+  lastActivity: Date | null;
+}> {
+  const analytics = this.analytics.get(userId);
+  if (!analytics) {
+  return {
+  totalNavigations: 0,
+  averageSessionTime: 0,
+  mostVisitedSections: [],
+  searchQueriesCount: 0,
+  lastActivity: null,
+};
     const totalTime = Array.from(analytics.timeSpent.values()).reduce((sum, time) => sum + time, 0);
     const totalNavigations = analytics.pathHistory.length;
     const averageSessionTime = totalNavigations > 0 ? totalTime / totalNavigations : 0;
     const mostVisitedSections = Array.from(analytics.timeSpent.entries());
-      .sort(([, a], [, b]) => b - a)
+      .sort(([ a], [ b]) => b - a)
       .slice(0, 5)
       .map(([section]) => section);
     const lastActivity = analytics.pathHistory.length > 0;
       ? analytics.pathHistory[analytics.pathHistory.length - 1].timestamp
       : null;
     return {
-      totalNavigations,
-      averageSessionTime,
-      mostVisitedSections,
-      searchQueriesCount: analytics.searchQueries.length,
-      lastActivity
-    };
-  }
+  totalNavigations,
+  averageSessionTime,
+  mostVisitedSections,
+  searchQueriesCount: analytics.searchQueries.length,
+  lastActivity
+};
   /**
    * Export user navigation data
    */
-  async exportUserData(userId: string): Promise<{
-    preferences: NavigationPreferences;
-    analytics: NavigationAnalytics;
-    summary: any;
-  }> {
-    const preferences = await this.getUserPreferences(userId);
-    const analytics = this.analytics.get(userId);
-    const summary = await this.getAnalyticsSummary(userId);
-    return {
-      preferences,
-      analytics: analytics || this.createEmptyAnalytics(userId),
-      summary
-    };
-  }
+  async exportUserData(userId: string): Promise<{,
+  preferences: NavigationPreferences;
+  analytics: NavigationAnalytics;,
+  summary: any;
+}> {
+  const preferences = await this.getUserPreferences(userId);
+  const analytics = this.analytics.get(userId);
+  const summary = await this.getAnalyticsSummary(userId);
+  return {
+  preferences,
+  analytics: analytics || this.createEmptyAnalytics(userId),
+  summary
+};
   // Private helper methods
   private async createDefaultPreferences(userId: string): Promise<NavigationPreferences> {
-    return {
-      userId,
-      expandedSections: ['feature-management'],
-      pinnedItems: [],
-      favoriteItems: [],
-      recentItems: [],
-      layout: 'sidebar',
-      theme: 'light',
-      compactMode: false,
-      showDescriptions: true,
-      enableAnimations: true,
-      searchHistory: [],
-      lastSection: 'overview',
-      customSections: [],
-    };
-  }
+  return {
+  userId,
+  expandedSections: ['feature-management'],
+  pinnedItems: [],
+  favoriteItems: [],
+  recentItems: [],
+  layout: 'sidebar',
+  theme: 'light',
+  compactMode: false,
+  showDescriptions: true,
+  enableAnimations: true,
+  searchHistory: [],
+  lastSection: 'overview',
+  customSections: [],
+};
   private createEmptyAnalytics(userId: string): NavigationAnalytics {
-    return {
-      userId,
-      sessionId: this.generateSessionId(),
-      pathHistory: [],
-      timeSpent: new Map(),
-      clickCounts: new Map(),
-      searchQueries: [],
-      errorEvents: [],
-      performanceMetrics: [],
-    };
-  }
+  return {
+  userId,
+  sessionId: this.generateSessionId(),
+  pathHistory: [],
+  timeSpent: new Map(),
+  clickCounts: new Map(),
+  searchQueries: [],
+  errorEvents: [],
+  performanceMetrics: [],
+};
   private async persistPreferences(userId: string, preferences: NavigationPreferences): Promise<void> {
     // In real implementation, this would save to database or local storage
     // For now, just emit event
     this.emit('preferences_persisted', { userId, preferences });
-  }
   private initializeSearchIndex(): void {
     // Initialize search index with common terms
     // In real implementation, this would build from actual navigation items
-  }
   private highlightMatch(text: string, searchTerm: string): string {
     const index = text.toLowerCase().indexOf(searchTerm.toLowerCase());
     if (index === -1) return text;
@@ -483,10 +438,7 @@ export class NavigationManagerService extends EventEmitter {
     const match = text.substring(index, index + searchTerm.length);
     const after = text.substring(index + searchTerm.length);
     return `${before}<mark>${match}</mark>${after}`;}
-  }
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  }
-}
 
 export default NavigationManagerService;

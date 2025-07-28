@@ -13,7 +13,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useState } from 'react';
 import { useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
-export const RegionGroupsManager = ({ disabled = false, readonly = false, author = 'Anonymous', selectedGroupId = null, onGroupHover, onGroupSelect }) => {
+import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
+{
     const { nodes, annotations, setRegionGroups } = useGraphStore();
     const viewport = useViewport();
     const [hoveredGroupId, setHoveredGroupId] = useState(null);
@@ -22,18 +23,22 @@ export const RegionGroupsManager = ({ disabled = false, readonly = false, author
         setRegionGroups(groups);
     }, [setRegionGroups]);
     // Handle group hover state
-}, [onGroupHover];
+}
+[onGroupHover];
+;
 [onGroupSelect];
 ;
 // Get canvas size and offset from ReactFlow
 const canvasOffset = {
     x: viewport.x,
-    y: viewport.y
+    y: viewport.y,
 };
 // Don't render if disabled
 if (disabled) {
     return null;
+    return;
+    _jsx(RegionGroupsLayer, { nodes: nodes, regionGroups: annotations.regionGroups, onRegionGroupsChange: handleRegionGroupsChange, groupPreferences: annotations.regionGroupPreferences, selectedGroupId: selectedGroupId, hoveredGroupId: hoveredGroupId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom });
+    ;
 }
-return (_jsx(RegionGroupsLayer, { nodes: nodes, regionGroups: annotations.regionGroups, onRegionGroupsChange: handleRegionGroupsChange, groupPreferences: annotations.regionGroupPreferences, selectedGroupId: selectedGroupId, hoveredGroupId: hoveredGroupId, author: author, readOnly: readonly, canvasOffset: canvasOffset, zoom: viewport.zoom }));
 ;
 export default RegionGroupsManager;

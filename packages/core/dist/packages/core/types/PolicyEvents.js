@@ -1,8 +1,13 @@
-/**
- * Policy Events and Notifications - Epic 17 Implementation
- * Task: E17-1753114397367-674DF3 - Design policy interfaces
- *
- * Event-driven policy system interfaces for real-time notifications,
- * workflow automation, and system integration.
- */
+'policy.activated' | 'policy.deactivated' | 'policy.deprecated' | 'policy.archived';
+data: PolicyLifecycleEventData;
+'assignment.activated' | 'assignment.deactivated' |
+    'assignment.conflict.detected' | 'assignment.conflict.resolved';
+data: PolicyAssignmentEventData;
+'evaluation.cached' | 'evaluation.cache.expired';
+data: PolicyEvaluationEventData;
+'compliance.audit.started' | 'compliance.audit.completed' |
+    'compliance.report.generated';
+data: ComplianceEventData;
+'security.suspicious.activity' | 'security.threat.detected';
+data: SecurityEventData;
 export {};

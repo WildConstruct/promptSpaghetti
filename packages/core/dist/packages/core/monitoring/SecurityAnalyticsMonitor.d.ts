@@ -5,8 +5,7 @@
  * Extends Epic 1 monitoring infrastructure to cover security analytics systems
  */
 import { EventEmitter } from 'events';
-import { PerformanceMonitor, PerformanceAlert } from './PerformanceMonitor';
-import { SecurityEvent } from '../security/AlertingSystem';
+import { PerformanceAlert } from './PerformanceMonitor';
 export interface SecurityAnalyticsMetrics {
     threatDetectionMetrics: {
         threatsDetected: number;
@@ -68,11 +67,11 @@ export interface SecuritySystemHealth {
 }
 export interface SecurityAnalyticsAlert extends PerformanceAlert {
     securityCategory: 'threat_detection' | 'compliance' | 'access_control' | 'data_protection' | 'incident_response';
-    affectedSystems: string[];
+    affectedSystems: string;
     threatLevel: number;
     complianceImpact: 'none' | 'low' | 'medium' | 'high' | 'critical';
-    recommendedActions: string[];
-    relatedEvents: string[];
+    recommendedActions: string;
+    relatedEvents: string;
 }
 export interface SecurityAnalyticsConfig {
     performanceConfig: {
@@ -105,9 +104,6 @@ export interface SecurityAnalyticsConfig {
         threatIntelIntegration: boolean;
     };
 }
-/**
- * Security Analytics Monitor extending Epic 1 Performance Monitor
- */
 export declare class SecurityAnalyticsMonitor extends EventEmitter {
     private performanceMonitor;
     private config;
@@ -119,106 +115,18 @@ export declare class SecurityAnalyticsMonitor extends EventEmitter {
     private metricsAggregationInterval?;
     private alertCorrelationInterval?;
     constructor(config?: Partial<SecurityAnalyticsConfig>);
-    /**
-     * Initialize security monitoring systems
-     */
-    private initialize;
-    /**
-     * Register a security system for monitoring
-     */
-    registerSecuritySystem(systemHealth: SecuritySystemHealth): void;
-    /**
-     * Record security event for analytics
-     */
-    recordSecurityEvent(systemId: string, event: SecurityEvent): void;
-    /**
-     * Update system health status
-     */
-    updateSystemHealth(systemId: string, healthUpdate: Partial<SecuritySystemHealth>): void;
-    /**
-     * Get security analytics metrics for a system
-     */
-    getSecurityMetrics(systemId: string): SecurityAnalyticsMetrics | null;
-    /**
-     * Get system health status
-     */
-    getSystemHealth(systemId: string): SecuritySystemHealth | null;
-    /**
-     * Get all security alerts
-     */
-    getSecurityAlerts(resolved?: boolean): SecurityAnalyticsAlert[];
-    /**
-     * Get comprehensive security dashboard data
-     */
-    getSecurityDashboardData(): {
-        overallSecurityHealth: number;
-        criticalAlerts: number;
-        systemsStatus: {
-            healthy: number;
-            degraded: number;
-            critical: number;
-            offline: number;
-        };
-        threatLevel: number;
-        complianceScore: number;
-        incidentStats: {
-            activeIncidents: number;
-            meanDetectionTime: number;
-            meanResponseTime: number;
-        };
-        topThreats: Array<{
-            type: string;
-            count: number;
-        }>;
-        systemPerformance: Array<{
-            systemId: string;
-            healthScore: number;
-            responseTime: number;
-            threatDetectionRate: number;
-        }>;
-    };
-    /**
-     * Generate security analytics report
-     */
-    generateSecurityReport(timeRange: {
-        start: number;
-        end: number;
-    }): {
-        summary: {
-            totalEvents: number;
-            threatsDetected: number;
-            complianceViolations: number;
-            incidentsResolved: number;
-            averageResponseTime: number;
-        };
-        trends: {
-            threatTrend: 'increasing' | 'stable' | 'decreasing';
-            complianceTrend: 'improving' | 'stable' | 'degrading';
-            performanceTrend: 'improving' | 'stable' | 'degrading';
-        };
-        recommendations: string[];
-    };
-    /**
-     * Get base performance monitor (Epic 1 integration)
-     */
-    getPerformanceMonitor(): PerformanceMonitor;
-    /**
-     * Shutdown the security analytics monitor
-     */
-    shutdown(): void;
     private setupEventForwarding;
     private createEmptySecurityMetrics;
-    private updateThreatDetectionMetrics;
-    private updateComplianceMetrics;
-    private updateAccessControlMetrics;
-    private updateDataProtectionMetrics;
-    private updateIncidentResponseMetrics;
-    private checkSecurityAlerts;
-    private checkSystemHealthAlerts;
-    private performHealthChecks;
-    private aggregateSecurityMetrics;
-    private correlateSecurityAlerts;
-    private generateAlertId;
+    details: {
+        complianceScore: metrics.complianceMetrics.complianceScore;
+        systemId: any;
+    };
+    resolved: false;
+    affectedSystems: [systemId];
+    threatLevel: 5;
+    complianceImpact: 'critical';
+    recommendedActions: ['Review compliance policies', 'Audit recent changes', 'Train staff'];
+    relatedEvents: [event.id];
 }
 export default SecurityAnalyticsMonitor;
 //# sourceMappingURL=SecurityAnalyticsMonitor.d.ts.map

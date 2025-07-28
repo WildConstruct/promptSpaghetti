@@ -6,43 +6,40 @@ import {
   useCorrectionsEnabled
 } from './correctionsStore';
 interface CorrectionsPanelProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-}
-
-export const {
-    rules,
-    addRule,
-    updateRule,
-    deleteRule,
-    toggleRule,
-    clearAllRules,
-    applyCorrections
-  } = useCorrectionsStore();
+  export const {
+  rules,
+  addRule,
+  updateRule,
+  deleteRule,
+  toggleRule,
+  clearAllRules,
+  applyCorrections
+} = useCorrectionsStore();
   const [editingRule, setEditingRule] = useState<CorrectionRule | null>(null);
   const [newRule, setNewRule] = useState({)
-    name: '',
-    description: '',
-    findPattern: '',
-    replaceWith: '',
-    isRegex: false,
-    isActive: true,
-    priority: rules.length,
-  });
+  name: '',
+  description: '',
+  findPattern: '',
+  replaceWith: '',
+  isRegex: false,
+  isActive: true,
+  priority: rules.length,
+});
   const [testText, setTestText] = useState('');
   const handleAddRule = useCallback(() => {
-    if (newRule.name.trim() && newRule.findPattern.trim()) {
-      addRule(newRule);
-      setNewRule({)
-        name: '',
-        description: '',
-        findPattern: '',
-        replaceWith: '',
-        isRegex: false,
-        isActive: true,
-        priority: rules.length,
-      });
-    }
+  if (newRule.name.trim() && newRule.findPattern.trim()) {
+  addRule(newRule);
+  setNewRule({)
+  name: '',
+  description: '',
+  findPattern: '',
+  replaceWith: '',
+  isRegex: false,
+  isActive: true,
+  priority: rules.length,
+});
   }, [newRule, addRule, rules.length]);
   const handleUpdateRule = useCallback((rule: CorrectionRule) => {
     updateRule(rule.id, rule);
@@ -51,12 +48,10 @@ export const {
   const handleDeleteRule = useCallback((id: string) => {
     if (window.confirm('Are you sure you want to delete this correction rule?')) {
       deleteRule(id);
-    }
   }, [deleteRule]);
   const handleLoadDefaults = useCallback(() => {
     if (window.confirm('This will add default correction rules. Continue?')) {
       DEFAULT_CORRECTION_RULES.forEach(rule => addRule(rule));
-    }
   }, [addRule]);
   const handleTestCorrections = useCallback(() => {
     return applyCorrections(testText);
@@ -64,43 +59,43 @@ export const {
   if (!isOpen) return null;
   // Don't render if corrections are not enabled
   if (!isEnabled) return null;
-  return ();
+  return;
     <div
       style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: '400px',
-        background: '#23272f',
-        color: '#fff',
-        borderLeft: '1px solid #444',
-        zIndex: 1000,
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  width: '400px',
+  background: '#23272f',
+  color: '#fff',
+  borderLeft: '1px solid #444',
+  zIndex: 1000,
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+}}
       data-testid="corrections-panel"
     >
       {/* Header */}
-      <div style={{ 
-        padding: '16px', 
-        borderBottom: '1px solid #444',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
+      <div style={{
+  padding: '16px',
+  borderBottom: '1px solid #444',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}}>
         <h2 style={{ margin: 0, fontSize: '18px' }}>Corrections Manager</h2>
         <button
           onClick={onClose}
           style={{
-            background: 'none',
-            border: 'none',
-            color: '#fff',
-            fontSize: '20px',
-            cursor: 'pointer',
-            padding: '4px 8px',
-          }}
+  background: 'none',
+  border: 'none',
+  color: '#fff',
+  fontSize: '20px',
+  cursor: 'pointer',
+  padding: '4px 8px',
+}}
           aria-label="Close corrections panel"
         >
           ×
@@ -116,28 +111,28 @@ export const {
             onChange={(e) => setTestText(e.target.value)}
             placeholder="Enter text to test corrections..."
             style={{
-              width: '100%',
-              minHeight: '60px',
-              padding: '8px',
-              background: '#2a2e37',
-              color: '#fff',
-              border: '1px solid #444',
-              borderRadius: '4px',
-              resize: 'vertical',
-            }}
+  width: '100%',
+  minHeight: '60px',
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  resize: 'vertical',
+}}
           />
           {testText && ()
             <div style={{ marginTop: '8px' }}>
               <strong>Result:</strong>
               <div
                 style={{
-                  padding: '8px',
-                  background: '#1e2228',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                  marginTop: '4px',
-                  fontSize: '14px',
-                }}
+  padding: '8px',
+  background: '#1e2228',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  marginTop: '4px',
+  fontSize: '14px',
+}}
               >
                 {handleTestCorrections()}
               </div>
@@ -152,29 +147,29 @@ export const {
               <button
                 onClick={handleLoadDefaults}
                 style={{
-                  background: '#4a5568',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '6px 12px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  marginRight: '8px',
-                }}
+  background: '#4a5568',
+  color: '#fff',
+  border: 'none',
+  padding: '6px 12px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  marginRight: '8px',
+}}
               >
                 Load Defaults
               </button>
               <button
                 onClick={clearAllRules}
                 style={{
-                  background: '#e53e3e',
-                  color: '#fff',
-                  border: 'none',
-                  padding: '6px 12px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                }}
+  background: '#e53e3e',
+  color: '#fff',
+  border: 'none',
+  padding: '6px 12px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
               >
                 Clear All
               </button>
@@ -184,19 +179,19 @@ export const {
             <div
               key={rule.id}
               style={{
-                background: '#2a2e37',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                padding: '12px',
-                marginBottom: '8px',
-              }}
+  background: '#2a2e37',
+  border: '1px solid #444',
+  borderRadius: '4px',
+  padding: '12px',
+  marginBottom: '8px',
+}}
             >
               <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: '8px',
-              }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '8px',
+}}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <input
                     type="checkbox"
@@ -206,14 +201,14 @@ export const {
                   />
                   <strong style={{ fontSize: '14px' }}>{rule.name}</strong>
                   {rule.isRegex && ()
-                    <span style={{ 
-                      background: '#4a5568', 
-                      color: '#fff', 
-                      padding: '2px 6px', 
-                      borderRadius: '2px', 
-                      fontSize: '10px',
-                      marginLeft: '8px',
-                    }}>
+                    <span style={{
+  background: '#4a5568',
+  color: '#fff',
+  padding: '2px 6px',
+  borderRadius: '2px',
+  fontSize: '10px',
+  marginLeft: '8px',
+}}>
                       REGEX
                     </span>
                   )}
@@ -222,25 +217,25 @@ export const {
                   <button
                     onClick={() => setEditingRule(rule)}
                     style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#63b3ed',
-                      cursor: 'pointer',
-                      fontSize: '12px',
-                      marginRight: '8px',
-                    }}
+  background: 'none',
+  border: 'none',
+  color: '#63b3ed',
+  cursor: 'pointer',
+  fontSize: '12px',
+  marginRight: '8px',
+}}
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteRule(rule.id)}
                     style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#e53e3e',
-                      cursor: 'pointer',
-                      fontSize: '12px',
-                    }}
+  background: 'none',
+  border: 'none',
+  color: '#e53e3e',
+  cursor: 'pointer',
+  fontSize: '12px',
+}}
                   >
                     Delete
                   </button>
@@ -270,12 +265,12 @@ export const {
               onChange={(e) => setNewRule(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Rule name"
               style={{
-                padding: '8px',
-                background: '#2a2e37',
-                color: '#fff',
-                border: '1px solid #444',
-                borderRadius: '4px',
-              }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
             />
             <input
               type="text"
@@ -283,12 +278,12 @@ export const {
               onChange={(e) => setNewRule(prev => ({ ...prev, description: e.target.value }))}
               placeholder="Description (optional)"
               style={{
-                padding: '8px',
-                background: '#2a2e37',
-                color: '#fff',
-                border: '1px solid #444',
-                borderRadius: '4px',
-              }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
             />
             <input
               type="text"
@@ -296,12 +291,12 @@ export const {
               onChange={(e) => setNewRule(prev => ({ ...prev, findPattern: e.target.value }))}
               placeholder="Find pattern"
               style={{
-                padding: '8px',
-                background: '#2a2e37',
-                color: '#fff',
-                border: '1px solid #444',
-                borderRadius: '4px',
-              }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
             />
             <input
               type="text"
@@ -309,12 +304,12 @@ export const {
               onChange={(e) => setNewRule(prev => ({ ...prev, replaceWith: e.target.value }))}
               placeholder="Replace with"
               style={{
-                padding: '8px',
-                background: '#2a2e37',
-                color: '#fff',
-                border: '1px solid #444',
-                borderRadius: '4px',
-              }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
@@ -340,13 +335,13 @@ export const {
               onClick={handleAddRule}
               disabled={!newRule.name.trim() || !newRule.findPattern.trim()}
               style={{
-                background: newRule.name.trim() && newRule.findPattern.trim() ? '#38a169' : '#4a5568',
-                color: '#fff',
-                border: 'none',
-                padding: '8px 16px',
-                borderRadius: '4px',
-                cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
-              }}
+  background: newRule.name.trim() && newRule.findPattern.trim() ? '#38a169' : '#4a5568',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: newRule.name.trim() && newRule.findPattern.trim() ? 'pointer' : 'not-allowed',
+}}
             >
               Add Rule
             </button>
@@ -357,26 +352,26 @@ export const {
       {editingRule && ()
         <div
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0, 0, 0, 0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1001,
-          }}
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: 'rgba(0, 0, 0, 0.8)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1001,
+}}
         >
           <div
             style={{
-              background: '#23272f',
-              padding: '24px',
-              borderRadius: '8px',
-              width: '400px',
-              maxWidth: '90vw',
-            }}
+  background: '#23272f',
+  padding: '24px',
+  borderRadius: '8px',
+  width: '400px',
+  maxWidth: '90vw',
+}}
           >
             <h3 style={{ marginBottom: '16px' }}>Edit Rule</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -386,12 +381,12 @@ export const {
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, name: e.target.value }) : null)}
                 placeholder="Rule name"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
               />
               <input
                 type="text"
@@ -399,12 +394,12 @@ export const {
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, description: e.target.value }) : null)}
                 placeholder="Description (optional)"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
               />
               <input
                 type="text"
@@ -412,12 +407,12 @@ export const {
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, findPattern: e.target.value }) : null)}
                 placeholder="Find pattern"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
               />
               <input
                 type="text"
@@ -425,12 +420,12 @@ export const {
                 onChange={(e) => setEditingRule(prev => prev ? ({ ...prev, replaceWith: e.target.value }) : null)}
                 placeholder="Replace with"
                 style={{
-                  padding: '8px',
-                  background: '#2a2e37',
-                  color: '#fff',
-                  border: '1px solid #444',
-                  borderRadius: '4px',
-                }}
+  padding: '8px',
+  background: '#2a2e37',
+  color: '#fff',
+  border: '1px solid #444',
+  borderRadius: '4px',
+}}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <label style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
@@ -456,28 +451,28 @@ export const {
                 <button
                   onClick={() => handleUpdateRule(editingRule)}
                   style={{
-                    background: '#38a169',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 1,
-                  }}
+  background: '#38a169',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  flex: 1,
+}}
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setEditingRule(null)}
                   style={{
-                    background: '#4a5568',
-                    color: '#fff',
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 1,
-                  }}
+  background: '#4a5568',
+  color: '#fff',
+  border: 'none',
+  padding: '8px 16px',
+  borderRadius: '4px',
+  cursor: 'pointer',
+  flex: 1,
+}}
                 >
                   Cancel
                 </button>

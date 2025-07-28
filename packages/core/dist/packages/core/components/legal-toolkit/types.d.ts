@@ -15,12 +15,12 @@ export interface LegalDocument {
 }
 export interface LegalDocumentMetadata {
     jurisdiction: string;
-    practiceArea: string[];
-    parties?: string[];
+    practiceArea: string;
+    parties?: string;
     effectiveDate?: Date;
     expirationDate?: Date;
-    references: LegalReference[];
-    tags: string[];
+    references: LegalReference;
+    tags: string;
     confidentialityLevel: 'public' | 'confidential' | 'attorney_client' | 'work_product';
 }
 export interface LegalReference {
@@ -40,7 +40,7 @@ export interface ContractClause {
     category: 'termination' | 'payment' | 'liability' | 'confidentiality' | 'dispute_resolution' | 'other';
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     standardCompliance: boolean;
-    suggestions?: string[];
+    suggestions?: string;
     position: {
         start: number;
         end: number;
@@ -53,8 +53,8 @@ export interface ComplianceCheck {
     status: 'compliant' | 'non_compliant' | 'partial' | 'unknown';
     severity: 'info' | 'warning' | 'error' | 'critical';
     description: string;
-    remediation?: string[];
-    affectedSections: number[];
+    remediation?: string;
+    affectedSections: number;
 }
 export interface LegalTerminology {
     term: string;
@@ -62,7 +62,7 @@ export interface LegalTerminology {
     context: string;
     jurisdiction: string;
     source: string;
-    alternatives?: string[];
+    alternatives?: string;
 }
 export interface Citation {
     id: string;
@@ -85,24 +85,24 @@ export interface LegalDocumentParserProps {
 }
 export interface ContractAnalyzerProps {
     document: LegalDocument;
-    onClauseIdentified: (clauses: ContractClause[]) => void;
+    onClauseIdentified: (clauses: ContractClause) => void;
     onAnalysisComplete: (analysis: ContractAnalysis) => void;
     analysisType?: 'basic' | 'detailed' | 'comprehensive';
     className?: string;
 }
 export interface ContractAnalysis {
     documentId: string;
-    clauses: ContractClause[];
+    clauses: ContractClause;
     riskAssessment: RiskAssessment;
-    complianceChecks: ComplianceCheck[];
-    recommendations: string[];
+    complianceChecks: ComplianceCheck;
+    recommendations: string;
     confidence: number;
     processingTime: number;
 }
 export interface RiskAssessment {
     overallRisk: 'low' | 'medium' | 'high' | 'critical';
-    riskFactors: RiskFactor[];
-    mitigation: string[];
+    riskFactors: RiskFactor;
+    mitigation: string;
     score: number;
 }
 export interface RiskFactor {
@@ -110,17 +110,17 @@ export interface RiskFactor {
     description: string;
     impact: 'low' | 'medium' | 'high';
     likelihood: 'low' | 'medium' | 'high';
-    mitigation: string[];
+    mitigation: string;
 }
 export interface ComplianceCheckerProps {
     document: LegalDocument;
-    regulations: string[];
-    onComplianceResults: (results: ComplianceCheck[]) => void;
+    regulations: string;
+    onComplianceResults: (results: ComplianceCheck) => void;
     autoCheck?: boolean;
     className?: string;
 }
 export interface CitationManagerProps {
-    citations: Citation[];
+    citations: Citation;
     onCitationAdd: (citation: Citation) => void;
     onCitationEdit: (id: string, citation: Citation) => void;
     onCitationDelete: (id: string) => void;
@@ -129,7 +129,7 @@ export interface CitationManagerProps {
 }
 export interface TerminologyValidatorProps {
     text: string;
-    onValidationResults: (results: TermValidationResult[]) => void;
+    onValidationResults: (results: TermValidationResult) => void;
     jurisdiction?: string;
     practiceArea?: string;
     autoValidate?: boolean;
@@ -142,7 +142,7 @@ export interface TermValidationResult {
         end: number;
     };
     isValid: boolean;
-    suggestions: LegalTerminology[];
+    suggestions: LegalTerminology;
     confidence: number;
     context: string;
 }
@@ -151,10 +151,10 @@ export interface WorkflowTemplate {
     name: string;
     description: string;
     type: 'gdpr_dsar' | 'policy_comparison' | 'contract_review' | 'compliance_audit' | 'due_diligence';
-    steps: WorkflowStep[];
+    steps: WorkflowStep;
     estimatedTime: number;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
-    tags: string[];
+    tags: string;
 }
 export interface WorkflowStep {
     id: string;
@@ -162,8 +162,8 @@ export interface WorkflowStep {
     description: string;
     type: 'document_upload' | 'analysis' | 'review' | 'validation' | 'export';
     required: boolean;
-    inputs: WorkflowInput[];
-    outputs: WorkflowOutput[];
+    inputs: WorkflowInput;
+    outputs: WorkflowOutput;
     automationLevel: 'manual' | 'assisted' | 'automated';
 }
 export interface WorkflowInput {
@@ -171,7 +171,7 @@ export interface WorkflowInput {
     type: 'document' | 'text' | 'selection' | 'boolean' | 'date';
     required: boolean;
     validation?: string;
-    options?: string[];
+    options?: string;
 }
 export interface WorkflowOutput {
     name: string;

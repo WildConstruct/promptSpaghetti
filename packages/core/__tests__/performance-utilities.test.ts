@@ -29,7 +29,6 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
         let sum = 0;
         for (let i = 0; i < 1000; i++) {
           sum += i;
-        }
         return sum;
       };
       const { result, metrics } = await measureExecution(syncFunction);
@@ -50,11 +49,11 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       expect(metrics.duration).toBeLessThan(150); // Should not take much longer
     });
     it('should include custom metadata in metrics', async () => {
-      const testMetadata = {
-        operation: 'test-operation',
-        category: 'unit-test',
-        version: '1.0.0',
-      };
+  const testMetadata = {
+  operation: 'test-operation',
+  category: 'unit-test',
+  version: '1.0.0',
+};
       const testFunction = () => 'test-result';
       const { result, metrics } = await measureExecution(testFunction, testMetadata);
       expect(result).toBe('test-result');
@@ -70,10 +69,11 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       const memoryIntensiveFunction = () => {
         // Create some objects to use memory
         const largeArray = new Array(100000).fill(0).map((_, i) => ({)
-          id: i,
-          data: `item-${i}`,}
-          timestamp: Date.now(),
-        }));
+  id: i,
+          data: `item-${i}`}
+},
+  timestamp: Date.now();
+  }));
         return largeArray.length;
       };
       const { result, metrics } = await measureExecution(memoryIntensiveFunction);
@@ -92,14 +92,12 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(Error);
         expect((error as Error).message).toBe('Async error');
-      }
     });
     it('should measure execution time precision accurately', async () => {
       const preciseFunction = () => {
         const start = performance.now();
         while (performance.now() - start < 50) {
           // Busy wait for approximately 50ms
-        }
         return 'precise-timing';
       };
       const { result, metrics } = await measureExecution(preciseFunction);
@@ -115,7 +113,6 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       const start = Date.now();
       while (Date.now() - start < 100) {
         // Busy wait
-      }
       const metrics = timer.stop();
       expect(metrics.duration).toBeGreaterThanOrEqual(95);
       expect(metrics.duration).toBeLessThan(150);
@@ -128,7 +125,6 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       const start = Date.now();
       while (Date.now() - start < 50) {
         // Busy wait
-      }
       const firstStop = timer.stop();
       expect(firstStop.duration).toBeGreaterThanOrEqual(45);
       timer.reset();
@@ -136,7 +132,6 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       const start2 = Date.now();
       while (Date.now() - start2 < 30) {
         // Busy wait
-      }
       const secondStop = timer.stop();
       expect(secondStop.duration).toBeGreaterThanOrEqual(25);
       expect(secondStop.duration).toBeLessThan(50);
@@ -157,7 +152,6 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       const start = Date.now();
       while (Date.now() - start < 25) {
         // Busy wait
-      }
       const firstMetrics = timer.stop();
       // Second stop (should use same end time)
       const secondMetrics = timer.stop();
@@ -167,48 +161,47 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
     });
   });
   describe('3. PerformanceTracker Class', () => {
-    let tracker: PerformanceTracker;
-    beforeEach(() => {
-      tracker = new PerformanceTracker();
-    });
+  let tracker: PerformanceTracker;
+  beforeEach(() => {
+  tracker = new PerformanceTracker();
+});
     it('should add and retrieve metrics for operations', () => {
-      const testMetrics: ExecutionMetrics = {
-        duration: 100,
-        startTime: Date.now() - 100,
-        endTime: Date.now(),
-        memory: 1024,
-      };
+  const testMetrics: ExecutionMetrics = {,
+  duration: 100,
+  startTime: Date.now() - 100,
+  endTime: Date.now(),
+  memory: 1024,
+};
       tracker.addMetric('test-operation', testMetrics);
       const retrievedMetrics = tracker.getMetrics('test-operation');
       expect(retrievedMetrics).toHaveLength(1);
       expect(retrievedMetrics[0]).toEqual(testMetrics);
     });
     it('should accumulate multiple metrics for same operation', () => {
-      const operation = 'multi-test';
-      for (let i = 0; i < 5; i++) {
-        const metrics: ExecutionMetrics = {
-          duration: (i + 1) * 50,
-          startTime: Date.now() - 100,
-          endTime: Date.now(),
-          memory: (i + 1) * 512,
-        };
+  const operation = 'multi-test';
+  for (let i = 0; i < 5; i++) {
+  const metrics: ExecutionMetrics = {,
+  duration: (i + 1) * 50,
+  startTime: Date.now() - 100,
+  endTime: Date.now(),
+  memory: (i + 1) * 512,
+};
         tracker.addMetric(operation, metrics);
-      }
       const allMetrics = tracker.getMetrics(operation);
       expect(allMetrics).toHaveLength(5);
       expect(allMetrics[0].duration).toBe(50);
       expect(allMetrics[4].duration).toBe(250);
     });
     it('should calculate accurate average metrics', () => {
-      const operation = 'avg-test';
-      const durations = [100, 200, 150, 250, 300];
-      durations.forEach(duration => {)
-        tracker.addMetric(operation, {)
-          duration,
-          startTime: Date.now() - duration,
-          endTime: Date.now(),
-          memory: duration * 2,
-        });
+  const operation = 'avg-test';
+  const durations = [100, 200, 150, 250, 300];
+  durations.forEach(duration => {)
+  tracker.addMetric(operation, {)
+  duration,
+  startTime: Date.now() - duration,
+  endTime: Date.now(),
+  memory: duration * 2,
+});
       });
       const avgMetrics = tracker.getAverageMetrics(operation);
       expect(avgMetrics).not.toBeNull();
@@ -238,11 +231,11 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       expect(tracker.getMetrics('op3')).toHaveLength(0);
     });
     it('should handle metrics without memory information', () => {
-      const metricsWithoutMemory: ExecutionMetrics = {
-        duration: 150,
-        startTime: Date.now() - 150,
-        endTime: Date.now(),
-      };
+  const metricsWithoutMemory: ExecutionMetrics = {,
+  duration: 150,
+  startTime: Date.now() - 150,
+  endTime: Date.now(),
+};
       tracker.addMetric('no-memory-test', metricsWithoutMemory);
       const avgMetrics = tracker.getAverageMetrics('no-memory-test');
       expect(avgMetrics).not.toBeNull();
@@ -250,17 +243,16 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       expect(avgMetrics!.memory).toBe(0); // Should default to 0
     });
     it('should handle large numbers of metrics efficiently', () => {
-      const operation = 'stress-test';
-      const numMetrics = 10000;
-      const start = Date.now();
-      for (let i = 0; i < numMetrics; i++) {
-        tracker.addMetric(operation, {)
-          duration: Math.random() * 1000,
-          startTime: Date.now() - 1000,
-          endTime: Date.now(),
-          memory: Math.random() * 10000,
-        });
-      }
+  const operation = 'stress-test';
+  const numMetrics = 10000;
+  const start = Date.now();
+  for (let i = 0; i < numMetrics; i++) {
+  tracker.addMetric(operation, {)
+  duration: Math.random() * 1000,
+  startTime: Date.now() - 1000,
+  endTime: Date.now(),
+  memory: Math.random() * 10000,
+});
       const addTime = Date.now() - start;
       expect(addTime).toBeLessThan(1000); // Should complete within 1 second
       const metrics = tracker.getMetrics(operation);
@@ -274,17 +266,17 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
     });
   });
   describe('4. Global Performance Tracker', () => {
-    it('should maintain global state across operations', () => {
-      globalPerformanceTracker.addMetric('global-op1', {)
-        duration: 100,
-        startTime: 0,
-        endTime: 100,
-      });
+  it('should maintain global state across operations', () => {
+  globalPerformanceTracker.addMetric('global-op1', {)
+  duration: 100,
+  startTime: 0,
+  endTime: 100,
+});
       globalPerformanceTracker.addMetric('global-op2', {)
-        duration: 200,
-        startTime: 0,
-        endTime: 200,
-      });
+  duration: 200,
+  startTime: 0,
+  endTime: 200,
+});
       expect(globalPerformanceTracker.getMetrics('global-op1')).toHaveLength(1);
       expect(globalPerformanceTracker.getMetrics('global-op2')).toHaveLength(1);
     });
@@ -293,9 +285,9 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
         return 'global-test-result';
       };
       const { result, metrics } = await measureExecution(testFunction, {)
-        trackGlobally: true,
-        operation: 'global-measure-test',
-      });
+  trackGlobally: true,
+  operation: 'global-measure-test',
+});
       expect(result).toBe('global-test-result');
       // Note: This would require actual integration between measureExecution and global tracker
       // For now, we'll just verify the metrics structure
@@ -303,11 +295,11 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
       expect(metrics.metadata?.operation).toBe('global-measure-test');
     });
     it('should be clearable for test isolation', () => {
-      globalPerformanceTracker.addMetric('test-isolation', {)
-        duration: 50,
-        startTime: 0,
-        endTime: 50,
-      });
+  globalPerformanceTracker.addMetric('test-isolation', {)
+  duration: 50,
+  startTime: 0,
+  endTime: 50,
+});
       expect(globalPerformanceTracker.getMetrics('test-isolation')).toHaveLength(1);
       globalPerformanceTracker.clear();
       expect(globalPerformanceTracker.getMetrics('test-isolation')).toHaveLength(0);
@@ -321,10 +313,10 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
         return { rows: 42, affectedRows: 1 };
       };
       const { result, metrics } = await measureExecution(simulatedDbQuery, {)
-        operation: 'db-query',
-        table: 'users',
-        type: 'SELECT',
-      });
+  operation: 'db-query',
+  table: 'users',
+  type: 'SELECT',
+});
       expect(result.rows).toBe(42);
       expect(metrics.duration).toBeGreaterThanOrEqual(20);
       expect(metrics.duration).toBeLessThan(100);
@@ -342,9 +334,9 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
         };
       };
       const { result, metrics } = await measureExecution(simulatedApiCall, {)
-        endpoint: '/api/users',
-        method: 'GET',
-      });
+  endpoint: '/api/users',
+  method: 'GET',
+});
       expect(result.status).toBe(200);
       expect(result.data.message).toBe('API response');
       expect(metrics.duration).toBeGreaterThan(0);
@@ -360,10 +352,8 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
         const start = Date.now();
         while (Date.now() - start < Math.random() * 10) {
           // Variable processing time
-        }
         const metrics = timer.stop();
         tracker.addMetric('batch-item', metrics);
-      }
       const allMetrics = tracker.getMetrics('batch-item');
       const avgMetrics = tracker.getAverageMetrics('batch-item');
       expect(allMetrics).toHaveLength(batchSize);
@@ -374,21 +364,19 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
     it('should measure and compare algorithm performance', async () => {
       const data = Array.from({ length: 1000 }, (_, i) => i);
       // Algorithm 1: Simple linear search
-      const linearSearch = (arr: number[], target: number) => {
+      const linearSearch = (arr: number, target: number) => {
         for (let i = 0; i < arr.length; i++) {
           if (arr[i] === target) return i;
-        }
         return -1;
       };
       // Algorithm 2: Binary search (requires sorted array)
-      const binarySearch = (arr: number[], target: number) => {
+      const binarySearch = (arr: number, target: number) => {
         let left = 0, right = arr.length - 1;
         while (left <= right) {
           const mid = Math.floor((left + right) / 2);
           if (arr[mid] === target) return mid;
           if (arr[mid] < target) left = mid + 1;
           else right = mid - 1;
-        }
         return -1;
       };
       const target = 750;
@@ -423,13 +411,13 @@ describe('Epic 20.1 - Core Performance Utilities Unit Tests', () => {
     });
     it('should handle complex object returns', async () => {
       const complexFunction = () => ({)
-        nested: {,
-          array: [1, 2, 3],
+  nested: {,
+  array: [1, 2, 3],
           object: { key: 'value' }
-        },
-        date: new Date(),
-        regex: /test/g,
-      });
+  },
+  date: new Date(),
+        regex: /test/g;
+  });
       const { result, metrics } = await measureExecution(complexFunction);
       expect(result.nested.array).toEqual([1, 2, 3]);
       expect(result.nested.object.key).toBe('value');

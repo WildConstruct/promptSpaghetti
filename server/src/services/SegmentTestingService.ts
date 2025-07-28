@@ -26,6 +26,7 @@ export type TestStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cance
 
 export type TestSeverity = 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface SegmentTest {
   id: string;
   name: string;
@@ -53,7 +54,9 @@ export interface SegmentTest {
   createdAt: string;
   version: string;
 }
+}
 
+}
 export interface TestConfiguration {
   // Sample Configuration
   sampleSize?: number;
@@ -81,7 +84,9 @@ export interface TestConfiguration {
   failOnWarnings?: boolean;
   timeoutMs?: number;
 }
+}
 
+}
 export interface TestExpectation {
   id: string;
   description: string;
@@ -91,7 +96,9 @@ export interface TestExpectation {
   severity: TestSeverity;
   failureMessage?: string;
 }
+}
 
+}
 export interface TestResult {
   testId: string;
   status: 'passed' | 'failed' | 'warning';
@@ -136,14 +143,18 @@ export interface TestResult {
   rawMetrics?: Record<string, any>;
   testLogs?: string[];
 }
+}
 
+}
 export interface GoldStandardEntry {
   userId: string;
   expectedMatch: boolean;
   reason?: string;
   confidence?: number;
 }
+}
 
+}
 export interface OverlapAnalysis {
   totalUsers: number;
   overlappingSegments: Array<{
@@ -152,18 +163,22 @@ export interface OverlapAnalysis {
     overlapCount: number;
     overlapPercentage: number;
     jaccard: number; // Jaccard similarity coefficient
+}
   }>;
   uniqueUsers: number;
   exclusiveUsers: number;
 }
 
+}
 export interface IntegrationTestResult {
   testName: string;
   passed: boolean;
   details: string;
   executionTime: number;
 }
+}
 
+}
 export interface TestError {
   id: string;
   code: string;
@@ -173,19 +188,24 @@ export interface TestError {
   context?: Record<string, any>;
   stackTrace?: string;
 }
+}
 
+}
 export interface TestWarning {
   id: string;
   message: string;
   severity: TestSeverity;
   suggestion?: string;
 }
+}
 
+}
 export interface BatchTestRequest {
   testConfigs: Array<{
     segmentId: string;
     testTypes: TestType[];
     config?: Partial<TestConfiguration>;
+}
   }>;
   runInParallel?: boolean;
   maxConcurrency?: number;
@@ -193,6 +213,7 @@ export interface BatchTestRequest {
   createdBy: string;
 }
 
+}
 export interface BatchTestResult {
   batchId: string;
   tests: SegmentTest[];
@@ -203,10 +224,12 @@ export interface BatchTestResult {
     warnings: number;
     avgExecutionTime: number;
     totalDuration: number;
+}
   };
   timestamp: string;
 }
 
+}
 export interface TestReport {
   segmentId: string;
   segmentName: string;
@@ -222,6 +245,7 @@ export interface TestReport {
     testsRun: number;
     passRate: number;
     avgScore: number;
+}
   }>;
   
   // Test Breakdown
@@ -274,6 +298,7 @@ export class SegmentTestingService {
     expectations?: Omit<TestExpectation, 'id'>[];
     createdBy: string;
   }): Promise<SegmentTest> {
+
     const segment = await this.segmentationService.getSegment(request.segmentId);
     if (!segment) {
       throw new Error(`Segment ${request.segmentId} not found`);
@@ -309,6 +334,7 @@ export class SegmentTestingService {
   }
 
   async runTest(testId: string): Promise<SegmentTest> {
+
     const test = this.activeTests.get(testId);
     if (!test) {
       throw new Error(`Test ${testId} not found`);
@@ -372,6 +398,7 @@ export class SegmentTestingService {
   }
 
   async cancelTest(testId: string): Promise<boolean> {
+
     const test = this.activeTests.get(testId);
     if (!test) return false;
 
@@ -391,6 +418,7 @@ export class SegmentTestingService {
 
   // Batch Testing
   async runBatchTests(request: BatchTestRequest): Promise<BatchTestResult> {
+
     const startTime = Date.now();
     const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
@@ -455,13 +483,13 @@ export class SegmentTestingService {
         warnings,
         avgExecutionTime,
         totalDuration: Date.now() - startTime
-      },
-      timestamp: new Date().toISOString()
-    };
+  }
+      timestamp: new Date().toISOString(};
   }
 
   // Test Execution by Type
   private async executeTest(test: SegmentTest): Promise<TestResult> {
+
     switch (test.testType) {
     case 'validation':
       return await this.runValidationTest(test);
@@ -485,6 +513,7 @@ export class SegmentTestingService {
   }
 
   private async runValidationTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const warnings: TestWarning[] = [];
     const recommendations: string[] = [];
@@ -556,6 +585,7 @@ export class SegmentTestingService {
   }
 
   private async runPerformanceTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const config = test.config;
     const sampleSize = config.sampleSize || 1000;
@@ -638,6 +668,7 @@ export class SegmentTestingService {
   }
 
   private async runAccuracyTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const goldStandard = test.config.goldStandardData || [];
     
@@ -690,6 +721,7 @@ export class SegmentTestingService {
   }
 
   private async runOverlapTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const compareWith = test.config.compareWithSegments || [];
     
@@ -788,6 +820,7 @@ export class SegmentTestingService {
   }
 
   private async runStabilityTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const iterations = test.config.iterationCount || 10;
     const sampleSize = test.config.sampleSize || 100;
@@ -845,6 +878,7 @@ export class SegmentTestingService {
   }
 
   private async runIntegrationTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const integrationResults: IntegrationTestResult[] = [];
     
@@ -927,6 +961,7 @@ export class SegmentTestingService {
   }
 
   private async runLoadTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const concurrentUsers = test.config.concurrentUsers || 10;
     const sustainedLoad = test.config.sustainedLoad || 60000; // 1 minute
@@ -1011,6 +1046,7 @@ export class SegmentTestingService {
   }
 
   private async runRegressionTest(test: SegmentTest): Promise<TestResult> {
+
     const startTime = Date.now();
     const baseline = test.config.baselineMetrics || {};
     
@@ -1146,6 +1182,7 @@ export class SegmentTestingService {
   }
 
   private async archiveTest(test: SegmentTest): Promise<void> {
+
     const segmentHistory = this.testHistory.get(test.segmentId) || [];
     segmentHistory.push(test);
     this.testHistory.set(test.segmentId, segmentHistory);
@@ -1155,6 +1192,7 @@ export class SegmentTestingService {
   }
 
   private async logTestAction(action: string, test: SegmentTest): Promise<void> {
+
     console.log(`Segment test ${action}:`, {
       testId: test.id,
       testName: test.name,
@@ -1167,14 +1205,17 @@ export class SegmentTestingService {
 
   // Public API Methods
   async getTest(testId: string): Promise<SegmentTest | null> {
+
     return this.activeTests.get(testId) || null;
   }
 
   async getTestHistory(segmentId: string): Promise<SegmentTest[]> {
+
     return this.testHistory.get(segmentId) || [];
   }
 
   async generateTestReport(segmentId: string, reportType: 'summary' | 'detailed' | 'comparison' = 'summary'): Promise<TestReport> {
+
     const tests = this.testHistory.get(segmentId) || [];
     const segment = await this.segmentationService.getSegment(segmentId);
     
@@ -1202,7 +1243,7 @@ export class SegmentTestingService {
         avgExecutionTime: tests.reduce((sum, t) => sum + (t.duration || 0), 0) / tests.length || 0,
         performanceTrend: 'stable',
         bottlenecks: []
-      },
+  }
       qualityScore: avgScore,
       recommendations: [],
       criticalIssues: [],

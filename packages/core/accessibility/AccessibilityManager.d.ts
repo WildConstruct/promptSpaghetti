@@ -23,13 +23,13 @@ export declare enum AccessibilityNeed {
     SPEECH_IMPAIRMENT = "speech_impairment",
     TEMPORARY_DISABILITY = "temporary_disability",
     MULTIPLE_DISABILITIES = "multiple_disabilities"
-}
+
 export declare enum SeverityLevel {
     MILD = "mild",
     MODERATE = "moderate",
     SEVERE = "severe",
     COMPLETE = "complete"
-}
+
 export declare enum FallbackMethod {
     AUDIO_CAPTCHA = "audio_captcha",
     LARGE_TEXT_DISPLAY = "large_text_display",
@@ -44,7 +44,7 @@ export declare enum FallbackMethod {
     EMAIL_VERIFICATION = "email_verification",
     PHONE_VERIFICATION = "phone_verification",
     BACKUP_CODES = "backup_codes"
-}
+
 export declare enum AssistiveTechnology {
     SCREEN_READER = "screen_reader",
     MAGNIFIER = "magnifier",
@@ -54,7 +54,7 @@ export declare enum AssistiveTechnology {
     KEYBOARD_ONLY = "keyboard_only",
     TOUCH_ASSISTANCE = "touch_assistance",
     COGNITIVE_ASSISTANT = "cognitive_assistant"
-}
+
 export declare enum InterfaceAdaptation {
     FONT_SIZE_INCREASE = "font_size_increase",
     CONTRAST_ENHANCEMENT = "contrast_enhancement",
@@ -66,7 +66,7 @@ export declare enum InterfaceAdaptation {
     CAPTIONS = "captions",
     FOCUS_INDICATORS = "focus_indicators",
     ERROR_CLARIFICATION = "error_clarification"
-}
+
 export interface UserAccessibilityProfile {
     userId: string;
     needs: AccessibilityNeed[];
@@ -103,7 +103,7 @@ export interface UserAccessibilityProfile {
     };
     lastUpdated: Date;
     isActive: boolean;
-}
+
 export interface AccessibilityContext {
     userAgent: string;
     screenReaderDetected: boolean;
@@ -132,7 +132,7 @@ export interface AccessibilityContext {
         timeRemaining: number;
         lastSuccessfulMethod: string;
     };
-}
+
 export interface FallbackConfiguration {
     method: FallbackMethod;
     enabled: boolean;
@@ -159,7 +159,7 @@ export interface FallbackConfiguration {
         section508: boolean;
         ada: boolean;
     };
-}
+
 export interface AccessibilityValidationResult {
     isAccessible: boolean;
     fallbacksRequired: FallbackMethod[];
@@ -172,7 +172,7 @@ export interface AccessibilityValidationResult {
     }>;
     score: number;
     complianceLevel: 'A' | 'AA' | 'AAA' | 'Non-compliant';
-}
+
 export interface EmergencyBypass {
     id: string;
     userId: string;
@@ -196,7 +196,6 @@ export interface EmergencyBypass {
         action: string;
         details: Record<string, unknown>;
     }>;
-}
 /**
  * Comprehensive accessibility management service
  */
@@ -297,6 +296,6 @@ export declare class AccessibilityManager extends EventEmitter {
     private initializeFallbackConfigurations;
     private startComplianceMonitoring;
     private updateComplianceMetrics;
-}
+
 export default AccessibilityManager;
 //# sourceMappingURL=AccessibilityManager.d.ts.map

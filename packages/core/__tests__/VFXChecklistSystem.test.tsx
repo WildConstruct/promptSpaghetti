@@ -26,7 +26,8 @@ import type {
 
 // Mock UI components
 jest.mock('../components/ui/Card', () => ({)
-  Card: ({ children, className }: unknown) => <div className={`card ${className || ''}`}>{children}</div>,}
+  Card: ({ children, className }: unknown) => <div className={`card ${className || ''}`}>{children}</div>}
+},
   CardContent: ({ children }: unknown) => <div className="card-content">{children}</div>,
   CardHeader: ({ children }: unknown) => <div className="card-header">{children}</div>,
   CardTitle: ({ children, className }: unknown) => <div className={`card-title ${className || ''}`}>{children}</div>}
@@ -73,8 +74,8 @@ jest.mock('../components/ui/Select', () => ({)
   SelectTrigger: ({ children, className }: unknown) => ()
     <div className={`select-trigger ${className || ''}`}>{children}</div>}
   ),
-  SelectValue: () => <div className="select-value">Selected Value</div>,
-}));
+  SelectValue: () => <div className="select-value">Selected Value</div>;
+  }));
 jest.mock('../components/ui/Switch', () => ({)
   Switch: ({ checked, onCheckedChange, id }: unknown) => ()
     <input 
@@ -99,7 +100,7 @@ jest.mock('../components/ui/Slider', () => ({)
 }));
 
 // Sample test data
-const sampleVFXUser: VFXTeamMember = {
+const sampleVFXUser: VFXTeamMember = {,
   id: 'user-001',
   name: 'John Director',
   role: 'director',
@@ -108,57 +109,52 @@ const sampleVFXUser: VFXTeamMember = {
   avatar: 'https://example.com/avatar.jpg',
   isOnline: true,
   permissions: {,
-    canCreate: true,
-    canEdit: true,
-    canDelete: true,
-    canApprove: true,
-    canAssign: true,
-    canViewReports: true,
-  }
+  canCreate: true,
+  canEdit: true,
+  canDelete: true,
+  canApprove: true,
+  canAssign: true,
+  canViewReports: true,
 };
-const sampleTeam: VFXTeamMember[] = [
+const sampleTeam: VFXTeamMember = [
   sampleVFXUser,
   {
-    id: 'user-002',
-    name: 'Jane VFX Supervisor',
-    role: 'vfx_supervisor',
-    email: 'jane@wildconstruct.com',
-    color: '#3b82f6',
-    isOnline: false,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: true,
-      canAssign: true,
-      canViewReports: true,
-    }
-  },
+  id: 'user-002',
+  name: 'Jane VFX Supervisor',
+  role: 'vfx_supervisor',
+  email: 'jane@wildconstruct.com',
+  color: '#3b82f6',
+  isOnline: false,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: true,
+  canAssign: true,
+  canViewReports: true,
+}
   {
-    id: 'user-003',
-    name: 'Alex Artist',
-    role: 'artist',
-    email: 'alex@wildconstruct.com',
-    color: '#10b981',
-    isOnline: true,
-    permissions: {,
-      canCreate: true,
-      canEdit: true,
-      canDelete: false,
-      canApprove: false,
-      canAssign: false,
-      canViewReports: true,
-    }
-  }
-];
-const sampleChecklistItem: VFXChecklistItem = {
+  id: 'user-003',
+  name: 'Alex Artist',
+  role: 'artist',
+  email: 'alex@wildconstruct.com',
+  color: '#10b981',
+  isOnline: true,
+  permissions: {,
+  canCreate: true,
+  canEdit: true,
+  canDelete: false,
+  canApprove: false,
+  canAssign: false,
+  canViewReports: true];
+  const sampleChecklistItem: VFXChecklistItem = {,
   id: 'item-001',
   title: 'Camera Tracking Setup',
   description: 'Set up camera tracking for the hero shot',
   status: 'pending',
   priority: 'high',
   completion: 25,
-  assignee: sampleTeam[2], // Artist
+  assignee: sampleTeam[2], // Artist,
   author: sampleVFXUser,
   createdAt: '2025-07-22T09:00:00Z',
   updatedAt: '2025-07-22T09:00:00Z',
@@ -166,49 +162,43 @@ const sampleChecklistItem: VFXChecklistItem = {
   estimatedHours: 8,
   dependencies: [],
   subtasks: [,
+  {
+  id: 'sub-001',
+  title: 'Feature point tracking',
+  completed: true,
+  assignee: sampleTeam[2],
+}
     {
-      id: 'sub-001',
-      title: 'Feature point tracking',
-      completed: true,
-      assignee: sampleTeam[2],
-    },
-    {
-      id: 'sub-002',
-      title: '3D solve validation',
-      completed: false,
-      assignee: sampleTeam[2],
-    }
-  ],
+  id: 'sub-002',
+  title: '3D solve validation',
+  completed: false,
+  assignee: sampleTeam[2]],
   attachments: [],
   assets: [,
-    {
-      id: 'asset-001',
-      name: 'Camera_Track_v01.ma',
-      type: 'animation',
-      status: 'draft',
-      version: 'v01',
-      accuracy: 92,
-      complexity: 78,
-      dependencies: [],
-    }
-  ],
+  {
+  id: 'asset-001',
+  name: 'Camera_Track_v01.ma',
+  type: 'animation',
+  status: 'draft',
+  version: 'v01',
+  accuracy: 92,
+  complexity: 78,
+  dependencies: []],
   tags: ['tracking', 'camera', '3d-solve'],
   category: 'pre_production',
   vfxPhase: 'previs',
   qualityGates: [,
-    {
-      id: 'qg-001',
-      name: 'Tracking Stability',
-      type: 'technical',
-      status: 'pending',
-      criteria: 'Sub-pixel accuracy maintained',
-      required: true,
-    }
-  ],
+  {
+  id: 'qg-001',
+  name: 'Tracking Stability',
+  type: 'technical',
+  status: 'pending',
+  criteria: 'Sub-pixel accuracy maintained',
+  required: true],
   comments: [],
   history: [],
 };
-const sampleChecklist: VFXChecklist = {
+const sampleChecklist: VFXChecklist = {,
   id: 'checklist-001',
   name: 'Medieval Castle Scene',
   description: 'Complete VFX workflow for medieval castle establishing shot',
@@ -224,26 +214,26 @@ const sampleChecklist: VFXChecklist = {
   dueDate: '2025-07-30T17:00:00Z',
   tags: ['medieval', 'castle', 'establishing'],
   metadata: {,
-    totalItems: 1,
-    completedItems: 0,
-    overallProgress: 25,
-    estimatedTotalHours: 8,
-    actualTotalHours: 2,
-    criticalIssues: 0,
-    blockedItems: 0,
-    averageAccuracy: 92,
-    lastActivity: '2025-07-22T14:30:00Z',
-    collaborators: 3,
-  },
-  items: [sampleChecklistItem],
-};
+  totalItems: 1,
+  completedItems: 0,
+  overallProgress: 25,
+  estimatedTotalHours: 8,
+  actualTotalHours: 2,
+  criticalIssues: 0,
+  blockedItems: 0,
+  averageAccuracy: 92,
+  lastActivity: '2025-07-22T14:30:00Z',
+  collaborators: 3,
+},
+  items: [sampleChecklistItem];
+  };
 describe('VFX Checklist System Components', () => {
   describe('VFXChecklistSystem', () => {
-    const mockOnChecklistUpdate = jest.fn<unknown[], unknown>();
-    const mockOnItemCreate = jest.fn<unknown[], unknown>();
-    const mockOnItemUpdate = jest.fn<unknown[], unknown>();
-    const mockOnItemDelete = jest.fn<unknown[], unknown>();
-    const mockOnCommentCreate = jest.fn<unknown[], unknown>();
+    const mockOnChecklistUpdate = jest.fn<unknown, unknown>();
+    const mockOnItemCreate = jest.fn<unknown, unknown>();
+    const mockOnItemUpdate = jest.fn<unknown, unknown>();
+    const mockOnItemDelete = jest.fn<unknown, unknown>();
+    const mockOnCommentCreate = jest.fn<unknown, unknown>();
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -339,12 +329,12 @@ describe('VFX Checklist System Components', () => {
       await user.click(screen.getByText('Create Item'));
       expect(mockOnItemCreate).toHaveBeenCalledWith()
         expect.objectContaining({)
-          title: 'New Test Item',
-          status: 'pending',
-          priority: 'medium',
-          category: 'asset_creation',
-          author: sampleVFXUser,
-        })
+  title: 'New Test Item',
+  status: 'pending',
+  priority: 'medium',
+  category: 'asset_creation',
+  author: sampleVFXUser,
+}
       );
     });
     it('should handle status changes', async () => {
@@ -366,9 +356,9 @@ describe('VFX Checklist System Components', () => {
       expect(mockOnItemUpdate).toHaveBeenCalledWith()
         'item-001',
         expect.objectContaining({)
-          status: 'approved',
-          completion: 100,
-        })
+  status: 'approved',
+  completion: 100,
+}
       );
     });
     it('should show comments section', async () => {
@@ -409,10 +399,10 @@ describe('VFX Checklist System Components', () => {
       expect(mockOnCommentCreate).toHaveBeenCalledWith()
         'item-001',
         expect.objectContaining({)
-          content: 'This is a test comment',
-          author: sampleVFXUser,
-          type: 'comment',
-        })
+  content: 'This is a test comment',
+  author: sampleVFXUser,
+  type: 'comment',
+}
       );
     });
     it('should handle filters and search', async () => {
@@ -498,11 +488,11 @@ describe('VFX Checklist System Components', () => {
     });
   });
   describe('VFXChecklistTemplates', () => {
-    const mockOnTemplateSelect = jest.fn<unknown[], unknown>();
-    const mockOnTemplateCreate = jest.fn<unknown[], unknown>();
-    const mockOnTemplateUpdate = jest.fn<unknown[], unknown>();
-    const mockOnTemplateDelete = jest.fn<unknown[], unknown>();
-    const mockOnTemplateClone = jest.fn<unknown[], unknown>();
+    const mockOnTemplateSelect = jest.fn<unknown, unknown>();
+    const mockOnTemplateCreate = jest.fn<unknown, unknown>();
+    const mockOnTemplateUpdate = jest.fn<unknown, unknown>();
+    const mockOnTemplateDelete = jest.fn<unknown, unknown>();
+    const mockOnTemplateClone = jest.fn<unknown, unknown>();
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -561,7 +551,6 @@ describe('VFX Checklist System Components', () => {
         await user.click(eyeButton);
         // Should show template details
         expect(screen.getByText('Use Template')).toBeInTheDocument();
-      }
     });
     it('should handle readonly mode', () => {
       render();
@@ -615,11 +604,11 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Critical')).toBeInTheDocument();
     });
     it('should display sample checklist data', () => {
-      render(<VFXChecklistDemo />);
-      // Sample data should be visible
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-      expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-    });
+  render(<VFXChecklistDemo />);
+  // Sample data should be visible
+  expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
+  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
+});
     it('should show tab navigation', () => {
       render(<VFXChecklistDemo />);
       expect(screen.getByText('Checklist')).toBeInTheDocument();
@@ -691,11 +680,11 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
     });
     it('should maintain VFX-specific workflow patterns', () => {
-      render(<VFXChecklistDemo />);
-      // VFX-specific elements should be present
-      expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-      expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
-    });
+  render(<VFXChecklistDemo />);
+  // VFX-specific elements should be present
+  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
+  expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
+});
     it('should support collaborative features', () => {
       render(<VFXChecklistDemo />);
       // Team collaboration elements
@@ -731,10 +720,10 @@ describe('VFX Checklist System Components', () => {
       expect(screen.getByText('Medieval Courtyard - Hero Shot 042')).toBeInTheDocument();
     });
     it('should handle historical accuracy validation', () => {
-      render(<VFXChecklistDemo />);
-      // Historical accuracy is part of the VFX workflow
-      expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
-    });
+  render(<VFXChecklistDemo />);
+  // Historical accuracy is part of the VFX workflow
+  expect(screen.getByText('Kingdom Chronicles: The Lost Crown')).toBeInTheDocument();
+});
     it('should support quality gates and approvals', () => {
       render(<VFXChecklistDemo />);
       // Quality gates are integrated into the workflow
@@ -753,11 +742,11 @@ describe('VFX Checklist System Components', () => {
           <VFXChecklistSystem
             checklist={sampleChecklist}
             currentUser={sampleVFXUser}
-            onChecklistUpdate={jest.fn<unknown[], unknown>()}
-            onItemCreate={jest.fn<unknown[], unknown>()}
-            onItemUpdate={jest.fn<unknown[], unknown>()}
-            onItemDelete={jest.fn<unknown[], unknown>()}
-            onCommentCreate={jest.fn<unknown[], unknown>()}
+            onChecklistUpdate={jest.fn<unknown, unknown>()}
+            onItemCreate={jest.fn<unknown, unknown>()}
+            onItemUpdate={jest.fn<unknown, unknown>()}
+            onItemDelete={jest.fn<unknown, unknown>()}
+            onCommentCreate={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();
@@ -773,27 +762,26 @@ describe('VFX Checklist System Components', () => {
           <VFXChecklistSystem
             checklist={emptyChecklist}
             currentUser={sampleVFXUser}
-            onChecklistUpdate={jest.fn<unknown[], unknown>()}
-            onItemCreate={jest.fn<unknown[], unknown>()}
-            onItemUpdate={jest.fn<unknown[], unknown>()}
-            onItemDelete={jest.fn<unknown[], unknown>()}
-            onCommentCreate={jest.fn<unknown[], unknown>()}
+            onChecklistUpdate={jest.fn<unknown, unknown>()}
+            onItemCreate={jest.fn<unknown, unknown>()}
+            onItemUpdate={jest.fn<unknown, unknown>()}
+            onItemDelete={jest.fn<unknown, unknown>()}
+            onCommentCreate={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();
     });
     it('should handle invalid user permissions', () => {
-      const limitedUser = {
-        ...sampleVFXUser,
-        permissions: {,
-          canCreate: false,
-          canEdit: false,
-          canDelete: false,
-          canApprove: false,
-          canAssign: false,
-          canViewReports: true,
-        }
-      };
+  const limitedUser = {
+  ...sampleVFXUser,
+  permissions: {,
+  canCreate: false,
+  canEdit: false,
+  canDelete: false,
+  canApprove: false,
+  canAssign: false,
+  canViewReports: true,
+};
       render();
         <VFXChecklistDemo initialUser={limitedUser} />
       );

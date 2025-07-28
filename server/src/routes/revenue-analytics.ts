@@ -20,6 +20,7 @@ import { TimeRange } from '../marketplace/analytics.types';
 import { Database } from '../database';
 
 // Request type definitions
+}
 interface GenerateAnalyticsRequest {
   Querystring: {
     timeRange?: TimeRange;
@@ -28,12 +29,15 @@ interface GenerateAnalyticsRequest {
     includeForecasting?: boolean;
     includeOptimization?: boolean;
     granularity?: 'daily' | 'weekly' | 'monthly';
+}
   };
 }
 
+}
 interface CreatorRevenueRequest {
   Params: {
     creatorId: string;
+}
   };
   Querystring: {
     timeRange?: TimeRange;
@@ -42,9 +46,11 @@ interface CreatorRevenueRequest {
   };
 }
 
+}
 interface TemplateRevenueRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     timeRange?: TimeRange;
@@ -53,6 +59,7 @@ interface TemplateRevenueRequest {
   };
 }
 
+}
 interface RevenueComparisonRequest {
   Body: {
     templateIds: string[];
@@ -60,22 +67,27 @@ interface RevenueComparisonRequest {
     timeRange?: TimeRange;
     comparisonType: 'templates' | 'creators' | 'categories';
     metrics?: string[]; // specific metrics to compare
+}
   };
 }
 
+}
 interface RevenueForecastRequest {
   Querystring: {
     horizon?: number; // days to forecast
     confidence?: number; // confidence level (0.8, 0.9, 0.95)
     includeSeasonality?: boolean;
     includeEvents?: boolean;
+}
   };
 }
 
+}
 interface RevenueOptimizationRequest {
   Params: {
     templateId?: string;
     creatorId?: string;
+}
   };
   Querystring: {
     optimizationType?: 'pricing' | 'marketing' | 'content' | 'all';
@@ -109,27 +121,27 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D,
               description: 'Time range for revenue analysis'
-            },
+  }
             startDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom start date (YYYY-MM-DD)'
-            },
+  }
             endDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom end date (YYYY-MM-DD)'
-            },
+  }
             includeForecasting: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue forecasting analysis'
-            },
+  }
             includeOptimization: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue optimization insights'
-            },
+  }
             granularity: { 
               type: 'string',
               enum: ['daily', 'weekly', 'monthly'],
@@ -137,7 +149,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               description: 'Data granularity for analysis'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -150,7 +162,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<GenerateAnalyticsRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -217,7 +229,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           properties: {
             creatorId: { type: 'string', description: 'Creator ID' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -225,19 +237,19 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             includeAttribution: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue attribution analysis'
-            },
+  }
             includeForecasting: { 
               type: 'boolean', 
               default: true,
               description: 'Include revenue forecasting'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -249,7 +261,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreatorRevenueRequest>, reply: FastifyReply) => {
       try {
         const { creatorId } = request.params;
@@ -294,7 +306,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string', description: 'Template ID' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -302,18 +314,18 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             compareWith: { 
               type: 'string',
               description: 'Comma-separated template IDs to compare with'
-            },
+  }
             includeOptimization: { 
               type: 'boolean', 
               default: true,
               description: 'Include optimization recommendations'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -326,7 +338,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<TemplateRevenueRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -385,26 +397,26 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               maximum: 365,
               default: 90,
               description: 'Number of days to forecast'
-            },
+  }
             confidence: { 
               type: 'number',
               minimum: 0.8,
               maximum: 0.99,
               default: 0.9,
               description: 'Confidence level for forecasting'
-            },
+  }
             includeSeasonality: { 
               type: 'boolean', 
               default: true,
               description: 'Include seasonal patterns in forecast'
-            },
+  }
             includeEvents: { 
               type: 'boolean', 
               default: true,
               description: 'Include known events in forecast'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -417,7 +429,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<RevenueForecastRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -478,13 +490,13 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
             templateId: { 
               type: 'string',
               description: 'Template ID for template-specific optimization'
-            },
+  }
             creatorId: { 
               type: 'string',
               description: 'Creator ID for creator-specific optimization'
             }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -493,7 +505,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               enum: ['pricing', 'marketing', 'content', 'all'],
               default: 'all',
               description: 'Type of optimization insights'
-            },
+  }
             timeframe: { 
               type: 'string',
               enum: ['short', 'medium', 'long'],
@@ -501,7 +513,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               description: 'Optimization timeframe'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -515,7 +527,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<RevenueOptimizationRequest>, reply: FastifyReply) => {
       try {
         const { templateId, creatorId } = request.params;
@@ -576,29 +588,29 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               type: 'array',
               items: { type: 'string' },
               description: 'Template IDs to compare'
-            },
+  }
             creatorIds: { 
               type: 'array',
               items: { type: 'string' },
               description: 'Creator IDs to compare'
-            },
+  }
             timeRange: { 
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             comparisonType: { 
               type: 'string',
               enum: ['templates', 'creators', 'categories'],
               description: 'Type of comparison to perform'
-            },
+  }
             metrics: { 
               type: 'array',
               items: { type: 'string' },
               description: 'Specific metrics to compare'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -611,7 +623,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<RevenueComparisonRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -690,7 +702,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
               description: 'Time window for real-time metrics'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -703,7 +715,7 @@ export async function revenueAnalyticsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { window = '24h' } = request.query as any;

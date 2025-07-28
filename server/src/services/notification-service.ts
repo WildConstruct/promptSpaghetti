@@ -8,13 +8,16 @@ import {
   ScheduleConflict
 } from '../database/scheduling-models';
 
+}
 export interface NotificationChannel {
   id: string;
   type: 'email' | 'slack' | 'webhook' | 'in_app';
   config: Record<string, any>;
   enabled: boolean;
 }
+}
 
+}
 export interface NotificationTemplate {
   id: string;
   type: string;
@@ -22,7 +25,9 @@ export interface NotificationTemplate {
   body: string;
   variables: string[];
 }
+}
 
+}
 export interface NotificationEvent {
   type: 'execution_success' | 'execution_failure' | 'conflict_detected' | 'schedule_expired';
   scheduleId: string;
@@ -31,6 +36,7 @@ export interface NotificationEvent {
   conflict?: ScheduleConflict;
   metadata: Record<string, any>;
   timestamp: Date;
+}
 }
 
 export class NotificationService extends EventEmitter {
@@ -73,7 +79,7 @@ Schedule "{{scheduleName}}" has been executed successfully.
 This is an automated notification from the Feature Toggle Scheduling System.
         `.trim(),
         variables: ['scheduleName', 'toggleName', 'action', 'executionTime', 'duration', 'affectedUsers', 'status', 'beforeValue', 'afterValue', 'scheduleUrl', 'historyUrl']
-      },
+  }
       {
         id: 'execution_failure',
         type: 'execution_failure',
@@ -111,7 +117,7 @@ Schedule "{{scheduleName}}" execution has failed.
 This is an automated notification from the Feature Toggle Scheduling System.
         `.trim(),
         variables: ['scheduleName', 'toggleName', 'action', 'executionTime', 'duration', 'errorCode', 'errorMessage', 'retryable', 'retryAttempt', 'nextRetry', 'scheduleUrl', 'historyUrl', 'troubleshootingUrl']
-      },
+  }
       {
         id: 'conflict_detected',
         type: 'conflict_detected',
@@ -150,7 +156,7 @@ A scheduling conflict has been detected for "{{scheduleName}}".
 This is an automated notification from the Feature Toggle Scheduling System.
         `.trim(),
         variables: ['scheduleName', 'toggleName', 'action', 'startTime', 'conflictResolution', 'conflictType', 'severity', 'conflictDescription', 'conflictingScheduleNames', 'autoResolvable', 'suggestedResolution', 'scheduleUrl', 'conflictsUrl', 'managementUrl']
-      },
+  }
       {
         id: 'schedule_expired',
         type: 'schedule_expired',
@@ -208,11 +214,11 @@ This is an automated notification from the Feature Toggle Scheduling System.
               user: process.env.SMTP_USER,
               pass: process.env.SMTP_PASS
             }
-          },
+  }
           from: process.env.NOTIFICATION_FROM_EMAIL || 'noreply@example.com'
-        },
+  }
         enabled: true
-      },
+  }
       {
         id: 'slack_default',
         type: 'slack',
@@ -221,9 +227,9 @@ This is an automated notification from the Feature Toggle Scheduling System.
           channel: process.env.SLACK_CHANNEL || '#feature-toggles',
           username: 'Feature Toggle Bot',
           iconEmoji: ':robot_face:'
-        },
+  }
         enabled: !!process.env.SLACK_WEBHOOK_URL
-      },
+  }
       {
         id: 'webhook_default',
         type: 'webhook',
@@ -234,7 +240,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
             'Content-Type': 'application/json',
             'Authorization': process.env.NOTIFICATION_WEBHOOK_TOKEN ? `Bearer ${process.env.NOTIFICATION_WEBHOOK_TOKEN}` : undefined
           }
-        },
+  }
         enabled: !!process.env.NOTIFICATION_WEBHOOK_URL
       }
     ];
@@ -246,6 +252,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
 
   // Register notification configuration
   async registerNotification(notification: Omit<ScheduleNotification, 'id'>): Promise<ScheduleNotification> {
+
     const id = `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fullNotification: ScheduleNotification = {
       id,
@@ -260,6 +267,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
 
   // Send notification for a specific event
   async sendNotification(event: NotificationEvent): Promise<void> {
+
     // Find all notifications that should be triggered for this event
     const relevantNotifications = Array.from(this.notifications.values())
       .filter(notification => 
@@ -311,6 +319,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     notification: ScheduleNotification, 
     event: NotificationEvent
   ): Promise<void> {
+
     const template = this.templates.get(notification.type);
     if (!template) {
       throw new Error(`Template not found for notification type: ${notification.type}`);
@@ -445,6 +454,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     notification: { subject: string; body: string },
     recipients: string[]
   ): Promise<void> {
+
     switch (channel.type) {
     case 'email':
       await this.sendEmail(channel, notification, recipients);
@@ -472,6 +482,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     notification: { subject: string; body: string },
     recipients: string[]
   ): Promise<void> {
+
     // Email implementation would go here
     // This is a placeholder - in production you'd use nodemailer or similar
     console.log('Email notification:', {
@@ -486,6 +497,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     channel: NotificationChannel,
     notification: { subject: string; body: string }
   ): Promise<void> {
+
     const { webhookUrl, username, iconEmoji, channel: slackChannel } = channel.config;
     
     if (!webhookUrl) {
@@ -515,6 +527,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     notification: { subject: string; body: string },
     recipients: string[]
   ): Promise<void> {
+
     const { url, method, headers } = channel.config;
     
     if (!url) {
@@ -543,6 +556,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
     notification: { subject: string; body: string },
     recipients: string[]
   ): Promise<void> {
+
     // In-app notification implementation
     // This would typically store notifications in a database for user retrieval
     console.log('In-app notification:', {
@@ -565,6 +579,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
 
   // Utility methods for schedule service integration
   async notifyExecutionSuccess(schedule: FeatureToggleSchedule, execution: ScheduleExecution, metadata: Record<string, any> = {}): Promise<void> {
+
     const event: NotificationEvent = {
       type: 'execution_success',
       scheduleId: schedule.id,
@@ -578,6 +593,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
   }
 
   async notifyExecutionFailure(schedule: FeatureToggleSchedule, execution: ScheduleExecution, metadata: Record<string, any> = {}): Promise<void> {
+
     const event: NotificationEvent = {
       type: 'execution_failure',
       scheduleId: schedule.id,
@@ -591,6 +607,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
   }
 
   async notifyConflictDetected(schedule: FeatureToggleSchedule, conflict: ScheduleConflict, metadata: Record<string, any> = {}): Promise<void> {
+
     const event: NotificationEvent = {
       type: 'conflict_detected',
       scheduleId: schedule.id,
@@ -604,6 +621,7 @@ This is an automated notification from the Feature Toggle Scheduling System.
   }
 
   async notifyScheduleExpired(schedule: FeatureToggleSchedule, metadata: Record<string, any> = {}): Promise<void> {
+
     const event: NotificationEvent = {
       type: 'schedule_expired',
       scheduleId: schedule.id,

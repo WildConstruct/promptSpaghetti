@@ -10,6 +10,207 @@
 import { EventEmitter } from 'events';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+;
+// Caching and performance
+cacheEnabled: boolean;
+cacheTTL: number; // seconds
+maxCacheEntries: number;
+// Alerting
+alerting: {
+    enabled: boolean;
+    channels: string[];
+    thresholdBreaches: boolean;
+    qualityDegradation: boolean;
+}
+;
+;
+codeQuality: {
+    maxComplexity: number;
+    maxDuplication: number; // percentage
+    minMaintainabilityIndex: number;
+}
+;
+performance: {
+    maxResponseTime: number; // milliseconds
+    maxMemoryUsage: number; // MB
+    maxCpuUsage: number; // percentage
+}
+;
+security: {
+    maxVulnerabilities: number;
+    maxCriticalVulnerabilities: number;
+    requiresSecurityScan: boolean;
+}
+;
+buildHealth: {
+    maxFailureRate: number; // percentage
+    maxBuildTime: number; // minutes
+    requiresAllTestsPassing: boolean;
+}
+;
+;
+;
+// Weightings used in calculation
+weights: {
+    testCoverage: number;
+    codeQuality: number;
+    performance: number;
+    security: number;
+    documentation: number;
+    buildHealth: number;
+}
+;
+;
+byPackage: PackageCoverageMetrics[];
+byComponent: ComponentCoverageMetrics[];
+trends: {
+    last7Days: number[];
+    last30Days: number[];
+    changeFromLastWeek: number;
+    changeFromLastMonth: number;
+}
+;
+uncoveredCriticalPaths: string[];
+coverageHotspots: CoverageHotspot[];
+;
+duplication: {
+    percentage: number;
+    duplicatedLines: number;
+    totalLines: number;
+    duplicatedBlocks: DuplicationBlock[];
+}
+;
+maintainability: {
+    index: number; // 0-100
+    byFile: FileMaintainability[];
+    trends: number[];
+}
+;
+linting: {
+    totalIssues: number;
+    errorCount: number;
+    warningCount: number;
+    ruleBreakdowns: LintRuleBreakdown[];
+    trends: number[];
+}
+;
+technicalDebt: {
+    totalMinutes: number;
+    breakdown: TechnicalDebtBreakdown[];
+    priority: 'low' | 'medium' | 'high' | 'critical';
+}
+;
+;
+throughput: {
+    requestsPerSecond: number;
+    peakRps: number;
+    trends: number[];
+}
+;
+resourceUtilization: {
+    cpu: {
+        average: number;
+        peak: number;
+        trends: number[];
+    }
+    ;
+    memory: {
+        average: number; // MB
+        peak: number; // MB
+        trends: number[];
+    }
+    ;
+    disk: {
+        usage: number; // percentage
+        iops: number;
+    }
+    ;
+}
+;
+errorRates: {
+    overall: number; // percentage
+    by4xx: number;
+    by5xx: number;
+    trends: number[];
+}
+;
+loadTestResults: LoadTestResult[];
+;
+dependencies: {
+    total: number;
+    outdated: number;
+    vulnerable: number;
+    licenses: LicenseBreakdown[];
+}
+;
+codeSecurityIssues: {
+    total: number;
+    byCategory: SecurityCategoryBreakdown[];
+    highRiskFiles: string[];
+}
+;
+compliance: {
+    frameworks: ComplianceFrameworkStatus[];
+    overallScore: number; // 0-100
+    gaps: ComplianceGap[];
+}
+;
+accessControl: {
+    privilegedAccounts: number;
+    dormantAccounts: number;
+    lastSecurityReview: Date;
+}
+;
+;
+accuracy: {
+    validCodeExamples: number; // percentage
+    validApiExamples: number; // percentage
+    brokenLinks: number;
+    outdatedSections: string[];
+}
+;
+completeness: {
+    missingApiDocs: string[];
+    missingUserGuides: string[];
+    incompleteSections: string[];
+}
+;
+maintenance: {
+    lastUpdated: Date;
+    staleSections: string[];
+    maintenanceScore: number; // 0-100
+}
+;
+;
+tests: {
+    passRate: number; // percentage
+    totalTests: number;
+    flakyTests: string[];
+    slowTests: SlowTest[];
+    trends: number[];
+}
+;
+deployments: {
+    successRate: number; // percentage
+    frequency: number; // per week
+    rollbackRate: number; // percentage
+    averageDeployTime: number; // minutes
+}
+;
+pipeline: {
+    stages: PipelineStage[];
+    bottlenecks: string[];
+    healthScore: number; // 0-100
+}
+;
+;
+// Related items
+relatedFiles: string[];
+relatedComponents: string[];
+// Tracking
+status: 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed';
+createdAt: Date;
+updatedAt: Date;
 // =============================================================================
 // Quality Metrics Service Implementation
 // =============================================================================

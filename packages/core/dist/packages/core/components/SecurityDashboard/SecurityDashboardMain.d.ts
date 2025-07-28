@@ -46,9 +46,9 @@ export interface SecurityAlert {
     timestamp: Date;
     status: 'new' | 'investigating' | 'escalated' | 'resolved' | 'false_positive';
     assignee?: string;
-    affectedAssets: string[];
-    indicators: string[];
-    responseActions: ResponseAction[];
+    affectedAssets: string;
+    indicators: string;
+    responseActions: ResponseAction;
 }
 export interface ResponseAction {
     id: string;
@@ -63,7 +63,7 @@ export interface ComplianceStatus {
     framework: string;
     status: 'compliant' | 'non_compliant' | 'partial';
     score: number;
-    violations: ComplianceViolation[];
+    violations: ComplianceViolation;
     lastAssessment: Date;
 }
 export interface ComplianceViolation {
@@ -74,9 +74,6 @@ export interface ComplianceViolation {
     remediation: string;
     dueDate: Date;
 }
-/**
- * Main Security Dashboard Component
- */
 export declare const SecurityDashboardMain: React.FC<SecurityDashboardMainProps>;
 export default SecurityDashboardMain;
 //# sourceMappingURL=SecurityDashboardMain.d.ts.map

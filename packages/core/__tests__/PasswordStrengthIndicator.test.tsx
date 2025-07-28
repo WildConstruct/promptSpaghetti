@@ -20,42 +20,39 @@ jest.mock('../auth/PasswordComplexityValidator');
 describe('PasswordStrengthIndicator', () => {
   let mockValidator: jest.Mocked<PasswordComplexityValidator>;
   beforeEach(() => {
-    mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
-    // Default mock implementation
-    mockValidator.validatePassword.mockResolvedValue({)
-      valid: true,
-      score: 75,
-      strength: 'good',
-      ruleResults: [,
+  mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
+  // Default mock implementation
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: true,
+  score: 75,
+  strength: 'good',
+  ruleResults: [,
+  {
+  passed: true,
+  score: 8,
+  message: 'Length requirement met (12 characters)',
+}
         {
-          passed: true,
-          score: 8,
-          message: 'Length requirement met (12 characters)',
-        },
+  passed: true,
+  score: 7,
+  message: 'Uppercase requirement met (1 found)',
+}
         {
-          passed: true,
-          score: 7,
-          message: 'Uppercase requirement met (1 found)',
-        },
-        {
-          passed: false,
-          score: 0,
-          message: 'Not enough special characters (0/1)',
-          suggestion: 'Add 1 special character(s)',
-        }
-      ],
-      errors: [],
-      warnings: [],
-      suggestions: ['Add 1 special character(s)'],
-      passedRules: 2,
-      totalRules: 3,
-      entropy: 45.2,
-      estimatedCrackTime: {,
-        offline: '2 hours',
-        online: '3 days',
-        unit: 'average time',
-      }
-    });
+  passed: false,
+  score: 0,
+  message: 'Not enough special characters (0/1)',
+  suggestion: 'Add 1 special character(s)'],
+  errors: [],
+  warnings: [],
+  suggestions: ['Add 1 special character(s)'],
+  passedRules: 2,
+  totalRules: 3,
+  entropy: 45.2,
+  estimatedCrackTime: {,
+  offline: '2 hours',
+  online: '3 days',
+  unit: 'average time',
+});
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -80,19 +77,19 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should show loading state during validation', () => {
-      // Delay the mock validation
-      mockValidator.validatePassword.mockImplementation()
-        () => new Promise(resolve => setTimeout(() => resolve({)
-          valid: true,
-          score: 75,
-          strength: 'good',
-          ruleResults: [],
-          errors: [],
-          warnings: [],
-          suggestions: [],
-          passedRules: 0,
-          totalRules: 0,
-        }), 100))
+  // Delay the mock validation
+  mockValidator.validatePassword.mockImplementation()
+  () => new Promise(resolve => setTimeout(() => resolve({)
+  valid: true,
+  score: 75,
+  strength: 'good',
+  ruleResults: [],
+  errors: [],
+  warnings: [],
+  suggestions: [],
+  passedRules: 0,
+  totalRules: 0,
+}), 100))
       );
       render();
         <PasswordStrengthIndicator 
@@ -116,16 +113,16 @@ describe('PasswordStrengthIndicator', () => {
     strengthTestCases.forEach(({ score, strength, color }) => {
       test(`should display correct color and label for ${strength} password`, async () => {}
         mockValidator.validatePassword.mockResolvedValue({)
-          valid: score >= 70,
-          score,
-          strength: strength as any,
-          ruleResults: [],
-          errors: [],
-          warnings: [],
-          suggestions: [],
-          passedRules: 0,
-          totalRules: 0,
-        });
+  valid: score >= 70,
+  score,
+  strength: strength as any,
+  ruleResults: [],
+  errors: [],
+  warnings: [],
+  suggestions: [],
+  passedRules: 0,
+  totalRules: 0,
+});
         render();
           <PasswordStrengthIndicator 
             password="test" 
@@ -221,25 +218,25 @@ describe('PasswordStrengthIndicator', () => {
         />
       );
       await waitFor(() => {
-        expect(screen.getByText('Crack Time')).toBeInTheDocument();
-        expect(screen.getByText('Online: 3 days')).toBeInTheDocument();
-        expect(screen.getByText('Offline: 2 hours')).toBeInTheDocument();
-      });
+  expect(screen.getByText('Crack Time')).toBeInTheDocument();
+  expect(screen.getByText('Online: 3 days')).toBeInTheDocument();
+  expect(screen.getByText('Offline: 2 hours')).toBeInTheDocument();
+});
     });
   });
   describe('Error and Warning Display', () => {
-    test('should display errors', async () => {
-      mockValidator.validatePassword.mockResolvedValue({)
-        valid: false,
-        score: 25,
-        strength: 'weak',
-        ruleResults: [],
-        errors: ['Password too short', 'Missing special characters'],
-        warnings: [],
-        suggestions: [],
-        passedRules: 0,
-        totalRules: 2,
-      });
+  test('should display errors', async () => {
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: false,
+  score: 25,
+  strength: 'weak',
+  ruleResults: [],
+  errors: ['Password too short', 'Missing special characters'],
+  warnings: [],
+  suggestions: [],
+  passedRules: 0,
+  totalRules: 2,
+});
       render();
         <PasswordStrengthIndicator 
           password="weak" 
@@ -253,17 +250,17 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should display warnings', async () => {
-      mockValidator.validatePassword.mockResolvedValue({)
-        valid: true,
-        score: 75,
-        strength: 'good',
-        ruleResults: [],
-        errors: [],
-        warnings: ['Contains common sequence', 'Low entropy'],
-        suggestions: [],
-        passedRules: 2,
-        totalRules: 2,
-      });
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: true,
+  score: 75,
+  strength: 'good',
+  ruleResults: [],
+  errors: [],
+  warnings: ['Contains common sequence', 'Low entropy'],
+  suggestions: [],
+  passedRules: 2,
+  totalRules: 2,
+});
       render();
         <PasswordStrengthIndicator 
           password="Password123" 
@@ -277,17 +274,17 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should not show warnings in compact mode', async () => {
-      mockValidator.validatePassword.mockResolvedValue({)
-        valid: true,
-        score: 75,
-        strength: 'good',
-        ruleResults: [],
-        errors: [],
-        warnings: ['Contains common sequence'],
-        suggestions: [],
-        passedRules: 2,
-        totalRules: 2,
-      });
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: true,
+  score: 75,
+  strength: 'good',
+  ruleResults: [],
+  errors: [],
+  warnings: ['Contains common sequence'],
+  suggestions: [],
+  passedRules: 2,
+  totalRules: 2,
+});
       render();
         <PasswordStrengthIndicator 
           password="Password123" 
@@ -301,13 +298,13 @@ describe('PasswordStrengthIndicator', () => {
     });
   });
   describe('Context-Aware Validation', () => {
-    test('should pass context to validator', async () => {
-      const context: PasswordValidationContext = {
-        username: 'testuser',
-        email: 'test@example.com',
-        firstName: 'Test',
-        lastName: 'User',
-      };
+  test('should pass context to validator', async () => {
+  const context: PasswordValidationContext = {,
+  username: 'testuser',
+  email: 'test@example.com',
+  firstName: 'Test',
+  lastName: 'User',
+};
       render();
         <PasswordStrengthIndicator 
           password="TestPassword123" 
@@ -334,12 +331,12 @@ describe('PasswordStrengthIndicator', () => {
         />
       );
       await waitFor(() => {
-        expect(onValidationChange).toHaveBeenCalledWith()
-          expect.objectContaining({)
-            valid: true,
-            score: 75,
-            strength: 'good',
-          })
+  expect(onValidationChange).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  valid: true,
+  score: 75,
+  strength: 'good',
+}
         );
       });
     });
@@ -370,19 +367,19 @@ describe('PasswordStrengthIndicator', () => {
       });
     });
     test('should auto-detect theme', async () => {
-      // Mock matchMedia for auto theme detection
-      Object.defineProperty(window, 'matchMedia', {)
-        writable: true,
-        value: jest.fn().mockImplementation(query => ({),
-          matches: query.includes('dark'),
-          media: query,
-          onchange: null,
-          addListener: jest.fn(),
-          removeListener: jest.fn(),
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-          dispatchEvent: jest.fn(),
-        }))
+  // Mock matchMedia for auto theme detection
+  Object.defineProperty(window, 'matchMedia', {)
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({,)
+  matches: query.includes('dark'),
+  media: query,
+  onchange: null,
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+  dispatchEvent: jest.fn(),
+}))
       });
       render();
         <PasswordStrengthIndicator 
@@ -446,25 +443,25 @@ describe('PasswordStrengthIndicator', () => {
     });
   });
   describe('Suggestion Limiting', () => {
-    test('should limit suggestions display to 3 items', async () => {
-      mockValidator.validatePassword.mockResolvedValue({)
-        valid: false,
-        score: 25,
-        strength: 'weak',
-        ruleResults: [],
-        errors: [],
-        warnings: [],
-        suggestions: [,
-          'Add uppercase letters',
-          'Add lowercase letters', 
-          'Add numbers',
-          'Add special characters',
-          'Increase length',
-          'Remove common patterns'
-        ],
-        passedRules: 0,
-        totalRules: 6,
-      });
+  test('should limit suggestions display to 3 items', async () => {
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: false,
+  score: 25,
+  strength: 'weak',
+  ruleResults: [],
+  errors: [],
+  warnings: [],
+  suggestions: [,
+  'Add uppercase letters',
+  'Add lowercase letters',
+  'Add numbers',
+  'Add special characters',
+  'Increase length',
+  'Remove common patterns'
+  ],
+  passedRules: 0,
+  totalRules: 6,
+});
       render();
         <PasswordStrengthIndicator 
           password="weak" 
@@ -496,18 +493,18 @@ describe('PasswordStrengthIndicator', () => {
 describe('usePasswordStrength Hook', () => {
   let mockValidator: jest.Mocked<PasswordComplexityValidator>;
   beforeEach(() => {
-    mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
-    mockValidator.validatePassword.mockResolvedValue({)
-      valid: true,
-      score: 85,
-      strength: 'strong',
-      ruleResults: [],
-      errors: [],
-      warnings: [],
-      suggestions: ['Consider adding more special characters'],
-      passedRules: 5,
-      totalRules: 6,
-    });
+  mockValidator = new PasswordComplexityValidator() as jest.Mocked<PasswordComplexityValidator>;
+  mockValidator.validatePassword.mockResolvedValue({)
+  valid: true,
+  score: 85,
+  strength: 'strong',
+  ruleResults: [],
+  errors: [],
+  warnings: [],
+  suggestions: ['Consider adding more special characters'],
+  passedRules: 5,
+  totalRules: 6,
+});
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -516,7 +513,7 @@ describe('usePasswordStrength Hook', () => {
     const TestComponent = () => {
       const { result, isValidating, isValid, score, strength, suggestions, errors } = 
         usePasswordStrength('TestPassword123!', undefined, mockValidator);
-      return ();
+      return;
         <div>
           <div data-testid="is-validating">{isValidating.toString()}</div>
           <div data-testid="is-valid">{isValid.toString()}</div>
@@ -538,7 +535,7 @@ describe('usePasswordStrength Hook', () => {
   test('should handle empty password', () => {
     const TestComponent = () => {
       const { isValid, score, strength } = usePasswordStrength('', undefined, mockValidator);
-      return ();
+      return;
         <div>
           <div data-testid="is-valid">{isValid.toString()}</div>
           <div data-testid="score">{score}</div>
@@ -604,7 +601,6 @@ describe('Integration Tests', () => {
           debounceMs={50}
         />
       );
-    }
     // Should eventually call validation change
     await waitFor(() => {
       expect(onValidationChange).toHaveBeenCalled();

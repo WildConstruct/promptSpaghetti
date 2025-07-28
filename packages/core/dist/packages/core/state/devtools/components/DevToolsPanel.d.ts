@@ -23,7 +23,7 @@ export interface DevToolsState {
     activeTab: string;
     isRecording: boolean;
     timeTravelState: TimeTravelState | null;
-    performanceAlerts: PerformanceAlert[];
+    performanceAlerts: PerformanceAlert;
     selectedDomain: string;
     dependencyGraph: DependencyGraph | null;
     performanceReport: PerformanceReport | null;

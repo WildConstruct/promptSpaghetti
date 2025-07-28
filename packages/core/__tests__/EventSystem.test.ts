@@ -45,7 +45,7 @@ describe('EventSystem', () => {
   });
   describe('EventBus Core Operations', () => {
     it('should publish and receive events', async () => {
-      const mockHandler = jest.fn<unknown[], unknown>();
+      const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_publish' });
       eventBus.subscribe()
         { types: ['test_publish'] },
@@ -56,8 +56,8 @@ describe('EventSystem', () => {
       expect(mockHandler).toHaveBeenCalledTimes(1);
     });
     it('should handle multiple subscribers for same event', async () => {
-      const handler1 = jest.fn<unknown[], unknown>();
-      const handler2 = jest.fn<unknown[], unknown>();
+      const handler1 = jest.fn<unknown, unknown>();
+      const handler2 = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'multi_subscriber' });
       eventBus.subscribe({ types: ['multi_subscriber'] }, handler1);
       eventBus.subscribe({ types: ['multi_subscriber'] }, handler2);
@@ -66,7 +66,7 @@ describe('EventSystem', () => {
       expect(handler2).toHaveBeenCalledWith(testEvent);
     });
     it('should unsubscribe correctly', async () => {
-      const mockHandler = jest.fn<unknown[], unknown>();
+      const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_unsubscribe' });
       const subscriptionId = eventBus.subscribe(;);
         { types: ['test_unsubscribe'] },
@@ -80,7 +80,7 @@ describe('EventSystem', () => {
       expect(mockHandler).toHaveBeenCalledTimes(1); // Should not increase
     });
     it('should handle one-time subscriptions', async () => {
-      const mockHandler = jest.fn<unknown[], unknown>();
+      const mockHandler = jest.fn<unknown, unknown>();
       const testEvent = createTestEvent({ type: 'test_once' });
       eventBus.subscribe()
         { types: ['test_once'] },
@@ -100,8 +100,8 @@ describe('EventSystem', () => {
   });
   describe('Event Filtering', () => {
     it('should filter by event types', async () => {
-      const handler1 = jest.fn<unknown[], unknown>();
-      const handler2 = jest.fn<unknown[], unknown>();
+      const handler1 = jest.fn<unknown, unknown>();
+      const handler2 = jest.fn<unknown, unknown>();
       eventBus.subscribe({ types: ['type_a'] }, handler1);
       eventBus.subscribe({ types: ['type_b'] }, handler2);
       await eventBus.publish(createTestEvent({ type: 'type_a' }));
@@ -110,22 +110,22 @@ describe('EventSystem', () => {
       expect(handler2).toHaveBeenCalledTimes(1);
     });
     it('should filter by categories', async () => {
-      const handler1 = jest.fn<unknown[], unknown>();
-      const handler2 = jest.fn<unknown[], unknown>();
+      const handler1 = jest.fn<unknown, unknown>();
+      const handler2 = jest.fn<unknown, unknown>();
       eventBus.subscribe({ categories: [EventCategory.WORKFLOW] }, handler1);
       eventBus.subscribe({ categories: [EventCategory.ANALYTICS] }, handler2);
       await eventBus.publish(createTestEvent({)
-        metadata: { category: EventCategory.WORKFLOW }
+  metadata: { category: EventCategory.WORKFLOW }
       }));
       await eventBus.publish(createTestEvent({)
-        metadata: { category: EventCategory.ANALYTICS }
+  metadata: { category: EventCategory.ANALYTICS }
       }));
       expect(handler1).toHaveBeenCalledTimes(1);
       expect(handler2).toHaveBeenCalledTimes(1);
     });
     it('should filter by user ID', async () => {
-      const userHandler = jest.fn<unknown[], unknown>();
-      const allHandler = jest.fn<unknown[], unknown>();
+      const userHandler = jest.fn<unknown, unknown>();
+      const allHandler = jest.fn<unknown, unknown>();
       eventBus.subscribe({ userIds: ['user123'] }, userHandler);
       eventBus.subscribe({}, allHandler);
       await eventBus.publish(createTestEvent({ userId: 'user123' }));
@@ -134,28 +134,27 @@ describe('EventSystem', () => {
       expect(allHandler).toHaveBeenCalledTimes(2);
     });
     it('should filter by time window', async () => {
-      const handler = jest.fn<unknown[], unknown>();
-      const now = new Date();
-      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-      const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
-      eventBus.subscribe({)
-        timeWindow: {,
-          start: oneHourAgo,
-          end: oneHourFromNow,
-        }
-      }, handler);
+  const handler = jest.fn<unknown, unknown>();
+  const now = new Date();
+  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+  const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+  eventBus.subscribe({)
+  timeWindow: {,
+  start: oneHourAgo,
+  end: oneHourFromNow,
+}, handler);
       // Event within window
       await eventBus.publish(createTestEvent({ timestamp: now }));
       // Event outside window
       await eventBus.publish(createTestEvent({)
-        timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000),
-      }));
+  timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000),
+}));
       expect(handler).toHaveBeenCalledTimes(1);
     });
   });
   describe('Event Priority Handling', () => {
     it('should execute handlers in priority order', async () => {
-      const executionOrder: string[] = [];
+      const executionOrder: string = [];
       const criticalHandler = jest.fn(() => executionOrder.push('critical'));
       const highHandler = jest.fn(() => executionOrder.push('high'));
       const mediumHandler = jest.fn(() => executionOrder.push('medium'));
@@ -240,12 +239,12 @@ describe('EventSystem', () => {
     });
   });
   describe('Middleware Processing', () => {
-    it('should process middleware in order', async () => {
-      const executionOrder: string[] = [];
-      const middleware1 = jest.fn((event, next) => {
-        executionOrder.push('middleware1');
-        next();
-      });
+  it('should process middleware in order', async () => {
+  const executionOrder: string = [];
+  const middleware1 = jest.fn((event, next) => {
+  executionOrder.push('middleware1');
+  next();
+});
       const middleware2 = jest.fn((event, next) => {
         executionOrder.push('middleware2');
         next();
@@ -256,8 +255,8 @@ describe('EventSystem', () => {
       expect(executionOrder).toEqual(['middleware1', 'middleware2']);
     });
     it('should handle middleware errors', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
-      const successHandler = jest.fn<unknown[], unknown>();
+      const errorHandler = jest.fn<unknown, unknown>();
+      const successHandler = jest.fn<unknown, unknown>();
       eventBus.on('handler_error', errorHandler);
       eventBus.subscribe({}, successHandler);
       eventBus.use((event, next) => {
@@ -270,20 +269,20 @@ describe('EventSystem', () => {
     it('should apply validation middleware', async () => {
       eventBus.use(createValidationMiddleware({ strictMode: true }));
       const invalidEvent = {
-        type: '',
-        timestamp: new Date(),
-        id: crypto.randomUUID(),
-        source: 'test',
-      };
+  type: '',
+  timestamp: new Date(),
+  id: crypto.randomUUID(),
+  source: 'test',
+};
       await expect(eventBus.publish(invalidEvent))
         .rejects
         .toThrow('Event validation failed');
     });
     it('should apply rate limiting middleware', async () => {
-      eventBus.use(createRateLimitMiddleware({)
-        maxEventsPerSecond: 1,
-        strategy: 'error',
-      }));
+  eventBus.use(createRateLimitMiddleware({)
+  maxEventsPerSecond: 1,
+  strategy: 'error',
+}));
       const testEvent = createTestEvent();
       // First event should pass
       await expect(eventBus.publish(testEvent)).resolves.not.toThrow();
@@ -293,12 +292,12 @@ describe('EventSystem', () => {
         .toThrow('Rate limit exceeded');
     });
     it('should apply deduplication middleware', async () => {
-      const handler = jest.fn<unknown[], unknown>();
-      eventBus.use(createDeduplicationMiddleware({)
-        keyGenerator: (event) => event.type,
-        windowMs: 1000,
-        strategy: 'drop',
-      }));
+  const handler = jest.fn<unknown, unknown>();
+  eventBus.use(createDeduplicationMiddleware({)
+  keyGenerator: (event) => event.type,
+  windowMs: 1000,
+  strategy: 'drop',
+}));
       eventBus.subscribe({}, handler);
       const testEvent = createTestEvent({ type: 'duplicate_test' });
       await eventBus.publish(testEvent);
@@ -308,8 +307,8 @@ describe('EventSystem', () => {
   });
   describe('Error Handling', () => {
     it('should handle handler errors gracefully', async () => {
-      const errorHandler = jest.fn<unknown[], unknown>();
-      const workingHandler = jest.fn<unknown[], unknown>();
+      const errorHandler = jest.fn<unknown, unknown>();
+      const workingHandler = jest.fn<unknown, unknown>();
       eventBus.on('handler_error', errorHandler);
       eventBus.subscribe({}, () => {
         throw new Error('Handler error');
@@ -320,7 +319,7 @@ describe('EventSystem', () => {
       expect(workingHandler).toHaveBeenCalled();
     });
     it('should emit error events for handler failures', async () => {
-      const errorEventHandler = jest.fn<unknown[], unknown>();
+      const errorEventHandler = jest.fn<unknown, unknown>();
       eventBus.subscribe({ types: ['handler_error'] }, errorEventHandler);
       eventBus.subscribe({}, () => {
         throw new Error('Test handler error');
@@ -334,7 +333,7 @@ describe('EventSystem', () => {
   });
   describe('Performance', () => {
     it('should handle high event throughput', async () => {
-      const handler = jest.fn<unknown[], unknown>();
+      const handler = jest.fn<unknown, unknown>();
       eventBus.subscribe({}, handler);
       const events = Array.from({ length: 1000 }, (_, i) =>
         createTestEvent({ type: `performance_test_${i}` })}
@@ -346,15 +345,15 @@ describe('EventSystem', () => {
       expect(duration).toBeLessThan(1000); // Should complete within 1 second
     });
     it('should track event statistics', () => {
-      eventBus.subscribe({}, jest.fn<unknown[], unknown>());
+      eventBus.subscribe({}, jest.fn<unknown, unknown>());
       eventBus.use(() => {});
       const stats = eventBus.getStats();
       expect(stats).toMatchObject({)
-        subscriptions: expect.any(Number),
-        middleware: expect.any(Number),
-        historySize: expect.any(Number),
-        eventTypes: expect.any(Array),
-      });
+  subscriptions: expect.any(Number),
+  middleware: expect.any(Number),
+  historySize: expect.any(Number),
+  eventTypes: expect.any(Array),
+});
     });
   });
   describe('Global Event Bus', () => {
@@ -362,7 +361,7 @@ describe('EventSystem', () => {
       expect(globalEventBus).toBeInstanceOf(EventBus);
     });
     it('should maintain state across imports', async () => {
-      const handler = jest.fn<unknown[], unknown>();
+      const handler = jest.fn<unknown, unknown>();
       globalEventBus.subscribe({}, handler);
       await globalEventBus.publish(createTestEvent());
       expect(handler).toHaveBeenCalled();
@@ -378,8 +377,8 @@ describe('Event System Integration', () => {
     globalEventBus.removeAllListeners();
   });
   it('should integrate workflow and analytics events', async () => {
-    const workflowHandler = jest.fn<unknown[], unknown>();
-    const analyticsHandler = jest.fn<unknown[], unknown>();
+    const workflowHandler = jest.fn<unknown, unknown>();
+    const analyticsHandler = jest.fn<unknown, unknown>();
     globalEventBus.subscribe()
       { categories: [EventCategory.WORKFLOW] },
       workflowHandler
@@ -410,7 +409,7 @@ describe('Event System Integration', () => {
     );
   });
   it('should handle cross-system event dependencies', async () => {
-    const executionOrder: string[] = [];
+    const executionOrder: string = [];
     // UI event handler that triggers workflow event
     globalEventBus.subscribe()
       { types: ['user_interaction'] },
@@ -422,7 +421,6 @@ describe('Event System Integration', () => {
           'ui-integration'
         );
         await globalEventBus.publish(workflowEvent);
-      }
     );
     // Workflow event handler that triggers analytics
     globalEventBus.subscribe()
@@ -435,14 +433,12 @@ describe('Event System Integration', () => {
           'workflow-integration'
         );
         await globalEventBus.publish(analyticsEvent);
-      }
     );
     // Analytics event handler
     globalEventBus.subscribe()
       { types: ['performance_metric'] },
       () => {
         executionOrder.push('analytics_handler');
-      }
     );
     // Start the chain
     const uiEvent = EventFactory.createUIEvent(;);

@@ -9,6 +9,7 @@ import { KeyManagementService } from './KeyManagementService';
 import { EventEmitter } from 'events';
 import * as cron from 'node-cron';
 
+}
 export interface KeyRotationPolicyConfig {
   // Rotation scheduling
   enableAutomaticRotation: boolean;
@@ -33,7 +34,9 @@ export interface KeyRotationPolicyConfig {
   retainPolicyHistory: boolean;
   complianceReportingEnabled: boolean;
 }
+}
 
+}
 export interface RotationPolicy {
   id: string;
   policyName: string;
@@ -76,7 +79,9 @@ export interface RotationPolicy {
   isActive: boolean;
   priority: number; // Higher number = higher priority
 }
+}
 
+}
 export interface RotationSchedule {
   id: string;
   policyId: string;
@@ -88,6 +93,7 @@ export interface RotationSchedule {
   rotationWindow: {
     startTime: Date;
     endTime: Date;
+}
   };
   
   // Status
@@ -117,6 +123,7 @@ export interface RotationSchedule {
   notifications: RotationNotification[];
 }
 
+}
 export interface RotationNotification {
   id: string;
   type: 'reminder' | 'approval_request' | 'emergency' | 'completion' | 'failure';
@@ -125,7 +132,9 @@ export interface RotationNotification {
   acknowledged?: boolean;
   acknowledgedAt?: Date;
 }
+}
 
+}
 export interface PolicyEvaluation {
   policyId: string;
   keyId: string;
@@ -137,9 +146,11 @@ export interface PolicyEvaluation {
     affectedSystems: string[];
     downtime: number;
     riskLevel: string;
+}
   };
 }
 
+}
 export interface RotationMetrics {
   totalRotations: number;
   successfulRotations: number;
@@ -149,6 +160,7 @@ export interface RotationMetrics {
   upcomingRotations: number;
   overdueRotations: number;
   emergencyRotations: number;
+}
 }
 
 export class KeyRotationPolicyService extends EventEmitter {
@@ -179,6 +191,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async createPolicy(policy: Omit<RotationPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<RotationPolicy> {
+
     try {
       const policyId = this.generatePolicyId(policy.policyName);
       
@@ -219,7 +232,7 @@ export class KeyRotationPolicyService extends EventEmitter {
           $22,
           $23,
           $24
-        )
+
       `, [
         policyId,
         policy.policyName,
@@ -277,6 +290,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async evaluateKey(keyId: string): Promise<PolicyEvaluation[]> {
+
     try {
       // Get key details
       const key = await this.keyManagementService.getMasterKey(keyId);
@@ -315,6 +329,7 @@ export class KeyRotationPolicyService extends EventEmitter {
     scheduledDate: Date,
     priority: 'low' | 'medium' | 'high' | 'critical' | 'emergency' = 'medium'
   ): Promise<RotationSchedule> {
+
     try {
       const scheduleId = this.generateScheduleId();
       
@@ -394,6 +409,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async executeRotation(scheduleId: string, executorId?: string): Promise<boolean> {
+
     try {
       // Get schedule
       const schedule = await this.getRotationSchedule(scheduleId);
@@ -466,6 +482,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async approveRotation(scheduleId: string, approverId: string, notes?: string): Promise<boolean> {
+
     try {
       const schedule = await this.getRotationSchedule(scheduleId);
       if (!schedule) {
@@ -506,6 +523,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async getUpcomingRotations(days: number = 30): Promise<RotationSchedule[]> {
+
     try {
       const result = await this.db.query(`
         SELECT 
@@ -528,6 +546,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   async getRotationMetrics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<RotationMetrics> {
+
     try {
       const intervals = {
         day: '1 day',
@@ -616,6 +635,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async getApplicablePolicies(key: unknown): Promise<RotationPolicy[]> {
+
     const result = await this.db.query(`
       SELECT * FROM key_rotation_policies
       WHERE is_active = true
@@ -628,6 +648,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async evaluateKeyAgainstPolicy(key: unknown, policy: RotationPolicy): Promise<PolicyEvaluation | null> {
+
     const reasoning: string[] = [];
     let urgency: 'low' | 'medium' | 'high' | 'critical' = 'low';
     let recommendedAction: 'schedule' | 'immediate' | 'emergency' = 'schedule';
@@ -699,6 +720,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async checkRotationConflicts(scheduledDate: Date, rotationWindow: unknown): Promise<void> {
+
     const conflicts = await this.db.query(`
       SELECT COUNT(*) as count
       FROM rotation_schedules
@@ -707,7 +729,7 @@ export class KeyRotationPolicyService extends EventEmitter {
           (rotation_window_start <= $1 AND rotation_window_end >= $1) OR
           (rotation_window_start <= $2 AND rotation_window_end >= $2) OR
           (rotation_window_start >= $1 AND rotation_window_end <= $2)
-        )
+
     `, [rotationWindow.startTime, rotationWindow.endTime]);
     
     const conflictCount = parseInt((conflicts.rows[0] as { count: string }).count);
@@ -783,7 +805,7 @@ export class KeyRotationPolicyService extends EventEmitter {
       rotationWindow: {
         startTime: row.rotation_window_start,
         endTime: row.rotation_window_end
-      },
+  }
       status: row.status,
       priority: row.priority,
       executionAttempts: row.execution_attempts || 0,
@@ -803,6 +825,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async getPolicy(policyId: string): Promise<RotationPolicy | null> {
+
     const result = await this.db.query(
       'SELECT * FROM key_rotation_policies WHERE id = $1',
       [policyId]
@@ -813,6 +836,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async getRotationSchedule(scheduleId: string): Promise<RotationSchedule | null> {
+
     const result = await this.db.query(
       'SELECT * FROM rotation_schedules WHERE id = $1',
       [scheduleId]
@@ -823,6 +847,7 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async updateScheduleStatus(scheduleId: string, status: string, failureReason?: string): Promise<void> {
+
     await this.db.query(`
       UPDATE rotation_schedules 
       SET status = $1, failure_reason = $2, updated_at = $3
@@ -846,21 +871,25 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async processScheduledRotations(policy: RotationPolicy): Promise<void> {
+
     // Implementation for processing scheduled rotations
     console.log(`Processing scheduled rotations for policy ${policy.id}`);
   }
 
   private async scheduleNotifications(schedule: RotationSchedule, _____policy: RotationPolicy): Promise<void> {
+
     // Implementation for scheduling notifications
     console.log(`Scheduling notifications for rotation ${schedule.id}`);
   }
 
   private async sendCompletionNotification(schedule: RotationSchedule, _____newKey: unknown): Promise<void> {
+
     // Implementation for sending completion notifications
     console.log(`Sending completion notification for rotation ${schedule.id}`);
   }
 
   private async logPolicyEvent(policyId: string, eventType: string, details: unknown): Promise<void> {
+
     if (!this.config.auditAllRotations) return;
     
     try {
@@ -871,7 +900,7 @@ export class KeyRotationPolicyService extends EventEmitter {
           policyId,
           eventType,
           ...details
-        },
+  }
         severity: eventType.includes('failed') ? 'error' : 'info'
       });
     } catch (error) {
@@ -902,11 +931,13 @@ export class KeyRotationPolicyService extends EventEmitter {
   }
 
   private async checkAndExecuteRotations(): Promise<void> {
+
     // Implementation for checking and executing rotations
     console.log('Checking for rotations to execute...');
   }
 
   private async processNotifications(): Promise<void> {
+
     // Implementation for processing notifications
     console.log('Processing rotation notifications...');
   }

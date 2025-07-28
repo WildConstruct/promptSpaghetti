@@ -13,8 +13,8 @@ export interface VFXScene {
     region: string;
     timeOfDay: 'dawn' | 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
     weather: string;
-    characters: VFXCharacter[];
-    assets: VFXAsset[];
+    characters: VFXCharacter;
+    assets: VFXAsset;
     composition: SceneComposition;
     accuracy: HistoricalAccuracyMetrics;
 }
@@ -25,7 +25,7 @@ export interface VFXCharacter {
     period: string;
     culture: string;
     accuracy: number;
-    clothing: string[];
+    clothing: string;
     position: {
         x: number;
         y: number;
@@ -39,7 +39,7 @@ export interface VFXAsset {
     period: string;
     region: string;
     accuracy: number;
-    materials: MaterialProperty[];
+    materials: MaterialProperty;
     lod: number;
 }
 export interface MaterialProperty {
@@ -56,14 +56,14 @@ export interface SceneComposition {
     };
     focalLength: number;
     depth: number;
-    layers: SceneLayer[];
+    layers: SceneLayer;
 }
 export interface SceneLayer {
     id: string;
     name: string;
     type: 'foreground' | 'midground' | 'background';
     opacity: number;
-    elements: string[];
+    elements: string;
 }
 export interface HistoricalAccuracyMetrics {
     overall: number;
@@ -73,7 +73,7 @@ export interface HistoricalAccuracyMetrics {
     culture: number;
     timeline: number;
     expertValidated: boolean;
-    violations: AccuracyViolation[];
+    violations: AccuracyViolation;
 }
 export interface AccuracyViolation {
     type: 'anachronism' | 'cultural' | 'architectural' | 'technological';
@@ -84,7 +84,7 @@ export interface AccuracyViolation {
 }
 export interface VFXPipelineVisualizerProps {
     scene?: VFXScene;
-    scenes?: VFXScene[];
+    scenes?: VFXScene;
     realTimeUpdate?: boolean;
     showControls?: boolean;
     onSceneUpdate?: (scene: VFXScene) => void;

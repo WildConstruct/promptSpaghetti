@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { GraphDiff, GraphData } from './GraphDiffEngine';
+
 interface VisualDiffViewerProps {
     fromGraphData: GraphData;
     toGraphData: GraphData;
@@ -13,7 +14,7 @@ interface VisualDiffViewerProps {
     onApplyChange?: (changeId: string) => void;
     onRejectChange?: (changeId: string) => void;
     className?: string;
-}
+
 export declare const VisualDiffViewer: React.FC<VisualDiffViewerProps>;
 export {};
 //# sourceMappingURL=VisualDiffViewer.d.ts.map

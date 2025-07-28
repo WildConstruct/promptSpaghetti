@@ -28,107 +28,97 @@ import { Progress } from '../ui/Progress';
 import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
 interface SecurityLoggingConfig {
-  enabled: boolean;
-  destinations: LoggingDestination[];
-  event_types: SecurityEventType[];
-  alert_rules: AlertRule[];
-  retention_policies: RetentionPolicy[];
+  enabled: boolean;,
+  destinations: LoggingDestination;
+  event_types: SecurityEventType;,
+  alert_rules: AlertRule;
+  retention_policies: RetentionPolicy;,
   performance_settings: PerformanceSettings;
   compliance_settings: ComplianceSettings;
-}
-interface LoggingDestination {
-  id: string;
+  interface LoggingDestination {
+  id: string;,
   name: string;
-  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';
+  type: 'file' | 'database' | 'siem' | 'webhook' | 'elasticsearch';,
   endpoint: string;
   enabled: boolean;
   credentials?: Record<string, string>;
   format: 'json' | 'csv' | 'syslog' | 'cef';
   batch_size?: number;
   flush_interval?: number;
-}
-interface AlertRule {
-  id: string;
+  interface AlertRule {
+  id: string;,
   name: string;
-  description: string;
-  event_types: SecurityEventType[];
-  severity_threshold: SecurityEventSeverity;
-  conditions: AlertCondition[];
-  actions: AlertAction[];
+  description: string;,
+  event_types: SecurityEventType;
+  severity_threshold: SecurityEventSeverity;,
+  conditions: AlertCondition;
+  actions: AlertAction;,
   enabled: boolean;
-  notification_channels: string[];
-}
-interface AlertCondition {
-  field: string;
+  notification_channels: string;
+  interface AlertCondition {
+  field: string;,
   operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex';
   value: Error;
   logic?: 'and' | 'or';
-}
-interface AlertAction {
-  type: 'notification' | 'containment' | 'escalation' | 'logging';
+  interface AlertAction {
+  type: 'notification' | 'containment' | 'escalation' | 'logging';,
   config: Record<string, any>;
-}
-interface RetentionPolicy {
-  framework: ComplianceFramework;
+  interface RetentionPolicy {
+  framework: ComplianceFramework;,
   retention_days: number;
   encryption_required: boolean;
   archive_after_days?: number;
   archive_destination?: string;
-}
-interface PerformanceSettings {
-  batch_processing_enabled: boolean;
+  interface PerformanceSettings {
+  batch_processing_enabled: boolean;,
   batch_size: number;
-  batch_interval_ms: number;
+  batch_interval_ms: number;,
   queue_size_limit: number;
-  circuit_breaker_enabled: boolean;
+  circuit_breaker_enabled: boolean;,
   circuit_breaker_threshold: number;
   rate_limit_per_minute: number;
-}
-interface ComplianceSettings {
-  frameworks: ComplianceFramework[];
+  interface ComplianceSettings {
+  frameworks: ComplianceFramework;,
   automated_reporting: boolean;
-  external_notifications: boolean;
-  validation_rules: ValidationRule[];
-}
-interface ValidationRule {
-  framework: ComplianceFramework;
+  external_notifications: boolean;,
+  validation_rules: ValidationRule;
+  interface ValidationRule {
+  framework: ComplianceFramework;,
   field: string;
   required: boolean;
   pattern?: string;
   custom_validator?: string;
-}
-/**
- * Main Security Event Logging Configuration Panel
- */
-export const SecurityEventLoggingConfigPanel: React.FC = () => {
+  /**
+  * Main Security Event Logging Configuration Panel
+  */
+  export const SecurityEventLoggingConfigPanel: React.FC = () => {,
   const [config, setConfig] = useState<SecurityLoggingConfig>({)
-    enabled: true,
-    destinations: [],
-    event_types: [],
-    alert_rules: [],
-    retention_policies: [],
-    performance_settings: {,
-      batch_processing_enabled: true,
-      batch_size: 100,
-      batch_interval_ms: 60000,
-      queue_size_limit: 10000,
-      circuit_breaker_enabled: true,
-      circuit_breaker_threshold: 100,
-      rate_limit_per_minute: 1000,
-    },
-    compliance_settings: {,
-      frameworks: [],
-      automated_reporting: true,
-      external_notifications: true,
-      validation_rules: [],
-    }
-  });
+  enabled: true,
+  destinations: [],
+  event_types: [],
+  alert_rules: [],
+  retention_policies: [],
+  performance_settings: {,
+  batch_processing_enabled: true,
+  batch_size: 100,
+  batch_interval_ms: 60000,
+  queue_size_limit: 10000,
+  circuit_breaker_enabled: true,
+  circuit_breaker_threshold: 100,
+  rate_limit_per_minute: 1000,
+},
+  compliance_settings: {,
+  frameworks: [],
+  automated_reporting: true,
+  external_notifications: true,
+  validation_rules: [],
+});
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [policies, setPolicies] = useState<SecurityEventPolicy[]>([]);
+  const [policies, setPolicies] = useState<SecurityEventPolicy>([]);
   // Load current configuration and policies
   useEffect(() => {
     loadConfiguration();
@@ -145,7 +135,6 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       setErrors(['Failed to load security logging configuration']);
     } finally {
       setLoading(false);
-    }
   };
   const loadPolicies = () => {
     try {
@@ -153,7 +142,6 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       setPolicies(currentPolicies);
     } catch (error) {
       setErrors(prev => [...prev, 'Failed to load security policies']);
-    }
   };
   const handleConfigChange = useCallback((updates: Partial<SecurityLoggingConfig>) => {
     setConfig(prev => ({ ...prev, ...updates }));
@@ -168,7 +156,6 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       if (validationErrors.length > 0) {
         setErrors(validationErrors);
         return;
-      }
       // Save configuration
       await saveSecurityLoggingConfig(config);
       setHasUnsavedChanges(false);
@@ -176,22 +163,20 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       // In a real implementation, this would show a toast notification
       console.log('Security logging configuration saved successfully');
     } catch (error) {
-      setErrors(['Failed to save configuration: ' + (error instanceof Error ? error.message : 'Unknown error')]);
-    } finally {
+  setErrors(['Failed to save configuration: ' + (error instanceof Error ? error.message : 'Unknown error')]);
+} finally {
       setLoading(false);
-    }
   };
   const handleTestConfiguration = async () => {
-    setLoading(true);
-    try {
-      const testResults = await testSecurityLoggingConfig(config);
-      // Show test results in a dialog or notification
-      console.log('Configuration test results:', testResults);
-    } catch (error) {
-      setErrors(['Configuration test failed: ' + (error instanceof Error ? error.message : 'Unknown error')]);
-    } finally {
+  setLoading(true);
+  try {
+  const testResults = await testSecurityLoggingConfig(config);
+  // Show test results in a dialog or notification
+  console.log('Configuration test results:', testResults);
+} catch (error) {
+  setErrors(['Configuration test failed: ' + (error instanceof Error ? error.message : 'Unknown error')]);
+} finally {
       setLoading(false);
-    }
   };
   const renderOverviewTab = () => (;);
     <div className="config-overview">
@@ -316,7 +301,7 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
       onSettingsChange={(compliance_settings) => handleConfigChange({ compliance_settings })}
     />
   );
-  return ();
+  return;
     <div className="security-logging-config">
       <div className="config-header">
         <div className="header-content">
@@ -437,28 +422,27 @@ export const SecurityEventLoggingConfigPanel: React.FC = () => {
 };
 
 // Component for managing logging destinations
-const LogDestinationManager: React.FC<{
-  destinations: LoggingDestination[];
-  onDestinationsChange: (destinations: LoggingDestination[]) => void;
+const LogDestinationManager: React.FC<{,
+  destinations: LoggingDestination;
+  onDestinationsChange: (destinations: LoggingDestination) => void;
 }> = ({ destinations, onDestinationsChange }) => {
   const [_editingDestination, setEditingDestination] = useState<LoggingDestination | null>(null);
   const [_showAddDialog, setShowAddDialog] = useState(false);
-  const _handleAddDestination = (newDestination: LoggingDestination) => {
-    onDestinationsChange([...destinations, newDestination]);
-    setShowAddDialog(false);
-  };
+  const _handleAddDestination = (newDestination: LoggingDestination) => {,
+  onDestinationsChange([...destinations, newDestination]);
+  setShowAddDialog(false);
+};
   const _handleUpdateDestination = (updated: LoggingDestination) => {
-    const updatedDestinations = destinations.map(dest => ;);
-      dest.id === updated.id ? updated : dest
-    );
-    onDestinationsChange(updatedDestinations);
-    setEditingDestination(null);
-  };
+  const updatedDestinations = destinations.map(dest => ;);
+  dest.id === updated.id ? updated : dest);
+  onDestinationsChange(updatedDestinations);
+  setEditingDestination(null);
+};
   const handleDeleteDestination = (id: string) => {
     const filtered = destinations.filter(dest => dest.id !== id);
     onDestinationsChange(filtered);
   };
-  return ();
+  return;
     <div className="destination-manager">
       <div className="manager-header">
         <h2>Logging Destinations</h2>
@@ -530,50 +514,49 @@ const LogDestinationManager: React.FC<{
 };
 
 // Component for selecting event types to monitor
-const EventTypeSelector: React.FC<{
-  selectedTypes: SecurityEventType[];
-  onSelectionChange: (types: SecurityEventType[]) => void;
+const EventTypeSelector: React.FC<{,
+  selectedTypes: SecurityEventType;
+  onSelectionChange: (types: SecurityEventType) => void;
 }> = ({ selectedTypes, onSelectionChange }) => {
   const eventTypeCategories = {
-    'Application Security': [
-      SecurityEventType.AUTHENTICATION_FAILURE,
-      SecurityEventType.AUTHORIZATION_VIOLATION,
-      SecurityEventType.CODE_INJECTION_ATTEMPT,
-      SecurityEventType.INPUT_VALIDATION_FAILURE,
-      SecurityEventType.SESSION_ANOMALY,
-      SecurityEventType.FILE_UPLOAD_VIOLATION,
-      SecurityEventType.API_ABUSE_DETECTED,
-      SecurityEventType.PRIVILEGE_ESCALATION
-    ],
-    'Network Security': [
-      SecurityEventType.NETWORK_INTRUSION_ATTEMPT,
-      SecurityEventType.FIREWALL_VIOLATION,
-      SecurityEventType.DDOS_ATTACK_DETECTED,
-      SecurityEventType.VPN_ACCESS_ANOMALY,
-      SecurityEventType.DNS_QUERY_ANOMALY,
-      SecurityEventType.NETWORK_SEGMENTATION_BREACH
-    ],
-    'Compliance Events': [
-      SecurityEventType.SOX_ITGC_VIOLATION,
-      SecurityEventType.GDPR_DATA_SUBJECT_REQUEST,
-      SecurityEventType.CCPA_CONSUMER_REQUEST,
-      SecurityEventType.CHANGE_MANAGEMENT_VIOLATION,
-      SecurityEventType.SEGREGATION_DUTIES_VIOLATION
-    ],
-    'Advanced Threats': [
-      SecurityEventType.BEHAVIORAL_ANOMALY,
-      SecurityEventType.INSIDER_THREAT_INDICATOR,
-      SecurityEventType.IOC_DETECTION,
-      SecurityEventType.THREAT_INTELLIGENCE_ALERT
-    ]
-  };
+  'Application Security': [
+  SecurityEventType.AUTHENTICATION_FAILURE,
+  SecurityEventType.AUTHORIZATION_VIOLATION,
+  SecurityEventType.CODE_INJECTION_ATTEMPT,
+  SecurityEventType.INPUT_VALIDATION_FAILURE,
+  SecurityEventType.SESSION_ANOMALY,
+  SecurityEventType.FILE_UPLOAD_VIOLATION,
+  SecurityEventType.API_ABUSE_DETECTED,
+  SecurityEventType.PRIVILEGE_ESCALATION
+  ],
+  'Network Security': [
+  SecurityEventType.NETWORK_INTRUSION_ATTEMPT,
+  SecurityEventType.FIREWALL_VIOLATION,
+  SecurityEventType.DDOS_ATTACK_DETECTED,
+  SecurityEventType.VPN_ACCESS_ANOMALY,
+  SecurityEventType.DNS_QUERY_ANOMALY,
+  SecurityEventType.NETWORK_SEGMENTATION_BREACH
+  ],
+  'Compliance Events': [
+  SecurityEventType.SOX_ITGC_VIOLATION,
+  SecurityEventType.GDPR_DATA_SUBJECT_REQUEST,
+  SecurityEventType.CCPA_CONSUMER_REQUEST,
+  SecurityEventType.CHANGE_MANAGEMENT_VIOLATION,
+  SecurityEventType.SEGREGATION_DUTIES_VIOLATION
+  ],
+  'Advanced Threats': [
+  SecurityEventType.BEHAVIORAL_ANOMALY,
+  SecurityEventType.INSIDER_THREAT_INDICATOR,
+  SecurityEventType.IOC_DETECTION,
+  SecurityEventType.THREAT_INTELLIGENCE_ALERT
+  ]
+};
   const handleTypeToggle = (eventType: SecurityEventType) => {
     const isSelected = selectedTypes.includes(eventType);
     if (isSelected) {
       onSelectionChange(selectedTypes.filter(type => type !== eventType));
     } else {
       onSelectionChange([...selectedTypes, eventType]);
-    }
   };
   const handleCategoryToggle = (category: string) => {
     const categoryTypes = eventTypeCategories[category as keyof typeof eventTypeCategories];
@@ -585,14 +568,12 @@ const EventTypeSelector: React.FC<{
       // Select all in category
       const newTypes = [...selectedTypes];
       categoryTypes.forEach(type => {)
-        if (!newTypes.includes(type)) {
+  if (!newTypes.includes(type)) {
           newTypes.push(type);
-        }
       });
       onSelectionChange(newTypes);
-    }
   };
-  return ();
+  return;
     <div className="event-type-selector">
       <div className="selector-header">
         <h2>Security Event Types</h2>
@@ -606,7 +587,7 @@ const EventTypeSelector: React.FC<{
       {Object.entries(eventTypeCategories).map(([category, types]) => {
         const selectedCount = types.filter(type => selectedTypes.includes(type)).length;
         const allSelected = selectedCount === types.length;
-        return ();
+        return;
           <Card key={category} className="category-card">
             <div className="category-header">
               <Checkbox
@@ -641,19 +622,19 @@ const EventTypeSelector: React.FC<{
 /**
  * Retention Policy Editor Component
  */
-const RetentionPolicyEditor: React.FC<{
-  policies: RetentionPolicy[];
-  onPoliciesChange: (policies: RetentionPolicy[]) => void;
+const RetentionPolicyEditor: React.FC<{,
+  policies: RetentionPolicy;
+  onPoliciesChange: (policies: RetentionPolicy) => void;
 }> = ({ policies, onPoliciesChange }) => {
   const [editingPolicy, setEditingPolicy] = useState<RetentionPolicy | null>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const addPolicy = () => {
-    const newPolicy: RetentionPolicy = {
-      framework: ComplianceFramework.GDPR,
-      retention_days: 365,
-      encryption_required: true,
-      archive_after_days: 90,
-    };
+  const newPolicy: RetentionPolicy = {,
+  framework: ComplianceFramework.GDPR,
+  retention_days: 365,
+  encryption_required: true,
+  archive_after_days: 90,
+};
     setEditingPolicy(newPolicy);
     setShowAddDialog(true);
   };
@@ -665,14 +646,13 @@ const RetentionPolicyEditor: React.FC<{
       onPoliciesChange(updatedPolicies);
     } else {
       onPoliciesChange([...policies, policy]);
-    }
     setEditingPolicy(null);
     setShowAddDialog(false);
   };
   const deletePolicy = (framework: ComplianceFramework) => {
     onPoliciesChange(policies.filter(p => p.framework !== framework));
   };
-  return ();
+  return;
     <div className="retention-policy-editor">
       <div className="editor-header">
         <h2>Data Retention Policies</h2>
@@ -753,7 +733,6 @@ const RetentionPolicyEditor: React.FC<{
                 value={editingPolicy.framework}
                 onValueChange={(value) => 
                   setEditingPolicy(prev => ({ ...prev!, framework: value as ComplianceFramework }))
-                }
               >
                 {Object.values(ComplianceFramework).map(framework => ()
                   <option key={framework} value={framework}>
@@ -769,7 +748,6 @@ const RetentionPolicyEditor: React.FC<{
                 value={editingPolicy.retention_days}
                 onChange={(e) => 
                   setEditingPolicy(prev => ({ ...prev!, retention_days: parseInt(e.target.value) }))
-                }
               />
             </div>
             <div className="form-group">
@@ -779,7 +757,6 @@ const RetentionPolicyEditor: React.FC<{
                 value={editingPolicy.archive_after_days || ''}
                 onChange={(e) => 
                   setEditingPolicy(prev => ({ ...prev!, archive_after_days: parseInt(e.target.value) || undefined }))
-                }
               />
             </div>
             <div className="form-group">
@@ -788,7 +765,6 @@ const RetentionPolicyEditor: React.FC<{
                   checked={editingPolicy.encryption_required}
                   onChange={(checked) => 
                     setEditingPolicy(prev => ({ ...prev!, encryption_required: checked }))
-                  }
                 />
                 Encryption Required
               </label>
@@ -810,14 +786,14 @@ const RetentionPolicyEditor: React.FC<{
 /**
  * Performance Settings Panel Component
  */
-const PerformanceSettingsPanel: React.FC<{
+const PerformanceSettingsPanel: React.FC<{,
   settings: PerformanceSettings;
   onSettingsChange: (settings: PerformanceSettings) => void;
 }> = ({ settings, onSettingsChange }) => {
   const updateSetting = (key: keyof PerformanceSettings, value: Error) => {
     onSettingsChange({ ...settings, [key]: value });
   };
-  return ();
+  return;
     <div className="performance-settings">
       <div className="settings-header">
         <h2>Performance Settings</h2>
@@ -922,7 +898,7 @@ const PerformanceSettingsPanel: React.FC<{
 /**
  * Compliance Framework Settings Component
  */
-const ComplianceFrameworkSettings: React.FC<{
+const ComplianceFrameworkSettings: React.FC<{,
   settings: ComplianceSettings;
   onSettingsChange: (settings: ComplianceSettings) => void;
 }> = ({ settings, onSettingsChange }) => {
@@ -938,21 +914,21 @@ const ComplianceFrameworkSettings: React.FC<{
     onSettingsChange({ ...settings, validation_rules: updatedRules });
   };
   const addValidationRule = () => {
-    const newRule: ValidationRule = {
-      framework: ComplianceFramework.GDPR,
-      field: 'user_id',
-      required: true,
-    };
+  const newRule: ValidationRule = {,
+  framework: ComplianceFramework.GDPR,
+  field: 'user_id',
+  required: true,
+};
     onSettingsChange({)
-      ...settings,
-      validation_rules: [...settings.validation_rules, newRule]
-    });
+  ...settings,
+  validation_rules: [...settings.validation_rules, newRule],
+});
   };
   const removeValidationRule = (index: number) => {
     const updatedRules = settings.validation_rules.filter((_, i) => i !== index);
     onSettingsChange({ ...settings, validation_rules: updatedRules });
   };
-  return ();
+  return;
     <div className="compliance-settings">
       <div className="settings-header">
         <h2>Compliance Framework Settings</h2>
@@ -986,7 +962,6 @@ const ComplianceFrameworkSettings: React.FC<{
                 checked={settings.automated_reporting}
                 onChange={(checked) => 
                   onSettingsChange({ ...settings, automated_reporting: checked })
-                }
               />
               Enable Automated Compliance Reporting
             </label>
@@ -997,7 +972,6 @@ const ComplianceFrameworkSettings: React.FC<{
                 checked={settings.external_notifications}
                 onChange={(checked) => 
                   onSettingsChange({ ...settings, external_notifications: checked })
-                }
               />
               Enable External Compliance Notifications
             </label>
@@ -1017,7 +991,6 @@ const ComplianceFrameworkSettings: React.FC<{
                     value={rule.framework}
                     onValueChange={(value) => 
                       updateValidationRule(index, { framework: value as ComplianceFramework })
-                    }
                   >
                     {Object.values(ComplianceFramework).map(framework => ()
                       <option key={framework} value={framework}>
@@ -1068,37 +1041,36 @@ const ComplianceFrameworkSettings: React.FC<{
 
 // Helper function for framework descriptions
 function getFrameworkDescription(framework: ComplianceFramework): string {
-  const descriptions: Record<ComplianceFramework, string> = {
-    [ComplianceFramework.GDPR]: 'General Data Protection Regulation (EU)',
-    [ComplianceFramework.CCPA]: 'California Consumer Privacy Act',
-    [ComplianceFramework.SOX]: 'Sarbanes-Oxley Act',
-    [ComplianceFramework.HIPAA]: 'Health Insurance Portability and Accountability Act',
-    [ComplianceFramework.ISO27001]: 'ISO 27001 Information Security Management',
-    [ComplianceFramework.PCI_DSS]: 'Payment Card Industry Data Security Standard',
-    [ComplianceFramework.NIST]: 'NIST Cybersecurity Framework',
-    [ComplianceFramework.FERPA]: 'Family Educational Rights and Privacy Act',
-    [ComplianceFramework.GLBA]: 'Gramm-Leach-Bliley Act',
-    [ComplianceFramework.FEDRAMP]: 'Federal Risk and Authorization Management Program'
-  };
+  const descriptions: Record<ComplianceFramework, string> = {,
+  [ComplianceFramework.GDPR]: 'General Data Protection Regulation (EU)',
+  [ComplianceFramework.CCPA]: 'California Consumer Privacy Act',
+  [ComplianceFramework.SOX]: 'Sarbanes-Oxley Act',
+  [ComplianceFramework.HIPAA]: 'Health Insurance Portability and Accountability Act',
+  [ComplianceFramework.ISO27001]: 'ISO 27001 Information Security Management',
+  [ComplianceFramework.PCI_DSS]: 'Payment Card Industry Data Security Standard',
+  [ComplianceFramework.NIST]: 'NIST Cybersecurity Framework',
+  [ComplianceFramework.FERPA]: 'Family Educational Rights and Privacy Act',
+  [ComplianceFramework.GLBA]: 'Gramm-Leach-Bliley Act',
+  [ComplianceFramework.FEDRAMP]: 'Federal Risk and Authorization Management Program',
+};
   return descriptions[framework] || framework;
-}
 
 // Utility functions (would be replaced with actual API calls)
 async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
   // Simulate API call
   return {
-    enabled: true,
-    destinations: [,
-      {
-        id: '1',
-        name: 'Primary Database',
-        type: 'database',
-        endpoint: 'postgresql://localhost:5432/security_logs',
-        enabled: true,
-        format: 'json',
-        batch_size: 100,
-        flush_interval: 30000,
-      },
+  enabled: true,
+  destinations: [,
+  {
+  id: '1',
+  name: 'Primary Database',
+  type: 'database',
+  endpoint: 'postgresql://localhost:5432/security_logs',
+  enabled: true,
+  format: 'json',
+  batch_size: 100,
+  flush_interval: 30000,
+}
       {
         id: '2',
         name: 'SIEM Integration',
@@ -1107,7 +1079,6 @@ async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
         enabled: true,
         format: 'cef',
         credentials: { api_key: '***' }
-      }
     ],
     event_types: [,
       SecurityEventType.AUTHENTICATION_FAILURE,
@@ -1117,27 +1088,24 @@ async function fetchSecurityLoggingConfig(): Promise<SecurityLoggingConfig> {
     alert_rules: [],
     retention_policies: [],
     performance_settings: {,
-      batch_processing_enabled: true,
-      batch_size: 100,
-      batch_interval_ms: 60000,
-      queue_size_limit: 10000,
-      circuit_breaker_enabled: true,
-      circuit_breaker_threshold: 100,
-      rate_limit_per_minute: 1000,
-    },
-    compliance_settings: {,
-      frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
-      automated_reporting: true,
-      external_notifications: true,
-      validation_rules: [],
-    }
-  };
-}
+  batch_processing_enabled: true,
+  batch_size: 100,
+  batch_interval_ms: 60000,
+  queue_size_limit: 10000,
+  circuit_breaker_enabled: true,
+  circuit_breaker_threshold: 100,
+  rate_limit_per_minute: 1000,
+},
+  compliance_settings: {,
+  frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
+  automated_reporting: true,
+  external_notifications: true,
+  validation_rules: [],
+};
 async function saveSecurityLoggingConfig(config: SecurityLoggingConfig): Promise<void> {
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
   console.log('Saved configuration:', config);
-}
 async function testSecurityLoggingConfig(_config: SecurityLoggingConfig): Promise<unknown> {
   // Simulate configuration test
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -1149,17 +1117,13 @@ async function testSecurityLoggingConfig(_config: SecurityLoggingConfig): Promis
       { name: 'Event Processing', status: 'pass' }
     ]
   };
-}
-function validateConfiguration(config: SecurityLoggingConfig): string[] {
-  const errors: string[] = [];
+function validateConfiguration(config: SecurityLoggingConfig): string {
+  const errors: string = [];
   if (config.destinations.length === 0) {
     errors.push('At least one logging destination must be configured');
-  }
   if (config.event_types.length === 0) {
     errors.push('At least one event type must be selected for monitoring');
-  }
   // Add more validation rules as needed
   return errors;
-}
 
 export default SecurityEventLoggingConfigPanel;

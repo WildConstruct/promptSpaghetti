@@ -7,6 +7,7 @@
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
 import React from 'react';
+
 interface ConsentBannerProps {
     onConsentUpdate?: (consents: ConsentPreferences) => void;
     onClose?: () => void;
@@ -18,7 +19,8 @@ interface ConsentBannerProps {
     showCustomizeButton?: boolean;
     autoHide?: boolean;
     respectDoNotTrack?: boolean;
-}
+
+
 interface ConsentPreferences {
     essential: boolean;
     functional: boolean;
@@ -27,7 +29,8 @@ interface ConsentPreferences {
     advertising: boolean;
     socialMedia: boolean;
     personalization: boolean;
-}
+
+
 declare const ConsentBanner: React.FC<ConsentBannerProps>;
 export default ConsentBanner;
 //# sourceMappingURL=ConsentBanner.d.ts.map

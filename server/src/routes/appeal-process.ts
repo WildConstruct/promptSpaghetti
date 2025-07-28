@@ -24,12 +24,14 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin, requireRole } from '../middleware/auth';
 
+}
 interface AppealRoutes {
   '/appeals': {
     GET: {
       Querystring: AppealFilters & {
         include_timeline?: boolean;
         include_evidence?: boolean;
+}
       };
     };
     POST: {
@@ -194,7 +196,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['enforcement_action', 'trust_score', 'policy_violation', 'verification_status', 
                 'content_moderation', 'account_restriction', 'transaction_block', 'marketplace_decision', 'other']
-            },
+  }
             subject: { type: 'string', maxLength: 500 },
             description: { type: 'string', maxLength: 5000 },
             requested_outcome: { type: 'string', maxLength: 2000 },
@@ -214,7 +216,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
               }
             }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -225,7 +227,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const user = (request as any).user;
@@ -283,7 +285,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const filters: AppealFilters = {
@@ -327,7 +329,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -337,7 +339,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -393,7 +395,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -403,7 +405,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -453,7 +455,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['evidence_type', 'title', 'description'],
@@ -467,7 +469,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -524,7 +526,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['status'],
@@ -532,12 +534,12 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             status: { 
               type: 'string',
               enum: ['under_review', 'evidence_requested', 'investigation', 'pending_decision']
-            },
+  }
             notes: { type: 'string' }
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -572,7 +574,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['reviewer_id', 'reviewer_role'],
@@ -585,7 +587,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -619,7 +621,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           properties: {
             appealId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['decision', 'rationale'],
@@ -627,7 +629,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
             decision: {
               type: 'string',
               enum: ['approve', 'partially_approve', 'deny', 'dismiss']
-            },
+  }
             rationale: {
               type: 'object',
               required: ['primary_reasoning', 'policy_references'],
@@ -640,7 +642,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
                 risk_considerations: { type: 'array', items: { type: 'string' } },
                 recommended_actions: { type: 'array', items: { type: 'string' } }
               }
-            },
+  }
             review_criteria: {
               type: 'object',
               properties: {
@@ -655,7 +657,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { appealId } = request.params;
@@ -703,7 +705,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const timeRange = request.query.start_date && request.query.end_date ? {
@@ -745,7 +747,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const user = (request as any).user;
@@ -798,7 +800,7 @@ export default async function appealProcessRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const user = (request as any).user;

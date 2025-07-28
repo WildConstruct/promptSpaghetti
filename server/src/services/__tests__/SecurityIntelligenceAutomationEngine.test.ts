@@ -98,7 +98,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         dark_web_monitoring: true,
         social_media_intelligence: true,
         vulnerability_intelligence: true
-      },
+  }
       intelligence_processing: {
         natural_language_processing: true,
         machine_learning_analysis: true,
@@ -108,7 +108,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         temporal_analysis: true,
         geospatial_analysis: true,
         behavioral_analysis: true
-      },
+  }
       threat_intelligence: {
         indicator_extraction: true,
         ioc_management: true,
@@ -118,7 +118,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         attribution_analysis: true,
         threat_hunting_automation: true,
         predictive_threat_modeling: true
-      },
+  }
       intelligence_fusion: {
         multi_source_correlation: true,
         cross_intelligence_analysis: true,
@@ -127,7 +127,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         strategic_intelligence: true,
         technical_intelligence: true,
         contextual_intelligence: true
-      },
+  }
       automation_capabilities: {
         automated_analysis: true,
         intelligence_orchestration: true,
@@ -137,7 +137,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         decision_support: true,
         workflow_automation: true,
         integration_automation: true
-      },
+  }
       intelligence_distribution: {
         stakeholder_targeting: true,
         format_customization: true,
@@ -764,12 +764,12 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           workflow_name: 'Collection Workflow',
           automation_level: 'fully_automated' as const,
           trigger_conditions: ['schedule']
-        },
+  }
         {
           workflow_name: 'Analysis Workflow',
           automation_level: 'semi_automated' as const,
           trigger_conditions: ['data_available']
-        },
+  }
         {
           workflow_name: 'Distribution Workflow',
           automation_level: 'fully_automated' as const,
@@ -781,7 +781,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         engine.automateWorkflow(
           ['collection', 'analysis', 'distribution'][index] as any,
           config
-        )
+
       );
 
       const results = await Promise.all(workflowPromises);
@@ -800,7 +800,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
         engine.generateIntelligenceBriefing(type, {
           target_audience: `${type}_team`,
           classification_level: 'internal'
-        })
+  }
       );
 
       const briefings = await Promise.all(briefingPromises);
@@ -825,7 +825,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           dark_web_monitoring: true,
           social_media_intelligence: false,
           vulnerability_intelligence: true
-        },
+  }
         intelligence_processing: {
           natural_language_processing: true,
           machine_learning_analysis: false,
@@ -835,7 +835,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           temporal_analysis: false,
           geospatial_analysis: false,
           behavioral_analysis: true
-        },
+  }
         threat_intelligence: {
           indicator_extraction: true,
           ioc_management: true,
@@ -845,7 +845,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           attribution_analysis: true,
           threat_hunting_automation: false,
           predictive_threat_modeling: true
-        },
+  }
         intelligence_fusion: {
           multi_source_correlation: true,
           cross_intelligence_analysis: false,
@@ -854,7 +854,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           strategic_intelligence: false,
           technical_intelligence: true,
           contextual_intelligence: false
-        },
+  }
         automation_capabilities: {
           automated_analysis: false,
           intelligence_orchestration: true,
@@ -864,7 +864,7 @@ describe('SecurityIntelligenceAutomationEngine', () => {
           decision_support: false,
           workflow_automation: true,
           integration_automation: false
-        },
+  }
         intelligence_distribution: {
           stakeholder_targeting: true,
           format_customization: true,

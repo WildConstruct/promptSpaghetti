@@ -32,6 +32,7 @@ class MockDatabaseService {
   private queries: Array<{ query: string; params: any[] }> = [];
 
   async query(sql: string, params: any[] = []): Promise<{ rows: any[]; rowCount: number }> {
+
     this.queries.push({ query: sql, params });
     
     // Simple mock implementation for testing
@@ -239,6 +240,7 @@ class MockAuditService {
   private events: any[] = [];
 
   async logEvent(event: unknown): Promise<void> {
+
     this.events.push(event);
   }
 
@@ -286,7 +288,7 @@ describe('AuditTeamCollaborationService', () => {
           }),
           expect.objectContaining({
             query: expect.stringContaining('CREATE TABLE IF NOT EXISTS evidence')
-          })
+  }
         ])
       );
     });
@@ -431,7 +433,7 @@ describe('AuditTeamCollaborationService', () => {
           complianceFrameworks: [],
           tags: [],
           metadata: {}
-        },
+  }
         {
           title: 'Compliance Investigation 1',
           category: InvestigationCategory.COMPLIANCE_VIOLATION,
@@ -606,12 +608,12 @@ describe('AuditTeamCollaborationService', () => {
           type: EvidenceType.SCREENSHOT,
           title: 'Error Screenshot',
           fileName: 'error.png'
-        },
+  }
         {
           type: EvidenceType.DATABASE_QUERY,
           title: 'User Query Results',
           content: 'SELECT * FROM users WHERE...'
-        },
+  }
         {
           type: EvidenceType.EMAIL,
           title: 'Incident Report Email',

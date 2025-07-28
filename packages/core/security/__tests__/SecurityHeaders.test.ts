@@ -20,33 +20,33 @@ import express, { Application, Request, Response } from 'express';
 describe('Security Headers Test Suite', () => {
   let app: Application;
   beforeEach(() => {
-    app = express();
-    // Default security headers middleware
-    app.use((req: Request, res: Response, next) => {
-      // HSTS Header
-      res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
-      // CSP Header
-      res.setHeader('Content-Security-Policy', )
-        'default-src \'self\'; ' +
-        'script-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net; ' +
-        'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; ' +
-        'font-src \'self\' https://fonts.gstatic.com; ' +
-        'img-src \'self\' data: https:; ' +
-        'connect-src \'self\' https://api.example.com; ' +
-        'frame-ancestors \'none\'; ' +
-        'form-action \'self\'; ' +
-        'base-uri \'self\'; ' +
-        'object-src \'none\'; ' +
-        'upgrade-insecure-requests'
-      );
-      // Additional Security Headers
-      res.setHeader('X-Content-Type-Options', 'nosniff');
-      res.setHeader('X-Frame-Options', 'DENY');
-      res.setHeader('X-XSS-Protection', '1; mode=block');
-      res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-      res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-      next();
-    });
+  app = express();
+  // Default security headers middleware
+  app.use((req: Request, res: Response, next) => {,
+  // HSTS Header
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  // CSP Header
+  res.setHeader('Content-Security-Policy')
+  'default-src \'self\'; ' +
+  'script-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net; ' +,
+  'style-src \'self\' \'unsafe-inline\' https://fonts.googleapis.com; ' +,
+  'font-src \'self\' https://fonts.gstatic.com; ' +,
+  'img-src \'self\' data: https:; ' +,
+  'connect-src \'self\' https://api.example.com; ' +,
+  'frame-ancestors \'none\'; ' +
+  'form-action \'self\'; ' +
+  'base-uri \'self\'; ' +
+  'object-src \'none\'; ' +
+  'upgrade-insecure-requests'
+  );
+  // Additional Security Headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
     // Test endpoints
     app.get('/test', (req: Request, res: Response) => {
       res.json({ message: 'Test endpoint' });
@@ -84,7 +84,6 @@ describe('Security Headers Test Suite', () => {
       for (const endpoint of endpoints) {
         const response = await request(app).get(endpoint);
         expect(response.headers['strict-transport-security']).toBeDefined();
-      }
     });
   });
   describe('Content Security Policy (CSP)', () => {
@@ -145,7 +144,6 @@ describe('Security Headers Test Suite', () => {
       for (const endpoint of endpoints) {
         const response = await request(app).get(endpoint);
         expect(response.headers['x-content-type-options']).toBe('nosniff');
-      }
     });
   });
   describe('X-Frame-Options', () => {
@@ -163,7 +161,6 @@ describe('Security Headers Test Suite', () => {
         expect(cspDirectives['frame-ancestors']).toBe('\'none\'');
       } else if (xFrameOptions === 'SAMEORIGIN') {
         expect(cspDirectives['frame-ancestors']).toContain('\'self\'');
-      }
     });
   });
   describe('X-XSS-Protection', () => {
@@ -212,7 +209,7 @@ describe('Security Headers Test Suite', () => {
         'referrer-policy'
       ];
       requiredHeaders.forEach(header => {)
-        expect(response.headers[header]).toBeDefined();
+  expect(response.headers[header]).toBeDefined();
       });
     });
     test('should not expose server information', async () => {
@@ -241,17 +238,16 @@ describe('Security Headers Test Suite', () => {
       expect(directives['report-uri']).toBe('/csp-report');
     });
     test('should validate CSP report format', () => {
-      const mockCSPReport = {
-        'csp-report': {
-          'document-uri': 'https://example.com/page',
-          'referrer': '',
-          'violated-directive': 'script-src',
-          'effective-directive': 'script-src',
-          'original-policy': 'default-src \'self\'; script-src \'self\'',
-          'blocked-uri': 'https://evil.com/script',
-          'status-code': 200
-        }
-      };
+  const mockCSPReport = {
+  'csp-report': {,
+  'document-uri': 'https://example.com/page',
+  'referrer': '',
+  'violated-directive': 'script-src',
+  'effective-directive': 'script-src',
+  'original-policy': 'default-src \'self\'; script-src \'self\'',
+  'blocked-uri': 'https://evil.com/script',
+  'status-code': 200,
+};
       expect(validateCSPReport(mockCSPReport)).toBe(true);
     });
   });
@@ -303,131 +299,115 @@ describe('Security Headers Test Suite', () => {
 function parseHSTSHeader(header: string): Record<string, string> {
   const directives: Record<string, string> = {};
   header.split(';').forEach(directive => {)
-    const trimmed = directive.trim();
+  const trimmed = directive.trim();
     if (trimmed.includes('=')) {
       const [key, value] = trimmed.split('=', 2);
       directives[key.trim()] = value.trim();
     } else {
       directives[trimmed] = 'true';
-    }
   });
   return directives;
-}
 /**
  * Parse CSP header into directive object
  */
 function parseCSPHeader(header: string): Record<string, string> {
   const directives: Record<string, string> = {};
   header.split(';').forEach(directive => {)
-    const trimmed = directive.trim();
+  const trimmed = directive.trim();
     if (trimmed) {
       const parts = trimmed.split(/\s+/);
       const directiveName = parts[0];
       const directiveValue = parts.slice(1).join(' ');
       directives[directiveName] = directiveValue;
-    }
   });
   return directives;
-}
 /**
  * Generate cryptographically secure CSP nonce
  */
 function generateCSPNonce(): string {
   const crypto = require('crypto');
   return crypto.randomBytes(24).toString('base64');
-}
-/**
- * Validate CSP violation report structure
- */
-function validateCSPReport(report: any): boolean {
+  /**
+  * Validate CSP violation report structure
+  */
+  function validateCSPReport(report: any): boolean {,
   if (!report['csp-report']) return false;
   const cspReport = report['csp-report'];
   const requiredFields = [;
-    'document-uri',
-    'violated-directive',
-    'effective-directive',
-    'original-policy'
+  'document-uri',
+  'violated-directive',
+  'effective-directive',
+  'original-policy'
   ];
   return requiredFields.every(field => field in cspReport);
-}
-/**
- * Calculate security score based on headers
- */
-function calculateSecurityScore(headers: Record<string, string>): {
-  total: number;
+  /**
+  * Calculate security score based on headers
+  */
+  function calculateSecurityScore(headers: Record<string, string>): {,
+  total: number;,
   checks: Record<string, boolean>;
   const checks = {
-    hsts: !!headers['strict-transport-security'],
-    csp: !!headers['content-security-policy'],
-    contentTypeOptions: headers['x-content-type-options'] === 'nosniff',
-    frameOptions: !!headers['x-frame-options'],
-    xssProtection: !!headers['x-xss-protection'],
-    referrerPolicy: !!headers['referrer-policy'],
-    permissionsPolicy: !!headers['permissions-policy'],
-  };
+  hsts: !!headers['strict-transport-security'],
+  csp: !!headers['content-security-policy'],
+  contentTypeOptions: headers['x-content-type-options'] === 'nosniff',
+  frameOptions: !!headers['x-frame-options'],
+  xssProtection: !!headers['x-xss-protection'],
+  referrerPolicy: !!headers['referrer-policy'],
+  permissionsPolicy: !!headers['permissions-policy'],
+};
   const totalChecks = Object.keys(checks).length;
   const passedChecks = Object.values(checks).filter(Boolean).length;
   const total = Math.round((passedChecks / totalChecks) * 100);
   return { total, checks };
-}
 /**
  * Analyze security headers for common issues
  */
-function analyzeSecurityHeaders(headers: Record<string, string>): string[] {
-  const warnings: string[] = [];
+function analyzeSecurityHeaders(headers: Record<string, string>): string {
+  const warnings: string = [];
   // Check CSP for common issues
   const csp = headers['content-security-policy'];
   if (csp) {
-    if (csp.includes('\'unsafe-eval\'')) {
-      warnings.push('CSP_UNSAFE_EVAL');
-    }
-    if (csp.includes('\'unsafe-inline\'')) {
-      warnings.push('CSP_UNSAFE_INLINE');
-    }
-    if (csp.includes('default-src *') || csp.includes('script-src *')) {
-      warnings.push('CSP_WILDCARD_SOURCE');
-    }
-  }
+  if (csp.includes('\'unsafe-eval\'')) {
+  warnings.push('CSP_UNSAFE_EVAL');
+  if (csp.includes('\'unsafe-inline\'')) {
+  warnings.push('CSP_UNSAFE_INLINE');
+  if (csp.includes('default-src *') || csp.includes('script-src *')) {
+  warnings.push('CSP_WILDCARD_SOURCE');
   // Check HSTS
   const hsts = headers['strict-transport-security'];
   if (hsts) {
-    const maxAgeMatch = hsts.match(/max-age=(\d+)/);
-    if (maxAgeMatch && parseInt(maxAgeMatch[1]) < 31536000) {
-      warnings.push('HSTS_SHORT_MAX_AGE');
-    }
-  } else {
-    warnings.push('MISSING_HSTS');
-  }
+  const maxAgeMatch = hsts.match(/max-age=(\d+)/);
+  if (maxAgeMatch && parseInt(maxAgeMatch[1]) < 31536000) {
+  warnings.push('HSTS_SHORT_MAX_AGE');
+} else {
+  warnings.push('MISSING_HSTS');
   // Check for missing headers
   if (!headers['x-content-type-options']) {
-    warnings.push('MISSING_CONTENT_TYPE_OPTIONS');
-  }
+  warnings.push('MISSING_CONTENT_TYPE_OPTIONS');
   if (!headers['x-frame-options']) {
-    warnings.push('MISSING_FRAME_OPTIONS');
-  }
+  warnings.push('MISSING_FRAME_OPTIONS');
   return warnings;
-}
-/**
- * Integration test helper for external security scanning
- */
-export class SecurityHeaderScanner {
-  static async scanEndpoint(url: string): Promise<{
-    score: number;
-    headers: Record<string, string>;
-    warnings: string[];
-    recommendations: string[];
-  }> {
-    // This would integrate with external security scanning services
-    // For testing purposes, we'll simulate the functionality
-    const mockResponse = {
-      score: 85,
-      headers: {,
-        'strict-transport-security': 'max-age=31536000; includeSubDomains',
-        'content-security-policy': 'default-src \'self\'',
-        'x-content-type-options': 'nosniff',
-        'x-frame-options': 'DENY'
-      },
-      warnings: [],
+  /**
+  * Integration test helper for external security scanning
+  */
+  export class SecurityHeaderScanner {
+  static async scanEndpoint(url: string): Promise<{,
+  score: number;,
+  headers: Record<string, string>;
+  warnings: string;,
+  recommendations: string;
+}> {
+  // This would integrate with external security scanning services
+  // For testing purposes, we'll simulate the functionality
+  const mockResponse = {
+  score: 85,
+  headers: {,
+  'strict-transport-security': 'max-age=31536000; includeSubDomains',
+  'content-security-policy': 'default-src \'self\'',
+  'x-content-type-options': 'nosniff',
+  'x-frame-options': 'DENY',
+},
+  warnings: [],
       recommendations: [,
         'Add Permissions-Policy header',
         'Include preload directive in HSTS',
@@ -435,16 +415,15 @@ export class SecurityHeaderScanner {
       ]
     };
     return mockResponse;
-  }
-  static async generateSecurityReport(scanResults: any[]): Promise<string> {
-    const report = {
-      timestamp: new Date().toISOString(),
-      summary: {,
-        totalEndpoints: scanResults.length,
-        averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length,
-        criticalIssues: scanResults.filter(r => r.score < 60).length,
-      },
-      details: scanResults,
+  static async generateSecurityReport(scanResults: any): Promise<string> {
+  const report = {
+  timestamp: new Date().toISOString(),
+  summary: {,
+  totalEndpoints: scanResults.length,
+  averageScore: scanResults.reduce((sum, r) => sum + r.score, 0) / scanResults.length,
+  criticalIssues: scanResults.filter(r => r.score < 60).length,
+},
+  details: scanResults,
       recommendations: [,
         'Implement Content Security Policy on all endpoints',
         'Enable HSTS with preload for all domains',
@@ -453,5 +432,3 @@ export class SecurityHeaderScanner {
       ]
     };
     return JSON.stringify(report, null, 2);
-  }
-}

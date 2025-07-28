@@ -16,6 +16,7 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 import { requireAuth, requireAdmin } from '../middleware/auth';
 
+}
 interface EnforcementRoutes {
   '/enforcement/actions': {
     GET: {
@@ -27,6 +28,7 @@ interface EnforcementRoutes {
         limit?: number;
         offset?: number;
         include_expired?: boolean;
+}
       };
     };
   };
@@ -153,7 +155,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             offset: { type: 'integer', minimum: 0, default: 0 },
             include_expired: { type: 'boolean', default: false }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -177,7 +179,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
                     reviewRequired: { type: 'boolean' }
                   }
                 }
-              },
+  }
               total: { type: 'integer' },
               limit: { type: 'integer' },
               offset: { type: 'integer' }
@@ -185,7 +187,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const {
@@ -291,7 +293,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             entity_id: { type: 'string' },
             reason: { type: 'string' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -305,7 +307,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { entity_type, entity_id, reason } = request.body;
@@ -326,7 +328,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             entity_id,
             reason,
             actions_generated: actions.length
-          },
+  }
           severity: 'info'
         });
 
@@ -366,7 +368,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const report = request.body;
@@ -386,9 +388,9 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
               user_id: report.user_id,
               template_id: report.template_id,
               transaction_id: report.transaction_id
-            },
+  }
             actions_generated: actions.length
-          },
+  }
           severity: report.severity === 'critical' ? 'error' : 'warning'
         });
 
@@ -438,7 +440,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const result = await db.query(`
@@ -479,7 +481,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policy_id, name, description, enabled, policy_config } = request.body;
@@ -499,7 +501,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
             policy_id,
             name,
             enabled
-          },
+  }
           severity: 'info'
         });
 
@@ -535,7 +537,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           properties: {
             policyId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -546,7 +548,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -591,7 +593,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           details: {
             policy_id: policyId,
             updates: Object.keys(updates)
-          },
+  }
           severity: 'info'
         });
 
@@ -625,7 +627,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           }
         }
       }
-    },
+  }
     async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -649,7 +651,7 @@ export default async function automatedEnforcementRoutes(fastify: FastifyInstanc
           details: {
             policy_id: policyId,
             name: result.rows[0].name
-          },
+  }
           severity: 'warning'
         });
 

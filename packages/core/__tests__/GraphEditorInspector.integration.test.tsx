@@ -10,7 +10,7 @@ describe('GraphEditor integration: InspectorSidebar', () => {
     { id: 'n1', type: 'Concat', data: { label: 'Concat', delimiter: ', ' }, position: { x: 0, y: 0 } },
     { id: 'n2', type: 'Output', data: { label: 'Output', prompt: 'Hello' }, position: { x: 100, y: 0 } }
   ];
-  const edges: Edge[] = [];
+  const edges: Edge = [];
   it('shows InspectorSidebar when node is selected and updates node data', async () => {
     render();
       <GraphEditor

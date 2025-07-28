@@ -7,6 +7,7 @@ import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 import { AuditService } from './AuditService';
 
+}
 export interface BehaviorAnalyticsConfig {
   // Analysis parameters
   baselineWindowDays: number; // Days to establish baseline behavior
@@ -29,6 +30,7 @@ export interface BehaviorAnalyticsConfig {
     volumeAnomaly: number;
     velocityAnomaly: number;
     patternDeviation: number;
+}
   };
   
   // Response configuration
@@ -46,6 +48,7 @@ export type BehaviorPatternType =
   | 'feature_usage'
   | 'navigation_flow';
 
+}
 export interface UserBehaviorProfile {
   userId: string;
   baseline: BehaviorBaseline;
@@ -57,10 +60,13 @@ export interface UserBehaviorProfile {
   dataPoints: number;
   status: 'learning' | 'established' | 'suspicious' | 'blocked';
 }
+}
 
+}
 export interface BehaviorBaseline {
   // Temporal patterns
   typicalLoginTimes: TimeWindow[];
+}
   typicalSessionDuration: { mean: number; stdDev: number };
   typicalActivityHours: number[]; // 0-23 hours
   weekdayVsWeekendRatio: number;
@@ -83,6 +89,7 @@ export interface BehaviorBaseline {
   retryPatterns: RetryPattern[];
 }
 
+}
 export interface BehaviorPattern {
   id: string;
   type: BehaviorPatternType;
@@ -92,7 +99,9 @@ export interface BehaviorPattern {
   confidence: number;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface BehaviorAnomaly {
   id: string;
   timestamp: Date;
@@ -105,6 +114,7 @@ export interface BehaviorAnomaly {
   resolvedBy?: string;
   resolvedAt?: Date;
 }
+}
 
 export type AnomalyType = 
   | 'unusual_login_time'
@@ -116,38 +126,49 @@ export type AnomalyType =
   | 'volume_spike'
   | 'bot_like_behavior';
 
+}
 export interface TimeWindow {
   startHour: number;
   endHour: number;
   dayOfWeek: number; // 0-6
   probability: number;
 }
+}
 
+}
 export interface ActionSequence {
   actions: string[];
   frequency: number;
   averageTimeBetween: number[]; // ms between each action
 }
+}
 
+}
 export interface ResourceAccess {
   resourceType: string;
   resourceId: string;
   frequency: number;
   averageAccessDuration: number;
 }
+}
 
+}
 export interface NavigationPath {
   path: string[];
   frequency: number;
   averageDuration: number;
 }
+}
 
+}
 export interface RetryPattern {
   action: string;
   averageRetries: number;
   successRate: number;
 }
+}
 
+}
 export interface BehaviorAnalysisResult {
   userId: string;
   timestamp: Date;
@@ -158,7 +179,9 @@ export interface BehaviorAnalysisResult {
   confidence: number; // 0-1
   reasoning: string[];
 }
+}
 
+}
 export interface SessionBehaviorData {
   sessionId: string;
   userId: string;
@@ -169,7 +192,9 @@ export interface SessionBehaviorData {
   interactions: InteractionEvent[];
   errors: ErrorEvent[];
 }
+}
 
+}
 export interface UserAction {
   timestamp: Date;
   action: string;
@@ -178,7 +203,9 @@ export interface UserAction {
   duration?: number;
   success: boolean;
 }
+}
 
+}
 export interface ResourceAccessLog {
   timestamp: Date;
   resourceType: string;
@@ -186,20 +213,25 @@ export interface ResourceAccessLog {
   action: 'view' | 'edit' | 'delete' | 'create';
   duration: number;
 }
+}
 
+}
 export interface InteractionEvent {
   timestamp: Date;
   type: 'click' | 'scroll' | 'keypress' | 'focus' | 'blur';
   target?: string;
   metadata?: Record<string, any>;
 }
+}
 
+}
 export interface ErrorEvent {
   timestamp: Date;
   errorType: string;
   errorMessage: string;
   context: string;
   resolved: boolean;
+}
 }
 
 export class BehaviorAnalyticsService {
@@ -233,7 +265,7 @@ export class BehaviorAnalyticsService {
         volumeAnomaly: 0.15,
         velocityAnomaly: 0.2,
         patternDeviation: 0.2
-      },
+  }
       autoBlockThreshold: 85,
       alertThreshold: 65,
       requireManualReview: true,
@@ -245,6 +277,7 @@ export class BehaviorAnalyticsService {
    * Initialize the behavior analytics service
    */
   async initialize(): Promise<void> {
+
     await this.initializeSchema();
     
     // Start periodic profile updates
@@ -263,6 +296,7 @@ export class BehaviorAnalyticsService {
     userId: string,
     sessionData: SessionBehaviorData
   ): Promise<BehaviorAnalysisResult> {
+
     try {
       // Get or create user profile
       const profile = await this.getUserBehaviorProfile(userId);
@@ -313,6 +347,7 @@ export class BehaviorAnalyticsService {
     sessionData: SessionBehaviorData,
     profile: UserBehaviorProfile
   ): Promise<BehaviorAnomaly[]> {
+
     const anomalies: BehaviorAnomaly[] = [];
     
     // Time-based anomalies
@@ -617,6 +652,7 @@ export class BehaviorAnalyticsService {
     sessionData: SessionBehaviorData,
     profile: UserBehaviorProfile
   ): Promise<BehaviorAnomaly[]> {
+
     const anomalies: BehaviorAnomaly[] = [];
     
     // Check each pattern type
@@ -710,6 +746,7 @@ export class BehaviorAnalyticsService {
    * Get or create user behavior profile
    */
   private async getUserBehaviorProfile(userId: string): Promise<UserBehaviorProfile> {
+
     // Try cache first
     const cacheKey = `behavior_profile:${userId}`;
     const cached = await this.redis.get(cacheKey);
@@ -745,6 +782,7 @@ export class BehaviorAnalyticsService {
    * Create new user profile
    */
   private async createNewProfile(userId: string): Promise<UserBehaviorProfile> {
+
     const profile: UserBehaviorProfile = {
       userId,
       baseline: this.createEmptyBaseline(),
@@ -804,6 +842,7 @@ export class BehaviorAnalyticsService {
    * Record session behavior for learning
    */
   private async recordSessionBehavior(sessionData: SessionBehaviorData): Promise<void> {
+
     await this.db.query(`
       INSERT INTO user_behavior_sessions (
         session_id, user_id, start_time, end_time,
@@ -829,6 +868,7 @@ export class BehaviorAnalyticsService {
     sessionData: SessionBehaviorData,
     anomalies: BehaviorAnomaly[]
   ): Promise<void> {
+
     const profile = await this.getUserBehaviorProfile(userId);
     
     // Update data points
@@ -866,6 +906,7 @@ export class BehaviorAnalyticsService {
     profile: UserBehaviorProfile,
     sessionData: SessionBehaviorData
   ): Promise<void> {
+
     const baseline = profile.baseline;
     
     // Update login times
@@ -931,6 +972,7 @@ export class BehaviorAnalyticsService {
    * Save user profile to database
    */
   private async saveUserProfile(profile: UserBehaviorProfile): Promise<void> {
+
     await this.db.query(`
       UPDATE user_behavior_profiles SET
         baseline_data = $2,
@@ -967,6 +1009,7 @@ export class BehaviorAnalyticsService {
     anomalies: BehaviorAnomaly[],
     recommendation: 'allow' | 'monitor' | 'challenge' | 'block'
   ): Promise<void> {
+
     await this.auditService.logEvent({
       userId,
       action: 'behavior_analysis',
@@ -977,7 +1020,7 @@ export class BehaviorAnalyticsService {
         anomalyTypes: [...new Set(anomalies.map(a => a.type))],
         recommendation,
         severity: this.getRiskLevel(riskScore)
-      },
+  }
       severity: riskScore > 80 ? 'critical' : riskScore > 60 ? 'warning' : 'info'
     });
   }
@@ -1076,6 +1119,7 @@ export class BehaviorAnalyticsService {
     sessionData: SessionBehaviorData,
     pattern: BehaviorPattern
   ): Promise<number> {
+
     // Simplified pattern deviation calculation
     // In production, this would use more sophisticated pattern matching
     return Math.random() * 0.5; // Placeholder
@@ -1160,6 +1204,7 @@ export class BehaviorAnalyticsService {
    * Update all user profiles periodically
    */
   private async updateAllProfiles(): Promise<void> {
+
     try {
       // Get users with recent activity
       const result = await this.db.query(`
@@ -1180,6 +1225,7 @@ export class BehaviorAnalyticsService {
    * Update patterns for a specific user
    */
   private async updateProfilePatterns(userId: string): Promise<void> {
+
     try {
       const profile = await this.getUserBehaviorProfile(userId);
       
@@ -1212,6 +1258,7 @@ export class BehaviorAnalyticsService {
    * Get recent sessions for a user
    */
   private async getRecentSessions(userId: string, days: number): Promise<SessionBehaviorData[]> {
+
     const result = await this.db.query(`
       SELECT * FROM user_behavior_sessions
       WHERE user_id = $1 AND created_at >= NOW() - INTERVAL '${days} days'
@@ -1237,6 +1284,7 @@ export class BehaviorAnalyticsService {
     type: BehaviorPatternType,
     sessions: SessionBehaviorData[]
   ): Promise<BehaviorPattern | null> {
+
     // Simplified pattern detection
     // In production, this would use more sophisticated algorithms
     
@@ -1371,6 +1419,7 @@ export class BehaviorAnalyticsService {
    * Initialize database schema
    */
   async initializeSchema(): Promise<void> {
+
     // User behavior profiles table
     await this.db.query(`
       CREATE TABLE IF NOT EXISTS user_behavior_profiles (
@@ -1384,7 +1433,7 @@ export class BehaviorAnalyticsService {
         status VARCHAR(50) DEFAULT 'learning',
         last_updated TIMESTAMP DEFAULT NOW(),
         created_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Behavior sessions table
@@ -1401,7 +1450,7 @@ export class BehaviorAnalyticsService {
         errors_data JSONB NOT NULL,
         created_at TIMESTAMP DEFAULT NOW(),
         UNIQUE(session_id)
-      )
+
     `);
 
     // Behavior analysis results table
@@ -1418,7 +1467,7 @@ export class BehaviorAnalyticsService {
         confidence DECIMAL(3,2) NOT NULL,
         reasoning TEXT[],
         created_at TIMESTAMP DEFAULT NOW()
-      )
+
     `);
 
     // Create indexes
@@ -1447,6 +1496,7 @@ export class BehaviorAnalyticsService {
    * Stop the service
    */
   async stop(): Promise<void> {
+
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }

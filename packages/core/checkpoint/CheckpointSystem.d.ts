@@ -17,6 +17,7 @@
  * - Data integrity validation
  */
 import { EventEmitter } from 'events';
+
 export interface CheckpointMetadata {
     id: string;
     name: string;
@@ -35,7 +36,7 @@ export interface CheckpointMetadata {
         totalSteps: number;
         elapsedTime: number;
     };
-}
+
 export interface CheckpointData {
     metadata: CheckpointMetadata;
     state: {,
@@ -52,7 +53,7 @@ export interface CheckpointData {
         isValid: boolean;
         validationErrors: string[];
     };
-}
+
 export interface CheckpointPolicy {
     autoSave: {,
         enabled: boolean;
@@ -72,7 +73,7 @@ export interface CheckpointPolicy {
         maxRecoveryAttempts: number;
         fallbackStrategy: 'latest' | 'stable' | 'manual';
     };
-}
+
 export interface CheckpointDiff {
     checkpointId: string;
     previousCheckpointId: string | null;
@@ -90,21 +91,21 @@ export interface CheckpointDiff {
         totalChanges: number;
         impactScore: number;
     };
-}
+
 export interface RecoveryOptions {
     checkpointId: string;
     preserveCurrentState: boolean;
     createBackup: boolean;
     validateBeforeRestore: boolean;
     progressCallback?: (progress: number, step: string) => void;
-}
+
 export interface CheckpointCompressionResult {
     originalSize: number;
     compressedSize: number;
     compressionRatio: number;
     algorithm: string;
     processingTime: number;
-}
+
 export declare class CheckpointSystem extends EventEmitter {
     private checkpoints;
     private policy;
@@ -163,7 +164,7 @@ export declare class CheckpointSystem extends EventEmitter {
     private simulateCompression;
     private generateChecksum;
     private generateHash;
-}
+
 export declare class CheckpointManager {
     private checkpointSystem;
     private currentSessionId;
@@ -173,7 +174,6 @@ export declare class CheckpointManager {
     undoLastChange(): Promise<void>;
     getRecentSaves(limit?: number): CheckpointMetadata[];
     private getCurrentState;
-}
 declare const _default: {
     CheckpointSystem: typeof CheckpointSystem;
     CheckpointManager: typeof CheckpointManager;

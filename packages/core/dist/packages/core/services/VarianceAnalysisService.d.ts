@@ -16,12 +16,12 @@ export interface VarianceMetrics {
         executionPathDiversity: number;
     };
     creativeRange: {
-        uniqueElements: string[];
-        commonElements: string[];
+        uniqueElements: string;
+        commonElements: string;
         repetitionRate: number;
         creativityScore: number;
     };
-    suggestions: VarianceSuggestion[];
+    suggestions: VarianceSuggestion;
 }
 export interface VarianceSuggestion {
     type: 'increase' | 'decrease' | 'optimize';
@@ -39,51 +39,9 @@ export interface DiversityIndicator {
 }
 export declare class VarianceAnalysisService {
     /**
-     * Analyzes variance across multiple preview results
-     */
-    analyzeVariance(results: PreviewResultWithPath[]): VarianceMetrics;
-    /**
-     * Creates diversity indicators for UI display
-     */
-    createDiversityIndicators(metrics: VarianceMetrics): DiversityIndicator[];
-    /**
-     * Gets variance level styling information
-     */
-    getVarianceLevelInfo(level: 'low' | 'medium' | 'high'): {
-        color: string;
-        background: string;
-        border: string;
-        icon: string;
-        description: string;
-    } | {
-        color: string;
-        background: string;
-        border: string;
-        icon: string;
-        description: string;
-    } | {
-        color: string;
-        background: string;
-        border: string;
-        icon: string;
-        description: string;
-    };
-    private createMinimalVariance;
-    private calculateLengthVariance;
-    private calculateVocabularyDiversity;
-    private calculateStructuralDiversity;
-    private calculateExecutionPathDiversity;
-    private extractUniqueElements;
-    private extractCommonElements;
-    private calculateRepetitionRate;
-    private calculateCreativityScore;
-    private calculateOverallVarianceScore;
-    private categorizeVariance;
-    private generateVarianceSuggestions;
-    private calculateArrayVariance;
-    private calculateStringSimilarity;
-    private categorizeMetric;
-    private getMetricColor;
+    * Analyzes variance across multiple preview results
+    */
+    analyzeVariance(results: PreviewResultWithPath): VarianceMetrics;
+    if(metrics: any, diversityMetrics: any, executionPathDiversity: any): any;
 }
-export declare const varianceAnalysisService: VarianceAnalysisService;
 //# sourceMappingURL=VarianceAnalysisService.d.ts.map

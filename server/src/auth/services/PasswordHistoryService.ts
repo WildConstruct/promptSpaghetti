@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
+}
 export interface PasswordHistoryEntry {
   id: string;
   userId: string;
@@ -22,11 +23,13 @@ export interface PasswordHistoryEntry {
     complianceFlags: string[];
     rotationPolicy?: string;
     breachDetected?: boolean;
+}
   };
   archivedAt?: Date;
   isActive: boolean;
 }
 
+}
 export interface PasswordSecurityAnalysis {
   userId: string;
   analysisDate: Date;
@@ -42,9 +45,11 @@ export interface PasswordSecurityAnalysis {
     event: string;
     severity: 'low' | 'medium' | 'high';
     description: string;
+}
   }>;
 }
 
+}
 export interface PasswordPattern {
   id: string;
   pattern: string;
@@ -54,7 +59,9 @@ export interface PasswordPattern {
   detectedAt: Date;
   affectedUsers: number;
 }
+}
 
+}
 export interface HistoryPolicy {
   preventReuse: number; // Number of previous passwords to remember
   minPasswordAge: number; // Minimum hours before password can be changed again
@@ -63,6 +70,7 @@ export interface HistoryPolicy {
   patternAnalysis: boolean; // Enable pattern detection
   complianceTracking: boolean; // Track compliance metrics
   retentionPeriod: number; // Days to keep password history
+}
 }
 
 export class PasswordHistoryService {
@@ -101,6 +109,7 @@ export class PasswordHistoryService {
       breachDetected?: boolean;
     } = {}
   ): Promise<PasswordHistoryEntry> {
+
     // Hash the password
     const passwordHash = await bcrypt.hash(password, this.saltRounds);
     
@@ -127,7 +136,7 @@ export class PasswordHistoryService {
         ...metadata,
         securityScore,
         complianceFlags
-      },
+  }
       isActive: true
     };
 
@@ -181,6 +190,7 @@ export class PasswordHistoryService {
     timeSinceLastUse?: number;
     allowedAfter?: Date;
   }> {
+
     const userHistory = this.passwordHistory.get(userId) || [];
     const recentPasswords = userHistory.slice(-this.policy.preventReuse!);
 
@@ -247,6 +257,7 @@ export class PasswordHistoryService {
    * Generate comprehensive security analysis for a user
    */
   async generateSecurityAnalysis(userId: string): Promise<PasswordSecurityAnalysis> {
+
     const userHistory = this.passwordHistory.get(userId) || [];
     
     if (userHistory.length === 0) {
@@ -297,11 +308,13 @@ export class PasswordHistoryService {
    * Detect and analyze password patterns across users
    */
   async analyzePasswordPatterns(password: string, userId: string): Promise<PasswordPattern[]> {
+
     const detectedPatterns: PasswordPattern[] = [];
     
     // Check for common weak patterns
     const weakPatterns = [
-      { pattern: /(.)\1{2,}/, type: 'weak_pattern', description: 'Repeating characters' },
+      { pattern: /(.)\1{2
+}/, type: 'weak_pattern', description: 'Repeating characters' },
       { pattern: /^(.+)123+$/, type: 'common_substitution', description: 'Common number suffix' },
       { pattern: /qwerty|asdf|zxcv/i, type: 'keyboard_sequence', description: 'Keyboard sequence' },
       { pattern: /password|admin|login/i, type: 'dictionary_word', description: 'Common dictionary word' }
@@ -436,6 +449,7 @@ export class PasswordHistoryService {
   // Private helper methods
 
   private async calculatePasswordStrength(password: string): Promise<number> {
+
     let score = 0;
     
     // Length bonus
@@ -452,13 +466,15 @@ export class PasswordHistoryService {
     score += Math.min(uniqueChars * 2, 20);
     
     // Penalty for common patterns
-    if (/(.)\1{2,}/.test(password)) score -= 10;
+    if (/(.)\1{2
+}/.test(password)) score -= 10;
     if (/123|abc|qwe/i.test(password)) score -= 15;
     
     return Math.max(0, Math.min(100, score));
   }
 
   private async calculateSecurityScore(password: string, userId: string): Promise<number> {
+
     let score = await this.calculatePasswordStrength(password);
     
     // Check against user's previous patterns
@@ -474,6 +490,7 @@ export class PasswordHistoryService {
   }
 
   private async detectComplianceIssues(password: string, userId: string): Promise<string[]> {
+
     const flags: string[] = [];
     
     const strength = await this.calculatePasswordStrength(password);
@@ -511,6 +528,7 @@ export class PasswordHistoryService {
   }
 
   private async countReuseViolations(userId: string): Promise<number> {
+
     // Implementation would count historical reuse violations
     return 0; // Simplified for example
   }
@@ -612,6 +630,7 @@ export class PasswordHistoryService {
   }
 
   private async updateSecurityAnalysis(userId: string): Promise<void> {
+
     await this.generateSecurityAnalysis(userId);
   }
 
@@ -645,6 +664,7 @@ export class PasswordHistoryService {
   }
 
   private async logPasswordEvent(userId: string, event: string, metadata: any): Promise<void> {
+
     console.log(`Password History Event: ${event} for user ${userId}`, metadata);
   }
 }

@@ -652,7 +652,7 @@ export declare class TutorialSecurity {
         isValid: boolean;
         error?: string;
     };
-}
+
 export declare class TutorialDataAccess {
     /**
      * Creates a new tutorial with security validation
@@ -670,7 +670,7 @@ export declare class TutorialDataAccess {
      * Searches tutorials with security filtering
      */
     static searchTutorials(query: string, userId?: string): Promise<Tutorial[]>;
-}
+
 export declare const schemas: {
     tutorial: z.ZodObject<{,
         id: z.ZodString;

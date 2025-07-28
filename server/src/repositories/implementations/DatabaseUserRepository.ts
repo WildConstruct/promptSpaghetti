@@ -10,6 +10,7 @@ export class DatabaseUserRepository implements UserRepository {
   constructor(private db: Database.Database) {}
 
   async create(request: CreateUserRequest): Promise<User> {
+
     const passwordHash = await argon2.hash(request.password);
     const now = Date.now();
     const userId = this.generateUserId();
@@ -42,6 +43,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async findById(id: UserId): Promise<User | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, email, name, organization_id, is_active, created_at, updated_at, last_login_at
       FROM users 
@@ -64,6 +66,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, email, name, organization_id, is_active, created_at, updated_at, last_login_at
       FROM users 
@@ -86,6 +89,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async update(id: UserId, updates: Partial<User>): Promise<User> {
+
     const setClause: string[] = [];
     const values: any[] = [];
     
@@ -127,6 +131,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async delete(id: UserId): Promise<boolean> {
+
     // Soft delete - mark as inactive
     const stmt = this.db.prepare(`
       UPDATE users 
@@ -139,11 +144,13 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async exists(id: UserId): Promise<boolean> {
+
     const stmt = this.db.prepare('SELECT 1 FROM users WHERE id = ? AND is_active = 1 LIMIT 1');
     return stmt.get(id) !== undefined;
   }
 
   async authenticate(email: string, password: string): Promise<User | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, email, name, password_hash, organization_id, is_active, created_at, updated_at, last_login_at
       FROM users 
@@ -172,11 +179,11 @@ export class DatabaseUserRepository implements UserRepository {
       isActive: Boolean(row.is_active),
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
-      lastLoginAt: new Date()
-    };
+      lastLoginAt: new Date(};
   }
 
   async updatePassword(id: UserId, newPassword: string): Promise<boolean> {
+
     const passwordHash = await argon2.hash(newPassword);
     
     const stmt = this.db.prepare(`
@@ -190,6 +197,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async findByOrganization(organizationId: string): Promise<User[]> {
+
     const stmt = this.db.prepare(`
       SELECT id, email, name, organization_id, is_active, created_at, updated_at, last_login_at
       FROM users 
@@ -211,6 +219,7 @@ export class DatabaseUserRepository implements UserRepository {
   }
 
   async getUserStats(id: UserId): Promise<UserStats> {
+
     const graphsStmt = this.db.prepare('SELECT COUNT(*) as count FROM graphs WHERE user_id = ?');
     const graphsResult = graphsStmt.get(id) as any;
     
@@ -227,8 +236,7 @@ export class DatabaseUserRepository implements UserRepository {
       totalGraphs: graphsResult?.count || 0,
       totalExecutions: executionsResult?.count || 0,
       lastLoginAt: user?.lastLoginAt || null,
-      accountCreatedAt: user?.createdAt || new Date()
-    };
+      accountCreatedAt: user?.createdAt || new Date(};
   }
 
   private generateUserId(): string {

@@ -29,7 +29,6 @@ interface ActivityState {
     pageSize: number;
     hasNextPage: boolean;
     hasPreviousPage: boolean;
-}
 interface ActivityActions {
     setActivities: (activities: Activity[]) => void;
     addActivity: (activity: Activity) => void;
@@ -67,7 +66,6 @@ interface ActivityActions {
     setLoading: (loading: boolean) => void;
     setError: (error: string | null) => void;
     reset: () => void;
-}
 type ActivityStore = ActivityState & ActivityActions;
 export declare const useActivityStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<ActivityStore>, "subscribe"> & {
     subscribe: {,

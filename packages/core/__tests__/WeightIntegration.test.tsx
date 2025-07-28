@@ -10,39 +10,39 @@ import { useWeightControlIntegration } from '../components/Inspector/WeightContr
 
 // Mock the hooks to test integration
 jest.mock('../hooks/useRealTimePreview', () => ({)
-  useRealTimePreview: () => ({),
-    variants: [],
+  useRealTimePreview: () => ({,)
+  variants: [],
     isGenerating: false,
     performance: { averageExecutionTime: 50, totalGenerations: 0, successRate: 100 },
     error: null,
-    requestPreview: jest.fn<unknown[], unknown>(),
-    forcePreview: jest.fn<unknown[], unknown>(),
-    refreshVariant: jest.fn<unknown[], unknown>(),
-    clearVariants: jest.fn<unknown[], unknown>(),
-    getPerformanceInsights: () => [],
-  })
+    requestPreview: jest.fn<unknown, unknown>(),
+    forcePreview: jest.fn<unknown, unknown>(),
+    refreshVariant: jest.fn<unknown, unknown>(),
+    clearVariants: jest.fn<unknown, unknown>(),
+    getPerformanceInsights: () => [];
+  }
 }));
 jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({),
-    complexityLevel: 'advanced',
-    shouldShowTechnicalFields: () => true,
-  })
+  useUISettingsStore: () => ({,)
+  complexityLevel: 'advanced',
+  shouldShowTechnicalFields: () => true,
+}
 }));
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({),
-    nodes: [],
-    edges: [],
-  })
+  useGraphStore: () => ({,)
+  nodes: [],
+  edges: [],
+}
 }));
 describe('Epic 8.5 Task 6: Weight Integration', () => {
   const mockNodeData = {
-    id: 'test-node',
-    name: 'Test WeightedChoice',
-    choices: ['Option A', 'Option B', 'Option C'],
-    weights: [1, 2, 3]
-  };
-  const mockOnChange = jest.fn<unknown[], unknown>();
-  const mockOnGlobalPreviewRequest = jest.fn<unknown[], unknown>();
+  id: 'test-node',
+  name: 'Test WeightedChoice',
+  choices: ['Option A', 'Option B', 'Option C'],
+  weights: [1, 2, 3],
+};
+  const mockOnChange = jest.fn<unknown, unknown>();
+  const mockOnGlobalPreviewRequest = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -69,14 +69,14 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     expect(screen.getByText(/Last update:/)).toBeInTheDocument();
   });
   test('useWeightControlIntegration should debounce preview requests', async () => {
-    const mockPreviewRequest = jest.fn<unknown[], unknown>();
+    const mockPreviewRequest = jest.fn<unknown, unknown>();
     const options = [;
       { id: '1', text: 'A', weight: 50 },
       { id: '2', text: 'B', weight: 30 }
     ];
     const TestComponent = () => {
       const { handleOptionsChange } = useWeightControlIntegration(options, mockPreviewRequest);
-      return ();
+      return;
         <button onClick={() => handleOptionsChange(options)}>
           Trigger Weight Change
         </button>
@@ -97,10 +97,10 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     expect(mockPreviewRequest).toHaveBeenCalledWith(options);
   });
   test('should integrate with weight visualization', () => {
-    const nodeDataWithWeights = {
-      ...mockNodeData,
-      weights: [70, 20, 10] // Varied weights for testing
-    };
+  const nodeDataWithWeights = {
+  ...mockNodeData,
+  weights: [70, 20, 10] // Varied weights for testing,
+};
     render();
       <WeightedChoiceEditor
         nodeData={nodeDataWithWeights}
@@ -123,9 +123,9 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
     );
     // Simulate weight change by updating nodeData
     const updatedNodeData = {
-      ...mockNodeData,
-      weights: [2, 2, 2] // Changed weights
-    };
+  ...mockNodeData,
+  weights: [2, 2, 2] // Changed weights,
+};
     rerender();
       <WeightedChoiceEditor
         nodeData={updatedNodeData}
@@ -140,7 +140,7 @@ describe('Epic 8.5 Task 6: Weight Integration', () => {
 describe('Weight Integration Performance', () => {
   test('should have reasonable debounce timing', () => {
     const start = Date.now();
-    const mockCallback = jest.fn<unknown[], unknown>();
+    const mockCallback = jest.fn<unknown, unknown>();
     // This is a basic timing test - more sophisticated testing would use fake timers
     const { handleOptionsChange } = useWeightControlIntegration([], mockCallback);
     expect(typeof handleOptionsChange).toBe('function');

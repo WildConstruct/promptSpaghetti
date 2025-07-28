@@ -17,5 +17,5 @@ interface RateLimitingAnalyticsDashboardProps {
     showAdvancedFeatures?: boolean;
 }
 export declare const RateLimitingAnalyticsDashboardComponent: React.FC<RateLimitingAnalyticsDashboardProps>;
-export default RateLimitingAnalyticsDashboardComponent;
+export {};
 //# sourceMappingURL=RateLimitingAnalyticsDashboardComponent.d.ts.map

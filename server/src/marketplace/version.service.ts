@@ -34,6 +34,7 @@ export class VersionService {
 
   // Create new version with enhanced metadata
   async createVersion(templateId: string, userId: string, versionData: any): Promise<EnhancedTemplateVersion> {
+
     const validated = CreateVersionSchema.parse(versionData);
     
     // Check if user has permission to create versions
@@ -100,6 +101,7 @@ export class VersionService {
 
   // Get version by ID
   async getVersion(id: string, userId?: string): Promise<EnhancedTemplateVersion | null> {
+
     const result = await this.pool.query(`
       SELECT v.*, t.owner_id, u.name as creator_name
       FROM enhanced_template_versions v
@@ -126,6 +128,7 @@ export class VersionService {
 
   // Get version by semantic version number
   async getVersionByNumber(templateId: string, versionNumber: string): Promise<EnhancedTemplateVersion | null> {
+
     const result = await this.pool.query(`
       SELECT v.*, t.owner_id, u.name as creator_name
       FROM enhanced_template_versions v
@@ -139,6 +142,7 @@ export class VersionService {
 
   // Get all versions for a template
   async getTemplateVersions(templateId: string, userId?: string, includePrivate: boolean = false): Promise<EnhancedTemplateVersion[]> {
+
     const template = await this.dao.getTemplate(templateId);
     if (!template) {
       throw new NotFoundException('Template not found');
@@ -168,6 +172,7 @@ export class VersionService {
 
   // Update version
   async updateVersion(id: string, userId: string, updates: any): Promise<EnhancedTemplateVersion> {
+
     const validated = UpdateVersionSchema.parse(updates);
     
     const version = await this.getVersion(id, userId);
@@ -211,6 +216,7 @@ export class VersionService {
 
   // Compare versions
   async compareVersions(fromVersionId: string, toVersionId: string, options: any = {}): Promise<VersionComparison> {
+
     const validated = VersionComparisonSchema.parse({ 
       from_version_id: fromVersionId, 
       to_version_id: toVersionId,
@@ -250,6 +256,7 @@ export class VersionService {
 
   // Deploy version
   async deployVersion(versionId: string, userId: string, deploymentData: any): Promise<VersionDeployment> {
+
     const validated = VersionDeploymentSchema.parse(deploymentData);
     
     const version = await this.getVersion(versionId, userId);
@@ -289,6 +296,7 @@ export class VersionService {
 
   // Rollback version
   async rollbackVersion(templateId: string, userId: string, rollbackData: any): Promise<VersionRollback> {
+
     const validated = VersionRollbackSchema.parse(rollbackData);
     
     const template = await this.dao.getTemplate(templateId);
@@ -344,6 +352,7 @@ export class VersionService {
 
   // Get version analytics
   async getVersionAnalytics(versionId: string, userId: string, periodDays: number = 30): Promise<VersionAnalytics> {
+
     const version = await this.getVersion(versionId, userId);
     if (!version) {
       throw new NotFoundException('Version not found');
@@ -422,7 +431,7 @@ export class VersionService {
         average_execution_time: parseFloat(metrics.average_execution_time) || 0,
         satisfaction_score: parseFloat(metrics.satisfaction_score) || 0,
         adoption_rate: adoptionRate
-      },
+  }
       performance_trends: trendsResult.rows.map(row => ({
         date: row.date,
         downloads: parseInt(row.downloads),
@@ -555,6 +564,7 @@ export class VersionService {
   }
 
   private async processDeployment(deploymentId: string): Promise<void> {
+
     // Simulate deployment process (in production, this would be more complex)
     setTimeout(async () => {
       await this.pool.query(`
@@ -575,6 +585,7 @@ export class VersionService {
   }
 
   private async executeRollback(rollbackId: string): Promise<void> {
+
     const rollback = await this.pool.query(`
       SELECT * FROM version_rollbacks WHERE id = $1
     `, [rollbackId]);
@@ -606,6 +617,7 @@ export class VersionService {
   }
 
   private async isUserAdmin(userId: string): Promise<boolean> {
+
     const result = await this.pool.query(`
       SELECT role FROM users WHERE id = $1
     `, [userId]);

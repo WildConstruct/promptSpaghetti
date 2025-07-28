@@ -21,6 +21,7 @@ import {
   FraudIndicator
 } from '../../../../packages/core/types/TrustTypes';
 
+}
 export interface EnforcementAction {
   actionId: string;
   entityType: 'user' | 'template' | 'transaction';
@@ -40,9 +41,11 @@ export interface EnforcementAction {
     reversedAt: Date;
     reversedBy: string;
     reason: string;
+}
   };
 }
 
+}
 export interface EnforcementPolicy {
   policyId: string;
   name: string;
@@ -53,6 +56,7 @@ export interface EnforcementPolicy {
       suspend: number;
       restrict: number;
       flag: number;
+}
     };
     riskFactorRules?: {
       criticalRiskCount: number;
@@ -78,6 +82,7 @@ export interface EnforcementPolicy {
   };
 }
 
+}
 export interface EnforcementConfig {
   enabled: boolean;
   policies: EnforcementPolicy[];
@@ -85,6 +90,7 @@ export interface EnforcementConfig {
     adminAlerts: boolean;
     userNotifications: boolean;
     webhookUrl?: string;
+}
   };
   reviewSettings: {
     autoReviewEnabled: boolean;
@@ -122,6 +128,7 @@ export class AutomatedEnforcementService {
     userTrustScore: UserTrustScore,
     triggeredBy: string = 'trust_score_update'
   ): Promise<EnforcementAction[]> {
+
     if (!this.config.enabled) {
       return [];
     }
@@ -176,6 +183,7 @@ export class AutomatedEnforcementService {
     templateTrustScore: TemplateTrustScore,
     triggeredBy: string = 'template_analysis'
   ): Promise<EnforcementAction[]> {
+
     if (!this.config.enabled) {
       return [];
     }
@@ -223,6 +231,7 @@ export class AutomatedEnforcementService {
     transactionTrustScore: TransactionTrustScore,
     triggeredBy: string = 'transaction_analysis'
   ): Promise<EnforcementAction[]> {
+
     if (!this.config.enabled) {
       return [];
     }
@@ -290,6 +299,7 @@ export class AutomatedEnforcementService {
     evidence: string[];
     description: string;
   }): Promise<EnforcementAction[]> {
+
     console.log(`🚨 Processing suspicious activity report: ${report.type} (${report.severity})`);
     
     const actions: EnforcementAction[] = [];
@@ -572,6 +582,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyEnforcementActions(actions: EnforcementAction[]): Promise<EnforcementAction[]> {
+
     const appliedActions: EnforcementAction[] = [];
     
     for (const action of actions) {
@@ -598,7 +609,7 @@ export class AutomatedEnforcementService {
           details: {
             action: action,
             error: error.message
-          },
+  }
           severity: 'error'
         });
       }
@@ -608,6 +619,7 @@ export class AutomatedEnforcementService {
   }
 
   private async executeEnforcementAction(action: EnforcementAction): Promise<void> {
+
     const client = await this.db.getClient();
     
     try {
@@ -651,6 +663,7 @@ export class AutomatedEnforcementService {
   // =============================================================================
 
   private async applySuspension(client: unknown, action: EnforcementAction): Promise<void> {
+
     if (action.entityType === 'user') {
       // Update user status to suspended
       await client.query(`
@@ -686,6 +699,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyRestriction(client: unknown, action: EnforcementAction): Promise<void> {
+
     if (action.entityType === 'user') {
       // Apply user restrictions
       await client.query(`
@@ -708,6 +722,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyFlagging(client: unknown, action: EnforcementAction): Promise<void> {
+
     // Add flag to entity
     await client.query(`
       INSERT INTO entity_flags (entity_type, entity_id, flag_type, reason, flagged_by, expires_at)
@@ -716,6 +731,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyVerificationRequirement(client: unknown, action: EnforcementAction): Promise<void> {
+
     if (action.entityType === 'user') {
       // Require additional verification
       await client.query(`
@@ -729,6 +745,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyTransactionBlock(client: unknown, action: EnforcementAction): Promise<void> {
+
     // Block/cancel transaction
     await client.query(`
       UPDATE transactions 
@@ -741,6 +758,7 @@ export class AutomatedEnforcementService {
   }
 
   private async applyTemplateQuarantine(client: unknown, action: EnforcementAction): Promise<void> {
+
     // Quarantine template
     await client.query(`
       UPDATE templates 
@@ -757,6 +775,7 @@ export class AutomatedEnforcementService {
   // =============================================================================
 
   private async isUserExempt(userId: string, policy: EnforcementPolicy): Promise<boolean> {
+
     if (!policy.exemptions) {
       return false;
     }
@@ -837,6 +856,7 @@ export class AutomatedEnforcementService {
   }
 
   private async storeEnforcementAction(action: EnforcementAction): Promise<void> {
+
     await this.db.query(`
       INSERT INTO enforcement_actions 
       (action_id, entity_type, entity_id, action_type, severity, reason, 
@@ -857,6 +877,7 @@ export class AutomatedEnforcementService {
     entityId: string,
     actions: EnforcementAction[]
   ): Promise<void> {
+
     await this.auditService.logEvent({
       userId: 'automated_enforcement',
       action: 'enforcement_decision',
@@ -870,7 +891,7 @@ export class AutomatedEnforcementService {
           autoApplied: a.autoApplied,
           actionTaken: a.actionTaken
         }))
-      },
+  }
       severity: actions.some(a => a.severity === 'critical') ? 'error' : 'warning'
     });
   }
@@ -880,6 +901,7 @@ export class AutomatedEnforcementService {
     context: unknown,
     actions: EnforcementAction[]
   ): Promise<void> {
+
     if (this.config.notificationSettings.adminAlerts) {
       console.log(`🚨 ADMIN ALERT: ${alertType}`, { context, actions });
       // TODO: Implement actual alert mechanism (email, Slack, etc.)
@@ -905,24 +927,24 @@ export class AutomatedEnforcementService {
               suspend: 25,
               restrict: 40,
               flag: 60
-            },
+  }
             riskFactorRules: {
               criticalRiskCount: 1,
               highRiskCount: 3,
               automaticSuspension: true
-            },
+  }
             fraudDetectionRules: {
               fraudScoreThreshold: 80,
               suspiciousIndicatorThreshold: 3
             }
-          },
+  }
           actions: {
             autoSuspension: true,
             autoRestriction: true,
             autoFlagging: true,
             requireManualReview: true,
             notifyAdmins: true
-          },
+  }
           exemptions: {
             highTrustUsers: true,
             verifiedUsers: false,
@@ -933,7 +955,7 @@ export class AutomatedEnforcementService {
       notificationSettings: {
         adminAlerts: true,
         userNotifications: true
-      },
+  }
       reviewSettings: {
         autoReviewEnabled: false,
         appealProcessEnabled: true,
@@ -954,6 +976,7 @@ export class AutomatedEnforcementService {
     entityId: string,
     options: { limit?: number; includeExpired?: boolean } = {}
   ): Promise<EnforcementAction[]> {
+
     const { limit = 50, includeExpired = false } = options;
     
     let query = `
@@ -996,6 +1019,7 @@ export class AutomatedEnforcementService {
     entityType: 'user' | 'template' | 'transaction',
     entityId: string
   ): Promise<EnforcementAction[]> {
+
     console.log(`🔄 Manual enforcement evaluation triggered for ${entityType}: ${entityId}`);
     
     switch (entityType) {

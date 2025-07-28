@@ -6,6 +6,7 @@
  * policy enforcement, monitoring, and compliance management.
  */
 import { SecurityEvent, SecurityEventSeverity, ComplianceFramework } from './SecurityEventLoggingPolicies';
+
 export interface PolicyManagerConfig {
     enabled: boolean;
     real_time_processing: boolean;
@@ -25,7 +26,7 @@ export interface PolicyManagerConfig {
         siem_integration_enabled: boolean;
         compliance_reporting_enabled: boolean;
     };
-}
+
 export interface NotificationChannel {
     channel_id: string;
     channel_type: 'email' | 'sms' | 'slack' | 'webhook' | 'dashboard' | 'siem';
@@ -37,7 +38,7 @@ export interface NotificationChannel {
         max_per_minute: number;
         burst_limit: number;
     };
-}
+
 export interface PolicyEnforcementResult {
     event_id: string;
     policies_matched: string[];
@@ -48,7 +49,7 @@ export interface PolicyEnforcementResult {
     automated_responses: AutomatedResponse[];
     processing_time_ms: number;
     errors: string[];
-}
+
 export interface PolicyAction {
     action_id: string;
     action_type: 'containment' | 'notification' | 'escalation' | 'documentation' | 'analysis';
@@ -57,7 +58,7 @@ export interface PolicyAction {
     success: boolean;
     details: Record<string, any>;
     error_message?: string;
-}
+
 export interface NotificationResult {
     notification_id: string;
     channel_id: string;
@@ -67,7 +68,7 @@ export interface NotificationResult {
     success: boolean;
     delivery_status?: 'pending' | 'delivered' | 'failed' | 'bounced';
     error_message?: string;
-}
+
 export interface ComplianceImpact {
     framework: ComplianceFramework;
     requirement_ids: string[];
@@ -75,7 +76,7 @@ export interface ComplianceImpact {
     notification_required: boolean;
     reporting_deadline?: Date;
     external_notification_required: boolean;
-}
+
 export interface AutomatedResponse {
     response_id: string;
     response_type: 'ip_block' | 'account_lock' | 'service_isolation' | 'data_quarantine';
@@ -84,7 +85,7 @@ export interface AutomatedResponse {
     details: Record<string, any>;
     rollback_available: boolean;
     rollback_deadline?: Date;
-}
+
 export interface PolicyMetrics {
     policy_id: string;
     events_processed: number;
@@ -96,7 +97,6 @@ export interface PolicyMetrics {
     compliance_violations: number;
     effectiveness_score: number;
     last_updated: Date;
-}
 /**
  * Advanced Security Event Policy Manager
  *
@@ -198,6 +198,6 @@ export declare class SecurityEventPolicyManager {
         recommendations: string[];
     };
     private generatePolicyRecommendations;
-}
+
 export declare export default SecurityEventPolicyManager;
 //# sourceMappingURL=SecurityEventPolicyManager.d.ts.map

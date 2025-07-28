@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { CaseStudy } from '../../models/CaseStudyDataModel';
+
 export interface CaseStudyModalProps {
     caseStudy: CaseStudy;
     isOpen: boolean;
@@ -15,7 +16,7 @@ export interface CaseStudyModalProps {
     onAuthorClick?: (authorId: string) => void;
     onShare?: (caseStudy: CaseStudy) => void;
     className?: string;
-}
+
 export declare const CaseStudyModal: React.FC<CaseStudyModalProps>;
 export default CaseStudyModal;
 //# sourceMappingURL=CaseStudyModal.d.ts.map

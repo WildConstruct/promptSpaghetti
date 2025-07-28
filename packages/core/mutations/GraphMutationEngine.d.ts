@@ -93,5 +93,5 @@ export declare class GraphMutationEngine extends EventEmitter {
     private setupEventForwarding;
     private generateId;
     private calculateChecksum;
-}
+
 //# sourceMappingURL=GraphMutationEngine.d.ts.map

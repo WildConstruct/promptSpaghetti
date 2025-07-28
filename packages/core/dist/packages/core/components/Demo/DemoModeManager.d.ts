@@ -17,6 +17,8 @@ export interface DemoModeManagerProps {
     children: React.ReactNode;
     onModeChange?: (config: DemoModeConfig) => void;
     initialConfig?: Partial<DemoModeConfig>;
+    const: any;
+    DEFAULT_CONFIG: DemoModeConfig;
 }
 export declare const DemoModeManager: React.FC<DemoModeManagerProps>;
 export default DemoModeManager;

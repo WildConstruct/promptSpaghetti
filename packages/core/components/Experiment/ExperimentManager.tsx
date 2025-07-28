@@ -50,34 +50,32 @@ import {
 } from '../../types/experiment';
 
 export interface ExperimentManagerProps {
-  experiments: Experiment[];
-  templates: ExperimentTemplate[];
-  knowledgeBase: KnowledgeBaseEntry[];
+  experiments: Experiment;,
+  templates: ExperimentTemplate;
+  knowledgeBase: KnowledgeBaseEntry;,
   onCreateExperiment: (template?: ExperimentTemplate) => void;
-  onEditExperiment: (id: string) => void;
-  onViewResults: (id: string) => void;
-  onDuplicateExperiment: (id: string) => void;
-  onArchiveExperiment: (id: string) => void;
-  onStartExperiment: (id: string) => Promise<void>;
-  onPauseExperiment: (id: string) => Promise<void>;
-  onStopExperiment: (id: string) => Promise<void>;
-  onExportExperiments: (format: 'csv' | 'json') => Promise<void>;
-  onImportTemplate: (file: File) => Promise<void>;
+  onEditExperiment: (id: string) => void;,
+  onViewResults: (id: string) => void;,
+  onDuplicateExperiment: (id: string) => void;,
+  onArchiveExperiment: (id: string) => void;,
+  onStartExperiment: (id: string) => Promise<void>;,
+  onPauseExperiment: (id: string) => Promise<void>;,
+  onStopExperiment: (id: string) => Promise<void>;,
+  onExportExperiments: (format: 'csv' | 'json') => Promise<void>;,
+  onImportTemplate: (file: File) => Promise<void>;,
   onCreateTemplate: (experimentId: string) => Promise<void>;
   className?: string;
-}
-interface ManagerState {
-  activeTab: string;
+  interface ManagerState {
+  activeTab: string;,
   searchQuery: string;
-  statusFilter: ExperimentStatus | 'all';
+  statusFilter: ExperimentStatus | 'all';,
   typeFilter: ExperimentType | 'all';
-  tagFilter: string;
+  tagFilter: string;,
   sortBy: 'created' | 'updated' | 'name' | 'status';
-  sortOrder: 'asc' | 'desc';
-  selectedExperiments: string[];
+  sortOrder: 'asc' | 'desc';,
+  selectedExperiments: string;
   showArchived: boolean;
 }
-
 export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
   experiments,
   templates,
@@ -96,87 +94,80 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
   className = ''
 }) => {
   const [state, setState] = useState<ManagerState>({)
-    activeTab: 'experiments',
-    searchQuery: '',
-    statusFilter: 'all',
-    typeFilter: 'all',
-    tagFilter: '',
-    sortBy: 'updated',
-    sortOrder: 'desc',
-    selectedExperiments: [],
-    showArchived: false,
-  });
+  activeTab: 'experiments',
+  searchQuery: '',
+  statusFilter: 'all',
+  typeFilter: 'all',
+  tagFilter: '',
+  sortBy: 'updated',
+  sortOrder: 'desc',
+  selectedExperiments: [],
+  showArchived: false,
+});
   /**
    * Filter and sort experiments
    */
   const filteredExperiments = React.useMemo(() => {
     const filtered = experiments.filter(experiment => {)
-      // Text search
+  // Text search
       if (state.searchQuery) {
         const query = state.searchQuery.toLowerCase();
         if (!experiment.name.toLowerCase().includes(query) &&
             !experiment.hypothesis.toLowerCase().includes(query) &&
             !experiment.tags.some(tag => tag.toLowerCase().includes(query))) {
           return false;
-        }
-      }
       // Status filter
       if (state.statusFilter !== 'all' && experiment.status !== state.statusFilter) {
         return false;
-      }
       // Type filter
       if (state.typeFilter !== 'all' && experiment.type !== state.typeFilter) {
         return false;
-      }
       // Tag filter
       if (state.tagFilter && !experiment.tags.includes(state.tagFilter)) {
         return false;
-      }
       // Archive filter
       if (!state.showArchived && experiment.status === 'archived') {
         return false;
-      }
       return true;
     });
     // Sort
     filtered.sort((a, b) => {
-      let aValue, bValue;
-      switch (state.sortBy) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'status':
-          aValue = a.status;
-          bValue = b.status;
-          break;
-        case 'created':
-          aValue = a.createdAt.getTime();
-          bValue = b.createdAt.getTime();
-          break;
-        case 'updated':
-        default:
-          aValue = a.updatedAt.getTime();
-          bValue = b.updatedAt.getTime();
-          break;
-      }
-      if (aValue < bValue) return state.sortOrder === 'asc' ? -1 : 1;
-      if (aValue > bValue) return state.sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
+  let aValue, bValue;
+  switch (state.sortBy) {
+  case 'name':,
+  aValue = a.name.toLowerCase();
+  bValue = b.name.toLowerCase();
+  break;
+  case 'status':,
+  aValue = a.status;
+  bValue = b.status;
+  break;
+  case 'created':,
+  aValue = a.createdAt.getTime();
+  bValue = b.createdAt.getTime();
+  break;
+  case 'updated':,
+  default:,
+  aValue = a.updatedAt.getTime();
+  bValue = b.updatedAt.getTime();
+  break;
+  if (aValue < bValue) return state.sortOrder === 'asc' ? -1 : 1;
+  if (aValue > bValue) return state.sortOrder === 'asc' ? 1 : -1;
+  return 0;
+});
     return filtered;
   }, [experiments, state]);
   /**
    * Get experiment statistics
    */
   const experimentStats = React.useMemo(() => {
-    const stats = {
-      total: experiments.length,
-      running: experiments.filter(e => e.status === 'running').length,
-      draft: experiments.filter(e => e.status === 'draft').length,
-      completed: experiments.filter(e => e.status === 'completed').length,
-      archived: experiments.filter(e => e.status === 'archived').length,
-    };
+  const stats = {
+  total: experiments.length,
+  running: experiments.filter(e => e.status === 'running').length,
+  draft: experiments.filter(e => e.status === 'draft').length,
+  completed: experiments.filter(e => e.status === 'completed').length,
+  archived: experiments.filter(e => e.status === 'archived').length,
+};
     return stats;
   }, [experiments]);
   /**
@@ -197,40 +188,36 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
         case 'archive':
           for (const id of state.selectedExperiments) {
             await onArchiveExperiment(id);
-          }
           break;
         case 'export':
           await onExportExperiments('json');
           break;
-      }
       setState(prev => ({ ...prev, selectedExperiments: [] }));
     } catch (error) {
-      console.error('Bulk action failed:', error);
-    }
-  }, [state.selectedExperiments, onArchiveExperiment, onExportExperiments]);
+  console.error('Bulk action failed:', error);
+}, [state.selectedExperiments, onArchiveExperiment, onExportExperiments]);
   /**
    * Toggle experiment selection
    */
   const toggleExperimentSelection = useCallback((experimentId: string) => {
-    setState(prev => ({)
-      ...prev,
-      selectedExperiments: prev.selectedExperiments.includes(experimentId),
-        ? prev.selectedExperiments.filter(id => id !== experimentId)
-        : [...prev.selectedExperiments, experimentId]
-    }));
+  setState(prev => ({)
+  ...prev,
+  selectedExperiments: prev.selectedExperiments.includes(experimentId),
+  ? prev.selectedExperiments.filter(id => id !== experimentId)
+  : [...prev.selectedExperiments, experimentId],
+}));
   }, []);
   /**
    * Get status badge variant
    */
   const getStatusVariant = useCallback((status: ExperimentStatus) => {
-    switch (status) {
-      case 'running': return 'default';
-      case 'completed': return 'default';
-      case 'paused': return 'secondary';
-      case 'archived': return 'outline';
-      default: return 'secondary';
-    }
-  }, []);
+  switch (status) {
+  case 'running': return 'default';
+  case 'completed': return 'default';
+  case 'paused': return 'secondary';
+  case 'archived': return 'outline';
+  default: return 'secondary';
+}, []);
   /**
    * Format duration
    */
@@ -240,7 +227,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     return `${days} day${days !== 1 ? 's' : ''}`;}
   }, []);
-  return ();
+  return;
     <div className={`experiment-manager ${className}`}>}
       {/* Header */}
       <div className="manager-header">
@@ -377,7 +364,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
                 <Select value={`${state.sortBy}-${state.sortOrder}`} onValueChange={(value) => {}
                   const [sortBy, sortOrder] = value.split('-');
                   setState();
-                    prev => ({ ...prev,)
+                    prev => ({ ...prev)
                     sortBy: sortBy as 'created' | 'updated' | 'name' | 'status',
                     sortOrder: sortOrder as 'asc' | 'desc' }
                   ));
@@ -647,11 +634,11 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
               <CardContent>
                 <div className="space-y-3">
                   {['prompt', 'graph', 'feature_flag'].map(type => {)
-                    const typeExperiments = experiments.filter(e => e.type === type);
+  const typeExperiments = experiments.filter(e => e.type === type);
                     const successRate = typeExperiments.length > 0 ;
                       ? (typeExperiments.filter(e => e.status === 'completed').length / typeExperiments.length) * 100
                       : 0;
-                    return ();
+                    return;
                       <div key={type} className="flex items-center justify-between">
                         <span className="text-sm capitalize">{type}</span>
                         <div className="flex items-center space-x-2">
@@ -684,7 +671,7 @@ export const ExperimentManager: React.FC<ExperimentManagerProps> = ({)
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">
                     {Math.round()
-                      experiments.reduce((acc,)
+                      experiments.reduce((acc)
                       exp
                     ) => acc + exp.variants.length, 0) / experiments.length) || 0}
                   </div>

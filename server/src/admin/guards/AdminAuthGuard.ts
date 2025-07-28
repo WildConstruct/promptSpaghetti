@@ -19,6 +19,7 @@ import { Reflector } from '@nestjs/core';
 import { Pool } from 'pg';
 import { AuthService } from '../../auth/services/AuthService';
 
+}
 export interface AdminUser {
   id: string;
   email: string;
@@ -27,13 +28,16 @@ export interface AdminUser {
   adminGroups: string[];
   isActive: boolean;
 }
+}
 
+}
 export interface AdminPermissionCheck {
   userId: string;
   requiredPermissions: string[];
   userPermissions: string[];
   hasAccess: boolean;
   deniedPermissions: string[];
+}
 }
 
 @Injectable()
@@ -47,6 +51,7 @@ export class AdminAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+
     const request = context.switchToHttp().getRequest();
     
     try {
@@ -115,6 +120,7 @@ export class AdminAuthGuard implements CanActivate {
   }
 
   private async getAdminUserDetails(userId: string): Promise<AdminUser | null> {
+
     const query = `
       SELECT 
         u.id,
@@ -231,6 +237,7 @@ export class AdminAuthGuard implements CanActivate {
   }
 
   private async logAdminAccess(userId: string, request: any): Promise<void> {
+
     try {
       const logQuery = `
         INSERT INTO admin_activity_log (
@@ -268,6 +275,7 @@ export class AdminAuthGuard implements CanActivate {
     requiredPermissions: string[], 
     request: any
   ): Promise<void> {
+
     try {
       const logQuery = `
         INSERT INTO admin_activity_log (
@@ -307,6 +315,7 @@ export class AdminAuthGuard implements CanActivate {
     userId: string, 
     permission: string
   ): Promise<boolean> {
+
     const query = `
       SELECT 1
       FROM admin_user_group_assignments auga
@@ -317,7 +326,7 @@ export class AdminAuthGuard implements CanActivate {
           apg.permissions ? $2 
           OR apg.permissions ? 'admin:*'
           OR apg.permissions ? 'super_admin'
-        )
+
       LIMIT 1
     `;
 
@@ -334,6 +343,7 @@ export class AdminAuthGuard implements CanActivate {
    * Get all permissions for a user (utility method)
    */
   static async getUserPermissions(pool: Pool, userId: string): Promise<string[]> {
+
     const query = `
       SELECT DISTINCT perm.value as permission
       FROM admin_user_group_assignments auga

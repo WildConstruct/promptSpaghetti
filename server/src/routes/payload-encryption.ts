@@ -4,25 +4,33 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { PayloadEncryptionService, EncryptedPayload } from '../middleware/payload-encryption';
 
+}
 interface EncryptPayloadRequest {
   data: unknown;
   endpoint?: string;
   algorithm?: 'aes-256-gcm' | 'aes-256-cbc' | 'chacha20-poly1305';
   compression?: boolean;
 }
+}
 
+}
 interface DecryptPayloadRequest {
   encryptedPayload: EncryptedPayload;
 }
+}
 
+}
 interface KeyRotationRequest {
   reason?: string;
   scheduleDate?: string;
 }
+}
 
+}
 interface EncryptionTestRequest {
   testData: unknown;
   iterations?: number;
+}
 }
 
 export async function payloadEncryptionRoutes(
@@ -65,7 +73,7 @@ export async function payloadEncryptionRoutes(
           compressionUsed: encryptedPayload.compressed || false,
           algorithm: encryptedPayload.algorithm,
           keyId: encryptedPayload.keyId
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -112,7 +120,7 @@ export async function payloadEncryptionRoutes(
           wasCompressed: encryptedPayload.compressed || false,
           originalTimestamp: encryptedPayload.timestamp,
           decryptionTime: Date.now()
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -145,14 +153,14 @@ export async function payloadEncryptionRoutes(
           averageEncryptionTimeMs: Math.round(metrics.averageEncryptionTime),
           averageDecryptionTimeMs: Math.round(metrics.averageDecryptionTime),
           compressionEfficiency: `${Math.round((1 - metrics.compressionRatio) * 100)}%`
-        },
+  }
         insights: {
           totalOperations: metrics.totalEncryptions + metrics.totalDecryptions,
           encryptionToDecryptionRatio: metrics.totalDecryptions > 0 ? 
             Math.round((metrics.totalEncryptions / metrics.totalDecryptions) * 100) / 100 : metrics.totalEncryptions,
           errorRate: `${Math.round((metrics.failedOperations / (metrics.totalEncryptions + metrics.totalDecryptions)) * 100)}%`,
           keyRotationFrequency: metrics.keyRotations
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -191,7 +199,7 @@ export async function payloadEncryptionRoutes(
           reason,
           rotatedBy: userId,
           rotatedAt: new Date().toISOString()
-        },
+  }
         nextSteps: [
           'New key is now active for all encryption operations',
           'Existing encrypted payloads can still be decrypted with their original keys',
@@ -292,19 +300,19 @@ export async function payloadEncryptionRoutes(
               minMs: minEncryptTime,
               maxMs: maxEncryptTime,
               opsPerSecond: Math.round(1000 / avgEncryptTime)
-            },
+  }
             decryption: {
               averageMs: Math.round(avgDecryptTime * 100) / 100,
               minMs: minDecryptTime,
               maxMs: maxDecryptTime,
               opsPerSecond: Math.round(1000 / avgDecryptTime)
-            },
+  }
             total: {
               averageRoundTripMs: Math.round((avgEncryptTime + avgDecryptTime) * 100) / 100,
               roundTripsPerSecond: Math.round(1000 / (avgEncryptTime + avgDecryptTime))
             }
           }
-        },
+  }
         recommendations: [
           avgEncryptTime > 100 ? 'Encryption performance is slow - consider algorithm optimization' : null,
           avgDecryptTime > 100 ? 'Decryption performance is slow - consider caching optimization' : null,
@@ -342,7 +350,7 @@ export async function payloadEncryptionRoutes(
           compressionAvailable: true,
           maxPayloadSizeMB: 10,
           keyRotationSupported: true
-        },
+  }
         endpoints: {
           requiredEncryption: [
             '/auth/login',
@@ -356,7 +364,7 @@ export async function payloadEncryptionRoutes(
             '/api/corrections',
             '/api/workspace'
           ]
-        },
+  }
         features: [
           'End-to-end payload encryption',
           'Automatic key rotation',
@@ -400,7 +408,7 @@ export async function payloadEncryptionRoutes(
             Math.round((metrics.successfulOperations / (metrics.totalEncryptions + metrics.totalDecryptions)) * 100) : 100,
           keyRotations: metrics.keyRotations,
           averagePerformanceMs: Math.round((metrics.averageEncryptionTime + metrics.averageDecryptionTime) / 2)
-        },
+  }
         capabilities: [
           'Real-time payload encryption/decryption',
           'Automatic key management and rotation',
@@ -433,7 +441,7 @@ export async function payloadEncryptionRoutes(
             header: 'x-payload-encrypted',
             value: 'true',
             description: 'Indicates request body is encrypted'
-          },
+  }
           {
             header: 'x-response-encryption',
             value: 'true',
@@ -448,19 +456,18 @@ export async function payloadEncryptionRoutes(
           '5. Server encrypts response if x-response-encryption: true header present',
           '6. Client receives and decrypts response'
         ]
-      },
-
+  }
       algorithms: [
         {
           name: 'aes-256-gcm',
           description: 'AES 256-bit with Galois/Counter Mode (recommended)',
           features: ['Authenticated encryption', 'Fast performance', 'Industry standard']
-        },
+  }
         {
           name: 'aes-256-cbc',
           description: 'AES 256-bit with Cipher Block Chaining',
           features: ['Block cipher mode', 'Widely supported', 'Good compatibility']
-        },
+  }
         {
           name: 'chacha20-poly1305',
           description: 'ChaCha20 stream cipher with Poly1305 authenticator',
@@ -472,15 +479,15 @@ export async function payloadEncryptionRoutes(
         {
           feature: 'Key Management',
           description: 'Automatic key generation, rotation, and secure storage using KeyManagementService'
-        },
+  }
         {
           feature: 'Replay Protection',
           description: 'Time-based payload expiration prevents replay attacks'
-        },
+  }
         {
           feature: 'Data Integrity',
           description: 'Authentication tags ensure payload has not been tampered with'
-        },
+  }
         {
           feature: 'Audit Logging',
           description: 'All encryption operations are logged for security monitoring'
@@ -493,37 +500,37 @@ export async function payloadEncryptionRoutes(
           method: 'POST',
           description: 'Encrypt payload data',
           auth: 'admin, security, or developer role required'
-        },
+  }
         {
           path: '/encryption/decrypt',
           method: 'POST',
           description: 'Decrypt encrypted payload',
           auth: 'admin, security, or developer role required'
-        },
+  }
         {
           path: '/encryption/metrics',
           method: 'GET',
           description: 'Get encryption performance metrics',
           auth: 'admin, security, or developer role required'
-        },
+  }
         {
           path: '/encryption/rotate-key',
           method: 'POST',
           description: 'Manually rotate encryption key',
           auth: 'admin or security role required'
-        },
+  }
         {
           path: '/encryption/test',
           method: 'POST',
           description: 'Run encryption performance tests',
           auth: 'admin, security, or developer role required'
-        },
+  }
         {
           path: '/encryption/config',
           method: 'GET',
           description: 'Get encryption configuration',
           auth: 'admin or security role required'
-        },
+  }
         {
           path: '/encryption/health',
           method: 'GET',

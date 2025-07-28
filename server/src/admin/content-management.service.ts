@@ -15,6 +15,7 @@ export type ContentType = 'template' | 'documentation' | 'user_content' | 'syste
 export type ContentStatus = 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured';
 export type ContentVisibility = 'public' | 'private' | 'organization' | 'admin_only';
 
+}
 export interface ContentItem {
   id: string;
   title: string;
@@ -36,6 +37,7 @@ export interface ContentItem {
     expiresAt?: string;
     publishedAt?: string;
     customFields: Record<string, any>;
+}
   };
   organizationId?: string;
   parentId?: string; // For content hierarchies
@@ -43,6 +45,7 @@ export interface ContentItem {
   updatedAt: string;
 }
 
+}
 export interface ContentFilter {
   type?: ContentType;
   status?: ContentStatus;
@@ -56,9 +59,11 @@ export interface ContentFilter {
   dateRange?: {
     start: string;
     end: string;
+}
   };
 }
 
+}
 export interface ContentCreateRequest {
   title: string;
   description?: string;
@@ -72,12 +77,14 @@ export interface ContentCreateRequest {
     priority?: number;
     expiresAt?: string;
     customFields?: Record<string, any>;
+}
   };
   organizationId?: string;
   parentId?: string;
   publishImmediately?: boolean;
 }
 
+}
 export interface ContentUpdateRequest {
   title?: string;
   description?: string;
@@ -91,10 +98,12 @@ export interface ContentUpdateRequest {
     priority?: number;
     expiresAt?: string;
     customFields?: Record<string, any>;
+}
   };
   publishImmediately?: boolean;
 }
 
+}
 export interface ContentStatistics {
   totalItems: number;
   byType: Record<ContentType, number>;
@@ -105,6 +114,7 @@ export interface ContentStatistics {
     created24h: number;
     updated24h: number;
     published24h: number;
+}
   };
   topCategories: Array<{
     category: string;
@@ -117,6 +127,7 @@ export interface ContentStatistics {
   }>;
 }
 
+}
 export interface ContentRevision {
   id: string;
   contentId: string;
@@ -130,6 +141,7 @@ export interface ContentRevision {
   createdAt: string;
   comment?: string;
 }
+}
 
 export class ContentManagementService {
   private database: DatabaseService;
@@ -142,6 +154,7 @@ export class ContentManagementService {
 
   // Create new content item
   async createContent(request: ContentCreateRequest, userId: string, userRole: string): Promise<ContentItem> {
+
     const client = await this.database.getClient();
     
     try {
@@ -204,7 +217,7 @@ export class ContentManagementService {
           type: request.type,
           status: initialStatus,
           visibility: request.visibility
-        },
+  }
         severity: 'info'
       });
 
@@ -227,6 +240,7 @@ export class ContentManagementService {
     userId: string, 
     userRole: string
   ): Promise<ContentItem> {
+
     const client = await this.database.getClient();
     
     try {
@@ -319,7 +333,7 @@ export class ContentManagementService {
           type: updatedContent.type,
           status: updatedContent.status,
           changes: Object.keys(request)
-        },
+  }
         severity: 'info'
       });
 
@@ -337,6 +351,7 @@ export class ContentManagementService {
 
   // Get content by ID
   async getContentById(contentId: string): Promise<ContentItem | null> {
+
     try {
       const query = 'SELECT * FROM content_items WHERE id = $1';
       const result = await this.database.query(query, [contentId]);
@@ -360,6 +375,7 @@ export class ContentManagementService {
     limit = 50,
     offset = 0
   ): Promise<{ items: ContentItem[]; totalCount: number }> {
+
     try {
       const whereConditions: string[] = [];
       const queryParams: any[] = [];
@@ -459,6 +475,7 @@ export class ContentManagementService {
 
   // Delete content item
   async deleteContent(contentId: string, userId: string, userRole: string): Promise<void> {
+
     const client = await this.database.getClient();
     
     try {
@@ -491,7 +508,7 @@ export class ContentManagementService {
         details: {
           title: existingContent.title,
           type: existingContent.type
-        },
+  }
         severity: 'warning'
       });
 
@@ -508,6 +525,7 @@ export class ContentManagementService {
 
   // Get content statistics
   async getContentStatistics(): Promise<ContentStatistics> {
+
     try {
       const queries = {
         totalItems: 'SELECT COUNT(*) as count FROM content_items WHERE status != \'archived\'',
@@ -631,7 +649,7 @@ export class ContentManagementService {
           created24h: parseInt(recentActivity.created24h),
           updated24h: parseInt(recentActivity.updated24h),
           published24h: parseInt(recentActivity.published24h)
-        },
+  }
         topCategories: categoriesResult.rows.map(row => ({
           category: row.category,
           count: parseInt(row.count)
@@ -650,6 +668,7 @@ export class ContentManagementService {
 
   // Get content revisions
   async getContentRevisions(contentId: string, limit = 20): Promise<ContentRevision[]> {
+
     try {
       const query = `
         SELECT * FROM content_revisions 
@@ -686,6 +705,7 @@ export class ContentManagementService {
     userId: string, 
     userRole: string
   ): Promise<{ success: number; failed: number }> {
+
     let success = 0;
     let failed = 0;
 
@@ -710,7 +730,7 @@ export class ContentManagementService {
         newStatus,
         success,
         failed
-      },
+  }
       severity: failed > 0 ? 'warning' : 'info'
     });
 
@@ -725,6 +745,7 @@ export class ContentManagementService {
     contentType: ContentType,
     existingContent?: ContentItem
   ): Promise<void> {
+
     // Super admins can do everything
     if (userRole === 'super_admin') {
       return;
@@ -761,6 +782,7 @@ export class ContentManagementService {
     userId: string, 
     comment?: string
   ): Promise<void> {
+
     const query = `
       INSERT INTO content_revisions (
         content_id, version, title, description, content, metadata, 
@@ -803,6 +825,7 @@ export class ContentManagementService {
   }
 
   private async getUserName(userId: string): Promise<string> {
+
     try {
       const result = await this.database.query(
         'SELECT COALESCE(first_name || \' \' || last_name, email) as name FROM users WHERE id = $1',
@@ -815,6 +838,7 @@ export class ContentManagementService {
   }
 
   private async getUserOrganizationId(userId: string): Promise<string | null> {
+
     try {
       const result = await this.database.query(
         'SELECT organization_id FROM users WHERE id = $1',

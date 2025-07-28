@@ -78,6 +78,7 @@ export enum EvidenceType {
 /**
  * Investigation record
  */
+}
 export interface Investigation {
   id: string;
   title: string;
@@ -117,10 +118,12 @@ export interface Investigation {
   tags: string[];
   metadata: Record<string, any>;
 }
+}
 
 /**
  * Investigation task
  */
+}
 export interface InvestigationTask {
   id: string;
   investigationId: string;
@@ -141,10 +144,12 @@ export interface InvestigationTask {
   
   metadata: Record<string, any>;
 }
+}
 
 /**
  * Evidence record
  */
+}
 export interface Evidence {
   id: string;
   investigationId: string;
@@ -182,10 +187,12 @@ export interface Evidence {
   
   metadata: Record<string, any>;
 }
+}
 
 /**
  * Custody chain record
  */
+}
 export interface CustodyRecord {
   id: string;
   evidenceId: string;
@@ -195,10 +202,12 @@ export interface CustodyRecord {
   reason: string;
   signature: string; // Digital signature/hash
 }
+}
 
 /**
  * Investigation comment/update
  */
+}
 export interface InvestigationComment {
   id: string;
   investigationId: string;
@@ -220,10 +229,12 @@ export interface InvestigationComment {
   
   metadata: Record<string, any>;
 }
+}
 
 /**
  * Team notification
  */
+}
 export interface TeamNotification {
   id: string;
   recipientId: string;
@@ -242,10 +253,12 @@ export interface TeamNotification {
   
   metadata: Record<string, any>;
 }
+}
 
 /**
  * Collaboration metrics
  */
+}
 export interface CollaborationMetrics {
   investigationCount: number;
   openInvestigations: number;
@@ -254,6 +267,7 @@ export interface CollaborationMetrics {
   teamWorkload: Record<string, number>;
   evidenceCollected: number;
   complianceIssues: number;
+}
 }
 
 /**
@@ -276,6 +290,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    * Initialize database schema for collaboration
    */
   async initializeSchema(): Promise<void> {
+
     try {
       // Investigations table
       await this.db.query(`
@@ -305,7 +320,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           lessons_learned TEXT,
           tags TEXT[],
           metadata JSONB DEFAULT '{}'::jsonb
-        )
+
       `);
 
       // Investigation tasks table
@@ -326,7 +341,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           estimated_hours INTEGER,
           actual_hours INTEGER,
           metadata JSONB DEFAULT '{}'::jsonb
-        )
+
       `);
 
       // Evidence table
@@ -351,7 +366,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           verified_at TIMESTAMP,
           confidentiality_level VARCHAR(20) DEFAULT 'INTERNAL',
           metadata JSONB DEFAULT '{}'::jsonb
-        )
+
       `);
 
       // Custody chain table
@@ -364,7 +379,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           transferred_at TIMESTAMP DEFAULT NOW(),
           reason VARCHAR(500),
           signature VARCHAR(128) NOT NULL
-        )
+
       `);
 
       // Comments table
@@ -382,7 +397,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           notifications_sent BOOLEAN DEFAULT FALSE,
           attachments TEXT[],
           metadata JSONB DEFAULT '{}'::jsonb
-        )
+
       `);
 
       // Notifications table
@@ -400,7 +415,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           read_at TIMESTAMP,
           action_taken BOOLEAN DEFAULT FALSE,
           metadata JSONB DEFAULT '{}'::jsonb
-        )
+
       `);
 
       // Create indexes for performance
@@ -432,6 +447,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     investigation: Omit<Investigation,
     'id' | 'createdAt' | 'updatedAt' | 'status'>
   ): Promise<Investigation> {
+
     // Input validation
     if (!investigation.title || investigation.title.trim().length === 0) {
       throw new Error('Investigation title is required and cannot be empty');
@@ -506,7 +522,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           category: investigation.category,
           priority: investigation.priority,
           assignedTeam: investigation.assignedTeam
-        },
+  }
         severity: 'info'
       });
 
@@ -540,6 +556,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    * Update investigation status and details
    */
   async updateInvestigation(id: string, updates: Partial<Investigation>, updatedBy: string): Promise<void> {
+
     const updateFields: string[] = [];
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -595,7 +612,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
           updatedBy,
           changes: Object.keys(updates),
           newStatus: updates.status
-        },
+  }
         severity: 'info'
       });
 
@@ -626,6 +643,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     task: Omit<InvestigationTask,
     'id' | 'createdAt' | 'updatedAt' | 'status'>
   ): Promise<InvestigationTask> {
+
     // Input validation
     if (!task.title || task.title.trim().length === 0) {
       throw new Error('Task title is required and cannot be empty');
@@ -716,6 +734,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     'id' | 'custodyChain' | 'collectedBy' | 'collectedAt' | 'verified'>,
     collectedBy: string = 'system'
   ): Promise<Evidence> {
+
     // Input validation
     if (!evidence.title || evidence.title.trim().length === 0) {
       throw new Error('Evidence title is required and cannot be empty');
@@ -824,6 +843,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    * Add comment to investigation
    */
   async addComment(comment: Omit<InvestigationComment, 'id' | 'createdAt' | 'notificationsSent'>): Promise<void> {
+
     // Input validation
     if (!comment.investigationId || comment.investigationId.trim().length === 0) {
       throw new Error('Investigation ID is required');
@@ -900,6 +920,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    * Get investigation details
    */
   async getInvestigation(id: string): Promise<Investigation | null> {
+
     try {
       const result = await this.db.query(`
         SELECT * FROM investigations WHERE id = $1
@@ -927,6 +948,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ investigations: Investigation[]; total: number }> {
+
     const conditions: string[] = [];
     const params: unknown[] = [];
     let paramIndex = 1;
@@ -989,6 +1011,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
    * Get collaboration metrics
    */
   async getCollaborationMetrics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<CollaborationMetrics> {
+
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -1067,6 +1090,7 @@ export class AuditTeamCollaborationService extends EventEmitter {
     recipients: string[],
     notification: Omit<TeamNotification, 'id' | 'recipientId' | 'createdAt'>
   ): Promise<void> {
+
     // Input validation
     if (!recipients || recipients.length === 0) {
       console.warn('No recipients provided for notification');

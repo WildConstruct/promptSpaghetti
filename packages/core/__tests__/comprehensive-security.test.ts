@@ -82,7 +82,6 @@ describe('Comprehensive Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(pattern, context);
         }).toThrow();
-      }
     });
     it('should handle complex nested dangerous patterns', () => {
       const complexPatterns = [;
@@ -97,7 +96,6 @@ describe('Comprehensive Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(pattern, context);
         }).toThrow();
-      }
     });
   });
   describe('AST Node Security', () => {
@@ -117,7 +115,6 @@ describe('Comprehensive Security Test Suite', () => {
         const result = filter.filterAST(node as any);
         expect(result.allowed).toBe(true);
         expect(result.blockedNodes).toHaveLength(0);
-      }
       // Dangerous nodes
       const dangerousNodes = [;
         { type: 'FunctionExpression' },
@@ -137,7 +134,6 @@ describe('Comprehensive Security Test Suite', () => {
         expect(result.allowed).toBe(false);
         expect(result.blockedNodes).toHaveLength(1);
         expect(result.blockedNodes[0].safetyLevel).toBe(NodeSafetyLevel.DANGEROUS);
-      }
     });
     it('should enforce AST depth limits', () => {
       const filter = createConditionalNodeFilter();
@@ -150,49 +146,45 @@ describe('Comprehensive Security Test Suite', () => {
           left: deepNode,
           right: { type: 'Literal', value: 1 }
         };
-      }
       const result = filter.filterAST(deepNode);
       expect(result.allowed).toBe(false);
       expect(result.blockedNodes.some(n => n.reason.includes('depth'))).toBe(true);
     });
     it('should enforce AST node count limits', () => {
-      const filter = createConditionalNodeFilter();
-      // Create AST with many nodes
-      const manyNodes: any = {
-        type: 'Program',
-        body: [],
-      };
+  const filter = createConditionalNodeFilter();
+  // Create AST with many nodes
+  const manyNodes: any = {,
+  type: 'Program',
+  body: [],
+};
       for (let i = 0; i < 150; i++) {
         manyNodes.body.push({)
-          type: 'ExpressionStatement',
+  type: 'ExpressionStatement',
           expression: {,
-            type: 'BinaryExpression',
+  type: 'BinaryExpression',
             operator: '+',
             left: { type: 'Literal', value: i },
             right: { type: 'Identifier', name: `var${i}` }
-          }
         });
-      }
       const result = filter.filterAST(manyNodes);
       expect(result.allowed).toBe(false);
       expect(result.blockedNodes.some(n => n.reason.includes('node count'))).toBe(true);
     });
     it('should detect dangerous identifiers', () => {
-      const filter = createConditionalNodeFilter();
-      const dangerousIdentifiers = [;
-        'eval', 'Function', 'constructor', 'prototype', '__proto__',
-        'window', 'global', 'globalThis', 'document', 'process',
-        'require', 'import', 'export', 'arguments', 'caller'
-      ];
-      for (const name of dangerousIdentifiers) {
-        const node = {
-          type: 'Identifier',
-          name
-        };
+  const filter = createConditionalNodeFilter();
+  const dangerousIdentifiers = [;
+  'eval', 'Function', 'constructor', 'prototype', '__proto__',
+  'window', 'global', 'globalThis', 'document', 'process',
+  'require', 'import', 'export', 'arguments', 'caller'
+  ];
+  for (const name of dangerousIdentifiers) {
+  const node = {
+  type: 'Identifier',
+  name
+};
         const result = filter.filterAST(node as any);
         expect(result.allowed).toBe(false);
         expect(result.blockedNodes[0].reason).toContain(`Dangerous identifier '${name}'`);}
-      }
     });
     it('should detect dangerous property access', () => {
       const filter = createConditionalNodeFilter();
@@ -206,12 +198,11 @@ describe('Comprehensive Security Test Suite', () => {
           type: 'MemberExpression',
           object: { type: 'Identifier', name: 'obj' },
           property: { type: 'Identifier', name: prop },
-          computed: false,
-        };
+          computed: false;
+  };
         const result = filter.filterAST(node as any);
         expect(result.allowed).toBe(false);
         expect(result.blockedNodes[0].reason).toContain(`dangerous property '${prop}'`);}
-      }
     });
   });
   describe('Math Function Security', () => {
@@ -247,24 +238,24 @@ describe('Comprehensive Security Test Suite', () => {
       expect(() => safeMath.max()).toThrow('requires at least one argument');
     });
     it('should audit Math function access', () => {
-      const auditedMath = createAuditedSafeMathContext('test');
-      // Access allowed function
-      auditedMath.min(1, 2);
-      // Try to access blocked function
-      expect(() => auditedMath.random).toThrow();
-      // Check audit log
-      const auditLog = MathFunctionAuditor.getAuditLog();
-      expect(auditLog).toHaveLength(2);
-      expect(auditLog[0]).toMatchObject({)
-        functionName: 'min',
-        allowed: true,
-        reason: 'Safe function accessed',
-      });
+  const auditedMath = createAuditedSafeMathContext('test');
+  // Access allowed function
+  auditedMath.min(1, 2);
+  // Try to access blocked function
+  expect(() => auditedMath.random).toThrow();
+  // Check audit log
+  const auditLog = MathFunctionAuditor.getAuditLog();
+  expect(auditLog).toHaveLength(2);
+  expect(auditLog[0]).toMatchObject({)
+  functionName: 'min',
+  allowed: true,
+  reason: 'Safe function accessed',
+});
       expect(auditLog[1]).toMatchObject({)
-        functionName: 'random',
-        allowed: false,
-        reason: 'Blocked function access attempted',
-      });
+  functionName: 'random',
+  allowed: false,
+  reason: 'Blocked function access attempted',
+});
     });
     it('should prevent Math object modification', () => {
       const safeMath = createSafeMathContext();
@@ -292,10 +283,8 @@ describe('Comprehensive Security Test Suite', () => {
       // Verify validation function
       for (const func of SAFE_MATH_FUNCTIONS) {
         expect(validateMathFunctionCall(func)).toBe(true);
-      }
       for (const func of BLOCKED_MATH_FUNCTIONS) {
         expect(validateMathFunctionCall(func)).toBe(false);
-      }
     });
   });
   describe('Prototype Pollution Prevention', () => {
@@ -315,17 +304,16 @@ describe('Comprehensive Security Test Suite', () => {
         }).toThrow();
         // Verify critical event was logged
         const events = securityAudit.getEvents({ )
-          category: SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT ,
-        });
+          category: SecurityEventCategory.PROTOTYPE_POLLUTION_ATTEMPT ;
+  });
         expect(events.length).toBeGreaterThan(0);
         expect(events[events.length - 1].severity).toBe(SecuritySeverity.CRITICAL);
-      }
     });
     it('should prevent indirect prototype access', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({ )
-        arr: [1, 2, 3],
-        str: 'hello',
-      });
+  const context = SafeExpressionEvaluator.createSafeContext({ )
+  arr: [1, 2, 3],
+  str: 'hello',
+});
       // These should all fail
       const indirectAttempts = [;
         'arr.constructor.prototype',
@@ -339,17 +327,16 @@ describe('Comprehensive Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(attempt, context);
         }).toThrow();
-      }
     });
   });
   describe('Safe Context Utilities', () => {
-    it('should provide safe utility functions', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        str: 'hello world',
-        arr: [1, 2, 3, 4, 5],
-        empty: '',
-        nullVal: null,
-      });
+  it('should provide safe utility functions', () => {
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  str: 'hello world',
+  arr: [1, 2, 3, 4, 5],
+  empty: '',
+  nullVal: null,
+});
       // Test utility functions
       expect(SafeExpressionEvaluator.evaluate('getType(str)', context)).toBe('string');
       expect(SafeExpressionEvaluator.evaluate('getType(arr)', context)).toBe('object');
@@ -364,7 +351,7 @@ describe('Comprehensive Security Test Suite', () => {
     });
     it('should handle edge cases in utility functions', () => {
       const context = SafeExpressionEvaluator.createSafeContext({)
-        num: 42,
+  num: 42,
         bool: true,
         obj: { key: 'value' }
       });
@@ -486,13 +473,13 @@ describe('Comprehensive Security Test Suite', () => {
       const ctx = new AdvancedExecutionContext('test-seed');
       ctx.variables = { x: 10, y: 5 };
       // Safe operations
-      const safeNode = new ConditionalNode('safe', [;);
+      const safeNode = new ConditionalNode('safe', [);
         { condition: 'x > y', output: 'greater' },
         { condition: 'Math.min(x, y) === y', output: 'min is y' }
       ], 'equal');
       safeNode.run(ctx);
       // Dangerous operations (will throw)
-      const dangerousNode = new ConditionalNode('danger', [;);
+      const dangerousNode = new ConditionalNode('danger', [);
         { condition: 'eval(x)', output: 'eval' },
         { condition: 'x.__proto__', output: 'proto' }
       ], 'safe');
@@ -500,7 +487,6 @@ describe('Comprehensive Security Test Suite', () => {
         dangerousNode.run(ctx);
       } catch (e) {
         // Expected
-      }
       // Get statistics
       const stats = securityAudit.getStatistics();
       expect(stats.totalEvents).toBeGreaterThan(2);
@@ -511,7 +497,6 @@ describe('Comprehensive Security Test Suite', () => {
       if (stats.topBlockedPatterns.length > 0) {
         expect(stats.topBlockedPatterns[0]).toHaveProperty('pattern');
         expect(stats.topBlockedPatterns[0]).toHaveProperty('count');
-      }
     });
     it('should export security events for analysis', () => {
       // Generate some events
@@ -533,10 +518,10 @@ describe('Comprehensive Security Test Suite', () => {
     });
   });
   describe('OWASP Top 10 Coverage', () => {
-    it('should prevent injection attacks (A03:2021)', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({ )
-        userInput: '; DROP TABLE users; --' 
-      });
+  it('should prevent injection attacks (A03:2021)', () => {,
+  const context = SafeExpressionEvaluator.createSafeContext({ )
+  userInput: '; DROP TABLE users; --',
+});
       // SQL injection attempt in expression
       expect(() => {
         SafeExpressionEvaluator.evaluate('eval(userInput)', context);
@@ -560,7 +545,6 @@ describe('Comprehensive Security Test Suite', () => {
         expect(() => {
           SafeExpressionEvaluator.evaluate(api, context);
         }).toThrow();
-      }
     });
     it('should prevent security misconfiguration (A05:2021)', () => {
       // Verify secure defaults
@@ -576,10 +560,10 @@ describe('Comprehensive Security Test Suite', () => {
     });
   });
   describe('Performance and Resource Limits', () => {
-    it('should handle complex expressions within resource limits', () => {
-      const context = SafeExpressionEvaluator.createSafeContext({)
-        arr: Array(100).fill(0).map((_, i) => i)
-      });
+  it('should handle complex expressions within resource limits', () => {
+  const context = SafeExpressionEvaluator.createSafeContext({)
+  arr: Array(100).fill(0).map((_, i) => i),
+});
       // Complex but safe expression
       const complexExpr = 'Math.max(...arr.filter(x => x % 2 === 0).map(x => x * 2))';
       const start = Date.now();
@@ -593,7 +577,6 @@ describe('Comprehensive Security Test Suite', () => {
       let deepExpr = 'x';
       for (let i = 0; i < 50; i++) {
         deepExpr = `(${deepExpr} + 1)`;}
-      }
       const context = SafeExpressionEvaluator.createSafeContext({ x: 1 });
       // Should eventually fail due to depth
       expect(() => {

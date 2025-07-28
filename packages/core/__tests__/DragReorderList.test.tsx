@@ -6,15 +6,15 @@ import '@testing-library/jest-dom';
 import { DragReorderList } from '../components/WeightControls/DragReorderList';
 import { WeightControlOption } from '../components/Inspector/WeightControlSlider';
 describe('DragReorderList', () => {
-  const mockOptions: WeightControlOption[] = [
+  const mockOptions: WeightControlOption = [
     { id: '1', text: 'Fire Spell', weight: 40 },
     { id: '2', text: 'Ice Spell', weight: 30 },
     { id: '3', text: 'Lightning Spell', weight: 20 },
     { id: '4', text: 'Earth Spell', weight: 10 }
   ];
-  const mockOnReorder = jest.fn<unknown[], unknown>();
-  const mockOnWeightChange = jest.fn<unknown[], unknown>();
-  const mockOnTextChange = jest.fn<unknown[], unknown>();
+  const mockOnReorder = jest.fn<unknown, unknown>();
+  const mockOnWeightChange = jest.fn<unknown, unknown>();
+  const mockOnTextChange = jest.fn<unknown, unknown>();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -142,7 +142,7 @@ describe('DragReorderList', () => {
       expect(mockOnReorder).not.toHaveBeenCalled();
     });
     it('disables weight controls for locked options', () => {
-      const lockedOptions: WeightControlOption[] = [
+      const lockedOptions: WeightControlOption = [
         { id: '1', text: 'Locked Option', weight: 50, locked: true },
         { id: '2', text: 'Normal Option', weight: 50, locked: false }
       ];
@@ -268,12 +268,12 @@ describe('DragReorderList', () => {
       );
       const dragHandle = screen.getAllByText('⋮⋮')[0];
       fireEvent.touchStart(dragHandle, {)
-        touches: [{ clientX: 100, clientY: 100 }]
+  touches: [{ clientX: 100, clientY: 100 }]
       });
       // Should prepare for potential drag
       expect(() => {
         fireEvent.touchMove(document, {)
-          touches: [{ clientX: 110, clientY: 110 }]
+  touches: [{ clientX: 110, clientY: 110 }]
         });
       }).not.toThrow();
     });
@@ -287,13 +287,13 @@ describe('DragReorderList', () => {
       const dragHandle = screen.getAllByText('⋮⋮')[0];
       // Multi-touch should be ignored
       fireEvent.touchStart(dragHandle, {)
-        touches: [,
+  touches: [,
           { clientX: 100, clientY: 100 },
           { clientX: 200, clientY: 200 }
         ]
       });
       fireEvent.touchMove(document, {)
-        touches: [,
+  touches: [,
           { clientX: 110, clientY: 110 },
           { clientX: 210, clientY: 210 }
         ]
@@ -310,11 +310,11 @@ describe('DragReorderList', () => {
       const dragHandle = screen.getAllByText('⋮⋮')[0];
       // Start touch drag
       fireEvent.touchStart(dragHandle, {)
-        touches: [{ clientX: 100, clientY: 100 }]
+  touches: [{ clientX: 100, clientY: 100 }]
       });
       await act(async () => {
         fireEvent.touchMove(document, {)
-          touches: [{ clientX: 110, clientY: 150 }]
+  touches: [{ clientX: 110, clientY: 150 }]
         });
         fireEvent.touchEnd(document);
       });
@@ -347,10 +347,9 @@ describe('DragReorderList', () => {
       );
       const items = container.querySelectorAll('[style*="cursor"]');
       items.forEach(item => {)
-        if (item.textContent?.includes('⋮⋮')) {
-          expect(item).toHaveStyle('cursor: default');
-        }
-      });
+  if (item.textContent?.includes('⋮⋮')) {
+  expect(item).toHaveStyle('cursor: default');
+});
     });
     it('disables text and weight inputs when disabled', () => {
       render();
@@ -366,10 +365,10 @@ describe('DragReorderList', () => {
       const textInputs = screen.getAllByRole('textbox');
       const sliders = screen.getAllByRole('slider');
       textInputs.forEach(input => {)
-        expect(input).toBeDisabled();
+  expect(input).toBeDisabled();
       });
       sliders.forEach(slider => {)
-        expect(slider).toBeDisabled();
+  expect(slider).toBeDisabled();
       });
     });
   });
@@ -439,11 +438,11 @@ describe('DragReorderList', () => {
       const sliders = screen.getAllByRole('slider');
       // Text inputs should be focusable
       textInputs.forEach(input => {)
-        expect(input).not.toHaveAttribute('tabindex', '-1');
+  expect(input).not.toHaveAttribute('tabindex', '-1');
       });
       // Sliders should be focusable
       sliders.forEach(slider => {)
-        expect(slider).not.toHaveAttribute('tabindex', '-1');
+  expect(slider).not.toHaveAttribute('tabindex', '-1');
       });
     });
     it('maintains text content accessibility during drag', async () => {

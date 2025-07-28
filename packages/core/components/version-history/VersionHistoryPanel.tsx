@@ -5,17 +5,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { VersionHistoryManager, VersionSnapshot, Branch, ChangeEvent, VersionAnnotation } from '../../version-history/VersionHistoryManager';
 interface VersionHistoryPanelProps {
-  versionManager: VersionHistoryManager;
+  versionManager: VersionHistoryManager;,
   currentGraphData: unknown;
-  onRestoreVersion: (snapshotId: string) => void;
-  onCompareVersions: (fromId: string, toId: string) => void;
+  onRestoreVersion: (snapshotId: string) => void;,
+  onCompareVersions: (fromId: string, toId: string) => void;,
   isOpen: boolean;
   onClose: () => void;
   className?: string;
-}
-type ViewMode = 'timeline' | 'branches' | 'changes' | 'annotations';
-
-export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
+  type ViewMode = 'timeline' | 'branches' | 'changes' | 'annotations';
+  export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({,)
   versionManager,
   currentGraphData,
   onRestoreVersion,
@@ -25,10 +23,10 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
   className = ''
 }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('timeline');
-  const [snapshots, setSnapshots] = useState<VersionSnapshot[]>([]);
-  const [branches, setBranches] = useState<Branch[]>([]);
-  const [changeEvents, setChangeEvents] = useState<ChangeEvent[]>([]);
-  const [annotations, setAnnotations] = useState<VersionAnnotation[]>([]);
+  const [snapshots, setSnapshots] = useState<VersionSnapshot>([]);
+  const [branches, setBranches] = useState<Branch>([]);
+  const [changeEvents, setChangeEvents] = useState<ChangeEvent>([]);
+  const [annotations, setAnnotations] = useState<VersionAnnotation>([]);
   const [loading, setLoading] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState<string>('main');
   const [selectedSnapshots, setSelectedSnapshots] = useState<Set<string>>(new Set());
@@ -38,100 +36,91 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
   useEffect(() => {
     if (isOpen) {
       loadData();
-    }
   }, [isOpen, viewMode, selectedBranch]);
   const loadData = async () => {
-    try {
-      setLoading(true);
-      switch (viewMode) {
-      case 'timeline':
-        await loadSnapshots();
-        break;
-      case 'branches':
-        await loadBranches();
-        await loadSnapshots();
-        break;
-      case 'changes':
-        await loadChangeEvents();
-        break;
-      case 'annotations':
-        await loadAnnotations();
-        break;
-      }
-    } catch (error) {
-      console.error('Failed to load version history data:', error);
-    } finally {
+  try {
+  setLoading(true);
+  switch (viewMode) {
+  case 'timeline':,
+  await loadSnapshots();
+  break;
+  case 'branches':,
+  await loadBranches();
+  await loadSnapshots();
+  break;
+  case 'changes':,
+  await loadChangeEvents();
+  break;
+  case 'annotations':,
+  await loadAnnotations();
+  break;
+} catch (error) {
+  console.error('Failed to load version history data:', error);
+} finally {
       setLoading(false);
-    }
   };
   const loadSnapshots = async () => {
-    const filter = {
-      branch_name: selectedBranch,
-      limit: 50,
-      include_annotations: true,
-    };
+  const filter = {
+  branch_name: selectedBranch,
+  limit: 50,
+  include_annotations: true,
+};
     // Apply date filter
     if (dateFilter !== 'all') {
-      const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - days);
-      filter.start_date = startDate.toISOString();
-    }
-    if (authorFilter) {
-      filter.author_id = authorFilter;
-    }
-    const result = await versionManager.getSnapshots(filter);
-    setSnapshots(result.snapshots);
-  };
+  const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  filter.start_date = startDate.toISOString();
+  if (authorFilter) {
+  filter.author_id = authorFilter;
+  const result = await versionManager.getSnapshots(filter);
+  setSnapshots(result.snapshots);
+};
   const loadBranches = async () => {
     const branchList = await versionManager.getBranches();
     setBranches(branchList);
   };
   const loadChangeEvents = async () => {
-    const filter = {
-      limit: 100,
-      author_id: authorFilter || undefined,
-    };
+  const filter = {
+  limit: 100,
+  author_id: authorFilter || undefined,
+};
     if (dateFilter !== 'all') {
-      const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - days);
-      filter.start_date = startDate.toISOString();
-    }
-    const result = await versionManager.getChangeEvents(filter);
-    setChangeEvents(result.events);
-  };
+  const days = dateFilter === 'week' ? 7 : dateFilter === 'month' ? 30 : 90;
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  filter.start_date = startDate.toISOString();
+  const result = await versionManager.getChangeEvents(filter);
+  setChangeEvents(result.events);
+};
   const loadAnnotations = async () => {
-    // Load annotations for all snapshots
-    const allAnnotations: VersionAnnotation[] = [];
-    for (const snapshot of snapshots.slice(0, 20)) { // Limit to recent snapshots
-      try {
-        const snapshotAnnotations = await versionManager.getAnnotations(snapshot.id);
-        allAnnotations.push(...snapshotAnnotations);
-      } catch (error) {
+  // Load annotations for all snapshots
+  const allAnnotations: VersionAnnotation = [];
+  for (const snapshot of snapshots.slice(0, 20)) { // Limit to recent snapshots
+  try {
+  const snapshotAnnotations = await versionManager.getAnnotations(snapshot.id);
+  allAnnotations.push(...snapshotAnnotations);
+} catch (error) {
         console.error(`Failed to load annotations for snapshot ${snapshot.id}:`, error);}
-      }
-    }
     setAnnotations(allAnnotations);
   };
   const handleCreateSnapshot = async () => {
-    try {
-      setLoading(true);
-      const title = prompt('Enter snapshot title:');
-      if (!title) return;
-      const description = prompt('Enter snapshot description (optional):') || undefined;
-      await versionManager.createSnapshot(currentGraphData, {)
-        title,
-        description,
-        snapshot_type: 'manual',
-      });
+  try {
+  setLoading(true);
+  const title = prompt('Enter snapshot title:');
+  if (!title) return;
+  const description = prompt('Enter snapshot description (optional):') || undefined;
+  await versionManager.createSnapshot(currentGraphData, {)
+  title,
+  description,
+  snapshot_type: 'manual',
+});
       await loadSnapshots();
     } catch (error) {
-      console.error('Failed to create snapshot:', error);
-      alert('Failed to create snapshot. Please try again.');
-    } finally {
+  console.error('Failed to create snapshot:', error);
+  alert('Failed to create snapshot. Please try again.');
+} finally {
       setLoading(false);
-    }
   };
   const handleSnapshotSelect = (snapshotId: string, selected: boolean) => {
     const newSelection = new Set(selectedSnapshots);
@@ -139,7 +128,6 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
       newSelection.add(snapshotId);
     } else {
       newSelection.delete(snapshotId);
-    }
     setSelectedSnapshots(newSelection);
   };
   const handleCompareSelected = () => {
@@ -148,7 +136,6 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
       onCompareVersions(selected[0], selected[1]);
     } else {
       alert('Please select exactly 2 snapshots to compare.');
-    }
   };
   const filteredSnapshots = useMemo(() => {
     if (!searchQuery) return snapshots;
@@ -174,25 +161,23 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
     return date.toLocaleDateString();
   };
   const getSnapshotTypeIcon = (type: string): string => {
-    switch (type) {
-    case 'manual': return '📝';
-    case 'auto': return '🤖';
-    case 'milestone': return '🏆';
-    case 'backup': return '💾';
-    default: return '📄';
-    }
-  };
+  switch (type) {
+  case 'manual': return '📝';
+  case 'auto': return '🤖';
+  case 'milestone': return '🏆';
+  case 'backup': return '💾';
+  default: return '📄';
+};
   const getSnapshotTypeColor = (type: string): string => {
-    switch (type) {
-    case 'manual': return 'bg-blue-100 text-blue-800';
-    case 'auto': return 'bg-gray-100 text-gray-800';
-    case 'milestone': return 'bg-yellow-100 text-yellow-800';
-    case 'backup': return 'bg-green-100 text-green-800';
-    default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+  switch (type) {
+  case 'manual': return 'bg-blue-100 text-blue-800';
+  case 'auto': return 'bg-gray-100 text-gray-800';
+  case 'milestone': return 'bg-yellow-100 text-yellow-800';
+  case 'backup': return 'bg-green-100 text-green-800';
+  default: return 'bg-gray-100 text-gray-800';
+};
   if (!isOpen) return null;
-  return ();
+  return;
     <div className={`version-history-panel ${className} fixed right-0 top-0 h-full w-96 bg-white shadow-xl border-l border-gray-200 z-50 flex flex-col`}>}
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
@@ -219,10 +204,10 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
               key={tab.key}
               onClick={() => setViewMode(tab.key as ViewMode)}
               className={`flex-1 flex items-center justify-center px-2 py-1 text-xs font-medium rounded transition-colors ${
-                viewMode === tab.key
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
+  viewMode === tab.key
+  ? 'bg-white text-gray-900 shadow-sm'
+  : 'text-gray-600 hover:text-gray-900',
+}`}
             >
               <span className="mr-1">{tab.icon}</span>
               {tab.label}
@@ -331,15 +316,14 @@ export const VersionHistoryPanel: React.FC<VersionHistoryPanelProps> = ({)
 
 // Sub-components
 interface SnapshotTimelineProps {
-  snapshots: VersionSnapshot[];
+  snapshots: VersionSnapshot;,
   selectedSnapshots: Set<string>;
-  onSnapshotSelect: (id: string, selected: boolean) => void;
-  onRestore: (id: string) => void;
-  formatTimeAgo: (date: string) => string;
-  getSnapshotTypeIcon: (type: string) => string;
+  onSnapshotSelect: (id: string, selected: boolean) => void;,
+  onRestore: (id: string) => void;,
+  formatTimeAgo: (date: string) => string;,
+  getSnapshotTypeIcon: (type: string) => string;,
   getSnapshotTypeColor: (type: string) => string;
-}
-const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({)
+  const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({,)
   snapshots,
   selectedSnapshots,
   onSnapshotSelect,
@@ -348,7 +332,7 @@ const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({)
   getSnapshotTypeIcon,
   getSnapshotTypeColor
 }) => {
-  return ();
+  return;
     <div className="p-4">
       {snapshots.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
@@ -362,10 +346,10 @@ const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({)
             <div
               key={snapshot.id}
               className={`border rounded-lg p-3 transition-colors ${
-                selectedSnapshots.has(snapshot.id)
-                  ? 'border-blue-300 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
+  selectedSnapshots.has(snapshot.id)
+  ? 'border-blue-300 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
             >
               <div className="flex items-start space-x-3">
                 <input
@@ -416,40 +400,38 @@ const SnapshotTimeline: React.FC<SnapshotTimelineProps> = ({)
   );
 };
 interface BranchViewProps {
-  branches: Branch[];
-  snapshots: VersionSnapshot[];
-  selectedBranch: string;
-  onBranchSelect: (branchName: string) => void;
+  branches: Branch;,
+  snapshots: VersionSnapshot;
+  selectedBranch: string;,
+  onBranchSelect: (branchName: string) => void;,
   formatTimeAgo: (date: string) => string;
-}
-const BranchView: React.FC<BranchViewProps> = ({)
+  const BranchView: React.FC<BranchViewProps> = ({,)
   branches,
   snapshots,
   selectedBranch,
   onBranchSelect,
   formatTimeAgo
 }) => {
-  const getBranchIcon = (type: string): string => {
-    switch (type) {
-    case 'main': return '🌳';
-    case 'feature': return '🌿';
-    case 'hotfix': return '🔥';
-    case 'experiment': return '🧪';
-    case 'archive': return '📦';
-    default: return '🌿';
-    }
-  };
-  return ();
+  const getBranchIcon = (type: string): string => {,
+  switch (type) {
+  case 'main': return '🌳';
+  case 'feature': return '🌿';
+  case 'hotfix': return '🔥';
+  case 'experiment': return '🧪';
+  case 'archive': return '📦';
+  default: return '🌿';
+};
+  return;
     <div className="p-4">
       <div className="space-y-3">
         {branches.map(branch => ()
           <div
             key={branch.id}
             className={`border rounded-lg p-3 cursor-pointer transition-colors ${
-              selectedBranch === branch.name
-                ? 'border-blue-300 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
+  selectedBranch === branch.name
+  ? 'border-blue-300 bg-blue-50'
+  : 'border-gray-200 hover:border-gray-300',
+}`}
             onClick={() => onBranchSelect(branch.name)}
           >
             <div className="flex items-center justify-between mb-2">
@@ -487,18 +469,17 @@ const BranchView: React.FC<BranchViewProps> = ({)
   );
 };
 interface ChangeEventsListProps {
-  events: ChangeEvent[];
+  events: ChangeEvent;,
   formatTimeAgo: (date: string) => string;
-}
 const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeAgo }) => {
-  const getEventIcon = (eventType: string): string => {
-    if (eventType.includes('node')) return '🔵';
-    if (eventType.includes('edge')) return '🔗';
-    if (eventType.includes('property')) return '⚙️';
-    if (eventType.includes('snapshot')) return '📸';
-    if (eventType.includes('branch')) return '🌿';
-    return '📝';
-  };
+  const getEventIcon = (eventType: string): string => {,
+  if (eventType.includes('node')) return '🔵';
+  if (eventType.includes('edge')) return '🔗';
+  if (eventType.includes('property')) return '⚙️';
+  if (eventType.includes('snapshot')) return '📸';
+  if (eventType.includes('branch')) return '🌿';
+  return '📝';
+};
   const getEventDescription = (event: ChangeEvent): string => {
     const { event_type, event_data } = event;
     switch (event_type) {
@@ -520,9 +501,8 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
       return 'Merged branches';
     default:
       return event_type.replace(/_/g, ' ');
-    }
   };
-  return ();
+  return;
     <div className="p-4">
       {events.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">
@@ -562,29 +542,26 @@ const ChangeEventsList: React.FC<ChangeEventsListProps> = ({ events, formatTimeA
   );
 };
 interface AnnotationsListProps {
-  annotations: VersionAnnotation[];
+  annotations: VersionAnnotation;,
   formatTimeAgo: (date: string) => string;
-}
 const AnnotationsList: React.FC<AnnotationsListProps> = ({ annotations, formatTimeAgo }) => {
-  const getAnnotationIcon = (type: string): string => {
-    switch (type) {
-    case 'comment': return '💬';
-    case 'review': return '👀';
-    case 'approval': return '✅';
-    case 'flag': return '🚩';
-    default: return '💭';
-    }
-  };
+  const getAnnotationIcon = (type: string): string => {,
+  switch (type) {
+  case 'comment': return '💬';
+  case 'review': return '👀';
+  case 'approval': return '✅';
+  case 'flag': return '🚩';
+  default: return '💭';
+};
   const getPriorityColor = (priority: string): string => {
-    switch (priority) {
-    case 'critical': return 'text-red-600';
-    case 'high': return 'text-orange-600';
-    case 'normal': return 'text-gray-600';
-    case 'low': return 'text-gray-400';
-    default: return 'text-gray-600';
-    }
-  };
-  return ();
+  switch (priority) {
+  case 'critical': return 'text-red-600';
+  case 'high': return 'text-orange-600';
+  case 'normal': return 'text-gray-600';
+  case 'low': return 'text-gray-400';
+  default: return 'text-gray-600';
+};
+  return;
     <div className="p-4">
       {annotations.length === 0 ? ()
         <div className="text-center py-8 text-gray-500">

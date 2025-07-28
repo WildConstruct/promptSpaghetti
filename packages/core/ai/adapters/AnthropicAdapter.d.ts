@@ -5,12 +5,13 @@
  * Concrete implementation of BaseAIModel for Anthropic Claude models
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface AnthropicConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
-}
+
 export interface AnthropicRequestOptions {
     model?: string;
     temperature?: number;
@@ -25,7 +26,7 @@ export interface AnthropicRequestOptions {
         type: 'auto' | 'any' | 'tool';
         name?: string;
     };
-}
+
 export interface ClaudeMessage {
     role: 'user' | 'assistant';
     content: string | Array<{,
@@ -37,7 +38,7 @@ export interface ClaudeMessage {
             data: string;
         };
     }>;
-}
+
 export interface AnthropicResponse {
     id: string;
     type: 'message';
@@ -53,7 +54,7 @@ export interface AnthropicResponse {
         input_tokens: number;
         output_tokens: number;
     };
-}
+
 export declare class AnthropicAdapter extends BaseAIModel {
     private config;
     private apiEndpoint;
@@ -71,6 +72,6 @@ export declare class AnthropicAdapter extends BaseAIModel {
     private _extractContent;
     private _estimateTokenCount;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default AnthropicAdapter;
 //# sourceMappingURL=AnthropicAdapter.d.ts.map

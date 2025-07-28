@@ -16,6 +16,7 @@
  * - Real-time segment updates
  */
 import { z } from 'zod';
+
 export interface UserAttributes {
     userId: string;
     email?: string;
@@ -69,7 +70,7 @@ export interface UserAttributes {
     lastSupportInteraction?: Date;
     npsScore?: number;
     healthScore: number;
-}
+
 export interface BehaviorEvent {
     eventType: string;
     eventData: Record<string, any>;
@@ -84,7 +85,7 @@ export interface BehaviorEvent {
         campaign?: string;
         referrer?: string;
     };
-}
+
 export interface SegmentCondition {
     id: string;
     type: 'attribute' | 'behavior' | 'demographic' | 'geographic' | 'temporal' | 'cohort' | 'custom';
@@ -105,7 +106,7 @@ export interface SegmentCondition {
     lastEvaluated?: Date;
     evaluationCount: number;
     matchRate: number;
-}
+
 export interface UserSegment {
     id: string;
     name: string;
@@ -179,7 +180,7 @@ export interface UserSegment {
         actionable: boolean;
         generatedAt: Date;
     }>;
-}
+
 export interface UserCohort {
     id: string;
     name: string;
@@ -209,7 +210,7 @@ export interface UserCohort {
     lastCalculated: Date;
     calculationStatus: 'pending' | 'calculating' | 'completed' | 'failed';
     isActive: boolean;
-}
+
 export interface SegmentAnalytics {
     segmentId: string;
     timeRange: {,
@@ -250,7 +251,7 @@ export interface SegmentAnalytics {
         percentageDifference: number;
         significance: 'higher' | 'lower' | 'similar';
     }[];
-}
+
 export interface SegmentRule {
     id: string;
     name: string;
@@ -275,7 +276,7 @@ export interface SegmentRule {
     executionCount: number;
     successRate: number;
     averageExecutionTime: number;
-}
+
 export interface SegmentAction {
     id: string;
     type: 'add_to_segment' | 'remove_from_segment' | 'send_notification' | 'trigger_webhook' | 'update_attribute' | 'log_event' | 'custom';
@@ -285,7 +286,7 @@ export interface SegmentAction {
     executionCount: number;
     successCount: number;
     lastExecuted?: Date;
-}
+
 export interface SegmentExport {
     id: string;
     segmentId: string;
@@ -303,7 +304,7 @@ export interface SegmentExport {
     requestedAt: Date;
     completedAt?: Date;
     errorMessage?: string;
-}
+
 export declare const UserAttributesSchema: z.ZodObject<{
     userId: z.ZodString;
     email: z.ZodOptional<z.ZodString>;
@@ -941,8 +942,7 @@ export declare class SegmentUtils {
     /**
      * Evaluate if a user matches segment conditions
      */
-    static evaluateUserForSegment()
-      userAttributes: UserAttributes,
+    static evaluateUserForSegment(userAttributes: UserAttributes,)
       segment: UserSegment,
       behaviorHistory?: BehaviorEvent[]
     ): {
@@ -966,7 +966,6 @@ export declare class SegmentUtils {
      * Generate segment insights
      */
     static generateSegmentInsights(segment: UserSegment, analytics: SegmentAnalytics): UserSegment['insights'];
-}
 declare const _default: {
     UserAttributesSchema: z.ZodObject<{,
         userId: z.ZodString;

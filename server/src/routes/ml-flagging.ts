@@ -14,6 +14,7 @@ import { DatabaseConnection } from '../database/connection';
 import { AuditService } from '../auth/services/AuditService';
 import { requirePermission } from '../middleware/auth';
 
+}
 interface FlagContentBody {
   content: string;
   contentType: 'text' | 'json' | 'graph' | 'prompt' | 'code';
@@ -24,28 +25,37 @@ interface FlagContentBody {
     sessionId?: string;
     requestId?: string;
     metadata?: Record<string, unknown>;
+}
   };
 }
 
+}
 interface FlaggingStatsQuery {
   organizationId?: string;
   startDate?: string;
   endDate?: string;
 }
+}
 
+}
 interface RecentEventsQuery {
   limit?: string;
   organizationId?: string;
   flaggedOnly?: string;
 }
+}
 
+}
 interface UpdateReviewBody {
   status: 'approved' | 'rejected' | 'escalated';
   notes?: string;
 }
+}
 
+}
 interface UpdateReviewParams {
   eventId: string;
+}
 }
 
 export async function mlFlaggingRoutes(fastify: FastifyInstance) {
@@ -88,7 +98,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           contentType: { 
             type: 'string', 
             enum: ['text', 'json', 'graph', 'prompt', 'code'] 
-          },
+  }
           categories: {
             type: 'array',
             items: {
@@ -97,9 +107,9 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 'content_moderation', 'security_threat', 'compliance_violation',
                 'anomaly_detection', 'prompt_injection', 'data_leak', 'malware', 'phishing'
               ]
-            },
+  }
             minItems: 1
-          },
+  }
           context: {
             type: 'object',
             properties: {
@@ -111,7 +121,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
             }
           }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -125,11 +135,11 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                 riskLevel: { 
                   type: 'string', 
                   enum: ['low', 'medium', 'high', 'critical'] 
-                },
+  }
                 recommendedAction: { 
                   type: 'string', 
                   enum: ['allow', 'warn', 'block', 'review', 'quarantine'] 
-                },
+  }
                 explanation: { type: 'string' },
                 categories: {
                   type: 'array',
@@ -142,7 +152,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                       severity: { type: 'string' }
                     }
                   }
-                },
+  }
                 processingTime: { type: 'number' },
                 fallbackUsed: { type: 'boolean' }
               }
@@ -168,7 +178,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'],
           ipAddress: request.ip,
           timestamp: new Date()
-        },
+  }
         categories: request.body.categories
       };
 
@@ -203,7 +213,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           startDate: { type: 'string', format: 'date-time' },
           endDate: { type: 'string', format: 'date-time' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -266,7 +276,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           organizationId: { type: 'string' },
           flaggedOnly: { type: 'string', enum: ['true', 'false'] }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -340,7 +350,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
         properties: {
           eventId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['status'],
@@ -348,10 +358,10 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           status: { 
             type: 'string', 
             enum: ['approved', 'rejected', 'escalated'] 
-          },
+  }
           notes: { type: 'string', maxLength: 1000 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -531,7 +541,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
           flaggedRate: stats.flaggedRate,
           averageProcessingTime: stats.averageProcessingTime,
           recentEvents: recentEvents.length
-        },
+  }
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -569,7 +579,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
                   items: { type: 'string' }
                 }
               }
-            },
+  }
             maxItems: 100
           }
         }
@@ -611,7 +621,7 @@ export async function mlFlaggingRoutes(fastify: FastifyInstance) {
               error: error instanceof Error ? error.message : 'Unknown error' 
             };
           }
-        })
+  }
       );
 
       const successCount = results.filter(r => r.success).length;

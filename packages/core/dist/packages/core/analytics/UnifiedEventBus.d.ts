@@ -29,117 +29,13 @@ export declare enum AnalyticsEventType {
     FILE_BROWSER_EVENT = "file_browser_event",
     ERROR_EVENT = "error_event",
     WARNING_EVENT = "warning_event",
-    INFO_EVENT = "info_event"
+    INFO_EVENT = "info_event",
+    export,
+    enum,
+    EventSeverity
 }
-export declare enum EventSeverity {
-    CRITICAL = "critical",
-    ERROR = "error",
-    WARNING = "warning",
-    INFO = "info",
-    DEBUG = "debug"
-}
-export declare enum EventCategory {
-    EXECUTION = "execution",
-    USER = "user",
-    PERFORMANCE = "performance",
-    SECURITY = "security",
-    BUSINESS = "business",
-    SYSTEM = "system",
-    INTEGRATION = "integration"
-}
-export declare const BaseEventSchema: z.ZodObject<{
-    id: z.ZodString;
-    type: z.ZodNativeEnum<typeof AnalyticsEventType>;
-    category: z.ZodNativeEnum<typeof EventCategory>;
-    severity: z.ZodNativeEnum<typeof EventSeverity>;
-    timestamp: z.ZodNumber;
-    source: z.ZodString;
-    version: z.ZodDefault<z.ZodString>;
-    sessionId: z.ZodOptional<z.ZodString>;
-    userId: z.ZodOptional<z.ZodString>;
-    organizationId: z.ZodOptional<z.ZodString>;
-    requestId: z.ZodOptional<z.ZodString>;
-    traceId: z.ZodOptional<z.ZodString>;
-    data: z.ZodRecord<z.ZodString, z.ZodUnknown>;
-    metadata: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
-    tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    environment: z.ZodDefault<z.ZodString>;
-    region: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id?: string;
-    data?: Record<string, unknown>;
-    type?: AnalyticsEventType;
-    category?: EventCategory;
-    tags?: string[];
-    version?: string;
-    timestamp?: number;
-    metadata?: Record<string, unknown>;
-    source?: string;
-    userId?: string;
-    region?: string;
-    environment?: string;
-    sessionId?: string;
-    requestId?: string;
-    severity?: EventSeverity;
-    organizationId?: string;
-    traceId?: string;
-}, {
-    id?: string;
-    data?: Record<string, unknown>;
-    type?: AnalyticsEventType;
-    category?: EventCategory;
-    tags?: string[];
-    version?: string;
-    timestamp?: number;
-    metadata?: Record<string, unknown>;
-    source?: string;
-    userId?: string;
-    region?: string;
-    environment?: string;
-    sessionId?: string;
-    requestId?: string;
-    severity?: EventSeverity;
-    organizationId?: string;
-    traceId?: string;
-}>;
 export type UnifiedAnalyticsEvent = z.infer<typeof BaseEventSchema>;
-export declare const EventFilterSchema: z.ZodObject<{
-    types: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof AnalyticsEventType>, "many">>;
-    categories: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof EventCategory>, "many">>;
-    severities: z.ZodOptional<z.ZodArray<z.ZodNativeEnum<typeof EventSeverity>, "many">>;
-    sources: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    userId: z.ZodOptional<z.ZodString>;
-    organizationId: z.ZodOptional<z.ZodString>;
-    sessionId: z.ZodOptional<z.ZodString>;
-    startTime: z.ZodOptional<z.ZodNumber>;
-    endTime: z.ZodOptional<z.ZodNumber>;
-    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
-    environment: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    tags?: string[];
-    userId?: string;
-    environment?: string;
-    categories?: EventCategory[];
-    sessionId?: string;
-    startTime?: number;
-    endTime?: number;
-    organizationId?: string;
-    types?: AnalyticsEventType[];
-    severities?: EventSeverity[];
-    sources?: string[];
-}, {
-    tags?: string[];
-    userId?: string;
-    environment?: string;
-    categories?: EventCategory[];
-    sessionId?: string;
-    startTime?: number;
-    endTime?: number;
-    organizationId?: string;
-    types?: AnalyticsEventType[];
-    severities?: EventSeverity[];
-    sources?: string[];
-}>;
+export declare const EventFilterSchema: z.ZodObject<{}, "strip", z.ZodTypeAny, {}, {}>;
 export type EventFilter = z.infer<typeof EventFilterSchema>;
 export interface EventSubscriber {
     id: string;
@@ -170,12 +66,6 @@ export interface EventBusMetrics {
     queueDepth: number;
     lastEventTime: number;
 }
-/**
- * Unified Event Bus Implementation
- *
- * Consolidates analytics from 12+ systems into a single event-driven architecture
- * with pub/sub patterns, filtering, routing, and persistence capabilities.
- */
 export declare class UnifiedEventBus extends EventEmitter {
     private subscribers;
     private eventHistory;
@@ -186,82 +76,23 @@ export declare class UnifiedEventBus extends EventEmitter {
     private flushTimer;
     constructor(config?: Partial<EventBusConfig>);
     /**
-     * Publish an analytics event to the unified bus
-     */
-    publishEvent(eventData: Omit<UnifiedAnalyticsEvent, 'id' | 'timestamp'>): Promise<string>;
-    /**
-     * Subscribe to analytics events with filtering
-     */
-    subscribe(subscriber: Omit<EventSubscriber, 'id'>): string;
-    /**
-     * Unsubscribe from analytics events
-     */
-    unsubscribe(subscriberId: string): boolean;
-    /**
-     * Get filtered events from history
-     */
-    getEvents(filter: EventFilter, limit?: number, offset?: number): UnifiedAnalyticsEvent[];
-    /**
-     * Get real-time event stream for dashboards
-     */
-    getEventStream(filter: EventFilter): EventEmitter;
-    /**
-     * Get event bus metrics
-     */
-    getMetrics(): EventBusMetrics;
-    /**
-     * Get event bus health status
-     */
-    getHealthStatus(): {
-        status: 'healthy' | 'degraded' | 'unhealthy';
-        metrics: EventBusMetrics;
-        issues: string[];
-    };
-    /**
-     * Migrate analytics data from existing systems
-     */
-    migrateFromLegacySystem(systemName: string, events: unknown[], transformer: (legacyEvent: unknown) => Partial<UnifiedAnalyticsEvent>): Promise<{
-        migrated: number;
-        failed: number;
-        errors: string[];
-    }>;
-    /**
      * Process event queue in batches
      */
     private processEventQueue;
     /**
-     * Process individual event through subscribers
-     */
+    * Process individual event through subscribers
+    */
     private processEvent;
     /**
      * Process event through individual subscriber
      */
     private processSubscriber;
     /**
-     * Retry failed subscriber processing
-     */
+    * Retry failed subscriber processing
+    */
     private retrySubscriber;
-    /**
-     * Check if event matches filter criteria
-     */
-    private matchesFilter;
-    /**
-     * Start flush timer for batch processing
-     */
-    private startFlushTimer;
-    /**
-     * Cleanup and shutdown
-     */
-    shutdown(): Promise<void>;
+    subscriber: EventSubscriber;
+    originalError: unknown;
+    Promise(): any;
 }
-/**
- * Event Bus Factory for dependency injection
- */
-export declare class EventBusFactory {
-    private static instance;
-    static getInstance(config?: Partial<EventBusConfig>): UnifiedEventBus;
-    static createInstance(config?: Partial<EventBusConfig>): UnifiedEventBus;
-    static shutdown(): Promise<void>;
-}
-export default UnifiedEventBus;
 //# sourceMappingURL=UnifiedEventBus.d.ts.map

@@ -94,8 +94,8 @@ const DeployPolicyRequestSchema = z.object({
         channel: z.string(),
         template: z.string()
       })).optional()
-    })
-  })
+  }
+  }
 });
 
 const GenerateFromComplianceRequestSchema = z.object({
@@ -175,7 +175,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -183,7 +183,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const authorId = request.user.userId;
@@ -236,7 +236,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -244,7 +244,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const authorId = request.user.userId;
@@ -297,7 +297,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -309,7 +309,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions for deployment' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const deployerId = request.user.userId;
@@ -368,7 +368,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -376,7 +376,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { framework, jurisdiction, customizations } = request.body;
@@ -436,10 +436,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { policyId, frameworks } = request.body;
@@ -492,10 +492,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { policyId, version1, version2 } = request.body;
@@ -546,10 +546,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { policyId, version, format, options } = request.body;
@@ -605,17 +605,17 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
                     total: { type: 'number' },
                     pages: { type: 'number' }
                   }
-                },
+  }
                 filters: { type: 'object' }
               }
             }
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const filters = request.query;
@@ -632,7 +632,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
             createdBy: 'john.doe',
             jurisdiction: ['US', 'EU'],
             complianceFrameworks: ['GDPR', 'CCPA']
-          },
+  }
           {
             policyId: 'POL-002',
             title: 'Cookie Policy',
@@ -658,7 +658,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               limit: filters.limit,
               total,
               pages
-            },
+  }
             filters: {
               applied: Object.keys(filters).filter(key => 
                 !['page', 'limit', 'sortBy', 'sortOrder'].includes(key) && filters[key]
@@ -694,16 +694,16 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-        },
+  }
         required: ['policyId']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           version: { type: 'string' },
           includeContent: { type: 'boolean', default: false }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -713,10 +713,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -792,9 +792,9 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           policyId: { type: 'string' }
-        },
+  }
         required: ['policyId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -811,10 +811,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { policyId } = request.params;
@@ -833,7 +833,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               deployedAt: new Date().toISOString(),
               status: 'COMPLETED'
             }
-          },
+  }
           {
             versionId: 'VER-002',
             version: '2.0.0',
@@ -885,7 +885,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           framework: { type: 'string' },
           policyType: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -902,10 +902,10 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { framework, policyType } = request.query;
@@ -926,7 +926,7 @@ export async function policyAuthoringRoutes(fastify: FastifyInstance) {
               { name: 'contact_email', type: 'EMAIL', required: true },
               { name: 'data_retention_period', type: 'NUMBER', required: true }
             ]
-          },
+  }
           {
             templateId: 'TPL-CCPA-001',
             name: 'CCPA Privacy Policy Template',

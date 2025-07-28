@@ -69,15 +69,15 @@ export async function templateRoutes(fastify: FastifyInstance) {
   const templateService = new TemplateService(templateDAO, workspaceDAO, {
     getUserInfo: async (userId: string) => {
       return { name: `User ${userId}`, avatar: undefined };
-    },
+  }
     checkWorkspaceAccess: async (workspaceId: string, userId: string, permission: number) => {
       // Simplified permission check - in real app, this would check ACL
       return true;
-    },
+  }
     generateThumbnail: async (templateData: Record<string, any>) => {
       // Mock thumbnail generation - in real app, this would generate actual thumbnails
       return `https://api.placeholder.com/300x200?text=${encodeURIComponent('Template')}`;
-    },
+  }
     sendNotification: async (userId: string, notification: any) => {
       fastify.log.info('Notification sent:', notification);
     }
@@ -95,7 +95,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -299,7 +299,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         201: z.object({
           project: z.any(),
           usage: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -314,7 +314,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
           name: project_name,
           description: project_description,
           workspace_id
-        },
+  }
         userId
       );
       
@@ -408,7 +408,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {
@@ -528,7 +528,7 @@ export async function templateRoutes(fastify: FastifyInstance) {
         200: z.object({
           data: z.array(z.any()),
           pagination: z.any()
-        })
+  }
       }
     }
   }, async (request, reply) => {

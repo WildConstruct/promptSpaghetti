@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { NotificationManager } from './NotificationManager';
+
 export interface Notification {
     id: string;
     user_id: string;
@@ -20,13 +21,14 @@ export interface Notification {
     icon?: string;
     color?: string;
     action_label?: string;
-}
+
+
 interface NotificationCenterProps {
     notificationManager: NotificationManager;
     isOpen: boolean;
     onClose: () => void;
     className?: string;
-}
+
 export declare const NotificationCenter: React.FC<NotificationCenterProps>;
 export {};
 //# sourceMappingURL=NotificationCenter.d.ts.map

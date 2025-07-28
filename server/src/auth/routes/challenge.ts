@@ -50,19 +50,19 @@ export async function challengeRoutes(fastify: FastifyInstance) {
         v2Enabled: process.env.RECAPTCHA_V2_ENABLED === 'true',
         v3Enabled: process.env.RECAPTCHA_V3_ENABLED === 'true',
         v3Threshold: parseFloat(process.env.RECAPTCHA_V3_THRESHOLD || '0.5')
-      },
+  }
       hcaptcha: {
         siteKey: process.env.HCAPTCHA_SITE_KEY || '',
         secretKey: process.env.HCAPTCHA_SECRET_KEY || '',
         enabled: process.env.HCAPTCHA_ENABLED === 'true'
-      },
+  }
       custom: {
         enabled: true,
         difficulty: ChallengeDifficulty.MEDIUM,
         maxAttempts: parseInt(process.env.CHALLENGE_MAX_ATTEMPTS || '3'),
         expiryMinutes: parseInt(process.env.CHALLENGE_EXPIRY_MINUTES || '10')
       }
-    },
+  }
     rules: [],
     escalation: {
       enabled: process.env.CHALLENGE_ESCALATION_ENABLED === 'true',
@@ -71,7 +71,7 @@ export async function challengeRoutes(fastify: FastifyInstance) {
         timeWindow: parseInt(process.env.CHALLENGE_ESCALATION_WINDOW || '300'),
         escalateAfter: parseInt(process.env.CHALLENGE_ESCALATE_AFTER || '5')
       }
-    },
+  }
     progressive: {
       enabled: process.env.CHALLENGE_PROGRESSIVE_ENABLED === 'true',
       stages: [
@@ -82,9 +82,9 @@ export async function challengeRoutes(fastify: FastifyInstance) {
           triggerConditions: {
             failedAttempts: 1,
             timeWindow: 300
-          },
+  }
           escalationDelay: 0
-        },
+  }
         {
           stage: 2,
           challengeType: ChallengeType.TEXT_CAPTCHA,
@@ -92,9 +92,9 @@ export async function challengeRoutes(fastify: FastifyInstance) {
           triggerConditions: {
             failedAttempts: 3,
             timeWindow: 600
-          },
+  }
           escalationDelay: 60
-        },
+  }
         {
           stage: 3,
           challengeType: ChallengeType.RECAPTCHA_V2,
@@ -102,7 +102,7 @@ export async function challengeRoutes(fastify: FastifyInstance) {
           triggerConditions: {
             failedAttempts: 5,
             timeWindow: 900
-          },
+  }
           escalationDelay: 300
         }
       ]
@@ -127,7 +127,7 @@ export async function challengeRoutes(fastify: FastifyInstance) {
             threshold: 3
           }
         ]
-      },
+  }
       {
         path: '/auth/register',
         method: 'POST',
@@ -135,14 +135,14 @@ export async function challengeRoutes(fastify: FastifyInstance) {
         difficulty: ChallengeDifficulty.MEDIUM,
         skipAuth: false,
         riskThreshold: 0.2
-      },
+  }
       {
         path: '/auth/password-reset',
         method: 'POST',
         challengeType: ChallengeType.RECAPTCHA_V2,
         skipAuth: false,
         riskThreshold: 0.1
-      },
+  }
       {
         path: /^\/api\/sensitive/,
         challengeType: ChallengeType.RECAPTCHA_V3,
@@ -153,7 +153,7 @@ export async function challengeRoutes(fastify: FastifyInstance) {
     defaultChallenge: {
       type: ChallengeType.TEXT_CAPTCHA,
       difficulty: ChallengeDifficulty.MEDIUM
-    },
+  }
     bypassTokens: process.env.CHALLENGE_BYPASS_TOKENS?.split(',') || [],
     trustProxy: process.env.TRUST_PROXY === 'true'
   });
@@ -199,7 +199,7 @@ export async function challengeRoutes(fastify: FastifyInstance) {
             token: { type: 'string' },
             message: { type: 'string' }
           }
-        },
+  }
         401: {
           type: 'object',
           properties: {
@@ -252,12 +252,12 @@ export async function challengeRoutes(fastify: FastifyInstance) {
           v2Enabled: challengeConfig.providers.recaptcha?.v2Enabled,
           v3Enabled: challengeConfig.providers.recaptcha?.v3Enabled,
           siteKey: challengeConfig.providers.recaptcha?.siteKey
-        },
+  }
         hcaptcha: {
           enabled: challengeConfig.providers.hcaptcha?.enabled,
           siteKey: challengeConfig.providers.hcaptcha?.siteKey
         }
-      },
+  }
       types: Object.values(ChallengeType),
       difficulties: Object.values(ChallengeDifficulty)
     };
@@ -304,15 +304,15 @@ export async function challengeRoutes(fastify: FastifyInstance) {
           v2: !!challengeConfig.providers.recaptcha?.v2Enabled,
           v3: !!challengeConfig.providers.recaptcha?.v3Enabled,
           configured: !!(challengeConfig.providers.recaptcha?.siteKey && challengeConfig.providers.recaptcha?.secretKey)
-        },
+  }
         hcaptcha: {
           enabled: !!challengeConfig.providers.hcaptcha?.enabled,
           configured: !!(challengeConfig.providers.hcaptcha?.siteKey && challengeConfig.providers.hcaptcha?.secretKey)
-        },
+  }
         custom: {
           enabled: !!challengeConfig.providers.custom?.enabled
         }
-      },
+  }
       features: {
         escalation: !!challengeConfig.escalation.enabled,
         progressive: !!challengeConfig.progressive.enabled

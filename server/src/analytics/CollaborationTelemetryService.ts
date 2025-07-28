@@ -24,6 +24,7 @@ import {
 } from './CollaborationTelemetry';
 import { v4 as uuidv4 } from 'uuid';
 
+}
 export interface CollaborationTelemetryServiceConfig {
   enabled: boolean;
   enableLatencyMeasurement: boolean;
@@ -31,6 +32,7 @@ export interface CollaborationTelemetryServiceConfig {
   sessionHeartbeatInterval: number; // ms
   enablePerformanceTracking: boolean;
   enableConflictTracking: boolean;
+}
 }
 
 export class CollaborationTelemetryService {
@@ -178,6 +180,7 @@ export class CollaborationTelemetryService {
    * Handle session start events
    */
   private async handleSessionStart(connectionInfo: any): Promise<void> {
+
     const sessionId = uuidv4();
     this.sessionMap.set(connectionInfo.id, sessionId);
 
@@ -200,6 +203,7 @@ export class CollaborationTelemetryService {
    * Handle session end events
    */
   private async handleSessionEnd(connectionInfo: any): Promise<void> {
+
     const sessionId = this.sessionMap.get(connectionInfo.id);
     if (sessionId) {
       await this.collaborationAnalytics.endCollaborativeSession(sessionId);
@@ -211,6 +215,7 @@ export class CollaborationTelemetryService {
    * Handle presence updates
    */
   private async handlePresenceUpdate(documentId: string, presence: any, newStatus: string): Promise<void> {
+
     const sessionId = this.sessionMap.get(presence.connectionId);
     if (!sessionId) return;
 
@@ -246,6 +251,7 @@ export class CollaborationTelemetryService {
    * Handle graph update events for real-time editing
    */
   private async handleGraphUpdate(documentId: string, updatePayload: any, connectionInfo: any): Promise<void> {
+
     const sessionId = this.sessionMap.get(connectionInfo.id);
     if (!sessionId) return;
 
@@ -282,6 +288,7 @@ export class CollaborationTelemetryService {
    * Handle conflict detection
    */
   private async handleConflictDetected(conflict: any): Promise<void> {
+
     const sessionId = this.getSessionForDocument(conflict.documentId);
     if (!sessionId) return;
 
@@ -308,6 +315,7 @@ export class CollaborationTelemetryService {
    * Handle automatic conflict resolution
    */
   private async handleConflictAutoResolved(resolution: any): Promise<void> {
+
     const sessionId = this.getSessionForDocument(resolution.conflict.documentId);
     if (!sessionId) return;
 
@@ -335,6 +343,7 @@ export class CollaborationTelemetryService {
    * Handle manual conflict resolution
    */
   private async handleConflictManuallyResolved(resolution: any): Promise<void> {
+
     const sessionId = this.getSessionForDocument(resolution.conflict.documentId);
     if (!sessionId) return;
 
@@ -362,6 +371,7 @@ export class CollaborationTelemetryService {
    * Handle synchronization batch processing
    */
   private async handleSyncBatchProcessed(batch: any): Promise<void> {
+
     // Record sync performance metrics
     if (batch.documentId && batch.processingTime) {
       const sessionId = this.getSessionForDocument(batch.documentId);
@@ -396,6 +406,7 @@ export class CollaborationTelemetryService {
    * Handle state update events
    */
   private async handleStateUpdate(event: any): Promise<void> {
+
     // Track operational transforms applied during state updates
     if (event.operations && event.operations.length > 0) {
       const sessionId = this.getSessionForDocument(event.documentId);
@@ -431,6 +442,7 @@ export class CollaborationTelemetryService {
    * Record collaborative session join event
    */
   private async recordCollaborativeSessionJoin(documentId: string, presence: any): Promise<void> {
+
     const sessionId = this.sessionMap.get(presence.connectionId);
     if (!sessionId) return;
 
@@ -485,6 +497,7 @@ export class CollaborationTelemetryService {
    * Measure collaboration latency for active sessions
    */
   private async measureCollaborationLatency(): Promise<void> {
+
     const healthMetrics = this.wsServer.getHealthMetrics();
     
     // Simulate latency measurement (in production, this would ping clients)
@@ -516,6 +529,7 @@ export class CollaborationTelemetryService {
    * Send heartbeat events for active sessions
    */
   private async sendSessionHeartbeats(): Promise<void> {
+
     for (const [connectionId, sessionId] of this.sessionMap.entries()) {
       const connectionInfo = (this.wsServer as any).connectionManager.getConnectionInfo(connectionId);
       if (connectionInfo && connectionInfo.documentId) {
@@ -550,6 +564,7 @@ export class CollaborationTelemetryService {
    * Measure WebSocket performance metrics
    */
   private async measureWebSocketPerformance(): Promise<void> {
+
     const healthMetrics = this.wsServer.getHealthMetrics();
     
     // Create a system context for performance metrics
@@ -645,6 +660,7 @@ export class CollaborationTelemetryService {
    * Get collaboration dashboard data
    */
   public async getCollaborationDashboard(): Promise<any> {
+
     return this.collaborationAnalytics.getCollaborationDashboardData();
   }
 

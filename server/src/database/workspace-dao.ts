@@ -51,6 +51,7 @@ export class WorkspaceDAO {
   constructor(private db: Database) {}
 
   async initialize(): Promise<void> {
+
     // Create database schema for testing
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS workspaces (
@@ -232,6 +233,7 @@ export class WorkspaceDAO {
   // ====== WORKSPACE OPERATIONS ======
 
   async createWorkspace(data: CreateWorkspace, userId: string): Promise<Workspace> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -273,6 +275,7 @@ export class WorkspaceDAO {
   }
 
   async getWorkspace(id: string): Promise<Workspace | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, owner_id, name, description, settings, created_at, updated_at, archived_at
       FROM workspaces
@@ -356,7 +359,7 @@ export class WorkspaceDAO {
         invited_by: null,
         joined_at: new Date(row.joined_at),
         last_active_at: new Date(row.last_active_at)
-      },
+  }
       role_permissions: row.role_permissions || 0
     }));
 
@@ -374,6 +377,7 @@ export class WorkspaceDAO {
   }
 
   async updateWorkspace(id: string, data: UpdateWorkspace): Promise<Workspace | null> {
+
     const setClause: string[] = [];
     const params: unknown[] = [];
 
@@ -409,6 +413,7 @@ export class WorkspaceDAO {
   }
 
   async archiveWorkspace(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare(`
       UPDATE workspaces
       SET archived_at = ?, updated_at = ?
@@ -423,6 +428,7 @@ export class WorkspaceDAO {
   // ====== PROJECT OPERATIONS ======
 
   async createProject(data: CreateProject, userId: string): Promise<Project> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -455,6 +461,7 @@ export class WorkspaceDAO {
   }
 
   async getProject(id: string): Promise<Project | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, workspace_id, name, description, status, metadata, created_by, created_at, updated_at
       FROM projects
@@ -554,6 +561,7 @@ export class WorkspaceDAO {
   }
 
   async updateProject(id: string, data: UpdateProject, userId: string): Promise<Project | null> {
+
     const setClause: string[] = [];
     const params: unknown[] = [];
 
@@ -608,6 +616,7 @@ export class WorkspaceDAO {
   // ====== RESOURCE OPERATIONS ======
 
   async createResource(data: CreateResource, userId: string): Promise<Resource> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -616,7 +625,7 @@ export class WorkspaceDAO {
         id, project_id, name, type, content_type, json_meta, 
         storage_path, content_data, size_bytes, checksum, 
         version, created_by, created_at, updated_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?)
     `);
 
@@ -653,6 +662,7 @@ export class WorkspaceDAO {
   }
 
   async getResource(id: string): Promise<Resource | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         id, project_id, name, type, content_type, json_meta,
@@ -677,6 +687,7 @@ export class WorkspaceDAO {
   // ====== ROLE AND PERMISSION OPERATIONS ======
 
   private async createDefaultRoles(workspaceId: string): Promise<void> {
+
     const roles = [
       { name: 'admin', description: 'Full workspace access', permissions: ROLE_PERMISSIONS.ADMIN },
       { name: 'editor', description: 'Can create and edit content', permissions: ROLE_PERMISSIONS.EDITOR },
@@ -696,6 +707,7 @@ export class WorkspaceDAO {
   }
 
   async getRole(workspaceId: string, roleName: string): Promise<ACLRole | null> {
+
     const stmt = this.db.prepare(`
       SELECT id, workspace_id, name, description, permissions, is_system_role, created_at, updated_at
       FROM acl_roles
@@ -714,6 +726,7 @@ export class WorkspaceDAO {
   }
 
   async createACLAssignment(data: CreateACLAssignment, grantedBy: string): Promise<ACLAssignment> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -746,6 +759,7 @@ export class WorkspaceDAO {
   }
 
   async createUserMembership(data: CreateUserMembership, invitedBy?: string): Promise<UserMembership> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -770,6 +784,7 @@ export class WorkspaceDAO {
   // ====== ACTIVITY OPERATIONS ======
 
   async createActivityEvent(data: CreateActivityEvent): Promise<ActivityEvent> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -777,7 +792,7 @@ export class WorkspaceDAO {
       INSERT INTO activity_events (
         id, workspace_id, project_id, resource_id, actor_id, 
         event_type, event_data, aggregation_key, created_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -896,6 +911,7 @@ export class WorkspaceDAO {
   }
 
   async getActivityEventById(id: string): Promise<ActivityEventWithActorInfo | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         ae.id, ae.workspace_id, ae.project_id, ae.resource_id, ae.actor_id,
@@ -929,6 +945,7 @@ export class WorkspaceDAO {
   }
 
   async getActivityEventTypes(workspaceId: string): Promise<string[]> {
+
     const stmt = this.db.prepare(`
       SELECT DISTINCT event_type
       FROM activity_events
@@ -1013,6 +1030,7 @@ export class WorkspaceDAO {
   // ====== COMMENT OPERATIONS ======
 
   async createComment(data: CreateComment): Promise<Comment> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -1020,7 +1038,7 @@ export class WorkspaceDAO {
       INSERT INTO comments (
         id, workspace_id, project_id, resource_id, parent_comment_id, author_id, 
         content, target_type, target_id, metadata, created_at, updated_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -1058,6 +1076,7 @@ export class WorkspaceDAO {
   }
 
   async getComment(id: string): Promise<Comment | null> {
+
     const stmt = this.db.prepare(`
       SELECT 
         c.id, c.workspace_id, c.project_id, c.resource_id, c.parent_comment_id,
@@ -1095,6 +1114,7 @@ export class WorkspaceDAO {
   }
 
   async updateComment(commentId: string, userId: string, updates: UpdateComment): Promise<Comment | null> {
+
     // Check if user can update this comment
     const existingComment = await this.getComment(commentId);
     if (!existingComment || existingComment.author_id !== userId) {
@@ -1138,6 +1158,7 @@ export class WorkspaceDAO {
   }
 
   async deleteComment(commentId: string, userId: string): Promise<boolean> {
+
     const existingComment = await this.getComment(commentId);
     if (!existingComment || existingComment.author_id !== userId) {
       return false;
@@ -1385,6 +1406,7 @@ export class WorkspaceDAO {
   // ====== NOTIFICATION OPERATIONS ======
 
   async createNotification(data: CreateNotification): Promise<Notification> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -1392,7 +1414,7 @@ export class WorkspaceDAO {
       INSERT INTO notifications (
         id, user_id, workspace_id, event_id, notification_type, title, message,
         action_url, priority, delivery_channel, delivered_at
-      )
+
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -1429,6 +1451,7 @@ export class WorkspaceDAO {
   // ====== USER AUTHENTICATION OPERATIONS ======
 
   async createUser(data: CreateUser): Promise<User> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -1455,6 +1478,7 @@ export class WorkspaceDAO {
   }
 
   async findUserById(id: string): Promise<User | null> {
+
     const stmt = this.db.prepare('SELECT * FROM users WHERE id = ? AND deactivated_at IS NULL');
     const row = stmt.get(id) as any;
     
@@ -1480,6 +1504,7 @@ export class WorkspaceDAO {
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
+
     const stmt = this.db.prepare('SELECT * FROM users WHERE email = ? AND deactivated_at IS NULL');
     const row = stmt.get(email) as any;
     
@@ -1505,6 +1530,7 @@ export class WorkspaceDAO {
   }
 
   async findUserByAuthProvider(provider: string, providerId: string): Promise<User | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM users 
       WHERE auth_provider = ? AND auth_provider_id = ? AND deactivated_at IS NULL
@@ -1533,6 +1559,7 @@ export class WorkspaceDAO {
   }
 
   async updateUser(id: string, data: UpdateUser): Promise<User | null> {
+
     const now = new Date().toISOString();
     const updates: string[] = [];
     const values: unknown[] = [];
@@ -1567,6 +1594,7 @@ export class WorkspaceDAO {
   }
 
   async updateUserPassword(id: string, passwordHash: string): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?
     `);
@@ -1574,6 +1602,7 @@ export class WorkspaceDAO {
   }
 
   async updateUserMFA(id: string, mfaEnabled: boolean, mfaSecret?: string, backupCodes?: string[]): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE users SET 
         mfa_enabled = ?, 
@@ -1592,6 +1621,7 @@ export class WorkspaceDAO {
   }
 
   async updateUserLastLogin(id: string): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE users SET last_login_at = ? WHERE id = ?
     `);
@@ -1599,6 +1629,7 @@ export class WorkspaceDAO {
   }
 
   async deactivateUser(id: string): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE users SET deactivated_at = ? WHERE id = ?
     `);
@@ -1608,6 +1639,7 @@ export class WorkspaceDAO {
   // ====== USER SESSION OPERATIONS ======
 
   async createUserSession(data: CreateUserSession): Promise<UserSession> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -1642,6 +1674,7 @@ export class WorkspaceDAO {
   }
 
   async findUserSessionByToken(token: string): Promise<UserSession | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM user_sessions 
       WHERE session_token = ? AND expires_at > ?
@@ -1663,6 +1696,7 @@ export class WorkspaceDAO {
   }
 
   async updateSessionActivity(sessionId: string): Promise<void> {
+
     const stmt = this.db.prepare(`
       UPDATE user_sessions SET last_active_at = ? WHERE id = ?
     `);
@@ -1670,21 +1704,25 @@ export class WorkspaceDAO {
   }
 
   async deleteUserSession(sessionId: string): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE id = ?');
     stmt.run(sessionId);
   }
 
   async deleteUserSessionByToken(token: string): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE session_token = ?');
     stmt.run(token);
   }
 
   async deleteAllUserSessions(userId: string): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE user_id = ?');
     stmt.run(userId);
   }
 
   async getUserSessions(userId: string): Promise<UserSession[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM user_sessions 
       WHERE user_id = ? AND expires_at > ?
@@ -1705,6 +1743,7 @@ export class WorkspaceDAO {
   }
 
   async cleanupExpiredSessions(): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM user_sessions WHERE expires_at <= ?');
     stmt.run(new Date().toISOString());
   }
@@ -1717,6 +1756,7 @@ export class WorkspaceDAO {
     redirectUri: string,
     workspaceId?: string
   ): Promise<OAuthState> {
+
     const id = uuidv4();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
     const now = new Date().toISOString();
@@ -1749,6 +1789,7 @@ export class WorkspaceDAO {
   }
 
   async findOAuthState(state: string): Promise<OAuthState | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM oauth_states 
       WHERE state = ? AND expires_at > ?
@@ -1769,11 +1810,13 @@ export class WorkspaceDAO {
   }
 
   async deleteOAuthState(state: string): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM oauth_states WHERE state = ?');
     stmt.run(state);
   }
 
   async cleanupExpiredOAuthStates(): Promise<void> {
+
     const stmt = this.db.prepare('DELETE FROM oauth_states WHERE expires_at <= ?');
     stmt.run(new Date().toISOString());
   }
@@ -1788,6 +1831,7 @@ export class WorkspaceDAO {
     userAgent?: string,
     workspaceId?: string
   ): Promise<void> {
+
     const id = uuidv4();
     const now = new Date().toISOString();
 
@@ -1816,6 +1860,7 @@ export class WorkspaceDAO {
     endDate?: Date,
     limit: number = 100
   ): Promise<any[]> {
+
     let query = 'SELECT * FROM security_audit_log WHERE 1=1';
     const params: unknown[] = [];
 
@@ -1892,6 +1937,7 @@ export class WorkspaceDAO {
     userId: string, 
     workspaceId: string
   ): Promise<{ permissions: number; roles: ACLRole[] } | null> {
+
     // First check if user has workspace membership
     const membershipStmt = this.db.prepare(`
       SELECT id, status 
@@ -1918,7 +1964,7 @@ export class WorkspaceDAO {
           (aa.scope_type = 'project' AND aa.scope_id IN (
             SELECT id FROM projects WHERE workspace_id = ? AND status != 'deleted'
           ))
-        )
+
         AND (aa.expires_at IS NULL OR aa.expires_at > CURRENT_TIMESTAMP)
       ORDER BY ar.permissions DESC
     `);
@@ -1962,6 +2008,7 @@ export class WorkspaceDAO {
     requiredPermissions: number,
     projectId?: string
   ): Promise<boolean> {
+
     // Check if user is workspace owner (owners have all permissions)
     const workspace = await this.getWorkspace(workspaceId);
     if (workspace && workspace.owner_id === userId) {
@@ -2012,6 +2059,7 @@ export class WorkspaceDAO {
     workspaceId: string, 
     filter: { status?: string; user_id?: string } = {}
   ): Promise<UserMembership[]> {
+
     let query = `
       SELECT id, user_id, workspace_id, status, invited_by, joined_at, last_active_at
       FROM user_memberships
@@ -2055,6 +2103,7 @@ export class WorkspaceDAO {
     newRoleName: string,
     updatedBy: string
   ): Promise<boolean> {
+
     // Get the new role
     const newRole = await this.getRole(workspaceId, newRoleName);
     if (!newRole) {
@@ -2083,6 +2132,7 @@ export class WorkspaceDAO {
    * Remove user from workspace (revoke all permissions)
    */
   async removeUserFromWorkspace(userId: string, workspaceId: string): Promise<boolean> {
+
     // Remove user membership
     const membershipStmt = this.db.prepare(`
       UPDATE user_memberships 
@@ -2099,7 +2149,7 @@ export class WorkspaceDAO {
         (scope_type = 'project' AND scope_id IN (
           SELECT id FROM projects WHERE workspace_id = ?
         ))
-      )
+
     `);
     assignmentStmt.run(userId, workspaceId, workspaceId);
 

@@ -26,7 +26,7 @@ describe('NodeCategory System', () => {
         'search-results', 'all'
       ];
       expectedCategories.forEach(categoryId => {)
-        expect(NODE_CATEGORIES[categoryId]).toBeDefined();
+  expect(NODE_CATEGORIES[categoryId]).toBeDefined();
         expect(NODE_CATEGORIES[categoryId].id).toBe(categoryId);
         expect(NODE_CATEGORIES[categoryId].name).toBeTruthy();
         expect(NODE_CATEGORIES[categoryId].description).toBeTruthy();
@@ -46,12 +46,12 @@ describe('NodeCategory System', () => {
         'PythonTransform'
       ];
       expectedNodes.forEach(nodeId => {)
-        expect(NODE_CATEGORY_MAPPING[nodeId]).toBeDefined();
+  expect(NODE_CATEGORY_MAPPING[nodeId]).toBeDefined();
         expect(Array.isArray(NODE_CATEGORY_MAPPING[nodeId])).toBe(true);
         expect(NODE_CATEGORY_MAPPING[nodeId].length).toBeGreaterThan(0);
         // Verify all categories exist
         NODE_CATEGORY_MAPPING[nodeId].forEach(categoryId => {)
-          expect(NODE_CATEGORIES[categoryId]).toBeDefined();
+  expect(NODE_CATEGORIES[categoryId]).toBeDefined();
         });
       });
     });
@@ -91,14 +91,13 @@ describe('NodeCategory System', () => {
       expect(categories.length).toBeGreaterThan(0);
       // Should not include special categories
       categories.forEach(category => {)
-        expect(Object.values(SPECIAL_CATEGORIES)).not.toContain(category.id);
+  expect(Object.values(SPECIAL_CATEGORIES)).not.toContain(category.id);
       });
     });
     test('should return categories sorted by order', () => {
       const categories = getAllCategories();
       for (let i = 1; i < categories.length; i++) {
         expect(categories[i].order).toBeGreaterThanOrEqual(categories[i - 1].order);
-      }
     });
     test('should include all expected main categories', () => {
       const categories = getAllCategories();
@@ -199,7 +198,7 @@ describe('NodeCategory System', () => {
       expect(beginnerCategories.length).toBeGreaterThan(0);
       expect(advancedCategories.length).toBeGreaterThan(0);
       beginnerCategories.forEach(category => {)
-        expect(['beginner', undefined]).toContain(category.metadata?.difficulty);
+  expect(['beginner', undefined]).toContain(category.metadata?.difficulty);
       });
     });
     test('should filter by usage', () => {
@@ -208,7 +207,7 @@ describe('NodeCategory System', () => {
       expect(commonCategories.length).toBeGreaterThan(0);
       expect(specializedCategories.length).toBeGreaterThan(0);
       commonCategories.forEach(category => {)
-        expect(category.metadata?.usage).toBe('common');
+  expect(category.metadata?.usage).toBe('common');
       });
     });
     test('should filter by expanded state', () => {
@@ -217,20 +216,20 @@ describe('NodeCategory System', () => {
       expect(expandedCategories.length).toBeGreaterThan(0);
       expect(collapsedCategories.length).toBeGreaterThan(0);
       expandedCategories.forEach(category => {)
-        expect(category.defaultExpanded).toBe(true);
+  expect(category.defaultExpanded).toBe(true);
       });
       collapsedCategories.forEach(category => {)
-        expect(category.defaultExpanded).toBe(false);
+  expect(category.defaultExpanded).toBe(false);
       });
     });
     test('should combine multiple filters', () => {
-      const filteredCategories = filterCategories({)
-        difficulty: 'beginner',
-        usage: 'common',
-        expanded: true,
-      });
+  const filteredCategories = filterCategories({)
+  difficulty: 'beginner',
+  usage: 'common',
+  expanded: true,
+});
       filteredCategories.forEach(category => {)
-        expect(['beginner', undefined]).toContain(category.metadata?.difficulty);
+  expect(['beginner', undefined]).toContain(category.metadata?.difficulty);
         expect(category.metadata?.usage).toBe('common');
         expect(category.defaultExpanded).toBe(true);
       });
@@ -244,21 +243,17 @@ describe('NodeCategory System', () => {
   describe('Category Metadata Validation', () => {
     test('should have valid metadata for all categories', () => {
       getAllCategories().forEach(category => {)
-        if (category.metadata) {
+  if (category.metadata) {
           if (category.metadata.keywords) {
             expect(Array.isArray(category.metadata.keywords)).toBe(true);
             category.metadata.keywords.forEach(keyword => {)
-              expect(typeof keyword).toBe('string');
+  expect(typeof keyword).toBe('string');
               expect(keyword.length).toBeGreaterThan(0);
             });
-          }
           if (category.metadata.difficulty) {
             expect(['beginner', 'intermediate', 'advanced']).toContain(category.metadata.difficulty);
-          }
           if (category.metadata.usage) {
             expect(['common', 'specialized', 'experimental']).toContain(category.metadata.usage);
-          }
-        }
       });
     });
     test('should have unique category IDs', () => {
@@ -269,7 +264,7 @@ describe('NodeCategory System', () => {
     });
     test('should have consistent color format', () => {
       Object.values(NODE_CATEGORIES).forEach(category => {)
-        expect(category.color).toMatch(/^#[0-9a-fA-F]{6}$/);
+  expect(category.color).toMatch(/^#[0-9a-fA-F]{6}$/);
       });
     });
   });

@@ -11,7 +11,16 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Textarea } from '../ui/Textarea';
 import { Eye, Download, ZoomIn, ZoomOut, RotateCw, CheckCircle, XCircle, Flag, FileText, Image, Maximize2, Minimize2, ArrowLeft, ArrowRight, Search, Info, Shield } from 'lucide-react';
-export const DocumentReviewInterface = ({ documents, requestId, userId, documentType, onReviewComplete, onBack, className = '' }) => {
+export const DocumentReviewInterface = ({
+    documents,
+    requestId,
+    userId,
+    documentType,
+    onReviewComplete,
+    onBack,
+    className = ''
+});
+{
     const [currentDocumentIndex, setCurrentDocumentIndex] = useState(0);
     const [zoom, setZoom] = useState(100);
     const [rotation, setRotation] = useState(0);
@@ -33,7 +42,9 @@ export const DocumentReviewInterface = ({ documents, requestId, userId, document
         setRotation(prev => (prev + 90) % 360);
     };
     const handleNextDocument = () => {
-        setCurrentDocumentIndex(prev => prev < documents.length - 1 ? prev + 1 : prev);
+        setCurrentDocumentIndex(prev => );
+        prev < documents.length - 1 ? prev + 1 : prev;
+        ;
     };
     const handlePrevDocument = () => {
         setCurrentDocumentIndex(prev => prev > 0 ? prev - 1 : prev);
@@ -45,41 +56,50 @@ export const DocumentReviewInterface = ({ documents, requestId, userId, document
         const x = ((event.clientX - rect.left) / rect.width) * 100;
         const y = ((event.clientY - rect.top) / rect.height) * 100;
         const newAnnotation = {
-            id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            x,
-            y,
-            width: 10, // Default size
-            height: 5,
-            type: activeAnnotationType,
-            note: '',
-            reviewer: 'current_admin', // Would come from auth context
-            timestamp: new Date()
-        };
-        setAnnotations(prev => [...prev, newAnnotation]);
-        setActiveAnnotationType(null);
+            id: `annotation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` };
     };
-    const handleAnnotationUpdate = (annotationId, note) => {
-        setAnnotations(prev => prev.map(ann => ann.id === annotationId ? { ...ann, note } : ann));
-    };
-    const handleDocumentReview = (approved) => {
-        const notes = reviewNotes[currentDocument.id] || '';
-        if (!notes.trim()) {
-            alert('Please provide review notes before making a decision.');
-            return;
-        }
-        setReviewDecisions(prev => ({
-            ...prev,
-            [currentDocument.id]: approved
-        }));
-        onReviewComplete(currentDocument.id, approved, notes);
-    };
-    const getDocumentTypeIcon = (type) => {
-        switch (type) {
-            case 'image': return Image;
-            case 'pdf': return FileText;
-            default: return FileText;
-        }
-    };
+    x,
+        y,
+        width;
+    10, // Default size
+        height;
+    5,
+        type;
+    activeAnnotationType,
+        note;
+    '',
+        reviewer;
+    'current_admin', // Would come from auth context
+        timestamp;
+    new Date();
+}
+;
+setAnnotations(prev => [...prev, newAnnotation]);
+setActiveAnnotationType(null);
+;
+const handleAnnotationUpdate = (annotationId, note) => {
+    setAnnotations(prev => );
+    prev.map(ann => ann.id === annotationId ? { ...ann, note } : ann);
+};
+;
+;
+const handleDocumentReview = (approved) => {
+    const notes = reviewNotes[currentDocument.id] || '';
+    if (!notes.trim()) {
+        alert('Please provide review notes before making a decision.');
+        return;
+        setReviewDecisions(prev => ({}), ...prev, [currentDocument.id], approved);
+    }
+    ;
+    onReviewComplete(currentDocument.id, approved, notes);
+};
+const getDocumentTypeIcon = (type) => {
+    switch (type) {
+        case 'image': return Image;
+        case 'pdf': return FileText;
+        default: return FileText;
+    }
+    ;
     const getAnnotationColor = (type) => {
         switch (type) {
             case 'highlight': return '#fbbf24';
@@ -89,457 +109,369 @@ export const DocumentReviewInterface = ({ documents, requestId, userId, document
             case 'reject': return '#ef4444';
             default: return '#6b7280';
         }
+        ;
+        const formatFileSize = (bytes) => {
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let size = bytes;
+            let unitIndex = 0;
+            while (size >= 1024 && unitIndex < units.length - 1) {
+                size /= 1024;
+                unitIndex++;
+                return `${size.toFixed(1)} ${units[unitIndex]}`;
+            }
+        };
+        const renderDocumentViewer = () => {
+            const DocumentIcon = getDocumentTypeIcon(currentDocument.type);
+            return;
+            _jsxs("div", { className: "document-viewer", children: [_jsxs("div", { className: "viewer-toolbar", children: [_jsxs("div", { className: "toolbar-left", children: [_jsxs("span", { className: "document-info", children: [currentDocumentIndex + 1, " of ", documents.length] }), _jsx("span", { className: "document-name", children: currentDocument.fileName })] }), _jsxs("div", { className: "toolbar-center", children: [_jsx(Button, { onClick: handlePrevDocument, disabled: currentDocumentIndex === 0, size: "sm", variant: "outline", children: _jsx(ArrowLeft, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: handleNextDocument, disabled: currentDocumentIndex === documents.length - 1, size: "sm", variant: "outline", children: _jsx(ArrowRight, { className: "w-4 h-4" }) })] }), _jsxs("div", { className: "toolbar-right", children: [_jsx(Button, { onClick: handleZoomOut, disabled: zoom <= 50, size: "sm", variant: "outline", children: _jsx(ZoomOut, { className: "w-4 h-4" }) }), _jsxs("span", { className: "zoom-level", children: [zoom, "%"] }), _jsx(Button, { onClick: handleZoomIn, disabled: zoom >= 300, size: "sm", variant: "outline", children: _jsx(ZoomIn, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: handleRotate, size: "sm", variant: "outline", children: _jsx(RotateCw, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: () => setIsFullscreen(!isFullscreen), size: "sm", variant: "outline", children: isFullscreen ? _jsx(Minimize2, { className: "w-4 h-4" }) : _jsx(Maximize2, { className: "w-4 h-4" }) })] })] }), _jsxs("div", { className: `viewer-container ${isFullscreen ? 'fullscreen' : ''}`, children: ["}", _jsx("div", { className: "document-display", onClick: handleDocumentClick, style: {
+                                    transform: `scale(${zoom / 100}) rotate(${rotation}deg)`
+                                } }), "} >", currentDocument.type === 'image' ? ()
+                                < img
+                                :
+                            , "src=", currentDocument.url, "alt=", currentDocument.fileName, "className=\"document-image\" /> ) : ()", _jsxs("div", { className: "document-placeholder", children: [_jsx(DocumentIcon, { className: "w-24 h-24 text-gray-400" }), _jsxs("p", { children: ["Document viewer for ", currentDocument.type, " files"] }), _jsxs(Button, { children: [_jsx(Eye, { className: "w-4 h-4 mr-2" }), "Open in External Viewer"] })] }), ")}", annotations.map(annotation => ()
+                                < div, key = { annotation, : .id }, className = "annotation", style = {}, {
+                                left: `${annotation.x}%`
+                            }), ", top: `$", annotation.y, "%`} }, width: `$", annotation.width, "%`} }, height: `$", annotation.height, "%`} }, borderColor: getAnnotationColor(annotation.type), backgroundColor: `$", getAnnotationColor(annotation.type), "20`} }} title=", annotation.note, "/> ))}"] })] });
+        };
     };
-    const formatFileSize = (bytes) => {
-        const units = ['B', 'KB', 'MB', 'GB'];
-        let size = bytes;
-        let unitIndex = 0;
-        while (size >= 1024 && unitIndex < units.length - 1) {
-            size /= 1024;
-            unitIndex++;
-        }
-        return `${size.toFixed(1)} ${units[unitIndex]}`;
-    };
-    const renderDocumentViewer = () => {
-        const DocumentIcon = getDocumentTypeIcon(currentDocument.type);
-        return (_jsxs("div", { className: "document-viewer", children: [_jsxs("div", { className: "viewer-toolbar", children: [_jsxs("div", { className: "toolbar-left", children: [_jsxs("span", { className: "document-info", children: [currentDocumentIndex + 1, " of ", documents.length] }), _jsx("span", { className: "document-name", children: currentDocument.fileName })] }), _jsxs("div", { className: "toolbar-center", children: [_jsx(Button, { onClick: handlePrevDocument, disabled: currentDocumentIndex === 0, size: "sm", variant: "outline", children: _jsx(ArrowLeft, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: handleNextDocument, disabled: currentDocumentIndex === documents.length - 1, size: "sm", variant: "outline", children: _jsx(ArrowRight, { className: "w-4 h-4" }) })] }), _jsxs("div", { className: "toolbar-right", children: [_jsx(Button, { onClick: handleZoomOut, disabled: zoom <= 50, size: "sm", variant: "outline", children: _jsx(ZoomOut, { className: "w-4 h-4" }) }), _jsxs("span", { className: "zoom-level", children: [zoom, "%"] }), _jsx(Button, { onClick: handleZoomIn, disabled: zoom >= 300, size: "sm", variant: "outline", children: _jsx(ZoomIn, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: handleRotate, size: "sm", variant: "outline", children: _jsx(RotateCw, { className: "w-4 h-4" }) }), _jsx(Button, { onClick: () => setIsFullscreen(!isFullscreen), size: "sm", variant: "outline", children: isFullscreen ? _jsx(Minimize2, { className: "w-4 h-4" }) : _jsx(Maximize2, { className: "w-4 h-4" }) })] })] }), _jsx("div", { className: `viewer-container ${isFullscreen ? 'fullscreen' : ''}`, children: _jsxs("div", { className: "document-display", onClick: handleDocumentClick, style: {
-                            transform: `scale(${zoom / 100}) rotate(${rotation}deg)`
-                        }, children: [currentDocument.type === 'image' ? (_jsx("img", { src: currentDocument.url, alt: currentDocument.fileName, className: "document-image" })) : (_jsxs("div", { className: "document-placeholder", children: [_jsx(DocumentIcon, { className: "w-24 h-24 text-gray-400" }), _jsxs("p", { children: ["Document viewer for ", currentDocument.type, " files"] }), _jsxs(Button, { children: [_jsx(Eye, { className: "w-4 h-4 mr-2" }), "Open in External Viewer"] })] })), annotations.map(annotation => (_jsx("div", { className: "annotation", style: {
-                                    left: `${annotation.x}%`,
-                                    top: `${annotation.y}%`,
-                                    width: `${annotation.width}%`,
-                                    height: `${annotation.height}%`,
-                                    borderColor: getAnnotationColor(annotation.type),
-                                    backgroundColor: `${getAnnotationColor(annotation.type)}20`
-                                }, title: annotation.note }, annotation.id)))] }) })] }));
-    };
-    const renderAnnotationTools = () => (_jsxs(Card, { className: "annotation-tools", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Annotation Tools" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "annotation-buttons", children: [_jsxs(Button, { onClick: () => setActiveAnnotationType('highlight'), variant: activeAnnotationType === 'highlight' ? 'default' : 'outline', size: "sm", children: [_jsx(Search, { className: "w-4 h-4 mr-2" }), "Highlight"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('question'), variant: activeAnnotationType === 'question' ? 'default' : 'outline', size: "sm", children: [_jsx(Info, { className: "w-4 h-4 mr-2" }), "Question"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('redact'), variant: activeAnnotationType === 'redact' ? 'default' : 'outline', size: "sm", children: [_jsx(Shield, { className: "w-4 h-4 mr-2" }), "Redact"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('approve'), variant: activeAnnotationType === 'approve' ? 'default' : 'outline', size: "sm", className: "approve-btn", children: [_jsx(CheckCircle, { className: "w-4 h-4 mr-2" }), "Approve"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('reject'), variant: activeAnnotationType === 'reject' ? 'default' : 'outline', size: "sm", className: "reject-btn", children: [_jsx(XCircle, { className: "w-4 h-4 mr-2" }), "Reject"] })] }), activeAnnotationType && (_jsxs("div", { className: "annotation-help", children: [_jsx(Info, { className: "w-4 h-4 text-blue-500" }), _jsxs("span", { children: ["Click on the document to place a ", activeAnnotationType, " annotation"] })] }))] })] }));
-    const renderDocumentMetadata = () => (_jsxs(Card, { className: "document-metadata", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Document Information" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "metadata-grid", children: [_jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Name" }), _jsx("span", { className: "metadata-value", children: currentDocument.fileName })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Size" }), _jsx("span", { className: "metadata-value", children: formatFileSize(currentDocument.fileSize) })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "Upload Date" }), _jsx("span", { className: "metadata-value", children: currentDocument.uploadDate.toLocaleDateString() })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Type" }), _jsx("span", { className: "metadata-value", children: currentDocument.mimeType })] }), currentDocument.metadata?.dimensions && (_jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "Dimensions" }), _jsxs("span", { className: "metadata-value", children: [currentDocument.metadata.dimensions.width, " x ", currentDocument.metadata.dimensions.height] })] })), currentDocument.metadata?.quality && (_jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "Quality" }), _jsx(Badge, { className: currentDocument.metadata.quality === 'high' ? 'text-green-600 bg-green-100' :
-                                            currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' :
-                                                'text-red-600 bg-red-100', children: currentDocument.metadata.quality.toUpperCase() })] }))] }), _jsxs("div", { className: "document-actions", children: [_jsxs(Button, { variant: "outline", size: "sm", children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Download"] }), _jsxs(Button, { variant: "outline", size: "sm", children: [_jsx(Flag, { className: "w-4 h-4 mr-2" }), "Report Issue"] })] })] })] }));
-    const renderReviewPanel = () => (_jsxs(Card, { className: "review-panel", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Document Review" }) }), _jsx(CardContent, { children: _jsxs("div", { className: "review-form", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Review Notes" }), _jsx(Textarea, { value: reviewNotes[currentDocument.id] || '', onChange: (e) => setReviewNotes(prev => ({
-                                        ...prev,
-                                        [currentDocument.id]: e.target.value
-                                    })), placeholder: "Provide detailed notes about this document...", rows: 4, className: "form-textarea" })] }), _jsx("div", { className: "review-status", children: reviewDecisions[currentDocument.id] !== undefined && (_jsx("div", { className: "status-display", children: reviewDecisions[currentDocument.id] ? (_jsxs("div", { className: "status approved", children: [_jsx(CheckCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Document Approved" })] })) : (_jsxs("div", { className: "status rejected", children: [_jsx(XCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Document Rejected" })] })) })) }), _jsxs("div", { className: "review-actions", children: [_jsxs(Button, { onClick: () => handleDocumentReview(true), className: "approve-button", disabled: !reviewNotes[currentDocument.id]?.trim(), children: [_jsx(CheckCircle, { className: "w-4 h-4 mr-2" }), "Approve Document"] }), _jsxs(Button, { onClick: () => handleDocumentReview(false), variant: "outline", className: "reject-button", disabled: !reviewNotes[currentDocument.id]?.trim(), children: [_jsx(XCircle, { className: "w-4 h-4 mr-2" }), "Reject Document"] })] })] }) })] }));
-    const renderAnnotationsList = () => (_jsxs(Card, { className: "annotations-list", children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { children: ["Annotations (", annotations.length, ")"] }) }), _jsx(CardContent, { children: annotations.length === 0 ? (_jsx("p", { className: "no-annotations", children: "No annotations yet. Use the annotation tools to mark areas of interest." })) : (_jsx("div", { className: "annotations", children: annotations.map(annotation => (_jsxs("div", { className: "annotation-item", children: [_jsxs("div", { className: "annotation-header", children: [_jsx("div", { className: "annotation-color", style: { backgroundColor: getAnnotationColor(annotation.type) } }), _jsx("span", { className: "annotation-type", children: annotation.type.toUpperCase() }), _jsx("span", { className: "annotation-time", children: annotation.timestamp.toLocaleTimeString() })] }), _jsx(Textarea, { value: annotation.note, onChange: (e) => handleAnnotationUpdate(annotation.id, e.target.value), placeholder: "Add a note for this annotation...", rows: 2, className: "annotation-note" })] }, annotation.id))) })) })] }));
-    return (_jsxs("div", { className: `document-review-interface ${className}`, children: [_jsxs("div", { className: "interface-header", children: [_jsxs(Button, { onClick: onBack, variant: "outline", children: [_jsx(ArrowLeft, { className: "w-4 h-4 mr-2" }), "Back to Queue"] }), _jsxs("div", { className: "header-info", children: [_jsxs("h2", { children: ["Document Review: ", documentType] }), _jsxs("p", { children: ["Request ID: ", requestId, " \u2022 User ID: ", userId] })] })] }), _jsxs("div", { className: "interface-layout", children: [_jsx("div", { className: "main-content", children: renderDocumentViewer() }), _jsxs("div", { className: "sidebar-content", children: [renderAnnotationTools(), renderDocumentMetadata(), renderReviewPanel(), renderAnnotationsList()] })] }), _jsx("style", { children: `
+};
+div >
+;
+;
+;
+const renderAnnotationTools = () => ();
+;
+_jsxs(Card, { className: "annotation-tools", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Annotation Tools" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "annotation-buttons", children: [_jsxs(Button, { onClick: () => setActiveAnnotationType('highlight'), variant: activeAnnotationType === 'highlight' ? 'default' : 'outline', size: "sm", children: [_jsx(Search, { className: "w-4 h-4 mr-2" }), "Highlight"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('question'), variant: activeAnnotationType === 'question' ? 'default' : 'outline', size: "sm", children: [_jsx(Info, { className: "w-4 h-4 mr-2" }), "Question"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('redact'), variant: activeAnnotationType === 'redact' ? 'default' : 'outline', size: "sm", children: [_jsx(Shield, { className: "w-4 h-4 mr-2" }), "Redact"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('approve'), variant: activeAnnotationType === 'approve' ? 'default' : 'outline', size: "sm", className: "approve-btn", children: [_jsx(CheckCircle, { className: "w-4 h-4 mr-2" }), "Approve"] }), _jsxs(Button, { onClick: () => setActiveAnnotationType('reject'), variant: activeAnnotationType === 'reject' ? 'default' : 'outline', size: "sm", className: "reject-btn", children: [_jsx(XCircle, { className: "w-4 h-4 mr-2" }), "Reject"] })] }), activeAnnotationType && ()
+                    < div, " className=\"annotation-help\">", _jsx(Info, { className: "w-4 h-4 text-blue-500" }), _jsxs("span", { children: ["Click on the document to place a ", activeAnnotationType, " annotation"] })] }), ")}"] });
+Card >
+;
+;
+const renderDocumentMetadata = () => ();
+;
+_jsxs(Card, { className: "document-metadata", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Document Information" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "metadata-grid", children: [_jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Name" }), _jsx("span", { className: "metadata-value", children: currentDocument.fileName })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Size" }), _jsx("span", { className: "metadata-value", children: formatFileSize(currentDocument.fileSize) })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "Upload Date" }), _jsx("span", { className: "metadata-value", children: currentDocument.uploadDate.toLocaleDateString() })] }), _jsxs("div", { className: "metadata-item", children: [_jsx("span", { className: "metadata-label", children: "File Type" }), _jsx("span", { className: "metadata-value", children: currentDocument.mimeType })] }), currentDocument.metadata?.dimensions && ()
+                            < div, " className=\"metadata-item\">", _jsx("span", { className: "metadata-label", children: "Dimensions" }), _jsxs("span", { className: "metadata-value", children: [currentDocument.metadata.dimensions.width, " x ", currentDocument.metadata.dimensions.height] })] }), ")}", currentDocument.metadata?.quality && ()
+                    < div, " className=\"metadata-item\">", _jsx("span", { className: "metadata-label", children: "Quality" }), _jsx(Badge, { className: (currentDocument.metadata.quality === 'high' ? 'text-green-600 bg-green-100' : ,
+                        currentDocument.metadata.quality === 'medium' ? 'text-yellow-600 bg-yellow-100' : ,
+                        'text-red-600 bg-red-100'), children: currentDocument.metadata.quality.toUpperCase() })] }), ")}"] })
+    ,
+        _jsxs("div", { className: "document-actions", children: [_jsxs(Button, { variant: "outline", size: "sm", children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Download"] }), _jsxs(Button, { variant: "outline", size: "sm", children: [_jsx(Flag, { className: "w-4 h-4 mr-2" }), "Report Issue"] })] });
+CardContent >
+;
+Card >
+;
+;
+const renderReviewPanel = () => ();
+;
+_jsxs(Card, { className: "review-panel", children: [_jsx(CardHeader, { children: _jsx(CardTitle, { children: "Document Review" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "review-form", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Review Notes" }), _jsx(Textarea, { value: reviewNotes[currentDocument.id] || '', onChange: (e) => setReviewNotes(prev => ({}), ...prev, [currentDocument.id]) }), ": e.target.value, }))} placeholder=\"Provide detailed notes about this document...\" rows=", 4, "className=\"form-textarea\" />"] }), _jsxs("div", { className: "review-status", children: [reviewDecisions[currentDocument.id] !== undefined && ()
+                                    < div, " className=\"status-display\">", reviewDecisions[currentDocument.id] ? ()
+                                    < div : , " className=\"status approved\">", _jsx(CheckCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Document Approved" })] }), ") : ()", _jsxs("div", { className: "status rejected", children: [_jsx(XCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Document Rejected" })] }), ")}"] }), ")}"] }), _jsxs("div", { className: "review-actions", children: [_jsxs(Button, { onClick: () => handleDocumentReview(true), className: "approve-button", disabled: !reviewNotes[currentDocument.id]?.trim(), children: [_jsx(CheckCircle, { className: "w-4 h-4 mr-2" }), "Approve Document"] }), _jsxs(Button, { onClick: () => handleDocumentReview(false), variant: "outline", className: "reject-button", disabled: !reviewNotes[currentDocument.id]?.trim(), children: [_jsx(XCircle, { className: "w-4 h-4 mr-2" }), "Reject Document"] })] })] });
+CardContent >
+;
+Card >
+;
+;
+const renderAnnotationsList = () => ();
+;
+_jsxs(Card, { className: "annotations-list", children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { children: ["Annotations (", annotations.length, ")"] }) }), _jsxs(CardContent, { children: [annotations.length === 0 ? ()
+                    < p : , " className=\"no-annotations\">No annotations yet. Use the annotation tools to mark areas of interest."] }), ") : ()", _jsx("div", { className: "annotations", children: annotations.map(annotation => ()
+                < div, key = { annotation, : .id }, className = "annotation-item" >
+                (_jsxs("div", { className: "annotation-header", children: [_jsx("div", { className: "annotation-color", style: { backgroundColor: getAnnotationColor(annotation.type) } }), _jsx("span", { className: "annotation-type", children: annotation.type.toUpperCase() }), _jsx("span", { className: "annotation-time", children: annotation.timestamp.toLocaleTimeString() })] })
+                    ,
+                        _jsx(Textarea, { value: annotation.note, onChange: (e) => handleAnnotationUpdate(annotation.id, e.target.value), placeholder: "Add a note for this annotation...", rows: 2, className: "annotation-note" }))) }), "))}"] });
+CardContent >
+;
+Card >
+;
+;
+return;
+_jsxs("div", { className: `document-review-interface ${className}`, children: ["}", _jsxs("div", { className: "interface-header", children: [_jsxs(Button, { onClick: onBack, variant: "outline", children: [_jsx(ArrowLeft, { className: "w-4 h-4 mr-2" }), "Back to Queue"] }), _jsxs("div", { className: "header-info", children: [_jsxs("h2", { children: ["Document Review: ", documentType] }), _jsxs("p", { children: ["Request ID: ", requestId, " \u2022 User ID: ", userId] })] })] }), _jsxs("div", { className: "interface-layout", children: [_jsx("div", { className: "main-content", children: renderDocumentViewer() }), _jsxs("div", { className: "sidebar-content", children: [renderAnnotationTools(), renderDocumentMetadata(), renderReviewPanel(), renderAnnotationsList()] })] }), _jsx("style", { children: `
         .document-review-interface {
-          max-width: 1600px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
+          max-width: 1600px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
           min-height: 100vh;
-        }
-
         .interface-header {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
+          align-items: center;,
+  gap: 1rem;
         .header-info h2 {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
-
         .header-info p {
           color: #6b7280;
           font-size: 0.875rem;
-        }
-
         .interface-layout {
           display: grid;
-          grid-template-columns: 1fr 400px;
-          gap: 1.5rem;
+          grid-template-columns: 1fr 400px;,
+  gap: 1.5rem;
           flex: 1;
-        }
-
         .main-content {
           display: flex;
           flex-direction: column;
           min-height: 0;
-        }
-
         .sidebar-content {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
+          flex-direction: column;,
+  gap: 1rem;
           overflow-y: auto;
-        }
-
         .document-viewer {
-          background: white;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          display: flex;
-          flex-direction: column;
-          flex: 1;
+          background: white;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  display: flex;
+          flex-direction: column;,
+  flex: 1;
           min-height: 0;
-        }
-
         .viewer-toolbar {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 0.75rem 1rem;
-          border-bottom: 1px solid #e5e7eb;
-          background: #f9fafb;
+          justify-content: space-between;,
+  padding: 0.75rem 1rem;
+          border-bottom: 1px solid #e5e7eb;,
+  background: #f9fafb;
           border-radius: 8px 8px 0 0;
-        }
-
         .toolbar-left {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-
+          align-items: center;,
+  gap: 1rem;
         .document-info {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
-
         .document-name {
-          font-size: 0.875rem;
-          color: #1f2937;
+          font-size: 0.875rem;,
+  color: #1f2937;
           font-weight: 600;
-          max-width: 200px;
-          overflow: hidden;
+          max-width: 200px;,
+  overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-        }
-
         .toolbar-center {
-          display: flex;
-          gap: 0.5rem;
-        }
-
+          display: flex;,
+  gap: 0.5rem;
         .toolbar-right {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
+          align-items: center;,
+  gap: 0.5rem;
         .zoom-level {
-          font-size: 0.875rem;
-          color: #374151;
+          font-size: 0.875rem;,
+  color: #374151;
           font-weight: 500;
           min-width: 40px;
           text-align: center;
-        }
-
         .viewer-container {
-          flex: 1;
-          position: relative;
-          overflow: auto;
-          background: #f3f4f6;
+          flex: 1;,
+  position: relative;
+          overflow: auto;,
+  background: #f3f4f6;
           display: flex;
           align-items: center;
           justify-content: center;
           min-height: 400px;
-        }
-
         .viewer-container.fullscreen {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
+          position: fixed;,
+  top: 0;
+          left: 0;,
+  right: 0;
           bottom: 0;
-          z-index: 1000;
-          background: white;
-        }
-
+          z-index: 1000;,
+  background: white;
         .document-display {
-          position: relative;
-          transition: transform 0.2s ease;
-          cursor: ${activeAnnotationType ? 'crosshair' : 'default'};
-        }
-
+          position: relative;,
+  transition: transform 0.2s ease;
+          cursor: ${activeAnnotationType ? 'crosshair' : 'default'};}
         .document-image {
           max-width: 100%;
           max-height: 100%;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
         .document-placeholder {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 1rem;
+          align-items: center;,
+  gap: 1rem;
           padding: 4rem;
-          text-align: center;
-          color: #6b7280;
-        }
-
+          text-align: center;,
+  color: #6b7280;
         .annotation {
-          position: absolute;
-          border: 2px solid;
+          position: absolute;,
+  border: 2px solid;
           pointer-events: none;
-        }
-
         .annotation-buttons {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .annotation-help {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-top: 0.75rem;
-          padding: 0.75rem;
+          align-items: center;,
+  gap: 0.5rem;
+          margin-top: 0.75rem;,
+  padding: 0.75rem;
           background: #eff6ff;
           border-radius: 6px;
-          font-size: 0.875rem;
-          color: #1e40af;
-        }
-
+          font-size: 0.875rem;,
+  color: #1e40af;
         .metadata-grid {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
+          flex-direction: column;,
+  gap: 0.75rem;
         .metadata-item {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem 0;
+          align-items: center;,
+  padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
-        }
-
         .metadata-item:last-child {
           border-bottom: none;
-        }
-
         .metadata-label {
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           font-size: 0.875rem;
-        }
-
         .metadata-value {
           color: #1f2937;
           font-size: 0.875rem;
-        }
-
         .document-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           margin-top: 1rem;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
-        }
-
         .review-form {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
+          flex-direction: column;,
+  gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
+          flex-direction: column;,
+  gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
-          color: #374151;
-        }
-
+          font-weight: 500;,
+  color: #374151;
         .form-textarea {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
-          resize: vertical;
-        }
-
-        .form-textarea:focus {
-          outline: none;
+          font-size: 0.875rem;,
+  resize: vertical;
+        .form-textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-
         .review-status {
           margin: 0.5rem 0;
-        }
-
         .status-display {
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding: 1rem;
+          justify-content: center;,
+  padding: 1rem;
           border-radius: 6px;
-        }
-
         .status.approved {
-          background: #d1fae5;
-          color: #065f46;
-        }
-
+          background: #d1fae5;,
+  color: #065f46;
         .status.rejected {
-          background: #fee2e2;
-          color: #991b1b;
-        }
-
+          background: #fee2e2;,
+  color: #991b1b;
         .status {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-weight: 500;
-        }
-
         .review-actions {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-
+          flex-direction: column;,
+  gap: 0.5rem;
         .approve-button {
           background: #059669;
           border-color: #059669;
-        }
-
-        .approve-button:hover:not(:disabled) {
-          background: #047857;
+        .approve-button:hover:not(:disabled) {,
+  background: #047857;
           border-color: #047857;
-        }
-
         .reject-button {
           color: #dc2626;
           border-color: #dc2626;
-        }
-
-        .reject-button:hover:not(:disabled) {
-          background: #dc2626;
+        .reject-button:hover:not(:disabled) {,
+  background: #dc2626;
           color: white;
-        }
-
         .no-annotations {
           color: #6b7280;
           font-style: italic;
-          text-align: center;
-          padding: 2rem;
-        }
-
+          text-align: center;,
+  padding: 2rem;
         .annotations {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
-
+          flex-direction: column;,
+  gap: 0.75rem;
         .annotation-item {
           border: 1px solid #e5e7eb;
-          border-radius: 6px;
-          padding: 0.75rem;
-        }
-
+          border-radius: 6px;,
+  padding: 0.75rem;
         .annotation-header {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-bottom: 0.5rem;
-        }
-
         .annotation-color {
-          width: 12px;
-          height: 12px;
+          width: 12px;,
+  height: 12px;
           border-radius: 50%;
-        }
-
         .annotation-type {
           font-size: 0.75rem;
-          font-weight: 500;
-          color: #374151;
+          font-weight: 500;,
+  color: #374151;
           flex: 1;
-        }
-
         .annotation-time {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
-
+          font-size: 0.75rem;,
+  color: #6b7280;
         .annotation-note {
           width: 100%;
           font-size: 0.875rem;
-        }
-
         .approve-btn {
           background: #059669;
-          border-color: #059669;
-          color: white;
-        }
-
-        .approve-btn:hover {
-          background: #047857;
+          border-color: #059669;,
+  color: white;
+        .approve-btn:hover {,
+  background: #047857;
           border-color: #047857;
-        }
-
         .reject-btn {
           background: #dc2626;
-          border-color: #dc2626;
-          color: white;
-        }
-
-        .reject-btn:hover {
-          background: #b91c1c;
+          border-color: #dc2626;,
+  color: white;
+        .reject-btn:hover {,
+  background: #b91c1c;
           border-color: #b91c1c;
-        }
-
         @media (max-width: 1200px) {
           .interface-layout {
             grid-template-columns: 1fr;
-          }
-
           .sidebar-content {
             order: -1;
             flex-direction: row;
-            overflow-x: auto;
-            gap: 0.75rem;
-          }
-
+            overflow-x: auto;,
+  gap: 0.75rem;
           .sidebar-content > * {
             min-width: 300px;
-          }
-        }
-
         @media (max-width: 768px) {
           .interface-header {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
-          }
-
+            align-items: flex-start;,
+  gap: 0.75rem;
           .viewer-toolbar {
-            flex-direction: column;
-            gap: 0.75rem;
-          }
-
+            flex-direction: column;,
+  gap: 0.75rem;
           .toolbar-left,
           .toolbar-center,
           .toolbar-right {
             justify-content: center;
-          }
-
           .sidebar-content {
             flex-direction: column;
-          }
-
           .sidebar-content > * {
             min-width: auto;
-          }
-
           .annotation-buttons {
             justify-content: center;
-          }
-        }
-      ` })] }));
-};
+      ` })] });
+;
+;
 export default DocumentReviewInterface;

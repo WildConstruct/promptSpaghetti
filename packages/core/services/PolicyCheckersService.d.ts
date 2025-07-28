@@ -11,6 +11,7 @@ import { ContentQualityMetricsService } from '../marketplace/ContentQualityMetri
 export type PolicyType = 'content_quality' | 'content_safety' | 'marketplace_standards' | 'security_compliance' | 'data_protection' | 'regulatory_compliance' | 'access_control' | 'template_licensing' | 'pre_release_protection';
 export type PolicySeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 export type PolicyCheckStatus = 'passed' | 'failed' | 'warning' | 'requires_review';
+
 export interface PolicyCheckResult {
     checkId: string;
     policyType: PolicyType;
@@ -24,7 +25,7 @@ export interface PolicyCheckResult {
     recommendations: string[];
     timestamp: string;
     executionTimeMs: number;
-}
+
 export interface PolicyViolation {
     id: string;
     ruleId: string;
@@ -36,7 +37,7 @@ export interface PolicyViolation {
     expectedValue?: any;
     location?: string;
     context?: Record<string, any>;
-}
+
 export interface PolicyCheckRequest {
     id: string;
     resourceType: 'content' | 'user' | 'template' | 'api_request' | 'system_config';
@@ -51,7 +52,7 @@ export interface PolicyCheckRequest {
     };
     checksRequested?: PolicyType[];
     skipCache?: boolean;
-}
+
 export interface PolicyRule {
     id: string;
     name: string;
@@ -70,19 +71,19 @@ export interface PolicyRule {
     createdAt: string;
     updatedAt: string;
     createdBy: string;
-}
+
 export interface RuleCondition {
     id: string;
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'matches' | 'greater_than' | 'less_than' | 'in' | 'not_in';
     value: any;
     caseSensitive?: boolean;
-}
+
 export interface RuleAction {
     id: string;
     type: 'block' | 'warn' | 'flag' | 'require_review' | 'auto_fix' | 'notify';
     parameters?: Record<string, any>;
-}
+
 export interface PolicyChecker {
     name: string;
     type: PolicyType;
@@ -90,7 +91,7 @@ export interface PolicyChecker {
     check(request: PolicyCheckRequest): Promise<PolicyCheckResult>;
     validateRule(rule: PolicyRule): Promise<boolean>;
     getDefaultRules(): Promise<PolicyRule[]>;
-}
+
 export declare class PolicyCheckersService {
     private checkers;
     private complianceMonitor;
@@ -137,6 +138,6 @@ export declare class PolicyCheckersService {
     private initializeBuiltInCheckers;
     private createErrorResult;
     private logPolicyCheckExecution;
-}
+
 export default PolicyCheckersService;
 //# sourceMappingURL=PolicyCheckersService.d.ts.map

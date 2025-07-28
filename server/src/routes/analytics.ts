@@ -92,7 +92,7 @@ export async function analyticsRoutes(
           period: {
             startTime: filters.startTime,
             endTime: filters.endTime
-          },
+  }
           generatedAt: Date.now()
         }
       });
@@ -115,16 +115,16 @@ export async function analyticsRoutes(
         type: 'object',
         properties: {
           metric: { type: 'string', enum: ['executions', 'tokens', 'cost', 'errors'] }
-        },
+  }
         required: ['metric']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           startTime: { type: 'number' },
           endTime: { type: 'number' },
           granularity: { type: 'string', enum: ['hour', 'day'], default: 'hour' }
-        },
+  }
         required: ['startTime', 'endTime']
       }
     }
@@ -146,12 +146,12 @@ export async function analyticsRoutes(
           metric,
           granularity: query.granularity,
           dataPoints: timeSeriesData
-        },
+  }
         meta: {
           period: {
             startTime: query.startTime,
             endTime: query.endTime
-          },
+  }
           totalDataPoints: timeSeriesData.length
         }
       });
@@ -175,7 +175,7 @@ export async function analyticsRoutes(
         properties: {
           startTime: { type: 'number' },
           endTime: { type: 'number' }
-        },
+  }
         required: ['startTime', 'endTime']
       }
     }
@@ -192,7 +192,7 @@ export async function analyticsRoutes(
           period: {
             startTime: query.startTime,
             endTime: query.endTime
-          },
+  }
           totalPoints: heatMapData.length
         }
       });
@@ -215,7 +215,7 @@ export async function analyticsRoutes(
         type: 'object',
         properties: {
           type: { type: 'string', enum: ['hourly', 'daily', 'weekly'] }
-        },
+  }
         required: ['type']
       }
     }
@@ -288,7 +288,7 @@ export async function analyticsRoutes(
           endTime: { type: 'number' },
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-        },
+  }
         required: ['startTime', 'endTime']
       }
     }
@@ -328,7 +328,7 @@ export async function analyticsRoutes(
           days: { type: 'number', minimum: 1, maximum: 365 },
           userId: { type: 'number' },
           organizationId: { type: 'number' }
-        },
+  }
         required: ['days']
       }
     }
@@ -445,9 +445,9 @@ export async function analyticsRoutes(
         type: 'object',
         properties: {
           budgetId: { type: 'string' }
-        },
+  }
         required: ['budgetId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -498,7 +498,7 @@ export async function analyticsRoutes(
         type: 'object',
         properties: {
           budgetId: { type: 'string' }
-        },
+  }
         required: ['budgetId']
       }
     }
@@ -558,7 +558,7 @@ export async function analyticsRoutes(
         type: 'object',
         properties: {
           alertId: { type: 'string' }
-        },
+  }
         required: ['alertId']
       }
     }
@@ -681,7 +681,7 @@ export async function analyticsRoutes(
           startTime: { type: 'number' },
           endTime: { type: 'number' },
           format: { type: 'string', enum: ['json', 'csv'], default: 'json' }
-        },
+  }
         required: ['startTime', 'endTime']
       }
     }

@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { KeyExchangeService } from '../services/KeyExchangeService';
 
+}
 interface InitiateKeyExchangeRequest {
   clientId?: string;
   securityLevel?: 'standard' | 'high' | 'maximum';
@@ -12,9 +13,11 @@ interface InitiateKeyExchangeRequest {
     keyLength: number;
     expiryHours?: number;
     maxUsage?: number;
+}
   }>;
 }
 
+}
 interface CompleteKeyExchangeRequest {
   sessionId: string;
   clientPublicKey: string;
@@ -23,12 +26,15 @@ interface CompleteKeyExchangeRequest {
     keyLength: number;
     expiryHours?: number;
     maxUsage?: number;
+}
   }>;
 }
 
+}
 interface RevokeKeyRequest {
   keyId: string;
   reason: string;
+}
 }
 
 export async function keyExchangeRoutes(
@@ -99,7 +105,7 @@ export async function keyExchangeRoutes(
           nextStep: 'POST /key-exchange/complete with your public key',
           algorithm: result.algorithm,
           securityLevel: result.securityLevel
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -172,7 +178,7 @@ export async function keyExchangeRoutes(
           description: 'Key exchange completed successfully',
           usage: 'Use the derived key IDs to access encrypted data or authentication tokens',
           keyManagement: 'Keys will expire according to their individual schedules'
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -229,7 +235,7 @@ export async function keyExchangeRoutes(
           expiresAt: session.expiresAt,
           clientId: session.clientId,
           hasClientKey: !!session.clientPublicKey
-        },
+  }
         timestamp: new Date().toISOString()
       };
     } catch (error) {
@@ -381,7 +387,7 @@ export async function keyExchangeRoutes(
           totalPages: Math.ceil(total / limit),
           hasNext: page * limit < total,
           hasPrev: page > 1
-        },
+  }
         filters: { state },
         timestamp: new Date().toISOString()
       };
@@ -545,7 +551,7 @@ export async function keyExchangeRoutes(
         name: 'Elliptic Curve Diffie-Hellman (ECDH)',
         keyDerivation: 'HKDF (HMAC-based Key Derivation Function)',
         standards: ['RFC 5869', 'NIST SP 800-56A', 'RFC 6090']
-      },
+  }
       security: {
         algorithms: [
           { name: 'secp256r1', description: 'NIST P-256, 256-bit security (standard)' },
@@ -557,25 +563,25 @@ export async function keyExchangeRoutes(
           { level: 'high', iterations: 250000, algorithm: 'secp384r1' },
           { level: 'maximum', iterations: 500000, algorithm: 'secp521r1' }
         ]
-      },
+  }
       workflow: [
         {
           step: 1,
           endpoint: 'POST /key-exchange/initiate',
           description: 'Client initiates key exchange and receives server public key',
           required: ['authentication']
-        },
+  }
         {
           step: 2,
           description: 'Client generates ECDH key pair using specified algorithm',
           action: 'client-side cryptography'
-        },
+  }
         {
           step: 3,
           endpoint: 'POST /key-exchange/complete',
           description: 'Client sends public key and completes key exchange',
           required: ['sessionId', 'clientPublicKey']
-        },
+  }
         {
           step: 4,
           description: 'Both parties derive shared secret and requested keys',
@@ -595,25 +601,25 @@ export async function keyExchangeRoutes(
           method: 'POST',
           description: 'Initiate ECDH key exchange',
           auth: 'required'
-        },
+  }
         {
           path: '/key-exchange/complete',
           method: 'POST', 
           description: 'Complete key exchange with client public key',
           auth: 'required'
-        },
+  }
         {
           path: '/key-exchange/session/:sessionId',
           method: 'GET',
           description: 'Get key exchange session status',
           auth: 'required'
-        },
+  }
         {
           path: '/key-exchange/sessions',
           method: 'GET',
           description: 'List user\'s key exchange sessions',
           auth: 'required'
-        },
+  }
         {
           path: '/key-exchange/revoke-key',
           method: 'POST',

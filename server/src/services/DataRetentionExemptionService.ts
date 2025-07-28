@@ -4,6 +4,7 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface ExemptionRequest {
   requestId?: string;
   requestorId: string;
@@ -19,7 +20,9 @@ export interface ExemptionRequest {
   requestDate?: Date;
   status?: ExemptionStatus;
 }
+}
 
+}
 export interface ExemptionRecord {
   id: string;
   requestId: string;
@@ -39,7 +42,9 @@ export interface ExemptionRecord {
   updatedAt: Date;
   metadata: Record<string, any>;
 }
+}
 
+}
 export interface ExemptionApproval {
   approverId: string;
   approvalType: ApprovalType;
@@ -48,7 +53,9 @@ export interface ExemptionApproval {
   approvedAt?: Date;
   conditions?: string[];
 }
+}
 
+}
 export interface ExemptionReview {
   reviewId: string;
   reviewerId: string;
@@ -58,6 +65,7 @@ export interface ExemptionReview {
   recommendations: string[];
   nextReviewDate?: Date;
   complianceStatus: ComplianceStatus;
+}
 }
 
 export enum ExemptionType {
@@ -120,6 +128,7 @@ export class DataRetentionExemptionService {
    * Submit a new exemption request
    */
   async submitExemptionRequest(request: ExemptionRequest): Promise<{ requestId: string; status: string }> {
+
     const requestId = await this.generateRequestId();
     
     try {
@@ -191,6 +200,7 @@ export class DataRetentionExemptionService {
    * Get exemption requests for review
    */
   async getExemptionRequestsForReview(reviewerId: string): Promise<ExemptionRecord[]> {
+
     const result = await this.db.query(`
       SELECT e.*, a.approval_type, a.status as approval_status
       FROM data_retention_exemptions e
@@ -213,6 +223,7 @@ export class DataRetentionExemptionService {
     comments: string,
     conditions?: string[]
   ): Promise<{ approved: boolean; nextSteps: string[] }> {
+
     try {
       // Update approval record
       await this.db.query(`
@@ -269,6 +280,7 @@ export class DataRetentionExemptionService {
     expiringBefore?: Date;
     dataCategory?: string;
   }): Promise<ExemptionRecord[]> {
+
     let query = `
       SELECT * FROM data_retention_exemptions 
       WHERE status = $1
@@ -300,6 +312,7 @@ export class DataRetentionExemptionService {
    * Schedule periodic reviews
    */
   async schedulePeriodicReview(exemptionId: string): Promise<void> {
+
     const exemption = await this.getExemptionById(exemptionId);
     if (!exemption) {
       throw new Error('Exemption not found');
@@ -322,6 +335,7 @@ export class DataRetentionExemptionService {
     terminatedBy: string,
     reason: string
   ): Promise<void> {
+
     try {
       await this.db.query(`
         UPDATE data_retention_exemptions 
@@ -387,6 +401,7 @@ export class DataRetentionExemptionService {
   // Private helper methods
 
   private async validateExemptionRequest(request: ExemptionRequest): Promise<void> {
+
     if (!request.requestorId) {
       throw new Error('Requestor ID is required');
     }
@@ -408,6 +423,7 @@ export class DataRetentionExemptionService {
   }
 
   private async initializeApprovalWorkflow(requestId: string, exemptionType: ExemptionType): Promise<void> {
+
     const requiredApprovals = this.getRequiredApprovals(exemptionType);
     
     for (const approval of requiredApprovals) {
@@ -463,6 +479,7 @@ export class DataRetentionExemptionService {
   }
 
   private async generateRequestId(): Promise<string> {
+
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
     return `EXE-${timestamp}-${random}`;
@@ -492,6 +509,7 @@ export class DataRetentionExemptionService {
 
   // Additional private methods would be implemented here...
   private async validateBusinessReason(_____type: ExemptionType, _____reason: string): Promise<void> {
+
     // Implementation for validating business reasons
   }
 
@@ -500,28 +518,34 @@ export class DataRetentionExemptionService {
     anyDenied: boolean;
     pendingApprovals: string[];
   }> {
+
     // Implementation for checking approval status
     return { allApproved: false, anyDenied: false, pendingApprovals: [] };
   }
 
   private async activateExemption(_____requestId: string): Promise<void> {
+
     // Implementation for activating exemption
   }
 
   private async updateExemptionStatus(_____requestId: string, _____status: ExemptionStatus): Promise<void> {
+
     // Implementation for updating status
   }
 
   private async getExemptionById(_____exemptionId: string): Promise<ExemptionRecord | null> {
+
     // Implementation for getting exemption by ID
     return null;
   }
 
   private async processTerminatedExemptionData(_____exemptionId: string): Promise<void> {
+
     // Implementation for processing data after termination
   }
 
   private async getComplianceSummary(_____startDate: Date, _____endDate: Date): Promise<ComplianceSummary> {
+
     // Implementation for compliance summary
     return {} as ComplianceSummary;
   }
@@ -532,17 +556,20 @@ export class DataRetentionExemptionService {
   }
 
   private async getReviewComplianceMetrics(_____startDate: Date, _____endDate: Date): Promise<ReviewComplianceMetrics> {
+
     // Implementation for review compliance metrics
     return {} as ReviewComplianceMetrics;
   }
 
   private async calculateRiskAssessment(): Promise<RiskAssessment> {
+
     // Implementation for risk assessment
     return {} as RiskAssessment;
   }
 }
 
 // Supporting interfaces
+}
 interface ComplianceSummary {
   totalExemptions: number;
   activeExemptions: number;
@@ -550,17 +577,22 @@ interface ComplianceSummary {
   terminatedExemptions: number;
   complianceRate: number;
 }
+}
 
+}
 interface ReviewComplianceMetrics {
   scheduledReviews: number;
   completedReviews: number;
   overdueReviews: number;
   averageReviewTime: number;
 }
+}
 
+}
 interface RiskAssessment {
   overallRiskScore: number;
   highRiskExemptions: number;
   riskFactors: string[];
   mitigationRecommendations: string[];
+}
 }

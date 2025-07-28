@@ -13,17 +13,13 @@ export interface CommandPaletteIntegrationProps {
         x: number;
         y: number;
     }, data?: any) => void;
-    onNodesDelete?: (nodeIds: string[]) => void;
+    onNodesDelete?: (nodeIds: string) => void;
     onExport?: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
     onTemplateApply?: (templateId: string) => void;
     onSave?: () => void;
-    selectedNodes?: Node[];
-    customActions?: CommandPaletteAction[];
+    selectedNodes?: Node;
+    customActions?: CommandPaletteAction;
     disabled?: boolean;
 }
-/**
- * Command palette integration component for the graph editor
- */
 export declare const CommandPaletteIntegration: React.FC<CommandPaletteIntegrationProps>;
-export default CommandPaletteIntegration;
 //# sourceMappingURL=CommandPaletteIntegration.d.ts.map

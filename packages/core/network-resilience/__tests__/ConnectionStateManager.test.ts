@@ -17,22 +17,21 @@ Object.defineProperty(global.navigator, 'onLine', {)
 Object.defineProperty(global.navigator, 'connection', {)
   writable: true,
   value: {,
-    type: 'wifi',
-    effectiveType: '4g',
-    downlink: 10,
-    rtt: 100,
-    saveData: false,
-    addEventListener: jest.fn(),
-  }
+  type: 'wifi',
+  effectiveType: '4g',
+  downlink: 10,
+  rtt: 100,
+  saveData: false,
+  addEventListener: jest.fn(),
 });
 describe('ConnectionStateManager', () => {
   let manager: ConnectionStateManager;
   beforeEach(() => {
-    manager = new ConnectionStateManager({)
-      pingInterval: 100,
-      qualityCheckInterval: 200,
-      offlineDetectionTimeout: 500,
-    });
+  manager = new ConnectionStateManager({)
+  pingInterval: 100,
+  qualityCheckInterval: 200,
+  offlineDetectionTimeout: 500,
+});
     (fetch as jest.Mock).mockClear();
   });
   afterEach(() => {
@@ -45,24 +44,24 @@ describe('ConnectionStateManager', () => {
       expect(manager.isOnline()).toBe(false);
     });
     test('should update connection state', () => {
-      const stateChanges: any[] = [];
-      manager.on('state_changed', (event) => stateChanges.push(event));
-      manager.setState(ConnectionState.CONNECTING, 'Test connection');
-      expect(manager.getState()).toBe(ConnectionState.CONNECTING);
-      expect(stateChanges).toHaveLength(1);
-      expect(stateChanges[0].newState).toBe(ConnectionState.CONNECTING);
-      expect(stateChanges[0].reason).toBe('Test connection');
-      manager.setState(ConnectionState.CONNECTED);
-      expect(manager.getState()).toBe(ConnectionState.CONNECTED);
-      expect(manager.isOnline()).toBe(true);
-    });
+  const stateChanges: any = [];
+  manager.on('state_changed', (event) => stateChanges.push(event));
+  manager.setState(ConnectionState.CONNECTING, 'Test connection');
+  expect(manager.getState()).toBe(ConnectionState.CONNECTING);
+  expect(stateChanges).toHaveLength(1);
+  expect(stateChanges[0].newState).toBe(ConnectionState.CONNECTING);
+  expect(stateChanges[0].reason).toBe('Test connection');
+  manager.setState(ConnectionState.CONNECTED);
+  expect(manager.getState()).toBe(ConnectionState.CONNECTED);
+  expect(manager.isOnline()).toBe(true);
+});
     test('should not emit duplicate state changes', () => {
-      const stateChanges: any[] = [];
-      manager.on('state_changed', (event) => stateChanges.push(event));
-      manager.setState(ConnectionState.CONNECTED);
-      manager.setState(ConnectionState.CONNECTED); // Duplicate
-      expect(stateChanges).toHaveLength(1);
-    });
+  const stateChanges: any = [];
+  manager.on('state_changed', (event) => stateChanges.push(event));
+  manager.setState(ConnectionState.CONNECTED);
+  manager.setState(ConnectionState.CONNECTED); // Duplicate
+  expect(stateChanges).toHaveLength(1);
+});
     test('should track state history', () => {
       manager.setState(ConnectionState.CONNECTING);
       manager.setState(ConnectionState.CONNECTED);
@@ -75,90 +74,90 @@ describe('ConnectionStateManager', () => {
     });
   });
   describe('Connection Quality', () => {
-    test('should update quality based on metrics', () => {
-      const qualityChanges: any[] = [];
-      manager.on('quality_changed', (event) => qualityChanges.push(event));
-      // Excellent quality metrics
-      manager.updateQuality({)
-        latency: 30,
-        packetLoss: 0,
-        bandwidth: 100,
-        jitter: 5,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  test('should update quality based on metrics', () => {
+  const qualityChanges: any = [];
+  manager.on('quality_changed', (event) => qualityChanges.push(event));
+  // Excellent quality metrics
+  manager.updateQuality({)
+  latency: 30,
+  packetLoss: 0,
+  bandwidth: 100,
+  jitter: 5,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       expect(manager.getQuality()).toBe(ConnectionQuality.EXCELLENT);
       expect(qualityChanges).toHaveLength(1);
       // Reset metrics first to ensure we get fresh poor quality
       manager.reset();
       // Poor quality metrics
       manager.updateQuality({)
-        latency: 500,
-        packetLoss: 0.2,
-        bandwidth: 1,
-        jitter: 100,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  latency: 500,
+  packetLoss: 0.2,
+  bandwidth: 1,
+  jitter: 100,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       expect(manager.getQuality()).toBe(ConnectionQuality.POOR);
       expect(qualityChanges).toHaveLength(2);
     });
     test('should calculate quality thresholds correctly', () => {
-      // Good quality
-      manager.updateMetrics({)
-        latency: 100,
-        packetLoss: 0.02,
-        bandwidth: 50,
-        jitter: 10,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  // Good quality
+  manager.updateMetrics({)
+  latency: 100,
+  packetLoss: 0.02,
+  bandwidth: 50,
+  jitter: 10,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       manager.updateQuality();
       expect(manager.getQuality()).toBe(ConnectionQuality.GOOD);
       // Reset and set fair quality
       manager.reset();
       manager.updateMetrics({)
-        latency: 200,
-        packetLoss: 0.08,
-        bandwidth: 20,
-        jitter: 30,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  latency: 200,
+  packetLoss: 0.08,
+  bandwidth: 20,
+  jitter: 30,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       manager.updateQuality();
       expect(manager.getQuality()).toBe(ConnectionQuality.FAIR);
     });
     test('should use exponential moving average for metrics', () => {
-      // First measurement
-      manager.updateMetrics({)
-        latency: 100,
-        packetLoss: 0.1,
-        jitter: 20,
-        lastMeasurement: Date.now(),
-        measurementCount: 0,
-      });
+  // First measurement
+  manager.updateMetrics({)
+  latency: 100,
+  packetLoss: 0.1,
+  jitter: 20,
+  lastMeasurement: Date.now(),
+  measurementCount: 0,
+});
       const firstMetrics = manager.getStateData().metrics;
       expect(firstMetrics.latency).toBe(100);
       expect(firstMetrics.packetLoss).toBe(0.1);
       // Second measurement should be averaged
       manager.updateMetrics({)
-        latency: 200,
-        packetLoss: 0.2,
-        jitter: 40,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  latency: 200,
+  packetLoss: 0.2,
+  jitter: 40,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       const secondMetrics = manager.getStateData().metrics;
       expect(secondMetrics.latency).toBe(120); // 100 * 0.8 + 200 * 0.2
       expect(secondMetrics.packetLoss).toBeCloseTo(0.11, 10); // 0.1 * 0.9 + 0.2 * 0.1
     });
   });
   describe('Connection Testing', () => {
-    test('should perform successful connection test', async () => {
-      (fetch as jest.Mock).mockResolvedValue({)
-        ok: true,
-        status: 200,
-      });
+  test('should perform successful connection test', async () => {
+  (fetch as jest.Mock).mockResolvedValue({)
+  ok: true,
+  status: 200,
+});
       const metrics = await manager.testConnection();
       expect(metrics.latency).toBeGreaterThan(0);
       expect(metrics.packetLoss).toBe(0);
@@ -171,39 +170,39 @@ describe('ConnectionStateManager', () => {
       expect(metrics.packetLoss).toBe(1);
     });
     test('should handle response with error status', async () => {
-      (fetch as jest.Mock).mockResolvedValue({)
-        ok: false,
-        status: 500,
-      });
+  (fetch as jest.Mock).mockResolvedValue({)
+  ok: false,
+  status: 500,
+});
       const metrics = await manager.testConnection();
       expect(metrics.packetLoss).toBe(1);
     });
   });
   describe('Stability Checks', () => {
-    test('should determine connection stability', () => {
-      manager.setState(ConnectionState.CONNECTED);
-      // Start with poor quality
-      manager.updateQuality({)
-        latency: 500,
-        packetLoss: 0.2,
-        bandwidth: 1,
-        jitter: 100,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  test('should determine connection stability', () => {
+  manager.setState(ConnectionState.CONNECTED);
+  // Start with poor quality
+  manager.updateQuality({)
+  latency: 500,
+  packetLoss: 0.2,
+  bandwidth: 1,
+  jitter: 100,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       expect(manager.isStable()).toBe(false);
       // Reset to get fresh metrics for excellent quality
       manager.reset();
       manager.setState(ConnectionState.CONNECTED);
       // Set excellent quality
       manager.updateQuality({)
-        latency: 30,
-        packetLoss: 0,
-        bandwidth: 100,
-        jitter: 5,
-        lastMeasurement: Date.now(),
-        measurementCount: 1,
-      });
+  latency: 30,
+  packetLoss: 0,
+  bandwidth: 100,
+  jitter: 5,
+  lastMeasurement: Date.now(),
+  measurementCount: 1,
+});
       expect(manager.isStable()).toBe(true);
     });
     test('should consider offline as unstable', () => {
@@ -212,16 +211,16 @@ describe('ConnectionStateManager', () => {
     });
   });
   describe('Statistics and Metrics', () => {
-    test('should provide connection statistics', () => {
-      manager.setState(ConnectionState.CONNECTED);
-      manager.updateMetrics({)
-        latency: 100,
-        packetLoss: 0.05,
-        bandwidth: 50,
-        jitter: 10,
-        lastMeasurement: Date.now(),
-        measurementCount: 5,
-      });
+  test('should provide connection statistics', () => {
+  manager.setState(ConnectionState.CONNECTED);
+  manager.updateMetrics({)
+  latency: 100,
+  packetLoss: 0.05,
+  bandwidth: 50,
+  jitter: 10,
+  lastMeasurement: Date.now(),
+  measurementCount: 5,
+});
       const stats = manager.getStatistics();
       expect(stats.currentState).toBe(ConnectionState.CONNECTED);
       expect(stats.averageLatency).toBe(100);
@@ -262,12 +261,11 @@ describe('ConnectionStateManager', () => {
         expect(stateData.networkInfo.effectiveType).toBe('4g');
         expect(stateData.networkInfo.downlink).toBe(10);
         expect(stateData.networkInfo.rtt).toBe(100);
-      }
     });
   });
   describe('Browser Events', () => {
     test('should handle online/offline events', () => {
-      const stateChanges: any[] = [];
+      const stateChanges: any = [];
       manager.on('state_changed', (event) => stateChanges.push(event));
       // Simulate going offline
       Object.defineProperty(navigator, 'onLine', { value: false });
@@ -289,16 +287,16 @@ describe('ConnectionStateManager', () => {
     });
   });
   describe('Cleanup and Reset', () => {
-    test('should reset state and metrics', () => {
-      manager.setState(ConnectionState.CONNECTED);
-      manager.updateMetrics({)
-        latency: 100,
-        packetLoss: 0.05,
-        bandwidth: 50,
-        jitter: 10,
-        lastMeasurement: Date.now(),
-        measurementCount: 5,
-      });
+  test('should reset state and metrics', () => {
+  manager.setState(ConnectionState.CONNECTED);
+  manager.updateMetrics({)
+  latency: 100,
+  packetLoss: 0.05,
+  bandwidth: 50,
+  jitter: 10,
+  lastMeasurement: Date.now(),
+  measurementCount: 5,
+});
       expect(manager.getState()).toBe(ConnectionState.CONNECTED);
       manager.reset();
       expect(manager.getState()).toBe(ConnectionState.DISCONNECTED);

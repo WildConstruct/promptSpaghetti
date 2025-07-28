@@ -17,7 +17,6 @@ export interface ExtensionManagerPanelProps {
   onClose?: () => void;
   initialView?: 'installed' | 'marketplace' | 'settings';
 }
-
 export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
   className = '',
   onClose,
@@ -29,10 +28,10 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
   const [showConfigPanel, setShowConfigPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterOptions, setFilterOptions] = useState({)
-    status: 'all' as 'all' | 'enabled' | 'disabled',
-    type: 'all' as 'all' | 'node' | 'ui' | 'transform' | 'storage',
-    sortBy: 'name' as 'name' | 'version' | 'lastUpdated' | 'size',
-  });
+  status: 'all' as 'all' | 'enabled' | 'disabled',
+  type: 'all' as 'all' | 'node' | 'ui' | 'transform' | 'storage',
+  sortBy: 'name' as 'name' | 'version' | 'lastUpdated' | 'size',
+});
   const {
     installedExtensions,
     availableExtensions,
@@ -52,50 +51,44 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
     loadInstalledExtensions();
     if (currentView === 'marketplace') {
       loadAvailableExtensions();
-    }
   }, [currentView, loadInstalledExtensions, loadAvailableExtensions]);
   // Filter and search extensions
   const filteredExtensions = useMemo(() => {
-    const extensions = currentView === 'marketplace' ? availableExtensions : installedExtensions;
-    const filtered = extensions.filter(ext => {)
-      // Search query filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        if (!ext.name.toLowerCase().includes(query) &&
-            !ext.description?.toLowerCase().includes(query) &&
-            !ext.author?.toLowerCase().includes(query)) {
-          return false;
-        }
-      }
-      // Type filter
-      if (filterOptions.type !== 'all' && ext.extension_type !== filterOptions.type) {
-        return false;
-      }
-      // Status filter (only for installed extensions)
-      if (currentView === 'installed' && filterOptions.status !== 'all') {
-        const status = getExtensionStatus(ext.id);
-        if (filterOptions.status === 'enabled' && !status.enabled) return false;
-        if (filterOptions.status === 'disabled' && status.enabled) return false;
-      }
-      return true;
-    });
+  const extensions = currentView === 'marketplace' ? availableExtensions : installedExtensions;
+  const filtered = extensions.filter(ext => {)
+  // Search query filter
+  if (searchQuery) {
+  const query = searchQuery.toLowerCase();
+  if (!ext.name.toLowerCase().includes(query) &&
+  !ext.description?.toLowerCase().includes(query) &&
+  !ext.author?.toLowerCase().includes(query)) {
+  return false;
+  // Type filter
+  if (filterOptions.type !== 'all' && ext.extension_type !== filterOptions.type) {
+  return false;
+  // Status filter (only for installed extensions)
+  if (currentView === 'installed' && filterOptions.status !== 'all') {
+  const status = getExtensionStatus(ext.id);
+  if (filterOptions.status === 'enabled' && !status.enabled) return false;
+  if (filterOptions.status === 'disabled' && status.enabled) return false;
+  return true;
+});
     // Sort extensions
     filtered.sort((a, b) => {
-      switch (filterOptions.sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name);
-      case 'version':
-        return a.version.localeCompare(b.version);
-      case 'lastUpdated':
-        // In a real implementation, this would use actual update timestamps
-        return a.version.localeCompare(b.version);
-      case 'size':
-        // In a real implementation, this would use actual size data
-        return a.name.length - b.name.length;
-      default:
-        return 0;
-      }
-    });
+  switch (filterOptions.sortBy) {
+  case 'name':,
+  return a.name.localeCompare(b.name);
+  case 'version':,
+  return a.version.localeCompare(b.version);
+  case 'lastUpdated':,
+  // In a real implementation, this would use actual update timestamps
+  return a.version.localeCompare(b.version);
+  case 'size':,
+  // In a real implementation, this would use actual size data
+  return a.name.length - b.name.length;
+  default:,
+  return 0;
+});
     return filtered;
   }, [
     installedExtensions,
@@ -113,19 +106,16 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
       await installExtension(extension);
       setShowInstallDialog(false);
     } catch (error) {
-      console.error('Failed to install extension:', error);
-    }
-  };
+  console.error('Failed to install extension:', error);
+};
   const handleUninstallExtension = async (extensionId: string) => {
     try {
       await uninstallExtension(extensionId);
       if (selectedExtension?.id === extensionId) {
         setSelectedExtension(null);
-      }
     } catch (error) {
-      console.error('Failed to uninstall extension:', error);
-    }
-  };
+  console.error('Failed to uninstall extension:', error);
+};
   const handleToggleExtension = async (extensionId: string) => {
     try {
       const status = getExtensionStatus(extensionId);
@@ -133,23 +123,20 @@ export const ExtensionManagerPanel: React.FC<ExtensionManagerPanelProps> = ({)
         await disableExtension(extensionId);
       } else {
         await enableExtension(extensionId);
-      }
     } catch (error) {
-      console.error('Failed to toggle extension:', error);
-    }
-  };
+  console.error('Failed to toggle extension:', error);
+};
   const handleUpdateExtension = async (extensionId: string) => {
     try {
       await updateExtension(extensionId);
     } catch (error) {
-      console.error('Failed to update extension:', error);
-    }
-  };
+  console.error('Failed to update extension:', error);
+};
   const handleConfigureExtension = (extension: ExtensionManifest) => {
     setSelectedExtension(extension);
     setShowConfigPanel(true);
   };
-  return ();
+  return;
     <div className={`extension-manager-panel ${className}`}>}
       {/* Header */}
       <div className="extension-manager-header">

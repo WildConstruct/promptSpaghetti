@@ -7,6 +7,7 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
 /**
  * Cache performance metrics
  */
+
 interface CacheMetrics {
     totalExecutions: number;
     cacheHits: number;
@@ -14,7 +15,8 @@ interface CacheMetrics {
     averageExecutionTime: number;
     cacheSize: number;
     memoryUsage: number;
-}
+
+
 /**
  * High-performance execution cache with intelligent invalidation
  */
@@ -91,6 +93,6 @@ export declare class ExecutionCache {
     private updateMetrics;
     private estimateMemoryUsage;
     private performCleanup;
-}
+
 export {};
 //# sourceMappingURL=ExecutionCache.d.ts.map

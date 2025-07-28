@@ -61,40 +61,4 @@ export interface Epic16ComponentTheme {
     };
 }
 export declare const defaultEpic16Theme: Epic16ComponentTheme;
-export declare const Epic16DesignTokens: {
-    readonly spacing: {
-        readonly xs: "0.25rem";
-        readonly sm: "0.5rem";
-        readonly md: "1rem";
-        readonly lg: "1.5rem";
-        readonly xl: "2rem";
-        readonly '2xl': "3rem";
-    };
-    readonly borderRadius: {
-        readonly sm: "0.25rem";
-        readonly md: "0.375rem";
-        readonly lg: "0.5rem";
-        readonly xl: "0.75rem";
-    };
-    readonly fontSize: {
-        readonly xs: "0.75rem";
-        readonly sm: "0.875rem";
-        readonly base: "1rem";
-        readonly lg: "1.125rem";
-        readonly xl: "1.25rem";
-        readonly '2xl': "1.5rem";
-    };
-    readonly fontWeight: {
-        readonly normal: "400";
-        readonly medium: "500";
-        readonly semibold: "600";
-        readonly bold: "700";
-    };
-    readonly boxShadow: {
-        readonly sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)";
-        readonly md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)";
-        readonly lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)";
-        readonly xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)";
-    };
-};
 //# sourceMappingURL=index.d.ts.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"StickyNotesManager.d.ts","sourceRoot":"","sources":["../../../../../components/StickyNotes/StickyNotesManager.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;GAUG;AAEH,OAAO,KAAyC,MAAM,OAAO,CAAC;AAM9D,UAAU,uBAAuB;IAC/B,QAAQ,CAAC,EAAE,OAAO,CAAC;IACnB,QAAQ,CAAC,EAAE,OAAO,CAAC;IACnB,MAAM,CAAC,EAAE,MAAM,CAAC;CACjB;AAED,eAAO,MAAM,kBAAkB,EAAE,KAAK,CAAC,EAAE,CAAC,uBAAuB,CA4ChE,CAAC;AAEF,eAAe,kBAAkB,CAAC"}
+{"version":3,"file":"StickyNotesManager.d.ts","sourceRoot":"","sources":["../../../../../components/StickyNotes/StickyNotesManager.tsx"],"names":[],"mappings":""}

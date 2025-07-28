@@ -16,8 +16,10 @@ import {
   MarketplaceAttributionFilterSchema
 } from '../../../packages/core/types/marketplaceAttribution';
 
+}
 interface AttributionRouteOptions {
   database: Database;
+}
 }
 
 // =============================================================================
@@ -39,7 +41,7 @@ const templateAttributionResponseSchema = {
         revenueSharing: { type: 'object' },
         isVerified: { type: 'boolean' }
       }
-    },
+  }
     relatedTemplates: { type: 'array' },
     revenueStatistics: { type: 'object' }
   }
@@ -62,12 +64,12 @@ const createAttributionRequestSchema = {
           contributionType: {
             type: 'string',
             enum: ['co-creator', 'contributor', 'reviewer', 'editor', 'advisor']
-          },
+  }
           contributionPercentage: { type: 'number', minimum: 0, maximum: 100 },
           contributionDescription: { type: 'string' }
         }
       }
-    },
+  }
     derivedFrom: {
       type: 'object',
       required: ['originalTemplateId', 'derivationType', 'attributionPercentage'],
@@ -76,15 +78,15 @@ const createAttributionRequestSchema = {
         derivationType: {
           type: 'string',
           enum: ['fork', 'remix', 'inspired', 'adaptation']
-        },
+  }
         attributionPercentage: { type: 'number', minimum: 0, maximum: 100 }
       }
-    },
+  }
     attributionMethod: {
       type: 'string',
       enum: ['manual', 'git_history', 'session_tracking', 'ai_analysis', 'user_declaration'],
       default: 'manual'
-    },
+  }
     sourceMetadata: { type: 'object' }
   }
 };
@@ -96,12 +98,12 @@ const attributionClaimRequestSchema = {
     claimType: {
       type: 'string',
       enum: ['ownership', 'collaboration', 'derivation', 'inspiration']
-    },
+  }
     claimDescription: { type: 'string', minLength: 10, maxLength: 1000 },
     evidenceUrls: {
       type: 'array',
       items: { type: 'string', format: 'uri' }
-    },
+  }
     metadata: { type: 'object' }
   }
 };
@@ -156,7 +158,7 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: createAttributionRequestSchema
     }
   }, async (request, reply) => {
@@ -216,7 +218,7 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       response: {
         200: templateAttributionResponseSchema
       }
@@ -258,7 +260,7 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -321,7 +323,7 @@ export default async function marketplaceAttributionRoutes(
           templateId: { type: 'string', format: 'uuid' },
           purchaseId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: revenueDistributionRequestSchema
     }
   }, async (request, reply) => {
@@ -405,7 +407,7 @@ export default async function marketplaceAttributionRoutes(
               'amountCents', rar.amount_cents,
               'status', rar.status,
               'releasedAt', rar.released_at
-            )
+
           ) as attributions
         FROM revenue_attributions ra
         LEFT JOIN revenue_attribution_records rar ON ra.id = rar.revenue_attribution_id
@@ -466,7 +468,7 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: attributionClaimRequestSchema
     }
   }, async (request, reply) => {
@@ -517,14 +519,14 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           templateId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           status: {
             type: 'string',
             enum: ['pending', 'approved', 'rejected', 'disputed']
-          },
+  }
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'number', minimum: 0, default: 0 }
         }
@@ -644,7 +646,7 @@ export default async function marketplaceAttributionRoutes(
         properties: {
           userId: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -739,7 +741,7 @@ export default async function marketplaceAttributionRoutes(
             type: 'string',
             enum: ['24h', '7d', '30d', '90d'],
             default: '30d'
-          },
+  }
           templateId: { type: 'string', format: 'uuid' },
           creatorId: { type: 'string', format: 'uuid' }
         }
@@ -793,12 +795,12 @@ export default async function marketplaceAttributionRoutes(
           totalClaims: 8,
           averageResolutionTime: '3.2 days',
           verificationRate: 92.5
-        },
+  }
         trends: {
           attributionsCreated: [10, 15, 12, 18, 14, 16, 20],
           revenueDistributed: [2500, 3200, 2800, 3600, 3100, 3400, 4200],
           claimsResolved: [2, 1, 3, 0, 1, 2, 1]
-        },
+  }
         topCreators: [
           { creatorId: 'creator-1', templatesCreated: 25, totalRevenue: 15000 },
           { creatorId: 'creator-2', templatesCreated: 18, totalRevenue: 12000 }

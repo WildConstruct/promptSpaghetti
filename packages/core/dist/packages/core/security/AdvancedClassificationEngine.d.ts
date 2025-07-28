@@ -6,7 +6,7 @@
  * Extends the base DataClassifier with enterprise-grade features.
  */
 import { EventEmitter } from 'events';
-import { ClassificationLevel, DataCategory, ComplianceFramework, ClassificationResult, DataElement } from './DataClassifier';
+import { ClassificationLevel, DataCategory, ClassificationResult } from './DataClassifier';
 export interface MLClassificationModel {
     id: string;
     name: string;
@@ -17,16 +17,16 @@ export interface MLClassificationModel {
     lastTrained: Date;
     enabled: boolean;
     threshold: number;
-    categories: DataCategory[];
-    features: string[];
+    categories: DataCategory;
+    features: string;
 }
 export interface ClassificationWorkflow {
     id: string;
     name: string;
     description: string;
-    triggers: WorkflowTrigger[];
-    actions: WorkflowAction[];
-    conditions: WorkflowCondition[];
+    triggers: WorkflowTrigger;
+    actions: WorkflowAction;
+    conditions: WorkflowCondition;
     enabled: boolean;
     priority: number;
 }
@@ -51,24 +51,17 @@ export interface ClassificationAnalytics {
     classificationsByCategory: Record<DataCategory, number>;
     complianceViolations: number;
     averageConfidence: number;
-    topRiskPatterns: Array<{
-        pattern: string;
-        count: number;
-        riskScore: number;
-    }>;
-    temporalTrends: Array<{
-        timestamp: Date;
-        count: number;
-        avgConfidence: number;
-    }>;
-    lastUpdated: Date;
+    topRiskPatterns: Array<{}, pattern>;
+    string: any;
+    count: number;
+    riskScore: number;
 }
 export interface DataFlow {
     id: string;
     source: string;
     destination: string;
-    dataTypes: DataCategory[];
-    classificationLevels: ClassificationLevel[];
+    dataTypes: DataCategory;
+    classificationLevels: ClassificationLevel;
     encryptionInTransit: boolean;
     lastClassified: Date;
     riskScore: number;
@@ -93,27 +86,11 @@ export interface ClassificationContext {
     parentClassification?: string;
 }
 export interface EnhancedClassificationResult extends ClassificationResult {
-    mlPredictions: Array<{
-        model: string;
-        prediction: ClassificationLevel;
-        confidence: number;
-        features: Record<string, number>;
-    }>;
-    contextualFactors: Array<{
-        factor: string;
-        impact: number;
-        description: string;
-    }>;
-    riskScore: number;
-    remediation: Array<{
-        action: string;
-        priority: 'low' | 'medium' | 'high' | 'critical';
-        description: string;
-        automated: boolean;
-    }>;
-    workflowsTriggered: string[];
-    reviewRequired: boolean;
-    reviewReason?: string;
+    mlPredictions: Array<{}, model>;
+    string: any;
+    prediction: ClassificationLevel;
+    confidence: number;
+    features: Record<string, number>;
 }
 /**
  * Advanced Classification Engine with ML and Workflow Capabilities
@@ -128,103 +105,8 @@ export declare class AdvancedClassificationEngine extends EventEmitter {
     private contextualCache;
     constructor();
     /**
-     * Enhanced classification with ML and context awareness
-     */
-    classifyWithContext(data: DataElement, context: ClassificationContext): Promise<EnhancedClassificationResult>;
-    /**
-     * Real-time stream classification
-     */
-    classifyStream(dataStream: AsyncIterable<DataElement>, context: ClassificationContext): Promise<AsyncGenerator<EnhancedClassificationResult>>;
-    private classifyStreamInternal;
-    /**
-     * Add or update ML model
-     */
-    addMLModel(model: MLClassificationModel): void;
-    /**
-     * Train ML model with new data
-     */
-    trainMLModel(modelId: string, trainingData: Array<{
-        data: DataElement;
-        expectedClassification: ClassificationLevel;
-        context?: ClassificationContext;
-    }>): Promise<{
-        accuracy: number;
-        metrics: Record<string, number>;
-    }>;
-    /**
-     * Add classification workflow
-     */
-    addWorkflow(workflow: ClassificationWorkflow): void;
-    /**
-     * Execute workflow manually
-     */
-    executeWorkflow(workflowId: string, result: EnhancedClassificationResult, context: ClassificationContext): Promise<void>;
-    /**
-     * Get classification analytics
-     */
-    getAnalytics(): ClassificationAnalytics;
-    /**
-     * Get data flow information
-     */
-    getDataFlows(): DataFlow[];
-    /**
-     * Get compliance report
-     */
-    generateComplianceReport(framework: ComplianceFramework, dateRange: {
-        start: Date;
-        end: Date;
-    }): {
-        framework: ComplianceFramework;
-        period: {
-            start: Date;
-            end: Date;
-        };
-        totalClassifications: number;
-        compliantClassifications: number;
-        violations: Array<{
-            dataId: string;
-            violation: string;
-            severity: string;
-            timestamp: Date;
-        }>;
-        recommendations: string[];
-    };
-    private applyMLModels;
-    private analyzeContextualFactors;
-    private calculateRiskScore;
-    private getClassificationRisk;
-    private shouldRequireReview;
-    private getReviewReason;
-    private generateRemediationActions;
-    private triggerWorkflows;
-    private evaluateTrigger;
-    private evaluateWorkflowConditions;
-    private getFieldValue;
-    private getNestedValue;
-    private evaluateCondition;
-    private executeWorkflowAction;
-    private executeNotifyAction;
-    private executeEncryptAction;
-    private executeQuarantineAction;
-    private executeAuditLogAction;
-    private executeEscalateAction;
-    private executeAutoRemediateAction;
-    private extractFeatures;
-    private hashSource;
-    private performTraining;
-    private extractModelFeatures;
-    private mapClearanceToNumber;
-    private makePrediction;
-    private updateAnalytics;
-    private updateDataFlow;
-    private initializeAnalytics;
-    private initializeDefaultWorkflows;
-    private initializeMLModels;
-    private startAnalyticsCollection;
-    /**
-     * Cleanup and shutdown
-     */
-    destroy(): void;
+    * Enhanced classification with ML and context awareness
+    */
+    classifyWithContext(): any;
 }
-export default AdvancedClassificationEngine;
 //# sourceMappingURL=AdvancedClassificationEngine.d.ts.map

@@ -3,7 +3,7 @@ export interface DocumentState {
     version: number;
     checksum: string;
     lastModified: number;
-    operations: DocumentOperation[];
+    operations: DocumentOperation;
     metadata: Record<string, any>;
 }
 export interface DocumentOperation {
@@ -16,13 +16,13 @@ export interface DocumentOperation {
     timestamp: number;
     userId: string;
     version: number;
-    dependencies?: string[];
+    dependencies?: string;
 }
 export interface SyncDelta {
-    operations: DocumentOperation[];
+    operations: DocumentOperation;
     fromVersion: number;
     toVersion: number;
-    conflicts: ConflictInfo[];
+    conflicts: ConflictInfo;
     metadata: {
         operationCount: number;
         estimatedSize: number;
@@ -35,7 +35,7 @@ export interface ConflictInfo {
     operation1: DocumentOperation;
     operation2?: DocumentOperation;
     description: string;
-    resolutionOptions: ConflictResolution[];
+    resolutionOptions: ConflictResolution;
     autoResolvable: boolean;
     severity: 'low' | 'medium' | 'high' | 'critical';
 }
@@ -53,7 +53,7 @@ export interface SyncProgress {
     estimatedTimeRemaining?: number;
     bytesTransferred?: number;
     bytesTotal?: number;
-    errors: Error[];
+    errors: Error;
 }
 export interface RecoveryConfig {
     maxDeltaSize: number;
@@ -87,58 +87,6 @@ export declare class SynchronizationRecovery extends EventEmitter {
     private recoveryTimer;
     constructor(config?: Partial<RecoveryConfig>);
     /**
-     * Start synchronization recovery for a document
-     */
-    startRecovery(documentId: string, localState: DocumentState, serverStateProvider: () => Promise<DocumentState>): Promise<SyncDelta>;
-    /**
-     * Calculate differential sync between local and server state
-     */
-    calculateDelta(localState: DocumentState, serverState: DocumentState): Promise<SyncDelta>;
-    /**
-     * Apply sync delta to local state
-     */
-    applyDelta(documentId: string, localState: DocumentState, delta: SyncDelta): Promise<SyncDelta>;
-    /**
-     * Resolve conflicts manually or automatically
-     */
-    resolveConflict(conflictId: string, resolution: ConflictResolution): Promise<boolean>;
-    /**
-     * Get current recovery progress
-     */
-    getRecoveryProgress(): SyncProgress | null;
-    /**
-     * Get recovery statistics
-     */
-    getStats(): RecoveryStats;
-    /**
-     * Get pending conflicts
-     */
-    getPendingConflicts(): ConflictInfo[];
-    /**
-     * Cancel current recovery
-     */
-    cancelRecovery(): void;
-    /**
-     * Reset recovery statistics
-     */
-    resetStats(): void;
-    /**
-     * Cleanup resources
-     */
-    cleanup(): void;
-    /**
-     * Detect conflicts between operations
-     */
-    private detectConflicts;
-    /**
-     * Auto-resolve conflict if possible
-     */
-    private autoResolveConflict;
-    /**
-     * Apply single operation to document state
-     */
-    private applyOperation;
-    /**
      * Validate operation dependencies
      */
     private validateDependencies;
@@ -155,36 +103,12 @@ export declare class SynchronizationRecovery extends EventEmitter {
      */
     private backupDocumentState;
     /**
-     * Merge two conflicting operations
-     */
+    * Merge two conflicting operations
+    */
     private mergeOperations;
     /**
      * Calculate checksum for state
      */
     private calculateChecksum;
-    /**
-     * Update recovery progress
-     */
-    private updateProgress;
-    /**
-     * Handle successful recovery
-     */
-    private handleRecoverySuccess;
-    /**
-     * Handle recovery failure
-     */
-    private handleRecoveryFailure;
-    /**
-     * Start recovery timeout timer
-     */
-    private startRecoveryTimer;
-    /**
-     * Clear recovery timer
-     */
-    private clearRecoveryTimer;
-    /**
-     * Utility function to chunk array
-     */
-    private chunkArray;
 }
 //# sourceMappingURL=SynchronizationRecovery.d.ts.map

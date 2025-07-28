@@ -495,7 +495,7 @@ export async function performanceMonitoringRoutes(fastify: FastifyInstance) {
           alerting: criticalAlerts > 0 ? 'degraded' : 'healthy',
           tracing: observabilityMetrics.tracesActive > 0 ? 'healthy' : 'unknown',
           observability: status
-        },
+  }
         uptime: observabilityMetrics.uptime,
         metrics: {
           errorRate: observabilityMetrics.errorRate,

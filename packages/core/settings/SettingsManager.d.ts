@@ -35,11 +35,9 @@ export declare class SettingsManager {
     /**
      * Update specific setting
      */
-    updateSetting<K extends keyof AdvancedSettings>()
-      key: K,
+    updateSetting<K extends keyof AdvancedSettings>(key: K,)
       value: AdvancedSettings[K],
-      source?: 'user' | 'system' | 'import'
-    ): SettingsValidationResult;
+      source?: 'user' | 'system' | 'import'): SettingsValidationResult;
     /**
      * Reset settings to defaults
      */
@@ -137,5 +135,5 @@ export declare class SettingsManager {
      * Enable/disable auto-save
      */
     setAutoSave(enabled: boolean): void;
-}
+
 export declare //# sourceMappingURL=SettingsManager.d.ts.map

@@ -26,16 +26,20 @@ import {
 // Challenge Generators
 // ========================================
 
+}
 interface MathPuzzle {
   question: string;
   answer: string;
   difficulty: ChallengeDifficulty;
 }
+}
 
+}
 interface ImageSelectionChallenge {
   images: string[];
   correctIndices: number[];
   prompt: string;
+}
 }
 
 class ChallengeGenerators {
@@ -172,16 +176,17 @@ class ExternalChallengeProviders {
     action?: string;
     errorCodes?: string[];
   }> {
+
     try {
       const response = await globalThis.fetch('https://www.google.com/recaptcha/api/siteverify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        },
+  }
         body: new URLSearchParams({
           secret: secretKey,
           response: token
-        })
+  }
       });
 
       const data = await response.json() as any;
@@ -216,16 +221,17 @@ class ExternalChallengeProviders {
     success: boolean;
     errorCodes?: string[];
   }> {
+
     try {
       const response = await globalThis.fetch('https://hcaptcha.com/siteverify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
-        },
+  }
         body: new URLSearchParams({
           secret: secretKey,
           response: token
-        })
+  }
       });
 
       const data = await response.json() as any;
@@ -263,6 +269,7 @@ export class ChallengeService implements IChallengeService {
    * Generate a new challenge based on request
    */
   async generateChallenge(request: ChallengeRequest): Promise<ChallengeResponse> {
+
     const challengeId = this.generateChallengeId();
     const expiryMinutes = this.getExpiryMinutes(request.type);
     const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
@@ -346,6 +353,7 @@ export class ChallengeService implements IChallengeService {
    * Validate challenge solution
    */
   async validateChallenge(validation: ChallengeValidation): Promise<ChallengeResult> {
+
     const storedChallenge = this.challenges.get(validation.challengeId);
     
     if (!storedChallenge) {
@@ -438,6 +446,7 @@ export class ChallengeService implements IChallengeService {
    * Get challenge by ID
    */
   async getChallenge(challengeId: string): Promise<ChallengeResponse | null> {
+
     const challenge = this.challenges.get(challengeId);
     if (!challenge) return null;
 
@@ -456,6 +465,7 @@ export class ChallengeService implements IChallengeService {
    * Refresh challenge (generate new one)
    */
   async refreshChallenge(challengeId: string): Promise<ChallengeResponse> {
+
     const existingChallenge = this.challenges.get(challengeId);
     if (!existingChallenge) {
       throw new Error('Challenge not found');
@@ -481,6 +491,7 @@ export class ChallengeService implements IChallengeService {
    * Invalidate challenge
    */
   async invalidateChallenge(challengeId: string): Promise<void> {
+
     this.challenges.delete(challengeId);
   }
 
@@ -493,6 +504,7 @@ export class ChallengeService implements IChallengeService {
     userId?: string;
     challengeType?: ChallengeType;
   }): Promise<ChallengeStats> {
+
     // Return aggregated stats (simplified implementation)
     const defaultStats: ChallengeStats = {
       totalChallenges: 0,
@@ -602,6 +614,7 @@ export class ChallengeService implements IChallengeService {
   }
 
   private async validateRecaptchaResponse(token: string, type: ChallengeType): Promise<boolean> {
+
     const secretKey = this.config.providers.recaptcha?.secretKey;
     if (!secretKey) {
       throw new Error('reCAPTCHA secret key not configured');
@@ -618,6 +631,7 @@ export class ChallengeService implements IChallengeService {
   }
 
   private async validateHCaptchaResponse(token: string): Promise<boolean> {
+
     const secretKey = this.config.providers.hcaptcha?.secretKey;
     if (!secretKey) {
       throw new Error('hCaptcha secret key not configured');

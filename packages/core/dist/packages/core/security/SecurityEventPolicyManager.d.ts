@@ -1,11 +1,4 @@
-/**
- * Security Event Policy Manager
- *
- * Advanced policy management system that integrates security event logging policies
- * with the existing PromptScape security infrastructure, providing centralized
- * policy enforcement, monitoring, and compliance management.
- */
-import { SecurityEvent, SecurityEventSeverity, ComplianceFramework } from './SecurityEventLoggingPolicies';
+import { SecurityEventSeverity, ComplianceFramework } from './SecurityEventLoggingPolicies';
 export interface PolicyManagerConfig {
     enabled: boolean;
     real_time_processing: boolean;
@@ -16,7 +9,7 @@ export interface PolicyManagerConfig {
         compliance_retention_overrides: Record<ComplianceFramework, number>;
     };
     notification_config: {
-        channels: NotificationChannel[];
+        channels: NotificationChannel;
         escalation_delays: Record<SecurityEventSeverity, number>;
         retry_attempts: number;
     };
@@ -32,7 +25,7 @@ export interface NotificationChannel {
     endpoint: string;
     credentials?: Record<string, string>;
     enabled: boolean;
-    severity_filter: SecurityEventSeverity[];
+    severity_filter: SecurityEventSeverity;
     rate_limit?: {
         max_per_minute: number;
         burst_limit: number;
@@ -40,14 +33,14 @@ export interface NotificationChannel {
 }
 export interface PolicyEnforcementResult {
     event_id: string;
-    policies_matched: string[];
-    actions_executed: PolicyAction[];
-    notifications_sent: NotificationResult[];
-    compliance_impact: ComplianceImpact[];
-    escalations_triggered: string[];
-    automated_responses: AutomatedResponse[];
+    policies_matched: string;
+    actions_executed: PolicyAction;
+    notifications_sent: NotificationResult;
+    compliance_impact: ComplianceImpact;
+    escalations_triggered: string;
+    automated_responses: AutomatedResponse;
     processing_time_ms: number;
-    errors: string[];
+    errors: string;
 }
 export interface PolicyAction {
     action_id: string;
@@ -70,7 +63,7 @@ export interface NotificationResult {
 }
 export interface ComplianceImpact {
     framework: ComplianceFramework;
-    requirement_ids: string[];
+    requirement_ids: string;
     impact_level: 'low' | 'medium' | 'high' | 'critical';
     notification_required: boolean;
     reporting_deadline?: Date;
@@ -97,12 +90,6 @@ export interface PolicyMetrics {
     effectiveness_score: number;
     last_updated: Date;
 }
-/**
- * Advanced Security Event Policy Manager
- *
- * Provides centralized management of security event policies, enforcement,
- * monitoring, and integration with existing PromptScape infrastructure.
- */
 export declare class SecurityEventPolicyManager {
     private config;
     private notificationChannels;
@@ -111,96 +98,8 @@ export declare class SecurityEventPolicyManager {
     private processingInProgress;
     constructor(config: PolicyManagerConfig);
     /**
-     * Initialize notification channels
-     */
+    * Initialize notification channels
+    */
     private initializeNotificationChannels;
-    /**
-     * Process security event through policy engine
-     */
-    processSecurityEvent(event: SecurityEvent): Promise<PolicyEnforcementResult>;
-    /**
-     * Execute policy-defined actions
-     */
-    private executePolicyActions;
-    /**
-     * Send notifications through configured channels
-     */
-    private sendNotifications;
-    /**
-     * Assess compliance impact of security event
-     */
-    private assessComplianceImpact;
-    /**
-     * Handle event escalations
-     */
-    private handleEscalations;
-    /**
-     * Create corresponding audit event in existing audit system
-     */
-    private createAuditEvent;
-    /**
-     * Update policy performance metrics
-     */
-    private updatePolicyMetrics;
-    /**
-     * Start batch processing for queued events
-     */
-    private startBatchProcessing;
-    /**
-     * Process queued events in batch
-     */
-    private processBatchEvents;
-    private executeIpBlock;
-    private executeAccountLock;
-    private preserveEvidence;
-    private isolateNetworkSegment;
-    private sendNotification;
-    private executeEscalation;
-    private categorizeAction;
-    private mapToAuditEventType;
-    private mapToAuditSeverity;
-    private mapComplianceFrameworks;
-    private mapToAuditStatus;
-    private calculateEscalationLevel;
-    private getFrameworkRequirements;
-    private calculateImpactLevel;
-    private requiresExternalNotification;
-    /**
-     * Public API methods
-     */
-    /**
-     * Add security event to processing queue
-     */
-    queueSecurityEvent(event: SecurityEvent): void;
-    /**
-     * Get policy performance metrics
-     */
-    getPolicyMetrics(): PolicyMetrics[];
-    /**
-     * Get notification channels
-     */
-    getNotificationChannels(): NotificationChannel[];
-    /**
-     * Update notification channel
-     */
-    updateNotificationChannel(channelId: string, updates: Partial<NotificationChannel>): boolean;
-    /**
-     * Generate policy effectiveness report
-     */
-    generatePolicyEffectivenessReport(): {
-        total_policies: number;
-        active_policies: number;
-        avg_response_time: number;
-        total_events_processed: number;
-        false_positive_rate: number;
-        compliance_violation_rate: number;
-        top_performing_policies: PolicyMetrics[];
-        recommendations: string[];
-    };
-    private generatePolicyRecommendations;
 }
-export declare const defaultPolicyManagerConfig: PolicyManagerConfig;
-export declare const securityEventPolicyManager: SecurityEventPolicyManager;
-export declare const queueSecurityEvent: (event: SecurityEvent) => void;
-export default SecurityEventPolicyManager;
 //# sourceMappingURL=SecurityEventPolicyManager.d.ts.map

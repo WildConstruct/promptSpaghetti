@@ -15,6 +15,7 @@ import { PerformanceMonitor } from '../monitoring/PerformanceMonitor';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 
+}
 export interface PerformanceTestConfig {
   testSuiteId: string;
   name: string;
@@ -33,6 +34,7 @@ export interface PerformanceTestConfig {
   resourceLimits: {
     maxMemory: number; // MB
     maxCpu: number; // percentage
+}
   };
   
   // Baseline Configuration
@@ -52,6 +54,7 @@ export interface PerformanceTestConfig {
   };
 }
 
+}
 export interface PerformanceTest {
   testId: string;
   name: string;
@@ -70,6 +73,7 @@ export interface PerformanceTest {
     maxDuration: number; // milliseconds
     maxMemory?: number; // MB
     minThroughput?: number; // operations per second
+}
   };
   
   // Test Dependencies
@@ -82,6 +86,7 @@ export interface PerformanceTest {
   version: string;
 }
 
+}
 export interface TestContext {
   testId: string;
   iteration: number;
@@ -106,7 +111,9 @@ export interface TestContext {
   getMemoryUsage: () => NodeJS.MemoryUsage;
   getCpuUsage: () => NodeJS.CpuUsage;
 }
+}
 
+}
 export interface TestResult {
   testId: string;
   iteration: number;
@@ -129,6 +136,7 @@ export interface TestResult {
     message: string;
     stack?: string;
     type: string;
+}
   };
   
   // Timing Breakdown
@@ -145,6 +153,7 @@ export interface TestResult {
   metadata: Record<string, any>;
 }
 
+}
 export interface TestSuiteResult {
   suiteId: string;
   name: string;
@@ -172,7 +181,9 @@ export interface TestSuiteResult {
   status: 'completed' | 'failed' | 'timeout' | 'cancelled';
   errors: TestError[];
 }
+}
 
+}
 export interface TestSummary {
   totalTests: number;
   passedTests: number;
@@ -193,7 +204,9 @@ export interface TestSummary {
   averageThroughput: number;
   totalOperations: number;
 }
+}
 
+}
 export interface PerformanceAnalysis {
   bottlenecks: Bottleneck[];
   trends: PerformanceTrend[];
@@ -201,7 +214,9 @@ export interface PerformanceAnalysis {
   regressions: Regression[];
   improvements: Improvement[];
 }
+}
 
+}
 export interface Bottleneck {
   type: 'cpu' | 'memory' | 'io' | 'network' | 'database';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -210,7 +225,9 @@ export interface Bottleneck {
   suggestedFix: string;
   impact: number; // percentage impact on performance
 }
+}
 
+}
 export interface PerformanceTrend {
   metric: string;
   trend: 'improving' | 'stable' | 'degrading';
@@ -218,7 +235,9 @@ export interface PerformanceTrend {
   dataPoints: number;
   timeframe: string;
 }
+}
 
+}
 export interface Recommendation {
   category: 'optimization' | 'architecture' | 'scaling' | 'monitoring';
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -228,7 +247,9 @@ export interface Recommendation {
   implementationEffort: 'low' | 'medium' | 'high';
   relatedTests: string[];
 }
+}
 
+}
 export interface Regression {
   testId: string;
   metric: string;
@@ -237,7 +258,9 @@ export interface Regression {
   regressionPercentage: number;
   severity: 'minor' | 'moderate' | 'major' | 'critical';
 }
+}
 
+}
 export interface Improvement {
   testId: string;
   metric: string;
@@ -245,6 +268,7 @@ export interface Improvement {
   baselineValue: number;
   improvementPercentage: number;
   significance: 'minor' | 'moderate' | 'major';
+}
 }
 
 export type TestCategory = 
@@ -259,24 +283,31 @@ export type TestCategory =
 
 export type TestPriority = 'low' | 'medium' | 'high' | 'critical';
 
+}
 export interface MemoryUsageSnapshot {
   heapUsed: number;
   heapTotal: number;
   external: number;
   rss: number;
 }
+}
 
+}
 export interface CpuUsageSnapshot {
   user: number;
   system: number;
 }
+}
 
+}
 export interface ResourceSnapshot {
   memory: MemoryUsageSnapshot;
   cpu: CpuUsageSnapshot;
   timestamp: Date;
 }
+}
 
+}
 export interface BaselineComparison {
   baselineDate: Date;
   baselineVersion: string;
@@ -294,9 +325,11 @@ export interface BaselineComparison {
     currentValue: number;
     change: number;
     significant: boolean;
+}
   }>;
 }
 
+}
 export interface TestEnvironment {
   nodeVersion: string;
   platform: string;
@@ -307,12 +340,15 @@ export interface TestEnvironment {
   buildVersion?: string;
   commitHash?: string;
 }
+}
 
+}
 export interface TestError {
   testId: string;
   message: string;
   stack?: string;
   timestamp: Date;
+}
 }
 
 export class PerformanceTestSuite extends EventEmitter {
@@ -349,6 +385,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Initialize performance test suite
    */
   public async initialize(): Promise<void> {
+
     console.log(`🧪 Initializing Performance Test Suite: ${this.config.name}`);
     
     // Initialize default performance tests
@@ -386,6 +423,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Run the complete performance test suite
    */
   public async runSuite(): Promise<TestSuiteResult> {
+
     if (this.isRunning) {
       throw new Error('Performance test suite is already running');
     }
@@ -469,6 +507,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Run a specific test
    */
   public async runTest(testId: string): Promise<TestResult[]> {
+
     const test = this.tests.get(testId);
     if (!test) {
       throw new Error(`Test not found: ${testId}`);
@@ -500,7 +539,7 @@ export class PerformanceTestSuite extends EventEmitter {
           {
             component: 'performance_test',
             operation: test.name
-          },
+  }
           {
             testId,
             category: test.category,
@@ -522,6 +561,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Execute all tests in the suite
    */
   private async executeAllTests(): Promise<void> {
+
     const testEntries = Array.from(this.tests.entries());
     
     if (this.config.parallel) {
@@ -556,6 +596,7 @@ export class PerformanceTestSuite extends EventEmitter {
     totalIterations: number,
     isWarmup: boolean
   ): Promise<TestResult> {
+
     const context = this.createTestContext(test, iteration, totalIterations, isWarmup);
     const resourcesBefore = this.captureResourceSnapshot();
     const startTime = performance.now();
@@ -586,7 +627,7 @@ export class PerformanceTestSuite extends EventEmitter {
           start: resourcesBefore,
           end: resourcesAfter,
           peak: context.testData.peakResources || resourcesAfter
-        },
+  }
         timestamp: new Date(),
         metadata: {
           isWarmup,
@@ -618,12 +659,12 @@ export class PerformanceTestSuite extends EventEmitter {
           start: resourcesBefore,
           end: this.captureResourceSnapshot(),
           peak: resourcesBefore
-        },
+  }
         error: {
           message: error.message,
           stack: error.stack,
           type: error.constructor.name
-        },
+  }
         timestamp: new Date(),
         metadata: {
           isWarmup,
@@ -668,15 +709,14 @@ export class PerformanceTestSuite extends EventEmitter {
         customMetrics,
         timingBreakdown,
         peakResources
-      },
+  }
       sharedState: this.sharedTestState,
       
       startTimer: (label: string) => {
         const timerId = `${label}_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
         timers.set(timerId, performance.now());
         return timerId;
-      },
-      
+  }
       endTimer: (timerId: string) => {
         const startTime = timers.get(timerId);
         if (!startTime) return 0;
@@ -690,12 +730,10 @@ export class PerformanceTestSuite extends EventEmitter {
         timingBreakdown[label] = (timingBreakdown[label] || 0) + duration;
         
         return duration;
-      },
-      
+  }
       recordMetric: (name: string, value: number, unit: string) => {
         customMetrics[name] = value;
-      },
-      
+  }
       getMemoryUsage: () => {
         const usage = process.memoryUsage();
         
@@ -706,8 +744,7 @@ export class PerformanceTestSuite extends EventEmitter {
         }
         
         return usage;
-      },
-      
+  }
       getCpuUsage: () => {
         return process.cpuUsage();
       }
@@ -723,8 +760,7 @@ export class PerformanceTestSuite extends EventEmitter {
     return {
       memory: process.memoryUsage(),
       cpu: process.cpuUsage(),
-      timestamp: new Date()
-    };
+      timestamp: new Date(};
   }
 
   /**
@@ -741,6 +777,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Run test safely with error handling
    */
   private async runTestSafe(testId: string): Promise<TestResult[]> {
+
     try {
       return await this.runTest(testId);
     } catch (error) {
@@ -760,12 +797,12 @@ export class PerformanceTestSuite extends EventEmitter {
           start: this.captureResourceSnapshot(),
           end: this.captureResourceSnapshot(),
           peak: this.captureResourceSnapshot()
-        },
+  }
         error: {
           message: error.message,
           stack: error.stack,
           type: error.constructor.name
-        },
+  }
         timestamp: new Date(),
         metadata: {}
       }];
@@ -776,6 +813,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Initialize default performance tests
    */
   private async initializeDefaultTests(): Promise<void> {
+
     const defaultTests: Omit<PerformanceTest, 'testFunction' | 'config'>[] = [
       {
         testId: 'api_response_time',
@@ -786,13 +824,13 @@ export class PerformanceTestSuite extends EventEmitter {
         expectedPerformance: {
           maxDuration: 200,
           minThroughput: 100
-        },
+  }
         dependencies: [],
         tags: ['api', 'response_time'],
         createdAt: new Date(),
         lastModified: new Date(),
         version: '1.0.0'
-      },
+  }
       {
         testId: 'graph_execution_performance',
         name: 'Graph Execution Performance',
@@ -802,13 +840,13 @@ export class PerformanceTestSuite extends EventEmitter {
         expectedPerformance: {
           maxDuration: 1000,
           maxMemory: 100
-        },
+  }
         dependencies: [],
         tags: ['graph', 'execution'],
         createdAt: new Date(),
         lastModified: new Date(),
         version: '1.0.0'
-      },
+  }
       {
         testId: 'database_query_performance',
         name: 'Database Query Performance',
@@ -818,13 +856,13 @@ export class PerformanceTestSuite extends EventEmitter {
         expectedPerformance: {
           maxDuration: 100,
           minThroughput: 1000
-        },
+  }
         dependencies: [],
         tags: ['database', 'query'],
         createdAt: new Date(),
         lastModified: new Date(),
         version: '1.0.0'
-      },
+  }
       {
         testId: 'ui_render_performance',
         name: 'UI Component Render Performance',
@@ -834,7 +872,7 @@ export class PerformanceTestSuite extends EventEmitter {
         expectedPerformance: {
           maxDuration: 16, // 60 FPS
           maxMemory: 50
-        },
+  }
         dependencies: [],
         tags: ['ui', 'render'],
         createdAt: new Date(),
@@ -1059,6 +1097,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Generate performance analysis
    */
   private async generateAnalysis(): Promise<void> {
+
     if (!this.currentExecution) return;
     
     const analysis = this.currentExecution.analysis;
@@ -1167,6 +1206,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Generate baseline comparison
    */
   private async generateBaselineComparison(): Promise<void> {
+
     if (!this.currentExecution) return;
     
     // Implementation would compare with stored baseline data
@@ -1184,6 +1224,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Record baseline data
    */
   private async recordBaseline(): Promise<void> {
+
     if (!this.currentExecution) return;
     
     // Store current results as baseline
@@ -1203,6 +1244,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Load baseline data from storage
    */
   private async loadBaselineData(): Promise<void> {
+
     try {
       const baselineData = await this.databaseService.query(`
         SELECT * FROM performance_baselines 
@@ -1225,6 +1267,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Persist baseline data to storage
    */
   private async persistBaselineData(): Promise<void> {
+
     try {
       const baselineData = Object.fromEntries(this.baselineResults.entries());
       
@@ -1264,6 +1307,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Persist test results to storage
    */
   private async persistResults(result: TestSuiteResult): Promise<void> {
+
     try {
       await this.databaseService.execute(`
         INSERT INTO performance_test_results (
@@ -1284,7 +1328,7 @@ export class PerformanceTestSuite extends EventEmitter {
           tests: result.tests,
           environment: result.environment,
           baselineComparison: result.baselineComparison
-        })
+  }
       ]);
       
       console.log(`💾 Persisted test results: ${result.executionId}`);
@@ -1314,6 +1358,7 @@ export class PerformanceTestSuite extends EventEmitter {
    * Stop performance test suite
    */
   public async stop(): Promise<void> {
+
     if (this.isRunning) {
       console.log('⏹️ Stopping Performance Test Suite...');
       this.isRunning = false;

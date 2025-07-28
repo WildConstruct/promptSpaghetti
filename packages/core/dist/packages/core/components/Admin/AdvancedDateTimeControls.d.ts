@@ -18,7 +18,7 @@ interface DateTimeSelection {
 }
 interface BusinessHours {
     enabled: boolean;
-    workdays: number[];
+    workdays: number;
     startTime: string;
     endTime: string;
     timezone: string;

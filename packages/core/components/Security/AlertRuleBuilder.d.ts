@@ -7,6 +7,7 @@
 import React from 'react';
 import { SecurityEventType, SecurityEventSeverity } from '../../security/SecurityEventLoggingPolicies';
 import './AlertRuleBuilder.css';
+
 interface AlertRule {
     id: string;
     name: string;
@@ -20,14 +21,16 @@ interface AlertRule {
     escalation_config?: EscalationConfig;
     created_at: Date;
     updated_at: Date;
-}
+
+
 interface AlertCondition {
     id: string;
     field: string;
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains' | 'regex' | 'in' | 'not_in';
     value: Error;
     logic_operator?: 'and' | 'or';
-}
+
+
 interface AlertAction {
     id: string;
     type: 'notification' | 'containment' | 'escalation' | 'logging' | 'webhook';
@@ -35,20 +38,23 @@ interface AlertAction {
     config: Record<string, any>;
     enabled: boolean;
     delay_seconds?: number;
-}
+
+
 interface NotificationChannel {
     id: string;
     name: string;
     type: 'email' | 'sms' | 'slack' | 'webhook' | 'dashboard';
     config: Record<string, any>;
     enabled: boolean;
-}
+
+
 interface EscalationConfig {
     enabled: boolean;
     escalation_delay_minutes: number;
     escalation_targets: string[];
     max_escalations: number;
-}
+
+
 /**
  * Main Alert Rule Builder Component
  */

@@ -43,6 +43,6 @@ export declare class ExtensionInterfaceDocumentationGenerator {
     private generateExtensionContextDocumentation;
     private generateValidationResultsDocumentation;
     private generateUsageExamples;
-}
+
 export declare const extensionInterfaceDocumentationGenerator: ExtensionInterfaceDocumentationGenerator;
 //# sourceMappingURL=ExtensionInterfaceDocumentationGenerator.d.ts.map

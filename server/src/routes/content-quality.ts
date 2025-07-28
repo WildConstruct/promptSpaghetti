@@ -21,9 +21,11 @@ import { TimeRange } from '../marketplace/analytics.types';
 import { Database } from '../database';
 
 // Request type definitions
+}
 interface AssessQualityRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     timeRange?: TimeRange;
@@ -31,9 +33,11 @@ interface AssessQualityRequest {
   };
 }
 
+}
 interface CreatorDashboardRequest {
   Params: {
     creatorId: string;
+}
   };
   Querystring: {
     timeRange?: TimeRange;
@@ -41,9 +45,11 @@ interface CreatorDashboardRequest {
   };
 }
 
+}
 interface QualityTrendsRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     timeRange?: TimeRange;
@@ -51,17 +57,21 @@ interface QualityTrendsRequest {
   };
 }
 
+}
 interface MarketplaceInsightsRequest {
   Querystring: {
     timeRange?: TimeRange;
     category?: string;
     minQualityScore?: number;
+}
   };
 }
 
+}
 interface QualityBenchmarkRequest {
   Params: {
     templateId: string;
+}
   };
   Body: {
     compareWith?: string[]; // competitor template IDs
@@ -69,9 +79,11 @@ interface QualityBenchmarkRequest {
   };
 }
 
+}
 interface QualityRecommendationsRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     priority?: 'critical' | 'high' | 'medium' | 'low';
@@ -108,7 +120,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string', description: 'Template ID to assess' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -117,14 +129,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D,
               description: 'Time range for quality assessment'
-            },
+  }
             forceRefresh: { 
               type: 'boolean', 
               default: false,
               description: 'Force fresh assessment ignoring cache'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -137,7 +149,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AssessQualityRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -199,7 +211,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           properties: {
             creatorId: { type: 'string', description: 'Creator ID' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -207,14 +219,14 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             includeRecommendations: { 
               type: 'boolean', 
               default: true,
               description: 'Include quality improvement recommendations'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -226,7 +238,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreatorDashboardRequest>, reply: FastifyReply) => {
       try {
         const { creatorId } = request.params;
@@ -272,11 +284,11 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             category: { 
               type: 'string',
               description: 'Filter by specific category'
-            },
+  }
             minQualityScore: { 
               type: 'number',
               minimum: 0,
@@ -284,7 +296,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               description: 'Minimum quality score filter'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -296,7 +308,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<MarketplaceInsightsRequest>, reply: FastifyReply) => {
       try {
         const { timeRange = TimeRange.LAST_30D, category, minQualityScore } = request.query;
@@ -350,7 +362,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -358,7 +370,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_90D
-            },
+  }
             granularity: { 
               type: 'string',
               enum: ['daily', 'weekly', 'monthly'],
@@ -366,7 +378,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               description: 'Data point granularity'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -378,7 +390,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<QualityTrendsRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -424,7 +436,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string' }
           }
-        },
+  }
         body: {
           type: 'object',
           properties: {
@@ -432,7 +444,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'array',
               items: { type: 'string' },
               description: 'Specific template IDs to compare with'
-            },
+  }
             benchmarkType: { 
               type: 'string',
               enum: ['category', 'marketplace', 'custom'],
@@ -440,7 +452,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               description: 'Type of benchmark comparison'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -452,7 +464,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<QualityBenchmarkRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -502,7 +514,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -510,19 +522,19 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['critical', 'high', 'medium', 'low'],
               description: 'Filter by recommendation priority'
-            },
+  }
             category: { 
               type: 'string',
               enum: ['effectiveness', 'usability', 'engagement', 'reliability', 'maintainability', 'marketFit'],
               description: 'Filter by quality dimension'
-            },
+  }
             implementationLevel: { 
               type: 'string',
               enum: ['quick', 'moderate', 'complex'],
               description: 'Filter by implementation complexity'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -536,7 +548,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<QualityRecommendationsRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -573,7 +585,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           .sort((a, b) => {
             const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
             return priorityOrder[a.priority] - priorityOrder[b.priority];
-          })
+  }
           .slice(0, 10); // Top 10 actions
 
         // Calculate estimated cumulative impact
@@ -624,19 +636,19 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
               minItems: 1,
               maxItems: 50,
               description: 'Template IDs to get quality summary for'
-            },
+  }
             timeRange: { 
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             includeDetails: { 
               type: 'boolean', 
               default: false,
               description: 'Include detailed metrics for each template'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -649,7 +661,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { templateIds, timeRange = TimeRange.LAST_30D, includeDetails = false } = request.body as any;
@@ -674,7 +686,7 @@ export async function contentQualityRoutes(fastify: FastifyInstance) {
                 error: error instanceof Error ? error.message : 'Assessment failed'
               };
             }
-          })
+  }
         );
 
         // Calculate aggregate metrics

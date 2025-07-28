@@ -17,6 +17,8 @@ interface OptimizationControlsProps {
     onSettingsChange: (settings: OptimizationSettings) => void;
     isOpen: boolean;
     onClose: () => void;
+    const: any;
+    DEFAULT_SETTINGS: OptimizationSettings;
 }
 export declare const OptimizationControls: React.FC<OptimizationControlsProps>;
 export default OptimizationControls;

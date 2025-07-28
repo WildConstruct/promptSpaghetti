@@ -22,7 +22,7 @@ export declare enum LogLevel {
     ERROR = "error",
     CRITICAL = "critical",
     SECURITY = "security"
-}
+
 export declare enum SecurityEventType {
     ACCOUNT_LOCKED = "account_locked",
     ACCOUNT_UNLOCKED = "account_unlocked",
@@ -38,7 +38,7 @@ export declare enum SecurityEventType {
     COMPLIANCE_EVENT = "compliance_event",
     AUDIT_LOG_ACCESS = "audit_log_access",
     LOG_TAMPERING_DETECTED = "log_tampering_detected"
-}
+
 export declare enum ComplianceFramework {
     SOX = "sox",
     GDPR = "gdpr",
@@ -47,7 +47,7 @@ export declare enum ComplianceFramework {
     ISO_27001 = "iso_27001",
     NIST = "nist",
     CCPA = "ccpa"
-}
+
 export interface LogContext {
     userId?: string;
     userEmail?: string;
@@ -77,7 +77,7 @@ export interface LogContext {
         attackVector?: string;
         indicators?: string[];
     };
-}
+
 export interface SecurityLogEntry {
     id: string;
     timestamp: Date;
@@ -113,7 +113,7 @@ export interface SecurityLogEntry {
         traceId?: string;
         checksum: string;
     };
-}
+
 export interface AuditTrailEntry {
     id: string;
     timestamp: Date;
@@ -134,7 +134,7 @@ export interface AuditTrailEntry {
     context: LogContext;
     compliance: ComplianceFramework[];
     signature: string;
-}
+
 export interface SecurityMetrics {
     period: {,
         start: Date;
@@ -180,7 +180,7 @@ export interface SecurityMetrics {
             peakDays: string[];
         };
     };
-}
+
 export interface LogQuery {
     startTime?: Date;
     endTime?: Date;
@@ -195,7 +195,7 @@ export interface LogQuery {
     sortBy?: 'timestamp' | 'severity' | 'eventType';
     sortOrder?: 'asc' | 'desc';
     search?: string;
-}
+
 export interface LogRetentionPolicy {
     framework: ComplianceFramework;
     retentionDays: number;
@@ -203,7 +203,6 @@ export interface LogRetentionPolicy {
     encrypted: boolean;
     immutable: boolean;
     accessControls: string[];
-}
 /**
  * Comprehensive security logging service
  */
@@ -321,7 +320,7 @@ export declare class SecurityLogger extends EventEmitter {
     private initializeRetentionPolicies;
     private startMetricsCollection;
     private startLogMaintenance;
-}
+
 export declare const securityLogger: SecurityLogger;
 export default SecurityLogger;
 //# sourceMappingURL=SecurityLogger.d.ts.map

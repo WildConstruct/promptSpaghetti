@@ -6,13 +6,14 @@
  * revenue sharing, collaborations, and attribution claims.
  */
 import React from 'react';
+
 export interface CreatorAttributionDashboardProps {
     userId: string;
     onTemplateClick?: (templateId: string) => void;
     onCollaborationClick?: (templateId: string) => void;
     onSettingsClick?: () => void;
     className?: string;
-}
+
 export declare const CreatorAttributionDashboard: React.FC<CreatorAttributionDashboardProps>;
 export default CreatorAttributionDashboard;
 //# sourceMappingURL=CreatorAttributionDashboard.d.ts.map

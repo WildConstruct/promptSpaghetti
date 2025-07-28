@@ -14,11 +14,14 @@ import {
   DetailedComparison
 } from './comparison-models.js';
 
+}
 export interface PaginationOptions {
   page?: number;
   limit?: number;
 }
+}
 
+}
 export interface ComparisonFilter {
   graph_id?: string;
   source_version_id?: string;
@@ -30,7 +33,9 @@ export interface ComparisonFilter {
   created_before?: Date;
   created_by?: string;
 }
+}
 
+}
 export interface PaginatedResult<T> {
   data: T[];
   total: number;
@@ -44,6 +49,7 @@ export class ComparisonDAO {
 
   // Snapshot Management
   async createSnapshot(snapshot: Omit<GraphComparisonSnapshot, 'id' | 'created_at'>): Promise<GraphComparisonSnapshot> {
+
     const id = crypto.randomUUID();
     const now = new Date();
 
@@ -73,6 +79,7 @@ export class ComparisonDAO {
   }
 
   async getSnapshot(versionId: string): Promise<GraphComparisonSnapshot | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM graph_comparison_snapshots 
       WHERE version_id = ?
@@ -91,6 +98,7 @@ export class ComparisonDAO {
   }
 
   async deleteSnapshotsForGraph(graphId: string): Promise<number> {
+
     const stmt = this.db.prepare(`
       DELETE FROM graph_comparison_snapshots 
       WHERE graph_id = ?
@@ -102,6 +110,7 @@ export class ComparisonDAO {
 
   // Comparison Management
   async createComparison(comparison: Omit<GraphComparison, 'id' | 'created_at'>): Promise<GraphComparison> {
+
     const id = crypto.randomUUID();
     const now = new Date();
 
@@ -138,6 +147,7 @@ export class ComparisonDAO {
   }
 
   async getComparison(id: string): Promise<GraphComparison | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM graph_comparisons 
       WHERE id = ?
@@ -154,6 +164,7 @@ export class ComparisonDAO {
     targetVersionId: string,
     comparisonType?: string
   ): Promise<GraphComparison | null> {
+
     let query = `
       SELECT * FROM graph_comparisons 
       WHERE source_version_id = ? AND target_version_id = ?
@@ -252,6 +263,7 @@ export class ComparisonDAO {
   }
 
   async deleteComparison(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare('DELETE FROM graph_comparisons WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
@@ -259,6 +271,7 @@ export class ComparisonDAO {
 
   // Node Match Results
   async createNodeMatchResults(comparisonId: string, matches: Omit<NodeMatchResult, 'id' | 'comparison_id' | 'created_at'>[]): Promise<NodeMatchResult[]> {
+
     const stmt = this.db.prepare(`
       INSERT INTO node_match_results (
         id, comparison_id, source_node_id, target_node_id, match_type,
@@ -291,6 +304,7 @@ export class ComparisonDAO {
   }
 
   async getNodeMatchResults(comparisonId: string): Promise<NodeMatchResult[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM node_match_results 
       WHERE comparison_id = ?
@@ -309,6 +323,7 @@ export class ComparisonDAO {
 
   // Edge Match Results
   async createEdgeMatchResults(comparisonId: string, matches: Omit<EdgeMatchResult, 'id' | 'comparison_id' | 'created_at'>[]): Promise<EdgeMatchResult[]> {
+
     const stmt = this.db.prepare(`
       INSERT INTO edge_match_results (
         id, comparison_id, source_edge_id, target_edge_id, match_type,
@@ -343,6 +358,7 @@ export class ComparisonDAO {
   }
 
   async getEdgeMatchResults(comparisonId: string): Promise<EdgeMatchResult[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM edge_match_results 
       WHERE comparison_id = ?
@@ -359,6 +375,7 @@ export class ComparisonDAO {
 
   // Visual Diff Sessions
   async createDiffSession(session: Omit<VisualDiffSession, 'id' | 'created_at' | 'last_accessed'>): Promise<VisualDiffSession> {
+
     const id = crypto.randomUUID();
     const now = new Date();
 
@@ -388,6 +405,7 @@ export class ComparisonDAO {
   }
 
   async getDiffSession(id: string): Promise<VisualDiffSession | null> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM visual_diff_sessions 
       WHERE id = ? AND expires_at > datetime('now')
@@ -407,6 +425,7 @@ export class ComparisonDAO {
   }
 
   async updateDiffSession(id: string, updates: Partial<VisualDiffSession>): Promise<boolean> {
+
     const setClause: string[] = [];
     const params: unknown[] = [];
 
@@ -462,12 +481,14 @@ export class ComparisonDAO {
   }
 
   async deleteDiffSession(id: string): Promise<boolean> {
+
     const stmt = this.db.prepare('DELETE FROM visual_diff_sessions WHERE id = ?');
     const result = stmt.run(id);
     return result.changes > 0;
   }
 
   async getUserDiffSessions(userId: string): Promise<VisualDiffSession[]> {
+
     const stmt = this.db.prepare(`
       SELECT * FROM visual_diff_sessions 
       WHERE user_id = ? AND expires_at > datetime('now')
@@ -487,6 +508,7 @@ export class ComparisonDAO {
 
   // Cleanup Methods
   async cleanupExpiredSessions(): Promise<number> {
+
     const stmt = this.db.prepare(`
       DELETE FROM visual_diff_sessions 
       WHERE expires_at <= datetime('now')
@@ -509,7 +531,7 @@ export class ComparisonDAO {
       whereClause = `
         WHERE source_version_id IN (
           SELECT id FROM graph_versions WHERE graph_id = ?
-        )
+
       `;
       params.push(graphId);
     }

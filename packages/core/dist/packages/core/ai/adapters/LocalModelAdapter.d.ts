@@ -4,7 +4,7 @@
  *
  * Adapter for locally hosted AI models (Ollama, local inference servers)
  */
-import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+import { BaseAIModel, AIModelType, AIModelProvider } from '../BaseAIModel';
 export interface LocalModelConfig {
     endpoint: string;
     modelName: string;
@@ -19,7 +19,7 @@ export interface LocalRequestOptions {
     max_tokens?: number;
     top_p?: number;
     top_k?: number;
-    stop?: string[];
+    stop?: string;
     stream?: boolean;
     seed?: number;
     repeat_penalty?: number;
@@ -39,7 +39,7 @@ export interface LocalModelResponse {
     };
     response?: string;
     done: boolean;
-    context?: number[];
+    context?: number;
     total_duration?: number;
     load_duration?: number;
     prompt_eval_count?: number;
@@ -51,26 +51,15 @@ export declare class LocalModelAdapter extends BaseAIModel {
     private config;
     private modelInfo;
     constructor(id: string, config: LocalModelConfig);
-    initialize(): Promise<void>;
-    process(input: unknown, options?: LocalRequestOptions): Promise<unknown>;
-    cleanup(): Promise<void>;
-    estimate(input: unknown, options?: LocalRequestOptions): Promise<CostEstimate>;
-    pullModel(): Promise<void>;
-    listAvailableModels(): Promise<string[]>;
-    getModelInfo(): any;
-    private _testConnection;
-    private _loadModelInfo;
-    private _warmupModel;
-    private _buildHeaders;
-    private _getEndpoint;
-    private _buildPayload;
-    private _makeRequest;
-    private _convertToMessages;
-    private _extractContent;
-    private _estimateTokenCount;
-    private _updateCapabilitiesFromModelInfo;
-    protected _performHealthCheck(): Promise<void>;
-    private updateMetadata;
+    provider: AIModelProvider.LOCAL;
+    type: AIModelType.TEXT;
+    costPerToken: 0;
+    averageLatency: 2000;
+    maxConcurrency: 5;
+    rateLimit: {
+        requestsPerMinute: 60;
+        tokensPerMinute: 50000;
+    };
+    tags: ['local', 'open-source', config.modelType];
 }
-export default LocalModelAdapter;
 //# sourceMappingURL=LocalModelAdapter.d.ts.map

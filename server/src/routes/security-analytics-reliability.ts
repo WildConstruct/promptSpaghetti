@@ -26,6 +26,7 @@ import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 // Global reliability engineer instance
 let reliabilityEngineer: SecurityAnalyticsReliabilityEngineer | null = null;
 
+}
 interface ReliabilityQuery {
   includeMetrics?: boolean;
   includeIncidents?: boolean;
@@ -34,29 +35,37 @@ interface ReliabilityQuery {
   includeDisasterRecovery?: boolean;
   timeRange?: 'last_hour' | 'last_day' | 'last_week' | 'last_month';
 }
+}
 
+}
 interface DisasterRecoveryRequest {
   planId: string;
   testMode?: boolean;
   force?: boolean;
 }
+}
 
+}
 interface CircuitBreakerRequest {
   componentName: string;
   action: 'reset' | 'force_open' | 'force_close';
 }
+}
 
+}
 interface ReliabilityResponse {
   success: boolean;
   data?: any;
   error?: string;
   timestamp: number;
 }
+}
 
 /**
  * Initialize security analytics reliability engineer
  */
 async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabilityEngineer> {
+
   if (reliabilityEngineer) {
     return reliabilityEngineer;
   }
@@ -73,8 +82,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       performance_event_forwarding: true,
       batch_size: 50,
       flush_interval_ms: 10000
-    },
-    
+  }
     epic17_admin_integration: {
       enabled: true,
       auth_guard: new AdminAuthGuard(),
@@ -82,8 +90,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       diagnostic_service: new DiagnosticService(),
       admin_notification_enabled: true,
       security_alert_threshold: 5
-    },
-    
+  }
     performance_monitoring: {
       real_time_monitoring_enabled: true,
       performance_threshold_ms: 1000,
@@ -91,8 +98,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       cpu_threshold_percent: 80,
       alert_on_degradation: true,
       auto_optimization_enabled: false
-    },
-    
+  }
     security_features: {
       threat_detection_enabled: true,
       anomaly_detection_sensitivity: 0.8,
@@ -113,24 +119,24 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       memory_threshold_mb: 512,
       cpu_threshold_percent: 80,
       latency_threshold_ms: 1000
-    },
+  }
     caching: {
       enabled: true,
       cache_ttl_seconds: 3600,
       max_cache_size_mb: 100,
       cache_strategies: ['lru', 'ttl']
-    },
+  }
     resource_management: {
       auto_scaling_enabled: true,
       max_concurrent_operations: 10,
       resource_pool_size: 20,
       garbage_collection_interval_ms: 300000
-    },
+  }
     analytics_integration: {
       epic1_optimization_events: true,
       epic17_admin_notifications: true,
       optimization_metrics_tracking: true
-    },
+  }
     security_validation: {
       enabled: true,
       threat_detection_enabled: true,
@@ -159,7 +165,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       recovery_timeout_ms: 60000, // 1 minute
       half_open_max_calls: 3,
       monitoring_window_ms: 300000 // 5 minutes
-    },
+  }
     fault_tolerance: {
       enabled: true,
       retry_attempts: 3,
@@ -167,7 +173,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       exponential_backoff: true,
       jitter_enabled: true,
       max_retry_delay_ms: 10000
-    },
+  }
     disaster_recovery: {
       enabled: true,
       backup_interval_ms: 3600000, // 1 hour
@@ -175,7 +181,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       auto_failover: false,
       recovery_verification: true,
       backup_encryption: true
-    },
+  }
     health_monitoring: {
       enabled: true,
       check_interval_ms: 30000, // 30 seconds
@@ -183,7 +189,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       critical_threshold: 60,
       auto_healing: true,
       alert_escalation: true
-    },
+  }
     system_resilience: {
       enabled: true,
       load_shedding: true,
@@ -191,7 +197,7 @@ async function initializeReliabilityEngineer(): Promise<SecurityAnalyticsReliabi
       resource_isolation: true,
       chaos_engineering: false,
       stress_testing_enabled: false
-    },
+  }
     epic_integration: {
       epic1_reliability_events: true,
       epic17_admin_notifications: true,
@@ -239,7 +245,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
                 circuit_breaker_status: { type: 'object' },
                 active_incidents_count: { type: 'number' }
               }
-            },
+  }
             timestamp: { type: 'number' }
           }
         }
@@ -265,12 +271,12 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
                 name, 
                 { state: state.state, failure_count: state.failure_count }
               ])
-            )
-          },
+
+  }
           active_incidents_count: activeIncidents.length,
           overall_status: systemHealth.overall_health,
           reliability_score: reliabilityMetrics.system_reliability_score
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -385,7 +391,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             degraded: circuitBreakerDetails.filter(cb => cb.state === 'half_open').length,
             failed: circuitBreakerDetails.filter(cb => cb.state === 'open').length
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -433,7 +439,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
           action_performed: action,
           timestamp: Date.now(),
           message: `Circuit breaker ${action} performed for ${componentName}`
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -471,13 +477,13 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             high: activeIncidents.filter(i => i.severity === 'high').length,
             medium: activeIncidents.filter(i => i.severity === 'medium').length,
             low: activeIncidents.filter(i => i.severity === 'low').length
-          },
+  }
           metrics: {
             incident_count_last_24h: reliabilityMetrics.incident_count_last_24h,
             mean_time_to_recovery_minutes: reliabilityMetrics.mean_time_to_recovery_minutes,
             mean_time_between_failures_hours: reliabilityMetrics.mean_time_between_failures_hours
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -516,12 +522,12 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             average_success_rate: drPlans.length > 0 
               ? drPlans.reduce((sum, p) => sum + p.success_rate, 0) / drPlans.length 
               : 0
-          },
+  }
           backup_status: {
             backup_success_rate: reliabilityMetrics.backup_success_rate,
             disaster_recovery_readiness: reliabilityMetrics.disaster_recovery_readiness
           }
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -569,7 +575,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             test_mode: true,
             test_successful: success,
             timestamp: Date.now()
-          },
+  }
           timestamp: Date.now()
         };
       } else {
@@ -588,7 +594,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             plan_id: planId,
             execution_started: success,
             timestamp: Date.now()
-          },
+  }
           timestamp: Date.now()
         };
       }
@@ -628,7 +634,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             health_score: systemHealth.health_score,
             availability: reliabilityMetrics.availability_percent,
             reliability_score: reliabilityMetrics.system_reliability_score
-          },
+  }
           operational_metrics: {
             circuit_breaker_trips: reliabilityMetrics.circuit_breaker_trip_count,
             auto_healing_success_rate: reliabilityMetrics.auto_healing_success_rate,
@@ -636,7 +642,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             active_incidents: activeIncidents.length,
             mttr_minutes: reliabilityMetrics.mean_time_to_recovery_minutes,
             mtbf_hours: reliabilityMetrics.mean_time_between_failures_hours
-          },
+  }
           component_availability: Object.entries(systemHealth.component_health).map(([name, health]) => ({
             component: name,
             status: health.status,
@@ -644,7 +650,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
             response_time_ms: health.response_time_ms,
             error_rate: health.error_rate
           }))
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -681,24 +687,24 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
           health_score: systemHealth.health_score,
           reliability_score: reliabilityMetrics.system_reliability_score,
           uptime_hours: systemHealth.system_metrics.uptime_ms / (1000 * 60 * 60)
-        },
+  }
         component_health: systemHealth.component_health,
         reliability_metrics: reliabilityMetrics,
         circuit_breaker_status: Object.fromEntries(circuitBreakers),
         incident_management: {
           active_incidents: activeIncidents,
           incident_count_24h: reliabilityMetrics.incident_count_last_24h
-        },
+  }
         disaster_recovery: {
           plans: drPlans,
           readiness_score: reliabilityMetrics.disaster_recovery_readiness,
           backup_success_rate: reliabilityMetrics.backup_success_rate
-        },
+  }
         system_resources: {
           memory_usage_percent: systemHealth.system_metrics.memory_usage_percent,
           cpu_usage_percent: systemHealth.system_metrics.cpu_usage_percent,
           average_response_time_ms: systemHealth.system_metrics.average_response_time_ms
-        },
+  }
         configuration: {
           circuit_breaker_enabled: true,
           fault_tolerance_enabled: true,
@@ -746,7 +752,7 @@ export default async function securityAnalyticsReliabilityRoutes(fastify: Fastif
           estimated_duration_minutes: 10,
           affected_components: ['security_analytics', 'optimization_service'],
           timestamp: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {

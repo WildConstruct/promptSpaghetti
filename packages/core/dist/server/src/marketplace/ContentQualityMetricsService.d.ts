@@ -40,16 +40,6 @@ export interface EffectivenessMetrics {
         satisfactionScore: number;
         qualityConsistency: number;
     };
-    problemSolving: {
-        resolutionRate: number;
-        timeToResolution: number;
-        complexityHandling: number;
-    };
-    valueDelivery: {
-        userValueScore: number;
-        businessImpact: number;
-        efficiencyGains: number;
-    };
 }
 export interface UsabilityMetrics {
     score: number;
@@ -58,22 +48,6 @@ export interface UsabilityMetrics {
         userFriendliness: number;
         errorRate: number;
         recoverability: number;
-    };
-    clarity: {
-        instructionClarity: number;
-        outputClarity: number;
-        documentationQuality: number;
-    };
-    accessibility: {
-        deviceCompatibility: number;
-        browserCompatibility: number;
-        languageSupport: number;
-        disabilityAccessibility: number;
-    };
-    userExperience: {
-        interfaceQuality: number;
-        responseTime: number;
-        visualDesign: number;
     };
 }
 export interface EngagementMetrics {
@@ -84,22 +58,6 @@ export interface EngagementMetrics {
         frequencyOfUse: number;
         sessionDuration: number;
     };
-    interaction: {
-        likeRate: number;
-        shareRate: number;
-        commentRate: number;
-        recommendationRate: number;
-    };
-    virality: {
-        viralCoefficient: number;
-        growthRate: number;
-        wordOfMouthScore: number;
-    };
-    community: {
-        discussionVolume: number;
-        supportQuality: number;
-        contributionRate: number;
-    };
 }
 export interface ReliabilityMetrics {
     score: number;
@@ -108,24 +66,6 @@ export interface ReliabilityMetrics {
         crashRate: number;
         uptime: number;
         consistencyScore: number;
-    };
-    performance: {
-        responseTime: number;
-        throughput: number;
-        resourceEfficiency: number;
-        scalability: number;
-    };
-    robustness: {
-        edgeCaseHandling: number;
-        errorHandling: number;
-        inputValidation: number;
-        faultTolerance: number;
-    };
-    security: {
-        vulnerabilityScore: number;
-        dataProtection: number;
-        accessControl: number;
-        complianceScore: number;
     };
 }
 export interface MaintainabilityMetrics {
@@ -136,24 +76,6 @@ export interface MaintainabilityMetrics {
         featureUpdateRate: number;
         maintenanceQuality: number;
     };
-    codeQuality: {
-        codeStructure: number;
-        documentation: number;
-        testCoverage: number;
-        technicalDebt: number;
-    };
-    evolution: {
-        adaptability: number;
-        extensibility: number;
-        backwardsCompatibility: number;
-        migrationSupport: number;
-    };
-    support: {
-        issueResolution: number;
-        userSupport: number;
-        documentationMaintenance: number;
-        communitySupport: number;
-    };
 }
 export interface MarketFitMetrics {
     score: number;
@@ -162,24 +84,6 @@ export interface MarketFitMetrics {
         searchVolume: number;
         competitorComparison: number;
         marketPenetration: number;
-    };
-    satisfaction: {
-        npsScore: number;
-        customerSatisfaction: number;
-        repeatUsage: number;
-        loyaltyScore: number;
-    };
-    business: {
-        revenueGeneration: number;
-        costEffectiveness: number;
-        roi: number;
-        marketValue: number;
-    };
-    strategic: {
-        differentiationScore: number;
-        competitiveAdvantage: number;
-        strategicAlignment: number;
-        futureViability: number;
     };
 }
 export interface QualityBenchmarks {
@@ -217,7 +121,6 @@ export interface HistoricalQualityData {
         maintainability: number;
         marketFit: number;
     };
-    events: QualityEvent[];
 }
 export interface QualityProjection {
     date: Date;
@@ -248,25 +151,6 @@ export interface QualityRecommendation {
         confidenceLevel: number;
         timeToImpact: string;
     };
-    implementation: {
-        effort: 'low' | 'medium' | 'high';
-        complexity: 'simple' | 'moderate' | 'complex';
-        resources: string[];
-        timeline: string;
-        prerequisites: string[];
-    };
-    roi: {
-        investmentRequired: number;
-        expectedReturn: number;
-        paybackPeriod: string;
-        riskLevel: 'low' | 'medium' | 'high';
-    };
-    evidence: {
-        dataPoints: string[];
-        benchmarkComparison: string;
-        userFeedback: string[];
-        analyticsInsights: string[];
-    };
 }
 export interface RatingDistribution {
     oneStar: number;
@@ -284,16 +168,6 @@ export interface ContentQualityConfig {
         maintainability: number;
         marketFit: number;
     };
-    thresholds: {
-        excellent: number;
-        good: number;
-        fair: number;
-        poor: number;
-        critical: number;
-    };
-    benchmarkSources: string[];
-    updateFrequency: string;
-    minimumDataPoints: number;
 }
 export declare class ContentQualityMetricsService {
     private db;
@@ -369,11 +243,6 @@ export interface CategoryPerformance {
 }
 export interface CreatorQualityTrends {
     monthlyScores: number[];
-    dimensionTrends: {
-        [key: string]: number[];
-    };
-    milestones: QualityEvent[];
-    projectedScore: number;
 }
 export interface CreatorQualityBenchmarks {
     vsMarketplace: number;
@@ -430,12 +299,6 @@ export interface QualityDistribution {
 export interface MarketplaceQualityTrends {
     overallTrend: 'improving' | 'stable' | 'declining';
     monthlyAverages: number[];
-    categoryTrends: {
-        [key: string]: number[];
-    };
-    qualityFactorTrends: {
-        [key: string]: number[];
-    };
 }
 export interface TopPerformer {
     templateId: string;

@@ -20,10 +20,10 @@ describe('UTDG Historical Data Integration Foundation', () => {
   let medievalDemo: MedievalDemoDatabase;
   let constraintValidator: ConstraintValidator;
   beforeEach(() => {
-    utdgManager = UTDGManager.getInstance();
-    medievalDemo = MedievalDemoDatabase.getInstance();
-    constraintValidator = new ConstraintValidator(MEDIEVAL_DEMO_CONSTRAINTS);
-  });
+  utdgManager = UTDGManager.getInstance();
+  medievalDemo = MedievalDemoDatabase.getInstance();
+  constraintValidator = new ConstraintValidator(MEDIEVAL_DEMO_CONSTRAINTS);
+});
   describe('UTDG Manager', () => {
     test('should create singleton instance', () => {
       const instance1 = UTDGManager.getInstance();
@@ -39,10 +39,10 @@ describe('UTDG Historical Data Integration Foundation', () => {
       expect(result.generation_metadata.accuracy_score).toBeGreaterThan(0);
     });
     test('should export VFX data correctly', () => {
-      const nodes = medievalDemo.getClothing({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-        social_class: 'peasant',
-      });
+  const nodes = medievalDemo.getClothing({)
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+  social_class: 'peasant',
+});
       if (nodes.length > 0) {
         const vfxData = utdgManager.exportForVFX(;);
           nodes, 
@@ -54,12 +54,11 @@ describe('UTDG Historical Data Integration Foundation', () => {
         expect(vfxData.historical_context).toBe(HISTORICAL_ERAS.MEDIEVAL_HIGH);
         expect(vfxData.materials).toBeInstanceOf(Array);
         expect(vfxData.crowd_control_data).toBeDefined();
-      }
     });
     test('should validate UTDG data quality', () => {
-      const nodes = medievalDemo.getClothing({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-      });
+  const nodes = medievalDemo.getClothing({)
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+});
       const validationReport = utdgManager.validateUTDGData(nodes);
       expect(validationReport).toBeDefined();
       expect(validationReport.overall_score).toBeGreaterThanOrEqual(0);
@@ -69,12 +68,12 @@ describe('UTDG Historical Data Integration Foundation', () => {
     });
   });
   describe('Medieval Demo Database', () => {
-    test('should provide medieval clothing data', () => {
-      const clothing = medievalDemo.getClothing({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-        social_class: 'peasant',
-        gender: 'male',
-      });
+  test('should provide medieval clothing data', () => {
+  const clothing = medievalDemo.getClothing({)
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+  social_class: 'peasant',
+  gender: 'male',
+});
       expect(clothing).toBeInstanceOf(Array);
       if (clothing.length > 0) {
         const item = clothing[0];
@@ -82,15 +81,14 @@ describe('UTDG Historical Data Integration Foundation', () => {
         expect(item.metadata.era).toContain(HISTORICAL_ERAS.MEDIEVAL_HIGH);
         expect(item.metadata.social_class).toContain('peasant');
         expect(item.medieval_specific).toBeDefined();
-      }
     });
     test('should generate complete medieval outfit', () => {
-      const outfit = medievalDemo.generateOutfit({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-        social_class: 'noble',
-        gender: 'female',
-        occasion: 'ceremonial',
-      });
+  const outfit = medievalDemo.generateOutfit({)
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+  social_class: 'noble',
+  gender: 'female',
+  occasion: 'ceremonial',
+});
       expect(outfit).toBeDefined();
       expect(outfit.outfit).toBeInstanceOf(Array);
       expect(outfit.description).toBeDefined();
@@ -98,39 +96,37 @@ describe('UTDG Historical Data Integration Foundation', () => {
       expect(outfit.historical_notes.length).toBeGreaterThan(0);
     });
     test('should provide materials and accessories', () => {
-      const materials = medievalDemo.getMaterials({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-      });
+  const materials = medievalDemo.getMaterials({)
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+});
       const accessories = medievalDemo.getAccessories({)
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-        social_class: 'merchant',
-      });
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+  social_class: 'merchant',
+});
       expect(materials).toBeInstanceOf(Array);
       expect(accessories).toBeInstanceOf(Array);
     });
   });
   describe('Constraint Validator', () => {
-    test('should validate historical constraints', () => {
-      const testNodes: UTDGNode[] = [
-        {
-          id: 'test_peasant_silk',
-          type: 'material',
-          content: 'Expensive silk fabric',
-          metadata: {,
-            era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
-            authenticity: 0.9,
-            source: 'test',
-            tags: ['silk', 'luxury'],
-            social_class: ['peasant'],
-          },
-          relationships: {,
-            compatible: [],
-            incompatible: [],
-            variations: [],
-          },
-          constraints: [],
-        }
-      ];
+  test('should validate historical constraints', () => {
+  const testNodes: UTDGNode = [
+  {
+  id: 'test_peasant_silk',
+  type: 'material',
+  content: 'Expensive silk fabric',
+  metadata: {,
+  era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
+  authenticity: 0.9,
+  source: 'test',
+  tags: ['silk', 'luxury'],
+  social_class: ['peasant'],
+},
+  relationships: {,
+  compatible: [],
+  incompatible: [],
+  variations: [],
+},
+  constraints: []];
       const result = constraintValidator.validateNodes(testNodes);
       expect(result).toBeDefined();
       expect(result.valid).toBeDefined();
@@ -139,16 +135,16 @@ describe('UTDG Historical Data Integration Foundation', () => {
       expect(result.suggestions).toBeInstanceOf(Array);
     });
     test('should provide era-specific validation', () => {
-      const testNodes: UTDGNode[] = [];
-      const result = constraintValidator.validateForEra(testNodes, HISTORICAL_ERAS.MEDIEVAL_HIGH);
-      expect(result).toBeDefined();
-      expect(result.valid).toBe(true); // Empty set should be valid
-    });
+  const testNodes: UTDGNode = [];
+  const result = constraintValidator.validateForEra(testNodes, HISTORICAL_ERAS.MEDIEVAL_HIGH);
+  expect(result).toBeDefined();
+  expect(result.valid).toBe(true); // Empty set should be valid
+});
     test('should generate improvement suggestions', () => {
-      const testNodes: UTDGNode[] = [];
-      const suggestions = constraintValidator.getSuggestions(testNodes, HISTORICAL_ERAS.MEDIEVAL_HIGH);
-      expect(suggestions).toBeInstanceOf(Array);
-    });
+  const testNodes: UTDGNode = [];
+  const suggestions = constraintValidator.getSuggestions(testNodes, HISTORICAL_ERAS.MEDIEVAL_HIGH);
+  expect(suggestions).toBeInstanceOf(Array);
+});
   });
   describe('Historical Eras', () => {
     test('should provide comprehensive era definitions', () => {
@@ -167,18 +163,18 @@ describe('UTDG Historical Data Integration Foundation', () => {
     });
   });
   describe('Content Generation', () => {
-    test('should generate content with different configurations', async () => {
-      const config: ContentGenerationConfig = {
-        era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
-        region: 'England',
-        social_class: 'artisan',
-        scenario: 'daily_life',
-        gender: 'male',
-        age_groups: ['adult'],
-        variation_level: 'medium',
-        historical_accuracy: 'moderate',
-        creativity_factor: 0.5,
-      };
+  test('should generate content with different configurations', async () => {
+  const config: ContentGenerationConfig = {,
+  era: HISTORICAL_ERAS.MEDIEVAL_HIGH,
+  region: 'England',
+  social_class: 'artisan',
+  scenario: 'daily_life',
+  gender: 'male',
+  age_groups: ['adult'],
+  variation_level: 'medium',
+  historical_accuracy: 'moderate',
+  creativity_factor: 0.5,
+};
       const result = await utdgManager.generateHistoricalContent(config);
       expect(result).toBeDefined();
       expect(result.nodes).toBeInstanceOf(Array);
@@ -188,13 +184,13 @@ describe('UTDG Historical Data Integration Foundation', () => {
   });
   describe('External Data Integration', () => {
     test('should handle historical queries', async () => {
-      const query: HistoricalQuery = {
-        era: 'medieval',
+      const query: HistoricalQuery = {,
+  era: 'medieval',
         category: 'garment',
         social_class: 'peasant',
         filters: {},
-        limit: 5,
-      };
+        limit: 5;
+  };
       const result = await utdgManager.queryHistoricalContent(query);
       expect(result).toBeDefined();
       expect(result.nodes).toBeInstanceOf(Array);
@@ -207,34 +203,34 @@ describe('UTDG Historical Data Integration Foundation', () => {
 // Type safety tests
 describe('UTDG Type System', () => {
   test('should enforce proper UTDGNode structure', () => {
-    const node: UTDGNode = {
-      id: 'test_node_001',
-      type: 'material',
-      content: 'Test historical material',
-      metadata: {,
-        era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
-        authenticity: 0.8,
-        source: 'test source',
-        tags: ['test', 'material']
-      },
-      relationships: {,
-        compatible: [],
-        incompatible: [],
-        variations: [],
-      },
-      constraints: [],
-    };
+  const node: UTDGNode = {,
+  id: 'test_node_001',
+  type: 'material',
+  content: 'Test historical material',
+  metadata: {,
+  era: [HISTORICAL_ERAS.MEDIEVAL_HIGH],
+  authenticity: 0.8,
+  source: 'test source',
+  tags: ['test', 'material'],
+},
+  relationships: {,
+  compatible: [],
+  incompatible: [],
+  variations: [],
+},
+  constraints: [];
+  };
     expect(node.id).toBe('test_node_001');
     expect(node.type).toBe('material');
     expect(node.metadata.era).toContain(HISTORICAL_ERAS.MEDIEVAL_HIGH);
     expect(node.metadata.authenticity).toBe(0.8);
   });
   test('should handle Era type correctly', () => {
-    const era: Era = HISTORICAL_ERAS.MEDIEVAL_HIGH;
-    expect(era.name).toBe('High Medieval');
-    expect(typeof era.period.start).toBe('number');
-    expect(typeof era.period.end).toBe('number');
-    expect(era.region).toBeInstanceOf(Array);
-    expect(['high', 'medium', 'low']).toContain(era.accuracy);
-  });
+  const era: Era = HISTORICAL_ERAS.MEDIEVAL_HIGH;
+  expect(era.name).toBe('High Medieval');
+  expect(typeof era.period.start).toBe('number');
+  expect(typeof era.period.end).toBe('number');
+  expect(era.region).toBeInstanceOf(Array);
+  expect(['high', 'medium', 'low']).toContain(era.accuracy);
+});
 });

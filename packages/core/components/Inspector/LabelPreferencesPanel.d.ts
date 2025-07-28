@@ -6,9 +6,10 @@
  * including display modes, positioning, styling, and behavior settings.
  */
 import React from 'react';
+
 interface LabelPreferencesPanelProps {
     onClose?: () => void;
-}
+
 export declare const LabelPreferencesPanel: React.FC<LabelPreferencesPanelProps>;
 export default LabelPreferencesPanel;
 //# sourceMappingURL=LabelPreferencesPanel.d.ts.map

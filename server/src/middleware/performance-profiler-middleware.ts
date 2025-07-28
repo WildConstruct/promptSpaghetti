@@ -10,6 +10,7 @@
 import { FastifyRequest, FastifyReply, FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { PerformanceProfiler } from '../performance/PerformanceProfiler';
 
+}
 interface PerformanceMiddlewareOptions {
   enabled?: boolean;
   autoStartProfiling?: boolean;
@@ -21,6 +22,7 @@ interface PerformanceMiddlewareOptions {
     memoryUsage: number;
     responseTime: number;
     errorRate: number;
+}
   };
 }
 
@@ -42,7 +44,7 @@ export async function performanceProfilerMiddleware(
       memoryUsage: 85,
       responseTime: 2000,
       errorRate: 5
-    },
+  }
     ...options
   };
 
@@ -285,11 +287,11 @@ async function registerPerformanceRoutes(fastify: FastifyInstance, profiler: Per
             heapTotal: memoryUsage.heapTotal,
             heapUsed: memoryUsage.heapUsed,
             external: memoryUsage.external
-          },
+  }
           cpu: {
             user: cpuUsage.user,
             system: cpuUsage.system
-          },
+  }
           uptime: process.uptime(),
           platform: process.platform,
           nodeVersion: process.version
@@ -362,5 +364,6 @@ export function withPerformanceTracking(routeHandler: Function) {
 declare module 'fastify' {
   interface FastifyInstance {
     performanceProfiler: PerformanceProfiler;
+}
   }
 }

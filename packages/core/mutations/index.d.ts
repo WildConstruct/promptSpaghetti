@@ -15,16 +15,16 @@ export declare export declare export declare export declare class MutationEngine
     operation?: any | undefined;
     validationErrors?: any[] | undefined;
     constructor(message: string, operation?: any | undefined, validationErrors?: any[] | undefined);
-}
+
 export declare class ValidationError extends Error {
     field?: string | undefined;
     nodeId?: string | undefined;
     edgeId?: string | undefined;
     constructor(message: string, field?: string | undefined, nodeId?: string | undefined, edgeId?: string | undefined);
-}
+
 export declare class ConflictError extends Error {
     conflicts: any[];
     operation?: any | undefined;
     constructor(message: string, conflicts: any[], operation?: any | undefined);
-}
+
 export declare //# sourceMappingURL=index.d.ts.map

@@ -16,7 +16,7 @@ export interface CommentModerationConfig {
     requireApprovalThreshold: number;
     enableRealtimeUpdates: boolean;
     moderatorId: string;
-    permissions: string[];
+    permissions: string;
 }
 export interface CommentModerationFilters {
     status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'auto_hidden';
@@ -35,7 +35,7 @@ export interface CommentModerationFilters {
 }
 export interface CommentModerationAction {
     type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
-    commentIds: string[];
+    commentIds: string;
     reason?: string;
     duration?: number;
     notifyAuthor?: boolean;
@@ -62,5 +62,5 @@ interface CommentModerationPanelProps {
     className?: string;
 }
 export declare const CommentModerationPanel: React.FC<CommentModerationPanelProps>;
-export default CommentModerationPanel;
+export {};
 //# sourceMappingURL=CommentModerationPanel.d.ts.map

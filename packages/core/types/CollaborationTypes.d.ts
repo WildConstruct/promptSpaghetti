@@ -5,6 +5,7 @@
  * Type definitions for sticky notes, node labels, region groups,
  * and other collaboration features.
  */
+
 export interface StickyNote {
     id: string;
     position: {,
@@ -21,8 +22,9 @@ export interface StickyNote {
     timestamp: string;
     isEditing?: boolean;
     zIndex?: number;
-}
+
 export type StickyNoteColor = 'yellow' | 'blue' | 'green' | 'red' | 'purple' | 'orange';
+
 export interface StickyNoteColorInfo {
     background: string;
     border: string;
@@ -30,16 +32,17 @@ export interface StickyNoteColorInfo {
     shadow: string;
     category: string;
     description: string;
-}
+
 export type RegionGroupStyle = 'solid' | 'dashed' | 'dotted' | 'rounded' | 'modern';
 export type RegionGroupVisibility = 'always' | 'hover' | 'selected' | 'editing' | 'collapsed';
+
 export interface RegionGroupBounds {
     x: number;
     y: number;
     width: number;
     height: number;
     padding?: number;
-}
+
 export interface RegionGroup {
     id: string;
     label: string;
@@ -61,7 +64,7 @@ export interface RegionGroup {
     author: string;
     timestamp: string;
     lastModified: string;
-}
+
 export interface RegionGroupAction {
     type: 'create' | 'update' | 'delete' | 'addNodes' | 'removeNodes' | 'move' | 'resize' | 'collapse' | 'expand';
     groupId?: string;
@@ -76,7 +79,7 @@ export interface RegionGroupAction {
         width: number;
         height: number;
     };
-}
+
 export interface RegionGroupPreferences {
     defaultColor: string;
     defaultBackgroundColor: string;
@@ -90,10 +93,11 @@ export interface RegionGroupPreferences {
     autoGroupThreshold: number;
     snapToGrid: boolean;
     gridSize: number;
-}
+
 export export export export type ConnectionLabelPosition = 'start' | 'middle' | 'end' | 'custom';
 export type ConnectionLabelStyle = 'default' | 'badge' | 'arrow' | 'highlight' | 'minimal';
 export type ConnectionVisualStyle = 'solid' | 'dashed' | 'dotted' | 'animated' | 'gradient';
+
 export interface ConnectionLabel {
     id: string;
     connectionId: string;
@@ -117,7 +121,7 @@ export interface ConnectionLabel {
     author: string;
     timestamp: string;
     lastModified: string;
-}
+
 export interface ConnectionAnnotation {
     id: string;
     connectionId: string;
@@ -135,7 +139,7 @@ export interface ConnectionAnnotation {
     author: string;
     timestamp: string;
     lastModified: string;
-}
+
 export interface ConnectionLabelAction {
     type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit' | 'move';
     labelId?: string;
@@ -147,13 +151,13 @@ export interface ConnectionLabelAction {
         y: number;
     };
     positionOffset?: number;
-}
+
 export interface ConnectionAnnotationAction {
     type: 'create' | 'update' | 'delete' | 'highlight' | 'unhighlight';
     annotationId?: string;
     connectionId: string;
     annotation?: Partial<ConnectionAnnotation>;
-}
+
 export interface ConnectionAnnotationPreferences {
     defaultLabelStyle: ConnectionLabelStyle;
     defaultVisualStyle: ConnectionVisualStyle;
@@ -166,10 +170,11 @@ export interface ConnectionAnnotationPreferences {
     showDirectionArrows: boolean;
     maxLabelLength: number;
     highlightOnHover: boolean;
-}
+
 export export export export type NodeLabelDisplayMode = 'always' | 'hover' | 'focus' | 'selected' | 'never';
 export type NodeLabelPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type NodeLabelStyle = 'default' | 'minimal' | 'professional' | 'colorful' | 'outline';
+
 export interface NodeLabelConfig {
     id: string;
     nodeId: string;
@@ -186,14 +191,14 @@ export interface NodeLabelConfig {
     truncateLength?: number;
     author: string;
     timestamp: string;
-}
+
 export interface NodeLabelAction {
     type: 'create' | 'update' | 'delete' | 'startEdit' | 'stopEdit';
     nodeId: string;
     labelId?: string;
     config?: Partial<NodeLabelConfig>;
     customLabel?: string;
-}
+
 export interface NodeLabelPreferences {
     defaultDisplayMode: NodeLabelDisplayMode;
     defaultPosition: NodeLabelPosition;
@@ -203,7 +208,7 @@ export interface NodeLabelPreferences {
     enableLabelHistory: boolean;
     maxLabelLength: number;
     showLabelTooltips: boolean;
-}
+
 export export export interface GraphAnnotations {
     stickyNotes: StickyNote[];
     nodeLabels: Record<string, string>;
@@ -220,7 +225,7 @@ export export export interface GraphAnnotations {
         modified: string;
         version: string;
     };
-}
+
 export interface StickyNoteAction {
     type: 'create' | 'update' | 'delete' | 'move' | 'resize' | 'startEdit' | 'stopEdit';
     noteId?: string;
@@ -235,7 +240,7 @@ export interface StickyNoteAction {
     };
     content?: string;
     color?: StickyNoteColor;
-}
+
 export interface StickyNoteContextMenuOptions {
     x: number;
     y: number;
@@ -246,7 +251,7 @@ export interface StickyNoteContextMenuOptions {
     onDelete?: () => void;
     onChangeColor?: (color: StickyNoteColor) => void;
     onDuplicate?: () => void;
-}
+
 export declare const STICKY_NOTE_COLORS: {
     yellow: string;
     blue: string;

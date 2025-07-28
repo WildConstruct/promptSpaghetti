@@ -57,54 +57,11 @@ export declare class ImageProcessor {
     private canvas;
     private ctx;
     constructor();
-    convertFormat(imageData: string | ArrayBuffer, options: ImageProcessingOptions): Promise<{
-        data: string;
-        metadata: ImageMetadata;
-    }>;
-    extractMetadata(imageData: string | ArrayBuffer): Promise<ImageMetadata>;
-    compress(imageData: string, quality?: number, format?: 'jpeg' | 'webp'): Promise<{
-        data: string;
-        compressionRatio: number;
-        originalSize: number;
-        compressedSize: number;
-    }>;
-    resize(imageData: string, width: number, height?: number, maintainAspectRatio?: boolean): Promise<string>;
-    processBatch(images: string[], options: ImageBatchProcessingOptions): Promise<Array<{
-        original: string;
-        processed: string;
-        metadata: ImageMetadata;
-    }>>;
-    generateVariations(imageData: string, options: ImageVariationOptions): Promise<string[]>;
-    compareImages(image1: string, image2: string): Promise<{
-        similarity: number;
-        differences: {
-            colorDifference: number;
-            structuralDifference: number;
-            pixelDifference: number;
-        };
-    }>;
-    private _loadImage;
-    private _setupCanvas;
-    private _optimizeCanvas;
-    private _getMimeType;
-    private _getFormatFromDataURL;
-    private _estimateDataURLSize;
-    private _parseImageHeaders;
-    private _parsePNGHeaders;
-    private _parseJPEGHeaders;
-    private _parseWebPHeaders;
-    private _applyWatermark;
     private _drawTextWatermark;
     private _drawImageWatermark;
-    private _getWatermarkPosition;
-    private _createVariation;
-    private _applyBrightnessVariation;
-    private _applyContrastVariation;
-    private _applyHueVariation;
-    private _applySaturationVariation;
-    private _getImageData;
-    private _rgbToHsl;
-    private _hslToRgb;
+    position: string;
+    canvasWidth: number;
+    canvasHeight: number;
+    Promise(): any;
 }
-export default ImageProcessor;
 //# sourceMappingURL=ImageProcessor.d.ts.map

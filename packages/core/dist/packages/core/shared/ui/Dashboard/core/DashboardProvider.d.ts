@@ -23,7 +23,7 @@ export interface DashboardContextValue {
     selectedItems: Set<string>;
     selectItem: (id: string) => void;
     deselectItem: (id: string) => void;
-    selectAll: (ids: string[]) => void;
+    selectAll: (ids: string) => void;
     clearSelection: () => void;
     isSelected: (id: string) => boolean;
     onRefresh?: () => void;
@@ -39,5 +39,4 @@ export interface DashboardProviderProps {
 }
 export declare const DashboardProvider: React.FC<DashboardProviderProps>;
 export declare const useDashboard: () => DashboardContextValue;
-export default DashboardProvider;
 //# sourceMappingURL=DashboardProvider.d.ts.map

@@ -6,14 +6,14 @@ export declare enum ConnectionState {
     RECONNECTING = "reconnecting",
     FAILED = "failed",
     OFFLINE = "offline"
-}
+
 export declare enum ConnectionQuality {
     EXCELLENT = "excellent",
     GOOD = "good",
     FAIR = "fair",
     POOR = "poor",
     UNKNOWN = "unknown"
-}
+
 export interface ConnectionMetrics {
     latency: number;
     packetLoss: number;
@@ -21,14 +21,14 @@ export interface ConnectionMetrics {
     jitter: number;
     lastMeasurement: number;
     measurementCount: number;
-}
+
 export interface NetworkInfo {
     type: 'wifi' | 'cellular' | 'ethernet' | 'unknown';
     effectiveType: '2g' | '3g' | '4g' | 'slow-2g' | 'unknown';
     downlink: number;
     rtt: number;
     saveData: boolean;
-}
+
 export interface ConnectionStateData {
     state: ConnectionState;
     quality: ConnectionQuality;
@@ -44,7 +44,7 @@ export interface ConnectionStateData {
         timestamp: number;
         reason?: string;
     }>;
-}
+
 export interface ConnectionStateConfig {
     pingInterval: number;
     qualityCheckInterval: number;
@@ -63,7 +63,7 @@ export interface ConnectionStateConfig {
     onlineCheckUrl: string;
     enableNetworkInfoAPI: boolean;
     enablePerformanceMonitoring: boolean;
-}
+
 export declare class ConnectionStateManager extends EventEmitter {
     private state;
     private quality;
@@ -183,5 +183,5 @@ export declare class ConnectionStateManager extends EventEmitter {
      * Stop all timers
      */
     private stopAllTimers;
-}
+
 //# sourceMappingURL=ConnectionStateManager.d.ts.map

@@ -8,7 +8,6 @@ export interface SwitchProps {
   disabled?: boolean;
   className?: string;
 }
-
 export const Switch: React.FC<SwitchProps> = ({)
   checked = false,
   onCheckedChange,
@@ -17,7 +16,7 @@ export const Switch: React.FC<SwitchProps> = ({)
   disabled = false,
   className = ''
 }) => {
-  return ();
+  return;
     <label className={`switch ${size} ${className}`}>}
       <input
         type="checkbox"

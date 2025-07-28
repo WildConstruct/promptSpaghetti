@@ -1,39 +1,33 @@
-/**
- * VFX Scene Sample Data - E17-1753114397343-6622FD
- *
- * Sample data for testing and demonstrating VFX Pipeline Visualizer components
- * with Wild Construct ecosystem integration.
- */
 // Sample Material Properties
 const medievalWoolMaterial = {
     name: 'Medieval Wool',
     type: 'diffuse',
     value: 0.8,
-    historicallyAccurate: true
+    historicallyAccurate: true,
 };
 const stoneTexture = {
     name: 'Limestone Texture',
     type: 'roughness',
     value: 0.9,
-    historicallyAccurate: true
+    historicallyAccurate: true,
 };
 const ironMetal = {
     name: 'Wrought Iron',
     type: 'metallic',
     value: 0.7,
-    historicallyAccurate: true
+    historicallyAccurate: true,
 };
 const oakWood = {
     name: 'Oak Wood',
     type: 'diffuse',
     value: 0.6,
-    historicallyAccurate: true
+    historicallyAccurate: true,
 };
 const thatchRoof = {
     name: 'Thatched Roofing',
     type: 'normal',
     value: 0.5,
-    historicallyAccurate: true
+    historicallyAccurate: true,
 };
 // Sample VFX Assets
 const sampleAssets = [
@@ -45,7 +39,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 95,
         materials: [stoneTexture, oakWood, ironMetal],
-        lod: 3
+        lod: 3,
     },
     {
         id: 'market-stall-001',
@@ -55,7 +49,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 88,
         materials: [oakWood, thatchRoof],
-        lod: 2
+        lod: 2,
     },
     {
         id: 'stone-well-001',
@@ -65,7 +59,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 92,
         materials: [stoneTexture, ironMetal],
-        lod: 2
+        lod: 2,
     },
     {
         id: 'castle-wall-001',
@@ -75,7 +69,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 97,
         materials: [stoneTexture],
-        lod: 4
+        lod: 4,
     },
     {
         id: 'cobblestone-001',
@@ -85,7 +79,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 85,
         materials: [stoneTexture],
-        lod: 1
+        lod: 1,
     },
     {
         id: 'oak-tree-001',
@@ -95,7 +89,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 90,
         materials: [oakWood],
-        lod: 2
+        lod: 2,
     },
     {
         id: 'cart-wheel-001',
@@ -105,7 +99,7 @@ const sampleAssets = [
         region: 'England',
         accuracy: 86,
         materials: [oakWood, ironMetal],
-        lod: 1
+        lod: 1,
     },
     {
         id: 'banner-fabric-001',
@@ -208,14 +202,14 @@ const sampleSceneLayers = [
         name: 'Background',
         type: 'background',
         opacity: 1.0,
-        elements: ['castle-wall-001', 'great-hall-001', 'oak-tree-001']
+        elements: ['castle-wall-001', 'great-hall-001', 'oak-tree-001'],
     },
     {
         id: 'midground-layer',
         name: 'Midground',
         type: 'midground',
         opacity: 1.0,
-        elements: ['market-stall-001', 'stone-well-001', 'cobblestone-001']
+        elements: ['market-stall-001', 'stone-well-001', 'cobblestone-001'],
     },
     {
         id: 'foreground-layer',
@@ -239,7 +233,7 @@ const sampleViolations = [
         severity: 'low',
         description: 'Glass windows in peasant housing would be uncommon',
         element: 'market-stall-001',
-        suggestion: 'Replace glass with wooden shutters or leave open'
+        suggestion: 'Replace glass with wooden shutters or leave open',
     },
     {
         type: 'cultural',
@@ -258,7 +252,7 @@ const sampleAccuracyMetrics = {
     culture: 93,
     timeline: 96,
     expertValidated: true,
-    violations: sampleViolations
+    violations: sampleViolations,
 };
 // Complete Sample VFX Scene
 export const medievalCourtyard = {
@@ -271,7 +265,7 @@ export const medievalCourtyard = {
     characters: sampleCharacters,
     assets: sampleAssets,
     composition: sampleComposition,
-    accuracy: sampleAccuracyMetrics
+    accuracy: sampleAccuracyMetrics,
 };
 // Additional sample scenes for timeline testing
 export const vikingVillage = {
@@ -281,25 +275,19 @@ export const vikingVillage = {
     region: 'Scandinavia',
     timeOfDay: 'evening',
     weather: 'Cold with snow flurries',
-    characters: sampleCharacters.slice(0, 4).map(char => ({
-        ...char,
-        culture: 'Norse',
-        period: 'Viking Age',
-        id: `viking-${char.id}`
-    })),
-    assets: sampleAssets.slice(0, 5).map(asset => ({
-        ...asset,
-        period: 'Viking Age',
-        region: 'Scandinavia',
-        id: `viking-${asset.id}`
-    })),
-    composition: sampleComposition,
-    accuracy: {
-        ...sampleAccuracyMetrics,
-        overall: 87,
-        expertValidated: false
-    }
-};
+    characters: sampleCharacters.slice(0, 4).map(char => ({}), ...char, culture, 'Norse', period, 'Viking Age', id, `viking-${char.id}`) };
+assets: sampleAssets.slice(0, 5).map(asset => ({}), ...asset, period, 'Viking Age', region, 'Scandinavia', id, `viking-${asset.id}`);
+composition: sampleComposition,
+    accuracy;
+{
+    sampleAccuracyMetrics,
+        overall;
+    87,
+        expertValidated;
+    false,
+    ;
+}
+;
 export const romanForum = {
     id: 'roman-forum-001',
     name: 'Roman Forum Plaza',
@@ -307,26 +295,21 @@ export const romanForum = {
     region: 'Italy',
     timeOfDay: 'noon',
     weather: 'Clear and warm',
-    characters: sampleCharacters.slice(0, 6).map(char => ({
-        ...char,
-        culture: 'Roman',
-        period: 'Imperial Rome',
-        id: `roman-${char.id}`
-    })),
-    assets: sampleAssets.slice(0, 6).map(asset => ({
-        ...asset,
-        period: 'Imperial Rome',
-        region: 'Italy',
-        id: `roman-${asset.id}`
-    })),
-    composition: sampleComposition,
-    accuracy: {
-        ...sampleAccuracyMetrics,
-        overall: 94,
-        architecture: 98,
-        expertValidated: true
-    }
-};
+    characters: sampleCharacters.slice(0, 6).map(char => ({}), ...char, culture, 'Roman', period, 'Imperial Rome', id, `roman-${char.id}`) };
+assets: sampleAssets.slice(0, 6).map(asset => ({}), ...asset, period, 'Imperial Rome', region, 'Italy', id, `roman-${asset.id}`);
+composition: sampleComposition,
+    accuracy;
+{
+    sampleAccuracyMetrics,
+        overall;
+    94,
+        architecture;
+    98,
+        expertValidated;
+    true,
+    ;
+}
+;
 // Export all sample scenes as an array for timeline visualization
 export const sampleScenes = [
     romanForum,
@@ -346,21 +329,21 @@ export const generateRandomScene = (id, name, period) => {
         assets: sampleAssets.slice(0, Math.floor(Math.random() * 5) + 3),
         composition: sampleComposition,
         accuracy: {
-            overall: Math.floor(Math.random() * 20) + 80, // 80-99%
+            overall: Math.floor(Math.random() * 20) + 80, // 80-99%,
             architecture: Math.floor(Math.random() * 15) + 85,
             clothing: Math.floor(Math.random() * 15) + 85,
             technology: Math.floor(Math.random() * 15) + 85,
             culture: Math.floor(Math.random() * 15) + 85,
             timeline: Math.floor(Math.random() * 15) + 85,
             expertValidated: Math.random() > 0.3,
-            violations: Math.random() > 0.5 ? [sampleViolations[0]] : []
+            violations: Math.random() > 0.5 ? [sampleViolations[0]] : [],
         }
     };
-};
-export default {
-    medievalCourtyard,
-    vikingVillage,
-    romanForum,
-    sampleScenes,
-    generateRandomScene
+    export default {
+        medievalCourtyard,
+        vikingVillage,
+        romanForum,
+        sampleScenes,
+        generateRandomScene
+    };
 };

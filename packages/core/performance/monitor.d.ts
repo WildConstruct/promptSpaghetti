@@ -2,6 +2,7 @@
  * Performance Monitor for Epic 18.1.4
  * Real-time performance tracking and metrics collection
  */
+
 export interface PerformanceMetric {
     name: string;
     values: number[];
@@ -12,20 +13,22 @@ export interface PerformanceMetric {
     p99: number;
     count: number;
     lastUpdated: number;
-}
+
+
 export interface PerformanceAlert {
     metric: string;
     threshold: number;
     currentValue: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
     timestamp: number;
-}
+
+
 export interface PerformanceConfig {
     maxSamples: number;
     alertThresholds: Record<string, number>;
     enableLogging: boolean;
     enableAlerts: boolean;
-}
+
 export declare class PerformanceMonitor {
     private metrics;
     private alerts;
@@ -90,7 +93,7 @@ export declare class PerformanceMonitor {
      * Create a performance decorator
      */
     createDecorator(metricName: string): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
-}
+
 export declare export declare function measurePerformance<T>(name: string, fn: () => T): T;
 export declare function measurePerformanceAsync<T>(name: string, fn: () => Promise<T>): Promise<T>;
 export declare function usePerformanceMonitor(): {

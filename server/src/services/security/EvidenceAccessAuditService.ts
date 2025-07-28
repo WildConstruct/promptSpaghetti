@@ -14,12 +14,15 @@ import { EvidenceVersioningService } from '../EvidenceVersioningService';
 import { DatabaseService } from '../../auth/database/DatabaseService';
 // import { UserAccessTransparencyService } from '../../../packages/core/security/UserAccessTransparency';
 // Mock interface for now to avoid import issues
+}
 interface UserAccessTransparencyService {
   recordDataAccess(userId: string, evidenceId: string, action: string, timestamp: Date): Promise<void>;
+}
 }
 import crypto from 'crypto';
 
 // Core audit trail data structures
+}
 export interface EvidenceAccessAuditEntry {
   id: string;
   timestamp: Date;
@@ -34,6 +37,7 @@ export interface EvidenceAccessAuditEntry {
     permissions: string[];
     ipAddress: string;
     userAgent: string;
+}
   };
   
   resource: {
@@ -107,6 +111,7 @@ export enum EvidenceAccessOutcome {
   TIMEOUT = 'TIMEOUT'
 }
 
+}
 export interface AuditTrailQuery {
   evidenceId?: string;
   userId?: string;
@@ -119,7 +124,9 @@ export interface AuditTrailQuery {
   offset?: number;
   includeDeleted?: boolean;
 }
+}
 
+}
 export interface AuditTrailReport {
   summary: {
     totalAccesses: number;
@@ -127,6 +134,7 @@ export interface AuditTrailReport {
     riskDistribution: Record<string, number>;
     actionDistribution: Record<string, number>;
     outcomeDistribution: Record<string, number>;
+}
   };
   entries: EvidenceAccessAuditEntry[];
   insights: {
@@ -170,6 +178,7 @@ export class EvidenceAccessAuditService {
     outcome: EvidenceAccessOutcome,
     additionalMetadata: Record<string, any> = {}
   ): Promise<EvidenceAccessAuditEntry> {
+
     const startTime = Date.now();
     const timestamp = new Date();
     const correlationId = crypto.randomUUID();
@@ -195,32 +204,28 @@ export class EvidenceAccessAuditService {
           permissions: context.subject.permissions?.map(p => p.name) || [],
           ipAddress: context.environment.sourceIP || 'unknown',
           userAgent: context.environment.userAgent || 'unknown'
-        },
-        
+  }
         resource: {
           evidenceType: evidenceMetadata.type,
           classificationLevel: evidenceMetadata.classification,
           sensitivityScore: evidenceMetadata.sensitivityScore,
           dataLocation: evidenceMetadata.location,
           complianceFrameworks: evidenceMetadata.complianceFrameworks || []
-        },
-        
+  }
         action: {
           type: action,
           operation: context.action.operation || action,
           intent: (context.action.metadata as any)?.intent || 'user_requested',
           parameters: additionalMetadata,
           resultSize: additionalMetadata.resultSize
-        },
-        
+  }
         environment: {
           applicationContext: context.environment.applicationId || 'web',
           networkZone: 'internal',
           deviceType: context.environment.deviceType || 'unknown',
           securityLevel: 'standard',
           geoLocation: context.environment.geolocation?.country
-        },
-        
+  }
         outcome,
         risk: riskAssessment,
         
@@ -301,6 +306,7 @@ export class EvidenceAccessAuditService {
    * Retrieves audit trail for specific evidence or user
    */
   async getAuditTrail(query: AuditTrailQuery): Promise<EvidenceAccessAuditEntry[]> {
+
     const connection = await (this.databaseService as any).getConnection();
     
     try {
@@ -363,6 +369,7 @@ export class EvidenceAccessAuditService {
    * Generates comprehensive audit trail report with analytics
    */
   async generateAuditReport(query: AuditTrailQuery): Promise<AuditTrailReport> {
+
     const entries = await this.getAuditTrail(query);
     
     const summary = this.calculateAuditSummary(entries);
@@ -421,6 +428,7 @@ export class EvidenceAccessAuditService {
     complianceFrameworks: string[];
     legalHold: boolean;
   }> {
+
     // Integrate with existing evidence services
     return {
       currentVersion: '1.0',
@@ -443,9 +451,10 @@ export class EvidenceAccessAuditService {
       location: string;
       complianceFrameworks: string[];
       legalHold: boolean;
-    },
+  }
     action: EvidenceAccessAction
   ): Promise<EvidenceAccessAuditEntry['risk']> {
+
     let riskScore = 0;
     const factors: string[] = [];
     const mitigations: string[] = [];
@@ -485,6 +494,7 @@ export class EvidenceAccessAuditService {
   }
 
   private async createContentHash(data: Record<string, unknown>): Promise<string> {
+
     const content = JSON.stringify(data, Object.keys(data).sort());
     return crypto.createHash('sha256').update(content).digest('hex');
   }
@@ -494,6 +504,7 @@ export class EvidenceAccessAuditService {
     evidenceId: string,
     previousHash?: string
   ): Promise<string> {
+
     if (!previousHash) {
       // Get the most recent audit entry for this evidence
       const recentEntries = await this.getAuditTrail({ 
@@ -514,6 +525,7 @@ export class EvidenceAccessAuditService {
   }
 
   private async storeAuditEntry(entry: EvidenceAccessAuditEntry): Promise<void> {
+
     const connection = await (this.databaseService as any).getConnection();
     
     try {
@@ -536,7 +548,7 @@ export class EvidenceAccessAuditService {
           $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
           $21, $22, $23, $24, $25, $26, $27, $28, $29, $30,
           $31, $32, $33, $34, $35, $36, $37, $38, $39, $40
-        )
+
       `, [
         entry.id, entry.timestamp, entry.evidenceId, entry.evidenceVersion,
         entry.subject.userId, entry.subject.sessionId, JSON.stringify(entry.subject.roles),
@@ -559,6 +571,7 @@ export class EvidenceAccessAuditService {
   }
 
   private async updateUserAccessTransparency(entry: EvidenceAccessAuditEntry): Promise<void> {
+
     // Update user's data access transparency records
     await this.userAccessTransparency.recordDataAccess(
       entry.subject.userId,
@@ -569,6 +582,7 @@ export class EvidenceAccessAuditService {
   }
 
   private async triggerSecurityAlert(entry: EvidenceAccessAuditEntry): Promise<void> {
+
     // Integrate with security monitoring systems
     console.warn('High-risk evidence access detected:', {
       evidenceId: entry.evidenceId,
@@ -627,35 +641,35 @@ export class EvidenceAccessAuditService {
         permissions: JSON.parse(row.subject_permissions || '[]'),
         ipAddress: row.subject_ip_address,
         userAgent: row.subject_user_agent
-      },
+  }
       resource: {
         evidenceType: row.resource_evidence_type,
         classificationLevel: row.resource_classification_level,
         sensitivityScore: row.resource_sensitivity_score,
         dataLocation: row.resource_data_location,
         complianceFrameworks: JSON.parse(row.resource_compliance_frameworks || '[]')
-      },
+  }
       action: {
         type: row.action_type,
         operation: row.action_operation,
         intent: row.action_intent,
         parameters: JSON.parse(row.action_parameters || '{}'),
         resultSize: row.action_result_size
-      },
+  }
       environment: {
         applicationContext: row.environment_application_context,
         networkZone: row.environment_network_zone,
         deviceType: row.environment_device_type,
         securityLevel: row.environment_security_level,
         geoLocation: row.environment_geo_location
-      },
+  }
       outcome: row.outcome,
       risk: {
         level: row.risk_level,
         score: row.risk_score,
         factors: JSON.parse(row.risk_factors || '[]'),
         mitigations: JSON.parse(row.risk_mitigations || '[]')
-      },
+  }
       contentHash: row.content_hash,
       chainHash: row.chain_hash,
       correlationId: row.correlation_id,
@@ -697,6 +711,7 @@ export class EvidenceAccessAuditService {
   }
 
   private async analyzeAuditInsights(entries: EvidenceAccessAuditEntry[]): Promise<AuditTrailReport['insights']> {
+
     const suspiciousPatterns: string[] = [];
     const complianceIssues: string[] = [];
     const performanceAlerts: string[] = [];

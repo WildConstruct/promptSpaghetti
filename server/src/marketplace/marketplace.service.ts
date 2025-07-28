@@ -42,6 +42,7 @@ export class MarketplaceService {
 
   // Template operations
   async createTemplate(ownerId: string, templateData: any): Promise<MarketplaceTemplate> {
+
     const validated = CreateTemplateSchema.parse(templateData);
     
     const template = await this.dao.createTemplate({
@@ -62,6 +63,7 @@ export class MarketplaceService {
   }
 
   async getTemplate(id: string, userId?: string): Promise<TemplateWithStats | null> {
+
     const template = await this.dao.getTemplate(id);
     
     if (!template) {
@@ -87,6 +89,7 @@ export class MarketplaceService {
   }
 
   async updateTemplate(id: string, userId: string, updates: any): Promise<MarketplaceTemplate> {
+
     const template = await this.dao.getTemplate(id);
     
     if (!template) {
@@ -127,6 +130,7 @@ export class MarketplaceService {
   }
 
   async deleteTemplate(id: string, userId: string): Promise<void> {
+
     const template = await this.dao.getTemplate(id);
     
     if (!template) {
@@ -151,6 +155,7 @@ export class MarketplaceService {
       searchStartTime?: number;
     }
   ): Promise<SearchResult> {
+
     const searchStartTime = searchContext?.searchStartTime || Date.now();
     
     // Use Elasticsearch for advanced search, fallback to PostgreSQL
@@ -190,7 +195,7 @@ export class MarketplaceService {
           is_free: filters.is_free,
           is_featured: filters.is_featured,
           claude_models: filters.claude_models
-        },
+  }
         results_count: result.total,
         session_id: searchContext?.sessionId,
         ip_address: searchContext?.ipAddress,
@@ -223,6 +228,7 @@ export class MarketplaceService {
   }
 
   async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
+
     try {
       // Try enhanced search analytics suggestions first
       const analyticsSuggestions = await this.searchAnalytics.getSearchSuggestions(query, limit);
@@ -254,6 +260,7 @@ export class MarketplaceService {
 
   // Version management
   async createVersion(templateId: string, userId: string, versionData: any): Promise<TemplateVersion> {
+
     const template = await this.dao.getTemplate(templateId);
     
     if (!template) {
@@ -289,6 +296,7 @@ export class MarketplaceService {
   }
 
   async getTemplateVersions(templateId: string, userId?: string): Promise<TemplateVersion[]> {
+
     const template = await this.dao.getTemplate(templateId);
     
     if (!template) {
@@ -304,11 +312,13 @@ export class MarketplaceService {
   }
 
   async getVersion(id: string): Promise<TemplateVersion | null> {
+
     return this.dao.getVersion(id);
   }
 
   // Purchase operations
   async createPurchase(userId: string, purchaseData: any): Promise<MarketplacePurchase> {
+
     const validated = CreatePurchaseSchema.parse(purchaseData);
     
     const template = await this.dao.getTemplate(validated.template_id);
@@ -371,6 +381,7 @@ export class MarketplaceService {
   }
 
   async completePurchase(stripeIntentId: string, status: PurchaseStatus): Promise<MarketplacePurchase | null> {
+
     const purchase = await this.dao.getPurchaseByStripeIntent(stripeIntentId);
     
     if (!purchase) {
@@ -397,11 +408,13 @@ export class MarketplaceService {
   }
 
   async getUserPurchases(userId: string): Promise<any[]> {
+
     return this.dao.getUserPurchases(userId);
   }
 
   // Review operations
   async createReview(userId: string, reviewData: any): Promise<TemplateReview> {
+
     const validated = CreateReviewSchema.parse(reviewData);
     
     const template = await this.dao.getTemplate(validated.template_id);
@@ -436,11 +449,13 @@ export class MarketplaceService {
   }
 
   async getTemplateReviews(templateId: string): Promise<any[]> {
+
     return this.dao.getTemplateReviews(templateId);
   }
 
   // Preview system
   async previewTemplate(userId: string, request: PreviewRequest): Promise<PreviewResponse> {
+
     try {
       return await this.claudePreview.generatePreview(userId, request);
     } catch (error) {
@@ -450,6 +465,7 @@ export class MarketplaceService {
   }
 
   async getPreviewMetadata(templateId: string, versionId?: string): Promise<any> {
+
     try {
       return await this.claudePreview.getPreviewMetadata(templateId, versionId);
     } catch (error) {
@@ -495,6 +511,7 @@ export class MarketplaceService {
 
   // Utility methods
   async refreshSearchIndex(): Promise<void> {
+
     await this.dao.refreshSearchIndex();
   }
 }

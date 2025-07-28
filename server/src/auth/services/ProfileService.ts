@@ -5,6 +5,7 @@ import { AuthConfig, UserProfile, UserPreferences } from '../types';
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 
+}
 export interface ProfileUpdateData {
   displayName?: string;
   firstName?: string;
@@ -13,19 +14,25 @@ export interface ProfileUpdateData {
   timezone?: string;
   locale?: string;
 }
+}
 
+}
 export interface ProfileImageData {
   originalName: string;
   mimeType: string;
   size: number;
   buffer: Buffer;
 }
+}
 
+}
 export interface PreferencesData {
   category: string;
   settings: Record<string, any>;
 }
+}
 
+}
 export interface NotificationPreferences {
   email: {
     enabled: boolean;
@@ -35,6 +42,7 @@ export interface NotificationPreferences {
       system: boolean;
       updates: boolean;
       marketing: boolean;
+}
     };
   };
   inApp: {
@@ -75,6 +83,7 @@ export class ProfileService {
   }
 
   async getProfile(userId: string): Promise<UserProfile | null> {
+
     const result = await this.dbService.query(`
       SELECT * FROM user_profiles WHERE user_id = $1
     `, [userId]);
@@ -100,6 +109,7 @@ export class ProfileService {
   }
 
   async createProfile(userId: string, data: ProfileUpdateData): Promise<UserProfile> {
+
     const id = require('crypto').randomUUID();
     const now = new Date();
 
@@ -151,6 +161,7 @@ export class ProfileService {
     data: ProfileUpdateData,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<UserProfile> {
+
     const now = new Date();
     
     // Check if profile exists
@@ -191,7 +202,7 @@ export class ProfileService {
             timezone: profile.timezone,
             locale: profile.locale
           }
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -218,6 +229,7 @@ export class ProfileService {
     imageData: ProfileImageData,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<{ avatarUrl: string }> {
+
     // Validate image
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imageData.size > maxSize) {
@@ -269,7 +281,7 @@ export class ProfileService {
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
           size: imageData.size
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -286,7 +298,7 @@ export class ProfileService {
           originalName: imageData.originalName,
           mimeType: imageData.mimeType,
           size: imageData.size
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
@@ -300,6 +312,7 @@ export class ProfileService {
     userId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     const profile = await this.getProfile(userId);
     if (!profile || !profile.avatarUrl) {
       return;
@@ -326,7 +339,7 @@ export class ProfileService {
       resourceType: 'profile',
       details: {
         deletedAvatarUrl: profile.avatarUrl
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -334,6 +347,7 @@ export class ProfileService {
   }
 
   async getPreferences(userId: string, category?: string): Promise<UserPreferences[]> {
+
     const query = category 
       ? 'SELECT * FROM user_preferences WHERE user_id = $1 AND category = $2'
       : 'SELECT * FROM user_preferences WHERE user_id = $1';
@@ -357,6 +371,7 @@ export class ProfileService {
     settings: Record<string, any>,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<UserPreferences> {
+
     const now = new Date();
     
     // Check if preferences exist
@@ -383,7 +398,7 @@ export class ProfileService {
           category,
           changes: settings,
           previousSettings
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -412,7 +427,7 @@ export class ProfileService {
         details: {
           category,
           settings
-        },
+  }
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'info'
@@ -430,6 +445,7 @@ export class ProfileService {
   }
 
   async getNotificationPreferences(userId: string): Promise<NotificationPreferences> {
+
     const preferences = await this.getPreferences(userId, 'notifications');
     
     if (preferences.length === 0) {
@@ -444,7 +460,7 @@ export class ProfileService {
             updates: false,
             marketing: false
           }
-        },
+  }
         inApp: {
           enabled: true,
           types: {
@@ -453,7 +469,7 @@ export class ProfileService {
             updates: true,
             mentions: true
           }
-        },
+  }
         push: {
           enabled: false,
           types: {
@@ -462,7 +478,7 @@ export class ProfileService {
             updates: false,
             mentions: true
           }
-        },
+  }
         quietHours: {
           enabled: false,
           start: '22:00',
@@ -480,6 +496,7 @@ export class ProfileService {
     preferences: NotificationPreferences,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<NotificationPreferences> {
+
     await this.updatePreferences(userId, 'notifications', preferences, context);
     return preferences;
   }
@@ -488,6 +505,7 @@ export class ProfileService {
     userId: string,
     context: { ipAddress?: string; userAgent?: string } = {}
   ): Promise<void> {
+
     // Delete profile image if exists
     await this.deleteProfileImage(userId, context);
     
@@ -515,7 +533,7 @@ export class ProfileService {
       resourceType: 'profile',
       details: {
         deletedAt: new Date()
-      },
+  }
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       severity: 'info'
@@ -527,6 +545,7 @@ export class ProfileService {
     completedFields: string[];
     missingFields: string[];
   }> {
+
     const profile = await this.getProfile(userId);
     
     const allFields = [
@@ -581,7 +600,7 @@ export class ProfileService {
         LOWER(p.first_name) LIKE $1 OR 
         LOWER(p.last_name) LIKE $1 OR
         LOWER(CONCAT(p.first_name, ' ', p.last_name)) LIKE $1
-      )
+
       ORDER BY p.display_name, p.first_name, p.last_name
       LIMIT $2 OFFSET $3
     `, [searchQuery, limit, offset]);

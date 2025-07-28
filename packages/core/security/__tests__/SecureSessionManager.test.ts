@@ -16,16 +16,15 @@ describe('SecureSessionManager', () => {
   let manager: SecureSessionManager;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
-    // Mock the Date constructor
-    const OriginalDate = Date;
-    const mockDateConstructor = jest.fn().mockImplementation((value?: any) => {
-      if (value !== undefined) {
-        return new OriginalDate(value);
-      }
-      return mockDate;
-    });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime());
+  // Mock the Date constructor
+  const OriginalDate = Date;
+  const mockDateConstructor = jest.fn().mockImplementation((value?: any) => {,
+  if (value !== undefined) {
+  return new OriginalDate(value);
+  return mockDate;
+});
     global.Date = mockDateConstructor as any;
     global.Date.now = jest.fn(() => mockDate.getTime());
     manager = new SecureSessionManager();
@@ -36,23 +35,22 @@ describe('SecureSessionManager', () => {
   });
   describe('Session Creation', () => {
     test('should create secure session with all required properties', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         deviceFingerprint: 'fp_12345',
         requestHeaders: { 'x-requested-endpoint': '/api/auth' },
         geolocation: {,
-          country: 'US',
-          region: 'California',
-          city: 'San Francisco',
-        },
-        securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  country: 'US',
+  region: 'California',
+  city: 'San Francisco',
+},
+  securityFlags: {,
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const result = await manager.createSession(;);
         'user123',
         context,
@@ -76,33 +74,31 @@ describe('SecureSessionManager', () => {
         expect(data.context.ipAddress).toBe('10.0.0.1');
         done();
       });
-      const context: SessionContext = {
-        ipAddress: '10.0.0.1',
+      const context: SessionContext = {,
+  ipAddress: '10.0.0.1',
         userAgent: 'TestAgent',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       manager.createSession('user456', context);
     });
     test('should handle high security level sessions', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_secure',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const result = await manager.createSession(;);
         'user_secure',
         context,
@@ -115,18 +111,17 @@ describe('SecureSessionManager', () => {
       );
     });
     test('should calculate risk score based on security flags', async () => {
-      const suspiciousContext: SessionContext = {
-        ipAddress: '203.0.113.100',
+      const suspiciousContext: SessionContext = {,
+  ipAddress: '203.0.113.100',
         userAgent: 'SuspiciousAgent',
         deviceFingerprint: 'fp_suspicious',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: true,
-          isNewDevice: true,
-          hasVpn: true,
-          hasProxy: true,
-        }
-      };
+  isSuspiciousLocation: true,
+  isNewDevice: true,
+  hasVpn: true,
+  hasProxy: true,
+};
       const result = await manager.createSession('user_risky', suspiciousContext);
       expect(result.session.metadata.security.riskScore).toBeGreaterThan(50);
       expect(result.session.metadata.security.trustLevel).toBe('low');
@@ -136,18 +131,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Session Validation', () => {
     test('should validate legitimate session successfully', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_valid',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', context);
       const validation = await manager.validateSession(session.id, token, context);
       expect(validation.isValid).toBe(true);
@@ -157,18 +151,17 @@ describe('SecureSessionManager', () => {
       expect(validation.requiresReauthentication).toBe(false);
     });
     test('should reject invalid session token', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session } = await manager.createSession('user123', context);
       const validation = await manager.validateSession(session.id, 'invalid_token', context);
       expect(validation.isValid).toBe(false);
@@ -176,44 +169,42 @@ describe('SecureSessionManager', () => {
       expect(validation.securityIssues[0].description).toContain('Invalid session token');
     });
     test('should detect IP address changes', async () => {
-      const originalContext: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const originalContext: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', originalContext);
       const changedContext = {
-        ...originalContext,
-        ipAddress: '203.0.113.50',
-      };
+  ...originalContext,
+  ipAddress: '203.0.113.50',
+};
       const validation = await manager.validateSession(session.id, token, changedContext);
       expect(validation.anomalies.some(a => a.type === 'ipChange')).toBe(true);
     });
     test('should detect device fingerprint mismatch', async () => {
-      const originalContext: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const originalContext: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_original',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', originalContext);
       const hijackedContext = {
-        ...originalContext,
-        deviceFingerprint: 'fp_hijacker',
-      };
+  ...originalContext,
+  deviceFingerprint: 'fp_hijacker',
+};
       const validation = await manager.validateSession(session.id, token, hijackedContext);
       expect(validation.isValid).toBe(false);
       expect(validation.securityIssues.some(issue => )
@@ -221,18 +212,17 @@ describe('SecureSessionManager', () => {
       )).toBe(true);
     });
     test('should handle expired sessions', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession()
         'user123',
         context,
@@ -250,18 +240,17 @@ describe('SecureSessionManager', () => {
       )).toBe(true);
     });
     test('should check MFA expiration', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', context, SessionSecurityLevel.MEDIUM, true);
       // Move time forward 45 minutes (MFA expires after 30 minutes)
       const futureDate = new Date(mockDate.getTime() + 45 * 60 * 1000);
@@ -276,18 +265,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Session Rotation', () => {
     test('should rotate session token successfully', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token: originalToken } = await manager.createSession('user123', context);
       const originalTokenHash = session.tokenHash;
       const newToken = await manager.rotateSession(session.id);
@@ -306,35 +294,33 @@ describe('SecureSessionManager', () => {
         expect(data.newTokenHash).not.toBe(data.oldTokenHash);
         done();
       });
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       manager.createSession('user123', context).then(({ session }) => {
         manager.rotateSession(session.id);
       });
     });
     test('should not rotate inactive session', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session } = await manager.createSession('user123', context);
       // Terminate the session
       await manager.terminateSession(session.id, SessionTerminationReason.MANUAL_LOGOUT);
@@ -344,18 +330,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Session Termination', () => {
     test('should terminate session successfully', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session } = await manager.createSession('user123', context);
       const terminated = await manager.terminateSession(;);
         session.id,
@@ -371,35 +356,33 @@ describe('SecureSessionManager', () => {
         expect(data.reason).toBe(SessionTerminationReason.SECURITY_VIOLATION);
         done();
       });
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       manager.createSession('user123', context).then(({ session }) => {
         manager.terminateSession(session.id, SessionTerminationReason.SECURITY_VIOLATION);
       });
     });
     test('should terminate all user sessions except excluded', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       // Create multiple sessions for the same user
       const session1 = await manager.createSession('user123', context);
       const session2 = await manager.createSession('user123', context);
@@ -422,41 +405,39 @@ describe('SecureSessionManager', () => {
   });
   describe('Session Management', () => {
     test('should get user sessions', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       await manager.createSession('user123', context);
       await manager.createSession('user123', context);
       await manager.createSession('user456', context);
       const userSessions = manager.getUserSessions('user123');
       expect(userSessions).toHaveLength(2);
       userSessions.forEach(session => {)
-        expect(session.userId).toBe('user123');
+  expect(session.userId).toBe('user123');
         expect(session.state).toBe(SessionState.ACTIVE);
       });
     });
     test('should get session statistics', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       // Create sessions with different security levels
       await manager.createSession('user1', context, SessionSecurityLevel.LOW);
       await manager.createSession('user2', context, SessionSecurityLevel.MEDIUM);
@@ -471,18 +452,17 @@ describe('SecureSessionManager', () => {
       expect(stats.averageSessionDuration).toBeGreaterThanOrEqual(0);
     });
     test('should enforce concurrent session limits', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       // Create sessions up to limit (MEDIUM security allows 3 concurrent sessions)
       await manager.createSession('user123', context, SessionSecurityLevel.MEDIUM);
       await manager.createSession('user123', context, SessionSecurityLevel.MEDIUM);
@@ -495,18 +475,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Activity Tracking and Anomaly Detection', () => {
     test('should track session activities', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: { 'x-requested-endpoint': '/api/profile' },
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', context);
       // Simulate activity by validating session
       await manager.validateSession(session.id, token, context);
@@ -522,38 +501,37 @@ describe('SecureSessionManager', () => {
         expect(data.description).toContain('high activity');
         done();
       });
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       // Create session and simulate rapid activity
       manager.createSession('user123', context).then(({ session }) => {
         // Simulate many activities
         for (let i = 0; i < 60; i++) {
           session.activities.push({)
-            timestamp: new Date(),
-            action: `activity_${i}`,}
-            endpoint: '/api/test',
+  timestamp: new Date(),
+            action: `activity_${i}`}
+},
+  endpoint: '/api/test',
             riskScore: 0,
-            anomalyDetected: false,
-          });
-        }
+            anomalyDetected: false;
+  });
         // Trigger anomaly detection manually
         manager.emit('anomalyDetected', {)
-          sessionId: session.id,
-          type: 'rapidActivity',
-          severity: 'high',
-          description: 'Unusually high activity detected',
-          recommendation: 'Monitor for automation',
-        });
+  sessionId: session.id,
+  type: 'rapidActivity',
+  severity: 'high',
+  description: 'Unusually high activity detected',
+  recommendation: 'Monitor for automation',
+});
       });
     });
     test('should emit activity recorded event', (done) => {
@@ -563,18 +541,17 @@ describe('SecureSessionManager', () => {
         expect(data.context.ipAddress).toBe('192.168.1.100');
         done();
       });
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       manager.createSession('user123', context).then(({ session, token }) => {
         manager.validateSession(session.id, token, context);
       });
@@ -582,18 +559,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Security Features', () => {
     test('should generate unique CSRF tokens', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const session1 = await manager.createSession('user1', context);
       const session2 = await manager.createSession('user2', context);
       expect(session1.session.csrfToken).toBeTruthy();
@@ -601,18 +577,17 @@ describe('SecureSessionManager', () => {
       expect(session1.session.csrfToken).not.toBe(session2.session.csrfToken);
     });
     test('should handle critical security level restrictions', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session } = await manager.createSession()
         'user_critical',
         context,
@@ -628,44 +603,41 @@ describe('SecureSessionManager', () => {
       expect(userSessions.length).toBeLessThanOrEqual(1);
     });
     test('should detect suspicious location changes', async () => {
-      const normalContext: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const normalContext: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const { session, token } = await manager.createSession('user123', normalContext);
       const suspiciousContext: SessionContext = {
-        ...normalContext,
-        securityFlags: {,
-          ...normalContext.securityFlags,
-          isSuspiciousLocation: true,
-        }
-      };
+  ...normalContext,
+  securityFlags: {,
+  ...normalContext.securityFlags,
+  isSuspiciousLocation: true,
+};
       const validation = await manager.validateSession(session.id, token, suspiciousContext);
       expect(validation.anomalies.some(a => a.type === 'locationAnomaly')).toBe(true);
     });
   });
   describe('Cleanup and Destruction', () => {
     test('should clean up expired sessions', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       // Create a short-lived session
       await manager.createSession('user123', context, SessionSecurityLevel.CRITICAL);
       // Move time forward to expire the session
@@ -693,18 +665,17 @@ describe('SecureSessionManager', () => {
   });
   describe('Error Handling', () => {
     test('should handle non-existent session validation', async () => {
-      const context: SessionContext = {
-        ipAddress: '192.168.1.100',
+      const context: SessionContext = {,
+  ipAddress: '192.168.1.100',
         userAgent: 'Mozilla/5.0',
         deviceFingerprint: 'fp_test',
         requestHeaders: {},
         securityFlags: {,
-          isSuspiciousLocation: false,
-          isNewDevice: false,
-          hasVpn: false,
-          hasProxy: false,
-        }
-      };
+  isSuspiciousLocation: false,
+  isNewDevice: false,
+  hasVpn: false,
+  hasProxy: false,
+};
       const validation = await manager.validateSession('non-existent-id', 'fake-token', context);
       expect(validation.isValid).toBe(false);
       expect(validation.securityIssues[0].type).toBe('critical');

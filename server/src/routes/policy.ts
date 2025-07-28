@@ -17,19 +17,24 @@ import {
 } from '../../../packages/core/services/PolicyManagement';
 
 // Request/Response Types
+}
 interface CreatePolicyRequest {
   Body: Omit<UnifiedPolicy, 'id' | 'metadata'>;
 }
+}
 
+}
 interface UpdatePolicyRequest {
   Params: { policyId: string };
   Body: Partial<UnifiedPolicy>;
 }
 
+}
 interface DeletePolicyRequest {
   Params: { policyId: string };
 }
 
+}
 interface GetPoliciesRequest {
   Querystring: {
     domain?: PolicyDomain;
@@ -39,9 +44,11 @@ interface GetPoliciesRequest {
     limit?: number;
     offset?: number;
     search?: string;
+}
   };
 }
 
+}
 interface EvaluatePolicyRequest {
   Body: {
     entityType: 'USER' | 'TEMPLATE' | 'PROJECT' | 'TRANSACTION' | 'CONTENT';
@@ -51,6 +58,7 @@ interface EvaluatePolicyRequest {
       type: string;
       parameters: Record<string, any>;
       riskLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+}
     };
     contentContext?: {
       historicalPeriod?: string;
@@ -62,6 +70,7 @@ interface EvaluatePolicyRequest {
   };
 }
 
+}
 interface ComplianceReportRequest {
   Params: { framework: ComplianceFramework };
 }
@@ -314,12 +323,12 @@ export async function policyRoutes(fastify: FastifyInstance) {
           userAgent: request.headers['user-agent'] || 'Unknown',
           geolocation: undefined,
           authenticationMethod: 'jwt'
-        },
+  }
         operation: {
           type: operation.type,
           parameters: operation.parameters,
           riskLevel: operation.riskLevel || 'MEDIUM'
-        },
+  }
         contentContext,
         additionalContext: additionalContext || {}
       };
@@ -531,18 +540,18 @@ export async function policyRoutes(fastify: FastifyInstance) {
           ipAddress: request.ip,
           userAgent: request.headers['user-agent'] || 'Unknown',
           authenticationMethod: 'jwt'
-        },
+  }
         operation: {
           type: 'historical_accuracy_validation',
           parameters: contentMetadata,
           riskLevel: 'HIGH'
-        },
+  }
         contentContext: {
           historicalPeriod,
           culturalContext,
           accuracyLevel: 'STRICT',
           expertReviewed: false
-        },
+  }
         additionalContext: {}
       });
 

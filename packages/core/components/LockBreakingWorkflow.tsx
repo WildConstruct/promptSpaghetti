@@ -4,14 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
 import { WorkflowLock } from '../types/locking';
 interface LockBreakingWorkflowProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  resourceId: string;
-  onBreakLock: (lockId: string, resourceId: string, justification: string) => void;
+  resourceId: string;,
+  onBreakLock: (lockId: string, resourceId: string, justification: string) => void;,
   userId: string;
-}
-
-export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
+  export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({,)
   isOpen,
   onClose,
   resourceId,
@@ -23,40 +21,37 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
   const [justification, setJustification] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [locks, setLocks] = useState<WorkflowLock[]>([]);
+  const [locks, setLocks] = useState<WorkflowLock>([]);
   const [userPermissions, setUserPermissions] = useState<{
-    canBreakLocks: boolean;
-    requiresJustification: boolean;
-    roles: string[];
-  }>({)
-    canBreakLocks: false,
-    requiresJustification: true,
-    roles: [],
-  });
+  canBreakLocks: boolean;,
+  requiresJustification: boolean;
+  roles: string;
+}>({)
+  canBreakLocks: false,
+  requiresJustification: true,
+  roles: [],
+});
   // Mock data - in real implementation, this would come from API
   useEffect(() => {
-    if (isOpen && resourceId) {
-      // Mock locks data
-      setLocks([)
-        {
-          id: 'lock-1',
-          resource_id: resourceId,
-          locked_by: 'user-456',
-          lock_type: 'edit',
-          lock_reason: 'Working on content updates',
-          locked_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-          expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-          auto_release: true,
-          workspace_id: 'workspace-123',
-        }
-      ]);
-      // Mock user permissions
-      setUserPermissions({)
-        canBreakLocks: true,
-        requiresJustification: true,
-        roles: ['admin', 'editor']
-      });
-    }
+  if (isOpen && resourceId) {
+  // Mock locks data
+  setLocks([)
+  {
+  id: 'lock-1',
+  resource_id: resourceId,
+  locked_by: 'user-456',
+  lock_type: 'edit',
+  lock_reason: 'Working on content updates',
+  locked_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+  expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+  auto_release: true,
+  workspace_id: 'workspace-123']);
+  // Mock user permissions
+  setUserPermissions({)
+  canBreakLocks: true,
+  requiresJustification: true,
+  roles: ['admin', 'editor'],
+});
   }, [isOpen, resourceId]);
   const handleLockSelect = (lock: WorkflowLock) => {
     setSelectedLock(lock);
@@ -67,7 +62,6 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
       setCurrentStep('justification');
     } else {
       handleBreakLock();
-    }
   };
   const handleBreakLock = async () => {
     if (!selectedLock) return;
@@ -76,14 +70,12 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
     try {
       if (userPermissions.requiresJustification && !justification.trim()) {
         throw new Error('Justification is required');
-      }
       await onBreakLock(selectedLock.id, resourceId, justification);
       onClose();
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to break lock');
-    } finally {
+  setError(error instanceof Error ? error.message : 'Failed to break lock');
+} finally {
       setIsSubmitting(false);
-    }
   };
   const handleCancel = () => {
     setCurrentStep('select');
@@ -101,11 +93,10 @@ export const LockBreakingWorkflow: React.FC<LockBreakingWorkflowProps> = ({)
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     if (hours > 0) {
       return `${hours}h ${minutes}m`;}
-    }
     return `${minutes}m`;}
   };
   if (!isOpen) return null;
-  return ();
+  return;
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}

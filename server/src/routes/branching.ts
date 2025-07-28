@@ -61,9 +61,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: UpdateBranchRequestSchema
     }
   }, async (request, reply) => {
@@ -96,7 +96,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -130,7 +130,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -216,9 +216,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -226,7 +226,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
           commitMessage: { type: 'string' },
           parentCommitIds: { type: 'array', items: { type: 'string', format: 'uuid' } },
           commitMetadata: { type: 'object' }
-        },
+  }
         required: ['snapshotId']
       }
     }
@@ -297,9 +297,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -348,7 +348,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -377,7 +377,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           projectId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['projectId']
       }
     }
@@ -407,7 +407,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         properties: {
           sourceId: { type: 'string', format: 'uuid' },
           targetId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['sourceId', 'targetId']
       }
     }
@@ -436,9 +436,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -580,7 +580,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -619,9 +619,9 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: UpdateMergeRequestRequestSchema
     }
   }, async (request, reply) => {
@@ -706,7 +706,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -753,15 +753,15 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: {
         type: 'object',
         properties: {
           status: { type: 'string', enum: ['pending', 'approved', 'rejected', 'commented'] },
           reviewMessage: { type: 'string' }
-        },
+  }
         required: ['status']
       }
     }
@@ -805,7 +805,7 @@ export async function branchingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }

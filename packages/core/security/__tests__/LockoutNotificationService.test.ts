@@ -23,39 +23,38 @@ describe('LockoutNotificationService', () => {
   let mockLockout: AccountLockout;
   let mockDate: Date;
   beforeEach(() => {
-    mockDate = new Date('2025-01-15T10:00:00Z');
-    const OriginalDate = Date;
-    jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
-    // Mock the Date constructor
-    const mockDateConstructor = jest.fn<unknown[], unknown>().mockImplementation((value?: unknown) => {
-      if (value !== undefined) {
-        return new OriginalDate(value);
-      }
-      return mockDate;
-    });
+  mockDate = new Date('2025-01-15T10:00:00Z');
+  const OriginalDate = Date;
+  jest.spyOn(Date, 'now').mockReturnValue(mockDate.getTime( as unknown));
+  // Mock the Date constructor
+  const mockDateConstructor = jest.fn<unknown, unknown>().mockImplementation((value?: unknown) => {,
+  if (value !== undefined) {
+  return new OriginalDate(value);
+  return mockDate;
+});
     global.Date = mockDateConstructor as any;
     global.Date.now = jest.fn(() => mockDate.getTime());
     service = new LockoutNotificationService();
     mockLockout = {
-      id: 'LOCK-1234567890-ABCD1234',
-      userId: 'user123',
-      userEmail: 'test@example.com',
-      status: LockoutStatus.ACTIVE,
-      reason: LockoutReason.EXCESSIVE_FAILED_ATTEMPTS,
-      lockoutTime: mockDate,
-      expiryTime: new Date(mockDate.getTime() + 30 * 60 * 1000), // 30 minutes
-      failedAttempts: 5,
-      securityEvents: [],
-      metadata: {,
-        ipAddress: '192.168.1.1',
-        userAgent: 'Mozilla/5.0',
-        riskScore: 75,
-        threatLevel: 'medium',
-      },
-      adminActions: [],
+  id: 'LOCK-1234567890-ABCD1234',
+  userId: 'user123',
+  userEmail: 'test@example.com',
+  status: LockoutStatus.ACTIVE,
+  reason: LockoutReason.EXCESSIVE_FAILED_ATTEMPTS,
+  lockoutTime: mockDate,
+  expiryTime: new Date(mockDate.getTime() + 30 * 60 * 1000), // 30 minutes,
+  failedAttempts: 5,
+  securityEvents: [],
+  metadata: {,
+  ipAddress: '192.168.1.1',
+  userAgent: 'Mozilla/5.0',
+  riskScore: 75,
+  threatLevel: 'medium',
+},
+  adminActions: [],
       notifications: [],
-      auditTrail: [],
-    };
+      auditTrail: [];
+  };
   });
   afterEach(() => {
     jest.restoreAllMocks();
@@ -78,31 +77,31 @@ describe('LockoutNotificationService', () => {
       expect(status.deliveries).toHaveLength(2);
     });
     test('should use high priority for suspicious activity', async () => {
-      const suspiciousLockout = {
-        ...mockLockout,
-        reason: LockoutReason.SUSPICIOUS_ACTIVITY,
-      };
+  const suspiciousLockout = {
+  ...mockLockout,
+  reason: LockoutReason.SUSPICIOUS_ACTIVITY,
+};
       const notificationId = await service.sendLockoutNotification(suspiciousLockout);
       const status = service.getNotificationStatus(notificationId);
       expect(status.request!.priority).toBe(NotificationPriority.HIGH);
     });
     test('should use urgent priority for system security alerts', async () => {
-      const alertLockout = {
-        ...mockLockout,
-        reason: LockoutReason.SYSTEM_SECURITY_ALERT,
-      };
+  const alertLockout = {
+  ...mockLockout,
+  reason: LockoutReason.SYSTEM_SECURITY_ALERT,
+};
       const notificationId = await service.sendLockoutNotification(alertLockout);
       const status = service.getNotificationStatus(notificationId);
       expect(status.request!.priority).toBe(NotificationPriority.URGENT);
     });
   });
   describe('Unlock Notifications', () => {
-    test('should send unlock notification', async () => {
-      const unlockedLockout = {
-        ...mockLockout,
-        status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
-      };
+  test('should send unlock notification', async () => {
+  const unlockedLockout = {
+  ...mockLockout,
+  status: LockoutStatus.UNLOCKED,
+  unlockTime: new Date(mockDate.getTime() + 60 * 60 * 1000),
+};
       const notificationId = await service.sendUnlockNotification(unlockedLockout, 'Admin User');
       const status = service.getNotificationStatus(notificationId);
       expect(status.request!.type).toBe(NotificationType.UNLOCK_NOTIFICATION);
@@ -110,23 +109,23 @@ describe('LockoutNotificationService', () => {
       expect(status.request!.metadata.adminName).toBe('Admin User');
     });
     test('should send unlock notification without admin name', async () => {
-      const unlockedLockout = {
-        ...mockLockout,
-        status: LockoutStatus.UNLOCKED,
-        unlockTime: new Date(),
-      };
+  const unlockedLockout = {
+  ...mockLockout,
+  status: LockoutStatus.UNLOCKED,
+  unlockTime: new Date(),
+};
       const notificationId = await service.sendUnlockNotification(unlockedLockout);
       const status = service.getNotificationStatus(notificationId);
       expect(status.request!.metadata.adminName).toBeUndefined();
     });
   });
   describe('Security Alert Notifications', () => {
-    test('should send security alert with urgent priority', async () => {
-      const alertDetails = {
-        source: 'intrusion_detection',
-        severity: 'high',
-        details: 'Multiple failed attempts from suspicious IP',
-      };
+  test('should send security alert with urgent priority', async () => {
+  const alertDetails = {
+  source: 'intrusion_detection',
+  severity: 'high',
+  details: 'Multiple failed attempts from suspicious IP',
+};
       const notificationId = await service.sendSecurityAlert(mockLockout, alertDetails);
       const status = service.getNotificationStatus(notificationId);
       expect(status.request!.type).toBe(NotificationType.SECURITY_ALERT);
@@ -150,31 +149,30 @@ describe('LockoutNotificationService', () => {
         const status = service.getNotificationStatus(notificationId);
         expect(status.request!.type).toBe(NotificationType.ADMIN_ACTION_REQUIRED);
         expect(status.request!.priority).toBe(NotificationPriority.HIGH);
-      }
     });
   });
   describe('User Preferences', () => {
-    test('should respect user notification preferences', async () => {
-      const preferences: UserNotificationPreferences = {
-        userId: 'user123',
-        channels: {,
-          email: true,
-          sms: false,
-          push: true,
-        },
-        language: 'en',
+  test('should respect user notification preferences', async () => {
+  const preferences: UserNotificationPreferences = {,
+  userId: 'user123',
+  channels: {,
+  email: true,
+  sms: false,
+  push: true,
+},
+  language: 'en',
         timezone: 'UTC',
         quietHours: {,
-          enabled: false,
-          start: '22:00',
-          end: '08:00',
-        },
-        frequency: {,
-          immediate: true,
-          digest: false,
-          digestFrequency: 'daily',
-        },
-        metadata: {}
+  enabled: false,
+  start: '22:00',
+  end: '08:00',
+},
+  frequency: {,
+  immediate: true,
+  digest: false,
+  digestFrequency: 'daily',
+},
+  metadata: {}
       };
       service.updateUserPreferences('user123', preferences);
       const notificationId = await service.sendLockoutNotification(mockLockout);
@@ -204,13 +202,13 @@ describe('LockoutNotificationService', () => {
         variables: ['appName'],
         priority: NotificationPriority.MEDIUM,
         retryPolicy: {,
-          maxAttempts: 3,
-          backoffMultiplier: 2,
-          baseDelaySeconds: 30,
-          maxDelaySeconds: 300,
-          retryOn: ['timeout'],
-        },
-        expiryMinutes: 60,
+  maxAttempts: 3,
+  backoffMultiplier: 2,
+  baseDelaySeconds: 30,
+  maxDelaySeconds: 300,
+  retryOn: ['timeout'],
+},
+  expiryMinutes: 60,
         metadata: { custom: true }
       };
       const templateId = service.createTemplate(template);
@@ -224,21 +222,21 @@ describe('LockoutNotificationService', () => {
         done();
       });
       service.createTemplate({)
-        type: NotificationType.UNLOCK_NOTIFICATION,
-        channel: NotificationChannel.EMAIL,
-        language: 'fr',
-        subject: 'Test',
-        bodyText: 'Test body',
-        variables: [],
-        priority: NotificationPriority.LOW,
-        retryPolicy: {,
-          maxAttempts: 1,
-          backoffMultiplier: 1,
-          baseDelaySeconds: 10,
-          maxDelaySeconds: 10,
-          retryOn: [],
-        },
-        expiryMinutes: 30,
+  type: NotificationType.UNLOCK_NOTIFICATION,
+  channel: NotificationChannel.EMAIL,
+  language: 'fr',
+  subject: 'Test',
+  bodyText: 'Test body',
+  variables: [],
+  priority: NotificationPriority.LOW,
+  retryPolicy: {,
+  maxAttempts: 1,
+  backoffMultiplier: 1,
+  baseDelaySeconds: 10,
+  maxDelaySeconds: 10,
+  retryOn: [],
+},
+  expiryMinutes: 30,
         metadata: { custom: true }
       });
     });
@@ -283,20 +281,20 @@ describe('LockoutNotificationService', () => {
     });
   });
   describe('Test Notifications', () => {
-    test('should send test notification', async () => {
-      const variables = {
-        userName: 'Test User',
-        userEmail: 'test@example.com',
-        lockoutReason: 'testing',
-        lockoutTime: mockDate.toISOString(),
-        supportEmail: 'support@test.com',
-        supportPhone: '+1-800-TEST',
-        lockoutId: 'TEST-123',
-        companyName: 'Test Corp',
-        appName: 'Test App',
-        securityTips: ['Tip 1', 'Tip 2'],
-        nextSteps: ['Step 1', 'Step 2']
-      };
+  test('should send test notification', async () => {
+  const variables = {
+  userName: 'Test User',
+  userEmail: 'test@example.com',
+  lockoutReason: 'testing',
+  lockoutTime: mockDate.toISOString(),
+  supportEmail: 'support@test.com',
+  supportPhone: '+1-800-TEST',
+  lockoutId: 'TEST-123',
+  companyName: 'Test Corp',
+  appName: 'Test App',
+  securityTips: ['Tip 1', 'Tip 2'],
+  nextSteps: ['Step 1', 'Step 2'],
+};
       const notificationId = await service.testNotification(;);
         'test@example.com',
         NotificationChannel.EMAIL,
@@ -322,7 +320,6 @@ describe('LockoutNotificationService', () => {
       // Send multiple notifications
       for (let i = 0; i < 5; i++) {
         await service.sendLockoutNotification(mockLockout);
-      }
       const history = service.getUserNotificationHistory('user123', 3);
       expect(history).toHaveLength(3);
     });
@@ -341,11 +338,11 @@ describe('LockoutNotificationService', () => {
       expect(stats.deliveryRate).toBeGreaterThanOrEqual(0);
     });
     test('should filter statistics by date range', async () => {
-      await service.sendLockoutNotification(mockLockout);
-      const stats = service.getNotificationStatistics({)
-        start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
-        end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
-      });
+  await service.sendLockoutNotification(mockLockout);
+  const stats = service.getNotificationStatistics({)
+  start: new Date(mockDate.getTime() - 24 * 60 * 60 * 1000),
+  end: new Date(mockDate.getTime() + 24 * 60 * 60 * 1000),
+});
       expect(stats.totalNotifications).toBe(1);
     });
     test('should calculate delivery rate correctly', async () => {
@@ -396,16 +393,16 @@ describe('LockoutNotificationService', () => {
       expect(status.deliveries).toHaveLength(4);
       const channelTypes = status.deliveries.map(d => d.channel);
       channels.forEach(channel => {)
-        expect(channelTypes).toContain(channel);
+  expect(channelTypes).toContain(channel);
       });
     });
   });
   describe('Priority Handling', () => {
-    test('should process urgent notifications immediately', async () => {
-      const urgentLockout = {
-        ...mockLockout,
-        reason: LockoutReason.SYSTEM_SECURITY_ALERT,
-      };
+  test('should process urgent notifications immediately', async () => {
+  const urgentLockout = {
+  ...mockLockout,
+  reason: LockoutReason.SYSTEM_SECURITY_ALERT,
+};
       const notificationId = await service.sendLockoutNotification(urgentLockout);
       // Urgent notifications should be processed immediately
       const status = service.getNotificationStatus(notificationId);

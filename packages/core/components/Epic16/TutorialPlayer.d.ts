@@ -5,6 +5,7 @@
  * creation workflows, and advanced platform capabilities.
  */
 import React from 'react';
+
 export interface TutorialStep {
     id: string;
     title: string;
@@ -18,7 +19,7 @@ export interface TutorialStep {
     requirements?: string[];
     tips?: string[];
     actions?: TutorialAction[];
-}
+
 export interface TutorialAction {
     id: string;
     type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
@@ -26,7 +27,7 @@ export interface TutorialAction {
     value?: string;
     message?: string;
     completed: boolean;
-}
+
 export interface Tutorial {
     id: string;
     title: string;
@@ -46,7 +47,7 @@ export interface Tutorial {
     completionCount: number;
     createdAt: Date;
     updatedAt: Date;
-}
+
 export interface TutorialProgress {
     tutorialId: string;
     currentStepIndex: number;
@@ -56,7 +57,7 @@ export interface TutorialProgress {
     timeSpent: number;
     stepsCompleted: string[];
     score?: number;
-}
+
 export interface TutorialPlayerProps {
     tutorial?: Tutorial;
     isOpen: boolean;
@@ -67,8 +68,9 @@ export interface TutorialPlayerProps {
     showTranscript?: boolean;
     enableInteractions?: boolean;
     className?: string;
-}
+
 export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
+
 export interface TutorialBrowserProps {
     tutorials: Tutorial[];
     onSelectTutorial: (tutorial: Tutorial) => void;
@@ -77,7 +79,7 @@ export interface TutorialBrowserProps {
         [tutorialId: string]: TutorialProgress;
     };
     className?: string;
-}
+
 export declare const TutorialBrowser: React.FC<TutorialBrowserProps>;
 export default TutorialPlayer;
 //# sourceMappingURL=TutorialPlayer.d.ts.map

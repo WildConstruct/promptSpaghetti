@@ -10,16 +10,15 @@ import { useResultManagementStore } from '../../stores/resultManagementStore';
 import { ErrorFactory } from '../../errors/ErrorFactory';
 
 export interface ExportFormat {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   extension: string;
   category: 'script' | 'vfx' | 'data' | 'report';
   vfxCompatible?: boolean;
   controlNetReady?: boolean;
   icon: string;
 }
-
 export interface ExportOptions {
   format: ExportFormat;
   includeMetadata?: boolean;
@@ -27,124 +26,119 @@ export interface ExportOptions {
   includeVarianceAnalysis?: boolean;
   compressOutput?: boolean;
   // VFX-specific options
-  vfxOptions?: {
-    targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
-    includeControlNet?: boolean;
-    includeSceneData?: boolean;
-    frameRate?: number;
-    resolution?: [number, number];
-  };
+  vfxOptions?: {,
+  targetPipeline?: 'stable-diffusion' | 'midjourney' | 'dalle' | 'custom';
+  includeControlNet?: boolean;
+  includeSceneData?: boolean;
+  frameRate?: number;
+  resolution?: [number, number];
+};
   // Film industry options
   filmOptions?: {
-    scriptFormat?: 'fountain' | 'final-draft' | 'writerpro';
-    includeCharacterNotes?: boolean;
-    includeDirectorNotes?: boolean;
-    includeSceneBreakdowns?: boolean;
-    watermark?: string;
-  };
+  scriptFormat?: 'fountain' | 'final-draft' | 'writerpro';
+  includeCharacterNotes?: boolean;
+  includeDirectorNotes?: boolean;
+  includeSceneBreakdowns?: boolean;
+  watermark?: string;
+};
 }
-
 export interface ResultExportManagerProps {
-  results: EnhancedPreviewResult[];
-  selectedResultIds: string[];
-  onExportComplete?: (exportedResultIds: string[], format: ExportFormat) => void;
+  results: EnhancedPreviewResult;,
+  selectedResultIds: string;
+  onExportComplete?: (exportedResultIds: string, format: ExportFormat) => void;
   onExportError?: (error: Error) => void;
   className?: string;
-}
-
-// Professional export formats for film industry
-const EXPORT_FORMATS: ExportFormat[] = [
+  // Professional export formats for film industry
+  const EXPORT_FORMATS: ExportFormat = [
   // Script Formats
   {
-    id: 'fountain',
-    name: 'Fountain Script',
-    description: 'Industry-standard screenplay format',
-    extension: 'fountain',
-    category: 'script',
-    icon: '📄',
-  },
+  id: 'fountain',
+  name: 'Fountain Script',
+  description: 'Industry-standard screenplay format',
+  extension: 'fountain',
+  category: 'script',
+  icon: '📄',
+}
   {
-    id: 'final-draft',
-    name: 'Final Draft',
-    description: 'Final Draft compatible XML format',
-    extension: 'fdx',
-    category: 'script',
-    icon: '🎬',
-  },
+  id: 'final-draft',
+  name: 'Final Draft',
+  description: 'Final Draft compatible XML format',
+  extension: 'fdx',
+  category: 'script',
+  icon: '🎬',
+}
   {
-    id: 'pdf-script',
-    name: 'PDF Script',
-    description: 'Professional screenplay PDF',
-    extension: 'pdf',
-    category: 'script',
-    icon: '📋',
-  },
+  id: 'pdf-script',
+  name: 'PDF Script',
+  description: 'Professional screenplay PDF',
+  extension: 'pdf',
+  category: 'script',
+  icon: '📋',
+}
   // VFX Formats
   {
-    id: 'controlnet-json',
-    name: 'ControlNet JSON',
-    description: 'ControlNet-compatible export for AI generation',
-    extension: 'json',
-    category: 'vfx',
-    vfxCompatible: true,
-    controlNetReady: true,
-    icon: '🤖',
-  },
+  id: 'controlnet-json',
+  name: 'ControlNet JSON',
+  description: 'ControlNet-compatible export for AI generation',
+  extension: 'json',
+  category: 'vfx',
+  vfxCompatible: true,
+  controlNetReady: true,
+  icon: '🤖',
+}
   {
-    id: 'stable-diffusion',
-    name: 'Stable Diffusion Bundle',
-    description: 'Complete Stable Diffusion pipeline export',
-    extension: 'zip',
-    category: 'vfx',
-    vfxCompatible: true,
-    controlNetReady: true,
-    icon: '🎨',
-  },
+  id: 'stable-diffusion',
+  name: 'Stable Diffusion Bundle',
+  description: 'Complete Stable Diffusion pipeline export',
+  extension: 'zip',
+  category: 'vfx',
+  vfxCompatible: true,
+  controlNetReady: true,
+  icon: '🎨',
+}
   {
-    id: 'scene-data',
-    name: 'Scene Data JSON',
-    description: 'Camera, lighting, and environment data',
-    extension: 'json',
-    category: 'vfx',
-    vfxCompatible: true,
-    icon: '🎥',
-  },
+  id: 'scene-data',
+  name: 'Scene Data JSON',
+  description: 'Camera, lighting, and environment data',
+  extension: 'json',
+  category: 'vfx',
+  vfxCompatible: true,
+  icon: '🎥',
+}
   // Data Formats
   {
-    id: 'csv-analysis',
-    name: 'CSV Analysis',
-    description: 'Spreadsheet-ready analytics data',
-    extension: 'csv',
-    category: 'data',
-    icon: '📊',
-  },
+  id: 'csv-analysis',
+  name: 'CSV Analysis',
+  description: 'Spreadsheet-ready analytics data',
+  extension: 'csv',
+  category: 'data',
+  icon: '📊',
+}
   {
-    id: 'json-complete',
-    name: 'Complete JSON',
-    description: 'Full result data with metadata',
-    extension: 'json',
-    category: 'data',
-    icon: '💾',
-  },
+  id: 'json-complete',
+  name: 'Complete JSON',
+  description: 'Full result data with metadata',
+  extension: 'json',
+  category: 'data',
+  icon: '💾',
+}
   // Reports
   {
-    id: 'professional-report',
-    name: 'Professional Report',
-    description: 'Executive summary with variance analysis',
-    extension: 'pdf',
-    category: 'report',
-    icon: '📈',
-  },
+  id: 'professional-report',
+  name: 'Professional Report',
+  description: 'Executive summary with variance analysis',
+  extension: 'pdf',
+  category: 'report',
+  icon: '📈',
+}
   {
-    id: 'creative-brief',
-    name: 'Creative Brief',
-    description: 'Director-focused creative document',
-    extension: 'docx',
-    category: 'report',
-    icon: '📝',
-  }
-];
-
+  id: 'creative-brief',
+  name: 'Creative Brief',
+  description: 'Director-focused creative document',
+  extension: 'docx',
+  category: 'report',
+  icon: '📝'];
+}
 export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
   results,
   selectedResultIds,
@@ -166,81 +160,77 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
     return EXPORT_FORMATS.reduce((acc, format) => {
       if (!acc[format.category]) {
         acc[format.category] = [];
-      }
       acc[format.category].push(format);
       return acc;
-    }, {} as Record<string, ExportFormat[]>);
+    }, {} as Record<string, ExportFormat>);
   }, []);
   const categoryLabels = {
-    script: '🎬 Screenplay Formats',
-    vfx: '🤖 VFX Pipeline',
-    data: '📊 Data Exports',
-    report: '📈 Professional Reports',
-  };
+  script: '🎬 Screenplay Formats',
+  vfx: '🤖 VFX Pipeline',
+  data: '📊 Data Exports',
+  report: '📈 Professional Reports',
+};
   // Handle format selection
   const handleFormatSelect = useCallback((format: ExportFormat) => {
-    setSelectedFormat(format);
-    // Set default options based on format
-    const defaultOptions: ExportOptions = {
-      format,
-      includeMetadata: true,
-      includeExecutionPath: format.vfxCompatible,
-      includeVarianceAnalysis: format.category === 'report',
-      compressOutput: format.extension === 'zip',
-    };
+  setSelectedFormat(format);
+  // Set default options based on format
+  const defaultOptions: ExportOptions = {,
+  format,
+  includeMetadata: true,
+  includeExecutionPath: format.vfxCompatible,
+  includeVarianceAnalysis: format.category === 'report',
+  compressOutput: format.extension === 'zip',
+};
     // Add VFX-specific defaults
     if (format.vfxCompatible) {
-      defaultOptions.vfxOptions = {
-        targetPipeline: 'stable-diffusion',
-        includeControlNet: format.controlNetReady,
-        includeSceneData: true,
-        frameRate: 24,
-        resolution: [1920, 1080]
-      };
-    }
+  defaultOptions.vfxOptions = {
+  targetPipeline: 'stable-diffusion',
+  includeControlNet: format.controlNetReady,
+  includeSceneData: true,
+  frameRate: 24,
+  resolution: [1920, 1080],
+};
     // Add film-specific defaults
     if (format.category === 'script') {
-      defaultOptions.filmOptions = {
-        scriptFormat: format.id.includes('fountain') ? 'fountain' : 'final-draft',
-        includeCharacterNotes: true,
-        includeDirectorNotes: true,
-        includeSceneBreakdowns: false,
-      };
-    }
+  defaultOptions.filmOptions = {
+  scriptFormat: format.id.includes('fountain') ? 'fountain' : 'final-draft',
+  includeCharacterNotes: true,
+  includeDirectorNotes: true,
+  includeSceneBreakdowns: false,
+};
     setExportOptions(defaultOptions);
   }, []);
   // Handle export execution
   const handleExport = useCallback(async () => {
-    if (!selectedFormat || !exportOptions || selectedResults.length === 0) {
-      return;
-    }
-    setIsExporting(true);
-    try {
-      // Prepare export payload based on format
-      const exportPayload = await prepareExportPayload(;);
-        selectedResults,
-        exportOptions
-      );
-      // Call the export API endpoint
-      const response = await fetch('/api/export', {)
-        method: 'POST',
-        headers: {,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({),
-          format: selectedFormat.id,
-          data: exportPayload,
-          options: exportOptions,
-          filename: generateFilename(selectedFormat, selectedResults.length)
-        })
+  if (!selectedFormat || !exportOptions || selectedResults.length === 0) {
+  return;
+  setIsExporting(true);
+  try {
+  // Prepare export payload based on format
+  const exportPayload = await prepareExportPayload(;);
+  selectedResults,
+  exportOptions
+  );
+  // Call the export API endpoint
+  const response = await fetch('/api/export', {)
+  method: 'POST',
+  headers: {,
+  'Content-Type': 'application/json',
+},
+  body: JSON.stringify({,)
+  format: selectedFormat.id,
+  data: exportPayload,
+  options: exportOptions,
+  filename: generateFilename(selectedFormat, selectedResults.length),
+}
       });
       if (!response.ok) {
         throw ErrorFactory.createAPIError()
           response.status,
-          `Export failed: ${response.statusText}`,}
+          `Export failed: ${response.statusText}`}
+}
           '/api/export'
         );
-      }
       // Handle different response types
       let exportResult;
       if (selectedFormat.extension === 'zip' || selectedFormat.extension === 'pdf') {
@@ -258,7 +248,6 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
       } else {
         // Text formats - return data
         exportResult = await response.json();
-      }
       // Mark results as exported
       await resultManagement.bulkExport(selectedResultIds, selectedFormat.id);
       // Notify parent component
@@ -277,7 +266,6 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
       );
     } finally {
       setIsExporting(false);
-    }
   }, [selectedFormat, exportOptions, selectedResults, selectedResultIds, resultManagement, onExportComplete, onExportError]);
   // Generate appropriate filename
   const generateFilename = (format: ExportFormat, resultCount: number): string => {
@@ -286,16 +274,16 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
     return `${prefix}-${timestamp}.${format.extension}`;}
   };
   if (selectedResults.length === 0) {
-    return ();
+    return;
       <div className={className}>
         <div style={{
-          padding: 24,
-          textAlign: 'center',
-          color: '#64748b',
-          background: '#f8fafc',
-          borderRadius: 8,
-          border: '1px dashed #cbd5e1',
-        }}>
+  padding: 24,
+  textAlign: 'center',
+  color: '#64748b',
+  background: '#f8fafc',
+  borderRadius: 8,
+  border: '1px dashed #cbd5e1',
+}}>
           <div style={{ fontSize: 24, marginBottom: 8 }}>📤</div>
           <div style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
             No Results Selected
@@ -306,36 +294,35 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
-    <div className={`result-export-manager ${className}`} style={{}
-      background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+  return;
+    <div className={`result-export-manager ${className}`} style={{},}
+  background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
       borderRadius: 12,
       border: '1px solid #e2e8f0',
-      overflow: 'hidden',
-    }}>
+      overflow: 'hidden';
+  }}>
       {/* Header */}
       <div style={{
-        padding: 20,
-        borderBottom: '1px solid #e2e8f0',
-        background: 'rgba(255, 255, 255, 0.8)'
-      }}>
+  padding: 20,
+  borderBottom: '1px solid #e2e8f0',
+  background: 'rgba(255, 255, 255, 0.8)',
+}}>
         <h3 style={{
-          margin: 0,
-          fontSize: 18,
-          fontWeight: 600,
-          color: '#1e293b',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-        }}>
+  margin: 0,
+  fontSize: 18,
+  fontWeight: 600,
+  color: '#1e293b',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+}}>
           📤 Export {selectedResults.length} Result{selectedResults.length !== 1 ? 's' : ''}
         </h3>
         <div style={{
-          fontSize: 14,
-          color: '#64748b',
-          marginTop: 4,
-        }}>
+  fontSize: 14,
+  color: '#64748b',
+  marginTop: 4,
+}}>
           Choose professional export format for film industry workflows
         </div>
       </div>
@@ -345,68 +332,67 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           {Object.entries(formatsByCategory).map(([category, formats]) => ()
             <div key={category} style={{ marginBottom: 24 }}>
               <h4 style={{
-                margin: '0 0 12px 0',
-                fontSize: 14,
-                fontWeight: 600,
-                color: '#374151',
-              }}>
+  margin: '0 0 12px 0',
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#374151',
+}}>
                 {categoryLabels[category as keyof typeof categoryLabels]}
               </h4>
               <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: 12,
-              }}>
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: 12,
+}}>
                 {formats.map((format) => ()
                   <button
                     key={format.id}
                     onClick={() => handleFormatSelect(format)}
                     style={{
-                      padding: 16,
-                      background: 'white',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: 8,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.2s',
-                      ':hover': {
-                        borderColor: '#3b82f6',
-                        boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)'
-                      }
-                    }}
+  padding: 16,
+  background: 'white',
+  border: '1px solid #e5e7eb',
+  borderRadius: 8,
+  cursor: 'pointer',
+  textAlign: 'left',
+  transition: 'all 0.2s',
+  ':hover': {,
+  borderColor: '#3b82f6',
+  boxShadow: '0 2px 4px rgba(59, 130, 246, 0.1)',
+}}
                   >
                     <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      marginBottom: 6,
-                    }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  marginBottom: 6,
+}}>
                       <span style={{ fontSize: 20 }}>{format.icon}</span>
                       <span style={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: '#1f2937',
-                      }}>
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#1f2937',
+}}>
                         {format.name}
                       </span>
                       {format.vfxCompatible && ()
                         <span style={{
-                          background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
-                          color: 'white',
-                          fontSize: 9,
-                          padding: '1px 4px',
-                          borderRadius: 4,
-                          fontWeight: 500,
-                        }}>
+  background: 'linear-gradient(135deg, #8b5cf6, #a855f7)',
+  color: 'white',
+  fontSize: 9,
+  padding: '1px 4px',
+  borderRadius: 4,
+  fontWeight: 500,
+}}>
                           VFX
                         </span>
                       )}
                     </div>
                     <div style={{
-                      fontSize: 12,
-                      color: '#6b7280',
-                      lineHeight: 1.4,
-                    }}>
+  fontSize: 12,
+  color: '#6b7280',
+  lineHeight: 1.4,
+}}>
                       {format.description}
                     </div>
                   </button>
@@ -419,28 +405,28 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
         /* Export Options */
         <div style={{ padding: 20 }}>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            marginBottom: 20,
-            padding: 16,
-            background: 'rgba(59, 130, 246, 0.05)',
-            border: '1px solid rgba(59, 130, 246, 0.2)',
-            borderRadius: 8,
-          }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  marginBottom: 20,
+  padding: 16,
+  background: 'rgba(59, 130, 246, 0.05)',
+  border: '1px solid rgba(59, 130, 246, 0.2)',
+  borderRadius: 8,
+}}>
             <span style={{ fontSize: 24 }}>{selectedFormat.icon}</span>
             <div>
               <div style={{
-                fontSize: 16,
-                fontWeight: 600,
-                color: '#1e293b',
-              }}>
+  fontSize: 16,
+  fontWeight: 600,
+  color: '#1e293b',
+}}>
                 {selectedFormat.name}
               </div>
               <div style={{
-                fontSize: 14,
-                color: '#64748b',
-              }}>
+  fontSize: 14,
+  color: '#64748b',
+}}>
                 {selectedFormat.description}
               </div>
             </div>
@@ -448,61 +434,61 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           {/* Basic Options */}
           <div style={{ marginBottom: 20 }}>
             <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 16,
-            }}>
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 16,
+}}>
               <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                cursor: 'pointer',
-                fontSize: 14,
-              }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  cursor: 'pointer',
+  fontSize: 14,
+}}>
                 <input
                   type="checkbox"
                   checked={exportOptions?.includeMetadata || false}
                   onChange={(e) => setExportOptions(prev => prev ? {)
-                    ...prev,
-                    includeMetadata: e.target.checked,
-                  } : null)}
+  ...prev,
+  includeMetadata: e.target.checked,
+} : null)}
                   style={{ accentColor: '#3b82f6' }}
                 />
                 Include Metadata
               </label>
               <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                cursor: 'pointer',
-                fontSize: 14,
-              }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  cursor: 'pointer',
+  fontSize: 14,
+}}>
                 <input
                   type="checkbox"
                   checked={exportOptions?.includeExecutionPath || false}
                   onChange={(e) => setExportOptions(prev => prev ? {)
-                    ...prev,
-                    includeExecutionPath: e.target.checked,
-                  } : null)}
+  ...prev,
+  includeExecutionPath: e.target.checked,
+} : null)}
                   style={{ accentColor: '#3b82f6' }}
                 />
                 Include Execution Path
               </label>
               {selectedFormat.category === 'report' && ()
                 <label style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  cursor: 'pointer',
-                  fontSize: 14,
-                }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  cursor: 'pointer',
+  fontSize: 14,
+}}>
                   <input
                     type="checkbox"
                     checked={exportOptions?.includeVarianceAnalysis || false}
                     onChange={(e) => setExportOptions(prev => prev ? {)
-                      ...prev,
-                      includeVarianceAnalysis: e.target.checked,
-                    } : null)}
+  ...prev,
+  includeVarianceAnalysis: e.target.checked,
+} : null)}
                     style={{ accentColor: '#3b82f6' }}
                   />
                   Include Variance Analysis
@@ -514,18 +500,18 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           <button
             onClick={() => setShowAdvancedOptions(!showAdvancedOptions)}
             style={{
-              background: 'none',
-              border: '1px solid #d1d5db',
-              borderRadius: 6,
-              padding: '8px 12px',
-              fontSize: 13,
-              color: '#374151',
-              cursor: 'pointer',
-              marginBottom: 16,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-            }}
+  background: 'none',
+  border: '1px solid #d1d5db',
+  borderRadius: 6,
+  padding: '8px 12px',
+  fontSize: 13,
+  color: '#374151',
+  cursor: 'pointer',
+  marginBottom: 16,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+}}
           >
             <span>{showAdvancedOptions ? '▼' : '▶'}</span>
             Advanced Options
@@ -533,54 +519,53 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           {/* Advanced Options Panel */}
           {showAdvancedOptions && ()
             <div style={{
-              background: 'rgba(248, 250, 252, 0.8)',
-              border: '1px solid #e5e7eb',
-              borderRadius: 8,
-              padding: 16,
-              marginBottom: 20,
-            }}>
+  background: 'rgba(248, 250, 252, 0.8)',
+  border: '1px solid #e5e7eb',
+  borderRadius: 8,
+  padding: 16,
+  marginBottom: 20,
+}}>
               {/* VFX Options */}
               {selectedFormat.vfxCompatible && ()
                 <div style={{ marginBottom: 16 }}>
                   <h5 style={{
-                    margin: '0 0 8px 0',
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: '#374151',
-                  }}>
+  margin: '0 0 8px 0',
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#374151',
+}}>
                     🤖 VFX Pipeline Settings
                   </h5>
                   <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                    gap: 12,
-                  }}>
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+  gap: 12,
+}}>
                     <div>
                       <label style={{
-                        display: 'block',
-                        fontSize: 12,
-                        fontWeight: 500,
-                        color: '#6b7280',
-                        marginBottom: 4,
-                      }}>
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 500,
+  color: '#6b7280',
+  marginBottom: 4,
+}}>
                         Target Pipeline
                       </label>
                       <select
                         value={exportOptions?.vfxOptions?.targetPipeline || 'stable-diffusion'}
                         onChange={(e) => setExportOptions(prev => prev ? {)
-                          ...prev,
-                          vfxOptions: {,
-                            ...prev.vfxOptions,
-                            targetPipeline: e.target.value as any,
-                          }
-                        } : null)}
+  ...prev,
+  vfxOptions: {,
+  ...prev.vfxOptions,
+  targetPipeline: e.target.value as any,
+} : null)}
                         style={{
-                          width: '100%',
-                          padding: '6px 8px',
-                          border: '1px solid #d1d5db',
-                          borderRadius: 4,
-                          fontSize: 13,
-                        }}
+  width: '100%',
+  padding: '6px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: 4,
+  fontSize: 13,
+}}
                       >
                         <option value="stable-diffusion">Stable Diffusion</option>
                         <option value="midjourney">Midjourney</option>
@@ -590,33 +575,32 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                     </div>
                     <div>
                       <label style={{
-                        display: 'block',
-                        fontSize: 12,
-                        fontWeight: 500,
-                        color: '#6b7280',
-                        marginBottom: 4,
-                      }}>
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 500,
+  color: '#6b7280',
+  marginBottom: 4,
+}}>
                         Resolution
                       </label>
                       <select
                         value={`${exportOptions?.vfxOptions?.resolution?.[0]}x${exportOptions?.vfxOptions?.resolution?.[1]}`}
                         onChange={(e) => {
-                          const [width, height] = e.target.value.split('x').map(Number);
-                          setExportOptions(prev => prev ? {)
-                            ...prev,
-                            vfxOptions: {,
-                              ...prev.vfxOptions,
-                              resolution: [width, height]
-                            }
-                          } : null);
+  const [width, height] = e.target.value.split('x').map(Number);
+  setExportOptions(prev => prev ? {)
+  ...prev,
+  vfxOptions: {,
+  ...prev.vfxOptions,
+  resolution: [width, height],
+} : null);
                         }}
                         style={{
-                          width: '100%',
-                          padding: '6px 8px',
-                          border: '1px solid #d1d5db',
-                          borderRadius: 4,
-                          fontSize: 13,
-                        }}
+  width: '100%',
+  padding: '6px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: 4,
+  fontSize: 13,
+}}
                       >
                         <option value="1920x1080">1920×1080 (HD)</option>
                         <option value="2560x1440">2560×1440 (QHD)</option>
@@ -631,56 +615,54 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
               {selectedFormat.category === 'script' && ()
                 <div>
                   <h5 style={{
-                    margin: '0 0 8px 0',
-                    fontSize: 14,
-                    fontWeight: 600,
-                    color: '#374151',
-                  }}>
+  margin: '0 0 8px 0',
+  fontSize: 14,
+  fontWeight: 600,
+  color: '#374151',
+}}>
                     🎬 Script Format Settings
                   </h5>
                   <div style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 12,
-                  }}>
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 12,
+}}>
                     <label style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      cursor: 'pointer',
-                      fontSize: 13,
-                    }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  cursor: 'pointer',
+  fontSize: 13,
+}}>
                       <input
                         type="checkbox"
                         checked={exportOptions?.filmOptions?.includeCharacterNotes || false}
                         onChange={(e) => setExportOptions(prev => prev ? {)
-                          ...prev,
-                          filmOptions: {,
-                            ...prev.filmOptions,
-                            includeCharacterNotes: e.target.checked,
-                          }
-                        } : null)}
+  ...prev,
+  filmOptions: {,
+  ...prev.filmOptions,
+  includeCharacterNotes: e.target.checked,
+} : null)}
                         style={{ accentColor: '#3b82f6' }}
                       />
                       Character Notes
                     </label>
                     <label style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      cursor: 'pointer',
-                      fontSize: 13,
-                    }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  cursor: 'pointer',
+  fontSize: 13,
+}}>
                       <input
                         type="checkbox"
                         checked={exportOptions?.filmOptions?.includeDirectorNotes || false}
                         onChange={(e) => setExportOptions(prev => prev ? {)
-                          ...prev,
-                          filmOptions: {,
-                            ...prev.filmOptions,
-                            includeDirectorNotes: e.target.checked,
-                          }
-                        } : null)}
+  ...prev,
+  filmOptions: {,
+  ...prev.filmOptions,
+  includeDirectorNotes: e.target.checked,
+} : null)}
                         style={{ accentColor: '#3b82f6' }}
                       />
                       Director Notes
@@ -692,10 +674,10 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           )}
           {/* Action Buttons */}
           <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: 12,
-          }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: 12,
+}}>
             <button
               onClick={() => {
                 setSelectedFormat(null);
@@ -703,15 +685,15 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
                 setShowAdvancedOptions(false);
               }}
               style={{
-                background: 'none',
-                border: '1px solid #d1d5db',
-                color: '#6b7280',
-                padding: '12px 20px',
-                borderRadius: 8,
-                cursor: 'pointer',
-                fontSize: 14,
-                fontWeight: 500,
-              }}
+  background: 'none',
+  border: '1px solid #d1d5db',
+  color: '#6b7280',
+  padding: '12px 20px',
+  borderRadius: 8,
+  cursor: 'pointer',
+  fontSize: 14,
+  fontWeight: 500,
+}}
             >
               ← Back to Formats
             </button>
@@ -719,31 +701,31 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
               onClick={handleExport}
               disabled={isExporting}
               style={{
-                background: isExporting ,
-                  ? '#9ca3af'
-                  : 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
-                color: 'white',
-                border: 'none',
-                padding: '12px 24px',
-                borderRadius: 8,
-                cursor: isExporting ? 'not-allowed' : 'pointer',
-                fontSize: 14,
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
+  background: isExporting ,
+  ? '#9ca3af'
+  : 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+  color: 'white',
+  border: 'none',
+  padding: '12px 24px',
+  borderRadius: 8,
+  cursor: isExporting ? 'not-allowed' : 'pointer',
+  fontSize: 14,
+  fontWeight: 600,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+}}
             >
               {isExporting ? ()
                 <>
                   <div style={{
-                    width: 16,
-                    height: 16,
-                    border: '2px solid rgba(255,255,255,0.3)',
-                    borderTop: '2px solid white',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite',
-                  }} />
+  width: 16,
+  height: 16,
+  border: '2px solid rgba(255,255,255,0.3)',
+  borderTop: '2px solid white',
+  borderRadius: '50%',
+  animation: 'spin 1s linear infinite',
+}} />
                   Exporting...
                 </>
               ) : ()
@@ -760,7 +742,6 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-          }
         `}
       </style>
     </div>
@@ -768,49 +749,44 @@ export const ResultExportManager: React.FC<ResultExportManagerProps> = ({)
 };
 
 // Helper function to prepare export payload
-async function prepareExportPayload()
-  results: EnhancedPreviewResult[],
-  options: ExportOptions,
-): Promise<unknown> {
+async function prepareExportPayload(()
+    results: EnhancedPreviewResult,
+    options: ExportOptions,
+  ): Promise<unknown> {
   const { format, includeMetadata, includeExecutionPath, includeVarianceAnalysis } = options;
   const basePayload = {
-    results: results.map(result => ({),
-      id: result.id,
+    results: results.map(result => ({,)
+  id: result.id,
       seed: result.seed,
       output: result.output,
       ...(includeMetadata && { metadata: result.metadata }),
       ...(includeExecutionPath && { executionPath: result.executionPath || null })
     })),
     exportOptions: options,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString();
   };
   // Add format-specific data
   switch (format.category) {
-  case 'vfx':
-    return {
-      ...basePayload,
-      vfxData: {,
-        pipeline: options.vfxOptions?.targetPipeline,
-        resolution: options.vfxOptions?.resolution,
-        controlNetCompatible: format.controlNetReady,
-      }
-    };
+  case 'vfx':,
+  return {
+  ...basePayload,
+  vfxData: {,
+  pipeline: options.vfxOptions?.targetPipeline,
+  resolution: options.vfxOptions?.resolution,
+  controlNetCompatible: format.controlNetReady,
+};
   case 'script':
     return {
-      ...basePayload,
-      scriptData: {,
-        format: options.filmOptions?.scriptFormat,
-        includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes,
-      }
-    };
+  ...basePayload,
+  scriptData: {,
+  format: options.filmOptions?.scriptFormat,
+  includeNotes: options.filmOptions?.includeCharacterNotes || options.filmOptions?.includeDirectorNotes,
+};
   case 'report':
     // Add variance analysis if requested
     if (includeVarianceAnalysis) {
       // This would calculate variance analysis across results
       // Implementation would depend on the specific analytics needed
-    }
     return basePayload;
   default:
     return basePayload;
-  }
-}

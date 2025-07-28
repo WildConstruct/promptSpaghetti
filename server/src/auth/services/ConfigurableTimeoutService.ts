@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { DatabaseService } from '../database/DatabaseService';
 import { RedisService } from '../database/RedisService';
 
+}
 export interface TimeoutConfiguration {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface TimeoutConfiguration {
     validated: boolean;
     deployedAt?: Date;
     lastModified: Date;
+}
   };
   
   scope: {
@@ -144,11 +146,13 @@ export interface TimeoutConfiguration {
   };
 }
 
+}
 export interface TimeoutMetrics {
   configurationId: string;
   timeRange: {
     start: Date;
     end: Date;
+}
   };
   usage: {
     totalSessions: number;
@@ -177,6 +181,7 @@ export interface TimeoutMetrics {
   }>;
 }
 
+}
 export interface TimeoutTemplate {
   id: string;
   name: string;
@@ -195,6 +200,7 @@ export interface TimeoutTemplate {
       max?: number;
       pattern?: string;
       required?: boolean;
+}
     };
   }>;
   
@@ -205,6 +211,7 @@ export interface TimeoutTemplate {
   }>;
 }
 
+}
 export interface TimeoutAdjustment {
   id: string;
   configurationId: string;
@@ -219,6 +226,7 @@ export interface TimeoutAdjustment {
       metric: string;
       threshold: number;
       actualValue: number;
+}
     };
   };
   
@@ -250,8 +258,10 @@ export interface TimeoutAdjustment {
   };
 }
 
+}
 export interface TimeoutMetrics {
   configurationId: string;
+}
   timeRange: { start: Date; end: Date };
   
   usage: {
@@ -321,6 +331,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     validationErrors?: string[];
     warnings?: string[];
   }> {
+
     try {
       // Create configuration object
       const configuration: TimeoutConfiguration = {
@@ -397,6 +408,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     warnings?: string[];
     requiresApproval?: boolean;
   }> {
+
     try {
       const existingConfig = this.configurations.get(configurationId);
       if (!existingConfig) {
@@ -512,6 +524,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     };
     errors?: string[];
   }> {
+
     try {
       const configuration = this.configurations.get(configurationId);
       if (!configuration) {
@@ -603,6 +616,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     configuration?: TimeoutConfiguration;
     errors?: string[];
   }> {
+
     try {
       const template = this.templates.get(templateId);
       if (!template) {
@@ -656,6 +670,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     expires?: Date;
     overridable: boolean;
   }> {
+
     try {
       // Get applicable configuration
       const config = await this.getApplicableConfiguration(context);
@@ -693,6 +708,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     configurationId: string,
     timeRange: { start: Date; end: Date }
   ): Promise<TimeoutMetrics> {
+
     try {
       return await this.metricsCollector.collectMetrics(configurationId, timeRange);
     } catch (error) {
@@ -752,6 +768,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     deviceType?: string;
     sessionType?: string;
   }): Promise<TimeoutConfiguration | null> {
+
     // Check cache first
     const cacheKey = `timeout_config:${JSON.stringify(context)}`;
     const cached = await this.redis.get(cacheKey);
@@ -890,14 +907,14 @@ export class ConfigurableTimeoutService extends EventEmitter {
               inactivity: { enabled: true, duration: 900, heartbeatRequired: true }
             }
           }
-        },
+  }
         variables: [
           {
             name: 'sessionDuration',
             type: 'number',
             description: 'Maximum session duration in seconds',
             defaultValue: 28800
-          },
+  }
           {
             name: 'idleDuration',
             type: 'number',
@@ -912,7 +929,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
             reasoning: 'Shorter idle timeout for better resource management'
           }
         ]
-      },
+  }
       {
         name: 'High Security Environment',
         description: 'Strict timeouts for high-security applications',
@@ -926,7 +943,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
               inactivity: { enabled: true, duration: 300, heartbeatRequired: true }
             }
           }
-        },
+  }
         variables: [
           {
             name: 'maxSessionTime',
@@ -963,6 +980,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
    * Save configuration to database with validation
    */
   private async saveConfigurationToDatabase(configuration: TimeoutConfiguration): Promise<void> {
+
     try {
       // Validate configuration before saving
       const validation = await this.validationEngine.validate(configuration);
@@ -996,6 +1014,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
    * Apply configuration to Redis with security validation
    */
   private async applyToRedis(configuration: TimeoutConfiguration): Promise<void> {
+
     try {
       // Validate configuration security before applying
       if (!this.validateSecurityConstraints(configuration)) {
@@ -1023,6 +1042,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
    * Apply configuration to active sessions with security checks
    */
   private async applyToActiveSessions(configuration: TimeoutConfiguration): Promise<void> {
+
     try {
       // Security check: Validate that new timeouts don't create security vulnerabilities
       if (!this.validateSessionSecurityConstraints(configuration)) {
@@ -1108,6 +1128,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     userId: string, 
     details: Record<string, unknown>
   ): Promise<void> {
+
     try {
       // Use proper audit logging instead of console.log
       if (this.db) {
@@ -1131,6 +1152,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
    * Load the currently active configuration from storage
    */
   private async loadActiveConfiguration(): Promise<void> {
+
     try {
       if (this.redis) {
         const activeConfigId = await this.redis.get('timeout:active_config');
@@ -1156,6 +1178,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     existingConfig: TimeoutConfiguration,
     updatedConfig: TimeoutConfiguration
   ): Promise<boolean> {
+
     // Check if this is a significant change that requires approval
     const significantFields = [
       'timeouts.session.absolute.duration',
@@ -1185,6 +1208,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     adjustmentType: string,
     triggeredBy: string
   ): Promise<TimeoutAdjustment> {
+
     const changes = [];
     
     // Compare configurations and record changes
@@ -1205,7 +1229,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
         reason: 'Configuration update',
         triggeredBy,
         triggeredAt: new Date()
-      },
+  }
       changes,
       impact: {
         affectedSessions: 0,
@@ -1228,6 +1252,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     riskLevel: 'low' | 'medium' | 'high';
     recommendations: string[];
   }> {
+
     // Mock implementation - would analyze current sessions and user activity
     return {
       affectedSessions: 150,
@@ -1244,6 +1269,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
    * Backup current configuration before changes
    */
   private async backupConfiguration(configuration: TimeoutConfiguration): Promise<void> {
+
     try {
       if (this.db) {
         await this.db.query(`
@@ -1303,6 +1329,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
     configName: string,
     createdBy: string
   ): Promise<TimeoutConfiguration> {
+
     const config = JSON.parse(JSON.stringify(template.template));
     
     // Apply variables to template
@@ -1329,8 +1356,7 @@ export class ConfigurableTimeoutService extends EventEmitter {
       status: {
         active: false,
         validated: false,
-        lastModified: new Date()
-      }
+        lastModified: new Date(}
     } as TimeoutConfiguration;
   }
 
@@ -1404,6 +1430,7 @@ class TimeoutValidationEngine {
     errors: string[];
     warnings: string[];
   }> {
+
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -1450,6 +1477,7 @@ class TimeoutMetricsCollector {
    * @returns Comprehensive metrics and analytics
    */
   async collectMetrics(configurationId: string, timeRange: { start: Date; end: Date }): Promise<TimeoutMetrics> {
+
     // Mock implementation - would collect real metrics
     return {
       configurationId,
@@ -1459,23 +1487,23 @@ class TimeoutMetricsCollector {
         timeoutOccurrences: {
           'session.idle': 50,
           'session.absolute': 20
-        },
+  }
         averageSessionDuration: 1800,
         extensionsGranted: 15,
         overridesUsed: 3
-      },
+  }
       performance: {
         systemLoad: 0.65,
         responseTime: 120,
         errorRate: 0.02,
         availability: 99.9
-      },
+  }
       effectiveness: {
         securityIncidents: 2,
         userComplaints: 5,
         productivityImpact: 0.1,
         complianceScore: 95
-      },
+  }
       recommendations: []
     };
   }

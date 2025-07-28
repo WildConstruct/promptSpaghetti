@@ -7,21 +7,20 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { TimeTravel, TimeTravelState, TimelineEntry, TimeBranch, TimelineMarker } from '../TimeTravel';
 
 export interface TimeTravelPanelProps {
-  timeTravel: TimeTravel;
+  timeTravel: TimeTravel;,
   timeTravelState: TimeTravelState | null;
-  selectedDomain: string;
+  selectedDomain: string;,
   onDomainChange: (domain: string) => void;
 }
-
 export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   timeTravel,
   timeTravelState,
   selectedDomain,
   onDomainChange
 }) => {
-  const [timeline, setTimeline] = useState<TimelineEntry[]>([]);
-  const [branches, setBranches] = useState<TimeBranch[]>([]);
-  const [markers, setMarkers] = useState<TimelineMarker[]>([]);
+  const [timeline, setTimeline] = useState<TimelineEntry>([]);
+  const [branches, setBranches] = useState<TimeBranch>([]);
+  const [markers, setMarkers] = useState<TimelineMarker>([]);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<string | null>(null);
@@ -69,10 +68,10 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
     const name = prompt('Enter branch name:');
     if (name) {
       timeTravel.createBranch(name, {)
-        description: `Branch created from position ${timeTravelState?.currentPosition}`,}
-        author: 'developer',
-      });
-    }
+  description: `Branch created from position ${timeTravelState?.currentPosition}`}
+},
+  author: 'developer';
+  });
   };
   const handleSwitchBranch = (branchId: string) => {
     timeTravel.switchBranch(branchId);
@@ -82,25 +81,25 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
     const name = prompt('Enter marker name:');
     if (name && selectedEntry) {
       timeTravel.addMarker({)
-        entryId: selectedEntry,
+  entryId: selectedEntry,
         name,
-        description: `Marker at ${name}`,}
-        color: '#61dafb',
-        type: 'bookmark',
-      });
-    }
+        description: `Marker at ${name}`}
+},
+  color: '#61dafb',
+        type: 'bookmark';
+  });
   };
   // Replay functionality
   const handleStartReplay = () => {
     const sessionName = `Replay ${Date.now()}`;}
     const sessionId = timeTravel.createReplaySession(sessionName, {)
-      speed: playbackSpeed,
-      domains: selectedDomain === 'all' ? undefined : [selectedDomain],
-    });
+  speed: playbackSpeed,
+  domains: selectedDomain === 'all' ? undefined : [selectedDomain],
+});
     timeTravel.startReplay(sessionId, {)
-      autoPlay: isAutoPlay,
-      speed: playbackSpeed,
-    });
+  autoPlay: isAutoPlay,
+  speed: playbackSpeed,
+});
   };
   const handleStopReplay = () => {
     timeTravel.stopReplay();
@@ -113,7 +112,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
   const canGoBack = timeTravelState?.canGoBack ?? false;
   const canGoForward = timeTravelState?.canGoForward ?? false;
   const isReplaying = timeTravelState?.isReplaying ?? false;
-  return ();
+  return;
     <div className="timetravel-panel">
       {/* Controls */}
       <div className="timetravel-controls">
@@ -211,17 +210,18 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
         />
         <div className="timeline-markers">
           {markers.map(marker => {)
-            const entryIndex = filteredTimeline.findIndex(e => e.id === marker.entryId);
+  const entryIndex = filteredTimeline.findIndex(e => e.id === marker.entryId);
             if (entryIndex === -1) return null;
             const position = (entryIndex / (filteredTimeline.length - 1)) * 100;
-            return ();
+            return;
               <div
                 key={marker.id}
                 className="timeline-marker"
                 style={{
-                  left: `${position}%`,}
-                  backgroundColor: marker.color,
-                }}
+                  left: `${position}%`}
+},
+  backgroundColor: marker.color;
+  }}
                 title={marker.name}
                 onClick={() => handleGoToEntry(marker.entryId)}
               />
@@ -242,8 +242,8 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
             <div
               key={branch.id}
               className={`branch-item ${
-                timeTravelState?.currentBranch === branch.id ? 'active' : ''
-              }`}
+  timeTravelState?.currentBranch === branch.id ? 'active' : '',
+}`}
               onClick={() => handleSwitchBranch(branch.id)}
             >
               <div className="branch-info">
@@ -271,7 +271,7 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
             const isSelected = selectedEntry === entry.id;
             const isCurrent = index === currentPosition;
             const entryMarkers = markers.filter(m => m.entryId === entry.id);
-            return ();
+            return;
               <div
                 key={entry.id}
                 className={`timeline-entry ${isSelected ? 'selected' : ''} ${}
@@ -324,56 +324,47 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
       </div>
       <style jsx>{`
         .timetravel-panel {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          background: var(--devtools-bg, #1e1e1e);
-        }
+          height: 100%;,
+  display: flex;
+          flex-direction: column;,
+  background: var(--devtools-bg, #1e1e1e);
         .timetravel-controls {
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           display: flex;
-          align-items: center;
-          gap: 16px;
+          align-items: center;,
+  gap: 16px;
           flex-wrap: wrap;
-        }
         .playback-controls {
-          display: flex;
-          gap: 4px;
-        }
+          display: flex;,
+  gap: 4px;
         .control-btn {
           background: var(--devtools-btn-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 6px 10px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 14px;
-          transition: background 0.2s;
-        }
-        .control-btn:hover:not(:disabled) {
-          background: var(--devtools-hover, #404040);
-        }
-        .control-btn:disabled {
-          opacity: 0.5;
+          border-radius: 4px;,
+  cursor: pointer;
+          font-size: 14px;,
+  transition: background 0.2s;
+        .control-btn:hover:not(:disabled) {,
+  background: var(--devtools-hover, #404040);
+        .control-btn:disabled {,
+  opacity: 0.5;
           cursor: not-allowed;
-        }
         .position-info {
-          font-size: 12px;
-          color: var(--devtools-text-secondary, #aaa);
-        }
+          font-size: 12px;,
+  color: var(--devtools-text-secondary, #aaa);
         .replay-controls {
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .replay-controls label {
           display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 12px;
-          color: var(--devtools-text, #fff);
-        }
+          align-items: center;,
+  gap: 4px;
+          font-size: 12px;,
+  color: var(--devtools-text, #fff);
         .replay-controls select {
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
@@ -381,18 +372,15 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           padding: 2px 6px;
           border-radius: 4px;
           font-size: 12px;
-        }
         .domain-filter {
           padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-        }
         .domain-filter label {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 12px;
-          color: var(--devtools-text, #fff);
-        }
+          align-items: center;,
+  gap: 8px;
+          font-size: 12px;,
+  color: var(--devtools-text, #fff);
         .domain-filter select {
           background: var(--devtools-input-bg, #2a2a2a);
           border: 1px solid var(--devtools-border, #333);
@@ -400,198 +388,165 @@ export const TimeTravelPanel: React.FC<TimeTravelPanelProps> = ({)
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-        }
         .timeline-slider {
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           position: relative;
-        }
         .slider {
-          width: 100%;
-          height: 4px;
+          width: 100%;,
+  height: 4px;
           background: var(--devtools-slider-bg, #333);
           outline: none;
-          border-radius: 2px;
-          appearance: none;
-        }
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 16px;
-          height: 16px;
+          border-radius: 2px;,
+  appearance: none;
+        .slider::-webkit-slider-thumb {,
+  appearance: none;
+          width: 16px;,
+  height: 16px;
           background: var(--devtools-active, #61dafb);
-          border-radius: 50%;
-          cursor: pointer;
-        }
+          border-radius: 50%;,
+  cursor: pointer;
         .timeline-markers {
-          position: absolute;
-          top: 18px;
-          left: 12px;
-          right: 12px;
+          position: absolute;,
+  top: 18px;
+          left: 12px;,
+  right: 12px;
           height: 4px;
           pointer-events: none;
-        }
         .timeline-marker {
-          position: absolute;
-          width: 8px;
+          position: absolute;,
+  width: 8px;
           height: 8px;
-          border-radius: 50%;
-          top: -2px;
-          transform: translateX(-50%);
-          cursor: pointer;
-          pointer-events: all;
-          border: 1px solid var(--devtools-bg, #1e1e1e);
-        }
+          border-radius: 50%;,
+  top: -2px;
+          transform: translateX(-50%);,
+  cursor: pointer;
+          pointer-events: all;,
+  border: 1px solid var(--devtools-bg, #1e1e1e);
         .branch-section,
         .timeline-section {
           flex: 1;
-          min-height: 0;
-          display: flex;
+          min-height: 0;,
+  display: flex;
           flex-direction: column;
-        }
         .section-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 8px 12px;
+          justify-content: space-between;,
+  padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
-        }
         .section-header h4 {
           margin: 0;
           font-size: 12px;
-          font-weight: 500;
-          color: var(--devtools-text, #fff);
-        }
+          font-weight: 500;,
+  color: var(--devtools-text, #fff);
         .add-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;
-          color: #000;
+          border: none;,
+  color: #000;
           padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
+          border-radius: 4px;,
+  cursor: pointer;
           font-size: 11px;
           font-weight: 500;
-        }
-        .add-btn:disabled {
-          opacity: 0.5;
+        .add-btn:disabled {,
+  opacity: 0.5;
           cursor: not-allowed;
-        }
         .branch-list,
         .timeline-list {
           flex: 1;
-          overflow-y: auto;
-          padding: 0;
-        }
+          overflow-y: auto;,
+  padding: 0;
         .branch-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 8px 12px;
+          justify-content: space-between;,
+  padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-          cursor: pointer;
-          transition: background 0.2s;
-        }
-        .branch-item:hover {
-          background: var(--devtools-hover, #2a2a2a);
-        }
+          cursor: pointer;,
+  transition: background 0.2s;
+        .branch-item:hover {,
+  background: var(--devtools-hover, #2a2a2a);
         .branch-item.active {
           background: var(--devtools-active-bg, #2a3a4a);
           border-left: 3px solid var(--devtools-active, #61dafb);
-        }
         .branch-info {
           flex: 1;
-        }
         .branch-name {
           display: block;
           font-size: 12px;
-          font-weight: 500;
-          color: var(--devtools-text, #fff);
-        }
+          font-weight: 500;,
+  color: var(--devtools-text, #fff);
         .branch-entries {
           display: block;
-          font-size: 11px;
-          color: var(--devtools-text-secondary, #aaa);
-        }
+          font-size: 11px;,
+  color: var(--devtools-text-secondary, #aaa);
         .branch-color {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          border: 1px solid var(--devtools-border, #333);
-        }
+          width: 12px;,
+  height: 12px;
+          border-radius: 50%;,
+  border: 1px solid var(--devtools-border, #333);
         .timeline-entry {
           padding: 8px 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-          cursor: pointer;
-          transition: background 0.2s;
-        }
-        .timeline-entry:hover {
-          background: var(--devtools-hover, #2a2a2a);
-        }
+          cursor: pointer;,
+  transition: background 0.2s;
+        .timeline-entry:hover {,
+  background: var(--devtools-hover, #2a2a2a);
         .timeline-entry.selected {
           background: var(--devtools-selected-bg, #2a3a4a);
-        }
         .timeline-entry.current {
           border-left: 3px solid var(--devtools-active, #61dafb);
           background: var(--devtools-current-bg, #1a2a3a);
-        }
         .entry-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
           margin-bottom: 4px;
-        }
         .entry-type {
           font-size: 11px;
-          font-weight: 500;
-          color: var(--devtools-active, #61dafb);
+          font-weight: 500;,
+  color: var(--devtools-active, #61dafb);
           text-transform: uppercase;
-        }
         .entry-time {
-          font-size: 11px;
-          color: var(--devtools-text-secondary, #aaa);
-        }
+          font-size: 11px;,
+  color: var(--devtools-text-secondary, #aaa);
         .entry-info {
           margin-bottom: 4px;
-        }
         .entry-domain {
-          font-size: 11px;
-          color: var(--devtools-domain, #f39c12);
+          font-size: 11px;,
+  color: var(--devtools-domain, #f39c12);
           font-weight: 500;
-        }
         .entry-description {
           display: block;
-          font-size: 12px;
-          color: var(--devtools-text, #fff);
+          font-size: 12px;,
+  color: var(--devtools-text, #fff);
           margin-top: 2px;
-        }
         .entry-markers {
-          display: flex;
-          gap: 4px;
+          display: flex;,
+  gap: 4px;
           margin-bottom: 4px;
-        }
         .entry-marker {
-          display: inline-block;
-          width: 16px;
+          display: inline-block;,
+  width: 16px;
           height: 16px;
           border-radius: 50%;
-          font-size: 10px;
-          display: flex;
+          font-size: 10px;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
         .entry-tags {
-          display: flex;
-          gap: 4px;
+          display: flex;,
+  gap: 4px;
           flex-wrap: wrap;
-        }
         .entry-tag {
           background: var(--devtools-tag-bg, #333);
           color: var(--devtools-text, #fff);
           padding: 2px 6px;
           border-radius: 10px;
-          font-size: 10px;
-          border: 1px solid var(--devtools-border, #555);
-        }
+          font-size: 10px;,
+  border: 1px solid var(--devtools-border, #555);
       `}</style>
     </div>
   );

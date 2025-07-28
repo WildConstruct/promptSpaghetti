@@ -64,22 +64,22 @@ describe('ReferrerPolicyService Basic Tests', () => {
         priority: 10,
         policy: {
           default: 'no-referrer' as ReferrerPolicyValue
-        },
+  }
         scope: {
           global: true
-        },
+  }
         security: {
           strictMode: true,
           preventDowngrade: true,
           logViolations: true,
           blockUnsafeReferrers: true
-        },
+  }
         reporting: {
           enabled: true,
           reportOnlyMode: false,
           sampleRate: 10,
           includeUserAgent: true
-        },
+  }
         createdBy: 'test-user'
       };
 
@@ -95,7 +95,7 @@ describe('ReferrerPolicyService Basic Tests', () => {
         name: '',
         policy: {
           default: 'invalid-policy' as ReferrerPolicyValue
-        },
+  }
         createdBy: 'test-user'
       };
 
@@ -114,20 +114,20 @@ describe('ReferrerPolicyService Basic Tests', () => {
         priority: 5,
         policy: {
           default: 'origin' as ReferrerPolicyValue
-        },
+  }
         scope: { global: true },
         security: {
           strictMode: false,
           preventDowngrade: false,
           logViolations: false,
           blockUnsafeReferrers: false
-        },
+  }
         reporting: {
           enabled: false,
           reportOnlyMode: true,
           sampleRate: 0,
           includeUserAgent: false
-        },
+  }
         createdBy: 'test-user'
       });
 
@@ -139,7 +139,7 @@ describe('ReferrerPolicyService Basic Tests', () => {
         name: 'Updated Policy',
         policy: {
           default: 'strict-origin' as ReferrerPolicyValue
-        },
+  }
         lastModifiedBy: 'admin-user'
       });
 
@@ -179,20 +179,20 @@ describe('ReferrerPolicyService Basic Tests', () => {
           priority: 1,
           policy: {
             default: policy
-          },
+  }
           scope: { global: true },
           security: {
             strictMode: false,
             preventDowngrade: false,
             logViolations: false,
             blockUnsafeReferrers: false
-          },
+  }
           reporting: {
             enabled: false,
             reportOnlyMode: true,
             sampleRate: 0,
             includeUserAgent: false
-          },
+  }
           createdBy: 'test-user'
         });
 
@@ -213,27 +213,27 @@ describe('ReferrerPolicyService Basic Tests', () => {
               path: '/admin',
               policy: 'no-referrer' as ReferrerPolicyValue,
               exactMatch: false
-            },
+  }
             {
               path: '/api/sensitive',
               policy: 'strict-origin' as ReferrerPolicyValue,
               exactMatch: true
             }
           ]
-        },
+  }
         scope: { global: true },
         security: {
           strictMode: true,
           preventDowngrade: true,
           logViolations: true,
           blockUnsafeReferrers: true
-        },
+  }
         reporting: {
           enabled: true,
           reportOnlyMode: false,
           sampleRate: 100,
           includeUserAgent: true
-        },
+  }
         createdBy: 'test-user'
       });
 
@@ -255,20 +255,20 @@ describe('ReferrerPolicyService Basic Tests', () => {
               exactMatch: false
             }
           ]
-        },
+  }
         scope: { global: true },
         security: {
           strictMode: false,
           preventDowngrade: false,
           logViolations: false,
           blockUnsafeReferrers: false
-        },
+  }
         reporting: {
           enabled: false,
           reportOnlyMode: true,
           sampleRate: 0,
           includeUserAgent: false
-        },
+  }
         createdBy: 'test-user'
       });
 
@@ -289,25 +289,25 @@ describe('ReferrerPolicyService Basic Tests', () => {
             method: 'GET',
             userAgent: 'test-agent',
             ip: '192.168.1.1'
-          },
+  }
           referrer: {
             header: 'https://malicious.com',
             expectedPolicy: 'no-referrer' as ReferrerPolicyValue,
             origin: 'https://malicious.com',
             isSecure: true
-          },
+  }
           violation: {
             type: 'unsafe_referrer' as const,
             severity: 'high' as const,
             description: 'Unsafe referrer detected',
             blocked: true,
             action: 'block' as const
-          },
+  }
           response: {
             status: 403,
             headers: {},
             redirected: false
-          },
+  }
           metadata: {
             configId: 'default',
             environment: 'test',
@@ -469,11 +469,11 @@ describe('ReferrerPolicyService Integration', () => {
             exactMatch: false
           }
         ]
-      },
+  }
       scope: {
         global: true,
         sensitiveRoutes: ['/secure', '/admin']
-      },
+  }
       security: {
         strictMode: true,
         preventDowngrade: true,
@@ -481,13 +481,13 @@ describe('ReferrerPolicyService Integration', () => {
         blockUnsafeReferrers: true,
         allowedOrigins: ['https://trusted.com'],
         blockedOrigins: ['https://malicious.com']
-      },
+  }
       reporting: {
         enabled: true,
         reportOnlyMode: false,
         sampleRate: 50,
         includeUserAgent: true
-      },
+  }
       createdBy: 'integration-test'
     });
 

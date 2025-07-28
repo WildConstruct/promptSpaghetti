@@ -8,6 +8,28 @@
  * Task: E17-1753114397380-E8827E - Implement automated enforcement
  * Epic: 17 - Backstage Admin Controls
  */
+;
+;
+actions: {
+    autoSuspension: boolean;
+    autoRestriction: boolean;
+    autoFlagging: boolean;
+    requireManualReview: boolean;
+    notifyAdmins: boolean;
+}
+;
+exemptions ?  : {
+    highTrustUsers: boolean,
+    verifiedUsers: boolean,
+    whitelistedEntities: string[]
+};
+;
+reviewSettings: {
+    autoReviewEnabled: boolean;
+    appealProcessEnabled: boolean;
+    adminOverrideRequired: boolean;
+}
+;
 export class AutomatedEnforcementService {
     db;
     trustScoreService;

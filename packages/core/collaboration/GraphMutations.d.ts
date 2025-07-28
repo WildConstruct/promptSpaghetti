@@ -9,6 +9,7 @@ import { NodeTypeEnum, Node } from '../graphSchema';
 /**
  * Base interface for all graph mutation operations
  */
+
 export interface BaseMutationOperation {
     operationId: string;
     documentId: string;
@@ -17,13 +18,12 @@ export interface BaseMutationOperation {
     clientId?: string;
     operationVector?: VersionVector;
     dependencies?: string[];
-}
 /**
  * Version vector for operation ordering and conflict resolution
  */
+
 export interface VersionVector {
     [clientId: string]: number;
-}
 /**
  * Operation priority for conflict resolution
  */
@@ -32,10 +32,10 @@ export declare enum OperationPriority {
     MEDIUM = 2,
     HIGH = 3,
     CRITICAL = 4
-}
 /**
  * Node Addition Operation
  */
+
 export interface NodeAddOperation extends BaseMutationOperation {
     type: 'NODE_ADD';
     nodeId: string;
@@ -47,10 +47,10 @@ export interface NodeAddOperation extends BaseMutationOperation {
     initialData?: Record<string, any>;
     parentId?: string;
     priority?: OperationPriority;
-}
 /**
  * Node Update Operation
  */
+
 export interface NodeUpdateOperation extends BaseMutationOperation {
     type: 'NODE_UPDATE';
     nodeId: string;
@@ -60,10 +60,10 @@ export interface NodeUpdateOperation extends BaseMutationOperation {
     partialUpdate: boolean;
     validationSchema?: string;
     priority?: OperationPriority;
-}
 /**
  * Node Removal Operation
  */
+
 export interface NodeRemoveOperation extends BaseMutationOperation {
     type: 'NODE_REMOVE';
     nodeId: string;
@@ -71,10 +71,10 @@ export interface NodeRemoveOperation extends BaseMutationOperation {
     preserveConnections: boolean;
     snapshotData?: Node;
     priority?: OperationPriority;
-}
 /**
  * Edge data structure
  */
+
 export interface GraphEdge {
     id: string;
     sourceNodeId: string;
@@ -83,10 +83,10 @@ export interface GraphEdge {
     targetPort?: string;
     type: 'data' | 'control' | 'conditional';
     metadata?: Record<string, any>;
-}
 /**
  * Edge Addition Operation
  */
+
 export interface EdgeAddOperation extends BaseMutationOperation {
     type: 'EDGE_ADD';
     edgeId: string;
@@ -97,10 +97,10 @@ export interface EdgeAddOperation extends BaseMutationOperation {
     edgeType: 'data' | 'control' | 'conditional';
     metadata?: Record<string, any>;
     priority?: OperationPriority;
-}
 /**
  * Edge Update Operation
  */
+
 export interface EdgeUpdateOperation extends BaseMutationOperation {
     type: 'EDGE_UPDATE';
     edgeId: string;
@@ -108,10 +108,10 @@ export interface EdgeUpdateOperation extends BaseMutationOperation {
     oldValue: unknown;
     newValue: unknown;
     priority?: OperationPriority;
-}
 /**
  * Edge Removal Operation
  */
+
 export interface EdgeRemoveOperation extends BaseMutationOperation {
     type: 'EDGE_REMOVE';
     edgeId: string;
@@ -119,10 +119,10 @@ export interface EdgeRemoveOperation extends BaseMutationOperation {
     targetNodeId: string;
     snapshotData?: GraphEdge;
     priority?: OperationPriority;
-}
 /**
  * Parameter Update Operation
  */
+
 export interface ParameterUpdateOperation extends BaseMutationOperation {
     type: 'PARAMETER_UPDATE';
     nodeId: string;
@@ -133,10 +133,10 @@ export interface ParameterUpdateOperation extends BaseMutationOperation {
     newValue: unknown;
     validationSchema?: string;
     priority?: OperationPriority;
-}
 /**
  * Batch Operation for atomic multi-operation execution
  */
+
 export interface BatchMutationOperation extends BaseMutationOperation {
     type: 'BATCH_MUTATION';
     batchId: string;
@@ -144,7 +144,6 @@ export interface BatchMutationOperation extends BaseMutationOperation {
     atomic: boolean;
     rollbackOnFailure: boolean;
     priority?: OperationPriority;
-}
 /**
  * All possible mutation operation types
  */
@@ -171,7 +170,6 @@ export declare enum ConflictType {
     PARAMETER_UPDATE = "parameter_update",
     CIRCULAR_DEPENDENCY = "circular_dependency",
     VALIDATION_ERROR = "validation_error"
-}
 /**
  * Conflict resolution strategies
  */
@@ -184,10 +182,10 @@ export declare enum ResolutionStrategy {
     MANUAL_RESOLUTION = "manual_resolution",
     ROLLBACK_OPERATION = "rollback_operation",
     AUTO_MERGE = "auto_merge"
-}
 /**
  * Conflict resolution data
  */
+
 export interface ConflictResolution {
     conflictId: string;
     conflictType: ConflictType;
@@ -198,10 +196,10 @@ export interface ConflictResolution {
     resolvedBy: string;
     timestamp: number;
     automatic: boolean;
-}
 /**
  * Conflict operation for manual resolution UI
  */
+
 export interface ConflictOperation {
     id: string;
     type: ConflictType;
@@ -217,20 +215,20 @@ export interface ConflictOperation {
     requiresUserInput: boolean;
     suggestedResolution?: ResolutionStrategy;
     options: ResolutionOption[];
-}
 /**
  * Resolution option for conflict UI
  */
+
 export interface ResolutionOption {
     strategy: ResolutionStrategy;
     label: string;
     description: string;
     preview?: Record<string, unknown>;
     recommended: boolean;
-}
 /**
  * Graph mutation message for WebSocket transport
  */
+
 export interface GraphMutationMessage {
     type: 'GRAPH_MUTATION';
     operationId: string;
@@ -241,10 +239,10 @@ export interface GraphMutationMessage {
     operationVector: VersionVector;
     dependencies?: string[];
     requiresAck: boolean;
-}
 /**
  * Batch mutation message
  */
+
 export interface BatchMutationMessage {
     type: 'BATCH_MUTATION';
     batchId: string;
@@ -253,10 +251,10 @@ export interface BatchMutationMessage {
     atomic: boolean;
     userId: string;
     timestamp: number;
-}
 /**
  * Conflict detected message
  */
+
 export interface ConflictDetectedMessage {
     type: 'CONFLICT_DETECTED';
     conflictId: string;
@@ -268,10 +266,10 @@ export interface ConflictDetectedMessage {
     resolutionRequired: boolean;
     suggestedResolution?: ResolutionStrategy;
     timeout?: number;
-}
 /**
  * Conflict resolved message
  */
+
 export interface ConflictResolvedMessage {
     type: 'CONFLICT_RESOLVED';
     conflictId: string;
@@ -279,10 +277,10 @@ export interface ConflictResolvedMessage {
     resolution: ConflictResolution;
     resultingOperations: MutationOperation[];
     timestamp: number;
-}
 /**
  * Delta synchronization message
  */
+
 export interface DeltaSyncMessage {
     type: 'DELTA_SYNC';
     documentId: string;
@@ -291,10 +289,10 @@ export interface DeltaSyncMessage {
     operations: MutationOperation[];
     checksum: string;
     userId: string;
-}
 /**
  * State verification message
  */
+
 export interface StateVerificationMessage {
     type: 'STATE_VERIFICATION';
     documentId: string;
@@ -305,10 +303,10 @@ export interface StateVerificationMessage {
     operationCount: number;
     lastOperationId: string;
     requiredResync: boolean;
-}
 /**
  * Operation acknowledgment message
  */
+
 export interface OperationAckMessage {
     type: 'OPERATION_ACK';
     operationId: string;
@@ -317,7 +315,6 @@ export interface OperationAckMessage {
     error?: string;
     resultingVersion: number;
     timestamp: number;
-}
 /**
  * Version vector validation schema
  */

@@ -6,6 +6,7 @@
 import { EventEmitter } from 'events';
 import crypto from 'crypto';
 
+}
 export interface SecurityEvent {
   id: string;
   userId: string;
@@ -17,6 +18,7 @@ export interface SecurityEvent {
   metadata: Record<string, any>;
   riskScore: number;
   actionTaken?: SecurityAction;
+}
 }
 
 export enum SecurityEventType {
@@ -52,6 +54,7 @@ export enum SecurityAction {
   FORCE_PASSWORD_RESET = 'force_password_reset'
 }
 
+}
 interface RiskProfile {
   userId: string;
   baselineScore: number;
@@ -61,7 +64,9 @@ interface RiskProfile {
   riskFactors: RiskFactor[];
   lastAssessment: Date;
 }
+}
 
+}
 interface DeviceFingerprint {
   id: string;
   userAgent: string;
@@ -75,12 +80,15 @@ interface DeviceFingerprint {
   firstSeen: Date;
   lastSeen: Date;
 }
+}
 
+}
 interface GeolocationData {
   ip: string;
   country: string;
   region: string;
   city: string;
+}
   coordinates?: { lat: number; lng: number };
   isp: string;
   isVPN: boolean;
@@ -88,13 +96,16 @@ interface GeolocationData {
   trusted: boolean;
 }
 
+}
 interface RiskFactor {
   type: string;
   value: number;
   description: string;
   weight: number;
 }
+}
 
+}
 interface BreachPattern {
   name: string;
   description: string;
@@ -103,6 +114,7 @@ interface BreachPattern {
   threshold: number;
   riskScore: number;
   action: SecurityAction;
+}
 }
 
 export class BreachDetectionService extends EventEmitter {
@@ -127,7 +139,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 5,
         riskScore: 80,
         action: SecurityAction.BLOCK_IP
-      },
+  }
       {
         name: 'Credential Stuffing',
         description: 'Failed logins across multiple accounts from same source',
@@ -136,7 +148,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 20,
         riskScore: 90,
         action: SecurityAction.BLOCK_IP
-      },
+  }
       {
         name: 'Account Takeover Pattern',
         description: 'Successful login followed by suspicious changes',
@@ -149,7 +161,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 1,
         riskScore: 95,
         action: SecurityAction.LOCK_ACCOUNT
-      },
+  }
       {
         name: 'Location Anomaly',
         description: 'Login from geographically impossible location',
@@ -158,7 +170,7 @@ export class BreachDetectionService extends EventEmitter {
         threshold: 1,
         riskScore: 70,
         action: SecurityAction.REQUIRE_MFA
-      },
+  }
       {
         name: 'MFA Bypass Attempt',
         description: 'Multiple MFA failures followed by different method',
@@ -189,6 +201,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   async recordSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp' | 'riskScore'>): Promise<SecurityEvent> {
+
     const event: SecurityEvent = {
       ...eventData,
       id: this.generateEventId(),
@@ -214,6 +227,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async calculateRiskScore(eventData: Partial<SecurityEvent>): Promise<number> {
+
     let score = 0;
 
     // Base scores by event type
@@ -263,6 +277,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async assessThreatLevel(event: SecurityEvent): Promise<number> {
+
     const recentEvents = this.getRecentEvents(event.userId, 30);
     
     // Check for patterns in recent events
@@ -295,6 +310,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async handleHighRiskEvent(event: SecurityEvent): Promise<void> {
+
     // Determine appropriate response based on risk score and event type
     let action = SecurityAction.LOG_ONLY;
 
@@ -317,6 +333,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async executeSecurityAction(userId: string, action: SecurityAction, event: SecurityEvent): Promise<void> {
+
     switch (action) {
     case SecurityAction.LOCK_ACCOUNT:
       await this.lockUserAccount(userId, event.id);
@@ -341,6 +358,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async lockUserAccount(userId: string, eventId: string): Promise<void> {
+
     // Implementation would interact with user management system
     console.log(`🔒 SECURITY: Locking account ${userId} due to high-risk event ${eventId}`);
     
@@ -356,16 +374,19 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async requireAdditionalMFA(userId: string): Promise<void> {
+
     console.log(`🛡️ SECURITY: Requiring additional MFA for user ${userId}`);
     // Implementation would update user session requirements
   }
 
   private async notifyUserOfSuspiciousActivity(userId: string, event: SecurityEvent): Promise<void> {
+
     console.log(`📧 SECURITY: Notifying user ${userId} of suspicious activity`);
     // Implementation would send notification via email/SMS
   }
 
   private async forcePasswordReset(userId: string): Promise<void> {
+
     console.log(`🔑 SECURITY: Forcing password reset for user ${userId}`);
     // Implementation would invalidate current password and require reset
   }
@@ -378,6 +399,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async getGeolocationData(ip: string): Promise<GeolocationData> {
+
     // Mock implementation - would integrate with real geolocation service
     return {
       ip,
@@ -392,6 +414,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async assessDeviceRisk(userId: string, userAgent: string): Promise<number> {
+
     const profile = this.riskProfiles.get(userId);
     if (!profile) return 20; // Unknown user, medium risk
 
@@ -410,6 +433,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   private async updateUserRiskProfile(userId: string, event: SecurityEvent): Promise<void> {
+
     let profile = this.riskProfiles.get(userId);
     
     if (!profile) {
@@ -497,10 +521,12 @@ export class BreachDetectionService extends EventEmitter {
 
   // Public API methods
   async getUserRiskProfile(userId: string): Promise<RiskProfile | null> {
+
     return this.riskProfiles.get(userId) || null;
   }
 
   async getSecurityEvents(userId: string, hours: number = 24): Promise<SecurityEvent[]> {
+
     const cutoff = new Date(Date.now() - hours * 60 * 60 * 1000);
     return this.securityEvents.filter(e => 
       e.userId === userId && e.timestamp >= cutoff
@@ -508,6 +534,7 @@ export class BreachDetectionService extends EventEmitter {
   }
 
   async isIPBlacklisted(ip: string): Promise<boolean> {
+
     return this.ipBlacklist.has(ip);
   }
 
@@ -518,6 +545,7 @@ export class BreachDetectionService extends EventEmitter {
     breachDetected: boolean;
     recommendations: string[];
   }> {
+
     const profile = this.riskProfiles.get(userId);
     const recentEvents = this.getRecentEvents(userId, 24);
     

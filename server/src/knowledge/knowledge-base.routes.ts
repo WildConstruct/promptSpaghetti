@@ -11,6 +11,7 @@ import {
   SearchFilters
 } from './knowledge-base.service';
 
+}
 interface AuthenticatedRequest extends FastifyRequest {
   user: {
     id: string;
@@ -19,6 +20,7 @@ interface AuthenticatedRequest extends FastifyRequest {
   };
 }
 
+}
 interface ContentQuerystring {
   category?: string;
   difficulty_level?: string;
@@ -30,13 +32,16 @@ interface ContentQuerystring {
   limit?: number;
   offset?: number;
 }
+}
 
+}
 interface SearchQuerystring {
   q: string;
   category?: string;
   difficulty_level?: string;
   content_type?: string;
   limit?: number;
+}
 }
 
 export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool) {
@@ -99,7 +104,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -208,7 +213,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -322,7 +327,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         type: 'object',
         properties: {
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['id']
       }
     }
@@ -370,7 +375,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 description: { type: 'string' }
               }
             }
-          },
+  }
           templates_used: {
             type: 'array',
             items: {
@@ -382,7 +387,7 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
                 url: { type: 'string', format: 'uri' }
               }
             }
-          },
+  }
           screenshots: { type: 'array', items: { type: 'string', format: 'uri' } }
         }
       }
@@ -449,9 +454,9 @@ export async function knowledgeBaseRoutes(fastify: FastifyInstance, dbPool: Pool
         properties: {
           type: { type: 'string', enum: ['articles', 'tutorials', 'case-studies'] },
           id: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['type', 'id']
-      },
+  }
       body: {
         type: 'object',
         required: ['is_helpful'],

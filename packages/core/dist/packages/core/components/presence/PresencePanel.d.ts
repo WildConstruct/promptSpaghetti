@@ -10,13 +10,13 @@ export interface PresenceUser {
         y: number;
         nodeId?: string;
     };
-    selection?: string[];
+    selection?: string;
     currentTool?: string;
     isTyping?: boolean;
     focusedNodeId?: string;
 }
 export interface PresencePanelProps {
-    users: PresenceUser[];
+    users: PresenceUser;
     currentUserId: string;
     onUserClick?: (userId: string) => void;
     onFollowUser?: (userId: string) => void;

@@ -23,5 +23,4 @@ export interface OperationUIProps {
     showAdvanced?: boolean;
 }
 export declare const OperationUI: React.FC<OperationUIProps>;
-export default OperationUI;
 //# sourceMappingURL=OperationUI.d.ts.map

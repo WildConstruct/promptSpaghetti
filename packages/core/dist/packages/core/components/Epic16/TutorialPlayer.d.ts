@@ -14,10 +14,10 @@ export interface TutorialStep {
     duration?: number;
     videoUrl?: string;
     imageUrl?: string;
-    highlightElements?: string[];
-    requirements?: string[];
-    tips?: string[];
-    actions?: TutorialAction[];
+    highlightElements?: string;
+    requirements?: string;
+    tips?: string;
+    actions?: TutorialAction;
 }
 export interface TutorialAction {
     id: string;
@@ -34,14 +34,14 @@ export interface Tutorial {
     category: 'getting-started' | 'template-creation' | 'marketplace' | 'collaboration' | 'advanced';
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     estimatedTime: number;
-    prerequisites?: string[];
-    steps: TutorialStep[];
+    prerequisites?: string;
+    steps: TutorialStep;
     completionRewards: {
         xp: number;
         badge?: string;
         certificate?: string;
     };
-    tags: string[];
+    tags: string;
     rating: number;
     completionCount: number;
     createdAt: Date;
@@ -54,7 +54,7 @@ export interface TutorialProgress {
     startedAt: Date;
     completedAt?: Date;
     timeSpent: number;
-    stepsCompleted: string[];
+    stepsCompleted: string;
     score?: number;
 }
 export interface TutorialPlayerProps {
@@ -70,7 +70,7 @@ export interface TutorialPlayerProps {
 }
 export declare const TutorialPlayer: React.FC<TutorialPlayerProps>;
 export interface TutorialBrowserProps {
-    tutorials: Tutorial[];
+    tutorials: Tutorial;
     onSelectTutorial: (tutorial: Tutorial) => void;
     onStartTutorial?: (tutorial: Tutorial) => void;
     userProgress?: {

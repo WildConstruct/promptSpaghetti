@@ -1,32 +1,32 @@
 export interface WorkspaceId extends String {
     readonly __brand: 'WorkspaceId';
-}
+
 export interface ProjectId extends String {
     readonly __brand: 'ProjectId';
-}
+
 export interface UserId extends String {
     readonly __brand: 'UserId';
-}
+
 export interface ResourceId extends String {
     readonly __brand: 'ResourceId';
-}
+
 export declare enum WorkspaceRole {
     OWNER = "owner",
     ADMIN = "admin",
     COLLABORATOR = "collaborator",
     VIEWER = "viewer"
-}
+
 export declare enum ProjectRole {
     OWNER = "owner",
     EDITOR = "editor",
     VIEWER = "viewer"
-}
+
 export declare enum ResourceType {
     GRAPH = "graph",
     TEMPLATE = "template",
     ASSET = "asset",
     DOCUMENT = "document"
-}
+
 export declare enum ActivityType {
     WORKSPACE_CREATE = "workspace.create",
     WORKSPACE_UPDATE = "workspace.update",
@@ -41,7 +41,7 @@ export declare enum ActivityType {
     USER_JOIN = "user.join",
     USER_LEAVE = "user.leave",
     USER_ROLE_CHANGE = "user.role_change"
-}
+
 export interface Workspace {
     id: WorkspaceId;
     name: string;
@@ -51,7 +51,7 @@ export interface Workspace {
     updated_at: Date;
     created_by: UserId;
     is_active: boolean;
-}
+
 export interface WorkspaceSettings {
     visibility: 'private' | 'internal' | 'public';
     features: {,
@@ -71,7 +71,7 @@ export interface WorkspaceSettings {
         who_can_create_projects: 'owners' | 'admins' | 'members';
         default_project_visibility: 'private' | 'workspace' | 'public';
     };
-}
+
 export interface Project {
     id: ProjectId;
     workspace_id: WorkspaceId;
@@ -83,7 +83,7 @@ export interface Project {
     created_by: UserId;
     is_active: boolean;
     last_activity_at: Date;
-}
+
 export interface ProjectSettings {
     visibility: 'private' | 'workspace' | 'public';
     features: {,
@@ -97,7 +97,7 @@ export interface ProjectSettings {
         conflict_resolution: 'manual' | 'automatic' | 'last_writer_wins';
         presence_timeout_ms: number;
     };
-}
+
 export interface Resource {
     id: ResourceId;
     project_id: ProjectId;
@@ -110,14 +110,14 @@ export interface Resource {
     created_by: UserId;
     is_active: boolean;
     version: number;
-}
+
 export interface ResourceMetadata {
     size_bytes: number;
     mime_type?: string;
     checksum: string;
     tags: string[];
     custom_properties: Record<string, any>;
-}
+
 export interface WorkspaceMember {
     workspace_id: WorkspaceId;
     user_id: UserId;
@@ -126,7 +126,7 @@ export interface WorkspaceMember {
     invited_by: UserId;
     is_active: boolean;
     last_activity_at: Date;
-}
+
 export interface ProjectMember {
     project_id: ProjectId;
     user_id: UserId;
@@ -135,7 +135,7 @@ export interface ProjectMember {
     invited_by: UserId;
     is_active: boolean;
     last_activity_at: Date;
-}
+
 export interface ActivityEvent {
     id: string;
     workspace_id: WorkspaceId;
@@ -146,7 +146,7 @@ export interface ActivityEvent {
     details: ActivityDetails;
     metadata: ActivityMetadata;
     created_at: Date;
-}
+
 export interface ActivityDetails {
     action: string;
     target_type: string;
@@ -156,13 +156,13 @@ export interface ActivityDetails {
         to: any;
     }>;
     description?: string;
-}
+
 export interface ActivityMetadata {
     user_agent?: string;
     ip_address?: string;
     session_id?: string;
     request_id?: string;
-}
+
 export interface Comment {
     id: string;
     workspace_id: WorkspaceId;
@@ -175,7 +175,7 @@ export interface Comment {
     created_at: Date;
     updated_at: Date;
     is_active: boolean;
-}
+
 export interface CommentMetadata {
     mentions: UserId[];
     attachments: string[];
@@ -183,7 +183,7 @@ export interface CommentMetadata {
     is_resolved: boolean;
     resolved_by?: UserId;
     resolved_at?: Date;
-}
+
 export interface Notification {
     id: string;
     user_id: UserId;
@@ -196,7 +196,7 @@ export interface Notification {
     created_at: Date;
     read_at?: Date;
     is_active: boolean;
-}
+
 export declare enum NotificationType {
     WORKSPACE_INVITE = "workspace.invite",
     PROJECT_INVITE = "project.invite",
@@ -205,14 +205,14 @@ export declare enum NotificationType {
     RESOURCE_SHARED = "resource.shared",
     ROLE_CHANGED = "role.changed",
     ACTIVITY_DIGEST = "activity.digest"
-}
+
 export interface NotificationData {
     action_url?: string;
     actor_user_id?: UserId;
     target_type?: string;
     target_id?: string;
     metadata?: Record<string, any>;
-}
+
 export interface WorkspaceOperations {
     createWorkspace(data: Omit<Workspace, 'id' | 'created_at' | 'updated_at'>): Promise<Workspace>;
     getWorkspace(id: WorkspaceId): Promise<Workspace | null>;
@@ -251,5 +251,5 @@ export interface WorkspaceOperations {
     createNotification(data: Omit<Notification, 'id' | 'created_at'>): Promise<Notification>;
     getUserNotifications(userId: UserId, unreadOnly?: boolean): Promise<Notification[]>;
     markNotificationRead(id: string): Promise<void>;
-}
+
 //# sourceMappingURL=workspace.d.ts.map

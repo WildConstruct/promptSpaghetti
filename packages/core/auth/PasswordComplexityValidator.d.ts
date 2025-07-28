@@ -3,6 +3,7 @@
  * Task: T-1752989143997-524 - Implement configurable password complexity rules
  * Epic 19: Authentication Enhancement & Security Hardening
  */
+
 export interface PasswordComplexityRule {
     id: string;
     name: string;
@@ -13,7 +14,8 @@ export interface PasswordComplexityRule {
     category: 'length' | 'character' | 'pattern' | 'dictionary' | 'entropy' | 'history';
     severity: 'error' | 'warning' | 'info';
     validate: (password: string, context?: PasswordValidationContext) => PasswordRuleResult;
-}
+
+
 export interface PasswordValidationContext {
     username?: string;
     email?: string;
@@ -25,7 +27,8 @@ export interface PasswordValidationContext {
     organizationName?: string;
     userRole?: string;
     locale?: string;
-}
+
+
 export interface PasswordRuleResult {
     passed: boolean;
     score: number;
@@ -35,8 +38,9 @@ export interface PasswordRuleResult {
         expected?: unknown;
         actual?: unknown;
         examples?: string[];
+
     };
-}
+
 export interface PasswordComplexityConfig {
     enabled: boolean;
     mode: 'strict' | 'balanced' | 'lenient' | 'custom';
@@ -46,6 +50,7 @@ export interface PasswordComplexityConfig {
         enabled: boolean;
         roles: string[];
         requireJustification: boolean;
+
     };
     breachChecking?: {
         enabled: boolean;
@@ -58,7 +63,7 @@ export interface PasswordComplexityConfig {
         sources: string[];
         categories: string[];
     };
-}
+
 export interface PasswordValidationResult {
     valid: boolean;
     score: number;
@@ -71,11 +76,12 @@ export interface PasswordValidationResult {
         offline: string;
         online: string;
         unit: string;
+
     };
     entropy?: number;
     passedRules: number;
     totalRules: number;
-}
+
 export declare class PasswordRules {
     /**
      * Minimum length rule
@@ -121,7 +127,7 @@ export declare class PasswordRules {
      * Password history check
      */
     static notInHistory(historyCount?: number): PasswordComplexityRule;
-}
+
 export declare class PasswordComplexityValidator {
     private config;
     private commonPasswords;
@@ -198,6 +204,6 @@ export declare class PasswordComplexityValidator {
         errors: string[];
         warnings: string[];
     };
-}
+
 export default PasswordComplexityValidator;
 //# sourceMappingURL=PasswordComplexityValidator.d.ts.map

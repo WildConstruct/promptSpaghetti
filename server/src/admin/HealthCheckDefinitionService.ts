@@ -37,6 +37,7 @@ import {
 // SERVICE INTERFACES
 // ==========================================
 
+}
 export interface HealthCheckExecutionContext {
   executionId: string;
   checkDefinition: HealthCheckDefinition;
@@ -45,14 +46,18 @@ export interface HealthCheckExecutionContext {
   startTime: Date;
   timeout: number;
 }
+}
 
+}
 export interface HealthCheckRegistry {
   definitions: Map<string, HealthCheckDefinition>;
   executionHistory: Map<string, HealthCheckResult[]>;
   activeExecutions: Map<string, HealthCheckExecutionContext>;
   schedules: Map<string, NodeJS.Timeout>;
 }
+}
 
+}
 export interface BulkExecutionResult {
   executionId: string;
   totalChecks: number;
@@ -62,7 +67,9 @@ export interface BulkExecutionResult {
   duration: number;
   overallStatus: HealthStatus;
 }
+}
 
+}
 export interface HealthCheckFilter {
   category?: HealthCheckCategory;
   priority?: HealthCheckPriority;
@@ -71,6 +78,7 @@ export interface HealthCheckFilter {
   isActive?: boolean;
   createdAfter?: Date;
   createdBefore?: Date;
+}
 }
 
 // ==========================================
@@ -96,8 +104,7 @@ export class HealthCheckDefinitionService {
       definitions: new Map(),
       executionHistory: new Map(),
       activeExecutions: new Map(),
-      schedules: new Map()
-    };
+      schedules: new Map(};
   }
 
   // ==========================================
@@ -105,6 +112,7 @@ export class HealthCheckDefinitionService {
   // ==========================================
 
   async initialize(): Promise<void> {
+
     if (this.isInitialized) return;
 
     console.log('🔧 Initializing Health Check Definition Service');
@@ -123,6 +131,7 @@ export class HealthCheckDefinitionService {
   }
 
   async shutdown(): Promise<void> {
+
     if (!this.isInitialized) return;
 
     console.log('🛑 Shutting down Health Check Definition Service');
@@ -147,6 +156,7 @@ export class HealthCheckDefinitionService {
     definition: HealthCheckDefinition,
     createdBy: string
   ): Promise<HealthCheckDefinition> {
+
     console.log(`📋 Creating health check definition: ${definition.name}`);
 
     // Validate definition
@@ -205,6 +215,7 @@ export class HealthCheckDefinitionService {
     updates: Partial<HealthCheckDefinition>,
     updatedBy: string
   ): Promise<HealthCheckDefinition> {
+
     console.log(`📝 Updating health check definition: ${checkId}`);
 
     const existingDefinition = this.registry.definitions.get(checkId);
@@ -250,6 +261,7 @@ export class HealthCheckDefinitionService {
   }
 
   async deleteDefinition(checkId: string, deletedBy: string): Promise<void> {
+
     console.log(`🗑️ Deleting health check definition: ${checkId}`);
 
     const definition = this.registry.definitions.get(checkId);
@@ -291,10 +303,12 @@ export class HealthCheckDefinitionService {
   }
 
   async getDefinition(checkId: string): Promise<HealthCheckDefinition | null> {
+
     return this.registry.definitions.get(checkId) || null;
   }
 
   async listDefinitions(filter?: HealthCheckFilter): Promise<HealthCheckDefinition[]> {
+
     let definitions = Array.from(this.registry.definitions.values());
 
     if (filter) {
@@ -321,6 +335,7 @@ export class HealthCheckDefinitionService {
     initiatedBy: string,
     parameters: Record<string, any> = {}
   ): Promise<HealthCheckResult> {
+
     console.log(`🔍 Executing health check: ${checkId}`);
 
     const definition = this.registry.definitions.get(checkId);
@@ -346,7 +361,7 @@ export class HealthCheckDefinitionService {
         userId: initiatedBy,
         correlationId: this.generateCorrelationId(),
         retryAttempt: 0
-      },
+  }
       startTime,
       timeout: definition.config.timeout
     };
@@ -422,6 +437,7 @@ export class HealthCheckDefinitionService {
     initiatedBy: string,
     parallel = true
   ): Promise<BulkExecutionResult> {
+
     console.log(`🔍 Executing bulk health checks: ${checkIds.length} checks`);
 
     const executionId = this.generateExecutionId();
@@ -433,7 +449,7 @@ export class HealthCheckDefinitionService {
       const promises = checkIds.map(checkId => 
         this.executeHealthCheck(checkId, initiatedBy).catch(error => 
           this.createErrorResultForBulk(checkId, error, executionId)
-        )
+
       );
       
       const parallelResults = await Promise.all(promises);
@@ -489,6 +505,7 @@ export class HealthCheckDefinitionService {
   // ==========================================
 
   private async executeByType(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
+
     const { checkDefinition } = context;
 
     switch (checkDefinition.config.type) {
@@ -510,6 +527,7 @@ export class HealthCheckDefinitionService {
   }
 
   private async executeHttpEndpointCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
+
     const { checkDefinition, executionId, startTime } = context;
     const config = checkDefinition.config.endpoint!;
     
@@ -572,7 +590,7 @@ export class HealthCheckDefinitionService {
             statusCode: response.status,
             contentLength: response.contentLength || 0
           }
-        },
+  }
         metadata: context.metadata
       };
 
@@ -583,6 +601,7 @@ export class HealthCheckDefinitionService {
   }
 
   private async executeDatabaseQueryCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
+
     const { checkDefinition, executionId } = context;
     const config = checkDefinition.config.query!;
     
@@ -619,7 +638,7 @@ export class HealthCheckDefinitionService {
             rowCount: result.rowCount,
             queryComplexity: result.complexity || 1
           }
-        },
+  }
         metadata: context.metadata
       };
 
@@ -630,11 +649,13 @@ export class HealthCheckDefinitionService {
   }
 
   private async executeSystemCommandCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
+
     // Implementation for system command execution
     throw new Error('System command health checks not yet implemented');
   }
 
   private async executeCompositeCheck(context: HealthCheckExecutionContext): Promise<HealthCheckResult> {
+
     // Implementation for composite health checks
     throw new Error('Composite health checks not yet implemented');
   }
@@ -729,7 +750,7 @@ export class HealthCheckDefinitionService {
         ],
         affectedComponents: ['health_check_system'],
         relatedChecks: []
-      },
+  }
       metrics: { custom: {} },
       metadata: context.metadata
     };
@@ -750,7 +771,7 @@ export class HealthCheckDefinitionService {
         recommendations: [],
         affectedComponents: [],
         relatedChecks: []
-      },
+  }
       metrics: { custom: {} },
       metadata: {
         hostname: require('os').hostname(),
@@ -774,6 +795,7 @@ export class HealthCheckDefinitionService {
   }
 
   private async makeHttpRequest(config: any): Promise<any> {
+
     // Simplified HTTP request simulation
     await new Promise(resolve => setTimeout(resolve, Math.random() * 200 + 50));
     return {
@@ -783,6 +805,7 @@ export class HealthCheckDefinitionService {
   }
 
   private async executeDatabaseQuery(config: any): Promise<any> {
+
     // Simplified database query simulation
     await new Promise(resolve => setTimeout(resolve, Math.random() * 100 + 20));
     return {
@@ -793,48 +816,59 @@ export class HealthCheckDefinitionService {
 
   // Database operations (simplified)
   private async loadDefinitionsFromDatabase(): Promise<void> {
+
     // In production, would load from actual database
     console.log('Loading health check definitions from database...');
   }
 
   private async storeDefinitionInDatabase(definition: HealthCheckDefinition): Promise<void> {
+
     console.log(`Storing definition ${definition.id} in database`);
   }
 
   private async updateDefinitionInDatabase(definition: HealthCheckDefinition): Promise<void> {
+
     console.log(`Updating definition ${definition.id} in database`);
   }
 
   private async deleteDefinitionFromDatabase(checkId: string): Promise<void> {
+
     console.log(`Deleting definition ${checkId} from database`);
   }
 
   private async storeExecutionResult(result: HealthCheckResult): Promise<void> {
+
     console.log(`Storing execution result ${result.executionId}`);
   }
 
   // Scheduling methods (simplified)
   private async startScheduledChecks(): Promise<void> {
+
     console.log('Starting scheduled health checks...');
   }
 
   private async scheduleHealthCheck(definition: HealthCheckDefinition): Promise<void> {
+
     console.log(`Scheduling health check: ${definition.id}`);
   }
 
   private async updateScheduleIfNeeded(old: HealthCheckDefinition, updated: HealthCheckDefinition): Promise<void> {
+
     console.log(`Updating schedule for ${updated.id} if needed`);
   }
 
   private async registerWithDiagnosticService(): Promise<void> {
+
     console.log('Registering with diagnostic service...');
   }
 
   private async cancelExecution(executionId: string): Promise<void> {
+
     console.log(`Cancelling execution: ${executionId}`);
   }
 
   private async processAlerting(definition: HealthCheckDefinition, result: HealthCheckResult): Promise<void> {
+
     console.log(`Processing alerts for ${definition.id}: ${result.status}`);
   }
 }

@@ -23,48 +23,57 @@ class MockRedisService {
     expire: jest.fn<unknown[], unknown>(),
     ttl: jest.fn<unknown[], unknown>(),
     ping: jest.fn<unknown[], unknown>().mockResolvedValue('PONG' as unknown as unknown),
-    quit: jest.fn<unknown[], unknown>()
-  };
+    quit: jest.fn<unknown[], unknown>(};
 
   async get(key: string): Promise<string | null> {
+
     return this.client.get(key);
   }
 
   async set(key: string, value: string): Promise<void> {
+
     await this.client.set(key, value);
   }
 
   async setex(key: string, seconds: number, value: string): Promise<void> {
+
     await this.client.set(key, value, { EX: seconds });
   }
 
   async exists(key: string): Promise<boolean> {
+
     const value = await this.client.get(key);
     return value !== null;
   }
 
   async del(key: string): Promise<void> {
+
     await this.client.del(key);
   }
 
   async incr(key: string): Promise<number> {
+
     return this.client.incr(key);
   }
 
   async expire(key: string, seconds: number): Promise<void> {
+
     await this.client.expire(key, seconds);
   }
 
   async ttl(key: string): Promise<number> {
+
     return this.client.ttl(key);
   }
 
   async healthCheck(): Promise<boolean> {
+
     const pong = await this.client.ping();
     return pong === 'PONG';
   }
 
   async close(): Promise<void> {
+
     await this.client.quit();
   }
 
@@ -102,7 +111,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 5
-        })
+  }
       }, async (request, reply) => {
         return { success: true };
       });
@@ -136,7 +145,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 3
-        })
+  }
       }, async (request, reply) => {
         return { success: true };
       });
@@ -177,7 +186,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-        })
+  }
       }, async (request, reply) => {
         return { success: true };
       });
@@ -219,7 +228,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-        })
+  }
       }, async (request, reply) => {
         return { success: true };
       });
@@ -229,7 +238,7 @@ describe('RateLimitMiddleware', () => {
         url: '/test',
         headers: {
           'x-forwarded-for': '192.168.1.100'
-        },
+  }
         remoteAddress: '127.0.0.1'
       });
 
@@ -257,7 +266,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-        })
+  }
       }, async (request, reply) => {
         return { success: true, userId: request.userId };
       });
@@ -313,7 +322,7 @@ describe('RateLimitMiddleware', () => {
             windowMs: 900000, // 15 minutes
             maxRequests: 3
           }
-        },
+  }
         {
           path: '/api/data',
           method: 'GET',
@@ -392,7 +401,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 100 // Default limit
-        })
+  }
       }, async () => ({ success: true }));
 
       // Normal user agent - should have high limit
@@ -441,7 +450,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 1
-        })
+  }
       }, async () => ({ success: true }));
 
       // Should allow requests even though Redis is down
@@ -498,7 +507,7 @@ describe('RateLimitMiddleware', () => {
         preHandler: middleware.createEndpointMiddleware({
           windowMs: 60000,
           maxRequests: 2
-        })
+  }
       }, async (request, reply) => {
         if ((request.query as any).fail) {
           reply.code(400).send({ error: 'Bad request' });
@@ -589,7 +598,7 @@ describe('RateLimitMiddleware', () => {
           maxRequests: 100,
           standardHeaders: true,
           legacyHeaders: true
-        })
+  }
       }, async () => ({ success: true }));
 
       const response = await fastify.inject({

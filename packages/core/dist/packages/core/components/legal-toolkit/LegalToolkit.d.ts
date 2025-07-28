@@ -15,9 +15,9 @@ interface LegalToolkitProps {
 interface LegalToolkitResults {
     document: LegalDocument;
     analysis?: ContractAnalysis;
-    complianceResults?: ComplianceCheck[];
-    citations: Citation[];
-    terminologyResults?: TermValidationResult[];
+    complianceResults?: ComplianceCheck;
+    citations: Citation;
+    terminologyResults?: TermValidationResult;
 }
 export declare const LegalToolkit: React.FC<LegalToolkitProps>;
 export default LegalToolkit;

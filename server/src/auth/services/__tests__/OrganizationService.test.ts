@@ -48,14 +48,14 @@ describe('OrganizationService', () => {
         audience: 'test-audience',
         accessTokenExpiry: '15m',
         refreshTokenExpiry: '7d'
-      },
+  }
       database: {
         host: 'localhost',
         port: 5432,
         name: 'test_db',
         user: 'test_user',
         password: 'test_password'
-      },
+  }
       redis: {
         host: 'localhost',
         port: 6379
@@ -164,7 +164,7 @@ describe('OrganizationService', () => {
             organizationName: 'Test Organization',
             slug: 'test-organization',
             plan: 'pro'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'info'
@@ -291,7 +291,7 @@ describe('OrganizationService', () => {
               description: 'Original description',
               plan: 'free'
             }
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'info'
@@ -348,7 +348,7 @@ describe('OrganizationService', () => {
           details: {
             organizationName: 'Test Organization',
             slug: 'test-org'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'warning'
@@ -474,7 +474,7 @@ describe('OrganizationService', () => {
             teamName: 'Development Team',
             organizationId: 'org-123',
             parentTeamId: 'parent-team-123'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'info'
@@ -577,7 +577,7 @@ describe('OrganizationService', () => {
           details: {
             teamName: 'Test Team',
             organizationId: 'org-123'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'warning'
@@ -694,7 +694,7 @@ describe('OrganizationService', () => {
             teamId: 'team-123',
             removedUserId: 'user-456',
             previousRole: 'member'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'info'
@@ -739,7 +739,7 @@ describe('OrganizationService', () => {
             targetUserId: 'user-456',
             newRole: 'admin',
             previousRole: 'member'
-          },
+  }
           ipAddress: '127.0.0.1',
           userAgent: 'Test Agent',
           severity: 'info'
@@ -767,7 +767,7 @@ describe('OrganizationService', () => {
             maxUsers: 100,
             maxTeams: 50,
             maxStorage: 10240
-          },
+  }
           usage: {
             users: 15,
             teams: 8,

@@ -23,6 +23,7 @@ import { Readable, Transform } from 'stream';
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface UploadRequest {
   id: string;
   filename: string;
@@ -41,7 +42,9 @@ export interface UploadRequest {
   completedAt?: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface UploadChunk {
   chunkNumber: number;
   chunkSize: number;
@@ -51,7 +54,9 @@ export interface UploadChunk {
   storageLocation: string;
   verified: boolean;
 }
+}
 
+}
 export interface UploadMetadata {
   // File metadata
   fileExtension: string;
@@ -94,7 +99,9 @@ export interface UploadMetadata {
   customFields: Record<string, any>;
   tags: string[];
 }
+}
 
+}
 export interface UploadOptions {
   // Upload behavior
   allowResume: boolean;
@@ -134,6 +141,7 @@ export interface UploadOptions {
   parallelChunks: number;
   bandwidthLimit?: number;
   priorityLevel: 'low' | 'normal' | 'high' | 'urgent';
+}
 }
 
 export enum UploadType {
@@ -210,6 +218,7 @@ export enum StorageRedundancy {
   MULTI_CLOUD = 'multi_cloud'
 }
 
+}
 export interface UploadProgress {
   uploadId: string;
   bytesUploaded: number;
@@ -223,7 +232,9 @@ export interface UploadProgress {
   status: UploadStatus;
   lastActivity: Date;
 }
+}
 
+}
 export interface ProcessingJob {
   id: string;
   uploadId: string;
@@ -236,6 +247,7 @@ export interface ProcessingJob {
   progress: number; // 0-100
   result?: any;
   metadata: Record<string, any>;
+}
 }
 
 export enum ProcessorType {
@@ -265,13 +277,16 @@ export enum ProcessingStatus {
   SKIPPED = 'skipped'
 }
 
+}
 export interface UploadValidationResult {
   valid: boolean;
   errors: UploadValidationError[];
   warnings: UploadValidationWarning[];
   recommendations: string[];
 }
+}
 
+}
 export interface UploadValidationError {
   code: string;
   field: string;
@@ -279,7 +294,9 @@ export interface UploadValidationError {
   severity: 'error' | 'critical';
   fixSuggestion?: string;
 }
+}
 
+}
 export interface UploadValidationWarning {
   code: string;
   field: string;
@@ -287,7 +304,9 @@ export interface UploadValidationWarning {
   severity: 'warning' | 'info';
   canIgnore: boolean;
 }
+}
 
+}
 export interface StorageProvider {
   name: string;
   backend: StorageBackend;
@@ -311,7 +330,9 @@ export interface StorageProvider {
   validateConnection(): Promise<boolean>;
   getStorageStats(): Promise<StorageStats>;
 }
+}
 
+}
 export interface StorageConfig {
   endpoint?: string;
   region?: string;
@@ -324,28 +345,36 @@ export interface StorageConfig {
   redundancy?: RedundancyConfig;
   performance?: PerformanceConfig;
 }
+}
 
+}
 export interface EncryptionConfig {
   enabled: boolean;
   algorithm: 'AES-256' | 'ChaCha20' | 'AES-128';
   keyRotation: boolean;
   keyRotationDays: number;
 }
+}
 
+}
 export interface CompressionConfig {
   enabled: boolean;
   algorithm: 'gzip' | 'brotli' | 'lz4' | 'zstd';
   level: number; // 1-9
   threshold: number; // minimum file size to compress
 }
+}
 
+}
 export interface RedundancyConfig {
   enabled: boolean;
   copies: number;
   distribution: 'same_region' | 'cross_region' | 'multi_cloud';
   syncMode: 'async' | 'sync';
 }
+}
 
+}
 export interface PerformanceConfig {
   maxConcurrentUploads: number;
   chunkSize: number;
@@ -353,7 +382,9 @@ export interface PerformanceConfig {
   retryDelay: number;
   timeout: number;
 }
+}
 
+}
 export interface StorageResult {
   success: boolean;
   location: string;
@@ -362,7 +393,9 @@ export interface StorageResult {
   metadata?: Record<string, any>;
   error?: string;
 }
+}
 
+}
 export interface StorageMetadata {
   size: number;
   lastModified: Date;
@@ -370,7 +403,9 @@ export interface StorageMetadata {
   checksum: string;
   customMetadata: Record<string, any>;
 }
+}
 
+}
 export interface StorageFileInfo {
   location: string;
   name: string;
@@ -379,7 +414,9 @@ export interface StorageFileInfo {
   contentType: string;
   isDirectory: boolean;
 }
+}
 
+}
 export interface StorageStats {
   totalFiles: number;
   totalSize: number;
@@ -388,7 +425,9 @@ export interface StorageStats {
   quotaLimit?: number;
   costEstimate?: number;
 }
+}
 
+}
 export interface FileProcessor {
   type: ProcessorType;
   name: string;
@@ -406,7 +445,9 @@ export interface FileProcessor {
   postProcess?(upload: UploadRequest, result: ProcessingResult): Promise<void>;
   cleanup?(upload: UploadRequest): Promise<void>;
 }
+}
 
+}
 export interface ProcessingResult {
   success: boolean;
   processorType: ProcessorType;
@@ -417,13 +458,16 @@ export interface ProcessingResult {
   errors?: string[];
   warnings?: string[];
 }
+}
 
+}
 export interface ProcessedFile {
   filename: string;
   path: string;
   size: number;
   contentType: string;
   purpose: string; // thumbnail, preview, converted, etc.
+}
 }
 
 /**
@@ -464,6 +508,7 @@ export class UploaderService extends EventEmitter {
     options: Partial<UploadOptions> = {},
     metadata: Partial<UploadMetadata> = {}
   ): Promise<UploadRequest> {
+
     const uploadId = this.generateUploadId();
     
     const uploadRequest: UploadRequest = {
@@ -491,7 +536,7 @@ export class UploaderService extends EventEmitter {
         tags: [],
         purpose: 'user_upload',
         ...metadata
-      },
+  }
       options: {
         allowResume: true,
         maxChunkSize: this.config.maxChunkSize,
@@ -514,7 +559,7 @@ export class UploaderService extends EventEmitter {
         parallelChunks: this.config.maxParallelChunks,
         priorityLevel: 'normal',
         ...options
-      },
+  }
       chunks: [],
       status: UploadStatus.INITIATED,
       createdAt: new Date(),
@@ -544,7 +589,7 @@ export class UploaderService extends EventEmitter {
         mimeType,
         uploadType: uploadRequest.uploadType,
         category: uploadRequest.category
-      },
+  }
       severity: 'info'
     });
     
@@ -562,6 +607,7 @@ export class UploaderService extends EventEmitter {
     chunkData: Buffer,
     chunkChecksum: string
   ): Promise<UploadProgress> {
+
     const upload = await this.getUploadRequest(uploadId);
     if (!upload) {
       throw new Error('Upload not found');
@@ -630,6 +676,7 @@ export class UploaderService extends EventEmitter {
    * Complete upload and trigger processing
    */
   private async completeUpload(uploadId: string): Promise<void> {
+
     const upload = await this.getUploadRequest(uploadId);
     if (!upload) return;
     
@@ -661,7 +708,7 @@ export class UploaderService extends EventEmitter {
           fileSize: upload.size,
           chunksCount: upload.chunks.length,
           finalLocation
-        },
+  }
         severity: 'info'
       });
       
@@ -684,8 +731,7 @@ export class UploaderService extends EventEmitter {
   // - processFile()
   // - setupEventHandlers()
   // - startCleanupScheduler()
-  // - startProcessingWorker()
-  // - etc.
+  // - startProcessingWorker(// - etc.
   
   private generateUploadId(): string {
     return `upload_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -747,8 +793,7 @@ export class UploaderService extends EventEmitter {
       speed: 0, // Would be calculated based on recent chunks
       estimatedTimeRemaining: 0, // Would be calculated based on speed
       status: upload.status,
-      lastActivity: new Date()
-    };
+      lastActivity: new Date(};
   }
   
   private isUploadComplete(upload: UploadRequest): boolean {
@@ -758,24 +803,29 @@ export class UploaderService extends EventEmitter {
   
   // Placeholder methods that would be fully implemented
   private async validateUpload(upload: UploadRequest): Promise<UploadValidationResult> {
+
     // Implementation would validate file type, size, permissions, etc.
     return { valid: true, errors: [], warnings: [], recommendations: [] };
   }
   
   private async storeUploadRequest(upload: UploadRequest): Promise<void> {
+
     // Implementation would store in database
   }
   
   private async getUploadRequest(uploadId: string): Promise<UploadRequest | null> {
+
     // Implementation would retrieve from database or cache
     return this.uploadQueue.get(uploadId) || null;
   }
   
   private async updateUploadStatus(uploadId: string, status: UploadStatus): Promise<void> {
+
     // Implementation would update database
   }
   
   private async updateUploadChunks(uploadId: string, chunks: UploadChunk[]): Promise<void> {
+
     // Implementation would update database
   }
   
@@ -788,15 +838,18 @@ export class UploaderService extends EventEmitter {
   }
   
   private async assembleFile(upload: UploadRequest): Promise<string> {
+
     // Implementation would assemble chunks into final file
     return `uploads/${upload.id}/${upload.filename}`;
   }
   
   private async queueForProcessing(upload: UploadRequest): Promise<void> {
+
     // Implementation would add to processing queue
   }
   
   private async handleUploadError(uploadId: string, error: Error): Promise<void> {
+
     // Implementation would handle errors and cleanup
   }
   
@@ -813,6 +866,7 @@ export class UploaderService extends EventEmitter {
   }
 }
 
+}
 export interface UploaderConfig {
   maxFileSize: number;
   maxChunkSize: number;
@@ -830,6 +884,7 @@ export interface UploaderConfig {
   thumbnailGeneration: boolean;
   cleanupIntervalMs: number;
   maxConcurrentProcessing: number;
+}
 }
 
 export default UploaderService;

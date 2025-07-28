@@ -24,12 +24,14 @@ import { TrustedDeviceManager } from '../../../../packages/core/security/Trusted
 import { WSServerConfig, WSMessage } from './types';
 
 // Enhanced server configuration
+}
 export interface SecureWSServerConfig extends WSServerConfig {
   security: WebSocketSecurityConfig;
   keyManagement: KeyManagementConfig;
 }
 
 // Enhanced connection info with security context
+}
 export interface SecureConnectionInfo {
   id: string;
   userId: string;
@@ -46,6 +48,7 @@ export interface SecureConnectionInfo {
   isSecure: boolean;
   threatLevel: 'low' | 'medium' | 'high' | 'critical';
   trustLevel: 'none' | 'basic' | 'verified' | 'full';
+}
 }
 
 /**
@@ -98,6 +101,7 @@ export class SecureWebSocketServer extends EventEmitter {
    * Start the secure WebSocket server
    */
   async start(server?: any): Promise<void> {
+
     try {
       // Start base server
       await this.baseServer.start(server);
@@ -114,6 +118,7 @@ export class SecureWebSocketServer extends EventEmitter {
    * Stop the secure WebSocket server
    */
   async stop(): Promise<void> {
+
     try {
       // Clean up all secure connections
       for (const connectionId of this.secureConnections.keys()) {
@@ -175,6 +180,7 @@ export class SecureWebSocketServer extends EventEmitter {
     message: Omit<WSMessage, 'timestamp' | 'messageId'>,
     excludeConnectionId?: string
   ): Promise<void> {
+
     const connections = Array.from(this.secureConnections.values())
       .filter(conn => 
         conn.documentId === documentId && 
@@ -214,6 +220,7 @@ export class SecureWebSocketServer extends EventEmitter {
     connectionId: string,
     reason: string
   ): Promise<void> {
+
     const connection = this.secureConnections.get(connectionId);
     if (connection) {
       // Block connection in security manager
@@ -288,6 +295,7 @@ export class SecureWebSocketServer extends EventEmitter {
     ws: WebSocket,
     request: any
   ): Promise<void> {
+
     try {
       this.securityMetrics.totalConnections++;
       
@@ -366,6 +374,7 @@ export class SecureWebSocketServer extends EventEmitter {
     connectionId: string,
     rawMessage: any
   ): Promise<void> {
+
     const connection = this.secureConnections.get(connectionId);
     if (!connection) {
       console.warn(`Secure connection not found: ${connectionId}`);
@@ -426,6 +435,7 @@ export class SecureWebSocketServer extends EventEmitter {
   }
 
   private async cleanupSecureConnection(connectionId: string): Promise<void> {
+
     const connection = this.secureConnections.get(connectionId);
     if (connection) {
       // Clean up security context
@@ -491,8 +501,7 @@ export class SecureWebSocketServer extends EventEmitter {
       ...this.securityMetrics,
       securityManager: this.securityManager.getSecurityStats(),
       keyManagement: this.keyManagementService.getPerformanceMetrics(),
-      lastUpdated: new Date()
-    };
+      lastUpdated: new Date(};
   }
 
   /**

@@ -8,6 +8,7 @@
  * Epic: 17 - Backstage Admin Controls
  */
 import React from 'react';
+
 interface DateTimeSelection {
     date: Date;
     time: string;
@@ -15,14 +16,16 @@ interface DateTimeSelection {
     businessHoursOnly?: boolean;
     avoidWeekends?: boolean;
     smartSuggestion?: boolean;
-}
+
+
 interface BusinessHours {
     enabled: boolean;
     workdays: number[];
     startTime: string;
     endTime: string;
     timezone: string;
-}
+
+
 interface AdvancedDateTimeControlsProps {
     value?: DateTimeSelection;
     onChange: (selection: DateTimeSelection) => void;
@@ -32,7 +35,7 @@ interface AdvancedDateTimeControlsProps {
     smartSuggestions?: boolean;
     allowPastDates?: boolean;
     className?: string;
-}
+
 export declare const AdvancedDateTimeControls: React.FC<AdvancedDateTimeControlsProps>;
 export default AdvancedDateTimeControls;
 //# sourceMappingURL=AdvancedDateTimeControls.d.ts.map

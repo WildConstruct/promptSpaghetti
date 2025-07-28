@@ -312,7 +312,7 @@ export async function registerAutomatedCategorizationRoutes(
           ...ruleData,
           createdBy: request.user!.id,
           createdAt: new Date().toISOString()
-        },
+  }
         message: 'Categorization rule created successfully'
       });
 
@@ -393,7 +393,7 @@ export async function registerAutomatedCategorizationRoutes(
           ruleId,
           ...updates,
           lastModified: new Date().toISOString()
-        },
+  }
         message: 'Categorization rule updated successfully'
       });
 
@@ -454,7 +454,7 @@ export async function registerAutomatedCategorizationRoutes(
           ...categoryData,
           createdBy: request.user!.id,
           createdAt: new Date().toISOString()
-        },
+  }
         message: 'Category definition created successfully'
       });
 

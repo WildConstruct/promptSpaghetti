@@ -30,6 +30,7 @@ export class AuditService extends EventEmitter {
   }
 
   private async initializeService(): Promise<void> {
+
     // Load configuration
     await this.loadConfiguration();
     
@@ -43,6 +44,7 @@ export class AuditService extends EventEmitter {
   }
 
   private async loadConfiguration(): Promise<void> {
+
     try {
       // In a real implementation, this would load from database
       this.config = {
@@ -60,7 +62,7 @@ export class AuditService extends EventEmitter {
           [AuditCategory.SYSTEM_CONFIGURATION]: 1095, // 3 years
           [AuditCategory.PERFORMANCE]: 90, // 3 months
           [AuditCategory.ERROR]: 365 // 1 year
-        },
+  }
         archiveAfterDays: 365,
         deleteAfterDays: 2555,
         enableIntegrityChecking: true,
@@ -100,6 +102,7 @@ export class AuditService extends EventEmitter {
    * Log an audit event
    */
   async logEvent(request: CreateAuditEventRequest, context: AuditContext): Promise<void> {
+
     // Check if event type is enabled
     if (!this.isEventTypeEnabled(request.eventType)) {
       return;
@@ -128,6 +131,7 @@ export class AuditService extends EventEmitter {
    * Log feature toggle events
    */
   async logToggleCreated(toggleId: string, toggleData: unknown, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_CREATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -142,7 +146,7 @@ export class AuditService extends EventEmitter {
       metadata: {
         toggleType: toggleData.type,
         claudeImpact: toggleData.claudeImpact
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
   }
@@ -153,6 +157,7 @@ export class AuditService extends EventEmitter {
     afterData: unknown,
     context: AuditContext
   ): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_UPDATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -168,12 +173,13 @@ export class AuditService extends EventEmitter {
       metadata: {
         toggleType: afterData.type,
         claudeImpact: afterData.claudeImpact
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
   }
 
   async logToggleEnabled(toggleId: string, toggleName: string, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_ENABLED,
       category: AuditCategory.SYSTEM_CONFIGURATION,
@@ -190,6 +196,7 @@ export class AuditService extends EventEmitter {
   }
 
   async logToggleDisabled(toggleId: string, toggleName: string, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.TOGGLE_DISABLED,
       category: AuditCategory.SYSTEM_CONFIGURATION,
@@ -209,6 +216,7 @@ export class AuditService extends EventEmitter {
    * Log schedule events
    */
   async logScheduleCreated(scheduleId: string, scheduleData: unknown, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.SCHEDULE_CREATED,
       category: AuditCategory.DATA_MODIFICATION,
@@ -224,7 +232,7 @@ export class AuditService extends EventEmitter {
         scheduleType: scheduleData.type,
         scheduleAction: scheduleData.action,
         toggleId: scheduleData.toggleId
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
   }
@@ -235,6 +243,7 @@ export class AuditService extends EventEmitter {
     execution: unknown,
     context: AuditContext
   ): Promise<void> {
+
     const severity = execution.status === 'success' ? AuditSeverity.MEDIUM : AuditSeverity.HIGH;
     
     await this.logEvent({
@@ -254,7 +263,7 @@ export class AuditService extends EventEmitter {
         duration: execution.duration,
         affectedUsers: execution.affectedUsers,
         triggeredBy: execution.triggeredBy
-      },
+  }
       error: execution.error,
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
@@ -270,6 +279,7 @@ export class AuditService extends EventEmitter {
     context: AuditContext,
     error?: Error
   ): Promise<void> {
+
     const eventType = success ? AuditEventType.USER_LOGIN : AuditEventType.LOGIN_FAILED;
     const severity = success ? AuditSeverity.LOW : AuditSeverity.HIGH;
     const category = AuditCategory.AUTHENTICATION;
@@ -289,7 +299,7 @@ export class AuditService extends EventEmitter {
       metadata: {
         loginMethod: context.metadata?.loginMethod || 'unknown',
         deviceType: context.metadata?.deviceType || 'unknown'
-      },
+  }
       error: error ? {
         code: error.code || 'LOGIN_FAILED',
         message: error.message || 'Login failed'
@@ -299,6 +309,7 @@ export class AuditService extends EventEmitter {
   }
 
   async logUserLogout(userId: string, userEmail: string, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.USER_LOGOUT,
       category: AuditCategory.AUTHENTICATION,
@@ -317,6 +328,7 @@ export class AuditService extends EventEmitter {
    * Log access control events
    */
   async logAccessGranted(userId: string, resource: string, permission: string, context: AuditContext): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.ACCESS_GRANTED,
       category: AuditCategory.AUTHORIZATION,
@@ -330,7 +342,7 @@ export class AuditService extends EventEmitter {
       metadata: {
         permission,
         resource
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
   }
@@ -342,6 +354,7 @@ export class AuditService extends EventEmitter {
     context: AuditContext,
     reason?: string
   ): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.ACCESS_DENIED,
       category: AuditCategory.AUTHORIZATION,
@@ -356,7 +369,7 @@ export class AuditService extends EventEmitter {
         permission,
         resource,
         reason: reason || 'insufficient_permissions'
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2]
     }, context);
   }
@@ -370,6 +383,7 @@ export class AuditService extends EventEmitter {
     metadata?: Record<string,
     unknown>
   ): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
       category: AuditCategory.SECURITY,
@@ -382,7 +396,7 @@ export class AuditService extends EventEmitter {
         ...metadata,
         detectionTime: new Date().toISOString(),
         riskLevel: 'high'
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.ISO27001]
     }, context);
   }
@@ -393,6 +407,7 @@ export class AuditService extends EventEmitter {
     metadata?: Record<string,
     unknown>
   ): Promise<void> {
+
     await this.logEvent({
       eventType: AuditEventType.SECURITY_BREACH_DETECTED,
       category: AuditCategory.SECURITY,
@@ -406,7 +421,7 @@ export class AuditService extends EventEmitter {
         detectionTime: new Date().toISOString(),
         riskLevel: 'critical',
         requiresImmedateAction: true
-      },
+  }
       complianceStandards: [ComplianceStandard.SOC2, ComplianceStandard.ISO27001]
     }, context);
 
@@ -424,6 +439,7 @@ export class AuditService extends EventEmitter {
     context: AuditContext,
     duration?: number
   ): Promise<void> {
+
     const severity = statusCode >= 400 ? AuditSeverity.MEDIUM : AuditSeverity.LOW;
     const outcome = statusCode < 400 ? 'success' : 'failure';
 
@@ -451,6 +467,7 @@ export class AuditService extends EventEmitter {
    * Query audit events
    */
   async queryEvents(query: AuditEventQuery): Promise<AuditEventResponse> {
+
     return this.auditDAO.queryAuditEvents(query);
   }
 
@@ -458,6 +475,7 @@ export class AuditService extends EventEmitter {
    * Get audit statistics
    */
   async getStatistics(startDate?: Date, endDate?: Date): Promise<AuditStatistics> {
+
     return this.auditDAO.getAuditStatistics(startDate, endDate);
   }
 
@@ -468,6 +486,7 @@ export class AuditService extends EventEmitter {
     request: CreateComplianceReportRequest,
     generatedBy: string
   ): Promise<ComplianceReport> {
+
     return this.auditDAO.createComplianceReport(request, generatedBy);
   }
 
@@ -489,8 +508,7 @@ export class AuditService extends EventEmitter {
       metadata: {
         method: req.method,
         url: req.url,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(}
     };
   }
 
@@ -523,6 +541,7 @@ export class AuditService extends EventEmitter {
   }
 
   private async flushEventQueue(): Promise<void> {
+
     if (this.isProcessing || this.eventQueue.length === 0) {
       return;
     }
@@ -548,6 +567,7 @@ export class AuditService extends EventEmitter {
   }
 
   private async processBatch(events: CreateAuditEventRequest[]): Promise<void> {
+
     for (const event of events) {
       try {
         // Create a basic context for queued events
@@ -610,6 +630,7 @@ export class AuditService extends EventEmitter {
    * Cleanup and shutdown
    */
   async shutdown(): Promise<void> {
+
     if (this.flushTimer) {
       clearInterval(this.flushTimer);
     }

@@ -10,6 +10,7 @@
  * - Professional styling with multiple group styles
  */
 import React from 'react';
+
 interface RegionGroupsManagerProps {
     disabled?: boolean;
     readonly?: boolean;
@@ -17,7 +18,7 @@ interface RegionGroupsManagerProps {
     selectedGroupId?: string | null;
     onGroupHover?: (groupId: string | null) => void;
     onGroupSelect?: (groupId: string | null) => void;
-}
+
 export declare const RegionGroupsManager: React.FC<RegionGroupsManagerProps>;
 export default RegionGroupsManager;
 //# sourceMappingURL=RegionGroupsManager.d.ts.map

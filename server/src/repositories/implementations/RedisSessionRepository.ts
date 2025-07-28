@@ -13,6 +13,7 @@ export class RedisSessionRepository implements SessionRepository {
   constructor(private redis: RedisClientType) {}
 
   async create(request: CreateSessionRequest): Promise<string> {
+
     const sessionId = this.generateSessionId();
     const ttl = request.ttlSeconds || RedisSessionRepository.DEFAULT_TTL_SECONDS;
     const now = new Date();
@@ -44,6 +45,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async findById(sessionId: string): Promise<Session | null> {
+
     const sessionKey = this.getSessionKey(sessionId);
     const data = await this.redis.get(sessionKey);
     
@@ -61,6 +63,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async update(sessionId: string, updates: Partial<Session>): Promise<boolean> {
+
     const session = await this.findById(sessionId);
     if (!session) return false;
     
@@ -80,6 +83,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async delete(sessionId: string): Promise<boolean> {
+
     const session = await this.findById(sessionId);
     if (!session) return false;
     
@@ -96,6 +100,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async findByUser(userId: UserId): Promise<Session[]> {
+
     const userSessionsKey = this.getUserSessionsKey(userId);
     const sessionIds = await this.redis.sMembers(userSessionsKey);
     
@@ -115,6 +120,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async deleteAllForUser(userId: UserId): Promise<boolean> {
+
     const userSessionsKey = this.getUserSessionsKey(userId);
     const sessionIds = await this.redis.sMembers(userSessionsKey);
     
@@ -131,6 +137,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async extend(sessionId: string, ttlSeconds?: number): Promise<boolean> {
+
     const session = await this.findById(sessionId);
     if (!session) return false;
     
@@ -149,6 +156,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async isValid(sessionId: string): Promise<boolean> {
+
     const sessionKey = this.getSessionKey(sessionId);
     const exists = await this.redis.exists(sessionKey);
     
@@ -159,6 +167,7 @@ export class RedisSessionRepository implements SessionRepository {
   }
 
   async cleanupExpired(): Promise<number> {
+
     // Redis automatically handles TTL expiration, but we can clean up user session lists
     const pattern = `${RedisSessionRepository.USER_SESSIONS_PREFIX}*`;
     const keys = await this.redis.keys(pattern);
@@ -220,6 +229,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async create(request: CreateSessionRequest): Promise<string> {
+
     const sessionId = this.generateSessionId();
     const ttl = request.ttlSeconds || 24 * 60 * 60; // 24 hours
     const now = new Date();
@@ -248,6 +258,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async findById(sessionId: string): Promise<Session | null> {
+
     const session = this.sessions.get(sessionId);
     
     if (!session || session.expiresAt <= new Date()) {
@@ -258,6 +269,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async update(sessionId: string, updates: Partial<Session>): Promise<boolean> {
+
     const session = this.sessions.get(sessionId);
     if (!session || session.expiresAt <= new Date()) {
       return false;
@@ -274,6 +286,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async delete(sessionId: string): Promise<boolean> {
+
     const session = this.sessions.get(sessionId);
     if (!session) return false;
     
@@ -291,6 +304,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async findByUser(userId: UserId): Promise<Session[]> {
+
     const sessionIds = this.userSessions.get(userId);
     if (!sessionIds) return [];
     
@@ -306,6 +320,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async deleteAllForUser(userId: UserId): Promise<boolean> {
+
     const sessionIds = this.userSessions.get(userId);
     if (!sessionIds) return true;
     
@@ -318,6 +333,7 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async extend(sessionId: string, ttlSeconds?: number): Promise<boolean> {
+
     const session = this.sessions.get(sessionId);
     if (!session) return false;
     
@@ -329,11 +345,13 @@ export class MemorySessionRepository implements SessionRepository {
   }
 
   async isValid(sessionId: string): Promise<boolean> {
+
     const session = await this.findById(sessionId);
     return session !== null && session.isActive;
   }
 
   async cleanupExpired(): Promise<number> {
+
     const now = new Date();
     let cleanedCount = 0;
     

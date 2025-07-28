@@ -10,6 +10,7 @@
 import { EventEmitter } from 'events';
 import { RateLimitingService, ThreatLevel } from './RateLimitingService';
 import { AdaptiveThrottlingRulesEngine } from './AdaptiveThrottlingRules';
+
 export interface RateLimitingMetricsConfig {
     enableRealTimeMetrics: boolean;
     metricsRetentionPeriod: number;
@@ -35,7 +36,7 @@ export interface RateLimitingMetricsConfig {
             highBlockRate: number;
         };
     };
-}
+
 export interface PerformanceMetrics {
     timestamp: Date;
     responseTime: {,
@@ -70,7 +71,7 @@ export interface PerformanceMetrics {
         blockedThreats: number;
         adaptiveAdjustments: number;
     };
-}
+
 export interface MetricsVisualizationData {
     timeSeriesData: {,
         timestamps: Date[];
@@ -103,7 +104,7 @@ export interface MetricsVisualizationData {
         }>;
         userAgentDistribution: Record<string, number>;
     };
-}
+
 export interface AlertCondition {
     alertId: string;
     timestamp: Date;
@@ -115,7 +116,7 @@ export interface AlertCondition {
     affectedEndpoints: string[];
     recommendedActions: string[];
     metadata: Record<string, unknown>;
-}
+
 export interface DashboardWidget {
     widgetId: string;
     widgetType: 'chart' | 'gauge' | 'table' | 'heatmap' | 'map' | 'counter';
@@ -137,7 +138,7 @@ export interface DashboardWidget {
         width: number;
         height: number;
     };
-}
+
 export declare class RateLimitingPerformanceMetrics extends EventEmitter {
     private rateLimitingService;
     private throttlingEngine?;
@@ -276,6 +277,6 @@ export declare class RateLimitingPerformanceMetrics extends EventEmitter {
      * Cleanup resources
      */
     destroy(): void;
-}
+
 export default RateLimitingPerformanceMetrics;
 //# sourceMappingURL=RateLimitingPerformanceMetrics.d.ts.map

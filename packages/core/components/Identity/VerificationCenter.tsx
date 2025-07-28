@@ -32,7 +32,6 @@ export interface VerificationCenterProps {
   onVerificationComplete?: (type: string) => void;
   className?: string;
 }
-
 export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   userId,
   onVerificationComplete,
@@ -58,23 +57,22 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   const recommendedSteps = getRecommendedVerificationSteps();
   const trustBenefits = getTrustTierBenefits();
   const getTrustTierColor = (tier?: string) => {
-    switch (tier) {
-    case 'expert': return 'text-purple-600 bg-purple-100';
-    case 'professional': return 'text-blue-600 bg-blue-100';
-    case 'verified': return 'text-green-600 bg-green-100';
-    case 'basic': return 'text-yellow-600 bg-yellow-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (tier) {
+  case 'expert': return 'text-purple-600 bg-purple-100';
+  case 'professional': return 'text-blue-600 bg-blue-100';
+  case 'verified': return 'text-green-600 bg-green-100';
+  case 'basic': return 'text-yellow-600 bg-yellow-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getVerificationIcon = (type: string, status: string) => {
-    const icons = {
-      email_verification: Mail,
-      phone_verification: Phone,
-      government_id: FileText,
-      professional_credentials: Award,
-      portfolio_verification: Camera,
-      social_media_verification: ExternalLink,
-    };
+  const icons = {
+  email_verification: Mail,
+  phone_verification: Phone,
+  government_id: FileText,
+  professional_credentials: Award,
+  portfolio_verification: Camera,
+  social_media_verification: ExternalLink,
+};
     const Icon = icons[type as keyof typeof icons] || User;
     if (status === 'completed') {
       return <CheckCircle className="w-5 h-5 text-green-500" />;
@@ -82,7 +80,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
       return <Clock className="w-5 h-5 text-yellow-500" />;
     } else if (status === 'rejected') {
       return <XCircle className="w-5 h-5 text-red-500" />;
-    }
     return <Icon className="w-5 h-5 text-gray-400" />;
   };
   const handleVerificationSubmit = async (type: string, data: Record<string, unknown>) => {
@@ -106,12 +103,10 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
     case 'portfolio_verification':
       result = await submitPortfolioVerification(data);
       break;
-    }
     if (result?.success) {
       setActiveStep(null);
       setFormData({});
       onVerificationComplete?.(type);
-    }
   };
   const renderTrustScoreOverview = () => (;);
     <Card className="trust-score-overview">
@@ -228,7 +223,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
   const renderVerificationForm = (type: string) => {
     switch (type) {
     case 'email_verification':
-      return ();
+      return;
         <div className="verification-form">
           <div className="form-group">
             <label>Email Address</label>
@@ -251,7 +246,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'phone_verification':
-      return ();
+      return;
         <div className="verification-form">
           <div className="form-group">
             <label>Phone Number</label>
@@ -274,7 +269,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'professional_credentials':
-      return ();
+      return;
         <div className="verification-form">
           <div className="form-group">
             <label>Professional Role</label>
@@ -318,19 +313,18 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
           </div>
           <div className="form-actions">
             <Button onClick={() => handleVerificationSubmit(type, {)
-              professionalCredentials: {,
-                role: formData.role,
-                experience: formData.experience,
-                credentials: [{,
-                  type: 'degree',
-                  title: formData.education,
-                  institution: 'User Provided',
-                  year: new Date().getFullYear(),
-                  verificationStatus: 'pending',
-                }],
-                portfolio: [],
-              }
-            })}>
+  professionalCredentials: {,
+  role: formData.role,
+  experience: formData.experience,
+  credentials: [{,
+  type: 'degree',
+  title: formData.education,
+  institution: 'User Provided',
+  year: new Date().getFullYear(),
+  verificationStatus: 'pending',
+}],
+                portfolio: [];
+  })}>
                 Submit Credentials
             </Button>
             <Button variant="outline" onClick={() => setActiveStep(null)}>
@@ -340,7 +334,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     case 'social_media_verification':
-      return ();
+      return;
         <div className="verification-form">
           <div className="form-group">
             <label>LinkedIn Profile</label>
@@ -375,20 +369,20 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
           <div className="form-actions">
             <Button onClick={() => handleVerificationSubmit(type, [)
               ...(formData.linkedin ? [{)
-                platform: 'linkedin',
-                url: formData.linkedin,
-                verified: false,
-              }] : []),
+  platform: 'linkedin',
+  url: formData.linkedin,
+  verified: false,
+}] : []),
               ...(formData.imdb ? [{)
-                platform: 'imdb',
-                url: formData.imdb,
-                verified: false,
-              }] : []),
+  platform: 'imdb',
+  url: formData.imdb,
+  verified: false,
+}] : []),
               ...(formData.website ? [{)
-                platform: 'website',
-                url: formData.website,
-                verified: false,
-              }] : [])
+  platform: 'website',
+  url: formData.website,
+  verified: false,
+}] : [])
             ])}>
                 Verify Profiles
             </Button>
@@ -399,7 +393,7 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
         </div>
       );
     default:
-      return ();
+      return;
         <div className="verification-form">
           <p>Verification form for {type} is coming soon.</p>
           <Button variant="outline" onClick={() => setActiveStep(null)}>
@@ -407,7 +401,6 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
           </Button>
         </div>
       );
-    }
   };
   const renderValidationHistory = () => (;);
     <Card className="validation-history">
@@ -454,14 +447,13 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
     </Card>
   );
   if (isLoading) {
-    return ();
+    return;
       <div className="verification-center loading">
         <div className="loading-spinner"></div>
         <p>Loading verification data...</p>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`verification-center ${className}`}>}
       <div className="verification-header">
         <h2>Identity Verification</h2>
@@ -485,263 +477,209 @@ export const VerificationCenter: React.FC<VerificationCenterProps> = ({)
       </Tabs>
       <style>{`
         .verification-center {
-          max-width: 1200px;
-          margin: 0 auto;
+          max-width: 1200px;,
+  margin: 0 auto;
           padding: 1rem;
-        }
         .verification-header {
           text-align: center;
           margin-bottom: 2rem;
-        }
         .verification-header h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .verification-header p {
           color: #6b7280;
           font-size: 1.125rem;
-        }
         .trust-score-overview {
           margin-bottom: 1rem;
-        }
         .trust-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .trust-info {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .trust-tier {
           display: flex;
           align-items: center;
-        }
         .score-circle {
           display: flex;
-          align-items: baseline;
-          gap: 0.25rem;
-        }
+          align-items: baseline;,
+  gap: 0.25rem;
         .score-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .score-max {
-          font-size: 1rem;
-          color: #9ca3af;
-        }
+          font-size: 1rem;,
+  color: #9ca3af;
         .verification-progress {
           margin: 1.5rem 0;
-        }
         .progress-header {
           display: flex;
           justify-content: space-between;
           margin-bottom: 0.5rem;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .trust-breakdown {
           margin: 1.5rem 0;
-        }
         .trust-breakdown h4 {
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           margin-bottom: 0.75rem;
-        }
         .components-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 0.75rem;
-        }
         .component-item {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem;
-          border: 1px solid #e5e7eb;
+          align-items: center;,
+  gap: 0.5rem;
+          padding: 0.5rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .component-score {
           margin-left: auto;
-          font-weight: 600;
-          color: #374151;
-        }
+          font-weight: 600;,
+  color: #374151;
         .trust-benefits h4 {
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           margin-bottom: 0.75rem;
-        }
         .benefits-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .benefits-list li {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 0.5rem;
+          font-size: 0.875rem;,
+  color: #6b7280;
         .steps-list {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .step-item {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          overflow: hidden;
-        }
+          border-radius: 8px;,
+  overflow: hidden;
         .step-item.active {
           border-color: #3b82f6;
-        }
         .step-header {
           display: flex;
-          align-items: center;
-          gap: 1rem;
+          align-items: center;,
+  gap: 1rem;
           padding: 1rem;
-        }
         .step-icon {
           flex-shrink: 0;
-        }
         .step-info {
           flex: 1;
-        }
         .step-title {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .step-description {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .step-actions {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .step-form {
-          border-top: 1px solid #e5e7eb;
-          padding: 1rem;
+          border-top: 1px solid #e5e7eb;,
+  padding: 1rem;
           background: #f9fafb;
-        }
         .verification-form {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-input, .form-select, .form-textarea {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-          outline: none;
+        .form-input:focus, .form-select:focus, .form-textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .form-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           justify-content: flex-end;
-        }
         .history-summary {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .summary-stats {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
-        }
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          padding: 1rem;
+          align-items: center;,
+  padding: 1rem;
           border: 1px solid #e5e7eb;
           border-radius: 8px;
-        }
         .stat-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .stat-value {
           font-size: 1.5rem;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .earned-badges h4 {
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           margin-bottom: 0.75rem;
-        }
         .badges-grid {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .badge-item {
           display: flex;
           align-items: center;
-        }
         .loading {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          padding: 4rem;
+          align-items: center;,
+  padding: 4rem;
           gap: 1rem;
-        }
         .loading-spinner {
-          width: 2rem;
-          height: 2rem;
+          width: 2rem;,
+  height: 2rem;
           border: 2px solid #e5e7eb;
           border-top: 2px solid #3b82f6;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         @media (max-width: 768px) {
           .trust-header {
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: column;,
+  gap: 1rem;
             align-items: stretch;
-          }
           .components-grid {
             grid-template-columns: 1fr;
-          }
           .summary-stats {
             grid-template-columns: repeat(2, 1fr);
-          }
           .step-header {
-            flex-direction: column;
-            gap: 0.75rem;
+            flex-direction: column;,
+  gap: 0.75rem;
             align-items: stretch;
-          }
           .step-actions {
             justify-content: center;
-          }
-        }
       `}</style>
     </div>
   );

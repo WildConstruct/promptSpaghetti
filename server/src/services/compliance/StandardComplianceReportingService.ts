@@ -16,6 +16,7 @@ import { RefactoredDataLifecycleService } from '../RefactoredDataLifecycleServic
 import { EvidenceAccessAuditService } from '../security/EvidenceAccessAuditService';
 
 // Core data structures for standard compliance reporting
+}
 export interface StandardComplianceReport {
   id: string;
   reportType: ComplianceReportType;
@@ -29,6 +30,7 @@ export interface StandardComplianceReport {
   attachments: ReportAttachment[];
   certification: ComplianceCertification;
   metadata: ReportMetadata;
+}
 }
 
 export enum ComplianceReportType {
@@ -55,6 +57,7 @@ export enum ComplianceFramework {
   MULTI_FRAMEWORK = 'MULTI_FRAMEWORK'
 }
 
+}
 export interface ReportingPeriod {
   startDate: Date;
   endDate: Date;
@@ -62,7 +65,9 @@ export interface ReportingPeriod {
   fiscalYear?: string;
   reportingCycle?: string;
 }
+}
 
+}
 export interface ExecutiveSummary {
   overallComplianceScore: number;
   previousPeriodScore?: number;
@@ -73,7 +78,9 @@ export interface ExecutiveSummary {
   financialImpact?: FinancialImpact;
   executiveRecommendations: string[];
 }
+}
 
+}
 export interface DetailedFindings {
   frameworkAssessments: FrameworkAssessment[];
   controlEvaluations: ControlEvaluation[];
@@ -83,7 +90,9 @@ export interface DetailedFindings {
   incidentAnalysis: IncidentAnalysis;
   thirdPartyAssessments: ThirdPartyAssessment[];
 }
+}
 
+}
 export interface RiskAssessment {
   overallRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskScore: number;
@@ -93,7 +102,9 @@ export interface RiskAssessment {
   riskTrends: RiskTrend[];
   contingencyPlans: ContingencyPlan[];
 }
+}
 
+}
 export interface Recommendation {
   id: string;
   priority: 'low' | 'medium' | 'high' | 'critical';
@@ -107,7 +118,9 @@ export interface Recommendation {
   timeline: Timeline;
   success_metrics: SuccessMetric[];
 }
+}
 
+}
 export interface ComplianceCertification {
   certifiedBy: string;
   certificationDate: Date;
@@ -117,7 +130,9 @@ export interface ComplianceCertification {
   limitations: string[];
   attestation: string;
 }
+}
 
+}
 export interface ReportMetadata {
   version: string;
   template: string;
@@ -125,6 +140,7 @@ export interface ReportMetadata {
     system: string;
     user: string;
     role: string;
+}
   };
   approvals: ReportApproval[];
   distribution: DistributionList[];
@@ -134,6 +150,7 @@ export interface ReportMetadata {
 }
 
 // Framework-specific report templates
+}
 export interface GDPRComplianceReport extends StandardComplianceReport {
   dataSubjectRights: {
     requestsReceived: number;
@@ -147,6 +164,7 @@ export interface GDPRComplianceReport extends StandardComplianceReport {
   privacyImpactAssessments: PIAAssessment[];
 }
 
+}
 export interface SOXComplianceReport extends StandardComplianceReport {
   financialControls: FinancialControlAssessment[];
   managementAssertion: ManagementAssertion;
@@ -155,6 +173,7 @@ export interface SOXComplianceReport extends StandardComplianceReport {
   auditTrailCompliance: AuditTrailCompliance;
 }
 
+}
 export interface SOC2ComplianceReport extends StandardComplianceReport {
   securityCriteria: SOC2Criteria[];
   availabilityMetrics: AvailabilityMetrics;
@@ -163,6 +182,7 @@ export interface SOC2ComplianceReport extends StandardComplianceReport {
   privacyNotices: PrivacyNoticeAssessment[];
 }
 
+}
 export interface ISO27001ComplianceReport extends StandardComplianceReport {
   controlObjectives: ISO27001Control[];
   riskTreatmentPlan: RiskTreatmentPlan;
@@ -204,6 +224,7 @@ export class StandardComplianceReportingService {
     period: ReportingPeriod,
     options: ReportGenerationOptions = {}
   ): Promise<StandardComplianceReport> {
+
     console.log(`🔄 Generating ${framework} ${reportType} report for period ${period.startDate} to ${period.endDate}`);
 
     const reportId = this.generateReportId(framework, reportType, period);
@@ -249,7 +270,7 @@ export class StandardComplianceReportingService {
           system: 'StandardComplianceReportingService',
           user: options.requestedBy || 'system',
           role: options.requestedByRole || 'compliance_officer'
-        },
+  }
         approvals: [],
         distribution: options.distributionList || [],
         retention: this.getRetentionPolicy(framework, reportType),
@@ -273,6 +294,7 @@ export class StandardComplianceReportingService {
     period: ReportingPeriod,
     options: ReportGenerationOptions = {}
   ): Promise<GDPRComplianceReport> {
+
     const baseReport = await this.generateStandardReport(
       ComplianceFramework.GDPR, 
       reportType, 
@@ -303,6 +325,7 @@ export class StandardComplianceReportingService {
     period: ReportingPeriod,
     options: ReportGenerationOptions = {}
   ): Promise<SOXComplianceReport> {
+
     const baseReport = await this.generateStandardReport(
       ComplianceFramework.SOX, 
       reportType, 
@@ -334,12 +357,13 @@ export class StandardComplianceReportingService {
     period: ReportingPeriod,
     options: ReportGenerationOptions = {}
   ): Promise<StandardComplianceReport> {
+
     console.log(`🔄 Generating multi-framework report for: ${frameworks.join(', ')}`);
 
     const frameworkReports = await Promise.all(
       frameworks.map(framework => 
         this.generateStandardReport(framework, reportType, period, options)
-      )
+
     );
 
     // Aggregate findings across frameworks
@@ -359,6 +383,7 @@ export class StandardComplianceReportingService {
     period: ReportingPeriod,
     options: ReportGenerationOptions = {}
   ): Promise<StandardComplianceReport> {
+
     const allFrameworks = [
       ComplianceFramework.GDPR,
       ComplianceFramework.SOX,
@@ -390,6 +415,7 @@ export class StandardComplianceReportingService {
     format: 'pdf' | 'excel' | 'json' | 'html' | 'docx',
     options: ExportOptions = {}
   ): Promise<Buffer | string> {
+
     console.log(`📄 Exporting ${report.framework} report ${report.id} as ${format}`);
 
     switch (format) {
@@ -416,6 +442,7 @@ export class StandardComplianceReportingService {
     reportType: ComplianceReportType,
     schedule: ReportSchedule
   ): Promise<string> {
+
     const scheduleId = crypto.randomUUID();
     
     console.log(`📅 Scheduling ${framework} ${reportType} report: ${schedule.frequency}`);
@@ -429,6 +456,7 @@ export class StandardComplianceReportingService {
    * Validate report completeness and accuracy
    */
   async validateReport(report: StandardComplianceReport): Promise<ValidationResult> {
+
     const validationChecks = [
       this.validateReportStructure(report),
       this.validateDataCompleteness(report),
@@ -444,8 +472,7 @@ export class StandardComplianceReportingService {
       score: results.reduce((sum, r) => sum + r.score, 0) / results.length,
       issues: results.flatMap(r => r.issues),
       recommendations: results.flatMap(r => r.recommendations),
-      validatedAt: new Date()
-    };
+      validatedAt: new Date(};
 
     return overallResult;
   }
@@ -456,6 +483,7 @@ export class StandardComplianceReportingService {
     framework: ComplianceFramework,
     period: ReportingPeriod
   ): Promise<ComplianceData> {
+
     // Gather data from all compliance systems
     const [
       monitoringData,
@@ -486,6 +514,7 @@ export class StandardComplianceReportingService {
     data: ComplianceData,
     period: ReportingPeriod
   ): Promise<ExecutiveSummary> {
+
     // Calculate overall compliance score
     const currentScore = this.calculateOverallScore(data);
     const previousScore = await this.getPreviousPeriodScore(framework, period);
@@ -509,6 +538,7 @@ export class StandardComplianceReportingService {
     data: ComplianceData,
     period: ReportingPeriod
   ): Promise<DetailedFindings> {
+
     return {
       frameworkAssessments: await this.assessFramework(framework, data),
       controlEvaluations: await this.evaluateControls(framework, data),
@@ -524,6 +554,7 @@ export class StandardComplianceReportingService {
     framework: ComplianceFramework,
     data: ComplianceData
   ): Promise<RiskAssessment> {
+
     const riskFactors = await this.identifyRiskFactors(data);
     const riskScore = this.calculateRiskScore(riskFactors);
     const riskLevel = this.determineRiskLevel(riskScore);
@@ -543,6 +574,7 @@ export class StandardComplianceReportingService {
     framework: ComplianceFramework,
     data: ComplianceData
   ): Promise<Recommendation[]> {
+
     const recommendations: Recommendation[] = [];
 
     // Analyze gaps and generate recommendations
@@ -641,6 +673,7 @@ export class StandardComplianceReportingService {
   }
 
   private async logReportGeneration(report: StandardComplianceReport): Promise<void> {
+
     // Log report generation in audit trail
     console.log(`📊 Compliance report generated: ${report.id} (${report.framework})`);
     
@@ -663,31 +696,37 @@ export class StandardComplianceReportingService {
 
   // Export methods
   private async exportToPDF(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
+
     // PDF export implementation
     return Buffer.from('PDF content placeholder');
   }
 
   private async exportToExcel(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
+
     // Excel export implementation
     return Buffer.from('Excel content placeholder');
   }
 
   private async exportToJSON(report: StandardComplianceReport, _____options: ExportOptions): Promise<string> {
+
     return JSON.stringify(report, null, 2);
   }
 
   private async exportToHTML(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<string> {
+
     // HTML export implementation
     return '<html><body>HTML content placeholder</body></html>';
   }
 
   private async exportToDocx(_____report: StandardComplianceReport, _____options: ExportOptions): Promise<Buffer> {
+
     // DOCX export implementation
     return Buffer.from('DOCX content placeholder');
   }
 }
 
 // Supporting interfaces and types
+}
 interface ReportGenerationOptions {
   requestedBy?: string;
   requestedByRole?: string;
@@ -697,7 +736,9 @@ interface ReportGenerationOptions {
   includeFinancialImpact?: boolean;
   customSections?: string[];
 }
+}
 
+}
 interface ExportOptions {
   template?: string;
   includeAttachments?: boolean;
@@ -705,7 +746,9 @@ interface ExportOptions {
   password?: string;
   digitallySign?: boolean;
 }
+}
 
+}
 interface ValidationResult {
   isValid: boolean;
   score: number;
@@ -713,7 +756,9 @@ interface ValidationResult {
   recommendations: string[];
   validatedAt: Date;
 }
+}
 
+}
 interface ValidationIssue {
   type: 'missing_data' | 'calculation_error' | 'compliance_gap' | 'evidence_missing';
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -721,7 +766,9 @@ interface ValidationIssue {
   location: string;
   suggestion: string;
 }
+}
 
+}
 interface ReportSchedule {
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually';
   dayOfWeek?: number;
@@ -731,13 +778,16 @@ interface ReportSchedule {
   recipients?: string[];
   format?: string[];
 }
+}
 
+}
 interface ComplianceData {
   monitoring: unknown;
   baselines: unknown;
   audits: unknown[];
   lifecycle: Error;
   period: ReportingPeriod;
+}
 }
 
 // Additional supporting types would be defined here...

@@ -36,6 +36,7 @@ export enum ChangeType {
 }
 
 // Enhanced template version interface
+}
 export interface EnhancedTemplateVersion {
   id: string;
   template_id: string;
@@ -81,8 +82,10 @@ export interface EnhancedTemplateVersion {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Version comparison interface
+}
 export interface VersionComparison {
   from_version: EnhancedTemplateVersion;
   to_version: EnhancedTemplateVersion;
@@ -91,8 +94,10 @@ export interface VersionComparison {
   migration_complexity: 'simple' | 'moderate' | 'complex';
   estimated_migration_time: number; // in minutes
 }
+}
 
 // Version difference interface
+}
 export interface VersionDifference {
   id: string;
   path: string;
@@ -103,8 +108,10 @@ export interface VersionDifference {
   impact: 'breaking' | 'non-breaking' | 'improvement';
   category: 'structure' | 'content' | 'metadata' | 'configuration';
 }
+}
 
 // Compatibility impact interface
+}
 export interface CompatibilityImpact {
   is_breaking: boolean;
   affected_components: string[];
@@ -113,8 +120,10 @@ export interface CompatibilityImpact {
   deprecation_warnings: string[];
   risk_level: 'low' | 'medium' | 'high';
 }
+}
 
 // Version deployment interface
+}
 export interface VersionDeployment {
   id: string;
   version_id: string;
@@ -131,8 +140,10 @@ export interface VersionDeployment {
   completed_at?: Date;
   rollback_at?: Date;
 }
+}
 
 // Version analytics interface
+}
 export interface VersionAnalytics {
   version_id: string;
   period_start: Date;
@@ -145,6 +156,7 @@ export interface VersionAnalytics {
     average_execution_time: number;
     satisfaction_score: number;
     adoption_rate: number;
+}
   };
   performance_trends: Array<{
     date: string;
@@ -162,6 +174,7 @@ export interface VersionAnalytics {
 }
 
 // Version rollback interface
+}
 export interface VersionRollback {
   id: string;
   template_id: string;
@@ -178,6 +191,7 @@ export interface VersionRollback {
   completed_at?: Date;
   success: boolean;
   issues_encountered: string[];
+}
 }
 
 // Zod schemas for validation

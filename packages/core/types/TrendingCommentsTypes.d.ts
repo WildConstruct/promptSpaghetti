@@ -1182,6 +1182,6 @@ export declare export declare export declare export interface TrendingSystemConf
         batchSize: number;
         maxConcurrentCalculations: number;
     };
-}
+
 export { CommentEngagementSchema, CommentScoreSchema, TrendingCommentSchema, TrendingAlgorithmConfigSchema, TrendingResultsSchema, CommentAnalyticsSchema, GetTrendingCommentsRequestSchema, TrendingCommentsResponseSchema };
 //# sourceMappingURL=TrendingCommentsTypes.d.ts.map

@@ -11,8 +11,8 @@ import { BaseEvent, EventMiddleware, EventPriority, EventCategory } from '../Eve
 export const createLoggingMiddleware = (options?: {)
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
   includeMetadata?: boolean;
-  filterCategories?: EventCategory[];
-  filterPriorities?: EventPriority[];
+  filterCategories?: EventCategory;
+  filterPriorities?: EventPriority;
 }): EventMiddleware => {
   const {
     logLevel = 'info',
@@ -26,12 +26,10 @@ export const createLoggingMiddleware = (options?: {)
         !filterCategories.includes(event.metadata.category as EventCategory)) {
       next();
       return;
-    }
     if (filterPriorities && event.metadata?.priority && )
         !filterPriorities.includes(event.metadata.priority as EventPriority)) {
       next();
       return;
-    }
     // Create log message
     const baseMessage = `[EVENT] ${event.type} from ${event.source}`;}
     const timestamp = event.timestamp.toISOString();
@@ -40,31 +38,29 @@ export const createLoggingMiddleware = (options?: {)
     let logMessage = `${baseMessage} at ${timestamp}${userInfo}${sessionInfo}`;}
     if (includeMetadata && event.metadata) {
       logMessage += `\n  Metadata: ${JSON.stringify(event.metadata, null, 2)}`;}
-    }
     // Log at appropriate level
     switch (logLevel) {
-      case 'debug':
-        console.debug(logMessage);
-        break;
-      case 'info':
-        console.info(logMessage);
-        break;
-      case 'warn':
-        console.warn(logMessage);
-        break;
-      case 'error':
-        console.error(logMessage);
-        break;
-    }
-    next();
-  };
+  case 'debug':,
+  console.debug(logMessage);
+  break;
+  case 'info':,
+  console.info(logMessage);
+  break;
+  case 'warn':,
+  console.warn(logMessage);
+  break;
+  case 'error':,
+  console.error(logMessage);
+  break;
+  next();
+};
 };
 /**
  * Advanced validation middleware
  */
 export const createValidationMiddleware = (options?: {)
   strictMode?: boolean;
-  requiredFields?: string[];
+  requiredFields?: string;
   customValidators?: Array<(event: BaseEvent) => string | null>;
 }): EventMiddleware => {
   const {
@@ -73,58 +69,45 @@ export const createValidationMiddleware = (options?: {)
     customValidators = []
   } = options || {};
   return (event: BaseEvent, next: () => void) => {
-    const errors: string[] = [];
+    const errors: string = [];
     // Check required fields
     for (const field of requiredFields) {
       if (!(field in event) || event[field as keyof BaseEvent] == null) {
         errors.push(`Missing required field: ${field}`);}
-      }
-    }
     // Type validation
     if (typeof event.type !== 'string' || event.type.trim() === '') {
       errors.push('Event type must be a non-empty string');
-    }
     if (!(event.timestamp instanceof Date) || isNaN(event.timestamp.getTime())) {
       errors.push('Event timestamp must be a valid Date');
-    }
     if (typeof event.id !== 'string' || event.id.trim() === '') {
       errors.push('Event id must be a non-empty string');
-    }
     if (typeof event.source !== 'string' || event.source.trim() === '') {
       errors.push('Event source must be a non-empty string');
-    }
     // User ID validation (if present)
     if (event.userId && typeof event.userId !== 'string') {
       errors.push('Event userId must be a string');
-    }
     // Session ID validation (if present)
     if (event.sessionId && typeof event.sessionId !== 'string') {
       errors.push('Event sessionId must be a string');
-    }
     // Metadata validation
     if (event.metadata && typeof event.metadata !== 'object') {
       errors.push('Event metadata must be an object');
-    }
     // Custom validators
     for (const validator of customValidators) {
       const error = validator(event);
       if (error) {
         errors.push(error);
-      }
-    }
     if (errors.length > 0) {
       const errorMessage = `Event validation failed: ${errors.join(', ')}`;}
       if (strictMode) {
         throw new Error(errorMessage);
       } else {
-        console.warn(errorMessage);
-        // Add validation errors to event metadata
-        event.metadata = {
-          ...event.metadata,
-          validationErrors: errors,
-        };
-      }
-    }
+  console.warn(errorMessage);
+  // Add validation errors to event metadata
+  event.metadata = {
+  ...event.metadata,
+  validationErrors: errors,
+};
     next();
   };
 };
@@ -137,53 +120,50 @@ export const createRateLimitMiddleware = (options: {)
   maxEventsPerHour?: number;
   strategy?: 'drop' | 'delay' | 'error';
   keyGenerator?: (event: BaseEvent) => string;
-  whitelist?: string[];
+  whitelist?: string;
 }): EventMiddleware => {
   const {
     maxEventsPerSecond = 100,
     maxEventsPerMinute = 1000,
     maxEventsPerHour = 10000,
     strategy = 'error',
-    keyGenerator = (event) => `${event.source}-${event.type}`,}
+    keyGenerator = (event) => `${event.source}-${event.type}`}
+}
     whitelist = []
   } = options;
   const eventCounts = new Map<string, {
-    secondCount: number;
-    minuteCount: number;
-    hourCount: number;
-    secondReset: number;
-    minuteReset: number;
-    hourReset: number;
-  }>();
+  secondCount: number;,
+  minuteCount: number;
+  hourCount: number;,
+  secondReset: number;
+  minuteReset: number;,
+  hourReset: number;
+}>();
   return (event: BaseEvent, next: () => void) => {
-    const key = keyGenerator(event);
-    const now = Date.now();
-    // Skip rate limiting for whitelisted keys
-    if (whitelist.includes(key)) {
-      next();
-      return;
-    }
-    const counts = eventCounts.get(key) || {
-      secondCount: 0,
-      minuteCount: 0,
-      hourCount: 0,
-      secondReset: now + 1000,
-      minuteReset: now + 60000,
-      hourReset: now + 3600000,
-    };
+  const key = keyGenerator(event);
+  const now = Date.now();
+  // Skip rate limiting for whitelisted keys
+  if (whitelist.includes(key)) {
+  next();
+  return;
+  const counts = eventCounts.get(key) || {
+  secondCount: 0,
+  minuteCount: 0,
+  hourCount: 0,
+  secondReset: now + 1000,
+  minuteReset: now + 60000,
+  hourReset: now + 3600000,
+};
     // Reset counters if time windows have passed
     if (now >= counts.secondReset) {
       counts.secondCount = 0;
       counts.secondReset = now + 1000;
-    }
     if (now >= counts.minuteReset) {
       counts.minuteCount = 0;
       counts.minuteReset = now + 60000;
-    }
     if (now >= counts.hourReset) {
       counts.hourCount = 0;
       counts.hourReset = now + 3600000;
-    }
     // Check rate limits
     const exceeded = ;
       counts.secondCount >= maxEventsPerSecond ||
@@ -202,8 +182,6 @@ export const createRateLimitMiddleware = (options: {)
         case 'error':
         default:
           throw new Error(errorMessage);
-      }
-    }
     // Increment counters
     counts.secondCount++;
     counts.minuteCount++;
@@ -215,19 +193,17 @@ export const createRateLimitMiddleware = (options: {)
 /**
  * Event transformation middleware
  */
-export const createTransformMiddleware = (options: {)
+export const createTransformMiddleware = (options: {,)
   transforms: Array<{,
-    condition: (event: BaseEvent) => boolean;
-    transform: (event: BaseEvent) => BaseEvent;
-  }>;
+  condition: (event: BaseEvent) => boolean;,
+  transform: (event: BaseEvent) => BaseEvent;
+}>;
 }): EventMiddleware => {
   return (event: BaseEvent, next: () => void) => {
     let transformedEvent = event;
     for (const { condition, transform } of options.transforms) {
       if (condition(transformedEvent)) {
         transformedEvent = transform(transformedEvent);
-      }
-    }
     // Update the original event object
     Object.assign(event, transformedEvent);
     next();
@@ -237,10 +213,10 @@ export const createTransformMiddleware = (options: {)
  * Security middleware for sensitive data filtering
  */
 export const createSecurityMiddleware = (options?: {)
-  sensitiveFields?: string[];
+  sensitiveFields?: string;
   maskPattern?: string;
   logSensitiveAccess?: boolean;
-  allowedSources?: string[];
+  allowedSources?: string;
 }): EventMiddleware => {
   const {
     sensitiveFields = ['password', 'token', 'secret', 'key', 'ssn', 'creditCard'],
@@ -251,10 +227,8 @@ export const createSecurityMiddleware = (options?: {)
   const maskSensitiveData = (obj: any): any => {
     if (typeof obj !== 'object' || obj === null) {
       return obj;
-    }
     if (Array.isArray(obj)) {
       return obj.map(maskSensitiveData);
-    }
     const masked: any = {};
     for (const [key, value] of Object.entries(obj)) {
       const isSensitive = sensitiveFields.some(field => ;);
@@ -264,13 +238,10 @@ export const createSecurityMiddleware = (options?: {)
         masked[key] = maskPattern;
         if (logSensitiveAccess) {
           console.warn(`Sensitive field '${key}' accessed in event ${event.id}`);}
-        }
       } else if (typeof value === 'object') {
         masked[key] = maskSensitiveData(value);
       } else {
         masked[key] = value;
-      }
-    }
     return masked;
   };
   return (event: BaseEvent, next: () => void) => {
@@ -279,8 +250,6 @@ export const createSecurityMiddleware = (options?: {)
       // Mask sensitive data in metadata
       if (event.metadata) {
         event.metadata = maskSensitiveData(event.metadata);
-      }
-    }
     next();
   };
 };
@@ -302,7 +271,6 @@ export const createPerformanceMiddleware = (options?: {)
     if (Math.random() > sampleRate) {
       next();
       return;
-    }
     const startTime = Date.now();
     const startMemory = trackMemoryUsage && typeof process !== 'undefined' ;
       ? process.memoryUsage() 
@@ -314,28 +282,25 @@ export const createPerformanceMiddleware = (options?: {)
     // Log slow events
     if (duration > slowEventThreshold) {
       console.warn(`Slow event processing: ${event.type} took ${duration}ms`);}
-    }
     // Add performance metadata
     event.metadata = {
-      ...event.metadata,
-      performance: {,
-        processingTime: duration,
-        timestamp: endTime,
-        ...(startMemory && trackMemoryUsage && {)
-          memoryUsage: {,
-            before: startMemory,
-            after: typeof process !== 'undefined' ? process.memoryUsage() : null,
-          }
-        })
-      }
+  ...event.metadata,
+  performance: {,
+  processingTime: duration,
+  timestamp: endTime,
+  ...(startMemory && trackMemoryUsage && {)
+  memoryUsage: {,
+  before: startMemory,
+  after: typeof process !== 'undefined' ? process.memoryUsage() : null,
+}
     };
   };
 };
 /**
  * Event deduplication middleware
  */
-export const createDeduplicationMiddleware = (options: {)
-  keyGenerator: (event: BaseEvent) => string;
+export const createDeduplicationMiddleware = (options: {,)
+  keyGenerator: (event: BaseEvent) => string;,
   windowMs: number;
   strategy?: 'drop' | 'merge' | 'latest';
 }): EventMiddleware => {
@@ -345,9 +310,9 @@ export const createDeduplicationMiddleware = (options: {)
     strategy = 'drop'
   } = options;
   const recentEvents = new Map<string, {
-    event: BaseEvent;
-    timestamp: number;
-  }>();
+  event: BaseEvent;,
+  timestamp: number;
+}>();
   return (event: BaseEvent, next: () => void) => {
     const key = keyGenerator(event);
     const now = Date.now();
@@ -355,7 +320,6 @@ export const createDeduplicationMiddleware = (options: {)
     // Clean up expired entries
     if (existing && now - existing.timestamp > windowMs) {
       recentEvents.delete(key);
-    }
     const current = recentEvents.get(key);
     if (current) {
       switch (strategy) {
@@ -365,28 +329,26 @@ export const createDeduplicationMiddleware = (options: {)
         case 'merge':
           // Merge metadata
           current.event.metadata = {
-            ...current.event.metadata,
-            ...event.metadata,
-            duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1,
-          };
+  ...current.event.metadata,
+  ...event.metadata,
+  duplicateCount: (current.event.metadata?.duplicateCount || 0) + 1,
+};
           return; // Don't call next(), use existing event
         case 'latest':
           // Replace with latest event
           recentEvents.set(key, { event, timestamp: now });
           break;
-      }
     } else {
       recentEvents.set(key, { event, timestamp: now });
-    }
     next();
   };
 };
 /**
  * Circuit breaker middleware
  */
-export const createCircuitBreakerMiddleware = (options: {)
+export const createCircuitBreakerMiddleware = (options: {,)
   failureThreshold: number;
-  resetTimeoutMs: number;
+  resetTimeoutMs: number;,
   monitorWindowMs: number;
 }): EventMiddleware => {
   const { failureThreshold, resetTimeoutMs, monitorWindowMs } = options;
@@ -395,46 +357,40 @@ export const createCircuitBreakerMiddleware = (options: {)
   let lastFailureTime = 0;
   let windowStart = Date.now();
   return (event: BaseEvent, next: () => void) => {
-    const now = Date.now();
-    // Reset window if expired
-    if (now - windowStart > monitorWindowMs) {
-      failureCount = 0;
-      windowStart = now;
-      if (state === 'open' && now - lastFailureTime > resetTimeoutMs) {
-        state = 'half-open';
-      }
-    }
-    switch (state) {
-      case 'open':
-        throw new Error('Circuit breaker is OPEN - rejecting events');
-      case 'half-open':
-        try {
-          next();
-          // Success - reset to closed
-          state = 'closed';
-          failureCount = 0;
-        } catch (error) {
-          // Failure - back to open
-          state = 'open';
-          lastFailureTime = now;
-          throw error;
-        }
-        break;
-      case 'closed':
-      default:
-        try {
-          next();
-        } catch (error) {
+  const now = Date.now();
+  // Reset window if expired
+  if (now - windowStart > monitorWindowMs) {
+  failureCount = 0;
+  windowStart = now;
+  if (state === 'open' && now - lastFailureTime > resetTimeoutMs) {
+  state = 'half-open';
+  switch (state) {
+  case 'open':,
+  throw new Error('Circuit breaker is OPEN - rejecting events');
+  case 'half-open':,
+  try {
+  next();
+  // Success - reset to closed
+  state = 'closed';
+  failureCount = 0;
+} catch (error) {
+  // Failure - back to open
+  state = 'open';
+  lastFailureTime = now;
+  throw error;
+  break;
+  case 'closed':,
+  default:,
+  try {
+  next();
+} catch (error) {
           failureCount++;
           lastFailureTime = now;
           if (failureCount >= failureThreshold) {
             state = 'open';
             console.error(`Circuit breaker opened after ${failureCount} failures`);}
-          }
           throw error;
-        }
         break;
-    }
   };
 };
 /**
@@ -452,7 +408,8 @@ export const productionMiddleware = [
 
 export const testingMiddleware = [
   createDeduplicationMiddleware({ )
-    keyGenerator: (event) => `${event.type}_${event.timestamp}`, }
-    windowMs: 1000 ,
-  })
+    keyGenerator: (event) => `${event.type}_${event.timestamp}`}
+},
+  windowMs: 1000 ;
+  }
 ];

@@ -14,6 +14,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataRetentionFrameworkService } from '../services/DataRetentionFrameworkService';
 import { DataCategory } from '../types/DataRetentionPeriods';
 
+}
 export interface StoragePool {
   poolId: string;
   name: string;
@@ -34,6 +35,7 @@ export interface StoragePool {
   lastOptimized?: Date;
   healthStatus: HealthStatus;
   tags: string[];
+}
 }
 
 export enum StorageType {
@@ -69,6 +71,7 @@ export enum HealthStatus {
   OFFLINE = 'offline'
 }
 
+}
 export interface StorageQuota {
   quotaId: string;
   resourceType: ResourceType;
@@ -85,6 +88,7 @@ export interface StorageQuota {
   quotaExceeded: boolean;
   exemptions: QuotaExemption[];
 }
+}
 
 export enum ResourceType {
   USER = 'user',
@@ -97,6 +101,7 @@ export enum ResourceType {
   BACKUP = 'backup'
 }
 
+}
 export interface QuotaExemption {
   exemptionId: string;
   reason: string;
@@ -105,7 +110,9 @@ export interface QuotaExemption {
   additionalStorage: number; // GB
   createdAt: Date;
 }
+}
 
+}
 export interface StorageOptimization {
   optimizationId: string;
   type: OptimizationType;
@@ -121,6 +128,7 @@ export interface StorageOptimization {
   results?: OptimizationResults;
   errors: string[];
 }
+}
 
 export enum OptimizationType {
   COMPRESSION = 'compression',
@@ -132,6 +140,7 @@ export enum OptimizationType {
   REBALANCING = 'rebalancing'
 }
 
+}
 export interface OptimizationTarget {
   targetType: 'pool' | 'category' | 'user' | 'system' | 'global';
   targetId?: string;
@@ -139,6 +148,7 @@ export interface OptimizationTarget {
   storageTypes: StorageType[];
   ageThreshold?: number; // days
   accessThreshold?: number; // days since last access
+}
 }
 
 export enum OptimizationStatus {
@@ -150,6 +160,7 @@ export enum OptimizationStatus {
   PAUSED = 'paused'
 }
 
+}
 export interface OptimizationParameters {
   compressionAlgorithm?: 'gzip' | 'lz4' | 'zstd';
   compressionLevel?: number;
@@ -160,7 +171,9 @@ export interface OptimizationParameters {
   preserveAccess?: boolean;
   notifyUsers?: boolean;
 }
+}
 
+}
 export interface OptimizationResults {
   filesProcessed: number;
   storageFreed: number; // GB
@@ -172,7 +185,9 @@ export interface OptimizationResults {
   errorCount: number;
   performanceImpact: PerformanceImpact;
 }
+}
 
+}
 export interface PerformanceImpact {
   cpuUsage: number; // percentage
   memoryUsage: number; // GB
@@ -180,7 +195,9 @@ export interface PerformanceImpact {
   networkTraffic: number; // GB
   duration: number; // seconds
 }
+}
 
+}
 export interface StorageMetrics {
   timestamp: Date;
   totalCapacity: number; // GB
@@ -197,7 +214,9 @@ export interface StorageMetrics {
   alertCount: number;
   poolMetrics: StoragePoolMetrics[];
 }
+}
 
+}
 export interface StoragePoolMetrics {
   poolId: string;
   capacity: number;
@@ -210,7 +229,9 @@ export interface StoragePoolMetrics {
   errorRate: number; // percentage
   healthScore: number;
 }
+}
 
+}
 export interface StorageAlert {
   alertId: string;
   type: AlertType;
@@ -227,6 +248,7 @@ export interface StorageAlert {
   actionsTaken: string[];
   suppressed: boolean;
   suppressedUntil?: Date;
+}
 }
 
 export enum AlertType {
@@ -247,6 +269,7 @@ export enum AlertSeverity {
   EMERGENCY = 'emergency'
 }
 
+}
 export interface StorageReport {
   reportId: string;
   reportType: ReportType;
@@ -259,6 +282,7 @@ export interface StorageReport {
   nextActions: string[];
   exportFormats: ExportFormat[];
 }
+}
 
 export enum ReportType {
   USAGE = 'usage',
@@ -270,12 +294,15 @@ export enum ReportType {
   HEALTH = 'health'
 }
 
+}
 export interface ReportPeriod {
   start: Date;
   end: Date;
   granularity: 'hour' | 'day' | 'week' | 'month';
 }
+}
 
+}
 export interface ReportSummary {
   totalStorage: number;
   storageGrowth: number;
@@ -285,6 +312,7 @@ export interface ReportSummary {
   healthScore: number;
   criticalIssues: number;
   recommendationCount: number;
+}
 }
 
 export enum ExportFormat {
@@ -327,6 +355,7 @@ export class StorageManagementService {
     poolData: Omit<StoragePool, 'poolId' | 'createdAt' | 'healthStatus'>,
     createdBy: string
   ): Promise<StoragePool> {
+
     console.log(`💾 Creating storage pool: ${poolData.name}`);
 
     const poolId = this.generatePoolId();
@@ -347,7 +376,7 @@ export class StorageManagementService {
         name: pool.name,
         storageType: pool.storageType,
         capacity: pool.capacity
-      },
+  }
       severity: 'info'
     });
 
@@ -363,6 +392,7 @@ export class StorageManagementService {
     isActive?: boolean;
     healthStatus?: HealthStatus;
   } = {}): Promise<StoragePool[]> {
+
     let query = `
       SELECT * FROM storage_pools 
       WHERE 1=1
@@ -408,6 +438,7 @@ export class StorageManagementService {
     updates: Partial<StoragePool>,
     updatedBy: string
   ): Promise<StoragePool> {
+
     console.log(`📝 Updating storage pool: ${poolId}`);
 
     const currentPool = await this.getStoragePool(poolId);
@@ -443,7 +474,7 @@ export class StorageManagementService {
       details: {
         poolId,
         updates: Object.keys(updateData)
-      },
+  }
       severity: 'info'
     });
 
@@ -461,6 +492,7 @@ export class StorageManagementService {
     quotaData: Omit<StorageQuota, 'quotaId' | 'createdAt' | 'lastChecked' | 'quotaExceeded' | 'exemptions'>,
     createdBy: string
   ): Promise<StorageQuota> {
+
     console.log(`📏 Creating storage quota for ${quotaData.resourceType}:${quotaData.resourceId}`);
 
     const quotaId = this.generateQuotaId();
@@ -488,7 +520,7 @@ export class StorageManagementService {
         resourceType: quota.resourceType,
         resourceId: quota.resourceId,
         maxStorage: quota.maxStorage
-      },
+  }
       severity: 'info'
     });
 
@@ -499,6 +531,7 @@ export class StorageManagementService {
    * Check and enforce storage quotas
    */
   async enforceStorageQuotas(): Promise<void> {
+
     console.log('🔍 Checking storage quota compliance');
 
     const quotas = await this.getAllActiveQuotas();
@@ -542,6 +575,7 @@ export class StorageManagementService {
     scheduledBy: string,
     scheduledAt?: Date
   ): Promise<StorageOptimization> {
+
     console.log(`🔧 Scheduling ${type} optimization`);
 
     const optimizationId = this.generateOptimizationId();
@@ -568,7 +602,7 @@ export class StorageManagementService {
         type,
         targetType: target.targetType,
         estimatedSavings: optimization.estimatedSavings
-      },
+  }
       severity: 'info'
     });
 
@@ -579,6 +613,7 @@ export class StorageManagementService {
    * Execute storage optimization
    */
   async executeOptimization(optimizationId: string): Promise<StorageOptimization> {
+
     console.log(`⚙️ Executing optimization: ${optimizationId}`);
 
     const optimization = await this.getOptimization(optimizationId);
@@ -687,6 +722,7 @@ export class StorageManagementService {
    * Get current storage metrics
    */
   async getCurrentStorageMetrics(): Promise<StorageMetrics> {
+
     const cacheKey = 'current_metrics';
     
     if (this.metricsCache.has(cacheKey)) {
@@ -736,6 +772,7 @@ export class StorageManagementService {
     period: ReportPeriod,
     generatedBy: string
   ): Promise<StorageReport> {
+
     console.log(`📋 Generating ${reportType} report for ${period.granularity} period`);
 
     const reportId = this.generateReportId();
@@ -765,7 +802,7 @@ export class StorageManagementService {
         reportId,
         reportType,
         period: period.granularity
-      },
+  }
       severity: 'info'
     });
 
@@ -814,6 +851,7 @@ export class StorageManagementService {
    * Monitor storage health
    */
   private async monitorStorageHealth(): Promise<void> {
+
     const pools = await this.getStoragePools({ isActive: true });
     
     for (const pool of pools) {
@@ -885,6 +923,7 @@ export class StorageManagementService {
 
   // Actual implementation methods
   private async getStoragePool(poolId: string): Promise<StoragePool | null> {
+
     const result = await this.db.query(
       'SELECT * FROM storage_pools WHERE pool_id = $1',
       [poolId]
@@ -897,6 +936,7 @@ export class StorageManagementService {
     return this.hydrateStoragePool(result.rows[0]);
   }
   private async storeStoragePool(pool: StoragePool): Promise<void> {
+
     await this.db.query(`
       INSERT INTO storage_pools (
         pool_id, name, description, storage_type, tier, capacity, used, available,
@@ -917,6 +957,7 @@ export class StorageManagementService {
   private async updateStorageQuota(quota: StorageQuota): Promise<void> {}
   private async handleQuotaViolation(quota: StorageQuota): Promise<void> {}
   private async storeOptimization(optimization: StorageOptimization): Promise<void> {
+
     await this.db.query(`
       INSERT INTO storage_optimizations (
         optimization_id, optimization_type, target, status, scheduled_at,
@@ -932,6 +973,7 @@ export class StorageManagementService {
     ]);
   }
   private async getOptimization(optimizationId: string): Promise<StorageOptimization | null> {
+
     const result = await this.db.query(
       'SELECT * FROM storage_optimizations WHERE optimization_id = $1',
       [optimizationId]
@@ -958,7 +1000,8 @@ export class StorageManagementService {
     };
   }
   private async updateOptimization(optimization: StorageOptimization): Promise<void> {}
-  private async performOptimization(optimization: StorageOptimization): Promise<OptimizationResults> { 
+  private async performOptimization(optimization: StorageOptimization): Promise<OptimizationResults> {
+
     return {
       filesProcessed: 1000,
       storageFreed: 50,
@@ -982,6 +1025,7 @@ export class StorageManagementService {
   private async findOldData(ageDays: number): Promise<{ size: number }> { return { size: 150 }; }
   private async findDuplicateData(): Promise<{ size: number }> { return { size: 25 }; }
   private async calculatePoolMetrics(pool: StoragePool): Promise<StoragePoolMetrics> {
+
     return {
       poolId: pool.poolId,
       capacity: pool.capacity,
@@ -1004,6 +1048,7 @@ export class StorageManagementService {
   private async calculateHealthScore(pools: StoragePool[]): Promise<number> { return 88; }
   private async getActiveAlertCount(): Promise<number> { return 3; }
   private async calculateReportSummary(reportType: ReportType, period: ReportPeriod): Promise<ReportSummary> {
+
     return {
       totalStorage: 5000,
       storageGrowth: 500,
@@ -1016,7 +1061,8 @@ export class StorageManagementService {
     };
   }
   private async generateReportDetails(reportType: ReportType, period: ReportPeriod): Promise<any> { return {}; }
-  private async generateReportRecommendations(reportType: ReportType, details: any): Promise<string[]> { 
+  private async generateReportRecommendations(reportType: ReportType, details: any): Promise<string[]> {
+
     return ['Enable compression for warm storage', 'Archive data older than 90 days', 'Implement deduplication']; 
   }
   private generateNextActions(recommendations: string[]): string[] {

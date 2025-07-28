@@ -20,7 +20,7 @@ interface DragSelectBoxProps {
     };
     zoom: number;
     isActive: boolean;
-}
+
 export declare const DragSelectBox: React.FC<DragSelectBoxProps>;
 export default DragSelectBox;
 //# sourceMappingURL=DragSelectBox.d.ts.map

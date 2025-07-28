@@ -2,6 +2,7 @@ import { Node, Edge } from 'reactflow';
 /**
  * Template data structure as defined in story requirements
  */
+
 export interface Template {
     id: string;
     name: string;
@@ -13,18 +14,18 @@ export interface Template {
     reviews: Review[];
     graph: GraphData;
     metadata: TemplateMetadata;
-}
 /**
  * Complete graph data including annotations from Epic 8.7
  */
+
 export interface GraphData {
     nodes: Node[];
     edges: Edge[];
     annotations: GraphAnnotations;
-}
 /**
  * Epic 8.7 annotation system as defined in story architecture
  */
+
 export interface GraphAnnotations {
     stickyNotes: StickyNote[];
     nodeLabels: Record<string, string>;
@@ -36,7 +37,7 @@ export interface GraphAnnotations {
         modified: string;
         version: string;
     };
-}
+
 export interface StickyNote {
     id: string;
     position: {,
@@ -51,7 +52,7 @@ export interface StickyNote {
     };
     author: string;
     timestamp: string;
-}
+
 export interface RegionGroup {
     id: string;
     label: string;
@@ -64,10 +65,10 @@ export interface RegionGroup {
     };
     nodeIds: string[];
     collapsed: boolean;
-}
 /**
  * Review system for templates
  */
+
 export interface Review {
     id: string;
     author: string;
@@ -75,10 +76,10 @@ export interface Review {
     comment: string;
     timestamp: string;
     helpful: number;
-}
 /**
  * Template metadata
  */
+
 export interface TemplateMetadata {
     created: string;
     lastModified: string;
@@ -90,7 +91,6 @@ export interface TemplateMetadata {
     isPublic: boolean;
     parentTemplateId?: string;
     language: string;
-}
 /**
  * Template category system
  */
@@ -98,16 +98,17 @@ export type TemplateCategory = 'character' | 'setting' | 'mood' | 'action' | 'di
 /**
  * Template sharing and permissions
  */
+
 export interface TemplateSharing {
     isPublic: boolean;
     sharedWith: string[];
     permissions: 'view' | 'edit' | 'admin';
     shareUrl?: string;
     team?: string;
-}
 /**
  * Template search and filtering
  */
+
 export interface TemplateFilter {
     category?: TemplateCategory;
     author?: string;
@@ -117,20 +118,20 @@ export interface TemplateFilter {
     searchTerm?: string;
     sortBy?: 'name' | 'created' | 'rating' | 'usage' | 'modified';
     sortOrder?: 'asc' | 'desc';
-}
 /**
  * Template instantiation options
  */
+
 export interface TemplateInstantiationOptions {
     preservePositions: boolean;
     mergeWithCurrent: boolean;
     offsetX?: number;
     offsetY?: number;
     customizationValues?: Record<string, any>;
-}
 /**
  * Template validation result
  */
+
 export interface TemplateValidation {
     isValid: boolean;
     errors: string[];
@@ -140,10 +141,10 @@ export interface TemplateValidation {
         features: string[];
         missingFeatures: string[];
     };
-}
 /**
  * Template library state
  */
+
 export interface TemplateLibraryState {
     templates: Template[];
     categories: TemplateCategory[];
@@ -151,10 +152,10 @@ export interface TemplateLibraryState {
     error: string | null;
     filter: TemplateFilter;
     selectedTemplate: Template | null;
-}
 /**
  * Template operations
  */
+
 export interface TemplateOperations {
     saveTemplate: (template: Omit<Template, 'id'>) => Promise<Template>;
     loadTemplate: (id: string) => Promise<Template>;
@@ -170,10 +171,10 @@ export interface TemplateOperations {
     addReview: (templateId: string, review: Omit<Review, 'id' | 'timestamp'>) => Promise<Review>;
     getReviews: (templateId: string) => Promise<Review[]>;
     validateTemplate: (template: Template) => Promise<TemplateValidation>;
-}
 /**
  * Template save dialog data
  */
+
 export interface TemplateSaveData {
     name: string;
     description: string;
@@ -181,10 +182,10 @@ export interface TemplateSaveData {
     tags: string[];
     isPublic: boolean;
     includeAnnotations: boolean;
-}
 /**
  * Template browser UI state
  */
+
 export interface TemplateBrowserState {
     isOpen: boolean;
     viewMode: 'grid' | 'list';
@@ -193,10 +194,10 @@ export interface TemplateBrowserState {
     sortBy: TemplateFilter['sortBy'];
     showOnlyMyTemplates: boolean;
     previewTemplate: Template | null;
-}
 /**
  * Template event types for component communication
  */
+
 export type TemplateEvent = {
     type: 'template-saved';
     template: Template;
@@ -216,6 +217,7 @@ export type TemplateEvent = {
 /**
  * Template compatibility with existing graph system
  */
+
 export interface TemplateCompatibility {
     supportsNodeTypes: string[];
     requiredFeatures: string[];
@@ -226,5 +228,5 @@ export interface TemplateCompatibility {
         regionGroups: boolean;
         connectionLabels: boolean;
     };
-}
+
 //# sourceMappingURL=TemplateTypes.d.ts.map

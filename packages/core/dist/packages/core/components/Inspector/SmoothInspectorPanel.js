@@ -29,11 +29,21 @@ const getFilmmakerFriendlyName = (nodeType) => {
         'Sequential': 'Sequence',
         'Markov': 'Smart Chain',
         'WeightedAdvanced': 'Weighted Selection',
-        'PythonTransform': 'Text Transform'
+        'PythonTransform': 'Text Transform',
     };
     return friendlyNames[nodeType] || nodeType;
 };
-export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobalPreviewRequest, initialWidth = 320, minWidth = 280, maxWidth = 600 }) => {
+export const SmoothInspectorPanel = ({
+    node,
+    schema,
+    onChange,
+    onClose,
+    onGlobalPreviewRequest,
+    initialWidth = 320,
+    minWidth = 280,
+    maxWidth = 600
+});
+{
     const [isResizing, setIsResizing] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
@@ -71,14 +81,15 @@ export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobal
             document.removeEventListener('mouseup', handleMouseUp);
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+            return () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            };
         }
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-            document.body.style.cursor = '';
-            document.body.style.userSelect = '';
-        };
-    }, [isResizing, handleMouseMove, handleMouseUp]);
+        [isResizing, handleMouseMove, handleMouseUp];
+    });
     // Animation styles
     const panelStyle = {
         width: collapsed ? 48 : isMaximized ? '50%' : width,
@@ -91,7 +102,9 @@ export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobal
         position: 'relative',
         zIndex: 10,
         boxShadow: collapsed ? 'none' : '-4px 0 20px rgba(0, 0, 0, 0.1)',
-        ...createSmoothTransition(['width', 'min-width', 'box-shadow'], animationDurations.panel, easingFunctions.cinema4d.professional)
+        ...createSmoothTransition()['width', 'min-width', 'box-shadow'],
+        animationDurations, : .panel,
+        easingFunctions, : .cinema4d.professional
     };
     const headerStyle = {
         padding: collapsed ? '8px' : '16px 20px',
@@ -113,14 +126,15 @@ export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobal
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        ...createSmoothTransition(['background', 'border-color', 'transform', 'box-shadow'], animationDurations.micro)
+        ...createSmoothTransition(['background', 'border-color', 'transform', 'box-shadow']),
+        animationDurations, : .micro
     };
     const getHoverButtonStyle = (isHovered) => ({
         ...buttonStyle,
         background: isHovered ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.1)',
         borderColor: isHovered ? 'rgba(59, 130, 246, 0.4)' : 'rgba(59, 130, 246, 0.2)',
         transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
-        boxShadow: isHovered ? '0 4px 12px rgba(59, 130, 246, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)'
+        boxShadow: isHovered ? '0 4px 12px rgba(59, 130, 246, 0.2)' : '0 2px 4px rgba(0, 0, 0, 0.1)',
     });
     // Handle collapse with animation
     const handleCollapse = useCallback(() => {
@@ -128,122 +142,233 @@ export const SmoothInspectorPanel = ({ node, schema, onChange, onClose, onGlobal
         if (isMaximized) {
             setIsMaximized(false);
         }
-    }, [collapsed, isMaximized]);
+        [collapsed, isMaximized];
+    });
     // Handle maximize with animation
     const handleMaximize = useCallback(() => {
         setIsMaximized(!isMaximized);
         if (collapsed) {
             setCollapsed(false);
         }
-    }, [isMaximized, collapsed]);
+        [isMaximized, collapsed];
+    });
     // Debug mode toggle with animation
     const handleDebugToggle = useCallback(() => {
         setDebugMode(!debugMode);
     }, [debugMode, setDebugMode]);
     if (!node || !schema) {
-        return (_jsxs("aside", { style: panelStyle, children: [_jsxs("div", { style: headerStyle, children: [!collapsed && (_jsx(AnimatedElement, { animationType: "fade", duration: animationDurations.fast, isVisible: !collapsed, children: _jsx("h3", { style: {
-                                    margin: 0,
-                                    fontSize: 16,
-                                    fontWeight: 600,
-                                    color: '#f3f4f6',
-                                    letterSpacing: '0.025em'
-                                }, children: "Inspector" }) })), _jsx("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: _jsx("button", { ...collapseHover.hoverProps, onClick: handleCollapse, style: getHoverButtonStyle(collapseHover.isHovered), title: collapsed ? 'Expand Inspector' : 'Collapse Inspector', children: collapsed ? _jsx(ChevronLeft, { size: 16 }) : _jsx(ChevronRight, { size: 16 }) }) })] }), !collapsed && (_jsx(AnimatedElement, { animationType: "fade", duration: animationDurations.normal, delay: 100, isVisible: !collapsed, children: _jsxs("div", { style: {
-                            padding: 24,
-                            color: '#9ca3af',
-                            fontStyle: 'italic',
-                            textAlign: 'center',
-                            marginTop: 60,
-                            fontSize: 15,
-                            lineHeight: 1.6
-                        }, children: [_jsx("div", { style: {
-                                    fontSize: 48,
-                                    opacity: 0.3,
-                                    marginBottom: 16,
-                                    ...createSmoothTransition(['opacity'], 2000)
-                                }, children: "\uD83C\uDFAC" }), "Select a node to configure its properties"] }) })), _jsx("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        width: 6,
-                        cursor: 'col-resize',
-                        background: 'transparent',
-                        zIndex: 20,
-                        opacity: isResizing ? 1 : 0,
-                        ...createSmoothTransition(['opacity'], animationDurations.fast)
-                    } }), _jsx("div", { style: {
-                        position: 'absolute',
-                        left: -1,
-                        top: 0,
-                        bottom: 0,
-                        width: 2,
-                        background: isResizing ? '#3b82f6' : 'transparent',
-                        ...createSmoothTransition(['background'], animationDurations.fast)
-                    } })] }));
+        return;
+        _jsxs("aside", { style: panelStyle, children: [_jsxs("div", { style: headerStyle, children: [!collapsed && ()
+                            < AnimatedElement, "animationType=\"fade\" duration=", animationDurations.fast, "isVisible=", !collapsed, ">", _jsx("h3", { style: {
+                                margin: 0,
+                                fontSize: 16,
+                                fontWeight: 600,
+                                color: '#f3f4f6',
+                                letterSpacing: '0.025em',
+                            }, children: "Inspector" })] }), ")}", _jsx("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: _jsx("button", { ...collapseHover.hoverProps, onClick: handleCollapse, style: getHoverButtonStyle(collapseHover.isHovered), title: collapsed ? 'Expand Inspector' : 'Collapse Inspector', children: collapsed ? _jsx(ChevronLeft, { size: 16 }) : _jsx(ChevronRight, { size: 16 }) }) })] });
+        {
+            !collapsed && ()
+                < AnimatedElement;
+            animationType = "fade";
+            duration = { animationDurations, : .normal };
+            delay = { 100:  };
+            isVisible = {};
+            collapsed;
+        }
+            >
+                _jsxs("div", { style: {
+                        padding: 24,
+                        color: '#9ca3af',
+                        fontStyle: 'italic',
+                        textAlign: 'center',
+                        marginTop: 60,
+                        fontSize: 15,
+                        lineHeight: 1.6,
+                    }, children: [_jsx("div", { style: {
+                                fontSize: 48,
+                                opacity: 0.3,
+                                marginBottom: 16,
+                                ...createSmoothTransition(['opacity'], 2000)
+                            }, children: "\uD83C\uDFAC" }), "Select a node to configure its properties"] });
+        AnimatedElement >
+        ;
     }
+    { /* Resize handle */ }
+    _jsx("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 6,
+            cursor: 'col-resize',
+            background: 'transparent',
+            zIndex: 20,
+            opacity: isResizing ? 1 : 0,
+            ...createSmoothTransition(['opacity'], animationDurations.fast)
+        } });
+    { /* Visual resize indicator */ }
+    _jsx("div", { style: {
+            position: 'absolute',
+            left: -1,
+            top: 0,
+            bottom: 0,
+            width: 2,
+            background: isResizing ? '#3b82f6' : 'transparent',
+            ...createSmoothTransition(['background'], animationDurations.fast)
+        } });
+    aside >
+    ;
+    ;
     const nodeTypeName = getFilmmakerFriendlyName(node.type);
-    return (_jsxs("aside", { style: panelStyle, className: "inspector-panel", children: [_jsxs("div", { style: headerStyle, children: [!collapsed && (_jsx(AnimatedElement, { animationType: "slide", duration: animationDurations.normal, isVisible: !collapsed, children: _jsxs("div", { children: [_jsx("h3", { style: {
-                                        margin: 0,
-                                        fontSize: 16,
-                                        fontWeight: 600,
-                                        color: '#f3f4f6',
-                                        letterSpacing: '0.025em',
-                                        marginBottom: 4
-                                    }, children: nodeTypeName }), debugMode && (_jsxs("div", { style: {
-                                        fontSize: 12,
-                                        color: '#6b7280',
-                                        fontFamily: 'monospace'
-                                    }, children: ["ID: ", node.id] }))] }) })), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [!collapsed && !isMaximized && (_jsx("button", { ...maximizeHover.hoverProps, onClick: handleMaximize, style: getHoverButtonStyle(maximizeHover.isHovered), title: "Maximize Inspector", children: _jsx(Maximize2, { size: 14 }) })), !collapsed && isMaximized && (_jsx("button", { ...maximizeHover.hoverProps, onClick: handleMaximize, style: getHoverButtonStyle(maximizeHover.isHovered), title: "Restore Inspector", children: _jsx(Minimize2, { size: 14 }) })), !collapsed && (_jsx("button", { ...debugHover.hoverProps, onClick: handleDebugToggle, style: {
-                                    ...getHoverButtonStyle(debugHover.isHovered),
-                                    background: debugMode
-                                        ? 'rgba(239, 68, 68, 0.2)'
-                                        : debugHover.isHovered
-                                            ? 'rgba(59, 130, 246, 0.2)'
-                                            : 'rgba(59, 130, 246, 0.1)',
-                                    borderColor: debugMode
-                                        ? 'rgba(239, 68, 68, 0.4)'
-                                        : debugHover.isHovered
-                                            ? 'rgba(59, 130, 246, 0.4)'
-                                            : 'rgba(59, 130, 246, 0.2)'
-                                }, title: debugMode ? 'Hide Technical Details' : 'Show Technical Details', children: debugMode ? '👨‍💻' : '🎭' })), _jsx("button", { ...collapseHover.hoverProps, onClick: handleCollapse, style: getHoverButtonStyle(collapseHover.isHovered), title: collapsed ? 'Expand Inspector' : 'Collapse Inspector', children: collapsed ? _jsx(ChevronLeft, { size: 16 }) : _jsx(ChevronRight, { size: 16 }) })] })] }), !collapsed && (_jsxs(AnimatedElement, { animationType: "slide", duration: animationDurations.panel, delay: 50, isVisible: !collapsed, style: {
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    overflow: 'hidden'
-                }, children: [_jsx("div", { style: {
-                            flex: 1,
-                            overflow: 'auto',
-                            padding: '0 4px'
-                        }, children: _jsx(PropertiesSection, { node: node, schema: schema, onChange: onChange }) }), _jsx(AnimatedElement, { animationType: "fade", duration: animationDurations.normal, delay: 200, isVisible: !collapsed, children: _jsx(PreviewSection, { node: node }) })] })), _jsx("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
-                    position: 'absolute',
-                    left: -3,
-                    top: 0,
-                    bottom: 0,
-                    width: 6,
-                    cursor: 'col-resize',
-                    background: 'transparent',
-                    zIndex: 20,
-                    borderRadius: '0 3px 3px 0'
-                }, className: "smooth-transition" }), _jsx("div", { style: {
-                    position: 'absolute',
-                    left: -1,
-                    top: 0,
-                    bottom: 0,
-                    width: 2,
-                    background: isResizing
-                        ? 'linear-gradient(180deg, #3b82f6, #1d4ed8)'
-                        : 'transparent',
-                    boxShadow: isResizing ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none',
-                    ...createSmoothTransition(['background', 'box-shadow'], animationDurations.fast)
-                } }), (node && !collapsed) && (_jsx("div", { style: {
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(90deg, rgba(59, 130, 246, 0.02) 0%, transparent 50%)',
-                    pointerEvents: 'none',
-                    opacity: isResizing ? 1 : 0,
-                    ...createSmoothTransition(['opacity'], animationDurations.normal)
-                } }))] }));
-};
+    return;
+    _jsx("aside", { style: panelStyle, className: "inspector-panel", children: _jsxs("div", { style: headerStyle, children: [!collapsed && ()
+                    < AnimatedElement, "animationType=\"slide\" duration=", animationDurations.normal, "isVisible=", !collapsed, ">", _jsxs("div", { children: [_jsx("h3", { style: {
+                                margin: 0,
+                                fontSize: 16,
+                                fontWeight: 600,
+                                color: '#f3f4f6',
+                                letterSpacing: '0.025em',
+                                marginBottom: 4,
+                            }, children: nodeTypeName }), debugMode && ()
+                            < div, " style=", {
+                            fontSize: 12,
+                            color: '#6b7280',
+                            fontFamily: 'monospace',
+                        }, "> ID: ", node.id] }), ")}"] }) });
+}
+_jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [!collapsed && !isMaximized && ()
+            < button, ...maximizeHover.hoverProps, "onClick=", handleMaximize, "style=", getHoverButtonStyle(maximizeHover.isHovered), "title=\"Maximize Inspector\" >", _jsx(Maximize2, { size: 14 })] });
+{
+    !collapsed && isMaximized && ()
+        < button;
+    {
+        maximizeHover.hoverProps;
+    }
+    onClick = { handleMaximize };
+    style = { getHoverButtonStyle(maximizeHover) { }, : .isHovered };
+    title = "Restore Inspector"
+        >
+            _jsx(Minimize2, { size: 14 });
+    button >
+    ;
+}
+{
+    !collapsed && ()
+        < button;
+    {
+        debugHover.hoverProps;
+    }
+    onClick = { handleDebugToggle };
+    style = {};
+    {
+        getHoverButtonStyle(debugHover.isHovered),
+            background;
+        debugMode,
+                ? 'rgba(239, 68, 68, 0.2)'
+                : debugHover.isHovered,
+                ? 'rgba(59, 130, 246, 0.2)'
+                : 'rgba(59, 130, 246, 0.1)',
+            borderColor;
+        debugMode,
+                ? 'rgba(239, 68, 68, 0.4)'
+                : debugHover.isHovered,
+                ? 'rgba(59, 130, 246, 0.4)'
+                : 'rgba(59, 130, 246, 0.2)',
+        ;
+    }
+}
+title = { debugMode, 'Hide Technical Details': 'Show Technical Details' }
+    >
+        { debugMode, '👨‍💻': '🎭' };
+button >
+;
+_jsx("button", { ...collapseHover.hoverProps, onClick: handleCollapse, style: getHoverButtonStyle(collapseHover.isHovered), title: collapsed ? 'Expand Inspector' : 'Collapse Inspector', children: collapsed ? _jsx(ChevronLeft, { size: 16 }) : _jsx(ChevronRight, { size: 16 }) });
+div >
+;
+div >
+    { /* Content with smooth animations */};
+{
+    !collapsed && ()
+        < AnimatedElement;
+    animationType = "slide";
+    duration = { animationDurations, : .panel };
+    delay = { 50:  };
+    isVisible = {};
+    collapsed;
+}
+style = {};
+{
+    flex: 1,
+        display;
+    'flex',
+        flexDirection;
+    'column',
+        overflow;
+    'hidden',
+    ;
+}
+    >
+        (_jsx("div", { style: {
+                flex: 1,
+                overflow: 'auto',
+                padding: '0 4px',
+            }, children: _jsx(PropertiesSection, { node: node, schema: schema, onChange: onChange }) })
+            ,
+                _jsx(AnimatedElement, { animationType: "fade", duration: animationDurations.normal, delay: 200, isVisible: !collapsed, children: _jsx(PreviewSection, { node: node }) }));
+AnimatedElement >
+;
+{ /* Enhanced resize handle with visual feedback */ }
+_jsx("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
+        position: 'absolute',
+        left: -3,
+        top: 0,
+        bottom: 0,
+        width: 6,
+        cursor: 'col-resize',
+        background: 'transparent',
+        zIndex: 20,
+        borderRadius: '0 3px 3px 0',
+    }, className: "smooth-transition" });
+{ /* Visual resize indicator */ }
+_jsx("div", { style: {
+        position: 'absolute',
+        left: -1,
+        top: 0,
+        bottom: 0,
+        width: 2,
+        background: isResizing,
+        'linear-gradient(180deg, #3b82f6, #1d4ed8)': 'transparent',
+        boxShadow: isResizing ? '0 0 8px rgba(59, 130, 246, 0.5)' : 'none',
+        ...createSmoothTransition()['background', 'box-shadow'],
+        animationDurations, : .fast
+    } });
+{ /* Subtle glow effect when active */ }
+{
+    (node && !collapsed) && ()
+        < div;
+    style = {};
+    {
+        position: 'absolute',
+            top;
+        0,
+            left;
+        0,
+            right;
+        0,
+            bottom;
+        0,
+            background;
+        'linear-gradient(90deg, rgba(59, 130, 246, 0.02) 0%, transparent 50%)',
+            pointerEvents;
+        'none',
+            opacity;
+        isResizing ? 1 : 0,
+        ;
+        createSmoothTransition(['opacity'], animationDurations.normal);
+    }
+}
+/>;
+aside >
+;
+;
+;

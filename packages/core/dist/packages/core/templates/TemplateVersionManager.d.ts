@@ -2,7 +2,7 @@
  * Template Version Manager
  * Enhanced versioning system for templates with advanced import/export capabilities
  */
-import { ProjectTemplate, TemplateVariable, CustomizationPoint } from './ProjectTemplateManager';
+import { ProjectTemplate } from './ProjectTemplateManager';
 export interface TemplateVersion {
     id: string;
     template_id: string;
@@ -29,8 +29,8 @@ export interface TemplateVersion {
     download_count: number;
     usage_count: number;
     rating: number;
-    dependencies: TemplateDependency[];
-    conflicts: TemplateConflict[];
+    dependencies: TemplateDependency;
+    conflicts: TemplateConflict;
 }
 export interface TemplateDependency {
     template_id: string;
@@ -58,7 +58,7 @@ export interface TemplateImportOptions {
     validate_dependencies?: boolean;
     validate_compatibility?: boolean;
     import_notes?: string;
-    tags?: string[];
+    tags?: string;
 }
 export interface TemplateExportOptions {
     format: 'json' | 'yaml' | 'zip' | 'template_bundle';
@@ -68,7 +68,7 @@ export interface TemplateExportOptions {
     include_reviews?: boolean;
     version_id?: string;
     version_range?: string;
-    include_branches?: string[];
+    include_branches?: string;
     bundle_dependencies?: boolean;
     bundle_assets?: boolean;
     compress?: boolean;
@@ -83,15 +83,15 @@ export interface TemplateExportOptions {
 export interface TemplateImportResult {
     success: boolean;
     imported_version: TemplateVersion;
-    warnings: string[];
-    errors: string[];
+    warnings: string;
+    errors: string;
     original_version?: string;
     new_version: string;
     changes_detected: number;
     conflicts_resolved: number;
     dependencies_updated: number;
     migration_applied: boolean;
-    migration_log?: string[];
+    migration_log?: string;
     backup_version_id?: string;
     can_rollback: boolean;
 }
@@ -110,159 +110,18 @@ export interface VersionComparisonResult {
     estimated_migration_time: number;
 }
 export interface TemplateDiff {
-    metadata_changes: Array<{
-        field: string;
-        old_value: any;
-        new_value: any;
-        change_type: 'added' | 'removed' | 'modified';
-    }>;
-    variable_changes: Array<{
-        variable_id: string;
-        change_type: 'added' | 'removed' | 'modified';
-        old_variable?: TemplateVariable;
-        new_variable?: TemplateVariable;
-    }>;
-    customization_changes: Array<{
-        point_id: string;
-        change_type: 'added' | 'removed' | 'modified';
-        old_point?: CustomizationPoint;
-        new_point?: CustomizationPoint;
-    }>;
-    graph_changes: {
-        nodes_added: number;
-        nodes_removed: number;
-        nodes_modified: number;
-        edges_added: number;
-        edges_removed: number;
-        edges_modified: number;
-    };
+    metadata_changes: Array<{}, field>;
+    string: any;
+    old_value: any;
+    new_value: any;
+    change_type: 'added' | 'removed' | 'modified';
 }
 export declare class TemplateVersionManager {
+    private versions;
+    private branches;
+    constructor();
     private apiClient;
     private templateId;
     private userId;
-    private versions;
-    private branches;
-    constructor(apiClient: any, templateId: string, userId: string);
-    createVersion(template: ProjectTemplate, options?: {
-        version_number?: string;
-        version_tag?: string;
-        title?: string;
-        description?: string;
-        changelog?: string;
-        branch_name?: string;
-        compatibility_level?: 'patch' | 'minor' | 'major';
-    }): Promise<TemplateVersion>;
-    publishVersion(versionId: string, options?: {
-        release_notes?: string;
-        visibility?: 'private' | 'workspace' | 'public';
-    }): Promise<TemplateVersion>;
-    getVersions(options?: {
-        include_drafts?: boolean;
-        branch_name?: string;
-        limit?: number;
-        offset?: number;
-    }): Promise<{
-        versions: TemplateVersion[];
-        total: number;
-    }>;
-    getVersion(versionId: string): Promise<TemplateVersion>;
-    importTemplate(options: TemplateImportOptions): Promise<TemplateImportResult>;
-    importFromGit(gitUrl: string, options: {
-        branch?: string;
-        commit?: string;
-        credentials?: {
-            username?: string;
-            token?: string;
-        };
-        import_options?: Partial<TemplateImportOptions>;
-    }): Promise<TemplateImportResult>;
-    importFromMarketplace(marketplaceId: string, options: {
-        version?: string;
-        auto_update?: boolean;
-        include_dependencies?: boolean;
-    }): Promise<TemplateImportResult>;
-    exportTemplate(versionId: string, options: TemplateExportOptions): Promise<{
-        download_url?: string;
-        file_data?: ArrayBuffer;
-        filename: string;
-        size: number;
-        checksum: string;
-    }>;
-    exportVersionHistory(options?: {
-        branch_name?: string;
-        start_version?: string;
-        end_version?: string;
-        format?: 'json' | 'csv' | 'timeline';
-        include_diffs?: boolean;
-    }): Promise<{
-        download_url: string;
-        filename: string;
-    }>;
-    checkDependencies(versionId: string): Promise<{
-        satisfied: boolean;
-        missing: TemplateDependency[];
-        conflicts: TemplateConflict[];
-        recommendations: Array<{
-            template_id: string;
-            recommended_version: string;
-            reason: string;
-        }>;
-    }>;
-    resolveDependencies(versionId: string, options: {
-        auto_install?: boolean;
-        update_strategy?: 'conservative' | 'latest' | 'compatible';
-    }): Promise<{
-        resolved: TemplateDependency[];
-        installed: string[];
-        updated: string[];
-        conflicts: TemplateConflict[];
-    }>;
-    generateMigrationScript(fromVersionId: string, toVersionId: string): Promise<{
-        script: string;
-        instructions: string;
-        complexity: 'simple' | 'moderate' | 'complex';
-        estimated_time: number;
-        breaking_changes: Array<{
-            type: string;
-            description: string;
-            action_required: string;
-        }>;
-    }>;
-    applyMigration(versionId: string, migrationScript: string): Promise<{
-        success: boolean;
-        new_version_id: string;
-        migration_log: string[];
-        rollback_script?: string;
-    }>;
-    private generateNextVersion;
-    private getCurrentApiVersion;
-    private calculateChecksum;
-}
-export interface TemplateBundle {
-    format_version: string;
-    created_at: string;
-    created_by: string;
-    template: TemplateVersion;
-    dependencies: TemplateVersion[];
-    related_templates: TemplateVersion[];
-    assets: Array<{
-        type: 'image' | 'document' | 'config' | 'script';
-        filename: string;
-        data: ArrayBuffer | string;
-        mime_type: string;
-    }>;
-    documentation: {
-        readme: string;
-        changelog: string;
-        api_docs?: string;
-        examples?: Array<{
-            name: string;
-            description: string;
-            graph_data: any;
-        }>;
-    };
-    checksums: Record<string, string>;
-    signature?: string;
 }
 //# sourceMappingURL=TemplateVersionManager.d.ts.map

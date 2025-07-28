@@ -45,7 +45,7 @@ export interface UserActivity {
     violationCount: number;
     lastActivity: Date;
     riskScore: number;
-    suspiciousActivities: string[];
+    suspiciousActivities: string;
 }
 export interface MonitoringAlert {
     id: string;
@@ -78,9 +78,9 @@ export interface MonitoringDashboard {
         violationCount: number;
         complianceScore: number;
     };
-    classificationBreakdown: ClassificationStats[];
-    topUsers: UserActivity[];
-    recentAlerts: MonitoringAlert[];
+    classificationBreakdown: ClassificationStats;
+    topUsers: UserActivity;
+    recentAlerts: MonitoringAlert;
     trendData: {
         timestamp: Date;
         eventCount: number;
@@ -98,113 +98,12 @@ export declare class ClassificationMonitoringService {
     private alertHandlers;
     constructor();
     /**
-     * Initialize default monitoring thresholds
-     */
+    * Initialize default monitoring thresholds
+    */
     private initializeDefaultThresholds;
     /**
      * Initialize classification statistics
      */
     private initializeClassificationStats;
-    /**
-     * Record a monitoring event
-     */
-    recordEvent(event: Omit<MonitoringEvent, 'id'>): Promise<void>;
-    /**
-     * Update classification statistics
-     */
-    private updateStatistics;
-    /**
-     * Update user activity tracking
-     */
-    private updateUserActivity;
-    /**
-     * Detect suspicious activity patterns
-     */
-    private detectSuspiciousActivity;
-    /**
-     * Calculate user risk score
-     */
-    private calculateUserRiskScore;
-    /**
-     * Check monitoring thresholds
-     */
-    private checkThresholds;
-    /**
-     * Get metric value for threshold checking
-     */
-    private getMetricValue;
-    /**
-     * Evaluate threshold condition
-     */
-    private evaluateThreshold;
-    /**
-     * Create monitoring alert
-     */
-    private createAlert;
-    /**
-     * Notify real-time handlers
-     */
-    private notifyRealTimeHandlers;
-    /**
-     * Notify alert handlers
-     */
-    private notifyAlertHandlers;
-    /**
-     * Register real-time event handler
-     */
-    onEvent(handler: (event: MonitoringEvent) => void): void;
-    /**
-     * Register alert handler
-     */
-    onAlert(handler: (alert: MonitoringAlert) => void): void;
-    /**
-     * Get monitoring dashboard data
-     */
-    getDashboard(): MonitoringDashboard;
-    /**
-     * Calculate average processing time
-     */
-    private calculateAverageProcessingTime;
-    /**
-     * Get events by criteria
-     */
-    getEvents(criteria?: {
-        classification?: DataClassificationLevel;
-        userId?: string;
-        eventType?: string;
-        startDate?: Date;
-        endDate?: Date;
-        result?: 'SUCCESS' | 'FAILURE' | 'WARNING';
-    }): MonitoringEvent[];
-    /**
-     * Get alerts
-     */
-    getAlerts(unresolved?: boolean): MonitoringAlert[];
-    /**
-     * Resolve alert
-     */
-    resolveAlert(alertId: string, resolvedBy: string): void;
-    /**
-     * Get or update threshold
-     */
-    getThreshold(name: string): MonitoringThreshold | undefined;
-    updateThreshold(name: string, updates: Partial<MonitoringThreshold>): void;
-    /**
-     * Get user activity
-     */
-    getUserActivity(userId: string): UserActivity | undefined;
-    /**
-     * Get classification statistics
-     */
-    getClassificationStats(classification?: DataClassificationLevel): ClassificationStats[];
-    /**
-     * Export monitoring data
-     */
-    exportData(format: 'json' | 'csv'): string;
-    /**
-     * Clear monitoring data
-     */
-    clearData(): void;
 }
-export default ClassificationMonitoringService;
 //# sourceMappingURL=ClassificationMonitoringService.d.ts.map

@@ -27,10 +27,10 @@ export interface PerformanceProfile {
     startTime: number;
     endTime: number;
     duration: number;
-    samples: PerformanceSample[];
+    samples: PerformanceSample;
     summary: PerformanceSummary;
     analysis: PerformanceAnalysis;
-    recommendations: PerformanceRecommendation[];
+    recommendations: PerformanceRecommendation;
 }
 export interface PerformanceSample {
     timestamp: number;
@@ -48,7 +48,7 @@ export interface PerformanceSample {
         networkRequests?: number;
         errorCount: number;
     };
-    stackTrace?: string[];
+    stackTrace?: string;
     metadata?: Record<string, any>;
 }
 export interface PerformanceSummary {
@@ -73,15 +73,15 @@ export interface DomainPerformanceStats {
     memoryUsage: number;
     errorCount: number;
     cacheHitRate: number;
-    bottlenecks: string[];
+    bottlenecks: string;
 }
 export interface PerformanceAnalysis {
-    bottlenecks: PerformanceBottleneck[];
-    patterns: PerformancePattern[];
-    trends: PerformanceTrend[];
-    anomalies: PerformanceAnomaly[];
-    correlations: PerformanceCorrelation[];
-    insights: PerformanceInsight[];
+    bottlenecks: PerformanceBottleneck;
+    patterns: PerformancePattern;
+    trends: PerformanceTrend;
+    anomalies: PerformanceAnomaly;
+    correlations: PerformanceCorrelation;
+    insights: PerformanceInsight;
 }
 export interface PerformanceBottleneck {
     id: string;
@@ -91,13 +91,13 @@ export interface PerformanceBottleneck {
     location: {
         domain: string;
         operation: string;
-        stackTrace?: string[];
+        stackTrace?: string;
     };
     impact: {
         frequency: number;
         averageDelay: number;
         totalTimeWasted: number;
-        affectedOperations: string[];
+        affectedOperations: string;
     };
     metrics: {
         currentValue: number;
@@ -116,7 +116,7 @@ export interface PerformancePattern {
     type: 'recurring' | 'cyclical' | 'linear' | 'exponential';
     description: string;
     confidence: number;
-    samples: PerformanceSample[];
+    samples: PerformanceSample;
     characteristics: {
         frequency: number;
         amplitude: number;
@@ -135,7 +135,7 @@ export interface PerformanceTrend {
         nextDay: number;
         nextWeek: number;
     };
-    inflectionPoints: number[];
+    inflectionPoints: number;
 }
 export interface PerformanceAnomaly {
     id: string;
@@ -144,7 +144,7 @@ export interface PerformanceAnomaly {
     severity: 'low' | 'medium' | 'high';
     description: string;
     metrics: Record<string, number>;
-    possibleCauses: string[];
+    possibleCauses: string;
     sample: PerformanceSample;
 }
 export interface PerformanceCorrelation {
@@ -153,7 +153,7 @@ export interface PerformanceCorrelation {
     strength: 'weak' | 'moderate' | 'strong';
     significance: number;
     description: string;
-    implications: string[];
+    implications: string;
 }
 export interface PerformanceInsight {
     id: string;
@@ -162,8 +162,8 @@ export interface PerformanceInsight {
     description: string;
     impact: 'low' | 'medium' | 'high';
     effort: 'low' | 'medium' | 'high';
-    evidence: PerformanceSample[];
-    recommendations: string[];
+    evidence: PerformanceSample;
+    recommendations: string;
 }
 export interface PerformanceRecommendation {
     id: string;
@@ -175,8 +175,8 @@ export interface PerformanceRecommendation {
         effort: 'low' | 'medium' | 'high';
         risk: 'low' | 'medium' | 'high';
         estimatedImpact: number;
-        prerequisites: string[];
-        steps: string[];
+        prerequisites: string;
+        steps: string;
         codeExample?: string;
     };
     metrics: {
@@ -195,7 +195,7 @@ export interface PerformanceAlert {
     threshold: number;
     domain: string;
     sample: PerformanceSample;
-    suggestions: string[];
+    suggestions: string;
 }
 export interface MemorySnapshot {
     timestamp: number;
@@ -203,7 +203,7 @@ export interface MemorySnapshot {
     usedHeapSize: number;
     heapSizeLimit: number;
     objects: Map<string, number>;
-    leaks: MemoryLeak[];
+    leaks: MemoryLeak;
 }
 export interface MemoryLeak {
     object: string;
@@ -211,15 +211,15 @@ export interface MemoryLeak {
     sizeBytes: number;
     growthRate: number;
     firstDetected: number;
-    locations: string[];
+    locations: string;
 }
 export interface RenderProfile {
     componentName: string;
     renderTime: number;
     props: any;
     state: any;
-    hooks: any[];
-    children: RenderProfile[];
+    hooks: any;
+    children: RenderProfile;
     updates: {
         propsChanged: boolean;
         stateChanged: boolean;
@@ -238,69 +238,5 @@ export declare class PerformanceProfiler extends EventEmitter {
     private renderProfiles;
     private alerts;
     constructor(config?: Partial<PerformanceProfilerConfig>);
-    startProfile(name: string, options?: {
-        duration?: number;
-        domains?: string[];
-        operations?: string[];
-    }): string;
-    stopProfile(profileId: string): PerformanceProfile | null;
-    pauseProfile(profileId: string): boolean;
-    resumeProfile(profileId: string): boolean;
-    private startSampling;
-    private stopSampling;
-    private collectSample;
-    sampleOperation<T>(domain: string, operation: string, fn: () => T, metadata?: Record<string, any>): T;
-    takeMemorySnapshot(): MemorySnapshot;
-    profileRender(componentName: string, renderFn: () => any): any;
-    private analyzeProfile;
-    private generateSummary;
-    private performAnalysis;
-    private identifyBottlenecks;
-    private detectPatterns;
-    private analyzeTrends;
-    private detectAnomalies;
-    private findCorrelations;
-    private generateInsights;
-    private generateRecommendations;
-    private checkAlerts;
-    private createAlert;
-    private getSuggestions;
-    private getMemoryInfo;
-    private getCPUUsage;
-    private captureStackTrace;
-    private detectMemoryLeaks;
-    private calculateCacheHitRate;
-    private groupSamplesByDomain;
-    private groupSamplesByOperation;
-    private calculateSeverity;
-    private calculateLinearTrend;
-    private calculateMemoryTrend;
-    private calculateCorrelation;
-    private calculateVariability;
-    private average;
-    private sum;
-    private standardDeviation;
-    private calculatePercentile;
-    private countMemoryLeaks;
-    private calculateOverallCacheEfficiency;
-    private createEmptySummary;
-    private createEmptyAnalysis;
-    private generateProfileId;
-    private generateBottleneckId;
-    private generateAnomalyId;
-    private generateInsightId;
-    private generateRecommendationId;
-    private generateAlertId;
-    getActiveProfiles(): PerformanceProfile[];
-    getProfile(profileId: string): PerformanceProfile | null;
-    getAlerts(): PerformanceAlert[];
-    clearAlerts(): void;
-    getMemorySnapshots(): MemorySnapshot[];
-    getRenderProfiles(): Map<string, RenderProfile[]>;
-    isProfilingActive(): boolean;
-    getCurrentProfileId(): string | null;
-    updateConfig(config: Partial<PerformanceProfilerConfig>): void;
-    exportProfile(profileId: string): any;
 }
-export declare const globalPerformanceProfiler: PerformanceProfiler;
 //# sourceMappingURL=PerformanceProfiler.d.ts.map

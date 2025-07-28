@@ -3,6 +3,7 @@
  * Hook for managing comments in a workspace target
  */
 import { Comment, CreateComment, UpdateComment } from '../types/workspace';
+
 interface UseCommentsOptions {
     workspaceId: string;
     targetType: string;
@@ -12,7 +13,7 @@ interface UseCommentsOptions {
     sortOrder?: 'asc' | 'desc';
     autoRefresh?: boolean;
     refreshInterval?: number;
-}
+
 export declare function useComments(options: UseCommentsOptions): {
     comments: Comment[];
     loading: boolean;

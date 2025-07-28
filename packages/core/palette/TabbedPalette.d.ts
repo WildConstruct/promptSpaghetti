@@ -1,5 +1,6 @@
 import React from 'react';
 import { NodeMeta } from '../Palette';
+
 export interface TabbedPaletteProps {
     nodes: NodeMeta[];
     collapsed: boolean;
@@ -9,7 +10,8 @@ export interface TabbedPaletteProps {
     showSearch?: boolean;
     showFavorites?: boolean;
     maxSearchResults?: number;
-}
+
+
 /**
  * Enhanced tabbed palette with search and favorites
  */

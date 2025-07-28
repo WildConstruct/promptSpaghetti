@@ -22,10 +22,10 @@ export interface SystemService {
     uptime: number;
     lastRestart: Date;
     autoRestart: boolean;
-    dependencies: string[];
+    dependencies: string;
     port?: number;
     url?: string;
-    logs: ServiceLog[];
+    logs: ServiceLog;
     metrics: ServiceMetrics;
 }
 export interface ServiceLog {

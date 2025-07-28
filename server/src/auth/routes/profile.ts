@@ -33,7 +33,7 @@ const notificationPreferencesSchema = z.object({
       system: z.boolean(),
       updates: z.boolean(),
       marketing: z.boolean()
-    })
+  }
   }),
   inApp: z.object({
     enabled: z.boolean(),
@@ -42,7 +42,7 @@ const notificationPreferencesSchema = z.object({
       system: z.boolean(),
       updates: z.boolean(),
       mentions: z.boolean()
-    })
+  }
   }),
   push: z.object({
     enabled: z.boolean(),
@@ -51,19 +51,21 @@ const notificationPreferencesSchema = z.object({
       system: z.boolean(),
       updates: z.boolean(),
       mentions: z.boolean()
-    })
+  }
   }),
   quietHours: z.object({
     enabled: z.boolean(),
     start: z.string().regex(/^\d{2}:\d{2}$/),
     end: z.string().regex(/^\d{2}:\d{2}$/),
     timezone: z.string()
-  })
+  }
 });
 
+}
 interface ProfileRouteContext {
   authService: AuthenticationService;
   profileService: ProfileService;
+}
 }
 
 export async function profileRoutes(fastify: FastifyInstance, context: ProfileRouteContext) {
@@ -98,7 +100,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
                 createdAt: { type: 'string' },
                 updatedAt: { type: 'string' }
               }
-            },
+  }
             completeness: {
               type: 'object',
               properties: {
@@ -302,7 +304,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         properties: {
           category: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -496,9 +498,9 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
           q: { type: 'string', minLength: 1 },
           limit: { type: 'number', minimum: 1, maximum: 100, default: 20 },
           offset: { type: 'number', minimum: 0, default: 0 }
-        },
+  }
         required: ['q']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -506,7 +508,7 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
             profiles: {
               type: 'array',
               items: { type: 'object' }
-            },
+  }
             total: { type: 'number' },
             pagination: {
               type: 'object',
@@ -557,9 +559,9 @@ export async function profileRoutes(fastify: FastifyInstance, context: ProfileRo
         type: 'object',
         properties: {
           userId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['userId']
-      },
+  }
       response: {
         200: {
           type: 'object',

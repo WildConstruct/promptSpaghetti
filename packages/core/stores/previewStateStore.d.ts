@@ -5,6 +5,7 @@
  * Centralized state management for real-time preview functionality with
  * synchronization, caching, and performance optimizations.
  */
+
 export interface PreviewResult {
     seed: number;
     output?: string;
@@ -38,7 +39,7 @@ export interface PreviewResult {
             total: number;
         };
     };
-}
+
 export interface PreviewCache {
     graphHash: string;
     timestamp: number;
@@ -47,7 +48,7 @@ export interface PreviewCache {
         totalTime: number;
         averageTime: number;
     } | null;
-}
+
 export interface PreviewPerformanceMetrics {
     totalExecutionTime: number;
     averageExecutionTime: number;
@@ -55,7 +56,7 @@ export interface PreviewPerformanceMetrics {
     lastExecutionCount: number;
     peakMemoryUsage?: number;
     networkLatency?: number;
-}
+
 export interface PreviewStateStore {
     isLoading: boolean;
     error: string | null;
@@ -114,7 +115,7 @@ export interface PreviewStateStore {
     resetState: () => void;
     getStateSnapshot: () => any;
     restoreFromSnapshot: (snapshot: Record<string, unknown>) => void;
-}
+
 export declare }, "subscribe"> & {
     subscribe: {,
         (listener: (selectedState: PreviewStateStore, previousSelectedState: PreviewStateStore) => void): () => void;

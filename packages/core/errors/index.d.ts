@@ -27,13 +27,13 @@ export declare enum ErrorCode {
     VALIDATION_ERROR = "VALIDATION_ERROR",
     ENTROPY_ERROR = "ENTROPY_ERROR",
     RATE_LIMIT_ERROR = "RATE_LIMIT_ERROR"
-}
+
 export declare enum ErrorSeverity {
     LOW = "low",
     MEDIUM = "medium",
     HIGH = "high",
     CRITICAL = "critical"
-}
+
 export interface ErrorContext {
     timestamp: string;
     userId?: string;
@@ -44,14 +44,13 @@ export interface ErrorContext {
     stackTrace?: string;
     originalError?: any;
     metadata?: Record<string, any>;
-}
+
 export interface RecoveryAction {
     type: 'retry' | 'fallback' | 'redirect' | 'reset' | 'manual';
     description: string;
     action?: () => Promise<void> | void;
     url?: string;
     delay?: number;
-}
 /**
  * Base class for all structured errors in the system
  */
@@ -89,7 +88,6 @@ export declare abstract class BaseError extends Error {
      * Check if error is recoverable
      */
     isRecoverable(): boolean;
-}
 /**
  * Graph-related errors
  */
@@ -104,59 +102,52 @@ export declare class GraphValidationError extends BaseError {
         value: any;
         expected: string;
     }>, context?: Partial<ErrorContext>);
-}
+
 export declare class GraphExecutionError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>, cause?: Error);
-}
+
 export declare class NodeExecutionError extends BaseError {
     constructor(nodeId: string, operation: string, message: string, cause?: Error, context?: Partial<ErrorContext>);
-}
 /**
  * Connection and Network errors
  */
 export declare class DatabaseConnectionError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>, cause?: Error);
-}
+
 export declare class ConnectionFactoryError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>);
-}
 /**
  * Authentication and Authorization errors
  */
 export declare class AuthenticationError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>);
-}
+
 export declare class MFAError extends BaseError {
     constructor(message: string, mfaType?: string, context?: Partial<ErrorContext>);
-}
 /**
  * File and Resource errors
  */
 export declare class ProjectLockedError extends BaseError {
     constructor(projectId?: string, context?: Partial<ErrorContext>);
-}
 /**
  * Workflow and State errors
  */
 export declare class WorkflowStateError extends BaseError {
     constructor(message: string, context?: Partial<ErrorContext>);
-}
 /**
  * API and Analytics errors
  */
 export declare class APIError extends BaseError {
     constructor(statusCode: number, message: string, endpoint?: string, context?: Partial<ErrorContext>);
-}
 /**
  * Validation errors
  */
 export declare class ValidationError extends BaseError {
     constructor(field: string, value: any, expected: string, context?: Partial<ErrorContext>);
-}
 /**
  * Configuration and setup errors
  */
 export declare class ConfigurationError extends BaseError {
     constructor(message: string, configKey?: string, context?: Partial<ErrorContext>);
-}
+
 //# sourceMappingURL=index.d.ts.map

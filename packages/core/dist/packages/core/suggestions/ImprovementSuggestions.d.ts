@@ -27,11 +27,11 @@ export interface ImprovementSuggestion {
     rationale: string;
     impact: ImpactAssessment;
     implementation: ImplementationDetails;
-    evidence: Evidence[];
+    evidence: Evidence;
     status: SuggestionStatus;
     confidence: number;
-    targetAudience: string[];
-    tags: string[];
+    targetAudience: string;
+    tags: string;
     metadata: SuggestionMetadata;
 }
 export type SuggestionType = 'performance' | 'usability' | 'accessibility' | 'content' | 'workflow' | 'feature' | 'design' | 'technical' | 'business' | 'security';
@@ -51,11 +51,11 @@ export interface ImpactAssessment {
 export interface ImplementationDetails {
     complexity: 'trivial' | 'simple' | 'moderate' | 'complex' | 'very_complex';
     estimatedEffort: number;
-    skillsRequired: string[];
-    dependencies: string[];
-    prerequisites: string[];
-    risksAndChallenges: string[];
-    acceptanceCriteria: string[];
+    skillsRequired: string;
+    dependencies: string;
+    prerequisites: string;
+    risksAndChallenges: string;
+    acceptanceCriteria: string;
     testingStrategy: string;
     rolloutPlan: string;
 }
@@ -77,9 +77,9 @@ export interface SuggestionMetadata {
     lastUpdated: Date;
     reviewedBy?: string;
     implementedBy?: string;
-    relatedSuggestions: string[];
+    relatedSuggestions: string;
     parentSuggestion?: string;
-    childSuggestions: string[];
+    childSuggestions: string;
 }
 export interface AnalysisContext {
     userId?: string;
@@ -96,18 +96,18 @@ export interface AnalysisContext {
 }
 export interface AnalysisScope {
     domain: 'user_experience' | 'performance' | 'content' | 'workflow' | 'system' | 'business';
-    components: string[];
-    userSegments: string[];
-    features: string[];
-    workflows: string[];
+    components: string;
+    userSegments: string;
+    features: string;
+    workflows: string;
 }
 export interface AnalysisFilters {
-    includeTypes: SuggestionType[];
-    excludeTypes: SuggestionType[];
+    includeTypes: SuggestionType;
+    excludeTypes: SuggestionType;
     minPriority: 'low' | 'medium' | 'high' | 'critical';
     maxComplexity: 'trivial' | 'simple' | 'moderate' | 'complex' | 'very_complex';
     minConfidence: number;
-    targetAudience: string[];
+    targetAudience: string;
 }
 export interface ContextMetrics {
     performanceMetrics: {
@@ -130,19 +130,19 @@ export interface ContextMetrics {
     };
 }
 export interface UserBehaviorData {
-    commonPatterns: BehaviorPattern[];
-    dropoffPoints: DropoffPoint[];
-    painPoints: PainPoint[];
-    successPaths: SuccessPath[];
-    featureUsage: FeatureUsageData[];
-    preferences: UserPreference[];
+    commonPatterns: BehaviorPattern;
+    dropoffPoints: DropoffPoint;
+    painPoints: PainPoint;
+    successPaths: SuccessPath;
+    featureUsage: FeatureUsageData;
+    preferences: UserPreference;
 }
 export interface BehaviorPattern {
     id: string;
     description: string;
     frequency: number;
     userSegment: string;
-    actions: UserAction[];
+    actions: UserAction;
     outcome: 'success' | 'failure' | 'abandonment' | 'completion';
     confidence: number;
 }
@@ -157,10 +157,10 @@ export interface UserAction {
 export interface DropoffPoint {
     location: string;
     dropoffRate: number;
-    commonReasons: string[];
-    userSegments: string[];
+    commonReasons: string;
+    userSegments: string;
     timeSpent: number;
-    recoveryActions: string[];
+    recoveryActions: string;
 }
 export interface PainPoint {
     id: string;
@@ -168,14 +168,14 @@ export interface PainPoint {
     severity: 'low' | 'medium' | 'high' | 'critical';
     frequency: number;
     affectedUsers: number;
-    userFeedback: string[];
-    potentialCauses: string[];
-    suggestedSolutions: string[];
+    userFeedback: string;
+    potentialCauses: string;
+    suggestedSolutions: string;
 }
 export interface SuccessPath {
     id: string;
     description: string;
-    steps: string[];
+    steps: string;
     completionRate: number;
     averageTime: number;
     userSatisfaction: number;
@@ -186,8 +186,8 @@ export interface FeatureUsageData {
     adoptionRate: number;
     usageFrequency: number;
     userSatisfaction: number;
-    commonIssues: string[];
-    improvementOpportunities: string[];
+    commonIssues: string;
+    improvementOpportunities: string;
 }
 export interface UserPreference {
     category: string;
@@ -203,17 +203,17 @@ export interface SystemStateData {
         disk: number;
         network: number;
     };
-    errors: ErrorPattern[];
-    warnings: WarningPattern[];
-    capacityMetrics: CapacityMetric[];
-    trends: TrendData[];
+    errors: ErrorPattern;
+    warnings: WarningPattern;
+    capacityMetrics: CapacityMetric;
+    trends: TrendData;
 }
 export interface ErrorPattern {
     type: string;
     frequency: number;
     impact: 'low' | 'medium' | 'high' | 'critical';
-    commonCauses: string[];
-    affectedComponents: string[];
+    commonCauses: string;
+    affectedComponents: string;
     trends: string;
 }
 export interface WarningPattern {
@@ -275,100 +275,10 @@ export declare class ImprovementSuggestionsSystem extends EventEmitter {
     private generatorWorkers;
     private isAnalysisRunning;
     constructor(config?: Partial<SuggestionConfiguration>);
-    generateSuggestions(context: AnalysisContext): Promise<string[]>;
-    getSuggestions(filters?: {
-        types?: SuggestionType[];
-        categories?: SuggestionCategory[];
-        priorities?: string[];
-        status?: SuggestionStatus[];
-        targetAudience?: string[];
-        confidenceMin?: number;
-        impactMin?: number;
-    }): ImprovementSuggestion[];
-    getPersonalizedSuggestions(userId: string, context?: Partial<AnalysisContext>): Promise<ImprovementSuggestion[]>;
-    updateSuggestionStatus(suggestionId: string, status: SuggestionStatus, metadata?: Partial<SuggestionMetadata>): Promise<void>;
-    provideFeedback(suggestionId: string, feedback: {
-        rating: number;
-        helpful: boolean;
-        comment?: string;
-        implemented?: boolean;
-        outcome?: string;
-    }): Promise<void>;
-    generateTargetedSuggestions(problem: {
-        type: string;
-        description: string;
-        context: Record<string, any>;
-        urgency: 'low' | 'medium' | 'high' | 'critical';
-    }): Promise<string[]>;
-    approveSuggestions(suggestionIds: string[]): Promise<void>;
-    rejectSuggestions(suggestionIds: string[], reason?: string): Promise<void>;
-    getSuggestionAnalytics(): {
-        totalSuggestions: number;
-        byType: Record<SuggestionType, number>;
-        byPriority: Record<string, number>;
-        byStatus: Record<SuggestionStatus, number>;
-        averageConfidence: number;
-        averageImpact: number;
-        implementationRate: number;
-        approvalRate: number;
-        topCategories: Array<{
-            category: SuggestionCategory;
-            count: number;
-        }>;
-    };
-    updateConfiguration(config: Partial<SuggestionConfiguration>): void;
-    destroy(): void;
-    private initializeAnalyzers;
-    private initializeGenerators;
-    private analyzePerformance;
-    private analyzeUserExperience;
-    private analyzeContent;
-    private analyzeWorkflows;
-    private analyzeAccessibility;
-    private analyzeSecurity;
-    private generateSuggestionsFromAnalysis;
-    private createSuggestionFromOpportunity;
-    private filterSuggestions;
-    private removeDuplicateSuggestions;
     private prioritizeSuggestions;
     private calculatePriorityScore;
     private getEffortScore;
     private getUrgencyScore;
     private storeSuggestion;
-    private startAutomaticAnalysis;
-    private stopAutomaticAnalysis;
-    private restartAutomaticAnalysis;
-    private runAutomaticAnalysis;
-    private buildDefaultAnalysisContext;
-    private buildUserContext;
-    private getUserBehaviorData;
-    private personalizeSuggestions;
-    private updateAlgorithmsFromFeedback;
-    private mapProblemTypeToDomain;
-    private mapProblemTypeToSuggestionTypes;
-    private filterForProblemRelevance;
-    private mapOpportunityToType;
-    private mapOpportunityToCategory;
-    private calculatePriority;
-    private generateDetailedDescription;
-    private generateRationale;
-    private assessImpact;
-    private generateImplementationDetails;
-    private generateEvidence;
-    private calculateConfidence;
-    private identifyTargetAudience;
-    private generateTags;
-    private getCurrentMetrics;
-    private getCurrentUserBehavior;
-    private getCurrentSystemState;
-    private generatePerformanceSuggestions;
-    private generateUsabilitySuggestions;
-    private generateContentSuggestions;
-    private generateWorkflowSuggestions;
-    private generateFeatureSuggestions;
 }
-declare const _default: {
-    ImprovementSuggestionsSystem: typeof ImprovementSuggestionsSystem;
-};
-export default _default;
 //# sourceMappingURL=ImprovementSuggestions.d.ts.map

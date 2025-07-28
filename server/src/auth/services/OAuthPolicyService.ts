@@ -27,6 +27,7 @@ export type SecurityLevel = 'HIGH_SECURITY' | 'STANDARD_SECURITY' | 'LOW_SECURIT
 export type EnvironmentType = 'PRODUCTION' | 'STAGING' | 'DEVELOPMENT';
 export type ComplianceFramework = 'OAuth2.1' | 'GDPR' | 'CCPA' | 'SOX' | 'PCI_DSS' | 'ISO27001' | 'HIPAA';
 
+}
 export interface OAuthPolicyTemplate {
   templateId: string;
   policyType: OAuthPolicyType;
@@ -41,7 +42,9 @@ export interface OAuthPolicyTemplate {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface PolicyDocument {
   title: string;
   description: string;
@@ -51,7 +54,9 @@ export interface PolicyDocument {
   reviewSchedule: string;
   approvalRequired: boolean;
 }
+}
 
+}
 export interface PolicySection {
   sectionId: string;
   title: string;
@@ -60,7 +65,9 @@ export interface PolicySection {
   variables: PolicyVariable[];
   validations: ValidationRule[];
 }
+}
 
+}
 export interface PolicyVariable {
   name: string;
   type: 'TEXT' | 'SELECT' | 'MULTI_SELECT' | 'NUMBER' | 'BOOLEAN' | 'LIST';
@@ -74,9 +81,11 @@ export interface PolicyVariable {
     maxLength?: number;
     min?: number;
     max?: number;
+}
   };
 }
 
+}
 export interface PolicyRequirement {
   requirementId: string;
   title: string;
@@ -86,7 +95,9 @@ export interface PolicyRequirement {
   validationRule?: string;
   enforcementAction: 'BLOCK' | 'WARN' | 'LOG' | 'REQUIRE_APPROVAL';
 }
+}
 
+}
 export interface PolicyException {
   exceptionId: string;
   title: string;
@@ -95,20 +106,26 @@ export interface PolicyException {
   approvalRequired: boolean;
   validUntil?: Date;
 }
+}
 
+}
 export interface ExceptionCondition {
   field: string;
   operator: 'EQUALS' | 'NOT_EQUALS' | 'CONTAINS' | 'NOT_CONTAINS' | 'GREATER_THAN' | 'LESS_THAN';
   value: any;
 }
+}
 
+}
 export interface ValidationRule {
   ruleId: string;
   expression: string;
   errorMessage: string;
   severity: 'ERROR' | 'WARNING' | 'INFO';
 }
+}
 
+}
 export interface PolicyRule {
   ruleId: string;
   name: string;
@@ -118,7 +135,9 @@ export interface PolicyRule {
   priority: number;
   enabled: boolean;
 }
+}
 
+}
 export interface EnforcementMechanism {
   mechanismId: string;
   name: string;
@@ -127,7 +146,9 @@ export interface EnforcementMechanism {
   escalation: 'BLOCK' | 'ALERT' | 'LOG' | 'REQUIRE_APPROVAL';
   automated: boolean;
 }
+}
 
+}
 export interface OAuthConfiguration {
   clientId: string;
   clientType: ClientType;
@@ -138,7 +159,9 @@ export interface OAuthConfiguration {
   complianceRequirements: ComplianceFramework[];
   customAttributes: Record<string, any>;
 }
+}
 
+}
 export interface TokenConfiguration {
   accessTokenTtl: number;
   refreshTokenTtl: number;
@@ -148,7 +171,9 @@ export interface TokenConfiguration {
   audience: string[];
   scopes: string[];
 }
+}
 
+}
 export interface PolicyEnforcementResult {
   compliant: boolean;
   policyId: string;
@@ -159,7 +184,9 @@ export interface PolicyEnforcementResult {
   evaluatedAt: Date;
   nextEvaluation?: Date;
 }
+}
 
+}
 export interface PolicyViolation {
   violationId: string;
   ruleId: string;
@@ -171,7 +198,9 @@ export interface PolicyViolation {
   expectedValue?: any;
   remediationSuggestion: string;
 }
+}
 
+}
 export interface PolicyRecommendation {
   recommendationId: string;
   title: string;
@@ -181,7 +210,9 @@ export interface PolicyRecommendation {
   implementationGuide: string;
   estimatedEffort: string;
 }
+}
 
+}
 export interface EnforcementAction {
   actionId: string;
   type: 'BLOCK_REGISTRATION' | 'REQUIRE_APPROVAL' | 'SEND_ALERT' | 'CREATE_TICKET' | 'LOG_VIOLATION';
@@ -191,7 +222,9 @@ export interface EnforcementAction {
   executedBy?: string;
   result?: string;
 }
+}
 
+}
 export interface OAuthGovernanceFramework {
   frameworkId: string;
   title: string;
@@ -203,7 +236,9 @@ export interface OAuthGovernanceFramework {
   complianceRequirements: ComplianceRequirement[];
   approvalWorkflows: ApprovalWorkflow[];
 }
+}
 
+}
 export interface ReportingSchedule {
   daily?: string[];
   weekly?: string[];
@@ -211,7 +246,9 @@ export interface ReportingSchedule {
   quarterly?: string[];
   annual?: string[];
 }
+}
 
+}
 export interface ComplianceRequirement {
   frameworkId: ComplianceFramework;
   requirementId: string;
@@ -221,7 +258,9 @@ export interface ComplianceRequirement {
   evidenceRequired: string[];
   automated: boolean;
 }
+}
 
+}
 export interface ApprovalWorkflow {
   workflowId: string;
   name: string;
@@ -230,7 +269,9 @@ export interface ApprovalWorkflow {
   timeouts: WorkflowTimeout[];
   escalations: EscalationRule[];
 }
+}
 
+}
 export interface ApprovalStep {
   stepId: string;
   name: string;
@@ -240,18 +281,23 @@ export interface ApprovalStep {
   autoApprove?: boolean;
   conditions?: string;
 }
+}
 
+}
 export interface WorkflowTimeout {
   stepId: string;
   timeoutHours: number;
   action: 'AUTO_APPROVE' | 'AUTO_REJECT' | 'ESCALATE' | 'NOTIFY';
 }
+}
 
+}
 export interface EscalationRule {
   ruleId: string;
   condition: string;
   escalateTo: string[];
   action: string;
+}
 }
 
 export class OAuthPolicyService {
@@ -289,6 +335,7 @@ export class OAuthPolicyService {
     customizations: Record<string, any> = {},
     userId: string
   ): Promise<string> {
+
     try {
       const template = await this.getOAuthPolicyTemplate(templateId);
       
@@ -314,7 +361,7 @@ export class OAuthPolicyService {
           policyType: template.policyType,
           frameworks: template.frameworks,
           customizations: Object.keys(customizations)
-        },
+  }
         userId,
         severity: 'MEDIUM'
       });
@@ -327,7 +374,7 @@ export class OAuthPolicyService {
           templateId,
           error: error.message,
           customizations: Object.keys(customizations)
-        },
+  }
         userId,
         severity: 'HIGH'
       });
@@ -343,6 +390,7 @@ export class OAuthPolicyService {
     oauthConfig: OAuthConfiguration,
     userId: string
   ): Promise<PolicyEnforcementResult> {
+
     try {
       // Load OAuth client registration rules
       const rules = await this.loadOAuthPolicyRules('CLIENT_REGISTRATION');
@@ -382,7 +430,7 @@ export class OAuthPolicyService {
           compliant: enforcementResult.compliant,
           violationCount: enforcementResult.violations.length,
           enforcementActions: enforcementResult.enforcementActions.length
-        },
+  }
         userId,
         severity: enforcementResult.compliant ? 'LOW' : 'HIGH'
       });
@@ -395,7 +443,7 @@ export class OAuthPolicyService {
           clientId: oauthConfig.clientId,
           policyType: 'CLIENT_REGISTRATION',
           error: error.message
-        },
+  }
         userId,
         severity: 'HIGH'
       });
@@ -412,6 +460,7 @@ export class OAuthPolicyService {
     clientId: string,
     userId: string
   ): Promise<PolicyEnforcementResult> {
+
     try {
       // Get applicable token lifecycle policy
       const policy = await this.policyAuthoringService.getPolicyByType('OAUTH_TOKEN_LIFECYCLE');
@@ -439,7 +488,7 @@ export class OAuthPolicyService {
           compliant: enforcementResult.compliant,
           tokenTtl: tokenConfig.accessTokenTtl,
           rotationRequired: tokenConfig.rotationRequired
-        },
+  }
         userId,
         severity: enforcementResult.compliant ? 'LOW' : 'MEDIUM'
       });
@@ -459,6 +508,7 @@ export class OAuthPolicyService {
     scopes: string[],
     consentMetadata: Record<string, any> = {}
   ): Promise<string> {
+
     try {
       // Use existing PolicyAcceptanceTrackingService for OAuth consent
       const consentId = await this.policyAcceptanceService.recordPolicyAcceptance({
@@ -474,7 +524,7 @@ export class OAuthPolicyService {
             granted: true,
             timestamp: new Date()
           }))
-        },
+  }
         acceptanceContext: {
           clientId,
           grantType: 'authorization_code',
@@ -493,7 +543,7 @@ export class OAuthPolicyService {
           clientId,
           scopes,
           acceptanceMethod: 'OAUTH_FLOW'
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -514,9 +564,10 @@ export class OAuthPolicyService {
       endDate: Date;
       clientIds?: string[];
       includePolicies?: OAuthPolicyType[];
-    },
+  }
     userId: string
   ): Promise<string> {
+
     try {
       // Use existing ComplianceReportingService
       const reportId = await this.complianceReportingService.generateReport({
@@ -532,7 +583,7 @@ export class OAuthPolicyService {
             'OAUTH_CONSENT_MANAGEMENT'
           ],
           additionalFilters: scope.clientIds ? { clientIds: scope.clientIds } : {}
-        },
+  }
         recipients: [`${userId}@company.com`],
         format: 'PDF',
         includeExecutiveSummary: true,
@@ -551,7 +602,7 @@ export class OAuthPolicyService {
             clientCount: scope.clientIds?.length || 'ALL',
             policyTypes: scope.includePolicies?.length || 'ALL'
           }
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -571,6 +622,7 @@ export class OAuthPolicyService {
     complianceFrameworks: ComplianceFramework[],
     userId: string
   ): Promise<OAuthGovernanceFramework> {
+
     try {
       const framework: OAuthGovernanceFramework = {
         frameworkId: `oauth-governance-${Date.now()}`,
@@ -609,7 +661,7 @@ export class OAuthPolicyService {
           complianceFrameworks,
           policyCount: framework.policies.length,
           enforcementMechanismCount: framework.enforcementMechanisms.length
-        },
+  }
         userId,
         severity: 'MEDIUM'
       });
@@ -623,6 +675,7 @@ export class OAuthPolicyService {
   // Private helper methods
 
   private async getOAuthPolicyTemplate(templateId: string): Promise<OAuthPolicyTemplate> {
+
     // Implementation would load from database or predefined templates
     const templates = await this.getDefaultOAuthPolicyTemplates(['OAuth2.1', 'GDPR']);
     const template = templates.find(t => t.templateId === templateId);
@@ -635,6 +688,7 @@ export class OAuthPolicyService {
   }
 
   private async loadOAuthPolicyRules(policyType: string): Promise<any[]> {
+
     // Load OAuth-specific rules from RuleEvaluationEngine
     return await this.ruleEvaluationEngine.loadRulesByCategory(`oauth_${policyType.toLowerCase()}`);
   }
@@ -731,6 +785,7 @@ export class OAuthPolicyService {
     violations: PolicyViolation[];
     recommendations: PolicyRecommendation[];
   }> {
+
     const violations: PolicyViolation[] = [];
     const recommendations: PolicyRecommendation[] = [];
 
@@ -789,6 +844,7 @@ export class OAuthPolicyService {
   private async getDefaultOAuthPolicyTemplates(
     frameworks: ComplianceFramework[]
   ): Promise<OAuthPolicyTemplate[]> {
+
     // Return comprehensive default OAuth policy templates
     return [
       {
@@ -815,7 +871,7 @@ export class OAuthPolicyService {
                   description: 'OAuth client type',
                   required: true,
                   options: ['CONFIDENTIAL', 'PUBLIC', 'MACHINE_TO_MACHINE']
-                },
+  }
                 {
                   name: 'pkceRequired',
                   type: 'BOOLEAN',
@@ -847,7 +903,7 @@ export class OAuthPolicyService {
           exceptions: [],
           reviewSchedule: 'QUARTERLY',
           approvalRequired: true
-        },
+  }
         validationRules: [],
         enforcementMechanisms: [
           {
@@ -860,8 +916,7 @@ export class OAuthPolicyService {
           }
         ],
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(}
     ];
   }
 
@@ -874,7 +929,7 @@ export class OAuthPolicyService {
         action: 'validateAgainstPolicy',
         escalation: 'BLOCK',
         automated: true
-      },
+  }
       {
         mechanismId: 'TOKEN-LIFECYCLE-MONITORING',
         name: 'Token Lifecycle Monitoring',
@@ -921,7 +976,7 @@ export class OAuthPolicyService {
             approvers: ['security-team'],
             requiredApprovals: 1,
             timeoutHours: 24
-          },
+  }
           {
             stepId: 'compliance-review',
             name: 'Compliance Officer Review',

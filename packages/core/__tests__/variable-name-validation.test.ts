@@ -30,7 +30,6 @@ describe('Variable Name Validation', () => {
       ];
       for (const name of validNames) {
         expect(VARIABLE_NAME_PATTERN.test(name)).toBe(true);
-      }
     });
     it('should reject invalid characters', () => {
       const invalidNames = [;
@@ -63,7 +62,6 @@ describe('Variable Name Validation', () => {
       ];
       for (const name of invalidNames) {
         expect(VARIABLE_NAME_PATTERN.test(name)).toBe(false);
-      }
     });
   });
   describe('validateVariableName', () => {
@@ -79,7 +77,6 @@ describe('Variable Name Validation', () => {
       ];
       for (const name of validNames) {
         expect(SecurityValidation.validateVariableName(name)).toBe(true);
-      }
     });
     it('should enforce 64 character limit', () => {
       // 64 characters - should pass
@@ -107,7 +104,6 @@ describe('Variable Name Validation', () => {
       ];
       for (const keyword of reservedKeywords) {
         expect(SecurityValidation.validateVariableName(keyword)).toBe(false);
-      }
     });
     it('should reject names containing dangerous patterns', () => {
       const dangerousNames = [;
@@ -120,7 +116,6 @@ describe('Variable Name Validation', () => {
       ];
       for (const name of dangerousNames) {
         expect(SecurityValidation.validateVariableName(name)).toBe(false);
-      }
     });
     it('should handle edge cases', () => {
       expect(SecurityValidation.validateVariableName('')).toBe(false);
@@ -143,7 +138,6 @@ describe('Variable Name Validation', () => {
       for (const name of validNames) {
         const result = variableNameSchema.safeParse(name);
         expect(result.success).toBe(true);
-      }
     });
     it('should provide meaningful error messages', () => {
       // Empty string
@@ -151,25 +145,21 @@ describe('Variable Name Validation', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.errors[0].message).toContain('cannot be empty');
-      }
       // Too long
       result = variableNameSchema.safeParse('a'.repeat(65));
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.errors[0].message).toContain('64 characters');
-      }
       // Invalid characters
       result = variableNameSchema.safeParse('var name');
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.errors[0].message).toContain('letters, numbers, underscore, or dash');
-      }
       // Reserved keyword
       result = variableNameSchema.safeParse('constructor');
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.errors[0].message).toContain('reserved keywords');
-      }
     });
   });
   describe('Integration with SetVariable', () => {
@@ -207,7 +197,6 @@ describe('Variable Name Validation', () => {
       for (const testCase of testCases) {
         const result = SecurityValidation.validateVariableName(testCase.name);
         expect(result).toBe(testCase.expected);
-      }
     });
   });
   describe('Performance', () => {
@@ -224,8 +213,6 @@ describe('Variable Name Validation', () => {
       for (let i = 0; i < iterations; i++) {
         for (const name of testNames) {
           SecurityValidation.validateVariableName(name);
-        }
-      }
       const duration = Date.now() - start;
       // Should complete 50,000 validations in under 100ms
       expect(duration).toBeLessThan(100);

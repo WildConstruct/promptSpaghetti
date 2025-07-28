@@ -20,22 +20,19 @@ interface RevisionRequestFormProps {
   contentType?: RevisionContentType;
   contentId?: string;
   contentTitle?: string;
-  onSubmit: (formData: RevisionRequestFormData) => Promise<void>;
+  onSubmit: (formData: RevisionRequestFormData) => Promise<void>;,
   onCancel: () => void;
   isSubmitting?: boolean;
   className?: string;
-}
 interface ValidationErrors {
   [key: string]: string;
-}
 interface EvidenceItem {
-  id: string;
+  id: string;,
   type: RevisionEvidenceType;
-  title: string;
+  title: string;,
   description: string;
   file?: File;
   preview?: string;
-}
 
 export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
   initialData = {},
@@ -49,22 +46,22 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
 }) => {
   // Form state
   const [formData, setFormData] = useState<RevisionRequestFormData>({)
-    title: initialData.title || '',
-    description: initialData.description || '',
-    requestedChanges: initialData.requestedChanges || '',
-    businessJustification: initialData.businessJustification || '',
-    contentType: initialData.contentType || initialContentType || RevisionContentType.TEMPLATE,
-    contentId: initialData.contentId || initialContentId || '',
-    type: initialData.type || RevisionRequestType.CONTENT_UPDATE,
-    priority: initialData.priority || RevisionRequestPriority.MEDIUM,
-    dueDate: initialData.dueDate,
-    estimatedHours: initialData.estimatedHours,
-    tags: initialData.tags || [],
-    evidence: initialData.evidence || [],
-  });
+  title: initialData.title || '',
+  description: initialData.description || '',
+  requestedChanges: initialData.requestedChanges || '',
+  businessJustification: initialData.businessJustification || '',
+  contentType: initialData.contentType || initialContentType || RevisionContentType.TEMPLATE,
+  contentId: initialData.contentId || initialContentId || '',
+  type: initialData.type || RevisionRequestType.CONTENT_UPDATE,
+  priority: initialData.priority || RevisionRequestPriority.MEDIUM,
+  dueDate: initialData.dueDate,
+  estimatedHours: initialData.estimatedHours,
+  tags: initialData.tags || [],
+  evidence: initialData.evidence || [],
+});
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
-  const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
+  const [evidenceItems, setEvidenceItems] = useState<EvidenceItem>([]);
   const [newTag, setNewTag] = useState<string>('');
   const [_____showAdvanced, _____setShowAdvanced] = useState<boolean>(false);
   const totalSteps = 4;
@@ -76,77 +73,64 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
   const validateStep = useCallback((step: number): ValidationErrors => {
     const errors: ValidationErrors = {};
     switch (step) {
-    case 1: // Basic Information
-      if (!formData.title.trim()) {
-        errors.title = 'Title is required';
-      } else if (formData.title.length > 500) {
+  case 1: // Basic Information,
+  if (!formData.title.trim()) {
+  errors.title = 'Title is required';
+} else if (formData.title.length > 500) {
         errors.title = 'Title must be less than 500 characters';
-      }
       if (!formData.description.trim()) {
         errors.description = 'Description is required';
       } else if (formData.description.length < 10) {
-        errors.description = 'Description must be at least 10 characters';
-      }
-      if (!formData.contentType) {
-        errors.contentType = 'Content type is required';
-      }
-      if (!formData.contentId.trim()) {
-        errors.contentId = 'Content ID is required';
-      }
-      break;
-    case 2: // Request Details
-      if (!formData.requestedChanges.trim()) {
-        errors.requestedChanges = 'Requested changes are required';
-      } else if (formData.requestedChanges.length < 10) {
+  errors.description = 'Description must be at least 10 characters';
+  if (!formData.contentType) {
+  errors.contentType = 'Content type is required';
+  if (!formData.contentId.trim()) {
+  errors.contentId = 'Content ID is required';
+  break;
+  case 2: // Request Details,
+  if (!formData.requestedChanges.trim()) {
+  errors.requestedChanges = 'Requested changes are required';
+} else if (formData.requestedChanges.length < 10) {
         errors.requestedChanges = 'Requested changes must be at least 10 characters';
-      }
       if (!formData.businessJustification.trim()) {
         errors.businessJustification = 'Business justification is required';
       } else if (formData.businessJustification.length < 10) {
-        errors.businessJustification = 'Business justification must be at least 10 characters';
-      }
-      if (!formData.type) {
-        errors.type = 'Request type is required';
-      }
-      if (!formData.priority) {
-        errors.priority = 'Priority is required';
-      }
-      break;
-    case 3: // Timeline & Estimation (optional)
-      if (formData.estimatedHours && formData.estimatedHours < 0) {
-        errors.estimatedHours = 'Estimated hours must be positive';
-      }
-      if (formData.dueDate && formData.dueDate < new Date()) {
-        errors.dueDate = 'Due date cannot be in the past';
-      }
-      break;
-    case 4: // Evidence & Review (optional)
-      // No required validations for evidence
-      break;
-    }
-    return errors;
-  }, [formData]);
+  errors.businessJustification = 'Business justification must be at least 10 characters';
+  if (!formData.type) {
+  errors.type = 'Request type is required';
+  if (!formData.priority) {
+  errors.priority = 'Priority is required';
+  break;
+  case 3: // Timeline & Estimation (optional),
+  if (formData.estimatedHours && formData.estimatedHours < 0) {
+  errors.estimatedHours = 'Estimated hours must be positive';
+  if (formData.dueDate && formData.dueDate < new Date()) {
+  errors.dueDate = 'Due date cannot be in the past';
+  break;
+  case 4: // Evidence & Review (optional),
+  // No required validations for evidence
+  break;
+  return errors;
+}, [formData]);
   // Form handlers
   const handleInputChange = useCallback((field: keyof RevisionRequestFormData, value: Error) => {
-    setFormData(prev => ({)
-      ...prev,
-      [field]: value
-    }));
+  setFormData(prev => ({)
+  ...prev,
+  [field]: value,
+}));
     // Clear validation error for this field
     if (validationErrors[field]) {
       setValidationErrors(prev => {)
-        const newErrors = { ...prev };
+  const newErrors = { ...prev };
         delete newErrors[field];
         return newErrors;
       });
-    }
   }, [validationErrors]);
   const handleNext = useCallback(() => {
     const errors = validateStep(currentStep);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
-    }
     setValidationErrors({});
     setCurrentStep(prev => Math.min(prev + 1, totalSteps));
   }, [currentStep, validateStep]);
@@ -160,34 +144,32 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
     for (let step = 1; step <= totalSteps; step++) {
       const stepErrors = validateStep(step);
       allErrors = { ...allErrors, ...stepErrors };
-    }
     if (Object.keys(allErrors).length > 0) {
-      setValidationErrors(allErrors);
-      setCurrentStep(1); // Go to first step with errors
-      return;
-    }
-    // Prepare final form data
-    const finalFormData: RevisionRequestFormData = {
-      ...formData,
-      evidence: evidenceItems.map(item => item.file).filter(Boolean) as File[],
-    };
+  setValidationErrors(allErrors);
+  setCurrentStep(1); // Go to first step with errors
+  return;
+  // Prepare final form data
+  const finalFormData: RevisionRequestFormData = {,
+  ...formData,
+  evidence: evidenceItems.map(item => item.file).filter(Boolean) as File,
+};
     try {
       await onSubmit(finalFormData);
     } catch (error) {
-      console.error('Failed to submit revision request:', error);
-      setValidationErrors({)
-        submit: error instanceof Error ? error.message : 'Failed to submit revision request',
-      });
-    }
+  console.error('Failed to submit revision request:', error);
+  setValidationErrors({)
+  submit: error instanceof Error ? error.message : 'Failed to submit revision request',
+});
   }, [formData, evidenceItems, validateStep, onSubmit]);
   // Evidence handlers
   const handleAddEvidence = useCallback(() => {
-    const newEvidence: EvidenceItem = {
-      id: `evidence_${Date.now()}`,}
-      type: RevisionEvidenceType.SCREENSHOT,
+    const newEvidence: EvidenceItem = {,
+  id: `evidence_${Date.now()}`}
+},
+  type: RevisionEvidenceType.SCREENSHOT,
       title: '',
-      description: '',
-    };
+      description: '';
+  };
     setEvidenceItems(prev => [...prev, newEvidence]);
   }, []);
   const handleRemoveEvidence = useCallback((evidenceId: string) => {
@@ -200,12 +182,11 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
   }, []);
   const handleFileUpload = useCallback((evidenceId: string, file: File) => {
     setEvidenceItems(prev => prev.map(item => {)
-      if (item.id === evidenceId) {
+  if (item.id === evidenceId) {
         const preview = file.type.startsWith('image/') ;
           ? URL.createObjectURL(file)
           : undefined;
         return { ...item, file, preview };
-      }
       return item;
     }));
   }, []);
@@ -214,28 +195,26 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
     if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
       handleInputChange('tags', [...formData.tags, newTag.trim()]);
       setNewTag('');
-    }
   }, [newTag, formData.tags, handleInputChange]);
   const handleRemoveTag = useCallback((tagToRemove: string) => {
     handleInputChange('tags', formData.tags.filter(tag => tag !== tagToRemove));
   }, [formData.tags, handleInputChange]);
   // Priority color mapping
   const getPriorityColor = (priority: RevisionRequestPriority): string => {
-    switch (priority) {
-    case RevisionRequestPriority.CRITICAL: return 'text-red-800 bg-red-100';
-    case RevisionRequestPriority.URGENT: return 'text-orange-800 bg-orange-100';
-    case RevisionRequestPriority.HIGH: return 'text-yellow-800 bg-yellow-100';
-    case RevisionRequestPriority.MEDIUM: return 'text-blue-800 bg-blue-100';
-    case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
-    }
-  };
+  switch (priority) {
+  case RevisionRequestPriority.CRITICAL: return 'text-red-800 bg-red-100';
+  case RevisionRequestPriority.URGENT: return 'text-orange-800 bg-orange-100';
+  case RevisionRequestPriority.HIGH: return 'text-yellow-800 bg-yellow-100';
+  case RevisionRequestPriority.MEDIUM: return 'text-blue-800 bg-blue-100';
+  case RevisionRequestPriority.LOW: return 'text-gray-800 bg-gray-100';
+};
   const renderStepIndicator = () => (;);
     <div className="flex items-center justify-center mb-8">
       {Array.from({ length: totalSteps }, (_, index) => {
         const stepNumber = index + 1;
         const isActive = stepNumber === currentStep;
         const isCompleted = stepNumber < currentStep;
-        return ();
+        return;
           <React.Fragment key={stepNumber}>
             <div className={`
               flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold
@@ -269,8 +248,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
           value={formData.title}
           onChange={(e) => handleInputChange('title', e.target.value)}
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            validationErrors.title ? 'border-red-500' : 'border-gray-300'
-          }`}
+  validationErrors.title ? 'border-red-500' : 'border-gray-300',
+}`}
           placeholder="Brief, descriptive title for your revision request"
           maxLength={500}
         />
@@ -288,8 +267,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
           onChange={(e) => handleInputChange('description', e.target.value)}
           rows={4}
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            validationErrors.description ? 'border-red-500' : 'border-gray-300'
-          }`}
+  validationErrors.description ? 'border-red-500' : 'border-gray-300',
+}`}
           placeholder="Provide a detailed description of what needs to be revised and why"
         />
         {validationErrors.description && ()
@@ -306,8 +285,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.contentType}
             onChange={(e) => handleInputChange('contentType', e.target.value as RevisionContentType)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.contentType ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.contentType ? 'border-red-500' : 'border-gray-300',
+}`}
           >
             {Object.values(RevisionContentType).map((type) => ()
               <option key={type} value={type}>
@@ -328,8 +307,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.contentId}
             onChange={(e) => handleInputChange('contentId', e.target.value)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.contentId ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.contentId ? 'border-red-500' : 'border-gray-300',
+}`}
             placeholder="ID of the content to be revised"
           />
           {validationErrors.contentId && ()
@@ -359,8 +338,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
           onChange={(e) => handleInputChange('requestedChanges', e.target.value)}
           rows={4}
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            validationErrors.requestedChanges ? 'border-red-500' : 'border-gray-300'
-          }`}
+  validationErrors.requestedChanges ? 'border-red-500' : 'border-gray-300',
+}`}
           placeholder="Describe exactly what changes you want made"
         />
         {validationErrors.requestedChanges && ()
@@ -377,8 +356,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
           onChange={(e) => handleInputChange('businessJustification', e.target.value)}
           rows={3}
           className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            validationErrors.businessJustification ? 'border-red-500' : 'border-gray-300'
-          }`}
+  validationErrors.businessJustification ? 'border-red-500' : 'border-gray-300',
+}`}
           placeholder="Explain why these changes are needed from a business perspective"
         />
         {validationErrors.businessJustification && ()
@@ -395,8 +374,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.type}
             onChange={(e) => handleInputChange('type', e.target.value as RevisionRequestType)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.type ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.type ? 'border-red-500' : 'border-gray-300',
+}`}
           >
             {Object.values(RevisionRequestType).map((type) => ()
               <option key={type} value={type}>
@@ -416,8 +395,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.priority}
             onChange={(e) => handleInputChange('priority', e.target.value as RevisionRequestPriority)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.priority ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.priority ? 'border-red-500' : 'border-gray-300',
+}`}
           >
             {Object.values(RevisionRequestPriority).map((priority) => ()
               <option key={priority} value={priority}>
@@ -429,8 +408,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             <p className="mt-1 text-sm text-red-600">{validationErrors.priority}</p>
           )}
           {/* Priority indicator */}
-          <div className={`mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`}>}
-            Priority: {formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)}
+          <div className={`mt-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(formData.priority)}`}>},}
+  Priority: {formData.priority.charAt(0).toUpperCase() + formData.priority.slice(1)}
           </div>
         </div>
       </div>
@@ -453,8 +432,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.dueDate ? formData.dueDate.toISOString().slice(0, 16) : ''}
             onChange={(e) => handleInputChange('dueDate', e.target.value ? new Date(e.target.value) : undefined)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.dueDate ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.dueDate ? 'border-red-500' : 'border-gray-300',
+}`}
           />
           {validationErrors.dueDate && ()
             <p className="mt-1 text-sm text-red-600">{validationErrors.dueDate}</p>
@@ -471,8 +450,8 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
             value={formData.estimatedHours || ''}
             onChange={(e) => handleInputChange('estimatedHours', e.target.value ? parseFloat(e.target.value) : undefined)}
             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              validationErrors.estimatedHours ? 'border-red-500' : 'border-gray-300'
-            }`}
+  validationErrors.estimatedHours ? 'border-red-500' : 'border-gray-300',
+}`}
             placeholder="How many hours do you estimate this will take?"
           />
           {validationErrors.estimatedHours && ()
@@ -642,7 +621,7 @@ export const RevisionRequestForm: React.FC<RevisionRequestFormProps> = ({)
       )}
     </div>
   );
-  return ();
+  return;
     <div className={`max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden ${className}`}>}
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">

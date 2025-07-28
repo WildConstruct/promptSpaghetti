@@ -5,6 +5,7 @@
 import { logger } from '../utils/logger';
 import { isRetryableError, TimeoutError, ExternalServiceError, DatabaseError } from '../types/errors';
 
+}
 export interface RetryOptions {
   maxAttempts: number;
   initialDelayMs: number;
@@ -15,7 +16,9 @@ export interface RetryOptions {
   onRetry?: (error: unknown, attempt: number, nextDelayMs: number) => void;
   name?: string;               // Operation name for logging
 }
+}
 
+}
 export interface RetryResult<T> {
   result: T;
   attempts: number;
@@ -23,6 +26,7 @@ export interface RetryResult<T> {
   errors: unknown[];
 }
 
+}
 export interface RetryMetrics {
   operationName: string;
   totalExecutions: number;
@@ -37,6 +41,7 @@ export interface RetryMetrics {
     error: string;
     count: number;
     percentage: number;
+}
   }>;
 }
 
@@ -114,6 +119,7 @@ class RetryStrategy {
   }
 
   private sleep(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
@@ -408,6 +414,7 @@ export async function retryOperation<T>(
   operation: () => Promise<T>,
   options?: Partial<RetryOptions>
 ): Promise<T> {
+
   const result = await retryService.executeWithRetry(operationName, operation, options);
   return result.result;
 }

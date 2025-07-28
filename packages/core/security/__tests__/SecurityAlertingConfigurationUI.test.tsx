@@ -21,7 +21,7 @@ import {
 import { ComplianceFramework } from '../SecurityLogger';
 
 // Mock data
-const mockConfig: SecurityAlertingConfig = {
+const mockConfig: SecurityAlertingConfig = {,
   enableRealTimeAnalytics: true,
   enablePatternAnalysis: true,
   enableThreatIntelligence: true,
@@ -31,23 +31,22 @@ const mockConfig: SecurityAlertingConfig = {
   threatIntelligenceUpdate: 3600000,
   machinelearningEnabled: false,
   escalationThresholds: {,
-    criticalAlertCount: 5,
-    highAlertCount: 20,
-    correlatedAlertCount: 10,
-    timeWindowMinutes: 15,
-    failedAccessAttempts: 5,
-    dataExfiltrationThreshold: 100,
-    suspiciousPatternCount: 3,
-    riskScoreThreshold: 75,
-  },
+  criticalAlertCount: 5,
+  highAlertCount: 20,
+  correlatedAlertCount: 10,
+  timeWindowMinutes: 15,
+  failedAccessAttempts: 5,
+  dataExfiltrationThreshold: 100,
+  suspiciousPatternCount: 3,
+  riskScoreThreshold: 75,
+},
   correlationRules: [],
   responseAutomation: {,
-    enabledActions: [],
-    approvalRequired: true,
-    maxAutomatedActions: 5,
-    cooldownPeriod: 900000,
-    emergencyOverride: false,
-  }
+  enabledActions: [],
+  approvalRequired: true,
+  maxAutomatedActions: 5,
+  cooldownPeriod: 900000,
+  emergencyOverride: false,
 };
 const mockValidationResult = {
   isValid: true,
@@ -55,7 +54,7 @@ const mockValidationResult = {
   warnings: [],
   securityScore: 85,
 };
-const mockComplianceFrameworks: ComplianceFramework[] = [
+const mockComplianceFrameworks: ComplianceFramework = [
   ComplianceFramework.SOC2,
   ComplianceFramework.GDPR,
   ComplianceFramework.HIPAA
@@ -259,26 +258,24 @@ describe('SecurityAlertingConfigurationUI', () => {
       }, { timeout: 2000 });
     });
     it('displays validation results', async () => {
-      const validationWithWarnings = {
-        isValid: true,
-        errors: [],
-        warnings: [,
-          {
-            field: 'enableRealTimeAnalytics',
-            message: 'Real-time analytics disabled - may impact threat detection',
-            impact: 'high' as const,
-            code: 'REALTIME_DISABLED',
-          }
-        ],
-        securityScore: 70,
-      };
+  const validationWithWarnings = {
+  isValid: true,
+  errors: [],
+  warnings: [,
+  {
+  field: 'enableRealTimeAnalytics',
+  message: 'Real-time analytics disabled - may impact threat detection',
+  impact: 'high' as const,
+  code: 'REALTIME_DISABLED'],
+  securityScore: 70,
+};
       mockOnValidateConfig.mockResolvedValue(validationWithWarnings);
       render();
         <SecurityAlertingConfigurationUI
           currentConfig={{
-            ...mockConfig,
-            enableRealTimeAnalytics: false,
-          }}
+  ...mockConfig,
+  enableRealTimeAnalytics: false,
+}}
           onConfigChange={mockOnConfigChange}
           onValidateConfig={mockOnValidateConfig}
           userRole="admin"
@@ -289,24 +286,22 @@ describe('SecurityAlertingConfigurationUI', () => {
       const validateButton = screen.getByText('🔍 Validate Configuration');
       fireEvent.click(validateButton);
       await waitFor(() => {
-        expect(screen.getByText('Configuration Valid')).toBeInTheDocument();
-        expect(screen.getByText('Security Score: 70/100')).toBeInTheDocument();
-        expect(screen.getByText('Warnings:')).toBeInTheDocument();
-      });
+  expect(screen.getByText('Configuration Valid')).toBeInTheDocument();
+  expect(screen.getByText('Security Score: 70/100')).toBeInTheDocument();
+  expect(screen.getByText('Warnings:')).toBeInTheDocument();
+});
     });
     it('displays validation errors', async () => {
-      const validationWithErrors = {
-        isValid: false,
-        errors: [,
-          {
-            field: 'alertRetentionDays',
-            message: 'Alert retention period exceeds maximum allowed',
-            severity: 'error' as const,
-          }
-        ],
-        warnings: [],
-        securityScore: 20,
-      };
+  const validationWithErrors = {
+  isValid: false,
+  errors: [,
+  {
+  field: 'alertRetentionDays',
+  message: 'Alert retention period exceeds maximum allowed',
+  severity: 'error' as const],
+  warnings: [],
+  securityScore: 20,
+};
       mockOnValidateConfig.mockResolvedValue(validationWithErrors);
       render();
         <SecurityAlertingConfigurationUI
@@ -321,10 +316,10 @@ describe('SecurityAlertingConfigurationUI', () => {
       const validateButton = screen.getByText('🔍 Validate Configuration');
       fireEvent.click(validateButton);
       await waitFor(() => {
-        expect(screen.getByText('Configuration Invalid')).toBeInTheDocument();
-        expect(screen.getByText('Errors:')).toBeInTheDocument();
-        expect(screen.getByText(/Alert retention period exceeds maximum/)).toBeInTheDocument();
-      });
+  expect(screen.getByText('Configuration Invalid')).toBeInTheDocument();
+  expect(screen.getByText('Errors:')).toBeInTheDocument();
+  expect(screen.getByText(/Alert retention period exceeds maximum/)).toBeInTheDocument();
+});
     });
   });
   describe('Save and Reset Actions', () => {

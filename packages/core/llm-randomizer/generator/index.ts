@@ -57,81 +57,68 @@ export class RandomizerSystem {
   private parameterManager: ParameterManager;
   private workflow: RandomizerWorkflow;
   constructor(options: Partial<ParameterManagerOptions> = {}) {
-    this.parameterManager = new ParameterManager(options);
-    this.workflow = new RandomizerWorkflow();
-  }
+  this.parameterManager = new ParameterManager(options);
+  this.workflow = new RandomizerWorkflow();
   /**
-   * Get parameter manager
-   */
-  getParameterManager(): ParameterManager {
-    return this.parameterManager;
-  }
+  * Get parameter manager
+  */
+  getParameterManager(): ParameterManager {,
+  return this.parameterManager;
   /**
-   * Get workflow
-   */
-  getWorkflow(): RandomizerWorkflow {
-    return this.workflow;
-  }
+  * Get workflow
+  */
+  getWorkflow(): RandomizerWorkflow {,
+  return this.workflow;
   /**
-   * Quick generation with minimal setup
-   */
-  async quickGenerate()
-    purpose: string,
-    complexity: ComplexityLevelType = 'moderate',
-    provider: LLMProviderType = 'openai',
-  ): Promise<WorkflowResult> {
-    const parameters = this.parameterManager.createCompleteParameters({)
-      purpose,
-      complexity,
-      provider
-    });
+  * Quick generation with minimal setup
+  */
+  async quickGenerate(purpose: string,)
+  complexity: ComplexityLevelType = 'moderate',
+  provider: LLMProviderType = 'openai'): Promise<WorkflowResult> {,
+  const parameters = this.parameterManager.createCompleteParameters({)
+  purpose,
+  complexity,
+  provider
+});
     return this.workflow.generateGraph(parameters);
-  }
   /**
    * Generate with preset
    */
-  async generateWithPreset()
+  async generateWithPreset(()
     presetId: string,
     overrides: Partial<RandomizerParameters> = {}
   ): Promise<WorkflowResult> {
     const preset = this.parameterManager.getPreset(presetId);
     if (!preset) {
       throw new Error(`Preset not found: ${presetId}`);}
-    }
     const parameters = {
       ...preset.parameters,
       ...overrides
     };
     return this.workflow.generateGraph(parameters);
-  }
   /**
    * Generate multiple variations
    */
-  async generateVariations()
+  async generateVariations(()
     parameters: RandomizerParameters,
     count: number = 3,
-  ): Promise<WorkflowResult[]> {
-    return this.workflow.generateVariations(parameters, count);
-  }
+  ): Promise<WorkflowResult> {
+  return this.workflow.generateVariations(parameters, count);
   /**
-   * Get generation history with statistics
-   */
+  * Get generation history with statistics
+  */
   getHistory() {
-    return {
-      entries: this.parameterManager.getHistory(),
-      stats: this.parameterManager.getHistoryStats(),
-    };
-  }
+  return {
+  entries: this.parameterManager.getHistory(),
+  stats: this.parameterManager.getHistoryStats(),
+};
   /**
    * Export all data
    */
   exportData() {
     return this.parameterManager.exportData();
-  }
   /**
    * Import data
    */
   importData(data: unknown) {
     return this.parameterManager.importData(data);
-  }
-}

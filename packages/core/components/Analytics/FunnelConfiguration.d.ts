@@ -15,6 +15,7 @@
  */
 import React from 'react';
 import { ConversionFunnelDefinition, ConversionStep, FunnelCategory } from '../../analytics/ConversionDataModel';
+
 export interface FunnelConfigurationProps {
     initialFunnel?: Partial<ConversionFunnelDefinition>;
     templates?: FunnelTemplate[];
@@ -23,7 +24,8 @@ export interface FunnelConfigurationProps {
     onSave?: (funnel: ConversionFunnelDefinition) => void;
     onCancel?: () => void;
     onValidation?: (isValid: boolean, errors: ValidationError[]) => void;
-}
+
+
 export interface FunnelTemplate {
     id: string;
     name: string;
@@ -32,7 +34,8 @@ export interface FunnelTemplate {
     steps: Partial<ConversionStep>[];
     defaultConfiguration: Partial<ConversionFunnelDefinition>;
     tags: string[];
-}
+
+
 export interface EventDefinition {
     type: string;
     name: string;
@@ -40,7 +43,8 @@ export interface EventDefinition {
     category: string;
     properties: PropertyDefinition[];
     examples: unknown[];
-}
+
+
 export interface PropertyDefinition {
     path: string;
     name: string;
@@ -48,7 +52,8 @@ export interface PropertyDefinition {
     description: string;
     possibleValues?: unknown[];
     validation?: PropertyValidation;
-}
+
+
 export interface PropertyValidation {
     required?: boolean;
     minLength?: number;
@@ -57,18 +62,21 @@ export interface PropertyValidation {
     max?: number;
     pattern?: string;
     customValidator?: string;
-}
+
+
 export interface ValidationError {
     field: string;
     message: string;
     severity: 'error' | 'warning' | 'info';
     suggestion?: string;
-}
+
+
 export interface DragItem {
     type: 'step' | 'condition' | 'path';
     id: string;
     data: Record<string, unknown>;
-}
+
+
 /**
  * Main Funnel Configuration Component
  */

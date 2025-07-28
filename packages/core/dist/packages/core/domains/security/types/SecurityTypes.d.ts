@@ -9,7 +9,7 @@ export interface User {
     email: string;
     name: string;
     role: UserRole;
-    permissions: Permission[];
+    permissions: Permission;
     status: UserStatus;
     profile: UserProfile;
     security: UserSecurityInfo;
@@ -19,10 +19,10 @@ export interface UserRole {
     id: string;
     name: string;
     description: string;
-    permissions: Permission[];
+    permissions: Permission;
     isSystemRole: boolean;
     hierarchy: number;
-    inheritsFrom?: string[];
+    inheritsFrom?: string;
 }
 export interface Permission {
     id: string;
@@ -31,7 +31,7 @@ export interface Permission {
     resource: string;
     action: PermissionAction;
     scope: PermissionScope;
-    conditions?: PermissionCondition[];
+    conditions?: PermissionCondition;
 }
 export type PermissionAction = 'read' | 'write' | 'delete' | 'admin' | 'execute' | 'manage';
 export type PermissionScope = 'global' | 'organization' | 'team' | 'project' | 'self';
@@ -50,8 +50,8 @@ export interface UserSecurityInfo {
     failedLoginAttempts: number;
     mfaEnabled: boolean;
     mfaMethod?: 'totp' | 'sms' | 'email';
-    securityQuestions: SecurityQuestion[];
-    trustedDevices: TrustedDevice[];
+    securityQuestions: SecurityQuestion;
+    trustedDevices: TrustedDevice;
 }
 export interface UserMetadata {
     createdAt: Date;
@@ -94,7 +94,7 @@ export interface AccessContext {
 export interface AccessResponse {
     granted: boolean;
     reason?: string;
-    conditions?: string[];
+    conditions?: string;
     expiresAt?: Date;
     auditId: string;
 }
@@ -152,12 +152,12 @@ export type SecurityAlertType = 'authentication_failure' | 'privilege_escalation
 export type SecuritySeverity = 'low' | 'medium' | 'high' | 'critical';
 export type AlertStatus = 'open' | 'investigating' | 'resolved' | 'false_positive';
 export interface SecurityAlertDetails {
-    affectedResources: string[];
+    affectedResources: string;
     riskScore: number;
-    indicators: SecurityIndicator[];
-    timeline: SecurityEvent[];
-    recommendations: string[];
-    relatedAlerts: string[];
+    indicators: SecurityIndicator;
+    timeline: SecurityEvent;
+    recommendations: string;
+    relatedAlerts: string;
 }
 export interface SecurityIndicator {
     type: string;
@@ -175,7 +175,7 @@ export interface SecurityPolicy {
     name: string;
     description: string;
     type: PolicyType;
-    rules: PolicyRule[];
+    rules: PolicyRule;
     enforcement: PolicyEnforcement;
     scope: PolicyScope;
     status: PolicyStatus;
@@ -203,23 +203,23 @@ export interface PolicyMetadata {
     createdBy: string;
     lastModifiedBy: string;
     version: number;
-    complianceFrameworks: string[];
+    complianceFrameworks: string;
 }
 export interface DataClassification {
     id: string;
     name: string;
     level: ClassificationLevel;
     description: string;
-    handlingRules: DataHandlingRule[];
+    handlingRules: DataHandlingRule;
     retentionPolicy: RetentionPolicy;
-    accessControls: ClassificationAccessControl[];
+    accessControls: ClassificationAccessControl;
 }
 export type ClassificationLevel = 'public' | 'internal' | 'confidential' | 'restricted' | 'top_secret';
 export interface DataHandlingRule {
     type: 'storage' | 'transmission' | 'processing' | 'disposal';
-    requirements: string[];
-    restrictions: string[];
-    approvals: string[];
+    requirements: string;
+    restrictions: string;
+    approvals: string;
 }
 export interface RetentionPolicy {
     retentionPeriod: number;
@@ -229,8 +229,8 @@ export interface RetentionPolicy {
 }
 export interface ClassificationAccessControl {
     role: string;
-    permissions: PermissionAction[];
-    conditions: PermissionCondition[];
+    permissions: PermissionAction;
+    conditions: PermissionCondition;
 }
 export interface EncryptionConfig {
     algorithm: string;
@@ -272,16 +272,16 @@ export interface SecurityDomainEvents {
     onSecurityViolation: (violation: SecurityAlert) => void;
     onPolicyViolation: (policy: SecurityPolicy, violation: PolicyRule) => void;
     onAuditLogCreated: (auditLog: AuditLog) => void;
-    onPermissionChanged: (userId: string, oldPermissions: Permission[], newPermissions: Permission[]) => void;
+    onPermissionChanged: (userId: string, oldPermissions: Permission, newPermissions: Permission) => void;
     onSecurityMetricsUpdated: (metrics: SecurityMetrics) => void;
 }
 export interface SecurityDomainState {
     currentUser: User | null;
-    userPermissions: Permission[];
+    userPermissions: Permission;
     activeSession: UserSession | null;
-    securityAlerts: SecurityAlert[];
-    auditLogs: AuditLog[];
-    securityPolicies: SecurityPolicy[];
+    securityAlerts: SecurityAlert;
+    auditLogs: AuditLog;
+    securityPolicies: SecurityPolicy;
     metrics: SecurityMetrics;
     loading: boolean;
     error: string | null;
@@ -296,7 +296,7 @@ export interface UserSession {
     lastActivity: Date;
     expiresAt: Date;
     riskScore: number;
-    flags: SessionFlag[];
+    flags: SessionFlag;
 }
 export interface SessionFlag {
     type: 'suspicious' | 'elevated_risk' | 'new_device' | 'unusual_location';
@@ -305,7 +305,7 @@ export interface SessionFlag {
 }
 export interface SecurityDashboardProps {
     userId: string;
-    permissions: Permission[];
+    permissions: Permission;
     onSecurityEvent?: (event: SecurityAlert) => void;
     className?: string;
 }
@@ -319,7 +319,7 @@ export interface AccessControlProps {
 export interface AuditLogViewerProps {
     userId?: string;
     resource?: string;
-    actions?: AuditAction[];
+    actions?: AuditAction;
     dateRange?: {
         start: Date;
         end: Date;

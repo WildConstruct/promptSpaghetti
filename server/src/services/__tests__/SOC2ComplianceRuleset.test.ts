@@ -82,8 +82,8 @@ describe('SOC2ComplianceRuleset', () => {
           details: expect.objectContaining({
             framework: 'SOC2',
             trustServiceCategories: Object.values(SOC2TrustServiceCategory)
-          })
-        })
+  }
+  }
       );
 
       // Verify rules were registered
@@ -101,7 +101,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'GOVERNANCE',
           subcategory: SOC2TrustServiceCriteria.CC1_CONTROL_ENVIRONMENT
-        })
+  }
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -111,7 +111,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'ACCESS',
           subcategory: SOC2TrustServiceCriteria.CC6_LOGICAL_PHYSICAL_ACCESS
-        })
+  }
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -121,7 +121,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'SECURITY',
           subcategory: SOC2TrustServiceCriteria.CC7_SYSTEM_OPERATIONS
-        })
+  }
       );
     });
 
@@ -134,7 +134,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'System Availability Design Requirements',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.A1_AVAILABILITY_DESIGN
-        })
+  }
       );
     });
 
@@ -147,7 +147,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Data Processing Completeness Validation',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.PI1_PROCESSING_COMPLETENESS
-        })
+  }
       );
     });
 
@@ -160,7 +160,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Confidential Information Access Controls',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.C1_ACCESS_CONTROLS
-        })
+  }
       );
     });
 
@@ -173,7 +173,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Privacy Notice and Communication Requirements',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.P1_NOTICE_COMMUNICATION
-        })
+  }
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -182,7 +182,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Privacy Choice and Consent Management',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.P2_CHOICE_CONSENT
-        })
+  }
       );
     });
   });
@@ -280,8 +280,8 @@ describe('SOC2ComplianceRuleset', () => {
             assessmentId: assessment.assessmentId,
             trustServiceCategory: SOC2TrustServiceCategory.SECURITY,
             reportingPeriod
-          })
-        })
+  }
+  }
       );
     });
 
@@ -356,8 +356,8 @@ describe('SOC2ComplianceRuleset', () => {
             evidenceId: evidence.evidenceId,
             evidenceType: evidence.type,
             criteria: evidence.criteria
-          })
-        })
+  }
+  }
       );
     });
 
@@ -424,7 +424,7 @@ describe('SOC2ComplianceRuleset', () => {
             criteria: finding.criteria
           }),
           riskLevel: 'MEDIUM' // SIGNIFICANT_DEFICIENCY maps to MEDIUM risk
-        })
+  }
       );
     });
 
@@ -452,7 +452,7 @@ describe('SOC2ComplianceRuleset', () => {
       expect(mockAuditService.logEvent).toHaveBeenCalledWith(
         expect.objectContaining({
           riskLevel: 'HIGH' // MATERIAL_WEAKNESS maps to HIGH risk
-        })
+  }
       );
     });
   });
@@ -508,8 +508,8 @@ describe('SOC2ComplianceRuleset', () => {
             rulesEvaluated: 1,
             compliantRules: 1,
             nonCompliantRules: 0
-          })
-        })
+  }
+  }
       );
     });
 
@@ -563,8 +563,8 @@ describe('SOC2ComplianceRuleset', () => {
           details: expect.objectContaining({
             assessmentId: assessment.assessmentId,
             overallRating: report.overallRating
-          })
-        })
+  }
+  }
       );
     });
 
@@ -615,8 +615,8 @@ describe('SOC2ComplianceRuleset', () => {
             frameworks: ['SOC2'],
             requirements: expect.arrayContaining(['assessment_management']),
             evidenceLevel: 'ENHANCED'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -647,8 +647,8 @@ describe('SOC2ComplianceRuleset', () => {
           compliance: expect.objectContaining({
             frameworks: ['SOC2'],
             requirements: expect.arrayContaining(['evidence_management'])
-          })
-        })
+  }
+  }
       );
     });
   });

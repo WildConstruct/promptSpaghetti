@@ -16,37 +16,35 @@ const mockUsePreviewStateStore = usePreviewStateStore as jest.MockedFunction<typ
 const mockUsePreviewSeeds = usePreviewSeeds as jest.MockedFunction<typeof usePreviewSeeds>;
 const mockResults = [;
   {
-    seed: 1234,
-    output: 'This is a comprehensive test output with multiple words and sentences. It contains good content for analysis.',
-    executionTimeMs: 125,
-    locked: false,
-  },
+  seed: 1234,
+  output: 'This is a comprehensive test output with multiple words and sentences. It contains good content for analysis.',
+  executionTimeMs: 125,
+  locked: false,
+}
   {
-    seed: 5678,
-    output: 'A shorter test output with different content.',
-    executionTimeMs: 89,
-    locked: true,
-    lockedNote: 'Important baseline result',
-  },
+  seed: 5678,
+  output: 'A shorter test output with different content.',
+  executionTimeMs: 89,
+  locked: true,
+  lockedNote: 'Important baseline result',
+}
   {
-    seed: 9012,
-    error: 'Test error message',
-    executionTimeMs: 45,
-    locked: false,
-  }
-];
-const mockStoreState = {
+  seed: 9012,
+  error: 'Test error message',
+  executionTimeMs: 45,
+  locked: false];
+  const mockStoreState = {
   results: mockResults,
   isLoading: false,
   error: null,
   lockedResults: [1],
   regeneratingResults: [],
-  lockResult: jest.fn<unknown[], unknown>(),
-  unlockResult: jest.fn<unknown[], unknown>(),
-  setRegeneratingResult: jest.fn<unknown[], unknown>()
+  lockResult: jest.fn<unknown, unknown>(),
+  unlockResult: jest.fn<unknown, unknown>(),
+  setRegeneratingResult: jest.fn<unknown, unknown>(),
 };
 const mockPreviewSeeds = {
-  regenerateResult: jest.fn<unknown[], unknown>()
+  regenerateResult: jest.fn<unknown, unknown>(),
 };
 describe('IndividualResultManager Component', () => {
   beforeEach(() => {
@@ -55,12 +53,12 @@ describe('IndividualResultManager Component', () => {
     mockUsePreviewSeeds.mockReturnValue(mockPreviewSeeds as any as unknown);
     // Mock URL.createObjectURL and related functions for export tests
     global.URL.createObjectURL = jest.fn(() => 'mock-url');
-    global.URL.revokeObjectURL = jest.fn<unknown[], unknown>();
+    global.URL.revokeObjectURL = jest.fn<unknown, unknown>();
     // Mock document.createElement for export tests
     const mockAnchor = {
       href: '',
       download: '',
-      click: jest.fn<unknown[], unknown>(),
+      click: jest.fn<unknown, unknown>(),
       style: {}
     };
     jest.spyOn(document, 'createElement').mockReturnValue(mockAnchor as any as unknown);
@@ -92,17 +90,17 @@ describe('IndividualResultManager Component', () => {
       expect(screen.getByText('Test error message')).toBeInTheDocument();
     });
     test('shows close button when onClose provided', () => {
-      const mockOnClose = jest.fn<unknown[], unknown>();
+      const mockOnClose = jest.fn<unknown, unknown>();
       render(<IndividualResultManager onClose={mockOnClose} />);
       const closeButton = screen.getByText('×');
       expect(closeButton).toBeInTheDocument();
     });
     test('displays locked result indicators', () => {
-      render(<IndividualResultManager />);
-      // Find the locked result (seed 5678)
-      const lockIcon = screen.getByText('🔒');
-      expect(lockIcon).toHaveAttribute('title', 'Locked: Important baseline result');
-    });
+  render(<IndividualResultManager />);
+  // Find the locked result (seed 5678)
+  const lockIcon = screen.getByText('🔒');
+  expect(lockIcon).toHaveAttribute('title', 'Locked: Important baseline result');
+});
   });
   describe('Controls', () => {
     test('displays comparison toggle when enabled', () => {
@@ -145,7 +143,7 @@ describe('IndividualResultManager Component', () => {
       await user.click(clearButton);
       // All checkboxes should be unchecked
       checkboxes.forEach(checkbox => {)
-        expect(checkbox).not.toBeChecked();
+  expect(checkbox).not.toBeChecked();
       });
     });
   });
@@ -311,10 +309,10 @@ describe('IndividualResultManager Component', () => {
       expect(mockPreviewSeeds.regenerateResult).toHaveBeenCalledWith(0);
     });
     test('shows regenerating indicator', () => {
-      const regeneratingStore = {
-        ...mockStoreState,
-        regeneratingResults: [0],
-      };
+  const regeneratingStore = {
+  ...mockStoreState,
+  regeneratingResults: [0],
+};
       mockUsePreviewStateStore.mockReturnValue(regeneratingStore as any as unknown);
       render(<IndividualResultManager />);
       expect(screen.getByText('⟳')).toBeInTheDocument();
@@ -331,28 +329,28 @@ describe('IndividualResultManager Component', () => {
     });
   });
   describe('Export Functionality', () => {
-    test('exports result as text', async () => {
-      const user = userEvent.setup();
-      render(<IndividualResultManager />);
-      const actionButtons = screen.getAllByText('⋯');
-      await user.click(actionButtons[0]);
-      await user.click(screen.getByText('📄 Export Text'));
-      expect(global.URL.createObjectURL).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          type: 'text/plain',
-        })
+  test('exports result as text', async () => {
+  const user = userEvent.setup();
+  render(<IndividualResultManager />);
+  const actionButtons = screen.getAllByText('⋯');
+  await user.click(actionButtons[0]);
+  await user.click(screen.getByText('📄 Export Text'));
+  expect(global.URL.createObjectURL).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: 'text/plain',
+}
       );
     });
     test('exports result as JSON', async () => {
-      const user = userEvent.setup();
-      render(<IndividualResultManager />);
-      const actionButtons = screen.getAllByText('⋯');
-      await user.click(actionButtons[0]);
-      await user.click(screen.getByText('📋 Export JSON'));
-      expect(global.URL.createObjectURL).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          type: 'application/json',
-        })
+  const user = userEvent.setup();
+  render(<IndividualResultManager />);
+  const actionButtons = screen.getAllByText('⋯');
+  await user.click(actionButtons[0]);
+  await user.click(screen.getByText('📋 Export JSON'));
+  expect(global.URL.createObjectURL).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: 'application/json',
+}
       );
     });
     test('exports result as CSV when analytics enabled', async () => {
@@ -363,46 +361,44 @@ describe('IndividualResultManager Component', () => {
       await user.click(screen.getByText('📊 Export CSV'));
       expect(global.URL.createObjectURL).toHaveBeenCalledWith()
         expect.objectContaining({)
-          type: 'text/csv',
-        })
+  type: 'text/csv',
+}
       );
     });
   });
   describe('Error States', () => {
-    test('displays error when present', () => {
-      const errorStore = {
-        ...mockStoreState,
-        error: 'Test error message',
-      };
+  test('displays error when present', () => {
+  const errorStore = {
+  ...mockStoreState,
+  error: 'Test error message',
+};
       mockUsePreviewStateStore.mockReturnValue(errorStore as any as unknown);
       render(<IndividualResultManager />);
       expect(screen.getByText('Error:')).toBeInTheDocument();
       expect(screen.getByText('Test error message')).toBeInTheDocument();
     });
     test('shows empty state when no results', () => {
-      const emptyStore = {
-        ...mockStoreState,
-        results: [],
-      };
+  const emptyStore = {
+  ...mockStoreState,
+  results: [],
+};
       mockUsePreviewStateStore.mockReturnValue(emptyStore as any as unknown);
       render(<IndividualResultManager />);
       expect(screen.getByText('📋')).toBeInTheDocument();
       expect(screen.getByText('No results to manage')).toBeInTheDocument();
     });
     test('handles analytics calculation errors gracefully', async () => {
-      const user = userEvent.setup();
-      const resultsWithInvalidData = [;
-        {
-          seed: 1234,
-          output: null, // Invalid output
-          executionTimeMs: 125,
-          locked: false,
-        }
-      ];
-      const storeWithInvalidData = {
-        ...mockStoreState,
-        results: resultsWithInvalidData,
-      };
+  const user = userEvent.setup();
+  const resultsWithInvalidData = [;
+  {
+  seed: 1234,
+  output: null, // Invalid output,
+  executionTimeMs: 125,
+  locked: false];
+  const storeWithInvalidData = {
+  ...mockStoreState,
+  results: resultsWithInvalidData,
+};
       mockUsePreviewStateStore.mockReturnValue(storeWithInvalidData as any as unknown);
       expect(() => {
         render(<IndividualResultManager enableAnalytics={true} />);
@@ -412,15 +408,16 @@ describe('IndividualResultManager Component', () => {
   describe('Result Limiting', () => {
     test('limits displayed results to maxDisplayResults', () => {
       const manyResults = Array.from({ length: 15 }, (_, i) => ({)
-        seed: 1000 + i,
-        output: `Output ${i}`,}
-        executionTimeMs: 100 + i,
-        locked: false,
-      }));
+  seed: 1000 + i,
+        output: `Output ${i}`}
+},
+  executionTimeMs: 100 + i,
+        locked: false;
+  }));
       const storeWithManyResults = {
-        ...mockStoreState,
-        results: manyResults,
-      };
+  ...mockStoreState,
+  results: manyResults,
+};
       mockUsePreviewStateStore.mockReturnValue(storeWithManyResults as any as unknown);
       render(<IndividualResultManager maxDisplayResults={5} />);
       expect(screen.getByText('Seed 1000')).toBeInTheDocument();
@@ -432,16 +429,16 @@ describe('IndividualResultManager Component', () => {
   describe('Accessibility', () => {
     test('provides proper close button', async () => {
       const user = userEvent.setup();
-      const mockOnClose = jest.fn<unknown[], unknown>();
+      const mockOnClose = jest.fn<unknown, unknown>();
       render(<IndividualResultManager onClose={mockOnClose} />);
       const closeButton = screen.getByText('×');
       await user.click(closeButton);
       expect(mockOnClose).toHaveBeenCalled();
     });
     test('provides tooltips for locked results', () => {
-      render(<IndividualResultManager />);
-      expect(screen.getByTitle('Locked: Important baseline result')).toBeInTheDocument();
-    });
+  render(<IndividualResultManager />);
+  expect(screen.getByTitle('Locked: Important baseline result')).toBeInTheDocument();
+});
     test('provides proper form labels in lock dialog', async () => {
       const user = userEvent.setup();
       render(<IndividualResultManager />);

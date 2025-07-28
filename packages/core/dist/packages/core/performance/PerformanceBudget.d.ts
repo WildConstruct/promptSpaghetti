@@ -50,13 +50,13 @@ export interface BudgetViolation {
     threshold: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
     impact: string;
-    suggestions: string[];
+    suggestions: string;
     timestamp: number;
 }
 export interface BudgetCheckResult {
     passed: boolean;
     score: number;
-    violations: BudgetViolation[];
+    violations: BudgetViolation;
     summary: {
         total: number;
         critical: number;
@@ -64,7 +64,7 @@ export interface BudgetCheckResult {
         medium: number;
         low: number;
     };
-    recommendations: string[];
+    recommendations: string;
     timestamp: number;
 }
 export interface PerformanceSnapshot {
@@ -72,7 +72,7 @@ export interface PerformanceSnapshot {
     bundles: {
         main: number;
         vendor: number;
-        chunks: number[];
+        chunks: number;
         total: number;
     };
     runtime: {
@@ -101,20 +101,12 @@ export interface PerformanceSnapshot {
         testTime: number;
     };
 }
-/**
- * Performance Budget Manager
- * Enforces performance budgets and tracks violations
- */
 export declare class PerformanceBudgetManager extends EventEmitter {
     private config;
     private violations;
     private snapshots;
     private maxSnapshotHistory;
     constructor(config: PerformanceBudgetConfig);
-    /**
-     * Check current performance against budget
-     */
-    checkBudget(snapshot: PerformanceSnapshot): BudgetCheckResult;
     private checkBundleBudgets;
     private checkRuntimeBudgets;
     private checkApiBudgets;
@@ -125,29 +117,5 @@ export declare class PerformanceBudgetManager extends EventEmitter {
     private calculatePerformanceScore;
     private summarizeViolations;
     private generateRecommendations;
-    private calculateMemoryTrend;
-    /**
-     * Get performance trend analysis
-     */
-    getPerformanceTrends(): {
-        bundleSize: number[];
-        memoryUsage: number[];
-        apiLatency: number[];
-        violations: number[];
-    };
-    /**
-     * Update budget configuration
-     */
-    updateBudget(newConfig: Partial<PerformanceBudgetConfig>): void;
-    /**
-     * Get current budget configuration
-     */
-    getBudgetConfig(): PerformanceBudgetConfig;
-    /**
-     * Clear violation history
-     */
-    clearHistory(): void;
 }
-export declare const defaultPerformanceBudget: PerformanceBudgetConfig;
-export { PerformanceBudgetManager, defaultPerformanceBudget };
 //# sourceMappingURL=PerformanceBudget.d.ts.map

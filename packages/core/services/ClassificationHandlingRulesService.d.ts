@@ -12,6 +12,7 @@ import {
   OperationContext,
   ValidationResult
 } from '../types/DataClassification';
+
 export interface HandlingRule {
     id: string;
     name: string;
@@ -24,7 +25,8 @@ export interface HandlingRule {
     effectiveDate: Date;
     expirationDate?: Date;
     complianceFramework: string[];
-}
+
+
 export interface HandlingRuleViolation {
     id: string;
     ruleId: string;
@@ -38,7 +40,8 @@ export interface HandlingRuleViolation {
     evidence: Record<string, any>;
     remediation: string[];
     status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK';
-}
+
+
 export interface ComplianceCheck {
     ruleId: string;
     dataElement: string;
@@ -47,7 +50,7 @@ export interface ComplianceCheck {
     passed: boolean;
     details: Record<string, any>;
     timestamp: Date;
-}
+
 export declare class ClassificationHandlingRulesService {
     private handlingRequirements;
     private handlingRules;
@@ -139,6 +142,6 @@ export declare class ClassificationHandlingRulesService {
      * Get compliance score for a classification level
      */
     getComplianceScore(classification: DataClassificationLevel): number;
-}
+
 export default ClassificationHandlingRulesService;
 //# sourceMappingURL=ClassificationHandlingRulesService.d.ts.map

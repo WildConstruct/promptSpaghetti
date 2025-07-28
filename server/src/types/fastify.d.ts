@@ -28,6 +28,7 @@ declare module 'fastify' {
     // Other plugin services
     redis?: unknown;
     websocket?: unknown;
+}
   }
 
   interface FastifyRequest {
@@ -39,6 +40,7 @@ declare module 'fastify' {
       sessionId: string;
       roles?: string[];
       permissions?: string[];
+}
     };
     
     // Workspace context
@@ -68,6 +70,7 @@ declare module 'fastify' {
 
   interface FastifyReply {
     // Custom reply methods can be added here if needed
+}
   }
 }
 
@@ -84,6 +87,7 @@ declare module '../auth/services/AuditService' {
       userAgent?: string;
       sessionId?: string;
       severity?: 'info' | 'warning' | 'error' | 'critical';
+}
     }): Promise<void>;
   }
 }

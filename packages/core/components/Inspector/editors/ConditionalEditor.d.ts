@@ -2,7 +2,7 @@ import React from 'react';
 import { BaseNodeEditorProps } from '../BaseNodeEditor';
 export interface ConditionalEditorProps extends Omit<BaseNodeEditorProps, 'children'> {
     nodeId: string;
-}
+
 /**
  * Epic 8.4 - Conditional Editor with Progressive Disclosure
  *

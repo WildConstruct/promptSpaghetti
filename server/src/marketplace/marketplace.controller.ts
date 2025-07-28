@@ -255,7 +255,7 @@ export class MarketplaceController {
         claude_model_override: { type: 'string', description: 'Override Claude model for preview' }
       }
     }
-  })
+  }
   @ApiResponse({ status: 200, description: 'Preview generated successfully' })
   @ApiResponse({ status: 404, description: 'Template not found' })
   @ApiResponse({ status: 400, description: 'Template preview not available' })

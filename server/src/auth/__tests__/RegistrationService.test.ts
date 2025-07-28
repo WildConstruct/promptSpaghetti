@@ -123,7 +123,7 @@ describe('RegistrationService', () => {
           createdAt: mockUser.createdAt,
           roles: ['user'],
           permissions: ['graphs:create:own']
-        },
+  }
         emailVerificationRequired: true,
         nextSteps: expect.any(Array)
       });
@@ -448,7 +448,7 @@ describe('RegistrationService', () => {
         registrationService.resendEmailVerification('test@example.com', {
           ipAddress: '127.0.0.1',
           userAgent: 'Test Browser'
-        })
+  }
       ).rejects.toThrow('Email is already verified');
     });
   });

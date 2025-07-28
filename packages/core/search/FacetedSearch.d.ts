@@ -16,6 +16,7 @@
  * - Performance optimization with caching
  */
 import { EventEmitter } from 'events';
+
 export interface SearchFacet {
     id: string;
     name: string;
@@ -28,7 +29,7 @@ export interface SearchFacet {
     hierarchy?: FacetHierarchy;
     config: FacetConfig;
     metadata: FacetMetadata;
-}
+
 export interface FacetOption {
     value: any;
     label: string;
@@ -36,7 +37,7 @@ export interface FacetOption {
     selected: boolean;
     disabled?: boolean;
     metadata?: Record<string, any>;
-}
+
 export interface FacetRange {
     min: number;
     max: number;
@@ -44,13 +45,13 @@ export interface FacetRange {
     selectedMin?: number;
     selectedMax?: number;
     format?: 'number' | 'currency' | 'percentage' | 'date';
-}
+
 export interface FacetHierarchy {
     levels: HierarchyLevel[];
     separator: string;
     expandedLevels: Set<string>;
     maxDepth?: number;
-}
+
 export interface HierarchyLevel {
     id: string;
     name: string;
@@ -59,7 +60,7 @@ export interface HierarchyLevel {
     count: number;
     selected: boolean;
     expanded: boolean;
-}
+
 export interface FacetConfig {
     multiSelect: boolean;
     searchable: boolean;
@@ -70,7 +71,7 @@ export interface FacetConfig {
     collapsible: boolean;
     defaultExpanded: boolean;
     excludeFromQuery?: boolean;
-}
+
 export interface FacetMetadata {
     priority: number;
     group?: string;
@@ -84,7 +85,7 @@ export interface FacetMetadata {
         popularValues: string[];
         averageSelections: number;
     };
-}
+
 export interface SearchQuery {
     text: string;
     filters: SearchFilter[];
@@ -92,7 +93,7 @@ export interface SearchQuery {
     pagination: SearchPagination;
     facets: string[];
     options: SearchOptions;
-}
+
 export interface SearchFilter {
     facetId: string;
     field: string;
@@ -100,19 +101,19 @@ export interface SearchFilter {
     value: any;
     values?: any[];
     boost?: number;
-}
+
 export interface SearchSort {
     field: string;
     order: 'asc' | 'desc';
     mode?: 'relevance' | 'field' | 'custom';
     customFunction?: string;
-}
+
 export interface SearchPagination {
     page: number;
     size: number;
     offset: number;
     total?: number;
-}
+
 export interface SearchOptions {
     includeHighlights: boolean;
     includeAggregations: boolean;
@@ -122,7 +123,7 @@ export interface SearchOptions {
     synonyms: boolean;
     boostFields: Record<string, number>;
     minScore?: number;
-}
+
 export interface SearchResult<T = any> {
     items: SearchResultItem<T>[];
     facets: FacetResult[];
@@ -131,7 +132,7 @@ export interface SearchResult<T = any> {
     aggregations: SearchAggregation[];
     metadata: SearchResultMetadata;
     query: SearchQuery;
-}
+
 export interface SearchResultItem<T = any> {
     id: string;
     data: T;
@@ -139,18 +140,18 @@ export interface SearchResultItem<T = any> {
     highlights: Record<string, string[]>;
     explanation?: ScoreExplanation;
     matched: string[];
-}
+
 export interface ScoreExplanation {
     value: number;
     description: string;
     details: ScoreDetail[];
-}
+
 export interface ScoreDetail {
     field: string;
     weight: number;
     contribution: number;
     explanation: string;
-}
+
 export interface FacetResult {
     facetId: string;
     name: string;
@@ -168,7 +169,7 @@ export interface FacetResult {
         selectedOptions: number;
         hasMore: boolean;
     };
-}
+
 export interface SearchSuggestion {
     type: 'query' | 'correction' | 'completion';
     text: string;
@@ -176,33 +177,33 @@ export interface SearchSuggestion {
     score: number;
     count?: number;
     metadata?: Record<string, any>;
-}
+
 export interface SearchAggregation {
     name: string;
     type: 'terms' | 'date_histogram' | 'numeric_range' | 'stats';
     field: string;
     buckets?: AggregationBucket[];
     stats?: AggregationStats;
-}
+
 export interface AggregationBucket {
     key: any;
     count: number;
     subAggregations?: SearchAggregation[];
-}
+
 export interface AggregationStats {
     min: number;
     max: number;
     avg: number;
     sum: number;
     count: number;
-}
+
 export interface SearchResultMetadata {
     took: number;
     total: number;
     maxScore: number;
     queryAnalysis: QueryAnalysis;
     performance: PerformanceMetrics;
-}
+
 export interface QueryAnalysis {
     processedQuery: string;
     queryType: 'simple' | 'complex' | 'structured';
@@ -210,7 +211,7 @@ export interface QueryAnalysis {
     activeFacets: number;
     searchTerms: string[];
     suggestedTerms: string[];
-}
+
 export interface PerformanceMetrics {
     parseTime: number;
     searchTime: number;
@@ -219,7 +220,7 @@ export interface PerformanceMetrics {
     cacheHit: boolean;
     documentsScanned: number;
     resultsFiltered: number;
-}
+
 export interface SearchIndex<T = any> {
     name: string;
     fields: IndexField[];
@@ -227,7 +228,7 @@ export interface SearchIndex<T = any> {
     facets: Map<string, SearchFacet>;
     statistics: IndexStatistics;
     configuration: IndexConfiguration;
-}
+
 export interface IndexField {
     name: string;
     type: 'text' | 'keyword' | 'number' | 'date' | 'boolean' | 'object' | 'nested';
@@ -238,7 +239,7 @@ export interface IndexField {
     sortable: boolean;
     boost?: number;
     analyzer?: string;
-}
+
 export interface IndexedDocument<T = any> {
     id: string;
     data: T;
@@ -246,7 +247,7 @@ export interface IndexedDocument<T = any> {
     version: number;
     fields: Record<string, any>;
     boost?: number;
-}
+
 export interface IndexStatistics {
     totalDocuments: number;
     totalFields: number;
@@ -257,7 +258,7 @@ export interface IndexStatistics {
         averageFacetTime: number;
         cacheHitRate: number;
     };
-}
+
 export interface IndexConfiguration {
     analyzer: {,
         default: string;
@@ -274,7 +275,7 @@ export interface IndexConfiguration {
         cacheSize: number;
         cacheTtl: number;
     };
-}
+
 export interface SearchConfiguration {
     index: IndexConfiguration;
     query: {,
@@ -303,7 +304,7 @@ export interface SearchConfiguration {
         maxCacheSize: number;
         enablePrefetch: boolean;
     };
-}
+
 export declare class FacetedSearchSystem<T = any> extends EventEmitter {
     private indexes;
     private cache;
@@ -385,7 +386,6 @@ export declare class FacetedSearchSystem<T = any> extends EventEmitter {
     private processTextQuery;
     private processFuzzyQuery;
     private processPhraseQuery;
-}
 declare const _default: {
     FacetedSearchSystem: typeof FacetedSearchSystem;
 };

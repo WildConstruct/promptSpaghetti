@@ -27,9 +27,7 @@ interface WorkflowStateManagerProps {
   onStateChange?: (newStateId: string) => void;
   onLockAcquired?: (lockId: string) => void;
   onLockReleased?: (lockId: string) => void;
-}
-
-export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
+  export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({,)
   workspaceId,
   resourceId,
   currentUserId,
@@ -92,24 +90,21 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
     (approval.requester_id === currentUserId || approval.approved_by === currentUserId)
   );
   const handleStateTransition = useCallback(async (toStateId: string, comment?: string) => {
-    if (!resourceId) return;
-    try {
-      const result = await transitionResourceState(resourceId, toStateId, currentUserId, {)
-        comment,
-        force: false,
-      });
+  if (!resourceId) return;
+  try {
+  const result = await transitionResourceState(resourceId, toStateId, currentUserId, {)
+  comment,
+  force: false,
+});
       if (result.success) {
         if (result.approval_required) {
           // Show approval request confirmation
           alert('Approval request submitted for state transition.');
         } else {
           onStateChange?.(result.new_state_id!);
-        }
-      }
     } catch (error) {
-      console.error('Failed to transition state:', error);
-    }
-  }, [resourceId, currentUserId, transitionResourceState, onStateChange]);
+  console.error('Failed to transition state:', error);
+}, [resourceId, currentUserId, transitionResourceState, onStateChange]);
   const handleApprovalAction = useCallback(async (;);
     approvalId: string, 
     action: 'approve' | 'reject', 
@@ -120,35 +115,33 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
         await approveWorkflow(approvalId, currentUserId, comment);
       } else {
         await rejectWorkflow(approvalId, currentUserId, comment || 'Rejected');
-      }
       // Refresh data
       fetchApprovals(workspaceId);
       fetchStates(workspaceId);
     } catch (error) {
-      console.error(`Failed to ${action} workflow:`, error);}
-    }
+      console.error(`Failed to ${action},)}
+  workflow:`, error);}
   }, [currentUserId, approveWorkflow, rejectWorkflow, fetchApprovals, fetchStates, workspaceId]);
   const handleLockAction = useCallback(async (;);
     action: 'acquire' | 'release',
     lockId?: string,
     lockType?: 'edit' | 'state_change' | 'delete' | 'custom'
   ) => {
-    if (!resourceId) return;
-    try {
-      if (action === 'acquire') {
-        const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {)
-          reason: 'Manual lock acquisition',
-        });
+  if (!resourceId) return;
+  try {
+  if (action === 'acquire') {
+  const lock = await acquireLock(resourceId, currentUserId, lockType || 'edit', {)
+  reason: 'Manual lock acquisition',
+});
         onLockAcquired?.(lock.id);
       } else if (lockId) {
         await releaseLock(lockId, currentUserId);
         onLockReleased?.(lockId);
-      }
       // Refresh locks
       fetchLocks(workspaceId);
     } catch (error) {
-      console.error(`Failed to ${action} lock:`, error);}
-    }
+      console.error(`Failed to ${action},)}
+  lock:`, error);}
   }, [resourceId, currentUserId, acquireLock, releaseLock, onLockAcquired, onLockReleased, fetchLocks, workspaceId]);
   const toggleStateExpansion = (stateId: string) => {
     const newExpanded = new Set(expandedStates);
@@ -156,31 +149,28 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
       newExpanded.delete(stateId);
     } else {
       newExpanded.add(stateId);
-    }
     setExpandedStates(newExpanded);
   };
   const getStateIcon = (state: WorkflowState) => {
-    switch (state.icon) {
-    case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
-    case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
-    case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
-    case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
-    case 'DocumentTextIcon': 
-    default: return <DocumentTextIcon className="h-4 w-4" />;
-    }
-  };
+  switch (state.icon) {
+  case 'CheckCircleIcon': return <CheckCircleIcon className="h-4 w-4" />;
+  case 'EyeIcon': return <EyeIcon className="h-4 w-4" />;
+  case 'GlobeAltIcon': return <GlobeAltIcon className="h-4 w-4" />;
+  case 'ArchiveBoxIcon': return <ArchiveBoxIcon className="h-4 w-4" />;
+  case 'DocumentTextIcon':,
+  default: return <DocumentTextIcon className="h-4 w-4" />;
+};
   const getStateTransitions = (stateId: string) => {
     return transitions.filter(t => t.from_state_id === stateId);
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -191,8 +181,7 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="bg-white rounded-lg shadow">
       {/* Header */}
       <div className="border-b border-gray-200">
@@ -235,18 +224,18 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               {tab.label}
               {tab.count !== null && ()
                 <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
-                  activeTab === tab.id
-                    ? 'bg-blue-100 text-blue-600'
-                    : 'bg-gray-100 text-gray-600'
-                }`}>
+  activeTab === tab.id
+  ? 'bg-blue-100 text-blue-600'
+  : 'bg-gray-100 text-gray-600',
+}`}>
                   {tab.count}
                 </span>
               )}
@@ -410,10 +399,10 @@ export const WorkflowStateManager: React.FC<WorkflowStateManagerProps> = ({)
                           </span>
                         </div>
                         <span className={`px-2 py-1 rounded text-xs ${
-                          approval.priority === 'high' ? 'bg-red-100 text-red-800' :
-                            approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-green-100 text-green-800'
-                        }`}>
+  approval.priority === 'high' ? 'bg-red-100 text-red-800' :,
+  approval.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :,
+  'bg-green-100 text-green-800'
+}`}>
                           {approval.priority}
                         </span>
                       </div>

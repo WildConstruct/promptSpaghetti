@@ -10,10 +10,7 @@
  * - Security audit logging
  */
 import { EventEmitter } from 'events';
-import { KeyManagementService } from './KeyManagementService';
-import { DataClassifier, ClassificationLevel } from './DataClassifier';
-import { DeviceFingerprintingService } from './DeviceFingerprintingService';
-import { TrustedDeviceManager } from './TrustedDeviceManager';
+import { ClassificationLevel } from './DataClassifier';
 export interface WebSocketSecurityConfig {
     enableMessageEncryption: boolean;
     encryptionKeyRotationMinutes: number;
@@ -33,9 +30,9 @@ export interface WebSocketSecurityConfig {
     auditLogRetentionDays: number;
     complianceMode: boolean;
     enableCertificatePinning: boolean;
-    pinnedCertificates: string[];
+    pinnedCertificates: string;
     enableCSRFProtection: boolean;
-    allowedOrigins: string[];
+    allowedOrigins: string;
     requireSecureTransport: boolean;
 }
 export interface ConnectionSecurityContext {
@@ -81,7 +78,7 @@ export interface SecureWebSocketMessage {
     signature?: string;
     originConnectionId: string;
     originUserId: string;
-    processingPath: string[];
+    processingPath: string;
 }
 export interface SecurityEvent {
     id: string;
@@ -103,15 +100,7 @@ export interface ThreatDetectionRule {
     action: 'log' | 'warn' | 'block' | 'disconnect';
     description: string;
 }
-/**
- * WebSocket Security Manager
- */
 export declare class WebSocketSecurityManager extends EventEmitter {
-    private config;
-    private keyManagementService;
-    private dataClassifier;
-    private fingerprintService;
-    private trustedDeviceManager;
     private connectionContexts;
     private encryptionKeys;
     private securityEvents;
@@ -119,80 +108,12 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     private rateLimiters;
     private suspiciousIPs;
     private blockedConnections;
-    constructor(config: WebSocketSecurityConfig, keyManagementService: KeyManagementService, dataClassifier: DataClassifier, fingerprintService: DeviceFingerprintingService, trustedDeviceManager: TrustedDeviceManager);
-    /**
-     * Initialize connection security context
-     */
-    initializeConnection(connectionId: string, userId: string, requestInfo: {
-        ipAddress: string;
-        userAgent: string;
-        origin: string;
-        headers: Record<string, string>;
-    }): Promise<ConnectionSecurityContext>;
-    /**
-     * Authenticate connection with enhanced security
-     */
-    authenticateConnection(connectionId: string, credentials: {
-        token: string;
-        mfaCode?: string;
-        deviceVerificationToken?: string;
-    }): Promise<boolean>;
-    /**
-     * Encrypt outgoing message
-     */
-    encryptMessage(connectionId: string, message: any): Promise<SecureWebSocketMessage>;
-    /**
-     * Decrypt incoming message
-     */
-    decryptMessage(connectionId: string, secureMessage: SecureWebSocketMessage): Promise<any>;
-    /**
-     * Check if connection should be blocked
-     */
-    isConnectionBlocked(connectionId: string, ipAddress: string): boolean;
-    /**
-     * Block connection due to security violation
-     */
-    blockConnection(connectionId: string, reason: string, duration?: number): Promise<void>;
-    /**
-     * Get connection security context
-     */
-    getConnectionContext(connectionId: string): ConnectionSecurityContext | null;
-    /**
-     * Clean up connection resources
-     */
-    cleanupConnection(connectionId: string): Promise<void>;
-    /**
-     * Get security statistics
-     */
-    getSecurityStats(): {
-        totalConnections: number;
-        authenticatedConnections: number;
-        highRiskConnections: number;
-        encryptedConnections: number;
-        trustedDevices: number;
-        blockedConnections: number;
-        suspiciousIPs: number;
-        securityEvents: number;
-        avgRiskScore: number;
-    };
-    private generateSessionEncryptionKey;
-    private generateSessionId;
-    private generateMessageId;
-    private mapRiskLevelToThreatLevel;
-    private calculateTrustLevel;
-    private validateToken;
-    private validateMFACode;
-    private checkForThreats;
-    private detectAnomalies;
-    private initializeThreatDetectionRules;
-    private startSecurityMonitoring;
-    private rotateSessionKeys;
-    private cleanupOldSecurityEvents;
-    private logSecurityEvent;
-    /**
-     * Cleanup and shutdown
-     */
-    destroy(): void;
+    constructor();
+    private config;
+    private keyManagementService;
+    private dataClassifier;
+    private fingerprintService;
+    private trustedDeviceManager;
+    super(): any;
 }
-export default WebSocketSecurityManager;
 //# sourceMappingURL=WebSocketSecurityManager.d.ts.map

@@ -7,7 +7,7 @@ import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
 export interface ExtensionDetailViewProps {
-  extension: ExtensionManifest;
+  extension: ExtensionManifest;,
   status: ExtensionStatus;
   viewMode: 'installed' | 'marketplace';
   onToggle?: () => void;
@@ -17,7 +17,6 @@ export interface ExtensionDetailViewProps {
   onInstall?: () => void;
   onClose: () => void;
 }
-
 export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
   extension,
   status,
@@ -30,15 +29,14 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
   onClose
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'permissions' | 'dependencies' | 'configuration'>('overview');
-  const getExtensionIcon = (type: string): string => {
-    switch (type) {
-    case 'node': return '🔧';
-    case 'ui': return '🎨';
-    case 'transform': return '⚡';
-    case 'storage': return '💾';
-    default: return '📦';
-    }
-  };
+  const getExtensionIcon = (type: string): string => {,
+  switch (type) {
+  case 'node': return '🔧';
+  case 'ui': return '🎨';
+  case 'transform': return '⚡';
+  case 'storage': return '💾';
+  default: return '📦';
+};
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;}
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
@@ -50,7 +48,7 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
   const canUpdate = isInstalled && status.updateAvailable && onUpdate;
   const canConfigure = isInstalled && onConfigure;
   const canInstall = !isInstalled && onInstall;
-  return ();
+  return;
     <div className="extension-detail-view">
       {/* Header */}
       <div className="extension-detail-header">
@@ -392,17 +390,16 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({)
 
 // Helper function to get permission descriptions
 function getPermissionDescription(permission: string): string {
-  const descriptions: Record<string, string> = {
-    'data-processing': 'Access and process data within the application',
-    'file-system-read': 'Read files from the local file system',
-    'file-system-write': 'Write files to the local file system',
-    'network': 'Make network requests to external services',
-    'ui-components': 'Add or modify user interface components',
-    'extensions-api': 'Interact with other extensions',
-    'system-info': 'Access system information and statistics',
-    'data-storage': 'Store and retrieve persistent data'
-  };
+  const descriptions: Record<string, string> = {,
+  'data-processing': 'Access and process data within the application',
+  'file-system-read': 'Read files from the local file system',
+  'file-system-write': 'Write files to the local file system',
+  'network': 'Make network requests to external services',
+  'ui-components': 'Add or modify user interface components',
+  'extensions-api': 'Interact with other extensions',
+  'system-info': 'Access system information and statistics',
+  'data-storage': 'Store and retrieve persistent data',
+};
   return descriptions[permission] || 'Access to system functionality';
-}
 
 export default ExtensionDetailView;

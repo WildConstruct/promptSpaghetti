@@ -5,6 +5,7 @@
  * real-time updates, collaboration tracking, and analytics.
  */
 import React from 'react';
+
 interface ActivityTimelineProps {
     userId?: string;
     workspaceId?: string;
@@ -14,7 +15,7 @@ interface ActivityTimelineProps {
     showFilters?: boolean;
     maxItems?: number;
     className?: string;
-}
+
 export declare const ActivityTimeline: React.FC<ActivityTimelineProps>;
 export default ActivityTimeline;
 //# sourceMappingURL=ActivityTimeline.d.ts.map

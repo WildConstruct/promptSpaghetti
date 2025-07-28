@@ -76,7 +76,7 @@ describe('Marketplace Verification System', () => {
             'test-user-id',
             VerificationType.IDENTITY,
             {}
-          )
+
         ).rejects.toThrow('already have an active verification request');
       });
     });
@@ -157,7 +157,7 @@ describe('Marketplace Verification System', () => {
         jest.doMock('fs', () => ({
           promises: {
             readFile: jest.fn<unknown[], unknown>().mockResolvedValue(Buffer.from('mock-file-content' as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown))
-          },
+  }
           existsSync: jest.fn<unknown[], unknown>().mockReturnValue(true as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown as unknown)
         }));
 
@@ -302,7 +302,7 @@ describe('Marketplace Verification System', () => {
           'user-id', 
           'invalid-type' as VerificationType, 
           {}
-        )
+
       ).rejects.toThrow();
     });
   });

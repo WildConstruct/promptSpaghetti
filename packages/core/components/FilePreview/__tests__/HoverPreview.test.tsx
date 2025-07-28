@@ -10,48 +10,47 @@ import { projectManager } from '../../../projectManager';
 // Mock the projectManager
 jest.mock('../../../projectManager', () => ({)
   projectManager: {,
-    generateThumbnail: jest.fn<unknown[], unknown>()
-  }
+  generateThumbnail: jest.fn<unknown, unknown>(),
 }));
 const mockProjectManager = projectManager as jest.Mocked<typeof projectManager>;
 
 // Mock getBoundingClientRect for positioning tests
-const mockGetBoundingClientRect = jest.fn<unknown[], unknown>();
+const mockGetBoundingClientRect = jest.fn<unknown, unknown>();
 Element.prototype.getBoundingClientRect = mockGetBoundingClientRect;
 describe('HoverPreview Component', () => {
   const mockFile = {
-    id: 'test-file-1',
-    name: 'hover-test.psg',
-    path: '/projects/hover-test.psg',
-    size: 3072,
-    lastModified: new Date('2025-01-15T14:30:00Z'),
-    nodeCount: 25,
-    metadata: {,
-      title: 'Hover Test File',
-      description: 'A file for testing hover preview functionality',
-      tags: ['test', 'hover'],
-      author: 'Test Author',
-      version: '1.2.0',
-      created: new Date('2025-01-10T09:00:00Z'),
-    },
-    isFavorite: true,
+  id: 'test-file-1',
+  name: 'hover-test.psg',
+  path: '/projects/hover-test.psg',
+  size: 3072,
+  lastModified: new Date('2025-01-15T14:30:00Z'),
+  nodeCount: 25,
+  metadata: {,
+  title: 'Hover Test File',
+  description: 'A file for testing hover preview functionality',
+  tags: ['test', 'hover'],
+  author: 'Test Author',
+  version: '1.2.0',
+  created: new Date('2025-01-10T09:00:00Z'),
+},
+  isFavorite: true;
   };
   const mockThumbnail = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjgwIj48L3N2Zz4=';
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.useFakeTimers('legacy');
-    mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail as unknown as unknown);
-    // Mock getBoundingClientRect to return predictable values
-    mockGetBoundingClientRect.mockReturnValue({)
-      left: 100,
-      top: 200,
-      right: 200,
-      bottom: 250,
-      width: 100,
-      height: 50,
-      x: 100,
-      y: 200,
-    } as unknown as unknown);
+  jest.clearAllMocks();
+  jest.useFakeTimers('legacy');
+  mockProjectManager.generateThumbnail.mockResolvedValue(mockThumbnail as unknown as unknown);
+  // Mock getBoundingClientRect to return predictable values
+  mockGetBoundingClientRect.mockReturnValue({)
+  left: 100,
+  top: 200,
+  right: 200,
+  bottom: 250,
+  width: 100,
+  height: 50,
+  x: 100,
+  y: 200,
+} as unknown as unknown);
     // Mock window dimensions
     Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
     Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 768 });
@@ -193,17 +192,17 @@ describe('HoverPreview Component', () => {
       });
     });
     it('adjusts position when near right edge', async () => {
-      // Mock element being near right edge
-      mockGetBoundingClientRect.mockReturnValue({)
-        left: 900, // Near right edge
-        top: 200,
-        right: 1000,
-        bottom: 250,
-        width: 100,
-        height: 50,
-        x: 900,
-        y: 200,
-      } as unknown as unknown);
+  // Mock element being near right edge
+  mockGetBoundingClientRect.mockReturnValue({)
+  left: 900, // Near right edge,
+  top: 200,
+  right: 1000,
+  bottom: 250,
+  width: 100,
+  height: 50,
+  x: 900,
+  y: 200,
+} as unknown as unknown);
       render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
@@ -219,17 +218,17 @@ describe('HoverPreview Component', () => {
       });
     });
     it('adjusts position when near bottom edge', async () => {
-      // Mock element being near bottom edge
-      mockGetBoundingClientRect.mockReturnValue({)
-        left: 100,
-        top: 700, // Near bottom edge
-        right: 200,
-        bottom: 750,
-        width: 100,
-        height: 50,
-        x: 100,
-        y: 700,
-      } as unknown as unknown);
+  // Mock element being near bottom edge
+  mockGetBoundingClientRect.mockReturnValue({)
+  left: 100,
+  top: 700, // Near bottom edge,
+  right: 200,
+  bottom: 750,
+  width: 100,
+  height: 50,
+  x: 100,
+  y: 700,
+} as unknown as unknown);
       render();
         <HoverPreview file={mockFile} delay={100}>
           <span>Hover target</span>
@@ -298,15 +297,14 @@ describe('HoverPreview Component', () => {
       expect(screen.getByText('25 nodes')).toBeInTheDocument();
     });
     it('handles missing file metadata gracefully', async () => {
-      const fileWithoutMetadata = {
-        ...mockFile,
-        metadata: {,
-          ...mockFile.metadata,
-          title: undefined,
-          description: undefined,
-          author: undefined,
-        }
-      };
+  const fileWithoutMetadata = {
+  ...mockFile,
+  metadata: {,
+  ...mockFile.metadata,
+  title: undefined,
+  description: undefined,
+  author: undefined,
+};
       render();
         <HoverPreview file={fileWithoutMetadata} delay={100}>
           <span>Hover target</span>

@@ -1,16 +1,9 @@
-/**
- * Real-Time State React Hooks
- * REFACTOR-006: Advanced State Management & Data Flow Architecture
- * Phase 2: Real-Time Data Synchronization
- *
- * React hooks for real-time state management and synchronization
- */
-import { StateSubscription, SubscriptionFilter, SubscriptionOptions, StateMutation, ConnectionState, OptimisticUpdate } from '../realtime/RealTimeStateManager';
+import { StateSubscription, SubscriptionOptions, ConnectionState, OptimisticUpdate } from '../realtime/RealTimeStateManager';
 export interface UseRealTimeStateOptions {
     autoConnect?: boolean;
     userId?: string;
     sessionId?: string;
-    domains?: string[];
+    domains?: string;
 }
 export interface UseRealTimeStateReturn {
     isConnected: boolean;
@@ -46,7 +39,7 @@ export interface UseOptimisticMutationReturn<TVariables, TData> {
     error: Error | null;
     data: TData | null;
     reset: () => void;
-    optimisticUpdates: OptimisticUpdate[];
+    optimisticUpdates: OptimisticUpdate;
 }
 export interface UseDomainStateOptions<T> {
     domain: string;
@@ -61,29 +54,8 @@ export interface UseDomainStateReturn<T> {
     error: Error | null;
     lastModified: number;
 }
-export declare function useRealTimeState(options?: UseRealTimeStateOptions): UseRealTimeStateReturn;
-export declare function useStateSubscription<T = any>(domain: string, filters?: SubscriptionFilter[], options?: UseStateSubscriptionOptions): UseStateSubscriptionReturn<T>;
-export declare function useOptimisticMutation<TVariables = any, TData = any>(domain: string, mutationFn: (variables: TVariables) => StateMutation, options?: UseOptimisticMutationOptions): UseOptimisticMutationReturn<TVariables, TData>;
+export declare function useRealTimeState(options?: UseRealTimeStateOptions): any;
+export declare function useOptimisticMutation<TVariables = any, TData = any>(): any;
 export declare function useDomainState<T = any>(options: UseDomainStateOptions<T>): UseDomainStateReturn<T>;
-export declare function useConnectionStatus(): Readonly<ConnectionState>;
-export declare function useLatency(): number;
-export declare function useOptimisticUpdates(domain?: string): OptimisticUpdate[];
-export declare function useCollaboration(domain: string): {
-    collaborators: any[];
-    cursors: Record<string, any>;
-    updateCursor: (position: any) => void;
-    sendPresence: (data: any) => void;
-};
-export declare function useConflictResolution(domain: string): {
-    conflicts: any[];
-    resolveConflict: (conflictId: string, resolution: any) => void;
-};
-export declare function useBatchMutation(domain: string): {
-    batch: StateMutation[];
-    addToBatch: (mutation: StateMutation) => void;
-    clearBatch: () => void;
-    executeBatch: () => Promise<void>;
-    isExecuting: boolean;
-    batchSize: number;
-};
+export declare function useConnectionStatus(): any;
 //# sourceMappingURL=useRealTimeState.d.ts.map

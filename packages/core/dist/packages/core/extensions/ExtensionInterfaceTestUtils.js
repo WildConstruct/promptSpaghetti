@@ -1,7 +1,3 @@
-/**
- * Extension Interface Test Utilities - Epic 8.4 Story 8.4.2
- * Testing utilities for extension interface validation and compliance
- */
 import { extensionDevelopmentKit } from './ExtensionDevelopmentTools';
 // Extension Interface Test Suite
 export class ExtensionInterfaceTestSuite {
@@ -11,12 +7,18 @@ export class ExtensionInterfaceTestSuite {
     static getInstance() {
         if (!ExtensionInterfaceTestSuite.instance) {
             ExtensionInterfaceTestSuite.instance = new ExtensionInterfaceTestSuite();
+            return ExtensionInterfaceTestSuite.instance;
+            /**
+            * Run comprehensive interface tests for an extension
+            */
         }
-        return ExtensionInterfaceTestSuite.instance;
+        /**
+        * Run comprehensive interface tests for an extension
+        */
     }
     /**
-     * Run comprehensive interface tests for an extension
-     */
+    * Run comprehensive interface tests for an extension
+    */
     async runInterfaceTests(extension) {
         const testSuite = {
             extensionId: extension.id,
@@ -24,32 +26,61 @@ export class ExtensionInterfaceTestSuite {
             version: extension.version,
             timestamp: new Date(),
             overallPassed: true,
-            tests: []
+            tests: [],
         };
         // Run all test categories
-        const testCategories = [
-            { name: 'Base Interface Tests', tests: this.runBaseInterfaceTests(extension) },
-            { name: 'Lifecycle Tests', tests: this.runLifecycleTests(extension) },
-            { name: 'Configuration Tests', tests: this.runConfigurationTests(extension) },
-            { name: 'Health Check Tests', tests: this.runHealthCheckTests(extension) },
-            { name: 'Type-Specific Tests', tests: this.runTypeSpecificTests(extension) },
-            { name: 'Performance Tests', tests: this.runPerformanceTests(extension) },
-            { name: 'Security Tests', tests: this.runSecurityTests(extension) }
-        ];
+        const testCategories = [];
+        {
+            name: 'Base Interface Tests', tests;
+            this.runBaseInterfaceTests(extension);
+        }
+        {
+            name: 'Lifecycle Tests', tests;
+            this.runLifecycleTests(extension);
+        }
+        {
+            name: 'Configuration Tests', tests;
+            this.runConfigurationTests(extension);
+        }
+        {
+            name: 'Health Check Tests', tests;
+            this.runHealthCheckTests(extension);
+        }
+        {
+            name: 'Type-Specific Tests', tests;
+            this.runTypeSpecificTests(extension);
+        }
+        {
+            name: 'Performance Tests', tests;
+            this.runPerformanceTests(extension);
+        }
+        {
+            name: 'Security Tests', tests;
+            this.runSecurityTests(extension);
+        }
+        ;
         for (const category of testCategories) {
             const categoryResults = await category.tests;
-            testSuite.tests.push({
-                category: category.name,
-                results: categoryResults
-            });
-            // Update overall status
-            if (categoryResults.some(test => !test.passed)) {
-                testSuite.overallPassed = false;
-            }
+            testSuite.tests.push({});
+            category: category.name,
+                results;
+            categoryResults,
+            ;
         }
-        // Cache results
-        this.testResults.set(extension.id, testSuite);
-        return testSuite;
+        ;
+        // Update overall status
+        if (categoryResults.some(test => !test.passed)) {
+            testSuite.overallPassed = false;
+            // Cache results
+            this.testResults.set(extension.id, testSuite);
+            return testSuite;
+            /**
+             * Run base interface compliance tests
+             */
+        }
+        /**
+         * Run base interface compliance tests
+         */
     }
     /**
      * Run base interface compliance tests
@@ -119,13 +150,16 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run lifecycle tests
+         */
     }
     /**
      * Run lifecycle tests
      */
     async runLifecycleTests(extension) {
         const tests = [];
-        // Test 1: Initialization
+        // Test 1: Initialization,
         tests.push(await this.runAsyncTest('Initialization', async () => {
             await extension.initialize();
         }));
@@ -138,10 +172,10 @@ export class ExtensionInterfaceTestSuite {
             const isHealthy = extension.isHealthy();
             if (typeof isHealthy !== 'boolean') {
                 throw new Error('isHealthy() must return boolean');
-            }
-            const healthStatus = extension.getHealthStatus();
-            if (!healthStatus || typeof healthStatus !== 'object') {
-                throw new Error('getHealthStatus() must return object');
+                const healthStatus = extension.getHealthStatus();
+                if (!healthStatus || typeof healthStatus !== 'object') {
+                    throw new Error('getHealthStatus() must return object');
+                }
             }
         }));
         // Test 4: Deactivation
@@ -153,13 +187,16 @@ export class ExtensionInterfaceTestSuite {
             await extension.dispose();
         }));
         return tests;
+        /**
+         * Run configuration tests
+         */
     }
     /**
      * Run configuration tests
      */
     async runConfigurationTests(extension) {
         const tests = [];
-        // Test 1: Get configuration
+        // Test 1: Get configuration,
         tests.push(this.runTest('Get Configuration', () => {
             const config = extension.getConfiguration();
             // Config can be any type, but should not throw
@@ -186,23 +223,26 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run health check tests
+         */
     }
     /**
      * Run health check tests
      */
     async runHealthCheckTests(extension) {
         const tests = [];
-        // Test 1: Health status structure
+        // Test 1: Health status structure,
         tests.push(this.runTest('Health Status Structure', () => {
             const healthStatus = extension.getHealthStatus();
             if (!healthStatus.hasOwnProperty('status')) {
                 throw new Error('Health status must have status property');
-            }
-            if (!healthStatus.hasOwnProperty('lastChecked')) {
-                throw new Error('Health status must have lastChecked property');
-            }
-            if (!(healthStatus.lastChecked instanceof Date)) {
-                throw new Error('lastChecked must be Date object');
+                if (!healthStatus.hasOwnProperty('lastChecked')) {
+                    throw new Error('Health status must have lastChecked property');
+                    if (!(healthStatus.lastChecked instanceof Date)) {
+                        throw new Error('lastChecked must be Date object');
+                    }
+                }
             }
         }));
         // Test 2: Health status values
@@ -222,6 +262,9 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run type-specific tests
+         */
     }
     /**
      * Run type-specific tests
@@ -230,14 +273,18 @@ export class ExtensionInterfaceTestSuite {
         const tests = [];
         const extensionType = extension.extensionType;
         if (!extensionType) {
-            tests.push({
-                name: 'Extension Type',
-                passed: false,
-                error: 'Extension type not specified',
-                duration: 0
-            });
-            return tests;
+            tests.push({});
+            name: 'Extension Type',
+                passed;
+            false,
+                error;
+            'Extension type not specified',
+                duration;
+            0,
+            ;
         }
+        ;
+        return tests;
         // Test based on extension type
         switch (extensionType) {
             case 'node':
@@ -253,44 +300,45 @@ export class ExtensionInterfaceTestSuite {
                 tests.push(...await this.runStorageExtensionTests(extension));
                 break;
             default:
-                tests.push({
-                    name: 'Unknown Extension Type',
-                    passed: false,
-                    error: `Unknown extension type: ${extensionType}`,
-                    duration: 0
-                });
+                tests.push({});
+                name: 'Unknown Extension Type',
+                    passed;
+                false,
+                    error;
+                `Unknown extension type: ${extensionType}`;
         }
-        return tests;
     }
-    /**
-     * Run node extension tests
-     */
-    async runNodeExtensionTests(extension) {
-        const tests = [];
-        // Test node-specific methods
-        tests.push(this.runTest('Node Methods', () => {
-            const requiredMethods = ['getNodeDefinitions', 'createNodeInstance', 'validateNodeConfig', 'getNodeSchema', 'supportsAdvancedNodes'];
-            const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
-            if (missingMethods.length > 0) {
-                throw new Error(`Missing node methods: ${missingMethods.join(', ')}`);
-            }
-        }));
-        // Test node definitions
-        tests.push(this.runTest('Node Definitions', () => {
-            const definitions = extension.getNodeDefinitions();
-            if (!Array.isArray(definitions)) {
-                throw new Error('getNodeDefinitions() must return array');
-            }
-        }));
-        // Test advanced node support
-        tests.push(this.runTest('Advanced Node Support', () => {
-            const supportsAdvanced = extension.supportsAdvancedNodes();
-            if (typeof supportsAdvanced !== 'boolean') {
-                throw new Error('supportsAdvancedNodes() must return boolean');
-            }
-        }));
-        return tests;
-    }
+    duration;
+}
+;
+return tests;
+async;
+runNodeExtensionTests(extension, NodeExtension);
+Promise < TestResult > {
+    const: tests, TestResult = [],
+    // Test node-specific methods
+    tests, : .push(this.runTest('Node Methods', () => {
+        const requiredMethods = ['getNodeDefinitions', 'createNodeInstance', 'validateNodeConfig', 'getNodeSchema', 'supportsAdvancedNodes'];
+        const missingMethods = requiredMethods.filter(method => typeof extension[method] !== 'function');
+        if (missingMethods.length > 0) {
+            throw new Error(`Missing node methods: ${missingMethods.join(', ')}`);
+        }
+    })),
+    // Test node definitions
+    tests, : .push(this.runTest('Node Definitions', () => {
+        const definitions = extension.getNodeDefinitions();
+        if (!Array.isArray(definitions)) {
+            throw new Error('getNodeDefinitions() must return array');
+        }
+    })),
+    // Test advanced node support
+    tests, : .push(this.runTest('Advanced Node Support', () => {
+        const supportsAdvanced = extension.supportsAdvancedNodes();
+        if (typeof supportsAdvanced !== 'boolean') {
+            throw new Error('supportsAdvancedNodes() must return boolean');
+        }
+    })),
+    return: tests,
     /**
      * Run UI extension tests
      */
@@ -312,7 +360,14 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run transform extension tests
+         */
     }
+    /**
+     * Run transform extension tests
+     */
+    ,
     /**
      * Run transform extension tests
      */
@@ -341,7 +396,14 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run storage extension tests
+         */
     }
+    /**
+     * Run storage extension tests
+     */
+    ,
     /**
      * Run storage extension tests
      */
@@ -370,7 +432,14 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run performance tests
+         */
     }
+    /**
+     * Run performance tests
+     */
+    ,
     /**
      * Run performance tests
      */
@@ -405,7 +474,14 @@ export class ExtensionInterfaceTestSuite {
             }
         }));
         return tests;
+        /**
+         * Run security tests
+         */
     }
+    /**
+     * Run security tests
+     */
+    ,
     /**
      * Run security tests
      */
@@ -425,13 +501,13 @@ export class ExtensionInterfaceTestSuite {
             const config = extension.getConfiguration();
             const configString = JSON.stringify(config);
             const dangerousPatterns = ['eval(', 'Function(', 'setTimeout(', 'setInterval('];
-            const found = dangerousPatterns.find(pattern => configString.includes(pattern));
-            if (found) {
-                throw new Error(`Potentially dangerous code pattern found: ${found}`);
-            }
         }));
-        return tests;
-    }
+        const found = dangerousPatterns.find(pattern => configString.includes(pattern));
+        if (found) {
+            throw new Error(`Potentially dangerous code pattern found: ${found}`);
+        }
+    },
+    return: tests,
     /**
      * Helper method to run synchronous tests
      */
@@ -443,7 +519,7 @@ export class ExtensionInterfaceTestSuite {
                 name,
                 passed: true,
                 error: undefined,
-                duration: performance.now() - start
+                duration: performance.now() - start,
             };
         }
         catch (error) {
@@ -451,10 +527,20 @@ export class ExtensionInterfaceTestSuite {
                 name,
                 passed: false,
                 error: error.message,
-                duration: performance.now() - start
+                duration: performance.now() - start,
             };
+            /**
+             * Helper method to run asynchronous tests
+             */
         }
+        /**
+         * Helper method to run asynchronous tests
+         */
     }
+    /**
+     * Helper method to run asynchronous tests
+     */
+    ,
     /**
      * Helper method to run asynchronous tests
      */
@@ -466,7 +552,7 @@ export class ExtensionInterfaceTestSuite {
                 name,
                 passed: true,
                 error: undefined,
-                duration: performance.now() - start
+                duration: performance.now() - start,
             };
         }
         catch (error) {
@@ -474,22 +560,46 @@ export class ExtensionInterfaceTestSuite {
                 name,
                 passed: false,
                 error: error.message,
-                duration: performance.now() - start
+                duration: performance.now() - start,
             };
+            /**
+             * Get cached test results
+             */
         }
+        /**
+         * Get cached test results
+         */
     }
+    /**
+     * Get cached test results
+     */
+    ,
     /**
      * Get cached test results
      */
     getTestResults(extensionId) {
         return this.testResults.get(extensionId);
+        /**
+         * Clear test results cache
+         */
     }
+    /**
+     * Clear test results cache
+     */
+    ,
     /**
      * Clear test results cache
      */
     clearTestResults() {
         this.testResults.clear();
+        /**
+         * Generate test report
+         */
     }
+    /**
+     * Generate test report
+     */
+    ,
     /**
      * Generate test report
      */
@@ -500,92 +610,94 @@ export class ExtensionInterfaceTestSuite {
         }
         let report = '\n# Extension Interface Test Report\n\n';
         report += `**Extension**: ${results.extensionName} (${results.extensionId})\n`;
-        report += `**Version**: ${results.version}\n`;
-        report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;
-        report += `**Overall Status**: ${results.overallPassed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
-        for (const category of results.tests) {
-            report += `## ${category.category}\n\n`;
-            for (const test of category.results) {
-                const status = test.passed ? '✅' : '❌';
-                report += `${status} **${test.name}** (${test.duration.toFixed(2)}ms)\n`;
-                if (test.error) {
-                    report += `   Error: ${test.error}\n`;
-                }
-                report += '\n';
+    },
+    report
+} `**Version**: ${results.version}\n`;
+report += `**Timestamp**: ${results.timestamp.toISOString()}\n`;
+report += `**Overall Status**: ${results.overallPassed ? '✅ PASSED' : '❌ FAILED'}\n\n`;
+for (const category of results.tests) {
+    report += `## ${category.category}\n\n`;
+}
+for (const test of category.results) {
+    const status = test.passed ? '✅' : '❌';
+    report += `${status} **${test.name}** (${test.duration.toFixed(2)}ms)\n`;
+}
+if (test.error) {
+    report += `   Error: ${test.error}\n`;
+}
+report += '\n';
+return report;
+isAsyncFunction(fn, Function);
+boolean;
+{
+    return fn.constructor.name === 'AsyncFunction';
+    // Extension Interface Mock Factory
+    export class ExtensionInterfaceMockFactory {
+        /**
+         * Create mock extension for testing
+         */
+        static createMockExtension(type = 'node') {
+            const baseExtension = extensionDevelopmentKit.createTestExtension({});
+            id: `mock-${type}-extension`;
+        }
+    }
+    name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`;
+}
+version: '1.0.0',
+    description;
+`A mock ${type} extension for testing`;
+author: 'Test Author';
+;
+// Add type-specific methods
+switch (type) {
+    case 'node':
+        baseExtension.extensionType = 'node';
+        baseExtension.getNodeDefinitions = () => [];
+        baseExtension.createNodeInstance = () => ({});
+        baseExtension.validateNodeConfig = () => ({ valid: true, errors: [], warnings: [] });
+        baseExtension.getNodeSchema = () => ({ type: 'object' });
+        baseExtension.supportsAdvancedNodes = () => false;
+        break;
+    case 'ui':
+        baseExtension.extensionType = 'ui';
+        baseExtension.getComponentDefinitions = () => [];
+        baseExtension.createComponentInstance = () => null;
+        baseExtension.getThemeContributions = () => [];
+        baseExtension.getCommandContributions = () => [];
+        baseExtension.getMenuContributions = () => [];
+        baseExtension.getKeybindingContributions = () => [];
+        break;
+    case 'transform':
+        baseExtension.extensionType = 'transform';
+        baseExtension.getTransformDefinitions = () => [];
+        baseExtension.createTransformInstance = () => ({});
+        baseExtension.validateTransformConfig = () => ({ valid: true, errors: [], warnings: [] });
+        baseExtension.getTransformSchema = () => ({ type: 'object' });
+        baseExtension.supportsPipeline = () => false;
+        break;
+    case 'storage':
+        baseExtension.extensionType = 'storage';
+        baseExtension.getStorageProviders = () => [];
+        baseExtension.createStorageProvider = () => ({});
+        baseExtension.validateStorageConfig = () => ({ valid: true, errors: [], warnings: [] });
+        baseExtension.getStorageSchema = () => ({ type: 'object' });
+        baseExtension.supportsMigration = () => false;
+        break;
+        return baseExtension;
+        createInvalidExtension(missingFields, string = []);
+        any;
+        {
+            const extension = {
+                id: 'invalid-extension',
+                name: 'Invalid Extension',
+                version: '1.0.0',
+            };
+            // Remove specified fields
+            for (const field of missingFields) {
+                delete extension[field];
+                return extension;
+                // Export singleton
+                export const extensionInterfaceTestSuite = ExtensionInterfaceTestSuite.getInstance();
             }
         }
-        return report;
-    }
-    isAsyncFunction(fn) {
-        return fn.constructor.name === 'AsyncFunction';
-    }
 }
-// Extension Interface Mock Factory
-export class ExtensionInterfaceMockFactory {
-    /**
-     * Create mock extension for testing
-     */
-    static createMockExtension(type = 'node') {
-        const baseExtension = extensionDevelopmentKit.createTestExtension({
-            id: `mock-${type}-extension`,
-            name: `Mock ${type.charAt(0).toUpperCase() + type.slice(1)} Extension`,
-            version: '1.0.0',
-            description: `A mock ${type} extension for testing`,
-            author: 'Test Author'
-        });
-        // Add type-specific methods
-        switch (type) {
-            case 'node':
-                baseExtension.extensionType = 'node';
-                baseExtension.getNodeDefinitions = () => [];
-                baseExtension.createNodeInstance = () => ({});
-                baseExtension.validateNodeConfig = () => ({ valid: true, errors: [], warnings: [] });
-                baseExtension.getNodeSchema = () => ({ type: 'object' });
-                baseExtension.supportsAdvancedNodes = () => false;
-                break;
-            case 'ui':
-                baseExtension.extensionType = 'ui';
-                baseExtension.getComponentDefinitions = () => [];
-                baseExtension.createComponentInstance = () => null;
-                baseExtension.getThemeContributions = () => [];
-                baseExtension.getCommandContributions = () => [];
-                baseExtension.getMenuContributions = () => [];
-                baseExtension.getKeybindingContributions = () => [];
-                break;
-            case 'transform':
-                baseExtension.extensionType = 'transform';
-                baseExtension.getTransformDefinitions = () => [];
-                baseExtension.createTransformInstance = () => ({});
-                baseExtension.validateTransformConfig = () => ({ valid: true, errors: [], warnings: [] });
-                baseExtension.getTransformSchema = () => ({ type: 'object' });
-                baseExtension.supportsPipeline = () => false;
-                break;
-            case 'storage':
-                baseExtension.extensionType = 'storage';
-                baseExtension.getStorageProviders = () => [];
-                baseExtension.createStorageProvider = () => ({});
-                baseExtension.validateStorageConfig = () => ({ valid: true, errors: [], warnings: [] });
-                baseExtension.getStorageSchema = () => ({ type: 'object' });
-                baseExtension.supportsMigration = () => false;
-                break;
-        }
-        return baseExtension;
-    }
-    /**
-     * Create invalid extension for testing validation
-     */
-    static createInvalidExtension(missingFields = []) {
-        const extension = {
-            id: 'invalid-extension',
-            name: 'Invalid Extension',
-            version: '1.0.0'
-        };
-        // Remove specified fields
-        for (const field of missingFields) {
-            delete extension[field];
-        }
-        return extension;
-    }
-}
-// Export singleton
-export const extensionInterfaceTestSuite = ExtensionInterfaceTestSuite.getInstance();

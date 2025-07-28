@@ -70,6 +70,7 @@ export class EnhancedServer {
    * Initialize server instances
    */
   async initialize(): Promise<void> {
+
     const config = this.tlsManager.getConfig();
 
     // Validate TLS configuration if enabled
@@ -107,6 +108,7 @@ export class EnhancedServer {
    * Setup routes on server instances
    */
   private async setupRoutes(): Promise<void> {
+
     // Import the existing server configuration
     const { setupRoutes } = await import('./routes/setup');
     
@@ -131,6 +133,7 @@ export class EnhancedServer {
    * Start the server(s)
    */
   async start(): Promise<void> {
+
     if (this.isStarted) {
       throw new Error('Server is already started');
     }
@@ -182,6 +185,7 @@ export class EnhancedServer {
    * Stop the server(s)
    */
   async stop(): Promise<void> {
+
     if (!this.isStarted) {
       return;
     }
@@ -227,7 +231,7 @@ export class EnhancedServer {
       http: {
         running: !!this.httpServer && this.isStarted,
         port: process.env.PORT ? parseInt(process.env.PORT) : 8000
-      },
+  }
       https: {
         running: !!this.httpsServer && this.isStarted && config.enabled,
         port: config.port,
@@ -236,12 +240,11 @@ export class EnhancedServer {
           maxVersion: config.options.maxVersion,
           hsts: config.hsts
         } : undefined
-      },
+  }
       config: {
         tlsEnabled: config.enabled,
         environment: process.env.NODE_ENV,
-        validation: this.tlsManager.validateConfiguration()
-      }
+        validation: this.tlsManager.validateConfiguration(}
     };
   }
 
@@ -249,6 +252,7 @@ export class EnhancedServer {
    * Reload TLS certificates
    */
   async reloadCertificates(): Promise<void> {
+
     if (!this.tlsManager.getConfig().enabled || !this.httpsServer) {
       throw new Error('TLS is not enabled or HTTPS server is not running');
     }
@@ -301,6 +305,7 @@ export class EnhancedServer {
 // ========================================
 
 export async function startEnhancedServer(): Promise<EnhancedServer> {
+
   const server = new EnhancedServer();
   
   try {

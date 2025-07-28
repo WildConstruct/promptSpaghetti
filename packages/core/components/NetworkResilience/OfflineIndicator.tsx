@@ -9,9 +9,7 @@ interface OfflineIndicatorProps {
   onRetryConnection?: () => void;
   onViewQueue?: () => void;
   className?: string;
-}
-
-export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
+  export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({,)
   status,
   position = 'top',
   showQueueInfo = true,
@@ -31,77 +29,70 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
       return () => clearTimeout(timer);
     } else {
       setCanDismiss(false);
-    }
   }, [status.isOnline, status.queueSize]);
   const getIndicatorMessage = () => {
-    if (!status.isOnline) {
-      switch (status.connectionState) {
-      case ConnectionState.OFFLINE:
-        return 'You are offline. Changes will be saved locally and synced when connection is restored.';
-      case ConnectionState.DISCONNECTED:
-        return 'Connection lost. Attempting to reconnect...';
-      case ConnectionState.FAILED:
-        return 'Connection failed. Check your network and try again.';
-      default:
-        return 'Not connected. Working in offline mode.';
-      }
-    } else if (status.queueSize > 0) {
+  if (!status.isOnline) {
+  switch (status.connectionState) {
+  case ConnectionState.OFFLINE:,
+  return 'You are offline. Changes will be saved locally and synced when connection is restored.';
+  case ConnectionState.DISCONNECTED:,
+  return 'Connection lost. Attempting to reconnect...';
+  case ConnectionState.FAILED:,
+  return 'Connection failed. Check your network and try again.';
+  default:,
+  return 'Not connected. Working in offline mode.';
+} else if (status.queueSize > 0) {
       return `Syncing ${status.queueSize} pending change${status.queueSize === 1 ? '' : 's'}...`;}
-    }
     return '';
   };
   const getIndicatorType = () => {
-    if (!status.isOnline) {
-      return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning';
-    } else if (status.queueSize > 0) {
+  if (!status.isOnline) {
+  return status.connectionState === ConnectionState.FAILED ? 'error' : 'warning';
+} else if (status.queueSize > 0) {
       return 'info';
-    }
     return 'info';
   };
   const getIndicatorColor = () => {
-    const type = getIndicatorType();
-    switch (type) {
-    case 'error':
-      return {
-        background: '#fef2f2',
-        border: '#fecaca',
-        text: '#dc2626',
-        button: '#dc2626',
-      };
+  const type = getIndicatorType();
+  switch (type) {
+  case 'error':,
+  return {
+  background: '#fef2f2',
+  border: '#fecaca',
+  text: '#dc2626',
+  button: '#dc2626',
+};
     case 'warning':
       return {
-        background: '#fffbeb',
-        border: '#fed7aa',
-        text: '#d97706',
-        button: '#d97706',
-      };
+  background: '#fffbeb',
+  border: '#fed7aa',
+  text: '#d97706',
+  button: '#d97706',
+};
     case 'info':
       return {
-        background: '#eff6ff',
-        border: '#bfdbfe',
-        text: '#2563eb',
-        button: '#2563eb',
-      };
+  background: '#eff6ff',
+  border: '#bfdbfe',
+  text: '#2563eb',
+  button: '#2563eb',
+};
     default:
-      return {
-        background: '#f8fafc',
-        border: '#e2e8f0',
-        text: '#475569',
-        button: '#475569',
-      };
-    }
+      return {,
+  background: '#f8fafc',
+  border: '#e2e8f0',
+  text: '#475569',
+  button: '#475569',
+};
   };
   const handleDismiss = () => {
     if (canDismiss) {
       setIsVisible(false);
-    }
   };
   if (!isVisible) {
     return null;
-  }
   const colors = getIndicatorColor();
   const message = getIndicatorMessage();
-  return ();
+  return;
     <div 
       className={`offline-indicator ${position} ${className}`}
       style={{
@@ -111,9 +102,11 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
         top: position === 'top' ? 0 : undefined,
         bottom: position === 'bottom' ? 0 : undefined,
         backgroundColor: colors.background,
-        borderBottom: position === 'top' ? `2px solid ${colors.border}` : undefined,}
-        borderTop: position === 'bottom' ? `2px solid ${colors.border}` : undefined,}
-        color: colors.text,
+        borderBottom: position === 'top' ? `2px solid ${colors.border}` : undefined}
+},
+  borderTop: position === 'bottom' ? `2px solid ${colors.border}` : undefined}
+},
+  color: colors.text,
         padding: '12px 16px',
         zIndex: 1000,
         fontSize: '14px',
@@ -153,9 +146,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
                   className="px-3 py-1 text-sm font-medium rounded transition-colors"
                   style={{
                     backgroundColor: 'transparent',
-                    border: `1px solid ${colors.button}`,}
-                    color: colors.button,
-                  }}
+                    border: `1px solid ${colors.button}`}
+},
+  color: colors.button;
+  }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
                     e.currentTarget.style.color = 'white';
@@ -174,9 +168,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({)
                   className="px-3 py-1 text-sm font-medium rounded transition-colors"
                   style={{
                     backgroundColor: 'transparent',
-                    border: `1px solid ${colors.button}`,}
-                    color: colors.button,
-                  }}
+                    border: `1px solid ${colors.button}`}
+},
+  color: colors.button;
+  }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.button;
                     e.currentTarget.style.color = 'white';

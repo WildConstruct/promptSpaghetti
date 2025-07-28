@@ -37,7 +37,7 @@ const BulkOperationRequestSchema = z.object({
     priority: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
     category: z.string().min(1).max(100),
     tags: z.array(z.string()).optional()
-  })
+  }
 });
 
 const BulkOperationFilterSchema = z.object({
@@ -343,13 +343,13 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-          },
+  }
           limits: {
             defaultBatchSize: 100,
             maxBatchSize: 1000,
             maxConcurrency: 10
           }
-        },
+  }
         {
           resourceType: 'permissions',
           supportedOperations: ['grant', 'revoke', 'update', 'delete', 'export', 'import'],
@@ -358,13 +358,13 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-          },
+  }
           limits: {
             defaultBatchSize: 200,
             maxBatchSize: 1000,
             maxConcurrency: 5
           }
-        },
+  }
         {
           resourceType: 'roles',
           supportedOperations: [
@@ -376,7 +376,7 @@ export async function bulkOperationsRoutes(
             supportsRollback: true,
             supportsBatchProcessing: true,
             supportsScheduling: true
-          },
+  }
           limits: {
             defaultBatchSize: 50,
             maxBatchSize: 500,
@@ -501,7 +501,7 @@ export async function bulkOperationsRoutes(
           lastUsedAt: new Date(),
           defaultParameters: {},
           defaultOptions: { batchSize: 50, continueOnError: true }
-        },
+  }
         {
           id: 'template-2',
           name: 'Suspend Users',
@@ -570,7 +570,7 @@ export async function bulkOperationsRoutes(
           // Template defaults merged with overrides
           ...{}, // template.defaultParameters
           ...useTemplateData.parameterOverrides
-        },
+  }
         options: {
           // Template defaults merged with overrides
           ...{ batchSize: 50, continueOnError: true }, // template.defaultOptions
@@ -644,29 +644,29 @@ export async function bulkOperationsRoutes(
           completedOperations: 1195,
           failedOperations: 47,
           cancelledOperations: 3
-        },
+  }
         byResourceType: {
           users: 856,
           permissions: 245,
           roles: 147
-        },
+  }
         byStatus: {
           pending: 1,
           running: 2,
           completed: 1195,
           failed: 47,
           cancelled: 3
-        },
+  }
         performance: {
           averageExecutionTime: 45.2, // seconds
           averageItemsPerSecond: 12.8,
           successRate: 95.7 // percentage
-        },
+  }
         recent: {
           last24Hours: 23,
           lastWeek: 156,
           lastMonth: 542
-        },
+  }
         popularOperations: [
           { operation: 'activate', count: 324 },
           { operation: 'grant_role', count: 289 },
@@ -712,18 +712,18 @@ export async function bulkOperationsRoutes(
           auditLogging: 'operational',
           rollbackSupport: 'operational',
           schedulingSupport: 'operational'
-        },
+  }
         handlers: {
           users: 'registered',
           permissions: 'registered',
           roles: 'registered'
-        },
+  }
         metrics: {
           activeOperations: 3,
           totalHandlers: 3,
           averageResponseTime: 125.5,
           uptime: process.uptime()
-        },
+  }
         environment: process.env.NODE_ENV || 'development'
       };
 

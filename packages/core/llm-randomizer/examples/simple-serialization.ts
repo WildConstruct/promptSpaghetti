@@ -5,7 +5,7 @@ import { validateFormat } from '../serialization/validator';
 import { Graph } from '../../graphSchema';
 
 // Example: Simple greeting generator
-const simpleGraph: Graph = {
+const simpleGraph: Graph = {,
   nodes: [,
     {
       id: 'greeting_choice',
@@ -15,24 +15,22 @@ const simpleGraph: Graph = {
         { value: 'Hi', weight: 0.3 },
         { value: 'Greetings', weight: 0.3 }
       ]
-    },
+  }
     {
-      id: 'name_var',
-      type: 'GetVariable',
-      key: 'user_name',
-    },
+  id: 'name_var',
+  type: 'GetVariable',
+  key: 'user_name',
+}
     {
-      id: 'greeting_concat',
-      type: 'Concat',
-      inputs: ['greeting_choice', 'name_var']
-    },
+  id: 'greeting_concat',
+  type: 'Concat',
+  inputs: ['greeting_choice', 'name_var'],
+}
     {
-      id: 'final_output',
-      type: 'Output',
-      inputs: ['greeting_concat'],
-    }
-  ]
-};
+  id: 'final_output',
+  type: 'Output',
+  inputs: ['greeting_concat']];
+  };
 
 // Serialize the graph
 const serialized = GraphSerializer.serialize(simpleGraph, {)
@@ -53,12 +51,10 @@ console.log('Warnings:', validation.warnings.length);
 if (validation.errors.length > 0) {
   console.log('\nErrors:');
   validation.errors.forEach(error => {)
-    console.log(`  - ${error.message}`);}
+  console.log(`  - ${error.message}`);}
   });
-}
 if (validation.warnings.length > 0) {
   console.log('\nWarnings:');
   validation.warnings.forEach(warning => {)
-    console.log(`  - ${warning.message}`);}
+  console.log(`  - ${warning.message}`);}
   });
-}

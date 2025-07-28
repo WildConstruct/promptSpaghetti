@@ -71,7 +71,7 @@ describe('SecurityExperimentationPlatform', () => {
         experiment_orchestration_enabled: true,
         automated_rollback_enabled: true,
         compliance_validation_required: true
-      },
+  }
       experiment_types: {
         security_research_experiments: true,
         vulnerability_simulation_experiments: true,
@@ -80,14 +80,14 @@ describe('SecurityExperimentationPlatform', () => {
         incident_response_experiments: true,
         penetration_testing_experiments: true,
         social_engineering_experiments: false
-      },
+  }
       environments: {
         production_experiments_allowed: false,
         staging_environment_required: true,
         isolated_sandbox_available: true,
         development_environment_enabled: true,
         canary_environment_enabled: true
-      },
+  }
       safety_controls: {
         experiment_approval_required: true,
         ethical_review_required: true,
@@ -95,7 +95,7 @@ describe('SecurityExperimentationPlatform', () => {
         automatic_termination_enabled: true,
         real_time_monitoring_required: true,
         data_anonymization_required: true
-      },
+  }
       research_capabilities: {
         hypothesis_generation_enabled: true,
         statistical_analysis_enabled: true,
@@ -103,7 +103,7 @@ describe('SecurityExperimentationPlatform', () => {
         behavioral_analysis_enabled: true,
         longitudinal_studies_supported: true,
         cross_experiment_correlation: true
-      },
+  }
       collaboration: {
         multi_team_experiments: true,
         external_researcher_access: false,
@@ -136,7 +136,7 @@ describe('SecurityExperimentationPlatform', () => {
             population_definition: 'Production network traffic patterns',
             inclusion_criteria: ['Active network connections', 'Representative traffic mix'],
             exclusion_criteria: ['Test traffic', 'Administrative connections']
-          },
+  }
           control_mechanisms: [
             {
               control_type: 'randomization',
@@ -151,7 +151,7 @@ describe('SecurityExperimentationPlatform', () => {
               measurement_method: 'system_configuration',
               data_type: 'categorical',
               expected_values: ['ml_based', 'rule_based']
-            },
+  }
             {
               variable_name: 'detection_accuracy',
               variable_type: 'dependent',
@@ -160,7 +160,7 @@ describe('SecurityExperimentationPlatform', () => {
               expected_values: ['0.80', '1.00']
             }
           ]
-        },
+  }
         expected_outcomes: [
           'Improved threat detection accuracy',
           'Reduced false positive rate',
@@ -192,7 +192,7 @@ describe('SecurityExperimentationPlatform', () => {
           practical_significance_threshold: 15.0,
           minimum_effect_size: 0.3
         }
-      },
+  }
       experimental_setup: {
         target_systems: [
           {
@@ -214,7 +214,7 @@ describe('SecurityExperimentationPlatform', () => {
               isolation_level: 'network',
               monitoring_enabled: true,
               data_retention_days: 90
-            },
+  }
             isolation_measures: ['network_segmentation', 'traffic_isolation'],
             monitoring_setup: ['real_time_metrics', 'security_alerts'],
             rollback_procedures: ['configuration_restore', 'traffic_redirect']
@@ -251,7 +251,7 @@ describe('SecurityExperimentationPlatform', () => {
               review_criteria: ['safety_metrics_within_bounds', 'no_security_incidents']
             }
           ]
-        },
+  }
         resources_required: [
           {
             resource_type: 'infrastructure',
@@ -366,7 +366,7 @@ describe('SecurityExperimentationPlatform', () => {
           hypothesis: 'System will perform within acceptable parameters',
           objectives: ['Test basic functionality'],
           expected_outcomes: ['System validation']
-        },
+  }
         experimental_setup: {
           target_systems: [
             {
@@ -397,7 +397,7 @@ describe('SecurityExperimentationPlatform', () => {
             maximum_duration_days: 7,
             milestone_dates: [],
             review_schedule: []
-          },
+  }
           resources_required: []
         }
       };
@@ -568,7 +568,7 @@ describe('SecurityExperimentationPlatform', () => {
           ...sampleExperimentConfig,
           experiment_name: 'Policy Effectiveness Research',
           experiment_type: 'policy_effectiveness'
-        })
+  }
       ]);
       
       experimentIds = experiments.map(exp => exp.experiment_id);

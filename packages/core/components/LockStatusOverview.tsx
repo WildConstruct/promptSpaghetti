@@ -4,12 +4,10 @@ import React from 'react';
 import { Lock, Clock, AlertTriangle, Users, Activity, TrendingUp } from 'lucide-react';
 import { LockingStatistics, LockConflict } from '../types/locking';
 interface LockStatusOverviewProps {
-  statistics: LockingStatistics;
-  conflicts: LockConflict[];
+  statistics: LockingStatistics;,
+  conflicts: LockConflict;
   onConflictClick: (conflict: LockConflict) => void;
-}
-
-export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
+  export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({,)
   statistics,
   conflicts,
   onConflictClick
@@ -17,8 +15,8 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
   const pendingConflicts = conflicts.filter(c => c.status === 'pending');
   const resolvedConflicts = conflicts.filter(c => c.status === 'resolved');
   const StatCard = ({ title, value, icon: Icon, color, subtext }: {)
-    title: string;
-    value: string | number;
+  title: string;,
+  value: string | number;
     icon: React.ComponentType<{ className?: string }>;
     color: string;
     subtext?: string;
@@ -36,7 +34,7 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
       </div>
     </div>
   );
-  return ();
+  return;
     <div className="space-y-6">
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -74,15 +72,15 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Lock Type Distribution</h3>
         <div className="space-y-3">
           {Object.entries(statistics.by_type).map(([type, count]) => {
-            const percentage = statistics.total_locks > 0 ? (count / statistics.total_locks) * 100 : 0;
-            const colorMap: Record<string, string> = {
-              edit: 'bg-blue-500',
-              state_change: 'bg-orange-500',
-              delete: 'bg-red-500',
-              admin: 'bg-purple-500',
-              custom: 'bg-gray-500',
-            };
-            return ();
+  const percentage = statistics.total_locks > 0 ? (count / statistics.total_locks) * 100 : 0;
+  const colorMap: Record<string, string> = {,
+  edit: 'bg-blue-500',
+  state_change: 'bg-orange-500',
+  delete: 'bg-red-500',
+  admin: 'bg-purple-500',
+  custom: 'bg-gray-500',
+};
+            return;
               <div key={type} className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div className={`w-3 h-3 rounded-full ${colorMap[type] || 'bg-gray-400'}`}></div>}
@@ -111,7 +109,7 @@ export const LockStatusOverview: React.FC<LockStatusOverviewProps> = ({)
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Lock Holders</h3>
         <div className="space-y-3">
           {Object.entries(statistics.by_user)
-            .sort(([, a], [, b]) => b - a)
+            .sort(([ a], [ b]) => b - a)
             .slice(0, 5)
             .map(([userId, count]) => ()
               <div key={userId} className="flex items-center justify-between">

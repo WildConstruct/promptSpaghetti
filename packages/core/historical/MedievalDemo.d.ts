@@ -114,7 +114,6 @@ export declare class MedievalDemoDatabase {
      * Generate outfit description
      */
     private generateOutfitDescription;
-}
 /**
  * Medieval historical constraints specific to the demo
  */

@@ -11,63 +11,58 @@ import { TrendingComment } from '../../types/TrendingCommentsTypes';
 import { TrendingCommentCard } from '../TrendingComments/TrendingCommentCard';
 
 export interface CommentModerationConfig {
-  enableBulkActions: boolean;
+  enableBulkActions: boolean;,
   enableAutoModeration: boolean;
-  enableThreadModeration: boolean;
+  enableThreadModeration: boolean;,
   enableSentimentFiltering: boolean;
-  autoHideThreshold: number; // toxicity threshold
-  requireApprovalThreshold: number; // low quality threshold
-  enableRealtimeUpdates: boolean;
+  autoHideThreshold: number; // toxicity threshold,
+  requireApprovalThreshold: number; // low quality threshold,
+  enableRealtimeUpdates: boolean;,
   moderatorId: string;
-  permissions: string[];
+  permissions: string;
 }
-
 export interface CommentModerationFilters {
   status?: 'pending' | 'approved' | 'rejected' | 'flagged' | 'auto_hidden';
   sentiment?: 'positive' | 'neutral' | 'negative' | 'very_negative';
   toxicity?: 'low' | 'medium' | 'high' | 'critical';
   reports?: 'none' | 'few' | 'many' | 'critical';
   author?: 'all' | 'new' | 'verified' | 'banned';
-  dateRange?: {
-    start: Date;
-    end: Date;
-  };
+  dateRange?: {,
+  start: Date;,
+  end: Date;
+};
   resourceId?: string;
   resourceType?: string;
   sortBy?: 'newest' | 'oldest' | 'most_reported' | 'lowest_quality' | 'highest_toxicity';
   keywords?: string;
 }
-
 export interface CommentModerationAction {
-  type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';
-  commentIds: string[];
+  type: 'approve' | 'reject' | 'flag' | 'hide' | 'delete' | 'ban_author' | 'require_edit' | 'escalate';,
+  commentIds: string;
   reason?: string;
-  duration?: number; // for temporary actions
+  duration?: number; // for temporary actions,
   notifyAuthor?: boolean;
   escalateTo?: string;
   metadata?: Record<string, unknown>;
 }
-
 export interface CommentModerationStats {
-  total: number;
+  total: number;,
   pending: number;
-  approved: number;
+  approved: number;,
   rejected: number;
-  flagged: number;
+  flagged: number;,
   autoHidden: number;
-  totalReports: number;
+  totalReports: number;,
   avgToxicity: number;
   avgQuality: number;
   lastProcessed?: Date;
-}
-interface CommentModerationPanelProps {
+  interface CommentModerationPanelProps {
   config: CommentModerationConfig;
   onAction?: (action: CommentModerationAction) => Promise<void>;
   onFiltersChange?: (filters: CommentModerationFilters) => void;
   onStatsUpdate?: (stats: CommentModerationStats) => void;
   className?: string;
 }
-
 export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
   config,
   onAction,
@@ -76,23 +71,23 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
   className = ''
 }) => {
   // State management
-  const [comments, setComments] = useState<TrendingComment[]>([]);
-  const [selectedComments, setSelectedComments] = useState<string[]>([]);
+  const [comments, setComments] = useState<TrendingComment>([]);
+  const [selectedComments, setSelectedComments] = useState<string>([]);
   const [filters, setFilters] = useState<CommentModerationFilters>({)
-    status: 'pending',
-    sortBy: 'newest',
-  });
+  status: 'pending',
+  sortBy: 'newest',
+});
   const [stats, setStats] = useState<CommentModerationStats>({)
-    total: 0,
-    pending: 0,
-    approved: 0,
-    rejected: 0,
-    flagged: 0,
-    autoHidden: 0,
-    totalReports: 0,
-    avgToxicity: 0,
-    avgQuality: 0,
-  });
+  total: 0,
+  pending: 0,
+  approved: 0,
+  rejected: 0,
+  flagged: 0,
+  autoHidden: 0,
+  totalReports: 0,
+  avgToxicity: 0,
+  avgQuality: 0,
+});
   // UI state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,13 +106,11 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       setStats(mockStats);
       if (onStatsUpdate) {
         onStatsUpdate(mockStats);
-      }
     } catch (err) {
       setError(`Failed to load comments: ${err.message}`);}
       console.error('Comment loading failed:', err);
     } finally {
       setLoading(false);
-    }
   }, [filters, onStatsUpdate]);
   // Initialize and load data
   useEffect(() => {
@@ -129,16 +122,14 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
     setFilters(updatedFilters);
     if (onFiltersChange) {
       onFiltersChange(updatedFilters);
-    }
   }, [filters, onFiltersChange]);
   // Handle comment selection
   const handleCommentSelection = useCallback((commentId: string, selected: boolean) => {
     setSelectedComments(prev => {)
-      if (selected) {
+  if (selected) {
         return [...prev, commentId];
       } else {
         return prev.filter(id => id !== commentId);
-      }
     });
   }, []);
   // Handle bulk selection
@@ -148,7 +139,6 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       setSelectedComments(visibleCommentIds);
     } else {
       setSelectedComments([]);
-    }
   }, [comments]);
   // Handle moderation actions
   const handleModerationAction = async (action: CommentModerationAction) => {
@@ -165,91 +155,87 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       console.error('Moderation action failed:', err);
     } finally {
       setLoading(false);
-    }
   };
   // Handle thread expansion
   const handleThreadToggle = useCallback((commentId: string) => {
     setExpandedThreads(prev => {)
-      const newSet = new Set(prev);
+  const newSet = new Set(prev);
       if (newSet.has(commentId)) {
         newSet.delete(commentId);
       } else {
         newSet.add(commentId);
-      }
       return newSet;
     });
   }, []);
   // Computed values
   const hasPermission = useCallback((permission: string) => {
-    return config.permissions.includes(permission) || config.permissions.includes('moderation:admin');
-  }, [config.permissions]);
+  return config.permissions.includes(permission) || config.permissions.includes('moderation:admin');
+}, [config.permissions]);
   const selectedCount = selectedComments.length;
   const allSelected = selectedCount > 0 && selectedCount === comments.length;
   const someSelected = selectedCount > 0 && selectedCount < comments.length;
   // Quick action buttons data
   const quickActions = useMemo(() => [;
-    { 
-      type: 'approve' as const, 
-      label: '✅ Approve', 
-      color: '#059669',
-      permission: 'moderation:approve',
-      show: selectedCount > 0,
-    },
-    { 
-      type: 'reject' as const, 
-      label: '❌ Reject', 
-      color: '#dc2626',
-      permission: 'moderation:reject',
-      show: selectedCount > 0,
-    },
-    { 
-      type: 'flag' as const, 
-      label: '🚩 Flag', 
-      color: '#d97706',
-      permission: 'moderation:flag',
-      show: selectedCount > 0,
-    },
+    {
+  type: 'approve' as const,
+  label: '✅ Approve',
+  color: '#059669',
+  permission: 'moderation:approve',
+  show: selectedCount > 0,
+}
+    {
+  type: 'reject' as const,
+  label: '❌ Reject',
+  color: '#dc2626',
+  permission: 'moderation:reject',
+  show: selectedCount > 0,
+}
+    {
+  type: 'flag' as const,
+  label: '🚩 Flag',
+  color: '#d97706',
+  permission: 'moderation:flag',
+  show: selectedCount > 0,
+}
     { 
       type: 'hide' as const, 
       label: '👁️ Hide', 
       color: '#6b7280',
       permission: 'moderation:hide',
-      show: selectedCount > 0,
-    }
-  ].filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission]);
-  return ();
-    <div className={`comment-moderation-panel ${className}`} style={{}
-      backgroundColor: '#ffffff',
+      show: selectedCount > 0].filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission]);
+  return;
+    <div className={`comment-moderation-panel ${className}`} style={{},}
+  backgroundColor: '#ffffff',
       border: '1px solid #e5e7eb',
       borderRadius: '8px',
-      overflow: 'hidden',
-    }}>
+      overflow: 'hidden';
+  }}>
       {/* Header */}
       <div style={{
-        padding: '16px 20px',
-        backgroundColor: '#f9fafb',
-        borderBottom: '1px solid #e5e7eb',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
+  padding: '16px 20px',
+  backgroundColor: '#f9fafb',
+  borderBottom: '1px solid #e5e7eb',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}}>
         <div>
           <h2 style={{
-            margin: 0,
-            fontSize: '18px',
-            fontWeight: '600',
-            color: '#111827',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}>
+  margin: 0,
+  fontSize: '18px',
+  fontWeight: '600',
+  color: '#111827',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+}}>
             💬 Comment Moderation
           </h2>
           <p style={{
-            margin: '4px 0 0 0',
-            fontSize: '13px',
-            color: '#6b7280',
-          }}>
+  margin: '4px 0 0 0',
+  fontSize: '13px',
+  color: '#6b7280',
+}}>
             {stats.pending} pending • {stats.total} total • {stats.totalReports} reports
           </p>
         </div>
@@ -257,13 +243,13 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
           {/* Auto-moderation toggle */}
           {hasPermission('moderation:auto') && ()
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '12px',
-              color: '#6b7280',
-              cursor: 'pointer',
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  fontSize: '12px',
+  color: '#6b7280',
+  cursor: 'pointer',
+}}>
               <input
                 type="checkbox"
                 defaultChecked={config.enableAutoModeration}
@@ -277,16 +263,16 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
             onClick={loadComments}
             disabled={loading}
             style={{
-              padding: '6px 12px',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '12px',
-              fontWeight: '500',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1,
-            }}
+  padding: '6px 12px',
+  backgroundColor: '#3b82f6',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '12px',
+  fontWeight: '500',
+  cursor: loading ? 'not-allowed' : 'pointer',
+  opacity: loading ? 0.6 : 1,
+}}
           >
             {loading ? '🔄' : '↻'} Refresh
           </button>
@@ -294,24 +280,24 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       </div>
       {/* Filters */}
       <div style={{
-        padding: '12px 20px',
-        backgroundColor: '#f8fafc',
-        borderBottom: '1px solid #e5e7eb',
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '10px',
-        alignItems: 'center',
-      }}>
+  padding: '12px 20px',
+  backgroundColor: '#f8fafc',
+  borderBottom: '1px solid #e5e7eb',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '10px',
+  alignItems: 'center',
+}}>
         <select
           value={filters.status || ''}
           onChange={(e) => handleFiltersChange({ status: e.target.value as any })}
           style={{
-            padding: '4px 8px',
-            border: '1px solid #d1d5db',
-            borderRadius: '4px',
-            fontSize: '12px',
-            backgroundColor: 'white',
-          }}
+  padding: '4px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: '4px',
+  fontSize: '12px',
+  backgroundColor: 'white',
+}}
         >
           <option value="">All Status</option>
           <option value="pending">Pending</option>
@@ -324,12 +310,12 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
           value={filters.sentiment || ''}
           onChange={(e) => handleFiltersChange({ sentiment: e.target.value as any })}
           style={{
-            padding: '4px 8px',
-            border: '1px solid #d1d5db',
-            borderRadius: '4px',
-            fontSize: '12px',
-            backgroundColor: 'white',
-          }}
+  padding: '4px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: '4px',
+  fontSize: '12px',
+  backgroundColor: 'white',
+}}
         >
           <option value="">All Sentiment</option>
           <option value="positive">Positive</option>
@@ -341,12 +327,12 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
           value={filters.toxicity || ''}
           onChange={(e) => handleFiltersChange({ toxicity: e.target.value as any })}
           style={{
-            padding: '4px 8px',
-            border: '1px solid #d1d5db',
-            borderRadius: '4px',
-            fontSize: '12px',
-            backgroundColor: 'white',
-          }}
+  padding: '4px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: '4px',
+  fontSize: '12px',
+  backgroundColor: 'white',
+}}
         >
           <option value="">All Toxicity</option>
           <option value="low">Low</option>
@@ -358,12 +344,12 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
           value={filters.sortBy || 'newest'}
           onChange={(e) => handleFiltersChange({ sortBy: e.target.value as any })}
           style={{
-            padding: '4px 8px',
-            border: '1px solid #d1d5db',
-            borderRadius: '4px',
-            fontSize: '12px',
-            backgroundColor: 'white',
-          }}
+  padding: '4px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: '4px',
+  fontSize: '12px',
+  backgroundColor: 'white',
+}}
         >
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
@@ -377,44 +363,44 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
           value={filters.keywords || ''}
           onChange={(e) => handleFiltersChange({ keywords: e.target.value })}
           style={{
-            padding: '4px 8px',
-            border: '1px solid #d1d5db',
-            borderRadius: '4px',
-            fontSize: '12px',
-            minWidth: '150px',
-          }}
+  padding: '4px 8px',
+  border: '1px solid #d1d5db',
+  borderRadius: '4px',
+  fontSize: '12px',
+  minWidth: '150px',
+}}
         />
       </div>
       {/* Bulk Actions Bar */}
       {config.enableBulkActions && selectedCount > 0 && ()
         <div style={{
-          padding: '12px 20px',
-          backgroundColor: '#eff6ff',
-          borderBottom: '1px solid #bfdbfe',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
+  padding: '12px 20px',
+  backgroundColor: '#eff6ff',
+  borderBottom: '1px solid #bfdbfe',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+}}>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-          }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+}}>
             <span style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#1e40af',
-            }}>
+  fontSize: '14px',
+  fontWeight: '500',
+  color: '#1e40af',
+}}>
               {selectedCount} comment{selectedCount > 1 ? 's' : ''} selected
             </span>
             <label style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '12px',
-              color: '#6b7280',
-              cursor: 'pointer',
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  fontSize: '12px',
+  color: '#6b7280',
+  cursor: 'pointer',
+}}>
               <input
                 type="checkbox"
                 checked={allSelected}
@@ -428,27 +414,27 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
             </label>
           </div>
           <div style={{
-            display: 'flex',
-            gap: '6px',
-          }}>
+  display: 'flex',
+  gap: '6px',
+}}>
             {quickActions.map(action => ()
               <button
                 key={action.type}
                 onClick={() => handleModerationAction({)
-                  type: action.type,
+  type: action.type,
                   commentIds: selectedComments,
                   reason: `Bulk ${action.type} action`}
                 })}
                 style={{
-                  padding: '6px 12px',
-                  backgroundColor: action.color,
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                }}
+  padding: '6px 12px',
+  backgroundColor: action.color,
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  fontWeight: '500',
+  cursor: 'pointer',
+}}
               >
                 {action.label}
               </button>
@@ -456,14 +442,14 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
             <button
               onClick={() => setSelectedComments([])}
               style={{
-                padding: '6px 12px',
-                backgroundColor: '#6b7280',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                fontSize: '12px',
-                cursor: 'pointer',
-              }}
+  padding: '6px 12px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  border: 'none',
+  borderRadius: '4px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
             >
               Clear
             </button>
@@ -473,34 +459,34 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       {/* Error Display */}
       {error && ()
         <div style={{
-          padding: '12px 20px',
-          backgroundColor: '#fef2f2',
-          borderBottom: '1px solid #fecaca',
-          color: '#dc2626',
-          fontSize: '14px',
-        }}>
+  padding: '12px 20px',
+  backgroundColor: '#fef2f2',
+  borderBottom: '1px solid #fecaca',
+  color: '#dc2626',
+  fontSize: '14px',
+}}>
           ❌ {error}
         </div>
       )}
       {/* Comments List */}
       <div style={{
-        maxHeight: '600px',
-        overflowY: 'auto',
-      }}>
+  maxHeight: '600px',
+  overflowY: 'auto',
+}}>
         {loading && comments.length === 0 ? ()
           <div style={{
-            padding: '40px',
-            textAlign: 'center',
-            color: '#6b7280',
-          }}>
+  padding: '40px',
+  textAlign: 'center',
+  color: '#6b7280',
+}}>
             🔄 Loading comments...
           </div>
         ) : comments.length === 0 ? ()
           <div style={{
-            padding: '40px',
-            textAlign: 'center',
-            color: '#6b7280',
-          }}>
+  padding: '40px',
+  textAlign: 'center',
+  color: '#6b7280',
+}}>
             📭 No comments found matching current filters
           </div>
         ) : ()
@@ -512,9 +498,9 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
                 selected={selectedComments.includes(comment.commentId)}
                 onSelectionChange={(selected) => handleCommentSelection(comment.commentId, selected)}
                 onAction={(action) => handleModerationAction({)
-                  ...action,
-                  commentIds: [comment.commentId],
-                })}
+  ...action,
+  commentIds: [comment.commentId],
+})}
                 onThreadToggle={() => handleThreadToggle(comment.commentId)}
                 expanded={expandedThreads.has(comment.commentId)}
                 showCheckbox={config.enableBulkActions}
@@ -527,15 +513,15 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
       </div>
       {/* Footer Stats */}
       <div style={{
-        padding: '12px 20px',
-        backgroundColor: '#f9fafb',
-        borderTop: '1px solid #e5e7eb',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '12px',
-        color: '#6b7280',
-      }}>
+  padding: '12px 20px',
+  backgroundColor: '#f9fafb',
+  borderTop: '1px solid #e5e7eb',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  fontSize: '12px',
+  color: '#6b7280',
+}}>
         <div>
           Showing {comments.length} of {stats.total} comments
         </div>
@@ -552,17 +538,16 @@ export const CommentModerationPanel: React.FC<CommentModerationPanelProps> = ({)
 
 // Individual Comment Moderation Item Component
 interface CommentModerationItemProps {
-  comment: TrendingComment;
+  comment: TrendingComment;,
   selected: boolean;
-  onSelectionChange: (selected: boolean) => void;
+  onSelectionChange: (selected: boolean) => void;,
   onAction: (action: Omit<CommentModerationAction, 'commentIds'>) => void;
-  onThreadToggle: () => void;
+  onThreadToggle: () => void;,
   expanded: boolean;
-  showCheckbox: boolean;
-  moderatorPermissions: string[];
+  showCheckbox: boolean;,
+  moderatorPermissions: string;
   style?: React.CSSProperties;
-}
-const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
+  const CommentModerationItem: React.FC<CommentModerationItemProps> = ({,)
   comment,
   selected,
   onSelectionChange,
@@ -573,24 +558,25 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
   moderatorPermissions,
   style
 }) => {
-  const hasPermission = (permission: string) => {
-    return moderatorPermissions.includes(permission) || moderatorPermissions.includes('moderation:admin');
-  };
+  const hasPermission = (permission: string) => {,
+  return moderatorPermissions.includes(permission) || moderatorPermissions.includes('moderation:admin');
+};
   // Mock moderation metadata
   const moderationData = {
-    status: 'pending' as const,
-    toxicity: Math.random() * 0.3, // 0-30% toxicity
-    sentiment: 'neutral' as const,
-    reports: Math.floor(Math.random() * 3),
-    autoFlag: Math.random() > 0.8,
-  };
-  const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' : ;
+  status: 'pending' as const,
+  toxicity: Math.random() * 0.3, // 0-30% toxicity,
+  sentiment: 'neutral' as const,
+  reports: Math.floor(Math.random() * 3),
+  autoFlag: Math.random() > 0.8,
+};
+  const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' :;
     moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
-  return ();
+  return;
     <div
       style={{
-        border: `1px solid ${selected ? '#3b82f6' : '#e5e7eb'}`,}
-        borderRadius: '8px',
+        border: `1px solid ${selected ? '#3b82f6' : '#e5e7eb'}`}
+},
+  borderRadius: '8px',
         backgroundColor: selected ? '#eff6ff' : 'white',
         overflow: 'hidden',
         ...style
@@ -598,19 +584,19 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
     >
       {/* Moderation Header */}
       <div style={{
-        padding: '8px 12px',
-        backgroundColor: '#f8fafc',
-        borderBottom: '1px solid #e5e7eb',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontSize: '11px',
-      }}>
+  padding: '8px 12px',
+  backgroundColor: '#f8fafc',
+  borderBottom: '1px solid #e5e7eb',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  fontSize: '11px',
+}}>
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-        }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+}}>
           {showCheckbox && ()
             <input
               type="checkbox"
@@ -620,13 +606,13 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
             />
           )}
           <span style={{
-            padding: '2px 6px',
-            backgroundColor: moderationData.status === 'pending' ? '#fbbf24' : '#10b981',
-            color: 'white',
-            borderRadius: '4px',
-            fontSize: '10px',
-            fontWeight: '600',
-          }}>
+  padding: '2px 6px',
+  backgroundColor: moderationData.status === 'pending' ? '#fbbf24' : '#10b981',
+  color: 'white',
+  borderRadius: '4px',
+  fontSize: '10px',
+  fontWeight: '600',
+}}>
             {moderationData.status.toUpperCase()}
           </span>
           <span style={{ color: '#6b7280' }}>
@@ -646,21 +632,21 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
           )}
         </div>
         <div style={{
-          display: 'flex',
-          gap: '4px',
-        }}>
+  display: 'flex',
+  gap: '4px',
+}}>
           {hasPermission('moderation:approve') && ()
             <button
               onClick={() => onAction({ type: 'approve', reason: 'Manual approval' })}
               style={{
-                padding: '2px 6px',
-                backgroundColor: '#059669',
-                color: 'white',
-                border: 'none',
-                borderRadius: '3px',
-                fontSize: '10px',
-                cursor: 'pointer',
-              }}
+  padding: '2px 6px',
+  backgroundColor: '#059669',
+  color: 'white',
+  border: 'none',
+  borderRadius: '3px',
+  fontSize: '10px',
+  cursor: 'pointer',
+}}
             >
               ✅
             </button>
@@ -669,14 +655,14 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
             <button
               onClick={() => onAction({ type: 'reject', reason: 'Manual rejection' })}
               style={{
-                padding: '2px 6px',
-                backgroundColor: '#dc2626',
-                color: 'white',
-                border: 'none',
-                borderRadius: '3px',
-                fontSize: '10px',
-                cursor: 'pointer',
-              }}
+  padding: '2px 6px',
+  backgroundColor: '#dc2626',
+  color: 'white',
+  border: 'none',
+  borderRadius: '3px',
+  fontSize: '10px',
+  cursor: 'pointer',
+}}
             >
               ❌
             </button>
@@ -685,14 +671,14 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
             <button
               onClick={() => onAction({ type: 'flag', reason: 'Manual flag' })}
               style={{
-                padding: '2px 6px',
-                backgroundColor: '#d97706',
-                color: 'white',
-                border: 'none',
-                borderRadius: '3px',
-                fontSize: '10px',
-                cursor: 'pointer',
-              }}
+  padding: '2px 6px',
+  backgroundColor: '#d97706',
+  color: 'white',
+  border: 'none',
+  borderRadius: '3px',
+  fontSize: '10px',
+  cursor: 'pointer',
+}}
             >
               🚩
             </button>
@@ -701,14 +687,14 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
             <button
               onClick={onThreadToggle}
               style={{
-                padding: '2px 6px',
-                backgroundColor: '#6b7280',
-                color: 'white',
-                border: 'none',
-                borderRadius: '3px',
-                fontSize: '10px',
-                cursor: 'pointer',
-              }}
+  padding: '2px 6px',
+  backgroundColor: '#6b7280',
+  color: 'white',
+  border: 'none',
+  borderRadius: '3px',
+  fontSize: '10px',
+  cursor: 'pointer',
+}}
             >
               {expanded ? '👁️' : '👁️‍🗨️'} Thread
             </button>
@@ -730,18 +716,21 @@ const CommentModerationItem: React.FC<CommentModerationItemProps> = ({)
 };
 
 // Helper functions for mock data
-async function generateMockComments(_____filters: CommentModerationFilters): Promise<TrendingComment[]> {
+async function generateMockComments(_____filters: CommentModerationFilters): Promise<TrendingComment> {
   // Generate mock comments based on filters
   const count = Math.floor(Math.random() * 20) + 5;
-  const comments: TrendingComment[] = [];
+  const comments: TrendingComment = [];
   for (let i = 0; i < count; i++) {
     comments.push({)
-      commentId: `comment_${Date.now()}_${i}`,}
-      resourceId: 'template_123',
+  commentId: `comment_${Date.now()}_${i}`}
+},
+  resourceId: 'template_123',
       resourceType: 'template',
-      authorId: `user_${Math.floor(Math.random() * 100)}`,}
-      authorDisplayName: `User${Math.floor(Math.random() * 100)}`,}
-      authorVerified: Math.random() > 0.7,
+      authorId: `user_${Math.floor(Math.random() * 100)}`}
+},
+  authorDisplayName: `User${Math.floor(Math.random() * 100)}`}
+},
+  authorVerified: Math.random() > 0.7,
       authorReputation: Math.floor(Math.random() * 1000),
       content: generateMockCommentContent(),
       contentType: 'text',
@@ -757,57 +746,51 @@ async function generateMockComments(_____filters: CommentModerationFilters): Pro
       replyCount: Math.floor(Math.random() * 5),
       replyTree: [],
       visibility: 'public',
-      language: 'en',
-    });
-  }
+      language: 'en';
+  });
   return comments;
-}
 function generateMockCommentContent(): string {
   const contents = [;
-    'This template is really helpful, thanks for sharing!',
-    'I found a bug in this implementation, can you fix it?',
-    'Great work! This solved my problem perfectly.',
-    'This is spam content that should be moderated',
-    'The documentation could be better explained',
-    'Excellent template, very well designed!',
-    'Not sure this is working correctly for me',
-    'This is inappropriate content that violates guidelines'
+  'This template is really helpful, thanks for sharing!',
+  'I found a bug in this implementation, can you fix it?',
+  'Great work! This solved my problem perfectly.',
+  'This is spam content that should be moderated',
+  'The documentation could be better explained',
+  'Excellent template, very well designed!',
+  'Not sure this is working correctly for me',
+  'This is inappropriate content that violates guidelines'
   ];
   return contents[Math.floor(Math.random() * contents.length)];
-}
-function generateMockScore(): unknown {
+  function generateMockScore(): unknown {,
   return {
-    scores: {,
-      trendingScore: Math.random() * 100,
-      engagementScore: Math.random() * 100,
-      qualityScore: Math.random() * 100,
-      controversyScore: Math.random() * 100,
-    },
-    metrics: {,
-      totalLikes: Math.floor(Math.random() * 50),
-      totalReplies: Math.floor(Math.random() * 20),
-      totalShares: Math.floor(Math.random() * 10),
-      totalHelpfulVotes: Math.floor(Math.random() * 15),
-      totalReports: Math.floor(Math.random() * 5),
-    },
-    trends: {,
-      velocityTrend: 'steady' as const,
-    }
-  };
-}
-function calculateMockStats(comments: TrendingComment[]): CommentModerationStats {
+  scores: {,
+  trendingScore: Math.random() * 100,
+  engagementScore: Math.random() * 100,
+  qualityScore: Math.random() * 100,
+  controversyScore: Math.random() * 100,
+},
+  metrics: {,
+  totalLikes: Math.floor(Math.random() * 50),
+  totalReplies: Math.floor(Math.random() * 20),
+  totalShares: Math.floor(Math.random() * 10),
+  totalHelpfulVotes: Math.floor(Math.random() * 15),
+  totalReports: Math.floor(Math.random() * 5),
+},
+  trends: {,
+  velocityTrend: 'steady' as const,
+};
+function calculateMockStats(comments: TrendingComment): CommentModerationStats {
   return {
-    total: comments.length,
-    pending: Math.floor(comments.length * 0.6),
-    approved: Math.floor(comments.length * 0.3),
-    rejected: Math.floor(comments.length * 0.05),
-    flagged: Math.floor(comments.length * 0.03),
-    autoHidden: Math.floor(comments.length * 0.02),
-    totalReports: Math.floor(comments.length * 0.1),
-    avgToxicity: Math.random() * 0.2,
-    avgQuality: 70 + Math.random() * 20,
-    lastProcessed: new Date(),
-  };
-}
+  total: comments.length,
+  pending: Math.floor(comments.length * 0.6),
+  approved: Math.floor(comments.length * 0.3),
+  rejected: Math.floor(comments.length * 0.05),
+  flagged: Math.floor(comments.length * 0.03),
+  autoHidden: Math.floor(comments.length * 0.02),
+  totalReports: Math.floor(comments.length * 0.1),
+  avgToxicity: Math.random() * 0.2,
+  avgQuality: 70 + Math.random() * 20,
+  lastProcessed: new Date(),
+};
 
 export default CommentModerationPanel;

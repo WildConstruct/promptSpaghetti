@@ -32,44 +32,40 @@ export function BasicMetricsExample() {
     rateLimitingService,
     throttlingEngine,
     {
-      enableRealTimeMetrics: true,
-      metricsRetentionPeriod: 24, // 24 hours
-      visualizationOptions: {,
-        enableCharts: true,
-        enableHeatmaps: true,
-        enableTimeseries: true,
-        enableGeospatialMaps: true,
-        refreshInterval: 5 // 5 seconds,
-      },
-      alerting: {,
-        enableAlerts: true,
-        alertThresholds: {,
-          highResponseTime: 150,
-          lowThroughput: 50,
-          highErrorRate: 8,
-          highBlockRate: 20,
-        }
-      }
-    }
-  );
+  enableRealTimeMetrics: true,
+  metricsRetentionPeriod: 24, // 24 hours,
+  visualizationOptions: {,
+  enableCharts: true,
+  enableHeatmaps: true,
+  enableTimeseries: true,
+  enableGeospatialMaps: true,
+  refreshInterval: 5 // 5 seconds,
+},
+  alerting: {,
+  enableAlerts: true,
+  alertThresholds: {,
+  highResponseTime: 150,
+  lowThroughput: 50,
+  highErrorRate: 8,
+  highBlockRate: 20);
   // Start monitoring
   metricsService.startMetricsCollection();
   // Listen for events
   metricsService.on('metricsUpdated', (data) => {
-    console.log('📊 Metrics updated:', {)
-      responseTime: data.metrics.responseTime.average.toFixed(2) + 'ms',
-      throughput: data.metrics.throughput.requestsPerSecond.toFixed(1) + ' rps',
-      blockRate: data.metrics.errorRates.blockRate.toFixed(1) + '%',
-      collectionTime: data.collectionTime + 'ms',
-    });
+  console.log('📊 Metrics updated:', {,)
+  responseTime: data.metrics.responseTime.average.toFixed(2) + 'ms',
+  throughput: data.metrics.throughput.requestsPerSecond.toFixed(1) + ' rps',
+  blockRate: data.metrics.errorRates.blockRate.toFixed(1) + '%',
+  collectionTime: data.collectionTime + 'ms',
+});
   });
   metricsService.on('alertCreated', (alert) => {
-    console.log('🚨 Alert created:', {)
-      condition: alert.condition,
-      severity: alert.severity,
-      currentValue: alert.currentValue,
-      threshold: alert.threshold,
-    });
+  console.log('🚨 Alert created:', {,)
+  condition: alert.condition,
+  severity: alert.severity,
+  currentValue: alert.currentValue,
+  threshold: alert.threshold,
+});
   });
   // Simulate some traffic
   setTimeout(() => {
@@ -77,7 +73,6 @@ export function BasicMetricsExample() {
     simulateTraffic(rateLimitingService);
   }, 2000);
   return metricsService;
-}
 
 // ========================================
 // Example 2: React Dashboard Integration
@@ -94,16 +89,15 @@ export function RateLimitingDashboardExample() {
   ));
   // Use the custom hook for metrics management
   const metricsHook = useRateLimitingMetrics({)
-    rateLimitingService,
-    throttlingEngine,
-    options: {,
-      autoRefresh: true,
-      refreshInterval: 3,
-      timeRange: '1h',
-      enableAlerts: true,
-      retainHistoryHours: 48,
-    }
-  });
+  rateLimitingService,
+  throttlingEngine,
+  options: {,
+  autoRefresh: true,
+  refreshInterval: 3,
+  timeRange: '1h',
+  enableAlerts: true,
+  retainHistoryHours: 48,
+});
   // Simulate traffic on component mount
   useEffect(() => {
     const trafficTimer = setInterval(() => {
@@ -112,7 +106,7 @@ export function RateLimitingDashboardExample() {
     return () => clearInterval(trafficTimer);
   }, [rateLimitingService]);
   if (metricsHook.error) {
-    return ();
+    return;
       <div className="p-8 bg-red-50 dark:bg-red-900/20 rounded-lg">
         <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
           Metrics Error
@@ -126,8 +120,7 @@ export function RateLimitingDashboardExample() {
         </button>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Dashboard Header */}
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
@@ -143,15 +136,15 @@ export function RateLimitingDashboardExample() {
             </div>
             <div className="flex items-center space-x-4">
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
-                metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :
-                'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-              }`}>
+  metricsHook.systemStatus === 'healthy' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :,
+  metricsHook.systemStatus === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :,
+  'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+}`}>
                 <div className={`w-2 h-2 rounded-full mr-2 ${
-                  metricsHook.systemStatus === 'healthy' ? 'bg-green-500' :
-                  metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' :
-                  'bg-red-500'
-                }`}></div>
+  metricsHook.systemStatus === 'healthy' ? 'bg-green-500' :,
+  metricsHook.systemStatus === 'warning' ? 'bg-yellow-500' :,
+  'bg-red-500'
+}`}></div>
                 {metricsHook.systemStatus.charAt(0).toUpperCase() + metricsHook.systemStatus.slice(1)}
               </div>
               {metricsHook.isConnected && ()
@@ -169,7 +162,6 @@ export function RateLimitingDashboardExample() {
           new RateLimitingPerformanceMetrics()
             rateLimitingService,
             throttlingEngine
-        }
         theme="light"
         autoRefresh={true}
         refreshInterval={3}
@@ -194,55 +186,51 @@ export function AdvancedVisualizationExample() {
     rateLimitingService,
     throttlingEngine,
     {
-      enableRealTimeMetrics: true,
-      visualizationOptions: {,
-        enableCharts: true,
-        enableHeatmaps: true,
-        enableTimeseries: true,
-        enableGeospatialMaps: true,
-        refreshInterval: 2,
-      }
-    }
-  );
+  enableRealTimeMetrics: true,
+  visualizationOptions: {,
+  enableCharts: true,
+  enableHeatmaps: true,
+  enableTimeseries: true,
+  enableGeospatialMaps: true,
+  refreshInterval: 2);
   // Start metrics collection
   metricsService.startMetricsCollection();
   // Demonstrate visualization data generation
   console.log('Generating visualization data...');
   setTimeout(() => {
-    // Get time series data
-    const timeSeriesData = metricsService.generateTimeSeriesData('1h');
-    console.log('📈 Time Series Data:', {)
-      dataPoints: timeSeriesData.timestamps.length,
-      avgResponseTime: timeSeriesData.responseTime.reduce((a, b) => a + b, 0) / timeSeriesData.responseTime.length,
-      avgThroughput: timeSeriesData.throughput.reduce((a, b) => a + b, 0) / timeSeriesData.throughput.length
-    });
+  // Get time series data
+  const timeSeriesData = metricsService.generateTimeSeriesData('1h');
+  console.log('📈 Time Series Data:', {,)
+  dataPoints: timeSeriesData.timestamps.length,
+  avgResponseTime: timeSeriesData.responseTime.reduce((a, b) => a + b, 0) / timeSeriesData.responseTime.length,
+  avgThroughput: timeSeriesData.throughput.reduce((a, b) => a + b, 0) / timeSeriesData.throughput.length,
+});
     // Get heatmap data
     const heatmapData = metricsService.generateHeatmapData();
     console.log('🔥 Heatmap Data:', {)
-      endpoints: heatmapData.endpoints.length,
-      timeSlots: heatmapData.timeSlots.length,
-      totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length,
-    });
+  endpoints: heatmapData.endpoints.length,
+  timeSlots: heatmapData.timeSlots.length,
+  totalDataPoints: heatmapData.activityMatrix.length * heatmapData.activityMatrix[0].length,
+});
     // Get geospatial data
     const geoData = metricsService.generateGeospatialData();
     console.log('🌍 Geospatial Data:', {)
-      locations: geoData.locations.length,
-      totalRequests: geoData.locations.reduce((sum, loc) => sum + loc.requestCount, 0),
-      totalBlocks: geoData.locations.reduce((sum, loc) => sum + loc.blockCount, 0)
-    });
+  locations: geoData.locations.length,
+  totalRequests: geoData.locations.reduce((sum, loc) => sum + loc.requestCount, 0),
+  totalBlocks: geoData.locations.reduce((sum, loc) => sum + loc.blockCount, 0),
+});
     // Get distribution data
     const distributionData = metricsService.generateDistributionData();
     console.log('📊 Distribution Data:', {)
-      endpoints: Object.keys(distributionData.endpointDistribution).length,
-      threatLevels: Object.keys(distributionData.threatLevelDistribution).length,
-      responseTimeRanges: distributionData.responseTimeDistribution.length,
-      userAgents: Object.keys(distributionData.userAgentDistribution).length,
-    });
+  endpoints: Object.keys(distributionData.endpointDistribution).length,
+  threatLevels: Object.keys(distributionData.threatLevelDistribution).length,
+  responseTimeRanges: distributionData.responseTimeDistribution.length,
+  userAgents: Object.keys(distributionData.userAgentDistribution).length,
+});
     // Get complete visualization data
         console.log('🎯 Complete Visualization Data Generated');
   }, 3000);
   return metricsService;
-}
 
 // ========================================
 // Example 4: Custom Widget Creation
@@ -254,50 +242,49 @@ export function CustomWidgetExample() {
   const metricsService = new RateLimitingPerformanceMetrics(rateLimitingService);
   // Create custom widgets
   const customWidgets = [;
+  {
+  widgetId: 'security-overview',
+  widgetType: 'chart' as const,
+  title: 'Security Overview',
+  description: 'Real-time security metrics overview',
+  dataSource: 'current',
+  refreshInterval: 1,
+  config: {,
+  chartType: 'gauge' as const,
+  metrics: ['threatLevel', 'blockRate'],
+},
+  position: { x: 0, y: 0, width: 4, height: 4 }
+  }
     {
-      widgetId: 'security-overview',
-      widgetType: 'chart' as const,
-      title: 'Security Overview',
-      description: 'Real-time security metrics overview',
-      dataSource: 'current',
-      refreshInterval: 1,
-      config: {,
-        chartType: 'gauge' as const,
-        metrics: ['threatLevel', 'blockRate']
-      },
-      position: { x: 0, y: 0, width: 4, height: 4 }
-    },
+  widgetId: 'endpoint-performance',
+  widgetType: 'table' as const,
+  title: 'Endpoint Performance',
+  description: 'Performance metrics by endpoint',
+  dataSource: 'distribution',
+  refreshInterval: 10,
+  config: {,
+  metrics: ['endpointDistribution'],
+  dimensions: ['endpoint', 'requests', 'responseTime'],
+},
+  position: { x: 4, y: 0, width: 8, height: 6 }
+  }
     {
-      widgetId: 'endpoint-performance',
-      widgetType: 'table' as const,
-      title: 'Endpoint Performance',
-      description: 'Performance metrics by endpoint',
-      dataSource: 'distribution',
-      refreshInterval: 10,
-      config: {,
-        metrics: ['endpointDistribution'],
-        dimensions: ['endpoint', 'requests', 'responseTime']
-      },
-      position: { x: 4, y: 0, width: 8, height: 6 }
-    },
-    {
-      widgetId: 'threat-timeline',
-      widgetType: 'chart' as const,
-      title: 'Threat Activity Timeline',
-      description: 'Historical threat activity over time',
-      dataSource: 'timeseries',
-      refreshInterval: 30,
-      config: {,
-        chartType: 'area' as const,
-        timeRange: '24h',
-        metrics: ['blockRate', 'errorRate']
-      },
-      position: { x: 0, y: 4, width: 12, height: 6 }
-    }
+  widgetId: 'threat-timeline',
+  widgetType: 'chart' as const,
+  title: 'Threat Activity Timeline',
+  description: 'Historical threat activity over time',
+  dataSource: 'timeseries',
+  refreshInterval: 30,
+  config: {,
+  chartType: 'area' as const,
+  timeRange: '24h',
+  metrics: ['blockRate', 'errorRate'],
+},
+  position: { x: 0, y: 4, width: 12, height: 6 }
   ];
   // Add custom widgets
   customWidgets.forEach(widget => {)
-    metricsService.addWidget(widget);
+  metricsService.addWidget(widget);
     console.log(`✅ Added custom widget: ${widget.title}`);}
   });
   // List all widgets
@@ -306,12 +293,11 @@ export function CustomWidgetExample() {
   // Get widget data
   setTimeout(() => {
     customWidgets.forEach(widget => {)
-      const widgetData = metricsService.getWidgetData(widget.widgetId);
+  const widgetData = metricsService.getWidgetData(widget.widgetId);
       console.log(`📊 Widget "${widget.title}" data:`, widgetData ? 'Available' : 'No data');}
     });
   }, 2000);
   return metricsService;
-}
 
 // ========================================
 // Example 5: Alert Management System
@@ -321,35 +307,31 @@ export function AlertManagementExample() {
   console.log('=== Alert Management System Example ===');
   const rateLimitingService = new RateLimitingService();
   const metricsService = new RateLimitingPerformanceMetrics(;);
-    rateLimitingService,
-    undefined,
-    {
-      alerting: {,
-        enableAlerts: true,
-        alertThresholds: {,
-          highResponseTime: 100, // Low threshold for demo
-          lowThroughput: 10,
-          highErrorRate: 5,
-          highBlockRate: 15,
-        }
-      }
-    }
-  );
+  rateLimitingService,
+  undefined,
+  {
+  alerting: {,
+  enableAlerts: true,
+  alertThresholds: {,
+  highResponseTime: 100, // Low threshold for demo,
+  lowThroughput: 10,
+  highErrorRate: 5,
+  highBlockRate: 15);
   // Set up alert event listeners
   metricsService.on('alertCreated', (alert) => {
-    console.log('🚨 ALERT CREATED:', {)
-      id: alert.alertId,
-      type: alert.alertType,
-      severity: alert.severity,
-      condition: alert.condition,
-      current: alert.currentValue,
-      threshold: alert.threshold,
-      recommendations: alert.recommendedActions,
-    });
+  console.log('🚨 ALERT CREATED:', {,)
+  id: alert.alertId,
+  type: alert.alertType,
+  severity: alert.severity,
+  condition: alert.condition,
+  current: alert.currentValue,
+  threshold: alert.threshold,
+  recommendations: alert.recommendedActions,
+});
   });
   metricsService.on('alertAcknowledged', (data) => {
-    console.log('✅ Alert acknowledged:', data.alertId);
-  });
+  console.log('✅ Alert acknowledged:', data.alertId);
+});
   // Start monitoring
   metricsService.startMetricsCollection();
   // Simulate high load to trigger alerts
@@ -359,17 +341,17 @@ export function AlertManagementExample() {
       setTimeout(() => {
         simulateTraffic(rateLimitingService, true); // High volume
       }, i * 100);
-    }
     // Check alerts after simulation
     setTimeout(() => {
       const activeAlerts = metricsService.getActiveAlerts();
       console.log(`📊 Active alerts: ${activeAlerts.length}`);}
       activeAlerts.forEach((alert, index) => {
         console.log(`Alert ${index + 1}:`, {)}
-          condition: alert.condition,
+  },
+  condition: alert.condition,
           severity: alert.severity,
-          timestamp: alert.timestamp.toLocaleString(),
-        });
+          timestamp: alert.timestamp.toLocaleString();
+  });
         // Acknowledge alert after 5 seconds
         setTimeout(() => {
           metricsService.acknowledgeAlert(alert.alertId);
@@ -378,7 +360,6 @@ export function AlertManagementExample() {
     }, 3000);
   }, 2000);
   return metricsService;
-}
 
 // ========================================
 // Example 6: Data Export and Analysis
@@ -395,38 +376,37 @@ export function DataExportExample() {
     setTimeout(() => {
       simulateTraffic(rateLimitingService);
     }, i * 200);
-  }
   // Export data after collection
   setTimeout(() => {
-    console.log('Exporting metrics data...');
-    // Export as JSON
-    const jsonExport = metricsService.exportMetrics('json');
-    const jsonData = JSON.parse(jsonExport);
-    console.log('📄 JSON Export:', {)
-      metricsCount: jsonData.metricsCount,
-      timeRange: jsonData.timeRange,
-      alertsCount: jsonData.alerts.length,
-      configurationKeys: Object.keys(jsonData.configuration),
-    });
+  console.log('Exporting metrics data...');
+  // Export as JSON
+  const jsonExport = metricsService.exportMetrics('json');
+  const jsonData = JSON.parse(jsonExport);
+  console.log('📄 JSON Export:', {,)
+  metricsCount: jsonData.metricsCount,
+  timeRange: jsonData.timeRange,
+  alertsCount: jsonData.alerts.length,
+  configurationKeys: Object.keys(jsonData.configuration),
+});
     // Export as CSV
     const csvExport = metricsService.exportMetrics('csv');
     const csvLines = csvExport.split('\n');
     console.log('📊 CSV Export:', {)
-      headers: csvLines[0],
-      dataRows: csvLines.length - 1,
-      sampleRow: csvLines[1],
-    });
+  headers: csvLines[0],
+  dataRows: csvLines.length - 1,
+  sampleRow: csvLines[1],
+});
     // Get system status
     const systemStatus = metricsService.getSystemStatus();
     console.log('🔍 System Status:', {)
-      status: systemStatus.status,
-      uptime: `${Math.round(systemStatus.uptime / 1000)}s`,}
-      metricsCollected: systemStatus.systemInfo.metricsCollected,
-      activeAlerts: systemStatus.alerts.length,
-    });
+  status: systemStatus.status,
+      uptime: `${Math.round(systemStatus.uptime / 1000)}s`}
+},
+  metricsCollected: systemStatus.systemInfo.metricsCollected,
+      activeAlerts: systemStatus.alerts.length;
+  });
   }, 3000);
   return metricsService;
-}
 
 // ========================================
 // Traffic Simulation Utility
@@ -443,16 +423,14 @@ function simulateTraffic(rateLimitingService: RateLimitingService, highVolume: b
     const success = Math.random() > (highVolume ? 0.3 : 0.1); // Higher failure rate for high volume;
     // Check rate limit
     rateLimitingService.checkRateLimit(ip, endpoint, {)
-      userAgent,
+  userAgent,
       userId: success ? `user_${Math.floor(Math.random() * 1000)}` : undefined}
     });
     // Record attempt
     rateLimitingService.recordAttempt(ip, endpoint, success, {)
-      userAgent,
+  userAgent,
       userId: success ? `user_${Math.floor(Math.random() * 1000)}` : undefined}
     });
-  }
-}
 
 // ========================================
 // Example Usage Functions
@@ -468,7 +446,7 @@ export function runAllExamples() {
     { name: 'Alert Management', fn: AlertManagementExample, delay: 15000 },
     { name: 'Data Export', fn: DataExportExample, delay: 20000 }
   ];
-  const services: RateLimitingPerformanceMetrics[] = [];
+  const services: RateLimitingPerformanceMetrics = [];
   examples.forEach(({ name, fn, delay }) => {
     setTimeout(() => {
       console.log(`\n--- Starting ${name} Example ---`);}
@@ -476,25 +454,22 @@ export function runAllExamples() {
         const service = fn();
         if (service) {
           services.push(service);
-        }
       } catch (error) {
-        console.error(`Error in ${name} example:`, error);}
-      }
+        console.error(`Error in ${name},)}
+  example:`, error);}
     }, delay);
   });
   // Cleanup after all examples
   setTimeout(() => {
     console.log('\n🧹 Cleaning up examples...');
     services.forEach(service => {)
-      try {
+  try {
         service.destroy();
       } catch (error) {
-        console.error('Error during cleanup:', error);
-      }
-    });
+  console.error('Error during cleanup:', error);
+});
     console.log('✅ All examples completed and cleaned up');
   }, 30000);
-}
 
 // Export all examples for individual use
 export {
@@ -509,4 +484,3 @@ export {
 // Run examples if this file is executed directly
 if (typeof window === 'undefined' && require.main === module) {
   runAllExamples();
-}

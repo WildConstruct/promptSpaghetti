@@ -22,7 +22,7 @@ export interface FunnelComparisonProps {
     primaryFunnel: ConversionFunnelDefinition;
     comparisonMode: ComparisonMode;
     comparisonConfig: ComparisonConfiguration;
-    onInsightGenerated?: (insights: ComparisonInsight[]) => void;
+    onInsightGenerated?: (insights: ComparisonInsight) => void;
     onExportRequest?: (data: ComparisonExportData) => void;
 }
 export type ComparisonMode = 'time_period' | 'funnel_variant' | 'segment' | 'cohort' | 'ab_test' | 'geographic' | 'device_type';
@@ -43,7 +43,7 @@ export interface ComparisonTarget {
     id: string;
     name: string;
     description?: string;
-    filters?: ComparisonFilter[];
+    filters?: ComparisonFilter;
     funnelDefinition?: ConversionFunnelDefinition;
     metadata?: Record<string, any>;
 }
@@ -58,8 +58,8 @@ export interface ComparisonResult {
     baseline: FunnelPerformanceData;
     comparison: FunnelPerformanceData;
     delta: PerformanceDelta;
-    statisticalTests: StatisticalTestResult[];
-    insights: ComparisonInsight[];
+    statisticalTests: StatisticalTestResult;
+    insights: ComparisonInsight;
     metadata: ComparisonMetadata;
 }
 export interface FunnelPerformanceData {
@@ -69,7 +69,7 @@ export interface FunnelPerformanceData {
     overallConversionRate: number;
     averageTimeToConvert: number;
     totalValue: number;
-    stepPerformance: StepPerformanceData[];
+    stepPerformance: StepPerformanceData;
     additionalMetrics: Record<string, number>;
 }
 export interface StepPerformanceData {
@@ -105,7 +105,7 @@ export interface PerformanceDelta {
         relative: number;
         direction: 'improvement' | 'decline' | 'no_change';
     };
-    stepDeltas: StepDelta[];
+    stepDeltas: StepDelta;
 }
 export interface StepDelta {
     stepId: string;
@@ -135,7 +135,7 @@ export interface PowerAnalysisResult {
     currentPower: number;
     requiredSampleSize: number;
     detectedEffectSize: number;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface ComparisonInsight {
     type: 'significant_improvement' | 'significant_decline' | 'no_significant_difference' | 'sample_size_warning' | 'recommendation';
@@ -145,7 +145,7 @@ export interface ComparisonInsight {
     metric?: string;
     stepId?: string;
     evidence: InsightEvidence;
-    recommendations?: string[];
+    recommendations?: string;
     priority: number;
 }
 export interface InsightEvidence {
@@ -175,10 +175,10 @@ export interface ComparisonMetadata {
 export interface ComparisonExportData {
     comparison: ComparisonResult;
     rawData: {
-        baselineEvents: FlexibleConversionEvent[];
-        comparisonEvents: FlexibleConversionEvent[];
+        baselineEvents: FlexibleConversionEvent;
+        comparisonEvents: FlexibleConversionEvent;
     };
-    visualizations: ComparisonVisualization[];
+    visualizations: ComparisonVisualization;
     reportSummary: string;
 }
 export interface ComparisonVisualization {
@@ -190,13 +190,13 @@ export interface ComparisonVisualization {
 export interface ABTestIntegration {
     experimentId: string;
     experimentName: string;
-    variants: ABTestVariant[];
+    variants: ABTestVariant;
     trafficAllocation: Record<string, number>;
     status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';
     startDate: number;
     endDate?: number;
     primaryMetric: string;
-    secondaryMetrics: string[];
+    secondaryMetrics: string;
     hypothesis: string;
     successCriteria: ABTestSuccessCriteria;
 }
@@ -215,9 +215,5 @@ export interface ABTestSuccessCriteria {
     minimumRunTime: number;
     minimumSampleSize: number;
 }
-/**
- * Main Funnel Comparison Component
- */
 export declare const FunnelComparison: React.FC<FunnelComparisonProps>;
-export default FunnelComparison;
 //# sourceMappingURL=FunnelComparison.d.ts.map

@@ -28,7 +28,7 @@ export interface ShareConfig {
 }
 export interface DomainConfig {
     primaryDomain: string;
-    customDomains: CustomDomain[];
+    customDomains: CustomDomain;
     defaultScheme: 'http' | 'https';
     subdomainStrategy: 'random' | 'hash' | 'sequential' | 'custom';
     pathPrefix?: string;
@@ -70,23 +70,23 @@ export interface TokenConfig {
 }
 export interface AccessControlConfig {
     requireAuthentication: boolean;
-    allowedRoles: string[];
-    ipWhitelist: string[];
-    geoRestrictions: GeoRestriction[];
-    deviceRestrictions: DeviceRestriction[];
-    timeRestrictions: TimeRestriction[];
+    allowedRoles: string;
+    ipWhitelist: string;
+    geoRestrictions: GeoRestriction;
+    deviceRestrictions: DeviceRestriction;
+    timeRestrictions: TimeRestriction;
 }
 export interface GeoRestriction {
     type: 'allow' | 'deny';
-    countries: string[];
-    regions: string[];
-    cities: string[];
+    countries: string;
+    regions: string;
+    cities: string;
 }
 export interface DeviceRestriction {
     type: 'allow' | 'deny';
     deviceTypes: ('desktop' | 'mobile' | 'tablet')[];
-    browsers: string[];
-    operatingSystems: string[];
+    browsers: string;
+    operatingSystems: string;
 }
 export interface TimeRestriction {
     type: 'allow' | 'deny';
@@ -94,7 +94,7 @@ export interface TimeRestriction {
     timezone: string;
 }
 export interface TimeSchedule {
-    days: string[];
+    days: string;
     hours: {
         start: string;
         end: string;
@@ -113,15 +113,15 @@ export interface ValidationConfig {
 }
 export interface ContentValidation {
     enabled: boolean;
-    allowedContentTypes: string[];
+    allowedContentTypes: string;
     maxContentSize: number;
     scanForMalware: boolean;
     requireApproval: boolean;
 }
 export interface URLValidation {
     enabled: boolean;
-    allowedDomains: string[];
-    blockedDomains: string[];
+    allowedDomains: string;
+    blockedDomains: string;
     requireHTTPS: boolean;
     validateDNS: boolean;
 }
@@ -156,7 +156,7 @@ export interface AnalyticsConfig {
     trackGeolocation: boolean;
     realTimeUpdates: boolean;
     attributionTracking: boolean;
-    customEvents: string[];
+    customEvents: string;
 }
 export interface BrandingConfig {
     enabled: boolean;
@@ -215,7 +215,7 @@ export interface LimitsConfig {
     maxLinksPerDay: number;
     maxClicksPerLink: number;
     linkExpirationDays: number;
-    customLimits: CustomLimit[];
+    customLimits: CustomLimit;
 }
 export interface CustomLimit {
     name: string;
@@ -254,7 +254,7 @@ export interface PreviewConfig {
     enabled: boolean;
     generatePreviews: boolean;
     cacheLifetime: number;
-    supportedTypes: string[];
+    supportedTypes: string;
     maxPreviewSize: number;
 }
 export interface SchedulingConfig {
@@ -266,7 +266,7 @@ export interface SchedulingConfig {
 export interface CollaborationConfig {
     enabled: boolean;
     allowTeamSharing: boolean;
-    permissions: CollaborationPermission[];
+    permissions: CollaborationPermission;
     notifications: NotificationConfig;
 }
 export interface CollaborationPermission {
@@ -278,7 +278,7 @@ export interface NotificationConfig {
     email: boolean;
     webhook: boolean;
     inApp: boolean;
-    events: string[];
+    events: string;
 }
 export interface AutomationConfig {
     enabled: boolean;
@@ -295,15 +295,15 @@ export interface IntegrationConfig {
 }
 export interface AttributionIntegration {
     enabled: boolean;
-    trackingParameters: string[];
+    trackingParameters: string;
     defaultSource: string;
     defaultMedium: string;
     campaignTracking: boolean;
 }
 export interface AnalyticsIntegration {
-    providers: AnalyticsProvider[];
+    providers: AnalyticsProvider;
     realTimeSync: boolean;
-    customDimensions: string[];
+    customDimensions: string;
     eventTracking: boolean;
 }
 export interface AnalyticsProvider {
@@ -314,7 +314,7 @@ export interface AnalyticsProvider {
     enabled: boolean;
 }
 export interface SocialIntegration {
-    platforms: SocialPlatform[];
+    platforms: SocialPlatform;
     autoPosting: boolean;
     hashtagSuggestions: boolean;
     optimalTiming: boolean;
@@ -326,15 +326,15 @@ export interface SocialPlatform {
     defaultSettings: Record<string, any>;
 }
 export interface WebhookIntegration {
-    endpoints: WebhookEndpoint[];
-    events: string[];
+    endpoints: WebhookEndpoint;
+    events: string;
     retryPolicy: RetryPolicy;
     security: WebhookSecurity;
 }
 export interface WebhookEndpoint {
     name: string;
     url: string;
-    events: string[];
+    events: string;
     headers: Record<string, string>;
     enabled: boolean;
 }
@@ -347,7 +347,7 @@ export interface RetryPolicy {
 export interface WebhookSecurity {
     signatureVerification: boolean;
     secretKey?: string;
-    ipWhitelist: string[];
+    ipWhitelist: string;
     requireHTTPS: boolean;
 }
 export interface ShareLink {
@@ -373,7 +373,7 @@ export interface LinkMetadata {
     contentType?: string;
     fileSize?: number;
     preview?: PreviewData;
-    tags: string[];
+    tags: string;
     category?: string;
     campaign?: string;
     source?: string;
@@ -400,9 +400,9 @@ export interface UTMParameters {
 export interface LinkSecurity {
     accessLevel: AccessLevel;
     password?: string;
-    allowedUsers: string[];
-    allowedRoles: string[];
-    restrictions: AccessRestriction[];
+    allowedUsers: string;
+    allowedRoles: string;
+    restrictions: AccessRestriction;
     verification: VerificationConfig;
 }
 export type AccessLevel = 'public' | 'restricted' | 'private' | 'team' | 'custom';
@@ -428,7 +428,7 @@ export interface LinkAnalytics {
     lastClickAt?: Date;
     conversionRate?: number;
     revenue?: number;
-    goals: GoalTracking[];
+    goals: GoalTracking;
 }
 export interface GoalTracking {
     goalId: string;
@@ -452,19 +452,19 @@ export interface UserInfo {
     email: string;
     name: string;
     role: string;
-    permissions: string[];
+    permissions: string;
 }
 export interface TeamInfo {
     id: string;
     name: string;
-    members: TeamMember[];
-    permissions: TeamPermission[];
+    members: TeamMember;
+    permissions: TeamPermission;
 }
 export interface TeamMember {
     userId: string;
     role: string;
     joinedAt: Date;
-    permissions: string[];
+    permissions: string;
 }
 export interface TeamPermission {
     action: string;
@@ -531,7 +531,7 @@ export interface ResponseInfo {
     redirectUrl: string;
     responseTime: number;
     cacheHit: boolean;
-    errors?: string[];
+    errors?: string;
 }
 export interface ClickAttribution {
     touchPointId?: string;
@@ -566,7 +566,7 @@ export interface BulkOperation {
 export type BulkOperationType = 'create' | 'update' | 'delete' | 'archive' | 'export' | 'import';
 export type OperationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
 export interface BulkRequest {
-    items: any[];
+    items: any;
     options: Record<string, any>;
     metadata: Record<string, any>;
 }
@@ -579,8 +579,8 @@ export interface OperationProgress {
     currentItem?: string;
 }
 export interface BulkResults {
-    successful: BulkResultItem[];
-    failed: BulkResultItem[];
+    successful: BulkResultItem;
+    failed: BulkResultItem;
     summary: ResultSummary;
 }
 export interface BulkResultItem {
@@ -595,7 +595,7 @@ export interface ResultSummary {
     successCount: number;
     failureCount: number;
     averageProcessingTime: number;
-    warnings: string[];
+    warnings: string;
 }
 export declare class DirectLinkSharing extends EventEmitter {
     private config;
@@ -606,235 +606,6 @@ export declare class DirectLinkSharing extends EventEmitter {
     private attributionTracker?;
     private analytics?;
     constructor(config: Partial<ShareConfig>);
-    createLink(request: CreateLinkRequest): Promise<ShareLink>;
-    updateLink(linkId: string, updates: UpdateLinkRequest): Promise<ShareLink>;
-    deleteLink(linkId: string): Promise<boolean>;
-    getLink(linkId: string): Promise<ShareLink | null>;
-    getLinkByShortCode(shortCode: string): Promise<ShareLink | null>;
-    accessLink(shortCode: string, accessContext: AccessContext): Promise<AccessResult>;
-    getLinkAnalytics(linkId: string, timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<LinkAnalyticsReport>;
-    getBulkAnalytics(linkIds: string[], timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<BulkAnalyticsReport>;
-    getUserAnalytics(userId: string, timeRange?: {
-        start: Date;
-        end: Date;
-    }): Promise<UserAnalyticsReport>;
-    createBulkLinks(requests: CreateLinkRequest[]): Promise<BulkOperation>;
-    getBulkOperation(operationId: string): Promise<BulkOperation | null>;
-    generateQRCode(linkId: string, options?: QRCodeOptions): Promise<QRCodeResult>;
-    generatePreview(url: string): Promise<PreviewData>;
-    scheduleShare(request: CreateLinkRequest, schedule: ShareSchedule): Promise<ScheduledShare>;
-    shareWithTeam(linkId: string, teamId: string, permissions: string[]): Promise<void>;
-    updateConfig(updates: Partial<ShareConfig>): void;
-    getConfig(): ShareConfig;
-    getSystemStats(): Promise<SystemStats>;
-    private mergeDefaultConfig;
-    private buildShareLink;
-    private generateShortCode;
-    private generateRandomCode;
-    private generateHashCode;
-    private incrementCode;
-    private validateCreateRequest;
-    private validateUpdateRequest;
-    private isValidUrl;
-    private checkRateLimits;
-    private applyLinkUpdates;
-    private validateAccess;
-    private validateRestriction;
-    private validateGeoRestriction;
-    private validateTimeRestriction;
-    private validateDeviceRestriction;
-    private validateIPRestriction;
-    private validateClickLimit;
-    private trackClick;
-    private updateLinkAnalytics;
-    private trackAttribution;
-    private createAccessResult;
-    private isUniqueVisitor;
-    private generateVisitorId;
-    private generateLinkId;
-    private generateClickId;
-    private generateSessionId;
-    private generateOperationId;
-    private generateScheduleId;
-    private processBulkOperation;
-    private createQRCode;
-    private fetchUrlPreview;
-    private processScheduledShare;
-    private generateAnalyticsReport;
-    private aggregateAnalyticsReports;
-    private aggregateUserAnalytics;
-    private getTopDomains;
-    private getRecentActivity;
-    private getPerformanceMetrics;
+    catch(error: any): void;
 }
-export interface CreateLinkRequest {
-    originalUrl: string;
-    title?: string;
-    description?: string;
-    customSlug?: string;
-    domain?: string;
-    expires?: Date;
-    security?: Partial<LinkSecurity>;
-    metadata?: Partial<LinkMetadata>;
-    creator: UserInfo;
-    team?: TeamInfo;
-}
-export interface UpdateLinkRequest {
-    originalUrl?: string;
-    title?: string;
-    description?: string;
-    expires?: Date;
-    status?: LinkStatus;
-    security?: Partial<LinkSecurity>;
-    metadata?: Partial<LinkMetadata>;
-}
-export interface AccessContext {
-    ipAddress?: string;
-    userAgent?: string;
-    headers?: Record<string, string>;
-    queryParams?: Record<string, string>;
-    sessionId?: string;
-    fingerprint?: string;
-    password?: string;
-    user?: UserInfo;
-    geo?: GeoLocation;
-    device?: DeviceInfo;
-    referrer?: ReferrerInfo;
-    attribution?: ClickAttribution;
-}
-export interface AccessValidation {
-    allowed: boolean;
-    reason?: string;
-}
-export type AccessResultStatus = 'allowed' | 'not_found' | 'inactive' | 'expired' | 'restricted';
-export interface AccessResult {
-    status: AccessResultStatus;
-    link?: ShareLink;
-    message?: string;
-    clickEvent?: ClickEvent;
-    timestamp: Date;
-}
-export interface QRCodeOptions {
-    size?: number;
-    format?: 'png' | 'svg' | 'pdf';
-    errorCorrection?: 'low' | 'medium' | 'quartile' | 'high';
-    colors?: {
-        foreground: string;
-        background: string;
-    };
-    logo?: {
-        url: string;
-        size: number;
-    };
-}
-export interface QRCodeResult {
-    url: string;
-    dataUrl: string;
-    svg: string;
-    size: number;
-    format: string;
-}
-export interface ShareSchedule {
-    publishAt: Date;
-    timezone: string;
-    recurring?: {
-        frequency: 'daily' | 'weekly' | 'monthly';
-        interval: number;
-        endDate?: Date;
-    };
-}
-export interface ScheduledShare {
-    id: string;
-    request: CreateLinkRequest;
-    schedule: ShareSchedule;
-    status: 'pending' | 'published' | 'failed' | 'cancelled';
-    created: Date;
-    publishedAt?: Date;
-    error?: string;
-}
-export interface LinkAnalyticsReport {
-    linkId: string;
-    timeRange: {
-        start: Date;
-        end: Date;
-    };
-    summary: {
-        totalClicks: number;
-        uniqueClicks: number;
-        conversionRate: number;
-        averageClicksPerDay: number;
-    };
-    breakdown: {
-        byCountry: Record<string, number>;
-        byDevice: Record<string, number>;
-        byReferrer: Record<string, number>;
-        byHour: Record<string, number>;
-    };
-    trends: Array<{
-        date: Date;
-        clicks: number;
-    }>;
-    generatedAt: Date;
-}
-export interface BulkAnalyticsReport {
-    totalLinks: number;
-    summary: {
-        totalClicks: number;
-        uniqueClicks: number;
-        conversionRate: number;
-        averageClicksPerDay: number;
-    };
-    topPerformers: Array<{
-        linkId: string;
-        clicks: number;
-    }>;
-    trends: Array<{
-        date: Date;
-        clicks: number;
-    }>;
-    generatedAt: Date;
-}
-export interface UserAnalyticsReport {
-    userId: string;
-    totalLinks: number;
-    activeLinks: number;
-    summary: {
-        totalClicks: number;
-        uniqueClicks: number;
-        conversionRate: number;
-        averageClicksPerDay: number;
-    };
-    topLinks: Array<{
-        linkId: string;
-        clicks: number;
-    }>;
-    generatedAt: Date;
-}
-export interface SystemStats {
-    totalLinks: number;
-    activeLinks: number;
-    totalClicks: number;
-    uniqueVisitors: number;
-    averageClicksPerLink: number;
-    topDomains: Array<{
-        domain: string;
-        count: number;
-    }>;
-    recentActivity: Array<{
-        type: string;
-        timestamp: Date;
-        data: any;
-    }>;
-    performanceMetrics: any;
-}
-declare const _default: {
-    DirectLinkSharing: typeof DirectLinkSharing;
-};
-export default _default;
 //# sourceMappingURL=DirectLinkSharing.d.ts.map

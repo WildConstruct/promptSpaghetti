@@ -20,6 +20,7 @@ export class MigrationService {
     importedCount: number;
     errors: string[];
   }> {
+
     const errors: string[] = [];
     let importedCount = 0;
 
@@ -113,6 +114,7 @@ export class MigrationService {
    * Migrate user preferences
    */
   private async migrateUserPreferences(preferences: unknown): Promise<void> {
+
     // TODO: Implement user preferences migration
     // This would update the user_preferences table with the settings
     console.log('User preferences migration not yet implemented:', preferences);
@@ -223,6 +225,7 @@ export class MigrationService {
    * Create a backup of current database before migration
    */
   async createBackup(): Promise<string> {
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = `corrections-backup-${timestamp}.db`;
     
@@ -274,6 +277,7 @@ export class MigrationService {
  * Standalone migration function for CLI usage
  */
 export async function runMigration(localStorageData: unknown): Promise<void> {
+
   const migrationService = new MigrationService();
   
   console.log('Starting corrections migration...');

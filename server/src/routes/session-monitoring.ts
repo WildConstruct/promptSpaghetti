@@ -6,14 +6,17 @@ import { SessionMonitoringService } from '../auth/services/SessionMonitoringServ
 import { requireAuth } from '../auth/middleware/requireAuth';
 import { requirePermission } from '../auth/middleware/requirePermission';
 
+}
 export interface SessionAnalyticsQuery {
   Querystring: {
     startDate?: string;
     endDate?: string;
     userId?: string;
+}
   };
 }
 
+}
 export interface AlertsQuery {
   Querystring: {
     userId?: string;
@@ -22,15 +25,19 @@ export interface AlertsQuery {
     resolved?: string;
     limit?: string;
     offset?: string;
+}
   };
 }
 
+}
 export interface ResolveAlertBody {
   Body: {
     alertId: string;
+}
   };
 }
 
+}
 export interface UpdateRuleBody {
   Body: {
     ruleId: string;
@@ -40,6 +47,7 @@ export interface UpdateRuleBody {
       threshold?: number;
       parameters?: Record<string, any>;
       action?: 'alert' | 'block' | 'require_2fa' | 'notify_user';
+}
     };
   };
 }
@@ -48,6 +56,7 @@ export async function sessionMonitoringRoutes(
   server: FastifyInstance,
   sessionMonitoringService: SessionMonitoringService
 ): Promise<void> {
+
   // Get current session metrics
   server.get('/auth/sessions/metrics', {
     preHandler: [
@@ -226,7 +235,7 @@ export async function sessionMonitoringRoutes(
           details: {
             ruleId,
             updates
-          },
+  }
           sessionId: request.sessionId,
           severity: 'info'
         });
@@ -408,7 +417,7 @@ export async function sessionMonitoringRoutes(
               alerts: alertsResult.rows.length,
               sessions: sessionsResult.rows.length
             }
-          },
+  }
           sessionId: request.sessionId,
           severity: 'info'
         });

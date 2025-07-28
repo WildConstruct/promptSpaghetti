@@ -3,6 +3,7 @@
  * Establishes performance thresholds and monitoring for technical debt reduction
  */
 import { EventEmitter } from 'events';
+
 export interface PerformanceBudgetConfig {
     bundles: {,
         main: number;
@@ -41,7 +42,7 @@ export interface PerformanceBudgetConfig {
         lintTime: number;
         testTime: number;
     };
-}
+
 export interface BudgetViolation {
     category: string;
     metric: string;
@@ -52,7 +53,7 @@ export interface BudgetViolation {
     impact: string;
     suggestions: string[];
     timestamp: number;
-}
+
 export interface BudgetCheckResult {
     passed: boolean;
     score: number;
@@ -66,7 +67,7 @@ export interface BudgetCheckResult {
     };
     recommendations: string[];
     timestamp: number;
-}
+
 export interface PerformanceSnapshot {
     timestamp: number;
     bundles: {,
@@ -100,7 +101,6 @@ export interface PerformanceSnapshot {
         lintTime: number;
         testTime: number;
     };
-}
 /**
  * Performance Budget Manager
  * Enforces performance budgets and tracks violations
@@ -147,7 +147,7 @@ export declare class PerformanceBudgetManager extends EventEmitter {
      * Clear violation history
      */
     clearHistory(): void;
-}
+
 export declare const defaultPerformanceBudget: PerformanceBudgetConfig;
 export { PerformanceBudgetManager, defaultPerformanceBudget };
 //# sourceMappingURL=PerformanceBudget.d.ts.map

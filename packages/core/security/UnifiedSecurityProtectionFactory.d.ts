@@ -17,6 +17,7 @@ import {
   CoordinationStrategy,
   FallbackBehavior
 } from './AdaptiveRateLimitingIntegration';
+
 export interface UnifiedSecurityConfig {
     rateLimiting: {,
         enabled: boolean;
@@ -52,14 +53,14 @@ export interface UnifiedSecurityConfig {
             systemHealth: number;
         };
     };
-}
+
 export declare enum SecurityProfile {
     DEVELOPMENT = "development",// Relaxed settings for development
     STAGING = "staging",// Balanced settings for testing
     PRODUCTION = "production",// Strict settings for production
     HIGH_SECURITY = "high_security",// Maximum security for sensitive applications
     HIGH_VOLUME = "high_volume"
-}
+
 export declare class UnifiedSecurityProtectionFactory {
     /**
      * Create a complete unified security protection system
@@ -121,6 +122,6 @@ export declare class UnifiedSecurityProtectionFactory {
         errors: string[];
         warnings: string[];
     };
-}
+
 export default UnifiedSecurityProtectionFactory;
 //# sourceMappingURL=UnifiedSecurityProtectionFactory.d.ts.map

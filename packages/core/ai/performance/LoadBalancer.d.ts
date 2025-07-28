@@ -5,6 +5,7 @@
  * Load balancing system with multiple strategies and health monitoring
  */
 import { BaseAIModel } from '../BaseAIModel';
+
 export interface LoadBalancerConfig {
     strategy: 'round_robin' | 'least_connections' | 'response_time' | 'cost_aware' | 'adaptive';
     healthCheckInterval: number;
@@ -13,7 +14,7 @@ export interface LoadBalancerConfig {
     timeoutMs: number;
     circuitBreakerEnabled: boolean;
     metricsCollection: boolean;
-}
+
 export interface ModelInstance {
     id: string;
     model: BaseAIModel;
@@ -36,7 +37,7 @@ export interface ModelInstance {
         openedAt: number;
         nextRetryAt: number;
     };
-}
+
 export interface LoadBalancingRequest {
     id: string;
     input: any;
@@ -46,7 +47,7 @@ export interface LoadBalancingRequest {
     retryCount?: number;
     startTime: number;
     metadata?: Record<string, any>;
-}
+
 export interface LoadBalancingResult<T = any> {
     result: T;
     modelId: string;
@@ -54,7 +55,7 @@ export interface LoadBalancingResult<T = any> {
     retryCount: number;
     cached: boolean;
     cost: number;
-}
+
 export declare class LoadBalancer {
     private config;
     private instances;
@@ -96,6 +97,6 @@ export declare class LoadBalancer {
     private generateRequestId;
     private sleep;
     destroy(): void;
-}
+
 export default LoadBalancer;
 //# sourceMappingURL=LoadBalancer.d.ts.map

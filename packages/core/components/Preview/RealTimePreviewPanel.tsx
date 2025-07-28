@@ -15,17 +15,14 @@ interface RealTimePreviewPanelProps {
   className?: string;
   enablePerformanceMonitoring?: boolean;
   maxResults?: number;
-}
-interface PreviewResult {
+  interface PreviewResult {
   seed: number;
   output?: string;
   error?: string;
   executionTimeMs?: number;
   locked?: boolean;
   lockedNote?: string;
-}
-
-export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
+  export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({,)
   visible = true,
   onClose,
   className = '',
@@ -49,20 +46,20 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
   } = usePreviewStateStore();
   // Sync hook for real-time updates
   const {
-    isEnabled: isSyncEnabled,
-    isSyncing,
-    lastSyncTime,
-    syncCount,
-    enableSync,
-    forceSyncNow,
-    getChangeAnalysis,
-    performanceMetrics
-  } = usePreviewSync({)
-    enabled: isRealTimeEnabled,
-    debounceMs: 1000,
-    significanceThreshold: 0.2,
-    enablePerformanceTracking: enablePerformanceMonitoring,
-  });
+  isEnabled: isSyncEnabled,
+  isSyncing,
+  lastSyncTime,
+  syncCount,
+  enableSync,
+  forceSyncNow,
+  getChangeAnalysis,
+  performanceMetrics
+} = usePreviewSync({)
+  enabled: isRealTimeEnabled,
+  debounceMs: 1000,
+  significanceThreshold: 0.2,
+  enablePerformanceTracking: enablePerformanceMonitoring,
+});
   // Local state
   const [showPerformanceDetails, setShowPerformanceDetails] = useState(false);
   const [selectedResult, setSelectedResult] = useState<number | null>(null);
@@ -75,8 +72,8 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
   }, []);
   // Handle result selection
   const handleResultClick = useCallback((index: number) => {
-    setSelectedResult(selectedResult === index ? null : index);
-  }, [selectedResult]);
+  setSelectedResult(selectedResult === index ? null : index);
+}, [selectedResult]);
   // Handle lock/unlock result
   const handleToggleLock = useCallback((index: number) => {
     const result = results[index];
@@ -86,7 +83,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
     } else {
       setSelectedResult(index);
       setShowLockDialog(true);
-    }
   }, [results, unlockResult]);
   // Handle lock confirmation
   const handleConfirmLock = useCallback(() => {
@@ -95,7 +91,6 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
       setLockNote('');
       setShowLockDialog(false);
       setSelectedResult(null);
-    }
   }, [selectedResult, lockNote, lockResult]);
   // Get sync status display
   const syncStatusDisplay = useMemo(() => {
@@ -106,13 +101,13 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
   }, [isSyncEnabled, isSyncing, syncCount]);
   // Get change analysis display
   const changeAnalysis = useMemo(() => {
-    const analysis = getChangeAnalysis();
-    if (!analysis) return null;
-    return {
-      type: analysis.changeType,
-      significance: Math.round(analysis.significance * 100),
-      affectedCount: analysis.affectedNodes.length + analysis.affectedEdges.length,
-    };
+  const analysis = getChangeAnalysis();
+  if (!analysis) return null;
+  return {
+  type: analysis.changeType,
+  significance: Math.round(analysis.significance * 100),
+  affectedCount: analysis.affectedNodes.length + analysis.affectedEdges.length,
+};
   }, [getChangeAnalysis]);
   // Handle manual refresh
   const handleManualRefresh = useCallback(async () => {
@@ -123,32 +118,32 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
     resetState();
   }, [resetState]);
   if (!visible) return null;
-  return ();
+  return;
     <div
       className={`real-time-preview-panel ${className}`}
       style={{
-        position: 'fixed',
-        right: '20px',
-        top: '20px',
-        width: '400px',
-        maxHeight: '80vh',
-        background: 'white',
-        border: '1px solid #e2e8f0',
-        borderRadius: '12px',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
-        zIndex: 1000,
-        overflow: 'hidden',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
-      }}
+  position: 'fixed',
+  right: '20px',
+  top: '20px',
+  width: '400px',
+  maxHeight: '80vh',
+  background: 'white',
+  border: '1px solid #e2e8f0',
+  borderRadius: '12px',
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+  zIndex: 1000,
+  overflow: 'hidden',
+  fontFamily: 'system-ui, -apple-system, sans-serif',
+}}
     >
       {/* Header */}
       <div
         style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid #e2e8f0',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-        }}
+  padding: '16px 20px',
+  borderBottom: '1px solid #e2e8f0',
+  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  color: 'white',
+}}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
@@ -163,17 +158,17 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
             <button
               onClick={onClose}
               style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                border: 'none',
-                borderRadius: '6px',
-                color: 'white',
-                width: '28px',
-                height: '28px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+  background: 'rgba(255, 255, 255, 0.2)',
+  border: 'none',
+  borderRadius: '6px',
+  color: 'white',
+  width: '28px',
+  height: '28px',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}}
             >
               ×
             </button>
@@ -183,10 +178,10 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
       {/* Controls */}
       <div
         style={{
-          padding: '12px 20px',
-          borderBottom: '1px solid #e2e8f0',
-          background: '#f8fafc',
-        }}
+  padding: '12px 20px',
+  borderBottom: '1px solid #e2e8f0',
+  background: '#f8fafc',
+}}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px' }}>
@@ -213,28 +208,28 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
             onClick={handleManualRefresh}
             disabled={isSyncing}
             style={{
-              padding: '6px 12px',
-              background: isSyncing ? '#e2e8f0' : '#3b82f6',
-              color: isSyncing ? '#9ca3af' : 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '12px',
-              cursor: isSyncing ? 'not-allowed' : 'pointer',
-            }}
+  padding: '6px 12px',
+  background: isSyncing ? '#e2e8f0' : '#3b82f6',
+  color: isSyncing ? '#9ca3af' : 'white',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '12px',
+  cursor: isSyncing ? 'not-allowed' : 'pointer',
+}}
           >
             {isSyncing ? 'Syncing...' : '🔄 Refresh'}
           </button>
           <button
             onClick={handleClearResults}
             style={{
-              padding: '6px 12px',
-              background: '#ef4444',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '12px',
-              cursor: 'pointer',
-            }}
+  padding: '6px 12px',
+  background: '#ef4444',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
           >
             🗑️ Clear
           </button>
@@ -242,14 +237,14 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
             <button
               onClick={() => setShowPerformanceDetails(!showPerformanceDetails)}
               style={{
-                padding: '6px 12px',
-                background: showPerformanceDetails ? '#8b5cf6' : '#e2e8f0',
-                color: showPerformanceDetails ? 'white' : '#374151',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '12px',
-                cursor: 'pointer',
-              }}
+  padding: '6px 12px',
+  background: showPerformanceDetails ? '#8b5cf6' : '#e2e8f0',
+  color: showPerformanceDetails ? 'white' : '#374151',
+  border: 'none',
+  borderRadius: '6px',
+  fontSize: '12px',
+  cursor: 'pointer',
+}}
             >
               📊 Stats
             </button>
@@ -260,11 +255,11 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
       {showPerformanceDetails && ()
         <div
           style={{
-            padding: '12px 20px',
-            borderBottom: '1px solid #e2e8f0',
-            background: '#fafafa',
-            fontSize: '12px',
-          }}
+  padding: '12px 20px',
+  borderBottom: '1px solid #e2e8f0',
+  background: '#fafafa',
+  fontSize: '12px',
+}}
         >
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             <div>
@@ -291,7 +286,7 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
           {changeAnalysis && ()
             <div style={{ marginTop: '8px', padding: '8px', background: 'white', borderRadius: '4px' }}>
               <strong>Last Change:</strong> {changeAnalysis.type} 
-              ({changeAnalysis.significance}% significance, )
+              ({changeAnalysis.significance}% significance)
               {changeAnalysis.affectedCount} items affected)
             </div>
           )}
@@ -300,22 +295,22 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
       {/* Results */}
       <div
         style={{
-          maxHeight: '400px',
-          overflowY: 'auto',
-          padding: '12px 0',
-        }}
+  maxHeight: '400px',
+  overflowY: 'auto',
+  padding: '12px 0',
+}}
       >
         {error && ()
           <div
             style={{
-              margin: '0 20px 12px',
-              padding: '12px',
-              background: '#fee2e2',
-              border: '1px solid #fecaca',
-              borderRadius: '8px',
-              color: '#dc2626',
-              fontSize: '14px',
-            }}
+  margin: '0 20px 12px',
+  padding: '12px',
+  background: '#fee2e2',
+  border: '1px solid #fecaca',
+  borderRadius: '8px',
+  color: '#dc2626',
+  fontSize: '14px',
+}}
           >
             <strong>Error:</strong> {error}
           </div>
@@ -323,10 +318,10 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
         {isLoading && ()
           <div
             style={{
-              padding: '20px',
-              textAlign: 'center',
-              color: '#6b7280',
-            }}
+  padding: '20px',
+  textAlign: 'center',
+  color: '#6b7280',
+}}
           >
             <div style={{ fontSize: '24px', marginBottom: '8px' }}>⏳</div>
             <div>Generating previews...</div>
@@ -335,10 +330,10 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
         {results.length === 0 && !isLoading && !error && ()
           <div
             style={{
-              padding: '40px 20px',
-              textAlign: 'center',
-              color: '#9ca3af',
-            }}
+  padding: '40px 20px',
+  textAlign: 'center',
+  color: '#9ca3af',
+}}
           >
             <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎯</div>
             <div style={{ fontSize: '16px', marginBottom: '4px' }}>No previews yet</div>
@@ -354,22 +349,23 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
               margin: '0 20px 8px',
               padding: '12px',
               background: selectedResult === index ? '#f0f9ff' : 'white',
-              border: `1px solid ${selectedResult === index ? '#0ea5e9' : '#e2e8f0'}`,}
-              borderRadius: '8px',
+              border: `1px solid ${selectedResult === index ? '#0ea5e9' : '#e2e8f0'}`}
+},
+  borderRadius: '8px',
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
+              transition: 'all 0.2s ease';
+  }}
             onClick={() => handleResultClick(index)}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ 
-                  background: '#e2e8f0', 
-                  padding: '2px 6px', 
-                  borderRadius: '4px', 
-                  fontSize: '11px',
-                  fontWeight: '600',
-                }}>
+                <span style={{
+  background: '#e2e8f0',
+  padding: '2px 6px',
+  borderRadius: '4px',
+  fontSize: '11px',
+  fontWeight: '600',
+}}>
                   Seed {result.seed}
                 </span>
                 {result.executionTimeMs && ()
@@ -390,13 +386,13 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
                     handleToggleLock(index);
                   }}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    opacity: 0.7,
-                    padding: '2px',
-                  }}
+  background: 'none',
+  border: 'none',
+  fontSize: '14px',
+  cursor: 'pointer',
+  opacity: 0.7,
+  padding: '2px',
+}}
                   title={result.locked ? 'Unlock result' : 'Lock result'}
                 >
                   {result.locked ? '🔓' : '🔒'}
@@ -419,11 +415,11 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
         {results.length > maxResults && ()
           <div
             style={{
-              padding: '12px 20px',
-              textAlign: 'center',
-              color: '#6b7280',
-              fontSize: '14px',
-            }}
+  padding: '12px 20px',
+  textAlign: 'center',
+  color: '#6b7280',
+  fontSize: '14px',
+}}
           >
             ... and {results.length - maxResults} more results
           </div>
@@ -433,23 +429,23 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
       {showLockDialog && ()
         <div
           style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1001,
-          }}
+  position: 'absolute',
+  inset: 0,
+  background: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1001,
+}}
         >
           <div
             style={{
-              background: 'white',
-              padding: '20px',
-              borderRadius: '12px',
-              width: '300px',
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)'
-            }}
+  background: 'white',
+  padding: '20px',
+  borderRadius: '12px',
+  width: '300px',
+  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+}}
           >
             <h4 style={{ margin: '0 0 12px', fontSize: '16px' }}>Lock Result</h4>
             <p style={{ margin: '0 0 12px', fontSize: '14px', color: '#6b7280' }}>
@@ -460,15 +456,15 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
               onChange={(e) => setLockNote(e.target.value)}
               placeholder="Optional note..."
               style={{
-                width: '100%',
-                height: '60px',
-                padding: '8px',
-                border: '1px solid #e2e8f0',
-                borderRadius: '6px',
-                fontSize: '14px',
-                resize: 'none',
-                marginBottom: '12px',
-              }}
+  width: '100%',
+  height: '60px',
+  padding: '8px',
+  border: '1px solid #e2e8f0',
+  borderRadius: '6px',
+  fontSize: '14px',
+  resize: 'none',
+  marginBottom: '12px',
+}}
             />
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
@@ -478,26 +474,26 @@ export const RealTimePreviewPanel: React.FC<RealTimePreviewPanelProps> = ({)
                   setSelectedResult(null);
                 }}
                 style={{
-                  padding: '8px 16px',
-                  background: '#e2e8f0',
-                  color: '#374151',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                }}
+  padding: '8px 16px',
+  background: '#e2e8f0',
+  color: '#374151',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+}}
               >
                 Cancel
               </button>
               <button
                 onClick={handleConfirmLock}
                 style={{
-                  padding: '8px 16px',
-                  background: '#3b82f6',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer',
-                }}
+  padding: '8px 16px',
+  background: '#3b82f6',
+  color: 'white',
+  border: 'none',
+  borderRadius: '6px',
+  cursor: 'pointer',
+}}
               >
                 Lock Result
               </button>

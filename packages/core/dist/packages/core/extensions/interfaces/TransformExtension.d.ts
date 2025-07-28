@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { BaseExtension, ExtensionContext, ExtensionValidationResult } from './ExtensionInterfaces';
 export interface TransformExtension extends BaseExtension {
     readonly extensionType: 'transform';
-    getTransformDefinitions(): TransformDefinition[];
+    getTransformDefinitions(): TransformDefinition;
     createTransformInstance(transformId: string, config: unknown): DataTransform;
     validateTransformConfig(transformId: string, config: unknown): ExtensionValidationResult;
     getTransformSchema(transformId: string): z.ZodSchema<any>;
@@ -14,7 +14,7 @@ export interface TransformExtension extends BaseExtension {
     onTransformExecuted?(transform: DataTransform, input: unknown, output: unknown): void;
     onTransformError?(transform: DataTransform, error: Error): void;
     supportsPipeline(): boolean;
-    createPipeline?(transforms: DataTransform[]): TransformPipeline;
+    createPipeline?(transforms: DataTransform): TransformPipeline;
 }
 export interface DataTransform {
     readonly id: string;
@@ -41,22 +41,10 @@ export declare enum TransformType {
     NUMBER = "number",
     BOOLEAN = "boolean",
     DATE = "date",
-    CUSTOM = "custom"
-}
-export interface TransformDefinition {
-    id: string;
-    name: string;
-    description: string;
-    version: string;
-    type: TransformType;
-    transformClass: new (id: string, config: any) => DataTransform;
-    inputSchema: z.ZodSchema<any>;
-    outputSchema: z.ZodSchema<any>;
-    configSchema: z.ZodSchema<any>;
-    ui: TransformUIConfiguration;
-    runtime: TransformRuntimeConfiguration;
-    pipeline: TransformPipelineConfiguration;
-    metadata: TransformMetadata;
+    CUSTOM = "custom",
+    export,
+    interface,
+    TransformDefinition
 }
 export interface TransformUIConfiguration {
     icon?: string;
@@ -120,14 +108,13 @@ export interface TransformPreviewProps {
 }
 export interface TransformHelpConfiguration {
     documentation?: string;
-    examples?: TransformExample[];
+    examples?: TransformExample;
     interactive?: boolean;
     tutorial?: string;
-    links?: Array<{
-        title: string;
-        url: string;
-        type: 'documentation' | 'example' | 'tutorial' | 'reference';
-    }>;
+    links?: Array<{}, title>;
+    string: any;
+    url: string;
+    type: 'documentation' | 'example' | 'tutorial' | 'reference';
 }
 export interface TransformRuntimeConfiguration {
     timeout?: number;
@@ -151,15 +138,15 @@ export interface TransformPerformanceConfiguration {
 }
 export interface TransformSecurityConfiguration {
     sandboxed?: boolean;
-    permissions?: string[];
+    permissions?: string;
     inputValidation?: {
         sanitize?: boolean;
-        allowedTypes?: string[];
+        allowedTypes?: string;
         maxSize?: number;
     };
     outputValidation?: {
         sanitize?: boolean;
-        allowedTypes?: string[];
+        allowedTypes?: string;
         maxSize?: number;
     };
 }
@@ -169,7 +156,7 @@ export interface TransformCachingConfiguration {
     ttl?: number;
     maxSize?: number;
     keyGenerator?: (input: any, config: any) => string;
-    invalidationRules?: string[];
+    invalidationRules?: string;
 }
 export interface TransformStreamingConfiguration {
     enabled?: boolean;
@@ -177,13 +164,13 @@ export interface TransformStreamingConfiguration {
     backpressureLimit?: number;
     parallelChunks?: number;
     streamProcessor?: (chunk: any) => any;
-    chunkCombiner?: (chunks: any[]) => any;
+    chunkCombiner?: (chunks: any) => any;
 }
 export interface TransformPipelineConfiguration {
     supportsComposition?: boolean;
     compositionType?: 'sequential' | 'parallel' | 'conditional';
-    inputCompatibility?: string[];
-    outputCompatibility?: string[];
+    inputCompatibility?: string;
+    outputCompatibility?: string;
     optimization?: {
         fuseable?: boolean;
         parallelizable?: boolean;
@@ -195,7 +182,7 @@ export interface TransformMetadata {
     license: string;
     repository?: string;
     documentation?: string;
-    examples?: TransformExample[];
+    examples?: TransformExample;
     performance?: {
         complexity: 'O(1)' | 'O(n)' | 'O(n^2)' | 'O(log n)' | 'custom';
         memoryUsage: 'constant' | 'linear' | 'quadratic' | 'custom';
@@ -207,9 +194,9 @@ export interface TransformMetadata {
         deprecated?: boolean;
         deprecationMessage?: string;
     };
-    categories?: string[];
-    tags?: string[];
-    keywords?: string[];
+    categories?: string;
+    tags?: string;
+    keywords?: string;
 }
 export interface TransformExample {
     name: string;
@@ -250,7 +237,7 @@ export interface TransformContext {
 export interface TransformPipeline {
     readonly id: string;
     readonly name: string;
-    readonly transforms: DataTransform[];
+    readonly transforms: DataTransform;
     execute(input: any, context: TransformContext): Promise<any> | any;
     validate(): ExtensionValidationResult;
     optimize(): TransformPipeline;
@@ -265,27 +252,27 @@ export interface PipelineMetadata {
     estimatedMemoryUsage: number;
     inputType: string;
     outputType: string;
-    compatibility: string[];
+    compatibility: string;
 }
 export interface TransformRegistry {
     register(definition: TransformDefinition): void;
     unregister(transformId: string): void;
     get(transformId: string): TransformDefinition | undefined;
-    getAll(): TransformDefinition[];
-    getByType(type: TransformType): TransformDefinition[];
-    getByCategory(category: string): TransformDefinition[];
-    search(query: string): TransformDefinition[];
-    filter(predicate: (definition: TransformDefinition) => boolean): TransformDefinition[];
-    getCompatible(inputType: string, outputType: string): TransformDefinition[];
+    getAll(): TransformDefinition;
+    getByType(type: TransformType): TransformDefinition;
+    getByCategory(category: string): TransformDefinition;
+    search(query: string): TransformDefinition;
+    filter(predicate: (definition: TransformDefinition) => boolean): TransformDefinition;
+    getCompatible(inputType: string, outputType: string): TransformDefinition;
     validate(definition: TransformDefinition): ExtensionValidationResult;
     on(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
     off(event: 'registered' | 'unregistered' | 'updated', listener: (definition: TransformDefinition) => void): void;
 }
 export interface TransformFactory {
     create(transformId: string, config: any): DataTransform;
-    createPipeline(transforms: DataTransform[]): TransformPipeline;
+    createPipeline(transforms: DataTransform): TransformPipeline;
     validateConfig(transformId: string, config: any): ExtensionValidationResult;
-    validatePipeline(transforms: DataTransform[]): ExtensionValidationResult;
+    validatePipeline(transforms: DataTransform): ExtensionValidationResult;
     getInputSchema(transformId: string): z.ZodSchema<any>;
     getOutputSchema(transformId: string): z.ZodSchema<any>;
     getConfigSchema(transformId: string): z.ZodSchema<any>;
@@ -317,7 +304,5 @@ export interface TransformExecutionMetrics {
 }
 export declare namespace TransformExtensionHelpers {
     function createTransformDefinition(config: Partial<TransformDefinition>): TransformDefinition;
-    function validateTransformDefinition(definition: TransformDefinition): ExtensionValidationResult;
-    function createTransformRegistry(): TransformRegistry;
 }
 //# sourceMappingURL=TransformExtension.d.ts.map

@@ -18,6 +18,7 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
+}
 export interface VerifyBackupRequest {
   backupId: string;
   configuration?: {
@@ -28,9 +29,11 @@ export interface VerifyBackupRequest {
     customParameters?: Record<string, any>;
     skipOnWarnings?: boolean;
     abortOnCriticalFailure?: boolean;
+}
   };
 }
 
+}
 export interface BackupVerificationResponse {
   success: boolean;
   data?: any;
@@ -39,9 +42,11 @@ export interface BackupVerificationResponse {
     timestamp: Date;
     requestId: string;
     processingTime: number;
+}
   };
 }
 
+}
 export interface SessionListQuery {
   status?: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
   backupId?: string;
@@ -50,13 +55,16 @@ export interface SessionListQuery {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 export interface StepConfigurationRequest {
   stepId: string;
   enabled: boolean;
   timeout?: number;
   retryAttempts?: number;
   parameters?: Record<string, any>;
+}
 }
 
 // ==========================================
@@ -147,7 +155,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
           sessionId,
           backupId: request.body.backupId,
           status: 'started'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId,
@@ -237,7 +245,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         data: {
           sessionId: request.params.sessionId,
           status: 'cancelled'
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `cancel_${Date.now()}`,
@@ -370,7 +378,7 @@ export const backupVerificationAPI: FastifyPluginAsync = async (fastify: Fastify
         data: {
           stepId: request.params.stepId,
           configuration: request.body
-        },
+  }
         metadata: {
           timestamp: new Date(),
           requestId: `config_${Date.now()}`,

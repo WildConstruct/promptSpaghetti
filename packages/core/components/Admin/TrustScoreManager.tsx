@@ -33,37 +33,34 @@ import {
 import type { TrustScore } from '../../types/TrustTypes';
 
 export interface UserTrustData {
-  userId: string;
+  userId: string;,
   userName: string;
-  email: string;
+  email: string;,
   userType: 'creator' | 'buyer' | 'both';
-  trustScore: TrustScore;
+  trustScore: TrustScore;,
   verificationStatus: {,
-    email: boolean;
-    phone: boolean;
-    identity: boolean;
-    professional: boolean;
-  };
-  accountStatus: 'active' | 'suspended' | 'under_review';
+  email: boolean;,
+  phone: boolean;
+  identity: boolean;,
+  professional: boolean;
+};
+  accountStatus: 'active' | 'suspended' | 'under_review';,
   lastActivity: Date;
-  joinDate: Date;
-  riskFlags: string[];
+  joinDate: Date;,
+  riskFlags: string;
 }
-
 export interface TrustScoreAdjustment {
-  userId: string;
+  userId: string;,
   adjustmentType: 'manual_override' | 'penalty' | 'bonus' | 'reset';
-  scoreChange: number;
+  scoreChange: number;,
   reason: string;
-  adminId: string;
+  adminId: string;,
   timestamp: Date;
   expiresAt?: Date;
 }
-
 export interface TrustScoreManagerProps {
   className?: string;
 }
-
 export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   className = ''
 }) => {
@@ -71,62 +68,61 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   const [selectedUser, setSelectedUser] = useState<UserTrustData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [adjustmentData, setAdjustmentData] = useState<Partial<TrustScoreAdjustment>>({)
-    adjustmentType: 'manual_override',
-    scoreChange: 0,
-    reason: '',
-  });
+  adjustmentType: 'manual_override',
+  scoreChange: 0,
+  reason: '',
+});
   const [filterType, setFilterType] = useState<string>('all');
   const [isLoading, setIsLoading] = useState(false);
   // Mock data - in real implementation, this would come from API
-  const [userTrustData, setUserTrustData] = useState<UserTrustData[]>([)
+  const [userTrustData, setUserTrustData] = useState<UserTrustData>([)
     {
-      userId: 'user-1',
-      userName: 'John Director',
-      email: 'john@example.com',
-      userType: 'creator',
-      trustScore: {,
-        score: 92,
-        grade: 'A',
-        status: 'excellent',
-        lastUpdated: new Date(),
-        version: '1.0',
-        confidence: 95,
-      },
-      verificationStatus: {,
-        email: true,
-        phone: true,
-        identity: true,
-        professional: true,
-      },
-      accountStatus: 'active',
+  userId: 'user-1',
+  userName: 'John Director',
+  email: 'john@example.com',
+  userType: 'creator',
+  trustScore: {,
+  score: 92,
+  grade: 'A',
+  status: 'excellent',
+  lastUpdated: new Date(),
+  version: '1.0',
+  confidence: 95,
+},
+  verificationStatus: {,
+  email: true,
+  phone: true,
+  identity: true,
+  professional: true,
+},
+  accountStatus: 'active',
       lastActivity: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       joinDate: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000),
-      riskFlags: [],
-    },
+      riskFlags: [];
+  }
     {
-      userId: 'user-2',
-      userName: 'Sarah Producer',
-      email: 'sarah@example.com',
-      userType: 'creator',
-      trustScore: {,
-        score: 45,
-        grade: 'D',
-        status: 'warning',
-        lastUpdated: new Date(),
-        version: '1.0',
-        confidence: 70,
-      },
-      verificationStatus: {,
-        email: true,
-        phone: false,
-        identity: false,
-        professional: true,
-      },
-      accountStatus: 'under_review',
+  userId: 'user-2',
+  userName: 'Sarah Producer',
+  email: 'sarah@example.com',
+  userType: 'creator',
+  trustScore: {,
+  score: 45,
+  grade: 'D',
+  status: 'warning',
+  lastUpdated: new Date(),
+  version: '1.0',
+  confidence: 70,
+},
+  verificationStatus: {,
+  email: true,
+  phone: false,
+  identity: false,
+  professional: true,
+},
+  accountStatus: 'under_review',
       lastActivity: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
       joinDate: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
       riskFlags: ['unusual_activity', 'low_verification']
-    }
   ]);
   const getTrustScoreColor = (score: number) => {
     if (score >= 90) return 'text-green-600';
@@ -136,63 +132,57 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
     return 'text-red-600';
   };
   const getStatusColor = (status: string) => {
-    switch (status) {
-    case 'excellent': return 'text-green-600 bg-green-100';
-    case 'good': return 'text-blue-600 bg-blue-100';
-    case 'fair': return 'text-yellow-600 bg-yellow-100';
-    case 'warning': return 'text-orange-600 bg-orange-100';
-    case 'critical': return 'text-red-600 bg-red-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'excellent': return 'text-green-600 bg-green-100';
+  case 'good': return 'text-blue-600 bg-blue-100';
+  case 'fair': return 'text-yellow-600 bg-yellow-100';
+  case 'warning': return 'text-orange-600 bg-orange-100';
+  case 'critical': return 'text-red-600 bg-red-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const getAccountStatusColor = (status: string) => {
-    switch (status) {
-    case 'active': return 'text-green-600 bg-green-100';
-    case 'suspended': return 'text-red-600 bg-red-100';
-    case 'under_review': return 'text-yellow-600 bg-yellow-100';
-    default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  switch (status) {
+  case 'active': return 'text-green-600 bg-green-100';
+  case 'suspended': return 'text-red-600 bg-red-100';
+  case 'under_review': return 'text-yellow-600 bg-yellow-100';
+  default: return 'text-gray-600 bg-gray-100';
+};
   const handleApplyAdjustment = async () => {
-    if (!selectedUser || !adjustmentData.reason?.trim() || !adjustmentData.scoreChange) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Update the user's trust score
-      const updatedUsers = userTrustData.map(user => {)
-        if (user.userId === selectedUser.userId) {
-          const newScore = Math.max(0, Math.min(100, user.trustScore.score + adjustmentData.scoreChange!));
-          return {
-            ...user,
-            trustScore: {,
-              ...user.trustScore,
-              score: newScore,
-              grade: getGradeFromScore(newScore),
-              status: getStatusFromScore(newScore),
-              lastUpdated: new Date(),
-            }
-          };
-        }
+  if (!selectedUser || !adjustmentData.reason?.trim() || !adjustmentData.scoreChange) {
+  alert('Please fill in all required fields.');
+  return;
+  setIsLoading(true);
+  try {
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Update the user's trust score
+  const updatedUsers = userTrustData.map(user => {)
+  if (user.userId === selectedUser.userId) {
+  const newScore = Math.max(0, Math.min(100, user.trustScore.score + adjustmentData.scoreChange!));
+  return {
+  ...user,
+  trustScore: {,
+  ...user.trustScore,
+  score: newScore,
+  grade: getGradeFromScore(newScore),
+  status: getStatusFromScore(newScore),
+  lastUpdated: new Date(),
+};
         return user;
       });
       setUserTrustData(updatedUsers);
       setSelectedUser(updatedUsers.find(u => u.userId === selectedUser.userId) || null);
       setIsEditing(false);
       setAdjustmentData({)
-        adjustmentType: 'manual_override',
-        scoreChange: 0,
-        reason: '',
-      });
+  adjustmentType: 'manual_override',
+  scoreChange: 0,
+  reason: '',
+});
     } catch (error) {
-      console.error('Error applying adjustment:', error);
-      alert('Error applying adjustment. Please try again.');
-    } finally {
+  console.error('Error applying adjustment:', error);
+  alert('Error applying adjustment. Please try again.');
+} finally {
       setIsLoading(false);
-    }
   };
   const getGradeFromScore = (score: number): TrustScore['grade'] => {
     if (score >= 97) return 'A+';
@@ -212,7 +202,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
     return 'critical';
   };
   const filteredUsers = userTrustData.filter(user => {)
-    const matchesSearch = searchTerm === '' || ;
+  const matchesSearch = searchTerm === '' || ;
       user.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.userId.toLowerCase().includes(searchTerm.toLowerCase());
@@ -308,7 +298,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
   );
   const renderUserDetails = () => {
     if (!selectedUser) {
-      return ();
+      return;
         <Card className="user-details-placeholder">
           <CardContent>
             <div className="placeholder-content">
@@ -318,8 +308,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
           </CardContent>
         </Card>
       );
-    }
-    return ();
+    return;
       <div className="user-details-panel">
         <Card className="user-profile">
           <CardHeader>
@@ -433,8 +422,8 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     value={adjustmentData.adjustmentType}
                     onChange={(e) => setAdjustmentData(prev => ({ )
                       ...prev, 
-                      adjustmentType: e.target.value as TrustScoreAdjustment['adjustmentType'],
-                    }))}
+                      adjustmentType: e.target.value as TrustScoreAdjustment['adjustmentType'];
+  }))}
                     className="form-select"
                   >
                     <option value="manual_override">Manual Override</option>
@@ -452,14 +441,14 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     value={adjustmentData.scoreChange || 0}
                     onChange={(e) => setAdjustmentData(prev => ({ )
                       ...prev, 
-                      scoreChange: parseInt(e.target.value) || 0,
-                    }))}
+                      scoreChange: parseInt(e.target.value) || 0;
+  }))}
                     className="form-input"
                   />
                   <span className="form-helper">
                     New score: {Math.max()
                       0,
-                      Math.min(100,)
+                      Math.min(100)
                         selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)
                         )))}
                   </span>
@@ -470,8 +459,8 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                     value={adjustmentData.reason || ''}
                     onChange={(e) => setAdjustmentData(prev => ({ )
                       ...prev, 
-                      reason: e.target.value,
-                    }))}
+                      reason: e.target.value;
+  }))}
                     placeholder="Provide a detailed reason for this adjustment..."
                     rows={3}
                     className="form-textarea"
@@ -488,14 +477,14 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
                   <div className="preview-item">
                     <span>New Score:</span>
                     <span className={getTrustScoreColor()
-                      Math.max(0,)
-                        Math.min(100,)
+                      Math.max(0)
+                        Math.min(100)
                           selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)
                           ))))}>
                       {Math.max(0, Math.min(100, selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)))} 
                       ({getGradeFromScore()
-                        Math.max(0,)
-                          Math.min(100,)
+                        Math.max(0)
+                          Math.min(100)
                             selectedUser.trustScore.score + (adjustmentData.scoreChange || 0)
                             ))))})
                     </span>
@@ -536,7 +525,7 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       </div>
     );
   };
-  return ();
+  return;
     <div className={`trust-score-manager ${className}`}>}
       <div className="manager-layout">
         <div className="users-section">
@@ -548,348 +537,277 @@ export const TrustScoreManager: React.FC<TrustScoreManagerProps> = ({)
       </div>
       <style>{`
         .trust-score-manager {
-          max-width: 1400px;
-          margin: 0 auto;
+          max-width: 1400px;,
+  margin: 0 auto;
           padding: 1.5rem;
-        }
         .manager-layout {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1.5rem;
         .users-section {
           display: flex;
           flex-direction: column;
-        }
         .details-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .list-header {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .list-controls {
-          display: flex;
-          gap: 0.75rem;
-        }
+          display: flex;,
+  gap: 0.75rem;
         .search-bar {
-          position: relative;
-          flex: 1;
-        }
+          position: relative;,
+  flex: 1;
         .search-bar .lucide {
-          position: absolute;
-          left: 0.75rem;
-          top: 50%;
-          transform: translateY(-50%);
+          position: absolute;,
+  left: 0.75rem;
+          top: 50%;,
+  transform: translateY(-50%);
           z-index: 1;
-        }
         .search-input {
-          width: 100%;
-          padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+          width: 100%;,
+  padding: 0.5rem 0.75rem 0.5rem 2.25rem;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .search-input:focus {
-          outline: none;
+        .search-input:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .filter-select {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 0.875rem;
-          background: white;
+          font-size: 0.875rem;,
+  background: white;
           min-width: 150px;
-        }
         .users-list {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
+          flex-direction: column;,
+  gap: 0.75rem;
           max-height: 600px;
           overflow-y: auto;
-        }
         .user-item {
-          padding: 1rem;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          cursor: pointer;
+          padding: 1rem;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  cursor: pointer;
           transition: all 0.2s ease;
-        }
         .user-item:hover {
-          border-color: #3b82f6;
-          background: #f8fafc;
-        }
+          border-color: #3b82f6;,
+  background: #f8fafc;
         .user-item.selected {
-          border-color: #3b82f6;
-          background: #eff6ff;
-        }
+          border-color: #3b82f6;,
+  background: #eff6ff;
         .user-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           margin-bottom: 0.75rem;
-        }
         .user-details {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex-direction: column;,
+  gap: 0.25rem;
         .user-name {
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .user-email {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .user-badges {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .user-metrics {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .trust-score-display {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .score-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .score-value {
           font-weight: 600;
-        }
         .score-grade {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .verification-indicators {
-          display: flex;
-          gap: 0.25rem;
-        }
+          display: flex;,
+  gap: 0.25rem;
         .risk-flags {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-top: 0.5rem;
-          font-size: 0.875rem;
-          color: #dc2626;
-        }
+          font-size: 0.875rem;,
+  color: #dc2626;
         .user-details-placeholder {
-          height: 400px;
-          display: flex;
+          height: 400px;,
+  display: flex;
           align-items: center;
           justify-content: center;
-        }
         .placeholder-content {
-          text-align: center;
-          color: #6b7280;
-        }
+          text-align: center;,
+  color: #6b7280;
         .user-details-panel {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .profile-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .profile-info h3 {
           font-size: 1.25rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.25rem;
-        }
         .profile-info p {
           color: #6b7280;
           margin-bottom: 0.5rem;
-        }
         .trust-score-circle {
           text-align: center;
-        }
         .score-display {
           display: flex;
           align-items: baseline;
-          justify-content: center;
-          gap: 0.25rem;
-        }
+          justify-content: center;,
+  gap: 0.25rem;
         .score-number {
           font-size: 2rem;
           font-weight: 700;
-        }
         .score-max {
-          font-size: 1rem;
-          color: #9ca3af;
-        }
+          font-size: 1rem;,
+  color: #9ca3af;
         .score-grade {
           font-size: 1rem;
-          font-weight: 600;
-          color: #6b7280;
+          font-weight: 600;,
+  color: #6b7280;
           margin-top: 0.25rem;
-        }
         .profile-details {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
+          flex-direction: column;,
+  gap: 0.5rem;
           margin-bottom: 1.5rem;
-        }
         .detail-item {
           display: flex;
-          justify-content: space-between;
-          padding: 0.5rem 0;
+          justify-content: space-between;,
+  padding: 0.5rem 0;
           border-bottom: 1px solid #f3f4f6;
-        }
         .detail-label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .detail-value {
           color: #1f2937;
-        }
         .verification-status h4 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.75rem;
-        }
         .verification-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 0.5rem;
-        }
         .verification-item {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           padding: 0.5rem;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
         .verification-item.verified {
-          background: #d1fae5;
-          color: #065f46;
-        }
+          background: #d1fae5;,
+  color: #065f46;
         .verification-item.unverified {
-          background: #fee2e2;
-          color: #991b1b;
-        }
+          background: #fee2e2;,
+  color: #991b1b;
         .risk-section h4 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 1.5rem 0 0.75rem 0;
-        }
         .risk-flags-list {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .adjustment-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .adjustment-form {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .form-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .form-group label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .form-select, .form-input, .form-textarea {
-          padding: 0.5rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .form-select:focus, .form-input:focus, .form-textarea:focus {
-          outline: none;
+        .form-select:focus, .form-input:focus, .form-textarea:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .form-helper {
-          font-size: 0.75rem;
-          color: #6b7280;
-        }
+          font-size: 0.75rem;,
+  color: #6b7280;
         .adjustment-preview {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 6px;
-          padding: 1rem;
-        }
+          background: #f9fafb;,
+  border: 1px solid #e5e7eb;
+          border-radius: 6px;,
+  padding: 1rem;
         .adjustment-preview h4 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin-bottom: 0.75rem;
-        }
         .preview-item {
           display: flex;
           justify-content: space-between;
           margin-bottom: 0.5rem;
           font-size: 0.875rem;
-        }
         .adjustment-actions {
           display: flex;
           justify-content: flex-end;
-        }
         .apply-button {
           background: #059669;
           border-color: #059669;
-        }
-        .apply-button:hover:not(:disabled) {
-          background: #047857;
+        .apply-button:hover:not(:disabled) {,
+  background: #047857;
           border-color: #047857;
-        }
         .adjustment-info {
-          text-align: center;
-          padding: 2rem;
-        }
+          text-align: center;,
+  padding: 2rem;
         .info-message {
           display: flex;
-          align-items: flex-start;
-          gap: 0.75rem;
-          text-align: left;
-          background: #eff6ff;
+          align-items: flex-start;,
+  gap: 0.75rem;
+          text-align: left;,
+  background: #eff6ff;
           border: 1px solid #bfdbfe;
-          border-radius: 6px;
-          padding: 1rem;
-        }
+          border-radius: 6px;,
+  padding: 1rem;
         @media (max-width: 1200px) {
           .manager-layout {
             grid-template-columns: 1fr;
-          }
-        }
         @media (max-width: 768px) {
           .list-controls {
             flex-direction: column;
-          }
           .search-bar {
             order: 2;
-          }
           .profile-header {
-            flex-direction: column;
-            gap: 1rem;
+            flex-direction: column;,
+  gap: 1rem;
             align-items: stretch;
-          }
           .verification-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );

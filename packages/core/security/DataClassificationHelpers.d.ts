@@ -23,6 +23,7 @@ export declare const SENSITIVITY_LEVEL_MAPPING: Record<DataSensitivityLevel, Cla
 /**
  * Enhanced data element with sensitivity information
  */
+
 export interface EnhancedDataElement extends DataElement {
     sensitivityLevel?: DataSensitivityLevel;
     handlingRequirements?: DataHandlingRequirements;
@@ -31,10 +32,10 @@ export interface EnhancedDataElement extends DataElement {
         color: string;
         displayFormat: string;
     };
-}
 /**
  * Security policy enforcement result
  */
+
 export interface SecurityPolicyEnforcementResult {
     compliant: boolean;
     violations: string[];
@@ -46,10 +47,10 @@ export interface SecurityPolicyEnforcementResult {
         retention: string;
     };
     riskScore: number;
-}
 /**
  * Data flow security assessment
  */
+
 export interface DataFlowSecurityAssessment {
     sourceLevel: DataSensitivityLevel;
     targetLevel: DataSensitivityLevel;
@@ -57,7 +58,6 @@ export interface DataFlowSecurityAssessment {
     requiredControls: string[];
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     complianceImpact: string[];
-}
 /**
  * Comprehensive data classification helper utilities
  */
@@ -98,8 +98,7 @@ export declare class DataClassificationHelpers {
     /**
      * Assess security for data transfer between systems
      */
-    static assessDataFlowSecurity()
-      sourceLevel: DataSensitivityLevel,
+    static assessDataFlowSecurity(sourceLevel: DataSensitivityLevel,)
       targetLevel: DataSensitivityLevel,
       transferMethod: string,
       encryptionInPlace: boolean,
@@ -131,7 +130,6 @@ export declare class DataClassificationHelpers {
         errors: string[];
         sanitizedValue?: any;
     };
-}
 /**
  * Integration adapter for existing DataClassifier
  */
@@ -147,14 +145,13 @@ export declare class DataClassifierIntegration {
     /**
      * Create DataElement from enhanced data with sensitivity
      */
-    static createDataElementFromSensitive()
-      id: string,
+    static createDataElementFromSensitive(id: string,)
       fieldName: string,
       value: any,
       sensitivityLevel: DataSensitivityLevel,
       source?: string
     ): EnhancedDataElement;
-}
+
 export { type EnhancedDataElement, type SecurityPolicyEnforcementResult, type DataFlowSecurityAssessment };
 export default DataClassificationHelpers;
 //# sourceMappingURL=DataClassificationHelpers.d.ts.map

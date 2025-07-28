@@ -20,7 +20,8 @@ import type { VFXScene } from '../components/Visualization/VFXPipelineVisualizer
 
 // Mock UI components
 jest.mock('../components/ui/Card', () => ({)
-  Card: ({ children, className }: unknown) => <div className={`card ${className || ''}`}>{children}</div>,}
+  Card: ({ children, className }: unknown) => <div className={`card ${className || ''}`}>{children}</div>}
+},
   CardContent: ({ children }: unknown) => <div className="card-content">{children}</div>,
   CardHeader: ({ children }: unknown) => <div className="card-header">{children}</div>,
   CardTitle: ({ children, className }: unknown) => <div className={`card-title ${className || ''}`}>{children}</div>}
@@ -64,9 +65,10 @@ jest.mock('../components/ui/Select', () => ({)
   SelectTrigger: (),
     { children,
       className }: unknown
-  ) => <div className={`select-trigger ${className || ''}`}>{children}</div>,}
-  SelectValue: () => <div className="select-value">Selected Value</div>,
-}));
+  ) => <div className={`select-trigger ${className || ''}`}>{children}</div>}
+},
+  SelectValue: () => <div className="select-value">Selected Value</div>;
+  }));
 jest.mock('../components/ui/Switch', () => ({)
   Switch: ({ checked, onCheckedChange, id }: unknown) => ()
     <input 
@@ -121,7 +123,6 @@ describe('VFX Visualization Components', () => {
       render(<VFXPipelineVisualizer scene={medievalCourtyard} />);
       if (medievalCourtyard.accuracy.violations.length > 0) {
         expect(screen.getByText(/Accuracy Violations/)).toBeInTheDocument();
-      }
     });
     it('should render character crowd visualization', () => {
       render(<VFXPipelineVisualizer scene={medievalCourtyard} />);
@@ -146,7 +147,7 @@ describe('VFX Visualization Components', () => {
       expect(screen.getByText('Viking Village Settlement')).toBeInTheDocument();
     });
     it('should handle real-time updates', () => {
-      const mockOnUpdate = jest.fn<unknown[], unknown>();
+      const mockOnUpdate = jest.fn<unknown, unknown>();
       render();
         <VFXPipelineVisualizer 
           scene={medievalCourtyard} 
@@ -290,7 +291,7 @@ describe('VFX Visualization Components', () => {
     });
     it('should maintain historical accuracy across all scenes', () => {
       sampleScenes.forEach(scene => {)
-        expect(scene.accuracy.overall).toBeGreaterThanOrEqual(80);
+  expect(scene.accuracy.overall).toBeGreaterThanOrEqual(80);
         expect(scene.accuracy.architecture).toBeGreaterThanOrEqual(80);
         expect(scene.accuracy.clothing).toBeGreaterThanOrEqual(80);
         expect(scene.accuracy.technology).toBeGreaterThanOrEqual(80);
@@ -300,8 +301,8 @@ describe('VFX Visualization Components', () => {
     });
     it('should validate asset authenticity in all scenes', () => {
       sampleScenes.forEach(scene => {)
-        scene.assets.forEach(asset => {)
-          expect(asset.accuracy).toBeGreaterThanOrEqual(80);
+  scene.assets.forEach(asset => {)
+  expect(asset.accuracy).toBeGreaterThanOrEqual(80);
           expect(asset.materials.length).toBeGreaterThan(0);
           expect(asset.lod).toBeGreaterThanOrEqual(1);
           expect(asset.lod).toBeLessThanOrEqual(5);
@@ -310,13 +311,13 @@ describe('VFX Visualization Components', () => {
     });
     it('should ensure character diversity in sample scenes', () => {
       sampleScenes.forEach(scene => {)
-        expect(scene.characters.length).toBeGreaterThan(0);
+  expect(scene.characters.length).toBeGreaterThan(0);
         const characterTypes = [...new Set(scene.characters.map(c => c.type))];
         const cultures = [...new Set(scene.characters.map(c => c.culture))];
         expect(characterTypes.length).toBeGreaterThan(0);
         expect(cultures.length).toBeGreaterThan(0);
         scene.characters.forEach(character => {)
-          expect(character.accuracy).toBeGreaterThanOrEqual(80);
+  expect(character.accuracy).toBeGreaterThanOrEqual(80);
           expect(character.clothing.length).toBeGreaterThan(0);
         });
       });
@@ -328,12 +329,13 @@ describe('VFX Visualization Components', () => {
         ...medievalCourtyard,
         id: 'large-scene-test',
         characters: Array(50).fill(null).map((_, i) => ({)
-          ...medievalCourtyard.characters[0],
-          id: `char-${i}`,}
-          position: { x: (i % 10) * 5, y: 0, z: Math.floor(i / 10) * 5 }
+  ...medievalCourtyard.characters[0],
+          id: `char-${i}`}
+},
+  position: { x: (i % 10) * 5, y: 0, z: Math.floor(i / 10) * 5 }
         })),
         assets: Array(20).fill(null).map((_, i) => ({)
-          ...medievalCourtyard.assets[0],
+  ...medievalCourtyard.assets[0],
           id: `asset-${i}`}
         }))
       };
@@ -351,7 +353,6 @@ describe('VFX Visualization Components', () => {
         await act(async () => {
           await new Promise(resolve => setTimeout(resolve, 10));
         });
-      }
       // Should render final scene without errors
       expect(screen.getByText(sampleScenes[4 % sampleScenes.length].name)).toBeInTheDocument();
     });
@@ -367,7 +368,7 @@ describe('Wild Construct VFX Integration', () => {
     expect(medievalCourtyard.characters).toBeDefined();
     expect(medievalCourtyard.characters.length).toBeGreaterThan(0);
     medievalCourtyard.characters.forEach(character => {)
-      expect(character.type).toMatch(/^(hero|crowd|background)$/);
+  expect(character.type).toMatch(/^(hero|crowd|background)$/);
       expect(character.culture).toBeDefined();
       expect(character.period).toBeDefined();
       expect(character.clothing).toBeInstanceOf(Array);
@@ -392,10 +393,10 @@ describe('Wild Construct VFX Integration', () => {
   it('should maintain VFX pipeline compatibility', () => {
     // All assets should have proper material definitions for VFX
     medievalCourtyard.assets.forEach(asset => {)
-      expect(asset.materials).toBeInstanceOf(Array);
+  expect(asset.materials).toBeInstanceOf(Array);
       expect(asset.materials.length).toBeGreaterThan(0);
       asset.materials.forEach(material => {)
-        expect(material.type).toMatch(/^(diffuse|roughness|metallic|normal|displacement)$/);
+  expect(material.type).toMatch(/^(diffuse|roughness|metallic|normal|displacement)$/);
         expect(material.value).toBeGreaterThanOrEqual(0);
         expect(material.value).toBeLessThanOrEqual(1);
         expect(material.historicallyAccurate).toBeDefined();

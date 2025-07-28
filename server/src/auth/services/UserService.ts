@@ -28,6 +28,7 @@ export class UserService implements IUserService {
   }
 
   async createUser(data: RegisterRequest): Promise<User> {
+
     // Validate password strength with breach detection
     await this.validatePassword(data.password, undefined, false);
     
@@ -94,6 +95,7 @@ export class UserService implements IUserService {
   }
 
   async getUserById(id: string): Promise<User | null> {
+
     const result = await this.db.query(`
       SELECT * FROM users WHERE id = $1 AND status != 'deleted'
     `, [id]);
@@ -106,6 +108,7 @@ export class UserService implements IUserService {
   }
 
   async getUserByEmail(email: string): Promise<User | null> {
+
     const result = await this.db.query(`
       SELECT * FROM users WHERE LOWER(email) = LOWER($1) AND status != 'deleted'
     `, [email]);
@@ -118,6 +121,7 @@ export class UserService implements IUserService {
   }
 
   async updateUser(id: string, data: Partial<User>): Promise<User> {
+
     const allowedFields = [
       'email', 'email_verified', 'last_login_at', 'failed_login_attempts',
       'account_locked', 'locked_until', 'password_reset_token',
@@ -175,6 +179,7 @@ export class UserService implements IUserService {
   }
 
   async deleteUser(id: string): Promise<void> {
+
     // Soft delete - mark as deleted and clear sensitive data
     await this.db.query(`
       UPDATE users 
@@ -199,6 +204,7 @@ export class UserService implements IUserService {
   }
 
   async verifyPassword(user: User, password: string): Promise<boolean> {
+
     if (!user.hashedPassword) {
       return false;
     }
@@ -229,6 +235,7 @@ export class UserService implements IUserService {
   }
 
   async hashPassword(password: string): Promise<string> {
+
     try {
       // Use Argon2id with secure parameters (OWASP recommended)
       return await argon2.hash(password, {
@@ -243,6 +250,7 @@ export class UserService implements IUserService {
   }
 
   async requestPasswordReset(email: string): Promise<string> {
+
     const user = await this.getUserByEmail(email);
     if (!user) {
       // Don't reveal if email exists - still return token for security
@@ -272,6 +280,7 @@ export class UserService implements IUserService {
   }
 
   async resetPassword(token: string, newPassword: string): Promise<User> {
+
     // Validate new password with breach detection
     await this.validatePassword(newPassword, undefined, false);
 
@@ -311,6 +320,7 @@ export class UserService implements IUserService {
   }
 
   async verifyEmail(token: string): Promise<User> {
+
     const user = await this.db.query(`
       SELECT * FROM users 
       WHERE email_verification_token = $1 
@@ -342,6 +352,7 @@ export class UserService implements IUserService {
   }
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
+
     const user = await this.getUserById(userId);
     if (!user) {
       throw new Error('User not found');
@@ -373,6 +384,7 @@ export class UserService implements IUserService {
   }
 
   private async handleFailedLogin(user: User): Promise<void> {
+
     const failedAttempts = user.failedLoginAttempts + 1;
     const maxAttempts = this.config.security.maxFailedLoginAttempts;
 
@@ -406,6 +418,7 @@ export class UserService implements IUserService {
   }
 
   private async validatePassword(password: string, userId?: string, skipBreachCheck: boolean = false): Promise<void> {
+
     const rules = PASSWORD_RULES;
 
     if (password.length < rules.minLength) {
@@ -451,7 +464,7 @@ export class UserService implements IUserService {
               occurrences: breachResult.occurrenceCount,
               source: breachResult.source,
               responseTime: breachResult.responseTime
-            },
+  }
             severity: 'critical'
           });
 
@@ -472,7 +485,7 @@ export class UserService implements IUserService {
               responseTime: breachResult.responseTime,
               cacheHit: breachResult.cacheHit,
               source: breachResult.source
-            },
+  }
             severity: 'info'
           });
         }
@@ -492,7 +505,7 @@ export class UserService implements IUserService {
             details: {
               error: error.message,
               service: 'PasswordBreachService'
-            },
+  }
             severity: 'warning'
           });
         }

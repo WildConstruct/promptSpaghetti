@@ -26,6 +26,7 @@ import { EnhancedToggleEvaluationService } from './EnhancedToggleEvaluationServi
 import { AuditService } from '../auth/services/AuditService';
 
 // Real-time dependency enforcement interfaces
+}
 export interface DependencyEnforcement {
   toggleId: string;
   operation: ToggleOperation;
@@ -34,7 +35,9 @@ export interface DependencyEnforcement {
   actorId: string;
   context: EnforcementContext;
 }
+}
 
+}
 export interface ToggleOperation {
   type: OperationType;
   targetToggleId: string;
@@ -42,6 +45,7 @@ export interface ToggleOperation {
   newValue?: unknown;
   reason: string;
   metadata?: unknown;
+}
 }
 
 export enum OperationType {
@@ -54,6 +58,7 @@ export enum OperationType {
   DELETE = 'delete'
 }
 
+}
 export interface EnforcementResult {
   allowed: boolean;
   blockers: DependencyBlocker[];
@@ -64,7 +69,9 @@ export interface EnforcementResult {
   recommendation: EnforcementRecommendation;
   rollbackPlan?: RollbackPlan;
 }
+}
 
+}
 export interface DependencyBlocker {
   type: DependencyType;
   sourceToggleId: string;
@@ -75,6 +82,7 @@ export interface DependencyBlocker {
   overridable: boolean;
   overrideRequiredRoles: string[];
 }
+}
 
 export enum BlockerSeverity {
   INFO = 'info',
@@ -83,6 +91,7 @@ export enum BlockerSeverity {
   CRITICAL = 'critical'
 }
 
+}
 export interface DependencyWarning {
   type: WarningType;
   toggleId: string;
@@ -90,6 +99,7 @@ export interface DependencyWarning {
   recommendation: string;
   impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
   canProceedWithWarning: boolean;
+}
 }
 
 export enum WarningType {
@@ -101,6 +111,7 @@ export enum WarningType {
   TIMING_CONCERN = 'timing_concern'
 }
 
+}
 export interface CascadeAction {
   targetToggleId: string;
   requiredAction: OperationType;
@@ -111,7 +122,9 @@ export interface CascadeAction {
   dependsOn?: string[]; // Other cascade actions this depends on
   rollbackAction?: OperationType;
 }
+}
 
+}
 export interface OperationImpact {
   directlyAffectedToggles: string[];
   indirectlyAffectedToggles: string[];
@@ -122,7 +135,9 @@ export interface OperationImpact {
   technicalComplexity: 'simple' | 'moderate' | 'complex' | 'critical';
   rolloutDuration: number; // estimated minutes for safe rollout
 }
+}
 
+}
 export interface EnforcementRecommendation {
   action: RecommendationAction;
   reason: string;
@@ -130,6 +145,7 @@ export interface EnforcementRecommendation {
   prerequisites?: string[];
   timeline?: string;
   riskMitigation?: string[];
+}
 }
 
 export enum RecommendationAction {
@@ -141,6 +157,7 @@ export enum RecommendationAction {
   ALTERNATIVE_APPROACH = 'alternative_approach'
 }
 
+}
 export interface RollbackPlan {
   id: string;
   steps: RollbackStep[];
@@ -149,7 +166,9 @@ export interface RollbackPlan {
   automationSupported: boolean;
   validationChecks: string[];
 }
+}
 
+}
 export interface RollbackStep {
   stepNumber: number;
   action: OperationType;
@@ -159,7 +178,9 @@ export interface RollbackStep {
   dependencies: number[]; // step numbers this depends on
   validationRequired: boolean;
 }
+}
 
+}
 export interface EnforcementContext {
   requestSource: RequestSource;
   urgencyLevel: UrgencyLevel;
@@ -168,6 +189,7 @@ export interface EnforcementContext {
   testingPhase?: TestingPhase;
   rolloutStrategy?: RolloutStrategy;
   notifications?: NotificationPreference[];
+}
 }
 
 export enum RequestSource {
@@ -186,6 +208,7 @@ export enum UrgencyLevel {
   EMERGENCY = 'emergency'
 }
 
+}
 export interface Approval {
   id: string;
   approverRole: string;
@@ -194,7 +217,9 @@ export interface Approval {
   reason: string;
   conditions?: string[];
 }
+}
 
+}
 export interface DependencyOverride {
   id: string;
   overrideType: OverrideType;
@@ -203,6 +228,7 @@ export interface DependencyOverride {
   validUntil?: Date;
   reason: string;
   riskAcceptance: string;
+}
 }
 
 export enum OverrideType {
@@ -228,11 +254,13 @@ export enum RolloutStrategy {
   BLUE_GREEN = 'blue_green'
 }
 
+}
 export interface NotificationPreference {
   channel: NotificationChannel;
   recipients: string[];
   eventTypes: NotificationEvent[];
   urgencyThreshold: UrgencyLevel;
+}
 }
 
 export enum NotificationChannel {
@@ -252,6 +280,7 @@ export enum NotificationEvent {
 }
 
 // Configuration and service interfaces
+}
 export interface DependencyIntegrationConfig {
   enforcement: {
     enableRealTimeValidation: boolean;
@@ -260,6 +289,7 @@ export interface DependencyIntegrationConfig {
     maxCascadeDepth: number;
     defaultBlockerSeverity: BlockerSeverity;
     requireApprovalThreshold: number; // risk score threshold
+}
   };
   
   notifications: {
@@ -293,11 +323,13 @@ export interface DependencyIntegrationConfig {
   };
 }
 
+}
 export interface EscalationRule {
   condition: string; // JSON logic expression
   escalateTo: string[];
   escalationDelay: number; // minutes
   maxEscalations: number;
+}
 }
 
 /**
@@ -349,6 +381,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     context: EnforcementContext,
     actorId: string
   ): Promise<EnforcementResult> {
+
     const startTime = Date.now();
 
     try {
@@ -484,6 +517,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     context: EnforcementContext,
     actorId: string
   ): Promise<OperationExecutionResult> {
+
     if (!enforcementResult.allowed) {
       throw new Error('Operation not allowed by dependency enforcement');
     }
@@ -568,6 +602,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     operation: ToggleOperation,
     _____context: EnforcementContext = { requestSource: RequestSource.ADMIN_DASHBOARD, urgencyLevel: UrgencyLevel.NORMAL }
   ): Promise<ImpactPreview> {
+
     try {
       // Get dependency analysis
       
@@ -625,27 +660,27 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
         maxCascadeDepth: 3,
         defaultBlockerSeverity: BlockerSeverity.ERROR,
         requireApprovalThreshold: 0.7
-      },
+  }
       notifications: {
         enableNotifications: true,
         defaultChannels: [NotificationChannel.EMAIL, NotificationChannel.DASHBOARD_ALERT],
         escalationRules: [],
         notificationTimeout: 30
-      },
+  }
       safety: {
         enableSafetyChecks: true,
         maxSimultaneousOperations: 10,
         operationTimeout: 60,
         enableEmergencyStops: true,
         requireDoubleConfirmation: false
-      },
+  }
       performance: {
         enableCaching: true,
         cacheDuration: 15,
         enableBulkOperations: true,
         maxBulkOperationSize: 50,
         enableAsyncProcessing: true
-      },
+  }
       integration: {
         enableAuditLogging: true,
         enableMetricsCollection: true,
@@ -667,6 +702,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     operation: ToggleOperation,
     context: EnforcementContext
   ): Promise<{ blockers: DependencyBlocker[]; warnings: DependencyWarning[] }> {
+
     const blockers: DependencyBlocker[] = [];
     const warnings: DependencyWarning[] = [];
 
@@ -720,6 +756,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     operation: ToggleOperation,
     _____context: EnforcementContext
   ): Promise<OperationImpact> {
+
     try {
       const impactAnalysis = await this.dependencyService.getImpactAnalysis(
         operation.targetToggleId,
@@ -745,6 +782,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     operation: ToggleOperation,
     dependencyValidation: { blockers: DependencyBlocker[]; warnings: DependencyWarning[] }
   ): Promise<CascadeAction[]> {
+
     const cascadeActions: CascadeAction[] = [];
 
     // For each dependency requirement, create cascade actions
@@ -769,6 +807,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     operation: ToggleOperation,
     cascadeActions: CascadeAction[]
   ): Promise<RollbackPlan> {
+
     const steps: RollbackStep[] = [];
     let stepNumber = 1;
 
@@ -969,6 +1008,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     _____context: EnforcementContext,
     _____actorId: string
   ): Promise<void> {
+
     // Implementation would send notifications based on configuration
   }
 
@@ -978,6 +1018,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
     context: EnforcementContext,
     actorId: string
   ): Promise<void> {
+
     await this.auditService.logAction({
       action: `dependency_enforcement_${operation.type}`,
       userId: actorId,
@@ -991,9 +1032,9 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
           blockersCount: result.blockers.length,
           warningsCount: result.warnings.length,
           cascadeActionsCount: result.cascadeActions.length
-        },
+  }
         context
-      },
+  }
       severity: result.allowed ? 'info' : 'warning'
     });
   }
@@ -1071,6 +1112,7 @@ export class ToggleDependencyIntegrationService extends EventEmitter {
 }
 
 // Supporting interfaces for completeness
+}
 export interface OperationExecutionResult {
   executionId: string;
   success: boolean;
@@ -1080,14 +1122,18 @@ export interface OperationExecutionResult {
   executionTime: number;
   rollbackPlanId?: string;
 }
+}
 
+}
 export interface CascadeExecutionResult {
   cascadeAction: CascadeAction;
   success: boolean;
   result: Record<string, unknown>;
   executionTime: number;
 }
+}
 
+}
 export interface ImpactPreview {
   operation: ToggleOperation;
   directImpact: unknown[];
@@ -1099,6 +1145,7 @@ export interface ImpactPreview {
   estimatedExecutionTime: number;
   recommendedApprovals: string[];
   safetyChecks: string[];
+}
 }
 
 export default ToggleDependencyIntegrationService;

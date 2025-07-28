@@ -9,6 +9,7 @@
 import { logger } from '../utils/logger';
 import { AnalyticsCollector } from './AnalyticsCollector';
 
+}
 export interface TokenInfluenceResult {
   originalPrompt: string;
   tokens: TokenInfluence[];
@@ -22,9 +23,11 @@ export interface TokenInfluenceResult {
     analysisTime: number;
     tokenCount: number;
     perturbationCount?: number;
+}
   };
 }
 
+}
 export interface TokenInfluence {
   token: string;
   position: number;
@@ -36,9 +39,11 @@ export interface TokenInfluence {
   contextWindow?: {
     before: string[];
     after: string[];
+}
   };
 }
 
+}
 export interface LimeAnalysisOptions {
   numSamples: number;           // Number of perturbations for LIME
   perturbationStrategy: 'mask' | 'replace' | 'reorder';
@@ -47,7 +52,9 @@ export interface LimeAnalysisOptions {
   maxFeatures: number;          // Max features in explanation
   regularization: number;       // Ridge regression alpha
 }
+}
 
+}
 export interface SaliencyAnalysisOptions {
   gradientMethod: 'vanilla' | 'integrated' | 'smoothgrad';
   baselineStrategy: 'zero' | 'random' | 'mask';
@@ -55,12 +62,15 @@ export interface SaliencyAnalysisOptions {
   noiseLevel: number;           // Noise for SmoothGrad
   aggregationMethod: 'mean' | 'max' | 'l2_norm';
 }
+}
 
+}
 export interface PromptPerturbation {
   perturbedPrompt: string;
   changedPositions: number[];
   similarity: number;
   prediction?: any;
+}
 }
 
 class TokenInfluenceAnalyzer {
@@ -86,6 +96,7 @@ class TokenInfluenceAnalyzer {
     predictionFunction: (prompt: string) => Promise<any>,
     options: Partial<LimeAnalysisOptions> = {}
   ): Promise<TokenInfluenceResult> {
+
     const startTime = Date.now();
     
     const opts: LimeAnalysisOptions = {
@@ -126,7 +137,7 @@ class TokenInfluenceAnalyzer {
               ) });
             return { ...p, prediction: null, index };
           }
-        })
+  }
       );
 
       // Filter successful predictions
@@ -186,6 +197,7 @@ class TokenInfluenceAnalyzer {
     gradientFunction: (prompt: string) => Promise<number[]>,
     options: Partial<SaliencyAnalysisOptions> = {}
   ): Promise<TokenInfluenceResult> {
+
     const startTime = Date.now();
     
     const opts: SaliencyAnalysisOptions = {
@@ -284,6 +296,7 @@ class TokenInfluenceAnalyzer {
       divergentTokens: TokenInfluence[];
     };
   }> {
+
     logger.info('Starting comparative token influence analysis');
 
     const [limeResult, saliencyResult] = await Promise.all([
@@ -415,6 +428,7 @@ class TokenInfluenceAnalyzer {
     gradientFunction: (prompt: string) => Promise<number[]>,
     options: SaliencyAnalysisOptions
   ): Promise<number[]> {
+
     const baseline = this.createBaseline(prompt, tokens, options.baselineStrategy);
     const steps = options.numSteps;
     
@@ -441,6 +455,7 @@ class TokenInfluenceAnalyzer {
     gradientFunction: (prompt: string) => Promise<number[]>,
     options: SaliencyAnalysisOptions
   ): Promise<number[]> {
+
     const numSamples = 50; // Number of noisy samples
     const smoothedGrads: number[] = new Array(tokens.length).fill(0);
 

@@ -5,13 +5,14 @@
  * Adapter for OpenAI Whisper models for audio transcription and translation
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface WhisperConfig {
     apiKey: string;
     baseURL?: string;
     timeout?: number;
     maxRetries?: number;
     organization?: string;
-}
+
 export interface WhisperRequestOptions {
     file: File | Blob | ArrayBuffer;
     model?: 'whisper-1';
@@ -21,7 +22,7 @@ export interface WhisperRequestOptions {
     temperature?: number;
     timestamp_granularities?: ('word' | 'segment')[];
     task?: 'transcribe' | 'translate';
-}
+
 export interface WhisperTranscriptionResult {
     text: string;
     language?: string;
@@ -60,7 +61,7 @@ export interface WhisperTranscriptionResult {
         audio_duration: number;
         cost: number;
     };
-}
+
 export interface AudioFileInfo {
     name: string;
     size: number;
@@ -69,7 +70,7 @@ export interface AudioFileInfo {
     sample_rate?: number;
     channels?: number;
     format: string;
-}
+
 export declare class WhisperAdapter extends BaseAIModel {
     private config;
     private supportedFormats;
@@ -115,6 +116,6 @@ export declare class WhisperAdapter extends BaseAIModel {
     private _calculateConfidenceScore;
     private _calculateCost;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default WhisperAdapter;
 //# sourceMappingURL=WhisperAdapter.d.ts.map

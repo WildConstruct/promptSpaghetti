@@ -14,7 +14,7 @@ export declare enum BaselineCategory {
     DATABASE = "database",
     BUILD_PERFORMANCE = "build_performance",
     LOAD_TESTING = "load_testing"
-}
+
 export declare enum MeasurementType {
     DURATION = "duration",// milliseconds
     THROUGHPUT = "throughput",// operations per second
@@ -23,14 +23,14 @@ export declare enum MeasurementType {
     COUNT = "count",// absolute numbers
     BYTES = "bytes",// file/data sizes
     RATIO = "ratio"
-}
+
 export declare enum TestEnvironment {
     DEVELOPMENT = "development",
     STAGING = "staging",
     PRODUCTION = "production",
     CI_CD = "ci_cd",
     LOCAL = "local"
-}
+
 export declare const PerformanceMeasurementSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
@@ -513,7 +513,7 @@ export declare class PerformanceBaselineManager {
      * Clear all baselines and measurements
      */
     clear(): void;
-}
+
 export declare export declare const globalBaselineManager: PerformanceBaselineManager;
 export default PerformanceBaselineManager;
 //# sourceMappingURL=PerformanceBaselines.d.ts.map

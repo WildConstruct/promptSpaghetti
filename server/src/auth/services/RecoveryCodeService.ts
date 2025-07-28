@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
+}
 export interface RecoveryCode {
   id: string;
   userId: string;
@@ -17,7 +18,9 @@ export interface RecoveryCode {
   createdAt: Date;
   expiresAt?: Date;
 }
+}
 
+}
 export interface RecoveryCodeSet {
   id: string;
   userId: string;
@@ -28,9 +31,11 @@ export interface RecoveryCodeSet {
     generationReason: string;
     replacedSetId?: string;
     deviceFingerprint?: string;
+}
   };
 }
 
+}
 export interface RecoveryCodeUsage {
   codeId: string;
   userId: string;
@@ -40,7 +45,9 @@ export interface RecoveryCodeUsage {
   success: boolean;
   failureReason?: string;
 }
+}
 
+}
 export interface RecoveryCodeGenerationOptions {
   count?: number;
   length?: number;
@@ -51,6 +58,7 @@ export interface RecoveryCodeGenerationOptions {
   generatedBy: string;
   reason: string;
   deviceFingerprint?: string;
+}
 }
 
 export class RecoveryCodeService {
@@ -70,6 +78,7 @@ export class RecoveryCodeService {
     userId: string, 
     options: RecoveryCodeGenerationOptions
   ): Promise<{ codes: string[]; setId: string }> {
+
     const {
       count = this.defaultCodeCount,
       length = this.defaultCodeLength,
@@ -124,7 +133,7 @@ export class RecoveryCodeService {
           createdAt: new Date(),
           expiresAt: expirationDays ? new Date(Date.now() + expirationDays * 24 * 60 * 60 * 1000) : undefined
         } as RecoveryCode;
-      })
+  }
     );
 
     // Create recovery code set
@@ -167,6 +176,7 @@ export class RecoveryCodeService {
     sourceIP: string, 
     userAgent: string
   ): Promise<{ success: boolean; remainingCodes: number; message: string }> {
+
     // Get active recovery codes for user
     const activeCodes = await this.getActiveRecoveryCodes(userId);
     
@@ -266,6 +276,7 @@ export class RecoveryCodeService {
     lastGenerated?: Date;
     lastUsed?: Date;
   }> {
+
     const activeCodes = await this.getActiveRecoveryCodes(userId);
     const now = new Date();
     const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -358,22 +369,26 @@ export class RecoveryCodeService {
   }
 
   private async storeRecoverySet(recoverySet: RecoveryCodeSet): Promise<void> {
+
     // Implementation would persist to database
     console.log(`Storing recovery code set ${recoverySet.id} for user ${recoverySet.userId}`);
   }
 
   private async getActiveRecoveryCodes(userId: string): Promise<RecoveryCode[]> {
+
     // Implementation would query database
     // For now, return empty array
     return [];
   }
 
   private async invalidatePreviousRecoveryCodes(userId: string, currentSetId: string): Promise<void> {
+
     // Implementation would mark previous codes as inactive
     console.log(`Invalidating previous recovery codes for user ${userId}, keeping set ${currentSetId}`);
   }
 
   private async markCodeAsUsed(codeId: string, sourceIP: string, userAgent: string): Promise<void> {
+
     // Implementation would update database record
     console.log(`Marking recovery code ${codeId} as used from IP ${sourceIP}`);
   }
@@ -385,11 +400,13 @@ export class RecoveryCodeService {
     codeId?: string;
     metadata?: Record<string, any>;
   }): Promise<void> {
+
     // Implementation would log to audit system
     console.log(`Recovery code event: ${event.action} for user ${event.userId}`);
   }
 
   private async logRecoveryCodeUsage(usage: RecoveryCodeUsage): Promise<void> {
+
     // Implementation would persist usage record
     console.log(`Recovery code usage: ${usage.success ? 'success' : 'failure'} for user ${usage.userId}`);
   }
@@ -427,6 +444,7 @@ export class RecoveryCodeService {
     adminId: string, 
     reason: string
   ): Promise<{ codes: string[]; setId: string }> {
+
     const result = await this.generateRecoveryCodes(userId, {
       count: 5, // Fewer codes for emergency use
       length: 8,
@@ -454,6 +472,7 @@ export class RecoveryCodeService {
     reason: string, 
     performedBy: string
   ): Promise<void> {
+
     // Implementation would mark all active codes as inactive
     console.log(`Invalidating ALL recovery codes for user ${userId} - Reason: ${reason}`);
     

@@ -123,7 +123,7 @@ describe('KeyManagementService Access Control Integration', () => {
           sessionId: mockContext.sessionId,
           ipAddress: mockContext.ipAddress,
           userAgent: mockContext.userAgent
-        })
+  }
       );
     });
 
@@ -266,7 +266,7 @@ describe('KeyManagementService Access Control Integration', () => {
           JSON.stringify({
             riskLevel: 'medium',
             monitoringRequired: true
-          })
+  }
         ])
       );
     });
@@ -313,7 +313,7 @@ describe('KeyManagementService Access Control Integration', () => {
             requestId: 'req-123',
             serviceVersion: '1.2.3'
           }
-        })
+  }
       );
     });
 
@@ -340,7 +340,7 @@ describe('KeyManagementService Access Control Integration', () => {
         'encrypt',
         expect.objectContaining({
           userId: 'anonymous'
-        })
+  }
       );
     });
   });

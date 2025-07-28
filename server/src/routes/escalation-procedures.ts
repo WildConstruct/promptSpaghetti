@@ -10,6 +10,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { EscalationProcedureService, EscalationRule, EscalationCase, EscalationPriority, EscalationCategory, EscalationStatus } from '../services/escalation/EscalationProcedureService';
 
 // Request/Response Types
+}
 interface CreateRuleRequest {
   name: string;
   description?: string;
@@ -25,7 +26,9 @@ interface CreateRuleRequest {
   allowWeekends?: boolean;
   timeZone?: string;
 }
+}
 
+}
 interface UpdateRuleRequest {
   name?: string;
   description?: string;
@@ -40,7 +43,9 @@ interface UpdateRuleRequest {
   allowWeekends?: boolean;
   timeZone?: string;
 }
+}
 
+}
 interface CreateCaseRequest {
   sourceType: string;
   sourceId: string;
@@ -48,16 +53,22 @@ interface CreateCaseRequest {
   ruleId?: string;
   priority?: EscalationPriority;
 }
+}
 
+}
 interface ResolveCaseRequest {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged';
   resolutionNotes?: string;
 }
+}
 
+}
 interface EscalateCaseRequest {
   reason?: string;
 }
+}
 
+}
 interface GetCasesQuery {
   status?: EscalationStatus;
   priority?: EscalationPriority;
@@ -68,12 +79,15 @@ interface GetCasesQuery {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+}
 
+}
 interface GetRulesQuery {
   category?: EscalationCategory;
   enabled?: boolean;
   page?: number;
   limit?: number;
+}
 }
 
 /**
@@ -237,7 +251,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         properties: {
           ruleId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -479,7 +493,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         properties: {
           caseId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -519,7 +533,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         properties: {
           caseId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['resolutionType'],
@@ -527,7 +541,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           resolutionType: {
             type: 'string',
             enum: ['resolved', 'cancelled', 'transferred', 'merged']
-          },
+  }
           resolutionNotes: { type: 'string', maxLength: 2000 }
         }
       }
@@ -595,7 +609,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
             type: 'string',
             enum: ['hourly', 'daily', 'weekly', 'monthly'],
             default: 'daily'
-          },
+  }
           startDate: { type: 'string', format: 'date' },
           endDate: { type: 'string', format: 'date' },
           category: { type: 'string' }
@@ -688,7 +702,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         properties: {
           ruleId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['testData'],

@@ -9,30 +9,30 @@ import { validateConnection, ValidationError } from '../validation';
 describe('Core Validation - validateConnection', () => {
   // Helper function to create test nodes
   const createNode = (id: string, type = 'default'): Node => ({)
-    id,
+  id,
     type,
     position: { x: 0, y: 0 },
     data: { label: `Node ${id}` }
   });
   // Helper function to create test edges
   const createEdge = (id: string, source: string, target: string): Edge => ({)
-    id,
+  id,
     source,
     target
   });
   describe('Valid Graph Configurations', () => {
-    it('should return no errors for empty graph', () => {
-      const nodes: Node[] = [];
-      const edges: Edge[] = [];
-      const result = validateConnection(edges, nodes);
-      expect(result).toEqual([]);
-    });
+  it('should return no errors for empty graph', () => {
+  const nodes: Node = [];
+  const edges: Edge = [];
+  const result = validateConnection(edges, nodes);
+  expect(result).toEqual([]);
+});
     it('should return no errors for single node with no edges', () => {
-      const nodes = [createNode('1')];
-      const edges: Edge[] = [];
-      const result = validateConnection(edges, nodes);
-      expect(result).toEqual([]);
-    });
+  const nodes = [createNode('1')];
+  const edges: Edge = [];
+  const result = validateConnection(edges, nodes);
+  expect(result).toEqual([]);
+});
     it('should return no errors for valid linear chain', () => {
       const nodes = [;
         createNode('1'),
@@ -81,37 +81,37 @@ describe('Core Validation - validateConnection', () => {
     });
   });
   describe('Self-Loop Detection', () => {
-    it('should detect single self-loop', () => {
-      const nodes = [createNode('1')];
-      const edges = [createEdge('e1', '1', '1')];
-      const result = validateConnection(edges, nodes);
-      expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({)
-        edgeId: 'e1',
-        message: 'Edge is a self-loop',
-      });
+  it('should detect single self-loop', () => {
+  const nodes = [createNode('1')];
+  const edges = [createEdge('e1', '1', '1')];
+  const result = validateConnection(edges, nodes);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toEqual({)
+  edgeId: 'e1',
+  message: 'Edge is a self-loop',
+});
     });
     it('should detect multiple self-loops', () => {
-      const nodes = [;
-        createNode('1'),
-        createNode('2'),
-        createNode('3')
-      ];
-      const edges = [;
-        createEdge('e1', '1', '1'),
-        createEdge('e2', '2', '2'),
-        createEdge('e3', '1', '3') // Valid edge
-      ];
-      const result = validateConnection(edges, nodes);
-      expect(result).toHaveLength(2);
+  const nodes = [;
+  createNode('1'),
+  createNode('2'),
+  createNode('3')
+  ];
+  const edges = [;
+  createEdge('e1', '1', '1'),
+  createEdge('e2', '2', '2'),
+  createEdge('e3', '1', '3') // Valid edge
+  ];
+  const result = validateConnection(edges, nodes);
+  expect(result).toHaveLength(2);
+  expect(result).toContainEqual({)
+  edgeId: 'e1',
+  message: 'Edge is a self-loop',
+});
       expect(result).toContainEqual({)
-        edgeId: 'e1',
-        message: 'Edge is a self-loop',
-      });
-      expect(result).toContainEqual({)
-        edgeId: 'e2',
-        message: 'Edge is a self-loop',
-      });
+  edgeId: 'e2',
+  message: 'Edge is a self-loop',
+});
     });
     it('should detect self-loops in complex graphs', () => {
       const nodes = Array.from({ length: 5 }, (_, i) => createNode(`${i}`));}
@@ -131,45 +131,45 @@ describe('Core Validation - validateConnection', () => {
     });
   });
   describe('Duplicate Edge Detection', () => {
-    it('should detect simple duplicate edges', () => {
-      const nodes = [;
-        createNode('1'),
-        createNode('2')
-      ];
-      const edges = [;
-        createEdge('e1', '1', '2'),
-        createEdge('e2', '1', '2') // Duplicate
-      ];
-      const result = validateConnection(edges, nodes);
-      expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({)
-        edgeId: 'e2',
-        message: 'Duplicate edge',
-      });
+  it('should detect simple duplicate edges', () => {
+  const nodes = [;
+  createNode('1'),
+  createNode('2')
+  ];
+  const edges = [;
+  createEdge('e1', '1', '2'),
+  createEdge('e2', '1', '2') // Duplicate
+  ];
+  const result = validateConnection(edges, nodes);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toEqual({)
+  edgeId: 'e2',
+  message: 'Duplicate edge',
+});
     });
     it('should detect multiple duplicate edges', () => {
-      const nodes = [;
-        createNode('1'),
-        createNode('2'),
-        createNode('3')
-      ];
-      const edges = [;
-        createEdge('e1', '1', '2'),
-        createEdge('e2', '1', '2'), // Duplicate of e1
-        createEdge('e3', '2', '3'),
-        createEdge('e4', '2', '3'), // Duplicate of e3
-        createEdge('e5', '1', '3') // Valid
-      ];
-      const result = validateConnection(edges, nodes);
-      expect(result).toHaveLength(2);
+  const nodes = [;
+  createNode('1'),
+  createNode('2'),
+  createNode('3')
+  ];
+  const edges = [;
+  createEdge('e1', '1', '2'),
+  createEdge('e2', '1', '2'), // Duplicate of e1
+  createEdge('e3', '2', '3'),
+  createEdge('e4', '2', '3'), // Duplicate of e3
+  createEdge('e5', '1', '3') // Valid
+  ];
+  const result = validateConnection(edges, nodes);
+  expect(result).toHaveLength(2);
+  expect(result).toContainEqual({)
+  edgeId: 'e2',
+  message: 'Duplicate edge',
+});
       expect(result).toContainEqual({)
-        edgeId: 'e2',
-        message: 'Duplicate edge',
-      });
-      expect(result).toContainEqual({)
-        edgeId: 'e4',
-        message: 'Duplicate edge',
-      });
+  edgeId: 'e4',
+  message: 'Duplicate edge',
+});
     });
     it('should allow reverse edges (bidirectional)', () => {
       const nodes = [;
@@ -241,32 +241,32 @@ describe('Core Validation - validateConnection', () => {
     });
   });
   describe('Edge Cases and Error Conditions', () => {
-    it('should handle null/undefined nodes gracefully', () => {
-      const edges = [createEdge('e1', '1', '2')];
-      const nodes: Node[] = [];
-      const result = validateConnection(edges, nodes);
-      // Should still validate edges regardless of node existence
-      expect(result).toEqual([]);
-    });
+  it('should handle null/undefined nodes gracefully', () => {
+  const edges = [createEdge('e1', '1', '2')];
+  const nodes: Node = [];
+  const result = validateConnection(edges, nodes);
+  // Should still validate edges regardless of node existence
+  expect(result).toEqual([]);
+});
     it('should handle edges with special characters in IDs', () => {
-      const nodes = [;
-        createNode('node-1'),
-        createNode('node_2'),
-        createNode('node@3'),
-        createNode('node.4')
-      ];
-      const edges = [;
-        createEdge('edge-1', 'node-1', 'node_2'),
-        createEdge('edge_2', 'node_2', 'node@3'),
-        createEdge('edge@3', 'node@3', 'node.4'),
-        createEdge('edge.4', 'node-1', 'node_2') // Duplicate
-      ];
-      const result = validateConnection(edges, nodes);
-      expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({)
-        edgeId: 'edge.4',
-        message: 'Duplicate edge',
-      });
+  const nodes = [;
+  createNode('node-1'),
+  createNode('node_2'),
+  createNode('node@3'),
+  createNode('node.4')
+  ];
+  const edges = [;
+  createEdge('edge-1', 'node-1', 'node_2'),
+  createEdge('edge_2', 'node_2', 'node@3'),
+  createEdge('edge@3', 'node@3', 'node.4'),
+  createEdge('edge.4', 'node-1', 'node_2') // Duplicate
+  ];
+  const result = validateConnection(edges, nodes);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toEqual({)
+  edgeId: 'edge.4',
+  message: 'Duplicate edge',
+});
     });
     it('should handle very long node IDs', () => {
       const longId1 = 'a'.repeat(100);
@@ -300,7 +300,7 @@ describe('Core Validation - validateConnection', () => {
       const nodeCount = 1000;
       const edgeCount = 2000;
       const nodes = Array.from({ length: nodeCount }, (_, i) => createNode(`node${i}`));}
-      const edges: Edge[] = [];
+      const edges: Edge = [];
       // Create valid edges
       for (let i = 0; i < edgeCount; i++) {
         const source = `node${Math.floor(Math.random() * nodeCount)}`;}
@@ -308,9 +308,7 @@ describe('Core Validation - validateConnection', () => {
         // Avoid self-loops for this test
         while (target === source) {
           target = `node${Math.floor(Math.random() * nodeCount)}`;}
-        }
         edges.push(createEdge(`edge${i}`, source, target));}
-      }
       const startTime = performance.now();
       const result = validateConnection(edges, nodes);
       const endTime = performance.now();
@@ -321,11 +319,10 @@ describe('Core Validation - validateConnection', () => {
     });
     it('should handle worst-case scenario with many duplicates', () => {
       const nodes = [createNode('1'), createNode('2')];
-      const edges: Edge[] = [];
+      const edges: Edge = [];
       // Create 1000 duplicate edges
       for (let i = 0; i < 1000; i++) {
         edges.push(createEdge(`edge${i}`, '1', '2'));}
-      }
       const startTime = performance.now();
       const result = validateConnection(edges, nodes);
       const endTime = performance.now();
@@ -416,27 +413,26 @@ describe('Core Validation - validateConnection', () => {
     });
   });
   describe('TypeScript Type Safety', () => {
-    it('should handle ValidationError type correctly', () => {
-      const nodes = [createNode('1')];
-      const edges = [createEdge('e1', '1', '1')];
-      const result: ValidationError[] = validateConnection(edges, nodes);
-      expect(result[0].edgeId).toBe('e1');
-      expect(result[0].message).toBe('Edge is a self-loop');
-    });
+  it('should handle ValidationError type correctly', () => {
+  const nodes = [createNode('1')];
+  const edges = [createEdge('e1', '1', '1')];
+  const result: ValidationError = validateConnection(edges, nodes);
+  expect(result[0].edgeId).toBe('e1');
+  expect(result[0].message).toBe('Edge is a self-loop');
+});
     it('should work with different node and edge types', () => {
       // Test with different node data structures
-      const customNode: Node = {
-        id: 'custom',
+      const customNode: Node = {,
+  id: 'custom',
         type: 'custom',
         position: { x: 100, y: 200 },
-        data: { ,
-          label: 'Custom Node',
+        data: {,
+  label: 'Custom Node',
           customProperty: 'value',
           config: { enabled: true }
-        }
       };
-      const customEdge: Edge = {
-        id: 'custom-edge',
+      const customEdge: Edge = {,
+  id: 'custom-edge',
         source: 'custom',
         target: 'custom',
         type: 'custom',

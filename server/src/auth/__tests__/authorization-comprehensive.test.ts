@@ -50,25 +50,25 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
       email: 'super@admin.com',
       roles: ['super_admin'],
       permissions: ['*']
-    },
+  }
     admin: {
       id: 2,
       email: 'admin@company.com',
       roles: ['admin'],
       permissions: ['users:read', 'users:write', 'reports:read', 'settings:read']
-    },
+  }
     manager: {
       id: 3,
       email: 'manager@company.com',
       roles: ['manager'],
       permissions: ['users:read', 'reports:read', 'team:manage']
-    },
+  }
     user: {
       id: 4,
       email: 'user@company.com',
       roles: ['user'],
       permissions: ['profile:read', 'profile:write']
-    },
+  }
     contractor: {
       id: 5,
       email: 'contractor@company.com',
@@ -85,28 +85,28 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
       permissions: ['*'],
       inherits: [],
       constraints: {}
-    },
+  }
     admin: {
       id: 'admin',
       name: 'Administrator',
       permissions: ['users:*', 'reports:*', 'settings:read'],
       inherits: ['manager'],
       constraints: {}
-    },
+  }
     manager: {
       id: 'manager',
       name: 'Manager',
       permissions: ['users:read', 'reports:read', 'team:manage'],
       inherits: ['user'],
       constraints: { businessHours: true }
-    },
+  }
     user: {
       id: 'user',
       name: 'User',
       permissions: ['profile:*'],
       inherits: [],
       constraints: {}
-    },
+  }
     contractor: {
       id: 'contractor',
       name: 'Contractor',
@@ -537,7 +537,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               };
             }
             return { allowed: false };
-          })
+  }
         };
 
         fastify.get('/api/reports/time-sensitive', async (request, reply) => {
@@ -592,7 +592,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               'contractors': ['docs:read']
             };
             return groupPermissions[groupId as keyof typeof groupPermissions] || [];
-          })
+  }
         };
 
         rbacService.hasPermission.mockImplementation(async (userId, permission) => {
@@ -761,12 +761,12 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           'org:acme': {
             children: ['department:engineering', 'department:sales'],
             permissions: { '1': ['admin'], '2': ['admin'] } // super_admin and admin
-          },
+  }
           'department:engineering': {
             parent: 'org:acme',
             children: ['team:backend', 'team:frontend'],
             permissions: { '3': ['manage'] } // manager
-          },
+  }
           'team:backend': {
             parent: 'department:engineering',
             children: [],
@@ -932,7 +932,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
               granted: new Date(Date.now() - 86400000), // granted yesterday
               expires: new Date(Date.now() + 3600000), // expires in 1 hour
               permissions: ['reports:temp:read']
-            },
+  }
             'expired:access': {
               granted: new Date(Date.now() - 172800000), // granted 2 days ago
               expires: new Date(Date.now() - 3600000), // expired 1 hour ago
@@ -1097,7 +1097,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             permissions: ['users:read', 'events:read', 'reports:write'],
             clientId: 'analytics-service-client',
             scopes: ['data:read', 'reports:write']
-          },
+  }
           'service:notification': {
             id: 'svc-notification',
             permissions: ['users:read', 'notifications:write'],
@@ -1285,7 +1285,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
             }
             
             return { success: true, assignedRole: roleId };
-          })
+  }
         };
 
         fastify.post('/api/admin/users/:userId/assign-role', async (request, reply) => {
@@ -1380,12 +1380,12 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
                 reason: 'Attempted privilege escalation',
                 suspiciousPermissions: requestedPermissions.filter((perm: string) =>
                   suspiciousPermissions.some(suspicious => perm.includes(suspicious))
-                )
+
               };
             }
 
             return { tampered: false };
-          })
+  }
         };
 
         fastify.post('/api/auth/validate-permissions', async (request, reply) => {
@@ -1445,7 +1445,7 @@ describe('Epic 19.5 - Comprehensive Authorization & RBAC Tests', () => {
           details: expect.objectContaining({
             reason: 'Attempted privilege escalation',
             suspiciousPermissions: expect.arrayContaining(['admin:*'])
-          })
+  }
         });
       });
     });

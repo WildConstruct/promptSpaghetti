@@ -7,6 +7,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { DataRetentionFrameworkService, RetentionRecord, RetentionStatus } from './DataRetentionFrameworkService';
 import { DataCategory, Jurisdiction } from '../types/DataRetentionPeriods';
 
+}
 export interface EnforcementPolicy {
   policyId: string;
   name: string;
@@ -21,7 +22,9 @@ export interface EnforcementPolicy {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface EnforcementRule {
   ruleId: string;
   trigger: EnforcementTrigger;
@@ -29,6 +32,7 @@ export interface EnforcementRule {
   action: EnforcementAction;
   parameters: Record<string, any>;
   priority: number;
+}
 }
 
 export enum EnforcementTrigger {
@@ -50,6 +54,7 @@ export enum EnforcementAction {
   EXTEND_RETENTION = 'EXTEND_RETENTION'
 }
 
+}
 export interface NotificationRule {
   ruleId: string;
   trigger: EnforcementTrigger;
@@ -58,10 +63,13 @@ export interface NotificationRule {
   urgency: NotificationUrgency;
   channels: NotificationChannel[];
 }
+}
 
+}
 export interface NotificationRecipient {
   type: RecipientType;
   identifier: string;
+}
 }
 
 export enum RecipientType {
@@ -87,6 +95,7 @@ export enum NotificationChannel {
   WEBHOOK = 'WEBHOOK'
 }
 
+}
 export interface EscalationRule {
   ruleId: string;
   trigger: string;
@@ -95,7 +104,9 @@ export interface EscalationRule {
   recipients: NotificationRecipient[];
   autoApprove: boolean;
 }
+}
 
+}
 export interface EnforcementEvent {
   eventId: string;
   recordId: string;
@@ -108,6 +119,7 @@ export interface EnforcementEvent {
   approvals: EnforcementApproval[];
   notifications: EnforcementNotification[];
 }
+}
 
 export enum EnforcementStatus {
   PENDING = 'PENDING',
@@ -118,6 +130,7 @@ export enum EnforcementStatus {
   AWAITING_APPROVAL = 'AWAITING_APPROVAL'
 }
 
+}
 export interface EnforcementDetails {
   dataId: string;
   category: DataCategory;
@@ -127,6 +140,7 @@ export interface EnforcementDetails {
   complianceFrameworks: string[];
   metadata: Record<string, any>;
 }
+}
 
 export enum RiskLevel {
   LOW = 'LOW',
@@ -135,6 +149,7 @@ export enum RiskLevel {
   CRITICAL = 'CRITICAL'
 }
 
+}
 export interface EnforcementApproval {
   approvalId: string;
   approverRole: RecipientType;
@@ -143,7 +158,9 @@ export interface EnforcementApproval {
   reason?: string;
   timestamp: Date;
 }
+}
 
+}
 export interface EnforcementNotification {
   notificationId: string;
   recipient: NotificationRecipient;
@@ -151,6 +168,7 @@ export interface EnforcementNotification {
   sent: boolean;
   sentAt?: Date;
   error?: string;
+}
 }
 
 export class RetentionEnforcementService {
@@ -172,6 +190,7 @@ export class RetentionEnforcementService {
     policy: Omit<EnforcementPolicy,
     'policyId' | 'createdAt' | 'updatedAt'>
   ): Promise<EnforcementPolicy> {
+
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
     
@@ -193,6 +212,7 @@ export class RetentionEnforcementService {
     trigger: EnforcementTrigger,
     context?: Record<string, any>
   ): Promise<EnforcementEvent> {
+
     const record = await this.retentionService.getRetentionStatus(recordId);
     if (!record) {
       throw new Error(`Retention record not found: ${recordId}`);
@@ -233,6 +253,7 @@ export class RetentionEnforcementService {
     event: EnforcementEvent,
     rule: EnforcementRule
   ): Promise<void> {
+
     event.status = EnforcementStatus.IN_PROGRESS;
     await this.updateEnforcementEvent(event);
 
@@ -271,6 +292,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeImmediateDeletion(event: EnforcementEvent): Promise<void> {
+
     const record = await this.retentionService.getRetentionStatus(event.recordId);
     if (!record) return;
 
@@ -285,6 +307,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeArchiveThenDelete(event: EnforcementEvent): Promise<void> {
+
     const record = await this.retentionService.getRetentionStatus(event.recordId);
     if (!record) return;
 
@@ -301,6 +324,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeAnonymization(event: EnforcementEvent): Promise<void> {
+
     const record = await this.retentionService.getRetentionStatus(event.recordId);
     if (!record) return;
 
@@ -311,6 +335,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeQuarantine(event: EnforcementEvent): Promise<void> {
+
     const record = await this.retentionService.getRetentionStatus(event.recordId);
     if (!record) return;
 
@@ -323,6 +348,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeApprovalRequest(event: EnforcementEvent, _____rule: EnforcementRule): Promise<void> {
+
     event.status = EnforcementStatus.AWAITING_APPROVAL;
     
     // Send approval requests
@@ -335,6 +361,7 @@ export class RetentionEnforcementService {
   }
 
   private async executeNotification(event: EnforcementEvent, _____rule: EnforcementRule): Promise<void> {
+
     const notifications = await this.getNotificationRules(event.trigger);
     
     for (const notification of notifications) {
@@ -352,6 +379,7 @@ export class RetentionEnforcementService {
     approved: boolean,
     reason?: string
   ): Promise<void> {
+
     const event = await this.getEnforcementEvent(eventId);
     if (!event) {
       throw new Error(`Enforcement event not found: ${eventId}`);
@@ -386,6 +414,7 @@ export class RetentionEnforcementService {
   }
 
   private async getApplicablePolicies(record: RetentionRecord): Promise<EnforcementPolicy[]> {
+
     const query = `
       SELECT * FROM enforcement_policies 
       WHERE enabled = true 
@@ -408,6 +437,7 @@ export class RetentionEnforcementService {
   }
 
   private async buildEnforcementDetails(record: RetentionRecord): Promise<EnforcementDetails> {
+
     return {
       dataId: record.dataId,
       category: record.category,
@@ -455,27 +485,33 @@ export class RetentionEnforcementService {
 
   // Placeholder methods for actual data operations
   private async performDataDeletion(record: RetentionRecord): Promise<void> {
+
     console.log(`Deleting data for record: ${record.recordId}`);
   }
 
   private async performDataArchiving(record: RetentionRecord): Promise<void> {
+
     console.log(`Archiving data for record: ${record.recordId}`);
   }
 
   private async performDataAnonymization(record: RetentionRecord): Promise<void> {
+
     console.log(`Anonymizing data for record: ${record.recordId}`);
   }
 
   private async performDataQuarantine(record: RetentionRecord): Promise<void> {
+
     console.log(`Quarantining data for record: ${record.recordId}`);
   }
 
   private async estimateDataSize(_____dataId: string): Promise<number> {
+
     // Implementation would calculate actual data size
     return 1024; // placeholder
   }
 
   private async getApprovers(riskLevel: RiskLevel): Promise<NotificationRecipient[]> {
+
     // Return appropriate approvers based on risk level
     const approvers: NotificationRecipient[] = [];
     
@@ -491,6 +527,7 @@ export class RetentionEnforcementService {
 
   // Database operations
   private async saveEnforcementPolicy(policy: EnforcementPolicy): Promise<void> {
+
     const query = `
       INSERT INTO enforcement_policies (
         policy_id, name, description, enabled, strict_mode, categories,
@@ -516,6 +553,7 @@ export class RetentionEnforcementService {
   }
 
   private async saveEnforcementEvent(event: EnforcementEvent): Promise<void> {
+
     const query = `
       INSERT INTO enforcement_events (
         event_id, record_id, trigger_type, action_type, status,
@@ -537,6 +575,7 @@ export class RetentionEnforcementService {
   }
 
   private async updateEnforcementEvent(event: EnforcementEvent): Promise<void> {
+
     const query = `
       UPDATE enforcement_events 
       SET status = $1, completed_at = $2, details = $3, 
@@ -555,32 +594,38 @@ export class RetentionEnforcementService {
   }
 
   private async getEnforcementEvent(eventId: string): Promise<EnforcementEvent | null> {
+
     const query = 'SELECT * FROM enforcement_events WHERE event_id = $1';
     const result = await this.db.query(query, [eventId]);
     return result.rows[0] || null;
   }
 
   private async getEnforcementPolicy(_____recordId: string): Promise<EnforcementPolicy | null> {
+
     // Implementation would retrieve the appropriate policy for the record
     return null;
   }
 
   private async getApproverRole(_____approverId: string): Promise<RecipientType> {
+
     // Implementation would determine the approver's role
     return RecipientType.ADMIN;
   }
 
   private async hasRequiredApprovals(event: EnforcementEvent): Promise<boolean> {
+
     // Implementation would check if all required approvals are received
     return event.approvals.every(a => a.approved);
   }
 
   private async getNotificationRules(_____trigger: EnforcementTrigger): Promise<NotificationRule[]> {
+
     // Implementation would retrieve notification rules for the trigger
     return [];
   }
 
   private async sendApprovalRequest(event: EnforcementEvent, approver: NotificationRecipient): Promise<void> {
+
     // Implementation would send approval request
     console.log(`Sending approval request for event ${event.eventId} to ${approver.identifier}`);
   }
@@ -590,6 +635,7 @@ export class RetentionEnforcementService {
     recipient: NotificationRecipient,
     _____rule: NotificationRule
   ): Promise<void> {
+
     // Implementation would send notification
     console.log(`Sending notification for event ${event.eventId} to ${recipient.identifier}`);
   }
@@ -599,18 +645,20 @@ export class RetentionEnforcementService {
     context: unknown,
     additionalData?: any
   ): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: `ENFORCEMENT_${eventType}`,
       userId: 'system',
       details: {
         context,
         ...additionalData
-      },
+  }
       timestamp: new Date()
     });
   }
 
   private async logError(event: EnforcementEvent, error: Error): Promise<void> {
+
     await this.auditService.logEvent({
       eventType: 'ENFORCEMENT_ERROR',
       userId: 'system',
@@ -618,7 +666,7 @@ export class RetentionEnforcementService {
         eventId: event.eventId,
         error: error.message,
         stack: error.stack
-      },
+  }
       timestamp: new Date()
     });
   }

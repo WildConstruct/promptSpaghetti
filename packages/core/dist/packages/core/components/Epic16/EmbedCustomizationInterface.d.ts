@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import { Template } from './TemplatePreviewModal';
-import { EmbedCustomization, PreviewSize } from './EmbeddedTemplatePreview';
+import { EmbedCustomization } from './EmbeddedTemplatePreview';
 export interface EmbedCustomizationInterfaceProps {
     template: Template;
     initialCustomization?: EmbedCustomization;
@@ -16,7 +16,7 @@ export interface EmbedCustomizationInterfaceProps {
     onPreview: (customization: EmbedCustomization) => void;
     onExport: (customization: EmbedCustomization, format: 'iframe' | 'javascript' | 'react') => string;
     className?: string;
-    presets?: EmbedPreset[];
+    presets?: EmbedPreset;
 }
 export interface EmbedPreset {
     id: string;
@@ -49,7 +49,7 @@ export interface EmbedWidget {
 export interface CustomFont {
     family: string;
     category: 'serif' | 'sans-serif' | 'monospace' | 'display' | 'handwriting';
-    weights: number[];
+    weights: number;
     url?: string;
     provider: 'google' | 'adobe' | 'custom';
 }
@@ -77,7 +77,7 @@ export interface CustomTheme {
     };
     spacing: {
         unit: number;
-        scale: number[];
+        scale: number;
     };
     borderRadius: {
         small: number;
@@ -89,17 +89,9 @@ export interface CustomTheme {
         medium: string;
         large: string;
     };
+    const: any;
+    DEFAULT_PRESETS: EmbedPreset;
 }
-export declare const PresetSelector: React.FC<{
-    presets: EmbedPreset[];
-    selectedPreset?: string;
-    onPresetSelect: (preset: EmbedPreset) => void;
-}>;
-export declare const VisualLayoutBuilder: React.FC<{
-    widgets: EmbedWidget[];
-    onWidgetsChange: (widgets: EmbedWidget[]) => void;
-    previewSize: PreviewSize;
-}>;
 export declare const EmbedCustomizationInterface: React.FC<EmbedCustomizationInterfaceProps>;
 export default EmbedCustomizationInterface;
 //# sourceMappingURL=EmbedCustomizationInterface.d.ts.map

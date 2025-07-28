@@ -23,13 +23,10 @@ export declare enum TokenType {
     DEDENT = "DEDENT",
     EDGE_ARROW = "EDGE_ARROW",
     EOF = "EOF",
-    ERROR = "ERROR"
-}
-export interface Token {
-    type: TokenType;
-    value: string;
-    position: LexerPosition;
-    raw?: string;
+    ERROR = "ERROR",
+    export,
+    interface,
+    Token
 }
 export interface LexerError {
     message: string;
@@ -47,13 +44,6 @@ export declare class GraphLexer {
     private currentSection;
     constructor(input: string);
     /**
-     * Tokenize the entire input
-     */
-    tokenize(): {
-        tokens: Token[];
-        errors: LexerError[];
-    };
-    /**
      * Scan and classify the next token
      */
     private scanToken;
@@ -66,32 +56,32 @@ export declare class GraphLexer {
      */
     private scanSectionDelimiter;
     /**
-     * Scan quoted string
-     */
+    * Scan quoted string
+    */
     private scanQuotedString;
     /**
-     * Scan unquoted string/identifier
-     */
+    * Scan unquoted string/identifier
+    */
     private scanString;
     /**
-     * Scan identifier (unquoted key/value)
-     */
+    * Scan identifier (unquoted key/value)
+    */
     private scanIdentifier;
     /**
-     * Scan numeric value
-     */
+    * Scan numeric value
+    */
     private scanNumber;
     /**
-     * Skip comment to end of line
-     */
+    * Skip comment to end of line
+    */
     private skipComment;
     /**
-     * Get token type for keywords
-     */
+    * Get token type for keywords
+    */
     private getKeywordType;
     /**
-     * Add token to list
-     */
+    * Add token to list
+    */
     private addToken;
     /**
      * Add error to list

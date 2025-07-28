@@ -36,93 +36,85 @@ import {
 import { useEpic17Authorization } from '../../../client/src/hooks/useEpic17Authorization';
 
 // Navigation configuration interfaces
+
 export interface NavigationItem {
-  id: string;
+  id: string;,
   label: string;
   description?: string;
-  icon: React.ComponentType<unknown>;
+  icon: React.ComponentType<unknown>;,
   path: string;
-  children?: NavigationItem[];
-  requiredPermissions?: {
-    resource: string;
-    actions: string[];
-  }[];
+  children?: NavigationItem;
+  requiredPermissions?: {,
+  resource: string;,
+  actions: string;
+}[];
   badge?: NavigationBadge;
   metadata: {,
-    category: string;
-    priority: number;
-    riskLevel: 'low' | 'medium' | 'high' | 'critical';
-    epic?: string;
-    story?: string;
-    tags: string[];
-  };
+  category: string;
+  priority: number;,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  epic?: string;
+  story?: string;
+  tags: string;
+};
 }
-
 export interface NavigationBadge {
-  type: 'count' | 'status' | 'alert' | 'info';
+  type: 'count' | 'status' | 'alert' | 'info';,
   value: string | number;
   color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray';
   pulse?: boolean;
 }
-
 export interface NavigationContext {
-  currentPath: string;
+  currentPath: string;,
   currentSection: string;
-  parentSections: string[];
-  breadcrumbs: BreadcrumbItem[];
-  availableActions: QuickAction[];
+  parentSections: string;,
+  breadcrumbs: BreadcrumbItem;
+  availableActions: QuickAction;
 }
-
 export interface BreadcrumbItem {
-  label: string;
+  label: string;,
   path: string;
   icon?: React.ComponentType<unknown>;
   active: boolean;
 }
-
 export interface QuickAction {
-  id: string;
+  id: string;,
   label: string;
-  description: string;
+  description: string;,
   icon: React.ComponentType<unknown>;
   action: () => void;
   shortcut?: string;
-  category: 'primary' | 'secondary' | 'tertiary';
+  category: 'primary' | 'secondary' | 'tertiary';,
   enabled: boolean;
 }
-
 export interface NavigationState {
-  expandedSections: Set<string>;
+  expandedSections: Set<string>;,
   pinnedItems: Set<string>;
-  recentItems: RecentItem[];
+  recentItems: RecentItem;,
   favoriteItems: Set<string>;
-  searchQuery: string;
+  searchQuery: string;,
   mobileMenuOpen: boolean;
 }
-
 export interface RecentItem {
-  id: string;
+  id: string;,
   label: string;
-  path: string;
+  path: string;,
   timestamp: Date;
   icon: React.ComponentType<unknown>;
-}
-
-// Epic 17 Navigation Configuration
-const EPIC17_NAVIGATION: NavigationItem[] = [
+  // Epic 17 Navigation Configuration
+  const EPIC17_NAVIGATION: NavigationItem = [
   {
-    id: 'overview',
-    label: 'Overview',
-    description: 'System overview and dashboard',
-    icon: Home,
-    path: '/admin',
-    metadata: {,
-      category: 'dashboard',
-      priority: 100,
-      riskLevel: 'low',
-      tags: ['dashboard', 'overview']
-    }
-  },
+  id: 'overview',
+  label: 'Overview',
+  description: 'System overview and dashboard',
+  icon: Home,
+  path: '/admin',
+  metadata: {,
+  category: 'dashboard',
+  priority: 100,
+  riskLevel: 'low',
+  tags: ['dashboard', 'overview'],
+}
   {
     id: 'feature-management',
     label: 'Feature Management',
@@ -138,48 +130,42 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/features/toggles',
         badge: { type: 'count', value: 12, color: 'blue' },
         metadata: {,
-          category: 'feature_toggles',
-          priority: 90,
-          riskLevel: 'high',
-          epic: '17.1',
-          tags: ['toggles', 'rollouts', 'features']
-        }
-      },
+  category: 'feature_toggles',
+  priority: 90,
+  riskLevel: 'high',
+  epic: '17.1',
+  tags: ['toggles', 'rollouts', 'features'],
+}
       {
-        id: 'toggle-dependencies',
-        label: 'Dependencies',
-        description: 'Manage toggle dependencies and conflicts',
-        icon: Zap,
-        path: '/admin/features/dependencies',
-        metadata: {,
-          category: 'dependencies',
-          priority: 85,
-          riskLevel: 'high',
-          tags: ['dependencies', 'conflicts', 'analysis']
-        }
-      },
+  id: 'toggle-dependencies',
+  label: 'Dependencies',
+  description: 'Manage toggle dependencies and conflicts',
+  icon: Zap,
+  path: '/admin/features/dependencies',
+  metadata: {,
+  category: 'dependencies',
+  priority: 85,
+  riskLevel: 'high',
+  tags: ['dependencies', 'conflicts', 'analysis'],
+}
       {
-        id: 'toggle-conditions',
-        label: 'Conditions',
-        description: 'Advanced targeting and conditions',
-        icon: Settings,
-        path: '/admin/features/conditions',
-        metadata: {,
-          category: 'conditions',
-          priority: 80,
-          riskLevel: 'medium',
-          tags: ['conditions', 'targeting', 'rules']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'feature_management',
-      priority: 95,
-      riskLevel: 'high',
-      epic: '17.1',
-      tags: ['features', 'management']
-    }
-  },
+  id: 'toggle-conditions',
+  label: 'Conditions',
+  description: 'Advanced targeting and conditions',
+  icon: Settings,
+  path: '/admin/features/conditions',
+  metadata: {,
+  category: 'conditions',
+  priority: 80,
+  riskLevel: 'medium',
+  tags: ['conditions', 'targeting', 'rules']],
+  metadata: {,
+  category: 'feature_management',
+  priority: 95,
+  riskLevel: 'high',
+  epic: '17.1',
+  tags: ['features', 'management'],
+}
   {
     id: 'user-management',
     label: 'User Management',
@@ -195,12 +181,11 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/users/accounts',
         badge: { type: 'count', value: 1247, color: 'green' },
         metadata: {,
-          category: 'user_accounts',
-          priority: 80,
-          riskLevel: 'critical',
-          tags: ['users', 'accounts', 'profiles']
-        }
-      },
+  category: 'user_accounts',
+  priority: 80,
+  riskLevel: 'critical',
+  tags: ['users', 'accounts', 'profiles'],
+}
       {
         id: 'permissions',
         label: 'Permissions',
@@ -209,34 +194,29 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/users/permissions',
         badge: { type: 'alert', value: '!', color: 'yellow', pulse: true },
         metadata: {,
-          category: 'permissions',
-          priority: 85,
-          riskLevel: 'critical',
-          tags: ['permissions', 'rbac', 'security']
-        }
-      },
+  category: 'permissions',
+  priority: 85,
+  riskLevel: 'critical',
+  tags: ['permissions', 'rbac', 'security'],
+}
       {
-        id: 'activity-monitoring',
-        label: 'Activity Monitoring',
-        description: 'User activity and behavior tracking',
-        icon: BarChart3,
-        path: '/admin/users/activity',
-        metadata: {,
-          category: 'monitoring',
-          priority: 70,
-          riskLevel: 'medium',
-          tags: ['activity', 'monitoring', 'analytics']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'user_management',
-      priority: 90,
-      riskLevel: 'critical',
-      epic: '17.3',
-      tags: ['users', 'permissions']
-    }
-  },
+  id: 'activity-monitoring',
+  label: 'Activity Monitoring',
+  description: 'User activity and behavior tracking',
+  icon: BarChart3,
+  path: '/admin/users/activity',
+  metadata: {,
+  category: 'monitoring',
+  priority: 70,
+  riskLevel: 'medium',
+  tags: ['activity', 'monitoring', 'analytics']],
+  metadata: {,
+  category: 'user_management',
+  priority: 90,
+  riskLevel: 'critical',
+  epic: '17.3',
+  tags: ['users', 'permissions'],
+}
   {
     id: 'content-management',
     label: 'Content Management',
@@ -252,34 +232,29 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/content/review',
         badge: { type: 'count', value: 23, color: 'red', pulse: true },
         metadata: {,
-          category: 'content_review',
-          priority: 75,
-          riskLevel: 'medium',
-          tags: ['content', 'review', 'moderation']
-        }
-      },
+  category: 'content_review',
+  priority: 75,
+  riskLevel: 'medium',
+  tags: ['content', 'review', 'moderation'],
+}
       {
-        id: 'content-categories',
-        label: 'Categories',
-        description: 'Manage content categories and tags',
-        icon: Settings,
-        path: '/admin/content/categories',
-        metadata: {,
-          category: 'categories',
-          priority: 60,
-          riskLevel: 'low',
-          tags: ['categories', 'taxonomy', 'organization']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'content_management',
-      priority: 75,
-      riskLevel: 'medium',
-      epic: '17.2',
-      tags: ['content', 'moderation']
-    }
-  },
+  id: 'content-categories',
+  label: 'Categories',
+  description: 'Manage content categories and tags',
+  icon: Settings,
+  path: '/admin/content/categories',
+  metadata: {,
+  category: 'categories',
+  priority: 60,
+  riskLevel: 'low',
+  tags: ['categories', 'taxonomy', 'organization']],
+  metadata: {,
+  category: 'content_management',
+  priority: 75,
+  riskLevel: 'medium',
+  epic: '17.2',
+  tags: ['content', 'moderation'],
+}
   {
     id: 'marketplace',
     label: 'Marketplace Admin',
@@ -295,96 +270,85 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/marketplace/review',
         badge: { type: 'count', value: 8, color: 'purple' },
         metadata: {,
-          category: 'template_review',
-          priority: 70,
-          riskLevel: 'medium',
-          tags: ['templates', 'review', 'approval']
-        }
-      },
+  category: 'template_review',
+  priority: 70,
+  riskLevel: 'medium',
+  tags: ['templates', 'review', 'approval'],
+}
       {
-        id: 'transactions',
-        label: 'Transactions',
-        description: 'Monitor transactions and payments',
-        icon: BarChart3,
-        path: '/admin/marketplace/transactions',
-        metadata: {,
-          category: 'transactions',
-          priority: 65,
-          riskLevel: 'high',
-          tags: ['transactions', 'payments', 'monitoring']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'marketplace',
-      priority: 70,
-      riskLevel: 'medium',
-      epic: '17.5',
-      tags: ['marketplace', 'commerce']
-    }
-  },
+  id: 'transactions',
+  label: 'Transactions',
+  description: 'Monitor transactions and payments',
+  icon: BarChart3,
+  path: '/admin/marketplace/transactions',
+  metadata: {,
+  category: 'transactions',
+  priority: 65,
+  riskLevel: 'high',
+  tags: ['transactions', 'payments', 'monitoring']],
+  metadata: {,
+  category: 'marketplace',
+  priority: 70,
+  riskLevel: 'medium',
+  epic: '17.5',
+  tags: ['marketplace', 'commerce'],
+}
   {
-    id: 'system',
-    label: 'System Configuration',
-    description: 'System settings and configuration',
-    icon: Settings,
-    path: '/admin/system',
-    children: [,
-      {
-        id: 'api-management',
-        label: 'API Management',
-        description: 'Manage API keys and rate limits',
-        icon: Key,
-        path: '/admin/system/api',
-        metadata: {,
-          category: 'api_management',
-          priority: 60,
-          riskLevel: 'high',
-          tags: ['api', 'keys', 'rate-limiting']
-        }
-      },
-      {
-        id: 'integrations',
-        label: 'Integrations',
-        description: 'Third-party integrations and webhooks',
-        icon: Zap,
-        path: '/admin/system/integrations',
-        metadata: {,
-          category: 'integrations',
-          priority: 55,
-          riskLevel: 'medium',
-          tags: ['integrations', 'webhooks', 'third-party']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'system_configuration',
-      priority: 65,
-      riskLevel: 'high',
-      epic: '17.4',
-      tags: ['system', 'configuration']
-    }
-  },
+  id: 'system',
+  label: 'System Configuration',
+  description: 'System settings and configuration',
+  icon: Settings,
+  path: '/admin/system',
+  children: [,
   {
-    id: 'analytics',
-    label: 'Analytics & Monitoring',
-    description: 'System analytics and performance monitoring',
-    icon: BarChart3,
-    path: '/admin/analytics',
-    children: [,
+  id: 'api-management',
+  label: 'API Management',
+  description: 'Manage API keys and rate limits',
+  icon: Key,
+  path: '/admin/system/api',
+  metadata: {,
+  category: 'api_management',
+  priority: 60,
+  riskLevel: 'high',
+  tags: ['api', 'keys', 'rate-limiting'],
+}
       {
-        id: 'dashboards',
-        label: 'Dashboards',
-        description: 'System health and performance dashboards',
-        icon: BarChart3,
-        path: '/admin/analytics/dashboards',
-        metadata: {,
-          category: 'dashboards',
-          priority: 50,
-          riskLevel: 'low',
-          tags: ['dashboards', 'metrics', 'performance']
-        }
-      },
+  id: 'integrations',
+  label: 'Integrations',
+  description: 'Third-party integrations and webhooks',
+  icon: Zap,
+  path: '/admin/system/integrations',
+  metadata: {,
+  category: 'integrations',
+  priority: 55,
+  riskLevel: 'medium',
+  tags: ['integrations', 'webhooks', 'third-party']],
+  metadata: {,
+  category: 'system_configuration',
+  priority: 65,
+  riskLevel: 'high',
+  epic: '17.4',
+  tags: ['system', 'configuration'],
+}
+  {
+  id: 'analytics',
+  label: 'Analytics & Monitoring',
+  description: 'System analytics and performance monitoring',
+  icon: BarChart3,
+  path: '/admin/analytics',
+  children: [,
+  {
+  id: 'dashboards',
+  label: 'Dashboards',
+  description: 'System health and performance dashboards',
+  icon: BarChart3,
+  path: '/admin/analytics/dashboards',
+  metadata: {,
+  category: 'dashboards',
+  priority: 50,
+  riskLevel: 'low',
+  tags: ['dashboards', 'metrics', 'performance'],
+}
       {
         id: 'alerts',
         label: 'Alerts',
@@ -393,21 +357,17 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
         path: '/admin/analytics/alerts',
         badge: { type: 'status', value: 'OK', color: 'green' },
         metadata: {,
-          category: 'alerts',
-          priority: 65,
-          riskLevel: 'medium',
-          tags: ['alerts', 'notifications', 'monitoring']
-        }
-      }
-    ],
-    metadata: {,
-      category: 'analytics',
-      priority: 60,
-      riskLevel: 'low',
-      epic: '17.4',
-      tags: ['analytics', 'monitoring']
-    }
-  },
+  category: 'alerts',
+  priority: 65,
+  riskLevel: 'medium',
+  tags: ['alerts', 'notifications', 'monitoring']],
+  metadata: {,
+  category: 'analytics',
+  priority: 60,
+  riskLevel: 'low',
+  epic: '17.4',
+  tags: ['analytics', 'monitoring'],
+}
   {
     id: 'audit',
     label: 'Audit & Security',
@@ -416,14 +376,11 @@ const EPIC17_NAVIGATION: NavigationItem[] = [
     path: '/admin/audit',
     badge: { type: 'info', value: 'New', color: 'blue' },
     metadata: {,
-      category: 'audit_security',
-      priority: 85,
-      riskLevel: 'critical',
-      tags: ['audit', 'security', 'compliance']
-    }
-  }
-];
-interface Epic17NavigationSystemProps {
+  category: 'audit_security',
+  priority: 85,
+  riskLevel: 'critical',
+  tags: ['audit', 'security', 'compliance']];
+  interface Epic17NavigationSystemProps {
   currentSection?: string;
   onSectionChange?: (section: string) => void;
   variant?: 'sidebar' | 'top' | 'mobile';
@@ -431,7 +388,6 @@ interface Epic17NavigationSystemProps {
   showQuickActions?: boolean;
   enableSearch?: boolean;
 }
-
 export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   currentSection = 'overview',
   onSectionChange,
@@ -445,74 +401,70 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   const { canAccess, userRoles, availableSections } = useEpic17Authorization();
   // Navigation state
   const [state, setState] = useState<NavigationState>({)
-    expandedSections: new Set(['feature-management', 'user-management']),
-    pinnedItems: new Set(['feature-toggles', 'user-accounts']),
-    recentItems: [],
-    favoriteItems: new Set(['feature-toggles', 'permissions']),
-    searchQuery: '',
-    mobileMenuOpen: false,
-  });
+  expandedSections: new Set(['feature-management', 'user-management']),
+  pinnedItems: new Set(['feature-toggles', 'user-accounts']),
+  recentItems: [],
+  favoriteItems: new Set(['feature-toggles', 'permissions']),
+  searchQuery: '',
+  mobileMenuOpen: false,
+});
   // Filter navigation items based on permissions
   const availableNavItems = useMemo(() => {
-    const filterItems = (items: NavigationItem[]): NavigationItem[] => {
-      return items.filter(item => {)
-        // For now, return all items - in full implementation would check permissions
-        return true;
-      }).map(item => ({)
-        ...item,
-        children: item.children ? filterItems(item.children) : undefined,
-      }));
+  const filterItems = (items: NavigationItem): NavigationItem => {,
+  return items.filter(item => {)
+  // For now, return all items - in full implementation would check permissions
+  return true;
+}).map(item => ({)
+  ...item,
+  children: item.children ? filterItems(item.children) : undefined,
+}));
     };
     return filterItems(EPIC17_NAVIGATION);
   }, [canAccess]);
   // Generate navigation context
   const navigationContext: NavigationContext = useMemo(() => {
-    const pathSegments = location.pathname.split('/').filter(Boolean);
-    const currentPath = location.pathname;
-    // Find current item
-    const findCurrentItem = (items: NavigationItem[], segments: string[]): NavigationItem | null => {
-      for (const item of items) {
-        if (item.path === currentPath) return item;
-        if (item.children) {
-          const found = findCurrentItem(item.children, segments);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const currentPath = location.pathname;
+  // Find current item
+  const findCurrentItem = (items: NavigationItem, segments: string): NavigationItem | null => {,
+  for (const item of items) {
+  if (item.path === currentPath) return item;
+  if (item.children) {
+  const found = findCurrentItem(item.children, segments);
+  if (found) return found;
+  return null;
+};
     const currentItem = findCurrentItem(availableNavItems, pathSegments);
     // Generate breadcrumbs
-    const breadcrumbs: BreadcrumbItem[] = [
+    const breadcrumbs: BreadcrumbItem = [
       { label: 'Admin', path: '/admin', icon: Shield, active: false }
     ];
     if (currentItem) {
-      // Add parent breadcrumbs
-      const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
-      if (parentPath !== '/admin') {
-        breadcrumbs.push({)
-          label: 'Section',
-          path: parentPath,
-          active: false,
-        });
-      }
+  // Add parent breadcrumbs
+  const parentPath = currentItem.path.split('/').slice(0, -1).join('/');
+  if (parentPath !== '/admin') {
+  breadcrumbs.push({)
+  label: 'Section',
+  path: parentPath,
+  active: false,
+});
       breadcrumbs.push({)
-        label: currentItem.label,
-        path: currentItem.path,
-        icon: currentItem.icon,
-        active: true,
-      });
-    }
+  label: currentItem.label,
+  path: currentItem.path,
+  icon: currentItem.icon,
+  active: true,
+});
     return {
-      currentPath,
-      currentSection: currentItem?.id || 'overview',
-      parentSections: [],
-      breadcrumbs,
-      availableActions: generateQuickActions(currentItem),
-    };
+  currentPath,
+  currentSection: currentItem?.id || 'overview',
+  parentSections: [],
+  breadcrumbs,
+  availableActions: generateQuickActions(currentItem),
+};
   }, [location.pathname, availableNavItems]);
   // Generate quick actions based on current context
-  const generateQuickActions = (currentItem: NavigationItem | null): QuickAction[] => {
-    const baseActions: QuickAction[] = [
+  const generateQuickActions = (currentItem: NavigationItem | null): QuickAction => {
+    const baseActions: QuickAction = [
       {
         id: 'search',
         label: 'Search',
@@ -521,79 +473,74 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
         action: () => setState(prev => ({ ...prev, searchQuery: '' })),
         shortcut: 'Ctrl+K',
         category: 'primary',
-        enabled: true,
-      },
+        enabled: true;
+  }
       {
-        id: 'help',
-        label: 'Help & Documentation',
-        description: 'Access help and documentation',
-        icon: HelpCircle,
-        action: () => window.open('/docs/epic17', '_blank'),
-        category: 'secondary',
-        enabled: true,
-      }
-    ];
-    // Add context-specific actions
-    if (currentItem?.id === 'feature-toggles') {
-      baseActions.unshift({)
-        id: 'create-toggle',
-        label: 'Create Toggle',
-        description: 'Create a new feature toggle',
-        icon: ToggleLeft,
-        action: () => navigate('/admin/features/toggles/create'),
-        shortcut: 'Ctrl+N',
-        category: 'primary',
-        enabled: true,
-      });
-    }
+  id: 'help',
+  label: 'Help & Documentation',
+  description: 'Access help and documentation',
+  icon: HelpCircle,
+  action: () => window.open('/docs/epic17', '_blank'),
+  category: 'secondary',
+  enabled: true];
+  // Add context-specific actions
+  if (currentItem?.id === 'feature-toggles') {
+  baseActions.unshift({)
+  id: 'create-toggle',
+  label: 'Create Toggle',
+  description: 'Create a new feature toggle',
+  icon: ToggleLeft,
+  action: () => navigate('/admin/features/toggles/create'),
+  shortcut: 'Ctrl+N',
+  category: 'primary',
+  enabled: true,
+});
     return baseActions;
   };
   // Handle navigation item click
   const handleNavItemClick = useCallback((item: NavigationItem, event: React.MouseEvent) => {
-    event.preventDefault();
-    if (item.children && item.children.length > 0) {
-      // Toggle expansion for items with children
-      setState(prev => ({)
-        ...prev,
-        expandedSections: prev.expandedSections.has(item.id),
-          ? new Set([...prev.expandedSections].filter(id => id !== item.id))
-          : new Set([...prev.expandedSections, item.id])
-      }));
+  event.preventDefault();
+  if (item.children && item.children.length > 0) {
+  // Toggle expansion for items with children
+  setState(prev => ({)
+  ...prev,
+  expandedSections: prev.expandedSections.has(item.id),
+  ? new Set([...prev.expandedSections].filter(id => id !== item.id))
+  : new Set([...prev.expandedSections, item.id]),
+}));
     } else {
-      // Navigate to item
-      navigate(item.path);
-      onSectionChange?.(item.id);
-      // Add to recent items
-      setState(prev => ({)
-        ...prev,
-        recentItems: [,
-          {
-            id: item.id,
-            label: item.label,
-            path: item.path,
-            timestamp: new Date(),
-            icon: item.icon,
-          },
+  // Navigate to item
+  navigate(item.path);
+  onSectionChange?.(item.id);
+  // Add to recent items
+  setState(prev => ({)
+  ...prev,
+  recentItems: [,
+  {
+  id: item.id,
+  label: item.label,
+  path: item.path,
+  timestamp: new Date(),
+  icon: item.icon,
+}
           ...prev.recentItems.filter(r => r.id !== item.id).slice(0, 9)
         ]
       }));
       // Close mobile menu if open
       if (variant === 'mobile') {
         setState(prev => ({ ...prev, mobileMenuOpen: false }));
-      }
-    }
   }, [navigate, onSectionChange, variant]);
   // Render navigation badge
   const renderBadge = (badge: NavigationBadge) => {
-    const colorClasses = {
-      blue: 'bg-blue-500 text-white',
-      green: 'bg-green-500 text-white',
-      yellow: 'bg-yellow-500 text-yellow-900',
-      red: 'bg-red-500 text-white',
-      purple: 'bg-purple-500 text-white',
-      gray: 'bg-gray-500 text-white',
-    };
-    return ();
+  const colorClasses = {
+  blue: 'bg-blue-500 text-white',
+  green: 'bg-green-500 text-white',
+  yellow: 'bg-yellow-500 text-yellow-900',
+  red: 'bg-red-500 text-white',
+  purple: 'bg-purple-500 text-white',
+  gray: 'bg-gray-500 text-white',
+};
+    return;
       <span
         className={`
           px-2 py-1 rounded-full text-xs font-medium
@@ -607,19 +554,19 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   };
   // Render navigation item
   const renderNavItem = (item: NavigationItem, level = 0) => {
-    const isActive = navigationContext.currentPath === item.path;
-    const isExpanded = state.expandedSections.has(item.id);
-    const hasChildren = item.children && item.children.length > 0;
-    const isPinned = state.pinnedItems.has(item.id);
-    const isFavorite = state.favoriteItems.has(item.id);
-    const Icon = item.icon;
-    const riskColors = {
-      low: 'text-green-600',
-      medium: 'text-yellow-600',
-      high: 'text-orange-600',
-      critical: 'text-red-600',
-    };
-    return ();
+  const isActive = navigationContext.currentPath === item.path;
+  const isExpanded = state.expandedSections.has(item.id);
+  const hasChildren = item.children && item.children.length > 0;
+  const isPinned = state.pinnedItems.has(item.id);
+  const isFavorite = state.favoriteItems.has(item.id);
+  const Icon = item.icon;
+  const riskColors = {
+  low: 'text-green-600',
+  medium: 'text-yellow-600',
+  high: 'text-orange-600',
+  critical: 'text-red-600',
+};
+    return;
       <div key={item.id} className={`nav-item-container ${level > 0 ? 'ml-4' : ''}`}>}
         <div
           className={`
@@ -671,7 +618,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render breadcrumbs
   const renderBreadcrumbs = () => {
     if (!showBreadcrumbs) return null;
-    return ();
+    return;
       <div className="breadcrumb-container flex items-center space-x-2 px-4 py-2 bg-gray-50 border-b">
         {navigationContext.breadcrumbs.map((crumb, index) => ()
           <React.Fragment key={index}>
@@ -683,7 +630,6 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
                 ${crumb.active }
             ? 'text-blue-600 font-medium bg-blue-100' 
             : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100'
-          }
               `}
               disabled={crumb.active}
             >
@@ -698,7 +644,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render search bar
   const renderSearch = () => {
     if (!enableSearch) return null;
-    return ();
+    return;
       <div className="search-container p-4 border-b">
         <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -716,7 +662,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render quick actions
   const renderQuickActions = () => {
     if (!showQuickActions || navigationContext.availableActions.length === 0) return null;
-    return ();
+    return;
       <div className="quick-actions-container p-4 border-b bg-gray-50">
         <h3 className="text-sm font-medium text-gray-700 mb-2">Quick Actions</h3>
         <div className="grid grid-cols-2 gap-2">
@@ -729,9 +675,8 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
                 flex items-center space-x-2 p-2 rounded-lg text-left text-sm
                 ${action.category === 'primary' }
               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }
-                disabled:opacity-50 disabled:cursor-not-allowed,
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  disabled:opacity-50 disabled:cursor-not-allowed,
                 transition-colors duration-200
               `}
             >
@@ -751,7 +696,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
   // Render recent items
   const renderRecentItems = () => {
     if (state.recentItems.length === 0) return null;
-    return ();
+    return;
       <div className="recent-items-container p-4 border-b">
         <h3 className="text-sm font-medium text-gray-700 mb-2 flex items-center">
           <Clock size={14} className="mr-1" />
@@ -772,7 +717,7 @@ export const Epic17NavigationSystem: React.FC<Epic17NavigationSystemProps> = ({)
       </div>
     );
   };
-  return ();
+  return;
     <div className={`epic17-navigation-system ${variant}`}>}
       {/* Mobile Header */}
       {variant === 'mobile' && ()

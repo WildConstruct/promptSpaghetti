@@ -6,6 +6,7 @@
  * and intelligent search with AI-powered recommendations.
  */
 import { EventEmitter } from 'events';
+
 export interface KnowledgeBaseArticle {
     id: string;
     title: string;
@@ -47,7 +48,7 @@ export interface KnowledgeBaseArticle {
     videos: VideoContent[];
     images: ImageContent[];
     analytics: ArticleAnalytics;
-}
+
 export declare enum KnowledgeCategory {
     GETTING_STARTED = "getting_started",
     MARKETPLACE_GUIDE = "marketplace_guide",
@@ -64,7 +65,7 @@ export declare enum KnowledgeCategory {
     INTEGRATIONS = "integrations",
     MOBILE_APP = "mobile_app",
     ADVANCED_FEATURES = "advanced_features"
-}
+
 export declare enum ArticleType {
     GUIDE = "guide",
     TUTORIAL = "tutorial",
@@ -78,7 +79,7 @@ export declare enum ArticleType {
     API_DOC = "api_doc",
     CHANGELOG = "changelog",
     POLICY = "policy"
-}
+
 export declare enum ArticleStatus {
     DRAFT = "draft",
     UNDER_REVIEW = "under_review",
@@ -86,13 +87,13 @@ export declare enum ArticleStatus {
     ARCHIVED = "archived",
     NEEDS_UPDATE = "needs_update",
     DEPRECATED = "deprecated"
-}
+
 export declare enum ReadingLevel {
     BEGINNER = "beginner",
     INTERMEDIATE = "intermediate",
     ADVANCED = "advanced",
     EXPERT = "expert"
-}
+
 export interface ArticleSection {
     id: string;
     title: string;
@@ -102,7 +103,7 @@ export interface ArticleSection {
     anchor: string;
     isCollapsible: boolean;
     metadata: Record<string, any>;
-}
+
 export declare enum SectionType {
     TEXT = "text",
     CODE = "code",
@@ -115,7 +116,7 @@ export declare enum SectionType {
     QUOTE = "quote",
     TABLE = "table",
     INTERACTIVE = "interactive"
-}
+
 export interface ArticleAttachment {
     id: string;
     name: string;
@@ -125,14 +126,16 @@ export interface ArticleAttachment {
     size: number;
     downloadCount: number;
     isPublic: boolean;
-}
+
+
 export interface ArticleRating {
     userId: string;
     rating: number;
     comment?: string;
     timestamp: Date;
     helpful: boolean;
-}
+
+
 export interface ArticleFeedback {
     id: string;
     userId: string;
@@ -142,7 +145,7 @@ export interface ArticleFeedback {
     response?: string;
     timestamp: Date;
     resolved: boolean;
-}
+
 export declare enum FeedbackType {
     IMPROVEMENT = "improvement",
     ERROR_REPORT = "error_report",
@@ -150,19 +153,19 @@ export declare enum FeedbackType {
     POSITIVE = "positive",
     NEGATIVE = "negative",
     QUESTION = "question"
-}
+
 export declare enum FeedbackStatus {
     NEW = "new",
     ACKNOWLEDGED = "acknowledged",
     IN_PROGRESS = "in_progress",
     RESOLVED = "resolved",
     REJECTED = "rejected"
-}
+
 export interface AccessibilityFeature {
     type: AccessibilityType;
     description: string;
     enabled: boolean;
-}
+
 export declare enum AccessibilityType {
     SCREEN_READER = "screen_reader",
     HIGH_CONTRAST = "high_contrast",
@@ -171,13 +174,13 @@ export declare enum AccessibilityType {
     ALT_TEXT = "alt_text",
     CAPTIONS = "captions",
     TRANSCRIPT = "transcript"
-}
+
 export interface InteractiveKBElement {
     id: string;
     type: InteractiveElementType;
     config: Record<string, any>;
     position: ElementPosition;
-}
+
 export declare enum InteractiveElementType {
     COLLAPSIBLE_SECTION = "collapsible_section",
     TABBED_CONTENT = "tabbed_content",
@@ -189,12 +192,13 @@ export declare enum InteractiveElementType {
     CODE_SANDBOX = "code_sandbox",
     QUIZ = "quiz",
     CHECKLIST = "checklist"
-}
+
 export interface ElementPosition {
     sectionId: string;
     order: number;
     placement: 'before' | 'after' | 'replace' | 'inline';
-}
+
+
 export interface CodeExample {
     id: string;
     language: string;
@@ -204,7 +208,8 @@ export interface CodeExample {
     output?: string;
     runnable: boolean;
     githubLink?: string;
-}
+
+
 export interface VideoContent {
     id: string;
     title: string;
@@ -215,13 +220,15 @@ export interface VideoContent {
     transcript?: string;
     captions?: string;
     chapters: VideoChapter[];
-}
+
+
 export interface VideoChapter {
     title: string;
     startTime: number;
     endTime: number;
     description?: string;
-}
+
+
 export interface ImageContent {
     id: string;
     url: string;
@@ -231,7 +238,8 @@ export interface ImageContent {
     height: number;
     format: string;
     zoomable: boolean;
-}
+
+
 export interface ArticleAnalytics {
     totalViews: number;
     uniqueViews: number;
@@ -250,19 +258,22 @@ export interface ArticleAnalytics {
     accuracyScore: number;
     freshnessScore: number;
     seoScore: number;
-}
+
+
 export interface SectionAnalytics {
     sectionId: string;
     views: number;
     timeSpent: number;
     exitRate: number;
-}
+
+
 export interface UserJourneyStep {
     fromArticle?: string;
     toArticle?: string;
     timestamp: Date;
     sessionId: string;
-}
+
+
 export interface KnowledgeBaseSearch {
     query: string;
     filters: SearchFilters;
@@ -271,7 +282,8 @@ export interface KnowledgeBaseSearch {
     totalResults: number;
     searchTime: number;
     didYouMean?: string;
-}
+
+
 export interface SearchFilters {
     categories: KnowledgeCategory[];
     types: ArticleType[];
@@ -282,43 +294,47 @@ export interface SearchFilters {
     minRating: number;
     hasVideo: boolean;
     hasCode: boolean;
-}
+
+
 export interface DateRange {
     start?: Date;
     end?: Date;
-}
+
+
 export interface SearchResult {
     article: KnowledgeBaseArticle;
     score: number;
     matchedSections: MatchedSection[];
     highlightedContent: string;
     relevanceReason: string[];
-}
+
+
 export interface MatchedSection {
     sectionId: string;
     title: string;
     matchScore: number;
     highlightedText: string;
-}
+
+
 export interface SearchSuggestion {
     text: string;
     type: SuggestionType;
     score: number;
     category?: KnowledgeCategory;
-}
+
 export declare enum SuggestionType {
     QUERY_COMPLETION = "query_completion",
     SPELLING_CORRECTION = "spelling_correction",
     RELATED_TOPIC = "related_topic",
     POPULAR_SEARCH = "popular_search"
-}
+
 export interface AIRecommendation {
     articleId: string;
     score: number;
     reason: RecommendationReason;
     context: RecommendationContext;
     personalizedFactors: PersonalizationFactor[];
-}
+
 export declare enum RecommendationReason {
     SIMILAR_CONTENT = "similar_content",
     USER_BEHAVIOR = "user_behavior",
@@ -327,7 +343,7 @@ export declare enum RecommendationReason {
     BASED_ON_SEARCH = "based_on_search",
     TRENDING = "trending",
     PERSONALIZED = "personalized"
-}
+
 export interface RecommendationContext {
     currentArticleId?: string;
     userSearchHistory: string[];
@@ -335,12 +351,13 @@ export interface RecommendationContext {
     userRole: string;
     userExperience: string;
     timestamp: Date;
-}
+
+
 export interface PersonalizationFactor {
     type: PersonalizationType;
     weight: number;
     value: any;
-}
+
 export declare enum PersonalizationType {
     USER_ROLE = "user_role",
     SKILL_LEVEL = "skill_level",
@@ -349,7 +366,7 @@ export declare enum PersonalizationType {
     LOCATION = "location",
     DEVICE_TYPE = "device_type",
     TIME_OF_DAY = "time_of_day"
-}
+
 export interface KnowledgeBaseConfig {
     searchConfig: SearchConfig;
     aiConfig: AIConfig;
@@ -357,7 +374,8 @@ export interface KnowledgeBaseConfig {
     analyticsConfig: AnalyticsConfig;
     localizationConfig: LocalizationConfig;
     integrationConfig: IntegrationConfig;
-}
+
+
 export interface SearchConfig {
     enableAISearch: boolean;
     enableAutoComplete: boolean;
@@ -368,7 +386,8 @@ export interface SearchConfig {
     boostFactors: Record<string, number>;
     stopWords: string[];
     synonyms: Record<string, string[]>;
-}
+
+
 export interface AIConfig {
     enableRecommendations: boolean;
     enableContentGeneration: boolean;
@@ -377,7 +396,8 @@ export interface AIConfig {
     confidenceThreshold: number;
     maxRecommendations: number;
     personalizedWeight: number;
-}
+
+
 export interface ContentConfig {
     autoPublish: boolean;
     requireReview: boolean;
@@ -386,7 +406,8 @@ export interface ContentConfig {
     allowedFileTypes: string[];
     contentModeration: boolean;
     duplicateDetection: boolean;
-}
+
+
 export interface AnalyticsConfig {
     trackingEnabled: boolean;
     retentionPeriod: number;
@@ -394,14 +415,16 @@ export interface AnalyticsConfig {
     realTimeTracking: boolean;
     heatmapTracking: boolean;
     performanceTracking: boolean;
-}
+
+
 export interface LocalizationConfig {
     defaultLanguage: string;
     supportedLanguages: string[];
     autoTranslation: boolean;
     translationService: string;
     fallbackLanguage: string;
-}
+
+
 export interface IntegrationConfig {
     crmIntegration: boolean;
     helpDeskIntegration: boolean;
@@ -410,7 +433,7 @@ export interface IntegrationConfig {
     emailIntegration: boolean;
     apiAccess: boolean;
     webhookSupport: boolean;
-}
+
 export declare class Epic16KnowledgeBaseService extends EventEmitter {
     private articles;
     private searchIndex;
@@ -451,25 +474,27 @@ export declare class Epic16KnowledgeBaseService extends EventEmitter {
     private getUserSession;
     private updateHelpfulnessScore;
     private incrementVersion;
-}
+
 export interface UserKBSession {
     userId: string;
     sessionStart: Date;
     viewedArticles: Set<string>;
     searchHistory: SearchHistoryItem[];
     preferences: UserKBPreferences;
-}
+
+
 export interface SearchHistoryItem {
     query: string;
     timestamp: Date;
     results: number;
-}
+
+
 export interface UserKBPreferences {
     favoriteCategories?: KnowledgeCategory[];
     preferredReadingLevel?: ReadingLevel;
     language?: string;
     emailNotifications?: boolean;
     darkMode?: boolean;
-}
+
 export default Epic16KnowledgeBaseService;
 //# sourceMappingURL=Epic16KnowledgeBaseService.d.ts.map

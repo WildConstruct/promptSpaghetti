@@ -45,6 +45,7 @@ export enum ConfidenceLevel {
   VERY_HIGH = 'very_high'  // 81-100%
 }
 
+}
 export interface CategorizationRequest {
   requestId: string;
   itemId: string;
@@ -56,7 +57,9 @@ export interface CategorizationRequest {
   context?: CategorizationContext;
   options?: CategorizationOptions;
 }
+}
 
+}
 export interface CategorizationResult {
   requestId: string;
   itemId: string;
@@ -94,7 +97,9 @@ export interface CategorizationResult {
   metadata: Record<string, unknown>;
   reasoningChain: ReasoningStep[];
 }
+}
 
+}
 export interface CategorizationContext {
   organizationId?: string;
   userId?: string;
@@ -109,9 +114,11 @@ export interface CategorizationContext {
     region: string;
     country: string;
     timezone: string;
+}
   };
 }
 
+}
 export interface CategorizationOptions {
   enableMLCategorization?: boolean;
   enableRuleBasedCategorization?: boolean;
@@ -123,7 +130,9 @@ export interface CategorizationOptions {
   excludeCategories?: string[];
   priorityCategories?: string[];
 }
+}
 
+}
 export interface AutoAssignment {
   assignmentType: 'user' | 'team' | 'role' | 'permission' | 'queue' | 'workflow';
   assignmentTarget: string;
@@ -132,14 +141,18 @@ export interface AutoAssignment {
   conditions?: AssignmentCondition[];
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 export interface AssignmentCondition {
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'contains' | 'matches';
   value: any;
   description: string;
 }
+}
 
+}
 export interface ReasoningStep {
   stepId: string;
   stepType: 'rule_evaluation' | 'ml_inference' | 'data_analysis' | 'validation';
@@ -150,7 +163,9 @@ export interface ReasoningStep {
   processingTime: number;
   metadata?: Record<string, unknown>;
 }
+}
 
+}
 export interface CategorizationRule {
   ruleId: string;
   name: string;
@@ -182,16 +197,20 @@ export interface CategorizationRule {
     lastTriggered?: Date;
     successRate: number;
     averageConfidence: number;
+}
   };
 }
 
+}
 export interface RuleTrigger {
   field: string;
   operator: string;
   value: any;
   weight: number; // 0-100
 }
+}
 
+}
 export interface RuleCondition {
   field: string;
   operator: string;
@@ -199,13 +218,17 @@ export interface RuleCondition {
   logicalOperator?: 'AND' | 'OR';
   negate?: boolean;
 }
+}
 
+}
 export interface RuleAction {
   actionType: 'categorize' | 'assign' | 'flag' | 'escalate' | 'notify';
   parameters: Record<string, unknown>;
   conditions?: Record<string, unknown>;
 }
+}
 
+}
 export interface CategoryDefinition {
   categoryId: string;
   name: string;
@@ -236,6 +259,7 @@ export interface CategoryDefinition {
     itemsCategories: number;
     lastUsed?: Date;
     averageConfidence: number;
+}
   };
   
   // ML Training
@@ -246,6 +270,7 @@ export interface CategoryDefinition {
   }>;
 }
 
+}
 export interface CategorizationStats {
   totalRequests: number;
   processedRequests: number;
@@ -266,6 +291,7 @@ export interface CategorizationStats {
     category: string;
     count: number;
     averageConfidence: number;
+}
   }>;
   
   // Success metrics
@@ -314,6 +340,7 @@ export class AutomatedCategorizationService extends EventEmitter {
       categorizationOptions?: CategorizationOptions;
     } = {}
   ): Promise<string> {
+
     try {
       const requestId = crypto.randomUUID();
       
@@ -361,6 +388,7 @@ export class AutomatedCategorizationService extends EventEmitter {
    * Process categorization request
    */
   private async processCategorizationRequest(request: CategorizationRequest): Promise<CategorizationResult> {
+
     const startTime = Date.now();
     const reasoningChain: ReasoningStep[] = [];
 
@@ -564,7 +592,7 @@ export class AutomatedCategorizationService extends EventEmitter {
         rulesApplied: rulesApplied.length,
         categoriesFound: categories.length,
         primaryCategory: primaryCategoryResult?.category
-      },
+  }
       confidence: primaryCategoryResult?.confidence || 0,
       processingTime: Date.now() - stepStart
     });
@@ -679,7 +707,7 @@ export class AutomatedCategorizationService extends EventEmitter {
           categories,
           riskLevel,
           confidence
-        },
+  }
         confidence,
         processingTime: Date.now() - stepStart
       });
@@ -944,6 +972,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   // =============================================================================
 
   private async initialize(): Promise<void> {
+
     try {
       await this.loadCategorizationRules();
       await this.loadCategoryDefinitions();
@@ -971,6 +1000,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   }
 
   private async processNextRequest(): Promise<void> {
+
     if (this.isProcessing || this.processingQueue.length === 0) {
       return;
     }
@@ -1003,6 +1033,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     rule: CategorizationRule,
     request: CategorizationRequest
   ): Promise<{ matches: boolean; confidence: number }> {
+
     // Simplified rule evaluation - would implement comprehensive logic
     const triggerMatches = rule.triggers.length === 0 || rule.triggers.some(trigger => {
       const fieldValue = request.itemData[trigger.field];
@@ -1099,6 +1130,7 @@ export class AutomatedCategorizationService extends EventEmitter {
     result: CategorizationResult,
     request: CategorizationRequest
   ): Promise<AutoAssignment[]> {
+
     const assignments: AutoAssignment[] = [];
     
     // Add category-based assignments
@@ -1121,6 +1153,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   }
 
   private async assessComplianceFlags(result: CategorizationResult, request: CategorizationRequest): Promise<string[]> {
+
     const flags: string[] = [];
     
     if (request.itemType === CategorizationType.CONTENT && result.primaryCategory === 'content_moderation') {
@@ -1135,10 +1168,12 @@ export class AutomatedCategorizationService extends EventEmitter {
   }
 
   private async assessSecurityFlags(result: CategorizationResult, request: CategorizationRequest): Promise<string[]> {
+
     return result.securityFlags || [];
   }
 
   private async executeAutoAssignments(assignments: AutoAssignment[], request: CategorizationRequest): Promise<void> {
+
     for (const assignment of assignments) {
       try {
         if (assignment.assignmentType === 'team' || assignment.assignmentType === 'user') {
@@ -1187,6 +1222,7 @@ export class AutomatedCategorizationService extends EventEmitter {
   }
 
   private async invokeMLCategorization(request: CategorizationRequest): Promise<any> {
+
     // Placeholder for ML model invocation
     // Would integrate with actual ML models based on item type
     return {
@@ -1211,11 +1247,13 @@ export class AutomatedCategorizationService extends EventEmitter {
 
   // Public API methods
   async getCategorizationResult(requestId: string): Promise<CategorizationResult | null> {
+
     // Implementation would fetch from database
     return null;
   }
 
   async getCategorizationStats(): Promise<CategorizationStats> {
+
     // Implementation would calculate stats from database
     return {
       totalRequests: 0,

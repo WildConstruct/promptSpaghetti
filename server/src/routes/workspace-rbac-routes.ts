@@ -74,7 +74,7 @@ export async function registerWorkspaceRBACRoutes(
               status: member.membership.status,
               joinedAt: member.membership.joined_at,
               lastActiveAt: member.membership.last_active_at
-            },
+  }
             roles: member.roles.map(role => ({
               id: role.id,
               name: role.name,
@@ -351,19 +351,19 @@ export async function registerWorkspaceRBACRoutes(
             description: 'Full workspace access and management',
             permissions: ROLE_PERMISSIONS.ADMIN,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.ADMIN)
-          },
+  }
           {
             name: 'editor',
             description: 'Can create and edit content',
             permissions: ROLE_PERMISSIONS.EDITOR,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.EDITOR)
-          },
+  }
           {
             name: 'viewer',
             description: 'Read-only access to workspace',
             permissions: ROLE_PERMISSIONS.VIEWER,
             permissionNames: getPermissionNames(ROLE_PERMISSIONS.VIEWER)
-          },
+  }
           {
             name: 'commenter',
             description: 'Can view content and add comments',

@@ -2,67 +2,64 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 // Per-node disclosure preferences
+
 export interface NodePreferences {
-  disclosureLevel: 'basic' | 'advanced' | 'debug';
+  disclosureLevel: 'basic' | 'advanced' | 'debug';,
   useGlobalDefault: boolean;
   lastModified: number;
+  // Per-node type preferences
 }
-
-// Per-node type preferences  
 export interface NodeTypePreferences {
-  disclosureLevel: 'basic' | 'advanced' | 'debug';
-  collapsedSections: string[];
+  disclosureLevel: 'basic' | 'advanced' | 'debug';,
+  collapsedSections: string;
 }
-
 export interface UISettings {
   // Professional Interface Settings
-  debugMode: boolean;           // Shows technical fields when true
+  debugMode: boolean;           // Shows technical fields when true,
   professionalUI: boolean;      // Uses professional color scheme and typography
   showTechnicalDetails: boolean; // Shows IDs, internal configs, etc.
   // Progressive Disclosure Settings
-  complexityLevel: 'basic' | 'advanced' | 'expert';  // Global default
-  globalDisclosureLevel: 'basic' | 'advanced' | 'debug'; // New: Global disclosure preference
+  complexityLevel: 'basic' | 'advanced' | 'expert';  // Global default,
+  globalDisclosureLevel: 'basic' | 'advanced' | 'debug'; // New: Global disclosure preference,
   hideAdvancedFeatures: boolean;
   // Per-Node Preferences
   nodePreferences: Record<string, NodePreferences>; // nodeId -> preferences
   nodeTypePreferences: Record<string, NodeTypePreferences>; // nodeType -> preferences
   preferenceInheritance: 'global' | 'nodeType' | 'individual'; // Preference precedence
   // Visual Settings
-  theme: 'light' | 'dark' | 'cinema4d';
+  theme: 'light' | 'dark' | 'cinema4d';,
   compactMode: boolean;
   showNodeIcons: boolean;
   // Demo Settings
-  demoMode: boolean;           // Optimizes for presentation/demo
+  demoMode: boolean;           // Optimizes for presentation/demo,
   hideAllTechnicalUI: boolean; // Forces all technical UI hidden
-}
 interface UISettingsState extends UISettings {
   // Actions
-  setDebugMode: (enabled: boolean) => void;
-  setProfessionalUI: (enabled: boolean) => void;
-  setShowTechnicalDetails: (enabled: boolean) => void;
-  setComplexityLevel: (level: 'basic' | 'advanced' | 'expert') => void;
-  setGlobalDisclosureLevel: (level: 'basic' | 'advanced' | 'debug') => void;
-  setTheme: (theme: 'light' | 'dark' | 'cinema4d') => void;
+  setDebugMode: (enabled: boolean) => void;,
+  setProfessionalUI: (enabled: boolean) => void;,
+  setShowTechnicalDetails: (enabled: boolean) => void;,
+  setComplexityLevel: (level: 'basic' | 'advanced' | 'expert') => void;,
+  setGlobalDisclosureLevel: (level: 'basic' | 'advanced' | 'debug') => void;,
+  setTheme: (theme: 'light' | 'dark' | 'cinema4d') => void;,
   setDemoMode: (enabled: boolean) => void;
   // Per-Node Preference Actions
-  setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => void;
-  setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => void;
-  setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => void;
-  setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => void;
-  setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void;
+  setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => void;,
+  setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => void;,
+  setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => void;,
+  setNodeTypeCollapsedSections: (nodeType: string, sections: string) => void;,
+  setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => void;,
   clearNodePreferences: (nodeId?: string) => void; // Clear specific node or all nodes
   // Computed getters
-  shouldShowTechnicalFields: () => boolean;
+  shouldShowTechnicalFields: () => boolean;,
   shouldShowAdvancedFeatures: () => boolean;
-  getEffectiveTheme: () => 'light' | 'dark' | 'cinema4d';
+  getEffectiveTheme: () => 'light' | 'dark' | 'cinema4d';,
   getNodeDisclosureLevel: (nodeId: string, nodeType?: string) => 'basic' | 'advanced' | 'debug';
   getEffectiveNodePreferences: (nodeId: string, nodeType?: string) => NodePreferences;
   // Presets
-  applyFilmmakerPreset: () => void;
+  applyFilmmakerPreset: () => void;,
   applyDeveloperPreset: () => void;
   applyDemoPreset: () => void;
-}
-const DEFAULT_SETTINGS: UISettings = {
+const DEFAULT_SETTINGS: UISettings = {,
   debugMode: false,
   professionalUI: true,
   showTechnicalDetails: false,
@@ -76,13 +73,13 @@ const DEFAULT_SETTINGS: UISettings = {
   compactMode: false,
   showNodeIcons: true,
   demoMode: false,
-  hideAllTechnicalUI: false,
-};
-
+  hideAllTechnicalUI: false;
+  };
+}
 export const useUISettingsStore = create<UISettingsState>()()
   persist();
     (set, get) => ({)
-      ...DEFAULT_SETTINGS,
+  ...DEFAULT_SETTINGS,
       // Actions
       setDebugMode: (enabled: boolean) => set({ debugMode: enabled }),
       setProfessionalUI: (enabled: boolean) => set({ professionalUI: enabled }),
@@ -93,58 +90,50 @@ export const useUISettingsStore = create<UISettingsState>()()
       setDemoMode: (enabled: boolean) => set({ demoMode: enabled }),
       // Per-Node Preference Actions
       setNodeDisclosureLevel: (nodeId: string, level: 'basic' | 'advanced' | 'debug') => {
-        set((state) => ({)
-          nodePreferences: {,
-            ...state.nodePreferences,
-            [nodeId]: {
-              disclosureLevel: level,
-              useGlobalDefault: false,
-              lastModified: Date.now(),
-            }
-          }
-        }));
-      },
-      setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => {
-        set((state) => ({)
-          nodePreferences: {,
-            ...state.nodePreferences,
-            [nodeId]: {
-              ...state.nodePreferences[nodeId],
-              disclosureLevel: state.nodePreferences[nodeId]?.disclosureLevel || state.globalDisclosureLevel,
-              useGlobalDefault: useGlobal,
-              lastModified: Date.now(),
-            }
-          }
-        }));
-      },
-      setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => {
-        set((state) => ({)
-          nodeTypePreferences: {,
-            ...state.nodeTypePreferences,
-            [nodeType]: {
-              ...state.nodeTypePreferences[nodeType],
-              disclosureLevel: level,
-              collapsedSections: state.nodeTypePreferences[nodeType]?.collapsedSections || [],
-            }
-          }
-        }));
-      },
-      setNodeTypeCollapsedSections: (nodeType: string, sections: string[]) => {
-        set((state) => ({)
-          nodeTypePreferences: {,
-            ...state.nodeTypePreferences,
-            [nodeType]: {
-              ...state.nodeTypePreferences[nodeType],
-              disclosureLevel: state.nodeTypePreferences[nodeType]?.disclosureLevel || state.globalDisclosureLevel,
-              collapsedSections: sections,
-            }
-          }
-        }));
-      },
-      setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => {,
+  set((state) => ({)
+  nodePreferences: {,
+  ...state.nodePreferences,
+  [nodeId]: {,
+  disclosureLevel: level,
+  useGlobalDefault: false,
+  lastModified: Date.now(),
+}));
+  },
+  setNodeUseGlobalDefault: (nodeId: string, useGlobal: boolean) => {
+  set((state) => ({)
+  nodePreferences: {,
+  ...state.nodePreferences,
+  [nodeId]: {,
+  ...state.nodePreferences[nodeId],
+  disclosureLevel: state.nodePreferences[nodeId]?.disclosureLevel || state.globalDisclosureLevel,
+  useGlobalDefault: useGlobal,
+  lastModified: Date.now(),
+}));
+  },
+  setNodeTypeDisclosureLevel: (nodeType: string, level: 'basic' | 'advanced' | 'debug') => {
+  set((state) => ({)
+  nodeTypePreferences: {,
+  ...state.nodeTypePreferences,
+  [nodeType]: {,
+  ...state.nodeTypePreferences[nodeType],
+  disclosureLevel: level,
+  collapsedSections: state.nodeTypePreferences[nodeType]?.collapsedSections || [],
+}));
+  },
+  setNodeTypeCollapsedSections: (nodeType: string, sections: string) => {
+  set((state) => ({)
+  nodeTypePreferences: {,
+  ...state.nodeTypePreferences,
+  [nodeType]: {,
+  ...state.nodeTypePreferences[nodeType],
+  disclosureLevel: state.nodeTypePreferences[nodeType]?.disclosureLevel || state.globalDisclosureLevel,
+  collapsedSections: sections,
+}));
+  },
+  setPreferenceInheritance: (inheritance: 'global' | 'nodeType' | 'individual') => {,
         set({ preferenceInheritance: inheritance });
-      },
-      clearNodePreferences: (nodeId?: string) => {,
+  },
+  clearNodePreferences: (nodeId?: string) => {,
         if (nodeId) {
           set((state) => {
             const { [nodeId]: removed, ...remaining } = state.nodePreferences;
@@ -152,27 +141,25 @@ export const useUISettingsStore = create<UISettingsState>()()
           });
         } else {
           set({ nodePreferences: {} });
-        }
-      },
+  }
       // Computed getters
       shouldShowTechnicalFields: () => {,
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         return state.debugMode || state.showTechnicalDetails;
-      },
-      shouldShowAdvancedFeatures: () => {,
+  },
+  shouldShowAdvancedFeatures: () => {,
         const state = get();
         if (state.hideAllTechnicalUI || state.demoMode) return false;
         if (state.hideAdvancedFeatures) return false;
         return state.complexityLevel !== 'basic';
-      },
-      getEffectiveTheme: () => {,
+  },
+  getEffectiveTheme: () => {,
         const state = get();
         if (state.professionalUI && state.theme === 'dark') {
           return 'cinema4d'; // Use professional dark theme
-        }
         return state.theme;
-      },
+  }
       // Get effective disclosure level for a specific node
       getNodeDisclosureLevel: (nodeId: string, nodeType?: string) => {
         const state = get();
@@ -181,31 +168,27 @@ export const useUISettingsStore = create<UISettingsState>()()
           const nodePrefs = state.nodePreferences[nodeId];
           if (nodePrefs && !nodePrefs.useGlobalDefault) {
             return nodePrefs.disclosureLevel;
-          }
-        }
         // Node type preference is second priority
         if (state.preferenceInheritance === 'nodeType' && nodeType) {
           const typePrefs = state.nodeTypePreferences[nodeType];
           if (typePrefs) {
             return typePrefs.disclosureLevel;
-          }
-        }
         // Fall back to global default
         return state.globalDisclosureLevel;
-      },
+  }
       // Get effective node preferences with inheritance resolution
       getEffectiveNodePreferences: (nodeId: string, nodeType?: string) => {
-        const state = get();
-        const disclosureLevel = get().getNodeDisclosureLevel(nodeId, nodeType);
-        return {
-          disclosureLevel,
-          useGlobalDefault: state.nodePreferences[nodeId]?.useGlobalDefault ?? true,
-          lastModified: state.nodePreferences[nodeId]?.lastModified ?? Date.now(),
-        };
-      },
+  const state = get();
+  const disclosureLevel = get().getNodeDisclosureLevel(nodeId, nodeType);
+  return {
+  disclosureLevel,
+  useGlobalDefault: state.nodePreferences[nodeId]?.useGlobalDefault ?? true,
+  lastModified: state.nodePreferences[nodeId]?.lastModified ?? Date.now(),
+};
+  }
       // Presets
-      applyFilmmakerPreset: () => set({),
-        professionalUI: true,
+      applyFilmmakerPreset: () => set({,)
+  professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
         complexityLevel: 'basic',
@@ -218,10 +201,10 @@ export const useUISettingsStore = create<UISettingsState>()()
         compactMode: false,
         showNodeIcons: true,
         demoMode: false,
-        hideAllTechnicalUI: true,
-      }),
-      applyDeveloperPreset: () => set({),
-        professionalUI: false,
+        hideAllTechnicalUI: true;
+  }),
+      applyDeveloperPreset: () => set({,)
+  professionalUI: false,
         debugMode: true,
         showTechnicalDetails: true,
         complexityLevel: 'expert',
@@ -234,10 +217,10 @@ export const useUISettingsStore = create<UISettingsState>()()
         compactMode: true,
         showNodeIcons: true,
         demoMode: false,
-        hideAllTechnicalUI: false,
-      }),
-      applyDemoPreset: () => set({),
-        professionalUI: true,
+        hideAllTechnicalUI: false;
+  }),
+      applyDemoPreset: () => set({,)
+  professionalUI: true,
         debugMode: false,
         showTechnicalDetails: false,
         complexityLevel: 'basic',
@@ -250,9 +233,9 @@ export const useUISettingsStore = create<UISettingsState>()()
         compactMode: false,
         showNodeIcons: true,
         demoMode: true,
-        hideAllTechnicalUI: true,
-      }),
-    }),
+        hideAllTechnicalUI: true;
+  }
+}),
     {
       name: 'ui-settings-storage',
       version: 2,
@@ -265,12 +248,9 @@ export const useUISettingsStore = create<UISettingsState>()()
                                    persistedState.complexityLevel === 'advanced' ? 'advanced' : 'basic',
             nodePreferences: {},
             nodeTypePreferences: {},
-            preferenceInheritance: 'global',
-          };
-        }
+            preferenceInheritance: 'global';
+  };
         return persistedState;
-      }
-    }
 );
 
 // Helper function to check if field should be shown based on current settings
@@ -279,11 +259,9 @@ export const shouldShowField = (fieldName: string, fieldType?: string, store?: R
   const technicalFields = ['id', 'nodeId', 'internalId', 'config', '_internal', 'metadata'];
   if (technicalFields.some(tech => fieldName.toLowerCase().includes(tech.toLowerCase()))) {
     return store?.shouldShowTechnicalFields() ?? false;
-  }
   // Hide advanced fields based on complexity level
   if (fieldType === 'advanced') {
     return store?.shouldShowAdvancedFeatures() ?? true;
-  }
   // Always show basic fields
   return true;
 };
@@ -295,9 +273,7 @@ export const classifyField = (fieldName: string, fieldType?: string): 'basic' | 
   const lowerName = fieldName.toLowerCase();
   if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'technical';
-  }
   if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
     return 'advanced';
-  }
   return 'basic';
 };

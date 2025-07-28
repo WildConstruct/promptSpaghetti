@@ -63,7 +63,7 @@ export declare class ExtensionInterfaceValidator {
     private isAsyncFunction;
     private isValidSemanticVersion;
     private getBaseMethodSignatures;
-}
+
 export declare class ExtensionRuntimeTypeChecker {
     private static instance;
     private typeCache;
@@ -91,13 +91,14 @@ export declare class ExtensionRuntimeTypeChecker {
     private getObjectProperties;
     private isExtension;
     private isAsyncFunction;
-}
+
 interface MethodSignature {
     parameterCount?: number;
     parameterTypes?: string[];
     returnType?: string;
     async?: boolean;
-}
+
+
 interface ExtensionValidationReport {
     extensionId: string;
     extensionName: string;
@@ -105,13 +106,15 @@ interface ExtensionValidationReport {
     timestamp: Date;
     overallValid: boolean;
     validations: ValidationResult[];
-}
+
+
 interface ValidationResult {
     name: string;
     valid: boolean;
     errors: string[];
     warnings: string[];
-}
+
+
 interface RuntimeTypeInfo {
     type: string;
     constructor: string;
@@ -119,7 +122,7 @@ interface RuntimeTypeInfo {
     methods: string[];
     properties: string[];
     isExtension: boolean;
-}
+
 export declare const extensionValidator: ExtensionInterfaceValidator;
 export declare const runtimeTypeChecker: ExtensionRuntimeTypeChecker;
 export {};

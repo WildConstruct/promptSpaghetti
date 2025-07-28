@@ -2,102 +2,113 @@
 // Real-time preview system specifically designed for template-based nodes
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { parseTemplate, substituteVariables, getContextualDefaults } from '../utils/templateParser';
-const DEFAULT_CONFIG = {
-    maxVariants: 5,
-    debounceMs: 300,
-    enablePerformanceTracking: true,
-    autoRefresh: true,
-    showVariableSubstitution: true,
-    errorOnUndefinedVariables: false
-};
-export const useTemplatePreview = (template, variableValues = {}, customConfig = {}) => {
+export const useTemplatePreview = ();
+template: string,
+    variableValues;
+(Record) = {},
+    customConfig;
+(Partial) = {};
+{
     const config = { ...DEFAULT_CONFIG, ...customConfig };
     // Core state
     const [variants, setVariants] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
-    const [performance, setPerformance] = useState({
-        averageExecutionTime: 0,
-        totalGenerations: 0,
-        successRate: 100,
-        lastUpdate: Date.now(),
-        templatesProcessed: 0
-    });
-    const [error, setError] = useState(null);
-    // Template parsing results
-    const parseResult = useMemo(() => parseTemplate(template), [template]);
-    const extractedVariables = useMemo(() => parseResult.variables.filter(v => v.isValid), [parseResult.variables]);
-    // Refs for async operations
-    const debounceTimeoutRef = useRef(null);
-    const abortControllerRef = useRef(null);
-    const generationCounterRef = useRef(0);
-    // Generate sample values for undefined variables
-    const generateSampleValues = useCallback((variables) => {
-        const samples = {};
-        for (const variable of variables) {
-            if (!variableValues[variable.name]) {
-                // First try to use the inferred default value from type inference
-                if (variable.defaultValue) {
-                    samples[variable.name] = variable.defaultValue;
-                }
-                else {
-                    // Use contextual defaults based on node type and template
-                    const contextualDefault = getContextualDefaults(variable.name, template, undefined);
-                    samples[variable.name] = contextualDefault;
-                }
+    const [performance, setPerformance] = useState({});
+    averageExecutionTime: 0,
+        totalGenerations;
+    0,
+        successRate;
+    100,
+        lastUpdate;
+    Date.now(),
+        templatesProcessed;
+    0,
+    ;
+}
+;
+const [error, setError] = useState(null);
+// Template parsing results
+const parseResult = useMemo(() => parseTemplate(template), [template]);
+const extractedVariables = useMemo(() => );
+parseResult.variables.filter(v => v.isValid),
+    [parseResult.variables];
+;
+// Refs for async operations
+const debounceTimeoutRef = useRef(null);
+const abortControllerRef = useRef(null);
+const generationCounterRef = useRef(0);
+// Generate sample values for undefined variables
+const generateSampleValues = useCallback((variables) => {
+    const samples = {};
+    for (const variable of variables) {
+        if (!variableValues[variable.name]) {
+            // First try to use the inferred default value from type inference
+            if (variable.defaultValue) {
+                samples[variable.name] = variable.defaultValue;
             }
+            else {
+                // Use contextual defaults based on node type and template
+                const contextualDefault = getContextualDefaults(variable.name, template, undefined);
+                samples[variable.name] = contextualDefault;
+                return samples;
+            }
+            [variableValues, template];
         }
-        return samples;
-    }, [variableValues, template]);
-    // Generate intelligent sample values based on variable names
-    const generateSmartSample = (variableName) => {
-        // Use our enhanced contextual defaults
-        return getContextualDefaults(variableName, template, undefined);
-    };
-    // Generate preview variants
-    const generatePreviews = useCallback(async (forceGeneration = false) => {
-        if (!template.trim() || (!forceGeneration && isGenerating)) {
-            return;
-        }
+    }
+});
+// Generate intelligent sample values based on variable names
+const generateSmartSample = (variableName) => {
+    // Use our enhanced contextual defaults
+    return getContextualDefaults(variableName, template, undefined);
+};
+// Generate preview variants
+const generatePreviews = useCallback(async (forceGeneration = false) => {
+    if (!template.trim() || (!forceGeneration && isGenerating)) {
+        return;
         // Cancel any existing generation
         if (abortControllerRef.current) {
             abortControllerRef.current.abort();
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
+            setIsGenerating(true);
+            setError(null);
+            const startTime = performance.now();
+            const generationId = ++generationCounterRef.current;
+            try {
+                // Check for template errors first
+                if (!parseResult.isValid) {
+                    throw new Error(`Template error: ${parseResult.errors.map(e => e.message).join(', ')}`);
+                }
+                // Generate sample values for missing variables
+                const sampleValues = generateSampleValues(extractedVariables);
+                const allValues = { ...sampleValues, ...variableValues };
+                // Check for undefined variables if error mode is enabled
+                if (config.errorOnUndefinedVariables) {
+                    const missingVars = extractedVariables;
+                }
+            }
+            finally {
+            }
         }
-        const abortController = new AbortController();
-        abortControllerRef.current = abortController;
-        setIsGenerating(true);
-        setError(null);
-        const startTime = performance.now();
-        const generationId = ++generationCounterRef.current;
-        try {
-            // Check for template errors first
-            if (!parseResult.isValid) {
-                throw new Error(`Template error: ${parseResult.errors.map(e => e.message).join(', ')}`);
-            }
-            // Generate sample values for missing variables
-            const sampleValues = generateSampleValues(extractedVariables);
-            const allValues = { ...sampleValues, ...variableValues };
-            // Check for undefined variables if error mode is enabled
-            if (config.errorOnUndefinedVariables) {
-                const missingVars = extractedVariables
-                    .map(v => v.name)
-                    .filter(name => !allValues[name]);
-                if (missingVars.length > 0) {
-                    throw new Error(`Undefined variables: ${missingVars.join(', ')}`);
-                }
-            }
-            // Generate multiple variants with different seeds
-            const newVariants = await Promise.all(Array.from({ length: config.maxVariants }, async (_, index) => {
-                const seed = Math.floor(Math.random() * 1000000);
-                // Add some randomness to sample values for variety
-                const variantValues = { ...allValues };
-                if (index > 0) {
-                    for (const variable of extractedVariables) {
-                        if (!variableValues[variable.name]) {
-                            // Generate slight variations for different seeds
-                            variantValues[variable.name] = generateSmartSample(variable.name);
-                        }
-                    }
-                }
+    }
+})
+    .map(v => v.name)
+    .filter(name => !allValues[name]);
+if (missingVars.length > 0) {
+    throw new Error(`Undefined variables: ${missingVars.join(', ')}`);
+}
+// Generate multiple variants with different seeds
+const newVariants = await Promise.all();
+;
+Array.from({ length: config.maxVariants }, async (_, index) => {
+    const seed = Math.floor(Math.random() * 1000000);
+    // Add some randomness to sample values for variety
+    const variantValues = { ...allValues };
+    if (index > 0) {
+        for (const variable of extractedVariables) {
+            if (!variableValues[variable.name]) {
+                // Generate slight variations for different seeds
+                variantValues[variable.name] = generateSmartSample(variable.name);
                 // Substitute variables in template
                 const result = substituteVariables(template, variantValues);
                 // Simulate generation delay for realism
@@ -105,68 +116,74 @@ export const useTemplatePreview = (template, variableValues = {}, customConfig =
                 // Check if generation was aborted
                 if (abortController.signal.aborted) {
                     throw new Error('Generation aborted');
+                    return {
+                        id: `template_variant_${generationId}_${index}`
+                    };
                 }
-                return {
-                    id: `template_variant_${generationId}_${index}`,
-                    seed,
+                seed,
                     result,
-                    timestamp: Date.now(),
-                    executionTime: performance.now() - startTime,
-                    substitutions: variantValues,
-                    variablesUsed: extractedVariables.map(v => v.name),
-                    hasErrors: false
-                };
-            }));
-            // Update variants if this is still the current generation
-            if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-                setVariants(newVariants);
-                // Update performance metrics
-                if (config.enablePerformanceTracking) {
-                    const executionTime = performance.now() - startTime;
-                    setPerformance(prev => ({
-                        averageExecutionTime: (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1),
-                        totalGenerations: prev.totalGenerations + 1,
-                        successRate: ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)),
-                        lastUpdate: Date.now(),
-                        templatesProcessed: prev.templatesProcessed + 1
-                    }));
-                }
+                    timestamp;
+                Date.now(),
+                    executionTime;
+                performance.now() - startTime,
+                    substitutions;
+                variantValues,
+                    variablesUsed;
+                extractedVariables.map(v => v.name),
+                    hasErrors;
+                false;
             }
+            ;
         }
-        catch (err) {
-            if (!abortController.signal.aborted) {
-                const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-                setError(errorMessage);
-                // Create error variant
-                const errorVariant = {
-                    id: `error_${generationId}`,
-                    seed: 0,
-                    result: '',
-                    timestamp: Date.now(),
-                    executionTime: performance.now() - startTime,
-                    substitutions: {},
-                    variablesUsed: [],
-                    hasErrors: true,
-                    errorMessage
-                };
-                setVariants([errorVariant]);
-                // Update performance metrics for failed generation
-                if (config.enablePerformanceTracking) {
-                    setPerformance(prev => ({
-                        ...prev,
-                        successRate: (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1),
-                        totalGenerations: prev.totalGenerations + 1,
-                        lastUpdate: Date.now()
-                    }));
-                }
-            }
-        }
-        finally {
-            if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-                setIsGenerating(false);
-            }
-        }
-    }, [template, variableValues, extractedVariables, parseResult, config, isGenerating, generateSampleValues]);
+    }
+});
+// Update variants if this is still the current generation
+if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
+    setVariants(newVariants);
+    // Update performance metrics
+    if (config.enablePerformanceTracking) {
+        const executionTime = performance.now() - startTime;
+        setPerformance(prev => ({}), averageExecutionTime, (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, successRate, ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)), lastUpdate, Date.now(), templatesProcessed, prev.templatesProcessed + 1);
+    }
+    ;
+}
+try { }
+catch (err) {
+    if (!abortController.signal.aborted) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+        // Create error variant
+        const errorVariant = {
+            id: `error_${generationId}` };
+    }
+    seed: 0,
+        result;
+    '',
+        timestamp;
+    Date.now(),
+        executionTime;
+    performance.now() - startTime,
+        substitutions;
+    { }
+    variablesUsed: [],
+        hasErrors;
+    true,
+        errorMessage;
+}
+;
+setVariants([errorVariant]);
+// Update performance metrics for failed generation
+if (config.enablePerformanceTracking) {
+    setPerformance(prev => ({}), ...prev, successRate, (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, lastUpdate, Date.now());
+}
+;
+try { }
+finally {
+    if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
+        setIsGenerating(false);
+    }
+    [template, variableValues, extractedVariables, parseResult, config, isGenerating, generateSampleValues];
+    ;
     // Debounced preview update
     const requestPreview = useCallback(() => {
         if (!config.autoRefresh)
@@ -174,21 +191,23 @@ export const useTemplatePreview = (template, variableValues = {}, customConfig =
         // Clear existing debounce timeout
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
+            // Set new debounced timeout
+            debounceTimeoutRef.current = setTimeout(() => {
+                generatePreviews();
+            }, config.debounceMs);
         }
-        // Set new debounced timeout
-        debounceTimeoutRef.current = setTimeout(() => {
-            generatePreviews();
-        }, config.debounceMs);
-    }, [generatePreviews, config]);
+        [generatePreviews, config];
+    });
     // Force immediate preview generation
     const forcePreview = useCallback(() => {
         // Clear any pending debounced calls
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
             debounceTimeoutRef.current = null;
+            generatePreviews(true);
         }
-        generatePreviews(true);
-    }, [generatePreviews]);
+        [generatePreviews];
+    });
     // Refresh single variant with new seed
     const refreshVariant = useCallback(async (variantId) => {
         const variant = variants.find(v => v.id === variantId);
@@ -201,18 +220,19 @@ export const useTemplatePreview = (template, variableValues = {}, customConfig =
         for (const variable of extractedVariables) {
             if (!variableValues[variable.name]) {
                 allValues[variable.name] = generateSmartSample(variable.name);
+                const result = substituteVariables(template, allValues);
+                const updatedVariant = {
+                    ...variant,
+                    seed: newSeed,
+                    result,
+                    timestamp: Date.now(),
+                    substitutions: allValues,
+                };
+                setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
             }
+            [variants, extractedVariables, variableValues, template, generateSampleValues];
         }
-        const result = substituteVariables(template, allValues);
-        const updatedVariant = {
-            ...variant,
-            seed: newSeed,
-            result,
-            timestamp: Date.now(),
-            substitutions: allValues
-        };
-        setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
-    }, [variants, extractedVariables, variableValues, template, generateSampleValues]);
+    });
     // Clear all variants
     const clearVariants = useCallback(() => {
         setVariants([]);
@@ -222,46 +242,50 @@ export const useTemplatePreview = (template, variableValues = {}, customConfig =
     const getPerformanceInsights = useCallback(() => {
         return {
             isPerformanceGood: performance.averageExecutionTime < 200,
-            insights: [
-                `Processed ${performance.templatesProcessed} templates`,
-                `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`,
-                `Success rate: ${Math.round(performance.successRate)}%`
-            ]
+            insights: [,
+                `Processed ${performance.templatesProcessed} templates`]
         };
-    }, [performance]);
-    // Auto-refresh when template or variables change
-    useEffect(() => {
-        if (template.trim()) {
-            requestPreview();
-        }
-        else {
-            clearVariants();
-        }
+    }, `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`);
+}
+`Success rate: ${Math.round(performance.successRate)}%`;
+;
+[performance];
+;
+// Auto-refresh when template or variables change
+useEffect(() => {
+    if (template.trim()) {
+        requestPreview();
+    }
+    else {
+        clearVariants();
         // Cleanup on unmount
         return () => {
             if (debounceTimeoutRef.current) {
                 clearTimeout(debounceTimeoutRef.current);
+                if (abortControllerRef.current) {
+                    abortControllerRef.current.abort();
+                }
+                ;
             }
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
+            [template, variableValues, requestPreview, clearVariants];
         };
-    }, [template, variableValues, requestPreview, clearVariants]);
-    return {
-        // Core state
-        variants,
-        isGenerating,
-        error,
-        performance,
-        // Template info
-        extractedVariables: extractedVariables.map(v => v.name),
-        hasTemplateErrors: !parseResult.isValid,
-        templateErrors: parseResult.errors,
-        // Actions
-        requestPreview,
-        forcePreview,
-        refreshVariant,
-        clearVariants,
-        getPerformanceInsights
-    };
+    }
+});
+return {
+    // Core state
+    variants,
+    isGenerating,
+    error,
+    performance,
+    // Template info
+    extractedVariables: extractedVariables.map(v => v.name),
+    hasTemplateErrors: !parseResult.isValid,
+    templateErrors: parseResult.errors,
+    // Actions
+    requestPreview,
+    forcePreview,
+    refreshVariant,
+    clearVariants,
+    getPerformanceInsights
 };
+;

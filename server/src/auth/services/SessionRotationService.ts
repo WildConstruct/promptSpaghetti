@@ -8,6 +8,7 @@ import { AuditService } from './AuditService';
 import { RBACService } from './RBACService';
 import { TokenService } from './TokenService';
 
+}
 export interface PrivilegeChangeEvent {
   userId: string;
   changeType: 'role_added' | 'role_removed' | 'permission_added' | 'permission_removed' | 'organization_change' | 'status_change';
@@ -16,14 +17,18 @@ export interface PrivilegeChangeEvent {
   reason?: string;
   performedBy?: string;
 }
+}
 
+}
 export interface SessionRotationResult {
   success: boolean;
   rotatedSessions: number;
   newSessionId?: string;
   errors?: string[];
 }
+}
 
+}
 export interface SessionRotationPolicy {
   rotateOnRoleChange: boolean;
   rotateOnPermissionChange: boolean;
@@ -32,6 +37,7 @@ export interface SessionRotationPolicy {
   preserveCurrentSession: boolean;
   notifyUser: boolean;
   graceWindowMinutes: number;
+}
 }
 
 export class SessionRotationService {
@@ -75,6 +81,7 @@ export class SessionRotationService {
     currentSessionId?: string,
     customPolicy?: Partial<SessionRotationPolicy>
   ): Promise<SessionRotationResult> {
+
     const policy = { ...this.defaultPolicy, ...customPolicy };
     const errors: string[] = [];
 
@@ -98,7 +105,7 @@ export class SessionRotationService {
           reason: event.reason,
           performedBy: event.performedBy,
           sessionRotationRequired: true
-        },
+  }
         severity: 'warning'
       });
 
@@ -155,7 +162,7 @@ export class SessionRotationService {
           graceWindowMinutes: policy.graceWindowMinutes,
           newSessionId,
           errors
-        },
+  }
         sessionId: currentSessionId,
         severity: 'info'
       });
@@ -174,7 +181,7 @@ export class SessionRotationService {
         details: {
           error: error.message,
           event
-        },
+  }
         sessionId: currentSessionId,
         severity: 'error'
       });
@@ -205,6 +212,7 @@ export class SessionRotationService {
   }
 
   private async rotateSession(sessionId: string, event: PrivilegeChangeEvent): Promise<void> {
+
     // Get session details before rotation
     const sessionResult = await this.dbService.query(
       'SELECT session_token FROM user_sessions WHERE id = $1',
@@ -240,6 +248,7 @@ export class SessionRotationService {
   }
 
   private async createGraceWindows(sessionIds: string[], graceMinutes: number): Promise<void> {
+
     const expiresAt = new Date(Date.now() + graceMinutes * 60 * 1000);
     
     for (const sessionId of sessionIds) {
@@ -260,6 +269,7 @@ export class SessionRotationService {
   }
 
   private async createReplacementSession(userId: string, oldSessionId: string): Promise<any> {
+
     // Get old session details for device info
     const oldSessionResult = await this.dbService.query(
       'SELECT device_info, ip_address FROM user_sessions WHERE id = $1',
@@ -287,6 +297,7 @@ export class SessionRotationService {
     event: PrivilegeChangeEvent,
     rotatedCount: number
   ): Promise<void> {
+
     // Get user email
     const userResult = await this.dbService.query(
       'SELECT email FROM users WHERE id = $1',
@@ -326,7 +337,7 @@ export class SessionRotationService {
         email,
         changeType: event.changeType,
         rotatedCount
-      },
+  }
       severity: 'info'
     });
   }
@@ -363,6 +374,7 @@ Security Team
 
   // Check if a session is in grace period
   async isSessionInGracePeriod(sessionId: string): Promise<boolean> {
+
     const result = await this.dbService.query(`
       SELECT expires_at FROM session_grace_windows
       WHERE session_id = $1 AND expires_at > NOW()
@@ -373,6 +385,7 @@ Security Team
 
   // Clean up expired grace windows
   async cleanupExpiredGraceWindows(): Promise<number> {
+
     const result = await this.dbService.query(`
       DELETE FROM session_grace_windows
       WHERE expires_at < NOW()
@@ -386,7 +399,7 @@ Security Team
         action: 'grace_windows_cleanup',
         details: {
           cleanedCount
-        },
+  }
         severity: 'info'
       });
     }
@@ -396,6 +409,7 @@ Security Team
 
   // Get session rotation history for a user
   async getRotationHistory(userId: string, limit: number = 50): Promise<any[]> {
+
     const result = await this.dbService.query(`
       SELECT * FROM session_rotation_history
       WHERE user_id = $1

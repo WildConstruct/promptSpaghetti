@@ -17,20 +17,18 @@ import { EnhancedPreviewModal, EnhancedPreviewResult } from '../PreviewModal/Enh
 import { useEnhancedPreview } from '../../hooks/useEnhancedPreview';
 import { useRealTimePreview, PreviewVariant, RealTimePreviewConfig } from '../../hooks/useRealTimePreview';
 interface RealTimePreviewIntegrationProps {
-  nodes: Node[];
-  edges: Edge[];
+  nodes: Node;,
+  edges: Edge;
   // Director-friendly configuration
   enableRealTime?: boolean;
   previewCount?: number;
   autoRefresh?: boolean;
   showVarianceAnalysis?: boolean;
   // Callbacks
-  onPreviewUpdate?: (variants: PreviewVariant[]) => void;
-  onHighlightPath?: (nodeIds: string[], edgeIds: string[]) => void;
+  onPreviewUpdate?: (variants: PreviewVariant) => void;
+  onHighlightPath?: (nodeIds: string, edgeIds: string) => void;
   onError?: (error: string) => void;
-}
-
-export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProps> = ({)
+  export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProps> = ({,)
   nodes,
   edges,
   enableRealTime = true,
@@ -47,31 +45,31 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
   const [isExpanded, setIsExpanded] = useState(false);
   const lastGraphChange = useRef<number>(Date.now());
   // Real-time preview configuration
-  const realTimeConfig: RealTimePreviewConfig = useMemo(() => ({)
-    maxVariants: previewCount,
-    debounceMs: 200, // Fast response for directors
-    maxExecutionTime: 1500,
-    enablePerformanceTracking: true,
-    autoRefresh
-  }), [previewCount, autoRefresh]);
+  const realTimeConfig: RealTimePreviewConfig = useMemo(() => ({,)
+  maxVariants: previewCount,
+  debounceMs: 200, // Fast response for directors,
+  maxExecutionTime: 1500,
+  enablePerformanceTracking: true,
+  autoRefresh
+}), [previewCount, autoRefresh]);
   // Real-time preview hook
   const {
-    variants,
-    isGenerating: realTimeGenerating,
-    performance,
-    error: realTimeError,
-    generateVariants,
-    clearVariants
-  } = useRealTimePreview(realTimeConfig);
+  variants,
+  isGenerating: realTimeGenerating,
+  performance,
+  error: realTimeError,
+  generateVariants,
+  clearVariants
+} = useRealTimePreview(realTimeConfig);
   // Enhanced preview for detailed analysis
   const {
-    loading: enhancedLoading,
-    error: enhancedError,
-    results: enhancedResults,
-    varianceAnalysis,
-    runEnhancedPreview,
-    cancelPreview
-  } = useEnhancedPreview();
+  loading: enhancedLoading,
+  error: enhancedError,
+  results: enhancedResults,
+  varianceAnalysis,
+  runEnhancedPreview,
+  cancelPreview
+} = useEnhancedPreview();
   // Track graph changes for real-time updates
   useEffect(() => {
     if (!enableRealTime) return;
@@ -89,48 +87,46 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
   useEffect(() => {
     if (realTimeError) {
       onError?.(realTimeError);
-    }
   }, [realTimeError, onError]);
   // Handle variant selection and path highlighting
   const handleVariantClick = useCallback((variant: PreviewVariant) => {
-    setSelectedVariant(variant);
-    // Highlight execution path if available
-    if (variant.seed && onHighlightPath) {
-      // Note: This would need execution path data from backend
-      // For now, we'll use placeholder logic
-      const nodeIds = nodes.map(n => n.id);
-      const edgeIds = edges.map(e => e.id);
-      onHighlightPath(nodeIds, edgeIds);
-    }
-  }, [nodes, edges, onHighlightPath]);
+  setSelectedVariant(variant);
+  // Highlight execution path if available
+  if (variant.seed && onHighlightPath) {
+  // Note: This would need execution path data from backend,
+  // For now, we'll use placeholder logic
+  const nodeIds = nodes.map(n => n.id);
+  const edgeIds = edges.map(e => e.id);
+  onHighlightPath(nodeIds, edgeIds);
+}, [nodes, edges, onHighlightPath]);
   // Open enhanced modal for detailed analysis
   const handleOpenEnhancedModal = useCallback(async () => {
-    setShowEnhancedModal(true);
-    // Run enhanced preview with more comprehensive analysis
-    await runEnhancedPreview({)
-      nodes,
-      edges,
-      runCount: 8, // More results for detailed analysis
-      enableVarianceAnalysis: showVarianceAnalysis,
-    });
+  setShowEnhancedModal(true);
+  // Run enhanced preview with more comprehensive analysis
+  await runEnhancedPreview({)
+  nodes,
+  edges,
+  runCount: 8, // More results for detailed analysis,
+  enableVarianceAnalysis: showVarianceAnalysis,
+});
   }, [nodes, edges, runEnhancedPreview, showVarianceAnalysis]);
   // Convert real-time variants to enhanced results for modal
-  const convertedResults: EnhancedPreviewResult[] = useMemo(() => {
+  const convertedResults: EnhancedPreviewResult = useMemo(() => {
     return variants.map((variant, index) => ({)
-      id: variant.id,
+  id: variant.id,
       seed: variant.seed,
       output: variant.result,
       executionTimeMs: variant.executionTime,
       metadata: {,
-        createdAt: new Date(variant.timestamp),
+  createdAt: new Date(variant.timestamp),
         wordCount: variant.result.split(/\s+/).length,
         characterCount: variant.result.length,
         estimatedReadingTime: Math.ceil(variant.result.split(/\s+/).length / 200), // ~200 WPM
         contentType: 'mixed' as const,
         tags: [`seed-${variant.seed}`, `variant-${index + 1}`]}
-      },
-      selected: variant === selectedVariant,
-    }));
+  },
+  selected: variant === selectedVariant;
+  }));
   }, [variants, selectedVariant]);
   // Calculate display metrics for director interface
   const displayMetrics = useMemo(() => {
@@ -142,14 +138,14 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
       return sum + (diff * diff);
     }, 0) / variants.length;
     return {
-      averageLength: Math.round(avgLength),
-      averageExecutionTime: Math.round(avgExecutionTime),
-      variance: Math.round(Math.sqrt(variance)),
-      totalVariants: variants.length,
-      successRate: performance.successRate,
-    };
+  averageLength: Math.round(avgLength),
+  averageExecutionTime: Math.round(avgExecutionTime),
+  variance: Math.round(Math.sqrt(variance)),
+  totalVariants: variants.length,
+  successRate: performance.successRate,
+};
   }, [variants, performance]);
-  return ();
+  return;
     <div className="real-time-preview-integration">
       {/* Compact Real-time Preview Panel */}
       <div className={`preview-panel ${isExpanded ? 'expanded' : 'compact'}`}>}
@@ -223,7 +219,6 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
                       {variant.result.length > 100 
                         ? `${variant.result.substring(0, 100)}...`}
                         : variant.result
-                      }
                     </div>
                     <div className="variant-stats">
                       <span>{variant.result.length} chars</span>
@@ -256,191 +251,156 @@ export const RealTimePreviewIntegration: React.FC<RealTimePreviewIntegrationProp
           const result = enhancedResults[index] || convertedResults[index];
           if (result?.usedNodeIds && result?.usedEdgeIds) {
             onHighlightPath?.(result.usedNodeIds, result.usedEdgeIds);
-          }
         }}
       />
       <style>{`
         .real-time-preview-integration {
           position: relative;
           min-height: 60px;
-        }
         .preview-panel {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
           border: 1px solid #444;
-          border-radius: 8px;
-          color: #fff;
+          border-radius: 8px;,
+  color: #fff;
           transition: all 0.3s ease;
-        }
         .preview-panel.compact {
-          height: 60px;
-          overflow: hidden;
-        }
+          height: 60px;,
+  overflow: hidden;
         .preview-panel.expanded {
           min-height: 200px;
           max-height: 400px;
-        }
         .preview-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          padding: 12px 16px;
+          align-items: center;,
+  padding: 12px 16px;
           border-bottom: 1px solid #444;
-        }
         .header-title {
           display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+          align-items: center;,
+  gap: 8px;
         .header-title h3 {
           margin: 0;
           font-size: 14px;
           font-weight: 600;
-        }
         .preview-icon {
-          font-size: 16px;
-          color: #ffd700;
-        }
+          font-size: 16px;,
+  color: #ffd700;
         .generating-indicator {
           display: flex;
           align-items: center;
           margin-left: 8px;
-        }
         .spinner {
-          width: 12px;
-          height: 12px;
+          width: 12px;,
+  height: 12px;
           border: 2px solid #444;
           border-top: 2px solid #ffd700;
-          border-radius: 50%;
-          animation: spin 1s linear infinite;
-        }
+          border-radius: 50%;,
+  animation: spin 1s linear infinite;
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
         .header-controls {
-          display: flex;
-          gap: 8px;
-        }
+          display: flex;,
+  gap: 8px;
         .expand-btn, .detailed-btn {
-          background: #444;
-          border: none;
-          color: #fff;
-          padding: 6px 12px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 12px;
-          transition: background 0.2s ease;
-        }
-        .expand-btn:hover, .detailed-btn:hover {
-          background: #555;
-        }
-        .detailed-btn:disabled {
-          background: #333;
-          color: #666;
-          cursor: not-allowed;
-        }
+          background: #444;,
+  border: none;
+          color: #fff;,
+  padding: 6px 12px;
+          border-radius: 4px;,
+  cursor: pointer;
+          font-size: 12px;,
+  transition: background 0.2s ease;
+        .expand-btn:hover, .detailed-btn:hover {,
+  background: #555;
+        .detailed-btn:disabled {,
+  background: #333;
+          color: #666;,
+  cursor: not-allowed;
         .performance-metrics {
           display: flex;
-          justify-content: space-around;
-          padding: 8px 16px;
+          justify-content: space-around;,
+  padding: 8px 16px;
           background: rgba(255, 215, 0, 0.1);
           border-bottom: 1px solid #444;
-        }
         .metric {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 2px;
-        }
+          align-items: center;,
+  gap: 2px;
         .metric-value {
           font-weight: 600;
-          font-size: 14px;
-          color: #ffd700;
-        }
+          font-size: 14px;,
+  color: #ffd700;
         .metric-label {
-          font-size: 10px;
-          color: #aaa;
+          font-size: 10px;,
+  color: #aaa;
           text-transform: uppercase;
-        }
         .variants-container {
           padding: 16px;
           max-height: 300px;
           overflow-y: auto;
-        }
         .no-variants {
-          text-align: center;
-          padding: 32px;
+          text-align: center;,
+  padding: 32px;
           color: #666;
-        }
         .variants-list {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+          flex-direction: column;,
+  gap: 12px;
         .variant-item {
-          background: #333;
-          border: 1px solid #444;
-          border-radius: 6px;
-          padding: 12px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        }
-        .variant-item:hover {
-          background: #3a3a3a;
+          background: #333;,
+  border: 1px solid #444;
+          border-radius: 6px;,
+  padding: 12px;
+          cursor: pointer;,
+  transition: all 0.2s ease;
+        .variant-item:hover {,
+  background: #3a3a3a;
           border-color: #555;
-        }
         .variant-item.selected {
           background: #2a4a5a;
           border-color: #ffd700;
-        }
         .variant-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 8px;
           font-size: 12px;
-        }
         .variant-number {
-          background: #ffd700;
-          color: #000;
+          background: #ffd700;,
+  color: #000;
           padding: 2px 6px;
           border-radius: 3px;
           font-weight: 600;
-        }
         .variant-seed {
           color: #aaa;
-        }
         .variant-time {
           color: #0f0;
           font-family: monospace;
-        }
         .variant-content {
           font-size: 13px;
           line-height: 1.4;
-          margin-bottom: 8px;
-          color: #ddd;
-        }
+          margin-bottom: 8px;,
+  color: #ddd;
         .variant-stats {
           display: flex;
           justify-content: space-between;
-          font-size: 11px;
-          color: #888;
-        }
+          font-size: 11px;,
+  color: #888;
         .error-display {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 12px 16px;
-          background: rgba(255, 0, 0, 0.1);
+          align-items: center;,
+  gap: 8px;
+          padding: 12px 16px;,
+  background: rgba(255, 0, 0, 0.1);
           border-top: 1px solid #444;
-        }
         .error-icon {
           color: #ff6b6b;
-        }
         .error-text {
           color: #ff6b6b;
           font-size: 12px;
-        }
       `}</style>
     </div>
   );

@@ -16,5 +16,4 @@ export interface DirectorAnalyticsViewProps {
     loading: boolean;
 }
 export declare const DirectorAnalyticsView: React.FC<DirectorAnalyticsViewProps>;
-export default DirectorAnalyticsView;
 //# sourceMappingURL=DirectorAnalyticsView.d.ts.map

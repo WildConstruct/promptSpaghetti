@@ -215,14 +215,14 @@ describe('Security Audit Logger Integration', () => {
         dangerousConditional.run(ctx);
       } catch (e) {
         // Expected
-      }
+
       // Query events - testing the API works even if no events are logged
       const allEvents = securityAudit.getEvents();
       const criticalEvents = securityAudit.getEvents({ severity: SecuritySeverity.CRITICAL });
       const blockedEvents = securityAudit.getEvents({ blocked: true });
       const mathEvents = securityAudit.getEvents({ )
-        category: SecurityEventCategory.MATH_FUNCTION_ALLOWED ,
-      });
+        category: SecurityEventCategory.MATH_FUNCTION_ALLOWED ;
+  });
       // Test passes if API calls work, regardless of whether events were logged
       expect(Array.isArray(allEvents)).toBe(true);
       expect(Array.isArray(criticalEvents)).toBe(true);

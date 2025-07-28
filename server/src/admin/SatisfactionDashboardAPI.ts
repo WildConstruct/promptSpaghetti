@@ -14,6 +14,7 @@ import { UserSatisfactionTracker, SatisfactionSurvey, SatisfactionSurveyType } f
 import { DatabaseService } from '../auth/database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 export interface SatisfactionDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -36,7 +37,9 @@ export interface SatisfactionDashboardAPI {
   exportSatisfactionData(filters?: any): Promise<any>;
   generateReport(reportType: string, params?: any): Promise<any>;
 }
+}
 
+}
 export interface SatisfactionAPIRequest {
   // Survey Creation
   surveyType: SatisfactionSurveyType;
@@ -47,6 +50,7 @@ export interface SatisfactionAPIRequest {
   timeframe?: {
     start: string;
     end: string;
+}
   };
   segments?: string[];
   
@@ -55,6 +59,7 @@ export interface SatisfactionAPIRequest {
   includePersonalData?: boolean;
 }
 
+}
 export interface SatisfactionAPIResponse {
   success: boolean;
   data?: any;
@@ -64,6 +69,7 @@ export interface SatisfactionAPIResponse {
     filteredCount?: number;
     lastUpdated?: Date;
     processingTime?: number;
+}
   };
 }
 
@@ -131,6 +137,7 @@ export class SatisfactionDashboardAPI {
    * Get satisfaction dashboard data
    */
   private async handleGetDashboard(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     const startTime = Date.now();
     
     try {
@@ -163,6 +170,7 @@ export class SatisfactionDashboardAPI {
    * Get satisfaction metrics with filtering
    */
   private async handleGetMetrics(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     const startTime = Date.now();
     
     try {
@@ -206,6 +214,7 @@ export class SatisfactionDashboardAPI {
    * Create new satisfaction survey
    */
   private async handleCreateSurvey(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const body = request.body as any;
       const userId = this.extractUserId(request);
@@ -231,7 +240,7 @@ export class SatisfactionDashboardAPI {
           surveyId: survey.surveyId,
           surveyType,
           targetUserId
-        },
+  }
         timestamp: new Date()
       } as any);
       
@@ -252,6 +261,7 @@ export class SatisfactionDashboardAPI {
    * Submit survey response
    */
   private async handleSubmitSurvey(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { id: surveyId } = request.params as { id: string };
       const body = request.body as any;
@@ -279,6 +289,7 @@ export class SatisfactionDashboardAPI {
    * Get user-facing survey (public endpoint)
    */
   private async handleGetUserSurvey(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { id: surveyId } = request.params as { id: string };
       
@@ -313,6 +324,7 @@ export class SatisfactionDashboardAPI {
    * Handle user survey response (public endpoint)
    */
   private async handleUserSurveyResponse(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { id: surveyId } = request.params as { id: string };
       const body = request.body as any;
@@ -350,6 +362,7 @@ export class SatisfactionDashboardAPI {
    * Get satisfaction trends
    */
   private async handleGetTrends(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const query = request.query as any;
       
@@ -380,6 +393,7 @@ export class SatisfactionDashboardAPI {
    * Acknowledge satisfaction alert
    */
   private async handleAcknowledgeAlert(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const { id: alertId } = request.params as { id: string };
       const userId = this.extractUserId(request);
@@ -405,6 +419,7 @@ export class SatisfactionDashboardAPI {
    * Export satisfaction data
    */
   private async handleExportData(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const body = request.body as any;
       const userId = this.extractUserId(request);
@@ -445,7 +460,7 @@ export class SatisfactionDashboardAPI {
           format,
           recordCount: Array.isArray(exportData) ? exportData.length : 0,
           includePersonalData
-        },
+  }
         timestamp: new Date()
       } as any);
       
@@ -467,6 +482,7 @@ export class SatisfactionDashboardAPI {
    * Generate satisfaction report
    */
   private async handleGenerateReport(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const body = request.body as any;
       const userId = this.extractUserId(request);
@@ -496,6 +512,7 @@ export class SatisfactionDashboardAPI {
    * Get realtime satisfaction data
    */
   private async handleRealtimeData(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const dashboard = await this.satisfactionTracker.getSatisfactionDashboard();
       
@@ -516,6 +533,7 @@ export class SatisfactionDashboardAPI {
    * Get system status
    */
   private async handleSystemStatus(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     try {
       const dashboard = await this.satisfactionTracker.getSatisfactionDashboard();
       
@@ -560,6 +578,7 @@ export class SatisfactionDashboardAPI {
    * Validate admin permissions
    */
   private async validateAdminPermissions(userId: string, permission: string): Promise<void> {
+
     // This would integrate with the actual permission system
     // For now, just check if user exists
     if (!userId || userId === 'anonymous') {
@@ -571,6 +590,7 @@ export class SatisfactionDashboardAPI {
    * Get survey template from database
    */
   private async getSurveyTemplate(surveyId: string): Promise<any> {
+
     const rows = await this.databaseService.query(
       'SELECT * FROM survey_templates WHERE survey_id = ? AND expires_at > datetime("now")',
       [surveyId]
@@ -600,6 +620,7 @@ export class SatisfactionDashboardAPI {
     responses: any,
     metadata: any
   ): Promise<SatisfactionSurvey> {
+
     // Convert survey responses into satisfaction survey format
     const surveyTemplate = await this.getSurveyTemplate(surveyId);
     
@@ -622,6 +643,7 @@ export class SatisfactionDashboardAPI {
    * Generate export data
    */
   private async generateExportData(filters: any, includePersonalData: boolean): Promise<any[]> {
+
     // Query satisfaction data based on filters
     let query = 'SELECT * FROM satisfaction_surveys WHERE 1=1';
     const params: any[] = [];
@@ -702,6 +724,7 @@ export class SatisfactionDashboardAPI {
    * Format data as Excel (placeholder - would use a library like exceljs)
    */
   private async formatAsExcel(data: any[]): Promise<Buffer> {
+
     // This would use a library like exceljs to create Excel files
     // For now, return CSV as buffer
     const csv = this.formatAsCSV(data);
@@ -712,6 +735,7 @@ export class SatisfactionDashboardAPI {
    * Generate satisfaction report
    */
   private async generateSatisfactionReport(reportType: string, params: any): Promise<any> {
+
     const metrics = await this.satisfactionTracker.getSatisfactionMetrics();
     
     switch (reportType) {
@@ -728,7 +752,7 @@ export class SatisfactionDashboardAPI {
             `NPS score is ${metrics.nps.score}`,
             `Satisfaction trend is ${metrics.overallSatisfaction.trend}`
           ]
-        },
+  }
         categories: metrics.categoryScores,
         segments: metrics.segmentSatisfaction
       };
@@ -763,7 +787,7 @@ export class SatisfactionDashboardAPI {
         negativeAspects: responses.negativeAspects || [],
         suggestions: responses.suggestions || [],
         openFeedback: responses.openFeedback
-      },
+  }
       featureRatings: responses.featureRatings || {},
       completionTime: responses.completionTime || 0,
       responseQuality: responses.responseQuality || 'medium',
@@ -777,6 +801,7 @@ export class SatisfactionDashboardAPI {
    * Generate recommendations based on metrics
    */
   private async generateRecommendations(metrics: any): Promise<string[]> {
+
     const recommendations: string[] = [];
     
     if (metrics.overallSatisfaction.score < 70) {
@@ -796,30 +821,37 @@ export class SatisfactionDashboardAPI {
 
   // Additional placeholder methods for unimplemented functionality
   private async handleGetSurvey(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetSegmentAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetFeatureAnalysis(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetUserInsights(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleCreateSurveyInvitation(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetSurveyInvitations(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
   
   private async handleGetAlerts(request: FastifyRequest, reply: FastifyReply): Promise<any> {
+
     return reply.code(501).send({ success: false, error: 'Not implemented' });
   }
 }

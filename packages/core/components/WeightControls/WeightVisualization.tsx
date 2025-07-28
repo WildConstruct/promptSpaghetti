@@ -5,16 +5,15 @@ import React, { useMemo } from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 
 export interface WeightVisualizationProps {
-  options: WeightControlOption[];
+  options: WeightControlOption;,
   type: 'pie' | 'bar';
   width?: number;
   height?: number;
   showLabels?: boolean;
   showPercentages?: boolean;
   className?: string;
+  // Shared color palette for consistent option visualization across all weight components
 }
-
-// Shared color palette for consistent option visualization across all weight components
 export const WEIGHT_OPTION_COLORS = [
   '#4299e1', // Blue
   '#48bb78', // Green
@@ -42,21 +41,21 @@ const PieChart: React.FC<WeightVisualizationProps> = ({)
   className = ''
 }) => {
   const { slices, totalWeight } = useMemo(() => {
-    const total = options.reduce((sum, option) => sum + option.weight, 0);
-    let currentAngle = 0;
-    const slices = options.map((option, index) => {
-      const percentage = total > 0 ? (option.weight / total) * 100 : 0;
-      const angle = total > 0 ? (option.weight / total) * 360 : 0;
-      const startAngle = currentAngle;
-      currentAngle += angle;
-      return {
-        option,
-        percentage,
-        angle,
-        startAngle,
-        endAngle: currentAngle,
-        color: getOptionColor(index),
-      };
+  const total = options.reduce((sum, option) => sum + option.weight, 0);
+  let currentAngle = 0;
+  const slices = options.map((option, index) => {
+  const percentage = total > 0 ? (option.weight / total) * 100 : 0;
+  const angle = total > 0 ? (option.weight / total) * 360 : 0;
+  const startAngle = currentAngle;
+  currentAngle += angle;
+  return {
+  option,
+  percentage,
+  angle,
+  startAngle,
+  endAngle: currentAngle,
+  color: getOptionColor(index),
+};
     });
     return { slices, totalWeight: total };
   }, [options]);
@@ -76,16 +75,16 @@ const PieChart: React.FC<WeightVisualizationProps> = ({)
   };
   // Calculate label position
   const getLabelPosition = (startAngle: number, endAngle: number, radius: number) => {
-    const midAngle = (startAngle + endAngle) / 2;
-    const midAngleRad = (midAngle - 90) * (Math.PI / 180);
-    const labelRadius = radius * 0.7;
-    return {
-      x: centerX + labelRadius * Math.cos(midAngleRad),
-      y: centerY + labelRadius * Math.sin(midAngleRad),
-    };
+  const midAngle = (startAngle + endAngle) / 2;
+  const midAngleRad = (midAngle - 90) * (Math.PI / 180);
+  const labelRadius = radius * 0.7;
+  return {
+  x: centerX + labelRadius * Math.cos(midAngleRad),
+  y: centerY + labelRadius * Math.sin(midAngleRad),
+};
   };
   if (totalWeight === 0) {
-    return ();
+    return;
       <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
         <svg width={width} height={height}>
           <circle
@@ -109,8 +108,7 @@ const PieChart: React.FC<WeightVisualizationProps> = ({)
         </svg>
       </div>
     );
-  }
-  return ();
+  return;
     <div className={`weight-visualization pie-chart ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
         {slices.map((slice, index) => ()
@@ -152,19 +150,19 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({)
   className = ''
 }) => {
   const { bars, maxWeight, totalWeight } = useMemo(() => {
-    const total = options.reduce((sum, option) => sum + option.weight, 0);
-    const max = Math.max(...options.map(option => option.weight), 1);
-    const bars = options.map((option, index) => ({)
-      option,
-      percentage: total > 0 ? (option.weight / total) * 100 : 0,
-      height: max > 0 ? (option.weight / max) * (height - 60) : 0,
-      color: getOptionColor(index),
-    }));
+  const total = options.reduce((sum, option) => sum + option.weight, 0);
+  const max = Math.max(...options.map(option => option.weight), 1);
+  const bars = options.map((option, index) => ({)
+  option,
+  percentage: total > 0 ? (option.weight / total) * 100 : 0,
+  height: max > 0 ? (option.weight / max) * (height - 60) : 0,
+  color: getOptionColor(index),
+}));
     return { bars, maxWeight: max, totalWeight: total };
   }, [options, height]);
   const barWidth = Math.max(20, (width - 40) / options.length - 5);
   const barSpacing = 5;
-  return ();
+  return;
     <div className={`weight-visualization bar-graph ${className}`} style={{ width, height }}>}
       <svg width={width} height={height}>
         {/* Y-axis */}
@@ -189,7 +187,7 @@ const BarGraph: React.FC<WeightVisualizationProps> = ({)
         {bars.map((bar, index) => {
           const x = 35 + index * (barWidth + barSpacing);
           const y = height - 40 - bar.height;
-          return ();
+          return;
             <g key={bar.option.id}>
               <rect
                 x={x}
@@ -245,33 +243,30 @@ export const WeightVisualization: React.FC<WeightVisualizationProps> = (props) =
     return <PieChart {...props} />;
   } else {
     return <BarGraph {...props} />;
-  }
 };
 
 // Legend Component for both visualizations
-export interface WeightLegendProps {
-  options: WeightControlOption[];
-  className?: string;
-}
 
-export 
-        return ();
+export interface WeightLegendProps {
+  options: WeightControlOption;
+  className?: string;
+        return;
           <div
             key={option.id}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+}}
           >
             <div
               style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '2px',
-                backgroundColor: getOptionColor(index),
-                flexShrink: 0,
-              }}
+  width: '12px',
+  height: '12px',
+  borderRadius: '2px',
+  backgroundColor: getOptionColor(index),
+  flexShrink: 0,
+}}
             />
             <span style={{ flex: 1, minWidth: 0 }}>
               {option.text}
@@ -285,5 +280,5 @@ export
     </div>
   );
 };
-
+}
 export default WeightVisualization;

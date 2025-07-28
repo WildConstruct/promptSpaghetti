@@ -4,18 +4,18 @@ import { VariationList } from '../components/Inspector/VariationList';
 
 // Mock the graph store
 jest.mock('../graphStore', () => ({)
-  useGraphStore: () => ({),
-    addVariation: jest.fn(),
-    removeVariation: jest.fn(),
-    updateVariation: jest.fn(),
-    reorderVariations: jest.fn(),
-  })
+  useGraphStore: () => ({,)
+  addVariation: jest.fn(),
+  removeVariation: jest.fn(),
+  updateVariation: jest.fn(),
+  reorderVariations: jest.fn(),
+}
 }));
 describe('VariationList', () => {
   const defaultProps = {
-    nodeId: 'test-node',
-    variations: ['variation 1', 'variation 2', 'variation 3']
-  };
+  nodeId: 'test-node',
+  variations: ['variation 1', 'variation 2', 'variation 3'],
+};
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -54,7 +54,7 @@ describe('VariationList', () => {
     render(<VariationList {...defaultProps} />);
     const variations = screen.getAllByText(/variation [123]/);
     variations.forEach(variation => {)
-      const parent = variation.closest('div[draggable="true"]');
+  const parent = variation.closest('div[draggable="true"]');
       expect(parent).toHaveAttribute('draggable', 'true');
     });
   });

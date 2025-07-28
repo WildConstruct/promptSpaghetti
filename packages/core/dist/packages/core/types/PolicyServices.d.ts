@@ -6,7 +6,7 @@
  * Defines contracts for policy CRUD operations, evaluation services,
  * and administrative functions.
  */
-import { BasePolicy, PolicyType, PolicyStatus, PolicySearchCriteria, PolicySearchResult, PolicyValidationResult, PolicyAssignment, PolicyEvaluation, EvaluationContext, PolicyAnalytics, PolicyTemplate, PolicyExport, PolicyImport, PolicyDiff, AssignmentTargetType, AnalyticsPeriod, ExportFormat, ExportMetadata, ComplianceFramework } from './PolicyInterfaces';
+import { BasePolicy, PolicyType, PolicyStatus, PolicySearchCriteria, PolicySearchResult, PolicyValidationResult, PolicyAssignment, PolicyEvaluation, EvaluationContext, PolicyTemplate, PolicyExport, AssignmentTargetType, AnalyticsPeriod, ExportFormat, ExportMetadata, ComplianceFramework } from './PolicyInterfaces';
 /**
  * Main policy management service interface
  */
@@ -21,92 +21,61 @@ export interface IPolicyService {
     deprecatePolicy(id: string, replacementId?: string): Promise<PolicyServiceResponse<BasePolicy>>;
     archivePolicy(id: string): Promise<PolicyServiceResponse<BasePolicy>>;
     validatePolicy(policy: Partial<BasePolicy>): Promise<PolicyServiceResponse<PolicyValidationResult>>;
-    testPolicy(id: string, testCases: PolicyTestCase[]): Promise<PolicyServiceResponse<PolicyTestResult>>;
-    dryRunPolicy(policy: Partial<BasePolicy>, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-    createPolicyVersion(id: string, changes: Partial<BasePolicy>): Promise<PolicyServiceResponse<BasePolicy>>;
-    getPolicyVersions(id: string): Promise<PolicyServiceResponse<PolicyVersion[]>>;
-    comparePolicyVersions(id: string, version1: string, version2: string): Promise<PolicyServiceResponse<PolicyDiff>>;
-    rollbackToVersion(id: string, version: string): Promise<PolicyServiceResponse<BasePolicy>>;
-    bulkCreatePolicies(policies: CreatePolicyRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
-    bulkUpdatePolicies(updates: BulkUpdateRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
-    bulkDeletePolicies(ids: string[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
+    testPolicy(id: string, testCases: PolicyTestCase): Promise<PolicyServiceResponse<PolicyTestResult>>;
+    dryRunPolicy(): any;
+    policy: Partial<BasePolicy>;
+    context: EvaluationContext;
+    Promise<PolicyServiceResponse>(): any;
+    <PolicyEvaluation>(): any;
 }
-/**
- * Policy evaluation service interface
- */
 export interface IPolicyEvaluationService {
     evaluatePolicy(policyId: string, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-    evaluatePolicies(policyIds: string[], context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
+    evaluatePolicies(policyIds: string, context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     evaluateForContext(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
-    bulkEvaluate(requests: EvaluationRequest[]): Promise<PolicyServiceResponse<PolicyEvaluation[]>>;
+    bulkEvaluate(requests: EvaluationRequest): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     evaluateRealtime(context: EvaluationContext): Promise<PolicyServiceResponse<PolicyEvaluation>>;
     getCachedEvaluation(cacheKey: string): Promise<PolicyServiceResponse<PolicyEvaluation | null>>;
-    invalidateEvaluationCache(policyIds?: string[]): Promise<PolicyServiceResponse<void>>;
+    invalidateEvaluationCache(policyIds?: string): Promise<PolicyServiceResponse<void>>;
     getEvaluationMetrics(period?: AnalyticsPeriod): Promise<PolicyServiceResponse<EvaluationPerformanceMetrics>>;
 }
-/**
- * Policy assignment service interface
- */
 export interface IPolicyAssignmentService {
     createAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<PolicyAssignment>>;
     updateAssignment(id: string, updates: UpdateAssignmentRequest): Promise<PolicyServiceResponse<PolicyAssignment>>;
     getAssignment(id: string): Promise<PolicyServiceResponse<PolicyAssignment>>;
     getAssignments(criteria?: AssignmentSearchCriteria): Promise<PolicyServiceResponse<AssignmentSearchResult>>;
     deleteAssignment(id: string): Promise<PolicyServiceResponse<void>>;
-    getAssignmentsForTarget(targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
-    assignPolicyToTarget(policyId: string, targetType: AssignmentTargetType, targetId: string, options?: AssignmentOptions): Promise<PolicyServiceResponse<PolicyAssignment>>;
-    unassignPolicyFromTarget(policyId: string, targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<void>>;
-    bulkAssign(assignments: CreateAssignmentRequest[]): Promise<PolicyServiceResponse<BulkOperationResult>>;
-    bulkUnassign(criteria: AssignmentSearchCriteria): Promise<PolicyServiceResponse<BulkOperationResult>>;
-    resolveAssignmentConflicts(targetType: AssignmentTargetType, targetId: string): Promise<PolicyServiceResponse<ConflictResolutionResult>>;
-    getInheritanceChain(assignmentId: string): Promise<PolicyServiceResponse<AssignmentInheritanceChain>>;
-    validateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentValidationResult>>;
-    simulateAssignment(assignment: CreateAssignmentRequest): Promise<PolicyServiceResponse<AssignmentSimulationResult>>;
+    getAssignmentsForTarget(): any;
+    targetType: AssignmentTargetType;
+    targetId: string;
+    Promise<PolicyServiceResponse>(): any;
+    <PolicyAssignment>(): any;
 }
-/**
- * Policy analytics service interface
- */
 export interface IPolicyAnalyticsService {
-    generateAnalytics(period: AnalyticsPeriod, criteria?: AnalyticsSearchCriteria): Promise<PolicyServiceResponse<PolicyAnalytics>>;
-    getUsageAnalytics(policyIds?: string[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<UsageAnalytics>>;
-    getComplianceAnalytics(frameworks?: ComplianceFramework[], period?: AnalyticsPeriod): Promise<PolicyServiceResponse<ComplianceAnalytics>>;
-    getPerformanceAnalytics(period?: AnalyticsPeriod): Promise<PolicyServiceResponse<PerformanceAnalytics>>;
-    getRealTimeMetrics(): Promise<PolicyServiceResponse<RealTimeMetrics>>;
-    getSystemHealth(): Promise<PolicyServiceResponse<SystemHealthMetrics>>;
-    generateComplianceReport(frameworks: ComplianceFramework[], format?: ReportFormat): Promise<PolicyServiceResponse<ComplianceReport>>;
-    generateUsageReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<UsageReport>>;
-    generateAuditReport(period: AnalyticsPeriod, format?: ReportFormat): Promise<PolicyServiceResponse<AuditReport>>;
-    getInsights(criteria?: InsightCriteria): Promise<PolicyServiceResponse<PolicyInsight[]>>;
-    getRecommendations(criteria?: RecommendationCriteria): Promise<PolicyServiceResponse<PolicyRecommendation[]>>;
+    generateAnalytics(): any;
+    period: AnalyticsPeriod;
+    criteria?: AnalyticsSearchCriteria;
+    Promise<PolicyServiceResponse>(): any;
+    <PolicyAnalytics>(): any;
 }
-/**
- * Policy template service interface
- */
 export interface IPolicyTemplateService {
     createTemplate(template: CreateTemplateRequest): Promise<PolicyServiceResponse<PolicyTemplate>>;
     updateTemplate(id: string, updates: UpdateTemplateRequest): Promise<PolicyServiceResponse<PolicyTemplate>>;
     getTemplate(id: string): Promise<PolicyServiceResponse<PolicyTemplate>>;
     getTemplates(criteria?: TemplateSearchCriteria): Promise<PolicyServiceResponse<TemplateSearchResult>>;
     deleteTemplate(id: string): Promise<PolicyServiceResponse<void>>;
-    createPolicyFromTemplate(templateId: string, customizations: TemplateCustomization): Promise<PolicyServiceResponse<BasePolicy>>;
-    getTemplateUsage(templateId: string): Promise<PolicyServiceResponse<TemplateUsageStats>>;
-    recommendTemplates(context: TemplateRecommendationContext): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
-    searchTemplatesByFramework(frameworks: ComplianceFramework[]): Promise<PolicyServiceResponse<PolicyTemplate[]>>;
-    validateTemplate(template: CreateTemplateRequest): Promise<PolicyServiceResponse<TemplateValidationResult>>;
-    testTemplate(templateId: string, testData: TemplateTestData): Promise<PolicyServiceResponse<TemplateTestResult>>;
+    createPolicyFromTemplate(): any;
+    templateId: string;
+    customizations: TemplateCustomization;
+    Promise<PolicyServiceResponse>(): any;
+    <BasePolicy>(): any;
 }
-/**
- * Policy import/export service interface
- */
 export interface IPolicyImportExportService {
     exportPolicies(criteria: PolicySearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyExport>>;
-    exportAssignments(criteria: AssignmentSearchCriteria, options: ExportOptions): Promise<PolicyServiceResponse<PolicyAssignment[]>>;
-    downloadExport(exportId: string): Promise<PolicyServiceResponse<Blob>>;
-    importPolicies(data: ImportData, options: ImportOptions): Promise<PolicyServiceResponse<PolicyImport>>;
-    validateImportData(data: ImportData): Promise<PolicyServiceResponse<ImportValidationResult>>;
-    getImportStatus(importId: string): Promise<PolicyServiceResponse<PolicyImport>>;
-    scheduleBatchExport(criteria: PolicySearchCriteria, schedule: ExportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
-    scheduleBatchImport(source: ImportSource, schedule: ImportSchedule): Promise<PolicyServiceResponse<BatchJob>>;
+    exportAssignments(): any;
+    criteria: AssignmentSearchCriteria;
+    options: ExportOptions;
+    Promise<PolicyServiceResponse>(): any;
+    <PolicyAssignment>(): any;
 }
 export interface PolicyServiceResponse<T> {
     success: boolean;
@@ -145,14 +114,14 @@ export interface PolicyTestCase {
     description: string;
     context: EvaluationContext;
     expectedDecision: 'allow' | 'deny' | 'conditional' | 'review_required';
-    expectedReasons?: string[];
+    expectedReasons?: string;
 }
 export interface PolicyTestResult {
     testId: string;
     passed: boolean;
     actualResult: PolicyEvaluation;
     expectedResult: Partial<PolicyEvaluation>;
-    deviations: TestDeviation[];
+    deviations: TestDeviation;
     executionTime: number;
 }
 export interface TestDeviation {
@@ -173,8 +142,8 @@ export interface BulkOperationResult {
     totalRequested: number;
     successful: number;
     failed: number;
-    results: BulkOperationItem[];
-    errors: ServiceError[];
+    results: BulkOperationItem;
+    errors: ServiceError;
 }
 export interface BulkOperationItem {
     id: string;
@@ -216,15 +185,15 @@ export interface UpdateAssignmentRequest {
     reason?: string;
 }
 export interface AssignmentSearchCriteria {
-    policyIds?: string[];
-    targetTypes?: AssignmentTargetType[];
-    targetIds?: string[];
-    statuses?: string[];
+    policyIds?: string;
+    targetTypes?: AssignmentTargetType;
+    targetIds?: string;
+    statuses?: string;
     assignedAfter?: Date;
     assignedBefore?: Date;
 }
 export interface AssignmentSearchResult {
-    assignments: PolicyAssignment[];
+    assignments: PolicyAssignment;
     totalCount: number;
     pageSize: number;
     currentPage: number;
@@ -238,13 +207,13 @@ export interface AssignmentOptions {
 }
 export interface ConflictResolutionResult {
     hasConflicts: boolean;
-    conflicts: AssignmentConflict[];
-    resolvedAssignments: PolicyAssignment[];
-    recommendations: ConflictRecommendation[];
+    conflicts: AssignmentConflict;
+    resolvedAssignments: PolicyAssignment;
+    recommendations: ConflictRecommendation;
 }
 export interface AssignmentConflict {
     conflictType: 'priority' | 'contradiction' | 'duplicate';
-    involvedAssignments: string[];
+    involvedAssignments: string;
     description: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
 }
@@ -255,9 +224,9 @@ export interface ConflictRecommendation {
 }
 export interface AssignmentInheritanceChain {
     assignmentId: string;
-    chain: InheritanceLevel[];
+    chain: InheritanceLevel;
     effectivePolicy: BasePolicy;
-    overrides: string[];
+    overrides: string;
 }
 export interface InheritanceLevel {
     assignmentId: string;
@@ -268,8 +237,8 @@ export interface InheritanceLevel {
 }
 export interface AssignmentValidationResult {
     valid: boolean;
-    errors: AssignmentValidationError[];
-    warnings: AssignmentValidationWarning[];
+    errors: AssignmentValidationError;
+    warnings: AssignmentValidationWarning;
 }
 export interface AssignmentValidationError {
     field: string;
@@ -285,9 +254,9 @@ export interface AssignmentValidationWarning {
 }
 export interface AssignmentSimulationResult {
     wouldSucceed: boolean;
-    predictedConflicts: AssignmentConflict[];
+    predictedConflicts: AssignmentConflict;
     impactAnalysis: AssignmentImpact;
-    recommendations: string[];
+    recommendations: string;
 }
 export interface AssignmentImpact {
     affectedTargets: number;
@@ -296,18 +265,18 @@ export interface AssignmentImpact {
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
 }
 export interface AnalyticsSearchCriteria {
-    policyTypes?: PolicyType[];
-    policyIds?: string[];
-    targetTypes?: AssignmentTargetType[];
-    complianceFrameworks?: ComplianceFramework[];
+    policyTypes?: PolicyType;
+    policyIds?: string;
+    targetTypes?: AssignmentTargetType;
+    complianceFrameworks?: ComplianceFramework;
     includeInactive?: boolean;
 }
 export interface UsageAnalytics {
     period: AnalyticsPeriod;
-    policyUsage: PolicyUsageData[];
+    policyUsage: PolicyUsageData;
     totalEvaluations: number;
     uniqueContexts: number;
-    topPolicies: TopPolicyData[];
+    topPolicies: TopPolicyData;
 }
 export interface PolicyUsageData {
     policyId: string;
@@ -327,9 +296,9 @@ export interface TopPolicyData {
 export interface ComplianceAnalytics {
     period: AnalyticsPeriod;
     overallScore: number;
-    frameworkScores: FrameworkScore[];
-    violations: ComplianceViolation[];
-    recommendations: ComplianceRecommendation[];
+    frameworkScores: FrameworkScore;
+    violations: ComplianceViolation;
+    recommendations: ComplianceRecommendation;
 }
 export interface FrameworkScore {
     framework: ComplianceFramework;
@@ -358,8 +327,8 @@ export interface ComplianceRecommendation {
 export interface PerformanceAnalytics {
     period: AnalyticsPeriod;
     systemMetrics: SystemPerformanceMetrics;
-    policyMetrics: PolicyPerformanceMetrics[];
-    bottlenecks: PerformanceBottleneck[];
+    policyMetrics: PolicyPerformanceMetrics;
+    bottlenecks: PerformanceBottleneck;
 }
 export interface SystemPerformanceMetrics {
     totalRequests: number;
@@ -394,7 +363,7 @@ export interface RealTimeMetrics {
 export interface SystemHealthMetrics {
     overallHealth: 'healthy' | 'degraded' | 'critical';
     healthScore: number;
-    components: ComponentHealth[];
+    components: ComponentHealth;
     lastCheck: Date;
 }
 export interface ComponentHealth {
@@ -411,15 +380,15 @@ export interface UpdateTemplateRequest {
     reason?: string;
 }
 export interface TemplateSearchCriteria {
-    policyTypes?: PolicyType[];
-    complianceFrameworks?: ComplianceFramework[];
-    industries?: string[];
+    policyTypes?: PolicyType;
+    complianceFrameworks?: ComplianceFramework;
+    industries?: string;
     customizable?: boolean;
     minimumRating?: number;
     text?: string;
 }
 export interface TemplateSearchResult {
-    templates: PolicyTemplate[];
+    templates: PolicyTemplate;
     totalCount: number;
     pageSize: number;
     currentPage: number;
@@ -436,7 +405,7 @@ export interface TemplateUsageStats {
     recentUsages: number;
     averageRating: number;
     successRate: number;
-    popularCustomizations: PopularCustomization[];
+    popularCustomizations: PopularCustomization;
 }
 export interface PopularCustomization {
     field: string;
@@ -448,13 +417,13 @@ export interface TemplateRecommendationContext {
     organizationType?: string;
     industry?: string;
     region?: string;
-    complianceRequirements?: ComplianceFramework[];
-    existingPolicies?: string[];
+    complianceRequirements?: ComplianceFramework;
+    existingPolicies?: string;
 }
 export interface TemplateValidationResult {
     valid: boolean;
-    errors: TemplateValidationError[];
-    warnings: TemplateValidationWarning[];
+    errors: TemplateValidationError;
+    warnings: TemplateValidationWarning;
 }
 export interface TemplateValidationError {
     field: string;
@@ -469,8 +438,8 @@ export interface TemplateValidationWarning {
     suggestion?: string;
 }
 export interface TemplateTestData {
-    customizations: TemplateCustomization[];
-    validationTests: TemplateValidationTest[];
+    customizations: TemplateCustomization;
+    validationTests: TemplateValidationTest;
 }
 export interface TemplateValidationTest {
     testName: string;
@@ -480,7 +449,7 @@ export interface TemplateValidationTest {
 export interface TemplateTestResult {
     testsPassed: number;
     totalTests: number;
-    results: TemplateTestCaseResult[];
+    results: TemplateTestCaseResult;
     overallSuccess: boolean;
 }
 export interface TemplateTestCaseResult {
@@ -523,8 +492,8 @@ export interface ImportValidationResult {
     totalPolicies: number;
     validPolicies: number;
     invalidPolicies: number;
-    errors: ImportValidationError[];
-    warnings: ImportValidationWarning[];
+    errors: ImportValidationError;
+    warnings: ImportValidationWarning;
 }
 export interface ImportValidationError {
     policyId?: string;
@@ -561,7 +530,7 @@ export interface BatchJob {
     createdAt: Date;
     lastRunAt?: Date;
     nextRunAt?: Date;
-    results?: BatchJobResult[];
+    results?: BatchJobResult;
 }
 export interface BatchJobResult {
     runId: string;
@@ -569,7 +538,7 @@ export interface BatchJobResult {
     completedAt?: Date;
     status: 'running' | 'completed' | 'failed';
     recordsProcessed: number;
-    errors: ServiceError[];
+    errors: ServiceError;
     outputLocation?: string;
 }
 export interface ImportSource {
@@ -589,7 +558,7 @@ export interface PolicyInsight {
     description: string;
     impact: 'low' | 'medium' | 'high' | 'critical';
     actionable: boolean;
-    relatedPolicies: string[];
+    relatedPolicies: string;
     generatedAt: Date;
 }
 export interface PolicyRecommendation {
@@ -601,21 +570,21 @@ export interface PolicyRecommendation {
     expectedImpact: string;
     implementationComplexity: 'low' | 'medium' | 'high';
     estimatedEffort: string;
-    relatedPolicies: string[];
+    relatedPolicies: string;
     generatedAt: Date;
 }
 export interface InsightCriteria {
-    types?: string[];
+    types?: string;
     minImpact?: 'low' | 'medium' | 'high' | 'critical';
     actionableOnly?: boolean;
-    policyIds?: string[];
+    policyIds?: string;
     generatedAfter?: Date;
 }
 export interface RecommendationCriteria {
-    categories?: string[];
+    categories?: string;
     minPriority?: 'low' | 'medium' | 'high' | 'critical';
     maxComplexity?: 'low' | 'medium' | 'high';
-    policyIds?: string[];
+    policyIds?: string;
     implementable?: boolean;
 }
 export type ReportFormat = 'pdf' | 'html' | 'csv' | 'json' | 'xml';
@@ -623,11 +592,11 @@ export interface ComplianceReport {
     reportId: string;
     generatedAt: Date;
     period: AnalyticsPeriod;
-    frameworks: ComplianceFramework[];
+    frameworks: ComplianceFramework;
     overallScore: number;
-    frameworkResults: FrameworkResult[];
-    violations: ComplianceViolation[];
-    recommendations: ComplianceRecommendation[];
+    frameworkResults: FrameworkResult;
+    violations: ComplianceViolation;
+    recommendations: ComplianceRecommendation;
     format: ReportFormat;
     downloadUrl?: string;
 }
@@ -646,8 +615,8 @@ export interface UsageReport {
     period: AnalyticsPeriod;
     totalEvaluations: number;
     uniquePolicies: number;
-    topPolicies: TopPolicyData[];
-    usageTrends: UsageTrendData[];
+    topPolicies: TopPolicyData;
+    usageTrends: UsageTrendData;
     format: ReportFormat;
     downloadUrl?: string;
 }
@@ -662,10 +631,10 @@ export interface AuditReport {
     reportId: string;
     generatedAt: Date;
     period: AnalyticsPeriod;
-    auditTrail: AuditTrailEntry[];
-    policyChanges: PolicyChangeEntry[];
-    accessLog: AccessLogEntry[];
-    securityEvents: SecurityEventEntry[];
+    auditTrail: AuditTrailEntry;
+    policyChanges: PolicyChangeEntry;
+    accessLog: AccessLogEntry;
+    securityEvents: SecurityEventEntry;
     format: ReportFormat;
     downloadUrl?: string;
 }
@@ -704,7 +673,7 @@ export interface SecurityEventEntry {
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     userId?: string;
-    affectedResources: string[];
+    affectedResources: string;
     mitigationTaken?: string;
 }
 //# sourceMappingURL=PolicyServices.d.ts.map

@@ -11,43 +11,43 @@ export interface Era {
         start: number;
         end: number;
     };
-    region: string[];
+    region: string;
     accuracy: 'high' | 'medium' | 'low';
     description?: string;
-    culturalContext?: string[];
+    culturalContext?: string;
 }
 export declare const HISTORICAL_ERAS: {
-    readonly MEDIEVAL_EARLY: {
-        readonly name: "Early Medieval";
-        readonly period: {
-            readonly start: 476;
-            readonly end: 1000;
+    MEDIEVAL_EARLY: {
+        name: string;
+        period: {
+            start: number;
+            end: number;
         };
-        readonly region: readonly ["Europe"];
-        readonly accuracy: "high";
-        readonly description: "Early medieval period characterized by the fall of Rome and rise of feudalism";
+        region: string[];
+        accuracy: string;
+        description: string;
     };
-    readonly MEDIEVAL_HIGH: {
-        readonly name: "High Medieval";
-        readonly period: {
-            readonly start: 1000;
-            readonly end: 1300;
+    MEDIEVAL_HIGH: {
+        name: string;
+        period: {
+            start: number;
+            end: number;
         };
-        readonly region: readonly ["Europe"];
-        readonly accuracy: "high";
-        readonly description: "High medieval period of cathedral building, crusades, and scholasticism";
+        region: string[];
+        accuracy: string;
+        description: string;
     };
-    readonly MEDIEVAL_LATE: {
-        readonly name: "Late Medieval";
-        readonly period: {
-            readonly start: 1300;
-            readonly end: 1500;
+    MEDIEVAL_LATE: {
+        name: string;
+        period: {
+            start: number;
+            end: number;
         };
-        readonly region: readonly ["Europe"];
-        readonly accuracy: "high";
-        readonly description: "Late medieval period transitioning toward Renaissance";
+        region: string[];
+        accuracy: string;
+        description: string;
     };
-    readonly RENAISSANCE: {
+    RENAISSANCE: {
         readonly name: "Renaissance";
         readonly period: {
             readonly start: 1400;
@@ -57,16 +57,9 @@ export declare const HISTORICAL_ERAS: {
         readonly accuracy: "high";
         readonly description: "Renaissance period of cultural and artistic rebirth";
     };
-};
-export interface Variation {
-    id: string;
-    type: 'color' | 'texture' | 'pattern' | 'quality' | 'condition';
-    value: string;
-    probability: number;
-    era_specific?: boolean;
-    region_specific?: string[];
-    social_class?: SocialClass[];
-}
+    interface: any;
+    Variation: any;
+}, string: any;
 export type SocialClass = 'peasant' | 'artisan' | 'merchant' | 'noble' | 'clergy' | 'royal';
 export interface UTDGNode {
     id: string;
@@ -74,25 +67,25 @@ export interface UTDGNode {
     content: string;
     description?: string;
     metadata: {
-        era: Era[];
+        era: Era;
         authenticity: number;
         source: string;
-        tags: string[];
-        social_class?: SocialClass[];
+        tags: string;
+        social_class?: SocialClass;
         gender?: 'male' | 'female' | 'unisex';
         age_group?: 'child' | 'adult' | 'elder';
-        occupation?: string[];
+        occupation?: string;
         ceremonial?: boolean;
         daily_use?: boolean;
     };
     relationships: {
-        compatible: string[];
-        incompatible: string[];
-        variations: Variation[];
-        requires?: string[];
-        enhances?: string[];
+        compatible: string;
+        incompatible: string;
+        variations: Variation;
+        requires?: string;
+        enhances?: string;
     };
-    constraints: HistoricalConstraint[];
+    constraints: HistoricalConstraint;
     external_source?: {
         source_id: string;
         source_type: 'museum_api' | 'academic_db' | 'archaeological' | 'literary';
@@ -104,9 +97,9 @@ export interface UTDGNode {
 export interface HistoricalConstraint {
     id: string;
     rule: string;
-    eras: Era[];
-    regions?: string[];
-    social_classes?: SocialClass[];
+    eras: Era;
+    regions?: string;
+    social_classes?: SocialClass;
     enforcement: 'strict' | 'warning' | 'suggestion';
     message: string;
     description?: string;
@@ -114,27 +107,27 @@ export interface HistoricalConstraint {
 }
 export interface ConstraintValidationResult {
     valid: boolean;
-    violations: ConstraintViolation[];
-    warnings: ConstraintWarning[];
-    suggestions: ConstraintSuggestion[];
+    violations: ConstraintViolation;
+    warnings: ConstraintWarning;
+    suggestions: ConstraintSuggestion;
 }
 export interface ConstraintViolation {
     constraint_id: string;
-    node_ids: string[];
+    node_ids: string;
     message: string;
     severity: 'critical' | 'major' | 'minor';
 }
 export interface ConstraintWarning {
     constraint_id: string;
-    node_ids: string[];
+    node_ids: string;
     message: string;
     historical_context?: string;
 }
 export interface ConstraintSuggestion {
     constraint_id: string;
-    node_ids: string[];
+    node_ids: string;
     message: string;
-    suggested_alternatives?: string[];
+    suggested_alternatives?: string;
 }
 export interface DataSource {
     id: string;
@@ -148,15 +141,15 @@ export interface DataSource {
         strategy: 'memory' | 'disk' | 'hybrid';
         max_size?: number;
     };
-    transforms: DataTransform[];
+    transforms: DataTransform;
     rate_limiting?: {
         requests_per_minute: number;
         requests_per_hour: number;
     };
     metadata: {
         description: string;
-        coverage_eras: Era[];
-        data_types: UTDGNodeType[];
+        coverage_eras: Era;
+        data_types: UTDGNodeType;
         accuracy_level: 'high' | 'medium' | 'low';
         last_validated: string;
     };
@@ -172,10 +165,10 @@ export interface DataTransform {
 }
 export type UTDGNodeType = UTDGNode['type'];
 export interface HistoricalQuery {
-    era: string | string[];
-    region?: string | string[];
-    category: UTDGNodeType | UTDGNodeType[];
-    social_class?: SocialClass | SocialClass[];
+    era: string | string;
+    region?: string | string;
+    category: UTDGNodeType | UTDGNodeType;
+    social_class?: SocialClass | SocialClass;
     filters: Record<string, any>;
     limit?: number;
     offset?: number;
@@ -184,12 +177,12 @@ export interface HistoricalQuery {
     min_authenticity?: number;
 }
 export interface HistoricalQueryResult {
-    nodes: UTDGNode[];
+    nodes: UTDGNode;
     total_count: number;
     query_metadata: {
         query_time: number;
         cache_hit: boolean;
-        sources_used: string[];
+        sources_used: string;
     };
 }
 export interface MedievalClothing extends UTDGNode {
@@ -204,15 +197,15 @@ export interface MedievalClothing extends UTDGNode {
     };
 }
 export interface UTDGGraph {
-    nodes: UTDGNode[];
-    constraints: HistoricalConstraint[];
+    nodes: UTDGNode;
+    constraints: HistoricalConstraint;
     metadata: {
         version: string;
         created: string;
         last_modified: string;
-        era_focus: Era[];
+        era_focus: Era;
         accuracy_level: 'high' | 'medium' | 'low';
-        source_attribution: string[];
+        source_attribution: string;
     };
 }
 export interface ContentGenerationConfig {
@@ -225,29 +218,29 @@ export interface ContentGenerationConfig {
     variation_level: 'low' | 'medium' | 'high';
     historical_accuracy: 'strict' | 'moderate' | 'flexible';
     creativity_factor: number;
-    required_elements?: string[];
-    forbidden_elements?: string[];
+    required_elements?: string;
+    forbidden_elements?: string;
     prefer_common_items?: boolean;
 }
 export interface GeneratedContent {
-    nodes: UTDGNode[];
-    constraints_applied: HistoricalConstraint[];
+    nodes: UTDGNode;
+    constraints_applied: HistoricalConstraint;
     generation_metadata: {
         config: ContentGenerationConfig;
         generation_time: number;
         accuracy_score: number;
         creativity_score: number;
-        historical_basis: string[];
+        historical_basis: string;
     };
 }
 export interface VFXExportData {
     scene_description: string;
     historical_context: Era;
-    accuracy_notes: string[];
-    materials: MaterialDescription[];
-    textures: TextureDescription[];
-    lighting_notes?: string[];
-    atmospheric_notes?: string[];
+    accuracy_notes: string;
+    materials: MaterialDescription;
+    textures: TextureDescription;
+    lighting_notes?: string;
+    atmospheric_notes?: string;
     crowd_control_data?: CrowdControlData;
     backdrop_data?: BackdropData;
     meteor_data?: MeteorData;
@@ -261,23 +254,23 @@ export interface MaterialDescription {
 export interface TextureDescription {
     name: string;
     pattern: string;
-    color_palette: string[];
+    color_palette: string;
     historical_source: string;
 }
 export interface CrowdControlData {
-    character_types: string[];
-    clothing_combinations: string[][];
+    character_types: string;
+    clothing_combinations: string[];
     social_stratification: Record<SocialClass, number>;
 }
 export interface BackdropData {
     architectural_style: string;
-    materials: string[];
-    atmospheric_conditions: string[];
+    materials: string;
+    atmospheric_conditions: string;
 }
 export interface MeteorData {
-    weather_patterns: string[];
-    seasonal_conditions: string[];
-    time_of_day_preferences: string[];
+    weather_patterns: string;
+    seasonal_conditions: string;
+    time_of_day_preferences: string;
 }
 export interface DataQualityMetrics {
     completeness: number;
@@ -289,15 +282,15 @@ export interface DataQualityMetrics {
 export interface ValidationReport {
     overall_score: number;
     metrics: DataQualityMetrics;
-    issues: ValidationIssue[];
-    recommendations: string[];
+    issues: ValidationIssue;
+    recommendations: string;
     last_validated: string;
 }
 export interface ValidationIssue {
     type: 'missing_data' | 'inconsistency' | 'historical_error' | 'source_issue';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
-    affected_nodes: string[];
+    affected_nodes: string;
     suggested_fix?: string;
 }
 export type { UTDGNode, Era, HistoricalConstraint, DataSource, HistoricalQuery, HistoricalQueryResult, MedievalClothing, UTDGGraph, ContentGenerationConfig, GeneratedContent, VFXExportData, ValidationReport, ConstraintValidationResult };

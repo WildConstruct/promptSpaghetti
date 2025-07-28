@@ -7,6 +7,7 @@
  * ensuring high-performance data access and efficient resource utilization.
  */
 import { EventEmitter } from 'events';
+
 export interface QueryProfile {
     id: string;
     query_hash: string;
@@ -38,7 +39,7 @@ export interface QueryProfile {
     created_at: number;
     last_updated: number;
     last_executed: number;
-}
+
 export interface QueryExecution {
     id: string;
     query_profile_id: string;
@@ -69,7 +70,7 @@ export interface QueryExecution {
     result_accuracy: number;
     result_completeness: number;
     user_satisfaction_score?: number;
-}
+
 export interface CachingStrategy {
     cache_type: 'none' | 'result_cache' | 'partial_cache' | 'materialized_view' | 'smart_cache';
     cache_duration_seconds: number;
@@ -78,7 +79,7 @@ export interface CachingStrategy {
     cache_partitioning: boolean;
     cache_compression: boolean;
     cache_location: 'memory' | 'ssd' | 'distributed';
-}
+
 export interface ExecutionPlan {
     id: string;
     plan_type: 'sequential' | 'parallel' | 'distributed' | 'hybrid';
@@ -106,7 +107,7 @@ export interface ExecutionPlan {
         join_reordering: boolean;
         aggregation_pushdown: boolean;
     };
-}
+
 export interface UserUsagePattern {
     user_id: string;
     usage_frequency: number;
@@ -117,7 +118,7 @@ export interface UserUsagePattern {
     query_complexity_preference: 'simple' | 'moderate' | 'complex';
     result_size_preference: 'small' | 'medium' | 'large';
     latency_tolerance_ms: number;
-}
+
 export interface SeasonalPattern {
     pattern_type: 'daily' | 'weekly' | 'monthly' | 'quarterly';
     peak_periods: Array<{,
@@ -131,7 +132,7 @@ export interface SeasonalPattern {
         multiplier: number;
     }>;
     confidence_score: number;
-}
+
 export interface CacheEntry {
     cache_key: string;
     query_hash: string;
@@ -157,7 +158,7 @@ export interface CacheEntry {
     replicated: boolean;
     replication_factor: number;
     geographic_distribution: string[];
-}
+
 export interface QueryOptimizationRule {
     id: string;
     name: string;
@@ -192,7 +193,7 @@ export interface QueryOptimizationRule {
     last_applied: number;
     application_count: number;
     success_rate: number;
-}
+
 export interface IndexRecommendation {
     index_name: string;
     table_name: string;
@@ -202,7 +203,7 @@ export interface IndexRecommendation {
     estimated_improvement_percentage: number;
     maintenance_cost: number;
     creation_time_estimate_minutes: number;
-}
+
 export interface QueryRewrite {
     original_pattern: string;
     optimized_pattern: string;
@@ -210,7 +211,7 @@ export interface QueryRewrite {
     expected_improvement_percentage: number;
     risk_level: 'low' | 'medium' | 'high';
     validation_required: boolean;
-}
+
 export interface OptimizationJob {
     id: string;
     name: string;
@@ -250,7 +251,7 @@ export interface OptimizationJob {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface PerformanceMetrics {
     id: string;
     collection_period: {,
@@ -299,7 +300,7 @@ export interface PerformanceMetrics {
         user_satisfaction_score: number;
     };
     collected_at: number;
-}
+
 export interface OptimizationEvent {
     id: string;
     type: 'optimization_applied' | 'cache_miss_spike' | 'performance_degradation' | 'rule_triggered' | 'index_created' | 'cache_warmed';
@@ -330,7 +331,7 @@ export interface OptimizationEvent {
         rollback_required: boolean;
         rollback_completed: boolean;
     };
-}
+
 export declare class SecurityQueryOptimizer extends EventEmitter {
     private queryProfiles;
     private queryExecutions;
@@ -413,6 +414,6 @@ export declare class SecurityQueryOptimizer extends EventEmitter {
     exportConfiguration(): Promise<string>;
     importConfiguration(configJson: string): Promise<void>;
     shutdown(): void;
-}
+
 export default SecurityQueryOptimizer;
 //# sourceMappingURL=SecurityQueryOptimizer.d.ts.map

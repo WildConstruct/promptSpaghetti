@@ -11,6 +11,7 @@
 import { EventEmitter } from 'events';
 import { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus } from '../../../server/src/services/PolicyUpdateWorkflowService.ts';
 export { PolicyType, PolicyUpdateRequest, PolicyVersion, PolicyDeployment, DeploymentType, DeploymentStatus, ValidationType, ValidationStatus, RiskLevel, UpdatePriority, VersionStatus };
+
 export interface PolicyPreviewConfig {
     enableStagingEnvironments: boolean;
     enableImpactSimulation: boolean;
@@ -20,7 +21,7 @@ export interface PolicyPreviewConfig {
     maxConcurrentPreviews: number;
     stagingEnvironments: StagingEnvironment[];
     defaultValidations: ValidationType[];
-}
+
 export interface StagingEnvironment {
     environmentId: string;
     name: string;
@@ -32,19 +33,19 @@ export interface StagingEnvironment {
     autoCleanupHours: number;
     monitoringEnabled: boolean;
     features: EnvironmentFeature[];
-}
+
 export interface EnvironmentFeature {
     feature: string;
     enabled: boolean;
     configuration: Record<string, any>;
-}
+
 export declare enum EnvironmentType {
     DEVELOPMENT = "DEVELOPMENT",
     STAGING = "STAGING",
     TESTING = "TESTING",
     CANARY = "CANARY",
     PREVIEW = "PREVIEW"
-}
+
 export interface PolicyPreview {
     previewId: string;
     policyId: string;
@@ -62,7 +63,7 @@ export interface PolicyPreview {
     impactSimulation?: ImpactSimulation;
     userFeedback: UserFeedback[];
     metadata: Record<string, any>;
-}
+
 export interface PreviewChange {
     changeId: string;
     section: string;
@@ -73,7 +74,7 @@ export interface PreviewChange {
     impactLevel: 'low' | 'medium' | 'high' | 'critical';
     userVisible: boolean;
     requiresConsent: boolean;
-}
+
 export declare enum PreviewStatus {
     DRAFT = "DRAFT",
     VALIDATING = "VALIDATING",
@@ -82,7 +83,7 @@ export declare enum PreviewStatus {
     APPROVED = "APPROVED",
     REJECTED = "REJECTED",
     EXPIRED = "EXPIRED"
-}
+
 export interface StagingDeployment {
     deploymentId: string;
     previewId: string;
@@ -94,7 +95,7 @@ export interface StagingDeployment {
     issues: StagingIssue[];
     rollbackTriggers: RollbackTrigger[];
     autoRollbackEnabled: boolean;
-}
+
 export declare enum StagingDeploymentStatus {
     DEPLOYING = "DEPLOYING",
     ACTIVE = "ACTIVE",
@@ -104,7 +105,7 @@ export declare enum StagingDeploymentStatus {
     ROLLED_BACK = "ROLLED_BACK",
     COMPLETED = "COMPLETED",
     FAILED = "FAILED"
-}
+
 export interface StagingMetrics {
     userInteractions: number;
     consentRates: number;
@@ -114,7 +115,7 @@ export interface StagingMetrics {
     complianceScore: number;
     accessibilityScore: number;
     securityScore: number;
-}
+
 export interface StagingIssue {
     issueId: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -124,7 +125,7 @@ export interface StagingIssue {
     affectedUsers: string[];
     resolution?: IssueResolution;
     status: IssueStatus;
-}
+
 export declare enum IssueCategory {
     LEGAL = "LEGAL",
     COMPLIANCE = "COMPLIANCE",
@@ -133,28 +134,28 @@ export declare enum IssueCategory {
     PERFORMANCE = "PERFORMANCE",
     SECURITY = "SECURITY",
     TECHNICAL = "TECHNICAL"
-}
+
 export declare enum IssueStatus {
     DETECTED = "DETECTED",
     INVESTIGATING = "INVESTIGATING",
     CONFIRMED = "CONFIRMED",
     RESOLVED = "RESOLVED",
     IGNORED = "IGNORED"
-}
+
 export interface IssueResolution {
     resolvedBy: string;
     resolvedAt: Date;
     resolution: string;
     changeRequired: boolean;
     fixApplied: boolean;
-}
+
 export interface RollbackTrigger {
     triggerType: RollbackTriggerType;
     threshold: number;
     description: string;
     enabled: boolean;
     conditions: string[];
-}
+
 export declare enum RollbackTriggerType {
     ERROR_RATE = "ERROR_RATE",
     USER_COMPLAINTS = "USER_COMPLAINTS",
@@ -162,7 +163,7 @@ export declare enum RollbackTriggerType {
     PERFORMANCE_DEGRADATION = "PERFORMANCE_DEGRADATION",
     SECURITY_INCIDENT = "SECURITY_INCIDENT",
     MANUAL_TRIGGER = "MANUAL_TRIGGER"
-}
+
 export interface PreviewValidationResult {
     validationId: string;
     validationType: ValidationType;
@@ -174,7 +175,7 @@ export interface PreviewValidationResult {
     warnings: string[];
     validatedAt: Date;
     validatorInfo: ValidatorInfo;
-}
+
 export interface ValidationFinding {
     findingId: string;
     severity: 'info' | 'warning' | 'error' | 'critical';
@@ -184,13 +185,13 @@ export interface ValidationFinding {
     location: string;
     suggestion?: string;
     autoFixable: boolean;
-}
+
 export interface ValidatorInfo {
     validatorId: string;
     validatorType: 'automated' | 'human' | 'hybrid';
     version: string;
     credentials?: string[];
-}
+
 export interface ImpactSimulation {
     simulationId: string;
     scenarios: SimulationScenario[];
@@ -199,7 +200,7 @@ export interface ImpactSimulation {
     simulatedAt: Date;
     duration: number;
     methodology: string;
-}
+
 export interface SimulationScenario {
     scenarioId: string;
     name: string;
@@ -208,19 +209,19 @@ export interface SimulationScenario {
     userCount: number;
     simulatedActions: SimulatedAction[];
     expectedOutcomes: ExpectedOutcome[];
-}
+
 export interface SimulatedAction {
     action: string;
     parameters: Record<string, any>;
     expectedResponse: string;
     timing: number;
-}
+
 export interface ExpectedOutcome {
     metric: string;
     expectedValue: number;
     tolerance: number;
     critical: boolean;
-}
+
 export interface SimulationResult {
     scenarioId: string;
     actualOutcomes: ActualOutcome[];
@@ -229,14 +230,14 @@ export interface SimulationResult {
     passedTests: number;
     failedTests: number;
     recommendations: string[];
-}
+
 export interface ActualOutcome {
     metric: string;
     actualValue: number;
     expectedValue: number;
     variance: number;
     acceptable: boolean;
-}
+
 export interface OutcomeDeviation {
     metric: string;
     deviationType: 'positive' | 'negative' | 'unexpected';
@@ -244,7 +245,7 @@ export interface OutcomeDeviation {
     description: string;
     impact: string;
     recommendedAction: string;
-}
+
 export interface UserFeedback {
     feedbackId: string;
     userId: string;
@@ -256,7 +257,7 @@ export interface UserFeedback {
     submittedAt: Date;
     processed: boolean;
     actionRequired: boolean;
-}
+
 export declare enum FeedbackType {
     USABILITY = "USABILITY",
     CLARITY = "CLARITY",
@@ -264,7 +265,7 @@ export declare enum FeedbackType {
     ACCESSIBILITY = "ACCESSIBILITY",
     TRUST = "TRUST",
     GENERAL = "GENERAL"
-}
+
 export declare enum FeedbackCategory {
     POSITIVE = "POSITIVE",
     NEGATIVE = "NEGATIVE",
@@ -272,7 +273,7 @@ export declare enum FeedbackCategory {
     SUGGESTION = "SUGGESTION",
     BUG_REPORT = "BUG_REPORT",
     QUESTION = "QUESTION"
-}
+
 export interface PreviewAnalytics {
     previewId: string;
     totalInteractions: number;
@@ -283,13 +284,13 @@ export interface PreviewAnalytics {
     heatmapData: HeatmapData[];
     userJourney: UserJourneyStep[];
     conversionFunnel: ConversionStep[];
-}
+
 export interface DropOffPoint {
     section: string;
     dropOffRate: number;
     userCount: number;
     commonReasons: string[];
-}
+
 export interface HeatmapData {
     element: string;
     interactionType: string;
@@ -298,21 +299,21 @@ export interface HeatmapData {
         x: number;
         y: number;
     };
-}
+
 export interface UserJourneyStep {
     step: number;
     section: string;
     userCount: number;
     averageTime: number;
     successRate: number;
-}
+
 export interface ConversionStep {
     stepName: string;
     usersEntered: number;
     usersCompleted: number;
     conversionRate: number;
     averageTime: number;
-}
+
 export interface PolicyComparisonReport {
     comparisonId: string;
     baseVersion: string;
@@ -322,7 +323,7 @@ export interface PolicyComparisonReport {
     userImpactAssessment: UserImpactAssessment;
     complianceComparison: ComplianceComparison;
     generatedAt: Date;
-}
+
 export interface PolicyDifference {
     section: string;
     type: 'added' | 'removed' | 'modified' | 'moved';
@@ -331,63 +332,63 @@ export interface PolicyDifference {
     significance: 'minor' | 'moderate' | 'major' | 'critical';
     userVisible: boolean;
     legalImplications: string[];
-}
+
 export interface ComparisonImpactAnalysis {
     overallRisk: RiskLevel;
     affectedUserSegments: string[];
     requiredActions: RequiredAction[];
     timelineRecommendations: TimelineRecommendation[];
     rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'very_complex';
-}
+
 export interface RequiredAction {
     action: string;
     priority: UpdatePriority;
     deadline: Date;
     responsible: string;
     dependencies: string[];
-}
+
 export interface TimelineRecommendation {
     phase: string;
     duration: number;
     activities: string[];
     dependencies: string[];
     risks: string[];
-}
+
 export interface UserImpactAssessment {
     totalAffectedUsers: number;
     segmentBreakdown: SegmentImpact[];
     communicationRequirements: CommunicationRequirement[];
     trainingRequirements: TrainingRequirement[];
     supportTicketEstimate: number;
-}
+
 export interface SegmentImpact {
     segment: string;
     userCount: number;
     impactLevel: 'low' | 'medium' | 'high' | 'critical';
     specificChanges: string[];
     requiredActions: string[];
-}
+
 export interface CommunicationRequirement {
     channel: string;
     audience: string;
     message: string;
     timing: string;
     priority: 'low' | 'medium' | 'high' | 'urgent';
-}
+
 export interface TrainingRequirement {
     audience: string;
     trainingType: string;
     estimatedHours: number;
     materials: string[];
     deadline: Date;
-}
+
 export interface ComplianceComparison {
     frameworks: FrameworkComparison[];
     overallComplianceChange: 'improved' | 'maintained' | 'degraded';
     newRequirements: string[];
     removedRequirements: string[];
     modifiedRequirements: string[];
-}
+
 export interface FrameworkComparison {
     framework: string;
     beforeScore: number;
@@ -395,7 +396,6 @@ export interface FrameworkComparison {
     scoreDelta: number;
     impactedRequirements: string[];
     riskLevel: RiskLevel;
-}
 /**
  * Main Policy Preview and Staging Service
  */
@@ -493,6 +493,6 @@ export declare class PolicyPreviewStagingService extends EventEmitter {
     private cleanupStagingDeployments;
     private executeRollback;
     private startPeriodicTasks;
-}
+
 export default PolicyPreviewStagingService;
 //# sourceMappingURL=PolicyPreviewStagingService.d.ts.map

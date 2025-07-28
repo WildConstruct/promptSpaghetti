@@ -210,7 +210,7 @@ export async function temporaryPermissionsRoutes(
           severity: body.severity,
           incidentId: body.incidentId,
           reviewRequired: body.reviewRequired
-        },
+  }
         context
       );
 
@@ -442,18 +442,18 @@ export async function temporaryPermissionsRoutes(
           roleAssignments: 0,
           directGrants: 0,
           emergencyAccess: 0
-        },
+  }
         expired: {
           total: 0,
           autoRevoked: 0,
           manuallyRevoked: 0
-        },
+  }
         trends: {
           timeframe,
           grantsPerDay: [],
           revocationsPerDay: [],
           emergencyAccessUsage: []
-        },
+  }
         topGranters: [],
         averageDuration: 0,
         complianceMetrics: {
@@ -499,7 +499,7 @@ export async function temporaryPermissionsRoutes(
           emergencyAccess: 'available',
           automaticCleanup: 'running',
           auditLogging: 'operational'
-        },
+  }
         uptime: process.uptime(),
         environment: process.env.NODE_ENV || 'development'
       };

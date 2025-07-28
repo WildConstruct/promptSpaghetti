@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import { Comment } from '../../types/workspace';
+
 interface CommentItemProps {
     comment: Comment;
     userId: string;
@@ -15,7 +16,7 @@ interface CommentItemProps {
     isReply?: boolean;
     isThreadRoot?: boolean;
     isLast?: boolean;
-}
+
 export declare const CommentItem: React.FC<CommentItemProps>;
 export default CommentItem;
 //# sourceMappingURL=CommentItem.d.ts.map

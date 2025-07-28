@@ -28,7 +28,16 @@ export var TokenType;
     // Control tokens
     TokenType["EOF"] = "EOF";
     TokenType["ERROR"] = "ERROR";
+    TokenType[TokenType["export"] = void 0] = "export";
+    TokenType[TokenType["interface"] = void 0] = "interface";
+    TokenType[TokenType["Token"] = void 0] = "Token";
 })(TokenType || (TokenType = {}));
+{
+    type: TokenType;
+    value: string;
+    position: LexerPosition;
+    raw ?  : string; // Original text for error reporting,
+}
 export class GraphLexer {
     input;
     position = 0;
@@ -40,31 +49,48 @@ export class GraphLexer {
     currentSection = null;
     constructor(input) {
         this.input = input.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    }
-    /**
-     * Tokenize the entire input
-     */
-    tokenize() {
-        this.tokens = [];
-        this.errors = [];
-        this.position = 0;
-        this.line = 1;
-        this.column = 1;
-        this.indentStack = [0];
-        this.currentSection = null;
-        while (!this.isAtEnd()) {
-            this.scanToken();
+        /**
+         * Tokenize the entire input
+         */
+        tokenize();
+        {
+            tokens: Token;
+            errors: LexerError;
         }
-        // Emit final dedents
-        while (this.indentStack.length > 1) {
-            this.indentStack.pop();
-            this.addToken(TokenType.DEDENT, '');
+        {
+            this.tokens = [];
+            this.errors = [];
+            this.position = 0;
+            this.line = 1;
+            this.column = 1;
+            this.indentStack = [0];
+            this.currentSection = null;
+            while (!this.isAtEnd()) {
+                this.scanToken();
+                // Emit final dedents
+                while (this.indentStack.length > 1) {
+                    this.indentStack.pop();
+                    this.addToken(TokenType.DEDENT, '');
+                    this.addToken(TokenType.EOF, '');
+                    return {
+                        tokens: this.tokens,
+                        errors: this.errors,
+                    };
+                    /**
+                     * Scan and classify the next token
+                     */
+                }
+                /**
+                 * Scan and classify the next token
+                 */
+            }
+            /**
+             * Scan and classify the next token
+             */
         }
-        this.addToken(TokenType.EOF, '');
-        return {
-            tokens: this.tokens,
-            errors: this.errors
-        };
+        /**
+         * Scan and classify the next token
+         */
     }
     /**
      * Scan and classify the next token
@@ -76,74 +102,98 @@ export class GraphLexer {
             // Handle indentation at start of line
             if (this.isAtLineStart()) {
                 this.handleIndentation();
+                return;
+                // Handle newlines
+                if (char === '\n') {
+                    this.addToken(TokenType.NEWLINE, '\n');
+                    this.line++;
+                    this.column = 1;
+                    return;
+                    // Skip comments
+                    if (char === '#') {
+                        this.skipComment();
+                        return;
+                        // Handle section delimiters
+                        if (char === '-' && this.peek() === '-' && this.peekNext() === '-') {
+                            this.scanSectionDelimiter();
+                            return;
+                            // Handle edge arrows in edges section
+                            if (this.currentSection === 'EDGES' && char === '-' && this.peek() === '>') {
+                                this.advance(); // consume '>'
+                                this.addToken(TokenType.EDGE_ARROW, '->');
+                                return;
+                                // Handle YAML structure
+                                switch (char) {
+                                    case ':':
+                                        this.addToken(TokenType.COLON, ':');
+                                        break;
+                                    case '-':
+                                        if (this.isWhitespace(this.peek())) {
+                                            this.addToken(TokenType.DASH, '-');
+                                        }
+                                        else {
+                                            this.scanString();
+                                            break;
+                                        }
+                                    case '[':
+                                        this.addToken(TokenType.ARRAY_START, '[');
+                                        break;
+                                    case ']':
+                                        this.addToken(TokenType.ARRAY_END, ']');
+                                        break;
+                                    case '"':
+                                    case '\'':
+                                        this.scanQuotedString(char);
+                                        break;
+                                    default:
+                                        if (this.isDigit(char)) {
+                                            this.scanNumber();
+                                        }
+                                        else if (this.isAlpha(char)) {
+                                            this.scanIdentifier();
+                                        }
+                                        else {
+                                            this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');
+                                        }
+                                        break;
+                                    /**
+                                     * Handle indentation tracking
+                                     */
+                                }
+                                /**
+                                 * Handle indentation tracking
+                                 */
+                            }
+                            /**
+                             * Handle indentation tracking
+                             */
+                        }
+                        /**
+                         * Handle indentation tracking
+                         */
+                    }
+                    /**
+                     * Handle indentation tracking
+                     */
+                }
+                /**
+                 * Handle indentation tracking
+                 */
             }
-            return;
+            /**
+             * Handle indentation tracking
+             */
         }
-        // Handle newlines
-        if (char === '\n') {
-            this.addToken(TokenType.NEWLINE, '\n');
-            this.line++;
-            this.column = 1;
-            return;
-        }
-        // Skip comments
-        if (char === '#') {
-            this.skipComment();
-            return;
-        }
-        // Handle section delimiters
-        if (char === '-' && this.peek() === '-' && this.peekNext() === '-') {
-            this.scanSectionDelimiter();
-            return;
-        }
-        // Handle edge arrows in edges section
-        if (this.currentSection === 'EDGES' && char === '-' && this.peek() === '>') {
-            this.advance(); // consume '>'
-            this.addToken(TokenType.EDGE_ARROW, '->');
-            return;
-        }
-        // Handle YAML structure
-        switch (char) {
-            case ':':
-                this.addToken(TokenType.COLON, ':');
-                break;
-            case '-':
-                if (this.isWhitespace(this.peek())) {
-                    this.addToken(TokenType.DASH, '-');
-                }
-                else {
-                    this.scanString();
-                }
-                break;
-            case '[':
-                this.addToken(TokenType.ARRAY_START, '[');
-                break;
-            case ']':
-                this.addToken(TokenType.ARRAY_END, ']');
-                break;
-            case '"':
-            case '\'':
-                this.scanQuotedString(char);
-                break;
-            default:
-                if (this.isDigit(char)) {
-                    this.scanNumber();
-                }
-                else if (this.isAlpha(char)) {
-                    this.scanIdentifier();
-                }
-                else {
-                    this.addError(`Unexpected character: ${char}`, 'Check for typos or invalid characters');
-                }
-                break;
-        }
+        /**
+         * Handle indentation tracking
+         */
     }
     /**
      * Handle indentation tracking
      */
     handleIndentation() {
         let indent = 0;
-        const start = this.position - 1; // Go back to include current space/tab
+        const start = this.position - 1; // Go back to include current space/tab;
         // Count indentation
         for (let i = start; i < this.input.length; i++) {
             const char = this.input[i];
@@ -155,19 +205,52 @@ export class GraphLexer {
             }
             else {
                 break;
-            }
-        }
-        const currentIndent = this.indentStack[this.indentStack.length - 1];
-        if (indent > currentIndent) {
-            // Increased indentation
-            this.indentStack.push(indent);
-            this.addToken(TokenType.INDENT, ' '.repeat(indent));
-        }
-        else if (indent < currentIndent) {
-            // Decreased indentation - may need multiple dedents
-            while (this.indentStack.length > 1 && this.indentStack[this.indentStack.length - 1] > indent) {
-                this.indentStack.pop();
-                this.addToken(TokenType.DEDENT, '');
+                const currentIndent = this.indentStack[this.indentStack.length - 1];
+                if (indent > currentIndent) {
+                    // Increased indentation
+                    this.indentStack.push(indent);
+                    this.addToken(TokenType.INDENT, ' '.repeat(indent));
+                }
+                else if (indent < currentIndent) {
+                    // Decreased indentation - may need multiple dedents
+                    while (this.indentStack.length > 1 && this.indentStack[this.indentStack.length - 1] > indent) {
+                        this.indentStack.pop();
+                        this.addToken(TokenType.DEDENT, '');
+                        // Check for indentation error - temporarily disabled for debugging
+                        // TODO: Fix indentation validation logic
+                        // if (this.indentStack[this.indentStack.length - 1] !== indent) {
+                        //   this.addError(
+                        //     'Indentation does not match any outer indentation level',
+                        //     'Use consistent 2-space indentation'
+                        //   );
+                        // }
+                        /**
+                         * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+                         */
+                    }
+                    // Check for indentation error - temporarily disabled for debugging
+                    // TODO: Fix indentation validation logic
+                    // if (this.indentStack[this.indentStack.length - 1] !== indent) {
+                    //   this.addError(
+                    //     'Indentation does not match any outer indentation level',
+                    //     'Use consistent 2-space indentation'
+                    //   );
+                    // }
+                    /**
+                     * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+                     */
+                }
+                // Check for indentation error - temporarily disabled for debugging
+                // TODO: Fix indentation validation logic
+                // if (this.indentStack[this.indentStack.length - 1] !== indent) {
+                //   this.addError(
+                //     'Indentation does not match any outer indentation level',
+                //     'Use consistent 2-space indentation'
+                //   );
+                // }
+                /**
+                 * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+                 */
             }
             // Check for indentation error - temporarily disabled for debugging
             // TODO: Fix indentation validation logic
@@ -177,8 +260,30 @@ export class GraphLexer {
             //     'Use consistent 2-space indentation'
             //   );
             // }
+            /**
+             * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+             */
         }
+        // Check for indentation error - temporarily disabled for debugging
+        // TODO: Fix indentation validation logic
+        // if (this.indentStack[this.indentStack.length - 1] !== indent) {
+        //   this.addError(
+        //     'Indentation does not match any outer indentation level',
+        //     'Use consistent 2-space indentation'
+        //   );
+        // }
+        /**
+         * Scan section delimiter (---NODES---, ---EDGES---, etc.)
+         */
     }
+    // Check for indentation error - temporarily disabled for debugging
+    // TODO: Fix indentation validation logic
+    // if (this.indentStack[this.indentStack.length - 1] !== indent) {
+    //   this.addError(
+    //     'Indentation does not match any outer indentation level',
+    //     'Use consistent 2-space indentation'
+    //   );
+    // }
     /**
      * Scan section delimiter (---NODES---, ---EDGES---, etc.)
      */
@@ -190,24 +295,33 @@ export class GraphLexer {
         let sectionName = '';
         while (!this.isAtEnd() && this.peek() !== '-') {
             sectionName += this.advance();
+            // Expect closing '---'
+            if (this.peek() === '-' && this.peekNext() === '-' && this.input[this.position + 2] === '-') {
+                this.advance(); // first -
+                this.advance(); // second -  
+                this.advance(); // third -
+            }
+            else {
+                this.addError('Incomplete section delimiter', 'Section delimiters must end with ---');
+                const fullDelimiter = this.input.substring(start, this.position);
+                this.addToken(TokenType.SECTION_DELIMITER, fullDelimiter);
+                // Track current section
+                this.currentSection = sectionName;
+                /**
+                * Scan quoted string
+                */
+            }
+            /**
+            * Scan quoted string
+            */
         }
-        // Expect closing '---'
-        if (this.peek() === '-' && this.peekNext() === '-' && this.input[this.position + 2] === '-') {
-            this.advance(); // first -
-            this.advance(); // second -  
-            this.advance(); // third -
-        }
-        else {
-            this.addError('Incomplete section delimiter', 'Section delimiters must end with ---');
-        }
-        const fullDelimiter = this.input.substring(start, this.position);
-        this.addToken(TokenType.SECTION_DELIMITER, fullDelimiter);
-        // Track current section
-        this.currentSection = sectionName;
+        /**
+        * Scan quoted string
+        */
     }
     /**
-     * Scan quoted string
-     */
+    * Scan quoted string
+    */
     scanQuotedString(quote) {
         let value = '';
         let escaped = false;
@@ -237,80 +351,122 @@ export class GraphLexer {
                     default:
                         value += char;
                         break;
+                        escaped = false;
                 }
-                escaped = false;
+                if (this.peek() === '\\') {
+                    escaped = true;
+                    this.advance();
+                }
+                else {
+                    value += this.advance();
+                    if (this.isAtEnd()) {
+                        this.addError('Unterminated string', 'Add closing quote');
+                        return;
+                        // Consume closing quote
+                        this.advance();
+                        this.addToken(TokenType.STRING, value);
+                        /**
+                        * Scan unquoted string/identifier
+                        */
+                    }
+                    /**
+                    * Scan unquoted string/identifier
+                    */
+                }
+                /**
+                * Scan unquoted string/identifier
+                */
             }
-            else if (this.peek() === '\\') {
-                escaped = true;
-                this.advance();
-            }
-            else {
-                value += this.advance();
-            }
+            /**
+            * Scan unquoted string/identifier
+            */
         }
-        if (this.isAtEnd()) {
-            this.addError('Unterminated string', 'Add closing quote');
-            return;
-        }
-        // Consume closing quote
-        this.advance();
-        this.addToken(TokenType.STRING, value);
+        /**
+        * Scan unquoted string/identifier
+        */
     }
     /**
-     * Scan unquoted string/identifier
-     */
+    * Scan unquoted string/identifier
+    */
     scanString() {
         const start = this.position - 1;
         let value = this.input[start];
         while (!this.isAtEnd() && !this.isLineTerminator(this.peek()) &&
-            this.peek() !== ':' && this.peek() !== '[' && this.peek() !== ']' &&
+            this.peek() !== ':' && this.peek() !== '[' && this.peek() !== ']' && ,
             this.peek() !== ',' && !this.isWhitespace(this.peek())) {
             value += this.advance();
+            // Determine if this is a key or value based on context
+            if (this.isAtLineStart() || this.isAfterIndent()) {
+                this.addToken(TokenType.KEY, value.trim());
+            }
+            else {
+                this.addToken(TokenType.VALUE, value.trim());
+                /**
+                * Scan identifier (unquoted key/value)
+                */
+            }
+            /**
+            * Scan identifier (unquoted key/value)
+            */
         }
-        // Determine if this is a key or value based on context
-        if (this.isAtLineStart() || this.isAfterIndent()) {
-            this.addToken(TokenType.KEY, value.trim());
-        }
-        else {
-            this.addToken(TokenType.VALUE, value.trim());
-        }
+        /**
+        * Scan identifier (unquoted key/value)
+        */
     }
     /**
-     * Scan identifier (unquoted key/value)
-     */
+    * Scan identifier (unquoted key/value)
+    */
     scanIdentifier() {
         const start = this.position - 1;
         let value = this.input[start];
         while (!this.isAtEnd() && (this.isAlpha(this.peek()) || this.isDigit(this.peek()) ||
             this.peek() === '_' || this.peek() === '-' || this.peek() === '.')) {
             value += this.advance();
+            // Check for special keywords
+            const tokenType = this.getKeywordType(value);
+            this.addToken(tokenType, value);
+            /**
+            * Scan numeric value
+            */
         }
-        // Check for special keywords
-        const tokenType = this.getKeywordType(value);
-        this.addToken(tokenType, value);
+        /**
+        * Scan numeric value
+        */
     }
     /**
-     * Scan numeric value
-     */
+    * Scan numeric value
+    */
     scanNumber() {
         const start = this.position - 1;
         let value = this.input[start];
         while (!this.isAtEnd() && (this.isDigit(this.peek()) || this.peek() === '.')) {
             value += this.advance();
+            this.addToken(TokenType.NUMBER, value);
+            /**
+            * Skip comment to end of line
+            */
         }
-        this.addToken(TokenType.NUMBER, value);
+        /**
+        * Skip comment to end of line
+        */
     }
     /**
-     * Skip comment to end of line
-     */
+    * Skip comment to end of line
+    */
     skipComment() {
         while (!this.isAtEnd() && this.peek() !== '\n') {
             this.advance();
+            /**
+            * Get token type for keywords
+            */
         }
+        /**
+        * Get token type for keywords
+        */
     }
     /**
-     * Get token type for keywords
-     */
+    * Get token type for keywords
+    */
     getKeywordType(value) {
         switch (value.toLowerCase()) {
             case 'version': return TokenType.VERSION;
@@ -323,36 +479,53 @@ export class GraphLexer {
             default:
                 // Determine if key or value based on position
                 return this.isAtLineStart() || this.isAfterIndent() ? TokenType.KEY : TokenType.VALUE;
+            /**
+            * Add token to list
+            */
         }
+        /**
+        * Add token to list
+        */
     }
     /**
-     * Add token to list
-     */
+    * Add token to list
+    */
     addToken(type, value) {
-        this.tokens.push({
-            type,
+        this.tokens.push({});
+        type,
             value,
-            position: {
-                line: this.line,
-                column: this.column - value.length,
-                offset: this.position - value.length
-            }
-        });
+            position;
+        {
+            line: this.line,
+                column;
+            this.column - value.length,
+                offset;
+            this.position - value.length,
+            ;
+        }
+        ;
+        /**
+         * Add error to list
+         */
     }
     /**
      * Add error to list
      */
     addError(message, suggestion) {
-        this.errors.push({
-            message,
-            position: {
-                line: this.line,
-                column: this.column,
-                offset: this.position
-            },
-            suggestion
-        });
+        this.errors.push({});
+        message,
+            position;
+        {
+            line: this.line,
+                column;
+            this.column,
+                offset;
+            this.position,
+            ;
+        }
+        suggestion;
     }
+    ;
     /**
      * Helper methods
      */
@@ -398,8 +571,8 @@ export class GraphLexer {
                 return true;
             if (!this.isWhitespace(char))
                 return false;
+            return true;
         }
-        return true;
     }
     isAfterIndent() {
         // Check if we're immediately after indentation

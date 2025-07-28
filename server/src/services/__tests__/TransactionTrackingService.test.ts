@@ -37,7 +37,7 @@ describe('TransactionTrackingService', () => {
       discount: 0,
       refundable: 95.00,
       refunded: 0
-    },
+  }
     currency: 'USD',
     buyer: {
       id: 'user_buyer_123',
@@ -45,14 +45,14 @@ describe('TransactionTrackingService', () => {
       displayName: 'John Doe',
       email: 'john@example.com',
       accountStatus: 'active'
-    },
+  }
     seller: {
       id: 'user_seller_456',
       type: 'creator',
       displayName: 'Jane Creator',
       email: 'jane@example.com',
       accountStatus: 'active'
-    },
+  }
     template: {
       id: 'template_789',
       title: 'Test Template',
@@ -61,30 +61,30 @@ describe('TransactionTrackingService', () => {
       version: '1.0',
       creatorId: 'user_seller_456',
       creatorName: 'Jane Creator'
-    },
+  }
     paymentMethod: {
       type: 'card',
       last4: '4242',
       brand: 'visa'
-    },
+  }
     provider: {
       provider: 'stripe',
       providerTransactionId: 'stripe_tx_456',
       providerFees: 3.00,
       processingTime: 1500,
       webhookReceived: true
-    },
+  }
     riskAssessment: {
       score: 25,
       level: 'low',
       factors: []
-    },
+  }
     fraudFlags: [],
     timestamps: {
       initiated: new Date('2024-01-15T10:00:00Z'),
       completed: new Date('2024-01-15T10:00:05Z'),
       lastUpdated: new Date('2024-01-15T10:00:05Z')
-    },
+  }
     lifecycle: [],
     adminNotes: [],
     flags: [],
@@ -92,7 +92,7 @@ describe('TransactionTrackingService', () => {
       processingTime: 1500,
       retryCount: 0,
       errorCount: 0
-    },
+  }
     metadata: {},
     tags: []
   };
@@ -195,7 +195,7 @@ describe('TransactionTrackingService', () => {
           amount_cents: 5000,
           total_count: '2'
           // ... other required fields
-        },
+  }
         {
           id: 'tx_2',
           status: 'failed',
@@ -494,7 +494,7 @@ describe('TransactionTrackingService', () => {
             'high',
             'Unusual transaction pattern detected',
             'admin_456']
-        )
+
       );
     });
   });
@@ -742,7 +742,7 @@ describe('TransactionTrackingService Integration', () => {
     mockDb.query
       .mockResolvedValueOnce({
         rows: [{ total_transactions: '1', total_revenue: '100.00' }]
-      })
+  }
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] })
       .mockResolvedValueOnce({ rows: [] });

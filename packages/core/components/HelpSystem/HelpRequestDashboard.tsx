@@ -15,20 +15,18 @@ import {
   KnowledgeBaseArticle
 } from '../../services/Epic16HelpRequestService';
 interface HelpRequestDashboardProps {
-  helpService: Epic16HelpRequestService;
+  helpService: Epic16HelpRequestService;,
   userId: string;
   userRole: 'user' | 'agent' | 'admin';
   onRequestSelect?: (request: HelpRequest) => void;
-}
 interface HelpRequestFilters {
-  status: HelpRequestStatus[];
-  category: HelpCategory[];
-  priority: HelpPriority[];
-  type: HelpRequestType[];
+  status: HelpRequestStatus;,
+  category: HelpCategory;
+  priority: HelpPriority;,
+  type: HelpRequestType;
   assignedTo?: string;
   dateRange?: { start: Date; end: Date };
   searchQuery: string;
-}
 
 export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
   helpService,
@@ -37,78 +35,75 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
   onRequestSelect
 }) => {
   // State management
-  const [requests, setRequests] = useState<HelpRequest[]>([]);
+  const [requests, setRequests] = useState<HelpRequest>([]);
   const [selectedRequest, setSelectedRequest] = useState<HelpRequest | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<HelpRequestFilters>({)
-    status: [],
-    category: [],
-    priority: [],
-    type: [],
-    searchQuery: '',
-  });
+  status: [],
+  category: [],
+  priority: [],
+  type: [],
+  searchQuery: '',
+});
   const [pagination, setPagination] = useState({)
-    page: 0,
-    limit: 25,
-    total: 0,
-    hasMore: false,
-  });
+  page: 0,
+  limit: 25,
+  total: 0,
+  hasMore: false,
+});
   const [_____showCreateModal, setShowCreateModal] = useState(false);
   const [analytics, setAnalytics] = useState<unknown>(null);
-  const [knowledgeBase, setKnowledgeBase] = useState<KnowledgeBaseArticle[]>([]);
+  const [knowledgeBase, setKnowledgeBase] = useState<KnowledgeBaseArticle>([]);
   // Load help requests
   const loadRequests = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const filterCriteria = {
-        status: filters.status.length > 0 ? filters.status : undefined,
-        category: filters.category.length > 0 ? filters.category : undefined,
-        priority: filters.priority.length > 0 ? filters.priority : undefined,
-        assignedTo: filters.assignedTo,
-        dateRange: filters.dateRange,
-        limit: pagination.limit,
-        offset: pagination.page * pagination.limit,
-      };
+  setLoading(true);
+  setError(null);
+  try {
+  const filterCriteria = {
+  status: filters.status.length > 0 ? filters.status : undefined,
+  category: filters.category.length > 0 ? filters.category : undefined,
+  priority: filters.priority.length > 0 ? filters.priority : undefined,
+  assignedTo: filters.assignedTo,
+  dateRange: filters.dateRange,
+  limit: pagination.limit,
+  offset: pagination.page * pagination.limit,
+};
       const result = await helpService.getHelpRequests(filterCriteria);
       setRequests(result.requests);
       setPagination(prev => ({)
-        ...prev,
-        total: result.total,
-        hasMore: result.hasMore,
-      }));
+  ...prev,
+  total: result.total,
+  hasMore: result.hasMore,
+}));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load help requests');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to load help requests');
+} finally {
       setLoading(false);
-    }
   }, [helpService, filters, pagination.page, pagination.limit]);
   // Load analytics
   const loadAnalytics = useCallback(async () => {
-    try {
-      const timeRange = {
-        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date(),
-      };
+  try {
+  const timeRange = {
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
+  end: new Date(),
+};
       const analyticsData = await helpService.getAnalytics(timeRange);
       setAnalytics(analyticsData);
     } catch (err) {
-      console.error('Failed to load analytics:', err);
-    }
-  }, [helpService]);
+  console.error('Failed to load analytics:', err);
+}, [helpService]);
   // Load knowledge base articles
   const loadKnowledgeBase = useCallback(async () => {
-    try {
-      const articles = await helpService.searchKnowledgeBase({)
-        query: '',
-        limit: 10,
-      });
+  try {
+  const articles = await helpService.searchKnowledgeBase({)
+  query: '',
+  limit: 10,
+});
       setKnowledgeBase(articles);
     } catch (err) {
-      console.error('Failed to load knowledge base:', err);
-    }
-  }, [helpService]);
+  console.error('Failed to load knowledge base:', err);
+}, [helpService]);
   // Effects
   useEffect(() => {
     loadRequests();
@@ -137,55 +132,50 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
         const updatedRequest = requests.find(r => r.id === requestId);
         if (updatedRequest) {
           setSelectedRequest({ ...updatedRequest, status: newStatus });
-        }
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update request status');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to update request status');
+};
   // Handle request escalation
   const handleEscalation = async (requestId: string, reason: string) => {
     try {
       await helpService.escalateRequest(requestId, reason, userId);
       await loadRequests();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to escalate request');
-    }
-  };
+  setError(err instanceof Error ? err.message : 'Failed to escalate request');
+};
   // Handle knowledge base search
   const searchKnowledgeBase = async (query: string) => {
     try {
       const results = await helpService.searchKnowledgeBase({ query, limit: 5 });
       setKnowledgeBase(results);
     } catch (err) {
-      console.error('Knowledge base search failed:', err);
-    }
-  };
+  console.error('Knowledge base search failed:', err);
+};
   // Reset filters
   const resetFilters = () => {
-    setFilters({)
-      status: [],
-      category: [],
-      priority: [],
-      type: [],
-      searchQuery: '',
-    });
+  setFilters({)
+  status: [],
+  category: [],
+  priority: [],
+  type: [],
+  searchQuery: '',
+});
     setPagination(prev => ({ ...prev, page: 0 }));
   };
   // Render status badge
   const renderStatusBadge = (status: HelpRequestStatus) => {
-    const colors = {
-      [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800',
-      [HelpRequestStatus.TRIAGED]: 'bg-purple-100 text-purple-800',
-      [HelpRequestStatus.AUTO_SUGGESTED]: 'bg-yellow-100 text-yellow-800',
-      [HelpRequestStatus.IN_PROGRESS]: 'bg-orange-100 text-orange-800',
-      [HelpRequestStatus.PENDING_USER]: 'bg-gray-100 text-gray-800',
-      [HelpRequestStatus.ESCALATED]: 'bg-red-500 text-white',
-      [HelpRequestStatus.RESOLVED]: 'bg-green-100 text-green-800',
-      [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700',
-      [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800'
-    };
-    return ();
+  const colors = {
+  [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800',
+  [HelpRequestStatus.TRIAGED]: 'bg-purple-100 text-purple-800',
+  [HelpRequestStatus.AUTO_SUGGESTED]: 'bg-yellow-100 text-yellow-800',
+  [HelpRequestStatus.IN_PROGRESS]: 'bg-orange-100 text-orange-800',
+  [HelpRequestStatus.PENDING_USER]: 'bg-gray-100 text-gray-800',
+  [HelpRequestStatus.ESCALATED]: 'bg-red-500 text-white',
+  [HelpRequestStatus.RESOLVED]: 'bg-green-100 text-green-800',
+  [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700',
+  [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800',
+};
+    return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`}>}
         {status.replace('_', ' ').toUpperCase()}
       </span>
@@ -193,21 +183,21 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
   };
   // Render priority badge
   const renderPriorityBadge = (priority: HelpPriority) => {
-    const colors = {
-      [HelpPriority.LOW]: 'bg-gray-100 text-gray-800',
-      [HelpPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
-      [HelpPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
-      [HelpPriority.URGENT]: 'bg-orange-100 text-orange-800',
-      [HelpPriority.CRITICAL]: 'bg-red-500 text-white'
-    };
-    return ();
+  const colors = {
+  [HelpPriority.LOW]: 'bg-gray-100 text-gray-800',
+  [HelpPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
+  [HelpPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
+  [HelpPriority.URGENT]: 'bg-orange-100 text-orange-800',
+  [HelpPriority.CRITICAL]: 'bg-red-500 text-white',
+};
+    return;
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`}>}
         {priority.toUpperCase()}
       </span>
     );
   };
   if (loading && requests.length === 0) {
-    return ();
+    return;
       <div className="flex items-center justify-center h-64">
         <div className="flex items-center space-x-2">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -215,8 +205,7 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="help-request-dashboard h-full flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -513,17 +502,16 @@ export const HelpRequestDashboard: React.FC<HelpRequestDashboardProps> = ({)
 
 // Help Request List Item Component
 interface HelpRequestListItemProps {
-  request: HelpRequest;
+  request: HelpRequest;,
   onSelect: () => void;
-  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void;
-  onEscalate: (requestId: string, reason: string) => void;
+  onStatusUpdate: (requestId: string, newStatus: HelpRequestStatus) => void;,
+  onEscalate: (requestId: string, reason: string) => void;,
   currentUserId: string;
-  userRole: 'user' | 'agent' | 'admin';
+  userRole: 'user' | 'agent' | 'admin';,
   selected: boolean;
-  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode;
+  renderStatusBadge: (status: HelpRequestStatus) => React.ReactNode;,
   renderPriorityBadge: (priority: HelpPriority) => React.ReactNode;
-}
-const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({)
+  const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({,)
   request,
   onSelect,
   onStatusUpdate,
@@ -540,13 +528,13 @@ const HelpRequestListItem: React.FC<HelpRequestListItemProps> = ({)
   const isSLAWarning = request.sla.responseTime.deadline.getTime() - Date.now() < (60 * 60 * 1000); // 1 hour warning;
   const routingStrategy = request.routingDecision.strategy;
   const routingIcon = {
-    'auto_resolve': '🤖',
-    'knowledge_base': '📚',
-    'community': '👥',
-    'support_agent': '👨‍💼',
-    'specialist': '🎯'
-  }[routingStrategy] || '❓';
-  return ();
+  'auto_resolve': '🤖',
+  'knowledge_base': '📚',
+  'community': '👥',
+  'support_agent': '👨‍💼',
+  'specialist': '🎯',
+}[routingStrategy] || '❓';
+  return;
     <div
       className={`relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`}
       onClick={onSelect}

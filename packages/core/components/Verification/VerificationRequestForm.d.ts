@@ -6,14 +6,16 @@
  */
 import React from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
+
 interface VerificationRequestFormProps {
     userId: string;
     onSubmit: (type: IdentityValidationType, data: Partial<IdentityValidationData>) => Promise<{
         requestId: string;
         status: string;
+
     }>;
     onCancel?: () => void;
-}
+
 export declare const VerificationRequestForm: React.FC<VerificationRequestFormProps>;
 export default VerificationRequestForm;
 //# sourceMappingURL=VerificationRequestForm.d.ts.map

@@ -12,17 +12,15 @@ import { verificationCodeManager } from '../VerificationCodeManager';
 // Mock the password reset managers
 jest.mock('../PasswordResetTokenManager', () => ({)
   passwordResetTokenManager: {,
-    generateToken: jest.fn<unknown[], unknown>(),
-    validateToken: jest.fn<unknown[], unknown>(),
-    useToken: jest.fn<unknown[], unknown>()
-  }
+  generateToken: jest.fn<unknown, unknown>(),
+  validateToken: jest.fn<unknown, unknown>(),
+  useToken: jest.fn<unknown, unknown>(),
 }));
 jest.mock('../VerificationCodeManager', () => ({)
   verificationCodeManager: {,
-    generateCode: jest.fn<unknown[], unknown>(),
-    validateCode: jest.fn<unknown[], unknown>(),
-    useCode: jest.fn<unknown[], unknown>()
-  }
+  generateCode: jest.fn<unknown, unknown>(),
+  validateCode: jest.fn<unknown, unknown>(),
+  useCode: jest.fn<unknown, unknown>(),
 }));
 const mockPasswordResetTokenManager = passwordResetTokenManager as jest.Mocked<typeof passwordResetTokenManager>;
 describe('usePasswordReset', () => {
@@ -48,7 +46,7 @@ describe('usePasswordReset', () => {
       expect(result.current.canResend).toBe(true);
     });
     test('should call onStepChange when step changes', () => {
-      const onStepChange = jest.fn<unknown[], unknown>();
+      const onStepChange = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onStepChange }));
       expect(onStepChange).toHaveBeenCalledWith(ResetStep.REQUEST);
       act(() => {
@@ -129,19 +127,18 @@ describe('usePasswordReset', () => {
       expect(result.current.passwordsMatch).toBe(false);
     });
     test('should use custom validation when provided', () => {
-      const customValidation = jest.fn(() => ({)
-        isValid: true,
-        strength: PasswordStrength.STRONG,
-        score: 100,
-        feedback: ['Custom validation passed'],
-        requirements: {,
-          length: true,
-          uppercase: true,
-          lowercase: true,
-          numbers: true,
-          symbols: true,
-        }
-      }));
+  const customValidation = jest.fn(() => ({)
+  isValid: true,
+  strength: PasswordStrength.STRONG,
+  score: 100,
+  feedback: ['Custom validation passed'],
+  requirements: {,
+  length: true,
+  uppercase: true,
+  lowercase: true,
+  numbers: true,
+  symbols: true,
+}));
       const { result } = renderHook(() => usePasswordReset({ customValidation }));
       act(() => {
         result.current.setNewPassword('test');
@@ -177,12 +174,12 @@ describe('usePasswordReset', () => {
     });
   });
   describe('Reset Flow - Request Step', () => {
-    test('should handle successful reset request', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'mock-token',
-        tokenId: 'mock-token-id',
-      } as unknown as unknown);
-      const onSecurityEvent = jest.fn<unknown[], unknown>();
+  test('should handle successful reset request', async () => {
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token',
+  tokenId: 'mock-token-id',
+} as unknown as unknown);
+      const onSecurityEvent = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onSecurityEvent }));
       act(() => {
         result.current.setEmail('test@example.com');
@@ -203,13 +200,13 @@ describe('usePasswordReset', () => {
       expect(onSecurityEvent).toHaveBeenCalledWith()
         'password_reset_requested',
         expect.objectContaining({)
-          email: 'test@example.com',
-        })
+  email: 'test@example.com',
+}
       );
     });
     test('should handle request failure', async () => {
       mockPasswordResetTokenManager.generateToken.mockResolvedValue(null as unknown as unknown);
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       const { result } = renderHook(() => usePasswordReset({ onError }));
       act(() => {
         result.current.setEmail('test@example.com');
@@ -242,20 +239,20 @@ describe('usePasswordReset', () => {
     });
   });
   describe('Reset Flow - Verify Step', () => {
-    test('should handle successful token verification', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'mock-token',
-        tokenId: 'mock-token-id',
-      } as unknown as unknown);
+  test('should handle successful token verification', async () => {
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token',
+  tokenId: 'mock-token-id',
+} as unknown as unknown);
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-        valid: true,
-        token: {,
-          id: 'mock-token-id',
-          userId: 'user-123',
-          email: 'test@example.com',
-        } as any,
-        riskScore: 10,
-      } as unknown as unknown);
+  valid: true,
+  token: {,
+  id: 'mock-token-id',
+  userId: 'user-123',
+  email: 'test@example.com',
+} as any,
+        riskScore: 10;
+  } as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       // First request reset
       act(() => {
@@ -280,14 +277,14 @@ describe('usePasswordReset', () => {
       expect(result.current.currentStep).toBe(ResetStep.RESET);
     });
     test('should handle token verification failure', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'mock-token',
-        tokenId: 'mock-token-id',
-      } as unknown as unknown);
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token',
+  tokenId: 'mock-token-id',
+} as unknown as unknown);
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-        valid: false,
-        reason: 'token_expired',
-      } as unknown as unknown);
+  valid: false,
+  reason: 'token_expired',
+} as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       // First request reset
       act(() => {
@@ -327,16 +324,16 @@ describe('usePasswordReset', () => {
     });
   });
   describe('Reset Flow - Password Reset Step', () => {
-    const setupForPasswordReset = async (result: unknown) => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'mock-token',
-        tokenId: 'mock-token-id',
-      } as unknown as unknown);
+  const setupForPasswordReset = async (result: unknown) => {,
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token',
+  tokenId: 'mock-token-id',
+} as unknown as unknown);
       mockPasswordResetTokenManager.validateToken.mockResolvedValue({)
-        valid: true,
+  valid: true,
         token: { id: 'mock-token-id' } as any,
-        riskScore: 10,
-      } as unknown as unknown);
+        riskScore: 10;
+  } as unknown as unknown);
       act(() => {
         result.current.setEmail('test@example.com');
       });
@@ -352,7 +349,7 @@ describe('usePasswordReset', () => {
     };
     test('should handle successful password reset', async () => {
       mockPasswordResetTokenManager.useToken.mockResolvedValue({)
-        success: true,
+  success: true,
         token: { id: 'mock-token-id' } as any
       } as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
@@ -408,10 +405,10 @@ describe('usePasswordReset', () => {
       expect(result.current.error).toContain('do not match');
     });
     test('should handle token usage failure', async () => {
-      mockPasswordResetTokenManager.useToken.mockResolvedValue({)
-        success: false,
-        reason: 'token_already_used',
-      } as unknown as unknown);
+  mockPasswordResetTokenManager.useToken.mockResolvedValue({)
+  success: false,
+  reason: 'token_already_used',
+} as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       await setupForPasswordReset(result);
       const strongPassword = 'StrongP@ssw0rd123';
@@ -431,11 +428,11 @@ describe('usePasswordReset', () => {
     });
   });
   describe('Resend Functionality', () => {
-    test('should handle successful code resend', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'new-mock-token',
-        tokenId: 'new-mock-token-id',
-      } as unknown as unknown);
+  test('should handle successful code resend', async () => {
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'new-mock-token',
+  tokenId: 'new-mock-token-id',
+} as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset());
       act(() => {
         result.current.setEmail('test@example.com');
@@ -582,11 +579,11 @@ describe('usePasswordReset', () => {
     });
   });
   describe('Auto-advance Configuration', () => {
-    test('should not auto-advance when disabled', async () => {
-      mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
-        token: 'mock-token',
-        tokenId: 'mock-token-id',
-      } as unknown as unknown);
+  test('should not auto-advance when disabled', async () => {
+  mockPasswordResetTokenManager.generateToken.mockResolvedValue({)
+  token: 'mock-token',
+  tokenId: 'mock-token-id',
+} as unknown as unknown);
       const { result } = renderHook(() => usePasswordReset({ autoAdvance: false }));
       act(() => {
         result.current.setEmail('test@example.com');

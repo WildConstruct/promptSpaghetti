@@ -27,6 +27,7 @@ import {
   RuleCompliance
 } from './ComplianceRuleEngine';
 
+}
 export interface GDPRRulesetConfig {
   jurisdiction: 'EU' | 'EEA' | 'UK' | 'GLOBAL';
   dataSubjectRights: boolean;
@@ -39,6 +40,7 @@ export interface GDPRRulesetConfig {
   dpoRequirements: boolean;
   recordKeeping: boolean;
   impactAssessments: boolean;
+}
 }
 
 export class GDPRComplianceRuleset {
@@ -632,7 +634,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        },
+  }
         {
           conditionId: 'validate-special-conditions',
           type: 'CUSTOM' as ConditionType,
@@ -1211,7 +1213,7 @@ export class GDPRComplianceRuleset {
           required: true,
           validationRules: [],
           errorHandling: {} as any
-        },
+  }
         {
           conditionId: 'validate-dpia-completion',
           type: 'CUSTOM' as ConditionType,
@@ -1495,7 +1497,7 @@ export class GDPRComplianceRuleset {
         conditions: [],
         triggers: [],
         exemptions: []
-      },
+  }
       dataTypes: [],
       processingActivities: [],
       geographicScope: {
@@ -1505,7 +1507,7 @@ export class GDPRComplianceRuleset {
         adequacyDecisions: [],
         transferMechanisms: [],
         localizations: []
-      },
+  }
       organizationalScope: {
         departments: [],
         roles: [],
@@ -1515,7 +1517,7 @@ export class GDPRComplianceRuleset {
         processors: [],
         controllers: [],
         jointControllers: []
-      },
+  }
       temporalScope: {
         effectiveDate: new Date('2018-05-25'), // GDPR effective date
         activationTriggers: [],
@@ -1524,7 +1526,7 @@ export class GDPRComplianceRuleset {
         frequency: {} as any,
         businessHours: {} as any,
         holidays: []
-      },
+  }
       technicalScope: {
         systems: [],
         platforms: [],
@@ -1534,7 +1536,7 @@ export class GDPRComplianceRuleset {
         storageTypes: [],
         networkTypes: [],
         deploymentTypes: []
-      },
+  }
       exceptions: []
     };
   }
@@ -1689,7 +1691,7 @@ export class GDPRComplianceRuleset {
     return Array.from(this.rules.values()).filter(rule => 
       rule.compliance.frameworks.some(framework => 
         framework.articles.includes(article)
-      )
+
     );
   }
 

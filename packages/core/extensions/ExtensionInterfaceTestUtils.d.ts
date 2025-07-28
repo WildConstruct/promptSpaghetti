@@ -77,7 +77,7 @@ export declare class ExtensionInterfaceTestSuite {
      */
     generateTestReport(extensionId: string): string;
     private isAsyncFunction;
-}
+
 interface TestSuiteResult {
     extensionId: string;
     extensionName: string;
@@ -85,17 +85,19 @@ interface TestSuiteResult {
     timestamp: Date;
     overallPassed: boolean;
     tests: TestCategoryResult[];
-}
+
+
 interface TestCategoryResult {
     category: string;
     results: TestResult[];
-}
+
+
 interface TestResult {
     name: string;
     passed: boolean;
     error?: string;
     duration: number;
-}
+
 export declare class ExtensionInterfaceMockFactory {
     /**
      * Create mock extension for testing
@@ -105,7 +107,7 @@ export declare class ExtensionInterfaceMockFactory {
      * Create invalid extension for testing validation
      */
     static createInvalidExtension(missingFields?: string[]): any;
-}
+
 export declare const extensionInterfaceTestSuite: ExtensionInterfaceTestSuite;
 export {};
 //# sourceMappingURL=ExtensionInterfaceTestUtils.d.ts.map

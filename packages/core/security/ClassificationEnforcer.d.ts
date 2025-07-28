@@ -20,6 +20,7 @@ import {
 /**
  * Enforcement configuration
  */
+
 export interface ClassificationEnforcementConfig {
     /** Strict mode - blocks all non-compliant operations */
     strictMode: boolean;
@@ -40,11 +41,13 @@ export interface ClassificationEnforcementConfig {
         users?: string[];
         roles?: string[];
         conditions?: string[];
+
     };
-}
+
 /**
  * Enforcement result
  */
+
 export interface EnforcementResult {
     allowed: boolean;
     classification: DataClassificationLevel;
@@ -54,10 +57,12 @@ export interface EnforcementResult {
     riskScore: number;
     auditId: string;
     recommendations?: string[];
-}
+
+
 /**
  * Access decision
  */
+
 export interface AccessDecision {
     granted: boolean;
     reason: string;
@@ -65,7 +70,8 @@ export interface AccessDecision {
     requiredAuthorization?: string[];
     conditions?: string[];
     expiresAt?: Date;
-}
+
+
 /**
  * Classification Enforcement Engine
  */
@@ -220,7 +226,7 @@ export declare class ClassificationEnforcer {
      * Clear audit log (for testing)
      */
     clearAuditLog(): void;
-}
+
 /**
  * Factory function for creating enforcers with presets
  */

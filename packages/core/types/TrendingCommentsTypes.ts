@@ -31,34 +31,34 @@ export type CommentEngagement = z.infer<typeof CommentEngagementSchema>;
 export const CommentScoreSchema = z.object({)
   commentId: z.string().uuid(),
   calculatedAt: z.date(),
-  scores: z.object({),
-    trendingScore: z.number().min(0), // Primary trending algorithm score
-    engagementScore: z.number().min(0), // Total engagement weighted score
-    recencyScore: z.number().min(0), // Time-based decay score
-    qualityScore: z.number().min(0).max(100), // Content quality assessment
-    controversyScore: z.number().min(0), // Like/dislike ratio controversy
-    viralityScore: z.number().min(0), // Share and mention velocity
-    helpfulnessScore: z.number().min(0), // Helpful votes score
-    authorityScore: z.number().min(0) // Author credibility score,
-  }),
-  metrics: z.object({),
-    totalLikes: z.number().default(0),
-    totalDislikes: z.number().default(0),
-    totalReplies: z.number().default(0),
-    totalShares: z.number().default(0),
-    totalHelpfulVotes: z.number().default(0),
-    totalReports: z.number().default(0),
-    replyEngagement: z.number().default(0), // Engagement on reply threads
-    viewCount: z.number().default(0),
-    uniqueEngagers: z.number().default(0) // Unique users who engaged,
-  }),
-  trends: z.object({),
-    hourlyGrowth: z.number().default(0),
-    dailyGrowth: z.number().default(0),
-    weeklyGrowth: z.number().default(0),
-    peakEngagementHour: z.number().min(0).max(23).optional(),
-    velocityTrend: z.enum(['accelerating', 'steady', 'declining', 'stagnant']).default('steady')
-  })
+  scores: z.object({,)
+  trendingScore: z.number().min(0), // Primary trending algorithm score,
+  engagementScore: z.number().min(0), // Total engagement weighted score,
+  recencyScore: z.number().min(0), // Time-based decay score,
+  qualityScore: z.number().min(0).max(100), // Content quality assessment,
+  controversyScore: z.number().min(0), // Like/dislike ratio controversy,
+  viralityScore: z.number().min(0), // Share and mention velocity,
+  helpfulnessScore: z.number().min(0), // Helpful votes score,
+  authorityScore: z.number().min(0) // Author credibility score,
+}),
+  metrics: z.object({,)
+  totalLikes: z.number().default(0),
+  totalDislikes: z.number().default(0),
+  totalReplies: z.number().default(0),
+  totalShares: z.number().default(0),
+  totalHelpfulVotes: z.number().default(0),
+  totalReports: z.number().default(0),
+  replyEngagement: z.number().default(0), // Engagement on reply threads,
+  viewCount: z.number().default(0),
+  uniqueEngagers: z.number().default(0) // Unique users who engaged,
+}),
+  trends: z.object({,)
+  hourlyGrowth: z.number().default(0),
+  dailyGrowth: z.number().default(0),
+  weeklyGrowth: z.number().default(0),
+  peakEngagementHour: z.number().min(0).max(23).optional(),
+  velocityTrend: z.enum(['accelerating', 'steady', 'declining', 'stagnant']).default('steady'),
+}
 });
 
 export type CommentScore = z.infer<typeof CommentScoreSchema>;
@@ -68,7 +68,7 @@ export const TrendingCommentSchema = z.object({)
   commentId: z.string().uuid(),
   resourceId: z.string(),
   resourceType: z.enum(['template', 'graph', 'collection', 'case_study', 'tutorial', 'marketplace_item']),
-  parentCommentId: z.string().uuid().optional(), // For reply threading
+  parentCommentId: z.string().uuid().optional(), // For reply threading,
   authorId: z.string().uuid(),
   authorDisplayName: z.string(),
   authorAvatarUrl: z.string().url().optional(),
@@ -76,18 +76,18 @@ export const TrendingCommentSchema = z.object({)
   authorReputation: z.number().min(0).default(0),
   content: z.string().min(1).max(5000),
   contentType: z.enum(['text', 'markdown', 'rich']).default('text'),
-  mentions: z.array(z.string().uuid()).default([]), // Mentioned user IDs
+  mentions: z.array(z.string().uuid()).default([]), // Mentioned user IDs,
   hashtags: z.array(z.string()).default([]),
-  attachments: z.array(z.object({),
-    attachmentId: z.string().uuid(),
-    type: z.enum(['image', 'video', 'audio', 'document', 'link']),
-    url: z.string().url(),
-    thumbnail: z.string().url().optional(),
-    title: z.string().optional(),
-    description: z.string().optional(),
-    fileSize: z.number().positive().optional(),
-    mimeType: z.string().optional(),
-  })).default([]),
+  attachments: z.array(z.object({,)
+  attachmentId: z.string().uuid(),
+  type: z.enum(['image', 'video', 'audio', 'document', 'link']),
+  url: z.string().url(),
+  thumbnail: z.string().url().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  fileSize: z.number().positive().optional(),
+  mimeType: z.string().optional(),
+})).default([]),
   createdAt: z.date(),
   updatedAt: z.date().optional(),
   editedAt: z.date().optional(),
@@ -100,11 +100,11 @@ export const TrendingCommentSchema = z.object({)
   replyTree: z.array(z.lazy(() => TrendingCommentSchema)).default([]), // Nested replies
   visibility: z.enum(['public', 'subscribers', 'premium', 'private']).default('public'),
   language: z.string().default('en'),
-  sentiment: z.object({),
-    overall: z.enum(['positive', 'neutral', 'negative']),
+  sentiment: z.object({,)
+  overall: z.enum(['positive', 'neutral', 'negative']),
     confidence: z.number().min(0).max(1),
     emotions: z.record(z.number().min(0).max(1)).default({}), // emotion -> confidence
-    toxicity: z.number().min(0).max(1).default(0),
+    toxicity: z.number().min(0).max(1).default(0);
   }).optional()
 });
 
@@ -117,36 +117,36 @@ export const TrendingAlgorithmConfigSchema = z.object({)
   description: z.string(),
   version: z.string().default('1.0.0'),
   enabled: z.boolean().default(true),
-  weights: z.object({),
-    engagementWeight: z.number().min(0).max(1).default(0.4), // Likes, replies, shares
-    recencyWeight: z.number().min(0).max(1).default(0.25), // Time decay factor
-    qualityWeight: z.number().min(0).max(1).default(0.15), // Content quality signals
-    authorityWeight: z.number().min(0).max(1).default(0.1), // Author reputation
-    controversyWeight: z.number().min(0).max(1).default(0.05), // Healthy debate factor
-    viralityWeight: z.number().min(0).max(1).default(0.05) // Share velocity,
-  }),
-  parameters: z.object({),
-    timeDecayHalfLife: z.number().positive().default(24), // Hours for 50% decay
-    minEngagementThreshold: z.number().default(3), // Minimum engagements to rank
-    controversyBoostFactor: z.number().min(1).default(1.2), // Boost for healthy debate
-    qualityThreshold: z.number().min(0).max(100).default(60), // Min quality score
-    authorMinReputation: z.number().default(0), // Min author reputation
-    spamPenaltyFactor: z.number().min(0).max(1).default(0.1), // Penalty for spam-like content
-    maxCommentAge: z.number().default(168), // Max hours to consider (7 days)
-    boostNewAuthors: z.boolean().default(true) // Give new authors a small boost,
-  }),
-  moderationRules: z.object({),
-    autoFlag: z.object({),
-      toxicityThreshold: z.number().min(0).max(1).default(0.8),
-      spamThreshold: z.number().min(0).max(1).default(0.7),
-      offTopicThreshold: z.number().min(0).max(1).default(0.8),
-    }),
-    autoPromote: z.object({),
-      qualityThreshold: z.number().min(0).max(100).default(90),
-      engagementThreshold: z.number().default(20),
-      authorReputationThreshold: z.number().default(500),
-    })
-  })
+  weights: z.object({,)
+  engagementWeight: z.number().min(0).max(1).default(0.4), // Likes, replies, shares,
+  recencyWeight: z.number().min(0).max(1).default(0.25), // Time decay factor,
+  qualityWeight: z.number().min(0).max(1).default(0.15), // Content quality signals,
+  authorityWeight: z.number().min(0).max(1).default(0.1), // Author reputation,
+  controversyWeight: z.number().min(0).max(1).default(0.05), // Healthy debate factor,
+  viralityWeight: z.number().min(0).max(1).default(0.05) // Share velocity,
+}),
+  parameters: z.object({,)
+  timeDecayHalfLife: z.number().positive().default(24), // Hours for 50% decay,
+  minEngagementThreshold: z.number().default(3), // Minimum engagements to rank,
+  controversyBoostFactor: z.number().min(1).default(1.2), // Boost for healthy debate,
+  qualityThreshold: z.number().min(0).max(100).default(60), // Min quality score,
+  authorMinReputation: z.number().default(0), // Min author reputation,
+  spamPenaltyFactor: z.number().min(0).max(1).default(0.1), // Penalty for spam-like content,
+  maxCommentAge: z.number().default(168), // Max hours to consider (7 days),
+  boostNewAuthors: z.boolean().default(true) // Give new authors a small boost,
+}),
+  moderationRules: z.object({,)
+  autoFlag: z.object({,)
+  toxicityThreshold: z.number().min(0).max(1).default(0.8),
+  spamThreshold: z.number().min(0).max(1).default(0.7),
+  offTopicThreshold: z.number().min(0).max(1).default(0.8),
+}),
+    autoPromote: z.object({,)
+  qualityThreshold: z.number().min(0).max(100).default(90),
+  engagementThreshold: z.number().default(20),
+  authorReputationThreshold: z.number().default(500),
+}
+  }
 });
 
 export type TrendingAlgorithmConfig = z.infer<typeof TrendingAlgorithmConfigSchema>;
@@ -159,29 +159,29 @@ export const TrendingResultsSchema = z.object({)
   algorithmUsed: z.string(),
   generatedAt: z.date(),
   totalComments: z.number().default(0),
-  qualifiedComments: z.number().default(0), // Comments meeting trending criteria
+  qualifiedComments: z.number().default(0), // Comments meeting trending criteria,
   trendingComments: z.array(TrendingCommentSchema),
-  summary: z.object({),
-    topEngagementType: z.enum(['like', 'dislike', 'reply', 'share', 'helpful', 'report']).optional(),
-    averageScore: z.number().default(0),
-    totalEngagements: z.number().default(0),
-    uniqueParticipants: z.number().default(0),
-    conversationHealth: z.enum(['excellent', 'good', 'fair', 'poor']).default('fair'),
-    sentimentDistribution: z.object({),
-      positive: z.number().min(0).max(1).default(0),
-      neutral: z.number().min(0).max(1).default(0),
-      negative: z.number().min(0).max(1).default(0),
-    }),
+  summary: z.object({,)
+  topEngagementType: z.enum(['like', 'dislike', 'reply', 'share', 'helpful', 'report']).optional(),
+  averageScore: z.number().default(0),
+  totalEngagements: z.number().default(0),
+  uniqueParticipants: z.number().default(0),
+  conversationHealth: z.enum(['excellent', 'good', 'fair', 'poor']).default('fair'),
+  sentimentDistribution: z.object({,)
+  positive: z.number().min(0).max(1).default(0),
+  neutral: z.number().min(0).max(1).default(0),
+  negative: z.number().min(0).max(1).default(0),
+}),
     topHashtags: z.array(z.string()).default([]),
     emergingTopics: z.array(z.string()).default([]),
     controversyLevel: z.enum(['low', 'medium', 'high']).default('low')
   }),
-  metadata: z.object({),
-    calculationTimeMs: z.number().default(0),
-    cacheHit: z.boolean().default(false),
-    dataFreshness: z.number().default(0), // Minutes since last update
-    algorithmVersion: z.string().default('1.0.0'),
-  })
+  metadata: z.object({,)
+  calculationTimeMs: z.number().default(0),
+  cacheHit: z.boolean().default(false),
+  dataFreshness: z.number().default(0), // Minutes since last update,
+  algorithmVersion: z.string().default('1.0.0'),
+}
 });
 
 export type TrendingResults = z.infer<typeof TrendingResultsSchema>;
@@ -189,68 +189,68 @@ export type TrendingResults = z.infer<typeof TrendingResultsSchema>;
 // Comment analytics and insights
 export const CommentAnalyticsSchema = z.object({)
   resourceId: z.string(),
-  timeRange: z.object({),
-    start: z.date(),
-    end: z.date(),
+  timeRange: z.object({,)
+  start: z.date(),
+  end: z.date(),
+}),
+  metrics: z.object({,)
+  totalComments: z.number().default(0),
+  totalEngagements: z.number().default(0),
+  uniqueCommenters: z.number().default(0),
+  averageCommentsPerUser: z.number().default(0),
+  commentsGrowthRate: z.number().default(0), // Percentage growth,
+  engagementRate: z.number().min(0).max(1).default(0), // Engagements per comment,
+  responseRate: z.number().min(0).max(1).default(0), // Comments with replies,
+  moderationRate: z.number().min(0).max(1).default(0) // Flagged/removed percentage,
+}),
+  trends: z.object({,)
+  commentVelocity: z.array(z.object({,)
+  timestamp: z.date(),
+  count: z.number(),
+})).default([]),
+    engagementTrends: z.array(z.object({,)
+  timestamp: z.date(),
+  likes: z.number(),
+  replies: z.number(),
+  shares: z.number(),
+})).default([]),
+    sentimentTrends: z.array(z.object({,)
+  timestamp: z.date(),
+  positive: z.number(),
+  neutral: z.number(),
+  negative: z.number(),
+})).default([]),
+    topicEvolution: z.array(z.object({,)
+  topic: z.string(),
+  mentions: z.number(),
+  sentiment: z.number(),
+  period: z.string(),
+})).default([])
   }),
-  metrics: z.object({),
-    totalComments: z.number().default(0),
-    totalEngagements: z.number().default(0),
-    uniqueCommenters: z.number().default(0),
-    averageCommentsPerUser: z.number().default(0),
-    commentsGrowthRate: z.number().default(0), // Percentage growth
-    engagementRate: z.number().min(0).max(1).default(0), // Engagements per comment
-    responseRate: z.number().min(0).max(1).default(0), // Comments with replies
-    moderationRate: z.number().min(0).max(1).default(0) // Flagged/removed percentage,
-  }),
-  trends: z.object({),
-    commentVelocity: z.array(z.object({),
-      timestamp: z.date(),
-      count: z.number(),
-    })).default([]),
-    engagementTrends: z.array(z.object({),
-      timestamp: z.date(),
-      likes: z.number(),
-      replies: z.number(),
-      shares: z.number(),
-    })).default([]),
-    sentimentTrends: z.array(z.object({),
-      timestamp: z.date(),
-      positive: z.number(),
-      neutral: z.number(),
-      negative: z.number(),
-    })).default([]),
-    topicEvolution: z.array(z.object({),
-      topic: z.string(),
-      mentions: z.number(),
-      sentiment: z.number(),
-      period: z.string(),
-    })).default([])
-  }),
-  breakdowns: z.object({),
-    byEngagementType: z.record(z.number()).default({}),
+  breakdowns: z.object({,)
+  byEngagementType: z.record(z.number()).default({}),
     byUserType: z.record(z.number()).default({}), // verified, new, regular, etc.
     byTimeOfDay: z.array(z.number()).default([]), // 24 hour breakdown
     byDayOfWeek: z.array(z.number()).default([]), // 7 day breakdown
     byLanguage: z.record(z.number()).default({}),
-    bySentiment: z.object({),
-      positive: z.number().default(0),
-      neutral: z.number().default(0),
-      negative: z.number().default(0),
-    })
+    bySentiment: z.object({,)
+  positive: z.number().default(0),
+  neutral: z.number().default(0),
+  negative: z.number().default(0),
+}
   }),
-  insights: z.object({),
-    mostEngagedTopics: z.array(z.string()).default([]),
-    influentialCommenters: z.array(z.string()).default([]), // User IDs
-    emergingTrends: z.array(z.string()).default([]),
-    contentRecommendations: z.array(z.string()).default([]),
-    moderationAlerts: z.array(z.object({),
-      type: z.string(),
-      severity: z.enum(['low', 'medium', 'high', 'critical']),
-      message: z.string(),
-      commentIds: z.array(z.string()),
-    })).default([])
-  })
+  insights: z.object({,)
+  mostEngagedTopics: z.array(z.string()).default([]),
+  influentialCommenters: z.array(z.string()).default([]), // User IDs,
+  emergingTrends: z.array(z.string()).default([]),
+  contentRecommendations: z.array(z.string()).default([]),
+  moderationAlerts: z.array(z.object({,)
+  type: z.string(),
+  severity: z.enum(['low', 'medium', 'high', 'critical']),
+  message: z.string(),
+  commentIds: z.array(z.string()),
+})).default([])
+  }
 });
 
 export type CommentAnalytics = z.infer<typeof CommentAnalyticsSchema>;
@@ -271,19 +271,19 @@ export const GetTrendingCommentsRequestSchema = z.object({)
 
 export const TrendingCommentsResponseSchema = z.object({)
   results: TrendingResultsSchema,
-  pagination: z.object({),
-    total: z.number(),
-    limit: z.number(),
-    offset: z.number(),
-    hasMore: z.boolean(),
-  }),
-  meta: z.object({),
-    requestId: z.string().uuid(),
-    processingTime: z.number(), // milliseconds
-    cacheStatus: z.enum(['hit', 'miss', 'stale']),
-    algorithm: z.string(),
-    dataFreshness: z.number() // minutes,
-  })
+  pagination: z.object({,)
+  total: z.number(),
+  limit: z.number(),
+  offset: z.number(),
+  hasMore: z.boolean(),
+}),
+  meta: z.object({,)
+  requestId: z.string().uuid(),
+  processingTime: z.number(), // milliseconds,
+  cacheStatus: z.enum(['hit', 'miss', 'stale']),
+  algorithm: z.string(),
+  dataFreshness: z.number() // minutes,
+}
 });
 
 export type GetTrendingCommentsRequest = z.infer<typeof GetTrendingCommentsRequestSchema>;
@@ -303,27 +303,28 @@ export const validateCommentScore = (data: unknown): CommentScore => {
 };
 
 // Helper types
+
 export interface TrendingSystemConfig {
-  enabledAlgorithms: string[];
+  enabledAlgorithms: string;,
   defaultAlgorithm: string;
   cacheSettings: {,
-    trendingCacheTTL: number; // minutes
-    scoreCacheTTL: number; // minutes
-    analyticsCacheTTL: number; // minutes
-  };
+  trendingCacheTTL: number; // minutes,
+  scoreCacheTTL: number; // minutes,
+  analyticsCacheTTL: number; // minutes,
+};
   moderationSettings: {,
-    autoModerationEnabled: boolean;
-    humanReviewThreshold: number;
-    quarantineThreshold: number;
-  };
+  autoModerationEnabled: boolean;
+  humanReviewThreshold: number;,
+  quarantineThreshold: number;
+};
   performanceSettings: {,
-    maxCommentsToAnalyze: number;
-    batchSize: number;
-    maxConcurrentCalculations: number;
-  };
-}
+  maxCommentsToAnalyze: number;
+  batchSize: number;,
+  maxConcurrentCalculations: number;
+};
 
 // Export all schemas for external use
+}
 export {
   CommentEngagementSchema,
   CommentScoreSchema,

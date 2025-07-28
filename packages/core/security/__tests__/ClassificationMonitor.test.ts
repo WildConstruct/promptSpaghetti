@@ -24,7 +24,7 @@ describe('ClassificationMonitor', () => {
   let monitor: ClassificationMonitor;
   let testConfig: MonitorConfig;
   const createTestDataElement = (overrides?: Partial<DataElement>): DataElement => ({)
-    id: 'data-123',
+  id: 'data-123',
     fieldName: 'email',
     value: 'test@example.com',
     dataType: 'string',
@@ -36,44 +36,44 @@ describe('ClassificationMonitor', () => {
   const createTestClassificationResult = (;);
     overrides?: Partial<ClassificationResult>
   ): ClassificationResult => ({)
-    level: ClassificationLevel.CONFIDENTIAL,
-    category: DataCategory.PII,
-    confidence: 95,
-    matchedRules: ['pii-email'],
-    complianceRequirements: [ComplianceFramework.GDPR],
-    encryptionRequired: true,
-    retentionPeriod: '7 years',
-    accessControls: ['mfa-required', 'role-based-access'],
-    reasoning: ['Email address detected'],
-    ...overrides
-  });
+  level: ClassificationLevel.CONFIDENTIAL,
+  category: DataCategory.PII,
+  confidence: 95,
+  matchedRules: ['pii-email'],
+  complianceRequirements: [ComplianceFramework.GDPR],
+  encryptionRequired: true,
+  retentionPeriod: '7 years',
+  accessControls: ['mfa-required', 'role-based-access'],
+  reasoning: ['Email address detected'],
+  ...overrides
+});
   beforeEach(() => {
-    jest.useFakeTimers();
-    testConfig = {
-      enableRealTimeMonitoring: true,
-      enablePerformanceTracking: true,
-      enableAnomalyDetection: true,
-      enableComplianceMonitoring: true,
-      retentionPeriodDays: 30,
-      aggregationIntervalMinutes: 5,
-      alertConfig: {,
-        enabled: true,
-        thresholds: {,
-          errorRate: 5,
-          responseTime: 100,
-          violationCount: 10,
-          anomalyConfidence: 80,
-        },
-        channels: {,
-          email: true,
-          webhook: true,
-          syslog: false,
-        },
-        recipients: ['security@example.com'],
-        webhookUrl: 'https://example.com/webhook',
-      },
-      dashboardRefreshIntervalSeconds: 30,
-    };
+  jest.useFakeTimers();
+  testConfig = {
+  enableRealTimeMonitoring: true,
+  enablePerformanceTracking: true,
+  enableAnomalyDetection: true,
+  enableComplianceMonitoring: true,
+  retentionPeriodDays: 30,
+  aggregationIntervalMinutes: 5,
+  alertConfig: {,
+  enabled: true,
+  thresholds: {,
+  errorRate: 5,
+  responseTime: 100,
+  violationCount: 10,
+  anomalyConfidence: 80,
+},
+  channels: {,
+  email: true,
+  webhook: true,
+  syslog: false,
+},
+  recipients: ['security@example.com'],
+        webhookUrl: 'https://example.com/webhook';
+  },
+  dashboardRefreshIntervalSeconds: 30;
+  };
     monitor = new ClassificationMonitor(testConfig);
   });
   afterEach(() => {
@@ -81,23 +81,23 @@ describe('ClassificationMonitor', () => {
     jest.useRealTimers();
   });
   describe('Classification Recording', () => {
-    test('should record classification events', () => {
-      const dataElement = createTestDataElement();
-      const result = createTestClassificationResult();
-      monitor.recordClassification(dataElement, result, 25);
-      const events = monitor.getRecentEvents(10);
-      expect(events).toHaveLength(1);
-      expect(events[0]).toMatchObject({)
-        type: MonitoringEventType.CLASSIFICATION_PERFORMED,
-        dataId: dataElement.id,
-        classification: result,
-        metadata: expect.objectContaining({),
-          fieldName: dataElement.fieldName,
-          responseTime: 25,
-          confidence: result.confidence,
-        }),
-        severity: AlertSeverity.INFO,
-      });
+  test('should record classification events', () => {
+  const dataElement = createTestDataElement();
+  const result = createTestClassificationResult();
+  monitor.recordClassification(dataElement, result, 25);
+  const events = monitor.getRecentEvents(10);
+  expect(events).toHaveLength(1);
+  expect(events[0]).toMatchObject({)
+  type: MonitoringEventType.CLASSIFICATION_PERFORMED,
+  dataId: dataElement.id,
+  classification: result,
+  metadata: expect.objectContaining({,)
+  fieldName: dataElement.fieldName,
+  responseTime: 25,
+  confidence: result.confidence,
+}),
+        severity: AlertSeverity.INFO;
+  });
     });
     test('should update performance metrics', () => {
       const dataElement = createTestDataElement();
@@ -105,11 +105,11 @@ describe('ClassificationMonitor', () => {
       // Record multiple classifications
       for (let i = 0; i < 10; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           20 + i * 5
         );
-      }
       const metrics = monitor.getPerformanceMetrics();
       expect(metrics.totalClassifications).toBe(10);
       expect(metrics.averageResponseTime).toBeCloseTo(42.5, 1); // Average of 20-65
@@ -160,28 +160,28 @@ describe('ClassificationMonitor', () => {
     });
   });
   describe('Compliance Monitoring', () => {
-    test('should detect compliance violations', () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      monitor.on('monitoringEvent', eventHandler);
-      monitor.recordComplianceViolation()
-        'data-123',
-        ComplianceFramework.GDPR,
-        'Missing data retention policy',
-        AlertSeverity.WARNING
-      );
-      const metrics = monitor.getComplianceMetrics();
-      expect(metrics.totalViolations).toBe(1);
-      expect(metrics.violationsByFramework[ComplianceFramework.GDPR]).toBe(1);
-      expect(metrics.violationTypes['Missing data retention policy']).toBe(1);
-      expect(metrics.pendingRemediation).toBe(1);
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          type: MonitoringEventType.COMPLIANCE_VIOLATION,
-          metadata: expect.objectContaining({),
-            framework: ComplianceFramework.GDPR,
-            violation: 'Missing data retention policy',
-          })
-        })
+  test('should detect compliance violations', () => {
+  const eventHandler = jest.fn<unknown, unknown>();
+  monitor.on('monitoringEvent', eventHandler);
+  monitor.recordComplianceViolation()
+  'data-123',
+  ComplianceFramework.GDPR,
+  'Missing data retention policy',
+  AlertSeverity.WARNING
+  );
+  const metrics = monitor.getComplianceMetrics();
+  expect(metrics.totalViolations).toBe(1);
+  expect(metrics.violationsByFramework[ComplianceFramework.GDPR]).toBe(1);
+  expect(metrics.violationTypes['Missing data retention policy']).toBe(1);
+  expect(metrics.pendingRemediation).toBe(1);
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: MonitoringEventType.COMPLIANCE_VIOLATION,
+  metadata: expect.objectContaining({,)
+  framework: ComplianceFramework.GDPR,
+  violation: 'Missing data retention policy',
+}
+  }
       );
     });
     test('should calculate compliance rate', () => {
@@ -190,57 +190,57 @@ describe('ClassificationMonitor', () => {
       // Record successful classifications
       for (let i = 0; i < 95; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           20
         );
-      }
       // Record violations
       for (let i = 0; i < 5; i++) {
         monitor.recordComplianceViolation()
-          `data-${i}`,}
+          `data-${i}`}
+}
           ComplianceFramework.GDPR,
           'Test violation',
           AlertSeverity.WARNING
         );
-      }
       const metrics = monitor.getComplianceMetrics();
       expect(metrics.complianceRate).toBeCloseTo(95, 1);
     });
     test('should trigger alerts for critical violations', () => {
-      const alertHandler = jest.fn<unknown[], unknown>();
-      monitor.on('alert', alertHandler);
-      monitor.recordComplianceViolation()
-        'data-123',
-        ComplianceFramework.PCI_DSS,
-        'Unencrypted credit card data',
-        AlertSeverity.CRITICAL
-      );
-      expect(alertHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          event: expect.objectContaining({),
-            type: MonitoringEventType.COMPLIANCE_VIOLATION,
-            severity: AlertSeverity.CRITICAL,
-          }),
-          channels: testConfig.alertConfig.channels,
-        })
+  const alertHandler = jest.fn<unknown, unknown>();
+  monitor.on('alert', alertHandler);
+  monitor.recordComplianceViolation()
+  'data-123',
+  ComplianceFramework.PCI_DSS,
+  'Unencrypted credit card data',
+  AlertSeverity.CRITICAL
+  );
+  expect(alertHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  event: expect.objectContaining({,)
+  type: MonitoringEventType.COMPLIANCE_VIOLATION,
+  severity: AlertSeverity.CRITICAL,
+}),
+          channels: testConfig.alertConfig.channels;
+  }
       );
       const metrics = monitor.getComplianceMetrics();
       expect(metrics.criticalViolations).toBe(1);
     });
     test('should detect missing encryption on restricted data', () => {
-      const dataElement = createTestDataElement();
-      const result = createTestClassificationResult({)
-        level: ClassificationLevel.RESTRICTED,
-        encryptionRequired: false // Should be true for restricted,
-      });
+  const dataElement = createTestDataElement();
+  const result = createTestClassificationResult({)
+  level: ClassificationLevel.RESTRICTED,
+  encryptionRequired: false // Should be true for restricted,
+});
       monitor.recordClassification(dataElement, result, 20);
       const events = monitor.getRecentEvents(10, [MonitoringEventType.COMPLIANCE_VIOLATION]);
       expect(events).toHaveLength(1);
       expect(events[0].metadata).toMatchObject({)
-        framework: ComplianceFramework.NIST,
-        violation: 'Restricted data must have encryption enabled',
-      });
+  framework: ComplianceFramework.NIST,
+  violation: 'Restricted data must have encryption enabled',
+});
     });
   });
   describe('Performance Monitoring', () => {
@@ -254,7 +254,8 @@ describe('ClassificationMonitor', () => {
       ];
       responseTimes.forEach((time, index) => {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${index}` },}
+          { ...dataElement, id: `data-${index}` }
+}
           result,
           time
         );
@@ -264,20 +265,20 @@ describe('ClassificationMonitor', () => {
       expect(metrics.p99ResponseTime).toBeCloseTo(105, 0);
     });
     test('should detect performance warnings', () => {
-      const eventHandler = jest.fn<unknown[], unknown>();
-      monitor.on('monitoringEvent', eventHandler);
-      monitor.recordPerformanceWarning('responseTime', 150, 100);
-      expect(eventHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          type: MonitoringEventType.PERFORMANCE_WARNING,
-          metadata: expect.objectContaining({),
-            metric: 'responseTime',
-            value: 150,
-            threshold: 100,
-            percentageOver: 50,
-          }),
-          severity: AlertSeverity.WARNING,
-        })
+  const eventHandler = jest.fn<unknown, unknown>();
+  monitor.on('monitoringEvent', eventHandler);
+  monitor.recordPerformanceWarning('responseTime', 150, 100);
+  expect(eventHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  type: MonitoringEventType.PERFORMANCE_WARNING,
+  metadata: expect.objectContaining({,)
+  metric: 'responseTime',
+  value: 150,
+  threshold: 100,
+  percentageOver: 50,
+}),
+          severity: AlertSeverity.WARNING;
+  }
       );
     });
     test('should calculate throughput correctly', () => {
@@ -286,21 +287,21 @@ describe('ClassificationMonitor', () => {
       // Record classifications
       for (let i = 0; i < 30; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           20
         );
-      }
       // Advance time by 30 seconds
       jest.advanceTimersByTime(30000);
       // Record more classifications
       for (let i = 30; i < 50; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           25
         );
-      }
       const metrics = monitor.getPerformanceMetrics();
       // Should only count recent classifications (last minute)
       expect(metrics.throughput).toBe(20);
@@ -313,28 +314,28 @@ describe('ClassificationMonitor', () => {
       // Establish baseline
       for (let i = 0; i < 5; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           20
         );
-      }
       // Wait and then spike
       jest.advanceTimersByTime(60000);
       // Record many classifications quickly
       for (let i = 100; i < 150; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           25
         );
-      }
       const anomalies = monitor.getAnomalies();
       expect(anomalies).toHaveLength(1);
       expect(anomalies[0]).toMatchObject({)
-        type: 'volume',
-        description: 'Unusual spike in classification volume',
-        confidence: 85,
-      });
+  type: 'volume',
+  description: 'Unusual spike in classification volume',
+  confidence: 85,
+});
     });
     test('should detect pattern anomalies', () => {
       const dataElement = createTestDataElement();
@@ -347,41 +348,41 @@ describe('ClassificationMonitor', () => {
       levels.forEach((level, idx) => {
         for (let i = 0; i < 10; i++) {
           monitor.recordClassification()
-            { ...dataElement, id: `data-${idx}-${i}` },}
+            { ...dataElement, id: `data-${idx}-${i}` }
+}
             createTestClassificationResult({ level }),
             20
           );
-        }
       });
       // Add unusual concentration of restricted data
       for (let i = 0; i < 40; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `restricted-${i}` },}
+          { ...dataElement, id: `restricted-${i}` }
+}
           createTestClassificationResult({ )
             level: ClassificationLevel.RESTRICTED,
-            category: DataCategory.AUTHENTICATION ,
-          }),
+            category: DataCategory.AUTHENTICATION ;
+  }),
           25
         );
-      }
       const anomalies = monitor.getAnomalies();
       const patternAnomaly = anomalies.find(a => a.type === 'pattern');
       expect(patternAnomaly).toBeDefined();
       expect(patternAnomaly?.confidence).toBeGreaterThanOrEqual(75);
     });
     test('should trigger alerts for high-confidence anomalies', () => {
-      const alertHandler = jest.fn<unknown[], unknown>();
+      const alertHandler = jest.fn<unknown, unknown>();
       monitor.on('alert', alertHandler);
       const dataElement = createTestDataElement();
       const result = createTestClassificationResult();
       // Create volume spike to trigger high-confidence anomaly
       for (let i = 0; i < 100; i++) {
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           result,
           20
         );
-      }
       const alerts = alertHandler.mock.calls;
         .map(call => call[0])
         .filter(alert => )
@@ -399,11 +400,11 @@ describe('ClassificationMonitor', () => {
         const level = Object.values(ClassificationLevel)[i % 4] as ClassificationLevel;
         const category = Object.values(DataCategory)[i % 5] as DataCategory;
         monitor.recordClassification()
-          { ...dataElement, id: `data-${i}` },}
+          { ...dataElement, id: `data-${i}` }
+}
           createTestClassificationResult({ level, category }),
           20 + (i % 30)
         );
-      }
       // Add some violations
       monitor.recordComplianceViolation()
         'data-10',
@@ -413,18 +414,18 @@ describe('ClassificationMonitor', () => {
       );
       const dashboard = monitor.getDashboardMetrics();
       expect(dashboard).toMatchObject({)
-        performance: expect.objectContaining({),
-          totalClassifications: 50,
-          averageResponseTime: expect.any(Number),
-        }),
-        statistics: expect.objectContaining({),
-          totalClassified: 50,
-        }),
-        compliance: expect.objectContaining({),
-          totalViolations: 1,
-        }),
-        healthStatus: 'healthy',
-      });
+  performance: expect.objectContaining({,)
+  totalClassifications: 50,
+  averageResponseTime: expect.any(Number),
+}),
+        statistics: expect.objectContaining({,)
+  totalClassified: 50,
+}),
+        compliance: expect.objectContaining({,)
+  totalViolations: 1,
+}),
+        healthStatus: 'healthy';
+  });
       expect(dashboard.recentAnomalies).toBeInstanceOf(Array);
       expect(dashboard.alerts).toBeInstanceOf(Array);
     });
@@ -438,12 +439,12 @@ describe('ClassificationMonitor', () => {
       // Warning state - add violations
       for (let i = 0; i < 15; i++) {
         monitor.recordComplianceViolation()
-          `data-${i}`,}
+          `data-${i}`}
+}
           ComplianceFramework.GDPR,
           'Test violation',
           AlertSeverity.WARNING
         );
-      }
       dashboard = monitor.getDashboardMetrics();
       expect(dashboard.healthStatus).toBe('warning');
       // Critical state - add critical violation
@@ -457,31 +458,31 @@ describe('ClassificationMonitor', () => {
       expect(dashboard.healthStatus).toBe('critical');
     });
     test('should export data in JSON format', () => {
-      const dataElement = createTestDataElement();
-      const result = createTestClassificationResult();
-      monitor.recordClassification(dataElement, result, 20);
-      monitor.recordComplianceViolation()
-        dataElement.id,
-        ComplianceFramework.GDPR,
-        'Test violation',
-        AlertSeverity.WARNING
-      );
-      const exportedJson = monitor.exportData('json');
-      const parsed = JSON.parse(exportedJson);
-      expect(parsed).toMatchObject({)
-        exportedAt: expect.any(String),
-        events: expect.arrayContaining([),
+  const dataElement = createTestDataElement();
+  const result = createTestClassificationResult();
+  monitor.recordClassification(dataElement, result, 20);
+  monitor.recordComplianceViolation()
+  dataElement.id,
+  ComplianceFramework.GDPR,
+  'Test violation',
+  AlertSeverity.WARNING
+  );
+  const exportedJson = monitor.exportData('json');
+  const parsed = JSON.parse(exportedJson);
+  expect(parsed).toMatchObject({)
+  exportedAt: expect.any(String),
+  events: expect.arrayContaining([),
+  expect.objectContaining({)
+  type: MonitoringEventType.CLASSIFICATION_PERFORMED,
+}),
           expect.objectContaining({)
-            type: MonitoringEventType.CLASSIFICATION_PERFORMED,
-          }),
-          expect.objectContaining({)
-            type: MonitoringEventType.COMPLIANCE_VIOLATION,
-          })
+  type: MonitoringEventType.COMPLIANCE_VIOLATION,
+}
         ]),
         performance: expect.any(Object),
         statistics: expect.any(Object),
-        compliance: expect.any(Object),
-      });
+        compliance: expect.any(Object);
+  });
     });
     test('should export data in CSV format', () => {
       const dataElement = createTestDataElement();
@@ -507,12 +508,12 @@ describe('ClassificationMonitor', () => {
         'Test violation'
       );
       monitor.recordPerformanceWarning('errorRate', 10, 5);
-      const classificationEvents = monitor.getRecentEvents(10, [;);
+      const classificationEvents = monitor.getRecentEvents(10, [);
         MonitoringEventType.CLASSIFICATION_PERFORMED
       ]);
       expect(classificationEvents).toHaveLength(1);
       expect(classificationEvents[0].type).toBe(MonitoringEventType.CLASSIFICATION_PERFORMED);
-      const violationEvents = monitor.getRecentEvents(10, [;);
+      const violationEvents = monitor.getRecentEvents(10, [);
         MonitoringEventType.COMPLIANCE_VIOLATION,
         MonitoringEventType.PERFORMANCE_WARNING
       ]);
@@ -566,28 +567,28 @@ describe('ClassificationMonitor', () => {
       expect(events[0].dataId).toBe('data-new');
     });
     test('should emit cleanup event', () => {
-      const cleanupHandler = jest.fn<unknown[], unknown>();
-      monitor.on('cleanupCompleted', cleanupHandler);
-      // Trigger cleanup
-      jest.advanceTimersByTime(3600000); // 1 hour
-      expect(cleanupHandler).toHaveBeenCalledWith()
-        expect.objectContaining({)
-          remainingEvents: expect.any(Number),
-          remainingAnomalies: expect.any(Number),
-          timestamp: expect.any(Date),
-        })
+  const cleanupHandler = jest.fn<unknown, unknown>();
+  monitor.on('cleanupCompleted', cleanupHandler);
+  // Trigger cleanup
+  jest.advanceTimersByTime(3600000); // 1 hour
+  expect(cleanupHandler).toHaveBeenCalledWith()
+  expect.objectContaining({)
+  remainingEvents: expect.any(Number),
+  remainingAnomalies: expect.any(Number),
+  timestamp: expect.any(Date),
+}
       );
     });
   });
   describe('Configuration', () => {
-    test('should respect monitoring toggles', () => {
-      const disabledConfig: MonitorConfig = {
-        ...testConfig,
-        enableRealTimeMonitoring: false,
-        enablePerformanceTracking: false,
-        enableAnomalyDetection: false,
-        enableComplianceMonitoring: false,
-      };
+  test('should respect monitoring toggles', () => {
+  const disabledConfig: MonitorConfig = {,
+  ...testConfig,
+  enableRealTimeMonitoring: false,
+  enablePerformanceTracking: false,
+  enableAnomalyDetection: false,
+  enableComplianceMonitoring: false,
+};
       const disabledMonitor = new ClassificationMonitor(disabledConfig);
       const dataElement = createTestDataElement();
       const result = createTestClassificationResult();

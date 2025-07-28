@@ -54,82 +54,80 @@ import {
 } from 'lucide-react';
 
 // Unified review types extending existing system
+
 export interface ReviewItem {
-  id: string;
+  id: string;,
   type: 'template_submission' | 'verification_request' | 'policy_violation' | 'content_appeal' | 'marketplace_listing';
   title: string;
   description?: string;
-  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'changes_requested';
+  status: 'pending' | 'under_review' | 'approved' | 'rejected' | 'changes_requested';,
   priority: 'low' | 'medium' | 'high' | 'urgent';
   submitter: {,
-    id: string;
-    name: string;
-    email: string;
-    avatar_url?: string;
-    tier: string;
-    reputation_score?: number;
-  };
-  created_at: Date;
+  id: string;,
+  name: string;
+  email: string;
+  avatar_url?: string;
+  tier: string;
+  reputation_score?: number;
+};
+  created_at: Date;,
   updated_at: Date;
   submitted_at?: Date;
   assigned_reviewer?: string;
   estimated_review_time?: number; // minutes
   // Type-specific data
   template_data?: {
-    template_id: string;
-    version: number;
-    categories: string[];
-    tags: string[];
-    price_cents: number;
-    graph_json: unknown;
-    validation_results: ValidationResult[];
-    previous_reviews?: ReviewFeedback[];
-  };
+  template_id: string;,
+  version: number;
+  categories: string;,
+  tags: string;
+  price_cents: number;,
+  graph_json: unknown;
+  validation_results: ValidationResult;
+  previous_reviews?: ReviewFeedback;
+};
   verification_data?: {
-    request_type: 'identity' | 'business' | 'creator';
-    documents: DocumentData[];
-    verification_criteria: VerificationCriterion[];
-    previous_attempts?: number;
-  };
+  request_type: 'identity' | 'business' | 'creator';,
+  documents: DocumentData;
+  verification_criteria: VerificationCriterion;
+  previous_attempts?: number;
+};
   violation_data?: {
-    policy_id: string;
-    violation_type: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    evidence: Evidence[];
-    automated_detection: boolean;
-    affected_content?: string[];
-  };
+  policy_id: string;,
+  violation_type: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';,
+  evidence: Evidence;
+  automated_detection: boolean;
+  affected_content?: string;
+};
   appeal_data?: {
-    original_decision_id: string;
-    appeal_reason: string;
-    supporting_evidence: Evidence[];
-    original_reviewer: string;
-    appeal_deadline: Date;
-  };
+  original_decision_id: string;,
+  appeal_reason: string;
+  supporting_evidence: Evidence;,
+  original_reviewer: string;
+  appeal_deadline: Date;
+};
 }
-
 export interface ValidationResult {
-  rule_id: string;
+  rule_id: string;,
   severity: 'error' | 'warning' | 'info';
-  category: string;
+  category: string;,
   message: string;
   field?: string;
   auto_fixable: boolean;
-  suggestions?: string[];
+  suggestions?: string;
 }
-
 export interface ReviewFeedback {
-  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';
-  rating: number; // 1-5
-  comments: string;
-  suggestions: string[];
+  category: 'content' | 'quality' | 'compliance' | 'usability' | 'technical';,
+  rating: number; // 1-5,
+  comments: string;,
+  suggestions: string;
   is_blocking: boolean;
 }
-
 export interface DocumentData {
-  id: string;
+  id: string;,
   type: 'image' | 'pdf' | 'document' | 'video' | 'audio';
-  fileName: string;
+  fileName: string;,
   fileSize: number;
   url: string;
   thumbnailUrl?: string;
@@ -139,50 +137,45 @@ export interface DocumentData {
     quality?: 'low' | 'medium' | 'high';
   };
 }
-
 export interface VerificationCriterion {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   required: boolean;
-  type: 'document_check' | 'identity_match' | 'address_verification' | 'business_validation';
+  type: 'document_check' | 'identity_match' | 'address_verification' | 'business_validation';,
   status: 'pending' | 'passed' | 'failed' | 'manual_review';
   automated_result?: unknown;
   manual_override?: boolean;
 }
-
 export interface Evidence {
-  id: string;
+  id: string;,
   type: 'screenshot' | 'log' | 'report' | 'document';
-  url: string;
+  url: string;,
   description: string;
   timestamp: Date;
   confidence_score?: number;
 }
-
 export interface ReviewDecision {
-  decision: 'approved' | 'rejected' | 'changes_requested';
-  overall_score: number; // 1-100
-  feedback: ReviewFeedback[];
+  decision: 'approved' | 'rejected' | 'changes_requested';,
+  overall_score: number; // 1-100,
+  feedback: ReviewFeedback;,
   public_comments: string;
-  private_notes: string;
+  private_notes: string;,
   follow_up_required: boolean;
   follow_up_date?: Date;
-  conditional_approval?: {
-    conditions: string[];
-    deadline: Date;
-  };
+  conditional_approval?: {,
+  conditions: string;,
+  deadline: Date;
+};
 }
-
 export interface UnifiedReviewInterfaceProps {
-  reviewItem: ReviewItem;
-  onDecision: (decision: ReviewDecision) => void;
-  onSaveDraft: (decision: Partial<ReviewDecision>) => void;
+  reviewItem: ReviewItem;,
+  onDecision: (decision: ReviewDecision) => void;,
+  onSaveDraft: (decision: Partial<ReviewDecision>) => void;,
   onBack: () => void;
-  reviewerPermissions: string[];
+  reviewerPermissions: string;
   className?: string;
-}
-const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
+  const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({,)
   reviewItem,
   onDecision,
   onSaveDraft,
@@ -193,16 +186,16 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
   // State management
   const [activeTab, setActiveTab] = useState('overview');
   const [reviewDecision, setReviewDecision] = useState<Partial<ReviewDecision>>({)
-    feedback: [],
-    public_comments: '',
-    private_notes: '',
-    follow_up_required: false,
-  });
+  feedback: [],
+  public_comments: '',
+  private_notes: '',
+  follow_up_required: false,
+});
   const [_____currentDocumentIndex, _____setCurrentDocumentIndex] = useState(0);
   const [documentZoom, setDocumentZoom] = useState(100);
   const [_____mediaPlaying, _____setMediaPlaying] = useState<Record<string, boolean>>({});
-  const [_____selectedValidationRules, _____setSelectedValidationRules] = useState<string[]>([]);
-  const [_____customValidations, _____setCustomValidations] = useState<ValidationResult[]>([]);
+  const [_____selectedValidationRules, _____setSelectedValidationRules] = useState<string>([]);
+  const [_____customValidations, _____setCustomValidations] = useState<ValidationResult>([]);
   // Load any existing draft
   useEffect(() => {
     loadReviewDraft();
@@ -210,16 +203,15 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
   const loadReviewDraft = async () => {
     try {
       const response = await fetch(`/api/admin/reviews/${reviewItem.id}/draft`, {)}
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+  },
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
       });
       if (response.ok) {
         const draft = await response.json();
         setReviewDecision(draft);
-      }
     } catch (error) {
-      console.error('Failed to load review draft:', error);
-    }
-  };
+  console.error('Failed to load review draft:', error);
+};
   const handleSaveDraft = async () => {
     await onSaveDraft(reviewDecision);
   };
@@ -227,11 +219,9 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
     if (!reviewDecision.decision) {
       alert('Please select a decision before submitting.');
       return;
-    }
     if (!reviewDecision.public_comments?.trim()) {
       alert('Please provide public comments for the submitter.');
       return;
-    }
     await onDecision(reviewDecision as ReviewDecision);
   };
   const updateFeedback = (category: string, updates: Partial<ReviewFeedback>) => {
@@ -240,23 +230,22 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
     if (existingIndex >= 0) {
       updatedFeedback[existingIndex] = { ...updatedFeedback[existingIndex], ...updates };
     } else {
-      updatedFeedback.push({)
-        category: category as ReviewFeedback['category'],
-        rating: 3,
-        comments: '',
-        suggestions: [],
-        is_blocking: false,
-        ...updates
-      });
-    }
+  updatedFeedback.push({)
+  category: category as ReviewFeedback['category'],
+  rating: 3,
+  comments: '',
+  suggestions: [],
+  is_blocking: false,
+  ...updates
+});
     setReviewDecision(prev => ({ ...prev, feedback: updatedFeedback }));
   };
   const calculateOverallScore = () => {
-    if (!reviewDecision.feedback?.length) return 50;
-    const weightedScore = reviewDecision.feedback.reduce((total, feedback) => {
-      const weight = feedback.is_blocking ? 2 : 1;
-      return total + (feedback.rating * 20 * weight); // Convert 1-5 to 0-100
-    }, 0);
+  if (!reviewDecision.feedback?.length) return 50;
+  const weightedScore = reviewDecision.feedback.reduce((total, feedback) => {
+  const weight = feedback.is_blocking ? 2 : 1;
+  return total + (feedback.rating * 20 * weight); // Convert 1-5 to 0-100
+}, 0);
     const totalWeight = reviewDecision.feedback.reduce((total, feedback) => ;
       total + (feedback.is_blocking ? 2 : 1), 0
     );
@@ -589,8 +578,8 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
           <CardContent>
             <div className="feedback-categories">
               {['content', 'quality', 'compliance', 'usability', 'technical'].map(category => {)
-                const existingFeedback = reviewDecision.feedback?.find(f => f.category === category);
-                return ();
+  const existingFeedback = reviewDecision.feedback?.find(f => f.category === category);
+                return;
                   <div key={category} className="feedback-category">
                     <div className="category-header">
                       <h4 className="category-title">{category.charAt(0).toUpperCase() + category.slice(1)}</h4>
@@ -675,8 +664,8 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
                   checked={reviewDecision.follow_up_required || false}
                   onChange={(e) => setReviewDecision(prev => ({ )
                     ...prev, 
-                    follow_up_required: e.target.checked ,
-                  }))}
+                    follow_up_required: e.target.checked ;
+  }))}
                 />
                 <span>Follow-up required</span>
               </label>
@@ -688,8 +677,8 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
                       reviewDecision.follow_up_date.toISOString().split('T')[0] : ''}
                     onChange={(e) => setReviewDecision(prev => ({ )
                       ...prev, 
-                      follow_up_date: e.target.value ? new Date(e.target.value) : undefined ,
-                    }))}
+                      follow_up_date: e.target.value ? new Date(e.target.value) : undefined ;
+  }))}
                     className="follow-up-date"
                   />
                 </div>
@@ -702,22 +691,22 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
   );
   // Helper functions
   const getTypeColor = (type: string) => {
-    const colors = {
-      template_submission: 'bg-blue-100 text-blue-800',
-      verification_request: 'bg-green-100 text-green-800',
-      policy_violation: 'bg-red-100 text-red-800',
-      content_appeal: 'bg-purple-100 text-purple-800',
-      marketplace_listing: 'bg-yellow-100 text-yellow-800',
-    };
+  const colors = {
+  template_submission: 'bg-blue-100 text-blue-800',
+  verification_request: 'bg-green-100 text-green-800',
+  policy_violation: 'bg-red-100 text-red-800',
+  content_appeal: 'bg-purple-100 text-purple-800',
+  marketplace_listing: 'bg-yellow-100 text-yellow-800',
+};
     return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
   const getPriorityColor = (priority: string) => {
-    const colors = {
-      urgent: 'bg-red-100 text-red-800',
-      high: 'bg-orange-100 text-orange-800',
-      medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-gray-100 text-gray-800',
-    };
+  const colors = {
+  urgent: 'bg-red-100 text-red-800',
+  high: 'bg-orange-100 text-orange-800',
+  medium: 'bg-yellow-100 text-yellow-800',
+  low: 'bg-gray-100 text-gray-800',
+};
     return colors[priority as keyof typeof colors] || colors.medium;
   };
   const formatItemType = (type: string) => {
@@ -739,7 +728,7 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;}
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;}
   };
-  return ();
+  return;
     <div className={`unified-review-interface ${className}`}>}
       <div className="review-header">
         <div className="header-nav">
@@ -781,501 +770,400 @@ const UnifiedReviewInterface: React.FC<UnifiedReviewInterfaceProps> = ({)
       </Tabs>
       <style>{`
         .unified-review-interface {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 24px;
-          background: #f8fafc;
+          max-width: 1200px;,
+  margin: 0 auto;
+          padding: 24px;,
+  background: #f8fafc;
           min-height: 100vh;
-        }
         .review-header {
           background: white;
-          border-radius: 12px;
-          padding: 16px 24px;
+          border-radius: 12px;,
+  padding: 16px 24px;
           margin-bottom: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         .header-nav {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .header-actions {
-          display: flex;
-          gap: 12px;
-        }
+          display: flex;,
+  gap: 12px;
         .submit-decision {
-          background: #059669;
-          color: white;
-        }
-        .submit-decision:hover {
-          background: #047857;
-        }
-        .submit-decision:disabled {
-          background: #9ca3af;
+          background: #059669;,
+  color: white;
+        .submit-decision:hover {,
+  background: #047857;
+        .submit-decision:disabled {,
+  background: #9ca3af;
           cursor: not-allowed;
-        }
         .review-tabs {
           background: white;
-          border-radius: 12px;
-          padding: 24px;
+          border-radius: 12px;,
+  padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
         .review-tab-list {
           grid-template-columns: repeat(3, 1fr);
           margin-bottom: 32px;
-        }
         .tab-content {
-          margin: 0;
-          padding: 0;
-        }
+          margin: 0;,
+  padding: 0;
         /* Overview Tab Styles */
         .overview-header {
           margin-bottom: 24px;
-        }
         .item-info {
           margin-bottom: 16px;
-        }
         .item-type-badge {
           margin-bottom: 8px;
-        }
         .item-title {
           font-size: 24px;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin: 0 0 8px 0;
           line-height: 1.3;
-        }
         .item-description {
           color: #6b7280;
           font-size: 16px;
-          line-height: 1.5;
-          margin: 0;
-        }
+          line-height: 1.5;,
+  margin: 0;
         .metadata-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
           margin-top: 16px;
-        }
         .metadata-item {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 14px;
-          color: #6b7280;
-        }
+          align-items: center;,
+  gap: 8px;
+          font-size: 14px;,
+  color: #6b7280;
         .template-insights, .verification-insights {
-          margin-top: 24px;
-          border: 1px solid #e5e7eb;
-        }
+          margin-top: 24px;,
+  border: 1px solid #e5e7eb;
         .insights-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
-        }
         .insight-item {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 12px;
+          padding: 12px;,
+  background: #f9fafb;
           border-radius: 8px;
-        }
         .insight-label {
-          font-size: 14px;
-          color: #6b7280;
+          font-size: 14px;,
+  color: #6b7280;
           display: block;
-        }
         .insight-value {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           display: block;
-        }
         .verification-progress {
           space-y: 16px;
-        }
         .progress-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-weight: 600;
-          color: #1f2937;
-        }
+          font-weight: 600;,
+  color: #1f2937;
         .criteria-list {
           space-y: 8px;
-        }
         .criterion-item {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 12px;
+          padding: 12px;,
+  background: #f9fafb;
           border-radius: 6px;
-        }
         .criterion-status {
           flex-shrink: 0;
-        }
         .criterion-info {
           display: flex;
-          align-items: center;
-          flex: 1;
-        }
+          align-items: center;,
+  flex: 1;
         .criterion-name {
-          font-size: 14px;
-          color: #374151;
-        }
+          font-size: 14px;,
+  color: #374151;
         /* Content Tab Styles */
         .content-review {
           space-y: 24px;
-        }
         .content-tabs {
           border: 1px solid #e5e7eb;
-        }
         .graph-preview {
-          max-height: 400px;
-          overflow: auto;
+          max-height: 400px;,
+  overflow: auto;
           background: #f8fafc;
-          border-radius: 6px;
-          padding: 16px;
-        }
+          border-radius: 6px;,
+  padding: 16px;
         .graph-json {
           font-family: 'Monaco', 'Consolas', monospace;
           font-size: 12px;
-          line-height: 1.4;
-          color: #374151;
-          white-space: pre-wrap;
-          margin: 0;
-        }
+          line-height: 1.4;,
+  color: #374151;
+          white-space: pre-wrap;,
+  margin: 0;
         .validation-list {
           space-y: 12px;
-        }
         .validation-item {
-          display: flex;
-          gap: 12px;
+          display: flex;,
+  gap: 12px;
           padding: 12px;
           border-radius: 8px;
-        }
         .validation-item.severity-error {
-          background: #fef2f2;
-          border: 1px solid #fecaca;
-        }
+          background: #fef2f2;,
+  border: 1px solid #fecaca;
         .validation-item.severity-warning {
-          background: #fffbeb;
-          border: 1px solid #fed7aa;
-        }
+          background: #fffbeb;,
+  border: 1px solid #fed7aa;
         .validation-item.severity-info {
-          background: #eff6ff;
-          border: 1px solid #bfdbfe;
-        }
+          background: #eff6ff;,
+  border: 1px solid #bfdbfe;
         .validation-icon {
           flex-shrink: 0;
-        }
         .validation-content {
           flex: 1;
-        }
         .validation-header {
           display: flex;
           align-items: center;
           margin-bottom: 4px;
-        }
         .validation-category {
           font-size: 12px;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #6b7280;
-        }
+          letter-spacing: 0.05em;,
+  color: #6b7280;
         .validation-message {
-          font-size: 14px;
-          color: #374151;
+          font-size: 14px;,
+  color: #374151;
           margin: 4px 0;
-        }
         .validation-field {
-          font-size: 12px;
-          color: #9ca3af;
+          font-size: 12px;,
+  color: #9ca3af;
           margin: 0;
-        }
         .documents-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 16px;
           margin-bottom: 24px;
-        }
         .document-card {
           border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          overflow: hidden;
+          border-radius: 8px;,
+  overflow: hidden;
           background: white;
-        }
         .document-preview {
-          height: 150px;
-          display: flex;
+          height: 150px;,
+  display: flex;
           align-items: center;
-          justify-content: center;
-          background: #f9fafb;
+          justify-content: center;,
+  background: #f9fafb;
           overflow: hidden;
-        }
         .document-image {
           max-width: 100%;
           max-height: 100%;
           object-fit: contain;
-        }
         .document-placeholder {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          gap: 8px;
+          align-items: center;,
+  gap: 8px;
           color: #9ca3af;
-        }
         .document-type {
           font-size: 12px;
           font-weight: 600;
-        }
         .document-info {
           padding: 12px;
-        }
         .document-name {
           font-size: 14px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 4px 0;
           word-break: break-word;
-        }
         .document-size {
-          font-size: 12px;
-          color: #6b7280;
+          font-size: 12px;,
+  color: #6b7280;
           margin: 0;
-        }
         .document-actions {
-          display: flex;
-          gap: 8px;
+          display: flex;,
+  gap: 8px;
           padding: 12px;
           border-top: 1px solid #f3f4f6;
-        }
         .document-controls {
           display: flex;
-          justify-content: center;
-          padding: 16px;
-          border-top: 1px solid #f3f4f6;
-          background: #f9fafb;
-        }
+          justify-content: center;,
+  padding: 16px;
+          border-top: 1px solid #f3f4f6;,
+  background: #f9fafb;
         .zoom-controls {
           display: flex;
-          align-items: center;
-          gap: 12px;
-        }
+          align-items: center;,
+  gap: 12px;
         .zoom-level {
           font-size: 14px;
-          font-weight: 600;
-          color: #374151;
+          font-weight: 600;,
+  color: #374151;
           min-width: 50px;
           text-align: center;
-        }
         /* Review Tab Styles */
         .review-decision {
           space-y: 24px;
-        }
         .decision-options {
           space-y: 16px;
-        }
         .decision-buttons {
-          display: flex;
-          gap: 12px;
+          display: flex;,
+  gap: 12px;
           flex-wrap: wrap;
-        }
         .overall-score {
           display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 16px;
-          background: #f9fafb;
+          align-items: center;,
+  gap: 12px;
+          padding: 16px;,
+  background: #f9fafb;
           border-radius: 8px;
-        }
         .score-label {
-          font-size: 14px;
-          color: #6b7280;
-        }
+          font-size: 14px;,
+  color: #6b7280;
         .score-value {
           font-size: 18px;
-          font-weight: 700;
-          color: #1f2937;
-        }
+          font-weight: 700;,
+  color: #1f2937;
         .score-bar {
-          flex: 1;
-          height: 8px;
+          flex: 1;,
+  height: 8px;
           background: #e5e7eb;
-          border-radius: 4px;
-          overflow: hidden;
-        }
+          border-radius: 4px;,
+  overflow: hidden;
         .score-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
+          height: 100%;,
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #10b981);
           transition: width 0.3s;
-        }
         .feedback-categories {
           space-y: 20px;
-        }
         .feedback-category {
-          padding: 16px;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          background: #fafafa;
-        }
+          padding: 16px;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  background: #fafafa;
         .category-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: 12px;
-        }
         .category-title {
           font-size: 16px;
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
-        }
         .rating-controls {
-          display: flex;
-          gap: 4px;
-        }
+          display: flex;,
+  gap: 4px;
         .rating-star {
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 2px;
-          transition: color 0.2s;
-          color: #d1d5db;
-        }
-        .rating-star:hover {
-          color: #fbbf24;
-        }
+          background: none;,
+  border: none;
+          cursor: pointer;,
+  padding: 2px;
+          transition: color 0.2s;,
+  color: #d1d5db;
+        .rating-star:hover {,
+  color: #fbbf24;
         .rating-star.active {
           color: #f59e0b;
-        }
         .feedback-textarea {
           width: 100%;
-          margin-bottom: 8px;
-          resize: vertical;
-        }
+          margin-bottom: 8px;,
+  resize: vertical;
         .feedback-options {
           display: flex;
           align-items: center;
-        }
         .blocking-checkbox {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 14px;
-          color: #374151;
+          align-items: center;,
+  gap: 8px;
+          font-size: 14px;,
+  color: #374151;
           cursor: pointer;
-        }
         .comment-inputs {
           space-y: 20px;
-        }
         .comment-group {
           display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+          flex-direction: column;,
+  gap: 8px;
         .comment-label {
           font-size: 14px;
-          font-weight: 600;
-          color: #374151;
-        }
+          font-weight: 600;,
+  color: #374151;
         .public-comments, .private-notes {
-          width: 100%;
-          resize: vertical;
-        }
+          width: 100%;,
+  resize: vertical;
         .follow-up-options {
           space-y: 12px;
-        }
         .follow-up-checkbox {
           display: flex;
-          align-items: center;
-          gap: 8px;
-          font-size: 14px;
-          color: #374151;
+          align-items: center;,
+  gap: 8px;
+          font-size: 14px;,
+  color: #374151;
           cursor: pointer;
-        }
         .follow-up-details {
           padding-left: 24px;
-        }
         .follow-up-date {
-          padding: 8px 12px;
-          border: 1px solid #e5e7eb;
+          padding: 8px 12px;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
           font-size: 14px;
-        }
         .history-list {
           space-y: 16px;
-        }
         .history-item {
-          padding: 16px;
-          border: 1px solid #e5e7eb;
-          border-radius: 8px;
-          background: #fafafa;
-        }
+          padding: 16px;,
+  border: 1px solid #e5e7eb;
+          border-radius: 8px;,
+  background: #fafafa;
         .review-meta {
           display: flex;
-          align-items: center;
-          gap: 12px;
+          align-items: center;,
+  gap: 12px;
           margin-bottom: 8px;
-        }
         .review-comments {
-          color: #374151;
-          margin: 8px 0;
-        }
+          color: #374151;,
+  margin: 8px 0;
         .review-suggestions {
-          margin: 8px 0 0 20px;
-          color: #6b7280;
+          margin: 8px 0 0 20px;,
+  color: #6b7280;
           font-size: 14px;
-        }
         .review-suggestions li {
           margin-bottom: 4px;
-        }
         /* Responsive Design */
         @media (max-width: 768px) {
           .unified-review-interface {
             padding: 16px;
-          }
           .header-nav {
-            flex-direction: column;
-            gap: 16px;
+            flex-direction: column;,
+  gap: 16px;
             align-items: stretch;
-          }
           .header-actions {
             justify-content: stretch;
-          }
           .item-title {
             font-size: 20px;
-          }
           .metadata-grid {
             grid-template-columns: 1fr;
-          }
           .insights-grid {
             grid-template-columns: 1fr;
-          }
           .decision-buttons {
             flex-direction: column;
-          }
           .overall-score {
             flex-direction: column;
             align-items: stretch;
             text-align: center;
-          }
           .category-header {
-            flex-direction: column;
-            gap: 8px;
+            flex-direction: column;,
+  gap: 8px;
             align-items: stretch;
             text-align: center;
-          }
           .documents-grid {
             grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
   );
 };
-
+}
 export default UnifiedReviewInterface;

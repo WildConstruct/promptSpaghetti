@@ -14,7 +14,7 @@ export interface ResourceUsage {
     cpu: {
         usage: number;
         cores: number;
-        load: number[];
+        load: number;
     };
     network: {
         bytesIn: number;
@@ -80,16 +80,9 @@ export interface ModelResourceProfile {
         gpu?: number;
         disk: number;
     };
-    utilizationHistory: Array<{
-        timestamp: number;
-        usage: ResourceUsage;
-    }>;
-    optimizationApplied: string[];
-    efficiency: {
-        requestsPerSecond: number;
-        costEfficiency: number;
-        resourceEfficiency: number;
-    };
+    utilizationHistory: Array<{}, timestamp>;
+    number: any;
+    usage: ResourceUsage;
 }
 export declare class ResourceOptimizer {
     private config;
@@ -101,58 +94,6 @@ export declare class ResourceOptimizer {
     private requestQueue;
     private modelPool;
     constructor(config: ResourceOptimizationConfig);
-    start(): void;
-    stop(): void;
-    registerModel(modelId: string, resourceRequirements: ModelResourceProfile['resourceRequirements']): void;
-    unregisterModel(modelId: string): void;
-    optimizeMemoryUsage(): Promise<{
-        memoryFreed: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeCPUUsage(): Promise<{
-        cpuSavings: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeNetworkUsage(): Promise<{
-        bandwidthSaved: number;
-        latencyImprovement: number;
-        optimizationsApplied: string[];
-    }>;
-    optimizeModelPerformance(modelId: string): Promise<{
-        responseTimeImprovement: number;
-        resourceSavings: Partial<ResourceUsage>;
-        optimizationsApplied: string[];
-    }>;
-    generateOptimizationPlan(): Promise<{
-        currentState: ResourceUsage;
-        recommendedOptimizations: OptimizationStrategy[];
-        estimatedImpact: {
-            memoryReduction: number;
-            cpuReduction: number;
-            costSavings: number;
-            responseTimeImprovement: number;
-        };
-        implementationOrder: string[];
-    }>;
-    applyOptimizationPlan(plan: OptimizationStrategy[]): Promise<{
-        applied: string[];
-        failed: Array<{
-            strategy: string;
-            error: string;
-        }>;
-        totalImpact: {
-            memoryFreed: number;
-            cpuSaved: number;
-            costSaved: number;
-            responseTimeImproved: number;
-        };
-    }>;
-    getResourceUtilization(): ResourceUsage;
-    getModelProfiles(): ModelResourceProfile[];
-    getActiveOptimizations(): OptimizationStrategy[];
-    rollbackOptimization(optimizationName: string): Promise<void>;
-    private initializeResourceUsage;
-    private monitorResources;
     private evaluateOptimizations;
     private processRequestQueue;
     private getCurrentMemoryUsage;
@@ -176,12 +117,8 @@ export declare class ResourceOptimizer {
     private enableModelCaching;
     private implementRequestPrioritization;
     private calculateResourceSavings;
-    private analyzeOptimizationOpportunities;
-    private calculateEstimatedImpact;
     private determineImplementationOrder;
     private measureCurrentState;
     private calculateImpact;
-    destroy(): void;
 }
-export default ResourceOptimizer;
 //# sourceMappingURL=ResourceOptimizer.d.ts.map

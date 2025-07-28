@@ -9,7 +9,7 @@ import { ExecutionPathVisualization } from './ExecutionPathVisualization';
 import { PreviewResultWithPath, ExecutionPath, RandomChoiceInfo } from '../types/ExecutionPath';
 
 // Mock data for testing
-const mockExecutionPath: ExecutionPath = {
+const mockExecutionPath: ExecutionPath = {,
   id: 'exec_test_1',
   seed: 12345,
   startTime: Date.now() - 1000,
@@ -25,14 +25,13 @@ const mockExecutionPath: ExecutionPath = {
       inputs: [{ value: 'input1', inputIndex: 0 }],
       output: 'choice1',
       randomChoice: {,
-        choiceType: 'weighted',
-        availableOptions: ['choice1', 'choice2', 'choice3'],
-        selectedOption: 'choice1',
-        selectionReason: 'Selected with highest weight',
-        probability: 0.6,
-        weight: 3,
-      }
-    },
+  choiceType: 'weighted',
+  availableOptions: ['choice1', 'choice2', 'choice3'],
+  selectedOption: 'choice1',
+  selectionReason: 'Selected with highest weight',
+  probability: 0.6,
+  weight: 3,
+}
     {
       nodeId: 'node2',
       nodeType: 'Concat',
@@ -40,62 +39,53 @@ const mockExecutionPath: ExecutionPath = {
       timestamp: Date.now() - 400,
       executionTimeMs: 30,
       inputs: [{ value: 'choice1', inputIndex: 0 }],
-      output: 'Final output with choice1',
-    }
-  ],
+      output: 'Final output with choice1'],
   finalOutput: 'Final output with choice1',
   nodeExecutionOrder: ['node1', 'node2'],
   randomizationPoints: [,
     {
-      choiceType: 'weighted',
-      availableOptions: ['choice1', 'choice2', 'choice3'],
-      selectedOption: 'choice1',
-      selectionReason: 'Selected with highest weight',
-      probability: 0.6,
-      weight: 3,
-    }
-  ]
-};
-const mockPreviewResults: PreviewResultWithPath[] = [
+  choiceType: 'weighted',
+  availableOptions: ['choice1', 'choice2', 'choice3'],
+  selectedOption: 'choice1',
+  selectionReason: 'Selected with highest weight',
+  probability: 0.6,
+  weight: 3];
+  };
+const mockPreviewResults: PreviewResultWithPath = [
   {
-    seed: 12345,
-    output: 'Final output with choice1',
-    executionTimeMs: 500,
-    usedNodeIds: ['node1', 'node2'],
-    usedEdgeIds: [],
-    executionPath: mockExecutionPath,
-    debugInfo: {,
-      nodeExecutionOrder: ['node1', 'node2'],
+  seed: 12345,
+  output: 'Final output with choice1',
+  executionTimeMs: 500,
+  usedNodeIds: ['node1', 'node2'],
+  usedEdgeIds: [],
+  executionPath: mockExecutionPath,
+  debugInfo: {,
+  nodeExecutionOrder: ['node1', 'node2'],
+  randomChoices: mockExecutionPath.randomizationPoints,
+  performanceBreakdown: {,
+  'WeightedChoice': 50,
+  'Concat': 30,
+}
+  {
+  seed: 67890,
+  output: 'Another output',
+  executionTimeMs: 300,
+  usedNodeIds: ['node1', 'node2'],
+  usedEdgeIds: [],
+  executionPath: {,
+  ...mockExecutionPath,
+  id: 'exec_test_2',
+  seed: 67890,
+  totalExecutionTime: 300,
+  finalOutput: 'Another output',
+  randomizationPoints: mockExecutionPath.randomizationPoints // Ensure it has same randomization points,
+},
+  debugInfo: {,
+  nodeExecutionOrder: ['node1', 'node2'],
       randomChoices: mockExecutionPath.randomizationPoints,
       performanceBreakdown: {,
         'WeightedChoice': 50,
         'Concat': 30
-      }
-    }
-  },
-  {
-    seed: 67890,
-    output: 'Another output',
-    executionTimeMs: 300,
-    usedNodeIds: ['node1', 'node2'],
-    usedEdgeIds: [],
-    executionPath: {,
-      ...mockExecutionPath,
-      id: 'exec_test_2',
-      seed: 67890,
-      totalExecutionTime: 300,
-      finalOutput: 'Another output',
-      randomizationPoints: mockExecutionPath.randomizationPoints // Ensure it has same randomization points,
-    },
-    debugInfo: {,
-      nodeExecutionOrder: ['node1', 'node2'],
-      randomChoices: mockExecutionPath.randomizationPoints,
-      performanceBreakdown: {,
-        'WeightedChoice': 50,
-        'Concat': 30
-      }
-    }
-  }
 ];
 describe('ExecutionPathVisualization', () => {
   describe('Basic Rendering', () => {
@@ -110,15 +100,13 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('Paths: 2')).toBeInTheDocument();
     });
     it('should show message when no execution paths available', () => {
-      const resultsWithoutPaths: PreviewResultWithPath[] = [
+      const resultsWithoutPaths: PreviewResultWithPath = [
         {
           seed: 123,
           output: 'test output',
           executionTimeMs: 100,
           usedNodeIds: [],
-          usedEdgeIds: [],
-        }
-      ];
+          usedEdgeIds: []];
       render();
         <ExecutionPathVisualization 
           results={resultsWithoutPaths}
@@ -152,11 +140,11 @@ describe('ExecutionPathVisualization', () => {
       render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
-          config={{ 
-            showExecutionOrder: true, 
-            showRandomChoices: true,
-            showPerformanceMetrics: false,
-          }}
+          config={{
+  showExecutionOrder: true,
+  showRandomChoices: true,
+  showPerformanceMetrics: false,
+}}
         />
       );
       // Initially collapsed
@@ -198,11 +186,11 @@ describe('ExecutionPathVisualization', () => {
       render();
         <ExecutionPathVisualization 
           results={mockPreviewResults}
-          config={{ 
-            showExecutionOrder: false,
-            showRandomChoices: false,
-            showPerformanceMetrics: true ,
-          }}
+          config={{
+  showExecutionOrder: false,
+  showRandomChoices: false,
+  showPerformanceMetrics: true,
+}}
         />
       );
       // Expand first result
@@ -216,7 +204,7 @@ describe('ExecutionPathVisualization', () => {
     });
   });
   describe('Path Selection and Highlighting', () => {
-    const mockOnNodeHighlight = jest.fn<unknown[], unknown>();
+    const mockOnNodeHighlight = jest.fn<unknown, unknown>();
     beforeEach(() => {
       mockOnNodeHighlight.mockClear();
     });
@@ -331,7 +319,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.getByText('No execution path data available')).toBeInTheDocument();
     });
     it('should handle results without randomization points', () => {
-      const resultsWithoutRandomization: PreviewResultWithPath[] = [
+      const resultsWithoutRandomization: PreviewResultWithPath = [
         {
           seed: 123,
           output: 'test output',
@@ -340,10 +328,7 @@ describe('ExecutionPathVisualization', () => {
           usedEdgeIds: [],
           executionPath: {,
             ...mockExecutionPath,
-            randomizationPoints: [],
-          }
-        }
-      ];
+            randomizationPoints: []];
       render();
         <ExecutionPathVisualization 
           results={resultsWithoutRandomization}
@@ -353,7 +338,7 @@ describe('ExecutionPathVisualization', () => {
       expect(screen.queryByText('random')).not.toBeInTheDocument();
     });
     it('should handle results without debug info', () => {
-      const resultsWithoutDebugInfo: PreviewResultWithPath[] = [
+      const resultsWithoutDebugInfo: PreviewResultWithPath = [
         {
           seed: 123,
           output: 'test output',
@@ -362,7 +347,6 @@ describe('ExecutionPathVisualization', () => {
           usedEdgeIds: [],
           executionPath: mockExecutionPath,
           // No debugInfo
-        }
       ];
       render();
         <ExecutionPathVisualization 

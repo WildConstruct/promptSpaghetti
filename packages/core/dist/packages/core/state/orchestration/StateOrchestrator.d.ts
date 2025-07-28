@@ -18,8 +18,8 @@ export interface DomainEvent {
 export interface CrossDomainChange {
     id: string;
     sourceDomain: string;
-    targetDomains: string[];
-    changes: DomainStateChange[];
+    targetDomains: string;
+    changes: DomainStateChange;
     timestamp: number;
     transactionId?: string;
 }
@@ -33,18 +33,18 @@ export interface DomainStateChange {
 export interface TransactionContext {
     id: string;
     initiator: string;
-    participants: string[];
+    participants: string;
     status: 'pending' | 'committed' | 'aborted';
-    changes: CrossDomainChange[];
+    changes: CrossDomainChange;
     startTime: number;
     timeout: number;
 }
 export interface StateCoordinationRule {
     name: string;
     sourceDomain: string;
-    targetDomains: string[];
-    eventTypes: string[];
-    transform?: (event: DomainEvent) => DomainEvent[];
+    targetDomains: string;
+    eventTypes: string;
+    transform?: (event: DomainEvent) => DomainEvent;
     condition?: (event: DomainEvent) => boolean;
     priority: number;
 }
@@ -65,45 +65,5 @@ export declare class StateOrchestrator extends EventEmitter {
     private maxRetries;
     private transactionTimeout;
     constructor();
-    registerDomain(domain: DomainStateContainer): void;
-    unregisterDomain(domainName: string): void;
-    handleCrossDomainEvent(event: DomainEvent): Promise<void>;
-    private processEventQueue;
-    private processEvent;
-    private applyCoordinationRule;
-    atomicCrossDomainUpdate(changes: CrossDomainChange[]): Promise<void>;
-    private prepareTransaction;
-    private applyTransactionChanges;
-    private commitTransaction;
-    private rollbackTransaction;
-    private applyCrossDomainChanges;
-    private handleDomainStateChange;
-    private setupCoordinationRules;
-    private setupEventHandling;
-    private handleSyncRequest;
-    private handleConflict;
-    private cleanupExpiredTransactions;
-    addCoordinationRule(rule: StateCoordinationRule): void;
-    removeCoordinationRule(name: string): void;
-    getCoordinationRules(): StateCoordinationRule[];
-    private generateChangeId;
-    private generateTransactionId;
-    getDomain(name: string): DomainStateContainer | undefined;
-    getRegisteredDomains(): string[];
-    getDomainCount(): number;
-    getHealthStatus(): any;
-    resolveDomainDependencies(): Promise<string[]>;
 }
-export declare class CrossDomainSyncError extends Error {
-    cause?: Error;
-    constructor(message: string, cause?: Error);
-}
-export declare class TransactionError extends Error {
-    transactionId: string;
-    cause?: Error;
-    constructor(message: string, transactionId: string, cause?: Error);
-}
-export declare const globalStateOrchestrator: StateOrchestrator;
-export declare function useStateOrchestrator(): StateOrchestrator;
-export declare function useCrossDomainState<T>(domains: string[], selector: (states: Record<string, any>) => T): T | null;
 //# sourceMappingURL=StateOrchestrator.d.ts.map

@@ -2,13 +2,12 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Node } from 'reactflow';
 import { NodeData } from '../../types/NodeTypes';
 interface BatchNodeEditorProps {
-  selectedNodes: Node<NodeData>[];
+  selectedNodes: Node<NodeData>[];,
   isActive: boolean;
   onUpdate: (updates: Record<string, Partial<NodeData>>) => void;
-  onClose: () => void;
+  onClose: () => void;,
   position: { x: number; y: number };
   theme?: 'light' | 'dark' | 'cinema';
-}
 
 export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
   selectedNodes,
@@ -30,24 +29,24 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
     const conflicts: Record<string, boolean> = {};
     // Collect all fields and their values
     selectedNodes.forEach(node => {)
-      Object.keys(node.data).forEach(field => {)
-        allFields.add(field);
+  Object.keys(node.data).forEach(field => {)
+  allFields.add(field);
         if (!fieldValues[field]) fieldValues[field] = new Set();
         fieldValues[field].add(node.data[field]);
       });
     });
     // Identify conflicts (fields with different values)
     Object.keys(fieldValues).forEach(field => {)
-      conflicts[field] = fieldValues[field].size > 1;
+  conflicts[field] = fieldValues[field].size > 1;
     });
     const commonFields = Array.from(allFields);
     return {
-      commonTypes: nodeTypes,
-      commonFields,
-      conflicts,
-      fieldValues,
-      totalNodes: selectedNodes.length,
-    };
+  commonTypes: nodeTypes,
+  commonFields,
+  conflicts,
+  fieldValues,
+  totalNodes: selectedNodes.length,
+};
   }, [selectedNodes]);
   const handleFieldSelection = useCallback((field: string, selected: boolean) => {
     const newSelectedFields = new Set(selectedFields);
@@ -58,7 +57,6 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
       const newUpdates = { ...updates };
       delete newUpdates[field];
       setUpdates(newUpdates);
-    }
     setSelectedFields(newSelectedFields);
   }, [selectedFields, updates]);
   const handleFieldUpdate = useCallback((field: string, value: any) => {
@@ -67,57 +65,54 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
   const handleApplyChanges = useCallback(() => {
     const nodeUpdates: Record<string, Partial<NodeData>> = {};
     selectedNodes.forEach(node => {)
-      const nodeUpdate: Partial<NodeData> = {};
+  const nodeUpdate: Partial<NodeData> = {};
       selectedFields.forEach(field => {)
-        if (field in updates) {
+  if (field in updates) {
           nodeUpdate[field] = updates[field];
-        }
       });
       if (Object.keys(nodeUpdate).length > 0) {
         nodeUpdates[node.id] = nodeUpdate;
-      }
     });
     onUpdate(nodeUpdates);
     onClose();
   }, [selectedNodes, selectedFields, updates, onUpdate, onClose]);
   const getThemeColors = () => {
-    switch (theme) {
-      case 'cinema':
-        return {
-          background: '#2d3748',
-          border: '#4a5568',
-          text: '#e2e8f0',
-          accent: '#4299e1',
-          success: '#38a169',
-          warning: '#f6ad55',
-          danger: '#e53e3e',
-        };
+  switch (theme) {
+  case 'cinema':,
+  return {
+  background: '#2d3748',
+  border: '#4a5568',
+  text: '#e2e8f0',
+  accent: '#4299e1',
+  success: '#38a169',
+  warning: '#f6ad55',
+  danger: '#e53e3e',
+};
       case 'dark':
         return {
-          background: '#1a202c',
-          border: '#2d3748',
-          text: '#f7fafc',
-          accent: '#38a169',
-          success: '#48bb78',
-          warning: '#ed8936',
-          danger: '#f56565',
-        };
+  background: '#1a202c',
+  border: '#2d3748',
+  text: '#f7fafc',
+  accent: '#38a169',
+  success: '#48bb78',
+  warning: '#ed8936',
+  danger: '#f56565',
+};
       case 'light':
       default:
-        return {
-          background: '#ffffff',
-          border: '#e2e8f0',
-          text: '#2d3748',
-          accent: '#3182ce',
-          success: '#38a169',
-          warning: '#d69e2e',
-          danger: '#e53e3e',
-        };
-    }
+        return {,
+  background: '#ffffff',
+  border: '#e2e8f0',
+  text: '#2d3748',
+  accent: '#3182ce',
+  success: '#38a169',
+  warning: '#d69e2e',
+  danger: '#e53e3e',
+};
   };
   const colors = getThemeColors();
   if (!isActive || selectedNodes.length === 0) return null;
-  return ();
+  return;
     <div
       className="batch-node-editor"
       style={{
@@ -127,8 +122,9 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
         width: 480,
         maxHeight: 600,
         background: colors.background,
-        border: `2px solid ${colors.accent}`,}
-        borderRadius: 8,
+        border: `2px solid ${colors.accent}`}
+},
+  borderRadius: 8,
         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)',
         zIndex: 1000,
         color: colors.text,
@@ -156,29 +152,29 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
           <button
             onClick={() => setPreviewMode(!previewMode)}
             style={{
-              padding: '6px 12px',
-              background: previewMode ? colors.accent : colors.border,
-              color: previewMode ? 'white' : colors.text,
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-              fontSize: 12,
-            }}
+  padding: '6px 12px',
+  background: previewMode ? colors.accent : colors.border,
+  color: previewMode ? 'white' : colors.text,
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 12,
+}}
           >
             {previewMode ? 'Edit' : 'Preview'}
           </button>
           <button
             onClick={onClose}
             style={{
-              background: 'none',
-              border: 'none',
-              color: colors.text,
-              cursor: 'pointer',
-              fontSize: 18,
-              padding: 0,
-              width: 24,
-              height: 24,
-            }}
+  background: 'none',
+  border: 'none',
+  color: colors.text,
+  cursor: 'pointer',
+  fontSize: 18,
+  padding: 0,
+  width: 24,
+  height: 24,
+}}
           >
             ×
           </button>
@@ -219,14 +215,14 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
           <button
             onClick={onClose}
             style={{
-              padding: '8px 16px',
-              background: colors.border,
-              color: colors.text,
-              border: 'none',
-              borderRadius: 4,
-              cursor: 'pointer',
-              fontSize: 12,
-            }}
+  padding: '8px 16px',
+  background: colors.border,
+  color: colors.text,
+  border: 'none',
+  borderRadius: 4,
+  cursor: 'pointer',
+  fontSize: 12,
+}}
           >
             Cancel
           </button>
@@ -234,15 +230,15 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
             onClick={handleApplyChanges}
             disabled={selectedFields.size === 0}
             style={{
-              padding: '8px 16px',
-              background: selectedFields.size > 0 ? colors.success : colors.border,
-              color: 'white',
-              border: 'none',
-              borderRadius: 4,
-              cursor: selectedFields.size > 0 ? 'pointer' : 'not-allowed',
-              fontSize: 12,
-              fontWeight: 600,
-            }}
+  padding: '8px 16px',
+  background: selectedFields.size > 0 ? colors.success : colors.border,
+  color: 'white',
+  border: 'none',
+  borderRadius: 4,
+  cursor: selectedFields.size > 0 ? 'pointer' : 'not-allowed',
+  fontSize: 12,
+  fontWeight: 600,
+}}
           >
             Apply to {nodeAnalysis.totalNodes} Node{nodeAnalysis.totalNodes === 1 ? '' : 's'}
           </button>
@@ -254,14 +250,13 @@ export const BatchNodeEditor: React.FC<BatchNodeEditorProps> = ({)
 
 // Batch Edit Form Component
 interface BatchEditFormProps {
-  nodeAnalysis: any;
+  nodeAnalysis: any;,
   selectedFields: Set<string>;
   updates: Record<string, any>;
-  onFieldSelection: (field: string, selected: boolean) => void;
-  onFieldUpdate: (field: string, value: any) => void;
+  onFieldSelection: (field: string, selected: boolean) => void;,
+  onFieldUpdate: (field: string, value: any) => void;,
   colors: any;
-}
-const BatchEditForm: React.FC<BatchEditFormProps> = ({)
+  const BatchEditForm: React.FC<BatchEditFormProps> = ({,)
   nodeAnalysis,
   selectedFields,
   updates,
@@ -269,7 +264,7 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
   onFieldUpdate,
   colors
 }) => {
-  return ();
+  return;
     <div>
       <div style={{ marginBottom: 16 }}>
         <h4 style={{ margin: '0 0 8px 0', fontSize: 14, fontWeight: 600 }}>
@@ -283,24 +278,25 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
         {nodeAnalysis.commonFields.map((field: string) => ()
           <div key={field} style={{
             padding: 12,
-            border: `1px solid ${colors.border}`,}
-            borderRadius: 6,
+            border: `1px solid ${colors.border}`}
+},
+  borderRadius: 6,
             background: selectedFields.has(field) ? `${colors.accent}10` : 'transparent'}
           }}>
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: 8,
-            }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: 8,
+}}>
               <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                cursor: 'pointer',
-                fontSize: 13,
-                fontWeight: 500,
-              }}>
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  cursor: 'pointer',
+  fontSize: 13,
+  fontWeight: 500,
+}}>
                 <input
                   type="checkbox"
                   checked={selectedFields.has(field)}
@@ -313,11 +309,12 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
                 <span style={{
                   fontSize: 11,
                   color: colors.warning,
-                  background: `${colors.warning}20`,}
-                  padding: '2px 6px',
+                  background: `${colors.warning}20`}
+},
+  padding: '2px 6px',
                   borderRadius: 10,
-                  fontWeight: 600,
-                }}>
+                  fontWeight: 600;
+  }}>
                   CONFLICT
                 </span>
               )}
@@ -335,10 +332,10 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
             )}
             {nodeAnalysis.conflicts[field] && ()
               <div style={{
-                marginTop: 8,
-                fontSize: 11,
-                opacity: 0.7,
-              }}>
+  marginTop: 8,
+  fontSize: 11,
+  opacity: 0.7,
+}}>
                 Current values: {Array.from(nodeAnalysis.fieldValues[field]).map(v => )
                   typeof v === 'string' ? `"${v}"` : String(v)}
                 ).join(', ')}
@@ -353,13 +350,12 @@ const BatchEditForm: React.FC<BatchEditFormProps> = ({)
 
 // Field Editor Component
 interface FieldEditorProps {
-  field: string;
+  field: string;,
   value: any;
-  onChange: (value: any) => void;
+  onChange: (value: any) => void;,
   nodeAnalysis: any;
   colors: any;
-}
-const FieldEditor: React.FC<FieldEditorProps> = ({)
+  const FieldEditor: React.FC<FieldEditorProps> = ({,)
   field,
   value,
   onChange,
@@ -378,14 +374,15 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
     width: '100%',
     padding: 8,
     background: colors.background,
-    border: `1px solid ${colors.border}`,}
-    borderRadius: 4,
+    border: `1px solid ${colors.border}`}
+},
+  borderRadius: 4,
     color: colors.text,
-    fontSize: 13,
+    fontSize: 13;
   };
   switch (fieldType) {
     case 'boolean':
-      return ();
+      return;
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="checkbox"
@@ -397,7 +394,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         </label>
       );
     case 'number':
-      return ();
+      return;
         <input
           type="number"
           value={value || ''}
@@ -407,7 +404,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         />
       );
     case 'textarea':
-      return ();
+      return;
         <textarea
           value={value || ''}
           onChange={(e) => onChange(e.target.value)}
@@ -416,7 +413,7 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
         />
       );
     default:
-      return ();
+      return;
         <input
           type="text"
           value={value || ''}
@@ -425,23 +422,21 @@ const FieldEditor: React.FC<FieldEditorProps> = ({)
           placeholder={`Enter new ${field} value`}
         />
       );
-  }
 };
 
 // Batch Preview Component
 interface BatchPreviewProps {
-  selectedNodes: Node<NodeData>[];
+  selectedNodes: Node<NodeData>[];,
   updates: Record<string, any>;
-  selectedFields: Set<string>;
+  selectedFields: Set<string>;,
   colors: any;
-}
-const BatchPreview: React.FC<BatchPreviewProps> = ({)
+  const BatchPreview: React.FC<BatchPreviewProps> = ({,)
   selectedNodes,
   updates,
   selectedFields,
   colors
 }) => {
-  return ();
+  return;
     <div>
       <h4 style={{ margin: '0 0 16px 0', fontSize: 14, fontWeight: 600 }}>
         Preview Changes
@@ -450,42 +445,44 @@ const BatchPreview: React.FC<BatchPreviewProps> = ({)
         {selectedNodes.map(node => ()
           <div key={node.id} style={{
             padding: 12,
-            border: `1px solid ${colors.border}`,}
-            borderRadius: 6,
+            border: `1px solid ${colors.border}`}
+},
+  borderRadius: 6,
             background: `${colors.background}50`}
           }}>
             <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 8,
-            }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: 8,
+}}>
               <strong style={{ fontSize: 13 }}>
                 {node.data.label || node.id}
               </strong>
               <span style={{
                 fontSize: 11,
                 color: colors.accent,
-                background: `${colors.accent}20`,}
-                padding: '2px 6px',
-                borderRadius: 10,
-              }}>
+                background: `${colors.accent}20`}
+},
+  padding: '2px 6px',
+                borderRadius: 10;
+  }}>
                 {node.type || 'default'}
               </span>
             </div>
             {Array.from(selectedFields).map(field => ()
               <div key={field} style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: 12,
-                marginBottom: 4,
-              }}>
+  display: 'flex',
+  justifyContent: 'space-between',
+  fontSize: 12,
+  marginBottom: 4,
+}}>
                 <span style={{ opacity: 0.7 }}>{field}:</span>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <span style={{
-                    textDecoration: 'line-through',
-                    opacity: 0.5,
-                  }}>
+  textDecoration: 'line-through',
+  opacity: 0.5,
+}}>
                     {String(node.data[field] || 'undefined')}
                   </span>
                   <span>→</span>

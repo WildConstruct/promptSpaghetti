@@ -53,6 +53,7 @@ export const SubscriptionConfigSchema = z.object({
 export type SubscriptionConfig = z.infer<typeof SubscriptionConfigSchema>;
 
 // Client Connection
+}
 interface ClientConnection {
   id: string;
   ws: WebSocket; // WebSocket interface
@@ -65,8 +66,10 @@ interface ClientConnection {
   ipAddress?: string;
   userAgent?: string;
 }
+}
 
 // Connection Statistics
+}
 interface ConnectionStats {
   totalConnections: number;
   activeConnections: number;
@@ -76,8 +79,10 @@ interface ConnectionStats {
   bytesPerSecond: number;
   errorRate: number;
 }
+}
 
 // WebSocket Server Configuration
+}
 interface WSServerConfig {
   port: number;
   heartbeatInterval: number;
@@ -88,6 +93,7 @@ interface WSServerConfig {
   enableCompression: boolean;
   enableCors: boolean;
   corsOrigins: string[];
+}
 }
 
 /**
@@ -145,6 +151,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Start WebSocket server
    */
   async start(): Promise<void> {
+
     try {
       // In production, this would use an actual WebSocket library like 'ws'
       console.log(`Starting WebSocket server on port ${this.config.port}`);
@@ -172,6 +179,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Stop WebSocket server
    */
   async stop(): Promise<void> {
+
     try {
       console.log('Stopping WebSocket server...');
 
@@ -209,6 +217,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle new client connection
    */
   async handleConnection(ws: WebSocket, request: { url?: string; headers: Record<string, string> }): Promise<void> {
+
     const clientId = this.generateClientId();
     const ipAddress = request.connection?.remoteAddress || request.socket?.remoteAddress;
     const userAgent = request.headers?.['user-agent'];
@@ -259,7 +268,7 @@ export class WebSocketStreamingServer extends EventEmitter {
         requireAuthentication: this.config.requireAuthentication,
         maxSubscriptions: this.config.maxSubscriptionsPerClient,
         heartbeatInterval: this.config.heartbeatInterval
-      },
+  }
       timestamp: Date.now()
     });
 
@@ -270,6 +279,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle client message
    */
   private async handleMessage(clientId: string, data: string | Buffer): Promise<void> {
+
     const client = this.clients.get(clientId);
     if (!client) return;
 
@@ -315,6 +325,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle client authentication
    */
   private async handleAuthentication(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
+
     try {
       const { token } = payload;
       
@@ -348,7 +359,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           authenticated: true,
           userId: authContext.userId,
           permissions: authContext.permissions
-        },
+  }
         timestamp: Date.now()
       });
 
@@ -365,6 +376,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle subscription request
    */
   private async handleSubscription(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
+
     try {
       // Check authentication if required
       if (this.config.requireAuthentication && !client.isAuthenticated) {
@@ -412,7 +424,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           subscriptionId: subscriptionConfig.subscriptionId,
           subscribed: true,
           filter: authorizedFilter
-        },
+  }
         timestamp: Date.now()
       });
 
@@ -432,6 +444,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle unsubscription request
    */
   private async handleUnsubscription(client: ClientConnection, payload: Record<string, unknown>): Promise<void> {
+
     try {
       const { subscriptionId } = payload;
       
@@ -444,7 +457,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           payload: {
             subscriptionId,
             unsubscribed: true
-          },
+  }
           timestamp: Date.now()
         });
 
@@ -462,6 +475,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle heartbeat
    */
   private async handleHeartbeat(client: ClientConnection): Promise<void> {
+
     client.lastHeartbeat = Date.now();
     
     await this.sendMessage(client, {
@@ -475,6 +489,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Handle configuration request
    */
   private async handleConfigRequest(client: ClientConnection): Promise<void> {
+
     await this.sendMessage(client, {
       type: WSMessageType.CONFIG,
       payload: {
@@ -483,7 +498,7 @@ export class WebSocketStreamingServer extends EventEmitter {
         subscriptions: Array.from(client.subscriptions.keys()),
         heartbeatInterval: this.config.heartbeatInterval,
         maxSubscriptions: this.config.maxSubscriptionsPerClient
-      },
+  }
       timestamp: Date.now()
     });
   }
@@ -526,7 +541,7 @@ export class WebSocketStreamingServer extends EventEmitter {
       filter: {}, // Subscribe to all events
       handler: (event: UnifiedAnalyticsEvent) => {
         this.broadcastEvent(event);
-      },
+  }
       priority: 500
     });
   }
@@ -535,6 +550,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Broadcast event to matching subscribers
    */
   private async broadcastEvent(event: UnifiedAnalyticsEvent): Promise<void> {
+
     const broadcastPromises: Promise<void>[] = [];
 
     for (const client of this.clients.values()) {
@@ -562,6 +578,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     subscriptionId: string,
     config: SubscriptionConfig
   ): Promise<void> {
+
     try {
       // Authorize event access if client is authenticated
       if (client.authContext) {
@@ -597,6 +614,7 @@ export class WebSocketStreamingServer extends EventEmitter {
     subscriptionId: string,
     config: SubscriptionConfig
   ): Promise<void> {
+
     if (client.eventQueue.length === 0) return;
 
     const events = client.eventQueue.splice(0, config.batchSize);
@@ -612,7 +630,7 @@ export class WebSocketStreamingServer extends EventEmitter {
           data: e.data
         })),
         batchSize: events.length
-      },
+  }
       timestamp: Date.now()
     });
   }
@@ -637,6 +655,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Send heartbeats to all clients
    */
   private async sendHeartbeats(): Promise<void> {
+
     const now = Date.now();
     const timeoutThreshold = now - this.config.connectionTimeout;
     const clientsToRemove: string[] = [];
@@ -676,6 +695,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Send message to client
    */
   private async sendMessage(client: ClientConnection, message: WSMessage): Promise<void> {
+
     if (!client.connected || !client.ws) return;
 
     try {
@@ -692,6 +712,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Send error message to client
    */
   private async sendError(client: ClientConnection, message: string, details?: Record<string, unknown>): Promise<void> {
+
     await this.sendMessage(client, {
       type: WSMessageType.ERROR,
       payload: { message, details },
@@ -703,6 +724,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Disconnect client
    */
   private async disconnectClient(clientId: string, reason: string): Promise<void> {
+
     const client = this.clients.get(clientId);
     if (client) {
       try {
@@ -768,6 +790,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Broadcast custom message to all clients
    */
   async broadcastMessage(message: WSMessage, filter?: (client: ClientConnection) => boolean): Promise<void> {
+
     const clients = filter 
       ? Array.from(this.clients.values()).filter(filter)
       : Array.from(this.clients.values());
@@ -787,6 +810,7 @@ export class WebSocketStreamingServer extends EventEmitter {
    * Force disconnect client
    */
   async forceDisconnect(clientId: string, reason: string = 'Forced disconnect'): Promise<boolean> {
+
     const client = this.clients.get(clientId);
     if (client) {
       await this.disconnectClient(clientId, reason);
@@ -818,6 +842,7 @@ export class WebSocketAnalyticsClient extends EventEmitter {
    * Connect to WebSocket server
    */
   async connect(): Promise<void> {
+
     return new Promise((resolve, reject) => {
       try {
         // In a Node.js environment, would use 'ws' library

@@ -6,6 +6,7 @@
  * storage, aggregation, analytics, and real-time updates.
  */
 import { ReactionData, ReactionSummary } from '../components/Reactions/ReactionButton';
+
 export interface ReactionAnalytics {
     contentId: string;
     timeRange: {,
@@ -51,7 +52,7 @@ export interface ReactionAnalytics {
             reactionPattern: string[];
         }>;
     };
-}
+
 export interface ReactionBehaviorInsights {
     userId: string;
     timeRange: {,
@@ -77,7 +78,7 @@ export interface ReactionBehaviorInsights {
         averageResponseTime: number;
         burstyBehavior: boolean;
     };
-}
+
 export interface ReactionTrend {
     reactionType: string;
     timeRange: {,
@@ -101,7 +102,7 @@ export interface ReactionTrend {
         cycleLength?: number;
         amplitude?: number;
     };
-}
+
 export interface BulkReactionOperation {
     operations: Array<{,
         contentId: string;
@@ -113,14 +114,14 @@ export interface BulkReactionOperation {
     batchId: string;
     timestamp: Date;
     metadata?: Record<string, unknown>;
-}
+
 export interface ReactionModerationAction {
     actionType: 'hide' | 'remove' | 'flag' | 'approve' | 'escalate';
     reactionIds: string[];
     moderatorId: string;
     reason: string;
     metadata?: Record<string, unknown>;
-}
+
 export interface ReactionConfig {
     enabledReactions: string[];
     maxReactionsPerUser: number;
@@ -140,7 +141,6 @@ export interface ReactionConfig {
         maxReactions?: number;
         requireAuth?: boolean;
     }>;
-}
 /**
  * Reaction Service
  *
@@ -230,6 +230,6 @@ export declare class ReactionService {
     private calculateContentAffinity;
     private analyzeBehaviorPatterns;
     private analyzeEngagementTiming;
-}
+
 export default ReactionService;
 //# sourceMappingURL=ReactionService.d.ts.map

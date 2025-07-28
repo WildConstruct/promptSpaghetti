@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
 
+}
 export interface TemporaryLockoutConfig {
   enabled: boolean;
   baseDuration: number; // seconds
@@ -19,7 +20,9 @@ export interface TemporaryLockoutConfig {
   exemptIPs: string[];
   exemptUserAgents: string[];
 }
+}
 
+}
 export interface LockoutTrigger {
   id: string;
   name: string;
@@ -32,7 +35,9 @@ export interface LockoutTrigger {
   customDuration?: number; // override default duration
   description: string;
 }
+}
 
+}
 export interface TemporaryLockout {
   id: string;
   userId: string;
@@ -47,6 +52,7 @@ export interface TemporaryLockout {
     duration: number; // seconds
     gracePeriod: number; // seconds
     remainingTime: number; // seconds (calculated dynamically)
+}
   };
   
   status: 'pending' | 'active' | 'expired' | 'released' | 'overridden';
@@ -85,6 +91,7 @@ export interface TemporaryLockout {
   };
 }
 
+}
 export interface LockoutAttempt {
   id: string;
   userId: string;
@@ -102,6 +109,7 @@ export interface LockoutAttempt {
     responseTime?: number;
     errorType?: string;
     blocked: boolean;
+}
   };
   
   triggers: {
@@ -117,6 +125,7 @@ export interface LockoutAttempt {
   };
 }
 
+}
 export interface LockoutWarning {
   id: string;
   userId: string;
@@ -129,6 +138,7 @@ export interface LockoutWarning {
     issuedAt: Date;
     expiresAt: Date;
     acknowledgedAt?: Date;
+}
   };
   
   thresholds: {
@@ -164,6 +174,7 @@ export class TemporaryLockoutService extends EventEmitter {
    * Register a lockout trigger
    */
   async registerTrigger(trigger: Omit<LockoutTrigger, 'id'>): Promise<LockoutTrigger> {
+
     const newTrigger: LockoutTrigger = {
       ...trigger,
       id: this.generateTriggerId()
@@ -206,6 +217,7 @@ export class TemporaryLockoutService extends EventEmitter {
     restrictions: string[];
     message?: string;
   }> {
+
     // Check if user is exempt
     if (await this.isUserExempt(userId, context.ipAddress, context.userAgent)) {
       return {
@@ -297,6 +309,7 @@ export class TemporaryLockoutService extends EventEmitter {
     approvalRequestId?: string;
     message: string;
   }> {
+
     const lockout = this.activeLockouts.get(userId);
     if (!lockout) {
       return {
@@ -380,6 +393,7 @@ export class TemporaryLockoutService extends EventEmitter {
     message: string;
     lockout?: TemporaryLockout;
   }> {
+
     const lockout = this.activeLockouts.get(userId);
     if (!lockout) {
       return {
@@ -453,6 +467,7 @@ export class TemporaryLockoutService extends EventEmitter {
     nextLockoutLevel: number;
     timeSinceLastLockout?: number;
   }> {
+
     const lockout = this.activeLockouts.get(userId);
     const warnings = this.activeWarnings.get(userId) || [];
     const history = this.lockoutHistory.get(userId) || [];
@@ -526,7 +541,7 @@ export class TemporaryLockoutService extends EventEmitter {
         severity: 'medium',
         resetOnSuccess: true,
         description: 'Lock account after multiple failed login attempts'
-      },
+  }
       {
         name: 'API Rate Limit Violation',
         type: 'rate_limit',
@@ -537,7 +552,7 @@ export class TemporaryLockoutService extends EventEmitter {
         resetOnSuccess: false,
         customDuration: 300, // 5 minutes
         description: 'Temporary lockout for API rate limit violations'
-      },
+  }
       {
         name: 'Suspicious Activity Detection',
         type: 'suspicious_activity',
@@ -547,7 +562,7 @@ export class TemporaryLockoutService extends EventEmitter {
         severity: 'high',
         resetOnSuccess: false,
         description: 'Lock account for suspicious activity patterns'
-      },
+  }
       {
         name: 'Security Violation',
         type: 'security_violation',
@@ -665,6 +680,7 @@ export class TemporaryLockoutService extends EventEmitter {
     violationData: Record<string, any>,
     context: any
   ): Promise<TemporaryLockout> {
+
     const level = this.calculateLockoutLevel(userId);
     const duration = this.calculateLockoutDuration(trigger, level);
     const gracePeriod = this.calculateGracePeriod(trigger, level);
@@ -683,7 +699,7 @@ export class TemporaryLockoutService extends EventEmitter {
         duration,
         gracePeriod,
         remainingTime: duration
-      },
+  }
       status: gracePeriod > 0 ? 'pending' : 'active',
       level,
       context: {
@@ -693,12 +709,12 @@ export class TemporaryLockoutService extends EventEmitter {
         sessionId: context.sessionId,
         triggerData: violationData,
         violationCount: violationData.violationCount
-      },
+  }
       recovery: {
         allowEarlyRelease: trigger.severity !== 'critical',
         allowGraceExtension: level === 1,
         requiresApproval: trigger.severity === 'critical' || level > 3
-      },
+  }
       metadata: {
         deviceFingerprint: await this.generateDeviceFingerprint(context.userAgent, context.ipAddress),
         geolocation: await this.getGeolocation(context.ipAddress),
@@ -746,6 +762,7 @@ export class TemporaryLockoutService extends EventEmitter {
     warningData: Record<string, any>,
     context: any
   ): Promise<LockoutWarning> {
+
     const warning: LockoutWarning = {
       id: this.generateWarningId(),
       userId,
@@ -756,12 +773,12 @@ export class TemporaryLockoutService extends EventEmitter {
       timing: {
         issuedAt: new Date(),
         expiresAt: new Date(Date.now() + trigger.timeWindow * 1000)
-      },
+  }
       thresholds: {
         current: warningData.currentCount,
         maximum: warningData.threshold,
         remaining: warningData.remaining
-      },
+  }
       actions: {
         required: [],
         recommended: ['Review account activity', 'Change password if compromised'],
@@ -871,6 +888,7 @@ export class TemporaryLockoutService extends EventEmitter {
   }
 
   private async isUserExempt(userId: string, ipAddress: string, userAgent: string): Promise<boolean> {
+
     // Check IP exemptions
     if (this.config.exemptIPs.includes(ipAddress)) {
       return true;
@@ -893,6 +911,7 @@ export class TemporaryLockoutService extends EventEmitter {
     attemptType: LockoutAttempt['attemptType'],
     context: any
   ): Promise<LockoutAttempt> {
+
     const attempt: LockoutAttempt = {
       id: this.generateAttemptId(),
       userId,
@@ -909,12 +928,12 @@ export class TemporaryLockoutService extends EventEmitter {
         responseTime: context.responseTime,
         errorType: context.errorType,
         blocked: false
-      },
+  }
       triggers: {
         evaluated: [],
         triggered: [],
         warnings: []
-      },
+  }
       consequences: {}
     };
 
@@ -1092,19 +1111,23 @@ export class TemporaryLockoutService extends EventEmitter {
 
   // Additional helper methods for notifications, approvals, etc.
   private async sendLockoutNotification(userId: string, lockout: TemporaryLockout): Promise<void> {
+
     console.log(`Sending lockout notification to user ${userId} for ${lockout.triggerType}`);
     lockout.metadata.notificationsSent.push('lockout_created');
   }
 
   private async sendWarningNotification(userId: string, warning: LockoutWarning): Promise<void> {
+
     console.log(`Sending warning notification to user ${userId}: ${warning.message}`);
   }
 
   private async sendReleaseNotification(userId: string, lockout: TemporaryLockout, releaseType: string, releasedBy: string): Promise<void> {
+
     console.log(`Sending release notification to user ${userId}, released by ${releasedBy}`);
   }
 
   private async createApprovalRequest(lockout: TemporaryLockout, reason: string, requestedBy: string, context: any): Promise<string> {
+
     const approvalId = this.generateApprovalId();
     // Implementation would create approval request in database/queue
     console.log(`Created approval request ${approvalId} for lockout ${lockout.id}`);
@@ -1112,20 +1135,24 @@ export class TemporaryLockoutService extends EventEmitter {
   }
 
   private async canAutoApproveRelease(lockout: TemporaryLockout, reason: string): Promise<boolean> {
+
     // Implementation would check auto-approval criteria
     return lockout.severity === 'low' && lockout.level === 1;
   }
 
   private async generateDeviceFingerprint(userAgent: string, ipAddress: string): Promise<string> {
+
     return crypto.createHash('sha256').update(`${userAgent}-${ipAddress}`).digest('hex');
   }
 
   private async getGeolocation(ipAddress: string): Promise<string> {
+
     // Mock implementation - would integrate with geolocation service
     return 'Unknown Location';
   }
 
   private async validateTrigger(trigger: LockoutTrigger): Promise<void> {
+
     if (trigger.threshold <= 0) {
       throw new Error('Trigger threshold must be positive');
     }
@@ -1156,6 +1183,7 @@ export class TemporaryLockoutService extends EventEmitter {
   }
 
   private async logEvent(action: string, performedBy: string, metadata: any): Promise<void> {
+
     console.log(`Temporary Lockout Event: ${action} by ${performedBy}`, metadata);
   }
 

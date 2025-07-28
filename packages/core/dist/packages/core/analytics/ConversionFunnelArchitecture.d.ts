@@ -15,9 +15,9 @@ export interface EnhancedConversionEvent extends ConversionEvent {
     deviceFingerprint?: string;
     crossDeviceUserId?: string;
     attributionData: {
-        touchpoints: TouchPoint[];
+        touchpoints: TouchPoint;
         primaryAttribution: AttributionModel;
-        assistedAttribution: AttributionModel[];
+        assistedAttribution: AttributionModel;
     };
     privacyConsent: {
         tracking: boolean;
@@ -57,16 +57,16 @@ export interface EnhancedConversionFunnel extends ConversionFunnel {
     attributionWindow: number;
     conversionDefinition: {
         primaryGoal: ConversionGoal;
-        microConversions: ConversionGoal[];
-        macroConversions: ConversionGoal[];
+        microConversions: ConversionGoal;
+        macroConversions: ConversionGoal;
     };
     segmentation: {
-        userSegments: UserSegment[];
-        cohortDefinitions: CohortDefinition[];
+        userSegments: UserSegment;
+        cohortDefinitions: CohortDefinition;
     };
     anomalyDetection: {
         enabled: boolean;
-        thresholds: AnomalyThreshold[];
+        thresholds: AnomalyThreshold;
         alerting: AlertingConfig;
     };
 }
@@ -83,7 +83,7 @@ export interface UserSegment {
     id: string;
     name: string;
     definition: {
-        rules: SegmentRule[];
+        rules: SegmentRule;
         operator: 'AND' | 'OR';
     };
     size: number;
@@ -100,7 +100,7 @@ export interface CohortDefinition {
     criteriaEvent: string;
     criteriaWindow: number;
     analysisWindow: number;
-    retentionPeriods: number[];
+    retentionPeriods: number;
 }
 export interface AnomalyThreshold {
     metric: 'conversion_rate' | 'drop_off_rate' | 'time_to_convert' | 'volume';
@@ -110,13 +110,13 @@ export interface AnomalyThreshold {
 }
 export interface AlertingConfig {
     channels: ('email' | 'slack' | 'webhook' | 'dashboard')[];
-    recipients: string[];
+    recipients: string;
     frequency: 'immediate' | 'hourly' | 'daily';
     cooldown: number;
 }
 export interface CrossDeviceIdentity {
     primaryUserId: string;
-    linkedDevices: DeviceIdentity[];
+    linkedDevices: DeviceIdentity;
     confidence: number;
     linkingMethod: 'deterministic' | 'probabilistic' | 'hybrid';
     privacyCompliant: boolean;
@@ -135,7 +135,7 @@ export interface DeviceIdentity {
     userAgent: string;
     ipAddress?: string;
     linkedAt: number;
-    linkingSignals: LinkingSignal[];
+    linkingSignals: LinkingSignal;
 }
 export interface LinkingSignal {
     type: 'login' | 'email' | 'phone' | 'behavioral' | 'temporal';
@@ -175,24 +175,20 @@ export interface ConversionPatternInsight {
         at_risk: UserJourneyPattern;
     };
     recommendations: {
-        optimization: string[];
-        targeting: string[];
-        personalization: string[];
+        optimization: string;
+        targeting: string;
+        personalization: string;
     };
 }
 export interface UserJourneyPattern {
-    pattern: string[];
+    pattern: string;
     frequency: number;
     conversionRate: number;
     averageTimeToConvert: number;
     averageValue: number;
-    dropOffPoints: string[];
+    dropOffPoints: string;
     characteristics: Record<string, any>;
 }
-/**
- * Enhanced Conversion Architecture Manager
- * Orchestrates all conversion tracking components with privacy compliance
- */
 export declare class ConversionArchitectureManager {
     private funnels;
     private crossDeviceIdentities;
@@ -200,44 +196,12 @@ export declare class ConversionArchitectureManager {
     private privacySettings;
     constructor();
     private initializeDefaultArchitecture;
-    private setupPrivacyCompliance;
     /**
      * Create enhanced conversion event with attribution and privacy compliance
      */
-    createEnhancedEvent(baseEvent: ConversionEvent, touchpoints: TouchPoint[], privacyConsent: EnhancedConversionEvent['privacyConsent']): EnhancedConversionEvent;
-    /**
-     * Calculate multi-touch attribution
-     */
-    private calculateAttribution;
-    private calculateFirstTouchAttribution;
-    private calculateLastTouchAttribution;
-    private calculateLinearAttribution;
-    private calculateTimeDecayAttribution;
-    private calculatePositionBasedAttribution;
-    private selectPrimaryAttribution;
-    private generateDeviceFingerprint;
-    private getCrossDeviceUserId;
-    private generateStreamId;
-    private generateBatchId;
-    /**
-     * Get enhanced funnel configuration
-     */
-    getEnhancedFunnel(funnelId: string): EnhancedConversionFunnel | null;
-    /**
-     * Get cross-device identity for user
-     */
-    getCrossDeviceIdentity(userId: string): CrossDeviceIdentity | null;
-    /**
-     * Create cross-device identity link
-     */
-    linkDeviceIdentity(userId: string, deviceIdentity: DeviceIdentity, linkingSignals: LinkingSignal[]): boolean;
-    private calculateLinkingConfidence;
-    private getSignalWeight;
-    /**
-     * Analyze conversion patterns and generate insights
-     */
-    analyzeConversionPatterns(funnelId: string): ConversionPatternInsight | null;
+    createEnhancedEvent(baseEvent: ConversionEvent): any;
+    touchpoints: TouchPoint;
+    privacyConsent: EnhancedConversionEvent['privacyConsent'];
+    EnhancedConversionEvent: any;
 }
-export declare const conversionArchitecture: ConversionArchitectureManager;
-export default conversionArchitecture;
 //# sourceMappingURL=ConversionFunnelArchitecture.d.ts.map

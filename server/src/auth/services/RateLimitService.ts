@@ -12,6 +12,7 @@ export class RateLimitService implements IRateLimitService {
   }
 
   async checkRateLimit(key: string, rule: RateLimitRule): Promise<RateLimitResult> {
+
     const rateLimitKey = `rate_limit:${key}`;
     
     try {
@@ -41,6 +42,7 @@ export class RateLimitService implements IRateLimitService {
   }
 
   async resetRateLimit(key: string): Promise<void> {
+
     const rateLimitKey = `rate_limit:${key}`;
     
     try {
@@ -68,6 +70,7 @@ export class RateLimitService implements IRateLimitService {
 
   // Get rate limit status without incrementing
   async getRateLimitStatus(key: string, rule: RateLimitRule): Promise<RateLimitResult> {
+
     const rateLimitKey = `rate_limit:${key}`;
     
     try {
@@ -105,6 +108,7 @@ export class RateLimitService implements IRateLimitService {
     endpoint: string,
     rule: RateLimitRule
   ): Promise<RateLimitResult> {
+
     const key = `ip:${ip}:${endpoint}`;
     return this.checkRateLimit(key, rule);
   }
@@ -115,6 +119,7 @@ export class RateLimitService implements IRateLimitService {
     endpoint: string,
     rule: RateLimitRule
   ): Promise<RateLimitResult> {
+
     const key = `user:${userId}:${endpoint}`;
     return this.checkRateLimit(key, rule);
   }
@@ -124,6 +129,7 @@ export class RateLimitService implements IRateLimitService {
     endpoint: string,
     rule: RateLimitRule
   ): Promise<RateLimitResult> {
+
     const key = `global:${endpoint}`;
     return this.checkRateLimit(key, rule);
   }
@@ -134,6 +140,7 @@ export class RateLimitService implements IRateLimitService {
     maxAttempts: number,
     windowSeconds: number
   ): Promise<void> {
+
     const rule: RateLimitRule = {
       window: windowSeconds,
       max: maxAttempts
@@ -154,6 +161,7 @@ export class RateLimitService implements IRateLimitService {
     avgResponseTime: number,
     targetResponseTime: number = 200
   ): Promise<RateLimitResult> {
+
     // Adjust rate limit based on performance
     let adjustedMax = baseRule.max;
     
@@ -183,6 +191,7 @@ export class RateLimitService implements IRateLimitService {
     refillRate: number, // tokens per second
     tokensRequested: number = 1
   ): Promise<RateLimitResult> {
+
     const bucketKey = `bucket:${key}`;
     
     try {
@@ -219,7 +228,7 @@ export class RateLimitService implements IRateLimitService {
         JSON.stringify({
           tokens,
           lastRefill: now
-        })
+  }
       );
       
       return {
@@ -242,6 +251,7 @@ export class RateLimitService implements IRateLimitService {
 
   // Clean up expired rate limit data
   async cleanup(): Promise<void> {
+
     try {
       const client = this.redis.getClient();
       const pattern = 'rate_limit:*';

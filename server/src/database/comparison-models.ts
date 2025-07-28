@@ -230,11 +230,13 @@ export type ViewMode = z.infer<typeof ViewModeSchema>;
 export type HighlightMode = z.infer<typeof HighlightModeSchema>;
 
 // Graph data for comparison
+}
 export interface GraphData {
   id: string;
   nodes: Array<{
     id: string;
     type: string;
+}
     position: { x: number; y: number };
     data: Record<string, unknown>;
     [key: string]: unknown;
@@ -250,6 +252,7 @@ export interface GraphData {
 }
 
 // Comparison result with full details
+}
 export interface DetailedComparison extends GraphComparison {
   source_data: GraphData;
   target_data: GraphData;

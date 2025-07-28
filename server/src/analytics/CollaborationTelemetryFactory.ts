@@ -12,10 +12,12 @@ import { CollaborationTelemetryService, CollaborationTelemetryServiceConfig } fr
 import { getDatabase } from '../database/connection';
 import { AnalyticsDAO } from '../database/analytics-dao';
 
+}
 export interface CollaborationTelemetrySetup {
   telemetryService: CollaborationTelemetryService;
   analyticsCollector: AnalyticsCollector;
   analyticsWebSocketServer: AnalyticsWebSocketServer;
+}
 }
 
 export class CollaborationTelemetryFactory {
@@ -27,7 +29,7 @@ export class CollaborationTelemetryFactory {
     wsServer: WebSocketServer,
     config: Partial<CollaborationTelemetryServiceConfig> = {}
   ): Promise<CollaborationTelemetrySetup> {
-    
+
     console.log('🚀 Initializing Epic 23 collaboration telemetry system...');
 
     try {
@@ -116,8 +118,7 @@ export class CollaborationTelemetryFactory {
             details: error instanceof Error ? error.message : String(error)
           });
         }
-      },
-
+  }
       // Epic 23 status endpoint
       '/api/collaboration/epic23/status': async (request: any, reply: any) => {
         try {
@@ -133,8 +134,7 @@ export class CollaborationTelemetryFactory {
             details: error instanceof Error ? error.message : String(error)
           });
         }
-      },
-
+  }
       // Health check for telemetry system
       '/api/collaboration/telemetry/health': async (request: any, reply: any) => {
         try {
@@ -145,7 +145,7 @@ export class CollaborationTelemetryFactory {
               telemetryService: setup.telemetryService ? 'active' : 'inactive',
               analyticsCollector: setup.analyticsCollector ? 'active' : 'inactive',
               analyticsWebSocket: setup.analyticsWebSocketServer ? 'active' : 'inactive'
-            },
+  }
             metrics: {
               // Add any health metrics here
             }
@@ -170,6 +170,7 @@ export class CollaborationTelemetryFactory {
    * Cleanup all telemetry resources
    */
   static async cleanup(setup: CollaborationTelemetrySetup): Promise<void> {
+
     console.log('🧹 Cleaning up collaboration telemetry system...');
 
     try {

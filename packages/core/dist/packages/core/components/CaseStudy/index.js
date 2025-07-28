@@ -17,39 +17,39 @@ export const CASE_STUDY_DEFAULTS = {
     showSort: true,
     showMetrics: true,
     showTemplates: true,
-    showAuthor: true
+    showAuthor: true,
 };
 // Filter presets for common use cases
 export const CASE_STUDY_FILTER_PRESETS = {
     featured: {
         featuredOnly: true,
-        status: ['featured']
+        status: ['featured'],
     },
     beginner: {
-        difficulty: ['beginner']
+        difficulty: ['beginner'],
     },
     advanced: {
-        difficulty: ['advanced', 'expert']
+        difficulty: ['advanced', 'expert'],
     },
     templateSuccess: {
-        type: ['template-success']
+        type: ['template-success'],
     },
     roiAnalysis: {
-        type: ['roi-analysis']
+        type: ['roi-analysis'],
     },
     industryShowcase: {
-        type: ['industry-showcase']
+        type: ['industry-showcase'],
     },
     recentlyPublished: {
-        publishedAfter: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+        publishedAfter: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    // Sort presets
+    const: CASE_STUDY_SORT_PRESETS = {
+        newest: { field: 'publishedAt', direction: 'desc' },
+        oldest: { field: 'publishedAt', direction: 'asc' },
+        mostViewed: { field: 'views', direction: 'desc' },
+        mostLiked: { field: 'likes', direction: 'desc' },
+        mostHelpful: { field: 'helpfulVotes', direction: 'desc' },
+        alphabetical: { field: 'title', direction: 'asc' }
     }
-};
-// Sort presets
-export const CASE_STUDY_SORT_PRESETS = {
-    newest: { field: 'publishedAt', direction: 'desc' },
-    oldest: { field: 'publishedAt', direction: 'asc' },
-    mostViewed: { field: 'views', direction: 'desc' },
-    mostLiked: { field: 'likes', direction: 'desc' },
-    mostHelpful: { field: 'helpfulVotes', direction: 'desc' },
-    alphabetical: { field: 'title', direction: 'asc' }
 };

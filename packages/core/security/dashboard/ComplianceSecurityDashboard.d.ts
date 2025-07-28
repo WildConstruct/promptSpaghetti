@@ -46,14 +46,14 @@ export declare enum ComplianceFramework {
     HIPAA = "hipaa",
     PCI_DSS = "pci_dss",
     FEDRAMP = "fedramp"
-}
+
 export declare enum ComplianceStatus {
     COMPLIANT = "compliant",
     PARTIALLY_COMPLIANT = "partially_compliant",
     NON_COMPLIANT = "non_compliant",
     NOT_ASSESSED = "not_assessed",
     IN_REMEDIATION = "in_remediation"
-}
+
 export interface ComplianceRequirement {
     id: string;
     framework: ComplianceFramework;
@@ -68,7 +68,7 @@ export interface ComplianceRequirement {
     findings: Finding[];
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     businessImpact: string;
-}
+
 export interface Evidence {
     id: string;
     type: 'document' | 'screenshot' | 'log' | 'certificate' | 'policy';
@@ -79,7 +79,7 @@ export interface Evidence {
     location: string;
     owner: string;
     status: 'current' | 'outdated' | 'missing';
-}
+
 export interface Finding {
     id: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
@@ -92,7 +92,7 @@ export interface Finding {
     status: 'open' | 'in_progress' | 'resolved' | 'accepted_risk';
     owner: string;
     estimatedEffort: string;
-}
+
 export interface AuditCycle {
     id: string;
     framework: ComplianceFramework;
@@ -106,7 +106,7 @@ export interface AuditCycle {
     scope: string[];
     findings: Finding[];
     reportUrl?: string;
-}
+
 export interface ComplianceMetrics {
     overallScore: number;
     byFramework: Record<ComplianceFramework, {
@@ -134,7 +134,7 @@ export interface ComplianceMetrics {
         missing: number;
         expiringWithin30Days: number;
     };
-}
+
 export interface ComplianceSecurityDashboardProps {
     metrics: ComplianceMetrics;
     requirements: ComplianceRequirement[];
@@ -146,7 +146,6 @@ export interface ComplianceSecurityDashboardProps {
     onRequirementUpdate?: (requirementId: string, status: ComplianceStatus) => void;
     onGenerateReport?: (framework: ComplianceFramework, format: string) => void;
     onScheduleAudit?: (framework: ComplianceFramework) => void;
-}
 /**
  * Compliance Security Dashboard Component
  */

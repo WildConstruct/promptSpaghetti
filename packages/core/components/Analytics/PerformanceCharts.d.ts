@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Performance charts props
  */
+
 export interface PerformanceChartsProps {
     analyticsClient: AnalyticsClient;
     timeRange: {,
@@ -11,7 +12,6 @@ export interface PerformanceChartsProps {
     };
     userId?: number;
     organizationId?: number;
-}
 /**
  * Performance charts component
  */

@@ -23,6 +23,7 @@ export class SchedulingDAO {
   constructor(private db: Database) {}
 
   async initializeTables(): Promise<void> {
+
     const tables = [
       // Feature toggle schedules
       `CREATE TABLE IF NOT EXISTS feature_toggle_schedules (
@@ -186,6 +187,7 @@ export class SchedulingDAO {
 
   // Schedule CRUD operations
   async createSchedule(request: CreateScheduleRequest, createdBy: string): Promise<FeatureToggleSchedule> {
+
     const id = `schedule_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -253,6 +255,7 @@ export class SchedulingDAO {
   }
 
   async getSchedule(id: string): Promise<FeatureToggleSchedule | null> {
+
     return new Promise((resolve, reject) => {
       this.db.get(
         'SELECT * FROM feature_toggle_schedules WHERE id = ?',
@@ -271,6 +274,7 @@ export class SchedulingDAO {
   }
 
   async getSchedulesByToggle(toggleId: string): Promise<FeatureToggleSchedule[]> {
+
     return new Promise((resolve, reject) => {
       this.db.all(
         'SELECT * FROM feature_toggle_schedules WHERE toggle_id = ? ORDER BY priority DESC, start_time ASC',
@@ -287,6 +291,7 @@ export class SchedulingDAO {
   }
 
   async querySchedules(query: ScheduleQuery): Promise<{ schedules: FeatureToggleSchedule[]; total: number }> {
+
     let sql = 'SELECT * FROM feature_toggle_schedules WHERE 1=1';
     let countSql = 'SELECT COUNT(*) as total FROM feature_toggle_schedules WHERE 1=1';
     const params: unknown[] = [];
@@ -351,13 +356,14 @@ export class SchedulingDAO {
           if (err) reject(err);
           else resolve(row.total);
         });
-      })
+  }
     ]);
 
     return { schedules, total };
   }
 
   async updateSchedule(request: UpdateScheduleRequest, updatedBy: string): Promise<FeatureToggleSchedule | null> {
+
     const existing = await this.getSchedule(request.id);
     if (!existing) return null;
 
@@ -408,6 +414,7 @@ export class SchedulingDAO {
   }
 
   async deleteSchedule(id: string): Promise<boolean> {
+
     return new Promise((resolve, reject) => {
       this.db.run('DELETE FROM feature_toggle_schedules WHERE id = ?', [id], function(err) {
         if (err) reject(err);
@@ -418,6 +425,7 @@ export class SchedulingDAO {
 
   // Schedule execution operations
   async createExecution(execution: Omit<ScheduleExecution, 'id' | 'createdAt'>): Promise<ScheduleExecution> {
+
     const id = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -461,6 +469,7 @@ export class SchedulingDAO {
   }
 
   async getExecutionsBySchedule(scheduleId: string, limit = 100): Promise<ScheduleExecution[]> {
+
     return new Promise((resolve, reject) => {
       this.db.all(
         'SELECT * FROM schedule_executions WHERE schedule_id = ? ORDER BY execution_time DESC LIMIT ?',
@@ -475,6 +484,7 @@ export class SchedulingDAO {
 
   // Schedule conflict operations
   async createConflict(conflict: Omit<ScheduleConflict, 'id' | 'detectedAt'>): Promise<ScheduleConflict> {
+
     const id = `conflict_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -512,6 +522,7 @@ export class SchedulingDAO {
   }
 
   async getUnresolvedConflicts(): Promise<ScheduleConflict[]> {
+
     return new Promise((resolve, reject) => {
       this.db.all(
         'SELECT * FROM schedule_conflicts WHERE resolved_at IS NULL ORDER BY severity DESC, detected_at ASC',
@@ -525,6 +536,7 @@ export class SchedulingDAO {
 
   // Analytics
   async getScheduleAnalytics(startDate?: Date, endDate?: Date): Promise<ScheduleAnalytics> {
+
     const params: unknown[] = [];
     let timeFilter = '';
 
@@ -574,8 +586,8 @@ export class SchedulingDAO {
               else resolve(row);
             });
           }
-        })
-      )
+  }
+
     );
 
     return {

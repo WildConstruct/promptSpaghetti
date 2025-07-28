@@ -30,6 +30,7 @@ export const HistoricalQuerySchema = z.object({
 export type HistoricalQuery = z.infer<typeof HistoricalQuerySchema>;
 
 // Historical Data Point
+}
 export interface HistoricalDataPoint {
   timestamp: number;
   value: number;
@@ -39,15 +40,18 @@ export interface HistoricalDataPoint {
     distinctSessions: number;
     topSources: string[];
     aggregatedFrom: string; // granularity used
+}
   };
 }
 
 // Time Series Data
+}
 export interface TimeSeriesData {
   query: HistoricalQuery;
   dataPoints: HistoricalDataPoint[];
   statistics: {
     totalPoints: number;
+}
     timeRange: { start: number; end: number };
     aggregatedEvents: number;
     queryExecutionTime: number;
@@ -60,6 +64,7 @@ export interface TimeSeriesData {
 }
 
 // Retention Policy Configuration
+}
 export interface RetentionPolicy {
   id: string;
   name: string;
@@ -69,7 +74,9 @@ export interface RetentionPolicy {
   lastExecuted?: number;
   nextExecution?: number;
 }
+}
 
+}
 export interface RetentionRule {
   eventTypes: AnalyticsEventType[];
   categories: string[];
@@ -80,10 +87,12 @@ export interface RetentionRule {
     minSeverity?: string;
     excludeSources?: string[];
     preserveUserData?: boolean;
+}
   };
 }
 
 // Archival Configuration
+}
 export interface ArchivalConfig {
   enabled: boolean;
   compressionEnabled: boolean;
@@ -92,14 +101,17 @@ export interface ArchivalConfig {
   batchSize: number;
   maxConcurrentOperations: number;
 }
+}
 
 // Historical Analytics Performance Metrics
+}
 export interface HistoricalAnalyticsMetrics {
   queryPerformance: {
     averageQueryTime: number;
     slowQueries: number;
     cachedQueries: number;
     totalQueries: number;
+}
   };
   dataVolume: {
     totalEvents: number;
@@ -149,6 +161,7 @@ export class HistoricalAnalyticsService {
    * Execute historical analytics query with optimization and caching
    */
   async queryHistoricalData(query: HistoricalQuery): Promise<TimeSeriesData> {
+
     const startTime = Date.now();
     
     // Validate query
@@ -179,10 +192,10 @@ export class HistoricalAnalyticsService {
           timeRange: { 
             start: validatedQuery.startDate, 
             end: validatedQuery.endDate 
-          },
+  }
           aggregatedEvents: dataPoints.reduce((sum, point) => sum + (point.metadata?.count || 1), 0),
           queryExecutionTime: queryTime
-        },
+  }
         cacheInfo: { cached: false, cacheKey, ttl: 0 }
       };
 
@@ -217,6 +230,7 @@ export class HistoricalAnalyticsService {
    * Execute optimized query with indexing and aggregation
    */
   private async executeOptimizedQuery(query: HistoricalQuery): Promise<HistoricalDataPoint[]> {
+
     const timeRange = query.endDate - query.startDate;
     const granularityMs = this.getGranularityMs(query.granularity);
     const buckets = Math.ceil(timeRange / granularityMs);
@@ -337,6 +351,7 @@ export class HistoricalAnalyticsService {
     'id'>,
     immediateExecution: boolean = false
   ): Promise<string> {
+
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     const fullPolicy: RetentionPolicy = {
@@ -353,6 +368,7 @@ export class HistoricalAnalyticsService {
    * Execute retention policies
    */
   async executeRetentionPolicies(): Promise<{ processed: number; archived: number; deleted: number }> {
+
     let totalProcessed = 0;
     let totalArchived = 0;
     let totalDeleted = 0;
@@ -418,6 +434,7 @@ export class HistoricalAnalyticsService {
    * Archive events with compression and optional encryption
    */
   private async archiveEvents(events: UnifiedAnalyticsEvent[], compressionLevel: string): Promise<number> {
+
     if (!this.archivalConfig.enabled) return 0;
 
     try {
@@ -457,6 +474,7 @@ export class HistoricalAnalyticsService {
    * Get comprehensive analytics on historical data performance and volume
    */
   async getHistoricalAnalyticsMetrics(): Promise<HistoricalAnalyticsMetrics> {
+
     // Update data volume metrics
     const totalEvents = await this.eventRepository.count();
     const stats = await this.eventRepository.getStatistics();
@@ -471,6 +489,7 @@ export class HistoricalAnalyticsService {
    * Optimize historical data storage and indexing
    */
   async optimizeHistoricalStorage(): Promise<{ optimized: boolean; improvements: string[] }> {
+
     const improvements: string[] = [];
 
     try {
@@ -514,6 +533,7 @@ export class HistoricalAnalyticsService {
     limit: number = 100, 
     offset: number = 0
   ): Promise<UnifiedAnalyticsEvent[]> {
+
     const historicalFilter: EventFilter = {
       ...filter,
       startTime: startDate,
@@ -537,14 +557,14 @@ export class HistoricalAnalyticsService {
         slowQueries: 0,
         cachedQueries: 0,
         totalQueries: 0
-      },
+  }
       dataVolume: {
         totalEvents: 0,
         archivedEvents: 0,
         deletedEvents: 0,
         compressionRatio: 0,
         storageSize: 0
-      },
+  }
       retentionExecution: {
         lastRunTime: 0,
         eventsProcessed: 0,
@@ -556,8 +576,7 @@ export class HistoricalAnalyticsService {
 
   private initializeDefaultRetentionPolicies(): void {
     // Default retention policies are not created automatically
-    // They will be created on demand via createRetentionPolicy()
-  }
+    // They will be created on demand via createRetentionPolicy(}
 
   private generateCacheKey(query: HistoricalQuery): string {
     return `hist_${query.startDate}_${query.endDate}_${query.granularity}_${query.aggregationType}_${JSON.stringify(query.filter || {})}_${query.limit}_${query.offset}`;

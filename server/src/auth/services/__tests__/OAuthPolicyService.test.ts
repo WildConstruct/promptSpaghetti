@@ -142,7 +142,7 @@ describe('OAuthPolicyService', () => {
           policyType: 'OAUTH_CLIENT_REGISTRATION',
           frameworks: ['OAuth2.1', 'GDPR'],
           customizations: ['environment', 'securityLevel']
-        },
+  }
         userId,
         severity: 'MEDIUM'
       });
@@ -165,7 +165,7 @@ describe('OAuthPolicyService', () => {
           templateId,
           error: 'Template not found',
           customizations: []
-        },
+  }
         userId,
         severity: 'HIGH'
       });
@@ -226,7 +226,7 @@ describe('OAuthPolicyService', () => {
           compliant: true,
           violationCount: 0,
           enforcementActions: 0
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -259,7 +259,7 @@ describe('OAuthPolicyService', () => {
             actualValue: ['http://localhost/callback'],
             expectedValue: ['https://...'],
             remediationSuggestion: 'Update redirect URIs to use HTTPS'
-          },
+  }
           {
             ruleId: 'PKCE-REQUIRED-PUBLIC',
             title: 'PKCE Required for Public Clients',
@@ -286,7 +286,7 @@ describe('OAuthPolicyService', () => {
           compliant: false,
           violationCount: 2,
           enforcementActions: expect.any(Number)
-        },
+  }
         userId,
         severity: 'HIGH'
       });
@@ -319,7 +319,7 @@ describe('OAuthPolicyService', () => {
           clientId: oauthConfig.clientId,
           policyType: 'CLIENT_REGISTRATION',
           error: 'Failed to load rules'
-        },
+  }
         userId,
         severity: 'HIGH'
       });
@@ -369,7 +369,7 @@ describe('OAuthPolicyService', () => {
           compliant: true,
           tokenTtl: tokenConfig.accessTokenTtl,
           rotationRequired: tokenConfig.rotationRequired
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -430,7 +430,7 @@ describe('OAuthPolicyService', () => {
           compliant: false,
           tokenTtl: tokenConfig.accessTokenTtl,
           rotationRequired: tokenConfig.rotationRequired
-        },
+  }
         userId,
         severity: 'MEDIUM'
       });
@@ -482,7 +482,7 @@ describe('OAuthPolicyService', () => {
               required: true,
               granted: true,
               timestamp: expect.any(Date)
-            },
+  }
             {
               consentId: 'oauth-profile',
               purpose: 'profile',
@@ -490,7 +490,7 @@ describe('OAuthPolicyService', () => {
               required: false,
               granted: true,
               timestamp: expect.any(Date)
-            },
+  }
             {
               consentId: 'oauth-email',
               purpose: 'email',
@@ -500,7 +500,7 @@ describe('OAuthPolicyService', () => {
               timestamp: expect.any(Date)
             }
           ]
-        },
+  }
         acceptanceContext: {
           clientId,
           grantType: 'authorization_code',
@@ -518,7 +518,7 @@ describe('OAuthPolicyService', () => {
           clientId,
           scopes,
           acceptanceMethod: 'OAUTH_FLOW'
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -567,7 +567,7 @@ describe('OAuthPolicyService', () => {
           includedSystems: ['oauth_service', 'oauth_guidance_service', 'oauth_policy_service'],
           includedPolicies: scope.includePolicies,
           additionalFilters: { clientIds: scope.clientIds }
-        },
+  }
         recipients: [`${userId}@company.com`],
         format: 'PDF',
         includeExecutiveSummary: true,
@@ -585,7 +585,7 @@ describe('OAuthPolicyService', () => {
             clientCount: 2,
             policyTypes: 2
           }
-        },
+  }
         userId,
         severity: 'LOW'
       });
@@ -665,7 +665,7 @@ describe('OAuthPolicyService', () => {
           complianceFrameworks,
           policyCount: 1,
           enforcementMechanismCount: 1
-        },
+  }
         userId,
         severity: 'MEDIUM'
       });
@@ -685,7 +685,7 @@ describe('OAuthPolicyService', () => {
           description,
           complianceFrameworks,
           userId
-        )
+
       ).rejects.toThrow('Failed to create OAuth governance framework: Database error');
     });
   });

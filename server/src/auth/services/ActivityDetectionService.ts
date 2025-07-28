@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 import { RedisService } from '../database/RedisService';
 import { IdleTimeoutDetectionService } from './IdleTimeoutDetectionService';
 
+}
 export interface ActivityDefinition {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface ActivityDefinition {
       payloadPattern?: string;
       minDuration?: number; // milliseconds
       userInitiated: boolean;
+}
     }>;
     
     filters: {
@@ -66,6 +68,7 @@ export interface ActivityDefinition {
   };
 }
 
+}
 export interface DetectedActivity {
   id: string;
   sessionId: string;
@@ -79,6 +82,7 @@ export interface DetectedActivity {
     userAgent?: string;
     ipAddress: string;
     referrer?: string;
+}
   };
   
   analysis: {
@@ -128,6 +132,7 @@ export interface DetectedActivity {
   };
 }
 
+}
 export interface ActivityPattern {
   id: string;
   name: string;
@@ -143,6 +148,7 @@ export interface ActivityPattern {
       operator: 'equals' | 'contains' | 'matches' | 'between' | 'greater' | 'less';
       value: any;
       weight: number;
+}
     }>;
     
     relationships: Array<{
@@ -168,6 +174,7 @@ export interface ActivityPattern {
   };
 }
 
+}
 export interface ActivitySession {
   sessionId: string;
   userId: string;
@@ -182,6 +189,7 @@ export interface ActivitySession {
     automatedActivities: number;
     averageGenuineness: number;
     timeoutResets: number;
+}
   };
   
   patterns: {
@@ -266,6 +274,7 @@ export class ActivityDetectionService extends EventEmitter {
     warnings: string[];
     blocked: boolean;
   }> {
+
     try {
       const timestamp = activityData.timestamp || new Date();
       
@@ -297,32 +306,32 @@ export class ActivityDetectionService extends EventEmitter {
           userAgent: activityData.userAgent,
           ipAddress: activityData.ipAddress,
           referrer: activityData.referrer
-        },
+  }
         analysis: {
           definitionId: bestDefinition.id,
           genuineScore: 0,
           automatedProbability: 0,
           fraudRisk: 0,
           validationResults: {}
-        },
+  }
         patterns: {
           sequencePosition: 0,
           timingPattern: 'regular',
           frequencyScore: 50,
           velocityIndicator: 'normal'
-        },
+  }
         context: {
           sessionContext: {
             totalActivities: 0,
             recentActivities: 0,
             averageGap: 0,
             sessionDuration: 0
-          },
+  }
           userContext: {
             deviationScore: 0,
             riskProfile: 'low'
           }
-        },
+  }
         outcome: {
           shouldResetTimeout: false,
           confidence: 0,
@@ -422,6 +431,7 @@ export class ActivityDetectionService extends EventEmitter {
     profile: any;
     recommendations: string[];
   }> {
+
     try {
       // Get user's recent activities
       const userActivities = await this.getUserRecentActivities(userId, 30); // 30 days
@@ -477,6 +487,7 @@ export class ActivityDetectionService extends EventEmitter {
     definitionId?: string;
     errors?: string[];
   }> {
+
     try {
       // Validate definition
       const validation = this.validateActivityDefinition(definition);
@@ -574,6 +585,7 @@ export class ActivityDetectionService extends EventEmitter {
   // Private helper methods
 
   private async findMatchingDefinitions(activityData: any): Promise<ActivityDefinition[]> {
+
     const matching: ActivityDefinition[] = [];
     
     for (const definition of this.activityDefinitions.values()) {
@@ -678,6 +690,7 @@ export class ActivityDetectionService extends EventEmitter {
     automatedProbability: number;
     fraudRisk: number;
   }> {
+
     let genuineScore = definition.scoring.baseScore;
     let automatedProbability = 0;
     let fraudRisk = 0;
@@ -721,6 +734,7 @@ export class ActivityDetectionService extends EventEmitter {
     activity: DetectedActivity,
     definition: ActivityDefinition
   ): Promise<boolean> {
+
     try {
       // Check minimum gap between resets
       const lastReset = await this.getLastTimeoutReset(activity.sessionId);
@@ -782,7 +796,7 @@ export class ActivityDetectionService extends EventEmitter {
             requireAuthentication: true,
             minTimeBetweenActivities: 1000 // 1 second
           }
-        },
+  }
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: true,
@@ -790,7 +804,7 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: true,
           validateTimestamp: true,
           timestampTolerance: 30000 // 30 seconds
-        },
+  }
         scoring: {
           baseScore: 80,
           modifiers: [{
@@ -803,7 +817,7 @@ export class ActivityDetectionService extends EventEmitter {
             penaltyScore: 30,
             description: 'Too many calls in short succession'
           }]
-        },
+  }
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
@@ -811,7 +825,7 @@ export class ActivityDetectionService extends EventEmitter {
           minimumGapBetweenResets: 10,
           resetScope: 'session'
         }
-      },
+  }
       {
         name: 'Page Navigation',
         description: 'User navigating between pages',
@@ -827,7 +841,7 @@ export class ActivityDetectionService extends EventEmitter {
             requireAuthentication: true,
             minTimeBetweenActivities: 2000 // 2 seconds
           }
-        },
+  }
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: false,
@@ -835,7 +849,7 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: true,
           validateTimestamp: true,
           timestampTolerance: 10000 // 10 seconds
-        },
+  }
         scoring: {
           baseScore: 90,
           modifiers: [{
@@ -848,7 +862,7 @@ export class ActivityDetectionService extends EventEmitter {
             penaltyScore: 40,
             description: 'Rapid navigation without referrer'
           }]
-        },
+  }
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
@@ -856,7 +870,7 @@ export class ActivityDetectionService extends EventEmitter {
           minimumGapBetweenResets: 5,
           resetScope: 'session'
         }
-      },
+  }
       {
         name: 'User Interaction',
         description: 'Direct user interface interactions',
@@ -870,7 +884,7 @@ export class ActivityDetectionService extends EventEmitter {
             requireAuthentication: true,
             minTimeBetweenActivities: 500 // 0.5 seconds
           }
-        },
+  }
         validation: {
           requiresValidSession: true,
           requiresCSRFToken: false,
@@ -878,7 +892,7 @@ export class ActivityDetectionService extends EventEmitter {
           checkIPConsistency: false,
           validateTimestamp: true,
           timestampTolerance: 5000 // 5 seconds
-        },
+  }
         scoring: {
           baseScore: 95,
           modifiers: [],
@@ -887,7 +901,7 @@ export class ActivityDetectionService extends EventEmitter {
             penaltyScore: 80,
             description: 'Interactions happening faster than humanly possible'
           }]
-        },
+  }
         timeoutReset: {
           shouldResetIdle: true,
           shouldResetInactivity: true,
@@ -921,12 +935,12 @@ export class ActivityDetectionService extends EventEmitter {
             weight: 1
           }],
           relationships: []
-        },
+  }
         scoring: {
           genuinessIndicator: -50,
           automationIndicator: 80,
           suspiciousIndicator: 70
-        },
+  }
         response: {
           blockActivity: false,
           requireAdditionalValidation: true,
@@ -951,6 +965,7 @@ export class ActivityDetectionService extends EventEmitter {
   }
 
   private async performMaintenance(): Promise<void> {
+
     // Clean up old activities
     const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 hours
     
@@ -965,6 +980,7 @@ export class ActivityDetectionService extends EventEmitter {
   }
 
   private validateSession(sessionId: string): Promise<boolean> {
+
     // Implementation would validate session with session service
     return Promise.resolve(true);
   }
@@ -1026,6 +1042,7 @@ export class ActivityDetectionService extends EventEmitter {
   }
 
   private async analyzeActivityTiming(activity: DetectedActivity): Promise<{ suspicious: boolean }> {
+
     // Analyze timing patterns for suspicious behavior
     const recent = this.recentActivities.get(activity.sessionId) || [];
     
@@ -1050,6 +1067,7 @@ export class ActivityDetectionService extends EventEmitter {
   }
 
   private async storeActivity(activity: DetectedActivity): Promise<void> {
+
     // Add to session activities
     const sessionActivities = this.recentActivities.get(activity.sessionId) || [];
     sessionActivities.push(activity);

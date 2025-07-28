@@ -14,15 +14,13 @@ import {
   Epic16LearningPathService
 } from '../../services/Epic16LearningPathService';
 interface LearningPathViewerProps {
-  path: LearningPath;
+  path: LearningPath;,
   learningService: Epic16LearningPathService;
   userId: string;
   enrollment?: UserEnrollment;
   onProgress?: (progress: number) => void;
   onComplete?: () => void;
-}
-
-export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
+  export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({,)
   path,
   learningService,
   userId,
@@ -46,8 +44,6 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
       // Set progress if available
       if (enrollment?.progress.moduleProgress[module.id]) {
         setModuleProgress(enrollment.progress.moduleProgress[module.id]);
-      }
-    }
   }, [path, enrollment]);
   // Calculate overall progress
   const overallProgress = useMemo(() => {
@@ -63,7 +59,6 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
       setModuleProgress(enrollment.progress.moduleProgress[module.id]);
     } else {
       setModuleProgress(null);
-    }
   }, [enrollment]);
   // Handle activity selection
   const handleActivitySelect = useCallback((activity: LearningActivity) => {
@@ -88,28 +83,25 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
         // Check if path is completed
         if (updatedProgress.overallProgress >= 100) {
           onComplete?.();
-        }
-      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update progress');
-    } finally {
+  setError(err instanceof Error ? err.message : 'Failed to update progress');
+} finally {
       setLoading(false);
-    }
   }, [currentModule, enrollment, learningService, userId, path.id, onProgress, onComplete]);
   // Get module status
   const getModuleStatus = useCallback((module: LearningModule) => {
-    if (!enrollment) return 'not_started';
-    const completed = enrollment.progress.completedModules.includes(module.id);
-    const current = enrollment.progress.currentModule === module.id;
-    const progress = enrollment.progress.moduleProgress[module.id];
-    if (completed) return 'completed';
-    if (current || (progress && progress.progress > 0)) return 'in_progress';
-    // Check if prerequisites are met
-    const prerequisitesMet = module.prerequisites.every(prereqId =>;);
-      enrollment.progress.completedModules.includes(prereqId)
-    );
-    return prerequisitesMet ? 'available' : 'locked';
-  }, [enrollment]);
+  if (!enrollment) return 'not_started';
+  const completed = enrollment.progress.completedModules.includes(module.id);
+  const current = enrollment.progress.currentModule === module.id;
+  const progress = enrollment.progress.moduleProgress[module.id];
+  if (completed) return 'completed';
+  if (current || (progress && progress.progress > 0)) return 'in_progress';
+  // Check if prerequisites are met
+  const prerequisitesMet = module.prerequisites.every(prereqId =>;);
+  enrollment.progress.completedModules.includes(prereqId)
+  );
+  return prerequisitesMet ? 'available' : 'locked';
+}, [enrollment]);
   // Get activity status
   const getActivityStatus = useCallback((activity: LearningActivity) => {
     if (!enrollment || !currentModule) return 'not_started';
@@ -169,16 +161,16 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
             const status = getModuleStatus(module);
             const isActive = currentModule?.id === module.id;
             const progress = enrollment?.progress.moduleProgress[module.id];
-            return ();
+            return;
               <div
                 key={module.id}
                 className={`rounded-lg border p-4 cursor-pointer transition-all ${
-                  isActive 
-                    ? 'bg-blue-50 border-blue-200' 
-                    : status === 'locked'
-                      ? 'bg-gray-50 border-gray-200 opacity-50 cursor-not-allowed'
-                      : 'bg-white border-gray-200 hover:border-gray-300'
-                }`}
+  isActive
+  ? 'bg-blue-50 border-blue-200'
+  : status === 'locked',
+  ? 'bg-gray-50 border-gray-200 opacity-50 cursor-not-allowed'
+  : 'bg-white border-gray-200 hover:border-gray-300',
+}`}
                 onClick={() => status !== 'locked' && handleModuleSelect(module)}
               >
                 <div className="flex items-start space-x-3">
@@ -274,7 +266,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
   // Render main content
   const renderMainContent = () => {
     if (!currentModule) {
-      return ();
+      return;
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -287,8 +279,7 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
           </div>
         </div>
       );
-    }
-    return ();
+    return;
       <div className="flex flex-col h-full">
         {/* Module header */}
         <div className="bg-white border-b border-gray-200 px-6 py-4">
@@ -361,14 +352,14 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
                 {currentModule.activities.map((activity) => {
                   const status = getActivityStatus(activity);
                   const isActive = currentActivity?.id === activity.id;
-                  return ();
+                  return;
                     <div
                       key={activity.id}
                       className={`border rounded-md p-3 cursor-pointer transition-all ${
-                        isActive 
-                          ? 'bg-blue-50 border-blue-200' 
-                          : 'bg-white border-gray-200 hover:border-gray-300'
-                      }`}
+  isActive
+  ? 'bg-blue-50 border-blue-200'
+  : 'bg-white border-gray-200 hover:border-gray-300',
+}`}
                       onClick={() => handleActivitySelect(activity)}
                     >
                       <div className="flex items-center space-x-3">
@@ -443,10 +434,11 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
       </div>
     );
   };
-  return ();
+  return;
     <div className="learning-path-viewer h-full flex">
       {/* Collapsible sidebar */}
-      <div className={`${sidebarOpen ? 'block' : 'hidden'} md:block`}>}
+      <div className={`${sidebarOpen ? 'block' : 'hidden'},}
+  md:block`}>}
         {renderModuleSidebar()}
       </div>
       {/* Main content */}
@@ -473,11 +465,10 @@ export const LearningPathViewer: React.FC<LearningPathViewerProps> = ({)
 
 // Activity Viewer Component
 interface ActivityViewerProps {
-  activity: LearningActivity;
+  activity: LearningActivity;,
   onComplete: () => void;
   loading?: boolean;
-}
-const ActivityViewer: React.FC<ActivityViewerProps> = ({)
+  const ActivityViewer: React.FC<ActivityViewerProps> = ({,)
   activity,
   onComplete,
   loading = false
@@ -487,7 +478,7 @@ const ActivityViewer: React.FC<ActivityViewerProps> = ({)
     setCompleted(true);
     onComplete();
   };
-  return ();
+  return;
     <div className="p-6">
       {/* Activity header */}
       <div className="mb-6">
@@ -580,12 +571,12 @@ const ActivityViewer: React.FC<ActivityViewerProps> = ({)
           onClick={handleComplete}
           disabled={completed || loading}
           className={`px-6 py-2 text-sm font-medium rounded-md ${
-            completed 
-              ? 'bg-green-100 text-green-800 cursor-not-allowed'
-              : loading
-                ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-          }`}
+  completed
+  ? 'bg-green-100 text-green-800 cursor-not-allowed'
+  : loading,
+  ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
+  : 'bg-blue-600 text-white hover:bg-blue-700',
+}`}
         >
           {completed ? 'Completed ✓' : loading ? 'Saving...' : 'Mark as Complete'}
         </button>

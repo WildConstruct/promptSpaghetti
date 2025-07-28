@@ -26,25 +26,25 @@ export interface InfrastructureComponent {
         check_interval_ms: number;
         timeout_ms: number;
         retry_attempts: number;
-        health_checks: HealthCheckConfig[];
+        health_checks: HealthCheckConfig;
         performance_monitoring: {
             enabled: boolean;
             metrics_collection_interval_ms: number;
-            custom_metrics: CustomMetricConfig[];
+            custom_metrics: CustomMetricConfig;
         };
         log_monitoring: {
             enabled: boolean;
-            log_paths: string[];
-            error_patterns: string[];
-            warning_patterns: string[];
+            log_paths: string;
+            error_patterns: string;
+            warning_patterns: string;
         };
     };
     alerting: {
         enabled: boolean;
-        alert_thresholds: AlertThreshold[];
-        notification_channels: NotificationChannel[];
-        escalation_policies: EscalationPolicy[];
-        suppression_rules: SuppressionRule[];
+        alert_thresholds: AlertThreshold;
+        notification_channels: NotificationChannel;
+        escalation_policies: EscalationPolicy;
+        suppression_rules: SuppressionRule;
     };
     status: {
         health_status: 'healthy' | 'warning' | 'critical' | 'unknown' | 'maintenance';
@@ -127,16 +127,16 @@ export interface NotificationChannel {
         endpoint?: string;
         api_key?: string;
         webhook_url?: string;
-        email_addresses?: string[];
-        phone_numbers?: string[];
+        email_addresses?: string;
+        phone_numbers?: string;
         channel_id?: string;
         template?: string;
     };
     routing: {
         severity_filter: ('info' | 'warning' | 'critical')[];
-        component_filter: string[];
+        component_filter: string;
         time_filter?: {
-            days_of_week: number[];
+            days_of_week: number;
             start_hour: number;
             end_hour: number;
             timezone: string;
@@ -154,25 +154,11 @@ export interface EscalationPolicy {
     id: string;
     name: string;
     description: string;
-    escalation_levels: Array<{
-        level: number;
-        delay_minutes: number;
-        notification_channels: string[];
-        actions: EscalationAction[];
-    }>;
-    trigger_conditions: {
-        severity_levels: ('info' | 'warning' | 'critical')[];
-        component_types: InfrastructureComponent['type'][];
-        unacknowledged_duration_minutes: number;
-        consecutive_failures?: number;
-    };
-    de_escalation: {
-        auto_resolve: boolean;
-        auto_resolve_delay_minutes: number;
-        require_manual_acknowledgment: boolean;
-    };
-    enabled: boolean;
-    priority: number;
+    escalation_levels: Array<{}, level>;
+    number: any;
+    delay_minutes: number;
+    notification_channels: string;
+    actions: EscalationAction;
 }
 export interface EscalationAction {
     action_type: 'notify_oncall' | 'create_incident' | 'run_automation' | 'scale_resources' | 'failover' | 'custom_webhook';
@@ -185,16 +171,16 @@ export interface SuppressionRule {
     name: string;
     description: string;
     conditions: {
-        component_patterns: string[];
-        alert_patterns: string[];
+        component_patterns: string;
+        alert_patterns: string;
         severity_levels: ('info' | 'warning' | 'critical')[];
-        maintenance_windows?: MaintenanceWindow[];
+        maintenance_windows?: MaintenanceWindow;
     };
     behavior: {
         suppress_notifications: boolean;
         suppress_escalations: boolean;
         suppress_logging: boolean;
-        alternative_notification_channels?: string[];
+        alternative_notification_channels?: string;
     };
     schedule?: {
         start_time: number;
@@ -216,7 +202,7 @@ export interface MaintenanceWindow {
         recurring: boolean;
         recurrence_pattern?: string;
     };
-    affected_components: string[];
+    affected_components: string;
     suppress_all_alerts: boolean;
     alternative_monitoring: boolean;
     created_by: string;
@@ -273,7 +259,7 @@ export interface InfrastructureAlert {
         threshold_value?: number;
         measurement_unit?: string;
         failure_count?: number;
-        affected_services: string[];
+        affected_services: string;
         root_cause_analysis?: string;
         impact_assessment: 'none' | 'low' | 'medium' | 'high' | 'critical';
     };
@@ -291,19 +277,11 @@ export interface InfrastructureAlert {
     escalation: {
         escalated: boolean;
         escalation_level: number;
-        escalation_history: Array<{
-            level: number;
-            escalated_at: number;
-            escalated_to: string[];
-            actions_taken: string[];
-        }>;
-    };
-    notifications: {
-        channels_notified: string[];
-        notification_count: number;
-        last_notification_at?: number;
-        suppressed: boolean;
-        suppression_reason?: string;
+        escalation_history: Array<{}, level>;
+        number: any;
+        escalated_at: number;
+        escalated_to: string;
+        actions_taken: string;
     };
 }
 export interface InfrastructureEvent {
@@ -323,7 +301,7 @@ export interface InfrastructureEvent {
     };
     impact: {
         severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
-        affected_components: string[];
+        affected_components: string;
         estimated_downtime_minutes?: number;
         service_impact_description?: string;
     };
@@ -368,26 +346,13 @@ export interface MonitoringReport {
         avg_resolution_time_minutes: number;
         false_positive_rate_percent: number;
     };
-    top_issues: Array<{
-        component_id: string;
-        component_name: string;
-        issue_type: string;
-        occurrence_count: number;
-        impact_score: number;
-        recommended_action: string;
-    }>;
-    trends: {
-        performance_trend: 'improving' | 'stable' | 'degrading';
-        availability_trend: 'improving' | 'stable' | 'degrading';
-        alert_volume_trend: 'increasing' | 'stable' | 'decreasing';
-        resource_utilization_trend: 'increasing' | 'stable' | 'decreasing';
-    };
-    recommendations: {
-        immediate_actions: string[];
-        preventive_measures: string[];
-        capacity_planning: string[];
-        optimization_opportunities: string[];
-    };
+    top_issues: Array<{}, component_id>;
+    string: any;
+    component_name: string;
+    issue_type: string;
+    occurrence_count: number;
+    impact_score: number;
+    recommended_action: string;
 }
 export declare class SecurityInfrastructureMonitor extends EventEmitter {
     private components;
@@ -401,76 +366,6 @@ export declare class SecurityInfrastructureMonitor extends EventEmitter {
     constructor();
     private initializeEventHandlers;
     private startGlobalMonitoring;
-    registerComponent(component: Omit<InfrastructureComponent, 'id' | 'created_at' | 'status'>): Promise<string>;
-    updateComponent(componentId: string, updates: Partial<InfrastructureComponent>): Promise<void>;
-    deleteComponent(componentId: string): Promise<void>;
-    private startComponentMonitoring;
-    private stopComponentMonitoring;
-    private performComponentHealthCheck;
-    private executeHealthCheck;
-    private performHttpHealthCheck;
-    private performTcpHealthCheck;
-    private performPingHealthCheck;
-    private performDnsHealthCheck;
-    private performSslCertHealthCheck;
-    private performDiskSpaceHealthCheck;
-    private performMemoryHealthCheck;
-    private performCpuHealthCheck;
-    private performProcessHealthCheck;
-    private performCustomScriptHealthCheck;
-    private calculateOverallHealth;
-    private collectComponentMetrics;
-    private collectSystemMetrics;
-    private collectApplicationMetrics;
-    private collectDatabaseMetrics;
-    private collectCustomMetric;
-    private generateStatusChangeAlert;
-    private generateHealthCheckAlert;
-    private checkThresholdAlerts;
-    private checkCustomMetricThresholds;
-    private getMetricValue;
-    private getMetricUnit;
-    private evaluateThreshold;
-    private compareValues;
-    private generateAlert;
-    private processAlert;
-    private sendAlertNotifications;
-    private matchesChannelFilters;
-    private checkRateLimit;
-    private sendNotification;
-    private checkEscalationPolicies;
-    private matchesEscalationPolicy;
-    private executeEscalationPolicy;
-    private executeEscalationAction;
-    private isAlertSuppressed;
-    private matchesSuppressionRule;
-    private updateAvailabilityMetrics;
-    private calculateAvailability;
-    private handleStatusChange;
-    private performGlobalHealthCheck;
-    private generatePredictiveAlerts;
-    private analyzeTrend;
-    private performDataCleanup;
-    getComponent(componentId: string): InfrastructureComponent | undefined;
-    getComponents(type?: InfrastructureComponent['type'], environment?: string): InfrastructureComponent[];
-    getComponentMetrics(componentId: string, hours?: number): InfrastructureMetrics[];
-    getActiveAlerts(componentId?: string, severity?: InfrastructureAlert['severity']): InfrastructureAlert[];
-    getInfrastructureEvents(componentId?: string, hours?: number): InfrastructureEvent[];
-    private getAlert;
-    acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<void>;
-    resolveAlert(alertId: string, resolvedBy: string, notes?: string): Promise<void>;
-    createMaintenanceWindow(window: Omit<MaintenanceWindow, 'id' | 'created_at'>): Promise<string>;
-    generateMonitoringReport(hours?: number): Promise<MonitoringReport>;
-    getSystemStatus(): {
-        total_components: number;
-        healthy_components: number;
-        warning_components: number;
-        critical_components: number;
-        active_alerts: number;
-        overall_health_score: number;
-    };
-    performMaintenance(): Promise<void>;
-    shutdown(): Promise<void>;
+    default: throw;
 }
-export default SecurityInfrastructureMonitor;
 //# sourceMappingURL=SecurityInfrastructureMonitor.d.ts.map

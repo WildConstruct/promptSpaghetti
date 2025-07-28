@@ -49,9 +49,11 @@ const checkPermissionSchema = z.object({
   }).optional()
 });
 
+}
 interface RBACRouteContext {
   authService: AuthenticationService;
   rbacService: RBACService;
+}
 }
 
 export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteContext) {
@@ -73,7 +75,7 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -92,7 +94,7 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
                   updatedAt: { type: 'string' }
                 }
               }
-            },
+  }
             total: { type: 'number' },
             pagination: {
               type: 'object',
@@ -144,9 +146,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['roleId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -249,9 +251,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['roleId']
-      },
+  }
       body: updateRoleSchema,
       response: {
         200: {
@@ -301,9 +303,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           roleId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['roleId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -373,7 +375,7 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
           ...assignmentData,
           grantedBy,
           expiresAt: assignmentData.expiresAt ? new Date(assignmentData.expiresAt) : undefined
-        },
+  }
         context
       );
 
@@ -445,9 +447,9 @@ export async function rbacRoutes(fastify: FastifyInstance, context: RBACRouteCon
         type: 'object',
         properties: {
           userId: { type: 'string', format: 'uuid' }
-        },
+  }
         required: ['userId']
-      },
+  }
       response: {
         200: {
           type: 'object',

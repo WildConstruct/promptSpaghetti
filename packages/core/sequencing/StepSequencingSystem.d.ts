@@ -17,6 +17,7 @@
  * - Dynamic step generation and modification
  */
 import { EventEmitter } from 'events';
+
 export interface SequenceStep {
     id: string;
     name: string;
@@ -33,7 +34,7 @@ export interface SequenceStep {
     retryPolicy?: RetryPolicy;
     metadata: StepMetadata;
     performance: StepPerformance;
-}
+
 export interface StepCondition {
     id: string;
     type: 'boolean' | 'value' | 'expression' | 'function';
@@ -43,7 +44,7 @@ export interface StepCondition {
     expression?: string;
     function?: string;
     negated?: boolean;
-}
+
 export interface StepAction {
     type: 'function' | 'api' | 'ui' | 'data' | 'navigation' | 'notification';
     handler: string;
@@ -53,7 +54,7 @@ export interface StepAction {
     onSuccess?: string;
     onFailure?: string;
     onSkip?: string;
-}
+
 export interface StepValidation {
     required: boolean;
     validators: {,
@@ -62,21 +63,21 @@ export interface StepValidation {
         parameters?: Record<string, unknown>;
     }[];
     onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
-}
+
 export interface StepRollback {
     enabled: boolean;
     action?: StepAction;
     autoTrigger: boolean;
     preserveState: boolean;
     dependencies?: string[];
-}
+
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'custom';
     baseDelay: number;
     maxDelay: number;
     retryConditions: string[];
-}
+
 export interface StepMetadata {
     estimatedDuration: number;
     category: string;
@@ -88,22 +89,23 @@ export interface StepMetadata {
     createdAt: Date;
     lastModified: Date;
     version: string;
-}
+
 export interface StepPerformance {
     averageExecutionTime: number;
     successRate: number;
     failureRate: number;
     retryRate: number;
     lastExecutions: ExecutionRecord[];
-}
+
 export interface ExecutionRecord {
     timestamp: Date;
     duration: number;
     status: StepExecutionStatus;
     attempts: number;
     errorMessage?: string;
-}
+
 export type StepExecutionStatus = 'pending' | 'running' | 'completed' | 'failed' | 'skipped' | 'cancelled' | 'retrying' | 'rolled_back';
+
 export interface SequenceDefinition {
     id: string;
     name: string;
@@ -122,7 +124,7 @@ export interface SequenceDefinition {
         createdAt: Date;
         lastModified: Date;
     };
-}
+
 export interface SequenceExecution {
     id: string;
     sequenceId: string;
@@ -139,21 +141,21 @@ export interface SequenceExecution {
     endTime?: Date;
     pausedAt?: Date;
     resumedAt?: Date;
-}
+
 export interface ExecutionContext {
     variables: Record<string, unknown>;
     userInput: Record<string, unknown>;
     sessionData: Record<string, unknown>;
     executionState: Record<string, unknown>;
     rollbackStack: RollbackEntry[];
-}
+
 export interface RollbackEntry {
     stepId: string;
     timestamp: Date;
     state: Record<string, unknown>;
     action: string;
     reversible: boolean;
-}
+
 export interface SequenceProgress {
     totalSteps: number;
     completedSteps: number;
@@ -161,7 +163,7 @@ export interface SequenceProgress {
     percentage: number;
     estimatedTimeRemaining: number;
     milestones: ProgressMilestone[];
-}
+
 export interface ProgressMilestone {
     id: string;
     name: string;
@@ -169,7 +171,7 @@ export interface ProgressMilestone {
     percentage: number;
     reached: boolean;
     timestamp?: Date;
-}
+
 export interface ExecutionPerformance {
     totalDuration: number;
     averageStepDuration: number;
@@ -184,7 +186,7 @@ export interface ExecutionPerformance {
     retryCount: number;
     errorCount: number;
     effectiveSuccessRate: number;
-}
+
 export interface SequencingConfig {
     execution: {,
         defaultTimeout: number;
@@ -206,7 +208,7 @@ export interface SequencingConfig {
         enableCaching: boolean;
         cacheExpiryTime: number;
     };
-}
+
 export declare class StepSequencingSystem extends EventEmitter {
     private sequences;
     private executions;
@@ -278,7 +280,7 @@ export declare class StepSequencingSystem extends EventEmitter {
     private getNextStep;
     private registerBuiltInHandlers;
     private delay;
-}
+
 export declare class SequenceBuilder {
     private definition;
     private steps;
@@ -288,7 +290,6 @@ export declare class SequenceBuilder {
     addExitPoint(stepId: string): SequenceBuilder;
     setMetadata(metadata: Partial<SequenceDefinition['metadata']>): SequenceBuilder;
     build(): Omit<SequenceDefinition, 'id'>;
-}
 declare const _default: {
     StepSequencingSystem: typeof StepSequencingSystem;
     SequenceBuilder: typeof SequenceBuilder;

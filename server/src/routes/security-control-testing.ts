@@ -21,6 +21,7 @@ import { SecurityOptimizationEngine } from '../services/SecurityOptimizationEngi
 // Global testing engine instance
 let controlTestingEngine: SecurityControlTestingEngine | null = null;
 
+}
 interface APIResponse<T = any> {
   success: boolean;
   data?: T;
@@ -29,24 +30,31 @@ interface APIResponse<T = any> {
   timestamp: number;
 }
 
+}
 interface ControlRegistrationRequest {
   control: SecurityControl;
   schedule_immediate_test?: boolean;
 }
+}
 
+}
 interface ControlTestRequest {
   control_id: string;
   test_types?: SecurityControlTest['test_type'][];
   environment?: 'production' | 'staging' | 'testing' | 'development';
   notify_on_completion?: boolean;
 }
+}
 
+}
 interface OptimizationRequest {
   control_id: string;
   optimization_targets?: string[];
   apply_automatically?: boolean;
 }
+}
 
+}
 interface ReportRequest {
   report_type?: EffectivenessReport['report_type'];
   start_date?: number;
@@ -54,6 +62,7 @@ interface ReportRequest {
   control_ids?: string[];
   include_detailed_findings?: boolean;
   include_compliance_assessment?: boolean;
+}
 }
 
 /**
@@ -64,6 +73,7 @@ async function initializeControlTestingEngine(
   policyEngine: SecurityPolicyAnalysisEngine,
   optimizationEngine: SecurityOptimizationEngine
 ): Promise<SecurityControlTestingEngine> {
+
   if (controlTestingEngine) {
     return controlTestingEngine;
   }
@@ -76,7 +86,7 @@ async function initializeControlTestingEngine(
       regression_testing_enabled: true,
       performance_testing_enabled: true,
       security_testing_enabled: true
-    },
+  }
     effectiveness_measurement: {
       enabled: true,
       real_time_monitoring: true,
@@ -84,7 +94,7 @@ async function initializeControlTestingEngine(
       comparative_analysis: true,
       trend_analysis: true,
       statistical_significance_testing: true
-    },
+  }
     optimization_settings: {
       enabled: true,
       automatic_optimization: false, // Require manual approval for safety
@@ -96,7 +106,7 @@ async function initializeControlTestingEngine(
         performance_threshold: 500,
         reliability_threshold: 99
       }
-    },
+  }
     test_categories: {
       authentication_controls: true,
       authorization_controls: true,
@@ -105,7 +115,7 @@ async function initializeControlTestingEngine(
       incident_response_controls: true,
       compliance_controls: true,
       monitoring_controls: true
-    },
+  }
     reporting_settings: {
       detailed_reports_enabled: true,
       executive_summaries_enabled: true,
@@ -153,11 +163,11 @@ export default async function securityControlTestingRoutes(
               category: {
                 type: 'string',
                 enum: ['authentication', 'authorization', 'data_protection', 'network_security', 'incident_response', 'compliance', 'monitoring']
-              },
+  }
               type: {
                 type: 'string',
                 enum: ['preventive', 'detective', 'corrective', 'compensating']
-              },
+  }
               implementation: {
                 type: 'object',
                 properties: {
@@ -166,7 +176,7 @@ export default async function securityControlTestingRoutes(
                   dependencies: { type: 'array', items: { type: 'string' } },
                   deployment_scope: { type: 'array', items: { type: 'string' } }
                 }
-              },
+  }
               testing_parameters: {
                 type: 'object',
                 properties: {
@@ -178,7 +188,7 @@ export default async function securityControlTestingRoutes(
                 }
               }
             }
-          },
+  }
           schedule_immediate_test: { type: 'boolean' }
         }
       }
@@ -214,7 +224,7 @@ export default async function securityControlTestingRoutes(
           baseline_established: true,
           initial_test_result: initialTestResult,
           next_scheduled_test: Date.now() + (control.testing_parameters.test_frequency_hours * 60 * 60 * 1000)
-        },
+  }
         message: `Security control '${control.name}' registered successfully`,
         timestamp: Date.now()
       };
@@ -248,11 +258,11 @@ export default async function securityControlTestingRoutes(
               type: 'string',
               enum: ['functional', 'performance', 'security', 'regression', 'integration', 'load']
             }
-          },
+  }
           environment: {
             type: 'string',
             enum: ['production', 'staging', 'testing', 'development']
-          },
+  }
           notify_on_completion: { type: 'boolean' }
         }
       }
@@ -293,7 +303,7 @@ export default async function securityControlTestingRoutes(
             average_success_rate: Math.round(avgSuccessRate * 100) / 100,
             total_issues_found: totalIssues,
             critical_issues_found: criticalIssues
-          },
+  }
           detailed_results: testResults.map(test => ({
             test_id: test.test_id,
             test_type: test.test_type,
@@ -306,7 +316,7 @@ export default async function securityControlTestingRoutes(
             recommendations: test.test_results.recommendations
           })),
           next_actions: this.generateNextActions(overallResult, totalIssues, criticalIssues)
-        },
+  }
         message: `Security control testing completed with ${overallResult} result`,
         timestamp: Date.now()
       };
@@ -337,7 +347,7 @@ export default async function securityControlTestingRoutes(
           optimization_targets: {
             type: 'array',
             items: { type: 'string' }
-          },
+  }
           apply_automatically: { type: 'boolean' }
         }
       }
@@ -362,18 +372,18 @@ export default async function securityControlTestingRoutes(
             applied_optimizations: optimizationResult.applied_optimizations,
             expected_improvements: optimizationResult.expected_improvements,
             monitoring_plan: optimizationResult.monitoring_plan
-          },
+  }
           validation: {
             validation_scheduled: true,
             validation_eta_minutes: 5,
             monitoring_duration_days: 7
-          },
+  }
           recommendations: [
             'Monitor control performance for next 24 hours',
             'Schedule follow-up effectiveness testing',
             'Document optimization changes for compliance'
           ]
-        },
+  }
         message: `Security control optimization initiated with ${optimizationResult.applied_optimizations.length} improvements`,
         timestamp: Date.now()
       };
@@ -412,7 +422,7 @@ export default async function securityControlTestingRoutes(
           recent_activities: analytics.recent_activities,
           insights: this.generateAnalyticsInsights(analytics),
           recommendations: this.generateAnalyticsRecommendations(analytics)
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -440,7 +450,7 @@ export default async function securityControlTestingRoutes(
           report_type: {
             type: 'string',
             enum: ['individual_control', 'category_summary', 'comprehensive', 'trend_analysis']
-          },
+  }
           start_date: { type: 'number' },
           end_date: { type: 'number' },
           control_ids: { type: 'array', items: { type: 'string' } },
@@ -479,10 +489,10 @@ export default async function securityControlTestingRoutes(
             report_type: report.report_type,
             reporting_period_days: report.reporting_period.duration_days,
             controls_analyzed: report.executive_summary.total_controls_tested
-          },
+  }
           executive_insights: this.generateExecutiveInsights(report),
           action_items: this.generateActionItems(report)
-        },
+  }
         message: `${report_type} effectiveness report generated successfully`,
         timestamp: Date.now()
       };
@@ -531,19 +541,19 @@ export default async function securityControlTestingRoutes(
           false_positive_rate: 1.8,
           response_time_ms: 245,
           availability_percent: 99.95
-        },
+  }
         recent_test_results: {
           total_tests_last_24h: 12,
           passed_tests: 11,
           failed_tests: 0,
           warning_tests: 1,
           average_success_rate: 96.8
-        },
+  }
         optimization_potential: {
           score: 25,
           opportunities: ['Response time optimization', 'False positive reduction'],
           estimated_impact: { effectiveness_improvement: 5, performance_improvement: 15 }
-        },
+  }
         next_scheduled_test: Date.now() + 82800000, // 23 hours from now
         compliance_status: ['SOX: Compliant', 'PCI_DSS: Compliant', 'GDPR: Partial']
       };
@@ -591,20 +601,20 @@ export default async function securityControlTestingRoutes(
             test_success_rate: analytics.performance_metrics.test_success_rate_percent,
             critical_issues: analytics.performance_metrics.critical_issues_found,
             average_effectiveness: analytics.summary.average_effectiveness_score
-          },
+  }
           system_metrics: {
             continuous_testing_active: true,
             baseline_establishment_complete: true,
             optimization_engine_connected: true,
             reporting_system_operational: true
-          },
+  }
           recent_performance: {
             tests_completed_24h: analytics.summary.completed_tests_24h,
             average_test_duration: analytics.performance_metrics.average_test_duration_seconds,
             optimization_opportunities: analytics.performance_metrics.optimization_opportunities
-          },
+  }
           last_check: Date.now()
-        },
+  }
         timestamp: Date.now()
       };
     } catch (error) {
@@ -615,7 +625,7 @@ export default async function securityControlTestingRoutes(
           healthy: false,
           engine_status: 'error',
           error_message: error.message
-        },
+  }
         error: 'Failed to get engine health status',
         timestamp: Date.now()
       };

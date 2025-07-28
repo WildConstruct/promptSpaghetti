@@ -14,31 +14,27 @@ import { useWorkflowStore } from '../stores/workflowStore';
 interface WorkflowTransition {
   id: string;
   from_state_id?: string;
-  to_state_id: string;
+  to_state_id: string;,
   name: string;
   description?: string;
-  requires_approval: boolean;
+  requires_approval: boolean;,
   required_permissions: bigint;
   conditions: Record<string, any>;
-}
-interface WorkflowState {
-  id: string;
+  interface WorkflowState {
+  id: string;,
   name: string;
   color: string;
   icon?: string;
   is_locked: boolean;
-}
-interface WorkflowTransitionControlsProps {
-  resourceId: string;
+  interface WorkflowTransitionControlsProps {
+  resourceId: string;,
   currentStateId: string;
-  currentUserId: string;
+  currentUserId: string;,
   workspaceId: string;
   onTransitionComplete?: (newStateId: string) => void;
   onApprovalRequested?: (approvalId: string) => void;
   disabled?: boolean;
-}
-
-export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProps> = ({)
+  export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProps> = ({,)
   resourceId,
   currentStateId,
   currentUserId,
@@ -86,18 +82,16 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     const validateTransitions = async () => {
       const results: Record<string, any> = {};
       for (const transition of availableTransitions) {
-        const validation = await validateStateTransition(resourceId, transition.to_state_id);
-        const canTransition = await canUserTransitionState(currentUserId, resourceId, transition.to_state_id);
-        results[transition.id] = {
-          ...validation,
-          can_transition: canTransition,
-        };
-      }
+  const validation = await validateStateTransition(resourceId, transition.to_state_id);
+  const canTransition = await canUserTransitionState(currentUserId, resourceId, transition.to_state_id);
+  results[transition.id] = {
+  ...validation,
+  can_transition: canTransition,
+};
       setValidationResults(results);
     };
     if (availableTransitions.length > 0) {
       validateTransitions();
-    }
   }, [availableTransitions, resourceId, currentUserId, validateStateTransition, canUserTransitionState]);
   const handleTransitionClick = (transition: WorkflowTransition) => {
     setSelectedTransition(transition);
@@ -106,47 +100,38 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
       setShowCommentDialog(true);
     } else {
       executeTransition(transition, '');
-    }
   };
   const executeTransition = async (transition: WorkflowTransition, transitionComment: string) => {
-    if (!transition) return;
-    try {
-      const result = await transitionResourceState(;);
-        resourceId,
-        transition.to_state_id,
-        currentUserId,
-        {
-          comment: transitionComment,
-          metadata: {,
-            transition_id: transition.id,
-            transition_name: transition.name,
-          }
-        }
-      );
-      if (result.success) {
-        if (result.approval_required) {
-          onApprovalRequested?.(result.approval_id!);
-        } else {
+  if (!transition) return;
+  try {
+  const result = await transitionResourceState(;);
+  resourceId,
+  transition.to_state_id,
+  currentUserId,
+  {
+  comment: transitionComment,
+  metadata: {,
+  transition_id: transition.id,
+  transition_name: transition.name);
+  if (result.success) {
+  if (result.approval_required) {
+  onApprovalRequested?.(result.approval_id!);
+} else {
           onTransitionComplete?.(result.new_state_id!);
-        }
-      }
     } catch (error) {
-      console.error('Transition failed:', error);
-    } finally {
+  console.error('Transition failed:', error);
+} finally {
       setSelectedTransition(null);
       setComment('');
       setShowCommentDialog(false);
-    }
   };
   const handleCommentSubmit = () => {
     if (selectedTransition) {
       executeTransition(selectedTransition, comment);
-    }
   };
   const getTransitionIcon = (transition: WorkflowTransition) => {
     if (transition.requires_approval) {
       return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-    }
     return <ArrowRightIcon className="h-4 w-4 text-blue-500" />;
   };
   const getTransitionButton = (transition: WorkflowTransition) => {
@@ -163,11 +148,10 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     if (isDisabled) {
       buttonClass += 'bg-gray-100 text-gray-400 cursor-not-allowed';
     } else if (transition.requires_approval) {
-      buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-    } else {
+  buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+} else {
       buttonClass += 'bg-blue-100 text-blue-800 hover:bg-blue-200';
-    }
-    return ();
+    return;
       <button
         key={transition.id}
         onClick={() => handleTransitionClick(transition)}
@@ -193,29 +177,26 @@ export const WorkflowTransitionControls: React.FC<WorkflowTransitionControlsProp
     );
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center space-x-2 text-sm text-gray-500">
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
         <span>Loading transitions...</span>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="flex items-center space-x-2 text-sm text-red-600">
         <ExclamationTriangleIcon className="h-4 w-4" />
         <span>Error loading transitions</span>
       </div>
     );
-  }
   if (!currentState) {
-    return ();
+    return;
       <div className="text-sm text-gray-500">
         Current state not found
       </div>
     );
-  }
-  return ();
+  return;
     <div className="space-y-3">
       {/* Current State Display */}
       <div className="flex items-center space-x-2 text-sm">

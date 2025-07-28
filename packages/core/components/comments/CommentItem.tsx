@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Comment } from '../../types/workspace';
 import { CommentForm } from './CommentForm';
 interface CommentItemProps {
-  comment: Comment;
+  comment: Comment;,
   userId: string;
   onUpdate: (commentId: string, content: string, metadata?: Record<string, unknown>) => Promise<void>;
   onDelete: (commentId: string) => Promise<void>;
@@ -16,9 +16,7 @@ interface CommentItemProps {
   isReply?: boolean;
   isThreadRoot?: boolean;
   isLast?: boolean;
-}
-
-export const CommentItem: React.FC<CommentItemProps> = ({)
+  export const CommentItem: React.FC<CommentItemProps> = ({,)
   comment,
   userId,
   onUpdate,
@@ -37,34 +35,29 @@ export const CommentItem: React.FC<CommentItemProps> = ({)
   const isResolved = comment.metadata?.resolved;
   const resolvedBy = comment.metadata?.resolved_by;
   const resolvedAt = comment.metadata?.resolved_at;
-  const handleEdit = async (content: string) => {
-    try {
-      await onUpdate(comment.id, content);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Failed to update comment:', error);
-    }
-  };
+  const handleEdit = async (content: string) => {,
+  try {
+  await onUpdate(comment.id, content);
+  setIsEditing(false);
+} catch (error) {
+  console.error('Failed to update comment:', error);
+};
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this comment?')) {
       setDeleting(true);
       try {
         await onDelete(comment.id);
       } catch (error) {
-        console.error('Failed to delete comment:', error);
-        setDeleting(false);
-      }
-    }
-  };
+  console.error('Failed to delete comment:', error);
+  setDeleting(false);
+};
   const handleResolve = async () => {
     if (onResolve) {
       try {
         await onResolve(comment.id, !isResolved);
       } catch (error) {
-        console.error('Failed to resolve comment:', error);
-      }
-    }
-  };
+  console.error('Failed to resolve comment:', error);
+};
   const formatTime = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
@@ -86,7 +79,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({)
       .replace(/\n/g, '<br />');
   };
   if (deleting) {
-    return ();
+    return;
       <div className="comment-item comment-item--deleting">
         <div className="comment-item__content">
           <div className="deletion-notice">
@@ -95,8 +88,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({)
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div 
       className={`comment-item ${compact ? 'comment-item--compact' : ''} ${isReply ? 'comment-item--reply' : ''} ${isThreadRoot ? 'comment-item--thread-root' : ''} ${isLast ? 'comment-item--last' : ''} ${isResolved ? 'comment-item--resolved' : ''}`}
       onMouseEnter={() => setShowActions(true)}

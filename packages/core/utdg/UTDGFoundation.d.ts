@@ -4,6 +4,7 @@
  * Provides unified interface for historical, cultural, and creative content integration
  */
 import { HistoricalEra, Genre, Style } from '../historical/NodeMetadataManager';
+
 export interface UTDGNode {
     id: string;
     type: 'concept' | 'entity' | 'relationship' | 'attribute' | 'constraint';
@@ -20,7 +21,7 @@ export interface UTDGNode {
         lastUpdated: Date;
     };
     relationships: UTDGRelationship[];
-}
+
 export interface UTDGRelationship {
     id: string;
     sourceNodeId: string;
@@ -34,7 +35,7 @@ export interface UTDGRelationship {
         after?: Date;
         duration?: number;
     };
-}
+
 export interface UTDGQuery {
     nodeTypes?: string[];
     relationshipTypes?: string[];
@@ -59,7 +60,7 @@ export interface UTDGQuery {
         professions?: string[];
         genders?: string[];
     };
-}
+
 export interface UTDGContext {
     historical: {,
         era: HistoricalEra;
@@ -78,7 +79,7 @@ export interface UTDGContext {
         sources: 'academic' | 'popular' | 'mixed';
         validation: boolean;
     };
-}
+
 export interface UTDGContentSuggestion {
     type: 'character' | 'setting' | 'object' | 'event' | 'concept';
     content: any;
@@ -90,7 +91,7 @@ export interface UTDGContentSuggestion {
         violations: string[];
         suggestions: string[];
     };
-}
+
 export declare class UTDGFoundation {
     private nodes;
     private relationships;
@@ -179,6 +180,6 @@ export declare class UTDGFoundation {
             stats: any;
         };
     };
-}
+
 export default UTDGFoundation;
 //# sourceMappingURL=UTDGFoundation.d.ts.map

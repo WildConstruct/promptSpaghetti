@@ -29,6 +29,7 @@ import {
   ReviewAssignment
 } from '../../../../packages/core/types/ReviewTools';
 
+}
 export interface AssignmentRecommendation {
   reviewerId: string;
   score: number;
@@ -38,20 +39,25 @@ export interface AssignmentRecommendation {
   riskFactors: string[];
   alternativeReviewers: string[];
 }
+}
 
+}
 export interface AssignmentReason {
   factor: WeightingFactor;
   weight: number;
   contribution: number;
   description: string;
 }
+}
 
+}
 export interface AssignmentStrategy {
   name: AssignmentType;
   description: string;
   weights: Record<WeightingFactor, number>;
   fallback: FallbackStrategy;
   enabled: boolean;
+}
 }
 
 export class ReviewerAssignmentService {
@@ -82,6 +88,7 @@ export class ReviewerAssignmentService {
     review: ReviewItem,
     excludeReviewers: string[] = []
   ): Promise<AssignmentRecommendation | null> {
+
     console.log(`🎯 Finding best reviewer for ${review.reviewType} review: ${review.reviewId}`);
 
     // Get assignment rules for this review type
@@ -125,6 +132,7 @@ export class ReviewerAssignmentService {
     requiredReviewers: number,
     excludeReviewers: string[] = []
   ): Promise<AssignmentRecommendation[]> {
+
     console.log(`👥 Finding ${requiredReviewers} reviewers for consensus review: ${review.reviewId}`);
 
     const recommendations: AssignmentRecommendation[] = [];
@@ -157,6 +165,7 @@ export class ReviewerAssignmentService {
     currentReviewerId: string,
     reason: ReassignmentReason
   ): Promise<AssignmentRecommendation | null> {
+
     console.log(`🔄 Recommending reassignment for review ${review.reviewId}: ${reason}`);
 
     // Get current reviewer's profile for context
@@ -189,6 +198,7 @@ export class ReviewerAssignmentService {
     reviewType?: ReviewType,
     targetUtilization: number = 80
   ): Promise<WorkloadRebalanceResult> {
+
     console.log(`⚖️ Rebalancing workload for ${reviewType || 'all'} reviews`);
 
     const reviewers = await this.getActiveReviewers(reviewType);
@@ -250,6 +260,7 @@ export class ReviewerAssignmentService {
     reviewers: ReviewerProfile[],
     rule: AssignmentRule
   ): Promise<AssignmentRecommendation[]> {
+
     const scoredReviewers: AssignmentRecommendation[] = [];
 
     for (const reviewer of reviewers) {
@@ -272,6 +283,7 @@ export class ReviewerAssignmentService {
     reviewer: ReviewerProfile,
     rule: AssignmentRule
   ): Promise<AssignmentRecommendation> {
+
     const reasons: AssignmentReason[] = [];
     let totalScore = 0;
     let confidence = 100;
@@ -401,7 +413,7 @@ export class ReviewerAssignmentService {
         weight: 0.2,
         contribution: score * 0.2,
         description
-      },
+  }
       risk
     };
   }
@@ -499,6 +511,7 @@ export class ReviewerAssignmentService {
     score: number;
     reason: AssignmentReason;
   }> {
+
     // Would query historical performance for this review type
     // For now, return a baseline score
     const score = 0.7; // Baseline historical success
@@ -530,7 +543,7 @@ export class ReviewerAssignmentService {
         performance: 0.1,
         specialization: 0,
         historical_success: 0
-      },
+  }
       fallback: 'assign_to_manager',
       enabled: true
     });
@@ -546,7 +559,7 @@ export class ReviewerAssignmentService {
         availability: 0.1,
         workload: 0,
         historical_success: 0
-      },
+  }
       fallback: 'use_backup_pool',
       enabled: true
     });
@@ -562,7 +575,7 @@ export class ReviewerAssignmentService {
         expertise: 0,
         specialization: 0,
         historical_success: 0
-      },
+  }
       fallback: 'queue_for_manual',
       enabled: true
     });
@@ -658,6 +671,7 @@ export class ReviewerAssignmentService {
 
   // Database and cache methods
   private async getAssignmentRules(reviewType: ReviewType): Promise<AssignmentRule[]> {
+
     if (this.assignmentRulesCache.has(reviewType)) {
       return this.assignmentRulesCache.get(reviewType)!;
     }
@@ -678,6 +692,7 @@ export class ReviewerAssignmentService {
     complexity: ReviewComplexity,
     excludeReviewers: string[] = []
   ): Promise<ReviewerProfile[]> {
+
     const query = `
       SELECT * FROM reviewer_profiles 
       WHERE availability_status IN ('available', 'busy')
@@ -697,6 +712,7 @@ export class ReviewerAssignmentService {
   }
 
   private async getReviewer(reviewerId: string): Promise<ReviewerProfile | null> {
+
     if (this.reviewerCache.has(reviewerId)) {
       return this.reviewerCache.get(reviewerId)!;
     }
@@ -716,6 +732,7 @@ export class ReviewerAssignmentService {
     review: ReviewItem,
     _____excludeReviewers: string[]
   ): Promise<AssignmentRecommendation | null> {
+
     // Implement fallback assignment logic
     console.log(`🔄 Using fallback assignment for review ${review.reviewId}`);
     return null;
@@ -753,6 +770,7 @@ export class ReviewerAssignmentService {
 // Supporting types
 type ReassignmentReason = 'performance_issue' | 'workload_overload' | 'expertise_mismatch' | 'unavailable' | 'escalated';
 
+}
 interface WorkloadRebalanceResult {
   totalReviewers: number;
   overloadedCount: number;
@@ -760,11 +778,14 @@ interface WorkloadRebalanceResult {
   recommendedActions: WorkloadRebalanceAction[];
   projectedImprovement: number;
 }
+}
 
+}
 interface WorkloadRebalanceAction {
   reviewId: string;
   fromReviewerId: string;
   toReviewerId: string;
   reason: string;
   expectedBenefit: number;
+}
 }

@@ -18,6 +18,7 @@ import {
 } from '../database/feature-toggle-models';
 
 // State query interface
+}
 export interface ToggleStateQuery {
   keys?: string[];
   types?: ToggleType[];
@@ -28,6 +29,7 @@ export interface ToggleStateQuery {
   lastModified?: {
     since?: string;
     until?: string;
+}
   };
   includeMetadata?: boolean;
   includeAudit?: boolean;
@@ -38,12 +40,14 @@ export interface ToggleStateQuery {
 }
 
 // Bulk operation interface
+}
 export interface BulkStateOperation {
   operation: 'enable' | 'disable' | 'toggle' | 'update_values';
   toggles: Array<string | {
     key: string;
     value?: unknown;
     reason?: string;
+}
   }>;
   reason?: string;
   dryRun?: boolean;
@@ -53,11 +57,13 @@ export interface BulkStateOperation {
 }
 
 // State comparison interface
+}
 export interface StateComparisonRequest {
   left: {
     orgId?: string;
     timestamp?: string;
     filters?: ToggleStateQuery;
+}
   };
   right: {
     orgId?: string;
@@ -72,25 +78,31 @@ export interface StateComparisonRequest {
 }
 
 // State watch interface
+}
 export interface StateWatchRequest {
   keys?: string[];
   events?: string[];
   filters?: ToggleStateQuery;
   callback: (event: unknown) => void;
 }
+}
 
 // Response interfaces
+}
 export interface ToggleStateQueryResult {
   states: unknown[];
   total: number;
   cacheHit?: boolean;
 }
+}
 
+}
 export interface BulkOperationResult {
   results: {
     successful: unknown[];
     failed: unknown[];
     rollbacks: unknown[];
+}
   };
   summary: {
     total: number;
@@ -100,11 +112,13 @@ export interface BulkOperationResult {
   };
 }
 
+}
 export interface StateCloneRequest {
   source: {
     orgId?: string;
     keys?: string[];
     filters?: ToggleStateQuery;
+}
   };
   target: {
     orgId: string;
@@ -139,6 +153,7 @@ export class ToggleStateService extends EventEmitter {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 200 })
   async queryStates(query: ToggleStateQuery, format: string = 'full'): Promise<ToggleStateQueryResult> {
+
     const cacheKey = `query:${JSON.stringify(query)}:${format}`;
     
     // Check cache first
@@ -207,6 +222,7 @@ export class ToggleStateService extends EventEmitter {
     groupBy?: string[];
     timeRange?: string;
   }): Promise<unknown> {
+
     try {
       // Get all toggles for the organization
       const result = await this.dao.listToggles({
@@ -251,8 +267,8 @@ export class ToggleStateService extends EventEmitter {
           ),
           newestToggle: toggles.reduce((newest, t) => 
             !newest || t.createdAt > newest.createdAt ? t : newest, null as FeatureToggle | null
-          )
-        },
+
+  }
         topModified: recentlyModified
           .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
           .slice(0, 10)
@@ -282,6 +298,7 @@ export class ToggleStateService extends EventEmitter {
     includeDiff?: boolean;
     orgId?: string;
   }): Promise<any[]> {
+
     try {
       const changes = [];
       
@@ -315,6 +332,7 @@ export class ToggleStateService extends EventEmitter {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 500 })
   async executeBulkOperation(operation: BulkStateOperation): Promise<BulkOperationResult> {
+
     const results = {
       successful: [] as any[],
       failed: [] as any[],
@@ -467,6 +485,7 @@ export class ToggleStateService extends EventEmitter {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 500 })
   async cloneStates(request: StateCloneRequest): Promise<unknown> {
+
     try {
       // Get source toggles
       const sourceQuery = await this.queryStates({
@@ -545,7 +564,7 @@ export class ToggleStateService extends EventEmitter {
           copied: cloneResults.copied.length,
           skipped: cloneResults.skipped.length,
           failed: cloneResults.failed.length
-        },
+  }
         details: cloneResults
       };
     } catch (error) {
@@ -600,6 +619,7 @@ export class ToggleStateService extends EventEmitter {
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async compareStates(request: StateComparisonRequest): Promise<unknown> {
+
     try {
       // Get states for both sides
       const [leftStates, rightStates] = await Promise.all([
@@ -619,7 +639,7 @@ export class ToggleStateService extends EventEmitter {
           leftOnly: 0,
           rightOnly: 0,
           different: 0
-        },
+  }
         details: {
           common: [] as any[],
           leftOnly: [] as any[],
@@ -685,6 +705,7 @@ export class ToggleStateService extends EventEmitter {
     orgId?: string;
     includeDetails?: boolean;
   }): Promise<unknown> {
+
     try {
       const summary = await this.getStateSummary({
         orgId: options.orgId,
@@ -748,6 +769,7 @@ export class ToggleStateService extends EventEmitter {
     orgId?: string;
     checks?: string[];
   }): Promise<unknown> {
+
     const validation = {
       isValid: true,
       issues: [] as any[],

@@ -7,6 +7,7 @@
  * ensuring continuous monitoring and zero-downtime operations.
  */
 import { EventEmitter } from 'events';
+
 export interface SecuritySystemNode {
     id: string;
     name: string;
@@ -63,7 +64,7 @@ export interface SecuritySystemNode {
         end: number;
         description: string;
     };
-}
+
 export interface FailoverPolicy {
     id: string;
     name: string;
@@ -119,7 +120,7 @@ export interface FailoverPolicy {
     created_by: string;
     created_at: number;
     last_modified: number;
-}
+
 export interface FailoverEvent {
     id: string;
     policy_id: string;
@@ -157,7 +158,7 @@ export interface FailoverEvent {
         policy_adjustments: string[];
     };
     created_by: string;
-}
+
 export interface FailoverTimelineEntry {
     id: string;
     timestamp: number;
@@ -167,7 +168,7 @@ export interface FailoverTimelineEntry {
     details: Record<string, any>;
     duration?: number;
     error_message?: string;
-}
+
 export interface RedundancyGroup {
     id: string;
     name: string;
@@ -200,7 +201,7 @@ export interface RedundancyGroup {
     };
     created_at: number;
     last_updated: number;
-}
+
 export interface FailoverMetrics {
     availability: {,
         uptime_percentage: number;
@@ -245,7 +246,7 @@ export interface FailoverMetrics {
         start: number;
         end: number;
     };
-}
+
 export interface FailoverConfig {
     enabled: boolean;
     default_failover_timeout: number;
@@ -296,7 +297,6 @@ export interface FailoverConfig {
         audit_all_failovers: boolean;
         compliance_mode: boolean;
     };
-}
 /**
  * Security Analytics System Failover Manager
  */
@@ -418,6 +418,6 @@ export declare class SecurityFailoverManager extends EventEmitter {
      * Shutdown the failover manager
      */
     shutdown(): void;
-}
+
 export default SecurityFailoverManager;
 //# sourceMappingURL=SecurityFailoverManager.d.ts.map

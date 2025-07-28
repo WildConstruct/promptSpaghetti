@@ -2,55 +2,52 @@ import { EventEmitter } from 'events';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface QueuedOperation {
-  id: string;
+  id: string;,
   type: 'graph_update' | 'presence_update' | 'cursor_update' | 'selection_update' | 'activity_update';
-  payload: any;
+  payload: any;,
   timestamp: number;
-  retryCount: number;
+  retryCount: number;,
   priority: 'high' | 'medium' | 'low';
-  documentId: string;
+  documentId: string;,
   userId: string;
   requiresOrder: boolean;
-  dependencies?: string[];
+  dependencies?: string;
   maxRetries: number;
   expiresAt?: number;
 }
-
 export interface QueueMetrics {
-  totalOperations: number;
+  totalOperations: number;,
   pendingOperations: number;
-  failedOperations: number;
+  failedOperations: number;,
   retryingOperations: number;
-  expiredOperations: number;
+  expiredOperations: number;,
   averageQueueTime: number;
-  oldestOperationAge: number;
+  oldestOperationAge: number;,
   queueSizeByPriority: {,
-    high: number;
-    medium: number;
-    low: number;
-  };
+  high: number;,
+  medium: number;
+  low: number;
+};
   operationsByType: Map<string, number>;
 }
-
 export interface OfflineQueueConfig {
-  maxQueueSize: number;
+  maxQueueSize: number;,
   maxRetries: number;
-  retryBackoffMs: number;
+  retryBackoffMs: number;,
   maxBackoffMs: number;
-  operationTtlMs: number;
+  operationTtlMs: number;,
   persistToLocalStorage: boolean;
-  storageKey: string;
+  storageKey: string;,
   compressionEnabled: boolean;
-  batchSizeLimit: number;
+  batchSizeLimit: number;,
   priorityWeights: {,
-    high: number;
-    medium: number;
-    low: number;
-  };
+  high: number;,
+  medium: number;
+  low: number;
+};
 }
-
 export class OfflineOperationQueue extends EventEmitter {
-  private queue: QueuedOperation[] = [];
+  private queue: QueuedOperation = [];
   private processingQueue: Map<string, QueuedOperation> = new Map();
   private failedOperations: Map<string, QueuedOperation> = new Map();
   private config: OfflineQueueConfig;
@@ -58,59 +55,57 @@ export class OfflineOperationQueue extends EventEmitter {
   private cleanupTimer: NodeJS.Timeout | null = null;
   private persistenceTimer: NodeJS.Timeout | null = null;
   constructor(config: Partial<OfflineQueueConfig> = {}) {
-    super();
-    this.config = {
-      maxQueueSize: 1000,
-      maxRetries: 3,
-      retryBackoffMs: 1000,
-      maxBackoffMs: 30000,
-      operationTtlMs: 3600000, // 1 hour
-      persistToLocalStorage: true,
-      storageKey: 'prompt-spaghetti-offline-queue',
-      compressionEnabled: false,
-      batchSizeLimit: 50,
-      priorityWeights: {,
-        high: 3,
-        medium: 2,
-        low: 1,
-      },
+  super();
+  this.config = {
+  maxQueueSize: 1000,
+  maxRetries: 3,
+  retryBackoffMs: 1000,
+  maxBackoffMs: 30000,
+  operationTtlMs: 3600000, // 1 hour,
+  persistToLocalStorage: true,
+  storageKey: 'prompt-spaghetti-offline-queue',
+  compressionEnabled: false,
+  batchSizeLimit: 50,
+  priorityWeights: {,
+  high: 3,
+  medium: 2,
+  low: 1,
+}
       ...config
     };
     this.metrics = {
-      totalOperations: 0,
-      pendingOperations: 0,
-      failedOperations: 0,
-      retryingOperations: 0,
-      expiredOperations: 0,
-      averageQueueTime: 0,
-      oldestOperationAge: 0,
-      queueSizeByPriority: {,
-        high: 0,
-        medium: 0,
-        low: 0,
-      },
-      operationsByType: new Map(),
-    };
+  totalOperations: 0,
+  pendingOperations: 0,
+  failedOperations: 0,
+  retryingOperations: 0,
+  expiredOperations: 0,
+  averageQueueTime: 0,
+  oldestOperationAge: 0,
+  queueSizeByPriority: {,
+  high: 0,
+  medium: 0,
+  low: 0,
+},
+  operationsByType: new Map();
+  };
     this.startCleanupTimer();
     this.startPersistenceTimer();
     this.loadFromPersistence();
-  }
   /**
    * Add operation to the queue
    */
   enqueue(operation: Omit<QueuedOperation, 'id' | 'timestamp' | 'retryCount'>): string {
-    // Check queue size limit
-    if (this.queue.length >= this.config.maxQueueSize) {
-      this.evictOldestOperation();
-    }
-    const queuedOperation: QueuedOperation = {
-      id: uuidv4(),
-      timestamp: Date.now(),
-      retryCount: 0,
-      expiresAt: Date.now() + this.config.operationTtlMs,
-      maxRetries: operation.maxRetries || this.config.maxRetries,
-      ...operation
-    };
+  // Check queue size limit
+  if (this.queue.length >= this.config.maxQueueSize) {
+  this.evictOldestOperation();
+  const queuedOperation: QueuedOperation = {,
+  id: uuidv4(),
+  timestamp: Date.now(),
+  retryCount: 0,
+  expiresAt: Date.now() + this.config.operationTtlMs,
+  maxRetries: operation.maxRetries || this.config.maxRetries,
+  ...operation
+};
     // Insert operation in priority order
     this.insertByPriority(queuedOperation);
     this.updateMetrics();
@@ -118,22 +113,20 @@ export class OfflineOperationQueue extends EventEmitter {
     this.emit('operation_queued', queuedOperation);
     console.log(`Queued operation ${queuedOperation.type} with priority ${queuedOperation.priority}`);}
     return queuedOperation.id;
-  }
   /**
    * Get next batch of operations to process
    */
-  dequeue(batchSize: number = this.config.batchSizeLimit): QueuedOperation[] {
-    const batch: QueuedOperation[] = [];
-    const now = Date.now();
-    // Filter out expired operations
-    this.queue = this.queue.filter(op => {)
-      if (op.expiresAt && op.expiresAt < now) {
-        this.metrics.expiredOperations++;
-        this.emit('operation_expired', op);
-        return false;
-      }
-      return true;
-    });
+  dequeue(batchSize: number = this.config.batchSizeLimit): QueuedOperation {
+  const batch: QueuedOperation = [];
+  const now = Date.now();
+  // Filter out expired operations
+  this.queue = this.queue.filter(op => {)
+  if (op.expiresAt && op.expiresAt < now) {
+  this.metrics.expiredOperations++;
+  this.emit('operation_expired', op);
+  return false;
+  return true;
+});
     // Sort by priority and age
     this.queue.sort((a, b) => {
       const priorityDiff = this.config.priorityWeights[b.priority] - this.config.priorityWeights[a.priority];
@@ -151,15 +144,11 @@ export class OfflineOperationQueue extends EventEmitter {
         // Put back at end if dependencies not satisfied
         this.queue.push(operation);
         break;
-      }
-    }
     this.updateMetrics();
     if (batch.length > 0) {
       console.log(`Dequeued batch of ${batch.length} operations`);}
       this.emit('batch_dequeued', batch);
-    }
     return batch;
-  }
   /**
    * Mark operation as successfully processed
    */
@@ -174,8 +163,6 @@ export class OfflineOperationQueue extends EventEmitter {
       this.persistToStorage();
       this.emit('operation_success', operation);
       console.log(`Operation ${operation.type} completed successfully after ${processingTime}ms`);}
-    }
-  }
   /**
    * Mark operation as failed and handle retry logic
    */
@@ -183,7 +170,6 @@ export class OfflineOperationQueue extends EventEmitter {
     const operation = this.processingQueue.get(operationId);
     if (!operation) {
       return;
-    }
     operation.retryCount++;
     this.processingQueue.delete(operationId);
     if (operation.retryCount >= operation.maxRetries) {
@@ -191,7 +177,8 @@ export class OfflineOperationQueue extends EventEmitter {
       this.failedOperations.set(operationId, operation);
       this.metrics.failedOperations++;
       this.emit('operation_failed', operation, error);
-      console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount} retries:`, error);}
+      console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount},)}
+  retries:`, error);}
     } else {
       // Schedule retry with exponential backoff
       const backoffTime = Math.min(;);
@@ -207,14 +194,11 @@ export class OfflineOperationQueue extends EventEmitter {
         this.emit('operation_retry', operation, backoffTime);
         console.log(`Retrying operation ${operation.type} (attempt ${operation.retryCount}) after ${backoffTime}ms`);}
       }, backoffTime);
-    }
-  }
   /**
    * Get all operations for a specific document
    */
-  getOperationsForDocument(documentId: string): QueuedOperation[] {
+  getOperationsForDocument(documentId: string): QueuedOperation {
     return this.queue.filter(op => op.documentId === documentId);
-  }
   /**
    * Remove all operations for a specific document
    */
@@ -225,21 +209,15 @@ export class OfflineOperationQueue extends EventEmitter {
     for (const [id, op] of this.processingQueue.entries()) {
       if (op.documentId === documentId) {
         this.processingQueue.delete(id);
-      }
-    }
     for (const [id, op] of this.failedOperations.entries()) {
       if (op.documentId === documentId) {
         this.failedOperations.delete(id);
-      }
-    }
     const removedCount = initialLength - this.queue.length;
     if (removedCount > 0) {
       this.updateMetrics();
       this.persistToStorage();
       this.emit('document_cleared', documentId, removedCount);
-    }
     return removedCount;
-  }
   /**
    * Clear all operations
    */
@@ -252,31 +230,26 @@ export class OfflineOperationQueue extends EventEmitter {
     this.persistToStorage();
     this.emit('queue_cleared', totalCleared);
     console.log(`Cleared ${totalCleared} operations from queue`);}
-  }
   /**
    * Get current queue metrics
    */
   getMetrics(): QueueMetrics {
     return { ...this.metrics };
-  }
   /**
    * Get queue size
    */
   size(): number {
     return this.queue.length;
-  }
   /**
    * Check if queue is empty
    */
   isEmpty(): boolean {
     return this.queue.length === 0 && this.processingQueue.size === 0;
-  }
   /**
    * Get failed operations for debugging/recovery
    */
-  getFailedOperations(): QueuedOperation[] {
+  getFailedOperations(): QueuedOperation {
     return Array.from(this.failedOperations.values());
-  }
   /**
    * Retry all failed operations
    */
@@ -287,26 +260,20 @@ export class OfflineOperationQueue extends EventEmitter {
       operation.expiresAt = Date.now() + this.config.operationTtlMs; // Extend expiry
       this.insertByPriority(operation);
       this.failedOperations.delete(operation.id);
-    }
     if (failedOps.length > 0) {
       this.updateMetrics();
       this.persistToStorage();
       this.emit('failed_operations_retried', failedOps.length);
-    }
     return failedOps.length;
-  }
   /**
    * Cleanup expired operations and reset metrics
    */
   cleanup(): void {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
-    }
     if (this.persistenceTimer) {
       clearInterval(this.persistenceTimer);
-    }
     this.clear();
-  }
   /**
    * Insert operation by priority
    */
@@ -320,25 +287,18 @@ export class OfflineOperationQueue extends EventEmitter {
           (weight === existingWeight && operation.timestamp < this.queue[i].timestamp)) {
         insertIndex = i;
         break;
-      }
-    }
     this.queue.splice(insertIndex, 0, operation);
-  }
   /**
    * Check if operation dependencies are satisfied
    */
   private areDependenciesSatisfied(operation: QueuedOperation): boolean {
     if (!operation.dependencies || operation.dependencies.length === 0) {
       return true;
-    }
     // Check if any dependencies are still in queue or processing
     for (const depId of operation.dependencies) {
       if (this.queue.some(op => op.id === depId) || this.processingQueue.has(depId)) {
         return false;
-      }
-    }
     return true;
-  }
   /**
    * Evict oldest operation when queue is full
    */
@@ -356,71 +316,60 @@ export class OfflineOperationQueue extends EventEmitter {
         oldestIndex = i;
         oldestTimestamp = timestamp;
         lowestPriority = priority;
-      }
-    }
     const evicted = this.queue.splice(oldestIndex, 1)[0];
     this.emit('operation_evicted', evicted);
     console.warn(`Evicted operation ${evicted.type} due to queue size limit`);}
-  }
   /**
    * Update queue metrics
    */
   private updateMetrics(): void {
-    this.metrics.pendingOperations = this.queue.length;
-    this.metrics.totalOperations = this.queue.length + this.processingQueue.size + this.failedOperations.size;
-    // Update priority counts
-    this.metrics.queueSizeByPriority = {
-      high: this.queue.filter(op => op.priority === 'high').length,
-      medium: this.queue.filter(op => op.priority === 'medium').length,
-      low: this.queue.filter(op => op.priority === 'low').length,
-    };
+  this.metrics.pendingOperations = this.queue.length;
+  this.metrics.totalOperations = this.queue.length + this.processingQueue.size + this.failedOperations.size;
+  // Update priority counts
+  this.metrics.queueSizeByPriority = {
+  high: this.queue.filter(op => op.priority === 'high').length,
+  medium: this.queue.filter(op => op.priority === 'medium').length,
+  low: this.queue.filter(op => op.priority === 'low').length,
+};
     // Update operation type counts
     this.metrics.operationsByType.clear();
     for (const operation of this.queue) {
-      const count = this.metrics.operationsByType.get(operation.type) || 0;
-      this.metrics.operationsByType.set(operation.type, count + 1);
-    }
-    // Calculate oldest operation age
-    if (this.queue.length > 0) {
-      const oldestOperation = this.queue.reduce((oldest, current) => ;
-        current.timestamp < oldest.timestamp ? current : oldest
-      );
-      this.metrics.oldestOperationAge = Date.now() - oldestOperation.timestamp;
-    } else {
-      this.metrics.oldestOperationAge = 0;
-    }
-  }
+  const count = this.metrics.operationsByType.get(operation.type) || 0;
+  this.metrics.operationsByType.set(operation.type, count + 1);
+  // Calculate oldest operation age
+  if (this.queue.length > 0) {
+  const oldestOperation = this.queue.reduce((oldest, current) => ;
+  current.timestamp < oldest.timestamp ? current : oldest);
+  this.metrics.oldestOperationAge = Date.now() - oldestOperation.timestamp;
+} else {
+  this.metrics.oldestOperationAge = 0;
   /**
-   * Update average queue time
-   */
-  private updateAverageQueueTime(newTime: number): void {
-    // Simple moving average
-    this.metrics.averageQueueTime = (this.metrics.averageQueueTime * 0.9) + (newTime * 0.1);
-  }
+  * Update average queue time
+  */
+  private updateAverageQueueTime(newTime: number): void {,
+  // Simple moving average
+  this.metrics.averageQueueTime = (this.metrics.averageQueueTime * 0.9) + (newTime * 0.1);
   /**
-   * Start cleanup timer
-   */
-  private startCleanupTimer(): void {
-    this.cleanupTimer = setInterval(() => {
-      const now = Date.now();
-      const initialLength = this.queue.length;
-      // Remove expired operations
-      this.queue = this.queue.filter(op => {)
-        if (op.expiresAt && op.expiresAt < now) {
-          this.metrics.expiredOperations++;
-          this.emit('operation_expired', op);
-          return false;
-        }
-        return true;
-      });
+  * Start cleanup timer
+  */
+  private startCleanupTimer(): void {,
+  this.cleanupTimer = setInterval(() => {
+  const now = Date.now();
+  const initialLength = this.queue.length;
+  // Remove expired operations
+  this.queue = this.queue.filter(op => {)
+  if (op.expiresAt && op.expiresAt < now) {
+  this.metrics.expiredOperations++;
+  this.emit('operation_expired', op);
+  return false;
+  return true;
+});
       const expiredCount = initialLength - this.queue.length;
       if (expiredCount > 0) {
         this.updateMetrics();
         this.persistToStorage();
         console.log(`Cleaned up ${expiredCount} expired operations`);}
-      }
     }, 60000); // Run every minute
-  }
   /**
    * Start persistence timer
    */
@@ -429,33 +378,28 @@ export class OfflineOperationQueue extends EventEmitter {
     this.persistenceTimer = setInterval(() => {
       this.persistToStorage();
     }, 30000); // Persist every 30 seconds
-  }
   /**
    * Persist queue to localStorage
    */
   private persistToStorage(): void {
-    if (!this.config.persistToLocalStorage || typeof localStorage === 'undefined') {
-      return;
-    }
-    try {
-      const data = {
-        queue: this.queue,
-        failedOperations: Array.from(this.failedOperations.entries()),
-        timestamp: Date.now(),
-      };
+  if (!this.config.persistToLocalStorage || typeof localStorage === 'undefined') {
+  return;
+  try {
+  const data = {
+  queue: this.queue,
+  failedOperations: Array.from(this.failedOperations.entries()),
+  timestamp: Date.now(),
+};
       const serialized = JSON.stringify(data);
       localStorage.setItem(this.config.storageKey, serialized);
     } catch (error) {
       console.error('Failed to persist queue to localStorage:', error);
-    }
-  }
   /**
    * Load queue from localStorage
    */
   private loadFromPersistence(): void {
     if (!this.config.persistToLocalStorage || typeof localStorage === 'undefined') {
       return;
-    }
     try {
       const stored = localStorage.getItem(this.config.storageKey);
       if (!stored) return;
@@ -464,7 +408,6 @@ export class OfflineOperationQueue extends EventEmitter {
       if (Date.now() - data.timestamp > this.config.operationTtlMs) {
         localStorage.removeItem(this.config.storageKey);
         return;
-      }
       this.queue = data.queue || [];
       this.failedOperations = new Map(data.failedOperations || []);
       this.updateMetrics();
@@ -473,6 +416,3 @@ export class OfflineOperationQueue extends EventEmitter {
     } catch (error) {
       console.error('Failed to load queue from localStorage:', error);
       localStorage.removeItem(this.config.storageKey);
-    }
-  }
-}

@@ -32,6 +32,7 @@ import {
   FraudNetworkAnalysis
 } from '../../../../packages/core/types/FraudMonitoring';
 
+}
 export interface FraudReviewCase {
   caseId: string;
   type: 'payment' | 'account' | 'network' | 'manual';
@@ -63,7 +64,9 @@ export interface FraudReviewCase {
   relatedCases: string[];
   tags: string[];
 }
+}
 
+}
 export interface FraudReviewNote {
   noteId: string;
   reviewerId: string;
@@ -72,7 +75,9 @@ export interface FraudReviewNote {
   timestamp: Date;
   attachments?: string[];
 }
+}
 
+}
 export interface FraudReviewDecision {
   decision: 'approve' | 'reject' | 'escalate' | 'modify';
   reason: string;
@@ -83,7 +88,9 @@ export interface FraudReviewDecision {
   decidedBy: string;
   decidedAt: Date;
 }
+}
 
+}
 export interface FraudEvidence {
   evidenceId: string;
   type: 'behavioral' | 'transactional' | 'device' | 'network' | 'external';
@@ -94,7 +101,9 @@ export interface FraudEvidence {
   verifiedBy?: string;
   verifiedAt?: Date;
 }
+}
 
+}
 export interface FraudAlert {
   alertId: string;
   severity: 'info' | 'warning' | 'critical' | 'urgent';
@@ -120,6 +129,7 @@ export interface FraudAlert {
   expiresAt?: Date;
   tags: string[];
   relatedAlerts: string[];
+}
 }
 
 export class FraudMonitoringService {
@@ -158,7 +168,7 @@ export class FraudMonitoringService {
         autoChallenge: 50,
         autoReview: 75,
         autoBlock: 90
-      },
+  }
       responseConfig: {
         autoActions: true,
         challengeEnabled: true,
@@ -166,12 +176,12 @@ export class FraudMonitoringService {
         escalationThresholds: [],
         appealEnabled: true,
         appealWindow: 72
-      },
+  }
       integrations: {
         fraudServices: [],
         identityVerification: [],
         paymentIntelligence: []
-      },
+  }
       performance: {
         maxProcessingTime: 5000,
         cacheEnabled: true,
@@ -180,13 +190,13 @@ export class FraudMonitoringService {
         maxBatchSize: 100,
         parallelProcessing: true,
         maxConcurrency: 10
-      },
+  }
       notifications: {
         realTimeAlerts: true,
         emailNotifications: true,
         webhookEndpoints: [],
         escalationNotifications: true
-      },
+  }
       ...config
     };
   }
@@ -202,6 +212,7 @@ export class FraudMonitoringService {
     startDate: Date;
     endDate: Date;
   }): Promise<FraudAnalytics> {
+
     console.log(`📊 Generating fraud analytics for ${timeRange.startDate.toISOString()} to ${timeRange.endDate.toISOString()}`);
 
     const [
@@ -226,7 +237,7 @@ export class FraudMonitoringService {
         startDate: timeRange.startDate,
         endDate: timeRange.endDate,
         timeRange: 'custom'
-      },
+  }
       generatedAt: new Date(),
       overallMetrics,
       detectionMetrics,
@@ -248,6 +259,7 @@ export class FraudMonitoringService {
     topRiskEntities: RiskEntity[];
     performanceMetrics: PerformanceMetrics;
   }> {
+
     const [
       summary,
       recentAlerts,
@@ -284,6 +296,7 @@ export class FraudMonitoringService {
     entityId: string,
     type: 'payment' | 'account' | 'network' | 'manual' = 'manual'
   ): Promise<FraudReviewCase> {
+
     const caseId = this.generateCaseId();
     const priority = this.determineCasePriority(detectionResult);
     const deadline = this.calculateCaseDeadline(priority);
@@ -325,6 +338,7 @@ export class FraudMonitoringService {
    * Assign a review case to an analyst
    */
   async assignReviewCase(caseId: string, analystId: string): Promise<FraudReviewCase> {
+
     const reviewCase = await this.getReviewCase(caseId);
     if (!reviewCase) {
       throw new Error(`Review case not found: ${caseId}`);
@@ -361,6 +375,7 @@ export class FraudMonitoringService {
     note: string,
     type: 'observation' | 'question' | 'recommendation' | 'decision' = 'observation'
   ): Promise<FraudReviewNote> {
+
     const reviewNote: FraudReviewNote = {
       noteId: this.generateNoteId(),
       reviewerId,
@@ -392,6 +407,7 @@ export class FraudMonitoringService {
       modifiedFraudScore?: number;
     }
   ): Promise<FraudReviewCase> {
+
     const reviewCase = await this.getReviewCase(caseId);
     if (!reviewCase) {
       throw new Error(`Review case not found: ${caseId}`);
@@ -431,7 +447,7 @@ export class FraudMonitoringService {
         decision: decision.decision, 
         entityType: reviewCase.entityType, 
         entityId: reviewCase.entityId 
-      },
+  }
       severity: 'info'
     });
 
@@ -462,6 +478,7 @@ export class FraudMonitoringService {
       tags?: string[];
     } = {}
   ): Promise<FraudAlert> {
+
     const alertId = this.generateAlertId();
 
     const alert: FraudAlert = {
@@ -497,6 +514,7 @@ export class FraudMonitoringService {
    * Acknowledge an alert
    */
   async acknowledgeAlert(alertId: string, userId: string): Promise<FraudAlert> {
+
     await this.db.query(`
       UPDATE fraud_alerts 
       SET status = 'acknowledged', acknowledged_by = $1, acknowledged_at = NOW()
@@ -510,6 +528,7 @@ export class FraudMonitoringService {
    * Resolve an alert
    */
   async resolveAlert(alertId: string, userId: string): Promise<FraudAlert> {
+
     await this.db.query(`
       UPDATE fraud_alerts 
       SET status = 'resolved', resolved_by = $1, resolved_at = NOW()
@@ -527,6 +546,7 @@ export class FraudMonitoringService {
    * Create or update a fraud rule
    */
   async upsertFraudRule(rule: Partial<FraudRule>): Promise<FraudRule> {
+
     const ruleId = rule.ruleId || this.generateRuleId();
     
     const fraudRule: FraudRule = {
@@ -614,6 +634,7 @@ export class FraudMonitoringService {
   // =============================================================================
 
   private async calculateOverallMetrics(_____timeRange: Error): Promise<FraudOverallMetrics> {
+
     // Implementation would query fraud detection results from database
     return {
       totalTransactions: 0,
@@ -634,6 +655,7 @@ export class FraudMonitoringService {
   }
 
   private async calculateDetectionMetrics(_____timeRange: Error): Promise<DetectionMetrics> {
+
     return {
       byMethod: [],
       byRiskLevel: [],
@@ -642,12 +664,13 @@ export class FraudMonitoringService {
         percentile95: 0,
         percentile99: 0,
         slowestRequests: 0
-      },
+  }
       automationRate: 0
     };
   }
 
   private async calculateFraudTrends(_____timeRange: Error): Promise<FraudTrends> {
+
     return {
       fraudRateTrend: 'stable',
       volumeTrend: 'stable',
@@ -659,6 +682,7 @@ export class FraudMonitoringService {
   }
 
   private async calculateFalsePositiveAnalysis(_____timeRange: Error): Promise<FalsePositiveAnalysis> {
+
     return {
       overallRate: 0,
       byCategory: [],
@@ -669,6 +693,7 @@ export class FraudMonitoringService {
   }
 
   private async calculateFinancialImpact(_____timeRange: Error): Promise<FinancialImpact> {
+
     return {
       fraudPrevented: 0,
       falsePositiveCost: 0,
@@ -682,6 +707,7 @@ export class FraudMonitoringService {
   }
 
   private async generateFraudInsights(metrics: FraudOverallMetrics, _____trends: FraudTrends): Promise<FraudInsight[]> {
+
     const insights: FraudInsight[] = [];
 
     // Example insight generation
@@ -706,6 +732,7 @@ export class FraudMonitoringService {
     metrics: FraudOverallMetrics, 
     falsePositives: FalsePositiveAnalysis
   ): Promise<FraudAnalyticsRecommendation[]> {
+
     const recommendations: FraudAnalyticsRecommendation[] = [];
 
     // Example recommendation generation
@@ -721,7 +748,7 @@ export class FraudMonitoringService {
           effort: 'medium',
           timeline: '2-4 weeks',
           resources: ['fraud_analyst', 'data_scientist']
-        },
+  }
         successMetrics: ['Reduce false positive rate to <5%', 'Maintain fraud detection accuracy'],
         generatedAt: new Date()
       });
@@ -732,19 +759,19 @@ export class FraudMonitoringService {
 
   // Dashboard helper methods
   private async getDashboardSummary(): Promise<FraudDashboardSummary> {
-        
+
     return {
       todayStats: {
         totalDetections: 0,
         blockedTransactions: 0,
         reviewQueue: 0,
         avgFraudScore: 0
-      },
+  }
       weeklyTrend: {
         fraudRate: 0,
         volumeChange: 0,
         performanceChange: 0
-      },
+  }
       systemHealth: {
         status: 'healthy',
         uptime: 99.9,
@@ -755,6 +782,7 @@ export class FraudMonitoringService {
   }
 
   private async getRecentAlerts(limit: number): Promise<FraudAlert[]> {
+
     const result = await this.db.query(`
       SELECT * FROM fraud_alerts 
       WHERE status IN ('active', 'acknowledged')
@@ -766,6 +794,7 @@ export class FraudMonitoringService {
   }
 
   private async getPendingReviews(limit: number): Promise<FraudReviewCase[]> {
+
     const result = await this.db.query(`
       SELECT * FROM fraud_review_cases 
       WHERE status IN ('pending', 'under_review')
@@ -777,11 +806,13 @@ export class FraudMonitoringService {
   }
 
   private async getTopRiskEntities(_____limit: number): Promise<RiskEntity[]> {
+
     // Implementation would query for highest risk entities
     return [];
   }
 
   private async getPerformanceMetrics(): Promise<PerformanceMetrics> {
+
     return {
       avgProcessingTime: 0,
       throughput: 0,
@@ -828,6 +859,7 @@ export class FraudMonitoringService {
   }
 
   private async autoAssignCase(reviewCase: FraudReviewCase): Promise<void> {
+
     // Implementation would auto-assign to available analyst
     console.log(`🤖 Auto-assigning case ${reviewCase.caseId}`);
   }
@@ -836,12 +868,14 @@ export class FraudMonitoringService {
     reviewCase: FraudReviewCase, 
     decision: FraudReviewDecision
   ): Promise<void> {
+
     // Implementation would execute enforcement actions based on decision
     console.log(`⚡ Executing decision actions for case ${reviewCase.caseId}: ${decision.decision}`);
   }
 
   // Database operations
   private async storeReviewCase(reviewCase: FraudReviewCase): Promise<void> {
+
     await this.db.query(`
       INSERT INTO fraud_review_cases (
         case_id, type, status, priority, fraud_score, risk_level,
@@ -858,6 +892,7 @@ export class FraudMonitoringService {
   }
 
   private async getReviewCase(caseId: string): Promise<FraudReviewCase | null> {
+
     const result = await this.db.query(`
       SELECT * FROM fraud_review_cases WHERE case_id = $1
     `, [caseId]);
@@ -893,6 +928,7 @@ export class FraudMonitoringService {
   }
 
   private async storeAlert(alert: FraudAlert): Promise<void> {
+
     await this.db.query(`
       INSERT INTO fraud_alerts (
         alert_id, severity, type, title, description, fraud_score,
@@ -907,6 +943,7 @@ export class FraudMonitoringService {
   }
 
   private async getAlert(alertId: string): Promise<FraudAlert | null> {
+
     const result = await this.db.query(`
       SELECT * FROM fraud_alerts WHERE alert_id = $1
     `, [alertId]);
@@ -939,6 +976,7 @@ export class FraudMonitoringService {
   }
 
   private async storeReviewNote(caseId: string, note: FraudReviewNote): Promise<void> {
+
     await this.db.query(`
       INSERT INTO fraud_review_notes (
         note_id, case_id, reviewer_id, note, type, timestamp
@@ -947,12 +985,14 @@ export class FraudMonitoringService {
   }
 
   private async updateCaseTimestamp(caseId: string): Promise<void> {
+
     await this.db.query(`
       UPDATE fraud_review_cases SET updated_at = NOW() WHERE case_id = $1
     `, [caseId]);
   }
 
   private async storeFraudRule(rule: FraudRule): Promise<void> {
+
     await this.db.query(`
       INSERT INTO fraud_rules (
         rule_id, name, description, category, severity, enabled,
@@ -971,14 +1011,17 @@ export class FraudMonitoringService {
 
   // Notification methods
   private async notifyNewReviewCase(reviewCase: FraudReviewCase): Promise<void> {
+
     console.log(`📧 Notifying new review case: ${reviewCase.caseId}`);
   }
 
   private async notifyDecisionMade(reviewCase: FraudReviewCase, decision: FraudReviewDecision): Promise<void> {
+
     console.log(`📧 Notifying decision made for case: ${reviewCase.caseId} - ${decision.decision}`);
   }
 
   private async sendAlertNotification(alert: FraudAlert): Promise<void> {
+
     console.log(`📧 Sending alert notification: ${alert.alertId} (${alert.severity})`);
   }
 
@@ -1013,12 +1056,14 @@ export class FraudMonitoringService {
 }
 
 // Supporting interfaces
+}
 interface FraudDashboardSummary {
   todayStats: {
     totalDetections: number;
     blockedTransactions: number;
     reviewQueue: number;
     avgFraudScore: number;
+}
   };
   weeklyTrend: {
     fraudRate: number;
@@ -1033,6 +1078,7 @@ interface FraudDashboardSummary {
   };
 }
 
+}
 interface RiskEntity {
   entityType: 'user' | 'transaction' | 'account';
   entityId: string;
@@ -1041,10 +1087,13 @@ interface RiskEntity {
   lastActivity: Date;
   actions: string[];
 }
+}
 
+}
 interface PerformanceMetrics {
   avgProcessingTime: number;
   throughput: number;
   errorRate: number;
   cacheHitRate: number;
+}
 }

@@ -5,8 +5,8 @@ export interface WorkflowConfig {
     name: string;
     description?: string;
     workspace_id?: string;
-    states: WorkflowStateConfig[];
-    transitions: WorkflowTransition[];
+    states: WorkflowStateConfig;
+    transitions: WorkflowTransition;
     default_state: WorkflowState;
     is_active: boolean;
     created_at: string;
@@ -20,8 +20,8 @@ export interface WorkflowStateConfig {
     icon?: string;
     is_initial: boolean;
     is_final: boolean;
-    required_permissions: string[];
-    auto_actions?: WorkflowAutoAction[];
+    required_permissions: string;
+    auto_actions?: WorkflowAutoAction;
     metadata?: Record<string, any>;
 }
 export interface WorkflowTransition {
@@ -31,9 +31,9 @@ export interface WorkflowTransition {
     action: WorkflowAction;
     name: string;
     description?: string;
-    required_permissions: string[];
-    conditions?: WorkflowCondition[];
-    auto_conditions?: WorkflowAutoCondition[];
+    required_permissions: string;
+    conditions?: WorkflowCondition;
+    auto_conditions?: WorkflowAutoCondition;
     metadata?: Record<string, any>;
 }
 export interface WorkflowCondition {
@@ -58,9 +58,9 @@ export interface WorkflowInstance {
     workflow_config_id: string;
     current_state: WorkflowState;
     current_state_entered_at: string;
-    assigned_to?: string[];
+    assigned_to?: string;
     metadata?: Record<string, any>;
-    history: WorkflowHistoryEntry[];
+    history: WorkflowHistoryEntry;
     created_at: string;
     updated_at: string;
 }
@@ -97,7 +97,7 @@ export interface ApprovalRequest {
     workflow_instance_id: string;
     requested_by: string;
     requested_by_name?: string;
-    reviewers: ApprovalReviewer[];
+    reviewers: ApprovalReviewer;
     approval_type: 'any' | 'all' | 'majority';
     due_date?: string;
     message?: string;
@@ -156,7 +156,7 @@ export interface AuditLogEntry {
     user_agent?: string;
     session_id?: string;
     risk_level: 'low' | 'medium' | 'high' | 'critical';
-    categories: string[];
+    categories: string;
     created_at: string;
 }
 export interface AuditFilter {
@@ -165,7 +165,7 @@ export interface AuditFilter {
     actor_id?: string;
     action?: string;
     risk_level?: string;
-    categories?: string[];
+    categories?: string;
     date_from?: string;
     date_to?: string;
     search?: string;
@@ -176,7 +176,7 @@ export interface WorkflowWebhook {
     name: string;
     url: string;
     secret?: string;
-    events: WorkflowWebhookEvent[];
+    events: WorkflowWebhookEvent;
     headers?: Record<string, string>;
     is_active: boolean;
     retry_config: {
@@ -241,7 +241,7 @@ export interface UseWorkflowReturn {
     error: Error | null;
     transition: (request: WorkflowTransitionRequest) => Promise<WorkflowInstance>;
     refreshInstance: () => Promise<void>;
-    availableTransitions: WorkflowTransition[];
+    availableTransitions: WorkflowTransition;
     canTransition: (action: WorkflowAction) => boolean;
     currentStateConfig: WorkflowStateConfig | null;
 }

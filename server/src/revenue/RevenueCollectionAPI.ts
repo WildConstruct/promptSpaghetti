@@ -53,7 +53,7 @@ export class RevenueCollectionService {
       };
     }
   ): Promise<RevenueEvent> {
-    
+
     // Create revenue event
     const revenueEvent: RevenueEvent = {
       id: uuidv4(),
@@ -68,7 +68,7 @@ export class RevenueCollectionService {
         payment_provider: transaction.provider,
         risk_score: transaction.risk_score,
         fraud_flags: transaction.fraud_flags
-      },
+  }
       revenue_data: {
         amount_cents: transaction.net_amount_cents,
         currency: transaction.currency,
@@ -110,6 +110,7 @@ export class RevenueCollectionService {
     transaction: Transaction, 
     revenueEvent: RevenueEvent
   ): Promise<void> {
+
     for (const item of order.items) {
       // Get template and creator information
       const templateInfo = await this.getTemplateInfo(item.template_id);
@@ -150,6 +151,7 @@ export class RevenueCollectionService {
     attribution: RevenueAttribution,
     sessionId: string
   ): Promise<void> {
+
     const commissionEvent: RevenueEvent = {
       id: uuidv4(),
       type: RevenueEventType.COMMISSION_EARNED,
@@ -160,7 +162,7 @@ export class RevenueCollectionService {
         attribution_id: attribution.id,
         transaction_id: attribution.transaction_id,
         template_id: attribution.template_id
-      },
+  }
       revenue_data: {
         amount_cents: attribution.commission_cents,
         currency: 'USD', // Default currency
@@ -188,10 +190,10 @@ export class RevenueCollectionService {
       currency: string;
       billing_cycle: 'monthly' | 'annual';
       previous_plan_id?: string;
-    },
+  }
     sessionId: string
   ): Promise<RevenueEvent> {
-    
+
     const eventType = this.mapSubscriptionEventType(subscriptionEvent.type);
     
     const revenueEvent: RevenueEvent = {
@@ -205,7 +207,7 @@ export class RevenueCollectionService {
         plan_id: subscriptionEvent.plan_id,
         billing_cycle: subscriptionEvent.billing_cycle,
         previous_plan_id: subscriptionEvent.previous_plan_id
-      },
+  }
       revenue_data: {
         amount_cents: subscriptionEvent.amount_cents,
         currency: subscriptionEvent.currency,
@@ -232,10 +234,10 @@ export class RevenueCollectionService {
       amount_cents: number;
       reason: string;
       processed_by: string;
-    },
+  }
     sessionId: string
   ): Promise<RevenueEvent> {
-    
+
     const revenueEvent: RevenueEvent = {
       id: uuidv4(),
       type: RevenueEventType.TRANSACTION_REFUNDED,
@@ -247,7 +249,7 @@ export class RevenueCollectionService {
         order_id: refund.order_id,
         refund_reason: refund.reason,
         processed_by: refund.processed_by
-      },
+  }
       revenue_data: {
         amount_cents: -refund.amount_cents, // Negative for refunds
         currency: 'USD',
@@ -269,6 +271,7 @@ export class RevenueCollectionService {
    * Update real-time revenue aggregations
    */
   private async updateRealtimeAggregations(revenueEvent: RevenueEvent): Promise<void> {
+
     const now = new Date();
     const hourStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours());
     const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -288,6 +291,7 @@ export class RevenueCollectionService {
     periodStart: Date, 
     revenueEvent: RevenueEvent
   ): Promise<void> {
+
     const periodEnd = new Date(periodStart);
     if (type === 'hourly') {
       periodEnd.setHours(periodEnd.getHours() + 1);
@@ -384,6 +388,7 @@ export class RevenueCollectionService {
     creator_id: string;
     commission_rate: number;
   } | null> {
+
     // Implementation would query template information
     // Returning mock data for now
     return {
@@ -397,6 +402,7 @@ export class RevenueCollectionService {
   }
 
   private async storeRevenueEvent(event: RevenueEvent): Promise<void> {
+
     const query = `
       INSERT INTO revenue_events (
         id, event_type, timestamp, session_id, user_id, organization_id,
@@ -430,7 +436,7 @@ export class RevenueCollectionService {
         $22,
         $23,
         $24
-      )
+
     `;
 
     await this.dbConnection.query(query, [
@@ -462,6 +468,7 @@ export class RevenueCollectionService {
   }
 
   private async storeRevenueAttribution(attribution: RevenueAttribution): Promise<void> {
+
     const query = `
       INSERT INTO revenue_attribution (
         id, transaction_id, template_id, creator_id, affiliate_id, campaign_id,
@@ -505,7 +512,7 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
             campaign: z.string().optional()
           }).optional()
         }).optional()
-      })
+  }
     }
   }, async (request: FastifyRequest<{
     Body: {
@@ -562,7 +569,7 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
         billing_cycle: z.enum(['monthly', 'annual']),
         session_id: z.string().uuid(),
         previous_plan_id: z.string().optional()
-      })
+  }
     }
   }, async (request: FastifyRequest<{
     Body: any
@@ -592,11 +599,13 @@ export async function revenueCollectionRoutes(fastify: FastifyInstance) {
 
 // Helper functions (would be implemented elsewhere)
 async function getTransaction(transactionId: string): Promise<Transaction | null> {
+
   // Implementation would query transaction from database
   return null;
 }
 
 async function getOrder(orderId: string): Promise<Order | null> {
+
   // Implementation would query order from database
   return null;
 }

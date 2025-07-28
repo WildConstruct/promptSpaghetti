@@ -18,18 +18,18 @@
  * @version 1.0.0
  * @since 2024-01-22
  */
-import { DashboardConfig, DashboardType, SecurityRole, WidgetDefinition, DashboardTheme, DashboardPermissions } from './SecurityDashboardFramework';
+import { DashboardConfig, DashboardType, SecurityRole, DashboardTheme, DashboardPermissions } from './SecurityDashboardFramework';
 export interface DashboardTemplate {
     id: string;
     type: DashboardType;
     name: string;
     description: string;
     category: 'executive' | 'operational' | 'compliance' | 'analytics' | 'custom';
-    targetRoles: SecurityRole[];
+    targetRoles: SecurityRole;
     previewImage?: string;
     config: Partial<DashboardConfig>;
-    requiredWidgets: string[];
-    optionalWidgets: string[];
+    requiredWidgets: string;
+    optionalWidgets: string;
     customization: {
         allowLayoutChange: boolean;
         allowWidgetAdd: boolean;
@@ -41,9 +41,9 @@ export interface DashboardTemplate {
         author: string;
         createdAt: Date;
         updatedAt: Date;
-        tags: string[];
-        industryFocus?: string[];
-        complianceFrameworks?: string[];
+        tags: string;
+        industryFocus?: string;
+        complianceFrameworks?: string;
     };
 }
 export interface DashboardPreset {
@@ -76,11 +76,6 @@ export interface RegistryOptions {
     maxCustomDashboards: number;
     enableAuditLogging: boolean;
 }
-/**
- * Dashboard Registry Class
- *
- * Manages the registration, discovery, and instantiation of security dashboards.
- */
 export declare class DashboardRegistry {
     private dashboards;
     private presets;
@@ -92,63 +87,8 @@ export declare class DashboardRegistry {
      * Initialize default dashboard templates
      */
     private initializeDefaultDashboards;
-    /**
-     * Initialize default dashboard presets
-     */
-    private initializeDefaultPresets;
-    /**
-     * Initialize built-in widget definitions
-     */
-    private initializeBuiltInWidgets;
-    /**
-     * Register a new dashboard template
-     */
-    registerDashboard(template: DashboardTemplate): boolean;
-    /**
-     * Register a new dashboard preset
-     */
-    registerPreset(preset: DashboardPreset): boolean;
-    /**
-     * Register a new widget definition
-     */
-    registerWidget(widget: WidgetDefinition): boolean;
-    /**
-     * Get dashboard templates by type or role
-     */
-    getDashboardTemplates(type?: DashboardType, role?: SecurityRole, category?: string): DashboardTemplate[];
-    /**
-     * Get dashboard presets
-     */
-    getDashboardPresets(dashboardType?: DashboardType, layout?: string): DashboardPreset[];
-    /**
-     * Get widget definitions
-     */
-    getWidgetDefinitions(category?: string, tags?: string[]): WidgetDefinition[];
-    /**
-     * Create dashboard from template
-     */
-    createDashboardFromTemplate(templateId: string, overrides?: Partial<DashboardConfig>): DashboardConfig | null;
-    /**
-     * Create dashboard from preset
-     */
-    createDashboardFromPreset(presetId: string, overrides?: Partial<DashboardConfig>): DashboardConfig | null;
-    /**
-     * Validate dashboard template
-     */
-    private validateDashboardTemplate;
-    /**
-     * Get registry statistics
-     */
-    getRegistryStats(): {
-        dashboardCount: number;
-        presetCount: number;
-        widgetCount: number;
-        categoriesByType: Record<DashboardType, number>;
-    };
-    /**
-     * Clear registry (for testing)
-     */
-    clear(): void;
+    export: [SecurityRole.EXECUTIVE, SecurityRole.SECURITY_ADMIN];
+    share: [SecurityRole.EXECUTIVE];
+    adminOnly: false;
 }
-export default DashboardRegistry;
 //# sourceMappingURL=DashboardRegistry.d.ts.map

@@ -7,7 +7,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NodeLabel } from '../NodeLabel';
 import { NodeLabelConfig, NODE_LABEL_STYLES } from '../../../types/CollaborationTypes';
-const mockConfig: NodeLabelConfig = {
+const mockConfig: NodeLabelConfig = {,
   id: 'test-label-1',
   nodeId: 'node-1',
   customLabel: 'Test Label',
@@ -19,7 +19,7 @@ const mockConfig: NodeLabelConfig = {
   author: 'Test Author',
   timestamp: '2024-01-01T12:00:00Z',
 };
-const mockOnAction = jest.fn<unknown[], unknown>();
+const mockOnAction = jest.fn<unknown, unknown>();
 describe('NodeLabel Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -68,10 +68,10 @@ describe('NodeLabel Component', () => {
       );
       let labelElement = screen.getByTestId('node-label-node-1');
       expect(labelElement).toHaveStyle({)
-        bottom: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-      });
+  bottom: '100%',
+  left: '50%',
+  transform: 'translateX(-50%)',
+});
       rerender();
         <NodeLabel
           config={{ ...mockConfig, position: 'right' }}
@@ -81,10 +81,10 @@ describe('NodeLabel Component', () => {
       );
       labelElement = screen.getByTestId('node-label-node-1');
       expect(labelElement).toHaveStyle({)
-        left: '100%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-      });
+  left: '100%',
+  top: '50%',
+  transform: 'translateY(-50%)',
+});
     });
     test('applies correct label styles', () => {
       render();
@@ -97,11 +97,11 @@ describe('NodeLabel Component', () => {
       const labelText = screen.getByText('Test Label');
       const professionalStyle = NODE_LABEL_STYLES.professional;
       expect(labelText).toHaveStyle({)
-        background: professionalStyle.background,
-        border: professionalStyle.border,
-        color: professionalStyle.color,
-        fontWeight: professionalStyle.fontWeight,
-      });
+  background: professionalStyle.background,
+  border: professionalStyle.border,
+  color: professionalStyle.color,
+  fontWeight: professionalStyle.fontWeight,
+});
     });
     test('shows icon when configured', () => {
       render();
@@ -212,10 +212,10 @@ describe('NodeLabel Component', () => {
       const labelElement = screen.getByText('Test Label');
       await user.dblClick(labelElement);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'startEdit',
-        nodeId: 'node-1',
-        labelId: mockConfig.id,
-      });
+  type: 'startEdit',
+  nodeId: 'node-1',
+  labelId: mockConfig.id,
+});
     });
     test('prevents editing when canEdit is false', async () => {
       const user = userEvent.setup();
@@ -258,15 +258,14 @@ describe('NodeLabel Component', () => {
       await user.clear(input);
       await user.type(input, 'Updated Label{enter}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
-        nodeId: 'node-1',
-        labelId: mockConfig.id,
-        customLabel: 'Updated Label',
-        config: {,
-          customLabel: 'Updated Label',
-          isEditing: false,
-        }
-      });
+  type: 'update',
+  nodeId: 'node-1',
+  labelId: mockConfig.id,
+  customLabel: 'Updated Label',
+  config: {,
+  customLabel: 'Updated Label',
+  isEditing: false,
+});
     });
     test('cancels on Escape key', async () => {
       const user = userEvent.setup();
@@ -281,10 +280,10 @@ describe('NodeLabel Component', () => {
       await user.clear(input);
       await user.type(input, 'Changed Text{escape}');
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'stopEdit',
-        nodeId: 'node-1',
-        labelId: mockConfig.id,
-      });
+  type: 'stopEdit',
+  nodeId: 'node-1',
+  labelId: mockConfig.id,
+});
     });
     test('saves on blur', async () => {
       const user = userEvent.setup();
@@ -300,15 +299,14 @@ describe('NodeLabel Component', () => {
       await user.type(input, 'Blur Save');
       await user.tab(); // Trigger blur
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'update',
-        nodeId: 'node-1',
-        labelId: mockConfig.id,
-        customLabel: 'Blur Save',
-        config: {,
-          customLabel: 'Blur Save',
-          isEditing: false,
-        }
-      });
+  type: 'update',
+  nodeId: 'node-1',
+  labelId: mockConfig.id,
+  customLabel: 'Blur Save',
+  config: {,
+  customLabel: 'Blur Save',
+  isEditing: false,
+});
     });
     test('respects character limit', async () => {
       const user = userEvent.setup();
@@ -340,14 +338,14 @@ describe('NodeLabel Component', () => {
       const deleteButton = screen.getByTitle('Remove custom label');
       await user.click(deleteButton);
       expect(mockOnAction).toHaveBeenCalledWith({)
-        type: 'delete',
-        nodeId: 'node-1',
-        labelId: mockConfig.id,
-      });
+  type: 'delete',
+  nodeId: 'node-1',
+  labelId: mockConfig.id,
+});
     });
     test('delete button prevents event propagation', async () => {
       const user = userEvent.setup();
-      const mockStopPropagation = jest.fn<unknown[], unknown>();
+      const mockStopPropagation = jest.fn<unknown, unknown>();
       render();
         <NodeLabel
           config={mockConfig}
@@ -461,10 +459,10 @@ describe('NodeLabel Component', () => {
   });
   describe('Performance', () => {
     test('does not re-render unnecessarily', () => {
-      const renderSpy = jest.fn<unknown[], unknown>();
+      const renderSpy = jest.fn<unknown, unknown>();
       const TestWrapper = ({ config }: { config: NodeLabelConfig }) => {
         renderSpy();
-        return ();
+        return;
           <NodeLabel
             config={config}
             nodeId="node-1"
@@ -484,17 +482,17 @@ describe('NodeLabel Component', () => {
     });
   });
   describe('Error Handling', () => {
-    test('handles missing config properties gracefully', () => {
-      const incompleteConfig = {
-        id: 'test',
-        nodeId: 'node-1',
-        customLabel: 'Test',
-        displayMode: 'always' as const,
-        position: 'bottom' as const,
-        style: 'default' as const,
-        author: 'Test',
-        timestamp: '2024-01-01T12:00:00Z',
-      };
+  test('handles missing config properties gracefully', () => {
+  const incompleteConfig = {
+  id: 'test',
+  nodeId: 'node-1',
+  customLabel: 'Test',
+  displayMode: 'always' as const,
+  position: 'bottom' as const,
+  style: 'default' as const,
+  author: 'Test',
+  timestamp: '2024-01-01T12:00:00Z',
+};
       expect(() => {
         render();
           <NodeLabel
@@ -511,7 +509,7 @@ describe('NodeLabel Component', () => {
           <NodeLabel
             config={mockConfig}
             nodeId="node-1"
-            onAction={jest.fn<unknown[], unknown>()}
+            onAction={jest.fn<unknown, unknown>()}
           />
         );
       }).not.toThrow();

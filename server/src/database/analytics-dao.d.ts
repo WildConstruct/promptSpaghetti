@@ -3,6 +3,7 @@ import { AnalyticsEvent, AnalyticsEventType } from '../analytics/AnalyticsCollec
 /**
  * Database models for analytics data
  */
+}
 export interface AnalyticsSession {
     id: number;
     sessionId: string;
@@ -20,9 +21,11 @@ export interface AnalyticsSession {
     createdAt: number;
     updatedAt: number;
 }
+}
 /**
  * Project execution statistics for health monitoring
  */
+}
 export interface ProjectExecutionStats {
     projectId: string;
     total: number;
@@ -30,6 +33,8 @@ export interface ProjectExecutionStats {
     failed: number;
     averageExecutionTime: number;
     lastExecution?: number;
+}
+}
 }
 export interface GraphExecution {
     id: number;
@@ -51,6 +56,8 @@ export interface GraphExecution {
     cpuTimeMs?: number;
     createdAt: number;
 }
+}
+}
 export interface NodeExecution {
     id: number;
     executionId: string;
@@ -66,6 +73,8 @@ export interface NodeExecution {
     errorMessage?: string;
     memoryDeltaMb?: number;
     createdAt: number;
+}
+}
 }
 export interface TokenUsage {
     id: number;
@@ -89,6 +98,8 @@ export interface TokenUsage {
     latencyMs?: number;
     createdAt: number;
 }
+}
+}
 export interface UserInteraction {
     id: number;
     interactionId: string;
@@ -107,6 +118,8 @@ export interface UserInteraction {
     metadata: string;
     createdAt: number;
 }
+}
+}
 export interface AnalyticsAggregation {
     id: number;
     timeBucket: number;
@@ -124,9 +137,11 @@ export interface AnalyticsAggregation {
     errorCount: number;
     createdAt: number;
 }
+}
 /**
  * Analytics query filters
  */
+}
 export interface AnalyticsFilters {
     startTime?: number;
     endTime?: number;
@@ -141,9 +156,11 @@ export interface AnalyticsFilters {
     limit?: number;
     offset?: number;
 }
+}
 /**
  * Analytics summary data
  */
+}
 export interface AnalyticsSummary {
     totalEvents: number;
     uniqueUsers: number;
@@ -157,6 +174,7 @@ export interface AnalyticsSummary {
     topGraphTypes: Array<{
         type: string;
         count: number;
+}
     }>;
     topNodeTypes: Array<{
         type: string;

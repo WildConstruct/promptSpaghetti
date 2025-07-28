@@ -28,9 +28,11 @@ import {
 import { Database } from '../database';
 
 // Request type definitions
+}
 interface UserTrustScoreRequest {
   Params: {
     userId: string;
+}
   };
   Querystring: {
     forceRecalculation?: boolean;
@@ -39,9 +41,11 @@ interface UserTrustScoreRequest {
   };
 }
 
+}
 interface TemplateTrustScoreRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     forceRecalculation?: boolean;
@@ -49,9 +53,11 @@ interface TemplateTrustScoreRequest {
   };
 }
 
+}
 interface TransactionTrustScoreRequest {
   Params: {
     transactionId: string;
+}
   };
   Querystring: {
     includeRiskAssessment?: boolean;
@@ -59,23 +65,28 @@ interface TransactionTrustScoreRequest {
   };
 }
 
+}
 interface BulkUserTrustRequest {
   Body: {
     userIds: string[];
     includeDetails?: boolean;
     prioritizeRecent?: boolean;
+}
   };
 }
 
+}
 interface TrustEventRequest {
   Params: {
     userId: string;
+}
   };
   Body: {
     events: TrustEvent[];
   };
 }
 
+}
 interface TrustAnalyticsRequest {
   Querystring: {
     timeRange?: TimeRange;
@@ -83,16 +94,21 @@ interface TrustAnalyticsRequest {
     endDate?: string;
     includeInsights?: boolean;
     includeRecommendations?: boolean;
+}
   };
 }
 
+}
 interface SuspiciousActivityRequest {
   Body: SuspiciousActivityReport;
 }
+}
 
+}
 interface TrustFactorsRequest {
   Params: {
     templateId: string;
+}
   };
   Querystring: {
     category?: string;
@@ -100,12 +116,14 @@ interface TrustFactorsRequest {
   };
 }
 
+}
 interface CreateTransactionTrustRequest {
   Body: {
     transactionId: string;
     buyerId: string;
     sellerId: string;
     templateId: string;
+}
   };
 }
 
@@ -143,7 +161,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           properties: {
             userId: { type: 'string', description: 'User ID to get trust score for' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -151,19 +169,19 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               type: 'boolean', 
               default: false,
               description: 'Force fresh calculation ignoring cache'
-            },
+  }
             includeDetails: { 
               type: 'boolean', 
               default: true,
               description: 'Include detailed trust dimensions and factors'
-            },
+  }
             includeSensitive: { 
               type: 'boolean', 
               default: false,
               description: 'Include sensitive risk factors (admin only)'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -176,7 +194,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<UserTrustScoreRequest>, reply: FastifyReply) => {
       try {
         const { userId } = request.params;
@@ -263,7 +281,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string', description: 'Template ID to get trust score for' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -271,14 +289,14 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               type: 'boolean', 
               default: false,
               description: 'Force fresh calculation ignoring cache'
-            },
+  }
             includeFactors: { 
               type: 'boolean', 
               default: true,
               description: 'Include detailed trust factors and evidence'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -291,7 +309,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<TemplateTrustScoreRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -360,7 +378,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
             sellerId: { type: 'string', description: 'Seller user ID' },
             templateId: { type: 'string', description: 'Template ID being purchased' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -373,7 +391,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateTransactionTrustRequest>, reply: FastifyReply) => {
       try {
         const { transactionId, buyerId, sellerId, templateId } = request.body;
@@ -424,19 +442,19 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               minItems: 1,
               maxItems: 100,
               description: 'User IDs to get trust scores for (max 100)'
-            },
+  }
             includeDetails: { 
               type: 'boolean', 
               default: false,
               description: 'Include detailed trust information'
-            },
+  }
             prioritizeRecent: { 
               type: 'boolean', 
               default: true,
               description: 'Prioritize recently calculated scores'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -451,7 +469,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<BulkUserTrustRequest>, reply: FastifyReply) => {
       try {
         const { userIds, includeDetails = false, prioritizeRecent = true } = request.body;
@@ -503,7 +521,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           properties: {
             userId: { type: 'string', description: 'User ID to update trust score for' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['events'],
@@ -522,13 +540,13 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
                   timestamp: { type: 'string', format: 'date-time' },
                   metadata: { type: 'object', description: 'Additional event metadata' }
                 }
-              },
+  }
               minItems: 1,
               maxItems: 50,
               description: 'Trust events to process (max 50)'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -541,7 +559,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<TrustEventRequest>, reply: FastifyReply) => {
       try {
         const { userId } = request.params;
@@ -587,7 +605,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           properties: {
             templateId: { type: 'string', description: 'Template ID' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
@@ -595,7 +613,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['behavior', 'quality', 'security', 'community', 'performance', 'compliance'],
               description: 'Filter by trust factor category'
-            },
+  }
             minWeight: { 
               type: 'number',
               minimum: 0,
@@ -603,7 +621,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               description: 'Minimum factor weight threshold'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -617,7 +635,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<TrustFactorsRequest>, reply: FastifyReply) => {
       try {
         const { templateId } = request.params;
@@ -676,29 +694,29 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D,
               description: 'Time range for analytics'
-            },
+  }
             startDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom start date (YYYY-MM-DD)'
-            },
+  }
             endDate: { 
               type: 'string',
               format: 'date',
               description: 'Custom end date (YYYY-MM-DD)'
-            },
+  }
             includeInsights: { 
               type: 'boolean', 
               default: true,
               description: 'Include trust insights and trends'
-            },
+  }
             includeRecommendations: { 
               type: 'boolean', 
               default: true,
               description: 'Include trust improvement recommendations'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -711,7 +729,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<TrustAnalyticsRequest>, reply: FastifyReply) => {
       try {
         const { 
@@ -772,47 +790,47 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['fraud', 'abuse', 'violation', 'security', 'quality'],
               description: 'Type of suspicious activity'
-            },
+  }
             severity: { 
               type: 'string',
               enum: ['low', 'medium', 'high', 'critical'],
               description: 'Severity level of the activity'
-            },
+  }
             description: { 
               type: 'string',
               minLength: 10,
               maxLength: 1000,
               description: 'Detailed description of the suspicious activity'
-            },
+  }
             userId: { 
               type: 'string',
               description: 'User ID involved (if applicable)'
-            },
+  }
             templateId: { 
               type: 'string',
               description: 'Template ID involved (if applicable)'
-            },
+  }
             transactionId: { 
               type: 'string',
               description: 'Transaction ID involved (if applicable)'
-            },
+  }
             evidence: { 
               type: 'array',
               items: { type: 'string' },
               minItems: 1,
               description: 'Evidence supporting the report'
-            },
+  }
             reportedBy: { 
               type: 'string',
               description: 'ID of the user reporting the activity'
-            },
+  }
             reportedAt: { 
               type: 'string',
               format: 'date-time',
               description: 'When the activity was reported'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -825,7 +843,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<SuspiciousActivityRequest>, reply: FastifyReply) => {
       try {
         const report = request.body;
@@ -884,7 +902,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: Object.values(TimeRange),
               default: TimeRange.LAST_30D
-            },
+  }
             entityType: { 
               type: 'string',
               enum: ['users', 'templates', 'transactions', 'all'],
@@ -892,7 +910,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
               description: 'Type of entities to include in statistics'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -904,7 +922,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const { timeRange = TimeRange.LAST_30D, entityType = 'all' } = request.query as any;
@@ -924,7 +942,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
             overallRiskLevel: analytics.riskAnalysis.overallRiskLevel,
             fraudIncidents: analytics.riskAnalysis.fraudIncidents,
             suspiciousActivityCount: analytics.riskAnalysis.suspiciousActivityCount
-          },
+  }
           summary: {
             totalEntitiesAssessed: (
               Object.values(analytics.userTrustDistribution).reduce((a: number, b: number) => a + b, 0) +
@@ -975,7 +993,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const healthStatus = {
@@ -987,7 +1005,7 @@ export async function trustScoreRoutes(fastify: FastifyInstance) {
             analyticsService: 'available',
             contentQualityService: 'available',
             qualityMetricsService: 'available'
-          },
+  }
           performance: {
             averageCalculationTime: '250ms',
             cacheHitRate: '85%',

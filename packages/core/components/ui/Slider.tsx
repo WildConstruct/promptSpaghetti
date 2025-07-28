@@ -1,15 +1,14 @@
 import React from 'react';
 
 export interface SliderProps {
-  value?: number[];
-  onValueChange?: (value: number[]) => void;
+  value?: number;
+  onValueChange?: (value: number) => void;
   max?: number;
   min?: number;
   step?: number;
   className?: string;
   disabled?: boolean;
 }
-
 export const Slider: React.FC<SliderProps> = ({)
   value = [0],
   onValueChange,
@@ -19,11 +18,11 @@ export const Slider: React.FC<SliderProps> = ({)
   className = '',
   disabled = false
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseFloat(e.target.value);
-    onValueChange?.([newValue]);
-  };
-  return ();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {,
+  const newValue = parseFloat(e.target.value);
+  onValueChange?.([newValue]);
+};
+  return;
     <input
       type="range"
       value={value[0] || 0}
@@ -34,14 +33,14 @@ export const Slider: React.FC<SliderProps> = ({)
       disabled={disabled}
       className={`slider ${className}`}
       style={{
-        width: '100%',
-        height: '4px',
-        background: '#4a5568',
-        outline: 'none',
-        borderRadius: '2px',
-        ...(!disabled && {)
-          cursor: 'pointer',
-        })
+  width: '100%',
+  height: '4px',
+  background: '#4a5568',
+  outline: 'none',
+  borderRadius: '2px',
+  ...(!disabled && {)
+  cursor: 'pointer',
+}
       }}
     />
   );

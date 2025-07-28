@@ -1,5 +1,6 @@
 import React from 'react';
 import { NodeMeta } from '../Palette';
+
 interface ProfessionalNodeRendererProps {
     id: string;
     data: Record<string, unknown>;
@@ -7,7 +8,8 @@ interface ProfessionalNodeRendererProps {
     onSelect: (nodeId: string) => void;
     getNodeMeta: (nodeType: string) => NodeMeta;
     getCategoryColor: (category: string) => string;
-}
+
+
 /**
  * Professional Node Renderer - Cinema 4D/Substance Designer inspired
  *

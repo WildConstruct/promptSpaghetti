@@ -2,7 +2,6 @@
  * Epic 9.2.1 - Workspace Types
  * TypeScript types for workspace functionality (client-side)
  */
-// Permission constants
 export const PERMISSIONS = {
     // Workspace permissions
     WORKSPACE_READ: 1 << 0,
@@ -30,26 +29,26 @@ export const PERMISSIONS = {
     // Advanced permissions
     ACTIVITY_READ: 1 << 18,
     NOTIFICATION_MANAGE: 1 << 19,
-    EXPORT_DATA: 1 << 20
+    EXPORT_DATA: 1 << 20,
 };
 // Utility functions
 export function hasPermission(userPermissions, requiredPermission) {
     return (userPermissions & requiredPermission) !== 0;
-}
-export function getRoleName(permissions) {
-    // Check for admin (has all key permissions)
-    if (hasPermission(permissions, PERMISSIONS.WORKSPACE_ADMIN)) {
-        return 'Admin';
+    export function getRoleName(permissions) {
+        // Check for admin (has all key permissions)
+        if (hasPermission(permissions, PERMISSIONS.WORKSPACE_ADMIN)) {
+            return 'Admin';
+            // Check for editor (can create/edit content)
+            if (hasPermission(permissions, PERMISSIONS.PROJECT_CREATE) &&
+                hasPermission(permissions, PERMISSIONS.RESOURCE_CREATE)) {
+                return 'Editor';
+                // Check for commenter (can view and comment)
+                if (hasPermission(permissions, PERMISSIONS.COMMENT_WRITE)) {
+                    return 'Commenter';
+                    // Default to viewer
+                    return 'Viewer';
+                }
+            }
+        }
     }
-    // Check for editor (can create/edit content)
-    if (hasPermission(permissions, PERMISSIONS.PROJECT_CREATE) &&
-        hasPermission(permissions, PERMISSIONS.RESOURCE_CREATE)) {
-        return 'Editor';
-    }
-    // Check for commenter (can view and comment)
-    if (hasPermission(permissions, PERMISSIONS.COMMENT_WRITE)) {
-        return 'Commenter';
-    }
-    // Default to viewer
-    return 'Viewer';
 }

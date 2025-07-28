@@ -6,6 +6,7 @@
  * infrastructure requirements, and service integrations.
  */
 import { EventEmitter } from 'events';
+
 export interface PrerequisiteCheck {
     id: string;
     name: string;
@@ -17,7 +18,7 @@ export interface PrerequisiteCheck {
     autoFix?: () => Promise<boolean>;
     manualFixInstructions?: string;
     estimatedFixTime?: number;
-}
+
 export interface PrerequisiteResult {
     passed: boolean;
     message: string;
@@ -27,7 +28,7 @@ export interface PrerequisiteResult {
     severity?: 'critical' | 'high' | 'medium' | 'low';
     recommendation?: string;
     checkDuration?: number;
-}
+
 export interface PrerequisiteReport {
     overall: {,
         passed: boolean;
@@ -48,14 +49,14 @@ export interface PrerequisiteReport {
     reportId: string;
     generatedAt: Date;
     version: string;
-}
+
 export interface PrerequisiteDependencyMap {
     [checkId: string]: {
         dependsOn: string[];
         requiredBy: string[];
         status: 'pending' | 'checking' | 'passed' | 'failed' | 'skipped';
     };
-}
+
 export interface Epic16PrerequisiteConfig {
     enabledCategories: string[];
     skipChecks: string[];
@@ -77,7 +78,7 @@ export interface Epic16PrerequisiteConfig {
     };
     environment: 'development' | 'staging' | 'production';
     region?: string;
-}
+
 export declare class Epic16PrerequisiteSystem extends EventEmitter {
     private config;
     private checks;
@@ -154,6 +155,6 @@ export declare class Epic16PrerequisiteSystem extends EventEmitter {
     private checkSSLCertificates;
     private checkSecurityHeaders;
     private fixSecurityHeaders;
-}
+
 export default Epic16PrerequisiteSystem;
 //# sourceMappingURL=Epic16PrerequisiteSystem.d.ts.map

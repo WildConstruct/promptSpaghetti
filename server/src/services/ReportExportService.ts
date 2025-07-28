@@ -37,6 +37,7 @@ export enum DeliveryMethod {
 /**
  * Report data structure
  */
+}
 export interface ReportData {
   metadata: {
     title: string;
@@ -44,6 +45,7 @@ export interface ReportData {
     generatedAt: Date;
     generatedBy: string;
     version: string;
+}
   };
   summary: Record<string, any>;
   data: Array<Record<string, any>>;
@@ -63,6 +65,7 @@ export interface ReportData {
 /**
  * Export configuration
  */
+}
 export interface ExportConfig {
   format: ExportFormat;
   delivery: DeliveryMethod;
@@ -74,6 +77,7 @@ export interface ExportConfig {
     compression?: boolean;
     encryption?: boolean;
     password?: string;
+}
   };
   deliveryConfig?: {
     email?: {
@@ -98,6 +102,7 @@ export interface ExportConfig {
 /**
  * Export result
  */
+}
 export interface ExportResult {
   id: string;
   success: boolean;
@@ -113,12 +118,14 @@ export interface ExportResult {
     recordCount: number;
     processingTime: number;
     compressionRatio?: number;
+}
   };
 }
 
 /**
  * Scheduled export configuration
  */
+}
 export interface ScheduledExport {
   id: string;
   name: string;
@@ -131,6 +138,7 @@ export interface ScheduledExport {
     dayOfWeek?: number; // 0-6 for weekly
     dayOfMonth?: number; // 1-31 for monthly
     cron?: string; // Custom cron expression
+}
   };
   enabled: boolean;
   lastRun?: Date;
@@ -176,6 +184,7 @@ export class ReportExportService extends EventEmitter {
    * ```
    */
   async exportReport(reportData: ReportData, config: ExportConfig): Promise<ExportResult> {
+
     const exportId = uuidv4();
     const startTime = Date.now();
 
@@ -302,6 +311,7 @@ export class ReportExportService extends EventEmitter {
    * Export to PDF format
    */
   private async exportToPDF(reportData: ReportData, _____config: ExportConfig): Promise<Buffer> {
+
     // Mock PDF generation - in production, use libraries like puppeteer, pdfkit, or jsPDF
         
     // This would use a real PDF generation library
@@ -346,6 +356,7 @@ startxref
    * Export to Excel format
    */
   private async exportToExcel(reportData: ReportData, config: ExportConfig): Promise<Buffer> {
+
     // Mock Excel generation - in production, use libraries like exceljs or xlsx
     const csvContent = this.exportToCSV(reportData, config);
     
@@ -556,6 +567,7 @@ startxref
    * Compress content (mock implementation)
    */
   private async compressContent(content: Buffer | string): Promise<Buffer> {
+
     // Mock compression - in production, use zlib or similar
     const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
     // Simulate compression by returning the same content (real implementation would compress)
@@ -566,6 +578,7 @@ startxref
    * Encrypt content (mock implementation)
    */
   private async encryptContent(content: Buffer | string, _____password: string): Promise<Buffer> {
+
     // Mock encryption - in production, use crypto module
     const buffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
     // Simulate encryption by returning the same content (real implementation would encrypt)
@@ -576,6 +589,7 @@ startxref
    * Deliver report via email
    */
   private async deliverViaEmail(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
+
     if (!config.deliveryConfig?.email) {
       throw new Error('Email configuration required for email delivery');
     }
@@ -593,6 +607,7 @@ startxref
    * Deliver report via webhook
    */
   private async deliverViaWebhook(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
+
     if (!config.deliveryConfig?.webhook) {
       throw new Error('Webhook configuration required for webhook delivery');
     }
@@ -610,6 +625,7 @@ startxref
    * Deliver report via API
    */
   private async deliverViaAPI(content: Buffer | string, filename: string, config: ExportConfig): Promise<void> {
+
     if (!config.deliveryConfig?.api) {
       throw new Error('API configuration required for API delivery');
     }
@@ -712,6 +728,7 @@ startxref
    * Execute scheduled export
    */
   private async executeScheduledExport(scheduledExport: ScheduledExport): Promise<void> {
+
     try {
       // Get report data
       let reportData: ReportData;

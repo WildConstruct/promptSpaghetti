@@ -6,6 +6,7 @@ export type IODataType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 
 /**
  * Input/Output port definition for advanced nodes
  */
+
 export interface IOPortDefinition {
     /** Unique identifier for this port */
     id: string;
@@ -23,10 +24,12 @@ export interface IOPortDefinition {
     description?: string;
     /** Whether this port supports multiple connections */
     multiple?: boolean;
-}
+
+
 /**
  * Validation constraints for I/O ports
  */
+
 export interface IOConstraints {
     /** Minimum value (for numbers) */
     min?: number;
@@ -42,28 +45,34 @@ export interface IOConstraints {
     allowedValues?: unknown[];
     /** Custom validation function */
     customValidator?: (value: unknown) => ValidationResult;
-}
+
+
 /**
  * Input/Output port specification for a node type
  */
+
 export interface IOSpec {
     /** Input port definitions */
     inputs: IOPortDefinition[];
     /** Output port definitions */
     outputs: IOPortDefinition[];
-}
+
+
 /**
  * Resolved input values for node execution
  */
+
 export interface ResolvedInputs {
     /** Direct input values by port ID */
     values: Map<string, any>;
     /** Metadata about input resolution */
     metadata: Map<string, IOResolutionMetadata>;
-}
+
+
 /**
  * Metadata about how an input was resolved
  */
+
 export interface IOResolutionMetadata {
     /** Whether the value came from a connection or default */
     source: 'connection' | 'default' | 'computed';
@@ -73,10 +82,11 @@ export interface IOResolutionMetadata {
     typeCoercion?: {
         from: IODataType;
         to: IODataType;
+
     };
     /** Validation warnings */
     warnings: string[];
-}
+
 /**
  * Advanced Input/Output handler for Epic 7 nodes
  */
@@ -127,7 +137,7 @@ export declare class AdvancedIOHandler {
      * Perform actual type coercion
      */
     private performCoercion;
-}
+
 /**
  * Helper function to create common I/O specifications for advanced nodes
  */
@@ -174,7 +184,7 @@ export declare class IOSpecBuilder {
      * Create a multi-input, single-output spec
      */
     static createMultiInput(inputLabels: string[], outputLabel?: string): IOSpec;
-}
+
 /**
  * Type-safe input getter for advanced nodes
  */
@@ -213,5 +223,5 @@ export declare class TypedInputs {
      * Get all warnings for an input
      */
     getWarnings(portId: string): string[];
-}
+
 //# sourceMappingURL=io-system.d.ts.map

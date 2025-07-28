@@ -5,13 +5,11 @@
 import React, { useState } from 'react';
 import { ActivityEventFilter } from '../../types/workspace';
 interface ActivityFiltersProps {
-  filters: ActivityEventFilter;
-  eventTypes: string[];
+  filters: ActivityEventFilter;,
+  eventTypes: string;
   onFilterChange: (filters: Partial<ActivityEventFilter>) => void;
   className?: string;
-}
-
-export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
+  export const ActivityFilters: React.FC<ActivityFiltersProps> = ({,)
   filters,
   eventTypes,
   onFilterChange,
@@ -19,9 +17,9 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState({)
-    from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
-    to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
-  });
+  from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
+  to: filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
+});
   const handleEventTypeChange = (eventType: string, checked: boolean) => {
     const currentTypes = filters.event_types || [];
     const newTypes = checked;
@@ -33,18 +31,18 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
     const newDateRange = { ...dateRange, [field]: value };
     setDateRange(newDateRange);
     onFilterChange({)
-      from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
-      to_date: newDateRange.to ? new Date(newDateRange.to) : undefined,
-    });
+  from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
+  to_date: newDateRange.to ? new Date(newDateRange.to) : undefined,
+});
   };
   const clearFilters = () => {
     setDateRange({ from: '', to: '' });
     onFilterChange({)
-      actor_id: undefined,
-      event_types: undefined,
-      from_date: undefined,
-      to_date: undefined,
-    });
+  actor_id: undefined,
+  event_types: undefined,
+  from_date: undefined,
+  to_date: undefined,
+});
   };
   const hasActiveFilters = !!(;);
     filters.actor_id ||
@@ -53,14 +51,14 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
     filters.to_date
   );
   const eventTypeGroups = {
-    workspace: eventTypes.filter(t => t.startsWith('workspace.')),
-    project: eventTypes.filter(t => t.startsWith('project.')),
-    resource: eventTypes.filter(t => t.startsWith('resource.')),
-    comment: eventTypes.filter(t => t.startsWith('comment.')),
-    user: eventTypes.filter(t => t.startsWith('user.')),
-    other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix)))
-  };
-  return ();
+  workspace: eventTypes.filter(t => t.startsWith('workspace.')),
+  project: eventTypes.filter(t => t.startsWith('project.')),
+  resource: eventTypes.filter(t => t.startsWith('resource.')),
+  comment: eventTypes.filter(t => t.startsWith('comment.')),
+  user: eventTypes.filter(t => t.startsWith('user.')),
+  other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))),
+};
+  return;
     <div className={`activity-filters ${className}`}>}
       <div className="activity-filters__header">
         <h4>Filter Activity</h4>
@@ -101,16 +99,16 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`}
               onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.includes('created')),
-              })}
+                event_types: eventTypes.filter(t => t.includes('created'));
+  })}
             >
               Created Items
             </button>
             <button
               className={`quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`}
               onClick={() => onFilterChange({ )
-                event_types: eventTypes.filter(t => t.startsWith('user.')),
-              })}
+                event_types: eventTypes.filter(t => t.startsWith('user.'));
+  })}
             >
               User Activity
             </button>
@@ -155,7 +153,7 @@ export const ActivityFilters: React.FC<ActivityFiltersProps> = ({)
             <div className="event-type-filters">
               {Object.entries(eventTypeGroups).map(([group, types]) => {
                 if (types.length === 0) return null;
-                return ();
+                return;
                   <div key={group} className="event-type-group">
                     <h5 className="event-type-group__title">
                       {group.charAt(0).toUpperCase() + group.slice(1)} Events

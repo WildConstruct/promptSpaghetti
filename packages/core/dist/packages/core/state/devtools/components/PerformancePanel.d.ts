@@ -7,7 +7,7 @@ import React from 'react';
 import { PerformanceProfiler, PerformanceAlert, PerformanceReport } from '../PerformanceProfiler';
 export interface PerformancePanelProps {
     performanceProfiler: PerformanceProfiler;
-    alerts: PerformanceAlert[];
+    alerts: PerformanceAlert;
     report: PerformanceReport | null;
     onGenerateReport: () => void;
 }

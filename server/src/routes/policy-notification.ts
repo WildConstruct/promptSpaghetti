@@ -201,7 +201,7 @@ const UpdatePreferencesRequestSchema = z.object({
         enabled: z.boolean(),
         frequency: z.enum(['HOURLY', 'DAILY', 'WEEKLY']),
         time: z.string().optional()
-      })
+  }
     }),
     quietHours: z.object({
       enabled: z.boolean(),
@@ -227,7 +227,7 @@ const UpdatePreferencesRequestSchema = z.object({
       enabled: z.boolean(),
       criteria: z.record(z.any())
     }))
-  })
+  }
 });
 
 export async function policyNotificationRoutes(fastify: FastifyInstance) {
@@ -264,7 +264,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -272,7 +272,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const notification = {
@@ -330,10 +330,10 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { userId, preferences } = request.body;
@@ -373,9 +373,9 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           notificationId: { type: 'string' }
-        },
+  }
         required: ['notificationId']
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -385,10 +385,10 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
-    },
+  }
     handler: async (request, reply) => {
       try {
         const { notificationId } = request.params;
@@ -434,7 +434,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           channel: { type: 'string' },
           framework: { type: 'string' }
         }
-      },
+  }
       response: {
         200: {
           type: 'object',
@@ -452,7 +452,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     preHandler: async (request: FastifyRequest, reply: FastifyReply) => {
       await fastify.authenticate(request, reply);
       
@@ -460,7 +460,7 @@ export async function policyNotificationRoutes(fastify: FastifyInstance) {
         reply.code(403).send({ error: 'Insufficient permissions' });
         return;
       }
-    },
+  }
     handler: async (request, reply) => {
       try {
         const filters = request.query;

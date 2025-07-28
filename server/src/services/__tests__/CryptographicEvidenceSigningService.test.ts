@@ -190,7 +190,7 @@ describe('CryptographicEvidenceSigningService', () => {
           evidenceData: { content: 'document 1' },
           collectorId: 'batch-collector',
           signingPurpose: SigningPurpose.COMPLIANCE_EVIDENCE
-        },
+  }
         {
           evidenceId: 'batch-item-2',
           evidenceType: 'log',
@@ -341,7 +341,7 @@ describe('CryptographicEvidenceSigningService', () => {
           evidenceData: { document: 'shared evidence' },
           collectorId: 'user-1',
           signingPurpose: SigningPurpose.COMPLIANCE_EVIDENCE
-        },
+  }
         {
           evidenceId,
           evidenceType: 'multi_sign_doc',

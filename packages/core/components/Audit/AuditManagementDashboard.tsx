@@ -49,50 +49,48 @@ const { RangePicker } = DatePicker;
 const { Search } = Input;
 const { TabPane } = Tabs;
 interface DashboardState {
-  events: AuditEvent[];
+  events: AuditEvent;,
   totalCount: number;
-  loading: boolean;
+  loading: boolean;,
   selectedEvent: AuditEvent | null;
-  currentQuery: AuditQuery;
+  currentQuery: AuditQuery;,
   analytics: unknown;
-  anomalousPatterns: unknown[];
-}
-interface AuditFilters {
+  anomalousPatterns: unknown;
+  interface AuditFilters {
   dateRange: [Date?, Date?];
-  eventTypes: AuditEventType[];
-  severities: AuditSeverity[];
-  complianceFrameworks: ComplianceFramework[];
-  statuses: AuditStatus[];
-  searchText: string;
+  eventTypes: AuditEventType;,
+  severities: AuditSeverity;
+  complianceFrameworks: ComplianceFramework;,
+  statuses: AuditStatus;
+  searchText: string;,
   riskScoreRange: [number, number];
-}
-/**
- * Main Audit Management Dashboard Component
- */
-export const AuditManagementDashboard: React.FC = () => {
+  /**
+  * Main Audit Management Dashboard Component
+  */
+  export const AuditManagementDashboard: React.FC = () => {,
   const [dashboardState, setDashboardState] = useState<DashboardState>({)
-    events: [],
-    totalCount: 0,
-    loading: true,
-    selectedEvent: null,
-    currentQuery: {,
-      page: 1,
-      limit: 50,
-      sort_field: 'timestamp',
-      sort_order: 'desc',
-    },
-    analytics: null,
-    anomalousPatterns: [],
+  events: [],
+  totalCount: 0,
+  loading: true,
+  selectedEvent: null,
+  currentQuery: {,
+  page: 1,
+  limit: 50,
+  sort_field: 'timestamp',
+  sort_order: 'desc',
+},
+  analytics: null,
+    anomalousPatterns: [];
   });
   const [filters, setFilters] = useState<AuditFilters>({)
-    dateRange: [undefined, undefined],
-    eventTypes: [],
-    severities: [],
-    complianceFrameworks: [],
-    statuses: [],
-    searchText: '',
-    riskScoreRange: [0, 10]
-  });
+  dateRange: [undefined, undefined],
+  eventTypes: [],
+  severities: [],
+  complianceFrameworks: [],
+  statuses: [],
+  searchText: '',
+  riskScoreRange: [0, 10],
+});
   const [activeTab, setActiveTab] = useState('overview');
   // Load audit data
   useEffect(() => {
@@ -106,33 +104,32 @@ export const AuditManagementDashboard: React.FC = () => {
   const loadAuditData = async () => {
     setDashboardState(prev => ({ ...prev, loading: true }));
     try {
-      const result = await auditManagementSystem.queryAuditEvents(dashboardState.currentQuery);
-      setDashboardState(prev => ({)
-        ...prev,
-        events: result.events,
-        totalCount: result.totalCount,
-        analytics: result.analytics,
-        loading: false,
-      }));
+  const result = await auditManagementSystem.queryAuditEvents(dashboardState.currentQuery);
+  setDashboardState(prev => ({)
+  ...prev,
+  events: result.events,
+  totalCount: result.totalCount,
+  analytics: result.analytics,
+  loading: false,
+}));
     } catch (error) {
       console.error('Failed to load audit data:', error);
       setDashboardState(prev => ({ ...prev, loading: false }));
-    }
   };
   const applyFilters = () => {
-    const newQuery: AuditQuery = {
-      ...dashboardState.currentQuery,
-      page: 1,
-      start_date: filters.dateRange[0],
-      end_date: filters.dateRange[1],
-      event_types: filters.eventTypes.length > 0 ? filters.eventTypes : undefined,
-      severities: filters.severities.length > 0 ? filters.severities : undefined,
-      compliance_frameworks: filters.complianceFrameworks.length > 0 ? filters.complianceFrameworks : undefined,
-      statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
-      search_text: filters.searchText || undefined,
-      min_risk_score: filters.riskScoreRange[0],
-      max_risk_score: filters.riskScoreRange[1],
-    };
+  const newQuery: AuditQuery = {,
+  ...dashboardState.currentQuery,
+  page: 1,
+  start_date: filters.dateRange[0],
+  end_date: filters.dateRange[1],
+  event_types: filters.eventTypes.length > 0 ? filters.eventTypes : undefined,
+  severities: filters.severities.length > 0 ? filters.severities : undefined,
+  compliance_frameworks: filters.complianceFrameworks.length > 0 ? filters.complianceFrameworks : undefined,
+  statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
+  search_text: filters.searchText || undefined,
+  min_risk_score: filters.riskScoreRange[0],
+  max_risk_score: filters.riskScoreRange[1],
+};
     setDashboardState(prev => ({ ...prev, currentQuery: newQuery }));
   };
   const exportAuditData = (format: 'csv' | 'json' | 'pdf') => {
@@ -142,12 +139,12 @@ export const AuditManagementDashboard: React.FC = () => {
   };
   // Render severity badge
   const renderSeverityBadge = (severity: AuditSeverity) => {
-    const colors = {
-      [AuditSeverity.LOW]: 'green',
-      [AuditSeverity.MEDIUM]: 'orange', 
-      [AuditSeverity.HIGH]: 'red',
-      [AuditSeverity.CRITICAL]: 'purple'
-    };
+  const colors = {
+  [AuditSeverity.LOW]: 'green',
+  [AuditSeverity.MEDIUM]: 'orange',
+  [AuditSeverity.HIGH]: 'red',
+  [AuditSeverity.CRITICAL]: 'purple',
+};
     return <Tag color={colors[severity]}>{severity.toUpperCase()}</Tag>;
   };
   // Render risk score
@@ -156,7 +153,7 @@ export const AuditManagementDashboard: React.FC = () => {
     if (score >= 7) color = 'red';
     else if (score >= 5) color = 'orange';
     else if (score >= 3) color = 'gold';
-    return ();
+    return;
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Progress 
           percent={score * 10} 
@@ -173,7 +170,7 @@ export const AuditManagementDashboard: React.FC = () => {
   const renderOverviewCards = () => {
     if (!dashboardState.analytics) return null;
     const { analytics } = dashboardState;
-    return ();
+    return;
       <Row gutter={16} style={{ marginBottom: 24 }}>
         <Col span={6}>
           <Card>
@@ -222,7 +219,7 @@ export const AuditManagementDashboard: React.FC = () => {
   // Anomalous patterns alerts
   const renderAnomalousPatterns = () => {
     if (dashboardState.anomalousPatterns.length === 0) return null;
-    return ();
+    return;
       <div style={{ marginBottom: 24 }}>
         <h3>🚨 Anomalous Patterns Detected</h3>
         {dashboardState.anomalousPatterns.map((pattern, index) => ()
@@ -237,7 +234,6 @@ export const AuditManagementDashboard: React.FC = () => {
               <Button size="small" onClick={() => console.log('Investigate pattern:', pattern)}>
                 Investigate
               </Button>
-            }
           />
         ))}
       </div>
@@ -245,71 +241,70 @@ export const AuditManagementDashboard: React.FC = () => {
   };
   // Audit events table
   const renderAuditEventsTable = () => {
-    const columns = [;
-      {
-        title: 'Timestamp',
-        dataIndex: 'timestamp',
-        key: 'timestamp',
-        render: (timestamp: Date) => timestamp.toLocaleString(),
-        sorter: true,
-      },
+  const columns = [;
+  {
+  title: 'Timestamp',
+  dataIndex: 'timestamp',
+  key: 'timestamp',
+  render: (timestamp: Date) => timestamp.toLocaleString(),
+  sorter: true,
+}
       {
         title: 'Event Type',
         dataIndex: 'event_type',
         key: 'event_type',
         render: (type: AuditEventType) => <Tag>{type.replace('_', ' ').toUpperCase()}</Tag>
-      },
+  }
       {
-        title: 'Severity',
-        dataIndex: 'severity',
-        key: 'severity',
-        render: renderSeverityBadge,
-      },
+  title: 'Severity',
+  dataIndex: 'severity',
+  key: 'severity',
+  render: renderSeverityBadge,
+}
       {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-        ellipsis: true,
-      },
+  title: 'Title',
+  dataIndex: 'title',
+  key: 'title',
+  ellipsis: true,
+}
       {
         title: 'User',
         dataIndex: 'user_id',
         key: 'user_id',
         render: (userId: string) => userId ? <Tag icon={<UserOutlined />}>{userId}</Tag> : 'System'
-      },
+  }
       {
-        title: 'Risk Score',
-        dataIndex: 'risk_score',
-        key: 'risk_score',
-        render: renderRiskScore,
-        sorter: true,
-      },
+  title: 'Risk Score',
+  dataIndex: 'risk_score',
+  key: 'risk_score',
+  render: renderRiskScore,
+  sorter: true,
+}
       {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        render: (status: AuditStatus) => {,
-          const colors = {
-            [AuditStatus.ACTIVE]: 'blue',
-            [AuditStatus.RESOLVED]: 'green',
-            [AuditStatus.INVESTIGATING]: 'orange',
-            [AuditStatus.SUPPRESSED]: 'gray',
-            [AuditStatus.ESCALATED]: 'red'
-          };
+  title: 'Status',
+  dataIndex: 'status',
+  key: 'status',
+  render: (status: AuditStatus) => {,
+  const colors = {
+  [AuditStatus.ACTIVE]: 'blue',
+  [AuditStatus.RESOLVED]: 'green',
+  [AuditStatus.INVESTIGATING]: 'orange',
+  [AuditStatus.SUPPRESSED]: 'gray',
+  [AuditStatus.ESCALATED]: 'red',
+};
           return <Tag color={colors[status]}>{status.toUpperCase()}</Tag>;
-        }
-      },
+  }
       {
         title: 'Compliance',
         dataIndex: 'compliance_frameworks',
         key: 'compliance_frameworks',
-        render: (frameworks: ComplianceFramework[]) => (),
+        render: (frameworks: ComplianceFramework) => (),
           <div>
             {frameworks.map(framework => ()
               <Tag key={framework} size="small">{framework.toUpperCase()}</Tag>
             ))}
           </div>
-      },
+  }
       {
         title: 'Actions',
         key: 'actions',
@@ -322,9 +317,8 @@ export const AuditManagementDashboard: React.FC = () => {
               View Details
             </Button>
           </Space>
-      }
     ];
-    return ();
+    return;
       <Table
         columns={columns}
         dataSource={dashboardState.events}
@@ -337,10 +331,9 @@ export const AuditManagementDashboard: React.FC = () => {
           showQuickJumper: true,
           onChange: (page, pageSize) => {
             setDashboardState(prev => ({)
-              ...prev,
+  ...prev,
               currentQuery: { ...prev.currentQuery, page, limit: pageSize || 50 }
             }));
-          }
         }}
         rowKey="id"
         scroll={{ x: 1200 }}
@@ -353,15 +346,15 @@ export const AuditManagementDashboard: React.FC = () => {
     const { analytics } = dashboardState;
     // Severity distribution pie chart
     const severityData = Object.entries(analytics.severity_distribution || {}).map(([severity, count]) => ({)
-      type: severity,
-      value: count as number,
-    }));
+  type: severity,
+  value: count as number,
+}));
     // Event type distribution bar chart
     const eventTypeData = Object.entries(analytics.event_type_distribution || {}).map(([type, count]) => ({)
-      type: type.replace('_', ' '),
-      value: count as number,
-    }));
-    return ();
+  type: type.replace('_', ' '),
+  value: count as number,
+}));
+    return;
       <Row gutter={16}>
         <Col span={12}>
           <Card title="Severity Distribution" style={{ marginBottom: 16 }}>
@@ -395,7 +388,7 @@ export const AuditManagementDashboard: React.FC = () => {
   const renderEventDetailsModal = () => {
     if (!dashboardState.selectedEvent) return null;
     const event = dashboardState.selectedEvent;
-    return ();
+    return;
       <Modal
         title={`Audit Event Details - ${event.title}`}
         visible={!!dashboardState.selectedEvent}
@@ -543,7 +536,7 @@ export const AuditManagementDashboard: React.FC = () => {
       </Row>
     </Card>
   );
-  return ();
+  return;
     <div style={{ padding: '24px' }}>
       <div style={{ marginBottom: 24 }}>
         <h1>🔍 Audit Management Dashboard</h1>
@@ -580,22 +573,21 @@ const ComplianceReportsTab: React.FC = () => {
   const [reportData, setReportData] = useState<unknown>(null);
   const [loading, setLoading] = useState(false);
   const generateComplianceReport = async () => {
-    setLoading(true);
-    try {
-      const report = auditManagementSystem.generateComplianceReport(selectedFramework, {)
-        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
-        end: new Date(),
-      });
+  setLoading(true);
+  try {
+  const report = auditManagementSystem.generateComplianceReport(selectedFramework, {)
+  start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
+  end: new Date(),
+});
       setReportData(report);
     } catch (error) {
-      console.error('Failed to generate compliance report:', error);
-    }
-    setLoading(false);
-  };
+  console.error('Failed to generate compliance report:', error);
+  setLoading(false);
+};
   useEffect(() => {
     generateComplianceReport();
   }, [selectedFramework]);
-  return ();
+  return;
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={6}>
@@ -661,23 +653,23 @@ const ComplianceReportsTab: React.FC = () => {
 // Real-time Monitoring Tab Component
 const RealTimeMonitoringTab: React.FC = () => {
   const [monitoringData, setMonitoringData] = useState({)
-    eventsPerMinute: 0,
-    alertsActive: 0,
-    systemHealth: 'healthy',
-  });
+  eventsPerMinute: 0,
+  alertsActive: 0,
+  systemHealth: 'healthy',
+});
   useEffect(() => {
-    // Set up real-time monitoring
-    const interval = setInterval(() => {
-      // This would connect to real-time event streams
-      setMonitoringData({)
-        eventsPerMinute: Math.floor(Math.random() * 50),
-        alertsActive: Math.floor(Math.random() * 5),
-        systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning',
-      });
+  // Set up real-time monitoring
+  const interval = setInterval(() => {
+  // This would connect to real-time event streams
+  setMonitoringData({)
+  eventsPerMinute: Math.floor(Math.random() * 50),
+  alertsActive: Math.floor(Math.random() * 5),
+  systemHealth: Math.random() > 0.1 ? 'healthy' : 'warning',
+});
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-  return ();
+  return;
     <div>
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={8}>
@@ -722,7 +714,7 @@ const RealTimeMonitoringTab: React.FC = () => {
 
 // System Health Tab Component
 const SystemHealthTab: React.FC = () => {
-  return ();
+  return;
     <div>
       <Card title="Audit System Health Check" style={{ marginBottom: 16 }}>
         <Row gutter={16}>

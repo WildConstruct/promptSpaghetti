@@ -3,6 +3,7 @@
 
 import { Pool, PoolClient } from 'pg';
 
+}
 export interface KnowledgeArticle {
   id: string;
   title: string;
@@ -18,6 +19,7 @@ export interface KnowledgeArticle {
     avatar_url?: string;
     creator_tier: string;
     verification_status: string;
+}
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimated_read_time: number; // minutes
@@ -37,6 +39,7 @@ export interface KnowledgeArticle {
   }>;
 }
 
+}
 export interface Tutorial {
   id: string;
   title: string;
@@ -49,6 +52,7 @@ export interface Tutorial {
     id: string;
     display_name: string;
     avatar_url?: string;
+}
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimated_duration: number; // minutes
@@ -63,6 +67,7 @@ export interface Tutorial {
   updated_at: string;
 }
 
+}
 export interface TutorialStep {
   id: string;
   order: number;
@@ -73,6 +78,7 @@ export interface TutorialStep {
     type: 'image' | 'video' | 'code' | 'template';
     url: string;
     caption?: string;
+}
   }>;
   interactive_elements?: Array<{
     type: 'quiz' | 'code_editor' | 'template_builder';
@@ -81,6 +87,7 @@ export interface TutorialStep {
   estimated_duration: number;
 }
 
+}
 export interface CaseStudy {
   id: string;
   title: string;
@@ -95,6 +102,7 @@ export interface CaseStudy {
     avatar_url?: string;
     company?: string;
     role?: string;
+}
   };
   industry: string;
   use_case: string;
@@ -119,6 +127,7 @@ export interface CaseStudy {
   updated_at: string;
 }
 
+}
 export interface LearningPath {
   id: string;
   title: string;
@@ -133,6 +142,7 @@ export interface LearningPath {
     resource_id: string;
     order: number;
     is_required: boolean;
+}
   }>;
   prerequisites?: string[];
   learning_objectives: string[];
@@ -142,6 +152,7 @@ export interface LearningPath {
   updated_at: string;
 }
 
+}
 export interface CreateArticleRequest {
   title: string;
   content: string;
@@ -156,9 +167,11 @@ export interface CreateArticleRequest {
     url: string;
     title: string;
     description?: string;
+}
   }>;
 }
 
+}
 export interface CreateTutorialRequest {
   title: string;
   description: string;
@@ -171,7 +184,9 @@ export interface CreateTutorialRequest {
   learning_objectives: string[];
   is_interactive?: boolean;
 }
+}
 
+}
 export interface CreateCaseStudyRequest {
   title: string;
   description: string;
@@ -186,6 +201,7 @@ export interface CreateCaseStudyRequest {
     label: string;
     value: string;
     description?: string;
+}
   }>;
   templates_used?: Array<{
     id: string;
@@ -195,6 +211,7 @@ export interface CreateCaseStudyRequest {
   screenshots?: string[];
 }
 
+}
 export interface SearchFilters {
   category?: string;
   difficulty_level?: string;
@@ -204,12 +221,14 @@ export interface SearchFilters {
   is_featured?: boolean;
   is_community_contributed?: boolean;
 }
+}
 
 export class KnowledgeBaseService {
   constructor(private db: Pool) {}
 
   // Article management
   async createArticle(authorId: string, articleData: CreateArticleRequest): Promise<KnowledgeArticle> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -254,6 +273,7 @@ export class KnowledgeBaseService {
   }
 
   async getArticles(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<KnowledgeArticle[]> {
+
     let query = `
       SELECT 
         a.id, a.title, a.content, a.summary, a.slug, a.category, a.tags,
@@ -306,6 +326,7 @@ export class KnowledgeBaseService {
   }
 
   async searchArticles(searchTerm: string, filters: SearchFilters = {}, limit = 20): Promise<KnowledgeArticle[]> {
+
     let query = `
       SELECT 
         a.id, a.title, a.content, a.summary, a.slug, a.category, a.tags,
@@ -348,6 +369,7 @@ export class KnowledgeBaseService {
 
   // Tutorial management
   async createTutorial(authorId: string, tutorialData: CreateTutorialRequest): Promise<Tutorial> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -408,6 +430,7 @@ export class KnowledgeBaseService {
   }
 
   async getTutorials(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<Tutorial[]> {
+
     let query = `
       SELECT 
         t.id, t.title, t.description, t.slug, t.category, t.tags,
@@ -447,6 +470,7 @@ export class KnowledgeBaseService {
 
   // Case study management
   async createCaseStudy(authorId: string, caseStudyData: CreateCaseStudyRequest): Promise<CaseStudy> {
+
     const slug = this.generateSlug(caseStudyData.title);
 
     const result = await this.db.query(`
@@ -477,6 +501,7 @@ export class KnowledgeBaseService {
   }
 
   async getCaseStudies(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<CaseStudy[]> {
+
     let query = `
       SELECT 
         cs.id, cs.title, cs.description, cs.slug, cs.category, cs.tags,
@@ -514,6 +539,7 @@ export class KnowledgeBaseService {
     contentId: string,
     userId?: string
   ): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -545,6 +571,7 @@ export class KnowledgeBaseService {
     userId: string,
     helpful: boolean
   ): Promise<void> {
+
     const client = await this.db.connect();
     try {
       await client.query('BEGIN');
@@ -579,6 +606,7 @@ export class KnowledgeBaseService {
 
   // Helper methods
   private async getArticleById(articleId: string): Promise<KnowledgeArticle> {
+
     const result = await this.db.query(`
       SELECT 
         a.id, a.title, a.content, a.summary, a.slug, a.category, a.tags,
@@ -595,6 +623,7 @@ export class KnowledgeBaseService {
   }
 
   private async getTutorialById(tutorialId: string): Promise<Tutorial> {
+
     const result = await this.db.query(`
       SELECT 
         t.id, t.title, t.description, t.slug, t.category, t.tags,
@@ -611,6 +640,7 @@ export class KnowledgeBaseService {
   }
 
   private async getCaseStudyById(caseStudyId: string): Promise<CaseStudy> {
+
     const result = await this.db.query(`
       SELECT 
         cs.id, cs.title, cs.description, cs.slug, cs.category, cs.tags,
@@ -627,6 +657,7 @@ export class KnowledgeBaseService {
   }
 
   private async getTutorialSteps(tutorialId: string): Promise<TutorialStep[]> {
+
     const result = await this.db.query(`
       SELECT id, order_number, title, content, step_type, media, interactive_elements, estimated_duration
       FROM tutorial_steps
@@ -662,7 +693,7 @@ export class KnowledgeBaseService {
         avatar_url: row.avatar_url,
         creator_tier: row.creator_tier,
         verification_status: row.verification_status
-      },
+  }
       difficulty_level: row.difficulty_level,
       estimated_read_time: row.estimated_read_time,
       views_count: row.views_count,
@@ -690,7 +721,7 @@ export class KnowledgeBaseService {
         id: row.author_id,
         display_name: row.display_name,
         avatar_url: row.avatar_url
-      },
+  }
       difficulty_level: row.difficulty_level,
       estimated_duration: row.estimated_duration,
       steps,
@@ -718,7 +749,7 @@ export class KnowledgeBaseService {
         id: row.author_id,
         display_name: row.display_name,
         avatar_url: row.avatar_url
-      },
+  }
       industry: row.industry,
       use_case: row.use_case,
       challenge: row.challenge,

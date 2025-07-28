@@ -27,7 +27,7 @@ export interface UserSessionRecordingProps {
     onExport?: (data: SessionRecordingExportData) => void;
 }
 export interface SessionRecordingConfig {
-    enabledFeatures: SessionFeature[];
+    enabledFeatures: SessionFeature;
     recordingSettings: RecordingSettings;
     analysisSettings: AnalysisSettings;
     storageSettings: StorageSettings;
@@ -64,7 +64,7 @@ export interface PatternRecognitionSettings {
     enableInteractionPatterns: boolean;
     enableTemporalPatterns: boolean;
     confidenceThreshold: number;
-    patternCategories: PatternCategory[];
+    patternCategories: PatternCategory;
 }
 export type PatternCategory = 'navigation' | 'engagement' | 'abandonment' | 'conversion' | 'confusion' | 'efficiency' | 'exploration' | 'decision_making';
 export interface HeatmapSettings {
@@ -81,7 +81,7 @@ export interface AnomalyDetectionSettings {
     enablePerformanceAnomalies: boolean;
     enableNavigationAnomalies: boolean;
     sensitivityLevel: 'low' | 'medium' | 'high';
-    alertThresholds: AnomalyThreshold[];
+    alertThresholds: AnomalyThreshold;
 }
 export interface AnomalyThreshold {
     metric: string;
@@ -94,7 +94,7 @@ export interface PerformanceAnalysisSettings {
     trackInteractionLatency: boolean;
     trackRenderPerformance: boolean;
     trackMemoryUsage: boolean;
-    performanceThresholds: PerformanceThreshold[];
+    performanceThresholds: PerformanceThreshold;
 }
 export interface PerformanceThreshold {
     metric: 'load_time' | 'interaction_delay' | 'render_time' | 'memory_usage';
@@ -128,7 +128,7 @@ export interface SessionPrivacySettings {
     maskFormInputs: boolean;
     maskPasswords: boolean;
     maskCreditCards: boolean;
-    excludedSelectors: string[];
+    excludedSelectors: string;
     dataRetentionDays: number;
     anonymizeUserData: boolean;
     gdprCompliant: boolean;
@@ -147,9 +147,9 @@ export interface UserSession {
     startTime: number;
     endTime?: number;
     duration: number;
-    pageViews: SessionPageView[];
-    interactions: SessionInteraction[];
-    navigationFlow: NavigationEvent[];
+    pageViews: SessionPageView;
+    interactions: SessionInteraction;
+    navigationFlow: NavigationEvent;
     performance: SessionPerformance;
     metadata: SessionMetadata;
     analysis?: SessionAnalysis;
@@ -216,8 +216,8 @@ export interface SessionPerformance {
     slowestPage: string;
     fastestPage: string;
     memoryUsage: MemoryUsage;
-    networkRequests: NetworkRequest[];
-    errors: SessionError[];
+    networkRequests: NetworkRequest;
+    errors: SessionError;
 }
 export interface MemoryUsage {
     peak: number;
@@ -264,12 +264,12 @@ export interface SessionAnalysis {
     sessionId: string;
     analysisTimestamp: number;
     overallScore: SessionScore;
-    behaviorPatterns: BehaviorPattern[];
+    behaviorPatterns: BehaviorPattern;
     navigationAnalysis: NavigationAnalysis;
     engagementMetrics: EngagementMetrics;
-    conversionIndicators: ConversionIndicator[];
-    anomalies: SessionAnomaly[];
-    recommendations: SessionRecommendation[];
+    conversionIndicators: ConversionIndicator;
+    anomalies: SessionAnomaly;
+    recommendations: SessionRecommendation;
     heatmapData: HeatmapData;
 }
 export interface SessionScore {
@@ -288,8 +288,8 @@ export interface BehaviorPattern {
     frequency: number;
     duration: number;
     significance: 'low' | 'medium' | 'high';
-    examples: PatternExample[];
-    insights: string[];
+    examples: PatternExample;
+    insights: string;
 }
 export interface PatternExample {
     sessionId: string;
@@ -302,8 +302,8 @@ export interface NavigationAnalysis {
     uniquePages: number;
     averageTimePerPage: number;
     bounceRate: number;
-    exitPages: PageExit[];
-    navigationFlow: FlowPath[];
+    exitPages: PageExit;
+    navigationFlow: FlowPath;
     backtrackingRate: number;
     directNavigationRate: number;
 }
@@ -334,7 +334,7 @@ export interface ConversionIndicator {
     indicatorType: 'positive' | 'negative' | 'neutral';
     strength: number;
     description: string;
-    relatedActions: string[];
+    relatedActions: string;
     timestamp: number;
 }
 export interface SessionAnomaly {
@@ -362,10 +362,10 @@ export interface SessionRecommendation {
 }
 export type RecommendationType = 'ui_improvement' | 'performance_optimization' | 'navigation_enhancement' | 'content_optimization' | 'technical_fix' | 'user_experience';
 export interface ImplementationGuide {
-    steps: string[];
+    steps: string;
     complexity: 'low' | 'medium' | 'high';
     estimatedEffort: string;
-    requiredSkills: string[];
+    requiredSkills: string;
 }
 export interface ImpactEstimate {
     conversionImprovement: number;
@@ -374,10 +374,10 @@ export interface ImpactEstimate {
     confidenceLevel: number;
 }
 export interface HeatmapData {
-    clickHeatmap: HeatmapPoint[];
-    scrollHeatmap: ScrollHeatmapData[];
-    hoverHeatmap: HeatmapPoint[];
-    attentionHeatmap: AttentionHeatmapData[];
+    clickHeatmap: HeatmapPoint;
+    scrollHeatmap: ScrollHeatmapData;
+    hoverHeatmap: HeatmapPoint;
+    attentionHeatmap: AttentionHeatmapData;
 }
 export interface HeatmapPoint {
     x: number;
@@ -398,11 +398,11 @@ export interface AttentionHeatmapData {
     interactionRate: number;
 }
 export interface SessionRecordingExportData {
-    sessions: UserSession[];
-    analysis: SessionAnalysis[];
-    patterns: BehaviorPattern[];
-    heatmaps: HeatmapData[];
-    recommendations: SessionRecommendation[];
+    sessions: UserSession;
+    analysis: SessionAnalysis;
+    patterns: BehaviorPattern;
+    heatmaps: HeatmapData;
+    recommendations: SessionRecommendation;
     metadata: {
         exportTimestamp: number;
         totalSessions: number;

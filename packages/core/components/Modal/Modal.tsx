@@ -9,25 +9,24 @@ import { uiColors } from '../../styles/professional-design-system';
 const uiColors = {
   ...uiColors,
   accent: {,
-    ...uiColors.accent,
-    primary: uiColors.accent.orange,
-    secondary: uiColors.accent.blue,
-  },
+  ...uiColors.accent,
+  primary: uiColors.accent.orange,
+  secondary: uiColors.accent.blue,
+},
   ui: {,
-    ...uiColors.ui,
-    selected: '#353535',
-    disabled: '#6b7280',
-  },
+  ...uiColors.ui,
+  selected: '#353535',
+  disabled: '#6b7280',
+},
   text: {,
-    ...uiColors.text,
-    disabled: '#6b7280',
-  }
+  ...uiColors.text,
+  disabled: '#6b7280',
 };
 
 export interface ModalProps {
-  isOpen: boolean;
+  isOpen: boolean;,
   onClose: () => void;
-  title: string;
+  title: string;,
   children: ReactNode;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   closeOnOverlayClick?: boolean;
@@ -38,15 +37,15 @@ export interface ModalProps {
   overlayClassName?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
+  /**
+  * Professional modal component with accessibility features
+  * - Focus management and keyboard navigation
+  * - Accessible dialog pattern (ARIA)
+  * - Smooth animations
+  * - Multiple size options
+  * - Portal rendering for z-index management
+  */
 }
-/**
- * Professional modal component with accessibility features
- * - Focus management and keyboard navigation
- * - Accessible dialog pattern (ARIA)
- * - Smooth animations
- * - Multiple size options
- * - Portal rendering for z-index management
- */
 export const Modal: React.FC<ModalProps> = ({)
   isOpen,
   onClose,
@@ -60,7 +59,7 @@ export const Modal: React.FC<ModalProps> = ({)
   className = '',
   overlayClassName = '',
   'aria-labelledby': ariaLabelledBy,
-  'aria-describedby': ariaDescribedBy
+  'aria-describedby': ariaDescribedBy,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -73,61 +72,50 @@ export const Modal: React.FC<ModalProps> = ({)
   };
   // Focus management
   useEffect(() => {
-    if (isOpen) {
-      // Store previously focused element
-      previousActiveElement.current = document.activeElement as HTMLElement;
-      // Focus modal after animation
-      const timer = setTimeout(() => {
-        if (modalRef.current) {
-          const firstFocusable = modalRef.current.querySelector(;);
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          ) as HTMLElement;
-          if (firstFocusable) {
-            firstFocusable.focus();
-          } else {
+  if (isOpen) {
+  // Store previously focused element
+  previousActiveElement.current = document.activeElement as HTMLElement;
+  // Focus modal after animation
+  const timer = setTimeout(() => {
+  if (modalRef.current) {
+  const firstFocusable = modalRef.current.querySelector(;);
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') as HTMLElement;
+  if (firstFocusable) {
+  firstFocusable.focus();
+} else {
             modalRef.current.focus();
-          }
-        }
       }, 150);
       return () => clearTimeout(timer);
     } else {
       // Restore focus when modal closes
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
-      }
-    }
   }, [isOpen]);
   // Keyboard event handling
   useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      // Close on Escape
-      if (closeOnEscape && event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-      // Tab navigation containment
-      if (event.key === 'Tab' && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll(;);
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-        if (event.shiftKey) {
-          // Shift + Tab
-          if (document.activeElement === firstElement) {
-            event.preventDefault();
-            lastElement.focus();
-          }
-        } else {
+  if (!isOpen) return;
+  const handleKeyDown = (event: KeyboardEvent) => {,
+  // Close on Escape
+  if (closeOnEscape && event.key === 'Escape') {
+  event.preventDefault();
+  onClose();
+  return;
+  // Tab navigation containment
+  if (event.key === 'Tab' && modalRef.current) {
+  const focusableElements = modalRef.current.querySelectorAll(;);
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstElement = focusableElements[0] as HTMLElement;
+  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+  if (event.shiftKey) {
+  // Shift + Tab
+  if (document.activeElement === firstElement) {
+  event.preventDefault();
+  lastElement.focus();
+} else {
           // Tab
           if (document.activeElement === lastElement) {
             event.preventDefault();
             firstElement.focus();
-          }
-        }
-      }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
@@ -140,34 +128,32 @@ export const Modal: React.FC<ModalProps> = ({)
       return () => {
         document.body.style.overflow = originalStyle;
       };
-    }
   }, [isOpen, preventScrollClose]);
   // Handle overlay click
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (closeOnOverlayClick && event.target === event.currentTarget) {
       onClose();
-    }
   };
   if (!isOpen) return null;
   const modalContent = (;);
     <div 
       className={`modal-overlay ${overlayClassName}`}
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 9999,
-        padding: '20px',
-        opacity: isOpen ? 1 : 0,
-        transition: 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        backdropFilter: 'blur(4px)',
-      }}
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 9999,
+  padding: '20px',
+  opacity: isOpen ? 1 : 0,
+  transition: 'opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  backdropFilter: 'blur(4px)',
+}}
       onClick={handleOverlayClick}
       role="presentation"
     >
@@ -185,33 +171,34 @@ export const Modal: React.FC<ModalProps> = ({)
           backgroundColor: uiColors.background.primary,
           borderRadius: '12px',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
-          border: `1px solid ${uiColors.ui.border}`,}
-          display: 'flex',
+          border: `1px solid ${uiColors.ui.border}`}
+},
+  display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
           transform: isOpen ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)',
           transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-          outline: 'none',
-        }}
+          outline: 'none';
+  }}
       >
         {/* Modal Header */}
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '24px 24px 0',
-          borderBottom: 'none',
-          minHeight: '60px',
-        }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '24px 24px 0',
+  borderBottom: 'none',
+  minHeight: '60px',
+}}>
           <h2 
             id={ariaLabelledBy || 'modal-title'}
             style={{
-              margin: 0,
-              fontSize: '20px',
-              fontWeight: 600,
-              color: uiColors.text.primary,
-              lineHeight: 1.3,
-            }}
+  margin: 0,
+  fontSize: '20px',
+  fontWeight: 600,
+  color: uiColors.text.primary,
+  lineHeight: 1.3,
+}}
           >
             {title}
           </h2>
@@ -220,19 +207,19 @@ export const Modal: React.FC<ModalProps> = ({)
               onClick={onClose}
               aria-label="Close modal"
               style={{
-                background: 'none',
-                border: 'none',
-                padding: '8px',
-                cursor: 'pointer',
-                color: uiColors.text.secondary,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '6px',
-                marginLeft: '16px',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                outline: 'none',
-              }}
+  background: 'none',
+  border: 'none',
+  padding: '8px',
+  cursor: 'pointer',
+  color: uiColors.text.secondary,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '6px',
+  marginLeft: '16px',
+  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  outline: 'none',
+}}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = uiColors.ui.hover;
                 e.currentTarget.style.color = uiColors.text.primary;
@@ -254,11 +241,11 @@ export const Modal: React.FC<ModalProps> = ({)
         </div>
         {/* Modal Body */}
         <div style={{
-          flex: 1,
-          overflow: 'auto',
-          padding: '24px',
-          color: uiColors.text.primary,
-        }}>
+  flex: 1,
+  overflow: 'auto',
+  padding: '24px',
+  color: uiColors.text.primary,
+}}>
           {children}
         </div>
       </div>

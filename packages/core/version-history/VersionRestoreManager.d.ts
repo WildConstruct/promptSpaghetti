@@ -2,6 +2,7 @@
  * Epic 9.3.3 - Version Restore Manager
  * Handles version restoration with conflict detection, preview, and selective restore capabilities
  */
+
 export interface RestoreOptions {
     create_backup?: boolean;
     backup_title?: string;
@@ -11,7 +12,7 @@ export interface RestoreOptions {
     restore_metadata?: boolean;
     restore_workflow_state?: boolean;
     notify_collaborators?: boolean;
-}
+
 export interface RestoreConflict {
     id: string;
     type: 'data_conflict' | 'workflow_conflict' | 'permission_conflict' | 'dependency_conflict';
@@ -23,7 +24,7 @@ export interface RestoreConflict {
     suggested_resolution: 'keep_current' | 'use_restore' | 'merge' | 'manual';
     severity: 'low' | 'medium' | 'high' | 'critical';
     auto_resolvable: boolean;
-}
+
 export interface RestorePreview {
     restore_id: string;
     snapshot_id: string;
@@ -45,7 +46,7 @@ export interface RestorePreview {
         potential_conflicts: string[];
         recommended_actions: string[];
     };
-}
+
 export interface RestoreResult {
     success: boolean;
     restore_id: string;
@@ -64,7 +65,7 @@ export interface RestoreResult {
     duration_ms: number;
     warnings: string[];
     errors: string[];
-}
+
 export interface RestoreState {
     id: string;
     status: 'pending' | 'in_progress' | 'completed' | 'failed' | 'cancelled';
@@ -75,7 +76,7 @@ export interface RestoreState {
     started_at: string;
     completed_at?: string;
     error_message?: string;
-}
+
 export declare class VersionRestoreManager {
     private apiClient;
     private projectId;
@@ -129,5 +130,5 @@ export declare class VersionRestoreManager {
     getRestoreState(restoreId: string): RestoreState | null;
     getRestoreHistory(): RestoreResult[];
     cancelRestore(restoreId: string): Promise<void>;
-}
+
 //# sourceMappingURL=VersionRestoreManager.d.ts.map

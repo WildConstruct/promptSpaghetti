@@ -11,6 +11,7 @@ import {
   ConflictResolutionResult,
   RestorationFilter
 } from '../types/restoration';
+
 interface UseRestorationReturn {
     loading: boolean;
     error: string | null;
@@ -26,7 +27,7 @@ interface UseRestorationReturn {
     listRestorations: (filter: RestorationFilter) => Promise<RestorationAttempt[]>;
     getRestorationDetails: (restorationAttemptId: string) => Promise<any>;
     clearError: () => void;
-}
+
 export declare const useRestoration: () => UseRestorationReturn;
 export {};
 //# sourceMappingURL=useRestoration.d.ts.map

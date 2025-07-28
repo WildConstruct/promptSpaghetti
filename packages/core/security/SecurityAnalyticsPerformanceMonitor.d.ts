@@ -7,6 +7,7 @@
  * providing real-time performance tracking, bottleneck detection, and optimization recommendations.
  */
 import { EventEmitter } from 'events';
+
 export interface AnalyticsPerformanceProfile {
     id: string;
     name: string;
@@ -49,7 +50,7 @@ export interface AnalyticsPerformanceProfile {
     created_at: number;
     last_updated: number;
     enabled: boolean;
-}
+
 export interface MonitoringScope {
     components: string[];
     operations: string[];
@@ -61,7 +62,7 @@ export interface MonitoringScope {
         operations: string[];
         time_periods: string[];
     };
-}
+
 export interface TimeWindow {
     name: string;
     start_hour: number;
@@ -73,7 +74,7 @@ export interface TimeWindow {
         expected_response_time_multiplier: number;
         priority_level: 'low' | 'medium' | 'high' | 'critical';
     };
-}
+
 export interface PerformanceTarget {
     id: string;
     name: string;
@@ -93,7 +94,7 @@ export interface PerformanceTarget {
         cost_per_violation: number;
         sla_requirement: boolean;
     };
-}
+
 export interface CustomResourceConfig {
     id: string;
     name: string;
@@ -113,7 +114,7 @@ export interface CustomResourceConfig {
         max: number;
     };
     collection_frequency_seconds: number;
-}
+
 export interface ThroughputConfig {
     enabled: boolean;
     metrics: {,
@@ -134,7 +135,7 @@ export interface ThroughputConfig {
         detection_algorithms: ('trend_analysis' | 'anomaly_detection' | 'threshold_monitoring')[];
         alert_on_degradation_percent: number;
     };
-}
+
 export interface LatencyConfig {
     enabled: boolean;
     metrics: {,
@@ -156,7 +157,7 @@ export interface LatencyConfig {
         percentiles: number[];
         window_size_minutes: number;
     };
-}
+
 export interface AccuracyConfig {
     enabled: boolean;
     metrics: {,
@@ -181,7 +182,7 @@ export interface AccuracyConfig {
         automated_testing: boolean;
         continuous_validation: boolean;
     };
-}
+
 export interface AvailabilityConfig {
     enabled: boolean;
     metrics: {,
@@ -202,7 +203,7 @@ export interface AvailabilityConfig {
         disaster_recovery_rto_minutes: number;
         disaster_recovery_rpo_minutes: number;
     };
-}
+
 export interface ScalabilityConfig {
     enabled: boolean;
     metrics: {,
@@ -224,7 +225,7 @@ export interface ScalabilityConfig {
         max_instances: number;
         min_instances: number;
     };
-}
+
 export interface MaintenanceWindow {
     id: string;
     name: string;
@@ -233,7 +234,7 @@ export interface MaintenanceWindow {
     days_of_week: number[];
     timezone: string;
     impact_on_sla: boolean;
-}
+
 export interface PerformanceMetrics {
     profile_id: string;
     timestamp: number;
@@ -299,7 +300,7 @@ export interface PerformanceMetrics {
         consistency_score: number;
         timeliness_score: number;
     };
-}
+
 export interface PerformanceAnomaly {
     id: string;
     profile_id: string;
@@ -338,14 +339,14 @@ export interface PerformanceAnomaly {
         resolution_notes?: string;
         prevention_measures?: string[];
     };
-}
+
 export interface CorrelationAnalysis {
     correlated_metric: string;
     correlation_strength: number;
     time_offset_minutes: number;
     statistical_significance: number;
     description: string;
-}
+
 export interface PerformanceOptimizationRecommendation {
     id: string;
     profile_id: string;
@@ -383,7 +384,7 @@ export interface PerformanceOptimizationRecommendation {
     reviewed_by?: string;
     reviewed_at?: number;
     review_notes?: string;
-}
+
 export interface PerformanceBenchmark {
     id: string;
     name: string;
@@ -408,21 +409,21 @@ export interface PerformanceBenchmark {
     created_at: number;
     last_executed: number;
     enabled: boolean;
-}
+
 export interface LoadConfiguration {
     concurrent_users: number;
     requests_per_second: number;
     data_volume_gb: number;
     operation_mix: Record<string, number>;
     geographic_distribution: Record<string, number>;
-}
+
 export interface DataSetConfiguration {
     data_type: 'synthetic' | 'anonymized_production' | 'test_data';
     volume_gb: number;
     complexity_level: 'simple' | 'medium' | 'complex';
     schema_version: string;
     data_characteristics: Record<string, any>;
-}
+
 export interface EnvironmentConfiguration {
     compute_resources: {,
         cpu_cores: number;
@@ -433,7 +434,7 @@ export interface EnvironmentConfiguration {
     software_versions: Record<string, string>;
     configuration_parameters: Record<string, any>;
     infrastructure_type: 'on_premise' | 'cloud' | 'hybrid';
-}
+
 export interface BenchmarkExecution {
     id: string;
     benchmark_id: string;
@@ -456,7 +457,7 @@ export interface BenchmarkExecution {
     status: 'completed' | 'failed' | 'partial' | 'cancelled';
     issues_encountered: string[];
     notes: string;
-}
+
 export interface PerformanceReport {
     report_id: string;
     profile_id: string;
@@ -508,7 +509,7 @@ export interface PerformanceReport {
         potential_savings: number;
         roi_timeline_months: number;
     };
-}
+
 export interface ThroughputAnalysis {
     average_throughput: number;
     peak_throughput: number;
@@ -516,7 +517,7 @@ export interface ThroughputAnalysis {
     bottlenecks_identified: string[];
     capacity_utilization_percent: number;
     scalability_headroom_percent: number;
-}
+
 export interface LatencyAnalysis {
     average_latency_ms: number;
     p95_latency_ms: number;
@@ -527,7 +528,7 @@ export interface LatencyAnalysis {
         operation: string;
         avg_latency_ms: number;
     }>;
-}
+
 export interface ResourceAnalysis {
     average_cpu_utilization_percent: number;
     average_memory_utilization_percent: number;
@@ -535,7 +536,7 @@ export interface ResourceAnalysis {
     resource_efficiency_score: number;
     waste_identification: string[];
     optimization_opportunities: string[];
-}
+
 export interface AccuracyAnalysis {
     average_accuracy_percent: number;
     accuracy_trend: 'improving' | 'stable' | 'degrading';
@@ -546,7 +547,7 @@ export interface AccuracyAnalysis {
         model: string;
         accuracy: number;
     }>;
-}
+
 export interface AvailabilityAnalysis {
     uptime_percentage: number;
     availability_trend: 'improving' | 'stable' | 'degrading';
@@ -554,7 +555,7 @@ export interface AvailabilityAnalysis {
     average_recovery_time_minutes: number;
     sla_compliance_percentage: number;
     availability_risks_identified: string[];
-}
+
 export interface ScalabilityAnalysis {
     current_scale_factor: number;
     maximum_tested_scale: number;
@@ -562,7 +563,7 @@ export interface ScalabilityAnalysis {
     scalability_bottlenecks: string[];
     auto_scaling_effectiveness: number;
     capacity_planning_recommendations: string[];
-}
+
 export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     private profiles;
     private metricsHistory;
@@ -658,6 +659,6 @@ export declare class SecurityAnalyticsPerformanceMonitor extends EventEmitter {
     private performDataCleanup;
     performMaintenance(): Promise<void>;
     shutdown(): Promise<void>;
-}
+
 export default SecurityAnalyticsPerformanceMonitor;
 //# sourceMappingURL=SecurityAnalyticsPerformanceMonitor.d.ts.map

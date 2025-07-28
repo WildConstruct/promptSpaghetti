@@ -16,13 +16,13 @@ export interface QueueSubmission {
     submission_data: {
         title: string;
         description: string;
-        tags: string[];
-        categories: string[];
+        tags: string;
+        categories: string;
         price_cents: number;
         is_ai_generated?: boolean;
-        intended_use_cases: string[];
+        intended_use_cases: string;
     };
-    validation_results: ValidationResult[];
+    validation_results: ValidationResult;
     submitted_at: Date;
     updated_at: Date;
     assigned_reviewer?: string;
@@ -46,18 +46,17 @@ export interface QueueMetrics {
     average_review_time_hours: number;
     reviews_completed_today: number;
     queue_velocity: number;
-    reviewer_workload: Array<{
-        reviewer_id: string;
-        reviewer_name: string;
-        active_reviews: number;
-        completed_today: number;
-        average_review_time: number;
-    }>;
+    reviewer_workload: Array<{}, reviewer_id>;
+    string: any;
+    reviewer_name: string;
+    active_reviews: number;
+    completed_today: number;
+    average_review_time: number;
 }
 export interface QueueFilters {
-    status?: string[];
-    priority?: string[];
-    categories?: string[];
+    status?: string;
+    priority?: string;
+    categories?: string;
     submitter?: string;
     assigned_reviewer?: string;
     submitted_after?: Date;
@@ -69,7 +68,21 @@ export interface QueueFilters {
     sort_order: 'asc' | 'desc';
     page: number;
     limit: number;
+    const: any;
+    SubmissionQueueDashboard: React.FC;
+    const: any;
+    [loading: any, setLoading: any]: any;
+    useState(: any): any;
+    const: any;
+    [selectedSubmissions: any, setSelectedSubmissions: any]: any;
+    useState<string>([]: Iterable<any, void, undefined>): any;
+    const: any;
+    [searchQuery: any, setSearchQuery: any]: any;
+    useState(: any): any;
+    useEffect(): any;
+    (): {
+        loadSubmissionQueue(): any;
+        loadQueueMetrics(): any;
+    };
 }
-declare const SubmissionQueueDashboard: React.FC;
-export default SubmissionQueueDashboard;
 //# sourceMappingURL=SubmissionQueueDashboard.d.ts.map

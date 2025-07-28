@@ -11,7 +11,6 @@ export interface UserAvatarProps {
   onClick?: (userId: string) => void;
   className?: string;
 }
-
 export const UserAvatar: React.FC<UserAvatarProps> = ({)
   userId,
   userName,
@@ -24,21 +23,21 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({)
   className = ''
 }) => {
   const sizeClasses = {
-    small: 'w-6 h-6 text-xs',
-    medium: 'w-8 h-8 text-sm',
-    large: 'w-12 h-12 text-base',
-  };
+  small: 'w-6 h-6 text-xs',
+  medium: 'w-8 h-8 text-sm',
+  large: 'w-12 h-12 text-base',
+};
   const statusColors = {
-    active: 'bg-green-500',
-    idle: 'bg-yellow-500',
-    away: 'bg-orange-500',
-    offline: 'bg-gray-400',
-  };
+  active: 'bg-green-500',
+  idle: 'bg-yellow-500',
+  away: 'bg-orange-500',
+  offline: 'bg-gray-400',
+};
   const statusSizes = {
-    small: 'w-2 h-2',
-    medium: 'w-2.5 h-2.5',
-    large: 'w-3 h-3',
-  };
+  small: 'w-2 h-2',
+  medium: 'w-2.5 h-2.5',
+  large: 'w-3 h-3',
+};
   const getInitials = (name?: string): string => {
     if (!name) return userId.slice(0, 2).toUpperCase();
     return name
@@ -65,7 +64,6 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({)
   const handleClick = () => {
     if (onClick) {
       onClick(userId);
-    }
   };
   const avatarContent = userAvatar ? (;);
     <img
@@ -80,7 +78,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({)
       {getInitials(userName)}
     </div>
   );
-  return ();
+  return;
     <div 
       className={`relative inline-block ${onClick ? 'cursor-pointer' : ''} ${className}`}
       onClick={handleClick}
@@ -98,18 +96,17 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({)
 
 export interface UserAvatarListProps {
   users: Array<{,
-    userId: string;
-    userName?: string;
-    userAvatar?: string;
-    status: 'active' | 'idle' | 'away' | 'offline';
-  }>;
+  userId: string;
+  userName?: string;
+  userAvatar?: string;
+  status: 'active' | 'idle' | 'away' | 'offline';
+}>;
   maxVisible?: number;
   size?: 'small' | 'medium' | 'large';
   showOverflow?: boolean;
   onUserClick?: (userId: string) => void;
   className?: string;
 }
-
 export const UserAvatarList: React.FC<UserAvatarListProps> = ({)
   users,
   maxVisible = 5,
@@ -121,16 +118,16 @@ export const UserAvatarList: React.FC<UserAvatarListProps> = ({)
   const visibleUsers = users.slice(0, maxVisible);
   const overflowCount = users.length - maxVisible;
   const sizeClasses = {
-    small: 'w-6 h-6 text-xs -ml-1',
-    medium: 'w-8 h-8 text-sm -ml-2',
-    large: 'w-12 h-12 text-base -ml-3',
-  };
+  small: 'w-6 h-6 text-xs -ml-1',
+  medium: 'w-8 h-8 text-sm -ml-2',
+  large: 'w-12 h-12 text-base -ml-3',
+};
   const overflowSizeClasses = {
-    small: 'w-6 h-6 text-xs',
-    medium: 'w-8 h-8 text-sm',
-    large: 'w-12 h-12 text-base',
-  };
-  return ();
+  small: 'w-6 h-6 text-xs',
+  medium: 'w-8 h-8 text-sm',
+  large: 'w-12 h-12 text-base',
+};
+  return;
     <div className={`flex items-center ${className}`}>}
       {visibleUsers.map((user, index) => ()
         <div

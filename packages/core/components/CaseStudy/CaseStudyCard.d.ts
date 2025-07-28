@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { CaseStudy } from '../../models/CaseStudyDataModel';
+
 export interface CaseStudyCardProps {
     caseStudy: CaseStudy;
     variant?: 'compact' | 'standard' | 'featured';
@@ -20,7 +21,7 @@ export interface CaseStudyCardProps {
     onLike?: (caseStudyId: string) => void;
     onShare?: (caseStudy: CaseStudy) => void;
     className?: string;
-}
+
 export declare const CaseStudyCard: React.FC<CaseStudyCardProps>;
 export default CaseStudyCard;
 //# sourceMappingURL=CaseStudyCard.d.ts.map

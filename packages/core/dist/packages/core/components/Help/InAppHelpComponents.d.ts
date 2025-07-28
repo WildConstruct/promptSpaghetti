@@ -23,7 +23,7 @@ export interface HelpContentItem {
     content: string;
     type: 'tooltip' | 'article' | 'video' | 'tutorial' | 'faq' | 'guide';
     category: string;
-    tags: string[];
+    tags: string;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     estimatedReadTime?: number;
     thumbnail?: string;
@@ -53,11 +53,11 @@ export interface HelpTour {
     name: string;
     description: string;
     category: string;
-    steps: TourStep[];
+    steps: TourStep;
     autoStart?: boolean;
     skippable?: boolean;
     repeatable?: boolean;
-    prerequisites?: string[];
+    prerequisites?: string;
     estimatedDuration: number;
     difficulty: 'beginner' | 'intermediate' | 'advanced';
 }
@@ -65,8 +65,8 @@ export interface HelpContext {
     currentPage: string;
     userRole?: string;
     userExperience?: 'beginner' | 'intermediate' | 'advanced';
-    completedTours?: string[];
-    dismissedHelp?: string[];
+    completedTours?: string;
+    dismissedHelp?: string;
     preferences?: {
         showTooltips: boolean;
         showTours: boolean;
@@ -92,7 +92,7 @@ export interface HelpTooltipProps {
 export declare const HelpTooltip: React.FC<HelpTooltipProps>;
 export interface ContextualHelpPanelProps {
     title: string;
-    content: HelpContentItem[];
+    content: HelpContentItem;
     context: HelpContext;
     position?: 'right' | 'left' | 'bottom';
     collapsible?: boolean;
@@ -114,8 +114,8 @@ export interface GuidedTourProps {
 }
 export declare const GuidedTour: React.FC<GuidedTourProps>;
 export interface HelpHubProps {
-    tours: HelpTour[];
-    content: HelpContentItem[];
+    tours: HelpTour;
+    content: HelpContentItem;
     context: HelpContext;
     onTourStart?: (tourId: string) => void;
     onContentView?: (contentId: string) => void;
@@ -123,7 +123,7 @@ export interface HelpHubProps {
 }
 export declare const HelpHub: React.FC<HelpHubProps>;
 export interface QuickHelpProps {
-    helpContent: HelpContentItem[];
+    helpContent: HelpContentItem;
     onHelpRequest?: () => void;
     className?: string;
 }

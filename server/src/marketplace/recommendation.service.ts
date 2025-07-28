@@ -4,12 +4,15 @@ import { MarketplaceDAO } from './dao';
 import { TemplateWithStats, EventType } from './types';
 import { Pool } from 'pg';
 
+}
 interface RecommendationScore {
   templateId: string;
   score: number;
   reasons: string[];
 }
+}
 
+}
 interface UserBehavior {
   userId: string;
   viewedTemplates: string[];
@@ -19,10 +22,13 @@ interface UserBehavior {
   categories: string[];
   tags: string[];
 }
+}
 
+}
 interface SimilarityMatrix {
   [templateId: string]: {
     [otherTemplateId: string]: number;
+}
   };
 }
 
@@ -45,6 +51,7 @@ export class RecommendationService {
     limit: number = 10,
     excludeOwned: boolean = true
   ): Promise<TemplateWithStats[]> {
+
     try {
       const userBehavior = await this.getUserBehavior(userId);
       const ownedTemplates = excludeOwned ? userBehavior.purchasedTemplates : [];
@@ -70,6 +77,7 @@ export class RecommendationService {
     templateId: string, 
     limit: number = 5
   ): Promise<TemplateWithStats[]> {
+
     try {
       await this.updateSimilarityMatrixIfNeeded();
       
@@ -93,6 +101,7 @@ export class RecommendationService {
     timeWindow: number = 7, // days
     limit: number = 10
   ): Promise<TemplateWithStats[]> {
+
     const query = `
       WITH recent_activity AS (
         SELECT 
@@ -117,7 +126,7 @@ export class RecommendationService {
         FROM recent_activity ra
         JOIN marketplace_templates t ON ra.template_id = t.id
         WHERE t.status = 'listed'
-      )
+
       SELECT template_id, trend_score
       FROM trending_scores
       WHERE trend_score > 0
@@ -134,6 +143,7 @@ export class RecommendationService {
    * Get recommendations for new users (cold start problem)
    */
   async getNewUserRecommendations(limit: number = 10): Promise<TemplateWithStats[]> {
+
     // For new users, recommend:
     // 1. Featured templates
     // 2. High-rated templates
@@ -153,7 +163,7 @@ export class RecommendationService {
         FROM marketplace_templates t
         LEFT JOIN marketplace_template_stats stats ON t.id = stats.id
         WHERE t.status = 'listed'
-      )
+
       SELECT id, score
       FROM template_scores
       WHERE score > 0
@@ -174,6 +184,7 @@ export class RecommendationService {
     limit: number = 10,
     excludeTemplateIds: string[] = []
   ): Promise<TemplateWithStats[]> {
+
     const excludeClause = excludeTemplateIds.length > 0 
       ? `AND t.id NOT IN (${excludeTemplateIds.map((_, i) => `$${i + 3}`).join(', ')})`
       : '';
@@ -206,6 +217,7 @@ export class RecommendationService {
     userId: string,
     limit: number = 10
   ): Promise<TemplateWithStats[]> {
+
     const userBehavior = await this.getUserBehavior(userId);
     
     if (userBehavior.searchQueries.length === 0) {
@@ -237,6 +249,7 @@ export class RecommendationService {
    * Get user behavior data for recommendations
    */
   private async getUserBehavior(userId: string): Promise<UserBehavior> {
+
     const query = `
       SELECT 
         event_type,
@@ -295,6 +308,7 @@ export class RecommendationService {
     userBehavior: UserBehavior,
     excludeTemplateIds: string[]
   ): Promise<RecommendationScore[]> {
+
     // Get all available templates
     const templates = await this.dao.searchTemplates({
       limit: 1000 // Get all templates for scoring
@@ -376,6 +390,7 @@ export class RecommendationService {
     templateId: string, 
     comparisonTemplateIds: string[]
   ): Promise<number> {
+
     // Simplified similarity calculation based on tags and categories
     // In production, this could use more sophisticated NLP/embedding techniques
     
@@ -427,6 +442,7 @@ export class RecommendationService {
    * Update the similarity matrix (run periodically)
    */
   private async updateSimilarityMatrixIfNeeded(): Promise<void> {
+
     const now = new Date();
     if (now.getTime() - this.lastMatrixUpdate.getTime() < this.MATRIX_UPDATE_INTERVAL) {
       return;
@@ -440,6 +456,7 @@ export class RecommendationService {
    * Build similarity matrix for all templates
    */
   private async buildSimilarityMatrix(): Promise<void> {
+
     const templates = await this.dao.searchTemplates({ limit: 1000 });
     const matrix: SimilarityMatrix = {};
 
@@ -464,6 +481,7 @@ export class RecommendationService {
    * Get templates by IDs while preserving order
    */
   private async getTemplatesByIds(templateIds: string[]): Promise<TemplateWithStats[]> {
+
     if (templateIds.length === 0) return [];
 
     const placeholders = templateIds.map((_, i) => `$${i + 1}`).join(', ');
@@ -518,6 +536,7 @@ export class RecommendationService {
    * Fallback recommendations when personalization fails
    */
   private async getFallbackRecommendations(limit: number): Promise<TemplateWithStats[]> {
+
     return this.getNewUserRecommendations(limit);
   }
 
@@ -528,6 +547,7 @@ export class RecommendationService {
     templateId: string, 
     limit: number
   ): Promise<TemplateWithStats[]> {
+
     const template = await this.dao.getTemplate(templateId);
     if (!template || !template.categories?.length) {
       return this.getFallbackRecommendations(limit);

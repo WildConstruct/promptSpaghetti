@@ -12,6 +12,7 @@ import crypto from 'crypto';
 import { DatabaseService } from '../../database/DatabaseService';
 import { AuditService } from './AuditService';
 
+}
 export interface WebAuthnConfig {
   rpId: string; // Relying Party ID (domain)
   rpName: string; // Relying Party Name
@@ -21,7 +22,9 @@ export interface WebAuthnConfig {
   userVerification: 'required' | 'preferred' | 'discouraged';
   attestation: 'none' | 'indirect' | 'direct' | 'enterprise';
 }
+}
 
+}
 export interface WebAuthnCredential {
   credentialId: string;
   userId: string;
@@ -35,20 +38,25 @@ export interface WebAuthnCredential {
   backupEligible?: boolean;
   backupState?: boolean;
 }
+}
 
+}
 export interface AuthenticatorSelection {
   authenticatorAttachment?: 'platform' | 'cross-platform';
   requireResidentKey: boolean;
   residentKey: 'discouraged' | 'preferred' | 'required';
   userVerification: 'required' | 'preferred' | 'discouraged';
 }
+}
 
+}
 export interface CredentialCreationOptions {
   challenge: string;
   user: {
     id: string;
     name: string;
     displayName: string;
+}
   };
   pubKeyCredParams: Array<{
     alg: number;
@@ -64,6 +72,7 @@ export interface CredentialCreationOptions {
   attestation: 'none' | 'indirect' | 'direct' | 'enterprise';
 }
 
+}
 export interface CredentialRequestOptions {
   challenge: string;
   timeout: number;
@@ -72,10 +81,12 @@ export interface CredentialRequestOptions {
     id: string;
     type: 'public-key';
     transports?: AuthenticatorTransport[];
+}
   }>;
   userVerification: 'required' | 'preferred' | 'discouraged';
 }
 
+}
 export interface AttestationResult {
   verified: boolean;
   credentialId: string;
@@ -85,12 +96,15 @@ export interface AttestationResult {
   credentialDeviceType?: string;
   credentialBackedUp?: boolean;
 }
+}
 
+}
 export interface AssertionResult {
   verified: boolean;
   credentialId: string;
   counter: number;
   userHandle?: string;
+}
 }
 
 export class WebAuthnService {
@@ -127,6 +141,7 @@ export class WebAuthnService {
     userDisplayName: string,
     excludeCredentials?: string[]
   ): Promise<CredentialCreationOptions> {
+
     const challenge = this.generateChallenge();
     const challengeId = crypto.randomUUID();
 
@@ -152,7 +167,7 @@ export class WebAuthnService {
         id: userId,
         name: userName,
         displayName: userDisplayName
-      },
+  }
       pubKeyCredParams: [
         { alg: -7, type: 'public-key' }, // ES256
         { alg: -257, type: 'public-key' } // RS256
@@ -164,7 +179,7 @@ export class WebAuthnService {
         requireResidentKey: this.config.requireResidentKey,
         residentKey: this.config.requireResidentKey ? 'required' : 'preferred',
         userVerification: this.config.userVerification
-      },
+  }
       attestation: this.config.attestation
     };
 
@@ -175,7 +190,7 @@ export class WebAuthnService {
         challengeId,
         rpId: this.config.rpId,
         excludedCredentials: excludeCredentialsList.length
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
@@ -193,6 +208,7 @@ export class WebAuthnService {
   async generateAuthenticationOptions(
     userId?: string
   ): Promise<CredentialRequestOptions> {
+
     const challenge = this.generateChallenge();
     const challengeId = crypto.randomUUID();
 
@@ -236,7 +252,7 @@ export class WebAuthnService {
         rpId: this.config.rpId,
         allowedCredentials: allowCredentials.length,
         userless: !userId
-      },
+  }
       riskLevel: 'LOW',
       compliance: {
         frameworks: ['SOC2', 'ISO27001'],
@@ -256,6 +272,7 @@ export class WebAuthnService {
     challengeId: string,
     attestationResponse: any
   ): Promise<{ success: boolean; credential?: WebAuthnCredential; error?: string }> {
+
     const challengeInfo = this.pendingChallenges.get(challengeId);
     
     if (!challengeInfo) {
@@ -308,7 +325,7 @@ export class WebAuthnService {
           credentialId,
           deviceType: credential.deviceType,
           transports: credential.transports
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -326,7 +343,7 @@ export class WebAuthnService {
         details: {
           challengeId,
           error: error.message
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -347,6 +364,7 @@ export class WebAuthnService {
     challengeId: string,
     assertionResponse: any
   ): Promise<{ success: boolean; userId?: string; error?: string }> {
+
     const challengeInfo = this.pendingChallenges.get(challengeId);
     
     if (!challengeInfo) {
@@ -382,7 +400,7 @@ export class WebAuthnService {
         details: {
           challengeId,
           success: true
-        },
+  }
         riskLevel: 'LOW',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -400,7 +418,7 @@ export class WebAuthnService {
         details: {
           challengeId,
           error: error.message
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -417,6 +435,7 @@ export class WebAuthnService {
    * Get user's registered credentials
    */
   async getUserCredentials(userId: string): Promise<WebAuthnCredential[]> {
+
     try {
       // In a full implementation, this would query the database
       // For now, return empty array as foundation
@@ -431,6 +450,7 @@ export class WebAuthnService {
    * Store new credential
    */
   private async storeCredential(credential: WebAuthnCredential): Promise<void> {
+
     try {
       // In a full implementation, this would store in database
       // For now, just log the credential creation
@@ -449,6 +469,7 @@ export class WebAuthnService {
    * Revoke a credential
    */
   async revokeCredential(userId: string, credentialId: string): Promise<boolean> {
+
     try {
       // In a full implementation, this would update database
       await this.auditService.logEvent({
@@ -456,7 +477,7 @@ export class WebAuthnService {
         userId,
         details: {
           credentialId
-        },
+  }
         riskLevel: 'MEDIUM',
         compliance: {
           frameworks: ['SOC2', 'ISO27001'],
@@ -476,6 +497,7 @@ export class WebAuthnService {
    * Get WebAuthn service statistics
    */
   async getStatistics(): Promise<any> {
+
     return {
       totalCredentials: 0, // Would query database
       activeUsers: 0,

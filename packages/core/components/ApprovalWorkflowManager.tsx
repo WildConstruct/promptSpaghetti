@@ -17,51 +17,47 @@ import { ApprovalDashboard } from './ApprovalDashboard';
 import { ApprovalReviewInterface } from './ApprovalReviewInterface';
 import { ApprovalStatistics } from './ApprovalStatistics';
 interface ApprovalCriteria {
-  id: string;
+  id: string;,
   workspace_id: string;
   name: string;
   description?: string;
   conditions: Record<string, any>;
-  weight: number;
+  weight: number;,
   is_required: boolean;
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
-}
-interface ApprovalRule {
-  id: string;
+  interface ApprovalRule {
+  id: string;,
   workspace_id: string;
-  transition_id: string;
+  transition_id: string;,
   name: string;
   description?: string;
-  reviewer_assignment_type: 'manual' | 'automatic' | 'role_based' | 'round_robin';
+  reviewer_assignment_type: 'manual' | 'automatic' | 'role_based' | 'round_robin';,
   required_reviewers: number;
-  minimum_approvals: number;
+  minimum_approvals: number;,
   allow_self_approval: boolean;
-  criteria_ids: string[];
+  criteria_ids: string;,
   require_all_criteria: boolean;
-  approval_timeout_hours: number;
+  approval_timeout_hours: number;,
   escalation_enabled: boolean;
-  escalation_after_hours: number;
-  escalation_reviewers: string[];
-  auto_approval_enabled: boolean;
+  escalation_after_hours: number;,
+  escalation_reviewers: string;
+  auto_approval_enabled: boolean;,
   auto_approval_conditions: Record<string, any>;
-  created_at: Date;
+  created_at: Date;,
   updated_at: Date;
-}
-interface ApprovalWorkflowManagerProps {
-  workspaceId: string;
+  interface ApprovalWorkflowManagerProps {
+  workspaceId: string;,
   currentUserId: string;
   userRole: 'admin' | 'manager' | 'reviewer' | 'user';
-}
-
-export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({)
+  export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({,)
   workspaceId,
   currentUserId,
   userRole
 }) => {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'rules' | 'criteria' | 'statistics'>('dashboard');
-  const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria[]>([]);
-  const [approvalRules, setApprovalRules] = useState<ApprovalRule[]>([]);
+  const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria>([]);
+  const [approvalRules, setApprovalRules] = useState<ApprovalRule>([]);
   const [selectedRequest, setSelectedRequest] = useState<unknown>(null);
   const [showReviewInterface, setShowReviewInterface] = useState(false);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
@@ -73,87 +69,79 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
   // Determine dashboard mode based on user role
   const dashboardMode = userRole === 'admin' ? 'admin' : 'reviewer';
   useEffect(() => {
-    loadApprovalData();
-  }, [workspaceId]);
+  loadApprovalData();
+}, [workspaceId]);
   const loadApprovalData = async () => {
     try {
       setLoading(true);
       setError(null);
       const [criteriaResponse, rulesResponse] = await Promise.all([)
-        fetch(`/api/approval/criteria/${workspaceId}`),}
+        fetch(`/api/approval/criteria/${workspaceId}`)}
+}
         fetch(`/api/approval/rules/${workspaceId}`)}
       ]);
       if (criteriaResponse.ok) {
         const criteria = await criteriaResponse.json();
         setApprovalCriteria(criteria);
-      }
       if (rulesResponse.ok) {
         const rules = await rulesResponse.json();
         setApprovalRules(rules);
-      }
     } catch (error) {
       setError('Failed to load approval data');
     } finally {
       setLoading(false);
-    }
   };
   const handleCreateCriteria = async (data: Partial<ApprovalCriteria>) => {
     try {
       const response = await fetch('/api/approval/criteria', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, workspace_id: workspaceId })
       });
       if (response.ok) {
         await loadApprovalData();
         setShowCriteriaModal(false);
-      }
     } catch (error) {
       setError('Failed to create criteria');
-    }
   };
   const handleUpdateCriteria = async (id: string, data: Partial<ApprovalCriteria>) => {
     try {
       const response = await fetch(`/api/approval/criteria/${id}`, {)}
-        method: 'PUT',
+  },
+  method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+        body: JSON.stringify(data);
+  });
       if (response.ok) {
         await loadApprovalData();
         setEditingCriteria(null);
-      }
     } catch (error) {
       setError('Failed to update criteria');
-    }
   };
   const handleDeleteCriteria = async (id: string) => {
     if (!confirm('Are you sure you want to delete this criteria?')) return;
     try {
       const response = await fetch(`/api/approval/criteria/${id}`, {)}
-        method: 'DELETE',
-      });
+  },
+  method: 'DELETE';
+  });
       if (response.ok) {
         await loadApprovalData();
-      }
     } catch (error) {
       setError('Failed to delete criteria');
-    }
   };
   const _____handleCreateRule = async (data: Partial<ApprovalRule>) => {
     try {
       const response = await fetch('/api/approval/rules', {)
-        method: 'POST',
+  method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, workspace_id: workspaceId })
       });
       if (response.ok) {
         await loadApprovalData();
         setShowRuleModal(false);
-      }
     } catch (error) {
       setError('Failed to create rule');
-    }
   };
   const handleReviewSubmit = async (;);
     decision: 'approve' | 'reject' | 'abstain',
@@ -163,33 +151,32 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
     if (!selectedRequest) return;
     try {
       const response = await fetch(`/api/approval/requests/${selectedRequest.id}/review`, {)}
-        method: 'POST',
+  },
+  method: 'POST',
         headers: {,
-          'Content-Type': 'application/json',
-          'x-user-id': currentUserId
-        },
-        body: JSON.stringify({),
-          decision,
-          comment,
-          criteria_evaluations: criteriaEvaluations,
-        })
+  'Content-Type': 'application/json',
+  'x-user-id': currentUserId,
+},
+  body: JSON.stringify({),
+  decision,
+  comment,
+  criteria_evaluations: criteriaEvaluations,
+}
       });
       if (response.ok) {
         setShowReviewInterface(false);
         setSelectedRequest(null);
         // Refresh dashboard data would be handled by the dashboard component
-      }
     } catch (error) {
       setError('Failed to submit review');
-    }
   };
   const CriteriaModal: React.FC<{
-    criteria?: ApprovalCriteria;
-    onSave: (data: Partial<ApprovalCriteria>) => void;
-    onClose: () => void;
-  }> = ({ criteria, onSave, onClose }) => {
+  criteria?: ApprovalCriteria;
+  onSave: (data: Partial<ApprovalCriteria>) => void;,
+  onClose: () => void;
+}> = ({ criteria, onSave, onClose }) => {
     const [formData, setFormData] = useState({)
-      name: criteria?.name || '',
+  name: criteria?.name || '',
       description: criteria?.description || '',
       weight: criteria?.weight || 1,
       is_required: criteria?.is_required || false,
@@ -199,7 +186,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
       e.preventDefault();
       onSave(formData);
     };
-    return ();
+    return;
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
@@ -275,7 +262,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
     );
   };
   const canManageWorkflow = ['admin', 'manager'].includes(userRole);
-  return ();
+  return;
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -317,10 +304,10 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+}`}
             >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>

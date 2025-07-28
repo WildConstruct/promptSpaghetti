@@ -12,15 +12,13 @@ import {
   CONNECTION_LABEL_STYLES
 } from '../../types/CollaborationTypes';
 interface ConnectionLabelProps {
-  label: ConnectionLabelType;
+  label: ConnectionLabelType;,
   onAction: (action: ConnectionLabelAction) => void;
   canEdit?: boolean;
   showTooltip?: boolean;
   isHighlighted?: boolean;
-  connectionPath?: string; // SVG path for positioning calculations
-}
-
-export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
+  connectionPath?: string; // SVG path for positioning calculations,
+  export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({,)
   label,
   onAction,
   canEdit = true,
@@ -54,24 +52,25 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
       fontFamily: 'system-ui, -apple-system, sans-serif',
       pointerEvents: 'all' as const,
       ...(isHighlighted && {)
-        transform: 'scale(1.1)',
-        boxShadow: `0 4px 12px ${baseStyle.color}40`,}
-        zIndex: 1000,
-      })
+  transform: 'scale(1.1)',
+        boxShadow: `0 4px 12px ${baseStyle.color}40`}
+},
+  zIndex: 1000;
+  }
     };
   }, [label, canEdit, isHighlighted]);
   // Handle double-click to start editing
   const handleDoubleClick = useCallback((e: React.MouseEvent) => {
-    if (!canEdit) return;
-    e.stopPropagation();
-    e.preventDefault();
-    setIsEditing(true);
-    setEditValue(label.content);
-    onAction({)
-      type: 'startEdit',
-      labelId: label.id,
-      connectionId: label.connectionId,
-    });
+  if (!canEdit) return;
+  e.stopPropagation();
+  e.preventDefault();
+  setIsEditing(true);
+  setEditValue(label.content);
+  onAction({)
+  type: 'startEdit',
+  labelId: label.id,
+  connectionId: label.connectionId,
+});
   }, [canEdit, label.content, label.id, label.connectionId, onAction]);
   // Handle input changes
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,52 +78,49 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     const maxLength = 100; // Could be configurable;
     if (value.length <= maxLength) {
       setEditValue(value);
-    }
   }, []);
   // Save label changes
   const saveLabel = useCallback(() => {
-    const newContent = editValue.trim();
-    setIsEditing(false);
+  const newContent = editValue.trim();
+  setIsEditing(false);
+  onAction({)
+  type: 'update',
+  labelId: label.id,
+  connectionId: label.connectionId,
+  content: newContent || 'Untitled',
+  label: {,
+  content: newContent || 'Untitled',
+  isEditing: false,
+  lastModified: new Date().toISOString(),
+});
     onAction({)
-      type: 'update',
-      labelId: label.id,
-      connectionId: label.connectionId,
-      content: newContent || 'Untitled',
-      label: {,
-        content: newContent || 'Untitled',
-        isEditing: false,
-        lastModified: new Date().toISOString(),
-      }
-    });
-    onAction({)
-      type: 'stopEdit',
-      labelId: label.id,
-      connectionId: label.connectionId,
-    });
+  type: 'stopEdit',
+  labelId: label.id,
+  connectionId: label.connectionId,
+});
   }, [editValue, label.id, label.connectionId, onAction]);
   // Cancel editing
   const cancelEdit = useCallback(() => {
-    setIsEditing(false);
-    setEditValue(label.content);
-    onAction({)
-      type: 'stopEdit',
-      labelId: label.id,
-      connectionId: label.connectionId,
-    });
+  setIsEditing(false);
+  setEditValue(label.content);
+  onAction({)
+  type: 'stopEdit',
+  labelId: label.id,
+  connectionId: label.connectionId,
+});
   }, [label.content, label.id, label.connectionId, onAction]);
   // Handle key events
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'Enter':
-        e.preventDefault();
-        saveLabel();
-        break;
-      case 'Escape':
-        e.preventDefault();
-        cancelEdit();
-        break;
-    }
-  }, [saveLabel, cancelEdit]);
+  switch (e.key) {
+  case 'Enter':,
+  e.preventDefault();
+  saveLabel();
+  break;
+  case 'Escape':,
+  e.preventDefault();
+  cancelEdit();
+  break;
+}, [saveLabel, cancelEdit]);
   // Handle blur
   const handleBlur = useCallback(() => {
     saveLabel();
@@ -134,33 +130,32 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
       inputRef.current.select();
-    }
   }, [isEditing]);
   // Handle drag start
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (!canEdit || isEditing) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-    setDragStart({)
-      x: e.clientX - label.position.x,
-      y: e.clientY - label.position.y,
-    });
+  if (!canEdit || isEditing) return;
+  e.preventDefault();
+  e.stopPropagation();
+  setIsDragging(true);
+  setDragStart({)
+  x: e.clientX - label.position.x,
+  y: e.clientY - label.position.y,
+});
   }, [canEdit, isEditing, label.position]);
   // Handle drag movement
   useEffect(() => {
-    if (!isDragging) return;
-    const handleMouseMove = (e: MouseEvent) => {
-      const newPosition = {
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y,
-      };
+  if (!isDragging) return;
+  const handleMouseMove = (e: MouseEvent) => {,
+  const newPosition = {
+  x: e.clientX - dragStart.x,
+  y: e.clientY - dragStart.y,
+};
       onAction({)
-        type: 'move',
-        labelId: label.id,
-        connectionId: label.connectionId,
-        position: newPosition,
-      });
+  type: 'move',
+  labelId: label.id,
+  connectionId: label.connectionId,
+  position: newPosition,
+});
     };
     const handleMouseUp = () => {
       setIsDragging(false);
@@ -175,9 +170,8 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
   // Don't render if not visible
   if (!label.visible) {
     return null;
-  }
   const labelStyles = getLabelStyles();
-  return ();
+  return;
     <div
       ref={labelRef}
       data-testid={`connection-label-${label.id}`}
@@ -189,10 +183,10 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
         transform: 'translate(-50%, -50%)', // Center on position
         ...labelStyles,
         ...(isDragging && {)
-          cursor: 'grabbing',
+  cursor: 'grabbing',
           transform: 'translate(-50%, -50%) scale(1.05)',
           boxShadow: `0 8px 20px ${labelStyles.color}40`}
-        })
+  }
       }}
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}
@@ -207,24 +201,24 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
           onKeyDown={handleKeyDown}
           onBlur={handleBlur}
           style={{
-            ...labelStyles,
-            outline: 'none',
-            border: '2px solid #3b82f6',
-            cursor: 'text',
-            minWidth: '80px',
-            maxWidth: '200px',
-            background: 'white',
-          }}
+  ...labelStyles,
+  outline: 'none',
+  border: '2px solid #3b82f6',
+  cursor: 'text',
+  minWidth: '80px',
+  maxWidth: '200px',
+  background: 'white',
+}}
           placeholder="Enter label..."
           maxLength={100}
         />
       ) : ()
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+}}
         >
           {/* Icon */}
           {label.showIcon && label.icon && ()
@@ -237,11 +231,11 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
           {/* Edit indicator */}
           {canEdit && ()
             <span 
-              style={{ 
-                fontSize: '8px', 
-                opacity: 0.6,
-                marginLeft: '2px',
-              }}
+              style={{
+  fontSize: '8px',
+  opacity: 0.6,
+  marginLeft: '2px',
+}}
             >
               ✏️
             </span>
@@ -252,30 +246,30 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
       {canEdit && !isEditing && ()
         <button
           style={{
-            position: 'absolute',
-            top: '-8px',
-            right: '-8px',
-            width: '16px',
-            height: '16px',
-            borderRadius: '50%',
-            background: '#ef4444',
-            color: 'white',
-            border: 'none',
-            fontSize: '10px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: 0.8,
-            transition: 'opacity 0.2s ease',
-          }}
+  position: 'absolute',
+  top: '-8px',
+  right: '-8px',
+  width: '16px',
+  height: '16px',
+  borderRadius: '50%',
+  background: '#ef4444',
+  color: 'white',
+  border: 'none',
+  fontSize: '10px',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: 0.8,
+  transition: 'opacity 0.2s ease',
+}}
           onClick={(e) => {
-            e.stopPropagation();
-            onAction({)
-              type: 'delete',
-              labelId: label.id,
-              connectionId: label.connectionId,
-            });
+  e.stopPropagation();
+  onAction({)
+  type: 'delete',
+  labelId: label.id,
+  connectionId: label.connectionId,
+});
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = '1';
@@ -292,29 +286,29 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
       {label.style === 'arrow' && ()
         <div
           style={{
-            position: 'absolute',
-            bottom: '-6px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 0,
-            height: 0,
-            borderLeft: '6px solid transparent',
-            borderRight: '6px solid transparent',
-            borderTop: '6px solid #fbbf24',
-          }}
+  position: 'absolute',
+  bottom: '-6px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: 0,
+  height: 0,
+  borderLeft: '6px solid transparent',
+  borderRight: '6px solid transparent',
+  borderTop: '6px solid #fbbf24',
+}}
         />
       )}
       {/* Glow effect for highlight style */}
       {label.style === 'highlight' && ()
         <div
           style={{
-            position: 'absolute',
-            inset: '-4px',
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
-            borderRadius: '12px',
-            zIndex: -1,
-            animation: 'pulse 2s infinite',
-          }}
+  position: 'absolute',
+  inset: '-4px',
+  background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
+  borderRadius: '12px',
+  zIndex: -1,
+  animation: 'pulse 2s infinite',
+}}
         />
       )}
       {/* CSS animations */}
@@ -322,20 +316,15 @@ export const ConnectionLabel: React.FC<ConnectionLabelProps> = ({)
         @keyframes pulse {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.6; }
-        }
         [data-testid^="connection-label-"] {
           animation: labelFadeIn 0.3s ease-out;
-        }
         @keyframes labelFadeIn {
           from {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
-          }
+            opacity: 0;,
+  transform: translate(-50%, -50%) scale(0.8);
           to {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-          }
-        }
+            opacity: 1;,
+  transform: translate(-50%, -50%) scale(1);
       `}</style>
     </div>
   );

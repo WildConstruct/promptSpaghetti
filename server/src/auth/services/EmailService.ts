@@ -4,18 +4,22 @@
 import { AuthConfig } from '../types';
 import { EMAIL_TEMPLATES } from '../config';
 
+}
 export interface EmailTemplate {
   subject: string;
   html: string;
   text?: string;
 }
+}
 
+}
 export interface EmailContext {
   displayName?: string;
   ipAddress?: string;
   userAgent?: string;
   deviceInfo?: string;
   timestamp?: Date;
+}
 }
 
 export class EmailService {
@@ -30,6 +34,7 @@ export class EmailService {
     token: string,
     context: EmailContext = {}
   ): Promise<void> {
+
     const verificationUrl = this.buildVerificationUrl(token);
     
     const template = this.renderEmailTemplate('emailVerification', {
@@ -50,6 +55,7 @@ export class EmailService {
     token: string,
     context: EmailContext = {}
   ): Promise<void> {
+
     const resetUrl = this.buildPasswordResetUrl(token);
     
     const template = this.renderEmailTemplate('passwordReset', {
@@ -69,6 +75,7 @@ export class EmailService {
     email: string,
     context: EmailContext = {}
   ): Promise<void> {
+
     const template = this.renderEmailTemplate('passwordChanged', {
       email,
       displayName: context.displayName || email.split('@')[0],
@@ -84,6 +91,7 @@ export class EmailService {
     email: string,
     context: EmailContext = {}
   ): Promise<void> {
+
     const template = this.renderEmailTemplate('loginAlert', {
       email,
       displayName: context.displayName || email.split('@')[0],
@@ -101,6 +109,7 @@ export class EmailService {
     unlockTime: Date,
     context: EmailContext = {}
   ): Promise<void> {
+
     const template = this.renderEmailTemplate('accountLocked', {
       email,
       displayName: context.displayName || email.split('@')[0],
@@ -117,6 +126,7 @@ export class EmailService {
     email: string,
     context: EmailContext & { hasInvitation?: boolean } = {}
   ): Promise<void> {
+
     const template = this.renderEmailTemplate('welcome', {
       email,
       displayName: context.displayName || email.split('@')[0],
@@ -135,6 +145,7 @@ export class EmailService {
     invitationToken: string,
     context: EmailContext = {}
   ): Promise<void> {
+
     const invitationUrl = this.buildInvitationUrl(invitationToken);
     
     const template = this.renderEmailTemplate('invitation', {
@@ -165,6 +176,7 @@ export class EmailService {
       timestamp: Date;
     }
   ): Promise<void> {
+
     // In a real implementation, you'd get the user's email from the database
     // For now, we'll use a placeholder email
     const email = `user-${userId}@example.com`; // TODO: Get actual email from database
@@ -191,6 +203,7 @@ export class EmailService {
     ipAddress: string;
     userAgent: string;
   }): Promise<void> {
+
     const template = this.renderEmailTemplate('passwordReset', {
       email: data.to,
       displayName: data.firstName,
@@ -211,6 +224,7 @@ export class EmailService {
     ipAddress: string;
     userAgent: string;
   }): Promise<void> {
+
     const template = this.renderEmailTemplate('passwordChanged', {
       email: data.to,
       displayName: data.firstName,
@@ -223,6 +237,7 @@ export class EmailService {
   }
 
   private async sendEmail(email: string, template: EmailTemplate): Promise<void> {
+
     if (!this.config.emailService) {
       console.log('Email service not configured. Would send email:');
       console.log(`To: ${email}`);
@@ -239,7 +254,7 @@ export class EmailService {
         from: {
           email: this.config.emailService.fromEmail,
           name: this.config.emailService.fromName
-        },
+  }
         to: [{ email }],
         subject: template.subject,
         html: template.html,
@@ -329,8 +344,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      },
-
+  }
       passwordReset: {
         subject: 'Reset your password - PromptScape',
         html: `
@@ -406,8 +420,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      },
-
+  }
       passwordChanged: {
         subject: 'Your password has been changed - PromptScape',
         html: `
@@ -470,8 +483,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      },
-
+  }
       welcome: {
         subject: 'Welcome to PromptScape!',
         html: `
@@ -549,8 +561,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      },
-
+  }
       invitation: {
         subject: `You're invited to join ${data.organizationName} on PromptScape`,
         html: `
@@ -613,8 +624,7 @@ export class EmailService {
           
           © 2025 PromptScape. All rights reserved.
         `
-      },
-
+  }
       locationVerification: {
         subject: 'Verify your login location - PromptScape',
         html: `

@@ -237,7 +237,7 @@ class ReferralDetectionService {
         rewardRate: campaign.rewardValue,
         attributionWeight,
         maxRewardCap: campaign.maxRewardPerReferrer
-      },
+  }
       earnedAt: new Date(),
       expiresAt: new Date(Date.now() + (90 * 24 * 60 * 60 * 1000)),
       createdAt: new Date(),
@@ -859,7 +859,7 @@ describe('Epic 16 Referral Detection System', () => {
             source: 'performance_test',
             ipAddress: `192.168.1.${i % 255}`,
             conversionValue: Math.random() * 1000
-          })
+  }
         );
       }
 

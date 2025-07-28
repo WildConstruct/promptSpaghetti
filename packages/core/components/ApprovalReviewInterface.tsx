@@ -17,49 +17,44 @@ import {
   ClipboardDocumentListIcon
 } from '@heroicons/react/24/outline';
 interface ApprovalCriteria {
-  id: string;
+  id: string;,
   name: string;
   description?: string;
-  weight: number;
+  weight: number;,
   is_required: boolean;
   conditions: Record<string, any>;
-}
-interface ApprovalRequest {
-  id: string;
+  interface ApprovalRequest {
+  id: string;,
   workspace_id: string;
-  resource_id: string;
+  resource_id: string;,
   transition_id: string;
-  requester_id: string;
+  requester_id: string;,
   title: string;
   description?: string;
   urgency: 'low' | 'medium' | 'high' | 'critical';
   business_justification?: string;
-  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';
+  status: 'pending' | 'in_review' | 'approved' | 'rejected' | 'cancelled' | 'expired';,
   requested_at: Date;
   due_date?: Date;
-  current_approvals: number;
+  current_approvals: number;,
   required_approvals: number;
   approval_percentage: number;
-}
-interface ReviewerAssignment {
-  id: string;
+  interface ReviewerAssignment {
+  id: string;,
   reviewer_id: string;
-  assignment_type: 'primary' | 'secondary' | 'escalated';
+  assignment_type: 'primary' | 'secondary' | 'escalated';,
   status: 'pending' | 'reviewing' | 'approved' | 'rejected' | 'abstained';
   reviewed_at?: Date;
   review_comment?: string;
   criteria_evaluations: Record<string, any>;
-}
-interface ApprovalReviewInterfaceProps {
-  request: ApprovalRequest;
+  interface ApprovalReviewInterfaceProps {
+  request: ApprovalRequest;,
   workspaceId: string;
-  currentUserId: string;
+  currentUserId: string;,
   onReviewSubmit: (decision: 'approve' | 'reject' | 'abstain', comment?: string, criteriaEvaluations?: Record<string, any>) => void;
   onClose: () => void;
   readOnly?: boolean;
-}
-
-export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = ({)
+  export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = ({,)
   request,
   workspaceId,
   currentUserId,
@@ -67,8 +62,8 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
   onClose,
   readOnly = false
 }) => {
-  const [reviewerAssignments, setReviewerAssignments] = useState<ReviewerAssignment[]>([]);
-  const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria[]>([]);
+  const [reviewerAssignments, setReviewerAssignments] = useState<ReviewerAssignment>([]);
+  const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria>([]);
   const [selectedDecision, setSelectedDecision] = useState<'approve' | 'reject' | 'abstain' | null>(null);
   const [reviewComment, setReviewComment] = useState('');
   const [criteriaEvaluations, setCriteriaEvaluations] = useState<Record<string, any>>({});
@@ -90,7 +85,6 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       if (reviewersResponse.ok) {
         const reviewers = await reviewersResponse.json();
         setReviewerAssignments(reviewers);
-      }
       // Load approval criteria
       const criteriaResponse = await fetch(`/api/approval/criteria/${workspaceId}`);}
       if (criteriaResponse.ok) {
@@ -99,33 +93,30 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
         // Initialize criteria evaluations
         const initialEvaluations: Record<string, any> = {};
         criteria.forEach((criterion: ApprovalCriteria) => {
-          initialEvaluations[criterion.id] = {
-            criteria_id: criterion.id,
-            passed: false,
-            score: 0,
-            comment: '',
-          };
+  initialEvaluations[criterion.id] = {
+  criteria_id: criterion.id,
+  passed: false,
+  score: 0,
+  comment: '',
+};
         });
         setCriteriaEvaluations(initialEvaluations);
-      }
     } catch (error) {
       setError('Failed to load review data');
     } finally {
       setLoading(false);
-    }
   };
   const handleSubmitReview = () => {
     if (!selectedDecision) return;
     onReviewSubmit(selectedDecision, reviewComment, criteriaEvaluations);
   };
   const handleCriteriaEvaluation = (criteriaId: string, field: string, value: Error) => {
-    setCriteriaEvaluations(prev => ({)
-      ...prev,
-      [criteriaId]: {
-        ...prev[criteriaId],
-        [field]: value
-      }
-    }));
+  setCriteriaEvaluations(prev => ({)
+  ...prev,
+  [criteriaId]: {,
+  ...prev[criteriaId],
+  [field]: value,
+}));
   };
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
@@ -133,27 +124,24 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
       newExpanded.delete(section);
     } else {
       newExpanded.add(section);
-    }
     setExpandedSections(newExpanded);
   };
   const getUrgencyColor = (urgency: string) => {
-    switch (urgency) {
-    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-    case 'low': return 'bg-green-100 text-green-800 border-green-200';
-    default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
+  switch (urgency) {
+  case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+  case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+  case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  case 'low': return 'bg-green-100 text-green-800 border-green-200';
+  default: return 'bg-gray-100 text-gray-800 border-gray-200';
+};
   const getStatusIcon = (status: string) => {
-    switch (status) {
-    case 'approved': return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-    case 'rejected': return <XCircleIcon className="h-4 w-4 text-red-500" />;
-    case 'reviewing': return <EyeIcon className="h-4 w-4 text-blue-500" />;
-    case 'pending': return <ClockIcon className="h-4 w-4 text-yellow-500" />;
-    default: return <ClockIcon className="h-4 w-4 text-gray-500" />;
-    }
-  };
+  switch (status) {
+  case 'approved': return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
+  case 'rejected': return <XCircleIcon className="h-4 w-4 text-red-500" />;
+  case 'reviewing': return <EyeIcon className="h-4 w-4 text-blue-500" />;
+  case 'pending': return <ClockIcon className="h-4 w-4 text-yellow-500" />;
+  default: return <ClockIcon className="h-4 w-4 text-gray-500" />;
+};
   const calculateOverallScore = () => {
     const totalWeight = approvalCriteria.reduce((sum, c) => sum + c.weight, 0);
     const weightedScore = approvalCriteria.reduce((sum, c) => {
@@ -168,14 +156,13 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
     return { passed: passedRequired, total: requiredCriteria.length };
   };
   if (loading) {
-    return ();
+    return;
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     );
-  }
   if (error) {
-    return ();
+    return;
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <div className="flex">
           <XCircleIcon className="h-5 w-5 text-red-400" />
@@ -186,8 +173,7 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
         </div>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="border-b border-gray-200 p-6">
@@ -298,10 +284,10 @@ export const ApprovalReviewInterface: React.FC<ApprovalReviewInterfaceProps> = (
                         <span className="font-medium">{assignment.reviewer_id}</span>
                       </div>
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' :
-                          assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' :
-                            'bg-gray-100 text-gray-800'
-                      }`}>
+  assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' :,
+  assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' :,
+  'bg-gray-100 text-gray-800'
+}`}>
                         {assignment.assignment_type}
                       </span>
                       {assignment.reviewer_id === currentUserId && ()

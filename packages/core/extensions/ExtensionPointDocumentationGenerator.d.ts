@@ -2,13 +2,14 @@
  * Extension Point Documentation Generator
  * Generates documentation for extension points in the system
  */
+
 export interface ExtensionPointDocumentation {
     name: string;
     description: string;
     interface: string;
     examples: string[];
     version: string;
-}
+
 export declare class ExtensionPointDocumentationGenerator {
     constructor();
     /**
@@ -23,6 +24,6 @@ export declare class ExtensionPointDocumentationGenerator {
      * Export documentation in various formats
      */
     exportDocumentation(format?: 'markdown' | 'html' | 'json'): string;
-}
+
 export default ExtensionPointDocumentationGenerator;
 //# sourceMappingURL=ExtensionPointDocumentationGenerator.d.ts.map

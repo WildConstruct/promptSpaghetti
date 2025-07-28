@@ -33,40 +33,21 @@ export interface BaselineTrend {
     framework: string;
     category: string;
     name: string;
-    measurements: ComplianceMeasurement[];
+    measurements: ComplianceMeasurement;
     trendDirection: 'improving' | 'stable' | 'declining' | 'critical';
     averageDeviation: number;
     consistencyScore: number;
     lastMeasurement: ComplianceMeasurement;
-    recommendedActions: string[];
+    recommendedActions: string;
 }
 export interface BaselineDashboard {
     overallHealthScore: number;
-    frameworkHealth: Record<string, {
-        score: number;
-        status: 'healthy' | 'warning' | 'critical';
-        baselinesTracked: number;
-        baselinesMet: number;
-        criticalDeviations: number;
-    }>;
-    recentDeviations: ComplianceMeasurement[];
-    trendAnalysis: BaselineTrend[];
-    improvementOpportunities: {
-        baselineId: string;
-        name: string;
-        currentGap: number;
-        potentialImpact: string;
-        difficulty: 'low' | 'medium' | 'high';
-        estimatedTimeframe: string;
-    }[];
-    alerts: {
-        id: string;
-        severity: 'low' | 'medium' | 'high' | 'critical';
-        message: string;
-        baselineId: string;
-        triggeredAt: Date;
-        acknowledged: boolean;
-    }[];
+    frameworkHealth: Record<string, {}, score>;
+    number: any;
+    status: 'healthy' | 'warning' | 'critical';
+    baselinesTracked: number;
+    baselinesMet: number;
+    criticalDeviations: number;
 }
 export declare class ComplianceBaselineTracker {
     private baselines;
@@ -74,49 +55,10 @@ export declare class ComplianceBaselineTracker {
     private alerts;
     constructor();
     /**
-     * Initialize default compliance baselines
-     */
+    * Initialize default compliance baselines
+    */
     private initializeBaselines;
-    /**
-     * Record a new measurement against a baseline
-     */
-    recordMeasurement(baselineId: string, actualValue: number, context?: Record<string, any>, notes?: string): Promise<ComplianceMeasurement>;
-    /**
-     * Get baseline trend analysis
-     */
-    getBaselineTrend(baselineId: string, daysPeriod?: number): BaselineTrend | null;
-    /**
-     * Generate comprehensive baseline dashboard
-     */
-    generateDashboard(): Promise<BaselineDashboard>;
-    /**
-     * Update baseline target or tolerance
-     */
-    updateBaseline(baselineId: string, updates: Partial<Pick<ComplianceBaseline, 'targetValue' | 'toleranceThreshold' | 'isActive'>>): Promise<void>;
-    /**
-     * Create custom baseline
-     */
-    createCustomBaseline(baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>): Promise<ComplianceBaseline>;
-    /**
-     * Get all active baselines
-     */
-    getActiveBaselines(): ComplianceBaseline[];
-    /**
-     * Export baseline data for reporting
-     */
-    exportBaselineData(framework?: string, daysPeriod?: number): {
-        baselines: ComplianceBaseline[];
-        measurements: ComplianceMeasurement[];
-        summary: Record<string, any>;
-    };
-    private calculateDeviation;
-    private determineStatus;
-    private calculateConsistencyScore;
-    private analyzeTrendDirection;
-    private generateRecommendations;
-    private identifyImprovementOpportunities;
-    private createAlert;
-    private getUnitSymbol;
+    console: any;
+    log(: any, defaultBaselines: any, length: any): any;
 }
-export declare const complianceBaselineTracker: ComplianceBaselineTracker;
 //# sourceMappingURL=ComplianceBaselineTracker.d.ts.map

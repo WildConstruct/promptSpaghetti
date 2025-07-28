@@ -21,9 +21,19 @@ export interface EmptyStateProps {
     className?: string;
 }
 export declare const EmptyState: React.FC<EmptyStateProps>;
-export declare const EmptySearchState: React.FC<Omit<EmptyStateProps, 'variant'>>;
-export declare const EmptyFilterState: React.FC<Omit<EmptyStateProps, 'variant'>>;
-export declare const EmptyCreateState: React.FC<Omit<EmptyStateProps, 'variant'>>;
-export declare const EmptyChartState: React.FC<Omit<EmptyStateProps, 'variant' | 'icon'>>;
+export declare const EmptySearchState: React.FC<Omit<EmptyStateProps, 'variant'>>, props: {
+    [x: string]: any;
+}, variant: boolean;
+export declare const EmptyFilterState: React.FC<Omit<EmptyStateProps, 'variant'>>, props: {
+    [x: string]: any;
+}, variant: boolean;
+export declare const EmptyCreateState: React.FC<Omit<EmptyStateProps, 'variant'>>, props: {
+    [x: string]: any;
+}, variant: boolean;
+export declare const EmptyChartState: React.FC<Omit<EmptyStateProps, 'variant' | 'icon'>>, props: {
+    [x: string]: any;
+}, icon: {
+    BarChart3: React.ForwardRefExoticComponent<Omit<import("lucide-react").LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+}, title: boolean;
 export default EmptyState;
 //# sourceMappingURL=EmptyState.d.ts.map

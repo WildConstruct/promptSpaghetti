@@ -21,86 +21,75 @@ import {
 } from '../realtime/RealTimeStateManager';
 
 // Hook types
+
 export interface UseRealTimeStateOptions {
   autoConnect?: boolean;
   userId?: string;
   sessionId?: string;
-  domains?: string[];
+  domains?: string;
 }
-
 export interface UseRealTimeStateReturn {
-  isConnected: boolean;
+  isConnected: boolean;,
   isConnecting: boolean;
-  connectionState: ConnectionState;
+  connectionState: ConnectionState;,
   latency: number;
   connect: (userId: string, sessionId?: string) => Promise<void>;
-  disconnect: () => Promise<void>;
+  disconnect: () => Promise<void>;,
   error: Error | null;
 }
-
 export interface UseStateSubscriptionOptions extends SubscriptionOptions {
   enabled?: boolean;
   suspense?: boolean;
-}
-
-export interface UseStateSubscriptionReturn<T> {
-  data: T | null;
+  export interface UseStateSubscriptionReturn<T> {
+  data: T | null;,
   isLoading: boolean;
-  error: Error | null;
+  error: Error | null;,
   lastUpdated: number | null;
   subscription: StateSubscription | null;
-}
-
-export interface UseOptimisticMutationOptions {
+  export interface UseOptimisticMutationOptions {
   onSuccess?: (data: any, variables: any) => void;
   onError?: (error: Error, variables: any) => void;
   onSettled?: (data: any, error: Error | null, variables: any) => void;
   retry?: number | boolean;
   retryDelay?: number | ((attempt: number) => number);
 }
-
 export interface UseOptimisticMutationReturn<TVariables, TData> {
-  mutate: (variables: TVariables) => Promise<TData>;
-  mutateAsync: (variables: TVariables) => Promise<TData>;
+  mutate: (variables: TVariables) => Promise<TData>;,
+  mutateAsync: (variables: TVariables) => Promise<TData>;,
   isLoading: boolean;
-  error: Error | null;
+  error: Error | null;,
   data: TData | null;
-  reset: () => void;
-  optimisticUpdates: OptimisticUpdate[];
-}
+  reset: () => void;,
+  optimisticUpdates: OptimisticUpdate;
 
 export interface UseDomainStateOptions<T> {
   domain: string;
   selector?: (state: any) => T;
   equalityFn?: (a: T, b: T) => boolean;
   suspense?: boolean;
-}
 
 export interface UseDomainStateReturn<T> {
-  state: T;
-  setState: (updater: (prev: T) => T | Partial<T>) => void;
+  state: T;,
+  setState: (updater: (prev: T) => T | Partial<T>) => void;,
   isLoading: boolean;
-  error: Error | null;
+  error: Error | null;,
   lastModified: number;
-}
 
 // Main real-time state hook
-export function useRealTimeState()
-  options: UseRealTimeStateOptions = {}
+export function useRealTimeState(options: UseRealTimeStateOptions = {})
 ): UseRealTimeStateReturn {
   const [connectionState, setConnectionState] = useState<ConnectionState>()
-    globalRealTimeManager.getConnectionState()
+  globalRealTimeManager.getConnectionState()
   );
   const [error, setError] = useState<Error | null>(null);
   const manager = useRef(globalRealTimeManager);
-  const connect = useCallback(async (userId: string, sessionId?: string) => {
-    try {
-      setError(null);
-      await manager.current.connect(userId, sessionId);
-    } catch (err) {
+  const connect = useCallback(async (userId: string, sessionId?: string) => {,
+  try {
+  setError(null);
+  await manager.current.connect(userId, sessionId);
+} catch (err) {
       setError(err as Error);
       throw err;
-    }
   }, []);
   const disconnect = useCallback(async () => {
     try {
@@ -109,7 +98,6 @@ export function useRealTimeState()
     } catch (err) {
       setError(err as Error);
       throw err;
-    }
   }, []);
   useEffect(() => {
     const handleConnectionChange = () => {
@@ -125,7 +113,6 @@ export function useRealTimeState()
     // Auto-connect if enabled
     if (options.autoConnect && options.userId) {
       connect(options.userId, options.sessionId).catch(console.error);
-    }
     return () => {
       manager.current.off('connected', handleConnectionChange);
       manager.current.off('disconnected', handleConnectionChange);
@@ -134,20 +121,18 @@ export function useRealTimeState()
     };
   }, [options.autoConnect, options.userId, options.sessionId, connect]);
   return {
-    isConnected: connectionState.status === 'connected',
-    isConnecting: connectionState.status === 'connecting',
-    connectionState,
-    latency: connectionState.latency,
-    connect,
-    disconnect,
-    error
-  };
-}
+  isConnected: connectionState.status === 'connected',
+  isConnecting: connectionState.status === 'connecting',
+  connectionState,
+  latency: connectionState.latency,
+  connect,
+  disconnect,
+  error
+};
 
 // State subscription hook
-export function useStateSubscription<T = any>()
-  domain: string,
-  filters: SubscriptionFilter[] = [],
+export function useStateSubscription<T = any>(domain: string,)
+  filters: SubscriptionFilter = [],
   options: UseStateSubscriptionOptions = {}
 ): UseStateSubscriptionReturn<T> {
   const [data, setData] = useState<T | null>(null);
@@ -161,9 +146,8 @@ export function useStateSubscription<T = any>()
     try {
       // Update data based on the change
       setData(prevData => {)
-        if (change.payload && typeof change.payload === 'object') {
+  if (change.payload && typeof change.payload === 'object') {
           return { ...prevData, ...change.payload } as T;
-        }
         return change.payload as T;
       });
       setLastUpdated(metadata.timestamp);
@@ -171,13 +155,11 @@ export function useStateSubscription<T = any>()
       setError(null);
     } catch (err) {
       setError(err as Error);
-    }
   }, []);
   useEffect(() => {
     if (!enabled) {
       setIsLoading(false);
       return;
-    }
     const unsubscribe = manager.current.subscribeToStateChanges(;);
       domain,
       callback,
@@ -185,13 +167,14 @@ export function useStateSubscription<T = any>()
       subscriptionOptions
     );
     // Create subscription object for return value
-    const sub: StateSubscription = {
-      id: `sub_${Date.now()}`,}
+    const sub: StateSubscription = {,
+  id: `sub_${Date.now()}`}
+}
       domain,
       filters,
       callback,
-      options: subscriptionOptions,
-    };
+      options: subscriptionOptions;
+  };
     setSubscription(sub);
     return () => {
       unsubscribe();
@@ -205,7 +188,6 @@ export function useStateSubscription<T = any>()
     lastUpdated,
     subscription
   };
-}
 
 // Optimistic mutation hook
 export function useOptimisticMutation<TVariables = any, TData = any>()
@@ -216,56 +198,53 @@ export function useOptimisticMutation<TVariables = any, TData = any>()
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [data, setData] = useState<TData | null>(null);
-  const [optimisticUpdates, setOptimisticUpdates] = useState<OptimisticUpdate[]>([]);
+  const [optimisticUpdates, setOptimisticUpdates] = useState<OptimisticUpdate>([]);
   const manager = useRef(globalRealTimeManager);
   const retryCount = useRef(0);
   const { onSuccess, onError, onSettled, retry = false, retryDelay = 1000 } = options;
   const mutate = useCallback(async (variables: TVariables): Promise<TData> => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const mutation = mutationFn(variables);
-      const updateId = await manager.current.optimisticUpdate(domain, mutation);
-      // Track the optimistic update
-      const pendingUpdates = manager.current.getPendingOptimisticUpdates();
-      setOptimisticUpdates(pendingUpdates);
-      // Wait for server confirmation or rejection
-      return new Promise((resolve, reject) => {
-        const handleConfirm = (event: any) => {
-          if (event.updateId === updateId) {
-            setIsLoading(false);
-            setData(event.data);
-            setOptimisticUpdates(prev => prev.filter(u => u.id !== updateId));
-            if (onSuccess) onSuccess(event.data, variables);
-            if (onSettled) onSettled(event.data, null, variables);
-            manager.current.off('optimisticUpdateConfirmed', handleConfirm);
-            manager.current.off('optimisticUpdateRejected', handleReject);
-            resolve(event.data);
-          }
-        };
+  setIsLoading(true);
+  setError(null);
+  try {
+  const mutation = mutationFn(variables);
+  const updateId = await manager.current.optimisticUpdate(domain, mutation);
+  // Track the optimistic update
+  const pendingUpdates = manager.current.getPendingOptimisticUpdates();
+  setOptimisticUpdates(pendingUpdates);
+  // Wait for server confirmation or rejection
+  return new Promise((resolve, reject) => {
+  const handleConfirm = (event: any) => {,
+  if (event.updateId === updateId) {
+  setIsLoading(false);
+  setData(event.data);
+  setOptimisticUpdates(prev => prev.filter(u => u.id !== updateId));
+  if (onSuccess) onSuccess(event.data, variables);
+  if (onSettled) onSettled(event.data, null, variables);
+  manager.current.off('optimisticUpdateConfirmed', handleConfirm);
+  manager.current.off('optimisticUpdateRejected', handleReject);
+  resolve(event.data);
+};
         const handleReject = (event: any) => {
-          if (event.updateId === updateId) {
-            const error = new Error(event.reason || 'Optimistic update rejected');
-            setIsLoading(false);
-            setError(error);
-            setOptimisticUpdates(prev => prev.filter(u => u.id !== updateId));
-            if (onError) onError(error, variables);
-            if (onSettled) onSettled(null, error, variables);
-            manager.current.off('optimisticUpdateConfirmed', handleConfirm);
-            manager.current.off('optimisticUpdateRejected', handleReject);
-            // Handle retry logic
-            if (retry && (typeof retry !== 'number' || retryCount.current < retry)) {
-              retryCount.current++;
-              const delay = typeof retryDelay === 'function' ;
-                ? retryDelay(retryCount.current) 
-                : retryDelay;
-              setTimeout(() => {
-                mutate(variables).then(resolve).catch(reject);
-              }, delay);
+  if (event.updateId === updateId) {
+  const error = new Error(event.reason || 'Optimistic update rejected');
+  setIsLoading(false);
+  setError(error);
+  setOptimisticUpdates(prev => prev.filter(u => u.id !== updateId));
+  if (onError) onError(error, variables);
+  if (onSettled) onSettled(null, error, variables);
+  manager.current.off('optimisticUpdateConfirmed', handleConfirm);
+  manager.current.off('optimisticUpdateRejected', handleReject);
+  // Handle retry logic
+  if (retry && (typeof retry !== 'number' || retryCount.current < retry)) {
+  retryCount.current++;
+  const delay = typeof retryDelay === 'function' ;
+  ? retryDelay(retryCount.current)
+  : retryDelay;
+  setTimeout(() => {
+  mutate(variables).then(resolve).catch(reject);
+}, delay);
             } else {
               reject(error);
-            }
-          }
         };
         manager.current.on('optimisticUpdateConfirmed', handleConfirm);
         manager.current.on('optimisticUpdateRejected', handleReject);
@@ -280,7 +259,6 @@ export function useOptimisticMutation<TVariables = any, TData = any>()
       if (onError) onError(err as Error, variables);
       if (onSettled) onSettled(null, err as Error, variables);
       throw err;
-    }
   }, [domain, mutationFn, onSuccess, onError, onSettled, retry, retryDelay]);
   const mutateAsync = mutate; // Alias for consistency;
   const reset = useCallback(() => {
@@ -299,12 +277,9 @@ export function useOptimisticMutation<TVariables = any, TData = any>()
     reset,
     optimisticUpdates
   };
-}
 
 // Domain state hook
-export function useDomainState<T = any>()
-  options: UseDomainStateOptions<T>,
-): UseDomainStateReturn<T> {
+export function useDomainState<T = any>(options: UseDomainStateOptions<T>): UseDomainStateReturn<T> {
   const { domain, selector, equalityFn, suspense } = options;
   const [state, setState] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -314,37 +289,34 @@ export function useDomainState<T = any>()
   const prevState = useRef<T | null>(null);
   // Memoized selector function
   const selectorFn = useMemo(() => {
-    return selector || ((s: any) => s as T);
-  }, [selector]);
+  return selector || ((s: any) => s as T);
+}, [selector]);
   // Equality function for preventing unnecessary re-renders
   const isEqual = useMemo(() => {
-    return equalityFn || ((a: T, b: T) => {
-      return JSON.stringify(a) === JSON.stringify(b);
-    });
+  return equalityFn || ((a: T, b: T) => {,
+  return JSON.stringify(a) === JSON.stringify(b);
+});
   }, [equalityFn]);
   const updateState = useCallback((updater: (prev: T) => T | Partial<T>) => {
-    // This would trigger a state update through the domain container
-    // Implementation depends on how we access the domain container
-    console.log('State update requested:', updater);
-  }, []);
+  // This would trigger a state update through the domain container
+  // Implementation depends on how we access the domain container
+  console.log('State update requested:', updater);
+}, []);
   // Subscribe to domain state changes
   useEffect(() => {
-    const handleStateChange = (change: StateChange<any>, metadata: ChangeMetadata) => {
-      try {
-        if (change.payload) {
-          const newState = selectorFn(change.payload);
-          if (!prevState.current || !isEqual(prevState.current, newState)) {
-            setState(newState);
-            prevState.current = newState;
-            setLastModified(metadata.timestamp);
-          }
-        }
-        setIsLoading(false);
-        setError(null);
-      } catch (err) {
+  const handleStateChange = (change: StateChange<any>, metadata: ChangeMetadata) => {,
+  try {
+  if (change.payload) {
+  const newState = selectorFn(change.payload);
+  if (!prevState.current || !isEqual(prevState.current, newState)) {
+  setState(newState);
+  prevState.current = newState;
+  setLastModified(metadata.timestamp);
+  setIsLoading(false);
+  setError(null);
+} catch (err) {
         setError(err as Error);
         setIsLoading(false);
-      }
     };
     const unsubscribe = manager.current.subscribeToStateChanges(;);
       domain,
@@ -355,13 +327,12 @@ export function useDomainState<T = any>()
     return unsubscribe;
   }, [domain, selectorFn, isEqual]);
   return {
-    state: state as T,
-    setState: updateState,
-    isLoading,
-    error,
-    lastModified
-  };
-}
+  state: state as T,
+  setState: updateState,
+  isLoading,
+  error,
+  lastModified
+};
 
 // Connection status hook
 export function useConnectionStatus() {
@@ -383,7 +354,6 @@ export function useConnectionStatus() {
     };
   }, []);
   return status;
-}
 
 // Latency monitoring hook
 export function useLatency() {
@@ -396,20 +366,19 @@ export function useLatency() {
     return () => clearInterval(interval);
   }, []);
   return latency;
-}
 
 // Optimistic updates monitoring hook
 export function useOptimisticUpdates(domain?: string) {
-  const [updates, setUpdates] = useState<OptimisticUpdate[]>([]);
+  const [updates, setUpdates] = useState<OptimisticUpdate>([]);
   const manager = useRef(globalRealTimeManager);
   useEffect(() => {
-    const updateList = () => {
-      const allUpdates = manager.current.getPendingOptimisticUpdates();
-      const filteredUpdates = domain ;
-        ? allUpdates.filter(u => u.domain === domain)
-        : allUpdates;
-      setUpdates(filteredUpdates);
-    };
+  const updateList = () => {
+  const allUpdates = manager.current.getPendingOptimisticUpdates();
+  const filteredUpdates = domain ;
+  ? allUpdates.filter(u => u.domain === domain)
+  : allUpdates;
+  setUpdates(filteredUpdates);
+};
     // Update initially
     updateList();
     // Listen for changes
@@ -423,40 +392,35 @@ export function useOptimisticUpdates(domain?: string) {
     };
   }, [domain]);
   return updates;
-}
 
 // Real-time collaboration hook
 export function useCollaboration(domain: string) {
-  const [collaborators, setCollaborators] = useState<any[]>([]);
+  const [collaborators, setCollaborators] = useState<any>([]);
   const [cursors, setCursors] = useState<Record<string, any>>({});
   // This would integrate with the collaboration features
   // Implementation depends on the specific collaboration requirements
   return {
-    collaborators,
-    cursors,
-    updateCursor: (position: any) => {,
-      // Update cursor position
-    },
-    sendPresence: (data: any) => {,
+  collaborators,
+  cursors,
+  updateCursor: (position: any) => {,
+  // Update cursor position
+},
+  sendPresence: (data: any) => {,
       // Send presence data
-    }
   };
-}
 
 // Conflict resolution hook
 export function useConflictResolution(domain: string) {
-  const [conflicts, setConflicts] = useState<any[]>([]);
+  const [conflicts, setConflicts] = useState<any>([]);
   const manager = useRef(globalRealTimeManager);
   useEffect(() => {
-    const handleConflict = (event: any) => {
-      if (event.conflict.domain === domain) {
-        setConflicts(prev => [...prev, event.conflict]);
-      }
-    };
+  const handleConflict = (event: any) => {,
+  if (event.conflict.domain === domain) {
+  setConflicts(prev => [...prev, event.conflict]);
+};
     const handleConflictResolved = (event: any) => {
       if (event.conflict.domain === domain) {
         setConflicts(prev => prev.filter(c => c.id !== event.conflict.id));
-      }
     };
     manager.current.on('conflictDetected', handleConflict);
     manager.current.on('conflictResolved', handleConflictResolved);
@@ -466,20 +430,18 @@ export function useConflictResolution(domain: string) {
     };
   }, [domain]);
   return {
-    conflicts,
-    resolveConflict: (conflictId: string, resolution: any) => {
-      // Resolve conflict manually
-    }
-  };
-}
+  conflicts,
+  resolveConflict: (conflictId: string, resolution: any) => {,
+  // Resolve conflict manually
+};
 
 // Batch mutation hook
 export function useBatchMutation(domain: string) {
-  const [batch, setBatch] = useState<StateMutation[]>([]);
+  const [batch, setBatch] = useState<StateMutation>([]);
   const [isExecuting, setIsExecuting] = useState(false);
-  const addToBatch = useCallback((mutation: StateMutation) => {
-    setBatch(prev => [...prev, mutation]);
-  }, []);
+  const addToBatch = useCallback((mutation: StateMutation) => {,
+  setBatch(prev => [...prev, mutation]);
+}, []);
   const clearBatch = useCallback(() => {
     setBatch([]);
   }, []);
@@ -497,14 +459,12 @@ export function useBatchMutation(domain: string) {
       throw error;
     } finally {
       setIsExecuting(false);
-    }
   }, [domain, batch]);
   return {
-    batch,
-    addToBatch,
-    clearBatch,
-    executeBatch,
-    isExecuting,
-    batchSize: batch.length,
-  };
-}
+  batch,
+  addToBatch,
+  clearBatch,
+  executeBatch,
+  isExecuting,
+  batchSize: batch.length,
+};

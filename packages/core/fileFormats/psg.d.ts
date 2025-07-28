@@ -372,13 +372,12 @@ export declare enum PSGErrorType {
     INVALID_NODE_DATA = "INVALID_NODE_DATA",
     INVALID_EDGE_DATA = "INVALID_EDGE_DATA",
     SECURITY_VIOLATION = "SECURITY_VIOLATION"
-}
+
 export interface PSGError {
     type: PSGErrorType;
     message: string;
     details?: any;
     suggestions?: string[];
-}
 /**
  * Safely parses a .psg file with comprehensive error handling
  */

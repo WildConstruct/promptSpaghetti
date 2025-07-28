@@ -4,6 +4,7 @@
  */
 import { KPISnapshot } from './PerformanceKPIs';
 import { EventEmitter } from 'events';
+
 export interface BaselineSnapshot {
     id: string;
     timestamp: number;
@@ -28,7 +29,7 @@ export interface BaselineSnapshot {
         dataSize: 'small' | 'medium' | 'large';
         concurrentUsers: number;
     };
-}
+
 export interface BaselineSummary {
     capturedAt: number;
     totalKPIs: number;
@@ -49,7 +50,6 @@ export interface BaselineSummary {
         userExperience: number;
     };
     recommendations: string[];
-}
 /**
  * Performance Baseline Measurement System
  * Captures and manages performance baselines for comparison and improvement tracking
@@ -129,6 +129,6 @@ export declare class PerformanceBaseline extends EventEmitter {
      * Clear all baseline data
      */
     clearBaselines(): void;
-}
+
 export default PerformanceBaseline;
 //# sourceMappingURL=PerformanceBaseline.d.ts.map

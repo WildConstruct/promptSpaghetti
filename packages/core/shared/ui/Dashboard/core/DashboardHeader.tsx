@@ -20,12 +20,11 @@ export interface DashboardHeaderProps {
   onExport?: (format: 'csv' | 'pdf' | 'excel') => void;
   // Time range
   timeRange?: string;
-  timeRangeOptions?: TimeRangeOption[];
+  timeRangeOptions?: TimeRangeOption;
   onTimeRangeChange?: (timeRange: string) => void;
   showTimeRange?: boolean;
   className?: string;
 }
-
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({)
   title,
   description,
@@ -50,14 +49,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({)
       await onRefresh();
     } finally {
       setRefreshing(false);
-    }
   };
   const handleExport = (format: 'csv' | 'pdf' | 'excel') => {
     onExport?.(format);
     setShowExportMenu(false);
   };
   const currentTimeRangeOption = timeRangeOptions.find(option => option.value === timeRange);
-  return ();
+  return;
     <div className={`dashboard-header ${className}`}>}
       <div className="header-content">
         {/* Title Section */}

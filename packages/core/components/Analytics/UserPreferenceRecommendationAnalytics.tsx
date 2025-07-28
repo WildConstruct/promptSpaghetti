@@ -8,130 +8,122 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 // Core interfaces
+
 export interface UserPreferenceRecommendationAnalyticsProps {
-  analyticsInfrastructure: ConversionAnalyticsInfrastructure;
+  analyticsInfrastructure: ConversionAnalyticsInfrastructure;,
   preferenceConfig: PreferenceAnalyticsConfig;
   recommendationConfig: RecommendationAnalyticsConfig;
   onPreferenceInsight?: (insight: PreferenceInsight) => void;
   onRecommendationOptimization?: (optimization: RecommendationOptimization) => void;
   onExport?: (data: PreferenceRecommendationExportData) => void;
+  // Configuration
 }
-
-// Configuration
 export interface PreferenceAnalyticsConfig {
-  trackingEnabled: boolean;
-  preferenceCategories: PreferenceCategory[];
-  learningAlgorithms: PreferenceLearningAlgorithm[];
-  updateFrequency: number; // hours
+  trackingEnabled: boolean;,
+  preferenceCategories: PreferenceCategory;
+  learningAlgorithms: PreferenceLearningAlgorithm;,
+  updateFrequency: number; // hours,
 }
-
 export interface RecommendationAnalyticsConfig {
-  algorithms: RecommendationAlgorithm[];
-  evaluationMetrics: RecommendationMetric[];
-  abTestingEnabled: boolean;
+  algorithms: RecommendationAlgorithm;,
+  evaluationMetrics: RecommendationMetric;
+  abTestingEnabled: boolean;,
   personalizationLevel: PersonalizationLevel;
 }
-
 export type PersonalizationLevel = 'basic' | 'intermediate' | 'advanced' | 'deep';
 
 // Data structures
+
 export interface UserPreferenceData {
-  userId: string;
-  preferences: UserPreference[];
-  implicit: ImplicitPreference[];
-  explicit: ExplicitPreference[];
-  learningHistory: PreferenceLearningRecord[];
+  userId: string;,
+  preferences: UserPreference;
+  implicit: ImplicitPreference;,
+  explicit: ExplicitPreference;
+  learningHistory: PreferenceLearningRecord;,
   confidence: PreferenceConfidence;
 }
-
 export interface UserPreference {
   category: string;
   subcategory?: string;
-  value: Error;
-  weight: number; // 0-1
-  source: PreferenceSource;
+  value: Error;,
+  weight: number; // 0-1,
+  source: PreferenceSource;,
   timestamp: number;
-  confidence: number; // 0-1
+  confidence: number; // 0-1,
 }
-
 export type PreferenceSource = 'explicit' | 'implicit' | 'inferred' | 'collaborative';
 
 export interface RecommendationPerformanceData {
-  algorithmId: string;
-  metrics: RecommendationPerformanceMetric[];
-  abTestResults: ABTestResult[];
-  userFeedback: UserFeedback[];
+  algorithmId: string;,
+  metrics: RecommendationPerformanceMetric;
+  abTestResults: ABTestResult;,
+  userFeedback: UserFeedback;
   businessImpact: BusinessImpact;
-}
 
 // Mock data generators
 const generateUserPreferenceData = (): UserPreferenceData => ({)
-  userId: `user_${Math.random().toString(36).substr(2, 8)}`,}
+  userId: `user_${Math.random().toString(36).substr(2, 8)}`}
+},
   preferences: [,
     {
-      category: 'content_type',
-      subcategory: 'templates',
-      value: ['business', 'creative', 'technical'],
-      weight: Math.random(),
-      source: 'implicit',
-      timestamp: Date.now() - Math.random() * 86400000 * 30,
-      confidence: Math.random() * 0.3 + 0.7,
-    },
+  category: 'content_type',
+  subcategory: 'templates',
+  value: ['business', 'creative', 'technical'],
+  weight: Math.random(),
+  source: 'implicit',
+  timestamp: Date.now() - Math.random() * 86400000 * 30,
+  confidence: Math.random() * 0.3 + 0.7,
+}
     {
-      category: 'style',
-      subcategory: 'design',
-      value: 'minimalist',
-      weight: Math.random(),
-      source: 'explicit',
-      timestamp: Date.now() - Math.random() * 86400000 * 30,
-      confidence: Math.random() * 0.3 + 0.7,
-    }
-  ],
+  category: 'style',
+  subcategory: 'design',
+  value: 'minimalist',
+  weight: Math.random(),
+  source: 'explicit',
+  timestamp: Date.now() - Math.random() * 86400000 * 30,
+  confidence: Math.random() * 0.3 + 0.7],
   implicit: [],
   explicit: [],
   learningHistory: [],
   confidence: {,
-    overall: Math.random() * 0.4 + 0.6,
-    byCategory: {,
-      'content_type': Math.random() * 0.3 + 0.7,
-      'style': Math.random() * 0.3 + 0.7,
-      'complexity': Math.random() * 0.3 + 0.7
-    }
-  }
+  overall: Math.random() * 0.4 + 0.6,
+  byCategory: {,
+  'content_type': Math.random() * 0.3 + 0.7,
+  'style': Math.random() * 0.3 + 0.7,
+  'complexity': Math.random() * 0.3 + 0.7,
 });
 const generateRecommendationPerformance = (): RecommendationPerformanceData => ({)
-  algorithmId: `algo_${Math.random().toString(36).substr(2, 6)}`,}
+  algorithmId: `algo_${Math.random().toString(36).substr(2, 6)}`}
+},
   metrics: [,
     {
-      metric: 'click_through_rate',
-      value: Math.random() * 0.15 + 0.05,
-      benchmark: 0.08,
-      change: (Math.random() - 0.5) * 0.04,
-    },
+  metric: 'click_through_rate',
+  value: Math.random() * 0.15 + 0.05,
+  benchmark: 0.08,
+  change: (Math.random() - 0.5) * 0.04,
+}
     {
-      metric: 'conversion_rate',
-      value: Math.random() * 0.1 + 0.02,
-      benchmark: 0.05,
-      change: (Math.random() - 0.5) * 0.02,
-    },
+  metric: 'conversion_rate',
+  value: Math.random() * 0.1 + 0.02,
+  benchmark: 0.05,
+  change: (Math.random() - 0.5) * 0.02,
+}
     {
-      metric: 'user_satisfaction',
-      value: Math.random() * 2 + 3.5,
-      benchmark: 4.0,
-      change: (Math.random() - 0.5) * 0.5,
-    }
-  ],
+  metric: 'user_satisfaction',
+  value: Math.random() * 2 + 3.5,
+  benchmark: 4.0,
+  change: (Math.random() - 0.5) * 0.5],
   abTestResults: [],
   userFeedback: [],
   businessImpact: {,
-    revenueImpact: (Math.random() - 0.5) * 10000,
-    engagementIncrease: Math.random() * 20 + 5,
-    retentionImprovement: Math.random() * 15 + 2,
-    costEfficiency: Math.random() * 30 + 10,
-  }
+  revenueImpact: (Math.random() - 0.5) * 10000,
+  engagementIncrease: Math.random() * 20 + 5,
+  retentionImprovement: Math.random() * 15 + 2,
+  costEfficiency: Math.random() * 30 + 10,
 });
 
 // Main component
+}
 export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecommendationAnalyticsProps> = ({)
   analyticsInfrastructure,
   preferenceConfig,
@@ -140,8 +132,8 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
   onRecommendationOptimization,
   onExport
 }) => {
-  const [userPreferences, setUserPreferences] = useState<UserPreferenceData[]>([]);
-  const [recommendationPerformance, setRecommendationPerformance] = useState<RecommendationPerformanceData[]>([]);
+  const [userPreferences, setUserPreferences] = useState<UserPreferenceData>([]);
+  const [recommendationPerformance, setRecommendationPerformance] = useState<RecommendationPerformanceData>([]);
   const [selectedView, setSelectedView] = useState<'preferences' | 'recommendations' | 'optimization'>('preferences');
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -158,54 +150,52 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
       setLoading(false);
       if (onPreferenceInsight) {
         onPreferenceInsight({)
-          insightId: `insight_${Math.random().toString(36).substr(2, 8)}`,}
-          type: 'preference_trend',
+  insightId: `insight_${Math.random().toString(36).substr(2, 8)}`}
+},
+  type: 'preference_trend',
           category: 'content_type',
           message: 'Users showing increased preference for technical content',
           confidence: 0.85,
           affectedUsers: Math.floor(Math.random() * 500) + 100,
           recommendations: ['Increase technical content recommendations', 'Create more technical templates']
         });
-      }
     }, 1500);
   }, [onPreferenceInsight]);
   const handleExport = useCallback(() => {
-    if (onExport) {
-      const exportData: PreferenceRecommendationExportData = {
-        userPreferences,
-        recommendationPerformance,
-        analysisTimestamp: Date.now(),
-        metadata: {,
-          totalUsers: userPreferences.length,
-          averagePreferenceConfidence: userPreferences.reduce(),
-            (sum,)
-            u
-          ) => sum + u.confidence.overall, 0) / userPreferences.length,
-          topPerformingAlgorithm: recommendationPerformance.sort((a, b) => {
-            const aScore = a.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
-            const bScore = b.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
-            return bScore - aScore;
-          })[0]?.algorithmId || 'unknown'
-        }
+  if (onExport) {
+  const exportData: PreferenceRecommendationExportData = {,
+  userPreferences,
+  recommendationPerformance,
+  analysisTimestamp: Date.now(),
+  metadata: {,
+  totalUsers: userPreferences.length,
+  averagePreferenceConfidence: userPreferences.reduce(),
+  (sum)
+  u
+  ) => sum + u.confidence.overall, 0) / userPreferences.length,
+  topPerformingAlgorithm: recommendationPerformance.sort((a, b) => {,
+  const aScore = a.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
+  const bScore = b.metrics.find(m => m.metric === 'conversion_rate')?.value || 0;
+  return bScore - aScore;
+})[0]?.algorithmId || 'unknown'
       };
       onExport(exportData);
-    }
   }, [userPreferences, recommendationPerformance, onExport]);
   const preferenceStats = useMemo(() => {
     if (!userPreferences.length) return null;
     const categoryDistribution = userPreferences.reduce((acc, user) => {
       user.preferences.forEach(pref => {)
-        acc[pref.category] = (acc[pref.category] || 0) + 1;
+  acc[pref.category] = (acc[pref.category] || 0) + 1;
       });
       return acc;
     }, {} as Record<string, number>);
     const avgConfidence = userPreferences.reduce((sum, u) => sum + u.confidence.overall, 0) / userPreferences.length;
     return {
-      totalUsers: userPreferences.length,
-      avgConfidence: Math.round(avgConfidence * 100),
-      topCategory: Object.entries(categoryDistribution).sort(([,a], [,b]) => b - a)[0]?.[0] || 'unknown',
-      categoryDistribution
-    };
+  totalUsers: userPreferences.length,
+  avgConfidence: Math.round(avgConfidence * 100),
+  topCategory: Object.entries(categoryDistribution).sort(([a], [b]) => b - a)[0]?.[0] || 'unknown',
+  categoryDistribution
+};
   }, [userPreferences]);
   const recommendationStats = useMemo(() => {
     if (!recommendationPerformance.length) return null;
@@ -218,16 +208,16 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
       return sum + conv;
     }, 0) / recommendationPerformance.length;
     return {
-      totalAlgorithms: recommendationPerformance.length,
-      avgCTR: Math.round(avgCTR * 100 * 100) / 100, // Percentage with 2 decimals
-      avgConversion: Math.round(avgConversion * 100 * 100) / 100,
-      totalRevenueImpact: recommendationPerformance.reduce((sum, algo) => sum + algo.businessImpact.revenueImpact, 0)
-    };
+  totalAlgorithms: recommendationPerformance.length,
+  avgCTR: Math.round(avgCTR * 100 * 100) / 100, // Percentage with 2 decimals,
+  avgConversion: Math.round(avgConversion * 100 * 100) / 100,
+  totalRevenueImpact: recommendationPerformance.reduce((sum, algo) => sum + algo.businessImpact.revenueImpact, 0),
+};
   }, [recommendationPerformance]);
   const selectedUserData = useMemo(() => {
-    return selectedUser ? userPreferences.find(u => u.userId === selectedUser) : null;
-  }, [selectedUser, userPreferences]);
-  return ();
+  return selectedUser ? userPreferences.find(u => u.userId === selectedUser) : null;
+}, [selectedUser, userPreferences]);
+  return;
     <div className="preference-recommendation-analytics">
       <div className="analytics-header">
         <div className="header-section">
@@ -433,122 +423,107 @@ export const UserPreferenceRecommendationAnalytics: React.FC<UserPreferenceRecom
 };
 
 // Supporting interfaces (condensed)
+
 export interface PreferenceCategory {
-  categoryId: string;
+  categoryId: string;,
   name: string;
-  subcategories: string[];
+  subcategories: string;,
   dataType: 'string' | 'number' | 'array' | 'boolean';
 }
-
 export interface PreferenceLearningAlgorithm {
-  algorithmId: string;
+  algorithmId: string;,
   name: string;
-  type: 'collaborative' | 'content_based' | 'hybrid';
+  type: 'collaborative' | 'content_based' | 'hybrid';,
   accuracy: number;
 }
-
 export interface RecommendationAlgorithm {
-  algorithmId: string;
+  algorithmId: string;,
   name: string;
-  type: 'collaborative' | 'content_based' | 'hybrid' | 'deep_learning';
+  type: 'collaborative' | 'content_based' | 'hybrid' | 'deep_learning';,
   parameters: Record<string, any>;
 }
-
 export interface RecommendationMetric {
-  metricId: string;
+  metricId: string;,
   name: string;
-  target: number;
+  target: number;,
   weight: number;
 }
-
 export interface ImplicitPreference {
-  category: string;
+  category: string;,
   inferredValue: Error;
-  confidence: number;
-  evidence: string[];
+  confidence: number;,
+  evidence: string;
 }
-
 export interface ExplicitPreference {
-  category: string;
+  category: string;,
   declaredValue: Error;
-  timestamp: number;
+  timestamp: number;,
   method: 'survey' | 'settings' | 'feedback';
 }
-
 export interface PreferenceLearningRecord {
-  timestamp: number;
-  changes: PreferenceChange[];
-  trigger: string;
+  timestamp: number;,
+  changes: PreferenceChange;
+  trigger: string;,
   confidence: number;
 }
-
 export interface PreferenceChange {
-  category: string;
+  category: string;,
   oldValue: Error;
-  newValue: Error;
+  newValue: Error;,
   reason: string;
 }
-
 export interface PreferenceConfidence {
-  overall: number;
+  overall: number;,
   byCategory: Record<string, number>;
 }
-
 export interface RecommendationPerformanceMetric {
-  metric: string;
+  metric: string;,
   value: number;
-  benchmark: number;
+  benchmark: number;,
   change: number;
 }
-
 export interface ABTestResult {
-  testId: string;
+  testId: string;,
   variant: string;
   metrics: Record<string, number>;
   significance: number;
 }
-
 export interface UserFeedback {
-  userId: string;
+  userId: string;,
   rating: number;
-  feedback: string;
+  feedback: string;,
   timestamp: number;
 }
-
 export interface BusinessImpact {
-  revenueImpact: number;
+  revenueImpact: number;,
   engagementIncrease: number;
-  retentionImprovement: number;
+  retentionImprovement: number;,
   costEfficiency: number;
 }
-
 export interface PreferenceInsight {
-  insightId: string;
+  insightId: string;,
   type: string;
-  category: string;
+  category: string;,
   message: string;
-  confidence: number;
+  confidence: number;,
   affectedUsers: number;
-  recommendations: string[];
+  recommendations: string;
 }
-
 export interface RecommendationOptimization {
-  optimizationId: string;
+  optimizationId: string;,
   type: string;
-  algorithm: string;
+  algorithm: string;,
   improvement: number;
-  implementation: string[];
+  implementation: string;
 }
-
 export interface PreferenceRecommendationExportData {
-  userPreferences: UserPreferenceData[];
-  recommendationPerformance: RecommendationPerformanceData[];
-  analysisTimestamp: number;
+  userPreferences: UserPreferenceData;,
+  recommendationPerformance: RecommendationPerformanceData;
+  analysisTimestamp: number;,
   metadata: {,
-    totalUsers: number;
-    averagePreferenceConfidence: number;
-    topPerformingAlgorithm: string;
-  };
+  totalUsers: number;,
+  averagePreferenceConfidence: number;
+  topPerformingAlgorithm: string;
+};
 }
-
 export default UserPreferenceRecommendationAnalytics;

@@ -24,8 +24,8 @@ export interface SequenceStep {
     type: 'action' | 'decision' | 'parallel' | 'loop' | 'delay' | 'validation' | 'rollback';
     category: string;
     priority: number;
-    dependencies: string[];
-    conditions?: StepCondition[];
+    dependencies: string;
+    conditions?: StepCondition;
     action?: StepAction;
     validation?: StepValidation;
     rollback?: StepRollback;
@@ -68,19 +68,19 @@ export interface StepRollback {
     action?: StepAction;
     autoTrigger: boolean;
     preserveState: boolean;
-    dependencies?: string[];
+    dependencies?: string;
 }
 export interface RetryPolicy {
     maxAttempts: number;
     backoffStrategy: 'linear' | 'exponential' | 'custom';
     baseDelay: number;
     maxDelay: number;
-    retryConditions: string[];
+    retryConditions: string;
 }
 export interface StepMetadata {
     estimatedDuration: number;
     category: string;
-    tags: string[];
+    tags: string;
     difficulty: 'easy' | 'medium' | 'hard' | 'expert';
     userVisible: boolean;
     skippable: boolean;
@@ -94,7 +94,7 @@ export interface StepPerformance {
     successRate: number;
     failureRate: number;
     retryRate: number;
-    lastExecutions: ExecutionRecord[];
+    lastExecutions: ExecutionRecord;
 }
 export interface ExecutionRecord {
     timestamp: Date;
@@ -109,14 +109,14 @@ export interface SequenceDefinition {
     name: string;
     description: string;
     version: string;
-    steps: SequenceStep[];
+    steps: SequenceStep;
     entryPoint: string;
-    exitPoints: string[];
+    exitPoints: string;
     globalTimeout?: number;
     concurrencyLimit?: number;
     metadata: {
         category: string;
-        tags: string[];
+        tags: string;
         estimatedTotalDuration: number;
         difficulty: 'easy' | 'medium' | 'hard' | 'expert';
         createdAt: Date;
@@ -129,9 +129,9 @@ export interface SequenceExecution {
     name: string;
     status: 'initializing' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
     currentStep?: string;
-    completedSteps: string[];
-    failedSteps: string[];
-    skippedSteps: string[];
+    completedSteps: string;
+    failedSteps: string;
+    skippedSteps: string;
     context: ExecutionContext;
     progress: SequenceProgress;
     performance: ExecutionPerformance;
@@ -145,7 +145,7 @@ export interface ExecutionContext {
     userInput: Record<string, unknown>;
     sessionData: Record<string, unknown>;
     executionState: Record<string, unknown>;
-    rollbackStack: RollbackEntry[];
+    rollbackStack: RollbackEntry;
 }
 export interface RollbackEntry {
     stepId: string;
@@ -160,7 +160,7 @@ export interface SequenceProgress {
     currentStep: number;
     percentage: number;
     estimatedTimeRemaining: number;
-    milestones: ProgressMilestone[];
+    milestones: ProgressMilestone;
 }
 export interface ProgressMilestone {
     id: string;
@@ -216,82 +216,5 @@ export declare class StepSequencingSystem extends EventEmitter {
     private validators;
     private rollbackHandlers;
     constructor(config?: Partial<SequencingConfig>);
-    createSequence(definition: Omit<SequenceDefinition, 'id'>): Promise<string>;
-    updateSequence(sequenceId: string, updates: Partial<SequenceDefinition>): Promise<void>;
-    deleteSequence(sequenceId: string, force?: boolean): Promise<void>;
-    startExecution(sequenceId: string, context?: Partial<ExecutionContext>, options?: {
-        name?: string;
-        timeout?: number;
-    }): Promise<string>;
-    pauseExecution(executionId: string): Promise<void>;
-    resumeExecution(executionId: string): Promise<void>;
-    cancelExecution(executionId: string): Promise<void>;
-    executeStep(executionId: string, stepId: string): Promise<StepExecutionStatus>;
-    rollbackExecution(executionId: string, toStepId?: string): Promise<void>;
-    getSequence(sequenceId: string): SequenceDefinition | null;
-    listSequences(filters?: {
-        category?: string;
-        tags?: string[];
-        difficulty?: string;
-    }): SequenceDefinition[];
-    getExecution(executionId: string): SequenceExecution | null;
-    listExecutions(filters?: {
-        sequenceId?: string;
-        status?: string[];
-        dateRange?: {
-            start: Date;
-            end: Date;
-        };
-    }): SequenceExecution[];
-    registerActionHandler(type: string, handler: (...args: unknown[]) => unknown): void;
-    registerValidator(type: string, validator: (...args: unknown[]) => unknown): void;
-    registerRollbackHandler(stepId: string, handler: (...args: unknown[]) => unknown): void;
-    getSequenceAnalytics(sequenceId: string): {
-        totalExecutions: number;
-        successRate: number;
-        averageDuration: number;
-        commonFailurePoints: Array<{
-            stepId: string;
-            failureRate: number;
-        }>;
-        performanceMetrics: Record<string, unknown>;
-    };
-    updateConfig(config: Partial<SequencingConfig>): void;
-    destroy(): void;
-    private runExecution;
-    private validateSequence;
-    private detectCircularDependencies;
-    private optimizeStepOrder;
-    private initializeProgress;
-    private validateStepDependencies;
-    private evaluateStepConditions;
-    private evaluateCondition;
-    private compareValues;
-    private evaluateExpression;
-    private executeStepAction;
-    private validateStepCompletion;
-    private addToRollbackStack;
-    private executeRollbackAction;
-    private calculateRetryDelay;
-    private updateStepPerformance;
-    private updateExecutionProgress;
-    private getNextStep;
-    private registerBuiltInHandlers;
-    private delay;
 }
-export declare class SequenceBuilder {
-    private definition;
-    private steps;
-    constructor(name: string, description?: string);
-    addStep(step: Omit<SequenceStep, 'performance'>): SequenceBuilder;
-    setEntryPoint(stepId: string): SequenceBuilder;
-    addExitPoint(stepId: string): SequenceBuilder;
-    setMetadata(metadata: Partial<SequenceDefinition['metadata']>): SequenceBuilder;
-    build(): Omit<SequenceDefinition, 'id'>;
-}
-declare const _default: {
-    StepSequencingSystem: typeof StepSequencingSystem;
-    SequenceBuilder: typeof SequenceBuilder;
-};
-export default _default;
 //# sourceMappingURL=StepSequencingSystem.d.ts.map

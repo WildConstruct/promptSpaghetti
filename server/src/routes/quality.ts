@@ -43,7 +43,7 @@ const QualityMetricsSchema = {
           }
         }
       }
-    },
+  }
     testCoverage: { type: 'object' },
     codeQuality: { type: 'object' },
     performance: { type: 'object' },
@@ -63,7 +63,7 @@ const HistoricalMetricsQuerySchema = {
     start: { type: 'string', format: 'date-time' },
     end: { type: 'string', format: 'date-time' },
     granularity: { type: 'string', enum: ['hour', 'day', 'week'] }
-  },
+  }
   required: ['start', 'end']
 };
 
@@ -85,7 +85,7 @@ const RecommendationUpdateSchema = {
   type: 'object',
   properties: {
     status: { type: 'string', enum: ['acknowledged', 'in_progress', 'completed', 'dismissed'] }
-  },
+  }
   required: ['status']
 };
 
@@ -201,7 +201,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         200: {
           type: 'array',
           items: QualityMetricsSchema
-        },
+  }
         400: {
           type: 'object',
           properties: {
@@ -329,7 +329,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           severity: { type: 'string', enum: ['info', 'warning', 'error', 'critical'] },
           limit: { type: 'number', minimum: 1, maximum: 100 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -401,9 +401,9 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: AlertAcknowledgeSchema,
       response: {
         200: {
@@ -412,7 +412,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {
@@ -481,7 +481,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
           status: { type: 'string' },
           limit: { type: 'number', minimum: 1, maximum: 100 }
         }
-      },
+  }
       response: {
         200: {
           type: 'array',
@@ -549,9 +549,9 @@ export async function qualityRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           id: { type: 'string' }
-        },
+  }
         required: ['id']
-      },
+  }
       body: RecommendationUpdateSchema,
       response: {
         200: {
@@ -560,7 +560,7 @@ export async function qualityRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' }
           }
-        },
+  }
         404: {
           type: 'object',
           properties: {

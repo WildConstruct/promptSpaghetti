@@ -9,7 +9,7 @@ import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAna
 export interface UserBehaviorFlowVisualizationProps {
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     flowConfig: FlowVisualizationConfig;
-    behaviorData: BehaviorFlowData[];
+    behaviorData: BehaviorFlowData;
     onFlowAnalysis?: (analysis: FlowAnalysis) => void;
     onPathwayOptimization?: (optimization: PathwayOptimization) => void;
     onExport?: (data: FlowVisualizationExportData) => void;
@@ -20,18 +20,18 @@ export interface FlowVisualizationConfig {
         start: number;
         end: number;
     };
-    segmentFilters: SegmentFilter[];
+    segmentFilters: SegmentFilter;
     pathwayAnalysis: PathwayAnalysisSettings;
-    interactionFilters: InteractionFilter[];
+    interactionFilters: InteractionFilter;
     performanceSettings: VisualizationPerformanceSettings;
 }
 export type VisualizationType = 'sankey' | 'node_link' | 'flow_map' | 'journey_map' | 'heatmap';
 export interface BehaviorFlowData {
     userId: string;
     sessionId: string;
-    flowPath: FlowStep[];
+    flowPath: FlowStep;
     metadata: FlowMetadata;
-    outcomes: FlowOutcome[];
+    outcomes: FlowOutcome;
 }
 export interface FlowStep {
     stepId: string;
@@ -42,10 +42,10 @@ export interface FlowStep {
     context: StepContext;
 }
 export interface FlowAnalysis {
-    popularPaths: PopularPath[];
-    dropoffPoints: DropoffPoint[];
-    conversionPaths: ConversionPath[];
-    optimizationOpportunities: OptimizationOpportunity[];
+    popularPaths: PopularPath;
+    dropoffPoints: DropoffPoint;
+    conversionPaths: ConversionPath;
+    optimizationOpportunities: OptimizationOpportunity;
 }
 export declare const UserBehaviorFlowVisualization: React.FC<UserBehaviorFlowVisualizationProps>;
 export interface SegmentFilter {
@@ -107,7 +107,7 @@ export interface OptimizationOpportunity {
     effort: string;
 }
 export interface PathwayOptimization {
-    recommendations: OptimizationRecommendation[];
+    recommendations: OptimizationRecommendation;
     projectedImpact: ProjectedImpact;
 }
 export interface OptimizationRecommendation {
@@ -121,7 +121,7 @@ export interface ProjectedImpact {
     dropoffReduction: number;
 }
 export interface FlowVisualizationExportData {
-    flowData: BehaviorFlowData[];
+    flowData: BehaviorFlowData;
     analysis: FlowAnalysis | null;
     visualizationConfig: FlowVisualizationConfig;
     metadata: {

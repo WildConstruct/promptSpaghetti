@@ -28,6 +28,7 @@ export declare enum AnalyticsEventType {
 /**
  * Base analytics event structure
  */
+}
 export interface AnalyticsEvent {
     id: string;
     type: AnalyticsEventType;
@@ -37,9 +38,11 @@ export interface AnalyticsEvent {
     organizationId?: string;
     metadata: Record<string, any>;
 }
+}
 /**
  * Graph execution analytics event
  */
+}
 export interface GraphExecutionEvent extends AnalyticsEvent {
     type: AnalyticsEventType.GRAPH_EXECUTION_START | AnalyticsEventType.GRAPH_EXECUTION_COMPLETE | AnalyticsEventType.GRAPH_EXECUTION_ERROR;
     metadata: {
@@ -56,6 +59,7 @@ export interface GraphExecutionEvent extends AnalyticsEvent {
 /**
  * Node execution analytics event
  */
+}
 export interface NodeExecutionEvent extends AnalyticsEvent {
     type: AnalyticsEventType.NODE_EXECUTION_START | AnalyticsEventType.NODE_EXECUTION_COMPLETE | AnalyticsEventType.NODE_EXECUTION_ERROR;
     metadata: {
@@ -72,6 +76,7 @@ export interface NodeExecutionEvent extends AnalyticsEvent {
 /**
  * User interaction analytics event
  */
+}
 export interface UserInteractionEvent extends AnalyticsEvent {
     type: AnalyticsEventType.NODE_CREATED | AnalyticsEventType.NODE_UPDATED | AnalyticsEventType.NODE_DELETED | AnalyticsEventType.CONNECTION_CREATED | AnalyticsEventType.CONNECTION_DELETED | AnalyticsEventType.CANVAS_INTERACTION;
     metadata: {
@@ -89,6 +94,7 @@ export interface UserInteractionEvent extends AnalyticsEvent {
 /**
  * Token usage analytics event
  */
+}
 export interface TokenUsageEvent extends AnalyticsEvent {
     type: AnalyticsEventType.TOKEN_USAGE;
     metadata: {
@@ -105,6 +111,7 @@ export interface TokenUsageEvent extends AnalyticsEvent {
 /**
  * Performance metrics event
  */
+}
 export interface PerformanceMetricEvent extends AnalyticsEvent {
     type: AnalyticsEventType.PERFORMANCE_METRIC;
     metadata: {
@@ -119,6 +126,7 @@ export interface PerformanceMetricEvent extends AnalyticsEvent {
 /**
  * Analytics configuration
  */
+}
 export interface AnalyticsConfig {
     /** Enable/disable analytics collection */
     enabled: boolean;
@@ -135,9 +143,11 @@ export interface AnalyticsConfig {
     /** Data retention period in milliseconds */
     retentionPeriod: number;
 }
+}
 /**
  * Analytics data aggregation window
  */
+}
 export interface AnalyticsWindow {
     startTime: number;
     endTime: number;
@@ -151,6 +161,7 @@ export interface AnalyticsWindow {
         totalTokenUsage: number;
         totalCost: number;
         errorRate: number;
+}
     };
 }
 /**

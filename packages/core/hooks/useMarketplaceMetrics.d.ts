@@ -5,13 +5,14 @@
  * Automatically tracks marketplace events and provides analytics utilities.
  */
 import { MarketplaceEventType, TemplateMetrics, CreatorMetrics } from '../analytics/MarketplaceMetrics';
+
 export interface MarketplaceMetricsConfig {
     enableAutoTracking?: boolean;
     trackPageViews?: boolean;
     trackUserInteractions?: boolean;
     userId?: string;
     userRole?: 'director' | 'producer' | 'creator' | 'admin';
-}
+
 export declare const useMarketplaceMetrics: (config?: MarketplaceMetricsConfig) => {
     dashboardData: any;
     insights: any[];

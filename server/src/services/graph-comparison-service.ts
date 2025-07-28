@@ -30,6 +30,7 @@ export class GraphComparisonService {
     targetData: GraphData,
     comparisonType: 'structural' | 'semantic' | 'visual' = 'structural'
   ): Promise<DetailedComparison> {
+
     const startTime = Date.now();
     const algorithmSteps: string[] = [];
 
@@ -133,8 +134,7 @@ export class GraphComparisonService {
       node_count: graphData.nodes.length,
       edge_count: graphData.edges.length,
       complexity_score: complexityScore,
-      created_at: new Date()
-    };
+      created_at: new Date(};
   }
 
   /**
@@ -145,6 +145,7 @@ export class GraphComparisonService {
     targetNodes: GraphData['nodes'],
     comparisonType: string
   ): Promise<NodeMatchResult[]> {
+
     const matches: NodeMatchResult[] = [];
     const sourceMap = new Map(sourceNodes.map(n => [n.id, n]));
     const targetMap = new Map(targetNodes.map(n => [n.id, n]));
@@ -256,6 +257,7 @@ export class GraphComparisonService {
     targetEdges: GraphData['edges'],
     nodeMatches: NodeMatchResult[]
   ): Promise<EdgeMatchResult[]> {
+
     const matches: EdgeMatchResult[] = [];
     const nodeIdMap = new Map<string, string>();
 
@@ -722,7 +724,7 @@ export class GraphComparisonService {
           node_match_count: nodeMatches.length,
           edge_match_count: edgeMatches.length,
           similarity_score: similarity
-        },
+  }
         confidence_distribution: this.calculateConfidenceDistribution(nodeMatches, edgeMatches)
       }
     };

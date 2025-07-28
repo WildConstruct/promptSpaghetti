@@ -3,7 +3,6 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
-}
 
 export const Tabs: React.FC<TabsProps> = ({ children, className, ...props }) => ()
   <div className={`tabs ${className || ''}`} {...props}>{children}</div>}

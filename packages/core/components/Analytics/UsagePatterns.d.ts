@@ -3,6 +3,7 @@ import { AnalyticsClient } from '../../analytics/AnalyticsClient';
 /**
  * Usage patterns props
  */
+
 export interface UsagePatternsProps {
     analyticsClient: AnalyticsClient;
     timeRange: {,
@@ -11,7 +12,6 @@ export interface UsagePatternsProps {
     };
     userId?: number;
     organizationId?: number;
-}
 /**
  * Usage patterns component
  */

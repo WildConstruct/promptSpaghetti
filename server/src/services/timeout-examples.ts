@@ -101,7 +101,7 @@ export class WorkspaceServiceWithTimeout {
           WHERE id = ?
         `);
         return updateStmt.run(updates.name, updates.description, new Date().toISOString(), workspaceId);
-      },
+  }
       `update_workspace_${workspaceId}`
     );
 
@@ -190,7 +190,7 @@ export class AuthServiceWithTimeout {
         // Simulate external CAPTCHA verification
         await this.simulateAuthDelay(1000);
         return captchaToken.length > 10; // Simple validation
-      },
+  }
       `captcha_${token.substring(0, 8)}`
     );
 
@@ -202,6 +202,7 @@ export class AuthServiceWithTimeout {
   }
 
   private simulateAuthDelay(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
@@ -231,7 +232,7 @@ export class FileServiceWithTimeout {
         // Simulate intensive file processing
         await this.simulateFileOperation(10000);
         return { processed: true, outputPath: `${filePath}.processed` };
-      },
+  }
       `process_${filePath.split('/').pop()}`
     );
 
@@ -243,6 +244,7 @@ export class FileServiceWithTimeout {
   }
 
   private simulateFileOperation(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
@@ -369,12 +371,12 @@ export class HealthCheckServiceWithTimeout {
           status: result.database.success ? 'healthy' : 'unhealthy',
           responseTime: result.database.totalTime,
           error: result.database.error?.message
-        },
+  }
         redis: {
           status: result.redis.success ? 'healthy' : 'unhealthy',
           responseTime: result.redis.totalTime,
           error: result.redis.error?.message
-        },
+  }
         externalServices: Object.entries(result.externalServices).reduce((acc, [url, result]) => {
           acc[url] = {
             status: result.success ? 'healthy' : 'unhealthy',
@@ -383,7 +385,7 @@ export class HealthCheckServiceWithTimeout {
           };
           return acc;
         }, {} as any)
-      },
+  }
       timeoutManager: result.timeoutManagerHealth
     };
   }
@@ -402,7 +404,7 @@ export class ManualTimeoutExample {
         // Custom database operation
         await this.simulateOperation(3000);
         return { rows: [], affectedRows: 0 };
-      },
+  }
       'database',
       'query',
       `custom_query_${Date.now()}`
@@ -423,12 +425,12 @@ export class ManualTimeoutExample {
         // Primary operation that might fail
         await this.simulateOperation(5000);
         throw new Error('Primary failed');
-      },
+  }
       async () => {
         // Fallback operation
         await this.simulateOperation(1000);
         return { fallback: true, data: 'fallback data' };
-      },
+  }
       'api',
       'authentication'
     );
@@ -437,6 +439,7 @@ export class ManualTimeoutExample {
   }
 
   private simulateOperation(ms: number): Promise<void> {
+
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
@@ -473,7 +476,7 @@ export function exampleRouteWithTimeout(fastify: unknown) {
       async () => {
         // Primary data source
         return { primary: true, data: 'primary data' };
-      },
+  }
       async () => {
         // Fallback data source
         return { primary: false, data: 'fallback data' };
@@ -493,10 +496,10 @@ export function setupTimeoutManagerWithConfig() {
     database: {
       query: 15000, // 15 seconds for queries
       transaction: 45000 // 45 seconds for transactions
-    },
+  }
     redis: {
       operation: 8000 // 8 seconds for Redis operations
-    },
+  }
     api: {
       webhook: 20000 // 20 seconds for webhooks
     }

@@ -5,17 +5,15 @@ import { ConnectionStatusIndicator } from './ConnectionStatusIndicator';
 import { ReconnectionState } from '../../network-resilience/ReconnectionHandler';
 import { ConnectionState, ConnectionQuality } from '../../network-resilience/ConnectionStateManager';
 interface NetworkResiliencePanelProps {
-  status: NetworkStatus;
-  queuedOperations: QueuedOperation[];
+  status: NetworkStatus;,
+  queuedOperations: QueuedOperation;
   onRetryConnection?: () => void;
   onForceSync?: () => void;
   onClearQueue?: () => void;
-  onRetryOperation?: (operationId: string) => void;
+  onRetryOperation?: (operationId: string) => void;,
   isOpen: boolean;
   onClose: () => void;
-}
-
-export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({)
+  export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({,)
   status,
   queuedOperations,
   onRetryConnection,
@@ -36,29 +34,27 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({)
     return new Date(timestamp).toLocaleTimeString();
   };
   const getOperationPriorityColor = (priority: 'high' | 'medium' | 'low') => {
-    switch (priority) {
-    case 'high': return '#dc2626';
-    case 'medium': return '#d97706';
-    case 'low': return '#059669';
-    default: return '#6b7280';
-    }
-  };
+  switch (priority) {
+  case 'high': return '#dc2626';
+  case 'medium': return '#d97706';
+  case 'low': return '#059669';
+  default: return '#6b7280';
+};
   const getConnectionQualityDescription = (quality: ConnectionQuality) => {
-    switch (quality) {
-    case ConnectionQuality.EXCELLENT:
-      return 'Excellent connection quality. Low latency, no packet loss.';
-    case ConnectionQuality.GOOD:
-      return 'Good connection quality. Acceptable latency and minimal packet loss.';
-    case ConnectionQuality.FAIR:
-      return 'Fair connection quality. Some latency or packet loss detected.';
-    case ConnectionQuality.POOR:
-      return 'Poor connection quality. High latency or significant packet loss.';
-    default:
-      return 'Connection quality unknown. Gathering metrics...';
-    }
-  };
+  switch (quality) {
+  case ConnectionQuality.EXCELLENT:,
+  return 'Excellent connection quality. Low latency, no packet loss.';
+  case ConnectionQuality.GOOD:,
+  return 'Good connection quality. Acceptable latency and minimal packet loss.';
+  case ConnectionQuality.FAIR:,
+  return 'Fair connection quality. Some latency or packet loss detected.';
+  case ConnectionQuality.POOR:,
+  return 'Poor connection quality. High latency or significant packet loss.';
+  default:,
+  return 'Connection quality unknown. Gathering metrics...';
+};
   if (!isOpen) return null;
-  return ();
+  return;
     <div className="network-resilience-panel">
       {/* Backdrop */}
       <div 
@@ -104,10 +100,10 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({)
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+  activeTab === tab.id
+  ? 'border-blue-500 text-blue-600'
+  : 'border-transparent text-gray-500 hover:text-gray-700',
+}`}
               >
                 {tab.label}
                 {tab.count !== undefined && tab.count > 0 && ()
@@ -231,9 +227,10 @@ export const NetworkResiliencePanel: React.FC<NetworkResiliencePanelProps> = ({)
                             <span 
                               className="px-2 py-0.5 rounded text-xs font-medium"
                               style={{ 
-                                backgroundColor: `${getOperationPriorityColor(operation.priority)}20`,}
-                                color: getOperationPriorityColor(operation.priority),
-                              }}
+                                backgroundColor: `${getOperationPriorityColor(operation.priority)}20`}
+},
+  color: getOperationPriorityColor(operation.priority);
+  }}
                             >
                               {operation.priority}
                             </span>

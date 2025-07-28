@@ -7,13 +7,13 @@ export declare enum MFAMethodType {
     TOTP = "totp",
     EMAIL = "email",
     SMS = "sms"
-}
+
 export declare enum MFAMethodStatus {
     PENDING = "pending",// Enrollment started but not completed
     ACTIVE = "active",// Fully enrolled and active
     DISABLED = "disabled",// Temporarily disabled
     REVOKED = "revoked"
-}
+
 export declare enum MFAVerificationResult {
     SUCCESS = "success",
     INVALID_CODE = "invalid_code",
@@ -21,7 +21,7 @@ export declare enum MFAVerificationResult {
     RATE_LIMITED = "rate_limited",
     METHOD_DISABLED = "method_disabled",
     USER_LOCKED = "user_locked"
-}
+
 export interface BaseMFAConfiguration {
     id: string;
     userId: string;
@@ -34,7 +34,7 @@ export interface BaseMFAConfiguration {
     lastUsedAt?: Date;
     failedAttempts: number;
     lockedUntil?: Date;
-}
+
 export interface TOTPConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.TOTP;
     encryptedSecret: string;
@@ -44,27 +44,27 @@ export interface TOTPConfiguration extends BaseMFAConfiguration {
     qrCodeUrl?: string;
     qrCodeExpiresAt?: Date;
     backupCodesGenerated: boolean;
-}
+
 export interface TOTPSecret {
     secret: string;
     qrCodeDataUrl: string;
     manualEntryKey: string;
     issuer: string;
     accountName: string;
-}
+
 export interface TOTPEnrollmentData {
     configurationId: string;
     secret: TOTPSecret;
     backupCodes: string[];
     expiresAt: Date;
-}
+
 export interface EmailConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.EMAIL;
     emailAddress: string;
     isVerified: boolean;
     verificationSentAt?: Date;
     verificationExpiresAt?: Date;
-}
+
 export interface EmailVerification {
     id: string;
     userId: string;
@@ -78,7 +78,7 @@ export interface EmailVerification {
         location?: string;
         riskScore: number;
     };
-}
+
 export interface SMSConfiguration extends BaseMFAConfiguration {
     methodType: MFAMethodType.SMS;
     phoneNumber: string;
@@ -89,7 +89,7 @@ export interface SMSConfiguration extends BaseMFAConfiguration {
         lineType: 'mobile' | 'landline' | 'voip';
         riskScore: number;
     };
-}
+
 export interface SMSVerification {
     id: string;
     userId: string;
@@ -104,7 +104,7 @@ export interface SMSVerification {
         carrierResponse?: string;
         deliveryStatus?: 'sent' | 'delivered' | 'failed';
     };
-}
+
 export interface BackupCode {
     id: string;
     userId: string;
@@ -117,13 +117,13 @@ export interface BackupCode {
         location?: string;
     };
     createdAt: Date;
-}
+
 export interface BackupCodeSet {
     userId: string;
     codes: string[];
     generatedAt: Date;
     expiresAt: Date;
-}
+
 export interface MFAChallenge {
     id: string;
     userId: string;
@@ -133,7 +133,7 @@ export interface MFAChallenge {
     attempts: number;
     maxAttempts: number;
     createdAt: Date;
-}
+
 export interface MFAVerificationAttempt {
     id: string;
     userId: string;
@@ -149,7 +149,7 @@ export interface MFAVerificationAttempt {
         timeSkew?: number;
         riskScore?: number;
     };
-}
+
 export interface MFASession {
     id: string;
     userId: string;
@@ -160,7 +160,7 @@ export interface MFASession {
     lastVerifiedAt?: Date;
     ipAddress: string;
     userAgent: string;
-}
+
 export interface RateLimitRule {
     action: string;
     userLimit: number;
@@ -169,7 +169,7 @@ export interface RateLimitRule {
     ipWindow: number;
     globalLimit: number;
     globalWindow: number;
-}
+
 export interface RateLimitState {
     userId?: string;
     ipAddress?: string;
@@ -177,7 +177,7 @@ export interface RateLimitState {
     count: number;
     windowStart: Date;
     blockedUntil?: Date;
-}
+
 export interface SecurityEvent {
     id: string;
     userId?: string;
@@ -194,7 +194,7 @@ export interface SecurityEvent {
     createdAt: Date;
     resolved: boolean;
     resolvedAt?: Date;
-}
+
 export interface UserMFAProfile {
     userId: string;
     isEnabled: boolean;
@@ -218,7 +218,7 @@ export interface UserMFAProfile {
         backupMethodEnabled: boolean;
         securityNotifications: boolean;
     };
-}
+
 export declare const TOTPConfigurationSchema: z.ZodObject<{
     id: z.ZodString;
     userId: z.ZodString;
@@ -402,36 +402,37 @@ export declare const MFA_DATABASE_TABLES: {
     readonly MFA_RATE_LIMITS: "mfa_rate_limits";
     readonly MFA_SECURITY_EVENTS: "mfa_security_events";
 };
+
 export interface MFAEnrollmentRequest {
     methodType: MFAMethodType;
     displayName: string;
     emailAddress?: string;
     phoneNumber?: string;
-}
+
 export interface MFAEnrollmentResponse {
     configurationId: string;
     methodType: MFAMethodType;
     enrollmentData?: TOTPEnrollmentData;
     requiresVerification: boolean;
     expiresAt: Date;
-}
+
 export interface MFAVerificationRequest {
     configurationId: string;
     code: string;
     backupCode?: boolean;
-}
+
 export interface MFAVerificationResponse {
     success: boolean;
     result: MFAVerificationResult;
     remainingAttempts?: number;
     lockoutDuration?: number;
     nextMethodSuggested?: MFAMethodType;
-}
+
 export interface MFAListResponse {
     configurations: BaseMFAConfiguration[];
     profile: UserMFAProfile;
     availableBackupCodes: number;
-}
+
 export declare const MFA_CONSTANTS: {
     readonly TOTP: {
         readonly SECRET_LENGTH: 32;

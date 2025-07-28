@@ -119,8 +119,8 @@ describe('API Permission Assignment System', () => {
             permissionId: permission.permissionId,
             type: ApiPermissionType.ENDPOINT_ACCESS,
             action: ApiPermissionAction.READ
-          })
-        })
+  }
+  }
       );
     });
 
@@ -218,8 +218,8 @@ describe('API Permission Assignment System', () => {
             assignmentId: assignment.assignmentId,
             userId,
             permissionId: testPermission.permissionId
-          })
-        })
+  }
+  }
       );
     });
 
@@ -282,7 +282,7 @@ describe('API Permission Assignment System', () => {
           'non-existent-permission',
           'admin-456',
           { reason: 'Test' }
-        )
+
       ).rejects.toThrow('Permission non-existent-permission not found');
     });
 
@@ -298,8 +298,7 @@ describe('API Permission Assignment System', () => {
           {
             reason: 'Test',
             expiresAt: futureDate
-          }
-        )
+  }
       ).rejects.toThrow('Expiration date must be in the future');
     });
 
@@ -328,8 +327,8 @@ describe('API Permission Assignment System', () => {
           details: expect.objectContaining({
             assignmentId: assignment.assignmentId,
             reason: revokeReason
-          })
-        })
+  }
+  }
       );
     });
 
@@ -360,7 +359,7 @@ describe('API Permission Assignment System', () => {
           assignment.assignmentId,
           'admin-789',
           'Second revocation'
-        )
+
       ).rejects.toThrow('is already revoked');
     });
   });
@@ -593,8 +592,8 @@ describe('API Permission Assignment System', () => {
             roleId: role.roleId,
             name: 'Test API Role',
             category: 'custom'
-          })
-        })
+  }
+  }
       );
     });
 
@@ -676,8 +675,8 @@ describe('API Permission Assignment System', () => {
             roleId: role.roleId,
             roleName: role.name,
             assignedPermissions: 2
-          })
-        })
+  }
+  }
       );
     });
 
@@ -807,7 +806,7 @@ describe('API Permission Assignment System', () => {
           testPermission.permissionId,
           'admin-456',
           { reason: `Concurrent assignment for ${userId}` }
-        )
+
       );
 
       const assignments = await Promise.all(assignmentPromises);
@@ -913,7 +912,7 @@ describe('API Permission Assignment System', () => {
             type: ApiPermissionType.API_KEY_MANAGEMENT,
             action: ApiPermissionAction.READ,
             resource: 'api_keys'
-          })
+  }
         );
       }
       

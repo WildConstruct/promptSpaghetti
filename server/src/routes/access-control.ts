@@ -7,14 +7,17 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
+}
 interface RouteContext {
   db: DatabaseService;
   redis: RedisService;
   auditService: AuditService;
   accessControlManager: AccessControlManager;
 }
+}
 
 // Request type definitions
+}
 interface CreateRoleRequest {
   Body: {
     name: string;
@@ -24,23 +27,27 @@ interface CreateRoleRequest {
       resource: string;
       scope: string;
       constraints?: any[];
+}
     }>;
     parentRoles?: string[];
   };
 }
 
+}
 interface AssignRoleRequest {
   Body: {
     userId: string;
     roleId: string;
     expiresAt?: string;
     conditions?: any[];
+}
   };
   Params: {
     userId: string;
   };
 }
 
+}
 interface CreatePolicyRequest {
   Body: {
     name: string;
@@ -48,11 +55,13 @@ interface CreatePolicyRequest {
     rules: Array<{
       condition: any;
       action: string;
+}
     }>;
     priority: number;
   };
 }
 
+}
 interface AccessRequestSubmission {
   Body: {
     keyId: string;
@@ -60,14 +69,17 @@ interface AccessRequestSubmission {
     justification: string;
     requestedDuration?: number;
     urgency: 'low' | 'medium' | 'high' | 'critical';
+}
   };
 }
 
+}
 interface ApproveAccessRequest {
   Body: {
     approved: boolean;
     comments?: string;
     conditions?: any[];
+}
   };
   Params: {
     requestId: string;
@@ -78,6 +90,7 @@ export async function accessControlRoutes(
   fastify: FastifyInstance,
   context: RouteContext
 ): Promise<void> {
+
   const { accessControlManager, auditService } = context;
 
   // Middleware for authentication and authorization
@@ -163,7 +176,7 @@ export async function accessControlRoutes(
                 constraints: { type: 'array' }
               }
             }
-          },
+  }
           parentRoles: {
             type: 'array',
             items: { type: 'string' }
@@ -226,7 +239,7 @@ export async function accessControlRoutes(
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['roleId'],
@@ -423,7 +436,7 @@ export async function accessControlRoutes(
         properties: {
           requestId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['approved'],
@@ -496,6 +509,7 @@ async function checkPermission(
   resource: string,
   accessControlManager: AccessControlManager
 ): Promise<boolean> {
+
   try {
     // This would integrate with the access control manager
     // For now, simplified check
@@ -507,6 +521,7 @@ async function checkPermission(
 }
 
 async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
+
   let whereClause = 'WHERE 1=1';
   const params: any[] = [];
   let paramIndex = 1;
@@ -556,6 +571,7 @@ async function getRoles(query: any, db: DatabaseService): Promise<Role[]> {
 }
 
 async function getPolicies(db: DatabaseService): Promise<AccessPolicy[]> {
+
   const result = await db.query(`
     SELECT * FROM access_control_policies 
     ORDER BY priority DESC, name
@@ -580,6 +596,7 @@ async function getAccessRequests(
   query: any,
   db: DatabaseService
 ): Promise<AccessRequest[]> {
+
   let whereClause = 'WHERE 1=1';
   const params: any[] = [];
   let paramIndex = 1;
@@ -628,6 +645,7 @@ async function processAccessRequestApproval(
   conditions?: any[],
   context?: RouteContext
 ): Promise<any> {
+
   if (!context) throw new Error('Context required');
   
   const { db, accessControlManager, auditService } = context;
@@ -678,6 +696,7 @@ async function processAccessRequestApproval(
 }
 
 async function getAccessPatternAnalytics(query: any, db: DatabaseService): Promise<any> {
+
   // This would generate analytics from the access control audit log
   const result = await db.query(`
     SELECT 

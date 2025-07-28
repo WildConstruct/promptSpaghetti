@@ -1,5 +1,6 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
+}
 export interface PolicyUpdateRequest {
     requestId: string;
     policyId: string;
@@ -21,6 +22,8 @@ export interface PolicyUpdateRequest {
     submittedAt: Date;
     metadata: Record<string, any>;
 }
+}
+}
 export interface PolicyChange {
     changeId: string;
     changeType: ChangeType;
@@ -32,6 +35,8 @@ export interface PolicyChange {
     affectedUsers: string[];
     breakingChange: boolean;
 }
+}
+}
 export interface ImpactAssessment {
     userImpact: UserImpact;
     systemImpact: SystemImpact;
@@ -39,6 +44,8 @@ export interface ImpactAssessment {
     riskAssessment: RiskAssessment;
     mitigationStrategies: string[];
     rollbackPlan: string;
+}
+}
 }
 export interface UserImpact {
     affectedUserCount: number;
@@ -48,6 +55,8 @@ export interface UserImpact {
     trainingRequired: boolean;
     communicationPlan: string;
 }
+}
+}
 export interface SystemImpact {
     affectedSystems: string[];
     configurationChanges: string[];
@@ -56,6 +65,8 @@ export interface SystemImpact {
     performanceImpact: PerformanceImpact;
     securityImplications: string[];
 }
+}
+}
 export interface ComplianceImpact {
     regulatoryFrameworks: string[];
     complianceRequirements: string[];
@@ -63,12 +74,16 @@ export interface ComplianceImpact {
     reportingChanges: string[];
     certificationImpacts: string[];
 }
+}
+}
 export interface RiskAssessment {
     riskLevel: RiskLevel;
     identifiedRisks: Risk[];
     mitigationMeasures: string[];
     residualRisk: RiskLevel;
     acceptanceCriteria: string[];
+}
+}
 }
 export interface Risk {
     riskId: string;
@@ -79,12 +94,16 @@ export interface Risk {
     severity: RiskSeverity;
     mitigation: string;
 }
+}
+}
 export interface PerformanceImpact {
     expectedLoadIncrease: number;
     storageRequirements: number;
     processingOverhead: number;
     networkImpact: string;
     scalabilityConsiderations: string[];
+}
+}
 }
 export interface ReviewRequirement {
     reviewType: ReviewType;
@@ -94,12 +113,16 @@ export interface ReviewRequirement {
     dependencies: string[];
     deadline: Date;
 }
+}
+}
 export interface ApprovalWorkflow {
     workflowId: string;
     stages: ApprovalStage[];
     currentStageIndex: number;
     escalationRules: EscalationRule[];
     timeoutSettings: TimeoutSettings;
+}
+}
 }
 export interface ApprovalStage {
     stageId: string;
@@ -113,6 +136,8 @@ export interface ApprovalStage {
     completedAt?: Date;
     conditions: string[];
 }
+}
+}
 export interface Approver {
     approverId: string;
     approverRole: string;
@@ -122,17 +147,23 @@ export interface Approver {
     decidedAt?: Date;
     qualifications: string[];
 }
+}
+}
 export interface EscalationRule {
     condition: EscalationCondition;
     action: EscalationAction;
     escalateTo: string[];
     delayHours: number;
 }
+}
+}
 export interface TimeoutSettings {
     stageTimeoutHours: number;
     workflowTimeoutDays: number;
     reminderIntervalHours: number;
     autoEscalate: boolean;
+}
+}
 }
 export interface PolicyVersion {
     versionId: string;
@@ -151,6 +182,8 @@ export interface PolicyVersion {
     previousVersion?: string;
     metadata: Record<string, any>;
 }
+}
+}
 export interface PolicyDeployment {
     deploymentId: string;
     policyVersionId: string;
@@ -164,6 +197,8 @@ export interface PolicyDeployment {
     rollbackVersion?: string;
     validationResults: ValidationResult[];
 }
+}
+}
 export interface ValidationResult {
     validationType: ValidationType;
     status: ValidationStatus;
@@ -172,11 +207,15 @@ export interface ValidationResult {
     validatedAt: Date;
     validatorId: string;
 }
+}
+}
 export interface DeploymentSchedule {
     phases: DeploymentPhase[];
     rollbackTriggers: string[];
     successCriteria: string[];
     monitoringPeriod: number;
+}
+}
 }
 export interface DeploymentPhase {
     phaseId: string;
@@ -187,6 +226,8 @@ export interface DeploymentPhase {
     rollbackThreshold: number;
     validationChecks: string[];
 }
+}
+}
 export interface RolloutStrategy {
     strategyType: RolloutType;
     parameters: Record<string, any>;
@@ -194,11 +235,15 @@ export interface RolloutStrategy {
     blueGreenConfig?: BlueGreenConfig;
     featureFlagConfig?: FeatureFlagConfig;
 }
+}
+}
 export interface BlueGreenConfig {
     environmentA: string;
     environmentB: string;
     switchoverCriteria: string[];
     rollbackTime: number;
+}
+}
 }
 export interface FeatureFlagConfig {
     flagName: string;
@@ -206,11 +251,14 @@ export interface FeatureFlagConfig {
     rolloutRules: RolloutRule[];
     killSwitchEnabled: boolean;
 }
+}
+}
 export interface RolloutRule {
     ruleId: string;
     condition: string;
     percentage: number;
     userSegments: string[];
+}
 }
 export declare enum PolicyType {
     PRIVACY_POLICY = "PRIVACY_POLICY",

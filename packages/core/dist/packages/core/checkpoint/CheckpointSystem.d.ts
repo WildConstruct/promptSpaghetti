@@ -24,7 +24,7 @@ export interface CheckpointMetadata {
     timestamp: Date;
     version: string;
     parentCheckpointId?: string;
-    tags: string[];
+    tags: string;
     size: number;
     compressionRatio: number;
     isAutomated: boolean;
@@ -41,7 +41,7 @@ export interface CheckpointData {
     state: {
         graphState: any;
         variables: Record<string, any>;
-        executionHistory: any[];
+        executionHistory: any;
         nodeStates: Record<string, any>;
         settings: Record<string, any>;
     };
@@ -50,7 +50,7 @@ export interface CheckpointData {
         stateHash: string;
         integrityScore: number;
         isValid: boolean;
-        validationErrors: string[];
+        validationErrors: string;
     };
 }
 export interface CheckpointPolicy {
@@ -113,70 +113,6 @@ export declare class CheckpointSystem extends EventEmitter {
     private isRecovering;
     private performanceMetrics;
     constructor(policy?: Partial<CheckpointPolicy>);
-    createCheckpoint(state: any, metadata?: Partial<CheckpointMetadata>, options?: {
-        compress?: boolean;
-        validate?: boolean;
-    }): Promise<string>;
-    restoreCheckpoint(checkpointId: string, options?: Partial<RecoveryOptions>): Promise<any>;
-    generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff>;
-    listCheckpoints(filters?: {
-        tags?: string[];
-        dateRange?: {
-            start: Date;
-            end: Date;
-        };
-        creator?: string;
-        isAutomated?: boolean;
-    }): CheckpointMetadata[];
-    deleteCheckpoint(checkpointId: string, force?: boolean): Promise<boolean>;
-    getPerformanceMetrics(): {
-        totalCheckpoints: number;
-        totalStorageUsed: number;
-        averageCompressionRatio: number;
-        averageCreateTime: number;
-        averageRestoreTime: number;
-        compressionSavings: number;
-    };
-    setAutoSave(enabled: boolean, interval?: number): void;
-    updatePolicy(policy: Partial<CheckpointPolicy>): void;
-    destroy(): void;
-    private initializeAutoSave;
-    private stopAutoSave;
-    private performAutoSave;
-    private shouldCreateAutoSave;
-    private cleanupAutoSaves;
-    private cleanupCheckpoints;
-    private compressCheckpoint;
-    private decompressCheckpoint;
-    private validateCheckpoint;
-    private compareObjects;
-    private extractAllPaths;
-    private calculateImpactScore;
-    private findPreviousCheckpoint;
-    private findDependentCheckpoints;
-    private updatePerformanceMetrics;
-    private calculateAverageCompressionRatio;
-    private initializeCompressionWorker;
-    private getCurrentState;
-    private applyState;
-    private deepClone;
-    private simulateCompression;
-    private generateChecksum;
-    private generateHash;
+    const checkpointData: CheckpointData;
 }
-export declare class CheckpointManager {
-    private checkpointSystem;
-    private currentSessionId;
-    constructor(policy?: Partial<CheckpointPolicy>);
-    saveProgress(name?: string): Promise<string>;
-    loadProgress(checkpointId: string): Promise<void>;
-    undoLastChange(): Promise<void>;
-    getRecentSaves(limit?: number): CheckpointMetadata[];
-    private getCurrentState;
-}
-declare const _default: {
-    CheckpointSystem: typeof CheckpointSystem;
-    CheckpointManager: typeof CheckpointManager;
-};
-export default _default;
 //# sourceMappingURL=CheckpointSystem.d.ts.map

@@ -18,6 +18,7 @@ import {
 } from '../auth/services/ApiPermissionAssignmentService';
 
 // Request/Response Types
+}
 interface CreatePermissionRequest {
   name: string;
   description?: string;
@@ -27,7 +28,9 @@ interface CreatePermissionRequest {
   resource: string;
   conditions?: any[];
 }
+}
 
+}
 interface AssignPermissionRequest {
   userId: string;
   permissionId: string;
@@ -38,16 +41,20 @@ interface AssignPermissionRequest {
     teamId?: string;
     apiKeyId?: string;
     resourceId?: string;
+}
   };
   conditions?: any[];
   reason: string;
   requiresApproval?: boolean;
 }
 
+}
 interface RevokePermissionRequest {
   reason: string;
 }
+}
 
+}
 interface CreateRoleRequest {
   name: string;
   description?: string;
@@ -55,7 +62,9 @@ interface CreateRoleRequest {
   permissions: string[];
   scope: ApiPermissionScope;
 }
+}
 
+}
 interface AssignRoleRequest {
   userId: string;
   roleId: string;
@@ -64,10 +73,12 @@ interface AssignRoleRequest {
     organizationId?: string;
     teamId?: string;
     resourceId?: string;
+}
   };
   reason: string;
 }
 
+}
 interface CheckPermissionRequest {
   userId: string;
   type: ApiPermissionType;
@@ -80,9 +91,11 @@ interface CheckPermissionRequest {
     apiKeyId?: string;
     resourceId?: string;
     metadata?: Record<string, any>;
+}
   };
 }
 
+}
 interface GetPermissionsQuery {
   type?: ApiPermissionType;
   scope?: ApiPermissionScope;
@@ -91,7 +104,9 @@ interface GetPermissionsQuery {
   page?: number;
   limit?: number;
 }
+}
 
+}
 interface GetAssignmentsQuery {
   userId?: string;
   permissionId?: string;
@@ -101,13 +116,16 @@ interface GetAssignmentsQuery {
   page?: number;
   limit?: number;
 }
+}
 
+}
 interface GetAnalyticsQuery {
   startDate: string;
   endDate: string;
   userId?: string;
   type?: ApiPermissionType;
   includeDetails?: boolean;
+}
 }
 
 /**
@@ -323,7 +341,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           assignmentId: { type: 'string' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['reason'],
@@ -367,7 +385,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         properties: {
           userId: { type: 'string' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
@@ -583,7 +601,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
         data: {
           assignments,
           assignmentCount: assignments.length
-        },
+  }
         message: 'Role assigned successfully'
       };
     } catch (error) {
@@ -725,14 +743,14 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           activeAssignments: analytics.summary.activeAssignments,
           uniqueUsers: analytics.summary.uniqueUsers,
           recentActivityCount: recentActivities.length
-        },
+  }
         breakdown: analytics.breakdown,
         security: {
           overPrivilegedUsers: analytics.security.overPrivilegedUsers.length,
           unusedPermissions: analytics.security.unusedPermissions.length,
           expiringAssignments: analytics.security.expiringAssignments.length,
           suspiciousActivity: analytics.security.suspiciousActivity.length
-        },
+  }
         recentActivity: recentActivities.slice(0, 5),
         recommendations: analytics.recommendations.slice(0, 3),
         trends: {
@@ -769,7 +787,7 @@ export async function apiPermissionAssignmentRoutes(fastify: FastifyInstance) {
           database: true,
           auditService: true,
           rbacIntegration: true
-        },
+  }
         metrics: {
           memoryUsage: process.memoryUsage(),
           loadAverage: require('os').loadavg()

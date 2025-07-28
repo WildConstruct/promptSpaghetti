@@ -49,10 +49,4 @@ export { default as ComplianceMonitor } from '../services/ComplianceMonitor';
 export { default as AdaptiveThrottlingRules } from './AdaptiveThrottlingRules';
 export { default as ComplianceSecurityDashboard } from './dashboard/ComplianceSecurityDashboard';
 export { default as SecurityDashboardWorkflow } from './dashboard/SecurityDashboardWorkflow';
-export declare const severityScores: {
-    low: number;
-    medium: number;
-    high: number;
-    critical: number;
-};
 //# sourceMappingURL=index.d.ts.map

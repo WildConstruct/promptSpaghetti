@@ -30,13 +30,7 @@ export interface NotificationPreferences {
     email_enabled: boolean;
     push_enabled: boolean;
     in_app_enabled: boolean;
-    type_preferences: {
-        [key in NotificationType]?: {
-            in_app?: boolean;
-            email?: boolean;
-            push?: boolean;
-        };
-    };
+    type_preferences: {};
     quiet_hours: {
         enabled: boolean;
         start: string;
@@ -53,7 +47,7 @@ export interface NotificationTemplate {
     name: string;
     title_template: string;
     message_template: string;
-    variables: string[];
+    variables: string;
     default_priority: NotificationPriority;
     created_at: string;
     updated_at: string;
@@ -90,7 +84,7 @@ export interface NotificationEvent {
     timestamp: string;
 }
 export interface NotificationListResponse {
-    notifications: Notification[];
+    notifications: Notification;
     total: number;
     unread_count: number;
     has_more: boolean;
@@ -108,7 +102,7 @@ export interface NotificationCreateRequest {
     metadata?: Record<string, any>;
 }
 export interface UseNotificationsReturn {
-    notifications: Notification[];
+    notifications: Notification;
     unreadCount: number;
     loading: boolean;
     error: Error | null;

@@ -2,6 +2,7 @@
  * Epic 9.2.1 - Workspace Types
  * TypeScript types for workspace functionality (client-side)
  */
+
 export interface Workspace {
     id: string;
     owner_id: string;
@@ -11,17 +12,20 @@ export interface Workspace {
     created_at: Date;
     updated_at: Date;
     archived_at?: Date | null;
-}
+
+
 export interface CreateWorkspace {
     name: string;
     description?: string;
     settings?: Record<string, any>;
-}
+
+
 export interface UpdateWorkspace {
     name?: string;
     description?: string;
     settings?: Record<string, any>;
-}
+
+
 export interface Project {
     id: string;
     workspace_id: string;
@@ -32,19 +36,22 @@ export interface Project {
     created_by: string;
     created_at: Date;
     updated_at: Date;
-}
+
+
 export interface CreateProject {
     workspace_id: string;
     name: string;
     description?: string;
     metadata?: Record<string, any>;
-}
+
+
 export interface UpdateProject {
     name?: string;
     description?: string;
     status?: Project['status'];
     metadata?: Record<string, any>;
-}
+
+
 export interface Resource {
     id: string;
     project_id: string;
@@ -60,7 +67,8 @@ export interface Resource {
     created_by: string;
     created_at: Date;
     updated_at: Date;
-}
+
+
 export interface CreateResource {
     project_id: string;
     name: string;
@@ -71,7 +79,8 @@ export interface CreateResource {
     content_data?: Record<string, any>;
     size_bytes?: number;
     checksum?: string;
-}
+
+
 export interface ACLRole {
     id: string;
     workspace_id: string;
@@ -81,7 +90,8 @@ export interface ACLRole {
     is_system_role: boolean;
     created_at: Date;
     updated_at: Date;
-}
+
+
 export interface UserMembership {
     id: string;
     user_id: string;
@@ -90,7 +100,8 @@ export interface UserMembership {
     invited_by?: string;
     joined_at: Date;
     last_active_at: Date;
-}
+
+
 export interface ActivityEvent {
     id: string;
     workspace_id: string;
@@ -101,7 +112,8 @@ export interface ActivityEvent {
     event_data: Record<string, any>;
     aggregation_key?: string;
     created_at: Date;
-}
+
+
 export interface Comment {
     id: string;
     resource_id: string;
@@ -117,7 +129,8 @@ export interface Comment {
     resolved_at?: Date;
     created_at: Date;
     updated_at: Date;
-}
+
+
 export interface CreateComment {
     resource_id: string;
     parent_id?: string;
@@ -125,11 +138,13 @@ export interface CreateComment {
     content_markdown: string;
     target_type?: Comment['target_type'];
     target_data?: Record<string, any>;
-}
+
+
 export interface UpdateComment {
     content_markdown?: string;
     status?: Comment['status'];
-}
+
+
 export interface Notification {
     id: string;
     user_id: string;
@@ -143,25 +158,26 @@ export interface Notification {
     delivery_channel: 'in_app' | 'email' | 'push';
     read_at?: Date;
     delivered_at: Date;
-}
+
+
 export interface WorkspaceWithMembership extends Workspace {
     membership?: UserMembership;
     role_permissions?: number;
-}
+
 export interface ProjectWithStats extends Project {
     resource_count?: number;
     comment_count?: number;
     last_activity?: Date;
-}
+
 export interface CommentWithReplies extends Comment {
     replies?: CommentWithReplies[];
     author_name?: string;
     author_avatar?: string;
-}
+
 export interface ActivityEventWithActorInfo extends ActivityEvent {
     actor_name?: string;
     actor_avatar?: string;
-}
+
 export interface PaginationMeta {
     page: number;
     limit: number;
@@ -169,33 +185,37 @@ export interface PaginationMeta {
     total_pages: number;
     has_next: boolean;
     has_prev: boolean;
-}
+
+
 export interface PaginatedResponse<T> {
     data: T[];
     pagination: PaginationMeta;
-}
+
 export interface WorkspaceFilter {
     search?: string;
     archived?: boolean;
-}
+
+
 export interface ProjectFilter {
     search?: string;
     status?: Project['status'][];
     created_by?: string;
-}
+
+
 export interface ActivityEventFilter {
     project_id?: string;
     actor_id?: string;
     event_types?: string[];
     from_date?: Date;
     to_date?: Date;
-}
+
+
 export interface CommentFilter {
     resource_id?: string;
     author_id?: string;
     status?: Comment['status'][];
     target_type?: Comment['target_type'];
-}
+
 export declare const PERMISSIONS: {
     readonly WORKSPACE_READ: number;
     readonly WORKSPACE_WRITE: number;

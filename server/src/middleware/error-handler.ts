@@ -16,6 +16,7 @@ import {
 } from '../types/errors';
 import { logger } from '../utils/logger';
 
+}
 interface ErrorResponse {
   error: {
     code: string;
@@ -30,16 +31,19 @@ interface ErrorResponse {
       endpoint?: string;
       method?: string;
       requestId?: string;
+}
     };
   };
 }
 
+}
 interface ErrorMetrics {
   totalErrors: number;
   errorsByCategory: Record<ErrorCategory, number>;
   errorsBySeverity: Record<ErrorSeverity, number>;
   errorsByEndpoint: Record<string, number>;
   lastReset: Date;
+}
 }
 
 class ErrorHandlerService {
@@ -48,8 +52,7 @@ class ErrorHandlerService {
     errorsByCategory: Object.values(ErrorCategory).reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {} as Record<ErrorCategory, number>),
     errorsBySeverity: Object.values(ErrorSeverity).reduce((acc, sev) => ({ ...acc, [sev]: 0 }), {} as Record<ErrorSeverity, number>),
     errorsByEndpoint: {},
-    lastReset: new Date()
-  };
+    lastReset: new Date(};
 
   private static instance: ErrorHandlerService;
 
@@ -70,8 +73,7 @@ class ErrorHandlerService {
       errorsByCategory: Object.values(ErrorCategory).reduce((acc, cat) => ({ ...acc, [cat]: 0 }), {} as Record<ErrorCategory, number>),
       errorsBySeverity: Object.values(ErrorSeverity).reduce((acc, sev) => ({ ...acc, [sev]: 0 }), {} as Record<ErrorSeverity, number>),
       errorsByEndpoint: {},
-      lastReset: new Date()
-    };
+      lastReset: new Date(};
   }
 
   private updateMetrics(error: BaseError, endpoint?: string): void {
@@ -92,8 +94,7 @@ class ErrorHandlerService {
       method: request.method,
       userAgent: request.headers['user-agent'] as string,
       ip: request.ip,
-      timestamp: new Date().toISOString()
-      // Don't include sensitive data like authorization headers
+      timestamp: new Date().toISOString(// Don't include sensitive data like authorization headers
     };
   }
 

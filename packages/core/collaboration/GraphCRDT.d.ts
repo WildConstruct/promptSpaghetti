@@ -21,6 +21,7 @@ import { Graph } from '../graphSchema';
 /**
  * CRDT representation of a graph node
  */
+
 export interface GraphNodeCRDT {
     id: string;
     type: string;
@@ -37,10 +38,10 @@ export interface GraphNodeCRDT {
         created: string;
         createdBy: string;
     };
-}
 /**
  * CRDT representation of a graph edge
  */
+
 export interface GraphEdgeCRDT {
     id: string;
     sourceNodeId: string;
@@ -56,10 +57,10 @@ export interface GraphEdgeCRDT {
         createdBy: string;
         [key: string]: any;
     };
-}
 /**
  * Operation record for history tracking
  */
+
 export interface OperationRecord {
     operationId: string;
     type: string;
@@ -70,7 +71,6 @@ export interface OperationRecord {
     applied: boolean;
     reverted: boolean;
     conflicted: boolean;
-}
 /**
  * CRDT-based graph state manager with Yjs integration
  */
@@ -208,6 +208,6 @@ export declare class GraphCRDT {
      * Dispose of the CRDT instance
      */
     dispose(): void;
-}
+
 export default GraphCRDT;
 //# sourceMappingURL=GraphCRDT.d.ts.map

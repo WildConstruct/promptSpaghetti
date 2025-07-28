@@ -12,17 +12,21 @@ import { SessionService } from '../auth/services/SessionService';
 import { AuditService } from '../auth/services/AuditService';
 
 // Request/Response schemas
+}
 interface GetConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
+}
   };
 }
 
+}
 interface UpdateConfigRequest {
   Params: {
     scope: 'global' | 'organization' | 'user';
     targetId?: string;
+}
   };
   Body: {
     config: Partial<SessionLimitConfig>;
@@ -30,6 +34,7 @@ interface UpdateConfigRequest {
   };
 }
 
+}
 interface GetMetricsRequest {
   Querystring: {
     timeRange?: string;
@@ -37,9 +42,11 @@ interface GetMetricsRequest {
     endDate?: string;
     userId?: string;
     organizationId?: string;
+}
   };
 }
 
+}
 interface GetViolationsRequest {
   Querystring: {
     userId?: string;
@@ -47,21 +54,26 @@ interface GetViolationsRequest {
     severity?: string;
     limit?: number;
     resolved?: boolean;
+}
   };
 }
 
+}
 interface ResolveViolationRequest {
   Params: {
     violationId: string;
+}
   };
   Body: {
     resolution: string;
   };
 }
 
+}
 interface TerminateSessionRequest {
   Params: {
     sessionId: string;
+}
   };
   Body: {
     reason: string;
@@ -70,9 +82,11 @@ interface TerminateSessionRequest {
   };
 }
 
+}
 interface OverrideUserLimitsRequest {
   Params: {
     userId: string;
+}
   };
   Body: {
     overrides: Partial<SessionLimitConfig>;
@@ -285,7 +299,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
         filters: {
           userId: query.userId,
           organizationId: query.organizationId
-        },
+  }
         ...additionalMetrics
       });
       
@@ -407,7 +421,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
               }
             };
           }
-        })
+  }
       );
       
       reply.send({
@@ -468,7 +482,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
             terminatedSessionId: sessionId,
             terminatedUserId: session.userId,
             reason
-          },
+  }
           severity: 'info'
         });
         
@@ -564,7 +578,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           graceful,
           gracePeriodMinutes,
           results
-        },
+  }
         severity: 'info'
       });
       
@@ -650,7 +664,7 @@ export async function sessionLimitsRoutes(fastify: FastifyInstance) {
           pendingViolations: violations.length,
           averageCheckTime: metrics.performance.averageCheckTime,
           cacheHitRate: metrics.performance.cacheHitRate
-        },
+  }
         sessionBreakdown: metrics.activeSessionsByType,
         recentViolations: violations.slice(0, 5),
         violationTrends: metrics.violations.byType,

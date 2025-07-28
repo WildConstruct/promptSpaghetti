@@ -31,7 +31,7 @@ const CreateDeploymentApprovalSchema = z.object({
     security_scan_status: z.enum(['passed', 'warning', 'failed']),
     performance_regression: z.number().default(0),
     deployment_type: z.enum(['github_actions', 'manual', 'auto']).default('github_actions')
-  })
+  }
 });
 
 const GetDeploymentApprovalsSchema = z.object({
@@ -90,7 +90,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
                   required_approvals: { type: 'number' }
                 }
               }
-            },
+  }
             total: { type: 'number' },
             hasMore: { type: 'boolean' }
           }
@@ -120,7 +120,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
                 'weight', ac.weight,
                 'description', ac.description,
                 'assigned_reviewers', ac.assigned_reviewers
-              )
+
             END
           ) as criteria,
           JSON_GROUP_ARRAY(
@@ -133,7 +133,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
                 'decision', a.decision,
                 'comments', a.comments,
                 'reviewed_at', a.reviewed_at
-              )
+
             END
           ) as approvals
         FROM approval_requests ar
@@ -267,7 +267,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
             security_scan_status: metadata.security_scan_status || 'unknown',
             performance_regression: metadata.performance_regression || 0,
             deployment_type: metadata.deployment_type || 'github_actions'
-          },
+  }
           criteria,
           approvals,
           current_approvals: row.current_approvals || 0,
@@ -395,10 +395,10 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
             status: requestData.metadata.security_scan_status,
             criticalIssues: 0, // Would be extracted from scan results
             highIssues: 0
-          },
+  }
           performanceRegression: {
             percent: requestData.metadata.performance_regression
-          },
+  }
           breakingChanges: requestData.metadata.breaking_changes,
           changedFiles: requestData.metadata.changed_files,
           linesChanged: requestData.metadata.lines_changed
@@ -615,7 +615,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
       }
     }
@@ -637,7 +637,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
                 'required', ac.required,
                 'description', ac.description,
                 'assigned_reviewers', JSON(ac.assigned_reviewers)
-              )
+
             END
           ) as criteria,
           JSON_GROUP_ARRAY(
@@ -650,7 +650,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
                 'decision', a.decision,
                 'comments', a.comments,
                 'reviewed_at', a.reviewed_at
-              )
+
             END
           ) as approvals
         FROM approval_requests ar
@@ -726,9 +726,9 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
         type: 'object',
         properties: {
           requestId: { type: 'string' }
-        },
+  }
         required: ['requestId']
-      },
+  }
       body: {
         type: 'object',
         properties: {
@@ -737,7 +737,7 @@ export default async function deploymentApprovalRoutes(fastify: FastifyInstance)
           comments: { type: 'string' },
           reviewer_name: { type: 'string' },
           reviewer_email: { type: 'string' }
-        },
+  }
         required: ['criterion_type', 'decision', 'reviewer_name', 'reviewer_email']
       }
     }

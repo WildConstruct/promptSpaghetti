@@ -18,6 +18,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { Database } from '../database';
 
 // Request/Response type definitions
+}
 interface CreateReviewRequest {
   Body: {
     reviewType: string;
@@ -30,16 +31,20 @@ interface CreateReviewRequest {
     dueDate?: string;
     assignToReviewer?: string;
     metadata?: any;
+}
   };
 }
 
+}
 interface AssignReviewRequest {
   Body: {
     reviewerId: string;
     assignmentType?: 'manual' | 'automatic';
+}
   };
 }
 
+}
 interface SubmitDecisionRequest {
   Body: {
     decision: 'approve' | 'approve_with_conditions' | 'reject' | 'return_for_revision' | 'escalate' | 'defer' | 'request_more_info';
@@ -50,26 +55,32 @@ interface SubmitDecisionRequest {
       score: number;
       passed: boolean;
       notes?: string;
+}
     }>;
     recommendedActions?: string[];
   };
 }
 
+}
 interface AddNoteRequest {
   Body: {
     noteType: 'observation' | 'question' | 'concern' | 'recommendation' | 'clarification';
     content: string;
     visibility: 'reviewers_only' | 'internal' | 'public' | 'submitter_visible';
     replyTo?: string;
+}
   };
 }
 
+}
 interface EscalateReviewRequest {
   Body: {
     reason: string;
+}
   };
 }
 
+}
 interface GetReviewsRequest {
   Querystring: {
     status?: string;
@@ -81,29 +92,36 @@ interface GetReviewsRequest {
     page?: number;
     limit?: number;
     search?: string;
+}
   };
 }
 
+}
 interface GetAnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     reviewType?: string;
     granularity?: 'day' | 'week' | 'month';
+}
   };
 }
 
+}
 interface ReassignReviewRequest {
   Body: {
     newReviewerId: string;
     reason: string;
+}
   };
 }
 
+}
 interface RebalanceWorkloadRequest {
   Body: {
     reviewType?: string;
     targetUtilization?: number;
+}
   };
 }
 
@@ -164,7 +182,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                 'enforcement_appeal', 'bulk_operation', 'emergency_action', 'compliance_audit'
               ],
               description: 'Type of review to create'
-            },
+  }
             sourceSystem: {
               type: 'string',
               enum: [
@@ -173,7 +191,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                 'compliance_system'
               ],
               description: 'Source system that triggered the review'
-            },
+  }
             sourceId: { type: 'string', description: 'ID of the item being reviewed in the source system' },
             title: { type: 'string', description: 'Review title' },
             description: { type: 'string', description: 'Review description' },
@@ -182,12 +200,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['low', 'medium', 'high', 'urgent', 'emergency'],
               description: 'Review priority level'
-            },
+  }
             dueDate: { type: 'string', format: 'date-time', description: 'Review due date' },
             assignToReviewer: { type: 'string', description: 'Specific reviewer to assign to' },
             metadata: { type: 'object', description: 'Additional review metadata' }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -196,7 +214,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               reviewId: { type: 'string' },
               review: { type: 'object' }
             }
-          },
+  }
           400: {
             type: 'object',
             properties: {
@@ -206,7 +224,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<CreateReviewRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -267,7 +285,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
             limit: { type: 'number', minimum: 1, maximum: 100, default: 20, description: 'Items per page' },
             search: { type: 'string', description: 'Search query' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -287,7 +305,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<GetReviewsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -355,7 +373,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -363,7 +381,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               review: { type: 'object' }
             }
-          },
+  }
           404: {
             type: 'object',
             properties: {
@@ -372,7 +390,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -423,7 +441,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['reviewerId'],
@@ -436,7 +454,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               description: 'Type of assignment'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -444,7 +462,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               assignment: { type: 'object' }
             }
-          },
+  }
           400: {
             type: 'object',
             properties: {
@@ -454,7 +472,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AssignReviewRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -499,13 +517,13 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         querystring: {
           type: 'object',
           properties: {
             excludeReviewers: { type: 'string', description: 'Comma-separated list of reviewer IDs to exclude' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -516,7 +534,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<{ Params: { reviewId: string }; Querystring: { excludeReviewers?: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -570,7 +588,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['decision', 'confidence', 'reasoning', 'criteriaEvaluations'],
@@ -579,13 +597,13 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['approve', 'approve_with_conditions', 'reject', 'return_for_revision', 'escalate', 'defer', 'request_more_info'],
               description: 'Review decision'
-            },
+  }
             confidence: {
               type: 'number',
               minimum: 0,
               maximum: 100,
               description: 'Confidence in decision (0-100)'
-            },
+  }
             reasoning: { type: 'string', description: 'Reasoning for the decision' },
             criteriaEvaluations: {
               type: 'array',
@@ -598,16 +616,16 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                   passed: { type: 'boolean' },
                   notes: { type: 'string' }
                 }
-              },
+  }
               description: 'Evaluation of review criteria'
-            },
+  }
             recommendedActions: {
               type: 'array',
               items: { type: 'string' },
               description: 'Recommended actions to take'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -618,7 +636,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<SubmitDecisionRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -662,7 +680,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['noteType', 'content', 'visibility'],
@@ -671,16 +689,16 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['observation', 'question', 'concern', 'recommendation', 'clarification'],
               description: 'Type of note'
-            },
+  }
             content: { type: 'string', description: 'Note content' },
             visibility: {
               type: 'string',
               enum: ['reviewers_only', 'internal', 'public', 'submitter_visible'],
               description: 'Note visibility level'
-            },
+  }
             replyTo: { type: 'string', description: 'ID of note being replied to' }
           }
-        },
+  }
         response: {
           201: {
             type: 'object',
@@ -691,7 +709,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<AddNoteRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -735,14 +753,14 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
           }
-        },
+  }
         body: {
           type: 'object',
           required: ['reason'],
           properties: {
             reason: { type: 'string', description: 'Reason for escalation' }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -753,7 +771,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<EscalateReviewRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -809,7 +827,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               description: 'Data granularity'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -820,7 +838,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<GetAnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -867,7 +885,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
@@ -917,7 +935,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               description: 'Target utilization percentage'
             }
           }
-        },
+  }
         response: {
           200: {
             type: 'object',
@@ -928,7 +946,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           }
         }
       }
-    },
+  }
     async (request: FastifyRequest<RebalanceWorkloadRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;

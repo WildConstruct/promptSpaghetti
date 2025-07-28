@@ -4,6 +4,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { NewDeviceDetectionService } from '../services/NewDeviceDetectionService';
 
+}
 interface DetectDeviceRequest {
   deviceFingerprint: string;
   ipAddress?: string;
@@ -13,6 +14,7 @@ interface DetectDeviceRequest {
     city: string;
     latitude?: number;
     longitude?: number;
+}
   };
   metadata?: {
     sessionId?: string;
@@ -20,15 +22,19 @@ interface DetectDeviceRequest {
   };
 }
 
+}
 interface ApproveDeviceRequest {
   deviceFingerprint: string;
   approvalMethod: string;
   verificationCode?: string;
 }
+}
 
+}
 interface RejectDeviceRequest {
   deviceFingerprint: string;
   reason: string;
+}
 }
 
 export async function newDeviceDetectionRoutes(
@@ -439,37 +445,37 @@ export async function newDeviceDetectionRoutes(
           method: 'POST',
           description: 'Detect if a device is new and assess risk',
           auth: 'required'
-        },
+  }
         {
           path: '/device/approve',
           method: 'POST',
           description: 'Approve a new device after verification',
           auth: 'required'
-        },
+  }
         {
           path: '/device/reject',
           method: 'POST',
           description: 'Reject and block a suspicious device',
           auth: 'required'
-        },
+  }
         {
           path: '/device/:fingerprint/verification-status',
           method: 'GET',
           description: 'Check if device needs verification',
           auth: 'required'
-        },
+  }
         {
           path: '/device/recent-new',
           method: 'GET',
           description: 'Get user\'s recent new devices',
           auth: 'required'
-        },
+  }
         {
           path: '/device/admin/detection-stats',
           method: 'GET',
           description: 'Get detection statistics (admin)',
           auth: 'admin required'
-        },
+  }
         {
           path: '/device/admin/multi-device-users',
           method: 'GET',

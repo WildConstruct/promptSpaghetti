@@ -3,6 +3,7 @@
  * Hook for managing replies to a specific comment
  */
 import { Comment } from '../types/workspace';
+
 interface UseCommentRepliesOptions {
     commentId: string;
     userId: string;
@@ -11,7 +12,7 @@ interface UseCommentRepliesOptions {
     enabled?: boolean;
     autoRefresh?: boolean;
     refreshInterval?: number;
-}
+
 export declare function useCommentReplies(options: UseCommentRepliesOptions): {
     replies: Comment[];
     loading: boolean;

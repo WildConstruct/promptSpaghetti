@@ -9,6 +9,7 @@ import { healthMonitoringService, HealthStatus } from './HealthMonitoringService
 import { circuitBreakerService } from './CircuitBreakerService';
 // import { retryService } from './RetryService'; // Unused import removed
 
+}
 export interface SystemMetrics {
   timestamp: number;
   uptime: number;
@@ -19,6 +20,7 @@ export interface SystemMetrics {
     perMinute: number;
     byCategory: Record<ErrorCategory, number>;
     bySeverity: Record<ErrorSeverity, number>;
+}
   };
   requestMetrics: {
     total: number;
@@ -42,6 +44,7 @@ export interface SystemMetrics {
   }>;
 }
 
+}
 export interface AlertRule {
   id: string;
   name: string;
@@ -52,7 +55,9 @@ export interface AlertRule {
   cooldownMs: number; // Minimum time between alerts
   lastTriggered?: number;
 }
+}
 
+}
 export interface Alert {
   id: string;
   ruleId: string;
@@ -63,6 +68,7 @@ export interface Alert {
   metrics: SystemMetrics;
   resolved: boolean;
   resolvedAt?: number;
+}
 }
 
 class OperationalMetricsService extends EventEmitter {
@@ -148,7 +154,7 @@ class OperationalMetricsService extends EventEmitter {
         return Object.values(metrics.circuitBreakerMetrics).some(
           breaker => breaker.state === 'open'
         );
-      },
+  }
       severity: 'high',
       description: 'One or more circuit breakers are open',
       enabled: true,
@@ -162,7 +168,7 @@ class OperationalMetricsService extends EventEmitter {
       condition: (metrics) => {
         const usedMemoryMB = metrics.memoryUsage.heapUsed / 1024 / 1024;
         return usedMemoryMB > 512; // 512 MB threshold
-      },
+  }
       severity: 'medium',
       description: 'Memory usage exceeds 512MB',
       enabled: true,
@@ -220,6 +226,7 @@ class OperationalMetricsService extends EventEmitter {
   }
 
   private async getCpuUsage(): Promise<number> {
+
     // Simple CPU usage approximation
     const startUsage = process.cpuUsage();
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -232,6 +239,7 @@ class OperationalMetricsService extends EventEmitter {
   }
 
   public async collectMetrics(): Promise<SystemMetrics> {
+
     const now = Date.now();
     const currentMinute = Math.floor(now / 60000);
 
@@ -307,7 +315,7 @@ class OperationalMetricsService extends EventEmitter {
         perMinute: totalErrorsThisMinute,
         byCategory: errorsByCategory,
         bySeverity: errorsBySeverity
-      },
+  }
       requestMetrics: {
         total: this.requestCounts.total,
         successful: this.requestCounts.successful,
@@ -316,7 +324,7 @@ class OperationalMetricsService extends EventEmitter {
         p95ResponseTime: Math.round(p95ResponseTime * 100) / 100,
         p99ResponseTime: Math.round(p99ResponseTime * 100) / 100,
         requestsPerSecond: Math.round(requestsPerSecond * 100) / 100
-      },
+  }
       circuitBreakerMetrics,
       healthScore,
       dependencyHealth
@@ -477,4 +485,4 @@ class OperationalMetricsService extends EventEmitter {
 }
 
 // Export singleton instance
-export export default OperationalMetricsService;
+export default OperationalMetricsService;

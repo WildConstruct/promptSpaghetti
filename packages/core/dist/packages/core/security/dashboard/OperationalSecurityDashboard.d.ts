@@ -36,9 +36,9 @@ export interface SecurityAlert {
     timestamp: Date;
     status: 'new' | 'investigating' | 'escalated' | 'resolved' | 'false_positive';
     assignee?: string;
-    affectedAssets: string[];
-    indicators: string[];
-    responseActions: ResponseAction[];
+    affectedAssets: string;
+    indicators: string;
+    responseActions: ResponseAction;
 }
 export interface ResponseAction {
     id: string;
@@ -63,7 +63,7 @@ export interface ThreatIntelligence {
     newIndicators: number;
     activeThreats: number;
     confidence: 'high' | 'medium' | 'low';
-    categories: string[];
+    categories: string;
 }
 export interface OperationalMetrics {
     alerts: {
@@ -94,10 +94,10 @@ export interface OperationalMetrics {
     };
 }
 export interface OperationalSecurityDashboardProps {
-    alerts: SecurityAlert[];
+    alerts: SecurityAlert;
     metrics: OperationalMetrics;
-    systemStatus: SystemStatus[];
-    threatIntel: ThreatIntelligence[];
+    systemStatus: SystemStatus;
+    threatIntel: ThreatIntelligence;
     theme?: DashboardTheme;
     refreshInterval?: number;
     maxAlertsDisplayed?: number;
@@ -105,9 +105,6 @@ export interface OperationalSecurityDashboardProps {
     onAlertAction?: (alertId: string, action: string) => void;
     onSystemIssue?: (component: string, issue: string) => void;
 }
-/**
- * Operational Security Dashboard Component
- */
 export declare const OperationalSecurityDashboard: React.FC<OperationalSecurityDashboardProps>;
 export default OperationalSecurityDashboard;
 //# sourceMappingURL=OperationalSecurityDashboard.d.ts.map

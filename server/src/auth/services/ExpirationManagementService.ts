@@ -14,6 +14,7 @@ import { AuditService } from './AuditService';
 import { RedisService } from '../database/RedisService';
 import cron from 'node-cron';
 
+}
 export interface ExpirationPolicy {
   id: string;
   name: string;
@@ -30,7 +31,9 @@ export interface ExpirationPolicy {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ExpirationRule {
   id: string;
   policyId: string;
@@ -47,7 +50,9 @@ export interface ExpirationRule {
   createdAt: Date;
   updatedAt: Date;
 }
+}
 
+}
 export interface ExpirationEvent {
   id: string;
   ruleId: string;
@@ -59,7 +64,9 @@ export interface ExpirationEvent {
   processedAt?: Date;
   notificationSent: boolean;
 }
+}
 
+}
 export interface ExpirationWarning {
   resourceId: string;
   resourceType: string;
@@ -71,7 +78,9 @@ export interface ExpirationWarning {
   userId?: string;
   organizationId?: string;
 }
+}
 
+}
 export interface ExpirationStats {
   total: number;
   active: number;
@@ -85,9 +94,11 @@ export interface ExpirationStats {
     next24Hours: number;
     next7Days: number;
     next30Days: number;
+}
   };
 }
 
+}
 export interface RenewalRequest {
   resourceId: string;
   resourceType: string;
@@ -96,7 +107,9 @@ export interface RenewalRequest {
   requestedBy: string;
   organizationId?: string;
 }
+}
 
+}
 export interface RenewalResult {
   success: boolean;
   newExpiresAt?: Date;
@@ -104,6 +117,7 @@ export interface RenewalResult {
   error?: string;
   warningMessage?: string;
   renewalCount?: number;
+}
 }
 
 export class ExpirationManagementService {
@@ -133,6 +147,7 @@ export class ExpirationManagementService {
    * Initialize the expiration management system
    */
   async initialize(): Promise<void> {
+
     if (this.isInitialized) {
       return;
     }
@@ -161,6 +176,7 @@ export class ExpirationManagementService {
    * Create an expiration policy
    */
   async createPolicy(policy: Omit<ExpirationPolicy, 'id' | 'createdAt' | 'updatedAt'>): Promise<ExpirationPolicy> {
+
     const policyId = `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -205,6 +221,7 @@ export class ExpirationManagementService {
     createdBy?: string,
     metadata?: Record<string, unknown>
   ): Promise<ExpirationRule> {
+
     const policy = await this.getPolicy(policyId);
     if (!policy) {
       throw new Error(`Expiration policy ${policyId} not found`);
@@ -285,6 +302,7 @@ export class ExpirationManagementService {
    * Check if a resource is expired
    */
   async isExpired(resourceId: string, resourceType: string): Promise<boolean> {
+
     // Try Redis first for fast lookup
     if (this.redisService) {
       const redisClient = await this.redisService.getClient();
@@ -320,6 +338,7 @@ export class ExpirationManagementService {
     status: string;
     canRenew: boolean;
   }> {
+
     const rule = await this.getExpirationRule(resourceId, resourceType);
     
     if (!rule) {
@@ -354,6 +373,7 @@ export class ExpirationManagementService {
    * Renew a resource's expiration
    */
   async renewResource(request: RenewalRequest): Promise<RenewalResult> {
+
     const rule = await this.getExpirationRule(request.resourceId, request.resourceType);
     
     if (!rule) {
@@ -461,6 +481,7 @@ export class ExpirationManagementService {
     revokedBy: string, 
     reason?: string
   ): Promise<boolean> {
+
     const rule = await this.getExpirationRule(resourceId, resourceType);
     
     if (!rule) {
@@ -504,6 +525,7 @@ export class ExpirationManagementService {
    * Get expiration statistics
    */
   async getExpirationStats(organizationId?: string): Promise<ExpirationStats> {
+
     const whereClause = organizationId 
       ? 'WHERE ep.organization_id = ? OR ep.organization_id IS NULL'
       : '';
@@ -570,6 +592,7 @@ export class ExpirationManagementService {
    * Get upcoming expiration warnings
    */
   async getUpcomingWarnings(organizationId?: string, limit = 100): Promise<ExpirationWarning[]> {
+
     const whereClause = organizationId 
       ? 'AND (ep.organization_id = ? OR ep.organization_id IS NULL)'
       : '';
@@ -624,6 +647,7 @@ export class ExpirationManagementService {
    * Clean up expired resources
    */
   async cleanupExpiredResources(): Promise<{ cleaned: number; errors: number }> {
+
     let cleaned = 0;
     let errors = 0;
 
@@ -637,7 +661,7 @@ export class ExpirationManagementService {
           AND (
             (ep.grace_period IS NULL AND er.expires_at <= NOW()) 
             OR (ep.grace_period IS NOT NULL AND er.grace_period_ends <= NOW())
-          )
+
       `);
 
       for (const rule of expiredRules) {
@@ -685,6 +709,7 @@ export class ExpirationManagementService {
    */
 
   private async getPolicy(policyId: string): Promise<ExpirationPolicy | null> {
+
     const results = await this.db.query(
       'SELECT * FROM expiration_policies WHERE id = ? AND is_active = 1',
       [policyId]
@@ -714,6 +739,7 @@ export class ExpirationManagementService {
   }
 
   private async getExpirationRule(resourceId: string, resourceType: string): Promise<ExpirationRule | null> {
+
     const results = await this.db.query(`
       SELECT * FROM expiration_rules 
       WHERE resource_id = ? AND resource_type = ?
@@ -751,6 +777,7 @@ export class ExpirationManagementService {
     eventType: ExpirationEvent['eventType'],
     metadata?: Record<string, unknown>
   ): Promise<void> {
+
     const eventId = `event_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
 
@@ -762,6 +789,7 @@ export class ExpirationManagementService {
   }
 
   private async ensureDefaultPolicies(): Promise<void> {
+
     const defaultPolicies = [
       {
         name: 'Default JWT Token Policy',
@@ -774,7 +802,7 @@ export class ExpirationManagementService {
         autoRenewal: true,
         renewalWindow: 1800, // 30 minutes
         isActive: true
-      },
+  }
       {
         name: 'Default API Key Policy',
         resourceType: 'api_key' as const,
@@ -785,7 +813,7 @@ export class ExpirationManagementService {
         autoRenewal: false,
         renewalWindow: 1209600, // 14 days
         isActive: true
-      },
+  }
       {
         name: 'Default Session Policy',
         resourceType: 'session' as const,
@@ -831,6 +859,7 @@ export class ExpirationManagementService {
   }
 
   private async processExpirationWarnings(): Promise<void> {
+
     try {
       const warnings = await this.getUpcomingWarnings(undefined, 50);
       
@@ -864,6 +893,7 @@ export class ExpirationManagementService {
   }
 
   private async cleanupOldEvents(): Promise<void> {
+
     try {
       // Delete events older than 90 days
       const result = await this.db.query(`
@@ -878,6 +908,7 @@ export class ExpirationManagementService {
   }
 
   private async setupRedisExpirationListeners(): Promise<void> {
+
     if (!this.redisService) return;
 
     try {
@@ -920,6 +951,7 @@ export class ExpirationManagementService {
    * Shutdown the service
    */
   async shutdown(): Promise<void> {
+
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     }

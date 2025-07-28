@@ -23,25 +23,25 @@ const createFeatureSchema = {
       pattern: '^[a-z0-9_.-]+$',
       minLength: 3,
       maxLength: 100
-    },
+  }
     name: { 
       type: 'string', 
       minLength: 1, 
       maxLength: 255 
-    },
+  }
     description: { 
       type: 'string', 
       maxLength: 1000 
-    },
+  }
     type: { 
       type: 'string', 
       enum: ['boolean', 'string', 'number', 'json', 'percentage', 'experiment'] 
-    },
+  }
     value: {},
     enabled: { 
       type: 'boolean',
       default: false
-    },
+  }
     user_targeting: {
       type: 'object',
       properties: {
@@ -58,14 +58,14 @@ const createFeatureSchema = {
               operator: { 
                 type: 'string', 
                 enum: ['equals', 'not_equals', 'in', 'not_in', 'contains', 'regex', 'greater_than', 'less_than']
-              },
+  }
               value: {},
               condition: { type: 'string', enum: ['and', 'or'] }
             }
           }
         }
       }
-    },
+  }
     scheduling: {
       type: 'object',
       properties: {
@@ -75,14 +75,14 @@ const createFeatureSchema = {
         rollout_percentage: { type: 'number', minimum: 0, maximum: 100 },
         rollout_duration_hours: { type: 'number', minimum: 1, maximum: 168 }
       }
-    },
+  }
     dependencies: {
       type: 'object',
       properties: {
         requires: { type: 'array', items: { type: 'string' } },
         conflicts_with: { type: 'array', items: { type: 'string' } }
       }
-    },
+  }
     monitoring: {
       type: 'object',
       properties: {
@@ -200,7 +200,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'number', minimum: 0, default: 0 }
         }
-      },
+  }
       security: [{ bearer: [] }]
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -283,7 +283,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       security: [{ bearer: [] }]
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -329,7 +329,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: updateFeatureSchema,
       security: [{ bearer: [] }]
     }
@@ -375,7 +375,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         required: ['enabled'],
@@ -383,7 +383,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
           enabled: { type: 'boolean' },
           reason: { type: 'string', maxLength: 500 }
         }
-      },
+  }
       security: [{ bearer: [] }]
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -428,7 +428,7 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: emergencyOverrideSchema,
       security: [{ bearer: [] }]
     }
@@ -486,13 +486,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 500 }
         }
-      },
+  }
       security: [{ bearer: [] }]
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {
@@ -540,13 +540,13 @@ export async function adminFeatureManagementRoutes(fastify: FastifyInstance) {
         properties: {
           id: { type: 'string', format: 'uuid' }
         }
-      },
+  }
       querystring: {
         type: 'object',
         properties: {
           limit: { type: 'number', minimum: 1, maximum: 500, default: 100 }
         }
-      },
+  }
       security: [{ bearer: [] }]
     }
   }, async (request: FastifyRequest, reply: FastifyReply) => {

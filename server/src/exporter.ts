@@ -176,7 +176,7 @@ export const GeneratorBundleSchema = z.object({
       type: z.literal('modifier_chain'),
       base: z.string(),
       mods: z.array(z.string())
-    })
+  }
   ])),
   entry_points: z.object({
     default: z.string(),
@@ -365,12 +365,12 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
       position: { x: 0, y: 0, z: 5 },
       angle: { pitch: 0, yaw: 0, roll: 0 },
       distance: 5
-    },
+  }
     lighting: {
       timeOfDay: 'noon',
       weather: 'clear',
       mood: 'bright'
-    },
+  }
     environment: {
       setting: 'interior-studio',
       atmosphere: 'calm',
@@ -558,7 +558,7 @@ export function graphToBundle(
     debug: {
       seed: typeof graph.seed === 'number' ? graph.seed : undefined,
       originGraphGuid: undefined // Could be added as an optional parameter if needed
-    },
+  }
     // Epic 8.6: VFX pipeline metadata
     vfx: options.controlNetEnabled ? {
       exportFormat: 'controlnet-compatible' as const,
@@ -575,7 +575,7 @@ export function graphToBundle(
     entry_points: {
       default: 'main',
       alternatives: []
-    },
+  }
     seed: typeof graph.seed === 'number' ? graph.seed : undefined
   };
 
@@ -590,25 +590,25 @@ export function graphToBundle(
         strength: 1.0,
         startStep: 0,
         endStep: 1000
-      },
+  }
       depthMaps: extractedParams.depthMaps || {
         enabled: false,
         strength: 1.0,
         preprocessor: 'depth_midas'
-      },
+  }
       edgeDetection: extractedParams.edgeDetection || {
         enabled: false,
         strength: 1.0,
         preprocessor: 'canny',
         lowThreshold: 100,
         highThreshold: 200
-      },
+  }
       animationSequence: extractedParams.animationSequence || {
         frameCount: 1,
         fps: 24,
         interpolationMethod: 'linear',
         keyframes: []
-      },
+  }
       cameraParameters: extractedParams.cameraParameters || {
         fov: 70,
         aspectRatio: 1.777, // 16:9
@@ -616,7 +616,7 @@ export function graphToBundle(
         farPlane: 1000,
         position: [0, 0, 5],
         rotation: [0, 0, 0]
-      },
+  }
       billboardProjection: extractedParams.billboardProjection || {
         enabled: false,
         targetResolution: [1920, 1080]
@@ -746,7 +746,7 @@ export function validateVFXCompatibility(graph: Graph): {
       node.key.toLowerCase().includes('weather') ||
       node.key.toLowerCase().includes('setting') ||
       node.key.toLowerCase().includes('mood')
-    )
+
   );
   if (hasSceneVars) features.push('Scene data variables (camera, lighting, environment)');
   else recommendations.push('Add scene variables (camera_x, lighting_mood, weather_clear) for cinematic control');
@@ -757,7 +757,7 @@ export function validateVFXCompatibility(graph: Graph): {
       node.key.toLowerCase().includes('position') ||
       node.key.toLowerCase().includes('angle') ||
       node.key.toLowerCase().includes('distance')
-    )
+
   );
   if (hasCameraControls) features.push('Camera position and angle controls');
   
@@ -1173,21 +1173,26 @@ function ensureOutputNode(graph: Graph, entryPointId: string): void {
  * Epic 8.5: Export Results for Film Industry
  * Professional export system with VFX-ready formats
  */
+}
 export interface ExportRequest {
   format: string;
   data: Record<string, unknown>;
   options: Record<string, unknown>;
   filename: string;
 }
+}
 
+}
 export interface ExportResult {
   type: 'text' | 'binary';
   data: Record<string, unknown>;
   mimeType: string;
   shouldDownload?: boolean;
 }
+}
 
 export async function exportResults(request: ExportRequest): Promise<ExportResult> {
+
   const { format, data, options, filename } = request;
 
   switch (format) {
@@ -1339,7 +1344,7 @@ function exportControlNetJSON(data: Record<string, unknown>, options: Record<str
         processor_res: 512,
         threshold_a: 100,
         threshold_b: 200
-      },
+  }
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1365,7 +1370,7 @@ function exportStableDiffusionBundle(data: Record<string, unknown>, options: Rec
         pipeline: data.vfxData?.pipeline,
         resolution: data.vfxData?.resolution,
         exportOptions: options
-      },
+  }
       'metadata.json': {
         exportedAt: new Date().toISOString(),
         resultCount: data.results.length,
@@ -1394,11 +1399,11 @@ function exportSceneData(data: Record<string, unknown>, options: Record<string, 
         position: { x: 0, y: 0, z: 5 },
         angle: { pitch: 0, yaw: 0, roll: 0 },
         fov: 70
-      },
+  }
       lighting: {
         timeOfDay: 'noon',
         mood: 'cinematic'
-      },
+  }
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1468,7 +1473,7 @@ function exportProfessionalReport(data: Record<string, unknown>, options: Record
           r: any
         ) => sum + (r.executionTimeMs || 0), 0) / data.results.length
       }
-    },
+  }
     results: data.results,
     recommendations: [
       'Results show consistent generation quality',
@@ -1523,6 +1528,7 @@ async function exportHybridPrompting(
   options: Record<string,
   unknown>
 ): Promise<ExportResult> {
+
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1567,13 +1573,13 @@ async function exportHybridPrompting(
         version: '1.0.0',
         timestamp: new Date().toISOString(),
         format: 'wild-construct-hybrid-v1'
-      },
+  }
       hybridPrompting: {
         mars: {
           framework: 'MARS-v1.0',
           tags: 'Basic MARS structure not available - analysis service error',
           structured: 'Structured format generation failed'
-        },
+  }
         zada: {
           approach: 'screenplay-style',
           variants: [
@@ -1585,7 +1591,7 @@ async function exportHybridPrompting(
               human_readable_score: 8
             }
           ]
-        },
+  }
         hollywood: {
           protocol: 'reproducibility-v1',
           seeds: {
@@ -1600,7 +1606,7 @@ async function exportHybridPrompting(
             }
           }
         }
-      },
+  }
       original_data: data
     };
 
@@ -1622,6 +1628,7 @@ async function exportMARSFramework(
   options: Record<string,
   unknown>
 ): Promise<ExportResult> {
+
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1658,8 +1665,7 @@ async function exportMARSFramework(
           lens: marsData.tags.CAM.lens,
           depth_of_field: marsData.tags.CAM.depth_of_field
         }
-      },
-      
+  }
       subject: {
         tag: `[SUBJ:${marsData.tags.SUBJ.primary}:${marsData.tags.SUBJ.emotion}:${marsData.tags.SUBJ.blocking}]`,
         breakdown: {
@@ -1669,8 +1675,7 @@ async function exportMARSFramework(
           emotion: marsData.tags.SUBJ.emotion,
           blocking: marsData.tags.SUBJ.blocking
         }
-      },
-      
+  }
       effects: {
         tag: `[FX:${marsData.tags.FX.lighting}:${marsData.tags.FX.color_grade}:${marsData.tags.FX.atmosphere}]`,
         breakdown: {
@@ -1680,8 +1685,7 @@ async function exportMARSFramework(
           special_fx: marsData.tags.FX.special_fx,
           post_processing: marsData.tags.FX.post_processing
         }
-      },
-      
+  }
       focal: {
         tag: `!FOCAL[${marsData.tags.FOCAL.primary_focus}]`,
         breakdown: {
@@ -1690,8 +1694,7 @@ async function exportMARSFramework(
           background_treatment: marsData.tags.FOCAL.background_treatment,
           visual_hierarchy: marsData.tags.FOCAL.visual_hierarchy
         }
-      },
-      
+  }
       // ControlNet Integration
       controlnet_mapping: marsData.structured.controlnet_mapping,
       
@@ -1701,8 +1704,7 @@ async function exportMARSFramework(
         controlnet_workflow: 'Map pose_guidance for character animation, depth_hints for 3D integration',
         recommended_tools: ['ControlNet', 'Stable Diffusion', 'Midjourney', 'DALL-E'],
         technical_requirements: 'Ensure pose data matches character rig, depth maps align with scene geometry'
-      },
-      
+  }
       // Original prompt for reference
       original_prompt: data.results?.[0]?.output || '',
       variables_used: data.variables || {}
@@ -1745,6 +1747,7 @@ async function exportZadaNaturalLanguage(
   options: Record<string,
   unknown>
 ): Promise<ExportResult> {
+
   const hybridService = new HybridPromptExportService();
   
   try {
@@ -1775,8 +1778,7 @@ async function exportZadaNaturalLanguage(
         shot_description: zadaData.director_friendly.shot_description,
         mood_direction: zadaData.director_friendly.mood_direction,
         reference_notes: zadaData.director_friendly.reference_notes
-      },
-      
+  }
       // Multiple Natural Language Variants
       variants: zadaData.variants.map(variant => ({
         id: variant.variant_id,
@@ -1795,8 +1797,7 @@ async function exportZadaNaturalLanguage(
         variables_context: data.variables || {},
         accessibility_focus: 'Converts technical prompts into natural, director-friendly language',
         target_audience: options?.targetAudience || 'Creative team members without technical AI background'
-      },
-      
+  }
       // Usage Guidelines
       usage_notes: {
         director_workflow: 'Use screenplay_style for storyboard discussions',
@@ -1864,8 +1865,7 @@ Generated by Wild Construct Prompt System | ${new Date().toLocaleDateString()}
         shot_description: 'Natural shot featuring the described elements with professional cinematic composition',
         mood_direction: 'Create an authentic, engaging atmosphere that serves the story',
         reference_notes: 'Focus on natural lighting and authentic character moments'
-      },
-      
+  }
       variants: [
         {
           id: 'fallback-screenplay',
@@ -1902,6 +1902,7 @@ async function exportSharedGraph(
   options: Record<string,
   unknown>
 ): Promise<ExportResult> {
+
   const graphSharingService = new GraphSharingService();
   
   try {
@@ -1960,17 +1961,17 @@ async function exportSharedGraph(
         author: {
           id: 'fallback',
           name: 'Unknown'
-        },
+  }
         versionControl: {
           version: 1,
           changes: ['Fallback export due to service error'],
           tags: []
-        },
+  }
         sharing: {
           permissions: 'read_only',
           collaborators: []
         }
-      },
+  }
       graph: {
         nodes: data.graph?.nodes || [],
         edges: data.graph?.edges || [],
@@ -1978,26 +1979,26 @@ async function exportSharedGraph(
           canvasPosition: { x: 0, y: 0, zoom: 1 },
           readonly: true
         }
-      },
+  }
       annotations: {
         connectionLabels: [],
         stickyNotes: [],
         nodeLabels: [],
         regions: [],
         comments: []
-      },
+  }
       collaboration: {
         changeHistory: [],
         conflicts: [],
         lastSync: new Date().toISOString(),
         syncStatus: 'offline'
-      },
+  }
       compatibility: {
         minVersion: '1.0.0',
         features: ['basic-sharing'],
         warnings: ['Generated in fallback mode due to service error'],
         errors: [error instanceof Error ? error.message : 'Unknown error']
-      },
+  }
       error: 'Sharing service unavailable, using fallback format'
     };
     
@@ -2020,6 +2021,7 @@ async function exportCollaborationFormat(
   options: Record<string,
   unknown>
 ): Promise<ExportResult> {
+
   const graphSharingService = new GraphSharingService();
   
   try {
@@ -2045,7 +2047,7 @@ async function exportCollaborationFormat(
           tags: ['collaboration', ...(options?.tags || [])],
           branch: options?.branch || 'collaboration'
         }
-      },
+  }
       {
         includeHistory: true,
         includeComments: true,
@@ -2068,7 +2070,7 @@ async function exportCollaborationFormat(
         commentSystem: true,
         permissionManagement: true,
         changeTracking: true
-      },
+  }
       usage: {
         importInstructions: 'Use Wild Construct import function or share URL',
         supportedClients: ['Wild Construct Web', 'Wild Construct Desktop'],
@@ -2093,7 +2095,7 @@ async function exportCollaborationFormat(
         timestamp: new Date().toISOString(),
         title: options?.title || 'Collaboration Export (Fallback)',
         format: 'collaboration-fallback'
-      },
+  }
       graph: data.graph || { nodes: [], edges: [] },
       collaborationFeatures: {
         realTimeSync: false,
@@ -2103,7 +2105,7 @@ async function exportCollaborationFormat(
         permissionManagement: false,
         changeTracking: false,
         fallbackMode: true
-      },
+  }
       error: error instanceof Error ? error.message : 'Collaboration service unavailable'
     };
     
@@ -2130,7 +2132,7 @@ function extractConnectionLabels(edges: Array<Record<string, unknown>>): Array<R
       position: {
         type: edge.labelPosition,
         offset: edge.labelOffset
-      },
+  }
       visible: edge.showLabel ?? true
     }));
 }

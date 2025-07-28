@@ -14,22 +14,21 @@ import {
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
 
 export interface TemplateEditorProps {
-  value: string;
+  value: string;,
   onChange: (value: string) => void;
-  onVariablesChange?: (variables: string[], extractedVariables?: ExtractedVariable[]) => void;
+  onVariablesChange?: (variables: string, extractedVariables?: ExtractedVariable) => void;
   variableValues?: Record<string, string>;
-  nodeType?: string; // For contextual suggestions
-  existingVariables?: string[]; // For related variable suggestions
+  nodeType?: string; // For contextual suggestions,
+  existingVariables?: string; // For related variable suggestions,
   placeholder?: string;
   disabled?: boolean;
   showPreview?: boolean;
   showRealTimePreview?: boolean;
   autoComplete?: boolean;
-  showCategoryFilters?: boolean; // Show category filters in suggestions
-  maxSuggestions?: number; // Limit number of suggestions shown
+  showCategoryFilters?: boolean; // Show category filters in suggestions,
+  maxSuggestions?: number; // Limit number of suggestions shown,
   className?: string;
 }
-
 export const [suggestionIndex, setSuggestionIndex] = useState(-1);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -40,28 +39,27 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
   useEffect(() => {
     if (nodeType || existingVariables.length > 0) {
       setTemplateContext(nodeType, existingVariables);
-    }
   }, [nodeType, existingVariables]);
   // Parse template and get results
   const parseResult = useMemo(() => parseTemplate(value), [value]);
   const previewResult = useMemo(() => getPreviewWithSamples(value), [value]);
   // Real-time preview integration
   const {
-    variants: realTimeVariants,
-    isGenerating,
-    error: previewError,
-    extractedVariables,
-    hasTemplateErrors,
-    templateErrors,
-    forcePreview,
-    refreshVariant
-  } = useTemplatePreview(value, variableValues, {)
-    maxVariants: 3,
-    debounceMs: 200,
-    autoRefresh: showRealTimePreview,
-    showVariableSubstitution: true,
-    errorOnUndefinedVariables: false,
-  });
+  variants: realTimeVariants,
+  isGenerating,
+  error: previewError,
+  extractedVariables,
+  hasTemplateErrors,
+  templateErrors,
+  forcePreview,
+  refreshVariant
+} = useTemplatePreview(value, variableValues, {)
+  maxVariants: 3,
+  debounceMs: 200,
+  autoRefresh: showRealTimePreview,
+  showVariableSubstitution: true,
+  errorOnUndefinedVariables: false,
+});
   // Get variable suggestions based on cursor position with enhanced filtering
   const suggestions = useMemo(() => {
     if (!autoComplete || !showSuggestions) return [];
@@ -74,7 +72,6 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       // Filter by selected category
       if (selectedCategory !== 'all') {
         allSuggestions = allSuggestions.filter(s => s.category === selectedCategory);
-      }
       // Limit number of suggestions
       allSuggestions = allSuggestions.slice(0, maxSuggestions);
       // Update refs array length
@@ -82,7 +79,6 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
         suggestionItemRefs.current[index] || null
       );
       return allSuggestions;
-    }
     return [];
   }, [value, cursorPosition, autoComplete, showSuggestions, selectedCategory, maxSuggestions, nodeType]);
   // Update variables when they change
@@ -91,7 +87,6 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       const validVariables = parseResult.variables.filter(v => v.isValid);
       const variableNames = validVariables.map(v => v.name);
       onVariablesChange(variableNames, validVariables);
-    }
   }, [parseResult.variables, onVariablesChange]);
   // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -106,37 +101,36 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
   };
   // Scroll selected suggestion into view
   const scrollToSuggestion = (index: number) => {
-    if (suggestionItemRefs.current[index]) {
-      suggestionItemRefs.current[index]?.scrollIntoView({)
-        behavior: 'smooth',
-        block: 'nearest',
-      });
-    }
+  if (suggestionItemRefs.current[index]) {
+  suggestionItemRefs.current[index]?.scrollIntoView({)
+  behavior: 'smooth',
+  block: 'nearest',
+});
   };
   // Handle enhanced key navigation for suggestions
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (showSuggestions && suggestions.length > 0) {
-      switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setSuggestionIndex(prev => {)
-          const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
-          scrollToSuggestion(newIndex);
-          return newIndex;
-        });
+  if (showSuggestions && suggestions.length > 0) {
+  switch (e.key) {
+  case 'ArrowDown':,
+  e.preventDefault();
+  setSuggestionIndex(prev => {)
+  const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
+  scrollToSuggestion(newIndex);
+  return newIndex;
+});
         break;
       case 'ArrowUp':
         e.preventDefault();
         setSuggestionIndex(prev => {)
-          const newIndex = prev > 0 ? prev - 1 : suggestions.length - 1;
-          scrollToSuggestion(newIndex);
-          return newIndex;
-        });
+  const newIndex = prev > 0 ? prev - 1 : suggestions.length - 1;
+  scrollToSuggestion(newIndex);
+  return newIndex;
+});
         break;
       case 'PageDown':
         e.preventDefault();
         setSuggestionIndex(prev => {)
-          const newIndex = Math.min(prev + 5, suggestions.length - 1);
+  const newIndex = Math.min(prev + 5, suggestions.length - 1);
           scrollToSuggestion(newIndex);
           return newIndex;
         });
@@ -144,7 +138,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       case 'PageUp':
         e.preventDefault();
         setSuggestionIndex(prev => {)
-          const newIndex = Math.max(prev - 5, 0);
+  const newIndex = Math.max(prev - 5, 0);
           scrollToSuggestion(newIndex);
           return newIndex;
         });
@@ -164,44 +158,38 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       case 'Tab':
         e.preventDefault();
         if (suggestionIndex >= 0) {
-          applySuggestion(suggestions[suggestionIndex]);
-        }
-        break;
-      case 'Escape':
-        e.preventDefault();
-        setShowSuggestions(false);
-        setSuggestionIndex(-1);
-        inputRef.current?.focus();
-        break;
-        // Quick filter by category using number keys
-      case '1':
-      case '2':
-      case '3':
-      case '4':
-      case '5':
-      case '6':
-      case '7':
-      case '8':
-      case '9':
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          const categoryIndex = parseInt(e.key) - 1;
-          if (categoryIndex < VARIABLE_CATEGORIES.length) {
-            setSelectedCategory(VARIABLE_CATEGORIES[categoryIndex]);
-            setSuggestionIndex(0);
-          }
-        }
-        break;
-      case '0':
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          setSelectedCategory('all');
-          setSuggestionIndex(0);
-        }
-        break;
-      }
-    }
-  };
+  applySuggestion(suggestions[suggestionIndex]);
+  break;
+  case 'Escape':,
+  e.preventDefault();
+  setShowSuggestions(false);
+  setSuggestionIndex(-1);
+  inputRef.current?.focus();
+  break;
+  // Quick filter by category using number keys
+  case '1':,
+  case '2':,
+  case '3':,
+  case '4':,
+  case '5':,
+  case '6':,
+  case '7':,
+  case '8':,
+  case '9':,
+  if (e.ctrlKey || e.metaKey) {
+  e.preventDefault();
+  const categoryIndex = parseInt(e.key) - 1;
+  if (categoryIndex < VARIABLE_CATEGORIES.length) {
+  setSelectedCategory(VARIABLE_CATEGORIES[categoryIndex]);
+  setSuggestionIndex(0);
+  break;
+  case '0':,
+  if (e.ctrlKey || e.metaKey) {
+  e.preventDefault();
+  setSelectedCategory('all');
+  setSuggestionIndex(0);
+  break;
+};
   // Apply selected suggestion
   const applySuggestion = (suggestion: VariableSuggestion) => {
     if (!inputRef.current) return;
@@ -226,9 +214,7 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
           inputRef.current.setSelectionRange(newPosition, newPosition);
           setCursorPosition(newPosition);
           inputRef.current.focus();
-        }
       }, 0);
-    }
   };
   // Render highlighted text (for display purposes)
   const renderHighlightedTemplate = () => {
@@ -243,10 +229,9 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       const highlightedVar = `<span class="${className}">${variable.placeholder}</span>`;}
       result = before + highlightedVar + after;
       offset += highlightedVar.length - variable.placeholder.length;
-    }
     return result;
   };
-  return ();
+  return;
     <div className={`template-editor ${className}`} style={{ position: 'relative' }}>}
       {/* Main Template Input */}
       <div style={{ position: 'relative' }}>
@@ -267,39 +252,39 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
           placeholder={placeholder}
           disabled={disabled}
           style={{
-            width: '100%',
-            minHeight: 80,
-            padding: 12,
-            border: parseResult.isValid ? ,
-              (isFocused ? '2px solid #4299e1' : '1px solid #4a5568') :
-              '2px solid #e53e3e',
-            borderRadius: 6,
-            background: '#2d3748',
-            color: '#e2e8f0',
-            fontSize: 14,
-            fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-            resize: 'vertical',
-            outline: 'none',
-            lineHeight: 1.4,
-          }}
+  width: '100%',
+  minHeight: 80,
+  padding: 12,
+  border: parseResult.isValid ? ,
+  (isFocused ? '2px solid #4299e1' : '1px solid #4a5568') :,
+  '2px solid #e53e3e',
+  borderRadius: 6,
+  background: '#2d3748',
+  color: '#e2e8f0',
+  fontSize: 14,
+  fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+  resize: 'vertical',
+  outline: 'none',
+  lineHeight: 1.4,
+}}
         />
         {/* Variable highlighting overlay */}
         {parseResult.variables.length > 0 && ()
           <div 
             style={{
-              position: 'absolute',
-              top: 12,
-              left: 12,
-              right: 12,
-              bottom: 12,
-              pointerEvents: 'none',
-              color: 'transparent',
-              fontSize: 14,
-              fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-              lineHeight: 1.4,
-              whiteSpace: 'pre-wrap',
-              wordWrap: 'break-word',
-            }}
+  position: 'absolute',
+  top: 12,
+  left: 12,
+  right: 12,
+  bottom: 12,
+  pointerEvents: 'none',
+  color: 'transparent',
+  fontSize: 14,
+  fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+  lineHeight: 1.4,
+  whiteSpace: 'pre-wrap',
+  wordWrap: 'break-word',
+}}
             dangerouslySetInnerHTML={{ __html: renderHighlightedTemplate() }}
           />
         )}
@@ -309,68 +294,68 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
         <div
           ref={suggestionsRef}
           style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            maxHeight: 200,
-            overflowY: 'auto',
-            background: '#2d3748',
-            border: '1px solid #4a5568',
-            borderRadius: 6,
-            marginTop: 4,
-            zIndex: 1000,
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-          }}
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  right: 0,
+  maxHeight: 200,
+  overflowY: 'auto',
+  background: '#2d3748',
+  border: '1px solid #4a5568',
+  borderRadius: 6,
+  marginTop: 4,
+  zIndex: 1000,
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+}}
         >
           {suggestions.map((suggestion, index) => ()
             <div
               key={suggestion.name}
               onClick={() => applySuggestion(suggestion)}
               style={{
-                padding: '8px 12px',
-                cursor: 'pointer',
-                background: index === suggestionIndex ? '#4a5568' : 'transparent',
-                borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none',
-              }}
+  padding: '8px 12px',
+  cursor: 'pointer',
+  background: index === suggestionIndex ? '#4a5568' : 'transparent',
+  borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none',
+}}
               onMouseEnter={() => setSuggestionIndex(index)}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div style={{ 
-                    color: '#e2e8f0', 
-                    fontWeight: 500, 
-                    fontSize: 14,
-                    fontFamily: 'Monaco, Consolas, monospace'
-                  }}>
+                  <div style={{
+  color: '#e2e8f0',
+  fontWeight: 500,
+  fontSize: 14,
+  fontFamily: 'Monaco, Consolas, monospace',
+}}>
                     {suggestion.name}
                   </div>
-                  <div style={{ 
-                    color: '#a0aec0', 
-                    fontSize: 12,
-                    marginTop: 2,
-                  }}>
+                  <div style={{
+  color: '#a0aec0',
+  fontSize: 12,
+  marginTop: 2,
+}}>
                     {suggestion.description}
                   </div>
                 </div>
                 <div style={{
-                  background: getCategoryColor(suggestion.category),
-                  color: 'white',
-                  fontSize: 10,
-                  padding: '2px 6px',
-                  borderRadius: 3,
-                  fontWeight: 500,
-                }}>
+  background: getCategoryColor(suggestion.category),
+  color: 'white',
+  fontSize: 10,
+  padding: '2px 6px',
+  borderRadius: 3,
+  fontWeight: 500,
+}}>
                   {suggestion.category}
                 </div>
               </div>
               {/* Example preview */}
               <div style={{
-                marginTop: 4,
-                fontSize: 11,
-                color: '#6b7280',
-                fontStyle: 'italic',
-              }}>
+  marginTop: 4,
+  fontSize: 11,
+  color: '#6b7280',
+  fontStyle: 'italic',
+}}>
                 e.g., {suggestion.examples[0]}
               </div>
             </div>
@@ -384,13 +369,13 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
             <div
               key={index}
               style={{
-                color: error.severity === 'error' ? '#f56565' : '#ed8936',
-                fontSize: 12,
-                marginBottom: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-              }}
+  color: error.severity === 'error' ? '#f56565' : '#ed8936',
+  fontSize: 12,
+  marginBottom: 4,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+}}
             >
               <span>{error.severity === 'error' ? '❌' : '⚠️'}</span>
               {error.message}
@@ -401,26 +386,26 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       {/* Live Preview */}
       {showPreview && parseResult.isValid && parseResult.variables.length > 0 && ()
         <div style={{
-          marginTop: 12,
-          padding: 12,
-          background: '#1a202c',
-          border: '1px solid #4a5568',
-          borderRadius: 6,
-        }}>
+  marginTop: 12,
+  padding: 12,
+  background: '#1a202c',
+  border: '1px solid #4a5568',
+  borderRadius: 6,
+}}>
           <div style={{
-            fontSize: 11,
-            color: '#a0aec0',
-            marginBottom: 6,
-            fontWeight: 500,
-          }}>
+  fontSize: 11,
+  color: '#a0aec0',
+  marginBottom: 6,
+  fontWeight: 500,
+}}>
             Preview with sample values:
           </div>
           <div style={{
-            color: '#e2e8f0',
-            fontSize: 13,
-            fontStyle: 'italic',
-            lineHeight: 1.4,
-          }}>
+  color: '#e2e8f0',
+  fontSize: 13,
+  fontStyle: 'italic',
+  lineHeight: 1.4,
+}}>
             "{previewResult.preview}"
           </div>
           {/* Variable values used */}
@@ -434,49 +419,49 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       {/* Real-time Preview */}
       {showRealTimePreview && value.trim() && ()
         <div style={{
-          marginTop: 12,
-          padding: 12,
-          background: '#1a202c',
-          border: hasTemplateErrors ? '1px solid #e53e3e' : '1px solid #4a5568',
-          borderRadius: 6,
-        }}>
+  marginTop: 12,
+  padding: 12,
+  background: '#1a202c',
+  border: hasTemplateErrors ? '1px solid #e53e3e' : '1px solid #4a5568',
+  borderRadius: 6,
+}}>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 8,
-          }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: 8,
+}}>
             <div style={{
-              fontSize: 11,
-              color: '#a0aec0',
-              fontWeight: 500,
-            }}>
+  fontSize: 11,
+  color: '#a0aec0',
+  fontWeight: 500,
+}}>
               Real-time Preview:
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {isGenerating && ()
                 <div style={{
-                  width: 12,
-                  height: 12,
-                  border: '2px solid #4a5568',
-                  borderTop: '2px solid #4299e1',
-                  borderRadius: '50%',
-                  animation: 'spin 1s linear infinite',
-                }}></div>
+  width: 12,
+  height: 12,
+  border: '2px solid #4a5568',
+  borderTop: '2px solid #4299e1',
+  borderRadius: '50%',
+  animation: 'spin 1s linear infinite',
+}}></div>
               )}
               <button
                 onClick={() => forcePreview()}
                 disabled={isGenerating || hasTemplateErrors}
                 style={{
-                  fontSize: 10,
-                  padding: '4px 8px',
-                  background: '#4299e1',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: 4,
-                  cursor: isGenerating ? 'not-allowed' : 'pointer',
-                  opacity: isGenerating || hasTemplateErrors ? 0.5 : 1,
-                }}
+  fontSize: 10,
+  padding: '4px 8px',
+  background: '#4299e1',
+  color: 'white',
+  border: 'none',
+  borderRadius: 4,
+  cursor: isGenerating ? 'not-allowed' : 'pointer',
+  opacity: isGenerating || hasTemplateErrors ? 0.5 : 1,
+}}
               >
                 Refresh
               </button>
@@ -489,13 +474,13 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                 <div
                   key={index}
                   style={{
-                    color: '#f56565',
-                    fontSize: 11,
-                    marginBottom: 4,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6,
-                  }}
+  color: '#f56565',
+  fontSize: 11,
+  marginBottom: 4,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+}}
                 >
                   <span>❌</span>
                   {error.message}
@@ -506,14 +491,14 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
           {/* Preview Error */}
           {previewError && ()
             <div style={{
-              color: '#f56565',
-              fontSize: 11,
-              marginBottom: 8,
-              padding: 8,
-              background: 'rgba(245, 101, 101, 0.1)',
-              borderRadius: 4,
-              border: '1px solid rgba(245, 101, 101, 0.3)'
-            }}>
+  color: '#f56565',
+  fontSize: 11,
+  marginBottom: 8,
+  padding: 8,
+  background: 'rgba(245, 101, 101, 0.1)',
+  borderRadius: 4,
+  border: '1px solid rgba(245, 101, 101, 0.3)',
+}}>
               <strong>Preview Error:</strong> {previewError}
             </div>
           )}
@@ -524,68 +509,68 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
                 <div
                   key={variant.id}
                   style={{
-                    padding: 8,
-                    background: '#2d3748',
-                    borderRadius: 4,
-                    border: '1px solid #4a5568',
-                  }}
+  padding: 8,
+  background: '#2d3748',
+  borderRadius: 4,
+  border: '1px solid #4a5568',
+}}
                 >
                   <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 4,
-                  }}>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: 4,
+}}>
                     <span style={{
-                      fontSize: 10,
-                      color: '#a0aec0',
-                      fontWeight: 500,
-                    }}>
+  fontSize: 10,
+  color: '#a0aec0',
+  fontWeight: 500,
+}}>
                       Variant {index + 1}
                     </span>
                     <button
                       onClick={() => refreshVariant(variant.id)}
                       style={{
-                        fontSize: 9,
-                        padding: '2px 6px',
-                        background: 'transparent',
-                        color: '#a0aec0',
-                        border: '1px solid #4a5568',
-                        borderRadius: 3,
-                        cursor: 'pointer',
-                      }}
+  fontSize: 9,
+  padding: '2px 6px',
+  background: 'transparent',
+  color: '#a0aec0',
+  border: '1px solid #4a5568',
+  borderRadius: 3,
+  cursor: 'pointer',
+}}
                       title="Generate new variation"
                     >
                       🔄
                     </button>
                   </div>
                   <div style={{
-                    color: '#e2e8f0',
-                    fontSize: 12,
-                    lineHeight: 1.4,
-                    marginBottom: 6,
-                  }}>
+  color: '#e2e8f0',
+  fontSize: 12,
+  lineHeight: 1.4,
+  marginBottom: 6,
+}}>
                     "{variant.result}"
                   </div>
                   {/* Variable substitutions */}
                   {Object.keys(variant.substitutions).length > 0 && ()
                     <div style={{
-                      fontSize: 9,
-                      color: '#6b7280',
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: 6,
-                    }}>
+  fontSize: 9,
+  color: '#6b7280',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 6,
+}}>
                       {Object.entries(variant.substitutions).map(([name, value]) => ()
                         <span
                           key={name}
                           style={{
-                            background: 'rgba(66, 153, 225, 0.2)',
-                            color: '#63b3ed',
-                            padding: '2px 4px',
-                            borderRadius: 2,
-                            fontSize: 9,
-                          }}
+  background: 'rgba(66, 153, 225, 0.2)',
+  color: '#63b3ed',
+  padding: '2px 4px',
+  borderRadius: 2,
+  fontSize: 9,
+}}
                         >
                           {name}="{value}"
                         </span>
@@ -599,12 +584,12 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
           {/* No variants message */}
           {!hasTemplateErrors && !previewError && !isGenerating && realTimeVariants.length === 0 && ()
             <div style={{
-              color: '#a0aec0',
-              fontSize: 11,
-              fontStyle: 'italic',
-              textAlign: 'center',
-              padding: 16,
-            }}>
+  color: '#a0aec0',
+  fontSize: 11,
+  fontStyle: 'italic',
+  textAlign: 'center',
+  padding: 16,
+}}>
               No previews generated yet. Try adding some variables to your template.
             </div>
           )}
@@ -614,22 +599,19 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
       <style>{`
         .template-variable {
           background: rgba(66, 153, 225, 0.2);
-          color: #63b3ed;
-          padding: 1px 2px;
+          color: #63b3ed;,
+  padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;
-        }
         .template-variable-error {
           background: rgba(245, 101, 101, 0.2);
-          color: #f56565;
-          padding: 1px 2px;
+          color: #f56565;,
+  padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;
-        }
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
-        }
       `}</style>
     </div>
   );
@@ -637,13 +619,13 @@ export const [suggestionIndex, setSuggestionIndex] = useState(-1);
 
 // Helper function to get category colors
 const getCategoryColor = (category: string): string => {
-  const colors: Record<string, string> = {
-    character: '#9f7aea',  // purple
-    setting: '#4fd1c7',    // teal
-    action: '#f6ad55',     // orange
-    mood: '#fc8181',       // red
-    object: '#68d391',     // green
-    custom: '#a0aec0'      // gray,
-  };
+  const colors: Record<string, string> = {,
+  character: '#9f7aea',  // purple,
+  setting: '#4fd1c7',    // teal,
+  action: '#f6ad55',     // orange,
+  mood: '#fc8181',       // red,
+  object: '#68d391',     // green,
+  custom: '#a0aec0'      // gray,
+};
   return colors[category] || colors.custom;
 };

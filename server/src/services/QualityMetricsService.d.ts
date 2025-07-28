@@ -13,6 +13,7 @@ import { AuditService } from '../auth/services/AuditService';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { MetricsCollector } from '../metrics/MetricsCollector';
 import { EventEmitter } from 'events';
+}
 export interface QualityMetricsConfig {
     enabled: boolean;
     collectRealTime: boolean;
@@ -27,6 +28,7 @@ export interface QualityMetricsConfig {
         security: boolean;
         documentation: boolean;
         buildHealth: boolean;
+}
     };
     cacheEnabled: boolean;
     cacheTTL: number;
@@ -38,11 +40,13 @@ export interface QualityMetricsConfig {
         qualityDegradation: boolean;
     };
 }
+}
 export interface QualityThresholds {
     testCoverage: {
         minimum: number;
         target: number;
         critical: number;
+}
     };
     codeQuality: {
         maxComplexity: number;
@@ -65,6 +69,7 @@ export interface QualityThresholds {
         requiresAllTestsPassing: boolean;
     };
 }
+}
 export interface QualityMetrics {
     timestamp: Date;
     overall: OverallQualityScore;
@@ -82,7 +87,9 @@ export interface QualityMetrics {
         dataSourcesActive: string[];
         lastUpdated: Date;
         version: string;
+}
     };
+}
 }
 export interface OverallQualityScore {
     score: number;
@@ -96,6 +103,7 @@ export interface OverallQualityScore {
         security: number;
         documentation: number;
         buildHealth: number;
+}
     };
     weights: {
         testCoverage: number;
@@ -106,6 +114,7 @@ export interface OverallQualityScore {
         buildHealth: number;
     };
 }
+}
 export interface TestCoverageMetrics {
     overall: {
         percentage: number;
@@ -115,6 +124,7 @@ export interface TestCoverageMetrics {
         branchesCovered: number;
         functionsTotal: number;
         functionsCovered: number;
+}
     };
     byPackage: PackageCoverageMetrics[];
     byComponent: ComponentCoverageMetrics[];
@@ -127,12 +137,14 @@ export interface TestCoverageMetrics {
     uncoveredCriticalPaths: string[];
     coverageHotspots: CoverageHotspot[];
 }
+}
 export interface CodeQualityMetrics {
     complexity: {
         average: number;
         maximum: number;
         distribution: ComplexityDistribution;
         highComplexityFiles: string[];
+}
     };
     duplication: {
         percentage: number;
@@ -158,6 +170,7 @@ export interface CodeQualityMetrics {
         priority: 'low' | 'medium' | 'high' | 'critical';
     };
 }
+}
 export interface PerformanceQualityMetrics {
     responseTime: {
         average: number;
@@ -165,6 +178,7 @@ export interface PerformanceQualityMetrics {
         p90: number;
         p95: number;
         p99: number;
+}
     };
     throughput: {
         requestsPerSecond: number;
@@ -195,6 +209,7 @@ export interface PerformanceQualityMetrics {
     };
     loadTestResults: LoadTestResult[];
 }
+}
 export interface SecurityQualityMetrics {
     vulnerabilities: {
         total: number;
@@ -203,6 +218,7 @@ export interface SecurityQualityMetrics {
         medium: number;
         low: number;
         trends: number[];
+}
     };
     dependencies: {
         total: number;
@@ -226,12 +242,14 @@ export interface SecurityQualityMetrics {
         lastSecurityReview: Date;
     };
 }
+}
 export interface DocumentationQualityMetrics {
     coverage: {
         apiDocumentation: number;
         codeDocumentation: number;
         userGuides: number;
         overall: number;
+}
     };
     accuracy: {
         validCodeExamples: number;
@@ -250,12 +268,14 @@ export interface DocumentationQualityMetrics {
         maintenanceScore: number;
     };
 }
+}
 export interface BuildHealthMetrics {
     builds: {
         successRate: number;
         averageDuration: number;
         failureReasons: BuildFailureReason[];
         trends: number[];
+}
     };
     tests: {
         passRate: number;
@@ -276,6 +296,7 @@ export interface BuildHealthMetrics {
         healthScore: number;
     };
 }
+}
 export interface QualityTrends {
     overall: TrendData;
     testCoverage: TrendData;
@@ -285,6 +306,8 @@ export interface QualityTrends {
     documentation: TrendData;
     buildHealth: TrendData;
 }
+}
+}
 export interface TrendData {
     daily: number[];
     weekly: number[];
@@ -292,6 +315,8 @@ export interface TrendData {
     direction: 'improving' | 'stable' | 'degrading';
     velocity: number;
     projection: number;
+}
+}
 }
 export interface QualityRecommendation {
     id: string;
@@ -307,12 +332,14 @@ export interface QualityRecommendation {
         currentValue: number;
         projectedValue: number;
         confidence: number;
+}
     };
     relatedFiles: string[];
     relatedComponents: string[];
     status: 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed';
     createdAt: Date;
     updatedAt: Date;
+}
 }
 export interface QualityAlert {
     id: string;
@@ -331,11 +358,15 @@ export interface QualityAlert {
     acknowledgedAt?: Date;
     resolvedAt?: Date;
 }
+}
+}
 interface PackageCoverageMetrics {
     name: string;
     percentage: number;
     linesTotal: number;
     linesCovered: number;
+}
+}
 }
 interface ComponentCoverageMetrics {
     name: string;
@@ -344,12 +375,16 @@ interface ComponentCoverageMetrics {
     criticalPaths: number;
     uncoveredPaths: number;
 }
+}
+}
 interface CoverageHotspot {
     file: string;
     function: string;
     coverage: number;
     importance: 'low' | 'medium' | 'high' | 'critical';
     reason: string;
+}
+}
 }
 interface ComplexityDistribution {
     '1-5': number;
@@ -358,10 +393,14 @@ interface ComplexityDistribution {
     '21-50': number;
     '50+': number;
 }
+}
+}
 interface DuplicationBlock {
     lines: number;
     files: string[];
     similarity: number;
+}
+}
 }
 interface FileMaintainability {
     file: string;
@@ -370,17 +409,23 @@ interface FileMaintainability {
     size: number;
     issues: string[];
 }
+}
+}
 interface LintRuleBreakdown {
     rule: string;
     count: number;
     severity: 'error' | 'warning';
     trend: 'increasing' | 'stable' | 'decreasing';
 }
+}
+}
 interface TechnicalDebtBreakdown {
     category: string;
     minutes: number;
     files: string[];
     priority: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 interface LoadTestResult {
     timestamp: Date;
@@ -391,16 +436,22 @@ interface LoadTestResult {
     errorRate: number;
     passed: boolean;
 }
+}
+}
 interface LicenseBreakdown {
     license: string;
     count: number;
     compatible: boolean;
     risk: 'low' | 'medium' | 'high';
 }
+}
+}
 interface SecurityCategoryBreakdown {
     category: string;
     count: number;
     severity: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 interface ComplianceFrameworkStatus {
     framework: string;
@@ -408,11 +459,15 @@ interface ComplianceFrameworkStatus {
     status: 'compliant' | 'non_compliant' | 'partial';
     lastAssessed: Date;
 }
+}
+}
 interface ComplianceGap {
     framework: string;
     requirement: string;
     status: 'missing' | 'partial' | 'outdated';
     priority: 'low' | 'medium' | 'high' | 'critical';
+}
+}
 }
 interface BuildFailureReason {
     reason: string;
@@ -420,11 +475,15 @@ interface BuildFailureReason {
     percentage: number;
     trend: 'increasing' | 'stable' | 'decreasing';
 }
+}
+}
 interface SlowTest {
     name: string;
     duration: number;
     file: string;
     trend: 'improving' | 'stable' | 'degrading';
+}
+}
 }
 interface PipelineStage {
     name: string;
@@ -432,11 +491,14 @@ interface PipelineStage {
     successRate: number;
     bottleneck: boolean;
 }
+}
+}
 interface RecommendationAction {
     description: string;
     type: 'code_change' | 'configuration' | 'process' | 'tooling';
     effort: 'low' | 'medium' | 'high';
     automated: boolean;
+}
 }
 export declare class QualityMetricsService extends EventEmitter {
     private config;

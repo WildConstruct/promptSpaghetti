@@ -47,6 +47,7 @@ export enum SentimentType {
 }
 
 // Base interfaces
+}
 export interface MarketplaceTemplate {
   id: string;
   owner_id: string;
@@ -64,7 +65,9 @@ export interface MarketplaceTemplate {
   updated_at: Date;
   search_vector?: string;
 }
+}
 
+}
 export interface TemplateVersion {
   id: string;
   template_id: string;
@@ -79,7 +82,9 @@ export interface TemplateVersion {
   s3_asset_key?: string;
   created_at: Date;
 }
+}
 
+}
 export interface MarketplacePurchase {
   id: string;
   buyer_id: string;
@@ -94,7 +99,9 @@ export interface MarketplacePurchase {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface TemplateReview {
   id: string;
   template_id: string;
@@ -109,7 +116,9 @@ export interface TemplateReview {
   created_at: Date;
   updated_at: Date;
 }
+}
 
+}
 export interface TemplateCategory {
   id: string;
   name: string;
@@ -120,7 +129,9 @@ export interface TemplateCategory {
   is_active: boolean;
   created_at: Date;
 }
+}
 
+}
 export interface MarketplaceEvent {
   id: string;
   event_type: EventType;
@@ -133,7 +144,9 @@ export interface MarketplaceEvent {
   user_agent?: string;
   created_at: Date;
 }
+}
 
+}
 export interface TemplateCollection {
   id: string;
   name: string;
@@ -145,8 +158,10 @@ export interface TemplateCollection {
   created_at: Date;
   updated_at: Date;
 }
+}
 
 // Extended interfaces with relations
+}
 export interface TemplateWithStats extends MarketplaceTemplate {
   total_purchases: number;
   total_reviews: number;
@@ -165,6 +180,7 @@ export interface TemplateWithStats extends MarketplaceTemplate {
   };
 }
 
+}
 export interface PurchaseWithDetails extends MarketplacePurchase {
   template?: MarketplaceTemplate;
   version?: TemplateVersion;
@@ -175,6 +191,7 @@ export interface PurchaseWithDetails extends MarketplacePurchase {
   };
 }
 
+}
 export interface ReviewWithDetails extends TemplateReview {
   template?: MarketplaceTemplate;
   buyer?: {
@@ -186,6 +203,7 @@ export interface ReviewWithDetails extends TemplateReview {
 }
 
 // Search and filter interfaces
+}
 export interface SearchFilters {
   query?: string;
   categories?: string[];
@@ -200,7 +218,9 @@ export interface SearchFilters {
   page?: number;
   limit?: number;
 }
+}
 
+}
 export interface SearchResult {
   templates: TemplateWithStats[];
   total: number;
@@ -208,6 +228,7 @@ export interface SearchResult {
   limit: number;
   has_more: boolean;
   aggregations?: {
+}
     categories: Array<{ name: string; count: number }>;
     price_ranges: Array<{ min: number; max: number; count: number }>;
     avg_ratings: Array<{ rating: number; count: number }>;
@@ -272,6 +293,7 @@ export const CreatePurchaseSchema = z.object({
 });
 
 // Analytics interfaces
+}
 export interface TemplateAnalytics {
   template_id: string;
   period_start: Date;
@@ -285,6 +307,7 @@ export interface TemplateAnalytics {
     avg_rating: number;
     total_reviews: number;
     refund_rate: number;
+}
   };
   demographics?: {
     countries: Array<{ country: string; count: number }>;
@@ -296,6 +319,7 @@ export interface TemplateAnalytics {
   };
 }
 
+}
 export interface CreatorAnalytics {
   creator_id: string;
   period_start: Date;
@@ -307,6 +331,7 @@ export interface CreatorAnalytics {
     total_purchases: number;
     avg_rating: number;
     total_reviews: number;
+}
   };
   top_templates: Array<{
     template_id: string;
@@ -321,13 +346,16 @@ export interface CreatorAnalytics {
 }
 
 // Preview system interfaces
+}
 export interface PreviewRequest {
   template_id: string;
   version_id?: string;
   user_input?: Record<string, any>;
   claude_model_override?: string;
 }
+}
 
+}
 export interface PreviewResponse {
   output: string;
   cost_estimate: number;
@@ -335,6 +363,7 @@ export interface PreviewResponse {
   token_usage: {
     input_tokens: number;
     output_tokens: number;
+}
   };
   cached: boolean;
   redacted_sections: string[];

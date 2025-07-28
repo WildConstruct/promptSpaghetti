@@ -5,6 +5,7 @@
  * Supports multi-node selection, highlighting, MARS zone annotations, and area-based feedback.
  */
 import React from 'react';
+
 export interface RegionAnnotation {
     id: string;
     name: string;
@@ -24,7 +25,7 @@ export interface RegionAnnotation {
     nodeIds: string[];
     tags: string[];
     metadata: RegionMetadata;
-}
+
 export interface RegionArea {
     shape: 'rectangle' | 'circle' | 'polygon' | 'freehand';
     bounds: {,
@@ -42,7 +43,7 @@ export interface RegionArea {
         y: number;
     };
     radius?: number;
-}
+
 export interface RegionStyle {
     borderColor: string;
     borderWidth: number;
@@ -52,21 +53,22 @@ export interface RegionStyle {
     shadowColor?: string;
     shadowBlur?: number;
     animation?: 'none' | 'pulse' | 'glow' | 'march';
-}
+
 export interface RegionMetadata {
     nodeCount: number;
     totalComplexity?: number;
     estimatedRenderTime?: number;
     performanceImpact?: 'low' | 'medium' | 'high';
     lastAnalysis?: string;
-}
+
 export type MARSZoneType = 'motion_source' | 'action_trigger' | 'reaction_output' | 'subject_focus' | 'camera_influence' | 'lighting_zone' | 'effects_region' | 'audio_sync' | 'timing_critical' | 'creative_decision';
+
 export interface VFXUser {
     id: string;
     name: string;
     role: string;
     color: string;
-}
+
 export interface RegionAnnotationSystemProps {
     width: number;
     height: number;
@@ -87,7 +89,7 @@ export interface RegionAnnotationSystemProps {
     readonly?: boolean;
     showGrid?: boolean;
     className?: string;
-}
+
 export declare const RegionAnnotationSystem: React.FC<RegionAnnotationSystemProps>;
 export default RegionAnnotationSystem;
 //# sourceMappingURL=RegionAnnotations.d.ts.map

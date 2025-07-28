@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'graphDraft' }) => {
+export const useAutosave = ({
+    nodes,
+    edges,
+    intervalMs = 5000,
+    storageKey = 'graphDraft'
+}), UseAutosaveProps, UseAutosaveReturn;
+{
     const [showRestorePrompt, setShowRestorePrompt] = useState(false);
     const [restoreDraft, setRestoreDraft] = useState(null);
     // Check for existing draft on mount
@@ -12,13 +18,16 @@ export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'gra
                     setRestoreDraft(draft);
                     setShowRestorePrompt(true);
                 }
+                try { }
+                catch (error) {
+                    console.warn('Failed to parse saved draft:', error);
+                    localStorage.removeItem(storageKey);
+                }
+                [storageKey];
             }
         }
-        catch (error) {
-            console.warn('Failed to parse saved draft:', error);
-            localStorage.removeItem(storageKey);
-        }
-    }, [storageKey]);
+        finally { }
+    });
     // Autosave graph every intervalMs
     useEffect(() => {
         const save = () => {
@@ -29,10 +38,11 @@ export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'gra
             catch (error) {
                 console.warn('Failed to save draft:', error);
             }
-        };
-        const interval = setInterval(save, intervalMs);
-        return () => clearInterval(interval);
-    }, [nodes, edges, intervalMs, storageKey]);
+            ;
+            const interval = setInterval(save, intervalMs);
+            return () => clearInterval(interval);
+        }, [nodes, edges, intervalMs, storageKey];
+    });
     // Clear localStorage on mount to prevent infinite loops (emergency fix)
     useEffect(() => {
         console.log('Clearing localStorage to prevent infinite loops');
@@ -45,4 +55,5 @@ export const useAutosave = ({ nodes, edges, intervalMs = 5000, storageKey = 'gra
         setShowRestorePrompt,
         setRestoreDraft
     };
-};
+}
+;

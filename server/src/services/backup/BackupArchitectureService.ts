@@ -59,6 +59,7 @@ export type EncryptionAlgorithm = 'none' | 'aes256' | 'aes128' | 'chacha20';
 // Core Architecture Interfaces
 // =============================================================================
 
+}
 export interface BackupJob {
   job_id: string;
   policy_id: string;
@@ -74,6 +75,7 @@ export interface BackupJob {
     include_patterns?: string[];
     exclude_patterns?: string[];
     filter_conditions?: Record<string, any>;
+}
   };
   
   // Target configuration
@@ -118,6 +120,7 @@ export interface BackupJob {
   next_execution_at?: Date;
 }
 
+}
 export interface BackupExecution {
   execution_id: string;
   job_id: string;
@@ -163,7 +166,9 @@ export interface BackupExecution {
   
   executed_by: string;
 }
+}
 
+}
 export interface BackupValidationResult {
   validation_id: string;
   validation_type: 'integrity' | 'completeness' | 'consistency' | 'recoverability';
@@ -175,6 +180,7 @@ export interface BackupValidationResult {
     check_name: string;
     check_result: 'pass' | 'fail' | 'warning';
     check_details?: string;
+}
   }[];
   
   // Issue analysis
@@ -189,6 +195,7 @@ export interface BackupValidationResult {
   validated_by: string;
 }
 
+}
 export interface BackupError {
   error_id: string;
   error_code: string;
@@ -200,7 +207,9 @@ export interface BackupError {
   is_transient: boolean;
   occurred_at: Date;
 }
+}
 
+}
 export interface BackupWarning {
   warning_id: string;
   warning_code: string;
@@ -210,7 +219,9 @@ export interface BackupWarning {
   recommended_action?: string;
   occurred_at: Date;
 }
+}
 
+}
 export interface StorageManifest {
   manifest_id: string;
   execution_id: string;
@@ -229,6 +240,7 @@ export interface StorageManifest {
     compression_algorithm: CompressionAlgorithm;
     encryption_status: boolean;
     created_at: Date;
+}
   }[];
   
   // Metadata files
@@ -248,9 +260,11 @@ export interface StorageManifest {
   expires_at: Date;
 }
 
+}
 export interface BackupArchitectureMetrics {
   metrics_id: string;
   collection_timestamp: Date;
+}
   time_period: { start: Date; end: Date };
   
   // Overall system metrics
@@ -333,6 +347,7 @@ export class BackupArchitectureService {
     jobConfiguration: Omit<BackupJob, 'job_id' | 'created_at' | 'updated_at' | 'status'>,
     createdBy: string
   ): Promise<string> {
+
     // Validate policy exists and is active
     const policy = await this.policyService.getBackupPolicy(policyId);
     if (!policy) {
@@ -380,7 +395,7 @@ export class BackupArchitectureService {
         backup_method: backupJob.backup_method,
         storage_provider: backupJob.target_configuration.storage_provider,
         is_scheduled: backupJob.schedule_configuration.is_scheduled
-      },
+  }
       severity: 'info'
     });
 
@@ -398,6 +413,7 @@ export class BackupArchitectureService {
       override_schedule?: boolean;
     }
   ): Promise<string> {
+
     const job = await this.getBackupJob(jobId);
     if (!job) {
       throw new Error(`Backup job not found: ${jobId}`);
@@ -463,7 +479,7 @@ export class BackupArchitectureService {
         execution_number: executionNumber,
         backup_method: job.backup_method,
         storage_provider: job.target_configuration.storage_provider
-      },
+  }
       severity: 'info'
     });
 
@@ -479,6 +495,7 @@ export class BackupArchitectureService {
    * Get backup job by ID
    */
   async getBackupJob(jobId: string): Promise<BackupJob | null> {
+
     const result = await this.db.query(`
       SELECT * FROM backup_jobs WHERE job_id = $1
     `, [jobId]);
@@ -500,6 +517,7 @@ export class BackupArchitectureService {
     limit?: number;
     offset?: number;
   } = {}): Promise<{ executions: BackupExecution[]; total: number }> {
+
     let whereClause = '';
     const params: unknown[] = [];
     const conditions: string[] = [];
@@ -553,6 +571,7 @@ export class BackupArchitectureService {
       dependencies: string[];
     }
   ): Promise<string> {
+
     const execution = await this.getBackupExecution(executionId);
     if (!execution) {
       throw new Error(`Backup execution not found: ${executionId}`);
@@ -589,6 +608,7 @@ export class BackupArchitectureService {
     targetProvider?: StorageProvider,
     migratedBy?: string
   ): Promise<string> {
+
     const execution = await this.getBackupExecution(executionId);
     if (!execution) {
       throw new Error(`Backup execution not found: ${executionId}`);
@@ -612,7 +632,7 @@ export class BackupArchitectureService {
         target_tier: targetTier,
         source_provider: execution.storage_provider,
         target_provider: targetProvider || execution.storage_provider
-      },
+  }
       severity: 'info'
     });
 
@@ -624,7 +644,7 @@ export class BackupArchitectureService {
         details: {
           migration_id: migrationId,
           error: error.message
-        },
+  }
         severity: 'error'
       });
     });
@@ -642,6 +662,7 @@ export class BackupArchitectureService {
   async generateArchitectureMetrics(
     timePeriod: { start: Date; end: Date }
   ): Promise<BackupArchitectureMetrics> {
+
     // Get execution statistics
     const executionStats = await this.db.query(`
       SELECT 
@@ -707,8 +728,7 @@ export class BackupArchitectureService {
       
       projected_storage_needs_3months: 0, // Would project from growth trends
       projected_storage_needs_12months: 0, // Would project from growth trends
-      capacity_alerts: await this.generateCapacityAlerts()
-    };
+      capacity_alerts: await this.generateCapacityAlerts(};
 
     return metrics;
   }
@@ -718,6 +738,7 @@ export class BackupArchitectureService {
   // =============================================================================
 
   private async validateJobConfiguration(job: BackupJob, _____policy: BackupPolicy): Promise<void> {
+
     const errors: string[] = [];
 
     // Validate backup method compatibility
@@ -744,6 +765,7 @@ export class BackupArchitectureService {
   }
 
   private async storeBackupJob(job: BackupJob): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_jobs (
         job_id, policy_id, job_name, description, backup_method, source_configuration,
@@ -760,6 +782,7 @@ export class BackupArchitectureService {
   }
 
   private async storeBackupExecution(execution: BackupExecution): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_executions (
         execution_id, job_id, execution_number, started_at, status, progress_percentage,
@@ -778,6 +801,7 @@ export class BackupArchitectureService {
   }
 
   private async storeStorageManifest(manifest: StorageManifest): Promise<void> {
+
     await this.db.query(`
       INSERT INTO backup_storage_manifests (
         manifest_id, execution_id, storage_provider, storage_location, storage_tier,
@@ -855,6 +879,7 @@ export class BackupArchitectureService {
   }
 
   private async getNextExecutionNumber(jobId: string): Promise<number> {
+
     const result = await this.db.query(`
       SELECT COALESCE(MAX(execution_number), 0) + 1 as next_number
       FROM backup_executions WHERE job_id = $1
@@ -864,6 +889,7 @@ export class BackupArchitectureService {
   }
 
   private async updateJobStatus(jobId: string, status: BackupStatus, _____updatedBy: string): Promise<void> {
+
     await this.db.query(`
       UPDATE backup_jobs 
       SET status = $2, updated_at = NOW(), last_executed_at = NOW()
@@ -872,6 +898,7 @@ export class BackupArchitectureService {
   }
 
   private async performBackupExecution(job: BackupJob, execution: BackupExecution): Promise<void> {
+
     try {
       console.log(`Starting backup execution: ${execution.execution_id}`);
       
@@ -943,6 +970,7 @@ export class BackupArchitectureService {
   }
 
   private async markExecutionFailed(executionId: string, errorMessage: string): Promise<void> {
+
     await this.db.query(`
       UPDATE backup_executions 
       SET status = 'failed',
@@ -954,6 +982,7 @@ export class BackupArchitectureService {
   }
 
   private async getBackupExecution(executionId: string): Promise<BackupExecution | null> {
+
     const result = await this.db.query(`
       SELECT * FROM backup_executions WHERE execution_id = $1
     `, [executionId]);
@@ -971,6 +1000,7 @@ export class BackupArchitectureService {
     targetProvider: StorageProvider | undefined,
     migrationId: string
   ): Promise<void> {
+
     // Would implement actual storage migration logic
     console.log(`Migrating storage for execution ${execution.execution_id} to ${targetTier}`);
     
@@ -1000,6 +1030,7 @@ export class BackupArchitectureService {
   }
 
   private async generateCapacityAlerts(): Promise<BackupArchitectureMetrics['capacity_alerts']> {
+
     // Would implement actual capacity monitoring and alerting
     return [
       {

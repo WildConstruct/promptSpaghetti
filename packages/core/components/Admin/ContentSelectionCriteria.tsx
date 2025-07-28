@@ -36,116 +36,112 @@ import {
 } from 'lucide-react';
 
 // Types based on existing PromotionSchedulingService
+
 export interface ContentCriteria {
   // Quality filters
   min_rating?: number;
   min_download_count?: number;
   quality_score_threshold?: number;
   // Category filters
-  categories?: string[];
-  tags?: string[];
-  exclude_categories?: string[];
+  categories?: string;
+  tags?: string;
+  exclude_categories?: string;
   // Time-based filters
   published_after?: Date;
   last_updated_after?: Date;
   // Creator filters
-  creator_ids?: string[];
-  creator_tiers?: string[];
+  creator_ids?: string;
+  creator_tiers?: string;
   // Performance filters
   min_conversion_rate?: number;
   min_engagement_score?: number;
   // Content attributes
-  content_types?: string[];
-  languages?: string[];
+  content_types?: string;
+  languages?: string;
   // Exclusions
-  exclude_content_ids?: string[];
+  exclude_content_ids?: string;
   exclude_recently_promoted?: boolean;
   exclude_current_promotions?: boolean;
   // Limits
   max_content_count?: number;
-  diversification_rules?: DiversificationRule[];
+  diversification_rules?: DiversificationRule;
 }
-
 export interface DiversificationRule {
-  attribute: string;
+  attribute: string;,
   max_percentage: number;
   enforce_uniqueness: boolean;
 }
-
 export interface SelectionCriteriaTemplate {
-  id: string;
+  id: string;,
   name: string;
-  description: string;
+  description: string;,
   category: 'quality' | 'performance' | 'diversity' | 'trending' | 'seasonal' | 'custom';
-  criteria: ContentCriteria;
+  criteria: ContentCriteria;,
   is_system_template: boolean;
-  usage_count: number;
+  usage_count: number;,
   created_by: string;
   created_at: Date;
   last_used?: Date;
 }
-
 export interface ContentSelectionPreview {
-  total_matches: number;
+  total_matches: number;,
   sample_content: Array<{,
-    id: string;
-    title: string;
-    creator: string;
-    rating: number;
-    downloads: number;
-    category: string;
-    match_reasons: string[];
-  }>;
+  id: string;,
+  title: string;
+  creator: string;,
+  rating: number;
+  downloads: number;,
+  category: string;
+  match_reasons: string;
+}>;
   category_distribution: Record<string, number>;
   creator_distribution: Record<string, number>;
   quality_stats: {,
-    avg_rating: number;
-    avg_downloads: number;
-    avg_engagement: number;
-  };
+  avg_rating: number;
+  avg_downloads: number;,
+  avg_engagement: number;
+};
   performance_prediction: {,
-    expected_ctr: number;
-    expected_conversion_rate: number;
-    confidence_level: number;
-  };
+  expected_ctr: number;
+  expected_conversion_rate: number;,
+  confidence_level: number;
+};
 }
-
 export interface ContentSelectionCriteriaProps {
   className?: string;
 }
-
 export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> = ({)
   className = ''
 }) => {
   const [activeTab, setActiveTab] = useState('builder');
   const [currentCriteria, setCurrentCriteria] = useState<ContentCriteria>({});
-  const [templates] = useState<SelectionCriteriaTemplate[]>([)
+  const [templates] = useState<SelectionCriteriaTemplate>([)
     {
-      id: 'template-trending',
-      name: 'Trending Content',
-      description: 'High-performing content with recent engagement',
-      category: 'trending',
-      criteria: {,
-        min_rating: 4.0,
-        min_download_count: 100,
-        published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        min_engagement_score: 75,
-        exclude_recently_promoted: true,
-        max_content_count: 20,
-      },
-      is_system_template: true,
+  id: 'template-trending',
+  name: 'Trending Content',
+  description: 'High-performing content with recent engagement',
+  category: 'trending',
+  criteria: {,
+  min_rating: 4.0,
+  min_download_count: 100,
+  published_after: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+  min_engagement_score: 75,
+  exclude_recently_promoted: true,
+  max_content_count: 20,
+},
+  is_system_template: true,
       usage_count: 45,
       created_by: 'system',
       created_at: new Date('2024-01-15'),
-      last_used: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-    },
+      last_used: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+  }
     {
       id: 'template-quality',
       name: 'Premium Quality',
       description: 'Highest quality content from top creators',
       category: 'quality',
       criteria: {,
-        min_rating: 4.5,
+  min_rating: 4.5,
         quality_score_threshold: 90,
         creator_tiers: ['premium', 'verified'],
         min_download_count: 500,
@@ -154,71 +150,66 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
           { attribute: 'creator', max_percentage: 30, enforce_uniqueness: true },
           { attribute: 'category', max_percentage: 40, enforce_uniqueness: false }
         ]
-      },
-      is_system_template: true,
+  },
+  is_system_template: true,
       usage_count: 78,
       created_by: 'system',
       created_at: new Date('2024-01-10'),
-      last_used: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    }
-  ]);
+      last_used: new Date(Date.now() - 24 * 60 * 60 * 1000)]);
   const [previewData] = useState<ContentSelectionPreview>({)
-    total_matches: 187,
-    sample_content: [,
+  total_matches: 187,
+  sample_content: [,
+  {
+  id: 'content-1',
+  title: 'Professional Business Card Template',
+  creator: 'DesignPro',
+  rating: 4.8,
+  downloads: 2450,
+  category: 'Business',
+  match_reasons: ['High rating', 'Popular downloads', 'Premium creator'],
+}
       {
-        id: 'content-1',
-        title: 'Professional Business Card Template',
-        creator: 'DesignPro',
-        rating: 4.8,
-        downloads: 2450,
-        category: 'Business',
-        match_reasons: ['High rating', 'Popular downloads', 'Premium creator']
-      },
-      {
-        id: 'content-2',
-        title: 'Modern Wedding Invitation Suite',
-        creator: 'EventDesigns',
-        rating: 4.7,
-        downloads: 1890,
-        category: 'Events',
-        match_reasons: ['Quality score', 'Recent engagement', 'Trending']
-      }
-    ],
-    category_distribution: {,
-      'Business': 45,
-      'Events': 32,
-      'Marketing': 28,
-      'Creative': 25,
-      'Educational': 18
-    },
-    creator_distribution: {,
-      'Premium': 67,
-      'Verified': 89,
-      'Community': 31
-    },
-    quality_stats: {,
-      avg_rating: 4.6,
-      avg_downloads: 1845,
-      avg_engagement: 82.5,
-    },
-    performance_prediction: {,
-      expected_ctr: 3.8,
-      expected_conversion_rate: 12.4,
-      confidence_level: 0.85,
-    }
-  });
+  id: 'content-2',
+  title: 'Modern Wedding Invitation Suite',
+  creator: 'EventDesigns',
+  rating: 4.7,
+  downloads: 1890,
+  category: 'Events',
+  match_reasons: ['Quality score', 'Recent engagement', 'Trending']],
+  category_distribution: {,
+  'Business': 45,
+  'Events': 32,
+  'Marketing': 28,
+  'Creative': 25,
+  'Educational': 18,
+},
+  creator_distribution: {,
+  'Premium': 67,
+  'Verified': 89,
+  'Community': 31,
+},
+  quality_stats: {,
+  avg_rating: 4.6,
+  avg_downloads: 1845,
+  avg_engagement: 82.5,
+},
+  performance_prediction: {,
+  expected_ctr: 3.8,
+  expected_conversion_rate: 12.4,
+  confidence_level: 0.85,
+});
   const categories = ['Business', 'Events', 'Marketing', 'Creative', 'Educational', 'Technology'];
   const contentTypes = ['Template', 'Asset Pack', 'Component', 'Theme', 'Tool'];
     const creatorTiers = ['premium', 'verified', 'community'];
   const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      'trending': 'text-orange-600 bg-orange-100',
-      'quality': 'text-purple-600 bg-purple-100',
-      'performance': 'text-green-600 bg-green-100',
-      'diversity': 'text-blue-600 bg-blue-100',
-      'seasonal': 'text-pink-600 bg-pink-100',
-      'custom': 'text-gray-600 bg-gray-100'
-    };
+  const colors: Record<string, string> = {,
+  'trending': 'text-orange-600 bg-orange-100',
+  'quality': 'text-purple-600 bg-purple-100',
+  'performance': 'text-green-600 bg-green-100',
+  'diversity': 'text-blue-600 bg-blue-100',
+  'seasonal': 'text-pink-600 bg-pink-100',
+  'custom': 'text-gray-600 bg-gray-100',
+};
     return colors[category] || 'text-gray-600 bg-gray-100';
   };
   const renderCriteriaBuilder = () => (;);
@@ -244,9 +235,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     step="0.1"
                     value={currentCriteria.min_rating || ''}
                     onChange={(e) => setCurrentCriteria({)
-                      ...currentCriteria,
-                      min_rating: parseFloat(e.target.value) || undefined,
-                    })}
+  ...currentCriteria,
+  min_rating: parseFloat(e.target.value) || undefined,
+})}
                     className="criteria-input"
                     placeholder="4.0"
                   />
@@ -261,9 +252,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     min="0"
                     value={currentCriteria.min_download_count || ''}
                     onChange={(e) => setCurrentCriteria({)
-                      ...currentCriteria,
-                      min_download_count: parseInt(e.target.value) || undefined,
-                    })}
+  ...currentCriteria,
+  min_download_count: parseInt(e.target.value) || undefined,
+})}
                     className="criteria-input"
                     placeholder="100"
                   />
@@ -279,9 +270,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="100"
                     value={currentCriteria.quality_score_threshold || ''}
                     onChange={(e) => setCurrentCriteria({)
-                      ...currentCriteria,
-                      quality_score_threshold: parseInt(e.target.value) || undefined,
-                    })}
+  ...currentCriteria,
+  quality_score_threshold: parseInt(e.target.value) || undefined,
+})}
                     className="criteria-input"
                     placeholder="80"
                   />
@@ -310,18 +301,17 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         type="checkbox"
                         checked={currentCriteria.categories?.includes(category) || false}
                         onChange={(e) => {
-                          const categories = currentCriteria.categories || [];
-                          if (e.target.checked) {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              categories: [...categories, category]
-                            });
+  const categories = currentCriteria.categories || [];
+  if (e.target.checked) {
+  setCurrentCriteria({)
+  ...currentCriteria,
+  categories: [...categories, category],
+});
                           } else {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              categories: categories.filter(c => c !== category),
-                            });
-                          }
+  setCurrentCriteria({)
+  ...currentCriteria,
+  categories: categories.filter(c => c !== category),
+});
                         }}
                       />
                       <span>{category}</span>
@@ -338,18 +328,17 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         type="checkbox"
                         checked={currentCriteria.content_types?.includes(type) || false}
                         onChange={(e) => {
-                          const types = currentCriteria.content_types || [];
-                          if (e.target.checked) {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              content_types: [...types, type]
-                            });
+  const types = currentCriteria.content_types || [];
+  if (e.target.checked) {
+  setCurrentCriteria({)
+  ...currentCriteria,
+  content_types: [...types, type],
+});
                           } else {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              content_types: types.filter(t => t !== type),
-                            });
-                          }
+  setCurrentCriteria({)
+  ...currentCriteria,
+  content_types: types.filter(t => t !== type),
+});
                         }}
                       />
                       <span>{type}</span>
@@ -380,9 +369,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     step="0.1"
                     value={currentCriteria.min_conversion_rate || ''}
                     onChange={(e) => setCurrentCriteria({)
-                      ...currentCriteria,
-                      min_conversion_rate: parseFloat(e.target.value) || undefined,
-                    })}
+  ...currentCriteria,
+  min_conversion_rate: parseFloat(e.target.value) || undefined,
+})}
                     className="criteria-input"
                     placeholder="5.0"
                   />
@@ -398,9 +387,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                     max="100"
                     value={currentCriteria.min_engagement_score || ''}
                     onChange={(e) => setCurrentCriteria({)
-                      ...currentCriteria,
-                      min_engagement_score: parseInt(e.target.value) || undefined,
-                    })}
+  ...currentCriteria,
+  min_engagement_score: parseInt(e.target.value) || undefined,
+})}
                     className="criteria-input"
                     placeholder="70"
                   />
@@ -429,18 +418,17 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                         type="checkbox"
                         checked={currentCriteria.creator_tiers?.includes(tier) || false}
                         onChange={(e) => {
-                          const tiers = currentCriteria.creator_tiers || [];
-                          if (e.target.checked) {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              creator_tiers: [...tiers, tier]
-                            });
+  const tiers = currentCriteria.creator_tiers || [];
+  if (e.target.checked) {
+  setCurrentCriteria({)
+  ...currentCriteria,
+  creator_tiers: [...tiers, tier],
+});
                           } else {
-                            setCurrentCriteria({)
-                              ...currentCriteria,
-                              creator_tiers: tiers.filter(t => t !== tier),
-                            });
-                          }
+  setCurrentCriteria({)
+  ...currentCriteria,
+  creator_tiers: tiers.filter(t => t !== tier),
+});
                         }}
                       />
                       <span className="capitalize">{tier}</span>
@@ -455,9 +443,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   value={currentCriteria.published_after ? 
                     currentCriteria.published_after.toISOString().split('T')[0] : ''}
                   onChange={(e) => setCurrentCriteria({)
-                    ...currentCriteria,
-                    published_after: e.target.value ? new Date(e.target.value) : undefined,
-                  })}
+  ...currentCriteria,
+  published_after: e.target.value ? new Date(e.target.value) : undefined,
+})}
                   className="criteria-input"
                 />
               </div>
@@ -481,9 +469,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                   min="1"
                   value={currentCriteria.max_content_count || ''}
                   onChange={(e) => setCurrentCriteria({)
-                    ...currentCriteria,
-                    max_content_count: parseInt(e.target.value) || undefined,
-                  })}
+  ...currentCriteria,
+  max_content_count: parseInt(e.target.value) || undefined,
+})}
                   className="criteria-input"
                   placeholder="50"
                 />
@@ -495,9 +483,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       type="checkbox"
                       checked={currentCriteria.exclude_recently_promoted || false}
                       onChange={(e) => setCurrentCriteria({)
-                        ...currentCriteria,
-                        exclude_recently_promoted: e.target.checked,
-                      })}
+  ...currentCriteria,
+  exclude_recently_promoted: e.target.checked,
+})}
                     />
                     <span>Exclude recently promoted content</span>
                   </label>
@@ -506,9 +494,9 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
                       type="checkbox"
                       checked={currentCriteria.exclude_current_promotions || false}
                       onChange={(e) => setCurrentCriteria({)
-                        ...currentCriteria,
-                        exclude_current_promotions: e.target.checked,
-                      })}
+  ...currentCriteria,
+  exclude_current_promotions: e.target.checked,
+})}
                     />
                     <span>Exclude currently promoted content</span>
                   </label>
@@ -748,7 +736,7 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </div>
     </div>
   );
-  return ();
+  return;
     <div className={`content-selection-criteria ${className}`}>}
       <div className="criteria-header">
         <div className="header-info">
@@ -783,388 +771,310 @@ export const ContentSelectionCriteria: React.FC<ContentSelectionCriteriaProps> =
       </Tabs>
       <style>{`
         .content-selection-criteria {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          max-width: 1400px;,
+  margin: 0 auto;
+          padding: 1.5rem;,
+  display: flex;
+          flex-direction: column;,
+  gap: 1.5rem;
         .criteria-header {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-        }
         .header-info h2 {
           font-size: 1.875rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           margin-bottom: 0.5rem;
-        }
         .header-info p {
           color: #6b7280;
           font-size: 1rem;
-        }
         .criteria-builder {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .builder-sections {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .builder-section .section-title {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           font-size: 1.125rem;
-        }
         .filter-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 1rem;
-        }
         .filter-item {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .filter-item.span-2 {
           grid-column: span 2;
-        }
         .filter-item label {
-          font-weight: 500;
-          color: #374151;
-        }
+          font-weight: 500;,
+  color: #374151;
         .criteria-input {
-          padding: 0.5rem 0.75rem;
-          border: 1px solid #d1d5db;
+          padding: 0.5rem 0.75rem;,
+  border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 0.875rem;
-        }
-        .criteria-input:focus {
-          outline: none;
+        .criteria-input:focus {,
+  outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
         .input-with-unit {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
+          align-items: center;,
+  gap: 0.5rem;
         .input-with-unit .criteria-input {
           flex: 1;
-        }
         .input-unit {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .multi-select {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.5rem;
         .checkbox-label {
           display: flex;
-          align-items: center;
-          gap: 0.375rem;
-          font-size: 0.875rem;
-          color: #374151;
+          align-items: center;,
+  gap: 0.375rem;
+          font-size: 0.875rem;,
+  color: #374151;
           cursor: pointer;
-        }
         .checkbox-label input[type="checkbox"] {
-          width: 1rem;
-          height: 1rem;
-        }
+          width: 1rem;,
+  height: 1rem;
         .checkbox-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .builder-actions {
-          display: flex;
-          gap: 0.75rem;
+          display: flex;,
+  gap: 0.75rem;
           justify-content: flex-end;
           padding-top: 1rem;
           border-top: 1px solid #e5e7eb;
-        }
         .templates-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .templates-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .templates-header h3 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
-        }
         .templates-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
           gap: 1rem;
-        }
         .template-card .card-content {
           padding-top: 0;
-        }
         .template-header {
           display: flex;
           justify-content: space-between;
-          align-items: flex-start;
-          gap: 1rem;
-        }
+          align-items: flex-start;,
+  gap: 1rem;
         .template-info h4 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 0.5rem 0;
-        }
         .template-info p {
           color: #6b7280;
-          font-size: 0.875rem;
-          margin: 0;
-        }
+          font-size: 0.875rem;,
+  margin: 0;
         .template-stats {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 1rem;
-          padding: 0.75rem;
+          margin-bottom: 1rem;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .stat-group {
           display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
+          flex-direction: column;,
+  gap: 0.25rem;
         .stat-label {
-          font-size: 0.75rem;
-          color: #6b7280;
+          font-size: 0.75rem;,
+  color: #6b7280;
           font-weight: 500;
-        }
         .stat-value {
-          font-size: 0.875rem;
-          color: #1f2937;
+          font-size: 0.875rem;,
+  color: #1f2937;
           font-weight: 600;
-        }
         .template-preview h5 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 0.5rem 0;
-        }
         .criteria-tags {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.375rem;
+          flex-wrap: wrap;,
+  gap: 0.375rem;
           margin-bottom: 1rem;
-        }
         .criteria-tag {
-          font-size: 0.75rem;
-          padding: 0.25rem 0.5rem;
-          background: #f3f4f6;
-          color: #374151;
+          font-size: 0.75rem;,
+  padding: 0.25rem 0.5rem;
+          background: #f3f4f6;,
+  color: #374151;
           display: flex;
           align-items: center;
-        }
         .template-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: flex;,
+  gap: 0.5rem;
           justify-content: flex-end;
-        }
         .preview-section {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .preview-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        }
         .preview-header h3 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0;
-        }
         .preview-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
+          display: flex;,
+  gap: 0.5rem;
         .preview-metrics {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1rem;
-        }
         .metric-card .card-content {
-          text-align: center;
-          padding: 1.5rem;
-        }
+          text-align: center;,
+  padding: 1.5rem;
         .metric-value {
           font-size: 2rem;
-          font-weight: 700;
-          color: #1f2937;
+          font-weight: 700;,
+  color: #1f2937;
           line-height: 1;
-        }
         .metric-label {
-          font-size: 0.875rem;
-          color: #6b7280;
+          font-size: 0.875rem;,
+  color: #6b7280;
           margin-top: 0.5rem;
-        }
         .preview-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
+          grid-template-columns: 1fr 1fr;,
+  gap: 1rem;
         .sample-content-list {
           display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
+          flex-direction: column;,
+  gap: 1rem;
         .sample-content-item {
-          padding: 1rem;
-          border: 1px solid #e5e7eb;
+          padding: 1rem;,
+  border: 1px solid #e5e7eb;
           border-radius: 6px;
-        }
         .content-info h5 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 0.5rem 0;
-        }
         .content-meta {
           display: flex;
-          align-items: center;
-          gap: 0.5rem;
+          align-items: center;,
+  gap: 0.5rem;
           margin-bottom: 0.5rem;
-        }
         .content-meta span {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .category-badge {
-          font-size: 0.75rem;
-          padding: 0.125rem 0.375rem;
-        }
+          font-size: 0.75rem;,
+  padding: 0.125rem 0.375rem;
         .content-stats {
-          display: flex;
-          gap: 1rem;
-          font-size: 0.875rem;
-          color: #374151;
+          display: flex;,
+  gap: 1rem;
+          font-size: 0.875rem;,
+  color: #374151;
           margin-bottom: 0.5rem;
-        }
         .match-reasons {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.25rem;
-        }
+          flex-wrap: wrap;,
+  gap: 0.25rem;
         .reason-badge {
-          font-size: 0.75rem;
-          padding: 0.125rem 0.375rem;
-          background: #eff6ff;
-          color: #1e40af;
-        }
+          font-size: 0.75rem;,
+  padding: 0.125rem 0.375rem;
+          background: #eff6ff;,
+  color: #1e40af;
         .distribution-charts {
           display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
+          flex-direction: column;,
+  gap: 1.5rem;
         .chart-section h5 {
-          font-weight: 600;
-          color: #1f2937;
+          font-weight: 600;,
+  color: #1f2937;
           margin: 0 0 0.75rem 0;
-        }
         .distribution-bars {
           display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-        }
+          flex-direction: column;,
+  gap: 0.5rem;
         .distribution-bar {
           display: flex;
-          align-items: center;
-          gap: 0.75rem;
-        }
+          align-items: center;,
+  gap: 0.75rem;
         .bar-label {
-          font-size: 0.875rem;
-          color: #374151;
+          font-size: 0.875rem;,
+  color: #374151;
           min-width: 80px;
-        }
         .bar-container {
-          flex: 1;
-          height: 20px;
+          flex: 1;,
+  height: 20px;
           background: #f3f4f6;
-          border-radius: 10px;
-          overflow: hidden;
-        }
+          border-radius: 10px;,
+  overflow: hidden;
         .bar-fill {
-          height: 100%;
-          background: #3b82f6;
+          height: 100%;,
+  background: #3b82f6;
           transition: width 0.3s ease;
-        }
         .bar-value {
-          font-size: 0.875rem;
-          color: #374151;
+          font-size: 0.875rem;,
+  color: #374151;
           font-weight: 600;
           min-width: 30px;
           text-align: right;
-        }
         .prediction-metrics {
           display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-        }
+          flex-direction: column;,
+  gap: 0.75rem;
         .prediction-item {
           display: flex;
-          justify-content: space-between;
-          padding: 0.75rem;
+          justify-content: space-between;,
+  padding: 0.75rem;
           background: #f9fafb;
           border-radius: 6px;
-        }
         .prediction-label {
-          font-size: 0.875rem;
-          color: #6b7280;
-        }
+          font-size: 0.875rem;,
+  color: #6b7280;
         .prediction-value {
-          font-size: 0.875rem;
-          color: #1f2937;
+          font-size: 0.875rem;,
+  color: #1f2937;
           font-weight: 600;
-        }
         @media (max-width: 1200px) {
           .preview-content {
             grid-template-columns: 1fr;
-          }
           .preview-metrics {
             grid-template-columns: repeat(2, 1fr);
-          }
           .filter-grid {
             grid-template-columns: 1fr;
-          }
           .filter-item.span-2 {
             grid-column: span 1;
-          }
-        }
         @media (max-width: 768px) {
           .criteria-header {
-            flex-direction: column;
-            gap: 1rem;
-          }
+            flex-direction: column;,
+  gap: 1rem;
           .preview-metrics {
             grid-template-columns: 1fr;
-          }
           .templates-grid {
             grid-template-columns: 1fr;
-          }
           .builder-actions {
             flex-wrap: wrap;
-          }
           .multi-select {
             flex-direction: column;
-          }
-        }
       `}</style>
     </div>
   );

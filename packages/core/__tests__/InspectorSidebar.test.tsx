@@ -13,35 +13,29 @@ class TestErrorBoundary extends React.Component<
   constructor(props: { children: React.ReactNode; onError?: (error: Error) => void }) {
     super(props);
     this.state = { hasError: false };
-  }
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
-  }
   componentDidCatch(error: Error) {
     this.props.onError?.(error);
-  }
   render() {
     if (this.state.hasError) {
       return <div data-testid="error-boundary">Error: {this.state.error?.message}</div>;
-    }
     return this.props.children;
-  }
-}
 describe('InspectorSidebar - Enhanced Testing', () => {
   const schema = z.object({)
-    label: z.string().default('Default Label'),
-    value: z.number().default(0),
-    description: z.string().optional(),
-  });
+  label: z.string().default('Default Label'),
+  value: z.number().default(0),
+  description: z.string().optional(),
+});
   const node = {
-    id: 'n1',
-    type: 'TestNode',
-    data: { ,
-      label: 'Test Label', 
-      value: 5,
-      description: 'Test description',
-    },
-    position: { x: 0, y: 0 }
+  id: 'n1',
+  type: 'TestNode',
+  data: {,
+  label: 'Test Label',
+  value: 5,
+  description: 'Test description',
+},
+  position: { x: 0, y: 0 }
   };
   beforeEach(() => {
     jest.clearAllMocks();
@@ -65,7 +59,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(screen.getByText(/select a node/i)).toBeInTheDocument();
     });
     it('calls onChange with updated string value', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -76,7 +70,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(handleChange).toHaveBeenCalledWith({ label: 'Changed' });
     });
     it('calls onChange with updated number value', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -110,10 +104,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       }).not.toThrow();
     });
     it('handles malformed node data', () => {
-      const malformedNode = {
-        ...node,
-        data: null,
-      } as any;
+  const malformedNode = {
+  ...node,
+  data: null,
+} as any;
       expect(() => {
         render();
           <InspectorSidebar node={malformedNode} schema={schema} onChange={() => {}} />
@@ -133,7 +127,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
         throw new Error('onChange error');
       });
       const user = userEvent.setup();
-      const onError = jest.fn<unknown[], unknown>();
+      const onError = jest.fn<unknown, unknown>();
       render();
         <TestErrorBoundary onError={onError}>
           <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -145,10 +139,10 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(onError).toHaveBeenCalled();
     });
     it('handles schema validation errors', async () => {
-      const strictSchema = z.object({)
-        label: z.string().min(10, 'Must be at least 10 characters'),
-        value: z.number().positive('Must be positive'),
-      });
+  const strictSchema = z.object({)
+  label: z.string().min(10, 'Must be at least 10 characters'),
+  value: z.number().positive('Must be positive'),
+});
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={strictSchema} onChange={() => {}} />
@@ -167,7 +161,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   });
   describe('Performance Concerns', () => {
     it('debounces rapid input changes', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar 
@@ -190,7 +184,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
     it('handles many concurrent input changes efficiently', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -210,25 +204,24 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(endTime - startTime).toBeLessThan(100);
     });
     it('efficiently renders complex schemas', () => {
-      const complexSchema = z.object({)
-        field1: z.string(),
-        field2: z.number(),
-        field3: z.boolean(),
-        field4: z.array(z.string()),
-        field5: z.object({),
-          nested1: z.string(),
-          nested2: z.number(),
-        })
+  const complexSchema = z.object({)
+  field1: z.string(),
+  field2: z.number(),
+  field3: z.boolean(),
+  field4: z.array(z.string()),
+  field5: z.object({,)
+  nested1: z.string(),
+  nested2: z.number(),
+}
       });
       const complexNode = {
         ...node,
         data: {,
-          field1: 'test',
+  field1: 'test',
           field2: 123,
           field3: true,
           field4: ['a', 'b'],
           field5: { nested1: 'nested', nested2: 456 }
-        }
       };
       const startTime = performance.now();
       render();
@@ -267,12 +260,12 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(document.activeElement).toBe(screen.getByLabelText('value'));
     });
     it('follows TypeScript strict mode', () => {
-      // Test proper TypeScript usage
-      const strictProps = {
-        node: node as const,
-        schema: schema,
-        onChange: jest.fn<unknown[], unknown>() as (data: Record<string, any>) => void
-      };
+  // Test proper TypeScript usage
+  const strictProps = {
+  node: node as const,
+  schema: schema,
+  onChange: jest.fn<unknown, unknown>() as (data: Record<string, any>) => void,
+};
       expect(() => {
         render(<InspectorSidebar {...strictProps} />);
       }).not.toThrow();
@@ -291,7 +284,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
   });
   describe('Data Type Handling', () => {
     it('handles string inputs correctly', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -302,7 +295,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(handleChange).toHaveBeenCalledWith({ label: 'New Label' });
     });
     it('handles number inputs correctly', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />
@@ -313,14 +306,14 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(handleChange).toHaveBeenCalledWith({ value: 123.45 });
     });
     it('handles boolean inputs correctly', async () => {
-      const booleanSchema = z.object({)
-        isEnabled: z.boolean().default(false),
-      });
+  const booleanSchema = z.object({)
+  isEnabled: z.boolean().default(false),
+});
       const booleanNode = {
         ...node,
         data: { isEnabled: false }
       };
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar 
@@ -351,7 +344,7 @@ describe('InspectorSidebar - Enhanced Testing', () => {
       expect(screen.getByLabelText('description')).toBeInTheDocument();
     });
     it('handles invalid number inputs gracefully', async () => {
-      const handleChange = jest.fn<unknown[], unknown>();
+      const handleChange = jest.fn<unknown, unknown>();
       const user = userEvent.setup();
       render();
         <InspectorSidebar node={node} schema={schema} onChange={handleChange} />

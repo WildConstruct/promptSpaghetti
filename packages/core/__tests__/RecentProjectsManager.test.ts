@@ -6,10 +6,10 @@ import { RecentProjectsManager, RecentProjectEntry } from '../managers/RecentPro
 
 // Mock localStorage
 const mockLocalStorage = {
-  getItem: jest.fn<unknown[], unknown>(),
-  setItem: jest.fn<unknown[], unknown>(),
-  removeItem: jest.fn<unknown[], unknown>(),
-  hasOwnProperty: jest.fn<unknown[], unknown>()
+  getItem: jest.fn<unknown, unknown>(),
+  setItem: jest.fn<unknown, unknown>(),
+  removeItem: jest.fn<unknown, unknown>(),
+  hasOwnProperty: jest.fn<unknown, unknown>(),
 };
 Object.defineProperty(window, 'localStorage', {)
   value: mockLocalStorage,
@@ -26,19 +26,19 @@ describe('RecentProjectsManager', () => {
     mockConsoleWarn.mockClear();
   });
   describe('addRecentProject', () => {
-    test('adds new project to empty list', () => {
-      const entry = {
-        name: 'Test Project',
-        metadata: {,
-          author: 'Test Author',
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z',
-          version: '1.0.0',
-          description: 'Test description',
-        },
-        thumbnail: 'data:image/svg+xml;base64,dGVzdA==',
-        fileSize: 1024,
-      };
+  test('adds new project to empty list', () => {
+  const entry = {
+  name: 'Test Project',
+  metadata: {,
+  author: 'Test Author',
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+  description: 'Test description',
+},
+  thumbnail: 'data:image/svg+xml;base64,dGVzdA==',
+        fileSize: 1024;
+  };
       RecentProjectsManager.addRecentProject(entry);
       expect(mockLocalStorage.setItem).toHaveBeenCalledTimes(1);
       const [key, value] = mockLocalStorage.setItem.mock.calls[0];
@@ -59,27 +59,25 @@ describe('RecentProjectsManager', () => {
             name: 'Existing Project',
             lastAccessDate: '2025-07-24T09:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T09:00:00.000Z', modified: '2025-07-24T09:00:00.000Z', version: '1.0.0' }
-          },
+  }
           {
             id: 'duplicate_456_def',
             name: 'Test Project',
             lastAccessDate: '2025-07-24T08:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T08:00:00.000Z', modified: '2025-07-24T08:00:00.000Z', version: '1.0.0' }
-          }
         ]
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       const entry = {
-        name: 'Test Project',
-        metadata: {,
-          author: 'New Author',
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z', 
-          version: '1.0.0',
-        }
-      };
+  name: 'Test Project',
+  metadata: {,
+  author: 'New Author',
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+};
       RecentProjectsManager.addRecentProject(entry);
-      const [, value] = mockLocalStorage.setItem.mock.calls[0];
+      const [ value] = mockLocalStorage.setItem.mock.calls[0];
       const savedData = JSON.parse(value as string);
       expect(savedData.projects).toHaveLength(2);
       expect(savedData.projects[0].name).toBe('Test Project');
@@ -90,24 +88,26 @@ describe('RecentProjectsManager', () => {
       const existingData = {
         version: '1.0.0',
         projects: Array.from({ length: 5 }, (_, i) => ({)
-          id: `project_${i}_abc`,}
-          name: `Project ${i}`,}
-          lastAccessDate: `2025-07-24T0${i}:00:00.000Z`,}
-          metadata: { author: 'Author', created: '2025-07-24T00:00:00.000Z', modified: '2025-07-24T00:00:00.000Z', version: '1.0.0' }
+  id: `project_${i}_abc`}
+},
+  name: `Project ${i}`}
+},
+  lastAccessDate: `2025-07-24T0${i}:00:00.000Z`;}
+  },
+  metadata: { author: 'Author', created: '2025-07-24T00:00:00.000Z', modified: '2025-07-24T00:00:00.000Z', version: '1.0.0' }
         }))
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       const entry = {
-        name: 'New Project',
-        metadata: {,
-          author: 'Author',
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z',
-          version: '1.0.0',
-        }
-      };
+  name: 'New Project',
+  metadata: {,
+  author: 'Author',
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+};
       RecentProjectsManager.addRecentProject(entry);
-      const [, value] = mockLocalStorage.setItem.mock.calls[0];
+      const [ value] = mockLocalStorage.setItem.mock.calls[0];
       const savedData = JSON.parse(value as string);
       expect(savedData.projects).toHaveLength(5);
       expect(savedData.projects[0].name).toBe('New Project');
@@ -118,14 +118,13 @@ describe('RecentProjectsManager', () => {
         throw new Error('Storage error');
       });
       const entry = {
-        name: 'Test Project',
-        metadata: {,
-          author: 'Author',
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z',
-          version: '1.0.0',
-        }
-      };
+  name: 'Test Project',
+  metadata: {,
+  author: 'Author',
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+};
       expect(() => RecentProjectsManager.addRecentProject(entry)).not.toThrow();
       expect(mockConsoleWarn).toHaveBeenCalledWith('Failed to load recent projects:', expect.any(Error));
     });
@@ -144,19 +143,18 @@ describe('RecentProjectsManager', () => {
             name: 'Project 1',
             lastAccessDate: '2025-07-24T08:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T08:00:00.000Z', modified: '2025-07-24T08:00:00.000Z', version: '1.0.0' }
-          },
+  }
           {
             id: 'project2_456_def',
             name: 'Project 2',
             lastAccessDate: '2025-07-24T10:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T10:00:00.000Z', modified: '2025-07-24T10:00:00.000Z', version: '1.0.0' }
-          },
+  }
           {
             id: 'project3_789_ghi',
             name: 'Project 3',
             lastAccessDate: '2025-07-24T09:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T09:00:00.000Z', modified: '2025-07-24T09:00:00.000Z', version: '1.0.0' }
-          }
         ]
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
@@ -175,7 +173,6 @@ describe('RecentProjectsManager', () => {
             name: 'Project 1',
             lastAccessDate: '2025-07-24T08:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T08:00:00.000Z', modified: '2025-07-24T08:00:00.000Z', version: '1.0.0' }
-          }
         ]
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
@@ -184,11 +181,11 @@ describe('RecentProjectsManager', () => {
       expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('promptspaghetti_recent_projects');
     });
     test('handles corrupted data gracefully', () => {
-      mockLocalStorage.getItem.mockReturnValue('invalid json' as unknown);
-      const projects = RecentProjectsManager.getRecentProjects();
-      expect(projects).toEqual([]);
-      expect(mockConsoleWarn).toHaveBeenCalledWith('Failed to load recent projects:', expect.any(Error));
-    });
+  mockLocalStorage.getItem.mockReturnValue('invalid json' as unknown);
+  const projects = RecentProjectsManager.getRecentProjects();
+  expect(projects).toEqual([]);
+  expect(mockConsoleWarn).toHaveBeenCalledWith('Failed to load recent projects:', expect.any(Error));
+});
   });
   describe('updateLastAccess', () => {
     test('updates last access date for existing project', () => {
@@ -200,12 +197,11 @@ describe('RecentProjectsManager', () => {
             name: 'Test Project',
             lastAccessDate: '2025-07-24T08:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T08:00:00.000Z', modified: '2025-07-24T08:00:00.000Z', version: '1.0.0' }
-          }
         ]
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       RecentProjectsManager.updateLastAccess('Test Project');
-      const [, value] = mockLocalStorage.setItem.mock.calls[0];
+      const [ value] = mockLocalStorage.setItem.mock.calls[0];
       const savedData = JSON.parse(value as string);
       expect(savedData.projects[0].lastAccessDate).not.toBe('2025-07-24T08:00:00.000Z');
       expect(new Date(savedData.projects[0].lastAccessDate).getTime()).toBeGreaterThan()
@@ -213,10 +209,10 @@ describe('RecentProjectsManager', () => {
       );
     });
     test('does nothing for non-existent project', () => {
-      const existingData = {
-        version: '1.0.0',
-        projects: [],
-      };
+  const existingData = {
+  version: '1.0.0',
+  projects: [],
+};
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       RecentProjectsManager.updateLastAccess('Nonexistent Project');
       expect(mockLocalStorage.setItem).not.toHaveBeenCalled();
@@ -232,18 +228,17 @@ describe('RecentProjectsManager', () => {
             name: 'Keep Project',
             lastAccessDate: '2025-07-24T08:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T08:00:00.000Z', modified: '2025-07-24T08:00:00.000Z', version: '1.0.0' }
-          },
+  }
           {
             id: 'project2_456_def',
             name: 'Remove Project',
             lastAccessDate: '2025-07-24T09:00:00.000Z',
             metadata: { author: 'Author', created: '2025-07-24T09:00:00.000Z', modified: '2025-07-24T09:00:00.000Z', version: '1.0.0' }
-          }
         ]
       };
       mockLocalStorage.getItem.mockReturnValue(JSON.stringify(existingData as unknown));
       RecentProjectsManager.removeRecentProject('Remove Project');
-      const [, value] = mockLocalStorage.setItem.mock.calls[0];
+      const [ value] = mockLocalStorage.setItem.mock.calls[0];
       const savedData = JSON.parse(value as string);
       expect(savedData.projects).toHaveLength(1);
       expect(savedData.projects[0].name).toBe('Keep Project');
@@ -274,11 +269,11 @@ describe('RecentProjectsManager', () => {
       expect(svgContent).toContain('<line');
     });
     test('returns default thumbnail on error', () => {
-      // Pass invalid data to trigger error
-      const thumbnail = RecentProjectsManager.generateThumbnail(null as any, null as any);
-      expect(thumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
-      expect(mockConsoleWarn).toHaveBeenCalledWith('Failed to generate thumbnail:', expect.any(Error));
-    });
+  // Pass invalid data to trigger error
+  const thumbnail = RecentProjectsManager.generateThumbnail(null as any, null as any);
+  expect(thumbnail).toMatch(/^data:image\/svg\+xml;base64,/);
+  expect(mockConsoleWarn).toHaveBeenCalledWith('Failed to generate thumbnail:', expect.any(Error));
+});
   });
   describe('checkStorageQuota', () => {
     test('returns available status when localStorage works', () => {
@@ -296,19 +291,19 @@ describe('RecentProjectsManager', () => {
     });
   });
   describe('getProjectDisplayInfo', () => {
-    test('formats project display information', () => {
-      const entry: RecentProjectEntry = {
-        id: 'test_123_abc',
-        name: 'Test Project',
-        lastAccessDate: '2025-07-24T10:00:00.000Z',
-        metadata: {,
-          author: 'Test Author',
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z',
-          version: '1.0.0',
-        },
-        fileSize: 2048,
-      };
+  test('formats project display information', () => {
+  const entry: RecentProjectEntry = {,
+  id: 'test_123_abc',
+  name: 'Test Project',
+  lastAccessDate: '2025-07-24T10:00:00.000Z',
+  metadata: {,
+  author: 'Test Author',
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+},
+  fileSize: 2048;
+  };
       const info = RecentProjectsManager.getProjectDisplayInfo(entry);
       expect(info.name).toBe('Test Project');
       expect(info.author).toBe('Test Author');
@@ -316,16 +311,15 @@ describe('RecentProjectsManager', () => {
       expect(info.lastAccessed).toBeDefined();
     });
     test('handles missing optional fields', () => {
-      const entry: RecentProjectEntry = {
-        id: 'test_123_abc',
-        name: 'Test Project',
-        lastAccessDate: '2025-07-24T10:00:00.000Z',
-        metadata: {,
-          created: '2025-07-24T10:00:00.000Z',
-          modified: '2025-07-24T10:00:00.000Z',
-          version: '1.0.0',
-        }
-      };
+  const entry: RecentProjectEntry = {,
+  id: 'test_123_abc',
+  name: 'Test Project',
+  lastAccessDate: '2025-07-24T10:00:00.000Z',
+  metadata: {,
+  created: '2025-07-24T10:00:00.000Z',
+  modified: '2025-07-24T10:00:00.000Z',
+  version: '1.0.0',
+};
       const info = RecentProjectsManager.getProjectDisplayInfo(entry);
       expect(info.name).toBe('Test Project');
       expect(info.author).toBeUndefined();

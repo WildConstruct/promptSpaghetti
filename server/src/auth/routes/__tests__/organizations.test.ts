@@ -121,7 +121,7 @@ describe('Organization Routes', () => {
             name: 'Test Organization',
             description: 'Test description',
             plan: 'free'
-          },
+  }
           'user-123',
           {
             ipAddress: '127.0.0.1',
@@ -408,7 +408,7 @@ describe('Organization Routes', () => {
             organizationId: 'org-123',
             name: 'Development Team',
             description: 'Main development team'
-          },
+  }
           'user-123',
           {
             ipAddress: '127.0.0.1',
@@ -623,7 +623,7 @@ describe('Organization Routes', () => {
             userId: 'user-456',
             role: 'member',
             invitedBy: 'user-123'
-          },
+  }
           {
             ipAddress: '127.0.0.1',
             userAgent: undefined

@@ -1,5 +1,6 @@
 import React from 'react';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
+
 export interface DragReorderListProps {
     options: WeightControlOption[];
     onReorder: (fromIndex: number, toIndex: number) => void;
@@ -8,7 +9,7 @@ export interface DragReorderListProps {
     className?: string;
     disabled?: boolean;
     showWeights?: boolean;
-}
+
 export declare const DragReorderList: React.FC<DragReorderListProps>;
 export default DragReorderList;
 //# sourceMappingURL=DragReorderList.d.ts.map

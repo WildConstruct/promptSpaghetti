@@ -5,6 +5,7 @@
  * Unified adapter for multimodal AI models that can process and understand multiple content types
  */
 import { BaseAIModel, CostEstimate } from '../BaseAIModel';
+
 export interface MultimodalConfig {
     provider: 'openai' | 'anthropic' | 'google' | 'custom';
     apiKey: string;
@@ -12,7 +13,7 @@ export interface MultimodalConfig {
     model?: string;
     timeout?: number;
     maxRetries?: number;
-}
+
 export interface MultimodalInput {
     type: 'text' | 'image' | 'audio' | 'video';
     content: string | ArrayBuffer | File | Blob;
@@ -26,7 +27,7 @@ export interface MultimodalInput {
         };
         description?: string;
     };
-}
+
 export interface MultimodalRequestOptions {
     inputs: MultimodalInput[];
     task?: 'understand' | 'describe' | 'analyze' | 'transform' | 'generate' | 'compare' | 'summarize';
@@ -45,7 +46,7 @@ export interface MultimodalRequestOptions {
     identify_objects?: boolean;
     transcribe_speech?: boolean;
     analyze_sentiment?: boolean;
-}
+
 export interface MultimodalAnalysis {
     content_type: string;
     confidence: number;
@@ -71,7 +72,7 @@ export interface MultimodalAnalysis {
         confidence: number;
     }>;
     metadata: Record<string, unknown>;
-}
+
 export interface MultimodalUnderstandingResult {
     understanding: {,
         summary: string;
@@ -121,7 +122,7 @@ export interface MultimodalUnderstandingResult {
         total_cost: number;
         processing_cost: number;
     };
-}
+
 export declare class MultimodalAdapter extends BaseAIModel {
     private config;
     private supportedModalities;
@@ -198,6 +199,6 @@ export declare class MultimodalAdapter extends BaseAIModel {
     private _getOutputTokenCost;
     private _calculateCost;
     protected _performHealthCheck(): Promise<void>;
-}
+
 export default MultimodalAdapter;
 //# sourceMappingURL=MultimodalAdapter.d.ts.map

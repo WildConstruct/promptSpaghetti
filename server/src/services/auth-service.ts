@@ -40,6 +40,7 @@ export type OAuthProvider = z.infer<typeof OAuthProviderSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type MFAConfig = z.infer<typeof MFAConfigSchema>;
 
+}
 interface TokenResponse {
   access_token: string;
   token_type: string;
@@ -47,13 +48,16 @@ interface TokenResponse {
   refresh_token?: string;
   scope?: string;
 }
+}
 
+}
 interface UserInfo {
   id: string;
   email: string;
   name: string;
   picture?: string;
   verified_email?: boolean;
+}
 }
 
 export class AuthService {
@@ -70,16 +74,19 @@ export class AuthService {
 
   // OAuth Provider Management
   async registerOAuthProvider(config: OAuthProvider): Promise<void> {
+
     const validatedConfig = OAuthProviderSchema.parse(config);
     this.oauthProviders.set(validatedConfig.provider, validatedConfig);
   }
 
   async getOAuthProvider(provider: string): Promise<OAuthProvider | null> {
+
     return this.oauthProviders.get(provider) || null;
   }
 
   // OAuth Authorization URL Generation
   async getAuthorizationUrl(provider: string, state?: string): Promise<string> {
+
     const config = await this.getOAuthProvider(provider);
     if (!config) {
       throw new Error(`OAuth provider ${provider} not configured`);
@@ -98,6 +105,7 @@ export class AuthService {
 
   // OAuth Token Exchange
   async exchangeCodeForToken(provider: string, code: string, state?: string): Promise<TokenResponse> {
+
     const config = await this.getOAuthProvider(provider);
     if (!config) {
       throw new Error(`OAuth provider ${provider} not configured`);
@@ -109,14 +117,14 @@ export class AuthService {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
-      },
+  }
       body: new URLSearchParams({
         client_id: config.clientId,
         client_secret: config.clientSecret,
         code,
         grant_type: 'authorization_code',
         redirect_uri: config.redirectUri
-      })
+  }
     });
 
     if (!response.ok) {
@@ -128,6 +136,7 @@ export class AuthService {
 
   // OAuth User Info Retrieval
   async getUserInfo(provider: string, accessToken: string): Promise<UserInfo> {
+
     const userInfoEndpoint = this.getUserInfoEndpoint(provider);
     const response = await fetch(userInfoEndpoint, {
       headers: {
@@ -146,6 +155,7 @@ export class AuthService {
 
   // Session Management
   async createSession(userId: string, workspaceId?: string, permissions: Permission[] = []): Promise<string> {
+
     const sessionId = this.generateSessionId();
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
@@ -167,6 +177,7 @@ export class AuthService {
   }
 
   async validateSession(sessionId: string): Promise<Session | null> {
+
     const session = this.sessionStore.get(sessionId);
     if (!session) {
       return null;
@@ -181,6 +192,7 @@ export class AuthService {
   }
 
   async refreshSession(sessionId: string): Promise<string> {
+
     const session = await this.validateSession(sessionId);
     if (!session) {
       throw new Error('Invalid session');
@@ -199,10 +211,12 @@ export class AuthService {
   }
 
   async revokeSession(sessionId: string): Promise<void> {
+
     this.sessionStore.delete(sessionId);
   }
 
   async revokeAllUserSessions(userId: string): Promise<void> {
+
     for (const [sessionId, session] of this.sessionStore.entries()) {
       if (session.userId === userId) {
         this.sessionStore.delete(sessionId);
@@ -212,10 +226,12 @@ export class AuthService {
 
   // JWT Token Management
   async generateJWT(payload: Record<string, any>, expiresIn: string = '24h'): Promise<string> {
+
     return jwt.sign(payload, this.jwtSecret, { expiresIn });
   }
 
   async verifyJWT(token: string): Promise<unknown> {
+
     try {
       return jwt.verify(token, this.jwtSecret);
     } catch (error) {
@@ -225,6 +241,7 @@ export class AuthService {
 
   // Multi-Factor Authentication
   async enableMFA(userId: string): Promise<{ secret: string; backupCodes: string[] }> {
+
     const secret = this.generateMFASecret();
     const backupCodes = this.generateBackupCodes();
 
@@ -240,6 +257,7 @@ export class AuthService {
   }
 
   async verifyMFA(userId: string, token: string): Promise<boolean> {
+
     const mfaConfig = this.mfaStore.get(userId);
     if (!mfaConfig || !mfaConfig.enabled) {
       return false;
@@ -263,6 +281,7 @@ export class AuthService {
   }
 
   async disableMFA(userId: string): Promise<void> {
+
     const mfaConfig = this.mfaStore.get(userId);
     if (mfaConfig) {
       mfaConfig.enabled = false;
@@ -271,6 +290,7 @@ export class AuthService {
 
   // Permission Management
   async getUserPermissions(userId: string, workspaceId?: string): Promise<Permission[]> {
+
     if (workspaceId) {
       const membership = await this.workspaceDAO.getUserMembership(userId, workspaceId);
       if (!membership) {
@@ -284,6 +304,7 @@ export class AuthService {
   }
 
   async hasPermission(userId: string, permission: Permission, workspaceId?: string): Promise<boolean> {
+
     const permissions = await this.getUserPermissions(userId, workspaceId);
     return permissions.includes(permission);
   }
@@ -397,6 +418,7 @@ export class AuthService {
     certificate: string;
     attributeMapping: Record<string, string>;
   }): Promise<void> {
+
     // SAML configuration implementation
     // This would integrate with a SAML library like passport-saml
     throw new Error('SAML configuration not yet implemented');
@@ -408,6 +430,7 @@ export class AuthService {
     clientSecret: string;
     scope: string;
   }): Promise<void> {
+
     // OIDC configuration implementation
     // This would integrate with openid-client
     throw new Error('OIDC configuration not yet implemented');

@@ -6,8 +6,10 @@ import { z } from 'zod';
 
 // Basic validation patterns
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const shareTokenRegex = /^[a-zA-Z0-9]{32,}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2
+}$/;
+const shareTokenRegex = /^[a-zA-Z0-9]{32
+}$/;
 
 // Core type schemas
 export const ShareAccessLevelSchema = z.enum(['public', 'restricted', 'private']);
@@ -36,18 +38,18 @@ export const ShareSecurityConfigSchema = z.object({)
   dataClassification: z.enum(['public', 'internal', 'confidential', 'restricted']),
   encryptionRequired: z.boolean(),
   auditingEnabled: z.boolean(),
-  retentionPolicy: z.object({),
-    maxShareDuration: z.number().min(1).max(3650), // Max 10 years
-    autoExpire: z.boolean(),
-    dataRetentionDays: z.number().min(1).max(3650),
-  }),
-  accessControls: z.object({),
-    ipWhitelist: z.array(z.string().ip()).default([]),
-    geoRestrictions: z.array(z.string().length(2)).default([]), // ISO country codes
-    requireAuthentication: z.boolean(),
-    maxConcurrentUsers: z.number().min(1).max(10000).optional(),
-    sessionTimeout: z.number().min(5).max(1440).optional() // 5 minutes to 24 hours,
-  })
+  retentionPolicy: z.object({,)
+  maxShareDuration: z.number().min(1).max(3650), // Max 10 years,
+  autoExpire: z.boolean(),
+  dataRetentionDays: z.number().min(1).max(3650),
+}),
+  accessControls: z.object({,)
+  ipWhitelist: z.array(z.string().ip()).default([]),
+  geoRestrictions: z.array(z.string().length(2)).default([]), // ISO country codes,
+  requireAuthentication: z.boolean(),
+  maxConcurrentUsers: z.number().min(1).max(10000).optional(),
+  sessionTimeout: z.number().min(5).max(1440).optional() // 5 minutes to 24 hours,
+}
 });
 
 export const SharingConfigSchema = z.object({)
@@ -78,7 +80,7 @@ export const MergeConflictSchema = z.object({)
   path: z.string().min(1),
   type: z.enum(['content', 'metadata', 'permissions']),
   conflictingVersions: z.array(z.string()).min(2),
-  resolution: z.enum(['auto', 'manual']).optional()
+  resolution: z.enum(['auto', 'manual']).optional(),
 });
 
 export const VersionControlSchema = z.object({)
@@ -97,8 +99,8 @@ export const ConnectionLabelSchema = z.object({)
   label: z.string().min(1).max(255),
   color: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
   author: UserInfoSchema,
-  createdAt: z.date(),
-});
+  createdAt: z.date();
+  });
 
 export const StickyNoteSchema = z.object({)
   id: z.string().regex(uuidRegex),
@@ -110,8 +112,8 @@ export const StickyNoteSchema = z.object({)
   color: z.string().regex(/^#[0-9A-F]{6}$/i),
   author: UserInfoSchema,
   createdAt: z.date(),
-  updatedAt: z.date(),
-});
+  updatedAt: z.date();
+  });
 
 export const AnnotationRegionSchema = z.object({)
   id: z.string().regex(uuidRegex),
@@ -123,8 +125,8 @@ export const AnnotationRegionSchema = z.object({)
   description: z.string().max(1000).optional(),
   color: z.string().regex(/^#[0-9A-F]{6}$/i),
   author: UserInfoSchema,
-  createdAt: z.date(),
-});
+  createdAt: z.date();
+  });
 
 export const ShareCommentSchema = z.object({)
   id: z.string().regex(uuidRegex),
@@ -133,14 +135,14 @@ export const ShareCommentSchema = z.object({)
   createdAt: z.date(),
   updatedAt: z.date().optional(),
   parentId: z.string().regex(uuidRegex).optional(),
-  position: z.object({),
-    x: z.number().finite(),
-    y: z.number().finite(),
-  }).optional(),
+  position: z.object({,)
+  x: z.number().finite(),
+  y: z.number().finite(),
+}).optional(),
   resolved: z.boolean().default(false),
   resolvedBy: UserInfoSchema.optional(),
-  resolvedAt: z.date().optional(),
-});
+  resolvedAt: z.date().optional();
+  });
 
 export const ContentAnnotationsSchema = z.object({)
   connectionLabels: z.array(ConnectionLabelSchema).default([]),
@@ -160,18 +162,18 @@ export const SharedContentMetadataSchema = z.object({)
   contentSize: z.number().min(0).max(1024 * 1024 * 1024), // Max 1GB
   checksumMd5: z.string().regex(/^[a-f0-9]{32}$/, 'Invalid MD5 checksum'),
   versionControl: VersionControlSchema,
-  annotations: ContentAnnotationsSchema,
-});
+  annotations: ContentAnnotationsSchema;
+  });
 
 // Analytics schemas
 export const GeoLocationSchema = z.object({)
-  country: z.string().length(2), // ISO country code
+  country: z.string().length(2), // ISO country code,
   region: z.string().min(1).max(100),
   city: z.string().min(1).max(100),
-  coordinates: z.object({),
-    lat: z.number().min(-90).max(90),
-    lng: z.number().min(-180).max(180),
-  })
+  coordinates: z.object({,)
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+}
 });
 
 export const ViewerInfoSchema = z.object({)
@@ -186,7 +188,7 @@ export const ShareViewSchema = z.object({)
   id: z.string().regex(uuidRegex),
   viewerInfo: ViewerInfoSchema,
   timestamp: z.date(),
-  duration: z.number().min(0), // seconds
+  duration: z.number().min(0), // seconds,
   ipAddress: z.string().ip(),
   userAgent: z.string().min(1).max(1000),
   referrer: z.string().url().optional(),
@@ -210,7 +212,7 @@ export const CollaborationEventSchema = z.object({)
   user: UserInfoSchema,
   timestamp: z.date(),
   details: z.any(),
-  impact: z.enum(['minor', 'major', 'breaking'])
+  impact: z.enum(['minor', 'major', 'breaking']),
 });
 
 export const GeographicStatsSchema = z.object({)
@@ -227,7 +229,7 @@ export const DeviceStatsSchema = z.object({)
 });
 
 export const ConversionMetricsSchema = z.object({)
-  viewToDownload: z.number().min(0).max(100), // percentage
+  viewToDownload: z.number().min(0).max(100), // percentage,
   viewToCollaboration: z.number().min(0).max(100),
   viewToSignup: z.number().min(0).max(100),
   averageTimeToAction: z.number().min(0) // seconds,
@@ -252,7 +254,7 @@ export const SharedContentSchema = z.object({)
   type: ContentTypeSchema,
   title: z.string().min(1).max(255),
   description: z.string().max(2000).optional(),
-  content: z.any(), // Content validation depends on type
+  content: z.any(), // Content validation depends on type,
   metadata: SharedContentMetadataSchema,
   sharing: SharingConfigSchema,
   security: ShareSecurityConfigSchema,
@@ -302,10 +304,10 @@ export const ShareAccessResponseSchema = z.object({)
   permissions: z.array(SharePermissionSchema),
   requiresPassword: z.boolean(),
   error: z.string().optional(),
-  analytics: z.object({),
-    viewCount: z.number().min(0),
-    lastAccessed: z.date(),
-  }).optional()
+  analytics: z.object({,)
+  viewCount: z.number().min(0),
+  lastAccessed: z.date(),
+}).optional()
 });
 
 export const SharePermissionRequestSchema = z.object({)
@@ -317,10 +319,10 @@ export const SharePermissionRequestSchema = z.object({)
 
 export const ShareAnalyticsRequestSchema = z.object({)
   shareId: z.string().regex(uuidRegex),
-  timeRange: z.object({),
-    start: z.date(),
-    end: z.date(),
-  }).optional(),
+  timeRange: z.object({,)
+  start: z.date(),
+  end: z.date(),
+}).optional(),
   metrics: z.array(z.enum(['views', 'downloads', 'collaborations'])).optional()
 });
 
@@ -332,7 +334,7 @@ export const ShareAnalyticsResponseSchema = z.object({)
 
 // Configuration schema
 export const SharingSystemConfigSchema = z.object({)
-  maxShareDuration: z.number().min(1).max(3650), // days
+  maxShareDuration: z.number().min(1).max(3650), // days,
   defaultAccessLevel: ShareAccessLevelSchema,
   allowAnonymousSharing: z.boolean(),
   requireEmailVerification: z.boolean(),
@@ -340,7 +342,7 @@ export const SharingSystemConfigSchema = z.object({)
   allowPasswordProtection: z.boolean(),
   trackAnalyticsByDefault: z.boolean(),
   defaultRetentionDays: z.number().min(1).max(3650),
-  maxFileSizeForSharing: z.number().min(1024).max(1024 * 1024 * 1024), // 1KB to 1GB
+  maxFileSizeForSharing: z.number().min(1024).max(1024 * 1024 * 1024), // 1KB to 1GB,
   supportedFormats: z.array(z.string()).default(['json', 'csv', 'pdf']),
   encryptionRequired: z.boolean(),
 });
@@ -348,17 +350,17 @@ export const SharingSystemConfigSchema = z.object({)
 // Event schema
 export const ShareEventSchema = z.object({)
   type: z.enum([),
-    'share_created',
-    'share_accessed',
-    'share_downloaded',
-    'share_expired',
-    'share_revoked',
-    'collaborator_added',
-    'collaborator_removed',
-    'permission_changed',
-    'comment_added',
-    'content_updated',
-    'annotation_added'
+  'share_created',
+  'share_accessed',
+  'share_downloaded',
+  'share_expired',
+  'share_revoked',
+  'collaborator_added',
+  'collaborator_removed',
+  'permission_changed',
+  'comment_added',
+  'content_updated',
+  'annotation_added'
   ]),
   shareId: z.string().regex(uuidRegex),
   timestamp: z.date(),
@@ -369,43 +371,38 @@ export const ShareEventSchema = z.object({)
 // Validation helper functions
 export function validateShareContent(content: unknown, type: string): boolean {
   try {
-    switch (type) {
-    case 'graph':
-      return z.object({)
-        nodes: z.array(z.any()),
-        edges: z.array(z.any()),
-      }).parse(content) !== null;
+  switch (type) {
+  case 'graph':,
+  return z.object({)
+  nodes: z.array(z.any()),
+  edges: z.array(z.any()),
+}).parse(content) !== null;
     case 'template':
       return z.object({)
-        template: z.string(),
-        variables: z.record(z.any()),
-      }).parse(content) !== null;
+  template: z.string(),
+  variables: z.record(z.any()),
+}).parse(content) !== null;
     case 'bundle':
       return z.object({)
-        version: z.string(),
-        generators: z.array(z.any()),
-      }).parse(content) !== null;
+  version: z.string(),
+  generators: z.array(z.any()),
+}).parse(content) !== null;
     case 'dataset':
       return z.object({)
-        format: z.string(),
-        data: z.any(),
-      }).parse(content) !== null;
+  format: z.string(),
+  data: z.any(),
+}).parse(content) !== null;
     default:
       return false;
-    }
   } catch {
     return false;
-  }
-}
 
 export function validateShareToken(token: string): boolean {
   return shareTokenRegex.test(token);
-}
 
 export function validatePassword(password: string): { valid: boolean; strength: 'weak' | 'medium' | 'strong' } {
   if (password.length < 8) {
     return { valid: false, strength: 'weak' };
-  }
   const hasUpper = /[A-Z]/.test(password);
   const hasLower = /[a-z]/.test(password);
   const hasNumber = /\d/.test(password);
@@ -417,8 +414,6 @@ export function validatePassword(password: string): { valid: boolean; strength: 
     return { valid: true, strength: 'medium' };
   } else {
     return { valid: true, strength: 'strong' };
-  }
-}
 
 // Export all schemas as a single object for convenience
 export const SharingSchemas = {

@@ -12,42 +12,37 @@ import {
   ActivationContext
 } from '../../services/Epic16InteractiveElementsService';
 interface LiveChatWidgetProps {
-  element: LiveChatElement;
+  element: LiveChatElement;,
   interactiveService: Epic16InteractiveElementsService;
-  userId: string;
+  userId: string;,
   userName: string;
   userAvatar?: string;
   isMinimized?: boolean;
   onMinimize?: () => void;
   onClose?: () => void;
-}
-interface ChatMessage {
-  id: string;
+  interface ChatMessage {
+  id: string;,
   userId: string;
   userName: string;
   userAvatar?: string;
-  message: string;
+  message: string;,
   timestamp: Date;
   type: 'text' | 'file' | 'system' | 'emoji';
-  attachments?: ChatAttachment[];
+  attachments?: ChatAttachment;
   edited?: boolean;
   editedAt?: Date;
-}
-interface ChatAttachment {
-  id: string;
+  interface ChatAttachment {
+  id: string;,
   name: string;
-  size: number;
+  size: number;,
   type: string;
   url: string;
   thumbnail?: string;
-}
-interface TypingUser {
-  userId: string;
+  interface TypingUser {
+  userId: string;,
   userName: string;
   timestamp: Date;
-}
-
-export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
+  export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({,)
   element,
   interactiveService,
   userId,
@@ -58,11 +53,11 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
   onClose
 }) => {
   // State management
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage>([]);
   const [currentMessage, setCurrentMessage] = useState('');
-  const [typingUsers, ___setTypingUsers] = useState<TypingUser[]>([]);
+  const [typingUsers, ___setTypingUsers] = useState<TypingUser>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<string>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [uploading, setUploading] = useState(false);
   // Refs
@@ -84,14 +79,15 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
     const connectTimeout = setTimeout(() => {
       setIsConnected(true);
       // Add welcome message
-      const welcomeMessage: ChatMessage = {
-        id: 'welcome-1',
+      const welcomeMessage: ChatMessage = {,
+  id: 'welcome-1',
         userId: 'system',
         userName: 'System',
-        message: `Welcome to the chat, ${userName}! Feel free to ask questions or share your thoughts.`,}
-        timestamp: new Date(),
-        type: 'system',
-      };
+        message: `Welcome to the chat, ${userName}! Feel free to ask questions or share your thoughts.`}
+},
+  timestamp: new Date(),
+        type: 'system';
+  };
       setMessages([welcomeMessage]);
       // Simulate other users online
       setOnlineUsers(['user-1', 'user-2', userId]);
@@ -103,11 +99,9 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
     if (!isTyping) {
       setIsTyping(true);
       // In real implementation, would emit typing event via WebSocket
-    }
     // Reset typing timeout
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
-    }
     typingTimeoutRef.current = setTimeout(() => {
       setIsTyping(false);
     }, 3000);
@@ -118,50 +112,52 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
     if (value.length <= maxMessageLength) {
       setCurrentMessage(value);
       handleTypingStart();
-    }
   }, [maxMessageLength, handleTypingStart]);
   // Send message
   const handleSendMessage = useCallback(async () => {
     if (!currentMessage.trim() || !isConnected) return;
-    const newMessage: ChatMessage = {
-      id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
+    const newMessage: ChatMessage = {,
+  id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+}
       userId,
       userName,
       userAvatar,
       message: currentMessage.trim(),
       timestamp: new Date(),
-      type: 'text',
-    };
+      type: 'text';
+  };
     setMessages(prev => [...prev, newMessage]);
     setCurrentMessage('');
     setIsTyping(false);
     // Track interaction
     await interactiveService.trackInteraction(element.id, {)
-      type: InteractionType.CUSTOM,
+  type: InteractionType.CUSTOM,
       user_id: userId,
       timestamp: new Date(),
       context: {,
-        page_url: window.location.href,
+  page_url: window.location.href,
         referrer: document.referrer,
         user_agent: navigator.userAgent,
-        screen_resolution: `${screen.width}x${screen.height}`,}
-        viewport_size: `${window.innerWidth}x${window.innerHeight}`,}
-        device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
+        screen_resolution: `${screen.width}x${screen.height}`}
+},
+  viewport_size: `${window.innerWidth}x${window.innerHeight}`}
+},
+  device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
         session_id: 'session-' + Date.now(),
-        ab_test_variant: null,
-      },
-      data: {,
-        action: 'message_sent',
-        message_length: currentMessage.length,
-        message_type: 'text',
-      },
-      result: {,
-        success: true,
+        ab_test_variant: null;
+  },
+  data: {,
+  action: 'message_sent',
+  message_length: currentMessage.length,
+  message_type: 'text',
+},
+  result: {,
+  success: true,
         conversion: false,
         data: { message_id: newMessage.id }
-      },
-      duration: 0,
-    });
+  },
+  duration: 0;
+  });
     // Simulate response (in real app, this would come via WebSocket)
     if (Math.random() > 0.7) {
       setTimeout(() => {
@@ -172,18 +168,18 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
           'Welcome to our marketplace! Feel free to browse our templates.',
           'That\'s an interesting perspective. What do you think about...?'
         ];
-        const responseMessage: ChatMessage = {
-          id: `response-${Date.now()}`,}
-          userId: 'support-bot',
+        const responseMessage: ChatMessage = {,
+  id: `response-${Date.now()}`}
+},
+  userId: 'support-bot',
           userName: 'Support Assistant',
           userAvatar: '/avatars/support-bot.png',
           message: responses[Math.floor(Math.random() * responses.length)],
           timestamp: new Date(),
-          type: 'text',
-        };
+          type: 'text';
+  };
         setMessages(prev => [...prev, responseMessage]);
       }, 1000 + Math.random() * 2000);
-    }
   }, [currentMessage, isConnected, userId, userName, userAvatar, element.id, interactiveService]);
   // Handle file upload
   const handleFileUpload = useCallback(async (files: FileList) => {
@@ -195,41 +191,40 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
         if (file.size > 10 * 1024 * 1024) { // 10MB limit
           alert('File too large. Maximum size is 10MB.');
           continue;
-        }
         // Create attachment
-        const attachment: ChatAttachment = {
-          id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
-          name: file.name,
+        const attachment: ChatAttachment = {,
+  id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+},
+  name: file.name,
           size: file.size,
           type: file.type,
           url: URL.createObjectURL(file), // In real app, upload to server
-          thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
-        };
-        const fileMessage: ChatMessage = {
-          id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,}
+          thumbnail: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined;
+  };
+        const fileMessage: ChatMessage = {,
+  id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
+}
           userId,
           userName,
           userAvatar,
-          message: `Shared a file: ${file.name}`,}
-          timestamp: new Date(),
+          message: `Shared a file: ${file.name}`}
+},
+  timestamp: new Date(),
           type: 'file',
-          attachments: [attachment],
-        };
+          attachments: [attachment];
+  };
         setMessages(prev => [...prev, fileMessage]);
-      }
     } catch (error) {
-      console.error('File upload failed:', error);
-      alert('Failed to upload file. Please try again.');
-    } finally {
+  console.error('File upload failed:', error);
+  alert('Failed to upload file. Please try again.');
+} finally {
       setUploading(false);
-    }
   }, [chatConfig.file_uploads, userId, userName, userAvatar]);
   // Handle key press
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
-    }
   }, [handleSendMessage]);
   // Format message timestamp
   const formatTimestamp = useCallback((timestamp: Date) => {
@@ -243,13 +238,12 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
       return `${Math.floor(diff / 3600000)}h ago`;}
     } else {
       return timestamp.toLocaleDateString();
-    }
   }, []);
   // Render message
   const renderMessage = useCallback((message: ChatMessage) => {
     const isOwn = message.userId === userId;
     const isSystem = message.userId === 'system';
-    return ();
+    return;
       <div key={message.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-4`}>}
         {!isOwn && !isSystem && ()
           <div className="flex-shrink-0 mr-3">
@@ -273,12 +267,12 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
             <div className="text-xs text-gray-500 mb-1">{message.userName}</div>
           )}
           <div className={`rounded-lg px-4 py-2 ${
-            isSystem 
-              ? 'bg-gray-100 text-gray-700 text-center text-sm'
-              : isOwn 
-                ? 'bg-blue-600 text-white' 
-                : 'bg-gray-100 text-gray-900'
-          }`}>
+  isSystem
+  ? 'bg-gray-100 text-gray-700 text-center text-sm'
+  : isOwn,
+  ? 'bg-blue-600 text-white'
+  : 'bg-gray-100 text-gray-900',
+}`}>
             {message.type === 'file' && message.attachments ? ()
               <div>
                 <div className="mb-2">{message.message}</div>
@@ -341,7 +335,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
   // Render typing indicator
   const renderTypingIndicator = () => {
     if (typingUsers.length === 0) return null;
-    return ();
+    return;
       <div className="flex justify-start mb-4">
         <div className="flex items-center space-x-2 bg-gray-100 rounded-lg px-4 py-2">
           <div className="flex space-x-1">
@@ -357,7 +351,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
     );
   };
   if (isMinimized) {
-    return ();
+    return;
       <div className="fixed bottom-4 right-4 z-50">
         <button
           onClick={onMinimize}
@@ -374,8 +368,7 @@ export const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({)
         </button>
       </div>
     );
-  }
-  return ();
+  return;
     <div className="fixed bottom-4 right-4 w-96 h-96 bg-white rounded-lg shadow-xl border border-gray-200 flex flex-col z-50">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-blue-600 text-white rounded-t-lg">

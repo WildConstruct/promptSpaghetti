@@ -17,7 +17,7 @@ export declare enum WSMessageType {
     AUTH = "auth",
     CONFIG = "config",
     METRICS = "metrics"
-}
+
 export declare const WSMessageSchema: z.ZodObject<{
     type: z.ZodNativeEnum<typeof WSMessageType>;
     id: z.ZodOptional<z.ZodString>;
@@ -107,7 +107,6 @@ interface ClientConnection {
     connected: boolean;
     ipAddress?: string;
     userAgent?: string;
-}
 interface ConnectionStats {
     totalConnections: number;
     activeConnections: number;
@@ -116,7 +115,6 @@ interface ConnectionStats {
     messagesPerSecond: number;
     bytesPerSecond: number;
     errorRate: number;
-}
 interface WSServerConfig {
     port: number;
     heartbeatInterval: number;
@@ -127,7 +125,6 @@ interface WSServerConfig {
     enableCompression: boolean;
     enableCors: boolean;
     corsOrigins: string[];
-}
 /**
  * WebSocket Streaming Server
  *
@@ -264,7 +261,6 @@ export declare class WebSocketStreamingServer extends EventEmitter {
      * Force disconnect client
      */
     forceDisconnect(clientId: string, reason?: string): Promise<boolean>;
-}
 /**
  * WebSocket Client for testing and integration
  */
@@ -317,6 +313,6 @@ export declare class WebSocketAnalyticsClient extends EventEmitter {
      * Get connection status
      */
     isConnected(): boolean;
-}
+
 export default WebSocketStreamingServer;
 //# sourceMappingURL=WebSocketStreaming.d.ts.map
